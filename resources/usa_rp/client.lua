@@ -25,3 +25,15 @@ Citizen.CreateThread(function()
 		SetVehicleDensityMultiplierThisFrame(0.5)
 	end
 end)
+
+-- no police npc / never wanted
+Citizen.CreateThread(function()
+    while true do
+        Wait(1)
+        if GetPlayerWantedLevel(PlayerId()) ~= 0 then
+            SetPlayerWantedLevel(PlayerId(),0,false)
+            SetPlayerWantedLevelNow(PlayerId(),false)
+            SetMaxWantedLevel(0)
+        end
+    end
+end)
