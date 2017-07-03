@@ -6,7 +6,7 @@ local civilianSpawns = {
 AddEventHandler('es:playerLoaded', function(source, user)
     print("player loaded!")
     local money = user.get("money")
-    user.displayMoney(money)
+    user.addMoney(0) -- show money display
     TriggerClientEvent('usa_rp:playerLoaded', source)
 end)
 
