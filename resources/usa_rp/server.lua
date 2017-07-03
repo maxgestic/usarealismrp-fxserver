@@ -19,9 +19,7 @@ AddEventHandler("usa_rp:spawnPlayer", function()
         local weapons = {}
         local spawn = {x = 0, y = 0, z = 0}
         if job == "civ" then
-            spawn.x = 391.611
-            spawn.y = -948.984
-            spawn.z = 29.3978
+            spawn = civilianSpawns[math.random(1,#civilianSpawns)] -- choose random spawn if civilian
             weapons = user.get("weapons")
         elseif job == "sheriff" then
             spawn.x = 451.255

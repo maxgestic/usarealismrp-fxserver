@@ -1,5 +1,3 @@
-local pauseMenu = false
-
 RegisterNetEvent('usa_rp:playerLoaded')
 AddEventHandler('usa_rp:playerLoaded', function()
     exports.spawnmanager:setAutoSpawn(true)
@@ -19,20 +17,6 @@ AddEventHandler('usa_rp:spawn', function(model, job, spawn, weapons)
 	end)
 end)
 
--- Pause menu disable money display
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(1)
-        if IsPauseMenuActive() and not pauseMenu then
-            pauseMenu = true
-            TriggerEvent('es:setMoneyDisplay', 0.0)
-        elseif not IsPauseMenuActive() and pauseMenu then
-            pauseMenu = false
-            TriggerEvent('es:setMoneyDisplay', 1.0)
-        end
-    end
-end)
-
 -- ped/vehicle npcs
 Citizen.CreateThread(function()
 	while true do
@@ -41,22 +25,3 @@ Citizen.CreateThread(function()
 		SetVehicleDensityMultiplierThisFrame(0.5)
 	end
 end)
-
--- wow money :o
-AddEventHandler('es_rp:playerLoaded', function()
-	SetMultiplayerBankCash()
-	Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-	Citizen.InvokeNative(0x0772DF77852C2E30, 0, 1)
-	Citizen.InvokeNative(0x0772DF77852C2E30, 0, -1)
-	Citizen.Trace("Enabled!\n")
-end)
-
---[[
-AddEventHandler('onClientMapStart', function()
-  exports.spawnmanager:setAutoSpawn(true)
-  exports.spawnmanager:forceRespawn()
-  exports.spawnmanager:setAutoSpawnCallback(function()
-      TriggerServerEvent('usa_rp:spawnPlayer')
-  end)
-end)
-]]

@@ -3,7 +3,7 @@ local time = 8
 RegisterNetEvent('es_rp:playerLoaded')
 AddEventHandler('es_rp:playerLoaded', function()
 	NetworkSetTalkerProximity(30.0)
-	
+
 	exports.spawnmanager:setAutoSpawn(true)
 	exports.spawnmanager:forceRespawn()
 
@@ -67,7 +67,6 @@ AddEventHandler('es_rp:playerLoaded', function()
 	LoadInterior(interior)
 end)
 
-
 -- Pause menu disable money display
 Citizen.CreateThread(function()
     while true do
@@ -89,7 +88,7 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		NetworkOverrideClockTime(time, 0, 0)		
+		NetworkOverrideClockTime(time, 0, 0)
 		Citizen.Wait(10000)
 	end
 end)
@@ -97,7 +96,7 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
-		
+
 		SetPedDensityMultiplierThisFrame(0.6)
 		SetVehicleDensityMultiplierThisFrame(0.5)
 	end
