@@ -5,7 +5,7 @@
 
 -- restart essentialmode
 
-function CreatePlayer(source, permission_level, money, bank, identifier, group)
+function CreatePlayer(source, permission_level, money, bank, identifier, group, model, inventory)
 	local self = {}
 
 	self.source = source
@@ -14,6 +14,8 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group)
 	self.bank = bank
 	self.identifier = identifier
 	self.group = group
+	self.model = model
+	self.inventory = inventory
 	self.coords = {x = 0.0, y = 0.0, z = 0.0}
 	self.session = {}
 
@@ -120,6 +122,22 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group)
 
 	rTable.setPermissions = function(p)
 		self.permission_level = p
+	end
+
+	rTable.getModel = function()
+		return self.model
+	end
+
+	rTable.setModel = function(m)
+		self.model = m
+	end
+
+	rTable.getInventory = function()
+		return self.inventory
+	end
+
+	rTable.setInventory = function(i)
+		self.inventory = i
 	end
 
 	rTable.getIdentifier = function(i)

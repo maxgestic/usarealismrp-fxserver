@@ -88,8 +88,8 @@ AddEventHandler('es_rp:process', function(i)
 
 			if inventories[source] == nil then
 				inventories[source] = {}
-			end	
-			
+			end
+
 			local process = false
 			local remove = nil
 			for k,v in pairs(inventories[source])do
@@ -210,7 +210,7 @@ end
 RegisterServerEvent('es_rp:removeItem')
 AddEventHandler('es_rp:removeItem', function(item)
 	if inventories[source] then
-		for e in pairs(inventories[source]) do 
+		for e in pairs(inventories[source]) do
 			print(inventories[source][e].name)
 			if inventories[source][e].name == item then
 				inventories[source][e] = nil
@@ -309,7 +309,7 @@ RegisterServerEvent('es_rp:search')
 AddEventHandler('es_rp:search', function(user)
 	if POLICE[jobs[source].name] then
 		if GetPlayerName(user) then
-			if not POLICE[jobs[user].name] then			
+			if not POLICE[jobs[user].name] then
 				TriggerClientEvent('es_rp:notify', source, "You searched ~b~" .. GetPlayerName(user))
 				TriggerClientEvent('es_rp:notify', user, "You have been searched by ~b~" .. GetPlayerName(source))
 
@@ -339,7 +339,7 @@ AddEventHandler('es_rp:cuff', function(user)
 				else
 					cuffed[user] = not cuffed[user]
 				end
-			
+
 				if cuffed[user] then
 					TriggerClientEvent('es_rp:notify', source, "You cuffed ~b~" .. GetPlayerName(user))
 					TriggerClientEvent('es_rp:notify', user, "You have been cuffed by ~b~" .. GetPlayerName(source))
@@ -375,9 +375,9 @@ AddEventHandler('es_rp:spawnPlayer', function()
 	end
 
 	if job.skins ~= "DEFAULT" then
-		TriggerClientEvent('es_rp:spawn', userSource, job.skins[math.random(#job.skins)], spawn.x, spawn.y, spawn.z, spawn.heading or 0.0, job.weapons, job.health, job.armour) 
-	else 
-		TriggerClientEvent('es_rp:spawn', userSource, job.skins[math.random(#job.skins)], spawn.x, spawn.y, spawn.z, spawn.heading or 0.0, job.weapons, job.health, job.armour) 
+		TriggerClientEvent('es_rp:spawn', userSource, job.skins[math.random(#job.skins)], spawn.x, spawn.y, spawn.z, spawn.heading or 0.0, job.weapons, job.health, job.armour)
+	else
+		TriggerClientEvent('es_rp:spawn', userSource, job.skins[math.random(#job.skins)], spawn.x, spawn.y, spawn.z, spawn.heading or 0.0, job.weapons, job.health, job.armour)
 		TriggerEvent('es_rp:setToDefaultS', userSource, job.weapons, job.health, job.armour)
 	end
 end)
@@ -394,7 +394,7 @@ TriggerEvent('es:addCommand', 'respawn', function(source, args, user)
 
 		TriggerClientEvent('es_rp:updateInventory', source, inventories[source])
 
-		TriggerClientEvent('es_rp:spawn', source, job.skins[math.random(#job.skins)], spawn.x, spawn.y, spawn.z, spawn.heading or 0.0, job.weapons, job.health, job.armour) 
+		TriggerClientEvent('es_rp:spawn', source, job.skins[math.random(#job.skins)], spawn.x, spawn.y, spawn.z, spawn.heading or 0.0, job.weapons, job.health, job.armour)
 	end
 end)
 
@@ -411,7 +411,7 @@ TriggerEvent('es:addCommand', 'revive', function(source, args, user)
 					local job = jobs[tonumber(args[2])] or JOB_CIVILIAN
 					local spawn = target.getCoords()
 
-					TriggerClientEvent('es_rp:spawn', tonumber(args[2]), job.skins[math.random(#job.skins)], spawn.x, spawn.y, spawn.z, spawn.heading or 0.0, job.weapons, job.health, job.armour) 
+					TriggerClientEvent('es_rp:spawn', tonumber(args[2]), job.skins[math.random(#job.skins)], spawn.x, spawn.y, spawn.z, spawn.heading or 0.0, job.weapons, job.health, job.armour)
 				end)
 			else
 				TriggerClientEvent('es_rp:notify', source, "~r~This person is fine")
@@ -432,7 +432,7 @@ AddEventHandler('es_rp:heal', function(usar)
 				TriggerClientEvent('es_rp:notify', source, "Healed ~b~" .. GetPlayerName(usar))
 				TriggerClientEvent('es_rp:notify', usar, "You've been healed by ~b~" .. GetPlayerName(source))
 
-				TriggerClientEvent('es_admin:heal', usar) 
+				TriggerClientEvent('es_admin:heal', usar)
 			end)
 		else
 			TriggerClientEvent('es_rp:notify', source, "~r~Player not found, /revive [ID]")
@@ -456,7 +456,7 @@ AddEventHandler('es_rp:revive', function(usar)
 					local job = jobs[tonumber(usar)] or JOB_CIVILIAN
 					local spawn = target.getCoords()
 
-					TriggerClientEvent('es_rp:spawn', tonumber(usar), job.skins[math.random(#job.skins)], spawn.x, spawn.y, spawn.z, spawn.heading or 0.0, job.weapons, job.health, job.armour) 
+					TriggerClientEvent('es_rp:spawn', tonumber(usar), job.skins[math.random(#job.skins)], spawn.x, spawn.y, spawn.z, spawn.heading or 0.0, job.weapons, job.health, job.armour)
 				end)
 			else
 				TriggerClientEvent('es_rp:notify', source, "~r~This person is fine")
@@ -488,9 +488,9 @@ AddEventHandler('es_rp:changeJob', function(job)
 				TriggerClientEvent('es_rp:notify', source, "Job changed to: ~b~" .. job.name)
 
 				if job.skins ~= "DEFAULT" then
-					TriggerClientEvent('es_rp:spawn', source, job.skins[math.random(#job.skins)], spawn.x, spawn.y, spawn.z, spawn.heading or 0.0, job.weapons, job.health, job.armour) 
-				else 
-					TriggerClientEvent('es_rp:spawn', source, job.skins[math.random(#job.skins)], spawn.x, spawn.y, spawn.z, spawn.heading or 0.0, job.weapons, job.health, job.armour) 
+					TriggerClientEvent('es_rp:spawn', source, job.skins[math.random(#job.skins)], spawn.x, spawn.y, spawn.z, spawn.heading or 0.0, job.weapons, job.health, job.armour)
+				else
+					TriggerClientEvent('es_rp:spawn', source, job.skins[math.random(#job.skins)], spawn.x, spawn.y, spawn.z, spawn.heading or 0.0, job.weapons, job.health, job.armour)
 					TriggerEvent('es_rp:setToDefaultS', source, job.weapons, job.health, job.armour)
 				end
 			else
@@ -518,7 +518,7 @@ TriggerEvent('es:addCommand', 'fine', function(source, args, user)
 
 						TriggerClientEvent('es_rp:notify', source, "Fined ~b~" .. GetPlayerName(tonumber(args[2])))
 						TriggerClientEvent('chatMessage', tonumber(args[2]), "FINE", {255, 0, 0}, "You're being fined you have 30 seconds to type /fine and pay ^2$" .. args[3])
-					
+
 						SetTimeout(30000, function()
 							if fines[tonumber(args[2])] then
 								TriggerClientEvent('chatMessage', tonumber(args[2]), "FINE", {255, 0, 0}, "Fine ^1WASN'T^0 payed by " .. GetPlayerName(tonumber(args[2])))
@@ -753,7 +753,7 @@ TriggerEvent('es:addCommand', 'cuff', function(source, args, user)
 			if POLICE[jobs[tonumber(args[2])].name] then
 				TriggerClientEvent('es_rp:notify', source, "You cuffed ~b~" .. GetPlayerName(tonumber(args[2])))
 				TriggerClientEvent('es_rp:notify', tonumber(args[2]), "You have been cuffed by ~b~" .. GetPlayerName(tonumber(source)))
-			
+
 				TriggerClientEvent('es_rp:cuff', tonumber(args[2]), true)
 			else
 				TriggerClientEvent('es_rp:notify', source, "~r~This person cannot be cuffed")
@@ -772,7 +772,7 @@ TriggerEvent('es:addCommand', 'uncuff', function(source, args, user)
 			if POLICE[jobs[tonumber(args[2])].name] then
 				TriggerClientEvent('es_rp:notify', source, "You uncuffed ~b~" .. GetPlayerName(tonumber(args[2])))
 				TriggerClientEvent('es_rp:notify', tonumber(args[2]), "You have been uncuffed by ~b~" .. GetPlayerName(tonumber(source)))
-			
+
 				TriggerClientEvent('es_rp:cuff', tonumber(args[2]), false)
 			else
 				TriggerClientEvent('es_rp:notify', source, "~r~This person cannot be uncuffed")
@@ -844,11 +844,12 @@ local curTime = 8
 AddEventHandler('es:playerLoaded', function(source, user)
 	jobs[source] = JOB_CIVILIAN
 
-	user.displayMoney(user.getMoney())
+	--user.displayMoney(user.getMoney())
+	user.displayMoney(1500
 
-	TriggerClientEvent('es_rp:setJob', source, jobs[source].name)
-	TriggerClientEvent('es_rp:playerLoaded', source)
-	TriggerClientEvent('es_rp:setTime', source, curTime)
+	--TriggerClientEvent('es_rp:setJob', source, jobs[source].name)
+	--TriggerClientEvent('es_rp:playerLoaded', source)
+	--TriggerClientEvent('es_rp:setTime', source, curTime)
 end)
 
 local function timeCycle()

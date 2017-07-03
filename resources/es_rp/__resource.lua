@@ -12,12 +12,12 @@ files {
 
 server_script 'jobs.lua'
 server_script 'server/jobManager.lua'
-server_script 'server/chat.lua'
-server_script 'server/stores.lua'
+--server_script 'server/chat.lua'
+--server_script 'server/stores.lua'
 server_script 'server.lua'
 
 client_script 'jobs.lua'
-client_script 'client/interact.lua'
+--client_script 'client/interact.lua'
 client_script 'client/spawn.lua'
-client_script 'client/jobOffice.lua'
-client_script 'client/police.lua'
+--client_script 'client/jobOffice.lua'
+--client_script 'client/police.lua'

@@ -1,0 +1,10 @@
+AddEventHandler('es:playerLoaded', function(source, user)
+    print("player loaded!")
+    TriggerClientEvent('usa_rp:playerLoaded', source)
+end)
+
+RegisterServerEvent("usa_rp:spawnPlayer")
+AddEventHandler("usa_rp:spawnPlayer", function()
+    print("inside of usa_rp:spawnPlayer!")
+    TriggerClientEvent("usa_rp:spawn", source)
+end)
