@@ -1,18 +1,19 @@
 local listOn = false
+local key = 168
 
 Citizen.CreateThread(function()
     listOn = false
     while true do
         Wait(0)
 
-        if IsControlPressed(0, 27) then
+        if IsControlPressed(0, key) then
             if not listOn then
 				TriggerServerEvent("getScoreboard", GetPlayers())
 
                 listOn = true
                 while listOn do
                     Wait(0)
-                    if(IsControlPressed(0, 27) == false) then
+                    if(IsControlPressed(0, key) == false) then
                         listOn = false
                         SendNUIMessage({
                             meta = 'close'
