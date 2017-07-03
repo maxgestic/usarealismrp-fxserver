@@ -845,7 +845,7 @@ AddEventHandler('es:playerLoaded', function(source, user)
 	jobs[source] = JOB_CIVILIAN
 
 	--user.displayMoney(user.getMoney())
-	user.displayMoney(1500
+	user.displayMoney(1500)
 
 	--TriggerClientEvent('es_rp:setJob', source, jobs[source].name)
 	--TriggerClientEvent('es_rp:playerLoaded', source)

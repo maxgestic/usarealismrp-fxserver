@@ -37,7 +37,7 @@ AddEventHandler('playerDropped', function()
 	if(Users[source])then
 		TriggerEvent("es:playerDropped", Users[source])
 
-		db.updateUser(Users[source].get('identifier'), {money = Users[source].getMoney(), bank = Users[source].getBank(), model = Users[source].getModel(), inventory = Users[source].inventory}, function()
+		db.updateUser(Users[source].get('identifier'), {money = Users[source].getMoney(), bank = Users[source].getBank(), model = Users[source].getModel(), job = Users[source].getJob(), weapons = Users[source].getWeapons(), inventory = Users[source].getInventory()}, function()
 			Users[source] = nil
 		end)
 	end
