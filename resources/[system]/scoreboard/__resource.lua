@@ -1,8 +1,6 @@
-description 'Scoreboard'
-
--- temporary!
 ui_page 'html/scoreboard.html'
 
+server_script 'server.lua'
 client_script 'scoreboard.lua'
 
 files {
