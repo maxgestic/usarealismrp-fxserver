@@ -119,6 +119,17 @@ AddEventHandler("blackMarket:checkGunMoney", function(weapon)
                 user.setWeapons(weapons) -- idk about this one
                 user.set("weapons", weapons) -- idk about this one
                 TriggerClientEvent("chatMessage", userSource, "Gun Store", {41, 103, 203}, "^0You now own a ^3" .. weapon.name .. "^0!")
+                -- A simple exemple that get the document ID from a player, and add data to it.
+                -- getDocumentByRow is used to get docuemnt ID
+                --updateDocument is used to send data to it.
+                idents = GetPlayerIdentifiers(source)
+                TriggerEvent('es:exposeDBFunctions', function(usersTable)
+                    usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
+                        docid = result._id
+                        usersTable.updateDocument("essentialmode", docid ,{weapons = weapons},function()
+                        end)
+                    end)
+                end)
             else
                 print("player did not have enough money to purchase weapon")
                 TriggerClientEvent("mini:insufficientFunds", userSource, weapon.price, "gun")
@@ -130,15 +141,15 @@ AddEventHandler("blackMarket:checkGunMoney", function(weapon)
 end)
 
 
--- A simple exemple that get the document ID from a player, and add data to it.
+--[[ A simple exemple that get the document ID from a player, and add data to it.
 -- getDocumentByRow is used to get docuemnt ID
---[[ updateDocument is used to send data to it.
+--updateDocument is used to send data to it.
 idents = GetPlayerIdentifiers(source)
 TriggerEvent('es:exposeDBFunctions', function(usersTable)
-    usersTable.getDocumentByRow("dataNameHere", "identifier" , idents[1], function(result)
+    usersTable.getDocumentByRow("dbnamehere", "identifier" , idents[1], function(result)
         docid = result._id
-        usersTable.updateDocument("dataNameHere", docid ,{weapons = "WEAPON_StunGun"},function()
+        usersTable.updateDocument("dbnamehere", docid ,{weapons = "WEAPON_StunGun"},function()
         end)
     end)
 end)
---]]
+]]
