@@ -1,8 +1,3 @@
-require "resources/essentialmode/lib/MySQL"
-
--- MySQL:open("IP", "databasname", "user", "pw")
-MySQL:open("127.0.0.1", "gta5_gamemode_essential", "minipunch", "redlego123")
-
 local MAX_PLAYER_WEAPON_SLOTS = 3
 
 function round(num, numDecimalPlaces)
@@ -108,25 +103,42 @@ end)
 
 RegisterServerEvent("blackMarket:checkGunMoney")
 AddEventHandler("blackMarket:checkGunMoney", function(weapon)
-	TriggerEvent('es:getPlayerFromId', source, function(user)
-		local inventory = user.inventory
-        if inventory ~= nil then
-    		if not playerHasMaxWeapons(source, inventory) then
-                print("player with source = " .. source .. " doesn't have max weapons")
-    				if weapon.price <= user.money then -- see if user has enough money
-    					TriggerClientEvent("blackMarket:equipWeapon", source, source, weapon.hash, weapon.name) -- equip
-    					user:setMoney(user.money - weapon.price) -- subtract price from user's money and store resulting amount
-    					-- update db/inventory
-    					addPlayerItem(source, inventory, weapon)
-    					TriggerClientEvent("chatMessage", source, "Gun Store", {41, 103, 203}, "^0You now own a ^3" .. weapon.name .. "^0!")
-    				else
-    					TriggerClientEvent("mini:insufficientFunds", source, weapon.price, "gun")
-    				end
-
-    		else
-    			TriggerClientEvent("chatMessage", source, "Gun Store", {41, 103, 203}, "^1All weapon slots full! (" .. MAX_PLAYER_WEAPON_SLOTS .. "/" .. MAX_PLAYER_WEAPON_SLOTS .. ")") -- all slots full, notify user
-    		end
-
+    local userSource = source
+	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+		local weapons = user.get("weapons")
+        if not weapons then
+            weapons = {}
+        end
+        if #weapons < MAX_PLAYER_WEAPON_SLOTS then
+            print("player with source = " .. userSource .. " doesn't have max weapons")
+            if weapon.price <= user.get("money") then -- see if user has enough money
+                print("player had enough money!")
+                TriggerClientEvent("blackMarket:equipWeapon", userSource, userSource, weapon.hash, weapon.name) -- equip
+                user.removeMoney(weapon.price) -- subtract price from user's money and store resulting amount
+                table.insert(weapons, weapon)
+                user.setWeapons(weapons) -- idk about this one
+                user.set("weapons", weapons) -- idk about this one
+                TriggerClientEvent("chatMessage", userSource, "Gun Store", {41, 103, 203}, "^0You now own a ^3" .. weapon.name .. "^0!")
+            else
+                print("player did not have enough money to purchase weapon")
+                TriggerClientEvent("mini:insufficientFunds", userSource, weapon.price, "gun")
+            end
+        else
+            -- TODO: notify user of weapon slots full
         end
     end)
 end)
+
+
+-- A simple exemple that get the document ID from a player, and add data to it.
+-- getDocumentByRow is used to get docuemnt ID
+--[[ updateDocument is used to send data to it.
+idents = GetPlayerIdentifiers(source)
+TriggerEvent('es:exposeDBFunctions', function(usersTable)
+    usersTable.getDocumentByRow("dataNameHere", "identifier" , idents[1], function(result)
+        docid = result._id
+        usersTable.updateDocument("dataNameHere", docid ,{weapons = "WEAPON_StunGun"},function()
+        end)
+    end)
+end)
+--]]
