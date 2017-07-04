@@ -32,7 +32,11 @@ AddEventHandler("usa_rp:spawnPlayer", function()
             spawn.z = 28.6563
             weapons = {"WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER"}
         end
-        print("#weapons = " .. #weapons)
+        if weapons then
+            print("#weapons = " .. #weapons)
+        else
+            print("user has no weapons")
+        end
         TriggerClientEvent("usa_rp:spawn", source, model, job, spawn, weapons)
     end)
 end)

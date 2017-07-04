@@ -11,8 +11,10 @@ RegisterNetEvent('usa_rp:spawn')
 AddEventHandler('usa_rp:spawn', function(model, job, spawn, weapons)
 	exports.spawnmanager:spawnPlayer({x = spawn.x, y = spawn.y, z = spawn.z, model = model, heading = 0.0}, function()
         -- do stuff to ped here after spawning
-        for i =1, #weapons do
-            GiveWeaponToPed(GetPlayerPed(-1), GetHashKey(weapons[i]), 1000, false, false)
+        if weapons then
+            for i =1, #weapons do
+                GiveWeaponToPed(GetPlayerPed(-1), GetHashKey(weapons[i]), 1000, false, false)
+            end
         end
 	end)
 end)
