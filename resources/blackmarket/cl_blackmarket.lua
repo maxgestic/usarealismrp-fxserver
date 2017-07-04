@@ -1,4 +1,3 @@
-local playerWeapons
 local shopX,shopY,shopZ = 129.345, -1920.89, 20.0187
  locations = {
 	{ x=129.345, y=-1920.89, z=20.0187 }
@@ -7,11 +6,6 @@ local shopX,shopY,shopZ = 129.345, -1920.89, 20.0187
 function round(num, numDecimalPlaces)
   return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
 end
-
-RegisterNetEvent("blackMarket:refreshWeapons")
-AddEventHandler("blackMarket:refreshWeapons", function(weapons)
-	playerWeapons = weapons
-end)
 
 RegisterNetEvent("blackMarket:equipWeapon")
 AddEventHandler("blackMarket:equipWeapon", function(source, hash, name)
@@ -23,9 +17,26 @@ RegisterNetEvent("blackMarket:insufficientFunds")
 AddEventHandler("blackMarket:insufficientFunds", function(price, purchaseType)
 
 	if purchaseType == "gun" then
-		TriggerEvent("chatMessage", "Dealer:", { 255,99,71 }, "^0You don't have enough money to purchase that! Sorry!")
+        DrawCoolLookingNotification("You don't have enough money to purchase that! Sorry!")
 	end
 
+end)
+
+RegisterNetEvent("blackMarket:notify")
+AddEventHandler("blackMarket:notify", function(msg)
+    DrawCoolLookingNotification(msg)
+end)
+
+RegisterNetEvent("blackMarket:displaySellMenu")
+AddEventHandler("blackMarket:displaySellMenu", function(weapons)
+    if not weapons then
+        DrawCoolLookingNotification("You have no weapons to sell.")
+        return
+    elseif #weapons <= 0 then
+        DrawCoolLookingNotification("You have no weapons to sell.")
+        return
+    end
+        sellMenu(weapons)
 end)
 
 function buyWeapon(params)
@@ -67,26 +78,20 @@ function sellWeapon(weapon)
 end
 
 function loadWeapons()
+    Menu.hidden = not Menu.hidden
 	ClearMenu()
-	TriggerServerEvent("blackMarket:refreshWeaponList")
-	while playerWeapons == nil do
-		Wait(1000)
-	end
-	if playerWeapons ~= nil then
-		sellMenu()
-	end
+	TriggerServerEvent("blackMarket:getWeaponsAndDisplaySellMenu")
 end
 
-function sellMenu()
+function sellMenu(weapons)
 	MenuTitle = "Sell"
 	ClearMenu()
 	Menu.hidden = false
-	TriggerServerEvent("blackMarket:refreshWeaponList")
-	Wait(1200) -- wait to load
-	for i=1, #playerWeapons do
-		local weapon = playerWeapons[i]
-		Menu.addButton("($" .. round(.50*weapon.price, 0) .. ") " .. weapon.name, "sellWeapon", weapon)
-	end
+    Citizen.Trace("at sell menu client func, #weapons = " .. #weapons)
+    for i=1, #weapons do
+    	local weapon = weapons[i]
+    	Menu.addButton("($" .. round(.50*weapon.price, 0) .. ") " .. weapon.name, "sellWeapon", weapon)
+    end
 end
 
 function getPlayerDistanceFromShop(shopX,shopY,shopZ)
@@ -115,7 +120,7 @@ Citizen.CreateThread(function()
 			DrawMarker(1, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 32, 0, 90, 0, 0, 2, 0, 0, 0, 0)
 		end
 		if isPlayerAtBlackMarket() and not playerNotified then
-			TriggerEvent("chatMessage", "SYSTEM", { 0, 141, 155 }, "^3Press E to open black market menu!")
+            DrawCoolLookingNotification("Press ~y~E~w~ to open black market menu!")
 			playerNotified = true
 		end
 		if IsControlJustPressed(1,Keys["E"]) then
@@ -130,3 +135,9 @@ Citizen.CreateThread(function()
 		Menu.renderGUI()     -- Draw menu on each tick if Menu.hidden = false
 	end
 end)
+
+function DrawCoolLookingNotification(msg)
+    SetNotificationTextEntry("STRING")
+    AddTextComponentString(msg)
+    DrawNotification(0,1)
+end
