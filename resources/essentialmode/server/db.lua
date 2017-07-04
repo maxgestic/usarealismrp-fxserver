@@ -163,7 +163,7 @@ end
 
 function db.createUser(identifier, callback)
 	if type(identifier) == "string" and identifier ~= nil then
-		createDocument({ identifier = identifier, money = 500, bank = 0, group = "user", permission_level = 0, model = "A_M_M_Tennis_01", job = "civ"}, function(returned, document)
+		createDocument({ identifier = identifier, money = 500, bank = 0, group = "user", permission_level = 0, model = "A_M_M_Tennis_01", job = "civ", weapons = {}}, function(returned, document)
 			if callback then
 				callback(returned, document)
 			end
@@ -231,6 +231,22 @@ function exposedDB.createDocument(db, rows, cb)
 			end
 		end, "PUT", json.encode(rows), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 	end, "GET", "", {Authorization = "Basic " .. auth})
+end
+
+function exposedDB.getContentsOfView(db, doc, view, callback)
+	print("performing get request on: http://" .. ip .. ":" .. port .. "/" .. db .. "/_design/" .. doc .. "/_view/" .. view)
+	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/_design/" .. doc .. "/_view/" .. view, function(err, rText, headers)
+		print("http error response code = " .. err)
+		print("rText = " .. rText)
+		local result = json.decode(rText)
+		print("#result.rows = " .. #(result.rows))
+		if result.rows then
+			print("calling callback")
+			callback(result.rows) -- result.rows contains id, key, value
+		else
+			print("result did not exists, did not call callback")
+		end
+	end, "GET", "", {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end
 
 function exposedDB.getDocumentByRow(db, row, value, callback)
