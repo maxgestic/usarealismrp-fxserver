@@ -13,7 +13,7 @@ AddEventHandler('usa_rp:spawn', function(model, job, spawn, weapons)
         -- do stuff to ped here after spawning
         if weapons then
             for i =1, #weapons do
-                GiveWeaponToPed(GetPlayerPed(-1), GetHashKey(weapons[i]), 1000, false, false)
+                GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
             end
         end
 	end)
