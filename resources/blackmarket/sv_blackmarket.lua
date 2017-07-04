@@ -4,97 +4,43 @@ function round(num, numDecimalPlaces)
   return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
 end
 
-function getPlayerIdentifierEasyMode(source)
-	local rawIdentifiers = GetPlayerIdentifiers(source)
-	if rawIdentifiers then
-		for key, value in pairs(rawIdentifiers) do
-			playerIdentifier = value
-		end
-    else
-		print("IDENTIFIERS DO NOT EXIST OR WERE NOT RETIREVED PROPERLY")
-	end
-	return playerIdentifier -- should usually be only 1 identifier according to the wiki
-end
-
-function setPlayerInventory(source, inventory)
-    TriggerEvent('es:getPlayerFromId', source, function(user)
-        user.inventory = inventory
-    end)
-end
-
-function addPlayerItem(source, inventory, item)
-    table.insert(inventory, item)
-    setPlayerInventory(source, inventory)
-end
-
-function playerHasMaxWeapons(targetPlayerId, inventory)
-	local count = 0
-	for i = 1, #inventory do
-		if inventory[i].type == "weapon" then
-			count = count + 1
-		end
-	end
-	if count >= MAX_PLAYER_WEAPON_SLOTS then
-		return true
-	else
-		return false
-	end
-end
-
-function removeWeaponFromInventory(targetPlayerId, inventory, weapon)
-	local removed = false
-	for i = 1, #inventory do
-		if inventory[i].name == weapon.name and not removed then
-			table.remove(inventory, i)
-			removed = true
-			setPlayerInventory(targetPlayerId, inventory)
-			return
-		end
-	end
-end
-
 RegisterServerEvent("blackMarket:refreshWeaponList")
 AddEventHandler("blackMarket:refreshWeaponList", function()
 
     TriggerEvent('es:getPlayerFromId', source, function(user)
-        local inventory = user.inventory
-		local weapons = {}
-		local index = 1
-        if inventory ~= nil then
-    		for i = 1, #inventory do
-    			if inventory[i].type == "weapon" then
-    				weapons[index] = inventory[i]
-    				index = index + 1
-    			end
-    		end
-		    TriggerClientEvent("blackMarket:refreshWeapons", source, weapons)
-        else
-            print("inventory was nil during weapon list refresh")
+		local weapons
+        weapons = user.get("weapons")
+        if not weapons then
+            weapons = {}
         end
+		TriggerClientEvent("blackMarket:refreshWeapons", source, weapons)
     end)
 
 end)
 
 RegisterServerEvent("blackMarket:sellWeapon")
 AddEventHandler("blackMarket:sellWeapon",function(weapon)
-	local weapons = {}
-	local index = 1
+	local weapons
 	TriggerEvent('es:getPlayerFromId', source, function(user)
-		user:setMoney(round(user.money + .50*(weapon.price), 0))
-        local inventory = user.inventory
-        local weapons = {}
-        if inventory ~= nil then
-            for i = 1, #inventory do
-                if inventory[i].name == weapon.name then
-                    table.remove(inventory,i)
+		user.addMoney(round(.50*(weapon.price), 0))
+        weapons = user.get("weapons")
+        if weapons then
+            for i = 1, #weapons do
+                if weapons[i].name == weapon.name then
+                    table.remove(weapons, i)
+                    local idents = GetPlayerIdentifiers(source)
+                    TriggerEvent('es:exposeDBFunctions', function(usersTable)
+                        usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
+                            docid = result._id
+                            usersTable.updateDocument("essentialmode", docid ,{weapons = weapons},function()
+                            end)
+                        end)
+                    end)
                     break
                 end
             end
-        else
-            print("inventory was nil during gunShop:sellWeapon")
+            TriggerClientEvent("blackMarket:refreshWeapons", source, weapons)
         end
-        removeWeaponFromInventory(source, inventory, weapon)
-        TriggerClientEvent("blackMarket:refreshWeapons", source, weapons)
 	end)
 	if Menu then
 		Menu.hidden = true
@@ -122,7 +68,7 @@ AddEventHandler("blackMarket:checkGunMoney", function(weapon)
                 -- A simple exemple that get the document ID from a player, and add data to it.
                 -- getDocumentByRow is used to get docuemnt ID
                 --updateDocument is used to send data to it.
-                idents = GetPlayerIdentifiers(source)
+                local idents = GetPlayerIdentifiers(source)
                 TriggerEvent('es:exposeDBFunctions', function(usersTable)
                     usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
                         docid = result._id
