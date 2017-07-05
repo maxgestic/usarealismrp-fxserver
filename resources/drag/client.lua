@@ -11,7 +11,6 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		if drag then
-			Citizen.Trace("drag!!")
 			local ped = GetPlayerPed(GetPlayerFromServerId(otherid))
 			local myped = GetPlayerPed(-1)
 			if ped ~= myped then
@@ -20,7 +19,6 @@ Citizen.CreateThread(function()
 				drag = false
 			end
 		else
-			Citizen.Trace("not drag!!")
 			DetachEntity(GetPlayerPed(-1), true, false)
 		end
 	end
