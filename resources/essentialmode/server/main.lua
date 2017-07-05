@@ -3,7 +3,7 @@
 -- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
 -- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
 
-_VERSION = '4.0.2'
+_VERSION = '4.1.4'
 
 -- Server
 Users = {}
@@ -14,6 +14,7 @@ settings.defaultSettings = {
 	['permissionDenied'] = false,
 	['debugInformation'] = false,
 	['startingCash'] = 500,
+	['startingBank'] = 0,
 	['enableRankDecorators'] = false,
 	['moneyIcon'] = "$",
 	['nativeMoneySystem'] = false,
@@ -37,7 +38,7 @@ AddEventHandler('playerDropped', function()
 	if(Users[source])then
 		TriggerEvent("es:playerDropped", Users[source])
 
-		db.updateUser(Users[source].get('identifier'), {money = Users[source].getMoney(), bank = Users[source].getBank(), model = Users[source].getModel(), job = Users[source].getJob(), weapons = Users[source].getWeapons(), inventory = Users[source].getInventory()}, function()
+		db.updateUser(Users[source].get('identifier'), {money = Users[source].getMoney(), Users[source].getBank()}, function()
 			Users[source] = nil
 		end)
 	end

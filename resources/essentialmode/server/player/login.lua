@@ -5,8 +5,8 @@
 
 function LoadUser(identifier, source, new)
 	db.retrieveUser(identifier, function(user)
-		Users[source] = CreatePlayer(source, user.permission_level, user.money, user.bank, user.identifier, user.group, user.model, user.job, user.weapons, user.inventory)
-
+		Users[source] = CreatePlayer(source, user.permission_level, user.money, user.bank, user.identifier, user.group)
+		
 		TriggerEvent('es:playerLoaded', source, Users[source])
 
 		TriggerClientEvent('es:setPlayerDecorator', source, 'rank', Users[source]:getPermissions())

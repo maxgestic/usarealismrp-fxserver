@@ -82,6 +82,7 @@ AddEventHandler("generalStore:sellItem", function(item)
                         usersTable.updateDocument("essentialmode", docid ,{inventory = inventory, money = newMoney},function() end)
                         TriggerEvent("es:getPlayerFromId", userSource, function(user)
                             user.addMoney(round(.50*item.price,0))
+                            user.set("money", newMoney)
                         end)
                     end
                 end

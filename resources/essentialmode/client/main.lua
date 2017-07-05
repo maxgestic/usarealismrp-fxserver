@@ -55,9 +55,19 @@ AddEventHandler("es:setPlayerDecorator", function(key, value, doNow)
 	end
 end)
 
+local firstSpawn = true
 AddEventHandler("playerSpawned", function()
 	for k,v in pairs(myDecorators)do
 		DecorSetInt(GetPlayerPed(-1), k, v)
+	end
+
+	if firstSpawn then
+		firstSpawn = false
+		SetMultiplayerBankCash()
+		N_0xc2d15bef167e27bc()
+		SetPlayerCashChange(1, 1)
+		Citizen.InvokeNative(0x170F541E1CADD1DE, true)
+		SetPlayerCashChange(-1, -1)
 	end
 end)
 
@@ -77,6 +87,24 @@ AddEventHandler('es:activateMoney', function(e)
 	})
 end)
 
+RegisterNetEvent('es:displayMoney')
+AddEventHandler('es:displayMoney', function(a)
+	-- Found by FiveM forum user @Lobix300
+	N_0xc2d15bef167e27bc()
+	SetPlayerCashChange(1, 0)
+	Citizen.InvokeNative(0x170F541E1CADD1DE, true)
+	SetPlayerCashChange(a - 1, 0)
+end)
+
+RegisterNetEvent('es:displayBank')
+AddEventHandler('es:displayBank', function(a)
+	-- Found by FiveM forum user @Lobix300
+	SetMultiplayerBankCash()
+	SetPlayerCashChange(0, 1)
+	Citizen.InvokeNative(0x170F541E1CADD1DE, true)
+	SetPlayerCashChange(0, a - 1)
+end)
+
 RegisterNetEvent("es:addedMoney")
 AddEventHandler("es:addedMoney", function(m, native)
 
@@ -87,7 +115,7 @@ AddEventHandler("es:addedMoney", function(m, native)
 		})
 	else
 		Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-		Citizen.InvokeNative(0x0772DF77852C2E30, math.ceil(m), 0)
+		Citizen.InvokeNative(0x0772DF77852C2E30, math.floor(m), 0)
 	end
 
 end)
@@ -101,20 +129,20 @@ AddEventHandler("es:removedMoney", function(m, native, current)
 		})
 	else
 		Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-		Citizen.InvokeNative(0x0772DF77852C2E30, -math.ceil(m), 0)
+		Citizen.InvokeNative(0x0772DF77852C2E30, -math.floor(m), 0)
 	end
 end)
 
 RegisterNetEvent('es:addedBank')
 AddEventHandler('es:addedBank', function(m)
 	Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-	Citizen.InvokeNative(0x0772DF77852C2E30, 0, math.ceil(m))
+	Citizen.InvokeNative(0x0772DF77852C2E30, 0, math.floor(m))
 end)
 
 RegisterNetEvent('es:removedBank')
 AddEventHandler('es:removedBank', function(m)
 	Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-	Citizen.InvokeNative(0x0772DF77852C2E30, 0, -math.ceil(m))
+	Citizen.InvokeNative(0x0772DF77852C2E30, 0, -math.floor(m))
 end)
 
 RegisterNetEvent("es:setMoneyDisplay")

@@ -5,7 +5,7 @@
 
 -- restart essentialmode
 
-function CreatePlayer(source, permission_level, money, bank, identifier, group, model, job, weapons, inventory)
+function CreatePlayer(source, permission_level, money, bank, identifier, group)
 	local self = {}
 
 	self.source = source
@@ -14,12 +14,9 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 	self.bank = bank
 	self.identifier = identifier
 	self.group = group
-	self.model = model
-	self.job = job
-	self.weapons = weapons
-	self.inventory = inventory
 	self.coords = {x = 0.0, y = 0.0, z = 0.0}
 	self.session = {}
+	self.bankDisplayed = false
 
 	local rTable = {}
 
@@ -103,11 +100,14 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 	end
 
 	rTable.displayMoney = function(m)
-		TriggerClientEvent("es:addedMoney", self.source, m, settings.defaultSettings.nativeMoneySystem)
+		TriggerClientEvent("es:displayMoney", self.source, math.floor(m))
 	end
 
 	rTable.displayBank = function(m)
-		TriggerClientEvent("es:addedBank", self.source, m)
+		if not self.bankDisplayed then
+			TriggerClientEvent("es:displayBank", self.source, math.floor(m))
+			self.bankDisplayed = true
+		end
 	end
 
 	rTable.setSessionVar = function(key, value)
@@ -126,38 +126,6 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 		self.permission_level = p
 	end
 
-	rTable.getModel = function()
-		return self.model
-	end
-
-	rTable.setModel = function(m)
-		self.model = m
-	end
-
-	rTable.getJob = function()
-		return self.job
-	end
-
-	rTable.setJob = function(j)
-		self.job = j
-	end
-
-	rTable.getWeapons = function()
-		return self.weapons
-	end
-
-	rTable.setWeapons = function(w)
-		self.weapons = w
-	end
-
-	rTable.getInventory = function()
-		return self.inventory
-	end
-
-	rTable.setInventory = function(i)
-		self.inventory = i
-	end
-
 	rTable.getIdentifier = function(i)
 		return self.identifier
 	end
@@ -172,6 +140,20 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 
 	rTable.get = function(k)
 		return self[k]
+	end
+
+	rTable.setGlobal = function(g, default)
+		self[g] = default or ""
+
+		rTable["get" .. g:gsub("^%l", string.upper)] = function()
+			return self[g]
+		end
+
+		rTable["set" .. g:gsub("^%l", string.upper)] = function(e)
+			self[g] = e
+		end
+
+		Users[self.source] = rTable
 	end
 
 	return rTable
