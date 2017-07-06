@@ -89,6 +89,7 @@ AddEventHandler("drugs:sellDrugs", function()
                         if item.quantity > 1 then
                             print("decrementing cannabis in inventory")
                             inventory[i].quantity = inventory[i].quantity - 1
+                            print("about to save money to db with value = " .. newMoney)
                             usersTable.updateDocument("essentialmode", docid ,{inventory = inventory, money = newMoney},function()
                                 TriggerEvent('es:getPlayerFromId', userSource, function(user)
                                     user.addMoney(8000)
@@ -99,6 +100,7 @@ AddEventHandler("drugs:sellDrugs", function()
                         else
                             print("removing cannabis from inventory")
                             table.remove(inventory, i)
+                            print("about to save money to db with value = " .. newMoney)
                             usersTable.updateDocument("essentialmode", docid ,{inventory = inventory, money = newMoney},function()
                                 TriggerEvent('es:getPlayerFromId', userSource, function(user)
                                     user.addMoney(8000)
