@@ -28,15 +28,13 @@ AddEventHandler("blackMarket:sellWeapon",function(weapon)
         usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
             docid = result._id
             weapons = result.weapons
-            oldMoney = result.money
             if weapons then
                 for i = 1, #weapons do
                     if weapons[i].name == weapon.name then
                         table.remove(weapons, i)
                         TriggerEvent('es:getPlayerFromId', userSource, function(user)
-                            user.addMoney(round(.50*weapon.price, 0))
-                            newMoney = oldMoney +  round((.50*weapon.price),0)
-                    		user.set("money", newMoney)
+                            user.setMoney(result.money + round(.50*weapon.price, 0))
+                            newMoney = result.money +  round((.50*weapon.price),0)
                         end)
                         break
                     end
@@ -54,24 +52,27 @@ end)
 
 RegisterServerEvent("blackMarket:checkGunMoney")
 AddEventHandler("blackMarket:checkGunMoney", function(weapon)
+    print("inside of checkGunMoney func...")
     local userSource = source
     local idents = GetPlayerIdentifiers(userSource)
     TriggerEvent('es:exposeDBFunctions', function(usersTable)
         usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
             docid = result._id
+            print("docid = " .. docid)
             weapons = result.weapons
-            local playerMoney = result.money
+            if not weapons then
+                weapons = {}
+            end
             if weapons then
                 if #weapons < MAX_PLAYER_WEAPON_SLOTS then
                     print("player with source = " .. userSource .. " doesn't have max weapons")
                     TriggerEvent('es:getPlayerFromId', userSource, function(user)
-                        if weapon.price <= playerMoney then -- see if user has enough money
+                        if weapon.price <= result.money then -- see if user has enough money
                             print("player had enough money!")
                             TriggerClientEvent("blackMarket:equipWeapon", userSource, userSource, weapon.hash, weapon.name) -- equip
-                            user.removeMoney(weapon.price) -- subtract price from user's money and store resulting amount
-                            user.set("money", playerMoney - weapon.price)
+                            user.setMoney(result.money - weapon.price)
                             table.insert(weapons, weapon)
-                            local newMoney = playerMoney - weapon.price
+                            local newMoney = result.money - weapon.price
                             usersTable.updateDocument("essentialmode", docid ,{weapons = weapons, money = newMoney},function() end)
                             TriggerClientEvent("blackMarket:notify", userSource, "You have purchased a ~r~" .. weapon.name .. ".")
                         else

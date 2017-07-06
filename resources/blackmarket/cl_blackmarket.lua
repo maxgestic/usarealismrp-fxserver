@@ -40,6 +40,7 @@ AddEventHandler("blackMarket:displaySellMenu", function(weapons)
 end)
 
 function buyWeapon(params)
+    Citizen.Trace("inside of buyWeapon func")
 	TriggerServerEvent("blackMarket:checkGunMoney",params)
 	Menu.hidden = true -- close menu
 end
