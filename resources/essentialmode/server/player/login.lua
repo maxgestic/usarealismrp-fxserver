@@ -4,18 +4,26 @@
 -- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
 
 function LoadUser(identifier, source, new)
-	db.retrieveUser(identifier, function(user)
-		Users[source] = CreatePlayer(source, user.permission_level, user.money, user.bank, user.identifier, user.group)
-		
-		TriggerEvent('es:playerLoaded', source, Users[source])
+	--db.retrieveUser(identifier, function(user)
+	local userSource = source
+    local idents = GetPlayerIdentifiers(userSource)
+    TriggerEvent('es:exposeDBFunctions', function(usersTable)
+        usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
+			docid = result._id
+			print("docid = " .. docid)
+			Users[source] = CreatePlayer(userSource, result.permission_level, result.money, result.bank, result.identifier, result.group)
 
-		TriggerClientEvent('es:setPlayerDecorator', source, 'rank', Users[source]:getPermissions())
-		TriggerClientEvent('es:setMoneyIcon', source,settings.defaultSettings.moneyIcon)
+			TriggerEvent('es:playerLoaded', userSource, Users[userSource])
 
-		if(new)then
-			TriggerEvent('es:newPlayerLoaded', source, Users[source])
-		end
+			TriggerClientEvent('es:setPlayerDecorator', userSource, 'rank', Users[userSource]:getPermissions())
+			TriggerClientEvent('es:setMoneyIcon', userSource,settings.defaultSettings.moneyIcon)
+
+			if(new)then
+				TriggerEvent('es:newPlayerLoaded', userSource, Users[source])
+			end
+		end)
 	end)
+	--end)
 end
 
 function getPlayerFromId(id)
@@ -41,8 +49,10 @@ end)
 function registerUser(identifier, source)
 	db.doesUserExist(identifier, function(exists)
 		if exists then
+			print("player existed, calling LoadUser with identifier = " .. identifier)
 			LoadUser(identifier, source, false)
 		else
+			print("player did not exist, calling db.createUser(...)")
 			db.createUser(identifier, function(r, user)
 				LoadUser(identifier, source, true)
 			end)

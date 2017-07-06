@@ -35,10 +35,20 @@ PerformHttpRequest("http://fivem.online/version.txt", function(err, rText, heade
 end, "GET", "", {what = 'this'})
 
 AddEventHandler('playerDropped', function()
+	print("inside of playerDropped")
+	local userSource = source
+    local idents = GetPlayerIdentifiers(userSource)
+    TriggerEvent('es:exposeDBFunctions', function(usersTable)
+        usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
+			docid = result._id
+			print("after dropping, money = " .. result.money)
+			print("after dropping, bank = " .. result.bank)
+		end)
+	end)
 	if(Users[source])then
 		TriggerEvent("es:playerDropped", Users[source])
-
-		db.updateUser(Users[source].get('identifier'), {money = Users[source].getMoney(), Users[source].getBank()}, function()
+		print("inside of es:playerDropped")
+		db.updateUser(Users[source].get('identifier'), {money = Users[source].getMoney(), bank = Users[source].getBank()}, function()
 			Users[source] = nil
 		end)
 	end
@@ -48,6 +58,7 @@ local justJoined = {}
 
 RegisterServerEvent('es:firstJoinProper')
 AddEventHandler('es:firstJoinProper', function()
+	print("inside of es:firstJoinProper")
 	registerUser(GetPlayerIdentifiers(source)[1], source)
 	justJoined[source] = true
 
