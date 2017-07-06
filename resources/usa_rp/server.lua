@@ -4,19 +4,14 @@ local civilianSpawns = {
 }
 
 AddEventHandler('es:playerLoaded', function(source, user)
-    print("player loaded with getMoney = " .. user.getMoney() .. "!")
-    print("player loaded with getBank = " .. user.getBank() .. "!")
-    local userSource = source
-    local idents = GetPlayerIdentifiers(userSource)
-    TriggerEvent('es:exposeDBFunctions', function(usersTable)
-        usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
-            print("player loaded with result.money = " .. result.money .. "!")
-            print("player loaded with result.bank = " .. result.bank .. "!")
-            user.displayMoney(result.money)
-            user.displayBank(result.bank)
-            TriggerClientEvent('usa_rp:playerLoaded', userSource)
-        end)
-    end)
+    local money = user.get("money")
+    local bank = user.get("bank")
+    print("Player " .. GetPlayerName(source) .. " has loaded.")
+    print("Money:" .. money)
+    print("Bank:" .. bank)
+    user.displayMoney(money)
+    user.displayBank(bank)
+    TriggerClientEvent('usa_rp:playerLoaded', source)
 end)
 
 RegisterServerEvent("usa_rp:spawnPlayer")

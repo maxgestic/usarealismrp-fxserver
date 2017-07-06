@@ -80,20 +80,14 @@ AddEventHandler("bank:inRange", function()
 	isBusy = "no"
 	local msg = "You have been given ~g~$" .. comma_value(rewardMoney) .. "~w~ in dirty money!"
 	TriggerClientEvent("bank-robbery:notify", source, msg)
-	local userSource = source
-    local idents = GetPlayerIdentifiers(userSource)
-    TriggerEvent('es:exposeDBFunctions', function(usersTable)
-        usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
-			docid = result._id
-			TriggerEvent('es:getPlayerFromId', userSource, function(user)
-				if user then
-					local oldMoney = user.getMoney()
-					local newMoney = oldMoney + rewardMoney
-					user.setMoney(newMoney)
-					usersTable.updateDocument("essentialmode", docid ,{money = newMoney},function() end)
-				end
-			end)
-		end)
+	TriggerEvent('es:getPlayerFromId', source, function(user)
+		if user then
+			local oldMoney = user.getMoney()
+			local newMoney = oldMoney + rewardMoney
+			user.addMoney(newMoney)
+			user.setMoney(newMoney)
+			print("user money set to $" .. newMoney)
+		end
 	end)
 end)
 

@@ -5,34 +5,41 @@ end
 RegisterServerEvent("generalStore:buyItem")
 AddEventHandler("generalStore:buyItem", function(item)
     local userSource = source
-    TriggerEvent('es:getPlayerFromId', userSource, function(user)
-        local playerMoney = user.get("money")
-        if playerMoney >= item.price then
-            local newMoney = playerMoney - item.price
-            user.removeMoney(item.price)
-            local idents = GetPlayerIdentifiers(userSource)
-            TriggerEvent('es:exposeDBFunctions', function(usersTable)
-                usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
-                    docid = result._id
+    local idents = GetPlayerIdentifiers(userSource)
+    TriggerEvent('es:exposeDBFunctions', function(usersTable)
+        usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
+                docid = result._id
+            TriggerEvent('es:getPlayerFromId', userSource, function(user)
+                if result.money >= item.price then
+                    user.removeMoney(item.price)
+                    local newMoney = result.money - item.price
                     local inventory = result.inventory
                     if inventory then
                         for i = 1, #inventory do
                             if inventory[i].name == item.name then
                                 inventory[i].quantity = inventory[i].quantity + 1
+                                print("just sold item setting new money in DB to " .. newMoney)
+                                user.setMoney(newMoney)
                                 usersTable.updateDocument("essentialmode", docid ,{inventory = inventory, money = newMoney},function() end)
                                 return
                             end
                         end
                         table.insert(inventory, item)
+                        print("just sold item setting new money in DB to " .. newMoney)
+                        user.setMoney(newMoney)
                         usersTable.updateDocument("essentialmode", docid ,{inventory = inventory, money = newMoney},function() end)
                     else
                         inventory = {}
                         table.insert(inventory, item)
+                        print("just sold item setting new money in DB to " .. newMoney)
+                        user.setMoney(newMoney)
                         usersTable.updateDocument("essentialmode", docid ,{inventory = inventory, money = newMoney},function() end)
                     end
-                end)
+                else
+                    -- not enough money
+                end
             end)
-        end
+        end)
     end)
 end)
 
@@ -79,6 +86,7 @@ AddEventHandler("generalStore:sellItem", function(item)
                             table.remove(inventory,i)
                         end
                         newMoney = playerMoney + round(.50*item.price,0)
+                        print("buying back item.. updating player DB money to " .. newMoney)
                         usersTable.updateDocument("essentialmode", docid ,{inventory = inventory, money = newMoney},function() end)
                         TriggerEvent("es:getPlayerFromId", userSource, function(user)
                             user.addMoney(round(.50*item.price,0))
