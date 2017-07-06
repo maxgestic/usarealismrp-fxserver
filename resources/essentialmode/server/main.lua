@@ -17,7 +17,7 @@ settings.defaultSettings = {
 	['startingBank'] = 0,
 	['enableRankDecorators'] = false,
 	['moneyIcon'] = "$",
-	['nativeMoneySystem'] = false,
+	['nativeMoneySystem'] = true,
 	['commandDelimeter'] = '/'
 }
 settings.sessionSettings = {}
