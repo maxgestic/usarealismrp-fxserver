@@ -6,93 +6,70 @@ end
 
 RegisterServerEvent("blackMarket:getWeaponsAndDisplaySellMenu")
 AddEventHandler("blackMarket:getWeaponsAndDisplaySellMenu", function()
-    local weapons = {}
-    local userSource = source
-    local idents = GetPlayerIdentifiers(userSource)
-    TriggerEvent('es:exposeDBFunctions', function(usersTable)
-        usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
-            docid = result._id
-            weapons = result.weapons
-            TriggerClientEvent("blackMarket:displaySellMenu", userSource, weapons)
-        end)
+    TriggerEvent('es:getPlayerFromId', source, function(user)
+        local weapons = user.getWeapons()
+        TriggerClientEvent("blackMarket:displaySellMenu", userSource, weapons)
     end)
 end)
 
 RegisterServerEvent("blackMarket:sellWeapon")
 AddEventHandler("blackMarket:sellWeapon",function(weapon)
-    local userSource = source
-    local idents = GetPlayerIdentifiers(userSource)
-    TriggerEvent('es:exposeDBFunctions', function(usersTable)
-        usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
-            TriggerEvent('es:getPlayerFromId', userSource, function(user)
-                docid = result._id
-                weapons = result.weapons
-                if weapons then
-                    for i = 1, #weapons do
-                        if weapons[i].name == weapon.name then
-                            table.remove(weapons, i)
-                            break
-                        end
-                    end
-                    usersTable.updateDocument("essentialmode", docid ,{weapons = weapons},function()
-                        print("calling user.addMoney now..")
-                        print("typeof user = " .. type(user))
-                        --user.addMoney(round(.50*weapon.price, 0))
-                        print("saving user money = $" .. user.getMoney() + round(.50*weapon.price, 0))
-                        user.setMoney(user.getMoney() + round(.50*weapon.price, 0))
-                    end)
-                else
-                    print("player had no weapons to sell")
+    TriggerEvent('es:getPlayerFromId', source, function(user)
+        local weapons = user.getWeapons()
+        if weapons then
+            for i = 1, #weapons do
+                if weapons[i].name == weapon.name then
+                    table.remove(weapons, i)
+                    user.setWeapons(weapons)
+                    user.addMoney(round(.50*weapon.price, 0))
+                    break
                 end
-            end)
-        end)
+            end
+        else
+            print("player had no weapons to sell")
+        end
     end)
 end)
 
 RegisterServerEvent("blackMarket:checkGunMoney")
 AddEventHandler("blackMarket:checkGunMoney", function(weapon)
     local userSource = source
-    local idents = GetPlayerIdentifiers(userSource)
-    TriggerEvent('es:exposeDBFunctions', function(usersTable)
-        usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
-            docid = result._id
-            weapons = result.weapons
-            if not weapons then
-                weapons = {}
-            end
-            if #weapons < MAX_PLAYER_WEAPON_SLOTS then
-                TriggerEvent('es:getPlayerFromId', userSource, function(user)
-                    if weapon.price <= user.getMoney() then -- see if user has enough money
-                        print("player had enough money! (" .. user.getMoney() .. ")")
-                        table.insert(weapons, weapon)
-                        usersTable.updateDocument("essentialmode", docid ,{weapons = weapons},function()
-                            print("setting money after buying to : $" .. user.getMoney() - weapon.price)
-                            --user.removeMoney(weapon.price) -- do one or the other here it seems both is not correct
-                            user.setMoney(user.getMoney() - weapon.price) -- do one or the other here it seems both is not correct
-                            TriggerClientEvent("blackMarket:equipWeapon", userSource, userSource, weapon.hash, weapon.name) -- equip
-                            TriggerClientEvent("blackMarket:notify", userSource, "You have purchased a ~r~" .. weapon.name .. ".")
-                        end)
-                    else
-                        print("player did not have enough money to purchase weapon")
-                        TriggerClientEvent("mini:insufficientFunds", userSource, weapon.price, "gun")
-                    end
-                end)
+    TriggerEvent('es:getPlayerFromId', userSource, function(user)
+        local weapons = user.getWeapons()
+        if not weapons then
+            weapons = {}
+        end
+        if #weapons < MAX_PLAYER_WEAPON_SLOTS then
+            if weapon.price <= user.getMoney() then -- see if user has enough money
+                print("player had enough money! (" .. user.getMoney() .. ")")
+                table.insert(weapons, weapon)
+                user.setWeapons(weapons)
+                print("setting money after buying to : $" .. user.getMoney() - weapon.price)
+                user.removeMoney(weapon.price) -- do one or the other here it seems both is not correct
+                --user.setMoney(user.getMoney() - weapon.price) -- do one or the other here it seems both is not correct
+                print("equipping weapon with type source : source = " .. type(source) .. " : " .. source)
+                print("weapon.name = " .. weapon.name)
+                TriggerClientEvent("blackMarket:equipWeapon", userSource, userSource, weapon.hash, weapon.name) -- equip
+                TriggerClientEvent("blackMarket:notify", userSource, "You have purchased a ~r~" .. weapon.name .. ".")
             else
-                -- TODO: notify user of weapon slots full
+                print("player did not have enough money to purchase weapon")
+                TriggerClientEvent("mini:insufficientFunds", userSource, weapon.price, "gun")
             end
-        end)
+        else
+            -- TODO: notify user of weapon slots full
+        end
     end)
 end)
 
 
---[[ A simple exemple that get the document ID from a player, and add data to it.
--- getDocumentByRow is used to get docuemnt ID
---updateDocument is used to send data to it.
-idents = GetPlayerIdentifiers(source)
-TriggerEvent('es:exposeDBFunctions', function(usersTable)
-usersTable.getDocumentByRow("dbnamehere", "identifier" , idents[1], function(result)
-docid = result._id
-usersTable.updateDocument("dbnamehere", docid ,{weapons = "WEAPON_StunGun"},function()
+    --[[ A simple exemple that get the document ID from a player, and add data to it.
+    -- getDocumentByRow is used to get docuemnt ID
+    --updateDocument is used to send data to it.
+    idents = GetPlayerIdentifiers(source)
+    TriggerEvent('es:exposeDBFunctions', function(usersTable)
+    usersTable.getDocumentByRow("dbnamehere", "identifier" , idents[1], function(result)
+    docid = result._id
+    usersTable.updateDocument("dbnamehere", docid ,{weapons = "WEAPON_StunGun"},function()
 end)
 end)
 end)
