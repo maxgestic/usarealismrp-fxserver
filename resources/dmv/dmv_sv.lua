@@ -5,8 +5,6 @@ AddEventHandler("dmv:checkMoney", function(price)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		if user.get("money") >= price then
 			local idents = GetPlayerIdentifiers(userSource)
-			local playerMoney = user.get("money")
-			local newPlayerMoney = playerMoney - price
             TriggerEvent('es:exposeDBFunctions', function(usersTable)
                 usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
                     docid = result._id
@@ -20,8 +18,11 @@ AddEventHandler("dmv:checkMoney", function(price)
 							expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
 							status = "valid"
 						}
-						usersTable.updateDocument("essentialmode", docid ,{driversLicense = license, money = newPlayerMoney},function() end)
+						usersTable.updateDocument("essentialmode", docid ,{driversLicense = license, money = (user.getMoney() - price)},function() end)
+						print("user.getMoney() = " .. user.getMoney())
+						print("removing $" .. price .. "...")
 						user.removeMoney(tonumber(price))
+						--user.setMoney(newPlayerMoney)
 						TriggerClientEvent("dmv:notify", userSource, "You have ~g~successfully~w~ purchased a driver's license.")
 					else
 						TriggerClientEvent("dmv:notify", userSource, "You already have a driver's license!")
