@@ -18,9 +18,7 @@ AddEventHandler("dmv:checkMoney", function(price)
 							expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
 							status = "valid"
 						}
-						usersTable.updateDocument("essentialmode", docid ,{driversLicense = license, money = (user.getMoney() - price)},function() end)
-						print("user.getMoney() = " .. user.getMoney())
-						print("removing $" .. price .. "...")
+						usersTable.updateDocument("essentialmode", docid ,{driversLicense = license},function() end)
 						user.removeMoney(tonumber(price))
 						--user.setMoney(newPlayerMoney)
 						TriggerClientEvent("dmv:notify", userSource, "You have ~g~successfully~w~ purchased a driver's license.")

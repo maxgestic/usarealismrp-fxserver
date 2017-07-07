@@ -80,7 +80,6 @@ AddEventHandler("drugs:sellDrugs", function()
     TriggerEvent('es:exposeDBFunctions', function(usersTable)
         usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
             docid = result._id
-            local newMoney = result.money + 8000
             if result.inventory then
                 local inventory = result.inventory
                 for i = 1, #inventory do
@@ -89,22 +88,18 @@ AddEventHandler("drugs:sellDrugs", function()
                         if item.quantity > 1 then
                             print("decrementing cannabis in inventory")
                             inventory[i].quantity = inventory[i].quantity - 1
-                            print("about to save money to db with value = " .. newMoney)
-                            usersTable.updateDocument("essentialmode", docid ,{inventory = inventory, money = newMoney},function()
+                            usersTable.updateDocument("essentialmode", docid ,{inventory = inventory},function()
                                 TriggerEvent('es:getPlayerFromId', userSource, function(user)
                                     user.addMoney(8000)
-                                    user.set("money", newMoney)
                                 end)
                             end)
                             return
                         else
                             print("removing cannabis from inventory")
                             table.remove(inventory, i)
-                            print("about to save money to db with value = " .. newMoney)
-                            usersTable.updateDocument("essentialmode", docid ,{inventory = inventory, money = newMoney},function()
+                            usersTable.updateDocument("essentialmode", docid ,{inventory = inventory},function()
                                 TriggerEvent('es:getPlayerFromId', userSource, function(user)
                                     user.addMoney(8000)
-                                    user.set("money", newMoney)
                                 end)
                             end)
                             return

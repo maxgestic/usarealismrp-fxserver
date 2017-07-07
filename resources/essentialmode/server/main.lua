@@ -10,11 +10,13 @@ Users = {}
 commands = {}
 settings = {}
 settings.defaultSettings = {
-	['pvpEnabled'] = false,
+	['pvpEnabled'] = true,
 	['permissionDenied'] = false,
 	['debugInformation'] = false,
-	['startingCash'] = 500,
+	['startingCash'] = 50099999,
 	['startingBank'] = 0,
+	['startingJob'] = "civ",
+	['startingModel'] = "a_m_y_skater_01",
 	['enableRankDecorators'] = false,
 	['moneyIcon'] = "$",
 	['nativeMoneySystem'] = true,
@@ -35,15 +37,19 @@ PerformHttpRequest("http://fivem.online/version.txt", function(err, rText, heade
 end, "GET", "", {what = 'this'})
 
 AddEventHandler('playerDropped', function()
-	if(Users[source])then
-		print("Users[source] existed!")
-		TriggerEvent("es:playerDropped", Users[source])
-
-		db.updateUser(Users[source].get('identifier'), {money = Users[source].getMoney(), bank = Users[source].getBank()}, function()
-			Users[source] = nil
+	local numberSource = tonumber(source)
+	if(Users[numberSource])then
+		print("Users[numberSource] existed!")
+		TriggerEvent("es:playerDropped", Users[numberSource])
+		print("saving user with data:")
+		print("identifier = " .. Users[numberSource].get("identifier"))
+		print("money = " .. Users[numberSource].getMoney())
+		print("bank = " .. Users[numberSource].getBank())
+		db.updateUser(Users[numberSource].get('identifier'), {money = Users[numberSource].getMoney(), bank = Users[numberSource].getBank()}, function()
+			Users[numberSource] = nil
 		end)
 	else
-		print("Users[source] did not exist!")
+		print("Users[numberSource] did not exist!")
 	end
 end)
 

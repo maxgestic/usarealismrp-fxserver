@@ -4,11 +4,10 @@ local civilianSpawns = {
 }
 
 AddEventHandler('es:playerLoaded', function(source, user)
-    local money = user.get("money")
-    local bank = user.get("bank")
+    local money = user.getMoney()
+    local bank = user.getBank()
     print("Player " .. GetPlayerName(source) .. " has loaded.")
     print("Money:" .. money)
-    print("Bank:" .. bank)
     user.displayMoney(money)
     user.displayBank(bank)
     TriggerClientEvent('usa_rp:playerLoaded', source)
@@ -24,12 +23,10 @@ AddEventHandler("usa_rp:spawnPlayer", function()
             print("docid = " .. docid)
             local model = result.model
             if not model then
-                print("not model!")
                 model = "a_m_y_skater_01"
             end
             local job = result.job
             if not job then
-                print("not job!")
                 job = "civ"
             end
             local weapons = {}
@@ -61,9 +58,6 @@ AddEventHandler("usa_rp:spawnPlayer", function()
                 else
                     print("user has no weapons")
                 end
-                print("calling usa_rp:spawn with model = " .. model)
-                print("job = " .. job)
-                print("spawn.x = " .. spawn.x)
                 TriggerClientEvent("usa_rp:spawn", userSource, model, job, spawn, weapons)
             end)
         end)

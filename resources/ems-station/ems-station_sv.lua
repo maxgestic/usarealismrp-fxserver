@@ -40,6 +40,7 @@ AddEventHandler("emsStation:toggleDuty", function(params)
                         newJob = "ems"
                 end
                 TriggerClientEvent("emsStation:giveEmsLoadout", userSource, emsModel)
+                print("setting job = " .. newJob)
                 usersTable.updateDocument("essentialmode", docid ,{job = newJob},function() end)
             end
         end)
@@ -58,8 +59,12 @@ AddEventHandler("emsStation:giveCivStuff", function()
             playerJob = result.job
             playerModel = result.model
             playerWeapons = result.weapons
+            if not playerWeapons then
+                playerWeapons = {}
+            end
             if playerJob == "sheriff" or playerJob == "fire" or playerJob == "ems" then
                 TriggerClientEvent("emsStation:giveCivLoadout", userSource, playerModel, playerWeapons)
+                print("setting job = civ")
                 usersTable.updateDocument("essentialmode", docid ,{job = "civ"},function() end)
             end
         end)

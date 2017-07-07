@@ -104,7 +104,7 @@ local function getDocument(uuid, callback)
 				if doc then callback(doc) else callback(false) end
 			end
 		end
-	end)	
+	end)
 end
 
 local function createDocument(doc, cb)
@@ -158,12 +158,13 @@ function db.updateUser(identifier, new, callback)
 		updateDocument(user._id, new, function(returned)
 			callback(returned)
 		end)
-	end)	
+	end)
 end
 
 function db.createUser(identifier, callback)
+	print("creating user!")
 	if type(identifier) == "string" and identifier ~= nil then
-		createDocument({ identifier = identifier, money = settings.defaultSettings.startingCash or 0, bank = settings.defaultSettings.startingBank or 0, group = "user", permission_level = 0 }, function(returned, document)
+		createDocument({ identifier = identifier, money = settings.defaultSettings.startingCash or 0, bank = settings.defaultSettings.startingBank or 0, group = "user", permission_level = 0, job = settings.defaultSettings.startingJob, model = settings.defaultSettings.startingModel }, function(returned, document)
 			if callback then
 				callback(returned, document)
 			end
@@ -251,7 +252,7 @@ function exposedDB.getDocumentByRow(db, row, value, callback)
 		else
 			callback(false, rText)
 		end
-	end, "POST", json.encode(qu), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})		
+	end, "POST", json.encode(qu), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end
 
 function exposedDB.updateDocument(db, documentID, updates, callback)
@@ -267,7 +268,7 @@ function exposedDB.updateDocument(db, documentID, updates, callback)
 				callback((err or true))
 			end, "PUT", json.encode(doc), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 		end
-	end, "GET", "", {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})	
+	end, "GET", "", {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end
 
 AddEventHandler('es:exposeDBFunctions', function(cb)

@@ -56,21 +56,24 @@ AddEventHandler("garage:checkVehicleStatus", function()
 				if vehicle then
 					if vehicle.impounded == true then
 						if user.get("money") >= 2000 then
-							local newPlayerMoney = user.get("money") - 2000
 							TriggerClientEvent("garage:notify", userSource, "~g~BC IMPOUND: ~w~Here's your car!")
 							TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
 							user.removeMoney(2000)
 							vehicle.impounded = false
-							usersTable.updateDocument("essentialmode", docid ,{money = newPlayerMoney, vehicle = vehicle},function() end)
+							usersTable.updateDocument("essentialmode", docid ,{vehicle = vehicle},function() end)
 						else
 							TriggerClientEvent("garage:notify", source, "~r~BC IMPOUND: ~w~Your car is impounded and can be retrieved for $2,000!")
 						end
 						return
 					end
 					if vehicle.stored == false then
-						if playerHasValidAutoInsurance(playerInsurance) then
-							TriggerClientEvent("garage:notify", source, "~g~T. ENDS INSURANCE: ~w~Here's your car!")
-							TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
+						if playerInsurance then
+							if playerHasValidAutoInsurance(playerInsurance) then
+								TriggerClientEvent("garage:notify", source, "~g~T. ENDS INSURANCE: ~w~Here's your car!")
+								TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
+							else
+								TriggerClientEvent("garage:vehicleNotStored", userSource)
+							end
 						else
 							TriggerClientEvent("garage:vehicleNotStored", userSource)
 						end

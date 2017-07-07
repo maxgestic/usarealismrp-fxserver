@@ -65,10 +65,11 @@ AddEventHandler("emsStation:changeSkin", function(skinName, playerWeapons)
         SetPlayerModel(PlayerId(), model)
         SetModelAsNoLongerNeeded(model)
 
-		Citizen.Trace("#playerWeapons = " .. #playerWeapons)
-		for i = 1, #playerWeapons do
-			print("playerWeapons[i].hash = " .. playerWeapons[i].hash)
-			GiveWeaponToPed(GetPlayerPed(-1), playerWeapons[i].hash, 1000, false, false)
+		if playerWeapons then
+			for i = 1, #playerWeapons do
+				print("playerWeapons[i].hash = " .. playerWeapons[i].hash)
+				GiveWeaponToPed(GetPlayerPed(-1), playerWeapons[i].hash, 1000, false, false)
+			end
 		end
     end)
 
