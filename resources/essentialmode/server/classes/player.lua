@@ -5,7 +5,7 @@
 
 -- restart essentialmode
 
-function CreatePlayer(source, permission_level, money, bank, identifier, group)
+function CreatePlayer(source, permission_level, money, bank, identifier, group, model, inventory, weapons, vehicles, insurance)
 	local self = {}
 
 	self.source = source
@@ -14,6 +14,13 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group)
 	self.bank = bank
 	self.identifier = identifier
 	self.group = group
+	-- CUSTOM STUFF HERE --
+	self.model = model
+	self.inventory = inventory
+	self.weapons = weapons
+	self.vehicles = vehicles
+	self.insurance = insurance
+	-- END --
 	self.coords = {x = 0.0, y = 0.0, z = 0.0}
 	self.session = {}
 	self.bankDisplayed = false
@@ -35,6 +42,47 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group)
 		if not settings.defaultSettings.nativeMoneySystem then
 			TriggerClientEvent('es:activateMoney', self.source , self.money)
 		end
+	end
+
+	-- CUSTOM SETTERS/GETTERS HERE --
+	rTable.getInsurance = function()
+		return self.insurance
+	end
+
+	rTable.setInsurance = function(i)
+		self.insurance = i
+	end
+
+	rTable.getVehicles = function()
+		return self.vehicles
+	end
+
+	rTable.setVehicles = function(v)
+		self.vehicles = v
+	end
+
+	rTable.getWeapons = function()
+		return self.weapons
+	end
+
+	rTable.setWeapons = function(w)
+		self.weapons = w
+	end
+
+	rTable.getInventory = function()
+		return self.inventory
+	end
+
+	rTable.setInventory = function(i)
+		self.inventory = i
+	end
+
+	rTable.getModel = function()
+		return self.model
+	end
+
+	rTable.setModel = function(m)
+		self.model = m
 	end
 
 	rTable.getMoney = function()

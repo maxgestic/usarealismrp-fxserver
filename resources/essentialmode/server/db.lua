@@ -164,7 +164,7 @@ end
 function db.createUser(identifier, callback)
 	print("creating user!")
 	if type(identifier) == "string" and identifier ~= nil then
-		createDocument({ identifier = identifier, money = settings.defaultSettings.startingCash or 0, bank = settings.defaultSettings.startingBank or 0, group = "user", permission_level = 0, job = settings.defaultSettings.startingJob, model = settings.defaultSettings.startingModel }, function(returned, document)
+		createDocument({ identifier = identifier, money = settings.defaultSettings.startingCash or 0, bank = settings.defaultSettings.startingBank or 0, group = "user", permission_level = 0, job = settings.defaultSettings.startingJob, model = settings.defaultSettings.startingModel, inventory = settings.defaultSettings.startingInventory, weapons = settings.defaultSettings.startingWeapons, vehicles = settings.defaultSettings.startingVehicles, insurance = settings.defaultSettings.startingInsurance }, function(returned, document)
 			if callback then
 				callback(returned, document)
 			end
