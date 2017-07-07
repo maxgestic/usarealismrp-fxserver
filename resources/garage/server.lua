@@ -1,22 +1,20 @@
 RegisterServerEvent("garage:storeVehicle")
 AddEventHandler("garage:storeVehicle", function(handle, numberPlateText)
 	local userSource = source
-	local idents = GetPlayerIdentifiers(userSource)
-	TriggerEvent('es:exposeDBFunctions', function(usersTable)
-		usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
-			docid = result._id
-			local ownedVehicle = result.vehicle
-			if ownedVehicle then
-				local ownedVehicleLicensePlate = ownedVehicle.plate
-				if string.match(numberPlateText,ownedVehicleLicensePlate) ~= nil then -- player actually owns the car that player is attempting to store
-					ownedVehicle.stored = true
-					usersTable.updateDocument("essentialmode", docid ,{vehicle = ownedVehicle},function() end)
-					TriggerClientEvent("garage:storeVehicle", source)
-				else
-					TriggerClientEvent("garage:notify", source, "~r~You do not own that vehicle!")
-				end
+	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+		local vehicles = user.getVehicles()
+		for i = 1, #vehicles do
+			local vehicle = vehicles[i]
+			local vehiclePlate = vehicle.plate
+			if string.match(numberPlateText,vehiclePlate) ~= nil then -- player actually owns the car that player is attempting to store
+				vehicles[i].stored = true
+				user.setVehicles(vehicles)
+				TriggerClientEvent("garage:storeVehicle", source)
+				return
 			end
-		end)
+		end
+		-- after checking all owned vehicles, player doesn't appear to own that car
+		TriggerClientEvent("garage:notify", source, "~r~You do not own that vehicle!")
 	end)
 end)
 
@@ -46,64 +44,64 @@ end
 RegisterServerEvent("garage:checkVehicleStatus")
 AddEventHandler("garage:checkVehicleStatus", function()
 	local userSource = source
-	local idents = GetPlayerIdentifiers(userSource)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
-		TriggerEvent('es:exposeDBFunctions', function(usersTable)
-			usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
-				docid = result._id
-				local vehicle = result.vehicle
-				local playerInsurance = result.insurance
-				if vehicle then
-					if vehicle.impounded == true then
-						if user.get("money") >= 2000 then
-							TriggerClientEvent("garage:notify", userSource, "~g~BC IMPOUND: ~w~Here's your car!")
-							TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
-							user.removeMoney(2000)
-							vehicle.impounded = false
-							usersTable.updateDocument("essentialmode", docid ,{vehicle = vehicle},function() end)
-						else
-							TriggerClientEvent("garage:notify", source, "~r~BC IMPOUND: ~w~Your car is impounded and can be retrieved for $2,000!")
-						end
-						return
-					end
-					if vehicle.stored == false then
-						if playerInsurance then
-							if playerHasValidAutoInsurance(playerInsurance) then
-								TriggerClientEvent("garage:notify", source, "~g~T. ENDS INSURANCE: ~w~Here's your car!")
-								TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
-							else
-								TriggerClientEvent("garage:vehicleNotStored", userSource)
-							end
-						else
-							TriggerClientEvent("garage:vehicleNotStored", userSource)
-						end
-					else
-						TriggerClientEvent("garage:notify", userSource, "Here's your car!")
+		local vehicles = user.getVehicles()
+		local playerInsurance = user.getInsurance()
+		local autoInsurance = {}
+		local hasAutoInsurance = false
+		for x = 1, #playerInsurance do
+			local insurance = playerInsurance[i]
+			if insurance.type == "auto" then
+				hasAutoInsurance = true
+				autoInsurance = insurance
+			end
+		end
+		for i = 1, #vehicles do
+			local vehicle = vehicles[i]
+			if vehicle.impounded == true then
+				if user.getMoney() >= 2000 then
+					TriggerClientEvent("garage:notify", userSource, "~g~BC IMPOUND: ~w~Here's your car!")
+					TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
+					user.removeMoney(2000)
+					vehicles[i].impounded = false
+					users.setVehicles(vehicles)
+					return
+				else
+					TriggerClientEvent("garage:notify", source, "~r~BC IMPOUND: ~w~Your car is impounded and can be retrieved for $2,000!")
+				end
+				return
+			end
+			-- not impounded, check if stored or not
+			if vehicle.stored == false then
+				if hasAutoInsurance then
+					if playerHasValidAutoInsurance(autoInsurance) then
+						TriggerClientEvent("garage:notify", source, "~g~T. ENDS INSURANCE: ~w~Here's your car!")
 						TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
-						vehicle.stored = false
-						usersTable.updateDocument("essentialmode", docid ,{vehicle = vehicle},function() end)
 					end
 				else
 					TriggerClientEvent("garage:vehicleNotStored", userSource)
 				end
-			end)
-		end)
+			else
+				TriggerClientEvent("garage:notify", userSource, "Here's your car!")
+				TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
+				vehicles[i].stored = false
+				user.setVehicles(vehicles)
+			end
+		end
 	end)
 end)
 
 RegisterServerEvent("garage:spawn")
 AddEventHandler("garage:spawn", function()
 	local userSource = source
-	local idents = GetPlayerIdentifiers(userSource)
-	TriggerEvent('es:exposeDBFunctions', function(usersTable)
-		usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
-			if not result.vehicle then
-				TriggerClientEvent("garage:notify", source, "~y~You don't seem to own a vehicle.")
+	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+		local vehicles = user.getVehicles()
+			if #vehicles < 1 then
+				TriggerClientEvent("garage:notify", userSource, "~y~You don't seem to own a vehicle.")
 			else
-				TriggerClientEvent("garage:spawn", source, result.vehicle)
-				TriggerClientEvent("garage:notify", source, "~g~Here you go, Drive safe!")
+				TriggerClientEvent("garage:spawn", userSource, vehicles[1]) -- currently only spawn first vehicle in player's owned vehicles list
+				TriggerClientEvent("garage:notify", userSource, "~g~Here you go, Drive safe!")
 			end
-		end)
 	end)
 end)
 
