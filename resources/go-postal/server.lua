@@ -5,20 +5,6 @@ AddEventHandler("postal:giveMoney", function(amount)
 	local userSource = source
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		user.addMoney(amount)
-		local oldMoney = user.get("money")
-		user.set("money", oldMoney + amount)
-		TriggerEvent('es:exposeDBFunctions', function(usersTable)
-			local idents = GetPlayerIdentifiers(userSource)
-			usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
-				docid = result._id
-				print("docid = " .. docid)
-				print("result.money = " .. result.money)
-				print("amount = " .. amount)
-				local newMoney = result.money + amount
-				print("saving new money with newMoney = " .. newMoney)
-				usersTable.updateDocument("essentialmode", docid ,{money = newMoney},function() end)
-			end)
-		end)
 	end)
 end)
 
