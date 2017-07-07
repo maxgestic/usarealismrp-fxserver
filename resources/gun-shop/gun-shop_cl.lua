@@ -18,9 +18,10 @@ function round(num, numDecimalPlaces)
   return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
 end
 
-RegisterNetEvent("gunShop:refreshWeapons")
-AddEventHandler("gunShop:refreshWeapons", function(weapons)
-	playerWeapons = weapons
+RegisterNetEvent("gunShop:showSellMenu")
+AddEventHandler("gunShop:showSellMenu", function(weapons)
+    Citizen.Trace("calling sellMenu with #weapons = " .. #weapons)
+    sellMenu(weapons)
 end)
 
 RegisterNetEvent("mini:equipWeapon")
@@ -134,20 +135,12 @@ end
 function loadWeapons()
 	ClearMenu()
 	TriggerServerEvent("gunShop:refreshWeaponList")
-	while playerWeapons == nil do
-		Wait(500)
-	end
-	if playerWeapons ~= nil then
-		sellMenu()
-	end
 end
 
-function sellMenu()
+function sellMenu(playerWeapons)
 	MenuTitle = "Sell"
 	ClearMenu()
 	Menu.hidden = false
-	TriggerServerEvent("gunShop:refreshWeaponList")
-	Wait(500) -- wait to load
 	for i=1, #playerWeapons do
 		local weapon = playerWeapons[i]
 		Menu.addButton("($" .. round(.50*weapon.price, 0) .. ") " .. weapon.name, "sellWeapon", weapon)
@@ -183,7 +176,9 @@ Citizen.CreateThread(function()
 			playerNotified = true
 		end
 		if IsControlJustPressed(1,Keys["E"]) then
+            Citizen.Trace("'E' was just pressed")
 			if isPlayerAtGunShop() then
+                Citizen.Trace("player was at gun shop")
                 TriggerServerEvent("gunShop:checkPermit")
                 --Menu.hidden = not Menu.hidden
 			end
