@@ -21,6 +21,7 @@ settings.defaultSettings = {
 	['startingWeapons'] = {},
 	['startingVehicles'] = {},
 	['startingInsurance'] = {},
+	['startingLicenses'] = {},
 	['enableRankDecorators'] = false,
 	['moneyIcon'] = "$",
 	['nativeMoneySystem'] = true,
@@ -49,7 +50,7 @@ AddEventHandler('playerDropped', function()
 		print("identifier = " .. Users[numberSource].get("identifier"))
 		print("money = " .. Users[numberSource].getMoney())
 		print("bank = " .. Users[numberSource].getBank())
-		db.updateUser(Users[numberSource].get('identifier'), {money = Users[numberSource].getMoney(), bank = Users[numberSource].getBank(), model = Users[numberSource].getModel(), inventory = Users[numberSource].getInventory(), weapons = Users[numberSource].getWeapons(), vehicles = Users[numberSource].getVehicles(), insurance = Users[numberSource].getInsurance(), job = Users[numberSource].getJob()}, function()
+		db.updateUser(Users[numberSource].get('identifier'), {money = Users[numberSource].getMoney(), bank = Users[numberSource].getBank(), model = Users[numberSource].getModel(), inventory = Users[numberSource].getInventory(), weapons = Users[numberSource].getWeapons(), vehicles = Users[numberSource].getVehicles(), insurance = Users[numberSource].getInsurance(), job = Users[numberSource].getJob(), licenses = Users[numberSource].getLicenses()}, function()
 			Users[numberSource] = nil
 		end)
 	else

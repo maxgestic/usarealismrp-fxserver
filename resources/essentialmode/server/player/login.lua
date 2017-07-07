@@ -5,7 +5,7 @@
 
 function LoadUser(identifier, source, new)
 	db.retrieveUser(identifier, function(user)
-		Users[source] = CreatePlayer(source, user.permission_level, user.money, user.bank, user.identifier, user.group, user.model, user.inventory, user.weapons, user.vehicles, user.insurance, user.job)
+		Users[source] = CreatePlayer(source, user.permission_level, user.money, user.bank, user.identifier, user.group, user.model, user.inventory, user.weapons, user.vehicles, user.insurance, user.job, user.licenses)
 		print("loading user with get.Money = " .. Users[source].getMoney())
 		print("loading user with get.Bank = " .. Users[source].getBank())
 

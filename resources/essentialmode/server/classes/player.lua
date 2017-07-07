@@ -5,7 +5,7 @@
 
 -- restart essentialmode
 
-function CreatePlayer(source, permission_level, money, bank, identifier, group, model, inventory, weapons, vehicles, insurance, job)
+function CreatePlayer(source, permission_level, money, bank, identifier, group, model, inventory, weapons, vehicles, insurance, job, licenses)
 	local self = {}
 
 	self.source = source
@@ -21,6 +21,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 	self.vehicles = vehicles
 	self.insurance = insurance
 	self.job = job
+	self.licenses = licenses
 	-- END --
 	self.coords = {x = 0.0, y = 0.0, z = 0.0}
 	self.session = {}
@@ -46,6 +47,14 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 	end
 
 	-- CUSTOM SETTERS/GETTERS HERE --
+	rTable.getLicenses = function()
+		return self.licenses
+	end
+
+	rTable.setLicenses = function(l)
+		self.licenses = l
+	end
+
 	rTable.getInsurance = function()
 		return self.insurance
 	end
