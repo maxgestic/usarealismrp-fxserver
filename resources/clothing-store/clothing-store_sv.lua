@@ -39,31 +39,25 @@ end)
 RegisterServerEvent("mini:save")
 AddEventHandler("mini:save", function(model)
 	local userSource = source
-	local idents = GetPlayerIdentifiers(userSource)
-	TriggerEvent('es:exposeDBFunctions', function(usersTable)
-        usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
-            docid = result._id
-            usersTable.updateDocument("essentialmode", docid ,{model = model},function() end)
-			print("PLAYER MODEL SAVED = " .. model)
-			TriggerClientEvent("clothingStore:notify", userSource, "Your player model has been ~y~saved!")
-        end)
+	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+		user.setModel(model)
+		print("PLAYER MODEL SAVED = " .. model)
+		TriggerClientEvent("clothingStore:notify", userSource, "Your player model has been ~y~saved!")
     end)
 end)
 
 RegisterServerEvent("mini:giveMeMyWeaponsPlease")
 AddEventHandler("mini:giveMeMyWeaponsPlease", function()
-	-- TODO: ADD A CHECK FOR PLAYER JOB, ONLY GIVE WEAPONS IF CIVILIAN
     print("inside of giveMeMyWeaponsPlease now!!")
 	local playerWeapons
 	local userSource = source
-	local idents = GetPlayerIdentifiers(userSource)
-	TriggerEvent('es:exposeDBFunctions', function(usersTable)
-		usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
-			docid = result._id
-			playerWeapons = result.weapons
+	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+		if user.getJob() == "civ" then
+			playerWeapons = user.getWeapons()
 			print("#playerWeapons = " .. #playerWeapons)
-			-- todo: ADD A CHECK FOR PLAYER JOB, ONLY GIVE WEAPONS IF CIVILIAN
 			TriggerClientEvent("mini:giveWeapons", userSource, playerWeapons)
-		end)
+		else
+			print("did not give weapons because player was not a civilian at clothing store")
+		end
 	end)
 end)
