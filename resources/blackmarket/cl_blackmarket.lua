@@ -15,11 +15,9 @@ end)
 
 RegisterNetEvent("blackMarket:insufficientFunds")
 AddEventHandler("blackMarket:insufficientFunds", function(price, purchaseType)
-
 	if purchaseType == "gun" then
         DrawCoolLookingNotification("You don't have enough money to purchase that! Sorry!")
 	end
-
 end)
 
 RegisterNetEvent("blackMarket:notify")

@@ -6,7 +6,8 @@ end
 
 RegisterServerEvent("blackMarket:getWeaponsAndDisplaySellMenu")
 AddEventHandler("blackMarket:getWeaponsAndDisplaySellMenu", function()
-    TriggerEvent('es:getPlayerFromId', source, function(user)
+    local userSource = source
+    TriggerEvent('es:getPlayerFromId', userSource, function(user)
         local weapons = user.getWeapons()
         TriggerClientEvent("blackMarket:displaySellMenu", userSource, weapons)
     end)
