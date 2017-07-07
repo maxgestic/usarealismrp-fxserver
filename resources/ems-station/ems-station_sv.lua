@@ -15,35 +15,30 @@ AddEventHandler("emsStation:toggleDuty", function(params)
     local splitParams = stringSplit(params,":")
     local gender = splitParams[1]
     local type = splitParams[2]
-	local userSource = source
-    local playerJob
-    local idents = GetPlayerIdentifiers(userSource)
-    TriggerEvent('es:exposeDBFunctions', function(usersTable)
-        usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
-            docid = result._id
-            playerJob = result.job
-            -- give appropriate loadout
-            if playerJob ~= ("fire" or "ems") then
-                local emsModel
-                local newJob
-                -- chosen gender for sheriff
-                if gender == "male" then
-                    if type == "paramedic" then
-                        emsModel = "S_M_M_Paramedic_01"
-                        newJob = "ems"
-                    else
-                        emsModel = "S_M_Y_Fireman_01"
-                        newJob = "fire"
-                    end
+    local userSource = source
+    TriggerEvent('es:getPlayerFromId', userSource, function(user)
+        local playerJob = user.getJob()
+        -- give appropriate loadout
+        if playerJob ~= ("fire" or "ems") then
+            local emsModel
+            local newJob
+            -- chosen gender for sheriff
+            if gender == "male" then
+                if type == "paramedic" then
+                    emsModel = "S_M_M_Paramedic_01"
+                    newJob = "ems"
                 else
-                        emsModel = "S_F_Y_Scrubs_01"
-                        newJob = "ems"
+                    emsModel = "S_M_Y_Fireman_01"
+                    newJob = "fire"
                 end
-                TriggerClientEvent("emsStation:giveEmsLoadout", userSource, emsModel)
-                print("setting job = " .. newJob)
-                usersTable.updateDocument("essentialmode", docid ,{job = newJob},function() end)
+            else
+                emsModel = "S_F_Y_Scrubs_01"
+                newJob = "ems"
             end
-        end)
+            user.setJob(newJob)
+            TriggerClientEvent("emsStation:giveEmsLoadout", userSource, emsModel)
+            print("setting job = " .. newJob)
+        end
     end)
 end)
 
@@ -52,22 +47,15 @@ AddEventHandler("emsStation:giveCivStuff", function()
     -- get player job
     local userSource = source
     local playerModel, playerWeapons, playerJob
-    local idents = GetPlayerIdentifiers(userSource)
-    TriggerEvent('es:exposeDBFunctions', function(usersTable)
-        usersTable.getDocumentByRow("essentialmode", "identifier", idents[1], function(result)
-            docid = result._id
-            playerJob = result.job
-            playerModel = result.model
-            playerWeapons = result.weapons
-            if not playerWeapons then
-                playerWeapons = {}
-            end
-            if playerJob == "sheriff" or playerJob == "fire" or playerJob == "ems" then
-                TriggerClientEvent("emsStation:giveCivLoadout", userSource, playerModel, playerWeapons)
-                print("setting job = civ")
-                usersTable.updateDocument("essentialmode", docid ,{job = "civ"},function() end)
-            end
-        end)
+    TriggerEvent('es:getPlayerFromId', userSource, function(user)
+        playerJob = user.getJob()
+        if playerJob == "sheriff" or playerJob == "fire" or playerJob == "ems" then
+            playerModel = user.getModel()
+            playerWeapons = user.getWeapons()
+            user.setJob("civ")
+            TriggerClientEvent("emsStation:giveCivLoadout", userSource, playerModel, playerWeapons)
+            print("setting job = civ")
+        end
     end)
 --[[
 		TriggerClientEvent("gps:removeAllEMSReq", source)
