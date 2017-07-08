@@ -1,7 +1,7 @@
 RegisterServerEvent("carDamage:checkForRepairKit")
 AddEventHandler("carDamage:checkForRepairKit", function(vehicle)
     TriggerEvent('es:getPlayerFromId', source, function(user)
-        local inventory = user.inventory
+        local inventory = user.getInventory()
         for i = 1, #inventory do
                 if inventory[i].name == "Repair Kit" then
                     if math.random(1, 100) < 60 then -- 60% chance to repair
