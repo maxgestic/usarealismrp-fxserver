@@ -1,0 +1,173 @@
+local locations = {
+	{ x=-460.847, y=5978.19, z=30.500 },
+	{ x=401.549, y=-1632.138, z=28.291 },
+}
+
+-- Delete car function borrowed frtom Mr.Scammer's model blacklist, thanks to him!
+function deleteCar( entity )
+    Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( entity ) )
+end
+
+function getVehicleInDirection(coordFrom, coordTo)
+	local rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 10, GetPlayerPed(-1), 0)
+	local a, b, c, d, vehicle = GetRaycastResult(rayHandle)
+	return vehicle
+end
+
+RegisterNetEvent("towJob:deleteVehicle")
+AddEventHandler("towJob:deleteVehicle", function(target)
+
+	SetEntityAsMissionEntity(target, true, true )
+    deleteCar(target)
+
+end)
+
+RegisterNetEvent("towJob:success")
+AddEventHandler("towJob:success", function()
+
+	TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0You have impounded the vehicle for ^2$750^0!")
+
+end)
+
+function impoundVehicle()
+
+	local targetVehicle = getVehicleInFrontOfUser()
+
+	if targetVehicle ~= 0 then
+
+		TriggerServerEvent("towJob:impoundVehicle", targetVehicle)
+
+	else
+
+		TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0There is no vehicle no impound!")
+
+	end
+
+	Menu.hidden = true -- close menu
+
+end
+
+function getVehicleInFrontOfUser()
+
+	local playerped = GetPlayerPed(-1)
+	local coordA = GetEntityCoords(playerped, 1)
+	local coordB = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 5.0, 0.0)
+	local targetVehicle = getVehicleInDirection(coordA, coordB)
+	return targetVehicle
+
+end
+
+function towJobMenu()
+	MenuTitle = "Tow Job"
+	ClearMenu()
+	Menu.addButton("Impound Vehicle (+$700)", "impoundVehicle")
+end
+
+function getPlayerDistanceFromShop(shopX,shopY,shopZ)
+	-- Get the player coords so that we know where to spawn it
+	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
+	return GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,shopX,shopY,shopZ,false)
+end
+
+function isPlayerAtTowSpot()
+	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
+
+	for i = 1, #locations do
+		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,false) < 5 then
+			return true
+		end
+	end
+
+	return false
+
+end
+
+local playerNotified = false
+
+Citizen.CreateThread(function()
+
+	while true do
+
+		Citizen.Wait(0)
+
+		for i = 1, #locations do
+			DrawMarker(1, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
+		end
+
+		if isPlayerAtTowSpot() and not playerNotified then
+      		TriggerEvent("chatMessage", "SYSTEM", { 0, 141, 155 }, "^3Drop the vehicle off inside the marker, then press E to impound it.")
+			playerNotified = true
+		end
+		if IsControlJustPressed(1,Keys["E"]) then
+
+			if isPlayerAtTowSpot() then
+
+				if not stored then
+					-- save skin for user canceling
+					skinBeforeRandomizing = GetEntityModel(GetPlayerPed(-1))
+					stored = true
+				end
+
+				towJobMenu()              -- Menu to draw
+				Menu.hidden = not Menu.hidden    -- Hide/Show the menu
+
+			end
+
+		elseif not isPlayerAtTowSpot() then
+			playerNotified = false
+			Menu.hidden = true
+		end
+
+		Menu.renderGUI()     -- Draw menu on each tick if Menu.hidden = false
+
+	end
+end)
+
+-- pv-tow :
+
+local currentlyTowedVehicle = nil
+
+RegisterNetEvent('pv:tow')
+AddEventHandler('pv:tow', function()
+
+	local playerped = GetPlayerPed(-1)
+	local vehicle = GetVehiclePedIsIn(playerped, true)
+
+	local towmodel = GetHashKey('flatbed')
+	local isVehicleTow = IsVehicleModel(vehicle, towmodel)
+
+	if isVehicleTow then
+
+		local coordA = GetEntityCoords(playerped, 1)
+		local coordB = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 5.0, 0.0)
+		local targetVehicle = getVehicleInDirection(coordA, coordB)
+
+		if currentlyTowedVehicle == nil then
+			if targetVehicle ~= 0 then
+				if not IsPedInAnyVehicle(playerped, true) then
+					if vehicle ~= targetVehicle then
+						AttachEntityToEntity(targetVehicle, vehicle, 20, -0.5, -5.0, 1.0, 0.0, 0.0, 0.0, false, false, false, false, 20, true)
+						currentlyTowedVehicle = targetVehicle
+						TriggerEvent("chatMessage", "", {0, 0, 0}, "Vehicle successfully attached to towtruck!")
+						TriggerServerEvent("tow:towingVehicle", currentlyTowedVehicle)
+					else
+						TriggerEvent("chatMessage", "", {0, 0, 0}, "You can't tow your own tow truck with your own tow truck!")
+					end
+				end
+			else
+				TriggerEvent("chatMessage", "", {0, 0, 0}, "There is no vehicle to tow!")
+			end
+		else
+			AttachEntityToEntity(currentlyTowedVehicle, vehicle, 20, -0.5, -12.0, 1.0, 0.0, 0.0, 0.0, false, false, false, false, 20, true)
+			DetachEntity(currentlyTowedVehicle, true, true)
+			currentlyTowedVehicle = nil
+			TriggerEvent("chatMessage", "", {0, 0, 0}, "The vehicle has been successfully detached!")
+		end
+	end
+end)
+
+function getVehicleInDirection(coordFrom, coordTo)
+	local rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 10, GetPlayerPed(-1), 0)
+	local a, b, c, d, vehicle = GetRaycastResult(rayHandle)
+	return vehicle
+end
