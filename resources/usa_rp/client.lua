@@ -1,6 +1,6 @@
 RegisterNetEvent('usa_rp:playerLoaded')
 AddEventHandler('usa_rp:playerLoaded', function()
-    exports.spawnmanager:setAutoSpawn(true)
+    exports.spawnmanager:setAutoSpawn(false)
     exports.spawnmanager:forceRespawn()
     exports.spawnmanager:setAutoSpawnCallback(function()
         TriggerServerEvent('usa_rp:spawnPlayer')
