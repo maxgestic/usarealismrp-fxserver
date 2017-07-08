@@ -61,11 +61,12 @@ AddEventHandler('chatMessage', function(from,name,message)
 			CancelEvent()
 			TriggerEvent('es:getPlayerFromId', from, function(user)
 				if user then
-					if user.job == "cop" or
-						user.job == "sheriff" or
-						user.job == "highwaypatrol" or
-						user.job == "ems" or
-						user.job == "fire" or
+					local userJob = user.getJob()
+					if userJob == "cop" or
+						userJob == "sheriff" or
+						userJob == "highwaypatrol" or
+						userJob == "ems" or
+						userJob == "fire" or
 						user.getGroup() == "mod" or
 						user.getGroup() == "admin" or
 						user.getGroup() == "superadmin" or
