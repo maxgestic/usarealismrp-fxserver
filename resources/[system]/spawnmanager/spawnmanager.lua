@@ -333,7 +333,8 @@ Citizen.CreateThread(function()
                             autoSpawnCallback()
                         else
                             Citizen.Trace("spawnManager(debug): spawnPlayer() called")
-                            spawnPlayer()
+                            --spawnPlayer()
+                            -- don't call that function cause usa_rp:spawnPlayer is better ;)
                         end
                         respawnForced = false
                     end
