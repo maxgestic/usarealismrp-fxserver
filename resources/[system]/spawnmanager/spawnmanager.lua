@@ -321,26 +321,26 @@ Citizen.CreateThread(function()
     -- main loop thing
     while true do
         Citizen.Wait(50)
-
         local playerPed = GetPlayerPed(-1)
-
         if playerPed and playerPed ~= -1 then
             -- check if we want to autospawn
             if autoSpawnEnabled then
+                Citizen.Trace("spawnManager(debug): autoSpawnEnabled = true")
                 if NetworkIsPlayerActive(PlayerId()) then
                     if (diedAt and (GetTimeDifference(GetGameTimer(), diedAt) > 2000)) or respawnForced then
                         if autoSpawnCallback then
+                            Citizen.Trace("spawnManager(debug): autoSpawnCallback() called")
                             autoSpawnCallback()
                         else
+                            Citizen.Trace("spawnManager(debug): spawnPlayer() called")
                             spawnPlayer()
                         end
-
                         respawnForced = false
                     end
                 end
             end
-
             if IsEntityDead(playerPed) then
+                --Citizen.Trace("spawnManager(debug): player died")
                 if not diedAt then
                     diedAt = GetGameTimer()
                 end

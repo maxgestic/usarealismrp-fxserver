@@ -87,10 +87,10 @@ AddEventHandler('RPD:allowRevive', function(from, group, size)
 end)
 
 Citizen.CreateThread(function()
+	Citizen.Trace("INSIDE OF RPDEATH CREATED THREAD")
 	local respawnCount = 0
 	local spawnPoints = {}
 	local playerIndex = NetworkGetPlayerIndex(-1)
-
 
 	math.randomseed(playerIndex)
 
@@ -137,7 +137,8 @@ Citizen.CreateThread(function()
 		if (RPDeathEnabled) then
 
 			if (IsEntityDead(ped)) then
-
+				Citizen.Trace("(debug:RPDeath): player is dead!") -- LEFT OFF HERE
+				Citizen.Trace("dead = " .. tostring(dead))
 
 				SetPlayerInvincible(ped, true)
 				SetEntityHealth(ped, 1)
@@ -161,7 +162,7 @@ Citizen.CreateThread(function()
 						table.insert( street, GetStreetNameFromHashKey( lastStreetB ) )
 					end
 					TriggerServerEvent("RPD:userDead", GetPlayerName(PlayerId()), table.concat( street, " & " ))
-
+					Citizen.Trace("calling RPD:startTimer")
 					TriggerEvent("RPD:startTimer")
 				end
 

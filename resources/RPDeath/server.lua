@@ -40,6 +40,7 @@ AddEventHandler("RPD:removeWeapons", function()
 			user.setWeapons({})
 			user.setLicenses({})
 			user.setVehicles({})
+			user.setInsurance({})
 		end
 	end)
 end)
@@ -47,7 +48,7 @@ end)
 AddEventHandler('chatMessage', function(from,name,message)
 	if(message:sub(1,1) == "/") then
 
-		local args = message.splitString("")
+		local args = splitString(message, " ")
 		local cmd = args[1]
 
 
@@ -57,7 +58,6 @@ AddEventHandler('chatMessage', function(from,name,message)
 		end
 
 		if (cmd == "/revive") then
-			print("PLAYER " .. GetPlayerName(source) .. " USED /REVIVE COMMAND!!!")
 			CancelEvent()
 			TriggerEvent('es:getPlayerFromId', from, function(user)
 				if user then
@@ -66,10 +66,10 @@ AddEventHandler('chatMessage', function(from,name,message)
 						user.job == "highwaypatrol" or
 						user.job == "ems" or
 						user.job == "fire" or
-						user.group.group == "mod" or
-						user.group.group == "admin" or
-						user.group.group == "superadmin" or
-						user.group.group == "owner" then
+						user.getGroup() == "mod" or
+						user.getGroup() == "admin" or
+						user.getGroup() == "superadmin" or
+						user.getGroup() == "owner" then
 						if args[2] == nil then
 							size = 10
 						else
@@ -81,7 +81,7 @@ AddEventHandler('chatMessage', function(from,name,message)
 								size = 0
 							end
 						end
-						TriggerClientEvent('RPD:allowRevive', -1, from, user.group.group, size)
+						TriggerClientEvent('RPD:allowRevive', -1, from, user.getGroup(), size)
 					else
 						TriggerClientEvent("chatMessage", from, "SYSTEM", {255, 0, 0}, "You don't have permissions to use this command.")
 					end
