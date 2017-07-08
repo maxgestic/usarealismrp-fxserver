@@ -1,0 +1,5 @@
+AddEventHandler("playerSpawned", function(spawn)
+    TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0Welcome to ^1U^0S^5A ^3REALISM RP^0!")
+	TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0You can use 'e' to open the menu when at one of the shops marked on your map")
+	TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0Type ^3'/help' ^0for more information!")
+end)

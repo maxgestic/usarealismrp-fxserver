@@ -95,14 +95,16 @@ end)
 
 
 
-function splitString(self, delimiter)
-	local words = self:Split(delimiter)
-	local output = {}
-	for i = 0, #words - 1 do
-		table.insert(output, words[i])
-	end
-
-	return output
+function splitString(inputstr, sep)
+        if sep == nil then
+                sep = "%s"
+        end
+        local t={} ; i=1
+        for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+                t[i] = str
+                i = i + 1
+        end
+        return t
 end
 
 function serializeTable(val, name, skipnewlines, depth)
