@@ -1,27 +1,30 @@
+currentlyTowedVehicle = nil
+
 RegisterServerEvent("towJob:impoundVehicle")
 AddEventHandler("towJob:impoundVehicle", function(targetVehicle)
+	local userSource = source
 	if currentlyTowedVehicle then
+		print("currentlyTowedVehicle = " .. currentlyTowedVehicle)
+		print("targetVehicle = " .. targetVehicle)
 		if currentlyTowedVehicle == targetVehicle then -- vehicles match update
 				-- Gives the loaded user corresponding to the given player id(second argument).
 				-- The user object is either nil or the loaded user.
-				TriggerEvent('es:getPlayerFromId', source, function(user)
-					user:setMoney(user.money + 700) -- subtract price from user's money and store resulting amount
+				TriggerEvent('es:getPlayerFromId', userSource, function(user)
+					user.addMoney(700) -- subtract price from user's money and store resulting amount
 					-- user:setLicense() ??
+					TriggerClientEvent("towJob:deleteVehicle", userSource, targetVehicle) -- delete vehicle
+					currentlyTowedVehicle = nil
+					TriggerClientEvent("towJob:success", userSource)
 				end)
-			TriggerClientEvent("towJob:deleteVehicle", source, targetVehicle) -- delete vehicle
-			currentlyTowedVehicle = nil
-			TriggerClientEvent("towJob:success", source)
 		else
-			print ("tow: VEHICLES DON'T MATCH UP WHEN TOWING")
+			print ("tow: VEHICLES DON'T MATCH UP WHEN TRYING TO IMPOUND")
 		end
 	else
-		print("tow: VEHICLE NOT IN DATABASE AS BEING TOWED!")
+		print("tow: NO CURRENTLY SET TOWED VEHICLE!")
 	end
 end)
 
 -- pv-tow :
-
-local currentlyTowedVehicle = nil
 
 TriggerEvent('es:addCommand', 'tow', function(source, args, user)
 	TriggerClientEvent('pv:tow', source)
@@ -29,5 +32,6 @@ end)
 
 RegisterServerEvent("tow:towingVehicle")
 AddEventHandler("tow:towingVehicle", function(vehicle)
+	print("setting currentlyTowedVehicle = " .. vehicle)
 	currentlyTowedVehicle = vehicle
 end)

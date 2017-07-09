@@ -16,16 +16,16 @@ end
 
 RegisterNetEvent("towJob:deleteVehicle")
 AddEventHandler("towJob:deleteVehicle", function(target)
-
+	Citizen.Trace("inside of towJob:deleteVehicle with typeof vehicle = " .. type(target))
+	Citizen.Trace("inside of towJob:deleteVehicle with vehicle = " .. target)
 	SetEntityAsMissionEntity(target, true, true )
     deleteCar(target)
-
 end)
 
 RegisterNetEvent("towJob:success")
 AddEventHandler("towJob:success", function()
 
-	TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0You have impounded the vehicle for ^2$750^0!")
+	TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0You have impounded the vehicle for ^2$700^0!")
 
 end)
 
