@@ -57,7 +57,7 @@ AddEventHandler("blackMarket:checkGunMoney", function(weapon)
                 TriggerClientEvent("mini:insufficientFunds", userSource, weapon.price, "gun")
             end
         else
-            -- TODO: notify user of weapon slots full
+            TriggerClientEvent("blackMarket:notify", userSource, "~r~All weapons slot are full! (" .. MAX_PLAYER_WEAPON_SLOTS .. "/" .. MAX_PLAYER_WEAPON_SLOTS .. ")")
         end
     end)
 end)

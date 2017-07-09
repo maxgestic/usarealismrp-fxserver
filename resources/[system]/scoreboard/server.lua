@@ -12,7 +12,7 @@ AddEventHandler("getScoreboard", function(ptable)
 		if characters[i] then
 			table.insert(players, '<tr><td>' .. i .. '</td><td>' .. GetPlayerName(i) .. '</td><td>' .. GetPlayerPing(i) .. '<small>ms</small></td></tr>')
 		else
-			if type(GetPlayerName(i)) ~= nil and type(GetPlayerPing(i)) ~= nil then
+			if GetPlayerName(i) and GetPlayerPing(i) then
 				table.insert(players, '<tr><td>' .. i .. '</td><td>' .. GetPlayerName(i) .. '</td><td>' .. GetPlayerPing(i) .. '<small>ms</small></td></tr>')
 			end
 		end
