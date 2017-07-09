@@ -22,13 +22,13 @@ end
 
 AddEventHandler("license:searchForLicense", function(source, playerId)
 	    TriggerEvent('es:getPlayerFromId', tonumber(playerId), function(user)
-			local vehicles = user.getVehicles()
-	        local licenses = user.getLicenses()
-			local insurancePlans = user.getInsurance()
 			if not user then
 				TriggerClientEvent("license:notifyNoExist", source, playerId) -- player not in game with that id
 				return
 			end
+			local vehicles = user.getVehicles()
+	        local licenses = user.getLicenses()
+			local insurancePlans = user.getInsurance()
 			local hasFirearmsPermit = false
 			local hasDL = false
 			print("#inventory = " .. #licenses)
