@@ -27,7 +27,7 @@ local blips = {
     { title="Ammu-Nation", colour=41, id=110, x=16.6405, y=-1116.9636, z=29.7911 },
     { title="Ammu-Nation", colour=41, id=110, x=812.4276, y=-2145.2118, z=29.3063 },
 	--{ title="Car Dealership", colour=71, id=56, x=119.634, y=6626.24, z=31.957 },
-	{ title="Car Dealership", colour=76, id=225, x=-43.2616, y=-1097.37, z=26.4223 },
+	{ title="Car Dealership", colour=76, id=225, x=-32.4886, y=-1111.35, z=25.3523 },
 	{ title="DMV", colour=4, id=355, x=-447.723, y=6013.65, z=30.700 },
 	{ title="DMV", colour=4, id=355, x=441.301, y=-981.434, z=29.689 },
 	{ title="DMV", colour=4, id=355, x=1853.616, y=3687.966, z=33.267 },
