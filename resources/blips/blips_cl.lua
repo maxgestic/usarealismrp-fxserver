@@ -46,7 +46,8 @@ local blips = {
 	{ title="FTF", colour = 47, id = 88, x=140.577, y=-768.375, z=45.752 },
 	{ title="Airport", colour = 30, id = 307, x=-1329.32, y=-3045.92, z=13.944 },
 	{ title="Bar", colour = 83, id = 93, x=-564.778, y=274.195, z=83.0197 },
-	{ title="Downtown Taxi", colour = 60, id = 198, x=895.563, y=-179.536, z=74.7003 }
+	{ title="Downtown Taxi", colour = 60, id = 198, x=895.563, y=-179.536, z=74.7003 },
+	{ title="Bank", colour = 24, id = 108, x=254.565, y=225.495, z=100.176 }
 }
 
 Citizen.CreateThread(function()

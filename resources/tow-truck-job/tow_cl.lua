@@ -171,3 +171,47 @@ function getVehicleInDirection(coordFrom, coordTo)
 	local a, b, c, d, vehicle = GetRaycastResult(rayHandle)
 	return vehicle
 end
+
+-- to go on duty as tow truck driver
+local towDutyX, towDutyY, towDutyZ = 409.671, -1623.3, 28.2919
+local spawn = {x=404.923,y= -1649.84,z=29.2934}
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(0)
+		DrawMarker(1, towDutyX, towDutyY, towDutyZ, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
+        local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+	    if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,towDutyX,towDutyY,towDutyZ,false) < 3 then
+            --DrawCoolLookingNotification("Press ~y~E~w~ to go work for Downtown Taxi Co.!")
+    		if IsControlJustPressed(1,38) then
+                DrawCoolLookingNotification("Here's your rig! Have a good shift!")
+                spawnVehicle()
+                Citizen.Wait(120000) -- ghetto spawn delay
+    		end
+        elseif GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,towDutyX,towDutyY,towDutyZ,false) > 3 then
+            -- out of range
+        end
+	end
+end)
+
+function spawnVehicle()
+    local numberHash = 1353720154 -- t ow truck
+    Citizen.CreateThread(function()
+        RequestModel(numberHash)
+        while not HasModelLoaded(numberHash) do
+            RequestModel(numberHash)
+            Citizen.Wait(0)
+        end
+        local playerPed = GetPlayerPed(-1)
+        local vehicle = CreateVehicle(numberHash, spawn.x, spawn.y, spawn.z, 0.0, true, false)
+        SetVehicleOnGroundProperly(vehicle)
+        SetVehRadioStation(vehicle, "OFF")
+        SetEntityAsMissionEntity(vehicle, true, true)
+    end)
+end
+
+function DrawCoolLookingNotification(msg)
+    SetNotificationTextEntry("STRING")
+    AddTextComponentString(msg)
+    DrawNotification(0,1)
+end

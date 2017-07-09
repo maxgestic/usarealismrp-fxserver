@@ -52,15 +52,12 @@ end
 
 function isPlayerAtDMV()
 	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
-
 	for i = 1, #locations do
 		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,false) < 5 then
 			return true
 		end
 	end
-
 	return false
-
 end
 
 local playerNotified = false

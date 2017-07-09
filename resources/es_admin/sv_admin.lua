@@ -20,12 +20,12 @@ end)
 -- Default commands
 TriggerEvent('es:addCommand', 'report', function(source, args, user)
 	table.remove(args, 1)
-	TriggerClientEvent('chatMessage', source, "REPORT", {255, 0, 0}, " (^2" .. GetPlayerName(source) .." | "..source.."^0) " .. table.concat(args, " "))
+	--TriggerClientEvent('chatMessage', source, "REPORT", {255, 0, 0}, " (^2" .. GetPlayerName(source) .." | "..source.."^0) " .. table.concat(args, " "))
 
 	TriggerEvent("es:getPlayers", function(pl)
 		for k,v in pairs(pl) do
 			TriggerEvent("es:getPlayerFromId", k, function(user)
-				if(user.permission_level > 0 and k ~= source)then
+				if((user.getPermissions() > 0 or user.getGroup() == "mod" or user.getGroup() == "admin") and k ~= source)then
 					TriggerClientEvent('chatMessage', k, "REPORT", {255, 0, 0}, " (^2" .. GetPlayerName(source) .." | "..source.."^0) " .. table.concat(args, " "))
 				end
 			end)
@@ -58,7 +58,7 @@ AddEventHandler('es_admin:givePos', function(str)
 	appendNewPos(str)
 end)
 
-TriggerEvent('es:addGroupCommand', 'hashes', "owner", function(source, args, user) 
+TriggerEvent('es:addGroupCommand', 'hashes', "owner", function(source, args, user)
 	TriggerClientEvent('es_admin:doHashes', source, doHashes())
 end, function(source, args, user)end)
 
