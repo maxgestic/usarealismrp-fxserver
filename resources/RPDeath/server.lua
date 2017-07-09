@@ -1,10 +1,19 @@
-players = {}
+print("INSIDE OF RPDEATH SERVER.LUA")
 
+players = {}
+print("#players = " .. #players)
+
+AddEventHandler('es:playerLoaded', function(source, user)
+	print("setting players[source = true!]")
+	players[source] = true
+end)
+--[[
 RegisterServerEvent('RPD:addPlayer')
 AddEventHandler('RPD:addPlayer', function()
 	players[source] = true
+	print("player added inside of RPD:addPlayer!")
 end)
-
+--]]
 AddEventHandler('playerDropped',function(reason)
 	players[source] = nil
 end)
