@@ -1,3 +1,17 @@
+-- this command is to get your cop weapons back after dying
+TriggerEvent('es:addCommand', 'loadout', function(source, args, user)
+
+   weapons = {"WEAPON_COMBATPISTOL", "WEAPON_CARBINERIFLE", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_PUMPSHOTGUN", "WEAPON_FLAREGUN", "WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER"}
+
+   if user.getJob() == "sheriff" then
+       TriggerClientEvent("policeStation:giveWeapons", source, weapons)
+       TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^3You have been given a sheriff's deputy loadout.")
+   else
+       TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^3Only sheriff deputies are allowed to use /loadout!")
+   end
+
+end)
+
 RegisterServerEvent("policeStation:toggleUCDuty")
 AddEventHandler("policeStation:toggleUCDuty", function(modelName)
     local userSource = source

@@ -6,6 +6,24 @@ local locations = {
 	{ x=451.255, y=-992.41, z = 29.1896 }
 }
 
+RegisterNetEvent("policeStation:giveWeapons")
+AddEventHandler("policeStation:giveWeapons", function(playerWeapons)
+	local name, hash
+	Citizen.CreateThread(function()
+		Citizen.Wait(1)
+		-- weapons
+		for i = 1, #playerWeapons do
+			name = playerWeapons[i]
+			if string.match(name, "_") then
+				hash = GetHashKey(name)
+				GiveWeaponToPed(GetPlayerPed(-1), hash, 1000, 0, false) -- get hash given name of weapon
+			else
+				GiveWeaponToPed(GetPlayerPed(-1), tonumber(name), 1000, 0, false) -- name already is the hash
+			end
+		end
+	end)
+end)
+
 RegisterNetEvent("policeStation:giveCivWeapons")
 AddEventHandler("policeStation:giveCivWeapons", function(playerWeapons)
 	-- weapons
