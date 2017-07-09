@@ -5,6 +5,12 @@ AddEventHandler("search:searchPlayer", function(source, playerId)
 			return
 		end
 		local items = {}
+		local licenses = user.getLicenses()
+		for index = 1, #licenses do
+			if licenses[index].name == "Driver's License" then
+				table.insert(items, licenses[index])
+			end
+		end
 		local playerInventory = user.getInventory()
 		for i = 1, #playerInventory do
 			table.insert(items, playerInventory[i])
