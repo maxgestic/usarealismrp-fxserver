@@ -1,6 +1,7 @@
 local civilianSpawns = {
-    {x = 391.611, y = -948.984, z = 29.3978}, -- atlee & sinner st
-    {x = 95.2552, y = -1310.8, z = 29.2921} -- near strip club
+    --{x = 391.611, y = -948.984, z = 29.3978}, -- atlee & sinner st
+    --{x = 95.2552, y = -1310.8, z = 29.2921} -- near strip club
+    {x = 10.6334, y = -718.769, z = 44.2174}
 }
 
 AddEventHandler('es:playerLoaded', function(source, user)

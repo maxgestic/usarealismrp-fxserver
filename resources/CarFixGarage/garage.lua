@@ -12,15 +12,19 @@ vehicleRepairStation = {
 	{536.1182,  -178.5338,  53.08846},
 	{2006.354,  3798.739,  30.83191},
 	--{128.6394,  6620.741,  30.43497}, -- OG paleto spot v1
-	{1150.1766,  -774.4962,  57.1689},
+	--{1150.1766,  -774.4962,  57.1689},
 	--{103.513,  6622.77,  30.1868}, -- paleto
 	{-456.078,5984.27,30.0}, -- Paleto Bay SO
-	{-355.011,6109.35,30.0}-- Paleto Bay FD
+	{-355.011,6109.35,30.0},-- Paleto Bay FD
+	{-222.407,-1329.69,30.89},
+	{480.805,-1317.43,29.2}
 }
 
 blips = {
-	{1150.1766,  -774.4962,  57.1689},
-	{536.1182,  -178.5338,  53.08846}
+	--{1150.1766,  -774.4962,  57.1689},
+	{536.1182,  -178.5338,  53.08846},
+	{-222.407,-1329.69,30.89},
+	{480.805,-1317.43,29.2}
 }
 
 
@@ -84,6 +88,7 @@ Citizen.CreateThread(function ()
 				garageCoords2 = vehicleRepairStation[i]
 				DrawMarker(1, garageCoords2[1], garageCoords2[2], garageCoords2[3], 0, 0, 0, 0, 0, 0, 5.0, 5.0, 2.0, 0, 157, 0, 155, 0, 0, 2, 0, 0, 0, 0)
 				if not alreadyInside and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), garageCoords2[1], garageCoords2[2], garageCoords2[3], true ) < 3 then
+					DrawCoolLookingNotification("Your vehicle is  ~y~being repaired~w~!")
 					SetVehicleEngineOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), false, false, false) -- turn engine off
 					lastVisitedGarageX = garageCoords2[1]
 					lastVisitedGarageY = garageCoords2[2]

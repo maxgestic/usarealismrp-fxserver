@@ -1,5 +1,5 @@
 --local markerX, markerY, markerZ = 120.924,6624.605,31.000
-local markerX, markerY, markerZ = -43.2616, -1097.37, 25.3523
+local markerX, markerY, markerZ = -32.4886, -1111.35, 25.3523
 
 RegisterNetEvent("mini:spawnVehicleAtShop")
 AddEventHandler("mini:spawnVehicleAtShop", function(hash, name, plate)

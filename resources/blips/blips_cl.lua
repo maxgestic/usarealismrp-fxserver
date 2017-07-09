@@ -27,7 +27,7 @@ local blips = {
     { title="Ammu-Nation", colour=41, id=110, x=16.6405, y=-1116.9636, z=29.7911 },
     { title="Ammu-Nation", colour=41, id=110, x=812.4276, y=-2145.2118, z=29.3063 },
 	--{ title="Car Dealership", colour=71, id=56, x=119.634, y=6626.24, z=31.957 },
-	{ title="Car Dealership", colour=71, id=56, x=-43.2616, y=-1097.37, z=26.4223 },
+	{ title="Car Dealership", colour=76, id=225, x=-43.2616, y=-1097.37, z=26.4223 },
 	{ title="DMV", colour=4, id=355, x=-447.723, y=6013.65, z=30.700 },
 	{ title="DMV", colour=4, id=355, x=441.301, y=-981.434, z=29.689 },
 	{ title="DMV", colour=4, id=355, x=1853.616, y=3687.966, z=33.267 },
@@ -45,7 +45,8 @@ local blips = {
 	{ title="Strip Club", colour = 48, id = 121, x=129.607, y=-1299.83, z=29.2327 },
 	{ title="FTF", colour = 47, id = 88, x=140.577, y=-768.375, z=45.752 },
 	{ title="Airport", colour = 30, id = 307, x=-1329.32, y=-3045.92, z=13.944 },
-	{ title="Bar", colour = 83, id = 93, x=-564.778, y=274.195, z=83.0197 }
+	{ title="Bar", colour = 83, id = 93, x=-564.778, y=274.195, z=83.0197 },
+	{ title="Downtown Taxi", colour = 60, id = 198, x=895.563, y=-179.536, z=74.7003 }
 }
 
 Citizen.CreateThread(function()
