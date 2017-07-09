@@ -144,7 +144,8 @@ AddEventHandler("vehShop:setHandle", function(vehicleHandle)
 				hash = hash,
 				plate = plate,
 				handle = vehicleHandle,
-				stored = false
+				stored = false,
+                impounded = false
 			}
 			if #vehicles > 0 then
 				table.remove(vehicles) -- overwrite previous vehicle (temp)

@@ -10,7 +10,7 @@ AddEventHandler("carDamage:checkForRepairKit", function(vehicle)
                         TriggerClientEvent("carDamage:notifiyCarRepairFailed", source)
                     end
                     if inventory[i].quantity > 1 then
-                        user.inventory[i].quantity = user.inventory[i].quantity - 1
+                        inventory[i].quantity = inventory[i].quantity - 1
                     else
                         table.remove(inventory, i)
                     end

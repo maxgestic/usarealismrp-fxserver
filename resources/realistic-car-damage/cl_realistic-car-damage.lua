@@ -31,7 +31,7 @@ Citizen.CreateThread(function()
             local coordB = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 20.0, 0.0)
             local targetVehicle = getVehicleInDirection(coordA, coordB)
             if targetVehicle ~= 0 then
-                if GetVehicleEngineHealth(targetVehicle) < 1000 or not IsVehicleDriveable(targetVehicle, 0) and not IsPedInAnyVehicle(GetPlayerPed(-1), true) then
+                if (GetVehicleEngineHealth(targetVehicle) < 1000 or not IsVehicleDriveable(targetVehicle, 0)) and not IsPedInAnyVehicle(GetPlayerPed(-1), true) then
                     TriggerServerEvent("carDamage:checkForRepairKit", targetVehicle)
                     --targetVehicle = nil
                 end

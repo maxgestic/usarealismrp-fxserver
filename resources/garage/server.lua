@@ -49,22 +49,27 @@ AddEventHandler("garage:checkVehicleStatus", function()
 		local playerInsurance = user.getInsurance()
 		local autoInsurance = {}
 		local hasAutoInsurance = false
+		print("#playerInsurance = " .. #playerInsurance)
 		for x = 1, #playerInsurance do
-			local insurance = playerInsurance[i]
-			if insurance.type == "auto" then
-				hasAutoInsurance = true
-				autoInsurance = insurance
+			local insurance = playerInsurance[x]
+			if insurance then
+				if insurance.type == "auto" then
+					hasAutoInsurance = true
+					autoInsurance = insurance
+				end
 			end
 		end
 		for i = 1, #vehicles do
 			local vehicle = vehicles[i]
+			print("checking if " .. GetPlayerName(userSource) ..  " vehicle was impounded")
+			print("vehicle.impounded = " .. tostring(vehicle.impounded))
 			if vehicle.impounded == true then
 				if user.getMoney() >= 2000 then
 					TriggerClientEvent("garage:notify", userSource, "~g~BC IMPOUND: ~w~Here's your car!")
 					TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
 					user.removeMoney(2000)
 					vehicles[i].impounded = false
-					users.setVehicles(vehicles)
+					user.setVehicles(vehicles)
 					return
 				else
 					TriggerClientEvent("garage:notify", source, "~r~BC IMPOUND: ~w~Your car is impounded and can be retrieved for $2,000!")

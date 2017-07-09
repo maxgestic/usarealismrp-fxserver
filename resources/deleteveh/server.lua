@@ -19,13 +19,25 @@ AddEventHandler("impound:impoundVehicle", function(vehicle, plate)
         local playerJob = user.getJob()
         if playerJob == "sheriff" or playerJob == "ems" or playerJob == "fire" or playerJob == "owner" or playerJob == "admin" or playerJob == "mod" then
             TriggerEvent('es:getPlayers', function(players)
-                    for x = 1, #players do
-                        local player = players[i]
+                    for k,v in pairs(players) do
+                        local player = v
                         local vehicles = player.getVehicles()
+                        print("about to check all player vehicles : " .. #vehicles)
                         for i = 1, #vehicles do
-                            if vehicles[i].plate == plate then
+                            print("checking vehicle.model = " .. vehicles[i].model)
+                            if vehicles[i].impounded then
+                                print("checking vehicle.impounded = " .. tostring(vehicles[i].impounded))
+                            else
+                                print("vehicle did not have impound property")
+                            end
+                            print("vehicles[i].plate = " .. type(vehicles[i].plate))
+                            print("plate = " .. type(plate))
+                            if tonumber(plate) == tonumber(vehicles[i].plate) then
+                                print("found matching plate = " .. plate)
+                                print("setting vehicle.impounded = true!")
                                 vehicles[i].impounded = true
-                                print("just impounded " .. GetPlayerName(userSource) .. "'s vehicle!'")
+                                v.setVehicles(vehicles)
+                                print("just impounded " .. GetPlayerName(k) .. "'s vehicle!'")
                                 TriggerClientEvent( 'impoundVehicle', userSource )
                                 return
                             end
