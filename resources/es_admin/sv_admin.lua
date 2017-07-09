@@ -26,7 +26,7 @@ TriggerEvent('es:addCommand', 'report', function(source, args, user)
 		for k,v in pairs(pl) do
 			TriggerEvent("es:getPlayerFromId", k, function(user)
 				if((user.getPermissions() > 0 or user.getGroup() == "mod" or user.getGroup() == "admin") and k ~= source)then
-					TriggerClientEvent('chatMessage', k, "REPORT", {255, 0, 0}, " (^2" .. GetPlayerName(source) .." | "..source.."^0) " .. table.concat(args, " "))
+					TriggerClientEvent('chatMessage', k, "REPORT", {255, 0, 0}, args)
 				end
 			end)
 		end
@@ -262,6 +262,14 @@ TriggerEvent('es:addGroupCommand', 'pos', "owner", function(source, args, user)
 	TriggerClientEvent('es_admin:givePosition', source)
 end, function(source, args, user)
 	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
+end)
+
+TriggerEvent('es:addCommand', 'car', function(source, args, user)
+	if user.getGroup() == "superadmin" or user.getGroup() == "owner" or user.getGroup() == "admin" then
+		TriggerClientEvent('es_admin:spawnVehicle', source, args[2])
+	else
+		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficient permissions!")
+	end
 end)
 
 

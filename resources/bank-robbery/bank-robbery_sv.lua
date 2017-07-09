@@ -85,7 +85,6 @@ AddEventHandler("bank:inRange", function()
 			local oldMoney = user.getMoney()
 			local newMoney = oldMoney + rewardMoney
 			user.addMoney(newMoney)
-			user.setMoney(newMoney)
 			print("user money set to $" .. newMoney)
 		end
 	end)
