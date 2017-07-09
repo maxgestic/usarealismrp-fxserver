@@ -167,6 +167,16 @@ function giveHat()
 	SetPedPropIndex(ped, PED_PROP_HATS, 0, 0, true)
 end
 
+function randomizeGlasses()
+	local ped = GetPlayerPed(-1)
+	local PED_PROP_GLASSES = 1
+	local index = math.random(0,GetNumberOfPedPropDrawableVariations(ped, 1))
+	SetPedPropIndex(ped, PED_PROP_GLASSES, index, 0, true) -- sport front down (index = 0)
+	--SetPedPropIndex(ped, PED_PROP_GLASSES, 1, 0, true) -- sport back (index = 1) .. etc
+	--SetPedPropIndex(ped, PED_PROP_GLASSES, 2, 0, true) -- sport front up
+	--SetPedPropIndex(ped, PED_PROP_GLASSES, 3, 0, true) -- aviator front down
+end
+
 function giveGlasses()
 	MenuTitle = "Glasses"
 	ClearMenu()
