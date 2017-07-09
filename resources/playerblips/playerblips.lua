@@ -59,6 +59,8 @@ Citizen.CreateThread(function()
 			end
 		end
 		if talking ~= "" then
+			-- no talking display at bottom of screen
+			--[[
 			SetTextFont(0)
 			SetTextProportional(0)
 			SetTextScale(0.0, 0.5)
@@ -85,6 +87,7 @@ Citizen.CreateThread(function()
 			SetTextCentre(true)
 			DrawText(0.5, 0.97)
 			talking = ""
+			--]]
 		end
 
 		-- BELOW THIS LINE IS WHERE SCAMMER'S PLAYERBLIPS SCRIPT BEGINS
@@ -373,6 +376,7 @@ function DrawTracerText(text, spacing)
 	local x,y,z = table.unpack(GetEntityCoords(ped))
 	local px,py,pz=table.unpack(GetGameplayCamCoords())
 	local dist = GetDistanceBetweenCoords(px,py,pz, x,y,z, 1)
+	Citizen.Trace("playerBlips: dist = " .. dist)
 
 	local scale = (1/dist)*20
 	local fov = (1/GetGameplayCamFov())*100
