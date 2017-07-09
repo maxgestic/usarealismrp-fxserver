@@ -36,8 +36,8 @@ AddEventHandler("bank:isBusy", function()
             TriggerEvent("bank:beginRobbery", source)
             abletorob = false
 
-            -- ~ 45 minute cooldown
-            SetTimeout(2700000 , function()
+            -- 1 hr cooldown
+            SetTimeout(3600000 , function()
                 abletorob = true
             end)
 
@@ -60,8 +60,8 @@ AddEventHandler("bank:beginRobbery", function(source)
 
 	TriggerClientEvent('chatMessage', -1, 'NEWS', { 255, 180, 0 }, '^0Someone is robbing the bank!')
 
-	-- wait 45 seconds to 'get' money
-	SetTimeout(60000, function()
+	-- wait 1.5 min seconds to get money
+	SetTimeout(90000, function()
 
 		-- need to check player distance from bank point
 		-- if in range: give bag of loot
@@ -76,7 +76,7 @@ end)
 
 RegisterServerEvent("bank:inRange")
 AddEventHandler("bank:inRange", function()
-	rewardMoney = math.random(5000, 60000)
+	rewardMoney = math.random(20000, 70000)
 	isBusy = "no"
 	local msg = "You have been given ~g~$" .. comma_value(rewardMoney) .. "~w~ in dirty money!"
 	TriggerClientEvent("bank-robbery:notify", source, msg)
