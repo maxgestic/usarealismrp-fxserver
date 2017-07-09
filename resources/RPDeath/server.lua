@@ -1,7 +1,4 @@
-print("INSIDE OF RPDEATH SERVER.LUA")
-
 players = {}
-print("#players = " .. #players)
 
 AddEventHandler('es:playerLoaded', function(source, user)
 	print("setting players[source = true!]")

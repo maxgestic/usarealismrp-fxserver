@@ -1,5 +1,3 @@
-Citizen.Trace("INSIDE OF RPDEATH CLIENT.LUA")
-
 RegisterNetEvent('RPD:allowRespawn')
 RegisterNetEvent('RPD:allowRevive')
 
@@ -135,12 +133,8 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(0)
 		local ped = GetPlayerPed(-1)
-		print("inside of RPDeath while true loop now")
 		if (RPDeathEnabled) then
-			Citizen.Trace("RPDeathEnabled = true!")
 			if (IsEntityDead(ped)) then
-				Citizen.Trace("(debug:RPDeath): player is dead!") -- LEFT OFF HERE
-				Citizen.Trace("dead = " .. tostring(dead))
 
 				SetPlayerInvincible(ped, true)
 				SetEntityHealth(ped, 1)
@@ -164,7 +158,6 @@ Citizen.CreateThread(function()
 						table.insert( street, GetStreetNameFromHashKey( lastStreetB ) )
 					end
 					TriggerServerEvent("RPD:userDead", GetPlayerName(PlayerId()), table.concat( street, " & " ))
-					Citizen.Trace("calling RPD:startTimer")
 					TriggerEvent("RPD:startTimer")
 				end
 
