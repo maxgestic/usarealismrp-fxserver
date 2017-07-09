@@ -12,28 +12,21 @@ end
 
 RegisterServerEvent("mini:randomizeCharacter")
 AddEventHandler("mini:randomizeCharacter", function()
-
 	local upperBoundary = #(LOADOUTS["civ"].skins) or 0
 	local skinName = LOADOUTS["civ"].skins[math.random(1, upperBoundary +1)] -- random civ skin
-
 	TriggerClientEvent("mini:changeSkin", source, skinName)
-
 end)
 
 RegisterServerEvent("clothingStore:selectSkin")
 AddEventHandler("clothingStore:selectSkin", function(index)
-
     if index > #LOADOUTS["civ"].skins then
         index = 1 -- first index (front)
         TriggerClientEvent("clothingStore:resetIndex", source)
     elseif index < 1 then
         index = #LOADOUTS["civ"].skins -- last index (back)
     end
-
     local skinName = LOADOUTS["civ"].skins[index]
-
     TriggerClientEvent("mini:changeSkin", source, skinName)
-
 end)
 
 RegisterServerEvent("mini:save")

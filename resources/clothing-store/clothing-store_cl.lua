@@ -153,14 +153,39 @@ function previous()
 	end
 end
 
-function randomizeProps()
+function randomizeComponents()
 	SetPedRandomComponentVariation(GetPlayerPed(-1), 1)
+end
+
+function randomizeProps()
+	SetPedRandomProps(GetPlayerPed(-1))
+end
+
+function giveHat()
+	local ped = GetPlayerPed(-1)
+	local PED_PROP_HATS = 0
+	SetPedPropIndex(ped, PED_PROP_HATS, 0, 0, true)
+end
+
+function giveGlasses()
+	MenuTitle = "Glasses"
+	ClearMenu()
+	Menu.addButton("Randomize", "randomizeGlasses", nil)
+end
+
+function propsMenu()
+	MenuTitle = "Props"
+	ClearMenu()
+	Menu.addButton("Randomize", "randomizeProps", nil)
+	Menu.addButton("Hat", "giveHat", nil)
+	Menu.addButton("Glasses", "giveGlasses", nil)
 end
 
 function clothingStoreMenu()
 	MenuTitle = "Character Menu"
 	ClearMenu()
-	Menu.addButton("Randomize Props", "randomizeProps", nil)
+	Menu.addButton("Props", "propsMenu", nil)
+	Menu.addButton("Randomize Components", "randomizeComponents", nil)
 	Menu.addButton("Randomize Model","randomizeCharacter", nil)
 	Menu.addButton("Next","next", nil)
 	Menu.addButton("Previous","previous", nil)
@@ -217,9 +242,7 @@ local playerNotified = false
 				playerNotified = false
 				Menu.hidden = true
 			end
-
 			Menu.renderGUI()     -- Draw menu on each tick if Menu.hidden = false
-
 		end
 	end)
 

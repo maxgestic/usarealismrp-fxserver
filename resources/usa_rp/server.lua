@@ -34,9 +34,10 @@ AddEventHandler("usa_rp:spawnPlayer", function()
             spawn.z = 30.6896
             weapons = {"WEAPON_COMBATPISTOL", "WEAPON_CARBINERIFLE", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_PUMPSHOTGUN", "WEAPON_FLAREGUN", "WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER"}
         elseif job == "ems" then
-            spawn.x =  360.31
-            spawn.y = -590.445
-            spawn.z = 28.6563
+            -- davis fire station
+            spawn.x =  207.106
+            spawn.y = -1641.45
+            spawn.z = 29.8
             weapons = {"WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER"}
         else
             spawn = civilianSpawns[math.random(1,#civilianSpawns)] -- choose random spawn if civilian

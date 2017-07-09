@@ -1,5 +1,6 @@
---local markerX, markerY, markerZ = -366.401, 6103.19, 34.500
-local markerX, markerY, markerZ = 318.781, -558.644, 27.6
+--local markerX, markerY, markerZ = -366.401, 6103.19, 34.500 -- paleto
+--local markerX, markerY, markerZ = 318.781, -558.644, 27.6 -- LS 1
+local markerX, markerY, markerZ = 207.106, -1641.45, 28.5 -- LS 2
 
 RegisterNetEvent("emsStation:giveCivWeapons")
 AddEventHandler("emsStation:giveCivWeapons", function(playerWeapons)
