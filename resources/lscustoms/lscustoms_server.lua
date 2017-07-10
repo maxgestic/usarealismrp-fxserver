@@ -20,7 +20,7 @@ end)
 -- Add a command everyone is able to run. Args is a table with all the arguments, and the user is the user object, containing all the user data.
 TriggerEvent('es:addCommand', 'unlockgarage', function(source, args, user)
 
-	if tonumber(user.permission_level) > 0 then
+	if tonumber(user.getPermissions()) > 0 then
 		TriggerClientEvent("lsCustoms:garageUnlock", -1) -- unlock everyone's ls customs
 		TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^2LS Customs has been unlocked, my niqqa!")
 	else

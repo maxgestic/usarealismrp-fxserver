@@ -99,7 +99,7 @@ end)
 
 TriggerEvent('es:addCommand', 'closebank', function(source, args, user)
 
-    if tonumber(user.permission_level) > 0 then
+    if tonumber(user.getPermissions()) > 0 then
         closed = true
 		TriggerClientEvent("bank-robbery:notify", source, "BANK IS NOW ~r~CLOSED")
     end
@@ -108,7 +108,7 @@ end)
 
 TriggerEvent('es:addCommand', 'openbank', function(source, args, user)
 
-    if tonumber(user.permission_level) > 0 then
+    if tonumber(user.getPermissions()) > 0 then
         closed = false
         TriggerClientEvent("bank-robbery:notify", source, "BANK IS NOW ~g~CLOSED")
     end
