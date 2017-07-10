@@ -10,7 +10,9 @@ AddEventHandler("getScoreboard", function(ptable)
 	local players = {}
 	for _, i in ipairs(ptable) do
 		if characters[i] then
-			table.insert(players, '<tr><td>' .. i .. '</td><td>' .. GetPlayerName(i) .. '</td><td>' .. GetPlayerPing(i) .. '<small>ms</small></td></tr>')
+			if GetPlayerName(i) and GetPlayerPing(i) then
+				table.insert(players, '<tr><td>' .. i .. '</td><td>' .. GetPlayerName(i) .. '</td><td>' .. GetPlayerPing(i) .. '<small>ms</small></td></tr>')
+			end
 		else
 			if GetPlayerName(i) and GetPlayerPing(i) then
 				table.insert(players, '<tr><td>' .. i .. '</td><td>' .. GetPlayerName(i) .. '</td><td>' .. GetPlayerPing(i) .. '<small>ms</small></td></tr>')
