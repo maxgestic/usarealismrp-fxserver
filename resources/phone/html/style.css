@@ -1,0 +1,162 @@
+.float-right {
+    float: right;
+}
+
+body {
+    font-family: sans-serif;
+    overflow: hidden;
+    display: none;
+}
+
+#cursor {
+    position: absolute;
+    z-index: 999999;
+    display: none;
+}
+
+/* custom */
+#phone-wrap {
+    padding-top: 20em;
+    margin: -5em auto 0 auto;
+    height: 900px;
+    width: 700px;
+    background-image: url('samsung-phone.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+}
+
+#screen-wrap {
+    margin: 1.2em auto 0 auto;
+    width: 330px;
+    height: 540px;
+    border-radius: 5px;
+}
+
+/* text message app  */
+
+.text-message {
+    color: white;
+}
+
+.text-from {
+    color: lightgray;
+}
+
+#text-message-app-home {
+    height: 100%;
+    width: 100%;
+    background: red;
+}
+
+#text-message-app-wrap {
+    margin: -7px 0 0 -11px;
+    padding: 1em 1em;
+    width: 98%;
+    height: 98%;
+}
+
+#text-message-app-wrap header {
+    width: 100%;
+    height: 10%;
+    background-color:teal;
+    margin:0 auto;
+}
+
+#home-messages-title {
+    color: white;
+    float: left;
+    padding-top: 1em;
+    padding-left: 1em;
+}
+
+#text-home-back-btn {
+    height:70%;
+    width: 50px;
+    color: white;
+    text-align: center;
+    padding-top:1em;
+    background-color: #ff8080;
+}
+
+#home-new-msg-btn {
+    height:70%;
+    width: 50px;
+    color: white;
+    background-color: teal;
+    text-align: center;
+    padding-top:1em;
+}
+
+#text-message-app-wrap section {
+    width: 100%;
+    height: 90%;
+    background-color: #286090;
+}
+
+.textMessageConvoBtn {
+    background-color: #666;
+    height: 30px;
+    width: 100%;
+    text-align: center;
+    padding-top: 1em;
+    color: white;
+}
+
+.hide-this, .hide-this > p {
+    display: none;
+}
+
+/* PHONE APPLICATION */
+
+#phone-icon {
+    height: 90px;
+}
+
+#phone-app-wrap {
+    margin: -7px 0 0 -11px;
+    padding: 1em 1em;
+    width: 98%;
+    height: 98%;
+}
+
+.phone-btn {
+    width: 75%;
+    height: 10%;
+    background-color: gray;
+    text-align: center;
+    border-radius: 10px;
+    margin: 1em auto;
+    padding-top: 1.2em;
+    color: white;
+}
+
+form {
+    margin: 0;
+}
+
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 10px;
+    padding-bottom: 4px;
+    padding-top:2px;
+}
+
+button {
+    display: block;
+    margin-top: 5px;
+    padding: 10px;
+    background-color: #286090;
+    border: 0;
+    color: #fff;
+    width: 100%;
+}
+
+h4 {
+    margin: 0 auto;
+    color: white;
+}
+
+input, textarea {
+    margin-bottom: 1em;
+}

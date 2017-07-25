@@ -1,6 +1,17 @@
 local taxiDutyX, taxiDutyY, taxiDutyZ = 895.563, -179.536, 73.8003
 local spawn = {x=907.193,y= -186.33,z=74.0205}
 
+RegisterNetEvent("taxi:onDuty")
+AddEventHandler("taxi:onDuty", function()
+	DrawCoolLookingNotificationWithTaxiPic("Here's your cab! Have a good shift!")
+	spawnVehicle()
+end)
+
+RegisterNetEvent("taxi:offDuty")
+AddEventHandler("taxi:offDuty", function()
+	DrawCoolLookingNotificationWithTaxiPic("You have clocked out! Have a good one!")
+end)
+
 local playerNotified = false
 Citizen.CreateThread(function()
 	while true do
@@ -10,9 +21,10 @@ Citizen.CreateThread(function()
 	    if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,taxiDutyX,taxiDutyY,taxiDutyZ,false) < 3 and not playerNotified then
             --DrawCoolLookingNotification("Press ~y~E~w~ to go work for Downtown Taxi Co.!")
     		if IsControlJustPressed(1,38) then
-                DrawCoolLookingNotification("Here's your cab! Have a good shift!")
-                spawnVehicle()
-                Citizen.Wait(120000) -- ghetto spawn delay
+				TriggerServerEvent("taxi:setJob")
+                --DrawCoolLookingNotification("Here's your cab! Have a good shift!")
+                --spawnVehicle()
+                --Citizen.Wait(120000) -- ghetto spawn delay
     		end
         elseif GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,taxiDutyX,taxiDutyY,taxiDutyZ,false) > 3 then
             -- out of range
@@ -36,8 +48,9 @@ function spawnVehicle()
     end)
 end
 
-function DrawCoolLookingNotification(msg)
-    SetNotificationTextEntry("STRING")
-    AddTextComponentString(msg)
-    DrawNotification(0,1)
+function DrawCoolLookingNotificationWithTaxiPic(name, msg)
+	SetNotificationTextEntry("STRING")
+	AddTextComponentString(msg)
+	SetNotificationMessage("CHAR_TAXI", "CHAR_TAXI", true, 1, name, "", msg)
+	DrawNotification(0,1)
 end

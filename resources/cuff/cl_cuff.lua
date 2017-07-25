@@ -1,8 +1,8 @@
 local lPed
 local isCuffed = false
 
-RegisterNetEvent("Handcuff")
-AddEventHandler("Handcuff", function()
+RegisterNetEvent("cuff:Handcuff")
+AddEventHandler("cuff:Handcuff", function(cuffer)
 	lPed = GetPlayerPed(-1)
 	if DoesEntityExist(lPed) then
 		Citizen.CreateThread(function()
@@ -10,28 +10,47 @@ AddEventHandler("Handcuff", function()
 			while not HasAnimDictLoaded("mp_arresting") do
 				Citizen.Wait(100)
 			end
-
 			if IsEntityPlayingAnim(lPed, "mp_arresting", "idle", 3) then
 				Citizen.Trace("ENTITY WAS ALREADY PLAYING ARRESTED ANIM, UNCUFFING")
 				ClearPedSecondaryTask(lPed)
 				SetEnableHandcuffs(lPed, false)
-				FreezeEntityPosition(lPed, false)
+				--FreezeEntityPosition(lPed, false)
+				DrawCoolLookingNotificationNoPic("You have been ~g~released~w~.")
 				isCuffed = false
 			else
 				Citizen.Trace("ENTITY WAS NOT PLAYING ARRESTED ANIM, CUFFING")
 				TaskPlayAnim(lPed, "mp_arresting", "idle", 8.0, -8, -1, 49, 0, 0, 0, 0)
 				SetEnableHandcuffs(lPed, true)
-				FreezeEntityPosition(lPed, true)
+				-- FreezeEntityPosition(lPed, true)
+				DrawCoolLookingNotificationNoPic("You have been ~r~detained~w~.")
 				isCuffed = true
 			end
 		end)
 	end
 end)
 
+local jailX, jailY, jailZ = 1714.893, 2542.678, 45.565
+
+function getPlayerDistanceFromCoords(x,y,z)
+	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
+	return GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,x,y,z,false)
+end
+
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
+
+		if getPlayerDistanceFromCoords(jailX, jailY, jailZ) <= 80 then
+			isCuffed = false
+		end
+
 		if isCuffed then
+			DisableControlAction(1, 245, true)
+			DisableControlAction(1, 117, true)
+			DisableControlAction(1, 73, true)
+			DisableControlAction(1, 29, true)
+			DisableControlAction(1, 322, true)
+
 			DisableControlAction(1, 18, true)
 			DisableControlAction(1, 24, true)
 			DisableControlAction(1, 69, true)
@@ -86,17 +105,78 @@ Citizen.CreateThread(function()
 			DisableControlAction(0, 86, false)
 			DisableControlAction(0, 106, false)
 			DisableControlAction(0, 25, false)
+
+			-- slow down while cuffed
+			--SetEntityVelocity(GetPlayerPed(-1), 0.3, 0.3, 0.0)
+			DisableControlAction(0, 21, true)
+
+			if not IsEntityPlayingAnim(GetPlayerPed(-1), "mp_arresting", "idle", 3) then
+				RequestAnimDict("mp_arresting")
+				while not HasAnimDictLoaded("mp_arresting") do
+					Citizen.Wait(100)
+				end
+				TaskPlayAnim(lPed, "mp_arresting", "idle", 8.0, -8, -1, 49, 0, 0, 0, 0)
+			end
 		end
 	end
 end)
 
 RegisterNetEvent("cuff:notify")
 AddEventHandler("cuff:notify", function(msg)
-	DrawCoolLookingNotification(msg)
+	DrawCoolLookingNotificationNoPic(msg)
 end)
 
-function DrawCoolLookingNotification(msg)
+function DrawCoolLookingNotificationWithPic(name, msg)
+	SetNotificationTextEntry("STRING")
+	AddTextComponentString(msg)
+	SetNotificationMessage("CHAR_BLOCKED", "CHAR_BLOCKED", true, 1, name, "", msg)
+	DrawNotification(0,1)
+end
+
+function DrawCoolLookingNotificationNoPic(msg)
 	SetNotificationTextEntry("STRING")
 	AddTextComponentString(msg)
 	DrawNotification(0,1)
+end
+
+-- new stuff below: --
+Citizen.CreateThread(function()
+	while true do
+		Wait(0)
+		local target = GetCurrentTargetCar()
+		playerId = 0
+		playerName = ""
+		for id = 0, 64 do
+			if NetworkIsPlayerActive(id) then
+				if GetPlayerPed(id) == target then
+					playerId = GetPlayerServerId(id)
+					playerName = GetPlayerName(id)
+				end
+			end
+		end
+		-- Citizen.Trace("target = " .. target)
+		if target ~= nil then
+			if IsControlJustPressed(1, 38) then -- Y = 246, E = 38
+				--Citizen.Trace("Y DETECTED!")
+				--Citizen.Trace("target = " .. target)
+				if playerId ~= 0 then
+					--Citizen.Trace("SENDING CUFF!")
+					TriggerServerEvent("cuff:Handcuff", playerId)
+				end
+			end
+		end
+	end
+end)
+
+function GetCurrentTargetCar()
+    local ped = GetPlayerPed(-1)
+    local coords = GetEntityCoords(ped)
+
+    local entityWorld = GetOffsetFromEntityInWorldCoords(ped, 0.0, 5.0, 0.0)
+    local rayHandle = CastRayPointToPoint(coords.x, coords.y, coords.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, ped, 0)
+    local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
+
+	--DrawMarker(4, entityWorld.x, entityWorld.y, entityWorld.z, 0, GetEntityHeading(GetPlayerPed(-1)), 0, 0, 0.0, 0, 1.5, 1.0, 1.25, 255, 255, 255, 200, 0, false, 0, 0)
+
+    return vehicleHandle
 end

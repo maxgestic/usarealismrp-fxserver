@@ -1,6 +1,6 @@
 TriggerEvent('es:addCommand', 'drag', function(source, args, user)
 	if user then
-		if user.getJob() == "sheriff" or user.getJob() == "ems" or user.getJob() == "fire" then
+		if user.getJob() == "sheriff" or user.getJob() == "cop" or user.getJob() == "ems" or user.getJob() == "fire" or user.getGroup() == "mod" or user.getGroup() == "admin" then
 			local argument = args[2] -- player id to check license
 			if argument == nil or type(tonumber(argument)) == nil then
 				TriggerClientEvent("chatMessage", source, "SYSTEM", { 0, 141, 155 }, "example: /drag <id>")
@@ -22,4 +22,14 @@ TriggerEvent('es:addCommand', 'drag', function(source, args, user)
 		--print("user nil for drag")
 		-- user did not exist
 	end
+end)
+
+RegisterServerEvent("dr:drag")
+AddEventHandler("dr:drag", function(id)
+	TriggerEvent("es:getPlayerFromId", source, function(user)
+		if user.getJob() == "sheriff" or user.getJob == "cop"  or user.getJob() == "ems" or user.getJob() == "fire" then
+			print("dragging player with id = " .. id)
+			TriggerClientEvent("dr:drag", tonumber(id), source)
+		end
+	end)
 end)

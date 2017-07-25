@@ -2,7 +2,8 @@ files {
     'index.html',
     'keks.css',
     'bankgothic.ttf',
-    'loadscreen.jpg'
+    'loadscreen.jpg',
+	'music/Loading.ogg'
 }
 
 loadscreen 'index.html'

@@ -1,5 +1,5 @@
 local listOn = false
-local key = 168
+local key = 168 -- F7 = 168, LALT = 19
 
 Citizen.CreateThread(function()
     listOn = false

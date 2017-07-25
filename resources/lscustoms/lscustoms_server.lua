@@ -3,18 +3,19 @@ local tbl = {
 [2] = {locked = false},
 [3] = {locked = false},
 [4] = {locked = false},
-[5] = {locked = false}
+[5] = {locked = false},
+[6] = {locked = false}
 }
 RegisterServerEvent('lockGarage')
 AddEventHandler('lockGarage', function(b,garage)
 	tbl[tonumber(garage)].locked = b
 	TriggerClientEvent('lockGarage',-1,tbl)
-	print(json.encode(tbl))
+	--print(json.encode(tbl))
 end)
 RegisterServerEvent('getGarageInfo')
 AddEventHandler('getGarageInfo', function()
 TriggerClientEvent('lockGarage',-1,tbl)
-print(json.encode(tbl))
+--print(json.encode(tbl))
 end)
 
 -- Add a command everyone is able to run. Args is a table with all the arguments, and the user is the user object, containing all the user data.

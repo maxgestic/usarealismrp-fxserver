@@ -225,7 +225,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		if GetLastInputMethod(2) then
-			if IsControlJustPressed(1, 117) then -- 117 = Numpad 7
+			if IsControlJustPressed(1, 166) then -- 117 = Numpad 7, F5 = 166
 				InitMenu()
 				Menu.hidden = not Menu.hidden
 			elseif IsControlJustPressed(1, 32) then -- INPUT_MOVE_UP_ONLY

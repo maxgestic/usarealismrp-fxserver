@@ -10,19 +10,6 @@ local bs = { [0] =
 	'w','x','y','z','0','1','2','3','4','5','6','7','8','9','+','/',
 }
 
-local function base64(s)
-	local byte, rep = string.byte, string.rep
-	local pad = 2 - ((#s-1) % 3)
-	s = (s..rep('\0', pad)):gsub("...", function(cs)
-		local a, b, c = byte(cs, 1, 3)
-		return bs[a>>2] .. bs[(a&3)<<4|b>>4] .. bs[(b&15)<<2|c>>6] .. bs[c&63]
-	end)
-
-	return s:sub(1, #s-pad) .. rep('=', pad)
-end
-
-auth = base64(auth)
-
 db = {}
 exposedDB = {}
 
@@ -70,7 +57,12 @@ local function requestDB(request, location, data, headers, callback)
 
 	PerformHttpRequest(url .. location, function(err, rText, headers)
 		if callback then
-			callback(err, rText, headers)
+			if err == 0 then
+				err = 200
+			end
+			if err and rText and headers then
+				callback(err, rText, headers)
+			end
 		end
 	end, request, data, headers)
 end
@@ -112,7 +104,7 @@ local function createDocument(doc, cb)
 
 	getUUID(1, function(uuid)
 		requestDB('PUT', 'essentialmode/' .. uuid, doc, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
-			if err ~= 201 then
+			if err ~= 201 and err ~= 200 then
 				print('Error occured while performing database request: could not create document, error code: ' .. err .. ", server returned: " .. rText)
 			else
 				if cb then
@@ -164,7 +156,7 @@ end
 function db.createUser(identifier, callback)
 	print("creating user!")
 	if type(identifier) == "string" and identifier ~= nil then
-		createDocument({ identifier = identifier, money = settings.defaultSettings.startingCash or 0, bank = settings.defaultSettings.startingBank or 0, group = "user", permission_level = 0, job = settings.defaultSettings.startingJob, model = settings.defaultSettings.startingModel, inventory = settings.defaultSettings.startingInventory, weapons = settings.defaultSettings.startingWeapons, vehicles = settings.defaultSettings.startingVehicles, insurance = settings.defaultSettings.startingInsurance, job = settings.defaultSettings.startingJob, licenses = settings.defaultSettings.startingLicenses }, function(returned, document)
+		createDocument({ identifier = identifier, money = settings.defaultSettings.startingCash or 0, bank = settings.defaultSettings.startingBank or 0, group = "user", permission_level = 0, job = settings.defaultSettings.startingJob, model = settings.defaultSettings.startingModel, inventory = settings.defaultSettings.startingInventory, weapons = settings.defaultSettings.startingWeapons, vehicles = settings.defaultSettings.startingVehicles, insurance = settings.defaultSettings.startingInsurance, job = settings.defaultSettings.startingJob, licenses = settings.defaultSettings.startingLicenses, criminalHistory = {}}, function(returned, document)
 			if callback then
 				callback(returned, document)
 			end
@@ -233,7 +225,23 @@ function exposedDB.createDocument(db, rows, cb)
 		end, "PUT", json.encode(rows), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 	end, "GET", "", {Authorization = "Basic " .. auth})
 end
-
+--[[
+function exposedDB.getAllDocumentsFromDb(db, callback)
+	local qu = {keys = {'true'}}
+	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/_all_docs?include_do‌​cs=true", function(err, rText, headers)
+		local t = json.decode(rText)
+		if t then
+			if t.rows then
+				callback(t.rows)
+			else
+				callback(false)
+			end
+		else
+			callback(false)
+		end
+	end, "GET", "", {["Content-Type"] = 'application/json'})
+end
+--]]
 function exposedDB.getDocumentByRow(db, row, value, callback)
 	local qu = {selector = {[row] = value}}
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/_find", function(err, rText, headers)

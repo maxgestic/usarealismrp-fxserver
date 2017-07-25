@@ -34,3 +34,16 @@ AddEventHandler("place:invalidCommand", function(msg)
 	TriggerEvent("chatMessage", "SYSTEM",  {255, 180, 0}, msg)
 
 end)
+
+-- unseat
+RegisterNetEvent('place:unseat')
+AddEventHandler('place:unseat', function(targetPlayerId)
+	local pos = GetEntityCoords(GetPlayerPed(targetPlayerId))
+	RequestCollisionAtCoord(pos.x, pos.y, pos.z)
+	while not HasCollisionLoadedAroundEntity(GetPlayerPed(-1))do
+		RequestCollisionAtCoord(pos.x, pos.y, pos.z)
+		Citizen.Wait(0)
+	end
+	SetEntityCoords(GetPlayerPed(-1), pos)
+	states.frozenPos = pos
+end)

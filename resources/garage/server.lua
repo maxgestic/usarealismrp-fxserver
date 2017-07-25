@@ -44,6 +44,7 @@ end
 RegisterServerEvent("garage:checkVehicleStatus")
 AddEventHandler("garage:checkVehicleStatus", function()
 	local userSource = source
+	local hasVehicle = false
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local vehicles = user.getVehicles()
 		local playerInsurance = user.getInsurance()
@@ -61,6 +62,9 @@ AddEventHandler("garage:checkVehicleStatus", function()
 		end
 		for i = 1, #vehicles do
 			local vehicle = vehicles[i]
+			if vehicle then
+				hasVehicle = true
+			end
 			print("checking if " .. GetPlayerName(userSource) ..  " vehicle was impounded")
 			print("vehicle.impounded = " .. tostring(vehicle.impounded))
 			if vehicle.impounded == true then
@@ -92,6 +96,9 @@ AddEventHandler("garage:checkVehicleStatus", function()
 				vehicles[i].stored = false
 				user.setVehicles(vehicles)
 			end
+		end
+		if not hasVehicle then
+			TriggerClientEvent("garage:notify", userSource, "You do not own any vehicles!")
 		end
 	end)
 end)

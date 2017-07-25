@@ -184,9 +184,7 @@ Citizen.CreateThread(function()
 	    if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,towDutyX,towDutyY,towDutyZ,false) < 3 then
             --DrawCoolLookingNotification("Press ~y~E~w~ to go work for Downtown Taxi Co.!")
     		if IsControlJustPressed(1,38) then
-                DrawCoolLookingNotification("Here's your rig! Have a good shift!")
-                spawnVehicle()
-                Citizen.Wait(120000) -- ghetto spawn delay
+				TriggerServerEvent("tow:setJob")
     		end
         elseif GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,towDutyX,towDutyY,towDutyZ,false) > 3 then
             -- out of range
@@ -214,4 +212,22 @@ function DrawCoolLookingNotification(msg)
     SetNotificationTextEntry("STRING")
     AddTextComponentString(msg)
     DrawNotification(0,1)
+end
+
+RegisterNetEvent("tow:onDuty")
+AddEventHandler("tow:onDuty", function()
+	DrawCoolLookingNotificationWithTowPic("Here's your rig! Have a good shift!")
+	spawnVehicle()
+end)
+
+RegisterNetEvent("tow:offDuty")
+AddEventHandler("tow:offDuty", function()
+	DrawCoolLookingNotificationWithTowPic("You have clocked out! Have a good one!")
+end)
+
+function DrawCoolLookingNotificationWithTowPic(name, msg)
+	SetNotificationTextEntry("STRING")
+	AddTextComponentString(msg)
+	SetNotificationMessage("CHAR_PROPERTY_TOWING_IMPOUND", "CHAR_PROPERTY_TOWING_IMPOUND", true, 1, name, "", msg)
+	DrawNotification(0,1)
 end

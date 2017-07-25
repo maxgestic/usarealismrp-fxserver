@@ -133,31 +133,45 @@ AddEventHandler("mini:checkVehicleMoney", function(params)
 	end)
 end)
 
+-- saves vehicle to DMV / PLAYER
 RegisterServerEvent("vehShop:setHandle")
 AddEventHandler("vehShop:setHandle", function(vehicleHandle)
-	TriggerEvent('es:getPlayerFromId', source, function(user)
-		local vehicles = user.getVehicles()
-		if vehicles then
-			local vehicle = {
-				owner = GetPlayerName(source),
-				model = vehicleName,
-				hash = hash,
-				plate = plate,
-				handle = vehicleHandle,
-				stored = false,
-                impounded = false
-			}
-			if #vehicles > 0 then
-				table.remove(vehicles) -- overwrite previous vehicle (temp)
-			end
-			table.insert(vehicles, vehicle)
-			user.setVehicles(vehicles)
-			print("vehicle added:")
-			print("vehicle.owner = " .. vehicle.owner)
-			print("vehicle.model = " .. vehicle.model)
-			print("vehicle.plate = " .. vehicle.plate)
-			print("vehicle.handle = " .. vehicle.handle)
-			print("vehicle.stored = " .. tostring(vehicle.stored))
-		end
-	end)
+    local userSource = source
+    TriggerEvent('es:exposeDBFunctions', function(GetDoc)
+    	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+            print("inside of setHandle")
+            print("model = " .. vehicleName)
+    		local vehicles = user.getVehicles()
+    		if vehicles then
+    			local vehicle = {
+    				owner = GetPlayerName(userSource),
+    				model = vehicleName,
+    				hash = hash,
+    				plate = plate,
+    				handle = vehicleHandle,
+    				stored = false,
+                    impounded = false,
+                    stolen = false
+    			}
+    			if #vehicles > 0 then
+    				table.remove(vehicles) -- overwrite previous vehicle (temp)
+    			end
+    			table.insert(vehicles, vehicle)
+    			user.setVehicles(vehicles)
+    			print("vehicle added:")
+    			print("vehicle.owner = " .. vehicle.owner)
+    			print("vehicle.model = " .. vehicle.model)
+    			print("vehicle.plate = " .. vehicle.plate)
+    			print("vehicle.handle = " .. vehicle.handle)
+    			print("vehicle.stored = " .. tostring(vehicle.stored))
+                -- update DB
+                print("inside of exposed db functions event")
+    			GetDoc.createDocument("dmv", vehicle, function() -- add vehicle object to dmv DB
+    				print("Vehicle has been added to the database!")
+                    print("owner: " .. vehicle.owner)
+                    print("make/model: " .. vehicle.model)
+    			end)
+		    end
+	   end)
+   end)
 end)

@@ -16,8 +16,10 @@ vehicleRepairStation = {
 	--{103.513,  6622.77,  30.1868}, -- paleto
 	{-456.078,5984.27,30.0}, -- Paleto Bay SO
 	{-355.011,6109.35,30.0},-- Paleto Bay FD
-	{-222.407,-1329.69,30.89},
-	{480.805,-1317.43,29.2}
+	--{-222.407,-1329.69,30.89},
+	{480.805,-1317.43,29.2},
+	{447.534, -997.033, 24.3635}, -- los santos police department on atlee & sinner st
+	{201.339, -1656.36, 27.2832} -- los santos fire department in davis
 }
 
 blips = {

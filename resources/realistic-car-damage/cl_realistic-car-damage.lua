@@ -28,7 +28,7 @@ Citizen.CreateThread(function()
         Wait(1)
         if IsControlJustPressed(1,38) then -- "E"
             local coordA = GetEntityCoords(GetPlayerPed(-1), 1)
-            local coordB = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 20.0, 0.0)
+            local coordB = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 5.0, 0.0)
             local targetVehicle = getVehicleInDirection(coordA, coordB)
             if targetVehicle ~= 0 then
                 if (GetVehicleEngineHealth(targetVehicle) < 1000 or not IsVehicleDriveable(targetVehicle, 0)) and not IsPedInAnyVehicle(GetPlayerPed(-1), true) then

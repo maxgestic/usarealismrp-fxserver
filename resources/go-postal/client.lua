@@ -101,8 +101,8 @@ Citizen.CreateThread(function()
 		        if IsControlPressed(0, 86) then
 		            if not pressed then
 
-						if job.distance * 5 > 10000 then
-							pay = 10000
+						if job.distance * 5 > 6000 then
+							pay = 6000
 						else
 							pay = math.ceil(job.distance * 5)
 						end

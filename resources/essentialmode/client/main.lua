@@ -8,8 +8,8 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 
 		if NetworkIsSessionStarted() then
-			Citizen.InvokeNative(0x170F541E1CADD1DE, false)
-			Citizen.InvokeNative(0x0772DF77852C2E30, 1, 1)
+			--Citizen.InvokeNative(0x170F541E1CADD1DE, false)
+			--Citizen.InvokeNative(0x0772DF77852C2E30, 1, 1)
 
 			TriggerServerEvent('es:firstJoinProper')
 			TriggerEvent('es:allowedToSpawn')
@@ -63,11 +63,11 @@ AddEventHandler("playerSpawned", function()
 
 	if firstSpawn then
 		firstSpawn = false
-		SetMultiplayerBankCash()
-		N_0xc2d15bef167e27bc()
-		SetPlayerCashChange(1, 1)
-		Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-		SetPlayerCashChange(-1, -1)
+		--SetMultiplayerBankCash()
+	--	N_0xc2d15bef167e27bc()
+	--	SetPlayerCashChange(1, 1)
+	--	Citizen.InvokeNative(0x170F541E1CADD1DE, true)
+	--	SetPlayerCashChange(-1, -1)
 	end
 end)
 
@@ -90,19 +90,19 @@ end)
 RegisterNetEvent('es:displayMoney')
 AddEventHandler('es:displayMoney', function(a)
 	-- Found by FiveM forum user @Lobix300
-	N_0xc2d15bef167e27bc()
-	SetPlayerCashChange(1, 0)
-	Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-	SetPlayerCashChange(a - 1, 0)
+	--N_0xc2d15bef167e27bc()
+	--SetPlayerCashChange(1, 0)
+	--Citizen.InvokeNative(0x170F541E1CADD1DE, true)
+	--SetPlayerCashChange(a - 1, 0)
 end)
 
 RegisterNetEvent('es:displayBank')
 AddEventHandler('es:displayBank', function(a)
 	-- Found by FiveM forum user @Lobix300
-	SetMultiplayerBankCash()
-	SetPlayerCashChange(0, 1)
-	Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-	SetPlayerCashChange(0, a - 1)
+	--SetMultiplayerBankCash()
+	--SetPlayerCashChange(0, 1)
+	--Citizen.InvokeNative(0x170F541E1CADD1DE, true)
+	--SetPlayerCashChange(0, a - 1)
 end)
 
 RegisterNetEvent("es:addedMoney")
@@ -114,8 +114,8 @@ AddEventHandler("es:addedMoney", function(m, native)
 			money = m
 		})
 	else
-		Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-		Citizen.InvokeNative(0x0772DF77852C2E30, math.floor(m), 0)
+		--Citizen.InvokeNative(0x170F541E1CADD1DE, true)
+		--Citizen.InvokeNative(0x0772DF77852C2E30, math.floor(m), 0)
 	end
 
 end)
@@ -128,21 +128,21 @@ AddEventHandler("es:removedMoney", function(m, native, current)
 			money = m
 		})
 	else
-		Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-		Citizen.InvokeNative(0x0772DF77852C2E30, -math.floor(m), 0)
+		--Citizen.InvokeNative(0x170F541E1CADD1DE, true)
+		--Citizen.InvokeNative(0x0772DF77852C2E30, -math.floor(m), 0)
 	end
 end)
 
 RegisterNetEvent('es:addedBank')
 AddEventHandler('es:addedBank', function(m)
-	Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-	Citizen.InvokeNative(0x0772DF77852C2E30, 0, math.floor(m))
+	--Citizen.InvokeNative(0x170F541E1CADD1DE, true)
+	--Citizen.InvokeNative(0x0772DF77852C2E30, 0, math.floor(m))
 end)
 
 RegisterNetEvent('es:removedBank')
 AddEventHandler('es:removedBank', function(m)
-	Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-	Citizen.InvokeNative(0x0772DF77852C2E30, 0, -math.floor(m))
+	--Citizen.InvokeNative(0x170F541E1CADD1DE, true)
+	--Citizen.InvokeNative(0x0772DF77852C2E30, 0, -math.floor(m))
 end)
 
 RegisterNetEvent("es:setMoneyDisplay")

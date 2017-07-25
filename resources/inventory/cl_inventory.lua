@@ -1,11 +1,12 @@
 local playerInventory = nil
 local showInventory = false
 local canRefresh = true
+local key = 167 -- n9 = 118, F6 = 167
 
 Citizen.CreateThread(function()
     while true do
         Wait(0)
-        if IsControlJustPressed(1, 118) then -- n9
+        if IsControlJustPressed(1, key) then
             showInventory = not showInventory
             if showInventory then
                 if canRefresh then
@@ -43,7 +44,7 @@ Citizen.CreateThread(function()
                     else
                         drawAdvText(0.510,0.31,0.185,0.206, 0.40,"You have nothing in your inventory.",255,255,255,255,4)
                     end
-                    if IsControlJustPressed(1, 118) then
+                    if IsControlJustPressed(1, key) then
                         showInventory = not showInventory
                     end
                 end

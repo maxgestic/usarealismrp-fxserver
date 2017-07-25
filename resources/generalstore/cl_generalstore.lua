@@ -32,10 +32,20 @@ function vehicleMenu()
 	end
 end
 
+function miscMenu()
+    MenuTitle = "Misc"
+    ClearMenu()
+    for i = 1, #storeItems["Misc"] do
+		item = storeItems["Misc"][i]
+		Menu.addButton(item.name .. " ($" .. item.price .. ")","buyItem", item)
+	end
+end
+
 function buyMenu()
 	MenuTitle = "Categories"
 	ClearMenu()
 	Menu.addButton("Vehicle","vehicleMenu", nil)
+    Menu.addButton("Misc","miscMenu", nil)
 end
 
 function sellMenu()

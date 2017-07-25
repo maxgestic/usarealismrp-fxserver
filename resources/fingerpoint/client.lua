@@ -39,7 +39,7 @@ Citizen.CreateThread(function()
         end
 
         if not keyPressed then
-            if IsControlPressed(0, 29) and not mp_pointing and IsPedOnFoot(PlayerPedId()) then
+            if IsControlPressed(0, 29) and not mp_pointing and IsPedOnFoot(PlayerPedId()) and not IsEntityPlayingAnim(lPed, "mp_arresting", "idle", 3) then
                 Wait(200)
                 if not IsControlPressed(0, 29) then
                     keyPressed = true

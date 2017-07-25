@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+        <link href="style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <img id="cursor" src="cursor.png">
+
+        <div id="phone-wrap">
+            <div id="screen-wrap">
+                <div id="icons-wrap">
+                    <img id="phone-icon" src="phone-icon.png" alt="phone-icon">
+                    <img id="text-message-icon" style="margin-left: -2em" src="text-msg-icon.png" alt="text-message-button">
+                </div>
+                <!-- TEXT MESSAGE APPLICATION -->
+                <div style="display:none" id="text-message-app-wrap">
+                    <!-- home -->
+                    <div id="text-message-app-home" style="overflow:hidden;">
+                        <header>
+                            <span id="home-messages-title">MESSAGES</span>
+                            <div class="float-right" id="home-new-msg-btn"><span>+</span></div>
+                            <div class="float-right" id="text-home-back-btn"><span>&larr;</span></div>
+                        </header>
+                        <section>
+                        </section>
+                    </div>
+                    <!-- send a message -->
+                    <form style="display:none;" id="text-message-app-form">
+                        <h4>ID #:</h4>
+                        <input type="text" id="text-id">
+                        <h4>MESSAGE:</h4>
+                        <textarea id="text-message" name="message" rows="10" style="width:100%;"></textarea>
+                        <button type="submit">SEND</button>
+                        <button id="sending-text-back-btn" type="button">BACK</button>
+                    </form>
+                </div>
+                <!-- PHONE APPLICATION -->
+                <div style="display:none" id="phone-app-wrap">
+                    <section id="phone-btns">
+                        <div class="phone-btn" id="police-btn">POLICE</div>
+                        <div class="phone-btn" id="ems-btn">EMS</div>
+                        <div class="phone-btn" id="taxi-btn">TAXI</div>
+                        <div class="phone-btn" id="tow-btn">TOW</div>
+                        <div class="phone-btn" id="phone-btns-back-btn">BACK</div>
+                    </section>
+                    <!-- send a message to police -->
+                    <form style="display:none;" id="police-phone-app-form">
+                        <h4>MESSAGE (POLICE):</h4>
+                        <textarea id="police-message" name="message" rows="10" style="width:100%;"></textarea>
+                        <button type="submit">SEND</button>
+                        <button class="phone-back-btn" type="button">BACK</button>
+                    </form>
+                    <!-- send a message to ems -->
+                    <form style="display:none;" id="ems-phone-app-form">
+                        <h4>MESSAGE (EMS):</h4>
+                        <textarea id="ems-message" name="message" rows="10" style="width:100%;"></textarea>
+                        <button type="submit">SEND</button>
+                        <button class="phone-back-btn" type="button">BACK</button>
+                    </form>
+                    <!-- send a message to taxi drivers -->
+                    <form style="display:none;" id="taxi-phone-app-form">
+                        <h4>MESSAGE (TAXI):</h4>
+                        <textarea id="taxi-message" name="message" rows="10" style="width:100%;"></textarea>
+                        <button type="submit">SEND</button>
+                        <button class="phone-back-btn" type="button">BACK</button>
+                    </form>
+                    <!-- send a message to tow truck drivers -->
+                    <form style="display:none;" id="tow-phone-app-form">
+                        <h4>MESSAGE (TOW):</h4>
+                        <textarea id="tow-message" name="message" rows="10" style="width:100%;"></textarea>
+                        <button type="submit">SEND</button>
+                        <button class="phone-back-btn" type="button">BACK</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script src="script.js" type="text/javascript"></script>
+    </body>
+</html>

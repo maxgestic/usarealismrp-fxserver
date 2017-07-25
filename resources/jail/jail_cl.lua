@@ -3,6 +3,61 @@ local releaseX, releaseY, releaseZ = 1847.086, 2585.990, 45.672
 local lPed
 local imprisoned = false
 
+-- start of NUI menu
+
+local menuEnabled = false
+
+function EnableGui(enable)
+    SetNuiFocus(enable)
+    menuEnabled = enable
+
+    SendNUIMessage({
+        type = "enableui",
+        enable = enable
+    })
+end
+
+RegisterNetEvent("jail:openMenu")
+AddEventHandler("jail:openMenu", function()
+    EnableGui(true)
+end)
+
+RegisterNUICallback('submit', function(data, cb)
+    --PrintChatMessage("id = " .. data.id)
+	--PrintChatMessage("sentence = " .. data.sentence)
+--	PrintChatMessage("charges = " .. data.charges)
+	EnableGui(false) -- close form
+    TriggerServerEvent("jail:jailPlayerFromMenu", data)
+    cb('ok')
+end)
+
+RegisterNUICallback('escape', function(data, cb)
+    EnableGui(false)
+    cb('ok')
+end)
+
+Citizen.CreateThread(function()
+    while true do
+        if menuEnabled then
+            DisableControlAction(0, 1, menuEnabled) -- LookLeftRight
+            DisableControlAction(0, 2, menuEnabled) -- LookUpDown
+
+            DisableControlAction(0, 142, menuEnabled) -- MeleeAttackAlternate
+
+            DisableControlAction(0, 106, menuEnabled) -- VehicleMouseControlOverride
+
+            if IsDisabledControlJustReleased(0, 142) then -- MeleeAttackAlternate
+                SendNUIMessage({
+                    type = "click"
+                })
+            end
+        end
+        Citizen.Wait(0)
+    end
+end)
+
+-- end of NUI menu stuff
+
 RegisterNetEvent("jail:jail")
 AddEventHandler("jail:jail", function(reason, sentence)
 

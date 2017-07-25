@@ -4,22 +4,16 @@ local list = {}
 RegisterServerEvent('hardcap:playerActivated')
 
 AddEventHandler('hardcap:playerActivated', function()
-local numberSource = tonumber(source)
-  if not list[numberSource] then
+  if not list[source] then
     playerCount = playerCount + 1
-    list[numberSource] = true
-    print("just added player with numberSource = " .. numberSource .. " to the hardcap list")
-	print("player count = " .. playerCount)
+    list[source] = true
   end
 end)
 
 AddEventHandler('playerDropped', function()
-local numberSource = tonumber(source)
-  if list[numberSource] then
+  if list[source] then
     playerCount = playerCount - 1
-    list[numberSource] = nil
-    print("just removed player with numberSource = " .. numberSource .. " from the hardcap list")
-	print("player count = " .. playerCount)
+    list[source] = nil
   end
 end)
 
@@ -30,6 +24,7 @@ AddEventHandler('playerConnecting', function(name, setReason)
 
   if playerCount >= cv then
     print('Full. :(')
+
     setReason('This server is full (past ' .. tostring(cv) .. ' players).')
     CancelEvent()
   end

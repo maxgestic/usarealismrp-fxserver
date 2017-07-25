@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+        <link href="style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <img id="cursor" src="cursor.png">
+
+        <div id="jail-form-wrap">
+            <div class="dialog">
+                <form id="jail-form">
+                    <h4 style="color:white;">INTAKE INFO:</h4>
+                    <input id="id" type="text" placeholder="ID #"><br>
+                    <input id="sentence" type="text" placeholder="SENTENCE"><br>
+                    <input id="charges" type="text" placeholder="CHARGES"><br>
+                    <h4 style="color:white;">ALLERGENS:</h4>
+                    <input id="medications" type="text" placeholder="i.e. Oxycotin, penicilin, etc"><br>
+                    <h4 style="color:white;">MENTAL DISORDERS/RETARDATIONS:</h4>
+                    <input id="disorders" type="text" placeholder="i.e. Schizophrenia, bi-polar disorder, etc"><br>
+                    <h4 style="color:white;">SUICIDAL:</h4>
+                    <input type="radio" name="suicidal" value="yes" checked><span style="color:white;">YES</span><br>
+                    <input type="radio" name="suicidal" value="no" checked><span style="color:white;">NO</span><br>
+                    <button id="submit" type="submit">SUBMIT</button>
+                <form>
+            </div>
+        </div>
+
+        <script src="script.js" type="text/javascript"></script>
+    </body>
+</html>

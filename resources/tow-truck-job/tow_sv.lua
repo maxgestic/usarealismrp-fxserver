@@ -35,3 +35,28 @@ AddEventHandler("tow:towingVehicle", function(vehicle)
 	print("setting currentlyTowedVehicle = " .. vehicle)
 	currentlyTowedVehicle = vehicle
 end)
+
+local timeout = false
+
+RegisterServerEvent("tow:setJob")
+AddEventHandler("tow:setJob", function()
+    TriggerEvent("es:getPlayerFromId", source, function(user)
+        if user.getJob() == "tow" then
+            print("user " .. GetPlayerName(source) .. " just went off duty for Bubba's Tow Co.!")
+            user.setJob("civ")
+            TriggerClientEvent("tow:offDuty", source)
+        else
+            if not timeout then
+                print("user " .. GetPlayerName(source) .. " just went on duty for Bubba's Tow Co.!")
+                user.setJob("tow")
+                TriggerClientEvent("tow:onDuty", source)
+                timeout = true
+                SetTimeout(15000, function()
+                    timeout = false
+                end)
+            else
+                print("player is on timeout and cannot go on duty for Bubba's Tow Co.!")
+            end
+        end
+    end)
+end)

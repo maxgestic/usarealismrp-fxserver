@@ -23,3 +23,14 @@ AddEventHandler("mdt:vehicleInfo", function(vehicle)
 		TriggerEvent("chatMessage", "", { 0, 141, 155 }, "^0No registered vehicle on record.")
 	end
 end)
+
+RegisterNetEvent("drawCoolNotification")
+AddEventHandler("drawCoolNotification", function(message)
+	DrawCoolLookingNotificationNoPic(message)
+end)
+
+function DrawCoolLookingNotificationNoPic(msg)
+	SetNotificationTextEntry("STRING")
+	AddTextComponentString(msg)
+	DrawNotification(0,1)
+end

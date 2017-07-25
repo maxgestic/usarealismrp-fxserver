@@ -49,7 +49,7 @@ AddEventHandler("emsStation:giveCivStuff", function()
     local playerModel, playerWeapons, playerJob
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
         playerJob = user.getJob()
-        if playerJob == "sheriff" or playerJob == "fire" or playerJob == "ems" then
+        if playerJob ~= "civ" then
             playerModel = user.getModel()
             playerWeapons = user.getWeapons()
             user.setJob("civ")

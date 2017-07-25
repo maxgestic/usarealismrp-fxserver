@@ -24,7 +24,7 @@
 				if(item.seticon == true)
 					moneyIcon = item.icon;
 				if(item.setmoney == true)
-					document.getElementById("cash").innerHTML = "<div><font style='color: rgb(0, 125, 0); font-weight: 700; margin-right: 6px;'>" + moneyIcon + "</font>" + addCommas(item.money);
+					document.getElementById("cash").innerHTML = "<div><span style='color: rgb(0, 125, 0); font-weight: 700; margin-right: 6px;'>" + moneyIcon + "</span>" + addCommas(item.money) + "</div>";
 				if(item.addcash == true){
 					$(".tiny").remove();
 
@@ -37,7 +37,7 @@
 				}
 				if(item.removecash == true){
 					$(".tiny").remove();
-					
+
 					var element = $("<div class='tiny'>-<font style='color: rgb(250, 0, 0); font-weight: 700; margin-right: 6px;'>" + moneyIcon + "</font>"+addCommas(item.money)+"</div>")
 					$("#money").append(element)
 
@@ -85,12 +85,10 @@
 
 <body>
 	<div id="starter" style="font-family: 'roboto'; color: white; position: absolute; left: 20%; top: 5%; width: 60%; background: rgba(40, 40, 40, 0.8)">
-
 	</div>
 	<div id="container">
 		<div id="money">
-
-			<div id="cash"/>
+			<div id="cash"></div>
 		</div>
 	</div>
 </body>

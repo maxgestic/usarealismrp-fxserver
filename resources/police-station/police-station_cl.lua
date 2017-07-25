@@ -6,6 +6,19 @@ local locations = {
 	{ x=451.255, y=-992.41, z = 29.1896 }
 }
 
+RegisterNetEvent("policeStation:isWhitelisted")
+AddEventHandler("policeStation:isWhitelisted", function()
+	toggleDuty()              -- Menu to draw
+	Menu.hidden = not Menu.hidden    -- Hide/Show the menu
+end)
+
+RegisterNetEvent("policeStation:notify")
+AddEventHandler("policeStation:notify", function(msg)
+	SetNotificationTextEntry("STRING")
+	AddTextComponentString(msg)
+	DrawNotification(0,1)
+end)
+
 RegisterNetEvent("policeStation:giveWeapons")
 AddEventHandler("policeStation:giveWeapons", function(playerWeapons)
 	local name, hash
@@ -265,9 +278,12 @@ function toggleDuty()
 	Menu.addButton("Variations", "pedVariationMenu", nil)
 	Menu.addButton("Male Deputy","givePoliceLoadout", "male")
 	Menu.addButton("Female Deputy","givePoliceLoadout", "female")
+	Menu.addButton("Male Cop","giveUCLoadout", "s_m_y_cop_01")
+	Menu.addButton("Female Cop","giveUCLoadout", "s_f_y_cop_01")
 	Menu.addButton("UC 1","giveUCLoadout", "s_m_m_ciasec_01")
 	Menu.addButton("UC 2","giveUCLoadout", "s_m_m_fiboffice_01")
 	Menu.addButton("UC 3","giveUCLoadout", "s_m_m_fibsec_01")
+	Menu.addButton("UC 4","giveUCLoadout", "s_m_m_chemsec_01")
 	Menu.addButton("FED 1","giveUCLoadout", "s_m_y_blackops_01")
 	Menu.addButton("Civilian","giveCivLoadout", nil)
 	Menu.addButton("Cancel","cancel", nil)
@@ -330,14 +346,17 @@ Citizen.CreateThread(function()
 
 			if isPlayerAtPD() then
 
+				-- check player against the white list
+				TriggerServerEvent("policeStation:checkWhitelist")
+
 				if not stored then
 					-- save skin for user canceling
 					skinBeforeRandomizing = GetEntityModel(GetPlayerPed(-1))
 					stored = true
 				end
 
-				toggleDuty()              -- Menu to draw
-				Menu.hidden = not Menu.hidden    -- Hide/Show the menu
+				--toggleDuty()              -- Menu to draw
+				--Menu.hidden = not Menu.hidden    -- Hide/Show the menu
 
 			end
 

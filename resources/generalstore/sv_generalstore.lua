@@ -7,13 +7,6 @@ AddEventHandler("generalStore:buyItem", function(item)
     local userSource = source
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
         if user.getMoney() >= item.price then
-            local item = {
-                quantity =  1,
-                price = 1500,
-                name = "Repair Kit",
-                legality = "legal",
-                type = "vehicle"
-            }
             user.removeMoney(item.price)
             local inventory = user.getInventory()
             for i = 1, #inventory do

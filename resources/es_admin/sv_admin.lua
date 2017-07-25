@@ -71,6 +71,7 @@ end)
 
 -- Kicking
 TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, user)
+	local userSource = source
 		if(GetPlayerName(tonumber(args[2])))then
 			local player = tonumber(args[2])
 
@@ -81,17 +82,36 @@ TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, user)
 				table.remove(reason, 1)
 				table.remove(reason, 1)
 				if(#reason == 0)then
-					reason = "Kicked: You have been kicked from the server"
+					reason = "kicked"
 				else
-					reason = "Kicked: " .. table.concat(reason, " ")
+					reason = table.concat(reason, " ")
 				end
 
-				TriggerClientEvent('chatMessage', -1, "SYSTEM", {255, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been kicked(^2" .. reason .. "^0)")
+				-- send discord notification
+				local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
+						PerformHttpRequest(url, function(err, text, headers)
+							if text then
+								print(text)
+							end
+						end, "POST", json.encode({
+							embeds = {
+								{
+									description = "**Display Name:** " ..GetPlayerName(player).. " \n**Identifier:** " ..target.getIdentifier().. " \n**Reason:** " ..reason:gsub("Kicked: ", "").. " \n**Kicked By:** "..GetPlayerName(userSource),
+									color = 16777062,
+									author = {
+										name = "User Kicked From The Server"
+									}
+								}
+							}
+						}), { ["Content-Type"] = 'application/json' })
+
+				TriggerClientEvent('chatMessage', -1, "SYSTEM", {255, 0, 0}, GetPlayerName(player) .. " has been ^3kicked^0 (" .. reason .. ")")
 				DropPlayer(player, reason)
 			end)
 		else
 			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
 		end
+
 end, function(source, args, user)
 	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
 end)
@@ -139,6 +159,15 @@ TriggerEvent('es:addGroupCommand', 'freeze', "mod", function(source, args, user)
 
 				TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have been " .. state .. " by ^2" .. GetPlayerName(source))
 				TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been " .. state)
+				TriggerEvent('es:getPlayers', function(players)
+					-- notify all admins/mods
+					for id, adminOrMod in pairs(players) do
+						local adminOrModGroup = adminOrMod.getGroup()
+						if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
+							TriggerClientEvent('chatMessage', id, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(source) .. "^0 froze " .. GetPlayerName(player))
+						end
+					end
+				end)
 			end)
 		else
 			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
@@ -160,6 +189,15 @@ TriggerEvent('es:addGroupCommand', 'bring', "mod", function(source, args, user)
 
 				TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have brought by ^2" .. GetPlayerName(source))
 				TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been brought")
+				TriggerEvent('es:getPlayers', function(players)
+					-- notify all admins/mods
+					for id, adminOrMod in pairs(players) do
+						local adminOrModGroup = adminOrMod.getGroup()
+						if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
+							TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been brought by " .. GetPlayerName(id))
+						end
+					end
+				end)
 			end)
 		else
 			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
@@ -203,6 +241,15 @@ TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, user)
 
 					TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have been teleported to by ^2" .. GetPlayerName(source))
 					TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Teleported to player ^2" .. GetPlayerName(player) .. "")
+					TriggerEvent('es:getPlayers', function(players)
+						-- notify all admins/mods
+						for id, adminOrMod in pairs(players) do
+							local adminOrModGroup = adminOrMod.getGroup()
+							if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
+								TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(id) .. "^0 teleported to " .. GetPlayerName(player))
+							end
+						end
+					end)
 				end
 			end)
 		else
@@ -360,3 +407,89 @@ end)
 AddEventHandler("es:adminCommandRan", function(source, command)
 
 end)
+
+--------------- BAN MANAGEMENT: -------------------
+local bans = {}
+
+function fetchAllBans()
+	print("fetching all bans...")
+	PerformHttpRequest("http://127.0.0.1:5984/bans/_all_docs?include_docs=true" --[[ string ]], function(err, text, headers)
+		print("finished getting bans...")
+		print("error code: " .. err)
+		local response = json.decode(text)
+		if response.rows then
+			bans = {} -- reset table
+			print("#(response.rows) = " .. #(response.rows))
+			-- insert all bans from 'bans' db into lua table
+			for i = 1, #(response.rows) do
+				table.insert(bans, response.rows[i].doc)
+			end
+			print("finished loading bans...")
+			print("# of bans: " .. #bans)
+		end
+	end, "GET", "", { ["Content-Type"] = 'application/json' })
+end
+
+-- Fetch all bans when resource starts
+fetchAllBans()
+
+	-- check for player being banned
+	AddEventHandler('playerConnecting', function(name, setReason)
+		local identifier = GetPlayerIdentifiers(source)[1]
+		for i = 1, #bans do
+			local bannedPlayer = bans[i]
+			if identifier == bannedPlayer.identifier then
+				print("player with identifier: " .. identifier .. " has been banned from your server and should not be allowed to connect!")
+				setReason("Banned: " .. bannedPlayer.reason .. ". You may file an appeal at usarpp.enjin.com.")
+				CancelEvent()
+			end
+		end
+	end)
+
+	-- ban command
+	TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, user)
+		local userSource = source
+		-- add player to ban list
+		TriggerEvent('es:exposeDBFunctions', function(GetDoc)
+			-- get info from command
+			local banner = GetPlayerName(userSource)
+			local bannerId = GetPlayerIdentifiers(userSource)[1]
+			local targetPlayer = tonumber(args[2])
+			local targerPlayerName = GetPlayerName(targetPlayer)
+			table.remove(args,1) -- remove /test
+			table.remove(args, 1) -- remove id
+			local reason = table.concat(args, " ")
+			idents = GetPlayerIdentifiers(targetPlayer)
+			local id = idents[1]
+			-- show message
+		    TriggerClientEvent('chatMessage', -1, "SYSTEM", {255, 0, 0}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
+
+			-- send discord message
+			local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
+				PerformHttpRequest(url, function(err, text, headers)
+					if text then
+						print(text)
+					end
+				end, "POST", json.encode({
+					embeds = {
+						{
+							description = "**Display Name:** " ..GetPlayerName(targetPlayer).. " \n**Identifier:** " .. id .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** "..GetPlayerName(userSource),
+							color = 14750740,
+							author = {
+								name = "User Banned From The Server"
+							}
+						}
+					}
+				}), { ["Content-Type"] = 'application/json' })
+
+			-- drop player from session
+			DropPlayer(targetPlayer, "Banned: " .. reason)
+			-- update db
+			GetDoc.createDocument("bans",  {name = targerPlayerName, identifier = id, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date("%c", os.time())}, function()
+				print("player banned!")
+				fetchAllBans() -- refresh lua table of bans for this resource
+			end)
+		end)
+	end, function(source,args,user)
+		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
+	end)
