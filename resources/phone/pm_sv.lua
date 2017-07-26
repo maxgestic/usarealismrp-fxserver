@@ -38,7 +38,7 @@ end)
 
 RegisterServerEvent("phone:sendPoliceMessage")
 AddEventHandler("phone:sendPoliceMessage", function(data)
-	local userSource = source
+	local userSource = tonumber(source)
 	local message = data.message
 	TriggerEvent('es:getPlayers', function(players)
 		for id, player in pairs(players) do
@@ -53,7 +53,7 @@ end)
 
 RegisterServerEvent("phone:sendEmsMessage")
 AddEventHandler("phone:sendEmsMessage", function(data)
-	local userSource = source
+	local userSource = tonumber(source)
 	local message = data.message
 	TriggerEvent('es:getPlayers', function(players)
 		for id, player in pairs(players) do
@@ -68,7 +68,7 @@ end)
 
 RegisterServerEvent("phone:sendTaxiMessage")
 AddEventHandler("phone:sendTaxiMessage", function(data)
-	local userSource = source
+	local userSource = tonumber(source)
 	local message = data.message
 	TriggerEvent('es:getPlayers', function(players)
 		for id, player in pairs(players) do
@@ -83,7 +83,7 @@ end)
 
 RegisterServerEvent("phone:sendTowMessage")
 AddEventHandler("phone:sendTowMessage", function(data)
-	local userSource = source
+	local userSource = tonumber(source)
 	local message = data.message
 	TriggerEvent('es:getPlayers', function(players)
 		for id, player in pairs(players) do
@@ -98,7 +98,7 @@ end)
 
 RegisterServerEvent("phone:sendTextToPlayer")
 AddEventHandler("phone:sendTextToPlayer", function(data)
-	local userSource = source
+	local userSource = tonumber(source)
 	print("userSource = " .. userSource)
 	local userIdent = GetPlayerIdentifiers(userSource)[1]
 	local targetPlayer = tonumber(data.id)
@@ -134,10 +134,12 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 								message = msg
 							}
 							table.insert(inventory[i].conversations[x].messages, message)
+							user.setInventory(inventory)
 							convoExistedForUser = true
 						end
 					end
 					if not convoExistedForUser then
+						print("no convo found for users! creating and inserting now!")
 						-- no previous converstaion with that partner, create new one
 						local message = {
 							timestamp = os.date("%c", os.time()),
@@ -151,6 +153,8 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 							messages = {message}
 						}
 						table.insert(inventory[i].conversations, conversation)
+						user.setInventory(inventory)
+						print("convo inserted!")
 					end
 				end
 			end
@@ -178,6 +182,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 										message = msg
 									}
 									table.insert(inventory[i].conversations[x].messages, message)
+									user.setInventory(inventory)
 									convoExistedForUser = true
 								end
 							end
@@ -195,6 +200,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 									messages = {message}
 								}
 								table.insert(inventory[i].conversations, conversation)
+								user.setInventory(inventory)
 							end
 						end
 					end
@@ -243,7 +249,7 @@ end)
 
 RegisterServerEvent("phone:getMessagesWithThisId")
 AddEventHandler("phone:getMessagesWithThisId", function(targetId)
-	local userSource = source
+	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
 		local inventory = user.getInventory()
 		for i = 1, #inventory do
