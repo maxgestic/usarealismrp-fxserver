@@ -225,6 +225,7 @@ AddEventHandler("phone:checkForPhone", function()
 			end
 		end
 		-- at this point, the player has no cell phone
+		TriggerClientEvent("chatMessage", source, "", {}, "^3You do not own a cell phone!")
 		print("found no cell phone on player! not opening cell phone ui!")
 	end)
 end)
