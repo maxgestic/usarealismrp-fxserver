@@ -40,16 +40,17 @@ local timeout = false
 
 RegisterServerEvent("tow:setJob")
 AddEventHandler("tow:setJob", function()
-    TriggerEvent("es:getPlayerFromId", source, function(user)
+	local userSource = tonumber(source)
+    TriggerEvent("es:getPlayerFromId", userSource, function(user)
         if user.getJob() == "tow" then
-            print("user " .. GetPlayerName(source) .. " just went off duty for Bubba's Tow Co.!")
+            print("user " .. GetPlayerName(userSource) .. " just went off duty for Bubba's Tow Co.!")
             user.setJob("civ")
-            TriggerClientEvent("tow:offDuty", source)
+            TriggerClientEvent("tow:offDuty", userSource)
         else
             if not timeout then
-                print("user " .. GetPlayerName(source) .. " just went on duty for Bubba's Tow Co.!")
+                print("user " .. GetPlayerName(userSource) .. " just went on duty for Bubba's Tow Co.!")
                 user.setJob("tow")
-                TriggerClientEvent("tow:onDuty", source)
+                TriggerClientEvent("tow:onDuty", userSource)
                 timeout = true
                 SetTimeout(15000, function()
                     timeout = false
