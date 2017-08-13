@@ -1,17 +1,15 @@
 --local markerX, markerY, markerZ = 120.924,6624.605,31.000
-local markerX, markerY, markerZ = -32.4886, -1111.35, 25.3523
+local markerX, markerY, markerZ = -43.2616, -1097.37, 25.3523
 
-RegisterNetEvent("mini:spawnVehicleAtShop")
-AddEventHandler("mini:spawnVehicleAtShop", function(hash, name, plate)
-
+RegisterNetEvent("vehShop:spawnPlayersVehicle")
+AddEventHandler("vehShop:spawnPlayersVehicle", function(hash, plate)
+	Citizen.Trace("spawning players vehicle...")
 	local numberHash = tonumber(hash)
-
 	-- thread code stuff below was taken from an example on the wiki
 	-- Create a thread so that we don't 'wait' the entire game
 	Citizen.CreateThread(function()
 		-- Request the model so that it can be spawned
 		RequestModel(numberHash)
-
 		-- Check if it's loaded, if not then wait and re-request it.
 		while not HasModelLoaded(numberHash) do
 			RequestModel(numberHash)
@@ -22,12 +20,7 @@ AddEventHandler("mini:spawnVehicleAtShop", function(hash, name, plate)
 		-- Spawn the vehicle at the gas station car dealership in paleto and assign the vehicle handle to 'vehicle'
 		local vehicle = CreateVehicle(numberHash, spawnX, spawnY, spawnZ, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
 		SetVehicleNumberPlateText(vehicle, plate)
-		--TriggerServerEvent()
-		if vehicle then
-			TriggerEvent("chatMessage", "Dealer", { 255,99,71 }, ("^0You now own a %s. Make sure to store it before leaving!"):format(name))
-			TriggerServerEvent("vehShop:setHandle", vehicle)
-		end
-
+		SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
 	end)
 
 end)
@@ -73,13 +66,31 @@ AddEventHandler("vehShop:notify", function(message)
 	DrawNotification(0,1)
 end)
 
-function buyVehicle(params)
-	TriggerServerEvent("mini:checkVehicleMoney",params)
-	Menu.hidden = true -- close menu
+RegisterNetEvent("vehShop:displayVehiclesToSell")
+AddEventHandler("vehShop:displayVehiclesToSell", function(vehicles)
+	ClearMenu()
+	if #vehicles > 0 then
+		for i = 1, #vehicles do
+			local vehicle = vehicles[i]
+			Menu.addButton(vehicle.model,"sellVehicle", vehicle)
+		end
+	else
+		Menu.hidden = true
+		SetNotificationTextEntry("STRING")
+		AddTextComponentString("You do not own any vehicles to sell!")
+		DrawNotification(0,1)
+	end
+end)
+
+function sellVehicle(vehicle)
+	Menu.hidden = true
+	TriggerServerEvent("vehShop:sellVehicle", vehicle)
 end
 
---[[
-]]
+function buyVehicle(params)
+	TriggerServerEvent("mini:checkVehicleMoney",params)
+	Menu.hidden = true
+end
 
 function suvMenu()
 	MenuTitle = "SUVs"
@@ -99,11 +110,11 @@ function coupeMenu()
 	MenuTitle = "Coupes"
 	ClearMenu()
 	Menu.addButton("Ocelot Jackal ($24,700)","buyVehicle","-624529134:24700:Ocelot Jackal")
-	Menu.addButton("Ubermacht Zion ($27,450)","buyVehicle","1122289213:27450:Ubermacht Zion")
+	--Menu.addButton("Ubermacht Zion ($27,450)","buyVehicle","1122289213:27450:Ubermacht Zion")
 	Menu.addButton("Dewbauchee Exemplar ($28,070)","buyVehicle","-5153954:28070:Dewbauchee Exemplar")
 	Menu.addButton("Ubermacht Sentinel XS ($30,020)","buyVehicle","1349725314:30020:Ubermacht Sentinel XS")
 	Menu.addButton("Enus Cognoscenti Carbio ($33,200)","buyVehicle","330661258:33200:Enus Cognoscenti Carbio")
-	Menu.addButton("Lampadati Felon ($34,550)","buyVehicle"," -391594584:34550Lampadati Felon")
+	Menu.addButton("Lampadati Felon ($34,550)","buyVehicle","-391594584:34550:Lampadati Felon")
 
 end
 
@@ -128,7 +139,7 @@ function muscleMenu()
 	Menu.addButton("Imponte Dukes ($10,500)","buyVehicle","723973206:10500:Imponte Dukes")
 	Menu.addButton("Declasse Vigero ($12,500)","buyVehicle","-825837129:12500:Declasse Vigero")
 	Menu.addButton("Vapid Dominator ($19,400)","buyVehicle","80636076:19400:Vapid Dominator")
-	Menu.addButton("Bravado Gauntlet ($21,400)","buyVehicle","1800170043:21400:Bravado Gauntlet")
+	--Menu.addButton("Bravado Gauntlet ($21,400)","buyVehicle","1800170043:21400:Bravado Gauntlet")
 
 end
 
@@ -138,7 +149,7 @@ function trucksMenu()
 	Menu.addButton("Karin Rebel ($10,500)","buyVehicle","-2045594037:10500:Karin Rebel")
 	Menu.addButton("Vapid Bobcat XL ($10,500)","buyVehicle","1069929536:10500:Vapid Bobcat XL")
 	Menu.addButton("Vapid Sadler ($25,500)","buyVehicle","599568815:25500:Vapid Sadler")
-	Menu.addButton("Bravado Bison ($27,110)","buyVehicle","16948145:27110:Bravado Bison")
+	--Menu.addButton("Bravado Bison ($27,110)","buyVehicle","16948145:27110:Bravado Bison")
 	Menu.addButton("Vapid Sandking XL ($35,000)","buyVehicle"," -1189015600:35000:Vapid Sandking XL")
 
 end
@@ -204,7 +215,7 @@ function sportsMenu()
 	Menu.addButton("Invetero Coquette ($65,450)","buyVehicle","108773431:65450:Invetero Coquette")
 	Menu.addButton("Dewbauchee Massacro ($75,000)","buyVehicle","-142942670:75000:Dewbauchee Massacro")
 	Menu.addButton("Ubermacht Zion Cabrio ($50,015)","buyVehicle","-1193103848:50015:Ubermacht Zion Cabrio")
-	Menu.addButton("Karin Sultan ($37,500)","buyVehicle","-1122289213:37500:Karin Sultan")
+	--Menu.addButton("Karin Sultan ($37,500)","buyVehicle","-1122289213:37500:Karin Sultan")
 	Menu.addButton("Bravado Buffalo S ($57,800)","buyVehicle","736902334:57800:Bravado Buffalo S")
 	Menu.addButton("Dewbauchee Specter ($120,000)","buyVehicle","1886268224:35000:Dewbauchee Specter")
 	Menu.addButton("Benefactor Surano ($70,000)","buyVehicle","384071873:70000:Benefactor Surano")
@@ -240,7 +251,7 @@ function classicMenu()
 	Menu.addButton("Pegassi Monroe ($210,800)","buyVehicle","-433375717:210800:Pegassi Monroe")
 	Menu.addButton("Grotti Stinger GT ($275,600)","buyVehicle","-2098947590:275600:Grotti Stinger")
 	Menu.addButton("Vapid Peyote ($100,000)","buyVehicle","1830407356:100000:Vapid Peyote")
-	Menu.addButton("Truffade Z-Type ($350,000)","buyVehicle","75889561:350000:Truffade Z-Type")
+	--Menu.addButton("Truffade Z-Type ($350,000)","buyVehicle","75889561:350000:Truffade Z-Type")
 	Menu.addButton("Lampadati Casco ($133,777)","buyVehicle","941800958:133777:Lampadati Casco")
 	Menu.addButton("Grotti Turismo Classic ($275,350)","buyVehicle","-982130927:275350:Grotti Turismo Classic")
 	Menu.addButton("Albany Roosevelt Valor ($350,350)","buyVehicle"," -602287871:350350:Albany Roosevelt Valor")
@@ -259,10 +270,11 @@ function sedanMenu()
     Menu.addButton("Vapid Stanier ($13,500)","buyVehicle","-1477580979:13500:Vapid Stanier")
 	Menu.addButton("Vulcan Ingot ($9,500)","buyVehicle","-1289722222:9500:Vulcan Ingot")
 	Menu.addButton("Enus Cognoscenti ($85,500)","buyVehicle","-2030171296:85500:Vulcan Ingot")
+
 end
 
-function vehicleMenu()
-	MenuTitle = "Vehicles"
+function purchaseMenu()
+	MenuTitle = "Purchase"
 	ClearMenu()
 	Menu.addButton("Bicylces","bicycleMenu", nil)
 	Menu.addButton("Compacts","compactMenu", nil)
@@ -302,10 +314,15 @@ function checkPlayerInsurance()
 	TriggerServerEvent("vehShop:checkPlayerInsurance")
 end
 
+function sellMenu()
+	TriggerServerEvent("vehShop:loadVehiclesToSell")
+end
+
 function mainMenu()
 	MenuTitle = "Auto Shop"
 	ClearMenu()
-	Menu.addButton("Vehicles","vehicleMenu", nil)
+	Menu.addButton("Buy","purchaseMenu", nil)
+	Menu.addButton("Sell","sellMenu", nil)
 	Menu.addButton("Insurance","checkPlayerInsurance", nil)
 end
 

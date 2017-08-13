@@ -43,8 +43,9 @@ Citizen.CreateThread(function()
 								local numberPlateText = GetVehicleNumberPlateText(GetVehiclePedIsIn(GetPlayerPed(-1), false))
 								TriggerServerEvent("garage:storeVehicle", handle, numberPlateText)
 							else
-								TriggerServerEvent("garage:checkVehicleStatus")
-								Wait(60000) -- wait 10 seconds for next spawn
+								--TriggerServerEvent("garage:checkVehicleStatus")
+								TriggerServerEvent("garage:openMenu")
+								Citizen.Wait(60000)
 							end
 						end
 				end
@@ -137,6 +138,7 @@ AddEventHandler("garage:spawn", function(vehicle)
 		SetVehicleEngineOn(vehicle, true, false, false)
 		SetEntityAsMissionEntity(vehicle, true, true)
 	end)
+
 end)
 
 RegisterNetEvent("garage:notify")
