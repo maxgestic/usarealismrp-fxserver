@@ -54,11 +54,13 @@ AddEventHandler("license:searchForLicense", function(source, playerId)
 			if not hasFirearmsPermit then
 				TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0No firearm permit on record.")
 			end
+			--[[
 			if #vehicles > 0 then
 				TriggerClientEvent("mdt:vehicleInfo", source, vehicles[1])
 			else
 				TriggerClientEvent("mdt:vehicleInfo", source, nil)
 			end
+			--]]
 			print("checking #insurancePlans: " .. #insurancePlans)
 			if #insurancePlans > 0 then
 				if playerHasValidAutoInsurance(insurancePlans[1]) then
@@ -126,81 +128,69 @@ function fetchAllRegisteredVehicles(callback)
 	end, "GET", "", { ["Content-Type"] = 'application/json' })
 end
 
+-- running vehicle plates
 TriggerEvent('es:addCommand', '28', function(source, args, user)
-	fetchAllRegisteredVehicles(function(registeredVehicles)
-		print("made it inside of fetchAllRegisteredVehicles!!")
-		local userSource = source
-		local licensePlateNumber = tonumber(args[2]) -- even though license plate # should probably be a string, not a number type
-		print("typeof licensePlateNumber = " .. type(licensePlateNumber))
-		if licensePlateNumber then
-			for i = 1, #registeredVehicles do
-				local vehicle = registeredVehicles[i]
-				if vehicle.plate == licensePlateNumber then -- found a player with a matching license plate #
-					TriggerClientEvent("chatMessage", userSource, "PLATE", {0,200,45}, tostring(licensePlateNumber))
-					TriggerClientEvent("chatMessage", userSource, "OWNER", {0,200,45}, vehicle.owner)
-					TriggerClientEvent("chatMessage", userSource, "DESC", {0,200,45}, vehicle.model)
-					local flags = ""
-					if vehicle.stolen then
-						flags = flags .. "^1STOLEN"
+	local userSource = tonumber(source)
+	local plateNumber = args[2]
+	if plateNumber then
+		TriggerEvent("es:getPlayers", function(players)
+			for id, player in pairs(players) do
+				--print("id = " .. id)
+				--print("player.job = " .. player.job)
+				local vehicles = player.vehicles
+				for i = 1, #vehicles do
+					local vehicle = vehicles[i]
+					if tostring(vehicle.plate) == tostring(plateNumber) then
+						print("found matching plate number! triggering client event")
+						local message = "~y~PLATE: ~w~" .. vehicle.plate .. "\n"
+						message = message .. "~y~RO: ~w~"
+						message = message .. vehicle.owner .. "\n"
+						message = message .. "~y~MODEL: ~w~"
+						message = message .. vehicle.model
+						TriggerClientEvent("licenseCheck:notify", userSource, message)
+						return
 					end
-					if vehicle.impounded then
-						if string.match(flags, "STOLEN") then
-							flags = flags .. "^0, ^3IMPOUNDED"
-						else
-							flags = flags .. "^3IMPOUNDED"
-						end
-					end
-					TriggerClientEvent("chatMessage", userSource, "FLAGS", {0,200,45}, flags)
-					--TriggerClientEvent("drawCoolNotification", userSource, result)
-					return
 				end
 			end
-			print("no matching plate number found on record!")
-			TriggerClientEvent("chatMessage", userSource, "DISPATCH", {0,200,45}, "There is no record for that plate number.")
-			-- at this point, no matching license plate # was found
-		else
-			print("no matching plate number found on record!")
-			TriggerClientEvent("chatMessage", userSource, "DISPATCH", {0,200,45}, "There is no record for that plate number.")
-			print("error: no license plate # entered with command!")
-		end
-	end)
+			-- player not in game with that plate number or plate number owned by a local!
+			TriggerClientEvent("licenseCheck:notify", userSource, "This plate is not on file.")
+		end)
+	else
+		print("player did not enter a plate #")
+		TriggerClientEvent("chatMessage", userSource, "", {}, "^1Invalid /28 command format!")
+		TriggerClientEvent("chatMessage", userSource, "", {}, "^3Usage: ^0/28 <plate_number_here>")
+	end
 end)
 
 TriggerEvent('es:addCommand', 'runplate', function(source, args, user)
-	fetchAllRegisteredVehicles(function(registeredVehicles)
-		print("made it inside of fetchAllRegisteredVehicles!!")
-		local userSource = source
-		local licensePlateNumber = tonumber(args[2]) -- even though license plate # should probably be a string, not a number type
-		if licensePlateNumber then
-			for i = 1, #registeredVehicles do
-				local vehicle = registeredVehicles[i]
-				if vehicle.plate == licensePlateNumber then -- found a player with a matching license plate #
-					TriggerClientEvent("chatMessage", userSource, "PLATE", {0,200,45}, tostring(licensePlateNumber))
-					TriggerClientEvent("chatMessage", userSource, "OWNER", {0,200,45}, vehicle.owner)
-					TriggerClientEvent("chatMessage", userSource, "DESC", {0,200,45}, vehicle.model)
-					local flags = ""
-					if vehicle.stolen then
-						flags = flags .. "^1STOLEN"
+	local userSource = tonumber(source)
+	local plateNumber = args[2]
+	if plateNumber then
+		TriggerEvent("es:getPlayers", function(players)
+			for id, player in pairs(players) do
+				--print("id = " .. id)
+				--print("player.job = " .. player.job)
+				local vehicles = player.getVehicles()
+				for i = 1, #vehicles do
+					local vehicle = vehicles[i]
+					if tostring(vehicle.plate) == tostring(plateNumber) then
+						print("found matching plate number! triggering client event")
+						local message = "~y~PLATE: ~w~" .. vehicle.plate .. "\n"
+						message = message .. "~y~RO: ~w~"
+						message = message .. vehicle.owner .. "\n"
+						message = message .. "~y~MODEL: ~w~"
+						message = message .. vehicle.model
+						TriggerClientEvent("licenseCheck:notify", userSource, message)
+						return
 					end
-					if vehicle.impounded then
-						if string.match(flags, "STOLEN") then
-							flags = flags .. "^0, ^3IMPOUNDED"
-						else
-							flags = flags .. "^3IMPOUNDED"
-						end
-					end
-					TriggerClientEvent("chatMessage", userSource, "FLAGS", {0,200,45}, flags)
-					--TriggerClientEvent("drawCoolNotification", userSource, result)
-					return
 				end
+				-- player not in game with that plate number or plate number owned by a local!
+				TriggerClientEvent("licenseCheck:notify", userSource, "This plate is not on file.")
 			end
-			print("no matching plate number found on record!")
-			TriggerClientEvent("chatMessage", userSource, "DISPATCH", {0,200,45}, "There is no record for that plate number.")
-			-- at this point, no matching license plate # was found
-		else
-			print("no matching plate number found on record!")
-			TriggerClientEvent("chatMessage", userSource, "DISPATCH", {0,200,45}, "There is no record for that plate number.")
-			print("error: no license plate # entered with command!")
-		end
-	end)
+		end)
+	else
+		print("player did not enter a plate #")
+		TriggerClientEvent("chatMessage", userSource, "", {}, "^1Invalid /28 command format!")
+		TriggerClientEvent("chatMessage", userSource, "", {}, "^3Usage: ^0/28 <plate_number_here>")
+	end
 end)

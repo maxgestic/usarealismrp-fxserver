@@ -24,12 +24,12 @@ AddEventHandler("mdt:vehicleInfo", function(vehicle)
 	end
 end)
 
-RegisterNetEvent("drawCoolNotification")
-AddEventHandler("drawCoolNotification", function(message)
-	DrawCoolLookingNotificationNoPic(message)
+RegisterNetEvent("licenseCheck:notify")
+AddEventHandler("licenseCheck:notify", function(message)
+	DrawCoolLookingNotification(message)
 end)
 
-function DrawCoolLookingNotificationNoPic(msg)
+function DrawCoolLookingNotification(msg)
 	SetNotificationTextEntry("STRING")
 	AddTextComponentString(msg)
 	DrawNotification(0,1)
