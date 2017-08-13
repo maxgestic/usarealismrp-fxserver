@@ -42,9 +42,10 @@ Citizen.CreateThread(function()
 
 				if NetworkIsPlayerTalking(id) then
 					if GetPlayerPed(id) ~= GetPlayerPed(-1) then
-						DrawMarker(2, x, y, z+1.10, 0, 0, 0, 0, 180.0, 0, 0.3, 0.1, 0.25, 0, 0, 200, 200, 0, GetEntityHeading(GetPlayerPed(-1)), 0, 0)
+						--DrawMarker(2, x, y, z+1.10, 0, 0, 0, 0, 180.0, 0, 0.3, 0.1, 0.25, 0, 0, 200, 200, 0, GetEntityHeading(GetPlayerPed(-1)), 0, 0)
 						--Citizen.InvokeNative(0xBFEFE3321A3F5015, ped, GetPlayerName(id), false, false, "", false)
-						Citizen.InvokeNative(0xBFEFE3321A3F5015, ped, tostring(GetPlayerServerId(id)), false, false, "", false)
+						--Citizen.InvokeNative(0xBFEFE3321A3F5015, ped, tostring(GetPlayerServerId(id)), false, false, "", false)
+						DrawTracerText(tostring(GetPlayerServerId(id)), 1.2, true)
 					end
 					if talking == "" then
 						talking = GetPlayerName(id)
@@ -52,9 +53,10 @@ Citizen.CreateThread(function()
 						talking = talking .. ", " .. GetPlayerName(id)
 					end
 				elseif GetPlayerPed(id) ~= GetPlayerPed(-1) then
-					DrawMarker(2, x, y, z+1.10, 0, 0, 0, 0, 180.0, 0, 0.3, 0.1, 0.25, 0, 200, 0, 200, 0, GetEntityHeading(GetPlayerPed(-1)), 0, 0)
+					--DrawMarker(2, x, y, z+1.10, 0, 0, 0, 0, 180.0, 0, 0.3, 0.1, 0.25, 0, 200, 0, 200, 0, GetEntityHeading(GetPlayerPed(-1)), 0, 0)
 					--Citizen.InvokeNative(0xBFEFE3321A3F5015, ped, GetPlayerName(id), false, false, "", false)
-					Citizen.InvokeNative(0xBFEFE3321A3F5015, ped, tostring(GetPlayerServerId(id)), false, false, "", false)
+					--Citizen.InvokeNative(0xBFEFE3321A3F5015, ped, tostring(GetPlayerServerId(id)), false, false, "", false)
+					DrawTracerText(tostring(GetPlayerServerId(id)), 1.2, false)
 				end
 			end
 		end
@@ -373,11 +375,11 @@ function getPedEmergencyPersonnelType(ped)
 	end
 end
 
-function DrawTracerText(text, spacing)
+function DrawTracerText(text, spacing, talking)
 	local x,y,z = table.unpack(GetEntityCoords(ped))
 	local px,py,pz=table.unpack(GetGameplayCamCoords())
 	local dist = GetDistanceBetweenCoords(px,py,pz, x,y,z, 1)
-	Citizen.Trace("playerBlips: dist = " .. dist)
+	--Citizen.Trace("playerBlips: dist = " .. dist)
 
 	local scale = (1/dist)*20
 	local fov = (1/GetGameplayCamFov())*100
@@ -385,7 +387,11 @@ function DrawTracerText(text, spacing)
 
 	SetTextFont(0)
 	SetTextProportional(1)
-	SetTextColour(255, 255, 255, 255)
+	if talking then
+		SetTextColour(0, 0, 255, 255)
+	else
+		SetTextColour(255, 255, 255, 255)
+	end
 	SetTextDropshadow(0, 0, 0, 0, 255)
 	SetTextEdge(2, 0, 0, 0, 150)
 	SetTextDropShadow()
@@ -394,7 +400,7 @@ function DrawTracerText(text, spacing)
 	SetTextCentre(1)
 	AddTextComponentString(text)
 	SetDrawOrigin(x, y, z+spacing, 0)
-	SetTextScale(0.0*scale, 0.05*scale)
+	SetTextScale(0.3*scale, 0.08*scale)
 	DrawText(0.0, 0.0)
 	ClearDrawOrigin()
 end
