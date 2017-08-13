@@ -2,6 +2,7 @@ RegisterServerEvent('chatCommandEntered')
 RegisterServerEvent('chatMessageEntered')
 
 AddEventHandler('chatMessageEntered', function(name, color, message)
+    print("message = " .. message)
     if not name or not color or not message or #color ~= 3 then
         return
     end
@@ -12,20 +13,15 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
 
             local job = user.getJob()
 
-			if(job == "civ") then
-
-				name = "Civilian | " .. name
-				color = {153, 255, 102}
-
-			elseif(job == "cop") then
+			if(job == "cop") then
 
 				name = "Police | " .. name
-				color = {0, 102, 255}
+				color = {2, 111, 218}
 
 			elseif job == "sheriff" then
 
-				name = "Deputy | " .. name
-				color = {255, 191, 0}
+				name = "Officer | " .. name
+				color = {2, 111, 218}
 
 			elseif job == "highwaypatrol" then
 
