@@ -47,7 +47,7 @@ Citizen.CreateThread(function()
     end
 end)
 
---[[ REDUCE NPC COUNT
+--REDUCE NPC COUNT
 Citizen.CreateThread(function()
     -- These natives do not have to be called everyframe.
     --SetGarbageTrucks(0)
@@ -55,11 +55,11 @@ Citizen.CreateThread(function()
     while true
     	do
     	-- These natives has to be called every frame.
-    	SetVehicleDensityMultiplierThisFrame(0.2)
-		--SetPedDensityMultiplierThisFrame(0.2)
-		--SetRandomVehicleDensityMultiplierThisFrame(0.2)
-		SetParkedVehicleDensityMultiplierThisFrame(0.6)
-		SetScenarioPedDensityMultiplierThisFrame(0.2, 0.2)
+    	SetVehicleDensityMultiplierThisFrame(0.3)
+		SetPedDensityMultiplierThisFrame(0.6)
+		SetRandomVehicleDensityMultiplierThisFrame(0.3)
+		SetParkedVehicleDensityMultiplierThisFrame(0.4)
+		SetScenarioPedDensityMultiplierThisFrame(0.6, 0.6)
 
 		local playerPed = GetPlayerPed(-1)
 		local pos = GetEntityCoords(playerPed)
@@ -69,4 +69,22 @@ Citizen.CreateThread(function()
 	end
 
 end)
---]]
+
+-- NO DRIVE BY'S
+local passengerDriveBy = false
+Citizen.CreateThread(function()
+	while true do
+		Wait(1)
+		playerPed = GetPlayerPed(-1)
+		car = GetVehiclePedIsIn(playerPed, false)
+		if car then
+			if GetPedInVehicleSeat(car, -1) == playerPed then
+				SetPlayerCanDoDriveBy(PlayerId(), false)
+			elseif passengerDriveBy then
+				SetPlayerCanDoDriveBy(PlayerId(), true)
+			else
+				SetPlayerCanDoDriveBy(PlayerId(), false)
+			end
+		end
+	end
+end)
