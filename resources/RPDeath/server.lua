@@ -24,9 +24,9 @@ AddEventHandler('RPD:userDead', function(userName, street)
 			for k, v in pairs(pl) do
 				TriggerEvent("es:getPlayerFromId", k, function(user)
 					if k ~= source then
-						if user.job == "cop" or user.job == "sheriff" or user.job == "highwaypatrol" or user.job == "ems" or user.job == "fire" then
+						if user.getJob() == "cop" or user.getJob() == "sheriff" or user.getJob() == "highwaypatrol" or user.getJob() == "ems" or user.getJob() == "fire" then
 							TriggerClientEvent("chatMessage", k, "911", {255, 0, 0}, userName .. " has been incapacitated on " .. street .. ".")
-							TriggerClientEvent("gps:addEMSReq", k, downedUser)
+							--TriggerClientEvent("gps:addEMSReq", k, downedUser)
 						end
 					end
 				end)
