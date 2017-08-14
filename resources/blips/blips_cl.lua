@@ -71,44 +71,7 @@ Citizen.CreateThread(function()
 	-- end
 end)
 
-local GovBlips = {}
-RegisterNetEvent("gps:showGov")
-AddEventHandler("gps:showGov", function(ptable)
-	for _, user in ipairs(ptable) do
-		if user.job == "cop" or user.job == "sheriff" or user.job == "highwaypatrol" or user.job == "ems" or user.job == "fire" then
-			if GovBlips[user.identifier] then
-				RemoveBlip(GovBlips[user.identifier])
-			end
-			GovBlips[user.identifier] = AddBlipForCoord(user.coords.x, user.coords.y, user.coords.z)
-			SetBlipDisplay(GovBlips[user.identifier], 4)
-			SetBlipScale(GovBlips[user.identifier], 0.9)
-			SetBlipAsShortRange(GovBlips[user.identifier], true)
-			BeginTextCommandSetBlipName("STRING")
-			if user.job == "cop" or user.job == "sheriff" or user.job == "highwaypatrol" then
-				SetBlipSprite(GovBlips[user.identifier], 60)
-				SetBlipColour(GovBlips[user.identifier], 67)
-				AddTextComponentString("Government Employee: Officer")
-			elseif user.job == "ems" then
-				SetBlipSprite(GovBlips[user.identifier], 61)
-				SetBlipColour(GovBlips[user.identifier], 32)
-				AddTextComponentString("Government Employee: EMS")
-			elseif user.job == "fire" then
-				SetBlipSprite(GovBlips[user.identifier], 461)
-				SetBlipColour(GovBlips[user.identifier], 17)
-				AddTextComponentString("Government Employee: Fire")
-			end
-			EndTextCommandSetBlipName(GovBlips[user.identifier])
-		end
-	end
-end)
-
-RegisterNetEvent("gps:removeGov")
-AddEventHandler("gps:removeGov", function(users)
-	for _, user in ipairs(users) do
-		RemoveBlip(GovBlips[user])
-	end
-end)
-
+--[[
 local EMSReq = {}
 RegisterNetEvent("gps:addEMSReq")
 AddEventHandler("gps:addEMSReq", function(user)
@@ -141,7 +104,7 @@ AddEventHandler("gps:removeAllEMSReq", function()
 		RemoveBlip(EMSReq[user])
 	end
 end)
-
+--]]
 function GetPlayers()
     local players = {}
 
