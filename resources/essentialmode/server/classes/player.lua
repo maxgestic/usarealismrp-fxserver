@@ -5,7 +5,7 @@
 
 -- restart essentialmode
 
-function CreatePlayer(source, permission_level, money, bank, identifier, group, model, inventory, weapons, vehicles, insurance, job, licenses, criminalHistory)
+function CreatePlayer(source, permission_level, money, bank, identifier, group, model, inventory, weapons, vehicles, insurance, job, licenses, criminalHistory, characters)
 	local self = {}
 
 	self.source = source
@@ -23,12 +23,29 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 	self.job = job
 	self.licenses = licenses
 	self.criminalHistory = criminalHistory
+	self.characters = characters
 	-- END --
 	self.coords = {x = 0.0, y = 0.0, z = 0.0}
 	self.session = {}
 	self.bankDisplayed = false
 
 	local rTable = {}
+
+	rTable.setCharacter = function(character, characterNumber)
+		if self.characters[characterNumber] then
+			self.characters[characterNumber] = character
+		else
+			print("tried to set a character at an index that did not exist!")
+		end
+	end
+
+	rTable.setCharacters = function(characters)
+		self.characters = characters
+	end
+
+	rTable.getCharacters = function()
+		return self.characters
+	end
 
 	rTable.setMoney = function(m)
 		local prevMoney = self.money

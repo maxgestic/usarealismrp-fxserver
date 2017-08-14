@@ -5,10 +5,8 @@
 
 function LoadUser(identifier, source, new)
 	db.retrieveUser(identifier, function(user)
-		Users[source] = CreatePlayer(source, user.permission_level, user.money, user.bank, user.identifier, user.group, user.model, user.inventory, user.weapons, user.vehicles, user.insurance, user.job, user.licenses, user.criminalHistory)
-		print("loaded user from db...")
-		print("money  = " .. Users[source].getMoney())
-		print("bank = " .. Users[source].getBank())
+		Users[source] = CreatePlayer(source, user.permission_level, user.money, user.bank, user.identifier, user.group, user.model, user.inventory, user.weapons, user.vehicles, user.insurance, user.job, user.licenses, user.criminalHistory, user.characters)
+		print("loaded user " .. GetPlayerName(tonumber(source)) .. "from db...")
 
 		TriggerEvent('es:playerLoaded', source, Users[source])
 
