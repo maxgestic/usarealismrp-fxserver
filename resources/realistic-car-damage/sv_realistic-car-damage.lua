@@ -1,24 +1,28 @@
 RegisterServerEvent("carDamage:checkForRepairKit")
 AddEventHandler("carDamage:checkForRepairKit", function(vehicle)
-    TriggerEvent('es:getPlayerFromId', source, function(user)
+    local userSource = tonumber(source)
+    TriggerEvent('es:getPlayerFromId', userSource, function(user)
         local inventory = user.getInventory()
         for i = 1, #inventory do
+            if i <= #inventory and i ~= 0 then
                 if inventory[i].name == "Repair Kit" then
                     if math.random(1, 100) < 60 then -- 60% chance to repair
-                        TriggerClientEvent("carDamage:repairVehicle", source, vehicle)
+                        TriggerClientEvent("carDamage:repairVehicle", userSource, vehicle)
                     else
-                        TriggerClientEvent("carDamage:notifiyCarRepairFailed", source)
+                        TriggerClientEvent("carDamage:notifiyCarRepairFailed", userSource)
                     end
                     if inventory[i].quantity > 1 then
                         inventory[i].quantity = inventory[i].quantity - 1
+                        user.setInventory(inventory)
                     else
                         table.remove(inventory, i)
+                        user.setInventory(inventory)
                     end
-                    user.setInventory(inventory)
                     CancelEvent()
                     return
                 end
+            end
         end
-        TriggerClientEvent("carDamage:notifyNoRepairKit", source)
+        TriggerClientEvent("carDamage:notifyNoRepairKit", userSource)
     end)
 end)

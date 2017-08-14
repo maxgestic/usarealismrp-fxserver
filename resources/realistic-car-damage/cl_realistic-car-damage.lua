@@ -1,6 +1,53 @@
 local targetVehicle, targetPed
-local civEngineOverheatThreshold, copEngineOverheatThreshold = 967.0, 935.0 -- non-severe accidents (busted radiator)
+local civEngineOverheatThreshold, copEngineOverheatThreshold = 950.0, 945.0 -- non-severe accidents (busted radiator)
 local engineDisabledThreshold = 935.0
+local engineIsOn, savedVehicle
+
+local policeVehicles = {
+    1171614426, -- ambulance
+    1127131465, -- fbi
+    -1647941228, -- fbi2
+    1938952078, -- firetruck
+    2046537925, -- police
+    -1627000575, -- police2
+    1912215274, -- police3
+    -1973172295, -- police4
+    -34623805, -- policeb
+    741586030, -- pranger
+    -1205689942 -- riot
+}
+
+Citizen.CreateThread(function()
+    while true do
+        Wait(1)
+        local userPed = GetPlayerPed(-1)
+        --Citizen.Trace("GetVehiclePedIsIn(targetPed, 1) = " .. GetVehiclePedIsIn(userPed, 0))
+        --Citizen.Trace("IsVehicleEngineOn(lastVehicle, false) = " .. tostring(IsVehicleEngineOn(lastVehicle, false)))
+        if IsPedInAnyVehicle(userPed) then -- ped is in a vehicle
+            --Citizen.Trace("ped is in a vehicle")
+            savedVehicle = GetVehiclePedIsIn(userPed)
+            if IsVehicleEngineOn(GetVehiclePedIsIn(userPed), false) then -- engine is running
+                --Citizen.Trace("setting engineIsOn to true with vehicle = " .. GetVehiclePedIsIn(userPed))
+                if not engineIsOn then engineIsOn = true end
+            end
+        else
+           --Citizen.Trace("ped not in vehicle")
+            if engineIsOn and not IsVehicleEngineOn(savedVehicle, false) then
+                --Citizen.Trace("engine should be on.. turning last vehicle engine on")
+                for i = 1, #policeVehicles do
+                    if IsVehicleModel(savedVehicle, policeVehicles[i]) then
+                        SetVehicleEngineOn(savedVehicle, true, true, true)
+                    end
+                end
+            end
+        end
+     end
+end)
+
+-- SetVehicleEngineOn(targetVehicle, true, true, false)
+-- GetIsVehicleEngineRunning(targetVehicle)
+-- targetPed = GetPlayerPed(-1)
+-- targetVehicle = GetVehiclePedIsIn(targetPed, 1)
 
 Citizen.CreateThread(function()
     local vehicleEngineHealth
@@ -9,7 +56,7 @@ Citizen.CreateThread(function()
         targetPed = GetPlayerPed(-1)
         targetVehicle = GetVehiclePedIsIn(targetPed, 1)
         vehicleEngineHealth = GetVehicleEngineHealth(targetVehicle)
-        if targetVehicle and targetPed then
+        if targetVehicle and targetPed  and IsPedSittingInVehicle(targetPed, targetVehicle) then
             if vehicleEngineHealth < engineDisabledThreshold then -- severe vehicle damage
                 DrawSpecialTextTimed("Your vehicle was ~r~disabled~w~!", 5)
                 SetVehicleUndriveable(targetVehicle, 1) -- disable car
@@ -31,7 +78,7 @@ Citizen.CreateThread(function()
             local coordB = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 5.0, 0.0)
             local targetVehicle = getVehicleInDirection(coordA, coordB)
             if targetVehicle ~= 0 then
-                if (GetVehicleEngineHealth(targetVehicle) < 1000 or not IsVehicleDriveable(targetVehicle, 0)) and not IsPedInAnyVehicle(GetPlayerPed(-1), true) then
+                if GetVehicleEngineHealth(targetVehicle) < 1000 or not IsVehicleDriveable(targetVehicle, 0) and not IsPedInAnyVehicle(GetPlayerPed(-1), true) then
                     TriggerServerEvent("carDamage:checkForRepairKit", targetVehicle)
                     --targetVehicle = nil
                 end
