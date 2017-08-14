@@ -448,7 +448,7 @@ fetchAllBans()
 
 	-- ban command
 	TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, user)
-		local userSource = source
+		local userSource = tonumber(source)
 		-- add player to ban list
 		TriggerEvent('es:exposeDBFunctions', function(GetDoc)
 			-- get info from command
