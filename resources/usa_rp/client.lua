@@ -11,15 +11,51 @@ AddEventHandler('usa_rp:playerLoaded', function()
 end)
 
 RegisterNetEvent('usa_rp:spawn')
-AddEventHandler('usa_rp:spawn', function(model, job, spawn, weapons)
+AddEventHandler('usa_rp:spawn', function(model, job, spawn, weapons, character)
 	exports.spawnmanager:spawnPlayer({x = spawn.x, y = spawn.y, z = spawn.z, model = model, heading = 0.0}, function()
-        -- do stuff to ped here after spawning
-        if weapons then
-            for i =1, #weapons do
-                if type(weapons[i]) == "string" then
-                    GiveWeaponToPed(GetPlayerPed(-1), GetHashKey(weapons[i]), 1000, false, false)
-                else -- table type most likely
-                    GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
+        -- give customized character
+        if character.hash then
+            local name, model
+            model = tonumber(character.hash)
+            Citizen.Trace("giving loading with customizations with hash = " .. model)
+            Citizen.CreateThread(function()
+                RequestModel(model)
+                while not HasModelLoaded(model) do -- Wait for model to load
+                    RequestModel(model)
+                    Citizen.Wait(0)
+                end
+                SetPlayerModel(PlayerId(), model)
+                SetModelAsNoLongerNeeded(model)
+                -- ADD CUSTOMIZATIONS FROM CLOTHING STORE
+                for key, value in pairs(character["components"]) do
+                    Citizen.Trace("setting key (" .. key .. ") = ( .. " .. value .. ")")
+                    Citizen.Trace("character['componentstexture'][key] = " .. character["componentstexture"][key])
+                    SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
+                end
+                for key, value in pairs(character["props"]) do
+                    Citizen.Trace("setting key (" .. key .. ") = ( .. " .. value .. ")")
+                    Citizen.Trace("character['propstexture'][key] = " .. character["propstexture"][key])
+                    SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
+                end
+                -- GIVE WEAPONS
+                for i =1, #weapons do
+                    if type(weapons[i]) == "string" then
+                        GiveWeaponToPed(GetPlayerPed(-1), GetHashKey(weapons[i]), 1000, false, false)
+                    else -- table type most likely
+                        GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
+                    end
+                end
+                -- CHECK JAIL STATUS
+                --TriggerServerEvent("jail:checkJailedStatusOnPlayerJoin")
+            end)
+        else -- no custom character to load, just give weapons
+            if weapons then
+                for i =1, #weapons do
+                    if type(weapons[i]) == "string" then
+                        GiveWeaponToPed(GetPlayerPed(-1), GetHashKey(weapons[i]), 1000, false, false)
+                    else -- table type most likely
+                        GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
+                    end
                 end
             end
         end

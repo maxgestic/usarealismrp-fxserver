@@ -105,7 +105,7 @@ AddEventHandler("usa_rp:spawnPlayer", function()
         else
             print("user has no weapons")
         end
-        print("spawning with player model = " .. model)
-        TriggerClientEvent("usa_rp:spawn", userSource, model, job, spawn, weapons)
+        local characters = user.getCharacters()
+        TriggerClientEvent("usa_rp:spawn", userSource, model, job, spawn, weapons, characters)
     end)
 end)
