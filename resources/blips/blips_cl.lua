@@ -13,8 +13,8 @@ local blips = {
 	{ title="Clothing Store", colour=67, id=73, x= 422.92, y=-811.772, z=29.4911 }, -- vinewood 6
 	{ title="Clothing Store", colour=67, id=73, x= -816.335, y=-1072.93, z=11.3281 }, -- vinewood 7
 	{ title="Clothing Store", colour=67, id=73, x= 78.0717, y=-1387.25, z=29.3761 }, -- vinewood 8
-	{ title="Drug Dealer", colour=25, id=140, x=31.1395, y=-1928.05, z=21.7875 },
-	{ title="Drug Buyer", colour=27, id=280, x=1435.595, y=6355.136, z=23.150 },
+	--{ title="Drug Dealer", colour=25, id=140, x=31.1395, y=-1928.05, z=21.7875 },
+	--{ title="Drug Buyer", colour=27, id=280, x=1435.595, y=6355.136, z=23.150 },
 	{ title="Ammu-Nation", colour=41, id=110, x=-330.184, y=6083.23, z=31.4548 },
 	{ title="Ammu-Nation", colour=41, id=110, x=1701.292, y=3750.450, z=34.365 },
     { title="Ammu-Nation", colour=41, id=110, x=237.428, y=-43.655, z=69.698 },

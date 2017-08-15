@@ -5,7 +5,7 @@
 
 -- restart essentialmode
 
-function CreatePlayer(source, permission_level, money, bank, identifier, group, model, inventory, weapons, vehicles, insurance, job, licenses, criminalHistory, characters)
+function CreatePlayer(source, permission_level, money, bank, identifier, group, model, inventory, weapons, vehicles, insurance, job, licenses, criminalHistory, characters, jailtime)
 	local self = {}
 
 	self.source = source
@@ -24,12 +24,21 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 	self.licenses = licenses
 	self.criminalHistory = criminalHistory
 	self.characters = characters
+	self.jailtime = jailtime
 	-- END --
 	self.coords = {x = 0.0, y = 0.0, z = 0.0}
 	self.session = {}
 	self.bankDisplayed = false
 
 	local rTable = {}
+
+	rTable.setJailtime = function(j)
+		self.jailtime = j
+	end
+
+	rTable.getJailtime = function()
+		return self.jailtime
+	end
 
 	rTable.setCharacter = function(character, characterNumber)
 		if self.characters[characterNumber] then
