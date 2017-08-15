@@ -121,31 +121,42 @@ AddEventHandler("policeStation:giveSheriffLoadout", function(model)
 end)
 
 RegisterNetEvent("policeStation:giveCivLoadout")
-AddEventHandler("policeStation:giveCivLoadout", function(skinName, playerWeapons)
-
-	-- change into uniform / get weapons
-	if string.match(skinName,"_") then
-		skinName = GetHashKey(skinName)
-	end
-	if skinName == nil then
-		Citizen.Trace("skin was null.\n")
-		return
-	end
+AddEventHandler("policeStation:giveCivLoadout", function(character, playerWeapons)
 	Citizen.CreateThread(function()
-		local model = tonumber(skinName)
-		RequestModel(model)
-		while not HasModelLoaded(model) do -- Wait for model to load
-			RequestModel(model)
-			Citizen.Wait(0)
+		local model
+		if not character.hash then -- does not have any customizations saved
+			model = -408329255 -- some random black dude with no shirt on, lawl
+		else
+			model = character.hash
 		end
-		SetPlayerModel(PlayerId(), model)
-		SetModelAsNoLongerNeeded(model)
-		for i = 1, #playerWeapons do
-			local hash = playerWeapons[i].hash
-			 GiveWeaponToPed(GetPlayerPed(-1), hash, 1000, 0, false) -- get hash given name of weapon
+        RequestModel(model)
+        while not HasModelLoaded(model) do -- Wait for model to load
+            RequestModel(model)
+            Citizen.Wait(0)
+        end
+        SetPlayerModel(PlayerId(), model)
+        SetModelAsNoLongerNeeded(model)
+		-- give model customizations if available
+		if character.hash then
+			for key, value in pairs(character["components"]) do
+				Citizen.Trace("setting key (" .. key .. ") = ( .. " .. value .. ")")
+				Citizen.Trace("character['componentstexture'][key] = " .. character["componentstexture"][key])
+				SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
+			end
+			for key, value in pairs(character["props"]) do
+				Citizen.Trace("setting key (" .. key .. ") = ( .. " .. value .. ")")
+				Citizen.Trace("character['propstexture'][key] = " .. character["propstexture"][key])
+				SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
+			end
 		end
-	end)
-
+		-- give weapons
+		if playerWeapons then
+			for i = 1, #playerWeapons do
+				print("playerWeapons[i].hash = " .. playerWeapons[i].hash)
+				GiveWeaponToPed(GetPlayerPed(-1), playerWeapons[i].hash, 1000, false, false)
+			end
+		end
+    end)
 end)
 
 -- PROPS:
