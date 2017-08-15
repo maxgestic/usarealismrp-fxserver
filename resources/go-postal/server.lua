@@ -1,23 +1,74 @@
 local activeJobs = {}
 
-RegisterServerEvent("postal:giveMoney")
-AddEventHandler("postal:giveMoney", function(amount)
-	local userSource = source
+RegisterServerEvent("transport:giveMoney")
+AddEventHandler("transport:giveMoney", function(amount, job)
+	local userSource = tonumber(source)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		user.addMoney(amount)
+		if job.name == "Cannabis Transport" then
+			local inventory = user.getInventory()
+			for i = 1, #inventory do
+				local item = inventory[i]
+				if item.name == "20g of concentrated cannabis" then
+					table.remove(inventory, i)
+					user.setInventory(inventory)
+					return
+				end
+			end
+		end
 	end)
 end)
 
-RegisterServerEvent("postal:addJob")
-AddEventHandler("postal:addJob", function(job)
+RegisterServerEvent("transport:addJob")
+AddEventHandler("transport:addJob", function(job)
 	activeJobs[source] = job
+	if job.name == "Cannabis Transport" then
+		TriggerEvent('es:getPlayerFromId', tonumber(source), function(user)
+			local inventory = user.getInventory()
+			for i = 1, #inventory do
+				local item = inventory[i]
+				if item.name == "20g of concentrated cannabis" then
+					print("job " .. job.name .. " started by player " .. GetPlayerName(tonumber(source)))
+					return
+				end
+			end
+			-- no weed in inventory at this point, so add it
+			local weedPackage = {
+				name = "20g of concentrated cannabis",
+				quantity = 1,
+				type = "drug",
+				legality = "illegal"
+			}
+			table.insert(inventory, weedPackage)
+			user.setInventory(inventory)
+		end)
+	end
 end)
 
-TriggerEvent('es:addCommand', 'gopostal', function(source, args, user)
+TriggerEvent('es:addCommand', 'waypoint', function(source, args, user)
+	print("/waypoint called!")
 	if activeJobs[source] == nil then
-		TriggerClientEvent('chatMessage', source, "Go Postal", {0, 255, 0}, "You're not currently working for Go Postal. Please return to one of our facilities to start your next job.")
+		TriggerClientEvent('chatMessage', source, "", {}, "You do not currently have any waypoints set!")
 	else
-		TriggerClientEvent('chatMessage', source, "Go Postal", {0, 255, 0}, "You're current job has been placed on your map.")
+		TriggerClientEvent('chatMessage', source, "", {}, "Your waypoint has been added to the map again!")
+		TriggerClientEvent('chatMessage', source, "x", {255,0,0}, activeJobs[source].x)
+		TriggerClientEvent('chatMessage', source, "y", {255,0,0}, activeJobs[source].y)
 		TriggerClientEvent('placeMarker', source, activeJobs[source].x, activeJobs[source].y)
+	end
+end)
+
+AddEventHandler('playerDropped', function()
+	if activeJobs[source] then
+		activeJobs[source] = nil
+		print("player dropped, setting activeJob to nil")
+	end
+end)
+
+TriggerEvent('es:addCommand', 'quitjob', function(source, args, user)
+	if activeJobs[source] then
+		activeJobs[source] = nil
+		TriggerClientEvent("transport:quitJob", source)
+		TriggerClientEvent('chatMessage', source, "", {}, "^3You have quit your active transport job!")
+		print("player used /quitjob, setting activeJob to nil")
 	end
 end)

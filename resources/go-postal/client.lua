@@ -2,7 +2,29 @@ local blips = {
 	{ title="Go Postal", colour=39, id=85, x=-311.6630, y=-1029.1395, z=30.3850 },
 	{ title="Go Postal", colour=39, id=85, x=-441.5871, y=6144.7211, z=31.4783 },
 	{ title="Go Postal", colour=39, id=85, x=-3157.6508, y=1128.9541, z=20.8447 },
-	{ title="Go Postal", colour=39, id=85, x=2983.7958, y=3488.7570, z=71.3818 }
+	{ title="Go Postal", colour=39, id=85, x=2983.7958, y=3488.7570, z=71.3818 },
+	{ title="Cannabis Transport", colour = 25, id = 469, x = 31.1395, y = -1928.05, z = 20.4},
+	{ title="FridgeIt Trucking", colour = 51, id = 477, x = -584.837, y = -1795.97, z = 22.8989  }
+}
+
+local peds = {
+	{x = 31.1395, y = -1928.05, z = 20.4}, -- weed distributer | GROVE ST
+	{x = 1435.595, y = 6355.136, z = 23.150}, -- weed buyer | GOH
+	{x = 2339.37, y = 2570.07, z = 49.7231}, -- weed buyer
+	{ x = -875.733, y = -1083.43, z = 2.16288 }, -- weed buyer LS INVENTION ST
+	{ x = - 806.306, y = 162.535, z = 71.5399 }, -- weed buyer VINE WOOD
+	{ x = 1293.34, y = -1695.4, z = 55.0786 }, -- weed buyer EAST LOS SANTOS
+	{ x = 2545.41, y = 343.727, z = 108.466 }, -- weed buyer ROUTE 15 GAS STATION
+	{x = -1923.0, y = 553.634, z = 114.711} -- weed buyer NORTH ROCKFORD DR
+}
+
+local weedBuyers = {
+	{x = 1435.595, y = 6355.136, z = 23.150},
+	{x = 2339.37, y = 2570.07, z = 46.1231},
+	{ x = -875.733, y = -1083.43, z = 2.16288 },
+	{ x = 1293.34, y = -1695.0, z = 55.0786 },
+	{ x = 2545.41, y = 343.727, z = 106.466 },
+	{x = -1923.0, y = 553.634, z = 114.711}
 }
 
 local gopostal = {
@@ -15,6 +37,17 @@ local gopostal = {
 	{ x=2583.2360, y=286.6179, z=108.4577 },
 	{ x=1703.9606, y=3750.3444, z=34.0815 },
 	{ x=-1131.3316, y=2699.0109, z=18.8003 }
+}
+
+local fridgeItTruckingDropOff = {
+	{x = -3250.8, y = 989.944, z = 12.4899},
+	{x = -2532.84, y = 2339.42, z = 33.0599},
+	{x = -1818.01, y = 805.399, z = 138.617},
+	{x = 2566.03, y = 399.011, z = 108.463},
+	{x = 579.853, y = 2737.14, z = 42.0038},
+	{x = 2687.68, y = 3455.55, z = 55.0758},
+	{x = 1708.17, y = 4803.8, z = 41.0013},
+	{x = 1994.89, y = 3058.77, z = 47.0521}
 }
 
 Citizen.CreateThread(function()
@@ -31,6 +64,34 @@ Citizen.CreateThread(function()
     end
 end)
 
+-- spawn cannabis distributer npc
+local created = false
+local hash = GetHashKey("A_M_M_Polynesian_01")
+-- thread code stuff below was taken from an example on the wiki
+-- Create a thread so that we don't 'wait' the entire game
+Citizen.CreateThread(function()
+	-- Request the model so that it can be spawned
+	RequestModel(hash)
+	-- Check if it's loaded, if not then wait and re-request it.
+	while not HasModelLoaded(hash) do
+		RequestModel(hash)
+		Citizen.Wait(0)
+	end
+	-- Model loaded, continue
+	-- Spawn the peds
+	for i = 1, #peds do
+		Citizen.Trace("spawned in ped # " .. i)
+		local ped = CreatePed(4, hash, peds[i].x, peds[i].y, peds[i].z, 175.189 --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
+		SetEntityCanBeDamaged(ped,false)
+		SetPedCanRagdollFromPlayerImpact(ped,false)
+		TaskSetBlockingOfNonTemporaryEvents(ped,true)
+		SetPedFleeAttributes(ped,0,0)
+		SetPedCombatAttributes(ped,17,1)
+		SetEntityInvincible(ped)
+	end
+end)
+
+
 local pressed = false
 local distance = nil
 local job = nil
@@ -39,6 +100,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 	    for _, info in pairs(blips) do
+			-- go postal transport job
 			if info.title == "Go Postal" and GetDistanceBetweenCoords(info.x, info.y, info.z,GetEntityCoords(GetPlayerPed(-1))) < 50 and not job then
 				DrawMarker(1, info.x, info.y, info.z-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
 				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), info.x, info.y, info.z, true) < 2 and (IsPedInAnyVehicle(GetPlayerPed(-1), true) == false or GetVehiclePedIsIn(GetPlayerPed(-1), false) == lastTruck) then
@@ -46,24 +108,21 @@ Citizen.CreateThread(function()
 			        if IsControlPressed(0, 176) then
 			            if not pressed then
 							job = gopostal[math.random(#gopostal)]
+							job.name = "Go Postal"
 							job.distance = GetDistanceBetweenCoords(job.x, job.y, job.z, GetEntityCoords(GetPlayerPed(-1)))
 							job.truck = -1
-
 							if GetVehiclePedIsIn(GetPlayerPed(-1), false) ~= lastTruck or IsPedInAnyVehicle(GetPlayerPed(-1), true) == false then
 								-- vehicle = GetHashKey("adder")
 								vehicle = GetHashKey("boxville2")
 								RequestModel(vehicle)
-
 								while not HasModelLoaded(vehicle) do
 									RequestModel(vehicle)
 									Citizen.Wait(0)
 								end
-
 								job.truck = CreateVehicle(vehicle, info.x, info.y, info.z+1.0, 2.0, true, false)
 							else
 								job.truck = lastTruck
 							end
-
 							if job.truck ~= -1 then
 								SetVehicleOnGroundProperly(job.truck)
 								SetVehRadioStation(job.truck, "OFF")
@@ -73,15 +132,95 @@ Citizen.CreateThread(function()
 
 								SetNewWaypoint(job.x, job.y)
 								lastTruck = job.truck
-								TriggerServerEvent("postal:addJob", job)
+								TriggerServerEvent("transport:addJob", job)
 							else
 								SetNotificationTextEntry("STRING")
 								AddTextComponentString("Failed to get truck! Try again.")
 								DrawNotification(0,1)
 								job = nil
 							end
-
 							pressed = true
+			                while pressed do
+			                    Wait(0)
+			                    if(IsControlPressed(0, 176) == false) then
+			                        pressed = false
+			                        break
+			                    end
+			                end
+		                end
+	                end
+				end
+			end
+			-- cannabis transport job
+			if info.title == "Cannabis Transport" and GetDistanceBetweenCoords(info.x, info.y, info.z,GetEntityCoords(GetPlayerPed(-1))) < 50 and not job then
+				DrawMarker(1, info.x, info.y, info.z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 32, 0, 90, 0, 0, 2, 0, 0, 0, 0)
+				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), info.x, info.y, info.z, true) < 2 then
+					DrawSpecialText("Press [ ~g~Enter~w~ ] to get a package of ~y~20g of concentrated cannabis")
+					if IsControlPressed(0, 176) then -- ENTER = 176
+			            if not pressed then
+							job = weedBuyers[math.random(#weedBuyers)]
+							job.name = "Cannabis Transport"
+							job.distance = GetDistanceBetweenCoords(job.x, job.y, job.z, GetEntityCoords(GetPlayerPed(-1)))
+							SetNewWaypoint(job.x, job.y)
+							TriggerServerEvent("transport:addJob", job)
+							pressed = true
+							SetNotificationTextEntry("STRING")
+							AddTextComponentString("Here are the directions to your destination. Don't get caught!")
+							DrawNotification(0,1)
+			                while pressed do
+			                    Wait(0)
+			                    if(IsControlPressed(0, 176) == false) then
+			                        pressed = false
+			                        break
+			                    end
+			                end
+		                end
+	                end
+				end
+			end
+			-- fridge it trucking job
+			if info.title == "FridgeIt Trucking" and GetDistanceBetweenCoords(info.x, info.y, info.z,GetEntityCoords(GetPlayerPed(-1))) < 50 and not job then
+				DrawMarker(1, info.x, info.y, info.z-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
+				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), info.x, info.y, info.z, true) < 2 and (IsPedInAnyVehicle(GetPlayerPed(-1), true) == false or GetVehiclePedIsIn(GetPlayerPed(-1), false) == lastTruck) then
+					DrawSpecialText("Press [ ~g~Enter~w~ ] to start working for FridgeIt Trucking")
+			        if IsControlPressed(0, 176) then -- ENTER = 176
+			            if not pressed then
+							job = fridgeItTruckingDropOff[math.random(#fridgeItTruckingDropOff)]
+							job.name = "FridgeIt Trucking"
+							job.distance = GetDistanceBetweenCoords(job.x, job.y, job.z, GetEntityCoords(GetPlayerPed(-1)))
+							job.truck = -1
+							if GetVehiclePedIsIn(GetPlayerPed(-1), false) ~= lastTruck or IsPedInAnyVehicle(GetPlayerPed(-1), true) == false then
+								-- vehicle = GetHashKey("adder")
+								--vehicle = GetHashKey("boxville2")
+								vehicle = tonumber(2112052861) -- semi truck (pounder)
+								RequestModel(vehicle)
+								while not HasModelLoaded(vehicle) do
+									RequestModel(vehicle)
+									Citizen.Wait(0)
+								end
+								job.truck = CreateVehicle(vehicle, info.x, info.y, info.z+1.0, 2.0, true, false)
+							else
+								job.truck = lastTruck
+							end
+							if job.truck ~= -1 then
+								SetVehicleOnGroundProperly(job.truck)
+								SetVehRadioStation(job.truck, "OFF")
+								SetPedIntoVehicle(GetPlayerPed(-1), job.truck, -1)
+								SetVehicleEngineOn(job.truck, true, false, false)
+								SetEntityAsMissionEntity(job.truck, true, true)
+								SetNewWaypoint(job.x, job.y)
+								lastTruck = job.truck
+								TriggerServerEvent("transport:addJob", job)
+							else
+								SetNotificationTextEntry("STRING")
+								AddTextComponentString("Failed to get truck! Try again.")
+								DrawNotification(0,1)
+								job = nil
+							end
+							pressed = true
+							SetNotificationTextEntry("STRING")
+							AddTextComponentString("Here are directions to your delivery location. Have a nice ride!")
+							DrawNotification(0,1)
 			                while pressed do
 			                    Wait(0)
 			                    if(IsControlPressed(0, 176) == false) then
@@ -95,41 +234,109 @@ Citizen.CreateThread(function()
 			end
 		end
 		if job and GetDistanceBetweenCoords(job.x, job.y, job.z, GetEntityCoords(GetPlayerPed(-1))) < 50 then
-			DrawMarker(1, job.x, job.y, job.z-1.0, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
-			if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), job.x, job.y, job.z, true) < 4 and GetVehiclePedIsIn(GetPlayerPed(-1), false) == job.truck then
-				DrawSpecialText("Press [ ~g~E~w~ ] to deliver your Go Postal packages")
-		        if IsControlPressed(0, 86) then
-		            if not pressed then
-
-						if job.distance * 5 > 6000 then
-							pay = 6000
-						else
-							pay = math.ceil(job.distance * 5)
-						end
-
-						SetNotificationTextEntry("STRING")
-						AddTextComponentString("~h~Job Completed!~h~ ~n~" .. "+ ~g~$" .. pay)
-						TriggerServerEvent("postal:giveMoney", pay)
-						DrawNotification(0,1)
-						job = nil
-
-						pressed = true
-		                while pressed do
-		                    Wait(0)
-		                    if(IsControlPressed(0, 86) == false) then
-		                        pressed = false
-		                        break
-		                    end
+			DrawMarker(1, job.x, job.y, job.z + 0.01, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 32, 0, 90, 0, 0, 2, 0, 0, 0, 0)
+			if job.name == "Go Postal" then
+				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), job.x, job.y, job.z, true) < 4 and GetVehiclePedIsIn(GetPlayerPed(-1), false) == job.truck then
+					DrawSpecialText("Press [ ~g~E~w~ ] to deliver your Go Postal packages")
+			        if IsControlPressed(0, 86) then
+			            if not pressed then
+							if job.distance * 2 > 5000 then
+								pay = 5000
+							else
+								pay = math.ceil(job.distance * 2)
+							end
+							-- notify user
+							SetNotificationTextEntry("STRING")
+							AddTextComponentString("~h~Job Completed!~h~ ~n~" .. "+ ~g~$" .. pay)
+							TriggerServerEvent("transport:giveMoney", pay, job)
+							DrawNotification(0,1)
+							-- set variables
+							job = nil
+							pressed = true
+			                while pressed do
+			                    Wait(0)
+			                    if(IsControlPressed(0, 86) == false) then
+			                        pressed = false
+			                        break
+			                    end
+			                end
 		                end
-	                end
+					end
+				end
+			elseif job.name == "Cannabis Transport" then
+				--DrawMarker(1, job.x, job.y, job.z-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
+				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), job.x, job.y, job.z, true) < 7 then
+					DrawSpecialText("Press [ ~g~E~w~ ] to deliver the cannabis!")
+					if IsControlPressed(0, 86) then -- E = 86
+						if not pressed then
+							if job.distance * 2 > 5000 then
+								pay = 5000
+							else
+								pay = math.ceil(job.distance * 2)
+							end
+							-- notify user
+							SetNotificationTextEntry("STRING")
+							AddTextComponentString("~h~Job Completed!~h~ ~n~" .. "+ ~g~$" .. pay)
+							DrawNotification(0,1)
+							TriggerServerEvent("transport:giveMoney", pay, job)
+							-- set variables
+							job = nil
+							pressed = true
+							while pressed do
+								Wait(0)
+								if(IsControlPressed(0, 86) == false) then
+									pressed = false
+									break
+								end
+							end
+						end
+					end
+				end
+			elseif job.name == "FridgeIt Trucking" then
+				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), job.x, job.y, job.z, true) < 4 and GetVehiclePedIsIn(GetPlayerPed(-1), false) == job.truck then
+					DrawSpecialText("Press [ ~g~E~w~ ] to deliver your goods.")
+			        if IsControlPressed(0, 86) then
+			            if not pressed then
+							if job.distance * 2 > 9000 then
+								pay = 9000
+							else
+								pay = math.ceil(job.distance * 2)
+							end
+							-- notify user
+							SetNotificationTextEntry("STRING")
+							AddTextComponentString("~h~Job Completed!~h~ ~n~" .. "+ ~g~$" .. pay)
+							TriggerServerEvent("transport:giveMoney", pay, job)
+							DrawNotification(0,1)
+							-- set variables
+							job = nil
+							pressed = true
+			                while pressed do
+			                    Wait(0)
+			                    if(IsControlPressed(0, 86) == false) then
+			                        pressed = false
+			                        break
+			                    end
+			                end
+		                end
+					end
 				end
 			end
 		end
 	end
 end)
 
+RegisterNetEvent("transport:quitJob")
+AddEventHandler("transport:quitJob", function()
+	ClearGpsPlayerWaypoint()
+	pressed = false
+	distance = nil
+	job = nil
+	lastTruck = 0
+end)
+
 RegisterNetEvent("placeMarker")
 AddEventHandler("placeMarker", function(x, y)
+	ClearGpsPlayerWaypoint()
 	SetNewWaypoint(x, y)
 end)
 
