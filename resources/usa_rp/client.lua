@@ -28,13 +28,9 @@ AddEventHandler('usa_rp:spawn', function(model, job, spawn, weapons, character)
                 SetModelAsNoLongerNeeded(model)
                 -- ADD CUSTOMIZATIONS FROM CLOTHING STORE
                 for key, value in pairs(character["components"]) do
-                    Citizen.Trace("setting key (" .. key .. ") = ( .. " .. value .. ")")
-                    Citizen.Trace("character['componentstexture'][key] = " .. character["componentstexture"][key])
                     SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
                 end
                 for key, value in pairs(character["props"]) do
-                    Citizen.Trace("setting key (" .. key .. ") = ( .. " .. value .. ")")
-                    Citizen.Trace("character['propstexture'][key] = " .. character["propstexture"][key])
                     SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
                 end
                 -- GIVE WEAPONS
