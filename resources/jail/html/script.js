@@ -47,6 +47,7 @@ $(function() {
             charges: $("#charges").val()
         }));
         $("#id").val("");
+        $("#name").val("");
         $("#sentence").val("");
         $("#charges").val("");
         $("#medications").val("");

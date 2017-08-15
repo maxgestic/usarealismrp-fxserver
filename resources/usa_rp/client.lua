@@ -41,8 +41,6 @@ AddEventHandler('usa_rp:spawn', function(model, job, spawn, weapons, character)
                         GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
                     end
                 end
-                -- CHECK JAIL STATUS
-                --TriggerServerEvent("jail:checkJailedStatusOnPlayerJoin")
             end)
         else -- no custom character to load, just give weapons
             if weapons then
@@ -55,6 +53,9 @@ AddEventHandler('usa_rp:spawn', function(model, job, spawn, weapons, character)
                 end
             end
         end
+        -- CHECK JAIL STATUS
+        Citizen.Trace("calling checkJailedStatusOnPlayerJoin server function")
+        TriggerServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
 	end)
 end)
 

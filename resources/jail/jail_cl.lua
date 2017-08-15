@@ -17,6 +17,13 @@ function EnableGui(enable)
     })
 end
 
+RegisterNetEvent("jail:notify")
+AddEventHandler("jail:notify", function(msg)
+    SetNotificationTextEntry("STRING")
+	AddTextComponentString(msg)
+	DrawNotification(0,1)
+end)
+
 RegisterNetEvent("jail:openMenu")
 AddEventHandler("jail:openMenu", function()
     EnableGui(true)
@@ -41,11 +48,8 @@ Citizen.CreateThread(function()
         if menuEnabled then
             DisableControlAction(0, 1, menuEnabled) -- LookLeftRight
             DisableControlAction(0, 2, menuEnabled) -- LookUpDown
-
             DisableControlAction(0, 142, menuEnabled) -- MeleeAttackAlternate
-
             DisableControlAction(0, 106, menuEnabled) -- VehicleMouseControlOverride
-
             if IsDisabledControlJustReleased(0, 142) then -- MeleeAttackAlternate
                 SendNUIMessage({
                     type = "click"
@@ -59,7 +63,7 @@ end)
 -- end of NUI menu stuff
 
 RegisterNetEvent("jail:jail")
-AddEventHandler("jail:jail", function(reason, sentence)
+AddEventHandler("jail:jail", function()
 
     lPed = GetPlayerPed(-1)
 	FreezeEntityPosition(lPed, false) -- fix for the /cuff command freezing the player in place
@@ -69,32 +73,38 @@ AddEventHandler("jail:jail", function(reason, sentence)
 end)
 
 RegisterNetEvent("jail:release")
-AddEventHandler("jail:release", function(playerModel)
-
-	local model
-
-	SetEntityCoords(GetPlayerPed(-1), releaseX, releaseY, releaseZ, 1, 0, 0, 1) -- release from jail
-    imprisoned = false
-
-	Citizen.CreateThread(function()
-
-		if string.match(playerModel, "_") then
-        	model = GetHashKey(playerModel)
-		else
-			model = tonumber(playerModel)
-		end
-
-        RequestModel(model)
-        while not HasModelLoaded(model) do -- Wait for model to load
+AddEventHandler("jail:release", function(character)
+    Citizen.CreateThread(function()
+	    local model
+	    SetEntityCoords(GetPlayerPed(-1), releaseX, releaseY, releaseZ, 1, 0, 0, 1) -- release from jail
+        imprisoned = false
+        if not character.hash then
+    		model = GetHashKey("a_m_y_skater_01")
             RequestModel(model)
-            Citizen.Wait(0)
+            while not HasModelLoaded(model) do -- Wait for model to load
+                RequestModel(model)
+                Citizen.Wait(0)
+            end
+            SetPlayerModel(PlayerId(), model)
+            SetModelAsNoLongerNeeded(model)
+        else
+            model = tonumber(character.hash)
+            RequestModel(model)
+            while not HasModelLoaded(model) do -- Wait for model to load
+                RequestModel(model)
+                Citizen.Wait(0)
+            end
+            SetPlayerModel(PlayerId(), model)
+            SetModelAsNoLongerNeeded(model)
+            -- set customizations
+            for key, value in pairs(character["components"]) do
+                SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
+            end
+            for key, value in pairs(character["props"]) do
+                SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
+            end
         end
-
-        SetPlayerModel(PlayerId(), model)
-        SetModelAsNoLongerNeeded(model)
-
     end)
-
 end)
 
 RegisterNetEvent("jail:wrongPw")
