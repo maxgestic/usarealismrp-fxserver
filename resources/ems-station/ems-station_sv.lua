@@ -45,15 +45,15 @@ end)
 RegisterServerEvent("emsStation:giveCivStuff")
 AddEventHandler("emsStation:giveCivStuff", function()
     -- get player job
-    local userSource = source
-    local playerModel, playerWeapons, playerJob
+    local userSource = tonumber(source)
+    local character, playerWeapons, playerJob
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
         playerJob = user.getJob()
         if playerJob ~= "civ" then
-            playerModel = user.getModel()
+            character = user.getCharacters()
             playerWeapons = user.getWeapons()
             user.setJob("civ")
-            TriggerClientEvent("emsStation:giveCivLoadout", userSource, playerModel, playerWeapons)
+            TriggerClientEvent("emsStation:changeSkin", userSource, character, playerWeapons)
             print("setting job = civ")
         end
     end)
