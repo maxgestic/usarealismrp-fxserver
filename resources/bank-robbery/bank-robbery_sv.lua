@@ -58,7 +58,16 @@ AddEventHandler("bank:beginRobbery", function(source)
 	-- make npc busy so only one at a time can rob bank
     isBusy = "yes"
 
-	TriggerClientEvent('chatMessage', -1, 'NEWS', { 255, 180, 0 }, '^0Someone is robbing the bank!')
+	TriggerEvent("es:getPlayers", function(pl)
+		for k, v in pairs(pl) do
+			TriggerEvent("es:getPlayerFromId", k, function(user)
+					if user.getJob() == "cop" or user.getJob() == "sheriff" or user.getJob() == "highwaypatrol" or user.getJob() == "ems" or user.getJob() == "fire" then
+						TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "Alarm activated at ^3Pacific Standard Bank^0 on Vinewood Blvd. & Alta St.")
+					end
+			end)
+		end
+	end)
+	--TriggerClientEvent('chatMessage', -1, 'NEWS', { 255, 180, 0 }, '^0Someone is robbing the bank!')
 
 	-- wait 1.5 min seconds to get money
 	SetTimeout(90000, function()
@@ -78,7 +87,7 @@ RegisterServerEvent("bank:inRange")
 AddEventHandler("bank:inRange", function()
 	rewardMoney = math.random(20000, 70000)
 	isBusy = "no"
-	local msg = "You have been given ~g~$" .. comma_value(rewardMoney) .. "~w~ in dirty money!"
+	local msg = "You stole ~g~$" .. comma_value(rewardMoney) .. "~w~!"
 	TriggerClientEvent("bank-robbery:notify", source, msg)
 	TriggerEvent('es:getPlayerFromId', source, function(user)
 		if user then
@@ -99,7 +108,9 @@ end)
 
 TriggerEvent('es:addCommand', 'closebank', function(source, args, user)
 
-    if tonumber(user.getPermissions()) > 0 then
+	local group = user.getGroup()
+
+    if group == "owner" or group == "admin" or group == "mod" then
         closed = true
 		TriggerClientEvent("bank-robbery:notify", source, "BANK IS NOW ~r~CLOSED")
     end
@@ -108,9 +119,11 @@ end)
 
 TriggerEvent('es:addCommand', 'openbank', function(source, args, user)
 
-    if tonumber(user.getPermissions()) > 0 then
+	local group = user.getGroup()
+
+    if group == "owner" or group == "admin" or group == "mod" then
         closed = false
-        TriggerClientEvent("bank-robbery:notify", source, "BANK IS NOW ~g~CLOSED")
+        TriggerClientEvent("bank-robbery:notify", source, "BANK IS NOW ~g~OPEN")
     end
 
 end)
