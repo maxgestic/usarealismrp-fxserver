@@ -63,7 +63,7 @@ TriggerEvent('es:addGroupCommand', 'hashes', "owner", function(source, args, use
 end, function(source, args, user)end)
 
 -- Noclip
-TriggerEvent('es:addGroupCommand', 'noclip', "admin", function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'noclip', "mod", function(source, args, user)
 	TriggerClientEvent("es_admin:noclip", source)
 end, function(source, args, user)
 	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
