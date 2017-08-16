@@ -246,7 +246,7 @@ TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, user)
 						for id, adminOrMod in pairs(players) do
 							local adminOrModGroup = adminOrMod.getGroup()
 							if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
-								TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(id) .. "^0 teleported to " .. GetPlayerName(player))
+								TriggerClientEvent('chatMessage', id, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(source) .. "^0 teleported to " .. GetPlayerName(player))
 							end
 						end
 					end)
