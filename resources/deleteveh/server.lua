@@ -2,7 +2,8 @@ TriggerEvent('es:addCommand','impound', function(source, args, user)
     local userSource = source
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
         local playerJob = user.getJob()
-        if playerJob == "sheriff" or playerJob == "ems" or playerJob == "fire" or playerJob == "owner" or playerJob == "admin" or playerJob == "mod" then
+        local userGroup = user.getGroup()
+        if playerJob == "sheriff" or playerJob == "ems" or playerJob == "fire" or userGroup == "owner" or userGroup == "admin" or userGroup == "mod" then
             TriggerClientEvent( 'impoundVehicle', source )
         else
             TriggerClientEvent("impound:notify", source, "Only ~y~law enforcement~w~,~y~medics~w~, and ~y~admins~w~ can use /impound!")

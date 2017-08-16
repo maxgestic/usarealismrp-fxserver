@@ -36,8 +36,8 @@ AddEventHandler("bank:isBusy", function()
             TriggerEvent("bank:beginRobbery", source)
             abletorob = false
 
-            -- 1 hr cooldown
-            SetTimeout(3600000 , function()
+            -- 3 hr cooldown
+            SetTimeout(10800000 , function()
                 abletorob = true
             end)
 
