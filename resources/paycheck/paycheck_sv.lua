@@ -11,13 +11,13 @@ AddEventHandler('paycheck:welfare', function()
         local job = user.getJob()
 
 		if job == "cop" or job == "sheriff" or job == "highwaypatrol" or job == "fbi" then
-			paycheckAmount = 800
+			paycheckAmount = 1000
 		elseif job == "ems" or job == "fire" then
-			paycheckAmount = 800
+			paycheckAmount = 1000
 		elseif job == "taxi" then
-            paycheckAmount = 650
+            paycheckAmount = 250
         elseif job == "tow" then
-            paycheckAmount = 445
+            paycheckAmount = 250
         else
 			paycheckAmount = 250 -- welfare amount (no job)
 		end
