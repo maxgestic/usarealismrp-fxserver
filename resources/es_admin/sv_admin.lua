@@ -21,7 +21,9 @@ end)
 TriggerEvent('es:addCommand', 'report', function(source, args, user)
 	local reporterId = tonumber(source)
 	local reportedId = args[2]
-	local message = args[3]
+	table.remove(args, 1)
+	table.remove(args, 1)
+	local message = table.concat(args, " ")
 	if not message or not reportedId then
 		TriggerClientEvent("chatMessage", tonumber(source), "", {}, "^3Usage: ^0/report [id] [reason]")
 		return
