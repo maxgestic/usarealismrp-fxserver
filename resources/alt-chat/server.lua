@@ -41,16 +41,6 @@ TriggerEvent('es:addCommand', 'me', function(source, args, user)
     TriggerClientEvent('chatMessage', -1, "", {255, 0, 0}, " ^6" .. GetPlayerName(source) .. " " .. table.concat(args, " "))
 end)
 
--- 911 DISPATCH
-TriggerEvent('es:addCommand', 'dispatch', function(source, args, user)
-	local userSource = source
-	local target = args[2]
-	table.remove(args,1)
-	table.remove(args,1)
-	TriggerClientEvent('chatMessage', target, "DISPATCH", {255, 20, 10}, table.concat(args, " "))
-	TriggerClientEvent('chatMessage', userSource, "DISPATCH", {255, 20, 10}, table.concat(args, " "))
-end)
-
 -- 911 CALL
 TriggerEvent('es:addCommand', '911', function(source, args, user)
 	TriggerClientEvent('chatMessage', tonumber(source), "", {0, 0, 0}, "^3/911 is no longer a usable command, buy a phone from the general store and use it to call 911.")
