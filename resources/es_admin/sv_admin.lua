@@ -19,6 +19,7 @@ end)
 
 -- Default commands
 TriggerEvent('es:addCommand', 'report', function(source, args, user)
+	local reporterId = tonumber(source)
 	local reportedId = args[2]
 	local message = args[3]
 	if not message or not reportedId then
@@ -31,7 +32,7 @@ TriggerEvent('es:addCommand', 'report', function(source, args, user)
 				if player then
 					local playerGroup = player.getGroup()
 					if playerGroup == "owner" or playerGroup == "superadmin" or playerGroup == "admin" or playerGroup == "mod" then
-						TriggerClientEvent("chatMessage", id, "REPORT", {255, 51, 204}, reportedId .. " " .. message)
+						TriggerClientEvent("chatMessage", id, "REPORT ["..reporterId.."]", {255, 51, 204}, reportedId .. " " .. message)
 					end
 				end
 			end
