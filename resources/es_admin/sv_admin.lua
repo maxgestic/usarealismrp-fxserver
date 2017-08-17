@@ -19,16 +19,22 @@ end)
 
 -- Default commands
 TriggerEvent('es:addCommand', 'report', function(source, args, user)
-	table.remove(args, 1)
-	--TriggerClientEvent('chatMessage', source, "REPORT", {255, 0, 0}, " (^2" .. GetPlayerName(source) .." | "..source.."^0) " .. table.concat(args, " "))
-
-	TriggerEvent("es:getPlayers", function(pl)
-		for k,v in pairs(pl) do
-			TriggerEvent("es:getPlayerFromId", k, function(user)
-				if((user.getPermissions() > 0 or user.getGroup() == "mod" or user.getGroup() == "admin") and k ~= source)then
-					TriggerClientEvent('chatMessage', k, "REPORT", {255, 0, 0}, args)
+	local reportedId = args[2]
+	local message = args[3]
+	if not message or not reportedId then
+		TriggerClientEvent("chatMessage", tonumber(source), "", {}, "^3Usage: ^0/report [id] [reason]")
+		return
+	end
+	TriggerEvent("es:getPlayers", function(players)
+		if players then
+			for id, player in pairs(players) do
+				if player then
+					local playerGroup = player.getGroup()
+					if playerGroup == "owner" or playerGroup == "superadmin" or playerGroup == "admin" or playerGroup == "mod" then
+						TriggerClientEvent("chatMessage", id, "REPORT", {255, 51, 204}, reportedId .. " " .. message)
+					end
 				end
-			end)
+			end
 		end
 	end)
 end)
