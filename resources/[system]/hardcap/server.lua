@@ -23,7 +23,15 @@ local reservedPlayers = {
     "85.227.248.200", -- marcus
     "47.184.33.115", -- otto ottman
     "73.220.46.9", -- miles long
-    "86.159.130.161" -- zoidberg (michael anderson) / jack
+    "86.159.130.161", -- zoidberg (michael anderson) / jack
+    "68.2.177.65", -- caddy
+    "70.118.135.50", -- michael rodgers
+    "73.225.193.85", -- niko caropot
+    "84.212.154.83", -- eddie newman
+    "66.249.79.92", -- josh stephens
+    "73.223.59.67", -- mr. chang
+    "109.67.3.134", -- afek
+    "50.51.195.104" -- N. Patton
 }
 
 RegisterServerEvent('hardcap:playerActivated')
