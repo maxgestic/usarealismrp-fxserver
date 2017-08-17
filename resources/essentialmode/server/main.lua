@@ -190,7 +190,8 @@ commands['info'].cmd = function(source, args, user)
 	TriggerClientEvent('chatMessage', source, 'SYSTEM', {255, 0, 0}, "^2[^3EssentialMode^2]^0 Commands loaded: ^2 " .. (returnIndexesInTable(commands) - 1))
 end
 
-local minutes = 1
+--[[
+local minutes = 30
 local interval = minutes * 60000
 function saveData()
 	print("calling saveData()...")
@@ -217,3 +218,4 @@ function saveData()
 end
 
 saveData()
+--]]
