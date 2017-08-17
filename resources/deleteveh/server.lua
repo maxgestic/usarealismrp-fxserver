@@ -23,22 +23,22 @@ AddEventHandler("impound:impoundVehicle", function(vehicle, plate)
                     for k,v in pairs(players) do
                         local player = v
                         local vehicles = player.getVehicles()
-                        print("about to check all player vehicles : " .. #vehicles)
+                        --print("about to check all player vehicles : " .. #vehicles)
                         for i = 1, #vehicles do
                             print("checking vehicle.model = " .. vehicles[i].model)
                             if vehicles[i].impounded then
-                                print("checking vehicle.impounded = " .. tostring(vehicles[i].impounded))
+                                --print("checking vehicle.impounded = " .. tostring(vehicles[i].impounded))
                             else
-                                print("vehicle did not have impound property")
+                                --print("vehicle did not have impound property")
                             end
-                            print("vehicles[i].plate = " .. type(vehicles[i].plate))
-                            print("plate = " .. type(plate))
+                            --print("vehicles[i].plate = " .. type(vehicles[i].plate))
+                            --print("plate = " .. type(plate))
                             if tonumber(plate) == tonumber(vehicles[i].plate) then
-                                print("found matching plate = " .. plate)
-                                print("setting vehicle.impounded = true!")
+                                --print("found matching plate = " .. plate)
+                                --print("setting vehicle.impounded = true!")
                                 vehicles[i].impounded = true
                                 v.setVehicles(vehicles)
-                                print("just impounded " .. GetPlayerName(k) .. "'s vehicle!'")
+                                --print("just impounded " .. GetPlayerName(k) .. "'s vehicle!'")
                                 TriggerClientEvent( 'impoundVehicle', userSource )
                                 return
                             end
