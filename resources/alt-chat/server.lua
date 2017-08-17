@@ -53,6 +53,8 @@ end)
 
 -- 911 CALL
 TriggerEvent('es:addCommand', '911', function(source, args, user)
+	TriggerClientEvent('chatMessage', tonumber(source), "", {0, 0, 0}, "^3/911 is no longer a usable command, buy a phone from the general store and use it to call 911.")
+	--[[
 	local userSource = source
 	table.remove(args, 1)
 	TriggerClientEvent('chatMessage', userSource, "911 (Caller: " .. userSource .. ")", {255, 20, 10}, table.concat(args, " "))
@@ -64,4 +66,5 @@ TriggerEvent('es:addCommand', '911', function(source, args, user)
 			end
 		end
 	end)
+	--]]
 end)
