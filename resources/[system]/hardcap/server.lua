@@ -29,9 +29,17 @@ local reservedPlayers = {
     "73.225.193.85", -- niko caropot
     "84.212.154.83", -- eddie newman
     "66.249.79.92", -- josh stephens
-    "73.223.59.67", -- mr. chang
     "109.67.3.134", -- afek
-    "50.51.195.104" -- N. Patton
+    "50.51.195.104", -- N. Patton
+    "68.102.156.211", -- drevv
+    "106.70.48.149", -- william harus
+    "47.40.127.197", -- don jones
+    "23.125.224.73", -- garrett
+    "70.55.212.242", -- K. kronin
+    "50.51.195.104", -- N. Patton
+    "160.3.4.243", -- bentley parker (beee)
+    "86.171.251.251", -- k. moretti
+    "84.193.236.76" -- henk mason
 }
 
 RegisterServerEvent('hardcap:playerActivated')
@@ -97,10 +105,10 @@ AddEventHandler('playerConnecting', function(name, setReason)
         CancelEvent()
     end
 
-    if publicPlayerCount >= 30 then
+    if publicPlayerCount >= 29 then
         if not playerHasReservedSlot(source) then
-            print('All public slots taken (at 30) :(')
-            setReason('All public slots taken (at 30) :(')
+            print('All public slots taken :(')
+            setReason('All public slots taken :(')
             CancelEvent()
         end
     end
