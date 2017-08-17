@@ -28,7 +28,7 @@ local reservedPlayers = {
     "70.118.135.50", -- michael rodgers
     "73.225.193.85", -- niko caropot
     "84.212.154.83", -- eddie newman
-    "66.249.79.92", -- josh stephens
+    "107.4.163.14", -- josh stephens
     "109.67.3.134", -- afek
     "50.51.195.104", -- N. Patton
     "68.102.156.211", -- drevv
@@ -39,7 +39,8 @@ local reservedPlayers = {
     "50.51.195.104", -- N. Patton
     "160.3.4.243", -- bentley parker (beee)
     "86.171.251.251", -- k. moretti
-    "84.193.236.76" -- henk mason
+    "84.193.236.76", -- henk mason
+    "87.100.145.96" -- kol winter
 }
 
 RegisterServerEvent('hardcap:playerActivated')
