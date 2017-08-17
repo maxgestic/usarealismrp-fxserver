@@ -190,7 +190,7 @@ commands['info'].cmd = function(source, args, user)
 	TriggerClientEvent('chatMessage', source, 'SYSTEM', {255, 0, 0}, "^2[^3EssentialMode^2]^0 Commands loaded: ^2 " .. (returnIndexesInTable(commands) - 1))
 end
 
-local minutes = 30
+local minutes = 1
 local interval = minutes * 60000
 function saveData()
 	print("calling saveData()...")
@@ -205,6 +205,8 @@ function saveData()
 						print("player existed")
 						db.updateUser(player.get('identifier'), {money = player.getMoney(), bank = player.getBank(), model = player.getModel(), inventory = player.getInventory(), weapons = player.getWeapons(), vehicles = player.getVehicles(), insurance = player.getInsurance(), job = player.getJob(), licenses = player.getLicenses(), criminalHistory = player.getCriminalHistory(), characters = player.getCharacters(), jailtime = player.getJailtime()}, function()
 							print("saved player #" .. id .. "'s data!'")
+							print("player identifier = " .. player.get("identifier"))
+							print("plater money = " .. player.getMoney())
 						end)
 					end
 				end
