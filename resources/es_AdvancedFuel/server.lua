@@ -1,5 +1,5 @@
 randomPrice = false --Random the price of each stations
-price = 45 --If random price is on False, set the price here for 1 liter
+price = 40 --If random price is on False, set the price here for 1 liter
 
 local players = {}
 local serverEssenceArray = {}
@@ -68,7 +68,7 @@ AddEventHandler("essence:buy", function(amount, index, e)
 		if(toPay > user.getMoney()) then
 				TriggerClientEvent("showNotif", _source, "~r~You don't have enought money.")
 		else
-			if user.getJob() ~= "sheriff" or user.getJob() ~= "ems" or user.getJob() ~= "fire" then -- police/ems don't pay for gas
+			if user.getJob() ~= "sheriff" and user.getJob() ~= "ems" and user.getJob() ~= "fire" and user.getJob() ~= "taxi" and user.getJob() ~= "tow" then -- police/ems don't pay for gas
 				user.removeMoney(toPay)
 			end
 			TriggerClientEvent("essence:hasBuying", _source, amount)
