@@ -1010,7 +1010,7 @@ local lsc = {
 		buttons = {
 			{name = "Repair vehicle", description = "Full body repair and engine service.", costs = 0, centre = 0, font = 0, scale = 0.4}
 		}
-	},
+	},--[[
 	["armor"] = {
 		title = "armor",
 		name = "armor",
@@ -1021,9 +1021,8 @@ local lsc = {
 			{name = "Armor Upgrade 60%",modtype = 16, mod = 2, costs = 0, description = "", centre = 0, font = 0, scale = 0.4},
 			{name = "Armor Upgrade 80%",modtype = 16, mod = 3, costs = 0, description = "", centre = 0, font = 0, scale = 0.4},
 			{name = "Armor Upgrade 100%",modtype = 16, mod = 4, costs = 0, description = "", centre = 0, font = 0, scale = 0.4}
-
 		}
-	},
+	},--]]
 	["brakes"] = {
 		title = "brakes",
 		name = "brakes",
@@ -1032,9 +1031,8 @@ local lsc = {
 			{name = "Street Brakes",modtype = 12, mod = false, costs = 0, description = "", centre = 0, font = 0, scale = 0.4},
 			{name = "Sport Brakes",modtype = 12, mod = 1, costs = 0, description = "", centre = 0, font = 0, scale = 0.4},
 			{name = "Race Brakes",modtype = 12, mod = 2, costs = 0, description = "", centre = 0, font = 0, scale = 0.4}
-
 		}
-	},
+	},--[[
 	["engine"] = {
 		title = "engine tunes",
 		name = "engine",
@@ -1044,7 +1042,7 @@ local lsc = {
 			{name = "EMS Upgrade, Level 3",modtype = 11, mod = 1, costs = 0, description = "", centre = 0, font = 0, scale = 0.4},
 			{name = "EMS Upgrade, Level 4",modtype = 11, mod = 2, costs = 0, description = "", centre = 0, font = 0, scale = 0.4}
 		}
-	},
+	},--]]
 	["horn"] = {
 			title = "horns",
 			name = "horn",
@@ -1157,7 +1155,7 @@ function DriveInGarage()
 			for i = 0,16 do
 				if GetNumVehicleMods(veh,i) ~= nil and GetNumVehicleMods(veh,i) ~= false then
 						if i == 16 then
-							insrt(lsc.menu["main"].buttons, {name = "Armor", description = "", centre = 0, font = 0, scale = 0.4})
+							--insrt(lsc.menu["main"].buttons, {name = "Armor", description = "", centre = 0, font = 0, scale = 0.4})
 						elseif i == 15 then
 							insrt(lsc.menu["main"].buttons, {name = "Suspension", description = "", centre = 0, font = 0, scale = 0.4})
 						elseif i == 13 then
@@ -1508,6 +1506,12 @@ function DriveOutOfGarage(pos)
 	SetEntityInvincible(veh,false)
 	TriggerServerEvent('lockGarage',false,lsc.currentgarage)
 	lsc.currentgarage = 0
+	Citizen.Trace("typeof mods = " .. type(mods))
+	Citizen.Trace("#mods = " .. #mods)
+	-- TODO: also check to see if fuel mod is free for cops/ems
+	-- print customizations / mods
+	Citizen.Trace("GetVehicleMod(veh, 11) = " .. GetVehicleMod(veh, 11))
+
 end
 
 function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
