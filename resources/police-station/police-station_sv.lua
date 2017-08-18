@@ -50,7 +50,9 @@ local whitelistedPolice = {
 		{name = "M. Henderson", identifier = "steam:11000010305ad16", permission = 1},
 		{name = "N. Patton", identifier = "steam:1100001086cbfc4", permission = 1},
 		{name = "T. Williams (tarrew)", identifier = "steam:110000106ea286b", permission = 1},
-		{name = "K. Moretti", identifier = "steam:11000010fcdb628", permission = 1}
+		{name = "K. Moretti", identifier = "steam:11000010fcdb628", permission = 1},
+		{name = "Jay Smiths", identifier = "license:a6477200f8c0e0c9e0f53fe43c4336d731a7fbfb", permission = 1},
+		{name = "Kodak Drucci", identifier = "steam:11000010c4a86e6", permission = 1}
 }
 
 RegisterServerEvent("policeStation:checkWhitelist")
