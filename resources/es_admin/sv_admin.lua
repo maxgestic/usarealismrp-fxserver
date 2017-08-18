@@ -31,7 +31,7 @@ TriggerEvent('es:addCommand', 'report', function(source, args, user)
 	TriggerEvent("es:getPlayers", function(players)
 		if players then
 			for id, player in pairs(players) do
-				if player then
+				if id and player then
 					local playerGroup = player.getGroup()
 					if playerGroup == "owner" or playerGroup == "superadmin" or playerGroup == "admin" or playerGroup == "mod" then
 						TriggerClientEvent("chatMessage", id, "REPORT ["..reporterId.."]", {255, 51, 204}, reportedId .. " " .. message)
@@ -105,7 +105,7 @@ TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, user)
 						end, "POST", json.encode({
 							embeds = {
 								{
-									description = "**Display Name:** " ..GetPlayerName(player).. " \n**Identifier:** " ..target.getIdentifier().. " \n**Reason:** " ..reason:gsub("Kicked: ", "").. " \n**Kicked By:** "..GetPlayerName(userSource),
+									description = "**Display Name:** " ..GetPlayerName(player).. " \n**Identifier:** " ..target.getIdentifier().. " \n**Reason:** " ..reason:gsub("Kicked: ", "").. " \n**Kicked By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date("%c", os.time()),
 									color = 16777062,
 									author = {
 										name = "User Kicked From The Server"
@@ -169,11 +169,15 @@ TriggerEvent('es:addGroupCommand', 'freeze', "mod", function(source, args, user)
 				TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have been " .. state .. " by ^2" .. GetPlayerName(source))
 				TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been " .. state)
 				TriggerEvent('es:getPlayers', function(players)
-					-- notify all admins/mods
-					for id, adminOrMod in pairs(players) do
-						local adminOrModGroup = adminOrMod.getGroup()
-						if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
-							TriggerClientEvent('chatMessage', id, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(source) .. "^0 froze " .. GetPlayerName(player))
+					if players then
+						-- notify all admins/mods
+						for id, adminOrMod in pairs(players) do
+							if id and adminOrMod then
+								local adminOrModGroup = adminOrMod.getGroup()
+								if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
+									TriggerClientEvent('chatMessage', id, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(source) .. "^0 froze " .. GetPlayerName(player))
+								end
+							end
 						end
 					end
 				end)
@@ -199,11 +203,15 @@ TriggerEvent('es:addGroupCommand', 'bring', "mod", function(source, args, user)
 				TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have brought by ^2" .. GetPlayerName(source))
 				TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been brought")
 				TriggerEvent('es:getPlayers', function(players)
-					-- notify all admins/mods
-					for id, adminOrMod in pairs(players) do
-						local adminOrModGroup = adminOrMod.getGroup()
-						if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
-							TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been brought by " .. GetPlayerName(id))
+					if players then
+						-- notify all admins/mods
+						for id, adminOrMod in pairs(players) do
+							if id and adminOrMod then
+								local adminOrModGroup = adminOrMod.getGroup()
+								if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
+									TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been brought by " .. GetPlayerName(id))
+								end
+							end
 						end
 					end
 				end)
@@ -251,11 +259,15 @@ TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, user)
 					TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have been teleported to by ^2" .. GetPlayerName(source))
 					TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Teleported to player ^2" .. GetPlayerName(player) .. "")
 					TriggerEvent('es:getPlayers', function(players)
-						-- notify all admins/mods
-						for id, adminOrMod in pairs(players) do
-							local adminOrModGroup = adminOrMod.getGroup()
-							if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
-								TriggerClientEvent('chatMessage', id, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(source) .. "^0 teleported to " .. GetPlayerName(player))
+						if players then
+							-- notify all admins/mods
+							for id, adminOrMod in pairs(players) do
+								if id and adminOrMod then
+									local adminOrModGroup = adminOrMod.getGroup()
+									if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
+										TriggerClientEvent('chatMessage', id, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(source) .. "^0 teleported to " .. GetPlayerName(player))
+									end
+								end
 							end
 						end
 					end)
@@ -444,11 +456,12 @@ fetchAllBans()
 
 	-- check for player being banned
 	AddEventHandler('playerConnecting', function(name, setReason)
-		local identifier = GetPlayerIdentifiers(source)[1]
+		--local identifier = GetPlayerIdentifiers(source)[1]
+		local playerEP = GetPlayerEP(tonumber(source))
 		for i = 1, #bans do
 			local bannedPlayer = bans[i]
-			if identifier == bannedPlayer.identifier then
-				print("player with identifier: " .. identifier .. " has been banned from your server and should not be allowed to connect!")
+			if playerEP == bannedPlayer.endpoint then
+				print("player with EP: " .. playerEP .. " has been banned from your server and should not be allowed to connect!")
 				setReason("Banned: " .. bannedPlayer.reason .. ". You may file an appeal at usarpp.enjin.com.")
 				CancelEvent()
 			end
@@ -468,8 +481,6 @@ fetchAllBans()
 			table.remove(args,1) -- remove /test
 			table.remove(args, 1) -- remove id
 			local reason = table.concat(args, " ")
-			idents = GetPlayerIdentifiers(targetPlayer)
-			local id = idents[1]
 			-- show message
 		    TriggerClientEvent('chatMessage', -1, "SYSTEM", {255, 0, 0}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
 
@@ -482,7 +493,7 @@ fetchAllBans()
 				end, "POST", json.encode({
 					embeds = {
 						{
-							description = "**Display Name:** " ..GetPlayerName(targetPlayer).. " \n**Identifier:** " .. id .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** "..GetPlayerName(userSource),
+							description = "**Display Name:** " ..GetPlayerName(targetPlayer).. " \n**Identifier:** " .. GetPlayerIdentifiers(targetPlayer)[1] .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date("%c", os.time()),
 							color = 14750740,
 							author = {
 								name = "User Banned From The Server"
@@ -490,13 +501,14 @@ fetchAllBans()
 						}
 					}
 				}), { ["Content-Type"] = 'application/json' })
-
-			-- drop player from session
-			DropPlayer(targetPlayer, "Banned: " .. reason)
 			-- update db
-			GetDoc.createDocument("bans",  {name = targerPlayerName, identifier = id, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date("%c", os.time())}, function()
+			GetDoc.createDocument("bans",  {name = targerPlayerName, endpoint = GetPlayerEP(targetPlayer), banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date("%c", os.time())}, function()
 				print("player banned!")
-				fetchAllBans() -- refresh lua table of bans for this resource
+				-- drop player from session
+				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
+				DropPlayer(targetPlayer, "Banned: " .. reason)
+				-- refresh lua table of bans for this resource
+				fetchAllBans()
 			end)
 		end)
 	end, function(source,args,user)
