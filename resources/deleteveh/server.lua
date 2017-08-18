@@ -25,7 +25,7 @@ AddEventHandler("impound:impoundVehicle", function(vehicle, plate)
                         local vehicles = player.getVehicles()
                         --print("about to check all player vehicles : " .. #vehicles)
                         for i = 1, #vehicles do
-                            print("checking vehicle.model = " .. vehicles[i].model)
+                            --print("checking vehicle.model = " .. vehicles[i].model)
                             if vehicles[i].impounded then
                                 --print("checking vehicle.impounded = " .. tostring(vehicles[i].impounded))
                             else
