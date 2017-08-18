@@ -137,7 +137,7 @@ TriggerEvent('es:addCommand', '28', function(source, args, user)
 			for id, player in pairs(players) do
 				--print("id = " .. id)
 				--print("player.job = " .. player.job)
-				local vehicles = player.vehicles
+				local vehicles = player.getVehicles()
 				for i = 1, #vehicles do
 					local vehicle = vehicles[i]
 					if tostring(vehicle.plate) == tostring(plateNumber) then
@@ -151,9 +151,9 @@ TriggerEvent('es:addCommand', '28', function(source, args, user)
 						return
 					end
 				end
+				-- player not in game with that plate number or plate number owned by a local!
+				TriggerClientEvent("licenseCheck:notify", userSource, "This plate is not on file.")
 			end
-			-- player not in game with that plate number or plate number owned by a local!
-			TriggerClientEvent("licenseCheck:notify", userSource, "This plate is not on file.")
 		end)
 	else
 		print("player did not enter a plate #")
