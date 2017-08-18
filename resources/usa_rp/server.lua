@@ -1,10 +1,11 @@
 local civilianSpawns = {
     --{x = 391.611, y = -948.984, z = 29.3978}, -- atlee & sinner st
-    --{x = 95.2552, y = -1310.8, z = 29.2921} -- near strip club
+    {x = 95.2552, y = -1310.8, z = 29.2921}, -- near strip club
     --{x = 10.6334, y = -718.769, z = 44.2174} -- pitts suggestion
-    {x = 434.14, y = -646.847, z = 28.7314}, -- daschound hus station 1
-    {x = 434.753, y = -629.007, z = 28.7186}, -- daschound hus station 2
-    {x = 412.16, y = -619.049, z = 28.7015} -- daschound hus station 3
+    {x = 434.14, y = -646.847, z = 28.7314}, -- daschound bus station 1
+    --{x = 434.753, y = -629.007, z = 28.7186}, -- daschound hus station 2
+    --{x = 412.16, y = -619.049, z = 28.7015}, -- daschound bus station 3
+    {x = -536.625, y = -218.624, z = 38.8497} -- DMV spawn in LS
 }
 local civSkins = {
     "a_m_m_beach_01",
@@ -77,13 +78,19 @@ AddEventHandler("usa_rp:spawnPlayer", function()
             spawn.x = 451.255
             spawn.y = -992.41
             spawn.z = 30.6896
-            weapons = {"WEAPON_COMBATPISTOL", "WEAPON_CARBINERIFLE", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_PUMPSHOTGUN", "WEAPON_FLAREGUN", "WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER"}
+            --weapons = {"WEAPON_COMBATPISTOL", "WEAPON_CARBINERIFLE", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_PUMPSHOTGUN", "WEAPON_FLAREGUN", "WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER"}
+            weapons = user.getWeapons()
+            user.setJob("civ") -- spawn as a civ
+            job = "civ"
         elseif job == "ems" then
             -- davis fire station
             spawn.x =  207.106
             spawn.y = -1641.45
             spawn.z = 29.8
-            weapons = {"WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER"}
+            --weapons = {"WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER"}
+            weapons = user.getWeapons()
+            user.setJob("civ") -- spawn as a civ
+            job = "civ"
         elseif job == "taxi" then
             -- davis fire station
             spawn.x =  895.59
