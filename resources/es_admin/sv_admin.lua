@@ -343,11 +343,59 @@ end)
 
 -- Rcon commands
 AddEventHandler('rconCommand', function(commandName, args)
-	if commandName == 'setadmin' then
-		if #args ~= 2 then
-				RconPrint("Usage: setadmin [user-id] [permission-level]\n")
+	if commandName == "ban" then
+		RconPrint("BAN COMMAND CALLED FROM RCON!")
+		if #args < 2 then
+			RconPrint("Usage: ban [user-id] [reason]\n")
+			CancelEvent()
+			return
+		end
+		RconPrint("id = " .. args[1])
+		-- ban player
+		TriggerEvent('es:exposeDBFunctions', function(GetDoc)
+			-- get info from command
+			local banner = "console"
+			local bannerId = "console"
+			local targetPlayer = tonumber(args[1])
+			local targetPlayerName = GetPlayerName(targetPlayer)
+			table.remove(args, 1) -- remove id
+			local reason = table.concat(args, " ")
+			-- show message
+		    TriggerClientEvent('chatMessage', -1, "SYSTEM", {255, 0, 0}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
+
+			-- send discord message
+			local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
+				PerformHttpRequest(url, function(err, text, headers)
+					if text then
+						print(text)
+					end
+				end, "POST", json.encode({
+					embeds = {
+						{
+							description = "**Display Name:** " ..targetPlayerName.. " \n**Identifier:** " .. GetPlayerIdentifiers(targetPlayer)[1] .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** Console\n**Timestamp:** "..os.date("%c", os.time()),
+							color = 14750740,
+							author = {
+								name = "User Banned From The Server"
+							}
+						}
+					}
+				}), { ["Content-Type"] = 'application/json' })
+			-- update db
+			GetDoc.createDocument("bans",  {name = targetPlayerName, endpoint = GetPlayerEP(targetPlayer), banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date("%c", os.time())}, function()
+				print("player banned!")
+				-- drop player from session
+				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
+				DropPlayer(targetPlayer, "Banned: " .. reason)
+				-- refresh lua table of bans for this resource
+				fetchAllBans()
 				CancelEvent()
-				return
+			end)
+		end)
+	elseif commandName == 'setadmin' then
+		if #args ~= 2 then
+			RconPrint("Usage: setadmin [user-id] [permission-level]\n")
+			CancelEvent()
+			return
 		end
 
 		if(GetPlayerName(tonumber(args[1])) == nil)then
@@ -369,9 +417,9 @@ AddEventHandler('rconCommand', function(commandName, args)
 		CancelEvent()
 	elseif commandName == 'setgroup' then
 		if #args ~= 2 then
-				RconPrint("Usage: setgroup [user-id] [group]\n")
-				CancelEvent()
-				return
+			RconPrint("Usage: setgroup [user-id] [group]\n")
+			CancelEvent()
+			return
 		end
 
 		if(GetPlayerName(tonumber(args[1])) == nil)then
@@ -399,29 +447,29 @@ AddEventHandler('rconCommand', function(commandName, args)
 
 		CancelEvent()
 	elseif commandName == 'setmoney' then
-			if #args ~= 2 then
-					RconPrint("Usage: setmoney [user-id] [money]\n")
-					CancelEvent()
-					return
-			end
-
-			if(GetPlayerName(tonumber(args[1])) == nil)then
-				RconPrint("Player not ingame\n")
-				CancelEvent()
-				return
-			end
-
-			TriggerEvent("es:getPlayerFromId", tonumber(args[1]), function(user)
-				if(user)then
-					user.setMoney(tonumber(args[2]))
-
-					RconPrint("Money set")
-					TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "Your money has been set to: ^2^*$" .. tonumber(args[2]))
-				end
-			end)
-
+		if #args ~= 2 then
+			RconPrint("Usage: setmoney [user-id] [money]\n")
 			CancelEvent()
+			return
 		end
+
+		if(GetPlayerName(tonumber(args[1])) == nil)then
+			RconPrint("Player not ingame\n")
+			CancelEvent()
+			return
+		end
+
+		TriggerEvent("es:getPlayerFromId", tonumber(args[1]), function(user)
+			if(user)then
+				user.setMoney(tonumber(args[2]))
+
+				RconPrint("Money set")
+				TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "Your money has been set to: ^2^*$" .. tonumber(args[2]))
+			end
+		end)
+
+		CancelEvent()
+	end
 end)
 
 -- Logging
