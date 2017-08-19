@@ -1165,7 +1165,7 @@ function DriveInGarage()
 						elseif i == 12 then
 							insrt(lsc.menu["main"].buttons, {name = "Brakes", description = "", centre = 0, font = 0, scale = 0.4})
 						elseif i == 11 then
-							insrt(lsc.menu["main"].buttons, {name = "Engine", description = "", centre = 0, font = 0, scale = 0.4})
+						--	insrt(lsc.menu["main"].buttons, {name = "Engine", description = "", centre = 0, font = 0, scale = 0.4})
 						elseif i == 0 then
 							insrt(lsc.menu["main"].buttons, {name = "Spoiler", description = "", centre = 0, font = 0, scale = 0.4})
 						elseif i == 1 then
@@ -1559,10 +1559,14 @@ function drawMenuCost(button,x,y,selected)
 		SetTextColour(255, 255, 255, 255)
 	end
 	SetTextEntry("STRING")
-	if button.costs == 0 then
-		AddTextComponentString("free")
+	if button.name ~= "Repair vehicle" then
+		if button.costs == 0 then
+			AddTextComponentString("free")
+		else
+			AddTextComponentString(button.costs)
+		end
 	else
-		AddTextComponentString(button.costs)
+		AddTextComponentString("")
 	end
 	DrawText(x + lsc.menu.width/2 - 0.035, y - lsc.menu.height/2 + 0.0028)
 end
