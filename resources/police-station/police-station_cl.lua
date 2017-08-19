@@ -109,7 +109,7 @@ AddEventHandler("policeStation:giveSheriffLoadout", function(model)
 		end
 		SetPlayerModel(PlayerId(), model)
 		SetModelAsNoLongerNeeded(model)
-		local playerWeapons = { "WEAPON_FLARE" , "WEAPON_CARBINERIFLE" ,"WEAPON_COMBATPISTOL", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_PUMPSHOTGUN", "WEAPON_FLAREGUN", "WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER" }
+		local playerWeapons = { "WEAPON_BZGAS", "WEAPON_FLARE" , "WEAPON_CARBINERIFLE" ,"WEAPON_COMBATPISTOL", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_PUMPSHOTGUN", "WEAPON_FLAREGUN", "WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER" }
 		local name, hash
 		for i = 1, #playerWeapons do
 			name = playerWeapons[i]

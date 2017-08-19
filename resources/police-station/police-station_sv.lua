@@ -71,7 +71,7 @@ end)
 -- this command is to get your cop weapons back after dying
 TriggerEvent('es:addCommand', 'loadout', function(source, args, user)
 
-   weapons = {"WEAPON_COMBATPISTOL", "WEAPON_CARBINERIFLE", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_PUMPSHOTGUN", "WEAPON_FLAREGUN", "WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER"}
+   weapons = {"WEAPON_BZGAS", "WEAPON_COMBATPISTOL", "WEAPON_CARBINERIFLE", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_PUMPSHOTGUN", "WEAPON_FLAREGUN", "WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER"}
 
    if user.getJob() == "sheriff" or user.getJob() == "police" or user.getJob() == "cop" then
        TriggerClientEvent("policeStation:giveWeapons", source, weapons)
