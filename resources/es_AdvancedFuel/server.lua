@@ -68,9 +68,12 @@ AddEventHandler("essence:buy", function(amount, index, e)
 		if(toPay > user.getMoney()) then
 				TriggerClientEvent("showNotif", _source, "~r~You don't have enought money.")
 		else
-			--if user.getJob() ~= "sheriff" and user.getJob() ~= "ems" and user.getJob() ~= "fire" and user.getJob() ~= "taxi" and user.getJob() ~= "tow" then -- police/ems don't pay for gas
+			if user.getJob() ~= "sheriff" and user.getJob() ~= "ems" and user.getJob() ~= "fire" then
 				user.removeMoney(toPay)
-			--end
+			else
+				print("user.getJob() was not sheriff/ems/fire: " .. user.getJob())
+			end
+
 			TriggerClientEvent("essence:hasBuying", _source, amount)
 		end
 	end)
