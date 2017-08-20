@@ -1,5 +1,5 @@
 TriggerEvent('es:addCommand','impound', function(source, args, user)
-    local userSource = source
+    local userSource = tonumber(source)
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
         local playerJob = user.getJob()
         local userGroup = user.getGroup()
@@ -15,10 +15,11 @@ end)
 RegisterServerEvent("impound:impoundVehicle")
 AddEventHandler("impound:impoundVehicle", function(vehicle, plate)
     print("inside of impound:impoundVehicle!")
-    local userSource = source
+    local userSource = tonumber(source)
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
         local playerJob = user.getJob()
-        if playerJob == "sheriff" or playerJob == "ems" or playerJob == "fire" or playerJob == "owner" or playerJob == "admin" or playerJob == "mod" then
+        local userGroup = user.getGroup()
+        if playerJob == "sheriff" or playerJob == "ems" or playerJob == "fire" or userGroup == "owner" or userGroup == "admin" or userGroup == "mod" then
             TriggerEvent('es:getPlayers', function(players)
                     for k,v in pairs(players) do
                         local player = v
