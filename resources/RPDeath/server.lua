@@ -88,6 +88,9 @@ AddEventHandler('chatMessage', function(from,name,message)
 								size = 0
 							end
 						end
+						print("PLAYER " .. GetPlayerName(source) .. " JUST USED /REVIVE!!!!")
+						print("PLAYER " .. GetPlayerName(source) .. " JUST USED /REVIVE!!!!")
+						print("PLAYER " .. GetPlayerName(source) .. " JUST USED /REVIVE!!!!")
 						TriggerClientEvent('RPD:allowRevive', -1, from, user.getGroup(), size)
 					else
 						TriggerClientEvent("chatMessage", from, "SYSTEM", {255, 0, 0}, "You don't have permissions to use this command.")
