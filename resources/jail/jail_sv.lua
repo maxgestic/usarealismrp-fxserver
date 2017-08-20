@@ -54,7 +54,7 @@ function jailPlayer(data, officerName)
 			sentence = sentence,
 			charges = reason,
 			arrestingOfficer = officerName,
-			timestamp = os.date("%c", os.time())
+			timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())
 		}
 		table.insert(playerCriminalHistory, record)
 		user.setCriminalHistory(playerCriminalHistory)
@@ -69,7 +69,7 @@ function jailPlayer(data, officerName)
 		end, "POST", json.encode({
 			embeds = {
 				{
-					description = "**Name:** " ..GetPlayerName(targetPlayer).. " \n**Sentence:** " .. sentence .. " months" .. " \n**Charges:** " ..reason.. "\n**Arresting Officer:** " ..officerName.."\n**Timestamp:** " .. os.date("%c", os.time()),
+					description = "**Name:** " ..GetPlayerName(targetPlayer).. " \n**Sentence:** " .. sentence .. " months" .. " \n**Charges:** " ..reason.. "\n**Arresting Officer:** " ..officerName.."\n**Timestamp:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
 					color = 263172,
 					author = {
 						name = "LS Correctional Facility"
