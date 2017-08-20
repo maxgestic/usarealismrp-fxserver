@@ -59,8 +59,8 @@ end)
 
 AddEventHandler('playerDropped', function()
 	if activeJobs[source] then
+		print("player dropped, setting activeJob of " .. activeJobs[source].name .. " to nil")
 		activeJobs[source] = nil
-		print("player dropped, setting activeJob to nil")
 	end
 end)
 
