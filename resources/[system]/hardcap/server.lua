@@ -40,7 +40,13 @@ local reservedPlayers = {
     "160.3.4.243", -- bentley parker (beee)
     "86.171.251.251", -- k. moretti
     "84.193.236.76", -- henk mason
-    "87.100.145.96" -- kol winter
+    "87.100.145.96", -- kol winter
+    "79.101.82.135", -- sikkkk
+    "85.224.124.15", -- t. williams
+    "91.14.241.80", -- weedom boiz (pittsburg)
+    "176.27.62.53", -- violette ford
+    "23.241.12.132", -- burrito
+    "64.186.74.43" -- mike henderson
 }
 
 RegisterServerEvent('hardcap:playerActivated')
