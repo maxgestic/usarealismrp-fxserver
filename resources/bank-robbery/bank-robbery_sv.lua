@@ -91,10 +91,8 @@ AddEventHandler("bank:inRange", function()
 	TriggerClientEvent("bank-robbery:notify", source, msg)
 	TriggerEvent('es:getPlayerFromId', source, function(user)
 		if user then
-			local oldMoney = user.getMoney()
-			local newMoney = oldMoney + rewardMoney
-			user.addMoney(newMoney)
-			print("user money set to $" .. newMoney)
+			user.addMoney(rewardMoney)
+			print("player " .. GetPlayerName(source) .. " successfully robbed the bank and now has: " .. user.getMoney())
 		end
 	end)
 end)
