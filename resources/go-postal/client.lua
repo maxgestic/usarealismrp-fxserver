@@ -50,6 +50,8 @@ local fridgeItTruckingDropOff = {
 	{x = 1994.89, y = 3058.77, z = 47.0521}
 }
 
+local retrievedVehicles = {}
+
 Citizen.CreateThread(function()
     for _, info in pairs(blips) do
 		info.blip = AddBlipForCoord(info.x, info.y, info.z)
@@ -120,8 +122,12 @@ Citizen.CreateThread(function()
 									Citizen.Wait(0)
 								end
 								job.truck = CreateVehicle(vehicle, info.x, info.y, info.z+1.0, 2.0, true, false)
+								table.insert(retrievedVehicles,job.truck)
+								print("inserted into retrievedVehicles: " .. job.truck)
 							else
 								job.truck = lastTruck
+								table.insert(retrievedVehicles,job.truck)
+								print("inserted into retrievedVehicles: " .. job.truck)
 							end
 							if job.truck ~= -1 then
 								SetVehicleOnGroundProperly(job.truck)
@@ -199,8 +205,12 @@ Citizen.CreateThread(function()
 									Citizen.Wait(0)
 								end
 								job.truck = CreateVehicle(vehicle, info.x, info.y, info.z+1.0, 2.0, true, false)
+								table.insert(retrievedVehicles,job.truck)
+								print("inserted into retrievedVehicles: " .. job.truck)
 							else
 								job.truck = lastTruck
+								table.insert(retrievedVehicles,job.truck)
+								print("inserted into retrievedVehicles: " .. job.truck)
 							end
 							if job.truck ~= -1 then
 								SetVehicleOnGroundProperly(job.truck)
@@ -332,7 +342,19 @@ AddEventHandler("transport:quitJob", function()
 	distance = nil
 	job = nil
 	lastTruck = 0
+	Citizen.Trace("#retrievedVehicles = " .. #retrievedVehicles)
+	for i =1, #retrievedVehicles do
+		SetEntityAsMissionEntity( retrievedVehicles[i], true, true )
+		deleteCar( retrievedVehicles[i] )
+	end
+	for i=1, #retrievedVehicles do
+		table.remove(retrievedVehicles)
+	end
 end)
+
+function deleteCar( entity )
+    Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( entity ) )
+end
 
 RegisterNetEvent("placeMarker")
 AddEventHandler("placeMarker", function(x, y)
