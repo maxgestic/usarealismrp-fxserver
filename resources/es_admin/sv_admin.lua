@@ -105,7 +105,7 @@ TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, user)
 						end, "POST", json.encode({
 							embeds = {
 								{
-									description = "**Display Name:** " ..GetPlayerName(player).. " \n**Identifier:** " ..target.getIdentifier().. " \n**Reason:** " ..reason:gsub("Kicked: ", "").. " \n**Kicked By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date("%c", os.time()),
+									description = "**Display Name:** " ..GetPlayerName(player).. " \n**Identifier:** " ..target.getIdentifier().. " \n**Reason:** " ..reason:gsub("Kicked: ", "").. " \n**Kicked By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time()),
 									color = 16777062,
 									author = {
 										name = "User Kicked From The Server"
@@ -137,7 +137,7 @@ function stringsplit(self, delimiter)
 end
 
 -- Announcing
-TriggerEvent('es:addGroupCommand', 'announce', "admin", function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'announce', "mod", function(source, args, user)
 	table.remove(args, 1)
 	TriggerClientEvent('chatMessage', -1, "ANNOUNCEMENT", {255, 0, 0}, "" .. table.concat(args, " "))
 end, function(source, args, user)
@@ -372,7 +372,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 				end, "POST", json.encode({
 					embeds = {
 						{
-							description = "**Display Name:** " ..targetPlayerName.. " \n**Identifier:** " .. GetPlayerIdentifiers(targetPlayer)[1] .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** Console\n**Timestamp:** "..os.date("%c", os.time()),
+							description = "**Display Name:** " ..targetPlayerName.. " \n**Identifier:** " .. GetPlayerIdentifiers(targetPlayer)[1] .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** Console\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time()),
 							color = 14750740,
 							author = {
 								name = "User Banned From The Server"
@@ -381,7 +381,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 					}
 				}), { ["Content-Type"] = 'application/json' })
 			-- update db
-			GetDoc.createDocument("bans",  {name = targetPlayerName, endpoint = GetPlayerEP(targetPlayer), banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date("%c", os.time())}, function()
+			GetDoc.createDocument("bans",  {name = targetPlayerName, endpoint = GetPlayerEP(targetPlayer), banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
 				print("player banned!")
 				-- drop player from session
 				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
@@ -541,7 +541,7 @@ fetchAllBans()
 				end, "POST", json.encode({
 					embeds = {
 						{
-							description = "**Display Name:** " ..GetPlayerName(targetPlayer).. " \n**Identifier:** " .. GetPlayerIdentifiers(targetPlayer)[1] .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date("%c", os.time()),
+							description = "**Display Name:** " ..GetPlayerName(targetPlayer).. " \n**Identifier:** " .. GetPlayerIdentifiers(targetPlayer)[1] .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time()),
 							color = 14750740,
 							author = {
 								name = "User Banned From The Server"
@@ -550,7 +550,7 @@ fetchAllBans()
 					}
 				}), { ["Content-Type"] = 'application/json' })
 			-- update db
-			GetDoc.createDocument("bans",  {name = targerPlayerName, endpoint = GetPlayerEP(targetPlayer), banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date("%c", os.time())}, function()
+			GetDoc.createDocument("bans",  {name = targerPlayerName, endpoint = GetPlayerEP(targetPlayer), banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%d-%m-%Y %H:%M:%S', os.time())}, function()
 				print("player banned!")
 				-- drop player from session
 				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
