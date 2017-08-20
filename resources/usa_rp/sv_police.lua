@@ -20,3 +20,11 @@ TriggerEvent('es:addCommand', 'dispatch', function(source, args, user)
     print("setting waypoint with target = " .. target)
 	TriggerClientEvent("dispatch:setWaypoint", userSource, tonumber(target))
 end)
+
+TriggerEvent('es:addCommand', 'spikestrip', function(source) -- usage /spike in chat maybe change to a hot key at later date
+  TriggerEvent('es:getPlayerFromId', source, function(user)
+     if user.getJob() == "sheriff"  then -- set police job can also use [ user.permission_level >= 2 ] in place of job if need be
+        TriggerClientEvent('c_setSpike', source)
+     end
+  end)
+end)

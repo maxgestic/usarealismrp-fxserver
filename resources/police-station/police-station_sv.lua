@@ -31,6 +31,7 @@ local whitelistedPolice = {
 		{name = "BlackieChan", identifier = "steam:1100001011cf039", permission = 1}, -- blackie
 		{name = "K. Moretti", identifier = "steam:11000010fcdb628", permission = 1},
 		{name = "H. Thompson", identifier = "steam:110000104ba5d42﻿", permission = 1},
+		{name = "H. Thompson", identifier = "license:f67a2a4034b8d2981e217fc66fa4dd35b393e0a5﻿", permission = 1},
 		{name = "Eclipse", identifier = "steam:11000010c758e01", permission = 1},
 		{name = "Eclipse", identifier = "ip:73.120.102.13", permission = 1},
 		{name = "Elliptic Feedz", identifier = "steam:11000010c74c95e", permission = 1},
