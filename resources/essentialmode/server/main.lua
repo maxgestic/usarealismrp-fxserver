@@ -45,6 +45,15 @@ AddEventHandler('playerDropped', function()
 	local numberSource = tonumber(source)
 	print("player " .. GetPlayerName(numberSource) .. " dropped from the server!")
 	if(Users[numberSource])then
+		local inventory = Users[numberSource].getInventory()
+		for i = 1, #inventory do
+			local item = inventory[i]
+			if item.name == "20g of concentrated cannabis" then
+				table.remove(inventory, i)
+				Users[numberSource].setInventory(inventory)
+				print("player dropped with cannabis, removing it...")
+			end
+		end
 		TriggerEvent("es:playerDropped", Users[numberSource])
 		db.updateUser(Users[numberSource].get('identifier'), {money = Users[numberSource].getMoney(), bank = Users[numberSource].getBank(), model = Users[numberSource].getModel(), inventory = Users[numberSource].getInventory(), weapons = Users[numberSource].getWeapons(), vehicles = Users[numberSource].getVehicles(), insurance = Users[numberSource].getInsurance(), job = Users[numberSource].getJob(), licenses = Users[numberSource].getLicenses(), criminalHistory = Users[numberSource].getCriminalHistory(), characters = Users[numberSource].getCharacters(), jailtime = Users[numberSource].getJailtime()}, function()
 			Users[numberSource] = nil
