@@ -148,7 +148,7 @@ function trucksMenu()
 	ClearMenu()
 	Menu.addButton("Karin Rebel ($10,500)","buyVehicle","-2045594037:10500:Karin Rebel")
 	Menu.addButton("Vapid Bobcat XL ($10,500)","buyVehicle","1069929536:10500:Vapid Bobcat XL")
-	Menu.addButton("Vapid Sadler ($25,500)","buyVehicle","599568815:25500:Vapid Sadler")
+	--Menu.addButton("Vapid Sadler ($25,500)","buyVehicle","599568815:25500:Vapid Sadler")
 	--Menu.addButton("Bravado Bison ($27,110)","buyVehicle","16948145:27110:Bravado Bison")
 	Menu.addButton("Vapid Sandking XL ($35,000)","buyVehicle"," -1189015600:35000:Vapid Sandking XL")
 
