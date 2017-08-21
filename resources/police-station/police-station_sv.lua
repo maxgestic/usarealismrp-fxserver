@@ -1,12 +1,9 @@
 local whitelistedPolice = {
-	{name = "minipunch", identifier = "steam:1100001007a8797", permission = 1},
+	--{name = "minipunch", identifier = "steam:1100001007a8797", permission = 1},
 	    {name = "clickcrackboom", identifier = "steam:110000112944617", permission = 1},
 	    {name = "Josh Stevens", identifier = "steam:11000011704283b", permission = 1},
-	    {name = "Tasha Crist", identifier = "steam:11000010a8aa0cb", permission = 1},
 	    {name = "Kube", identifier = "steam:11000010270ddb4", permission = 1},
-	    {name = "Jack Goffe", identifier = "steam:11000010f727d73", permission = 1},
 	    {name = "Gavin Tan", identifier = "steam:1100001072f82e3", permission = 1},
-		{name = "Tyrosien", identifier = "steam:1100001006ecc6f", permission = 1},
 		{name = "Hack", identifier = "steam:11000010b19ad35", permission = 1},
 		{name = "Bert W.", identifier = "steam:1100001050af13a", permission = 1},
 		{name = "totaleclipsed", identifier = "steam:1100001054d6790", permission = 1},
@@ -120,4 +117,27 @@ AddEventHandler("policeStation:giveCivStuff", function()
         TriggerClientEvent("policeStation:giveCivLoadout", userSource, user.getCharacters(), playerWeapons)
         user.setJob("civ")
     end)
+end)
+
+-- add rcon command for white listing:
+AddEventHandler('rconCommand', function(commandName, args)
+    if commandName:lower() == 'whitelist' then
+        local playerId = table.remove(args, 1)
+        local type = table.concat(args, ' ')
+
+		if tonumber(playerId) ~= nil and type then
+	        if type == "police" then
+				local identifier = GetPlayerIdentifiers(playerId)[1]
+				local person = {
+					name = GetPlayerName(playerId),
+					identifier = tostring(identifier),
+					permission = 1
+				}
+				print("whitelisting player for police, identifier: " .. person.identifier)
+				table.insert(whitelistedPolice, person)
+			end
+		end
+
+        CancelEvent()
+    end
 end)
