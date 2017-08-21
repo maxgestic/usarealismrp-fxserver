@@ -46,12 +46,16 @@ AddEventHandler('playerDropped', function()
 	print("player " .. GetPlayerName(numberSource) .. " dropped from the server!")
 	if(Users[numberSource])then
 		local inventory = Users[numberSource].getInventory()
-		for i = 1, #inventory do
-			local item = inventory[i]
-			if item.name == "20g of concentrated cannabis" then
-				table.remove(inventory, i)
-				Users[numberSource].setInventory(inventory)
-				print("player dropped with cannabis, removing it...")
+		if inventory then
+			for i = 1, #inventory do
+				local item = inventory[i]
+				if item then
+					if item.name == "20g of concentrated cannabis" then
+						table.remove(inventory, i)
+						Users[numberSource].setInventory(inventory)
+						print("player dropped with cannabis, removing it...")
+					end
+				end
 			end
 		end
 		TriggerEvent("es:playerDropped", Users[numberSource])
@@ -199,7 +203,7 @@ commands['info'].cmd = function(source, args, user)
 	TriggerClientEvent('chatMessage', source, 'SYSTEM', {255, 0, 0}, "^2[^3EssentialMode^2]^0 Commands loaded: ^2 " .. (returnIndexesInTable(commands) - 1))
 end
 
---[[
+
 local minutes = 30
 local interval = minutes * 60000
 function saveData()
@@ -215,8 +219,6 @@ function saveData()
 						print("player existed")
 						db.updateUser(player.get('identifier'), {money = player.getMoney(), bank = player.getBank(), model = player.getModel(), inventory = player.getInventory(), weapons = player.getWeapons(), vehicles = player.getVehicles(), insurance = player.getInsurance(), job = player.getJob(), licenses = player.getLicenses(), criminalHistory = player.getCriminalHistory(), characters = player.getCharacters(), jailtime = player.getJailtime()}, function()
 							print("saved player #" .. id .. "'s data!'")
-							print("player identifier = " .. player.get("identifier"))
-							print("plater money = " .. player.getMoney())
 						end)
 					end
 				end
@@ -227,4 +229,3 @@ function saveData()
 end
 
 saveData()
---]]
