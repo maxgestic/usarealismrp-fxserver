@@ -61,3 +61,47 @@ function RemoveSpike()
       DeleteObject(spike)
    end
 end
+
+-- /ticket
+RegisterNetEvent("police:ticket")
+AddEventHandler("police:ticket", function(amount, reason, fromPlayerId)
+    local responded = false
+    Citizen.Trace("amount = " .. amount)
+    Citizen.Trace("reason = " .. reason)
+    DrawTicketNotification(tostring(amount), reason)
+    Citizen.CreateThread(function()
+        while not responded do
+            Citizen.Wait(1)
+            DrawSpecialText("Pay ticket of $" .. amount .. "? ~g~Y~w~/~r~N" )
+        	if IsControlJustPressed(1, 246) then -- Y key
+                Citizen.Trace("player wants to pay ticket!")
+                responded = not responded
+                TriggerServerEvent("police:payTicket", fromPlayerId, amount, true) -- remove money & notify officer of signature
+            elseif IsControlJustPressed(1, 249) then -- N key
+                Citizen.Trace("player does not want to pay ticket!")
+                responded = not responded
+                TriggerServerEvent("police:payTicket", fromPlayerId, amount, false) -- notify officer of denial to sign
+            end
+        end
+    end)
+end)
+
+RegisterNetEvent("police:notify")
+AddEventHandler("police:notify", function(message)
+    SetNotificationTextEntry("STRING")
+    AddTextComponentString(message)
+    DrawNotification(0,1)
+end)
+
+function DrawTicketNotification(amount, reason)
+	SetNotificationTextEntry("STRING")
+	AddTextComponentString("~y~TICKET: ~w~$" .. amount .. "\n~y~REASON: ~w~" .. reason .. "\nPay? ~g~Y~w~/~r~N")
+	DrawNotification(0,1)
+end
+
+function DrawSpecialText(m_text)
+    ClearPrints()
+	SetTextEntry_2("STRING")
+	AddTextComponentString(m_text)
+	DrawSubtitleTimed(250, 1)
+end

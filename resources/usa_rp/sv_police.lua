@@ -1,10 +1,41 @@
 TriggerEvent('es:addCommand', 'ticket', function(source, args, user)
-    --[[
-    local targetPlayer = args[2]
-    local amount = tonumber(args[3])
-    local reason = args[3]
-    Trigger
-    --]]
+	if user.getJob() == "sheriff" or user.getJob() == "police" then
+	    local targetPlayer = tonumber(args[2])
+	    local amount = tonumber(args[3])
+		table.remove(args, 1)
+		table.remove(args, 1)
+		table.remove(args, 1)
+	    local reason = table.concat(args, " ")
+	    if not targetPlayer or not amount or reason == "" or reason == " " then
+			TriggerClientEvent("police:notify", tonumber(source), "~y~Usage: ~w~/ticket [id] [amount] [infractions]")
+			return
+		end
+		print("player is getting ticketed for $" .. amount .. "! by officer " .. GetPlayerName(source))
+		TriggerClientEvent("police:ticket", targetPlayer, amount, reason, source)
+	else
+		TriggerClientEvent("police:notify", tonumber(source), "Only police can use /ticket!")
+	end
+end)
+
+RegisterServerEvent("police:payTicket")
+AddEventHandler("police:payTicket", function(fromPlayerId, amount, wantsToPay)
+	local userSource = tonumber(source)
+	if wantsToPay then
+		TriggerEvent('es:getPlayerFromId', userSource, function(user)
+			if user then
+				if user.getMoney() >= tonumber(amount) then
+					user.removeMoney(tonumber(amount))
+					TriggerClientEvent("police:notify", userSource, "You have ~g~signed~w~ your ticket of $" .. amount .. "!")
+					TriggerClientEvent("police:notify", fromPlayerId, GetPlayerName(userSource) .. " has ~g~signed~w~ their ticket of $" .. amount .. "!")
+				else
+					TriggerClientEvent("police:notify", userSource, "You don't have enough money to pay the ticket of $" .. amount .. "!")
+				end
+			end
+		end)
+	else
+		TriggerClientEvent("police:notify", userSource, "You have ~r~denied~w~ to sign your ticket of $" .. amount .. "!")
+		TriggerClientEvent("police:notify", fromPlayerId, GetPlayerName(userSource) .. " has ~r~denied~w~ to sign their ticket of $" .. amount .. "!")
+	end
 end)
 
 -- /dispatch
