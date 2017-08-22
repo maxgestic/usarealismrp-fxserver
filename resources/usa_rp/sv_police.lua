@@ -25,16 +25,16 @@ AddEventHandler("police:payTicket", function(fromPlayerId, amount, wantsToPay)
 			if user then
 				if user.getMoney() >= tonumber(amount) then
 					user.removeMoney(tonumber(amount))
-					TriggerClientEvent("police:notify", userSource, "You have ~g~signed~w~ your ticket of $" .. amount .. "!")
-					TriggerClientEvent("police:notify", fromPlayerId, GetPlayerName(userSource) .. " has ~g~signed~w~ their ticket of $" .. amount .. "!")
+					TriggerClientEvent("police:notify", userSource, "You have ~g~signed~w~ your ticket of $" .. comma_value(amount) .. "!")
+					TriggerClientEvent("police:notify", fromPlayerId, GetPlayerName(userSource) .. " has ~g~signed~w~ their ticket of $" .. comma_value(amount) .. "!")
 				else
-					TriggerClientEvent("police:notify", userSource, "You don't have enough money to pay the ticket of $" .. amount .. "!")
+					TriggerClientEvent("police:notify", userSource, "You don't have enough money to pay the ticket of $" .. comma_value(amount) .. "!")
 				end
 			end
 		end)
 	else
 		TriggerClientEvent("police:notify", userSource, "You have ~r~denied~w~ to sign your ticket of $" .. amount .. "!")
-		TriggerClientEvent("police:notify", fromPlayerId, GetPlayerName(userSource) .. " has ~r~denied~w~ to sign their ticket of $" .. amount .. "!")
+		TriggerClientEvent("police:notify", fromPlayerId, GetPlayerName(userSource) .. " has ~r~denied~w~ to sign their ticket of $" .. comma_value(amount) .. "!")
 	end
 end)
 
@@ -52,6 +52,17 @@ TriggerEvent('es:addCommand', 'dispatch', function(source, args, user)
 	TriggerClientEvent("dispatch:setWaypoint", userSource, tonumber(target))
 end)
 
+--[[
+-- /barrier
+TriggerEvent("es:addCommand", 'cone', function(source)
+	TriggerEvent('es:getPlayerFromId', source, function(user)
+       if user.getJob() == "sheriff" or user.getJob() == "ems" then -- set police job can also use [ user.permission_level >= 2 ] in place of job if need be
+          TriggerClientEvent('c_setCone', source)
+       end
+    end)
+end)
+
+-- /spikestrip
 TriggerEvent('es:addCommand', 'spikestrip', function(source) -- usage /spike in chat maybe change to a hot key at later date
   TriggerEvent('es:getPlayerFromId', source, function(user)
      if user.getJob() == "sheriff"  then -- set police job can also use [ user.permission_level >= 2 ] in place of job if need be
@@ -59,3 +70,15 @@ TriggerEvent('es:addCommand', 'spikestrip', function(source) -- usage /spike in 
      end
   end)
 end)
+--]]
+
+function comma_value(amount)
+  local formatted = amount
+  while true do
+    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+    if (k==0) then
+      break
+    end
+  end
+  return formatted
+end

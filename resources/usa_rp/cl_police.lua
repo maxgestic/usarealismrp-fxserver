@@ -9,6 +9,24 @@ AddEventHandler("dispatch:setWaypoint", function(targetServerId)
     Citizen.Trace("waypoint set!")
 end)
 
+--[[
+-- barrier
+RegisterNetEvent('c_setCone')
+AddEventHandler('c_setCone', function()
+    SetConeOnGround()
+end)
+
+function SetConeOnGround()
+    x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+    barrier = GetHashKey("prop_mp_cone_01")
+    RequestModel(barrier)
+    while not HasModelLoaded(barrier) do
+      Citizen.Wait(1)
+    end
+    local object = CreateObject(barrier, x, y, z-1, true, true, false) -- x+1
+    PlaceObjectOnGroundProperly(object)
+end
+
 -- spike strip
 RegisterNetEvent('c_setSpike')
 AddEventHandler('c_setSpike', function()
@@ -17,14 +35,11 @@ end)
 
 function SetSpikesOnGround()
     x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
-
     spike = GetHashKey("P_ld_stinger_s")
-
     RequestModel(spike)
     while not HasModelLoaded(spike) do
       Citizen.Wait(1)
     end
-
     local object = CreateObject(spike, x, y, z-2, true, true, false) -- x+1
     PlaceObjectOnGroundProperly(object)
 end
@@ -61,8 +76,9 @@ function RemoveSpike()
       DeleteObject(spike)
    end
 end
+--]]
 
--- /ticket
+-- /ticket [id] [amount] [infractions]
 RegisterNetEvent("police:ticket")
 AddEventHandler("police:ticket", function(amount, reason, fromPlayerId)
     local responded = false
