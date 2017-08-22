@@ -177,8 +177,8 @@ Citizen.CreateThread(function()
 
 							if blipSprite ~= 274 then
 
-								SetBlipSprite( blip, 274 )
-								Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, false ) -- Player Blip indicator
+								--SetBlipSprite( blip, 274 )
+								--Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, false ) -- Player Blip indicator
 
 							end
 
@@ -191,8 +191,8 @@ Citizen.CreateThread(function()
 
 								if blipSprite ~= 422 then
 
-									SetBlipSprite( blip, 422 )
-									Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, false ) -- Player Blip indicator
+									--SetBlipSprite( blip, 422 )
+									--Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, false ) -- Player Blip indicator
 
 								end
 
@@ -203,15 +203,15 @@ Citizen.CreateThread(function()
 
 									if blipSprite ~= 424 then
 
-										SetBlipSprite( blip, 424 )
-										Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, false ) -- Player Blip indicator
+									--	SetBlipSprite( blip, 424 )
+										--Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, false ) -- Player Blip indicator
 
 									end
 
 								elseif blipSprite ~= 423 then
 
-									SetBlipSprite( blip, 423 )
-									Citizen.InvokeNative (0x5FBCA48327B914DF, blip, false ) -- Player Blip indicator
+									--SetBlipSprite( blip, 423 )
+									--Citizen.InvokeNative (0x5FBCA48327B914DF, blip, false ) -- Player Blip indicator
 
 								end
 
@@ -219,8 +219,8 @@ Citizen.CreateThread(function()
 
 								if blipSprite ~= 427 then
 
-									SetBlipSprite( blip, 427 )
-									Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, false ) -- Player Blip indicator
+									--SetBlipSprite( blip, 427 )
+									--Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, false ) -- Player Blip indicator
 
 								end
 
@@ -229,8 +229,8 @@ Citizen.CreateThread(function()
 
 								if blipSprite ~= 426 then
 
-									SetBlipSprite( blip, 426 )
-									Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, false ) -- Player Blip indicator
+									--SetBlipSprite( blip, 426 )
+									--Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, false ) -- Player Blip indicator
 
 								end
 
@@ -238,8 +238,8 @@ Citizen.CreateThread(function()
 
 								if blipSprite ~= 421 then
 
-									SetBlipSprite( blip, 421 )
-									Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, false ) -- Player Blip indicator
+									--SetBlipSprite( blip, 421 )
+									--Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, false ) -- Player Blip indicator
 
 								end
 
@@ -338,6 +338,7 @@ Citizen.CreateThread(function()
 end)
 
 local emergencySkins = {
+	{name = "S_M_Y_HwayCop_01", type="cop"},
 	{name = "s_m_y_sheriff_01", type="cop"},
 	{name = "s_f_y_sheriff_01", type="cop"},
 	{name = "s_m_y_blackops_01", type="cop"},
