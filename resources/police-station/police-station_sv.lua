@@ -1,5 +1,5 @@
 local whitelistedPolice = {
-	--{name = "minipunch", identifier = "steam:1100001007a8797", permission = 1},
+	{name = "minipunch", identifier = "steam:1100001007a8797", permission = 1},
 	    {name = "clickcrackboom", identifier = "steam:110000112944617", permission = 1},
 	    {name = "Josh Stevens", identifier = "steam:11000011704283b", permission = 1},
 	    {name = "Kube", identifier = "steam:11000010270ddb4", permission = 1},
@@ -29,8 +29,6 @@ local whitelistedPolice = {
 		{name = "K. Moretti", identifier = "steam:11000010fcdb628", permission = 1},
 		{name = "H. Thompson", identifier = "steam:110000104ba5d42﻿", permission = 1},
 		{name = "H. Thompson", identifier = "license:f67a2a4034b8d2981e217fc66fa4dd35b393e0a5﻿", permission = 1},
-		{name = "Eclipse", identifier = "steam:11000010c758e01", permission = 1},
-		{name = "Eclipse", identifier = "ip:73.120.102.13", permission = 1},
 		{name = "Elliptic Feedz", identifier = "steam:11000010c74c95e", permission = 1},
 		{name = "Don Jones", identifier = "steam:1100001161c0ea1", permission = 1},
 		{name = "Lucas", identifier = "steam:110000107be0c37", permission = 1},
@@ -50,7 +48,8 @@ local whitelistedPolice = {
 		{name = "T. Williams (tarrew)", identifier = "steam:110000106ea286b", permission = 1},
 		{name = "K. Moretti", identifier = "steam:11000010fcdb628", permission = 1},
 		{name = "Jay Smiths", identifier = "license:a6477200f8c0e0c9e0f53fe43c4336d731a7fbfb", permission = 1},
-		{name = "Kodak Drucci", identifier = "steam:11000010c4a86e6", permission = 1}
+		{name = "Kodak Drucci", identifier = "steam:11000010c4a86e6", permission = 1},
+		{name = "Brian Orian", identifier = "license:4b6ff175a02cdc955ebba7c17713c23209cc99dd", permission = 1}
 }
 
 RegisterServerEvent("policeStation:checkWhitelist")
