@@ -307,8 +307,8 @@ Citizen.CreateThread(function()
 					DrawSpecialText("Press [ ~g~E~w~ ] to deliver your goods.")
 			        if IsControlPressed(0, 86) then
 			            if not pressed then
-							if job.distance * 2 > 9000 then
-								pay = 9000
+							if job.distance * 2 > 3500 then
+								pay = 3500
 							else
 								pay = math.ceil(job.distance * 2)
 							end
