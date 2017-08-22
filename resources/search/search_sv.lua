@@ -7,9 +7,9 @@ AddEventHandler("search:searchPlayer", function(source, playerId)
 		local items = {}
 		local licenses = user.getLicenses()
 		for index = 1, #licenses do
-			if licenses[index].name == "Driver's License" then
+			--if licenses[index].name == "Driver's License" then
 				table.insert(items, licenses[index])
-			end
+			--end
 		end
 		local playerInventory = user.getInventory()
 		for i = 1, #playerInventory do
@@ -20,6 +20,9 @@ AddEventHandler("search:searchPlayer", function(source, playerId)
 			table.insert(items, playerWeapons[j])
 		end
 			TriggerClientEvent("chatMessage", source, "SYSTEM", {255,136,0}, "SEARCH OF " .. GetPlayerName(playerId) .. ":")
+			if user.getMoney() > 0 then
+				TriggerClientEvent("chatMessage", source, "", {255,136,0}, "CASH: $" .. comma_value(user.getMoney()))
+			end
 			for i = 1, #items do
 				local name = items[i].name
 				local quantity = items[i].quantity
@@ -44,3 +47,14 @@ TriggerEvent('es:addCommand', 'search', function(source, args, user)
 		TriggerEvent("search:searchPlayer", source, argument)
 	end
 end)
+
+function comma_value(amount)
+  local formatted = amount
+  while true do
+    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+    if (k==0) then
+      break
+    end
+  end
+  return formatted
+end
