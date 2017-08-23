@@ -1,8 +1,50 @@
 local states = {}
+local spectating = {}
 states.frozen = false
 states.frozenPos = nil
 
+function spectatePlayer(target, targetName)
 
+end
+
+RegisterNetEvent("mini_admin:spectate")
+AddEventHandler("mini_admin:spectate", function(target, targetName)
+
+		local playerPed = GetPlayerPed(-1) -- yourself
+		--Citizen.Trace("target before = " .. target)
+		--Citizen.Trace("calling GetPlayerFromServerId on target...")
+		target = GetPlayerFromServerId(target)
+		--Citizen.Trace("target after = " .. target)
+		--Citizen.Trace("calling GetPlayerPed() on target...")
+		target = GetPlayerPed(target)
+		--Citizen.Trace("target after = " .. target)
+		if spectating.target == target then
+			-- stop spectating and return
+			local targetx,targety,targetz = table.unpack(GetEntityCoords(target, false))
+			RequestCollisionAtCoord(targetx,targety,targetz)
+			NetworkSetInSpectatorMode(false, target)
+			spectating = {}
+			return
+		end
+		enable = true
+		if target == playerPed then enable = false end
+		if(enable)then
+			local targetx,targety,targetz = table.unpack(GetEntityCoords(target, false))
+			RequestCollisionAtCoord(targetx,targety,targetz)
+			NetworkSetInSpectatorMode(true, target)
+			spectating = {
+				target = target,
+				status = true
+			}
+			--ShowNotification("Spectating ~b~<C>"..targetName.."</C>.")
+		else
+			local targetx,targety,targetz = table.unpack(GetEntityCoords(target, false))
+			RequestCollisionAtCoord(targetx,targety,targetz)
+			NetworkSetInSpectatorMode(false, target)
+			--ShowNotification("Stopped spectating ~b~<C>"..targetName.."</C>.")
+		end
+
+end)
 
 RegisterNetEvent('es_admin:spawnVehicle')
 AddEventHandler('es_admin:spawnVehicle', function(v)

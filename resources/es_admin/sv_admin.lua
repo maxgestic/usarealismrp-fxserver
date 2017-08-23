@@ -209,7 +209,7 @@ TriggerEvent('es:addGroupCommand', 'bring', "mod", function(source, args, user)
 							if id and adminOrMod then
 								local adminOrModGroup = adminOrMod.getGroup()
 								if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
-									TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been brought by " .. GetPlayerName(id))
+									TriggerClientEvent('chatMessage', id, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(source) .. "^0 has been brought by " .. GetPlayerName(player))
 								end
 							end
 						end
@@ -340,6 +340,17 @@ TriggerEvent('es:addCommand', 'car', function(source, args, user)
 	end
 end)
 
+TriggerEvent('es:addCommand', 'spectate', function(source, args, user)
+	local userGroup = user.getGroup()
+	if userGroup == "owner" or userGroup == "superadmin" or userGroup == "admin" or userGroup == "mod" then
+		local userSource = tonumber(source)
+		local targetPlayer = tonumber(args[2])
+		if not targetPlayer then return end
+		TriggerClientEvent("mini_admin:spectate", userSource, targetPlayer, GetPlayerName(targetPlayer))
+	else
+		print("non admin/mod (" .. GetPlayerName(userSource) .. ") tried to use /spectate")
+	end
+end)
 
 -- Rcon commands
 AddEventHandler('rconCommand', function(commandName, args)
@@ -362,7 +373,6 @@ AddEventHandler('rconCommand', function(commandName, args)
 			local reason = table.concat(args, " ")
 			-- show message
 		    TriggerClientEvent('chatMessage', -1, "SYSTEM", {255, 0, 0}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
-
 			-- send discord message
 			local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
 				PerformHttpRequest(url, function(err, text, headers)
@@ -388,9 +398,9 @@ AddEventHandler('rconCommand', function(commandName, args)
 				DropPlayer(targetPlayer, "Banned: " .. reason)
 				-- refresh lua table of bans for this resource
 				fetchAllBans()
-				CancelEvent()
 			end)
 		end)
+		CancelEvent() -- prevent default rcon msg
 	elseif commandName == 'setadmin' then
 		if #args ~= 2 then
 			RconPrint("Usage: setadmin [user-id] [permission-level]\n")
@@ -508,10 +518,14 @@ fetchAllBans()
 		local playerEP = GetPlayerEP(tonumber(source))
 		for i = 1, #bans do
 			local bannedPlayer = bans[i]
-			if playerEP == bannedPlayer.endpoint then
-				print("player with EP: " .. playerEP .. " has been banned from your server and should not be allowed to connect!")
-				setReason("Banned: " .. bannedPlayer.reason .. ". You may file an appeal at usarpp.enjin.com.")
-				CancelEvent()
+			if bannedPlayer.endpoint then
+				if playerEP == bannedPlayer.endpoint then
+					print("player with EP: " .. playerEP .. " has been banned from your server!")
+					setReason("Banned: " .. bannedPlayer.reason .. ". You may file an appeal at usarpp.enjin.com.")
+					CancelEvent()
+				end
+			else
+				print("bannedCheck: banned player had no endpoint")
 			end
 		end
 	end)
