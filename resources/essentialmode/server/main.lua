@@ -204,6 +204,8 @@ commands['info'].cmd = function(source, args, user)
 end
 
 
+--[[ try Citizen.CreateThread(function() ... end) to reduce client crashes?
+
 local minutes = 30
 local interval = minutes * 60000
 function saveData()
@@ -229,3 +231,4 @@ function saveData()
 end
 
 saveData()
+--]]
