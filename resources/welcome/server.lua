@@ -29,7 +29,7 @@ function commandsText(source)
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "4) ^3/report <msg>  - report someone include id")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "5) ^3/me <msg>^0 - talks as yourself doing an action")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "6) ^3/ooc <msg>^0 - use this out of character")
-	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "7) ^3/givecash <i>d <amount>  - to give cash")
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "7) ^3/givecash [id] [amount]^0 - to give cash")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "8) ^3/ad <msg>^0 - create an advertisement")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "9) ^3/rules^0 to see the server rules")
 end
