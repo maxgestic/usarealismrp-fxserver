@@ -80,6 +80,7 @@ Citizen.CreateThread(function()
     end
 end)
 
+--[[
 --REDUCE NPC COUNT
 Citizen.CreateThread(function()
     -- These natives do not have to be called everyframe.
@@ -96,12 +97,13 @@ Citizen.CreateThread(function()
 
 		local playerPed = GetPlayerPed(-1)
 		local pos = GetEntityCoords(playerPed)
-		RemoveVehiclesFromGeneratorsInArea(pos['x'] - 500.0, pos['y'] - 500.0, pos['z'] - 500.0, pos['x'] + 500.0, pos['y'] + 500.0, pos['z'] + 500.0);
+		--RemoveVehiclesFromGeneratorsInArea(pos['x'] - 500.0, pos['y'] - 500.0, pos['z'] - 500.0, pos['x'] + 500.0, pos['y'] + 500.0, pos['z'] + 500.0);
 
 		Citizen.Wait(1)
 	end
 
 end)
+--]]
 
 -- NO DRIVE BY'S
 local passengerDriveBy = false
