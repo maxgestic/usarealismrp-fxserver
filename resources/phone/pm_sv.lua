@@ -102,6 +102,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 	print("userSource = " .. userSource)
 	local userIdent = GetPlayerIdentifiers(userSource)[1]
 	local targetPlayer = tonumber(data.id)
+	if not targetPlayer then return end
 	print("targetPlayer = " .. targetPlayer)
 	local targetPlayerName = GetPlayerName(targetPlayer)
 	print("targetPlayerName = " .. targetPlayerName)
