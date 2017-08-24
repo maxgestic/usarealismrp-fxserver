@@ -34,6 +34,15 @@ AddEventHandler("policeStation:giveWeapons", function(playerWeapons)
 				GiveWeaponToPed(GetPlayerPed(-1), tonumber(name), 1000, 0, false) -- name already is the hash
 			end
 		end
+		-- flashlight component
+		-- 0x359B7AAE combat pistol flashlight
+		-- 0x7BC4CDDC combat rifle flashlight
+		-- 0xC304849A combat pistol suppresor
+		-- 0xC164F53 carbine rifle grip
+		Citizen.Trace("giving flashlight components to cop...")
+		GiveWeaponComponentToPed(GetPlayerPed(-1), 1593441988 , 0x359B7AAE)
+		GiveWeaponComponentToPed(GetPlayerPed(-1), 2210333304, 0x7BC4CDDC)
+		GiveWeaponComponentToPed(GetPlayerPed(-1), 2210333304, 0xC164F53)
 	end)
 end)
 
@@ -117,6 +126,11 @@ AddEventHandler("policeStation:giveSheriffLoadout", function(model)
 			 GiveWeaponToPed(GetPlayerPed(-1), hash, 1000, 0, false) -- get hash given name of weapon
 		end
 		SetPedArmour(GetPlayerPed(-1), 100)
+		Citizen.Trace("giving flashlight components to cop...")
+		GiveWeaponComponentToPed(GetPlayerPed(-1), 1593441988 , 0x359B7AAE)
+		GiveWeaponComponentToPed(GetPlayerPed(-1), 2210333304, 0x7BC4CDDC)
+		GiveWeaponComponentToPed(GetPlayerPed(-1), 2210333304 , 0xC164F53) -- carbine rifle grip
+		--GiveWeaponComponentToPed(GetPlayerPed(-1), 1593441988 , 0xC304849A) combat pistol surpressor
 	end)
 end)
 
