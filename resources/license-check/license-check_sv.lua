@@ -61,12 +61,12 @@ AddEventHandler("license:searchForLicense", function(source, playerId)
 				TriggerClientEvent("mdt:vehicleInfo", source, nil)
 			end
 			--]]
-			print("checking #insurancePlans: " .. #insurancePlans)
-			if #insurancePlans > 0 then
-				if playerHasValidAutoInsurance(insurancePlans[1]) then
+			--print("checking #insurancePlans: " .. #insurancePlans)
+			if insurancePlans then
+				if playerHasValidAutoInsurance(insurancePlans) then
 					TriggerClientEvent("chatMessage", source, "", {0,141,155}, "^3Auto Insurance:")
-					TriggerClientEvent("chatMessage", source, "INSURER", {0,255,0}, insurancePlans[1].planName)
-					TriggerClientEvent("chatMessage", source, "EXPIRATION", {0,255,0}, padzero(insurancePlans[1].expireMonth, 2) .. "/" .. insurancePlans[1].expireYear)
+					TriggerClientEvent("chatMessage", source, "INSURER", {0,255,0}, insurancePlans.planName)
+					TriggerClientEvent("chatMessage", source, "EXPIRATION", {0,255,0}, padzero(insurancePlans.expireMonth, 2) .. "/" .. insurancePlans.expireYear)
 				end
 			else
 				TriggerClientEvent("chatMessage", source, "", {0,0,0}, "No auto insurance on record.")
@@ -74,11 +74,13 @@ AddEventHandler("license:searchForLicense", function(source, playerId)
 			TriggerClientEvent("chatMessage", source, "", {0,141,155}, "^3Criminal History:")
 			if #criminalHistory > 0 then
 				for i = 1, #criminalHistory do
+					if i == 15 then break end --  TODO: only shows first 15 charges (should show the MOST RECENT charges instead)
 					local crime = criminalHistory[i]
-					TriggerClientEvent("chatMessage", source, "DATE", {51,51,0}, crime.timestamp)
-					TriggerClientEvent("chatMessage", source, "CHARGE(S)", {51,51,0}, crime.charges)
-					TriggerClientEvent("chatMessage", source, "SENTENCE", {51,51,0}, crime.sentence .. " months")
-					TriggerClientEvent("chatMessage", source, "OFFICER", {51,51,0}, crime.arrestingOfficer)
+					local color = {187,94,187}
+					TriggerClientEvent("chatMessage", source, "DATE", color, crime.timestamp)
+					TriggerClientEvent("chatMessage", source, "CHARGE(S)", color, crime.charges)
+					TriggerClientEvent("chatMessage", source, "SENTENCE", color, crime.sentence .. " months")
+					TriggerClientEvent("chatMessage", source, "OFFICER", color, crime.arrestingOfficer)
 				end
 			else
 				TriggerClientEvent("chatMessage", source, "", {0,0,0}, "No criminal history.")
