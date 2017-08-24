@@ -56,33 +56,91 @@ Citizen.CreateThread(function()
 	--local position = 1
 	--local array = {"TEST", "TEST2", "TEST3", "TEST4"}
 
-	while true do
+    local menuName = "home"
 
+	while true do
 		if(menu) then
 			-- title of menu
 			TriggerEvent("airshopGUI:Title", "Seaview Aircrafts")
-				-- each vehicle the player owns
-                for i = 1, #ITEMS do
-    				TriggerEvent("airshopGUI:Option", "Retrieve ~y~"..ITEMS[i].name, function(cb)
-                        local item = ITEMS[i]
-    					if(cb) then
-    						Citizen.Trace("Trying to retrieve aircraft...")
-    						menu = false
-    						if not alreadyCalled then
-    							alreadyCalled = true
-                                -- call this event with the vehicle.price
-    							TriggerServerEvent("airshop:rentVehicle", item)
+
+            if menuName == "home" then
+
+                -- heli menu
+    			TriggerEvent("airshopGUI:Option", "Heli Menu", function(cb)
+    				if(cb) then
+    					menuName = "heli"
+    				end
+    			end)
+
+                -- plane menu
+    			TriggerEvent("airshopGUI:Option", "Plane Menu", function(cb)
+    				if(cb) then
+    					menuName = "plane"
+    				end
+    			end)
+
+            end
+
+            if menuName ~= "home" then
+                if menuName == "heli" then
+        			-- each helicopter item
+                    for i = 1, #(ITEMS.helicopters) do
+                        local item = ITEMS.helicopters[i]
+            			TriggerEvent("airshopGUI:Option", "Rent ~y~"..item.name.."~w~ - ~g~$"..comma_value(item.price), function(cb)
+            				if(cb) then
+            					Citizen.Trace("Trying to retrieve aircraft: " .. item.name)
+            					menu = false
+            					if not alreadyCalled then
+            						alreadyCalled = true
+                                    -- call this event with the vehicle.price
+            						TriggerServerEvent("airshop:rentVehicle", item)
+                                    menu = false
+            					end
+            				else
+            				end
+            			end)
+                    end
+                    -- back btn
+        			TriggerEvent("airshopGUI:Option", "Back", function(cb)
+        				if(cb) then
+                            menuName = "home"
+        				end
+        			end)
+                elseif menuName == "plane" then
+                    -- each plane item
+                    for i = 1, #(ITEMS.planes) do
+                        local item = ITEMS.planes[i]
+                        TriggerEvent("airshopGUI:Option", "Rent ~y~"..item.name.."~w~ - ~g~$"..comma_value(item.price), function(cb)
+                            if(cb) then
+                                Citizen.Trace("Trying to retrieve aircraft: " .. item.name)
                                 menu = false
-    						end
-    					else
-    					end
-    				end)
+                                if not alreadyCalled then
+                                    alreadyCalled = true
+                                    -- call this event with the vehicle.price
+                                    TriggerServerEvent("airshop:rentVehicle", item)
+                                    menu = false
+                                end
+                            else
+                            end
+                        end)
+                    end
+                    -- back btn
+        			TriggerEvent("airshopGUI:Option", "Back", function(cb)
+        				if(cb) then
+                            menuName = "home"
+        				end
+        			end)
                 end
+            end
+
+            -- close menu
 			TriggerEvent("airshopGUI:Option", "Close Menu", function(cb)
 				if(cb) then
 					menu = false
+                    menuName = "home"
 				end
 			end)
+
 			--[[
 			TriggerEvent("GUI:Bool", "bool", bool, function(cb)
 				bool = cb
@@ -107,20 +165,26 @@ local locations = {
 	{ ['x'] = -943.103, ['y'] = -2958.14, ['z'] = 13.9451}
 }
 
+local returnLocations = {
+    {x = -993.573, y = -3015.14, z = 13.9451}
+}
+
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
+        DrawMarker(1, returnLocations[1].x, returnLocations[1].y, returnLocations[1].z-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 76, 144, 114, 200, 0, 0, 0, 0)
 	    for _, info in pairs(locations) do
 			if GetDistanceBetweenCoords(info['x'], info['y'], info['z'],GetEntityCoords(GetPlayerPed(-1))) < 50 then
 				DrawMarker(1, info['x'], info['y'], info['z']-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
 				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), info['x'], info['y'], info['z'], true) < 3 then
-					DrawSpecialText("Press [ ~b~E~w~ ] to access the aircraft shop!")
+					DrawSpecialText("Press [ ~b~E~w~ ] to access the Seaview Aircraft shop!")
 					if IsControlPressed(0, 86) then
 						Citizen.Wait(500)
 						menu = true
 					end
 				else
                     menu = false
+                    alreadyCalled = false
                 end
 			end
 		end
@@ -155,3 +219,14 @@ AddEventHandler("airshop:spawnAircraft", function(hash)
         SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
     end)
 end)
+
+function comma_value(amount)
+  local formatted = amount
+  while true do
+    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+    if (k==0) then
+      break
+    end
+  end
+  return formatted
+end
