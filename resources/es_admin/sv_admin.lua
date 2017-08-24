@@ -354,7 +354,45 @@ end)
 
 -- Rcon commands
 AddEventHandler('rconCommand', function(commandName, args)
-	if commandName == "ban" then
+	if commandName == "freeze" then
+		if(GetPlayerName(tonumber(args[1])))then
+			local player = tonumber(args[1])
+
+			-- User permission check
+			TriggerEvent("es:getPlayerFromId", player, function(target)
+
+				if(frozen[player])then
+					frozen[player] = false
+				else
+					frozen[player] = true
+				end
+
+				TriggerClientEvent('es_admin:freezePlayer', player, frozen[player])
+
+				local state = "unfrozen"
+				if(frozen[player])then
+					state = "frozen"
+				end
+				RconPrint("You froze player " .. GetPlayerName(player) .. ".")
+				TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have been " .. state .. " by ^2an admin.")
+				TriggerEvent('es:getPlayers', function(players)
+					if players then
+						-- notify all admins/mods
+						for id, adminOrMod in pairs(players) do
+							if id and adminOrMod then
+								local adminOrModGroup = adminOrMod.getGroup()
+								if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
+									TriggerClientEvent('chatMessage', id, "", {0, 0, 0}, "The server console^0 froze " .. GetPlayerName(player))
+								end
+							end
+						end
+					end
+				end)
+			end)
+		else
+			RconPrint("INVALID PLAYER ID!")
+		end
+	elseif commandName == "ban" then
 		RconPrint("BAN COMMAND CALLED FROM RCON!")
 		if #args < 2 then
 			RconPrint("Usage: ban [user-id] [reason]\n")
