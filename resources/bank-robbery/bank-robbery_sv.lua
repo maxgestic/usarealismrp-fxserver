@@ -136,3 +136,12 @@ function comma_value(amount)
   end
   return formatted
 end
+
+AddEventHandler('rconCommand', function(commandName, args)
+	if commandName == "closebank" then
+		closed = true
+		RconPrint("You have closed the bank! Nobody should be able to rob it!")
+		CancelEvent()
+		return
+	end
+end)
