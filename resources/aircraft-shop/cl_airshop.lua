@@ -1,5 +1,6 @@
 local menu = false
 local alreadyCalled = false
+local rental = {}
 
 RegisterNetEvent("airshopGUI:Title")
 AddEventHandler("airshopGUI:Title", function(title)
@@ -95,6 +96,7 @@ Citizen.CreateThread(function()
                                     -- call this event with the vehicle.price
             						TriggerServerEvent("airshop:rentVehicle", item)
                                     menu = false
+                                    rental = item
             					end
             				else
             				end
@@ -119,6 +121,7 @@ Citizen.CreateThread(function()
                                     -- call this event with the vehicle.price
                                     TriggerServerEvent("airshop:rentVehicle", item)
                                     menu = false
+                                    rental = item
                                 end
                             else
                             end
@@ -172,7 +175,7 @@ local returnLocations = {
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-        DrawMarker(1, returnLocations[1].x, returnLocations[1].y, returnLocations[1].z-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 76, 144, 114, 200, 0, 0, 0, 0)
+        DrawMarker(1, returnLocations[1].x, returnLocations[1].y, returnLocations[1].z-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 76, 144, 114, 200, 0, 0, 0, 0) -- for returning the rental
 	    for _, info in pairs(locations) do
 			if GetDistanceBetweenCoords(info['x'], info['y'], info['z'],GetEntityCoords(GetPlayerPed(-1))) < 50 then
 				DrawMarker(1, info['x'], info['y'], info['z']-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
@@ -188,8 +191,43 @@ Citizen.CreateThread(function()
                 end
 			end
 		end
+        if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), returnLocations[1].x, returnLocations[1].y, returnLocations[1].z, true) < 5 then
+            DrawSpecialText("Press [ ~b~E~w~ ] to return your aircraft rental!")
+            if IsControlPressed(0, 86) then
+                Citizen.Wait(500)
+                --if rental.price then
+                    local vehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
+                    local hash = GetEntityModel(vehicle)
+                    for i = 1, #ITEMS.helicopters do
+                        local item = ITEMS.helicopters[i]
+                        if item.hash == hash then
+                            TriggerServerEvent("airshop:returnedVehicle", item)
+                            Citizen.Trace("found matching model")
+                            SetEntityAsMissionEntity( vehicle, true, true )
+                            deleteCar( vehicle )
+                            break
+                        end
+                    end
+                    for i = 1, #ITEMS.planes do
+                        local item = ITEMS.planes[i]
+                        if item.hash == hash then
+                            TriggerServerEvent("airshop:returnedVehicle", item)
+                            Citizen.Trace("found matching model")
+                            SetEntityAsMissionEntity( vehicle, true, true )
+                            deleteCar( vehicle )
+                            break
+                        end
+                    end
+                    --rental = {}
+                --end
+            end
+        end
 	end
 end)
+
+function deleteCar( entity )
+    Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( entity ) )
+end
 
 function DrawSpecialText(m_text)
     ClearPrints()

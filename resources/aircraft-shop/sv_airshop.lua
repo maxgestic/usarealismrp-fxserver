@@ -19,3 +19,17 @@ AddEventHandler("airshop:rentVehicle", function(vehicle)
         end
     end)
 end)
+
+RegisterServerEvent("airshop:returnedVehicle")
+AddEventHandler("airshop:returnedVehicle", function(item)
+    local userSource = tonumber(source)
+    TriggerEvent("es:getPlayerFromId", userSource, function(user)
+        local returnAmount = .25*item.price
+        local rounded = round(returnAmount, 0)
+        user.addMoney(rounded)
+    end)
+end)
+
+function round(num, numDecimalPlaces)
+  return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+end
