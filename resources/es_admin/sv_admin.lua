@@ -399,7 +399,8 @@ AddEventHandler('rconCommand', function(commandName, args)
 			CancelEvent()
 			return
 		end
-		RconPrint("id = " .. args[1])
+		RconPrint("banning player = " .. GetPlayerName(tonumber(args[1])))
+		RconPrint("\nid = " .. args[1])
 		-- ban player
 		TriggerEvent('es:exposeDBFunctions', function(GetDoc)
 			-- get info from command
@@ -409,6 +410,11 @@ AddEventHandler('rconCommand', function(commandName, args)
 			local targetPlayerName = GetPlayerName(targetPlayer)
 			table.remove(args, 1) -- remove id
 			local reason = table.concat(args, " ")
+			local allPlayerIdentifiers = GetPlayerIdentifiers(targetPlayer)
+			RconPrint("\nPlayer Identifiers:")
+			for i = 1, #allPlayerIdentifiers do
+				RconPrint("\n#"..i..": " .. allPlayerIdentifiers[i])
+			end
 			-- show message
 		    TriggerClientEvent('chatMessage', -1, "SYSTEM", {255, 0, 0}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
 			-- send discord message
@@ -429,8 +435,8 @@ AddEventHandler('rconCommand', function(commandName, args)
 					}
 				}), { ["Content-Type"] = 'application/json' })
 			-- update db
-			GetDoc.createDocument("bans",  {name = targetPlayerName, endpoint = GetPlayerEP(targetPlayer), banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
-				print("player banned!")
+			GetDoc.createDocument("bans",  {name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+				RconPrint("player banned!")
 				-- drop player from session
 				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
 				DropPlayer(targetPlayer, "Banned: " .. reason)
