@@ -52,8 +52,8 @@ TriggerEvent('es:addCommand', 'dispatch', function(source, args, user)
 	TriggerClientEvent("dispatch:setWaypoint", userSource, tonumber(target))
 end)
 
---[[
--- /barrier
+
+-- /cone barrier
 TriggerEvent("es:addCommand", 'cone', function(source)
 	TriggerEvent('es:getPlayerFromId', source, function(user)
        if user.getJob() == "sheriff" or user.getJob() == "ems" then -- set police job can also use [ user.permission_level >= 2 ] in place of job if need be
@@ -62,6 +62,15 @@ TriggerEvent("es:addCommand", 'cone', function(source)
     end)
 end)
 
+TriggerEvent("es:addCommand", 'pickup', function(source)
+	TriggerEvent('es:getPlayerFromId', source, function(user)
+       if user.getJob() == "sheriff" or user.getJob() == "ems" then -- set police job can also use [ user.permission_level >= 2 ] in place of job if need be
+          TriggerClientEvent('c_removeCones', source)
+       end
+    end)
+end)
+
+--[[
 -- /spikestrip
 TriggerEvent('es:addCommand', 'spikestrip', function(source) -- usage /spike in chat maybe change to a hot key at later date
   TriggerEvent('es:getPlayerFromId', source, function(user)

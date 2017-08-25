@@ -1,3 +1,5 @@
+local spawnedCones = {}
+
 RegisterNetEvent("dispatch:setWaypoint")
 AddEventHandler("dispatch:setWaypoint", function(targetServerId)
     local targetPed = GetPlayerFromServerId(targetServerId)
@@ -9,11 +11,16 @@ AddEventHandler("dispatch:setWaypoint", function(targetServerId)
     Citizen.Trace("waypoint set!")
 end)
 
---[[
+
 -- barrier
 RegisterNetEvent('c_setCone')
 AddEventHandler('c_setCone', function()
     SetConeOnGround()
+end)
+
+RegisterNetEvent('c_removeCones')
+AddEventHandler('c_removeCones', function()
+    removeCones()
 end)
 
 function SetConeOnGround()
@@ -25,8 +32,19 @@ function SetConeOnGround()
     end
     local object = CreateObject(barrier, x, y, z-1, true, true, false) -- x+1
     PlaceObjectOnGroundProperly(object)
+    table.insert(spawnedCones, object)
 end
 
+function removeCones()
+    for i = 1, #spawnedCones do
+        local cone = spawnedCones[i]
+        SetEntityAsMissionEntity(cone, true, true)
+        DeleteObject(cone)
+    end
+    spawnedCones = {}
+end
+
+--[[
 -- spike strip
 RegisterNetEvent('c_setSpike')
 AddEventHandler('c_setSpike', function()
