@@ -48,6 +48,7 @@ local whitelistedPolice = {
 		{name = "T. Williams (tarrew)", identifier = "steam:110000106ea286b", permission = 1},
 		{name = "K. Moretti", identifier = "steam:11000010fcdb628", permission = 1},
 		{name = "Jay Smiths", identifier = "license:a6477200f8c0e0c9e0f53fe43c4336d731a7fbfb", permission = 1},
+		{name = "Jay Smiths", identifier = "steam:1100001183f11e1", permission = 1},
 		{name = "Kodak Drucci", identifier = "steam:11000010c4a86e6", permission = 1},
 		{name = "Brian Orian", identifier = "license:4b6ff175a02cdc955ebba7c17713c23209cc99dd", permission = 1},
 		{name = "Danny McNulty (Matty_g)", identifier = "steam:1100001085db067", permission = 1}
