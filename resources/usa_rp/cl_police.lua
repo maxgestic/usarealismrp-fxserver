@@ -87,15 +87,15 @@ AddEventHandler("police:ticket", function(amount, reason, fromPlayerId)
     DrawTicketNotification(tostring(amount), reason)
     Citizen.CreateThread(function()
         while not responded do
-            Citizen.Wait(1)
+            Citizen.Wait(0)
             DrawSpecialText("Pay ticket of $" .. amount .. "? ~g~Y~w~/~r~N" )
         	if IsControlJustPressed(1, 246) then -- Y key
                 Citizen.Trace("player wants to pay ticket!")
-                responded = not responded
+                responded = true
                 TriggerServerEvent("police:payTicket", fromPlayerId, amount, true) -- remove money & notify officer of signature
             elseif IsControlJustPressed(1, 249) then -- N key
                 Citizen.Trace("player does not want to pay ticket!")
-                responded = not responded
+                responded = true
                 TriggerServerEvent("police:payTicket", fromPlayerId, amount, false) -- notify officer of denial to sign
             end
         end
