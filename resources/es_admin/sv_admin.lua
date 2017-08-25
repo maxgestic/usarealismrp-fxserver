@@ -96,7 +96,15 @@ TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, user)
 					reason = table.concat(reason, " ")
 				end
 
-				-- send discord notification
+				-- send discord message
+				local targetPlayerName = GetPlayerName(player)
+				local allPlayerIdentifiers = GetPlayerIdentifiers(player)
+				local desc = "**Display Name:** " .. targetPlayerName
+				for i = 1, #allPlayerIdentifiers do
+					desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
+				end
+				desc = desc .. " \n**Reason:** " ..reason:gsub("Kicked: ", "").. " \n**Kicked By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
+
 				local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
 						PerformHttpRequest(url, function(err, text, headers)
 							if text then
@@ -105,7 +113,7 @@ TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, user)
 						end, "POST", json.encode({
 							embeds = {
 								{
-									description = "**Display Name:** " ..GetPlayerName(player).. " \n**Identifier:** " ..target.getIdentifier().. " \n**Reason:** " ..reason:gsub("Kicked: ", "").. " \n**Kicked By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time()),
+									description = desc,
 									color = 16777062,
 									author = {
 										name = "User Kicked From The Server"
@@ -418,6 +426,11 @@ AddEventHandler('rconCommand', function(commandName, args)
 			-- show message
 		    TriggerClientEvent('chatMessage', -1, "SYSTEM", {255, 0, 0}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
 			-- send discord message
+			local desc = "**Display Name:** " .. targetPlayerName
+			for i = 1, #allPlayerIdentifiers do
+				desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
+			end
+			desc = desc .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** Console\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
 			local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
 				PerformHttpRequest(url, function(err, text, headers)
 					if text then
@@ -426,7 +439,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 				end, "POST", json.encode({
 					embeds = {
 						{
-							description = "**Display Name:** " ..targetPlayerName.. " \n**Identifier:** " .. GetPlayerIdentifiers(targetPlayer)[1] .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** Console\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time()),
+							description = desc,
 							color = 14750740,
 							author = {
 								name = "User Banned From The Server"
@@ -587,7 +600,7 @@ fetchAllBans()
 			local banner = GetPlayerName(userSource)
 			local bannerId = GetPlayerIdentifiers(userSource)[1]
 			local targetPlayer = tonumber(args[2])
-			local targerPlayerName = GetPlayerName(targetPlayer)
+			local targetPlayerName = GetPlayerName(targetPlayer)
 			table.remove(args,1) -- remove /test
 			table.remove(args, 1) -- remove id
 			local reason = table.concat(args, " ")
@@ -601,6 +614,12 @@ fetchAllBans()
 		    TriggerClientEvent('chatMessage', -1, "SYSTEM", {255, 0, 0}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
 
 			-- send discord message
+			local desc = "**Display Name:** " .. targetPlayerName
+			for i = 1, #allPlayerIdentifiers do
+				desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
+			end
+			desc = desc .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
+
 			local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
 				PerformHttpRequest(url, function(err, text, headers)
 					if text then
@@ -609,7 +628,7 @@ fetchAllBans()
 				end, "POST", json.encode({
 					embeds = {
 						{
-							description = "**Display Name:** " ..GetPlayerName(targetPlayer).. " \n**Identifier:** " .. GetPlayerIdentifiers(targetPlayer)[1] .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time()),
+							description = desc,
 							color = 14750740,
 							author = {
 								name = "User Banned From The Server"
@@ -618,7 +637,7 @@ fetchAllBans()
 					}
 				}), { ["Content-Type"] = 'application/json' })
 			-- update db
-			GetDoc.createDocument("bans",  {name = targerPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+			GetDoc.createDocument("bans",  {name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
 				print("player banned!")
 				-- drop player from session
 				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
