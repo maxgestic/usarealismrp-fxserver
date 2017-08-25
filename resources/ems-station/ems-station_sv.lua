@@ -67,10 +67,10 @@ AddEventHandler('rconCommand', function(commandName, args)
                 end
             end
         else
-            RconPrint("\nHelp: whitelist [id] [type] where [type] can be 'ems' or 'police'")
+            --RconPrint("\nHelp: whitelist [id] [type] where [type] can be 'ems' or 'police'")
         end
 
-        RconPrint("\nError: failed to whitelist player " .. GetPlayerName(playerId) .. " for EMS.")
+        --RconPrint("\nError: failed to whitelist player " .. GetPlayerName(playerId) .. " for EMS.")
         CancelEvent()
     end
 end)

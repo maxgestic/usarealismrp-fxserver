@@ -54,17 +54,101 @@ local whitelistedPolice = {
 		{name = "Danny McNulty (Matty_g)", identifier = "steam:1100001085db067", permission = 1}
 }
 
-RegisterServerEvent("policeStation:checkWhitelist")
-AddEventHandler("policeStation:checkWhitelist", function()
-    local identifier = GetPlayerIdentifiers(source)[1]
-    for i = 1, #whitelistedPolice do
-        if identifier == whitelistedPolice[i].identifier then
-            TriggerClientEvent("policeStation:isWhitelisted", source)
+local whitelist = {}
+
+function mysplit(inputstr, sep)
+	if sep == nil then
+		sep = "%s"
+	end
+	local t={} ; i=1
+	for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+		t[i] = str
+		i = i + 1
+	end
+	return t
+end
+
+AddEventHandler('rconCommand', function(commandName, args)
+    if commandName:lower() == 'whitelist' then
+        local playerId = table.remove(args, 1)
+        local type = table.concat(args, ' ')
+
+        if not GetPlayerName(playerId) then
+            RconPrint("\nError: player with id #" .. playerId .. " does not exist!")
+            CancelEvent()
             return
         end
+
+        if type == "police" then
+            local ids = GetPlayerIdentifiers(playerId)
+            if ids then
+                for i = 1, #ids do
+                    if string.find(ids[i], "license:") then
+							updateWhitelist(ids[i])
+                            addToWhitelistRoster("("..GetPlayerName(playerId).."::"..ids[i]..")")
+                            RconPrint("\nWhitelisted player " .. GetPlayerName(playerId) .. " for POLICE!")
+                            CancelEvent()
+                            return
+						end
+                end
+            end
+        else
+            --RconPrint("\nHelp: whitelist [id] [type] where [type] can be 'ems' or 'police'")
+        end
+
+        --RconPrint("\nError: failed to whitelist player " .. GetPlayerName(playerId) .. " for POLICE.")
+        CancelEvent()
     end
-    -- not whitelistedPolice
-    TriggerClientEvent("policeStation:notify", source, "You must apply for police/ems at ~y~usarrp.enjin.com!")
+end)
+
+function addToWhitelistRoster(addItem)
+	content = LoadResourceFile(GetCurrentResourceName(), "whitelist-roster.txt")
+	if string.len(content) > 1 then
+		content = content.."|"..addItem
+	else
+		content = content..""..addItem
+	end
+	SaveResourceFile("police-station", "whitelist-roster.txt", content, -1)
+end
+
+function updateWhitelist(addItem)
+	whitelist = {}
+	content = LoadResourceFile(GetCurrentResourceName(), "whitelist.txt")
+	if not addItem then
+		for index,value in ipairs(mysplit(content, "|")) do
+			whitelist[index] = value
+		end
+	else
+		if string.len(content) > 1 then
+			content = content.."|"..addItem
+		else
+			content = content..""..addItem
+		end
+		for index,value in ipairs(mysplit(content, "|")) do
+			whitelist[index] = value
+		end
+	end
+	SaveResourceFile("police-station", "whitelist.txt", content, -1)
+end
+
+updateWhitelist()
+
+RegisterServerEvent("policeStation:checkWhitelist")
+AddEventHandler("policeStation:checkWhitelist", function()
+	local playerIdentifiers = GetPlayerIdentifiers(source)
+	local playerGameLicense = ""
+	for i = 1, #playerIdentifiers do
+	    if string.find(playerIdentifiers[i], "license:") then
+	        playerGameLicense = playerIdentifiers[i]
+	    end
+	end
+	for j = 1, #whitelist do
+	    if playerGameLicense == whitelist[j] then
+	        TriggerClientEvent("policeStation:isWhitelisted", source)
+	        return
+	    end
+	end
+	TriggerClientEvent("policeStation:notify", source, "~y~You are not whitelisted for POLICE. Apply at ~b~usarrp.enjin.com~w~.")
 end)
 
 -- this command is to get your cop weapons back after dying
@@ -118,27 +202,4 @@ AddEventHandler("policeStation:giveCivStuff", function()
         TriggerClientEvent("policeStation:giveCivLoadout", userSource, user.getCharacters(), playerWeapons)
         user.setJob("civ")
     end)
-end)
-
--- add rcon command for white listing:
-AddEventHandler('rconCommand', function(commandName, args)
-    if commandName:lower() == 'whitelist' then
-        local playerId = table.remove(args, 1)
-        local type = table.concat(args, ' ')
-
-		if tonumber(playerId) ~= nil and type then
-	        if type == "police" then
-				local identifier = GetPlayerIdentifiers(playerId)[1]
-				local person = {
-					name = GetPlayerName(playerId),
-					identifier = tostring(identifier),
-					permission = 1
-				}
-				print("whitelisting player for police, identifier: " .. person.identifier)
-				table.insert(whitelistedPolice, person)
-			end
-		end
-
-        CancelEvent()
-    end
 end)
