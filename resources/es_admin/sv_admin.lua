@@ -553,17 +553,21 @@ fetchAllBans()
 	-- check for player being banned
 	AddEventHandler('playerConnecting', function(name, setReason)
 		--local identifier = GetPlayerIdentifiers(source)[1]
-		local playerEP = GetPlayerEP(tonumber(source))
+		local allPlayerIdentifiers = GetPlayerIdentifiers(tonumber(source))
 		for i = 1, #bans do
 			local bannedPlayer = bans[i]
-			if bannedPlayer.endpoint then
-				if playerEP == bannedPlayer.endpoint then
-					print("player with EP: " .. playerEP .. " has been banned from your server!")
-					setReason("Banned: " .. bannedPlayer.reason .. ". You may file an appeal at usarpp.enjin.com.")
-					CancelEvent()
+			local allBannedPlayerIdentifiers = bannedPlayer.identifiers
+			for j = 1, #allBannedPlayerIdentifiers do
+				local bannedPlayerId = allBannedPlayerIdentifiers[j]
+				for k = 1, #allPlayerIdentifiers do
+					local connectingPlayerId = allPlayerIdentifiers[k]
+					if bannedPlayerId == connectingPlayerId then
+						print(GetPlayerName(tonumber(source)) .. " has been banned from your server and should not be able to connect!")
+						setReason("Banned: " .. bannedPlayer.reason .. ". You may file an appeal at usarpp.enjin.com.")
+						CancelEvent()
+						return
+					end
 				end
-			else
-				print("bannedCheck: banned player had no endpoint")
 			end
 		end
 	end)
@@ -581,6 +585,12 @@ fetchAllBans()
 			table.remove(args,1) -- remove /test
 			table.remove(args, 1) -- remove id
 			local reason = table.concat(args, " ")
+			local allPlayerIdentifiers = GetPlayerIdentifiers(targetPlayer)
+			print("#allPlayerIdentifiers = " .. #allPlayerIdentifiers)
+			for i = 1, #allPlayerIdentifiers do
+				print("allPlayerIdentifiers[i] = " .. allPlayerIdentifiers[i])
+			end
+
 			-- show message
 		    TriggerClientEvent('chatMessage', -1, "SYSTEM", {255, 0, 0}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
 
@@ -602,7 +612,7 @@ fetchAllBans()
 					}
 				}), { ["Content-Type"] = 'application/json' })
 			-- update db
-			GetDoc.createDocument("bans",  {name = targerPlayerName, endpoint = GetPlayerEP(targetPlayer), banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%d-%m-%Y %H:%M:%S', os.time())}, function()
+			GetDoc.createDocument("bans",  {name = targerPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
 				print("player banned!")
 				-- drop player from session
 				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
