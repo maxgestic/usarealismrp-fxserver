@@ -193,7 +193,7 @@ function motorcycleMenu()
 	Menu.addButton("Dinka Enduro ($5,500)","buyVehicle","1753414259:5500:Dinka Enduro")
 	Menu.addButton("Dinka Thrust ($23,500)","buyVehicle","1836027715:23500:Dinka Thrust")
 	Menu.addButton("LCC Sanctus ($225,000)","buyVehicle","1491277511:225000:LCC Sanctus")
-	Menu.addButton("Nagasaki Chimera ($35,000)","buyVehicle","67744871:35000:Nagasaki Chimera")
+	--Menu.addButton("Nagasaki Chimera ($35,000)","buyVehicle","67744871:35000:Nagasaki Chimera")
 	Menu.addButton("Nagasaki Carbon RS ($30,000)","buyVehicle","11251904:30000:Nagasaki Carbon RS")
 
 end
