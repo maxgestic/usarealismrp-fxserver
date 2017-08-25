@@ -338,6 +338,8 @@ Citizen.CreateThread(function()
 end)
 
 local emergencySkins = {
+	-- add gang unit skin here (chemsec)
+	{name = "s_m_m_chemsec_01", type="cop"},
 	{name = "S_M_Y_HwayCop_01", type="cop"},
 	{name = "s_m_y_sheriff_01", type="cop"},
 	{name = "s_f_y_sheriff_01", type="cop"},
