@@ -2,6 +2,10 @@
 --local markerX, markerY, markerZ = 318.781, -558.644, 27.6 -- LS 1
 local markerX, markerY, markerZ = 207.106, -1641.45, 28.5 -- LS 2
 
+local healingStations = {
+
+}
+
 RegisterNetEvent("emsStation:giveCivWeapons")
 AddEventHandler("emsStation:giveCivWeapons", function(playerWeapons)
 	Citizen.Trace("#playerWeapons = " .. #playerWeapons)
@@ -117,7 +121,7 @@ function toggleDuty()
 	Menu.addButton("Randomize", "randomizeComponents", nil)
 	Menu.addButton("Male Paramedic","giveEmsLoadout", "male:paramedic")
 	Menu.addButton("Female Paramedic","giveEmsLoadout", "female:paramedic")
-	Menu.addButton("Male Fire","giveEmsLoadout", "male:fire")
+	--Menu.addButton("Male Fire","giveEmsLoadout", "male:fire")
 	Menu.addButton("Civilian","giveCivLoadout", nil)
 	Menu.addButton("Cancel","cancel", nil)
 
@@ -148,30 +152,22 @@ function getPlayerDistanceFromShop(shopX,shopY,shopZ)
 end
 
 Citizen.CreateThread(function()
-
 	while true do
-
 		Citizen.Wait(0)
 		DrawMarker(1, markerX, markerY, markerZ, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
 		if getPlayerDistanceFromShop(markerX,markerY,markerZ) < 3  and not playerNotified then
 			DrawSpecialText("Press [ ~g~E~w~ ] to go on/off duty!")
 		end
 		if IsControlJustPressed(1,Keys["E"]) then
-
 			if getPlayerDistanceFromShop(markerX,markerY,markerZ) < 3 then
-
-				toggleDuty()
-
-				Menu.hidden = false
-
+				TriggerServerEvent("ems:checkWhitelist")
+				--toggleDuty()
+				--Menu.hidden = false
 			end
-
 		elseif getPlayerDistanceFromShop(markerX,markerY,markerZ) > 3 then
 			Menu.hidden = true
 		end
-
 		Menu.renderGUI()     -- Draw menu on each tick if Menu.hidden = false
-
 	end
 end)
 
@@ -181,3 +177,10 @@ function DrawSpecialText(m_text)
 	AddTextComponentString(m_text)
 	DrawSubtitleTimed(250, 1)
 end
+
+-- whitelist
+RegisterNetEvent("ems:playerWasWhitelisted")
+AddEventHandler("ems:playerWasWhitelisted", function()
+	toggleDuty()
+	Menu.hidden = false
+end)
