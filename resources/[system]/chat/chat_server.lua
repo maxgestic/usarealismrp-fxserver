@@ -2,7 +2,8 @@ RegisterServerEvent('chatCommandEntered')
 RegisterServerEvent('chatMessageEntered')
 
 AddEventHandler('chatMessageEntered', function(name, color, message)
-    print("message = " .. message)
+    --print("message = " .. message)
+    if message == "" or message == " " then CancelEvent() return end
     if not name or not color or not message or #color ~= 3 then
         return
     end
