@@ -58,12 +58,15 @@ end)
 
 RegisterServerEvent("usa_rp:spawnPlayer")
 AddEventHandler("usa_rp:spawnPlayer", function()
+    local usingRandomSkin = false
     print("inside of usa_rp:spawnPlayer!")
-    local userSource = source
+    local userSource = tonumber(source)
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
-        local model = user.getModel()
-        if model == "a_m_y_skater_01" then
+        --local model = user.getModel()
+        local character = user.getCharacters()
+        if not character.hash then
             model = civSkins[math.random(1,#civSkins)]
+            TriggerClientEvent("rules:open", userSource)
         end
         local job = user.getJob() -- add spawn point for taxi and tow jobs
         local weapons = {}

@@ -16,5 +16,5 @@ files {
 dependency 'essentialmode'
 
 -- General
-client_scripts {'client.lua', 'cl_police.lua'}
-server_scripts {'server.lua', 'sv_police.lua'}
+client_scripts {'client.lua', 'cl_police.lua', 'cl_ems.lua'}
+server_scripts {'server.lua', 'sv_police.lua', 'sv_ems.lua'}

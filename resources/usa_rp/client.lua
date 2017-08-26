@@ -11,8 +11,8 @@ AddEventHandler('usa_rp:playerLoaded', function()
 end)
 
 RegisterNetEvent('usa_rp:spawn')
-AddEventHandler('usa_rp:spawn', function(model, job, spawn, weapons, character)
-	exports.spawnmanager:spawnPlayer({x = spawn.x, y = spawn.y, z = spawn.z, model = model, heading = 0.0}, function()
+AddEventHandler('usa_rp:spawn', function(defaultModel, job, spawn, weapons, character)
+	exports.spawnmanager:spawnPlayer({x = spawn.x, y = spawn.y, z = spawn.z, model = defaultModel, heading = 0.0}, function()
         -- give customized character
         if character.hash then
             local name, model
