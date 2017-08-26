@@ -64,15 +64,18 @@ AddEventHandler("usa_rp:spawnPlayer", function()
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
         --local model = user.getModel()
         local character = user.getCharacters()
+        local job = user.getJob() -- add spawn point for taxi and tow jobs
+        local weapons = {}
+        local spawn = civilianSpawns[math.random(1,#civilianSpawns)] -- choose random spawn if civilian
         if not character.hash then
             model = civSkins[math.random(1,#civSkins)]
             TriggerClientEvent("rules:open", userSource)
+            -- put in clothing store since they are new and don't have one saved
+            spawn.x = 425.073
+            spawn.y = -806.207
+            spawn.z = 29.4911
         end
-        local job = user.getJob() -- add spawn point for taxi and tow jobs
-        local weapons = {}
-        local spawn = {x = 0, y = 0, z = 0}
         if job == "civ" then
-            spawn = civilianSpawns[math.random(1,#civilianSpawns)] -- choose random spawn if civilian
             weapons = user.getWeapons()
             if not weapons then
                 weapons = {}

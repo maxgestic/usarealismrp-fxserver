@@ -203,6 +203,7 @@ AddEventHandler("CS:ShowMainMenu", function()
 			TriggerServerEvent("mini:save", character)
 			Citizen.Trace("calling server function: giveMeMyWeaponsPlease...")
 			TriggerServerEvent("mini:giveMeMyWeaponsPlease")
+			menu = false
 		else
 
 		end
