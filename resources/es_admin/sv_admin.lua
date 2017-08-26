@@ -3,6 +3,8 @@ local permission = {
 	ban = 4
 }
 
+local bans = {}
+
 -- Adding custom groups called owner, inhereting from superadmin. (It's higher then superadmin). And moderator, higher then user but lower then admin
 TriggerEvent("es:addGroup", "owner", "superadmin", function(group) end)
 TriggerEvent("es:addGroup", "mod", "user", function(group) end)
@@ -362,7 +364,36 @@ end)
 
 -- Rcon commands
 AddEventHandler('rconCommand', function(commandName, args)
-	if commandName == "freeze" then
+	if commandName == "unban" then
+		local identifierToUnban = args[1]
+		if not identifierToUnban then RconPrint("Usage: unban [identifier] ") CancelEvent() return end
+		for i = 1, #bans do
+			local bannedPlayer = bans[i]
+			local identifiers = bannedPlayer.identifiers
+			local docid = bannedPlayer._id
+			local docRev = bannedPlayer._rev
+			for j = 1, #identifiers do
+				if string.sub(identifiers[j],1,20) == string.sub(identifierToUnban,1,20) then
+					RconPrint("\nfound a matching identifer to unban for "..bannedPlayer.name.."!")
+					-- found a match, unban
+					PerformHttpRequest("http://127.0.0.1:5984/bans/"..docid.."?rev="..docRev, function(err, rText, headers)
+						if err == 0 then
+							RconPrint("\nrText = " .. rText)
+							RconPrint("\nerr = " .. err)
+						else
+							RconPrint("\nPlayer "..bannedPlayer.name.." has been unbanned!")
+							fetchAllBans()
+						end
+					end, "DELETE", "", {["Content-Type"] = 'application/json'})
+					CancelEvent()
+					return
+				end
+
+			end
+			RconPrint("\nNo match found for identifier: " .. identifierToUnban .. "!")
+			CancelEvent()
+		end
+	elseif commandName == "freeze" then
 		if(GetPlayerName(tonumber(args[1])))then
 			local player = tonumber(args[1])
 
@@ -545,7 +576,6 @@ AddEventHandler("es:adminCommandRan", function(source, command)
 end)
 
 --------------- BAN MANAGEMENT: -------------------
-local bans = {}
 
 function fetchAllBans()
 	print("fetching all bans...")
@@ -649,3 +679,11 @@ fetchAllBans()
 	end, function(source,args,user)
 		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
 	end)
+
+-- unban stuff im gunna need:
+--[[
+idents = GetPlayerIdentifiers(source)
+TriggerEvent('es:exposeDBFunctions', function(usersTable)
+usersTable.getDocumentByRow("dbnamehere", "identifier" , idents[1], function(result)
+docid = result._id (except probably change to the _rev instead)
+--]]
