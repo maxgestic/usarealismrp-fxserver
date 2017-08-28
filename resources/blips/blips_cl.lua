@@ -42,6 +42,7 @@ local blips = {
 	{ title="General Store", colour = 24 , id = 52, x=25.746, y=-1345.59, z=29.497 },
 	{ title="Sheriff's Office", colour = 38 , id = 60, x=451.255, y=-992.41, z=30.6896 },
 	{ title="Fire Department", colour = 59, id = 60, x=207.106, y=-1641.45, z=28.5 },
+	{ title="Hospital", colour = 48, id = 61, x = 307.63, y = -593.948, z = 42.2919 },
 	{ title="Strip Club", colour = 48, id = 121, x=129.607, y=-1299.83, z=29.2327 },
 	{ title="FTF", colour = 47, id = 88, x=140.577, y=-768.375, z=45.752 },
 	{ title="Airport", colour = 30, id = 307, x=-1329.32, y=-3045.92, z=13.944 },
