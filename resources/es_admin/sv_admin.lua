@@ -219,7 +219,7 @@ TriggerEvent('es:addGroupCommand', 'bring', "mod", function(source, args, user)
 							if id and adminOrMod then
 								local adminOrModGroup = adminOrMod.getGroup()
 								if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
-									TriggerClientEvent('chatMessage', id, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(source) .. "^0 has been brought by " .. GetPlayerName(player))
+									TriggerClientEvent('chatMessage', id, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been brought by " .. GetPlayerName(source))
 								end
 							end
 						end
