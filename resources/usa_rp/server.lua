@@ -109,11 +109,8 @@ AddEventHandler("usa_rp:spawnPlayer", function()
             spawn.y = -1641.33
             spawn.z = 29.292
             weapons = {"WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER"}
-        else
-            spawn = civilianSpawns[math.random(1,#civilianSpawns)] -- choose random spawn if civilian
-            weapons = {}
         end
-        if weapons then
+        if #weapons > 0 then
             print("#weapons = " .. #weapons)
         else
             print("user has no weapons")
