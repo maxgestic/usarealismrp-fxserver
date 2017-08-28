@@ -12,10 +12,23 @@ TriggerEvent('es:addCommand', 'admit', function(source, args, user)
         if not targetPlayerAdmissionTime or not reasonForAdmission or not GetPlayerName(targetPlayerId) then return end
         print("admitting patient to hospital!")
         TriggerClientEvent("ems:admitPatient", targetPlayerId)
-        TriggerClientEvent("ems:notify", targetPlayerId, targetPlayerAdmissionTime, reasonForAdmission)
-        TriggerClientEvent("ems:notify", userSource, targetPlayerAdmissionTime, reasonForAdmission)
+        TriggerClientEvent("ems:notifyHospitalized", targetPlayerId, targetPlayerAdmissionTime, reasonForAdmission)
+        TriggerClientEvent("ems:notifyHospitalized", userSource, targetPlayerAdmissionTime, reasonForAdmission)
         SetTimeout(targetPlayerAdmissionTime*60000, function()
             TriggerClientEvent("ems:releasePatient", targetPlayerId)
         end)
     end
+end)
+
+RegisterServerEvent("ems:checkPlayerMoney")
+AddEventHandler("ems:checkPlayerMoney", function()
+    local userSource = tonumber(source)
+    TriggerEvent("es:getPlayerFromId", userSource, function(user)
+        if user then
+            if user.getMoney() >= 500 then
+                user.removeMoney(500)
+                TriggerClientEvent("ems:healPlayer", userSource)
+            end
+        end
+    end)
 end)
