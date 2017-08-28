@@ -1,3 +1,5 @@
+var disableMouseScroll = true
+
 var documentWidth = document.documentElement.clientWidth;
 var documentHeight = document.documentElement.clientHeight;
 
@@ -26,15 +28,26 @@ $(function() {
         }
     });
 
-    $(document).mousemove(function(event) {
-        cursorX = event.pageX;
-        cursorY = event.pageY;
-        UpdateCursorPos();
-    });
+        $(document).mousemove(function(event) {
+            if (disableMouseScroll == true) {
+                cursorX = event.pageX;
+                cursorY = event.pageY;
+                UpdateCursorPos();
+            }
+        });
 
     document.onkeyup = function (data) {
         if (data.which == 27) { // Escape key
             $.post('http://jail/escape', JSON.stringify({}));
+            disableMouseScroll = true
+            $("#cursor").show();
+            $("#jail-form-wrap").show();
+            $("#chargesWrap").hide();
+        } else if (data.which == 8) { // BACKSPACE
+            disableMouseScroll = true
+            $("#jail-form-wrap").show();
+            $("#chargesWrap").hide();
+            $("#cursor").show();
         }
     };
 
@@ -46,11 +59,22 @@ $(function() {
             sentence: $("#sentence").val(),
             charges: $("#charges").val()
         }));
+
         $("#id").val("");
         $("#name").val("");
         $("#sentence").val("");
         $("#charges").val("");
         $("#medications").val("");
         $("#disorders").val("");
+
     });
+
+    // show list of criminal/vehicle/hs codes
+    $("#chargesList").click(function(){
+        $("#jail-form-wrap").hide();
+        $("#chargesWrap").show();
+        disableMouseScroll = false
+        $("#cursor").hide();
+    });
+
 });

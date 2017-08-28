@@ -10,6 +10,7 @@ local menuEnabled = false
 function EnableGui(enable)
     SetNuiFocus(enable)
     menuEnabled = enable
+    SetPedCanSwitchWeapon(GetPlayerPed(-1), (not menuEnabled))
 
     SendNUIMessage({
         type = "enableui",
@@ -27,6 +28,7 @@ end)
 RegisterNetEvent("jail:openMenu")
 AddEventHandler("jail:openMenu", function()
     EnableGui(true)
+    SetPedCanSwitchWeapon(GetPlayerPed(-1), false)
 end)
 
 RegisterNUICallback('submit', function(data, cb)
@@ -46,6 +48,8 @@ end)
 Citizen.CreateThread(function()
     while true do
         if menuEnabled then
+            DisableControlAction(29, 241, menuEnabled) -- scroll up
+            DisableControlAction(29, 242, menuEnabled) -- scroll down
             DisableControlAction(0, 1, menuEnabled) -- LookLeftRight
             DisableControlAction(0, 2, menuEnabled) -- LookUpDown
             DisableControlAction(0, 142, menuEnabled) -- MeleeAttackAlternate
