@@ -17,8 +17,34 @@ function Click(x, y) {
     element.focus().click();
 }
 
+function inventoryBackBtn() {
+    $(".sidenav .inventory-item").remove();
+    // initiliaze home menu
+    // show interaction menu items
+    $(".sidenav a").show();
+}
+
+function populateInventory(inventory, weapons, licenses) {
+    $(".sidenav a").hide();
+    for(i in licenses) {
+        var licenseName = licenses[i].name;
+        $(".sidenav").append("<a class='inventory-item'>" + licenseName + "</a>");
+    }
+    for(i in inventory) {
+        var inventoryItemName = inventory[i].name;
+        $(".sidenav").append("<a class='inventory-item'>" + inventoryItemName + "</a>");
+    }
+    for(i in weapons) {
+        var weaponName = weapons[i].name;
+        $(".sidenav").append("<a class='inventory-item'>" + weaponName + "</a>");
+    }
+    // back btn
+    $(".sidenav").append("<a onclick='inventoryBackBtn()' id='inventory-back-btn' class='inventory-item'>Back</a>");
+}
+
 /* Set the width of the side navigation to 0 */
 function closeNav() {
+    $(".sidenav .inventory-item").remove();
     document.getElementById("mySidenav").style.width = "0";
 }
 
@@ -28,11 +54,22 @@ $(function() {
             cursor.style.display = event.data.enable ? "block" : "none";
             document.body.style.display = event.data.enable ? "block" : "none";
             /* Set the width of the side navigation to 250px */
-            document.getElementById("mySidenav").style.width = "250px";
-            $("#player-name").text(event.data.playerName);
+            document.getElementById("mySidenav").style.width = "350px";
+            // show interaction menu items
+            $(".sidenav a").show();
+            // show targetted player name
+            //$("#player-name").html(event.data.playerName);
         } else if (event.data.type == "click") {
             // Avoid clicking the cursor itself, click 1px to the top/left;
             Click(cursorX - 1, cursorY - 1);
+        } else if (event.data.type == "inventoryLoaded") {
+            var inventory = event.data.inventory;
+            var weapons = event.data.weapons;
+            var licenses = event.data.licenses;
+            //alert("inventory.length = " + inventory.length);
+            //alert("weapons.length = " + weapons.length);
+            //alert("licenses.length = " + licenses.length);
+            populateInventory(inventory, weapons, licenses);
         }
     });
 
@@ -53,6 +90,15 @@ $(function() {
 
     $("#phone-btn").click(function(){
         $.post('http://test/showPhone', JSON.stringify({}));
+        closeNav();
+    });
+
+    $("#inventory-btn").click(function(){
+        $.post('http://test/loadInventory', JSON.stringify({}));
+    });
+
+    $("#close-btn").click(function(){
+        $.post('http://test/escape', JSON.stringify({}));
         closeNav();
     });
 

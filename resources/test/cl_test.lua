@@ -4,7 +4,28 @@ end)
 
 RegisterNUICallback('showPhone', function(data, cb)
     TriggerEvent("test:escapeFromCSharp")
+    TriggerServerEvent("interaction:checkForPhone")
+end)
+
+RegisterNUICallback('loadInventory', function(data, cb)
+    Citizen.Trace("inventory loading...")
+    TriggerServerEvent("interaction:loadInventoryForInteraction")
+end)
+
+RegisterNetEvent("interaction:playerHadPhone")
+AddEventHandler("interaction:playerHadPhone", function()
     TriggerEvent("phone:openPhone")
+end)
+
+RegisterNetEvent("interaction:inventoryLoaded")
+AddEventHandler("interaction:inventoryLoaded", function(inventory, weapons, licenses)
+    Citizen.Trace("inventory loaded...")
+    SendNUIMessage({
+        type = "inventoryLoaded",
+        inventory = inventory,
+        weapons = weapons,
+        licenses = licenses
+    })
 end)
 
 Citizen.CreateThread(function()

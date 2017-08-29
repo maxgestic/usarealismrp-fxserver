@@ -16,3 +16,33 @@ AddEventHandler("test:cuff", function(playerId, playerName)
         end
     end)
 end)
+
+RegisterServerEvent("interaction:loadInventoryForInteraction")
+AddEventHandler("interaction:loadInventoryForInteraction", function()
+    print("loading inventory for interaction menu...")
+    local userSource = tonumber(source)
+    TriggerEvent("es:getPlayerFromId", userSource, function(user)
+        if user then
+            local inventory = user.getInventory()
+            local weapons = user.getWeapons()
+            local licenses = user.getLicenses()
+            TriggerClientEvent("interaction:inventoryLoaded", userSource, inventory, weapons, licenses)
+        else
+            print("interaction: user did not exist")
+        end
+    end)
+end)
+
+RegisterServerEvent("interaction:checkForPhone")
+AddEventHandler("interaction:checkForPhone", function()
+    local userSource = tonumber(source)
+    TriggerEvent("es:getPlayerFromId", userSource, function(user)
+        local inventory = user.getInventory()
+        for i = 1, #inventory do
+            local item = inventory[i]
+            if item.name == "Cell Phone" then
+                TriggerClientEvent("interaction:playerHadPhone", userSource)
+            end
+        end
+    end)
+end)
