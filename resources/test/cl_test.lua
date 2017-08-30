@@ -12,6 +12,68 @@ RegisterNUICallback('loadInventory', function(data, cb)
     TriggerServerEvent("interaction:loadInventoryForInteraction")
 end)
 
+RegisterNUICallback('playEmote', function(data, cb)
+    TriggerEvent("test:escapeFromCSharp")
+    --Citizen.Trace("setting voice level = " .. data.level)
+    local COP,SIT,CHAIR,KNEEL,MEDIC,NOTEPAD,TRAFFIC,PHOTO,CLIPBOARD,LEAN,HANGOUT,POT,FISH,PHONE,YOGA,BINO,CHEER,STATUE,JOG,FLEX,SITUP,PUSHUP,WELD,MECHANIC = 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24
+    local selected = data.emote
+    if selected == COP then
+        TriggerEvent("playCopEmote")
+    elseif selected == SIT then
+        TriggerEvent("playSitEmote")
+    elseif selected == CHAIR then
+        TriggerEvent("playChairEmote")
+    elseif selected == KNEEL then
+        TriggerEvent("playKneelEmote")
+    elseif selected == MEDIC then
+        TriggerEvent("playMedicEmote")
+    elseif selected == NOTEPAD then
+        TriggerEvent("playNotepadEmote")
+    elseif selected == TRAFFIC then
+        TriggerEvent("playTrafficEmote")
+    elseif selected == PHOTO then
+        TriggerEvent("playPhotoEmote")
+    elseif selected == CLIPBOARD then
+        TriggerEvent("playClipboardEmote")
+    elseif selected == LEAN then
+        TriggerEvent("playLeanEmote")
+    elseif selected == HANGOUT then
+        TriggerEvent("playHangOutEmote")
+    elseif selected == POT then
+        TriggerEvent("playPotEmote")
+    elseif selected == FISH then
+        TriggerEvent("playFishEmote")
+    elseif selected == PHONE then
+        TriggerEvent("playPhoneEmote")
+    elseif selected == YOGA then
+        TriggerEvent("playYogaEmote")
+    elseif selected == BINO then
+        TriggerEvent("playBinocularsEmote")
+    elseif selected == CHEER then
+        TriggerEvent("playCheeringEmote")
+    elseif selected == STATUE then
+        TriggerEvent("playStatueEmote")
+    elseif selected == JOG then
+        TriggerEvent("playJogEmote")
+    elseif selected == FLEX then
+        TriggerEvent("playFlexEmote")
+    elseif selected == SITUP then
+        TriggerEvent("playSitUpEmote")
+    elseif selected == PUSHUP then
+        TriggerEvent("playPushUpEmote")
+    elseif selected == WELD then
+        TriggerEvent("playWeldingEmote")
+    elseif selected == MECHANIC then
+        TriggerEvent("playMechanicEmote")
+    elseif selected == SMOKE then
+        TriggerEvent("playSmokeEmote")
+    elseif selected == DRINK then
+        TriggerEvent("playDrinkEmote")
+    elseif selected == CANCEL then
+        TriggerEvent("playCancelEmote")
+    end
+end)
+
 RegisterNUICallback('setVoipLevel', function(data, cb)
     TriggerEvent("test:escapeFromCSharp")
     --Citizen.Trace("setting voice level = " .. data.level)

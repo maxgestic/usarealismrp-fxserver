@@ -1,4 +1,7 @@
 var voipOptions = ["Yell", "Normal", "Whisper"];
+var emoteOptions = ["Cop", "Sit", "Chair", "Kneel", "Medic", "Notepad","Traffic", "Photo","Clipboard", "Lean", "Hangout", "Pot", "Fish", "Phone", "Yoga", "Bino", "Cheer", "Statue", "Jog",
+"Flex", "Sit up", "Push up", "Weld", "Mechanic"];
+var emoteItemsPerPage = 8;
 
 var disableMouseScroll = true;
 
@@ -31,6 +34,51 @@ function voipBackBtn() {
     // initiliaze home menu
     // show interaction menu items
     $(".sidenav a").show();
+}
+
+function emotePageBackBtn() {
+    $(".sidenav .emote-page-option").remove();
+    // initiliaze home menu
+    // show interaction menu items
+    $(".sidenav a").show();
+}
+
+function emoteBackBtn() {
+    $(".sidenav .emote-option").remove();
+    $(".sidenav .emote-page-option").show();
+    // initiliaze home menu
+    // show interaction menu items
+}
+
+function openEmotePage(pageNumber) {
+    $(".sidenav a").hide();
+    if (pageNumber == "1") {
+        for(var x = 0; x < emoteItemsPerPage; x++) {
+            $(".sidenav").append("<a onclick='' class='emote-option'>"+emoteOptions[x]+"</a>");
+        }
+    } else if (pageNumber == "2") {
+        for(var y = emoteItemsPerPage; y < (emoteItemsPerPage*2); y++) {
+            $(".sidenav").append("<a onclick='' class='emote-option'>"+emoteOptions[y]+"</a>");
+        }
+    } else if (pageNumber == "3") {
+        for(var z = (emoteItemsPerPage*2); z < (emoteItemsPerPage*3); z++) {
+            $(".sidenav").append("<a onclick='' class='emote-option'>"+emoteOptions[z]+"</a>");
+        }
+    }
+    //back btn
+    $(".sidenav").append("<a onclick='emoteBackBtn()' id='emote-back-btn' class='emote-option'>Back</a>");
+}
+
+function openEmoteMenu() {
+    $(".sidenav a").hide();
+    var size = emoteOptions.length;
+    var pageCount = Math.ceil(size / emoteItemsPerPage);
+    for(var x = 0; x < pageCount; x++) {
+        $(".sidenav").append("<a onclick='openEmotePage("+(x+1)+")' class='emote-page-option'>Emotes "+(x+1)+"</a>");
+    }
+    // back btn
+    // back btn
+    $(".sidenav").append("<a onclick='emotePageBackBtn()' id='emote-page-back-btn' class='emote-page-option'>Back</a>");
 }
 
 function openVoipMenu() {
@@ -72,6 +120,9 @@ function populateInventory(inventory, weapons, licenses) {
 function closeNav() {
     $(".sidenav .inventory-item").remove();
     $(".sidenav .voip-option").remove();
+    $(".sidenav .emote-option").remove();
+    $(".sidenav .emote-page-option").remove();
+    $(".sidenav .emote-option").remove();
     document.getElementById("mySidenav").style.width = "0";
 }
 
@@ -131,6 +182,10 @@ $(function() {
 
     $("#voip-btn").click(function(){
         openVoipMenu();
+    });
+
+    $("#emotes-btn").click(function(){
+        openEmoteMenu();
     });
 
 });
