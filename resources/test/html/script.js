@@ -1,4 +1,6 @@
-var disableMouseScroll = true
+var voipOptions = ["Yell", "Normal", "Whisper"];
+
+var disableMouseScroll = true;
 
 var documentWidth = document.documentElement.clientWidth;
 var documentHeight = document.documentElement.clientHeight;
@@ -24,6 +26,30 @@ function inventoryBackBtn() {
     $(".sidenav a").show();
 }
 
+function voipBackBtn() {
+    $(".sidenav .voip-option").remove();
+    // initiliaze home menu
+    // show interaction menu items
+    $(".sidenav a").show();
+}
+
+function openVoipMenu() {
+    $(".sidenav a").hide();
+    for(i in voipOptions) {
+        $(".sidenav").append("<a onclick='setVoip("+i+")' class='voip-option'>" + voipOptions[i] + "</a>");
+    }
+    // back btn
+    $(".sidenav").append("<a onclick='voipBackBtn()' id='voip-back-btn' class='voip-option'>Back</a>");
+}
+
+function setVoip(option) {
+    $.post('http://test/setVoipLevel', JSON.stringify({
+        level: option
+    }));
+
+    closeNav();
+}
+
 function populateInventory(inventory, weapons, licenses) {
     $(".sidenav a").hide();
     for(i in licenses) {
@@ -45,6 +71,7 @@ function populateInventory(inventory, weapons, licenses) {
 /* Set the width of the side navigation to 0 */
 function closeNav() {
     $(".sidenav .inventory-item").remove();
+    $(".sidenav .voip-option").remove();
     document.getElementById("mySidenav").style.width = "0";
 }
 
@@ -100,6 +127,10 @@ $(function() {
     $("#close-btn").click(function(){
         $.post('http://test/escape', JSON.stringify({}));
         closeNav();
+    });
+
+    $("#voip-btn").click(function(){
+        openVoipMenu();
     });
 
 });

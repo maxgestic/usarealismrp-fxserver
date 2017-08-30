@@ -12,6 +12,20 @@ RegisterNUICallback('loadInventory', function(data, cb)
     TriggerServerEvent("interaction:loadInventoryForInteraction")
 end)
 
+RegisterNUICallback('setVoipLevel', function(data, cb)
+    TriggerEvent("test:escapeFromCSharp")
+    --Citizen.Trace("setting voice level = " .. data.level)
+    local YELL, NORMAL, WHISPER = 0,1,2
+    local selected = data.level
+    if selected == YELL then
+        TriggerEvent("voip", "yell")
+    elseif selected == NORMAL then
+        TriggerEvent("voip","default")
+    elseif selected == WHISPER then
+        TriggerEvent("voip","whisper")
+    end
+end)
+
 RegisterNetEvent("interaction:playerHadPhone")
 AddEventHandler("interaction:playerHadPhone", function()
     TriggerEvent("phone:openPhone")
