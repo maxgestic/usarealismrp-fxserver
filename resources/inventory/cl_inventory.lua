@@ -2,7 +2,7 @@ local playerInventory = nil
 local showInventory = false
 local canRefresh = true
 local key = 167 -- n9 = 118, F6 = 167
-
+--[[
 Citizen.CreateThread(function()
     while true do
         Wait(0)
@@ -52,6 +52,7 @@ Citizen.CreateThread(function()
         end
     end
 end)
+--]]
 
 RegisterNetEvent("inventory:updatePlayerInventory")
 AddEventHandler("inventory:updatePlayerInventory", function(data)
