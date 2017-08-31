@@ -1,0 +1,12 @@
+RegisterServerEvent("crim:startRobbery")
+AddEventHandler("crim:startRobbery", function(waitTime)
+    local userSource = tonumber(source)
+    SetTimeout(waitTime, function()
+        TriggerClientEvent("crim:checkRange", userSource)
+    end)
+end)
+
+RegisterServerEvent("crim:playerWasInRange")
+AddEventHandler("crim:playerWasInRange", function(rewardAmount)
+    print("giving $" .. rewardAmount)
+end)

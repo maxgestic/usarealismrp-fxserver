@@ -599,6 +599,7 @@ end
 -- Fetch all bans when resource starts
 fetchAllBans()
 
+--[[
 	-- check for player being banned
 	AddEventHandler('playerConnecting', function(name, setReason)
 		--local identifier = GetPlayerIdentifiers(source)[1]
@@ -620,7 +621,7 @@ fetchAllBans()
 			end
 		end
 	end)
-
+--]]
 	-- ban command
 	TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, user)
 		local userSource = tonumber(source)
@@ -679,6 +680,27 @@ fetchAllBans()
 	end, function(source,args,user)
 		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
 	end)
+
+RegisterServerEvent('mini:checkPlayerBannedOnSpawn')
+AddEventHandler('mini:checkPlayerBannedOnSpawn', function()
+	print("checking if loaded player is banned...")
+	local allPlayerIdentifiers = GetPlayerIdentifiers(tonumber(source))
+	for i = 1, #bans do
+		local bannedPlayer = bans[i]
+		local allBannedPlayerIdentifiers = bannedPlayer.identifiers
+		for j = 1, #allBannedPlayerIdentifiers do
+			local bannedPlayerId = allBannedPlayerIdentifiers[j]
+			for k = 1, #allPlayerIdentifiers do
+				local connectingPlayerId = allPlayerIdentifiers[k]
+				if bannedPlayerId == connectingPlayerId then
+					print(GetPlayerName(tonumber(source)) .. " has been banned from your server and should not be able to connect!")
+					DropPlayer(tonumber(source), "Banned: " .. bannedPlayer.reason)
+					return
+				end
+			end
+		end
+	end
+end)
 
 -- unban stuff im gunna need:
 --[[

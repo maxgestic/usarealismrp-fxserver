@@ -56,6 +56,8 @@ AddEventHandler('usa_rp:spawn', function(defaultModel, job, spawn, weapons, char
         -- CHECK JAIL STATUS
         Citizen.Trace("calling checkJailedStatusOnPlayerJoin server function")
         TriggerServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
+        -- check to see if player is banned (since on connect is flakey)
+        TriggerServerEvent('mini:checkPlayerBannedOnSpawn')
 	end)
 end)
 
