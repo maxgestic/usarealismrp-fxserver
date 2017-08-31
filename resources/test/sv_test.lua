@@ -42,7 +42,9 @@ AddEventHandler("interaction:checkForPhone", function()
             local item = inventory[i]
             if item.name == "Cell Phone" then
                 TriggerClientEvent("interaction:playerHadPhone", userSource)
+                return
             end
         end
+        TriggerClientEvent("interaction:notify", userSource, "You have no cell phone to open!")
     end)
 end)

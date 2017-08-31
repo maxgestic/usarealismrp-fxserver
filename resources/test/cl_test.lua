@@ -90,6 +90,13 @@ RegisterNUICallback('setVoipLevel', function(data, cb)
     end
 end)
 
+RegisterNetEvent("interaction:notify")
+AddEventHandler("interaction:notify", function(msg)
+    SetNotificationTextEntry("STRING")
+	AddTextComponentString(msg)
+	DrawNotification(0,1)
+end)
+
 RegisterNetEvent("interaction:playerHadPhone")
 AddEventHandler("interaction:playerHadPhone", function()
     TriggerEvent("phone:openPhone")
