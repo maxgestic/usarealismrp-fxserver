@@ -46,23 +46,35 @@ function emotePageBackBtn() {
 function emoteBackBtn() {
     $(".sidenav .emote-option").remove();
     $(".sidenav .emote-page-option").show();
-    // initiliaze home menu
-    // show interaction menu items
+}
+
+function playEmote(emoteNumber) {
+    $(".sidenav .emote-option").remove();
+    $(".sidenav .emote-page-option").remove();
+    if (typeof emoteNumber == "undefined") {
+        emoteNumber = "Cancel";
+    }
+    $.post('http://test/playEmote', JSON.stringify({
+        emoteNumber: emoteNumber
+    }));
 }
 
 function openEmotePage(pageNumber) {
     $(".sidenav a").hide();
+    // Cancel Emote btn
+    $(".sidenav").append("<a onclick='playEmote()' class='emote-option'>Cancel Emote</a>");
+    // emotes
     if (pageNumber == "1") {
         for(var x = 0; x < emoteItemsPerPage; x++) {
-            $(".sidenav").append("<a onclick='' class='emote-option'>"+emoteOptions[x]+"</a>");
+            $(".sidenav").append("<a onclick='playEmote("+(x)+")' class='emote-option'>"+emoteOptions[x]+"</a>");
         }
     } else if (pageNumber == "2") {
         for(var y = emoteItemsPerPage; y < (emoteItemsPerPage*2); y++) {
-            $(".sidenav").append("<a onclick='' class='emote-option'>"+emoteOptions[y]+"</a>");
+            $(".sidenav").append("<a onclick='playEmote("+(y)+")' class='emote-option'>"+emoteOptions[y]+"</a>");
         }
     } else if (pageNumber == "3") {
         for(var z = (emoteItemsPerPage*2); z < (emoteItemsPerPage*3); z++) {
-            $(".sidenav").append("<a onclick='' class='emote-option'>"+emoteOptions[z]+"</a>");
+            $(".sidenav").append("<a onclick='playEmote("+(z)+")' class='emote-option'>"+emoteOptions[z]+"</a>");
         }
     }
     //back btn
@@ -73,10 +85,12 @@ function openEmoteMenu() {
     $(".sidenav a").hide();
     var size = emoteOptions.length;
     var pageCount = Math.ceil(size / emoteItemsPerPage);
+    // Cancel Emote btn
+    $(".sidenav").append("<a onclick='playEmote()' class='emote-page-option'>Cancel Emote</a>");
+    // emote pages
     for(var x = 0; x < pageCount; x++) {
         $(".sidenav").append("<a onclick='openEmotePage("+(x+1)+")' class='emote-page-option'>Emotes "+(x+1)+"</a>");
     }
-    // back btn
     // back btn
     $(".sidenav").append("<a onclick='emotePageBackBtn()' id='emote-page-back-btn' class='emote-page-option'>Back</a>");
 }
