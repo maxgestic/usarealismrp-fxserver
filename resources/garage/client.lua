@@ -111,6 +111,7 @@ end)
 
 RegisterNetEvent("garage:spawn")
 AddEventHandler("garage:spawn", function(vehicle)
+	local playerVehicle = vehicle
 	local modelHash = vehicle.hash
 	local plateText = vehicle.plate
 	local numberHash = modelHash
@@ -137,6 +138,12 @@ AddEventHandler("garage:spawn", function(vehicle)
 		SetPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
 		SetVehicleEngineOn(vehicle, true, false, false)
 		SetEntityAsMissionEntity(vehicle, true, true)
+
+		-- car customizations
+		if playerVehicle.customizations then
+			TriggerEvent("customs:applyCustomizations", playerVehicle.customizations)
+		end
+
 	end)
 
 end)
