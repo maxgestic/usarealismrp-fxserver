@@ -1,4 +1,4 @@
-var policeActions = ["Cuff", "Drag", "Search", "MDT"];
+var policeActions = ["Cuff", "Drag", "Search", "MDT", "Place", "Unseat"];
 var voipOptions = ["Yell", "Normal", "Whisper"];
 var emoteOptions = ["Cop", "Sit", "Chair", "Kneel", "Medic", "Notepad","Traffic", "Photo","Clipboard", "Lean", "Hangout", "Pot", "Fish", "Phone", "Yoga", "Bino", "Cheer", "Statue", "Jog",
 "Flex", "Sit up", "Push up", "Weld", "Mechanic"];
@@ -113,10 +113,16 @@ function setVoip(option) {
     closeNav();
 }
 
+function performPoliceAction(policeActionIndex) {
+    $.post('http://test/performPoliceAction', JSON.stringify({
+        policeActionIndex: policeActionIndex
+    }));
+}
+
 function showPoliceActions() {
     $(".sidenav a").hide();
     for (i in policeActions) {
-        $(".sidenav").append("<a class='police-action'>" + policeActions[i] + "</a>");
+        $(".sidenav").append("<a onclick='performPoliceAction("+i+")' class='police-action'>" + policeActions[i] + "</a>");
     }
 }
 

@@ -94,6 +94,13 @@ RegisterNUICallback('checkPlayerJob', function(data, cb)
     TriggerServerEvent("interaction:checkPlayerJob")
 end)
 
+RegisterNUICallback('performPoliceAction', function(data, cb)
+    local actionIndex = data.policeActionIndex
+    if actionIndex == 0 then
+        TriggerEvent("interaction:performPoliceAction", "cuff")
+    end
+end)
+
 RegisterNetEvent("interaction:sendPlayersJob")
 AddEventHandler("interaction:sendPlayersJob", function(playerJob)
     SendNUIMessage({
