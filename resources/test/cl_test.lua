@@ -90,6 +90,18 @@ RegisterNUICallback('setVoipLevel', function(data, cb)
     end
 end)
 
+RegisterNUICallback('checkPlayerJob', function(data, cb)
+    TriggerServerEvent("interaction:checkPlayerJob")
+end)
+
+RegisterNetEvent("interaction:sendPlayersJob")
+AddEventHandler("interaction:sendPlayersJob", function(playerJob)
+    SendNUIMessage({
+        type = "receivedPlayerJob",
+        job = playerJob
+    })
+end)
+
 RegisterNetEvent("interaction:notify")
 AddEventHandler("interaction:notify", function(msg)
     SetNotificationTextEntry("STRING")

@@ -1,3 +1,4 @@
+var policeActions = ["Cuff", "Drag", "Search", "MDT"];
 var voipOptions = ["Yell", "Normal", "Whisper"];
 var emoteOptions = ["Cop", "Sit", "Chair", "Kneel", "Medic", "Notepad","Traffic", "Photo","Clipboard", "Lean", "Hangout", "Pot", "Fish", "Phone", "Yoga", "Bino", "Cheer", "Statue", "Jog",
 "Flex", "Sit up", "Push up", "Weld", "Mechanic"];
@@ -112,6 +113,13 @@ function setVoip(option) {
     closeNav();
 }
 
+function showPoliceActions() {
+    $(".sidenav a").hide();
+    for (i in policeActions) {
+        $(".sidenav").append("<a class='police-action'>" + policeActions[i] + "</a>");
+    }
+}
+
 function populateInventory(inventory, weapons, licenses) {
     $(".sidenav a").hide();
     for(i in licenses) {
@@ -137,6 +145,9 @@ function closeNav() {
     $(".sidenav .emote-option").remove();
     $(".sidenav .emote-page-option").remove();
     $(".sidenav .emote-option").remove();
+    $(".sidenav .emote-option").remove();
+    $(".sidenav .police-action").remove();
+    $("#police-btn").remove();
     document.getElementById("mySidenav").style.width = "0";
 }
 
@@ -151,6 +162,9 @@ $(function() {
             $(".sidenav a").show();
             // show targetted player name
             //$("#player-name").html(event.data.playerName);
+            if (event.data.enable) {
+                $.post('http://test/checkPlayerJob', JSON.stringify({}));
+            }
         } else if (event.data.type == "click") {
             // Avoid clicking the cursor itself, click 1px to the top/left;
             Click(cursorX - 1, cursorY - 1);
@@ -162,6 +176,20 @@ $(function() {
             //alert("weapons.length = " + weapons.length);
             //alert("licenses.length = " + licenses.length);
             populateInventory(inventory, weapons, licenses);
+        } else if (event.data.type == "receivedPlayerJob") {
+            var job = event.data.job;
+            //alert("job = " + job);
+
+            if (job == "sheriff") {
+                $("#mySidenav").prepend("<a onclick='showPoliceActions()' id='police-btn'>Police Actions</a>");
+            } else if (job == "ems") {
+                $("#ems-btn").show();
+            } else if (job == "taxi") {
+                $("#taxi-btn").show();
+            } else if (job == "tow") {
+                $("#tow-btn").show();
+            }
+
         }
     });
 

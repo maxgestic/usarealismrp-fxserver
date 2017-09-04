@@ -48,3 +48,14 @@ AddEventHandler("interaction:checkForPhone", function()
         TriggerClientEvent("interaction:notify", userSource, "You have no cell phone to open!")
     end)
 end)
+
+RegisterServerEvent("interaction:checkPlayerJob")
+AddEventHandler("interaction:checkPlayerJob", function()
+    local userSource = tonumber(source)
+    TriggerEvent("es:getPlayerFromId", userSource, function(user)
+        if user then
+            print("SUCCESS! PLAYER'S JOB = " .. user.getJob())
+            TriggerClientEvent("interaction:sendPlayersJob", userSource, user.getJob())
+        end
+    end)
+end)
