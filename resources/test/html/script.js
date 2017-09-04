@@ -1,7 +1,7 @@
 var policeActions = ["Cuff", "Drag", "Search", "MDT", "Place", "Unseat"];
 var voipOptions = ["Yell", "Normal", "Whisper"];
 var emoteOptions = ["Cop", "Sit", "Chair", "Kneel", "Medic", "Notepad","Traffic", "Photo","Clipboard", "Lean", "Hangout", "Pot", "Fish", "Phone", "Yoga", "Bino", "Cheer", "Statue", "Jog",
-"Flex", "Sit up", "Push up", "Weld", "Mechanic"];
+"Flex", "Sit up", "Push up", "Weld", "Mechanic","Smoke","Drink"];
 var emoteItemsPerPage = 8;
 
 var disableMouseScroll = true;
@@ -58,6 +58,7 @@ function playEmote(emoteNumber) {
     $.post('http://test/playEmote', JSON.stringify({
         emoteNumber: emoteNumber
     }));
+    closeNav();
 }
 
 function openEmotePage(pageNumber) {
@@ -76,6 +77,12 @@ function openEmotePage(pageNumber) {
     } else if (pageNumber == "3") {
         for(var z = (emoteItemsPerPage*2); z < (emoteItemsPerPage*3); z++) {
             $(".sidenav").append("<a onclick='playEmote("+(z)+")' class='emote-option'>"+emoteOptions[z]+"</a>");
+        }
+    } else if (pageNumber == "4") {
+        for(var z = (emoteItemsPerPage*3); z < (emoteItemsPerPage*4); z++) {
+            if (typeof emoteOptions[z] != "undefined") {
+                $(".sidenav").append("<a onclick='playEmote("+(z)+")' class='emote-option'>"+emoteOptions[z]+"</a>");
+            }
         }
     }
     //back btn
@@ -117,6 +124,7 @@ function performPoliceAction(policeActionIndex) {
     $.post('http://test/performPoliceAction', JSON.stringify({
         policeActionIndex: policeActionIndex
     }));
+    closeNav();
 }
 
 function showPoliceActions() {
