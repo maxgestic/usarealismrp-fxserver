@@ -102,13 +102,19 @@ AddEventHandler("usa_rp:spawnPlayer", function()
             spawn.x =  895.59
             spawn.y = -186.643
             spawn.z = 73.7617
-            weapons = {}
+            weapons = user.getWeapons()
+            if not weapons then
+                weapons = {}
+            end
         elseif job == "tow" then
             -- davis fire station
             spawn.x =  398.27
             spawn.y = -1641.33
             spawn.z = 29.292
-            weapons = {"WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER"}
+            weapons = user.getWeapons()
+            if not weapons then
+                weapons = {}
+            end
         end
         if #weapons > 0 then
             print("#weapons = " .. #weapons)
