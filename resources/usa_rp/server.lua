@@ -1,11 +1,14 @@
 local civilianSpawns = {
     --{x = 391.611, y = -948.984, z = 29.3978}, -- atlee & sinner st
-    {x = 95.2552, y = -1310.8, z = 29.2921}, -- near strip club
+    --{x = 95.2552, y = -1310.8, z = 29.2921}, -- near strip club
     --{x = 10.6334, y = -718.769, z = 44.2174} -- pitts suggestion
-    {x = 434.14, y = -646.847, z = 28.7314}, -- daschound bus station 1
+    --{x = 434.14, y = -646.847, z = 28.7314}, -- daschound bus station 1
     --{x = 434.753, y = -629.007, z = 28.7186}, -- daschound hus station 2
     --{x = 412.16, y = -619.049, z = 28.7015}, -- daschound bus station 3
-    {x = -536.625, y = -218.624, z = 38.8497} -- DMV spawn in LS
+    --{x = -536.625, y = -218.624, z = 38.8497}, -- DMV spawn in LS
+    {x = 232.919, y = -880.539, z = 30.5921},
+    {x = 233.919, y = -880.539, z = 30.5921},
+    {x = 234.919, y = -880.539, z = 30.5921}
 }
 local civSkins = {
     "a_m_m_beach_01",
@@ -70,10 +73,6 @@ AddEventHandler("usa_rp:spawnPlayer", function()
         if not character.hash then
             model = civSkins[math.random(1,#civSkins)]
             TriggerClientEvent("rules:open", userSource)
-            -- put in clothing store since they are new and don't have one saved
-            spawn.x = 425.073
-            spawn.y = -806.207
-            spawn.z = 29.4911
         end
         if job == "civ" then
             weapons = user.getWeapons()
