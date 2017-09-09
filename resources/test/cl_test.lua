@@ -15,7 +15,7 @@ end)
 RegisterNUICallback('playEmote', function(data, cb)
     TriggerEvent("test:escapeFromCSharp")
     --Citizen.Trace("setting voice level = " .. data.level)
-    local COP,SIT,CHAIR,KNEEL,MEDIC,NOTEPAD,TRAFFIC,PHOTO,CLIPBOARD,LEAN,HANGOUT,POT,FISH,PHONE,YOGA,BINO,CHEER,STATUE,JOG,FLEX,SITUP,PUSHUP,WELD,MECHANIC,DRINK,SMOKE = 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26
+    local COP,SIT,CHAIR,KNEEL,MEDIC,NOTEPAD,TRAFFIC,PHOTO,CLIPBOARD,LEAN,HANGOUT,POT,FISH,PHONE,YOGA,BINO,CHEER,STATUE,JOG,FLEX,SITUP,PUSHUP,WELD,MECHANIC,SMOKE,DRINK = 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26
     local selected = data.emoteNumber
     if selected == COP then
         TriggerEvent("playCopEmote")

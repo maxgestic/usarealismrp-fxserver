@@ -176,9 +176,11 @@ $(function() {
             $(".sidenav a").show();
             // show targetted player name
             //$("#player-name").html(event.data.playerName);
+            /*
             if (event.data.enable) {
                 $.post('http://test/checkPlayerJob', JSON.stringify({}));
             }
+            */
         } else if (event.data.type == "click") {
             // Avoid clicking the cursor itself, click 1px to the top/left;
             Click(cursorX - 1, cursorY - 1);
