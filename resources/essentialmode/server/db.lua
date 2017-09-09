@@ -127,6 +127,14 @@ local function updateDocument(docID, updates, callback)
 					update[i] = updates[i]
 				end
 			end
+			
+			for i in pairs(updates)do
+				if update[i] == nil then
+					--update[i] = updates[i]
+					print("adding " .. i)
+					update[i] = updates[i]
+				end
+			end
 
 			requestDB('PUT', 'essentialmode/' .. docID, update, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
 				if not json.decode(rText).ok then
@@ -156,7 +164,7 @@ end
 function db.createUser(identifier, callback)
 	print("creating user!")
 	if type(identifier) == "string" and identifier ~= nil then
-		createDocument({ identifier = identifier, money = settings.defaultSettings.startingCash or 0, bank = settings.defaultSettings.startingBank or 0, group = "user", permission_level = 0, job = settings.defaultSettings.startingJob, model = settings.defaultSettings.startingModel, inventory = settings.defaultSettings.startingInventory, weapons = settings.defaultSettings.startingWeapons, vehicles = settings.defaultSettings.startingVehicles, insurance = settings.defaultSettings.startingInsurance, job = settings.defaultSettings.startingJob, licenses = settings.defaultSettings.startingLicenses, criminalHistory = {}, characters = {}, jailtime = 0}, function(returned, document)
+		createDocument({ identifier = identifier, money = settings.defaultSettings.startingCash or 0, bank = settings.defaultSettings.startingBank or 0, group = "user", permission_level = 0, job = settings.defaultSettings.startingJob, model = settings.defaultSettings.startingModel, inventory = settings.defaultSettings.startingInventory, weapons = settings.defaultSettings.startingWeapons, vehicles = settings.defaultSettings.startingVehicles, insurance = settings.defaultSettings.startingInsurance, job = settings.defaultSettings.startingJob, licenses = settings.defaultSettings.startingLicenses, criminalHistory = {}, characters = {}, jailtime = 0, policeRank = 0, policeCharacter = {}}, function(returned, document)
 			if callback then
 				callback(returned, document)
 			end

@@ -43,8 +43,9 @@ end, "GET", "", {what = 'this'})
 
 AddEventHandler('playerDropped', function()
 	local numberSource = tonumber(source)
-	print("player " .. GetPlayerName(numberSource) .. " dropped from the server!")
+	
 	if(Users[numberSource])then
+		print("player " .. GetPlayerName(numberSource) .. " dropped from the server!")
 		local inventory = Users[numberSource].getInventory()
 		if inventory then
 			for i = 1, #inventory do
@@ -59,7 +60,7 @@ AddEventHandler('playerDropped', function()
 			end
 		end
 		TriggerEvent("es:playerDropped", Users[numberSource])
-		db.updateUser(Users[numberSource].get('identifier'), {money = Users[numberSource].getMoney(), bank = Users[numberSource].getBank(), model = Users[numberSource].getModel(), inventory = Users[numberSource].getInventory(), weapons = Users[numberSource].getWeapons(), vehicles = Users[numberSource].getVehicles(), insurance = Users[numberSource].getInsurance(), job = Users[numberSource].getJob(), licenses = Users[numberSource].getLicenses(), criminalHistory = Users[numberSource].getCriminalHistory(), characters = Users[numberSource].getCharacters(), jailtime = Users[numberSource].getJailtime()}, function()
+		db.updateUser(Users[numberSource].get('identifier'), {money = Users[numberSource].getMoney(), bank = Users[numberSource].getBank(), model = Users[numberSource].getModel(), inventory = Users[numberSource].getInventory(), weapons = Users[numberSource].getWeapons(), vehicles = Users[numberSource].getVehicles(), insurance = Users[numberSource].getInsurance(), job = Users[numberSource].getJob(), licenses = Users[numberSource].getLicenses(), criminalHistory = Users[numberSource].getCriminalHistory(), characters = Users[numberSource].getCharacters(), jailtime = Users[numberSource].getJailtime(), policeRank = Users[numberSource].getPoliceRank(), policeCharacter = Users[numberSource].getPoliceCharacter()}, function()
 			Users[numberSource] = nil
 		end)
 	else
