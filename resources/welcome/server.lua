@@ -33,7 +33,7 @@ function commandsText(source)
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "10) ^3/ad <msg>^0 - create an advertisement")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "11) ^3/rules^0 - to see the server rules")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "12) ^3F1^0 - open interaction menu")
-	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "12) ^3F9^0 - extra emotes menu")
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "12) ^3F5^0 - extra emotes menu")
 end
 
 -- end util functions / start commands
