@@ -12,11 +12,11 @@ AddEventHandler('rconCommand', function(commandName, args)
         if type == "police" then
 			TriggerEvent("es:getPlayerFromId", tonumber(playerId), function(user)
 				if(user)then
-					user.setPoliceRank(1)						
+					user.setPoliceRank(1)
 					RconPrint("DEBUG: " .. playerId .. " whitelisted as LSPD")
-					TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "You have been whitelist as LSPD")
+					TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "You have been whitelisted for LSPD")
 				end
-			end)		
+			end)
         end
 
         --RconPrint("\nError: failed to whitelist player " .. GetPlayerName(playerId) .. " for POLICE.")
@@ -34,7 +34,7 @@ AddEventHandler("policestation2:checkWhitelist", function(clientevent)
 			--TriggerClientEvent("policestation2:isWhitelisted", userSource)
 			if clientevent == "policestation2:showArmoury" then
 				if user.getJob() == "sheriff" or user.getJob() == "cop" then
-					TriggerClientEvent(clientevent, userSource)	
+					TriggerClientEvent(clientevent, userSource)
 				else
 					TriggerClientEvent("policestation2:notify", userSource, "You need to be ~r~10-8 ~w~ to access LSPD armoury.")
 				end
@@ -45,7 +45,7 @@ AddEventHandler("policestation2:checkWhitelist", function(clientevent)
 			TriggerClientEvent("policestation2:notify", userSource, "~y~You are not whitelisted for POLICE. Apply at ~b~usarrp.enjin.com~w~.")
 		end
 	end)
-	
+
 end)
 
 function getPlayerIdentifierEasyMode(source)
@@ -64,7 +64,7 @@ RegisterServerEvent("policestation2:saveasdefault")
 AddEventHandler("policestation2:saveasdefault", function(character)
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
-		if user.getJob() == "sheriff" or user.getJob() == "cop" then	
+		if user.getJob() == "sheriff" or user.getJob() == "cop" then
 			--user.setCharacters(character)
 			--print("PLAYER MODEL SAVED")
 			user.setPoliceCharacter(character)
