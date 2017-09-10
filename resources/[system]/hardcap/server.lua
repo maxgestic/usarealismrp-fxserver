@@ -112,7 +112,7 @@ AddEventHandler('playerConnecting', function(name, setReason)
         CancelEvent()
     end
 
-    if publicPlayerCount >= 29 then
+    if publicPlayerCount >= 31 then
         if not playerHasReservedSlot(source) then
             print('All public slots taken :(')
             setReason('All public slots taken :(')
