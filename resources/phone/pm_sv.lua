@@ -153,7 +153,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 							partnerId = targetPlayerIdent,
 							messages = {message}
 						}
-						table.insert(inventory[i].conversations, conversation)
+						table.insert(inventory[i].conversations, 1, conversation) -- insert at front
 						user.setInventory(inventory)
 						print("convo inserted!")
 					end
@@ -235,6 +235,7 @@ end)
 RegisterServerEvent("phone:loadMessages")
 AddEventHandler("phone:loadMessages", function()
 	TriggerEvent("es:getPlayerFromId", source, function(user)
+		local conversationsToSendToPhone = {}
 		local inventory = user.getInventory()
 		for i = 1, #inventory do
 			local item = inventory[i]
@@ -242,7 +243,12 @@ AddEventHandler("phone:loadMessages", function()
 				local conversations = item.conversations
 				if conversations then
 					print("loaded conversations with #: " .. #conversations)
-					TriggerClientEvent("phone:loadedMessages", source, conversations)
+
+					for j = 1, 10 do
+						table.insert(conversationsToSendToPhone, conversations[j])
+					end
+
+					TriggerClientEvent("phone:loadedMessages", source, conversationsToSendToPhone)
 				end
 			end
 		end
