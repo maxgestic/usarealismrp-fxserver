@@ -1,6 +1,6 @@
 local targetVehicle, targetPed
-local civEngineOverheatThreshold, copEngineOverheatThreshold = 950.0, 945.0 -- non-severe accidents (busted radiator)
-local engineDisabledThreshold = 935.0
+local civEngineOverheatThreshold, copEngineOverheatThreshold = 960.0, 955.0 -- non-severe accidents (busted radiator)
+local engineDisabledThreshold = 945.0
 local engineIsOn, savedVehicle
 
 local policeVehicles = {
