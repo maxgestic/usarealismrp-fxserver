@@ -5,7 +5,7 @@
 
 -- restart essentialmode
 
-function CreatePlayer(source, permission_level, money, bank, identifier, group, model, inventory, weapons, vehicles, insurance, job, licenses, criminalHistory, characters, jailtime, policeRank, policeCharacter)
+function CreatePlayer(source, permission_level, money, bank, identifier, group, model, inventory, weapons, vehicles, insurance, job, licenses, criminalHistory, characters, jailtime, policeRank, policeCharacter, EMSRank)
 	local self = {}
 
 	self.source = source
@@ -34,6 +34,11 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 		self.policeCharacter = {}
 	else
 		self.policeCharacter = policeCharacter
+	end
+	if EMSRank == nil then
+		self.EMSRank = 0
+	else
+		self.EMSRank = EMSRank
 	end
 	-- END --
 	self.coords = {x = 0.0, y = 0.0, z = 0.0}
@@ -84,6 +89,14 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 	end
 
 	-- CUSTOM SETTERS/GETTERS HERE --
+	rTable.getEMSRank = function()
+		return self.EMSRank
+	end
+
+	rTable.setEMSRank = function(rank)
+		self.EMSRank = rank
+	end
+	
 	rTable.getPoliceCharacter = function()
 		return self.policeCharacter
 	end

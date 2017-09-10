@@ -60,7 +60,7 @@ AddEventHandler('playerDropped', function()
 			end
 		end
 		TriggerEvent("es:playerDropped", Users[numberSource])
-		db.updateUser(Users[numberSource].get('identifier'), {money = Users[numberSource].getMoney(), bank = Users[numberSource].getBank(), model = Users[numberSource].getModel(), inventory = Users[numberSource].getInventory(), weapons = Users[numberSource].getWeapons(), vehicles = Users[numberSource].getVehicles(), insurance = Users[numberSource].getInsurance(), job = Users[numberSource].getJob(), licenses = Users[numberSource].getLicenses(), criminalHistory = Users[numberSource].getCriminalHistory(), characters = Users[numberSource].getCharacters(), jailtime = Users[numberSource].getJailtime(), policeRank = Users[numberSource].getPoliceRank(), policeCharacter = Users[numberSource].getPoliceCharacter()}, function()
+		db.updateUser(Users[numberSource].get('identifier'), {money = Users[numberSource].getMoney(), bank = Users[numberSource].getBank(), model = Users[numberSource].getModel(), inventory = Users[numberSource].getInventory(), weapons = Users[numberSource].getWeapons(), vehicles = Users[numberSource].getVehicles(), insurance = Users[numberSource].getInsurance(), job = Users[numberSource].getJob(), licenses = Users[numberSource].getLicenses(), criminalHistory = Users[numberSource].getCriminalHistory(), characters = Users[numberSource].getCharacters(), jailtime = Users[numberSource].getJailtime(), policeRank = Users[numberSource].getPoliceRank(), policeCharacter = Users[numberSource].getPoliceCharacter(), EMSRank = Users[numberSource].getEMSRank()}, function()
 			Users[numberSource] = nil
 		end)
 	else

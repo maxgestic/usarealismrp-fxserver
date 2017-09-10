@@ -89,9 +89,9 @@ AddEventHandler("usa_rp:spawnPlayer", function()
             job = "civ"
         elseif job == "ems" then
             -- davis fire station
-            spawn.x =  207.106
-            spawn.y = -1641.45
-            spawn.z = 29.8
+            spawn.x =  373.269
+            spawn.y = -1441.48
+            spawn.z = 29.43
             --weapons = {"WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER"}
             weapons = user.getWeapons()
             user.setJob("civ") -- spawn as a civ
