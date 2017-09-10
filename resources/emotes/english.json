@@ -1,0 +1,844 @@
+{  
+  "emotes":[  
+
+    {  
+      "title":"/beg",
+      "hash":"WORLD_HUMAN_BUM_FREEWAY",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"beg"
+    },
+     {  
+      "title":"/blow",
+      "hash":"WORLD_HUMAN_GARDENER_LEAF_BLOWER",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"blow"
+    },
+    {  
+      "title":"/bum",
+      "hash":"WORLD_HUMAN_BUM_SLUMPED",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"bum"
+    },
+    {  
+      "title":"/bum2",
+      "hash":"WORLD_HUMAN_BUM_STANDING",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"bum2"
+    },
+
+     {  
+      "title":"/bum3",
+      "hash":"PROP_HUMAN_BUM_SHOPPING_CART",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"bum3"
+    },
+
+{  
+      "title":"/camera",
+      "hash":"WORLD_HUMAN_PAPARAZZI",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"camera"
+    },
+
+{  
+      "title":"/cheer",
+      "hash":"WORLD_HUMAN_CHEERING",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"cheer"
+    },
+
+    {  
+      "title":"/chinup",
+      "hash":"PROP_HUMAN_MUSCLE_CHIN_UPS",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"chinup"
+    },
+
+    {  
+      "title":"/chinup2",
+      "hash":"PROP_HUMAN_MUSCLE_CHIN_UPS_ARMY",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"chinup2"
+    },
+
+     {  
+      "title":"/chinup3",
+      "hash":"PROP_HUMAN_MUSCLE_CHIN_UPS_PRISON",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"chinup3"
+    },
+
+    {  
+      "title":"/clean",
+      "hash":"WORLD_HUMAN_MAID_CLEAN",
+      "delay":0,
+      "playEnterAnim":false,
+      "description":"Clean"
+    },
+
+   {  
+      "title":"/clipboard",
+      "hash":"WORLD_HUMAN_CLIPBOARD",
+      "delay":0,
+      "playEnterAnim":false,
+      "description":"Clipboard"
+    },
+
+     {  
+      "title":"/coffe",
+      "hash":"WORLD_HUMAN_AA_COFFEE",
+      "delay":0,
+      "playEnterAnim":false,
+      "description":"coffe"
+    },
+
+    {  
+      "title":"/coins",
+      "hash":"PROP_HUMAN_PARKING_METER",
+      "delay":0,
+      "playEnterAnim":false,
+      "description":"coins"
+    },
+
+    {  
+      "title":"/crossroad",
+      "hash":"CODE_HUMAN_CROSS_ROAD_WAIT",
+      "delay":0,
+      "playEnterAnim":false,
+      "description":"crossroad"
+    },
+
+ {  
+      "title":"/crowdcontrol",
+      "hash":"CODE_HUMAN_POLICE_CROWD_CONTROL",
+      "delay":0,
+      "playEnterAnim":false,
+      "description":"crowdcontrol"
+    },
+
+  {  
+      "title":"/diggit",
+      "hash":"WORLD_HUMAN_STRIP_WATCH_STAND",
+      "delay":0,
+      "playEnterAnim":false,
+      "description":"diggit"
+    },
+
+     {  
+      "title":"/drill",
+      "hash":"WORLD_HUMAN_CONST_DRILL",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"drill"
+    },
+
+   {  
+      "title":"/drink",
+      "hash":"WORLD_HUMAN_DRINKING",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Drink"
+    },
+
+    {  
+      "title":"/drug",
+      "hash":"WORLD_HUMAN_DRUG_DEALER",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"drug"
+    },
+
+{  
+      "title":"/film",
+      "hash":"WORLD_HUMAN_MOBILE_FILM_SHOCKING",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"film"
+    },
+
+    {  
+      "title":"/fire",
+      "hash":"WORLD_HUMAN_STAND_FIRE",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"fire"
+    },
+
+{  
+      "title":"/fish",
+      "hash":"WORLD_HUMAN_STAND_FISHING",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"fish"
+    },
+
+    {  
+      "title":"/fix",
+      "hash":"WORLD_HUMAN_VEHICLE_MECHANIC",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"fix"
+    },
+{  
+      "title":"/flex",
+      "hash":"WORLD_HUMAN_MUSCLE_FLEX",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"flex"
+    },
+
+    {  
+      "title":"/flex2",
+      "hash":"WORLD_HUMAN_MUSCLE_FREE_WEIGHTS",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"flex2"
+    },
+
+    {  
+      "title":"/golf",
+      "hash":"WORLD_HUMAN_GOLF_PLAYER",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"golf"
+    },
+
+{  
+      "title":"/guard",
+      "hash":"WORLD_HUMAN_GUARD_STAND",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"guard"
+    },
+
+{  
+      "title":"/hammer",
+      "hash":"WORLD_HUMAN_HAMMERING",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"hammer"
+    },
+
+{  
+      "title":"/hangout",
+      "hash":"WORLD_HUMAN_HANG_OUT_STREET",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"hangout"
+    },
+
+{  
+      "title":"/hiker",
+      "hash":"WORLD_HUMAN_HIKER_STANDING",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"hiker"
+    },
+{  
+      "title":"/hoe",
+      "hash":"WORLD_HUMAN_PROSTITUTE_HIGH_CLASS",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"hoe"
+    },
+
+{  
+      "title":"/hoe2",
+      "hash":"WORLD_HUMAN_PROSTITUTE_LOW_CLASS",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"hoe2"
+    },
+
+{  
+      "title":"/impatient",
+      "hash":"WORLD_HUMAN_STAND_IMPATIENT",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"impatient"
+    },
+
+{  
+      "title":"/investigate",
+      "hash":"CODE_HUMAN_POLICE_INVESTIGATE",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"investigate"
+    },
+
+    {  
+      "title":"/janitor",
+      "hash":"WORLD_HUMAN_JANITOR",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"janitor"
+   },
+
+{  
+      "title":"/jog",
+      "hash":"WORLD_HUMAN_JOG_STANDING",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"jog"
+   },
+
+ {  
+      "title":"/kikkert",
+      "hash":"WORLD_HUMAN_BINOCULARS",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"kikkert"
+    },
+
+ {  
+      "title":"/kneel",
+      "hash":"CODE_HUMAN_MEDIC_KNEEL",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Kneel"
+    },
+
+ {  
+      "title":"/lean",
+      "hash":"WORLD_HUMAN_LEANING",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Lean"
+    },
+
+    {  
+      "title":"/map",
+      "hash":"WORLD_HUMAN_TOURIST_MAP",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"map"
+    },
+
+    {  
+      "title":"/medic",
+      "hash":"CODE_HUMAN_MEDIC_TEND_TO_DEAD",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Medic"
+    },
+
+  {  
+      "title":"/mobile",
+      "hash":"WORLD_HUMAN_STAND_MOBILE",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Mobile"
+    },
+
+      {  
+      "title":"/mobile2",
+      "hash":"WORLD_HUMAN_STAND_MOBILE_UPRIGHT",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Mobile2"
+    },
+
+     {  
+      "title":"/mobile3",
+      "hash":"WORLD_HUMAN_TOURIST_MOBILE",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Mobile3"
+    },
+
+    {  
+      "title":"/music",
+      "hash":"WORLD_HUMAN_MUSICIAN",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Mmusic"
+    },
+
+
+    {  
+      "title":"/notepad",
+      "hash":"CODE_HUMAN_MEDIC_TIME_OF_DEATH",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Notepad"
+    },
+
+     {  
+      "title":"/party",
+      "hash":"WORLD_HUMAN_PARTYING",
+      "delay":0,
+      "playEnterAnim":false,
+      "description":"Party"
+    },
+
+      {  
+      "title":"/photo",
+      "hash":"WORLD_HUMAN_PAPARAZZI",
+      "delay":0,
+      "playEnterAnim":false,
+      "description":"Photo"
+    },
+
+{  
+      "title":"/plant",
+      "hash":"WORLD_HUMAN_GARDENER_PLANT",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"plant"
+    },
+
+
+
+      {  
+      "title":"/politi",
+      "hash":"WORLD_HUMAN_COP_IDLES",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"politi"
+    },
+
+    {  
+      "title":"/pose",
+      "hash":"WORLD_HUMAN_HUMAN_STATUE",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"pose"
+    },
+
+     {  
+      "title":"/prostitute",
+      "hash":"WORLD_HUMAN_PROSTITUTE_HIGH_CLASS",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"prostitute"
+    },
+
+     {  
+      "title":"/prostitute2",
+      "hash":"WORLD_HUMAN_PROSTITUTE_LOW_CLASS",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"prostitute2"
+    },
+
+ {  
+      "title":"/pushups",
+      "hash":"WORLD_HUMAN_PUSH_UPS",
+      "delay":0,
+      "playEnterAnim":false,
+      "description":"pushups"
+    },
+
+     {  
+      "title":"/scout",
+      "hash":"WORLD_HUMAN_GUARD_PATROL",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"scout"
+    },
+
+ {  
+      "title":"/sitchair",
+      "hash":"PROP_HUMAN_SEAT_CHAIR_MP_PLAYER",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"sitchair"
+    },
+  {  
+      "title":"/sit",
+      "hash":"WORLD_HUMAN_PICNIC",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit"
+    },
+
+     {  
+      "title":"/sit2",
+      "hash":"WORLD_HUMAN_SEAT_LEDGE",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit2"
+    },
+
+     {  
+      "title":"/sit3",
+      "hash":"WORLD_HUMAN_SEAT_LEDGE_EATING",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit3"
+    },
+
+     {  
+      "title":"/sit4",
+      "hash":"WORLD_HUMAN_SEAT_STEPS",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit4"
+    },
+
+     {  
+      "title":"/sit5",
+      "hash":"WORLD_HUMAN_SEAT_WALL",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit5"
+    },
+
+     {  
+      "title":"/sit6",
+      "hash":"WORLD_HUMAN_SEAT_WALL_EATING",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit6"
+    },
+
+     {  
+      "title":"/sit7",
+      "hash":"WORLD_HUMAN_SEAT_WALL_TABLE",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit7"
+    },
+
+     {  
+      "title":"/sit8",
+      "hash":"WORLD_HUMAN_STUPOR",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit8"
+    },
+
+    {  
+      "title":"/sit9",
+      "hash":"PROP_HUMAN_SEAT_ARMCHAIR",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit9"
+    },
+
+    {  
+      "title":"/sit10",
+      "hash":"PROP_HUMAN_SEAT_BAR",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit10"
+    },
+
+    {  
+      "title":"/sit11",
+      "hash":"PROP_HUMAN_SEAT_BENCH",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit11"
+    },
+
+    {  
+      "title":"/sit12",
+      "hash":"PROP_HUMAN_SEAT_BENCH_DRINK",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit12"
+    },
+
+    {  
+      "title":"/sit13",
+      "hash":"PROP_HUMAN_SEAT_BENCH_DRINK_BEER",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit13"
+    },
+
+
+    {  
+      "title":"/sit14",
+      "hash":"PROP_HUMAN_SEAT_BENCH_FOOD",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit14"
+    },
+
+    {  
+      "title":"/sit15",
+      "hash":"PROP_HUMAN_SEAT_BUS_STOP_WAIT",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit15"
+    },
+
+    {  
+      "title":"/sit16",
+      "hash":"PROP_HUMAN_SEAT_CHAIR",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit16"
+    },
+
+    {  
+      "title":"/sit17",
+      "hash":"PROP_HUMAN_SEAT_CHAIR_DRINK",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit17"
+    },
+
+    {  
+      "title":"/sit18",
+      "hash":"PROP_HUMAN_SEAT_CHAIR_DRINK_BEER",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit18"
+    },
+
+    {  
+      "title":"/sit19",
+      "hash":"PROP_HUMAN_SEAT_CHAIR_FOOD",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit19"
+    },
+
+    {  
+      "title":"/sit20",
+      "hash":"PROP_HUMAN_SEAT_CHAIR_UPRIGHT",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit20"
+    },
+
+    {  
+      "title":"/sit21",
+      "hash":"PROP_HUMAN_SEAT_CHAIR_MP_PLAYER",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit21"
+    },
+
+    {  
+      "title":"/sit22",
+      "hash":"PROP_HUMAN_SEAT_COMPUTER",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit22"
+    },
+
+    {  
+      "title":"/sit23",
+      "hash":"PROP_HUMAN_SEAT_DECKCHAIR",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit23"
+    },
+
+    {  
+      "title":"/sit24",
+      "hash":"PROP_HUMAN_SEAT_DECKCHAIR_DRINK",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit24"
+    },
+
+    {  
+      "title":"/sit25",
+      "hash":"PROP_HUMAN_SEAT_MUSCLE_BENCH_PRESS",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit25"
+    },
+
+    {  
+      "title":"/sit26",
+      "hash":"PROP_HUMAN_SEAT_MUSCLE_BENCH_PRESS_PRISON",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit26"
+    },
+
+    {  
+      "title":"/sit27",
+      "hash":"PROP_HUMAN_SEAT_SEWING",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit27"
+    },
+
+    {  
+      "title":"/sit28",
+      "hash":"PROP_HUMAN_SEAT_STRIP_WATCH",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit28"
+    },
+
+     {  
+      "title":"/sit29",
+      "hash":"PROP_HUMAN_SEAT_SUNLOUNGER",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Sit29"
+    },
+
+ {  
+      "title":"/situps",
+      "hash":"WORLD_HUMAN_SIT_UPS",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Situps"
+    },
+
+  {  
+      "title":"/smoke",
+      "hash":"WORLD_HUMAN_SMOKING",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Smoke"
+    },
+
+     {  
+      "title":"/smoke2",
+      "hash":"WORLD_HUMAN_SMOKING_POT",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"Smoke2"
+    },
+
+    {  
+      "title":"/stand",
+      "hash":"WORLD_HUMAN_DRUG_DEALER_HARD",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"stand"
+    },
+
+    {  
+      "title":"/stand2",
+      "hash":"WORLD_HUMAN_GUARD_STAND_ARMY",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"stand2"
+    },
+
+     {  
+      "title":"/stand3",
+      "hash":"WORLD_HUMAN_STAND_IMPATIENT",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"stand3"
+    },
+
+     {  
+      "title":"/stand4",
+      "hash":"WORLD_HUMAN_STAND_IMPATIENT_UPRIGHT",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"stand4"
+    },
+
+    {  
+      "title":"/stand5",
+      "hash":"PROP_HUMAN_STAND_IMPATIENT",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"stand5"
+    },
+
+    {  
+      "title":"/stand6",
+      "hash":"CODE_HUMAN_COWER",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"stand6"
+    },
+
+{  
+      "title":"/statue",
+      "hash":"WORLD_HUMAN_HUMAN_STATUE",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"statue"
+    },
+
+
+{  
+      "title":"/sunbath",
+      "hash":"WORLD_HUMAN_SUNBATHE_BACK",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"sunbath"
+    },
+{  
+      "title":"/sunbath2",
+      "hash":"WWORLD_HUMAN_SUNBATHE",
+      "delay":0,
+      "playEnterAnim":true,
+      "description":"sunbath2"
+    },
+
+ {  
+      "title":"/think",
+      "hash":"WORLD_HUMAN_SECURITY_SHINE_TORCH",
+      "delay":0,
+      "playEnterAnim":false,
+      "description":"think"
+    },
+
+     {  
+      "title":"/torch",
+      "hash":"WORLD_HUMAN_SECURITY_SHINE_TORCH",
+      "delay":0,
+      "playEnterAnim":false,
+      "description":"torch"
+    },
+
+ {  
+      "title":"/traffic",
+      "hash":"WORLD_HUMAN_CAR_PARK_ATTENDANT",
+      "delay":0,
+      "playEnterAnim":false,
+      "description":"Traffic"
+    },
+
+     {  
+      "title":"/uhuh",
+      "hash":"WORLD_HUMAN_HANG_OUT_STREET",
+      "delay":0,
+      "playEnterAnim":false,
+      "description":"uhuh"
+    },
+
+    {  
+      "title":"/wash",
+      "hash":"WORLD_HUMAN_BUM_WASH",
+      "delay":0,
+      "playEnterAnim":false,
+      "description":"wash"
+    },
+{  
+      "title":"/weld",
+      "hash":"WORLD_HUMAN_WELDING",
+      "delay":0,
+      "playEnterAnim":false,
+      "description":"weld"
+    },
+
+{  
+      "title":"/yoga",
+      "hash":"WORLD_HUMAN_YOGA",
+      "delay":0,
+      "playEnterAnim":false,
+      "description":"yoga"
+    }
+  ],
+  "errorVehicle":"You are in a vehicle",
+  "errorUnexpected":"Unexpected error",
+  "errorPlayerID":"Player ID doesn't match"
+}
