@@ -39,6 +39,6 @@ function GetPlayers()
             table.insert(players, GetPlayerServerId(i))
         end
     end
-
+	table.sort(players)
     return players
 end
