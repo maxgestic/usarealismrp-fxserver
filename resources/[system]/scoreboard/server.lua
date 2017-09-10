@@ -19,6 +19,6 @@ AddEventHandler("getScoreboard", function(ptable)
 			end
 		end
 	end
-	table.sort(players)
+	--table.sort(players)
 	TriggerClientEvent("scoreboard", source, table.concat(players))
 end)
