@@ -14,8 +14,9 @@ function infoText(source)
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^5Look at the icons on your map to see where gun, vehicles, clothing, etc stores and jobs are located.")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^3Hold 'n' (default) to talk in-game.")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^3Press 'e' to open the shop menu when at a store.")
-	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^3Press ^2F1^0 to the interaction menu")
-	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^3Press ^2F7^0 to open the players list")
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^3Press ^2F1^0 to the interaction menu.")
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^3Press ^2F7^0 to open the players list.")
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^3Type ^2/commands^0 to see more commands.")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^3WEBSITE/RULES: ^0usarrp.enjin.com")
 end
 
@@ -32,6 +33,7 @@ function commandsText(source)
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "10) ^3/ad <msg>^0 - create an advertisement")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "11) ^3/rules^0 - to see the server rules")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "12) ^3F1^0 - open interaction menu")
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "12) ^3F9^0 - extra emotes menu")
 end
 
 -- end util functions / start commands
