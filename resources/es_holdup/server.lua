@@ -82,8 +82,9 @@ RegisterServerEvent('es_holdup:rob')
 AddEventHandler('es_holdup:rob', function(robb)
 	if stores[robb] then
 		local store = stores[robb]
+		local robberyCooldown = 2100
 
-		if (os.time() - store.lastrobbed) < 600 and store.lastrobbed ~= 0 then
+		if (os.time() - store.lastrobbed) < robberyCooldown and store.lastrobbed ~= 0 then
 			TriggerClientEvent('chatMessage', source, 'ROBBERY', {255, 0, 0}, "This has already been robbed recently. Please wait another: ^2" .. (1200 - (os.time() - store.lastrobbed)) .. "^0 seconds.")
 			return
 		end

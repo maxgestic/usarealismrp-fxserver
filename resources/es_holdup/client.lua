@@ -127,6 +127,7 @@ Citizen.CreateThread(function()
 	end
 end)
 
+--[[ don't create blips
 Citizen.CreateThread(function()
 	for k,v in pairs(stores)do
 		local ve = v.position
@@ -140,6 +141,7 @@ Citizen.CreateThread(function()
 		EndTextCommandSetBlipName(blip)
 	end
 end)
+--]]
 incircle = false
 
 Citizen.CreateThread(function()
