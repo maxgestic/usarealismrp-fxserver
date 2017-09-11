@@ -1,6 +1,4 @@
-client_script "nativeui.net.dll"
-client_script "emotes.net.dll"
+resource_manifest_version '77731fab-63ca-442c-a67b-abc70f28dfa5'
 
-file "english.json"
-file "french.json"
-file "config.ini"
+client_script "client.lua"
+server_script "server.lua"
