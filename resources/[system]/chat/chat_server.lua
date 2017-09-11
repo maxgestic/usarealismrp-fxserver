@@ -52,7 +52,8 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
     TriggerEvent('chatMessage', userSource, name, message)
 
     if not WasEventCanceled() then
-        TriggerClientEvent('chatMessage', -1, name, color, message)
+        --TriggerClientEvent('chatMessage', -1, name, color, message)
+		TriggerClientEvent('chatMessage', -1, "[OOC] - " .. name, {88, 193, 221}, message)
     end
 
     print(name .. ': ' .. message)
