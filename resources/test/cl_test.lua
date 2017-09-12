@@ -1,3 +1,33 @@
+local scenarios = {
+	{name = "lean", scenarioName = "WORLD_HUMAN_LEANING"},
+	{name = "cop", scenarioName = "WORLD_HUMAN_COP_IDLES"},
+	{name = "sit", scenarioName = "WORLD_HUMAN_PICNIC"},
+	{name = "chair", scenarioName = "PROP_HUMAN_SEAT_CHAIR_MP_PLAYER"},
+	{name = "kneel", scenarioName = "CODE_HUMAN_MEDIC_KNEEL"},
+	{name = "medic", scenarioName = "CODE_HUMAN_MEDIC_TEND_TO_DEAD"},
+	{name = "notepad", scenarioName = "CODE_HUMAN_MEDIC_TIME_OF_DEATH"},
+	{name = "traffic", scenarioName = "WORLD_HUMAN_CAR_PARK_ATTENDANT"},
+	{name = "photo", scenarioName = "WORLD_HUMAN_PAPARAZZI"},
+	{name = "clipboard", scenarioName = "WORLD_HUMAN_CLIPBOARD"},
+	{name = "hangout", scenarioName = "WORLD_HUMAN_HANG_OUT_STREET"},
+	{name = "pot", scenarioName = "WORLD_HUMAN_SMOKING_POT"},
+	{name = "fish", scenarioName = "WORLD_HUMAN_STAND_FISHING"},
+	{name = "phone", scenarioName = "WORLD_HUMAN_STAND_MOBILE"},
+	{name = "yoga", scenarioName = "WORLD_HUMAN_YOGA"},
+	{name = "bino", scenarioName = "WORLD_HUMAN_BINOCULARS"},
+	{name = "cheer", scenarioName = "WORLD_HUMAN_CHEERING"},
+	{name = "statue", scenarioName = "WORLD_HUMAN_HUMAN_STATUE"},
+	{name = "jog", scenarioName = "WORLD_HUMAN_JOG_STANDING"},
+	{name = "flex", scenarioName = "WORLD_HUMAN_MUSCLE_FLEX"},
+	{name = "sit up", scenarioName = "WORLD_HUMAN_SIT_UPS"},
+	{name = "push up", scenarioName = "WORLD_HUMAN_PUSH_UPS"},
+	{name = "weld", scenarioName = "WORLD_HUMAN_WELDING"},
+	{name = "mechanic", scenarioName = "WORLD_HUMAN_VEHICLE_MECHANIC"},
+	{name = "smoke", scenarioName = "WORLD_HUMAN_SMOKING"},
+	{name = "drink", scenarioName = "WORLD_HUMAN_DRINKING"},
+	{name = "bum", scenarioName = "WORLD_HUMAN_BUM_FREEWAY"}
+}
+
 RegisterNUICallback('escape', function(data, cb)
     TriggerEvent("test:escapeFromCSharp")
 end)
@@ -14,66 +44,24 @@ end)
 
 RegisterNUICallback('playEmote', function(data, cb)
     TriggerEvent("test:escapeFromCSharp")
-    --Citizen.Trace("setting voice level = " .. data.level)
-    local COP,SIT,CHAIR,KNEEL,MEDIC,NOTEPAD,TRAFFIC,PHOTO,CLIPBOARD,LEAN,HANGOUT,POT,FISH,PHONE,YOGA,BINO,CHEER,STATUE,JOG,FLEX,SITUP,PUSHUP,WELD,MECHANIC,SMOKE,DRINK = 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26
-    local selected = data.emoteNumber
-    if selected == COP then
-        TriggerEvent("playCopEmote")
-    elseif selected == SIT then
-        TriggerEvent("playSitEmote")
-    elseif selected == CHAIR then
-        TriggerEvent("playChairEmote")
-    elseif selected == KNEEL then
-        TriggerEvent("playKneelEmote")
-    elseif selected == MEDIC then
-        TriggerEvent("playMedicEmote")
-    elseif selected == NOTEPAD then
-        TriggerEvent("playNotepadEmote")
-    elseif selected == TRAFFIC then
-        TriggerEvent("playTrafficEmote")
-    elseif selected == PHOTO then
-        TriggerEvent("playPhotoEmote")
-    elseif selected == CLIPBOARD then
-        TriggerEvent("playClipboardEmote")
-    elseif selected == LEAN then
-        TriggerEvent("playLeanEmote")
-    elseif selected == HANGOUT then
-        TriggerEvent("playHangOutEmote")
-    elseif selected == POT then
-        TriggerEvent("playPotEmote")
-    elseif selected == FISH then
-        TriggerEvent("playFishEmote")
-    elseif selected == PHONE then
-        TriggerEvent("playPhoneEmote")
-    elseif selected == YOGA then
-        TriggerEvent("playYogaEmote")
-    elseif selected == BINO then
-        TriggerEvent("playBinocularsEmote")
-    elseif selected == CHEER then
-        TriggerEvent("playCheeringEmote")
-    elseif selected == STATUE then
-        TriggerEvent("playStatueEmote")
-    elseif selected == JOG then
-        TriggerEvent("playJogEmote")
-    elseif selected == FLEX then
-        TriggerEvent("playFlexEmote")
-    elseif selected == SITUP then
-        TriggerEvent("playSitUpEmote")
-    elseif selected == PUSHUP then
-        TriggerEvent("playPushUpEmote")
-    elseif selected == WELD then
-        TriggerEvent("playWeldingEmote")
-    elseif selected == MECHANIC then
-        TriggerEvent("playMechanicEmote")
-    elseif selected == SMOKE then
-        TriggerEvent("playSmokeEmote")
-    elseif selected == DRINK then
-        TriggerEvent("playDrinkEmote")
-    elseif selected == CANCEL then
-        TriggerEvent("playCancelEmote")
-    elseif selected == "Cancel" then
-        TriggerEvent("playCancelEmote")
-    end
+    --Citizen.Trace("inside of NUI callback with emote: " .. data.emoteName)
+    local scenarioName = data.emoteName
+    if scenarioName == "cancel" then
+		local ped = GetPlayerPed(-1)
+		ClearPedTasks(ped)
+		playing_emote = false
+		return
+	end
+	for i = 1, #scenarios do
+		if scenarioName == scenarios[i].name then
+			Citizen.Trace("found scenario match for: " .. scenarioName)
+			local ped = GetPlayerPed(-1)
+			if ped then
+				TaskStartScenarioInPlace(ped, scenarios[i].scenarioName, 0, true);
+				playing_emote = true
+			end
+		end
+	end
 end)
 
 RegisterNUICallback('setVoipLevel', function(data, cb)
@@ -124,7 +112,7 @@ end)
 
 RegisterNetEvent("interaction:inventoryLoaded")
 AddEventHandler("interaction:inventoryLoaded", function(inventory, weapons, licenses)
-    Citizen.Trace("inventory loaded...")
+    --Citizen.Trace("inventory loaded...")
     SendNUIMessage({
         type = "inventoryLoaded",
         inventory = inventory,
@@ -135,6 +123,12 @@ end)
 
 Citizen.CreateThread(function()
     while true do
+        -- cancel emote when walking forward
+       if IsControlJustPressed(1, 32) then -- INPUT_MOVE_UP_ONLY
+           local ped = GetPlayerPed(-1)
+           ClearPedTasks(ped);
+           playing_emote = false
+       end
         if menuEnabled then
             DisableControlAction(29, 241, menuEnabled) -- scroll up
             DisableControlAction(29, 242, menuEnabled) -- scroll down

@@ -50,13 +50,17 @@ function emoteBackBtn() {
 }
 
 function playEmote(emoteNumber) {
+    var emoteName = emoteOptions[emoteNumber];
+    //alert("playing emote: " + emoteName);
+    // hide emote-option btns
     $(".sidenav .emote-option").remove();
     $(".sidenav .emote-page-option").remove();
-    if (typeof emoteNumber == "undefined") {
-        emoteNumber = "Cancel";
+    // trigger playEmote callback
+    if (typeof emoteName == "undefined") {
+        emoteName = "cancel";
     }
     $.post('http://test/playEmote', JSON.stringify({
-        emoteNumber: emoteNumber
+        emoteName: emoteName.toLowerCase()
     }));
     closeNav();
 }
