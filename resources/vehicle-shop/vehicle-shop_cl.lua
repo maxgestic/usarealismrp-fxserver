@@ -133,6 +133,8 @@ function muscleMenu()
 	MenuTitle = "Muscle Cars"
 	ClearMenu()
 	Menu.addButton("Willand Faction ($10,575)","buyVehicle","-2119578145:10575:Willand Faction")
+	Menu.addButton("Willand Faction 2 ($25,575)","buyVehicle","-1790546981:25575:Willand Faction 2")
+	Menu.addButton("Willand Faction 3 ($35,575)","buyVehicle","-2039755226:35575:Willand Faction 3")
 	Menu.addButton("Imponte Nightshade ($15,850)","buyVehicle","-1943285540:15850:Imponte Nightshade")
 	Menu.addButton("Albany Buccaneer ($12,500)","buyVehicle","682211828:12500:Albany Buccaneer")
 	Menu.addButton("Declasse Sabre Turbo ($16,775)","buyVehicle","-1685021548:16775:Declasse Sabre Turbo")
