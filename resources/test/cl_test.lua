@@ -25,7 +25,21 @@ local scenarios = {
 	{name = "mechanic", scenarioName = "WORLD_HUMAN_VEHICLE_MECHANIC"},
 	{name = "smoke", scenarioName = "WORLD_HUMAN_SMOKING"},
 	{name = "drink", scenarioName = "WORLD_HUMAN_DRINKING"},
-	{name = "bum", scenarioName = "WORLD_HUMAN_BUM_FREEWAY"}
+	{name = "bum 1", scenarioName = "WORLD_HUMAN_BUM_FREEWAY"},
+    {name = "bum 2", scenarioName = "WORLD_HUMAN_BUM_SLUMPED"},
+    {name = "bum 3", scenarioName = "WORLD_HUMAN_BUM_STANDING"},
+    {name = "bum 4", scenarioName = "WORLD_HUMAN_BUM_WASH"},
+    {name = "drill", scenarioName = "WORLD_HUMAN_CONST_DRILL"},
+    {name = "blower", scenarioName = "WORLD_HUMAN_GARDENER_LEAF_BLOWER"},
+    {name = "chillin'", scenarioName = "WORLD_HUMAN_DRUG_DEALER_HARD"},
+	{name = "mobile film", scenarioName = "WORLD_HUMAN_MOBILE_FILM_SHOCKING"},
+	{name = "planting", scenarioName = "WORLD_HUMAN_GARDENER_PLANT"},
+	{name = "golf", scenarioName = "WORLD_HUMAN_GOLF_PLAYER"},
+	{name = "hammer", scenarioName = "WORLD_HUMAN_HAMMERING"},
+	{name = "clean", scenarioName = "WORLD_HUMAN_MAID_CLEAN"},
+	{name = "guitar", scenarioName = "WORLD_HUMAN_MUSICIAN"},
+	{name = "party", scenarioName = "WORLD_HUMAN_PARTYING"},
+	{name = "prostitute", scenarioName = "WORLD_HUMAN_PROSTITUTE_HIGH_CLASS"}
 }
 
 RegisterNUICallback('escape', function(data, cb)

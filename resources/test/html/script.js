@@ -1,7 +1,7 @@
 var policeActions = ["Cuff", "Drag", "Search", "MDT", "Place", "Unseat"];
 var voipOptions = ["Yell", "Normal", "Whisper"];
 var emoteOptions = ["Cop", "Sit", "Chair", "Kneel", "Medic", "Notepad","Traffic", "Photo","Clipboard", "Lean", "Hangout", "Pot", "Fish", "Phone", "Yoga", "Bino", "Cheer", "Statue", "Jog",
-"Flex", "Sit up", "Push up", "Weld", "Mechanic","Smoke","Drink"];
+"Flex", "Sit up", "Push up", "Weld", "Mechanic","Smoke","Drink", "Bum 1", "Bum 2", "Bum 4", "Drill", "Blower", "Chillin'", "Mobile Film", "Planting", "Golf", "Hammer", "Clean", "Guitar", "Party", "Prostitute"];
 var emoteItemsPerPage = 8;
 
 var disableMouseScroll = true;
@@ -66,6 +66,7 @@ function playEmote(emoteNumber) {
 }
 
 function openEmotePage(pageNumber) {
+    //alert("opening emote page: " + pageNumber);
     $(".sidenav a").hide();
     // Cancel Emote btn
     $(".sidenav").append("<a onclick='playEmote()' class='emote-option'>Cancel Emote</a>");
@@ -75,17 +76,24 @@ function openEmotePage(pageNumber) {
             $(".sidenav").append("<a onclick='playEmote("+(x)+")' class='emote-option'>"+emoteOptions[x]+"</a>");
         }
     } else if (pageNumber == "2") {
-        for(var y = emoteItemsPerPage; y < (emoteItemsPerPage*2); y++) {
+        for(var y = emoteItemsPerPage; y < (emoteItemsPerPage*pageNumber); y++) {
             $(".sidenav").append("<a onclick='playEmote("+(y)+")' class='emote-option'>"+emoteOptions[y]+"</a>");
         }
     } else if (pageNumber == "3") {
-        for(var z = (emoteItemsPerPage*2); z < (emoteItemsPerPage*3); z++) {
+        for(var z = (emoteItemsPerPage*2); z < (emoteItemsPerPage*pageNumber); z++) {
             $(".sidenav").append("<a onclick='playEmote("+(z)+")' class='emote-option'>"+emoteOptions[z]+"</a>");
         }
     } else if (pageNumber == "4") {
-        for(var z = (emoteItemsPerPage*3); z < (emoteItemsPerPage*4); z++) {
+        for(var z = (emoteItemsPerPage*3); z < (emoteItemsPerPage*pageNumber); z++) {
             if (typeof emoteOptions[z] != "undefined") {
                 $(".sidenav").append("<a onclick='playEmote("+(z)+")' class='emote-option'>"+emoteOptions[z]+"</a>");
+            }
+        }
+    } else if (pageNumber == "5") {
+        //alert("emoteOptions[emoteItemsPerPage*4] = " + emoteOptions[emoteItemsPerPage*4]);
+        for(var z = (emoteItemsPerPage*4); z < (emoteItemsPerPage*pageNumber); z++) {
+            if (typeof emoteOptions[z] != "undefined") {
+            $(".sidenav").append("<a onclick='playEmote("+(z)+")' class='emote-option'>"+emoteOptions[z]+"</a>");
             }
         }
     }
