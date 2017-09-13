@@ -143,3 +143,13 @@ function serializeTable(val, name, skipnewlines, depth)
 
 	return tmp
 end
+
+-- Rcon commands
+AddEventHandler('rconCommand', function(commandName, args)
+	if commandName == "revive" then
+		local targetId = args[1]
+		if not targetId then RconPrint("Error: no target id"); CancelEvent() return end
+		TriggerClientEvent("RPD:reviveFromRcon", targetId)
+		CancelEvent()
+	end
+end)

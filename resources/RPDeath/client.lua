@@ -8,6 +8,11 @@ local dead = false
 
 --TriggerServerEvent('RPD:addPlayer')
 
+RegisterNetEvent("RPD:reviveFromRcon")
+AddEventHandler("RPD:reviveFromRcon", function()
+	allowRevive = true
+end)
+
 local timer = 180000
 AddEventHandler('RPD:startTimer', function()
 	while timer > 0 do
