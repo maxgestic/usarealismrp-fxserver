@@ -1,7 +1,7 @@
 var policeActions = ["Cuff", "Drag", "Search", "MDT", "Place", "Unseat"];
 var voipOptions = ["Yell", "Normal", "Whisper"];
 var emoteOptions = ["Cop", "Sit", "Chair", "Kneel", "Medic", "Notepad","Traffic", "Photo","Clipboard", "Lean", "Hangout", "Pot", "Fish", "Phone", "Yoga", "Bino", "Cheer", "Statue", "Jog",
-"Flex", "Sit up", "Push up", "Weld", "Mechanic","Smoke","Drink", "Bum 1", "Bum 2", "Bum 4", "Drill", "Blower", "Chillin'", "Mobile Film", "Planting", "Golf", "Hammer", "Clean", "Guitar", "Party", "Prostitute"];
+"Flex", "Sit up", "Push up", "Weld", "Mechanic","Smoke","Drink", "Bum 1", "Bum 2", "Bum 4", "Drill", "Blower", "Chillin'", "Mobile Film", "Planting", "Golf", "Hammer", "Clean", "Musician", "Party", "Prostitute"];
 var emoteItemsPerPage = 8;
 
 var disableMouseScroll = true;

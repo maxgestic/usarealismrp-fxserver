@@ -37,7 +37,7 @@ local scenarios = {
 	{name = "golf", scenarioName = "WORLD_HUMAN_GOLF_PLAYER"},
 	{name = "hammer", scenarioName = "WORLD_HUMAN_HAMMERING"},
 	{name = "clean", scenarioName = "WORLD_HUMAN_MAID_CLEAN"},
-	{name = "guitar", scenarioName = "WORLD_HUMAN_MUSICIAN"},
+	{name = "musician", scenarioName = "WORLD_HUMAN_MUSICIAN"},
 	{name = "party", scenarioName = "WORLD_HUMAN_PARTYING"},
 	{name = "prostitute", scenarioName = "WORLD_HUMAN_PROSTITUTE_HIGH_CLASS"}
 }
