@@ -154,7 +154,8 @@ function populateInventory(inventory, weapons, licenses) {
     }
     for(i in inventory) {
         var inventoryItemName = inventory[i].name;
-        $(".sidenav").append("<a class='inventory-item'>" + inventoryItemName + "</a>");
+        var inventoryItemQuantity = inventory[i].quantity;
+        $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+inventoryItemQuantity+")</span> " + inventoryItemName + "</a>");
     }
     for(i in weapons) {
         var weaponName = weapons[i].name;
@@ -183,7 +184,7 @@ $(function() {
             cursor.style.display = event.data.enable ? "block" : "none";
             document.body.style.display = event.data.enable ? "block" : "none";
             /* Set the width of the side navigation to 250px */
-            document.getElementById("mySidenav").style.width = "350px";
+            document.getElementById("mySidenav").style.width = "410px";
             // show interaction menu items
             $(".sidenav a").show();
             // show targetted player name

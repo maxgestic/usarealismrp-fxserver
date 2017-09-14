@@ -45,6 +45,13 @@ AddEventHandler("transport:addJob", function(job)
 	end
 end)
 
+RegisterServerEvent("go_postal:setActiveJob")
+AddEventHandler("go_postal:setActiveJob", function(source, coords, name)
+	if not activeJobs[source] then
+		activeJobs[source] = {name = name, x = coords.x, y = coords.y}
+	end
+end)
+
 TriggerEvent('es:addCommand', 'waypoint', function(source, args, user)
 	print("/waypoint called!")
 	if activeJobs[source] == nil then
