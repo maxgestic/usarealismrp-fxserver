@@ -71,7 +71,7 @@ Citizen.CreateThread(function()
 			DisableControlAction(1, 250, true)
 			DisableControlAction(1, 263, true)
 			DisableControlAction(1, 310, true)
-			DisableControlAction(0, 288, true) -- interaction menu (F1)
+			--DisableControlAction(0, 288, true) -- interaction menu (F1)
 
 			DisableControlAction(1, 22, true)
 			DisableControlAction(1, 55, true)
