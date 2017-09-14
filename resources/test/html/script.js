@@ -150,7 +150,7 @@ function populateInventory(inventory, weapons, licenses) {
     $(".sidenav a").hide();
     for(i in licenses) {
         var licenseName = licenses[i].name;
-        $(".sidenav").append("<a class='inventory-item'>" + licenseName + "</a>");
+        $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x1)</span> " + licenseName + "</a>");
     }
     for(i in inventory) {
         var inventoryItemName = inventory[i].name;
@@ -159,7 +159,7 @@ function populateInventory(inventory, weapons, licenses) {
     }
     for(i in weapons) {
         var weaponName = weapons[i].name;
-        $(".sidenav").append("<a class='inventory-item'>" + weaponName + "</a>");
+        $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x1)</span> " + weaponName + "</a>");
     }
     // back btn
     $(".sidenav").append("<a onclick='inventoryBackBtn()' id='inventory-back-btn' class='inventory-item'>Back</a>");
