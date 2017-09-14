@@ -13,8 +13,6 @@ local blips = {
 	{ title="Clothing Store", colour=67, id=73, x= 422.92, y=-811.772, z=29.4911 }, -- vinewood 6
 	{ title="Clothing Store", colour=67, id=73, x= -816.335, y=-1072.93, z=11.3281 }, -- vinewood 7
 	{ title="Clothing Store", colour=67, id=73, x= 78.0717, y=-1387.25, z=29.3761 }, -- vinewood 8
-	--{ title="Drug Dealer", colour=25, id=140, x=31.1395, y=-1928.05, z=21.7875 },
-	--{ title="Drug Buyer", colour=27, id=280, x=1435.595, y=6355.136, z=23.150 },
 	{ title="Ammu-Nation", colour=41, id=110, x=-330.184, y=6083.23, z=31.4548 },
 	{ title="Ammu-Nation", colour=41, id=110, x=1701.292, y=3750.450, z=34.365 },
     { title="Ammu-Nation", colour=41, id=110, x=237.428, y=-43.655, z=69.698 },
@@ -26,12 +24,8 @@ local blips = {
     { title="Ammu-Nation", colour=41, id=110, x=-3157.450, y=1079.633, z=20.692 },
     { title="Ammu-Nation", colour=41, id=110, x=16.6405, y=-1116.9636, z=29.7911 },
     { title="Ammu-Nation", colour=41, id=110, x=812.4276, y=-2145.2118, z=29.3063 },
-	--{ title="Car Dealership", colour=71, id=56, x=119.634, y=6626.24, z=31.957 },
 	{ title="Car Dealership", colour=76, id=225, x=-32.4886, y=-1111.35, z=25.3523 },
-	--{ title="DMV", colour=4, id=355, x=-447.723, y=6013.65, z=30.700 },
-	--{ title="DMV", colour=4, id=355, x=441.301, y=-981.434, z=29.689 },
 	{ title="DMV", colour=4, id=355, x = -544.857, y = -204.422, z = 38.2152 },
-	--{ title="Vehicle Impound", colour=64, id=68, x=-460.847, y=5978.19, z=31.3063 },
 	{ title="Bubba's Tow Co.", colour=64, id=68, x=401.492, y=-1632.016, z=29.291 },
 	{ title="Black Market Dealer", colour = 59, id = 52, x = 129.345, y = -1920.89, z = 20.0187 },
 	{ title="General Store", colour = 24 , id = 52, x=1729.59, y=6415.49, z=34.0 },
@@ -40,7 +34,7 @@ local blips = {
 	{ title="General Store", colour = 24 , id = 52, x=1135.6, y=-981.327, z=46.5269	 },
 	{ title="General Store", colour = 24 , id = 52, x=-1223.69, y=-907.691, z=12.3264 },
 	{ title="General Store", colour = 24 , id = 52, x=25.746, y=-1345.59, z=29.497 },
-	{ title="Sheriff's Office", colour = 38 , id = 60, x=451.255, y=-992.41, z=30.6896 },
+	{ title="Police Department", colour = 38 , id = 60, x=451.255, y=-992.41, z=30.6896 },
 	{ title="Fire Department", colour = 59, id = 60, x=207.106, y=-1641.45, z=28.5 },
 	{ title="Hospital", colour = 48, id = 61, x = 307.63, y = -593.948, z = 42.2919 },
 	{ title="Strip Club", colour = 48, id = 121, x=129.607, y=-1299.83, z=29.2327 },
@@ -50,7 +44,8 @@ local blips = {
 	{ title="Yellow Jack", colour = 46, id = 93, x = 1986.1, y = 3050.57, z = 47.2151 },
 	{ title="Downtown Taxi", colour = 60, id = 198, x=895.563, y=-179.536, z=74.7003 },
 	{ title="Bank", colour = 24, id = 108, x=254.565, y=225.495, z=100.176 },
-	{ title="Seaview Aircraft", colour = 60, id = 251, x=-943.103, y=-2958.14, z=13.9451 }
+	{ title="Seaview Aircraft", colour = 60, id = 251, x=-943.103, y=-2958.14, z=13.9451 },
+	{ title="Meth", colour = 75, id = 499, x = 1389.28, y = 3604.6, z = 38.1 }
 }
 
 Citizen.CreateThread(function()
