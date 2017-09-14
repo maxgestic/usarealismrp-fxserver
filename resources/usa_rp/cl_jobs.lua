@@ -6,7 +6,7 @@
 
 
 local jobs = {
-    {name = "Meth", peds = {{x = 70.0828, y = 3745.53, z = 39.7858}, {x = 1257.82, y = -1611.92, z = 53.3251}}, jobSupplies = "Suspicious Chemicals", started = false, locations = {{name="Meth Supply Pickup", x = 70.0828, y = 3745.53, z = 38.6858},{name="Meth Lab",  x = 1389.28, y = 3604.6, z = 38.1},{name="Meth Dropoff 1", x = 1257.82, y = -1611.92, z = 52.3251}}}
+    {name = "Meth", peds = {{x = 70.0828, y = 3745.53, z = 39.7858, name = "supplies_ped", model = "G_M_Y_Lost_03"}, {x = 1257.82, y = -1611.92, z = 53.3251, name = "methdropoff_ped_1", model = "G_M_Y_SalvaGoon_02"}}, jobSupplies = "Suspicious Chemicals", started = false, locations = {{name="Meth Supply Pickup", x = 70.0828, y = 3745.53, z = 38.6858},{name="Meth Lab",  x = 1389.28, y = 3604.6, z = 38.1},{name="Meth Dropoff 1", x = 1257.82, y = -1611.92, z = 52.3251}}}
 }
 
 local peds = {}
@@ -20,26 +20,27 @@ local animName = ""
 
 local activeDropoffDestinationCoords = {x = 0.0, y = 0.0}
 
--- spawn job peds
-local created = false
-local hash = GetHashKey("A_M_M_Polynesian_01")
+local pedIsBusy = false
+
 -- thread code stuff below was taken from an example on the wiki
 -- Create a thread so that we don't 'wait' the entire game
 Citizen.CreateThread(function()
-	-- Request the model so that it can be spawned
-	RequestModel(hash)
-	-- Check if it's loaded, if not then wait and re-request it.
-	while not HasModelLoaded(hash) do
-		RequestModel(hash)
-		Citizen.Wait(0)
-	end
-	-- Model loaded, continue
-	-- Spawn the peds
-	for i = 1, #jobs do
+    -- Spawn the peds
+    for i = 1, #jobs do
         for j = 1, #jobs[i].peds do
+            local hash = GetHashKey(jobs[i].peds[j].model)
+	        -- Request the model so that it can be spawned
+	        RequestModel(hash)
+	        -- Check if it's loaded, if not then wait and re-request it.
+	        while not HasModelLoaded(hash) do
+		        RequestModel(hash)
+		        Citizen.Wait(0)
+	        end
+	         -- Model loaded, continue
             local x = jobs[i].peds[j].x
             local y = jobs[i].peds[j].y
             local z = jobs[i].peds[j].z
+
             --Citizen.Trace("spawned in ped # " .. i)
             local ped = CreatePed(4, hash, x, y, z, 175.189 --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
             SetEntityCanBeDamaged(ped,false)
@@ -75,6 +76,7 @@ AddEventHandler("usa_rp:returnPedToStartPosition", function(pedType)
         if pedType == peds[i].name then
             TaskGoStraightToCoord(peds[i].handle, jobs[1].peds[1].x, jobs[1].peds[1].y, jobs[1].peds[1].z, 2, -1)
             SetBlockingOfNonTemporaryEvents(peds[i].handle, false)
+            pedIsBusy = false
         end
     end
 end)
@@ -139,10 +141,11 @@ Citizen.CreateThread(function ()
                             end
                         elseif jobs[i].locations[j].name == "Meth Supply Pickup" then
                             drawTxt('Press ~g~E~s~ to buy the supplies needed to create meth',0,1,0.5,0.8,0.6,255,255,255,255)
-                            if IsControlJustPressed(1, 38) then -- 38 = E
+                            if IsControlJustPressed(1, 38) and not pedIsBusy then -- 38 = E
                                 for i = 1, #peds do
                                     if peds[i].name == "meth_supplies_ped" then
                                         local walkToCoords = {x = 66.77, y = 3759.16, z = 39.7337}
+                                        pedIsBusy = true
                                         --Citizen.Trace("Found meth supplier ped! do animation now...")
                                         TaskGoStraightToCoord(peds[i].handle, walkToCoords.x, walkToCoords.y, walkToCoords.z, 2, -1)
                                 		SetBlockingOfNonTemporaryEvents(peds[i].handle, false)
@@ -189,7 +192,7 @@ Citizen.CreateThread(function()
                 animDict = "timetable@jimmy@ig_1@idle_a"
                 animName = "hydrotropic_bud_or_something"
                 TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
-                for i = 1, 60 do
+                for i = 1, 80 do
                     if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) then
         				RequestAnimDict(animDict)
         				while not HasAnimDictLoaded(animDict) do
@@ -209,7 +212,7 @@ Citizen.CreateThread(function()
                     name = "Meth",
                     type = "drug",
                     legality = "illegal",
-                    quantity = 1
+                    quantity = 3
                 }
                 Citizen.Trace("giving meth to player!")
                 TriggerServerEvent("usa_rp:giveItem", meth)

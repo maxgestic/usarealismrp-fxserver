@@ -52,6 +52,13 @@ AddEventHandler("go_postal:setActiveJob", function(source, coords, name)
 	end
 end)
 
+RegisterServerEvent("go_postal:removeActiveJob")
+AddEventHandler("go_postal:removeActiveJob", function(source)
+	if activeJobs[source] then
+		activeJobs[source] = nil
+	end
+end)
+
 TriggerEvent('es:addCommand', 'waypoint', function(source, args, user)
 	print("/waypoint called!")
 	if activeJobs[source] == nil then
