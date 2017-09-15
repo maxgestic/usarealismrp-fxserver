@@ -34,8 +34,12 @@ local blips = {
 	{ title="General Store", colour = 24 , id = 52, x=1135.6, y=-981.327, z=46.5269	 },
 	{ title="General Store", colour = 24 , id = 52, x=-1223.69, y=-907.691, z=12.3264 },
 	{ title="General Store", colour = 24 , id = 52, x=25.746, y=-1345.59, z=29.497 },
-	{ title="Police Department", colour = 38 , id = 60, x=451.255, y=-992.41, z=30.6896 },
-	{ title="Fire Department", colour = 59, id = 60, x=207.106, y=-1641.45, z=28.5 },
+	{ title="Police Department", colour = 38 , id = 60, x=451.255, y=-992.41, z=30.6896 }, -- LOS SANTOS
+	{ title="Sheriff's Office", colour = 38 , id = 60, x=1853.2, y=3687.74, z=34.267 }, -- SANDY
+	{ title="Sheriff's Office", colour = 38 , id = 60, x=-447.041, y=6012.97, z=31.7164 }, -- PALETO
+	{ title="Fire Department", colour = 59, id = 60, x=207.106, y=-1641.45, z=28.5 }, -- LOS SANTOS
+	{ title="Fire Department", colour = 59, id = 60, x=-375.435, y=6114.61, z=35.4397 }, -- PALETO
+	{ title="Fire Department", colour = 59, id = 60, x=1694.01, y=3589.87, z=40.3212 }, -- SANDY
 	{ title="Hospital", colour = 48, id = 61, x = 307.63, y = -593.948, z = 42.2919 },
 	{ title="Strip Club", colour = 48, id = 121, x=129.607, y=-1299.83, z=29.2327 },
 	{ title="FBI", colour = 47, id = 88, x=140.577, y=-768.375, z=45.752 },

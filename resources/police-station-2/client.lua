@@ -42,11 +42,15 @@ local menu_loadout = 0
 local menu_armoury = 0
 local position = 1
 local policeLockerRooms = {
-{x=439.817 , y=-993.397 , z=29.689}, 
-{x=451.255 , y=-992.41 , z=29.689}
+{x=439.817 , y=-993.397 , z=29.689},
+{x=451.255 , y=-992.41 , z=29.689},
+ {x=1853.2, y=3687.74, z=33.267}, -- sandy
+ {x=-447.041, y=6012.97, z=30.7164} -- paleto
 }
 local policeArmourys = {
-{x=451.564 , y=-980.095 , z=29.6896}, 
+{x=451.564 , y=-980.095 , z=29.6896},
+{x=1851.34 , y=3683.64 , z=33.2671}, -- sandy
+{x=-452.361 , y=6006.11 , z=30.8409} -- paleto
 }
 
 local arrSkinGeneralCaptions = {"LSPD Male","LSPD Female","Motor Unit","SWAT","Sheriff Male","Sheriff Female","Traffic Warden","Custom Male","Custom Female","FBI 1","FBI 2","FBI 3","FBI 4","Detective Male","Detective Female","Prison Guard","Ranger Male", "Ranger Female", "Tactical"}
@@ -132,7 +136,7 @@ end)
 
 RegisterNetEvent("policestation2:giveDefaultLoadout")
 AddEventHandler("policestation2:giveDefaultLoadout", function()
-	Citizen.Trace("true")			
+	Citizen.Trace("true")
 	RemoveAllPedWeapons(GetPlayerPed(-1), true)
 	local playerWeapons = { "WEAPON_BZGAS", "WEAPON_FLARE" , "WEAPON_CARBINERIFLE" ,"WEAPON_COMBATPISTOL", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_PUMPSHOTGUN", "WEAPON_FLAREGUN", "WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER" }
 	local name, hash
@@ -147,7 +151,7 @@ AddEventHandler("policestation2:giveDefaultLoadout", function()
 	GiveWeaponComponentToPed(GetPlayerPed(-1), 1593441988 , 0x359B7AAE)
 	GiveWeaponComponentToPed(GetPlayerPed(-1), 2210333304, 0x7BC4CDDC)
 	GiveWeaponComponentToPed(GetPlayerPed(-1), 2210333304 , 0xC164F53)
-	
+
 end)
 
 RegisterNetEvent("policestation2:isWhitelisted")
@@ -167,7 +171,7 @@ RegisterNetEvent("policestation2:showArmoury")
 AddEventHandler("policestation2:showArmoury", function()
 	--Citizen.Trace("Inside is whitelisted client evnet")
 	--menu = 1
-	
+
 	menu_armoury = 1
 end)
 
@@ -220,14 +224,14 @@ AddEventHandler("policestation2:ShowArmouryMenu", function()
 			--menu_loadout = 2
 		end
 		end)
-	
+
 	TriggerEvent("GUI2:Option", "Default Loadout", function(cb)
 		if(cb) then
 			TriggerEvent("policestation2:giveDefaultLoadout")
 			TriggerEvent("policestation2:notify","Default Loadout")
 		end
 		end)
-	
+
 	TriggerEvent("GUI2:Option", "Marksman Loadout", function(cb)
 		if(cb) then
 			Citizen.Trace("true")
@@ -244,11 +248,11 @@ AddEventHandler("policestation2:ShowArmouryMenu", function()
 			GiveWeaponComponentToPed(GetPlayerPed(-1), 1593441988 , 0x359B7AAE)
 			GiveWeaponComponentToPed(GetPlayerPed(-1), 100416529 , 0xBC54DA77)
 			TriggerEvent("policestation2:notify","Marksman Loadout")
-			
+
 			--menu_loadout = 2
 		end
 		end)
-	
+
 	TriggerEvent("GUI2:Option", "Undercover Loadout", function(cb)
 		if(cb) then
 			Citizen.Trace("true")
@@ -267,7 +271,7 @@ AddEventHandler("policestation2:ShowArmouryMenu", function()
 			--menu_loadout = 2
 		end
 		end)
-		
+
 	TriggerEvent("GUI2:Option", "Prison Guard Loadout", function(cb)
 		if(cb) then
 			Citizen.Trace("true")
@@ -286,7 +290,7 @@ AddEventHandler("policestation2:ShowArmouryMenu", function()
 			--menu_loadout = 2
 		end
 		end)
-	
+
 	TriggerEvent("GUI2:Update")
 end)
 
@@ -345,7 +349,7 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 
 		end
 		end)
-		
+
 	TriggerEvent("GUI2:Option", "Load Default", function(cb)
 		if(cb) then
 			Citizen.Trace("true")
@@ -355,7 +359,7 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 
 		end
 		end)
-		
+
 	TriggerEvent("GUI2:Option", "Save as Default", function(cb)
 		if(cb) then
 			Citizen.Trace("true")
@@ -390,7 +394,7 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 
 		end
 		end)
-	
+
 	TriggerEvent("GUI2:Option", "Off-Duty", function(cb)
 		if(cb) then
 			Citizen.Trace("true")
@@ -400,7 +404,7 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 
 		end
 		end)
-	
+
 	--[[TriggerEvent("GUI2:Option", "Save", function(cb)
 		if(cb) then
 			--Citizen.Trace("true")
@@ -596,7 +600,7 @@ Citizen.CreateThread(function()
 			end
 
 		end
-		
+
 		if(IsControlJustPressed(1, 51) and IsNearArmoury() == true) then
 			if(menu_armoury == 0) then
 				--TriggerServerEvent("policestation2:checkWhitelist", "policestation2:isWhitelisted")
@@ -607,8 +611,8 @@ Citizen.CreateThread(function()
 			end
 
 		end
-		
-		
+
+
 
 		if(menu_loadout == 1) then
 			--Show main menu
@@ -638,5 +642,3 @@ AddEventHandler("CS:giveWeapons", function(weapons)
 		GiveWeaponToPed(GetPlayerPed(-1), weaponHash, 1000, 0, false) -- name already is the hash
 	end
 end)
-
-

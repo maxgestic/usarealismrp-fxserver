@@ -41,7 +41,9 @@ local menu = 0
 local position = 1
 local EMSLockerRooms = {
 {x = 207.106, y = -1641.45, z = 28.5},
-{x = 373.269, y = -1441.48, z = 28.5}
+{x = 373.269, y = -1441.48, z = 28.5},
+{x=-375.435, y=6114.61, z=35.4397}, -- paleto
+{x=1694.01, y=3589.87, z=40.3212} -- sandy
 }
 
 local arrSkinGeneralCaptions = {"Fireman", "Paramedic - Male", "Paramedic - Female", "Doctor"}
@@ -135,7 +137,7 @@ end)
 
 RegisterNetEvent("emsstation2:giveDefaultLoadout")
 AddEventHandler("emsstation2:giveDefaultLoadout", function()
-	Citizen.Trace("true")			
+	Citizen.Trace("true")
 	RemoveAllPedWeapons(GetPlayerPed(-1), true)
 	local playerWeapons = { "WEAPON_FLARE" , "WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER" }
 	local name, hash
@@ -202,7 +204,7 @@ AddEventHandler("emsstation2:ShowMainMenu", function()
 
 		end
 		end)
-		
+
 	TriggerEvent("GUI2:Option", "Off-Duty", function(cb)
 		if(cb) then
 			Citizen.Trace("true")
@@ -347,7 +349,7 @@ Citizen.CreateThread(function()
 		else
 			menu = 0
 		end
-		
+
 		if(IsControlJustPressed(1, 51) and IsNearEMSLocker() == true) then
 			if(menu == 0) then
 				TriggerServerEvent("emsstation2:checkWhitelist", "emsstation2:isWhitelisted")
@@ -355,7 +357,7 @@ Citizen.CreateThread(function()
 				menu = 0
 			end
 
-		end		
+		end
 
 		if(menu == 1) then
 			--Show main menu
@@ -373,8 +375,3 @@ Citizen.CreateThread(function()
 		Wait(0)
 	end
 end)
-
-
-
-
-
