@@ -44,3 +44,7 @@ body {
 .inventory-item-quantity {
     font-size: 20px;
 }
+
+.illegal-item {
+    color: #ed270d !important;
+}

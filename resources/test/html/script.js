@@ -155,7 +155,11 @@ function populateInventory(inventory, weapons, licenses) {
     for(i in inventory) {
         var inventoryItemName = inventory[i].name;
         var inventoryItemQuantity = inventory[i].quantity;
-        $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+inventoryItemQuantity+")</span> " + inventoryItemName + "</a>");
+        var inventoryItemLegality = inventory[i].legality;
+        if (inventoryItemLegality == "illegal")
+            $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+inventoryItemQuantity+")</span> <span class='illegal-item'>" + inventoryItemName + "</span></a>");
+        else
+            $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+inventoryItemQuantity+")</span> " + inventoryItemName + "</a>");
     }
     for(i in weapons) {
         var weaponName = weapons[i].name;
