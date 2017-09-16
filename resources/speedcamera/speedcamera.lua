@@ -49,7 +49,7 @@ Citizen.CreateThread(function()
 					vehModel == GetHashKey("policeb") or
 					vehModel == GetHashKey("sheriff") or
 					vehModel == GetHashKey("sheriff2") then
-					drawTxt(0.1025,0.84,0.185,0.206, 0.40, info, 255,255,255,255)
+					drawTxt(0.105,0.808,0.185,0.206, 0.40, info, 255,255,255,255)
 				end
 			end
 		end

@@ -35,8 +35,8 @@ settings["fr"] = {
 
 
 hud_form = 1 -- 1 : Vertical | 2 = Horizontal
-hud_x = 0.175
-hud_y = 0.885
+hud_x = 0.181
+hud_y = 0.905
 
 text_x = 0.2575
 text_y = 0.975

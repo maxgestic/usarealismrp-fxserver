@@ -337,14 +337,14 @@ function renderBoxes()
 			DrawRect(hud_x, hud_y, 0.0119999999999998, essence, 225, 146, 45, 255)
 			local percent = (essence/0.142)*100
 
-			DrawAdvancedText(text_x, text_y, 0.005, 0.0028, 0.4,round(percent,1).."%", 255, 255, 255, 255, 0, 1)
+			--DrawAdvancedText(text_x, text_y, 0.005, 0.0028, 0.4,round(percent,1).."%", 255, 255, 255, 255, 0, 1)
 		else
 			DrawRect(hud_x, hud_y, 0.15, 0.0149999999999998, 255, 255, 255, 200)
 			DrawRect(hud_x, hud_y, 0.142, 0.0119999999999998, 80, 80, 80, 255)
 			DrawRect(hud_x, hud_y, essence, 0.0119999999999998, 225, 146, 45, 255)
 			local percent = (essence/0.142)*100
 
-			DrawAdvancedText(text_x, text_y, 0.005, 0.0028, 0.4,round(percent,1).."%", 255, 255, 255, 255, 0, 1)
+			--DrawAdvancedText(text_x, text_y, 0.005, 0.0028, 0.4,round(percent,1).."%", 255, 255, 255, 255, 0, 1)
 		end
 	end
 end
