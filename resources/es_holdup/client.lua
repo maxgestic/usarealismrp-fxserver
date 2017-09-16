@@ -26,13 +26,13 @@ end
 
 local stores = {
 	["paleto_twentyfourseven"] = {
-		position = { ['x'] = 1730.35949707031, ['y'] = 6416.7001953125, ['z'] = 35.0372161865234 },
+		position = { ['x'] = 1728.77, ['y'] = 6417.61, ['z'] = 35.0372161865234 },
 		reward = 5000,
 		nameofstore = "24/7 (Paleto Bay)",
 		lastrobbed = 0
 	},
 	["sandyshores_twentyfoursever"] = {
-		position = { ['x'] = 1960.4197998047, ['y'] = 3742.9755859375, ['z'] = 32.343738555908 },
+		position = { ['x'] = 1959.49, ['y'] = 3740.27, ['z'] = 32.543738555908 },
 		reward = 5000,
 		nameofstore = "24/7 (Sandy Shores)",
 		lastrobbed = 0
@@ -81,7 +81,7 @@ local stores = {
 		lastrobbed = 0
 	},
 	["clintonAve_twentyfourseven"] = {
-		position = { ['x'] = 379.291, ['y'] = 332.149, ['z'] = 103.566 },
+		position = { ['x'] = 373.058, ['y'] = 329.096, ['z'] = 103.566 },
 		reward = 5000,
 		nameofstore = "Twenty-Four Seven. (Clinton Ave.)",
 		lastrobbed = 0
