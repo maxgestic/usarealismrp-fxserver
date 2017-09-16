@@ -103,3 +103,14 @@ TriggerEvent('es:addCommand', 'extra', function(source, args, user)
 		end
 	end)
 end)
+
+TriggerEvent('es:addCommand', 'engine', function(source, args, user)
+	if user.getJob() == "sheriff" then
+		local userSource = tonumber(source)
+		local param = args[2]
+		TriggerClientEvent("vehicleCommands:upgradeEngine", userSource, param)
+		--local engine = 11
+		--local totalOptions = GetNumVehicleMods()
+		--SetVehicleMod(currentvehicle, engine, param)
+	end
+end)

@@ -73,3 +73,34 @@ AddEventHandler("vehicleCommands:setExtra", function(extra, toggle)
 		TriggerEvent("chatMessage", "CAR", { 255, 180, 0 }, "You must be in a car to set the livery.")
 	end
 end)
+
+RegisterNetEvent("vehicleCommands:upgradeEngine")
+AddEventHandler("vehicleCommands:upgradeEngine", function(param)
+	if param then
+		local curVehicle = GetVehiclePedIsIn(GetPlayerPed(-1), true)
+		local engine = 11
+	--	local engineParam = 3
+	--	local armor = 16
+	--	local armorLevel = 3
+	--	local turbo = 18
+		local turboActivated = true
+		SetVehicleModKit(curVehicle, 0)
+		SetVehicleMod(curVehicle, engine, tonumber(param))
+		--SetVehicleMod(curVehicle, armor, armorLevel)
+		--SetVehicleMod(curVehicle, turbo, turboActivated)
+		Citizen.Trace("after upgrading...")
+		Citizen.Trace("curVehicle = " .. curVehicle)
+		Citizen.Trace("mod #11: " .. GetVehicleMod(curVehicle, engine))
+		--Citizen.Trace("mod #16: " .. GetVehicleMod(curVehicle, armor))
+		--Citizen.Trace("mod #18: " .. GetVehicleMod(curVehicle, turbo))
+		SetNotificationTextEntry("STRING")
+		AddTextComponentString("Vehicle engine upgraded! Level: " .. param)
+		DrawNotification(0,1)
+	else
+		Citizen.Trace("no engine param passed!")
+		local num = GetNumVehicleMods(curVehicle, engine)
+		SetNotificationTextEntry("STRING")
+		AddTextComponentString("~y~Options: ~w~0 - " .. num)
+		DrawNotification(0,1)
+	end
+end)
