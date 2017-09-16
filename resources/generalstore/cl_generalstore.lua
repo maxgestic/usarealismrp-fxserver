@@ -5,13 +5,14 @@ local locations = {
 	{ x=1135.6, y=-981.327, z=45.5269	 },
 	{ x=-1223.69, y=-907.691, z=11.5264 },
 	{ x=25.746, y=-1345.59, z=28.597 },
+    {x=1960.4197998047, y = 3742.9755859375, z = 31.343738555908}
 }
 local inventory
 
 function isPlayerAtGeneralStore()
 	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
 	for i = 1, #locations do
-		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,false) < 5 then
+		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,false) < 1 then
 			return true
 		end
 	end
