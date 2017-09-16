@@ -34,6 +34,9 @@ local function DrawPlayerList()
         end
     end
 
+	-- sort
+	table.sort(players)
+
 	--Top bar
 	DrawRect( 0.11, 0.025, 0.2, 0.03, 0, 0, 0, 220 )
 
@@ -71,7 +74,7 @@ local function DrawPlayerList()
 		SetTextScale( 0.45, 0.45 )
 		SetTextColour( 255, 255, 255, 255 )
 		SetTextEntry( "STRING" )
-		AddTextComponentString( GetPlayerName( v ) )
+		AddTextComponentString( (v+1) .. " | " .. GetPlayerName( v ) )
 		DrawText( 0.015, 0.007 + ( k * 0.03 ) )
 
 
