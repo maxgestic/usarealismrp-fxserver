@@ -6,7 +6,7 @@ local Settings = {
 	["PlayerID"] = true,
 
 	--Should the scoreboard draw voice indicator?
-	["VoiceIndicator"] = true,
+	["VoiceIndicator"] = false,
 
 	--Display time in milliseconds
 	["DisplayTime"] = 5000,
@@ -23,6 +23,8 @@ local Settings = {
 	--[47] = true,
 }
 
+local xOffset, yOffset = 0.4, 0
+
 -- END OF SETTINGS --
 
 local function DrawPlayerList()
@@ -38,7 +40,7 @@ local function DrawPlayerList()
 	table.sort(players)
 
 	--Top bar
-	DrawRect( 0.11, 0.025, 0.2, 0.03, 0, 0, 0, 220 )
+	DrawRect( 0.11 + xOffset, 0.025, 0.2, 0.03, 0, 0, 0, 220 )
 
 	--Top bar title
 	SetTextFont( 4 )
@@ -49,7 +51,7 @@ local function DrawPlayerList()
 	SetTextEdge( 1, 0, 0, 0, 255 )
 	SetTextEntry( "STRING" )
 	AddTextComponentString( "Players: " .. #players )
-	DrawText( 0.015, 0.007 )
+	DrawText( 0.01 + xOffset, 0.007 )
 
 	for k, v in pairs( players ) do
 		local r
@@ -67,15 +69,15 @@ local function DrawPlayerList()
 		end
 
 		--Row BG
-		DrawRect( 0.11, 0.025 + ( k * 0.03 ), 0.2, 0.03, r, g, b, 220 )
+		DrawRect( 0.11 + xOffset, 0.025 + ( k * 0.03 ), 0.2, 0.03, r, g, b, 220 )
 
 		--Name Label
 		SetTextFont( 4 )
 		SetTextScale( 0.45, 0.45 )
 		SetTextColour( 255, 255, 255, 255 )
 		SetTextEntry( "STRING" )
-		AddTextComponentString( (v+1) .. " | " .. GetPlayerName( v ) )
-		DrawText( 0.015, 0.007 + ( k * 0.03 ) )
+		AddTextComponentString( GetPlayerServerId(v) .. " | " .. GetPlayerName( v ) )
+		DrawText( 0.01 + xOffset, 0.007 + ( k * 0.03 ) )
 
 
 		--Voice Indicator
