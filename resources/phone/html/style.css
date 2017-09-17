@@ -17,13 +17,15 @@ body {
 /* custom */
 #phone-wrap {
     padding-top: 20em;
-    margin: -5em auto 0 auto;
     height: 900px;
     width: 700px;
     background-image: url('samsung-phone.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
+    position:absolute;
+    top: 0;
+    right: 10em;
 }
 
 #screen-wrap {

@@ -1,3 +1,6 @@
+local scenario = "WORLD_HUMAN_STAND_MOBILE"
+local startedTask = false
+
 RegisterNetEvent("pm:sendMessage")
 AddEventHandler("pm:sendMessage", function(from, msg)
 
@@ -85,6 +88,8 @@ RegisterNUICallback('sendTowMessage', function(data, cb)
 end)
 
 RegisterNUICallback('escape', function(data, cb)
+	startedTask = false
+	ClearPedTasks(GetPlayerPed(-1))
     EnableGui(false)
     cb('ok')
 end)
@@ -92,6 +97,20 @@ end)
 Citizen.CreateThread(function()
     while true do
         if phoneEnabled then
+			if not startedTask then
+				ClearPedTasks(GetPlayerPed(-1))
+				TaskStartScenarioInPlace(GetPlayerPed(-1), scenario, 0, true);
+				startedTask = true
+			end
+			--[[
+			if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) then
+				RequestAnimDict(animDict)
+				while not HasAnimDictLoaded(animDict) do
+					Citizen.Wait(100)
+				end
+				TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
+			end
+			--]]
             DisableControlAction(0, 1, phoneEnabled) -- LookLeftRight
             DisableControlAction(0, 2, phoneEnabled) -- LookUpDown
             DisableControlAction(0, 142, phoneEnabled) -- MeleeAttackAlternate
