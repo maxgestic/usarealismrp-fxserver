@@ -59,3 +59,31 @@ AddEventHandler("interaction:checkPlayerJob", function()
         end
     end)
 end)
+
+RegisterServerEvent("interaction:removeItemFromPlayer")
+AddEventHandler("interaction:removeItemFromPlayer", function(itemName)
+    if string.find(itemName,"%)") then
+        local i = string.find(itemName, "%)")
+        i = i + 2
+        itemName = string.sub(itemName, i)
+        print("new item name = " .. itemName)
+    end
+    local userSource = tonumber(source)
+    TriggerEvent("es:getPlayerFromId", userSource, function(user)
+        local inventory = user.getInventory()
+        for i = 1, #inventory do
+            local item = inventory[i]
+            if item.name == itemName then
+                if item.quantity > 1 then
+                    inventory[i].quantity = item.quantity - 1
+                    user.setInventory(inventory)
+                    return
+                else
+                    table.remove(inventory, i)
+                    user.setInventory(inventory)
+                    return
+                end
+            end
+        end
+    end)
+end)

@@ -104,6 +104,35 @@ RegisterNUICallback('performPoliceAction', function(data, cb)
     end
 end)
 
+RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
+    TriggerEvent("test:escapeFromCSharp")
+    local actionName = data.actionName
+	local itemName = data.itemName
+	if actionName and itemName then
+		--Citizen.Trace("button name = " .. actionName .. ", item = " .. itemName)
+		if actionName == "use" then
+			interactionMenuUse(itemName)
+		elseif actionName == "drop" then
+			TriggerEvent("interaction:notify", "~y~Under construction")
+		elseif actionName == "give" then
+			TriggerEvent("interaction:notify", "~y~Under construction")
+		end
+	end
+end)
+
+function interactionMenuUse(itemName)
+	-- METH
+	if string.find(itemName, "Meth") then
+		--Citizen.Trace("meth found to use!!")
+		TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
+		TriggerEvent("interaction:notify", "You have used: (x1) Meth")
+		intoxicate()
+		reality()
+	else
+		TriggerEvent("interaction:notify", "There is no use action for that item!")
+	end
+end
+
 RegisterNetEvent("interaction:sendPlayersJob")
 AddEventHandler("interaction:sendPlayersJob", function(playerJob)
     SendNUIMessage({
@@ -159,3 +188,33 @@ Citizen.CreateThread(function()
         Citizen.Wait(0)
     end
 end)
+
+-- getting drunk / high effect
+function intoxicate()
+   TaskStartScenarioInPlace(GetPlayerPed(-1), "WORLD_HUMAN_DRUG_DEALER", 0, 1)
+   Citizen.Wait(5000)
+   DoScreenFadeOut(1000)
+   Citizen.Wait(1000)
+   ClearPedTasksImmediately(GetPlayerPed(-1))
+   SetTimecycleModifier("spectator5")
+   SetPedMotionBlur(GetPlayerPed(-1), true)
+   SetPedMovementClipset(GetPlayerPed(-1), "MOVE_M@DRUNK@SLIGHTLYDRUNK", true)
+   SetPedIsDrunk(GetPlayerPed(-1), true)
+   DoScreenFadeIn(1000)
+ end
+
+ function reality()
+   Citizen.Wait(50000)
+   DoScreenFadeOut(1000)
+   Citizen.Wait(1000)
+   DoScreenFadeIn(1000)
+   ClearTimecycleModifier()
+   ResetScenarioTypesEnabled()
+   ResetPedMovementClipset(GetPlayerPed(-1), 0)
+   SetPedIsDrunk(GetPlayerPed(-1), false)
+   SetPedMotionBlur(GetPlayerPed(-1), false)
+   -- Stop the mini mission
+   Citizen.Trace("Going back to reality\n")
+ end
+
+ -- end drunk / high effect

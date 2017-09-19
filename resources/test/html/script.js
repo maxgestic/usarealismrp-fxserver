@@ -1,7 +1,7 @@
 var policeActions = ["Cuff", "Drag", "Search", "MDT", "Place", "Unseat"];
 var voipOptions = ["Yell", "Normal", "Whisper"];
 var emoteOptions = ["Cop", "Sit", "Chair", "Kneel", "Medic", "Notepad","Traffic", "Photo","Clipboard", "Lean", "Hangout", "Pot", "Fish", "Phone", "Yoga", "Bino", "Cheer", "Statue", "Jog",
-"Flex", "Sit up", "Push up", "Weld", "Mechanic","Smoke","Drink", "Bum 1", "Bum 2", "Bum 4", "Drill", "Blower", "Chillin'", "Mobile Film", "Planting", "Golf", "Hammer", "Clean", "Musician", "Party", "Prostitute"];
+"Flex", "Sit up", "Push up", "Weld", "Mechanic","Smoke","Drink", "Bum 1", "Bum 2", "Bum 3", "Drill", "Blower", "Chillin'", "Mobile Film", "Planting", "Golf", "Hammer", "Clean", "Musician", "Party", "Prostitute"];
 var emoteItemsPerPage = 8;
 
 var disableMouseScroll = true;
@@ -166,7 +166,8 @@ function populateInventory(inventory, weapons, licenses) {
         $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x1)</span> " + weaponName + "</a>");
     }
     // back btn
-    $(".sidenav").append("<a onclick='inventoryBackBtn()' id='inventory-back-btn' class='inventory-item'>Back</a>");
+    $(".sidenav").append("<a id='inventory-back-btn' class='inventory-item'>Back</a>");
+
 }
 
 /* Set the width of the side navigation to 0 */
@@ -178,6 +179,8 @@ function closeNav() {
     $(".sidenav .emote-option").remove();
     $(".sidenav .emote-option").remove();
     $(".sidenav .police-action").remove();
+    $(".sidenav .inventory-action-item").remove();
+    $(".sidenav .inventory-actions-back-btn").remove();
     $("#police-btn").remove();
     document.getElementById("mySidenav").style.width = "0";
 }
@@ -263,4 +266,51 @@ $(function() {
         openEmoteMenu();
     });
 
+    $('.sidenav').on('click', '.inventory-item', function() {
+        var itemName = $(this).text();
+        //alert("you clicked: " + itemName);
+        if (itemName != "Back") {
+            $(".sidenav a").hide();
+            $(".sidenav").append("<a class='inventory-item inventory-action-item'>Use</a>");
+            $(".sidenav").append("<a class='inventory-item inventory-action-item'>Drop</a>");
+            $(".sidenav").append("<a class='inventory-item inventory-action-item'>Give</a>");
+            $(".sidenav").append("<a onclick='inventoryActionsBackBtn()' class='inventory-actions-back-btn'>Back</a>");
+        } else {
+            $(".sidenav .inventory-item").remove();
+            $(".sidenav a").show();
+        }
+    });
+
+    $('.sidenav').on('click', '.inventory-item', function() {
+        var itemName = $(this).text();
+        //alert("you clicked: " + itemName);
+        if (itemName != "Back") {
+            $(".sidenav a").hide();
+            $(".sidenav").append("<a data-itemName='"+itemName+"' class='inventory-item inventory-action-item'>Use</a>");
+            $(".sidenav").append("<a data-itemName='"+itemName+"' class='inventory-item inventory-action-item'>Drop</a>");
+            $(".sidenav").append("<a data-itemName='"+itemName+"' class='inventory-item inventory-action-item'>Give</a>");
+            $(".sidenav").append("<a onclick='inventoryActionsBackBtn()' class='inventory-actions-back-btn'>Back</a>");
+        } else {
+            $(".sidenav .inventory-item").remove();
+            $(".sidenav a").show();
+        }
+    });
+
+    $('.sidenav').on('click', '.inventory-action-item', function() {
+        var actionName = $(this).text();
+        var itemName = $(this).attr("data-itemName");
+        //alert("item name = " + itemName);
+        $.post('http://test/inventoryActionItemClicked', JSON.stringify({
+            actionName: actionName.toLowerCase(),
+            itemName: itemName
+        }));
+        closeNav();
+    });
+
 });
+
+function inventoryActionsBackBtn() {
+    $(".sidenav .inventory-action-item").remove();
+    $(".sidenav .inventory-actions-back-btn").remove();
+    $.post('http://test/loadInventory', JSON.stringify({}));
+}
