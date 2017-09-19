@@ -43,7 +43,7 @@ AddEventHandler("phone:sendPoliceMessage", function(data)
 	TriggerEvent('es:getPlayers', function(players)
 		for id, player in pairs(players) do
 			local playerSource = id
-			if player.getJob() == "sheriff" or player.getJob() == "cop" or player.getJob() == "police" then
+			if player.getJob() == "ems" or player.getJob() == "sheriff" or player.getJob() == "police" then
 				TriggerClientEvent('chatMessage', playerSource, "911 (Caller: #" .. userSource .. ")", {255, 20, 10}, message)
 			end
 		end
@@ -58,7 +58,7 @@ AddEventHandler("phone:sendEmsMessage", function(data)
 	TriggerEvent('es:getPlayers', function(players)
 		for id, player in pairs(players) do
 			local playerSource = id
-			if player.getJob() == "ems" then
+			if player.getJob() == "ems" or player.getJob() == "sheriff" or player.getJob() == "police" then
 				TriggerClientEvent('chatMessage', playerSource, "911 (Caller: #" .. userSource .. ")", {255, 20, 10}, message)
 			end
 		end

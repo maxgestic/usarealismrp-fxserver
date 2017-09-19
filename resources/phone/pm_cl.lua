@@ -97,7 +97,7 @@ end)
 Citizen.CreateThread(function()
     while true do
         if phoneEnabled then
-			if not startedTask then
+			if not startedTask and not IsPedInAnyVehicle(GetPlayerPed(-1), true) then
 				ClearPedTasks(GetPlayerPed(-1))
 				TaskStartScenarioInPlace(GetPlayerPed(-1), scenario, 0, true);
 				startedTask = true
