@@ -32,12 +32,14 @@ local function DrawPlayerList()
 
     for i = 0, 31 do
         if NetworkIsPlayerActive( i ) then
-            table.insert( players, i )
+            table.insert( players, {i,GetPlayerServerId(i)})
         end
     end
 
 	-- sort
-	table.sort(players)
+	table.sort(players, function(a,b)
+		return a[2] > b[2]
+	end)
 
 	--Top bar
 	DrawRect( 0.11 + xOffset, 0.025, 0.2, 0.03, 0, 0, 0, 220 )
@@ -76,7 +78,7 @@ local function DrawPlayerList()
 		SetTextScale( 0.45, 0.45 )
 		SetTextColour( 255, 255, 255, 255 )
 		SetTextEntry( "STRING" )
-		AddTextComponentString( GetPlayerServerId(v) .. " | " .. GetPlayerName( v ) )
+		AddTextComponentString( v[2] .. " | " .. GetPlayerName( v[1] ) )
 		DrawText( 0.01 + xOffset, 0.007 + ( k * 0.03 ) )
 
 
