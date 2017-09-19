@@ -28,7 +28,6 @@ local scenarios = {
 	{name = "bum 1", scenarioName = "WORLD_HUMAN_BUM_FREEWAY"},
     {name = "bum 2", scenarioName = "WORLD_HUMAN_BUM_SLUMPED"},
     {name = "bum 3", scenarioName = "WORLD_HUMAN_BUM_STANDING"},
-    {name = "bum 4", scenarioName = "WORLD_HUMAN_BUM_WASH"},
     {name = "drill", scenarioName = "WORLD_HUMAN_CONST_DRILL"},
     {name = "blower", scenarioName = "WORLD_HUMAN_GARDENER_LEAF_BLOWER"},
     {name = "chillin'", scenarioName = "WORLD_HUMAN_DRUG_DEALER_HARD"},
@@ -113,7 +112,8 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 		if actionName == "use" then
 			interactionMenuUse(itemName)
 		elseif actionName == "drop" then
-			TriggerEvent("interaction:notify", "~y~Under construction")
+			TriggerEvent("interaction:notify", "Dropping item: " .. removeQuantityFromItemName(itemName))
+			TriggerServerEvent("interaction:dropItem", itemName)
 		elseif actionName == "give" then
 			TriggerEvent("interaction:notify", "~y~Under construction")
 		end
@@ -218,3 +218,13 @@ function intoxicate()
  end
 
  -- end drunk / high effect
+
+ function removeQuantityFromItemName(itemName)
+     if string.find(itemName,"%)") then
+         local i = string.find(itemName, "%)")
+         i = i + 2
+         itemName = string.sub(itemName, i)
+         --print("new item name = " .. itemName)
+     end
+     return itemName
+ end

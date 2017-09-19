@@ -300,6 +300,9 @@ $(function() {
         var actionName = $(this).text();
         var itemName = $(this).attr("data-itemName");
         //alert("item name = " + itemName);
+        if (itemName == "(x1) Driver") {
+            itemName = "(x1) Driver's License"
+        }
         $.post('http://test/inventoryActionItemClicked', JSON.stringify({
             actionName: actionName.toLowerCase(),
             itemName: itemName

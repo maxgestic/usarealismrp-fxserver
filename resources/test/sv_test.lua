@@ -62,12 +62,7 @@ end)
 
 RegisterServerEvent("interaction:removeItemFromPlayer")
 AddEventHandler("interaction:removeItemFromPlayer", function(itemName)
-    if string.find(itemName,"%)") then
-        local i = string.find(itemName, "%)")
-        i = i + 2
-        itemName = string.sub(itemName, i)
-        print("new item name = " .. itemName)
-    end
+    itemName = removeQuantityFromItemName(itemName)
     local userSource = tonumber(source)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
         local inventory = user.getInventory()
@@ -87,3 +82,60 @@ AddEventHandler("interaction:removeItemFromPlayer", function(itemName)
         end
     end)
 end)
+
+RegisterServerEvent("interaction:dropItem")
+AddEventHandler("interaction:dropItem", function(itemName)
+    local userSource = tonumber(source)
+    itemName = removeQuantityFromItemName(itemName)
+    TriggerEvent("es:getPlayerFromId", userSource, function(user)
+        -- inventory
+        local inventory = user.getInventory()
+        for i = 1, #inventory do
+            local item = inventory[i]
+            if item.name == itemName then
+                --print("found matching item to drop!")
+                if item.quantity > 1 then
+                    inventory[i].quantity = item.quantity - 1
+                    user.setInventory(inventory)
+                    return
+                else
+                    table.remove(inventory, i)
+                    user.setInventory(inventory)
+                    return
+                end
+            end
+        end
+        -- weapons
+        local weapons = user.getWeapons()
+        for i = 1, #weapons do
+            local item = weapons[i]
+            if item.name == itemName then
+                --print("found matching item to drop!")
+                table.remove(weapons, i)
+                user.setWeapons(weapons)
+                return
+            end
+        end
+        -- licenses
+        local licenses = user.getLicenses()
+        for i = 1, #licenses do
+            local item = licenses[i]
+            if item.name == itemName then
+                --print("found matching item to drop!")
+                table.remove(licenses, i)
+                user.setLicenses(licenses)
+                return
+            end
+        end
+    end)
+end)
+
+function removeQuantityFromItemName(itemName)
+    if string.find(itemName,"%)") then
+        local i = string.find(itemName, "%)")
+        i = i + 2
+        itemName = string.sub(itemName, i)
+        --print("new item name = " .. itemName)
+    end
+    return itemName
+end
