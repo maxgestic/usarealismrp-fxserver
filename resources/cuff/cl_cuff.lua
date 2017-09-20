@@ -45,7 +45,7 @@ Citizen.CreateThread(function()
 		end
 
 		if isCuffed then
-			DisableControlAction(1, 245, true)
+			--DisableControlAction(1, 245, true) 245 = 5 FOR TEXT CHAT
 			DisableControlAction(1, 117, true)
 			DisableControlAction(1, 73, true)
 			DisableControlAction(1, 29, true)
