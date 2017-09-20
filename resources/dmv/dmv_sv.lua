@@ -17,7 +17,7 @@ AddEventHandler("dmv:checkMoney", function(price)
 			user.removeMoney(tonumber(price))
 			local timestamp = os.date("*t", os.time())
 			local license = {
-				name = "Driver's License",
+				name = "Driver\'s License",
 				number = "F" .. tostring(math.random(1, 2543678)),
 				quantity = 1,
 				ownerName = GetPlayerName(userSource),
