@@ -107,15 +107,20 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
     TriggerEvent("test:escapeFromCSharp")
     local actionName = data.actionName
 	local itemName = data.itemName
-	if actionName and itemName then
+	local wholeItem = data.wholeItem
+	local targetPlayerId = data.playerId
+	Citizen.Trace("data.playerId = " .. data.playerId)
+	if actionName and itemName and wholeItem and targetPlayerId then
 		--Citizen.Trace("button name = " .. actionName .. ", item = " .. itemName)
 		if actionName == "use" then
 			interactionMenuUse(itemName)
 		elseif actionName == "drop" then
 			TriggerEvent("interaction:notify", "Dropping item: " .. removeQuantityFromItemName(itemName))
 			TriggerServerEvent("interaction:dropItem", itemName)
-		elseif actionName == "give" then
-			TriggerEvent("interaction:notify", "~y~Under construction")
+		elseif string.find(actionName, "give") then
+			--TriggerEvent("interaction:notify", "~y~Under construction")
+			--Citizen.Trace("wholeItem.expire = " .. wholeItem.expire)
+			TriggerServerEvent("interaction:giveItemToPlayer", wholeItem, targetPlayerId)
 		end
 	end
 end)
@@ -204,7 +209,7 @@ function intoxicate()
  end
 
  function reality()
-   Citizen.Wait(50000)
+   Citizen.Wait(180000)
    DoScreenFadeOut(1000)
    Citizen.Wait(1000)
    DoScreenFadeIn(1000)
@@ -228,3 +233,8 @@ function intoxicate()
      end
      return itemName
  end
+
+RegisterNetEvent("interaction:equipWeapon")
+AddEventHandler("interaction:equipWeapon", function(item)
+	GiveWeaponToPed(GetPlayerPed(-1), item.hash, 1000, false, false)
+end)

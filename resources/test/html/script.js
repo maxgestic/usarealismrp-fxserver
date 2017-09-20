@@ -3,6 +3,11 @@ var voipOptions = ["Yell", "Normal", "Whisper"];
 var emoteOptions = ["Cop", "Sit", "Chair", "Kneel", "Medic", "Notepad","Traffic", "Photo","Clipboard", "Lean", "Hangout", "Pot", "Fish", "Phone", "Yoga", "Bino", "Cheer", "Statue", "Jog",
 "Flex", "Sit up", "Push up", "Weld", "Mechanic","Smoke","Drink", "Bum 1", "Bum 2", "Bum 3", "Drill", "Blower", "Chillin'", "Mobile Film", "Planting", "Golf", "Hammer", "Clean", "Musician", "Party", "Prostitute"];
 var emoteItemsPerPage = 8;
+var playerInventory;
+var playerWeapons;
+var playerLicenses;
+var targetPlayerId = 0;
+var targetPlayerName = "";
 
 var disableMouseScroll = true;
 
@@ -201,17 +206,22 @@ $(function() {
                 $.post('http://test/checkPlayerJob', JSON.stringify({}));
             }
             */
+            if (event.data.enable) {
+                targetPlayerId = event.data.playerId;
+                targetPlayerName = event.data.playerName;
+                //alert("just set target player id = " + targetPlayerId);
+            }
         } else if (event.data.type == "click") {
             // Avoid clicking the cursor itself, click 1px to the top/left;
             Click(cursorX - 1, cursorY - 1);
         } else if (event.data.type == "inventoryLoaded") {
-            var inventory = event.data.inventory;
-            var weapons = event.data.weapons;
-            var licenses = event.data.licenses;
+            playerInventory = event.data.inventory;
+            playerWeapons = event.data.weapons;
+            playerLicenses = event.data.licenses;
             //alert("inventory.length = " + inventory.length);
             //alert("weapons.length = " + weapons.length);
             //alert("licenses.length = " + licenses.length);
-            populateInventory(inventory, weapons, licenses);
+            populateInventory(playerInventory, playerWeapons, playerLicenses);
         } else if (event.data.type == "receivedPlayerJob") {
             var job = event.data.job;
             //alert("job = " + job);
@@ -268,27 +278,13 @@ $(function() {
 
     $('.sidenav').on('click', '.inventory-item', function() {
         var itemName = $(this).text();
-        //alert("you clicked: " + itemName);
-        if (itemName != "Back") {
-            $(".sidenav a").hide();
-            $(".sidenav").append("<a class='inventory-item inventory-action-item'>Use</a>");
-            $(".sidenav").append("<a class='inventory-item inventory-action-item'>Drop</a>");
-            $(".sidenav").append("<a class='inventory-item inventory-action-item'>Give</a>");
-            $(".sidenav").append("<a onclick='inventoryActionsBackBtn()' class='inventory-actions-back-btn'>Back</a>");
-        } else {
-            $(".sidenav .inventory-item").remove();
-            $(".sidenav a").show();
-        }
-    });
-
-    $('.sidenav').on('click', '.inventory-item', function() {
-        var itemName = $(this).text();
+        var playerName = targetPlayerName;
         //alert("you clicked: " + itemName);
         if (itemName != "Back") {
             $(".sidenav a").hide();
             $(".sidenav").append("<a data-itemName='"+itemName+"' class='inventory-item inventory-action-item'>Use</a>");
             $(".sidenav").append("<a data-itemName='"+itemName+"' class='inventory-item inventory-action-item'>Drop</a>");
-            $(".sidenav").append("<a data-itemName='"+itemName+"' class='inventory-item inventory-action-item'>Give</a>");
+            $(".sidenav").append("<a data-itemName='"+itemName+"' class='inventory-item inventory-action-item' id='action-give'>Give to " + playerName + "</span></a>");
             $(".sidenav").append("<a onclick='inventoryActionsBackBtn()' class='inventory-actions-back-btn'>Back</a>");
         } else {
             $(".sidenav .inventory-item").remove();
@@ -298,14 +294,22 @@ $(function() {
 
     $('.sidenav').on('click', '.inventory-action-item', function() {
         var actionName = $(this).text();
+        if (typeof actionName == "undefined") {
+            //alert("actionName undefined!");
+        } else {
+            //alert("actionName = " + actionName);
+        }
         var itemName = $(this).attr("data-itemName");
+        var wholeItem = GetWholeItemByName(itemName);
         //alert("item name = " + itemName);
         if (itemName == "(x1) Driver") {
             itemName = "(x1) Driver's License"
         }
         $.post('http://test/inventoryActionItemClicked', JSON.stringify({
             actionName: actionName.toLowerCase(),
-            itemName: itemName
+            itemName: itemName,
+            playerId: targetPlayerId,
+            wholeItem: wholeItem
         }));
         closeNav();
     });
@@ -316,4 +320,44 @@ function inventoryActionsBackBtn() {
     $(".sidenav .inventory-action-item").remove();
     $(".sidenav .inventory-actions-back-btn").remove();
     $.post('http://test/loadInventory', JSON.stringify({}));
+}
+
+function GetWholeItemByName(itemName) {
+    itemName = removeQuantityFromName(itemName);
+    if (itemName == "Driver") {
+        //alert("was driver.. converting name...");
+        itemName = "Driver's License";
+    }
+    var inventory = playerInventory;
+    var weapons = playerWeapons;
+    var licenses = playerLicenses;
+    for (var i = 0; i < licenses.length; i++) {
+        if (licenses[i].name == itemName) {
+            //alert("matching item found in licenses!");
+            //alert("type = " + licenses[i].type);
+            return licenses[i]
+        }
+    }
+    for (var i = 0; i < weapons.length; i++) {
+        if (weapons[i].name == itemName) {
+            //alert("matching item found in weapons!");
+            //alert("type = " + weapons[i].type);
+            return weapons[i]
+        }
+    }
+    for (var i = 0; i < inventory.length; i++) {
+        if (inventory[i].name == itemName) {
+            //alert("matching item found in inventory!");
+            //alert("type = " + inventory[i].type);
+            return inventory[i]
+        }
+    }
+}
+
+function removeQuantityFromName(itemName) {
+    var index = itemName.indexOf(")");
+    index = index + 2;
+    var newItemName = itemName.substring(index);
+    //alert("new name = " + newItemName);
+    return newItemName
 }

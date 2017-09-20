@@ -139,3 +139,110 @@ function removeQuantityFromItemName(itemName)
     end
     return itemName
 end
+
+RegisterServerEvent("interaction:giveItemToPlayer")
+AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
+    local userSource = tonumber(source)
+    print("inside of server func with target id = " .. targetPlayerId)
+    print("item.name = " .. item.name)
+    -- give item to nearest player
+    TriggerEvent("es:getPlayerFromId", targetPlayerId, function(user)
+        if user then
+            if not item.type then
+                -- must be a license (no item.type)
+                print("giving a license!")
+                local licenses = user.getLicenses()
+                table.insert(licenses, item)
+                user.setLicenses(licenses)
+            else
+                if item.type == "weapon" then
+                    print("giving a weapon!")
+                    local weapons = user.getWeapons()
+                    if #weapons < 3 then
+                        table.insert(weapons, item)
+                        user.setWeapons(weapons)
+                        TriggerClientEvent("interaction:equipWeapon", targetPlayerId, item)
+                    else
+                        TriggerClientEvent("interaction:notify", userSource, GetPlayerName(targetPlayerId) .. " can't hold anymore weapons!")
+                        return
+                    end
+                else
+                    local found = false
+                    print("giving an inventory item!")
+                    local inventory = user.getInventory()
+                    for i = 1, #inventory do
+                        if inventory[i].name == item.name then
+                            found = true
+                            inventory[i].quantity = inventory[i].quantity + 1
+                            user.setInventory(inventory)
+                        end
+                    end
+                    if not found then
+                        table.insert(inventory, item)
+                        user.setInventory(inventory)
+                    end
+                end
+            end
+            -- remove from source player
+            removeItemFromPlayer(item, userSource)
+            TriggerClientEvent("interaction:notify", userSource, "You gave " .. GetPlayerName(targetPlayerId) .. ": (x1) " .. item.name)
+            TriggerClientEvent("interaction:notify", targetPlayerId, GetPlayerName(userSource) .. " has given you " .. ": (x1) " .. item.name)
+        else
+            print("player with id #" .. targetPlayerId .. " is not in game!")
+            return
+        end
+    end)
+end)
+
+function removeItemFromPlayer(item, userSource)
+    -- remove item from player
+    TriggerEvent("es:getPlayerFromId", userSource, function(user)
+        if user then
+            if not item.type then
+                -- must be a license (no item.type)
+                print("removing a license!")
+                local licenses = user.getLicenses()
+                for i = 1, #licenses do
+                    if licenses[i].name == item.name and licenses[i].ownerName == item.ownerName then
+                        --print("found a matching licenses to remove!!")
+                        table.remove(licenses, i)
+                        user.setLicenses(licenses)
+                        return
+                    end
+                end
+            else
+                if item.type == "weapon" then
+                    print("removing a weapon!")
+                    local weapons = user.getWeapons()
+                    for i = 1, #weapons do
+                        if weapons[i].name == item.name then
+                            print("found a matching weapon to remove!")
+                            table.remove(weapons,i)
+                            user.setWeapons(weapons)
+                            return
+                        end
+                    end
+                else
+                    print("removing an inventory item!")
+                    local inventory = user.getInventory()
+                    for i = 1, #inventory do
+                        if inventory[i].name == item.name then
+                            print("found matching item to remove!")
+                            if inventory[i].quantity > 1 then
+                                inventory[i].quantity = inventory[i].quantity - 1
+                                user.setInventory(inventory)
+                                return
+                            else
+                                table.remove(inventory,i)
+                                user.setInventory(inventory)
+                                return
+                            end
+                        end
+                    end
+                end
+            end
+        else
+            print("player with id #" .. targetPlayerId .. " is not in game!")
+        end
+    end)
+end
