@@ -21,7 +21,7 @@ AddEventHandler('altchat:localChatMessage', function(source, msg)
 
 						if get3DDistance(tPos.x, tPos.y, tPos.z, mPos.x, mPos.y, mPos.z) < 20.0 then
 						TriggerClientEvent('chatMessage', k, "", {0, 0, 0}, msg)
-		
+
 						end
 					end
 				end)
@@ -95,19 +95,19 @@ TriggerEvent('es:addCommand', 'showbadge', function(source, args, user)
 	TriggerEvent("es:getPlayerFromId", tonumber(source), function(user)
 		if(user)then
 			if user.getPoliceRank() > 0 then
-				local policeRanks = { 
-					"Probationary Officer" , 
-					"Police Officer 1" , 
-					"Police Officer 2" , 
-					"Sergaent" , 
+				local policeRanks = {
+					"Probationary Officer" ,
+					"Police Officer 1" ,
+					"Police Officer 2" ,
+					"Sergaent" ,
 					"Lieutenant" ,
 					"Captain" ,
 					"Deputy Chief" ,
-					"Chief of Police" 
+					"Chief of Police"
 				}
 				TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " shows Badge.")
 				TriggerEvent('altchat:localChatMessage', source, "^6[ID] ^2Name: ^4" .. GetPlayerName(source) .. " ^0- ^2Rank: ^4" .. policeRanks[user.getPoliceRank()])
-				--user.setEMSRank(1)						
+				--user.setEMSRank(1)
 				--RconPrint("DEBUG: " .. playerId .. " whitelisted as EMS")
 				--TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "You have been whitelist as EMS")
 			else
@@ -115,8 +115,8 @@ TriggerEvent('es:addCommand', 'showbadge', function(source, args, user)
 			end
 		end
 	end)
-	
-	
+
+
 end)
 
 TriggerEvent('es:addCommand', 'me', function(source, args, user)
@@ -124,8 +124,6 @@ TriggerEvent('es:addCommand', 'me', function(source, args, user)
     --TriggerClientEvent('chatMessage', -1, "", {255, 0, 0}, " ^6" .. GetPlayerName(source) .. " " .. table.concat(args, " "))
 	--print(GetPlayerName(source))
 	TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " " .. table.concat(args, " "))
-	
-	
 end)
 
 -- 911 CALL
@@ -144,4 +142,11 @@ TriggerEvent('es:addCommand', '911', function(source, args, user)
 		end
 	end)
 	--]]
+end)
+
+-- /tweet
+TriggerEvent('es:addCommand', 'tweet', function(source, args, user)
+	table.remove(args,1)
+    TriggerClientEvent('chatMessage', -1, "*TWEET* - " .. GetPlayerName(source), {29,161,242}, table.concat(args, " "))
+	--print(GetPlayerName(source))
 end)
