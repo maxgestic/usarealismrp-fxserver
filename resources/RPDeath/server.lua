@@ -68,6 +68,7 @@ AddEventHandler('chatMessage', function(from,name,message)
 			CancelEvent()
 			TriggerEvent('es:getPlayerFromId', from, function(user)
 				if user then
+					local targetId = 0
 					local userJob = user.getJob()
 					if userJob == "cop" or
 						userJob == "sheriff" or
@@ -79,20 +80,17 @@ AddEventHandler('chatMessage', function(from,name,message)
 						user.getGroup() == "superadmin" or
 						user.getGroup() == "owner" then
 						if args[2] == nil then
-							size = 10
+							targetId = 0
+							TriggerClientEvent("chatMessage", from, "SYSTEM", {255, 0, 0}, "Invalid command format. Ex: /revive [id]")
+							return
 						else
-							size = tonumber(args[2])
-
-							if size > 25 then
-								size = 25
-							elseif size < 0 then
-								size = 0
-							end
+							targetId = tonumber(args[2])
 						end
 						--print("PLAYER " .. GetPlayerName(source) .. " JUST USED /REVIVE!!!!")
 						--print("PLAYER " .. GetPlayerName(source) .. " JUST USED /REVIVE!!!!")
 						--print("PLAYER " .. GetPlayerName(source) .. " JUST USED /REVIVE!!!!")
-						TriggerClientEvent('RPD:allowRevive', -1, from, user.getGroup(), size)
+						--TriggerClientEvent('RPD:allowRevive', -1, from, user.getGroup(), size)
+						TriggerClientEvent("RPD:revivePerson", targetId)
 					else
 						TriggerClientEvent("chatMessage", from, "SYSTEM", {255, 0, 0}, "You don't have permissions to use this command.")
 					end
@@ -150,7 +148,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 	if commandName == "revive" then
 		local targetId = args[1]
 		if not targetId then RconPrint("Error: no target id"); CancelEvent() return end
-		TriggerClientEvent("RPD:reviveFromRcon", targetId)
+		TriggerClientEvent("RPD:revivePerson", targetId)
 		CancelEvent()
 	end
 end)

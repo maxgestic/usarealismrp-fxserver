@@ -8,8 +8,8 @@ local dead = false
 
 --TriggerServerEvent('RPD:addPlayer')
 
-RegisterNetEvent("RPD:reviveFromRcon")
-AddEventHandler("RPD:reviveFromRcon", function()
+RegisterNetEvent("RPD:revivePerson")
+AddEventHandler("RPD:revivePerson", function()
 	allowRevive = true
 end)
 
