@@ -43,7 +43,7 @@ end, "GET", "", {what = 'this'})
 
 AddEventHandler('playerDropped', function()
 	local numberSource = tonumber(source)
-	
+
 	if(Users[numberSource])then
 		print("player " .. GetPlayerName(numberSource) .. " dropped from the server!")
 		local inventory = Users[numberSource].getInventory()
@@ -205,31 +205,30 @@ commands['info'].cmd = function(source, args, user)
 end
 
 
---[[ try Citizen.CreateThread(function() ... end) to reduce client crashes?
-
-local minutes = 30
-local interval = minutes * 60000
-function saveData()
-	print("calling saveData()...")
-	SetTimeout(interval, function()
-		print("inside of the SetTimeout()")
-		TriggerEvent("es:getPlayers", function(players)
-			print("inside of es:getPlayers")
-			if players then
-				print("players existed")
-				for id, player in pairs(players) do
-					if player then
-						print("player existed")
-						db.updateUser(player.get('identifier'), {money = player.getMoney(), bank = player.getBank(), model = player.getModel(), inventory = player.getInventory(), weapons = player.getWeapons(), vehicles = player.getVehicles(), insurance = player.getInsurance(), job = player.getJob(), licenses = player.getLicenses(), criminalHistory = player.getCriminalHistory(), characters = player.getCharacters(), jailtime = player.getJailtime()}, function()
-							print("saved player #" .. id .. "'s data!'")
-						end)
+Citizen.CreateThread(function()
+	local minutes = 30
+	local interval = minutes * 60000
+	function saveData()
+		print("calling saveData()...")
+		SetTimeout(interval, function()
+			print("inside of the SetTimeout()")
+			TriggerEvent("es:getPlayers", function(players)
+				print("inside of es:getPlayers")
+				if players then
+					print("players existed")
+					for id, player in pairs(players) do
+						if player then
+							print("player existed")
+							db.updateUser(player.get('identifier'), {money = player.getMoney(), bank = player.getBank(), model = player.getModel(), inventory = player.getInventory(), weapons = player.getWeapons(), vehicles = player.getVehicles(), insurance = player.getInsurance(), job = player.getJob(), licenses = player.getLicenses(), criminalHistory = player.getCriminalHistory(), characters = player.getCharacters(), jailtime = player.getJailtime(), policeRank = Users[numberSource].getPoliceRank(), policeCharacter = Users[numberSource].getPoliceCharacter(), EMSRank = Users[numberSource].getEMSRank()}, function()
+								print("saved player #" .. id .. "'s data!'")
+							end)
+						end
 					end
 				end
-			end
+			end)
+			saveData()
 		end)
-		saveData()
-	end)
-end
+	end
 
-saveData()
---]]
+	saveData()
+end)
