@@ -235,6 +235,10 @@ function intoxicate()
  end
 
 RegisterNetEvent("interaction:equipWeapon")
-AddEventHandler("interaction:equipWeapon", function(item)
-	GiveWeaponToPed(GetPlayerPed(-1), item.hash, 1000, false, false)
+AddEventHandler("interaction:equipWeapon", function(item, equip)
+	if equip then
+		GiveWeaponToPed(GetPlayerPed(-1), item.hash, 1000, false, false)
+	else
+		RemoveWeaponFromPed(GetPlayerPed(-1), item.hash)
+	end
 end)

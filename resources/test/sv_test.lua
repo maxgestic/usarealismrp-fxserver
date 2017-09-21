@@ -113,6 +113,7 @@ AddEventHandler("interaction:dropItem", function(itemName)
                 --print("found matching item to drop!")
                 table.remove(weapons, i)
                 user.setWeapons(weapons)
+                TriggerClientEvent("interaction:equipWeapon", userSource, item, false)
                 return
             end
         end
@@ -161,7 +162,8 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
                     if #weapons < 3 then
                         table.insert(weapons, item)
                         user.setWeapons(weapons)
-                        TriggerClientEvent("interaction:equipWeapon", targetPlayerId, item)
+                        TriggerClientEvent("interaction:equipWeapon", targetPlayerId, item, true)
+                        TriggerClientEvent("interaction:equipWeapon", userSource, item, false)
                     else
                         TriggerClientEvent("interaction:notify", userSource, GetPlayerName(targetPlayerId) .. " can't hold anymore weapons!")
                         return
