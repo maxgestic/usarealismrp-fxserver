@@ -356,6 +356,7 @@ local emergencySkins = {
 	{name = "s_m_m_fiboffice_01", type="cop"},
 	{name = "s_m_m_ciasec_01", type="cop"},
 	{name = "s_m_y_cop_01", type="cop"},
+	{name = "s_f_y_cop_01", type="cop"},
 	{name = "s_m_m_paramedic_01", type="fire"},
 	{name = "s_m_y_fireman_01", type="fire"},
 	{name = "s_f_y_scrubs_01", type="fire"}
