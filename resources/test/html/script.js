@@ -168,7 +168,16 @@ function populateInventory(inventory, weapons, licenses) {
     }
     for(i in weapons) {
         var weaponName = weapons[i].name;
-        $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x1)</span> " + weaponName + "</a>");
+        var weaponLegality = weapons[i].legality;
+        if (typeof weaponLegality != "undefined") {
+            if (weaponLegality == "illegal") {
+                $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x1)</span> <span class='illegal-item'>" + weaponName + "</span></a>");
+            } else {
+                $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x1)</span> " + weaponName + "</a>");
+            }
+        } else {
+            $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x1)</span> " + weaponName + "</a>");
+        }
     }
     // back btn
     $(".sidenav").append("<a id='inventory-back-btn' class='inventory-item'>Back</a>");
