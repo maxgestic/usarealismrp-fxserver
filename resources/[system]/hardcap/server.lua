@@ -83,15 +83,15 @@ AddEventHandler('playerConnecting', function(name, setReason)
     print("reservedPlayerCount = " .. reservedPlayerCount)
 
     if totalPlayerCount >= MAX_PLAYER_COUNT then
-        print('Full (at 32). :(')
-        setReason('Full (at 32) :(')
+        print("Sorry, " .. GetPlayerName(source) .. ", the server is full (at 32). :(")
+        setReason("Sorry, " .. GetPlayerName(source) .. ", the server is full (at 32). :(")
         CancelEvent()
     end
 
     if publicPlayerCount >= 31 then
         if not playerHasReservedSlot(source) then
-            print('All public slots taken :(')
-            setReason('All public slots taken :(')
+            print("Sorry, " .. GetPlayerName(source) .. ", all public slots taken :(")
+            setReason("Sorry, " .. GetPlayerName(source) .. ", all public slots taken :(")
             CancelEvent()
         end
     end
