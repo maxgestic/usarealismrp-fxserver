@@ -153,9 +153,9 @@ TriggerEvent('es:addCommand', '28', function(source, args, user)
 						return
 					end
 				end
-				-- player not in game with that plate number or plate number owned by a local!
-				TriggerClientEvent("licenseCheck:notify", userSource, "This plate is not on file.")
 			end
+			-- player not in game with that plate number or plate number owned by a local!
+			TriggerClientEvent("licenseCheck:notify", userSource, "This plate is not on file.")
 		end)
 	else
 		print("player did not enter a plate #")
