@@ -142,7 +142,7 @@ AddEventHandler("mini:checkVehicleMoney", function(params)
 					hash = splitStr[1]
 					price = splitStr[2]
 					vehicleName = splitStr[3]
-		            if not alreadyHasVehicle(source, vehicleName) then
+		            if not alreadyHasVehicle(userSource, vehicleName) then
 		    			if tonumber(price) <= user.getMoney() then
 							plate = tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9))
 		    				--TriggerClientEvent("mini:spawnVehicleAtShop", source, hash, vehicleName, tostring(plate)) -- spawn it

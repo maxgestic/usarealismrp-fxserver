@@ -214,8 +214,8 @@ end
 function sportsMenu()
 	MenuTitle = "Sports Cars"
 	ClearMenu()
-	Menu.addButton("Annis Elegy RH8 ($95,000)","buyVehicle","-566387422:95000:Annis Elegy RH8")
-	Menu.addButton("Invetero Coquette ($65,450)","buyVehicle","108773431:65450:Invetero Coquette")
+	Menu.addButton("Annis Elegy RH8 ($145,000)","buyVehicle","-566387422:145000:Annis Elegy RH8")
+	Menu.addButton("Invetero Coquette ($150,450)","buyVehicle","108773431:150450:Invetero Coquette")
 	Menu.addButton("Dewbauchee Massacro ($75,000)","buyVehicle","-142942670:75000:Dewbauchee Massacro")
 	Menu.addButton("Ubermacht Zion Cabrio ($50,015)","buyVehicle","-1193103848:50015:Ubermacht Zion Cabrio")
 	--Menu.addButton("Karin Sultan ($37,500)","buyVehicle","-1122289213:37500:Karin Sultan")
