@@ -2,7 +2,7 @@
 TriggerEvent('es:addCommand', 'admit', function(source, args, user)
     local userSource = tonumber(source)
     local userJob = user.getJob()
-    if userJob == "ems" or userJob == "fire" then
+    if userJob == "ems" or userJob == "fire" or userJob == "police" or userJob == "sheriff" then
         local targetPlayerId = tonumber(args[2])
         local targetPlayerAdmissionTime = tonumber(args[3])
         table.remove(args, 1)
