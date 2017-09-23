@@ -1,10 +1,19 @@
 AddEventHandler('rconCommand', function(commandName, args)
     if commandName:lower() == 'whitelist' then
         local playerId = table.remove(args, 1)
-        local type = table.concat(args, ' ')
+        local type = table.remove(args, 2)
+        local status = table.remove(args, 3)
 		--RconPrint(type)
         if not GetPlayerName(playerId) then
             RconPrint("\nError: player with id #" .. playerId .. " does not exist!")
+            CancelEvent()
+            return
+        elseif not type then
+            RconPrint("\nYou must enter a whitelist type: police or  ems")
+            CancelEvent()
+            return
+        elseif not status then
+            RconPrint("\nYou must enter a whitelist status for that player: true or false")
             CancelEvent()
             return
         end
@@ -12,9 +21,14 @@ AddEventHandler('rconCommand', function(commandName, args)
         if type == "police" then
 			TriggerEvent("es:getPlayerFromId", tonumber(playerId), function(user)
 				if(user)then
-					user.setPoliceRank(1)
-					RconPrint("DEBUG: " .. playerId .. " whitelisted as LSPD")
-					TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "You have been whitelisted for LSPD")
+                    if status then
+    					user.setPoliceRank(1)
+    					RconPrint("DEBUG: " .. playerId .. " whitelisted as LSPD")
+    					TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "You have been whitelisted for LSPD")
+                    else
+                        user.setPoliceRank(0)
+                        RconPrint("DEBUG: " .. playerId .. " un-whitelisted as LSPD")
+                    end
 				end
 			end)
         end

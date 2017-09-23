@@ -1,21 +1,35 @@
 AddEventHandler('rconCommand', function(commandName, args)
     if commandName:lower() == 'whitelist' then
         local playerId = table.remove(args, 1)
-        local type = table.concat(args, ' ')
+        local type = table.remove(args, 2)
+        local status = table.remove(args, 3)
 		--RconPrint(type)
         if not GetPlayerName(playerId) then
             RconPrint("\nError: player with id #" .. playerId .. " does not exist!")
+            CancelEvent()
+            return
+        elseif not type then
+            RconPrint("\nYou must enter a whitelist type: police or  ems")
+            CancelEvent()
+            return
+        elseif not status then
+            RconPrint("\nYou must enter a whitelist status for that player: true or false")
             CancelEvent()
             return
         end
         if type == "ems" then
 			TriggerEvent("es:getPlayerFromId", tonumber(playerId), function(user)
 				if(user)then
-					user.setEMSRank(1)						
-					RconPrint("DEBUG: " .. playerId .. " whitelisted as EMS")
-					--TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "You have been whitelist as EMS")
+                    if status then
+    					user.setEMSRank(1)
+    					RconPrint("DEBUG: " .. playerId .. " whitelisted for EMS")
+    					--TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "You have been whitelist as EMS")
+                    else
+                        user.setEMSRank(0)
+    					RconPrint("DEBUG: " .. playerId .. " un-whitelisted for EMS")
+                    end
 				end
-			end)		
+			end)
         end
         --RconPrint("\nError: failed to whitelist player " .. GetPlayerName(playerId) .. " for POLICE.")
         CancelEvent()
@@ -55,5 +69,5 @@ AddEventHandler("emsstation2:checkWhitelist", function(clientevent)
 			TriggerClientEvent("emsstation2:notify", userSource, "~y~You are not whitelisted for EMS. Apply at ~b~usarrp.enjin.com~w~.")
 		end
 	end)
-	
+
 end)

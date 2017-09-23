@@ -43,7 +43,7 @@ local EMSLockerRooms = {
 {x = 207.106, y = -1641.45, z = 28.5},
 {x = 373.269, y = -1441.48, z = 28.5},
 {x=-366.269, y = 6102.27, z = 34.4397}, -- paleto
-{x=1694.01, y=3589.87, z=40.3212} -- sandy
+{x=1692.13, y=3586.27, z=34.6209} -- sandy
 }
 
 local arrSkinGeneralCaptions = {"Fireman", "Paramedic - Male", "Paramedic - Female", "Doctor"}
