@@ -57,7 +57,7 @@ AddEventHandler('playerDropped', function()
     end
 
     for i = 1, #reservedPlayers do
-        if reservedPlayers[i] == playerLicense then
+        if string.find(playerLicense, reservedPlayers[i].identifier) then
             if reservedList[source] then
                 totalPlayerCount = totalPlayerCount - 1
                 reservedPlayerCount = reservedPlayerCount - 1
@@ -160,10 +160,10 @@ AddEventHandler('rconCommand', function(commandName, args)
                 playerGameLicense = playerLicenses[i]
             end
         end
+        RconPrint("player " .. GetPlayerName(targetPlayerId) .. "added to reserved slot list!")
         TriggerEvent('es:exposeDBFunctions', function(GetDoc)
             -- update db
 			GetDoc.createDocument("reserved",  {name = targetPlayerName, identifier = playerGameLicense, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
-				RconPrint("player reserved!")
 				-- refresh table
 				fetchAllReserved()
 			end)
