@@ -68,34 +68,29 @@ AddEventHandler("usa_rp:spawnPlayer", function()
         --local model = user.getModel()
         local character = user.getCharacters()
         local job = user.getJob() -- add spawn point for taxi and tow jobs
-        local weapons = {}
-        local spawn = civilianSpawns[math.random(1,#civilianSpawns)] -- choose random spawn if civilian
+        local weapons = user.getWeapons()
+        local model
+        --local spawn = civilianSpawns[math.random(1,#civilianSpawns)] -- choose random spawn if civilian
+        local spawn = {x = 232.919, y = -880.539, z = 30.5921}
+
         if not character.hash then
             model = civSkins[math.random(1,#civSkins)]
             TriggerClientEvent("rules:open", userSource)
         end
-        if job == "civ" then
-            weapons = user.getWeapons()
-            if not weapons then
-                weapons = {}
-            end
-        elseif job == "sheriff" then
+
+        if job == "sheriff" or job == "police" then
             spawn.x = 451.255
             spawn.y = -992.41
             spawn.z = 30.6896
             --weapons = {"WEAPON_COMBATPISTOL", "WEAPON_CARBINERIFLE", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_PUMPSHOTGUN", "WEAPON_FLAREGUN", "WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER"}
-            weapons = user.getWeapons()
-            user.setJob("civ") -- spawn as a civ
-            job = "civ"
         elseif job == "ems" then
             -- davis fire station
             spawn.x =  373.269
             spawn.y = -1441.48
             spawn.z = 29.43
             --weapons = {"WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER"}
-            weapons = user.getWeapons()
-            user.setJob("civ") -- spawn as a civ
-            job = "civ"
+        end
+        --[[
         elseif job == "taxi" then
             -- davis fire station
             spawn.x =  895.59
@@ -115,13 +110,13 @@ AddEventHandler("usa_rp:spawnPlayer", function()
                 weapons = {}
             end
         end
+        --]]
         if #weapons > 0 then
             print("#weapons = " .. #weapons)
         else
             print("user has no weapons")
         end
-        local characters = user.getCharacters()
-        TriggerClientEvent("usa_rp:spawn", userSource, model, job, spawn, weapons, characters)
+        TriggerClientEvent("usa_rp:spawn", userSource, model, job, spawn, weapons, character)
     end)
 end)
 
