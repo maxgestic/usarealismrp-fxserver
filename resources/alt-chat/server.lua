@@ -147,6 +147,6 @@ end)
 -- /tweet
 TriggerEvent('es:addCommand', 'tweet', function(source, args, user)
 	table.remove(args,1)
-    TriggerClientEvent('chatMessage', -1, "*TWEET* - " .. GetPlayerName(source), {29,161,242}, table.concat(args, " "))
+    TriggerClientEvent('chatMessage', -1, "[TWEET] - " .. GetPlayerName(source), {29,161,242}, table.concat(args, " "))
 	--print(GetPlayerName(source))
 end)
