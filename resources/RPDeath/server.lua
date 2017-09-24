@@ -37,6 +37,7 @@ end)
 
 RegisterServerEvent("RPD:removeWeapons")
 AddEventHandler("RPD:removeWeapons", function()
+	local userSource = source
 	print("inside of RPD:removeWeapons")
 	TriggerEvent("es:getPlayerFromId", source, function(user)
 		if user.getJob() == "civ" then
@@ -48,6 +49,7 @@ AddEventHandler("RPD:removeWeapons", function()
 			--user.setLicenses({})
 			--user.setVehicles({})
 			--user.setInsurance({})
+			TriggerEvent("sway:updateDB", userSource)
 		end
 	end)
 end)

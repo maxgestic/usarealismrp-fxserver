@@ -168,6 +168,7 @@ AddEventHandler("mini:checkVehicleMoney", function(params)
 									print("vehicle.model = " .. vehicle.model)
 									print("vehicle.plate = " .. vehicle.plate)
 									print("vehicle.stored = " .. tostring(vehicle.stored))
+									TriggerEvent("sway:updateDB", userSource)
 									TriggerClientEvent("vehShop:spawnPlayersVehicle", userSource, hash, plate)
 								end
 							end)

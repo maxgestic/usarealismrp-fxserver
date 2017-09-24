@@ -15,6 +15,7 @@ end)
 
 RegisterServerEvent("blackMarket:sellWeapon")
 AddEventHandler("blackMarket:sellWeapon",function(weapon)
+	local userSource = source
     TriggerEvent('es:getPlayerFromId', source, function(user)
         local weapons = user.getWeapons()
         if weapons then
@@ -23,6 +24,7 @@ AddEventHandler("blackMarket:sellWeapon",function(weapon)
                     table.remove(weapons, i)
                     user.setWeapons(weapons)
                     user.addMoney(round(.50*weapon.price, 0))
+					TriggerEvent("sway:updateDB", userSource)
                     break
                 end
             end
@@ -52,6 +54,7 @@ AddEventHandler("blackMarket:checkGunMoney", function(weapon)
                 print("weapon.name = " .. weapon.name)
                 TriggerClientEvent("blackMarket:equipWeapon", userSource, userSource, weapon.hash, weapon.name) -- equip
                 TriggerClientEvent("blackMarket:notify", userSource, "You have purchased a ~r~" .. weapon.name .. ".")
+				TriggerEvent("sway:updateDB", userSource)
             else
                 print("player did not have enough money to purchase weapon")
                 TriggerClientEvent("mini:insufficientFunds", userSource, weapon.price, "gun")

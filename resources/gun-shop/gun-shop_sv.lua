@@ -22,6 +22,7 @@ AddEventHandler("gunShop:buyPermit", function()
         table.insert(licenses, permit)
         print("saving inventory with gun permit inside of it")
         user.setLicenses(licenses)
+		TriggerEvent("sway:updateDB", userSource)
     end)
 end)
 
@@ -62,6 +63,7 @@ AddEventHandler("gunShop:sellWeapon",function(weapon)
                 TriggerClientEvent("gunShop:showSellMenu", userSource, weapons) -- update client menu items
                 user.addMoney(round(.50*(weapon.price), 0))
                 user.setWeapons(weapons)
+				TriggerEvent("sway:updateDB", userSource)
                 break
             end
         end
@@ -80,6 +82,7 @@ AddEventHandler("mini:checkGunMoney", function(weapon)
                 user.setWeapons(weapons)
                 TriggerClientEvent("mini:equipWeapon", userSource, userSource, weapon.hash, weapon.name) -- equip
                 TriggerClientEvent("chatMessage", userSource, "Gun Store", {41, 103, 203}, "^0You now own a ^3" .. weapon.name .. "^0!")
+				TriggerEvent("sway:updateDB", userSource)
             else
                 TriggerClientEvent("mini:insufficientFunds", userSource, weapon.price, "gun")
             end
