@@ -14,18 +14,18 @@ AddEventHandler('hardcap:playerActivated', function()
     for i = 1, #playerIdentifiers do
         if string.find(playerIdentifiers[i], "license:") then
             playerLicense = playerIdentifiers[i]
-            print("license set for activated player: " .. playerLicense)
+            --print("license set for activated player: " .. playerLicense)
         end
     end
 
     for i = 1, #reservedPlayers do
         if string.find(playerLicense, reservedPlayers[i].identifier) then
-            print("reserved license for player was found!")
+            --print("reserved license for player was found!")
             if not reservedList[source] then
                 totalPlayerCount = totalPlayerCount + 1
                 reservedPlayerCount = reservedPlayerCount + 1
                 reservedList[source] = true
-                print("player was reserved...")
+                print("player loaded and was reserved...")
                 print("totalPlayerCount = " .. totalPlayerCount)
                 print("publicPlayerCount = " .. publicPlayerCount)
                 print("reservedPlayerCount = " .. reservedPlayerCount)
@@ -40,7 +40,7 @@ AddEventHandler('hardcap:playerActivated', function()
         publicList[source] = true
     end
 
-    print("player was not reserved...")
+    print("player loaded and was not reserved...")
     print("totalPlayerCount = " .. totalPlayerCount)
     print("publicPlayerCount = " .. publicPlayerCount)
     print("reservedPlayerCount = " .. reservedPlayerCount)
@@ -75,6 +75,7 @@ AddEventHandler('playerDropped', function()
 end)
 
 AddEventHandler('playerConnecting', function(name, setReason)
+    local MAX_PUBLIC_PLAYER_COUNT = 30
     local MAX_PLAYER_COUNT = 32
     print('Connecting: ' .. name)
     print("Player EP: " .. GetPlayerEP(source))
@@ -83,15 +84,15 @@ AddEventHandler('playerConnecting', function(name, setReason)
     print("reservedPlayerCount = " .. reservedPlayerCount)
 
     if totalPlayerCount >= MAX_PLAYER_COUNT then
-        print("Sorry, " .. GetPlayerName(source) .. ", the server is full (at 32). :(")
-        setReason("Sorry, " .. GetPlayerName(source) .. ", the server is full (at 32). :(")
+        print("Sorry, " .. GetPlayerName(source) .. "! The server is full (at 32) :(")
+        setReason("Sorry, " .. GetPlayerName(source) .. "! The server is full (at 32) :(")
         CancelEvent()
     end
 
-    if publicPlayerCount >= 31 then
+    if publicPlayerCount >= MAX_PUBLIC_PLAYER_COUNT then
         if not playerHasReservedSlot(source) then
-            print("Sorry, " .. GetPlayerName(source) .. ", all public slots taken :(")
-            setReason("Sorry, " .. GetPlayerName(source) .. ", all public slots taken :(")
+            print("Sorry, " .. GetPlayerName(source) .. "! All public slots taken :(")
+            setReason("Sorry, " .. GetPlayerName(source) .. "! All public slots taken :(")
             CancelEvent()
         end
     end
@@ -113,10 +114,10 @@ function playerHasReservedSlot(source)
             -- match found
             return true
         else
-            print("no match found.. compared:")
-            print(playerLicense)
-            print("and")
-            print(reservedPlayers[i])
+            --print("no match found.. compared:")
+            --print(playerLicense.identifier)
+            --print("and")
+            --print(reservedPlayers[i])
         end
     end
     -- no match found
