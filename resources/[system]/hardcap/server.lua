@@ -75,7 +75,7 @@ AddEventHandler('playerDropped', function()
 end)
 
 AddEventHandler('playerConnecting', function(name, setReason)
-    local MAX_PUBLIC_PLAYER_COUNT = 30
+    local MAX_PUBLIC_PLAYER_COUNT = 29
     local MAX_PLAYER_COUNT = 32
     print('Connecting: ' .. name)
     print("Player EP: " .. GetPlayerEP(source))

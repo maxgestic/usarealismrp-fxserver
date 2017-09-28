@@ -180,6 +180,7 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
                         end
                     end
                     if not found then
+                        item.quantity = 1
                         table.insert(inventory, item)
                         user.setInventory(inventory)
                     end
