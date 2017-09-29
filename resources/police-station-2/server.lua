@@ -1,8 +1,8 @@
 AddEventHandler('rconCommand', function(commandName, args)
     if commandName:lower() == 'whitelist' then
         local playerId = table.remove(args, 1)
-        local type = table.remove(args, 2)
-        local status = table.remove(args, 3)
+        local type = table.remove(args, 1)
+        local status = table.remove(args, 1)
 		--RconPrint(type)
         if not GetPlayerName(playerId) then
             RconPrint("\nError: player with id #" .. playerId .. " does not exist!")
