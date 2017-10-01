@@ -60,7 +60,7 @@ Citizen.CreateThread(function()
 		Wait(1)
 		for id = 0, 64 do
 			x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(id), true))
-			if NetworkIsPlayerActive(id) and GetDistanceBetweenCoords(x,y,z, GetEntityCoords(GetPlayerPed(-1))) < 75 and magic.position(hidden, GetPlayerServerId(id)) == 0 then
+			if NetworkIsPlayerActive(id) and GetDistanceBetweenCoords(x,y,z, GetEntityCoords(GetPlayerPed(-1))) < 40 and magic.position(hidden, GetPlayerServerId(id)) == 0 then
 				ped = GetPlayerPed(id)
 				blip = GetBlipFromEntity(ped)
 
