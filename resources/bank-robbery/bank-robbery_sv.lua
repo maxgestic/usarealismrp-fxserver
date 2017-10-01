@@ -85,6 +85,7 @@ end)
 
 RegisterServerEvent("bank:inRange")
 AddEventHandler("bank:inRange", function()
+	local userSource = tonumber(source)
 	rewardMoney = math.random(20000, 70000)
 	isBusy = "no"
 	local msg = "You stole ~g~$" .. comma_value(rewardMoney) .. "~w~!"
@@ -92,7 +93,7 @@ AddEventHandler("bank:inRange", function()
 	TriggerEvent('es:getPlayerFromId', source, function(user)
 		if user then
 			user.addMoney(rewardMoney)
-			print("player " .. GetPlayerName(source) .. " successfully robbed the bank and now has: " .. user.getMoney())
+			print("player " .. GetPlayerName(userSource) .. " successfully robbed the bank and now has: " .. user.getMoney())
 		end
 	end)
 end)
