@@ -121,7 +121,7 @@ customs = {
         {name = "Street Suspension",mod = 1,mt =15, cost = 10000},
         {name = "Sport Suspension",mod = 2,mt =15, cost = 15000},
         {name = "Competition Suspension",mod = 3,mt =15, cost = 20000},
-    }},
+    }},--[[
     {title = "Armour", data = {
         {name = "None",mt = 16, mod = -1,cost = 0},
         {name = "Armour Upgrade 20%",mt = 16, mod = 0, cost = 50000},
@@ -129,7 +129,7 @@ customs = {
         {name = "Armour Upgrade 60%",mt = 16, mod = 2, cost = 150000},
         {name = "Armour Upgrade 80%",mt = 16, mod = 3, cost = 200000},
         {name = "Armour Upgrade 100%",mt = 16, mod = 4, cost = 250000},
-    }},
+    }},--]]
     {title = "Lights", data = {
         ["Xenon"] = {
             {name = "Stock Lights",bool = false, mt = 22,cost = 0},
