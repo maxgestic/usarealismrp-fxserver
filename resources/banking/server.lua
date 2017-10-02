@@ -194,6 +194,7 @@ TriggerEvent('es:addCommand', 'givecash', function(source, args, user)
     fromPlayer = tonumber(source)
     toPlayer = tonumber(args[2])
     amount = tonumber(args[3])
+    amount = round(amount, 0)
     TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "You gave " .. GetPlayerName(toPlayer) .. " ^2$" .. amount .. "^0.");
     TriggerClientEvent('chatMessage', toPlayer, "", {0, 0, 0}, GetPlayerName(fromPlayer) .. " has given you ^2$" .. amount .. "^0.");
     TriggerClientEvent('bank:givecash', source, toPlayer, amount)
