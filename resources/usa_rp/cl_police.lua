@@ -30,7 +30,7 @@ function SetConeOnGround()
     while not HasModelLoaded(barrier) do
       Citizen.Wait(1)
     end
-    local object = CreateObject(barrier, x, y, z-1, true, true, false) -- x+1
+    local object = CreateObject(barrier, x, y+1, z-1, true, true, false) -- x+1
     PlaceObjectOnGroundProperly(object)
     table.insert(spawnedCones, object)
 end
