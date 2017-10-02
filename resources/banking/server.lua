@@ -190,6 +190,7 @@ TriggerEvent('es:addCommand', 'givecash', function(source, args, user)
   local toPlayer
   local amount
   if (args[2] ~= nil and tonumber(args[3]) > 0) then
+    TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " hands over money.")
     fromPlayer = tonumber(source)
     toPlayer = tonumber(args[2])
     amount = tonumber(args[3])
