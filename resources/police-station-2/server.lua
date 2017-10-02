@@ -21,7 +21,7 @@ AddEventHandler('rconCommand', function(commandName, args)
         if type == "police" then
 			TriggerEvent("es:getPlayerFromId", tonumber(playerId), function(user)
 				if(user)then
-                    if status then
+                    if status == "true" then
     					user.setPoliceRank(1)
     					RconPrint("DEBUG: " .. playerId .. " whitelisted as LSPD")
     					TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "You have been whitelisted for LSPD")

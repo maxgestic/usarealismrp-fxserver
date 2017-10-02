@@ -20,7 +20,7 @@ AddEventHandler('rconCommand', function(commandName, args)
         if type == "ems" then
 			TriggerEvent("es:getPlayerFromId", tonumber(playerId), function(user)
 				if(user)then
-                    if status then
+                    if status == "true" then
     					user.setEMSRank(1)
     					RconPrint("DEBUG: " .. playerId .. " whitelisted for EMS")
     					--TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "You have been whitelist as EMS")
