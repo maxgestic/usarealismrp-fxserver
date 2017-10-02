@@ -88,7 +88,11 @@ AddEventHandler("usa_rp:spawnPlayer", function()
             spawn.x =  373.269
             spawn.y = -1441.48
             spawn.z = 29.43
-            --weapons = {"WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER"}
+		elseif job == "security" then
+			spawn.x =  3502.5
+            spawn.y = 3762.45
+            spawn.z = 29.900
+			--weapons = {"WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER"}
         end
         --[[
         elseif job == "taxi" then
