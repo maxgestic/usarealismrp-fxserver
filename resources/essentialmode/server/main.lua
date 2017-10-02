@@ -60,7 +60,7 @@ AddEventHandler('playerDropped', function()
 			end
 		end
 		TriggerEvent("es:playerDropped", Users[numberSource])
-		db.updateUser(Users[numberSource].get('identifier'), {money = Users[numberSource].getMoney(), bank = Users[numberSource].getBank(), model = Users[numberSource].getModel(), inventory = Users[numberSource].getInventory(), weapons = Users[numberSource].getWeapons(), vehicles = Users[numberSource].getVehicles(), insurance = Users[numberSource].getInsurance(), job = Users[numberSource].getJob(), licenses = Users[numberSource].getLicenses(), criminalHistory = Users[numberSource].getCriminalHistory(), characters = Users[numberSource].getCharacters(), jailtime = Users[numberSource].getJailtime(), policeRank = Users[numberSource].getPoliceRank(), policeCharacter = Users[numberSource].getPoliceCharacter(), EMSRank = Users[numberSource].getEMSRank()}, function()
+		db.updateUser(Users[numberSource].get('identifier'), {money = Users[numberSource].getMoney(), bank = Users[numberSource].getBank(), model = Users[numberSource].getModel(), inventory = Users[numberSource].getInventory(), weapons = Users[numberSource].getWeapons(), vehicles = Users[numberSource].getVehicles(), insurance = Users[numberSource].getInsurance(), job = Users[numberSource].getJob(), licenses = Users[numberSource].getLicenses(), criminalHistory = Users[numberSource].getCriminalHistory(), characters = Users[numberSource].getCharacters(), jailtime = Users[numberSource].getJailtime(), policeRank = Users[numberSource].getPoliceRank(), policeCharacter = Users[numberSource].getPoliceCharacter(), EMSRank = Users[numberSource].getEMSRank(), securityRank = Users[numberSource].getSecurityRank()}, function()
 			Users[numberSource] = nil
 		end)
 	else
@@ -71,7 +71,7 @@ end)
 RegisterServerEvent('sway:updateDB')
 AddEventHandler('sway:updateDB', function(source)
 	local numberSource = tonumber(source)
-	db.updateUser(Users[numberSource].get('identifier'), {money = Users[numberSource].getMoney(), bank = Users[numberSource].getBank(), model = Users[numberSource].getModel(), inventory = Users[numberSource].getInventory(), weapons = Users[numberSource].getWeapons(), vehicles = Users[numberSource].getVehicles(), insurance = Users[numberSource].getInsurance(), job = Users[numberSource].getJob(), licenses = Users[numberSource].getLicenses(), criminalHistory = Users[numberSource].getCriminalHistory(), characters = Users[numberSource].getCharacters(), jailtime = Users[numberSource].getJailtime(), policeRank = Users[numberSource].getPoliceRank(), policeCharacter = Users[numberSource].getPoliceCharacter(), EMSRank = Users[numberSource].getEMSRank()}, function()
+	db.updateUser(Users[numberSource].get('identifier'), {money = Users[numberSource].getMoney(), bank = Users[numberSource].getBank(), model = Users[numberSource].getModel(), inventory = Users[numberSource].getInventory(), weapons = Users[numberSource].getWeapons(), vehicles = Users[numberSource].getVehicles(), insurance = Users[numberSource].getInsurance(), job = Users[numberSource].getJob(), licenses = Users[numberSource].getLicenses(), criminalHistory = Users[numberSource].getCriminalHistory(), characters = Users[numberSource].getCharacters(), jailtime = Users[numberSource].getJailtime(), policeRank = Users[numberSource].getPoliceRank(), policeCharacter = Users[numberSource].getPoliceCharacter(), EMSRank = Users[numberSource].getEMSRank(), securityRank = Users[numberSource].getSecurityRank()}, function()
 			print("Updated db for player " .. numberSource)
 		end)
 end)
@@ -227,7 +227,7 @@ Citizen.CreateThread(function()
 					for id, player in pairs(players) do
 						if player then
 							print("player existed")
-							db.updateUser(player.get('identifier'), {money = player.getMoney(), bank = player.getBank(), model = player.getModel(), inventory = player.getInventory(), weapons = player.getWeapons(), vehicles = player.getVehicles(), insurance = player.getInsurance(), job = player.getJob(), licenses = player.getLicenses(), criminalHistory = player.getCriminalHistory(), characters = player.getCharacters(), jailtime = player.getJailtime(), policeRank = player.getPoliceRank(), policeCharacter = player.getPoliceCharacter(), EMSRank = player.getEMSRank()}, function()
+							db.updateUser(player.get('identifier'), {money = player.getMoney(), bank = player.getBank(), model = player.getModel(), inventory = player.getInventory(), weapons = player.getWeapons(), vehicles = player.getVehicles(), insurance = player.getInsurance(), job = player.getJob(), licenses = player.getLicenses(), criminalHistory = player.getCriminalHistory(), characters = player.getCharacters(), jailtime = player.getJailtime(), policeRank = player.getPoliceRank(), policeCharacter = player.getPoliceCharacter(), EMSRank = player.getEMSRank(), securityRank = Users[numberSource].getSecurityRank()}, function()
 								print("saved player #" .. id .. "'s data!'")
 							end)
 						end

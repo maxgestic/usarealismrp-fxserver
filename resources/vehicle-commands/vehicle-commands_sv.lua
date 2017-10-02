@@ -65,8 +65,24 @@ TriggerEvent('es:addCommand', 'spawn', function(source, args, user)
 			TriggerClientEvent("vehicleCommands:error", source, "^1Invalid model name. Usage: /spawn <name>")
 			TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 firetruck")
 		end
+    elseif user.getJob() == "security" then
+		local mPos = user.getCoords()
+		if get3DDistance(3502.5, 3762.45, 29.010, mPos.x, mPos.y, mPos.z) < 20.0 then
+			if args[2] == "barracks" then
+				TriggerClientEvent("vehicleCommands:spawnVehicle", source, "barracks")
+			elseif args[2] == "crusader" then
+				TriggerClientEvent("vehicleCommands:spawnVehicle", source, "crusader")    
+			elseif args[2] == "buzzard2" then
+				TriggerClientEvent("vehicleCommands:spawnVehicle", source, "buzzard2")    
+			else
+				TriggerClientEvent("vehicleCommands:error", source, "^1Invalid model name. Usage: /spawn <name>")
+				TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 barracks, crusader, buzzard2")   
+			end
+		else
+			TriggerClientEvent("vehicleCommands:error", source, "^1Vehicles can only be spawned at HQ!")
+		end
 	else
-		TriggerClientEvent("chatMessage", source, "SYSTEM", {255, 180, 0}, "^3Only cops/sheriffs/ems/fire can use /spawn.")
+		TriggerClientEvent("chatMessage", source, "SYSTEM", {255, 180, 0}, "^3Only cops/sheriffs/ems/fire/security can use /spawn.")
 	end
 end)
 
@@ -116,3 +132,13 @@ TriggerEvent('es:addCommand', 'engine', function(source, args, user)
 		--SetVehicleMod(currentvehicle, engine, param)
 	end
 end)
+
+local function power(a, b)
+	return a ^ b
+	end
+
+function get3DDistance(x1, y1, z1, x2, y2, z2)
+	return math.sqrt(power(x1 - x2, 2) + power(y1 - y2, 2) + power(z1 - z2, 2))
+end
+
+
