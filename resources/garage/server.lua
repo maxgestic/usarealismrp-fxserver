@@ -25,12 +25,14 @@ function playerHasValidAutoInsurance(playerInsurance, source)
 					return true
 				else
 					-- expired month
-					TriggerClientEvent("garage:notify", source, "~r~T. ENDS INSURANCE: ~w~Sorry your coverage ended on " .. playerInsurance.month .. "/" .. playerInsurance.year .. ". We won't be able to help you.")
+					TriggerClientEvent("garage:notify", source, "~r~T. ENDS INSURANCE: ~w~Sorry your coverage ended on " .. playerInsurance.expireMonth .. "/" .. playerInsurance.expireYear.. ". We won't be able to help you.")
+					-- TODO: remove auto insurance so player can buy a new one without having to relog to remove it
 					return false
 				end
 			else
 				-- expired year
-				TriggerClientEvent("garage:notify", source, "~r~T. ENDS INSURANCE: ~w~Sorry your coverage ended on " .. playerInsurance.month .. "/" .. playerInsurance.year .. ". We won't be able to help you.")
+				TriggerClientEvent("garage:notify", source, "~r~T. ENDS INSURANCE: ~w~Sorry your coverage ended on " .. playerInsurance.expireMonth .. "/" .. playerInsurance.expireYear .. ". We won't be able to help you.")
+				-- TODO: remove auto insurance so player can buy a new one without having to relog to remove it
 				return false
 			end
 		else
