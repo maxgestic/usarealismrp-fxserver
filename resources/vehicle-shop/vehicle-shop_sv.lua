@@ -62,6 +62,45 @@ function alreadyHasAnyVehicle(source)
 	end)
 end
 
+function renewInsurance(source)
+	local userSource = tonumber(source)
+	print("player " .. GetPlayerName(source) .. " is buying auto insurance!")
+	local EXPIRATION_TIME_IN_MONTHS = 1
+	local INSURANCE_COVERAGE_MONTHLY_COST = 15000
+	local timestamp = os.date("*t", os.time())
+	local expireMonth, expireYear
+	if timestamp.month < 12 then
+		if timestamp.day > 10 then
+			expireMonth = timestamp.month + EXPIRATION_TIME_IN_MONTHS + 1
+		else
+			expireMonth = timestamp.month + EXPIRATION_TIME_IN_MONTHS
+		end
+		expireYear = timestamp.year
+	else
+		expireMonth = 1
+		expireYear = timestamp.year + 1
+	end
+	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+		local insurance = user.getInsurance()
+		if user.getMoney() >= INSURANCE_COVERAGE_MONTHLY_COST then
+			local insurancePlan = {
+				planName = "T. Ends Auto Insurance",
+				type = "auto",
+				valid = true,
+				expireMonth = expireMonth,
+				expireYear = expireYear
+			}
+			user.setInsurance(insurancePlan)
+			print("taking $15,000 from player for auto insurance!")
+			user.setMoney(user.getMoney() - INSURANCE_COVERAGE_MONTHLY_COST)
+			TriggerClientEvent("vehShop:notify", userSource, "~w~Thanks for purchasing auto insurance coverage! Your coverage expires on ~y~" .. padzero(expireMonth, 2) .. "/" .. expireYear .. "~w~.")
+		else
+			print("player did not have enough money to buy insurance")
+			TriggerClientEvent("vehShop:notify", userSource, "You ~r~don't have enough money~w~ to buy auto insurance coverage!")
+		end
+	end)
+end
+
 RegisterServerEvent("vehShop:buyInsurance")
 AddEventHandler("vehShop:buyInsurance", function()
 	local userSource = tonumber(source)
@@ -114,6 +153,7 @@ AddEventHandler("vehShop:checkPlayerInsurance", function()
 		local playerInsurance = user.getInsurance()
 		if playerInsurance.type == "auto" then
 			TriggerClientEvent("chatMessage", userSource, "T. ENDS INSURANCE", {255, 78, 0}, "You are already insured! Your coverage will expire on ^3" .. padzero(playerInsurance.expireMonth, 2) .. "/" .. playerInsurance.expireYear .. "^0.")
+			renewInsurance(userSource)
 			return
 		end
 		TriggerClientEvent("vehShop:insuranceOptionMenu", userSource)
