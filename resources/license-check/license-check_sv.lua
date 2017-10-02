@@ -7,12 +7,12 @@ function playerHasValidAutoInsurance(playerInsurance)
 					return true
 				else
 					-- expired month
-					TriggerClientEvent("garage:notify", source, "~r~T. ENDS INSURANCE: ~w~Sorry your coverage ended on " .. playerInsurance.month .. "/" .. playerInsurance.year .. ". We won't be able to help you.")
+					TriggerClientEvent("garage:notify", source, "~r~T. ENDS INSURANCE: ~w~Sorry your coverage ended on " .. playerInsurance.expireMonth .. "/" .. playerInsurance.expireYear .. ". We won't be able to help you.")
 					return false
 				end
 			else
 				-- expired year
-				TriggerClientEvent("garage:notify", source, "~r~T. ENDS INSURANCE: ~w~Sorry your coverage ended on " .. playerInsurance.month .. "/" .. playerInsurance.year .. ". We won't be able to help you.")
+				TriggerClientEvent("garage:notify", source, "~r~T. ENDS INSURANCE: ~w~Sorry your coverage ended on " .. playerInsurance.expireMonth .. "/" .. playerInsurance.expireYear .. ". We won't be able to help you.")
 				return false
 			end
 		end
@@ -103,6 +103,7 @@ TriggerEvent('es:addCommand', 'mdt', function(source, args, user)
 	elseif playerJob ~= "cop" and playerJob ~= "sheriff" and playerJob ~= "highwaypatrol" then
 		TriggerClientEvent("license:failureNotJurisdiction", source)
 	else -- player is a cop, so allow check and perform check with argument = player id to check license
+		TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " opens MDT.")
 		TriggerEvent("license:searchForLicense", source, argument)
 	end
 end)
@@ -135,6 +136,7 @@ TriggerEvent('es:addCommand', '28', function(source, args, user)
 	local userSource = tonumber(source)
 	local plateNumber = args[2]
 	if plateNumber then
+		TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " runs plate.")
 		TriggerEvent("es:getPlayers", function(players)
 			for id, player in pairs(players) do
 				--print("id = " .. id)
@@ -168,6 +170,7 @@ TriggerEvent('es:addCommand', 'runplate', function(source, args, user)
 	local userSource = tonumber(source)
 	local plateNumber = args[2]
 	if plateNumber then
+		TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " runs plate.")
 		TriggerEvent("es:getPlayers", function(players)
 			for id, player in pairs(players) do
 				--print("id = " .. id)

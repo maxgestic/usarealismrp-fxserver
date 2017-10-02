@@ -44,6 +44,7 @@ TriggerEvent('es:addCommand', 'search', function(source, args, user)
 	elseif user.getJob() ~= "cop" and user.getJob() ~= "sheriff" and user.getJob() ~= "highwaypatrol" then
 		TriggerClientEvent("search:failureNotJurisdiction", source)
 	else -- player is a cop, so allow search and perform search with argument = player id to search
+		TriggerEvent("altchat:localChatMessage", source, "^6* " .. GetPlayerName(source) .. " searches person.") -- send local me message
 		TriggerEvent("search:searchPlayer", source, argument)
 	end
 end)
