@@ -48,6 +48,8 @@ $(function() {
             $("#jail-form-wrap").show();
             $("#chargesWrap").hide();
             $("#cursor").show();
+        } else if (data.which == 13) { // ENTER
+            $("#jail-form").submit();
         }
     };
 
