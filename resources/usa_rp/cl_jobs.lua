@@ -192,7 +192,7 @@ Citizen.CreateThread(function()
                 animDict = "timetable@jimmy@ig_1@idle_a"
                 animName = "hydrotropic_bud_or_something"
                 TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
-                for i = 1, 80 do
+                for i = 1, 60 do
                     if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) then
         				RequestAnimDict(animDict)
         				while not HasAnimDictLoaded(animDict) do

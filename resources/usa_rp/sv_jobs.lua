@@ -140,7 +140,7 @@ AddEventHandler("usa_rp:startTimer", function(timerType)
     local userSource = tonumber(source)
     TriggerClientEvent("usa_rp:notify", userSource, "Sup! You can chill out here while I get your stuff.")
     if timerType == "meth_supplies_ped" then
-        local seconds = 120
+        local seconds = 80
         local time = seconds * 1000
         SetTimeout(time, function()
             TriggerClientEvent("usa_rp:notify", userSource, "Here are the chemicals needed for cooking!")
