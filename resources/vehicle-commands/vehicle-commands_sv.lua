@@ -4,6 +4,8 @@ local spawnableVehicles = {
 		'sheriff',
 		'sheriff2',
 		'sheriff3',
+		'pbus',
+		'policet',
 		'police',
 		'police2',
 		'police3',
@@ -16,20 +18,18 @@ local spawnableVehicles = {
 		'fbi2',
 		'riot',
 		'polmav',
-		'scorcher'
+		'scorcher',
+		'predator'
 	}
 }
 
 function isSpawnable(modelName)
-
 	for i =1, #spawnableVehicles["sheriff"] do
 		if spawnableVehicles["sheriff"][i] == modelName then
 			return true
 		end
 	end
-
 	return false
-
 end
 
 
@@ -45,7 +45,7 @@ TriggerEvent('es:addCommand', 'spawn', function(source, args, user)
 			end
 		else
 			TriggerClientEvent("vehicleCommands:error", source, "^1Invalid model name. Usage: /spawn <name>")
-			TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 scorcher, policeb, sheriff, sheriff2, sheriff3, police, police2, police3, police4, police5, police6, police7, police8, fbi, fbi2, riot, polmav")
+			TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 predator, scorcher, policeb, sheriff, sheriff2, sheriff3, police, police2, police3, police4, police5, police6, police7, police8, policet, pbus, fbi, fbi2, riot, polmav")
 		end
 	elseif user.getJob() == "ems" then
 		if args[2] == "ambulance" then
@@ -71,12 +71,12 @@ TriggerEvent('es:addCommand', 'spawn', function(source, args, user)
 			if args[2] == "barracks" then
 				TriggerClientEvent("vehicleCommands:spawnVehicle", source, "barracks")
 			elseif args[2] == "crusader" then
-				TriggerClientEvent("vehicleCommands:spawnVehicle", source, "crusader")    
+				TriggerClientEvent("vehicleCommands:spawnVehicle", source, "crusader")
 			elseif args[2] == "buzzard2" then
-				TriggerClientEvent("vehicleCommands:spawnVehicle", source, "buzzard2")    
+				TriggerClientEvent("vehicleCommands:spawnVehicle", source, "buzzard2")
 			else
 				TriggerClientEvent("vehicleCommands:error", source, "^1Invalid model name. Usage: /spawn <name>")
-				TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 barracks, crusader, buzzard2")   
+				TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 barracks, crusader, buzzard2")
 			end
 		else
 			TriggerClientEvent("vehicleCommands:error", source, "^1Vehicles can only be spawned at HQ!")
@@ -140,5 +140,3 @@ local function power(a, b)
 function get3DDistance(x1, y1, z1, x2, y2, z2)
 	return math.sqrt(power(x1 - x2, 2) + power(y1 - y2, 2) + power(z1 - z2, 2))
 end
-
-
