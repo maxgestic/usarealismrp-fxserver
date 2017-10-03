@@ -36,7 +36,10 @@ TriggerEvent('es:addCommand', 'report', function(source, args, user)
 				if id and player then
 					local playerGroup = player.getGroup()
 					if playerGroup == "owner" or playerGroup == "superadmin" or playerGroup == "admin" or playerGroup == "mod" then
-						TriggerClientEvent("chatMessage", id, "REPORT ["..reporterId.."]", {255, 51, 204}, reportedId .. " " .. message)
+						TriggerClientEvent("chatMessage", id, "", {}, "^3****")
+						TriggerClientEvent("chatMessage", id, "", {}, "^3REPORT FROM:^0 "..GetPlayerName(reporterId).." [#"..reporterId.."]")
+						TriggerClientEvent("chatMessage", id, "", {}, "^3MESSAGE:^0 " .. reportedId .. " " .. message)
+						TriggerClientEvent("chatMessage", id, "", {}, "^3****")
 					end
 				end
 			end
@@ -374,7 +377,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 			local docRev = bannedPlayer._rev
 			for j = 1, #identifiers do
 				if string.sub(identifiers[j],1,20) == string.sub(identifierToUnban,1,20) then
-					RconPrint("\nfound a matching identifer to unban for "..bannedPlayer.name.."!")
+					--RconPrint("\nfound a matching identifer to unban for "..bannedPlayer.name.."!")
 					-- found a match, unban
 					PerformHttpRequest("http://127.0.0.1:5984/bans/"..docid.."?rev="..docRev, function(err, rText, headers)
 						if err == 0 then
@@ -388,11 +391,10 @@ AddEventHandler('rconCommand', function(commandName, args)
 					CancelEvent()
 					return
 				end
-
 			end
-			RconPrint("\nNo match found for identifier: " .. identifierToUnban .. "!")
-			CancelEvent()
 		end
+		RconPrint("\nNo match found for identifier: " .. identifierToUnban .. "!")
+		CancelEvent()
 	elseif commandName == "freeze" then
 		if(GetPlayerName(tonumber(args[1])))then
 			local player = tonumber(args[1])
@@ -753,12 +755,12 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 					elseif license.name == "Firearm Permit" then
 						firearms_permit = "Valid"
 					end
-				end	
-				
+				end
+
 				local insurance = user.getInsurance()
 				local insurance_month = insurance.expireMonth
 				local insurance_year = insurance.expireYear
-				
+
 				TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
 				TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Name: " .. GetPlayerName(tonumber(args[2])) .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
 				TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Police Rank: " .. user.getPoliceRank() .. " | EMS Rank: " .. user.getEMSRank() .. " | Delta PMC Rank: " .. user.getSecurityRank() .. " |  Job: " .. user.getJob() .. " |" )
@@ -767,8 +769,8 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 				TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
 				TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Inventory: " .. inventorynames .. " |")
 				TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
-			end)		
-		end	
+			end)
+		end
 	else
 		--show player stats
 		local vehiclenames = ""
@@ -809,12 +811,12 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 			elseif license.name == "Firearm Permit" then
 				firearms_permit = "Valid"
 			end
-		end	
-		
+		end
+
 		local insurance = user.getInsurance()
 		local insurance_month = insurance.expireMonth
 		local insurance_year = insurance.expireYear
-		
+
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Name: " .. GetPlayerName(source) .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Police Rank: " .. user.getPoliceRank() .. " | EMS Rank: " .. user.getEMSRank() .. " | Delta PMC Rank: " .. user.getSecurityRank() .. " |  Job: " .. user.getJob() .. " |" )
