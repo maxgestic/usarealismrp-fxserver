@@ -717,58 +717,62 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 		--admins only
 		if user.getGroup() == "admin" or user.getGroup() == "owner" then
 			TriggerEvent("es:getPlayerFromId", tonumber(args[2]), function(user)
-				local vehiclenames = ""
-				local userVehicles = user.getVehicles()
-				for i = 1, #userVehicles do
-					local vehicle = userVehicles[i]
-					vehiclenames = vehiclenames .. userVehicles[i].model
-					if i ~= #userVehicles then
-						vehiclenames = vehiclenames .. ", "
+				if user then
+					local vehiclenames = ""
+					local userVehicles = user.getVehicles()
+					for i = 1, #userVehicles do
+						local vehicle = userVehicles[i]
+						vehiclenames = vehiclenames .. userVehicles[i].model
+						if i ~= #userVehicles then
+							vehiclenames = vehiclenames .. ", "
+						end
 					end
-				end
-				local weaponnames = ""
-				local userWeapons = user.getWeapons()
-				for i = 1, #userWeapons do
-					local weapon = userWeapons[i]
-					weaponnames = weaponnames .. userWeapons[i].name
-					if i ~= #userWeapons then
-						weaponnames = weaponnames .. ", "
+					local weaponnames = ""
+					local userWeapons = user.getWeapons()
+					for i = 1, #userWeapons do
+						local weapon = userWeapons[i]
+						weaponnames = weaponnames .. userWeapons[i].name
+						if i ~= #userWeapons then
+							weaponnames = weaponnames .. ", "
+						end
 					end
-				end
-				local inventorynames = ""
-				local userInventory = user.getInventory()
-				for i = 1, #userInventory do
-					--local inventory = userInventory[i]
-					--local quantity = inventory.quantity
-					inventorynames = inventorynames .. userInventory[i].name .. "(" .. userInventory[i].quantity .. ")"
-					if i ~= #userInventory then
-						inventorynames = inventorynames .. ", "
+					local inventorynames = ""
+					local userInventory = user.getInventory()
+					for i = 1, #userInventory do
+						--local inventory = userInventory[i]
+						--local quantity = inventory.quantity
+						inventorynames = inventorynames .. userInventory[i].name .. "(" .. userInventory[i].quantity .. ")"
+						if i ~= #userInventory then
+							inventorynames = inventorynames .. ", "
+						end
 					end
-				end
-				local firearms_permit = "Invalid"
-				local driving_license = "Invalid"
-				local userLicenses = user.getLicenses()
-				for i = 1, #userLicenses do
-					local license = userLicenses[i]
-					if license.name == "Driver's License"  then
-						driving_license = "Valid"
-					elseif license.name == "Firearm Permit" then
-						firearms_permit = "Valid"
+					local firearms_permit = "Invalid"
+					local driving_license = "Invalid"
+					local userLicenses = user.getLicenses()
+					for i = 1, #userLicenses do
+						local license = userLicenses[i]
+						if license.name == "Driver's License"  then
+							driving_license = "Valid"
+						elseif license.name == "Firearm Permit" then
+							firearms_permit = "Valid"
+						end
 					end
-				end
 
-				local insurance = user.getInsurance()
-				local insurance_month = insurance.expireMonth
-				local insurance_year = insurance.expireYear
+					local insurance = user.getInsurance()
+					local insurance_month = insurance.expireMonth
+					local insurance_year = insurance.expireYear
 
-				TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
-				TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Name: " .. GetPlayerName(tonumber(args[2])) .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
-				TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Police Rank: " .. user.getPoliceRank() .. " | EMS Rank: " .. user.getEMSRank() .. " | Delta PMC Rank: " .. user.getSecurityRank() .. " |  Job: " .. user.getJob() .. " |" )
-				TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Cash: " .. user.getMoney() .. " | Bank: " .. user.getBank() .. " | " )
-				TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. insurance_month .. "/" .. insurance_year .. " | Driver's License: " .. driving_license .. " |")
-				TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
-				TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Inventory: " .. inventorynames .. " |")
-				TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
+					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
+					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Name: " .. GetPlayerName(tonumber(args[2])) .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
+					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Police Rank: " .. user.getPoliceRank() .. " | EMS Rank: " .. user.getEMSRank() .. " | Delta PMC Rank: " .. user.getSecurityRank() .. " |  Job: " .. user.getJob() .. " |" )
+					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Cash: " .. user.getMoney() .. " | Bank: " .. user.getBank() .. " |  Ingame Time: " .. user.getIngameTime() .. " mins |" )
+					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. insurance_month .. "/" .. insurance_year .. " | Driver's License: " .. driving_license .. " |")
+					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
+					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Inventory: " .. inventorynames .. " |")
+					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
+				else
+					TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "User not found!")
+				end
 			end)
 		end
 	else
@@ -820,7 +824,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Name: " .. GetPlayerName(source) .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Police Rank: " .. user.getPoliceRank() .. " | EMS Rank: " .. user.getEMSRank() .. " | Delta PMC Rank: " .. user.getSecurityRank() .. " |  Job: " .. user.getJob() .. " |" )
-		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Cash: " .. user.getMoney() .. " | Bank: " .. user.getBank() .. " | " )
+		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Cash: " .. user.getMoney() .. " | Bank: " .. user.getBank() .. " |  Ingame Time: " .. user.getIngameTime() .. " mins |" )
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. insurance_month .. "/" .. insurance_year .. " | Driver's License: " .. driving_license .. " |")
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Inventory: " .. inventorynames .. " |")
