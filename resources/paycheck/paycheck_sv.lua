@@ -42,6 +42,7 @@ AddEventHandler('paycheck:welfare', function()
         end
 
         -- Notify the user
+		user.setIngameTime(10)
         TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, msg)
 
  	end)
