@@ -120,6 +120,9 @@ AddEventHandler("usa_rp:spawnPlayer", function()
         else
             print("user has no weapons")
         end
+
+        user.setJob("civ")
+
         TriggerClientEvent("usa_rp:spawn", userSource, model, job, spawn, weapons, character)
     end)
 end)

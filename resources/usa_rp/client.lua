@@ -115,6 +115,7 @@ Citizen.CreateThread(function()
 		playerPed = GetPlayerPed(-1)
 		car = GetVehiclePedIsIn(playerPed, false)
 		if car then
+            Citizen.InvokeNative(0xB736A491E64A32CF,Citizen.PointerValueIntInitialized(car)) -- auto car clean up for unused vehicles
 			if GetPedInVehicleSeat(car, -1) == playerPed then
 				SetPlayerCanDoDriveBy(PlayerId(), false)
 			elseif passengerDriveBy then
