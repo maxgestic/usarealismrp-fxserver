@@ -26,6 +26,7 @@ AddEventHandler('rconCommand', function(commandName, args)
     					--TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "You have been whitelist as EMS")
                     else
                         user.setEMSRank(0)
+						user.setJob("civ")
     					RconPrint("DEBUG: " .. playerId .. " un-whitelisted for EMS")
                     end
 				end
