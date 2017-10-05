@@ -254,6 +254,8 @@ function superCarMenu()
 	Menu.addButton("Sultan RS ($115,000)","buyVehicle","-295689028:115000:Sultan RS")
 	Menu.addButton("Turismo 2 ($750,999)","buyVehicle","-982130927:750999:Turismo 2")
 	Menu.addButton("Vacca ($750,000)","buyVehicle","338562499:750000:Vacca")
+	Menu.addButton("FMJ ($1,000,000)","buyVehicle","1426219628:1000000:FMJ")
+	Menu.addButton("GP1 ($1,000,000)","buyVehicle","1234311532:1000000:GP1")
 end
 
 function classicMenu()
@@ -282,6 +284,7 @@ function sedanMenu()
     Menu.addButton("Vapid Stanier ($13,500)","buyVehicle","-1477580979:13500:Vapid Stanier")
 	Menu.addButton("Vulcan Ingot ($9,500)","buyVehicle","-1289722222:9500:Vulcan Ingot")
 	Menu.addButton("Enus Cognoscenti ($85,500)","buyVehicle","-2030171296:85500:Vulcan Ingot")
+	Menu.addButton("Vulcan Warrener ($15,500)","buyVehicle","1373123368:15500:Vulcan Warrener")
 
 end
 
