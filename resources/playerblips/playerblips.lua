@@ -20,7 +20,9 @@ local emergencySkins = {
 	{name = "s_f_y_cop_01", type="police"},
 	{name = "s_m_m_paramedic_01", type="fire"},
 	{name = "s_m_y_fireman_01", type="fire"},
-	{name = "s_f_y_scrubs_01", type="fire"}
+	{name = "s_f_y_scrubs_01", type="fire"},
+	{name = "mp_m_freemode_01", type="police"},
+	{name = "mp_f_freemode_01", type="police"},
 }
 
 local magic = {}
@@ -242,6 +244,13 @@ function isPlayerEmergencyPed(ped)
 	for i = 1, #emergencySkins do
 		local skin = emergencySkins[i].name
 		if IsPedModel(ped, GetHashKey(skin)) then
+			if skin == "mp_m_freemode_01" and tonumber(GetPedDrawableVariation(ped, 11)) == 55 and tonumber(GetPedDrawableVariation(ped, 8)) == 58 and tonumber(GetPedDrawableVariation(ped, 4)) == 35 then
+				return true
+			elseif skin == "mp_f_freemode_01" and tonumber(GetPedDrawableVariation(ped, 11)) == 48 and tonumber(GetPedDrawableVariation(ped, 8)) == 35 and tonumber(GetPedDrawableVariation(ped, 4)) == 34 then
+				return true
+			elseif skin == "mp_m_freemode_01" or skin == "mp_f_freemode_01" then
+				return false
+			end
 			return true
 		end
 	end
