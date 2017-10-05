@@ -19,6 +19,10 @@ TriggerEvent('es:addCommand', 'hash', function(source, args, user)
 	TriggerClientEvent('es_admin:getHash', source, args[2])
 end)
 
+TriggerEvent('es:addCommand', 'gotopd', function(source, args, user)
+
+end)
+
 -- Default commands
 TriggerEvent('es:addCommand', 'report', function(source, args, user)
 	local reporterId = tonumber(source)
@@ -260,35 +264,42 @@ end)
 -- Freezing
 local frozen = {}
 TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, user)
+	local userJob = user.getJob()
+	if args[2] == "pd" then
+		TriggerClientEvent('es_admin:teleportUser', source, 451.255, -992.41, 30.6896)
+		return
+	end
+	if tonumber(args[2]) ~= nil then
 		if(GetPlayerName(tonumber(args[2])))then
 			local player = tonumber(args[2])
 
-			-- User permission check
-			TriggerEvent("es:getPlayerFromId", player, function(target)
-				if(target)then
+				-- User permission check
+				TriggerEvent("es:getPlayerFromId", player, function(target)
+					if(target)then
 
-					TriggerClientEvent('es_admin:teleportUser', source, target.getCoords().x, target.getCoords().y, target.getCoords().z)
+						TriggerClientEvent('es_admin:teleportUser', source, target.getCoords().x, target.getCoords().y, target.getCoords().z)
 
-					TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have been teleported to by ^2" .. GetPlayerName(source))
-					TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Teleported to player ^2" .. GetPlayerName(player) .. "")
-					TriggerEvent('es:getPlayers', function(players)
-						if players then
-							-- notify all admins/mods
-							for id, adminOrMod in pairs(players) do
-								if id and adminOrMod then
-									local adminOrModGroup = adminOrMod.getGroup()
-									if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
-										TriggerClientEvent('chatMessage', id, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(source) .. "^0 teleported to " .. GetPlayerName(player))
+						TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have been teleported to by ^2" .. GetPlayerName(source))
+						TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Teleported to player ^2" .. GetPlayerName(player) .. "")
+						TriggerEvent('es:getPlayers', function(players)
+							if players then
+								-- notify all admins/mods
+								for id, adminOrMod in pairs(players) do
+									if id and adminOrMod then
+										local adminOrModGroup = adminOrMod.getGroup()
+										if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
+											TriggerClientEvent('chatMessage', id, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(source) .. "^0 teleported to " .. GetPlayerName(player))
+										end
 									end
 								end
 							end
-						end
-					end)
-				end
-			end)
+						end)
+					end
+				end)
 		else
 			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
 		end
+	end
 end, function(source, args, user)
 	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
 end)
