@@ -45,6 +45,7 @@ AddEventHandler("phone:sendPoliceMessage", function(data)
 			local playerSource = id
 			if player.getJob() == "ems" or player.getJob() == "sheriff" or player.getJob() == "police" then
 				TriggerClientEvent('chatMessage', playerSource, "911 (Caller: #" .. userSource .. ")", {255, 20, 10}, message)
+				TriggerClientEvent("phone:notify", playerSource, "~r~911 (Caller: # ".. userSource .. "):\n~w~"..message)
 			end
 		end
 		TriggerClientEvent('chatMessage', userSource, "", {0, 0, 0}, "^3Police^0 has been notified!")
@@ -60,6 +61,7 @@ AddEventHandler("phone:sendEmsMessage", function(data)
 			local playerSource = id
 			if player.getJob() == "ems" or player.getJob() == "sheriff" or player.getJob() == "police" then
 				TriggerClientEvent('chatMessage', playerSource, "911 (Caller: #" .. userSource .. ")", {255, 20, 10}, message)
+				TriggerClientEvent("phone:notify", playerSource, "~r~911 (Caller: # ".. userSource .. "):\n~w~"..message)
 			end
 		end
 		TriggerClientEvent('chatMessage', userSource, "", {0, 0, 0}, "^3EMS^0 has been notified!")
@@ -75,6 +77,7 @@ AddEventHandler("phone:sendTaxiMessage", function(data)
 			local playerSource = id
 			if player.getJob() == "taxi" then
 				TriggerClientEvent('chatMessage', playerSource, "Taxi Requested! (Caller: #" .. userSource .. ")", {251, 229, 5}, message)
+				TriggerClientEvent("phone:notify", playerSource, "~y~TAXI REQUEST (Caller: # ".. userSource .. "):\n~w~"..message)
 			end
 		end
 		TriggerClientEvent('chatMessage', userSource, "", {0, 0, 0}, "A ^3taxi^0 has been notified!")
@@ -90,6 +93,7 @@ AddEventHandler("phone:sendTowMessage", function(data)
 			local playerSource = id
 			if player.getJob() == "tow" then
 				TriggerClientEvent('chatMessage', playerSource, "Tow Requested! (Caller: #" .. userSource .. ")", {118, 120, 251}, message)
+				TriggerClientEvent("phone:notify", playerSource, "~y~TOW REQUEST (Caller: # ".. userSource .. "):\n~w~"..message)
 			end
 		end
 		TriggerClientEvent('chatMessage', userSource, "", {0, 0, 0}, "A ^3tow truck^0 has been notified!")
@@ -113,6 +117,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 	if msg and targetPlayer then
 		TriggerClientEvent("chatMessage", userSource, "", {}, "Text message sent!") -- message send confirmation
 		TriggerClientEvent("chatMessage", targetPlayer, "", {}, userPlayerName .. " just texted you!") -- message recieve confirmation
+		TriggerClientEvent("phone:notify", targetPlayer, "~y~"..userPlayerName .. "~w~ just texted you!")
 		--TriggerClientEvent("pm:sendMessage", targetPlayer, GetPlayerName(source), msg)
 		-- store in user's phone
 		TriggerEvent("es:getPlayerFromId", userSource, function(user)

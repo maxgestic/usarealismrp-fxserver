@@ -1,18 +1,25 @@
 local scenario = "WORLD_HUMAN_STAND_MOBILE"
 local startedTask = false
 
+function DrawCoolLookingNotificationNoPic(msg)
+	SetNotificationTextEntry("STRING")
+	AddTextComponentString(msg)
+	DrawNotification(0,1)
+end
+
+RegisterNetEvent("phone:notify")
+AddEventHandler("phone:notify", function(msg)
+	DrawCoolLookingNotificationNoPic(msg)
+end)
+
 RegisterNetEvent("pm:sendMessage")
 AddEventHandler("pm:sendMessage", function(from, msg)
-
 	TriggerEvent("chatMessage", "TEXT (" .. from .. ")", { 255, 162, 0 }, msg)
-
 end)
 
 RegisterNetEvent("pm:help")
 AddEventHandler("pm:help", function()
-
 	TriggerEvent("chatMessage", "TEXT", { 255, 162, 0 }, "^0Usage: /text <id> <msg>")
-
 end)
 
 -- start of NUI menu
