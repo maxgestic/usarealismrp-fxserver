@@ -97,14 +97,56 @@ AddEventHandler("CS:ShowMainMenu", function()
 
 	TriggerEvent("GUI2:Title", "Swayam's Clothing")
 
-	TriggerEvent("GUI2:StringArray", "Skin:", arrSkinGeneralCaptions, position, function(cb)
+	TriggerEvent("GUI2:Option", "Multiplayer Male", function(cb)
+		if(cb) then
+			Citizen.CreateThread(function()
+				local modelhashed = GetHashKey("mp_m_freemode_01")
+				RequestModel(modelhashed)
+				while not HasModelLoaded(modelhashed) do
+					RequestModel(modelhashed)
+					Citizen.Wait(0)
+				end
+				SetPlayerModel(PlayerId(), modelhashed)
+				--SetPedDefaultComponentVariation(PlayerId());
+				local ply = GetPlayerPed(-1)
+				--drawTxt(ply,0,1,0.5,0.8,0.6,255,255,255,255)
+				SetPedRandomComponentVariation(ply, false)
+				SetModelAsNoLongerNeeded(modelhashed)
+			end)
+		else
+
+		end
+	end)
+
+	TriggerEvent("GUI2:Option", "Multiplayer Female", function(cb)
+		if(cb) then
+			Citizen.CreateThread(function()
+				local modelhashed = GetHashKey("mp_f_freemode_01")
+				RequestModel(modelhashed)
+				while not HasModelLoaded(modelhashed) do
+					RequestModel(modelhashed)
+					Citizen.Wait(0)
+				end
+				SetPlayerModel(PlayerId(), modelhashed)
+				--SetPedDefaultComponentVariation(PlayerId());
+				local ply = GetPlayerPed(-1)
+				--drawTxt(ply,0,1,0.5,0.8,0.6,255,255,255,255)
+				SetPedRandomComponentVariation(ply, false)
+				SetModelAsNoLongerNeeded(modelhashed)
+			end)
+		else
+
+		end
+	end)
+
+	TriggerEvent("GUI2:StringArray", "Peds:", arrSkinGeneralCaptions, position, function(cb)
 		Citizen.CreateThread(function()
 			position = cb
 			local modelhashed = GetHashKey(arrSkinGeneralValues[position])
-			Citizen.Trace("setting model to hash: " .. modelhashed)
-			Citizen.Trace("index = " .. position)
-			Citizen.Trace("value = " .. arrSkinGeneralValues[position])
-			Citizen.Trace("caption = " .. arrSkinGeneralCaptions[position])
+			--Citizen.Trace("setting model to hash: " .. modelhashed)
+			--Citizen.Trace("index = " .. position)
+			--Citizen.Trace("value = " .. arrSkinGeneralValues[position])
+			--Citizen.Trace("caption = " .. arrSkinGeneralCaptions[position])
 			RequestModel(modelhashed)
 			while not HasModelLoaded(modelhashed) do
 				RequestModel(modelhashed)
@@ -126,7 +168,7 @@ AddEventHandler("CS:ShowMainMenu", function()
 		else
 
 		end
-		end)
+	end)
 
 	TriggerEvent("GUI2:Option", "Secondary Components", function(cb)
 		if(cb) then
@@ -135,7 +177,7 @@ AddEventHandler("CS:ShowMainMenu", function()
 		else
 
 		end
-		end)
+	end)
 
 	TriggerEvent("GUI2:Option", "Props", function(cb)
 		if(cb) then
