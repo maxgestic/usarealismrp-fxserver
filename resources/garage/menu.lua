@@ -65,7 +65,15 @@ Citizen.CreateThread(function()
 			for i = 1, #ownedVehicles do
 				local vehicle = ownedVehicles[i]
 				-- each vehicle the player owns
-				TriggerEvent("GUI:Option", "Retrieve ~y~" .. vehicle.model, function(cb)
+				local buttonText = ""
+				if vehicle.stored == false then
+					buttonText = "Retrieve ~y~" .. vehicle.model .. " ~w~(~r~Not Stored~w~)"
+				elseif vehicle.impounded == true then
+					buttonText = "Retrieve ~y~" .. vehicle.model .. " ~w~(~y~Impounded~w~)"
+				else
+					buttonText = "Retrieve ~y~" .. vehicle.model .. " ~w~(~g~Stored~w~)"
+				end
+				TriggerEvent("GUI:Option", buttonText, function(cb)
 					if(cb) then
 						Citizen.Trace("Trying to retrieve vehicle...")
 						menu = false
