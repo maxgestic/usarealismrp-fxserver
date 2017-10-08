@@ -178,7 +178,7 @@ Citizen.CreateThread(function()
 					local playerPed = GetPlayerPed(id)
 					if isPlayerEmergencyPed(playerPed) then
 						if getEmergencyPedType(playerPed) == "police" then
-							Citizen.Trace("player " .. GetPlayerServerId(id) .. " was emergency ped (police)! applying blip!")
+							--Citizen.Trace("player " .. GetPlayerServerId(id) .. " was emergency ped (police)! applying blip!")
 							local blip = GetBlipFromEntity( playerPed )
 							if not DoesBlipExist( blip ) then
 								blip = AddBlipForEntity( playerPed )
@@ -191,7 +191,7 @@ Citizen.CreateThread(function()
 								SetBlipColour(blip, 3)
 							end
 							SetBlipNameToPlayerName(blip, id)
-							Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, true ) -- Player Blip indicator
+							--Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, true ) -- Player Blip indicator
 						elseif getEmergencyPedType(playerPed) == "ems" or getEmergencyPedType(playerPed) == "fire" then
 							Citizen.Trace("player " .. GetPlayerServerId(id) .. " was emergency ped (ems)! applying blip!")
 							local blip = GetBlipFromEntity( playerPed )
@@ -206,7 +206,7 @@ Citizen.CreateThread(function()
 								SetBlipColour(blip, 1)
 							end
 							SetBlipNameToPlayerName(blip, id)
-							Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, true ) -- Player Blip indicator
+							--Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, true ) -- Player Blip indicator
 						end
 					end
 				end
