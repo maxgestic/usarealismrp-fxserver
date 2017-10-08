@@ -23,6 +23,8 @@ AddEventHandler('voip', function(voipDistance)
 	NotificationMessage("Your VOIP is now ~b~" .. distanceName .."~w~.")
 	NetworkSetTalkerProximity(distanceSetting)
 	setDistance = distanceSetting
+	
+	TriggerEvent("test:setCSharpVoipLevel", distanceSetting)
 end)
 
 function NotificationMessage(message)

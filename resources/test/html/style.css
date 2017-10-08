@@ -10,6 +10,14 @@ body {
     display: none;
 }
 
+#voip-level-wrap {
+    color: white;
+    font-size: 16px;
+    margin-top: 17em;
+    margin-left: 25px;
+    margin-top: 20px;
+}
+
 /* The side navigation menu */
 .sidenav {
     height: 100%; /* 100% Full-height */
@@ -47,4 +55,16 @@ body {
 
 .illegal-item {
     color: #ed270d !important;
+}
+
+.player-meta-data {
+    margin-top: 5em;
+}
+
+.player-meta-data span, strong {
+    color: #818181;
+}
+
+.sidenav-buttons {
+    padding-bottom: 2em;
 }

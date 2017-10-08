@@ -40,6 +40,7 @@ function voipBackBtn() {
     // initiliaze home menu
     // show interaction menu items
     $(".sidenav a").show();
+    $(".player-meta-data").show();
 }
 
 function emotePageBackBtn() {
@@ -47,11 +48,13 @@ function emotePageBackBtn() {
     // initiliaze home menu
     // show interaction menu items
     $(".sidenav a").show();
+    $(".player-meta-data").show();
 }
 
 function emoteBackBtn() {
     $(".sidenav .emote-option").remove();
     $(".sidenav .emote-page-option").show();
+    $(".sidenav .player-meta-data").show();
 }
 
 function playEmote(emoteNumber) {
@@ -208,6 +211,7 @@ $(function() {
             document.getElementById("mySidenav").style.width = "410px";
             // show interaction menu items
             $(".sidenav a").show();
+            $(".player-meta-data").show();
             // show targetted player name
             //$("#player-name").html(event.data.playerName);
             /*
@@ -215,7 +219,17 @@ $(function() {
                 $.post('http://test/checkPlayerJob', JSON.stringify({}));
             }
             */
+            //alert("voip level = " + event.data.voipLevel);
             if (event.data.enable) {
+                //alert("test number = " + event.data.voip);
+                if (event.data.voip == 10) {
+                    $("#voip-level-value").text("Normal");
+                } else if (event.data.voip == 25) {
+                    $("#voip-level-value").text("Yell");
+                } else if (event.data.voip == 2) {
+                    $("#voip-level-value").text("Whisper");
+                }
+                //$("#voip-level").text($("#voip-level").text() + event.data.voip);
                 targetPlayerId = event.data.playerId;
                 targetPlayerName = event.data.playerName;
                 //alert("just set target player id = " + targetPlayerId);
@@ -263,6 +277,10 @@ $(function() {
         }
     };
 
+    $(".sidenav a").click(function() {
+        $(".player-meta-data").hide();
+    });
+
     $("#phone-btn").click(function(){
         $.post('http://test/showPhone', JSON.stringify({}));
         closeNav();
@@ -298,6 +316,7 @@ $(function() {
         } else {
             $(".sidenav .inventory-item").remove();
             $(".sidenav a").show();
+            $(".player-meta-data").show();
         }
     });
 
