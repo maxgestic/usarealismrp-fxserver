@@ -173,3 +173,19 @@ AddEventHandler("usa_rp:startTimer", function(timerType)
         end)
     end
 end)
+
+RegisterServerEvent("methJob:checkUserMoney")
+AddEventHandler("methJob:checkUserMoney", function(amount)
+    local userSource = tonumber(source)
+    TriggerEvent("es:getPlayerFromId", userSource, function(user)
+        local userMoney = user.getMoney()
+        if userMoney >= amount then
+            -- continue with transaction
+            TriggerClientEvent("methJob:getSupplies", userSource)
+            user.setMoney(userMoney - amount)
+        else
+            -- not enough funds to continue
+            TriggerClientEvent("usa_rp:notify", userSource, "Come back when you have ~y~$500~w~ to get the supplies!")
+        end
+    end)
+end)

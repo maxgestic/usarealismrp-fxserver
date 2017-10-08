@@ -142,17 +142,7 @@ Citizen.CreateThread(function ()
                         elseif jobs[i].locations[j].name == "Meth Supply Pickup" then
                             drawTxt('Press ~g~E~s~ to buy the supplies needed to create meth',0,1,0.5,0.8,0.6,255,255,255,255)
                             if IsControlJustPressed(1, 38) and not pedIsBusy then -- 38 = E
-                                for i = 1, #peds do
-                                    if peds[i].name == "meth_supplies_ped" then
-                                        local walkToCoords = {x = 66.77, y = 3759.16, z = 39.7337}
-                                        pedIsBusy = true
-                                        --Citizen.Trace("Found meth supplier ped! do animation now...")
-                                        TaskGoStraightToCoord(peds[i].handle, walkToCoords.x, walkToCoords.y, walkToCoords.z, 2, -1)
-                                		SetBlockingOfNonTemporaryEvents(peds[i].handle, false)
-                                        -- start timer
-                                        TriggerServerEvent("usa_rp:startTimer", "meth_supplies_ped")
-                                    end
-                                end
+                                TriggerServerEvent("methJob:checkUserMoney", 500)
                             end
                         elseif jobs[i].locations[j].name == "Meth Dropoff 1" then
                             drawTxt('Press ~g~E~s~ to sell your meth!',0,1,0.5,0.8,0.6,255,255,255,255)
@@ -166,6 +156,21 @@ Citizen.CreateThread(function ()
                     end
                 end
             end
+        end
+    end
+end)
+
+RegisterNetEvent("methJob:getSupplies")
+AddEventHandler("methJob:getSupplies", function()
+    for i = 1, #peds do
+        if peds[i].name == "meth_supplies_ped" then
+            local walkToCoords = {x = 66.77, y = 3759.16, z = 39.7337}
+            pedIsBusy = true
+            --Citizen.Trace("Found meth supplier ped! do animation now...")
+            TaskGoStraightToCoord(peds[i].handle, walkToCoords.x, walkToCoords.y, walkToCoords.z, 2, -1)
+            SetBlockingOfNonTemporaryEvents(peds[i].handle, false)
+            -- start timer
+            TriggerServerEvent("usa_rp:startTimer", "meth_supplies_ped")
         end
     end
 end)
