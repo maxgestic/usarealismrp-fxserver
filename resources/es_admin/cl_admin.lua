@@ -3,10 +3,6 @@ local spectating = {}
 states.frozen = false
 states.frozenPos = nil
 
-function spectatePlayer(target, targetName)
-
-end
-
 RegisterNetEvent("mini_admin:spectate")
 AddEventHandler("mini_admin:spectate", function(target, targetName)
 

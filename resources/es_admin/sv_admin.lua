@@ -305,10 +305,12 @@ end, function(source, args, user)
 end)
 
 -- Kill yourself
+--[[
 TriggerEvent('es:addCommand', 'die', function(source, args, user)
 	TriggerClientEvent('es_admin:kill', source)
 	TriggerClientEvent('chatMessage', source, "", {0,0,0}, "^1^*You killed yourself.")
 end)
+--]]
 
 -- Killing
 TriggerEvent('es:addGroupCommand', 'slay', "admin", function(source, args, user)
@@ -395,10 +397,10 @@ AddEventHandler('rconCommand', function(commandName, args)
 							RconPrint("\nrText = " .. rText)
 							RconPrint("\nerr = " .. err)
 						else
-							RconPrint("\nPlayer "..bannedPlayer.name.." has been unbanned!")
 							fetchAllBans()
 						end
 					end, "DELETE", "", {["Content-Type"] = 'application/json'})
+					RconPrint("\nPlayer "..bannedPlayer.name.." has been unbanned!")
 					CancelEvent()
 					return
 				end
@@ -772,6 +774,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 					local insurance = user.getInsurance()
 					local insurance_month = insurance.expireMonth
 					local insurance_year = insurance.expireYear
+					if not insurance then insurance_year = "" end
 
 					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
 					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Name: " .. GetPlayerName(tonumber(args[2])) .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
