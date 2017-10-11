@@ -220,7 +220,8 @@ end
 function sportsMenu()
 	MenuTitle = "Sports Cars"
 	ClearMenu()
-	Menu.addButton("Annis Elegy RH8 ($145,000)","buyVehicle","-566387422:145000:Annis Elegy RH8")
+	Menu.addButton("Annis Elegy ($85,000)","buyVehicle","196747873:85000:Annis Elegy")
+	Menu.addButton("Annis Elegy RH8 ($175,000)","buyVehicle","-566387422:175000:Annis Elegy RH8")
 	Menu.addButton("Invetero Coquette ($150,450)","buyVehicle","108773431:150450:Invetero Coquette")
 	Menu.addButton("Dewbauchee Massacro ($75,000)","buyVehicle","-142942670:75000:Dewbauchee Massacro")
 	Menu.addButton("Ubermacht Zion Cabrio ($50,015)","buyVehicle","-1193103848:50015:Ubermacht Zion Cabrio")
@@ -322,7 +323,7 @@ function insuranceMenu()
 	MenuTitle = "Auto Insurance"
 	ClearMenu()
 	Menu.addButton("Info","displayInsuranceInfo", nil)
-	Menu.addButton("($15,000) Buy","buyInsurance", nil)
+	Menu.addButton("($7,500) Buy","buyInsurance", nil)
 end
 
 function checkPlayerInsurance()

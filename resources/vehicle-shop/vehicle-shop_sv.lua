@@ -66,7 +66,7 @@ function renewInsurance(source)
 	local userSource = tonumber(source)
 	print("player " .. GetPlayerName(source) .. " is buying auto insurance!")
 	local EXPIRATION_TIME_IN_MONTHS = 1
-	local INSURANCE_COVERAGE_MONTHLY_COST = 15000
+	local INSURANCE_COVERAGE_MONTHLY_COST = 7500
 	local timestamp = os.date("*t", os.time())
 	local expireMonth, expireYear
 	if timestamp.month < 12 then
@@ -106,7 +106,7 @@ AddEventHandler("vehShop:buyInsurance", function()
 	local userSource = tonumber(source)
 	print("player " .. GetPlayerName(source) .. " is buying auto insurance!")
 	local EXPIRATION_TIME_IN_MONTHS = 1
-	local INSURANCE_COVERAGE_MONTHLY_COST = 15000
+	local INSURANCE_COVERAGE_MONTHLY_COST = 7500
 	local timestamp = os.date("*t", os.time())
 	local expireMonth, expireYear
 	if timestamp.month < 12 then
