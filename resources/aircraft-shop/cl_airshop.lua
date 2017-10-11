@@ -119,6 +119,7 @@ Citizen.CreateThread(function()
                                 if not alreadyCalled then
                                     alreadyCalled = true
                                     -- call this event with the vehicle.price
+									drawNotification("Here is your rental! You can return it for cash back at the green circle over there.")
                                     TriggerServerEvent("airshop:rentVehicle", item)
                                     menu = false
                                     rental = item
@@ -198,6 +199,7 @@ Citizen.CreateThread(function()
                 --if rental.price then
                     local vehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
                     local hash = GetEntityModel(vehicle)
+
                     for i = 1, #ITEMS.helicopters do
                         local item = ITEMS.helicopters[i]
                         if item.hash == hash then
@@ -267,4 +269,10 @@ function comma_value(amount)
     end
   end
   return formatted
+end
+
+function drawNotification(msg)
+	SetNotificationTextEntry("STRING")
+	AddTextComponentString(msg)
+	DrawNotification(0,1)
 end
