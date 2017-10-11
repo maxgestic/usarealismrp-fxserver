@@ -44,8 +44,8 @@ local LockerRooms = {
     {x=3502.5 , y=3762.45 , z=29.010}
 }
 
-local arrSkinGeneralCaptions = {"Marine", "Marine 2", "Marine Young", "Marine Young 2", "Pilot"}
-local arrSkinGeneralValues = {"s_m_m_marine_01", "s_m_m_marine_02", "s_m_y_marine_01", "s_m_y_marine_02", "s_m_m_pilot_02"}
+local arrSkinGeneralCaptions = {"Marine", "Marine 2", "Marine Young", "Marine Young 2", "Marine 3", "Pilot"}
+local arrSkinGeneralValues = {"s_m_m_marine_01", "s_m_m_marine_02", "s_m_y_marine_01", "s_m_y_marine_02", "s_m_y_marine_03", "s_m_m_pilot_02"}
 local arrSkinHashes = {}
 	for i=1,#arrSkinGeneralValues
 		do
@@ -381,7 +381,7 @@ Citizen.CreateThread(function()
 		else
 			menu_loadout = 0
 		end
-		
+
 		if(IsControlJustPressed(1, 51) and IsNearStore() == true) then
 			if(menu_loadout == 0) then
 				TriggerServerEvent("job-private-sec:checkWhitelist")
@@ -418,8 +418,8 @@ Citizen.CreateThread(function()
 		AddTextComponentString("Delta PMC")
 		EndTextCommandSetBlipName(item.blip)
 	end
-	end)	
-	
+	end)
+
 RegisterNetEvent("CS:giveWeapons")
 AddEventHandler("CS:giveWeapons", function(weapons)
 	-- weapons
