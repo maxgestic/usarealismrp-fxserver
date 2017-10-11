@@ -80,7 +80,7 @@ local justJoined = {}
 
 RegisterServerEvent('es:firstJoinProper')
 AddEventHandler('es:firstJoinProper', function()
-	registerUser(GetPlayerIdentifiers(source)[1], source)
+	registerUser(GetPlayerIdentifiers(source)[1], tonumber(source))
 	justJoined[source] = true
 
 	if(settings.defaultSettings.pvpEnabled)then
