@@ -11,6 +11,19 @@ TriggerEvent('es:addCommand','impound', function(source, args, user)
     end)
 end)
 
+TriggerEvent('es:addCommand','IMPOUND', function(source, args, user)
+    local userSource = tonumber(source)
+    TriggerEvent('es:getPlayerFromId', userSource, function(user)
+        local playerJob = user.getJob()
+        local userGroup = user.getGroup()
+        if playerJob == "sheriff" or playerJob == "ems" or playerJob == "fire" or userGroup == "owner" or userGroup == "admin" or userGroup == "mod" then
+            TriggerClientEvent( 'impoundVehicle', source )
+        else
+            TriggerClientEvent("impound:notify", source, "Only ~y~law enforcement~w~,~y~medics~w~, and ~y~admins~w~ can use /impound!")
+        end
+    end)
+end)
+
 
 RegisterServerEvent("impound:impoundVehicle")
 AddEventHandler("impound:impoundVehicle", function(vehicle, plate)
