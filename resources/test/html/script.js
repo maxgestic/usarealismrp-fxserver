@@ -54,7 +54,7 @@ function emotePageBackBtn() {
 function emoteBackBtn() {
     $(".sidenav .emote-option").remove();
     $(".sidenav .emote-page-option").show();
-    $(".sidenav .player-meta-data").show();
+    $(".player-meta-data").hide();
 }
 
 function playEmote(emoteNumber) {
@@ -76,6 +76,7 @@ function playEmote(emoteNumber) {
 function openEmotePage(pageNumber) {
     //alert("opening emote page: " + pageNumber);
     $(".sidenav a").hide();
+    $(".player-meta-data").hide();
     // Cancel Emote btn
     $(".sidenav").append("<a onclick='playEmote()' class='emote-option'>Cancel Emote</a>");
     // emotes
@@ -212,14 +213,6 @@ $(function() {
             // show interaction menu items
             $(".sidenav a").show();
             $(".player-meta-data").show();
-            // show targetted player name
-            //$("#player-name").html(event.data.playerName);
-            /*
-            if (event.data.enable) {
-                $.post('http://test/checkPlayerJob', JSON.stringify({}));
-            }
-            */
-            //alert("voip level = " + event.data.voipLevel);
             if (event.data.enable) {
                 //alert("test number = " + event.data.voip);
                 if (event.data.voip == 10) {
@@ -229,10 +222,8 @@ $(function() {
                 } else if (event.data.voip == 2) {
                     $("#voip-level-value").text("Whisper");
                 }
-                //$("#voip-level").text($("#voip-level").text() + event.data.voip);
                 targetPlayerId = event.data.playerId;
                 targetPlayerName = event.data.playerName;
-                //alert("just set target player id = " + targetPlayerId);
             }
         } else if (event.data.type == "click") {
             // Avoid clicking the cursor itself, click 1px to the top/left;
