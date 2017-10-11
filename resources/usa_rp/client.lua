@@ -114,8 +114,8 @@ Citizen.CreateThread(function()
 		Wait(1)
 		playerPed = GetPlayerPed(-1)
 		car = GetVehiclePedIsIn(playerPed, false)
+        --Citizen.InvokeNative(0xB736A491E64A32CF,Citizen.PointerValueIntInitialized(car)) -- auto car clean up for unused vehicles
 		if car then
-            Citizen.InvokeNative(0xB736A491E64A32CF,Citizen.PointerValueIntInitialized(car)) -- auto car clean up for unused vehicles
 			if GetPedInVehicleSeat(car, -1) == playerPed then
 				SetPlayerCanDoDriveBy(PlayerId(), false)
 			elseif passengerDriveBy then
@@ -162,3 +162,38 @@ Citizen.CreateThread(function()
         end
     end
 end)
+
+--[[------------------------------------------------------------------------
+    Remove Reticle on ADS (Third Person)
+------------------------------------------------------------------------]]--
+local scopedWeapons = {
+    100416529,  -- WEAPON_SNIPERRIFLE
+    205991906,  -- WEAPON_HEAVYSNIPER
+    3342088282  -- WEAPON_MARKSMANRIFLE
+}
+
+function HashInTable( hash )
+    for k, v in pairs( scopedWeapons ) do
+        if ( hash == v ) then
+            return true
+        end
+    end
+    return false
+end
+
+function ManageReticle()
+    local ped = GetPlayerPed( -1 )
+    if ( DoesEntityExist( ped ) and not IsEntityDead( ped ) ) then
+        local _, hash = GetCurrentPedWeapon( ped, true )
+        if not HashInTable( hash ) then
+            HideHudComponentThisFrame( 14 )
+        end
+    end
+end
+
+Citizen.CreateThread( function()
+    while true do
+        ManageReticle()
+        Citizen.Wait( 0 )
+    end
+end )
