@@ -70,9 +70,10 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle)
 		end
 		if vehicle.stored == false then
 			if playerHasValidAutoInsurance(playerInsurance, userSource) then
-				TriggerClientEvent("garage:notify", userSource, "~g~T. ENDS INSURANCE: ~w~Here's your vehicle! ~y~You will now need to renew your insurance.")
+				--TriggerClientEvent("garage:notify", userSource, "~g~T. ENDS INSURANCE: ~w~Here's your vehicle! ~y~You will now need to renew your insurance.")
+				TriggerClientEvent("garage:notify", userSource, "~g~T. ENDS INSURANCE: ~w~Here's your vehicle!")
 				TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
-				user.setInsurance({})
+				--user.setInsurance({})
 			else
 				TriggerClientEvent("garage:vehicleNotStored", userSource)
 			end
