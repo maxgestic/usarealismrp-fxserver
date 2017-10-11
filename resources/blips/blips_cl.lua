@@ -51,7 +51,8 @@ local blips = {
 	{ title="Downtown Taxi", colour = 60, id = 198, x=895.563, y=-179.536, z=74.7003 },
 	{ title="Bank", colour = 24, id = 108, x=254.565, y=225.495, z=100.176 },
 	{ title="Seaview Aircraft", colour = 60, id = 251, x=-943.103, y=-2958.14, z=13.9451 },
-	{ title="Meth", colour = 75, id = 499, x = 1389.28, y = 3604.6, z = 38.1 }
+	{ title="Meth", colour = 75, id = 499, x = 1389.28, y = 3604.6, z = 38.1 },
+	{ title="Boat Shop", colour = 57, id = 356, x = -782.598, y = -1482.14, z = 2.08597 }
 }
 
 Citizen.CreateThread(function()
