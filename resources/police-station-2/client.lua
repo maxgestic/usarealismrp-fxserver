@@ -317,6 +317,23 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 			local ply = GetPlayerPed(-1)
 			--drawTxt(ply,0,1,0.5,0.8,0.6,255,255,255,255)
 			SetPedDefaultComponentVariation(ply)
+			if arrSkinGeneralValues[position] == "mp_m_freemode_01" then
+				SetPedComponentVariation(ply, 2, 19, 1, 0)
+				SetPedComponentVariation(ply, 4, 35, 0, 0)
+				SetPedComponentVariation(ply, 6, 24, 0, 0)
+				SetPedComponentVariation(ply, 8, 58, 0, 0)
+				SetPedComponentVariation(ply, 11, 55, 0, 0)				
+			end
+			if arrSkinGeneralValues[position] == "mp_f_freemode_01" then
+				SetPedComponentVariation(ply, 0, 33, 0, 0)
+				SetPedComponentVariation(ply, 2, 4, 4, 0)
+				SetPedComponentVariation(ply, 3, 14, 0, 0)
+				SetPedComponentVariation(ply, 4, 34, 0, 0)
+				SetPedComponentVariation(ply, 6, 27, 0, 0)
+				SetPedComponentVariation(ply, 8, 35, 0, 0)
+				SetPedComponentVariation(ply, 11, 48, 0, 0)
+				
+			end			
 			SetModelAsNoLongerNeeded(modelhashed)
 			TriggerEvent("policestation2:giveDefaultLoadout")
 			TriggerServerEvent("policestation2:onduty")
@@ -504,22 +521,26 @@ AddEventHandler("policestation2:ShowComponentsMenu1", function()
 	local ply = GetPlayerPed(-1)
 	for i=0,5
 		do
-		local selectedComponent = GetPedDrawableVariation(ply, i)
-		local selectedTexture = GetPedTextureVariation(ply, i)
-		local maxComponent = GetNumberOfPedDrawableVariations(ply, i)
-		local maxTexture = GetNumberOfPedTextureVariations(ply, i, selectedComponent)
-		if(maxComponent > 1) then
-			TriggerEvent("GUI2:Int", components[i+1] .. " (" .. maxComponent .. ")", selectedComponent, 0, maxComponent - 1, function(cb)
-				selectedComponent = cb
-				SetPedComponentVariation(ply, i, selectedComponent, 0, 0)
-				selectedTexture = 0
-				end)
-		end
-		if(maxTexture > 1) then
-			TriggerEvent("GUI2:Int", components[i+1] .. " Texture (" .. maxTexture .. ")", selectedTexture, 0, maxTexture - 1, function(cb)
-				selectedTexture = cb
-				SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 0)
-				end)
+		if ( arrSkinGeneralValues[position] == "mp_m_freemode_01" or arrSkinGeneralValues[position] == "mp_f_freemode_01" ) and ( i == 11 or i == 8 or i == 4 ) then
+			-- do nothing
+		else
+			local selectedComponent = GetPedDrawableVariation(ply, i)
+			local selectedTexture = GetPedTextureVariation(ply, i)
+			local maxComponent = GetNumberOfPedDrawableVariations(ply, i)
+			local maxTexture = GetNumberOfPedTextureVariations(ply, i, selectedComponent)
+			if(maxComponent > 1) then
+				TriggerEvent("GUI2:Int", components[i+1] .. " (" .. maxComponent .. ")", selectedComponent, 0, maxComponent - 1, function(cb)
+					selectedComponent = cb
+					SetPedComponentVariation(ply, i, selectedComponent, 0, 0)
+					selectedTexture = 0
+					end)
+			end
+			if(maxTexture > 1) then
+				TriggerEvent("GUI2:Int", components[i+1] .. " Texture (" .. maxTexture .. ")", selectedTexture, 0, maxTexture - 1, function(cb)
+					selectedTexture = cb
+					SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 0)
+					end)
+			end
 		end
 	end
 	TriggerEvent("GUI2:Update")
@@ -540,22 +561,26 @@ AddEventHandler("policestation2:ShowComponentsMenu2", function()
 	local ply = GetPlayerPed(-1)
 	for i=6,11
 		do
-		local selectedComponent = GetPedDrawableVariation(ply, i)
-		local selectedTexture = GetPedTextureVariation(ply, i)
-		local maxComponent = GetNumberOfPedDrawableVariations(ply, i)
-		local maxTexture = GetNumberOfPedTextureVariations(ply, i, selectedComponent)
-		if(maxComponent > 1) then
-			TriggerEvent("GUI2:Int", components[i+1] .. " (" .. maxComponent .. ")", selectedComponent, 0, maxComponent - 1, function(cb)
-				selectedComponent = cb
-				SetPedComponentVariation(ply, i, selectedComponent, 0, 0)
-				selectedTexture = 0
-				end)
-		end
-		if(maxTexture > 1) then
-			TriggerEvent("GUI2:Int", components[i+1] .. " Texture (" .. maxTexture .. ")", selectedTexture, 0, maxTexture - 1, function(cb)
-				selectedTexture = cb
-				SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 0)
-				end)
+		if ( arrSkinGeneralValues[position] == "mp_m_freemode_01" or arrSkinGeneralValues[position] == "mp_f_freemode_01" ) and ( i == 11 or i == 8 or i == 4 ) then
+			-- do nothing
+		else
+			local selectedComponent = GetPedDrawableVariation(ply, i)
+			local selectedTexture = GetPedTextureVariation(ply, i)
+			local maxComponent = GetNumberOfPedDrawableVariations(ply, i)
+			local maxTexture = GetNumberOfPedTextureVariations(ply, i, selectedComponent)
+			if(maxComponent > 1) then
+				TriggerEvent("GUI2:Int", components[i+1] .. " (" .. maxComponent .. ")", selectedComponent, 0, maxComponent - 1, function(cb)
+					selectedComponent = cb
+					SetPedComponentVariation(ply, i, selectedComponent, 0, 0)
+					selectedTexture = 0
+					end)
+			end
+			if(maxTexture > 1) then
+				TriggerEvent("GUI2:Int", components[i+1] .. " Texture (" .. maxTexture .. ")", selectedTexture, 0, maxTexture - 1, function(cb)
+					selectedTexture = cb
+					SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 0)
+					end)
+			end
 		end
 	end
 	TriggerEvent("GUI2:Update")

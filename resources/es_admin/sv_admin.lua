@@ -774,13 +774,16 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 					local insurance = user.getInsurance()
 					local insurance_month = insurance.expireMonth
 					local insurance_year = insurance.expireYear
-					if not insurance then insurance_year = "" end
+					local displayInsurance = "Invalid"
+					if insurance_month and insurance_year then
+						displayInsurance = insurance_month .. "/" .. insurance_year
+					end
 
 					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
 					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Name: " .. GetPlayerName(tonumber(args[2])) .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
 					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Police Rank: " .. user.getPoliceRank() .. " | EMS Rank: " .. user.getEMSRank() .. " | Delta PMC Rank: " .. user.getSecurityRank() .. " |  Job: " .. user.getJob() .. " |" )
-					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Cash: " .. user.getMoney() .. " | Bank: " .. user.getBank() .. " |  Ingame Time: " .. user.getIngameTime() .. " mins |" )
-					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. insurance_month .. "/" .. insurance_year .. " | Driver's License: " .. driving_license .. " |")
+					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Cash: " .. user.getMoney() .. " | Bank: " .. user.getBank() .. " |  Ingame Time: " .. FormatSeconds(user.getIngameTime()) .. " |" )
+					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
 					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
 					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Inventory: " .. inventorynames .. " |")
 					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
@@ -834,14 +837,40 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 		local insurance = user.getInsurance()
 		local insurance_month = insurance.expireMonth
 		local insurance_year = insurance.expireYear
+		local displayInsurance = "Invalid"
+		if insurance_month and insurance_year then
+			displayInsurance = insurance_month .. "/" .. insurance_year
+		end
 
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Name: " .. GetPlayerName(source) .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Police Rank: " .. user.getPoliceRank() .. " | EMS Rank: " .. user.getEMSRank() .. " | Delta PMC Rank: " .. user.getSecurityRank() .. " |  Job: " .. user.getJob() .. " |" )
-		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Cash: " .. user.getMoney() .. " | Bank: " .. user.getBank() .. " |  Ingame Time: " .. user.getIngameTime() .. " mins |" )
-		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. insurance_month .. "/" .. insurance_year .. " | Driver's License: " .. driving_license .. " |")
+		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Cash: " .. user.getMoney() .. " | Bank: " .. user.getBank() .. " |  Ingame Time: " .. FormatSeconds(user.getIngameTime()) .. " |" )
+		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Inventory: " .. inventorynames .. " |")
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
 	end
 end)
+
+function FormatSeconds(mins)
+	local output = ""
+	local days = math.floor(mins / 1440)
+	local remainder = mins % 1440
+	local hours = math.floor(remainder / 60)
+	local mins = remainder % 60
+	if days ~= 0 then
+		output = days .. " Days"
+	end
+	if output ~= "" then
+		output = output .. ", "
+	end
+	if hours ~= 0 then
+		output = output .. hours .. " Hrs"
+	end
+	if output ~= "" then
+		output = output .. ", "
+	end
+	output = output .. mins .. " Mins"
+	return output
+end
