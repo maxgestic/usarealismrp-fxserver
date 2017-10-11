@@ -12,6 +12,10 @@ local policeVehicles = {
     -1627000575, -- police2
     1912215274, -- police3
     -1973172295, -- police4
+    0x9C32EB57, -- Police5
+    0xB2FF98F0, -- police 6
+    0xC4B53C5B, -- police 7
+    0xD0AF544F, -- police 8
     -34623805, -- policeb
     741586030, -- pranger
     -1205689942 -- riot
@@ -73,7 +77,7 @@ end)
 Citizen.CreateThread(function()
     while true do
         Wait(1)
-        if IsControlJustPressed(1,38) then -- "E"
+        if ( IsControlPressed( 1, 36 ) and IsControlJustPressed( 1, 45 ) ) then -- LCTRL + R to repair
             local coordA = GetEntityCoords(GetPlayerPed(-1), 1)
             local coordB = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 5.0, 0.0)
             local targetVehicle = getVehicleInDirection(coordA, coordB)
