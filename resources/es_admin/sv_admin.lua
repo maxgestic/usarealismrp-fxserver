@@ -305,12 +305,10 @@ end, function(source, args, user)
 end)
 
 -- Kill yourself
---[[
-TriggerEvent('es:addCommand', 'die', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'die', "admin", function(source, args, user)
 	TriggerClientEvent('es_admin:kill', source)
 	TriggerClientEvent('chatMessage', source, "", {0,0,0}, "^1^*You killed yourself.")
 end)
---]]
 
 -- Killing
 TriggerEvent('es:addGroupCommand', 'slay', "admin", function(source, args, user)
