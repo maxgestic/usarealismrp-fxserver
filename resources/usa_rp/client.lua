@@ -180,7 +180,7 @@ local locations = {
         {x = 104.256, y = -1294.67, z = 28.2587, animDict = "mini@strip_club@private_dance@part3", animName = "priv_dance_p3", model = "CSB_Stripper_01", heading = (math.random(50, 360)) * 1.0},
         {x = 112.480, y = -1287.032, z = 27.586, animDict = "mini@strip_club@private_dance@part2", animName = "priv_dance_p2", model = "CSB_Stripper_01", heading = (math.random(50, 360)) * 1.0},
         {x = 113.111, y = -1287.755, z = 27.586, animDict = "mini@strip_club@private_dance@part1", animName = "priv_dance_p1", model = "S_F_Y_Stripper_02", heading = (math.random(50, 360)) * 1.0},
-        {x = 113.375, y = -1286.546, z = 27.586, animDict = "mini@strip_club@private_dance@part1", animName = "priv_dance_p1", model = "S_F_Y_Stripper_01", heading = (math.random(50, 360)) * 1.0},
+        {x = 113.375, y = -1286.546, z = 27.586, animDict = "mini@strip_club@private_dance@part2", animName = "priv_dance_p2", model = "CSB_Stripper_02", heading = (math.random(50, 360)) * 1.0},
         {x = 129.442, y = -1283.407, z = 28.272, animDict = "missfbi3_party_d", animName = "stand_talk_loop_a_female", model = "S_F_Y_Bartender_01", heading = 122.471}
     }
 }
@@ -210,22 +210,4 @@ Citizen.CreateThread(function()
             TaskPlayAnim(ped, location[i].animDict, location[i].animName, 8.0, -8, -1, 7, 0, 0, 0, 0)
         end
 	end
-end)
-
-Citizen.CreateThread(function()
-
-    for i = 1, #spawnedPeds do
-        TaskPlayAnim(spawnedPeds[i], location[i].animDict, location[i].animName, 8.0, -8, -1, 7, 0, 0, 0, 0)
-        while true do
-            Wait(1)
-            if not IsEntityPlayingAnim(spawnedPeds[i], location[i].animDict, location[i].animName, 3) then
-                RequestAnimDict(location[i].animDict)
-                while not HasAnimDictLoaded(location[i].animDict) do
-                    Citizen.Wait(100)
-                end
-                TaskPlayAnim(spawnedPeds[i], location[i].animDict, location[i].animName, 8.0, -8, -1, 0, 0, 0, 0, 0)
-            end
-        end
-    end
-
 end)
