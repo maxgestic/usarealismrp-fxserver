@@ -157,7 +157,7 @@ Citizen.CreateThread(function()
 		end
 		-- Citizen.Trace("target = " .. target)
 		if target ~= nil then
-			if IsControlJustPressed(1, 38) then -- Y = 246, E = 38
+			if ( IsControlPressed( 1, 36 ) and IsControlJustPressed( 1, 38 ) ) then -- LCTRL + e to cuff
 				--Citizen.Trace("Y DETECTED!")
 				--Citizen.Trace("target = " .. target)
 				if playerId ~= 0 then
