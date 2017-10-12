@@ -67,7 +67,6 @@ Citizen.CreateThread(function()
 end)
 
 -- spawn cannabis distributer npc
-local created = false
 local hash = GetHashKey("A_M_M_Polynesian_01")
 -- thread code stuff below was taken from an example on the wiki
 -- Create a thread so that we don't 'wait' the entire game
