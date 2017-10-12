@@ -65,7 +65,7 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
-		SetPedDensityMultiplierThisFrame(0.6)
+		SetPedDensityMultiplierThisFrame(0.8)
 		SetVehicleDensityMultiplierThisFrame(0.5)
 	end
 end)
@@ -81,31 +81,6 @@ Citizen.CreateThread(function()
         end
     end
 end)
-
---[[
---REDUCE NPC COUNT
-Citizen.CreateThread(function()
-    -- These natives do not have to be called everyframe.
-    --SetGarbageTrucks(0)
-    --SetRandomBoats(0)
-    while true
-    	do
-    	-- These natives has to be called every frame.
-    	SetVehicleDensityMultiplierThisFrame(0.2)
-		SetPedDensityMultiplierThisFrame(0.4)
-		SetRandomVehicleDensityMultiplierThisFrame(0.2)
-		SetParkedVehicleDensityMultiplierThisFrame(0.2)
-		SetScenarioPedDensityMultiplierThisFrame(0.4, 0.4)
-
-		local playerPed = GetPlayerPed(-1)
-		local pos = GetEntityCoords(playerPed)
-		--RemoveVehiclesFromGeneratorsInArea(pos['x'] - 500.0, pos['y'] - 500.0, pos['z'] - 500.0, pos['x'] + 500.0, pos['y'] + 500.0, pos['z'] + 500.0);
-
-		Citizen.Wait(1)
-	end
-
-end)
---]]
 
 -- NO DRIVE BY'S
 local passengerDriveBy = false
@@ -197,3 +172,60 @@ Citizen.CreateThread( function()
         Citizen.Wait( 0 )
     end
 end )
+
+-- spawn peds (strip club only atm)
+local locations = {
+    stripclub = {
+        {x = 102.423, y = -1290.594, z = 28.2587, animDict = "mini@strip_club@private_dance@part1", animName = "priv_dance_p1", model = "CSB_Stripper_02", heading = (math.random(50, 360)) * 1.0},
+        {x = 104.256, y = -1294.67, z = 28.2587, animDict = "mini@strip_club@private_dance@part3", animName = "priv_dance_p3", model = "CSB_Stripper_01", heading = (math.random(50, 360)) * 1.0},
+        {x = 112.480, y = -1287.032, z = 27.586, animDict = "mini@strip_club@private_dance@part2", animName = "priv_dance_p2", model = "CSB_Stripper_01", heading = (math.random(50, 360)) * 1.0},
+        {x = 113.111, y = -1287.755, z = 27.586, animDict = "mini@strip_club@private_dance@part1", animName = "priv_dance_p1", model = "S_F_Y_Stripper_02", heading = (math.random(50, 360)) * 1.0},
+        {x = 113.375, y = -1286.546, z = 27.586, animDict = "mini@strip_club@private_dance@part1", animName = "priv_dance_p1", model = "S_F_Y_Stripper_01", heading = (math.random(50, 360)) * 1.0},
+        {x = 129.442, y = -1283.407, z = 28.272, animDict = "missfbi3_party_d", animName = "stand_talk_loop_a_female", model = "S_F_Y_Bartender_01", heading = 122.471}
+    }
+}
+local spawnedPeds = {}
+Citizen.CreateThread(function()
+	for _, location in pairs(locations) do
+        for i = 1, #location do
+            Wait(1000)
+            local hash = GetHashKey(location[i].model)
+            RequestModel(hash)
+        	while not HasModelLoaded(hash) do
+        		RequestModel(hash)
+        		Citizen.Wait(0)
+        	end
+    		local ped = CreatePed(4, hash, location[i].x, location[i].y, location[i].z, location[i].heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
+            table.insert(spawnedPeds, ped)
+            SetEntityCanBeDamaged(ped,false)
+    		SetPedCanRagdollFromPlayerImpact(ped,false)
+    		TaskSetBlockingOfNonTemporaryEvents(ped,true)
+    		SetPedFleeAttributes(ped,0,0)
+    		SetPedCombatAttributes(ped,17,1)
+    		SetEntityInvincible(ped)
+            RequestAnimDict(location[i].animDict)
+            while not HasAnimDictLoaded(location[i].animDict) do
+                Citizen.Wait(100)
+            end
+            TaskPlayAnim(ped, location[i].animDict, location[i].animName, 8.0, -8, -1, 7, 0, 0, 0, 0)
+        end
+	end
+end)
+
+Citizen.CreateThread(function()
+
+    for i = 1, #spawnedPeds do
+        TaskPlayAnim(spawnedPeds[i], location[i].animDict, location[i].animName, 8.0, -8, -1, 7, 0, 0, 0, 0)
+        while true do
+            Wait(1)
+            if not IsEntityPlayingAnim(spawnedPeds[i], location[i].animDict, location[i].animName, 3) then
+                RequestAnimDict(location[i].animDict)
+                while not HasAnimDictLoaded(location[i].animDict) do
+                    Citizen.Wait(100)
+                end
+                TaskPlayAnim(spawnedPeds[i], location[i].animDict, location[i].animName, 8.0, -8, -1, 0, 0, 0, 0, 0)
+            end
+        end
+    end
+
+end)
