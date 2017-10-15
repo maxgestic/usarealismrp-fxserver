@@ -174,7 +174,7 @@ function GetCurrentTargetCar()
     local coords = GetEntityCoords(ped)
 
     local entityWorld = GetOffsetFromEntityInWorldCoords(ped, 0.0, 5.0, 0.0)
-    local rayHandle = CastRayPointToPoint(coords.x, coords.y, coords.z, entityWorld.x, entityWorld.y, entityWorld.z, 10, ped, 0)
+    local rayHandle = CastRayPointToPoint(coords.x, coords.y, coords.z, entityWorld.x, entityWorld.y, entityWorld.z, 2, ped, 0)
     local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
 
 	--DrawMarker(4, entityWorld.x, entityWorld.y, entityWorld.z, 0, GetEntityHeading(GetPlayerPed(-1)), 0, 0, 0.0, 0, 1.5, 1.0, 1.25, 255, 255, 255, 200, 0, false, 0, 0)
