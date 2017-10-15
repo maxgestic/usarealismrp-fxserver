@@ -286,6 +286,7 @@ function sedanMenu()
 	Menu.addButton("Vulcan Ingot ($9,500)","buyVehicle","-1289722222:9500:Vulcan Ingot")
 	Menu.addButton("Enus Cognoscenti ($85,500)","buyVehicle","-2030171296:85500:Vulcan Ingot")
 	Menu.addButton("Vulcan Warrener ($15,500)","buyVehicle","1373123368:15500:Vulcan Warrener")
+	Menu.addButton("Limo ($20,500)","buyVehicle","2333339779:20500:Limo")
 
 end
 
