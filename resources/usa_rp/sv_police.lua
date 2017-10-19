@@ -84,6 +84,14 @@ TriggerEvent('es:addCommand', 'spikestrip', function(source) -- usage /spike in 
 end)
 --]]
 
+AddEventHandler( 'chatMessage', function( source, n, msg )
+    msg = string.lower( msg )
+    if ( msg == "/r" ) then
+        CancelEvent() 
+        TriggerClientEvent( 'Radio', source )
+    end
+end )
+
 function comma_value(amount)
   local formatted = amount
   while true do

@@ -40,7 +40,7 @@ AddEventHandler("usa_rp:sellItem", function(job)
                 for i = 1, #inventory do
                     local item = inventory[i]
                     if item.name == "Meth" then
-                        local reward = 650
+                        local reward = 400
                         user.addMoney(reward)
                         if item.quantity > 1 then
                             inventory[i].quantity = inventory[i].quantity - 1
@@ -176,16 +176,47 @@ end)
 
 RegisterServerEvent("methJob:checkUserMoney")
 AddEventHandler("methJob:checkUserMoney", function(amount)
+    local MAX_CHEMICALS = 10
     local userSource = tonumber(source)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
         local userMoney = user.getMoney()
+        local inventory = user.getInventory()
+        -- check for max item quantity
+        if hasItem("Suspicious Chemicals", inventory, MAX_CHEMICALS) then
+            TriggerClientEvent("usa_rp:notify", userSource, "You can't carry more than MAX_CHEMICALS Suspicious Chemicals!")
+            return
+        end
+        -- money check
         if userMoney >= amount then
             -- continue with transaction
             TriggerClientEvent("methJob:getSupplies", userSource)
             user.setMoney(userMoney - amount)
-        else
+        elseif userMoney < amount then
             -- not enough funds to continue
             TriggerClientEvent("usa_rp:notify", userSource, "Come back when you have ~y~$500~w~ to get the supplies!")
         end
     end)
 end)
+
+function hasItem(itemName, inventory, quantity)
+    for i = 1, #inventory do
+        local item = inventory[i]
+        if item.name == itemName then
+            if quantity then
+                if type(tonumber(quantity)) ~= nil then
+                    if item.quantity == quantity then
+                        print("inventory item found with the searched quantity!")
+                        return true
+                    else
+                        print("did not find item with that quantity")
+                        return false
+                    end
+                end
+            end
+            print("FOUND: " .. itemName .. " in player's inventory")
+            return true
+        end
+    end
+    print("did not find item")
+    return false
+end
