@@ -142,7 +142,7 @@ Citizen.CreateThread(function ()
                         elseif jobs[i].locations[j].name == "Meth Supply Pickup" then
                             drawTxt('Press ~g~E~s~ to buy the supplies needed to create meth',0,1,0.5,0.8,0.6,255,255,255,255)
                             if IsControlJustPressed(1, 38) and not pedIsBusy then -- 38 = E
-                                TriggerServerEvent("methJob:checkUserMoney", 500)
+                                TriggerServerEvent("methJob:checkUserMoney", 600)
                             end
                         elseif jobs[i].locations[j].name == "Meth Dropoff 1" then
                             drawTxt('Press ~g~E~s~ to sell your meth!',0,1,0.5,0.8,0.6,255,255,255,255)
@@ -197,7 +197,7 @@ Citizen.CreateThread(function()
                 animDict = "timetable@jimmy@ig_1@idle_a"
                 animName = "hydrotropic_bud_or_something"
                 TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
-                for i = 1, 60 do
+                for i = 1, 75 do
                     if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) then
         				RequestAnimDict(animDict)
         				while not HasAnimDictLoaded(animDict) do
@@ -217,7 +217,7 @@ Citizen.CreateThread(function()
                     name = "Meth",
                     type = "drug",
                     legality = "illegal",
-                    quantity = 3
+                    quantity = 1
                 }
                 Citizen.Trace("giving meth to player!")
                 TriggerServerEvent("usa_rp:giveItem", meth)
