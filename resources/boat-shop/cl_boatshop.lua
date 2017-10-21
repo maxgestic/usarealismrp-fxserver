@@ -149,18 +149,21 @@ Citizen.CreateThread(function()
                 --if rental.price then
                     local vehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
                     local hash = GetEntityModel(vehicle)
-
-                    for i = 1, #ITEMS.boats do
-                        local item = ITEMS.boats[i]
-                        if item.hash == hash then
-                            TriggerServerEvent("boatshop:returnedVehicle", item)
-                            Citizen.Trace("found matching model")
-                            SetEntityAsMissionEntity( vehicle, true, true )
-                            deleteCar( vehicle )
-							rental = {}
-                            break
-                        end
-                    end
+					if GetPedInVehicleSeat(vehicle, -1) == GetPlayerPed(-1) then
+						for i = 1, #ITEMS.boats do
+							local item = ITEMS.boats[i]
+							if item.hash == hash then
+								TriggerServerEvent("boatshop:returnedVehicle", item)
+								Citizen.Trace("found matching model")
+								SetEntityAsMissionEntity( vehicle, true, true )
+								deleteCar( vehicle )
+								rental = {}
+								break
+							end
+						end
+					else
+					drawNotification("You must be in the driver's seat.")
+					end
                 --end
             end
         end

@@ -199,28 +199,31 @@ Citizen.CreateThread(function()
                 --if rental.price then
                     local vehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
                     local hash = GetEntityModel(vehicle)
-
-                    for i = 1, #ITEMS.helicopters do
-                        local item = ITEMS.helicopters[i]
-                        if item.hash == hash then
-                            TriggerServerEvent("airshop:returnedVehicle", item)
-                            Citizen.Trace("found matching model")
-                            SetEntityAsMissionEntity( vehicle, true, true )
-                            deleteCar( vehicle )
-                            break
-                        end
-                    end
-                    for i = 1, #ITEMS.planes do
-                        local item = ITEMS.planes[i]
-                        if item.hash == hash then
-                            TriggerServerEvent("airshop:returnedVehicle", item)
-                            Citizen.Trace("found matching model")
-                            SetEntityAsMissionEntity( vehicle, true, true )
-                            deleteCar( vehicle )
-                            break
-                        end
-                    end
-                    --rental = {}
+					if GetPedInVehicleSeat(vehicle, -1) == GetPlayerPed(-1) then
+						for i = 1, #ITEMS.helicopters do
+							local item = ITEMS.helicopters[i]
+							if item.hash == hash then
+								TriggerServerEvent("airshop:returnedVehicle", item)
+								Citizen.Trace("found matching model")
+								SetEntityAsMissionEntity( vehicle, true, true )
+								deleteCar( vehicle )
+								break
+							end
+						end
+						for i = 1, #ITEMS.planes do
+							local item = ITEMS.planes[i]
+							if item.hash == hash then
+								TriggerServerEvent("airshop:returnedVehicle", item)
+								Citizen.Trace("found matching model")
+								SetEntityAsMissionEntity( vehicle, true, true )
+								deleteCar( vehicle )
+								break
+							end
+						end
+						rental = {}
+					else
+						drawNotification("You must be in the driver's seat.")
+					end
                 --end
             end
         end
