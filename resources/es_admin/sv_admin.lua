@@ -131,7 +131,7 @@ TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, user)
 							}
 						}), { ["Content-Type"] = 'application/json' })
 
-				TriggerClientEvent('chatMessage', -1, "SYSTEM", {255, 0, 0}, GetPlayerName(player) .. " has been ^3kicked^0 (" .. reason .. ")")
+				sendMessageToModsAndAdmins(GetPlayerName(player) .. " has been kicked (" .. reason .. ")")
 				DropPlayer(player, reason)
 			end)
 		else
@@ -468,7 +468,8 @@ AddEventHandler('rconCommand', function(commandName, args)
 				RconPrint("\n#"..i..": " .. allPlayerIdentifiers[i])
 			end
 			-- show message
-		    TriggerClientEvent('chatMessage', -1, "SYSTEM", {255, 0, 0}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
+		    RconPrint(targetPlayerName .. " has been banned (" .. reason .. ")")
+			sendMessageToModsAndAdmins(targetPlayerName .. " has been banned (" .. reason .. ")")
 			-- send discord message
 			local desc = "**Display Name:** " .. targetPlayerName
 			for i = 1, #allPlayerIdentifiers do
@@ -655,7 +656,7 @@ fetchAllBans()
 			end
 
 			-- show message
-		    TriggerClientEvent('chatMessage', -1, "SYSTEM", {255, 0, 0}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
+		    sendMessageToModsAndAdmins(GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
 
 			-- send discord message
 			local desc = "**Display Name:** " .. targetPlayerName
@@ -871,4 +872,19 @@ function FormatSeconds(mins)
 	end
 	output = output .. mins .. " Mins"
 	return output
+end
+
+function sendMessageToModsAndAdmins(msg)
+	TriggerEvent("es:getPlayers", function(players)
+		if players then
+			for id, player in pairs(players) do
+				if id and player then
+					local playerGroup = player.getGroup()
+					if playerGroup == "owner" or playerGroup == "superadmin" or playerGroup == "admin" or playerGroup == "mod" then
+						TriggerClientEvent("chatMessage", id, "", {}, msg)
+					end
+				end
+			end
+		end
+	end)
 end
