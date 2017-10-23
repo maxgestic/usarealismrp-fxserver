@@ -154,6 +154,7 @@ function trucksMenu()
 	--Menu.addButton("Vapid Sadler ($25,500)","buyVehicle","599568815:25500:Vapid Sadler")
 	--Menu.addButton("Bravado Bison ($27,110)","buyVehicle","16948145:27110:Bravado Bison")
 	Menu.addButton("Vapid Sandking XL ($35,000)","buyVehicle","-1189015600:35000:Vapid Sandking XL")
+	Menu.addButton("Vapid Contender ($40,500)","buyVehicle","683047626:40500:Vapid Contender")
 
 end
 
