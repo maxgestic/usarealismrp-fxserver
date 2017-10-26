@@ -8,6 +8,7 @@ var playerWeapons;
 var playerLicenses;
 var targetPlayerId = 0;
 var targetPlayerName = "";
+var currentPlayerJob = "civ";
 
 var disableMouseScroll = true;
 
@@ -74,7 +75,6 @@ function playEmote(emoteNumber) {
 }
 
 function openEmotePage(pageNumber) {
-    //alert("opening emote page: " + pageNumber);
     $(".sidenav a").hide();
     $(".player-meta-data").hide();
     // Cancel Emote btn
@@ -99,7 +99,6 @@ function openEmotePage(pageNumber) {
             }
         }
     } else if (pageNumber == "5") {
-        //alert("emoteOptions[emoteItemsPerPage*4] = " + emoteOptions[emoteItemsPerPage*4]);
         for(var z = (emoteItemsPerPage*4); z < (emoteItemsPerPage*pageNumber); z++) {
             if (typeof emoteOptions[z] != "undefined") {
             $(".sidenav").append("<a onclick='playEmote("+(z)+")' class='emote-option'>"+emoteOptions[z]+"</a>");
@@ -199,7 +198,7 @@ function closeNav() {
     $(".sidenav .police-action").remove();
     $(".sidenav .inventory-action-item").remove();
     $(".sidenav .inventory-actions-back-btn").remove();
-    $("#police-btn").remove();
+    $(".sidenav .police-btn").remove();
     document.getElementById("mySidenav").style.width = "0";
 }
 
@@ -214,7 +213,7 @@ $(function() {
             $(".sidenav a").show();
             $(".player-meta-data").show();
             if (event.data.enable) {
-                //alert("test number = " + event.data.voip);
+                handleMenuItemForJob(currentPlayerJob); // set player job specific menu item
                 if (event.data.voip == 10) {
                     $("#voip-level-value").text("Normal");
                 } else if (event.data.voip == 25) {
@@ -232,24 +231,9 @@ $(function() {
             playerInventory = event.data.inventory;
             playerWeapons = event.data.weapons;
             playerLicenses = event.data.licenses;
-            //alert("inventory.length = " + inventory.length);
-            //alert("weapons.length = " + weapons.length);
-            //alert("licenses.length = " + licenses.length);
             populateInventory(playerInventory, playerWeapons, playerLicenses);
-        } else if (event.data.type == "receivedPlayerJob") {
-            var job = event.data.job;
-            //alert("job = " + job);
-
-            if (job == "sheriff") {
-                $("#mySidenav").prepend("<a onclick='showPoliceActions()' id='police-btn'>Police Actions</a>");
-            } else if (job == "ems") {
-                $("#ems-btn").show();
-            } else if (job == "taxi") {
-                $("#taxi-btn").show();
-            } else if (job == "tow") {
-                $("#tow-btn").show();
-            }
-
+        } else if (event.data.type == "setPlayerJob") {
+            currentPlayerJob = event.data.job;
         }
     });
 
@@ -297,7 +281,6 @@ $(function() {
     $('.sidenav').on('click', '.inventory-item', function() {
         var itemName = $(this).text();
         var playerName = targetPlayerName;
-        //alert("you clicked: " + itemName);
         if (itemName != "Back") {
             $(".sidenav a").hide();
             $(".sidenav").append("<a data-itemName='"+itemName+"' class='inventory-item inventory-action-item'>Use</a>");
@@ -344,7 +327,6 @@ function inventoryActionsBackBtn() {
 function GetWholeItemByName(itemName) {
     itemName = removeQuantityFromName(itemName);
     if (itemName == "Driver") {
-        //alert("was driver.. converting name...");
         itemName = "Driver's License";
     }
     var inventory = playerInventory;
@@ -379,4 +361,16 @@ function removeQuantityFromName(itemName) {
     var newItemName = itemName.substring(index);
     //alert("new name = " + newItemName);
     return newItemName
+}
+
+function handleMenuItemForJob(jobName) {
+    if (jobName == "police") {
+        $(".sidenav .sidenav-buttons").prepend("<a onclick='showPoliceActions()' class='police-btn'>Police Actions</a>");
+    } else if (jobName == "ems") {
+        //$("#ems-btn").show();
+    } else if (jobName == "taxi") {
+        //$("#taxi-btn").show();
+    } else if (jobName == "tow") {
+        //$("#tow-btn").show();
+    }
 }

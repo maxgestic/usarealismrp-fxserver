@@ -91,10 +91,6 @@ RegisterNUICallback('setVoipLevel', function(data, cb)
     end
 end)
 
-RegisterNUICallback('checkPlayerJob', function(data, cb)
-    TriggerServerEvent("interaction:checkPlayerJob")
-end)
-
 RegisterNUICallback('performPoliceAction', function(data, cb)
     TriggerEvent("test:escapeFromCSharp")
     local actionIndex = data.policeActionIndex
@@ -138,10 +134,12 @@ function interactionMenuUse(itemName)
 	end
 end
 
-RegisterNetEvent("interaction:sendPlayersJob")
-AddEventHandler("interaction:sendPlayersJob", function(playerJob)
+-- update players job for interaction menu
+RegisterNetEvent("interaction:setPlayersJob")
+AddEventHandler("interaction:setPlayersJob", function(playerJob)
+	-- update interaction menu variable
     SendNUIMessage({
-        type = "receivedPlayerJob",
+        type = "setPlayerJob",
         job = playerJob
     })
 end)

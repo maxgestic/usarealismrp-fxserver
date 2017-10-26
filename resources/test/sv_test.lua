@@ -49,17 +49,6 @@ AddEventHandler("interaction:checkForPhone", function()
     end)
 end)
 
-RegisterServerEvent("interaction:checkPlayerJob")
-AddEventHandler("interaction:checkPlayerJob", function()
-    local userSource = tonumber(source)
-    TriggerEvent("es:getPlayerFromId", userSource, function(user)
-        if user then
-            print("SUCCESS! PLAYER'S JOB = " .. user.getJob())
-            TriggerClientEvent("interaction:sendPlayersJob", userSource, user.getJob())
-        end
-    end)
-end)
-
 RegisterServerEvent("interaction:removeItemFromPlayer")
 AddEventHandler("interaction:removeItemFromPlayer", function(itemName)
     itemName = removeQuantityFromItemName(itemName)

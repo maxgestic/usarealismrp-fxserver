@@ -156,7 +156,8 @@ end)
 
 RegisterNetEvent("policestation2:isWhitelisted")
 AddEventHandler("policestation2:isWhitelisted", function()
-	Citizen.Trace("Inside is whitelisted client evnet")
+	Citizen.Trace("Inside is whitelisted client event. setting NUI job variable to: police")
+	TriggerEvent("interaction:setPlayersJob", "police") -- set interaction menu javascript job variable to "police"
 	local playerhash = GetEntityModel(GetPlayerPed(-1))
 	for i=1,#arrSkinHashes
 	do
@@ -322,7 +323,7 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 				SetPedComponentVariation(ply, 4, 35, 0, 0)
 				SetPedComponentVariation(ply, 6, 24, 0, 0)
 				SetPedComponentVariation(ply, 8, 58, 0, 0)
-				SetPedComponentVariation(ply, 11, 55, 0, 0)				
+				SetPedComponentVariation(ply, 11, 55, 0, 0)
 			end
 			if arrSkinGeneralValues[position] == "mp_f_freemode_01" then
 				SetPedComponentVariation(ply, 0, 33, 0, 0)
@@ -332,8 +333,8 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 				SetPedComponentVariation(ply, 6, 27, 0, 0)
 				SetPedComponentVariation(ply, 8, 35, 0, 0)
 				SetPedComponentVariation(ply, 11, 48, 0, 0)
-				
-			end			
+
+			end
 			SetModelAsNoLongerNeeded(modelhashed)
 			TriggerEvent("policestation2:giveDefaultLoadout")
 			TriggerServerEvent("policestation2:onduty")
@@ -416,6 +417,7 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 		if(cb) then
 			Citizen.Trace("true")
 			TriggerServerEvent("policestation2:offduty")
+			TriggerEvent("interaction:setPlayersJob", "civ") -- set interaction menu javascript job variable to "civ"
 			--menu = 4
 		else
 
