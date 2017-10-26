@@ -48,11 +48,6 @@ Citizen.CreateThread(function()
      end
 end)
 
--- SetVehicleEngineOn(targetVehicle, true, true, false)
--- GetIsVehicleEngineRunning(targetVehicle)
--- targetPed = GetPlayerPed(-1)
--- targetVehicle = GetVehiclePedIsIn(targetPed, 1)
-
 Citizen.CreateThread(function()
     local vehicleEngineHealth
     while true do
@@ -162,10 +157,8 @@ function DrawSpecialTextTimed(text, time)
 end
 -- slowly disables a player's vehicle
 function overheatVehicle(targetVehicle)
-
     local timer = 10000 -- 10 seconds
     local engineHealth = 100
-
     while timer > 0 do
         Citizen.Wait(0)
         DrawSpecialText("You car is ~r~overheating~w~!")
@@ -173,12 +166,9 @@ function overheatVehicle(targetVehicle)
         engineHealth = engineHealth - 10
         SetVehicleEngineHealth(targetVehicle, engineHealth) -- engine health slowly drop to 0
     end
-
     -- disable vehicle
     SetVehicleUndriveable(targetVehicle, 1) -- disable car
-
     --reset variables
     timer = 10000
     engineHealth = 100
-
 end
