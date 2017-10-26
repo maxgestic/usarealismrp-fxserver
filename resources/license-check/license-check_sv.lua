@@ -133,69 +133,73 @@ end
 
 -- running vehicle plates
 TriggerEvent('es:addCommand', '28', function(source, args, user)
-	local userSource = tonumber(source)
-	local plateNumber = args[2]
-	if plateNumber then
-		TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " runs plate.")
-		TriggerEvent("es:getPlayers", function(players)
-			for id, player in pairs(players) do
-				--print("id = " .. id)
-				--print("player.job = " .. player.job)
-				local vehicles = player.getVehicles()
-				for i = 1, #vehicles do
-					local vehicle = vehicles[i]
-					if tostring(vehicle.plate) == tostring(plateNumber) then
-						print("found matching plate number! triggering client event")
-						local message = "~y~PLATE: ~w~" .. vehicle.plate .. "\n"
-						message = message .. "~y~RO: ~w~"
-						message = message .. vehicle.owner .. "\n"
-						message = message .. "~y~MODEL: ~w~"
-						message = message .. vehicle.model
-						TriggerClientEvent("licenseCheck:notify", userSource, message)
-						return
-					end
-				end
-			end
-			-- player not in game with that plate number or plate number owned by a local!
-			TriggerClientEvent("licenseCheck:notify", userSource, "This plate is not on file.")
-		end)
-	else
-		print("player did not enter a plate #")
-		TriggerClientEvent("chatMessage", userSource, "", {}, "^1Invalid /28 command format!")
-		TriggerClientEvent("chatMessage", userSource, "", {}, "^3Usage: ^0/28 <plate_number_here>")
-	end
-end)
-
-TriggerEvent('es:addCommand', 'runplate', function(source, args, user)
-	local userSource = tonumber(source)
-	local plateNumber = args[2]
-	if plateNumber then
-		TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " runs plate.")
-		TriggerEvent("es:getPlayers", function(players)
-			for id, player in pairs(players) do
-				--print("id = " .. id)
-				--print("player.job = " .. player.job)
-				local vehicles = player.getVehicles()
-				for i = 1, #vehicles do
-					local vehicle = vehicles[i]
-					if tostring(vehicle.plate) == tostring(plateNumber) then
-						print("found matching plate number! triggering client event")
-						local message = "~y~PLATE: ~w~" .. vehicle.plate .. "\n"
-						message = message .. "~y~RO: ~w~"
-						message = message .. vehicle.owner .. "\n"
-						message = message .. "~y~MODEL: ~w~"
-						message = message .. vehicle.model
-						TriggerClientEvent("licenseCheck:notify", userSource, message)
-						return
+	if user.getJob() == "sheriff" or user.getJob() == "police" then
+		local userSource = tonumber(source)
+		local plateNumber = args[2]
+		if plateNumber then
+			TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " runs plate.")
+			TriggerEvent("es:getPlayers", function(players)
+				for id, player in pairs(players) do
+					--print("id = " .. id)
+					--print("player.job = " .. player.job)
+					local vehicles = player.getVehicles()
+					for i = 1, #vehicles do
+						local vehicle = vehicles[i]
+						if tostring(vehicle.plate) == tostring(plateNumber) then
+							print("found matching plate number! triggering client event")
+							local message = "~y~PLATE: ~w~" .. vehicle.plate .. "\n"
+							message = message .. "~y~RO: ~w~"
+							message = message .. vehicle.owner .. "\n"
+							message = message .. "~y~MODEL: ~w~"
+							message = message .. vehicle.model
+							TriggerClientEvent("licenseCheck:notify", userSource, message)
+							return
+						end
 					end
 				end
 				-- player not in game with that plate number or plate number owned by a local!
 				TriggerClientEvent("licenseCheck:notify", userSource, "This plate is not on file.")
-			end
-		end)
-	else
-		print("player did not enter a plate #")
-		TriggerClientEvent("chatMessage", userSource, "", {}, "^1Invalid /28 command format!")
-		TriggerClientEvent("chatMessage", userSource, "", {}, "^3Usage: ^0/28 <plate_number_here>")
+			end)
+		else
+			print("player did not enter a plate #")
+			TriggerClientEvent("chatMessage", userSource, "", {}, "^1Invalid /28 command format!")
+			TriggerClientEvent("chatMessage", userSource, "", {}, "^3Usage: ^0/28 <plate_number_here>")
+		end
+	end
+end)
+
+TriggerEvent('es:addCommand', 'runplate', function(source, args, user)
+	if user.getJob() == "sheriff" or user.getJob() == "police" then
+		local userSource = tonumber(source)
+		local plateNumber = args[2]
+		if plateNumber then
+			TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " runs plate.")
+			TriggerEvent("es:getPlayers", function(players)
+				for id, player in pairs(players) do
+					--print("id = " .. id)
+					--print("player.job = " .. player.job)
+					local vehicles = player.getVehicles()
+					for i = 1, #vehicles do
+						local vehicle = vehicles[i]
+						if tostring(vehicle.plate) == tostring(plateNumber) then
+							print("found matching plate number! triggering client event")
+							local message = "~y~PLATE: ~w~" .. vehicle.plate .. "\n"
+							message = message .. "~y~RO: ~w~"
+							message = message .. vehicle.owner .. "\n"
+							message = message .. "~y~MODEL: ~w~"
+							message = message .. vehicle.model
+							TriggerClientEvent("licenseCheck:notify", userSource, message)
+							return
+						end
+					end
+					-- player not in game with that plate number or plate number owned by a local!
+					TriggerClientEvent("licenseCheck:notify", userSource, "This plate is not on file.")
+				end
+			end)
+		else
+			print("player did not enter a plate #")
+			TriggerClientEvent("chatMessage", userSource, "", {}, "^1Invalid /runplate command format!")
+			TriggerClientEvent("chatMessage", userSource, "", {}, "^3Usage: ^0/runplate <plate_number_here>")
+		end
 	end
 end)
