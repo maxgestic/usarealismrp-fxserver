@@ -40,7 +40,7 @@ AddEventHandler("usa_rp:sellItem", function(job)
                 for i = 1, #inventory do
                     local item = inventory[i]
                     if item.name == "Meth" then
-                        local reward = 200
+                        local reward = 275
                         user.addMoney(reward)
                         if item.quantity > 1 then
                             inventory[i].quantity = inventory[i].quantity - 1
@@ -131,6 +131,42 @@ AddEventHandler("usa_rp:checkUserJobSupplies", function(supply)
             -- does not have job supply at this point
             TriggerClientEvent("usa_rp:doesUserHaveJobSupply", userSource, false)
             print("player had job supply!!")
+        end
+    end)
+end)
+
+RegisterServerEvent("usa_rp:giveChemicals")
+AddEventHandler("usa_rp:giveChemicals", function()
+    local chemicals = {
+        name = "Suspicious Chemicals",
+        legality = "illegal",
+        quantity = 1,
+        type = "chemical"
+    }
+    local userSource = tonumber(source)
+    TriggerEvent("es:getPlayerFromId", userSource, function(user)
+        if user then
+            local inventory = user.getInventory()
+            for i = 1, #inventory do
+                local item = inventory[i]
+                if item.name == "Suspicious Chemicals" then -- player already has one of this item in inventory
+                    if item.quantity > 1 then
+                        inventory[i].quantity = item.quantity + 1
+                        user.setInventory(inventory)
+                        print("player went out of range, giving back Suspicious Chemicals")
+                        return
+                    else
+                        table.insert(inventory, chemicals)
+                        user.setInventory(inventory)
+                        print("player went out of range, giving back Suspicious Chemicals")
+                        return
+                    end
+                end
+            end
+            -- not in inventory at this point, so give chemicals here
+            table.insert(inventory, chemicals)
+            user.setInventory(inventory)
+            print("player went out of range, giving back Suspicious Chemicals")
         end
     end)
 end)

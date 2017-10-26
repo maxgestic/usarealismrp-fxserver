@@ -113,6 +113,15 @@ Citizen.CreateThread(function ()
                 end
             end
         end
+        if gatheringJob == "Meth" and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), jobs[1].locations[2].x, jobs[1].locations[2].y, jobs[1].locations[2].z, true ) > 6 then
+            --Citizen.Trace("you stopped cooking meth! too far!")
+            TriggerEvent("usa_rp:notify", "You went ~y~out of range~w~.")
+            gathering = false
+            gatheringJob = ""
+            jobs[1].started = false
+            onJob = false
+            TriggerServerEvent("usa_rp:giveChemicals")
+        end
 		Citizen.Wait(0)
     end
 end)
@@ -203,7 +212,9 @@ Citizen.CreateThread(function()
         				while not HasAnimDictLoaded(animDict) do
         					Citizen.Wait(100)
         				end
-        				TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
+                        if gathering then
+        				    TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
+                        end
         			end
                     Citizen.Wait(1000)
                 end
