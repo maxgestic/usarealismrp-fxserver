@@ -125,7 +125,6 @@ end)
 RegisterNetEvent("emsstation2:isWhitelisted")
 AddEventHandler("emsstation2:isWhitelisted", function()
 	--Citizen.Trace("Inside is whitelisted client evnet")
-	TriggerEvent("interaction:setPlayersJob", "ems") -- set interaction menu javascript job variable to "ems"
 	local playerhash = GetEntityModel(GetPlayerPed(-1))
 	for i=1,#arrSkinHashes
 	do
@@ -176,6 +175,7 @@ AddEventHandler("emsstation2:ShowMainMenu", function()
 			SetModelAsNoLongerNeeded(modelhashed)
 			TriggerEvent("emsstation2:giveDefaultLoadout")
 			TriggerServerEvent("emsstation2:onduty")
+			TriggerEvent("interaction:setPlayersJob", "ems") -- set interaction menu javascript job variable to "ems"
 		end)
 	end)
 

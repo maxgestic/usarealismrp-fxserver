@@ -149,6 +149,7 @@ function performPoliceAction(policeActionIndex) {
 
 function showPoliceActions() {
     $(".sidenav a").hide();
+    $(".player-meta-data").hide();
     for (i in policeActions) {
         $(".sidenav").append("<a onclick='performPoliceAction("+i+")' class='police-action'>" + policeActions[i] + "</a>");
     }
