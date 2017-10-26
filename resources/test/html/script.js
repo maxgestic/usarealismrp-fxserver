@@ -1,4 +1,4 @@
-var policeActions = ["Cuff", "Drag", "Search", "MDT", "Place", "Unseat"];
+var policeActions = ["Cuff", "Drag", "Search", "MDT", "Place", "Unseat", "Impound"];
 var voipOptions = ["Yell", "Normal", "Whisper"];
 var emoteOptions = ["Cop", "Sit", "Chair", "Kneel", "Medic", "Notepad","Traffic", "Photo","Clipboard", "Lean", "Hangout", "Pot", "Fish", "Phone", "Yoga", "Bino", "Cheer", "Statue", "Jog",
 "Flex", "Sit up", "Push up", "Weld", "Mechanic","Smoke","Drink", "Bum 1", "Bum 2", "Bum 3", "Drill", "Blower", "Chillin'", "Mobile Film", "Planting", "Golf", "Hammer", "Clean", "Musician", "Party", "Prostitute"];
@@ -142,7 +142,8 @@ function setVoip(option) {
 
 function performPoliceAction(policeActionIndex) {
     $.post('http://test/performPoliceAction', JSON.stringify({
-        policeActionIndex: policeActionIndex
+        policeActionIndex: policeActionIndex,
+        policeActionName: policeActions[policeActionIndex]
     }));
     closeNav();
 }
@@ -151,7 +152,7 @@ function showPoliceActions() {
     $(".sidenav a").hide();
     $(".player-meta-data").hide();
     for (i in policeActions) {
-        $(".sidenav").append("<a onclick='performPoliceAction("+i+")' class='police-action'>" + policeActions[i] + "</a>");
+        $(".sidenav .sidenav-buttons").append("<a onclick='performPoliceAction("+i+")' class='police-action'>" + policeActions[i] + "</a>");
     }
 }
 

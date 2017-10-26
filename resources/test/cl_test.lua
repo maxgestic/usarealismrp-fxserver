@@ -94,9 +94,8 @@ end)
 RegisterNUICallback('performPoliceAction', function(data, cb)
     TriggerEvent("test:escapeFromCSharp")
     local actionIndex = data.policeActionIndex
-    if actionIndex == 0 then
-        TriggerEvent("interaction:performPoliceAction", "cuff")
-    end
+	local actionName = string.lower(data.policeActionName)
+    TriggerEvent("interaction:performPoliceAction", actionName)
 end)
 
 RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
