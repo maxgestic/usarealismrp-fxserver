@@ -13,6 +13,8 @@ end)
 RegisterNetEvent('usa_rp:spawn')
 AddEventHandler('usa_rp:spawn', function(defaultModel, job, spawn, weapons, character)
 	exports.spawnmanager:spawnPlayer({x = spawn.x, y = spawn.y, z = spawn.z, model = defaultModel, heading = 0.0}, function()
+        -- character selection screen
+        --TriggerEvent("character:open") temp disable
         -- give customized character
         if character.hash then
             local name, model
