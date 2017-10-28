@@ -251,6 +251,9 @@ $(function() {
         if (data.which == 27) { // Escape key
             $.post('http://test/escape', JSON.stringify({}));
             closeNav();
+        } else if (data.which == 112) { // F1 key
+            $.post('http://test/escape', JSON.stringify({}));
+            closeNav();
         }
     };
 
