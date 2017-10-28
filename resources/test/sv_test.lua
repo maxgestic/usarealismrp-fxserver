@@ -1,3 +1,8 @@
+RegisterServerEvent("interaction:tackle")
+AddEventHandler("interaction:tackle", function(targetId)
+    TriggerClientEvent("interaction:ragdoll", targetId)
+end)
+
 RegisterServerEvent("test:cuff")
 AddEventHandler("test:cuff", function(playerId, playerName)
     print("going to cuff " .. playerName .. " with id of " .. playerId)
