@@ -19,10 +19,6 @@ TriggerEvent('es:addCommand', 'hash', function(source, args, user)
 	TriggerClientEvent('es_admin:getHash', source, args[2])
 end)
 
-TriggerEvent('es:addCommand', 'gotopd', function(source, args, user)
-
-end)
-
 -- Default commands
 TriggerEvent('es:addCommand', 'report', function(source, args, user)
 	local reporterId = tonumber(source)
