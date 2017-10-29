@@ -169,6 +169,7 @@ function showVehicleUnseatOptions() {
 function showPoliceActions() {
     $(".sidenav a").hide();
     $(".player-meta-data").hide();
+    $(".sidenav .sidenav-buttons").append("<a class='police-action'>Target: " + targetPlayerName + "</a>");
     for (i in policeActions) {
         if (policeActions[i] == "Unseat") {
             $(".sidenav .sidenav-buttons").append("<a onclick='showVehicleUnseatOptions()' class='police-action'>" + policeActions[i] + "</a>");
