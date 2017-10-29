@@ -1,4 +1,4 @@
-var policeActions = ["Cuff", "Drag", "Search", "MDT", "Place", "Unseat"];
+var policeActions = ["Cuff", "Drag", "Search", "MDT", "Place", "Unseat", "Impound"];
 var voipOptions = ["Yell", "Normal", "Whisper"];
 var emoteOptions = ["Cop", "Sit", "Chair", "Kneel", "Medic", "Notepad","Traffic", "Photo","Clipboard", "Lean", "Hangout", "Pot", "Fish", "Phone", "Yoga", "Bino", "Cheer", "Statue", "Jog",
 "Flex", "Sit up", "Push up", "Weld", "Mechanic","Smoke","Drink", "Bum 1", "Bum 2", "Bum 3", "Drill", "Blower", "Chillin'", "Mobile Film", "Planting", "Golf", "Hammer", "Clean", "Musician", "Party", "Prostitute"];
@@ -8,6 +8,7 @@ var playerWeapons;
 var playerLicenses;
 var targetPlayerId = 0;
 var targetPlayerName = "";
+var currentPlayerJob = "civ";
 
 var disableMouseScroll = true;
 
@@ -74,7 +75,6 @@ function playEmote(emoteNumber) {
 }
 
 function openEmotePage(pageNumber) {
-    //alert("opening emote page: " + pageNumber);
     $(".sidenav a").hide();
     $(".player-meta-data").hide();
     // Cancel Emote btn
@@ -99,7 +99,6 @@ function openEmotePage(pageNumber) {
             }
         }
     } else if (pageNumber == "5") {
-        //alert("emoteOptions[emoteItemsPerPage*4] = " + emoteOptions[emoteItemsPerPage*4]);
         for(var z = (emoteItemsPerPage*4); z < (emoteItemsPerPage*pageNumber); z++) {
             if (typeof emoteOptions[z] != "undefined") {
             $(".sidenav").append("<a onclick='playEmote("+(z)+")' class='emote-option'>"+emoteOptions[z]+"</a>");
@@ -142,16 +141,41 @@ function setVoip(option) {
 }
 
 function performPoliceAction(policeActionIndex) {
-    $.post('http://test/performPoliceAction', JSON.stringify({
-        policeActionIndex: policeActionIndex
-    }));
+    if (policeActionIndex == "front left" || policeActionIndex == "front right" || policeActionIndex == "back left" || policeActionIndex == "back right") {
+        var seat = policeActionIndex;
+        $.post('http://test/performPoliceAction', JSON.stringify({
+            policeActionIndex: 0,
+            policeActionName: "Unseat",
+            unseatIndex: seat
+        }));
+    } else {
+        $.post('http://test/performPoliceAction', JSON.stringify({
+            policeActionIndex: policeActionIndex,
+            policeActionName: policeActions[policeActionIndex],
+            unseatIndex: ""
+        }));
+    }
     closeNav();
+}
+
+function showVehicleUnseatOptions() {
+    $(".sidenav a").hide();
+    $(".sidenav .sidenav-buttons").append("<a onclick='performPoliceAction(\"front left\")' class='police-action'>Front Left</a>");
+    $(".sidenav .sidenav-buttons").append("<a onclick='performPoliceAction(\"front right\")' class='police-action'>Front Right</a>");
+    $(".sidenav .sidenav-buttons").append("<a onclick='performPoliceAction(\"back left\")' class='police-action'>Back Left</a>");
+    $(".sidenav .sidenav-buttons").append("<a onclick='performPoliceAction(\"back right\")' class='police-action'>Back Right</a>");
 }
 
 function showPoliceActions() {
     $(".sidenav a").hide();
+    $(".player-meta-data").hide();
+    $(".sidenav .sidenav-buttons").append("<a class='police-action'>Target: " + targetPlayerName + "</a>");
     for (i in policeActions) {
-        $(".sidenav").append("<a onclick='performPoliceAction("+i+")' class='police-action'>" + policeActions[i] + "</a>");
+        if (policeActions[i] == "Unseat") {
+            $(".sidenav .sidenav-buttons").append("<a onclick='showVehicleUnseatOptions()' class='police-action'>" + policeActions[i] + "</a>");
+        } else {
+            $(".sidenav .sidenav-buttons").append("<a onclick='performPoliceAction("+i+")' class='police-action'>" + policeActions[i] + "</a>");
+        }
     }
 }
 
@@ -199,7 +223,7 @@ function closeNav() {
     $(".sidenav .police-action").remove();
     $(".sidenav .inventory-action-item").remove();
     $(".sidenav .inventory-actions-back-btn").remove();
-    $("#police-btn").remove();
+    $(".sidenav .police-btn").remove();
     document.getElementById("mySidenav").style.width = "0";
 }
 
@@ -214,7 +238,7 @@ $(function() {
             $(".sidenav a").show();
             $(".player-meta-data").show();
             if (event.data.enable) {
-                //alert("test number = " + event.data.voip);
+                handleMenuItemForJob(currentPlayerJob); // set player job specific menu item
                 if (event.data.voip == 10) {
                     $("#voip-level-value").text("Normal");
                 } else if (event.data.voip == 25) {
@@ -232,24 +256,9 @@ $(function() {
             playerInventory = event.data.inventory;
             playerWeapons = event.data.weapons;
             playerLicenses = event.data.licenses;
-            //alert("inventory.length = " + inventory.length);
-            //alert("weapons.length = " + weapons.length);
-            //alert("licenses.length = " + licenses.length);
             populateInventory(playerInventory, playerWeapons, playerLicenses);
-        } else if (event.data.type == "receivedPlayerJob") {
-            var job = event.data.job;
-            //alert("job = " + job);
-
-            if (job == "sheriff") {
-                $("#mySidenav").prepend("<a onclick='showPoliceActions()' id='police-btn'>Police Actions</a>");
-            } else if (job == "ems") {
-                $("#ems-btn").show();
-            } else if (job == "taxi") {
-                $("#taxi-btn").show();
-            } else if (job == "tow") {
-                $("#tow-btn").show();
-            }
-
+        } else if (event.data.type == "setPlayerJob") {
+            currentPlayerJob = event.data.job;
         }
     });
 
@@ -263,6 +272,9 @@ $(function() {
 
     document.onkeyup = function (data) {
         if (data.which == 27) { // Escape key
+            $.post('http://test/escape', JSON.stringify({}));
+            closeNav();
+        } else if (data.which == 112) { // F1 key
             $.post('http://test/escape', JSON.stringify({}));
             closeNav();
         }
@@ -297,7 +309,6 @@ $(function() {
     $('.sidenav').on('click', '.inventory-item', function() {
         var itemName = $(this).text();
         var playerName = targetPlayerName;
-        //alert("you clicked: " + itemName);
         if (itemName != "Back") {
             $(".sidenav a").hide();
             $(".sidenav").append("<a data-itemName='"+itemName+"' class='inventory-item inventory-action-item'>Use</a>");
@@ -344,7 +355,6 @@ function inventoryActionsBackBtn() {
 function GetWholeItemByName(itemName) {
     itemName = removeQuantityFromName(itemName);
     if (itemName == "Driver") {
-        //alert("was driver.. converting name...");
         itemName = "Driver's License";
     }
     var inventory = playerInventory;
@@ -379,4 +389,16 @@ function removeQuantityFromName(itemName) {
     var newItemName = itemName.substring(index);
     //alert("new name = " + newItemName);
     return newItemName
+}
+
+function handleMenuItemForJob(jobName) {
+    if (jobName == "police") {
+        $(".sidenav .sidenav-buttons").prepend("<a onclick='showPoliceActions()' class='police-btn'>Police Actions</a>");
+    } else if (jobName == "ems") {
+        //$("#ems-btn").show();
+    } else if (jobName == "taxi") {
+        //$("#taxi-btn").show();
+    } else if (jobName == "tow") {
+        //$("#tow-btn").show();
+    }
 }

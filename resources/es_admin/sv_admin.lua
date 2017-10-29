@@ -723,7 +723,7 @@ docid = result._id (except probably change to the _rev instead)
 TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 	if args[2] then
 		--admins only
-		if user.getGroup() == "admin" or user.getGroup() == "owner" then
+		if user.getGroup() == "admin" or user.getGroup() == "superadmin" or user.getGroup() == "owner" then
 			TriggerEvent("es:getPlayerFromId", tonumber(args[2]), function(user)
 				if user then
 					local vehiclenames = ""

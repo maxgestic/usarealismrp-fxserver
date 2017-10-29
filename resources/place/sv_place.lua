@@ -9,6 +9,16 @@ TriggerEvent('es:addCommand', 'place', function(source, args, user)
     end)
 end)
 
+RegisterServerEvent("place:placePerson")
+AddEventHandler("place:placePerson", function(targetId)
+    TriggerClientEvent("place", targetId)
+end)
+
+RegisterServerEvent("place:unseatPerson")
+AddEventHandler("place:unseatPerson", function(targetId)
+    TriggerClientEvent("place:unseat", targetId, source)
+end)
+
 -- unseat
 TriggerEvent('es:addCommand', 'unseat', function(source, args, user)
     if user.getJob() == "sheriff" or user.getJob() == "cop" or user.getJob() == "ems" or user.getJob() == "fire" then

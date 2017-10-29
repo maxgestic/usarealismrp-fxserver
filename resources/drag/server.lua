@@ -24,12 +24,7 @@ TriggerEvent('es:addCommand', 'drag', function(source, args, user)
 	end
 end)
 
-RegisterServerEvent("dr:drag")
-AddEventHandler("dr:drag", function(id)
-	TriggerEvent("es:getPlayerFromId", source, function(user)
-		if user.getJob() == "sheriff" or user.getJob == "cop"  or user.getJob() == "ems" or user.getJob() == "fire" then
-			print("dragging player with id = " .. id)
-			TriggerClientEvent("dr:drag", tonumber(id), source)
-		end
-	end)
+RegisterServerEvent("dr:dragPlayer")
+AddEventHandler("dr:dragPlayer", function(id)
+	TriggerClientEvent("dr:drag", tonumber(id), source)
 end)
