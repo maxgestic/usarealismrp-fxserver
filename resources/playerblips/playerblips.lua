@@ -193,7 +193,7 @@ Citizen.CreateThread(function()
 							SetBlipNameToPlayerName(blip, id)
 							--Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, true ) -- Player Blip indicator
 						elseif getEmergencyPedType(playerPed) == "ems" or getEmergencyPedType(playerPed) == "fire" then
-							Citizen.Trace("player " .. GetPlayerServerId(id) .. " was emergency ped (ems)! applying blip!")
+							--Citizen.Trace("player " .. GetPlayerServerId(id) .. " was emergency ped (ems)! applying blip!")
 							local blip = GetBlipFromEntity( playerPed )
 							if not DoesBlipExist( blip ) then
 								blip = AddBlipForEntity( playerPed )
