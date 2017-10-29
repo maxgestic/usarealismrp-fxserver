@@ -141,18 +141,40 @@ function setVoip(option) {
 }
 
 function performPoliceAction(policeActionIndex) {
-    $.post('http://test/performPoliceAction', JSON.stringify({
-        policeActionIndex: policeActionIndex,
-        policeActionName: policeActions[policeActionIndex]
-    }));
+    if (policeActionIndex == "front left" || policeActionIndex == "front right" || policeActionIndex == "back left" || policeActionIndex == "back right") {
+        var seat = policeActionIndex;
+        $.post('http://test/performPoliceAction', JSON.stringify({
+            policeActionIndex: 0,
+            policeActionName: "Unseat",
+            unseatIndex: seat
+        }));
+    } else {
+        $.post('http://test/performPoliceAction', JSON.stringify({
+            policeActionIndex: policeActionIndex,
+            policeActionName: policeActions[policeActionIndex],
+            unseatIndex: ""
+        }));
+    }
     closeNav();
+}
+
+function showVehicleUnseatOptions() {
+    $(".sidenav a").hide();
+    $(".sidenav .sidenav-buttons").append("<a onclick='performPoliceAction(\"front left\")' class='police-action'>Front Left</a>");
+    $(".sidenav .sidenav-buttons").append("<a onclick='performPoliceAction(\"front right\")' class='police-action'>Front Right</a>");
+    $(".sidenav .sidenav-buttons").append("<a onclick='performPoliceAction(\"back left\")' class='police-action'>Back Left</a>");
+    $(".sidenav .sidenav-buttons").append("<a onclick='performPoliceAction(\"back right\")' class='police-action'>Back Right</a>");
 }
 
 function showPoliceActions() {
     $(".sidenav a").hide();
     $(".player-meta-data").hide();
     for (i in policeActions) {
-        $(".sidenav .sidenav-buttons").append("<a onclick='performPoliceAction("+i+")' class='police-action'>" + policeActions[i] + "</a>");
+        if (policeActions[i] == "Unseat") {
+            $(".sidenav .sidenav-buttons").append("<a onclick='showVehicleUnseatOptions()' class='police-action'>" + policeActions[i] + "</a>");
+        } else {
+            $(".sidenav .sidenav-buttons").append("<a onclick='performPoliceAction("+i+")' class='police-action'>" + policeActions[i] + "</a>");
+        }
     }
 }
 

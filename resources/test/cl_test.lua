@@ -95,7 +95,9 @@ RegisterNUICallback('performPoliceAction', function(data, cb)
     TriggerEvent("test:escapeFromCSharp")
     local actionIndex = data.policeActionIndex
 	local actionName = string.lower(data.policeActionName)
-    TriggerEvent("interaction:performPoliceAction", actionName)
+	local unseatIndex = string.lower(data.unseatIndex)
+	Citizen.Trace("unseat index = " .. unseatIndex)
+    TriggerEvent("interaction:performPoliceAction", actionName, unseatIndex)
 end)
 
 RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
