@@ -372,6 +372,7 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 		if(cb) then
 			Citizen.Trace("true")
 			TriggerServerEvent("policestation2:loadDefaultUniform", character)
+			TriggerEvent("interaction:setPlayersJob", "police") -- set interaction menu javascript job variable to "police"
 			--menu = 4
 		else
 

@@ -20,7 +20,9 @@ function playerHasValidAutoInsurance(playerInsurance)
 	return false
 end
 
+RegisterServerEvent("license:searchForLicense")
 AddEventHandler("license:searchForLicense", function(source, playerId)
+	TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " opens MDT.")
 	    TriggerEvent('es:getPlayerFromId', tonumber(playerId), function(user)
 			if not user then
 				TriggerClientEvent("license:notifyNoExist", source, playerId) -- player not in game with that id
@@ -103,7 +105,7 @@ TriggerEvent('es:addCommand', 'mdt', function(source, args, user)
 	elseif playerJob ~= "cop" and playerJob ~= "sheriff" and playerJob ~= "highwaypatrol" then
 		TriggerClientEvent("license:failureNotJurisdiction", source)
 	else -- player is a cop, so allow check and perform check with argument = player id to check license
-		TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " opens MDT.")
+		--TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " opens MDT.")
 		TriggerEvent("license:searchForLicense", source, argument)
 	end
 end)
