@@ -1,3 +1,4 @@
+RegisterServerEvent("search:searchPlayer")
 AddEventHandler("search:searchPlayer", function(source, playerId)
 	TriggerEvent('es:getPlayerFromId', tonumber(playerId), function(user)
 		if not user then

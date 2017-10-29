@@ -1,3 +1,8 @@
+RegisterServerEvent("interaction:tackle")
+AddEventHandler("interaction:tackle", function(targetId)
+    TriggerClientEvent("interaction:ragdoll", targetId)
+end)
+
 RegisterServerEvent("test:cuff")
 AddEventHandler("test:cuff", function(playerId, playerName)
     print("going to cuff " .. playerName .. " with id of " .. playerId)
@@ -46,17 +51,6 @@ AddEventHandler("interaction:checkForPhone", function()
             end
         end
         TriggerClientEvent("interaction:notify", userSource, "You have no cell phone to open!")
-    end)
-end)
-
-RegisterServerEvent("interaction:checkPlayerJob")
-AddEventHandler("interaction:checkPlayerJob", function()
-    local userSource = tonumber(source)
-    TriggerEvent("es:getPlayerFromId", userSource, function(user)
-        if user then
-            print("SUCCESS! PLAYER'S JOB = " .. user.getJob())
-            TriggerClientEvent("interaction:sendPlayersJob", userSource, user.getJob())
-        end
     end)
 end)
 

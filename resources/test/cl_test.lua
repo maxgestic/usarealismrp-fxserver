@@ -91,16 +91,13 @@ RegisterNUICallback('setVoipLevel', function(data, cb)
     end
 end)
 
-RegisterNUICallback('checkPlayerJob', function(data, cb)
-    TriggerServerEvent("interaction:checkPlayerJob")
-end)
-
 RegisterNUICallback('performPoliceAction', function(data, cb)
     TriggerEvent("test:escapeFromCSharp")
     local actionIndex = data.policeActionIndex
-    if actionIndex == 0 then
-        TriggerEvent("interaction:performPoliceAction", "cuff")
-    end
+	local actionName = string.lower(data.policeActionName)
+	local unseatIndex = string.lower(data.unseatIndex)
+	Citizen.Trace("unseat index = " .. unseatIndex)
+    TriggerEvent("interaction:performPoliceAction", actionName, unseatIndex)
 end)
 
 RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
@@ -138,10 +135,17 @@ function interactionMenuUse(itemName)
 	end
 end
 
-RegisterNetEvent("interaction:sendPlayersJob")
-AddEventHandler("interaction:sendPlayersJob", function(playerJob)
+RegisterNetEvent("interaction:ragdoll")
+AddEventHandler("interaction:ragdoll", function()
+	SetPedToRagdoll(GetPlayerPed(-1), 6500, 6500, 0, true, true, false);
+end)
+
+-- update players job for interaction menu
+RegisterNetEvent("interaction:setPlayersJob")
+AddEventHandler("interaction:setPlayersJob", function(playerJob)
+	-- update interaction menu variable
     SendNUIMessage({
-        type = "receivedPlayerJob",
+        type = "setPlayerJob",
         job = playerJob
     })
 end)

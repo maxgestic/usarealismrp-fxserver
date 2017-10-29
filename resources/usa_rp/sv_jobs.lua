@@ -219,7 +219,7 @@ AddEventHandler("methJob:checkUserMoney", function(amount)
         local inventory = user.getInventory()
         -- check for max item quantity
         if hasItem("Suspicious Chemicals", inventory, MAX_CHEMICALS) then
-            TriggerClientEvent("usa_rp:notify", userSource, "You can't carry more than MAX_CHEMICALS Suspicious Chemicals!")
+            TriggerClientEvent("usa_rp:notify", userSource, "You can't carry more than " .. MAX_CHEMICALS .. " Suspicious Chemicals!")
             return
         end
         -- money check
