@@ -436,12 +436,13 @@ end )
 Citizen.CreateThread( function()
     while true do
         -- LCtrl is pressed and K has just been pressed
-        if ( IsControlPressed( 1, 36 ) and IsControlJustPressed( 1, 311 ) ) then
+        if ( IsControlJustPressed( 1, 311 ) ) then
             TriggerEvent( 'wk:radarRC' )
         end
 
         -- LCtrl is not being pressed and M has just been pressed
-        if ( not IsControlPressed( 1, 36 ) and IsControlJustPressed( 1, 244 ) ) then
+        if ( IsControlPressed( 1, 19 ) and IsControlJustPressed( 1, 244 ) ) then
+            Citizen.Trace("radar reset!")
             ResetFrontFast()
             ResetRearFast()
         end
