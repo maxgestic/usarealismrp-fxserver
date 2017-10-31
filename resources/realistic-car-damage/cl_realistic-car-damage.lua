@@ -72,7 +72,8 @@ end)
 Citizen.CreateThread(function()
     while true do
         Wait(1)
-        if ( IsControlPressed( 1, 36 ) and IsControlJustPressed( 1, 45 ) ) then -- LCTRL + R to repair
+        -- todo: -change below to another key..
+        if ( IsControlPressed( 1, 19 ) and IsControlJustPressed( 1, 103 ) ) then -- LALT + E to repair
             local coordA = GetEntityCoords(GetPlayerPed(-1), 1)
             local coordB = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 5.0, 0.0)
             local targetVehicle = getVehicleInDirection(coordA, coordB)
