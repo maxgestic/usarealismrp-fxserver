@@ -1,5 +1,10 @@
-local randomReward = math.random(6000, 7000)
 local stores = {
+	["jewelry_store"] = {
+		position = { ['x'] = -622.641, ['y'] = -229.885, ['z'] = 38.057 },
+		reward = 6000,
+		nameofstore = "Vangelico Jewelry Store (Rockford Hills)",
+		lastrobbed = 0
+	},
 	["paleto_twentyfourseven"] = {
 		position = { ['x'] = 1728.77, ['y'] = 6417.61, ['z'] = 35.0372161865234 },
 		reward = 5000,
@@ -88,11 +93,12 @@ AddEventHandler('es_holdup:rob', function(robb)
 			TriggerClientEvent('chatMessage', source, 'ROBBERY', {255, 0, 0}, "This has already been robbed recently. Please wait another: ^2" .. (1200 - (os.time() - store.lastrobbed)) .. "^0 seconds.")
 			return
 		end
-		TriggerClientEvent('chatMessage', -1, 'NEWS', {255, 0, 0}, "Robbery in progress at ^2" .. store.nameofstore)
+		--TriggerClientEvent('chatMessage', -1, 'NEWS', {255, 0, 0}, "Robbery in progress at ^2" .. store.nameofstore)
 		TriggerClientEvent('chatMessage', source, 'SYSTEM', {255, 0, 0}, "You started a robbery at: ^2" .. store.nameofstore .. "^0, do not get too far away from this point!")
 		TriggerClientEvent('chatMessage', source, 'SYSTEM', {255, 0, 0}, "The Alarm has been triggered!")
 		TriggerClientEvent('chatMessage', source, 'SYSTEM', {255, 0, 0}, "Hold the fort for ^12 ^0minutes and the money is yours!")
 		TriggerClientEvent('es_holdup:currentlyrobbing', source, robb)
+		--sendMessageToEmsAndPolice("^1DISPATCH: ^0Robbery in progress at ^2" .. store.nameofstore)
 		stores[robb].lastrobbed = os.time()
 		robbers[source] = robb
 		local savedSource = source
@@ -105,10 +111,27 @@ AddEventHandler('es_holdup:rob', function(robb)
 					--target:addDirty_Money(store.reward)
 					print("adding stolen money amount of: " .. store.reward)
 					target.addMoney(store.reward)
-					TriggerClientEvent('chatMessage', -1, 'NEWS', {255, 0, 0}, "Robbery is over at: ^2" .. store.nameofstore)
+					--TriggerClientEvent('chatMessage', -1, 'NEWS', {255, 0, 0}, "Robbery is over at: ^2" .. store.nameofstore)
+					sendMessageToEmsAndPolice("^1DISPATCH: ^0Robbery is over at: ^2" .. store.nameofstore)
 					end
 				end)
 			end
 		end)
+		sendMessageToEmsAndPolice("^1DISPATCH: ^0Robbery in progress at ^2" .. store.nameofstore)
 	end
 end)
+
+function sendMessageToEmsAndPolice(msg)
+	TriggerEvent("es:getPlayers", function(players)
+		if players then
+			for id, player in pairs(players) do
+				if id and player then
+					local playerJob = player.getJob()
+					if playerJob == "sheriff" or playerJob == "police" or playerJob == "cop" or playerJob == "ems" then
+						TriggerClientEvent("chatMessage", id, "", {}, msg)
+					end
+				end
+			end
+		end
+	end)
+end

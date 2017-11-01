@@ -25,6 +25,12 @@ function drawTxt(x,y ,width,height,scale, text, r,g,b,a, outline)
 end
 
 local stores = {
+	["jewelry_store"] = {
+		position = { ['x'] = -622.641, ['y'] = -229.885, ['z'] = 38.057 },
+		reward = 6000,
+		nameofstore = "Vangelico Jewelry Store (Rockford Hills)",
+		lastrobbed = 0
+	},
 	["paleto_twentyfourseven"] = {
 		position = { ['x'] = 1728.77, ['y'] = 6417.61, ['z'] = 35.0372161865234 },
 		reward = 5000,
