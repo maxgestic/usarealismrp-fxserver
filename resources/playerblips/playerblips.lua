@@ -174,7 +174,7 @@ Citizen.CreateThread(function()
 		if isPlayerEmergencyPed(GetPlayerPed(-1)) then
 			--Citizen.Trace("player is emergency ped")
 			for id = 0, 64 do
-				if NetworkIsPlayerActive(id) and GetPlayerPed( id ) ~= GetPlayerPed( -1 ) then
+				if NetworkIsPlayerActive(id) then
 					local playerPed = GetPlayerPed(id)
 					if isPlayerEmergencyPed(playerPed) then
 						if getEmergencyPedType(playerPed) == "police" then
@@ -213,16 +213,19 @@ Citizen.CreateThread(function()
 			end
 		else
 			for x = 0, 64 do
-				--Wait(5000)
-				--Citizen.Trace("checking " .. GetPlayerName(x))
-				local everyPedInGame = GetPlayerPed(x)
-				local pedBlip = GetBlipFromEntity(everyPedInGame)
-				--Citizen.Trace("everyPedInGame = " .. everyPedInGame)
-				--Citizen.Trace("pedBlip = " .. pedBlip)
-				if GetBlipSprite( pedBlip ) ~= 2 then -- not invisible already
-					--Citizen.Trace("pedBlip was not invisible already... making invisible...")
-					SetBlipSprite(pedBlip, 2) -- make invis (ghetto way to remove blip)
-					SetBlipScale( pedBlip,  0.01 ) -- set scale (ghetto way to remove blip)
+				if NetworkIsPlayerActive(x) then
+					--Wait(5000)
+					--Citizen.Trace("checking " .. GetPlayerName(x))
+					local everyPedInGame = GetPlayerPed(x)
+					local pedBlip = GetBlipFromEntity(everyPedInGame)
+					--Citizen.Trace("everyPedInGame = " .. everyPedInGame)
+					--Citizen.Trace("pedBlip = " .. pedBlip)
+					--if GetBlipSprite( pedBlip ) ~= 2 then -- not invisible already
+						--Citizen.Trace("pedBlip was not invisible already... making invisible...")
+						--SetBlipSprite(pedBlip, 2) -- make invis (ghetto way to remove blip)
+						--SetBlipScale( pedBlip,  0.01 ) -- set scale (ghetto way to remove blip)
+						DeleteEntity(pedBlip)
+					--end
 				end
 			end
 		end
