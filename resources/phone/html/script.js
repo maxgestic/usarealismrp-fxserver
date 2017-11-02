@@ -33,8 +33,8 @@ $(function() {
                 $("#text-message-app-home section").append("<div class='textMessageConvoBtn' data-id='" + loadedConversations[convo].partnerId + "'>" + loadedConversations[convo].partnerName + "</div>");
             }
         } else if (event.data.type == "messagesHaveLoaded") {
+            var replyIdent = event.data.replyIdent;
             var messages = event.data.messages;
-            var backwardMessages = [];
             var size = Object.keys(messages).length;
             $("#text-message-app-home section").html(""); // make room for messages
             $("#text-message-app-home section").append("<div class='text-message-history'>");
@@ -44,8 +44,9 @@ $(function() {
                 $("#text-message-app-home section").append("<h5 style='margin-top:0;margin-bottom:0' class='text-from'>" + messages[i].from + " - <span style='font-size:10px;'>" + messages[i].timestamp + "</span></h5>")
                 $("#text-message-app-home section").append("<p class='text-message'>" + messages[i].message + "</p>");
             }
-
             $("#text-message-app-home section").append("</div>");
+            // ... then add the button for quick reply
+            $("#text-home-back-btn").before("<div id='quick-reply-arrow' data-replyIdent= '"+event.data.replyIdent+"' class='quick-reply float-right'><span>&rang;</span></div>");
         }
     });
 

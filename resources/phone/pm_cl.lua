@@ -9,6 +9,9 @@ end
 
 RegisterNetEvent("phone:notify")
 AddEventHandler("phone:notify", function(msg)
+	-- play sound
+	local soundParams = {-1, "Beep_Green", "DLC_HEIST_HACKING_SNAKE_SOUNDS", 0}
+	PlaySoundFrontend(table.unpack(soundParams))
 	DrawCoolLookingNotificationNoPic(msg)
 end)
 
@@ -37,11 +40,12 @@ function EnableGui(enable)
 end
 
 RegisterNetEvent("phone:loadedMessagesFromId")
-AddEventHandler("phone:loadedMessagesFromId", function(messages)
+AddEventHandler("phone:loadedMessagesFromId", function(messages, replyIdent)
 	Citizen.Trace("loaded msgs with # = " .. #messages)
 	SendNUIMessage({
 		type = "messagesHaveLoaded",
-		messages = messages
+		messages = messages,
+		replyIdent
 	})
 end)
 
@@ -109,15 +113,6 @@ Citizen.CreateThread(function()
 				TaskStartScenarioInPlace(GetPlayerPed(-1), scenario, 0, true);
 				startedTask = true
 			end
-			--[[
-			if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) then
-				RequestAnimDict(animDict)
-				while not HasAnimDictLoaded(animDict) do
-					Citizen.Wait(100)
-				end
-				TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
-			end
-			--]]
             DisableControlAction(0, 1, phoneEnabled) -- LookLeftRight
             DisableControlAction(0, 2, phoneEnabled) -- LookUpDown
             DisableControlAction(0, 142, phoneEnabled) -- MeleeAttackAlternate
@@ -131,16 +126,3 @@ Citizen.CreateThread(function()
         Citizen.Wait(1)
     end
 end)
-
---[[
-Citizen.CreateThread(function()
-    while true do
-		Citizen.Wait(1)
-		if GetLastInputMethod(2) then -- using keyboard only, no controller support
-			if IsControlJustReleased(0, 288) then -- F1 = 288
-				TriggerServerEvent("phone:checkForPhone") -- see if player bought a phone
-			end
-		end
-	end
-end)
---]]
