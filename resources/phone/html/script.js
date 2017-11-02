@@ -33,7 +33,7 @@ $(function() {
                 $("#text-message-app-home section").append("<div class='textMessageConvoBtn' data-id='" + loadedConversations[convo].partnerId + "'>" + loadedConversations[convo].partnerName + "</div>");
             }
         } else if (event.data.type == "messagesHaveLoaded") {
-            var replyIdent = event.data.replyIdent;
+            alert("event.data.replyIdent = " + event.data.replyIdent);
             var messages = event.data.messages;
             var size = Object.keys(messages).length;
             $("#text-message-app-home section").html(""); // make room for messages
@@ -101,6 +101,15 @@ $(function() {
         $.post('http://phone/getMessagesFromConvo', JSON.stringify({
             partnerId: partnerId
         }));
+    });
+
+    // txt msg quick reply
+    $('#text-message-app-home').on('click', '#quick-reply-arrow', function() {
+        var replyIdent = $(this).attr("data-replyIdent");
+        alert("reply ident = " + replyIdent);
+        //$.post('http://phone/getMessagesFromConvo', JSON.stringify({
+            //partnerId: partnerId
+        //}));
     });
 
     // show form to send a new text

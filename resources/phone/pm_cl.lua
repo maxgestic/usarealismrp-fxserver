@@ -45,7 +45,7 @@ AddEventHandler("phone:loadedMessagesFromId", function(messages, replyIdent)
 	SendNUIMessage({
 		type = "messagesHaveLoaded",
 		messages = messages,
-		replyIdent
+		replyIdent = replyIdent
 	})
 end)
 
