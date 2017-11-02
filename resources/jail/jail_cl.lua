@@ -139,6 +139,8 @@ AddEventHandler("jail:changeClothes", function()
 
         SetPlayerModel(PlayerId(), model)
         SetModelAsNoLongerNeeded(model)
+        SetPedRandomComponentVariation(GetPlayerPed(-1), false)
+        -- todo: don't remove player's cell phone on jail
 
     end)
 
