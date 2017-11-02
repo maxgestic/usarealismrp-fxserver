@@ -238,9 +238,9 @@ Citizen.CreateThread( function()
         Citizen.Wait( 1 )
         local ped = GetPlayerPed( -1 )
         if ( DoesEntityExist( ped ) and not IsEntityDead( ped ) ) then
-            DisableControlAction( 0, 36, true ) -- INPUT_DUCK
+            --DisableControlAction( 0, 36, true ) -- INPUT_DUCK
             if ( not IsPauseMenuActive() ) then
-                if ( IsDisabledControlJustPressed( 0, 36 ) ) then
+                if ( IsControlPressed( 1, 19 ) and IsControlJustPressed( 1, 173 ) and not IsPedInAnyVehicle(GetPlayerPed(-1), true)) then -- alt + downarrow
                     RequestAnimSet( "move_ped_crouched" )
                     while ( not HasAnimSetLoaded( "move_ped_crouched" ) ) do
                         Citizen.Wait( 100 )
