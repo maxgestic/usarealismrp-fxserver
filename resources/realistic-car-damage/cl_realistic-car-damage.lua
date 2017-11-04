@@ -69,6 +69,7 @@ Citizen.CreateThread(function()
     end
 end)
 
+--[[ this has been moved to the interaction menu
 Citizen.CreateThread(function()
     while true do
         Wait(1)
@@ -86,6 +87,7 @@ Citizen.CreateThread(function()
         end
     end
 end)
+--]]
 
 RegisterNetEvent("carDamage:repairVehicle")
 AddEventHandler("carDamage:repairVehicle", function(vehicle)
