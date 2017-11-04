@@ -78,8 +78,8 @@ RegisterNUICallback('sendTextMessage', function(data, cb)
     cb('ok')
 end)
 
-RegisterNUICallback('sendPoliceMessage', function(data, cb)
-	TriggerServerEvent("phone:sendPoliceMessage", data)
+RegisterNUICallback('send911Message', function(data, cb)
+	TriggerServerEvent("phone:send911Message", data)
     cb('ok')
 end)
 
