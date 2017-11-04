@@ -130,6 +130,8 @@ function interactionMenuUse(itemName)
 		TriggerEvent("interaction:notify", "You have used: (x1) Meth")
 		intoxicate()
 		reality()
+	elseif string.find(itemName, "Repair Kit") then
+		TriggerEvent("interaction:repairVehicle")
 	else
 		TriggerEvent("interaction:notify", "There is no use action for that item!")
 	end
