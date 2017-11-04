@@ -34,7 +34,6 @@ $(function() {
             }
         } else if (event.data.type == "messagesHaveLoaded") {
             var messages = event.data.messages;
-            var backwardMessages = [];
             var size = Object.keys(messages).length;
             $("#text-message-app-home section").html(""); // make room for messages
             $("#text-message-app-home section").append("<div class='text-message-history'>");
@@ -44,8 +43,9 @@ $(function() {
                 $("#text-message-app-home section").append("<h5 style='margin-top:0;margin-bottom:0' class='text-from'>" + messages[i].from + " - <span style='font-size:10px;'>" + messages[i].timestamp + "</span></h5>")
                 $("#text-message-app-home section").append("<p class='text-message'>" + messages[i].message + "</p>");
             }
-
             $("#text-message-app-home section").append("</div>");
+            // ... then add the button for quick reply
+            $("#text-home-back-btn").before("<div id='quick-reply-arrow' data-replyIdent= '"+event.data.replyIdent+"' class='quick-reply float-right'><span>&rang;</span></div>");
         }
     });
 
@@ -67,6 +67,7 @@ $(function() {
             $("#text-message-app-home section").html(""); // prevent stacking of recent convos
             $("#text-message-app-home section").css("padding-right", "0px"); // set padding
             $("#text-message-app-home section").css("overflow-y", "hidden"); // set padding
+            $("#quick-reply-arrow").remove();
         }
     };
 
@@ -102,6 +103,15 @@ $(function() {
         }));
     });
 
+    // txt msg quick reply
+    $('#text-message-app-home').on('click', '#quick-reply-arrow', function() {
+        var replyIdent = $(this).attr("data-replyIdent");
+        $("#text-message-app-home").hide();
+        $("#text-message-app-form").show();
+        // have user enter message for quick reply ...
+        $("#text-message-app-form #text-id").val(replyIdent);
+    });
+
     // show form to send a new text
     $("#home-new-msg-btn").click(function() {
         $("#text-message-app-home").hide();
@@ -123,20 +133,15 @@ $(function() {
         $("#text-message-app-home section").html(""); // prevent stacking of recent convos
         $("#text-message-app-home section").css("padding-right", "0px"); // set padding
         $("#text-message-app-home section").css("overflow-y", "hidden"); // set padding
+        $("#quick-reply-arrow").remove();
     });
 
     /* PHONE APP BELOW */
 
-    // 'calling' police
-    $("#police-btn").click(function() {
+    // 'calling' 911
+    $("#911-btn").click(function() {
         $("#phone-btns").hide();
-        $("#police-phone-app-form").show();
-    });
-
-    // 'calling' ems
-    $("#ems-btn").click(function() {
-        $("#phone-btns").hide();
-        $("#ems-phone-app-form").show();
+        $("#911-phone-app-form").show();
     });
 
     // 'calling' taxi
@@ -155,8 +160,7 @@ $(function() {
     $(".phone-back-btn").click(function() {
         $("#phone-btns").show();
         // shut all forms
-        $("#police-phone-app-form").hide();
-        $("#ems-phone-app-form").hide();
+        $("#911-phone-app-form").hide();
         $("#tow-phone-app-form").hide();
         $("#taxi-phone-app-form").hide();
     });
@@ -167,10 +171,10 @@ $(function() {
         $("#icons-wrap").show();
     });
 
-    $("#police-phone-app-form").submit(function() {
+    $("#911-phone-app-form").submit(function() {
         // send the message to police
-        $.post('http://phone/sendPoliceMessage', JSON.stringify({
-            message: $("#police-message").val()
+        $.post('http://phone/send911Message', JSON.stringify({
+            message: $("#911-message").val()
         }));
         // close phone
         $.post('http://phone/escape', JSON.stringify({}));

@@ -1,43 +1,10 @@
---[[ Add a command everyone is able to run. Args is a table with all the arguments, and the user is the user object, containing all the user data.
-TriggerEvent('es:addCommand', 'text', function(source, args, user)
-
-	local targetPlayer = args[2]
-	table.remove(args, 1)
-	table.remove(args, 1)
-	local msg = table.concat(args, " ")
-
-	if msg and targetPlayer and type(targetPlayer) ~= "number" then
-		TriggerClientEvent("pm:sendMessage", targetPlayer, GetPlayerName(source), msg)
-	else
-		TriggerClientEvent("pm:help", source)
-	end
-
-end)
---]]
---[[ Add a command everyone is able to run. Args is a table with all the arguments, and the user is the user object, containing all the user data.
-TriggerEvent('es:addCommand', 'TEXT', function(source, args, user)
-
-	local targetPlayer = args[2]
-	table.remove(args, 1)
-	table.remove(args, 1)
-	local msg = table.concat(args, " ")
-
-	if msg and targetPlayer and type(targetPlayer) ~= "number" then
-		TriggerClientEvent("pm:sendMessage", targetPlayer, GetPlayerName(source), msg)
-	else
-		TriggerClientEvent("pm:help", source)
-	end
-
-end)
---]]
-
 -- phone gui
 TriggerEvent('es:addCommand', 'phone', function(source, args, user)
 	TriggerClientEvent("phone:openPhone", source)
 end)
 
-RegisterServerEvent("phone:sendPoliceMessage")
-AddEventHandler("phone:sendPoliceMessage", function(data)
+RegisterServerEvent("phone:send911Message")
+AddEventHandler("phone:send911Message", function(data)
 	local userSource = tonumber(source)
 	local message = data.message
 	TriggerEvent('es:getPlayers', function(players)
@@ -48,7 +15,7 @@ AddEventHandler("phone:sendPoliceMessage", function(data)
 				TriggerClientEvent("phone:notify", playerSource, "~r~911 (Caller: # ".. userSource .. "):\n~w~"..message)
 			end
 		end
-		TriggerClientEvent('chatMessage', userSource, "", {0, 0, 0}, "^3Police^0 has been notified!")
+		TriggerClientEvent('chatMessage', userSource, "", {0, 0, 0}, "^3911^0 was notified!")
 	end)
 end)
 
@@ -100,8 +67,23 @@ AddEventHandler("phone:sendTowMessage", function(data)
 	end)
 end)
 
+-- TODO: allow this event handler to send text messages when data.id == an identifier (instead of ID #)
 RegisterServerEvent("phone:sendTextToPlayer")
 AddEventHandler("phone:sendTextToPlayer", function(data)
+	-- TODO: see if data.id == any online player's identifier, if so then convert it to that players server ID and set data.id = to it
+	if string.find(data.id, "steam:") or string.find(data.id, "ip:") or string.find(data.id, "license:") then
+		local allPlayers = GetPlayers()
+		for i = 1, #allPlayers do
+			print("allPlayers[i] = " .. allPlayers[i])
+			local playerIdentifiers = GetPlayerIdentifiers(allPlayers[i])
+			for j = 1, #playerIdentifiers do
+				if string.find(playerIdentifiers[j], data.id) then
+					print("matching identifier found! sending text to this player")
+					data.id = allPlayers[i]
+				end
+			end
+		end
+	end
 	local userSource = tonumber(source)
 	print("userSource = " .. userSource)
 	local userIdent = GetPlayerIdentifiers(userSource)[1]
@@ -273,7 +255,7 @@ AddEventHandler("phone:getMessagesWithThisId", function(targetId)
 					if conversations[x].partnerId == targetId then
 						print("found matching conversation for player id: " .. targetId)
 						print("#conversations[x].messages = " .. #(conversations[x].messages))
-						TriggerClientEvent("phone:loadedMessagesFromId", userSource, conversations[x].messages)
+						TriggerClientEvent("phone:loadedMessagesFromId", userSource, conversations[x].messages, targetId)
 						return
 					end
 				end

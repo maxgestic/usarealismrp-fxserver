@@ -207,31 +207,38 @@ Citizen.CreateThread(function()
                 animName = "hydrotropic_bud_or_something"
                 TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
                 for i = 1, 75 do
-                    if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) then
-        				RequestAnimDict(animDict)
-        				while not HasAnimDictLoaded(animDict) do
-        					Citizen.Wait(100)
-        				end
-                        if gathering then
-        				    TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
-                        end
-        			end
-                    Citizen.Wait(1000)
+                    if gathering then
+                        if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) then
+            				RequestAnimDict(animDict)
+            				while not HasAnimDictLoaded(animDict) do
+            					Citizen.Wait(100)
+            				end
+                            if gathering then
+            				    TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
+                            end
+            			end
+                        Citizen.Wait(1000)
+                    else
+                        print("player stopped gathering! breaking from for loop!")
+                        break
+                    end
                 end
-                onJob = false
-                gathering = false
-                gatheringJob = ""
                 ClearPedSecondaryTask(GetPlayerPed(-1))
                 StopAnimTask(GetPlayerPed(-1), animDict, animName, false)
-                -- give meth
-                local meth = {
-                    name = "Meth",
-                    type = "drug",
-                    legality = "illegal",
-                    quantity = 3
-                }
-                Citizen.Trace("giving meth to player!")
-                TriggerServerEvent("usa_rp:giveItem", meth)
+                if gathering then
+                    -- give meth
+                    local meth = {
+                        name = "Meth",
+                        type = "drug",
+                        legality = "illegal",
+                        quantity = 3
+                    }
+                    Citizen.Trace("giving meth to player!")
+                    TriggerServerEvent("usa_rp:giveItem", meth)
+                    onJob = false
+                    gathering = false
+                    gatheringJob = ""
+                end
             end
         end
         Citizen.Wait(0)

@@ -174,7 +174,7 @@ Citizen.CreateThread(function()
 		if isPlayerEmergencyPed(GetPlayerPed(-1)) then
 			--Citizen.Trace("player is emergency ped")
 			for id = 0, 64 do
-				if NetworkIsPlayerActive(id) then
+				if NetworkIsPlayerActive(id) and GetPlayerPed(id) ~= GetPlayerPed(-1) then
 					local playerPed = GetPlayerPed(id)
 					if isPlayerEmergencyPed(playerPed) then
 						if getEmergencyPedType(playerPed) == "police" then
