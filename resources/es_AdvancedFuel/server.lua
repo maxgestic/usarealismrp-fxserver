@@ -1,5 +1,5 @@
 randomPrice = false --Random the price of each stations
-price = 40 --If random price is on False, set the price here for 1 liter
+price = 25 --If random price is on False, set the price here for 1 liter
 
 local players = {}
 local serverEssenceArray = {}
@@ -79,7 +79,7 @@ AddEventHandler("essence:buy", function(amount, index, e)
 
 				TriggerClientEvent("essence:hasBuying", _source, amount)
 			end
-		end			
+		end
 	end)
 
 end)
