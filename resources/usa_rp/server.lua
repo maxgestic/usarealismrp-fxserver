@@ -10,20 +10,8 @@ local civilianSpawns = {
     --{x = 233.919, y = -880.539, z = 30.5921}, -- legion square
     --{x = 234.919, y = -880.539, z = 30.5921} -- legion square
     {x = -288.624, y = 6229.223, z = 31.454}, -- paleto (barber shop)
-    {x = -201.658, y = 6630.692, z = 31.534}, -- paleto (gas station)
+    {x = 178.346, y = 6636.780, z = 31.6}, -- paleto (gas station)
     {x = -391.130, y = 6216.655, z = 31.473} -- paleto (procopio dr)
-    --{x = -447.467, y = 6009.258, z = 31.716} -- paleto (police spawn) DONE
-    --{x = -368.314, y = 6101.166, z = 35.440} -- paleto (ems spawn) DONE
-    --{x = 121.594, y = 6626.484, z = 31.943} -- paleto (car dealer) DONE
-    --{x = 65.096, y = 6561.489, z = 29.380} -- paleto (tow truck drop off) DONE
-    --{x = 380.562, y = 6119.039, z = 31.631} -- paleto (heal station) DONE
-    --{x = -455.301, y = 5984.455, z = 31.308} -- paleto (police vehicle repair) DONE?
-    --{x=-240.10, y=6324.22, z=32.43} -- hospital release DONE
-    --{x=-1004.18, y=4848.26, z=275.01} -- paleto (weed dealer) DONE
-    -- {x=-1000.36, y=4848.59, z=275.01} -- paleto (weed dealer ped walk to location) NOT USED
-    -- Weed delivery 1 x 1538.26 y 6324.73 z 24.07 DONE
-    -- weed delivery 2 x-2186.82 y 4250.06 z 48.94 heading 37.01 DONE
-    -- weed delivery 3 x2352.62 y 3132.28 z 48.21 heading 69.85 DONE
     -- Meth Delivery -402.63 y 6316.12 z 28.95 heading 222.26 DONE
 }
 local civSkins = {

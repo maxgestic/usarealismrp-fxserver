@@ -80,7 +80,7 @@ AddEventHandler("usa_rp:giveItem", function(itemToGive)
                     user.setInventory(inventory) -- save the inventory
                     -- todo: choose one of a few different drop off location coordinates here?
                     if itemToGive.name == "Meth" then
-                        dropoffCoords = {x = 1257.82, y = -1611.92}
+                        dropoffCoords = {x = -402.63, y = 6316.12}
                         TriggerEvent("go_postal:setActiveJob", userSource, dropoffCoords, "meth_dropoff")
                     end
                     TriggerClientEvent("usa_rp:setWaypoint", userSource, dropoffCoords)

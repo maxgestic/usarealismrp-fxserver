@@ -166,7 +166,8 @@ end)
 
 
 local locations = {
-	{ ['x'] = -943.103, ['y'] = -2958.14, ['z'] = 13.9451}
+	{ ['x'] = -943.103, ['y'] = -2958.14, ['z'] = 13.9451}, -- LS
+	{ ['x'] = 2119.083, ['y'] = 4790.010, ['z'] = 41.139} -- Sandy Shores
 }
 
 local returnLocations = {
@@ -176,8 +177,8 @@ local returnLocations = {
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-        DrawMarker(1, returnLocations[1].x, returnLocations[1].y, returnLocations[1].z-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 76, 144, 114, 200, 0, 0, 0, 0) -- for returning the rental
 	    for _, info in pairs(locations) do
+			DrawMarker(1, info['x'], info['y'], info['z']-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 76, 144, 114, 200, 0, 0, 0, 0) -- for returning the rental
 			if GetDistanceBetweenCoords(info['x'], info['y'], info['z'],GetEntityCoords(GetPlayerPed(-1))) < 50 then
 				DrawMarker(1, info['x'], info['y'], info['z']-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
 				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), info['x'], info['y'], info['z'], true) < 3 then

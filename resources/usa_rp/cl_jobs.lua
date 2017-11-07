@@ -6,7 +6,20 @@
 
 
 local jobs = {
-    {name = "Meth", peds = {{x = 70.0828, y = 3745.53, z = 39.7858, name = "supplies_ped", model = "G_M_Y_Lost_03"}, {x = -402.63, y = 6316.12, z = 28.95, name = "methdropoff_ped_1", model = "G_M_Y_SalvaGoon_02"}}, jobSupplies = "Suspicious Chemicals", started = false, locations = {{name="Meth Supply Pickup", x = 70.0828, y = 3745.53, z = 38.6858},{name="Meth Lab",  x = 1389.28, y = 3604.6, z = 38.1},{name="Meth Dropoff 1", x = -402.63, y = 6316.12, z = 28.95}}}
+    {
+        name = "Meth",
+        peds = {
+            {x = 70.0828, y = 3745.53, z = 39.7858, name = "supplies_ped", model = "G_M_Y_Lost_03"},
+            {x = -402.63, y = 6316.12, z = 28.95, name = "methdropoff_ped_1", model = "G_M_Y_SalvaGoon_02"}
+        },
+        jobSupplies = "Suspicious Chemicals",
+        started = false,
+        locations = {
+            {name="Meth Supply Pickup", x = 70.0828, y = 3745.53, z = 38.6858},
+            {name="Meth Lab",  x = 1389.28, y = 3604.6, z = 38.1},
+            {name="Meth Dropoff 1", x = -402.63, y = 6316.12, z = 27.95}
+        }
+    }
 }
 
 local peds = {}

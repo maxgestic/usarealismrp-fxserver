@@ -4,7 +4,8 @@ local hospitalCoords = {x = 354.032, y = -589.411, z = 42.415}
 local releaseCoords = {x = -240.10, y = 6324.22, z = 32.43} -- paleto
 local healStations = {
     {x = 307.63, y = -593.948, z = 42.2919}, -- LS
-    {x = 380.562, y = 6119.039, z = 31.631} -- PALETO
+    {x = -380.562, y = 6119.039, z = 30.631}, -- PALETO FD
+    {x = -247.546, y = 6331.111, z = 31.426} -- PALETO HOSPITAL
 }
 
 RegisterNetEvent("ems:notify")
@@ -45,15 +46,17 @@ end)
 Citizen.CreateThread(function()
     while true do
         Wait(1)
-        DrawMarker(1, healStations[1].x, healStations[1].y, healStations[1].z, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
+        for i = 1, #healStations do
+            DrawMarker(1, healStations[i].x, healStations[i].y, healStations[i].z, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
+            if getPlayerDistanceFromCoords(healStations[i].x, healStations[i].y, healStations[i].z) < 3 then
+                DrawSpecialText("Press [~b~E~w~] to restore your health ($500)!")
+                if IsControlJustPressed(1, 38) then -- 38 = E
+                    TriggerServerEvent("ems:checkPlayerMoney")
+                end
+            end
+        end
         if admitted and getPlayerDistanceFromCoords(hospitalCoords.x, hospitalCoords.y, hospitalCoords.z) > 8 then
             SetEntityCoords(GetPlayerPed(-1), hospitalCoords.x, hospitalCoords.y, hospitalCoords.z, 1, 0, 0, 1)
-        end
-        if getPlayerDistanceFromCoords(healStations[1].x, healStations[1].y, healStations[1].z) < 3 then
-            DrawSpecialText("Press [~b~E~w~] to restore your health ($500)!")
-            if IsControlJustPressed(1, 38) then -- 38 = E
-                TriggerServerEvent("ems:checkPlayerMoney")
-            end
         end
     end
 end)
