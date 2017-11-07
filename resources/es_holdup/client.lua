@@ -25,6 +25,18 @@ function drawTxt(x,y ,width,height,scale, text, r,g,b,a, outline)
 end
 
 local stores = {
+	["paleto_tattoo"] = {
+		position = { ['x'] = -292.211, ['y'] = 6200.350, ['z'] = 31.487 },
+		reward = 3400,
+		nameofstore = "Tattoo Shop (Dulouz Ave. & Paleto Blvd.)",
+		lastrobbed = 0
+	},
+	["paleto_barber"] = {
+		position = { ['x'] = -277.842, ['y'] = 6230.185, ['z'] = 31.696 },
+		reward = 2500,
+		nameofstore = "Herr Kutz Barbershop (Dulouz Ave. & Paleto Blvd.)",
+		lastrobbed = 0
+	},
 	["jewelry_store"] = {
 		position = { ['x'] = -622.641, ['y'] = -229.885, ['z'] = 38.057 },
 		reward = 6000,
