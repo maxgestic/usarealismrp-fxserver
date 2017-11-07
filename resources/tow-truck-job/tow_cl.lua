@@ -1,6 +1,5 @@
 local locations = {
-	--{ x=-460.847, y=5978.19, z=30.500 },
-	{ x=401.549, y=-1632.138, z=28.291 },
+	{x = 65.112, y = 6563.968, z = 28.292} -- paleto dirt construction lot
 }
 
 -- Delete car function borrowed frtom Mr.Scammer's model blacklist, thanks to him!
@@ -173,8 +172,8 @@ function getVehicleInDirection(coordFrom, coordTo)
 end
 
 -- to go on duty as tow truck driver
-local towDutyX, towDutyY, towDutyZ = 409.671, -1623.3, 28.2919
-local spawn = {x=404.923,y= -1649.84,z=29.2934}
+local towDutyX, towDutyY, towDutyZ = 90.65, 6521.74, 30.33
+local spawn = {x=86.18,y= 6520.26,z=31.46}
 
 Citizen.CreateThread(function()
 	while true do

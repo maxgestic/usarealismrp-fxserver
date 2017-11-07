@@ -3,19 +3,23 @@ local blips = {
 	{ title="Go Postal", colour=60, id=85, x=-441.5871, y=6144.7211, z=31.4783 },
 	{ title="Go Postal", colour=60, id=85, x=-3157.6508, y=1128.9541, z=20.8447 },
 	{ title="Go Postal", colour=60, id=85, x=2983.7958, y=3488.7570, z=71.3818 },
-	{ title="Cannabis Transport", colour = 25, id = 469, x = 31.1395, y = -1928.05, z = 20.4},
-	{ title="FridgeIt Trucking", colour = 51, id = 477, x = -584.837, y = -1795.97, z = 22.8989  }
+	{ title="Cannabis Transport", colour = 25, id = 469, x = -1004.18, y = 4848.26, z = 274.01},
+	{ title="FridgeIt Trucking", colour = 51, id = 477, x = 22.307, y = 6281.687, z = 31.246  }
 }
 
 local peds = {
-	{x = 31.1395, y = -1928.05, z = 20.4}, -- weed distributer | GROVE ST
+	{x = -1004.18, y = 4848.26, z = 275.01}, -- weed distributer | PALETO
+	--{x = 31.1395, y = -1928.05, z = 20.4}, -- weed distributer | GROVE ST
 	{x = 1435.595, y = 6355.136, z = 23.150}, -- weed buyer | GOH
 	{x = 2339.37, y = 2570.07, z = 49.7231}, -- weed buyer
 	{ x = -875.733, y = -1083.43, z = 2.16288 }, -- weed buyer LS INVENTION ST
 	{ x = - 806.306, y = 162.535, z = 71.5399 }, -- weed buyer VINE WOOD
 	{ x = 1293.34, y = -1695.4, z = 55.0786 }, -- weed buyer EAST LOS SANTOS
 	{ x = 2545.41, y = 343.727, z = 108.466 }, -- weed buyer ROUTE 15 GAS STATION
-	{x = -1923.0, y = 553.634, z = 114.711} -- weed buyer NORTH ROCKFORD DR
+	{x = -1923.0, y = 553.634, z = 114.711}, -- weed buyer NORTH ROCKFORD DR
+	{x=1538.26,y=6324.73,z=24.07}, -- paleto 1
+	{x=-2186.82,y=4250.06,z=48.94}, -- paleto 2
+	{x=2352.62,y=3132.28,z=48.21} -- paleto 3
 }
 
 local weedBuyers = {
@@ -24,7 +28,10 @@ local weedBuyers = {
 	{ x = -875.733, y = -1083.43, z = 2.16288 },
 	{ x = 1293.34, y = -1695.0, z = 55.0786 },
 	{ x = 2545.41, y = 343.727, z = 106.466 },
-	{x = -1923.0, y = 553.634, z = 114.711}
+	{x = -1923.0, y = 553.634, z = 114.711},
+	{x=1538.26,y=6324.73,z=24.07}, -- paleto 1
+	{x=-2186.82,y=4250.06,z=48.94}, -- paleto 2
+	{x=2352.62,y=3132.28,z=48.21} -- paleto 3
 }
 
 local gopostal = {
@@ -278,8 +285,8 @@ Citizen.CreateThread(function()
 					DrawSpecialText("Press [ ~g~E~w~ ] to deliver the cannabis!")
 					if IsControlPressed(0, 86) then -- E = 86
 						if not pressed then
-							if job.distance * 2 > 1000 then
-								pay = 1000
+							if job.distance * 2 > 1500 then
+								pay = 1500
 							else
 								pay = math.ceil(job.distance * 2)
 							end

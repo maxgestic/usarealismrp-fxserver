@@ -127,7 +127,8 @@ TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, user)
 							}
 						}), { ["Content-Type"] = 'application/json' })
 
-				sendMessageToModsAndAdmins(GetPlayerName(player) .. " has been kicked (" .. reason .. ")")
+				--sendMessageToModsAndAdmins(GetPlayerName(player) .. " has been kicked (" .. reason .. ")")
+				TriggerClientEvent('chatMessage', -1, "", {0, 0, 0}, GetPlayerName(player) .. " has been ^3kicked^0 (" .. reason .. ")")
 				DropPlayer(player, reason)
 			end)
 		else
@@ -465,7 +466,8 @@ AddEventHandler('rconCommand', function(commandName, args)
 			end
 			-- show message
 		    RconPrint(targetPlayerName .. " has been banned (" .. reason .. ")")
-			sendMessageToModsAndAdmins(targetPlayerName .. " has been banned (" .. reason .. ")")
+			--sendMessageToModsAndAdmins(targetPlayerName .. " has been banned (" .. reason .. ")")
+			TriggerClientEvent('chatMessage', -1, "", {0, 0, 0}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
 			-- send discord message
 			local desc = "**Display Name:** " .. targetPlayerName
 			for i = 1, #allPlayerIdentifiers do
@@ -652,7 +654,9 @@ fetchAllBans()
 			end
 
 			-- show message
-		    sendMessageToModsAndAdmins(GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
+		    --sendMessageToModsAndAdmins(GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
+			TriggerClientEvent('chatMessage', -1, "", {0, 0, 0}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
+			-- TODO: change back to public kick / ban messages ?
 
 			-- send discord message
 			local desc = "**Display Name:** " .. targetPlayerName

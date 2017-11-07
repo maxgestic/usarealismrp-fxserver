@@ -1,8 +1,10 @@
 local admitted = false
 local hospitalCoords = {x = 354.032, y = -589.411, z = 42.415}
-local releaseCoords = {x = 304.785, y = -591.046, z = 42.4919}
+--local releaseCoords = {x = 304.785, y = -591.046, z = 42.4919} -- LS
+local releaseCoords = {x = -240.10, y = 6324.22, z = 32.43} -- paleto
 local healStations = {
-    {x = 307.63, y = -593.948, z = 42.2919}
+    {x = 307.63, y = -593.948, z = 42.2919}, -- LS
+    {x = 380.562, y = 6119.039, z = 31.631} -- PALETO
 }
 
 RegisterNetEvent("ems:notify")

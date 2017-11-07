@@ -1,6 +1,6 @@
---local markerX, markerY, markerZ = -106.358, 6474.25, 30.600 -- paleto
+local markerX, markerY, markerZ = -106.358, 6474.25, 30.600 -- paleto
 --local markerX, markerY, markerZ = 146.346, -1044.58, 28.2778 -- LS 1
-local markerX, markerY, markerZ = 254.565, 225.495, 100.176 -- LS 2
+--local markerX, markerY, markerZ = 254.565, 225.495, 100.176 -- LS 2
 
 function getPlayerDistanceFromShop(shopX,shopY,shopZ)
 	-- Get the player coords so that we know where to spawn it
