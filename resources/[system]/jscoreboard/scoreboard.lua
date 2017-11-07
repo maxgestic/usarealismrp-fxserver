@@ -9,7 +9,7 @@ local Settings = {
 	["VoiceIndicator"] = false,
 
 	--Display time in milliseconds
-	["DisplayTime"] = 5000,
+	["DisplayTime"] = 3000,
 
 	--Keys that will activate the scoreboard.
 	--Change only the number value, NOT the 'true'

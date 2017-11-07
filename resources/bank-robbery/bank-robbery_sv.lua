@@ -36,8 +36,8 @@ AddEventHandler("bank:isBusy", function()
             TriggerEvent("bank:beginRobbery", source)
             abletorob = false
 
-            -- 3 hr cooldown
-            SetTimeout(10800000 , function()
+            -- 1.5 hr cooldown
+            SetTimeout(5400000 , function()
                 abletorob = true
             end)
 
@@ -62,7 +62,7 @@ AddEventHandler("bank:beginRobbery", function(source)
 		for k, v in pairs(pl) do
 			TriggerEvent("es:getPlayerFromId", k, function(user)
 					if user.getJob() == "cop" or user.getJob() == "sheriff" or user.getJob() == "highwaypatrol" or user.getJob() == "ems" or user.getJob() == "fire" then
-						TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "Alarm activated at ^3Pacific Standard Bank^0 on Vinewood Blvd. & Alta St.")
+						TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "Alarm activated at ^3Blaine County Savings Bank^0 on Cascabel Ave.")
 					end
 			end)
 		end

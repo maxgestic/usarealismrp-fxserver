@@ -38,7 +38,7 @@ local stores = {
 		lastrobbed = 0
 	},
 	["sandyshores_twentyfoursever"] = {
-		position = { ['x'] = 1959.49, ['y'] = 3740.27, ['z'] = 32.543738555908 },
+		position = { ['x'] = 1960.4197998047, ['y'] = 3742.9755859375, ['z'] = 32.343738555908 },
 		reward = 5000,
 		nameofstore = "24/7 (Sandy Shores)",
 		lastrobbed = 0
@@ -49,6 +49,7 @@ local stores = {
 		nameofstore = "Yellow Jack. (Sandy Shores)",
 		lastrobbed = 0
 	},
+	--[[
 	["littleseoul_twentyfourseven"] = {
 		position = { ['x'] = -709.17022705078, ['y'] = -904.21722412109, ['z'] = 19.215591430664 },
 		reward = 5000,
@@ -92,6 +93,7 @@ local stores = {
 		nameofstore = "Twenty-Four Seven. (Clinton Ave.)",
 		lastrobbed = 0
 	}
+	--]]
 }
 
 RegisterNetEvent('es_holdup:currentlyrobbing')

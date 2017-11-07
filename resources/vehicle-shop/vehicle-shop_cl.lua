@@ -1,5 +1,7 @@
---local markerX, markerY, markerZ = 120.924,6624.605,31.000
-local markerX, markerY, markerZ = -43.2616, -1097.37, 25.3523
+local markerX, markerY, markerZ = 120.924,6624.605,31.000 -- paleto
+--local markerX, markerY, markerZ = -43.2616, -1097.37, 25.3523 (los santos)
+--local spawnX, spawnY, spawnZ = -48.884, -1113.75, 26.4358 -- (los santos)
+local spawnX, spawnY, spawnZ = 131.04, 6625.39, 31.71 -- (paleto)
 
 RegisterNetEvent("vehShop:spawnPlayersVehicle")
 AddEventHandler("vehShop:spawnPlayersVehicle", function(hash, plate)
@@ -16,7 +18,6 @@ AddEventHandler("vehShop:spawnPlayersVehicle", function(hash, plate)
 			Citizen.Wait(0)
 		end
 		-- Model loaded, continue
-		local spawnX, spawnY, spawnZ = -48.884, -1113.75, 26.4358
 		-- Spawn the vehicle at the gas station car dealership in paleto and assign the vehicle handle to 'vehicle'
 		local vehicle = CreateVehicle(numberHash, spawnX, spawnY, spawnZ, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
 		SetVehicleNumberPlateText(vehicle, plate)
