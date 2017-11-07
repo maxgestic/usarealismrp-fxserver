@@ -86,7 +86,7 @@ end)
 RegisterServerEvent("bank:inRange")
 AddEventHandler("bank:inRange", function()
 	local userSource = tonumber(source)
-	rewardMoney = math.random(20000, 70000)
+	rewardMoney = math.random(20000, 60000)
 	isBusy = "no"
 	local msg = "You stole ~g~$" .. comma_value(rewardMoney) .. "~w~!"
 	TriggerClientEvent("bank-robbery:notify", source, msg)
