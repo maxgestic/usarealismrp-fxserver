@@ -23,6 +23,7 @@ local stores = {
 		nameofstore = "Yellow Jack. (Sandy Shores)",
 		lastrobbed = 0
 	},
+	--[[
 	["littleseoul_twentyfourseven"] = {
 		position = { ['x'] = -709.17022705078, ['y'] = -904.21722412109, ['z'] = 19.215591430664 },
 		reward = 5000,
@@ -66,6 +67,7 @@ local stores = {
 		nameofstore = "Twenty-Four Seven. (Clinton Ave.)",
 		lastrobbed = 0
 	}
+	--]]
 }
 
 local robbers = {}

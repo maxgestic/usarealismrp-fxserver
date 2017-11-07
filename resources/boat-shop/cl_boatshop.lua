@@ -3,17 +3,24 @@ local alreadyCalled = false
 local rental = {}
 
 local locations = {
-	{ ['x'] = -782.598, ['y'] = -1482.14, ['z'] = 2.08597}
+	--{ ['x'] = -782.598, ['y'] = -1482.14, ['z'] = 2.08597} LS
+	{ ['x'] = -257.33, ['y'] = 6665.09, ['z'] = 1.40} -- paleto
 }
 
 local returnLocations = {
-    {x = -715.599, y = -1346.63, z = 1.565076}
+    --{x = -715.599, y = -1346.63, z = 1.565076}
+	{x = -271.19, y = 6665.49, z = 0.93}
 }
 
 local seacraftSpawnLocation = {
+	--[[
 	x = -810.809,
 	y = -1480.39,
 	z = 1.399703
+	--]]
+	x = -250.31,
+	y = 6674.13,
+	z = 0.93
 }
 
 RegisterNetEvent("boatshopGUI:Title")
