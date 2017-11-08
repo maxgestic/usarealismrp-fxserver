@@ -19,7 +19,8 @@ local spawnableVehicles = {
 		'riot',
 		'polmav',
 		'scorcher',
-		'predator'
+		'predator',
+		'chpcvpi'
 	}
 }
 
@@ -45,7 +46,7 @@ TriggerEvent('es:addCommand', 'spawn', function(source, args, user)
 			end
 		else
 			TriggerClientEvent("vehicleCommands:error", source, "^1Invalid model name. Usage: /spawn <name>")
-			TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 predator, scorcher, policeb, sheriff, sheriff2, sheriff3, police, police2, police3, police4, police5, police6, police7, police8, policet, pbus, fbi, fbi2, riot, polmav")
+			TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 predator, scorcher, policeb, sheriff, sheriff2, sheriff3, police, police2, police3, police4, police5, police6, police7, police8, policet, pbus, chpcvpi, fbi, fbi2, riot, polmav")
 		end
 	elseif user.getJob() == "ems" then
 		if args[2] == "ambulance" then
