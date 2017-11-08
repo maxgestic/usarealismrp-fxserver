@@ -25,13 +25,17 @@ function bankBalance(player)
 end
 
 function deposit(player, amount)
-  local bankbalance = bankBalance(player)
-  local new_balance = bankbalance + math.abs(amount)
-  balances[player] = new_balance
+    if amount <= 0 then
+      local bankbalance = bankBalance(player)
+      local new_balance = bankbalance + math.abs(amount)
+      balances[player] = new_balance
 
-  local user = exports.essentialmode:getPlayerFromId(player)
-  TriggerClientEvent("banking:updateBalance", source, new_balance)
-  user.addBank(math.abs(amount))
+      local user = exports.essentialmode:getPlayerFromId(player)
+      TriggerClientEvent("banking:updateBalance", source, new_balance)
+      user.addBank(math.abs(amount))
+  else
+      print("can't deposit a negative value, mr/mrs: " .. GetPlayerName(player))
+  end
 end
 
 function withdraw(player, amount)
@@ -67,11 +71,12 @@ AddEventHandler('bank:deposit', function(amount)
 local userSource = tonumber(source)
   TriggerEvent('es:getPlayerFromId', userSource, function(user)
     if notAllowedToDeposit[userSource] == nil then
-      local rounded = math.ceil(tonumber(amount))
+      local rounded = math.ceil(amount)
+      print("rounded = " .. rounded)
       if(string.len(rounded) >= 9) then
         TriggerClientEvent('chatMessage', userSource, "", {0, 0, 200}, "^1Input too high^0")
       else
-      	if(rounded <= user.getMoney()) then
+      	if(rounded <= user.getMoney() and rounded > 0) then
           --TriggerClientEvent("banking:updateBalance", userSource, (user.getBank() + rounded))
           --TriggerClientEvent("banking:addBalance", userSource, rounded)
 		 print("updating user balance! " .. (user.getBank() + rounded))
