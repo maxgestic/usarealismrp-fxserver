@@ -174,6 +174,8 @@ local returnLocations = {
     {x = -993.573, y = -3015.14, z = 13.9451}
 }
 
+local spawnX, spawnY, spawnZ = -982.552, -2993.78, 13.9451
+
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -257,7 +259,11 @@ AddEventHandler("airshop:spawnAircraft", function(hash)
             Citizen.Wait(0)
         end
         -- Model loaded, continue
-        local spawnX, spawnY, spawnZ = -982.552, -2993.78, 13.9451
+		if GetDistanceBetweenCoords(locations[1].x, locations[1].y, locations[1].z ,GetEntityCoords(GetPlayerPed(-1))) < 35 then
+			spawnX, spawnY, spawnZ = -982.552, -2993.78, 13.9451 -- LS
+		else
+			spawnX, spawnY, spawnZ = 2121.315, 4804.626, 41.196 -- grapeseed
+		end
         -- Spawn the vehicle at the gas station car dealership in paleto and assign the vehicle handle to 'vehicle'
         local vehicle = CreateVehicle(numberHash, spawnX, spawnY, spawnZ, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
         SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
