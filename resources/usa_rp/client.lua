@@ -1,3 +1,20 @@
+local civilianSpawns = {
+    --{x = 391.611, y = -948.984, z = 29.3978}, -- atlee & sinner st
+    --{x = 95.2552, y = -1310.8, z = 29.2921}, -- near strip club
+    --{x = 10.6334, y = -718.769, z = 44.2174} -- pitts suggestion
+    --{x = 434.14, y = -646.847, z = 28.7314}, -- daschound bus station 1
+    --{x = 434.753, y = -629.007, z = 28.7186}, -- daschound hus station 2
+    --{x = 412.16, y = -619.049, z = 28.7015}, -- daschound bus station 3
+    --{x = -536.625, y = -218.624, z = 38.8497}, -- DMV spawn in LS
+    --{x = 232.919, y = -880.539, z = 30.5921}, -- legion square
+    --{x = 233.919, y = -880.539, z = 30.5921}, -- legion square
+    --{x = 234.919, y = -880.539, z = 30.5921} -- legion square
+    {x = -288.624, y = 6229.223, z = 31.454}, -- paleto (barber shop)
+    {x = 178.346, y = 6636.780, z = 31.6}, -- paleto (gas station)
+    {x = -391.130, y = 6216.655, z = 31.473} -- paleto (procopio dr)
+    -- Meth Delivery -402.63 y 6316.12 z 28.95 heading 222.26 DONE
+}
+
 RegisterNetEvent('usa_rp:playerLoaded')
 AddEventHandler('usa_rp:playerLoaded', function()
     exports.spawnmanager:setAutoSpawn(false)
@@ -11,40 +28,70 @@ AddEventHandler('usa_rp:playerLoaded', function()
 end)
 
 RegisterNetEvent('usa_rp:spawn')
-AddEventHandler('usa_rp:spawn', function(defaultModel, job, spawn, weapons, character)
+AddEventHandler('usa_rp:spawn', function(defaultModel, job, weapons, character)
+    local spawn = {x = 0.0, y = 0.0, z = 0.0}
+    Citizen.Trace("spawning in with job = " .. job)
+    if job == "sheriff" or job == "police" then
+        spawn.x = -447.467
+        spawn.y = 6009.258
+        spawn.z = 31.716
+    elseif job == "ems" then
+        spawn.x =  -368.314
+        spawn.y = 6101.166
+        spawn.z = 35.440
+    elseif job == "security" then
+        spawn.x =  3502.5
+        spawn.y = 3762.45
+        spawn.z = 29.900
+    else
+        spawn = civilianSpawns[math.random(1, #civilianSpawns)]
+    end
 	exports.spawnmanager:spawnPlayer({x = spawn.x, y = spawn.y, z = spawn.z, model = defaultModel, heading = 0.0}, function()
         -- character selection screen
         --TriggerEvent("character:open") temp disable
         -- give customized character
-        if character.hash then
-            local name, model
-            model = tonumber(character.hash)
-            Citizen.Trace("giving loading with customizations with hash = " .. model)
-            Citizen.CreateThread(function()
-                RequestModel(model)
-                while not HasModelLoaded(model) do -- Wait for model to load
+        if character then
+            if character.hash then
+                local name, model
+                model = tonumber(character.hash)
+                Citizen.Trace("giving loading with customizations with hash = " .. model)
+                Citizen.CreateThread(function()
                     RequestModel(model)
-                    Citizen.Wait(0)
-                end
-                SetPlayerModel(PlayerId(), model)
-                SetModelAsNoLongerNeeded(model)
-                -- ADD CUSTOMIZATIONS FROM CLOTHING STORE
-                for key, value in pairs(character["components"]) do
-                    SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
-                end
-                for key, value in pairs(character["props"]) do
-                    SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
-                end
-                -- GIVE WEAPONS
-                for i =1, #weapons do
-                    if type(weapons[i]) == "string" then
-                        GiveWeaponToPed(GetPlayerPed(-1), GetHashKey(weapons[i]), 1000, false, false)
-                    else -- table type most likely
-                        GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
+                    while not HasModelLoaded(model) do -- Wait for model to load
+                        RequestModel(model)
+                        Citizen.Wait(0)
+                    end
+                    SetPlayerModel(PlayerId(), model)
+                    SetModelAsNoLongerNeeded(model)
+                    -- ADD CUSTOMIZATIONS FROM CLOTHING STORE
+                    for key, value in pairs(character["components"]) do
+                        SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
+                    end
+                    for key, value in pairs(character["props"]) do
+                        SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
+                    end
+                    -- GIVE WEAPONS
+                    for i =1, #weapons do
+                        if type(weapons[i]) == "string" then
+                            GiveWeaponToPed(GetPlayerPed(-1), GetHashKey(weapons[i]), 1000, false, false)
+                        else -- table type most likely
+                            GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
+                        end
+                    end
+                end)
+            else -- no custom character to load, just give weapons
+                if weapons then
+                    for i =1, #weapons do
+                        if type(weapons[i]) == "string" then
+                            GiveWeaponToPed(GetPlayerPed(-1), GetHashKey(weapons[i]), 1000, false, false)
+                        else -- table type most likely
+                            GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
+                        end
                     end
                 end
-            end)
-        else -- no custom character to load, just give weapons
+            end
+        else
+            Citizen.Trace("Could not find a character!")
             if weapons then
                 for i =1, #weapons do
                     if type(weapons[i]) == "string" then
@@ -58,7 +105,7 @@ AddEventHandler('usa_rp:spawn', function(defaultModel, job, spawn, weapons, char
         -- CHECK JAIL STATUS
         Citizen.Trace("calling checkJailedStatusOnPlayerJoin server function")
         TriggerServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
-        -- check to see if player is banned (since on connect is flakey)
+        -- CHECK BAN STATUS
         TriggerServerEvent('mini:checkPlayerBannedOnSpawn')
 	end)
 end)
@@ -238,7 +285,6 @@ Citizen.CreateThread( function()
         Citizen.Wait( 1 )
         local ped = GetPlayerPed( -1 )
         if ( DoesEntityExist( ped ) and not IsEntityDead( ped ) ) then
-            --DisableControlAction( 0, 36, true ) -- INPUT_DUCK
             if ( not IsPauseMenuActive() ) then
                 if ( IsControlPressed( 1, 19 ) and IsControlJustPressed( 1, 173 ) and not IsPedInAnyVehicle(GetPlayerPed(-1), true)) then -- alt + downarrow
                     RequestAnimSet( "move_ped_crouched" )
