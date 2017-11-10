@@ -4,15 +4,18 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-    <!-- <img id="cursor" src="cursor.png"> -->
     <div class="wrapper">
+        <!-- ======= TOP ======= -->
         <header class="header">
             <p>
                 <b>WELCOME TO USARRP</b>!
             </p>
         </header>
-        <section class="content">
+        <!-- ======= END TOP ======= -->
+        <!-- ======= HOME ======= -->
+        <section id="menu--home" class="content" style="display:none;">
             <div class="columns">
+                <!--
                 <aside class="char-card char-first">
                     <header style="text-align:center;">
                         <h4>Character #1</h4>
@@ -20,6 +23,7 @@
                     <section>
                         <ul>
                             <li>Name: </li>
+                            <li>DOB: </li>
                             <li>Money: </li>
                             <li>Bank: </li>
                         </ul>
@@ -32,6 +36,7 @@
                     <section>
                         <ul>
                             <li>Name: </li>
+                            <li>DOB: </li>
                             <li>Money: </li>
                             <li>Bank: </li>
                         </ul>
@@ -44,16 +49,42 @@
                     <section>
                         <ul>
                             <li>Name: </li>
+                            <li>DOB: </li>
                             <li>Money: </li>
                             <li>Bank: </li>
                         </ul>
                     </section>
                 </aside>
+            -->
             </div>
         </section>
+        <!-- ======= END HOME ======= -->
+        <!-- ======= NEW CHARACTER ======= -->
+        <section id="menu--new-character" class="menu--new-character-wrap" style="display:none;">
+            <header style="text-align: center; padding: 3em;">
+                <h2>New Character</h2>
+            </header>
+            <div class="char--new-character-form-wrap" style="margin: 0 auto;">
+                <form id="char--new-character-form">
+                    <label for="first-name">First Name: *</label>
+                    <input type="text" name="first-name">
+                    <label for="middle-name">Middle Name:</label>
+                    <input type="text" name="middle-name">
+                    <label for="last-name">Last Name: *</label>
+                    <input type="text" name="last-name">
+                    <label for="date-of-birth">DOB: *</label>
+                    <input type="date" name="date-of-birth">
+                    <button type="button">Back</button>
+                    <button type="submit" id="new-character-submit">Submit</button>
+                </form>
+            </div>
+        </section>
+        <!-- ======= END NEW CHARACTER ======= -->
+        <!-- ======= BOTTOM ======= -->
         <footer class="footer">
             <a><b>https://usarrp.enjin.com</b></a>
         </footer>
+        <!-- ======= END BOTTOM ======= -->
     </div>
     <script src="script.js" type="text/javascript"></script>
 </body>

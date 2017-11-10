@@ -81,6 +81,10 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 		return self.characters
 	end
 
+	rTable.getCharacter = function(index)
+		return self.characters[index]
+	end
+
 	rTable.setMoney = function(m)
 		local prevMoney = self.money
 		local newMoney = m
@@ -113,7 +117,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 	rTable.setSecurityRank = function(rank)
 		self.securityRank = rank
 	end
-    
+
     rTable.getEMSRank = function()
 		return self.EMSRank
 	end
@@ -121,7 +125,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 	rTable.setEMSRank = function(rank)
 		self.EMSRank = rank
 	end
-	
+
 	rTable.getPoliceCharacter = function()
 		return self.policeCharacter
 	end
@@ -129,7 +133,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 	rTable.setPoliceCharacter = function(character)
 		self.policeCharacter = character
 	end
-	
+
 	rTable.getPoliceRank = function()
 		return self.policeRank
 	end
@@ -137,7 +141,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 	rTable.setPoliceRank = function(rank)
 		self.policeRank = rank
 	end
-	
+
 	rTable.getCriminalHistory = function()
 		return self.criminalHistory
 	end

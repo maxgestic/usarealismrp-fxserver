@@ -1,13 +1,15 @@
 local menuOpen = false
 
-RegisterNetEvent("character:test")
-AddEventHandler("character:test", function()
-    toggleMenu(not menuOpen)
+RegisterNetEvent("character:open")
+AddEventHandler("character:open", function(menu, data)
+    menuOpen = true
+    toggleMenu(menuOpen, menu, data)
 end)
 
-RegisterNetEvent("character:open")
-AddEventHandler("character:open", function()
-    toggleMenu(true)
+RegisterNetEvent("character:close")
+AddEventHandler("character:close", function()
+    menuOpen = false
+    toggleMenu(menuOpen)
 end)
 
 RegisterNUICallback('escape', function(data, cb)
@@ -15,11 +17,25 @@ RegisterNUICallback('escape', function(data, cb)
     cb('ok')
 end)
 
-function toggleMenu(status)
+RegisterNUICallback('new-character-submit', function(data, cb)
+    local characterData = {
+        firstName = data.firstName,
+        middleName = data.middleName,
+        lastName = data.lastName,
+        dateOfBirth = data.dateOfBirth
+    }
+    -- save the new character with the data from the GUI form into the first character slot
+    TriggerServerEvent("character:save", characterData, 1)
+    cb('ok')
+end)
+
+function toggleMenu(status, menu, data)
     SetNuiFocus(status, status)
     menuOpen = status
     SendNUIMessage({
         type = "toggleMenu",
-        menuStatus = status
+        menuStatus = status,
+        menu = menu,
+        data = data
     })
 end

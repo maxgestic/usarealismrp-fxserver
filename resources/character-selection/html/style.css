@@ -64,8 +64,27 @@ aside {
    height: 50%;
 }
 ul {
+    padding: 3em;
     list-style-type: none;
 }
-ul > li {
-    padding: 1em;
+li {
+    padding: 2em;
+}
+form {
+    height: 50%;
+}
+input, label {
+    margin: .5em;
+    display: block;
+}
+.menu--new-character-form-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.char--new-character-form-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
