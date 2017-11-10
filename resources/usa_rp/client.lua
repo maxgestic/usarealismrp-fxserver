@@ -28,27 +28,21 @@ AddEventHandler('usa_rp:playerLoaded', function()
 end)
 
 RegisterNetEvent('usa_rp:spawn')
-AddEventHandler('usa_rp:spawn', function(defaultModel, job, weapons, character)
+AddEventHandler('usa_rp:spawn', function(defaultModel, job, weapons, characters)
+    print("size of characters = " .. #characters)
     local spawn = {x = 0.0, y = 0.0, z = 0.0}
-    Citizen.Trace("spawning in with job = " .. job)
-    if job == "sheriff" or job == "police" then
-        spawn.x = -447.467
-        spawn.y = 6009.258
-        spawn.z = 31.716
-    elseif job == "ems" then
-        spawn.x =  -368.314
-        spawn.y = 6101.166
-        spawn.z = 35.440
-    elseif job == "security" then
-        spawn.x =  3502.5
-        spawn.y = 3762.45
-        spawn.z = 29.900
-    else
-        spawn = civilianSpawns[math.random(1, #civilianSpawns)]
-    end
+    spawn = civilianSpawns[math.random(1, #civilianSpawns)]
 	exports.spawnmanager:spawnPlayer({x = spawn.x, y = spawn.y, z = spawn.z, model = defaultModel, heading = 0.0}, function()
+        if not characters[1].firstName then
+            print("player did not have a first character...")
+            TriggerEvent("character:open", "new-character")
+        else
+            print("player did have a first character!")
+            TriggerEvent("character:open", "home", characters)
+        end
         -- character selection screen
         --TriggerEvent("character:open") temp disable
+        --[[
         -- give customized character
         if character then
             if character.hash then
@@ -102,11 +96,13 @@ AddEventHandler('usa_rp:spawn', function(defaultModel, job, weapons, character)
                 end
             end
         end
+
         -- CHECK JAIL STATUS
         Citizen.Trace("calling checkJailedStatusOnPlayerJoin server function")
         TriggerServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
         -- CHECK BAN STATUS
         TriggerServerEvent('mini:checkPlayerBannedOnSpawn')
+        --]]
 	end)
 end)
 
@@ -222,7 +218,7 @@ Citizen.CreateThread( function()
     end
 end )
 
--- spawn peds (strip club only atm)
+-- spawn peds
 local locations = {
     stripclub = {
         {x = 102.423, y = -1290.594, z = 28.2587, animDict = "mini@strip_club@private_dance@part1", animName = "priv_dance_p1", model = "CSB_Stripper_02", heading = (math.random(50, 360)) * 1.0},
@@ -231,6 +227,9 @@ local locations = {
         {x = 113.111, y = -1287.755, z = 27.586, animDict = "mini@strip_club@private_dance@part1", animName = "priv_dance_p1", model = "S_F_Y_Stripper_02", heading = (math.random(50, 360)) * 1.0},
         {x = 113.375, y = -1286.546, z = 27.586, animDict = "mini@strip_club@private_dance@part2", animName = "priv_dance_p2", model = "CSB_Stripper_02", heading = (math.random(50, 360)) * 1.0},
         {x = 129.442, y = -1283.407, z = 28.272, animDict = "missfbi3_party_d", animName = "stand_talk_loop_a_female", model = "S_F_Y_Bartender_01", heading = 122.471}
+    },
+    boatshop = {
+        {x = -257.739, y = 6666.348, z = 1.3, animDict = "", animName = "", model = "CS_Fabien", heading = 236.9}
     }
 }
 local spawnedPeds = {}

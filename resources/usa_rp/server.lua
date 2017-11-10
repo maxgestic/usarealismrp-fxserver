@@ -52,12 +52,12 @@ AddEventHandler("usa_rp:spawnPlayer", function()
     print("inside of usa_rp:spawnPlayer!")
     local userSource = tonumber(source)
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
-        local character = user.getCharacters()
+        local characters = user.getCharacters()
         local job = user.getJob() -- add spawn point for taxi and tow jobs
         local weapons = user.getWeapons()
         local model = civSkins[math.random(1,#civSkins)]
         --local spawn = civilianSpawns[math.random(1,#civilianSpawns)] -- choose random spawn if civilian
-        if not character.hash or not character then
+        if not characters[1].hash or not characters then
             TriggerClientEvent("rules:open", userSource)
         end
         if #weapons > 0 then
@@ -66,7 +66,7 @@ AddEventHandler("usa_rp:spawnPlayer", function()
             print("user has no weapons")
         end
         user.setJob("civ")
-        TriggerClientEvent("usa_rp:spawn", userSource, model, job, weapons, character)
+        TriggerClientEvent("usa_rp:spawn", userSource, model, job, weapons, characters)
     end)
 end)
 
