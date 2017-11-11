@@ -11,12 +11,20 @@ function getPlayerIdentifierEasyMode(source)
 end
 
 RegisterServerEvent("mini:save")
-AddEventHandler("mini:save", function(character)
+AddEventHandler("mini:save", function(appearance)
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
-		user.setCharacters(character)
-		print("PLAYER MODEL SAVED")
-		TriggerClientEvent("chatMessage", source, "SYSTEM", {0, 128, 255}, "Your player character has been saved.")
+		local characters = user.getCharacters()
+		for i = 1, #characters do
+			print("characters[i].active = " .. tostring(characters[i].active))
+			if characters[i].active == true then
+				characters[i].appearance = appearance
+				user.setCharacter(characters[i], i)
+				print("PLAYER MODEL SAVED")
+				TriggerClientEvent("chatMessage", source, "SYSTEM", {0, 128, 255}, "Your player character has been saved.")
+				return
+			end
+		end
 		--TriggerEvent("mini:giveMeMyWeaponsPlease")
 	end)
 end)

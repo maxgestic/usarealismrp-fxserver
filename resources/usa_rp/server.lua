@@ -57,9 +57,11 @@ AddEventHandler("usa_rp:spawnPlayer", function()
         local weapons = user.getWeapons()
         local model = civSkins[math.random(1,#civSkins)]
         --local spawn = civilianSpawns[math.random(1,#civilianSpawns)] -- choose random spawn if civilian
+        --[[
         if not characters[1].firstName then
             TriggerClientEvent("rules:open", userSource)
         end
+        --]]
         if #weapons > 0 then
             print("#weapons = " .. #weapons)
         else

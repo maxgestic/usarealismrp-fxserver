@@ -61,7 +61,8 @@ $(function() {
             middleName: $("input[name='middle-name']").val(),
             lastName: $("input[name='last-name']").val(),
             dateOfBirth: $("input[name='date-of-birth']").val(),
-            slot: findOpenSlot("lua")
+            slot: findOpenSlot("lua"),
+            active: false
         }
 
         alert("saving character in slot #" + openSlot);
