@@ -220,12 +220,12 @@ Citizen.CreateThread(function()
 					local pedBlip = GetBlipFromEntity(everyPedInGame)
 					--Citizen.Trace("everyPedInGame = " .. everyPedInGame)
 					--Citizen.Trace("pedBlip = " .. pedBlip)
-					--if GetBlipSprite( pedBlip ) ~= 2 then -- not invisible already
+					if GetBlipSprite( pedBlip ) ~= 2 then -- not invisible already
 						--Citizen.Trace("pedBlip was not invisible already... making invisible...")
-						--SetBlipSprite(pedBlip, 2) -- make invis (ghetto way to remove blip)
-						--SetBlipScale( pedBlip,  0.01 ) -- set scale (ghetto way to remove blip)
-						DeleteEntity(pedBlip)
-					--end
+						SetBlipSprite(pedBlip, 2) -- make invis (ghetto way to remove blip)
+						SetBlipScale( pedBlip,  0.01 ) -- set scale (ghetto way to remove blip)
+						--DeleteEntity(pedBlip)
+					end
 				end
 			end
 		end
