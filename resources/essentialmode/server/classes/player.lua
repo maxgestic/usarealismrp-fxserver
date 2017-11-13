@@ -57,6 +57,39 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 
 	local rTable = {}
 
+	rTable.setActiveCharacterData = function(field, data)
+		for i = 1, #self.characters do
+			local char = self.characters[i]
+			if char.active == true then
+				print("found an active character at " .. i .. "!")
+				print("target field to set: " .. field)
+				print("setting data: " .. data)
+				if self.characters[i][field] then
+					self.characters[i][field] = data
+					print("set!")
+				else
+					print("field " .. field .. " did not exist on the character! can't set it!")
+				end
+			end
+		end
+	end
+
+	rTable.getActiveCharacterData = function(field)
+		for i = 1, #self.characters do
+			local char = self.characters[i]
+			if char.active == true then
+				print("found an active character at " .. i .. "!")
+				print("target field to retrieve: " .. field)
+				if self.characters[i][field] then
+					return self.characters[i][field]
+				else
+					print("field " .. field .. " did not exist on the character! can't retrieve it!")
+					return nil
+				end
+			end
+		end
+	end
+
 	rTable.setJailtime = function(j)
 		self.jailtime = j
 	end
