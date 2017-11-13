@@ -1660,7 +1660,7 @@ emplacement_customs = {
 	{locked = false,name="LS Customs", colour=3, id=72, locked = false, outside = { x = -1140.191, y = -1985.478, z = 12.72923, heading = 315.290466}, inside = {x = -1155.536,y = -2007.183,z = 12.744, heading = 155.413}},
 	{locked = false,name="LS Customs", colour=3, id=72, locked = false, outside = { x = 716.4645, y = -1088.869, z = 21.92979, heading = 88.768}, inside = {x = 731.8163,y = -1088.822,z = 21.733, heading = 269.318}},
 	{locked = false,name="LS Customs", colour=3, id=72, locked = false, outside = { x = 1174.811, y = 2649.954, z = 37.37151, heading = 0.450}, inside = {x = 1175.04,y = 2640.216,z = 37.32177, heading = 182.402}},
-	{locked = false,name="LS Customs", colour=3, id=72, locked = false, outside = { x = 111.366714477539, y = 6625.84033203125, z = 31.7872333526611, heading = 269}, inside = {x = 111.366714477539, y = 6625.84033203125, z = 31.7872333526611, heading = 71}},
+	{locked = false,name="LS Customs", colour=3, id=72, locked = false, outside = { x = 117.802, y = 6619.815, z = 31.855, heading = 269}, inside = {x = 111.366714477539, y = 6625.84033203125, z = 31.7872333526611, heading = 71}},
 }
 
 local incircle = false
