@@ -65,8 +65,7 @@ $(function() {
             active: false
         }
 
-        alert("saving character in slot #" + openSlot);
-        // subtract 1 for JS style index
+        alert("saving JS character in array at slot #" + openSlot);
         characters[openSlot] = newCharData;
 
         // call lua nui callback
@@ -113,10 +112,10 @@ function populateHomeMenuCharacters() {
             "</header>" +
             "<section>" +
             "<ul>" +
-            "<li>Name: " + characters[x].firstName + " " + characters[x].middleName + " " + characters[x].lastName + "</li>" +
-            "<li>DOB: " + characters[x].dateOfBirth + "</li>" +
-            "<li>Money: </li>" +
-            "<li>Bank: </li>" +
+            "<li><b>Name:</b> " + characters[x].firstName + " " + characters[x].middleName + " " + characters[x].lastName + "</li>" +
+            "<li><b>DOB:</b> " + characters[x].dateOfBirth + "</li>" +
+            "<li><b>Money:</b> </li>" +
+            "<li><b>Bank:</b> </li>" +
             "</ul>" +
             "</section>" +
             "</aside>"

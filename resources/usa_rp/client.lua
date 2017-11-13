@@ -40,66 +40,10 @@ AddEventHandler('usa_rp:spawn', function(defaultModel, job, weapons, characters)
             print("player did have a first character!")
             TriggerEvent("character:open", "home", characters)
         end
-        -- character selection screen
-        --TriggerEvent("character:open") temp disable
-        --[[
-        -- give customized character
-        if character then
-            if character.hash then
-                local name, model
-                model = tonumber(character.hash)
-                Citizen.Trace("giving loading with customizations with hash = " .. model)
-                Citizen.CreateThread(function()
-                    RequestModel(model)
-                    while not HasModelLoaded(model) do -- Wait for model to load
-                        RequestModel(model)
-                        Citizen.Wait(0)
-                    end
-                    SetPlayerModel(PlayerId(), model)
-                    SetModelAsNoLongerNeeded(model)
-                    -- ADD CUSTOMIZATIONS FROM CLOTHING STORE
-                    for key, value in pairs(character["components"]) do
-                        SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
-                    end
-                    for key, value in pairs(character["props"]) do
-                        SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
-                    end
-                    -- GIVE WEAPONS
-                    for i =1, #weapons do
-                        if type(weapons[i]) == "string" then
-                            GiveWeaponToPed(GetPlayerPed(-1), GetHashKey(weapons[i]), 1000, false, false)
-                        else -- table type most likely
-                            GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
-                        end
-                    end
-                end)
-            else -- no custom character to load, just give weapons
-                if weapons then
-                    for i =1, #weapons do
-                        if type(weapons[i]) == "string" then
-                            GiveWeaponToPed(GetPlayerPed(-1), GetHashKey(weapons[i]), 1000, false, false)
-                        else -- table type most likely
-                            GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
-                        end
-                    end
-                end
-            end
-        else
-            Citizen.Trace("Could not find a character!")
-            if weapons then
-                for i =1, #weapons do
-                    if type(weapons[i]) == "string" then
-                        GiveWeaponToPed(GetPlayerPed(-1), GetHashKey(weapons[i]), 1000, false, false)
-                    else -- table type most likely
-                        GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
-                    end
-                end
-            end
-        end
-
-        -- CHECK JAIL STATUS
+        --[[ CHECK JAIL STATUS
         Citizen.Trace("calling checkJailedStatusOnPlayerJoin server function")
         TriggerServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
+        --]]
         -- CHECK BAN STATUS
         TriggerServerEvent('mini:checkPlayerBannedOnSpawn')
         --]]

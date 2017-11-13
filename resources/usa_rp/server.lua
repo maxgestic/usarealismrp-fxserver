@@ -42,8 +42,6 @@ AddEventHandler('es:playerLoaded', function(source, user)
     print("Player " .. GetPlayerName(source) .. " has loaded.")
     print("Money:" .. money)
     user.setMoney(money)
-    --user.displayMoney(money)
-    --user.displayBank(bank)
     TriggerClientEvent('usa_rp:playerLoaded', source)
 end)
 
@@ -56,18 +54,13 @@ AddEventHandler("usa_rp:spawnPlayer", function()
         local job = user.getJob() -- add spawn point for taxi and tow jobs
         local weapons = user.getWeapons()
         local model = civSkins[math.random(1,#civSkins)]
-        --local spawn = civilianSpawns[math.random(1,#civilianSpawns)] -- choose random spawn if civilian
-        --[[
-        if not characters[1].firstName then
-            TriggerClientEvent("rules:open", userSource)
-        end
-        --]]
         if #weapons > 0 then
             print("#weapons = " .. #weapons)
         else
             print("user has no weapons")
         end
         user.setJob("civ")
+        --user.setActiveCharacterData("fuckshit", 69)
         TriggerClientEvent("usa_rp:spawn", userSource, model, job, weapons, characters)
     end)
 end)
