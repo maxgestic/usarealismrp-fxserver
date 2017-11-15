@@ -64,17 +64,19 @@ AddEventHandler("essence:buy", function(amount, index, e)
 
 	TriggerEvent("es:getPlayerFromId", _source,function(user)
 
-		if user.getJob() == "sheriff" or user.getJob() == "ems" or user.getJob() == "fire" then
+		local userJob = user.getActiveCharacterData("job")
+		local user_money = user.getActiveCharacterData("money")
+		if userJob == "sheriff" or userJob == "ems" or userJob == "fire" then
 			TriggerClientEvent("essence:hasBuying", _source, amount)
 		else
 			local toPay = round(amount*price,0)
-			if(toPay > user.getMoney()) then
+			if(toPay > user_money) then
 					TriggerClientEvent("showNotif", _source, "~r~You don't have enought money.")
 			else
 				--
-					user.removeMoney(toPay)
+				user.setActiveCharacterData("money", user_money - toPay)
 				--else
-					print("user.getJob() was not sheriff/ems/fire: " .. user.getJob())
+					print("user.getJob() was not sheriff/ems/fire: " .. userJob)
 				--end
 
 				TriggerClientEvent("essence:hasBuying", _source, amount)
