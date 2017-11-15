@@ -611,7 +611,6 @@ end
 -- Fetch all bans when resource starts
 fetchAllBans()
 
---[[
 	-- check for player being banned
 	AddEventHandler('playerConnecting', function(name, setReason)
 		--local identifier = GetPlayerIdentifiers(source)[1]
@@ -633,7 +632,7 @@ fetchAllBans()
 			end
 		end
 	end)
---]]
+	
 	-- ban command
 	TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, user)
 		local userSource = tonumber(source)
