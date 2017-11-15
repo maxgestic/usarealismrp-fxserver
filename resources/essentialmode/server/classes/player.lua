@@ -61,10 +61,29 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 		for i = 1, #self.characters do
 			local char = self.characters[i]
 			if char.active == true then
-				print("found an active character at " .. i .. "!")
+				--print("found an active character at " .. i .. "!")
 				print("target field to set: " .. field)
-				print("setting data: " .. data)
+				print("setting data...")
 				if self.characters[i][field] then
+					-- update the NUI gui
+					if field == "money" then
+						local new_money = data
+						local prev_money = self.characters[i][field]
+						if (new_money > prev_money) then
+							TriggerClientEvent("es:addedMoney", self.source, math.abs(prev_money - new_money), settings.defaultSettings.nativeMoneySystem)
+						else
+							TriggerClientEvent("es:removedMoney", self.source, math.abs(prev_money - new_money), settings.defaultSettings.nativeMoneySystem)
+						end
+						if not settings.defaultSettings.nativeMoneySystem then
+							TriggerClientEvent('es:activateMoney', self.source , new_money)
+						end
+					elseif field == "bank" then
+						TriggerEvent("es:setPlayerData", self.source, "bank", data, function(response, success)
+							print("bank saved!!")
+							self.bank = data
+						end)
+					end
+					-- update char
 					self.characters[i][field] = data
 					print("set!")
 				else
@@ -78,7 +97,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 		for i = 1, #self.characters do
 			local char = self.characters[i]
 			if char.active == true then
-				print("found an active character at " .. i .. "!")
+				--print("found an active character at " .. i .. "!")
 				print("target field to retrieve: " .. field)
 				if self.characters[i][field] then
 					return self.characters[i][field]

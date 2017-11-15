@@ -33,21 +33,24 @@ AddEventHandler("character:save", function(characterData, slot)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
         if user then
             local characters = user.getCharacters()
+            print("trying to save character data into slot #" .. slot .. "...")
             characters[slot] = characterData
-            print("saving character data into slot #" .. slot)
             user.setCharacters(characters)
+            print("done saving character data into slot #" .. slot)
         end
     end)
 end)
 
-RegisterServerEvent("character:loadAppearance")
-AddEventHandler("character:loadAppearance", function(activeSlot)
+RegisterServerEvent("character:loadCharacter")
+AddEventHandler("character:loadCharacter", function(activeSlot)
+    print("trying to load character in active slot #" .. activeSlot)
     local userSource = tonumber(source)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
         if user then
             local characters = user.getCharacters()
             local character = characters[activeSlot]
-            TriggerClientEvent("character:setAppearance", userSource, character)
+            TriggerClientEvent("character:setCharacter", userSource, character)
+            print("loaded character at slot #" .. activeSlot .. " with #weapons = " .. #(character.weapons))
         end
     end)
 end)

@@ -29,11 +29,13 @@ end)
 
 RegisterNetEvent('usa_rp:spawn')
 AddEventHandler('usa_rp:spawn', function(defaultModel, job, weapons, characters)
-    print("size of characters = " .. #characters)
+    if characters then
+        print("size of characters = " .. #characters)
+    end
     local spawn = {x = 0.0, y = 0.0, z = 0.0}
     spawn = civilianSpawns[math.random(1, #civilianSpawns)]
 	exports.spawnmanager:spawnPlayer({x = spawn.x, y = spawn.y, z = spawn.z, model = defaultModel, heading = 0.0}, function()
-        if not characters[1].firstName then
+        if not characters then
             print("player did not have a first character...")
             TriggerEvent("character:open", "new-character")
         else

@@ -40,7 +40,7 @@ $(function() {
     <!-- ==== character selection ==== -->
     $(".columns").on('click', '.char-card', function() {
         var slot = $(this).data("slot");
-        alert("selecting slot #" + slot + "!");
+        //alert("selecting slot #" + slot + "!");
         $.post('http://character-selection/select-character', JSON.stringify({
             character: characters[slot],
             slot: slot
@@ -52,9 +52,10 @@ $(function() {
     $("#char--new-character-form").submit(function(e) {
         e.preventDefault(); // Prevent form from submitting
 
-        alert("calling findOpenSlot !!");
+        //alert("calling findOpenSlot !!");
         // returns a lua style index for the open slot (+1)
         var openSlot = findOpenSlot("js");
+        //alert("lua open slot = " + findOpenSlot("lua"));
 
         var newCharData = {
             firstName: $("input[name='first-name']").val(),
@@ -65,7 +66,7 @@ $(function() {
             active: false
         }
 
-        alert("saving JS character in array at slot #" + openSlot);
+        //alert("saving JS character in array at slot #" + openSlot);
         characters[openSlot] = newCharData;
 
         // call lua nui callback
@@ -125,8 +126,8 @@ function populateHomeMenuCharacters() {
 }
 
 function findOpenSlot(style) {
-    alert("inside of findOpenSlot()");
-    alert("characters.length = " + characters.length);
+    //alert("inside of findOpenSlot()");
+    //alert("characters.length = " + characters.length);
     var openSlot = 0;
     if (characters.length == 0) { // check if no chars first
         if (style == "js") { // javascript index style
@@ -134,18 +135,18 @@ function findOpenSlot(style) {
         } else {
             openSlot++; // lua index style
         }
-        alert("findOpenSlot: returning openSlot = " + openSlot + " in [" + style + "] style.");
+        //alert("findOpenSlot: returning openSlot = " + openSlot + " in [" + style + "] style.");
         return openSlot;
     } else { // player has characters, look for next empty slot
         for (var x = 0; x < characters.length; ++x) {
-            alert("characters[x].firstName = " + characters[x].firstName);
+            //alert("characters[x].firstName = " + characters[x].firstName);
             if (typeof (characters[x].firstName) == "undefined" || characters[x].firstName == null) {
                 if (style == "js") {
                     openSlot = x;
                 } else {
                     openSlot = x + 1;
                 }
-                alert("findOpenSlot: returning openSlot = " + openSlot + " in [" + style + "] style.");
+                //alert("findOpenSlot: returning openSlot = " + openSlot + " in [" + style + "] style.");
                 return openSlot;
             }
         }

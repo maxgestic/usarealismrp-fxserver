@@ -53,11 +53,11 @@ end
 
 AddEventHandler("es:setPlayerData", function(user, k, v, cb)
 	if(Users[user])then
-		if(Users[user].get(k))then
+		if(Users[user].getActiveCharacterData(k))then
 			if(k ~= "money") then
-				Users[user].set(k, v)
+				Users[user].setActiveCharacterData(k, v)
 
-				db.updateUser(Users[user].get('identifier'), {[k] = v}, function(d)
+				db.updateUser(Users[user].get('identifier'), {characters = Users[user].getCharacters()}, function(d)
 					if d == true then
 						cb("Player data edited", true)
 					else
@@ -77,6 +77,7 @@ AddEventHandler("es:setPlayerData", function(user, k, v, cb)
 	end
 end)
 
+-- todo: update for characters?
 AddEventHandler("es:setPlayerDataId", function(user, k, v, cb)
 	db.updateUser(user, {[k] = v}, function(d)
 		cb("Player data edited.", true)
@@ -106,7 +107,7 @@ local function savePlayerMoney()
 	SetTimeout(60000, function()
 		for k,v in pairs(Users)do
 			if Users[k] ~= nil then
-				db.updateUser(v.get('identifier'), {money = v.getMoney(), bank = v.getBank()}, function()end)
+				db.updateUser(v.get('identifier'), {characters = v.getCharacters()}, function() end)
 			end
 		end
 

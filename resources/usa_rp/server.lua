@@ -37,11 +37,10 @@ local civSkins = {
 }
 
 AddEventHandler('es:playerLoaded', function(source, user)
-    local money = user.getMoney()
-    local bank = user.getBank()
+    local money = user.getActiveCharacterData("money")
     print("Player " .. GetPlayerName(source) .. " has loaded.")
     print("Money:" .. money)
-    user.setMoney(money)
+    user.setActiveCharacterData("money", money) -- set money GUI in top right (?)
     TriggerClientEvent('usa_rp:playerLoaded', source)
 end)
 
@@ -51,16 +50,21 @@ AddEventHandler("usa_rp:spawnPlayer", function()
     local userSource = tonumber(source)
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
         local characters = user.getCharacters()
-        local job = user.getJob() -- add spawn point for taxi and tow jobs
-        local weapons = user.getWeapons()
-        local model = civSkins[math.random(1,#civSkins)]
-        if #weapons > 0 then
-            print("#weapons = " .. #weapons)
-        else
-            print("user has no weapons")
+        local job = user.getActiveCharacterData("job")
+        if job then
+            print("user.getActiveCharacterData('job') = " .. job)
         end
-        user.setJob("civ")
-        --user.setActiveCharacterData("fuckshit", 69)
+        local weapons = user.getActiveCharacterData("weapons")
+        local model = civSkins[math.random(1,#civSkins)]
+        if weapons then
+            if #weapons > 0 then
+                print("#weapons = " .. #weapons)
+            else
+                print("user has no weapons")
+            end
+        end
+        user.setActiveCharacterData("job", "civ")
+        -- todo: remove unused passed in parameters below??
         TriggerClientEvent("usa_rp:spawn", userSource, model, job, weapons, characters)
     end)
 end)
