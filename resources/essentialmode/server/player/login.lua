@@ -53,24 +53,31 @@ end
 
 AddEventHandler("es:setPlayerData", function(user, k, v, cb)
 	if(Users[user])then
-		if(Users[user].getActiveCharacterData(k))then
-			if(k ~= "money") then
-				Users[user].setActiveCharacterData(k, v)
-
-				db.updateUser(Users[user].get('identifier'), {characters = Users[user].getCharacters()}, function(d)
-					if d == true then
-						cb("Player data edited", true)
-					else
-						cb(d, false)
-					end
-				end)
+		-- passed in group field to save? save it on the user, not the user's character(s)
+		if(k == "group")then
+			Users[user].set(k, v)
+			db.updateUser(Users[user].get('identifier'), {group = v}, function(d)
+				if d == true then
+					cb("Player group data edited", true)
+				else
+					cb(d, false)
+				end
+			end)
+		else -- not group field, save it on the character
+			if(Users[user].getActiveCharacterData(k))then
+				if(k ~= "money") then
+					Users[user].setActiveCharacterData(k, v)
+					db.updateUser(Users[user].get('identifier'), {characters = Users[user].getCharacters()}, function(d)
+						if d == true then
+							cb("Player data edited", true)
+						else
+							cb(d, false)
+						end
+					end)
+				end
+			else
+				cb("Column does not exist!", false)
 			end
-
-			if(k == "group")then
-				Users[user].set(k, v)
-			end
-		else
-			cb("Column does not exist!", false)
 		end
 	else
 		cb("User could not be found!", false)
