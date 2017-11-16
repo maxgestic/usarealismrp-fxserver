@@ -4,7 +4,21 @@ local Config = {}
 Config.Priority = {
     ["STEAM_0:1:#######"] = 50,
     ["steam:110000######"] = 25,
-    ["ip:127.0.0.0"] = 85
+    ["ip:127.0.0.0"] = 85,
+    -- end examples, start real peeps
+    ["steam:110000102f857d7"] = 50,
+    ["steam:11000011a437404"] = 1, -- distric
+    ["steam:110000106f87ef8"] = 1, -- afek
+    ["steam:1100001058e2443"] = 1, -- lucien castle
+    ["steam:1100001050af13a"] = 1, -- bert / otto
+    ["steam:11000011c037846"] = 1, -- lucy cole
+    ["steam:110000104ce1181"] = 50, -- cyril
+    ["steam:11000010c758e01"] = 1, -- eclipse
+    ["steam:11000010886ba11"] = 1, -- carter smith
+    ["steam:110000106ef7f61"] = 50, -- marcus
+    ["steam:11000010722541c"] = 20, -- nova
+    ["steam:1100001141991c8"] = 20, -- rimka
+    ["steam:1100001083d0f38"] = 50 -- weedem
 }
 
 Config.RequireSteam = true
