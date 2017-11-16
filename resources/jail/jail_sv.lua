@@ -92,6 +92,9 @@ function jailStatusLoop()
 				for id, player in pairs(players) do
 					if player then
 					local player_jailtime = player.getActiveCharacterData("jailtime")
+					if not player_jailtime then
+						player_jailtime = 0
+					end
 						if player_jailtime == 0 then
 							-- do nothing?
 						else

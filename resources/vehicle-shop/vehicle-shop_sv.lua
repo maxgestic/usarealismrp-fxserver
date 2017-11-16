@@ -28,7 +28,7 @@ end
 function getPlayersLicense(source) -- TODO: UPDATE THIS FUNCTION TO CORRECLATE TO UPDATED DB DOCUMENT STRUCTURE
 	local userSource = tonumber(source)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
-		local licenses = user.getLicenses()
+		local licenses = user.getActiveCharacterData("license")
 		for i = 1, #licenses do
 			if licenses[i].name == "Driver's License" then
 				license = licenses[i]
@@ -41,7 +41,7 @@ end
 
 function alreadyHasVehicle(source, vehName)
 	TriggerEvent('es:getPlayerFromId', source, function(user)
-		local vehicles = user.getVehicles()
+		local vehicles = user.getActiveCharacterData("vehicles")
 		for i = 1, #vehicles do
 			if vehicles[i].model == vehName then
 				return true
@@ -53,7 +53,7 @@ end
 
 function alreadyHasAnyVehicle(source)
 	TriggerEvent('es:getPlayerFromId', source, function(user)
-		local cars = user.getVehicles()
+		local cars = user.getActiveCharacterData("vehicles")
 		if #cars > 0 then
 			return true
 		else
@@ -81,8 +81,9 @@ function renewInsurance(source)
 		expireYear = timestamp.year + 1
 	end
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
-		local insurance = user.getInsurance()
-		if user.getMoney() >= INSURANCE_COVERAGE_MONTHLY_COST then
+		local insurance = user.getActiveCharacterData("insurance")
+		local user_money = user.getActiveCharacterData("money")
+		if user_money >= INSURANCE_COVERAGE_MONTHLY_COST then
 			local insurancePlan = {
 				planName = "T. Ends Auto Insurance",
 				type = "auto",
@@ -90,9 +91,9 @@ function renewInsurance(source)
 				expireMonth = expireMonth,
 				expireYear = expireYear
 			}
-			user.setInsurance(insurancePlan)
+			user.setActiveCharacterData("insurance", insurancePlan)
 			print("taking $15,000 from player for auto insurance!")
-			user.setMoney(user.getMoney() - INSURANCE_COVERAGE_MONTHLY_COST)
+			user.setActiveCharacterData("money", user_money - INSURANCE_COVERAGE_MONTHLY_COST)
 			TriggerClientEvent("vehShop:notify", userSource, "~w~Thanks for purchasing auto insurance coverage! Your coverage expires on ~y~" .. padzero(expireMonth, 2) .. "/" .. expireYear .. "~w~.")
 		else
 			print("player did not have enough money to buy insurance")
@@ -121,7 +122,7 @@ AddEventHandler("vehShop:buyInsurance", function()
 		expireYear = timestamp.year + 1
 	end
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
-		local insurance = user.getInsurance()
+		local insurance = user.getActiveCharacterData("insurance")
 		if user.getMoney() >= INSURANCE_COVERAGE_MONTHLY_COST then
 			local insurancePlan = {
 				planName = "T. Ends Auto Insurance",
@@ -130,9 +131,9 @@ AddEventHandler("vehShop:buyInsurance", function()
 				expireMonth = expireMonth,
 				expireYear = expireYear
 			}
-			user.setInsurance(insurancePlan)
+			user.setActiveCharacterData("insurance", insurancePlan)
 			print("taking $15,000 from player for auto insurance!")
-			user.setMoney(user.getMoney() - INSURANCE_COVERAGE_MONTHLY_COST)
+			user.setActiveCharacterData("money", user_money - INSURANCE_COVERAGE_MONTHLY_COST)
 			TriggerClientEvent("vehShop:notify", userSource, "~w~Thanks for purchasing auto insurance coverage! Your coverage expires on ~y~" .. padzero(expireMonth, 2) .. "/" .. expireYear .. "~w~.")
 		else
 			print("player did not have enough money to buy insurance")
@@ -150,7 +151,7 @@ RegisterServerEvent("vehShop:checkPlayerInsurance")
 AddEventHandler("vehShop:checkPlayerInsurance", function()
 	local userSource = tonumber(source)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
-		local playerInsurance = user.getInsurance()
+		local playerInsurance = user.getActiveCharacterData("insurance")
 		if playerInsurance.type == "auto" then
 			TriggerClientEvent("chatMessage", userSource, "T. ENDS INSURANCE", {255, 78, 0}, "You are already insured! Your coverage will expire on ^3" .. padzero(playerInsurance.expireMonth, 2) .. "/" .. playerInsurance.expireYear .. "^0.")
 			renewInsurance(userSource)
@@ -166,9 +167,9 @@ AddEventHandler("mini:checkVehicleMoney", function(params)
 	local userSource = tonumber(source)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local playerIdentifier = getPlayerIdentifierEasyMode(userSource)
-		local allLicenses = user.getLicenses()
+		local allLicenses = user.getActiveCharacterData("licenses")
 		local license = nil
-		local vehicles = user.getVehicles()
+		local vehicles = user.getActiveCharacterData("vehicles")
 		if #vehicles <= MAX_PLAYER_VEHICLES then
 			for i = 1, #allLicenses do
 				if allLicenses[i].name == "Driver's License" then
@@ -183,13 +184,14 @@ AddEventHandler("mini:checkVehicleMoney", function(params)
 					price = splitStr[2]
 					vehicleName = splitStr[3]
 		            if not alreadyHasVehicle(userSource, vehicleName) then
-		    			if tonumber(price) <= user.getMoney() then
+		    			if tonumber(price) <= user.getActiveCharacterData("money") then
 							plate = tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9))
 		    				--TriggerClientEvent("mini:spawnVehicleAtShop", source, hash, vehicleName, tostring(plate)) -- spawn it
 							TriggerEvent('es:getPlayerFromId', userSource, function(user)
-								local vehicles = user.getVehicles()
+								local vehicles = user.getActiveCharacterData("vehicles")
 								if vehicles then
-									user.setMoney(user.getMoney() - tonumber(price)) -- subtract price from user's money and store resulting amount
+									local user_money = user.getActiveCharacterData("money")
+									user.setActiveCharacterData("money", user_money - tonumber(price))
 									local vehicle = {
 										owner = GetPlayerName(userSource),
 										model = vehicleName,
@@ -202,13 +204,13 @@ AddEventHandler("mini:checkVehicleMoney", function(params)
 									print("#vehicles: " .. #vehicles)
 									print("buying vehicle")
 									table.insert(vehicles, vehicle)
-									user.setVehicles(vehicles)
+									user.setActiveCharacterData("vehicles", vehicles)
 									print("vehicle purchased!")
 									print("vehicle.owner = " .. vehicle.owner)
 									print("vehicle.model = " .. vehicle.model)
 									print("vehicle.plate = " .. vehicle.plate)
 									print("vehicle.stored = " .. tostring(vehicle.stored))
-									TriggerEvent("sway:updateDB", userSource)
+									--TriggerEvent("sway:updateDB", userSource)
 									TriggerClientEvent("vehShop:spawnPlayersVehicle", userSource, hash, plate)
 								end
 							end)
@@ -235,7 +237,7 @@ RegisterServerEvent("vehShop:loadVehiclesToSell")
 AddEventHandler("vehShop:loadVehiclesToSell", function()
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
-		local vehicles = user.getVehicles()
+		local vehicles = user.getActiveCharacterData("vehicles")
 		TriggerClientEvent("vehShop:displayVehiclesToSell", userSource, vehicles)
 	end)
 end)
@@ -244,15 +246,15 @@ RegisterServerEvent("vehShop:sellVehicle")
 AddEventHandler("vehShop:sellVehicle", function(toSellVehicle)
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
-		local vehicles = user.getVehicles()
+		local vehicles = user.getActiveCharacterData("vehicles")
 		for i = 1, #vehicles do
 			local vehicle = vehicles[i]
 			if vehicle.model == toSellVehicle.model then
 				table.remove(vehicles, i)
-				local oldMoney = user.getMoney()
+				local oldMoney = user.getActiveCharacterData("money")
 				local newMoney = round(oldMoney + (vehicle.price * .50),0)
-				user.setMoney(newMoney)
-				user.setVehicles(vehicles)
+				user.setActiveCharacterData("money", newMoney)
+				user.setActiveCharacterData("vehicles", vehicles)
 				print("vehicle " .. vehicle.model .. " sold for $" .. newMoney)
 				return
 			end

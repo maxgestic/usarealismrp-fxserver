@@ -1,5 +1,6 @@
 TriggerEvent('es:addCommand', 'ticket', function(source, args, user)
-	if user.getJob() == "sheriff" or user.getJob() == "police" then
+	local user_job = user.getActiveCharacterData("job")
+	if user_job == "sheriff" or user_job == "police" then
 	    local targetPlayer = tonumber(args[2])
 	    local amount = tonumber(args[3])
 		table.remove(args, 1)
@@ -23,8 +24,9 @@ AddEventHandler("police:payTicket", function(fromPlayerId, amount, wantsToPay)
 	if wantsToPay then
 		TriggerEvent('es:getPlayerFromId', userSource, function(user)
 			if user then
-				if user.getMoney() >= tonumber(amount) then
-					user.removeMoney(tonumber(amount))
+				local user_money = user.getActiveCharacterData("money")
+				if user_money >= tonumber(amount) then
+					user.setActiveCharacterData("money", user_money - tonumber(amount))
 					TriggerClientEvent("police:notify", userSource, "You have ~g~signed~w~ your ticket of $" .. comma_value(amount) .. "!")
 					TriggerClientEvent("police:notify", fromPlayerId, GetPlayerName(userSource) .. " has ~g~signed~w~ their ticket of $" .. comma_value(amount) .. "!")
 				else
@@ -41,7 +43,7 @@ end)
 -- /dispatch
 -- 911 DISPATCH
 TriggerEvent('es:addCommand', 'dispatch', function(source, args, user)
-	local userJob = user.getJob()
+	local userJob = user.getActiveCharacterData("job")
 	if userJob == "sheriff" or userJob == "ems" or userJob == "fire" or userJob == "taxi" or userJob == "tow" then
 		local userSource = tonumber(source)
 		local target = args[2]
@@ -59,7 +61,8 @@ end)
 -- /cone barrier
 TriggerEvent("es:addCommand", 'cone', function(source)
 	TriggerEvent('es:getPlayerFromId', source, function(user)
-       if user.getJob() == "sheriff" or user.getJob() == "ems" then -- set police job can also use [ user.permission_level >= 2 ] in place of job if need be
+		local user_job = user.getActiveCharacterData("job")
+       if user_job == "sheriff" or user_job == "ems" then -- set police job can also use [ user.permission_level >= 2 ] in place of job if need be
           TriggerClientEvent('c_setCone', source)
        end
     end)
@@ -67,7 +70,8 @@ end)
 
 TriggerEvent("es:addCommand", 'pickup', function(source)
 	TriggerEvent('es:getPlayerFromId', source, function(user)
-       if user.getJob() == "sheriff" or user.getJob() == "ems" then -- set police job can also use [ user.permission_level >= 2 ] in place of job if need be
+		local user_job = user.getActiveCharacterData("job")
+       if user_job == "sheriff" or user_job == "ems" then -- set police job can also use [ user.permission_level >= 2 ] in place of job if need be
           TriggerClientEvent('c_removeCones', source)
        end
     end)
@@ -87,7 +91,7 @@ end)
 AddEventHandler( 'chatMessage', function( source, n, msg )
     msg = string.lower( msg )
     if ( msg == "/r" ) then
-        CancelEvent() 
+        CancelEvent()
         TriggerClientEvent( 'Radio', source )
     end
 end )

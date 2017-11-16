@@ -7,7 +7,7 @@ AddEventHandler("garage:storeVehicle", function(handle, numberPlateText)
 			local vehicle = userVehicles[i]
 			if string.match(numberPlateText,tostring(vehicle.plate)) ~= nil or numberPlateText == vehicle.plate then -- player actually owns car that is being stored
 				userVehicles[i].stored = true
-				user.setActiveCharacterData(userVehicles)
+				user.setActiveCharacterData("vehicles", userVehicles)
 				TriggerClientEvent("garage:storeVehicle", userSource)
 				return
 			end

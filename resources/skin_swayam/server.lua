@@ -41,7 +41,7 @@ AddEventHandler("mini:giveMeMyWeaponsPlease", function()
     -- Gives the loaded user corresponding to the given player id(second argument).
     TriggerEvent('es:getPlayerFromId', source, function(user)
 		if user then
-            local playerWeapons = user.getWeapons()
+            local playerWeapons = user.getActiveCharacterData("weapons")
             print("#playerWeapons = " .. #playerWeapons)
             -- todo: ADD A CHECK FOR PLAYER JOB, ONLY GIVE WEAPONS IF POLICE
             TriggerClientEvent("CS:giveWeapons", source, playerWeapons)

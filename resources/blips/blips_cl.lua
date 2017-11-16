@@ -26,7 +26,7 @@ local blips = {
     { title="Ammu-Nation", colour=41, id=110, x=812.4276, y=-2145.2118, z=29.3063 },
 	{ title="Car Dealership", colour=76, id=225, x=120.924, y=6624.605, z=31.000 },
 	{ title="DMV", colour=4, id=355, x= -447.845, y = 6013.775, z = 30.716 },
-	{ title="Bubba's Tow Co.", colour=64, id=68, x = 65.112, y = 6563.968, z = 28.292 },
+	{ title="Bubba's Tow Co.", colour=64, id=68, x = 90.886, y = 6521.389, z = 31.316 },
 	{ title="Black Market Dealer", colour = 59, id = 52, x = 129.345, y = -1920.89, z = 20.0187 },
 	{ title="General Store", colour = 24 , id = 52, x=1729.59, y=6415.49, z=34.0 },
 	{ title="General Store", colour = 24 , id = 52, x=81.6779, y=-219.006, z=54.6367 },

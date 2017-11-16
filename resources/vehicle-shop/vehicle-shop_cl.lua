@@ -156,7 +156,7 @@ function trucksMenu()
 	--Menu.addButton("Bravado Bison ($27,110)","buyVehicle","16948145:27110:Bravado Bison")
 	Menu.addButton("Vapid Sandking XL ($35,000)","buyVehicle","-1189015600:35000:Vapid Sandking XL")
 	Menu.addButton("Vapid Contender ($40,500)","buyVehicle","683047626:40500:Vapid Contender")
-
+	Menu.addButton("Monster Truck ($20,000,000)","buyVehicle","683047626:20000000:Monster Truck")
 end
 
 function compactMenu()
@@ -237,7 +237,8 @@ function sportsMenu()
 	Menu.addButton("Dinka Jester ($200,000)","buyVehicle","-1297672541:200000:Dinka Jester")
 	Menu.addButton("Obey 9F ($250,700)","buyVehicle","1032823388:250700:Obey 9F")
 	Menu.addButton("Obey 9F Cabrio ($285,500)","buyVehicle","-1461482751:285500:Obey 9F Cabrio")
-
+	Menu.addButton("Comet ($175,000)","buyVehicle","-1045541610:175000:Comet")
+	Menu.addButton("Comet Retro ($135,000)","buyVehicle","-2022483795:135000:Comet Retro")
 end
 
 function superCarMenu()

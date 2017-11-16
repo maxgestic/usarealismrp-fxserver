@@ -39,7 +39,11 @@ local civSkins = {
 AddEventHandler('es:playerLoaded', function(source, user)
     local money = user.getActiveCharacterData("money")
     print("Player " .. GetPlayerName(source) .. " has loaded.")
-    print("Money:" .. money)
+    if money then
+        print("Money:" .. money)
+    else
+        print("new player, default money!")
+    end
     user.setActiveCharacterData("money", money) -- set money GUI in top right (?)
     TriggerClientEvent('usa_rp:playerLoaded', source)
 end)

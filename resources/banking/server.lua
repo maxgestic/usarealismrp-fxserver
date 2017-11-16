@@ -23,7 +23,7 @@ end)
 
 -- HELPER FUNCTIONS
 function bankBalance(player)
-  return exports.essentialmode:getPlayerFromId(player).getBank().getActiveCharacterData("bank")
+  return exports.essentialmode:getPlayerFromId(player).getActiveCharacterData("bank")
 end
 
 function deposit(player, amount)
