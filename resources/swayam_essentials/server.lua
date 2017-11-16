@@ -93,6 +93,16 @@ end)
 ----------------------------------------------------------------
 
 ----------------------------------------------------------------
+TriggerEvent('es:addCommand', 'gotowp', function(source, args, user)
+	if user.getGroup() == "mod" or user.getGroup() == "admin" or user.getGroup() == "superadmin" or user.getGroup() == "owner" then
+		TriggerClientEvent("swayam:gotoWP", source)
+	else
+		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "You're not authorized to use this command!")		
+	end
+end)
+----------------------------------------------------------------
+
+----------------------------------------------------------------
 --[[local weather = "CLEAR"
 
 RegisterServerEvent("swayam:GetWeather")
