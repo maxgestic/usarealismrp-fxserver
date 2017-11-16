@@ -436,7 +436,7 @@ end )
 Citizen.CreateThread( function()
     while true do
         -- LCtrl is pressed and K has just been pressed
-        if ( IsControlJustPressed( 1, 311 ) ) then
+        if (IsControlJustPressed( 1, 311 ) and GetLastInputMethod(2)) then
             TriggerEvent( 'wk:radarRC' )
         end
 
