@@ -43,8 +43,20 @@ local stores = {
 		nameofstore = "24/7 (Paleto Bay)",
 		lastrobbed = 0
 	},
+	["sandyshores_tattoo"] = {
+		position = { ['x'] = 1862.851, ['y'] = 3748.209, ['z'] = 33.0 },
+		reward = 3500,
+		nameofstore = "Tattoo Shop (Sandy Shores)",
+		lastrobbed = 0
+	},
+	["sandyshores_barber"] = {
+		position = { ['x'] = 1930.556, ['y'] = 3728.216, ['z'] = 32.8 },
+		reward = 3500,
+		nameofstore = "O'Sheas Barber Shop (Alhambra Dr. & Niland Ave.)",
+		lastrobbed = 0
+	},
 	["sandyshores_twentyfoursever"] = {
-		position = { ['x'] = 1960.4197998047, ['y'] = 3742.9755859375, ['z'] = 32.343738555908 },
+		position = { ['x'] = 1959.772, ['y'] = 3740.07, ['z'] = 32.344 },
 		reward = 5000,
 		nameofstore = "24/7 (Sandy Shores)",
 		lastrobbed = 0
