@@ -10,7 +10,8 @@ AddEventHandler("phone:send911Message", function(data)
 	TriggerEvent('es:getPlayers', function(players)
 		for id, player in pairs(players) do
 			local playerSource = id
-			if player.getJob() == "ems" or player.getJob() == "sheriff" or player.getJob() == "police" then
+			local player_job = player.getActiveCharacterData("job")
+			if player_job == "ems" or player_job == "sheriff" or player_job == "police" then
 				TriggerClientEvent('chatMessage', playerSource, "911 (Caller: #" .. userSource .. ")", {255, 20, 10}, message)
 				TriggerClientEvent("phone:notify", playerSource, "~r~911 (Caller: # ".. userSource .. "):\n~w~"..message)
 			end
@@ -26,7 +27,8 @@ AddEventHandler("phone:sendEmsMessage", function(data)
 	TriggerEvent('es:getPlayers', function(players)
 		for id, player in pairs(players) do
 			local playerSource = id
-			if player.getJob() == "ems" or player.getJob() == "sheriff" or player.getJob() == "police" then
+			local player_job = player.getActiveCharacterData("job")
+			if player_job == "ems" or player_job == "sheriff" or player_job == "police" then
 				TriggerClientEvent('chatMessage', playerSource, "911 (Caller: #" .. userSource .. ")", {255, 20, 10}, message)
 				TriggerClientEvent("phone:notify", playerSource, "~r~911 (Caller: # ".. userSource .. "):\n~w~"..message)
 			end
@@ -42,7 +44,7 @@ AddEventHandler("phone:sendTaxiMessage", function(data)
 	TriggerEvent('es:getPlayers', function(players)
 		for id, player in pairs(players) do
 			local playerSource = id
-			if player.getJob() == "taxi" then
+			if player.getActiveCharacterData("job") == "taxi" then
 				TriggerClientEvent('chatMessage', playerSource, "Taxi Requested! (Caller: #" .. userSource .. ")", {251, 229, 5}, message)
 				TriggerClientEvent("phone:notify", playerSource, "~y~TAXI REQUEST (Caller: # ".. userSource .. "):\n~w~"..message)
 			end
@@ -58,7 +60,7 @@ AddEventHandler("phone:sendTowMessage", function(data)
 	TriggerEvent('es:getPlayers', function(players)
 		for id, player in pairs(players) do
 			local playerSource = id
-			if player.getJob() == "tow" then
+			if player.getActiveCharacterData("job") == "tow" then
 				TriggerClientEvent('chatMessage', playerSource, "Tow Requested! (Caller: #" .. userSource .. ")", {118, 120, 251}, message)
 				TriggerClientEvent("phone:notify", playerSource, "~y~TOW REQUEST (Caller: # ".. userSource .. "):\n~w~"..message)
 			end
@@ -104,7 +106,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 		-- store in user's phone
 		TriggerEvent("es:getPlayerFromId", userSource, function(user)
 			local convoExistedForUser = false
-			local inventory = user.getInventory()
+			local inventory = user.getActiveCharacterData("inventory")
 			for i = 1, #inventory do
 				local item = inventory[i]
 				if item.name == "Cell Phone" then
@@ -122,7 +124,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 								message = msg
 							}
 							table.insert(inventory[i].conversations[x].messages, message)
-							user.setInventory(inventory)
+							user.setActiveCharacterData("inventory", inventory)
 							convoExistedForUser = true
 						end
 					end
@@ -141,7 +143,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 							messages = {message}
 						}
 						table.insert(inventory[i].conversations, 1, conversation) -- insert at front
-						user.setInventory(inventory)
+						user.setActiveCharacterData("inventory", inventory)
 						print("convo inserted!")
 					end
 				end
@@ -152,7 +154,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 				-- target player data update
 				TriggerEvent("es:getPlayerFromId", targetPlayer, function(user)
 					local convoExistedForUser = false
-					local inventory = user.getInventory()
+					local inventory = user.getActiveCharacterData("inventory")
 					for i = 1, #inventory do
 						local item = inventory[i]
 						if item.name == "Cell Phone" then
@@ -170,7 +172,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 										message = msg
 									}
 									table.insert(inventory[i].conversations[x].messages, message)
-									user.setInventory(inventory)
+									user.setActiveCharacterData("inventory", inventory)
 									convoExistedForUser = true
 								end
 							end
@@ -188,7 +190,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 									messages = {message}
 								}
 								table.insert(inventory[i].conversations, conversation)
-								user.setInventory(inventory)
+								user.setActiveCharacterData("inventory", inventory)
 							end
 						end
 					end
@@ -204,7 +206,7 @@ end)
 RegisterServerEvent("phone:checkForPhone")
 AddEventHandler("phone:checkForPhone", function()
 	TriggerEvent("es:getPlayerFromId", source, function(user)
-		local inventory = user.getInventory()
+		local inventory = user.getActiveCharacterData("inventory")
 		for i = 1, #inventory do
 			local item = inventory[i]
 			if item.name == "Cell Phone" then
@@ -223,7 +225,7 @@ RegisterServerEvent("phone:loadMessages")
 AddEventHandler("phone:loadMessages", function()
 	TriggerEvent("es:getPlayerFromId", source, function(user)
 		local conversationsToSendToPhone = {}
-		local inventory = user.getInventory()
+		local inventory = user.getActiveCharacterData("inventory")
 		for i = 1, #inventory do
 			local item = inventory[i]
 			if item.name == "Cell Phone" then
@@ -246,7 +248,7 @@ RegisterServerEvent("phone:getMessagesWithThisId")
 AddEventHandler("phone:getMessagesWithThisId", function(targetId)
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
-		local inventory = user.getInventory()
+		local inventory = user.getActiveCharacterData("inventory")
 		for i = 1, #inventory do
 			local item = inventory[i]
 			if item.name == "Cell Phone" then

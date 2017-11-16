@@ -4,14 +4,15 @@ RegisterServerEvent("transport:giveMoney")
 AddEventHandler("transport:giveMoney", function(amount, job)
 	local userSource = tonumber(source)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
-		user.addMoney(amount)
+		local user_money = user.getActiveCharacterData("money")
+		user.setActiveCharacterData("money", user_money + amount)
 		if job.name == "Cannabis Transport" then
 			local inventory = user.getInventory()
 			for i = 1, #inventory do
 				local item = inventory[i]
 				if item.name == "20g of concentrated cannabis" then
 					table.remove(inventory, i)
-					user.setInventory(inventory)
+					user.setActiveCharacterData("inventory", inventory)
 					return
 				end
 			end
@@ -24,7 +25,7 @@ AddEventHandler("transport:addJob", function(job)
 	activeJobs[source] = job
 	if job.name == "Cannabis Transport" then
 		TriggerEvent('es:getPlayerFromId', tonumber(source), function(user)
-			local inventory = user.getInventory()
+			local inventory = user.getActiveCharacterData("inventory")
 			for i = 1, #inventory do
 				local item = inventory[i]
 				if item.name == "20g of concentrated cannabis" then
@@ -40,7 +41,7 @@ AddEventHandler("transport:addJob", function(job)
 				legality = "illegal"
 			}
 			table.insert(inventory, weedPackage)
-			user.setInventory(inventory)
+			user.setActiveCharacterData("inventory", inventory)
 		end)
 	end
 end)

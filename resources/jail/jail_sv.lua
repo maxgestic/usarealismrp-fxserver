@@ -6,10 +6,12 @@ end
 
 -- V2
 TriggerEvent('es:addCommand', 'jail', function(source, args, user)
-	if user.getJob() == "sheriff" or user.getJob() == "cop" then
+	local user_job = user.getActiveCharacterData("job")
+	local user_jailtime = user.getActiveCharacterData("jailtime")
+	if user_job == "sheriff" or user_job == "cop" then
 		TriggerClientEvent("jail:openMenu", tonumber(source))
 	else
-		TriggerClientEvent("jail:notify", tonumber(source), "You have ~y~" .. user.getJailtime() .. " month(s) ~w~left in your jail sentence.")
+		TriggerClientEvent("jail:notify", tonumber(source), "You have ~y~" .. user_jailtime .. " month(s) ~w~left in your jail sentence.")
 	end
 end)
 
@@ -21,8 +23,10 @@ AddEventHandler("jail:jailPlayerFromMenu", function(data)
 	print("data.charges = " .. data.charges)
 	print("data.id = " .. data.id)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
-		if user.getJob() == "sheriff" or user.getJob() == "cop" then
-			local arrestingOfficerName = GetPlayerName(userSource)
+		local user_job = user.getActiveCharacterData("job")
+		local player_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
+		if user_job == "sheriff" or user_job == "cop" then
+			local arrestingOfficerName = player_name
 			jailPlayer(data, arrestingOfficerName)
 		end
 	end)
@@ -40,16 +44,17 @@ function jailPlayer(data, officerName)
 	end
 	TriggerEvent("es:getPlayerFromId", targetPlayer, function(user)
 		-- jail player
-		TriggerClientEvent('chatMessage', -1, "SYSTEM", {255,180,0}, GetPlayerName(targetPlayer) .. " has been jailed for ^3" .. sentence .. "^0 month(s).")
+		local inmate_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
+		TriggerClientEvent('chatMessage', -1, "SYSTEM", {255,180,0}, inmate_name .. " has been jailed for ^3" .. sentence .. "^0 month(s).")
 		TriggerClientEvent('chatMessage', -1, "SYSTEM", {255,180,0}, "Charges: " .. reason)
 		TriggerClientEvent("jail:jail", targetPlayer)
 		-- remove items from player
 		TriggerClientEvent("jail:removeWeapons", targetPlayer) -- take from ped
-		user.setWeapons({})
-		user.setInventory({})
-		user.setJailtime(sentence)
+		user.setActiveCharacterData("weapons", {})
+		user.setActiveCharacterData("weapons", {})
+		user.setActiveCharacterData("weapons", sentence)
 		-- add to criminal history
-		local playerCriminalHistory = user.getCriminalHistory()
+		local playerCriminalHistory = user.getActiveCharacterData("criminalHistory")
 		local record = {
 			sentence = sentence,
 			charges = reason,
@@ -57,7 +62,7 @@ function jailPlayer(data, officerName)
 			timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())
 		}
 		table.insert(playerCriminalHistory, record)
-		user.setCriminalHistory(playerCriminalHistory)
+		user.setActiveCharacterData("criminalHistory", playerCriminalHistory)
 		-- give inmate clothing
 		TriggerClientEvent("jail:changeClothes", targetPlayer)
 		-- send to discord #jail-logs
@@ -69,7 +74,7 @@ function jailPlayer(data, officerName)
 		end, "POST", json.encode({
 			embeds = {
 				{
-					description = "**Name:** " ..GetPlayerName(targetPlayer).. " \n**Sentence:** " .. sentence .. " months" .. " \n**Charges:** " ..reason.. "\n**Arresting Officer:** " ..officerName.."\n**Timestamp:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
+					description = "**Name:** " .. inmate_name .. " \n**Sentence:** " .. sentence .. " months" .. " \n**Charges:** " ..reason.. "\n**Arresting Officer:** " ..officerName.."\n**Timestamp:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
 					color = 263172,
 					author = {
 						name = "LS Correctional Facility"
@@ -86,15 +91,23 @@ function jailStatusLoop()
 			if players then
 				for id, player in pairs(players) do
 					if player then
-						if player.getJailtime() == 0 then
+					local player_jailtime = player.getActiveCharacterData("jailtime")
+						if player_jailtime == 0 then
 							-- do nothing?
 						else
-							if player.getJailtime() > 1 then
-								player.setJailtime(player.getJailtime() - 1)
+							if player_jailtime > 1 then
+								player.setActiveCharacterData("jailtime", player_jailtime - 1)
 							else
-								player.setJailtime(player.getJailtime() - 1)
+								player.setActiveCharacterData("jailtime", player_jailtime - 1)
 								print("player jail time was 0!! release this player!!")
-								TriggerClientEvent("jail:release", tonumber(id), player.getCharacters())
+								local chars = player.getCharacters()
+								for i = 1, #chars do
+									if chars[i].active == true then
+										print("found an active char to release with...")
+										TriggerClientEvent("jail:release", tonumber(id), chars[i].appearance) -- need to test
+										break
+									end
+								end
 							end
 						end
 					end

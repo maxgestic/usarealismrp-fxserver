@@ -21,15 +21,15 @@ AddEventHandler('rconCommand', function(commandName, args)
         if type == "police" then
 			TriggerEvent("es:getPlayerFromId", tonumber(playerId), function(user)
 				if(user)then
-                    if status == "true" then
-    					user.setPoliceRank(1)
+          if status == "true" then
+              user.setActiveCharacterData("policeRank", 1)
     					RconPrint("DEBUG: " .. playerId .. " whitelisted as LSPD")
     					TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "You have been whitelisted for LSPD")
                     else
-                        user.setPoliceRank(0)
-						user.setJob("civ")
+                        user.setActiveCharacterData("policeRank", 0)
+						user.setActiveCharacterData("job", "civ")
                         RconPrint("DEBUG: " .. playerId .. " un-whitelisted as LSPD")
-                    end
+          end
 				end
 			end)
         end
@@ -45,10 +45,11 @@ AddEventHandler("policestation2:checkWhitelist", function(clientevent)
 	local playerGameLicense = ""
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
-		if user.getPoliceRank() > 0 then
+		if user.getActiveCharacterData("policeRank") > 0 then
 			--TriggerClientEvent("policestation2:isWhitelisted", userSource)
 			if clientevent == "policestation2:showArmoury" then
-				if user.getJob() == "sheriff" or user.getJob() == "cop" then
+      local user_job = user.getActiveCharacterData("job")
+				if user_job == "sheriff" or user_job == "cop" then
 					TriggerClientEvent(clientevent, userSource)
 				else
 					TriggerClientEvent("policestation2:notify", userSource, "You need to be ~r~10-8 ~w~ to access LSPD armoury.")
@@ -79,10 +80,11 @@ RegisterServerEvent("policestation2:saveasdefault")
 AddEventHandler("policestation2:saveasdefault", function(character)
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
-		if user.getJob() == "sheriff" or user.getJob() == "cop" then
+    local user_job = user.getActiveCharacterData("job")
+		if user_job == "sheriff" or user_job == "cop" then
 			--user.setCharacters(character)
 			--print("PLAYER MODEL SAVED")
-			user.setPoliceCharacter(character)
+			user.setPoliceCharacter(character) -- this is right... right??
 			TriggerClientEvent("policestation2:notify", userSource, "Default ~b~LSPD~w~ uniform saved.")
 			--TriggerEvent("mini:giveMeMyWeaponsPlease")
 		else
@@ -98,7 +100,7 @@ AddEventHandler("policestation2:loadDefaultUniform", function()
 		character = user.getPoliceCharacter()
 		TriggerClientEvent("policestation2:setCharacter", userSource, character)
 		TriggerClientEvent("policestation2:giveDefaultLoadout", userSource)
-		user.setJob("sheriff")
+    user.setActiveCharacterData("job", "sheriff")
 	end)
 end)
 
@@ -108,8 +110,9 @@ RegisterServerEvent("policestation2:onduty")
 AddEventHandler("policestation2:onduty", function()
     local userSource = tonumber(source)
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
-        if user.getJob() ~= "sheriff" or user.getJob() ~= "cop" or user.getJob() ~= "police" then
-            user.setJob("sheriff")
+      local user_job = user.getActiveCharacterData("job")
+        if user_job ~= "sheriff" or user_job ~= "cop" or user_job ~= "police" then
+            user.setActiveCharacterData("job", "sheriff")
         end
     end)
 end)
@@ -118,8 +121,14 @@ RegisterServerEvent("policestation2:offduty")
 AddEventHandler("policestation2:offduty", function()
     local userSource = tonumber(source)
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
-        local playerWeapons = user.getWeapons()
-        TriggerClientEvent("policestation2:setciv", userSource, user.getCharacters(), playerWeapons)
-        user.setJob("civ")
+        local playerWeapons = user.getActiveCharacterData("weapons")
+        local chars = user.getCharacters()
+        for i = 1, #chars do
+          if chars[i].active == true then
+            TriggerClientEvent("policestation2:setciv", userSource, chars[i].appearance, playerWeapons) -- need to test
+            break
+          end
+        end
+        user.setActiveCharacterData("job", "civ")
     end)
 end)

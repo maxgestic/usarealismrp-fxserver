@@ -8,7 +8,7 @@ AddEventHandler('paycheck:welfare', function()
 
 	TriggerEvent('es:getPlayerFromId', source, function(user)
 
-        local job = user.getJob()
+        local job = user.getActiveCharacterData("job")
 
 		if job == "cop" or job == "sheriff" or job == "highwaypatrol" or job == "fbi" then
 			paycheckAmount = 1000
@@ -25,7 +25,8 @@ AddEventHandler('paycheck:welfare', function()
 		end
 
 		-- Give user the dough!!
-		user.addMoney(paycheckAmount)
+    local user_money = user.getActiveCharacterData("money")
+		user.setActiveCharacterData("money", user_money + paycheckAmount)
 
         msg = "You received a "
         if isWelfare then
@@ -42,7 +43,8 @@ AddEventHandler('paycheck:welfare', function()
         end
 
         -- Notify the user
-		user.setIngameTime(10)
+          local user_time = user.getActiveCharacterData("ingameTime")
+		      user.setActiveCharacterData("ingameTime", user_time + 10)
         TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, msg)
 
  	end)
@@ -50,7 +52,7 @@ AddEventHandler('paycheck:welfare', function()
 end)
 
 TriggerEvent('es:addCommand', 'job', function(source, args, user)
-    local job = user.getJob()
+    local job = user.getActiveCharacterData("job")
     if job == "civ" then
         TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "You do not currently work for any companies.")
     elseif job == "taxi" then
@@ -61,7 +63,7 @@ TriggerEvent('es:addCommand', 'job', function(source, args, user)
 end)
 
 TriggerEvent('es:addCommand', 'myjob', function(source, args, user)
-    local job = user.getJob()
+    local job = user.getActiveCharacterData("job")
     if job == "civ" then
         TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "You do not currently work for any companies.")
     elseif job == "taxi" then
