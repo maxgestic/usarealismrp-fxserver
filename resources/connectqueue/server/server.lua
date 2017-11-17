@@ -18,7 +18,8 @@ Config.Priority = {
     ["steam:110000106ef7f61"] = 50, -- marcus
     ["steam:11000010722541c"] = 20, -- nova
     ["steam:1100001141991c8"] = 20, -- rimka
-    ["steam:1100001083d0f38"] = 50 -- weedem
+    ["steam:1100001083d0f38"] = 50, -- weedem
+	["steam:1100001011cf039"] = 50 -- blackie
 }
 
 Config.RequireSteam = true
