@@ -29,11 +29,17 @@ $(function() {
     };
 
     <!-- ==== character selection hover effect ==== -->
+    $(".columns").on('mouseover', '.char--create-char-card', function() {
+        $(this).css("border-color", "red");
+    });
+    $(".columns").on('mouseleave', '.char--create-char-card', function() {
+        $(this).css("border-color", "transparent");
+    });
     $(".columns").on('mouseover', '.char-card', function() {
-        $(this).css("border", "1px solid red");
+        $(this).css("border-color", "red");
     });
     $(".columns").on('mouseleave', '.char-card', function() {
-        $(this).css("border", "none");
+        $(this).css("border-color", "transparent");
     });
     <!-- ==== end character selection hover effect ==== -->
 
@@ -82,11 +88,13 @@ $(function() {
     });
     <!-- ==== end character deletion ==== -->
 
+    <!-- ==== new character back-btn ==== -->
     $("#char--new-character-form").on('click', "button[type='button']", function() {
         $("#menu--new-character").hide();
         $("#menu--home").show();
         populateHomeMenuCharacters();
     });
+    <!-- ==== end new character back-btn ==== -->
 
     <!-- ==== new character creation form ==== -->
     $("#char--new-character-form").submit(function(e) {
@@ -227,7 +235,7 @@ function populateHomeMenuCharacters() {
     }
     // append new char button
     if (less_than_three_characters) {
-        alert("user has less than 3 charactes, adding the new char button!")
+        alert("user has less than 3 charactes, adding the new char button!");
         var asideClasses = "";
         switch(empty_char_index) {
             case 0:
@@ -246,8 +254,8 @@ function populateHomeMenuCharacters() {
         "<header style='text-align:center;'>" +
         "<h4>Character # " + (empty_char_index + 1) + "</h4>" +
         "</header>" +
-        "<section>" +
-        "<span style='font-size:24px;'><b>+</b></span>" +
+        "<section style='margin-top:1em;text-align:center;'>" +
+        "<span style='font-size:64px;'><b>+</b></span>" +
         "</section>" +
         "</aside>"
         $("#menu--home .columns").append(html);

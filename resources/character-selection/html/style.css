@@ -13,22 +13,22 @@ body {
 
 .wrapper{
   min-height: 100vh;
-  background: #ccc;
   display: flex;
   flex-direction: column;
 }
 .header, .footer{
   height: 200px;
-  background: #666;
-  color: #fff;
+  color: black;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0;
 }
 .content {
   background: #999;
   color: #000;
+  margin: 0;
 }
 .columns{
   display: flex;
@@ -40,8 +40,9 @@ body {
 }
 .char-card {
     border-radius: 3px;
-    border-width: 2px;
-    border-color: red;
+    border-color: transparent;
+    border-width: 1px;
+    border-style: solid;
 }
 .char-first{
   width: 22%;
@@ -85,4 +86,23 @@ input, label {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+.char--create-char-card {
+    border-radius: 3px;
+    border-color: transparent;
+    border-width: 1px;
+    border-style: solid;
+}
+#delete-character--back-button, #home--delete-button {
+    border: 1px solid black;
+    color: white;
+    padding: 1em;
+    margin-bottom: 1em;
+    margin-top: 0em;
+    text-decoration: none;
+    transition-duration: .3s;
+}
+ #delete-character--back-button:hover, #home--delete-button:hover {
+    border: 1px solid white;
+    color: black;
 }
