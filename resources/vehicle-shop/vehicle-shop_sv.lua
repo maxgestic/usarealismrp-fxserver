@@ -69,13 +69,22 @@ function renewInsurance(source)
 	local INSURANCE_COVERAGE_MONTHLY_COST = 7500
 	local timestamp = os.date("*t", os.time())
 	local expireMonth, expireYear
+	local skip = false
 	if timestamp.month < 12 then
-		if timestamp.day > 10 then
+		if timestamp.day > 15 then
 			expireMonth = timestamp.month + EXPIRATION_TIME_IN_MONTHS + 1
+			if expireMonth > 12 then
+				print("***expire month was 13 when buying auto insurance!!!****")
+				expireMonth = 1
+				expireYear = timestamp.year + 1
+				skip = true -- skip overwriting timestamp year down the code
+			end
 		else
 			expireMonth = timestamp.month + EXPIRATION_TIME_IN_MONTHS
 		end
-		expireYear = timestamp.year
+		if not skip then
+			expireYear = timestamp.year
+		end
 	else
 		expireMonth = 1
 		expireYear = timestamp.year + 1
@@ -110,20 +119,30 @@ AddEventHandler("vehShop:buyInsurance", function()
 	local INSURANCE_COVERAGE_MONTHLY_COST = 7500
 	local timestamp = os.date("*t", os.time())
 	local expireMonth, expireYear
+	local skip = false
 	if timestamp.month < 12 then
-		if timestamp.day > 10 then
+		if timestamp.day > 15 then
 			expireMonth = timestamp.month + EXPIRATION_TIME_IN_MONTHS + 1
+			if expireMonth > 12 then
+				print("***expire month was 13 when buying auto insurance!!!****")
+				expireMonth = 1
+				expireYear = timestamp.year + 1
+				skip = true -- skip overwriting timestamp year down the code
+			end
 		else
 			expireMonth = timestamp.month + EXPIRATION_TIME_IN_MONTHS
 		end
-		expireYear = timestamp.year
+		if not skip then
+			expireYear = timestamp.year
+		end
 	else
 		expireMonth = 1
 		expireYear = timestamp.year + 1
 	end
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local insurance = user.getActiveCharacterData("insurance")
-		if user.getMoney() >= INSURANCE_COVERAGE_MONTHLY_COST then
+		local user_money = user.getActiveCharacterData("money")
+		if user_money >= INSURANCE_COVERAGE_MONTHLY_COST then
 			local insurancePlan = {
 				planName = "T. Ends Auto Insurance",
 				type = "auto",
@@ -132,9 +151,9 @@ AddEventHandler("vehShop:buyInsurance", function()
 				expireYear = expireYear
 			}
 			user.setActiveCharacterData("insurance", insurancePlan)
-			print("taking $15,000 from player for auto insurance!")
+			print("taking $" .. INSURANCE_COVERAGE_MONTHLY_COST .. " from player for auto insurance!")
 			user.setActiveCharacterData("money", user_money - INSURANCE_COVERAGE_MONTHLY_COST)
-			TriggerClientEvent("vehShop:notify", userSource, "~w~Thanks for purchasing auto insurance coverage! Your coverage expires on ~y~" .. padzero(expireMonth, 2) .. "/" .. expireYear .. "~w~.")
+			TriggerClientEvent("vehShop:notify", userSource, "~w~Thanks for purchasing auto insurance coverage! Your coverage expires on the 1st day of ~y~" .. padzero(expireMonth, 2) .. "/" .. expireYear .. "~w~.")
 		else
 			print("player did not have enough money to buy insurance")
 			TriggerClientEvent("vehShop:notify", userSource, "You ~r~don't have enough money~w~ to buy auto insurance coverage!")
@@ -153,7 +172,7 @@ AddEventHandler("vehShop:checkPlayerInsurance", function()
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local playerInsurance = user.getActiveCharacterData("insurance")
 		if playerInsurance.type == "auto" then
-			TriggerClientEvent("chatMessage", userSource, "T. ENDS INSURANCE", {255, 78, 0}, "You are already insured! Your coverage will expire on ^3" .. padzero(playerInsurance.expireMonth, 2) .. "/" .. playerInsurance.expireYear .. "^0.")
+			TriggerClientEvent("chatMessage", userSource, "T. ENDS INSURANCE", {255, 78, 0}, "You are already insured! Your coverage will expire on the 1st day of ^3" .. padzero(playerInsurance.expireMonth, 2) .. "/" .. playerInsurance.expireYear .. "^0.")
 			renewInsurance(userSource)
 			return
 		end

@@ -313,7 +313,7 @@ end
 
 function displayInsuranceInfo()
 	Menu.hidden = not Menu.hidden
-	TriggerEvent("chatMessage", "T. ENDS INSURANCE", { 255, 78, 0 }, "T. Ends insurance will put your mind at ease by making sure you'll always have a ride even if yours gets stolen, lost, or totaled.")
+	TriggerEvent("chatMessage", "T. ENDS INSURANCE", { 255, 78, 0 }, "T. End's insurance will put your mind at ease by making sure you'll always have a ride even if yours gets stolen, lost, or totaled.")
 end
 
 -- only displays when player has no insurance
