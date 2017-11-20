@@ -41,6 +41,20 @@ AddEventHandler("character:save", function(characterData, slot)
     end)
 end)
 
+RegisterServerEvent("character:deleteCharacter")
+AddEventHandler("character:deleteCharacter", function(slot)
+    local userSource = tonumber(source)
+    TriggerEvent("es:getPlayerFromId", userSource, function(user)
+        if user then
+            local characters = user.getCharacters()
+            print("trying to delete character at slot #" .. slot .. "...")
+            characters[slot] = {active = false}
+            user.setCharacters(characters)
+            print("done deleting character at slot #" .. slot)
+        end
+    end)
+end)
+
 RegisterServerEvent("character:loadCharacter")
 AddEventHandler("character:loadCharacter", function(activeSlot)
     print("trying to load character in active slot #" .. activeSlot)

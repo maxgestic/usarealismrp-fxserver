@@ -15,15 +15,19 @@ AddEventHandler("character:close", function()
     toggleMenu(menuOpen)
 end)
 
+-- loading in character from JS selection
 RegisterNetEvent("character:setCharacter")
 AddEventHandler("character:setCharacter", function(character)
     RemoveAllPedWeapons(GetPlayerPed(-1), true) -- remove weapons for the case where a different character is selected after choosing one with weapons initially
     print("setting character!")
     local weapons
     if character then
+        print("character existed")
         weapons = character.weapons
         if character.appearance then
+            print("character.appearance existed")
             if character.appearance.hash then
+                print("character.appearance.hash existed")
                 local name, model
                 model = tonumber(character.appearance.hash)
                 Citizen.Trace("giving loading with customizations with hash = " .. model)
@@ -42,15 +46,23 @@ AddEventHandler("character:setCharacter", function(character)
                     for key, value in pairs(character.appearance["props"]) do
                         SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character.appearance["propstexture"][key], true)
                     end
+                    print("GIVING WEAPONS TO PED! # = " .. #weapons)
+                    -- G I V E  W E A P O N S
+                    for i =1, #weapons do
+                        GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
+                    end
                 end)
+            else
+                Citizen.Trace("Could not find saved character skin!")
+                print("GIVING WEAPONS TO PED! # = " .. #weapons)
+                -- G I V E  W E A P O N S
+                for i =1, #weapons do
+                    GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
+                end
             end
         end
     else
-        Citizen.Trace("Could not find a character!")
-    end
-    -- G I V E  W E A P O N S
-    for i =1, #weapons do
-        GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
+        Citizen.Trace("Could not find character!")
     end
 end)
 
@@ -103,6 +115,13 @@ RegisterNUICallback('select-character', function(data, cb)
     -- check jail status
     --print("checking player jailed status")
     --TriggerServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
+    cb('ok')
+end)
+
+RegisterNUICallback('delete-character', function(data, cb)
+    local slot = (data.slot) + 1 -- +1 because of js --> lua
+    Citizen.Trace("deleting char at slot #" .. slot)
+    TriggerServerEvent("character:deleteCharacter", slot)
     cb('ok')
 end)
 

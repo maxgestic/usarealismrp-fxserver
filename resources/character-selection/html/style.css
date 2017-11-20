@@ -27,17 +27,16 @@ body {
   align-items: center;
 }
 .content {
-  display: flex;
-  flex: 1;
   background: #999;
   color: #000;
 }
 .columns{
   display: flex;
   flex:1;
-  margin: 0 aut0;
+  margin: 0 auto;
   justify-content: center;
   align-items: center;
+  padding: 3em;
 }
 .char-card {
     border-radius: 3px;
@@ -77,13 +76,12 @@ input, label {
     margin: .5em;
     display: block;
 }
-.menu--new-character-form-wrap {
+.char--new-character-form-wrap {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-
-.char--new-character-form-wrap {
+.buttons {
     display: flex;
     justify-content: center;
     align-items: center;
