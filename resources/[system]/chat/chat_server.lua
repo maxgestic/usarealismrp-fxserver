@@ -12,7 +12,7 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
 
 		if user then
 
-            local job = user.getJob()
+            local job = user.getActiveCharacterData("job")
 
 			if(job == "cop") then
 
