@@ -41,10 +41,10 @@ AddEventHandler('es:playerLoaded', function(source, user)
     print("Player " .. GetPlayerName(source) .. " has loaded.")
     if money then
         print("Money:" .. money)
+        --user.setActiveCharacterData("money", money) -- set money GUI in top right (?)
     else
         print("new player, default money!")
     end
-    user.setActiveCharacterData("money", money) -- set money GUI in top right (?)
     TriggerClientEvent('usa_rp:playerLoaded', source)
 end)
 
