@@ -4,8 +4,9 @@ local Config = {}
 Config.Priority = {
     ["STEAM_0:1:#######"] = 50,
     ["steam:110000######"] = 25,
-    ["ip:127.0.0.0"] = 85,
+    ["ip:127.0.0.0"] = 85
     -- end examples, start real peeps
+    --[[
     ["steam:110000102f857d7"] = 50,
     ["steam:11000011a437404"] = 1, -- distric
     ["steam:110000106f87ef8"] = 1, -- afek
@@ -27,6 +28,7 @@ Config.Priority = {
 	["steam:11000010270ddb4"] = 50, -- kube
 	["steam:110000116400335"] = 50, -- ricky golden
 	["steam:11000010724bbe7"] = 51 -- swayamm cann
+    --]]
 }
 
 Config.RequireSteam = true
@@ -613,6 +615,14 @@ local function playerActivated()
     end
 end
 
+RegisterServerEvent("Queue:addPlayerToPriorityList")
+AddEventHandler("Queue:addPlayerToPriorityList", function(player)
+    Queue.Priority[string_lower(player.steamIdentifier)] = player.priorityLevel
+    print("player " .. player.name .. " was added to the server priority list!")
+    print("ident: " .. player.steamIdentifier)
+    print("level: " .. player.priorityLevel)
+end)
+
 RegisterServerEvent("Queue:playerActivated")
 AddEventHandler("Queue:playerActivated", playerActivated)
 
@@ -640,9 +650,61 @@ end)
 -- debugging / testing commands
 local testAdds = 0
 
+
+function fetchWhitelistFromDb()
+	print("fetching all whitelisted players from DB...")
+	PerformHttpRequest("http://127.0.0.1:5984/whitelist/_all_docs?include_docs=true" --[[ string ]], function(err, text, headers)
+		print("finished getting whitelisted players...")
+		print("error code: " .. err)
+		local response = json.decode(text)
+		if response.rows then
+			Queue.Priority = {} -- reset table
+			print("#(response.rows) = " .. #(response.rows))
+			-- insert all bans from 'bans' db into lua table
+			for i = 1, #(response.rows) do
+                local playerDoc = response.rows[i].doc
+                Queue.Priority[playerDoc.steam] = playerDoc.priority
+			end
+			print("finished loading whitelisted players table...")
+			print("# of WL players: " .. #(response.rows))
+		end
+	end, "GET", "", { ["Content-Type"] = 'application/json' })
+end
+
+-- get the whitelisted/prioritized players on resource start
+fetchWhitelistFromDb()
+
 AddEventHandler("rconCommand", function(command, args)
+    if command == "prioritize" then
+		local player = {}
+		if #args < 3 then
+			RconPrint("Usage: prioritize [steam-id] [level] [name]\n")
+			RconPrint("Example:\n")
+			RconPrint("prioritize STEAM_0:1:####### 1 Jonny Whitelisted Cash\n")
+			RconPrint("Or\n")
+			RconPrint("prioritize steam:110000###### 50 Impotent Kubane\n")
+			CancelEvent()
+			return
+		end
+		local steamIdentifier = args[1]
+		local priorityLevel = args[2]
+		table.remove(args,1)
+		table.remove(args,1)
+		local name = table.concat(args, " ")
+		player.name = name
+		player.priorityLevel = priorityLevel
+		player.steamIdentifier = steamIdentifier
+		print("adding player " .. name .. " to the priority list!")
+		TriggerEvent("Queue:addPlayerToPriorityList", player)
+        -- update db
+        TriggerEvent('es:exposeDBFunctions', function(GetDoc)
+            GetDoc.createDocument("whitelist",  {name = name, steam = steamIdentifier, priority = priorityLevel, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+                print("player " .. name .. " added to whitelist!")
+            end)
+        end)
+        CancelEvent()
     -- adds a fake player to the queue for debugging purposes, this will freeze the queue
-    if command == "addq" then
+    elseif command == "addq" then
         print("==ADDED FAKE QUEUE==")
         Queue:AddToQueue({"steam:110000103fd1bb1"..testAdds}, os_time(), "Fake Player", "debug")
         testAdds = testAdds + 1
