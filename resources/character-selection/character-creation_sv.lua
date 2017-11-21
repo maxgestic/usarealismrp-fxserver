@@ -14,15 +14,18 @@ AddEventHandler("character:setActive", function(slot)
     local userSource = tonumber(source)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
         if user then
+            local money_to_display = 0
             local characters = user.getCharacters()
             for i = 1, #characters do
                 if i == tonumber(slot) then
                     characters[i].active = true
+                    money_to_display = characters[i].money
                 else
                     characters[i].active = false
                 end
             end
             user.setCharacters(characters)
+            user.setActiveCharacterData("money", money_to_display) -- set money GUI in top right (?)
         end
     end)
 end)

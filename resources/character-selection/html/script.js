@@ -1,4 +1,6 @@
 var characters = [{},{},{}];
+var default_money = 5000; // starting money
+var default_bank = 0; // starting bank
 
 $(function() {
     window.addEventListener('message', function(event) {
@@ -67,14 +69,14 @@ $(function() {
         var confirmed = confirm("Are you sure you want to permanently delete that character?");
         if (confirmed) {
             var slot = $(this).data("slot");
-            alert("deleting char at slot #" + slot);
+            //alert("deleting char at slot #" + slot);
             for (var i = 0; i < characters.length; ++i) {
                 alert("characters at " + i + " name = " + characters[i].firstName);
             }
             characters[slot] = {};
-            alert("just finished setting characters[slot] = {}...");
+            //alert("just finished setting characters[slot] = {}...");
             for (var i = 0; i < characters.length; ++i) {
-                alert("characters at " + i + " name = " + characters[i].firstName);
+                //alert("characters at " + i + " name = " + characters[i].firstName);
             }
             $.post('http://character-selection/delete-character', JSON.stringify({
                 slot: slot
@@ -89,7 +91,7 @@ $(function() {
     <!-- ==== end character deletion ==== -->
 
     <!-- ==== new character back-btn ==== -->
-    $("#char--new-character-form").on('click', "button[type='button']", function() {
+    $("#char--new-character-form").on('click', "#new-char-back-btn", function() {
         $("#menu--new-character").hide();
         $("#menu--home").show();
         populateHomeMenuCharacters();
@@ -97,10 +99,31 @@ $(function() {
     <!-- ==== end new character back-btn ==== -->
 
     <!-- ==== new character creation form ==== -->
-    $("#char--new-character-form").submit(function(e) {
-        e.preventDefault(); // Prevent form from submitting
+    $("#char--new-character-form").on('click', "#new-character-submit", function() {
 
-        //alert("calling findOpenSlot !!");
+        // valid input regex (alphabetical char or a dash)
+        var alphabet_regex = /^[a-zA-Z-]*$/
+
+        // validate names
+        var first_name_validity = alphabet_regex.test($("input[name='first-name']").val());
+        var middle_name_validity = alphabet_regex.test($("input[name='middle-name']").val());
+        var last_name_validity = alphabet_regex.test($("input[name='last-name']").val());
+        if (!first_name_validity || !middle_name_validity || !last_name_validity) {
+            alert("Invalid name input entered! Try again!");
+            return
+        }
+
+        // validate date of birth
+        var dob = new Date($("input[name='date-of-birth']").val());
+        day = dob.getDate();
+        month = dob.getMonth() + 1;
+        year = dob.getFullYear();
+        alert([day, month, year].join('/'));
+        if (year < 1900 || year > 2020) {
+            alert("Invalid DOB entered!")
+            return
+        }
+
         // returns a lua style index for the open slot (+1)
         var openSlot = findOpenSlot("js");
         //alert("lua open slot = " + findOpenSlot("lua"));
@@ -110,6 +133,8 @@ $(function() {
             middleName: $("input[name='middle-name']").val(),
             lastName: $("input[name='last-name']").val(),
             dateOfBirth: $("input[name='date-of-birth']").val(),
+            money: default_money,
+            bank: default_bank,
             slot: findOpenSlot("lua"),
             active: false
         }
@@ -224,7 +249,7 @@ function populateHomeMenuCharacters() {
             "</aside>"
             $("#menu--home .columns").append(html);
         } else {
-            alert("setting empty char index to: " + empty_char_index);
+            //alert("setting empty char index to: " + empty_char_index);
             if (!first) {
                 // pending new char button
                 less_than_three_characters = true;
@@ -235,7 +260,7 @@ function populateHomeMenuCharacters() {
     }
     // append new char button
     if (less_than_three_characters) {
-        alert("user has less than 3 charactes, adding the new char button!");
+        //alert("user has less than 3 charactes, adding the new char button!");
         var asideClasses = "";
         switch(empty_char_index) {
             case 0:

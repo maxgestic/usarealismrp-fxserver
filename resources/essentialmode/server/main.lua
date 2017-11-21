@@ -9,6 +9,7 @@ _VERSION = '4.1.4'
 Users = {}
 commands = {}
 settings = {}
+-- some of these default settings are now unused (since it was moved into the characters attribute)
 settings.defaultSettings = {
 	['pvpEnabled'] = true,
 	['permissionDenied'] = false,

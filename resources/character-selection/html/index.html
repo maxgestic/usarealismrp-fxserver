@@ -19,7 +19,7 @@
                 <!-- characters are added dynamically with JS here -->
             </div>
             <div class="menu--home-buttons buttons">
-                <a id="home--delete-button" href="#">DELETE CHARACTER</a>
+                <a id="home--delete-button" href="#" class="button-link">DELETE CHARACTER</a>
             </div>
         </section>
         <!-- ======= END HOME ======= -->
@@ -38,8 +38,10 @@
                     <input type="text" name="last-name">
                     <label for="date-of-birth">DOB: *</label>
                     <input type="date" name="date-of-birth">
-                    <button type="button">Back</button>
-                    <button type="submit" id="new-character-submit">Submit</button>
+                    <div style="margin-top: 2em;margin-left: .5em;">
+                        <a href="#" id="new-char-back-btn" class="button-link">Back</a>
+                        <a href="#" id="new-character-submit" class="button-link">Submit</a>
+                    </div>
                 </form>
             </div>
         </section>
@@ -54,7 +56,7 @@
                     <!-- fill data here -->
                 </div>
                 <div class="menu--delete-character-buttons buttons">
-                    <a id="delete-character--back-button" href="#">BACK</a>
+                    <a id="delete-character--back-button" class="button-link" href="#">BACK</a>
                 </div>
             </div>
         </section>

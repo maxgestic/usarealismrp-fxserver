@@ -93,7 +93,7 @@ input, label {
     border-width: 1px;
     border-style: solid;
 }
-#delete-character--back-button, #home--delete-button {
+.button-link {
     border: 1px solid black;
     color: white;
     padding: 1em;
@@ -102,7 +102,7 @@ input, label {
     text-decoration: none;
     transition-duration: .3s;
 }
- #delete-character--back-button:hover, #home--delete-button:hover {
+ .button-link:hover {
     border: 1px solid white;
     color: black;
 }
