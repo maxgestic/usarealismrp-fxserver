@@ -19,7 +19,14 @@ Config.Priority = {
     ["steam:11000010722541c"] = 20, -- nova
     ["steam:1100001141991c8"] = 20, -- rimka
     ["steam:1100001083d0f38"] = 50, -- weedem
-	["steam:1100001011cf039"] = 50 -- blackie
+	["steam:1100001011cf039"] = 50, -- blackie
+	["steam:1100001007a8797"] = 100, -- mini friggin punch!!
+	["steam:11000010818cc14"] = 50, -- trevor lahey
+	["steam:110000102f857d7"] = 50, -- jamie
+	["steam:11000010a24a999"] = 2, -- brian barnes
+	["steam:11000010270ddb4"] = 50, -- kube
+	["steam:110000116400335"] = 50, -- ricky golden
+	["steam:11000010724bbe7"] = 51 -- swayamm cann
 }
 
 Config.RequireSteam = true
