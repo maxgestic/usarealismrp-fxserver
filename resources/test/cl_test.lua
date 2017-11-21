@@ -139,7 +139,7 @@ end
 
 RegisterNetEvent("interaction:ragdoll")
 AddEventHandler("interaction:ragdoll", function()
-	SetPedToRagdoll(GetPlayerPed(-1), 6500, 6500, 0, true, true, false);
+	SetPedToRagdoll(GetPlayerPed(-1), 5500, 5500, 0, true, true, false);
 end)
 
 -- update players job for interaction menu
