@@ -25,28 +25,29 @@ AddEventHandler('paycheck:welfare', function()
 		end
 
 		-- Give user the dough!!
-    local user_money = user.getActiveCharacterData("money")
-		user.setActiveCharacterData("money", user_money + paycheckAmount)
-
-        msg = "You received a "
-        if isWelfare then
-            msg = msg .. "welfare "
+        local user_money = user.getActiveCharacterData("money")
+        if user_money then
+    		user.setActiveCharacterData("money", user_money + paycheckAmount)
+            msg = "You received a "
+            if isWelfare then
+                msg = msg .. "welfare "
+            else
+                msg = msg .. "check "
+            end
+            if job == "taxi" then
+                msg = msg .. "of $" .. paycheckAmount .. " from ^3Downtown Taxi Co.^0!"
+            elseif job == "tow" then
+                msg = msg .. "of $" .. paycheckAmount .. " from ^3Bubba's Tow Co.^0!"
+            else
+                msg = msg .. "of $" .. paycheckAmount .. "."
+            end
+            -- Notify the user
+            local user_time = user.getActiveCharacterData("ingameTime")
+    		user.setActiveCharacterData("ingameTime", user_time + 10)
+            TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, msg)
         else
-            msg = msg .. "check "
+            -- no active char, don't pay
         end
-        if job == "taxi" then
-            msg = msg .. "of $" .. paycheckAmount .. " from ^3Downtown Taxi Co.^0!"
-        elseif job == "tow" then
-            msg = msg .. "of $" .. paycheckAmount .. " from ^3Bubba's Tow Co.^0!"
-        else
-            msg = msg .. "of $" .. paycheckAmount .. "."
-        end
-
-        -- Notify the user
-          local user_time = user.getActiveCharacterData("ingameTime")
-		      user.setActiveCharacterData("ingameTime", user_time + 10)
-        TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, msg)
-
  	end)
 
 end)
