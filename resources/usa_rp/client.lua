@@ -115,7 +115,7 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(0)
 		SetPedDensityMultiplierThisFrame(0.8)
-		SetVehicleDensityMultiplierThisFrame(0.4)
+		SetVehicleDensityMultiplierThisFrame(0.6)
 	end
 end)
 
@@ -359,3 +359,5 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
+
+-- bait car
