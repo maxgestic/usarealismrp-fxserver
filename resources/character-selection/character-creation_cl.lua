@@ -3,17 +3,33 @@ local selectedCharacter = {}
 local selectedCharacterSlot = 0
 local newCharacterTemplate = {} -- all atrributes for new characters are created here
 
-local cam_coords = {
+local open_menu_spawn_coords = {
     x = -1236.653,
     y = 4392.405,
     z = 19.532,
     angle = 285.343
 }
 
+local spawn_coords_closed_menu = {
+    x = 177.596,
+    y = 6636.183,
+    z = 31.638,
+    angle = 168.2
+}
+
 RegisterNetEvent("character:open")
 AddEventHandler("character:open", function(menu, data)
     menuOpen = true
     toggleMenu(menuOpen, menu, data)
+    if menu == "home" then
+        local ped = GetPlayerPed(-1)
+		SetEntityCoords(ped, open_menu_spawn_coords.x, open_menu_spawn_coords.y, open_menu_spawn_coords.z, open_menu_spawn_coords.angle, 0, 0, 1)
+		FreezeEntityPosition(ped, true)
+		DisplayHud(false)
+		DisplayRadar(false)
+		SetEnableHandcuffs(ped, true)
+		RemoveAllPedWeapons(ped, true)
+    end
 end)
 
 RegisterNetEvent("character:close")
@@ -133,6 +149,15 @@ RegisterNUICallback('delete-character', function(data, cb)
 end)
 
 function toggleMenu(status, menu, data)
+    -- set player position
+    local ped = GetPlayerPed(-1)
+    SetEntityCoords(ped, spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z, 0.0, 0, 0, 1) -- NEED TO CHANGE
+    FreezeEntityPosition(ped, false)
+    DisplayHud(true)
+    DisplayRadar(true)
+    SetEnableHandcuffs(ped, false)
+    RemoveAllPedWeapons(ped, false)
+    -- open / close menu
     SetNuiFocus(status, status)
     menuOpen = status
     SendNUIMessage({

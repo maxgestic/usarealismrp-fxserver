@@ -18,7 +18,7 @@ body {
 }
 .header, .footer{
   height: 200px;
-  color: white;
+  color: #B22234;
   text-align: center;
   display: flex;
   justify-content: center;

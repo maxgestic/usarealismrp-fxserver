@@ -24,12 +24,14 @@ $(function() {
         }
     });
 
+    /*
     document.onkeyup = function (data) {
         if (data.which == 27) { // Escape key
             closeMenus(); // reset html / lui nui focus
         }
     };
-
+    */
+    
     <!-- ==== character selection hover effect ==== -->
     $(".columns").on('mouseover', '.char--create-char-card', function() {
         $(this).css("border-color", "#B22234");
