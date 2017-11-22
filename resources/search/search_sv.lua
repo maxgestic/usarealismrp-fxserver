@@ -5,6 +5,7 @@ AddEventHandler("search:searchPlayer", function(source, playerId)
 			TriggerClientEvent("search:notifyNoExist", source, playerId) -- player does not exist
 			return
 		end
+		local user_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
 		local items = {}
 		local licenses = user.getActiveCharacterData("licenses")
 		for index = 1, #licenses do
@@ -20,9 +21,10 @@ AddEventHandler("search:searchPlayer", function(source, playerId)
 		for j = 1, #playerWeapons do
 			table.insert(items, playerWeapons[j])
 		end
-			TriggerClientEvent("chatMessage", source, "SYSTEM", {255,136,0}, "SEARCH OF " .. GetPlayerName(playerId) .. ":")
-			if user.getMoney() > 0 then
-				TriggerClientEvent("chatMessage", source, "", {255,136,0}, "CASH: $" .. comma_value(user.getActiveCharacterData("money")))
+			TriggerClientEvent("chatMessage", source, "SYSTEM", {255,136,0}, "SEARCH OF " .. user_name .. ":")
+			local user_money = user.getActiveCharacterData("money")
+			if user_money > 0 then
+				TriggerClientEvent("chatMessage", source, "", {255,136,0}, "CASH: $" .. comma_value(user_money))
 			end
 			for i = 1, #items do
 				local name = items[i].name
