@@ -31,8 +31,8 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 			local char = self.characters[i]
 			if char.active == true then
 				--print("found an active character at " .. i .. "!")
-				print("target field to set: " .. field)
-				print("setting data...")
+				--print("target field to set: " .. field)
+				--print("setting data...")
 				if self.characters[i][field] then
 					-- update the NUI gui
 					if field == "money" then
@@ -44,20 +44,20 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 							TriggerClientEvent("es:removedMoney", self.source, math.abs(prev_money - new_money), settings.defaultSettings.nativeMoneySystem)
 						end
 						if not settings.defaultSettings.nativeMoneySystem then
-							print("calling es:activeMoney with money = " .. new_money)
+							--print("calling es:activeMoney with money = " .. new_money)
 							TriggerClientEvent('es:activateMoney', self.source , new_money)
 						end
 					elseif field == "bank" then
 						TriggerEvent("es:setPlayerData", self.source, "bank", data, function(response, success)
-							print("bank saved!!")
+							--print("bank saved!!")
 							self.bank = data
 						end)
 					end
 					-- update char
 					self.characters[i][field] = data
-					print("set!")
+					--print("set!")
 				else
-					print("field " .. field .. " did not exist on the character! can't set it!")
+					print("Error: field " .. field .. " did not exist on the character! can't set it!")
 				end
 			end
 		end
