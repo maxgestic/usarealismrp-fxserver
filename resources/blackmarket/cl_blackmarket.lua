@@ -1,6 +1,7 @@
-local shopX,shopY,shopZ = 129.345, -1920.89, 20.0187
- locations = {
-	{ x=129.345, y=-1920.89, z=20.0187 }
+-- paleto island : x: -2166.786 y: 5197.684 Z: 16.880 Angle: 133.791
+locations = {
+	--{ x=129.345, y=-1920.89, z=20.0187 },
+    { x= -2166.786, y = 5197.684, z = 15.880}
 }
 
 function round(num, numDecimalPlaces)
@@ -91,12 +92,6 @@ function sellMenu(weapons)
     	local weapon = weapons[i]
     	Menu.addButton("($" .. round(.50*weapon.price, 0) .. ") " .. weapon.name, "sellWeapon", weapon)
     end
-end
-
-function getPlayerDistanceFromShop(shopX,shopY,shopZ)
-	-- Get the player coords so that we know where to spawn it
-	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
-	return GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,shopX,shopY,shopZ,false)
 end
 
 function isPlayerAtBlackMarket()
