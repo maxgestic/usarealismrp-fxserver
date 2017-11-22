@@ -32,16 +32,16 @@ $(function() {
 
     <!-- ==== character selection hover effect ==== -->
     $(".columns").on('mouseover', '.char--create-char-card', function() {
-        $(this).css("border-color", "red");
+        $(this).css("border-color", "#B22234");
     });
     $(".columns").on('mouseleave', '.char--create-char-card', function() {
-        $(this).css("border-color", "transparent");
+        $(this).css("border-color", "white");
     });
     $(".columns").on('mouseover', '.char-card', function() {
-        $(this).css("border-color", "red");
+        $(this).css("border-color", "#B22234");
     });
     $(".columns").on('mouseleave', '.char-card', function() {
-        $(this).css("border-color", "transparent");
+        $(this).css("border-color", "white");
     });
     <!-- ==== end character selection hover effect ==== -->
 
@@ -71,7 +71,7 @@ $(function() {
             var slot = $(this).data("slot");
             //alert("deleting char at slot #" + slot);
             for (var i = 0; i < characters.length; ++i) {
-                alert("characters at " + i + " name = " + characters[i].firstName);
+                //alert("characters at " + i + " name = " + characters[i].firstName);
             }
             characters[slot] = {};
             //alert("just finished setting characters[slot] = {}...");
@@ -118,8 +118,8 @@ $(function() {
         day = dob.getDate();
         month = dob.getMonth() + 1;
         year = dob.getFullYear();
-        alert([day, month, year].join('/'));
-        if (year < 1900 || year > 2020) {
+        //alert([day, month, year].join('/'));
+        if (year < 1900 || year > 2020 || isNaN(day) || isNaN(month) || isNaN(year)) {
             alert("Invalid DOB entered!")
             return
         }
@@ -197,15 +197,15 @@ function populateDeleteCharacterPage() {
                 default:
             }
             var html = "<aside data-slot='" + x + "' class='" + asideClasses + "'>" +
-            "<header style='text-align:center;'>" +
-            "<h4>Character # " + (x + 1) + "</h4>" +
+            "<header style='text-align:center;font-size: 28px;padding-bottom:0;margin-bottom:0;'>" +
+            "<span>Character # " + (x + 1) + "</span>" +
             "</header>" +
-            "<section>" +
+            "<section style='margin-top:0;padding-top:0;'>" +
             "<ul>" +
-            "<li><b>Name:</b> " + characters[x].firstName + " " + characters[x].middleName + " " + characters[x].lastName + "</li>" +
-            "<li><b>DOB:</b> " + characters[x].dateOfBirth + "</li>" +
-            "<li><b>Money:</b> $" + parseFloat(characters[x].money).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + " </li>" +
-            "<li><b>Bank:</b> $" + parseFloat(characters[x].bank).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + "</li>" +
+            "<li><b>Name:</b> <span>" + characters[x].firstName + " " + characters[x].middleName + " " + characters[x].lastName + "</span></li>" +
+            "<li><b>DOB:</b> <span>" + characters[x].dateOfBirth + "</li>" +
+            "<li><b>Money:</b> <span>$" + parseFloat(characters[x].money).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + "</span></li>" +
+            "<li><b>Bank:</b> <span>$" + parseFloat(characters[x].bank).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + "</span></li>" +
             "</ul>" +
             "</section>" +
             "</aside>"
@@ -235,15 +235,15 @@ function populateHomeMenuCharacters() {
                 default:
             }
             var html = "<aside data-slot='" + x + "' class='" + asideClasses + "'>" +
-            "<header style='text-align:center;'>" +
-            "<h4>Character # " + (x + 1) + "</h4>" +
+            "<header style='text-align:center;font-size: 28px;padding-bottom:0;margin-bottom:0;'>" +
+            "<span>Character # " + (x + 1) + "</span>" +
             "</header>" +
-            "<section>" +
+            "<section style='margin-top:0;padding-top:0;'>" +
             "<ul>" +
-            "<li><b>Name:</b> " + characters[x].firstName + " " + characters[x].middleName + " " + characters[x].lastName + "</li>" +
-            "<li><b>DOB:</b> " + characters[x].dateOfBirth + "</li>" +
-            "<li><b>Money:</b> $" + parseFloat(characters[x].money).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + " </li>" +
-            "<li><b>Bank:</b> $" + parseFloat(characters[x].bank).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + "</li>" +
+            "<li><b>Name:</b> <span>" + characters[x].firstName + " " + characters[x].middleName + " " + characters[x].lastName + "</span></li>" +
+            "<li><b>DOB:</b> <span>" + characters[x].dateOfBirth + "</li>" +
+            "<li><b>Money:</b> <span>$" + parseFloat(characters[x].money).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + "</span></li>" +
+            "<li><b>Bank:</b> <span>$" + parseFloat(characters[x].bank).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + "</span></li>" +
             "</ul>" +
             "</section>" +
             "</aside>"
@@ -276,10 +276,10 @@ function populateHomeMenuCharacters() {
         }
         // todo: when this char card is clicked, trigger the create new char buttn in this slot #
         var html = "<aside data-slot='" + x + "' class='" + asideClasses + " char--create-char-card'>" +
-        "<header style='text-align:center;'>" +
-        "<h4>Character # " + (empty_char_index + 1) + "</h4>" +
+        "<header style='text-align:center;font-size: 28px;padding-bottom:0;margin-bottom:0;'>" +
+        "<span>Character # " + (empty_char_index + 1) + "</span>" +
         "</header>" +
-        "<section style='margin-top:1em;text-align:center;'>" +
+        "<section style='margin-top:10em;text-align:center;'>" +
         "<span style='font-size:64px;'><b>+</b></span>" +
         "</section>" +
         "</aside>"

@@ -3,6 +3,13 @@ local selectedCharacter = {}
 local selectedCharacterSlot = 0
 local newCharacterTemplate = {} -- all atrributes for new characters are created here
 
+local cam_coords = {
+    x = -1236.653,
+    y = 4392.405,
+    z = 19.532,
+    angle = 285.343
+}
+
 RegisterNetEvent("character:open")
 AddEventHandler("character:open", function(menu, data)
     menuOpen = true

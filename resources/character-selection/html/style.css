@@ -1,5 +1,5 @@
 body {
-    font-family: sans-serif;
+    font-family: 'Open Sans Condensed', sans-serif;
     overflow: hidden;
     display: none;
     margin: 0;
@@ -18,17 +18,20 @@ body {
 }
 .header, .footer{
   height: 200px;
-  color: black;
+  color: white;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0;
+  font-size: 56px;
 }
 .content {
-  background: #999;
+  background: rgba(0,0,0,0.85);
   color: #000;
   margin: 0;
+  border-top: 1.5px solid #B22234;
+    border-bottom: 1.5px solid #B22234;
 }
 .columns{
   display: flex;
@@ -40,24 +43,24 @@ body {
 }
 .char-card {
     border-radius: 3px;
-    border-color: transparent;
+    border-color: white;
     border-width: 1px;
     border-style: solid;
 }
 .char-first{
   width: 22%;
-  background: #ccc;
+  background: rgba(239,239,239, .85);
   order: 1;
 }
 .char-second{
    width: 22%;
   order: 2;
-  background: #eee;
+  background: rgba(239,239,239, .85);
 }
 .char-third{
   width: 22%;
   order: 3;
-  background: #ddd;
+  background: rgba(239,239,239, .85);
 }
 aside {
    margin: 1em 2em;
@@ -94,7 +97,7 @@ input, label {
     border-style: solid;
 }
 .button-link {
-    border: 1px solid black;
+    border: 1px solid white;
     color: white;
     padding: 1em;
     margin-bottom: 1em;
@@ -103,6 +106,13 @@ input, label {
     transition-duration: .3s;
 }
  .button-link:hover {
-    border: 1px solid white;
-    color: black;
+    border: 1px solid #B22234;
+}
+ul li span{
+    font-size: 24px;
+    padding-left: .5em;
+}
+label {
+    padding-top: 1em;
+    color: white;
 }
