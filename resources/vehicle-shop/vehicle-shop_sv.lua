@@ -98,10 +98,12 @@ function renewInsurance(source)
 				type = "auto",
 				valid = true,
 				expireMonth = expireMonth,
-				expireYear = expireYear
+				expireYear = expireYear,
+				purchaseDate = os.date('%m-%d-%Y %H:%M:%S', os.time()),
+				purchaseTime = os.time()
 			}
 			user.setActiveCharacterData("insurance", insurancePlan)
-			print("taking $15,000 from player for auto insurance!")
+			print("taking $$$ from player for auto insurance!")
 			user.setActiveCharacterData("money", user_money - INSURANCE_COVERAGE_MONTHLY_COST)
 			TriggerClientEvent("vehShop:notify", userSource, "~w~Thanks for purchasing auto insurance coverage! Your coverage expires on ~y~" .. padzero(expireMonth, 2) .. "/" .. expireYear .. "~w~.")
 		else
@@ -115,30 +117,7 @@ RegisterServerEvent("vehShop:buyInsurance")
 AddEventHandler("vehShop:buyInsurance", function()
 	local userSource = tonumber(source)
 	print("player " .. GetPlayerName(source) .. " is buying auto insurance!")
-	local EXPIRATION_TIME_IN_MONTHS = 1
 	local INSURANCE_COVERAGE_MONTHLY_COST = 7500
-	local timestamp = os.date("*t", os.time())
-	local expireMonth, expireYear
-	local skip = false
-	if timestamp.month < 12 then
-		if timestamp.day > 15 then
-			expireMonth = timestamp.month + EXPIRATION_TIME_IN_MONTHS + 1
-			if expireMonth > 12 then
-				print("***expire month was 13 when buying auto insurance!!!****")
-				expireMonth = 1
-				expireYear = timestamp.year + 1
-				skip = true -- skip overwriting timestamp year down the code
-			end
-		else
-			expireMonth = timestamp.month + EXPIRATION_TIME_IN_MONTHS
-		end
-		if not skip then
-			expireYear = timestamp.year
-		end
-	else
-		expireMonth = 1
-		expireYear = timestamp.year + 1
-	end
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local insurance = user.getActiveCharacterData("insurance")
 		local user_money = user.getActiveCharacterData("money")
@@ -147,13 +126,13 @@ AddEventHandler("vehShop:buyInsurance", function()
 				planName = "T. Ends Auto Insurance",
 				type = "auto",
 				valid = true,
-				expireMonth = expireMonth,
-				expireYear = expireYear
+				purchaseDate = os.date('%m-%d-%Y %H:%M:%S', os.time()),
+				purchaseTime = os.time()
 			}
 			user.setActiveCharacterData("insurance", insurancePlan)
 			print("taking $" .. INSURANCE_COVERAGE_MONTHLY_COST .. " from player for auto insurance!")
 			user.setActiveCharacterData("money", user_money - INSURANCE_COVERAGE_MONTHLY_COST)
-			TriggerClientEvent("vehShop:notify", userSource, "~w~Thanks for purchasing auto insurance coverage! Your coverage expires on the 1st day of ~y~" .. padzero(expireMonth, 2) .. "/" .. expireYear .. "~w~.")
+			TriggerClientEvent("vehShop:notify", userSource, "~w~Thanks for purchasing auto insurance coverage! Your coverage expires in ~y~31~w~ days.")
 		else
 			print("player did not have enough money to buy insurance")
 			TriggerClientEvent("vehShop:notify", userSource, "You ~r~don't have enough money~w~ to buy auto insurance coverage!")
@@ -172,11 +151,14 @@ AddEventHandler("vehShop:checkPlayerInsurance", function()
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local playerInsurance = user.getActiveCharacterData("insurance")
 		if playerInsurance.type == "auto" then
-			TriggerClientEvent("chatMessage", userSource, "T. ENDS INSURANCE", {255, 78, 0}, "You are already insured! Your coverage will expire on the 1st day of ^3" .. padzero(playerInsurance.expireMonth, 2) .. "/" .. playerInsurance.expireYear .. "^0.")
-			renewInsurance(userSource)
-			return
+			if playerHasValidAutoInsurance(playerInsurance) then
+				TriggerClientEvent("chatMessage", userSource, "T. ENDS INSURANCE", {255, 78, 0}, "You are already insured!")
+			else
+				TriggerClientEvent("chatMessage", userSource, "T. ENDS INSURANCE", {255, 78, 0}, "Your auto insurance coverage has ~r~expired~w~! Would you like to renew it?")
+				user.setActiveCharacterData("insurance", {})
+				TriggerClientEvent("vehShop:insuranceOptionMenu", userSource)
+			end
 		end
-		TriggerClientEvent("vehShop:insuranceOptionMenu", userSource)
 	end)
 end)
 
@@ -283,4 +265,22 @@ end)
 
 function round(num, numDecimalPlaces)
   return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+end
+
+function playerHasValidAutoInsurance(playerInsurance)
+	local timestamp = os.date("*t", os.time())
+		if playerInsurance.type == "auto" then
+			local reference = playerInsurance.purchaseTime
+			local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
+			local wholedays = math.floor(daysfrom)
+			print(wholedays) -- today it prints "1"
+			if wholedays < 32 then
+				return true -- valid insurance, it was purchased 31 or less days ago
+			else
+				return false
+			end
+		else
+			-- no insurance at all
+			return false
+		end
 end

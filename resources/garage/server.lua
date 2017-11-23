@@ -19,20 +19,14 @@ end)
 function playerHasValidAutoInsurance(playerInsurance, source)
 	local timestamp = os.date("*t", os.time())
 		if playerInsurance.type == "auto" then
-			if timestamp.year <= playerInsurance.expireYear then
-				if timestamp.month < playerInsurance.expireMonth then
-					-- valid insurance
-					return true
-				else
-					-- expired month
-					TriggerClientEvent("garage:notify", source, "~r~T. ENDS INSURANCE: ~w~Sorry your coverage ended on " .. playerInsurance.expireMonth .. "/" .. playerInsurance.expireYear.. ". We won't be able to help you.")
-					-- TODO: remove auto insurance so player can buy a new one without having to relog to remove it
-					return false
-				end
+			local reference = playerInsurance.purchaseTime
+			local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
+			local wholedays = math.floor(daysfrom)
+			print(wholedays) -- today it prints "1"
+			if wholedays < 32 then
+				return true -- valid insurance, it was purchased 31 or less days ago
 			else
-				-- expired year
-				TriggerClientEvent("garage:notify", source, "~r~T. ENDS INSURANCE: ~w~Sorry your coverage ended on " .. playerInsurance.expireMonth .. "/" .. playerInsurance.expireYear .. ". We won't be able to help you.")
-				-- TODO: remove auto insurance so player can buy a new one without having to relog to remove it
+				TriggerClientEvent("garage:notify", source, "~r~T. ENDS INSURANCE: ~w~Sorry! Your insurance coverage expired. We won't be able to help you.")
 				return false
 			end
 		else
