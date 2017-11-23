@@ -261,7 +261,6 @@ end)
 -- Freezing
 local frozen = {}
 TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, user)
-	local userJob = user.getJob()
 	if args[2] == "pd" then
 		TriggerClientEvent('es_admin:teleportUser', source, 451.255, -992.41, 30.6896)
 		return
@@ -632,7 +631,7 @@ fetchAllBans()
 			end
 		end
 	end)
-	
+
 	-- ban command
 	TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, user)
 		local userSource = tonumber(source)
