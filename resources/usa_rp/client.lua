@@ -74,7 +74,7 @@ Citizen.CreateThread(function()
 end)
 
 -- NO DRIVE BY'S
-local passengerDriveBy = false
+local passengerDriveBy = true
 Citizen.CreateThread(function()
 	while true do
 		Wait(1)
