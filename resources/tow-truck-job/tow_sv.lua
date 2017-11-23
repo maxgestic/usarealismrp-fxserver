@@ -11,8 +11,7 @@ AddEventHandler("towJob:impoundVehicle", function(targetVehicle)
 				-- The user object is either nil or the loaded user.
 				TriggerEvent('es:getPlayerFromId', userSource, function(user)
 					local user_money = user.getActiveCharacterData("money")
-					user.setActiveCharacterData("money", user_money + 675)
-					-- user:setLicense() ??
+					user.setActiveCharacterData("money", user_money + 400)
 					TriggerClientEvent("towJob:deleteVehicle", userSource, targetVehicle) -- delete vehicle
 					currentlyTowedVehicle = nil
 					TriggerClientEvent("towJob:success", userSource)
