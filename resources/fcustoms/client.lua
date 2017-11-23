@@ -124,11 +124,11 @@ customs = {
     }},
     {title = "Armour", data = {
         {name = "None",mt = 16, mod = -1,cost = 0},
-        {name = "Armour Upgrade 20%",mt = 16, mod = 0, cost = 50000},
-        {name = "Armour Upgrade 40%",mt = 16, mod = 1, cost = 100000},
-        {name = "Armour Upgrade 60%",mt = 16, mod = 2, cost = 150000},
-        {name = "Armour Upgrade 80%",mt = 16, mod = 3, cost = 200000},
-        {name = "Armour Upgrade 100%",mt = 16, mod = 4, cost = 250000},
+        {name = "Armour Upgrade 20%",mt = 16, mod = 0, cost = 250000},
+        {name = "Armour Upgrade 40%",mt = 16, mod = 1, cost = 500000},
+        {name = "Armour Upgrade 60%",mt = 16, mod = 2, cost = 1000000},
+        {name = "Armour Upgrade 80%",mt = 16, mod = 3, cost = 5000000},
+        {name = "Armour Upgrade 100%",mt = 16, mod = 4, cost = 9000000},
     }},
     {title = "Lights", data = {
         ["Xenon"] = {
