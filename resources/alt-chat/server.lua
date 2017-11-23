@@ -35,7 +35,7 @@ AddEventHandler('altchat:chatMessageEntered', function(name, color, message)
 	--print(GetPlayerName(source))
 	--local msg = table.concat(args, " ")
 	--local sender = GetPlayerName(source)
-	TriggerClientEvent('chatMessage', -1, "[OOC] - " .. name, {88, 193, 221}, message)
+	TriggerClientEvent('chatMessage', -1, "[OOC] - " .. name .. "(#" .. source .. ")", {88, 193, 221}, message)
 end)
 
 -- 911 CALL
