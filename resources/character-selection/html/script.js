@@ -31,7 +31,7 @@ $(function() {
         }
     };
     */
-    
+
     <!-- ==== character selection hover effect ==== -->
     $(".columns").on('mouseover', '.char--create-char-card', function() {
         $(this).css("border-color", "#B22234");
@@ -200,7 +200,7 @@ function populateDeleteCharacterPage() {
             }
             var html = "<aside data-slot='" + x + "' class='" + asideClasses + "'>" +
             "<header style='text-align:center;font-size: 28px;padding-bottom:0;margin-bottom:0;'>" +
-            "<span>Character # " + (x + 1) + "</span>" +
+            "<span>Character #" + (x + 1) + "</span>" +
             "</header>" +
             "<section style='margin-top:0;padding-top:0;'>" +
             "<ul>" +
@@ -238,7 +238,7 @@ function populateHomeMenuCharacters() {
             }
             var html = "<aside data-slot='" + x + "' class='" + asideClasses + "'>" +
             "<header style='text-align:center;font-size: 28px;padding-bottom:0;margin-bottom:0;'>" +
-            "<span>Character # " + (x + 1) + "</span>" +
+            "<span>Character #" + (x + 1) + "</span>" +
             "</header>" +
             "<section style='margin-top:0;padding-top:0;'>" +
             "<ul>" +
@@ -279,7 +279,7 @@ function populateHomeMenuCharacters() {
         // todo: when this char card is clicked, trigger the create new char buttn in this slot #
         var html = "<aside data-slot='" + x + "' class='" + asideClasses + " char--create-char-card'>" +
         "<header style='text-align:center;font-size: 28px;padding-bottom:0;margin-bottom:0;'>" +
-        "<span>Character # " + (empty_char_index + 1) + "</span>" +
+        "<span>Character #" + (empty_char_index + 1) + "</span>" +
         "</header>" +
         "<section style='margin-top:10em;text-align:center;'>" +
         "<span style='font-size:64px;'><b>+</b></span>" +

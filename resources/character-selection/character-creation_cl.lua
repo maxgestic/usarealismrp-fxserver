@@ -1,7 +1,7 @@
 local menuOpen = false
 local selectedCharacter = {}
 local selectedCharacterSlot = 0
-local newCharacterTemplate = {} -- all atrributes for new characters are created here
+local newCharacterTemplate = {} -- all attributes for new characters are created here
 
 local open_menu_spawn_coords = {
     x = -1236.653,
@@ -21,15 +21,6 @@ RegisterNetEvent("character:open")
 AddEventHandler("character:open", function(menu, data)
     menuOpen = true
     toggleMenu(menuOpen, menu, data)
-    if menu == "home" then
-        local ped = GetPlayerPed(-1)
-		SetEntityCoords(ped, open_menu_spawn_coords.x, open_menu_spawn_coords.y, open_menu_spawn_coords.z, open_menu_spawn_coords.angle, 0, 0, 1)
-		FreezeEntityPosition(ped, true)
-		DisplayHud(false)
-		DisplayRadar(false)
-		SetEnableHandcuffs(ped, true)
-		RemoveAllPedWeapons(ped, true)
-    end
 end)
 
 RegisterNetEvent("character:close")
@@ -151,12 +142,16 @@ end)
 function toggleMenu(status, menu, data)
     -- set player position
     local ped = GetPlayerPed(-1)
-    SetEntityCoords(ped, spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z, 0.0, 0, 0, 1) -- NEED TO CHANGE
-    FreezeEntityPosition(ped, false)
-    DisplayHud(true)
-    DisplayRadar(true)
-    SetEnableHandcuffs(ped, false)
-    RemoveAllPedWeapons(ped, false)
+    if status then
+        SetEntityCoords(ped, open_menu_spawn_coords.x, open_menu_spawn_coords.y, open_menu_spawn_coords.z, open_menu_spawn_coords.angle, 0, 0, 1)
+        RemoveAllPedWeapons(ped, true)
+    else
+        SetEntityCoords(ped, spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z, 0.0, 0, 0, 1)
+    end
+    FreezeEntityPosition(ped, status)
+    DisplayHud(not status)
+    DisplayRadar(not status)
+    SetEnableHandcuffs(ped, status)
     -- open / close menu
     SetNuiFocus(status, status)
     menuOpen = status
