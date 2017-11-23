@@ -93,9 +93,9 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
             TriggerEvent('altchat:localChatMessage', userSource, "^6[ID] ^2Name: ^4" .. name .. " ^0- ^2SSN: ^4" .. userSource)
         elseif firstWord == "/ad" then
             table.remove(args, 1)
-            TriggerClientEvent('chatMessage', -1, "[Advertisement] - " .. name, {171, 67, 227}, message)
+            TriggerClientEvent('chatMessage', -1, "[Advertisement] - " .. name, {171, 67, 227}, table.concat(args, " "))
         else
-            TriggerClientEvent('chatMessage', -1, "[OOC] - " .. name, {88, 193, 221}, message)
+            TriggerClientEvent('chatMessage', -1, "[OOC] - " .. name .. " (" .. userSource .. ")", {88, 193, 221}, message)
         end
     end
 
