@@ -443,7 +443,7 @@ Citizen.CreateThread( function()
         end
 
         -- LCtrl is not being pressed and M has just been pressed
-        if ( IsControlPressed( 1, 19 ) and IsControlJustPressed( 1, 244 ) ) then
+        if ( IsControlPressed( 1, 19 ) and IsControlJustPressed( 1, 244 ) and GetLastInputMethod(2)) then
             Citizen.Trace("radar reset!")
             ResetFrontFast()
             ResetRearFast()
