@@ -5,30 +5,7 @@ Config.Priority = {
     ["STEAM_0:1:#######"] = 50,
     ["steam:110000######"] = 25,
     ["ip:127.0.0.0"] = 85
-    -- end examples, start real peeps
-    --[[
-    ["steam:110000102f857d7"] = 50,
-    ["steam:11000011a437404"] = 1, -- distric
-    ["steam:110000106f87ef8"] = 1, -- afek
-    ["steam:1100001058e2443"] = 1, -- lucien castle
-    ["steam:1100001050af13a"] = 1, -- bert / otto
-    ["steam:11000011c037846"] = 1, -- lucy cole
-    ["steam:110000104ce1181"] = 50, -- cyril
-    ["steam:11000010c758e01"] = 1, -- eclipse
-    ["steam:11000010886ba11"] = 1, -- carter smith
-    ["steam:110000106ef7f61"] = 50, -- marcus
-    ["steam:11000010722541c"] = 20, -- nova
-    ["steam:1100001141991c8"] = 20, -- rimka
-    ["steam:1100001083d0f38"] = 50, -- weedem
-	["steam:1100001011cf039"] = 50, -- blackie
-	["steam:1100001007a8797"] = 100, -- mini friggin punch!!
-	["steam:11000010818cc14"] = 50, -- trevor lahey
-	["steam:110000102f857d7"] = 50, -- jamie
-	["steam:11000010a24a999"] = 2, -- brian barnes
-	["steam:11000010270ddb4"] = 50, -- kube
-	["steam:110000116400335"] = 50, -- ricky golden
-	["steam:11000010724bbe7"] = 51 -- swayamm cann
-    --]]
+    -- end examples, start real peeps...
 }
 
 Config.RequireSteam = true
@@ -675,101 +652,179 @@ end
 fetchWhitelistFromDb()
 
 AddEventHandler("rconCommand", function(command, args)
-    if command == "prioritize" then
-		local player = {}
-		if #args < 3 then
-			RconPrint("Usage: prioritize [steam-id] [level] [name]\n")
-			RconPrint("Example:\n")
-			RconPrint("prioritize STEAM_0:1:####### 1 Jonny Whitelisted Cash\n")
-			RconPrint("Or\n")
-			RconPrint("prioritize steam:110000###### 50 Impotent Kubane\n")
-			CancelEvent()
-			return
-		end
-		local steamIdentifier = args[1]
-		local priorityLevel = args[2]
-		table.remove(args,1)
-		table.remove(args,1)
-		local name = table.concat(args, " ")
-		player.name = name
-		player.priorityLevel = priorityLevel
-		player.steamIdentifier = steamIdentifier
-		print("adding player " .. name .. " to the priority list!")
-		TriggerEvent("Queue:addPlayerToPriorityList", player)
-        -- update db
-        TriggerEvent('es:exposeDBFunctions', function(GetDoc)
-            GetDoc.createDocument("whitelist",  {name = name, steam = steamIdentifier, priority = priorityLevel, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
-                print("player " .. name .. " added to whitelist!")
+  --[[
+  This command is for admins to use to add, remove, and update people's priority in the queue
+  USAGE:
+  prioritize [steam-id] [level] [name] (insert/update record)
+  OR
+  prioritize [steam-id] false (remove record)
+  ]]
+  if command == "prioritize" then
+    local player = {}
+    local streamIdentifier, priorityLevel, name
+    if #args < 2 then -- incorrect usage
+      RconPrint("Usage: prioritize [steam-id] [level] [name]\n")
+      RconPrint("Example:\n")
+      RconPrint("prioritize STEAM_0:1:####### 1 Jonny Whitelisted Cash\n")
+      RconPrint("Or\n")
+      RconPrint("prioritize steam:110000###### 50 Impotent Kubane\n")
+      CancelEvent()
+      return
+    elseif #args < 3 then -- no name, must be remove priority command
+      steamIdentifier = args[1]
+      priorityLevel = string.lower(args[2])
+      -- See if user typed "false" for priority level
+      if priorityLevel == "false" then
+        RconPrint("\nRemoving " .. steamIdentifier .. " from the priority list!")
+        -- See if a user with that steam identifier exists in the prority list
+        if Queue.Priority[steamIdentifier] then
+          -- Remove from lua dictionary
+          RconPrint("\nFound user with that identifier!\nRemoving from dictionary...")
+          Queue.Priority[steamIdentifier] = nil
+          -- Remove from database
+          RconPrint("\nRemoving from database...")
+          TriggerEvent('es:exposeDBFunctions', function(db)
+            RconPrint("\nRetrieving document...")
+            -- Get the document based on that steam identifier
+            db.getDocumentByRow("whitelist", "steam", steamIdentifier, function(doc, rText)
+              RconPrint("\nFinished retrieving.")
+              if rText then
+                -- something went wrong?
+                RconPrint("\nrText = " .. rText)
+              end
+              if doc then
+                -- doc existed, remove it...
+                RconPrint("\nRemoving document...")
+                PerformHttpRequest("http://127.0.0.1:5984/whitelist/"..doc._id.."?rev="..doc._rev, function(err, rText, headers)
+                  RconPrint("\nFinished removing.")
+                  if err == 0 then
+                    RconPrint("\nrText = " .. rText)
+                    RconPrint("\nerr = " .. err)
+                  end
+                end, "DELETE", "", {["Content-Type"] = 'application/json'})
+              end
             end)
-        end)
-        CancelEvent()
+          end)
+        end
+      end
+    else -- label/name was included, must be adding or modifying
+      steamIdentifier = string.lower(args[1])
+      priorityLevel = args[2]
+      table.remove(args,1)
+      table.remove(args,1)
+      name = table.concat(args, " ")
+      RconPrint("\nAdding player " .. name .. " to the priority list!")
+      -- Check for valid input
+      if type(steamIdentifier) == "string" and type(tonumber(priorityLevel)) == "number" then
+        print("steam ident was string and priority level was number")
+        local whitelist_member = Queue.Priority[steamIdentifier]
+        if whitelist_member then
+          RconPrint("\nPlayer with that identifier already exists!")
+          -- That identifier was associated with someone already prioritized, just modify it.
+          Queue.Priority[steamIdentifier] = priorityLevel
+          -- Also update the DB
+          TriggerEvent('es:exposeDBFunctions', function(db)
+            -- Get the document based on that steam identifier
+            db.getDocumentByRow("whitelist", "steam", steamIdentifier, function(doc, rText)
+              if rText then
+                RconPrint("\nrText = " .. rText)
+              end
+              if doc then
+                db.updateDocument("whitelist", doc._id, {name = name, priority = priorityLevel}, function(status)
+                  if status == true then
+                    RconPrint("\nDocument updated.")
+                  else
+                    RconPrint("\nStatus Response: " .. status)
+                    if status == "201" then
+                      RconPrint("\nDocument successfully updated!")
+                    end
+                  end
+                end)
+              end
+            end)
+          end)
+        else
+          -- Player did not exist previously, need to add
+          Queue.Priority[steamIdentifier] = priorityLevel
+          -- Create document in database.
+          TriggerEvent('es:exposeDBFunctions', function(db)
+            db.createDocument("whitelist",  {name = name, steam = steamIdentifier, priority = priorityLevel, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+              RconPrint("\nPlayer " .. name .. " added to whitelist!")
+            end)
+          end)
+        end
+      else
+        print("invalid input!")
+      end
+    end
+    CancelEvent()
     -- adds a fake player to the queue for debugging purposes, this will freeze the queue
-    elseif command == "addq" then
-        print("==ADDED FAKE QUEUE==")
-        Queue:AddToQueue({"steam:110000103fd1bb1"..testAdds}, os_time(), "Fake Player", "debug")
-        testAdds = testAdds + 1
-        CancelEvent()
+  elseif command == "addq" then
+    print("==ADDED FAKE QUEUE==")
+    Queue:AddToQueue({"steam:110000103fd1bb1"..testAdds}, os_time(), "Fake Player", "debug")
+    testAdds = testAdds + 1
+    CancelEvent()
 
     -- removes targeted id from the queue
-    elseif command == "removeq" then
-        if not args[1] then return end
-        print("REMOVED " .. Queue.QueueList[tonumber(args[1])].name .. " FROM THE QUEUE")
-        table_remove(Queue.QueueList, args[1])
-        CancelEvent()
+  elseif command == "removeq" then
+    if not args[1] then return end
+    print("REMOVED " .. Queue.QueueList[tonumber(args[1])].name .. " FROM THE QUEUE")
+    table_remove(Queue.QueueList, args[1])
+    CancelEvent()
 
     -- print the current queue list
-    elseif command == "printq" then
-        print("==CURRENT QUEUE LIST==")
-        for k,v in ipairs(Queue.QueueList) do
-            print(k .. ": [src: " .. v.source .. "] " .. v.name .. "[" .. v.ids[1] .. "] | Priority: " .. (tostring(v.priority and true or false)) .. " | Last Msg: " .. (v.source ~= "debug" and GetPlayerLastMsg(v.source) or "debug") .. " | Timeout: " .. v.timeout)
-        end
-        CancelEvent()
+  elseif command == "printq" then
+    print("==CURRENT QUEUE LIST==")
+    for k,v in ipairs(Queue.QueueList) do
+      print(k .. ": [src: " .. v.source .. "] " .. v.name .. "[" .. v.ids[1] .. "] | Priority: " .. (tostring(v.priority and true or false)) .. " | Last Msg: " .. (v.source ~= "debug" and GetPlayerLastMsg(v.source) or "debug") .. " | Timeout: " .. v.timeout)
+    end
+    CancelEvent()
 
     -- adds a fake player to the connecting list
-    elseif command == "addc" then
-        print("==ADDED FAKE CONNECTING QUEUE==")
-        Queue:AddToConnecting({"debug"})
-        CancelEvent()
+  elseif command == "addc" then
+    print("==ADDED FAKE CONNECTING QUEUE==")
+    Queue:AddToConnecting({"debug"})
+    CancelEvent()
 
     -- removes a player from the connecting list
-    elseif command == "removec" then
-        print("==REMOVED FAKE CONNECTING QUEUE==")
-        if not args[1] then return end
-        table_remove(Queue.Connecting, args[1])
-        CancelEvent()
+  elseif command == "removec" then
+    print("==REMOVED FAKE CONNECTING QUEUE==")
+    if not args[1] then return end
+    table_remove(Queue.Connecting, args[1])
+    CancelEvent()
 
     -- prints a list of players that are connecting
-    elseif command == "printc" then
-        print("==CURRENT CONNECTING LIST==")
-        for k,v in ipairs(Queue.Connecting) do
-            print(k .. ": [src: " .. v.source .. "] " .. v.name .. "[" .. v.ids[1] .. "] | Priority: " .. (tostring(v.priority and true or false)) .. " | Last Msg: " .. (v.source ~= "debug" and GetPlayerLastMsg(v.source) or "debug") .. " | Timeout: " .. v.timeout)
-        end
-        CancelEvent()
+  elseif command == "printc" then
+    print("==CURRENT CONNECTING LIST==")
+    for k,v in ipairs(Queue.Connecting) do
+      print(k .. ": [src: " .. v.source .. "] " .. v.name .. "[" .. v.ids[1] .. "] | Priority: " .. (tostring(v.priority and true or false)) .. " | Last Msg: " .. (v.source ~= "debug" and GetPlayerLastMsg(v.source) or "debug") .. " | Timeout: " .. v.timeout)
+    end
+    CancelEvent()
 
     -- prints a list of activated players
-    elseif command == "printl" then
-        for k,v in pairs(Queue.PlayerList) do
-            print(k .. ": " .. tostring(v))
-        end
-        CancelEvent()
+  elseif command == "printl" then
+    for k,v in pairs(Queue.PlayerList) do
+      print(k .. ": " .. tostring(v))
+    end
+    CancelEvent()
 
     -- prints a list of priority id's
-    elseif command == "printp" then
-        print("==CURRENT PRIORITY LIST==")
-        for k,v in pairs(Queue.Priority) do
-            print(k .. ": " .. tostring(v))
-        end
-        CancelEvent()
+  elseif command == "printp" then
+    print("==CURRENT PRIORITY LIST==")
+    for k,v in pairs(Queue.Priority) do
+      print(k .. ": " .. tostring(v))
+    end
+    CancelEvent()
 
     -- prints the current player count
-    elseif command == "printcount" then
-        print("Player Count: " .. Queue.PlayerCount)
-        CancelEvent()
+  elseif command == "printcount" then
+    print("Player Count: " .. Queue.PlayerCount)
+    CancelEvent()
 
-    elseif command == "printt" then
-        print("Thread Count: " .. Queue.ThreadCount)
-        CancelEvent()
-    end
+  elseif command == "printt" then
+    print("Thread Count: " .. Queue.ThreadCount)
+    CancelEvent()
+  end
 end)
 
 -- prevent duplicating queue count in server name
