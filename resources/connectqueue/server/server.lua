@@ -663,11 +663,13 @@ AddEventHandler("rconCommand", function(command, args)
     local player = {}
     local streamIdentifier, priorityLevel, name
     if #args < 2 then -- incorrect usage
-      RconPrint("Usage: prioritize [steam-id] [level] [name]\n")
+      RconPrint("Usage: prioritize [steam-id] [level] [name] to update or insert a member\n")
       RconPrint("Example:\n")
       RconPrint("prioritize STEAM_0:1:####### 1 Jonny Whitelisted Cash\n")
       RconPrint("Or\n")
       RconPrint("prioritize steam:110000###### 50 Impotent Kubane\n")
+      RconPrint("\nTo remove a member: ")
+      RconPrint("\nprioritize [steam-identifier] false")
       CancelEvent()
       return
     elseif #args < 3 then -- no name, must be remove priority command
