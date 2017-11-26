@@ -1,7 +1,6 @@
 local menuOpen = false
 local selectedCharacter = {}
 local selectedCharacterSlot = 0
-local newCharacterTemplate = {} -- all attributes for new characters are created here
 
 local open_menu_spawn_coords = {
     x = -1236.653,
@@ -87,31 +86,7 @@ end)
 
 RegisterNUICallback('new-character-submit', function(data, cb)
     print("saving character " .. data.firstName .. " into slot #" .. data.slot)
-    local slot = data.slot
-    newCharacterTemplate = {
-        firstName = data.firstName,
-        middleName = data.middleName,
-        lastName = data.lastName,
-        dateOfBirth = data.dateOfBirth,
-        active = data.active,
-        appearance = {},
-        jailtime = 0,
-        money = 5000,
-        bank = 0,
-        inventory = {},
-        weapons = {},
-        vehicles = {},
-        insurance = {},
-        job = "civ",
-        licenses = {},
-        criminalHistory = {},
-        policeRank = 0,
-        emsRank = 0,
-        securityRank = 0,
-        ingameTime = 0
-    }
-    -- save the new character with the data from the GUI form into the first character slot
-    TriggerServerEvent("character:save", newCharacterTemplate, slot)
+    TriggerServerEvent("character:new", data)
     cb('ok')
 end)
 
@@ -135,8 +110,13 @@ end)
 RegisterNUICallback('delete-character', function(data, cb)
     local slot = (data.slot) + 1 -- +1 because of js --> lua
     Citizen.Trace("deleting char at slot #" .. slot)
-    TriggerServerEvent("character:deleteCharacter", slot)
+    TriggerServerEvent("character:delete", slot)
     cb('ok')
+end)
+
+RegisterNetEvent("character:send-nui-message")
+AddEventHandler("delete--success", function(messageTable)
+  SendNUIMessage(messageTable)
 end)
 
 function toggleMenu(status, menu, data)

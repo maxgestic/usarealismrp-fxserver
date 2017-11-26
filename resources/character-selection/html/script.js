@@ -21,16 +21,24 @@ $(function() {
                     populateHomeMenuCharacters();
                 }
             }
+        } else if (event.data.type == "delete") {
+          var status = event.data.status;
+          if (status == "fail") {
+            alert("failed to delete character due to age!");
+            // todo: update interface to reflect failure
+          }
+          else {
+            alert("trying to delete character...");
+            characters[slot] = {};
+            // send to homepage
+            $("#menu--delete-character .columns").html("");
+            $("#menu--delete-character").hide();
+            $("#menu--home").show();
+            populateHomeMenuCharacters();
+            alert("successfully deleted character!");
+          }
         }
     });
-
-    /*
-    document.onkeyup = function (data) {
-        if (data.which == 27) { // Escape key
-            closeMenus(); // reset html / lui nui focus
-        }
-    };
-    */
 
     <!-- ==== character selection hover effect ==== -->
     $(".columns").on('mouseover', '.char--create-char-card', function() {
@@ -71,23 +79,9 @@ $(function() {
         var confirmed = confirm("Are you sure you want to permanently delete that character?");
         if (confirmed) {
             var slot = $(this).data("slot");
-            //alert("deleting char at slot #" + slot);
-            for (var i = 0; i < characters.length; ++i) {
-                //alert("characters at " + i + " name = " + characters[i].firstName);
-            }
-            characters[slot] = {};
-            //alert("just finished setting characters[slot] = {}...");
-            for (var i = 0; i < characters.length; ++i) {
-                //alert("characters at " + i + " name = " + characters[i].firstName);
-            }
             $.post('http://character-selection/delete-character', JSON.stringify({
                 slot: slot
             }));
-            // send to homepage
-            $("#menu--delete-character .columns").html("");
-            $("#menu--delete-character").hide();
-            $("#menu--home").show();
-            populateHomeMenuCharacters();
         }
     });
     <!-- ==== end character deletion ==== -->
