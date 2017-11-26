@@ -115,7 +115,7 @@ RegisterNUICallback('delete-character', function(data, cb)
 end)
 
 RegisterNetEvent("character:send-nui-message")
-AddEventHandler("delete--success", function(messageTable)
+AddEventHandler("character:send-nui-message", function(messageTable)
   SendNUIMessage(messageTable)
 end)
 

@@ -12,6 +12,8 @@ end)
 -- Creating a new character
 RegisterServerEvent("character:new")
 AddEventHandler("character:new", function(data)
+	local userSource = tonumber(source)
+	print("***INSIDE OF CHARACTER:NEW***")
   local slot = data.slot
   local newCharacterTemplate = {
     firstName = data.firstName,
@@ -39,7 +41,15 @@ AddEventHandler("character:new", function(data)
       time = os.time()
     }
   }
-  TriggerEvent("character:save", newCharacterTemplate, slot)
+    TriggerEvent("es:getPlayerFromId", userSource, function(user)
+        if user then
+            local characters = user.getCharacters()
+            print("trying to save character data into slot #" .. slot .. "...")
+            characters[slot] = newCharacterTemplate
+            user.setCharacters(characters)
+            print("done saving character data into slot #" .. slot)
+        end
+    end)
 end)
 
 RegisterServerEvent("character:setActive")
@@ -65,6 +75,7 @@ end)
 
 RegisterServerEvent("character:save")
 AddEventHandler("character:save", function(characterData, slot)
+print("***INSIDE OF CHARACTER:SAVE***")
     local userSource = tonumber(source)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
         if user then
@@ -90,10 +101,10 @@ AddEventHandler("character:delete", function(slot)
               characters[slot] = {active = false}
               user.setCharacters(characters)
               print("Done deleting character at slot #" .. slot .. ".")
-              TriggerClientEvent("character:send-nui-message", {type = "delete", status = "success"}) -- update nui menu
+              TriggerClientEvent("character:send-nui-message", userSource, {type = "delete", status = "success"}) -- update nui menu
             else
               print("Error: Can't delete a character whose age is less than one week.")
-              TriggerClientEvent("character:send-nui-message", {type = "delete", status = "fail"}) -- update nui menu
+              TriggerClientEvent("character:send-nui-message", userSource, {type = "delete", status = "fail"}) -- update nui menu
             end
         end
     end)

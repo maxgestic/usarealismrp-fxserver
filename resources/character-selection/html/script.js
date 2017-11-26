@@ -4,11 +4,11 @@ var default_bank = 0; // starting bank
 
 $(function() {
     window.addEventListener('message', function(event) {
-        var event = event.data
-        if (event.type == "toggleMenu") {
+        var eventData = event.data;
+        if (eventData.type == "toggleMenu") {
             // rename
-            var menuStatus = event.menuStatus
-            var menu = event.menu
+            var menuStatus = eventData.menuStatus;
+            var menu = eventData.menu;
             // show document
             document.body.style.display = menuStatus ? "block" : "none";
             // check menu type
@@ -17,25 +17,23 @@ $(function() {
                 $("#menu--" + menu + "").show();
                 // populate the fields with character data if going to the home menu
                 if (menu == "home") {
-                    characters = event.data
+                    characters = eventData.data;
                     populateHomeMenuCharacters();
                 }
             }
-        } else if (event.data.type == "delete") {
-          var status = event.data.status;
+        } else if (eventData.type == "delete") {
+          var status = eventData.status;
           if (status == "fail") {
-            alert("failed to delete character due to age!");
-            // todo: update interface to reflect failure
+            alert("Sorry, you can't delete a character that is less than 7 days old!");
+            // todo: update interface to reflect failure?
           }
           else {
-            alert("trying to delete character...");
             characters[slot] = {};
             // send to homepage
             $("#menu--delete-character .columns").html("");
             $("#menu--delete-character").hide();
             $("#menu--home").show();
             populateHomeMenuCharacters();
-            alert("successfully deleted character!");
           }
         }
     });
