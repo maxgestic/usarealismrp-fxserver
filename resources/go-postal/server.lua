@@ -7,7 +7,7 @@ AddEventHandler("transport:giveMoney", function(amount, job)
 		local user_money = user.getActiveCharacterData("money")
 		user.setActiveCharacterData("money", user_money + amount)
 		if job.name == "Cannabis Transport" then
-			local inventory = user.getInventory()
+			local inventory = user.getActiveCharacterData("inventory")
 			for i = 1, #inventory do
 				local item = inventory[i]
 				if item.name == "20g of concentrated cannabis" then
