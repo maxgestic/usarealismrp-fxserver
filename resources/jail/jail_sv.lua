@@ -51,8 +51,7 @@ function jailPlayer(data, officerName)
 		-- remove items from player
 		TriggerClientEvent("jail:removeWeapons", targetPlayer) -- take from ped
 		user.setActiveCharacterData("weapons", {})
-		user.setActiveCharacterData("weapons", {})
-		user.setActiveCharacterData("weapons", sentence)
+		user.setActiveCharacterData("jailtime", sentence)
 		-- add to criminal history
 		local playerCriminalHistory = user.getActiveCharacterData("criminalHistory")
 		local record = {
