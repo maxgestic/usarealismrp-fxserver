@@ -19,7 +19,35 @@ TriggerEvent('es:addCommand', 'hash', function(source, args, user)
 	TriggerClientEvent('es_admin:getHash', source, args[2])
 end)
 
--- Default commands
+-- staff chat
+TriggerEvent('es:addCommand', 'staff', function(source, args, user)
+    local userGroup = user.getGroup()
+    if userGroup == "owner" or userGroup == "superadmin" or userGroup == "admin" or userGroup == "mod" then
+        local staffId = tonumber(source)
+        table.remove(args, 1) -- remove "/staff" from what the user enters into chat box
+        local message = table.concat(args, " ") -- get all the remaining words separated by spaces the user enters into chat box
+        if not message then
+            TriggerClientEvent("chatMessage", tonumber(source), "", {}, "^2Usage: ^0/staff [message]")
+            return
+        end
+        TriggerEvent("es:getPlayers", function(players)
+            if players then
+                for id, player in pairs(players) do
+                    if id and player then
+                        local playerGroup = player.getGroup()
+                        if playerGroup == "owner" or playerGroup == "superadmin" or playerGroup == "admin" or playerGroup == "mod" then
+                            TriggerClientEvent("chatMessage", id, "", {}, "^2STAFF:^0 "..GetPlayerName(staffId).." [#"..staffId.."]")
+                            TriggerClientEvent("chatMessage", id, "", {}, "^2MESSAGE:^0 " .. message)
+                        end
+                    end
+                end
+            end
+        end)
+    else
+        print("non-staff player tried using /staff")
+    end
+end)
+
 TriggerEvent('es:addCommand', 'report', function(source, args, user)
 	local reporterId = tonumber(source)
 	local reportedId = args[2]
@@ -262,7 +290,8 @@ end)
 local frozen = {}
 TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, user)
 	if args[2] == "pd" then
-		TriggerClientEvent('es_admin:teleportUser', source, 451.255, -992.41, 30.6896)
+		local pdCoords = {x=-447.256 , y=6000.667 , z=30.686}
+		TriggerClientEvent('es_admin:teleportUser', source, pdCoords.x, pdCoords.y, pdCoords.z)
 		return
 	end
 	if tonumber(args[2]) ~= nil then

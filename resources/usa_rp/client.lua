@@ -57,7 +57,7 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(0)
 		SetPedDensityMultiplierThisFrame(0.8)
-		SetVehicleDensityMultiplierThisFrame(0.3)
+		SetVehicleDensityMultiplierThisFrame(0.6)
 	end
 end)
 
@@ -289,3 +289,20 @@ Citizen.CreateThread(function()
         end
     end
 end)
+
+-- stop seat shuffling in vehicles
+local antiShuffleEnabled = true
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(0)
+		if IsPedInAnyVehicle(GetPlayerPed(-1), false) and antiShuffleEnabled then
+			if GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), 0) == GetPlayerPed(-1) then
+				if GetIsTaskActive(GetPlayerPed(-1), 165) then
+					SetPedIntoVehicle(GetPlayerPed(-1), GetVehiclePedIsIn(GetPlayerPed(-1), false), 0)
+				end
+			end
+		end
+	end
+end)
+
+-- bait car

@@ -36,6 +36,7 @@ local blips = {
     {name=blipNameFuelBoat, id=427, x=-802.513, y=-1504.675,z=1.305},
     {name=blipNameFuelBoat, id=427,x=7.313,y=-2777.435,z=3.451},
     {name=blipNameFuelBoat,id=427,x=1326.863,y=4218.219,z=33.55},
+    {name=blipNameFuelBoat,id=427,x = -487.820, y = 6491.395, z = 0.964},
 
     --------- AVIONS ---------
     {name = blipNameFuelAvions, id=251,x=2133.268,y=4783.649,z=40.97},
@@ -328,6 +329,9 @@ boat_stations = {
 
     {x=1337.098,y=4218.219,z=31.05,s=28},
     {x=1322.839,y=4221.219,z=31.05,s=28},
+
+    -- paleto
+    {x = -487.820, y = 6491.395, z = 1.7, s=29}
 }
 
 
@@ -374,7 +378,7 @@ stationsText[25] = {x=-94.239,y=6419.58,z=32.615}
 
 --- Boats stations
 stationsText[26] = {x=-802.513, y=-1504.675,z=2}
-stationsText[27] = {x=7.313,y=-2777.435,z=3.451} 
+stationsText[27] = {x=7.313,y=-2777.435,z=3.451}
 stationsText[28] = {x=1326.863,y=4218.219,z=33.55}
 
 
@@ -508,15 +512,15 @@ end
 
 
 
-function DrawText3D(x,y,z, text) 
+function DrawText3D(x,y,z, text)
     local onScreen,_x,_y=World3dToScreen2d(x,y,z)
     local px,py,pz=table.unpack(GetGameplayCamCoords())
     local dist = GetDistanceBetweenCoords(px,py,pz, x,y,z, 1)
- 
+
     local scale = (1/dist)*2
     local fov = (1/GetGameplayCamFov())*100
     local scale = scale*fov
-   
+
     if onScreen then
         SetTextScale(0.0*scale, 1.1*scale)
         SetTextFont(0)

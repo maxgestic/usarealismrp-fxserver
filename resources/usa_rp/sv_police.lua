@@ -106,3 +106,22 @@ function comma_value(amount)
   end
   return formatted
 end
+
+-- bait car
+TriggerEvent('es:addCommand', 'lockbc', function(source, args, user)
+	local userjob = user.getJob()
+	if userjob == "sheriff" then
+		local ServerID = args[2]
+		if not tonumber(ServerID) then return end
+		TriggerClientEvent("simp:baitCarDisable", tonumber(ServerID))
+	end
+end)
+
+TriggerEvent('es:addCommand', 'unlockbc', function(source, args, user)
+	local userjob = user.getJob()
+	if userjob == "sheriff" then
+		local ServerID = args[2]
+		if not tonumber(ServerID) then return end
+		TriggerClientEvent("simp:baitCarunlock", tonumber(ServerID))
+	end
+end)
