@@ -5,7 +5,7 @@
 
 function LoadUser(identifier, source, new)
 	db.retrieveUser(identifier, function(user)
-		Users[source] = CreatePlayer(source, user.permission_level, user.money, user.bank, user.identifier, user.group, user.model, user.inventory, user.weapons, user.vehicles, user.insurance, user.job, user.licenses, user.criminalHistory, user.characters, user.jailtime, user.policeRank, user.policeCharacter, user.EMSRank, user.securityRank, user.ingameTime)
+		Users[source] = CreatePlayer(source, user.permission_level, user.identifier, user.group, user.characters, user.policeCharacter)
 		--print("loaded user " .. GetPlayerName(tonumber(source)) .. "from db...")
 
 		TriggerEvent('es:playerLoaded', source, Users[source])
@@ -53,30 +53,38 @@ end
 
 AddEventHandler("es:setPlayerData", function(user, k, v, cb)
 	if(Users[user])then
-		if(Users[user].get(k))then
-			if(k ~= "money") then
-				Users[user].set(k, v)
-
-				db.updateUser(Users[user].get('identifier'), {[k] = v}, function(d)
-					if d == true then
-						cb("Player data edited", true)
-					else
-						cb(d, false)
-					end
-				end)
+		-- passed in group field to save? save it on the user, not the user's character(s)
+		if(k == "group")then
+			Users[user].set(k, v)
+			db.updateUser(Users[user].get('identifier'), {group = v}, function(d)
+				if d == true then
+					cb("Player group data edited", true)
+				else
+					cb(d, false)
+				end
+			end)
+		else -- not group field, save it on the character
+			if(Users[user].getActiveCharacterData(k))then
+				if(k ~= "money") then
+					Users[user].setActiveCharacterData(k, v)
+					db.updateUser(Users[user].get('identifier'), {characters = Users[user].getCharacters()}, function(d)
+						if d == true then
+							cb("Player data edited", true)
+						else
+							cb(d, false)
+						end
+					end)
+				end
+			else
+				cb("Column does not exist!", false)
 			end
-
-			if(k == "group")then
-				Users[user].set(k, v)
-			end
-		else
-			cb("Column does not exist!", false)
 		end
 	else
 		cb("User could not be found!", false)
 	end
 end)
 
+-- todo: update for characters?
 AddEventHandler("es:setPlayerDataId", function(user, k, v, cb)
 	db.updateUser(user, {[k] = v}, function(d)
 		cb("Player data edited.", true)
@@ -101,12 +109,13 @@ AddEventHandler("es:getPlayerFromIdentifier", function(identifier, cb)
 	end)
 end)
 
+--[[
 -- Function to update player money every 60 seconds.
 local function savePlayerMoney()
 	SetTimeout(60000, function()
 		for k,v in pairs(Users)do
 			if Users[k] ~= nil then
-				db.updateUser(v.get('identifier'), {money = v.getMoney(), bank = v.getBank()}, function()end)
+				db.updateUser(v.get('identifier'), {characters = v.getCharacters()}, function() end)
 			end
 		end
 
@@ -115,3 +124,4 @@ local function savePlayerMoney()
 end
 
 savePlayerMoney()
+--]]

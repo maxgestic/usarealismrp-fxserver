@@ -130,7 +130,8 @@ AddEventHandler('es_holdup:rob', function(robb)
 						print("target existed...")
 					--target:addDirty_Money(store.reward)
 					print("adding stolen money amount of: " .. store.reward)
-					target.addMoney(store.reward)
+					local user_money = target.getActiveCharacterData("money")
+					target.setActiveCharacterData("money", user_money  + store.reward)
 					--TriggerClientEvent('chatMessage', -1, 'NEWS', {255, 0, 0}, "Robbery is over at: ^2" .. store.nameofstore)
 					sendMessageToEmsAndPolice("^1DISPATCH: ^0Robbery is over at: ^2" .. store.nameofstore)
 					end
@@ -146,7 +147,7 @@ function sendMessageToEmsAndPolice(msg)
 		if players then
 			for id, player in pairs(players) do
 				if id and player then
-					local playerJob = player.getJob()
+					local playerJob = player.getActiveCharacterData("job")
 					if playerJob == "sheriff" or playerJob == "police" or playerJob == "cop" or playerJob == "ems" then
 						TriggerClientEvent("chatMessage", id, "", {}, msg)
 					end

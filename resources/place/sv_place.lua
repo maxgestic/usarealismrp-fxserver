@@ -1,6 +1,7 @@
 TriggerEvent('es:addCommand', 'place', function(source, args, user)
     TriggerEvent('es:getPlayerFromId', source, function(user)
-        if user.getJob() == "sheriff" or user.getJob() == "ems" or user.getJob() == "fire" then
+      local user_job = user.getActiveCharacterData("job")
+        if user_job == "sheriff" or user_job == "ems" or user_job == "fire" then
              local tPID = tonumber(args[2])
              TriggerClientEvent("place", tPID)
         else
@@ -21,7 +22,8 @@ end)
 
 -- unseat
 TriggerEvent('es:addCommand', 'unseat', function(source, args, user)
-    if user.getJob() == "sheriff" or user.getJob() == "cop" or user.getJob() == "ems" or user.getJob() == "fire" then
+  local user_job = user.getActiveCharacterData("job")
+    if user_job == "sheriff" or user_job == "cop" or user_job == "ems" or user_job == "fire" then
         local targetPlayer = args[2]
 	    TriggerClientEvent("place:unseat", targetPlayer, source)
     end

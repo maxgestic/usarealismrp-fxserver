@@ -5,24 +5,26 @@ AddEventHandler("search:searchPlayer", function(source, playerId)
 			TriggerClientEvent("search:notifyNoExist", source, playerId) -- player does not exist
 			return
 		end
+		local user_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
 		local items = {}
-		local licenses = user.getLicenses()
+		local licenses = user.getActiveCharacterData("licenses")
 		for index = 1, #licenses do
 			--if licenses[index].name == "Driver's License" then
 				table.insert(items, licenses[index])
 			--end
 		end
-		local playerInventory = user.getInventory()
+		local playerInventory = user.getActiveCharacterData("inventory")
 		for i = 1, #playerInventory do
 			table.insert(items, playerInventory[i])
 		end
-		local playerWeapons = user.getWeapons()
+		local playerWeapons = user.getActiveCharacterData("weapons")
 		for j = 1, #playerWeapons do
 			table.insert(items, playerWeapons[j])
 		end
-			TriggerClientEvent("chatMessage", source, "SYSTEM", {255,136,0}, "SEARCH OF " .. GetPlayerName(playerId) .. ":")
-			if user.getMoney() > 0 then
-				TriggerClientEvent("chatMessage", source, "", {255,136,0}, "CASH: $" .. comma_value(user.getMoney()))
+			TriggerClientEvent("chatMessage", source, "SYSTEM", {255,136,0}, "SEARCH OF " .. user_name .. ":")
+			local user_money = user.getActiveCharacterData("money")
+			if user_money > 0 then
+				TriggerClientEvent("chatMessage", source, "", {255,136,0}, "CASH: $" .. comma_value(user_money))
 			end
 			for i = 1, #items do
 				local name = items[i].name
@@ -39,10 +41,11 @@ end)
 
 -- Add a command everyone is able to run. Args is a table with all the arguments, and the user is the user object, containing all the user data.
 TriggerEvent('es:addCommand', 'search', function(source, args, user)
+	local user_job = user.getActiveCharacterData("job")
 	local argument = args[2] -- player id to search
 	if argument == nil or type(tonumber(argument)) == nil then
 		TriggerClientEvent("search:help", source)
-	elseif user.getJob() ~= "cop" and user.getJob() ~= "sheriff" and user.getJob() ~= "highwaypatrol" then
+	elseif user_job ~= "cop" and user_job ~= "sheriff" and user_job ~= "highwaypatrol" then
 		TriggerClientEvent("search:failureNotJurisdiction", source)
 	else -- player is a cop, so allow search and perform search with argument = player id to search
 		TriggerEvent("altchat:localChatMessage", source, "^6* " .. GetPlayerName(source) .. " searches person.") -- send local me message

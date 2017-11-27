@@ -10,9 +10,9 @@ RegisterServerEvent('es_carwash:checkmoney')
 AddEventHandler('es_carwash:checkmoney', function ()
 	TriggerEvent('es:getPlayerFromId', source, function (user)
 		if enableprice == true then
-			userMoney = user.getMoney()
+			userMoney = user.getActiveCharacterData("money")
 			if userMoney >= price then
-				user.removeMoney(price)
+				user.setActiveCharacterData("money", userMoney - price)
 				TriggerClientEvent('es_carwash:success', source, price)
 			else
 				moneyleft = price - userMoney

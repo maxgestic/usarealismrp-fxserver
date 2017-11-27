@@ -6,19 +6,20 @@ RegisterServerEvent("generalStore:buyItem")
 AddEventHandler("generalStore:buyItem", function(item)
     local userSource = source
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
-        if user.getMoney() >= item.price then
-            user.removeMoney(item.price)
-            local inventory = user.getInventory()
+      local user_money = user.getActiveCharacterData("money")
+        if user_money >= item.price then
+          user.setActiveCharacterData("money", user_money - item.price)
+            local inventory = user.getActiveCharacterData("inventory")
             for i = 1, #inventory do
                 if inventory[i].name == item.name then
                     inventory[i].quantity = inventory[i].quantity + 1
-                    user.setInventory(inventory)
+                    user.setActiveCharacterData("inventory", inventory)
                     return
                 end
             end
             -- not already in player inventory at this point, so add it
             table.insert(inventory, item)
-            user.setInventory(inventory)
+            user.setActiveCharacterData("inventory", inventory)
         else
             -- not enough money
         end
@@ -29,7 +30,7 @@ RegisterServerEvent("generalStore:getItemsAndDisplay")
 AddEventHandler("generalStore:getItemsAndDisplay", function()
     local userSource = source
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
-        local inventory = user.getInventory()
+        local inventory = user.getActiveCharacterData("inventory")
         local items = {}
         for i = 1, #inventory do
             if inventory[i].legality == "legal" and inventory[i].type ~= "weapon" then
@@ -44,7 +45,7 @@ RegisterServerEvent("generalStore:sellItem")
 AddEventHandler("generalStore:sellItem", function(item)
     local userSource = source
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
-        local inventory = user.getInventory()
+        local inventory = user.getActiveCharacterData("inventory")
         for i = 1, #inventory do
             if inventory[i].name == item.name then
                 if inventory[i].quantity > 1 then
@@ -52,8 +53,9 @@ AddEventHandler("generalStore:sellItem", function(item)
                 else
                     table.remove(inventory,i)
                 end
-                user.addMoney(round(.50*item.price,0))
-                user.setInventory(inventory)
+                local user_money = user.getActiveCharacterData("money")
+                user.setActiveCharacterData("money", user_money + round(.50*item.price,0))
+                user.setActiveCharacterData("inventory", inventory)
                 return
             end
         end

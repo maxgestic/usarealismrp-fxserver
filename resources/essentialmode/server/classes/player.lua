@@ -5,50 +5,19 @@
 
 -- restart essentialmode
 
-function CreatePlayer(source, permission_level, money, bank, identifier, group, model, inventory, weapons, vehicles, insurance, job, licenses, criminalHistory, characters, jailtime, policeRank, policeCharacter, EMSRank, securityRank, ingameTime)
+function CreatePlayer(source, permission_level, identifier, group, characters, policeCharacter)
 	local self = {}
 
 	self.source = source
 	self.permission_level = permission_level
-	self.money = money
-	self.bank = bank
 	self.identifier = identifier
 	self.group = group
 	-- CUSTOM STUFF HERE --
-	self.model = model
-	self.inventory = inventory
-	self.weapons = weapons
-	self.vehicles = vehicles
-	self.insurance = insurance
-	self.job = job
-	self.licenses = licenses
-	self.criminalHistory = criminalHistory
 	self.characters = characters
-	self.jailtime = jailtime
-	if policeRank == nil then
-		self.policeRank = 0
-	else
-		self.policeRank = policeRank
-	end
 	if policeCharacter == nil then
 		self.policeCharacter = {}
 	else
 		self.policeCharacter = policeCharacter
-	end
-	if EMSRank == nil then
-		self.EMSRank = 0
-	else
-		self.EMSRank = EMSRank
-	end
-    if securityRank == nil then
-		self.securityRank = 0
-	else
-		self.securityRank = securityRank
-	end
-	if ingameTime == nil then
-		self.ingameTime = 0
-	else
-		self.ingameTime = ingameTime
 	end
 	-- END --
 	self.coords = {x = 0.0, y = 0.0, z = 0.0}
@@ -57,12 +26,58 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 
 	local rTable = {}
 
-	rTable.setJailtime = function(j)
-		self.jailtime = j
+	rTable.setActiveCharacterData = function(field, data)
+		for i = 1, #self.characters do
+			local char = self.characters[i]
+			if char.active == true then
+				--print("found an active character at " .. i .. "!")
+				--print("target field to set: " .. field)
+				--print("setting data...")
+				if self.characters[i][field] then
+					-- update the NUI gui
+					if field == "money" then
+						local new_money = data
+						local prev_money = self.characters[i][field]
+						if (new_money > prev_money) then
+							TriggerClientEvent("es:addedMoney", self.source, math.abs(prev_money - new_money), settings.defaultSettings.nativeMoneySystem)
+						else
+							TriggerClientEvent("es:removedMoney", self.source, math.abs(prev_money - new_money), settings.defaultSettings.nativeMoneySystem)
+						end
+						if not settings.defaultSettings.nativeMoneySystem then
+							--print("calling es:activeMoney with money = " .. new_money)
+							TriggerClientEvent('es:activateMoney', self.source , new_money)
+						end
+					elseif field == "bank" then
+						print("field was bank!")
+						--TriggerEvent("es:setPlayerData", self.source, "bank", data, function(response, success)
+							--print("bank saved!!")
+							--self.bank = data
+						--end)
+					end
+					-- update char
+					self.characters[i][field] = data
+					print("set!")
+				else
+					print("Error: field " .. field .. " did not exist on the character! can't set it!")
+				end
+			end
+		end
 	end
 
-	rTable.getJailtime = function()
-		return self.jailtime
+	rTable.getActiveCharacterData = function(field)
+		for i = 1, #self.characters do
+			local char = self.characters[i]
+			if char.active == true then
+				--print("found an active character at " .. i .. "!")
+				--print("target field to retrieve: " .. field)
+				if self.characters[i][field] then
+					return self.characters[i][field]
+				else
+					print("field " .. field .. " did not exist on the character! can't retrieve it!")
+					return nil
+				end
+			end
+		end
 	end
 
 	rTable.setCharacter = function(character, characterNumber)
@@ -81,47 +96,11 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 		return self.characters
 	end
 
-	rTable.setMoney = function(m)
-		local prevMoney = self.money
-		local newMoney = m
-
-		self.money = m
-
-		if((prevMoney - newMoney) < 0)then
-			TriggerClientEvent("es:addedMoney", self.source, math.abs(prevMoney - newMoney), settings.defaultSettings.nativeMoneySystem)
-		else
-			TriggerClientEvent("es:removedMoney", self.source, math.abs(prevMoney - newMoney), settings.defaultSettings.nativeMoneySystem)
-		end
-
-		if not settings.defaultSettings.nativeMoneySystem then
-			TriggerClientEvent('es:activateMoney', self.source , self.money)
-		end
+	rTable.getCharacter = function(index)
+		return self.characters[index]
 	end
 
 	-- CUSTOM SETTERS/GETTERS HERE --
-	rTable.getIngameTime = function()
-		return self.ingameTime
-	end
-
-	rTable.setIngameTime = function(time)
-		self.ingameTime = self.ingameTime + time
-	end
-	rTable.getSecurityRank = function()
-		return self.securityRank
-	end
-
-	rTable.setSecurityRank = function(rank)
-		self.securityRank = rank
-	end
-    
-    rTable.getEMSRank = function()
-		return self.EMSRank
-	end
-
-	rTable.setEMSRank = function(rank)
-		self.EMSRank = rank
-	end
-	
 	rTable.getPoliceCharacter = function()
 		return self.policeCharacter
 	end
@@ -129,91 +108,12 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 	rTable.setPoliceCharacter = function(character)
 		self.policeCharacter = character
 	end
-	
-	rTable.getPoliceRank = function()
-		return self.policeRank
-	end
 
-	rTable.setPoliceRank = function(rank)
-		self.policeRank = rank
-	end
-	
-	rTable.getCriminalHistory = function()
-		return self.criminalHistory
-	end
-
-	rTable.setCriminalHistory = function(history)
-		self.criminalHistory = history
-	end
-
-	rTable.getLicenses = function()
-		return self.licenses
-	end
-
-	rTable.setLicenses = function(l)
-		self.licenses = l
-	end
-
-	rTable.getInsurance = function()
-		return self.insurance
-	end
-
-	rTable.setInsurance = function(i)
-		self.insurance = i
-	end
-
-	rTable.getVehicles = function()
-		return self.vehicles
-	end
-
-	rTable.setVehicles = function(v)
-		self.vehicles = v
-	end
-
-	rTable.getWeapons = function()
-		return self.weapons
-	end
-
-	rTable.setWeapons = function(w)
-		self.weapons = w
-	end
-
-	rTable.getInventory = function()
-		return self.inventory
-	end
-
-	rTable.setInventory = function(i)
-		self.inventory = i
-	end
-
-	rTable.getModel = function()
-		return self.model
-	end
-
-	rTable.setModel = function(m)
-		self.model = m
-	end
-
-	rTable.getJob = function()
-		return self.job
-	end
-
-	rTable.setJob = function(m)
-		self.job = m
-	end
-
-	rTable.getMoney = function()
-		return self.money
-	end
-
+	-- unused? remove?
 	rTable.setBankBalance = function(m)
 		TriggerEvent("es:setPlayerData", self.source, "bank", m, function(response, success)
 			self.bank = m
 		end)
-	end
-
-	rTable.getBank = function()
-		return self.bank
 	end
 
 	rTable.getCoords = function()
@@ -226,42 +126,6 @@ function CreatePlayer(source, permission_level, money, bank, identifier, group, 
 
 	rTable.kick = function(r)
 		DropPlayer(self.source, r)
-	end
-
-	rTable.addMoney = function(m)
-		local newMoney = self.money + m
-
-		self.money = newMoney
-
-		TriggerClientEvent("es:addedMoney", self.source, m, settings.defaultSettings.nativeMoneySystem)
-		if not settings.defaultSettings.nativeMoneySystem then
-			TriggerClientEvent('es:activateMoney', self.source , self.money)
-		end
-	end
-
-	rTable.removeMoney = function(m)
-		local newMoney = self.money - m
-
-		self.money = newMoney
-
-		TriggerClientEvent("es:removedMoney", self.source, m, settings.defaultSettings.nativeMoneySystem)
-		if not settings.defaultSettings.nativeMoneySystem then
-			TriggerClientEvent('es:activateMoney', self.source , self.money)
-		end
-	end
-
-	rTable.addBank = function(m)
-		local newBank = self.bank + m
-		self.bank = newBank
-
-		TriggerClientEvent("es:addedBank", self.source, m)
-	end
-
-	rTable.removeBank = function(m)
-		local newBank = self.bank - m
-		self.bank = newBank
-
-		TriggerClientEvent("es:removedBank", self.source, m)
 	end
 
 	rTable.displayMoney = function(m)

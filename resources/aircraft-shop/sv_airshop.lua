@@ -8,9 +8,11 @@ AddEventHandler("airshop:rentVehicle", function(vehicle)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
         print("inside of get player from id")
         if user then
+            local user_money = user.getActiveCharacterData("money")
             print("user existed")
-            if user.getMoney() >= price then
-                user.removeMoney(price)
+            if user_money >= price then
+                local new_money = user_money - price
+                user.setActiveCharacterData("money", new_money)
                 print("calling spawnAircraft")
                 TriggerClientEvent("airshop:spawnAircraft", userSource, vehicle.hash)
             else
@@ -24,9 +26,11 @@ RegisterServerEvent("airshop:returnedVehicle")
 AddEventHandler("airshop:returnedVehicle", function(item)
     local userSource = tonumber(source)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
+        local user_money = user.getActiveCharacterData("money")
         local returnAmount = .25*item.price
         local rounded = round(returnAmount, 0)
-        user.addMoney(rounded)
+        local new_money = user_money + rounded
+        user.setActiveCharacterData("money", new_money)
     end)
 end)
 

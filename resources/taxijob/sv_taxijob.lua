@@ -3,14 +3,14 @@ local timeout = false
 RegisterServerEvent("taxi:setJob")
 AddEventHandler("taxi:setJob", function()
     TriggerEvent("es:getPlayerFromId", source, function(user)
-        if user.getJob() == "taxi" then
+        if user.getActiveCharacterData("job") == "taxi" then
             print("user " .. GetPlayerName(source) .. " just went off duty for downtown taxi cab co.!")
-            user.setJob("civ")
+            user.setActiveCharacterData("job", "civ")
             TriggerClientEvent("taxi:offDuty", source)
         else
             if not timeout then
                 print("user " .. GetPlayerName(source) .. " just went on duty for downtown taxi cab co.!")
-                user.setJob("taxi")
+                user.setActiveCharacterData("job", "taxi")
                 TriggerClientEvent("taxi:onDuty", source)
                 timeout = true
                 SetTimeout(15000, function()

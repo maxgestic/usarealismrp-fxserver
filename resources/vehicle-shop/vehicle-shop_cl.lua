@@ -143,7 +143,7 @@ function muscleMenu()
 	Menu.addButton("Imponte Phoenix ($23,375)","buyVehicle","-2095439403:23375:Imponte Phoenix")
 	Menu.addButton("Declasse Vigero ($12,500)","buyVehicle","-825837129:12500:Declasse Vigero")
 	Menu.addButton("Vapid Dominator ($19,400)","buyVehicle","80636076:19400:Vapid Dominator")
-	--Menu.addButton("Bravado Gauntlet ($21,400)","buyVehicle","1800170043:21400:Bravado Gauntlet")
+	Menu.addButton("Bravado Gauntlet ($27,400)","buyVehicle","-1800170043:27400:Bravado Gauntlet")
 
 end
 
@@ -313,7 +313,7 @@ end
 
 function displayInsuranceInfo()
 	Menu.hidden = not Menu.hidden
-	TriggerEvent("chatMessage", "T. ENDS INSURANCE", { 255, 78, 0 }, "T. Ends insurance will put your mind at ease by making sure you'll always have a ride even if yours gets stolen, lost, or totaled.")
+	TriggerEvent("chatMessage", "T. ENDS INSURANCE", { 255, 78, 0 }, "T. End's insurance will put your mind at ease by making sure you'll always have a ride even if yours gets stolen, lost, or totaled.")
 end
 
 -- only displays when player has no insurance

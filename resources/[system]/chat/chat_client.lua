@@ -1,6 +1,21 @@
 local chatInputActive = false
 local chatInputActivating = false
 
+-- START CHAR RELATED STUFF --
+local characterName = {
+    first = "",
+    middle = "",
+    last = ""
+}
+
+RegisterNetEvent("chat:setCharName")
+AddEventHandler("chat:setCharName", function(character)
+    characterName.first = character.firstName
+    characterName.middle = character.middleName
+    characterName.last = character.lastName
+end)
+-- END CHAR RELATED STUFF
+
 RegisterNetEvent('chatMessage')
 
 AddEventHandler('chatMessage', function(name, color, message)
@@ -22,8 +37,10 @@ RegisterNUICallback('chatResult', function(data, cb)
         --local r, g, b = GetPlayerRgbColour(id, _i, _i, _i)
         local r, g, b = 0, 0x99, 255
 
-        TriggerServerEvent('chatMessageEntered', GetPlayerName(id), { r, g, b }, data.message)
-		
+        local author = characterName.first .. " " .. characterName.last
+        TriggerServerEvent('chatMessageEntered', author, { r, g, b }, data.message)
+        Citizen.Trace("data.message = " .. data.message)
+
     end
 
     cb('ok')

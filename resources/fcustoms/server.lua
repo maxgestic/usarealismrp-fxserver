@@ -3,14 +3,14 @@ AddEventHandler("customs:saveCarData", function(data, plate)
 	local userSource = tonumber(source)
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		if user then
-			local userVehicles = user.getVehicles()
+			local userVehicles = user.getActiveCharacterData("vehicles")
 			for i = 1, #userVehicles do
 				local vehicle = userVehicles[i]
 				if string.match(plate,tostring(vehicle.plate)) ~= nil or plate == vehicle.plate then -- player actually owns car that is being stored
 					print("player vehicle found.. saving data")
 					vehicle.customizations = data
 					userVehicles[i] = vehicle
-					user.setVehicles(userVehicles)
+					user.setActiveCharacterData("vehicles", userVehicles)
 				end
 			end
 		end
@@ -21,8 +21,9 @@ RegisterServerEvent("customs:check")
 AddEventHandler("customs:check",function(title, data, cost, value)
 	local source = tonumber(source)
     TriggerEvent('es:getPlayerFromId', source, function(user)
-	    if (tonumber(user.getMoney()) >= tonumber(cost)) then
-	    	user.removeMoney(cost)
+		local user_money = user.getActiveCharacterData("money")
+	    if (tonumber(user_money) >= tonumber(cost)) then
+			user.setActiveCharacterData("money", user_money - cost)
 	    	TriggerClientEvent("customs:receive", source, title, data, value)
 	    else
 	    	TriggerClientEvent("pNotify:SendNotification", source, {text = "Insufficient funds!",type = "error",queue = "left",timeout = 2500,layout = "centerRight"})
@@ -34,8 +35,9 @@ RegisterServerEvent("customs:check2")
 AddEventHandler("customs:check2",function(title, data, cost, value, back)
 	local source = tonumber(source)
     TriggerEvent('es:getPlayerFromId', source, function(user)
+		local user_money = user.getActiveCharacterData("money")
 	    if (tonumber(user.getMoney()) >= tonumber(cost)) then
-	    	user.removeMoney(cost)
+	    	user.setActiveCharacterData("money", user_money - cost)
 	    	TriggerClientEvent("customs:receive2", source, title, data, value, back)
 	    else
 	    	TriggerClientEvent("pNotify:SendNotification", source, {text = "Insufficient funds!",type = "error",queue = "left",timeout = 2500,layout = "centerRight"})
@@ -47,8 +49,9 @@ RegisterServerEvent("customs:check3")
 AddEventHandler("customs:check3",function(title, data, cost, mod, back, name, wtype)
 	local source = tonumber(source)
     TriggerEvent('es:getPlayerFromId', source, function(user)
+		local user_money = user.getActiveCharacterData("money")
 	    if (tonumber(user.getMoney()) >= tonumber(cost)) then
-	    	user.removeMoney(cost)
+	    	user.setActiveCharacterData("money", user_money - cost)
 	    	TriggerClientEvent("customs:receive3", source, title, data, mod, back, name, wtype)
 	    else
 	    	TriggerClientEvent("pNotify:SendNotification", source, {text = "Insufficient funds!",type = "error",queue = "left",timeout = 2500,layout = "centerRight"})

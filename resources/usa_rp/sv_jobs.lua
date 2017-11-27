@@ -8,19 +8,19 @@ function removeOrDecrementItem(itemNameBeingGiven)
     local userSource = tonumber(source)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
         if user then
-            local inventory = user.getInventory()
+            local inventory = user.getActiveCharacterData("inventory")
             if itemNameBeingGiven == "Meth" then
                 for i = 1, #inventory do
                     if inventory[i].name == "Suspicious Chemicals" then
                         if inventory[i].quantity > 1 then
                             inventory[i].quantity = inventory[i].quantity - 1
-                            user.setInventory(inventory)
+                            user.setActiveCharacterData("inventory", inventory)
                             print("decremented Suspicious Chemicals! at: " .. inventory[i].quantity)
                             return
                         else
                             print("removing Suspicious Chemicals from inventory! at: " .. inventory[i].quantity)
                             table.remove(inventory, i)
-                            user.setInventory(inventory)
+                            user.setActiveCharacterData("inventory", inventory)
                             return
                         end
                     end
@@ -36,22 +36,23 @@ AddEventHandler("usa_rp:sellItem", function(job)
         local userSource = tonumber(source)
         TriggerEvent("es:getPlayerFromId", userSource, function(user)
             if user then
-                local inventory = user.getInventory()
+                local inventory = user.getActiveCharacterData("inventory")
                 for i = 1, #inventory do
                     local item = inventory[i]
                     if item.name == "Meth" then
-                        local reward = 275
-                        user.addMoney(reward)
+                        local reward = 400
+                        local user_money = user.getActiveCharacterData("money")
+                        user.setActiveCharacterData("money", user_money + reward)
                         if item.quantity > 1 then
                             inventory[i].quantity = inventory[i].quantity - 1
-                            user.setInventory(inventory)
+                            user.setActiveCharacterData("inventory", inventory)
                             print("meth quantity decremented!")
                             TriggerClientEvent("usa_rp:notify", userSource, "Thanks, homie! Here is ~g~$"..reward.."~w~!")
                             TriggerEvent("go_postal:removeActiveJob", userSource) -- make sure this works
                             return
                         end
                         table.remove(inventory,i)
-                        user.setInventory(inventory)
+                        user.setActiveCharacterData("inventory", inventory)
                         print("removed meth from inventrory!")
                         TriggerClientEvent("usa_rp:notify", userSource, "Thanks, homie! Here is ~g~$"..reward.."~w~!")
                         TriggerEvent("go_postal:removeActiveJob", userSource) -- make sure this works
@@ -70,14 +71,14 @@ AddEventHandler("usa_rp:giveItem", function(itemToGive)
     local userSource = tonumber(source)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
         if user then
-            local inventory = user.getInventory()
+            local inventory = user.getActiveCharacterData("inventory")
             removeOrDecrementItem(itemToGive.name)
             for i = 1, #inventory do
                 local item = inventory[i]
                 if item.name == itemToGive.name then -- player already has one of this item in inventory, so increment
                     inventory[i].quantity = inventory[i].quantity + 3 -- increment item in inventory
                     print("meth quantity added! at: " .. inventory[i].quantity)
-                    user.setInventory(inventory) -- save the inventory
+                    user.setActiveCharacterData("inventory", inventory) -- save the inventory
                     -- todo: choose one of a few different drop off location coordinates here?
                     if itemToGive.name == "Meth" then
                         dropoffCoords = {x = -402.63, y = 6316.12}
@@ -90,12 +91,12 @@ AddEventHandler("usa_rp:giveItem", function(itemToGive)
             end
             -- user does not have that item yet, so give it to them
             table.insert(inventory, itemToGive)
-            user.setInventory(inventory)
+            user.setActiveCharacterData("inventory", inventory)
             print("gave meth to user!")
             -- set waypoint
             -- todo: choose one of a few different drop off location coordinates here?
             if itemToGive.name == "Meth" then
-                dropoffCoords = {x = 1257.82, y = -1611.92}
+                dropoffCoords = {x = -402.63, y = 6316.12}
                 TriggerEvent("go_postal:setActiveJob", userSource, dropoffCoords, "meth_dropoff")
             end
             TriggerClientEvent("usa_rp:setWaypoint", userSource, dropoffCoords)
@@ -109,19 +110,19 @@ AddEventHandler("usa_rp:checkUserJobSupplies", function(supply)
     local userSource = tonumber(source)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
         if user then
-            local inventory = user.getInventory()
+            local inventory = user.getActiveCharacterData("inventory")
             for i = 1, #inventory do
                 local item = inventory[i]
                 if item.name == supply then -- player already has one of this item in inventory
                     if item.quantity > 1 then
                         inventory[i].quantity = item.quantity - 1
-                        user.setInventory(inventory)
+                        user.setActiveCharacterData("inventory", inventory)
                         TriggerClientEvent("usa_rp:doesUserHaveJobSupply", userSource, true)
                         print("player had job supply!!")
                         return
                     else
                         table.remove(inventory, i)
-                        user.setInventory(inventory)
+                        user.setActiveCharacterData("inventory", inventory)
                         TriggerClientEvent("usa_rp:doesUserHaveJobSupply", userSource, true)
                         print("player had job supply!!")
                         return
@@ -146,18 +147,18 @@ AddEventHandler("usa_rp:giveChemicals", function()
     local userSource = tonumber(source)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
         if user then
-            local inventory = user.getInventory()
+            local inventory = user.getActiveCharacterData("inventory")
             for i = 1, #inventory do
                 local item = inventory[i]
                 if item.name == "Suspicious Chemicals" then -- player already has one of this item in inventory
                     if item.quantity > 1 then
                         inventory[i].quantity = item.quantity + 1
-                        user.setInventory(inventory)
+                        user.setActiveCharacterData("inventory", inventory)
                         print("player went out of range, giving back Suspicious Chemicals")
                         return
                     else
                         table.insert(inventory, chemicals)
-                        user.setInventory(inventory)
+                        user.setActiveCharacterData("inventory", inventory)
                         print("player went out of range, giving back Suspicious Chemicals")
                         return
                     end
@@ -165,7 +166,7 @@ AddEventHandler("usa_rp:giveChemicals", function()
             end
             -- not in inventory at this point, so give chemicals here
             table.insert(inventory, chemicals)
-            user.setInventory(inventory)
+            user.setActiveCharacterData("inventory", inventory)
             print("player went out of range, giving back Suspicious Chemicals")
         end
     end)
@@ -185,12 +186,12 @@ AddEventHandler("usa_rp:startTimer", function(timerType)
             -- give loot
             TriggerEvent("es:getPlayerFromId", userSource, function(user)
                 if user then
-                    local inventory = user.getInventory()
+                    local inventory = user.getActiveCharacterData("inventory")
                     for i = 1, #inventory do
                         local item = inventory[i]
                         if item.name == "Suspicious Chemicals" then
                             inventory[i].quantity = inventory[i].quantity + 1
-                            user.setInventory(inventory)
+                            user.setActiveCharacterData("inventory", inventory)
                             print("Suspicious Chemicals quantity increased at: " .. inventory[i].quantity)
                             return
                         end
@@ -202,7 +203,7 @@ AddEventHandler("usa_rp:startTimer", function(timerType)
                         type = "chemical"
                     }
                     table.insert(inventory, suspiciousChemicals)
-                    user.setInventory(inventory)
+                    user.setActiveCharacterData("inventory", inventory)
                     print("added suspicious chemicals!")
                 end
             end)
@@ -215,8 +216,8 @@ AddEventHandler("methJob:checkUserMoney", function(amount)
     local MAX_CHEMICALS = 10
     local userSource = tonumber(source)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
-        local userMoney = user.getMoney()
-        local inventory = user.getInventory()
+        local userMoney = user.getActiveCharacterData("money")
+        local inventory = user.getActiveCharacterData("inventory")
         -- check for max item quantity
         if hasItem("Suspicious Chemicals", inventory, MAX_CHEMICALS) then
             TriggerClientEvent("usa_rp:notify", userSource, "You can't carry more than " .. MAX_CHEMICALS .. " Suspicious Chemicals!")
@@ -226,7 +227,7 @@ AddEventHandler("methJob:checkUserMoney", function(amount)
         if userMoney >= amount then
             -- continue with transaction
             TriggerClientEvent("methJob:getSupplies", userSource)
-            user.setMoney(userMoney - amount)
+            user.setActiveCharacterData("money", userMoney - amount)
         elseif userMoney < amount then
             -- not enough funds to continue
             TriggerClientEvent("usa_rp:notify", userSource, "Come back when you have ~y~$500~w~ to get the supplies!")

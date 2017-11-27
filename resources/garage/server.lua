@@ -2,12 +2,12 @@ RegisterServerEvent("garage:storeVehicle")
 AddEventHandler("garage:storeVehicle", function(handle, numberPlateText)
 	local userSource = tonumber(source)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
-		local userVehicles = user.getVehicles()
+		local userVehicles = user.getActiveCharacterData("vehicles")
 		for i = 1, #userVehicles do
 			local vehicle = userVehicles[i]
 			if string.match(numberPlateText,tostring(vehicle.plate)) ~= nil or numberPlateText == vehicle.plate then -- player actually owns car that is being stored
 				userVehicles[i].stored = true
-				user.setVehicles(userVehicles)
+				user.setActiveCharacterData("vehicles", userVehicles)
 				TriggerClientEvent("garage:storeVehicle", userSource)
 				return
 			end
@@ -19,20 +19,14 @@ end)
 function playerHasValidAutoInsurance(playerInsurance, source)
 	local timestamp = os.date("*t", os.time())
 		if playerInsurance.type == "auto" then
-			if timestamp.year <= playerInsurance.expireYear then
-				if timestamp.month < playerInsurance.expireMonth then
-					-- valid insurance
-					return true
-				else
-					-- expired month
-					TriggerClientEvent("garage:notify", source, "~r~T. ENDS INSURANCE: ~w~Sorry your coverage ended on " .. playerInsurance.expireMonth .. "/" .. playerInsurance.expireYear.. ". We won't be able to help you.")
-					-- TODO: remove auto insurance so player can buy a new one without having to relog to remove it
-					return false
-				end
+			local reference = playerInsurance.purchaseTime
+			local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
+			local wholedays = math.floor(daysfrom)
+			print(wholedays) -- today it prints "1"
+			if wholedays < 32 then
+				return true -- valid insurance, it was purchased 31 or less days ago
 			else
-				-- expired year
-				TriggerClientEvent("garage:notify", source, "~r~T. ENDS INSURANCE: ~w~Sorry your coverage ended on " .. playerInsurance.expireMonth .. "/" .. playerInsurance.expireYear .. ". We won't be able to help you.")
-				-- TODO: remove auto insurance so player can buy a new one without having to relog to remove it
+				TriggerClientEvent("garage:notify", source, "~r~T. ENDS INSURANCE: ~w~Sorry! Your insurance coverage expired. We won't be able to help you.")
 				return false
 			end
 		else
@@ -46,21 +40,22 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle)
 	print("inside checkVehicleStatus with vehicle = " .. vehicle.model)
 	local userSource = tonumber(source)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
-		local userVehicles = user.getVehicles()
-		local playerInsurance = user.getInsurance()
+		local userVehicles = user.getActiveCharacterData("vehicles")
+		local playerInsurance = user.getActiveCharacterData("insurance")
 		if vehicle.impounded == true then
 			print("users vehicle was impounded!")
 			if user.getMoney() >= 2000 then
 				TriggerClientEvent("garage:notify", userSource, "~g~BC IMPOUND: ~w~Here's your car!")
 				TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
-				user.setMoney(user.getMoney() - 2000)
+				local user_money = user.getActiveCharacterData("money")
+				user.setActiveCharacterData("money", user_money - 2000)
 				--vehicle.impounded = false
 				for i = 1, #userVehicles do
 					local thisVeh = userVehicles[i]
 					if thisVeh.plate == vehicle.plate then
 						print("user retrieved an impounded vehicle.. setting impounded to false")
 						userVehicles[i].impounded = false
-						user.setVehicles(userVehicles)
+						user.setActiveCharacterData("vehicles", userVehicles)
 					end
 				end
 			else
@@ -85,7 +80,7 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle)
 				local thisVeh = userVehicles[i]
 				if thisVeh.plate == vehicle.plate then
 					userVehicles[i].stored = false
-					user.setVehicles(userVehicles)
+					user.setActiveCharacterData("vehicles", userVehicles)
 				end
 			end
 		end
@@ -97,10 +92,11 @@ RegisterServerEvent("garage:spawn")
 AddEventHandler("garage:spawn", function()
 	local userSource = tonumber(source)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
-		if #(user.getVehicles())  == 0 then
+	local vehs = user.getActiveCharacterData("vehicles")
+		if #(vehs)  == 0 then
 			TriggerClientEvent("garage:notify", userSource, "~y~You don't seem to own any vehicles.")
 		else
-			TriggerClientEvent("garage:spawn", userSource, user.getVehicles())
+			TriggerClientEvent("garage:spawn", userSource, vehs)
 			TriggerClientEvent("garage:notify", userSource, "~g~Here you go. Drive safe!")
 		end
 	end)
@@ -112,7 +108,7 @@ RegisterServerEvent("garage:openMenu")
 AddEventHandler("garage:openMenu", function()
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
-		local playerVehicles = user.getVehicles()
+		local playerVehicles = user.getActiveCharacterData("vehicles")
 		TriggerClientEvent("garage:openMenuWithVehiclesLoaded", userSource, playerVehicles)
 	end)
 end)

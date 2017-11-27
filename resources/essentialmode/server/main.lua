@@ -9,6 +9,7 @@ _VERSION = '4.1.4'
 Users = {}
 commands = {}
 settings = {}
+-- some of these default settings are now unused (since it was moved into the characters attribute)
 settings.defaultSettings = {
 	['pvpEnabled'] = true,
 	['permissionDenied'] = false,
@@ -46,21 +47,21 @@ AddEventHandler('playerDropped', function()
 
 	if(Users[numberSource])then
 		print("player " .. GetPlayerName(numberSource) .. " dropped from the server!")
-		local inventory = Users[numberSource].getInventory()
+		local inventory = Users[numberSource].getActiveCharacterData("inventory")
 		if inventory then
 			for i = 1, #inventory do
 				local item = inventory[i]
 				if item then
 					if item.name == "20g of concentrated cannabis" then
 						table.remove(inventory, i)
-						Users[numberSource].setInventory(inventory)
+						Users[numberSource].setActiveCharacterData("inventory", inventory)
 						print("player dropped with cannabis, removing it...")
 					end
 				end
 			end
 		end
 		TriggerEvent("es:playerDropped", Users[numberSource])
-		db.updateUser(Users[numberSource].get('identifier'), {money = Users[numberSource].getMoney(), bank = Users[numberSource].getBank(), model = Users[numberSource].getModel(), inventory = Users[numberSource].getInventory(), weapons = Users[numberSource].getWeapons(), vehicles = Users[numberSource].getVehicles(), insurance = Users[numberSource].getInsurance(), job = Users[numberSource].getJob(), licenses = Users[numberSource].getLicenses(), criminalHistory = Users[numberSource].getCriminalHistory(), characters = Users[numberSource].getCharacters(), jailtime = Users[numberSource].getJailtime(), policeRank = Users[numberSource].getPoliceRank(), policeCharacter = Users[numberSource].getPoliceCharacter(), EMSRank = Users[numberSource].getEMSRank(), securityRank = Users[numberSource].getSecurityRank(), ingameTime = Users[numberSource].getIngameTime()}, function()
+		db.updateUser(Users[numberSource].get('identifier'), {characters = Users[numberSource].getCharacters(), policeCharacter = Users[numberSource].getPoliceCharacter()}, function()
 			Users[numberSource] = nil
 		end)
 	else
@@ -70,10 +71,12 @@ end)
 
 RegisterServerEvent('sway:updateDB')
 AddEventHandler('sway:updateDB', function(source)
+	--[[ todo: need to update this to use active character
 	local numberSource = tonumber(source)
 	db.updateUser(Users[numberSource].get('identifier'), {money = Users[numberSource].getMoney(), bank = Users[numberSource].getBank(), model = Users[numberSource].getModel(), inventory = Users[numberSource].getInventory(), weapons = Users[numberSource].getWeapons(), vehicles = Users[numberSource].getVehicles(), insurance = Users[numberSource].getInsurance(), job = Users[numberSource].getJob(), licenses = Users[numberSource].getLicenses(), criminalHistory = Users[numberSource].getCriminalHistory(), characters = Users[numberSource].getCharacters(), jailtime = Users[numberSource].getJailtime(), policeRank = Users[numberSource].getPoliceRank(), policeCharacter = Users[numberSource].getPoliceCharacter(), EMSRank = Users[numberSource].getEMSRank(), securityRank = Users[numberSource].getSecurityRank(), ingameTime = Users[numberSource].getIngameTime()}, function()
 			print("Updated db for player " .. numberSource)
 		end)
+	--]]
 end)
 
 local justJoined = {}
@@ -214,7 +217,7 @@ end
 
 
 Citizen.CreateThread(function()
-	local minutes = 30
+	local minutes = 15
 	local interval = minutes * 60000
 	function saveData()
 		print("calling saveData()...")
@@ -227,7 +230,7 @@ Citizen.CreateThread(function()
 					for id, player in pairs(players) do
 						if player then
 							print("player existed")
-							db.updateUser(player.get('identifier'), {money = player.getMoney(), bank = player.getBank(), model = player.getModel(), inventory = player.getInventory(), weapons = player.getWeapons(), vehicles = player.getVehicles(), insurance = player.getInsurance(), job = player.getJob(), licenses = player.getLicenses(), criminalHistory = player.getCriminalHistory(), characters = player.getCharacters(), jailtime = player.getJailtime(), policeRank = player.getPoliceRank(), policeCharacter = player.getPoliceCharacter(), EMSRank = player.getEMSRank(), securityRank = player.getSecurityRank()}, function()
+							db.updateUser(player.get('identifier'), {characters = player.getCharacters(), policeCharacter = player.getPoliceCharacter()}, function()
 								print("saved player #" .. id .. "'s data!'")
 							end)
 						end

@@ -37,7 +37,8 @@ end
 -- Add a command everyone is able to run. Args is a table with all the arguments, and the user is the user object, containing all the user data.
 TriggerEvent('es:addCommand', 'spawn', function(source, args, user)
 	local model = args[2]
-	if user.getJob() == "sheriff" then
+	local user_job = user.getActiveCharacterData("job")
+	if user_job == "sheriff" then
 		if model ~= nil and model ~= '' then
 			if isSpawnable(model) then
 				TriggerClientEvent("vehicleCommands:spawnVehicle", source, model)
@@ -48,7 +49,7 @@ TriggerEvent('es:addCommand', 'spawn', function(source, args, user)
 			TriggerClientEvent("vehicleCommands:error", source, "^1Invalid model name. Usage: /spawn <name>")
 			TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 predator, scorcher, policeb, sheriff, sheriff2, sheriff3, police, police2, police3, police4, police5, police6, police7, police8, policet, pbus, chpcvpi, fbi, fbi2, riot, polmav")
 		end
-	elseif user.getJob() == "ems" then
+	elseif user_job == "ems" then
 		if args[2] == "ambulance" then
 			TriggerClientEvent("vehicleCommands:spawnVehicle", source, "ambulance")
 		elseif args[2] == "suv" then
@@ -59,14 +60,14 @@ TriggerEvent('es:addCommand', 'spawn', function(source, args, user)
 			TriggerClientEvent("vehicleCommands:error", source, "^1Invalid model name. Usage: /spawn <name>")
 			TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 ambulance, suv, heli")
 		end
-	elseif user.getJob() == "fire" then
+	elseif user_job == "fire" then
 		if args[2] == "firetruck" then
 			TriggerClientEvent("vehicleCommands:spawnVehicle", source, "firetruk")
 		else
 			TriggerClientEvent("vehicleCommands:error", source, "^1Invalid model name. Usage: /spawn <name>")
 			TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 firetruck")
 		end
-    elseif user.getJob() == "security" then
+    elseif user_job == "security" then
 		local mPos = user.getCoords()
 		if get3DDistance(3502.5, 3762.45, 29.010, mPos.x, mPos.y, mPos.z) < 20.0 then
 			if args[2] == "barracks" then
@@ -90,7 +91,8 @@ end)
 TriggerEvent('es:addCommand', 'livery', function(source, args, user)
 	TriggerEvent('es:getPlayerFromId', source, function(user)
 		if user then
-			if user.getJob() == "cop" or user.getJob() == "sheriff" or user.getJob() == "highwaypatrol" or user.getJob() == "ems" or user.getJob() == "fire" then
+			local user_job = user.getActiveCharacterData("job")
+			if  user_job == "cop" or user_job == "sheriff" or user_job == "highwaypatrol" or user_job == "ems" or user_job == "fire" then
 				if args[2] then
 					TriggerClientEvent("vehicleCommands:setLivery", source, args[2])
 				else
@@ -108,7 +110,8 @@ end)
 TriggerEvent('es:addCommand', 'extra', function(source, args, user)
 	TriggerEvent('es:getPlayerFromId', source, function(user)
 		if user then
-			if user.getJob() == "cop" or user.getJob() == "sheriff" or user.getJob() == "highwaypatrol" or user.getJob() == "ems" or user.getJob() == "fire" then
+			local user_job = user.getActiveCharacterData("job")
+			if user_job == "cop" or user_job == "sheriff" or user_job == "highwaypatrol" or user_job == "ems" or user_job == "fire" then
 				if args[2] then
 					TriggerClientEvent("vehicleCommands:setExtra", source, args[2], args[3])
 				else
@@ -124,7 +127,8 @@ TriggerEvent('es:addCommand', 'extra', function(source, args, user)
 end)
 
 TriggerEvent('es:addCommand', 'engine', function(source, args, user)
-	if user.getJob() == "sheriff" then
+	local user_job = user.getActiveCharacterData("job")
+	if user_job == "sheriff" then
 		local userSource = tonumber(source)
 		local param = args[2]
 		TriggerClientEvent("vehicleCommands:upgradeEngine", userSource, param)
