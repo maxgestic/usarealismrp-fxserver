@@ -48,14 +48,15 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 							TriggerClientEvent('es:activateMoney', self.source , new_money)
 						end
 					elseif field == "bank" then
-						TriggerEvent("es:setPlayerData", self.source, "bank", data, function(response, success)
+						print("field was bank!")
+						--TriggerEvent("es:setPlayerData", self.source, "bank", data, function(response, success)
 							--print("bank saved!!")
-							self.bank = data
-						end)
+							--self.bank = data
+						--end)
 					end
 					-- update char
 					self.characters[i][field] = data
-					--print("set!")
+					print("set!")
 				else
 					print("Error: field " .. field .. " did not exist on the character! can't set it!")
 				end
@@ -68,7 +69,7 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 			local char = self.characters[i]
 			if char.active == true then
 				--print("found an active character at " .. i .. "!")
-				print("target field to retrieve: " .. field)
+				--print("target field to retrieve: " .. field)
 				if self.characters[i][field] then
 					return self.characters[i][field]
 				else
