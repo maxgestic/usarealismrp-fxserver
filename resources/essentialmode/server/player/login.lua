@@ -109,6 +109,7 @@ AddEventHandler("es:getPlayerFromIdentifier", function(identifier, cb)
 	end)
 end)
 
+--[[
 -- Function to update player money every 60 seconds.
 local function savePlayerMoney()
 	SetTimeout(60000, function()
@@ -123,3 +124,4 @@ local function savePlayerMoney()
 end
 
 savePlayerMoney()
+--]]

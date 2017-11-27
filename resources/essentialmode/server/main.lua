@@ -217,7 +217,7 @@ end
 
 
 Citizen.CreateThread(function()
-	local minutes = 30
+	local minutes = 15
 	local interval = minutes * 60000
 	function saveData()
 		print("calling saveData()...")
