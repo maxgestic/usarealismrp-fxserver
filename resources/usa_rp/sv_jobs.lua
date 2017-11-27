@@ -78,7 +78,7 @@ AddEventHandler("usa_rp:giveItem", function(itemToGive)
                 if item.name == itemToGive.name then -- player already has one of this item in inventory, so increment
                     inventory[i].quantity = inventory[i].quantity + 3 -- increment item in inventory
                     print("meth quantity added! at: " .. inventory[i].quantity)
-                    user.setInventory(inventory) -- save the inventory
+                    user.setActiveCharacterData("inventory", inventory) -- save the inventory
                     -- todo: choose one of a few different drop off location coordinates here?
                     if itemToGive.name == "Meth" then
                         dropoffCoords = {x = -402.63, y = 6316.12}
