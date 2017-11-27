@@ -16,6 +16,34 @@ local spawn_coords_closed_menu = {
     angle = 168.2
 }
 
+local swap_locations = {
+{name="Clothes Store", x = 1.27486, y = 6511.89, z = 30.8778}, -- paleto bay
+{name="Clothes Store", x = 1692.24, y = 4819.79, z = 41.0631}, -- grape seed
+{name="Clothes Store", x = 1199.09, y = 2707.86, z = 37.0226}, -- sandy shores 1
+{name="Clothes Store", x = 614.565, y = 2763.17, z = 41.0881}, -- sandy shores 2
+{name="Clothes Store", x = -1097.71, y = 2711.18, z = 18.5079}, -- route 68
+{name="Clothes Store", x = -3170.52, y = 1043.97, z = 20.0632}, -- chumash, great ocean hwy
+{name="Clothes Store", x = -1449.93, y = -236.979, z = 49.0106}, -- vinewood 1
+{name="Clothes Store", x = -710.239, y = -152.319, z = 37.0151}, -- vinewood 2
+{name="Clothes Store", x = -1192.84, y = -767.861, z = 17.0187}, -- vinewood 3
+{name="Clothes Store", x = -163.61, y = -303.987, z = 39.0333}, -- vinewood 4
+{name="Clothes Store", x = 125.403, y = -223.887, z = 54.0578}, -- vinewood 5
+{name="Clothes Store", x = 423.474, y = -809.565, z = 29.0911}, -- vinewood 6
+{name="Clothes Store", x = -818.509, y = -1074.14, z = 11.0281}, -- vinewood 7
+{name="Clothes Store", x = 77.7774, y = -1389.87, z = 29.0761} -- vinewood 8
+}
+
+RegisterNetEvent("character:swap--check-distance")
+AddEventHandler("character:swap--check-distance", function()
+  for i = 1, #swap_locations do
+    local location = swap_locations[i]
+    if GetDistanceBetweenCoords(location.x, location.y, location.z,GetEntityCoords(GetPlayerPed(-1))) < 7 then
+      print("Player is at a swap location!")
+      TriggerServerEvent("character:getCharactersAndOpenMenu", "home")
+    end
+  end
+end)
+
 RegisterNetEvent("character:open")
 AddEventHandler("character:open", function(menu, data)
     menuOpen = true

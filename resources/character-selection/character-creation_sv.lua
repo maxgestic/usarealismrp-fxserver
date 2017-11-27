@@ -1,12 +1,17 @@
-TriggerEvent('es:addCommand', 'test', function(source, args, user)
-    if args[2] then
-        if args[2] ~= "close" then
-            local menu = args[2]
-            TriggerClientEvent("character:open", source, menu)
-        else
-            TriggerClientEvent("character:close", source)
-        end
+TriggerEvent('es:addCommand', 'swap', function(source, args, user)
+  TriggerClientEvent("character:swap--check-distance", source)
+end)
+
+RegisterServerEvent("character:getCharactersAndOpenMenu")
+AddEventHandler("character:getCharactersAndOpenMenu", function(menu)
+  print("loading characters to open menu...")
+  local userSource = tonumber(source)
+  TriggerEvent("es:getPlayerFromId", userSource, function(user)
+    if user then
+      local characters = user.getCharacters()
+      TriggerClientEvent("character:open", userSource, menu, characters)
     end
+  end)
 end)
 
 -- Creating a new character

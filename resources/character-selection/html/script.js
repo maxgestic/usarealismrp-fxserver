@@ -57,7 +57,10 @@ $(function() {
 
     <!-- ==== character selection ==== -->
     $("#menu--home .columns").on('click', '.char-card', function() {
+		//get selected char slot
         var slot = $(this).data("slot");
+		// clear out the html cards for next use
+		$(".columns").html("");
         //alert("selecting slot #" + slot + "!");
         $.post('http://character-selection/select-character', JSON.stringify({
             character: characters[slot],
