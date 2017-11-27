@@ -77,7 +77,7 @@ AddEventHandler('bank:deposit', function(amount)
 local userSource = tonumber(source)
   TriggerEvent('es:getPlayerFromId', userSource, function(user)
     if notAllowedToDeposit[userSource] == nil then
-      local rounded = math.ceil(amount)
+      local rounded = math.ceil(tonumber(amount))
       print("rounded = " .. rounded)
       if(string.len(rounded) >= 9) then
         TriggerClientEvent('chatMessage', userSource, "", {0, 0, 200}, "^1Input too high^0")
