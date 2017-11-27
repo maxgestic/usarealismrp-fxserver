@@ -24,7 +24,8 @@ $(function() {
         } else if (eventData.type == "delete") {
           var status = eventData.status;
           if (status == "fail") {
-            alert("Sorry, you can't delete a character that is less than 7 days old!");
+			  $("#delete-char-error").text("Sorry, you can't delete a character that is less than 7 days old!");
+            //alert("Sorry, you can't delete a character that is less than 7 days old!");
             // todo: update interface to reflect failure?
           }
           else {
@@ -33,6 +34,7 @@ $(function() {
             $("#menu--delete-character .columns").html("");
             $("#menu--delete-character").hide();
             $("#menu--home").show();
+			$("#delete-char-error").text("");
             populateHomeMenuCharacters();
           }
         }
@@ -75,6 +77,7 @@ $(function() {
     <!-- ==== character deletion ==== -->
     $("#menu--delete-character .columns").on('click', '.char-card', function() {
         var confirmed = confirm("Are you sure you want to permanently delete that character?");
+        //var confirmed = true
         if (confirmed) {
             var slot = $(this).data("slot");
             $.post('http://character-selection/delete-character', JSON.stringify({
@@ -167,6 +170,7 @@ $(function() {
         $("#menu--delete-character .columns").html("");
         $("#menu--delete-character").hide();
         $("#menu--home").show();
+		$("#delete-char-error").text("");
         populateHomeMenuCharacters();
     });
     <!-- ==== end character deletion ==== -->
