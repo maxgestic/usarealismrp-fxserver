@@ -46,7 +46,7 @@ AddEventHandler("blackMarket:checkGunMoney", function(weapon)
         if #weapons < MAX_PLAYER_WEAPON_SLOTS then
             local user_money = user.getActiveCharacterData("money")
             if weapon.price <= user_money then -- see if user has enough money
-                print("player had enough money! (" .. user.getMoney() .. ")")
+                print("player had enough money! (" .. user_money .. ")")
                 table.insert(weapons, weapon)
                 user.setActiveCharacterData("weapons", weapons)
                 print("setting money after buying to : $" .. user_money - weapon.price)
