@@ -9,7 +9,5 @@ files {
     'html/script.js',
     'html/style.css',
     'html/cursor.png',
-    'html/samsung-phone.png',
-    'html/text-msg-icon.png',
-    'html/phone-icon.png'
+    'html/samsung-phone.png'
 }
