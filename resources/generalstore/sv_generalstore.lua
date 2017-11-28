@@ -9,17 +9,30 @@ AddEventHandler("generalStore:buyItem", function(item)
       local user_money = user.getActiveCharacterData("money")
         if user_money >= item.price then
           user.setActiveCharacterData("money", user_money - item.price)
-            local inventory = user.getActiveCharacterData("inventory")
-            for i = 1, #inventory do
-                if inventory[i].name == item.name then
-                    inventory[i].quantity = inventory[i].quantity + 1
-                    user.setActiveCharacterData("inventory", inventory)
-                    return
+            if item.name ~= "Cell Phone" then
+                local inventory = user.getActiveCharacterData("inventory")
+                for i = 1, #inventory do
+                    if inventory[i].name == item.name then
+                        inventory[i].quantity = inventory[i].quantity + 1
+                        user.setActiveCharacterData("inventory", inventory)
+                        return
+                    end
                 end
+                -- not already in player inventory at this point, so add it
+                table.insert(inventory, item)
+                user.setActiveCharacterData("inventory", inventory)
+            else
+                --Generate number
+                --Add Registered Owner
+                --print(os.time())
+                item.number = string.sub(tostring(os.time()), -8)
+                item.owner = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
+                item.name = item.name .. " - " .. item.number
+                local inventory = user.getActiveCharacterData("inventory")
+                table.insert(inventory, item)
+                user.setActiveCharacterData("inventory", inventory)
+                print(item.number .. " ---- " .. item.owner)
             end
-            -- not already in player inventory at this point, so add it
-            table.insert(inventory, item)
-            user.setActiveCharacterData("inventory", inventory)
         else
             -- not enough money
         end

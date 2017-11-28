@@ -71,8 +71,189 @@ end)
 
 -- TODO: allow this event handler to send text messages when data.id == an identifier (instead of ID #)
 RegisterServerEvent("phone:sendTextToPlayer")
-AddEventHandler("phone:sendTextToPlayer", function(data)
-	-- TODO: see if data.id == any online player's identifier, if so then convert it to that players server ID and set data.id = to it
+AddEventHandler("phone:sendTextToPlayer", function(source, data) -- Need to remove source before deploying to public server
+	local userSource = tonumber(source)
+	if type(tonumber(data.id)) == "number" then --Check if phone number is valid
+		
+		print(data.id .. "is a number")
+		local toNumber = tonumber(data.id)
+		local fromNumber = tonumber(data.fromId)
+		local toPlayer = 0
+		local fromPlayer = userSource
+		local toName = "Unknown"
+		local fromName = data.fromName
+		local messageSent = false
+		local allPlayers = GetPlayers()
+		local msg = data.message
+
+		
+		--//Check all users for toNumber phone in their inventory
+		for i = 1, #allPlayers do
+			print("allPlayers[i] = " .. allPlayers[i])
+			TriggerEvent('es:getPlayerFromId', tonumber(allPlayers[i]), function(user)	
+				local inventory = user.getActiveCharacterData("inventory")
+				
+				--//Check entire user inventory for toNumber phone
+				for j = 1, #inventory do
+					print("Checking " .. inventory[j].name)
+	                if tonumber(inventory[j].number) == tonumber(toNumber) then
+	                	toPlayer = tonumber(allPlayers[i])
+	                	toName = inventory[j].owner
+	                	-- Add conversation to and from phone
+	                	item = inventory[j]
+	                	
+	                	--//Check toNumber phone to see if conversation exist with fromNumber
+	                	for x = 1, #item.conversations do
+							local conversation = item.conversations[x]
+							if conversation.partnerId == fromNumber then
+								local message = {
+									timestamp = os.date("%c", os.time()),
+									from = fromName,
+									to = item.owner,
+									message = msg
+								}
+								table.insert(inventory[j].conversations[x].messages, message)
+								user.setActiveCharacterData("inventory", inventory)
+								convoExistedForUser = true
+								TriggerClientEvent("swayam:notification", userSource, "Whiz Wireless", "Message Sent.", "CHAR_MP_DETONATEPHONE")
+								TriggerClientEvent("swayam:notification", tonumber(toPlayer), fromName, msg, "CHAR_DEFAULT")
+								messageSent = true
+								--TriggerClientEvent("swayam:notification", toPlayer, "From Someone", "Some Message", "CHAR_DEFAULT")
+								return
+							end
+						end
+						if not convoExistedForUser then
+							print("no convo found for users! creating and inserting now!")
+							-- no previous converstaion with that partner, create new one
+							local message = {
+								timestamp = os.date("%c", os.time()),
+								from = fromName,
+								to = item.owner,
+								message = msg
+							}
+							local conversation = {
+								partnerName = fromName,
+								partnerId = fromNumber,
+								messages = {message}
+							}
+							table.insert(inventory[j].conversations, 1, conversation) -- insert at front
+							user.setActiveCharacterData("inventory", inventory)
+							TriggerClientEvent("swayam:notification", userSource, "Whiz Wireless", "Message Sent.", "CHAR_MP_DETONATEPHONE")
+							TriggerClientEvent("swayam:notification", tonumber(toPlayer), fromName, msg, "CHAR_DEFAULT")
+							--TriggerClientEvent("swayam:notification", tonumber(toPlayer), "From Someone", "Some Message", "CHAR_DEFAULT")
+							messageSent = true
+							print("convo inserted!")
+							return
+						end
+
+	                end
+	            end
+
+	        end)
+		end
+		if messageSent == true then
+			convoExistedForUser = false
+			TriggerEvent('es:getPlayerFromId', tonumber(userSource), function(user)
+				local inventory = user.getActiveCharacterData("inventory")
+				for j = 1, #inventory do
+					print("Checking " .. inventory[j].name)
+					if tonumber(inventory[j].number) == tonumber(fromNumber) then
+						item = inventory[j]
+						for x = 1, #item.conversations do
+							local conversation = item.conversations[x]
+							if conversation.partnerId == toNumber then
+								local message = {
+								timestamp = os.date("%c", os.time()),
+								from = fromName,
+								to = toName,
+								message = msg
+							}
+							table.insert(inventory[j].conversations[x].messages, message)
+							user.setActiveCharacterData("inventory", inventory)
+							convoExistedForUser = true
+							end
+						end
+						if not convoExistedForUser then
+						print("no convo found for users! creating and inserting now!")
+							-- no previous converstaion with that partner, create new one
+							local message = {
+								timestamp = os.date("%c", os.time()),
+								from = fromName,
+								to = toName,
+								message = msg
+							}
+							local conversation = {
+								partnerName = toName,
+								partnerId = toNumber,
+								messages = {message}
+							}
+							table.insert(inventory[j].conversations, 1, conversation) -- insert at front
+							user.setActiveCharacterData("inventory", inventory)
+							print("convo inserted!")
+						end
+					end
+				end
+			end)
+		else
+			TriggerClientEvent("swayam:notification", userSource, "Whiz Wireless", "Number does not exist or out of coverage area. Please check the number and try again.", "CHAR_MP_DETONATEPHONE")
+		end
+
+		--[[if messageSent == true then
+			--update from phone 
+			convoExistedForUser = false
+			TriggerEvent('es:getPlayerFromId', tonumber(userSource, function(user)
+				local inventory = user.getActiveCharacterData("inventory")
+				for j = 1, #inventory do
+					print("Checking " .. inventory[j].name)
+					if tonumber(inventory[j].number) == tonumber(fromNumber) then
+						item = inventory[j]
+						for x = 1, #item.conversations do
+							local conversation = item.conversations[x]
+							if conversation.partnerId == toNumber then
+								local message = {
+								timestamp = os.date("%c", os.time()),
+								from = fromName,
+								to = toName,
+								message = msg
+							}
+							table.insert(inventory[j].conversations[x].messages, message)
+							user.setActiveCharacterData("inventory", inventory)
+							convoExistedForUser = true
+							end
+						end
+					end
+					if not convoExistedForUser then
+						print("no convo found for users! creating and inserting now!")
+							-- no previous converstaion with that partner, create new one
+							local message = {
+								timestamp = os.date("%c", os.time()),
+								from = fromName,
+								to = toName,
+								message = msg
+							}
+							local conversation = {
+								partnerName = toName,
+								partnerId = toNumber,
+								messages = {message}
+							}
+							table.insert(inventory[j].conversations, 1, conversation) -- insert at front
+							user.setActiveCharacterData("inventory", inventory)
+							print("convo inserted!")
+					end
+				end
+			end
+			end)
+		else
+			TriggerClientEvent("swayam:notification", userSource, "Whiz Wireless", "Number does not exist or out of coverage area. Please check the number and try again.", "CHAR_MP_DETONATEPHONE")	
+		end]]--
+
+	else -- Phone number is invalid
+		TriggerClientEvent("swayam:notification", userSource, "Whiz Wireless", "Please check the number and try again.", "CHAR_MP_DETONATEPHONE")
+	end
+
+end)
+
+	--[[-- TODO: see if data.id == any online player's identifier, if so then convert it to that players server ID and set data.id = to it
 	if string.find(data.id, "steam:") or string.find(data.id, "ip:") or string.find(data.id, "license:") then
 		local allPlayers = GetPlayers()
 		for i = 1, #allPlayers do
@@ -200,8 +381,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 		end)
 	else
 		TriggerClientEvent("pm:help", userSource)
-	end
-end)
+	end]]--
 
 RegisterServerEvent("phone:checkForPhone")
 AddEventHandler("phone:checkForPhone", function()
@@ -266,4 +446,23 @@ AddEventHandler("phone:getMessagesWithThisId", function(targetId)
 		end
 		-- no cell phone found
 	end)
+end)
+
+--//To test phone:sendTextToPlayer args[2] = message, args[3] = toNumber, args[4] = fromNumber, args[5] = fromName
+TriggerEvent('es:addCommand', 'testsms', function(source, args, user)
+	if user.getGroup() == "admin" or user.getGroup() == "superadmin" or user.getGroup() == "owner" then
+		if args[2] and args[3] and args[4] and args[5] then
+			data = {
+				message = args[2],
+				id = args[3],
+				fromId = args[4],
+				fromName = args[5]
+			}
+			TriggerEvent("phone:sendTextToPlayer", source, data)
+		else
+			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "USAGE: /testsms message toNumber fromNumber fromName")		
+		end
+	else
+		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "You're not authorized to use this command!")		
+	end
 end)
