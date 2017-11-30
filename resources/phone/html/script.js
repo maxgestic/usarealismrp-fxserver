@@ -17,11 +17,22 @@ function Click(x, y) {
     element.focus().click();
 }
 
+/*
+    ================
+    PHONE VARIABLES
+    ================
+*/
+
+var phone = {};
+
 $(function() {
     window.addEventListener('message', function(event) {
         if (event.data.type == "enableui") {
             cursor.style.display = event.data.enable ? "block" : "none";
             document.body.style.display = event.data.enable ? "block" : "none";
+            if (event.data.enable) {
+                phone = event.data.phone;
+            }
         } else if (event.data.type == "click") {
             // Avoid clicking the cursor itself, click 1px to the top/left;
             Click(cursorX - 1, cursorY - 1);
@@ -74,10 +85,12 @@ $(function() {
     // on text msg form submission
     $("#text-message-app-form").submit(function(){
         $.post('http://phone/sendTextMessage', JSON.stringify({
-            id: $("#text-id").val(),
-            message: $("#text-message").val()
+            toNumber: $("#text-toNumber").val(),
+            message: $("#text-message").val(),
+            fromName: phone.owner,
+            fromNumber: phone.number
         }));
-        //$("#text-id").val(""); // test
+        //$("#text-toNumber").val(""); // test
         //$("#text-message").val(""); // test
         $.post('http://phone/escape', JSON.stringify({}));
     });
@@ -109,7 +122,7 @@ $(function() {
         $("#text-message-app-home").hide();
         $("#text-message-app-form").show();
         // have user enter message for quick reply ...
-        $("#text-message-app-form #text-id").val(replyIdent);
+        $("#text-message-app-form #text-toNumber").val(replyIdent);
     });
 
     // show form to send a new text

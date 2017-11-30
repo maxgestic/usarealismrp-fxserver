@@ -110,7 +110,7 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 	if actionName and itemName and wholeItem and targetPlayerId then
 		--Citizen.Trace("button name = " .. actionName .. ", item = " .. itemName)
 		if actionName == "use" then
-			interactionMenuUse(itemName)
+			interactionMenuUse(itemName, wholeItem)
 		elseif actionName == "drop" then
 			TriggerEvent("interaction:notify", "Dropping item: " .. removeQuantityFromItemName(itemName))
 			TriggerServerEvent("interaction:dropItem", itemName)
@@ -122,19 +122,31 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 	end
 end)
 
-function interactionMenuUse(itemName)
-	-- METH
+function interactionMenuUse(itemName, wholeItem)
+	-------------------
+	-- Meth --
+	-------------------
 	if string.find(itemName, "Meth") then
 		--Citizen.Trace("meth found to use!!")
 		TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
 		TriggerEvent("interaction:notify", "You have used: (x1) Meth")
 		intoxicate()
 		reality()
+	-------------------
+	-- Repair Kit --
+	-------------------
 	elseif string.find(itemName, "Repair Kit") then
 		TriggerEvent("interaction:repairVehicle")
+	-------------------
+	-- Cell Phone --
+	-------------------
+	elseif string.find(itemName, "Cell Phone") then
+		print("Player is using a cell phone from the F1 menu with its number = " .. wholeItem.number)
+		TriggerEvent("phone:openPhone", wholeItem)
 	else
 		TriggerEvent("interaction:notify", "There is no use action for that item!")
 	end
+
 end
 
 RegisterNetEvent("interaction:ragdoll")
@@ -183,19 +195,6 @@ Citizen.CreateThread(function()
            ClearPedTasks(ped);
            playing_emote = false
        end
-        if menuEnabled then
-            DisableControlAction(29, 241, menuEnabled) -- scroll up
-            DisableControlAction(29, 242, menuEnabled) -- scroll down
-            DisableControlAction(0, 1, menuEnabled) -- LookLeftRight
-            DisableControlAction(0, 2, menuEnabled) -- LookUpDown
-            DisableControlAction(0, 142, menuEnabled) -- MeleeAttackAlternate
-            DisableControlAction(0, 106, menuEnabled) -- VehicleMouseControlOverride
-            if IsDisabledControlJustReleased(0, 142) then -- MeleeAttackAlternate
-                SendNUIMessage({
-                    type = "click"
-                })
-            end
-        end
         Citizen.Wait(0)
     end
 end)

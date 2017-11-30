@@ -29,14 +29,15 @@ end)
 
 local phoneEnabled = false
 
-function EnableGui(enable)
+function EnableGui(enable, phone)
+	print("inside of enablegui with phone = " .. type(phone))
     SetNuiFocus(enable)
     phoneEnabled = enable
-
-    SendNUIMessage({
-        type = "enableui",
-        enable = enable
-    })
+	SendNUIMessage({
+	    type = "enableui",
+	    enable = enable,
+		phone = phone
+	})
 end
 
 RegisterNetEvent("phone:loadedMessagesFromId")
@@ -58,8 +59,13 @@ AddEventHandler("phone:loadedMessages", function(conversations)
 end)
 
 RegisterNetEvent("phone:openPhone")
-AddEventHandler("phone:openPhone", function()
-    EnableGui(true)
+AddEventHandler("phone:openPhone", function(phone)
+	if phone then
+		print("inside of phone:openPhone with phone set!")
+    	EnableGui(true, phone)
+	else
+		EnableGui(true)
+	end
 end)
 
 RegisterNUICallback('getMessagesFromConvo', function(data, cb)

@@ -284,11 +284,6 @@ $(function() {
         $(".player-meta-data").hide();
     });
 
-    $("#phone-btn").click(function(){
-        $.post('http://test/showPhone', JSON.stringify({}));
-        closeNav();
-    });
-
     $("#inventory-btn").click(function(){
         $.post('http://test/loadInventory', JSON.stringify({}));
     });
