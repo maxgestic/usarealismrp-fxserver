@@ -1,6 +1,6 @@
 resource_manifest_version '77731fab-63ca-442c-a67b-abc70f28dfa5'
-server_script "pm_sv.lua"
-client_script "pm_cl.lua"
+server_script "phone_sv.lua"
+client_script "phone_cl.lua"
 
 ui_page 'html/index.html'
 
