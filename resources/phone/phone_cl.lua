@@ -52,6 +52,7 @@ end)
 
 RegisterNetEvent("phone:loadedMessages")
 AddEventHandler("phone:loadedMessages", function(conversations)
+	print("loaded conversations with #conversations = " .. #conversations)
 	SendNUIMessage({
 		type = "textMessage",
 		conversations = conversations
@@ -75,7 +76,7 @@ RegisterNUICallback('getMessagesFromConvo', function(data, cb)
 end)
 
 RegisterNUICallback('getMessages', function(data, cb)
-	TriggerServerEvent("phone:loadMessages")
+	TriggerServerEvent("phone:loadMessages", data.number)
     cb('ok')
 end)
 

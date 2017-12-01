@@ -39,7 +39,7 @@ $(function() {
         } else if (event.data.type == "textMessage") {
             loadedConversations = event.data.conversations;
             for (var convo in loadedConversations) {
-                // first reset to prevent duplications
+               // first reset to prevent duplications
                 // add person
                 $("#text-message-app-home section").append("<div class='textMessageConvoBtn' data-id='" + loadedConversations[convo].partnerId + "'>" + loadedConversations[convo].partnerName + "</div>");
             }
@@ -104,7 +104,9 @@ $(function() {
     $( "#text-message-icon" ).click(function() {
         $("#icons-wrap").hide();
         $("#text-message-app-wrap").show();
-        $.post('http://phone/getMessages', JSON.stringify({}));
+        $.post('http://phone/getMessages', JSON.stringify({
+            number: phone.number
+        }));
     });
 
     // load specific convo with person
