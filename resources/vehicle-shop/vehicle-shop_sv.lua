@@ -105,35 +105,22 @@ RegisterServerEvent("vehShop:buyInsurance")
 AddEventHandler("vehShop:buyInsurance", function()
 	local userSource = tonumber(source)
 	print("player " .. GetPlayerName(source) .. " is buying auto insurance!")
-	local EXPIRATION_TIME_IN_MONTHS = 1
 	local INSURANCE_COVERAGE_MONTHLY_COST = 7500
 	local timestamp = os.date("*t", os.time())
-	local expireMonth, expireYear
-	if timestamp.month < 12 then
-		if timestamp.day > 10 then
-			expireMonth = timestamp.month + EXPIRATION_TIME_IN_MONTHS + 1
-		else
-			expireMonth = timestamp.month + EXPIRATION_TIME_IN_MONTHS
-		end
-		expireYear = timestamp.year
-	else
-		expireMonth = 1
-		expireYear = timestamp.year + 1
-	end
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local insurance = user.getInsurance()
 		if user.getMoney() >= INSURANCE_COVERAGE_MONTHLY_COST then
 			local insurancePlan = {
-				planName = "T. Ends Auto Insurance",
-				type = "auto",
-				valid = true,
-				expireMonth = expireMonth,
-				expireYear = expireYear
-			}
+					planName = "T. Ends Auto Insurance",
+					type = "auto",
+					valid = true,
+					purchaseDate = os.date('%m-%d-%Y %H:%M:%S', os.time()),
+					purchaseTime = os.time()
+				}
 			user.setInsurance(insurancePlan)
-			print("taking $15,000 from player for auto insurance!")
+			print("taking $7,500 from player for auto insurance!")
 			user.setMoney(user.getMoney() - INSURANCE_COVERAGE_MONTHLY_COST)
-			TriggerClientEvent("vehShop:notify", userSource, "~w~Thanks for purchasing auto insurance coverage! Your coverage expires on ~y~" .. padzero(expireMonth, 2) .. "/" .. expireYear .. "~w~.")
+			TriggerClientEvent("vehShop:notify", userSource, "~w~Thanks for purchasing auto insurance coverage! Your coverage expires in ~y~31~w~ days.")
 		else
 			print("player did not have enough money to buy insurance")
 			TriggerClientEvent("vehShop:notify", userSource, "You ~r~don't have enough money~w~ to buy auto insurance coverage!")
@@ -146,17 +133,50 @@ function padzero(s, count)
     return string.rep("0", count-string.len(s)) .. s
 end
 
+function playerHasValidAutoInsurance(playerInsurance, source)
+	local timestamp = os.date("*t", os.time())
+	print("*****************************")
+	print("type player insurance purchase time = " .. type(playerInsurance.purchaseTime))
+	print("*****************************")
+	if playerInsurance.purchaseTime then
+		if playerInsurance.type == "auto" then
+			local reference = playerInsurance.purchaseTime
+			local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
+			local wholedays = math.floor(daysfrom)
+			print(wholedays) -- today it prints "1"
+			if wholedays < 32 then
+				return true -- valid insurance, it was purchased 31 or less days ago
+			else
+				TriggerClientEvent("garage:notify", source, "~r~T. ENDS INSURANCE: ~w~Sorry! Your insurance coverage expired. We won't be able to help you.")
+				return false
+			end
+		else
+			-- no insurance at all
+			return false
+		end
+	else
+		return false
+	end
+end
+
 RegisterServerEvent("vehShop:checkPlayerInsurance")
 AddEventHandler("vehShop:checkPlayerInsurance", function()
 	local userSource = tonumber(source)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local playerInsurance = user.getInsurance()
 		if playerInsurance.type == "auto" then
-			TriggerClientEvent("chatMessage", userSource, "T. ENDS INSURANCE", {255, 78, 0}, "You are already insured! Your coverage will expire on ^3" .. padzero(playerInsurance.expireMonth, 2) .. "/" .. playerInsurance.expireYear .. "^0.")
-			renewInsurance(userSource)
-			return
+			if playerHasValidAutoInsurance(playerInsurance, userSource) then
+				TriggerClientEvent("chatMessage", userSource, "T. ENDS INSURANCE", {255, 78, 0}, "You are already insured!")
+				return
+			else
+				TriggerClientEvent("chatMessage", userSource, "T. ENDS INSURANCE", {255, 78, 0}, "Your auto insurance coverage has ~r~expired~w~! Would you like to renew it?")
+				user.setInsurance({})
+				TriggerClientEvent("vehShop:insuranceOptionMenu", userSource)
+				return
+			end
+		else -- no insurance, let them buy it
+			TriggerClientEvent("vehShop:insuranceOptionMenu", userSource)
 		end
-		TriggerClientEvent("vehShop:insuranceOptionMenu", userSource)
 	end)
 end)
 

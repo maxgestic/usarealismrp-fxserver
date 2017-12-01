@@ -16,6 +16,7 @@ AddEventHandler("garage:storeVehicle", function(handle, numberPlateText)
 	end)
 end)
 
+--[[
 function playerHasValidAutoInsurance(playerInsurance, source)
 	local timestamp = os.date("*t", os.time())
 		if playerInsurance.type == "auto" then
@@ -39,6 +40,30 @@ function playerHasValidAutoInsurance(playerInsurance, source)
 			-- no insurance at all
 			return false
 		end
+end
+--]]
+
+function playerHasValidAutoInsurance(playerInsurance, source)
+	local timestamp = os.date("*t", os.time())
+	if playerInsurance.purchaseTime then
+		if playerInsurance.type == "auto" then
+			local reference = playerInsurance.purchaseTime
+			local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
+			local wholedays = math.floor(daysfrom)
+			print(wholedays) -- today it prints "1"
+			if wholedays < 32 then
+				return true -- valid insurance, it was purchased 31 or less days ago
+			else
+				TriggerClientEvent("garage:notify", source, "~r~T. ENDS INSURANCE: ~w~Sorry! Your insurance coverage expired. We won't be able to help you.")
+				return false
+			end
+		else
+			-- no insurance at all
+			return false
+		end
+	else
+		return false
+	end
 end
 
 RegisterServerEvent("garage:checkVehicleStatus")
