@@ -87,3 +87,7 @@ AddEventHandler("usa_rp:checkJailedStatusOnPlayerJoin", function()
 		end
 	end)
 end)
+
+TriggerEvent('es:addCommand', 'rollw', function(source, args, user)
+	TriggerClientEvent("RollWindow", source)
+end)
