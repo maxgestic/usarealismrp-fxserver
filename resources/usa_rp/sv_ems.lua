@@ -1,7 +1,7 @@
 -- /admit [id] [time] [reason]
 TriggerEvent('es:addCommand', 'admit', function(source, args, user)
     local userSource = tonumber(source)
-    local userJob = user.getActiveCharacterData("job")
+    local userJob = user.getJob()
     if userJob == "ems" or userJob == "fire" or userJob == "police" or userJob == "sheriff" then
         local targetPlayerId = tonumber(args[2])
         local targetPlayerAdmissionTime = tonumber(args[3])
@@ -42,9 +42,8 @@ AddEventHandler("ems:checkPlayerMoney", function()
     local userSource = tonumber(source)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
         if user then
-            if user.getActiveCharacterData("money") >= 500 then
-                local user_money = user.getActiveCharacterData("money")
-                user.setActiveCharacterData("money", user_money - 500)
+            if user.getMoney() >= 500 then
+                user.removeMoney(500)
                 TriggerClientEvent("ems:healPlayer", userSource)
             end
         end

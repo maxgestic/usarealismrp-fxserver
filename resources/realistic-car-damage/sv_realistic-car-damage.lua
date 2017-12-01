@@ -2,7 +2,7 @@ RegisterServerEvent("carDamage:checkForRepairKit")
 AddEventHandler("carDamage:checkForRepairKit", function(vehicle)
     local userSource = tonumber(source)
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
-        local inventory = user.getActiveCharacterData("inventory")
+        local inventory = user.getInventory()
         for i = 1, #inventory do
             if i <= #inventory and i ~= 0 then
                 if inventory[i].name == "Repair Kit" then
@@ -13,10 +13,10 @@ AddEventHandler("carDamage:checkForRepairKit", function(vehicle)
                     end
                     if inventory[i].quantity > 1 then
                         inventory[i].quantity = inventory[i].quantity - 1
-                        user.setActiveCharacterData("inventory", inventory)
+                        user.setInventory(inventory)
                     else
                         table.remove(inventory, i)
-                        user.setActiveCharacterData("inventory", inventory)
+                        user.setInventory(inventory)
                     end
                     CancelEvent()
                     return

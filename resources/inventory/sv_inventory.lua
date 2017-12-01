@@ -1,6 +1,6 @@
 function setPlayerInventory(source, inventory)
     TriggerEvent('es:getPlayerFromId', source, function(user)
-      user.setActiveCharacterData("inventory", inventory)
+        user.setInventory(inventory)
     end)
 end
 
@@ -8,9 +8,9 @@ RegisterServerEvent("inventory:refreshInventory")
 AddEventHandler("inventory:refreshInventory", function()
 	TriggerEvent('es:getPlayerFromId', source, function(user)
 		local inventoryToDisplay = {}
-		local inventory = user.getActiveCharacterData("inventory")
-		local weapons = user.getActiveCharacterData("weapons")
-		local licenses = user.getActiveCharacterData("licenses")
+		local inventory = user.getInventory()
+		local weapons = user.getWeapons()
+		local licenses = user.getLicenses()
 		print("#inventory = " .. #inventory)
 		print("#weapons = " .. #weapons)
 		print("#licenses = " .. #licenses)

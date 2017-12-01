@@ -10,8 +10,8 @@ AddEventHandler("towJob:impoundVehicle", function(targetVehicle)
 				-- Gives the loaded user corresponding to the given player id(second argument).
 				-- The user object is either nil or the loaded user.
 				TriggerEvent('es:getPlayerFromId', userSource, function(user)
-					local user_money = user.getActiveCharacterData("money")
-					user.setActiveCharacterData("money", user_money + 400)
+					user.addMoney(700) -- subtract price from user's money and store resulting amount
+					-- user:setLicense() ??
 					TriggerClientEvent("towJob:deleteVehicle", userSource, targetVehicle) -- delete vehicle
 					currentlyTowedVehicle = nil
 					TriggerClientEvent("towJob:success", userSource)
@@ -42,14 +42,14 @@ RegisterServerEvent("tow:setJob")
 AddEventHandler("tow:setJob", function()
 	local userSource = tonumber(source)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
-        if user.getActiveCharacterData("job") == "tow" then
+        if user.getJob() == "tow" then
             print("user " .. GetPlayerName(userSource) .. " just went off duty for Bubba's Tow Co.!")
-            user.setActiveCharacterData("job", "civ")
+            user.setJob("civ")
             TriggerClientEvent("tow:offDuty", userSource)
         else
             if not timeout then
                 print("user " .. GetPlayerName(userSource) .. " just went on duty for Bubba's Tow Co.!")
-                user.setActiveCharacterData("job", "tow")
+                user.setJob("tow")
                 TriggerClientEvent("tow:onDuty", userSource)
                 timeout = true
                 SetTimeout(15000, function()

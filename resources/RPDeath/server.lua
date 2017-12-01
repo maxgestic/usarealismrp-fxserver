@@ -24,9 +24,9 @@ AddEventHandler('RPD:userDead', function(userName, street)
 			for k, v in pairs(pl) do
 				TriggerEvent("es:getPlayerFromId", k, function(user)
 					if k ~= source then
-						local user_job = user.getActiveCharacterData("job")
-						if user_job == "cop" or user_job == "sheriff" or user_job == "highwaypatrol" or user_job == "ems" or user_job == "fire" then
+						if user.getJob() == "cop" or user.getJob() == "sheriff" or user.getJob() == "highwaypatrol" or user.getJob() == "ems" or user.getJob() == "fire" then
 							TriggerClientEvent("chatMessage", k, "911", {255, 0, 0}, userName .. " has been incapacitated on " .. street .. ".")
+							--TriggerClientEvent("gps:addEMSReq", k, downedUser)
 						end
 					end
 				end)
@@ -40,12 +40,12 @@ AddEventHandler("RPD:removeWeapons", function()
 	local userSource = source
 	print("inside of RPD:removeWeapons")
 	TriggerEvent("es:getPlayerFromId", source, function(user)
-		if user.getActiveCharacterData("job") == "civ" then
+		if user.getJob() == "civ" then
 			-- empty out everything since person has died and NLR is in place
 			--user.removeMoney(user.getMoney())
-			user.setActiveCharacterData("inventory", {})
-			user.setActiveCharacterData("weapons", {})
-			user.setActiveCharacterData("criminalHistory", {})
+			user.setInventory({})
+			user.setWeapons({})
+			user.setCriminalHistory({})
 			--user.setLicenses({})
 			--user.setVehicles({})
 			--user.setInsurance({})
@@ -71,7 +71,7 @@ AddEventHandler('chatMessage', function(from,name,message)
 			TriggerEvent('es:getPlayerFromId', from, function(user)
 				if user then
 					local targetId = 0
-					local userJob = user.getActiveCharacterData("job")
+					local userJob = user.getJob()
 					if userJob == "cop" or
 						userJob == "sheriff" or
 						userJob == "highwaypatrol" or

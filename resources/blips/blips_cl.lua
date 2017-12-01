@@ -54,7 +54,6 @@ local blips = {
 	{ title="Seaview Aircraft", colour = 60, id = 251, x=2119.083, y=4790.010, z=41.139 },
 	{ title="Meth", colour = 75, id = 499, x = 1389.28, y = 3604.6, z = 38.1 },
 	{ title="Boat Shop", colour = 57, id = 356, x =  -257.33, y = 6665.09, z = 1.40 }
-	--{ title="Prison", colour = 4, id = 188, x=1698.107, y=3688.166, z=34.267 }
 }
 
 Citizen.CreateThread(function()
@@ -71,12 +70,56 @@ Citizen.CreateThread(function()
     end
 end)
 
+Citizen.CreateThread(function()
+	-- while true do
+	-- 	Citizen.Wait(1000)
+	-- 	TriggerServerEvent("gps:pingPlayers")
+	-- end
+end)
+
+--[[
+local EMSReq = {}
+RegisterNetEvent("gps:addEMSReq")
+AddEventHandler("gps:addEMSReq", function(user)
+	if EMSReq[user.identifier] then
+		RemoveBlip(EMSReq[user.identifier])
+	end
+	EMSReq[user.identifier] = AddBlipForCoord(user.coords.x, user.coords.y, user.coords.z)
+	SetBlipDisplay(EMSReq[user.identifier], 4)
+	SetBlipScale(EMSReq[user.identifier], 0.9)
+	SetBlipAsShortRange(EMSReq[user.identifier], true)
+	BeginTextCommandSetBlipName("STRING")
+	SetBlipSprite(EMSReq[user.identifier], 153)
+	SetBlipColour(EMSReq[user.identifier], 75)
+	AddTextComponentString("Incapacitated person")
+	EndTextCommandSetBlipName(EMSReq[user.identifier])
+end)
+
+RegisterNetEvent("gps:removeEMSReq")
+AddEventHandler("gps:removeEMSReq", function(user)
+	if EMSReq then
+		if EMSReq[user.identifier] then
+			RemoveBlip(EMSReq[user.identifier])
+		end
+	end
+end)
+
+RegisterNetEvent("gps:removeAllEMSReq")
+AddEventHandler("gps:removeAllEMSReq", function()
+	for _, user in ipairs(EMSReq) do
+		RemoveBlip(EMSReq[user])
+	end
+end)
+--]]
 function GetPlayers()
     local players = {}
+
     for i = 0, 31 do
         if NetworkIsPlayerActive(i) then
+			-- table.insert(meta, GetEntityCoords(GetPlayerPed(GetPlayerServerId(i))))
             table.insert(players, GetPlayerServerId(i))
         end
     end
+
     return players
 end

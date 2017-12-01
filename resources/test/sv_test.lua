@@ -9,7 +9,7 @@ AddEventHandler("test:cuff", function(playerId, playerName)
     --TriggerClientEvent("cuff:Handcuff", tonumber(1), GetPlayerName(source))
     TriggerEvent("es:getPlayerFromId", source, function(user)
         if user then
-            playerJob = user.getActiveCharacterData("job")
+            playerJob = user.getJob()
             if playerJob == "sheriff" or playerJob == "cop" then
                 print("cuffing player " .. GetPlayerName(source) .. "...")
                 TriggerClientEvent("cuff:Handcuff", tonumber(playerId), GetPlayerName(source))
@@ -28,9 +28,9 @@ AddEventHandler("interaction:loadInventoryForInteraction", function()
     local userSource = tonumber(source)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
         if user then
-            local inventory = user.getActiveCharacterData("inventory")
-            local weapons = user.getActiveCharacterData("weapons")
-            local licenses = user.getActiveCharacterData("licenses")
+            local inventory = user.getInventory()
+            local weapons = user.getWeapons()
+            local licenses = user.getLicenses()
             TriggerClientEvent("interaction:inventoryLoaded", userSource, inventory, weapons, licenses)
         else
             print("interaction: user did not exist")
@@ -42,7 +42,7 @@ RegisterServerEvent("interaction:checkForPhone")
 AddEventHandler("interaction:checkForPhone", function()
     local userSource = tonumber(source)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
-        local inventory = user.getActiveCharacterData("inventory")
+        local inventory = user.getInventory()
         for i = 1, #inventory do
             local item = inventory[i]
             if item.name == "Cell Phone" then
@@ -59,13 +59,13 @@ AddEventHandler("interaction:removeItemFromPlayer", function(itemName)
     itemName = removeQuantityFromItemName(itemName)
     local userSource = tonumber(source)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
-        local inventory = user.getActiveCharacterData("inventory")
+        local inventory = user.getInventory()
         for i = 1, #inventory do
             local item = inventory[i]
             if item.name == itemName then
                 if item.quantity > 1 then
                     inventory[i].quantity = item.quantity - 1
-                    user.setActiveCharacterData("inventory", inventory)
+                    user.setInventory(inventory)
                     return
                 else
                     table.remove(inventory, i)
@@ -83,14 +83,14 @@ AddEventHandler("interaction:dropItem", function(itemName)
     itemName = removeQuantityFromItemName(itemName)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
         -- inventory
-        local inventory = user.getActiveCharacterData("inventory")
+        local inventory = user.getInventory()
         for i = 1, #inventory do
             local item = inventory[i]
             if item.name == itemName then
                 --print("found matching item to drop!")
                 if item.quantity > 1 then
                     inventory[i].quantity = item.quantity - 1
-                    user.setActiveCharacterData("inventory", inventory)
+                    user.setInventory(inventory)
                     return
                 else
                     table.remove(inventory, i)
@@ -100,25 +100,25 @@ AddEventHandler("interaction:dropItem", function(itemName)
             end
         end
         -- weapons
-        local weapons = user.getActiveCharacterData("weapons")
+        local weapons = user.getWeapons()
         for i = 1, #weapons do
             local item = weapons[i]
             if item.name == itemName then
                 --print("found matching item to drop!")
                 table.remove(weapons, i)
-                user.setActiveCharacterData("weapons", weapons)
+                user.setWeapons(weapons)
                 TriggerClientEvent("interaction:equipWeapon", userSource, item, false)
                 return
             end
         end
         -- licenses
-        local licenses = user.getActiveCharacterData("licenses")
+        local licenses = user.getLicenses()
         for i = 1, #licenses do
             local item = licenses[i]
             if item.name == itemName then
                 --print("found matching item to drop!")
                 table.remove(licenses, i)
-                user.setActiveCharacterData("licenses", licenses)
+                user.setLicenses(licenses)
                 return
             end
         end
@@ -146,16 +146,16 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
             if not item.type then
                 -- must be a license (no item.type)
                 print("giving a license!")
-                local licenses = user.getActiveCharacterData("licenses")
+                local licenses = user.getLicenses()
                 table.insert(licenses, item)
-                user.setActiveCharacterData("licenses", licenses)
+                user.setLicenses(licenses)
             else
                 if item.type == "weapon" then
                     print("giving a weapon!")
-                    local weapons = user.getActiveCharacterData("weapons")
+                    local weapons = user.getWeapons()
                     if #weapons < 3 then
                         table.insert(weapons, item)
-                        user.setActiveCharacterData("weapons", weapons)
+                        user.setWeapons(weapons)
                         TriggerClientEvent("interaction:equipWeapon", targetPlayerId, item, true)
                         TriggerClientEvent("interaction:equipWeapon", userSource, item, false)
                     else
@@ -165,18 +165,18 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
                 else
                     local found = false
                     print("giving an inventory item!")
-                    local inventory = user.getActiveCharacterData("inventory")
+                    local inventory = user.getInventory()
                     for i = 1, #inventory do
                         if inventory[i].name == item.name then
                             found = true
                             inventory[i].quantity = inventory[i].quantity + 1
-                            user.setActiveCharacterData("inventory", inventory)
+                            user.setInventory(inventory)
                         end
                     end
                     if not found then
                         item.quantity = 1
                         table.insert(inventory, item)
-                        user.setActiveCharacterData("inventory", inventory)
+                        user.setInventory(inventory)
                     end
                 end
             end
@@ -198,40 +198,40 @@ function removeItemFromPlayer(item, userSource)
             if not item.type then
                 -- must be a license (no item.type)
                 print("removing a license!")
-                local licenses = user.getActiveCharacterData("licenses")
+                local licenses = user.getLicenses()
                 for i = 1, #licenses do
                     if licenses[i].name == item.name and licenses[i].ownerName == item.ownerName then
                         --print("found a matching licenses to remove!!")
                         table.remove(licenses, i)
-                        user.setActiveCharacterData("licenses", licenses)
+                        user.setLicenses(licenses)
                         return
                     end
                 end
             else
                 if item.type == "weapon" then
                     print("removing a weapon!")
-                    local weapons = user.getActiveCharacterData("weapons")
+                    local weapons = user.getWeapons()
                     for i = 1, #weapons do
                         if weapons[i].name == item.name then
                             print("found a matching weapon to remove!")
                             table.remove(weapons,i)
-                            user.setActiveCharacterData("weapons", weapons)
+                            user.setWeapons(weapons)
                             return
                         end
                     end
                 else
                     print("removing an inventory item!")
-                    local inventory = user.getActiveCharacterData("inventory")
+                    local inventory = user.getInventory()
                     for i = 1, #inventory do
                         if inventory[i].name == item.name then
                             print("found matching item to remove!")
                             if inventory[i].quantity > 1 then
                                 inventory[i].quantity = inventory[i].quantity - 1
-                                user.setActiveCharacterData("inventory", inventory)
+                                user.setInventory(inventory)
                                 return
                             else
                                 table.remove(inventory,i)
-                                user.setActiveCharacterData("inventory", inventory)
+                                user.setInventory(inventory)
                                 return
                             end
                         end

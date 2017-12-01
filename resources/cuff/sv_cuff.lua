@@ -1,7 +1,7 @@
 TriggerEvent('es:addCommand','cuff', function(source, args, user)
         if args[2] ~= nil then
             local userSource = source
-                    playerJob = user.getActiveCharacterData("job")
+                    playerJob = user.getJob()
                     if playerJob == "sheriff" then
                          local tPID = tonumber(args[2])
                          TriggerClientEvent("cuff:Handcuff", tPID)
@@ -14,7 +14,7 @@ end)
 RegisterServerEvent("cuff:Handcuff")
 AddEventHandler("cuff:Handcuff", function(id)
     TriggerEvent("es:getPlayerFromId", source, function(user)
-        playerJob = user.getActiveCharacterData("job")
+        playerJob = user.getJob()
         if playerJob == "sheriff" or
             playerJob == "cop" then
             print("cuffing player with id: " .. id)

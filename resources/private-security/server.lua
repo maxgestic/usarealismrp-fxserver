@@ -21,12 +21,11 @@ AddEventHandler('rconCommand', function(commandName, args)
 			TriggerEvent("es:getPlayerFromId", tonumber(playerId), function(user)
 				if(user)then
                     if status == "true" then
-              user.setActiveCharacterData("securityRank", 1)
+    					user.setSecurityRank(1)
     					RconPrint("DEBUG: " .. playerId .. " whitelisted for Private Security")
     					--TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "You have been whitelist as EMS")
                     else
-                        user.setActiveCharacterData("securityRank", 0)
-                        user.setActiveCharacterData("job", "civ")
+                        user.setSecurityRank(0)
     					RconPrint("DEBUG: " .. playerId .. " un-whitelisted for Private Security")
                     end
 				end
@@ -43,7 +42,7 @@ AddEventHandler("job-private-sec:checkWhitelist", function()
 	local playerGameLicense = ""
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
-		if user.getActiveCharacterData("securityRank") > 0 then
+		if user.getSecurityRank() > 0 then
 			TriggerClientEvent("job-private-sec:isWhitelisted", userSource)
 		else
 			TriggerClientEvent("job-private-sec:notify", userSource, "~y~You are not whitelisted for Private Security. Apply at ~b~usarrp.enjin.com~w~.")
@@ -68,8 +67,8 @@ RegisterServerEvent("job-private-sec:onduty")
 AddEventHandler("job-private-sec:onduty", function()
     local userSource = tonumber(source)
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
-        if user.getActiveCharacterData("job") ~= "security" then
-            user.setActiveCharacterData("job", "security")
+        if user.getJob() ~= "security" then
+            user.setJob("security")
         end
     end)
 end)
@@ -78,8 +77,8 @@ RegisterServerEvent("job-private-sec:offduty")
 AddEventHandler("job-private-sec:offduty", function()
     local userSource = tonumber(source)
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
-        local playerWeapons = user.getActiveCharacterData("weapons")
+        local playerWeapons = user.getWeapons()
         TriggerClientEvent("job-private-sec:setciv", userSource, user.getCharacters(), playerWeapons)
-        user.setActiveCharacterData("job", "civ")
+        user.setJob("civ")
     end)
 end)

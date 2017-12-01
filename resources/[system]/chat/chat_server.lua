@@ -12,7 +12,7 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
 
 		if user then
 
-            local job = user.getActiveCharacterData("job")
+            local job = user.getJob()
 
 			if(job == "cop") then
 
@@ -52,51 +52,8 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
     TriggerEvent('chatMessage', userSource, name, message)
 
     if not WasEventCanceled() then
-        local args = mysplit(message, " ")
-        local firstWord = string.lower(args[1])
-        if firstWord == "/tweet" then
-            table.remove(args, 1)
-            TriggerClientEvent('chatMessage', -1, "[TWEET] - " .. name, {29,161,242}, table.concat(args, " "))
-        elseif firstWord == "/me" then
-            print("/me detected!")
-            print("msg = " .. table.concat(args, " "))
-            table.remove(args, 1)
-            TriggerEvent('altchat:localChatMessage', userSource, "^6* " .. name .. " " .. table.concat(args, " "))
-        elseif firstWord == "/showbadge" then
-            table.remove(args, 1)
-        	message = table.concat(args, " ")
-        	--TriggerClientEvent('chatMessage', -1, "", {255, 0, 0}, " ^6" .. GetPlayerName(source) .. " shows ID.")
-        	--TriggerClientEvent('chatMessage', -1, "[ID]", {171, 67, 227}, "^2Name: ^4" .. GetPlayerName(source) .. " ^0- ^2SSN: ^4" .. source)
-        	TriggerEvent("es:getPlayerFromId", userSource, function(user)
-        		if(user)then
-        			if user.getPoliceRank() > 0 then
-        				local policeRanks = {
-        					"Probationary Officer" ,
-        					"Police Officer 1" ,
-        					"Police Officer 2" ,
-        					"Sergaent" ,
-        					"Lieutenant" ,
-        					"Captain" ,
-        					"Deputy Chief" ,
-        					"Chief of Police"
-        				}
-        				TriggerEvent('altchat:localChatMessage', userSource, "^6* " .. name .. " shows Badge.")
-        				TriggerEvent('altchat:localChatMessage', userSource, "^6[ID] ^2Name: ^4" .. name .. " ^0- ^2Rank: ^4" .. policeRanks[user.getPoliceRank()])
-        			else
-        				TriggerClientEvent('chatMessage', userSource, "", {0, 0, 0}, "^3You're not whitelisted to use the command.")
-        			end
-        		end
-        	end)
-        elseif firstWord == "/showid" then
-            table.remove(args, 1)
-            TriggerEvent('altchat:localChatMessage', userSource, "^6* " .. name .. " shows ID.")
-            TriggerEvent('altchat:localChatMessage', userSource, "^6[ID] ^2Name: ^4" .. name .. " ^0- ^2SSN: ^4" .. userSource)
-        elseif firstWord == "/ad" then
-            table.remove(args, 1)
-            TriggerClientEvent('chatMessage', -1, "[Advertisement] - " .. name, {171, 67, 227}, table.concat(args, " "))
-        else
-            TriggerClientEvent('chatMessage', -1, "[OOC] - " .. name .. " (" .. userSource .. ")", {88, 193, 221}, message)
-        end
+        --TriggerClientEvent('chatMessage', -1, name, color, message)
+		TriggerClientEvent('chatMessage', -1, "[OOC] - " .. name, {88, 193, 221}, message)
     end
 
     print(name .. ': ' .. message)
@@ -136,15 +93,3 @@ AddEventHandler('rconCommand', function(commandName, args)
         CancelEvent()
     end
 end)
-
-function mysplit(inputstr, sep)
-        if sep == nil then
-                sep = "%s"
-        end
-        local t={} ; i=1
-        for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-                t[i] = str
-                i = i + 1
-        end
-        return t
-end

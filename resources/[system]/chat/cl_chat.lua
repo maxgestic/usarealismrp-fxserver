@@ -1,7 +1,6 @@
 local chatInputActive = false
 local chatInputActivating = false
 
-
 RegisterNetEvent('chatMessage')
 RegisterNetEvent('chat:addTemplate')
 RegisterNetEvent('chat:addMessage')

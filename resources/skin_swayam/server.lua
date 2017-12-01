@@ -11,20 +11,12 @@ function getPlayerIdentifierEasyMode(source)
 end
 
 RegisterServerEvent("mini:save")
-AddEventHandler("mini:save", function(appearance)
+AddEventHandler("mini:save", function(character)
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
-		local characters = user.getCharacters()
-		for i = 1, #characters do
-			print("characters[i].active = " .. tostring(characters[i].active))
-			if characters[i].active == true then
-				characters[i].appearance = appearance
-				user.setCharacter(characters[i], i)
-				print("PLAYER MODEL SAVED")
-				TriggerClientEvent("chatMessage", source, "SYSTEM", {0, 128, 255}, "Your player character has been saved.")
-				return
-			end
-		end
+		user.setCharacters(character)
+		print("PLAYER MODEL SAVED")
+		TriggerClientEvent("chatMessage", source, "SYSTEM", {0, 128, 255}, "Your player character has been saved.")
 		--TriggerEvent("mini:giveMeMyWeaponsPlease")
 	end)
 end)
@@ -41,7 +33,7 @@ AddEventHandler("mini:giveMeMyWeaponsPlease", function()
     -- Gives the loaded user corresponding to the given player id(second argument).
     TriggerEvent('es:getPlayerFromId', source, function(user)
 		if user then
-            local playerWeapons = user.getActiveCharacterData("weapons")
+            local playerWeapons = user.getWeapons()
             print("#playerWeapons = " .. #playerWeapons)
             -- todo: ADD A CHECK FOR PLAYER JOB, ONLY GIVE WEAPONS IF POLICE
             TriggerClientEvent("CS:giveWeapons", source, playerWeapons)

@@ -28,27 +28,85 @@ AddEventHandler('usa_rp:playerLoaded', function()
 end)
 
 RegisterNetEvent('usa_rp:spawn')
-AddEventHandler('usa_rp:spawn', function(defaultModel, job, weapons, characters)
-    if characters then
-        print("size of characters = " .. #characters)
-    end
+AddEventHandler('usa_rp:spawn', function(defaultModel, job, weapons, character)
     local spawn = {x = 0.0, y = 0.0, z = 0.0}
-    spawn = civilianSpawns[math.random(1, #civilianSpawns)]
+    Citizen.Trace("spawning in with job = " .. job)
+    if job == "sheriff" or job == "police" then
+        spawn.x = -447.467
+        spawn.y = 6009.258
+        spawn.z = 31.716
+    elseif job == "ems" then
+        spawn.x =  -368.314
+        spawn.y = 6101.166
+        spawn.z = 35.440
+    elseif job == "security" then
+        spawn.x =  3502.5
+        spawn.y = 3762.45
+        spawn.z = 29.900
+    else
+        spawn = civilianSpawns[math.random(1, #civilianSpawns)]
+    end
 	exports.spawnmanager:spawnPlayer({x = spawn.x, y = spawn.y, z = spawn.z, model = defaultModel, heading = 0.0}, function()
-        if not characters then
-            print("player did not have a first character...")
-            TriggerEvent("character:open", "new-character")
+        -- character selection screen
+        --TriggerEvent("character:open") temp disable
+        -- give customized character
+        if character then
+            if character.hash then
+                local name, model
+                model = tonumber(character.hash)
+                Citizen.Trace("giving loading with customizations with hash = " .. model)
+                Citizen.CreateThread(function()
+                    RequestModel(model)
+                    while not HasModelLoaded(model) do -- Wait for model to load
+                        RequestModel(model)
+                        Citizen.Wait(0)
+                    end
+                    SetPlayerModel(PlayerId(), model)
+                    SetModelAsNoLongerNeeded(model)
+                    -- ADD CUSTOMIZATIONS FROM CLOTHING STORE
+                    for key, value in pairs(character["components"]) do
+                        SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
+                    end
+                    for key, value in pairs(character["props"]) do
+                        SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
+                    end
+                    -- GIVE WEAPONS
+                    for i =1, #weapons do
+                        if type(weapons[i]) == "string" then
+                            GiveWeaponToPed(GetPlayerPed(-1), GetHashKey(weapons[i]), 1000, false, false)
+                        else -- table type most likely
+                            GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
+                        end
+                    end
+                end)
+            else -- no custom character to load, just give weapons
+                if weapons then
+                    for i =1, #weapons do
+                        if type(weapons[i]) == "string" then
+                            GiveWeaponToPed(GetPlayerPed(-1), GetHashKey(weapons[i]), 1000, false, false)
+                        else -- table type most likely
+                            GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
+                        end
+                    end
+                end
+            end
         else
-            print("player did have a first character!")
-            TriggerEvent("character:open", "home", characters)
+            Citizen.Trace("Could not find a character!")
+            if weapons then
+                for i =1, #weapons do
+                    if type(weapons[i]) == "string" then
+                        GiveWeaponToPed(GetPlayerPed(-1), GetHashKey(weapons[i]), 1000, false, false)
+                    else -- table type most likely
+                        GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
+                    end
+                end
+            end
         end
-        --[[ CHECK JAIL STATUS
+        -- CHECK JAIL STATUS
         Citizen.Trace("calling checkJailedStatusOnPlayerJoin server function")
         TriggerServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
-        --]]
         -- CHECK BAN STATUS
         TriggerServerEvent('mini:checkPlayerBannedOnSpawn')
-        --]]
 	end)
 end)
 
@@ -57,7 +115,7 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(0)
 		SetPedDensityMultiplierThisFrame(0.8)
-		SetVehicleDensityMultiplierThisFrame(0.6)
+		SetVehicleDensityMultiplierThisFrame(0.2)
 	end
 end)
 
@@ -164,7 +222,7 @@ Citizen.CreateThread( function()
     end
 end )
 
--- spawn peds
+-- spawn peds (strip club only atm)
 local locations = {
     stripclub = {
         {x = 102.423, y = -1290.594, z = 28.2587, animDict = "mini@strip_club@private_dance@part1", animName = "priv_dance_p1", model = "CSB_Stripper_02", heading = (math.random(50, 360)) * 1.0},
@@ -173,9 +231,6 @@ local locations = {
         {x = 113.111, y = -1287.755, z = 27.586, animDict = "mini@strip_club@private_dance@part1", animName = "priv_dance_p1", model = "S_F_Y_Stripper_02", heading = (math.random(50, 360)) * 1.0},
         {x = 113.375, y = -1286.546, z = 27.586, animDict = "mini@strip_club@private_dance@part2", animName = "priv_dance_p2", model = "CSB_Stripper_02", heading = (math.random(50, 360)) * 1.0},
         {x = 129.442, y = -1283.407, z = 28.272, animDict = "missfbi3_party_d", animName = "stand_talk_loop_a_female", model = "S_F_Y_Bartender_01", heading = 122.471}
-    },
-    boatshop = {
-        {x = -257.739, y = 6666.348, z = 1.3, animDict = "", animName = "", model = "CS_Fabien", heading = 236.9}
     }
 }
 local spawnedPeds = {}
@@ -305,4 +360,27 @@ Citizen.CreateThread(function()
 	end
 end)
 
--- bait car
+-- roll windows [usage: /rollw]
+local windowup = true
+RegisterNetEvent("RollWindow")
+AddEventHandler('RollWindow', function()
+    local playerPed = GetPlayerPed(-1)
+    if IsPedInAnyVehicle(playerPed, false) then
+        local playerCar = GetVehiclePedIsIn(playerPed, false)
+		if ( GetPedInVehicleSeat( playerCar, -1 ) == playerPed ) then
+            SetEntityAsMissionEntity( playerCar, true, true )
+
+			if ( windowup ) then
+				RollDownWindow(playerCar, 0)
+				RollDownWindow(playerCar, 1)
+				--TriggerEvent('chatMessage', '', {255,0,0}, 'Windows down')
+				windowup = false
+			else
+				RollUpWindow(playerCar, 0)
+				RollUpWindow(playerCar, 1)
+				--TriggerEvent('chatMessage', '', {255,0,0}, 'Windows up')
+				windowup = true
+			end
+		end
+	end
+end )

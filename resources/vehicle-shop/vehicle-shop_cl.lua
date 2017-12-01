@@ -144,6 +144,10 @@ function muscleMenu()
 	Menu.addButton("Declasse Vigero ($12,500)","buyVehicle","-825837129:12500:Declasse Vigero")
 	Menu.addButton("Vapid Dominator ($19,400)","buyVehicle","80636076:19400:Vapid Dominator")
 	Menu.addButton("Bravado Gauntlet ($27,400)","buyVehicle","-1800170043:27400:Bravado Gauntlet")
+	Menu.addButton("Voodoo ($30,000)","buyVehicle","2006667053:30000:Voodoo")
+	Menu.addButton("Tampa ($30,000)","buyVehicle","972671128:30000:Tampa")
+	Menu.addButton("Stalion ($30,000)","buyVehicle","1923400478:30000:Stalion")
+	Menu.addButton("Slam Van ($40,000)","buyVehicle","1119641113:40000:Slam Van")
 
 end
 

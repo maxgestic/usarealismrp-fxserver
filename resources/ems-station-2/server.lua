@@ -21,12 +21,12 @@ AddEventHandler('rconCommand', function(commandName, args)
 			TriggerEvent("es:getPlayerFromId", tonumber(playerId), function(user)
 				if(user)then
                     if status == "true" then
-    					user.setActiveCharacterData("emsRank", 1)
+    					user.setEMSRank(1)
     					RconPrint("DEBUG: " .. playerId .. " whitelisted for EMS")
     					--TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "You have been whitelist as EMS")
                     else
-                        user.setActiveCharacterData("emsRank", 0)
-						user.setActiveCharacterData("job", "civ")
+                        user.setEMSRank(0)
+						user.setJob("civ")
     					RconPrint("DEBUG: " .. playerId .. " un-whitelisted for EMS")
                     end
 				end
@@ -41,8 +41,8 @@ RegisterServerEvent("emsstation2:onduty")
 AddEventHandler("emsstation2:onduty", function()
     local userSource = tonumber(source)
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
-        if user.getActiveCharacterData("job") ~= "ems" then
-            user.setActiveCharacterData("job", "ems")
+        if user.getJob() ~= "ems" then
+            user.setJob("ems")
         end
     end)
 end)
@@ -51,9 +51,9 @@ RegisterServerEvent("emsstation2:offduty")
 AddEventHandler("emsstation2:offduty", function()
     local userSource = tonumber(source)
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
-        local playerWeapons = user.getActiveCharacterData("weapons")
+        local playerWeapons = user.getWeapons()
         TriggerClientEvent("emsstation2:setciv", userSource, user.getCharacters(), playerWeapons)
-        user.setActiveCharacterData("job", "civ")
+        user.setJob("civ")
     end)
 end)
 
@@ -63,7 +63,7 @@ AddEventHandler("emsstation2:checkWhitelist", function(clientevent)
 	local playerGameLicense = ""
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
-		if user.getActiveCharacterData("emsRank") > 0 then
+		if user.getEMSRank() > 0 then
 			--TriggerClientEvent("policestation2:isWhitelisted", userSource)
 			TriggerClientEvent(clientevent, userSource)
 		else

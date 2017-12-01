@@ -1,7 +1,7 @@
 TriggerEvent('es:addCommand','impound', function(source, args, user)
     local userSource = tonumber(source)
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
-        local playerJob = user.getActiveCharacterData("job")
+        local playerJob = user.getJob()
         local userGroup = user.getGroup()
         if playerJob == "sheriff" or playerJob == "ems" or playerJob == "fire" or userGroup == "owner" or userGroup == "superadmin" or userGroup == "admin" or userGroup == "mod" then
             TriggerClientEvent( 'impoundVehicle', source )
@@ -14,7 +14,7 @@ end)
 TriggerEvent('es:addCommand','IMPOUND', function(source, args, user)
     local userSource = tonumber(source)
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
-        local playerJob = user.getActiveCharacterData("job")
+        local playerJob = user.getJob()
         local userGroup = user.getGroup()
         if playerJob == "sheriff" or playerJob == "ems" or playerJob == "fire" or userGroup == "owner" or userGroup == "admin" or userGroup == "mod" then
             TriggerClientEvent( 'impoundVehicle', source )
@@ -30,13 +30,13 @@ AddEventHandler("impound:impoundVehicle", function(vehicle, plate)
     print("inside of impound:impoundVehicle!")
     local userSource = tonumber(source)
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
-        local playerJob = user.getActiveCharacterData("job")
+        local playerJob = user.getJob()
         local userGroup = user.getGroup()
         if playerJob == "sheriff" or playerJob == "ems" or playerJob == "fire" or userGroup == "owner" or userGroup == "admin" or userGroup == "mod" then
             TriggerEvent('es:getPlayers', function(players)
                     for k,v in pairs(players) do
                         local player = v
-                        local vehicles = player.getActiveCharacterData("vehicles")
+                        local vehicles = player.getVehicles()
                         --print("about to check all player vehicles : " .. #vehicles)
                         for i = 1, #vehicles do
                             --print("checking vehicle.model = " .. vehicles[i].model)

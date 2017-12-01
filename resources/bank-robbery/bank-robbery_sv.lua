@@ -61,8 +61,7 @@ AddEventHandler("bank:beginRobbery", function(source)
 	TriggerEvent("es:getPlayers", function(pl)
 		for k, v in pairs(pl) do
 			TriggerEvent("es:getPlayerFromId", k, function(user)
-				local userJob = user.getActiveCharacterData("job")
-					if userJob == "cop" or userJob == "sheriff" or userJob == "highwaypatrol" or userJob == "ems" or userJob == "fire" then
+					if user.getJob() == "cop" or user.getJob() == "sheriff" or user.getJob() == "highwaypatrol" or user.getJob() == "ems" or user.getJob() == "fire" then
 						TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "Alarm activated at ^3Blaine County Savings Bank^0 on Cascabel Ave.")
 					end
 			end)
@@ -93,10 +92,8 @@ AddEventHandler("bank:inRange", function()
 	TriggerClientEvent("bank-robbery:notify", source, msg)
 	TriggerEvent('es:getPlayerFromId', source, function(user)
 		if user then
-			local user_money = user.getActiveCharacterData("money")
-			local new_money = user_money + rewardMoney
-			user.setActiveCharacterData("money", new_money)
-			print("player " .. GetPlayerName(userSource) .. " successfully robbed the bank and now has: " .. new_money)
+			user.addMoney(rewardMoney)
+			print("player " .. GetPlayerName(userSource) .. " successfully robbed the bank and now has: " .. user.getMoney())
 		end
 	end)
 end)

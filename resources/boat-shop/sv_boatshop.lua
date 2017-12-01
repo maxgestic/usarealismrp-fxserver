@@ -9,9 +9,8 @@ AddEventHandler("boatshop:rentVehicle", function(vehicle)
         print("inside of get player from id")
         if user then
             print("user existed")
-            local user_money = user.getActiveCharacterData("money")
-            if user_money >= price then
-                user.setActiveCharacterData("money", user_money - price)
+            if user.getMoney() >= price then
+                user.removeMoney(price)
                 print("calling spawnAircraft")
                 TriggerClientEvent("boatshop:spawnSeacraft", userSource, vehicle.hash)
             else
@@ -27,8 +26,7 @@ AddEventHandler("boatshop:returnedVehicle", function(item)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
         local returnAmount = .25*item.price
         local rounded = round(returnAmount, 0)
-        local user_money = user.getActiveCharacterData("money")
-        user.setActiveCharacterData("money", user_money + rounded)
+        user.addMoney(rounded)
     end)
 end)
 

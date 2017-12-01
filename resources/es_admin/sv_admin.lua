@@ -130,7 +130,7 @@ TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, user)
 				end
 
 				-- send discord message
-				local targetPlayerName = target.getActiveCharacterData("firstName") .. " " .. target.getActiveCharacterData("lastName")
+				local targetPlayerName = GetPlayerName(player)
 				local allPlayerIdentifiers = GetPlayerIdentifiers(player)
 				local desc = "**Display Name:** " .. targetPlayerName
 				for i = 1, #allPlayerIdentifiers do
@@ -156,7 +156,7 @@ TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, user)
 						}), { ["Content-Type"] = 'application/json' })
 
 				--sendMessageToModsAndAdmins(GetPlayerName(player) .. " has been kicked (" .. reason .. ")")
-				TriggerClientEvent('chatMessage', -1, "", {0, 0, 0}, targetPlayerName .. " has been ^3kicked^0 (" .. reason .. ")")
+				TriggerClientEvent('chatMessage', -1, "", {0, 0, 0}, GetPlayerName(player) .. " has been ^3kicked^0 (" .. reason .. ")")
 				DropPlayer(player, reason)
 			end)
 		else
@@ -217,7 +217,7 @@ TriggerEvent('es:addGroupCommand', 'freeze', "mod", function(source, args, user)
 							if id and adminOrMod then
 								local adminOrModGroup = adminOrMod.getGroup()
 								if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
-									TriggerClientEvent('chatMessage', id, "", {0, 0, 0}, "Player ^2" .. user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName") .. "^0 froze " .. GetPlayerName(player))
+									TriggerClientEvent('chatMessage', id, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(source) .. "^0 froze " .. GetPlayerName(player))
 								end
 							end
 						end
@@ -289,6 +289,7 @@ end)
 -- Freezing
 local frozen = {}
 TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, user)
+	local userJob = user.getJob()
 	if args[2] == "pd" then
 		local pdCoords = {x=-447.256 , y=6000.667 , z=30.686}
 		TriggerClientEvent('es_admin:teleportUser', source, pdCoords.x, pdCoords.y, pdCoords.z)
@@ -599,7 +600,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 
 		TriggerEvent("es:getPlayerFromId", tonumber(args[1]), function(user)
 			if(user)then
-				user.setActiveCharacterData("money", tonumber(args[2]))
+				user.setMoney(tonumber(args[2]))
 
 				RconPrint("Money set")
 				TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "Your money has been set to: ^2^*$" .. tonumber(args[2]))
@@ -639,6 +640,7 @@ end
 -- Fetch all bans when resource starts
 fetchAllBans()
 
+--[[
 	-- check for player being banned
 	AddEventHandler('playerConnecting', function(name, setReason)
 		--local identifier = GetPlayerIdentifiers(source)[1]
@@ -660,7 +662,7 @@ fetchAllBans()
 			end
 		end
 	end)
-
+--]]
 	-- ban command
 	TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, user)
 		local userSource = tonumber(source)
@@ -758,7 +760,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 			TriggerEvent("es:getPlayerFromId", tonumber(args[2]), function(user)
 				if user then
 					local vehiclenames = ""
-					local userVehicles = user.getActiveCharacterData("vehicles")
+					local userVehicles = user.getVehicles()
 					for i = 1, #userVehicles do
 						local vehicle = userVehicles[i]
 						vehiclenames = vehiclenames .. userVehicles[i].model
@@ -767,7 +769,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 						end
 					end
 					local weaponnames = ""
-					local userWeapons = user.getActiveCharacterData("weapons")
+					local userWeapons = user.getWeapons()
 					for i = 1, #userWeapons do
 						local weapon = userWeapons[i]
 						weaponnames = weaponnames .. userWeapons[i].name
@@ -776,7 +778,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 						end
 					end
 					local inventorynames = ""
-					local userInventory = user.getActiveCharacterData("inventory")
+					local userInventory = user.getInventory()
 					for i = 1, #userInventory do
 						--local inventory = userInventory[i]
 						--local quantity = inventory.quantity
@@ -787,7 +789,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 					end
 					local firearms_permit = "Invalid"
 					local driving_license = "Invalid"
-					local userLicenses = user.getActiveCharacterData("licenses")
+					local userLicenses = user.getLicenses()
 					for i = 1, #userLicenses do
 						local license = userLicenses[i]
 						if license.name == "Driver's License"  then
@@ -797,7 +799,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 						end
 					end
 
-					local insurance = user.getActiveCharacterData("insurance")
+					local insurance = user.getInsurance()
 					local insurance_month = insurance.expireMonth
 					local insurance_year = insurance.expireYear
 					local displayInsurance = "Invalid"
@@ -806,9 +808,9 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 					end
 
 					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
-					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Name: " .. user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName") .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
-					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Police Rank: " .. user.getActiveCharacterData("policeRank") .. " | EMS Rank: " .. user.getActiveCharacterData("emsRank") .. " | Delta PMC Rank: " .. user.getActiveCharacterData("securityRank") .. " |  Job: " .. user.getActiveCharacterData("job") .. " |" )
-					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Cash: " .. user.getActiveCharacterData("money") .. " | Bank: " .. user.getActiveCharacterData("bank") .. " |  Ingame Time: " .. FormatSeconds(user.getActiveCharacterData("ingameTime")) .. " |" )
+					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Name: " .. GetPlayerName(tonumber(args[2])) .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
+					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Police Rank: " .. user.getPoliceRank() .. " | EMS Rank: " .. user.getEMSRank() .. " | Delta PMC Rank: " .. user.getSecurityRank() .. " |  Job: " .. user.getJob() .. " |" )
+					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Cash: " .. user.getMoney() .. " | Bank: " .. user.getBank() .. " |  Ingame Time: " .. FormatSeconds(user.getIngameTime()) .. " |" )
 					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
 					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
 					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Inventory: " .. inventorynames .. " |")
@@ -821,7 +823,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 	else
 		--show player stats
 		local vehiclenames = ""
-		local userVehicles = user.getActiveCharacterData("vehicles")
+		local userVehicles = user.getVehicles()
 		for i = 1, #userVehicles do
 			local vehicle = userVehicles[i]
 			vehiclenames = vehiclenames .. userVehicles[i].model
@@ -830,7 +832,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 			end
 		end
 		local weaponnames = ""
-		local userWeapons = user.getActiveCharacterData("weapons")
+		local userWeapons = user.getWeapons()
 		for i = 1, #userWeapons do
 			local weapon = userWeapons[i]
 			weaponnames = weaponnames .. userWeapons[i].name
@@ -839,7 +841,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 			end
 		end
 		local inventorynames = ""
-		local userInventory = user.getActiveCharacterData("inventory")
+		local userInventory = user.getInventory()
 		for i = 1, #userInventory do
 			--local inventory = userInventory[i]
 			--local quantity = inventory.quantity
@@ -850,7 +852,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 		end
 		local firearms_permit = "Invalid"
 		local driving_license = "Invalid"
-		local userLicenses = user.getActiveCharacterData("licenses")
+		local userLicenses = user.getLicenses()
 		for i = 1, #userLicenses do
 			local license = userLicenses[i]
 			if license.name == "Driver's License"  then
@@ -860,7 +862,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 			end
 		end
 
-		local insurance = user.getActiveCharacterData("insurance")
+		local insurance = user.getInsurance()
 		local insurance_month = insurance.expireMonth
 		local insurance_year = insurance.expireYear
 		local displayInsurance = "Invalid"
@@ -869,9 +871,9 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 		end
 
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
-		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Name: " .. user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName") .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
-		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Police Rank: " .. user.getActiveCharacterData("policeRank") .. " | EMS Rank: " .. user.getActiveCharacterData("emsRank") .. " | Delta PMC Rank: " .. user.getActiveCharacterData("securityJob") .. " |  Job: " .. user.getActiveCharacterData("job") .. " |" )
-		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Cash: " .. user.getActiveCharacterData("money") .. " | Bank: " .. user.getActiveCharacterData("bank") .. " |  Ingame Time: " .. FormatSeconds(user.getActiveCharacterData("ingameTime")) .. " |" )
+		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Name: " .. GetPlayerName(source) .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
+		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Police Rank: " .. user.getPoliceRank() .. " | EMS Rank: " .. user.getEMSRank() .. " | Delta PMC Rank: " .. user.getSecurityRank() .. " |  Job: " .. user.getJob() .. " |" )
+		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Cash: " .. user.getMoney() .. " | Bank: " .. user.getBank() .. " |  Ingame Time: " .. FormatSeconds(user.getIngameTime()) .. " |" )
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Inventory: " .. inventorynames .. " |")

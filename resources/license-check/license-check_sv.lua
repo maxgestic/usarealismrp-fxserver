@@ -28,10 +28,10 @@ AddEventHandler("license:searchForLicense", function(source, playerId)
 				TriggerClientEvent("license:notifyNoExist", source, playerId) -- player not in game with that id
 				return
 			end
-			local vehicles = user.getActiveCharacterData("vehicles")
-	    local licenses = user.getActiveCharacterData("licenses")
-			local insurancePlans = user.getActiveCharacterData("insurance")
-			local criminalHistory = user.getActiveCharacterData("criminalHistory")
+			local vehicles = user.getVehicles()
+	        local licenses = user.getLicenses()
+			local insurancePlans = user.getInsurance()
+			local criminalHistory = user.getCriminalHistory()
 			local hasFirearmsPermit = false
 			local hasDL = false
 			print("#inventory = " .. #licenses)
@@ -98,14 +98,14 @@ end
 
 -- Add a command everyone is able to run. Args is a table with all the arguments, and the user is the user object, containing all the user data.
 TriggerEvent('es:addCommand', 'mdt', function(source, args, user)
-	local playerJob = user.getActiveCharacterData("job")
+	local playerJob = user.getJob()
 	local argument = args[2] -- player id to check license
 	if argument == nil or type(tonumber(argument)) == nil then
 		TriggerClientEvent("license:help", source)
 	elseif playerJob ~= "cop" and playerJob ~= "sheriff" and playerJob ~= "highwaypatrol" then
 		TriggerClientEvent("license:failureNotJurisdiction", source)
 	else -- player is a cop, so allow check and perform check with argument = player id to check license
-		--TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " opens MDT.") -- need to update name
+		--TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " opens MDT.")
 		TriggerEvent("license:searchForLicense", source, argument)
 	end
 end)
@@ -135,18 +135,16 @@ end
 
 -- running vehicle plates
 TriggerEvent('es:addCommand', '28', function(source, args, user)
-	local user_job = user.getActiveCharacterData("job")
-	local user_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
-	if user_job == "sheriff" or user_job == "police" then
+	if user.getJob() == "sheriff" or user.getJob() == "police" then
 		local userSource = tonumber(source)
 		local plateNumber = args[2]
 		if plateNumber then
-			TriggerEvent('altchat:localChatMessage', source, "^6* " .. user_name .. " runs plate.")
+			TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " runs plate.")
 			TriggerEvent("es:getPlayers", function(players)
 				for id, player in pairs(players) do
 					--print("id = " .. id)
 					--print("player.job = " .. player.job)
-					local vehicles = player.getActiveCharacterData("vehicles")
+					local vehicles = player.getVehicles()
 					for i = 1, #vehicles do
 						local vehicle = vehicles[i]
 						if tostring(vehicle.plate) == tostring(plateNumber) then
@@ -173,18 +171,16 @@ TriggerEvent('es:addCommand', '28', function(source, args, user)
 end)
 
 TriggerEvent('es:addCommand', 'runplate', function(source, args, user)
-	local user_job = user.getActiveCharacterData("job")
-	local user_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
-	if user_job == "sheriff" or user_job == "police" then
+	if user.getJob() == "sheriff" or user.getJob() == "police" then
 		local userSource = tonumber(source)
 		local plateNumber = args[2]
 		if plateNumber then
-			TriggerEvent('altchat:localChatMessage', source, "^6* " .. user_name .. " runs plate.")
+			TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " runs plate.")
 			TriggerEvent("es:getPlayers", function(players)
 				for id, player in pairs(players) do
 					--print("id = " .. id)
 					--print("player.job = " .. player.job)
-					local vehicles = player.getActiveCharacterData("vehicles")
+					local vehicles = player.getVehicles()
 					for i = 1, #vehicles do
 						local vehicle = vehicles[i]
 						if tostring(vehicle.plate) == tostring(plateNumber) then

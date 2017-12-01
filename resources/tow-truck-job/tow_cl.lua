@@ -24,7 +24,7 @@ end)
 RegisterNetEvent("towJob:success")
 AddEventHandler("towJob:success", function()
 
-	TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0You have impounded the vehicle for ^2$400^0!")
+	TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0You have impounded the vehicle for ^2$700^0!")
 
 end)
 

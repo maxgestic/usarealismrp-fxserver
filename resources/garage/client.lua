@@ -63,7 +63,7 @@ end)
 
 RegisterNetEvent("garage:vehicleNotStored")
 AddEventHandler("garage:vehicleNotStored", function()
-	TriggerEvent("garage:notify", "~r~Sorry! You have no vehicles stored here and you don't have vehicle insurance.")
+	TriggerEvent("garage:notify", "~r~You have no vehicles stored here.")
 end)
 
 RegisterNetEvent("garage:vehicleStored")

@@ -1,19 +1,17 @@
 local balances = {}
 
 AddEventHandler('es:playerLoaded', function(source, user)
-    local bank = user.getActiveCharacterData("bank")
-    balances[source] = bank
+    balances[source] = user.getBank()
 
-    TriggerClientEvent('banking:updateBalance', source, bank)
+    TriggerClientEvent('banking:updateBalance', source, user.getBank())
 end)
 
 RegisterServerEvent('playerSpawned')
 AddEventHandler('playerSpawned', function()
   TriggerEvent('es:getPlayerFromId', source, function(user)
-    local bank = user.getActiveCharacterData("bank")
-    balances[source] = bank
+    balances[source] = user.getBank()
 
-    TriggerClientEvent('banking:updateBalance', source, bank)
+    TriggerClientEvent('banking:updateBalance', source, user.getBank())
   end)
 end)
 
@@ -23,7 +21,7 @@ end)
 
 -- HELPER FUNCTIONS
 function bankBalance(player)
-  return exports.essentialmode:getPlayerFromId(player).getActiveCharacterData("bank")
+  return exports.essentialmode:getPlayerFromId(player).getBank()
 end
 
 function deposit(player, amount)
@@ -34,9 +32,7 @@ function deposit(player, amount)
 
       local user = exports.essentialmode:getPlayerFromId(player)
       TriggerClientEvent("banking:updateBalance", source, new_balance)
-      local user_bank = user.getActiveCharacterData("bank")
-      local new_bank = user_bank + math.abs(amount)
-      user.setActiveCharacterData("bank", new_bank)
+      user.addBank(math.abs(amount))
   else
       print("can't deposit a negative value, mr/mrs: " .. GetPlayerName(player))
   end
@@ -49,9 +45,7 @@ function withdraw(player, amount)
 
   local user = exports.essentialmode:getPlayerFromId(player)
   TriggerClientEvent("banking:updateBalance", source, new_balance)
-  local user_bank = user.getActiveCharacterData("bank")
-  local new_bank = user_bank - math.abs(amount)
-  user.setActiveCharacterData("bank", new_bank)
+  user.removeBank(math.abs(amount))
 end
 
 function round(num, numDecimalPlaces)
@@ -77,21 +71,19 @@ AddEventHandler('bank:deposit', function(amount)
 local userSource = tonumber(source)
   TriggerEvent('es:getPlayerFromId', userSource, function(user)
     if notAllowedToDeposit[userSource] == nil then
-      local rounded = math.ceil(tonumber(amount))
+      local rounded = math.ceil(amount)
       print("rounded = " .. rounded)
       if(string.len(rounded) >= 9) then
         TriggerClientEvent('chatMessage', userSource, "", {0, 0, 200}, "^1Input too high^0")
       else
-          local user_money = user.getActiveCharacterData("money")
-          local user_bank = user.getActiveCharacterData("bank")
-      	if(rounded <= user_money and rounded > 0) then
+      	if(rounded <= user.getMoney() and rounded > 0) then
           --TriggerClientEvent("banking:updateBalance", userSource, (user.getBank() + rounded))
           --TriggerClientEvent("banking:addBalance", userSource, rounded)
-		 print("updating user balance! " .. (user_bank + rounded))
-          TriggerClientEvent("banking:updateBalance", userSource, (user_bank + rounded))
+		 print("updating user balance! " .. (user.getBank() + rounded))
+          TriggerClientEvent("banking:updateBalance", userSource, (user.getBank() + rounded))
           TriggerClientEvent("banking:addBalance", userSource, rounded)
-          user.setActiveCharacterData("money", user_money - rounded)
-          user.setActiveCharacterData("bank", user_bank + rounded)
+          user.removeMoney((rounded))
+          user.addBank(rounded)
           --deposit(userSource, rounded)
           --local new_balance = user.getBank()
         else
@@ -122,16 +114,14 @@ local userSource = tonumber(source)
       if(string.len(rounded) >= 9) then
         TriggerClientEvent('chatMessage', userSource, "", {0, 0, 200}, "^1Input too high^0")
       else
-          local user_bank = user.getActiveCharacterData("bank")
-           local user_money = user.getActiveCharacterData("money")
-        local bankbalance = user_bank
+        local bankbalance = user.getBank()
         if(tonumber(rounded) <= tonumber(bankbalance)) then
-          TriggerClientEvent("banking:updateBalance", userSource, (user_bank - rounded))
+          TriggerClientEvent("banking:updateBalance", userSource, (user.getBank() - rounded))
          TriggerClientEvent("banking:removeBalance", userSource, rounded)
 
           --withdraw(userSource, rounded)
-          user.setActiveCharacterData("money", user_money + rounded)
-          user.setActiveCharacterData("bank", user_bank - rounded)
+          user.removeBank(rounded)
+          user.addMoney((rounded))
         else
           TriggerClientEvent('chatMessage', userSource, "", {0, 0, 200}, "^1Not enough money in account!^0")
         end
@@ -222,17 +212,15 @@ end)
 RegisterServerEvent('bank:givecash')
 AddEventHandler('bank:givecash', function(toPlayer, amount)
 	TriggerEvent('es:getPlayerFromId', source, function(user)
-        local user_money_1 = user.getActiveCharacterData("money")
-		if (tonumber(user_money_1) >= tonumber(amount)) then
-            user.setActiveCharacterData("money", user_money_1 - amount)
+		if (tonumber(user.getMoney()) >= tonumber(amount)) then
+			user.removeMoney(amount)
 			TriggerEvent('es:getPlayerFromId', toPlayer, function(recipient)
-                local user_money_2 = user.getActiveCharacterData("money")
-                recipient.setActiveCharacterData("money", user_money_2 + amount)
-				TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Gave cash: ~r~-$".. amount .." ~n~~s~Wallet: ~g~$" .. user_money_1 - amount)
-				TriggerClientEvent("es_freeroam:notify", toPlayer, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Received cash: ~g~$".. amount .." ~n~~s~Wallet: ~g~$" .. user_money_2 + amount)
+				recipient.addMoney(amount)
+				TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Gave cash: ~r~-$".. amount .." ~n~~s~Wallet: ~g~$" .. user.getMoney())
+				TriggerClientEvent("es_freeroam:notify", toPlayer, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Received cash: ~g~$".. amount .." ~n~~s~Wallet: ~g~$" .. recipient.getMoney())
 			end)
 		else
-			if (tonumber(user_money_1) < tonumber(amount)) then
+			if (tonumber(user.getMoney()) < tonumber(amount)) then
         TriggerClientEvent('chatMessage', source, "", {0, 0, 200}, "^1Not enough money in wallet!^0")
 			end
 		end
