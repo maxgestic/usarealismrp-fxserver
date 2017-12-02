@@ -40,7 +40,7 @@ AddEventHandler("RPD:removeWeapons", function()
 	local userSource = source
 	print("inside of RPD:removeWeapons")
 	TriggerEvent("es:getPlayerFromId", source, function(user)
-		if user.getJob() == "civ" then
+		if user.getJob() ~= "sheriff" and user.getJob() ~= "ems" then
 			-- empty out everything since person has died and NLR is in place
 			--user.removeMoney(user.getMoney())
 			user.setInventory({})
