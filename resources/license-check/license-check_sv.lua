@@ -146,6 +146,7 @@ TriggerEvent('es:addCommand', '28', function(source, args, user)
 		if plateNumber then
 			TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " runs plate.")
 			TriggerEvent("es:getPlayers", function(players)
+				local found = false
 				for id, player in pairs(players) do
 					--print("id = " .. id)
 					--print("player.job = " .. player.job)
@@ -160,12 +161,15 @@ TriggerEvent('es:addCommand', '28', function(source, args, user)
 							message = message .. "~y~MODEL: ~w~"
 							message = message .. vehicle.model
 							TriggerClientEvent("licenseCheck:notify", userSource, message)
+							found = true
 							return
 						end
 					end
 				end
-				-- player not in game with that plate number or plate number owned by a local!
-				TriggerClientEvent("licenseCheck:notify", userSource, "This plate is not on file.")
+				if not found then
+					-- player not in game with that plate number or plate number owned by a local!
+					TriggerClientEvent("licenseCheck:notify", userSource, "This plate is not on file.")
+				end
 			end)
 		else
 			print("player did not enter a plate #")
@@ -182,6 +186,7 @@ TriggerEvent('es:addCommand', 'runplate', function(source, args, user)
 		if plateNumber then
 			TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " runs plate.")
 			TriggerEvent("es:getPlayers", function(players)
+				local found = false
 				for id, player in pairs(players) do
 					--print("id = " .. id)
 					--print("player.job = " .. player.job)
@@ -196,17 +201,20 @@ TriggerEvent('es:addCommand', 'runplate', function(source, args, user)
 							message = message .. "~y~MODEL: ~w~"
 							message = message .. vehicle.model
 							TriggerClientEvent("licenseCheck:notify", userSource, message)
+							found = true
 							return
 						end
 					end
+				end
+				if not found then
 					-- player not in game with that plate number or plate number owned by a local!
 					TriggerClientEvent("licenseCheck:notify", userSource, "This plate is not on file.")
 				end
 			end)
 		else
 			print("player did not enter a plate #")
-			TriggerClientEvent("chatMessage", userSource, "", {}, "^1Invalid /runplate command format!")
-			TriggerClientEvent("chatMessage", userSource, "", {}, "^3Usage: ^0/runplate <plate_number_here>")
+			TriggerClientEvent("chatMessage", userSource, "", {}, "^1Invalid /28 command format!")
+			TriggerClientEvent("chatMessage", userSource, "", {}, "^3Usage: ^0/28 <plate_number_here>")
 		end
 	end
 end)
