@@ -186,7 +186,7 @@ Citizen.CreateThread(function()
 	            DrawSpecialText("Press [ ~b~E~w~ ] to return your aircraft rental!")
 	            if IsControlPressed(0, 86) then
 	                Citizen.Wait(500)
-	                --if rental.price then
+	                if rental.price then
 	                    local vehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
 	                    local hash = GetEntityModel(vehicle)
 						if GetPedInVehicleSeat(vehicle, -1) == GetPlayerPed(-1) then
@@ -214,7 +214,7 @@ Citizen.CreateThread(function()
 						else
 							drawNotification("You must be in the driver's seat.")
 						end
-	                --end
+	                end
 	            end
 	        end
 		end
