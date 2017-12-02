@@ -90,15 +90,18 @@ $(function() {
             fromName: phone.owner,
             fromNumber: phone.number
         }));
-        //$("#text-toNumber").val(""); // test
-        //$("#text-message").val(""); // test
         $.post('http://phone/escape', JSON.stringify({}));
     });
 
-        $( "#phone-icon" ).click(function() {
-            $("#icons-wrap").hide();
-            $("#phone-app-wrap").show();
-        });
+    $( "#contacts-icon" ).click(function() {
+        $("#icons-wrap").hide();
+        $("#contacts-app-wrap").show();
+    });
+
+    $( "#phone-icon" ).click(function() {
+        $("#icons-wrap").hide();
+        $("#phone-app-wrap").show();
+    });
 
         // show text msg conversation history
     $( "#text-message-icon" ).click(function() {

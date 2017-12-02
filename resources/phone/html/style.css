@@ -29,10 +29,11 @@ body {
 }
 
 #screen-wrap {
-    margin: 1.2em auto 0 10.5em;
+    margin: 1.2em auto 0 11.65em;
     width: 330px;
     height: 540px;
     border-radius: 5px;
+    background-color: #22424B;
 }
 
 /* text message app  */
@@ -45,47 +46,47 @@ body {
     color: lightgray;
 }
 
-#text-message-app-home {
+#text-message-app-home, #contacts-app-home {
     height: 100%;
     width: 100%;
-    background: red;
+    background: #2E5458;
 }
 
-#text-message-app-wrap {
-    margin: -7px 0 0 .5em;
+#text-message-app-wrap, #contacts-app-wrap {
+    margin: -.5em 0 0 -1em;
     padding: 1em 1em;
-    width: 98%;
-    height: 98%;
+    width: 100%;
+    height: 100%;
 }
 
-#text-message-app-wrap header {
+#text-message-app-wrap header, #contacts-app-wrap header {
     width: 100%;
     height: 10%;
-    background-color:teal;
+    background-color: #7FA68C;
     margin:0 auto;
 }
 
-#home-messages-title {
+#home-messages-title, #contacts-title {
     color: white;
     float: left;
     padding-top: 1em;
     padding-left: 1em;
 }
 
-#text-home-back-btn {
+#text-home-back-btn, #contacts-back-btn {
     height:70%;
     width: 50px;
     color: white;
     text-align: center;
     padding-top:1em;
-    background-color: #ff8080;
+    background-color:#192B38;
 }
 
-#home-new-msg-btn {
+#home-new-msg-btn, #new-contact-btn {
     height:70%;
     width: 50px;
     color: white;
-    background-color: teal;
+    background-color: #7FA68C;
     text-align: center;
     padding-top:1em;
 }
@@ -102,7 +103,7 @@ body {
 #text-message-app-wrap section {
     width: 100%;
     height: 90%;
-    background-color: #286090;
+    background-color: #2E5458;
 }
 
 .textMessageConvoBtn {
@@ -139,7 +140,7 @@ li {
 
 .app-button {
     padding: 1em;
-    background: coral;
+    background: #2D859E;
     color: white;
     border-radius: 2px;
     text-decoration: none;
@@ -147,7 +148,7 @@ li {
 }
 
 #phone-app-wrap {
-    margin: -7px 0 0 -11px;
+    margin: -2px 0 0 -11px;
     padding: 1em 1em;
     width: 98%;
     height: 98%;
@@ -192,4 +193,8 @@ h4 {
 
 input, textarea {
     margin-bottom: 1em;
+}
+
+table td {
+    padding: .5em;
 }
