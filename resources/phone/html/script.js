@@ -93,6 +93,36 @@ $(function() {
         $.post('http://phone/escape', JSON.stringify({}));
     });
 
+    // new contact button
+    $( "#new-contact-btn" ).click(function() {
+        $("#contacts-app-home section").hide();
+        $("#new-contact-form").show();
+    });
+
+    // TODO: LEFT OFF HERE *** TEST BELOW FORM SUBMISSION
+    // submit new contact form
+    $("#new-contact-form").submit(function(){
+        $.post('http://phone/addNewContact', JSON.stringify({
+            number: $("#new-contact--number").val(),
+            first: $("#new-contact--first").val(),
+            last: $("#new-contact--last").val(),
+        }));
+        $.post('http://phone/escape', JSON.stringify({}));
+    });
+
+    // new contact form back btn
+    $( "#contact-form-back-btn" ).click(function() {
+        $("#new-contact-form").hide();
+    });
+
+    // contact app back btn
+    $( "#contacts-back-btn" ).click(function() {
+        $("#contacts-app-wrap").hide();
+        $("#new-contact-form").hide();
+        $("#icons-wrap").show();
+    });
+
+    // contacts app button
     $( "#contacts-icon" ).click(function() {
         $("#icons-wrap").hide();
         $("#contacts-app-wrap").show();
