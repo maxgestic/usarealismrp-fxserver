@@ -1,6 +1,42 @@
--- phone gui
-TriggerEvent('es:addCommand', 'phone', function(source, args, user)
-	TriggerClientEvent("phone:openPhone", source)
+RegisterServerEvent("phone:getContacts")
+AddEventHandler("phone:getContacts", function(number)
+	local userSource = tonumber(source)
+	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+		local inventory = user.getActiveCharacterData("inventory")
+		for i = 1, #inventory do
+			local item = inventory[i]
+			if string.find(item.name, "Cell Phone") and item.number == number then
+				local contacts = item.contacts
+				print("retrieved contacts!")
+				TriggerClientEvent("phone:loadedContacts", userSource, contacts)
+				return
+			end
+		end
+	end)
+end)
+
+RegisterServerEvent("phone:addContact")
+AddEventHandler("phone:addContact", function(data)
+	local userSource = tonumber(source)
+	local sourcePhone = data.source
+	local newContact = {
+		number = data.number,
+		first = data.first,
+		last = data.last
+	}
+	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+		local inventory = user.getActiveCharacterData("inventory")
+		for i = 1, #inventory do
+			local item = inventory[i]
+			if string.find(item.name, "Cell Phone") and item.number == sourcePhone then
+				local contacts = item.contacts
+				table.insert(inventory[i].contacts, newContact)
+				user.setActiveCharacterData("inventory", inventory)
+				print("contact saved!")
+				return
+			end
+		end
+	end)
 end)
 
 RegisterServerEvent("phone:send911Message")
@@ -285,7 +321,6 @@ AddEventHandler("phone:checkForPhone", function()
 	end)
 end)
 
--- TODO: UPDATE THIS EVENT HANDLER TO LOAD MESSAGES WITH THE GIVEN PHONE NUMBER
 RegisterServerEvent("phone:loadMessages")
 AddEventHandler("phone:loadMessages", function(number)
 	TriggerEvent("es:getPlayerFromId", source, function(user)

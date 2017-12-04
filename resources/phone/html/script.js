@@ -17,6 +17,11 @@ function Click(x, y) {
     element.focus().click();
 }
 
+function showContactActions(index) {
+    // TODO: FINISH IMPLEMENTING THIS FOR CONTACTS
+    alert("index = " + index);
+}
+
 /*
     ================
     PHONE VARIABLES
@@ -57,6 +62,25 @@ $(function() {
             $("#text-message-app-home section").append("</div>");
             // ... then add the button for quick reply
             $("#text-home-back-btn").before("<div id='quick-reply-arrow' data-replyIdent= '"+event.data.replyIdent+"' class='quick-reply float-right'><span>&rang;</span></div>");
+        } else if (event.data.type == "loadedContacts") {
+            phone.contacts = event.data.contacts;
+            var size = Object.keys(phone.contacts).length;
+            var html = "";
+            html = "<table id='contacts-table'>";
+            html += "<tr>";
+            html += "<td>NUMBER</td>";
+            html += "<td>FIRST</td>";
+            html += "<td>LAST</td>";
+            html += "</tr>";
+            for (var i = size - 1; i >=0; i--) {
+                html += "<tr onclick='showContactActions("+i+")'>";
+                html += "<td>" + phone.contacts[i].number + "</td>";
+                html += "<td>" + phone.contacts[i].first + "</td>";
+                html += "<td>" + phone.contacts[i].last + "</td>";
+                html += "</tr>";
+            }
+            html += "</table>";
+            $("#contacts-table-wrap").html(html);
         }
     });
 
@@ -93,19 +117,23 @@ $(function() {
         $.post('http://phone/escape', JSON.stringify({}));
     });
 
+    $("#contacts-table").on("click", ".contact-item", function() {
+        alert("hey");
+    });
+
     // new contact button
     $( "#new-contact-btn" ).click(function() {
         $("#contacts-app-home section").hide();
         $("#new-contact-form").show();
     });
 
-    // TODO: LEFT OFF HERE *** TEST BELOW FORM SUBMISSION
     // submit new contact form
     $("#new-contact-form").submit(function(){
         $.post('http://phone/addNewContact', JSON.stringify({
             number: $("#new-contact--number").val(),
             first: $("#new-contact--first").val(),
             last: $("#new-contact--last").val(),
+            source: phone.number
         }));
         $.post('http://phone/escape', JSON.stringify({}));
     });
@@ -113,6 +141,7 @@ $(function() {
     // new contact form back btn
     $( "#contact-form-back-btn" ).click(function() {
         $("#new-contact-form").hide();
+        $("#contacts-app-home section").show();
     });
 
     // contact app back btn
@@ -126,6 +155,11 @@ $(function() {
     $( "#contacts-icon" ).click(function() {
         $("#icons-wrap").hide();
         $("#contacts-app-wrap").show();
+        $("#contacts-app-home section").show();
+        // todo: implement below nui callback
+        $.post('http://phone/getContacts', JSON.stringify({
+            number: phone.number
+        }));
     });
 
     $( "#phone-icon" ).click(function() {

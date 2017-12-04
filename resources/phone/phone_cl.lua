@@ -59,6 +59,14 @@ AddEventHandler("phone:loadedMessages", function(conversations)
 	})
 end)
 
+RegisterNetEvent("phone:loadedContacts")
+AddEventHandler("phone:loadedContacts", function(contacts)
+	SendNUIMessage({
+		type = "loadedContacts",
+		contacts = contacts
+	})
+end)
+
 RegisterNetEvent("phone:openPhone")
 AddEventHandler("phone:openPhone", function(phone)
 	if phone then
@@ -67,6 +75,16 @@ AddEventHandler("phone:openPhone", function(phone)
 	else
 		EnableGui(true)
 	end
+end)
+
+RegisterNUICallback('getContacts', function(data, cb)
+	print("retrieving contacts!")
+	TriggerServerEvent("phone:getContacts", data.number)
+end)
+
+RegisterNUICallback('addNewContact', function(data, cb)
+	print("adding new contact!")
+	TriggerServerEvent("phone:addContact", data)
 end)
 
 RegisterNUICallback('getMessagesFromConvo', function(data, cb)

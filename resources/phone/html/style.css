@@ -196,8 +196,24 @@ input, textarea {
     margin-bottom: 1em;
 }
 
+
+table {
+    color: white;
+}
+
 table td {
-    padding: .5em;
+    color: white;
+    padding: 1em 1em;
+    margin: 0 1em;
+}
+
+table tr {
+    padding: 1em 1em;
+    color: white;
+}
+
+table tr:hover {
+    background-color: #1b2c2d
 }
 
 #new-contact-form {
