@@ -1,3 +1,5 @@
+local deathLog = {}
+
 players = {}
 
 AddEventHandler('es:playerLoaded', function(source, user)
@@ -104,6 +106,29 @@ AddEventHandler('chatMessage', function(from,name,message)
 	end
 end)
 
+-- START DEATH LOG
+
+TriggerEvent('es:addGroupCommand', 'log', "mod", function(source, args, user)
+	for i = 1, #deathLog do
+		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^3DEATH #" .. i)
+		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "Died: " .. deathLog[i].deadPlayerName .. " (#" .. deathLog[i].deadPlayerId .. ")")
+		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "Killer: " .. deathLog[i].killerName .. " (#" .. deathLog[i].killerId .. ")")
+		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "Time: " .. deathLog[i].timestamp)
+	end
+end, function(source, args, user)end)
+
+RegisterServerEvent("RPD:newDeathLog")
+AddEventHandler("RPD:newDeathLog", function(log)
+	log.timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())
+	if #deathLog >= 10 then
+		deathLog = {}
+	end
+	table.insert(deathLog, log)
+	print("Player " .. log.killerName .. " (#" .. log.killerId .. ") just killed player " .. log.deadPlayerName .. "(#" .. log.deadPlayerId .. ").")
+end)
+
+-- END DEATH LOG
+
 function splitString(inputstr, sep)
         if sep == nil then
                 sep = "%s"
@@ -151,6 +176,15 @@ AddEventHandler('rconCommand', function(commandName, args)
 		local targetId = args[1]
 		if not targetId then RconPrint("Error: no target id"); CancelEvent() return end
 		TriggerClientEvent("RPD:revivePerson", targetId)
+		CancelEvent()
+	elseif commandName == "log" then
+		for i = 1, #deathLog do
+			RconPrint("\nDEATH #" .. i)
+			RconPrint("\nDied: " .. deathLog[i].deadPlayerName)
+			RconPrint("\nKiller: " .. deathLog[i].killerName .. " (#" .. deathLog[i].killerId .. ")")
+			RconPrint("\nCause: " .. deathLog[i].cause)
+			RconPrint("\nTime: " .. deathLog[i].timestamp)
+		end
 		CancelEvent()
 	end
 end)
