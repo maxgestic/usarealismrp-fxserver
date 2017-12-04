@@ -60,6 +60,8 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Wait(1)
+		
+		--[[
 		for id = 0, 64 do
 			x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(id), true))
 			if NetworkIsPlayerActive(id) and GetDistanceBetweenCoords(x,y,z, GetEntityCoords(GetPlayerPed(-1))) < 40 and magic.position(hidden, GetPlayerServerId(id)) == 0 then
@@ -81,6 +83,7 @@ Citizen.CreateThread(function()
 				end
 			end
 		end
+		--]]
 
 		-- BELOW THIS LINE IS WHERE SCAMMER'S PLAYERBLIPS SCRIPT BEGINS
 		-- MODIFIED TO SHOW ONLY EMERGENCY PERSONEL
@@ -134,36 +137,6 @@ function getPedEmergencyPersonnelType(ped)
 	else
 		return nil
 	end
-end
-
-function DrawTracerText(text, spacing, talking)
-	local x,y,z = table.unpack(GetEntityCoords(ped))
-	local px,py,pz=table.unpack(GetGameplayCamCoords())
-	local dist = GetDistanceBetweenCoords(px,py,pz, x,y,z, 1)
-	--Citizen.Trace("playerBlips: dist = " .. dist)
-
-	local scale = (1/dist)*20
-	local fov = (1/GetGameplayCamFov())*100
-	local scale = scale*fov
-
-	SetTextFont(0)
-	SetTextProportional(1)
-	if talking then
-		SetTextColour(0, 0, 255, 255)
-	else
-		SetTextColour(255, 255, 255, 255)
-	end
-	SetTextDropshadow(0, 0, 0, 0, 255)
-	SetTextEdge(2, 0, 0, 0, 150)
-	SetTextDropShadow()
-	SetTextOutline()
-	SetTextEntry("STRING")
-	SetTextCentre(1)
-	AddTextComponentString(text)
-	SetDrawOrigin(x, y, z+spacing, 0)
-	SetTextScale(0.3*scale, 0.08*scale)
-	DrawText(0.0, 0.0)
-	ClearDrawOrigin()
 end
 
 -- emergency ped blips
