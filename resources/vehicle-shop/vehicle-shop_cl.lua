@@ -220,7 +220,9 @@ function vansMenu()
 	Menu.addButton("Rumbo 3 ($25,535)", "buyVehicle", "1475773103:25535:Rumbo 3")
 	Menu.addButton("Taco Truck ($10,500)", "buyVehicle", "1951180813:10500:Taco Truck")
 	Menu.addButton("Surfer ($10,500)", "buyVehicle", "699456151:10500:Surfer")
-	Menu.addButton("Camper ($35,500)", "buyVehicle", "1876516712:35500:Camper")
+	Menu.addButton("Camper ($40,500)", "buyVehicle", "1876516712:40500:Camper")
+	Menu.addButton("Gang Burrito ($30,000)", "buyVehicle", "-1745203402:30000:Gang Burrito")
+	Menu.addButton("Gang Burrito 2 ($38,500)", "buyVehicle", "296357396:38500:Gang Burrito 2")
 end
 
 function sportsMenu()
