@@ -1,3 +1,11 @@
+/*
+    ================
+    PHONE VARIABLES
+    ================
+*/
+
+var phone = {};
+
 var documentWidth = document.documentElement.clientWidth;
 var documentHeight = document.documentElement.clientHeight;
 
@@ -17,18 +25,33 @@ function Click(x, y) {
     element.focus().click();
 }
 
-function showContactActions(index) {
-    // TODO: FINISH IMPLEMENTING THIS FOR CONTACTS
-    alert("index = " + index);
+function DeleteContact(number_to_delete) {
+    var size = Object.keys(phone.contacts).length;
+    alert("size = " + size);
+    for (x = 0; x < size - 1; ++x) {
+        if (phone.contacts[x].number == number_to_delete) {
+            alert("deleting number from contacts!");
+            phone.contacts[x] = null;
+        }
+    }
 }
 
-/*
-    ================
-    PHONE VARIABLES
-    ================
-*/
-
-var phone = {};
+function showContactActions(index) {
+    alert("contact action clicked, index = " + index);
+    var contact = phone.contacts[index];
+    $("#contacts-table-wrap").hide();
+    var html = "";
+    html += "<div class='contact-info' style='text-align: center;'>";
+    html += "<p>Number: " + contact.number + "</p>";
+    html += "<p>Name: " + contact.first + " " + contact.last + "</p>";
+    html += "</div>";
+    html += "<ul>;";
+    html += "<li id ='contact-action--message' data-number='" + contact.number + "'><a href='#' class='app-button'>Message</a></li>";
+    html += "<li id='contact-action--delete' data-number='" + contact.number + "'><a href='#' class='app-button'>Delete</a></li>";
+    html += "</ul>";
+    $("#contact-actions-wrap").html(html);
+}
+// onclick='contactAction('message', '" + contact.number + "')'
 
 $(function() {
     window.addEventListener('message', function(event) {
@@ -98,6 +121,7 @@ $(function() {
             // hide all html
             $("#icons-wrap").show();
             $("#phone-app-wrap").hide();
+            $("#contacts-app-wrap").hide();
             $("#text-message-app-wrap").hide();
             $("#text-message-app-home section").html(""); // prevent stacking of recent convos
             $("#text-message-app-home section").css("padding-right", "0px"); // set padding
@@ -117,8 +141,31 @@ $(function() {
         $.post('http://phone/escape', JSON.stringify({}));
     });
 
-    $("#contacts-table").on("click", ".contact-item", function() {
-        alert("hey");
+    // contact action message
+    $("#contacts-app-wrap").on("click", "#contact-action--message", function() {
+        var attr = $(this).attr("id");
+        alert("attr = " + attr);
+        var number = $(this).attr("data-number");
+        alert("number = " + number);
+        $("#contacts-app-wrap").hide();
+        $("#text-message-app-wrap").show();
+        $("#text-message-app-home").hide();
+        $("#text-message-app-form").show();
+        // fill in reply number
+        $("#text-message-app-form #text-toNumber").val(number);
+    });
+
+    // contact action delete
+    $("#contacts-app-wrap").on("click", "#contact-action--delete", function() {
+        var number_to_delete = $(this).attr("data-number");
+        var confirmed = confirm("Are you sure you want to permantently delete that contact?");
+        if (confirmed) {
+            DeleteContact(number_to_delete);
+            $.post('http://phone/deleteContact', JSON.stringify({
+                numberToDelete: number_to_delete,
+                phone: phone.number
+            }));
+        }
     });
 
     // new contact button
@@ -146,6 +193,7 @@ $(function() {
 
     // contact app back btn
     $( "#contacts-back-btn" ).click(function() {
+        $("#contact-actions-wrap").html("");
         $("#contacts-app-wrap").hide();
         $("#new-contact-form").hide();
         $("#icons-wrap").show();

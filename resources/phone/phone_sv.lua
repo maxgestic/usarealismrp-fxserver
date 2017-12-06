@@ -1,3 +1,34 @@
+RegisterServerEvent("phone:deleteContact")
+AddEventHandler("phone:deleteContact", function(data)
+	local userSource = tonumber(source)
+	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+		local inventory = user.getActiveCharacterData("inventory")
+		for i = 1, #inventory do
+			local item = inventory[i]
+			if string.find(item.name, "Cell Phone") and item.number == data.phone then
+				local contacts = item.contacts
+				print("phone found!")
+				for j = 1, #contacts do
+					local contact = contacts[j]
+					if contact.number == data.numberToDelete then
+						print("matching contact found to delete!")
+						table.remove(contacts, j)
+						print("contact removed from table!")
+						inventory[i].contacts = contacts
+						user.setActiveCharacterData("inventory", inventory)
+						print("contact removed!")
+						for k = 1, #inventory[i].contacts do
+							print("inventory[i].contacts[k].first = " .. inventory[i].contacts[k].first)
+						end
+						return
+					end
+				end
+				return
+			end
+		end
+	end)
+end)
+
 RegisterServerEvent("phone:getContacts")
 AddEventHandler("phone:getContacts", function(number)
 	local userSource = tonumber(source)

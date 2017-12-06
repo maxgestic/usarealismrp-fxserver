@@ -77,6 +77,11 @@ AddEventHandler("phone:openPhone", function(phone)
 	end
 end)
 
+RegisterNUICallback('deleteContact', function(data, cb)
+	print("attempting to delete phone contact!")
+	TriggerServerEvent("phone:deleteContact", data)
+end)
+
 RegisterNUICallback('getContacts', function(data, cb)
 	print("retrieving contacts!")
 	TriggerServerEvent("phone:getContacts", data.number)
