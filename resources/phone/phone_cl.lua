@@ -31,7 +31,7 @@ local phoneEnabled = false
 
 function EnableGui(enable, phone)
 	print("inside of enablegui with phone = " .. type(phone))
-    SetNuiFocus(enable)
+    SetNuiFocus(enable, enable)
     phoneEnabled = enable
 	SendNUIMessage({
 	    type = "enableui",

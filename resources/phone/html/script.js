@@ -6,25 +6,7 @@
 
 var phone = {};
 var current_activity = "";
-
-var documentWidth = document.documentElement.clientWidth;
-var documentHeight = document.documentElement.clientHeight;
-
-var cursor = document.getElementById("cursor");
-var cursorX = documentWidth / 2;
-var cursorY = documentHeight / 2;
-
 var loadedConversations = {};
-
-function UpdateCursorPos() {
-    cursor.style.left = cursorX;
-    cursor.style.top = cursorY;
-}
-
-function Click(x, y) {
-    var element = $(document.elementFromPoint(x, y));
-    element.focus().click();
-}
 
 function DeleteContact(number_to_delete) {
     var size = Object.keys(phone.contacts).length;
@@ -59,9 +41,6 @@ $(function() {
             if (event.data.enable) {
                 phone = event.data.phone;
             }
-        } else if (event.data.type == "click") {
-            // Avoid clicking the cursor itself, click 1px to the top/left;
-            Click(cursorX - 1, cursorY - 1);
         } else if (event.data.type == "textMessage") {
             loadedConversations = event.data.conversations;
             for (var convo in loadedConversations) {
@@ -103,12 +82,6 @@ $(function() {
             html += "</table>";
             $("#contacts-table-wrap").html(html);
         }
-    });
-
-    $(document).mousemove(function(event) {
-        cursorX = event.pageX;
-        cursorY = event.pageY;
-        UpdateCursorPos();
     });
 
     // handle's closing the phone gui

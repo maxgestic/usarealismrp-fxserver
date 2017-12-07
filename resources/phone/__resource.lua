@@ -8,6 +8,5 @@ files {
     'html/index.html',
     'html/script.js',
     'html/style.css',
-    'html/cursor.png',
     'html/samsung-phone.png'
 }
