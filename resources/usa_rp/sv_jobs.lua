@@ -40,7 +40,7 @@ AddEventHandler("usa_rp:sellItem", function(job)
                 for i = 1, #inventory do
                     local item = inventory[i]
                     if item.name == "Meth" then
-                        local reward = 400
+                        local reward = 700
                         local user_money = user.getActiveCharacterData("money")
                         user.setActiveCharacterData("money", user_money + reward)
                         if item.quantity > 1 then
