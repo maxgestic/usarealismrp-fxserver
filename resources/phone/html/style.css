@@ -50,6 +50,7 @@ body {
     height: 100%;
     width: 100%;
     background: #2E5458;
+    overflow-y: scroll;
 }
 
 #text-message-app-wrap, #contacts-app-wrap {
@@ -58,6 +59,8 @@ body {
     width: 100%;
     height: 100%;
 }
+
+
 
 #text-message-app-wrap header, #contacts-app-wrap header {
     width: 100%;
@@ -229,3 +232,9 @@ table tr:hover {
     z-index: 555;
     display: none;
 }
+
+/*
+#contacts-table-wrap {
+    overflow-y: scroll;
+}
+*/
