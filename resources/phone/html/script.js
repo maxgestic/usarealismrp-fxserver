@@ -1,3 +1,12 @@
+/*
+    ================
+    PHONE VARIABLES
+    ================
+*/
+
+var phone = {};
+var current_activity = "";
+
 var documentWidth = document.documentElement.clientWidth;
 var documentHeight = document.documentElement.clientHeight;
 
@@ -17,18 +26,46 @@ function Click(x, y) {
     element.focus().click();
 }
 
+function DeleteContact(number_to_delete) {
+    var size = Object.keys(phone.contacts).length;
+    for (x = 0; x < size - 1; ++x) {
+        if (phone.contacts[x].number == number_to_delete) {
+            phone.contacts[x] = null;
+        }
+    }
+}
+
+// contact actions menu
+function showContactActions(index) {
+    var contact = phone.contacts[index];
+    $("#contacts-table-wrap").hide();
+    var html = "";
+    html += "<div class='contact-info' style='text-align: center;color: white;margin-bottom:0;margin-top:2em;padding:0;'>";
+    html += "<p style='margin-bottom: 0;'>Name: " + contact.first + " " + contact.last + "</p>";
+    html += "<p>Number: " + contact.number + "</p>";
+    html += "</div>";
+    html += "<ul style='margin-top:0;'>;";
+    html += "<li id ='contact-action--message' data-number='" + contact.number + "'><a href='#' class='app-button'>Message</a></li>";
+    html += "<li id='contact-action--delete' data-number='" + contact.number + "'><a href='#' class='app-button'>Delete</a></li>";
+    html += "</ul>";
+    $("#contact-actions-wrap").html(html);
+}
+
 $(function() {
     window.addEventListener('message', function(event) {
         if (event.data.type == "enableui") {
             cursor.style.display = event.data.enable ? "block" : "none";
             document.body.style.display = event.data.enable ? "block" : "none";
+            if (event.data.enable) {
+                phone = event.data.phone;
+            }
         } else if (event.data.type == "click") {
             // Avoid clicking the cursor itself, click 1px to the top/left;
             Click(cursorX - 1, cursorY - 1);
         } else if (event.data.type == "textMessage") {
             loadedConversations = event.data.conversations;
             for (var convo in loadedConversations) {
-                // first reset to prevent duplications
+               // first reset to prevent duplications
                 // add person
                 $("#text-message-app-home section").append("<div class='textMessageConvoBtn' data-id='" + loadedConversations[convo].partnerId + "'>" + loadedConversations[convo].partnerName + "</div>");
             }
@@ -46,6 +83,25 @@ $(function() {
             $("#text-message-app-home section").append("</div>");
             // ... then add the button for quick reply
             $("#text-home-back-btn").before("<div id='quick-reply-arrow' data-replyIdent= '"+event.data.replyIdent+"' class='quick-reply float-right'><span>&rang;</span></div>");
+        } else if (event.data.type == "loadedContacts") {
+            phone.contacts = event.data.contacts;
+            var size = Object.keys(phone.contacts).length;
+            var html = "";
+            html = "<table id='contacts-table'>";
+            html += "<tr>";
+            html += "<td>FIRST</td>";
+            html += "<td>LAST</td>";
+            html += "<td>NUMBER</td>";
+            html += "</tr>";
+            for (var i = size - 1; i >=0; i--) {
+                html += "<tr onclick='showContactActions("+i+")'>";
+                html += "<td>" + phone.contacts[i].first + "</td>";
+                html += "<td>" + phone.contacts[i].last + "</td>";
+                html += "<td>" + phone.contacts[i].number + "</td>";
+                html += "</tr>";
+            }
+            html += "</table>";
+            $("#contacts-table-wrap").html(html);
         }
     });
 
@@ -63,6 +119,7 @@ $(function() {
             // hide all html
             $("#icons-wrap").show();
             $("#phone-app-wrap").hide();
+            $("#contacts-app-wrap").hide();
             $("#text-message-app-wrap").hide();
             $("#text-message-app-home section").html(""); // prevent stacking of recent convos
             $("#text-message-app-home section").css("padding-right", "0px"); // set padding
@@ -74,24 +131,99 @@ $(function() {
     // on text msg form submission
     $("#text-message-app-form").submit(function(){
         $.post('http://phone/sendTextMessage', JSON.stringify({
-            id: $("#text-id").val(),
-            message: $("#text-message").val()
+            toNumber: $("#text-toNumber").val(),
+            message: $("#text-message").val(),
+            fromName: phone.owner,
+            fromNumber: phone.number
         }));
-        //$("#text-id").val(""); // test
-        //$("#text-message").val(""); // test
         $.post('http://phone/escape', JSON.stringify({}));
     });
 
-        $( "#phone-icon" ).click(function() {
-            $("#icons-wrap").hide();
-            $("#phone-app-wrap").show();
-        });
+    // contact action message
+    $("#contacts-app-wrap").on("click", "#contact-action--message", function() {
+        var attr = $(this).attr("id");
+        var number = $(this).attr("data-number");
+        $("#contacts-app-wrap").hide();
+        $("#text-message-app-wrap").show();
+        $("#text-message-app-home").hide();
+        $("#text-message-app-form").show();
+        // fill in reply number
+        $("#text-message-app-form #text-toNumber").val(number);
+        current_activity = "contact-message";
+    });
+
+    // contact action delete
+    $("#contacts-app-wrap").on("click", "#contact-action--delete", function() {
+        var number_to_delete = $(this).attr("data-number");
+        var confirmed = confirm("Are you sure you want to permantently delete that contact?");
+        if (confirmed) {
+            DeleteContact(number_to_delete);
+            $.post('http://phone/deleteContact', JSON.stringify({
+                numberToDelete: number_to_delete,
+                phone: phone.number
+            }));
+            $("#contact-actions-wrap").html("");
+            $("#contacts-table-wrap").hide();
+            $("#contacts-app-wrap").hide();
+            $("#icons-wrap").show();
+        }
+    });
+
+    // new contact button
+    $( "#new-contact-btn" ).click(function() {
+        $("#contacts-app-home section").hide();
+        $("#new-contact-form").show();
+    });
+
+    // submit new contact form
+    $("#new-contact-form").submit(function(){
+        $.post('http://phone/addNewContact', JSON.stringify({
+            number: $("#new-contact--number").val(),
+            first: $("#new-contact--first").val(),
+            last: $("#new-contact--last").val(),
+            source: phone.number
+        }));
+        $.post('http://phone/escape', JSON.stringify({}));
+    });
+
+    // new contact form back btn
+    $( "#contact-form-back-btn" ).click(function() {
+        $("#new-contact-form").hide();
+        $("#contacts-app-home section").show();
+    });
+
+    // contact app back btn
+    $( "#contacts-back-btn" ).click(function() {
+        $("#contact-actions-wrap").html("");
+        $("#contacts-app-wrap").hide();
+        $("#new-contact-form").hide();
+        $("#icons-wrap").show();
+    });
+
+    // contacts app button
+    $( "#contacts-icon" ).click(function() {
+        $("#icons-wrap").hide();
+        $("#contacts-app-wrap").show();
+        $("#contacts-app-home section").show();
+        // todo: implement below nui callback
+        $.post('http://phone/getContacts', JSON.stringify({
+            number: phone.number
+        }));
+    });
+
+    $( "#phone-icon" ).click(function() {
+        $("#icons-wrap").hide();
+        $("#phone-app-wrap").show();
+    });
 
         // show text msg conversation history
     $( "#text-message-icon" ).click(function() {
         $("#icons-wrap").hide();
         $("#text-message-app-wrap").show();
-        $.post('http://phone/getMessages', JSON.stringify({}));
+        $.post('http://phone/getMessages', JSON.stringify({
+            number: phone.number
+        }));
+        current_activity = "text-message";
     });
 
     // load specific convo with person
@@ -109,7 +241,7 @@ $(function() {
         $("#text-message-app-home").hide();
         $("#text-message-app-form").show();
         // have user enter message for quick reply ...
-        $("#text-message-app-form #text-id").val(replyIdent);
+        $("#text-message-app-form #text-toNumber").val(replyIdent);
     });
 
     // show form to send a new text
@@ -118,12 +250,17 @@ $(function() {
         $("#text-message-app-form").show();
     });
 
-    // back to conversations
+    // sending message back button
     $("#sending-text-back-btn").click(function() {
-        $("#text-message-app-home").show();
-        $("#text-message-app-form").hide();
-        $("#text-message-app-home section").css("padding-right", "0px"); // set padding
-        $("#text-message-app-home section").css("overflow-y", "hidden"); // set padding
+        if (current_activity == "text-message") {
+            $("#text-message-app-home").show();
+            $("#text-message-app-form").hide();
+            $("#text-message-app-home section").css("padding-right", "0px"); // set padding
+            $("#text-message-app-home section").css("overflow-y", "hidden"); // set padding
+        } else if (current_activity == "contact-message") {
+            $("#text-message-app-form").hide();
+            $("#contacts-app-wrap").show();
+        }
     });
 
     // back btn to home screen

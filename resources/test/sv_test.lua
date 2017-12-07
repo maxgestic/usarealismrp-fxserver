@@ -69,7 +69,7 @@ AddEventHandler("interaction:removeItemFromPlayer", function(itemName)
                     return
                 else
                     table.remove(inventory, i)
-                    user.setInventory(inventory)
+                    user.setActiveCharacterData("inventory", inventory)
                     return
                 end
             end
@@ -94,7 +94,7 @@ AddEventHandler("interaction:dropItem", function(itemName)
                     return
                 else
                     table.remove(inventory, i)
-                    user.setInventory(inventory)
+                    user.setActiveCharacterData("inventory", inventory)
                     return
                 end
             end

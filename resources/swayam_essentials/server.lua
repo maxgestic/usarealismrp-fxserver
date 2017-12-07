@@ -125,3 +125,12 @@ TriggerEvent('es:addCommand', 'setweather', function(source, args, user)
 end)]]--
 ----------------------------------------------------------------
 
+----------------------------------------------------------------
+--//https://wiki.gtanet.work/index.php?title=Notification_Pictures
+
+RegisterServerEvent("swayam:notification_s")
+AddEventHandler("swayam:notification_s", function(playerid)
+	TriggerClientEvent("swayam:notification", playerid, name, msg, icon)
+end)
+
+----------------------------------------------------------------

@@ -29,14 +29,15 @@ end)
 
 local phoneEnabled = false
 
-function EnableGui(enable)
+function EnableGui(enable, phone)
+	print("inside of enablegui with phone = " .. type(phone))
     SetNuiFocus(enable)
     phoneEnabled = enable
-
-    SendNUIMessage({
-        type = "enableui",
-        enable = enable
-    })
+	SendNUIMessage({
+	    type = "enableui",
+	    enable = enable,
+		phone = phone
+	})
 end
 
 RegisterNetEvent("phone:loadedMessagesFromId")
@@ -51,15 +52,44 @@ end)
 
 RegisterNetEvent("phone:loadedMessages")
 AddEventHandler("phone:loadedMessages", function(conversations)
+	print("loaded conversations with #conversations = " .. #conversations)
 	SendNUIMessage({
 		type = "textMessage",
 		conversations = conversations
 	})
 end)
 
+RegisterNetEvent("phone:loadedContacts")
+AddEventHandler("phone:loadedContacts", function(contacts)
+	SendNUIMessage({
+		type = "loadedContacts",
+		contacts = contacts
+	})
+end)
+
 RegisterNetEvent("phone:openPhone")
-AddEventHandler("phone:openPhone", function()
-    EnableGui(true)
+AddEventHandler("phone:openPhone", function(phone)
+	if phone then
+		print("inside of phone:openPhone with phone set!")
+    	EnableGui(true, phone)
+	else
+		EnableGui(true)
+	end
+end)
+
+RegisterNUICallback('deleteContact', function(data, cb)
+	print("attempting to delete phone contact!")
+	TriggerServerEvent("phone:deleteContact", data)
+end)
+
+RegisterNUICallback('getContacts', function(data, cb)
+	print("retrieving contacts!")
+	TriggerServerEvent("phone:getContacts", data.number)
+end)
+
+RegisterNUICallback('addNewContact', function(data, cb)
+	print("adding new contact!")
+	TriggerServerEvent("phone:addContact", data)
 end)
 
 RegisterNUICallback('getMessagesFromConvo', function(data, cb)
@@ -69,7 +99,7 @@ RegisterNUICallback('getMessagesFromConvo', function(data, cb)
 end)
 
 RegisterNUICallback('getMessages', function(data, cb)
-	TriggerServerEvent("phone:loadMessages")
+	TriggerServerEvent("phone:loadMessages", data.number)
     cb('ok')
 end)
 

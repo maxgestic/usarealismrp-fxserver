@@ -239,5 +239,15 @@ Citizen.CreateThread(function()
 end)]]--
 
 -------------------------------------------------------------------
+--//https://wiki.gtanet.work/index.php?title=Notification_Pictures
 
+RegisterNetEvent("swayam:notification")
+AddEventHandler("swayam:notification", function(name, msg, icon)
+	SetNotificationTextEntry("STRING")
+	AddTextComponentString(msg)
+	SetNotificationMessage(icon, icon, true, 1, name, "", msg)
+	DrawNotification(0,1)
+end)
+
+-------------------------------------------------------------------
 
