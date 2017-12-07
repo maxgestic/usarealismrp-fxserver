@@ -137,6 +137,12 @@ ul {
 li {
     margin: 4em 0;
     text-align: center;
+    width: 100%;
+}
+
+#phone-icon {
+    padding-left: 2em;
+    padding-right: 2em;
 }
 
 .app-button {
@@ -146,7 +152,6 @@ li {
     border-radius: 2px;
     text-decoration: none;
     font-size: 22px;
-    width: 100px;
 }
 
 #phone-app-wrap {
