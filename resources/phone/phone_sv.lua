@@ -219,8 +219,10 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 									-- see if that number is in this phone's contact list, if so set the from sender name to the readable name
 									if getNameFromContacts(item, fromNumber) then
 										from = getNameFromContacts(item, fromNumber)
+										print("name set for from field!!")
 									else
 										from = fromNumber
+										print("name not set for from field!!")
 									end
 									print("creating text message...")
 									print("from = " .. from)
@@ -274,8 +276,10 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 								-- see if that number is in this phone's contact list, if so set the from sender name to the readable name
 								if getNameFromContacts(item, toNumber) then
 									toName = getNameFromContacts(item, toNumber)
+									print("name set for from toName!!")
 								else
 									toName = toNumber
+									print("name not set for from toName!!")
 								end
 								print("creating text message...")
 								print("from = Me")
@@ -299,8 +303,10 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 							-- see if that number is in this phone's contact list, if so set the from sender name to the readable name
 							if getNameFromContacts(item, toNumber) then
 								toName = getNameFromContacts(item, toNumber)
+								print("name set for from toName!!")
 							else
 								toName = toNumber
+								print("name not set for from toName!!")
 							end
 							print("creating text message...")
 							print("from = Me")
@@ -425,13 +431,15 @@ end)
 function getNameFromContacts(phone, number)
 	local contacts = phone.contacts
 	-- look through contact list for matching phone number
+	print("#contacts in phone passed in = " .. #contacts)
 	for i = 1, #contacts do
-		if contacts[i].number == number then
+		if tonumber(contacts[i].number) == number then
 			print("matching number found in contacts!")
 			-- return name of contact with that phone number
-			return (contacts[i].firstName .. contacts[i].lastName)
+			return (contacts[i].first .. " " .. contacts[i].last)
 		end
 	end
 	-- at this point, no match was found in contacts for that number
+	print("no match was found for name in contacts! returning nil!")
 	return nil
 end

@@ -135,7 +135,7 @@ ul {
 }
 
 li {
-    margin: 3em 0;
+    margin: 4em 0;
     text-align: center;
 }
 
@@ -146,6 +146,7 @@ li {
     border-radius: 2px;
     text-decoration: none;
     font-size: 22px;
+    width: 100px;
 }
 
 #phone-app-wrap {
@@ -213,11 +214,11 @@ table tr {
 }
 
 table tr:hover {
-    background-color: #1b2c2d
+    background-color: #1b2c2d;
 }
 
 #new-contact-form {
-    background: red;
+    background: #429499;
     width: 100%;
     height: 100%;
     z-index: 555;

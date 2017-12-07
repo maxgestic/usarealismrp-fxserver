@@ -35,21 +35,21 @@ function DeleteContact(number_to_delete) {
     }
 }
 
+// contact actions menu
 function showContactActions(index) {
     var contact = phone.contacts[index];
     $("#contacts-table-wrap").hide();
     var html = "";
-    html += "<div class='contact-info' style='text-align: center;'>";
+    html += "<div class='contact-info' style='text-align: center;color: white;margin-bottom:0;margin-top:2em;padding:0;'>";
+    html += "<p style='margin-bottom: 0;'>Name: " + contact.first + " " + contact.last + "</p>";
     html += "<p>Number: " + contact.number + "</p>";
-    html += "<p>Name: " + contact.first + " " + contact.last + "</p>";
     html += "</div>";
-    html += "<ul>;";
+    html += "<ul style='margin-top:0;'>;";
     html += "<li id ='contact-action--message' data-number='" + contact.number + "'><a href='#' class='app-button'>Message</a></li>";
     html += "<li id='contact-action--delete' data-number='" + contact.number + "'><a href='#' class='app-button'>Delete</a></li>";
     html += "</ul>";
     $("#contact-actions-wrap").html(html);
 }
-// onclick='contactAction('message', '" + contact.number + "')'
 
 $(function() {
     window.addEventListener('message', function(event) {
@@ -89,15 +89,15 @@ $(function() {
             var html = "";
             html = "<table id='contacts-table'>";
             html += "<tr>";
-            html += "<td>NUMBER</td>";
             html += "<td>FIRST</td>";
             html += "<td>LAST</td>";
+            html += "<td>NUMBER</td>";
             html += "</tr>";
             for (var i = size - 1; i >=0; i--) {
                 html += "<tr onclick='showContactActions("+i+")'>";
-                html += "<td>" + phone.contacts[i].number + "</td>";
                 html += "<td>" + phone.contacts[i].first + "</td>";
                 html += "<td>" + phone.contacts[i].last + "</td>";
+                html += "<td>" + phone.contacts[i].number + "</td>";
                 html += "</tr>";
             }
             html += "</table>";
