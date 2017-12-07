@@ -1,5 +1,13 @@
+local currentlyTowedVehicle = nil
+
+local tow_duty_ped_heading = 312.352
+
+-- to go on duty as tow truck driver
+local towDutyX, towDutyY, towDutyZ = -246.733, 6238.865, 30.49
+local spawn = { x =-238.594, y = 6254.200, z =31.489, heading = 192.351 }
+
 local locations = {
-	{x = 65.112, y = 6563.968, z = 28.292} -- paleto dirt construction lot
+	{ x = -221.114, y = 6270.026, z = 30.684 } -- paleto dirt construction lot
 }
 
 -- Delete car function borrowed frtom Mr.Scammer's model blacklist, thanks to him!
@@ -13,53 +21,42 @@ function getVehicleInDirection(coordFrom, coordTo)
 	return vehicle
 end
 
-RegisterNetEvent("towJob:deleteVehicle")
-AddEventHandler("towJob:deleteVehicle", function(target)
-	Citizen.Trace("inside of towJob:deleteVehicle with typeof vehicle = " .. type(target))
-	Citizen.Trace("inside of towJob:deleteVehicle with vehicle = " .. target)
-	SetEntityAsMissionEntity(target, true, true )
-    deleteCar(target)
-end)
-
 RegisterNetEvent("towJob:success")
 AddEventHandler("towJob:success", function()
-
-	TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0You have impounded the vehicle for ^2$400^0!")
-
+	TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0You have impounded the vehicle for ^2$700^0!")
 end)
 
 function impoundVehicle()
-
 	local targetVehicle = getVehicleInFrontOfUser()
-
 	if targetVehicle ~= 0 then
-
-		TriggerServerEvent("towJob:impoundVehicle", targetVehicle)
-
+		--TriggerServerEvent("towJob:impoundVehicle", targetVehicle)
+		if targetVehicle == currentlyTowedVehicle then
+			print("impounding vehicle!")
+			SetEntityAsMissionEntity(currentlyTowedVehicle, true, true )
+			deleteCar(currentlyTowedVehicle)
+			currentlyTowedVehicle = nil
+			TriggerServerEvent("towJob:giveReward")
+		else
+			print("Trying to tow a vehicle that wasn't attached to your flatbed first!")
+		end
 	else
-
 		TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0There is no vehicle no impound!")
-
 	end
-
 	Menu.hidden = true -- close menu
-
 end
 
 function getVehicleInFrontOfUser()
-
 	local playerped = GetPlayerPed(-1)
 	local coordA = GetEntityCoords(playerped, 1)
 	local coordB = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 5.0, 0.0)
 	local targetVehicle = getVehicleInDirection(coordA, coordB)
 	return targetVehicle
-
 end
 
 function towJobMenu()
 	MenuTitle = "Tow Job"
 	ClearMenu()
-	Menu.addButton("Impound Vehicle (+$700)", "impoundVehicle")
+	Menu.addButton("Impound Vehicle (+$400)", "impoundVehicle")
 end
 
 function getPlayerDistanceFromShop(shopX,shopY,shopZ)
@@ -90,7 +87,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 
 		for i = 1, #locations do
-			DrawMarker(1, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
+			DrawMarker(1, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 1.0, 100, 85, 161, 92, 0, 0, 2, 0, 0, 0, 0)
 		end
 
 		if isPlayerAtTowSpot() and not playerNotified then
@@ -100,12 +97,6 @@ Citizen.CreateThread(function()
 		if IsControlJustPressed(1,Keys["E"]) then
 
 			if isPlayerAtTowSpot() then
-
-				if not stored then
-					-- save skin for user canceling
-					skinBeforeRandomizing = GetEntityModel(GetPlayerPed(-1))
-					stored = true
-				end
 
 				towJobMenu()              -- Menu to draw
 				Menu.hidden = not Menu.hidden    -- Hide/Show the menu
@@ -123,8 +114,6 @@ Citizen.CreateThread(function()
 end)
 
 -- pv-tow :
-
-local currentlyTowedVehicle = nil
 
 RegisterNetEvent('pv:tow')
 AddEventHandler('pv:tow', function()
@@ -148,7 +137,6 @@ AddEventHandler('pv:tow', function()
 						AttachEntityToEntity(targetVehicle, vehicle, 20, -0.5, -5.0, 1.0, 0.0, 0.0, 0.0, false, false, false, false, 20, true)
 						currentlyTowedVehicle = targetVehicle
 						TriggerEvent("chatMessage", "", {0, 0, 0}, "Vehicle successfully attached to towtruck!")
-						TriggerServerEvent("tow:towingVehicle", currentlyTowedVehicle)
 					else
 						TriggerEvent("chatMessage", "", {0, 0, 0}, "You can't tow your own tow truck with your own tow truck!")
 					end
@@ -159,7 +147,6 @@ AddEventHandler('pv:tow', function()
 		else
 			AttachEntityToEntity(currentlyTowedVehicle, vehicle, 20, -0.5, -12.0, 1.0, 0.0, 0.0, 0.0, false, false, false, false, 20, true)
 			DetachEntity(currentlyTowedVehicle, true, true)
-			currentlyTowedVehicle = nil
 			TriggerEvent("chatMessage", "", {0, 0, 0}, "The vehicle has been successfully detached!")
 		end
 	end
@@ -170,10 +157,6 @@ function getVehicleInDirection(coordFrom, coordTo)
 	local a, b, c, d, vehicle = GetRaycastResult(rayHandle)
 	return vehicle
 end
-
--- to go on duty as tow truck driver
-local towDutyX, towDutyY, towDutyZ = 90.65, 6521.74, 30.33
-local spawn = {x=86.18,y= 6520.26,z=31.46}
 
 Citizen.CreateThread(function()
 	while true do
