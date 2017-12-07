@@ -6,7 +6,8 @@ storeWeapons = {
         { name = "Bat", type = "weapon", hash = 0x958A4A8F, price = 85, legality = "legal", quantity = 1 },
         { name = "Crowbar", type = "weapon", hash = -2067956739, price = 75, legality = "legal", quantity = 1 },
         { name = "Ball", type = "weapon", hash = 600439132, price = 30, legality = "legal", quantity = 1 },
-        { name = "Ball of Ice", type = "weapon", hash = 126349499, price = 20, legality = "legal", quantity = 1 }
+        { name = "Ball of Ice", type = "weapon", hash = 126349499, price = 20, legality = "legal", quantity = 1 },
+        { name = "Hatchet", type = "weapon", hash = -102973651, price = 1000, legality = "illegal", quantity = 1 },
     },
     ["handguns"] = {
         { name = "Pistol", type = "weapon", hash = 0x1B06D571, price = 600, legality = "legal", quantity = 1},

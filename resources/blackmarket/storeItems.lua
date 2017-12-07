@@ -4,7 +4,6 @@ storeItems = {
         { name = "Brass Knuckles", type = "weapon", hash = -656458692, price = 650, legality = "illegal", quantity = 1 },
         { name = "Dagger", type = "weapon", hash = -1834847097, price = 750, legality = "illegal", quantity = 1 },
         { name = "Switchblade", type = "weapon", hash = -538741184, price = 1000, legality = "illegal", quantity = 1 },
-        { name = "Hatchet", type = "weapon", hash = -102973651, price = 1000, legality = "illegal", quantity = 1 },
         { name = "AP Pistol", type = "weapon", hash = 0x22D8FE39, price = 6550, legality = "illegal", quantity = 1 },
         { name = "Sawn-off", type = "weapon", hash = 0x7846A318, price = 8000, legality = "illegal", quantity = 1 },
         { name = "Micro SMG", type = "weapon", hash = 324215364, price = 9700, legality = "illegal", quantity = 1 },
