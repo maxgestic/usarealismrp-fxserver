@@ -112,7 +112,7 @@ TriggerEvent('es:addCommand', 'closebank', function(source, args, user)
 
 	local group = user.getGroup()
 
-    if group == "owner" or group == "admin" or group == "mod" then
+    if group == "owner" or group == "admin" or group == "superadmin" or group == "mod" then
         closed = true
 		TriggerClientEvent("bank-robbery:notify", source, "BANK IS NOW ~r~CLOSED")
     end
@@ -145,6 +145,11 @@ AddEventHandler('rconCommand', function(commandName, args)
 	if commandName == "closebank" then
 		closed = true
 		RconPrint("You have closed the bank! Nobody should be able to rob it!")
+		CancelEvent()
+		return
+	elseif commandName == "openbank" then
+		closed = false
+		RconPrint("You have opened the bank!")
 		CancelEvent()
 		return
 	end

@@ -29,10 +29,11 @@ body {
 }
 
 #screen-wrap {
-    margin: 1.2em auto 0 auto;
+    margin: 1.2em auto 0 11.65em;
     width: 330px;
     height: 540px;
     border-radius: 5px;
+    background-color: #22424B;
 }
 
 /* text message app  */
@@ -45,47 +46,48 @@ body {
     color: lightgray;
 }
 
-#text-message-app-home {
+#text-message-app-home, #contacts-app-home {
     height: 100%;
     width: 100%;
-    background: red;
+    background: #2E5458;
 }
 
-#text-message-app-wrap {
-    margin: -7px 0 0 -11px;
-    padding: 1em 1em;
-    width: 98%;
-    height: 98%;
+#text-message-app-wrap, #contacts-app-wrap {
+    margin: 0em 0 0 -1em;
+    padding: 0em 1em;
+    width: 100%;
+    height: 100%;
 }
 
-#text-message-app-wrap header {
+#text-message-app-wrap header, #contacts-app-wrap header {
     width: 100%;
     height: 10%;
-    background-color:teal;
+    background-color: #7FA68C;
     margin:0 auto;
+    padding: 0;
 }
 
-#home-messages-title {
+#home-messages-title, #contacts-title {
     color: white;
     float: left;
     padding-top: 1em;
     padding-left: 1em;
 }
 
-#text-home-back-btn {
+#text-home-back-btn, #contacts-back-btn {
     height:70%;
     width: 50px;
     color: white;
     text-align: center;
     padding-top:1em;
-    background-color: #ff8080;
+    background-color:#192B38;
 }
 
-#home-new-msg-btn {
+#home-new-msg-btn, #new-contact-btn {
     height:70%;
     width: 50px;
     color: white;
-    background-color: teal;
+    background-color: #7FA68C;
     text-align: center;
     padding-top:1em;
 }
@@ -102,7 +104,7 @@ body {
 #text-message-app-wrap section {
     width: 100%;
     height: 90%;
-    background-color: #286090;
+    background-color: #2E5458;
 }
 
 .textMessageConvoBtn {
@@ -120,12 +122,35 @@ body {
 
 /* PHONE APPLICATION */
 
-#phone-icon {
-    height: 90px;
+#icons-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: -1em;
+    padding-left: 0;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li {
+    margin: 4em 0;
+    text-align: center;
+}
+
+.app-button {
+    padding: 1em;
+    background: #2D859E;
+    color: white;
+    border-radius: 2px;
+    text-decoration: none;
+    font-size: 22px;
+    width: 100px;
 }
 
 #phone-app-wrap {
-    margin: -7px 0 0 -11px;
+    margin: -2px 0 0 -11px;
     padding: 1em 1em;
     width: 98%;
     height: 98%;
@@ -146,7 +171,7 @@ form {
     margin: 0;
 }
 
-input[type=text], input[type=password] {
+input {
     width: 100%;
     padding: 10px;
     padding-bottom: 4px;
@@ -170,4 +195,32 @@ h4 {
 
 input, textarea {
     margin-bottom: 1em;
+}
+
+
+table {
+    color: white;
+}
+
+table td {
+    color: white;
+    padding: 1em 1em;
+    margin: 0 1em;
+}
+
+table tr {
+    padding: 1em 1em;
+    color: white;
+}
+
+table tr:hover {
+    background-color: #1b2c2d;
+}
+
+#new-contact-form {
+    background: #429499;
+    width: 100%;
+    height: 100%;
+    z-index: 555;
+    display: none;
 }

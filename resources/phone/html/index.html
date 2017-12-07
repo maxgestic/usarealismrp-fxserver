@@ -8,9 +8,38 @@
 
         <div id="phone-wrap">
             <div id="screen-wrap">
-                <div id="icons-wrap">
-                    <img id="phone-icon" src="phone-icon.png" alt="phone-icon">
-                    <img id="text-message-icon" style="margin-left: -2em" src="text-msg-icon.png" alt="text-message-button">
+                <div id="icons-wrap" style="margin-top: 1.5em">
+                    <ul>
+                        <li><a id="phone-icon" class="app-button" href="#">PHONE</a></li>
+                        <li><a id="contacts-icon" class="app-button" href="#">CONTACTS</a></li>
+                        <li><a id="text-message-icon" class="app-button" href="#">MESSAGES</a></li>
+                    </ul>
+                </div>
+                <!-- CONTACTS APPLICATION -->
+                <div style="display:none" id="contacts-app-wrap">
+                    <div id="contacts-app-home" style="overflow:hidden;">
+                        <header>
+                            <span id="contacts-title">CONTACTS</span>
+                            <div class="float-right" id="new-contact-btn"><span>+</span></div>
+                            <div class="float-right" id="contacts-back-btn"><span>&larr;</span></div>
+                        </header>
+                        <section id="contact-actions-wrap">
+                            <!-- CONTACT ACTIONS HERE -->
+                        </section>
+                        <section id="contacts-table-wrap">
+                            <!-- TABLE OF CONTACTS GOES HERE -->
+                        </section>
+                        <form id="new-contact-form">
+                            <h4>Cell:</h4>
+                            <input id="new-contact--number" type="number" name="number" min="1" max="99999999">
+                            <h4>First:</h4>
+                            <input id="new-contact--first" type="text" name="first">
+                            <h4>Last:</h4>
+                            <input id="new-contact--last" type="text" name="last">
+                            <button type="submit">SAVE</button>
+                            <button id="contact-form-back-btn" type="button">CANCEL</button>
+                        </form>
+                    </div>
                 </div>
                 <!-- TEXT MESSAGE APPLICATION -->
                 <div style="display:none" id="text-message-app-wrap">
@@ -26,8 +55,8 @@
                     </div>
                     <!-- send a message -->
                     <form style="display:none;" id="text-message-app-form">
-                        <h4>ID #:</h4>
-                        <input type="text" id="text-id">
+                        <h4>PHONE #:</h4>
+                        <input type="text" id="text-toNumber">
                         <h4>MESSAGE:</h4>
                         <textarea id="text-message" name="message" rows="10" style="width:100%;"></textarea>
                         <button type="submit">SEND</button>

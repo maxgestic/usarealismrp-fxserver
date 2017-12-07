@@ -1,12 +1,9 @@
 local Settings = {
-	--Should the scoreboard draw wanted level?
-	["WantedStars"] = false,
+
+	["UserGroup"] = "user",
 
 	--Should the scoreboard draw player ID?
 	["PlayerID"] = true,
-
-	--Should the scoreboard draw voice indicator?
-	["VoiceIndicator"] = false,
 
 	--Display time in milliseconds
 	["DisplayTime"] = 3000,
@@ -18,14 +15,17 @@ local Settings = {
 
 	-- F7
 	[168] = true,
-
-	--Detonate / G
-	--[47] = true,
 }
 
-local xOffset, yOffset = 0.4, 0
+local xOffset, yOffset = 0.55, 0
 
 -- END OF SETTINGS --
+
+RegisterNetEvent("jscoreboard:setUserGroup")
+AddEventHandler("jscoreboard:setUserGroup", function(group)
+	print("setting scoreboard user group to: " .. group)
+	Settings["UserGroup"] = group
+end)
 
 local function DrawPlayerList()
     local players = {}
@@ -81,31 +81,65 @@ local function DrawPlayerList()
 		AddTextComponentString( v[2] .. " | " .. GetPlayerName( v[1] ) )
 		DrawText( 0.01 + xOffset, 0.007 + ( k * 0.03 ) )
 
+	end
+end
 
-		--Voice Indicator
-		if Settings["VoiceIndicator"] then
-			local transparency = 60
+-- ID #'s overhead
+function DrawTracerText(text, spacing, talking)
+	local x,y,z = table.unpack(GetEntityCoords(ped))
+	local px,py,pz=table.unpack(GetGameplayCamCoords())
+	local dist = GetDistanceBetweenCoords(px,py,pz, x,y,z, 1)
+	--Citizen.Trace("playerBlips: dist = " .. dist)
 
-			if NetworkIsPlayerTalking( v ) then
-				transparency = 255
-			end
+	local scale = (1/dist)*40
+	local fov = (1/GetGameplayCamFov())*100
+	local scale = scale*fov
 
-			DrawSprite( "mplobby", "mp_charcard_stats_icons9", 0.2, 0.024 + ( k * 0.03 ), 0.015, 0.025, 0, 255, 255, 255, transparency )
-		end
+	SetTextFont(0)
+	SetTextProportional(1)
+	if talking then
+		SetTextColour(0, 0, 255, 255)
+	else
+		SetTextColour(255, 255, 255, 255)
+	end
+	SetTextDropshadow(0, 0, 0, 0, 255)
+	SetTextEdge(2, 0, 0, 0, 150)
+	SetTextDropShadow()
+	SetTextOutline()
+	SetTextEntry("STRING")
+	SetTextCentre(1)
+	AddTextComponentString(text)
+	SetDrawOrigin(x, y, z+spacing, 0)
+	SetTextScale(0.3*scale, 0.08*scale)
+	DrawText(0.0, 0.0)
+	ClearDrawOrigin()
+end
 
-		--Wanted Stars
-		if Settings["WantedStars"] then
-			local wantedLevel = GetPlayerWantedLevel( v ) or 0
-			wantedLevel = wantedLevel
+function ShowIds()
+	local viewDistance = 0
+	if Settings["UserGroup"] == "user" then
+		viewDistance = 10
+	else
+		viewDistance = 40
+	end
+	for id = 0, 64 do
+		x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(id), true))
+		if NetworkIsPlayerActive(id) and GetDistanceBetweenCoords(x,y,z, GetEntityCoords(GetPlayerPed(-1))) < viewDistance then
+			ped = GetPlayerPed(id)
+			blip = GetBlipFromEntity(ped)
 
-			for i=1, 5 do
-				local transparency = 60
-
-				if wantedLevel >= i then
-					transparency = 255
-				end
-
-				DrawSprite( "mpleaderboard", "leaderboard_star_icon", 0.195 - ( i * 0.010	 ), 0.024 + ( k * 0.03 ), 0.0175, 0.0275, 0, 255, 255, 255, transparency )
+			if NetworkIsPlayerTalking(id) then
+				--if GetPlayerPed(id) ~= GetPlayerPed(-1) then
+					--DrawMarker(2, x, y, z+1.10, 0, 0, 0, 0, 180.0, 0, 0.3, 0.1, 0.25, 0, 0, 200, 200, 0, GetEntityHeading(GetPlayerPed(-1)), 0, 0)
+					--Citizen.InvokeNative(0xBFEFE3321A3F5015, ped, GetPlayerName(id), false, false, "", false)
+					--Citizen.InvokeNative(0xBFEFE3321A3F5015, ped, tostring(GetPlayerServerId(id)), false, false, "", false)
+					DrawTracerText(tostring(GetPlayerServerId(id)), 1.2, true)
+			--	end
+			else
+				--DrawMarker(2, x, y, z+1.10, 0, 0, 0, 0, 180.0, 0, 0.3, 0.1, 0.25, 0, 200, 0, 200, 0, GetEntityHeading(GetPlayerPed(-1)), 0, 0)
+				--Citizen.InvokeNative(0xBFEFE3321A3F5015, ped, GetPlayerName(id), false, false, "", false)
+				--Citizen.InvokeNative(0xBFEFE3321A3F5015, ped, tostring(GetPlayerServerId(id)), false, false, "", false)
+				DrawTracerText(tostring(GetPlayerServerId(id)), 1.2, false)
 			end
 		end
 	end
@@ -130,6 +164,7 @@ Citizen.CreateThread( function()
 
 		if GetGameTimer() < LastPress + Settings["DisplayTime"] then
 			DrawPlayerList()
+			ShowIds()
 		end
 
 	end
