@@ -69,26 +69,6 @@ Citizen.CreateThread(function()
     end
 end)
 
---[[ this has been moved to the interaction menu
-Citizen.CreateThread(function()
-    while true do
-        Wait(1)
-        -- todo: -change below to another key..
-        if ( IsControlPressed( 1, 19 ) and IsControlJustPressed( 1, 103 ) ) then -- LALT + E to repair
-            local coordA = GetEntityCoords(GetPlayerPed(-1), 1)
-            local coordB = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 5.0, 0.0)
-            local targetVehicle = getVehicleInDirection(coordA, coordB)
-            if targetVehicle ~= 0 then
-                if GetVehicleEngineHealth(targetVehicle) < 1000 or not IsVehicleDriveable(targetVehicle, 0) and not IsPedInAnyVehicle(GetPlayerPed(-1), true) then
-                    TriggerServerEvent("carDamage:checkForRepairKit", targetVehicle)
-                    --targetVehicle = nil
-                end
-            end
-        end
-    end
-end)
---]]
-
 RegisterNetEvent("carDamage:repairVehicle")
 AddEventHandler("carDamage:repairVehicle", function(vehicle)
     print("inside of carDamage:repairVehicle with vehicle param = " .. vehicle)
@@ -127,12 +107,6 @@ function DrawCoolLookingNotification(msg)
     AddTextComponentString(msg)
     DrawNotification(0,1)
 end
-
---[[ usage:
-local coordA = GetEntityCoords(GetPlayerPed(-1), 1)
-local coordB = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 20.0, 0.0)
-local targetVehicle = getVehicleInDirection(coordA, coordB)
-]]
 
 function getVehicleInDirection(coordFrom, coordTo)
     local rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 2, GetPlayerPed(-1), 0)
