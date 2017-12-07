@@ -9,7 +9,7 @@ local locations = {
 
 local returnLocations = {
     --{x = -715.599, y = -1346.63, z = 1.565076}
-	{x = -271.19, y = 6665.49, z = 0.93}
+	{x = -271.19, y = 6665.49, z = 1.8}
 }
 
 local seacraftSpawnLocation = {
