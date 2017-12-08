@@ -144,6 +144,30 @@ Citizen.CreateThread(function()
 				SetPlayerInvincible(ped, true)
 				SetEntityHealth(ped, 1)
 				if not dead then
+
+					-- send death log
+					local deathLog = {
+						deadPlayerId = GetPlayerServerId(PlayerId()),
+						deadPlayerName = GetPlayerName(PlayerId()),
+						cause = GetPedCauseOfDeath(ped),
+						killer = GetPedKiller(ped),
+						tod = GetPedTimeOfDeath(ped),
+						lastDeath = GetTimeSinceLastDeath(),
+						killerName = "",
+						killerId = 0
+					}
+
+					for id = 0, 64 do
+						if NetworkIsPlayerActive(id) then
+							if GetPlayerPed(id) == deathLog.killer then -- save killer details
+								deathLog.killerId = GetPlayerServerId(id)
+								deathLog.killerName = GetPlayerName(id)
+							end
+						end
+					end
+
+					TriggerServerEvent("RPD:newDeathLog", deathLog)
+
 					dead = true
 					local playerPos = GetEntityCoords( GetPlayerPed( -1 ), true )
 					local streetA, streetB = Citizen.InvokeNative( 0x2EB41072B4C1E4C0, playerPos.x, playerPos.y, playerPos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt() )
