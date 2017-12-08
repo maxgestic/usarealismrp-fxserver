@@ -37,24 +37,26 @@ AddEventHandler("impound:impoundVehicle", function(vehicle, plate)
                     for k,v in pairs(players) do
                         local player = v
                         local vehicles = player.getActiveCharacterData("vehicles")
-                        --print("about to check all player vehicles : " .. #vehicles)
-                        for i = 1, #vehicles do
-                            --print("checking vehicle.model = " .. vehicles[i].model)
-                            if vehicles[i].impounded then
-                                --print("checking vehicle.impounded = " .. tostring(vehicles[i].impounded))
-                            else
-                                --print("vehicle did not have impound property")
-                            end
-                            --print("vehicles[i].plate = " .. type(vehicles[i].plate))
-                            --print("plate = " .. type(plate))
-                            if tonumber(plate) == tonumber(vehicles[i].plate) then
-                                --print("found matching plate = " .. plate)
-                                --print("setting vehicle.impounded = true!")
-                                vehicles[i].impounded = true
-                                v.setVehicles(vehicles)
-                                --print("just impounded " .. GetPlayerName(k) .. "'s vehicle!'")
-                                TriggerClientEvent( 'impoundVehicle', userSource )
-                                return
+                        if vehicles then
+                            --print("about to check all player vehicles : " .. #vehicles)
+                            for i = 1, #vehicles do
+                                --print("checking vehicle.model = " .. vehicles[i].model)
+                                if vehicles[i].impounded then
+                                    --print("checking vehicle.impounded = " .. tostring(vehicles[i].impounded))
+                                else
+                                    --print("vehicle did not have impound property")
+                                end
+                                --print("vehicles[i].plate = " .. type(vehicles[i].plate))
+                                --print("plate = " .. type(plate))
+                                if tonumber(plate) == tonumber(vehicles[i].plate) then
+                                    --print("found matching plate = " .. plate)
+                                    --print("setting vehicle.impounded = true!")
+                                    vehicles[i].impounded = true
+                                    v.setVehicles(vehicles)
+                                    --print("just impounded " .. GetPlayerName(k) .. "'s vehicle!'")
+                                    TriggerClientEvent( 'impoundVehicle', userSource )
+                                    return
+                                end
                             end
                         end
                     end

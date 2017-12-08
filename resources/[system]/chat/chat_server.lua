@@ -69,7 +69,8 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
         	--TriggerClientEvent('chatMessage', -1, "[ID]", {171, 67, 227}, "^2Name: ^4" .. GetPlayerName(source) .. " ^0- ^2SSN: ^4" .. source)
         	TriggerEvent("es:getPlayerFromId", userSource, function(user)
         		if(user)then
-        			if user.getPoliceRank() > 0 then
+                    local user_rank = user.getActiveCharacterData("policeRank")
+        			if user_rank > 0 then
         				local policeRanks = {
         					"Probationary Officer" ,
         					"Police Officer 1" ,
@@ -81,7 +82,7 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
         					"Chief of Police"
         				}
         				TriggerEvent('altchat:localChatMessage', userSource, "^6* " .. name .. " shows Badge.")
-        				TriggerEvent('altchat:localChatMessage', userSource, "^6[ID] ^2Name: ^4" .. name .. " ^0- ^2Rank: ^4" .. policeRanks[user.getPoliceRank()])
+        				TriggerEvent('altchat:localChatMessage', userSource, "^6[ID] ^2Name: ^4" .. name .. " ^0- ^2Rank: ^4" .. policeRanks[user_rank])
         			else
         				TriggerClientEvent('chatMessage', userSource, "", {0, 0, 0}, "^3You're not whitelisted to use the command.")
         			end

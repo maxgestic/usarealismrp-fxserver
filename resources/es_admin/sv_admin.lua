@@ -870,7 +870,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Name: " .. user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName") .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
-		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Police Rank: " .. user.getActiveCharacterData("policeRank") .. " | EMS Rank: " .. user.getActiveCharacterData("emsRank") .. " | Delta PMC Rank: " .. user.getActiveCharacterData("securityJob") .. " |  Job: " .. user.getActiveCharacterData("job") .. " |" )
+		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Police Rank: " .. user.getActiveCharacterData("policeRank") .. " | EMS Rank: " .. user.getActiveCharacterData("emsRank") .. " | Delta PMC Rank: " .. user.getActiveCharacterData("securityRank") .. " |  Job: " .. user.getActiveCharacterData("job") .. " |" )
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Cash: " .. user.getActiveCharacterData("money") .. " | Bank: " .. user.getActiveCharacterData("bank") .. " |  Ingame Time: " .. FormatSeconds(user.getActiveCharacterData("ingameTime")) .. " |" )
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
