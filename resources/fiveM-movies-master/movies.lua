@@ -22,7 +22,7 @@ function LoadBlips()
     SetBlipSprite(blip, 135)
     SetBlipScale(blip, 1.2)
     SetBlipColour(blip, 25)
-    SetBlipAsShortRange(blip, false)
+    SetBlipAsShortRange(blip, true)
     BeginTextCommandSetBlipName("STRING")
     AddTextComponentSubstringPlayerName("Movie Theater")
     EndTextCommandSetBlipName(blip)
@@ -43,12 +43,12 @@ function randomVideo()
    elseif n == 2 then
     return "PL_STD_WZL"
    elseif n == 3 then
-    return "PL_CINEMA_MULTIPLAYER_NO_MELTDOWN" 
+    return "PL_CINEMA_MULTIPLAYER_NO_MELTDOWN"
    elseif n == 4 then
-    return "PL_CINEMA_ACTION"   
+    return "PL_CINEMA_ACTION"
    end
 end
-		 
+
 ------------------------------------------------------------
 ---------------------set up movie---------------------------
 ------------------------------------------------------------
@@ -60,7 +60,7 @@ function SetupMovie()
    if not DoesEntityExist(tv) then
      tv = CreateObjectNoOffset(cin_screen, 320.1257, 248.6608, 86.56934, 1, true, false)
 	 SetEntityHeading(tv, 179.99998474121)
-    else 
+    else
 	 tv = GetClosestObjectOfType(319.884, 262.103, 82.917, 20.475, cin_screen, 0, 0, 0)
    end
 --this checks if the rendertarget is registered and  registers rendertarget
@@ -72,23 +72,23 @@ function SetupMovie()
         LinkNamedRendertarget(cin_screen)
     end
   rendertargetid = GetNamedRendertargetRenderId("cinscreen")
---this checks if the rendertarget is linked AND registered 
+--this checks if the rendertarget is linked AND registered
   if IsNamedRendertargetLinked(cin_screen) and IsNamedRendertargetRegistered("cinscreen") then
---this sets the rendertargets channel and video 
+--this sets the rendertargets channel and video
 	Citizen.InvokeNative(0x9DD5A62390C3B735, 2, randomVideo(), 0)
---this sets the rendertarget	
+--this sets the rendertarget
 	SetTextRenderId(rendertargetid)
 --duh sets the volume
-	SetTvVolume(100)	
+	SetTvVolume(100)
 --duh sets the cannel
     SetTvChannel(2)
 --duh sets subtitles
     EnableMovieSubtitles(1)
---these are for the rendertarget 2d settings and stuff	
+--these are for the rendertarget 2d settings and stuff
     Citizen.InvokeNative(0x67A346B3CDB15CA5, 100.0)
     Citizen.InvokeNative(0x61BB1D9B3A95D802, 4)
     Citizen.InvokeNative(0xC6372ECD45D73BCD, 1)
-  else 
+  else
 --this puts the rendertarget back to regular use(playing)
    SetTextRenderId(GetDefaultScriptRendertargetRenderId())
   end
@@ -106,7 +106,7 @@ end
 function DeconstructMovie()
  local obj = GetClosestObjectOfType(319.884, 262.103, 82.917, 20.475, cin_screen, 0, 0, 0)
   cin_screen = GetHashKey("v_ilev_cin_screen")
-  SetTvChannel(-1)  
+  SetTvChannel(-1)
   ReleaseNamedRendertarget(GetHashKey("cinscreen"))
   SetTextRenderId(GetDefaultScriptRendertargetRenderId())
   SetEntityAsMissionEntity(obj,true,false)
@@ -120,11 +120,11 @@ end
 function CreateMovieThread()
   Citizen.CreateThread(function()
     SetTextRenderId(GetNamedRendertargetRenderId("cinscreen"))
-	Citizen.InvokeNative(0x9DD5A62390C3B735, 2, randomVideo(), 0)		
+	Citizen.InvokeNative(0x9DD5A62390C3B735, 2, randomVideo(), 0)
 	SetTvChannel(2)
 	Citizen.InvokeNative(0x67A346B3CDB15CA5, 100.0)
     Citizen.InvokeNative(0x61BB1D9B3A95D802, 4)
-    Citizen.InvokeNative(0xC6372ECD45D73BCD, 1)		
+    Citizen.InvokeNative(0xC6372ECD45D73BCD, 1)
     while(true) do
       Citizen.Wait(0)
       StartMovie()
@@ -155,15 +155,15 @@ function IsPlayerInArea()
 			  Citizen.Wait(30)
               SetEntityHeading(playerPed, 180.475)
 			  TaskLookAtCoord(GetPlayerPed(-1), 319.259, 251.827, 85.648, -1, 2048, 3)
-			  FreezeEntityPosition(GetPlayerPed(-1), 1)	
+			  FreezeEntityPosition(GetPlayerPed(-1), 1)
                   SetNotificationTextEntry('STRING')
                   AddTextComponentString("press ~r~ESC ~w~key to exit")
-                  DrawNotification(false, false)		  
+                  DrawNotification(false, false)
             end
           end
         end
       end
-end					
+end
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
@@ -173,25 +173,25 @@ end)
 --if the player is not inside theater delete screen
 Citizen.CreateThread(function()
  if GetRoomKeyFromEntity(PlayerPedId()) ~= -1337806789 and DoesEntityExist(GetClosestObjectOfType(319.884, 262.103, 82.917, 20.475, cin_screen, 0, 0, 0)) then
-    DeconstructMovie() 
+    DeconstructMovie()
  end
 -- Create the blips for the cinema's
-  LoadBlips()      
+  LoadBlips()
 end)
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
-    playerPed = GetPlayerPed(-1)   
+    playerPed = GetPlayerPed(-1)
 --if player hits "esc" key while in theater they exit
       if IsControlPressed(0, 322) and GetRoomKeyFromEntity(PlayerPedId()) == -1337806789 then
 	DoScreenFadeOut(1000)
         SetEntityCoords(playerPed, 297.891, 193.296, 104.344, 161.925)
-	Citizen.Wait(30)		
+	Citizen.Wait(30)
 	DoScreenFadeIn(800)
 	FreezeEntityPosition(GetPlayerPed(-1), 0)
 	SetFollowPedCamViewMode(fistPerson)
 	DeconstructMovie()
-	SetPlayerInvincible(PlayerId(), false)			
+	SetPlayerInvincible(PlayerId(), false)
         --ClearRoomForEntity(playerPed)
         MovieState = false
       end
@@ -204,6 +204,6 @@ Citizen.CreateThread(function()
 	else
      SetEntityVisible(PlayerPedId(-1), true)
 	 SetPlayerInvincible(PlayerId(), false)
-	end 
+	end
     end
 end)
