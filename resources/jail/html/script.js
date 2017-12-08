@@ -49,7 +49,9 @@ $(function() {
             $("#chargesWrap").hide();
             $("#cursor").show();
         } else if (data.which == 13) { // ENTER
-            $("#jail-form").submit();
+            if ($("#id").val() != "") {
+                $("#jail-form").submit();
+            }
         }
     };
 
