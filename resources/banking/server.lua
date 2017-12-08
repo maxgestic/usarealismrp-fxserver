@@ -55,8 +55,10 @@ function withdraw(player, amount)
 end
 
 function round(num, numDecimalPlaces)
-  local mult = 10^(numDecimalPlaces or 0)
-  return math.abs(math.floor(num * mult + 0.5) / mult)
+    if num and numDecimalPlaces then
+      local mult = 10^(numDecimalPlaces or 0)
+      return math.abs(math.floor(num * mult + 0.5) / mult)
+  end
 end
 
 local notAllowedToDeposit = {}
@@ -210,6 +212,7 @@ TriggerEvent('es:addCommand', 'givecash', function(source, args, user)
     toPlayer = tonumber(args[2])
     amount = tonumber(args[3])
     amount = round(amount, 0)
+    -- todo: update names when giving cash to character names
     TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "You gave " .. GetPlayerName(toPlayer) .. " ^2$" .. amount .. "^0.");
     TriggerClientEvent('chatMessage', toPlayer, "", {0, 0, 0}, GetPlayerName(fromPlayer) .. " has given you ^2$" .. amount .. "^0.");
     TriggerClientEvent('bank:givecash', source, toPlayer, amount)
@@ -226,7 +229,7 @@ AddEventHandler('bank:givecash', function(toPlayer, amount)
 		if (tonumber(user_money_1) >= tonumber(amount)) then
             user.setActiveCharacterData("money", user_money_1 - amount)
 			TriggerEvent('es:getPlayerFromId', toPlayer, function(recipient)
-                local user_money_2 = user.getActiveCharacterData("money")
+                local user_money_2 = recipient.getActiveCharacterData("money")
                 recipient.setActiveCharacterData("money", user_money_2 + amount)
 				TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Gave cash: ~r~-$".. amount .." ~n~~s~Wallet: ~g~$" .. user_money_1 - amount)
 				TriggerClientEvent("es_freeroam:notify", toPlayer, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Received cash: ~g~$".. amount .." ~n~~s~Wallet: ~g~$" .. user_money_2 + amount)
