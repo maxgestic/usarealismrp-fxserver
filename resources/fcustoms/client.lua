@@ -914,6 +914,9 @@ function CustomsShop()
     if IsVehicleDamaged(currentvehicle) then
         Menu.addOption("customs_main", function()
             if(Menu.Option("Repair Vehicle"))then
+                --print("engine health = " .. GetVehicleEngineHealth(currentvehicle))
+                --local engine_health = GetVehicleEngineHealth(currentvehicle)
+                --TriggerServerEvent("customs:checkRepairMoney", engine_health)
                 SetVehicleFixed(currentvehicle)
                 CustomsShop()
             end

@@ -1,3 +1,16 @@
+RegisterServerEvent("customs:checkRepairMoney")
+AddEventHandler("customs:checkRepairMoney", function(engineHealth)
+	print("engine health = " .. engineHealth)
+	local REPAIR_COST = 0
+	-- add base service fee
+	REPAIR_COST = REPAIR_COST + 75
+	-- add fee for engine damage
+	if engineHealth > 990 then
+		REPAIR_COST = REPAIR_COST + 125
+	end
+	-- todo: FINISH ENGINE DAMAGE PRICE ADJUSTMENT
+end)
+
 RegisterServerEvent("customs:saveCarData")
 AddEventHandler("customs:saveCarData", function(data, plate)
 	local userSource = tonumber(source)
@@ -50,7 +63,7 @@ AddEventHandler("customs:check3",function(title, data, cost, mod, back, name, wt
 	local source = tonumber(source)
     TriggerEvent('es:getPlayerFromId', source, function(user)
 		local user_money = user.getActiveCharacterData("money")
-	    if (tonumber(user.getMoney()) >= tonumber(cost)) then
+	    if (tonumber(user_money) >= tonumber(cost)) then
 	    	user.setActiveCharacterData("money", user_money - cost)
 	    	TriggerClientEvent("customs:receive3", source, title, data, mod, back, name, wtype)
 	    else

@@ -32,7 +32,7 @@ AddEventHandler("impound:impoundVehicle", function(vehicle, plate)
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
         local playerJob = user.getActiveCharacterData("job")
         local userGroup = user.getGroup()
-        if playerJob == "sheriff" or playerJob == "ems" or playerJob == "fire" or userGroup == "owner" or userGroup == "admin" or userGroup == "mod" then
+        if playerJob == "sheriff" or playerJob == "ems" or playerJob == "fire" or userGroup == "owner" or userGroup == "admin" or userGroup == "mod" or userGroup == "superadmin" then
             TriggerEvent('es:getPlayers', function(players)
                     for k,v in pairs(players) do
                         local player = v
@@ -52,7 +52,7 @@ AddEventHandler("impound:impoundVehicle", function(vehicle, plate)
                                     --print("found matching plate = " .. plate)
                                     --print("setting vehicle.impounded = true!")
                                     vehicles[i].impounded = true
-                                    v.setVehicles(vehicles)
+                                    v.setActiveCharacterData("vehicles", vehicles)
                                     --print("just impounded " .. GetPlayerName(k) .. "'s vehicle!'")
                                     TriggerClientEvent( 'impoundVehicle', userSource )
                                     return
