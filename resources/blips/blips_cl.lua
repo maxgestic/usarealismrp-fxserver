@@ -54,8 +54,8 @@ local blips = {
 	{ title="Seaview Aircraft", colour = 60, id = 251, x=-943.103, y=-2958.14, z=13.9451 },
 	{ title="Seaview Aircraft", colour = 60, id = 251, x=2119.083, y=4790.010, z=41.139 },
 	{ title="Meth", colour = 75, id = 499, x = 1389.28, y = 3604.6, z = 38.1 },
-	{ title="Boat Shop", colour = 57, id = 356, x =  -257.33, y = 6665.09, z = 1.40 }
-	--{ title="Prison", colour = 4, id = 188, x=1698.107, y=3688.166, z=34.267 }
+	{ title="Boat Shop", colour = 57, id = 356, x =  -257.33, y = 6665.09, z = 1.40 },
+	{ title="Jail", colour = 4, id = 238, x=1686.668, y=2581.715, z=51.6 }
 }
 
 Citizen.CreateThread(function()
