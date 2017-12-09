@@ -42,13 +42,12 @@ AddEventHandler('usa_rp:spawn', function(defaultModel, job, weapons, characters)
             print("player did have a first character!")
             TriggerEvent("character:open", "home", characters)
         end
-        --[[ CHECK JAIL STATUS
+        --[[ CHECK JAIL STATUS [moved]
         Citizen.Trace("calling checkJailedStatusOnPlayerJoin server function")
         TriggerServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
         --]]
         -- CHECK BAN STATUS
         TriggerServerEvent('mini:checkPlayerBannedOnSpawn')
-        --]]
 	end)
 end)
 
@@ -57,7 +56,7 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(0)
 		SetPedDensityMultiplierThisFrame(0.8)
-		SetVehicleDensityMultiplierThisFrame(0.6)
+		SetVehicleDensityMultiplierThisFrame(0.3)
 	end
 end)
 
