@@ -241,7 +241,7 @@ function hasItem(itemName, inventory, quantity)
         if item.name == itemName then
             if quantity then
                 if type(tonumber(quantity)) ~= nil then
-                    if item.quantity == quantity then
+                    if item.quantity >= quantity then
                         print("inventory item found with the searched quantity!")
                         return true
                     else
