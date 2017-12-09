@@ -125,6 +125,7 @@ AddEventHandler("policestation2:offduty", function()
         local chars = user.getCharacters()
         for i = 1, #chars do
           if chars[i].active == true then
+              print("found matching active character for off duty!")
             TriggerClientEvent("policestation2:setciv", userSource, chars[i].appearance, playerWeapons) -- need to test
             break
           end

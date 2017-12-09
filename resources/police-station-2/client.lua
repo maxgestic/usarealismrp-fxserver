@@ -180,8 +180,10 @@ AddEventHandler("policestation2:setciv", function(character, playerWeapons)
 	Citizen.CreateThread(function()
 		local model
 		if not character.hash then -- does not have any customizations saved
+			print("did not find character.hash!")
 			model = -408329255 -- some random black dude with no shirt on, lawl
 		else
+			print("found a character hash!")
 			model = character.hash
 		end
         RequestModel(model)

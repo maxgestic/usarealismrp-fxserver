@@ -52,7 +52,13 @@ AddEventHandler("emsstation2:offduty", function()
     local userSource = tonumber(source)
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
         local playerWeapons = user.getActiveCharacterData("weapons")
-        TriggerClientEvent("emsstation2:setciv", userSource, user.getCharacters(), playerWeapons)
+        local chars = user.getCharacters()
+        for i = 1, #chars do
+          if chars[i].active == true then
+            TriggerClientEvent("emsstation2:setciv", userSource, chars[i].appearance, playerWeapons) -- need to test
+            break
+          end
+        end
         user.setActiveCharacterData("job", "civ")
     end)
 end)
