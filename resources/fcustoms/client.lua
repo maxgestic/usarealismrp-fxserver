@@ -838,6 +838,13 @@ customs = {
 --==============================================================================================================================--
 --==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--==--
 
+RegisterNetEvent("customs:playerHadEnoughMoneyToRepair")
+AddEventHandler("customs:playerHadEnoughMoneyToRepair", function()
+    SetVehicleFixed(currentvehicle)
+    SetVehicleUndriveable(currentvehicle, 0)
+    SetVehicleEngineHealth(currentvehicle, 1000.0)
+    CustomsShop()
+end)
 
 RegisterNetEvent("customs:receive")
 AddEventHandler("customs:receive",function(title, data, value)
@@ -914,11 +921,9 @@ function CustomsShop()
     if IsVehicleDamaged(currentvehicle) then
         Menu.addOption("customs_main", function()
             if(Menu.Option("Repair Vehicle"))then
-                --print("engine health = " .. GetVehicleEngineHealth(currentvehicle))
-                --local engine_health = GetVehicleEngineHealth(currentvehicle)
-                --TriggerServerEvent("customs:checkRepairMoney", engine_health)
-                SetVehicleFixed(currentvehicle)
-                CustomsShop()
+                local engine_health = GetVehicleEngineHealth(GetVehiclePedIsIn(GetPlayerPed(-1), 1))
+                print("engine health = " .. engine_health)
+                TriggerServerEvent("customs:checkRepairMoney", engine_health)
             end
         end)
     end

@@ -1,14 +1,42 @@
+-- repair vehicle
+-- todo: change price based on body damage instead of only engine damage?
 RegisterServerEvent("customs:checkRepairMoney")
 AddEventHandler("customs:checkRepairMoney", function(engineHealth)
+	local userSource = tonumber(source)
 	print("engine health = " .. engineHealth)
 	local REPAIR_COST = 0
 	-- add base service fee
-	REPAIR_COST = REPAIR_COST + 75
+	REPAIR_COST = REPAIR_COST + 150
 	-- add fee for engine damage
-	if engineHealth > 990 then
-		REPAIR_COST = REPAIR_COST + 125
+	if engineHealth < 850 then
+		REPAIR_COST = REPAIR_COST + 2500
+	elseif engineHealth < 900 then
+		REPAIR_COST = REPAIR_COST + 1500
+	elseif engineHealth < 930 then
+		REPAIR_COST = REPAIR_COST + 1000
+	elseif engineHealth < 950 then
+		REPAIR_COST = REPAIR_COST + 700
+	elseif engineHealth < 970 then
+		REPAIR_COST = REPAIR_COST + 600
+	elseif engineHealth < 1000 then
+		REPAIR_COST = REPAIR_COST + 385
 	end
-	-- todo: FINISH ENGINE DAMAGE PRICE ADJUSTMENT
+	-- charge the player if they have enough money
+	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+		if user then
+			local user_money = user.getActiveCharacterData("money")
+			if user_money >= REPAIR_COST then
+				-- charge player
+				user.setActiveCharacterData("money", user_money - REPAIR_COST)
+				-- repair vehicle
+				TriggerClientEvent("customs:playerHadEnoughMoneyToRepair", userSource)
+				-- notify
+				TriggerClientEvent("usa:notify", userSource, "~y~Thanks for your business!~w~ Repair Cost: $" .. REPAIR_COST)
+			else
+				TriggerClientEvent("usa:notify", userSource, "~y~Sorry, we can't help you!~w~ Repair Cost: $" .. REPAIR_COST)
+			end
+		end
+	end)
 end)
 
 RegisterServerEvent("customs:saveCarData")
