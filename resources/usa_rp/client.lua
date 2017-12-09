@@ -328,3 +328,11 @@ AddEventHandler('RollWindow', function()
 		end
 	end
 end )
+
+-- UTILITY FUNCTIONS
+RegisterNetEvent("usa:notify")
+AddEventHandler("usa:notify", function(msg)
+    SetNotificationTextEntry("STRING")
+	AddTextComponentString(msg)
+	DrawNotification(0,1)
+end)
