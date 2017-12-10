@@ -1,3 +1,5 @@
+local target_player_id = 0
+
 TriggerEvent('es:addCommand', 'ticket', function(source, args, user)
 	local user_job = user.getActiveCharacterData("job")
 	if user_job == "sheriff" or user_job == "police" then
@@ -77,17 +79,6 @@ TriggerEvent("es:addCommand", 'pickup', function(source)
     end)
 end)
 
---[[
--- /spikestrip
-TriggerEvent('es:addCommand', 'spikestrip', function(source) -- usage /spike in chat maybe change to a hot key at later date
-  TriggerEvent('es:getPlayerFromId', source, function(user)
-     if user.getJob() == "sheriff"  then -- set police job can also use [ user.permission_level >= 2 ] in place of job if need be
-        TriggerClientEvent('c_setSpike', source)
-     end
-  end)
-end)
---]]
-
 AddEventHandler( 'chatMessage', function( source, n, msg )
     msg = string.lower( msg )
     if ( msg == "/r" ) then
@@ -107,7 +98,7 @@ function comma_value(amount)
   return formatted
 end
 
--- bait car
+-- start bait car
 TriggerEvent('es:addCommand', 'lockbc', function(source, args, user)
 	local userjob = user.getJob()
 	if userjob == "sheriff" then
@@ -125,3 +116,49 @@ TriggerEvent('es:addCommand', 'unlockbc', function(source, args, user)
 		TriggerClientEvent("simp:baitCarunlock", tonumber(ServerID))
 	end
 end)
+-- end bait car
+
+-- start seize contraband
+TriggerEvent('es:addCommand', 'seize', function(source, args, user)
+	local arg = args[2]
+	local targetId = tonumber(args[3])
+	local user_job = user.getActiveCharacterData("job")
+	local name = user.getActiveCharacterData("firstName") .. user.getActiveCharacterData("lastName")
+	if user_job == "sheriff" or user_job == "police" then
+		if arg and targetId then
+			if arg == "contraband" then
+				print(name .. " is seizing contraband!")
+				TriggerEvent('es:getPlayerFromId', targetId, function(target)
+					local targetInventory = target.getActiveCharacterData("inventory")
+					for i = 1, #targetInventory do
+						if targetInventory[i].legality == "illegal" then
+							TriggerClientEvent("usa:notify", source, "~y~Seized: ~w~(x".. targetInventory[i].quantity ..") " .. targetInventory[i].name)
+							TriggerClientEvent("usa:notify", targetId, "~y~Seized: ~w~(x".. targetInventory[i].quantity ..") " .. targetInventory[i].name)
+							table.remove(targetInventory, i)
+						end
+					end
+					target.setActiveCharacterData("inventory", targetInventory)
+				end)
+			elseif arg == "cash" then
+				print(name .. " is seizing a player's cash!")
+				target_player_id = targetId
+				TriggerClientEvent("police:getMoneyInput", source)
+			end
+		end
+	end
+end)
+
+RegisterServerEvent("police:seizeCash")
+AddEventHandler("police:seizeCash", function(amount)
+	local userSource = tonumber(source)
+	print("seizing cash from id #" .. target_player_id .. "! amount: $" .. amount)
+	TriggerEvent('es:getPlayerFromId', target_player_id, function(target)
+		local target_money = target.getActiveCharacterData("money")
+		if target_money - amount >= 0 then
+			target.setActiveCharacterData("money", target_money - amount)
+			TriggerClientEvent("usa:notify", userSource, "~y~Seized: ~w~$" .. amount)
+			TriggerClientEvent("usa:notify", target_player_id, "~y~Seized: ~w~$" .. amount)
+		end
+	end)
+end)
+-- end seize contraband

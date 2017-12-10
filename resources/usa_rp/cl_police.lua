@@ -51,6 +51,7 @@ AddEventHandler('c_setSpike', function()
     SetSpikesOnGround()
 end)
 
+-- TODO: set entity heading after spawning
 function SetSpikesOnGround()
     x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
     spike = GetHashKey("P_ld_stinger_s")
@@ -147,6 +148,37 @@ AddEventHandler("police:notify", function(message)
     DrawNotification(0,1)
 end)
 
+RegisterNetEvent("police:getMoneyInput")
+AddEventHandler("police:getMoneyInput", function()
+    Citizen.CreateThread( function()
+            DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+            while true do
+                if ( UpdateOnscreenKeyboard() == 1 ) then
+                    local input_amount = GetOnscreenKeyboardResult()
+                    if ( string.len( input_amount ) > 0 ) then
+                        local amount = tonumber( input_amount )
+                        if ( amount > 0 ) then
+                            -- todo: prevent decimals
+                            -- trigger server event to remove money
+                            amount = round(amount, 0)
+                            TriggerServerEvent("police:seizeCash", amount)
+                        end
+                        break
+                    else
+                        DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+                    end
+                elseif ( UpdateOnscreenKeyboard() == 2 ) then
+                    break
+                end
+            Citizen.Wait( 0 )
+        end
+    end )
+end)
+
+function round(num, numDecimalPlaces)
+  return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+end
+
 function DrawTicketNotification(amount, reason)
 	SetNotificationTextEntry("STRING")
 	AddTextComponentString("~y~TICKET: ~w~$" .. amount .. "\n~y~REASON: ~w~" .. reason .. "\nPay? ~g~Y~w~/~r~N")
@@ -207,4 +239,3 @@ end)
 -----------------------------------------------------------------------------------------------------------------------
 -- CREATED BY TONI MORTON FOR THE FIVEM COMMUNITY, PLEASE GIVE CREDITS TO ME IF YOU USE THIS SCRIPT IN YOUR SERVER.  --
 -----------------------------------------------------------------------------------------------------------------------
-
