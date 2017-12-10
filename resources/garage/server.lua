@@ -42,12 +42,12 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local userVehicles = user.getActiveCharacterData("vehicles")
 		local playerInsurance = user.getActiveCharacterData("insurance")
+		local user_money = user.getActiveCharacterData("money")
 		if vehicle.impounded == true then
 			print("users vehicle was impounded!")
-			if user.getMoney() >= 2000 then
+			if user_money >= 2000 then
 				TriggerClientEvent("garage:notify", userSource, "~g~BC IMPOUND: ~w~Here's your car!")
 				TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
-				local user_money = user.getActiveCharacterData("money")
 				user.setActiveCharacterData("money", user_money - 2000)
 				--vehicle.impounded = false
 				for i = 1, #userVehicles do
