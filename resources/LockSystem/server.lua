@@ -56,9 +56,11 @@ RegisterServerEvent("ls:removeKey")
 AddEventHandler("ls:removeKey", function(plate, vehicleId)
 	for i = 1, #vehStorage do
         local veh = vehStorage[i]
-        if veh.id == vehicleId and veh.plate == plate then
-            print("found matching car to remove from veh storage!")
-            table.remove(vehStorage, i)
+        if veh then
+            if veh.id == vehicleId and veh.plate == plate then
+                print("found matching car to remove from veh storage!")
+                table.remove(vehStorage, i)
+            end
         end
     end
 end)
