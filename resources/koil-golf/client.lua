@@ -73,6 +73,7 @@ Citizen.CreateThread(function()
 				else
 					Citizen.Trace("a1")
 
+					-- check player's money to play
 					print("calling usa:checkPlayerMoney for golf!!")
 					TriggerServerEvent("usa:checkPlayerMoney", "golf", amount, "beginGolf", false, true)
 					--[[
