@@ -1,3 +1,4 @@
+local default_voip = 8.5
 local civilianSpawns = {
     --{x = 391.611, y = -948.984, z = 29.3978}, -- atlee & sinner st
     --{x = 95.2552, y = -1310.8, z = 29.2921}, -- near strip club
@@ -22,7 +23,7 @@ AddEventHandler('usa_rp:playerLoaded', function()
     --exports.spawnmanager:setAutoSpawnCallback(function()
         --TriggerServerEvent('usa_rp:spawnPlayer')
     --end)
-    NetworkSetTalkerProximity(10.0)
+    NetworkSetTalkerProximity(default_voip)
     Citizen.Trace("calling usa_rp:spawnPlayer!")
     TriggerServerEvent('usa_rp:spawnPlayer')
 end)

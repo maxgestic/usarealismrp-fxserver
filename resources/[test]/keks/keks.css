@@ -13,7 +13,7 @@ body
     height: 100%;
 	
 	/*background-color: black;*/
-    background-image: url(loadscreen.png);
+    background-image: url('loadscreen.png');
     background-size: 100% 100%;
 }
 
