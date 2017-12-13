@@ -21,7 +21,7 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
 
 			elseif job == "sheriff" then
 
-				name = "Officer | " .. name
+				name = "Deputy | " .. name
 				color = {2, 111, 218}
 
 			elseif job == "highwaypatrol" then
