@@ -23,6 +23,7 @@ function commandsText(source)
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "10) ^3/tweet <msg>^0 - create a tweet message")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "11) ^3F1^0 - open interaction menu")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "12) ^3Press ^2F7^0 to open the players list")
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "13) ^3Press ^2F2^0 to toggle your voip level")
 end
 
 -- end util functions / start commands
