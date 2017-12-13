@@ -100,7 +100,7 @@ end
 
 -- start bait car
 TriggerEvent('es:addCommand', 'lockbc', function(source, args, user)
-	local userjob = user.getJob()
+	local userjob = user.getActiveCharacterData("job")
 	if userjob == "sheriff" then
 		local ServerID = args[2]
 		if not tonumber(ServerID) then return end
@@ -109,7 +109,7 @@ TriggerEvent('es:addCommand', 'lockbc', function(source, args, user)
 end)
 
 TriggerEvent('es:addCommand', 'unlockbc', function(source, args, user)
-	local userjob = user.getJob()
+	local userjob = user.getActiveCharacterData("job")
 	if userjob == "sheriff" then
 		local ServerID = args[2]
 		if not tonumber(ServerID) then return end
