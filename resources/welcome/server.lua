@@ -7,7 +7,7 @@ function helpText(source)
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "2) ^3/commands^0 - available commands")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "3) ^3/discord^0 - discord server link")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "4) ^3/rules^0 - to see the server rules")
-	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^3WEBSITE/RULES: ^0usarrp.enjin.com")
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^3WEBSITE/RULES: ^0https://www.usarrp.net")
 end
 
 function commandsText(source)
