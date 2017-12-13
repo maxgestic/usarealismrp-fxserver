@@ -1,4 +1,5 @@
 local currentlyTowedVehicle = nil
+local vehicleToImpound = nil
 
 local tow_duty_ped_heading = 312.352
 
@@ -23,18 +24,18 @@ end
 
 RegisterNetEvent("towJob:success")
 AddEventHandler("towJob:success", function()
-	TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0You have impounded the vehicle for ^2$700^0!")
+	TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0You have impounded the vehicle for ^2$400^0!")
 end)
 
 function impoundVehicle()
 	local targetVehicle = getVehicleInFrontOfUser()
 	if targetVehicle ~= 0 then
 		--TriggerServerEvent("towJob:impoundVehicle", targetVehicle)
-		if targetVehicle == currentlyTowedVehicle then
+		if targetVehicle == vehicleToImpound then
 			print("impounding vehicle!")
-			SetEntityAsMissionEntity(currentlyTowedVehicle, true, true )
-			deleteCar(currentlyTowedVehicle)
-			currentlyTowedVehicle = nil
+			SetEntityAsMissionEntity(vehicleToImpound, true, true )
+			deleteCar(vehicleToImpound)
+			vehicleToImpound = nil
 			TriggerServerEvent("towJob:giveReward")
 		else
 			print("Trying to tow a vehicle that wasn't attached to your flatbed first!")
@@ -91,7 +92,7 @@ Citizen.CreateThread(function()
 		end
 
 		if isPlayerAtTowSpot() and not playerNotified then
-      		TriggerEvent("chatMessage", "SYSTEM", { 0, 141, 155 }, "^3Drop the vehicle off inside the marker, then press E to impound it.")
+      		TriggerEvent("chatMessage", "SYSTEM", { 0, 141, 155 }, "^3Drop the vehicle off inside the marker, face it, then press E to impound it.")
 			playerNotified = true
 		end
 		if IsControlJustPressed(1,Keys["E"]) then
@@ -136,6 +137,7 @@ AddEventHandler('pv:tow', function()
 					if vehicle ~= targetVehicle then
 						AttachEntityToEntity(targetVehicle, vehicle, 20, -0.5, -5.0, 1.0, 0.0, 0.0, 0.0, false, false, false, false, 20, true)
 						currentlyTowedVehicle = targetVehicle
+						vehicleToImpound = currentlyTowedVehicle
 						TriggerEvent("chatMessage", "", {0, 0, 0}, "Vehicle successfully attached to towtruck!")
 					else
 						TriggerEvent("chatMessage", "", {0, 0, 0}, "You can't tow your own tow truck with your own tow truck!")
@@ -148,6 +150,7 @@ AddEventHandler('pv:tow', function()
 			AttachEntityToEntity(currentlyTowedVehicle, vehicle, 20, -0.5, -12.0, 1.0, 0.0, 0.0, 0.0, false, false, false, false, 20, true)
 			DetachEntity(currentlyTowedVehicle, true, true)
 			TriggerEvent("chatMessage", "", {0, 0, 0}, "The vehicle has been successfully detached!")
+			currentlyTowedVehicle = nil
 		end
 	end
 end)
