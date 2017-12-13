@@ -239,9 +239,10 @@ $(function() {
             $(".player-meta-data").show();
             if (event.data.enable) {
                 handleMenuItemForJob(currentPlayerJob); // set player job specific menu item
-                if (event.data.voip == 10) {
+                //alert("setting = " + event.data.voip);
+                if (event.data.voip == 8.5) {
                     $("#voip-level-value").text("Normal");
-                } else if (event.data.voip == 25) {
+                } else if (event.data.voip == 23) {
                     $("#voip-level-value").text("Yell");
                 } else if (event.data.voip == 2) {
                     $("#voip-level-value").text("Whisper");

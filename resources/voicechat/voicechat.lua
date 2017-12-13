@@ -5,6 +5,10 @@ voip['local'] = {name = 'local', setting = 8.5}
 voip['whisper'] = {name = 'whisper', setting = 2.0}
 voip['yell'] = {name = 'yell', setting = 23.0}
 setDistance = voip['default'].setting
+local distanceName = "default"
+local distanceSetting = 0
+
+local voip_toggle_key = 289 -- 38 = "E", 289 = "F2"
 
 AddEventHandler('onClientMapStart', function()
 	NetworkSetTalkerProximity(voip['default'].setting)
@@ -24,6 +28,7 @@ AddEventHandler('voip', function(voipDistance)
 	NetworkSetTalkerProximity(distanceSetting)
 	setDistance = distanceSetting
 
+	print("setting interaction menu voip display: " .. distanceSetting)
 	TriggerEvent("test:setCSharpVoipLevel", distanceSetting)
 end)
 
@@ -32,3 +37,19 @@ function NotificationMessage(message)
 	AddTextComponentString(message)
 	DrawNotification(0,1)
 end
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(1)
+			if IsControlJustPressed(1,voip_toggle_key) then
+				print("distanceName is: " .. distanceName)
+				if distanceName == "whisper" then
+					TriggerEvent("voip", "default")
+				elseif distanceName == "default" then
+					TriggerEvent("voip", "yell")
+				elseif distanceName == "yell" then
+					TriggerEvent("voip", "whisper")
+				end
+			end
+	end
+end)

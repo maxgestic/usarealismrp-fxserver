@@ -106,7 +106,7 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 	local itemName = data.itemName
 	local wholeItem = data.wholeItem
 	local targetPlayerId = data.playerId
-	Citizen.Trace("data.playerId = " .. data.playerId)
+	--Citizen.Trace("data.playerId = " .. data.playerId)
 	if actionName and itemName and wholeItem and targetPlayerId then
 		--Citizen.Trace("button name = " .. actionName .. ", item = " .. itemName)
 		if actionName == "use" then
