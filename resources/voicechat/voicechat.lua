@@ -1,9 +1,9 @@
 local voip = {}
 voip['off'] = {name = 'off', setting = 0.0}
-voip['default'] = {name = 'default', setting = 10.0}
-voip['local'] = {name = 'local', setting = 10.0}
+voip['default'] = {name = 'default', setting = 8.5}
+voip['local'] = {name = 'local', setting = 8.5}
 voip['whisper'] = {name = 'whisper', setting = 2.0}
-voip['yell'] = {name = 'yell', setting = 25.0}
+voip['yell'] = {name = 'yell', setting = 23.0}
 setDistance = voip['default'].setting
 
 AddEventHandler('onClientMapStart', function()
@@ -23,7 +23,7 @@ AddEventHandler('voip', function(voipDistance)
 	NotificationMessage("Your VOIP is now ~b~" .. distanceName .."~w~.")
 	NetworkSetTalkerProximity(distanceSetting)
 	setDistance = distanceSetting
-	
+
 	TriggerEvent("test:setCSharpVoipLevel", distanceSetting)
 end)
 
