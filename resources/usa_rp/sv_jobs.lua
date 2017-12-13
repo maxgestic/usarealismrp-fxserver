@@ -40,7 +40,7 @@ AddEventHandler("usa_rp:sellItem", function(job)
                 for i = 1, #inventory do
                     local item = inventory[i]
                     if item.name == "Meth" then
-                        local reward = 700
+                        local reward = 500
                         local user_money = user.getActiveCharacterData("money")
                         user.setActiveCharacterData("money", user_money + reward)
                         if item.quantity > 1 then
@@ -222,15 +222,16 @@ AddEventHandler("methJob:checkUserMoney", function(amount)
         if hasItem("Suspicious Chemicals", inventory, MAX_CHEMICALS) then
             TriggerClientEvent("usa_rp:notify", userSource, "You can't carry more than " .. MAX_CHEMICALS .. " Suspicious Chemicals!")
             return
-        end
-        -- money check
-        if userMoney >= amount then
-            -- continue with transaction
-            TriggerClientEvent("methJob:getSupplies", userSource)
-            user.setActiveCharacterData("money", userMoney - amount)
-        elseif userMoney < amount then
-            -- not enough funds to continue
-            TriggerClientEvent("usa_rp:notify", userSource, "Come back when you have ~y~$500~w~ to get the supplies!")
+        else
+            -- money check
+            if userMoney >= amount then
+                -- continue with transaction
+                TriggerClientEvent("methJob:getSupplies", userSource)
+                user.setActiveCharacterData("money", userMoney - amount)
+            elseif userMoney < amount then
+                -- not enough funds to continue
+                TriggerClientEvent("usa_rp:notify", userSource, "Come back when you have ~y~$500~w~ to get the supplies!")
+            end
         end
     end)
 end)
