@@ -4,6 +4,9 @@
 --# Twitter - twitter.com/itskoil
 --# Contact - koiltwitch@gmail.com
 --# You can modify, do what you wish with it just dont claim it as your own. (not that its worthy)
+--# modifications by: minipunch
+
+local amount = 400
 
 local golfhole = 0
 local golfstrokes = 0
@@ -31,7 +34,9 @@ local mygolfball = 0
 
 RegisterNetEvent('beginGolf')
 AddEventHandler('beginGolf', function()
+	spawnCart()
 	startGolf()
+	TriggerEvent("customNotification","Press E to swing, A-D to rotate, Y to swap club.")
 	Citizen.Trace("1")
 end)
 
@@ -59,7 +64,7 @@ Citizen.CreateThread(function()
 			if golfplaying then
 				DisplayHelpText("Press ~g~~INPUT_CONTEXT~~s~ to end golf.")
 			else
-				DisplayHelpText("Press ~g~~INPUT_CONTEXT~~s~ to start golf ($100).")
+				DisplayHelpText("Press ~g~~INPUT_CONTEXT~~s~ to start golf ($" .. amount .. ").")
 			end
 			if (IsControlJustReleased(1, 38)) then
 
@@ -68,9 +73,13 @@ Citizen.CreateThread(function()
 				else
 					Citizen.Trace("a1")
 
+					print("calling usa:checkPlayerMoney for golf!!")
+					TriggerServerEvent("usa:checkPlayerMoney", "golf", amount, "beginGolf", false, true)
+					--[[
 					spawnCart()
 					startGolf() -- If you plan to have it cost money, you need to remove this and only call it when they paid
 					TriggerEvent("customNotification","Press E to swing, A-D to rotate, Y to swap club.")
+					--]]
 				end
 			end
 			--if (IsControlJustPressed(1, 38) and golfplaying) then
@@ -839,4 +848,3 @@ RegisterNetEvent('attachItem')
 AddEventHandler('attachItem', function(item)
 	TriggerEvent("attachProp",attachPropList[item]["model"], attachPropList[item]["bone"], attachPropList[item]["x"], attachPropList[item]["y"], attachPropList[item]["z"], attachPropList[item]["xR"], attachPropList[item]["yR"], attachPropList[item]["zR"])
 end)
-

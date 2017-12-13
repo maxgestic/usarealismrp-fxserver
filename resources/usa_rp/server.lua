@@ -91,3 +91,24 @@ end)
 TriggerEvent('es:addCommand', 'rollw', function(source, args, user)
 	TriggerClientEvent("RollWindow", source)
 end)
+
+-- U T I L I T Y  F U N C T I O N S
+RegisterServerEvent("usa:checkPlayerMoney")
+AddEventHandler("usa:checkPlayerMoney", function(activity, amount, callbackEventName, isServerEvent, takeMoney)
+    local userSource = tonumber(source)
+    TriggerEvent("es:getPlayerFromId", userSource, function(user)
+        local user_money = user.getActiveCharacterData("money")
+        if user_money >= amount then
+            if takeMoney then
+                user.setActiveCharacterData("money", user_money - amount)
+            end
+            if isServerEvent then
+                TriggerEvent(callbackEventName)
+            else
+                TriggerClientEvent(callbackEventName, userSource)
+            end
+        else
+            TriggerClientEvent("usa:notify", userSource, "Sorry, you don't have enough money to " .. activity .. "!")
+        end
+    end)
+end)
