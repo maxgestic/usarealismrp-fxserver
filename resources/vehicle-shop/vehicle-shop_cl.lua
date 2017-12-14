@@ -49,7 +49,6 @@ end)
 
 RegisterNetEvent("mini:insufficientFunds")
 AddEventHandler("mini:insufficientFunds", function(price, purchaseType)
-
 	if purchaseType == "vehicle" then
 		TriggerEvent("chatMessage", "Dealer", { 255,99,71 }, "^0You don't have enough money to afford that vehicle! Sorry!")
 	end
@@ -144,10 +143,6 @@ function muscleMenu()
 	Menu.addButton("Declasse Vigero ($12,500)","buyVehicle","-825837129:12500:Declasse Vigero")
 	Menu.addButton("Vapid Dominator ($19,400)","buyVehicle","80636076:19400:Vapid Dominator")
 	Menu.addButton("Bravado Gauntlet ($27,400)","buyVehicle","-1800170043:27400:Bravado Gauntlet")
-	Menu.addButton("Voodoo ($30,000)","buyVehicle","2006667053:30000:Voodoo")
-	Menu.addButton("Tampa ($30,000)","buyVehicle","972671128:30000:Tampa")
-	Menu.addButton("Stalion ($30,000)","buyVehicle","1923400478:30000:Stalion")
-	Menu.addButton("Slam Van ($40,000)","buyVehicle","1119641113:40000:Slam Van")
 
 end
 
@@ -160,7 +155,7 @@ function trucksMenu()
 	--Menu.addButton("Bravado Bison ($27,110)","buyVehicle","16948145:27110:Bravado Bison")
 	Menu.addButton("Vapid Sandking XL ($35,000)","buyVehicle","-1189015600:35000:Vapid Sandking XL")
 	Menu.addButton("Vapid Contender ($40,500)","buyVehicle","683047626:40500:Vapid Contender")
-	Menu.addButton("Monster Truck ($10,000,000)","buyVehicle","-845961253:10000000:Monster Truck")
+	Menu.addButton("Monster Truck ($20,000,000)","buyVehicle","683047626:20000000:Monster Truck")
 end
 
 function compactMenu()
@@ -358,6 +353,8 @@ end
 
 local playerNotified = false
 
+--[[
+
 Citizen.CreateThread(function()
 
 	Citizen.Wait(5000) -- wait 5 seconds to avoid chat message showing up on first load
@@ -390,3 +387,171 @@ Citizen.CreateThread(function()
 
 	end
 end)
+
+--]]
+
+-- MENU CODE
+RegisterNetEvent("vehShop-GUI:Title")
+AddEventHandler("vehShop-GUI:Title", function(title)
+	Menu.Title(title)
+end)
+
+RegisterNetEvent("vehShop-GUI:Option")
+AddEventHandler("vehShop-GUI:Option", function(option, cb)
+print("setting up option button: " .. option)
+	cb(Menu.Option(option))
+end)
+
+RegisterNetEvent("vehShop-GUI:Bool")
+AddEventHandler("vehShop-GUI:Bool", function(option, bool, cb)
+	Menu.Bool(option, bool, function(data)
+		cb(data)
+	end)
+end)
+
+RegisterNetEvent("vehShop-GUI:Int")
+AddEventHandler("vehShop-GUI:Int", function(option, int, min, max, cb)
+	Menu.Int(option, int, min, max, function(data)
+		cb(data)
+	end)
+end)
+
+RegisterNetEvent("vehShop-GUI:StringArray")
+AddEventHandler("vehShop-GUI:StringArray", function(option, array, position, cb)
+	Menu.StringArray(option, array, position, function(data)
+		cb(data)
+	end)
+end)
+
+RegisterNetEvent("vehShop-GUI:Update")
+AddEventHandler("vehShop-GUI:Update", function()
+	Menu.updateSelection()
+end)
+
+local menu = {}
+
+Citizen.CreateThread(function()
+	while true do
+		Wait(1)
+		
+		--print("drawing marker!")
+		DrawMarker(1, markerX, markerY, markerZ, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
+		
+		if menu.page then
+			print("menu.page = " .. menu.page)
+		end
+		
+		if getPlayerDistanceFromShop(markerX, markerY, markerZ) < 6 then
+			if IsControlJustPressed(1,38) and not menu.open then
+				menu.open = true
+				menu.page = "home"
+			end
+		end
+
+		if menu.open == true then
+
+			TriggerEvent("vehShop-GUI:Title", menu.page)
+
+			if menu.page == "home" then
+			
+				print("setting up home buttons!")
+				
+
+				TriggerEvent("vehShop-GUI:Option", "Buy", function(cb) -- todo: complete ability to purchase selected vehicle
+					print("inside of vehShop-GUI:option: 'Buy'")
+					if(cb) then
+						menu.page = "buy"
+					end
+				end)
+				
+
+				TriggerEvent("vehShop-GUI:Option", "Sell", function(cb) -- todo: complete this menu
+					print("inside of vehShop-GUI:option: 'Sell'")
+					if(cb) then
+						menu.page = "sell"
+					end
+				end)
+
+				TriggerEvent("vehShop-GUI:Option", "Insurance", function(cb) -- todo: complete this menu
+					if(cb) then
+						menu.page = "insurance"
+					end
+				end)
+
+				TriggerEvent("vehShop-GUI:Option", "Close", function(cb)
+					if cb then
+						menu.open = false
+					end
+				end)
+				
+				
+
+			elseif menu.page == "buy" then
+			
+				print("menu.page: 'buy'!!!")
+
+				for k,v in pairs(vehicleShopItems["vehicles"]) do
+
+					print("k = " .. k)
+					TriggerEvent("vehShop-GUI:Option", k, function(cb)
+						if cb then
+							menu.page = k
+							cb(true)
+						end
+					end)
+
+				end
+
+				TriggerEvent("vehShop-GUI:Option", "Back", function(cb)
+					if cb then
+						menu.page = "home"
+						cb(true)
+					end
+				end)
+
+			else
+			
+				print("in else clause!")
+
+				for k,v in pairs(vehicleShopItems["vehicles"]) do
+
+					if menu.page == k then
+
+						-- todo: do all the vehicles fit on one page?
+						for i = 1, #vehicleShopItems["vehicles"][k] do
+							local vehicle = vehicleShopItems["vehicles"][k][i]
+							print("adding vehicle: " .. vehicle.make .. " " .. vehicle.model .. " to menu")
+							TriggerEvent("vehShop-GUI:Option", "($" .. vehicle.price .. ") " .. vehicle.make .. " " .. vehicle.model, function(cb)
+								print("player wants to purchase vehicle: " .. vehicle.make .. " " .. vehicle.model)
+								-- todo: complete purchase ability here
+								cb(true)
+							end)
+						end
+
+						TriggerEvent("vehShop-GUI:Option", "Back", function(cb)
+							menu.page = "buy"
+							cb(true)
+						end)
+
+					end
+
+				end
+
+			end
+			
+			TriggerEvent("vehShop-GUI:Update")
+
+		end
+		
+
+	end
+
+end)
+-- END MENU CODE
+--[[
+TriggerEvent("vehShop-GUI:Option", "(~g~$"..vehicle.price.."~w~) "..vehicle.make .. " " .. vehicle.model, function(cb)
+if(cb) then
+TriggerServerEvent("mini:checkVehicleMoney", vehicle)
+end
+end)
+--]]
