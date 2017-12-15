@@ -130,14 +130,25 @@ TriggerEvent('es:addCommand', 'seize', function(source, args, user)
 				print(name .. " is seizing contraband!")
 				TriggerEvent('es:getPlayerFromId', targetId, function(target)
 					local targetInventory = target.getActiveCharacterData("inventory")
+					local targetWeapons = target.getActiveCharacterData("weapons")
 					for i = 1, #targetInventory do
+						--print("checking item: " .. targetInventory[i].name)
 						if targetInventory[i].legality == "illegal" then
 							TriggerClientEvent("usa:notify", source, "~y~Seized: ~w~(x".. targetInventory[i].quantity ..") " .. targetInventory[i].name)
 							TriggerClientEvent("usa:notify", targetId, "~y~Seized: ~w~(x".. targetInventory[i].quantity ..") " .. targetInventory[i].name)
 							table.remove(targetInventory, i)
 						end
 					end
+					for j = 1, #targetWeapons do
+						--print("checking item: " .. targetWeapons[j].name)
+						if targetWeapons[j].legality == "illegal" then
+							TriggerClientEvent("usa:notify", source, "~y~Seized: ~w~" .. targetWeapons[j].name)
+							TriggerClientEvent("usa:notify", targetId, "~y~Seized: ~w~" .. targetWeapons[j].name)
+							table.remove(targetWeapons, j)
+						end
+					end
 					target.setActiveCharacterData("inventory", targetInventory)
+					target.setActiveCharacterData("weapons", targetWeapons)
 				end)
 			elseif arg == "cash" then
 				print(name .. " is seizing a player's cash!")
