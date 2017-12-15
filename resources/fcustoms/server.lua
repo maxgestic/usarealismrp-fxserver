@@ -77,7 +77,7 @@ AddEventHandler("customs:check2",function(title, data, cost, value, back)
 	local source = tonumber(source)
     TriggerEvent('es:getPlayerFromId', source, function(user)
 		local user_money = user.getActiveCharacterData("money")
-	    if (tonumber(user.getMoney()) >= tonumber(cost)) then
+	    if (tonumber(user_money) >= tonumber(cost)) then
 	    	user.setActiveCharacterData("money", user_money - cost)
 	    	TriggerClientEvent("customs:receive2", source, title, data, value, back)
 	    else
