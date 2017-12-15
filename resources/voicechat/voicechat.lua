@@ -41,6 +41,7 @@ end
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(1)
+		if GetLastInputMethod(2) then -- check for keyboard use only
 			if IsControlJustPressed(1,voip_toggle_key) then
 				print("distanceName is: " .. distanceName)
 				if distanceName == "whisper" then
@@ -51,5 +52,6 @@ Citizen.CreateThread(function()
 					TriggerEvent("voip", "whisper")
 				end
 			end
+		end
 	end
 end)
