@@ -4,7 +4,7 @@ local m = {} -- <<< Don't touch this!
 -- Delay in minutes between messages
 m.delay = 45
 
--- Prefix appears in front of each message. 
+-- Prefix appears in front of each message.
 -- Suffix appears on the end of each message.
 -- Leave a prefix/suffix empty ( '' ) to disable them.
 m.prefix = '^4[USARRP] '
@@ -12,16 +12,16 @@ m.suffix = ''
 
 -- You can make as many messages as you want.
 -- You can use ^0-^9 in your messages to change text color.
-m.messages = {   
-    "^0Interested in joining the Blaine County Sheriff's Office? Apply today at https://usarrp.enjin.com!",
-	"^0Interested in becoming a paramedic? Apply today at https://usarrp.enjin.com!",
-	"^0Want to skip ahead in the queue? Confident in your RP? Apply to get whitelisted at https://usarrp.enjin.com.",
-	"^0You must drive your vehicle as you would in real life!"
+m.messages = {
+    "^0Interested in joining the Blaine County Sheriff's Office? Apply today at https://www.usarrp.net!",
+	"^0Interested in becoming a paramedic? Apply today at https://www.usarrp.net!",
+	"^0Want to skip ahead in the queue? Confident in your RP? Apply to get whitelisted at https://www.usarrp.net.",
+	"^0You must drive your vehicle as you would in real life! You can do /rules for more info."
 }
 
 -- Player identifiers on this list will not receive any messages.
 -- Simply remove all identifiers if you don't want an ignore list.
-m.ignorelist = { 
+m.ignorelist = {
     'ip:127.0.1.5',
     'steam:123456789123456',
     'license:1654687313215747944131321',
@@ -76,7 +76,7 @@ Citizen.CreateThread(function()
                 end
                 Citizen.Wait(timeout)
             end
-            
+
             Citizen.Wait(0)
         end
     else
