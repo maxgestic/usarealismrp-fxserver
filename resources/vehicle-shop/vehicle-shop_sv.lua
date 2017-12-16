@@ -63,9 +63,8 @@ function alreadyHasAnyVehicle(source)
 end
 
 RegisterServerEvent("vehShop:buyInsurance")
-AddEventHandler("vehShop:buyInsurance", function()
-	local userSource = tonumber(source)
-	print("player " .. GetPlayerName(source) .. " is buying auto insurance!")
+AddEventHandler("vehShop:buyInsurance", function(userSource)
+	print("user source = " .. userSource)
 	local INSURANCE_COVERAGE_MONTHLY_COST = 7500
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local insurance = user.getActiveCharacterData("insurance")
@@ -105,14 +104,13 @@ AddEventHandler("vehShop:checkPlayerInsurance", function()
 			if playerHasValidAutoInsurance(playerInsurance) then
 				TriggerClientEvent("chatMessage", userSource, "T. ENDS INSURANCE", {255, 78, 0}, "You are already insured!")
 			else
-				TriggerClientEvent("chatMessage", userSource, "T. ENDS INSURANCE", {255, 78, 0}, "Your auto insurance coverage has ~r~expired~w~! Would you like to renew it?")
-				user.setActiveCharacterData("insurance", {})
-				TriggerClientEvent("vehShop:insuranceOptionMenu", userSource)
+				print("renewing auto insurance!")
+				TriggerClientEvent("chatMessage", userSource, "T. ENDS INSURANCE", {255, 78, 0}, "Your auto insurance coverage was ~r~expired~w~! Renewing...")
+				TriggerEvent("vehShop:buyInsurance", userSource)
 			end
 		else
 			print("no auto insurance found!")
-			user.setActiveCharacterData("insurance", {})
-			TriggerClientEvent("vehShop:insuranceOptionMenu", userSource)
+			TriggerEvent("vehShop:buyInsurance", userSource)
 		end
 	end)
 end)

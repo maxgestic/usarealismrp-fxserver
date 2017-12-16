@@ -325,10 +325,9 @@ end
 
 -- only displays when player has no insurance
 function insuranceMenu()
-	MenuTitle = "Auto Insurance"
-	ClearMenu()
-	Menu.addButton("Info","displayInsuranceInfo", nil)
-	Menu.addButton("($7,500) Buy","buyInsurance", nil)
+	menu.page = "insurance"
+	--Menu.addButton("Info","displayInsuranceInfo", nil)
+	--Menu.addButton("($7,500) Buy","buyInsurance", nil)
 end
 
 function checkPlayerInsurance()
@@ -462,7 +461,6 @@ Citizen.CreateThread(function()
 						if cb then
 							menu.page = k
 							--print("setting menu.page = " .. k)
-							--cb(true)
 						end
 					end)
 
@@ -471,7 +469,6 @@ Citizen.CreateThread(function()
 				TriggerEvent("vehShop-GUI:Option", "Back", function(cb)
 					if cb then
 						menu.page = "home"
-						--cb(true)
 					end
 				end)
 
@@ -493,6 +490,28 @@ Citizen.CreateThread(function()
 						end)
 					end
 				end
+
+				TriggerEvent("vehShop-GUI:Option", "Back", function(cb)
+					if cb then
+						menu.page = "home"
+					end
+				end)
+
+			elseif menu.page == "insurance" then
+
+				TriggerEvent("vehShop-GUI:Option", "Info", function(cb)
+					if cb then
+						TriggerEvent("chatMessage", "T. ENDS INSURANCE", { 255, 78, 0 }, "T. End's insurance will put your mind at ease by making sure you'll always have a ride even if yours gets stolen, lost, or totaled.")
+					end
+				end)
+
+				TriggerEvent("vehShop-GUI:Option", "($7,500) Purchase", function(cb)
+					if cb then
+						menu.open = false
+						menu.page = "home"
+						TriggerServerEvent("vehShop:checkPlayerInsurance")
+					end
+				end)
 
 				TriggerEvent("vehShop-GUI:Option", "Back", function(cb)
 					if cb then
@@ -527,7 +546,6 @@ Citizen.CreateThread(function()
 							if cb then
 								menu.page = "buy"
 							end
-							--cb(true)
 						end)
 
 					end
@@ -544,14 +562,6 @@ Citizen.CreateThread(function()
 	end
 
 end)
--- END MENU CODE
---[[
-TriggerEvent("vehShop-GUI:Option", "(~g~$"..vehicle.price.."~w~) "..vehicle.make .. " " .. vehicle.model, function(cb)
-if(cb) then
-TriggerServerEvent("mini:checkVehicleMoney", vehicle)
-end
-end)
---]]
 
 local vehicleShopItems = {
     ["vehicles"] = {
