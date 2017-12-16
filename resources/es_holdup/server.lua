@@ -29,7 +29,7 @@ local stores = {
 		nameofstore = "O'Sheas Barber Shop (Alhambra Dr. & Niland Ave.)",
 		lastrobbed = 0
 	},
-	["sandyshores_twentyfoursever"] = {
+	["sandyshores_twentyfourseven"] = {
 		position = { ['x'] = 1959.772, ['y'] = 3740.07, ['z'] = 32.344 },
 		reward = 5000,
 		nameofstore = "24/7 (Sandy Shores)",
@@ -41,6 +41,12 @@ local stores = {
 		nameofstore = "Yellow Jack. (Sandy Shores)",
 		lastrobbed = 0
 	},
+	["harmony_twentyfourseven"] = {
+		position = { ['x'] = 549.563, ['y'] = 2669.187, ['z'] = 42.157 },
+		reward = 2500,
+		nameofstore = "24/7 (Route 68, Harmony)",
+		lastrobbed = 0
+	}
 	--[[
 	["littleseoul_twentyfourseven"] = {
 		position = { ['x'] = -709.17022705078, ['y'] = -904.21722412109, ['z'] = 19.215591430664 },
