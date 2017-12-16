@@ -136,7 +136,6 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle)
 				if license.status == "valid" then
 					hash = vehicle.hash
 					price = vehicle.price
-					vehicleName = vehicle.make .. " " .. vehicle.model
 		            if not alreadyHasVehicle(userSource, vehicleName) then
 		    			if tonumber(price) <= user.getActiveCharacterData("money") then
 							plate = tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9))
@@ -148,7 +147,8 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle)
 									user.setActiveCharacterData("money", user_money - tonumber(price))
 									local vehicle = {
 										owner = GetPlayerName(userSource),
-										model = vehicleName,
+										make = vehicle.make,
+										model = vehicle.model,
 										hash = hash,
 										plate = plate,
 										stored = false,
@@ -192,6 +192,14 @@ AddEventHandler("vehShop:loadVehiclesToSell", function()
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
 		local vehicles = user.getActiveCharacterData("vehicles")
+		for i = 1, #vehicles do
+			local vehicle = vehicles[i]
+			if vehicle then
+				local sellPrice = round(vehicle.price * .5,0)
+				vehicles[i].sellPrice = sellPrice
+			end
+		end
+		print("vehicles loaded! # = " .. #vehicles)
 		TriggerClientEvent("vehShop:displayVehiclesToSell", userSource, vehicles)
 	end)
 end)

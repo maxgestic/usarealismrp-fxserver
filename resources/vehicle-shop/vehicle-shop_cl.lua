@@ -3,6 +3,8 @@ local markerX, markerY, markerZ = 120.924,6624.605,31.000 -- paleto
 --local spawnX, spawnY, spawnZ = -48.884, -1113.75, 26.4358 -- (los santos)
 local spawnX, spawnY, spawnZ = 131.04, 6625.39, 31.71 -- (paleto)
 
+local menu = {}
+
 RegisterNetEvent("vehShop:spawnPlayersVehicle")
 AddEventHandler("vehShop:spawnPlayersVehicle", function(hash, plate)
 	Citizen.Trace("spawning players vehicle...")
@@ -68,17 +70,17 @@ end)
 
 RegisterNetEvent("vehShop:displayVehiclesToSell")
 AddEventHandler("vehShop:displayVehiclesToSell", function(vehicles)
-	ClearMenu()
-	if #vehicles > 0 then
-		for i = 1, #vehicles do
-			local vehicle = vehicles[i]
-			Menu.addButton(vehicle.model,"sellVehicle", vehicle)
+	print("vehicles loaded!")
+	if vehicles then
+		if #vehicles > 0 then
+			print("#vehicles " .. #vehicles)
+			menu.vehicles = vehicles
+		else
+			SetNotificationTextEntry("STRING")
+			AddTextComponentString("You do not own any vehicles to sell!")
+			DrawNotification(0,1)
+			menu.page = "home"
 		end
-	else
-		Menu.hidden = true
-		SetNotificationTextEntry("STRING")
-		AddTextComponentString("You do not own any vehicles to sell!")
-		DrawNotification(0,1)
 	end
 end)
 
@@ -351,45 +353,6 @@ function getPlayerDistanceFromShop(shopX,shopY,shopZ)
 	return GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,shopX,shopY,shopZ,false)
 end
 
-local playerNotified = false
-
---[[
-
-Citizen.CreateThread(function()
-
-	Citizen.Wait(5000) -- wait 5 seconds to avoid chat message showing up on first load
-
-	while true do
-
-		Citizen.Wait(0)
-		DrawMarker(1, markerX, markerY, markerZ, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
-		if getPlayerDistanceFromShop(markerX,markerY,markerZ) < 8 and not playerNotified then
-			--TriggerEvent("chatMessage", "SYSTEM", { 0, 141, 155 }, "^3Press E to buy a vehicle")
-			playerNotified = true
-		end
-		if IsControlJustPressed(1,Keys["E"]) then
-
-			if getPlayerDistanceFromShop(markerX,markerY,markerZ) < 8 then -- car shop
-
-				mainMenu()                -- Menu to draw
-				Menu.hidden = not Menu.hidden    -- Hide/Show the menu
-
-			end
-
-		elseif getPlayerDistanceFromShop(markerX,markerY,markerZ) > 8 then
-
-			playerNotified = false
-			Menu.hidden = true
-
-		end
-
-		Menu.renderGUI()     -- Draw menu on each tick if Menu.hidden = false
-
-	end
-end)
-
---]]
-
 -- MENU CODE
 RegisterNetEvent("vehShop-GUI:Title")
 AddEventHandler("vehShop-GUI:Title", function(title)
@@ -398,7 +361,7 @@ end)
 
 RegisterNetEvent("vehShop-GUI:Option")
 AddEventHandler("vehShop-GUI:Option", function(option, cb)
-print("setting up option button: " .. option)
+	--print("setting up option button: " .. option)
 	cb(Menu.Option(option))
 end)
 
@@ -428,8 +391,6 @@ AddEventHandler("vehShop-GUI:Update", function()
 	Menu.updateSelection()
 end)
 
-local menu = {}
-
 Citizen.CreateThread(function()
 	while true do
 		Wait(1)
@@ -438,13 +399,14 @@ Citizen.CreateThread(function()
 		DrawMarker(1, markerX, markerY, markerZ, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
 
 		if menu.page then
-			print("menu.page = " .. menu.page)
+		--	print("menu.page = " .. menu.page)
 		end
 
 		if getPlayerDistanceFromShop(markerX, markerY, markerZ) < 6 then
 			if IsControlJustPressed(1,38) and not menu.open then
 				menu.open = true
 				menu.page = "home"
+				menu.vehicles = nil
 			end
 		end
 
@@ -454,11 +416,11 @@ Citizen.CreateThread(function()
 
 			if menu.page == "home" then
 
-				print("setting up home buttons!")
+			--	print("setting up home buttons!")
 
 
 				TriggerEvent("vehShop-GUI:Option", "Buy", function(cb) -- todo: complete ability to purchase selected vehicle
-					print("inside of vehShop-GUI:option: 'Buy'")
+					--print("inside of vehShop-GUI:option: 'Buy'")
 					if(cb) then
 						menu.page = "buy"
 					end
@@ -466,9 +428,10 @@ Citizen.CreateThread(function()
 
 
 				TriggerEvent("vehShop-GUI:Option", "Sell", function(cb) -- todo: complete this menu
-					print("inside of vehShop-GUI:option: 'Sell'")
+					--print("inside of vehShop-GUI:option: 'Sell'")
 					if(cb) then
 						menu.page = "sell"
+						TriggerServerEvent("vehShop:loadVehiclesToSell")
 					end
 				end)
 
@@ -488,17 +451,17 @@ Citizen.CreateThread(function()
 
 			elseif menu.page == "buy" then
 
-				print("menu.page: 'buy'!!!")
+			--	print("menu.page: 'buy'!!!")
 
-				print("type of vehicle shop items: " .. type(vehicleShopItems))
+			--	print("type of vehicle shop items: " .. type(vehicleShopItems))
 
 				for k, v in pairs(vehicleShopItems["vehicles"]) do
 
-					print("adding page button = " .. k)
+				--	print("adding page button = " .. k)
 					TriggerEvent("vehShop-GUI:Option", k, function(cb)
 						if cb then
 							menu.page = k
-							print("setting menu.page = " .. k)
+							--print("setting menu.page = " .. k)
 							--cb(true)
 						end
 					end)
@@ -512,9 +475,34 @@ Citizen.CreateThread(function()
 					end
 				end)
 
+			elseif menu.page == "sell" then
+
+				-- todo: complete this section
+				if menu.vehicles then
+					for i = 1, #menu.vehicles do
+						local vehicle = menu.vehicles[i]
+						--print("adding vehicle: " .. vehicle.make .. " " .. vehicle.model .. " to menu")
+						local vehName = vehicle.make .. " " .. vehicle.model
+						TriggerEvent("vehShop-GUI:Option", "+ ($" .. vehicle.sellPrice .. ") " .. vehName, function(cb)
+							if cb then
+								TriggerEvent("usa:notify", "~y~SOLD:~w~ " .. vehName .. "\n~y~PRICE: ~g~$" .. vehicle.sellPrice)
+								table.remove(menu.vehicles, i)
+								TriggerServerEvent("vehShop:sellVehicle", vehicle)
+								menu.page = "home"
+							end
+						end)
+					end
+				end
+
+				TriggerEvent("vehShop-GUI:Option", "Back", function(cb)
+					if cb then
+						menu.page = "home"
+					end
+				end)
+
 			else
 
-				print("in else clause!")
+				--print("in else clause!")
 
 				for k,v in pairs(vehicleShopItems["vehicles"]) do
 
@@ -523,10 +511,10 @@ Citizen.CreateThread(function()
 						-- todo: do all the vehicles fit on one page?
 						for i = 1, #vehicleShopItems["vehicles"][k] do
 							local vehicle = vehicleShopItems["vehicles"][k][i]
-							print("adding vehicle: " .. vehicle.make .. " " .. vehicle.model .. " to menu")
+							--print("adding vehicle: " .. vehicle.make .. " " .. vehicle.model .. " to menu")
 							TriggerEvent("vehShop-GUI:Option", "($" .. vehicle.price .. ") " .. vehicle.make .. " " .. vehicle.model, function(cb)
 								if cb then
-									print("player wants to purchase vehicle: " .. vehicle.make .. " " .. vehicle.model)
+								--	print("player wants to purchase vehicle: " .. vehicle.make .. " " .. vehicle.model)
 									-- todo: complete purchase ability here
 									TriggerServerEvent("mini:checkVehicleMoney", vehicle)
 									menu.open = false
@@ -568,7 +556,7 @@ end)
 local vehicleShopItems = {
     ["vehicles"] = {
         ["sedans"] = {
-            {make = "albany", model = "Washington", price = 8500, hash = 1777363799},
+            {make = "Albany", model = "Washington", price = 8500, hash = 1777363799},
             {make = "Ubermacht", model = "Washington", price = 8500, hash = 1777363799}
         }
     }
