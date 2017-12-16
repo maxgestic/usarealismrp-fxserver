@@ -118,11 +118,10 @@ AddEventHandler("vehShop:checkPlayerInsurance", function()
 end)
 
 RegisterServerEvent("mini:checkVehicleMoney")
-AddEventHandler("mini:checkVehicleMoney", function(params)
+AddEventHandler("mini:checkVehicleMoney", function(vehicle)
 	local playerIdentifier = getPlayerIdentifierEasyMode(source)
 	local userSource = tonumber(source)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
-		local playerIdentifier = getPlayerIdentifierEasyMode(userSource)
 		local allLicenses = user.getActiveCharacterData("licenses")
 		local license = nil
 		local vehicles = user.getActiveCharacterData("vehicles")
@@ -135,10 +134,9 @@ AddEventHandler("mini:checkVehicleMoney", function(params)
 			end
 			if license ~= nil then
 				if license.status == "valid" then
-					local splitStr = stringSplit(params,":")
-					hash = splitStr[1]
-					price = splitStr[2]
-					vehicleName = splitStr[3]
+					hash = vehicle.hash
+					price = vehicle.price
+					vehicleName = vehicle.make .. " " .. vehicle.model
 		            if not alreadyHasVehicle(userSource, vehicleName) then
 		    			if tonumber(price) <= user.getActiveCharacterData("money") then
 							plate = tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9))
@@ -157,7 +155,7 @@ AddEventHandler("mini:checkVehicleMoney", function(params)
 										price = price
 									}
 									--  prevent gui menu from breaking i believe (i think 16 is max # of menu items possible)
-									print("#vehicles: " .. #vehicles)
+									--print("#vehicles: " .. #vehicles)
 									print("buying vehicle")
 									table.insert(vehicles, vehicle)
 									user.setActiveCharacterData("vehicles", vehicles)

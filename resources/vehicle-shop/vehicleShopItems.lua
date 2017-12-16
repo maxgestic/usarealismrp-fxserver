@@ -2,7 +2,7 @@ vehicleShopItems = {
     ["vehicles"] = {
         ["sedans"] = {
             {make = "albany", model = "Washington", price = 8500, hash = 1777363799},
-            {make = "Ubermacht", model = "Washington", price = 8500, hash = 1777363799},
+            {make = "Ubermacht", model = "Washington", price = 8500, hash = 1777363799}
         }
     }
 }

@@ -433,14 +433,14 @@ local menu = {}
 Citizen.CreateThread(function()
 	while true do
 		Wait(1)
-		
+
 		--print("drawing marker!")
 		DrawMarker(1, markerX, markerY, markerZ, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
-		
+
 		if menu.page then
 			print("menu.page = " .. menu.page)
 		end
-		
+
 		if getPlayerDistanceFromShop(markerX, markerY, markerZ) < 6 then
 			if IsControlJustPressed(1,38) and not menu.open then
 				menu.open = true
@@ -453,9 +453,9 @@ Citizen.CreateThread(function()
 			TriggerEvent("vehShop-GUI:Title", menu.page)
 
 			if menu.page == "home" then
-			
+
 				print("setting up home buttons!")
-				
+
 
 				TriggerEvent("vehShop-GUI:Option", "Buy", function(cb) -- todo: complete ability to purchase selected vehicle
 					print("inside of vehShop-GUI:option: 'Buy'")
@@ -463,7 +463,7 @@ Citizen.CreateThread(function()
 						menu.page = "buy"
 					end
 				end)
-				
+
 
 				TriggerEvent("vehShop-GUI:Option", "Sell", function(cb) -- todo: complete this menu
 					print("inside of vehShop-GUI:option: 'Sell'")
@@ -483,20 +483,23 @@ Citizen.CreateThread(function()
 						menu.open = false
 					end
 				end)
-				
-				
+
+
 
 			elseif menu.page == "buy" then
-			
+
 				print("menu.page: 'buy'!!!")
 
-				for k,v in pairs(vehicleShopItems["vehicles"]) do
+				print("type of vehicle shop items: " .. type(vehicleShopItems))
 
-					print("k = " .. k)
+				for k, v in pairs(vehicleShopItems["vehicles"]) do
+
+					print("adding page button = " .. k)
 					TriggerEvent("vehShop-GUI:Option", k, function(cb)
 						if cb then
 							menu.page = k
-							cb(true)
+							print("setting menu.page = " .. k)
+							--cb(true)
 						end
 					end)
 
@@ -505,12 +508,12 @@ Citizen.CreateThread(function()
 				TriggerEvent("vehShop-GUI:Option", "Back", function(cb)
 					if cb then
 						menu.page = "home"
-						cb(true)
+						--cb(true)
 					end
 				end)
 
 			else
-			
+
 				print("in else clause!")
 
 				for k,v in pairs(vehicleShopItems["vehicles"]) do
@@ -522,15 +525,21 @@ Citizen.CreateThread(function()
 							local vehicle = vehicleShopItems["vehicles"][k][i]
 							print("adding vehicle: " .. vehicle.make .. " " .. vehicle.model .. " to menu")
 							TriggerEvent("vehShop-GUI:Option", "($" .. vehicle.price .. ") " .. vehicle.make .. " " .. vehicle.model, function(cb)
-								print("player wants to purchase vehicle: " .. vehicle.make .. " " .. vehicle.model)
-								-- todo: complete purchase ability here
-								cb(true)
+								if cb then
+									print("player wants to purchase vehicle: " .. vehicle.make .. " " .. vehicle.model)
+									-- todo: complete purchase ability here
+									TriggerServerEvent("mini:checkVehicleMoney", vehicle)
+									menu.open = false
+									menu.page = "home"
+								end
 							end)
 						end
 
 						TriggerEvent("vehShop-GUI:Option", "Back", function(cb)
-							menu.page = "buy"
-							cb(true)
+							if cb then
+								menu.page = "buy"
+							end
+							--cb(true)
 						end)
 
 					end
@@ -538,11 +547,11 @@ Citizen.CreateThread(function()
 				end
 
 			end
-			
+
 			TriggerEvent("vehShop-GUI:Update")
 
 		end
-		
+
 
 	end
 
@@ -555,3 +564,12 @@ TriggerServerEvent("mini:checkVehicleMoney", vehicle)
 end
 end)
 --]]
+
+local vehicleShopItems = {
+    ["vehicles"] = {
+        ["sedans"] = {
+            {make = "albany", model = "Washington", price = 8500, hash = 1777363799},
+            {make = "Ubermacht", model = "Washington", price = 8500, hash = 1777363799}
+        }
+    }
+}
