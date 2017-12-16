@@ -28,6 +28,7 @@ local blips = {
 	{ title="DMV", colour=4, id=355, x= -447.845, y = 6013.775, z = 30.716 },
 	{ title="Bubba's Tow Co.", colour=64, id=68, x = -246.733, y = 6238.865, z = 30.49 },
 	{ title="Black Market Dealer", colour = 59, id = 52, x= -2166.786, y = 5197.684, z = 15.880 },
+    --[[
 	{ title="General Store", colour = 24 , id = 52, x=1729.59, y=6415.49, z=34.0 },
 	{ title="General Store", colour = 24 , id = 52, x=81.6779, y=-219.006, z=54.6367 },
 	{ title="General Store", colour = 24 , id = 52, x=373.794, y=326.504, z=103.566	 },
@@ -35,6 +36,26 @@ local blips = {
 	{ title="General Store", colour = 24 , id = 52, x=-1223.69, y=-907.691, z=12.3264 },
 	{ title="General Store", colour = 24 , id = 52, x=25.746, y=-1345.59, z=29.497 },
 	{ title="General Store", colour = 24 , id = 52, x=1960.4197998047, y = 3742.9755859375, z = 31.343738555908 },
+	--]]
+	{ title="General Store", colour = 24 , id = 52, x=1961.061, y=3741.604, z=32.343 },
+    { title="General Store", colour = 24 , id = 52, x=374.586, y=326.037, z=103.566     },
+    { title="General Store", colour = 24 , id = 52, x=1136.534, y=-971.131, z=46.415 },
+    { title="General Store", colour = 24 , id = 52, x=-1224.188, y=-907.065, z=12.326 },
+    { title="General Store", colour = 24 , id = 52, x=26.453, y=-1347.059, z=29.497 },
+    { title="General Store", colour = 24 , id = 52, x=-48.437, y=-1756.889, z=29.421 },
+    { title="General Store", colour = 24 , id = 52, x=-707.712, y=-914.231, z=19.215 },
+    { title="General Store", colour = 24 , id = 52, x=1166.5310, y=2708.920, z=38.157 },
+    { title="General Store", colour = 24 , id = 52, x=1698.458, y=4924.744, z=43.063 },
+    { title="General Store", colour = 24 , id = 52, x=1729.413, y=6414.426, z=35.037 },
+    { title="General Store", colour = 24 , id = 52, x=-3039.294, y=586.014, z=7.908 },
+    { title="General Store", colour = 24 , id = 52, x=1162.799, y=-324.155, z=69.205 },
+    { title="General Store", colour = 24 , id = 52, x=2556.836, y=382.416, z=108.622 },
+    { title="General Store", colour = 24 , id = 52, x=2678.409, y=3280.871, z=55.241 },
+    { title="General Store", colour = 24 , id = 52, x=547.486, y=2670.635, z=42.156 },
+    { title="General Store", colour = 24 , id = 52, x=-1820.852, y=792.453, z=138.119 },
+    { title="General Store", colour = 24 , id = 52, x=-3242.260, y=1001.569, z=12.830 },
+    { title="General Store", colour = 24 , id = 52, x=-2968.126, y=390.579, z=15.043 },
+    { title="General Store", colour = 24 , id = 52, x=-1487.241, y=379.843, z=40.163 },
 	{ title="Police Department", colour = 38 , id = 60, x=451.255, y=-992.41, z=30.6896 }, -- LOS SANTOS
 	{ title="Sheriff's Office", colour = 38 , id = 60, x=1853.2, y=3687.74, z=34.267 }, -- SANDY
 	{ title="Sheriff's Office", colour = 38 , id = 60, x=-447.041, y=6012.97, z=31.7164 }, -- PALETO
