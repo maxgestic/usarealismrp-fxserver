@@ -25,9 +25,9 @@ AddEventHandler('paycheck:welfare', function()
 		end
 
 		-- Give user the dough!!
-        local user_money = user.getActiveCharacterData("money")
+        local user_money = user.getActiveCharacterData("bank")
         if user_money then
-    		user.setActiveCharacterData("money", user_money + paycheckAmount)
+    		user.setActiveCharacterData("bank", user_money + paycheckAmount)
             msg = "You received a "
             if isWelfare then
                 msg = msg .. "welfare "
