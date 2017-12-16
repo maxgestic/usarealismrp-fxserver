@@ -11,7 +11,8 @@ local closingHour = 22
 local cinemaLocations = {
   { ['name'] = "Downtown", ['x'] = 300.788, ['y'] = 200.752, ['z'] = 104.385},
   { ['name'] = "Morningwood", ['x'] = -1423.954, ['y'] = -213.62, ['z'] = 46.5},
-  { ['name'] = "Vinewood",  ['x'] = 302.907, ['y'] = 135.939, ['z'] = 160.946}
+  { ['name'] = "Vinewood",  ['x'] = 302.907, ['y'] = 135.939, ['z'] = 160.946},
+  { ['name'] = "Paleto",  ['x'] = -145.119, ['y'] = 6304.858, ['z'] = 31.560}
 }
 --adds blips for movie theater
 local blipsLoaded = false
@@ -131,6 +132,7 @@ function CreateMovieThread()
     end
   end)
 end
+local entered_theater = {}
 --this is the enter theater stuff
 function IsPlayerInArea()
   playerPed = GetPlayerPed(-1)
@@ -146,6 +148,7 @@ function IsPlayerInArea()
             helpDisplay("Press ~INPUT_CONTEXT~ to watch a movie", 0)
 -- Check if the player is near the cinema and pressed "INPUT_CONTEXT"
 			if IsControlPressed(0, 38) then
+              entered_theater = playerCoords
 			  DoScreenFadeOut(1000)
 			  SetupMovie()
 -- Teleport the Player inside the cinema
@@ -185,7 +188,8 @@ Citizen.CreateThread(function()
 --if player hits "esc" key while in theater they exit
       if IsControlPressed(0, 322) and GetRoomKeyFromEntity(PlayerPedId()) == -1337806789 then
 	DoScreenFadeOut(1000)
-        SetEntityCoords(playerPed, 297.891, 193.296, 104.344, 161.925)
+        --SetEntityCoords(playerPed, 297.891, 193.296, 104.344, 161.925)
+        SetEntityCoords(playerPed, entered_theater.x, entered_theater.y , entered_theater.z, 161.925)
 	Citizen.Wait(30)
 	DoScreenFadeIn(800)
 	FreezeEntityPosition(GetPlayerPed(-1), 0)
