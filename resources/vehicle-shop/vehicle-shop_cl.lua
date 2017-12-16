@@ -56,11 +56,6 @@ AddEventHandler("mini:insufficientFunds", function(price, purchaseType)
 	end
 end)
 
-RegisterNetEvent("vehShop:insuranceOptionMenu")
-AddEventHandler("vehShop:insuranceOptionMenu", function()
-	insuranceMenu()
-end)
-
 RegisterNetEvent("vehShop:notify")
 AddEventHandler("vehShop:notify", function(message)
 	SetNotificationTextEntry("STRING")
@@ -83,268 +78,6 @@ AddEventHandler("vehShop:displayVehiclesToSell", function(vehicles)
 		end
 	end
 end)
-
-function sellVehicle(vehicle)
-	Menu.hidden = true
-	TriggerServerEvent("vehShop:sellVehicle", vehicle)
-end
-
-function buyVehicle(params)
-	TriggerServerEvent("mini:checkVehicleMoney",params)
-	Menu.hidden = true
-end
-
-function suvMenu()
-	MenuTitle = "SUVs"
-	ClearMenu()
-	Menu.addButton("Gallivanter Baller ($28,700)","buyVehicle","142944341:28700:Gallivanter Baller")
-	Menu.addButton("Benefactor Dubsta ($18,000)","buyVehicle","1177543287:18000:Benefactor Dubsta")
-	Menu.addButton("Declasse Granger ($15,000)","buyVehicle","-1775728740:15000:Declasse Granger")
-	Menu.addButton("Dundreary Landstalker ($15,595)","buyVehicle","1269098716:15595:Dundreary Landstalker")
-	Menu.addButton("Bravado Gresley ($20,990)","buyVehicle","-1543762099:20990:Bravado Gresley")
-	Menu.addButton("Albany Cavalcade ($19,500)","buyVehicle","-789894171:19500:Albany Cavalcade")
-	Menu.addButton("Canis Seminole ($10,995)","buyVehicle","1221512915:10995:Canis Seminole")
-	Menu.addButton("Obey Rocoto ($12,000)","buyVehicle","2136773105:12000:Obey Rocoto")
-
-end
-
-function coupeMenu()
-	MenuTitle = "Coupes"
-	ClearMenu()
-	Menu.addButton("Ocelot Jackal ($24,700)","buyVehicle","-624529134:24700:Ocelot Jackal")
-	--Menu.addButton("Ubermacht Zion ($27,450)","buyVehicle","1122289213:27450:Ubermacht Zion")
-	Menu.addButton("Dewbauchee Exemplar ($28,070)","buyVehicle","-5153954:28070:Dewbauchee Exemplar")
-	Menu.addButton("Ubermacht Sentinel XS ($30,020)","buyVehicle","1349725314:30020:Ubermacht Sentinel XS")
-	Menu.addButton("Enus Cognoscenti Carbio ($33,200)","buyVehicle","330661258:33200:Enus Cognoscenti Carbio")
-	Menu.addButton("Lampadati Felon ($34,550)","buyVehicle","-391594584:34550:Lampadati Felon")
-
-end
-
-function bicycleMenu()
-	MenuTitle = "Bicycles"
-	ClearMenu()
-	Menu.addButton("Bmx ($500)","buyVehicle","1131912276:600:Bmx")
-	Menu.addButton("Cruiser ($500)","buyVehicle","448402357:500:Cruiser")
-	Menu.addButton("Fixster ($850)","buyVehicle","-836512833:850:Fixster")
-	Menu.addButton("Scorcher ($1,200)","buyVehicle","-186537451:1200:Scorcher")
-	Menu.addButton("TriBike ($1,350)","buyVehicle","1127861609:1350:TriBike")
-end
-
-function muscleMenu()
-
-	MenuTitle = "Muscle Cars"
-	ClearMenu()
-	Menu.addButton("Willand Faction ($10,575)","buyVehicle","-2119578145:10575:Willand Faction")
-	Menu.addButton("Willand Faction 2 ($25,575)","buyVehicle","-1790546981:25575:Willand Faction 2")
-	Menu.addButton("Willand Faction 3 ($35,575)","buyVehicle","-2039755226:35575:Willand Faction 3")
-	Menu.addButton("Imponte Nightshade ($15,850)","buyVehicle","-1943285540:15850:Imponte Nightshade")
-	Menu.addButton("Albany Buccaneer ($12,500)","buyVehicle","-682211828:12500:Albany Buccaneer")
-	Menu.addButton("Declasse Sabre Turbo ($16,775)","buyVehicle","-1685021548:16775:Declasse Sabre Turbo")
-	Menu.addButton("Imponte Dukes ($10,500)","buyVehicle","723973206:10500:Imponte Dukes")
-	Menu.addButton("Imponte Phoenix ($23,375)","buyVehicle","-2095439403:23375:Imponte Phoenix")
-	Menu.addButton("Declasse Vigero ($12,500)","buyVehicle","-825837129:12500:Declasse Vigero")
-	Menu.addButton("Vapid Dominator ($19,400)","buyVehicle","80636076:19400:Vapid Dominator")
-	Menu.addButton("Bravado Gauntlet ($27,400)","buyVehicle","-1800170043:27400:Bravado Gauntlet")
-
-end
-
-function trucksMenu()
-	MenuTitle = "Trucks"
-	ClearMenu()
-	Menu.addButton("Karin Rebel ($10,500)","buyVehicle","-2045594037:10500:Karin Rebel")
-	Menu.addButton("Vapid Bobcat XL ($10,500)","buyVehicle","1069929536:10500:Vapid Bobcat XL")
-	--Menu.addButton("Vapid Sadler ($25,500)","buyVehicle","599568815:25500:Vapid Sadler")
-	--Menu.addButton("Bravado Bison ($27,110)","buyVehicle","16948145:27110:Bravado Bison")
-	Menu.addButton("Vapid Sandking XL ($35,000)","buyVehicle","-1189015600:35000:Vapid Sandking XL")
-	Menu.addButton("Vapid Contender ($40,500)","buyVehicle","683047626:40500:Vapid Contender")
-	Menu.addButton("Monster Truck ($20,000,000)","buyVehicle","683047626:20000000:Monster Truck")
-end
-
-function compactMenu()
-	MenuTitle = "Compacts"
-	ClearMenu()
-	Menu.addButton("Karin Dilettante ($5,500)","buyVehicle","-1130810103:5500:Karin Dilettante")
-	Menu.addButton("Declasse Rhapsody ($6,500)","buyVehicle","841808271:6500:Declasse Rhapsody")
-	Menu.addButton("Dinka Blista Compact ($6,500)","buyVehicle","1039032026:6500:Dinka Blista Compact")
-	Menu.addButton("Weeny Issi ($8,500)","buyVehicle","-1177863319:8500:Weeny Issi")
-	Menu.addButton("Bollocan Prairie ($8,000)","buyVehicle","1039032026:8000:Bollocan Prairie")
-	Menu.addButton("Benefactor Panto ($6,000)","buyVehicle","-431692672:6000:Benefactor Panto")
-end
-
-function offroadMenu()
-	MenuTitle = "Offroads"
-	ClearMenu()
-	Menu.addButton("Canis Kalahari ($10,600)","buyVehicle","92612664:10600:Canis Kalahari")
-	Menu.addButton("Canis Mesa ($30,500)","buyVehicle","-2064372143:30500:Canis Mesa")
-	Menu.addButton("Declasse Rancher XL ($12,500)","buyVehicle","1645267888:12500:Declasse Rancher XL")
-	Menu.addButton("Coil Brawler ($18,500)","buyVehicle","-1479664699:18500:Coil Brawler")
-	Menu.addButton("BF Bifta ($24,350)","buyVehicle","0xEB298297:24350:BF Bifta")
-	Menu.addButton("Nagasaki Blazer ($14,000)","buyVehicle","-2128233223:14000:Nagasaki Blazer")
-
-end
-
-function motorcycleMenu()
-	MenuTitle = "Motorcycles"
-	ClearMenu()
-	Menu.addButton("Pegassi Faggio Sport ($1,200)","buyVehicle","-1842748181:1200:Pegassi Faggio Sport")
-	Menu.addButton("Dinka Akuma ($35,000)","buyVehicle","1672195559:35000:Dinka Akuma")
-	Menu.addButton("Maibatsu Sanchez ($15,000)","buyVehicle","-1453280962:15000:Maibatsu Sanchez")
-	Menu.addButton("Shitzu Vader ($8,000)","buyVehicle","-140902153:8500:Shitzu Vader")
-	Menu.addButton("Western Bagger ($12,500)","buyVehicle","-2140431165:12500:Western Bagger")
-	Menu.addButton("Pegassi Bati 801 ($16,700)","buyVehicle","-114291515:16700:Pegassi Bati 801")
-	Menu.addButton("Western Zombie Chopper ($15,000)","buyVehicle","-570033273:15000:Western Zombie Chopper")
-	Menu.addButton("Western Zombie Bobber ($21,350)","buyVehicle","-1009268949:21350:Western Zombie Bobber")
-	Menu.addButton("Western Nightblade ($15,750)","buyVehicle","-1606187161:15750:Western Nightblade")
-	Menu.addButton("LCC Hexer ($12,500)","buyVehicle","301427732:12500:LCC Hexer")
-	Menu.addButton("Dinka Enduro ($15,500)","buyVehicle","1753414259:15500:Dinka Enduro")
-	Menu.addButton("Dinka Thrust ($30,500)","buyVehicle","1836027715:30500:Dinka Thrust")
-	Menu.addButton("LCC Sanctus ($225,000)","buyVehicle","1491277511:225000:LCC Sanctus")
-	--Menu.addButton("Nagasaki Chimera ($35,000)","buyVehicle","67744871:35000:Nagasaki Chimera")
-	Menu.addButton("Nagasaki Carbon RS ($35,000)","buyVehicle","11251904:35000:Nagasaki Carbon RS")
-
-end
-
-function vansMenu()
-	MenuTitle = "Vans"
-	ClearMenu()
-	Menu.addButton("Declasse Burrito ($21,000)","buyVehicle","-1743316013:21000:Declasse Burrito")
-	Menu.addButton("BF Surfer ($22,500)","buyVehicle","699456151:22500:BF Surfer")
-	Menu.addButton("Bravado Youga Classic ($24,000)","buyVehicle","1026149675:24000:Bravado Youga Classic")
-	Menu.addButton("Vapid Minivan ($19,000)","buyVehicle","-310465116:19000:Vapid Minivan")
-	Menu.addButton("Vapid Speedo ($18,000)","buyVehicle","-810318068:18000:Vapid Speedo")
-	Menu.addButton("Vapid Speedo 2 ($19,599)","buyVehicle","728614474:19599:Vapid Speedo 2")
-	Menu.addButton("Journey RV ($8,575)", "buyVehicle", "-120287622:8575:Journey RV")
-	Menu.addButton("Rumbo 3 ($25,535)", "buyVehicle", "1475773103:25535:Rumbo 3")
-	Menu.addButton("Taco Truck ($10,500)", "buyVehicle", "1951180813:10500:Taco Truck")
-	Menu.addButton("Surfer ($10,500)", "buyVehicle", "699456151:10500:Surfer")
-	Menu.addButton("Camper ($35,500)", "buyVehicle", "1876516712:35500:Camper")
-end
-
-function sportsMenu()
-	MenuTitle = "Sports Cars"
-	ClearMenu()
-	Menu.addButton("Annis Elegy ($85,000)","buyVehicle","196747873:85000:Annis Elegy")
-	Menu.addButton("Annis Elegy RH8 ($175,000)","buyVehicle","-566387422:175000:Annis Elegy RH8")
-	Menu.addButton("Invetero Coquette ($150,450)","buyVehicle","108773431:150450:Invetero Coquette")
-	Menu.addButton("Dewbauchee Massacro ($75,000)","buyVehicle","-142942670:75000:Dewbauchee Massacro")
-	Menu.addButton("Ubermacht Zion Cabrio ($50,015)","buyVehicle","-1193103848:50015:Ubermacht Zion Cabrio")
-	Menu.addButton("Karin Sultan ($55,500)","buyVehicle","970598228:55500:Karin Sultan")
-	Menu.addButton("Bravado Buffalo S ($57,800)","buyVehicle","736902334:57800:Bravado Buffalo S")
-	Menu.addButton("Dewbauchee Specter ($120,000)","buyVehicle","1886268224:35000:Dewbauchee Specter")
-	Menu.addButton("Benefactor Surano ($70,000)","buyVehicle","384071873:70000:Benefactor Surano")
-	Menu.addButton("Benefactor Schafter V12 ($88,000)","buyVehicle","-1485523546:88000:Benefactor Schafter V12")
-	Menu.addButton("Rapid GT ($95,000)","buyVehicle","-1934452204:95000:Rapid GT")
-	Menu.addButton("Dewbauchee Seven-70 ($98,000)","buyVehicle","-1757836725:98000:Dewbauchee Seven-70")
-	Menu.addButton("Dinka Jester ($200,000)","buyVehicle","-1297672541:200000:Dinka Jester")
-	Menu.addButton("Obey 9F ($250,700)","buyVehicle","1032823388:250700:Obey 9F")
-	Menu.addButton("Obey 9F Cabrio ($285,500)","buyVehicle","-1461482751:285500:Obey 9F Cabrio")
-	Menu.addButton("Comet ($175,000)","buyVehicle","-1045541610:175000:Comet")
-	Menu.addButton("Comet Retro ($135,000)","buyVehicle","-2022483795:135000:Comet Retro")
-end
-
-function superCarMenu()
-	MenuTitle = "Super Cars"
-	ClearMenu()
-	Menu.addButton("Pegassi Infernus ($300,500)","buyVehicle","418536135:300500:Pegassi Infernus")
-	Menu.addButton("Cheetah ($375,000)","buyVehicle","-1311154784:357000:Cheetah")
-	Menu.addButton("Truffade Adder ($1,000,000)","buyVehicle","-1216765807:1000000:Truffade Adder")
-	Menu.addButton("Truffade Nero ($1,250,000)","buyVehicle","1034187331:1250000:Truffade Nero")
-	Menu.addButton("Pegassi Osiris ($850,000)","buyVehicle","1987142870:800000:Pegassi Osiris")
-	Menu.addButton("Pfister 811 ($625,000)","buyVehicle","-1829802492:625000:Pfister 811")
-	Menu.addButton("Pegassi Zentorno ($1,800,000)","buyVehicle","-1403128555:1800000:Pegassi Zentorno")
-	Menu.addButton("Pegassi Tempesta ($1,300,000)","buyVehicle","272929391:1200000:Pegassi Tempesta")
-	Menu.addButton("Progen T20 ($750,000)","buyVehicle","1663218586:750000:Progen T20")
-	Menu.addButton("Ocelot XA-21 ($3,000,000)","buyVehicle","917809321:3000000:Ocelot XA-21")
-	Menu.addButton("Vapid Bullet ($350,000)","buyVehicle","-1696146015:350000:Vapid Bullet")
-	Menu.addButton("Sultan RS ($115,000)","buyVehicle","-295689028:115000:Sultan RS")
-	Menu.addButton("Grotti Turismo 2 ($450,999)","buyVehicle","-982130927:450999:Grotti Turismo 2")
-	Menu.addButton("Vacca ($750,000)","buyVehicle","338562499:750000:Vacca")
-	Menu.addButton("FMJ ($1,000,000)","buyVehicle","1426219628:1000000:FMJ")
-	Menu.addButton("GP1 ($1,000,000)","buyVehicle","1234311532:1000000:GP1")
-end
-
-function classicMenu()
-	MenuTitle = "Classic Cars"
-	ClearMenu()
-	Menu.addButton("Pegassi Infernus Classic ($290,750)","buyVehicle","-1405937764:290750:Pegassi Infernus Classic")
-	Menu.addButton("Pegassi Monroe ($210,800)","buyVehicle","-433375717:210800:Pegassi Monroe")
-	Menu.addButton("Grotti Stinger GT ($275,600)","buyVehicle","-2098947590:275600:Grotti Stinger")
-	Menu.addButton("Vapid Peyote ($100,000)","buyVehicle","1830407356:100000:Vapid Peyote")
-	--Menu.addButton("Truffade Z-Type ($350,000)","buyVehicle","75889561:350000:Truffade Z-Type")
-	Menu.addButton("Lampadati Casco ($133,777)","buyVehicle","941800958:133777:Lampadati Casco")
-	--Menu.addButton("Grotti Turismo Classic ($275,350)","buyVehicle","-982130927:275350:Grotti Turismo Classic")
-	Menu.addButton("Albany Roosevelt Valor ($350,350)","buyVehicle","-602287871:350350:Albany Roosevelt Valor")
-end
-
-function sedanMenu()
-    MenuTitle = "Sedans"
-    ClearMenu()
-    Menu.addButton("Albany Washington ($7,500)","buyVehicle","1777363799:7500:Albany Washington")
-    Menu.addButton("Ubermacht Oracle ($35,000)","buyVehicle","-511601230:35000:Ubermacht Oracle")
-    Menu.addButton("Zinconium Stratum ($9,500)","buyVehicle","1723137093:9500:Zinconium Stratum")
-    Menu.addButton("Karin Intruder ($6,595)","buyVehicle","886934177:6595:Karin Intruder")
-    Menu.addButton("Albany Primo ($6,000)","buyVehicle","-1150599089:6000:Albany Primo")
-    Menu.addButton("Albany Emperor ($3,500)","buyVehicle","-1883002148:3500:Albany Emperor")
-    Menu.addButton("Enus Super Diamond ($95,000)","buyVehicle","1123216662:95000:Enus Super Diamond")
-    Menu.addButton("Vapid Stanier ($13,500)","buyVehicle","-1477580979:13500:Vapid Stanier")
-	Menu.addButton("Vulcan Ingot ($9,500)","buyVehicle","-1289722222:9500:Vulcan Ingot")
-	Menu.addButton("Enus Cognoscenti ($85,500)","buyVehicle","-2030171296:85500:Vulcan Ingot")
-	Menu.addButton("Vulcan Warrener ($15,500)","buyVehicle","1373123368:15500:Vulcan Warrener")
-	Menu.addButton("Limo ($20,500)","buyVehicle","2333339779:20500:Limo")
-	Menu.addButton("Glendale ($15,500)","buyVehicle","75131841:15500:Glendale")
-end
-
-function purchaseMenu()
-	MenuTitle = "Purchase"
-	ClearMenu()
-	Menu.addButton("Bicylces","bicycleMenu", nil)
-	Menu.addButton("Compacts","compactMenu", nil)
-	Menu.addButton("Coupes","coupeMenu", nil)
-	Menu.addButton("Sedans","sedanMenu", nil)
-	Menu.addButton("Muscle", "muscleMenu", nil)
-	Menu.addButton("Offroads","offroadMenu", nil)
-	Menu.addButton("SUV","suvMenu", nil)
-	Menu.addButton("Trucks","trucksMenu", nil)
-	Menu.addButton("Vans","vansMenu", nil)
-	Menu.addButton("Sports Cars","sportsMenu", nil)
-	Menu.addButton("Classic Cars","classicMenu", nil)
-	Menu.addButton("Super Cars","superCarMenu", nil)
-	Menu.addButton("Motorcycles","motorcycleMenu", nil)
-end
-
-function displayInsuranceInfo()
-	Menu.hidden = not Menu.hidden
-	TriggerEvent("chatMessage", "T. ENDS INSURANCE", { 255, 78, 0 }, "T. End's insurance will put your mind at ease by making sure you'll always have a ride even if yours gets stolen, lost, or totaled.")
-end
-
--- only displays when player has no insurance
-function buyInsurance()
-	Menu.hidden = not Menu.hidden
-	TriggerServerEvent("vehShop:buyInsurance")
-end
-
--- only displays when player has no insurance
-function insuranceMenu()
-	menu.page = "insurance"
-	--Menu.addButton("Info","displayInsuranceInfo", nil)
-	--Menu.addButton("($7,500) Buy","buyInsurance", nil)
-end
-
-function checkPlayerInsurance()
-	TriggerServerEvent("vehShop:checkPlayerInsurance")
-end
-
-function sellMenu()
-	TriggerServerEvent("vehShop:loadVehiclesToSell")
-end
-
-function mainMenu()
-	MenuTitle = "Auto Shop"
-	ClearMenu()
-	Menu.addButton("Buy","purchaseMenu", nil)
-	Menu.addButton("Sell","sellMenu", nil)
-	Menu.addButton("Insurance","checkPlayerInsurance", nil)
-end
 
 function getPlayerDistanceFromShop(shopX,shopY,shopZ)
 	-- Get the player coords so that we know where to spawn it
@@ -478,16 +211,18 @@ Citizen.CreateThread(function()
 				if menu.vehicles then
 					for i = 1, #menu.vehicles do
 						local vehicle = menu.vehicles[i]
-						--print("adding vehicle: " .. vehicle.make .. " " .. vehicle.model .. " to menu")
-						local vehName = vehicle.make .. " " .. vehicle.model
-						TriggerEvent("vehShop-GUI:Option", "+ ($" .. vehicle.sellPrice .. ") " .. vehName, function(cb)
-							if cb then
-								TriggerEvent("usa:notify", "~y~SOLD:~w~ " .. vehName .. "\n~y~PRICE: ~g~$" .. vehicle.sellPrice)
-								table.remove(menu.vehicles, i)
-								TriggerServerEvent("vehShop:sellVehicle", vehicle)
-								menu.page = "home"
-							end
-						end)
+						if vehicle then
+							--print("adding vehicle: " .. vehicle.make .. " " .. vehicle.model .. " to menu")
+							local vehName = vehicle.make .. " " .. vehicle.model
+							TriggerEvent("vehShop-GUI:Option", "+ ($" .. comma_value(vehicle.sellPrice) .. ") " .. vehName, function(cb)
+								if cb then
+									TriggerEvent("usa:notify", "~y~SOLD:~w~ " .. vehName .. "\n~y~PRICE: ~g~$" .. comma_value(vehicle.sellPrice))
+									table.remove(menu.vehicles, i)
+									TriggerServerEvent("vehShop:sellVehicle", vehicle)
+									menu.page = "home"
+								end
+							end)
+						end
 					end
 				end
 
@@ -531,7 +266,7 @@ Citizen.CreateThread(function()
 						for i = 1, #vehicleShopItems["vehicles"][k] do
 							local vehicle = vehicleShopItems["vehicles"][k][i]
 							--print("adding vehicle: " .. vehicle.make .. " " .. vehicle.model .. " to menu")
-							TriggerEvent("vehShop-GUI:Option", "($" .. vehicle.price .. ") " .. vehicle.make .. " " .. vehicle.model, function(cb)
+							TriggerEvent("vehShop-GUI:Option", "($" .. comma_value(vehicle.price) .. ") " .. vehicle.make .. " " .. vehicle.model, function(cb)
 								if cb then
 								--	print("player wants to purchase vehicle: " .. vehicle.make .. " " .. vehicle.model)
 									-- todo: complete purchase ability here
@@ -563,11 +298,178 @@ Citizen.CreateThread(function()
 
 end)
 
-local vehicleShopItems = {
+-- VEHICLES
+vehicleShopItems = {
     ["vehicles"] = {
-        ["sedans"] = {
-            {make = "Albany", model = "Washington", price = 8500, hash = 1777363799},
-            {make = "Ubermacht", model = "Washington", price = 8500, hash = 1777363799}
-        }
+        ["Suvs"] = {
+            {make = "Canis", model = "Seminole", price = 10995, hash = 1221512915},
+			{make = "Obey", model = "Rocoto", price = 12000, hash = 2136773105},
+			{make = "Declasse", model = "Granger", price = 15000, hash = -1775728740},
+			{make = "Dundreary", model = "Landstalker", price = 15595, hash = 1269098716},
+			{make = "Benefactor", model = "Dubsta", price = 18000, hash = 1177543287},
+			{make = "Bravado", model = "Gresley", price = 20990, hash = -1543762099},
+			{make = "Albany", model = "Cavalcade", price = 19500, hash = -789894171},
+			{make = "Gallivanter", model = "Baller", price = 28700, hash = 1878062887}
+        },
+		["Coupes"] = {
+            {make = "Ocelot", model = "Jackal", price = 24700, hash = -624529134},
+            {make = "Ubermacht", model = "Zion", price = 27450, hash = 1122289213},
+            {make = "Dewbauchee", model = "Exemplar", price = 28070, hash = -5153954},
+			{make = "Ubermacht", model = "Sentinel XS", price = 30020, hash = 1349725314},
+			{make = "Enus", model = "Cognoscenti Carbio", price = 33200, hash = 330661258},
+			{make = "Lampadati", model = "Felon", price = 34550, hash = -391594584},
+			{make = "Enus", model = "Windsor Cabrio", price = 45550, hash = -1930048799}
+		},
+        ["Bicycles"] = {
+            {make = "", model = "BMX", price = 500, hash = 1131912276},
+            {make = "", model = "Cruiser", price = 500, hash = 448402357},
+            {make = "", model = "Fixster", price = 850, hash = -836512833},
+            {make = "", model = "Scorcher", price = 1200, hash = -186537451},
+            {make = "", model = "TriBike", price = 1350, hash = 1127861609}
+        },
+        ["Muscles"] = {
+            {make = "Willand", model = "Faction", price = 10500, hash = -2119578145},
+			{make = "Imponte", model = "Dukes", price = 10500, hash = 723973206},
+			{make = "Declasse", model = "Vigero", price = 12500, hash = -825837129},
+			{make = "Albany", model = "Buccaneer", price = 12500, hash = 682211828},
+			{make = "Imponte", model = "Ruiner", price = 12575, hash = -2039755226},
+			{make = "Imponte", model = "Nightshade", price = 15850, hash = -1943285540},
+			{make = "Declasse", model = "Sabre Turbo", price = 16775, hash = -1685021548},
+			{make = "Vapid", model = "Dominator", price = 19400, hash = 80636076},
+			{make = "Bravado", model = "Gauntlet", price = 21400, hash = 1800170043},
+			{make = "Willand", model = "Faction Custom", price = 25575, hash = -1790546981},
+			{make = "Willand", model = "Faction Custom Donk", price = 35575, hash = -2039755226}
+        },
+		["Trucks"] = {
+			{make = "Karin", model = "Rebel", price = 10500, hash = -2045594037},
+			{make = "Vapid", model = "Bobcat XL", price = 10500, hash = 1069929536},
+			{make = "Vapid", model = "Sadler", price = 25500, hash = 599568815},
+			{make = "Bravado", model = "Bison", price = 27110, hash = 16948145},
+			{make = "Vapid", model = "Sandking XL", price = 35000, hash = -1189015600},
+			{make = "Vapid", model = "Contender", price = 40500, hash = 683047626},
+			{make = "Vapid", model = "Guardian", price = 350000, hash =  -2107990196}
+		},
+		["Compacts"] = {
+			{make = "Weedems", model = "Caddy", price = 3000, hash = -537896628},
+			{make = "Karin", model = "Dilettante", price = 5500, hash = -1130810103},
+			{make = "Benefactor", model = "Panto", price = 6000, hash = -431692672},
+			{make = "Declasse", model = "Rhapsody", price = 6500, hash = 841808271},
+			{make = "Dinka", model = "Blista Compact", price = 6500, hash = 1039032026},
+			{make = "Bollocan", model = "Prairie", price = 8000, hash = -1450650718},
+			{make = "Weeny", model = "Issi", price = 8500, hash = -1177863319}
+		},
+		["Offroads"] = {
+			{make = "Canis", model = "Kalahari", price = 10600, hash = 92612664},
+			{make = "Declasse", model = "Rancher XL", price = 12500, hash = 1645267888},
+			{make = "Nagasaki", model = "Blazer", price = 14000, hash = -2128233223},
+			{make = "Coil", model = "Brawler", price = 18500, hash = -1479664699},
+			{make = "BF", model = "Bifta", price = 24350, hash = -349601129},
+			{make = "Canis", model = "Mesa", price = 30500, hash = -2064372143}
+		},
+		["Motorcycles"] = {
+			{make = "Pegassi", model = "Faggio Sport", price = 1200, hash = -1842748181},
+			{make = "Dinka", model = "Enduro", price = 5500, hash = 1753414259},
+			{make = "Dinka", model = "Akuma", price = 7500, hash = 1672195559},
+			{make = "Maibatsu", model = "Sanchez", price = 7500, hash = -1453280962},
+			{make = "Shitzu", model = "Vader", price = 8500, hash = -140902153},
+			{make = "Western", model = "Bagger", price = 10500, hash = -2140431165},
+			{make = "LCC", model = "Hexer", price = 12500, hash = 301427732},
+			{make = "Western", model = "Zombie Chopper", price = 15000, hash = -570033273},
+			{make = "Western", model = "Nightblade", price = 15750, hash = -1606187161},
+			{make = "Pegassi", model = "Bati 801", price = 16700, hash = -114291515},
+			{make = "Western", model = "Zombie Bobber", price = 21350, hash = -1009268949},
+			{make = "Dinka", model = "Thrust", price = 23500, hash = 1836027715},
+			{make = "Nagasaki", model = "Carbon RS", price = 30000, hash = 11251904},
+			{make = "Nagasaki", model = "Chimera", price = 35000, hash = 6774487},
+			{make = "LCC", model = "Sanctus", price = 225000, hash = 1491277511}
+		},
+		["Vans"] = {
+			{make = "Rimka", model = "Taco Truck", price = 10500, hash = 1951180813},
+			{make = "Vapid", model = "Speedo", price = 18000, hash = -810318068},
+			{make = "Vapid", model = "Minivan", price = 19000, hash = -310465116},
+			{make = "Vapid", model = "Clown", price = 19599, hash = 728614474},
+			{make = "Declasse", model = "Burrito", price = 21000, hash = -1743316013},
+			{make = "BF", model = "Surfer", price = 22500, hash = 699456151},
+			{make = "Bravado", model = "Youga Classic", price = 24000, hash = 1026149675},
+			{make = "Bravado", model = "Rumpo Custom", price = 24000, hash = 1475773103},
+			{make = "Brute", model = "Camper", price = 35500, hash = 1876516712}
+		},
+		["Sports"] = {
+			{make = "Karin", model = "Sultan", price = 37500, hash = -1122289213},
+			{make = "Ubermacht", model = "Zion Cabrio", price = 40015, hash = -1193103848},
+			{make = "Bravado", model = "Buffalo S", price = 57800, hash = 736902334},
+			{make = "Invetero", model = "Coquette", price = 65450, hash = 108773431},
+			{make = "Benefactor", model = "Surano", price = 70000, hash = 384071873},
+			{make = "Dewbauchee", model = "Massacro", price = 75000, hash = -142942670},
+			{make = "Benefactor", model = "Schafter V12", price = 88000, hash = -1485523546},
+			{make = "Dewbauchee", model = "Rapid GT", price = 94500, hash = -1934452204},
+			{make = "Annis", model = "Elegy Retro Custom", price = 95000, hash = 196747873},
+			{make = "Dewbauchee", model = "Seven-70", price = 98000, hash = -1757836725},
+			{make = "Dewbauchee", model = "Specter", price = 120000, hash = 1886268224},
+			{make = "Annis", model = "Elegy RH8", price = 175000, hash = -566387422},
+			{make = "Dinka", model = "Jester", price = 200000, hash = -1297672541},
+			{make = "Obey", model = "9F", price = 250700, hash = 1032823388},
+			{make = "Obey", model = "9F Cabrio", price = 285500, hash = -1461482751}
+		},
+		["Supers"] = {
+			{make = "Karin", model = "Sultan RS", price = 145500, hash = -295689028},
+			{make = "Pegassi", model = "Infernus", price = 300500, hash = 418536135},
+			{make = "Vapid", model = "Bullet", price = 350000, hash = -1696146015},
+			{make = "Grotti", model = "Cheetah", price = 357000, hash = -1311154784},
+			{make = "Pfister", model = "811", price = 625000, hash = -1829802492},
+			{make = "Progen", model = "T20", price = 750000, hash = 1663218586},
+			{make = "Pegassi", model = "Vacca", price = 750000, hash = 338562499},
+			{make = "Pegassi", model = "Osiris", price = 850000, hash = 1987142870},
+			{make = "Truffade", model = "Adder", price = 1000000, hash = -1216765807},
+			{make = "Progen", model = "GP1", price = 1000000, hash = 1234311532},
+			{make = "Truffade", model = "Nero", price = 1250000, hash = 1034187331},
+			{make = "Pegassi", model = "Tempesta", price = 1300000, hash = 272929391},
+			{make = "Vapid", model = "FMJ", price = 1500000, hash = 1426219628},
+			{make = "Pegassi", model = "Zentorno", price = 1800000, hash = -1403128555},
+			{make = "Ocelot", model = "XA-21", price = 2000000, hash = 917809321},
+			{make = "Grotti", model = "Turismo R", price = 4500000, hash = 408192225},
+		},
+		["Classic"] = {
+			{make = "Vapid", model = "Peyote", price = 100000, hash = 1830407356},
+			{make = "Lampadati", model = "Casco", price = 133777, hash = 941800958},
+			{make = "Pegassi", model = "Monroe", price = 210800, hash = -433375717},
+			{make = "Grotti", model = "Turismo Classic", price = 275350, hash = -982130927},
+			{make = "Grotti", model = "Stinger GT", price = 275600, hash = -2098947590},
+			{make = "Pegassi", model = "Infernus Classic", price = 290750, hash = -1405937764},
+			{make = "Albany", model = "Roosevelt Valor", price = 350350, hash = -602287871}
+		},
+		["Sedans"] = {
+			{make = "Albany", model = "Emperor", price = 3500, hash = -1883002148},
+			{make = "Albany", model = "Washington", price = 7500, hash = 1777363799},
+			{make = "Albany", model = "Primo", price = 6000, hash = -1150599089},
+			{make = "Karin", model = "Intruder", price = 6595, hash = 886934177},
+			{make = "Vulcan", model = "Ingot", price = 9500, hash = -1289722222},
+			{make = "Zinconium", model = "Stratum", price = 9500, hash = 1723137093},
+			{make = "Vapid", model = "Stanier", price = 13500, hash = -1477580979},
+			{make = "Benefactor", model = "Glendale", price = 15000, hash = 75131841},
+			{make = "Vulcan", model = "Warrener", price = 15500, hash = 1373123368},
+			{make = "Ubermacht", model = "Oracle", price = 35000, hash = -511601230},
+			{make = "Enus", model = "Cognoscenti", price = 85500, hash = -2030171296},
+			{make = "Enus", model = "Super Diamond", price = 95000, hash = 1123216662}
+		},
+		["Specials"] = {
+			{make = "Declasse", model = "Stallion Special", price = 1500000, hash =  -401643538},
+			{make = "Bravado", model = "Buffalo Special", price = 2000000, hash = 237764926},
+			{make = "Vapid", model = "Dominator Special", price = 3700000, hash = -915704871},
+			{make = "BF", model = "Raptor", price = 4000000, hash = -674927303},
+			{make = "Dewbauchee", model = "Massacro Special", price = 4500000, hash = -631760477},
+			{make = "Dinka", model = "Jester Special", price = 7500000, hash = -1106353882}
+		},
     }
 }
+
+function comma_value(amount)
+  local formatted = amount
+  while true do
+    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+    if (k==0) then
+      break
+    end
+  end
+  return formatted
+end

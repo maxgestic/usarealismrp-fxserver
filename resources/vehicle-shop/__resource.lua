@@ -4,6 +4,5 @@ server_script 'vehicle-shop_sv.lua'
 
 client_scripts {
 	'GUI.lua',
-	'vehicleShopItems.lua',
 	'vehicle-shop_cl.lua'
 }
