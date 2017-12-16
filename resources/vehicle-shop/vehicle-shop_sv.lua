@@ -63,9 +63,8 @@ function alreadyHasAnyVehicle(source)
 end
 
 RegisterServerEvent("vehShop:buyInsurance")
-AddEventHandler("vehShop:buyInsurance", function()
-	local userSource = tonumber(source)
-	print("player " .. GetPlayerName(source) .. " is buying auto insurance!")
+AddEventHandler("vehShop:buyInsurance", function(userSource)
+	print("user source = " .. userSource)
 	local INSURANCE_COVERAGE_MONTHLY_COST = 7500
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local insurance = user.getActiveCharacterData("insurance")
@@ -105,24 +104,22 @@ AddEventHandler("vehShop:checkPlayerInsurance", function()
 			if playerHasValidAutoInsurance(playerInsurance) then
 				TriggerClientEvent("chatMessage", userSource, "T. ENDS INSURANCE", {255, 78, 0}, "You are already insured!")
 			else
-				TriggerClientEvent("chatMessage", userSource, "T. ENDS INSURANCE", {255, 78, 0}, "Your auto insurance coverage has ~r~expired~w~! Would you like to renew it?")
-				user.setActiveCharacterData("insurance", {})
-				TriggerClientEvent("vehShop:insuranceOptionMenu", userSource)
+				print("renewing auto insurance!")
+				TriggerClientEvent("chatMessage", userSource, "T. ENDS INSURANCE", {255, 78, 0}, "Your auto insurance coverage was ~r~expired~w~! Renewing...")
+				TriggerEvent("vehShop:buyInsurance", userSource)
 			end
 		else
 			print("no auto insurance found!")
-			user.setActiveCharacterData("insurance", {})
-			TriggerClientEvent("vehShop:insuranceOptionMenu", userSource)
+			TriggerEvent("vehShop:buyInsurance", userSource)
 		end
 	end)
 end)
 
 RegisterServerEvent("mini:checkVehicleMoney")
-AddEventHandler("mini:checkVehicleMoney", function(params)
+AddEventHandler("mini:checkVehicleMoney", function(vehicle)
 	local playerIdentifier = getPlayerIdentifierEasyMode(source)
 	local userSource = tonumber(source)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
-		local playerIdentifier = getPlayerIdentifierEasyMode(userSource)
 		local allLicenses = user.getActiveCharacterData("licenses")
 		local license = nil
 		local vehicles = user.getActiveCharacterData("vehicles")
@@ -135,10 +132,8 @@ AddEventHandler("mini:checkVehicleMoney", function(params)
 			end
 			if license ~= nil then
 				if license.status == "valid" then
-					local splitStr = stringSplit(params,":")
-					hash = splitStr[1]
-					price = splitStr[2]
-					vehicleName = splitStr[3]
+					hash = vehicle.hash
+					price = vehicle.price
 		            if not alreadyHasVehicle(userSource, vehicleName) then
 		    			if tonumber(price) <= user.getActiveCharacterData("money") then
 							plate = tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9))
@@ -150,14 +145,15 @@ AddEventHandler("mini:checkVehicleMoney", function(params)
 									user.setActiveCharacterData("money", user_money - tonumber(price))
 									local vehicle = {
 										owner = GetPlayerName(userSource),
-										model = vehicleName,
+										make = vehicle.make,
+										model = vehicle.model,
 										hash = hash,
 										plate = plate,
 										stored = false,
 										price = price
 									}
 									--  prevent gui menu from breaking i believe (i think 16 is max # of menu items possible)
-									print("#vehicles: " .. #vehicles)
+									--print("#vehicles: " .. #vehicles)
 									print("buying vehicle")
 									table.insert(vehicles, vehicle)
 									user.setActiveCharacterData("vehicles", vehicles)
@@ -194,6 +190,14 @@ AddEventHandler("vehShop:loadVehiclesToSell", function()
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
 		local vehicles = user.getActiveCharacterData("vehicles")
+		for i = 1, #vehicles do
+			local vehicle = vehicles[i]
+			if vehicle then
+				local sellPrice = round(vehicle.price * .5,0)
+				vehicles[i].sellPrice = sellPrice
+			end
+		end
+		print("vehicles loaded! # = " .. #vehicles)
 		TriggerClientEvent("vehShop:displayVehiclesToSell", userSource, vehicles)
 	end)
 end)
