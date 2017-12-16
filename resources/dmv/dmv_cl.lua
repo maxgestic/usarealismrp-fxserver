@@ -3,7 +3,8 @@ local locations = {
 	--{ x=441.301, y=-981.434, z=29.689 },
 	--{ x=1853.616, y=3687.966, z=33.267 },
 	-- {x = -544.857, y = -204.422, z = 37.2152} -- LS
-	{x= -447.845, y = 6013.775, z = 30.716} -- paleto
+	{x= -447.845, y = 6013.775, z = 30.716}, -- paleto
+	{x = 1855.458, y = 3688.599, z = 33.267} -- sandy
 }
 
 RegisterNetEvent("dmv:insufficientFunds")
@@ -55,7 +56,7 @@ end
 function isPlayerAtDMV()
 	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
 	for i = 1, #locations do
-		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,false) < 5 then
+		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,false) < 4 then
 			return true
 		end
 	end
