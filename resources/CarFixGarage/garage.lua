@@ -79,11 +79,13 @@ function DrawCoolLookingNotification(msg)
     DrawNotification(0,1)
 end
 
+local continue = false
+
 Citizen.CreateThread(function ()
 
 	-- keep track of which location the player is at
 	local lastVisitedGarageX, lastVisitedGarageY, lastVisitedGarageZ = nil, nil, nil
-
+	local called = false
 	while true do
 		Citizen.Wait(0)
 		if IsPedSittingInAnyVehicle(GetPlayerPed(-1)) then
@@ -91,38 +93,56 @@ Citizen.CreateThread(function ()
 				garageCoords2 = vehicleRepairStation[i]
 				DrawMarker(1, garageCoords2[1], garageCoords2[2], garageCoords2[3], 0, 0, 0, 0, 0, 0, 5.0, 5.0, 2.0, 0, 157, 0, 155, 0, 0, 2, 0, 0, 0, 0)
 				if not alreadyInside and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), garageCoords2[1], garageCoords2[2], garageCoords2[3], true ) < 3 then
-					DrawCoolLookingNotification("Your vehicle is  ~y~being repaired~w~!")
-					SetVehicleEngineOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), false, false, false) -- turn engine off
-					lastVisitedGarageX = garageCoords2[1]
-					lastVisitedGarageY = garageCoords2[2]
-					lastVisitedGarageZ = garageCoords2[3]
-					alreadyInside = true
-					local finished = false
-					while timer > 0 do
-						Citizen.Wait(1)
-						timer = timer - 15
-						if timer < 16 then
-							if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), lastVisitedGarageX, lastVisitedGarageY, lastVisitedGarageZ, true ) < 3 then
-								SetVehicleFixed(GetVehiclePedIsUsing(GetPlayerPed(-1)))
-								SetVehicleDirtLevel(GetVehiclePedIsUsing(GetPlayerPed(-1)),  0.0000000001) -- clean vehicle
-								SetVehicleDeformationFixed(GetVehiclePedIsUsing(GetPlayerPed(-1)))
-								SetVehicleUndriveable(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
-								SetVehicleEngineOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), true, false, false)
-								DrawCoolLookingNotification("Your vehicle has been ~g~repaired~w~!")
-								-- TODO: CALL SERVER EVENT TO CHARGE PLAYER MONEY FOR EACH REPAIR
-							else
-								DrawCoolLookingNotification("You left before your vehicle was repaired!")
+					if not called then
+						print("checking player money!!")
+						TriggerServerEvent("carFix:checkPlayerMoney")
+						called = true
+					end
+					-- after checking player money ...
+					print("continue =" .. tostring(continue))
+					if continue then
+						print("inside repairVehicle()")
+						DrawCoolLookingNotification("Your vehicle is  ~y~being repaired~w~!")
+						SetVehicleEngineOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), false, false, false) -- turn engine off
+						lastVisitedGarageX = garageCoords2[1]
+						lastVisitedGarageY = garageCoords2[2]
+						lastVisitedGarageZ = garageCoords2[3]
+						alreadyInside = true
+						local finished = false
+						while timer > 0 do
+							Citizen.Wait(1)
+							timer = timer - 15
+							if timer < 16 then
+								print("timer was < 16!")
+								if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), lastVisitedGarageX, lastVisitedGarageY, lastVisitedGarageZ, true ) < 3 then
+									SetVehicleFixed(GetVehiclePedIsUsing(GetPlayerPed(-1)))
+									SetVehicleDirtLevel(GetVehiclePedIsUsing(GetPlayerPed(-1)),  0.0000000001) -- clean vehicle
+									SetVehicleDeformationFixed(GetVehiclePedIsUsing(GetPlayerPed(-1)))
+									SetVehicleUndriveable(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
+									SetVehicleEngineOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), true, false, false)
+									DrawCoolLookingNotification("Your vehicle has been ~g~repaired~w~!")
+								else
+									DrawCoolLookingNotification("You left before your vehicle was repaired!")
+								end
 							end
 						end
+						timer = 15000 -- reset timer
+						continue = false -- reset price check var
 					end
-					timer = 15000 -- reset timer
 				end
 				if lastVisitedGarageX ~= nil and lastVisitedGarageY ~= nil and lastVisitedGarageZ ~= nil then
 					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), lastVisitedGarageX, lastVisitedGarageY, lastVisitedGarageZ, true ) > 3 then
 						alreadyInside = false
+						called = false
 					end
 				end
 			end
 		end
 	end
+end)
+
+RegisterNetEvent("carFix:repairVehicle")
+AddEventHandler("carFix:repairVehicle", function()
+	print("inside carFix:repairVehicle")
+	continue = true
 end)
