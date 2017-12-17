@@ -312,7 +312,7 @@ end
 -- VEHICLES
 vehicleShopItems = {
     ["vehicles"] = {
-        ["suvs"] = {
+        ["Suvs"] = {
             {make = "Canis", model = "Seminole", price = 10995, hash = 1221512915},
 			{make = "Obey", model = "Rocoto", price = 12000, hash = 2136773105},
 			{make = "Declasse", model = "Granger", price = 15000, hash = -1775728740},
@@ -322,7 +322,7 @@ vehicleShopItems = {
 			{make = "Albany", model = "Cavalcade", price = 19500, hash = -789894171},
 			{make = "Gallivanter", model = "Baller", price = 28700, hash = 1878062887}
         },
-		["coupes"] = {
+		["Coupes"] = {
             {make = "Ocelot", model = "Jackal", price = 24700, hash = -624529134},
             {make = "Ubermacht", model = "Zion", price = 27450, hash = -1122289213},
             {make = "Dewbauchee", model = "Exemplar", price = 28070, hash = -5153954},
@@ -331,14 +331,14 @@ vehicleShopItems = {
 			{make = "Lampadati", model = "Felon", price = 34550, hash = -391594584},
 			{make = "Enus", model = "Windsor Cabrio", price = 105550, hash = -1930048799}
 		},
-        ["bicycles"] = {
+        ["Bicycles"] = {
             {make = "", model = "BMX", price = 500, hash = 1131912276},
             {make = "", model = "Cruiser", price = 500, hash = 448402357},
             {make = "", model = "Fixster", price = 850, hash = -836512833},
             {make = "", model = "Scorcher", price = 1200, hash = -186537451},
             {make = "", model = "TriBike", price = 1350, hash = 1127861609}
         },
-        ["muscles"] = {
+        ["Muscles"] = {
             {make = "Willand", model = "Faction", price = 10500, hash = -2119578145},
 			{make = "Imponte", model = "Dukes", price = 10500, hash = 723973206},
 			{make = "Declasse", model = "Vigero", price = 12500, hash = -825837129},
@@ -351,7 +351,7 @@ vehicleShopItems = {
 			{make = "Willand", model = "Faction Custom", price = 25575, hash = -1790546981},
 			{make = "Willand", model = "Faction Custom Donk", price = 35575, hash = -2039755226}
         },
-		["trucks"] = {
+		["Trucks"] = {
 			{make = "Karin", model = "Rebel", price = 10500, hash = -2045594037},
 			{make = "Vapid", model = "Bobcat XL", price = 10500, hash = 1069929536},
 			{make = "Vapid", model = "Sadler", price = 25500, hash = -599568815},
@@ -362,7 +362,7 @@ vehicleShopItems = {
 			{make = "Vapid", model = "Contender", price = 40500, hash = 683047626},
 			{make = "Vapid", model = "Guardian", price = 350000, hash =  -2107990196}
 		},
-		["compacts"] = {
+		["Compacts"] = {
 			{make = "Weedems", model = "Caddy", price = 3000, hash = -537896628},
 			{make = "Karin", model = "Dilettante", price = 5500, hash = -1130810103},
 			{make = "Benefactor", model = "Panto", price = 6000, hash = -431692672},
@@ -371,7 +371,7 @@ vehicleShopItems = {
 			{make = "Bollocan", model = "Prairie", price = 8000, hash = -1450650718},
 			{make = "Weeny", model = "Issi", price = 8500, hash = -1177863319}
 		},
-		["offroads"] = {
+		["Offroads"] = {
 			{make = "Canis", model = "Kalahari", price = 10600, hash = 92612664},
 			{make = "Declasse", model = "Rancher XL", price = 12500, hash = 1645267888},
 			{make = "Nagasaki", model = "Blazer", price = 14000, hash = -2128233223},
@@ -379,7 +379,7 @@ vehicleShopItems = {
 			{make = "BF", model = "Bifta", price = 75350, hash = -349601129},
 			{make = "Canis", model = "Mesa", price = 30500, hash = -2064372143}
 		},
-		["motorcycles"] = {
+		["Motorcycles"] = {
 			{make = "Pegassi", model = "Faggio Sport", price = 1200, hash = -1842748181},
 			{make = "Dinka", model = "Enduro", price = 5500, hash = 1753414259},
 			{make = "Dinka", model = "Akuma", price = 7500, hash = 1672195559},
@@ -396,7 +396,7 @@ vehicleShopItems = {
 			{make = "Nagasaki", model = "Chimera", price = 35000, hash = 67744871},
 			{make = "LCC", model = "Sanctus", price = 225000, hash = 1491277511}
 		},
-		["vans"] = {
+		["Vans"] = {
 			{make = "Vapid", model = "Speedo", price = 18000, hash = -810318068},
 			{make = "Vapid", model = "Minivan", price = 19000, hash = -310465116},
 			{make = "Vapid", model = "Clown", price = 29599, hash = 728614474},
@@ -407,7 +407,7 @@ vehicleShopItems = {
 			{make = "Brute", model = "Camper", price = 45500, hash = 1876516712},
       {make = "Rimka", model = "Taco Truck", price = 60500, hash = 1951180813}
 		},
-		["sports"] = {
+		["Sports"] = {
 			{make = "Karin", model = "Sultan", price = 39500, hash = -1122289213},
 			{make = "Ubermacht", model = "Zion Cabrio", price = 40015, hash = -1193103848},
       {make = "Invetero", model = "Coquette", price = 65450, hash = 108773431},
@@ -425,7 +425,7 @@ vehicleShopItems = {
 			{make = "Obey", model = "9F Cabrio", price = 285500, hash = -1461482751},
       {make = "Dinka", model = "Jester", price = 350000, hash = -1297672541}
 		},
-		["supers"] = {
+		["Supers"] = {
 			{make = "Pegassi", model = "Infernus", price = 500500, hash = 418536135},
 			{make = "Vapid", model = "Bullet", price = 650000, hash = -1696146015},
 			{make = "Grotti", model = "Cheetah", price = 757000, hash = -1311154784},
@@ -442,7 +442,7 @@ vehicleShopItems = {
 			{make = "Ocelot", model = "XA-21", price = 3400999, hash = 917809321},
 			{make = "Grotti", model = "Turismo R", price = 4000000, hash = 408192225}
 		},
-		["classic"] = {
+		["Cassic"] = {
 			{make = "Vapid", model = "Peyote", price = 100000, hash = 1830407356},
 			{make = "Lampadati", model = "Casco", price = 183007, hash = 941800958},
 			{make = "Pegassi", model = "Monroe", price = 250800, hash = -433375717},
@@ -451,7 +451,7 @@ vehicleShopItems = {
 			{make = "Pegassi", model = "Infernus Classic", price = 350750, hash = -1405937764},
 			{make = "Albany", model = "Roosevelt Valor", price = 550350, hash = -602287871}
 		},
-		["sedans"] = {
+		["Sedans"] = {
 			{make = "Albany", model = "Emperor", price = 3500, hash = -1883002148},
 			{make = "Albany", model = "Washington", price = 9989, hash = 1777363799},
 			{make = "Albany", model = "Primo", price = 6000, hash = -1150599089},
@@ -465,7 +465,7 @@ vehicleShopItems = {
 			{make = "Enus", model = "Cognoscenti", price = 85500, hash = -2030171296},
 			{make = "Enus", model = "Super Diamond", price = 95000, hash = 1123216662}
 		},
-		["specials"] = {
+		["Specials"] = {
 			{make = "Declasse", model = "Burrito Lost", price = 100000, hash = -1745203402},
 			{make = "Vapid", model = "Slam Van Lost", price = 150000, hash = 833469436},
 			{make = "Bati", model = "801 Race", price = 175000, hash = -891462355},
