@@ -39,16 +39,18 @@ RegisterServerEvent("garage:checkVehicleStatus")
 AddEventHandler("garage:checkVehicleStatus", function(vehicle)
 	print("inside checkVehicleStatus with vehicle = " .. vehicle.model)
 	local userSource = tonumber(source)
+	local withdraw_fee = 0
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local userVehicles = user.getActiveCharacterData("vehicles")
 		local playerInsurance = user.getActiveCharacterData("insurance")
 		local user_money = user.getActiveCharacterData("money")
 		if vehicle.impounded == true then
+			withdraw_fee = 2000
 			print("users vehicle was impounded!")
-			if user_money >= 2000 then
+			if user_money >= withdraw_fee then
 				TriggerClientEvent("garage:notify", userSource, "~g~BC IMPOUND: ~w~Here's your car!")
 				TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
-				user.setActiveCharacterData("money", user_money - 2000)
+				user.setActiveCharacterData("money", user_money - withdraw_fee)
 				--vehicle.impounded = false
 				for i = 1, #userVehicles do
 					local thisVeh = userVehicles[i]
@@ -65,15 +67,27 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle)
 		end
 		if vehicle.stored == false then
 			if playerHasValidAutoInsurance(playerInsurance, userSource) then
+				withdraw_fee = 900
 				--TriggerClientEvent("garage:notify", userSource, "~g~T. ENDS INSURANCE: ~w~Here's your vehicle! ~y~You will now need to renew your insurance.")
-				TriggerClientEvent("garage:notify", userSource, "~g~T. ENDS INSURANCE: ~w~Here's your vehicle!")
+				TriggerClientEvent("garage:notify", userSource, "~g~T. ENDS INSURANCE: ~w~Here's your vehicle! Storage fee: $" .. withdraw_fee)
 				TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
 				--user.setInsurance({})
+				if user_money >= withdraw_fee then
+					user.setActiveCharacterData("money", user_money - withdraw_fee)
+				else
+					local user_bank = user.getActiveCharacterData("bank")
+					if user_bank >= withdraw_fee then
+						user.setActiveCharacterData("bank", user_bank  - withdraw_fee)
+					else
+						print("user literally doesn't have any money to withdraw their vehicle from the garage!")
+					end
+				end
 			else
 				TriggerClientEvent("garage:vehicleNotStored", userSource)
 			end
 		else
-			TriggerClientEvent("garage:notify", userSource, "Here's your car!")
+			withdraw_fee = 150
+			TriggerClientEvent("garage:notify", userSource, "Here's your car! Storage Fee: $" .. withdraw_fee)
 			TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
 			--vehicle.stored = false
 			for i = 1, #userVehicles do
@@ -81,6 +95,7 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle)
 				if thisVeh.plate == vehicle.plate then
 					userVehicles[i].stored = false
 					user.setActiveCharacterData("vehicles", userVehicles)
+					user.setActiveCharacterData("money", user_money - withdraw_fee)
 				end
 			end
 		end
