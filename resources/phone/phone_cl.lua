@@ -113,11 +113,6 @@ RegisterNUICallback('send911Message', function(data, cb)
     cb('ok')
 end)
 
-RegisterNUICallback('sendEmsMessage', function(data, cb)
-	TriggerServerEvent("phone:sendEmsMessage", data)
-    cb('ok')
-end)
-
 RegisterNUICallback('sendTaxiMessage', function(data, cb)
 	TriggerServerEvent("phone:sendTaxiMessage", data)
     cb('ok')

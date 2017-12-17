@@ -11,7 +11,8 @@ AddEventHandler("taxi:setJob", function()
             if not timeout then
                 print("user " .. GetPlayerName(source) .. " just went on duty for downtown taxi cab co.!")
                 user.setActiveCharacterData("job", "taxi")
-                TriggerClientEvent("taxi:onDuty", source)
+                local name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
+                TriggerClientEvent("taxi:onDuty", source, name)
                 timeout = true
                 SetTimeout(15000, function()
                     timeout = false

@@ -290,15 +290,6 @@ $(function() {
         $.post('http://phone/escape', JSON.stringify({}));
     });
 
-    $("#ems-phone-app-form").submit(function() {
-        // send the message to ems
-        $.post('http://phone/sendEmsMessage', JSON.stringify({
-            message: $("#ems-message").val()
-        }));
-        // close phone
-        $.post('http://phone/escape', JSON.stringify({}));
-    });
-
     $("#taxi-phone-app-form").submit(function() {
         // send the message to ems
         $.post('http://phone/sendTaxiMessage', JSON.stringify({

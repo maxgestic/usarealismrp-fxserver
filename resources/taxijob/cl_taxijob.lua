@@ -1,10 +1,10 @@
-local taxiDutyX, taxiDutyY, taxiDutyZ = 895.563, -179.536, 73.8003
-local spawn = {x=907.193,y= -186.33,z=74.0205}
+local taxiDutyX, taxiDutyY, taxiDutyZ = -41.306, 6436.432, 30.490
+local spawn = {x=-29.793,y= 6435.638,z=31.426}
 
 RegisterNetEvent("taxi:onDuty")
-AddEventHandler("taxi:onDuty", function()
+AddEventHandler("taxi:onDuty", function(name)
 	DrawCoolLookingNotificationWithTaxiPic("Here's your cab! Have a good shift!")
-	spawnVehicle()
+	spawnVehicle(name)
 end)
 
 RegisterNetEvent("taxi:offDuty")
@@ -32,7 +32,7 @@ Citizen.CreateThread(function()
 	end
 end)
 
-function spawnVehicle()
+function spawnVehicle(name)
     local numberHash = -956048545
     Citizen.CreateThread(function()
         RequestModel(numberHash)
@@ -45,6 +45,7 @@ function spawnVehicle()
         SetVehicleOnGroundProperly(vehicle)
         SetVehRadioStation(vehicle, "OFF")
         SetEntityAsMissionEntity(vehicle, true, true)
+		SetVehicleNumberPlateText(vehicle, name)
     end)
 end
 
