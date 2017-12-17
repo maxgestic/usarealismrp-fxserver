@@ -213,7 +213,12 @@ Citizen.CreateThread(function()
 						local vehicle = menu.vehicles[i]
 						if vehicle then
 							--print("adding vehicle: " .. vehicle.make .. " " .. vehicle.model .. " to menu")
-							local vehName = vehicle.make .. " " .. vehicle.model
+							local vehName = "Undefined"
+							if vehicle.make then
+								vehName = vehicle.make .. " " .. vehicle.model
+							else
+								vehName = vehicle.model
+							end
 							TriggerEvent("vehShop-GUI:Option", "+ ($" .. comma_value(vehicle.sellPrice) .. ") " .. vehName, function(cb)
 								if cb then
 									TriggerEvent("usa:notify", "~y~SOLD:~w~ " .. vehName .. "\n~y~PRICE: ~g~$" .. comma_value(vehicle.sellPrice))

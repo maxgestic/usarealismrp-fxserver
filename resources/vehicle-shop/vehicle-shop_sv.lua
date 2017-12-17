@@ -123,6 +123,8 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle)
 		local allLicenses = user.getActiveCharacterData("licenses")
 		local license = nil
 		local vehicles = user.getActiveCharacterData("vehicles")
+		local user_money = user.getActiveCharacterData("money")
+		local owner_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
 		if #vehicles <= MAX_PLAYER_VEHICLES then
 			for i = 1, #allLicenses do
 				if allLicenses[i].name == "Driver's License" then
@@ -135,16 +137,12 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle)
 					hash = vehicle.hash
 					price = vehicle.price
 		            if not alreadyHasVehicle(userSource, vehicleName) then
-		    			if tonumber(price) <= user.getActiveCharacterData("money") then
+		    			if tonumber(price) <= user_money then
 							plate = tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9))
-		    				--TriggerClientEvent("mini:spawnVehicleAtShop", source, hash, vehicleName, tostring(plate)) -- spawn it
-							TriggerEvent('es:getPlayerFromId', userSource, function(user)
-								local vehicles = user.getActiveCharacterData("vehicles")
 								if vehicles then
-									local user_money = user.getActiveCharacterData("money")
 									user.setActiveCharacterData("money", user_money - tonumber(price))
 									local vehicle = {
-										owner = GetPlayerName(userSource),
+										owner = owner_name,
 										make = vehicle.make,
 										model = vehicle.model,
 										hash = hash,
@@ -165,7 +163,6 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle)
 									--TriggerEvent("sway:updateDB", userSource)
 									TriggerClientEvent("vehShop:spawnPlayersVehicle", userSource, hash, plate)
 								end
-							end)
 		    			else
 		    				TriggerClientEvent("mini:insufficientFunds", userSource, price, "vehicle")
 		    			end
@@ -209,7 +206,7 @@ AddEventHandler("vehShop:sellVehicle", function(toSellVehicle)
 		local vehicles = user.getActiveCharacterData("vehicles")
 		for i = 1, #vehicles do
 			local vehicle = vehicles[i]
-			if vehicle.model == toSellVehicle.model then
+			if vehicle.model == toSellVehicle.model and vehicle.plate == toSellVehicle.plate then
 				table.remove(vehicles, i)
 				local oldMoney = user.getActiveCharacterData("money")
 				local newMoney = round(oldMoney + (vehicle.price * .50),0)
