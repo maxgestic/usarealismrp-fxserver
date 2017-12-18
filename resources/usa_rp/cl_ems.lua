@@ -25,6 +25,7 @@ end)
 RegisterNetEvent("ems:admitPatient")
 AddEventHandler("ems:admitPatient", function()
     lPed = GetPlayerPed(-1)
+    RequestCollisionAtCoord(hospitalCoords.x, hospitalCoords.y, hospitalCoords.z)
     SetEntityCoords(GetPlayerPed(-1), hospitalCoords.x, hospitalCoords.y, hospitalCoords.z, 1, 0, 0, 1) -- tp to hospital
     admitted = true
 end)
@@ -32,6 +33,7 @@ end)
 RegisterNetEvent("ems:releasePatient")
 AddEventHandler("ems:releasePatient", function()
     lPed = GetPlayerPed(-1)
+    RequestCollisionAtCoord(releaseCoords.x, releaseCoords.y, releaseCoords.z)
     SetEntityCoords(GetPlayerPed(-1), releaseCoords.x, releaseCoords.y, releaseCoords.z, 1, 0, 0, 1) -- tp to hospital
     admitted = false
 end)
