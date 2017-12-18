@@ -23,6 +23,7 @@ local emergencySkins = {
 	{name = "s_f_y_scrubs_01", type="fire"},
 	{name = "mp_m_freemode_01", type="police"},
 	{name = "mp_f_freemode_01", type="police"},
+	{name = "s_m_m_doctor_01", type="fire"}
 }
 
 local magic = {}
@@ -60,7 +61,7 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Wait(1)
-		
+
 		--[[
 		for id = 0, 64 do
 			x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(id), true))
