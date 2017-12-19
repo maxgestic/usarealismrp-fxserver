@@ -14,29 +14,46 @@ local notificationParam = 1 -- 1 = LockSystem notification | 2 = chatMessage not
 local keyParam = Keys["U"] -- e.g : Keys["H"] will be change the U key to the H key for lock/unlock a vehicle
 local soundEnable = true -- Set to false for disable sounds
 local disableCar_NPC = true -- Set to false for enable NPC's car
-local soundDistance = 10 -- Distance of sounds lock / unlock (default: 10m)
+local soundDistance = 6 -- Distance of sounds lock / unlock (default: 10m)
 
---[[
-		######### -- READ BELOW -- #########
+if disableCar_NPC then
+	Citizen.CreateThread(function()
+    	while true do
+			Wait(0)
 
-		- Engine System:
+			local player = GetPlayerPed(-1)
 
-		The vehicle's engine turns off and turns on solo correctly but if someone rides in a vehicle the engine will not turn off. 
-		This is due to the synchronization of fivem and after 4 hours of research we can't do anything at the moment.
-]]
+	        if DoesEntityExist(GetVehiclePedIsTryingToEnter(PlayerPedId(player))) then
 
--- BELOW : ONLY FOR PROGRAMMER --
+	            local veh = GetVehiclePedIsTryingToEnter(PlayerPedId(player))
+	            local lock = GetVehicleDoorLockStatus(veh)
 
-local player = GetPlayerPed(-1)
+	            if lock == 7 or lock == 0 then
+	                SetVehicleDoorsLocked(veh, 2)
+	            end
+
+	            local pedd = GetPedInVehicleSeat(veh, -1)
+
+	            if pedd then
+	                SetPedCanBeDraggedOut(pedd, false)
+	            end
+	        end
+	    end
+	end)
+end
+
+local player = GetPlayerPed(-1) -- the player trying to lock/unlock
+local vehicle = nil -- vehicle to be kept locked/unlocked (either inside already or the vehicle in front of player)
+local isPlayerInside = nil -- is player inside of any vehicle when trying to lock/unlock?
 
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
 
-		vehicle = GetVehiclePedIsIn(player, false)
-		isPlayerInside = IsPedInAnyVehicle(player, true)
-
 		if IsControlJustPressed(1, keyParam) then
+
+			vehicle = GetVehiclePedIsIn(player, false)
+			isPlayerInside = IsPedInAnyVehicle(player, true)
 
 			player = GetPlayerPed(-1)
 			lastVehicle = GetPlayersLastVehicle()
@@ -59,113 +76,99 @@ Citizen.CreateThread(function()
 
 				if vehicle ~= 0 then
 					plate = GetVehicleNumberPlateText(vehicle)
+					print("inside of vehicle already!")
+					print("checking lock key & lock status for plate " .. plate)
+					print("vehicle = " .. vehicle)
 				else
 					vehicle = targetVehicle
 					plate = GetVehicleNumberPlateText(vehicle)
+					print("not inside a vehicle! target = " .. targetVehicle)
+					print("checking lock key & lock status for plate " .. plate)
+					print("vehicle = " .. vehicle)
 				end
 
-				TriggerServerEvent("ls:check", plate, vehicle, isPlayerInside, notificationParam)
+				-- since only 7 letters are currently being used for license plates, trim off the last character (whitespace) since default gta uses 8 characters
+				plate = string.sub(plate, 1, 7)
+				--TriggerServerEvent("ls:check", plate, vehicle, isPlayerInside, notificationParam)
+				TriggerServerEvent("lock:checkForKey", plate)
 
 			end
 		end
 	end
 end)
 
-RegisterNetEvent("ls:lock")
-AddEventHandler("ls:lock", function(lockStatus, vehicle)
+RegisterNetEvent("lock:lockVehicle")
+AddEventHandler("lock:lockVehicle", function()
+	local lockStatus = GetVehicleDoorLockStatus(vehicle)
+	print("inside lockVehicle with lockStatus = " .. lockStatus)
 
-	if lockStatus == 1 or lockStatus == 0 then -- Si le véhicule est déverrouillé (on le verrouille):
+	if IsVehicleEngineOn(vehicle) then
+		--SetVehicleUndriveable(vehicle, true)
+	end
 
-		if IsVehicleEngineOn(vehicle) and not isPlayerInside then
-			SetVehicleUndriveable(vehicle, true)
-		end
+	print("locking doors!")
+	SetVehicleDoorsLocked(vehicle, 2)
+	SetVehicleDoorsLockedForAllPlayers(vehicle, true)
 
-		SetVehicleDoorsLocked(vehicle, 2) 
-		SetVehicleDoorsLockedForPlayer(vehicle, PlayerId(), true)
-		TriggerServerEvent("ls:updateLockStatus", 2, plate)
+	-- ## Notifications
+		if soundEnable then TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "lock", 1.0) end
+		TriggerEvent("lock:sendNotification", notificationParam, "Vehicle locked.", 0.080)
+	-- ## Notifications
+end)
 
-		-- ## Notifications
-			if soundEnable then TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "lock", 1.0) end
-			TriggerEvent("ls:sendNotification", notificationParam, "Vehicle locked.", 0.080)
-		-- ## Notifications
+RegisterNetEvent("lock:unlockVehicle")
+AddEventHandler("lock:unlockVehicle", function()
+	local lockStatus = GetVehicleDoorLockStatus(vehicle)
+	print("inside unlockVehicle with lockStatus = " .. lockStatus)
 
-	elseif lockStatus == 2 then -- Si le véhicule est verrouillé
+	if not IsVehicleEngineOn(vehicle) then
+		--SetVehicleUndriveable(vehicle, false)
+	end
 
-		if not IsVehicleEngineOn(vehicle) then
-			Citizen.CreateThread(function()
-				while true do
-					Wait(0)
-					if isPlayerInside then
-						SetVehicleUndriveable(vehicle, false)
-						break
-					end
-				end
-			end)
-		end
+	print("unlocking doors!")
+	SetVehicleDoorsLocked(vehicle, 1)
+	SetVehicleDoorsLockedForAllPlayers(vehicle, false)
 
-		SetVehicleDoorsLocked(vehicle, 1)
-		SetVehicleDoorsLockedForPlayer(vehicle, PlayerId(), false)
-		TriggerServerEvent("ls:updateLockStatus", 1, plate) 
+	-- ## Notifications
+		if soundEnable then	TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "unlock", 1.0) end
+		TriggerEvent("lock:sendNotification", notificationParam, "Vehicle unlocked.", 0.080)
+	-- ## Notifications
 
-		-- ## Notifications
-			if soundEnable then	TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "unlock", 1.0) end
-			TriggerEvent("ls:sendNotification", notificationParam, "Vehicle unlocked.", 0.080)
-		-- ## Notifications
+end)
 
+RegisterNetEvent("lock:lookForKeys")
+AddEventHandler("lock:lookForKeys", function(plate)
+	if isPlayerInside and IsVehicleEngineOn(vehicle) then
+		TriggerServerEvent("lock:foundKeys", true, plate)
+	else
+		TriggerServerEvent("lock:foundKeys", false)
 	end
 end)
 
-if not enableCar_NPC then
-	Citizen.CreateThread(function()
-    	while true do
-			Wait(0)
-
-			local player = GetPlayerPed(-1)
-
-	        if DoesEntityExist(GetVehiclePedIsTryingToEnter(PlayerPedId(player))) then
-
-	            local veh = GetVehiclePedIsTryingToEnter(PlayerPedId(player))
-	            local lock = GetVehicleDoorLockStatus(veh)
-
-	            if lock == 7 then
-	                SetVehicleDoorsLocked(veh, 2)
-	            end
-
-	            local pedd = GetPedInVehicleSeat(veh, -1)
-
-	            if pedd then
-	                SetPedCanBeDraggedOut(pedd, false)
-	            end
-	        end
-	    end
-	end)
-end
-
-RegisterNetEvent("ls:createMissionEntity")
-AddEventHandler("ls:createMissionEntity", function(vehicleId)
-
-	SetEntityAsMissionEntity(vehicleId, true, true)
-end)
-
-RegisterNetEvent("ls:notify")
-AddEventHandler("ls:notify", function(text, time)
-	SetNotificationTextEntry("STRING")
-	AddTextComponentString(text)
-	Citizen.InvokeNative(0x1E6611149DB3DB6B, "CHAR_LIFEINVADER", "CHAR_LIFEINVADER", true, 1, "LockSystem", "Version 2.0.3", time)
-	DrawNotification_4(false, true)
-end)
-
-RegisterNetEvent("ls:sendNotification")
-AddEventHandler("ls:sendNotification", function(param, message, duration)
+RegisterNetEvent("lock:sendNotification")
+AddEventHandler("lock:sendNotification", function(param, message, duration)
 	if param == 1 then
-		TriggerEvent("ls:notify", message, duration)
+		TriggerEvent("lock:notify", message, duration)
 	elseif param == 2 then
 		TriggerEvent('chatMessage', 'LockSystem', { 255, 128, 0 }, message)
 	end
 end)
 
+RegisterNetEvent("lock:notify")
+AddEventHandler("lock:notify", function(text, time)
+	SetNotificationTextEntry("STRING")
+	AddTextComponentString(text)
+	Citizen.InvokeNative(0x1E6611149DB3DB6B, "CHAR_LIFEINVADER", "CHAR_LIFEINVADER", true, 1, "Mini-Lock", "Version 1.0.0", time)
+	DrawNotification_4(false, true)
+end)
+
+RegisterNetEvent("lock:printLockStatus")
+AddEventHandler("lock:printLockStatus", function()
+	print("LOCK STATUS: " .. GetVehicleDoorLockStatus(vehicle))
+end)
+
 function GetVehicleInDirection(coordFrom, coordTo)
 	local rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 10, GetPlayerPed(-1), 0)
-	local a, b, c, d, vehicle = GetRaycastResult(rayHandle)
-	return vehicle
+	local a, b, c, d, vehicleResult = GetRaycastResult(rayHandle)
+	return vehicleResult
 end

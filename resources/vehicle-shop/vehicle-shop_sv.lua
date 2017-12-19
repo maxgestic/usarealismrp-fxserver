@@ -150,8 +150,15 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle)
 										stored = false,
 										price = price
 									}
+									local vehicle_key = {
+										name = "Key -- " .. plate,
+										quantity = 1,
+										owner = owner_name,
+										make = vehicle.make,
+										model = vehicle.model,
+										plate = plate
+									}
 									--  prevent gui menu from breaking i believe (i think 16 is max # of menu items possible)
-									--print("#vehicles: " .. #vehicles)
 									print("buying vehicle")
 									table.insert(vehicles, vehicle)
 									user.setActiveCharacterData("vehicles", vehicles)
@@ -160,7 +167,14 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle)
 									print("vehicle.model = " .. vehicle.model)
 									print("vehicle.plate = " .. vehicle.plate)
 									print("vehicle.stored = " .. tostring(vehicle.stored))
+									-- give player the key to the whip
+									local inv = user.getActiveCharacterData("inventory")
+									table.insert(inv, vehicle_key)
+									user.setActiveCharacterData("inventory", inv)
+									-- add vehicle plate to locking resource list:
+									TriggerEvent("lock:addPlate", vehicle.plate)
 									--TriggerEvent("sway:updateDB", userSource)
+									TriggerClientEvent("usa:notify", userSource, "Here are the keys! Thanks for your business!")
 									TriggerClientEvent("vehShop:spawnPlayersVehicle", userSource, hash, plate)
 								end
 		    			else

@@ -61,7 +61,9 @@ AddEventHandler("garage:storeVehicle", function()
 	TriggerEvent("garage:notify", "~g~We'll keep this fine thing safe for you.")
 	SetEntityAsMissionEntity(veh, true, true)
 	Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(veh))
-	TriggerServerEvent("ls:removeKey", plate, veh)
+	-- store vehicle key with vehicle
+	print("attempting to storing vehicle key!")
+	TriggerServerEvent("garage:storeKey", plate)
 end)
 
 RegisterNetEvent("garage:vehicleNotStored")
@@ -74,50 +76,24 @@ AddEventHandler("garage:vehicleStored", function(vehicle)
 	TriggerEvent("garage:spawn", vehicle)
 end)
 
---[[ COPY - BACKUP -
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(0)
-	    for _, info in pairs(locations) do
-			if GetDistanceBetweenCoords(info['x'], info['y'], info['z'],GetEntityCoords(GetPlayerPed(-1))) < 50 then
-				DrawMarker(1, info['x'], info['y'], info['z']-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
-				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), info['x'], info['y'], info['z'], true) < 2 then
-					if allowed then
-						DrawSpecialText("Press [ ~b~E~w~ ] to get your vehicle out of the garage.")
-						if IsControlPressed(0, 86) then
-							if not pressed then
-								TriggerServerEvent("garage:spawn")
-								pressed = true
-								while pressed do
-									Wait(0)
-									if(IsControlPressed(0, 86) == false) then
-										pressed = false
-										break
-									end
-								end
-							end
-						end
-					else
-						DrawSpecialText("Press [ ~b~E~w~ ] to store your vehicle in the garage.")
-						if IsControlPressed(0, 86) then
-							if not pressed then
-								TriggerServerEvent("garage:getVehicleInfo")
-							end
-						end
-					end
-				end
-			end
-		end
-	end
-end)
-]]
-
 RegisterNetEvent("garage:spawn")
 AddEventHandler("garage:spawn", function(vehicle)
 	local playerVehicle = vehicle
 	local modelHash = vehicle.hash
 	local plateText = vehicle.plate
 	local numberHash = modelHash
+
+	local vehicle_key = {
+		name = "Key -- " .. vehicle.plate,
+		quantity = 1,
+		owner = vehicle.owner,
+		make = vehicle.make,
+		model = vehicle.model,
+		plate = vehicle.plate
+	}
+
+	-- give key to owner
+	TriggerServerEvent("garage:giveKey", vehicle_key)
 
 	if type(modelHash) ~= "number" then
 		numberHash = tonumber(modelHash)
@@ -146,11 +122,6 @@ AddEventHandler("garage:spawn", function(vehicle)
 		if playerVehicle.customizations then
 			TriggerEvent("customs:applyCustomizations", playerVehicle.customizations)
 		end
-
-		-- Add key to LockSystem
-		lsvehicle = GetVehiclePedIsIn(playerPed, false)
-		plate = GetVehicleNumberPlateText(lsvehicle)
-		TriggerServerEvent("ls:addkey", plate, lsvehicle)
 
 	end)
 
