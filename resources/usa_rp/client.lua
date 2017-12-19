@@ -305,6 +305,8 @@ Citizen.CreateThread(function()
 	end
 end)
 
+
+-- V E H I C L E  C O N T R O L S
 -- roll windows [usage: /rollw]
 local windowup = true
 RegisterNetEvent("RollWindow")
@@ -314,7 +316,6 @@ AddEventHandler('RollWindow', function()
         local playerCar = GetVehiclePedIsIn(playerPed, false)
 		if ( GetPedInVehicleSeat( playerCar, -1 ) == playerPed ) then
             SetEntityAsMissionEntity( playerCar, true, true )
-
 			if ( windowup ) then
 				RollDownWindow(playerCar, 0)
 				RollDownWindow(playerCar, 1)
@@ -329,6 +330,76 @@ AddEventHandler('RollWindow', function()
 		end
 	end
 end )
+
+RegisterNetEvent("veh:openDoor")
+AddEventHandler("veh:openDoor", function(index)
+    print("opening door with index = " .. index)
+    local playerPed = GetPlayerPed(-1)
+    if IsPedInAnyVehicle(playerPed, false) then
+        local playerCar = GetVehiclePedIsIn(playerPed, false)
+        if index == "trunk" then
+            print("index was trunk!")
+            SetVehicleDoorOpen(playerCar, 5, true, false)
+        elseif index == "hood" then
+            SetVehicleDoorOpen(playerCar, 4, true, false)
+        elseif index == "fl" then
+            SetVehicleDoorOpen(playerCar, 0, true, false)
+        elseif index == "fr" then
+            SetVehicleDoorOpen(playerCar, 1, true, false)
+        elseif index == "bl" then
+            SetVehicleDoorOpen(playerCar, 2, true, false)
+        elseif index == "br" then
+        SetVehicleDoorOpen(playerCar, 3, true, false)
+        elseif index == "ambulance" then
+            SetVehicleDoorOpen(playerCar, 2, true, false)
+            SetVehicleDoorOpen(playerCar, 3, true, false)
+        end
+    end
+end)
+
+RegisterNetEvent("veh:shutDoor")
+AddEventHandler('veh:shutDoor', function(index)
+    print("inside shut door!")
+    local playerPed = GetPlayerPed(-1)
+    if IsPedInAnyVehicle(playerPed, false) then
+        local playerCar = GetVehiclePedIsIn(playerPed, false)
+        if index == "trunk" then
+            SetVehicleDoorShut(playerCar, 5, false)
+        elseif index == "hood" then
+            SetVehicleDoorShut(playerCar, 4, false)
+        elseif index == "fl" then
+            SetVehicleDoorShut(playerCar, 0, false)
+        elseif index == "fr" then
+            SetVehicleDoorShut(playerCar, 1, false)
+        elseif index == "bl" then
+            SetVehicleDoorShut(playerCar, 2, false)
+        elseif index == "br" then
+        SetVehicleDoorShut(playerCar, 3, false)
+        elseif index == "ambulance" then
+            SetVehicleDoorShut(playerCar, 2, false)
+            SetVehicleDoorShut(playerCar, 3, false)
+        end
+    end
+end)
+
+RegisterNetEvent("veh:toggleEngine")
+AddEventHandler('veh:toggleEngine', function(status)
+    local playerPed = GetPlayerPed(-1)
+    if IsPedInAnyVehicle(playerPed, false) then
+        local playerCar = GetVehiclePedIsIn(playerPed, false)
+        local targetVehicle = GetVehiclePedIsIn(playerPed, 1)
+        if status == "on" then
+            local vehicleEngineHealth = GetVehicleEngineHealth(targetVehicle)
+            if vehicleEngineHealth > 850 then
+                SetVehicleEngineOn(targetVehicle, true, false, false)
+            else
+                TriggerEvent("usa:notify", "Your vehicle is disabled! Can't turn the engine on.")
+            end
+        elseif status == "off" then
+            SetVehicleEngineOn(targetVehicle, false, false, false)
+        end
+    end
+end)
 
 -- UTILITY FUNCTIONS
 RegisterNetEvent("usa:notify")

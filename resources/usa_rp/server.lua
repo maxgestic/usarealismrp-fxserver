@@ -88,8 +88,35 @@ AddEventHandler("usa_rp:checkJailedStatusOnPlayerJoin", function(source)
 	end)
 end)
 
+-- V E H I C L E  C O N T R O L S
 TriggerEvent('es:addCommand', 'rollw', function(source, args, user)
 	TriggerClientEvent("RollWindow", source)
+end)
+
+TriggerEvent('es:addCommand', 'open', function(source, args, user)
+    if args[2] then
+        print("opening " .. args[2])
+        TriggerClientEvent("veh:openDoor", source, args[2])
+        TriggerClientEvent("usa:notify", source, "test")
+    end
+end)
+
+TriggerEvent('es:addCommand', 'close', function(source, args, user)
+    if args[2] then
+            TriggerClientEvent("veh:shutDoor", source, args[2])
+    end
+end)
+
+TriggerEvent('es:addCommand', 'shut', function(source, args, user)
+    if args[2] then
+            TriggerClientEvent("veh:shutDoor", source, args[2])
+    end
+end)
+
+TriggerEvent('es:addCommand', 'engine', function(source, args, user)
+    if args[2] then
+            TriggerClientEvent("veh:toggleEngine", source, args[2])
+    end
 end)
 
 -- U T I L I T Y  F U N C T I O N S
