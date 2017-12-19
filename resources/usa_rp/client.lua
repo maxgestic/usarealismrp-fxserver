@@ -388,15 +388,17 @@ AddEventHandler('veh:toggleEngine', function(status)
     if IsPedInAnyVehicle(playerPed, false) then
         local playerCar = GetVehiclePedIsIn(playerPed, false)
         local targetVehicle = GetVehiclePedIsIn(playerPed, 1)
-        if status == "on" then
-            local vehicleEngineHealth = GetVehicleEngineHealth(targetVehicle)
-            if vehicleEngineHealth > 850 then
-                SetVehicleEngineOn(targetVehicle, true, false, false)
-            else
-                TriggerEvent("usa:notify", "Your vehicle is disabled! Can't turn the engine on.")
+        if GetPedInVehicleSeat(targetVehicle, -1) == playerPed then
+            if status == "on" then
+                local vehicleEngineHealth = GetVehicleEngineHealth(targetVehicle)
+                if vehicleEngineHealth > 850 then
+                    SetVehicleEngineOn(targetVehicle, true, false, false)
+                else
+                    TriggerEvent("usa:notify", "Your vehicle is disabled! Can't turn the engine on.")
+                end
+            elseif status == "off" then
+                SetVehicleEngineOn(targetVehicle, false, false, false)
             end
-        elseif status == "off" then
-            SetVehicleEngineOn(targetVehicle, false, false, false)
         end
     end
 end)

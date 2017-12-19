@@ -138,7 +138,7 @@ end)
 
 RegisterNetEvent("lock:lookForKeys")
 AddEventHandler("lock:lookForKeys", function(plate)
-	if isPlayerInside and IsVehicleEngineOn(vehicle) then
+	if isPlayerInside and IsVehicleEngineOn(vehicle) and GetPedInVehicleSeat(vehicle, -1) == GetPlayerPed(-1) then
 		TriggerServerEvent("lock:foundKeys", true, plate)
 	else
 		TriggerServerEvent("lock:foundKeys", false)
