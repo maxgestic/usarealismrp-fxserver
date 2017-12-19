@@ -152,15 +152,19 @@ function toggleMenu(status, menu, data)
     local ped = GetPlayerPed(-1)
     if status then
         SetEntityCoords(ped, open_menu_spawn_coords.x, open_menu_spawn_coords.y, open_menu_spawn_coords.z, open_menu_spawn_coords.angle, 0, 0, 1)
+        FreezeEntityPosition(GetPlayerPed(-1), status)
+        SetEnableHandcuffs(GetPlayerPed(-1), status)
         RemoveAllPedWeapons(ped, true)
     else
         RequestCollisionAtCoord(spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z)
         SetEntityCoords(ped, spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z, 0.0, 0, 0, 1)
+        FreezeEntityPosition(GetPlayerPed(-1), status)
+        SetEnableHandcuffs(GetPlayerPed(-1), status)
     end
-    FreezeEntityPosition(ped, status)
+    print("status = " .. tostring(status))
+    print("ped = " .. ped)
     DisplayHud(not status)
     DisplayRadar(not status)
-    SetEnableHandcuffs(ped, status)
     -- open / close menu
     SetNuiFocus(status, status)
     menuOpen = status
@@ -171,3 +175,12 @@ function toggleMenu(status, menu, data)
         data = data
     })
 end
+
+Citizen.CreateThread(function()
+    while true do
+        Wait(1)
+        if menuOpen then
+            SetEntityCoords(GetPlayerPed(-1), open_menu_spawn_coords.x, open_menu_spawn_coords.y, open_menu_spawn_coords.z, open_menu_spawn_coords.angle, 0, 0, 1)
+        end
+    end
+end)
