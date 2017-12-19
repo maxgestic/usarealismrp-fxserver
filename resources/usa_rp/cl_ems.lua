@@ -1,7 +1,11 @@
 local admitted = false
 local hospitalCoords = {x = 354.032, y = -589.411, z = 42.415}
 --local releaseCoords = {x = 304.785, y = -591.046, z = 42.4919} -- LS
-local releaseCoords = {x = -240.10, y = 6324.22, z = 32.43} -- paleto
+local releaseCoords = {
+    {x = -240.10, y = 6324.22, z = 32.43}, -- paleto
+    {x = 307.63, y = -593.948, z = 42.2919}, -- LS
+    {x = 1814.914, y = 3685.767, z = 34.224} -- sandy
+}
 local healStations = {
     {x = 307.63, y = -593.948, z = 42.2919}, -- LS
     {x = -380.562, y = 6119.039, z = 30.631}, -- PALETO FD
@@ -22,8 +26,19 @@ AddEventHandler("ems:notifyHospitalized", function(time, reason)
     DrawNotification(0,1)
 end)
 
+local closest_release = nil
+local closest_distance = 9999999999999999
+
 RegisterNetEvent("ems:admitPatient")
 AddEventHandler("ems:admitPatient", function()
+    --get release location
+    for i = 1, #releaseCoords do
+        if getPlayerDistanceFromCoords(releaseCoords[i].x, releaseCoords[i].y, releaseCoords[i].z) < closest_distance then
+            closest_distance = getPlayerDistanceFromCoords(releaseCoords[i].x, releaseCoords[i].y, releaseCoords[i].z)
+            closest_release = releaseCoords[i]
+        end
+    end
+    -- admit
     lPed = GetPlayerPed(-1)
     RequestCollisionAtCoord(hospitalCoords.x, hospitalCoords.y, hospitalCoords.z)
     SetEntityCoords(GetPlayerPed(-1), hospitalCoords.x, hospitalCoords.y, hospitalCoords.z, 1, 0, 0, 1) -- tp to hospital
@@ -33,9 +48,11 @@ end)
 RegisterNetEvent("ems:releasePatient")
 AddEventHandler("ems:releasePatient", function()
     lPed = GetPlayerPed(-1)
-    RequestCollisionAtCoord(releaseCoords.x, releaseCoords.y, releaseCoords.z)
-    SetEntityCoords(GetPlayerPed(-1), releaseCoords.x, releaseCoords.y, releaseCoords.z, 1, 0, 0, 1) -- tp to hospital
+    RequestCollisionAtCoord(closest_release.x, closest_release.y, closest_release.z)
+    SetEntityCoords(GetPlayerPed(-1), closest_release.x, closest_release.y, closest_release.z, 1, 0, 0, 1) -- tp to hospital
     admitted = false
+    closest_release = nil
+    closest_distance = 999999999999
 end)
 
 RegisterNetEvent("ems:healPlayer")
