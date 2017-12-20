@@ -113,8 +113,8 @@ AddEventHandler("phone:sendTaxiMessage", function(data)
 			TriggerClientEvent('chatMessage', userSource, "", {0, 0, 0}, "A ^3taxi^0 has been notified!")
 			TriggerClientEvent("usa:notify", userSource, "A ~y~taxi ~w~has been notified!")
 		else
-			TriggerClientEvent('chatMessage', userSource, "", {0, 0, 0}, "Sorry, there is no one on duty as tow!")
-			TriggerClientEvent("usa:notify", userSource, "~y~Sorry, there is no one on duty as tow!")
+			TriggerClientEvent('chatMessage', userSource, "", {0, 0, 0}, "Sorry, there is no one on duty as taxi!")
+			TriggerClientEvent("usa:notify", userSource, "~y~Sorry, there is no one on duty as taxi!")
 		end
 	end)
 end)
