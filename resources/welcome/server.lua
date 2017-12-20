@@ -7,7 +7,7 @@ function helpText(source)
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "2) ^3/commands^0 - available commands")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "3) ^3/discord^0 - discord server link")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "4) ^3/rules^0 - to see the server rules")
-	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^3WEBSITE/RULES: ^0https://www.usarrp.net")
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^3WEBSITE: ^0https://www.usarrp.net")
 end
 
 function commandsText(source)
@@ -24,6 +24,11 @@ function commandsText(source)
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "11) ^3F1^0 - open interaction menu")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "12) ^3Press ^2F7^0 to open the players list")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "13) ^3Press ^2F2^0 to toggle your voip level")
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "14) ^3Press ^2U^0 to lock/unlock vehicles")
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "15) ^3/open [option]^0 options: hood, trunk, fr, fl, br, bl, ambulance")
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "16) ^3/close [option]^0 options: hood, trunk, fr, fl, br, bl, ambulance")
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "17) ^3/engine [option]^0 options: on, off")
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "18) ^3Page Up^0 to scroll up")
 end
 
 -- end util functions / start commands
