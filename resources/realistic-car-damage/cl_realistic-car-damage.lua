@@ -1,6 +1,7 @@
 local targetVehicle, targetPed
 local civEngineOverheatThreshold, copEngineOverheatThreshold = 960.0, 955.0 -- non-severe accidents (busted radiator)
 local engineDisabledThreshold = 945.0
+local bodyOverheatThreshold = 958.0
 local engineIsOn, savedVehicle
 
 local policeVehicles = {
@@ -48,21 +49,30 @@ Citizen.CreateThread(function()
      end
 end)
 
+-- TODO: disable on high body damage! USE: GetVehicleBodyHealth(veh)
 Citizen.CreateThread(function()
-    local vehicleEngineHealth
+    local vehicleEngineHealth, vehicleBodyHealth
     while true do
         Wait(1)
         targetPed = GetPlayerPed(-1)
         targetVehicle = GetVehiclePedIsIn(targetPed, 1)
         vehicleEngineHealth = GetVehicleEngineHealth(targetVehicle)
+        vehicleBodyHealth = GetVehicleBodyHealth(targetVehicle)
+        print("vehicle body HP: " .. vehicleBodyHealth)
         if targetVehicle and targetPed  and IsPedSittingInVehicle(targetPed, targetVehicle) then
-            if vehicleEngineHealth < engineDisabledThreshold then -- severe vehicle damage
+            if vehicleBodyHealth < bodyOverheatThreshold then
+                print("body health is overheating the vehicle!!")
+                overheatVehicle(targetVehicle)
+            elseif vehicleEngineHealth < engineDisabledThreshold then -- severe vehicle damage
+                print("engine health is overheating the vehicle!!")
                 DrawSpecialTextTimed("Your vehicle was ~r~disabled~w~!", 5)
                 SetVehicleUndriveable(targetVehicle, 1) -- disable car
                 SetVehicleEngineHealth(targetVehicle, 0.0) -- engine health to 0
             elseif vehicleEngineHealth >= engineDisabledThreshold and vehicleEngineHealth < civEngineOverheatThreshold and not IsPedInAnyPoliceVehicle(targetPed) then -- less severe vehicle damage, non police
+                print("body health is overheating the vehicle!!")
                 overheatVehicle(targetVehicle)
             elseif vehicleEngineHealth >= engineDisabledThreshold and vehicleEngineHealth < copEngineOverheatThreshold and IsPedInAnyPoliceVehicle(targetPed) then -- less severe vehicle damage, police
+                print("body health is overheating the vehicle!!")
                 overheatVehicle(targetVehicle)
             end
         end
