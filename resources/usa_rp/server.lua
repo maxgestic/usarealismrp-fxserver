@@ -97,7 +97,7 @@ TriggerEvent('es:addCommand', 'open', function(source, args, user)
     if args[2] then
         print("opening " .. args[2])
         TriggerClientEvent("veh:openDoor", source, args[2])
-        TriggerClientEvent("usa:notify", source, "test")
+        --TriggerClientEvent("usa:notify", source, "test")
     end
 end)
 
