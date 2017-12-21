@@ -104,7 +104,7 @@ local vehicleShopItems = {
 			{make = "Rimka", model = "Taco Truck", price = 60500, hash = 1951180813}
 		},
 		["Sports"] = {
-			{make = "Karin", model = "Sultan", price = 39500, hash = -1122289213},
+			{make = "Karin", model = "Sultan", price = 39500, hash = 970598228},
 			{make = "Ubermacht", model = "Zion Cabrio", price = 40015, hash = -1193103848},
 			{make = "Invetero", model = "Coquette", price = 65450, hash = 108773431},
 			{make = "Bravado", model = "Buffalo S", price = 67899, hash = 736902334},
@@ -328,6 +328,7 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle)
 									local vehicle_key = {
 										name = "Key -- " .. plate,
 										quantity = 1,
+										type = "key",
 										owner = owner_name,
 										make = vehicle.make,
 										model = vehicle.model,
