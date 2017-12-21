@@ -86,6 +86,7 @@ AddEventHandler("garage:spawn", function(vehicle)
 	local vehicle_key = {
 		name = "Key -- " .. vehicle.plate,
 		quantity = 1,
+		type = "key",
 		owner = vehicle.owner,
 		make = vehicle.make,
 		model = vehicle.model,

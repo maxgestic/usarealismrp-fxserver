@@ -47,6 +47,7 @@ AddEventHandler("lock:foundKeys", function(found, plate)
         local vehicle_key = {
             name = "Key -- " .. plate,
             quantity = 1,
+            type = "key",
             owner = "Stolen?",
             make = "???",
             model = "???",

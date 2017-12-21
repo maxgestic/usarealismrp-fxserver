@@ -158,7 +158,7 @@ RegisterNetEvent("lock:notify")
 AddEventHandler("lock:notify", function(text, time)
 	SetNotificationTextEntry("STRING")
 	AddTextComponentString(text)
-	Citizen.InvokeNative(0x1E6611149DB3DB6B, "CHAR_LIFEINVADER", "CHAR_LIFEINVADER", true, 1, "Mini-Lock", "Version 1.0.0", time)
+	Citizen.InvokeNative(0x1E6611149DB3DB6B, "CHAR_LIFEINVADER", "CHAR_LIFEINVADER", true, 1, "Mini-Lock", "Version 1.0.1", time)
 	DrawNotification_4(false, true)
 end)
 
