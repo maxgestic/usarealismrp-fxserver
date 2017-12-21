@@ -206,16 +206,20 @@ TriggerEvent('es:addCommand', 'givecash', function(source, args, user)
   local fromPlayer
   local toPlayer
   local amount
+  local from_user_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
   if (args[2] ~= nil and tonumber(args[3]) > 0) then
-    TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " hands over money.")
     fromPlayer = tonumber(source)
     toPlayer = tonumber(args[2])
-    amount = tonumber(args[3])
-    amount = round(amount, 0)
-    -- todo: update names when giving cash to character names
-    TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "You gave " .. GetPlayerName(toPlayer) .. " ^2$" .. amount .. "^0.");
-    TriggerClientEvent('chatMessage', toPlayer, "", {0, 0, 0}, GetPlayerName(fromPlayer) .. " has given you ^2$" .. amount .. "^0.");
-    TriggerClientEvent('bank:givecash', source, toPlayer, amount)
+    TriggerEvent("es:getPlayerFromId", toPlayer, function(toUser)
+      if toUser then
+        local to_user_name = toUser.getActiveCharacterData("firstName") .. " " .. toUser.getActiveCharacterData("lastName")
+        amount = tonumber(args[3])
+        amount = round(amount, 0)
+        -- todo: update names when giving cash to character names
+        TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "Giving " .. to_user_name .. " ^2$" .. amount .. "^0...");
+        TriggerClientEvent('bank:givecash', source, toPlayer, amount, from_user_name, source)
+      end
+    end)
 	else
     TriggerClientEvent('chatMessage', source, "", {0, 0, 200}, "^1Use format /givecash [id] [amount]^0")
     return false
