@@ -1,8 +1,9 @@
 local plyPed = GetPlayerPed(-1)
 local plyVeh = GetVehiclePedIsUsing(GetPlayerPed(-1))
-local shortR = true
-local timer = 15000 -- 8 seconds?
+local timer = 15000 -- miliseconds?
 local alreadyInside = false
+
+local KEY = 38
 
 -----------------------------------------------------------------------
 ----------------------------GARAGE-LOCATION----------------------------
@@ -30,38 +31,7 @@ blips = {
 	{480.805,-1317.43,29.2}
 }
 
-
---[[vehicleRepairStation = {
-	{49.41872,  2778.793,  58.04395},
-	{263.8949,  2606.463,  44.98339},
-	{1039.958,  2671.134,  39.55091},
-	{1207.26,   2660.175,  37.89996},
-	{2539.685,  2594.192,  37.94488},
-	{2679.858,  3263.946,  55.24057},
-	{2692.521,  3269.72,   55.24056},
-	{2692.521,  3269.72,   55.24056},
-	{2005.055,  3773.887,  32.40393},
-	{1687.156,  4929.392,  42.07809},
-	{1701.314,  6416.028,  32.76395},
-	{154.8158,  6629.454,  31.83573},
-	{179.8573,  6602.839,  31.86817},
-	{-94.46199, 6419.594,  31.48952},
-	{-2554.996, 2334.402,  33.07803},
-	{-1800.375, 803.6619,  138.6512},
-	{-1437.622, -276.7476, 46.20771},
-	{-2096.243, -320.2867, 13.16857},
-	{-724.6192, -935.1631, 19.21386},
-	{-526.0198, -1211.003, 18.18483},
-	{-70.21484, -1761.792, 29.53402},
-	{265.6484,  -1261.309, 29.29294},
-	{819.6538,  -1028.846, 26.40342},
-	{1208.951,  -1402.567, 35.22419},
-	{1181.381,  -330.8471, 69.31651},
-	{620.8434,  269.1009,  103.0895},
-	{2581.321,  362.0393,  108.4688}
-}]]
-
-
+--[[
 Citizen.CreateThread(function ()
 	Citizen.Wait(0)
 	for i = 1, #blips do
@@ -72,6 +42,7 @@ Citizen.CreateThread(function ()
 	end
 	return
 end)
+--]]
 
 function DrawCoolLookingNotification(msg)
     SetNotificationTextEntry("STRING")
@@ -79,61 +50,45 @@ function DrawCoolLookingNotification(msg)
     DrawNotification(0,1)
 end
 
-local continue = false
+RegisterNetEvent("carFix:repairVehicle")
+AddEventHandler("carFix:repairVehicle", function()
+	print("inside carFix:repairVehicle")
+	DrawCoolLookingNotification("Your vehicle is  ~y~being repaired~w~!")
+	SetVehicleEngineOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), false, false, false) -- turn engine off
+	while timer > 0 do
+		Citizen.Wait(1)
+		timer = timer - 15
+		if timer < 16 then
+			print("timer was < 16!")
+			SetVehicleFixed(GetVehiclePedIsUsing(GetPlayerPed(-1)))
+			SetVehicleDirtLevel(GetVehiclePedIsUsing(GetPlayerPed(-1)),  0.0000000001) -- clean vehicle
+			SetVehicleDeformationFixed(GetVehiclePedIsUsing(GetPlayerPed(-1)))
+			SetVehicleUndriveable(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
+			SetVehicleEngineOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), true, false, false)
+			DrawCoolLookingNotification("Your vehicle has been ~g~repaired~w~!")
+		end
+	end
+	timer = 15000 -- reset timer
+end)
 
 Citizen.CreateThread(function ()
-
-	-- keep track of which location the player is at
-	local lastVisitedGarageX, lastVisitedGarageY, lastVisitedGarageZ = nil, nil, nil
-	local called = false
 	while true do
 		Citizen.Wait(0)
-		if IsPedSittingInAnyVehicle(GetPlayerPed(-1)) then
+		if IsPedSittingInAnyVehicle(GetPlayerPed(-1)) then -- todo: check for driver seat only
 			for i = 1, #vehicleRepairStation do
 				garageCoords2 = vehicleRepairStation[i]
 				DrawMarker(1, garageCoords2[1], garageCoords2[2], garageCoords2[3], 0, 0, 0, 0, 0, 0, 5.0, 5.0, 2.0, 0, 157, 0, 155, 0, 0, 2, 0, 0, 0, 0)
-				if not alreadyInside and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), garageCoords2[1], garageCoords2[2], garageCoords2[3], true ) < 3 then
-					if not called then
-						print("checking player money!!")
-						TriggerServerEvent("carFix:checkPlayerMoney")
-						called = true
-					end
-					-- after checking player money ...
-					print("continue =" .. tostring(continue))
-					if continue then
-						print("inside repairVehicle()")
-						DrawCoolLookingNotification("Your vehicle is  ~y~being repaired~w~!")
-						SetVehicleEngineOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), false, false, false) -- turn engine off
-						lastVisitedGarageX = garageCoords2[1]
-						lastVisitedGarageY = garageCoords2[2]
-						lastVisitedGarageZ = garageCoords2[3]
-						alreadyInside = true
-						local finished = false
-						while timer > 0 do
-							Citizen.Wait(1)
-							timer = timer - 15
-							if timer < 16 then
-								print("timer was < 16!")
-								if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), lastVisitedGarageX, lastVisitedGarageY, lastVisitedGarageZ, true ) < 3 then
-									SetVehicleFixed(GetVehiclePedIsUsing(GetPlayerPed(-1)))
-									SetVehicleDirtLevel(GetVehiclePedIsUsing(GetPlayerPed(-1)),  0.0000000001) -- clean vehicle
-									SetVehicleDeformationFixed(GetVehiclePedIsUsing(GetPlayerPed(-1)))
-									SetVehicleUndriveable(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
-									SetVehicleEngineOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), true, false, false)
-									DrawCoolLookingNotification("Your vehicle has been ~g~repaired~w~!")
-								else
-									DrawCoolLookingNotification("You left before your vehicle was repaired!")
-								end
-							end
+				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), garageCoords2[1], garageCoords2[2], garageCoords2[3], true ) < 3 then
+					local veh = GetVehiclePedIsIn(GetPlayerPed(-1), false)
+					if GetPedInVehicleSeat(veh, -1) == GetPlayerPed(-1) then
+						DrawSpecialText("Press ~g~E~w~ to repair your vehicle!")
+						-- check if e is pressed:
+						if IsControlJustPressed(1, KEY) then
+							print("checking money for vehicle repair!")
+							local engineHealth = GetVehicleEngineHealth(veh)
+							local bodyHealth = GetVehicleBodyHealth(veh)
+							TriggerServerEvent("carFix:checkPlayerMoney", engineHealth, bodyHealth)
 						end
-						timer = 15000 -- reset timer
-						continue = false -- reset price check var
-					end
-				end
-				if lastVisitedGarageX ~= nil and lastVisitedGarageY ~= nil and lastVisitedGarageZ ~= nil then
-					if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), lastVisitedGarageX, lastVisitedGarageY, lastVisitedGarageZ, true ) > 3 then
-						alreadyInside = false
-						called = false
 					end
 				end
 			end
@@ -141,8 +96,9 @@ Citizen.CreateThread(function ()
 	end
 end)
 
-RegisterNetEvent("carFix:repairVehicle")
-AddEventHandler("carFix:repairVehicle", function()
-	print("inside carFix:repairVehicle")
-	continue = true
-end)
+function DrawSpecialText(m_text)
+  ClearPrints()
+	SetTextEntry_2("STRING")
+	AddTextComponentString(m_text)
+	DrawSubtitleTimed(250, 1)
+end
