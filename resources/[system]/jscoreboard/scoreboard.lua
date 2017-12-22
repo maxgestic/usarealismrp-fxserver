@@ -14,7 +14,7 @@ local Settings = {
 	--See: https://wiki.gtanet.work/index.php?title=Game_Controls
 
 	-- F7
-	[168] = true,
+	[170] = true,
 }
 
 local xOffset, yOffset = 0.55, 0
@@ -156,7 +156,7 @@ Citizen.CreateThread( function()
 
 		for k, v in pairs( Settings ) do
 			if type( k ) == "number" and v == true then
-				if IsControlPressed( 0, k ) then
+				if IsControlPressed( 0, k ) and GetLastInputMethod(2) then
 					LastPress = GetGameTimer()
 				end
 			end
