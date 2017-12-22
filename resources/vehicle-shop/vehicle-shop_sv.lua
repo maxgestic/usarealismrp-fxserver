@@ -397,7 +397,7 @@ AddEventHandler("vehShop:sellVehicle", function(toSellVehicle)
 		local vehicles = user.getActiveCharacterData("vehicles")
 		for i = 1, #vehicles do
 			local vehicle = vehicles[i]
-			if vehicle.model == toSellVehicle.model and vehicle.plate == toSellVehicle.plate then
+			if vehicle.plate == toSellVehicle.plate then
 				table.remove(vehicles, i)
 				local oldMoney = user.getActiveCharacterData("money")
 				local newMoney = round(oldMoney + (GetVehiclePrice(toSellVehicle) * .50),0)
@@ -423,6 +423,7 @@ function GetVehiclePrice(vehicle)
 				return v[i].price
 			end
 		end
+		print("no matching hash found to sell! hash: " .. vehicle.hash)
 	end
 end
 
