@@ -45,12 +45,14 @@ local policeLockerRooms = {
 {x=439.817 , y=-993.397 , z=29.689},
 {x=451.255 , y=-992.41 , z=29.689},
  {x=1853.2, y=3687.74, z=33.267}, -- sandy
- {x=-447.256 , y=6000.667 , z=30.686} -- paleto
+ --{x=-447.256 , y=6000.667 , z=30.686} -- paleto
+ {x = -449.471, y = 6010.7, z = 30.85}
 }
 local policeArmourys = {
 {x=451.564 , y=-980.095 , z=29.6896},
 {x=1851.34 , y=3683.64 , z=33.2671}, -- sandy
-{x=-452.361 , y=6006.11 , z=30.8409} -- paleto
+--{x=-452.361 , y=6006.11 , z=30.8409} -- paleto
+{x = -447.9, y = 6008.7, z = 30.85}
 }
 
 local arrSkinGeneralCaptions = {"LSPD Male","LSPD Female","Motor Unit","SWAT","Sheriff Male","Sheriff Female","Traffic Warden","Custom Male","Custom Female","FBI 1","FBI 2","FBI 3","FBI 4","Detective Male","Detective Female","Prison Guard","Ranger Male", "Ranger Female", "Tactical"}
@@ -602,10 +604,10 @@ Citizen.CreateThread(function()
 
 	while true do
 		for _, item in pairs(policeLockerRooms) do
-			DrawMarker(1, item.x,item.y,item.z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 0, 0, 255, 90, 0, 0, 2, 0, 0, 0, 0)
+			DrawMarker(27, item.x,item.y,item.z, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0, 0, 255, 90, 0, 0, 2, 0, 0, 0, 0)
 		end
 		for _, item in pairs(policeArmourys) do
-			DrawMarker(1, item.x,item.y,item.z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 255, 0, 0, 90, 0, 0, 2, 0, 0, 0, 0)
+			DrawMarker(27, item.x,item.y,item.z, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 255, 0, 0, 90, 0, 0, 2, 0, 0, 0, 0)
 		end
 		if (IsNearStore() == true) then
 			if(menu_loadout == 0) then
