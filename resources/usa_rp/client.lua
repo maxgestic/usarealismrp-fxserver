@@ -225,13 +225,15 @@ end)
 
 -- player crouching
 local crouched = false
+local KEY_1 = 19 -- alt
+local KEY_2 = 173 -- down arrow
 Citizen.CreateThread( function()
     while true do
         Citizen.Wait( 1 )
         local ped = GetPlayerPed( -1 )
         if ( DoesEntityExist( ped ) and not IsEntityDead( ped ) ) then
             if ( not IsPauseMenuActive() ) then
-                if ( IsControlPressed( 1, 19 ) and IsControlJustPressed( 1, 173 ) and not IsPedInAnyVehicle(GetPlayerPed(-1), true)) then -- alt + downarrow
+                if ( IsControlPressed( 1, KEY_1 ) and IsControlJustPressed( 1, KEY_2 ) and not IsPedInAnyVehicle(GetPlayerPed(-1), true)) then -- alt + downarrow
                     RequestAnimSet( "move_ped_crouched" )
                     while ( not HasAnimSetLoaded( "move_ped_crouched" ) ) do
                         Citizen.Wait( 100 )
