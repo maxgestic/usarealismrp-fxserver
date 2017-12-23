@@ -25,7 +25,13 @@ AddEventHandler("customs:checkRepairMoney", function(engineHealth)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		if user then
 			local user_money = user.getActiveCharacterData("money")
-			if user_money >= REPAIR_COST then
+			local user_job = user.getActiveCharacterData("job")
+			if user_job == "sheriff" or user_job == "ems" or user_job == "fire" then
+				-- repair vehicle
+				TriggerClientEvent("customs:playerHadEnoughMoneyToRepair", userSource)
+				-- notify
+				TriggerClientEvent("usa:notify", userSource, "~y~Thanks for your business and your public service!")
+			elseif user_money >= REPAIR_COST and user_job ~= "sheriff" and user_job ~= "ems" and user_job ~= "fire" then
 				-- charge player
 				user.setActiveCharacterData("money", user_money - REPAIR_COST)
 				-- repair vehicle
