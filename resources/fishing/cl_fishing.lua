@@ -52,7 +52,34 @@ local fish = {
     {name = "Flounder", quantity = 1, worth = 55, type = "fish"},
     {name = "Halibut", quantity = 1, worth = 200, type = "fish"}
 }
+
+local peds = {
+	{x = -666.794,y = 5805.77,z = 17.5,heading = 312.352,hash = 261586155}
+}
 --------------------------------EDITS--------------------------------
+
+-- S P A W N  J O B  P E D S
+Citizen.CreateThread(function()
+	for i = 1, #peds do
+		--local hash = GetHashKey(data.ped.model)
+		print("requesting hash...")
+		RequestModel(peds[i].hash)
+		while not HasModelLoaded(peds[i].hash) do
+			RequestModel(peds[i].hash)
+			Citizen.Wait(0)
+		end
+		print("spawning ped...")
+		print("hash: " .. peds[i].hash)
+		local ped = CreatePed(4, peds[i].hash, peds[i].x, peds[i].y, peds[i].z, peds[i].heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
+		SetEntityCanBeDamaged(ped,false)
+		SetPedCanRagdollFromPlayerImpact(ped,false)
+		TaskSetBlockingOfNonTemporaryEvents(ped,true)
+		SetPedFleeAttributes(ped,0,0)
+		SetPedCombatAttributes(ped,17,1)
+		SetEntityInvincible(ped)
+		SetPedRandomComponentVariation(ped, true)
+	end
+end)
 
 
 --------------------------------BLIPS--------------------------------
