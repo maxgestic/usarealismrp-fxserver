@@ -93,42 +93,6 @@ Citizen.CreateThread(function()
 	end
 end)
 
-local bahamaMama = {
-    entrance = {
-        x = -1388.94,
-        y = -585.919,
-        z = 29.2195
-    },
-    exit = {
-        x = -1387.47,
-        y = -588.195,
-        z = 29.3195
-    }
-}
--- bahama mama's
-Citizen.CreateThread(function()
-	while true do
-		Wait(1)
-        if GetDistanceBetweenCoords(bahamaMama.entrance.x, bahamaMama.entrance.y, bahamaMama.entrance.z,GetEntityCoords(GetPlayerPed(-1))) < 50 then
-            DrawMarker(1, bahamaMama.entrance.x, bahamaMama.entrance.y, bahamaMama.entrance.z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
-            DrawMarker(1, bahamaMama.exit.x, bahamaMama.exit.y, bahamaMama.exit.z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
-            if GetDistanceBetweenCoords(bahamaMama.entrance.x, bahamaMama.entrance.y, bahamaMama.entrance.z,GetEntityCoords(GetPlayerPed(-1))) < 1.6 then
-                DrawSpecialText("Press [ ~b~E~w~ ] to enter Bahama Mamas!")
-                if IsControlPressed(0, 86) then
-                    Citizen.Wait(500)
-                    SetEntityCoords(GetPlayerPed(-1), bahamaMama.exit.x+1.0, bahamaMama.exit.y, bahamaMama.exit.z)
-                end
-            elseif GetDistanceBetweenCoords(bahamaMama.exit.x, bahamaMama.exit.y, bahamaMama.exit.z,GetEntityCoords(GetPlayerPed(-1))) < 1.6 then
-                DrawSpecialText("Press [ ~b~E~w~ ] to exit Bahama Mamas!")
-                if IsControlPressed(0, 86) then
-                    Citizen.Wait(500)
-                    SetEntityCoords(GetPlayerPed(-1), bahamaMama.entrance.x+1.0, bahamaMama.entrance.y, bahamaMama.entrance.z)
-                end
-            end
-        end
-    end
-end)
-
 --[[------------------------------------------------------------------------
     Remove Reticle on ADS (Third Person)
 ------------------------------------------------------------------------]]--
