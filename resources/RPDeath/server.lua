@@ -184,7 +184,8 @@ RegisterServerEvent("RPD:newDeathLog")
 AddEventHandler("RPD:newDeathLog", function(log)
 	log.timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())
 	if #deathLog >= 10 then
-		deathLog = {}
+		--deathLog = {}
+		table.remove(deathLog, 1)
 	end
 	table.insert(deathLog, log)
 	print("Player " .. log.killerName .. " (#" .. log.killerId .. ") just killed player " .. log.deadPlayerName .. "(#" .. log.deadPlayerId .. ").")

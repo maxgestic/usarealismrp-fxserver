@@ -151,6 +151,7 @@ Citizen.CreateThread(function()
 						deadPlayerName = GetPlayerName(PlayerId()),
 						cause = GetPedCauseOfDeath(ped),
 						killer = GetPedKiller(ped),
+						--killer_source = GetPedSourceOfDeath(ped),
 						tod = GetPedTimeOfDeath(ped),
 						lastDeath = GetTimeSinceLastDeath(),
 						killerName = "",
@@ -164,6 +165,28 @@ Citizen.CreateThread(function()
 								deathLog.killerName = GetPlayerName(id)
 							end
 						end
+					end
+
+					if deathLog.killerId == 0 then
+						print("killer ID was 0!")
+						--print("killer: " .. deathLog.killer)
+						--print("cause: " .. deathLog.cause)
+						local killer_entity_type = GetEntityType(deathLog.killer)
+						local cause_entity_type = GetEntityType(deathLog.cause)
+						local ped_in_veh_seat = GetPedInVehicleSeat(deathLog.killer, -1)
+						for id = 0, 64 do
+							if NetworkIsPlayerActive(id) then
+								if GetPlayerPed(id) == ped_in_veh_seat then -- save vdm'r details
+									deathLog.killerId = GetPlayerServerId(id)
+									deathLog.killerName = GetPlayerName(id)
+								end
+							end
+						end
+						--print("ped in veh seat: " .. ped_in_veh_seat)
+						--print("killer entity type = " .. killer_entity_type)
+						--print("cause entity type = " .. cause_entity_type)
+					else
+						print("killer ID was NOT 0!")
 					end
 
 					TriggerServerEvent("RPD:newDeathLog", deathLog)
