@@ -17,7 +17,7 @@ end)
 local timeout = false
 
 RegisterServerEvent("tow:setJob")
-AddEventHandler("tow:setJob", function()
+AddEventHandler("tow:setJob", function(coords)
 	local userSource = tonumber(source)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
 		local user_job = user.getActiveCharacterData("job")
@@ -29,13 +29,15 @@ AddEventHandler("tow:setJob", function()
             if not timeout then
                 print("user " .. GetPlayerName(userSource) .. " just went on duty for Bubba's Tow Co.!")
 				user.setActiveCharacterData("job", "tow")
-                TriggerClientEvent("tow:onDuty", userSource)
+                TriggerClientEvent("tow:onDuty", userSource, coords)
                 timeout = true
                 SetTimeout(15000, function()
                     timeout = false
+										TriggerClientEvent("tow:onTimeout", userSource, false)
                 end)
             else
                 print("player is on timeout and cannot go on duty for Bubba's Tow Co.!")
+								TriggerClientEvent("tow:onTimeout", userSource, true)
             end
         end
     end)

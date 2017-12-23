@@ -1,15 +1,83 @@
+local on_duty = "no"
 local currentlyTowedVehicle = nil
 local vehicleToImpound = nil
 
-local tow_duty_ped_heading = 312.352
-
--- to go on duty as tow truck driver
-local towDutyX, towDutyY, towDutyZ = -246.733, 6238.865, 30.49
-local spawn = { x =-238.594, y = 6254.200, z =31.489, heading = 192.351 }
-
 local locations = {
-	{ x = -221.114, y = 6270.026, z = 30.684 } -- paleto dirt construction lot
+	["Paleto"] = {
+		duty = {
+			x = -196.027,
+			y = 6265.625,
+			z = 30.489
+		},
+		truck_spawn = {
+			x = -194.571,
+			y = 6279.666,
+			z = 31.489,
+			heading = 347.428
+		},
+		impound = {
+			x = -171.624,
+			y = 6277.602,
+			z = 30.489
+		},
+		ped = {
+			x = -196.027,
+			y = 6265.625,
+			z = 30.489,
+			heading = 312.352,
+			model = "amy_downtown_01"
+		}
+	},
+	["Sandy"] = {
+		duty = {
+			x = 2363.89,
+			y = 3126.85,
+			z = 47.211
+		},
+		truck_spawn = {
+			x = 2376.42,
+			y = 3126.12,
+			z = 46.9,
+			heading = 347.428
+		},
+		impound = {
+			x = 2398.42,
+			y = 3108.48,
+			z = 47.1806
+		},
+		ped = {
+			x = 2363.89,
+			y = 3126.85,
+			z = 47.211,
+			heading = 0.0,
+			model = "amm_farmer_01"
+		}
+	}
 }
+
+-- S P A W N  J O B  P E D S
+Citizen.CreateThread(function()
+	for name, data in pairs(locations) do
+		local hash = -1806291497
+		--local hash = GetHashKey(data.ped.model)
+		print("requesting hash...")
+		RequestModel(hash)
+		while not HasModelLoaded(hash) do
+			RequestModel(hash)
+			Citizen.Wait(0)
+		end
+		print("spawning ped, heading: " .. data.ped.heading)
+		print("hash: " .. hash)
+		local ped = CreatePed(4, hash, data.ped.x, data.ped.y, data.ped.z, data.ped.heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
+		SetEntityCanBeDamaged(ped,false)
+		SetPedCanRagdollFromPlayerImpact(ped,false)
+		TaskSetBlockingOfNonTemporaryEvents(ped,true)
+		SetPedFleeAttributes(ped,0,0)
+		SetPedCombatAttributes(ped,17,1)
+		SetEntityInvincible(ped)
+		SetPedRandomComponentVariation(ped, true)
+	end
+end)
 
 -- Delete car function borrowed frtom Mr.Scammer's model blacklist, thanks to him!
 function deleteCar( entity )
@@ -69,8 +137,8 @@ end
 function isPlayerAtTowSpot()
 	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
 
-	for i = 1, #locations do
-		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,false) < 5 then
+	for name, data in pairs(locations) do
+		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,data.impound.x,data.impound.y,data.impound.z,false) < 5 then
 			return true
 		end
 	end
@@ -87,8 +155,8 @@ Citizen.CreateThread(function()
 
 		Citizen.Wait(0)
 
-		for i = 1, #locations do
-			DrawMarker(1, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 1.0, 100, 85, 161, 92, 0, 0, 2, 0, 0, 0, 0)
+		for name, data in pairs(locations) do
+			DrawMarker(1, data.impound.x, data.impound.y, data.impound.z, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 1.0, 100, 85, 161, 92, 0, 0, 2, 0, 0, 0, 0)
 		end
 
 		if isPlayerAtTowSpot() and not playerNotified then
@@ -164,20 +232,29 @@ end
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-		DrawMarker(1, towDutyX, towDutyY, towDutyZ, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
-        local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
-	    if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,towDutyX,towDutyY,towDutyZ,false) < 3 then
-            --DrawCoolLookingNotification("Press ~y~E~w~ to go work for Downtown Taxi Co.!")
-    		if IsControlJustPressed(1,38) then
-				TriggerServerEvent("tow:setJob")
-    		end
-        elseif GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,towDutyX,towDutyY,towDutyZ,false) > 3 then
-            -- out of range
-        end
+		for name, data in pairs(locations) do
+			DrawMarker(1, data.duty.x, data.duty.y, data.duty.z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 130, 105, 90, 0, 0, 2, 0, 0, 0, 0)
+			local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+			if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,data.duty.x,data.duty.y,data.duty.z,false) < 3 then
+				--DrawCoolLookingNotification("Press ~y~E~w~ to go work for Downtown Taxi Co.!")
+				if on_duty == "yes" then
+					DrawSpecialText("Press ~g~E~w~ to go off duty!")
+				elseif on_duty == "no" then
+					DrawSpecialText("Press ~g~E~w~ to go on duty!")
+				elseif on_duty == "timeout" then
+					DrawSpecialText("You have clocked in and out too much recently!")
+				end
+				if IsControlJustPressed(1,38) then
+					TriggerServerEvent("tow:setJob", data.truck_spawn)
+				end
+			elseif GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,data.duty.x,data.duty.y,data.duty.z,false) > 3 then
+				-- out of range
+			end
+		end
 	end
 end)
 
-function spawnVehicle()
+function spawnVehicle(coords)
     local numberHash = 1353720154 -- t ow truck
     Citizen.CreateThread(function()
         RequestModel(numberHash)
@@ -186,7 +263,7 @@ function spawnVehicle()
             Citizen.Wait(0)
         end
         local playerPed = GetPlayerPed(-1)
-        local vehicle = CreateVehicle(numberHash, spawn.x, spawn.y, spawn.z, 0.0, true, false)
+        local vehicle = CreateVehicle(numberHash, coords.x, coords.y, coords.z, coords.heading, true, false)
         SetVehicleOnGroundProperly(vehicle)
         SetVehRadioStation(vehicle, "OFF")
         SetEntityAsMissionEntity(vehicle, true, true)
@@ -200,14 +277,25 @@ function DrawCoolLookingNotification(msg)
 end
 
 RegisterNetEvent("tow:onDuty")
-AddEventHandler("tow:onDuty", function()
+AddEventHandler("tow:onDuty", function(coords)
 	DrawCoolLookingNotificationWithTowPic("Here's your rig! Have a good shift!")
-	spawnVehicle()
+	spawnVehicle(coords)
+	on_duty = "yes"
 end)
 
 RegisterNetEvent("tow:offDuty")
 AddEventHandler("tow:offDuty", function()
 	DrawCoolLookingNotificationWithTowPic("You have clocked out! Have a good one!")
+	on_duty = "no"
+end)
+
+RegisterNetEvent("tow:onTimeout")
+AddEventHandler("tow:onTimeout", function(status)
+	if status then
+		on_duty = "timeout"
+	else
+		on_duty = "no"
+	end
 end)
 
 function DrawCoolLookingNotificationWithTowPic(name, msg)
@@ -215,4 +303,11 @@ function DrawCoolLookingNotificationWithTowPic(name, msg)
 	AddTextComponentString(msg)
 	SetNotificationMessage("CHAR_PROPERTY_TOWING_IMPOUND", "CHAR_PROPERTY_TOWING_IMPOUND", true, 1, name, "", msg)
 	DrawNotification(0,1)
+end
+
+function DrawSpecialText(m_text)
+  ClearPrints()
+	SetTextEntry_2("STRING")
+	AddTextComponentString(m_text)
+	DrawSubtitleTimed(250, 1)
 end
