@@ -1,17 +1,18 @@
 local INTERACTION_KEY = 86 -- "E"
 
 local warp_locations = {
-  ["Bahama Mama's"] = {
+  ["the Hen House"] = {
       entrance = {
-          x = -1388.94,
-          y = -585.919,
-          z = 29.2195
+          x = -299.48,
+          y = 6255.23,
+          z = 30.53
       },
       exit = {
           x = -1387.47,
           y = -588.195,
           z = 29.3195
-      }
+      },
+      job_access = "civ"
   },
   ["the jail cells"] = {
     entrance = {
@@ -23,7 +24,8 @@ local warp_locations = {
       x = 468.598,
       y = -1012.62,
       z = 25.3
-    }
+    },
+    job_access = "emergency"
   }
 }
 
@@ -41,9 +43,16 @@ Citizen.CreateThread(function()
       if GetDistanceBetweenCoords(locationCoords.entrance.x, locationCoords.entrance.y, locationCoords.entrance.z,GetEntityCoords(GetPlayerPed(-1))) < 1.6 then
         DrawSpecialText("Press [ ~b~E~w~ ] to enter " .. locationName .. "!")
         if IsControlPressed(0, INTERACTION_KEY) then
-          Citizen.Wait(500)
-          RequestCollisionAtCoord(locationCoords.exit.x+1.0, locationCoords.exit.y, locationCoords.exit.z)
-          SetEntityCoords(GetPlayerPed(-1), locationCoords.exit.x+1.0, locationCoords.exit.y, locationCoords.exit.z)
+          -- is location access restricted to certain jobs?
+          if locationCoords.job_access == "civ" then
+            print("job access: " ..locationCoords.job_access)
+            Citizen.Wait(500)
+            RequestCollisionAtCoord(locationCoords.exit.x+1.0, locationCoords.exit.y, locationCoords.exit.z)
+            SetEntityCoords(GetPlayerPed(-1), locationCoords.exit.x+1.0, locationCoords.exit.y, locationCoords.exit.z)
+          else
+            --print("job access: " ..locationCoords.job_access)
+            TriggerServerEvent("warp:checkJob", locationCoords)
+          end
         end
       elseif GetDistanceBetweenCoords(locationCoords.exit.x, locationCoords.exit.y, locationCoords.exit.z,GetEntityCoords(GetPlayerPed(-1))) < 1.6 then
         DrawSpecialText("Press [ ~b~E~w~ ] to exit " .. locationName .. "!")
@@ -55,6 +64,13 @@ Citizen.CreateThread(function()
       end
     end
   end
+end)
+
+RegisterNetEvent("warp:warpToPoint")
+AddEventHandler("warp:warpToPoint", function(locationCoords)
+  Citizen.Wait(500)
+  RequestCollisionAtCoord(locationCoords.exit.x+1.0, locationCoords.exit.y, locationCoords.exit.z)
+  SetEntityCoords(GetPlayerPed(-1), locationCoords.exit.x+1.0, locationCoords.exit.y, locationCoords.exit.z)
 end)
 
 function DrawSpecialText(m_text)
