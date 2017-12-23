@@ -16,7 +16,7 @@ end
 local showBlip = true
 
 local fishstore = {
-  {name="Fish Store", id=356, colour=75, x=-1845.090, y=-1197.110, z=19.186}
+  {name="Fish Store", id=356, colour=25, x=-666.796, y=5805.82, z=17.57}
 }
 
 local fishingzoneblips = {
@@ -48,9 +48,9 @@ local txt = {
 }
 
 local fish = {
-    {name = "Trout", quantity = 1, worth = 45, type = "fish"},
-    {name = "Flounder", quantity = 1, worth = 25, type = "fish"},
-    {name = "Halibut", quantity = 1, worth = 150, type = "fish"}
+    {name = "Trout", quantity = 1, worth = 75, type = "fish"},
+    {name = "Flounder", quantity = 1, worth = 55, type = "fish"},
+    {name = "Halibut", quantity = 1, worth = 200, type = "fish"}
 }
 --------------------------------EDITS--------------------------------
 
@@ -257,25 +257,23 @@ end
 
 Citizen.CreateThread(
 	function()
-		local x = -1845.090
-		local y = -1197.110
-		local z = 19.186
 
 		while true do
 		Citizen.Wait(1)
 
 
 			local playerPos = GetEntityCoords(GetPlayerPed(-1), true)
+			for i = 1, #fishstore do
+				if (Vdist(playerPos.x, playerPos.y, playerPos.z, fishstore[i].x, fishstore[i].y, fishstore[i].z) < 20.0) then
+					DrawMarker(27, fishstore[i].x, fishstore[i].y, fishstore[i].z - 1, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.5001, 255, 165, 0,165, 0, 0, 0,0)
 
-			if (Vdist(playerPos.x, playerPos.y, playerPos.z, x, y, z) < 20.0) then
-				DrawMarker(1, x, y, z - 1, 0, 0, 0, 0, 0, 0, 3.0001, 3.0001, 1.5001, 255, 165, 0,165, 0, 0, 0,0)
-
-				if (Vdist(playerPos.x, playerPos.y, playerPos.z, x, y, z) < 2.0) then
-						DisplayHelpText(txt[lang]['sellFish'])
-					if (IsControlJustReleased(1, 51)) then
-						--TriggerEvent("player:sellItem", 15, 30)
-                        Citizen.Trace("selling fish!!")
-                        TriggerServerEvent("fishing:sellFish")
+					if (Vdist(playerPos.x, playerPos.y, playerPos.z, fishstore[i].x, fishstore[i].y, fishstore[i].z) < 2.0) then
+							DisplayHelpText(txt[lang]['sellFish'])
+						if (IsControlJustReleased(1, 51)) then
+							--TriggerEvent("player:sellItem", 15, 30)
+	            Citizen.Trace("selling fish!!")
+	          	TriggerServerEvent("fishing:sellFish")
+						end
 					end
 				end
 			end
