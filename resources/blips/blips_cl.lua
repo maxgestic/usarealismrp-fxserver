@@ -26,7 +26,8 @@ local blips = {
     { title="Ammu-Nation", colour=41, id=110, x=812.4276, y=-2145.2118, z=29.3063 },
 	{ title="Car Dealership", colour=76, id=225, x=120.924, y=6624.605, z=31.000 },
 	{ title="DMV", colour=4, id=355, x= -447.845, y = 6013.775, z = 30.716 },
-	{ title="Bubba's Tow Co.", colour=64, id=68, x = -246.733, y = 6238.865, z = 30.49 },
+	{ title="Bubba's Tow Co.", colour=64, id=68, x = -196.027, y = 6265.625, z = 30.489 }, -- paleto
+	{ title="Bubba's Tow Co.", colour=64, id=68, x = 2363.89, y = 3126.85, z = 47.211 }, -- sandy shores
 	{ title="Black Market Dealer", colour = 59, id = 52, x= -2166.786, y = 5197.684, z = 15.880 },
     --[[
 	{ title="General Store", colour = 24 , id = 52, x=1729.59, y=6415.49, z=34.0 },
@@ -55,7 +56,7 @@ local blips = {
     { title="General Store", colour = 24 , id = 52, x=-1820.852, y=792.453, z=138.119 },
     { title="General Store", colour = 24 , id = 52, x=-3242.260, y=1001.569, z=12.830 },
     { title="General Store", colour = 24 , id = 52, x=-2968.126, y=390.579, z=15.043 },
-    { title="General Store", colour = 24 , id = 52, x=-1487.241, y=379.843, z=40.163 },
+    --{ title="General Store", colour = 24 , id = 52, x=-1487.241, y=379.843, z=40.163 },
 	{ title="Police Department", colour = 38 , id = 60, x=451.255, y=-992.41, z=30.6896 }, -- LOS SANTOS
 	{ title="Sheriff's Office", colour = 38 , id = 60, x=1853.2, y=3687.74, z=34.267 }, -- SANDY
 	{ title="Sheriff's Office", colour = 38 , id = 60, x=-447.041, y=6012.97, z=31.7164 }, -- PALETO
@@ -68,7 +69,7 @@ local blips = {
 	{ title="Airport", colour = 30, id = 307, x=-1329.32, y=-3045.92, z=13.944 },
 	{ title="The Hen House", colour = 83, id = 93, x= -304.092, y= 6264.582, z= 31.530 },
 	{ title="Tequilala", colour = 83, id = 93, x=-564.778, y=274.195, z=83.0197 },
-	{ title="Bahama Mamas", colour = 57, id = 93, x=-1388.94, y=-585.919, z=29.2195 },
+	--{ title="Bahama Mamas", colour = 57, id = 93, x=-1388.94, y=-585.919, z=29.2195 },
 	{ title="Yellow Jack", colour = 46, id = 93, x = 1986.1, y = 3050.57, z = 47.2151 },
 	--{ title="Downtown Taxi", colour = 60, id = 198, x=895.563, y=-179.536, z=74.7003 },
 	{ title="Downtown Taxi", colour = 60, id = 198, x = -41.306, y = 6436.432, z = 30.490 },
