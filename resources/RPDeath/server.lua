@@ -39,12 +39,17 @@ end)
 
 RegisterServerEvent("RPD:removeWeapons")
 AddEventHandler("RPD:removeWeapons", function()
+	local DEATH_PENALTY = 2000
 	local userSource = source
 	print("inside of RPD:removeWeapons")
 	TriggerEvent("es:getPlayerFromId", source, function(user)
 		if user.getActiveCharacterData("job") == "civ" then
 			-- empty out everything since person has died and NLR is in place
 			--user.removeMoney(user.getMoney())
+			local user_money = user.getActiveCharacterData("money")
+			if user_money - DEATH_PENALTY >= 0 then
+				user.setActiveCharacterData("money", user_money - DEATH_PENALTY)
+			end
 			user.setActiveCharacterData("inventory", {})
 			user.setActiveCharacterData("weapons", {})
 			user.setActiveCharacterData("criminalHistory", {})
