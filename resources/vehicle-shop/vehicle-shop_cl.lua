@@ -194,6 +194,7 @@ AddEventHandler("vehShop:spawnPlayersVehicle", function(hash, plate)
 		local vehicle = CreateVehicle(numberHash, spawnX, spawnY, spawnZ, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
 		SetVehicleNumberPlateText(vehicle, plate)
 		SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
+		--SetVehicleAsNoLongerNeeded(vehicle)
 	end)
 
 end)

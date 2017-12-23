@@ -255,18 +255,19 @@ Citizen.CreateThread(function()
 end)
 
 function spawnVehicle(coords)
-    local numberHash = 1353720154 -- t ow truck
+    local numberHash = 1353720154 -- tow truck
     Citizen.CreateThread(function()
         RequestModel(numberHash)
         while not HasModelLoaded(numberHash) do
             RequestModel(numberHash)
             Citizen.Wait(0)
         end
-        local playerPed = GetPlayerPed(-1)
         local vehicle = CreateVehicle(numberHash, coords.x, coords.y, coords.z, coords.heading, true, false)
         SetVehicleOnGroundProperly(vehicle)
         SetVehRadioStation(vehicle, "OFF")
         SetEntityAsMissionEntity(vehicle, true, true)
+				SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
+				--SetVehicleAsNoLongerNeeded(vehicle)
     end)
 end
 
