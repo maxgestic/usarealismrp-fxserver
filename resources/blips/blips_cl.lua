@@ -79,7 +79,8 @@ local blips = {
 	{ title="Meth", colour = 75, id = 499, x = 1389.28, y = 3604.6, z = 38.1 },
 	{ title="Boat Shop", colour = 57, id = 356, x = -250.183, y = 6632.84, z = 1.79 }, -- paleto
 	{ title="Boat Shop", colour = 57, id = 356, x = 2388.26, y = 4284.28, z = 30.6 }, -- sandy
-	{ title="Jail", colour = 4, id = 238, x=1686.668, y=2581.715, z=51.6 }
+	{ title="Jail", colour = 4, id = 238, x=1686.668, y=2581.715, z=51.6 },
+	{ title="Watercraft Course", colour = 63, id = 38, x=2272.15, y=4321.29, z=39.8 }
 }
 
 Citizen.CreateThread(function()
