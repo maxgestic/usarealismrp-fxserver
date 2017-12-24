@@ -40,6 +40,8 @@ AddEventHandler('rconCommand', function(commandName, args)
 end)
 
 TriggerEvent('es:addCommand', 'whitelist', function(source, args, user)
+    local user_group = user.getGroup()
+    if user_group ~= "admin" and user_group ~= "superadmin" and user_group ~= "owner" then return end
     local playerId = tonumber(args[2])
     local type = args[3]
     local status = args[4]
@@ -57,24 +59,24 @@ TriggerEvent('es:addCommand', 'whitelist', function(source, args, user)
         TriggerClientEvent("usa:notify", source, "You must enter a whitelist status for that player: true or false")
         return
     end
-    TriggerEvent('es:getPlayerFromId', playerId, function(user)
-      if user then
+    TriggerEvent('es:getPlayerFromId', playerId, function(targetUser)
+      if targetUser then
         if status == "true" then
           if type == "police" then
-            user.setActiveCharacterData("policeRank", 1)
+            targetUser.setActiveCharacterData("policeRank", 1)
           elseif type == "ems" then
-            user.setActiveCharacterData("emsRank", 1)
+            targetUser.setActiveCharacterData("emsRank", 1)
           end
           TriggerClientEvent("usa:notify", source, "Player " .. playerName .. " has been whitelisted for " .. type)
         else
           if type == "police" then
-            user.setActiveCharacterData("policeRank", 0)
+            targetUser.setActiveCharacterData("policeRank", 0)
           elseif type == "ems" then
-            user.setActiveCharacterData("emsRank", 0)
+            targetUser.setActiveCharacterData("emsRank", 0)
           end
-          local user_job = user.getActiveCharacterData("job")
+          local user_job = targetUser.getActiveCharacterData("job")
           if user_job == "ems" or user_job == "fire" or user_job == "sheriff" then
-            user.setActiveCharacterData("job", "civ")
+            targetUser.setActiveCharacterData("job", "civ")
           end
           TriggerClientEvent("usa:notify", source, "Player " .. playerName .. " has been un-whitelisted for " .. type)
         end
