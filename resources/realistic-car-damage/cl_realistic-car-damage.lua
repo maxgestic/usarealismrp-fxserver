@@ -1,7 +1,7 @@
 local targetVehicle, targetPed
 local civEngineOverheatThreshold, copEngineOverheatThreshold = 960.0, 955.0 -- non-severe accidents (busted radiator)
 local engineDisabledThreshold = 945.0
-local bodyOverheatThreshold = 255.0
+--local bodyOverheatThreshold = 255.0
 local engineIsOn, savedVehicle
 
 local policeVehicles = {
@@ -60,10 +60,10 @@ Citizen.CreateThread(function()
         vehicleBodyHealth = GetVehicleBodyHealth(targetVehicle)
         --print("vehicle body HP: " .. vehicleBodyHealth)
         if targetVehicle and targetPed  and IsPedSittingInVehicle(targetPed, targetVehicle) then
-            if vehicleBodyHealth < bodyOverheatThreshold then
+            --if vehicleBodyHealth < bodyOverheatThreshold then
                 --print("body health is overheating the vehicle!!")
-                overheatVehicle(targetVehicle)
-            elseif vehicleEngineHealth < engineDisabledThreshold then -- severe vehicle damage
+                --overheatVehicle(targetVehicle)
+            if vehicleEngineHealth < engineDisabledThreshold then -- severe vehicle damage
                 --print("engine health is overheating the vehicle!!")
                 DrawSpecialTextTimed("Your vehicle was ~r~disabled~w~!", 5)
                 SetVehicleUndriveable(targetVehicle, 1) -- disable car
