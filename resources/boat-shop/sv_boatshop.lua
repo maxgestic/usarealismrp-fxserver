@@ -17,7 +17,7 @@ local prices = {
 }
 
 RegisterServerEvent("boatshop:rentVehicle")
-AddEventHandler("boatshop:rentVehicle", function(vehicle)
+AddEventHandler("boatshop:rentVehicle", function(vehicle, coords)
     print("vehicle.name = " .. vehicle.name)
     print("vehicle.price = " .. vehicle.price)
     print("vehicle.hash = " .. vehicle.hash)
@@ -32,7 +32,7 @@ AddEventHandler("boatshop:rentVehicle", function(vehicle)
             if user_money >= price then
                 user.setActiveCharacterData("money", user_money - price)
                 print("calling spawnAircraft")
-                TriggerClientEvent("boatshop:spawnSeacraft", userSource, vehicle.hash)
+                TriggerClientEvent("boatshop:spawnSeacraft", userSource, vehicle.hash, coords)
             else
                 print("player did not have enough money")
             end
