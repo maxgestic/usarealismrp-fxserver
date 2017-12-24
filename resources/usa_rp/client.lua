@@ -57,7 +57,7 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(0)
 		SetPedDensityMultiplierThisFrame(0.8)
-		SetVehicleDensityMultiplierThisFrame(0.3)
+		SetVehicleDensityMultiplierThisFrame(0.0) -- no npc vehicles causing havoc
 	end
 end)
 
@@ -137,9 +137,6 @@ local locations = {
         {x = 113.111, y = -1287.755, z = 27.586, animDict = "mini@strip_club@private_dance@part1", animName = "priv_dance_p1", model = "S_F_Y_Stripper_02", heading = (math.random(50, 360)) * 1.0},
         {x = 113.375, y = -1286.546, z = 27.586, animDict = "mini@strip_club@private_dance@part2", animName = "priv_dance_p2", model = "CSB_Stripper_02", heading = (math.random(50, 360)) * 1.0},
         {x = 129.442, y = -1283.407, z = 28.272, animDict = "missfbi3_party_d", animName = "stand_talk_loop_a_female", model = "S_F_Y_Bartender_01", heading = 122.471}
-    },
-    boatshop = {
-        {x = -257.739, y = 6666.348, z = 1.3, animDict = "", animName = "", model = "CS_Fabien", heading = 236.9}
     }
 }
 local spawnedPeds = {}
