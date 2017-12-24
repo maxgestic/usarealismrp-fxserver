@@ -311,6 +311,8 @@ Citizen.CreateThread(function()
 				menu.page = "home"
 				menu.vehicles = nil
 			end
+		else
+			menu.open = false
 		end
 
 		if menu.open == true then
