@@ -24,7 +24,7 @@ AddEventHandler('rconCommand', function(commandName, args)
           if status == "true" then
               user.setActiveCharacterData("policeRank", 1)
     					RconPrint("DEBUG: " .. playerId .. " whitelisted as LSPD")
-    					TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "You have been whitelisted for LSPD")
+    					TriggerClientEvent('chatMessage', tonumber(playerId), "CONSOLE", {0, 0, 0}, "You have been whitelisted for LSPD")
                     else
                         user.setActiveCharacterData("policeRank", 0)
 						user.setActiveCharacterData("job", "civ")
@@ -37,6 +37,49 @@ AddEventHandler('rconCommand', function(commandName, args)
         --RconPrint("\nError: failed to whitelist player " .. GetPlayerName(playerId) .. " for POLICE.")
         CancelEvent()
     end
+end)
+
+TriggerEvent('es:addCommand', 'whitelist', function(source, args, user)
+    local playerId = tonumber(args[2])
+    local type = args[3]
+    local status = args[4]
+    local playerName = GetPlayerName(playerId)
+    if not playerName then
+        print("Error: player with id #" .. playerId .. " does not exist!")
+        TriggerClientEvent("usa:notify", source, "Error: player with id #" .. playerId .. " does not exist!")
+        return
+    elseif not type then
+        print("You must enter a whitelist type: police or  ems")
+        TriggerClientEvent("usa:notify", source, "You must enter a whitelist type: police or ems")
+        return
+    elseif not status then
+        print("You must enter a whitelist status for that player: true or false")
+        TriggerClientEvent("usa:notify", source, "You must enter a whitelist status for that player: true or false")
+        return
+    end
+    TriggerEvent('es:getPlayerFromId', playerId, function(user)
+      if user then
+        if status == "true" then
+          if type == "police" then
+            user.setActiveCharacterData("policeRank", 1)
+          elseif type == "ems" then
+            user.setActiveCharacterData("emsRank", 1)
+          end
+          TriggerClientEvent("usa:notify", source, "Player " .. playerName .. " has been whitelisted for " .. type)
+        else
+          if type == "police" then
+            user.setActiveCharacterData("policeRank", 0)
+          elseif type == "ems" then
+            user.setActiveCharacterData("emsRank", 0)
+          end
+          local user_job = user.getActiveCharacterData("job")
+          if user_job == "ems" or user_job == "fire" or user_job == "sheriff" then
+            user.setActiveCharacterData("job", "civ")
+          end
+          TriggerClientEvent("usa:notify", source, "Player " .. playerName .. " has been un-whitelisted for " .. type)
+        end
+      end
+    end)
 end)
 
 RegisterServerEvent("policestation2:checkWhitelist")
