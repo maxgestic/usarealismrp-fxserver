@@ -26,13 +26,23 @@ AddEventHandler("police:payTicket", function(fromPlayerId, amount, wantsToPay)
 	if wantsToPay then
 		TriggerEvent('es:getPlayerFromId', userSource, function(user)
 			if user then
+				local user_char_name = user.getActiveCharacterData("fullName")
 				local user_money = user.getActiveCharacterData("money")
 				if user_money >= tonumber(amount) then
 					user.setActiveCharacterData("money", user_money - tonumber(amount))
 					TriggerClientEvent("police:notify", userSource, "You have ~g~signed~w~ your ticket of $" .. comma_value(amount) .. "!")
-					TriggerClientEvent("police:notify", fromPlayerId, GetPlayerName(userSource) .. " has ~g~signed~w~ their ticket of $" .. comma_value(amount) .. "!")
+					TriggerClientEvent("police:notify", fromPlayerId, user_char_name .. " has ~g~signed~w~ their ticket of $" .. comma_value(amount) .. "!")
 				else
-					TriggerClientEvent("police:notify", userSource, "You don't have enough money to pay the ticket of $" .. comma_value(amount) .. "!")
+					local user_bank = user.getActiveCharacterData("bank")
+					if user_bank >= tonumber(amount) then
+						print("player had enough money in their bank for ticket! setting new bank amount...")
+						user.setActiveCharacterData("bank", user_bank - tonumber(amount))
+						TriggerClientEvent("police:notify", userSource, "You have ~g~signed~w~ your ticket of $" .. comma_value(amount) .. "!")
+						TriggerClientEvent("police:notify", fromPlayerId, user_char_name .. " has ~g~signed~w~ their ticket of $" .. comma_value(amount) .. "!")
+					else
+						TriggerClientEvent("police:notify", userSource, "You don't have enough money to pay the ticket of $" .. comma_value(amount) .. "!")
+						TriggerClientEvent("police:notify", fromPlayerId, "Person does have enough money to pay the ticket!")
+					end
 				end
 			end
 		end)
