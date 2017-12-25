@@ -246,12 +246,7 @@ AddEventHandler('bank:givecash', function(toPlayer, amount)
 	end)
 end)
 
---[[
-AddEventHandler('es:playerLoaded', function(source)
-  TriggerEvent('es:getPlayerFromId', source, function(user)
-      local bankbalance = user.getBank()
-      TriggerClientEvent("banking:updateBalance", source, bankbalance)
-      user.displayBank(bankbalance)
-    end)
+TriggerEvent('es:addCommand', 'bank', function(source, args, user)
+  local user_bank = user.getActiveCharacterData("bank")
+  TriggerClientEvent("usa:notify", source, "Bank: $" .. user_bank)
 end)
---]]
