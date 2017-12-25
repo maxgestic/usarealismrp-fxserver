@@ -58,7 +58,9 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 					self.characters[i][field] = data
 					print("set!")
 				else
-					print("Error: field " .. field .. " did not exist on the character! can't set it!")
+					--print("Error: field " .. field .. " did not exist on the character! can't set it!")
+					print("INFO: field " .. field .. " did not exist on the character! Creating the field...")
+					self.characters[i][field] = data
 				end
 			end
 		end

@@ -33,6 +33,8 @@ AddEventHandler("character:new", function(data)
     inventory = {},
     weapons = {},
     vehicles = {},
+    watercraft = {},
+    aircraft = {},
     insurance = {},
     job = "civ",
     licenses = {},

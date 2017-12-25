@@ -1,8 +1,10 @@
-local menu = false
-local alreadyCalled = false
+local menu = {page = "home", open = false}
 local rental = {}
+local withdrawn_boat = nil
 
 local closest_coords = nil
+
+local first_load = true
 
 local locations = {
 	["Paleto"] = {
@@ -119,76 +121,203 @@ AddEventHandler("boatshopGUI:Update", function()
 end)
 
 -- custom events
---[[
-RegisterNetEvent("garage:openMenuWithVehiclesLoaded")
-AddEventHandler("garage:openMenuWithVehiclesLoaded", function(userVehicles)
-	ownedVehicles = userVehicles
-	alreadyCalled = false
-	menu = true
+RegisterNetEvent("boatShop:loadedBoats")
+AddEventHandler("boatShop:loadedBoats", function(boats)
+	menu.watercraft = boats
+	if first_load then
+		print("was first load for boats!")
+		if menu.watercraft then
+			for index = 1, #menu.watercraft do
+				menu.watercraft[index].stored = true
+			end
+		end
+		first_load = not first_load
+	end
 end)
---]]
 -- end custom events
 
 Citizen.CreateThread(function()
-
-	--local menu = false
-	--local bool = false
-	--local int = 0
-	--local position = 1
-	--local array = {"TEST", "TEST2", "TEST3", "TEST4"}
-
 	while true do
-		if(menu) then
-
+		if menu.open then
 			-- title of menu
 			TriggerEvent("boatshopGUI:Title", "Revsta's Boats")
-
-			-- each boat item
-			for i = 1, #(ITEMS.boats) do
-				local item = ITEMS.boats[i]
-				TriggerEvent("boatshopGUI:Option", "Rent ~y~"..item.name.."~w~ - ~g~$"..comma_value(item.price), function(cb)
+			if menu.page == "home" then
+				TriggerEvent("boatshopGUI:Option", "Rent", function(cb)
 					if(cb) then
-						Citizen.Trace("Trying to retrieve boat: " .. item.name)
-						menu = false
-						print("alreadyCalled = " .. tostring(alreadyCalled))
-						if not alreadyCalled then
-							alreadyCalled = true
-							drawNotification("Here is your rental! You can return it for cash back just over there at the blue circle.")
-							TriggerServerEvent("boatshop:rentVehicle", item, closest_coords)
-							menu = false
-							rental = item
-							alreadyCalled = false
-						end
-					else
+						menu.page = "rent"
 					end
 				end)
+				TriggerEvent("boatshopGUI:Option", "Purchase", function(cb)
+					if(cb) then
+						menu.page = "buy"
+					end
+				end)
+				TriggerEvent("boatshopGUI:Option", "Sell", function(cb)
+					if(cb) then
+						if menu.watercraft then
+							print("menu.watercraft existed")
+							if #menu.watercraft > 0 then
+								print("#menu.watercraft > 0!")
+								menu.page = "sell"
+							else
+								TriggerEvent("usa:notify", "You don't own any watercraft!")
+							end
+						else
+							TriggerEvent("usa:notify", "You don't own any watercraft!")
+						end
+					end
+				end)
+				TriggerEvent("boatshopGUI:Option", "My Boats", function(cb)
+					if(cb) then
+						if menu.watercraft then
+							if #menu.watercraft > 0 then
+								menu.page = "boats"
+							else
+								TriggerEvent("usa:notify", "You have no watercraft stored here!")
+							end
+						else
+							TriggerEvent("usa:notify", "You have no watercraft stored here!")
+						end
+					end
+				end)
+				TriggerEvent("boatshopGUI:Option", "Close", function(cb)
+					if(cb) then
+						menu.open = false
+						menu.page = "home"
+					end
+				end)
+			elseif menu.page == "rent" then
+				-- each boat item
+				for i = 1, #(ITEMS.boats) do
+					local item = ITEMS.boats[i]
+					TriggerEvent("boatshopGUI:Option", "Rent ~y~"..item.name.."~w~ - ~g~$"..comma_value(item.rent), function(cb)
+						if(cb) then
+							Citizen.Trace("Trying to retrieve boat: " .. item.name)
+							TriggerServerEvent("boatshop:rentVehicle", item, closest_coords)
+							menu.open = false
+							menu.page = "home"
+							rental = item
+						end
+					end)
+				end
+				-- close menu
+				TriggerEvent("boatshopGUI:Option", "Back", function(cb)
+					if(cb) then
+						menu.page = "home"
+					end
+				end)
+				-- close menu
+				TriggerEvent("boatshopGUI:Option", "Close Menu", function(cb)
+					if(cb) then
+						menu.open = false
+					end
+				end)
+			elseif menu.page == "buy" then
+				-- each boat item
+				for i = 1, #(ITEMS.boats) do
+					local item = ITEMS.boats[i]
+					TriggerEvent("boatshopGUI:Option", "Buy ~y~"..item.name.."~w~ - ~g~$"..comma_value(item.price), function(cb)
+						if(cb) then
+							Citizen.Trace("Trying to purchase boat: " .. item.name)
+							TriggerServerEvent("boatshop:purchaseBoat", item, closest_coords)
+							menu.open = false
+							menu.page = "home"
+						end
+					end)
+				end
+				-- go back
+				TriggerEvent("boatshopGUI:Option", "Back", function(cb)
+					if(cb) then
+						menu.page = "home"
+					end
+				end)
+				-- close menu
+				TriggerEvent("boatshopGUI:Option", "Close Menu", function(cb)
+					if(cb) then
+						menu.open = false
+					end
+				end)
+			elseif menu.page == "sell" then
+				-- show boats to sell
+				if menu.watercraft then
+					for i = 1, #menu.watercraft do
+						local item = menu.watercraft[i]
+						TriggerEvent("boatshopGUI:Option", "Sell ~y~"..item.name.."~w~ - ~g~$"..comma_value(0.5 * item.price), function(cb)
+							if(cb) then
+								Citizen.Trace("Trying to sell boat: " .. item.name)
+								TriggerServerEvent("boatShop:sellBoat", item)
+								menu.page = "home"
+							end
+						end)
+					end
+					-- go back
+					TriggerEvent("boatshopGUI:Option", "Back", function(cb)
+						if(cb) then
+							menu.page = "home"
+						end
+					end)
+					-- close menu
+					TriggerEvent("boatshopGUI:Option", "Close Menu", function(cb)
+						if(cb) then
+							menu.open = false
+						end
+					end)
+				end
+			elseif menu.page == "boats" then
+				-- show boats to retrieve
+				if menu.watercraft then
+					if #menu.watercraft > 0 then
+						for i = 1, #menu.watercraft do
+							local item = menu.watercraft[i]
+							local store_status = ""
+							if item.stored then
+								--print("watercraft at " .. i .. " was stored!")
+								store_status = "~g~Stored~w~"
+							else
+								--print("watercraft at " .. i .. " was not stored!")
+								store_status = "~y~Not Stored~w~"
+							end
+							TriggerEvent("boatshopGUI:Option", "Retrieve ~y~"..item.name .. " ~w~(" .. store_status .. ")", function(cb)
+								if(cb) then
+									Citizen.Trace("Trying to retrieve boat: " .. item.name)
+									if item.stored then
+										TriggerEvent("boatshop:spawnSeacraft", item, closest_coords, true)
+										print("setting watercraft at " .. i .. " stored status to false!")
+										menu.watercraft[i].stored = false
+										menu.open = false
+										menu.page = "home"
+									else
+										TriggerEvent("usa:notify", "You did not store this vehicle! Can't retrieve.")
+									end
+								end
+							end)
+						end
+						-- go back
+						TriggerEvent("boatshopGUI:Option", "Back", function(cb)
+							if(cb) then
+								menu.page = "home"
+							end
+						end)
+						-- close menu
+						TriggerEvent("boatshopGUI:Option", "Close Menu", function(cb)
+							if(cb) then
+								menu.open = false
+							end
+						end)
+					else
+						TriggerEvent("usa:notify", "You don't have any watercraft!")
+					end
+				end
 			end
 
-			-- close menu
-			TriggerEvent("boatshopGUI:Option", "Close Menu", function(cb)
-				if(cb) then
-					menu = false
-					alreadyCalled = false
-				end
-			end)
+			TriggerEvent("boatshopGUI:Update")
 
-			--[[
-			TriggerEvent("GUI:Bool", "bool", bool, function(cb)
-			bool = cb
-		end)
+		end
 
-		TriggerEvent("GUI:Int", "int", int, 0, 55, function(cb)
-		int = cb
-	end)
+		Wait(0)
 
-	TriggerEvent("GUI:StringArray", "string:", array, position, function(cb)
-	position = cb
-end)
---]]
-TriggerEvent("boatshopGUI:Update")
-end
-Wait(0)
-end
+	end
+
 end)
 
 Citizen.CreateThread(function()
@@ -202,23 +331,26 @@ Citizen.CreateThread(function()
 				DrawSpecialText("Press [ ~b~E~w~ ] to access Revsta's Boat Shop!")
 				if IsControlPressed(0, 86) then
 					Citizen.Wait(500)
-					menu = true
+					menu.open = true
 					closest_coords = data.spawn
 					print("opening menu! closest coords x = " .. closest_coords.x)
 				end
 			end
 			if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), data.return_rental.x, data.return_rental.y, data.return_rental.z, true) < 5 then
-				DrawSpecialText("Press [ ~b~E~w~ ] to return your seacraft rental!")
+				DrawSpecialText("Press [ ~b~E~w~ ] to return/store your seacraft!")
 				if IsControlPressed(0, 86) then
 					Citizen.Wait(500)
-					if rental.price then
-						local vehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
-						local hash = GetEntityModel(vehicle)
-						if GetPedInVehicleSeat(vehicle, -1) == GetPlayerPed(-1) then
+					local vehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
+					local hash = GetEntityModel(vehicle)
+					print("driving boat with hash: " .. hash)
+					if GetPedInVehicleSeat(vehicle, -1) == GetPlayerPed(-1) then
+						if rental.rent then
+							print("player had a boat rental! returning!")
 							for i = 1, #ITEMS.boats do
 								local item = ITEMS.boats[i]
 								if item.hash == hash then
-									TriggerServerEvent("boatshop:returnedVehicle", item)
+									print("driving boat with hash: " .. hash)
+									TriggerServerEvent("boatshop:returnRental", item)
 									Citizen.Trace("found matching model")
 									SetEntityAsMissionEntity( vehicle, true, true )
 									deleteCar( vehicle )
@@ -226,9 +358,23 @@ Citizen.CreateThread(function()
 									break
 								end
 							end
-						else
-							drawNotification("You must be in the driver's seat.")
+						else -- not a rented boat
+							if menu.watercraft then
+								print("player had a withdrawn boat!")
+								for j = 1, #menu.watercraft do
+									if menu.watercraft[j].hash == hash then
+										TriggerEvent("usa:notify", "~g~Have a good day! We'll keep this thing safe!")
+										print("matching hash found for withdrawn boat! returning to storage...")
+										--TriggerServerEvent("boatshop:storeVehicle", withdrawn_boat)
+										SetEntityAsMissionEntity( vehicle, true, true )
+										deleteCar( vehicle )
+										menu.watercraft[j].stored = true
+									end
+								end
+							end
 						end
+					else
+						drawNotification("You must be in the driver's seat.")
 					end
 				end
 			end
@@ -247,10 +393,15 @@ function DrawSpecialText(m_text)
 	DrawSubtitleTimed(250, 1)
 end
 
+RegisterNetEvent("boatShop:setPage")
+AddEventHandler("boatShop:setPage", function(page_name)
+	menu.page = page_name
+end)
+
 RegisterNetEvent("boatshop:spawnSeacraft")
-AddEventHandler("boatshop:spawnSeacraft", function(hash, coords)
+AddEventHandler("boatshop:spawnSeacraft", function(boat, coords)
     Citizen.Trace("spawning players vehicle...")
-    local numberHash = tonumber(hash)
+    local numberHash = tonumber(boat.hash)
     -- thread code stuff below was taken from an example on the wiki
     -- Create a thread so that we don't 'wait' the entire game
     Citizen.CreateThread(function()
