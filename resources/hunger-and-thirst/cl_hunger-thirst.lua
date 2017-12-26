@@ -10,18 +10,51 @@ local settings = {
     ["hunger"] = {text = "Full", x = 0.698, y = 1.62, r = 9, g = 179, b = 9, a = 255},
     ["thirst"] = {text = "Thirsty", x = 0.698, y = 1.645, r = 255, g = 128, b = 0, a = 255}
   },
-  thirst_global_mult = 0.0013,
+  thirst_global_mult = 0.00083,
   hunger_global_mult = 0.00046,
   walking_mult = 0.0005,
   running_mult = 0.001,
   sprinting_mult = 0.0015,
-  debug = true
+  debug = false
 }
 
 local person = {
   hunger_level = 100.0,
   thirst_level = 100.0
 }
+
+RegisterNetEvent("hungerAndThirst:replenish")
+AddEventHandler("hungerAndThirst:replenish", function(type, item)
+  if type == "hunger" then
+    local new_hunger_level = person.hunger_level + item.substance
+    if new_hunger_level <= 100.0 then
+      person.hunger_level = new_hunger_level
+      TriggerEvent("usa:notify", "Consumed: ~y~" .. item.name)
+      TriggerServerEvent("usa:removeItem", item, 1)
+    else
+      local diff = new_hunger_level - 100.0
+      print("went over by: " .. diff)
+      person.hunger_level = 100.0
+      TriggerEvent("usa:notify", "You are now totally full!")
+      print("calling usa:removeItem!!")
+      TriggerServerEvent("usa:removeItem", item, 1)
+    end
+  elseif type == "thirst" then
+    local new_thirst_level = person.thirst_level + substance
+    if new_thirst_level <= 100.0 then
+      person.thirst_level = new_thirst_level
+      TriggerServerEvent("usa:removeItem", item, 1)
+    else
+      local diff = new_thirst_level - 100.0
+      print("went over by: " .. diff)
+      person.thirst_level = 100.0
+      TriggerEvent("usa:notify", "You are now totally hydrated!")
+      TriggerServerEvent("usa:removeItem", item, 1)
+    end
+  else
+    print("error: no item type specified!")
+  end
+end)
 
 ---------------
 -- MAIN LOOP --
@@ -64,16 +97,21 @@ Citizen.CreateThread(function()
           person.hunger_level = person.hunger_level - settings.hunger_global_mult
         end
       else
+        local cause = "Undefined"
+        if person.hunger_level <= 0.0 then cause = "Hunger" end
+        if person.thirst_level <= 0.0 then cause = "Thirst" end
         if settings.debug then
-          print("person died!")
+          print("person died from hunger or thirst!")
           print("HP: " .. GetEntityHealth(myPed))
           print("Hunger Level: " .. person.hunger_level)
           print("Thirst Level: " .. person.thirst_level)
           print("killing...")
+          print("cause: " .. cause)
         end
         SetEntityHealth(myPed, 0.0)
         person.thirst_level = 100.0
         person.hunger_level = 100.0
+        TriggerEvent("usa:notify", "You have died from: ~y~" .. cause)
       end
     else
       if settings.debug then

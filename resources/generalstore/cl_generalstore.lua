@@ -45,10 +45,19 @@ function buyItem(item)
     Menu.hidden = not Menu.hidden
 end
 
+function foodMenu()
+  MenuTitle = "food"
+  ClearMenu()
+  for i = 1, #storeItems["Food"] do
+    item = storeItems["Food"][i]
+    Menu.addButton(item.name .. " ($" .. item.price .. ")","buyItem", item)
+  end
+end
+
 function vehicleMenu()
-    MenuTitle = "Vehicles"
-    ClearMenu()
-    for i = 1, #storeItems["Vehicle"] do
+  MenuTitle = "Vehicles"
+  ClearMenu()
+  for i = 1, #storeItems["Vehicle"] do
 		item = storeItems["Vehicle"][i]
 		Menu.addButton(item.name .. " ($" .. item.price .. ")","buyItem", item)
 	end
@@ -66,8 +75,9 @@ end
 function buyMenu()
 	MenuTitle = "Categories"
 	ClearMenu()
+  Menu.addButton("Food", "foodMenu", nil)
 	Menu.addButton("Vehicle","vehicleMenu", nil)
-    Menu.addButton("Misc","miscMenu", nil)
+  Menu.addButton("Misc","miscMenu", nil)
 end
 
 function sellMenu()

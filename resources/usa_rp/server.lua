@@ -139,3 +139,63 @@ AddEventHandler("usa:checkPlayerMoney", function(activity, amount, callbackEvent
         end
     end)
 end)
+
+RegisterServerEvent("usa:removeItem")
+AddEventHandler("usa:removeItem", function(to_remove_item, quantity)
+  -- todo implement support for removing more than 1 at a time (aka quantity parameter above)
+  print("inside usa:removeItem!")
+  local userSource = tonumber(source)
+  TriggerEvent("es:getPlayerFromId", userSource, function(user)
+    local user_inventory = user.getActiveCharacterData("inventory")
+    local user_weapons = user.getActiveCharacterData("weapons")
+    local user_licenses = user.getActiveCharacterData("licenses")
+    --print("checking inventory items...")
+    for a = 1, #user_inventory do
+      local item = user_inventory[a]
+      --print("checking item: " .. item.name)
+      if item.name == to_remove_item.name then
+        print("found a matching inventory item for usa:removeItem! removing: " .. item.name)
+        if item.quantity == 1 then
+          table.remove(user_inventory, a)
+          user.setActiveCharacterData("inventory", user_inventory)
+        else
+          user_inventory[a].quantity = item.quantity - 1
+          user.setActiveCharacterData("inventory", user_inventory)
+        end
+        return
+      end
+    end
+    --print("checking license items...")
+    for b = 1, #user_licenses do
+      local item = user_licenses[b]
+      --print("checking item: " .. item.name)
+      if item.name == to_remove_item.name then
+        print("found a matching license for usa:removeItem! removing: " .. item.name)
+        if item.quantity == 1 then
+          table.remove(user_licenses, b)
+          user.setActiveCharacterData("licenses", user_licenses)
+        else
+          user_licenses[b].quantity = item.quantity - 1
+          user.setActiveCharacterData("licenses", user_licenses)
+        end
+        return
+      end
+    end
+    --print("checking weapon items...")
+    for c = 1, #user_weapons do
+      local item = user_weapons[c]
+      --print("checking item: " .. item.name)
+      if item.name == to_remove_item.name then
+        print("found a matching weapon for usa:removeItem! removing: " .. item.name)
+        if item.quantity == 1 then
+          table.remove(user_weapons, c)
+          user.setActiveCharacterData("weapons", user_weapons)
+        else
+          user_weapons[c].quantity = item.quantity - 1
+          user.setActiveCharacterData("weapons", user_weapons)
+        end
+        return
+      end
+    end
+  end)
+end)

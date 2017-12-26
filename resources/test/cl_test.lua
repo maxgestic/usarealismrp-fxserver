@@ -143,7 +143,14 @@ function interactionMenuUse(itemName, wholeItem)
 	elseif string.find(itemName, "Cell Phone") then
 		print("Player is using a cell phone from the F1 menu with its number = " .. wholeItem.number)
 		TriggerEvent("phone:openPhone", wholeItem)
-	else
+	-------------------
+	-- Cell Phone --
+	-------------------
+elseif wholeItem.type and wholeItem.type == "food" then
+	print("Player used inventory item of type: food!")
+	print("item name: " .. wholeItem.name)
+	TriggerEvent("hungerAndThirst:replenish", "hunger", wholeItem)
+else
 		TriggerEvent("interaction:notify", "There is no use action for that item!")
 	end
 
