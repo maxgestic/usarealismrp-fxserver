@@ -302,20 +302,20 @@ AddEventHandler("veh:openDoor", function(index)
         local playerCar = GetVehiclePedIsIn(playerPed, false)
         if index == "trunk" then
             print("index was trunk!")
-            SetVehicleDoorOpen(playerCar, 5, true, false)
+            SetVehicleDoorOpen(playerCar, 5, true, true)
         elseif index == "hood" then
-            SetVehicleDoorOpen(playerCar, 4, true, false)
+            SetVehicleDoorOpen(playerCar, 4, true, true)
         elseif index == "fl" then
-            SetVehicleDoorOpen(playerCar, 0, true, false)
+            SetVehicleDoorOpen(playerCar, 0, true, true)
         elseif index == "fr" then
-            SetVehicleDoorOpen(playerCar, 1, true, false)
+            SetVehicleDoorOpen(playerCar, 1, true, true)
         elseif index == "bl" then
-            SetVehicleDoorOpen(playerCar, 2, true, false)
+            SetVehicleDoorOpen(playerCar, 2, true, true)
         elseif index == "br" then
-        SetVehicleDoorOpen(playerCar, 3, true, false)
+        SetVehicleDoorOpen(playerCar, 3, true, true)
         elseif index == "ambulance" then
-            SetVehicleDoorOpen(playerCar, 2, true, false)
-            SetVehicleDoorOpen(playerCar, 3, true, false)
+            SetVehicleDoorOpen(playerCar, 2, true, true)
+            SetVehicleDoorOpen(playerCar, 3, true, true)
         end
     end
 end)
