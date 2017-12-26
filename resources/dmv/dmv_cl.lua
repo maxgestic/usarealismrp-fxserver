@@ -3,8 +3,8 @@ local locations = {
 	--{ x=441.301, y=-981.434, z=29.689 },
 	--{ x=1853.616, y=3687.966, z=33.267 },
 	-- {x = -544.857, y = -204.422, z = 37.2152} -- LS
-	{x= -447.845, y = 6013.775, z = 30.716}, -- paleto
-	{x = 1855.458, y = 3688.599, z = 33.267} -- sandy
+	{x= -447.845, y = 6013.775, z = 30.719}, -- paleto
+	{x = 1855.458, y = 3688.599, z = 33.273} -- sandy
 }
 
 RegisterNetEvent("dmv:insufficientFunds")
@@ -72,7 +72,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 
 		for i = 1, #locations do
-			DrawMarker(1, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
+			DrawMarker(27, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
 		end
 
 		if isPlayerAtDMV() and not playerNotified then
