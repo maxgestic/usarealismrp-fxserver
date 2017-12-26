@@ -15,7 +15,7 @@ local jobs = {
         jobSupplies = "Suspicious Chemicals",
         started = false,
         locations = {
-            {name="Meth Supply Pickup", x = 70.0828, y = 3745.53, z = 38.6858},
+            {name="Meth Supply Pickup", x = 70.0828, y = 3745.53, z = 38.85},
             {name="Meth Lab",  x = 1389.28, y = 3604.6, z = 38.1},
             {name="Meth Dropoff 1", x = -402.63, y = 6316.12, z = 27.95}
         }
@@ -122,7 +122,7 @@ Citizen.CreateThread(function ()
             -- check distance for any of the locations required for the jobs being < 3 in distance
             for j = 1, #jobs[i].locations do
                 if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), jobs[i].locations[j].x, jobs[i].locations[j].y, jobs[i].locations[j].z, true ) < 40 then
-                    DrawMarker(1, jobs[i].locations[j].x, jobs[i].locations[j].y, jobs[i].locations[j].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 255, 102, 255, 90, 0, 0, 2, 0, 0, 0, 0)
+                    DrawMarker(27, jobs[i].locations[j].x, jobs[i].locations[j].y, jobs[i].locations[j].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 255, 102, 255, 90, 0, 0, 2, 0, 0, 0, 0)
                 end
             end
         end
