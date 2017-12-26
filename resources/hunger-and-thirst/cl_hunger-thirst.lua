@@ -151,7 +151,7 @@ function drawHud(person)
     settings.hud["hunger"].r = 0
     settings.hud["hunger"].g = 179
     settings.hud["hunger"].b = 0
-  elseif person.hunger_level < 60.0 and person.hunger_level > 30.0 then
+  elseif person.hunger_level < 60.0 and person.hunger_level >= 30.0 then
     settings.hud["hunger"].text = "Hungry"
     -- make orange
     settings.hud["hunger"].r = 255
@@ -167,19 +167,19 @@ function drawHud(person)
   ------------
   -- Thirst Settings --
   ------------
-  if person.thirst_level < 100.0 and person.thirst_level >= 60.0 then
+  if person.thirst_level < 100.0 and person.thirst_level >= 50.0 then
     settings.hud["thirst"].text = "Hydrated"
     -- make green
     settings.hud["thirst"].r = 9
     settings.hud["thirst"].g = 179
     settings.hud["thirst"].b = 0
-  elseif person.thirst_level < 60.0 and person.thirst_level > 30.0 then
+  elseif person.thirst_level < 50.0 and person.thirst_level > 25.0 then
     settings.hud["thirst"].text = "Thirsty"
     -- make orange
     settings.hud["thirst"].r = 255
     settings.hud["thirst"].g = 128
     settings.hud["thirst"].b = 0
-  elseif person.thirst_level < 30.0 then
+  elseif person.thirst_level < 25.0 then
     settings.hud["thirst"].text = "Parched"
     -- make red
     settings.hud["thirst"].r = 255
