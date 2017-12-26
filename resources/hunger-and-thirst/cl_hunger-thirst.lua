@@ -10,8 +10,8 @@ local settings = {
     ["hunger"] = {text = "Full", x = 0.698, y = 1.62, r = 9, g = 179, b = 9, a = 255},
     ["thirst"] = {text = "Thirsty", x = 0.698, y = 1.645, r = 255, g = 128, b = 0, a = 255}
   },
-  thirst_global_mult = 0.00083,
-  hunger_global_mult = 0.00046,
+  thirst_global_mult = 0.00079,
+  hunger_global_mult = 0.00042,
   walking_mult = 0.0005,
   running_mult = 0.001,
   sprinting_mult = 0.0015,
@@ -39,8 +39,8 @@ AddEventHandler("hungerAndThirst:replenish", function(type, item)
       print("calling usa:removeItem!!")
       TriggerServerEvent("usa:removeItem", item, 1)
     end
-  elseif type == "thirst" then
-    local new_thirst_level = person.thirst_level + substance
+  elseif type == "drink" then
+    local new_thirst_level = person.thirst_level + item.substance
     if new_thirst_level <= 100.0 then
       person.thirst_level = new_thirst_level
       TriggerServerEvent("usa:removeItem", item, 1)
