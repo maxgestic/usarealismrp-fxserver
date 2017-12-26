@@ -43,6 +43,7 @@ AddEventHandler("RPD:removeWeapons", function()
 	local userSource = source
 	print("inside of RPD:removeWeapons")
 	TriggerEvent("es:getPlayerFromId", source, function(user)
+
 		if user.getActiveCharacterData("job") == "civ" then
 			-- empty out everything since person has died and NLR is in place
 			--user.removeMoney(user.getMoney())
@@ -50,14 +51,30 @@ AddEventHandler("RPD:removeWeapons", function()
 			if user_money - DEATH_PENALTY >= 0 then
 				user.setActiveCharacterData("money", user_money - DEATH_PENALTY)
 			end
-			user.setActiveCharacterData("inventory", {})
 			user.setActiveCharacterData("weapons", {})
 			user.setActiveCharacterData("criminalHistory", {})
 			--user.setLicenses({})
 			--user.setVehicles({})
 			--user.setInsurance({})
-			TriggerEvent("sway:updateDB", userSource)
+			--TriggerEvent("sway:updateDB", userSource)
 		end
+
+		local indexes_to_remove = {}
+		local user_inventory = user.getActiveCharacterData("inventory")
+		-- find non cell phone items to delete
+		for i = 1, #user_inventory do
+			local item = user_inventory[i]
+			if not string.find(item.name, "Cell Phone") then
+				table.insert(indexes_to_remove, i)
+			end
+		end
+		-- remove non cell phone items
+		for i = 1, #indexes_to_remove do
+			--print("removing: " .. user_inventory[indexes_to_remove[i]].name .. "...")
+			table.remove(user_inventory, indexes_to_remove[i])
+		end
+		-- save
+		user.setActiveCharacterData("inventory", user_inventory)
 	end)
 end)
 
