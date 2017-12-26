@@ -56,7 +56,7 @@ end
 function isPlayerAtDMV()
 	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
 	for i = 1, #locations do
-		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,false) < 2.5 then
+		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,false) < 1.5 then
 			return true
 		end
 	end
@@ -75,19 +75,12 @@ Citizen.CreateThread(function()
 			DrawMarker(27, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
 		end
 
-		if isPlayerAtDMV() and not playerNotified then
-			TriggerEvent("chatMessage", "SYSTEM", { 0, 141, 155 }, "^3Press E to access the DMV menu.")
-			playerNotified = true
+		if isPlayerAtDMV() then
+			DrawSpecialText("Press ~g~E~w~ to access the DMV menu",0,1,0.5,0.8,0.6,255,255,255,255)
 		end
 		if IsControlJustPressed(1,Keys["E"]) then
 
 			if isPlayerAtDMV() then
-
-				if not stored then
-					-- save skin for user canceling
-					skinBeforeRandomizing = GetEntityModel(GetPlayerPed(-1))
-					stored = true
-				end
 
 				dmvMenu()              -- Menu to draw
 				Menu.hidden = not Menu.hidden    -- Hide/Show the menu
@@ -95,7 +88,6 @@ Citizen.CreateThread(function()
 			end
 
 		elseif not isPlayerAtDMV() then
-			playerNotified = false
 			Menu.hidden = true
 		end
 
@@ -108,4 +100,19 @@ function DrawCoolLookingNotification(msg)
     SetNotificationTextEntry("STRING")
     AddTextComponentString(msg)
     DrawNotification(0,1)
+end
+
+function DrawSpecialText(text,font,centre,x,y,scale,r,g,b,a)
+		SetTextFont(font)
+		SetTextProportional(0)
+		SetTextScale(scale, scale)
+		SetTextColour(r, g, b, a)
+		SetTextDropShadow(0, 0, 0, 0,255)
+		SetTextEdge(1, 0, 0, 0, 255)
+		SetTextDropShadow()
+		SetTextOutline()
+		SetTextCentre(centre)
+		SetTextEntry("STRING")
+		AddTextComponentString(text)
+		DrawText(x , y)
 end

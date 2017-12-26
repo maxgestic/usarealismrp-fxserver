@@ -83,7 +83,7 @@ function IsNearStore()
 	local plyCoords = GetEntityCoords(ply, 0)
 	for _, item in pairs(policeLockerRooms) do
 		local distance = GetDistanceBetweenCoords(item.x, item.y, item.z,  plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
-		if(distance <= 2) then
+		if(distance <= 1.5) then
 			return true
 		end
 	end
