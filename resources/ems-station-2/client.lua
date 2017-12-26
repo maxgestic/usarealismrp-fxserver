@@ -42,8 +42,8 @@ local position = 1
 local EMSLockerRooms = {
 {x = 207.106, y = -1641.45, z = 28.5},
 {x = 373.269, y = -1441.48, z = 28.5},
-{x=-366.269, y = 6102.27, z = 34.4397}, -- paleto
-{x=1692.13, y=3586.27, z=34.6209} -- sandy
+{x=-366.269, y = 6102.27, z = 34.6397}, -- paleto
+{x=1692.13, y=3586.27, z=34.7209} -- sandy
 }
 
 local arrSkinGeneralCaptions = {"Fireman", "Paramedic - Male", "Paramedic - Female", "Doctor"}
@@ -341,7 +341,7 @@ Citizen.CreateThread(function()
 
 	while true do
 		for _, item in pairs(EMSLockerRooms) do
-			DrawMarker(1, item.x,item.y,item.z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 255, 102, 255, 90, 0, 0, 2, 0, 0, 0, 0)
+			DrawMarker(27, item.x,item.y,item.z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 255, 102, 255, 90, 0, 0, 2, 0, 0, 0, 0)
 		end
 		if (IsNearEMSLocker() == true) then
 			if(menu == 0) then
