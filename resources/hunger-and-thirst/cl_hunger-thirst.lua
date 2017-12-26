@@ -58,6 +58,7 @@ AddEventHandler("hungerAndThirst:replenish", function(type, item)
     -- adjust level, notify and remove item
     if new_thirst_level <= 100.0 then
       person.thirst_level = new_thirst_level
+      TriggerEvent("usa:notify", "Consumed: ~y~" .. item.name)
       TriggerServerEvent("usa:removeItem", item, 1)
     else
       local diff = new_thirst_level - 100.0
