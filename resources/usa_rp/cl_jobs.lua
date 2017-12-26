@@ -153,13 +153,6 @@ Citizen.CreateThread(function ()
                             if IsControlJustPressed(1, 38) then -- 38 = E
                                 --Citizen.Trace("checking if user has meth supplies!")
                                 TriggerServerEvent("usa_rp:checkUserJobSupplies", jobs[i].jobSupplies)
-                                --[[ not needed here
-                                jobs[i].started = true
-                                onJob = true
-                                gatheringJob = "Meth"
-                                gathering = true
-                                Citizen.Trace("job started!")
-                                --]]
                             end
                         elseif jobs[i].locations[j].name == "Meth Supply Pickup" then
                             drawTxt('Press ~g~E~s~ to buy the supplies needed to create meth',0,1,0.5,0.8,0.6,255,255,255,255)
@@ -213,49 +206,49 @@ function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
 end
 
 Citizen.CreateThread(function()
-    while true do
-        if gathering then
-            if gatheringJob == "Meth" then
-                animDict = "timetable@jimmy@ig_1@idle_a"
-                animName = "hydrotropic_bud_or_something"
+  while true do
+    if gathering then
+      if gatheringJob == "Meth" then
+        animDict = "timetable@jimmy@ig_1@idle_a"
+        animName = "hydrotropic_bud_or_something"
+        TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
+        for i = 1, 75 do
+          if gathering then
+            if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) then
+              RequestAnimDict(animDict)
+              while not HasAnimDictLoaded(animDict) do
+                Citizen.Wait(100)
+              end
+              if gathering then
                 TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
-                for i = 1, 75 do
-                    if gathering then
-                        if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) then
-            				RequestAnimDict(animDict)
-            				while not HasAnimDictLoaded(animDict) do
-            					Citizen.Wait(100)
-            				end
-                            if gathering then
-            				    TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
-                            end
-            			end
-                        Citizen.Wait(1000)
-                    else
-                        print("player stopped gathering! breaking from for loop!")
-                        break
-                    end
-                end
-                ClearPedSecondaryTask(GetPlayerPed(-1))
-                StopAnimTask(GetPlayerPed(-1), animDict, animName, false)
-                if gathering then
-                    -- give meth
-                    local meth = {
-                        name = "Meth",
-                        type = "drug",
-                        legality = "illegal",
-                        quantity = 2
-                    }
-                    Citizen.Trace("giving meth to player!")
-                    TriggerServerEvent("usa_rp:giveItem", meth)
-                    onJob = false
-                    gathering = false
-                    gatheringJob = ""
-                end
+              end
             end
+            Citizen.Wait(1000)
+          else
+            print("player stopped gathering! breaking from for loop!")
+            break
+          end
         end
-        Citizen.Wait(0)
+        ClearPedSecondaryTask(GetPlayerPed(-1))
+        StopAnimTask(GetPlayerPed(-1), animDict, animName, false)
+        if gathering then
+          -- give meth
+          local meth = {
+            name = "Meth",
+            type = "drug",
+            legality = "illegal",
+            quantity = 2
+          }
+          Citizen.Trace("giving meth to player!")
+          TriggerServerEvent("usa_rp:giveItem", meth)
+          onJob = false
+          gathering = false
+          gatheringJob = ""
+        end
+      end
     end
+    Citizen.Wait(0)
+  end
 end)
 
 --

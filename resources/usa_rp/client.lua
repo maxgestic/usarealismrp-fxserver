@@ -385,3 +385,23 @@ AddEventHandler("usa:notify", function(msg)
 	AddTextComponentString(msg)
 	DrawNotification(0,1)
 end)
+
+RegisterNetEvent("usa:playAnimation")
+AddEventHandler("usa:playAnimation", function(animName, animDict, duration)
+  --print("inside of usa:playAnimation!!")
+  -- load animation
+  RequestAnimDict(animDict)
+  while not HasAnimDictLoaded(animDict) do
+    Citizen.Wait(100)
+  end
+  for i = 1, duration do
+      -- play animation
+    if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) then
+      TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 53, 0, 0, 0, 0)
+    end
+    Wait(1000) -- wait one second * duration
+  end
+  -- after duration, stop playing animation:
+  ClearPedSecondaryTask(GetPlayerPed(-1))
+  StopAnimTask(GetPlayerPed(-1), animDict, animName, false)
+end)

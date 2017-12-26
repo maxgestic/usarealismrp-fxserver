@@ -26,31 +26,49 @@ local person = {
 RegisterNetEvent("hungerAndThirst:replenish")
 AddEventHandler("hungerAndThirst:replenish", function(type, item)
   if type == "hunger" then
+    local animation = {
+      dict = "amb@code_human_wander_eating_donut@male@idle_a",
+      name = "idle_c",
+      duration = 18
+    }
     local new_hunger_level = person.hunger_level + item.substance
+    -- adjust level, notify and remove item
     if new_hunger_level <= 100.0 then
       person.hunger_level = new_hunger_level
       TriggerEvent("usa:notify", "Consumed: ~y~" .. item.name)
       TriggerServerEvent("usa:removeItem", item, 1)
     else
       local diff = new_hunger_level - 100.0
-      print("went over by: " .. diff)
+      --print("went over by: " .. diff)
       person.hunger_level = 100.0
       TriggerEvent("usa:notify", "You are now totally full!")
-      print("calling usa:removeItem!!")
+      --print("calling usa:removeItem!!")
       TriggerServerEvent("usa:removeItem", item, 1)
     end
+    --print("playing food animation!")
+    -- play animation:
+    TriggerEvent("usa:playAnimation", animation.name, animation.dict, animation.duration)
   elseif type == "drink" then
+    local animation = {
+      dict = "amb@code_human_wander_drinking_fat@male@idle_a",
+      name = "idle_c",
+      duration = 12
+    }
     local new_thirst_level = person.thirst_level + item.substance
+    -- adjust level, notify and remove item
     if new_thirst_level <= 100.0 then
       person.thirst_level = new_thirst_level
       TriggerServerEvent("usa:removeItem", item, 1)
     else
       local diff = new_thirst_level - 100.0
-      print("went over by: " .. diff)
+      --print("went over by: " .. diff)
       person.thirst_level = 100.0
       TriggerEvent("usa:notify", "You are now totally hydrated!")
       TriggerServerEvent("usa:removeItem", item, 1)
     end
+    --print("playing drink animation!")
+    -- play animation:
+    TriggerEvent("usa:playAnimation", animation.name, animation.dict, animation.duration)
   else
     print("error: no item type specified!")
   end
