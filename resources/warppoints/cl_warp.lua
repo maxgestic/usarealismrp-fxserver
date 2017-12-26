@@ -35,9 +35,9 @@ Citizen.CreateThread(function()
     for locationName, locationCoords in pairs(warp_locations) do
       -- draw the markers
       if GetDistanceBetweenCoords(locationCoords.entrance.x, locationCoords.entrance.y, locationCoords.entrance.z,GetEntityCoords(GetPlayerPed(-1))) < 50 then
-        DrawMarker(1, locationCoords.entrance.x, locationCoords.entrance.y, locationCoords.entrance.z, 0, 0, 0, 0, 0, 0, 1.5, 1.5, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
+        DrawMarker(27, locationCoords.entrance.x, locationCoords.entrance.y, locationCoords.entrance.z, 0, 0, 0, 0, 0, 0, 1.5, 1.5, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
       elseif GetDistanceBetweenCoords(locationCoords.exit.x, locationCoords.exit.y, locationCoords.exit.z,GetEntityCoords(GetPlayerPed(-1))) < 50 then
-        DrawMarker(1, locationCoords.exit.x, locationCoords.exit.y, locationCoords.exit.z, 0, 0, 0, 0, 0, 0, 1.5, 1.5, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
+        DrawMarker(27, locationCoords.exit.x, locationCoords.exit.y, locationCoords.exit.z, 0, 0, 0, 0, 0, 0, 1.5, 1.5, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
       end
       -- enter/exit
       if GetDistanceBetweenCoords(locationCoords.entrance.x, locationCoords.entrance.y, locationCoords.entrance.z,GetEntityCoords(GetPlayerPed(-1))) < 1.6 then
