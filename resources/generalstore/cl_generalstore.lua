@@ -45,8 +45,17 @@ function buyItem(item)
     Menu.hidden = not Menu.hidden
 end
 
+function drinksMenu()
+  MenuTitle = "Drinks"
+  ClearMenu()
+  for i = 1, #storeItems["Drinks"] do
+    item = storeItems["Drinks"][i]
+    Menu.addButton(item.name .. " ($" .. item.price .. ")","buyItem", item)
+  end
+end
+
 function foodMenu()
-  MenuTitle = "food"
+  MenuTitle = "Food"
   ClearMenu()
   for i = 1, #storeItems["Food"] do
     item = storeItems["Food"][i]
@@ -75,6 +84,7 @@ end
 function buyMenu()
 	MenuTitle = "Categories"
 	ClearMenu()
+  Menu.addButton("Drinks", "drinksMenu", nil)
   Menu.addButton("Food", "foodMenu", nil)
 	Menu.addButton("Vehicle","vehicleMenu", nil)
   Menu.addButton("Misc","miscMenu", nil)
@@ -109,11 +119,10 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		for i = 1, #locations do
-			DrawMarker(1, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 15, 0, 190, 90, 0, 0, 2, 0, 0, 0, 0)
+			DrawMarker(27, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 15, 0, 190, 90, 0, 0, 2, 0, 0, 0, 0)
 		end
-		if isPlayerAtGeneralStore() and not playerNotified then
-			TriggerEvent("chatMessage", "SYSTEM", { 0, 141, 155 }, "^3Press E to open general store menu!")
-			playerNotified = true
+		if isPlayerAtGeneralStore() then
+			DrawSpecialText("Press ~g~E~w~ to open the general store menu!")
 		end
 		if IsControlJustPressed(1,Keys["E"]) then
 			if isPlayerAtGeneralStore() then
@@ -121,9 +130,15 @@ Citizen.CreateThread(function()
 				Menu.hidden = not Menu.hidden    -- Hide/Show the menu
 			end
 		elseif not isPlayerAtGeneralStore() then
-			playerNotified = false
 			Menu.hidden = true
 		end
 		Menu.renderGUI()     -- Draw menu on each tick if Menu.hidden = false
 	end
 end)
+
+function DrawSpecialText(m_text)
+    ClearPrints()
+	SetTextEntry_2("STRING")
+	AddTextComponentString(m_text)
+	DrawSubtitleTimed(250, 1)
+end
