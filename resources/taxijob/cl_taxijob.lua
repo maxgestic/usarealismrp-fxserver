@@ -19,12 +19,9 @@ Citizen.CreateThread(function()
 		DrawMarker(1, taxiDutyX, taxiDutyY, taxiDutyZ, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
         local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
 	    if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,taxiDutyX,taxiDutyY,taxiDutyZ,false) < 3 and not playerNotified then
-            --DrawCoolLookingNotification("Press ~y~E~w~ to go work for Downtown Taxi Co.!")
+        drawTxt("Press ~y~E~w~ to go on/off duty for Downtown Taxi Co.!",0,1,0.5,0.8,0.6,255,255,255,255)
     		if IsControlJustPressed(1,38) then
-				TriggerServerEvent("taxi:setJob")
-                --DrawCoolLookingNotification("Here's your cab! Have a good shift!")
-                --spawnVehicle()
-                --Citizen.Wait(120000) -- ghetto spawn delay
+					TriggerServerEvent("taxi:setJob")
     		end
         elseif GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,taxiDutyX,taxiDutyY,taxiDutyZ,false) > 3 then
             -- out of range
@@ -54,4 +51,19 @@ function DrawCoolLookingNotificationWithTaxiPic(name, msg)
 	AddTextComponentString(msg)
 	SetNotificationMessage("CHAR_TAXI", "CHAR_TAXI", true, 1, name, "", msg)
 	DrawNotification(0,1)
+end
+
+function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
+	SetTextFont(font)
+	SetTextProportional(0)
+	SetTextScale(scale, scale)
+	SetTextColour(r, g, b, a)
+	SetTextDropShadow(0, 0, 0, 0,255)
+	SetTextEdge(1, 0, 0, 0, 255)
+	SetTextDropShadow()
+	SetTextOutline()
+	SetTextCentre(centre)
+	SetTextEntry("STRING")
+	AddTextComponentString(text)
+	DrawText(x , y)
 end

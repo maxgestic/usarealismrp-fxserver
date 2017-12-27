@@ -2,24 +2,37 @@ local timeout = false
 
 RegisterServerEvent("taxi:setJob")
 AddEventHandler("taxi:setJob", function()
-    TriggerEvent("es:getPlayerFromId", source, function(user)
-        if user.getActiveCharacterData("job") == "taxi" then
-            print("user " .. GetPlayerName(source) .. " just went off duty for downtown taxi cab co.!")
-            user.setActiveCharacterData("job", "civ")
-            TriggerClientEvent("taxi:offDuty", source)
-        else
-            if not timeout then
-                print("user " .. GetPlayerName(source) .. " just went on duty for downtown taxi cab co.!")
-                user.setActiveCharacterData("job", "taxi")
-                local name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
-                TriggerClientEvent("taxi:onDuty", source, name)
-                timeout = true
-                SetTimeout(15000, function()
-                    timeout = false
-                end)
-            else
-                print("player is on timeout and cannot go on duty for downtown taxi co!")
+  TriggerEvent("es:getPlayerFromId", source, function(user)
+    local name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
+    local user_licenses = user.getActiveCharacterData("licenses")
+    if user.getActiveCharacterData("job") == "taxi" then
+      print("user " .. GetPlayerName(source) .. " just went off duty for downtown taxi cab co.!")
+      user.setActiveCharacterData("job", "civ")
+      TriggerClientEvent("taxi:offDuty", source)
+    else
+      if not timeout then
+        print("user " .. name .. " just is trying to go on duty for downtown taxi cab co.!")
+        for i = 1, #user_licenses do
+          local item = user_licenses[i]
+          if string.find(item.name, "Driver") then
+            print("DL found! checking validity")
+            if item.status == "valid" then
+              user.setActiveCharacterData("job", "taxi")
+              TriggerClientEvent("taxi:onDuty", source, name)
+              timeout = true
+              SetTimeout(15000, function()
+                timeout = false
+              end)
+              return
             end
+          end
         end
-    end)
+        -- at this point, no valid DL was found
+        TriggerClientEvent("usa:notify", source, "You don't have a valid driver's license!")
+      else
+        print("player is on timeout and cannot go on duty for downtown taxi co!")
+        TriggerClientEvent("usa:notify", source, "Can't retrieve another car! Please wait a little.")
+      end
+    end
+  end)
 end)
