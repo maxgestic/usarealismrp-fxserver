@@ -23,6 +23,10 @@ local person = {
   thirst_level = 100.0
 }
 
+---------------
+-- API FUNCS --
+---------------
+
 RegisterNetEvent("hungerAndThirst:replenish")
 AddEventHandler("hungerAndThirst:replenish", function(type, item)
   if type == "hunger" then
@@ -131,6 +135,7 @@ Citizen.CreateThread(function()
         person.thirst_level = 100.0
         person.hunger_level = 100.0
         TriggerEvent("usa:notify", "You have died from: ~y~" .. cause)
+        TriggerEvent("chatMessage", "", {}, "You have died from: ^3" .. cause)
       end
     else
       if settings.debug then
