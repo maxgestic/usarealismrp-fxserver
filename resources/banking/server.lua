@@ -121,7 +121,7 @@ AddEventHandler('bank:withdraw', function(amount)
 local userSource = tonumber(source)
   TriggerEvent('es:getPlayerFromId', userSource, function(user)
       local rounded = round(tonumber(amount), 0)
-      if(string.len(rounded) >= 9) then
+      if(string.len(tostring(rounded)) >= 9) then
         TriggerClientEvent('chatMessage', userSource, "", {0, 0, 200}, "^1Input too high^0")
       else
           local user_bank = user.getActiveCharacterData("bank")
