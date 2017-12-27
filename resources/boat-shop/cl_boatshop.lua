@@ -180,7 +180,7 @@ Citizen.CreateThread(function()
 						end
 					end
 				end)
-				TriggerEvent("boatshopGUI:Option", "Close", function(cb)
+				TriggerEvent("boatshopGUI:Option", "~y~Close", function(cb)
 					if(cb) then
 						menu.open = false
 						menu.page = "home"
@@ -201,13 +201,13 @@ Citizen.CreateThread(function()
 					end)
 				end
 				-- close menu
-				TriggerEvent("boatshopGUI:Option", "Back", function(cb)
+				TriggerEvent("boatshopGUI:Option", "~y~Back", function(cb)
 					if(cb) then
 						menu.page = "home"
 					end
 				end)
 				-- close menu
-				TriggerEvent("boatshopGUI:Option", "Close Menu", function(cb)
+				TriggerEvent("boatshopGUI:Option", "~y~Close Menu", function(cb)
 					if(cb) then
 						menu.open = false
 					end
@@ -226,13 +226,13 @@ Citizen.CreateThread(function()
 					end)
 				end
 				-- go back
-				TriggerEvent("boatshopGUI:Option", "Back", function(cb)
+				TriggerEvent("boatshopGUI:Option", "~y~Back", function(cb)
 					if(cb) then
 						menu.page = "home"
 					end
 				end)
 				-- close menu
-				TriggerEvent("boatshopGUI:Option", "Close Menu", function(cb)
+				TriggerEvent("boatshopGUI:Option", "~y~Close Menu", function(cb)
 					if(cb) then
 						menu.open = false
 					end
@@ -251,13 +251,13 @@ Citizen.CreateThread(function()
 						end)
 					end
 					-- go back
-					TriggerEvent("boatshopGUI:Option", "Back", function(cb)
+					TriggerEvent("boatshopGUI:Option", "~y~Back", function(cb)
 						if(cb) then
 							menu.page = "home"
 						end
 					end)
 					-- close menu
-					TriggerEvent("boatshopGUI:Option", "Close Menu", function(cb)
+					TriggerEvent("boatshopGUI:Option", "~y~Close Menu", function(cb)
 						if(cb) then
 							menu.open = false
 						end
@@ -293,13 +293,13 @@ Citizen.CreateThread(function()
 							end)
 						end
 						-- go back
-						TriggerEvent("boatshopGUI:Option", "Back", function(cb)
+						TriggerEvent("boatshopGUI:Option", "~y~Back", function(cb)
 							if(cb) then
 								menu.page = "home"
 							end
 						end)
 						-- close menu
-						TriggerEvent("boatshopGUI:Option", "Close Menu", function(cb)
+						TriggerEvent("boatshopGUI:Option", "~y~Close Menu", function(cb)
 							if(cb) then
 								menu.open = false
 							end
