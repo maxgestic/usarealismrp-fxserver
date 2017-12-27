@@ -18,7 +18,7 @@ local warp_locations = {
     entrance = {
       x = -447.414,
       y = 6000.88,
-      z = 30.6
+      z = 30.7
     },
     exit = {
       x = 450.957,
