@@ -36,6 +36,8 @@ AddEventHandler("GUI2:Update", function()
 	end)
 -- /MENU CODE
 
+local skin_saved = false -- prevent spamming of server event
+
 --Global Variables
 local menu = 0
 local position = 1
@@ -99,6 +101,7 @@ AddEventHandler("CS:ShowMainMenu", function()
 
 	TriggerEvent("GUI2:Option", "Multiplayer Male", function(cb)
 		if(cb) then
+			skin_saved = false
 			Citizen.CreateThread(function()
 				local modelhashed = GetHashKey("mp_m_freemode_01")
 				RequestModel(modelhashed)
@@ -120,6 +123,7 @@ AddEventHandler("CS:ShowMainMenu", function()
 
 	TriggerEvent("GUI2:Option", "Multiplayer Female", function(cb)
 		if(cb) then
+			skin_saved = false
 			Citizen.CreateThread(function()
 				local modelhashed = GetHashKey("mp_f_freemode_01")
 				RequestModel(modelhashed)
@@ -141,6 +145,7 @@ AddEventHandler("CS:ShowMainMenu", function()
 
 	TriggerEvent("GUI2:StringArray", "Peds:", arrSkinGeneralCaptions, position, function(cb)
 		Citizen.CreateThread(function()
+			skin_saved = false
 			position = cb
 			local modelhashed = GetHashKey(arrSkinGeneralValues[position])
 			--Citizen.Trace("setting model to hash: " .. modelhashed)
@@ -163,6 +168,7 @@ AddEventHandler("CS:ShowMainMenu", function()
 
 	TriggerEvent("GUI2:Option", "Primary Components", function(cb)
 		if(cb) then
+			skin_saved = false
 			Citizen.Trace("true")
 			menu = 2
 		else
@@ -172,6 +178,7 @@ AddEventHandler("CS:ShowMainMenu", function()
 
 	TriggerEvent("GUI2:Option", "Secondary Components", function(cb)
 		if(cb) then
+			skin_saved = false
 			Citizen.Trace("true")
 			menu = 3
 		else
@@ -181,6 +188,7 @@ AddEventHandler("CS:ShowMainMenu", function()
 
 	TriggerEvent("GUI2:Option", "Props", function(cb)
 		if(cb) then
+			skin_saved = false
 			Citizen.Trace("true")
 			menu = 4
 		else
@@ -190,6 +198,7 @@ AddEventHandler("CS:ShowMainMenu", function()
 
 	TriggerEvent("GUI2:Option", "Random", function(cb)
 	if(cb) then
+		skin_saved = false
 		Citizen.CreateThread(function()
 		local randomSkinValue = math.random ( 1, #arrSkinGeneralValues)
 		local modelhashed = GetHashKey(arrSkinGeneralValues[randomSkinValue])
@@ -242,9 +251,12 @@ AddEventHandler("CS:ShowMainMenu", function()
 				debugstr = debugstr .. character.components[i] .. "->" .. character.componentstexture[i] .. ","
 			end
 			Citizen.Trace(debugstr)
-			TriggerServerEvent("mini:save", character)
-			Citizen.Trace("calling server function: giveMeMyWeaponsPlease...")
-			TriggerServerEvent("mini:giveMeMyWeaponsPlease")
+			if not skin_saved then
+				TriggerServerEvent("mini:save", character)
+				Citizen.Trace("calling server function: giveMeMyWeaponsPlease...")
+				TriggerServerEvent("mini:giveMeMyWeaponsPlease")
+				skin_saved = true
+			end
 			menu = false
 		else
 
@@ -391,6 +403,7 @@ Citizen.CreateThread(function()
 			end
 		else
 			menu = 0
+			skin_saved = false
 		end
 
 		if(IsControlJustPressed(1, 51) and IsNearStore() == true) then

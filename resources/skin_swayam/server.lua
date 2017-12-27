@@ -16,7 +16,7 @@ AddEventHandler("mini:save", function(appearance)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
 		local characters = user.getCharacters()
 		for i = 1, #characters do
-			print("characters[i].active = " .. tostring(characters[i].active))
+			--print("characters[i].active = " .. tostring(characters[i].active))
 			if characters[i].active == true then
 				characters[i].appearance = appearance
 				user.setCharacter(characters[i], i)
@@ -35,8 +35,8 @@ AddEventHandler("mini:giveMeMyWeaponsPlease", function()
     local inventory
 
     print("inside of giveMeMyWeaponsPlease now!!")
-	print("source = " .. source)
-	print("typeof source = " .. type(source))
+	--print("source = " .. source)
+	--print("typeof source = " .. type(source))
 
     -- Gives the loaded user corresponding to the given player id(second argument).
     TriggerEvent('es:getPlayerFromId', source, function(user)
