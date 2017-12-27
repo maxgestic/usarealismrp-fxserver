@@ -71,7 +71,9 @@ AddEventHandler("RPD:removeWeapons", function()
 		-- remove non cell phone items
 		for i = 1, #indexes_to_remove do
 			--print("removing: " .. user_inventory[indexes_to_remove[i]].name .. "...")
-			table.remove(user_inventory, indexes_to_remove[i])
+			if user_inventory[indexes_to_remove[i]] then
+				table.remove(user_inventory, indexes_to_remove[i])
+			end
 		end
 		-- save
 		user.setActiveCharacterData("inventory", user_inventory)
