@@ -59,22 +59,17 @@ AddEventHandler("RPD:removeWeapons", function()
 			--TriggerEvent("sway:updateDB", userSource)
 		end
 
-		local indexes_to_remove = {}
 		local user_inventory = user.getActiveCharacterData("inventory")
+		print("#inventory = " .. #user_inventory)
 		-- find non cell phone items to delete
 		for i = 1, #user_inventory do
 			local item = user_inventory[i]
 			if not string.find(item.name, "Cell Phone") then
-				table.insert(indexes_to_remove, i)
+				print("setting to item to nil: " .. item.name)
+				user_inventory[i] = nil
 			end
 		end
-		-- remove non cell phone items
-		for i = 1, #indexes_to_remove do
-			--print("removing: " .. user_inventory[indexes_to_remove[i]].name .. "...")
-			if user_inventory[indexes_to_remove[i]] then
-				table.remove(user_inventory, indexes_to_remove[i])
-			end
-		end
+		print("after setting nils, #inventory = " .. #user_inventory)
 		-- save
 		user.setActiveCharacterData("inventory", user_inventory)
 	end)
