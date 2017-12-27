@@ -69,7 +69,7 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
         	--TriggerClientEvent('chatMessage', -1, "[ID]", {171, 67, 227}, "^2Name: ^4" .. GetPlayerName(source) .. " ^0- ^2SSN: ^4" .. source)
         	TriggerEvent("es:getPlayerFromId", userSource, function(user)
         		if(user)then
-                    local user_rank = user.getActiveCharacterData("policeRank")
+              local user_rank = user.getActiveCharacterData("policeRank")
         			if user_rank > 0 then
         				local policeRanks = {
         					"Probationary Officer" ,
