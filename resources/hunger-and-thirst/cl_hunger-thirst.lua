@@ -10,8 +10,8 @@ local settings = {
     ["hunger"] = {text = "Full", x = 0.698, y = 1.62, r = 9, g = 179, b = 9, a = 255},
     ["thirst"] = {text = "Thirsty", x = 0.698, y = 1.645, r = 255, g = 128, b = 0, a = 255}
   },
-  thirst_global_mult = 0.00079,
-  hunger_global_mult = 0.00042,
+  thirst_global_mult = 0.00071,
+  hunger_global_mult = 0.00034,
   walking_mult = 0.0005,
   running_mult = 0.001,
   sprinting_mult = 0.0015,
