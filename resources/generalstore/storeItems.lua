@@ -10,8 +10,8 @@ storeItems = {
     },
     ["Drinks"] = {
       {name = "Water", price = 30, type = "drink", substance = 25.0, quantity = 1, legality = "legal", weight = 6},
-      {name = "Cookies n Cream Milkshake", price = 35, type = "drink", substance = 20.0, quantity = 1, legality = "legal", weight = 8},
-      {name = "Orange Juice w/ pulp", price = 35, type = "drink", substance = 20.0, quantity = 1, legality = "legal", weight = 5},
+      {name = "Cookies n' Cream Milkshake", price = 35, type = "drink", substance = 20.0, quantity = 1, legality = "legal", weight = 8},
+      {name = "Orange Juice w/ Pulp", price = 35, type = "drink", substance = 20.0, quantity = 1, legality = "legal", weight = 5},
       {name = "Soda", price = 40, type = "drink", substance = 20.0, quantity = 1, legality = "legal", weight = 5}
       --{name = "Leanmonade", price = 50, type = "Drink", substance = 10.0, quantity = 1, legality = "illegal", weight = 4},
       --{name = "Lite Beer 4 Pack", price = 100, type = "Drink", substance = 5.0, quantity = 4, legality = "legal", weight = 6},
@@ -20,7 +20,7 @@ storeItems = {
     ["Vehicle"] = {
         { name = "Repair Kit", price = 1500, type = "vehicle", quantity = 1, legality = "legal", weight = 20}
     },
-    ["Misc"] = {
+    ["Electronics"] = {
         { name = "Cell Phone", price = 750, type = "misc", quantity = 1, legality = "legal", contacts = {}, conversations = {}, weight = 10}
     }
 }

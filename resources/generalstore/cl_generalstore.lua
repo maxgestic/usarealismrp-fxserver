@@ -32,103 +32,251 @@ end
 
 function buyItem(item)
     TriggerServerEvent("generalStore:buyItem", item)
-    Menu.hidden = not Menu.hidden
 end
-
-function drinksMenu()
-  MenuTitle = "Drinks"
-  ClearMenu()
-  for i = 1, #storeItems["Drinks"] do
-    item = storeItems["Drinks"][i]
-    Menu.addButton(item.name .. " ($" .. item.price .. ")","buyItem", item)
-  end
-end
-
-function foodMenu()
-  MenuTitle = "Food"
-  ClearMenu()
-  for i = 1, #storeItems["Food"] do
-    item = storeItems["Food"][i]
-    Menu.addButton(item.name .. " ($" .. item.price .. ")","buyItem", item)
-  end
-end
-
-function vehicleMenu()
-  MenuTitle = "Vehicles"
-  ClearMenu()
-  for i = 1, #storeItems["Vehicle"] do
-		item = storeItems["Vehicle"][i]
-		Menu.addButton(item.name .. " ($" .. item.price .. ")","buyItem", item)
-	end
-end
-
-function miscMenu()
-    MenuTitle = "Misc"
-    ClearMenu()
-    for i = 1, #storeItems["Misc"] do
-		item = storeItems["Misc"][i]
-		Menu.addButton(item.name .. " ($" .. item.price .. ")","buyItem", item)
-	end
-end
-
-function buyMenu()
-	MenuTitle = "Categories"
-	ClearMenu()
-  Menu.addButton("Drinks", "drinksMenu", nil)
-  Menu.addButton("Food", "foodMenu", nil)
-	Menu.addButton("Vehicle","vehicleMenu", nil)
-  Menu.addButton("Misc","miscMenu", nil)
-end
-
-function sellMenu()
-	TriggerServerEvent("generalStore:getItemsAndDisplay")
-end
-
-function sellItem(item)
-	TriggerServerEvent("generalStore:sellItem", item)
-	Menu.hidden = true
-end
-
-function generalStoreMenu()
-    MenuTitle = "General Store"
-    ClearMenu()
-    Menu.addButton("Buy", "buyMenu", nil)
-    Menu.addButton("Sell", "sellMenu", nil)
-end
-
-RegisterNetEvent("generalStore:displayItemsToSell")
-AddEventHandler("generalStore:displayItemsToSell", function(items)
-	MenuTitle = "Sell"
-    ClearMenu()
-    for i = 1, #items do
-        Menu.addButton("(" .. items[i].quantity .. "x) " .. items[i].name, "sellItem", items[i])
-    end
-end)
 
 Citizen.CreateThread(function()
+
+  local menu = {
+    open = false,
+    page = "home",
+    title = "General Store",
+    key = 38 -- "E"
+  }
+
 	while true do
 		Citizen.Wait(0)
+    ------------------------------
+    -- DRAW MARKERS & HELP TEXT --
+    ------------------------------
 		for i = 1, #locations do
 			DrawMarker(27, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 15, 0, 190, 90, 0, 0, 2, 0, 0, 0, 0)
 		end
-		if isPlayerAtGeneralStore() then
-			DrawSpecialText("Press ~g~E~w~ to open the general store menu!")
+		if isPlayerAtGeneralStore() and not menu.open then
+			drawTxt("Press ~g~E~w~ to open the general store menu!",0,1,0.5,0.8,0.6,255,255,255,255)
 		end
-		if IsControlJustPressed(1,Keys["E"]) then
+    -----------------------
+    -- OPEN / CLOSE MENU --
+    -----------------------
+		if IsControlJustPressed(1,menu.key) then
 			if isPlayerAtGeneralStore() then
-				generalStoreMenu()              -- Menu to draw
-				Menu.hidden = not Menu.hidden    -- Hide/Show the menu
+        menu.open = not menu.open
 			end
 		elseif not isPlayerAtGeneralStore() then
-			Menu.hidden = true
+      menu.open = false
 		end
-		Menu.renderGUI()     -- Draw menu on each tick if Menu.hidden = false
+    --------------
+    -- THE MENU --
+    --------------
+    if menu.open then
+      TriggerEvent("GUI-general:Title", menu.title)
+      ---------------
+      -- HOME MENU --
+      ---------------
+      if menu.page == "home" then
+  			TriggerEvent("GUI-general:Option", "Drinks", function(cb)
+  				if cb then
+            menu.page = "drinks"
+            menu.title = "Drinks"
+  				end
+  			end)
+        TriggerEvent("GUI-general:Option", "Food", function(cb)
+  				if cb then
+            menu.page = "food"
+            menu.title = "Food"
+  				end
+  			end)
+        TriggerEvent("GUI-general:Option", "Vehicle", function(cb)
+  				if cb then
+            menu.page = "vehicle"
+            menu.title = "Vehicle"
+  				end
+  			end)
+        TriggerEvent("GUI-general:Option", "Electronics", function(cb)
+  				if cb then
+            menu.page = "electronics"
+            menu.title = "Electronics"
+  				end
+  			end)
+        TriggerEvent("GUI-general:Option", "~y~Close", function(cb)
+  				if cb then
+            menu.page = "home"
+            menu.open = false
+            menu.title = "General Store"
+  				end
+  			end)
+        ---------------
+        -- DRINK MENU --
+        ---------------
+      elseif menu.page == "drinks" then
+        for i = 1, #storeItems["Drinks"] do
+          item = storeItems["Drinks"][i]
+          TriggerEvent("GUI-general:Option", item.name, function(cb)
+            if cb then
+              --print("person wants to buy: " .. item.name)
+              buyItem(item)
+              TriggerEvent("usa:notify", "Purchased: ~y~" .. item.name)
+              menu.page = "home"
+              menu.title = "General Store"
+            end
+          end)
+        end
+        TriggerEvent("GUI-general:Option", "~y~Back", function(cb)
+          if cb then
+            menu.page = "home"
+            menu.title = "General Store"
+          end
+        end)
+        TriggerEvent("GUI-general:Option", "~y~Close", function(cb)
+          if cb then
+            menu.page = "home"
+            menu.open = false
+            menu.title = "General Store"
+          end
+        end)
+        ---------------
+        -- FOOD MENU --
+        ---------------
+      elseif menu.page == "food" then
+        for i = 1, #storeItems["Food"] do
+          item = storeItems["Food"][i]
+          TriggerEvent("GUI-general:Option", item.name, function(cb)
+            if cb then
+              --print("person wants to buy: " .. item.name)
+              buyItem(item)
+              TriggerEvent("usa:notify", "Purchased: ~y~" .. item.name)
+              menu.page = "home"
+              menu.title = "General Store"
+            end
+          end)
+        end
+        TriggerEvent("GUI-general:Option", "~y~Back", function(cb)
+          if cb then
+            menu.page = "home"
+            menu.title = "General Store"
+          end
+        end)
+        TriggerEvent("GUI-general:Option", "~y~Close", function(cb)
+          if cb then
+            menu.page = "home"
+            menu.open = false
+            menu.title = "General Store"
+          end
+        end)
+        ------------------
+        -- VEHICLE MENU --
+        ------------------
+      elseif menu.page == "vehicle" then
+        for i = 1, #storeItems["Vehicle"] do
+          item = storeItems["Vehicle"][i]
+          TriggerEvent("GUI-general:Option", item.name, function(cb)
+            if cb then
+              --print("person wants to buy: " .. item.name)
+              buyItem(item)
+              TriggerEvent("usa:notify", "Purchased: ~y~" .. item.name)
+              menu.page = "home"
+              menu.title = "General Store"
+            end
+          end)
+        end
+        TriggerEvent("GUI-general:Option", "~y~Back", function(cb)
+          if cb then
+            menu.page = "home"
+            menu.title = "General Store"
+          end
+        end)
+        TriggerEvent("GUI-general:Option", "~y~Close", function(cb)
+          if cb then
+            menu.page = "home"
+            menu.open = false
+            menu.title = "General Store"
+          end
+        end)
+        ----------------------
+        -- ElECTRONICS MENU --
+        ----------------------
+      elseif menu.page == "electronics" then
+        for i = 1, #storeItems["Electronics"] do
+          item = storeItems["Electronics"][i]
+          TriggerEvent("GUI-general:Option", item.name, function(cb)
+            if cb then
+              --print("person wants to buy: " .. item.name)
+              buyItem(item)
+              TriggerEvent("usa:notify", "Purchased: ~y~" .. item.name)
+              menu.page = "home"
+              menu.title = "General Store"
+            end
+          end)
+        end
+        TriggerEvent("GUI-general:Option", "~y~Back", function(cb)
+          if cb then
+            menu.page = "home"
+            menu.title = "General Store"
+          end
+        end)
+        TriggerEvent("GUI-general:Option", "~y~Close", function(cb)
+          if cb then
+            menu.page = "home"
+            menu.open = false
+            menu.title = "General Store"
+          end
+        end)
+      end
+      TriggerEvent("GUI-general:Update")
+    end
 	end
+
 end)
 
-function DrawSpecialText(m_text)
-    ClearPrints()
-	SetTextEntry_2("STRING")
-	AddTextComponentString(m_text)
-	DrawSubtitleTimed(250, 1)
+function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
+	SetTextFont(font)
+	SetTextProportional(0)
+	SetTextScale(scale, scale)
+	SetTextColour(r, g, b, a)
+	SetTextDropShadow(0, 0, 0, 0,255)
+	SetTextEdge(1, 0, 0, 0, 255)
+	SetTextDropShadow()
+	SetTextOutline()
+	SetTextCentre(centre)
+	SetTextEntry("STRING")
+	AddTextComponentString(text)
+	DrawText(x , y)
 end
+
+---------------
+-- MENU CODE --
+---------------
+RegisterNetEvent("GUI-general:Title")
+AddEventHandler("GUI-general:Title", function(title)
+	Menu.Title(title)
+end)
+
+RegisterNetEvent("GUI-general:Option")
+AddEventHandler("GUI-general:Option", function(option, cb)
+	cb(Menu.Option(option))
+end)
+
+RegisterNetEvent("GUI-general:Bool")
+AddEventHandler("GUI-general:Bool", function(option, bool, cb)
+	Menu.Bool(option, bool, function(data)
+		cb(data)
+	end)
+end)
+
+RegisterNetEvent("GUI-general:Int")
+AddEventHandler("GUI-general:Int", function(option, int, min, max, cb)
+	Menu.Int(option, int, min, max, function(data)
+		cb(data)
+	end)
+end)
+
+RegisterNetEvent("GUI-general:StringArray")
+AddEventHandler("GUI-general:StringArray", function(option, array, position, cb)
+	Menu.StringArray(option, array, position, function(data)
+		cb(data)
+	end)
+end)
+
+RegisterNetEvent("GUI-general:Update")
+AddEventHandler("GUI-general:Update", function()
+	Menu.updateSelection()
+end)
