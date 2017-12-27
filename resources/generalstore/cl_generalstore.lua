@@ -19,7 +19,6 @@ local locations = {
     {x=-2968.126, y=390.579, z=14.043 },
     { x=-1487.241, y=379.843, z=39.163 },
 }
-local inventory
 
 function isPlayerAtGeneralStore()
 	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
