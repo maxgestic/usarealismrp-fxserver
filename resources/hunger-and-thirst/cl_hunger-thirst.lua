@@ -12,11 +12,13 @@ local settings = {
     --["clock"] = {text = "0:00", x = 0.75, y = 1.645, r = 255, g = 255, b = 255, a = 255}
     ["clock"] = {text = "0:00", x = 0.698, y = 1.595, r = 255, g = 255, b = 255, a = 255}
   },
-  thirst_global_mult = 0.00067,
-  hunger_global_mult = 0.00030,
-  walking_mult = 0.0005,
-  running_mult = 0.001,
-  sprinting_mult = 0.0015,
+  thirst_global_mult = 0.00056,
+  hunger_global_mult = 0.00019,
+  walking_mult = 0.00050,
+  running_mult = 0.00095,
+  sprinting_mult = 0.00145,
+  --sound_params = {-1, "3_2_1", "HUD_MINI_GAME_SOUNDSET", 0},
+  sound_params = {-1, "FocusIn", "HintCamSounds", 1},
   debug = false
 }
 
@@ -28,7 +30,6 @@ local person = {
 ---------------
 -- API FUNCS --
 ---------------
-
 RegisterNetEvent("hungerAndThirst:replenish")
 AddEventHandler("hungerAndThirst:replenish", function(type, item)
   if type == "hunger" then
@@ -85,6 +86,8 @@ end)
 -- MAIN LOOP --
 ---------------
 Citizen.CreateThread(function()
+  local notified = false
+
 	while true do
 		Citizen.Wait(1)
     local myPed = GetPlayerPed(-1)
@@ -120,6 +123,22 @@ Citizen.CreateThread(function()
           if settings.debug then print("still!") end
           person.thirst_level = person.thirst_level - settings.thirst_global_mult
           person.hunger_level = person.hunger_level - settings.hunger_global_mult
+        end
+        -------------------------------------------------------------
+        -- send notification when close to dying / LOWER PLAYER HP --
+        -------------------------------------------------------------
+        if not notified then
+          if person.thirst_level < 10.0 then
+            TriggerEvent("usa:notify", "~y~You are going to pass out from thirst soon!")
+          	PlaySoundFrontend(table.unpack(settings.sound_params))
+            notified = true
+          elseif person.hunger_level < 10.0 then
+            TriggerEvent("usa:notify", "~y~You are going to pass out from hunger soon!")
+            PlaySoundFrontend(table.unpack(settings.sound_params))
+            notified = true
+          else
+            notified = false
+          end
         end
       else
         local cause = "Undefined"
