@@ -31,26 +31,26 @@ end)
 
 RegisterNetEvent('usa_rp:spawn')
 AddEventHandler('usa_rp:spawn', function(defaultModel, job, weapons, characters)
-    if characters then
-        print("size of characters = " .. #characters)
+  if characters then
+    print("size of characters = " .. #characters)
+  end
+  local spawn = {x = 0.0, y = 0.0, z = 0.0}
+  spawn = civilianSpawns[math.random(1, #civilianSpawns)]
+  exports.spawnmanager:spawnPlayer({x = spawn.x, y = spawn.y, z = spawn.z, model = defaultModel, heading = 0.0}, function()
+    if not characters then
+      print("player did not have a first character...")
+      TriggerEvent("character:open", "new-character")
+    else
+      print("player did have a first character!")
+      TriggerEvent("character:open", "home", characters)
     end
-    local spawn = {x = 0.0, y = 0.0, z = 0.0}
-    spawn = civilianSpawns[math.random(1, #civilianSpawns)]
-	exports.spawnmanager:spawnPlayer({x = spawn.x, y = spawn.y, z = spawn.z, model = defaultModel, heading = 0.0}, function()
-        if not characters then
-            print("player did not have a first character...")
-            TriggerEvent("character:open", "new-character")
-        else
-            print("player did have a first character!")
-            TriggerEvent("character:open", "home", characters)
-        end
-        --[[ CHECK JAIL STATUS [moved]
-        Citizen.Trace("calling checkJailedStatusOnPlayerJoin server function")
-        TriggerServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
-        --]]
-        -- CHECK BAN STATUS
-        TriggerServerEvent('mini:checkPlayerBannedOnSpawn')
-	end)
+    --[[ CHECK JAIL STATUS [moved]
+    Citizen.Trace("calling checkJailedStatusOnPlayerJoin server function")
+    TriggerServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
+    --]]
+    -- CHECK BAN STATUS
+    TriggerServerEvent('mini:checkPlayerBannedOnSpawn')
+  end)
 end)
 
 -------------------
@@ -197,27 +197,27 @@ local KEY_1 = 19 -- alt
 local KEY_2 = 173 -- down arrow
 local clipset = "move_ped_crouched"
 Citizen.CreateThread( function()
-    while true do
-        Citizen.Wait( 1 )
-        local ped = GetPlayerPed( -1 )
-        if ( DoesEntityExist( ped ) and not IsEntityDead( ped ) ) then
-            if ( not IsPauseMenuActive() ) then
-                if ( IsControlPressed( 1, KEY_1 ) and IsControlJustPressed( 1, KEY_2 ) and not IsPedInAnyVehicle(GetPlayerPed(-1), true)) then
-                    RequestAnimSet( clipset )
-                    while ( not HasAnimSetLoaded( clipset ) ) do
-                        Citizen.Wait( 100 )
-                    end
-                    if ( crouched == true ) then
-                        ResetPedMovementClipset( ped, 0 )
-                        crouched = false
-                    elseif ( crouched == false ) then
-                        SetPedMovementClipset( ped, clipset, 0.25 )
-                        crouched = true
-                    end
-                end
-            end
+  while true do
+    Citizen.Wait( 1 )
+    local ped = GetPlayerPed( -1 )
+    if ( DoesEntityExist( ped ) and not IsEntityDead( ped ) ) then
+      if ( not IsPauseMenuActive() ) then
+        if ( IsControlPressed( 1, KEY_1 ) and IsControlJustPressed( 1, KEY_2 ) and not IsPedInAnyVehicle(GetPlayerPed(-1), true)) then
+          RequestAnimSet( clipset )
+          while ( not HasAnimSetLoaded( clipset ) ) do
+            Citizen.Wait( 100 )
+          end
+          if ( crouched == true ) then
+            ResetPedMovementClipset( ped, 0 )
+            crouched = false
+          elseif ( crouched == false ) then
+            SetPedMovementClipset( ped, clipset, 0.25 )
+            crouched = true
+          end
         end
+      end
     end
+  end
 end)
 
 -----------------------------
@@ -416,7 +416,7 @@ AddEventHandler("usa:playAnimation", function(animName, animDict, duration)
     end
     for i = 1, duration do
         -- play animation
-      if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) then
+      if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) and not IsPedInAnyVehicle(GetPlayerPed(-1)) then
         TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 53, 0, 0, 0, 0)
       end
       Wait(1000) -- wait one second * duration
