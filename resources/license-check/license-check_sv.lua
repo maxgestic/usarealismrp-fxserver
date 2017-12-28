@@ -157,14 +157,14 @@ TriggerEvent('es:addCommand', '28', function(source, args, user)
 							return
 						end
 					end
+					-- player not in game with that plate number or plate number owned by a local!
+					TriggerClientEvent("licenseCheck:notify", userSource, "This plate is not on file.")
 				end
-				-- player not in game with that plate number or plate number owned by a local!
-				TriggerClientEvent("licenseCheck:notify", userSource, "This plate is not on file.")
 			end)
 		else
 			print("player did not enter a plate #")
-			TriggerClientEvent("chatMessage", userSource, "", {}, "^1Invalid /28 command format!")
-			TriggerClientEvent("chatMessage", userSource, "", {}, "^3Usage: ^0/28 <plate_number_here>")
+			TriggerClientEvent("chatMessage", userSource, "", {}, "^1Invalid /runplate command format!")
+			TriggerClientEvent("chatMessage", userSource, "", {}, "^3Usage: ^0/runplate <plate_number_here>")
 		end
 	end
 end)
