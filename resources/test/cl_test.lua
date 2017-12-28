@@ -112,11 +112,13 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 		if actionName == "use" then
 			interactionMenuUse(itemName, wholeItem)
 		elseif actionName == "drop" then
-			TriggerEvent("interaction:notify", "Dropping item: " .. removeQuantityFromItemName(itemName))
-			TriggerServerEvent("interaction:dropItem", itemName)
+			if not IsPedDeadOrDying(GetPlayerPed(-1), 1) and not IsPedCuffed(GetPlayerPed(-1)) then
+				TriggerEvent("interaction:notify", "Dropping item: " .. removeQuantityFromItemName(itemName))
+				TriggerServerEvent("interaction:dropItem", itemName)
+			else
+				print("player who was cuffed or dead was trying to drop an item!")
+			end
 		elseif string.find(actionName, "give") then
-			--TriggerEvent("interaction:notify", "~y~Under construction")
-			--Citizen.Trace("wholeItem.expire = " .. wholeItem.expire)
 			TriggerServerEvent("interaction:giveItemToPlayer", wholeItem, targetPlayerId)
 		end
 	end
