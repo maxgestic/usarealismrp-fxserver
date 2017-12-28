@@ -220,9 +220,10 @@ Citizen.CreateThread( function()
     end
 end)
 
--- peds don't drop weapons
+-----------------------------
+-- peds don't drop weapons --
+-----------------------------
 local pedindex = {}
-
 function SetWeaponDrops() -- This function will set the closest entity to you as the variable entity.
     local handle, ped = FindFirstPed()
     local finished = false -- FindNextPed will turn the first variable to false when it fails to find another ped in the index
@@ -248,7 +249,9 @@ Citizen.CreateThread(function()
     end
 end)
 
--- disable pistol whipping (weapon melee) ?
+--------------------------------------------
+-- disable pistol whipping (weapon melee) --
+--------------------------------------------
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
@@ -261,7 +264,9 @@ Citizen.CreateThread(function()
     end
 end)
 
+----------------------------------
 -- stop seat shuffling in vehicles
+----------------------------------
 local antiShuffleEnabled = true
 Citizen.CreateThread(function()
 	while true do
@@ -277,8 +282,10 @@ Citizen.CreateThread(function()
 end)
 
 
--- V E H I C L E  C O N T R O L S
--- roll windows [usage: /rollw]
+------------------------------------
+-- V E H I C L E  C O N T R O L S --
+-- roll windows [usage: /rollw]   --
+------------------------------------
 local windowup = true
 RegisterNetEvent("RollWindow")
 AddEventHandler('RollWindow', function()
@@ -374,7 +381,9 @@ AddEventHandler('veh:toggleEngine', function(status)
     end
 end)
 
--- increase tazer gun stun duration
+--------------------------------------
+-- increase tazer gun stun duration --
+--------------------------------------
 local tiempo = 8000 -- in miliseconds >> 1000 ms = 1s
 
 Citizen.CreateThread(function()
