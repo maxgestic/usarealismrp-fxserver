@@ -1,6 +1,6 @@
 --# by: minipunch
 -- for USA REALISM RP
--- This script adds a realistic food and water requirement for players to stay alive while playing.
+-- This script adds a realistic food and water requirement for players to stay alive while playing. Also tacked on in game time due to not wanting to create a separate script for it ;o
 
 -----------------------
 -- SETTINGS / PERSON --
@@ -8,10 +8,12 @@
 local settings = {
   hud = {
     ["hunger"] = {text = "Full", x = 0.698, y = 1.62, r = 9, g = 179, b = 9, a = 255},
-    ["thirst"] = {text = "Thirsty", x = 0.698, y = 1.645, r = 255, g = 128, b = 0, a = 255}
+    ["thirst"] = {text = "Thirsty", x = 0.698, y = 1.645, r = 255, g = 128, b = 0, a = 255},
+    --["clock"] = {text = "0:00", x = 0.75, y = 1.645, r = 255, g = 255, b = 255, a = 255}
+    ["clock"] = {text = "0:00", x = 0.698, y = 1.595, r = 255, g = 255, b = 255, a = 255}
   },
-  thirst_global_mult = 0.00071,
-  hunger_global_mult = 0.00034,
+  thirst_global_mult = 0.00067,
+  hunger_global_mult = 0.00030,
   walking_mult = 0.0005,
   running_mult = 0.001,
   sprinting_mult = 0.0015,
@@ -210,9 +212,24 @@ function drawHud(person)
     settings.hud["thirst"].g = 0
     settings.hud["thirst"].b = 0
   end
+  ---------------
+  -- SET CLOCK --
+  ---------------
+  local hours = GetClockHours()
+  local minutes = GetClockMinutes()
+  local suffix = ""
+  if hours > 12 then
+    hours = hours - 12
+    suffix = "PM"
+  else
+    suffix = "AM"
+  end
+  local display_time = string.format("%d:%02d %s", hours, minutes, suffix)
+  settings.hud["clock"].text = display_time
   ------------
   -- Draw It --
   ------------
   drawTxt(settings.hud["hunger"].x, settings.hud["hunger"].y, 1.0, 1.5, 0.4, settings.hud["hunger"].text, settings.hud["hunger"].r, settings.hud["hunger"].g, settings.hud["hunger"].b, settings.hud["hunger"].a)
   drawTxt(settings.hud["thirst"].x, settings.hud["thirst"].y, 1.0, 1.5, 0.4, settings.hud["thirst"].text, settings.hud["thirst"].r, settings.hud["thirst"].g, settings.hud["thirst"].b, settings.hud["thirst"].a)
+  drawTxt(settings.hud["clock"].x, settings.hud["clock"].y, 1.0, 1.5, 0.4, settings.hud["clock"].text, settings.hud["clock"].r, settings.hud["clock"].g, settings.hud["clock"].b, settings.hud["clock"].a)
 end
