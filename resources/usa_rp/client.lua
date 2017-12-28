@@ -16,13 +16,14 @@ local civilianSpawns = {
     -- Meth Delivery -402.63 y 6316.12 z 28.95 heading 222.26 DONE
 }
 
+------------------------------
+-- FIRST LOAD / SPAWNING IN --
+------------------------------
+
 RegisterNetEvent('usa_rp:playerLoaded')
 AddEventHandler('usa_rp:playerLoaded', function()
     exports.spawnmanager:setAutoSpawn(false)
     exports.spawnmanager:forceRespawn()
-    --exports.spawnmanager:setAutoSpawnCallback(function()
-        --TriggerServerEvent('usa_rp:spawnPlayer')
-    --end)
     NetworkSetTalkerProximity(default_voip)
     Citizen.Trace("calling usa_rp:spawnPlayer!")
     TriggerServerEvent('usa_rp:spawnPlayer')
@@ -51,6 +52,10 @@ AddEventHandler('usa_rp:spawn', function(defaultModel, job, weapons, characters)
         TriggerServerEvent('mini:checkPlayerBannedOnSpawn')
 	end)
 end)
+
+-------------------
+-- RANDOM THINGS --
+-------------------
 
 -- ped/vehicle npcs
 Citizen.CreateThread(function()
@@ -184,33 +189,36 @@ Citizen.CreateThread(function()
     end
 end)
 
--- player crouching
+----------------------
+-- player crouching --
+----------------------
 local crouched = false
 local KEY_1 = 19 -- alt
 local KEY_2 = 173 -- down arrow
+local clipset = "move_ped_crouched"
 Citizen.CreateThread( function()
     while true do
         Citizen.Wait( 1 )
         local ped = GetPlayerPed( -1 )
         if ( DoesEntityExist( ped ) and not IsEntityDead( ped ) ) then
             if ( not IsPauseMenuActive() ) then
-                if ( IsControlPressed( 1, KEY_1 ) and IsControlJustPressed( 1, KEY_2 ) and not IsPedInAnyVehicle(GetPlayerPed(-1), true)) then -- alt + downarrow
-                    RequestAnimSet( "move_ped_crouched" )
-                    while ( not HasAnimSetLoaded( "move_ped_crouched" ) ) do
+                if ( IsControlPressed( 1, KEY_1 ) and IsControlJustPressed( 1, KEY_2 ) and not IsPedInAnyVehicle(GetPlayerPed(-1), true)) then
+                    RequestAnimSet( clipset )
+                    while ( not HasAnimSetLoaded( clipset ) ) do
                         Citizen.Wait( 100 )
                     end
                     if ( crouched == true ) then
                         ResetPedMovementClipset( ped, 0 )
                         crouched = false
                     elseif ( crouched == false ) then
-                        SetPedMovementClipset( ped, "move_ped_crouched", 0.25 )
+                        SetPedMovementClipset( ped, clipset, 0.25 )
                         crouched = true
                     end
                 end
             end
         end
     end
-end )
+end)
 
 -- peds don't drop weapons
 local pedindex = {}
@@ -378,7 +386,9 @@ Citizen.CreateThread(function()
 	end
 end)
 
--- UTILITY FUNCTIONS
+-----------------------
+-- UTILITY FUNCTIONS --
+-----------------------
 RegisterNetEvent("usa:notify")
 AddEventHandler("usa:notify", function(msg)
     SetNotificationTextEntry("STRING")
@@ -389,19 +399,23 @@ end)
 RegisterNetEvent("usa:playAnimation")
 AddEventHandler("usa:playAnimation", function(animName, animDict, duration)
   --print("inside of usa:playAnimation!!")
-  -- load animation
-  RequestAnimDict(animDict)
-  while not HasAnimDictLoaded(animDict) do
-    Citizen.Wait(100)
-  end
-  for i = 1, duration do
-      -- play animation
-    if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) then
-      TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 53, 0, 0, 0, 0)
+  if not IsPedInAnyVehicle(GetPlayerPed(-1)) then
+    -- load animation
+    RequestAnimDict(animDict)
+    while not HasAnimDictLoaded(animDict) do
+      Citizen.Wait(100)
     end
-    Wait(1000) -- wait one second * duration
+    for i = 1, duration do
+        -- play animation
+      if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) then
+        TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 53, 0, 0, 0, 0)
+      end
+      Wait(1000) -- wait one second * duration
+    end
+    -- after duration, stop playing animation:
+    ClearPedSecondaryTask(GetPlayerPed(-1))
+    StopAnimTask(GetPlayerPed(-1), animDict, animName, false)
+  else
+    print("ped was in vehicle, not playing animation")
   end
-  -- after duration, stop playing animation:
-  ClearPedSecondaryTask(GetPlayerPed(-1))
-  StopAnimTask(GetPlayerPed(-1), animDict, animName, false)
 end)
