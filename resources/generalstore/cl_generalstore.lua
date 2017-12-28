@@ -110,7 +110,7 @@ Citizen.CreateThread(function()
       elseif menu.page == "drinks" then
         for i = 1, #storeItems["Drinks"] do
           item = storeItems["Drinks"][i]
-          TriggerEvent("GUI-general:Option", item.name, function(cb)
+          TriggerEvent("GUI-general:Option", "(~g~$" .. item.price .. "~w~) " .. item.name, function(cb)
             if cb then
               --print("person wants to buy: " .. item.name)
               buyItem(item)
@@ -139,7 +139,7 @@ Citizen.CreateThread(function()
       elseif menu.page == "food" then
         for i = 1, #storeItems["Food"] do
           item = storeItems["Food"][i]
-          TriggerEvent("GUI-general:Option", item.name, function(cb)
+          TriggerEvent("GUI-general:Option", "(~g~$" .. item.price .. "~w~) " .. item.name, function(cb)
             if cb then
               --print("person wants to buy: " .. item.name)
               buyItem(item)
@@ -168,7 +168,7 @@ Citizen.CreateThread(function()
       elseif menu.page == "vehicle" then
         for i = 1, #storeItems["Vehicle"] do
           item = storeItems["Vehicle"][i]
-          TriggerEvent("GUI-general:Option", item.name, function(cb)
+          TriggerEvent("GUI-general:Option", "(~g~$" .. item.price .. "~w~) " .. item.name, function(cb)
             if cb then
               --print("person wants to buy: " .. item.name)
               buyItem(item)
@@ -197,7 +197,7 @@ Citizen.CreateThread(function()
       elseif menu.page == "electronics" then
         for i = 1, #storeItems["Electronics"] do
           item = storeItems["Electronics"][i]
-          TriggerEvent("GUI-general:Option", item.name, function(cb)
+          TriggerEvent("GUI-general:Option", "(~g~$" .. item.price .. "~w~) " .. item.name, function(cb)
             if cb then
               --print("person wants to buy: " .. item.name)
               buyItem(item)
