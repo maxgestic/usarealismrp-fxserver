@@ -10,10 +10,12 @@ AddEventHandler("transport:giveMoney", function(amount, job)
 			local inventory = user.getActiveCharacterData("inventory")
 			for i = 1, #inventory do
 				local item = inventory[i]
-				if item.name == "20g of concentrated cannabis" then
-					table.remove(inventory, i)
-					user.setActiveCharacterData("inventory", inventory)
-					return
+				if item then
+					if item.name == "20g of concentrated cannabis" then
+						table.remove(inventory, i)
+						user.setActiveCharacterData("inventory", inventory)
+						return
+					end
 				end
 			end
 		end
