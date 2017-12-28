@@ -14,7 +14,7 @@ local notificationParam = 1 -- 1 = LockSystem notification | 2 = chatMessage not
 local keyParam = Keys["U"] -- e.g : Keys["H"] will be change the U key to the H key for lock/unlock a vehicle
 local soundEnable = true -- Set to false for disable sounds
 local disableCar_NPC = true -- Set to false for enable NPC's car
-local soundDistance = 6 -- Distance of sounds lock / unlock (default: 10m)
+local soundDistance = 4 -- Distance of sounds lock / unlock (default: 10m)
 
 if disableCar_NPC then
 	Citizen.CreateThread(function()
@@ -108,7 +108,7 @@ AddEventHandler("lock:lockVehicle", function()
 
 	print("locking doors!")
 	SetVehicleDoorsLocked(vehicle, 2)
-	SetVehicleDoorsLockedForAllPlayers(vehicle, true)
+	--SetVehicleDoorsLockedForAllPlayers(vehicle, true)
 
 	-- ## Notifications
 		if soundEnable then TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "lock", 1.0) end
@@ -127,7 +127,7 @@ AddEventHandler("lock:unlockVehicle", function()
 
 	print("unlocking doors!")
 	SetVehicleDoorsLocked(vehicle, 1)
-	SetVehicleDoorsLockedForAllPlayers(vehicle, false)
+	--SetVehicleDoorsLockedForAllPlayers(vehicle, false)
 
 	-- ## Notifications
 		if soundEnable then	TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "unlock", 1.0) end
