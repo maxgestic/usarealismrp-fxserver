@@ -4,7 +4,9 @@ states.frozen = false
 states.frozenPos = nil
 
 RegisterNetEvent("mini_admin:spectate")
-AddEventHandler("mini_admin:spectate", function(target, targetName)
+AddEventHandler("mini_admin:spectate", function(target, targetName, spectator_name)
+
+	local target_id = target
 
 		local playerPed = GetPlayerPed(-1) -- yourself
 		--Citizen.Trace("target before = " .. target)
@@ -20,6 +22,7 @@ AddEventHandler("mini_admin:spectate", function(target, targetName)
 			RequestCollisionAtCoord(targetx,targety,targetz)
 			NetworkSetInSpectatorMode(false, target)
 			spectating = {}
+			TriggerServerEvent("usa:notifyStaff", spectator_name .. " has ^3stopped^0 spectating " .. targetName .. " [#" .. target_id .. "]")
 			return
 		end
 		enable = true
@@ -32,12 +35,12 @@ AddEventHandler("mini_admin:spectate", function(target, targetName)
 				target = target,
 				status = true
 			}
-			--ShowNotification("Spectating ~b~<C>"..targetName.."</C>.")
+			TriggerServerEvent("usa:notifyStaff", spectator_name .. " has ^2began^0 spectating " .. targetName .. " [#" .. target_id .. "]")
 		else
 			local targetx,targety,targetz = table.unpack(GetEntityCoords(target, false))
 			RequestCollisionAtCoord(targetx,targety,targetz)
 			NetworkSetInSpectatorMode(false, target)
-			--ShowNotification("Stopped spectating ~b~<C>"..targetName.."</C>.")
+			TriggerServerEvent("usa:notifyStaff", spectator_name .. " has ^3stopped^0 spectating " .. targetName .. " [#" .. target_id .. "]")
 		end
 
 end)

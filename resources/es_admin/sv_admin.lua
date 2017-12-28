@@ -391,11 +391,12 @@ end)
 
 TriggerEvent('es:addCommand', 'spectate', function(source, args, user)
 	local userGroup = user.getGroup()
+	local user_name = user.getActiveCharacterData("fullName")
 	if userGroup == "owner" or userGroup == "superadmin" or userGroup == "admin" or userGroup == "mod" then
 		local userSource = tonumber(source)
 		local targetPlayer = tonumber(args[2])
 		if not targetPlayer then return end
-		TriggerClientEvent("mini_admin:spectate", userSource, targetPlayer, GetPlayerName(targetPlayer))
+		TriggerClientEvent("mini_admin:spectate", userSource, targetPlayer, GetPlayerName(targetPlayer), user_name)
 	else
 		print("non admin/mod (" .. GetPlayerName(userSource) .. ") tried to use /spectate")
 	end
