@@ -12,8 +12,8 @@ local settings = {
     --["clock"] = {text = "0:00", x = 0.75, y = 1.645, r = 255, g = 255, b = 255, a = 255}
     ["clock"] = {text = "0:00", x = 0.698, y = 1.595, r = 255, g = 255, b = 255, a = 255}
   },
-  thirst_global_mult = 0.00056,
-  hunger_global_mult = 0.00019,
+  thirst_global_mult = 0.00052,
+  hunger_global_mult = 0.00015,
   walking_mult = 0.00050,
   running_mult = 0.00095,
   sprinting_mult = 0.00145,
@@ -241,6 +241,7 @@ function drawHud(person)
     hours = hours - 12
     suffix = "PM"
   else
+    if hours == 0 then hours = 12 end
     suffix = "AM"
   end
   local display_time = string.format("%d:%02d %s", hours, minutes, suffix)
