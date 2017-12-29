@@ -3,13 +3,13 @@ local target_player_id = 0
 TriggerEvent('es:addCommand', 'ticket', function(source, args, user)
 	local user_job = user.getActiveCharacterData("job")
 	if user_job == "sheriff" or user_job == "police" then
-	    local targetPlayer = tonumber(args[2])
-	    local amount = tonumber(args[3])
+		local targetPlayer = tonumber(args[2])
+		local amount = tonumber(args[3])
 		table.remove(args, 1)
 		table.remove(args, 1)
 		table.remove(args, 1)
-	    local reason = table.concat(args, " ")
-	    if not targetPlayer or not amount or reason == "" or reason == " " then
+		local reason = table.concat(args, " ")
+		if not targetPlayer or not amount or reason == "" or reason == " " then
 			TriggerClientEvent("police:notify", tonumber(source), "~y~Usage: ~w~/ticket [id] [amount] [infractions]")
 			return
 		end
@@ -21,7 +21,7 @@ TriggerEvent('es:addCommand', 'ticket', function(source, args, user)
 end)
 
 RegisterServerEvent("police:payTicket")
-AddEventHandler("police:payTicket", function(fromPlayerId, amount, wantsToPay)
+AddEventHandler("police:payTicket", function(fromPlayerId, amount, reason, wantsToPay)
 	local userSource = tonumber(source)
 	if wantsToPay then
 		TriggerEvent('es:getPlayerFromId', userSource, function(user)
@@ -44,6 +44,15 @@ AddEventHandler("police:payTicket", function(fromPlayerId, amount, wantsToPay)
 						TriggerClientEvent("police:notify", fromPlayerId, "Person does have enough money to pay the ticket!")
 					end
 				end
+				local ticket = {
+					reason = reason,
+					fine = amount,
+					timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time()),
+					type = "ticket"
+				}
+				local user_history = user.getActiveCharacterData("criminalHistory")
+				table.insert(user_history, ticket)
+				user.setActiveCharacterData("criminalHistory", user_history)
 			end
 		end)
 	else

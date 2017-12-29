@@ -53,13 +53,6 @@ AddEventHandler("license:searchForLicense", function(source, playerId)
 			if not hasFirearmsPermit then
 				TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0No firearm permit on record.")
 			end
-			--[[
-			if #vehicles > 0 then
-				TriggerClientEvent("mdt:vehicleInfo", source, vehicles[1])
-			else
-				TriggerClientEvent("mdt:vehicleInfo", source, nil)
-			end
-			--]]
 			--print("checking #insurancePlans: " .. #insurancePlans)
 			if insurancePlans then
 				if playerHasValidAutoInsurance(insurancePlans) then
@@ -71,15 +64,37 @@ AddEventHandler("license:searchForLicense", function(source, playerId)
 				TriggerClientEvent("chatMessage", source, "", {0,0,0}, "No auto insurance on record.")
 			end
 			TriggerClientEvent("chatMessage", source, "", {0,141,155}, "^3Criminal History:")
+			local ticket_history = {}
 			if #criminalHistory > 0 then
 				for i = 1, #criminalHistory do
 					if i == 15 then break end --  TODO: only shows first 15 charges (should show the MOST RECENT charges instead)
 					local crime = criminalHistory[i]
-					local color = {187,94,187}
-					TriggerClientEvent("chatMessage", source, "DATE", color, crime.timestamp)
-					TriggerClientEvent("chatMessage", source, "CHARGE(S)", color, crime.charges)
-					TriggerClientEvent("chatMessage", source, "SENTENCE", color, crime.sentence .. " months")
-					TriggerClientEvent("chatMessage", source, "OFFICER", color, crime.arrestingOfficer)
+					if not crime.type then -- not a ticket
+						print("crime.type did not exist!")
+						local color = {187,94,187}
+						TriggerClientEvent("chatMessage", source, "DATE", color, crime.timestamp)
+						TriggerClientEvent("chatMessage", source, "CHARGE(S)", color, crime.charges)
+						TriggerClientEvent("chatMessage", source, "SENTENCE", color, crime.sentence .. " months")
+						TriggerClientEvent("chatMessage", source, "OFFICER", color, crime.arrestingOfficer)
+					else
+						print("inserting ticket! crime.type: " .. crime.type)
+						table.insert(ticket_history, crime)
+					end
+				end
+				TriggerClientEvent("chatMessage", source, "", {0,141,155}, "^3Ticket History:")
+				-- display ticket history:
+				if #ticket_history > 0 then
+					for i = 1, #ticket_history do
+						local crime = ticket_history[i]
+						print("#tickets: " .. #ticket_history)
+						print("crime fine: " .. crime.fine)
+						local color = {149,149,184}
+						TriggerClientEvent("chatMessage", source, "DATE", color, crime.timestamp)
+						TriggerClientEvent("chatMessage", source, "FINE", color, "$" .. tostring(crime.fine))
+						TriggerClientEvent("chatMessage", source, "REASON", color, crime.reason)
+					end
+				else
+					TriggerClientEvent("chatMessage", source, "", {0,0,0}, "No ticket history.")
 				end
 			else
 				TriggerClientEvent("chatMessage", source, "", {0,0,0}, "No criminal history.")
