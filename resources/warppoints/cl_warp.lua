@@ -23,7 +23,7 @@ local warp_locations = {
     exit = {
       x = 450.957,
       y = -986.462,
-      z = 25.6
+      z = 25.7
     },
     job_access = "emergency"
   }
