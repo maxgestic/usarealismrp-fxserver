@@ -31,6 +31,7 @@ body {
     padding-top: 300px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
     opacity: 0.90;
+	overflow-y: hidden;
 }
 
 /* The navigation menu links */
