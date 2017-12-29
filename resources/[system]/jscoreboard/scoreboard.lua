@@ -14,10 +14,14 @@ local Settings = {
 	--See: https://wiki.gtanet.work/index.php?title=Game_Controls
 
 	-- F7
-	[170] = true,
+	["Key"] = 170,
 }
 
 local xOffset, yOffset = 0.55, 0
+
+local active_player_list = {}
+local player_list_open = false
+local alreadyPressed = false
 
 -- END OF SETTINGS --
 
@@ -27,18 +31,18 @@ AddEventHandler("jscoreboard:setUserGroup", function(group)
 	Settings["UserGroup"] = group
 end)
 
+RegisterNetEvent("jscoreboard:gotPlayers")
+AddEventHandler("jscoreboard:gotPlayers", function(players)
+	active_player_list = players
+	alreadyPressed = false
+	print("just set already pressed to false")
+end)
+
 local function DrawPlayerList()
-    local players = {}
 
-    for i = 0, 31 do
-        if NetworkIsPlayerActive( i ) then
-            table.insert( players, {i,GetPlayerServerId(i)})
-        end
-    end
-
-	-- sort
-	table.sort(players, function(a,b)
-		return a[2] > b[2]
+	-- sort by server ID:
+	table.sort(active_player_list, function(a,b)
+		return a[1] > b[1]
 	end)
 
 	--Top bar
@@ -52,10 +56,10 @@ local function DrawPlayerList()
 	SetTextDropShadow( 0, 0, 0, 0, 255 )
 	SetTextEdge( 1, 0, 0, 0, 255 )
 	SetTextEntry( "STRING" )
-	AddTextComponentString( "Players: " .. #players )
+	AddTextComponentString( "Players: " .. #active_player_list )
 	DrawText( 0.01 + xOffset, 0.007 )
 
-	for k, v in pairs( players ) do
+	for k, v in pairs( active_player_list ) do
 		local r
 		local g
 		local b
@@ -78,7 +82,7 @@ local function DrawPlayerList()
 		SetTextScale( 0.45, 0.45 )
 		SetTextColour( 255, 255, 255, 255 )
 		SetTextEntry( "STRING" )
-		AddTextComponentString( v[2] .. " | " .. GetPlayerName( v[1] ) )
+		AddTextComponentString( v[1] .. " | " .. v[2] .. " (" .. v[3] .. "ms)")
 		DrawText( 0.01 + xOffset, 0.007 + ( k * 0.03 ) )
 
 	end
@@ -145,27 +149,29 @@ function ShowIds()
 	end
 end
 
-local LastPress = 0
-
 Citizen.CreateThread( function()
 	RequestStreamedTextureDict( "mplobby" )
 	RequestStreamedTextureDict( "mpleaderboard" )
-
 	while true do
-		Wait( 0 )
-
-		for k, v in pairs( Settings ) do
-			if type( k ) == "number" and v == true then
-				if IsControlPressed( 0, k ) and GetLastInputMethod(2) then
-					LastPress = GetGameTimer()
+		-- open/close
+		if not alreadyPressed then
+			if IsControlJustPressed( 0, Settings["Key"] ) and GetLastInputMethod(2) then
+				if not player_list_open then
+					print("opening player list!")
+					player_list_open = true
+					TriggerServerEvent("jscoreboard:getPlayers")
+					alreadyPressed = true
+				else
+					print("closing player list!")
+					player_list_open = false
 				end
 			end
-		end
-
-		if GetGameTimer() < LastPress + Settings["DisplayTime"] then
+		else print("alreadyPressed was true") end
+		-- drawing
+		if player_list_open then
 			DrawPlayerList()
 			ShowIds()
 		end
-
+		Wait(1)
 	end
-end )
+end)
