@@ -19,9 +19,10 @@ RegisterServerEvent("jail:jailPlayerFromMenu")
 AddEventHandler("jail:jailPlayerFromMenu", function(data)
 	local userSource = tonumber(source)
 	print("jailing player...")
-	print("data.sentence = " .. data.sentence)
-	print("data.charges = " .. data.charges)
-	print("data.id = " .. data.id)
+	print("data.sentence: " .. data.sentence)
+	print("data.charges: " .. data.charges)
+	print("data.id: " .. data.id)
+	print("data.fine: " .. data.fine)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local user_job = user.getActiveCharacterData("job")
 		local player_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
@@ -37,10 +38,20 @@ function jailPlayer(data, officerName)
 	if not targetPlayer then TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^1Error: ^0You did not enter a player to jail!") return end
 	local sentence = tonumber(data.sentence)
 	local reason = data.charges
+	local fine = data.fine
 	if sentence == nil then
 		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^1Error: ^0YOU FORGOT TO ADD THE JAIL TIME SILLY GOOSE!!")
 		CancelEvent()
 		return
+	elseif not tonumber(fine) then
+		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^1Error: ^0Invalid input for fine!")
+		CancelEvent()
+		return
+	end
+	if tonumber(fine) then
+		fine = tonumber(fine)
+		fine = round(fine, 0)
+		print("after rounding, fine: " .. fine)
 	end
 	TriggerEvent("es:getPlayerFromId", targetPlayer, function(user)
 		-- jail player
@@ -52,6 +63,16 @@ function jailPlayer(data, officerName)
 		TriggerClientEvent("jail:removeWeapons", targetPlayer) -- take from ped
 		user.setActiveCharacterData("weapons", {})
 		user.setActiveCharacterData("jailtime", sentence)
+		-- fine the player using amount supplied from the form
+		local user_bank = user.getActiveCharacterData("bank")
+		local bank_after_fine = user_bank - fine
+		if  bank_after_fine >= 0 then
+			user.setActiveCharacterData("bank", user_bank - fine)
+		else
+			user.setActiveCharacterData("bank", 0)
+		end
+		-- notify of fine:
+		TriggerClientEvent("usa:notify", targetPlayer, "You have been fined: $" .. fine)
 		-- add to criminal history
 		local playerCriminalHistory = user.getActiveCharacterData("criminalHistory")
 		local record = {
@@ -122,3 +143,7 @@ function jailStatusLoop()
 end
 
 jailStatusLoop()
+
+function round(num, numDecimalPlaces)
+  return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+end

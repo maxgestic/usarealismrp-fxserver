@@ -61,12 +61,14 @@ $(function() {
         $.post('http://jail/submit', JSON.stringify({
             id: $("#id").val(),
             sentence: $("#sentence").val(),
-            charges: $("#charges").val()
+            charges: $("#charges").val(),
+            fine: $("#fine").val()
         }));
 
         $("#id").val("");
         $("#name").val("");
         $("#sentence").val("");
+        $("#fine").val("");
         $("#charges").val("");
         $("#medications").val("");
         $("#disorders").val("");

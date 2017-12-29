@@ -32,9 +32,6 @@ AddEventHandler("jail:openMenu", function()
 end)
 
 RegisterNUICallback('submit', function(data, cb)
-    --PrintChatMessage("id = " .. data.id)
-	--PrintChatMessage("sentence = " .. data.sentence)
---	PrintChatMessage("charges = " .. data.charges)
 	EnableGui(false) -- close form
     TriggerServerEvent("jail:jailPlayerFromMenu", data)
     cb('ok')
