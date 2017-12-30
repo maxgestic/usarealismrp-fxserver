@@ -390,7 +390,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		if IsPedBeingStunned(GetPlayerPed(-1)) then
-		SetPedMinGroundTimeForStungun(GetPlayerPed(-1), tiempo)
+		    SetPedMinGroundTimeForStungun(GetPlayerPed(-1), tiempo)
 		end
 	end
 end)
@@ -405,10 +405,11 @@ AddEventHandler("usa:notify", function(msg)
 	DrawNotification(0,1)
 end)
 
+local playing_anim = nil
 RegisterNetEvent("usa:playAnimation")
 AddEventHandler("usa:playAnimation", function(animName, animDict, duration)
   --print("inside of usa:playAnimation!!")
-  if not IsPedInAnyVehicle(GetPlayerPed(-1)) then
+  if not IsPedInAnyVehicle(GetPlayerPed(-1), 1) then
     -- load animation
     RequestAnimDict(animDict)
     while not HasAnimDictLoaded(animDict) do
@@ -416,8 +417,9 @@ AddEventHandler("usa:playAnimation", function(animName, animDict, duration)
     end
     for i = 1, duration do
         -- play animation
-      if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) and not IsPedInAnyVehicle(GetPlayerPed(-1)) then
+      if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) and not IsPedInAnyVehicle(GetPlayerPed(-1), 1) then
         TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 53, 0, 0, 0, 0)
+        playing_anim = {dict = animDict, name = animName}
       end
       Wait(1000) -- wait one second * duration
     end
@@ -427,4 +429,18 @@ AddEventHandler("usa:playAnimation", function(animName, animDict, duration)
   else
     print("ped was in vehicle, not playing animation")
   end
+end)
+
+-- prevent falling through vehicle when eating/drink and entering vehicle:
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(0)
+    print("trying to enter: " .. GetVehiclePedIsTryingToEnter(PlayerPedId(GetPlayerPed(-1))))
+		if DoesEntityExist(GetVehiclePedIsTryingToEnter(PlayerPedId(GetPlayerPed(-1)))) then
+      --ClearPedSecondaryTask(GetPlayerPed(-1))
+      if playing_anim then
+        StopAnimTask(GetPlayerPed(-1), playing_anim.dict, playing_anim.name, false)
+      end
+		end
+	end
 end)
