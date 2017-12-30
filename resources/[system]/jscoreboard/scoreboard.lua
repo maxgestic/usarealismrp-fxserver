@@ -61,32 +61,34 @@ local function DrawPlayerList()
 
 	for k, v in pairs( active_player_list ) do
 
-		if not v[1] or not v[2] or not v[3] then return end
+		if v[1] and v[2] and v[3] then
 
-		local r
-		local g
-		local b
+			local r
+			local g
+			local b
 
-		if k % 2 == 0 then
-			r = 28
-			g = 47
-			b = 68
-		else
-			r = 38
-			g = 57
-			b = 74
+			if k % 2 == 0 then
+				r = 28
+				g = 47
+				b = 68
+			else
+				r = 38
+				g = 57
+				b = 74
+			end
+
+			--Row BG
+			DrawRect( 0.11 + xOffset, 0.025 + ( k * 0.03 ), 0.2, 0.03, r, g, b, 220 )
+
+			--Name Label
+			SetTextFont( 4 )
+			SetTextScale( 0.45, 0.45 )
+			SetTextColour( 255, 255, 255, 255 )
+			SetTextEntry( "STRING" )
+			AddTextComponentString( v[1] .. " | " .. v[2] .. " (" .. v[3] .. "ms)")
+			DrawText( 0.01 + xOffset, 0.007 + ( k * 0.03 ) )
+
 		end
-
-		--Row BG
-		DrawRect( 0.11 + xOffset, 0.025 + ( k * 0.03 ), 0.2, 0.03, r, g, b, 220 )
-
-		--Name Label
-		SetTextFont( 4 )
-		SetTextScale( 0.45, 0.45 )
-		SetTextColour( 255, 255, 255, 255 )
-		SetTextEntry( "STRING" )
-		AddTextComponentString( v[1] .. " | " .. v[2] .. " (" .. v[3] .. "ms)")
-		DrawText( 0.01 + xOffset, 0.007 + ( k * 0.03 ) )
 
 	end
 end
