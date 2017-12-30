@@ -12,8 +12,8 @@ local settings = {
     --["clock"] = {text = "0:00", x = 0.75, y = 1.645, r = 255, g = 255, b = 255, a = 255}
     ["clock"] = {text = "0:00", x = 0.698, y = 1.595, r = 255, g = 255, b = 255, a = 255}
   },
-  thirst_global_mult = 0.00052,
-  hunger_global_mult = 0.00015,
+  thirst_global_mult = 0.00040,
+  hunger_global_mult = 0.00016,
   walking_mult = 0.00050,
   running_mult = 0.00095,
   sprinting_mult = 0.00145,
