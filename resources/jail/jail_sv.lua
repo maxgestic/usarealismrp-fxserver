@@ -58,6 +58,7 @@ function jailPlayer(data, officerName)
 		local inmate_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
 		TriggerClientEvent('chatMessage', -1, "SYSTEM", {255,180,0}, inmate_name .. " has been jailed for ^3" .. sentence .. "^0 month(s).")
 		TriggerClientEvent('chatMessage', -1, "SYSTEM", {255,180,0}, "Charges: " .. reason)
+		TriggerClientEvent('chatMessage', -1, "SYSTEM", {255,180,0}, "Fine: $" .. fine)
 		TriggerClientEvent("jail:jail", targetPlayer)
 		-- remove items from player
 		TriggerClientEvent("jail:removeWeapons", targetPlayer) -- take from ped
