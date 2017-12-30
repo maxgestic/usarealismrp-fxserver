@@ -60,6 +60,9 @@ local function DrawPlayerList()
 	DrawText( 0.01 + xOffset, 0.007 )
 
 	for k, v in pairs( active_player_list ) do
+
+		if not v[1] or not v[2] or not v[3] then return end
+
 		local r
 		local g
 		local b
