@@ -50,7 +50,7 @@ body {
 }
 
 /* inventory items */
-.inventory-item-quantity {
+.inventory-item-quantity, .vehicle-item-quantity {
     font-size: 20px;
 }
 

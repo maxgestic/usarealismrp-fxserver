@@ -22,6 +22,26 @@ AddEventHandler("test:cuff", function(playerId, playerName)
     end)
 end)
 
+RegisterServerEvent("interaction:loadVehicleInventoryForInteraction")
+AddEventHandler("interaction:loadVehicleInventoryForInteraction", function(plate)
+  print("loading vehicle inventory with plate #: " .. plate)
+  local userSource = tonumber(source)
+  TriggerEvent("es:getPlayers", function(players)
+    if players then
+      for id, player in pairs(players) do
+        local player_vehicles = player.getActiveCharacterData("vehicles")
+        for i = 1, #player_vehicles do
+          local veh = player_vehicles[i]
+          if string.find(plate, tostring(veh.plate)) then
+            print("found a matching plate! sending inventory to client!")
+            TriggerClientEvent("interaction:vehicleInventoryLoaded", userSource, veh.inventory)
+          end
+        end
+      end
+    end
+  end)
+end)
+
 RegisterServerEvent("interaction:loadInventoryForInteraction")
 AddEventHandler("interaction:loadInventoryForInteraction", function()
     print("loading inventory for interaction menu...")

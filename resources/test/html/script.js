@@ -9,6 +9,16 @@ var playerLicenses;
 var targetPlayerId = 0;
 var targetPlayerName = "";
 var currentPlayerJob = "civ";
+/*
+var target_vehicle = {
+  inventory: null,
+  plate: null,
+  id: null
+};
+*/
+var target_vehicle_plate = "";
+var target_vehicle_id = 0;
+var target_vehicle_inventory = 0;
 
 var disableMouseScroll = true;
 
@@ -179,6 +189,26 @@ function showPoliceActions() {
     }
 }
 
+function getVehicleInventory() {
+  $(".sidenav a").hide();
+  $.post('http://test/getVehicleInventory', JSON.stringify({
+      target_vehicle_plate: target_vehicle_plate
+  }));
+}
+
+function populateVehicleInventory(inventory) {
+  alert("populating vehicle inventory...");
+  $(".sidenav a").hide();
+  for(i in inventory) {
+    if (inventory[i].legality == "illegal")
+        $(".sidenav").append("<a class='vehicle-item'><span class='vehicle-item-quantity'>(x"+inventory[i].quantity+")</span> <span class='illegal-item'>" + inventory[i].name + "</span></a>");
+    else
+        $(".sidenav").append("<a class='vehicle-item'><span class='vehicle-item-quantity'>(x"+inventory[i].quantity+")</span> " + inventory[i].name + "</a>");
+  }
+  // back btn
+  $(".sidenav").append("<a id='vehicle-inventory-back-btn' class='vehicle-item'>Back</a>");
+}
+
 function populateInventory(inventory, weapons, licenses) {
     $(".sidenav a").hide();
     for(i in licenses) {
@@ -214,7 +244,9 @@ function populateInventory(inventory, weapons, licenses) {
 
 /* Set the width of the side navigation to 0 */
 function closeNav() {
+    $(".sidenav .veh-inventory-btn").remove();
     $(".sidenav .inventory-item").remove();
+    $(".sidenav .vehicle-item").remove();
     $(".sidenav .voip-option").remove();
     $(".sidenav .emote-option").remove();
     $(".sidenav .emote-page-option").remove();
@@ -249,6 +281,16 @@ $(function() {
                 }
                 targetPlayerId = event.data.playerId;
                 targetPlayerName = event.data.playerName;
+                // vehicle inventory:
+                if (event.data.target_vehicle_plate && typeof event.data.target_vehicle_plate !== "undefined") {
+                  //alert("target vehicle loaded. Plate #: " + event.data.target_vehicle_plate)
+                  // add interaction menu item for vehicle inventory:
+                  $(".sidenav .sidenav-buttons").prepend("<a onclick='getVehicleInventory()' class='veh-inventory-btn'>Veh Inventory</a>");
+                  target_vehicle_plate = event.data.target_vehicle_plate;
+                  //target_vehicle_id = event.data.target_vehicle_id;
+                } else {
+                    //alert("problem loading target veh");
+                }
             }
         } else if (event.data.type == "click") {
             // Avoid clicking the cursor itself, click 1px to the top/left;
@@ -258,6 +300,9 @@ $(function() {
             playerWeapons = event.data.weapons;
             playerLicenses = event.data.licenses;
             populateInventory(playerInventory, playerWeapons, playerLicenses);
+        } else if (event.data.type == "vehicleInventoryLoaded") {
+            target_vehicle_inventory = event.data.vehicle_inventory;
+            populateVehicleInventory(target_vehicle_inventory)
         } else if (event.data.type == "setPlayerJob") {
             currentPlayerJob = event.data.job;
         }
@@ -302,6 +347,9 @@ $(function() {
         openEmoteMenu();
     });
 
+    // -----------------
+    // normal inventory:
+    // -----------------
     $('.sidenav').on('click', '.inventory-item', function() {
         var itemName = $(this).text();
         var playerName = targetPlayerName;
@@ -310,6 +358,7 @@ $(function() {
             $(".sidenav").append("<a data-itemName='"+itemName+"' class='inventory-item inventory-action-item'>Use</a>");
             $(".sidenav").append("<a data-itemName='"+itemName+"' class='inventory-item inventory-action-item'>Drop</a>");
             $(".sidenav").append("<a data-itemName='"+itemName+"' class='inventory-item inventory-action-item' id='action-give'>Give to " + playerName + "</span></a>");
+            $(".sidenav").append("<a data-itemName='"+itemName+"' class='inventory-item inventory-action-item'>Store</a>");
             $(".sidenav").append("<a onclick='inventoryActionsBackBtn()' class='inventory-actions-back-btn'>Back</a>");
         } else {
             $(".sidenav .inventory-item").remove();
@@ -340,7 +389,51 @@ $(function() {
         closeNav();
     });
 
+    // ------------------
+    // vehicle inventory:
+    // ------------------
+    $('.sidenav').on('click', '.vehicle-item', function() {
+        var itemName = $(this).text();
+        if (itemName != "Back") {
+            $(".sidenav a").hide();
+            $(".sidenav").append("<a data-itemName='"+itemName+"' class='vehicle-item vehicle-item-action'>Retrieve</a>");
+            $(".sidenav").append("<a onclick='vehicleInventoryActionsBackBtn()' class='vehicle-item-actions-back-btn'>Back</a>");
+        } else {
+            $(".sidenav .vehicle-item").remove();
+            $(".sidenav a").show();
+            $(".player-meta-data").show();
+        }
+    });
+
+    $('.sidenav').on('click', '.vehicle-item-action', function() {
+        var actionName = $(this).text();
+        if (typeof actionName == "undefined") {
+            //alert("actionName undefined!");
+        } else {
+            //alert("actionName = " + actionName);
+        }
+        var itemName = $(this).attr("data-itemName");
+        //alert("item name = " + itemName);
+        if (itemName == "(x1) Driver") {
+            itemName = "(x1) Driver's License"
+        }
+        $.post('http://test/retrieveVehicleItem', JSON.stringify({
+            actionName: actionName.toLowerCase(),
+            itemName: itemName,
+            target_vehicle_plate: target_vehicle_plate
+        }));
+        closeNav();
+    });
+
 });
+
+function vehicleInventoryActionsBackBtn() {
+    $(".sidenav .vehicle-item-action").remove();
+    $(".sidenav .vehicle-item-actions-back-btn").remove();
+    $.post('http://test/getVehicleInventory', JSON.stringify({
+        target_vehicle_plate: target_vehicle_plate
+    }));
+}
 
 function inventoryActionsBackBtn() {
     $(".sidenav .inventory-action-item").remove();

@@ -55,6 +55,24 @@ RegisterNUICallback('loadInventory', function(data, cb)
     TriggerServerEvent("interaction:loadInventoryForInteraction")
 end)
 
+RegisterNUICallback('getVehicleInventory', function(data, cb)
+    Citizen.Trace("vehicle inventory loading...")
+		print("plate #: " .. data.target_vehicle_plate)
+    TriggerServerEvent("interaction:loadVehicleInventoryForInteraction", data.target_vehicle_plate)
+		--SetVehicleDoorOpen(data.target_vehicle.id, 5, false, false) -- experimental
+end)
+
+-- this is called when the player clicks "retrieve" in the interaction menu on a vehicle inventory item
+RegisterNUICallback('retrieveVehicleItem', function(data, cb)
+	TriggerEvent("test:escapeFromCSharp")
+	local target_vehicle_plate = data.target_vehicle_plate
+	local target_item_name = data.itemName
+		-- TODO:
+		-- 1) Get quantity to transfer from user input
+    -- 2) Remove/decrement full item with name data.itemName from vehicle inventory with plate matching target_vehicle.plate
+		-- 3) Add/increment full item with name data.itemName into player's inventory
+end)
+
 RegisterNUICallback('playEmote', function(data, cb)
     TriggerEvent("test:escapeFromCSharp")
     --Citizen.Trace("inside of NUI callback with emote: " .. data.emoteName)
@@ -120,6 +138,10 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 			end
 		elseif string.find(actionName, "give") then
 			TriggerServerEvent("interaction:giveItemToPlayer", wholeItem, targetPlayerId)
+		elseif actionName == "store" then
+			-- todo: get quantity from user to store
+			local quantity = 1
+			TriggerEvent("vehicle:checkTargetVehicleForStorage", wholeItem, quantity)
 		end
 	end
 end)
@@ -194,12 +216,21 @@ end)
 
 RegisterNetEvent("interaction:inventoryLoaded")
 AddEventHandler("interaction:inventoryLoaded", function(inventory, weapons, licenses)
-    --Citizen.Trace("inventory loaded...")
     SendNUIMessage({
         type = "inventoryLoaded",
         inventory = inventory,
         weapons = weapons,
         licenses = licenses
+    })
+end)
+
+RegisterNetEvent("interaction:vehicleInventoryLoaded")
+AddEventHandler("interaction:vehicleInventoryLoaded", function(inventory)
+	print("client received vehicle inventory... sending NUI message")
+	if inventory then print("#inventory: " .. #inventory) end
+    SendNUIMessage({
+        type = "vehicleInventoryLoaded",
+        vehicle_inventory = inventory
     })
 end)
 

@@ -323,7 +323,8 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle)
 										hash = hash,
 										plate = plate,
 										stored = false,
-										price = price
+										price = price,
+										inventory = {}
 									}
 									local vehicle_key = {
 										name = "Key -- " .. plate,
