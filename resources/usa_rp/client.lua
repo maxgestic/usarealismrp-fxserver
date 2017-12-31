@@ -435,7 +435,7 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-    print("trying to enter: " .. GetVehiclePedIsTryingToEnter(PlayerPedId(GetPlayerPed(-1))))
+    --print("trying to enter: " .. GetVehiclePedIsTryingToEnter(PlayerPedId(GetPlayerPed(-1))))
 		if DoesEntityExist(GetVehiclePedIsTryingToEnter(PlayerPedId(GetPlayerPed(-1)))) then
       --ClearPedSecondaryTask(GetPlayerPed(-1))
       if playing_anim then

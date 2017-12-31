@@ -237,24 +237,26 @@ AddEventHandler("methJob:checkUserMoney", function(amount)
 end)
 
 function hasItem(itemName, inventory, quantity)
-    for i = 1, #inventory do
-        local item = inventory[i]
-        if item.name == itemName then
-            if quantity then
-                if type(tonumber(quantity)) ~= nil then
-                    if item.quantity >= quantity then
-                        print("inventory item found with the searched quantity!")
-                        return true
-                    else
-                        print("did not find item with that quantity")
-                        return false
-                    end
-                end
+  for i = 1, #inventory do
+    local item = inventory[i]
+    if item then
+      if item.name == itemName then
+        if quantity then
+          if type(tonumber(quantity)) ~= nil then
+            if item.quantity >= quantity then
+              print("inventory item found with the searched quantity!")
+              return true
+            else
+              print("did not find item with that quantity")
+              return false
             end
-            print("FOUND: " .. itemName .. " in player's inventory")
-            return true
+          end
         end
+        print("FOUND: " .. itemName .. " in player's inventory")
+        return true
+      end
     end
-    print("did not find item")
-    return false
+  end
+  print("did not find item")
+  return false
 end
