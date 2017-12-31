@@ -180,28 +180,63 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 						if inventory then
 							--//Check entire user inventory for toNumber phone
 							for j = 1, #inventory do
-								print("Checking item: " .. inventory[j].name)
-								-- check for a matching phone number in player items
-								if string.find(inventory[j].name, "Cell Phone") and tonumber(inventory[j].number) == tonumber(toNumber) then
-									print("phone found with toNumber...")
-									-- phone found with toNumber
-									convoExistedForUser = false
-									toPlayer = tonumber(id)
-									--toName = inventory[j].owner
-									-- Add conversation to and from phone
-									item = inventory[j]
-									-- Check for existing conversation with fromNumber
-									for x = 1, #item.conversations do
-										local conversation = item.conversations[x]
-										-- does this phone already have a conversation with that phone number?
-										if conversation.partnerId == fromNumber then
-											print("Player #" .. toPlayer .. " had existing convo with partnerId = " .. fromNumber)
+								if inventory[j] then
+									print("Checking item: " .. inventory[j].name)
+									-- check for a matching phone number in player items
+									if string.find(inventory[j].name, "Cell Phone") and tonumber(inventory[j].number) == tonumber(toNumber) then
+										print("phone found with toNumber...")
+										-- phone found with toNumber
+										convoExistedForUser = false
+										toPlayer = tonumber(id)
+										--toName = inventory[j].owner
+										-- Add conversation to and from phone
+										item = inventory[j]
+										-- Check for existing conversation with fromNumber
+										for x = 1, #item.conversations do
+											local conversation = item.conversations[x]
+											-- does this phone already have a conversation with that phone number?
+											if conversation.partnerId == fromNumber then
+												print("Player #" .. toPlayer .. " had existing convo with partnerId = " .. fromNumber)
+												-- see if that number is in this phone's contact list, if so set the from sender name to the readable name
+												if getNameFromContacts(item, fromNumber) then
+													from = getNameFromContacts(item, fromNumber)
+												else
+													from = fromNumber
+												end
+												local message = {
+													timestamp = os.date("%c", os.time()),
+													from = from,
+													--to = item.owner,
+													to = "Me",
+													message = msg
+												}
+												table.insert(inventory[j].conversations[x].messages, message)
+												player.setActiveCharacterData("inventory", inventory)
+												convoExistedForUser = true
+												TriggerClientEvent("swayam:notification", userSource, "Whiz Wireless", "Message Sent.", "CHAR_MP_DETONATEPHONE")
+												TriggerClientEvent("swayam:notification", tonumber(toPlayer), from, msg, "CHAR_DEFAULT")
+												messageSent = true
+												print("matching convo found for player receiving text!")
+												--TriggerClientEvent("swayam:notification", toPlayer, "From Someone", "Some Message", "CHAR_DEFAULT")
+												--return
+												break
+											end
+										end
+										if not convoExistedForUser then
+											print("no convo found for users! creating and inserting now!")
+											-- no previous converstaion with that partner, create new one
 											-- see if that number is in this phone's contact list, if so set the from sender name to the readable name
 											if getNameFromContacts(item, fromNumber) then
 												from = getNameFromContacts(item, fromNumber)
+												print("name set for from field!!")
 											else
 												from = fromNumber
+												print("name not set for from field!!")
 											end
+											print("creating text message...")
+											print("from = " .. from)
+											print("to = 'Me'")
+											print("msg = " .. msg)
 											local message = {
 												timestamp = os.date("%c", os.time()),
 												from = from,
@@ -209,56 +244,23 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 												to = "Me",
 												message = msg
 											}
-											table.insert(inventory[j].conversations[x].messages, message)
+											print("creating conversation...")
+											print("partnerName = " .. fromName)
+											print("partnerId = " .. fromNumber)
+											local conversation = {
+												partnerName = from,
+												partnerId = fromNumber,
+												messages = {message}
+											}
+											table.insert(inventory[j].conversations, 1, conversation) -- insert at front
 											player.setActiveCharacterData("inventory", inventory)
-											convoExistedForUser = true
 											TriggerClientEvent("swayam:notification", userSource, "Whiz Wireless", "Message Sent.", "CHAR_MP_DETONATEPHONE")
 											TriggerClientEvent("swayam:notification", tonumber(toPlayer), from, msg, "CHAR_DEFAULT")
+											--TriggerClientEvent("swayam:notification", tonumber(toPlayer), "From Someone", "Some Message", "CHAR_DEFAULT")
 											messageSent = true
-											print("matching convo found for player receiving text!")
-											--TriggerClientEvent("swayam:notification", toPlayer, "From Someone", "Some Message", "CHAR_DEFAULT")
+											print("convo inserted!")
 											--return
-											break
 										end
-									end
-									if not convoExistedForUser then
-										print("no convo found for users! creating and inserting now!")
-										-- no previous converstaion with that partner, create new one
-										-- see if that number is in this phone's contact list, if so set the from sender name to the readable name
-										if getNameFromContacts(item, fromNumber) then
-											from = getNameFromContacts(item, fromNumber)
-											print("name set for from field!!")
-										else
-											from = fromNumber
-											print("name not set for from field!!")
-										end
-										print("creating text message...")
-										print("from = " .. from)
-										print("to = 'Me'")
-										print("msg = " .. msg)
-										local message = {
-											timestamp = os.date("%c", os.time()),
-											from = from,
-											--to = item.owner,
-											to = "Me",
-											message = msg
-										}
-										print("creating conversation...")
-										print("partnerName = " .. fromName)
-										print("partnerId = " .. fromNumber)
-										local conversation = {
-											partnerName = from,
-											partnerId = fromNumber,
-											messages = {message}
-										}
-										table.insert(inventory[j].conversations, 1, conversation) -- insert at front
-										player.setActiveCharacterData("inventory", inventory)
-										TriggerClientEvent("swayam:notification", userSource, "Whiz Wireless", "Message Sent.", "CHAR_MP_DETONATEPHONE")
-										TriggerClientEvent("swayam:notification", tonumber(toPlayer), from, msg, "CHAR_DEFAULT")
-										--TriggerClientEvent("swayam:notification", tonumber(toPlayer), "From Someone", "Some Message", "CHAR_DEFAULT")
-										messageSent = true
-										print("convo inserted!")
-										--return
 									end
 								end
 							end

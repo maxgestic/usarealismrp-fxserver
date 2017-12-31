@@ -14,30 +14,32 @@ local randomMsg = {	"You found the keys in the ignition!"
 -- check for key, and trigger proper lock/unlock event accordingly
 RegisterServerEvent("lock:checkForKey")
 AddEventHandler("lock:checkForKey", function(plate)
-    local userSource = tonumber(source)
-    TriggerEvent("es:getPlayerFromId", userSource, function(user)
-        local inv = user.getActiveCharacterData("inventory")
-        for i = 1, #inv do
-            local item = inv[i]
-            if string.find(item.name, "Key") then
-                print("found key!")
-                if string.find(plate, item.plate) then
-                    print("found plate match!")
-                    if isLocked(plate) then
-                        setLocked(plate, false)
-                        TriggerClientEvent("lock:unlockVehicle", userSource)
-                    else
-                        setLocked(plate, true)
-                        TriggerClientEvent("lock:lockVehicle", userSource)
-                    end
-                    return
-                end
+  local userSource = tonumber(source)
+  TriggerEvent("es:getPlayerFromId", userSource, function(user)
+    local inv = user.getActiveCharacterData("inventory")
+    for i = 1, #inv do
+      local item = inv[i]
+      if item then
+        if string.find(item.name, "Key") then
+          print("found key!")
+          if string.find(plate, item.plate) then
+            print("found plate match!")
+            if isLocked(plate) then
+              setLocked(plate, false)
+              TriggerClientEvent("lock:unlockVehicle", userSource)
+            else
+              setLocked(plate, true)
+              TriggerClientEvent("lock:lockVehicle", userSource)
             end
+            return
+          end
         end
-        -- no key owned for vehicle trying to lock/unlock
-        print("Player did not have the key to unlock vehicle with plate #" .. plate)
-        TriggerClientEvent("lock:lookForKeys", userSource, plate)
-    end)
+      end
+    end
+    -- no key owned for vehicle trying to lock/unlock
+    print("Player did not have the key to unlock vehicle with plate #" .. plate)
+    TriggerClientEvent("lock:lookForKeys", userSource, plate)
+  end)
 end)
 
 RegisterServerEvent("lock:foundKeys")
