@@ -211,6 +211,65 @@ AddEventHandler("usa:removeItem", function(to_remove_item, quantity)
   end)
 end)
 
+RegisterServerEvent("usa:insertItem")
+AddEventHandler("usa:insertItem", function(to_insert_item, quantity)
+  -- todo implement support for removing more than 1 at a time (aka quantity parameter above)
+  print("inside usa:insertItem!")
+  local userSource = tonumber(source)
+  TriggerEvent("es:getPlayerFromId", userSource, function(user)
+    if not to_insert_item.type or to_insert_item.type == "license" then
+      -- insert into licenses
+      local user_licenses = user.getActiveCharacterData("licenses")
+      for i = 1, #user_licenses do
+        local item = user_licenses[i]
+        if item.name == to_insert_item.name then
+          print("quantity increased for license item!")
+          user_licenses[i].quantity = item.quantity + quantity
+          user.setActiveCharacterData("licenses", user_licenses)
+          return
+        end
+      end
+      print("license inserted!")
+      -- not in licenses already. insert:
+      table.insert(user_licenses, to_insert_item)
+      user.setActiveCharacterData("licenses", user_licenses)
+    elseif to_insert_item.type == "weapon" then
+      -- insert into weapons, assuming that we've checked that player had < 3 weapons
+      local user_weapons = user.getActiveCharacterData("weapons")
+      for i = 1, #user_weapons do
+        local item = user_weapons[i]
+        if item.name == to_insert_item.name then
+          print("quantity increased for weapon item!")
+          user_weapons[i].quantity = item.quantity + quantity
+          user.setActiveCharacterData("weapons", user_weapons)
+          return
+        end
+      end
+      print("weapon inserted!")
+      -- not in weapons already. insert:
+      table.insert(user_weapons, to_insert_item)
+      user.setActiveCharacterData("weapons", user_weapons)
+      -- TODO: equip the weapon here with a client event with to_insert_item.hash passed to it
+    else
+      -- insert into inventory
+      local user_inventory = user.getActiveCharacterData("inventory")
+      for i = 1, #user_inventory do
+        local item = user_inventory[i]
+        if item.name == to_insert_item.name then
+          print("quantity increased for inventory item!")
+          user_inventory[i].quantity = item.quantity + quantity
+          user.setActiveCharacterData("inventory", user_inventory)
+          return
+        end
+      end
+      print("inventory item inserted!")
+      -- not in inventory already. insert:
+      table.insert(user_inventory, to_insert_item)
+      user.setActiveCharacterData("inventory", user_inventory)
+    end
+  end)
+end)
+
 RegisterServerEvent("usa:notifyStaff")
 AddEventHandler("usa:notifyStaff", function(msg)
   sendMessageToModsAndAdmins(msg)

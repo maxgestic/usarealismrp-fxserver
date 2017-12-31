@@ -163,7 +163,7 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
     -- give item to nearest player
     TriggerEvent("es:getPlayerFromId", targetPlayerId, function(user)
         if user then
-            if not item.type then
+            if not item.type or item.type == "license" then
                 -- must be a license (no item.type)
                 print("giving a license!")
                 local licenses = user.getActiveCharacterData("licenses")

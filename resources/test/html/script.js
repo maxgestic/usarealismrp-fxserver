@@ -413,6 +413,7 @@ $(function() {
             //alert("actionName = " + actionName);
         }
         var itemName = $(this).attr("data-itemName");
+        var wholeItem = GetWholeVehicleItemByName(itemName);
         //alert("item name = " + itemName);
         if (itemName == "(x1) Driver") {
             itemName = "(x1) Driver's License"
@@ -420,6 +421,7 @@ $(function() {
         $.post('http://test/retrieveVehicleItem', JSON.stringify({
             actionName: actionName.toLowerCase(),
             itemName: itemName,
+            wholeItem: wholeItem,
             target_vehicle_plate: target_vehicle_plate
         }));
         closeNav();
@@ -470,6 +472,19 @@ function GetWholeItemByName(itemName) {
             return inventory[i]
         }
     }
+}
+
+function GetWholeVehicleItemByName(name) {
+  name = removeQuantityFromName(name);
+  if (name == "Driver") {
+      name = "Driver's License";
+  }
+  var inventory = target_vehicle_inventory;
+  for (var i = 0; i < inventory.length; ++i) {
+      if (inventory[i].name == name) {
+        return inventory[i]
+      }
+  }
 }
 
 function removeQuantityFromName(itemName) {

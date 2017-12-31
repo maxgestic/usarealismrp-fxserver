@@ -66,11 +66,37 @@ end)
 RegisterNUICallback('retrieveVehicleItem', function(data, cb)
 	TriggerEvent("test:escapeFromCSharp")
 	local target_vehicle_plate = data.target_vehicle_plate
-	local target_item_name = data.itemName
-		-- TODO:
-		-- 1) Get quantity to transfer from user input
-    -- 2) Remove/decrement full item with name data.itemName from vehicle inventory with plate matching target_vehicle.plate
-		-- 3) Add/increment full item with name data.itemName into player's inventory
+	local target_item = data.wholeItem
+	-- 1) If item.type == "weapon" then check if player has < 3 weapons:
+	-- TODO: Finish this part here ^
+	-- 2) Get quantity to transfer from user input:
+	Citizen.CreateThread( function()
+					DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+					while true do
+							if ( UpdateOnscreenKeyboard() == 1 ) then
+									local input_amount = GetOnscreenKeyboardResult()
+									if ( string.len( input_amount ) > 0 ) then
+											local amount = tonumber( input_amount )
+											if ( amount > 0 ) then
+													-- trigger server event to remove money
+													amount = round(amount, 0)
+													local quantity_to_transfer = amount
+													-- 3) Remove/decrement full item with name data.itemName from vehicle inventory with plate matching target_vehicle.plate:
+													print("removing item (" .. target_item.name .. ") from vehicle inventory, quantity: " .. quantity_to_transfer)
+													TriggerServerEvent("vehicle:removeItem", target_item.name, quantity_to_transfer, target_vehicle_plate)
+													-- 4) Add/increment full item with name data.itemName into player's inventory:
+													TriggerServerEvent("usa:insertItem", target_item, quantity_to_transfer)
+											end
+											break
+									else
+											DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+									end
+							elseif ( UpdateOnscreenKeyboard() == 2 ) then
+									break
+							end
+					Citizen.Wait( 0 )
+			end
+	end )
 end)
 
 RegisterNUICallback('playEmote', function(data, cb)
@@ -294,3 +320,7 @@ AddEventHandler("interaction:equipWeapon", function(item, equip)
 		RemoveWeaponFromPed(GetPlayerPed(-1), item.hash)
 	end
 end)
+
+function round(num, numDecimalPlaces)
+  return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+end

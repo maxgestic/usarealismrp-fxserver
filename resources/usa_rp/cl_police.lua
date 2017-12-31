@@ -44,7 +44,6 @@ function removeCones()
     spawnedCones = {}
 end
 
---[[
 -- spike strip
 RegisterNetEvent('c_setSpike')
 AddEventHandler('c_setSpike', function()
@@ -95,7 +94,6 @@ function RemoveSpike()
       DeleteObject(spike)
    end
 end
---]]
 
 -- /ticket [id] [amount] [infractions]
 RegisterNetEvent("police:ticket")
