@@ -169,7 +169,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		for i = 1, #locations do
-			DrawMarker(1, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
+			DrawMarker(27, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
 		end
 		if isPlayerAtGunShop() and not playerNotified then
 			TriggerEvent("chatMessage", "SYSTEM", { 0, 141, 155 }, "^3Press E to open weapon menu!")
