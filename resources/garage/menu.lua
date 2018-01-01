@@ -66,10 +66,10 @@ Citizen.CreateThread(function()
 				local vehicle = ownedVehicles[i]
 				-- each vehicle the player owns
 				local buttonText = ""
-				if vehicle.stored == false then
-					buttonText = "Retrieve ~y~" .. vehicle.model .. " ~w~(~r~Not Stored~w~)"
-				elseif vehicle.impounded == true then
+				if vehicle.impounded == true then
 					buttonText = "Retrieve ~y~" .. vehicle.model .. " ~w~(~y~Impounded~w~)"
+				elseif vehicle.stored == false then
+					buttonText = "Retrieve ~y~" .. vehicle.model .. " ~w~(~r~Not Stored~w~)"
 				else
 					buttonText = "Retrieve ~y~" .. vehicle.model .. " ~w~(~g~Stored~w~)"
 				end

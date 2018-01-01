@@ -262,6 +262,28 @@ AddEventHandler("vehShop:buyInsurance", function(userSource)
 	end)
 end)
 
+RegisterServerEvent("vehShop:fileClaim")
+AddEventHandler("vehShop:fileClaim", function(vehicle_to_claim)
+	local userSource = tonumber(source)
+	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+		local user_vehicles = user.getActiveCharacterData("vehicles")
+		if user_vehicles then
+			for i = 1, #user_vehicles do
+				local veh = user_vehicles[i]
+				if veh then
+					if veh.plate == vehicle_to_claim.plate then
+						user_vehicles[i].inventory = {} -- empty inventory to prevent duplicating
+						user_vehicles[i].stored = true -- set to true for retrieval from garage
+						-- todo: add a realistic time delay for 'processing' before setting stored = true above
+						-- todo: add a fee based on a percentage of the vehicles price
+						user.setActiveCharacterData("vehicles", user_vehicles)
+					end
+				end
+			end
+		end
+	end)
+end)
+
 -- function to format expiration month correctly
 function padzero(s, count)
     return string.rep("0", count-string.len(s)) .. s
@@ -276,10 +298,10 @@ AddEventHandler("vehShop:checkPlayerInsurance", function()
 		if playerInsurance.type == "auto" then
 			print("found player auto insurance!")
 			if playerHasValidAutoInsurance(playerInsurance) then
-				TriggerClientEvent("chatMessage", userSource, "T. ENDS INSURANCE", {255, 78, 0}, "You are already insured!")
+				TriggerClientEvent("chatMessage", userSource, "T. END'S INSURANCE", {255, 78, 0}, "You are already insured!")
 			else
 				print("renewing auto insurance!")
-				TriggerClientEvent("chatMessage", userSource, "T. ENDS INSURANCE", {255, 78, 0}, "Your auto insurance coverage was ~r~expired~w~! Renewing...")
+				TriggerClientEvent("chatMessage", userSource, "T. END'S INSURANCE", {255, 78, 0}, "Your auto insurance coverage was ~r~expired~w~! Renewing...")
 				TriggerEvent("vehShop:buyInsurance", userSource)
 			end
 		else
@@ -388,6 +410,18 @@ AddEventHandler("vehShop:loadVehiclesToSell", function()
 		end
 		print("vehicles loaded! # = " .. #vehicles)
 		TriggerClientEvent("vehShop:displayVehiclesToSell", userSource, vehicles)
+	end)
+end)
+
+RegisterServerEvent("vehShop:loadVehicles")
+AddEventHandler("vehShop:loadVehicles", function()
+	local userSource = tonumber(source)
+	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+		local vehicles = user.getActiveCharacterData("vehicles")
+		if vehicles then
+			print("vehicles loaded! # = " .. #vehicles)
+			TriggerClientEvent("vehShop:loadedVehicles", userSource, vehicles)
+		end
 	end)
 end)
 

@@ -127,6 +127,7 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle)
 			return
 		end
 		if vehicle.stored == false then
+			--[[
 			if playerHasValidAutoInsurance(playerInsurance, userSource) then
 				withdraw_fee = 900
 				--TriggerClientEvent("garage:notify", userSource, "~g~T. ENDS INSURANCE: ~w~Here's your vehicle! ~y~You will now need to renew your insurance.")
@@ -146,6 +147,8 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle)
 			else
 				TriggerClientEvent("garage:vehicleNotStored", userSource)
 			end
+			--]]
+			TriggerClientEvent("garage:vehicleNotStored", userSource)
 		else
 			withdraw_fee = 150
 			TriggerClientEvent("garage:notify", userSource, "Here's your car! Storage Fee: $" .. withdraw_fee)

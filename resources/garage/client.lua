@@ -23,11 +23,6 @@ Citizen.CreateThread(function()
     end
 end)
 
-local allowed = true
-local plate = nil
-local pv = nil
-local stored
-
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -37,7 +32,7 @@ Citizen.CreateThread(function()
 				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), info['x'], info['y'], info['z'], true) < 2 then
 						DrawSpecialText("Press [ ~b~E~w~ ] to access the garage!")
 						if IsControlPressed(0, 86) then
-							Citizen.Wait(500)
+							Citizen.Wait(50)
 							if IsPedInAnyVehicle(GetPlayerPed(-1), true) then
 								local handle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
 								local numberPlateText = GetVehicleNumberPlateText(GetVehiclePedIsIn(GetPlayerPed(-1), false))
@@ -45,7 +40,7 @@ Citizen.CreateThread(function()
 							else
 								--TriggerServerEvent("garage:checkVehicleStatus")
 								TriggerServerEvent("garage:openMenu")
-								Citizen.Wait(60000)
+								--Citizen.Wait(60000)
 							end
 						end
 				end
@@ -68,7 +63,7 @@ end)
 
 RegisterNetEvent("garage:vehicleNotStored")
 AddEventHandler("garage:vehicleNotStored", function()
-	TriggerEvent("garage:notify", "~r~Sorry! You have no vehicles stored here and you don't have vehicle insurance.")
+	TriggerEvent("garage:notify", "~r~Sorry! That vehicle is not stored at any of our garages.")
 end)
 
 RegisterNetEvent("garage:vehicleStored")

@@ -250,6 +250,13 @@ AddEventHandler("vehShop:displayVehiclesToSell", function(vehicles)
 	end
 end)
 
+RegisterNetEvent("vehShop:loadedVehicles")
+AddEventHandler("vehShop:loadedVehicles", function(vehicles)
+	if vehicles then
+		menu.vehicles = vehicles
+	end
+end)
+
 function getPlayerDistanceFromShop(shopX,shopY,shopZ)
 	-- Get the player coords so that we know where to spawn it
 	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
@@ -299,7 +306,7 @@ Citizen.CreateThread(function()
 		Wait(1)
 
 		--print("drawing marker!")
-		DrawMarker(1, markerX, markerY, markerZ, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
+		DrawMarker(27, markerX, markerY, markerZ, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
 
 		if menu.page then
 		--	print("menu.page = " .. menu.page)
@@ -317,12 +324,10 @@ Citizen.CreateThread(function()
 
 		if menu.open == true then
 
-			TriggerEvent("vehShop-GUI:Title", menu.page)
-
 			if menu.page == "home" then
 
 			--	print("setting up home buttons!")
-
+				TriggerEvent("vehShop-GUI:Title", "Home")
 
 				TriggerEvent("vehShop-GUI:Option", "Buy", function(cb) -- todo: complete ability to purchase selected vehicle
 					--print("inside of vehShop-GUI:option: 'Buy'")
@@ -356,6 +361,8 @@ Citizen.CreateThread(function()
 
 			elseif menu.page == "buy" then
 
+			TriggerEvent("vehShop-GUI:Title", "Buy")
+
 			--	print("menu.page: 'buy'!!!")
 
 			--	print("type of vehicle shop items: " .. type(vehicleShopItems))
@@ -379,6 +386,8 @@ Citizen.CreateThread(function()
 				end)
 
 			elseif menu.page == "sell" then
+
+				TriggerEvent("vehShop-GUI:Title", "Sell")
 
 				-- todo: complete this section
 				if menu.vehicles then
@@ -412,9 +421,18 @@ Citizen.CreateThread(function()
 
 			elseif menu.page == "insurance" then
 
+				TriggerEvent("vehShop-GUI:Title", "Insurance")
+
 				TriggerEvent("vehShop-GUI:Option", "Info", function(cb)
 					if cb then
-						TriggerEvent("chatMessage", "T. ENDS INSURANCE", { 255, 78, 0 }, "T. End's insurance will put your mind at ease by making sure you'll always have a ride even if yours gets stolen, lost, or totaled.")
+						TriggerEvent("chatMessage", "T. END'S INSURANCE", { 255, 78, 0 }, "T. End's insurance will put your mind at ease by making sure you'll always have a ride even if yours gets stolen, lost, or totaled.")
+					end
+				end)
+
+				TriggerEvent("vehShop-GUI:Option", "Make a claim", function(cb)
+					if cb then
+						TriggerServerEvent("vehShop:loadVehicles")
+						menu.page = "insurance_claim"
 					end
 				end)
 
@@ -432,6 +450,36 @@ Citizen.CreateThread(function()
 					end
 				end)
 
+			elseif menu.page == "insurance_claim" then
+				TriggerEvent("vehShop-GUI:Title", "Make a claim")
+				if menu.vehicles then
+					for i = 1, #menu.vehicles do
+						local vehicle = menu.vehicles[i]
+						if vehicle then
+							local vehName = "Undefined"
+							if vehicle.make then
+								vehName = vehicle.make .. " " .. vehicle.model
+							else
+								vehName = vehicle.model
+							end
+							if vehicle.stored == false then
+								TriggerEvent("vehShop-GUI:Option", vehName, function(cb)
+									if cb then
+										TriggerEvent("usa:notify", "Filed an insurance claim for your " .. vehName)
+										table.remove(menu.vehicles, i)
+										TriggerServerEvent("vehShop:fileClaim", vehicle)
+										menu.page = "home"
+									end
+								end)
+							end
+						end
+					end
+					TriggerEvent("vehShop-GUI:Option", "Back", function(cb)
+						if cb then
+							menu.page = "home"
+						end
+					end)
+				end
 			else
 
 				--print("in else clause!")
