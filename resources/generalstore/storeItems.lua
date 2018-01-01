@@ -1,6 +1,6 @@
 storeItems = {
     ["Food"] = {
-      {name = "Tuna Sandwhich", price = 40, type = "food", substance = 25.0, quantity = 1, legality = "legal", weight = 8},
+      {name = "Tuna Sandwich", price = 40, type = "food", substance = 25.0, quantity = 1, legality = "legal", weight = 8},
       {name = "Chocolate Pizza", price = 25, type = "food", substance = 10.0, quantity = 1, legality = "legal", weight = 6},
       {name = "Cheeseburger", price = 50, type = "food", substance = 35.0, quantity = 1, legality = "legal", weight = 8},
       {name = "Kosher Hot Dog", price = 40, type = "food", substance = 31.5, quantity = 1, legality = "legal", weight = 5},
