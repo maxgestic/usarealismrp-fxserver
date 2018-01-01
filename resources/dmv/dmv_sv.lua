@@ -23,7 +23,8 @@ AddEventHandler("dmv:checkMoney", function(price)
 				quantity = 1,
 				ownerName = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName"),
 				expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
-				status = "valid"
+				status = "valid",
+				type = "license"
 			}
 			table.insert(licenses, license)
 			user.setActiveCharacterData("licenses", licenses)

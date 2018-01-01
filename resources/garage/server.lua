@@ -6,10 +6,12 @@ AddEventHandler("garage:giveKey", function(key)
 		local inv = user.getActiveCharacterData("inventory")
 		for i = 1, #inv do
 			local item = inv[i]
-			if string.find(item.name, "Key") then
-				print("found a key!!")
-				if string.find(key.plate, item.plate) then
-					already_has_key = true
+			if item then
+				if string.find(item.name, "Key") then
+					print("found a key!!")
+					if string.find(key.plate, item.plate) then
+						already_has_key = true
+					end
 				end
 			end
 		end
@@ -29,24 +31,28 @@ AddEventHandler("garage:storeKey", function(plate)
 	local userSource = tonumber(source)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local inv = user.getActiveCharacterData("inventory")
-		for i = 1, #inv do
-			local item = inv[i]
-			print("checking item: " .. item.name .. " for a matching plate # to store key!")
-			if string.find(item.name, "Key") then
-				print("found a key!!")
-				print("checking plate...")
-				print("type of item.plate = " .. type(item.plate))
-				print("type of plate param = " .. type(plate))
-				print("item.plate = " .. item.plate)
-				print("plate param = " .. plate)
-				if string.find(plate, item.plate) then
-					print("matching plate found!")
-					print("storing key for plate #" .. plate)
-					table.remove(inv, i)
-					user.setActiveCharacterData("inventory", inv)
-					-- remove key from lock resource toggle list:
-					TriggerEvent("lock:removePlate", item.plate)
-					return
+		if inv then
+			for i = 1, #inv do
+				local item = inv[i]
+				if item then
+					print("checking item: " .. item.name .. " for a matching plate # to store key!")
+					if string.find(item.name, "Key") then
+						print("found a key!!")
+						print("checking plate...")
+						print("type of item.plate = " .. type(item.plate))
+						print("type of plate param = " .. type(plate))
+						print("item.plate = " .. item.plate)
+						print("plate param = " .. plate)
+						if string.find(plate, item.plate) then
+							print("matching plate found!")
+							print("storing key for plate #" .. plate)
+							table.remove(inv, i)
+							user.setActiveCharacterData("inventory", inv)
+							-- remove key from lock resource toggle list:
+							TriggerEvent("lock:removePlate", item.plate)
+							return
+						end
+					end
 				end
 			end
 		end

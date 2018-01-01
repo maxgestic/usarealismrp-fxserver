@@ -74,16 +74,13 @@ TriggerEvent('es:addCommand', 'dos', function(source, args, user)
 			-- remove player inventory items (except phone -- since it's a pain to redo contacts)
 			print("removing all items except cell phone!")
 			local target_inventory = user.getActiveCharacterData("inventory")
-			local indexToRemove = {} -- indecies to be removed from player inventory (non cell phone items)
 			for i = 1,  #target_inventory do
 				local item = target_inventory[i]
-				if not string.find("Cell Phone", item.name) then
-					table.insert(indexToRemove, i) -- save non cell phone item index to be deleted below
+				if item then
+					if not string.find("Cell Phone", item.name) then
+						target_inventory[i] = nil
+					end
 				end
-			end
-			-- remove those items
-			for j = 1, #indexToRemove do
-				table.remove(target_inventory, indexToRemove[j])
 			end
 			user.setActiveCharacterData("inventory", target_inventory)
 			-- remove player licenses

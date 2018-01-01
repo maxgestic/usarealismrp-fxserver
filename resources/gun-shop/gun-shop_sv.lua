@@ -20,7 +20,8 @@ AddEventHandler("gunShop:buyPermit", function()
             quantity = 1,
             ownerName = GetPlayerName(userSource),
             expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
-            status = "valid"
+            status = "valid",
+            type = "license"
         }
         table.insert(licenses, permit)
         print("saving inventory with gun permit inside of it")

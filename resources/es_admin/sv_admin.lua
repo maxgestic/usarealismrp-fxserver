@@ -844,9 +844,11 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 		for i = 1, #userInventory do
 			--local inventory = userInventory[i]
 			--local quantity = inventory.quantity
-			inventorynames = inventorynames .. userInventory[i].name .. "(" .. userInventory[i].quantity .. ")"
-			if i ~= #userInventory then
-				inventorynames = inventorynames .. ", "
+			if userInventory[i] then
+				inventorynames = inventorynames .. userInventory[i].name .. "(" .. userInventory[i].quantity .. ")"
+				if i ~= #userInventory then
+					inventorynames = inventorynames .. ", "
+				end
 			end
 		end
 		local firearms_permit = "Invalid"

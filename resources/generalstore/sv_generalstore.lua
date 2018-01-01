@@ -12,11 +12,13 @@ AddEventHandler("generalStore:buyItem", function(item)
             if item.name ~= "Cell Phone" then
                 local inventory = user.getActiveCharacterData("inventory")
                 for i = 1, #inventory do
+                  if inventory[i] then
                     if inventory[i].name == item.name then
                         inventory[i].quantity = inventory[i].quantity + 1
                         user.setActiveCharacterData("inventory", inventory)
                         return
                     end
+                  end
                 end
                 -- not already in player inventory at this point, so add it
                 table.insert(inventory, item)
