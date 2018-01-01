@@ -465,8 +465,7 @@ Citizen.CreateThread(function()
 							if vehicle.stored == false then
 								TriggerEvent("vehShop-GUI:Option", vehName, function(cb)
 									if cb then
-										TriggerEvent("usa:notify", "Filed an insurance claim for your " .. vehName)
-										table.remove(menu.vehicles, i)
+										--table.remove(menu.vehicles, i)
 										TriggerServerEvent("vehShop:fileClaim", vehicle)
 										menu.page = "home"
 									end

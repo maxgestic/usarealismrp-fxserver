@@ -267,16 +267,30 @@ AddEventHandler("vehShop:fileClaim", function(vehicle_to_claim)
 	local userSource = tonumber(source)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local user_vehicles = user.getActiveCharacterData("vehicles")
+		local user_bank = user.getActiveCharacterData("bank")
 		if user_vehicles then
 			for i = 1, #user_vehicles do
 				local veh = user_vehicles[i]
 				if veh then
 					if veh.plate == vehicle_to_claim.plate then
-						user_vehicles[i].inventory = {} -- empty inventory to prevent duplicating
-						user_vehicles[i].stored = true -- set to true for retrieval from garage
 						-- todo: add a realistic time delay for 'processing' before setting stored = true above
-						-- todo: add a fee based on a percentage of the vehicles price
-						user.setActiveCharacterData("vehicles", user_vehicles)
+						local BASE_FEE = 300
+						local PERCENTAGE = .10
+						local CLAIM_PROCESSING_FEE = round(BASE_FEE + (PERCENTAGE * vehicle_to_claim.price))
+						print("claim fee: $" .. CLAIM_PROCESSING_FEE)
+						if CLAIM_PROCESSING_FEE <= user_bank then
+							user_vehicles[i].inventory = {} -- empty inventory to prevent duplicating
+							user_vehicles[i].stored = true -- set to true for retrieval from garage
+							user.setActiveCharacterData("vehicles", user_vehicles)
+							user.setActiveCharacterData("bank", user_bank - CLAIM_PROCESSING_FEE)
+							if veh.make and veh.model then
+								TriggerClientEvent("usa:notify", userSource, "Filed an insurance claim for your " .. veh.make .. " " .. veh.model .. ".\n~y~Fee:~w~ $" .. CLAIM_PROCESSING_FEE)
+							else
+								TriggerClientEvent("usa:notify", userSource, "Filed an insurance claim for your " .. veh.model .. ".\n~y~Fee:~w~ $" .. CLAIM_PROCESSING_FEE)
+							end
+						else
+							TriggerClientEvent("usa:notify", userSource, "You don't have enough money to make a claim on that vehicle.")
+						end
 					end
 				end
 			end
