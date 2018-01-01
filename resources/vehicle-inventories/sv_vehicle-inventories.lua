@@ -82,3 +82,18 @@ AddEventHandler("vehicle:removeItem", function(item_name, quantity, target_vehic
     end
   end)
 end)
+
+-- when retrieving a weapon from a vehicle, first check if player has room for it
+RegisterServerEvent("vehicle:checkPlayerWeaponAmount")
+AddEventHandler("vehicle:checkPlayerWeaponAmount", function(item, vehicle_plate)
+  print("checking user weapon #...")
+  local userSource = tonumber(source)
+  TriggerEvent("es:getPlayerFromId", userSource, function(user)
+    local user_weapons = user.getActiveCharacterData("weapons")
+    if #user_weapons < 3 then
+      TriggerClientEvent("vehicle:retrieveWeapon", userSource, item, vehicle_plate)
+    else
+      TriggerClientEvent("usa:notify", userSource, "Can't carry more than 3 weapons!")
+    end
+  end)
+end)

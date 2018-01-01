@@ -249,7 +249,7 @@ AddEventHandler("usa:insertItem", function(to_insert_item, quantity)
       -- not in weapons already. insert:
       table.insert(user_weapons, to_insert_item)
       user.setActiveCharacterData("weapons", user_weapons)
-      -- TODO: equip the weapon here with a client event with to_insert_item.hash passed to it
+      TriggerClientEvent("usa:equipWeapon", userSource, to_insert_item)
     else
       -- insert into inventory
       local user_inventory = user.getActiveCharacterData("inventory")

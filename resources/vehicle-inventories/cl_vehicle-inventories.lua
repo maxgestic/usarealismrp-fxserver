@@ -35,7 +35,47 @@ AddEventHandler("vehicle:checkTargetVehicleForStorage", function(item, quantity)
     SetVehicleDoorOpen(target_vehicle, 5, false, false)
     TriggerServerEvent("vehicle:storeItem", target_vehicle_plate, item, quantity)
     TriggerServerEvent("usa:removeItem", item, quantity)
+    -- remove weapon from ped if type was weapon:
+    if item.type == "weapon" then
+      RemoveWeaponFromPed(GetPlayerPed(-1), item.hash)
+    end
   end
+end)
+
+RegisterNetEvent("vehicle:retrieveWeapon")
+AddEventHandler("vehicle:retrieveWeapon", function(target_item, target_vehicle_plate)
+  -- Get quantity to transfer from user input:
+  Citizen.CreateThread( function()
+          DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+          while true do
+              if ( UpdateOnscreenKeyboard() == 1 ) then
+                  local input_amount = GetOnscreenKeyboardResult()
+                  if ( string.len( input_amount ) > 0 ) then
+                      local amount = tonumber( input_amount )
+                      if ( amount > 0 ) then
+                          -- trigger server event to remove money
+                          amount = round(amount, 0)
+                          local quantity_to_transfer = amount
+                          if quantity_to_transfer <= target_item.quantity then
+                            -- Remove/decrement full item with name data.itemName from vehicle inventory with plate matching target_vehicle.plate:
+                            print("removing item (" .. target_item.name .. ") from vehicle inventory, quantity: " .. quantity_to_transfer)
+                            TriggerServerEvent("vehicle:removeItem", target_item.name, quantity_to_transfer, target_vehicle_plate)
+                            -- Add/increment full item with name data.itemName into player's inventory:
+                            TriggerServerEvent("usa:insertItem", target_item, quantity_to_transfer)
+                          else
+                            TriggerEvent("usa:notify", "Quantity input too high!")
+                          end
+                      end
+                      break
+                  else
+                      DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+                  end
+              elseif ( UpdateOnscreenKeyboard() == 2 ) then
+                  break
+              end
+          Citizen.Wait( 0 )
+      end
+  end )
 end)
 -----------------------------------------
 -- OPEN/CLOSE TARGET VEHICLE INVENTORY --
@@ -72,4 +112,8 @@ function getVehicleInDirection(coordFrom, coordTo)
 	local rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 10, GetPlayerPed(-1), 0)
 	local a, b, c, d, vehicle = GetRaycastResult(rayHandle)
 	return vehicle
+end
+
+function round(num, numDecimalPlaces)
+  return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
 end

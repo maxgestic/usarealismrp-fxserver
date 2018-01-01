@@ -444,3 +444,9 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
+
+RegisterNetEvent("usa:equipWeapon")
+AddEventHandler("usa:equipWeapon", function(weapon)
+  -- todo: store ammo count on weapon object
+  GiveWeaponToPed(GetPlayerPed(-1), weapon.hash, 100, false, true)
+end)

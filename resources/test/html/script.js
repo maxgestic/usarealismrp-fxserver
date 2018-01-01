@@ -197,8 +197,9 @@ function getVehicleInventory() {
 }
 
 function populateVehicleInventory(inventory) {
-  alert("populating vehicle inventory...");
+  //alert("populating vehicle inventory...");
   $(".sidenav a").hide();
+  $(".player-meta-data").hide();
   for(i in inventory) {
     if (inventory[i].legality == "illegal")
         $(".sidenav").append("<a class='vehicle-item'><span class='vehicle-item-quantity'>(x"+inventory[i].quantity+")</span> <span class='illegal-item'>" + inventory[i].name + "</span></a>");
@@ -255,6 +256,7 @@ function closeNav() {
     $(".sidenav .police-action").remove();
     $(".sidenav .inventory-action-item").remove();
     $(".sidenav .inventory-actions-back-btn").remove();
+    $(".sidenav .vehicle-item-actions-back-btn").remove();
     $(".sidenav .police-btn").remove();
     document.getElementById("mySidenav").style.width = "0";
 }
