@@ -138,7 +138,7 @@ local vehicleShopItems = {
 			{make = "Ocelot", model = "XA-21", price = 3400999, hash = 917809321},
 			{make = "Grotti", model = "Turismo R", price = 4000000, hash = 408192225}
 		},
-		["Cassic"] = {
+		["Classic"] = {
 			{make = "Vapid", model = "Peyote", price = 100000, hash = 1830407356},
 			{make = "Lampadati", model = "Casco", price = 183007, hash = 941800958},
 			{make = "Pegassi", model = "Monroe", price = 250800, hash = -433375717},
