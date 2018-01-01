@@ -1,6 +1,6 @@
 local menu = {page = "home", open = false}
+
 local rental = {}
-local withdrawn_boat = nil
 
 local closest_coords = nil
 
@@ -365,7 +365,6 @@ Citizen.CreateThread(function()
 									if menu.watercraft[j].hash == hash then
 										TriggerEvent("usa:notify", "~g~Have a good day! We'll keep this thing safe!")
 										print("matching hash found for withdrawn boat! returning to storage...")
-										--TriggerServerEvent("boatshop:storeVehicle", withdrawn_boat)
 										SetEntityAsMissionEntity( vehicle, true, true )
 										deleteCar( vehicle )
 										menu.watercraft[j].stored = true
