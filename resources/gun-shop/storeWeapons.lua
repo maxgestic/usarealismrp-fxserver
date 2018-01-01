@@ -28,7 +28,7 @@ storeWeapons = {
     ["shotguns"] = {
         { name = "Pump Shotgun", type = "weapon", hash = 0x1D073A89, price = 3000, legality = "legal", quantity = 1 },
         { name = "Bullpup", type = "weapon", hash = 0x9D61E50F, price = 8750, legality = "legal", quantity = 1 },
-        { name = "Firework Gun", type = "weapon", hash = 2138347493, price = 12000, legality = "legal", quantity = 1 },
+        { name = "Firework Gun", type = "weapon", hash = 2138347493, price = 60000, legality = "legal", quantity = 1 },
         { name = "Musket", type = "weapon", hash = -1466123874, price = 8500, legality = "legal", quantity = 1 },
         { name = "Double Barrel", type = "weapon", hash = -275439685, price = 6500, legality = "legal", quantity = 1 }
     }
