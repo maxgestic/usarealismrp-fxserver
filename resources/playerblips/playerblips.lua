@@ -24,7 +24,8 @@ local emergencySkins = {
 	{name = "mp_m_freemode_01", type="police"},
 	{name = "mp_f_freemode_01", type="police"},
 	{name = "s_m_m_doctor_01", type="fire"},
-	{name = "s_m_m_pilot_02", type="police"}
+	{name = "s_m_m_pilot_02", type="police"},
+	{name = "mp_m_fibsec_01", type="police"}
 }
 
 local magic = {}
