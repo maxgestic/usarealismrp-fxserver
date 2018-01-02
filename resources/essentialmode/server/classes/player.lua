@@ -74,7 +74,16 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 				--print("target field to retrieve: " .. field)
 				if field == "fullName" then
 					--print("field was fullName! returning : " .. self.characters[i]["firstName"]  .. " " .. self.characters[i]["lastName"])
-					return self.characters[i]["firstName"] .. " " .. self.characters[i]["lastName"]
+					if self.characters[i]["firstName"] and self.characters[i]["lastName"] then
+						--print("both first / last existed")
+						return self.characters[i]["firstName"] .. " " .. self.characters[i]["lastName"]
+					elseif self.characters[i]["firstName"] and not self.characters[i]["lastName"] then
+						print("**only first name existed for player**")
+						return self.characters[i]["firstName"]
+					elseif self.characters[i]["lastName"] and not self.characters[i]["firstName"] then
+						print("**only last name existed for player**")
+						return self.characters[i]["lastName"]
+					end
 				end
 				if self.characters[i][field] then
 					return self.characters[i][field]
