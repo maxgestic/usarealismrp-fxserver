@@ -251,10 +251,11 @@ AddEventHandler("vehShop:displayVehiclesToSell", function(vehicles)
 end)
 
 RegisterNetEvent("vehShop:loadedVehicles")
-AddEventHandler("vehShop:loadedVehicles", function(vehicles)
+AddEventHandler("vehShop:loadedVehicles", function(vehicles, check_insurance)
 	if vehicles then
 		menu.vehicles = vehicles
 	end
+	if check_insurance then menu.page = "insurance_claim" end
 end)
 
 function getPlayerDistanceFromShop(shopX,shopY,shopZ)
@@ -306,7 +307,7 @@ Citizen.CreateThread(function()
 		Wait(1)
 
 		--print("drawing marker!")
-		DrawMarker(27, markerX, markerY, markerZ, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
+		DrawMarker(27, markerX, markerY, markerZ, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 88, 230, 88, 90, 0, 0, 2, 0, 0, 0, 0)
 
 		if menu.page then
 		--	print("menu.page = " .. menu.page)
@@ -431,8 +432,8 @@ Citizen.CreateThread(function()
 
 				TriggerEvent("vehShop-GUI:Option", "Make a claim", function(cb)
 					if cb then
-						TriggerServerEvent("vehShop:loadVehicles")
-						menu.page = "insurance_claim"
+						TriggerServerEvent("vehShop:loadVehicles", true)
+						--menu.page = "insurance_claim"
 					end
 				end)
 

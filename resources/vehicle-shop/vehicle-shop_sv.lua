@@ -428,13 +428,28 @@ AddEventHandler("vehShop:loadVehiclesToSell", function()
 end)
 
 RegisterServerEvent("vehShop:loadVehicles")
-AddEventHandler("vehShop:loadVehicles", function()
+AddEventHandler("vehShop:loadVehicles", function(check_insurance)
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
-		local vehicles = user.getActiveCharacterData("vehicles")
-		if vehicles then
-			print("vehicles loaded! # = " .. #vehicles)
-			TriggerClientEvent("vehShop:loadedVehicles", userSource, vehicles)
+		if check_insurance then
+			local user_insurance = user.getActiveCharacterData("insurance")
+			if user_insurance.type == "auto" then
+				print("player has valid auto insurance!")
+				local vehicles = user.getActiveCharacterData("vehicles")
+				if vehicles then
+					print("vehicles loaded! # = " .. #vehicles)
+					TriggerClientEvent("vehShop:loadedVehicles", userSource, vehicles, true)
+				end
+			else
+				print("player has no auto insurance!")
+				TriggerClientEvent("usa:notify", userSource, "You do not have any auto insurance!")
+			end
+		else
+			local vehicles = user.getActiveCharacterData("vehicles")
+			if vehicles then
+				print("vehicles loaded! # = " .. #vehicles)
+				TriggerClientEvent("vehShop:loadedVehicles", userSource, vehicles, false)
+			end
 		end
 	end)
 end)
