@@ -60,8 +60,15 @@ AddEventHandler("RPD:removeWeapons", function()
 		end
 
 		local user_inventory = user.getActiveCharacterData("inventory")
-		print("#inventory = " .. #user_inventory)
+		print("#inventory before death: " .. #user_inventory)
 		-- find non cell phone items to delete
+		for i = #user_inventory, 1, -1 do
+			local item = user_inventory[i]
+			if item == nil or not string.find(item.name, "Cell Phone") then
+        table.remove(user_inventory, i)
+    	end
+		end
+		--[[
 		for i = 1, #user_inventory do
 			local item = user_inventory[i]
 			if not string.find(item.name, "Cell Phone") then
@@ -70,8 +77,10 @@ AddEventHandler("RPD:removeWeapons", function()
 			end
 		end
 		print("after setting nils, #inventory = " .. #user_inventory)
+		-]]
 		-- save
 		user.setActiveCharacterData("inventory", user_inventory)
+		print("#inventory after death: " .. #user_inventory)
 	end)
 end)
 
