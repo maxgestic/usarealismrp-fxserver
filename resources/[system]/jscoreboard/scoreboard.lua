@@ -77,6 +77,28 @@ local function DrawPlayerList()
 				b = 74
 			end
 
+			-- color based on user job:
+			if v[4] then
+				local job = v[4]
+				if job == "sheriff" then
+					r = 0
+					g = 0
+					b = 255
+				elseif job == "ems" or job == "fire" then
+					r = 255
+					g = 0
+					b = 0
+				elseif job == "taxi" then
+					r = 255
+					g = 210
+					b = 64
+				elseif job == "tow" then
+					r = 23
+					g = 87
+					b = 67
+				end
+			end
+
 			--Row BG
 			DrawRect( 0.11 + xOffset, 0.025 + ( k * 0.03 ), 0.2, 0.03, r, g, b, 220 )
 

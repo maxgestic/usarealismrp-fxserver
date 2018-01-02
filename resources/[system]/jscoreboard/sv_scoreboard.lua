@@ -22,7 +22,7 @@ AddEventHandler("jscoreboard:getPlayers", function()
         if id and player then
           --print("id: " .. id)
           --print("player: " .. player.getActiveCharacterData("fullName"))
-          table.insert(players_to_send, {id, player.getActiveCharacterData("fullName"), GetPlayerPing(id)})
+          table.insert(players_to_send, {id, player.getActiveCharacterData("fullName"), GetPlayerPing(id), player.getActiveCharacterData("job")})
         end
       end
       TriggerClientEvent("jscoreboard:gotPlayers", userSource, players_to_send)
