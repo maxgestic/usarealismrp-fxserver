@@ -86,11 +86,8 @@ RegisterNUICallback('retrieveVehicleItem', function(data, cb)
 															amount = round(amount, 0)
 															local quantity_to_transfer = amount
 															if quantity_to_transfer <= target_item.quantity then
-																-- Remove/decrement full item with name data.itemName from vehicle inventory with plate matching target_vehicle.plate:
-																print("removing item (" .. target_item.name .. ") from vehicle inventory, quantity: " .. quantity_to_transfer)
-																TriggerServerEvent("vehicle:removeItem", target_item.name, quantity_to_transfer, target_vehicle_plate)
-																-- Add/increment full item with name data.itemName into player's inventory:
-																TriggerServerEvent("usa:insertItem", target_item, quantity_to_transfer)
+																print("seeing if item is still in vehicle...")
+																TriggerServerEvent("vehicle:isItemStillInVehicle", target_vehicle_plate, target_item, quantity_to_transfer)
 															else
 																TriggerEvent("usa:notify", "Quantity input too high!")
 															end
@@ -177,9 +174,6 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 		elseif string.find(actionName, "give") then
 			TriggerServerEvent("interaction:giveItemToPlayer", wholeItem, targetPlayerId)
 		elseif actionName == "store" then
-			--------------------------
-			-- TODO: get quantity from user to store here
-			----------------------------
 			-- Get quantity to transfer from user input:
 			Citizen.CreateThread( function()
 							DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )

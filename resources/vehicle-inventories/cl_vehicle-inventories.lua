@@ -36,6 +36,21 @@ AddEventHandler("vehicle:checkTargetVehicleForStorage", function(item, quantity)
       local target_vehicle_plate = GetVehicleNumberPlateText(target_vehicle)
       print("plate #: " .. target_vehicle_plate)
       SetVehicleDoorOpen(target_vehicle, 5, false, false)
+      -- play animation:
+      local anim = {
+        dict = "anim@mp_fireworks",
+        name = "place_firework_1_rocket"
+      }
+      --[[
+      RequestAnimDict(anim.dict)
+      while not HasAnimDictLoaded(anim.dict) do
+        Citizen.Wait(100)
+      end
+      if not IsEntityPlayingAnim(GetPlayerPed(-1), anim.dict, anim.name, 3) and not IsPedInAnyVehicle(GetPlayerPed(-1), 1) then
+        TaskPlayAnim(GetPlayerPed(-1), anim.dict, anim.name, 8.0, -8, 3000, 53, 0, 0, 0, 0)
+      end
+      --]]
+      TriggerEvent("usa:playAnimation", anim.name, anim.dict, 5)
       --print("calling vehicle:storeItem with item.quantity: " .. item.quantity .. ", which will be changed to: " .. quantity)
       TriggerServerEvent("vehicle:storeItem", target_vehicle_plate, item, quantity)
       TriggerServerEvent("usa:removeItem", item, quantity)
@@ -73,16 +88,31 @@ AddEventHandler("vehicle:retrieveWeapon", function(target_item, target_vehicle_p
                             TriggerEvent("usa:notify", "Quantity input too high!")
                           end
                       end
+                      -- experimental:
+                      TriggerServerEvent("vehicle:finishedUsingInventory", target_vehicle_plate)
                       break
                   else
                       DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
                   end
               elseif ( UpdateOnscreenKeyboard() == 2 ) then
+                  -- experimental:
+                  TriggerServerEvent("vehicle:finishedUsingInventory", target_vehicle_plate)
                   break
               end
           Citizen.Wait( 0 )
       end
   end )
+end)
+
+RegisterNetEvent("vehicle:continueRetrievingItem")
+AddEventHandler("vehicle:continueRetrievingItem", function(plate, item, quantity)
+  -- Remove/decrement full item with name data.itemName from vehicle inventory with plate matching target_vehicle.plate:
+  print("removing item (" .. item.name .. ") from vehicle inventory, quantity: " .. quantity)
+  TriggerServerEvent("vehicle:removeItem", item.name, quantity, plate)
+  -- Add/increment full item with name data.itemName into player's inventory:
+  TriggerServerEvent("usa:insertItem", item, quantity)
+  -- experimental:
+  TriggerServerEvent("vehicle:finishedUsingInventory", plate)
 end)
 -----------------------------------------
 -- OPEN/CLOSE TARGET VEHICLE INVENTORY --
