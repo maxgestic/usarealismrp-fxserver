@@ -488,6 +488,8 @@ Citizen.CreateThread(function()
 
 					if menu.page == k then
 
+						TriggerEvent("vehShop-GUI:Title", menu.page)
+
 						-- todo: do all the vehicles fit on one page?
 						for i = 1, #vehicleShopItems["vehicles"][k] do
 							local vehicle = vehicleShopItems["vehicles"][k][i]
