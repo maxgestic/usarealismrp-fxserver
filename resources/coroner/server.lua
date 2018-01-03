@@ -73,7 +73,7 @@ TriggerEvent('es:addCommand', 'dos', function(source, args, user)
 			targetPlayer.setActiveCharacterData("weapons", {})
 			-- remove player inventory items (except phone -- since it's a pain to redo contacts)
 			print("removing all items except cell phone!")
-			local target_inventory = user.getActiveCharacterData("inventory")
+			local target_inventory = targetPlayer.getActiveCharacterData("inventory")
 			for i = #target_inventory, 1, -1 do
 				local item = target_inventory[i]
 				if item == nil or not string.find(item.name, "Cell Phone") then
@@ -92,7 +92,7 @@ TriggerEvent('es:addCommand', 'dos', function(source, args, user)
 				end
 			end
 			--]]
-			user.setActiveCharacterData("inventory", target_inventory)
+			targetPlayer.setActiveCharacterData("inventory", target_inventory)
 			-- remove player licenses
 			print("removing licenses!")
 			targetPlayer.setActiveCharacterData("licenses", {})
