@@ -424,7 +424,8 @@ $(function() {
             actionName: actionName.toLowerCase(),
             itemName: itemName,
             wholeItem: wholeItem,
-            target_vehicle_plate: target_vehicle_plate
+            target_vehicle_plate: target_vehicle_plate,
+            current_job: currentPlayerJob
         }));
         closeNav();
     });

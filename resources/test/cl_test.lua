@@ -67,8 +67,10 @@ RegisterNUICallback('retrieveVehicleItem', function(data, cb)
 	TriggerEvent("test:escapeFromCSharp")
 	local target_vehicle_plate = data.target_vehicle_plate
 	local target_item = data.wholeItem
+	local current_job = data.current_job
+	--print("current_job: " .. current_job)
 	local facing_vehicle = getVehicleInFrontOfUser()
-	if facing_vehicle ~= 0 and GetVehicleDoorLockStatus(facing_vehicle) ~= 2 then
+	if (facing_vehicle ~= 0 and GetVehicleDoorLockStatus(facing_vehicle) ~= 2) or current_job == "police" then
 		-- If item.type == "weapon" then check if player has < 3 weapons:
 		if target_item.type == "weapon" then
 			TriggerServerEvent("vehicle:checkPlayerWeaponAmount", target_item, target_vehicle_plate)
