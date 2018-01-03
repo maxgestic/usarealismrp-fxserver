@@ -158,7 +158,7 @@ TriggerEvent('es:addCommand', 'seize', function(source, args, user)
 				TriggerEvent('es:getPlayerFromId', targetId, function(target)
 					local targetInventory = target.getActiveCharacterData("inventory")
 					local targetWeapons = target.getActiveCharacterData("weapons")
-					for i = 1, #targetInventory do
+					for i = #targetInventory, 1, -1 do
 						--print("checking item: " .. targetInventory[i].name)
 						if targetInventory[i].legality == "illegal" then
 							TriggerClientEvent("usa:notify", source, "~y~Seized: ~w~(x".. targetInventory[i].quantity ..") " .. targetInventory[i].name)
@@ -166,7 +166,7 @@ TriggerEvent('es:addCommand', 'seize', function(source, args, user)
 							table.remove(targetInventory, i)
 						end
 					end
-					for j = 1, #targetWeapons do
+					for j = #targetWeapons, 1, -1 do
 						--print("checking item: " .. targetWeapons[j].name)
 						if targetWeapons[j].legality == "illegal" then
 							TriggerClientEvent("usa:notify", source, "~y~Seized: ~w~" .. targetWeapons[j].name)
