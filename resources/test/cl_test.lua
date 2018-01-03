@@ -67,42 +67,47 @@ RegisterNUICallback('retrieveVehicleItem', function(data, cb)
 	TriggerEvent("test:escapeFromCSharp")
 	local target_vehicle_plate = data.target_vehicle_plate
 	local target_item = data.wholeItem
-	-- If item.type == "weapon" then check if player has < 3 weapons:
-	if target_item.type == "weapon" then
-		TriggerServerEvent("vehicle:checkPlayerWeaponAmount", target_item, target_vehicle_plate)
+	local facing_vehicle = getVehicleInFrontOfUser()
+	if facing_vehicle ~= 0 and GetVehicleDoorLockStatus(facing_vehicle) ~= 2 then
+		-- If item.type == "weapon" then check if player has < 3 weapons:
+		if target_item.type == "weapon" then
+			TriggerServerEvent("vehicle:checkPlayerWeaponAmount", target_item, target_vehicle_plate)
+		else
+			-- Get quantity to transfer from user input:
+			Citizen.CreateThread( function()
+							DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+							while true do
+									if ( UpdateOnscreenKeyboard() == 1 ) then
+											local input_amount = GetOnscreenKeyboardResult()
+											if ( string.len( input_amount ) > 0 ) then
+													local amount = tonumber( input_amount )
+													if ( amount > 0 ) then
+															-- trigger server event to remove money
+															amount = round(amount, 0)
+															local quantity_to_transfer = amount
+															if quantity_to_transfer <= target_item.quantity then
+																-- Remove/decrement full item with name data.itemName from vehicle inventory with plate matching target_vehicle.plate:
+																print("removing item (" .. target_item.name .. ") from vehicle inventory, quantity: " .. quantity_to_transfer)
+																TriggerServerEvent("vehicle:removeItem", target_item.name, quantity_to_transfer, target_vehicle_plate)
+																-- Add/increment full item with name data.itemName into player's inventory:
+																TriggerServerEvent("usa:insertItem", target_item, quantity_to_transfer)
+															else
+																TriggerEvent("usa:notify", "Quantity input too high!")
+															end
+													end
+													break
+											else
+													DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+											end
+									elseif ( UpdateOnscreenKeyboard() == 2 ) then
+											break
+									end
+							Citizen.Wait( 0 )
+					end
+			end )
+		end
 	else
-		-- Get quantity to transfer from user input:
-		Citizen.CreateThread( function()
-						DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
-						while true do
-								if ( UpdateOnscreenKeyboard() == 1 ) then
-										local input_amount = GetOnscreenKeyboardResult()
-										if ( string.len( input_amount ) > 0 ) then
-												local amount = tonumber( input_amount )
-												if ( amount > 0 ) then
-														-- trigger server event to remove money
-														amount = round(amount, 0)
-														local quantity_to_transfer = amount
-														if quantity_to_transfer <= target_item.quantity then
-															-- Remove/decrement full item with name data.itemName from vehicle inventory with plate matching target_vehicle.plate:
-															print("removing item (" .. target_item.name .. ") from vehicle inventory, quantity: " .. quantity_to_transfer)
-															TriggerServerEvent("vehicle:removeItem", target_item.name, quantity_to_transfer, target_vehicle_plate)
-															-- Add/increment full item with name data.itemName into player's inventory:
-															TriggerServerEvent("usa:insertItem", target_item, quantity_to_transfer)
-														else
-															TriggerEvent("usa:notify", "Quantity input too high!")
-														end
-												end
-												break
-										else
-												DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
-										end
-								elseif ( UpdateOnscreenKeyboard() == 2 ) then
-										break
-								end
-						Citizen.Wait( 0 )
-				end
-		end )
+		TriggerEvent("usa:notify", "Can't retrieve item. Vehicle is locked.")
 	end
 end)
 
@@ -152,8 +157,8 @@ RegisterNUICallback('performPoliceAction', function(data, cb)
 end)
 
 RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
-    TriggerEvent("test:escapeFromCSharp")
-    local actionName = data.actionName
+  TriggerEvent("test:escapeFromCSharp")
+  local actionName = data.actionName
 	local itemName = data.itemName
 	local wholeItem = data.wholeItem
 	local targetPlayerId = data.playerId
@@ -172,9 +177,35 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 		elseif string.find(actionName, "give") then
 			TriggerServerEvent("interaction:giveItemToPlayer", wholeItem, targetPlayerId)
 		elseif actionName == "store" then
-			-- todo: get quantity from user to store
-			local quantity = 1
-			TriggerEvent("vehicle:checkTargetVehicleForStorage", wholeItem, quantity)
+			--------------------------
+			-- TODO: get quantity from user to store here
+			----------------------------
+			-- Get quantity to transfer from user input:
+			Citizen.CreateThread( function()
+							DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+							while true do
+									if ( UpdateOnscreenKeyboard() == 1 ) then
+											local input_amount = GetOnscreenKeyboardResult()
+											if ( string.len( input_amount ) > 0 ) then
+													local amount = tonumber( input_amount )
+													if ( amount > 0 ) then
+															-- trigger server event to remove money
+															amount = round(amount, 0)
+															local quantity_to_transfer = amount
+															if quantity_to_transfer <= wholeItem.quantity then
+																TriggerEvent("vehicle:checkTargetVehicleForStorage", wholeItem, quantity_to_transfer)
+															end
+													end
+													break
+											else
+													DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+											end
+									elseif ( UpdateOnscreenKeyboard() == 2 ) then
+											break
+									end
+							Citizen.Wait( 0 )
+					end
+			end )
 		end
 	end
 end)
@@ -330,4 +361,18 @@ end)
 
 function round(num, numDecimalPlaces)
   return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+end
+
+function getVehicleInFrontOfUser()
+	local playerped = GetPlayerPed(-1)
+	local coordA = GetEntityCoords(playerped, 1)
+	local coordB = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 5.0, 0.0)
+	local targetVehicle = getVehicleInDirection(coordA, coordB)
+	return targetVehicle
+end
+
+function getVehicleInDirection(coordFrom, coordTo)
+	local rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 10, GetPlayerPed(-1), 0)
+	local a, b, c, d, vehicle = GetRaycastResult(rayHandle)
+	return vehicle
 end

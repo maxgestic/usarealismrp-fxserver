@@ -29,16 +29,23 @@ AddEventHandler("vehicle:checkTargetVehicleForStorage", function(item, quantity)
   -- 3) remove item from user inventory or decrement appropriate quantity
   local target_vehicle = getVehicleInFrontOfUser()
   print("target_vehicle: " .. target_vehicle)
-  if target_vehicle ~= 0 then
-    local target_vehicle_plate = GetVehicleNumberPlateText(target_vehicle)
-    print("plate #: " .. target_vehicle_plate)
-    SetVehicleDoorOpen(target_vehicle, 5, false, false)
-    TriggerServerEvent("vehicle:storeItem", target_vehicle_plate, item, quantity)
-    TriggerServerEvent("usa:removeItem", item, quantity)
-    -- remove weapon from ped if type was weapon:
-    if item.type == "weapon" then
-      RemoveWeaponFromPed(GetPlayerPed(-1), item.hash)
+  -- see if car is locked or not:
+  local lock_status = GetVehicleDoorLockStatus(target_vehicle)
+  if lock_status ~= 2 then
+    if target_vehicle ~= 0 then
+      local target_vehicle_plate = GetVehicleNumberPlateText(target_vehicle)
+      print("plate #: " .. target_vehicle_plate)
+      SetVehicleDoorOpen(target_vehicle, 5, false, false)
+      --print("calling vehicle:storeItem with item.quantity: " .. item.quantity .. ", which will be changed to: " .. quantity)
+      TriggerServerEvent("vehicle:storeItem", target_vehicle_plate, item, quantity)
+      TriggerServerEvent("usa:removeItem", item, quantity)
+      -- remove weapon from ped if type was weapon:
+      if item.type == "weapon" then
+        RemoveWeaponFromPed(GetPlayerPed(-1), item.hash)
+      end
     end
+  else
+    TriggerEvent("usa:notify", "Vehicle is locked. Can't open storage.")
   end
 end)
 

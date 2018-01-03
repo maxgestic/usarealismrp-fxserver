@@ -151,9 +151,9 @@ AddEventHandler("usa:checkPlayerMoney", function(activity, amount, callbackEvent
     end)
 end)
 
+-- assumes quantity provided is less than or equal to_remove_item.quantity
 RegisterServerEvent("usa:removeItem")
 AddEventHandler("usa:removeItem", function(to_remove_item, quantity)
-  -- todo implement support for removing more than 1 at a time (aka quantity parameter above)
   print("inside usa:removeItem!")
   local userSource = tonumber(source)
   TriggerEvent("es:getPlayerFromId", userSource, function(user)
@@ -166,11 +166,11 @@ AddEventHandler("usa:removeItem", function(to_remove_item, quantity)
       --print("checking item: " .. item.name)
       if item.name == to_remove_item.name then
         print("found a matching inventory item for usa:removeItem! removing: " .. item.name)
-        if item.quantity == 1 then
+        if to_remove_item.quantity - quantity <= 0 then -- assumes quantity provided is less than or equal to to_remove_item.quantity
           table.remove(user_inventory, a)
           user.setActiveCharacterData("inventory", user_inventory)
         else
-          user_inventory[a].quantity = item.quantity - 1
+          user_inventory[a].quantity = user_inventory[a].quantity - quantity
           user.setActiveCharacterData("inventory", user_inventory)
         end
         return

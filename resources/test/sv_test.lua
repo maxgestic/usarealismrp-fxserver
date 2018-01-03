@@ -30,11 +30,13 @@ AddEventHandler("interaction:loadVehicleInventoryForInteraction", function(plate
     if players then
       for id, player in pairs(players) do
         local player_vehicles = player.getActiveCharacterData("vehicles")
-        for i = 1, #player_vehicles do
-          local veh = player_vehicles[i]
-          if string.find(plate, tostring(veh.plate)) then
-            print("found a matching plate! sending inventory to client!")
-            TriggerClientEvent("interaction:vehicleInventoryLoaded", userSource, veh.inventory)
+        if player_vehicles then
+          for i = 1, #player_vehicles do
+            local veh = player_vehicles[i]
+            if string.find(plate, tostring(veh.plate)) then
+              print("found a matching plate! sending inventory to client!")
+              TriggerClientEvent("interaction:vehicleInventoryLoaded", userSource, veh.inventory)
+            end
           end
         end
       end
