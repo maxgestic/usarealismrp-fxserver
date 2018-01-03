@@ -214,7 +214,7 @@ function populateInventory(inventory, weapons, licenses) {
     $(".sidenav a").hide();
     for(i in licenses) {
         var licenseName = licenses[i].name;
-        $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x1)</span> " + licenseName + "</a>");
+        $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+licenses[i].quantity+")</span> " + licenseName + "</a>");
     }
     for(i in inventory) {
       var inventoryItemName = inventory[i].name;
@@ -230,12 +230,12 @@ function populateInventory(inventory, weapons, licenses) {
         var weaponLegality = weapons[i].legality;
         if (typeof weaponLegality != "undefined") {
             if (weaponLegality == "illegal") {
-                $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x1)</span> <span class='illegal-item'>" + weaponName + "</span></a>");
+                $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+weapons[i].quantity+")</span> <span class='illegal-item'>" + weaponName + "</span></a>");
             } else {
-                $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x1)</span> " + weaponName + "</a>");
+                $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+weapons[i].quantity+")</span> " + weaponName + "</a>");
             }
         } else {
-            $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x1)</span> " + weaponName + "</a>");
+            $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+weapons[i].quantity+")</span> " + weaponName + "</a>");
         }
     }
     // back btn
