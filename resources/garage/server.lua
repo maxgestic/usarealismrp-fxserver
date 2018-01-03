@@ -40,17 +40,19 @@ AddEventHandler("garage:storeKey", function(plate)
 						print("found a key!!")
 						print("checking plate...")
 						print("type of item.plate = " .. type(item.plate))
-						print("type of plate param = " .. type(plate))
-						print("item.plate = " .. item.plate)
-						print("plate param = " .. plate)
-						if string.find(plate, item.plate) then
-							print("matching plate found!")
-							print("storing key for plate #" .. plate)
-							table.remove(inv, i)
-							user.setActiveCharacterData("inventory", inv)
-							-- remove key from lock resource toggle list:
-							TriggerEvent("lock:removePlate", item.plate)
-							return
+						if plate then
+							print("type of plate param = " .. type(plate))
+							print("item.plate = " .. item.plate)
+							print("plate param = " .. plate)
+							if string.find(plate, item.plate) then
+								print("matching plate found!")
+								print("storing key for plate #" .. plate)
+								table.remove(inv, i)
+								user.setActiveCharacterData("inventory", inv)
+								-- remove key from lock resource toggle list:
+								TriggerEvent("lock:removePlate", item.plate)
+								return
+							end
 						end
 					end
 				end
@@ -66,11 +68,13 @@ AddEventHandler("garage:storeVehicle", function(handle, numberPlateText)
 		local userVehicles = user.getActiveCharacterData("vehicles")
 		for i = 1, #userVehicles do
 			local vehicle = userVehicles[i]
-			if string.match(numberPlateText,tostring(vehicle.plate)) ~= nil or numberPlateText == vehicle.plate then -- player actually owns car that is being stored
-				userVehicles[i].stored = true
-				user.setActiveCharacterData("vehicles", userVehicles)
-				TriggerClientEvent("garage:storeVehicle", userSource)
-				return
+			if numberPlateText and vehicle then
+				if string.match(numberPlateText,tostring(vehicle.plate)) ~= nil or numberPlateText == vehicle.plate then -- player actually owns car that is being stored
+					userVehicles[i].stored = true
+					user.setActiveCharacterData("vehicles", userVehicles)
+					TriggerClientEvent("garage:storeVehicle", userSource)
+					return
+				end
 			end
 		end
 		TriggerClientEvent("garage:notify", userSource, "~r~You do not own that vehicle!")
