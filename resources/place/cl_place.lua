@@ -21,7 +21,11 @@ AddEventHandler("place", function()
 			SetPedIntoVehicle(lPed, targetVehicle, 2) -- place in back right seat
 		end
 
-        -- TODOO:
+    -- try to prevent the car from locking when a person is placed inside (experimental):
+    TriggerServerEvent("lock:setLocked", GetVehicleNumberPlateText(targetVehicle), false)
+    SetVehicleDoorsLocked(targetVehicle, 1) -- unlock
+
+        -- TODO0:
          -- DetachEntity(GetPlayerPed(-1), true, false)	 -- detach from player
         -- drag = false?
 

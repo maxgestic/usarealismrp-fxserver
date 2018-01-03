@@ -90,6 +90,11 @@ function setLocked(plate, locked)
     print("plate #" .. plate .. " lock status set to: " .. tostring(locked))
 end
 
+RegisterServerEvent("lock:setLocked")
+AddEventHandler("lock:setLocked", function(plate, locked)
+  setLocked(plate, locked)
+end)
+
 TriggerEvent('es:addCommand', 'locklist', function(source, args, user)
     for k, v in pairs(vehicles) do
         print("key = " .. k .. ", type = " .. type(k))
