@@ -50,7 +50,7 @@ AddEventHandler("vehicle:checkTargetVehicleForStorage", function(item, quantity)
         TaskPlayAnim(GetPlayerPed(-1), anim.dict, anim.name, 8.0, -8, 3000, 53, 0, 0, 0, 0)
       end
       --]]
-      TriggerEvent("usa:playAnimation", anim.name, anim.dict, 5)
+      TriggerEvent("usa:playAnimation", anim.name, anim.dict, 4)
       --print("calling vehicle:storeItem with item.quantity: " .. item.quantity .. ", which will be changed to: " .. quantity)
       TriggerServerEvent("vehicle:storeItem", target_vehicle_plate, item, quantity)
       TriggerServerEvent("usa:removeItem", item, quantity)

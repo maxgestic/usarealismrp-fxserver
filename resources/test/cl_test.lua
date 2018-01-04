@@ -84,7 +84,13 @@ RegisterNUICallback('retrieveVehicleItem', function(data, cb)
 											if ( string.len( input_amount ) > 0 ) then
 													local amount = tonumber( input_amount )
 													if ( amount > 0 ) then
-															-- trigger server event to remove money
+														-- play animation:
+														local anim = {
+											        dict = "anim@move_m@trash",
+											        name = "pickup"
+											      }
+														TriggerEvent("usa:playAnimation", anim.name, anim.dict, 4)
+															-- see if item is able to be removed:
 															amount = round(amount, 0)
 															local quantity_to_transfer = amount
 															if quantity_to_transfer <= target_item.quantity then
