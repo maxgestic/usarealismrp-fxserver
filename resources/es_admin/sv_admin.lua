@@ -753,7 +753,6 @@ docid = result._id (except probably change to the _rev instead)
 --]]
 
 TriggerEvent('es:addCommand', 'stats', function(source, args, user)
-	TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "WEIGHT: " .. user.getActiveCharacterCurrentInventoryWeight())
 	if args[2] then
 		--admins only
 		if user.getGroup() == "admin" or user.getGroup() == "superadmin" or user.getGroup() == "owner" then
@@ -814,6 +813,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
 					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
 					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Inventory: " .. inventorynames .. " |")
+					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Weight: " .. user.getActiveCharacterCurrentInventoryWeight())
 					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
 				else
 					TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "User not found!")
@@ -879,6 +879,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Inventory: " .. inventorynames .. " |")
+		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Weight: " .. user.getActiveCharacterCurrentInventoryWeight())
 		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
 	end
 end)

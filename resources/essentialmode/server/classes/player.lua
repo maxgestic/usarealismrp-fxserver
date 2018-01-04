@@ -26,12 +26,15 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 
 	local rTable = {}
 
-	rTable.getCanActiveCharacterCurrentHoldItem = function(item)
+	rTable.getCanActiveCharacterCurrentHoldItem = function(item_to_add)
 		print("getting active character inventory weight!")
 		local current_weight = 0.0
 		for i = 1, #self.characters do
 			local char = self.characters[i]
 			if char.active == true then
+				-----------------------------
+				-- ADD UP INVENTORY WEIGHT --
+				-----------------------------
 				local char_inventory = char.inventory
 				for j = 1, #char_inventory do
 					local item = char_inventory[j]
@@ -41,9 +44,23 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 						current_weight = current_weight + (item.weight * item.quantity)
 					end
 				end
-				-- done adding all the inventory item weights, see if player has room for given item
-				if item.weight then
-					if current_weight + item.weight <= 100.0 then
+				-----------------------------
+				-- ADD UP WEAPONS WEIGHT --
+				-----------------------------
+				local char_weapons = char.weapons
+				for j = 1, #char_weapons do
+					local item = char_weapons[j]
+					if item then
+						if not item.weight then item.weight = 5.0 end -- for players with old weapon items that don't have a weight property yet
+						print("adding item: " .. item.name .. ", weight: " .. item.weight)
+						current_weight = current_weight + (item.weight * item.quantity)
+					end
+				end
+				---------------------------------------------------------------------------------------
+				-- done adding all the inventory item weights, see if player has room for given item --
+				---------------------------------------------------------------------------------------
+				if item_to_add.weight then
+					if current_weight + item_to_add.weight <= 100.0 then
 						return true
 					else
 						return false
@@ -59,11 +76,26 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 		for i = 1, #self.characters do
 			local char = self.characters[i]
 			if char.active == true then
+				-----------------------------
+				-- ADD UP INVENTORY WEIGHT --
+				-----------------------------
 				local char_inventory = char.inventory
 				for j = 1, #char_inventory do
 					local item = char_inventory[j]
 					if item then
 						if not item.weight then item.weight = 1.0 end -- for players with old items that don't have a weight property yet
+						print("adding item: " .. item.name .. ", weight: " .. item.weight)
+						current_weight = current_weight + (item.weight * item.quantity)
+					end
+				end
+				-----------------------------
+				-- ADD UP WEAPONS WEIGHT --
+				-----------------------------
+				local char_weapons = char.weapons
+				for j = 1, #char_weapons do
+					local item = char_weapons[j]
+					if item then
+						if not item.weight then item.weight = 5.0 end -- for players with old weapon items that don't have a weight property yet
 						print("adding item: " .. item.name .. ", weight: " .. item.weight)
 						current_weight = current_weight + (item.weight * item.quantity)
 					end
