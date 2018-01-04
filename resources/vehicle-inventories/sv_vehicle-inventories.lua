@@ -143,7 +143,7 @@ AddEventHandler("vehicle:checkPlayerWeaponAmount", function(item, vehicle_plate)
       end
     end)
   else
-    print("****discontinuing****")
+    print("****discontinuing weapon retreival****")
     TriggerClientEvent("usa:notify", userSource, "Please wait a moment.")
   end
 end)
@@ -183,7 +183,9 @@ AddEventHandler("vehicle:isItemStillInVehicle", function(plate, item, quantity)
       end
     end)
   else
-    print("****discontinuing****")
+    print("****discontinuing inventory item retrieval****")
     TriggerClientEvent("usa:notify", userSource, "Please wait a moment.")
+    -- experimental:
+    vehicles_being_checked[plate] = nil
   end
 end)
