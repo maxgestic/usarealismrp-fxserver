@@ -20,25 +20,6 @@ var target_vehicle_plate = "";
 var target_vehicle_id = 0;
 var target_vehicle_inventory = 0;
 
-var disableMouseScroll = true;
-
-var documentWidth = document.documentElement.clientWidth;
-var documentHeight = document.documentElement.clientHeight;
-
-var cursor = document.getElementById("cursor");
-var cursorX = documentWidth / 2;
-var cursorY = documentHeight / 2;
-
-function UpdateCursorPos() {
-    cursor.style.left = cursorX;
-    cursor.style.top = cursorY;
-}
-
-function Click(x, y) {
-    var element = $(document.elementFromPoint(x, y));
-    element.focus().click();
-}
-
 function inventoryBackBtn() {
     $(".sidenav .inventory-item").remove();
     // initiliaze home menu
@@ -214,32 +195,32 @@ function populateInventory(inventory, weapons, licenses) {
     $(".sidenav a").hide();
     for(i in licenses) {
         var licenseName = licenses[i].name;
-        $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+licenses[i].quantity+")</span> " + licenseName + "</a>");
+        $(".sidenav .sidenav-buttons").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+licenses[i].quantity+")</span> " + licenseName + "</a>");
     }
     for(i in inventory) {
       var inventoryItemName = inventory[i].name;
       var inventoryItemQuantity = inventory[i].quantity;
       var inventoryItemLegality = inventory[i].legality;
       if (inventoryItemLegality == "illegal")
-        $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+inventoryItemQuantity+")</span> <span class='illegal-item'>" + inventoryItemName + "</span></a>");
+        $(".sidenav .sidenav-buttons").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+inventoryItemQuantity+")</span> <span class='illegal-item'>" + inventoryItemName + "</span></a>");
       else
-        $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+inventoryItemQuantity+")</span> " + inventoryItemName + "</a>");
+        $(".sidenav .sidenav-buttons").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+inventoryItemQuantity+")</span> " + inventoryItemName + "</a>");
     }
     for(i in weapons) {
         var weaponName = weapons[i].name;
         var weaponLegality = weapons[i].legality;
         if (typeof weaponLegality != "undefined") {
             if (weaponLegality == "illegal") {
-                $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+weapons[i].quantity+")</span> <span class='illegal-item'>" + weaponName + "</span></a>");
+                $(".sidenav .sidenav-buttons").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+weapons[i].quantity+")</span> <span class='illegal-item'>" + weaponName + "</span></a>");
             } else {
-                $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+weapons[i].quantity+")</span> " + weaponName + "</a>");
+                $(".sidenav .sidenav-buttons").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+weapons[i].quantity+")</span> " + weaponName + "</a>");
             }
         } else {
-            $(".sidenav").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+weapons[i].quantity+")</span> " + weaponName + "</a>");
+            $(".sidenav .sidenav-buttons").append("<a class='inventory-item'><span class='inventory-item-quantity'>(x"+weapons[i].quantity+")</span> " + weaponName + "</a>");
         }
     }
     // back btn
-    $(".sidenav").append("<a id='inventory-back-btn' class='inventory-item'>Back</a>");
+    $(".sidenav .sidenav-buttons").append("<a id='inventory-back-btn' class='inventory-item'>Back</a>");
 
 }
 
@@ -264,7 +245,6 @@ function closeNav() {
 $(function() {
     window.addEventListener('message', function(event) {
         if (event.data.type == "enableui") {
-            cursor.style.display = event.data.enable ? "block" : "none";
             document.body.style.display = event.data.enable ? "block" : "none";
             /* Set the width of the side navigation to 250px */
             document.getElementById("mySidenav").style.width = "410px";
@@ -294,9 +274,6 @@ $(function() {
                     //alert("problem loading target veh");
                 }
             }
-        } else if (event.data.type == "click") {
-            // Avoid clicking the cursor itself, click 1px to the top/left;
-            Click(cursorX - 1, cursorY - 1);
         } else if (event.data.type == "inventoryLoaded") {
             playerInventory = event.data.inventory;
             playerWeapons = event.data.weapons;
@@ -309,14 +286,6 @@ $(function() {
             currentPlayerJob = event.data.job;
         }
     });
-
-        $(document).mousemove(function(event) {
-            if (disableMouseScroll == true) {
-                cursorX = event.pageX;
-                cursorY = event.pageY;
-                UpdateCursorPos();
-            }
-        });
 
     document.onkeyup = function (data) {
         if (data.which == 27) { // Escape key

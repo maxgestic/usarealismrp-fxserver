@@ -68,6 +68,8 @@ body {
 
 .sidenav-buttons {
     padding-bottom: 2em;
+    overflow-y: auto;
+	max-height: 50%;
 }
 
 /* target player for police actions */
