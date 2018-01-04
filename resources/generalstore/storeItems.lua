@@ -18,7 +18,7 @@ storeItems = {
       --{name = "Champagne", price = 200, type = "Drink", substance = 15.0, quantity = 1, legality = "legal", weight = 8}
     },
     ["Vehicle"] = {
-        { name = "Repair Kit", price = 1500, type = "vehicle", quantity = 1, legality = "legal", weight = 10}
+        { name = "Repair Kit", price = 1500, type = "vehicle", quantity = 1, legality = "legal", weight = 12}
     },
     ["Electronics"] = {
         { name = "Cell Phone", price = 750, type = "misc", quantity = 1, legality = "legal", contacts = {}, conversations = {}, weight = 3}
