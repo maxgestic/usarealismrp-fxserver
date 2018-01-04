@@ -26,6 +26,54 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 
 	local rTable = {}
 
+	rTable.getCanActiveCharacterCurrentHoldItem = function(item)
+		print("getting active character inventory weight!")
+		local current_weight = 0.0
+		for i = 1, #self.characters do
+			local char = self.characters[i]
+			if char.active == true then
+				local char_inventory = char.inventory
+				for j = 1, #char_inventory do
+					local item = char_inventory[j]
+					if item then
+						if not item.weight then item.weight = 1.0 end -- for players with old items that don't have a weight property yet
+						print("adding item: " .. item.name .. ", weight: " .. item.weight)
+						current_weight = current_weight + (item.weight * item.quantity)
+					end
+				end
+				-- done adding all the inventory item weights, see if player has room for given item
+				if item.weight then
+					if current_weight + item.weight <= 100.0 then
+						return true
+					else
+						return false
+					end
+				end
+			end
+		end
+	end
+
+	rTable.getActiveCharacterCurrentInventoryWeight = function()
+		print("getting active character inventory weight!")
+		local current_weight = 0.0
+		for i = 1, #self.characters do
+			local char = self.characters[i]
+			if char.active == true then
+				local char_inventory = char.inventory
+				for j = 1, #char_inventory do
+					local item = char_inventory[j]
+					if item then
+						if not item.weight then item.weight = 1.0 end -- for players with old items that don't have a weight property yet
+						print("adding item: " .. item.name .. ", weight: " .. item.weight)
+						current_weight = current_weight + (item.weight * item.quantity)
+					end
+				end
+				-- done adding all the inventory item weights
+				return current_weight
+			end
+		end
+	end
+
 	rTable.setActiveCharacterData = function(field, data)
 		for i = 1, #self.characters do
 			local char = self.characters[i]
