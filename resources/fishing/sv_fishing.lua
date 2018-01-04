@@ -2,21 +2,27 @@ RegisterServerEvent("fishing:giveFish")
 AddEventHandler("fishing:giveFish", function(fish)
   local userSource = tonumber(source)
   TriggerEvent("es:getPlayerFromId", userSource, function(user)
-    local inventory = user.getActiveCharacterData("inventory")
-    for i = 1, #inventory do
-      local item = inventory[i]
-      if item then
-        if item.name == fish.name then
-          print("found fish " .. item.name .. " in player's inventory already! incrementing..")
-          inventory[i].quantity = item.quantity + 1
-          user.setActiveCharacterData("inventory", inventory)
-          return
+    if user.getCanActiveCharacterCurrentHoldItem(fish) then
+      local inventory = user.getActiveCharacterData("inventory")
+      for i = 1, #inventory do
+        local item = inventory[i]
+        if item then
+          if item.name == fish.name then
+            print("found fish " .. item.name .. " in player's inventory already! incrementing..")
+            inventory[i].quantity = item.quantity + 1
+            user.setActiveCharacterData("inventory", inventory)
+            TriggerEvent("usa_rp:notify", userSource, "You caught a: " .. randomFish.name)
+            return
+          end
         end
       end
+      print("adding fish to player inventory!")
+      table.insert(inventory, fish)
+      user.setActiveCharacterData("inventory", inventory)
+      TriggerEvent("usa_rp:notify", userSource, "You caught a: " .. randomFish.name)
+    else
+      TriggerClientEvent("usa:notify", userSource, "Inventory is full!")
     end
-    print("adding fish to player inventory!")
-    table.insert(inventory, fish)
-    user.setActiveCharacterData("inventory", inventory)
   end)
 end)
 

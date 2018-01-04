@@ -188,7 +188,6 @@ Citizen.CreateThread(function()
                     local randomFish = fish[math.random(1, #fish)]
                     -- instead of random, add random fish by % chance of selection
                     Citizen.Trace("You caught a: " .. randomFish.name)
-                    TriggerEvent("usa_rp:notify", "You caught a: " .. randomFish.name)
                     TriggerServerEvent("fishing:giveFish", randomFish)
 					if ShowChatMSG then Chat('^2'..msg[3]) end
 					StopAnimTask(GetPed(), 'amb@world_human_stand_fishing@idle_a','idle_c',2.0)

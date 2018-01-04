@@ -237,7 +237,8 @@ Citizen.CreateThread(function()
             name = "Meth",
             type = "drug",
             legality = "illegal",
-            quantity = 2
+            quantity = 2,
+            weight = 7
           }
           Citizen.Trace("giving meth to player!")
           TriggerServerEvent("usa_rp:giveItem", meth)

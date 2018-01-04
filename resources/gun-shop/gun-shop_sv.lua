@@ -79,25 +79,29 @@ end)
 
 RegisterServerEvent("mini:checkGunMoney")
 AddEventHandler("mini:checkGunMoney", function(weapon)
-    local userSource = source
-    TriggerEvent('es:getPlayerFromId', userSource, function(user)
-        local weapons = user.getActiveCharacterData("weapons")
-        if #weapons < MAX_PLAYER_WEAPON_SLOTS then
-            if weapon.price <= user.getActiveCharacterData("money") then -- see if user has enough money
-                --user.removeMoney(weapon.price) -- subtract price from user's money and store resulting amounts
-                local user_money = user.getActiveCharacterData("money")
-                user.setActiveCharacterData("money", user_money - weapon.price)
-                table.insert(weapons, weapon)
-                user.setActiveCharacterData("weapons", weapons)
-                TriggerClientEvent("mini:equipWeapon", userSource, userSource, weapon.hash, weapon.name) -- equip
-                TriggerClientEvent("chatMessage", userSource, "Gun Store", {41, 103, 203}, "^0You now own a ^3" .. weapon.name .. "^0!")
-				TriggerEvent("sway:updateDB", userSource)
-            else
-                TriggerClientEvent("mini:insufficientFunds", userSource, weapon.price, "gun")
-            end
+  local userSource = source
+  TriggerEvent('es:getPlayerFromId', userSource, function(user)
+    local weapons = user.getActiveCharacterData("weapons")
+    if #weapons < MAX_PLAYER_WEAPON_SLOTS then
+      if user.getCanActiveCharacterCurrentHoldItem(weapon) then
+        local user_money = user.getActiveCharacterData("money")
+        if weapon.price <= user_money then -- see if user has enough money
+          --user.removeMoney(weapon.price) -- subtract price from user's money and store resulting amounts
+          user.setActiveCharacterData("money", user_money - weapon.price)
+          table.insert(weapons, weapon)
+          user.setActiveCharacterData("weapons", weapons)
+          TriggerClientEvent("mini:equipWeapon", userSource, userSource, weapon.hash, weapon.name) -- equip
+          TriggerClientEvent("chatMessage", userSource, "Gun Store", {41, 103, 203}, "^0You now own a ^3" .. weapon.name .. "^0!")
+          --TriggerEvent("sway:updateDB", userSource)
         else
-            --notify user of full weapon slots
-            TriggerClientEvent("chatMessage", userSource, "Gun Store", {41, 103, 203}, "^1All weapon slots full! (" .. MAX_PLAYER_WEAPON_SLOTS .. "/" .. MAX_PLAYER_WEAPON_SLOTS .. ")")
+          TriggerClientEvent("mini:insufficientFunds", userSource, weapon.price, "gun")
         end
-    end)
+      else
+        TriggerClientEvent("usa:notify", userSource, "Inventory is full.")
+      end
+    else
+      --notify user of full weapon slots
+      TriggerClientEvent("chatMessage", userSource, "Gun Store", {41, 103, 203}, "^1All weapon slots full! (" .. MAX_PLAYER_WEAPON_SLOTS .. "/" .. MAX_PLAYER_WEAPON_SLOTS .. ")")
+    end
+  end)
 end)

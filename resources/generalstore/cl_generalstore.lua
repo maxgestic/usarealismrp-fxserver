@@ -114,7 +114,6 @@ Citizen.CreateThread(function()
             if cb then
               --print("person wants to buy: " .. item.name)
               buyItem(item)
-              TriggerEvent("usa:notify", "Purchased: ~y~" .. item.name)
               menu.page = "home"
               menu.title = "General Store"
             end
@@ -143,7 +142,6 @@ Citizen.CreateThread(function()
             if cb then
               --print("person wants to buy: " .. item.name)
               buyItem(item)
-              TriggerEvent("usa:notify", "Purchased: ~y~" .. item.name)
               menu.page = "home"
               menu.title = "General Store"
             end
@@ -172,7 +170,6 @@ Citizen.CreateThread(function()
             if cb then
               --print("person wants to buy: " .. item.name)
               buyItem(item)
-              TriggerEvent("usa:notify", "Purchased: ~y~" .. item.name)
               menu.page = "home"
               menu.title = "General Store"
             end
@@ -201,7 +198,6 @@ Citizen.CreateThread(function()
             if cb then
               --print("person wants to buy: " .. item.name)
               buyItem(item)
-              TriggerEvent("usa:notify", "Purchased: ~y~" .. item.name)
               menu.page = "home"
               menu.title = "General Store"
             end

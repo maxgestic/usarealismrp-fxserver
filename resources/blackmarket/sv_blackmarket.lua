@@ -39,6 +39,7 @@ RegisterServerEvent("blackMarket:checkGunMoney")
 AddEventHandler("blackMarket:checkGunMoney", function(weapon)
     local userSource = source
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
+      if user.getCanActiveCharacterCurrentHoldItem(weapon) then
         local weapons = user.getActiveCharacterData("weapons")
         if not weapons then
             weapons = {}
@@ -63,6 +64,9 @@ AddEventHandler("blackMarket:checkGunMoney", function(weapon)
         else
             TriggerClientEvent("blackMarket:notify", userSource, "~r~All weapons slot are full! (" .. MAX_PLAYER_WEAPON_SLOTS .. "/" .. MAX_PLAYER_WEAPON_SLOTS .. ")")
         end
+      else
+        TriggerClientEvent("blackMarket:notify", userSource, "Inventory is full!")
+      end
     end)
 end)
 
