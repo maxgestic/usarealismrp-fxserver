@@ -217,7 +217,8 @@ AddEventHandler("usa:insertItem", function(to_insert_item, quantity)
   print("inside usa:insertItem!")
   local userSource = tonumber(source)
   TriggerEvent("es:getPlayerFromId", userSource, function(user)
-    if not to_insert_item.type or to_insert_item.type == "license" then
+    if to_insert_item.type == "license" then
+      print("inserting/incrementing license item!")
       -- insert into licenses
       local user_licenses = user.getActiveCharacterData("licenses")
       for i = 1, #user_licenses do
@@ -234,6 +235,7 @@ AddEventHandler("usa:insertItem", function(to_insert_item, quantity)
       table.insert(user_licenses, to_insert_item)
       user.setActiveCharacterData("licenses", user_licenses)
     elseif to_insert_item.type == "weapon" then
+      print("inserting/incrementing weapon item!")
       -- insert into weapons, assuming that we've checked that player had < 3 weapons
       local user_weapons = user.getActiveCharacterData("weapons")
       for i = 1, #user_weapons do
@@ -251,13 +253,17 @@ AddEventHandler("usa:insertItem", function(to_insert_item, quantity)
       user.setActiveCharacterData("weapons", user_weapons)
       TriggerClientEvent("usa:equipWeapon", userSource, to_insert_item)
     else
+      --print("inserting/incrementing inventory item!")
+      --print("to_insert_item.name: " .. to_insert_item.name)
       -- insert into inventory
       local user_inventory = user.getActiveCharacterData("inventory")
-      for i = 1, #user_inventory do
-        local item = user_inventory[i]
+      --print("#user_inventory: " .. #user_inventory)
+      for z = 1, #user_inventory do
+        local item = user_inventory[z]
+        --print("checking item name for match: " .. item.name)
         if item.name == to_insert_item.name then
           print("quantity increased for inventory item!")
-          user_inventory[i].quantity = item.quantity + quantity
+          user_inventory[z].quantity = item.quantity + quantity
           user.setActiveCharacterData("inventory", user_inventory)
           return
         end

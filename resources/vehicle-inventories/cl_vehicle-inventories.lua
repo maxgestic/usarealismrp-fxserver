@@ -110,6 +110,7 @@ AddEventHandler("vehicle:continueRetrievingItem", function(plate, item, quantity
   print("removing item (" .. item.name .. ") from vehicle inventory, quantity: " .. quantity)
   TriggerServerEvent("vehicle:removeItem", item.name, quantity, plate)
   -- Add/increment full item with name data.itemName into player's inventory:
+  item.quantity = quantity
   TriggerServerEvent("usa:insertItem", item, quantity)
   -- experimental:
   TriggerServerEvent("vehicle:finishedUsingInventory", plate)

@@ -159,58 +159,65 @@ end
 
 RegisterServerEvent("interaction:giveItemToPlayer")
 AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
-    local userSource = tonumber(source)
-    print("inside of server func with target id = " .. targetPlayerId)
-    print("item.name = " .. item.name)
-    -- give item to nearest player
-    TriggerEvent("es:getPlayerFromId", targetPlayerId, function(user)
-        if user then
-            if not item.type or item.type == "license" then
-                -- must be a license (no item.type)
-                print("giving a license!")
-                local licenses = user.getActiveCharacterData("licenses")
-                table.insert(licenses, item)
-                user.setActiveCharacterData("licenses", licenses)
-            else
-                if item.type == "weapon" then
-                    print("giving a weapon!")
-                    local weapons = user.getActiveCharacterData("weapons")
-                    if #weapons < 3 then
-                        table.insert(weapons, item)
-                        user.setActiveCharacterData("weapons", weapons)
-                        TriggerClientEvent("interaction:equipWeapon", targetPlayerId, item, true)
-                        TriggerClientEvent("interaction:equipWeapon", userSource, item, false)
-                    else
-                        TriggerClientEvent("interaction:notify", userSource, GetPlayerName(targetPlayerId) .. " can't hold anymore weapons!")
-                        return
-                    end
-                else
-                    local found = false
-                    print("giving an inventory item!")
-                    local inventory = user.getActiveCharacterData("inventory")
-                    for i = 1, #inventory do
-                        if inventory[i].name == item.name then
-                            found = true
-                            inventory[i].quantity = inventory[i].quantity + 1
-                            user.setActiveCharacterData("inventory", inventory)
-                        end
-                    end
-                    if not found then
-                        item.quantity = 1
-                        table.insert(inventory, item)
-                        user.setActiveCharacterData("inventory", inventory)
-                    end
-                end
-            end
-            -- remove from source player
-            removeItemFromPlayer(item, userSource)
-            TriggerClientEvent("interaction:notify", userSource, "You gave " .. GetPlayerName(targetPlayerId) .. ": (x1) " .. item.name)
-            TriggerClientEvent("interaction:notify", targetPlayerId, GetPlayerName(userSource) .. " has given you " .. ": (x1) " .. item.name)
+  local userSource = tonumber(source)
+  print("inside of interaction:giveItemToPlayer with target id = " .. targetPlayerId)
+  print("item.name = " .. item.name)
+  -- give item to nearest player
+  TriggerEvent("es:getPlayerFromId", targetPlayerId, function(user)
+    if user then
+      if user.getCanActiveCharacterCurrentHoldItem(item) then
+        if not item.type or item.type == "license" then
+          -- must be a license (no item.type)
+          print("giving a license!")
+          local licenses = user.getActiveCharacterData("licenses")
+          table.insert(licenses, item)
+          user.setActiveCharacterData("licenses", licenses)
         else
-            print("player with id #" .. targetPlayerId .. " is not in game!")
-            return
+          if item.type == "weapon" then
+            print("giving a weapon!")
+            local weapons = user.getActiveCharacterData("weapons")
+            if #weapons < 3 then
+              table.insert(weapons, item)
+              user.setActiveCharacterData("weapons", weapons)
+              TriggerClientEvent("interaction:equipWeapon", targetPlayerId, item, true)
+              TriggerClientEvent("interaction:equipWeapon", userSource, item, false)
+            else
+              TriggerClientEvent("interaction:notify", userSource, GetPlayerName(targetPlayerId) .. " can't hold anymore weapons!")
+              return
+            end
+          else
+            local found = false
+            print("giving an inventory item!")
+            local inventory = user.getActiveCharacterData("inventory")
+            for i = 1, #inventory do
+              if inventory[i].name == item.name then
+                found = true
+                inventory[i].quantity = inventory[i].quantity + 1
+                user.setActiveCharacterData("inventory", inventory)
+              end
+            end
+            if not found then
+              item.quantity = 1
+              table.insert(inventory, item)
+              user.setActiveCharacterData("inventory", inventory)
+            end
+          end
         end
-    end)
+        -- remove from source player
+        removeItemFromPlayer(item, userSource)
+        TriggerClientEvent("interaction:notify", userSource, "You gave " .. GetPlayerName(targetPlayerId) .. ": (x1) " .. item.name)
+        TriggerClientEvent("interaction:notify", targetPlayerId, GetPlayerName(userSource) .. " has given you " .. ": (x1) " .. item.name)
+        -- todo: play animation:
+        
+      else
+        TriggerClientEvent("usa:notify", userSource, "Player can't hold anymore items! Inventory full.")
+        TriggerClientEvent("usa:notify", targetPlayerId, "You can't hold that item! Inventory full.")
+      end
+    else
+      print("player with id #" .. targetPlayerId .. " is not in game!")
+      return
+    end
+  end)
 end)
 
 function removeItemFromPlayer(item, userSource)

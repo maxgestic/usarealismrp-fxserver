@@ -183,12 +183,12 @@ function populateVehicleInventory(inventory) {
   $(".player-meta-data").hide();
   for(i in inventory) {
     if (inventory[i].legality == "illegal")
-        $(".sidenav").append("<a class='vehicle-item'><span class='vehicle-item-quantity'>(x"+inventory[i].quantity+")</span> <span class='illegal-item'>" + inventory[i].name + "</span></a>");
+        $(".sidenav .sidenav-buttons").append("<a class='vehicle-item'><span class='vehicle-item-quantity'>(x"+inventory[i].quantity+")</span> <span class='illegal-item'>" + inventory[i].name + "</span></a>");
     else
-        $(".sidenav").append("<a class='vehicle-item'><span class='vehicle-item-quantity'>(x"+inventory[i].quantity+")</span> " + inventory[i].name + "</a>");
+        $(".sidenav .sidenav-buttons").append("<a class='vehicle-item'><span class='vehicle-item-quantity'>(x"+inventory[i].quantity+")</span> " + inventory[i].name + "</a>");
   }
   // back btn
-  $(".sidenav").append("<a id='vehicle-inventory-back-btn' class='vehicle-item'>Back</a>");
+  $(".sidenav .sidenav-buttons").append("<a id='vehicle-inventory-back-btn' class='vehicle-item'>Back</a>");
 }
 
 function populateInventory(inventory, weapons, licenses) {
