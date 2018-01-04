@@ -207,8 +207,12 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
         removeItemFromPlayer(item, userSource)
         TriggerClientEvent("interaction:notify", userSource, "You gave " .. GetPlayerName(targetPlayerId) .. ": (x1) " .. item.name)
         TriggerClientEvent("interaction:notify", targetPlayerId, GetPlayerName(userSource) .. " has given you " .. ": (x1) " .. item.name)
-        -- todo: play animation:
-        
+        -- play animation:
+        local anim = {
+          dict = "anim@move_m@trash",
+          name = "pickup"
+        }
+        TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 2)
       else
         TriggerClientEvent("usa:notify", userSource, "Player can't hold anymore items! Inventory full.")
         TriggerClientEvent("usa:notify", targetPlayerId, "You can't hold that item! Inventory full.")
