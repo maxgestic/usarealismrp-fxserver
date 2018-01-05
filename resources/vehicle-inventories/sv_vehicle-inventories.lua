@@ -33,28 +33,30 @@ AddEventHandler("vehicle:storeItem", function(vehicle_plate, item, quantity)
     if players then
       for id, player in pairs(players) do
         local player_vehicles = player.getActiveCharacterData("vehicles")
-        for i = 1, #player_vehicles do
-          local veh = player_vehicles[i]
-          if string.find(vehicle_plate, tostring(veh.plate)) then
-            local vehicle_inventory = veh.inventory
-            if not vehicle_inventory then
-              print("vehicle inventory did not exist, setting to {}")
-              vehicle_inventory = {}
-              player_vehicles[i].inventory = {}
-            end
-            for j = 1, #vehicle_inventory do
-              local vehicle_inventory_item = vehicle_inventory[j]
-              if vehicle_inventory_item.name == item.name then
-                player_vehicles[i].inventory[j].quantity = player_vehicles[i].inventory[j].quantity + quantity
-                player.setActiveCharacterData("vehicles", player_vehicles)
-                return
+        if player_vehicles then
+          for i = 1, #player_vehicles do
+            local veh = player_vehicles[i]
+            if string.find(vehicle_plate, tostring(veh.plate)) then
+              local vehicle_inventory = veh.inventory
+              if not vehicle_inventory then
+                print("vehicle inventory did not exist, setting to {}")
+                vehicle_inventory = {}
+                player_vehicles[i].inventory = {}
               end
+              for j = 1, #vehicle_inventory do
+                local vehicle_inventory_item = vehicle_inventory[j]
+                if vehicle_inventory_item.name == item.name then
+                  player_vehicles[i].inventory[j].quantity = player_vehicles[i].inventory[j].quantity + quantity
+                  player.setActiveCharacterData("vehicles", player_vehicles)
+                  return
+                end
+              end
+              item.quantity = quantity -- set quantity to the one provided as user input, assumes quantity provided is <= to item.quantity
+              -- not already in inventory, add it:
+              print("adding item to vehicle: " .. item.name .. ", quantity: " .. quantity)
+              table.insert(player_vehicles[i].inventory, item)
+              player.setActiveCharacterData("vehicles", player_vehicles)
             end
-            item.quantity = quantity -- set quantity to the one provided as user input, assumes quantity provided is <= to item.quantity
-            -- not already in inventory, add it:
-            print("adding item to vehicle: " .. item.name .. ", quantity: " .. quantity)
-            table.insert(player_vehicles[i].inventory, item)
-            player.setActiveCharacterData("vehicles", player_vehicles)
           end
         end
       end
