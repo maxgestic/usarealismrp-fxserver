@@ -27,7 +27,7 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 	local rTable = {}
 
 	rTable.getCanActiveCharacterCurrentHoldItem = function(item_to_add)
-		print("getting active character inventory weight!")
+		--print("getting active character inventory weight!")
 		local current_weight = 0.0
 		for i = 1, #self.characters do
 			local char = self.characters[i]
@@ -40,7 +40,7 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 					local item = char_inventory[j]
 					if item then
 						if not item.weight then item.weight = 1.0 end -- for players with old items that don't have a weight property yet
-						print("adding item: " .. item.name .. ", weight: " .. item.weight)
+						--print("adding item: " .. item.name .. ", weight: " .. item.weight)
 						current_weight = current_weight + (item.weight * item.quantity)
 					end
 				end
@@ -52,7 +52,7 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 					local item = char_weapons[j]
 					if item then
 						if not item.weight then item.weight = 5.0 end -- for players with old weapon items that don't have a weight property yet
-						print("adding item: " .. item.name .. ", weight: " .. item.weight)
+						--print("adding item: " .. item.name .. ", weight: " .. item.weight)
 						current_weight = current_weight + (item.weight * item.quantity)
 					end
 				end
@@ -71,7 +71,7 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 	end
 
 	rTable.getActiveCharacterCurrentInventoryWeight = function()
-		print("getting active character inventory weight!")
+		--print("getting active character inventory weight!")
 		local current_weight = 0.0
 		for i = 1, #self.characters do
 			local char = self.characters[i]
@@ -84,7 +84,7 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 					local item = char_inventory[j]
 					if item then
 						if not item.weight then item.weight = 1.0 end -- for players with old items that don't have a weight property yet
-						print("adding item: " .. item.name .. ", weight: " .. item.weight)
+						--print("adding item: " .. item.name .. ", weight: " .. item.weight)
 						current_weight = current_weight + (item.weight * item.quantity)
 					end
 				end
@@ -96,7 +96,7 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 					local item = char_weapons[j]
 					if item then
 						if not item.weight then item.weight = 5.0 end -- for players with old weapon items that don't have a weight property yet
-						print("adding item: " .. item.name .. ", weight: " .. item.weight)
+						--print("adding item: " .. item.name .. ", weight: " .. item.weight)
 						current_weight = current_weight + (item.weight * item.quantity)
 					end
 				end
