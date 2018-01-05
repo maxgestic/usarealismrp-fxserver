@@ -155,6 +155,7 @@ AddEventHandler("vehicle:isItemStillInVehicle", function(plate, item, quantity)
     vehicles_being_checked[plate] = true
     print("inside vehicle:isItemStillInVehicle...")
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
+      if not item.weight then item.weight = 2 end
       local temp_item = { weight = item.weight * quantity}
       print("seeing if user can hold item with weight: " .. temp_item.weight)
       if user.getCanActiveCharacterCurrentHoldItem(temp_item) then
@@ -197,4 +198,49 @@ AddEventHandler("vehicle:isItemStillInVehicle", function(plate, item, quantity)
     -- experimental:
     vehicles_being_checked[plate] = nil
   end
+end)
+
+RegisterServerEvent("vehicle:canVehicleHoldItem")
+AddEventHandler("vehicle:canVehicleHoldItem", function(vehId, plate, item, quantity)
+  print("checking to see if vehicle has enough room for item: " .. item.name .. ", quantity: " .. quantity)
+  local userSource = tonumber(source)
+  local current_weight = 0.0
+  TriggerEvent("es:getPlayers", function(players)
+    if players then
+      for id, player in pairs(players) do
+        local player_vehicles = player.getActiveCharacterData("vehicles")
+        for i = 1, #player_vehicles do
+          local veh = player_vehicles[i]
+          if string.find(plate, tostring(veh.plate)) then -- this is the vehicle whose inventory we want to target
+            local vehicle_inventory = veh.inventory
+            for j = 1, #vehicle_inventory do
+              local vehicle_inventory_item = vehicle_inventory[j]
+              if not vehicle_inventory_item.weight then vehicle_inventory_item.weight = 2.0 end
+              current_weight = current_weight + (vehicle_inventory_item.weight * vehicle_inventory_item.quantity) -- add item weight to total
+            end
+            print("current veh weight: " .. current_weight)
+            print("type veh.storage_capacity: " .. type(veh.storage_capacity))
+            -- add check for old vehicles that didn't have storage capacity property when purchased:
+            if not veh.storage_capacity then print("veh.storage_capacity did not exist! setting to 100.0!") veh.storage_capacity = 100.0 else print("vehicle.storage_capacity already existed! at: " .. veh.storage_capacity) end
+            -- add check for items with no weight property:
+            if not item.weight then item.weight = 1 end
+            -- total weight calculated, call appropriate client function
+            if current_weight + (item.weight * quantity) <= veh.storage_capacity then
+              -- not full, able to store item
+              print("not full, storing item inside a: " .. veh.model .. "...")
+              print("veh storage: " .. current_weight + (item.weight * quantity) .. "/" .. veh.storage_capacity)
+              TriggerClientEvent("vehicle:continueStoringItem", userSource, vehId, plate, item, quantity)
+              TriggerClientEvent("usa:notify", userSource, "Item stored! (" .. current_weight + (item.weight * quantity) .. "/" .. veh.storage_capacity .. ")")
+            else
+              -- vehicle storage full
+              print("veh storage full, not storing item!")
+              print("veh storage: " .. current_weight .. "/" .. veh.storage_capacity)
+              TriggerClientEvent("usa:notify", userSource, "Vehicle storage full! (" .. current_weight .. "/" .. veh.storage_capacity .. ")")
+            end
+            return
+          end
+        end
+      end
+    end
+  end)
 end)

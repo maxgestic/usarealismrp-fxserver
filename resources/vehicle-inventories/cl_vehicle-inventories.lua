@@ -31,25 +31,18 @@ AddEventHandler("vehicle:checkTargetVehicleForStorage", function(item, quantity)
   print("target_vehicle: " .. target_vehicle)
   -- see if car is locked or not:
   local lock_status = GetVehicleDoorLockStatus(target_vehicle)
-  if lock_status ~= 2 then
-    if target_vehicle ~= 0 then
+  if lock_status ~= 2 then -- not locked
+    if target_vehicle ~= 0 then -- there is a detected vehicle
+
       local target_vehicle_plate = GetVehicleNumberPlateText(target_vehicle)
-      print("plate #: " .. target_vehicle_plate)
+      --[[
+      --print("plate #: " .. target_vehicle_plate)
       SetVehicleDoorOpen(target_vehicle, 5, false, false)
       -- play animation:
       local anim = {
         dict = "anim@mp_fireworks",
         name = "place_firework_1_rocket"
       }
-      --[[
-      RequestAnimDict(anim.dict)
-      while not HasAnimDictLoaded(anim.dict) do
-        Citizen.Wait(100)
-      end
-      if not IsEntityPlayingAnim(GetPlayerPed(-1), anim.dict, anim.name, 3) and not IsPedInAnyVehicle(GetPlayerPed(-1), 1) then
-        TaskPlayAnim(GetPlayerPed(-1), anim.dict, anim.name, 8.0, -8, 3000, 53, 0, 0, 0, 0)
-      end
-      --]]
       TriggerEvent("usa:playAnimation", anim.name, anim.dict, 4)
       --print("calling vehicle:storeItem with item.quantity: " .. item.quantity .. ", which will be changed to: " .. quantity)
       TriggerServerEvent("vehicle:storeItem", target_vehicle_plate, item, quantity)
@@ -58,6 +51,8 @@ AddEventHandler("vehicle:checkTargetVehicleForStorage", function(item, quantity)
       if item.type == "weapon" then
         RemoveWeaponFromPed(GetPlayerPed(-1), item.hash)
       end
+      --]]
+      TriggerServerEvent("vehicle:canVehicleHoldItem", target_vehicle, target_vehicle_plate, item, quantity)
     end
   else
     TriggerEvent("usa:notify", "Vehicle is locked. Can't open storage.")
@@ -114,6 +109,25 @@ AddEventHandler("vehicle:continueRetrievingItem", function(plate, item, quantity
   TriggerServerEvent("usa:insertItem", item, quantity)
   -- experimental:
   TriggerServerEvent("vehicle:finishedUsingInventory", plate)
+end)
+
+RegisterNetEvent("vehicle:continueStoringItem")
+AddEventHandler("vehicle:continueStoringItem", function(vehId, plate, item, quantity)
+  print("inside continue storing item function....")
+  SetVehicleDoorOpen(vehId, 5, false, false)
+  -- play animation:
+  local anim = {
+    dict = "anim@mp_fireworks",
+    name = "place_firework_1_rocket"
+  }
+  TriggerEvent("usa:playAnimation", anim.name, anim.dict, 4)
+  --print("calling vehicle:storeItem with item.quantity: " .. item.quantity .. ", which will be changed to: " .. quantity)
+  TriggerServerEvent("vehicle:storeItem", plate, item, quantity)
+  TriggerServerEvent("usa:removeItem", item, quantity)
+  -- remove weapon from ped if type was weapon:
+  if item.type == "weapon" then
+    RemoveWeaponFromPed(GetPlayerPed(-1), item.hash)
+  end
 end)
 -----------------------------------------
 -- OPEN/CLOSE TARGET VEHICLE INVENTORY --
