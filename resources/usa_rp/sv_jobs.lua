@@ -40,6 +40,12 @@ AddEventHandler("usa_rp:sellItem", function(job)
                 for i = 1, #inventory do
                     local item = inventory[i]
                     if item.name == "Meth" then
+                      -- play animation:
+                      local anim = {
+                        dict = "anim@move_m@trash",
+                        name = "pickup"
+                      }
+                      TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 2)
                         local reward = 500
                         local user_money = user.getActiveCharacterData("money")
                         user.setActiveCharacterData("money", user_money + reward)
@@ -182,7 +188,7 @@ AddEventHandler("usa_rp:startTimer", function(timerType)
     local userSource = tonumber(source)
     TriggerClientEvent("usa_rp:notify", userSource, "Sup! You can chill out here while I get your stuff.")
     if timerType == "meth_supplies_ped" then
-        local seconds = 80
+        local seconds = 50
         local time = seconds * 1000
         SetTimeout(time, function()
             TriggerClientEvent("usa_rp:notify", userSource, "Here are the chemicals needed for cooking!")
@@ -242,7 +248,7 @@ AddEventHandler("methJob:checkUserMoney", function(amount)
           user.setActiveCharacterData("money", userMoney - amount)
         elseif userMoney < amount then
           -- not enough funds to continue
-          TriggerClientEvent("usa_rp:notify", userSource, "Come back when you have ~y~$500~w~ to get the supplies!")
+          TriggerClientEvent("usa_rp:notify", userSource, "Come back when you have ~y~$" .. amount .. "~w~ to get the supplies!")
         end
       end
     else
