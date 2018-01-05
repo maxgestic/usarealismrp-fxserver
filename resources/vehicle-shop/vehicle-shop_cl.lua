@@ -508,7 +508,7 @@ Citizen.CreateThread(function()
 						for i = 1, #vehicleShopItems["vehicles"][k] do
 							local vehicle = vehicleShopItems["vehicles"][k][i]
 							--print("adding vehicle: " .. vehicle.make .. " " .. vehicle.model .. " to menu")
-							TriggerEvent("vehShop-GUI:Option", "($" .. comma_value(vehicle.price) .. ") " .. vehicle.make .. " " .. vehicle.model .. "(C: ".. vehicle.storage_capacity .. ")", function(cb)
+							TriggerEvent("vehShop-GUI:Option", "($" .. comma_value(vehicle.price) .. ") " .. vehicle.make .. " " .. vehicle.model .. " (C: ".. vehicle.storage_capacity .. ")", function(cb)
 								if cb then
 								--	print("player wants to purchase vehicle: " .. vehicle.make .. " " .. vehicle.model)
 									-- todo: complete purchase ability here

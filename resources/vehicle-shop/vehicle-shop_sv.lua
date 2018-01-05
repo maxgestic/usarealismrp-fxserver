@@ -466,7 +466,9 @@ AddEventHandler("vehShop:sellVehicle", function(toSellVehicle)
 			if vehicle.plate == toSellVehicle.plate then
 				table.remove(vehicles, i)
 				local oldMoney = user.getActiveCharacterData("money")
-				local newMoney = round(oldMoney + (GetVehiclePrice(toSellVehicle) * .50),0)
+				local vehiclePrice = GetVehiclePrice(toSellVehicle)
+				if not vehiclePrice then vehiclePrice = 10000 end
+				local newMoney = round(oldMoney + (vehiclePrice * .50),0)
 				if (vehicle.price * .50) <= MAX_VEHICLE_SELL_PRICE then
 					user.setActiveCharacterData("money", newMoney)
 					user.setActiveCharacterData("vehicles", vehicles)
