@@ -146,7 +146,8 @@ AddEventHandler("usa_rp:giveChemicals", function()
         name = "Suspicious Chemicals",
         legality = "illegal",
         quantity = 1,
-        type = "chemical"
+        type = "chemical",
+        weight = 10
     }
     local userSource = tonumber(source)
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
@@ -223,7 +224,8 @@ AddEventHandler("methJob:checkUserMoney", function(amount)
   TriggerEvent("es:getPlayerFromId", userSource, function(user)
     local suspicious_chems = {
       name = "chems bruh",
-      weight = 10
+      weight = 10,
+      quantity = 1
     }
     if user.getCanActiveCharacterCurrentHoldItem(suspicious_chems) then
       local userMoney = user.getActiveCharacterData("money")
