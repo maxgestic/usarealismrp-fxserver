@@ -35,17 +35,17 @@ AddEventHandler("garage:storeKey", function(plate)
 			for i = 1, #inv do
 				local item = inv[i]
 				if item then
-					print("checking item: " .. item.name .. " for a matching plate # to store key!")
+					--print("checking item: " .. item.name .. " for a matching plate # to store key!")
 					if string.find(item.name, "Key") then
-						print("found a key!!")
-						print("checking plate...")
-						print("type of item.plate = " .. type(item.plate))
+						--print("found a key!!")
+						--print("checking plate...")
+						--print("type of item.plate = " .. type(item.plate))
 						if plate then
-							print("type of plate param = " .. type(plate))
-							print("item.plate = " .. item.plate)
-							print("plate param = " .. plate)
+							--print("type of plate param = " .. type(plate))
+							--print("item.plate = " .. item.plate)
+							--print("plate param = " .. plate)
 							if string.find(plate, item.plate) then
-								print("matching plate found!")
+							--	print("matching plate found!")
 								print("storing key for plate #" .. plate)
 								table.remove(inv, i)
 								user.setActiveCharacterData("inventory", inv)
