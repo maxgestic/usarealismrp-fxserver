@@ -313,7 +313,7 @@ end)
 
 RegisterNetEvent("CS:ShowComponentsMenu1")
 AddEventHandler("CS:ShowComponentsMenu1", function()
-	local components = {"Face","Head","Hair","Torso","Legs","Hands","Feet","Eyes","Acessories","Tasks","Textures","Torso2"}
+	local components = {"Face","Head","Hair","Arms/Hands","Legs","Back","Feet","Ties","Acessories","Vests","Textures","Torso2"}
 	TriggerEvent("GUI2:Title", "Components 1")
 	TriggerEvent("GUI2:Option", "..Back", function(cb)
 		if(cb) then
@@ -349,7 +349,7 @@ end)
 
 RegisterNetEvent("CS:ShowComponentsMenu2")
 AddEventHandler("CS:ShowComponentsMenu2", function()
-	local components = {"Face","Head","Hair","Torso","Legs","Hands","Feet","Eyes","Acessories","Tasks","Textures","Torso2"}
+	local components = {"Face","Head","Hair","Arms/Hands","Legs","Back","Feet","Ties","Acessories","Vests","Textures","Torso2"}
 	TriggerEvent("GUI2:Title", "Components 2")
 	TriggerEvent("GUI2:Option", "..Back", function(cb)
 		if(cb) then
