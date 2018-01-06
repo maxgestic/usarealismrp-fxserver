@@ -83,7 +83,7 @@ AddEventHandler("mini:checkGunMoney", function(weapon)
   TriggerEvent('es:getPlayerFromId', userSource, function(user)
     local weapons = user.getActiveCharacterData("weapons")
     if #weapons < MAX_PLAYER_WEAPON_SLOTS then
-      if user.getCanActiveCharacterCurrentHoldItem(weapon) then
+      if user.getCanActiveCharacterHoldItem(weapon) then
         local user_money = user.getActiveCharacterData("money")
         if weapon.price <= user_money then -- see if user has enough money
           --user.removeMoney(weapon.price) -- subtract price from user's money and store resulting amounts

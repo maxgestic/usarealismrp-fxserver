@@ -6,7 +6,7 @@ RegisterServerEvent("generalStore:buyItem")
 AddEventHandler("generalStore:buyItem", function(item)
   local userSource = source
   TriggerEvent('es:getPlayerFromId', userSource, function(user)
-    if user.getCanActiveCharacterCurrentHoldItem(item) then
+    if user.getCanActiveCharacterHoldItem(item) then
       local user_money = user.getActiveCharacterData("money")
       if user_money >= item.price then
         user.setActiveCharacterData("money", user_money - item.price)

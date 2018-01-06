@@ -39,7 +39,7 @@ RegisterServerEvent("blackMarket:checkGunMoney")
 AddEventHandler("blackMarket:checkGunMoney", function(weapon)
     local userSource = source
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
-      if user.getCanActiveCharacterCurrentHoldItem(weapon) then
+      if user.getCanActiveCharacterHoldItem(weapon) then
         local weapons = user.getActiveCharacterData("weapons")
         if not weapons then
             weapons = {}

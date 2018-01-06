@@ -77,13 +77,14 @@ AddEventHandler("usa_rp:giveItem", function(itemToGive)
   local userSource = tonumber(source)
   TriggerEvent("es:getPlayerFromId", userSource, function(user)
     if user then
-      if user.getCanActiveCharacterCurrentHoldItem(itemToGive) then
+      print("seeing if user can carry more weight of: " .. itemToGive.weight * itemToGive.quantity)
+      if user.getCanActiveCharacterHoldItem(itemToGive) then
         local inventory = user.getActiveCharacterData("inventory")
         removeOrDecrementItem(itemToGive.name)
         for i = 1, #inventory do
           local item = inventory[i]
           if item.name == itemToGive.name then -- player already has one of this item in inventory, so increment
-            inventory[i].quantity = inventory[i].quantity + 3 -- increment item in inventory
+            inventory[i].quantity = inventory[i].quantity + itemToGive.quantity -- increment item in inventory
             print("meth quantity added! at: " .. inventory[i].quantity)
             user.setActiveCharacterData("inventory", inventory) -- save the inventory
             -- todo: choose one of a few different drop off location coordinates here?
@@ -162,7 +163,7 @@ AddEventHandler("usa_rp:giveChemicals", function()
             for i = 1, #inventory do
                 local item = inventory[i]
                 if item.name == "Suspicious Chemicals" then -- player already has one of this item in inventory
-                    if item.quantity > 1 then
+                    if item.quantity >= 1 then
                         inventory[i].quantity = item.quantity + 1
                         user.setActiveCharacterData("inventory", inventory)
                         print("player went out of range, giving back Suspicious Chemicals")
@@ -186,7 +187,14 @@ end)
 RegisterServerEvent("usa_rp:startTimer")
 AddEventHandler("usa_rp:startTimer", function(timerType)
     local userSource = tonumber(source)
-    TriggerClientEvent("usa_rp:notify", userSource, "Sup! You can chill out here while I get your stuff.")
+    local messages = {
+      "Sup! You can chill out here while I get your stuff.",
+      "Long time no see!",
+      "What's up good lookin!",
+      "Back already?",
+      "Miss me already?"
+    }
+    TriggerClientEvent("usa_rp:notify", userSource, messages[math.random(1, tonumber(#messages))])
     if timerType == "meth_supplies_ped" then
         local seconds = 50
         local time = seconds * 1000
@@ -231,9 +239,10 @@ AddEventHandler("methJob:checkUserMoney", function(amount)
     local suspicious_chems = {
       name = "chems bruh",
       weight = 10,
-      quantity = 1
+      quantity = 1,
+      type = "chemicals"
     }
-    if user.getCanActiveCharacterCurrentHoldItem(suspicious_chems) then
+    if user.getCanActiveCharacterHoldItem(suspicious_chems) then
       local userMoney = user.getActiveCharacterData("money")
       local inventory = user.getActiveCharacterData("inventory")
       -- check for max item quantity

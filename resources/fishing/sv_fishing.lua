@@ -2,7 +2,7 @@ RegisterServerEvent("fishing:giveFish")
 AddEventHandler("fishing:giveFish", function(fish)
   local userSource = tonumber(source)
   TriggerEvent("es:getPlayerFromId", userSource, function(user)
-    if user.getCanActiveCharacterCurrentHoldItem(fish) then
+    if user.getCanActiveCharacterHoldItem(fish) then
       local inventory = user.getActiveCharacterData("inventory")
       for i = 1, #inventory do
         local item = inventory[i]

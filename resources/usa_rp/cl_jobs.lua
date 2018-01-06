@@ -16,7 +16,8 @@ local jobs = {
         started = false,
         locations = {
             {name="Meth Supply Pickup", x = 70.0828, y = 3745.53, z = 38.85},
-            {name="Meth Lab",  x = 1389.28, y = 3604.6, z = 38.1},
+            {name="Meth Lab",  z = 41.3476, y = 4968.75,  x = 2434.47}, -- grape seed meth lab
+            --{name="Meth Lab",  x = 1389.28, y = 3604.6, z = 38.1}, -- sandy shores ace liquor
             {name="Meth Dropoff 1", x = -402.63, y = 6316.12, z = 27.95}
         }
     }
@@ -186,6 +187,14 @@ AddEventHandler("methJob:getSupplies", function()
             SetBlockingOfNonTemporaryEvents(peds[i].handle, false)
             -- start timer
             TriggerServerEvent("usa_rp:startTimer", "meth_supplies_ped")
+            -- play ped sound:
+            local sounds = {
+              {sound = "Shout_Threaten_Ped", param = "Speech_Params_Force_Shouted_Critical"},
+              {sound = "Shout_Threaten_Gang", param = "Speech_Params_Force_Shouted_Critical"},
+              {sound = "Generic_Hi", param = "Speech_Params_Force"}
+            }
+            local random_sound = sounds[math.random(1, tonumber(#sounds))]
+            PlayAmbientSpeech1(peds[i].handle, random_sound.sound, random_sound.param)
         end
     end
 end)
