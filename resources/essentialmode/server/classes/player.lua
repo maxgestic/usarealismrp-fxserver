@@ -26,7 +26,7 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 
 	local rTable = {}
 
-	rTable.getCanActiveCharacterCurrentHoldItem = function(item_to_add)
+	rTable.getCanActiveCharacterHoldItem = function(item_to_add)
 		--print("getting active character inventory weight!")
 		local current_weight = 0.0
 		for i = 1, #self.characters do
@@ -60,7 +60,7 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 				-- done adding all the inventory item weights, see if player has room for given item --
 				---------------------------------------------------------------------------------------
 				if item_to_add.weight then
-					if current_weight + item_to_add.weight <= 100.0 then
+					if current_weight + (item_to_add.weight * item_to_add.quantity) <= 100.0 then
 						return true
 					else
 						return false

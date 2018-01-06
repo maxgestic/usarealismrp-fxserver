@@ -158,9 +158,9 @@ AddEventHandler("vehicle:isItemStillInVehicle", function(plate, item, quantity)
     print("inside vehicle:isItemStillInVehicle...")
     TriggerEvent("es:getPlayerFromId", userSource, function(user)
       if not item.weight then item.weight = 2 end
-      local temp_item = { weight = item.weight * quantity}
-      print("seeing if user can hold item with weight: " .. temp_item.weight)
-      if user.getCanActiveCharacterCurrentHoldItem(temp_item) then
+      local temp_item = { weight = item.weight, quantity = quantity}
+      print("seeing if user can hold item with weight: " .. temp_item.weight * temp_item.quantity)
+      if user.getCanActiveCharacterHoldItem(temp_item) then
         TriggerEvent("es:getPlayers", function(players)
           if players then
             for id, player in pairs(players) do

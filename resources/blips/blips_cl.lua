@@ -76,7 +76,8 @@ local blips = {
 	--{ title="Bank", colour = 24, id = 108, x=-106.358, y=6474.25, z=30.600 },
 	{ title="Seaview Aircraft", colour = 60, id = 251, x=-943.103, y=-2958.14, z=13.9451 },
 	{ title="Seaview Aircraft", colour = 60, id = 251, x=2119.083, y=4790.010, z=41.139 },
-	{ title="Meth", colour = 75, id = 499, x = 1389.28, y = 3604.6, z = 38.1 },
+	--{ title="Meth", colour = 75, id = 499, x = 1389.28, y = 3604.6, z = 38.1 }, -- sandy shores ace liqour
+	{ title="Meth", colour = 75, id = 499, z = 42.3476, y = 4968.75,  x = 2434.47 }, -- grape seed meth lab house
 	{ title="Boat Shop", colour = 57, id = 356, x = -250.183, y = 6632.84, z = 1.79 }, -- paleto
 	{ title="Boat Shop", colour = 57, id = 356, x = 2388.26, y = 4284.28, z = 30.6 }, -- sandy
 	{ title="Jail", colour = 4, id = 238, x=1686.668, y=2581.715, z=51.6 },
