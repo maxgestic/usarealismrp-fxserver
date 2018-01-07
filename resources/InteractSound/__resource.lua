@@ -21,6 +21,8 @@ ui_page('client/html/index.html')
 files({
     'client/html/index.html',
     -- Begin Sound Files Here...
+    'client/html/sounds/weed-process.ogg',
+    'client/html/sounds/trimming.ogg',
     'client/html/sounds/lock.ogg',
     'client/html/sounds/unlock.ogg',
     'client/html/sounds/demo.ogg'
