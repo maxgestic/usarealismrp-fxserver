@@ -212,8 +212,9 @@ AddEventHandler("usa:removeItem", function(to_remove_item, quantity)
 end)
 
 RegisterServerEvent("usa:insertItem")
-AddEventHandler("usa:insertItem", function(to_insert_item, quantity)
+AddEventHandler("usa:insertItem", function(to_insert_item, quantity, player_source)
   print("inside usa:insertItem!")
+  if player_source then source = player_source end
   local userSource = tonumber(source)
   TriggerEvent("es:getPlayerFromId", userSource, function(user)
     to_insert_item.quantity = quantity
@@ -278,7 +279,7 @@ AddEventHandler("usa:insertItem", function(to_insert_item, quantity)
         user.setActiveCharacterData("inventory", user_inventory)
       end
     else
-      TriggerClientEvent("usa:notify", "Inventory full.")
+      TriggerClientEvent("usa:notify", userSource, "Inventory full.")
     end
   end)
 end)

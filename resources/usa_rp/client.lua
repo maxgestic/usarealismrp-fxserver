@@ -61,8 +61,8 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
-		--SetPedDensityMultiplierThisFrame(0.8)
-		SetVehicleDensityMultiplierThisFrame(0.0) -- no npc vehicles causing havoc
+		SetPedDensityMultiplierThisFrame(0.9)
+		SetVehicleDensityMultiplierThisFrame(0.0003) -- no npc vehicles causing havoc
 	end
 end)
 
