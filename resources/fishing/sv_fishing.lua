@@ -11,7 +11,7 @@ AddEventHandler("fishing:giveFish", function(fish)
             print("found fish " .. item.name .. " in player's inventory already! incrementing..")
             inventory[i].quantity = item.quantity + 1
             user.setActiveCharacterData("inventory", inventory)
-            TriggerEvent("usa_rp:notify", userSource, "You caught a: " .. randomFish.name)
+            TriggerEvent("usa_rp:notify", userSource, "You caught a: " .. fish.name)
             return
           end
         end
@@ -19,7 +19,7 @@ AddEventHandler("fishing:giveFish", function(fish)
       print("adding fish to player inventory!")
       table.insert(inventory, fish)
       user.setActiveCharacterData("inventory", inventory)
-      TriggerEvent("usa_rp:notify", userSource, "You caught a: " .. randomFish.name)
+      TriggerEvent("usa_rp:notify", userSource, "You caught a: " .. fish.name)
     else
       TriggerClientEvent("usa:notify", userSource, "Inventory is full!")
     end
