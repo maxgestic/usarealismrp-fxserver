@@ -128,6 +128,7 @@ Citizen.CreateThread(function()
 									Citizen.Wait(0)
 								end
 								job.truck = CreateVehicle(vehicle, info.x, info.y, info.z+1.0, 2.0, true, false)
+								SetEntityAsMissionEntity(job.truck, true, true)
 								table.insert(retrievedVehicles,job.truck)
 								print("inserted into retrievedVehicles: " .. job.truck)
 							else
@@ -211,6 +212,7 @@ Citizen.CreateThread(function()
 									Citizen.Wait(0)
 								end
 								job.truck = CreateVehicle(vehicle, info.x, info.y, info.z+1.0, 2.0, true, false)
+								SetEntityAsMissionEntity(job.truck, true, true)
 								table.insert(retrievedVehicles,job.truck)
 								print("inserted into retrievedVehicles: " .. job.truck)
 							else
