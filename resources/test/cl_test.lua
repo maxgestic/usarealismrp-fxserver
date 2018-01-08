@@ -223,6 +223,15 @@ function interactionMenuUse(itemName, wholeItem)
 		intoxicate()
 		reality()
 	-------------------
+	-- Hash --
+	-------------------
+	elseif string.find(itemName, "Hash") then
+		--Citizen.Trace("meth found to use!!")
+		TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
+		TriggerEvent("interaction:notify", "You have used: (x1) Hash")
+		intoxicate()
+		reality()
+	-------------------
 	-- Repair Kit --
 	-------------------
 	elseif string.find(itemName, "Repair Kit") then
