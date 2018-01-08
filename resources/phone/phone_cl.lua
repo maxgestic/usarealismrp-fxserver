@@ -109,16 +109,65 @@ RegisterNUICallback('sendTextMessage', function(data, cb)
 end)
 
 RegisterNUICallback('send911Message', function(data, cb)
+	-- get location of sender and send to server function:
+	local playerPos = GetEntityCoords( GetPlayerPed( -1 ), true )
+	local streetA, streetB = Citizen.InvokeNative( 0x2EB41072B4C1E4C0, playerPos.x, playerPos.y, playerPos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt() )
+	local street = {}
+	if not ((streetA == lastStreetA or streetA == lastStreetB) and (streetB == lastStreetA or streetB == lastStreetB)) then
+		-- Ignores the switcharoo while doing circles on intersections
+		lastStreetA = streetA
+		lastStreetB = streetB
+	end
+	if lastStreetA ~= 0 then
+		table.insert( street, GetStreetNameFromHashKey( lastStreetA ) )
+	end
+	if lastStreetB ~= 0 then
+		table.insert( street, GetStreetNameFromHashKey( lastStreetB ) )
+	end
+	data.location = table.concat( street, " & " )
 	TriggerServerEvent("phone:send911Message", data)
     cb('ok')
 end)
 
 RegisterNUICallback('sendTaxiMessage', function(data, cb)
+	-- get location of sender and send to server function:
+	local playerPos = GetEntityCoords( GetPlayerPed( -1 ), true )
+	local streetA, streetB = Citizen.InvokeNative( 0x2EB41072B4C1E4C0, playerPos.x, playerPos.y, playerPos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt() )
+	local street = {}
+	if not ((streetA == lastStreetA or streetA == lastStreetB) and (streetB == lastStreetA or streetB == lastStreetB)) then
+		-- Ignores the switcharoo while doing circles on intersections
+		lastStreetA = streetA
+		lastStreetB = streetB
+	end
+	if lastStreetA ~= 0 then
+		table.insert( street, GetStreetNameFromHashKey( lastStreetA ) )
+	end
+	if lastStreetB ~= 0 then
+		table.insert( street, GetStreetNameFromHashKey( lastStreetB ) )
+	end
+	data.location = table.concat( street, " & " )
+	-- call server function, check if any is online:
 	TriggerServerEvent("phone:sendTaxiMessage", data)
     cb('ok')
 end)
 
 RegisterNUICallback('sendTowMessage', function(data, cb)
+	-- get location of sender and send to server function:
+	local playerPos = GetEntityCoords( GetPlayerPed( -1 ), true )
+	local streetA, streetB = Citizen.InvokeNative( 0x2EB41072B4C1E4C0, playerPos.x, playerPos.y, playerPos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt() )
+	local street = {}
+	if not ((streetA == lastStreetA or streetA == lastStreetB) and (streetB == lastStreetA or streetB == lastStreetB)) then
+		-- Ignores the switcharoo while doing circles on intersections
+		lastStreetA = streetA
+		lastStreetB = streetB
+	end
+	if lastStreetA ~= 0 then
+		table.insert( street, GetStreetNameFromHashKey( lastStreetA ) )
+	end
+	if lastStreetB ~= 0 then
+		table.insert( street, GetStreetNameFromHashKey( lastStreetB ) )
+	end
+	data.location = table.concat( street, " & " )
 	TriggerServerEvent("phone:sendTowMessage", data)
     cb('ok')
 end)
