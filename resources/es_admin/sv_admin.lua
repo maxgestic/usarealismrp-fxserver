@@ -19,6 +19,20 @@ TriggerEvent('es:addCommand', 'hash', function(source, args, user)
 	TriggerClientEvent('es_admin:getHash', source, args[2])
 end)
 
+-- staff pvt msg someone
+TriggerEvent('es:addGroupCommand', 'whisper', "mod", function(source, args, user)
+	local target = tonumber(args[2])
+	table.remove(args, 1)
+	table.remove(args, 1)
+	local message = table.concat(args, " ")
+	if GetPlayerName(target) then
+		TriggerClientEvent('chatMessage', source, "STAFF to (" .. GetPlayerName(target) .. ")", {90, 90, 60}, message)
+		TriggerClientEvent('chatMessage', target, "STAFF (" .. GetPlayerName(source) .. ")", {90, 90, 60}, message)
+	end
+end, function(source, args, user)
+	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
+end)
+
 -- staff chat
 TriggerEvent('es:addCommand', 'staff', function(source, args, user)
     local userGroup = user.getGroup()
