@@ -24,7 +24,7 @@ local locations = {
 			x = -196.027,
 			y = 6265.625,
 			z = 30.489,
-			heading = 312.352,
+			heading = 0.0,
 			model = "amy_downtown_01"
 		}
 	},
@@ -76,6 +76,7 @@ Citizen.CreateThread(function()
 		SetPedCombatAttributes(ped,17,1)
 		SetEntityInvincible(ped)
 		SetPedRandomComponentVariation(ped, true)
+		TaskStartScenarioInPlace(ped, "WORLD_HUMAN_CLIPBOARD", 0, true);
 	end
 end)
 

@@ -189,3 +189,34 @@ Citizen.CreateThread(function()
 		Menu.renderGUI()     -- Draw menu on each tick if Menu.hidden = false
 	end
 end)
+
+--------------------
+-- Spawn job peds --
+--------------------
+local JOB_PEDS = {
+  {x = -331.043, y = 6086.09, z = 30.40, heading = 180.0}
+}
+-- S P A W N  J O B  P E D S
+Citizen.CreateThread(function()
+	for i = 1, #JOB_PEDS do
+		local hash = -1064078846 
+		--local hash = GetHashKey(data.ped.model)
+		print("requesting hash...")
+		RequestModel(hash)
+		while not HasModelLoaded(hash) do
+			RequestModel(hash)
+			Citizen.Wait(0)
+		end
+		print("spawning ped, heading: " .. JOB_PEDS[i].heading)
+		print("hash: " .. hash)
+		local ped = CreatePed(4, hash, JOB_PEDS[i].x, JOB_PEDS[i].y, JOB_PEDS[i].z, JOB_PEDS[i].heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
+		SetEntityCanBeDamaged(ped,false)
+		SetPedCanRagdollFromPlayerImpact(ped,false)
+		TaskSetBlockingOfNonTemporaryEvents(ped,true)
+		SetPedFleeAttributes(ped,0,0)
+		SetPedCombatAttributes(ped,17,1)
+		SetEntityInvincible(ped)
+		SetPedRandomComponentVariation(ped, true)
+    TaskStartScenarioInPlace(ped, "WORLD_HUMAN_HANG_OUT_STREET", 0, true);
+	end
+end)
