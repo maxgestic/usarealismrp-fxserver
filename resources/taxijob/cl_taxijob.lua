@@ -1,5 +1,6 @@
 local taxiDutyX, taxiDutyY, taxiDutyZ = -41.306, 6436.432, 30.490
 local spawn = {x=-29.793,y= 6435.638,z=31.426}
+local ped_heading = 40.0
 
 RegisterNetEvent("taxi:onDuty")
 AddEventHandler("taxi:onDuty", function(name)
@@ -12,11 +13,36 @@ AddEventHandler("taxi:offDuty", function()
 	DrawCoolLookingNotificationWithTaxiPic("You have clocked out! Have a good one!")
 end)
 
+-- S P A W N  J O B  P E D S
+Citizen.CreateThread(function()
+	--for name, data in pairs(locations) do
+		local hash = 1397974313
+		--local hash = GetHashKey(data.ped.model)
+		print("requesting hash...")
+		RequestModel(hash)
+		while not HasModelLoaded(hash) do
+			RequestModel(hash)
+			Citizen.Wait(0)
+		end
+		print("spawning ped, heading: " .. ped_heading)
+		print("hash: " .. hash)
+		local ped = CreatePed(4, hash, taxiDutyX, taxiDutyY, taxiDutyZ, ped_heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
+		SetEntityCanBeDamaged(ped,false)
+		SetPedCanRagdollFromPlayerImpact(ped,false)
+		TaskSetBlockingOfNonTemporaryEvents(ped,true)
+		SetPedFleeAttributes(ped,0,0)
+		SetPedCombatAttributes(ped,17,1)
+		SetEntityInvincible(ped)
+		SetPedRandomComponentVariation(ped, true)
+		TaskStartScenarioInPlace(ped, "WORLD_HUMAN_DRUG_DEALER_HARD", 0, true);
+	--end
+end)
+
 local playerNotified = false
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-		DrawMarker(1, taxiDutyX, taxiDutyY, taxiDutyZ, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
+		DrawMarker(27, taxiDutyX, taxiDutyY, taxiDutyZ, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
         local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
 	    if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,taxiDutyX,taxiDutyY,taxiDutyZ,false) < 3 and not playerNotified then
         drawTxt("Press ~y~E~w~ to go on/off duty for Downtown Taxi Co.!",0,1,0.5,0.8,0.6,255,255,255,255)
