@@ -97,6 +97,12 @@ Citizen.CreateThread(function()
             menu.title = "Electronics"
   				end
   			end)
+        TriggerEvent("GUI-general:Option", "Miscellaneous", function(cb)
+  				if cb then
+            menu.page = "misc"
+            menu.title = "Miscellaneous"
+  				end
+  			end)
         TriggerEvent("GUI-general:Option", "~y~Close", function(cb)
   				if cb then
             menu.page = "home"
@@ -114,8 +120,8 @@ Citizen.CreateThread(function()
             if cb then
               --print("person wants to buy: " .. item.name)
               buyItem(item)
-              menu.page = "home"
-              menu.title = "General Store"
+              --menu.page = "home"
+              --menu.title = "General Store"
             end
           end)
         end
@@ -142,8 +148,8 @@ Citizen.CreateThread(function()
             if cb then
               --print("person wants to buy: " .. item.name)
               buyItem(item)
-              menu.page = "home"
-              menu.title = "General Store"
+              --menu.page = "home"
+              --menu.title = "General Store"
             end
           end)
         end
@@ -170,8 +176,8 @@ Citizen.CreateThread(function()
             if cb then
               --print("person wants to buy: " .. item.name)
               buyItem(item)
-              menu.page = "home"
-              menu.title = "General Store"
+              --menu.page = "home"
+              --menu.title = "General Store"
             end
           end)
         end
@@ -188,9 +194,9 @@ Citizen.CreateThread(function()
             menu.title = "General Store"
           end
         end)
-        ----------------------
-        -- ElECTRONICS MENU --
-        ----------------------
+      ----------------------
+      -- ElECTRONICS MENU --
+      ----------------------
       elseif menu.page == "electronics" then
         for i = 1, #storeItems["Electronics"] do
           item = storeItems["Electronics"][i]
@@ -198,8 +204,36 @@ Citizen.CreateThread(function()
             if cb then
               --print("person wants to buy: " .. item.name)
               buyItem(item)
-              menu.page = "home"
-              menu.title = "General Store"
+              --menu.page = "home"
+              --menu.title = "General Store"
+            end
+          end)
+        end
+        TriggerEvent("GUI-general:Option", "~y~Back", function(cb)
+          if cb then
+            menu.page = "home"
+            menu.title = "General Store"
+          end
+        end)
+        TriggerEvent("GUI-general:Option", "~y~Close", function(cb)
+          if cb then
+            menu.page = "home"
+            menu.open = false
+            menu.title = "General Store"
+          end
+        end)
+      ----------------------
+      -- MISC MENU --
+      ----------------------
+      elseif menu.page == "misc" then
+        for i = 1, #storeItems["Misc"] do
+          item = storeItems["Misc"][i]
+          TriggerEvent("GUI-general:Option", "(~g~$" .. item.price .. "~w~) " .. item.name, function(cb)
+            if cb then
+              --print("person wants to buy: " .. item.name)
+              buyItem(item)
+              --menu.page = "home"
+              --menu.title = "General Store"
             end
           end)
         end

@@ -22,5 +22,8 @@ storeItems = {
     },
     ["Electronics"] = {
         { name = "Cell Phone", price = 750, type = "misc", quantity = 1, legality = "legal", contacts = {}, conversations = {}, weight = 3}
+    },
+    ["Misc"] = {
+        { name = "Large Scissors", price = 80, type = "misc", quantity = 1, legality = "legal", weight = 2}
     }
 }
