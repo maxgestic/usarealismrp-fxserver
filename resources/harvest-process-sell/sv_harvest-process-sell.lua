@@ -72,9 +72,9 @@ AddEventHandler("HPS:checkItem", function(job_name, process_time, stage)
       if stage == "Harvest" then
         TriggerClientEvent("usa:notify", userSource, "You need " .. REWARDS[job_name].harvest_item_requirement .. " to harvest!")
       elseif stage == "Process" then
-        TriggerClientEvent("usa:notify", userSource, "Don't have any " .. string.lower(job_name) .. " to process!")
+        TriggerClientEvent("usa:notify", userSource, "Don't have any " .. REWARDS[job_name].harvest_item.name .. " to process!")
       elseif stage == "Sale" then
-        TriggerClientEvent("usa:notify", userSource, "Don't have any " .. string.lower(job_name) .. " to sell!")
+        TriggerClientEvent("usa:notify", userSource, "Don't have any " .. REWARDS[job_name].processed_item.name .. " to sell!")
       end
     end)
   end
