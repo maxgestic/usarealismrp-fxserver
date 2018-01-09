@@ -15,7 +15,7 @@ local REWARDS = {
       type = "drug",
       legality = "illegal"
     },
-    reward_amount = 80
+    reward_amount = 200
   }
 }
 
