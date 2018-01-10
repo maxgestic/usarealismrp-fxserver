@@ -139,33 +139,20 @@ function IsPlayerInArea()
   playerCoords = GetEntityCoords(playerPed, true)
   hour = GetClockHours()
   for k,v in ipairs(cinemaLocations) do
--- Check if the player is near the cinema
-        if GetDistanceBetweenCoords(playerCoords, v.x, v.y, v.z) < 4.8 then
--- Check if the cinema is open or closed.
-          if hour < openingHour or hour > closingHour then
-            helpDisplay("The cinema is ~r~closed ~w~come back between 1am and 22pm.", 0)
-          else
-            helpDisplay("Press ~INPUT_CONTEXT~ to watch a movie", 0)
--- Check if the player is near the cinema and pressed "INPUT_CONTEXT"
-			if IsControlPressed(0, 38) then
-              entered_theater = playerCoords
-			  DoScreenFadeOut(1000)
-			  SetupMovie()
--- Teleport the Player inside the cinema
-			  Citizen.Wait(500)
-              SetEntityCoords(playerPed, 320.217, 263.81, 81.974, true, true, true, true)
-			  DoScreenFadeIn(800)
-			  Citizen.Wait(30)
-              SetEntityHeading(playerPed, 180.475)
-			  TaskLookAtCoord(GetPlayerPed(-1), 319.259, 251.827, 85.648, -1, 2048, 3)
-			  FreezeEntityPosition(GetPlayerPed(-1), 1)
-                  SetNotificationTextEntry('STRING')
-                  AddTextComponentString("press ~r~ESC ~w~key to exit")
-                  DrawNotification(false, false)
-            end
-          end
+    -- Check if the player is near the cinema
+    if GetDistanceBetweenCoords(playerCoords, v.x, v.y, v.z) < 4.8 then
+      -- Check if the cinema is open or closed.
+      if hour < openingHour or hour > closingHour then
+        helpDisplay("The cinema is ~r~closed ~w~come back between 1am and 22pm.", 0)
+      else
+        helpDisplay("Press ~INPUT_CONTEXT~ to watch a movie", 0)
+        -- Check if the player is near the cinema and pressed "INPUT_CONTEXT"
+        if IsControlPressed(0, 38) then
+          TriggerServerEvent("usa:checkPlayerMoney", "watch a movie", 200, "movies:enterTheatre", false, true)
         end
       end
+    end
+  end
 end
 Citizen.CreateThread(function()
   while true do
@@ -185,29 +172,50 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     playerPed = GetPlayerPed(-1)
---if player hits "esc" key while in theater they exit
-      if IsControlPressed(0, 322) and GetRoomKeyFromEntity(PlayerPedId()) == -1337806789 then
-	DoScreenFadeOut(1000)
-        --SetEntityCoords(playerPed, 297.891, 193.296, 104.344, 161.925)
-        SetEntityCoords(playerPed, entered_theater.x, entered_theater.y , entered_theater.z, 161.925)
-	Citizen.Wait(30)
-	DoScreenFadeIn(800)
-	FreezeEntityPosition(GetPlayerPed(-1), 0)
-	SetFollowPedCamViewMode(fistPerson)
-	DeconstructMovie()
-	SetPlayerInvincible(PlayerId(), false)
-        --ClearRoomForEntity(playerPed)
-        MovieState = false
-      end
-    if GetRoomKeyFromEntity(PlayerPedId()) == -1337806789 then
-	 --SetPlayerInvisibleLocally(PlayerId(),  true)
-	 SetEntityVisible(PlayerPedId(-1), false)
-	 SetPlayerInvincible(PlayerId(), true)
-     	 SetCurrentPedWeapon(PlayerPedId(), GetHashKey("weapon_unarmed"), 1)
-	 SetFollowPedCamViewMode(4)
-	else
-     SetEntityVisible(PlayerPedId(-1), true)
-	 SetPlayerInvincible(PlayerId(), false)
-	end
+    --if player hits "esc" key while in theater they exit
+    if IsControlPressed(0, 322) and GetRoomKeyFromEntity(PlayerPedId()) == -1337806789 then
+      DoScreenFadeOut(1000)
+      --SetEntityCoords(playerPed, 297.891, 193.296, 104.344, 161.925)
+      SetEntityCoords(playerPed, entered_theater.x, entered_theater.y , entered_theater.z, 161.925)
+      Citizen.Wait(30)
+      DoScreenFadeIn(800)
+      FreezeEntityPosition(GetPlayerPed(-1), 0)
+      SetFollowPedCamViewMode(fistPerson)
+      DeconstructMovie()
+      SetPlayerInvincible(PlayerId(), false)
+      --ClearRoomForEntity(playerPed)
+      MovieState = false
     end
+    if GetRoomKeyFromEntity(PlayerPedId()) == -1337806789 then
+      --SetPlayerInvisibleLocally(PlayerId(),  true)
+      SetEntityVisible(PlayerPedId(-1), false)
+      SetPlayerInvincible(PlayerId(), true)
+      SetCurrentPedWeapon(PlayerPedId(), GetHashKey("weapon_unarmed"), 1)
+      SetFollowPedCamViewMode(4)
+    else
+      SetEntityVisible(PlayerPedId(-1), true)
+      SetPlayerInvincible(PlayerId(), false)
+    end
+  end
+end)
+
+-- Custom:
+RegisterNetEvent("movies:enterTheatre")
+AddEventHandler("movies:enterTheatre", function()
+  local temp_playerPed = GetPlayerPed(-1)
+  local temp_playerCoords = GetEntityCoords(temp_playerPed, true)
+  entered_theater = temp_playerCoords
+  DoScreenFadeOut(1000)
+  SetupMovie()
+  -- Teleport the Player inside the cinema
+  Citizen.Wait(500)
+  SetEntityCoords(temp_playerPed, 320.217, 263.81, 81.974, true, true, true, true)
+  DoScreenFadeIn(800)
+  Citizen.Wait(30)
+  SetEntityHeading(temp_playerPed, 180.475)
+  TaskLookAtCoord(GetPlayerPed(-1), 319.259, 251.827, 85.648, -1, 2048, 3)
+  FreezeEntityPosition(GetPlayerPed(-1), 1)
+  SetNotificationTextEntry('STRING')
+  AddTextComponentString("press ~r~ESC ~w~key to exit")
+  DrawNotification(false, false)
 end)
