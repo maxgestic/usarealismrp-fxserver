@@ -1,13 +1,15 @@
 -- this is where you edit the message seen by end user
 
 function helpText(source)
-	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0You will earn $250 every 10 minutes from welfare until you find another job.")
-	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^5Look at the icons on your map to see where gun, vehicles, clothing, etc stores and jobs are located.")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "1) ^3/help^0 - this menu")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "2) ^3/commands^0 - available commands")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "3) ^3/discord^0 - discord server link")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "4) ^3/rules^0 - to see the server rules")
 	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^3WEBSITE: ^0https://www.usarrp.net")
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0You will earn $250 every 10 minutes from welfare until you find another job.")
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^5Look at the icons on your map to see where jobs available jobs are.")
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^5If you don't have one, you should head to the general store to buy a cell phone. You can use it to call for a taxi, towtruck, police, EMS, etc")
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^5Once you have one, do F1 > Cell Phone > Use to open it.")
 end
 
 function commandsText(source)
