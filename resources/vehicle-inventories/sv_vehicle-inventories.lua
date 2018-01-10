@@ -64,6 +64,37 @@ AddEventHandler("vehicle:storeItem", function(vehicle_plate, item, quantity)
   end)
 end)
 
+RegisterServerEvent("vehicle:seizeContraband")
+AddEventHandler("vehicle:seizeContraband", function(target_vehicle_plate)
+  print("seizing contraband from veh with plate #: " .. target_vehicle_plate)
+  local userSource = tonumber(source)
+  TriggerEvent("es:getPlayers", function(players)
+    if players then
+      for id, player in pairs(players) do
+        local player_vehicles = player.getActiveCharacterData("vehicles")
+        for i = 1, #player_vehicles do
+          local veh = player_vehicles[i]
+          if string.find(target_vehicle_plate, tostring(veh.plate)) then -- this is the vehicle whose inventory we want to target
+            local vehicle_inventory = veh.inventory
+            for j = #vehicle_inventory, 1, -1 do
+              if vehicle_inventory[j].legality then
+                if vehicle_inventory[j].legality == "illegal" then
+                  TriggerClientEvent("usa:notify", userSource, "~y~Seized:~w~ " .. "(x" .. vehicle_inventory[j].quantity .. ") " .. vehicle_inventory[j].name)
+                  TriggerClientEvent("chatMessage", userSource, "^3Seized:^0 " .. "(x" .. vehicle_inventory[j].quantity .. ") " .. vehicle_inventory[j].name)
+                  table.remove(player_vehicles[i].inventory, j)
+                end
+              end
+            end
+            -- save:
+            player.setActiveCharacterData("vehicles", player_vehicles)
+            return
+          end
+        end
+      end
+    end
+  end)
+end)
+
 RegisterServerEvent("vehicle:removeItem")
 AddEventHandler("vehicle:removeItem", function(item_name, quantity, target_vehicle_plate)
   print("inside vehicle:removeItem!")
