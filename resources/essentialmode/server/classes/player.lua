@@ -5,7 +5,7 @@
 
 -- restart essentialmode
 
-function CreatePlayer(source, permission_level, identifier, group, characters, policeCharacter)
+function CreatePlayer(source, permission_level, identifier, group, characters, policeCharacter, emsCharacter)
 	local self = {}
 
 	self.source = source
@@ -18,6 +18,11 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 		self.policeCharacter = {}
 	else
 		self.policeCharacter = policeCharacter
+	end
+	if emsCharacter == nil then
+		self.emsCharacter = {}
+	else
+		self.emsCharacter = emsCharacter
 	end
 	-- END --
 	self.coords = {x = 0.0, y = 0.0, z = 0.0}
@@ -202,6 +207,17 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 
 	rTable.setPoliceCharacter = function(character)
 		self.policeCharacter = character
+	end
+
+	rTable.setEmsCharacter = function(character)
+		if not self.emsCharacter then self.emsCharacter = {} end
+		self.emsCharacter = character
+		print("ems character set! hash: " .. character.hash)
+	end
+
+	rTable.getEmsCharacter = function()
+		if not self.emsCharacter then print("self.emsCharacter did not exist when loading!") end
+		return self.emsCharacter
 	end
 
 	-- unused? remove?

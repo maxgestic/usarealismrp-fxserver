@@ -135,6 +135,35 @@ AddEventHandler("emsstation2:isWhitelisted", function()
 	menu = 1
 end)
 
+RegisterNetEvent("emsstation2:setCharacter")
+AddEventHandler("emsstation2:setCharacter", function(character)
+	--Citizen.Trace("Inside is whitelisted client evnet")
+	--menu = 1
+	if character.hash then
+            local name, model
+            model = tonumber(character.hash)
+            Citizen.Trace("giving loading with customizations with hash = " .. model)
+            Citizen.CreateThread(function()
+                RequestModel(model)
+                while not HasModelLoaded(model) do -- Wait for model to load
+                    RequestModel(model)
+                    Citizen.Wait(0)
+                end
+                SetPlayerModel(PlayerId(), model)
+                SetModelAsNoLongerNeeded(model)
+                -- ADD CUSTOMIZATIONS FROM CLOTHING STORE
+                for key, value in pairs(character["components"]) do
+                    SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
+                end
+                for key, value in pairs(character["props"]) do
+                    SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
+                end
+				TriggerEvent("emsstation2:giveDefaultLoadout")
+			end)
+	end
+	--menu_armoury = 1
+end)
+
 RegisterNetEvent("emsstation2:giveDefaultLoadout")
 AddEventHandler("emsstation2:giveDefaultLoadout", function()
 	Citizen.Trace("true")
@@ -204,6 +233,47 @@ AddEventHandler("emsstation2:ShowMainMenu", function()
 		else
 
 		end
+		end)
+
+		TriggerEvent("GUI2:Option", "Load Default", function(cb)
+			if(cb) then
+				Citizen.Trace("true")
+				TriggerServerEvent("emsstation2:loadDefaultUniform", character)
+				TriggerEvent("interaction:setPlayersJob", "ems") -- set interaction menu javascript job variable to "police"
+				--menu = 4
+			end
+		end)
+
+		TriggerEvent("GUI2:Option", "Save as default", function(cb)
+			if(cb) then
+				local character = {
+					["hash"] = "",
+					["components"] = {},
+					["componentstexture"] = {},
+					["props"] = {},
+					["propstexture"] = {}
+				}
+				local ply = GetPlayerPed(-1)
+				character.hash = GetEntityModel(GetPlayerPed(-1))
+				local debugstr = "Player Hash: " .. character.hash .. "| Props: "
+				for i=0,2 -- instead of 3?
+					do
+					character.props[i] = GetPedPropIndex(ply, i)
+					character.propstexture[i] = GetPedPropTextureIndex(ply, i)
+					debugstr = debugstr .. character.props[i] .. "->" .. character.propstexture[i] .. ","
+				end
+				debugstr = debugstr .. "| Components: "
+				for i=0,11
+					do
+					character.components[i] = GetPedDrawableVariation(ply, i)
+					character.componentstexture[i] = GetPedTextureVariation(ply, i)
+					debugstr = debugstr .. character.components[i] .. "->" .. character.componentstexture[i] .. ","
+				end
+				Citizen.Trace(debugstr)
+				TriggerServerEvent("emsstation2:saveasdefault", character)
+				--Citizen.Trace("calling server function: giveMeMyWeaponsPlease...")
+				--TriggerServerEvent("mini:giveMeMyWeaponsPlease")
+			end
 		end)
 
 	TriggerEvent("GUI2:Option", "Off-Duty", function(cb)

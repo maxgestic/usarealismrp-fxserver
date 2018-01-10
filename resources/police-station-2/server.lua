@@ -149,8 +149,6 @@ AddEventHandler("policestation2:loadDefaultUniform", function()
 	end)
 end)
 
-
-
 RegisterServerEvent("policestation2:onduty")
 AddEventHandler("policestation2:onduty", function()
     local userSource = tonumber(source)

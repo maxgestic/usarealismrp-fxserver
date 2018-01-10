@@ -37,6 +37,34 @@ AddEventHandler('rconCommand', function(commandName, args)
     end
 end)
 
+RegisterServerEvent("emsstation2:loadDefaultUniform")
+AddEventHandler("emsstation2:loadDefaultUniform", function()
+	local userSource = tonumber(source)
+	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+		character = user.getEmsCharacter()
+		TriggerClientEvent("emsstation2:setCharacter", userSource, character)
+		TriggerClientEvent("emsstation2:giveDefaultLoadout", userSource)
+    user.setActiveCharacterData("job", "ems")
+	end)
+end)
+
+RegisterServerEvent("emsstation2:saveasdefault")
+AddEventHandler("emsstation2:saveasdefault", function(character)
+	local userSource = tonumber(source)
+	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+    local user_job = user.getActiveCharacterData("job")
+		if user_job == "ems" or user_job == "fire" then
+			--user.setCharacters(character)
+			--print("PLAYER MODEL SAVED")
+			user.setEmsCharacter(character) -- this is right... right??
+			TriggerClientEvent("usa:notify", userSource, "Default ~b~EMS~w~ uniform saved.")
+			--TriggerEvent("mini:giveMeMyWeaponsPlease")
+		else
+			TriggerClientEvent("usa:notify", userSource, "You need to be ~y~on duty~w~ to save default uniform.")
+		end
+	end)
+end)
+
 RegisterServerEvent("emsstation2:onduty")
 AddEventHandler("emsstation2:onduty", function()
     local userSource = tonumber(source)
