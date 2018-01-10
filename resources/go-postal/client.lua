@@ -258,18 +258,25 @@ Citizen.CreateThread(function()
 					DrawSpecialText("Press [ ~g~E~w~ ] to deliver your Go Postal packages")
 			        if IsControlPressed(0, 86) then
 			            if not pressed then
-							if job.distance * 2 > 3500 then
-								pay = 3500
+							if job.distance * 2 > 1000 then
+								pay = 10000
 							else
 								pay = math.ceil(job.distance * 2)
 							end
 							-- notify user
 							SetNotificationTextEntry("STRING")
-							AddTextComponentString("~h~Job Completed!~h~ ~n~" .. "+ ~g~$" .. pay)
+							AddTextComponentString("~h~Job Completed!~h~ ~n~" .. "+ ~g~$" .. pay .. "\n~w~Next location set.")
 							TriggerServerEvent("transport:giveMoney", pay, job)
 							DrawNotification(0,1)
-							-- set variables
-							job = nil
+							-- give next location:
+							local temp_truck = job.truck
+							job = gopostal[math.random(#gopostal)]
+							job.name = "Go Postal"
+							job.distance = GetDistanceBetweenCoords(job.x, job.y, job.z, GetEntityCoords(GetPlayerPed(-1)))
+							job.truck = temp_truck
+							SetNewWaypoint(job.x, job.y)
+							TriggerServerEvent("transport:addJob", job)
+							-- not sure what below code is for:
 							pressed = true
 			                while pressed do
 			                    Wait(0)
@@ -315,18 +322,26 @@ Citizen.CreateThread(function()
 					DrawSpecialText("Press [ ~g~E~w~ ] to deliver your goods.")
 			        if IsControlPressed(0, 86) then
 			            if not pressed then
-							if job.distance * 2 > 2000 then
-								pay = 2000
+							if job.distance * 2 > 10000 then
+								pay = 10000
 							else
 								pay = math.ceil(job.distance * 2)
 							end
 							-- notify user
 							SetNotificationTextEntry("STRING")
-							AddTextComponentString("~h~Job Completed!~h~ ~n~" .. "+ ~g~$" .. pay)
+							AddTextComponentString("~h~Job Completed!~h~ ~n~" .. "+ ~g~$" .. pay .. "\n~w~Next location set.")
 							TriggerServerEvent("transport:giveMoney", pay, job)
 							DrawNotification(0,1)
-							-- set variables
-							job = nil
+							-- set next location:
+							local temp_truck = job.truck
+							job = fridgeItTruckingDropOff[math.random(#fridgeItTruckingDropOff)]
+							job.name = "FridgeIt Trucking"
+							job.distance = GetDistanceBetweenCoords(job.x, job.y, job.z, GetEntityCoords(GetPlayerPed(-1)))
+							job.truck = temp_truck
+							print("setting new trucking WP: x = " .. job.x .. ", y = " .. job.y)
+							SetNewWaypoint(job.x, job.y)
+							TriggerServerEvent("transport:addJob", job)
+							-- not sure what below code is for:
 							pressed = true
 			                while pressed do
 			                    Wait(0)
