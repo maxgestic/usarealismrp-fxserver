@@ -197,17 +197,19 @@ TriggerEvent('es:addCommand', 'runplate', function(source, args, user)
 					--print("id = " .. id)
 					--print("player.job = " .. player.job)
 					local vehicles = player.getActiveCharacterData("vehicles")
-					for i = 1, #vehicles do
-						local vehicle = vehicles[i]
-						if tostring(vehicle.plate) == tostring(plateNumber) then
-							print("found matching plate number! triggering client event")
-							local message = "~y~PLATE: ~w~" .. vehicle.plate .. "\n"
-							message = message .. "~y~RO: ~w~"
-							message = message .. vehicle.owner .. "\n"
-							message = message .. "~y~MODEL: ~w~"
-							message = message .. vehicle.model
-							TriggerClientEvent("licenseCheck:notify", userSource, message)
-							return
+					if vehicles then
+						for i = 1, #vehicles do
+							local vehicle = vehicles[i]
+							if tostring(vehicle.plate) == tostring(plateNumber) then
+								print("found matching plate number! triggering client event")
+								local message = "~y~PLATE: ~w~" .. vehicle.plate .. "\n"
+								message = message .. "~y~RO: ~w~"
+								message = message .. vehicle.owner .. "\n"
+								message = message .. "~y~MODEL: ~w~"
+								message = message .. vehicle.model
+								TriggerClientEvent("licenseCheck:notify", userSource, message)
+								return
+							end
 						end
 					end
 					-- player not in game with that plate number or plate number owned by a local!
