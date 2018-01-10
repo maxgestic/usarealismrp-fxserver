@@ -21,7 +21,6 @@ AddEventHandler("lock:checkForKey", function(plate)
       local item = inv[i]
       if item then
         if string.find(item.name, "Key") then
-          print("found key!")
           if string.find(plate, item.plate) then
             print("found plate match!")
             if isLocked(plate) then
