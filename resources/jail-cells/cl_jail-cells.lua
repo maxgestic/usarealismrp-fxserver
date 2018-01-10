@@ -14,12 +14,14 @@ local JAIL_CELLS = {
 }
 
 local LOCK_KEY = 38 -- "E"
+local SOUND_ENABLE = true
 
 RegisterNetEvent("jail:toggleDoorLock")
 AddEventHandler("jail:toggleDoorLock", function(number, locked)
   local cell_to_lock = getDoorInDirection(JAIL_CELLS[number].outside, JAIL_CELLS[number].inside)
   SetEntityAsMissionEntity(cell_to_lock, true, true)
   FreezeEntityPosition(cell_to_lock, locked)
+  --print("cell: " .. cell_to_lock .. ", locked")
 end)
 
 Citizen.CreateThread(function()
@@ -31,8 +33,9 @@ Citizen.CreateThread(function()
       if Vdist(data.outside.x, data.outside.y, data.outside.z, player_ped_coords.x, player_ped_coords.y, player_ped_coords.z) < 1.0 then
         DrawSpecialText("Press ~g~E~w~ to toggle cell #" .. cell_number .. " lock")
         if IsControlJustPressed(1, LOCK_KEY) then
-          print("attempting to lock or unlock cell #" .. cell_number)
+          --print("attempting to lock or unlock cell #" .. cell_number)
           TriggerServerEvent("jail:checkDoorLock", cell_number)
+          if SOUND_ENABLE then TriggerServerEvent("InteractSound_SV:PlayWithinDistance", 1.2, "cell-lock", 0.2) end
         end
       end
     end

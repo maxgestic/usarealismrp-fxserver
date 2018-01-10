@@ -1,5 +1,6 @@
 local lPed
 local isCuffed = false
+local SOUND_ENABLE = true
 
 RegisterNetEvent("cuff:Handcuff")
 AddEventHandler("cuff:Handcuff", function(cuffer)
@@ -24,6 +25,7 @@ AddEventHandler("cuff:Handcuff", function(cuffer)
 				-- FreezeEntityPosition(lPed, true)
 				DrawCoolLookingNotificationNoPic("You have been ~r~detained~w~.")
 				isCuffed = true
+				if SOUND_ENABLE then TriggerServerEvent("InteractSound_SV:PlayWithinDistance", 1.0, "handcuff", 0.2) end
 			end
 		end)
 	end
