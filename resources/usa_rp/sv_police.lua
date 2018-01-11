@@ -117,14 +117,6 @@ function comma_value(amount)
   return formatted
 end
 
--- spike strip:
-TriggerEvent('es:addCommand', 'spikestrip', function(source, args, user)
-	local userjob = user.getActiveCharacterData("job")
-	if userjob == "sheriff" then
-		TriggerClientEvent("c_setSpike", source)
-	end
-end)
-
 -- start bait car
 TriggerEvent('es:addCommand', 'lockbc', function(source, args, user)
 	local userjob = user.getActiveCharacterData("job")
