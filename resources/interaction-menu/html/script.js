@@ -59,7 +59,7 @@ function playEmote(emoteNumber) {
     if (typeof emoteName == "undefined") {
         emoteName = "cancel";
     }
-    $.post('http://test/playEmote', JSON.stringify({
+    $.post('http://interaction-menu/playEmote', JSON.stringify({
         emoteName: emoteName.toLowerCase()
     }));
     closeNav();
@@ -124,7 +124,7 @@ function openVoipMenu() {
 }
 
 function setVoip(option) {
-    $.post('http://test/setVoipLevel', JSON.stringify({
+    $.post('http://interaction-menu/setVoipLevel', JSON.stringify({
         level: option
     }));
 
@@ -134,13 +134,13 @@ function setVoip(option) {
 function performPoliceAction(policeActionIndex) {
     if (policeActionIndex == "front left" || policeActionIndex == "front right" || policeActionIndex == "back left" || policeActionIndex == "back right") {
         var seat = policeActionIndex;
-        $.post('http://test/performPoliceAction', JSON.stringify({
+        $.post('http://interaction-menu/performPoliceAction', JSON.stringify({
             policeActionIndex: 0,
             policeActionName: "Unseat",
             unseatIndex: seat
         }));
     } else {
-        $.post('http://test/performPoliceAction', JSON.stringify({
+        $.post('http://interaction-menu/performPoliceAction', JSON.stringify({
             policeActionIndex: policeActionIndex,
             policeActionName: policeActions[policeActionIndex],
             unseatIndex: ""
@@ -172,7 +172,7 @@ function showPoliceActions() {
 
 function getVehicleInventory() {
   $(".sidenav a").hide();
-  $.post('http://test/getVehicleInventory', JSON.stringify({
+  $.post('http://interaction-menu/getVehicleInventory', JSON.stringify({
       target_vehicle_plate: target_vehicle_plate
   }));
 }
@@ -289,10 +289,10 @@ $(function() {
 
     document.onkeyup = function (data) {
         if (data.which == 27) { // Escape key
-            $.post('http://test/escape', JSON.stringify({}));
+            $.post('http://interaction-menu/escape', JSON.stringify({}));
             closeNav();
         } else if (data.which == 112) { // F1 key
-            $.post('http://test/escape', JSON.stringify({}));
+            $.post('http://interaction-menu/escape', JSON.stringify({}));
             closeNav();
         }
     };
@@ -302,11 +302,11 @@ $(function() {
     });
 
     $("#inventory-btn").click(function(){
-        $.post('http://test/loadInventory', JSON.stringify({}));
+        $.post('http://interaction-menu/loadInventory', JSON.stringify({}));
     });
 
     $("#close-btn").click(function(){
-        $.post('http://test/escape', JSON.stringify({}));
+        $.post('http://interaction-menu/escape', JSON.stringify({}));
         closeNav();
     });
 
@@ -351,7 +351,7 @@ $(function() {
         if (itemName == "(x1) Driver") {
             itemName = "(x1) Driver's License"
         }
-        $.post('http://test/inventoryActionItemClicked', JSON.stringify({
+        $.post('http://interaction-menu/inventoryActionItemClicked', JSON.stringify({
             actionName: actionName.toLowerCase(),
             itemName: itemName,
             playerId: targetPlayerId,
@@ -389,7 +389,7 @@ $(function() {
         if (itemName == "(x1) Driver") {
             itemName = "(x1) Driver's License"
         }
-        $.post('http://test/retrieveVehicleItem', JSON.stringify({
+        $.post('http://interaction-menu/retrieveVehicleItem', JSON.stringify({
             actionName: actionName.toLowerCase(),
             itemName: itemName,
             wholeItem: wholeItem,
@@ -404,7 +404,7 @@ $(function() {
 function vehicleInventoryActionsBackBtn() {
     $(".sidenav .vehicle-item-action").remove();
     $(".sidenav .vehicle-item-actions-back-btn").remove();
-    $.post('http://test/getVehicleInventory', JSON.stringify({
+    $.post('http://interaction-menu/getVehicleInventory', JSON.stringify({
         target_vehicle_plate: target_vehicle_plate
     }));
 }
@@ -412,7 +412,7 @@ function vehicleInventoryActionsBackBtn() {
 function inventoryActionsBackBtn() {
     $(".sidenav .inventory-action-item").remove();
     $(".sidenav .inventory-actions-back-btn").remove();
-    $.post('http://test/loadInventory', JSON.stringify({}));
+    $.post('http://interaction-menu/loadInventory', JSON.stringify({}));
 }
 
 function GetWholeItemByName(itemName) {

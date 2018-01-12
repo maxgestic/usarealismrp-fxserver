@@ -41,6 +41,10 @@ local scenarios = {
 	{name = "prostitute", scenarioName = "WORLD_HUMAN_PROSTITUTE_HIGH_CLASS"}
 }
 
+local player = {
+	BAC = 0.00
+}
+
 RegisterNUICallback('escape', function(data, cb)
     TriggerEvent("test:escapeFromCSharp")
 end)
@@ -263,13 +267,42 @@ elseif wholeItem.type and wholeItem.type == "alcohol" then
 		print("Player used inventory item of type: alcohol!")
 		print("item name: " .. wholeItem.name)
 		TriggerEvent("hungerAndThirst:replenish", "drink", wholeItem)
-		intoxicate(false, "MOVE_M@DRUNK@SLIGHTLYDRUNK")
-		reality(5)
+		print("old player BAC: " .. player.BAC)
+		player.BAC = player.BAC + wholeItem.strength
+		print("new player BAC: " .. player.BAC)
+		if player.BAC >= 0.12 then
+			intoxicate(false, "MOVE_M@DRUNK@VERYDRUNK")
+			reality(4)
+		elseif player.BAC >= 0.08 then
+			intoxicate(false, "MOVE_M@DRUNK@MODERATEDRUNK")
+			reality(7)
+		elseif player.BAC >= 0.04 then
+			intoxicate(false, "MOVE_M@DRUNK@SLIGHTLYDRUNK")
+			reality(10)
+		end
 	else
 		TriggerEvent("interaction:notify", "There is no use action for that item!")
 	end
-
 end
+
+Citizen.CreateThread(function()
+	local timer = 600000
+	local decrement_amount = 0.03
+    while true do
+			if player.BAC > 0.00 then
+				local new_BAC = player.BAC - decrement_amount
+				if new_BAC >= 0.00 then
+					print("decrementing BAC! now at: " .. new_BAC)
+					player.BAC = new_BAC
+				else
+					player.BAC = 0.00
+				end
+			else
+				print("player BAC was not >= 0.00")
+			end
+      Wait(timer) -- every x seconds, decrement player.BAC
+    end
+end)
 
 RegisterNetEvent("interaction:ragdoll")
 AddEventHandler("interaction:ragdoll", function()
@@ -320,6 +353,7 @@ end)
 
 Citizen.CreateThread(function()
     while true do
+
         -- cancel emote when walking forward
        if IsControlJustPressed(1, 32) then -- INPUT_MOVE_UP_ONLY
            local ped = GetPlayerPed(-1)

@@ -1,5 +1,5 @@
-client_scripts {"cl_test.lua", "example.net.dll"}
-server_script "sv_test.lua"
+client_scripts {"cl_interaction.lua", "example.net.dll"}
+server_script "sv_interaction.lua"
 
 ui_page 'html/index.html'
 
