@@ -61,7 +61,7 @@ AddEventHandler('playerDropped', function()
 			end
 		end
 		TriggerEvent("es:playerDropped", Users[numberSource])
-		db.updateUser(Users[numberSource].get('identifier'), {characters = Users[numberSource].getCharacters(), policeCharacter = Users[numberSource].getPoliceCharacter()}, function()
+		db.updateUser(Users[numberSource].get('identifier'), {characters = Users[numberSource].getCharacters(), policeCharacter = Users[numberSource].getPoliceCharacter(), emsCharacter = Users[numberSource].getEmsCharacter()}, function()
 			Users[numberSource] = nil
 		end)
 	else
@@ -230,7 +230,7 @@ Citizen.CreateThread(function()
 					for id, player in pairs(players) do
 						if player then
 							print("player existed")
-							db.updateUser(player.get('identifier'), {characters = player.getCharacters(), policeCharacter = player.getPoliceCharacter()}, function()
+							db.updateUser(player.get('identifier'), {characters = player.getCharacters(), policeCharacter = player.getPoliceCharacter(), emsCharacter = Users[numberSource].getEmsCharacter()}, function()
 								print("saved player #" .. id .. "'s data!'")
 							end)
 						end
