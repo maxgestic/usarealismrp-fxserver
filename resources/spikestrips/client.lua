@@ -93,7 +93,7 @@ function FrontLeftTire(vehicle)
 	local spikestrip = GetClosestObjectOfType(tirePosition.x, tirePosition.y, tirePosition.z, 15.0, GetHashKey("P_ld_stinger_s"), false, 1, 1)
 	local spikeCoords = GetEntityCoords(spikestrip, false)
 	local distance = Vdist(tirePosition.x, tirePosition.y, tirePosition.z, spikeCoords.x, spikeCoords.y, spikeCoords.z)
-	
+
 	if distance < 1.8 then
 		if not IsVehicleTyreBurst(vehicle, 0, false) and not IsVehicleTyreBurst(vehicle, 0, true) then
 			SetVehicleTyreBurst(vehicle, 0, false, 1000.0)
@@ -106,10 +106,11 @@ function FrontRightTire(vehicle)
 	local spikestrip = GetClosestObjectOfType(tirePosition.x, tirePosition.y, tirePosition.z, 15.0, GetHashKey("P_ld_stinger_s"), false, 1, 1)
 	local spikeCoords = GetEntityCoords(spikestrip, false)
 	local distance = Vdist(tirePosition.x, tirePosition.y, tirePosition.z, spikeCoords.x, spikeCoords.y, spikeCoords.z)
-	
+
 	if distance < 1.8 then
 		if not IsVehicleTyreBurst(vehicle, 1, false) and not IsVehicleTyreBurst(vehicle, 1, true) then
 			SetVehicleTyreBurst(vehicle, 1, false, 1000.0)
+			--todo: add interact sound tire pop noise so people in the car hear it too
 		end
 	end
 end
@@ -119,7 +120,7 @@ function BackLeftTire(vehicle)
 	local spikestrip = GetClosestObjectOfType(tirePosition.x, tirePosition.y, tirePosition.z, 15.0, GetHashKey("P_ld_stinger_s"), false, 1, 1)
 	local spikeCoords = GetEntityCoords(spikestrip, false)
 	local distance = Vdist(tirePosition.x, tirePosition.y, tirePosition.z, spikeCoords.x, spikeCoords.y, spikeCoords.z)
-	
+
 	if distance < 1.8 then
 		if not IsVehicleTyreBurst(vehicle, 4, false) and not IsVehicleTyreBurst(vehicle, 4, true) then
 			SetVehicleTyreBurst(vehicle, 4, false, 1000.0)
@@ -133,7 +134,7 @@ function BackRightTire(vehicle)
 	local spikestrip = GetClosestObjectOfType(tirePosition.x, tirePosition.y, tirePosition.z, 15.0, GetHashKey("P_ld_stinger_s"), false, 1, 1)
 	local spikeCoords = GetEntityCoords(spikestrip, false)
 	local distance = Vdist(tirePosition.x, tirePosition.y, tirePosition.z, spikeCoords.x, spikeCoords.y, spikeCoords.z)
-	
+
 	if distance < 1.8 then
 		if not IsVehicleTyreBurst(vehicle, 5, false) and not IsVehicleTyreBurst(vehicle, 5, true) then
 			SetVehicleTyreBurst(vehicle, 5, false, 1000.0)

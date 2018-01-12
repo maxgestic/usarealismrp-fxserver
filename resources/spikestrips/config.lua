@@ -20,5 +20,10 @@ SpikeConfig.PedsList = {
 	"s_m_m_chemsec_01",
 	"s_m_y_blackops_01",
 	"s_m_m_ciasec_01",
-	"mp_m_fibsec_01"
+	"mp_m_fibsec_01",
+	"s_m_m_fiboffice_01",
+	"s_m_m_ciasec_01",
+	"ig_karen_daniels",
+	"S_M_M_PrisGuard_01",
+	"s_m_m_pilot_02"
 }
