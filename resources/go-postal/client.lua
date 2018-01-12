@@ -258,7 +258,7 @@ Citizen.CreateThread(function()
 					DrawSpecialText("Press [ ~g~E~w~ ] to deliver your Go Postal packages")
 			        if IsControlPressed(0, 86) then
 			            if not pressed then
-							if job.distance * 2 > 1000 then
+							if job.distance * 2 > 10000 then
 								pay = 10000
 							else
 								pay = math.ceil(job.distance * 2)
