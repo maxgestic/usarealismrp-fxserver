@@ -333,15 +333,17 @@ AddEventHandler("CS:ShowComponentsMenu1", function()
 		if(maxComponent > 1) then
 			TriggerEvent("GUI2:Int", components[i+1] .. " (" .. maxComponent .. ")", selectedComponent, 0, maxComponent - 1, function(cb)
 				selectedComponent = cb
-				SetPedComponentVariation(ply, i, selectedComponent, 0, 0)
+				-- SetPedComponentVariation(ply, i, selectedComponent, 0, 0)
+				SetPedComponentVariation(ply, i, selectedComponent, 0, 2)
 				selectedTexture = 0
-				end)
+			end)
 		end
 		if(maxTexture > 1) then
 			TriggerEvent("GUI2:Int", components[i+1] .. " Texture (" .. maxTexture .. ")", selectedTexture, 0, maxTexture - 1, function(cb)
 				selectedTexture = cb
-				SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 0)
-				end)
+				-- SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 0)
+				SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 2)
+			end)
 		end
 	end
 	TriggerEvent("GUI2:Update")

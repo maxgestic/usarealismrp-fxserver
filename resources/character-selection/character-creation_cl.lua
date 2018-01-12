@@ -82,7 +82,7 @@ AddEventHandler("character:setCharacter", function(character)
                     SetModelAsNoLongerNeeded(model)
                     -- ADD CUSTOMIZATIONS FROM CLOTHING STORE
                     for key, value in pairs(character.appearance["components"]) do
-                        SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character.appearance["componentstexture"][key], 0)
+                        SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character.appearance["componentstexture"][key], 2)
                     end
                     for key, value in pairs(character.appearance["props"]) do
                         SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character.appearance["propstexture"][key], true)
