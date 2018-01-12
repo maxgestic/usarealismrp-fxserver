@@ -220,8 +220,8 @@ function interactionMenuUse(itemName, wholeItem)
 		--Citizen.Trace("meth found to use!!")
 		TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
 		TriggerEvent("interaction:notify", "You have used: (x1) Meth")
-		intoxicate()
-		reality()
+		intoxicate(true, nil)
+		reality(5)
 	-------------------
 	-- Hash --
 	-------------------
@@ -229,8 +229,8 @@ function interactionMenuUse(itemName, wholeItem)
 		--Citizen.Trace("meth found to use!!")
 		TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
 		TriggerEvent("interaction:notify", "You have used: (x1) Hash")
-		intoxicate()
-		reality()
+		intoxicate(true, nil)
+		reality(3)
 	-------------------
 	-- Repair Kit --
 	-------------------
@@ -256,6 +256,15 @@ function interactionMenuUse(itemName, wholeItem)
 		print("Player used inventory item of type: drink!")
 		print("item name: " .. wholeItem.name)
 		TriggerEvent("hungerAndThirst:replenish", "drink", wholeItem)
+	---------------------------
+	-- Alcoholic Drink Item  --
+	---------------------------
+elseif wholeItem.type and wholeItem.type == "alcohol" then
+		print("Player used inventory item of type: alcohol!")
+		print("item name: " .. wholeItem.name)
+		TriggerEvent("hungerAndThirst:replenish", "drink", wholeItem)
+		intoxicate(false, "MOVE_M@DRUNK@SLIGHTLYDRUNK")
+		reality(5)
 	else
 		TriggerEvent("interaction:notify", "There is no use action for that item!")
 	end
@@ -322,21 +331,32 @@ Citizen.CreateThread(function()
 end)
 
 -- getting drunk / high effect
-function intoxicate()
-   TaskStartScenarioInPlace(GetPlayerPed(-1), "WORLD_HUMAN_DRUG_DEALER", 0, 1)
+function intoxicate(playScenario, clipset)
+	if playScenario then
+   	TaskStartScenarioInPlace(GetPlayerPed(-1), "WORLD_HUMAN_DRUG_DEALER", 0, 1)
+	end
    Citizen.Wait(5000)
    DoScreenFadeOut(1000)
    Citizen.Wait(1000)
    ClearPedTasksImmediately(GetPlayerPed(-1))
    SetTimecycleModifier("spectator5")
    SetPedMotionBlur(GetPlayerPed(-1), true)
-   SetPedMovementClipset(GetPlayerPed(-1), "MOVE_M@DRUNK@SLIGHTLYDRUNK", true)
+	 if clipset then
+	 	print("setting movement clipset to: " .. clipset)
+	 	ResetPedMovementClipset(GetPlayerPed(-1), 0)
+	 	RequestAnimSet( clipset )
+	 	while ( not HasAnimSetLoaded( clipset ) ) do
+		 	Citizen.Wait( 1 )
+	 	end
+	 	SetPedMovementClipset(GetPlayerPed(-1), clipset, 0.25)
+	end
    SetPedIsDrunk(GetPlayerPed(-1), true)
    DoScreenFadeIn(1000)
  end
 
- function reality()
-   Citizen.Wait(180000)
+ function reality(minutes)
+	 minutes = minutes * 60 * 1000
+   Citizen.Wait(minutes)
    DoScreenFadeOut(1000)
    Citizen.Wait(1000)
    DoScreenFadeIn(1000)

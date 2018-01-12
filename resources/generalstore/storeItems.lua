@@ -12,8 +12,8 @@ storeItems = {
       {name = "Water", price = 30, type = "drink", substance = 30.0, quantity = 1, legality = "legal", weight = 4},
       {name = "Cookies n Cream Milkshake", price = 35, type = "drink", substance = 34.0, quantity = 1, legality = "legal", weight = 5},
       {name = "Orange Juice w/ Pulp", price = 35, type = "drink", substance = 30.0, quantity = 1, legality = "legal", weight = 4},
-      {name = "Soda", price = 40, type = "drink", substance = 28.0, quantity = 1, legality = "legal", weight = 4}
-      --{name = "Leanmonade", price = 50, type = "Drink", substance = 10.0, quantity = 1, legality = "illegal", weight = 4},
+      {name = "Soda", price = 40, type = "drink", substance = 28.0, quantity = 1, legality = "legal", weight = 4},
+      {name = "Four Loko", price = 50, type = "alcohol", substance = 10.0, quantity = 1, legality = "legal", weight = 4}
       --{name = "Lite Beer 4 Pack", price = 100, type = "Drink", substance = 5.0, quantity = 4, legality = "legal", weight = 6},
       --{name = "Champagne", price = 200, type = "Drink", substance = 15.0, quantity = 1, legality = "legal", weight = 8}
     },
