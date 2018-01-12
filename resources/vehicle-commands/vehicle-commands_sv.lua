@@ -20,7 +20,8 @@ local spawnableVehicles = {
 		'polmav',
 		'scorcher',
 		'predator',
-		'chpcvpi'
+		'chpcvpi',
+		'firetruk'
 	}
 }
 
@@ -56,9 +57,11 @@ TriggerEvent('es:addCommand', 'spawn', function(source, args, user)
 			TriggerClientEvent("vehicleCommands:spawnVehicle", source, "pranger")
 		elseif args[2] == "heli" then
 			TriggerClientEvent("vehicleCommands:spawnVehicle", source, "polmav")
+		elseif args[2] == "firetruck" then
+			TriggerClientEvent("vehicleCommands:spawnVehicle", source, "firetruk")
 		else
 			TriggerClientEvent("vehicleCommands:error", source, "^1Invalid model name. Usage: /spawn <name>")
-			TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 ambulance, suv, heli")
+			TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 ambulance, suv, firetruck, heli")
 		end
 	elseif user_job == "fire" then
 		if args[2] == "firetruck" then
