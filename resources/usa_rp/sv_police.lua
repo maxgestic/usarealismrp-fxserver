@@ -192,3 +192,37 @@ AddEventHandler("police:seizeCash", function(amount)
 	end)
 end)
 -- end seize contraband
+
+TriggerEvent('es:addCommand', 'breathalyze', function(source, args, user)
+	local targetId = tonumber(args[2])
+	local user_job = user.getActiveCharacterData("job")
+	--local name = user.getActiveCharacterData("firstName") .. user.getActiveCharacterData("lastName")
+	if user_job == "sheriff" or user_job == "police" or user_job == "ems" then
+		if type(targetId) == "number" then
+			-- get BAC:
+			TriggerClientEvent("breathalyze:breathalyzePerson", targetId, source)
+			-- play animation:
+			local anim = {
+				name = "base",
+				dict = "amb@world_human_security_shine_torch@male@base"
+			}
+			TriggerClientEvent("usa:playAnimation", source, anim.name, anim.dict, 3)
+		end
+	end
+end)
+
+RegisterServerEvent("breathalyze:receivedResults")
+AddEventHandler("breathalyze:receivedResults", function(BAC, officer_source)
+	local color = ""
+	if BAC >= 0.08 then
+		color = "~r~"
+	elseif BAC >= 0.04 then
+		color = "~y~"
+	else
+		color = "~g~"
+	end
+	TriggerClientEvent("usa:notify", tonumber(officer_source), "BAC READING: " .. color .. BAC)
+	-- play sound:
+	local soundParams = {-1, "PIN_BUTTON", "ATM_SOUNDS", 1}
+	TriggerClientEvent("usa:playSound", tonumber(officer_source), soundParams)
+end)

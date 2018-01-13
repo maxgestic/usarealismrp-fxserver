@@ -304,6 +304,12 @@ Citizen.CreateThread(function()
     end
 end)
 
+RegisterNetEvent("breathalyze:breathalyzePerson")
+AddEventHandler("breathalyze:breathalyzePerson", function(source)
+	TriggerEvent("usa:notify", "You are being breathalyzed.")
+	TriggerServerEvent("breathalyze:receivedResults", player.BAC, source)
+end)
+
 RegisterNetEvent("interaction:ragdoll")
 AddEventHandler("interaction:ragdoll", function()
 	SetPedToRagdoll(GetPlayerPed(-1), 5500, 5500, 0, true, true, false);

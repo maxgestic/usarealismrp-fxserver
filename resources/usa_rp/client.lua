@@ -431,6 +431,12 @@ AddEventHandler("usa:playAnimation", function(animName, animDict, duration)
   end
 end)
 
+RegisterNetEvent("usa:playSound")
+AddEventHandler("usa:playSound", function(soundParams)
+  -- play start up / shut off sound
+  PlaySoundFrontend(table.unpack(soundParams))
+end)
+
 -- prevent falling through vehicle when eating/drink and entering vehicle:
 Citizen.CreateThread(function()
 	while true do
