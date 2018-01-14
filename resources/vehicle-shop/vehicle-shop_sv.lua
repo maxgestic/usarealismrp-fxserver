@@ -143,9 +143,21 @@ local vehicleShopItems = {
 			{make = "Lampadati", model = "Casco", price = 183007, hash = 941800958, storage_capacity = 135.0},
 			{make = "Pegassi", model = "Monroe", price = 250800, hash = -433375717, storage_capacity = 135.0},
 			{make = "Grotti", model = "Turismo Classic", price = 295350, hash = -982130927, storage_capacity = 135.0},
+			{make = "Grotti", model = "Stinger", price = 200000, hash = 1545842587, storage_capacity = 115.0},
 			{make = "Grotti", model = "Stinger GT", price = 315600, hash = -2098947590, storage_capacity = 135.0},
 			{make = "Pegassi", model = "Infernus Classic", price = 350750, hash = -1405937764, storage_capacity = 135.0},
-			{make = "Albany", model = "Roosevelt Valor", price = 550350, hash = -602287871, storage_capacity = 135.0}
+			{make = "Albany", model = "Roosevelt Valor", price = 550350, hash = -602287871, storage_capacity = 135.0},
+			-- new:
+			{make = "Ocelot", model = "Ardent", price = 75000, hash = 159274291, storage_capacity = 130.0},
+			{make = "Grotti", model = "Cheetah Clasic", price = 100000, hash = 223240013, storage_capacity = 120.0},
+			{make = "Invetero", model = "Coquette Classic", price = 100000, hash = 1011753235, storage_capacity = 120.0},
+			{make = "Invetero", model = "Coquette Blackfin", price = 130000, hash = 784565758, storage_capacity = 120.0},
+			{make = "Dewbauchee", model = "JB 700", price = 100000, hash = 1051415893, storage_capacity = 120.0},
+			{make = "Declasse", model = "Mamba", price = 110000, hash = -1660945322, storage_capacity = 110.0},
+			{make = "Albany", model = "Manana", price = 24500, hash = -2124201592, storage_capacity = 140.0},
+			{make = "Lampadati", model = "Pigalle", price = 24000, hash = 1078682497, storage_capacity = 125.0},
+			{make = "Pegassi", model = "Torero", price = 300000, hash = 1504306544, storage_capacity = 100.0},
+			{make = "Declasse", model = "Tornado", price = 30000, hash = 464687292, storage_capacity = 150.0}
 		},
 		["Sedans"] = {
 			{make = "Albany", model = "Emperor", price = 3500, hash = -1883002148, storage_capacity = 165.0},
@@ -165,7 +177,7 @@ local vehicleShopItems = {
 			{make = "Maibatsu", model = "Mule", price = 50000, hash = 904750859, storage_capacity = 475.0},
 			{make = "Maibatsu", model = "Mule 2", price = 52000, hash = -1050465301, storage_capacity = 475.0},
 			{make = "Maibatsu", model = "Mule 3", price = 70000, hash = -2052737935, storage_capacity = 475.0},
-			{make = "MTL", model = "Pounder", price = 110000, hash = 2112052861, storage_capacity = 850.0},
+			{make = "MTL", model = "Pounder", price = 110000, hash = 2112052861, storage_capacity = 900.0},
 			{make = "Declasse", model = "Burrito Lost", price = 100000, hash = -1745203402, storage_capacity = 260.0},
 			{make = "Declasse", model = "Burrito Lost", price = 100000, hash = -1745203402, storage_capacity = 260.0},
 			{make = "Declasse", model = "Burrito Lost", price = 100000, hash = -1745203402, storage_capacity = 260.0},
