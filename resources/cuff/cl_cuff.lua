@@ -22,6 +22,7 @@ AddEventHandler("cuff:Handcuff", function(cuffer)
 				Citizen.Trace("ENTITY WAS NOT PLAYING ARRESTED ANIM, CUFFING")
 				TaskPlayAnim(lPed, "mp_arresting", "idle", 8.0, -8, -1, 49, 0, 0, 0, 0)
 				SetEnableHandcuffs(lPed, true)
+				SetCurrentPedWeapon(lPed, GetHashKey("WEAPON_UNARMED"), true)
 				-- FreezeEntityPosition(lPed, true)
 				DrawCoolLookingNotificationNoPic("You have been ~r~detained~w~.")
 				isCuffed = true
