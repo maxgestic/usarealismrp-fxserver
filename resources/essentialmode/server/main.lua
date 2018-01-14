@@ -230,7 +230,9 @@ Citizen.CreateThread(function()
 					for id, player in pairs(players) do
 						if player then
 							print("player existed")
-							db.updateUser(player.get('identifier'), {characters = player.getCharacters(), policeCharacter = player.getPoliceCharacter(), emsCharacter = Users[numberSource].getEmsCharacter()}, function()
+							local ems_char = player.getEmsCharacter()
+							if not ems_char then ems_char = {} end
+							db.updateUser(player.get('identifier'), {characters = player.getCharacters(), policeCharacter = player.getPoliceCharacter(), emsCharacter = ems_char}, function()
 								print("saved player #" .. id .. "'s data!'")
 							end)
 						end

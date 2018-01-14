@@ -1,72 +1,185 @@
--- x = -1221.84, -908.512, z = 12.3264 ped
--- x = -1222.79, y = -906.859, z = 12.3263 front of ped (where player robs from)
+local hands_up = false
+local hands_tied = false
 
-local peds = {
-    {x = -1221.84, y = -908.512, z = 12.3264}
-}
+RegisterNetEvent("crim:tieHands")
+AddEventHandler("crim:tieHands", function()
+  local close_enough = false
+  local lPed = GetPlayerPed(-1)
+  if DoesEntityExist(lPed) then
+    -- tie up hands:
+    Citizen.CreateThread(function()
+      RequestAnimDict("mp_arresting")
+      while not HasAnimDictLoaded("mp_arresting") do
+        Citizen.Wait(100)
+      end
+      print("ENTITY WAS NOT PLAYING TIED UP ANIM, RETRYING..")
+      ClearPedSecondaryTask(lPed)
+      TaskPlayAnim(lPed, "mp_arresting", "idle", 8.0, -8, -1, 49, 0, 0, 0, 0)
+      SetEnableHandcuffs(lPed, true)
+      -- FreezeEntityPosition(lPed, true)
+      TriggerEvent("usa:notify", "Your hands have been ~r~tied together~w~.")
+      hands_tied = true
+      hands_up = false
+    end)
+  end
+end)
 
-local robbing = false
+RegisterNetEvent("crim:untieHands")
+AddEventHandler("crim:untieHands", function(from_id)
+  local lPed = GetPlayerPed(-1)
+  if DoesEntityExist(lPed) then
+    if closeEnoughToPlayer(from_id) then
+      print("ENTITY WAS ALREADY PLAYING TIED UP ANIM, RELEASING HANDS..")
+      ClearPedSecondaryTask(lPed)
+      SetEnableHandcuffs(lPed, false)
+      --FreezeEntityPosition(lPed, false)
+      TriggerEvent("usa:notify", "You have been ~g~released~w~.")
+      hands_tied = false
+    end
+  end
+end)
 
--- spawn ped
-local hash = GetHashKey("A_M_M_Polynesian_01")
--- thread code stuff below was taken from an example on the wiki
--- Create a thread so that we don't 'wait' the entire game
 Citizen.CreateThread(function()
-	-- Request the model so that it can be spawned
-	RequestModel(hash)
-	-- Check if it's loaded, if not then wait and re-request it.
-	while not HasModelLoaded(hash) do
-		RequestModel(hash)
-		Citizen.Wait(0)
+	while true do
+		Wait(0)
+		if hands_tied then
+			--DisableControlAction(1, 245, true) 245 = 5 FOR TEXT CHAT
+			DisableControlAction(1, 117, true)
+			DisableControlAction(1, 73, true)
+			DisableControlAction(1, 29, true)
+			DisableControlAction(1, 322, true)
+
+			DisableControlAction(1, 18, true)
+			DisableControlAction(1, 24, true)
+			DisableControlAction(1, 69, true)
+			DisableControlAction(1, 92, true)
+			DisableControlAction(1, 106, true)
+			DisableControlAction(1, 122, true)
+			DisableControlAction(1, 135, true)
+			DisableControlAction(1, 142, true)
+			DisableControlAction(1, 144, true)
+			DisableControlAction(1, 176, true)
+			DisableControlAction(1, 223, true)
+			DisableControlAction(1, 229, true)
+			DisableControlAction(1, 237, true)
+			DisableControlAction(1, 257, true)
+			DisableControlAction(1, 329, true)
+			DisableControlAction(1, 80, true)
+			DisableControlAction(1, 140, true)
+			DisableControlAction(1, 250, true)
+			DisableControlAction(1, 263, true)
+			DisableControlAction(1, 310, true)
+			--DisableControlAction(0, 288, true) -- interaction menu (F1)
+
+			DisableControlAction(1, 22, true)
+			DisableControlAction(1, 55, true)
+			DisableControlAction(1, 76, true)
+			DisableControlAction(1, 102, true)
+			DisableControlAction(1, 114, true)
+			DisableControlAction(1, 143, true)
+			DisableControlAction(1, 179, true)
+			DisableControlAction(1, 193, true)
+			DisableControlAction(1, 203, true)
+			DisableControlAction(1, 216, true)
+			DisableControlAction(1, 255, true)
+			DisableControlAction(1, 298, true)
+			DisableControlAction(1, 321, true)
+			DisableControlAction(1, 328, true)
+			DisableControlAction(1, 331, true)
+			DisableControlAction(0, 63, false)
+			DisableControlAction(0, 64, false)
+			DisableControlAction(0, 59, false)
+			DisableControlAction(0, 278, false)
+			DisableControlAction(0, 279, false)
+			DisableControlAction(0, 68, false)
+			DisableControlAction(0, 69, false)
+			DisableControlAction(0, 75, false)
+			DisableControlAction(0, 76, false)
+			DisableControlAction(0, 102, false)
+			DisableControlAction(0, 81, false)
+			DisableControlAction(0, 82, false)
+			DisableControlAction(0, 83, false)
+			DisableControlAction(0, 84, false)
+			DisableControlAction(0, 85, false)
+			DisableControlAction(0, 86, false)
+			DisableControlAction(0, 106, false)
+			DisableControlAction(0, 25, false)
+
+			-- slow down while cuffed
+			--SetEntityVelocity(GetPlayerPed(-1), 0.3, 0.3, 0.0)
+			DisableControlAction(0, 21, true)
+
+			if not IsEntityPlayingAnim(GetPlayerPed(-1), "mp_arresting", "idle", 3) then
+				RequestAnimDict("mp_arresting")
+				while not HasAnimDictLoaded("mp_arresting") do
+					Citizen.Wait(100)
+				end
+				TaskPlayAnim(GetPlayerPed(-1), "mp_arresting", "idle", 8.0, -8, -1, 49, 0, 0, 0, 0)
+			end
+		end
 	end
-	-- Model loaded, continue
-	-- Spawn the peds
-	for i = 1, #peds do
-		Citizen.Trace("spawned in ped # " .. i)
-		local ped = CreatePed(4, hash, peds[i].x, peds[i].y, peds[i].z, 175.189 --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
-		SetEntityCanBeDamaged(ped,false)
-		SetPedCanRagdollFromPlayerImpact(ped,false)
-		TaskSetBlockingOfNonTemporaryEvents(ped,true)
-		SetPedFleeAttributes(ped,0,0)
-		SetPedCombatAttributes(ped,17,1)
-		SetEntityInvincible(ped)
-	end
 end)
 
-RegisterNetEvent("crim:notify")
-AddEventHandler("crim:notify", function(message)
-    DrawNotification(message)
-end)
-
-
-RegisterNetEvent("crim:checkIsPedArmedForRobbery")
-AddEventHandler("crim:checkIsPedArmedForRobbery", function()
-    local waitTime = 5000
-    local armed = IsPedArmed(GetPlayerPed(-1), 7)
-    if armed then
-        Citizen.Trace("player is armed and is ready to rob")
-        robbing = true
-        TriggerServerEvent("crim:startRobbery", waitTime)
-    else
-        Citizen.Trace("player is not armed and is not ready to rob")
+Citizen.CreateThread(function()
+  while true do
+    local lPed = GetPlayerPed(-1)
+    -- toggle hands up when "X" is pressed
+    if GetLastInputMethod(2) then
+      if IsControlJustPressed(0, 73) then -- "X"
+        --print("hands_up: " .. tostring(hands_up))
+        if hands_up then
+  				ClearPedSecondaryTask(lPed)
+          hands_up = false
+  			else
+          --print("putting hands up.. ped: " .. lPed)
+          RequestAnimDict("random@mugging3")
+  				while not HasAnimDictLoaded("random@mugging3") do
+  					Citizen.Wait(100)
+  				end
+          TaskPlayAnim(lPed, "random@mugging3", "handsup_standing_base", 8.0, -8, -1, 49, 0, 0, 0, 0)
+          hands_up = true
+  		  end
+      end
     end
-end)
-
-RegisterNetEvent("crim:checkRange")
-AddEventHandler("crim:checkRange", function()
-    local rewardAmount = 1000
-    local armed = IsPedArmed(GetPlayerPed(-1), 7)
-    if getPlayerDistanceFromCoords(peds[1].x, peds[1].y, peds[1].z) < 5 and armed then
-        SetNotificationTextEntry("STRING")
-        AddTextComponentString("test")
-        DrawNotification(0,1)
-        TriggerServerEvent("crim:playerWasInRange", rewardAmount)
-    else
-
+    -- make sure to always play hands up anim when they should be up
+    if hands_up then
+      if not IsEntityPlayingAnim(lPed, "random@mugging3", "handsup_standing_base", 3) then
+        --print("hands_up was true but lped was not playing anim.. starting anim with lped: " .. lPed)
+        TaskPlayAnim(lPed, "random@mugging3", "handsup_standing_base", 8.0, -8, -1, 49, 0, 0, 0, 0)
+      end
     end
+    Wait(0)
+  end
 end)
 
-function getPlayerDistanceFromCoords(x,y,z)
-	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
-	return GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,x,y,z,false)
+RegisterNetEvent("crim:areHandsUp")
+AddEventHandler("crim:areHandsUp", function(from_source, to_source)
+  print("inside crim:areHandsUp with handsUp = " .. tostring(hands_up))
+  if hands_up == true and closeEnoughToPlayer(from_source) then
+    -- hands were up, continue tying hands
+    TriggerServerEvent("crim:continueBounding", true, from_source, to_source)
+  else
+    -- notify player that their target's hands were not up
+    TriggerServerEvent("crim:continueBounding", false, from_source, to_source)
+  end
+end)
+
+function closeEnoughToPlayer(from_id)
+  local lPed = GetPlayerPed(-1)
+  -- see if close enough to target
+  for id = 0, 64 do
+    if NetworkIsPlayerActive(id) then
+      if GetPlayerServerId(id) == tonumber(from_id) then
+        local target_ped = GetPlayerPed(id)
+        print("distance to #" .. GetPlayerServerId(id) .." = " .. Vdist(GetEntityCoords(lPed, 1), GetEntityCoords(target_ped, 1)))
+        if Vdist(GetEntityCoords(lPed, 1), GetEntityCoords(target_ped, 1)) < 1.0 then
+          print("close enough to get tied up by someone!")
+          return true
+        else
+          return false
+        end
+      end
+    end
+  end
+  return false
 end
