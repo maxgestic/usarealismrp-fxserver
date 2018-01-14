@@ -228,25 +228,36 @@ end)
 
 RegisterServerEvent('bank:givecash')
 AddEventHandler('bank:givecash', function(toPlayer, amount)
-	TriggerEvent('es:getPlayerFromId', source, function(user)
-        local user_money_1 = user.getActiveCharacterData("money")
-		if (tonumber(user_money_1) >= tonumber(amount)) then
-            user.setActiveCharacterData("money", user_money_1 - amount)
-			TriggerEvent('es:getPlayerFromId', toPlayer, function(recipient)
-                local user_money_2 = recipient.getActiveCharacterData("money")
-                recipient.setActiveCharacterData("money", user_money_2 + amount)
-				TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Gave cash: ~r~-$".. amount .." ~n~~s~Wallet: ~g~$" .. user_money_1 - amount)
-				TriggerClientEvent("es_freeroam:notify", toPlayer, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Received cash: ~g~$".. amount .." ~n~~s~Wallet: ~g~$" .. user_money_2 + amount)
-			end)
-		else
-			if (tonumber(user_money_1) < tonumber(amount)) then
+  TriggerEvent('es:getPlayerFromId', source, function(user)
+    local user_money_1 = user.getActiveCharacterData("money")
+    if (tonumber(user_money_1) >= tonumber(amount)) then
+      user.setActiveCharacterData("money", user_money_1 - amount)
+      TriggerEvent('es:getPlayerFromId', toPlayer, function(recipient)
+        local user_money_2 = recipient.getActiveCharacterData("money")
+        recipient.setActiveCharacterData("money", user_money_2 + amount)
+        TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Gave cash: ~r~-$".. amount .." ~n~~s~Wallet: ~g~$" .. user_money_1 - amount)
+        TriggerClientEvent("es_freeroam:notify", toPlayer, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Received cash: ~g~$".. amount .." ~n~~s~Wallet: ~g~$" .. user_money_2 + amount)
+      end)
+    else
+      if (tonumber(user_money_1) < tonumber(amount)) then
         TriggerClientEvent('chatMessage', source, "", {0, 0, 200}, "^1Not enough money in wallet!^0")
-			end
-		end
-	end)
+      end
+    end
+  end)
 end)
 
 TriggerEvent('es:addCommand', 'bank', function(source, args, user)
   local user_bank = user.getActiveCharacterData("bank")
-  TriggerClientEvent("usa:notify", source, "Bank: $" .. user_bank)
+  TriggerClientEvent("usa:notify", source, "Bank: $" .. comma_value(user_bank))
 end)
+
+function comma_value(amount)
+  local formatted = amount
+  while true do
+    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+    if (k==0) then
+      break
+    end
+  end
+  return formatted
+end
