@@ -1,10 +1,16 @@
 TriggerEvent('es:addCommand','cuff', function(source, args, user)
         if args[2] ~= nil then
-            local userSource = source
+            local userSource = tonumber(source)
                     playerJob = user.getActiveCharacterData("job")
                     if playerJob == "sheriff" then
                          local tPID = tonumber(args[2])
                          TriggerClientEvent("cuff:Handcuff", tPID)
+                         -- play anim:
+                         local anim = {
+                           dict = "anim@move_m@trash",
+                           name = "pickup"
+                         }
+                         TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 2)
                     else
                         TriggerClientEvent("cuff:notify", source, "Only ~y~law enforcement~w~ can use /cuff!")
                     end
