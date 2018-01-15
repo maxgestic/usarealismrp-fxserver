@@ -20,6 +20,7 @@ AddEventHandler('HOSPITAL:hospitalize', function(customTime, hospIdentifier)
 	isHospitalized = true
 	hospitalDuration = tonumber(customTime)
 	hospitalIdentifier = tonumber(hospIdentifier)
+	TriggerEvent("crim:blindfold", false, true)
 end)
 
 

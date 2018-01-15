@@ -48,6 +48,6 @@ AddEventHandler('place:unseat', function(targetPlayerId)
 		RequestCollisionAtCoord(pos.x, pos.y, pos.z)
 		Citizen.Wait(0)
 	end
-	SetEntityCoords(GetPlayerPed(-1), pos)
+	SetEntityCoords(GetPlayerPed(-1), pos.x, pos.y, pos.z + 1.0)
 	states.frozenPos = pos
 end)

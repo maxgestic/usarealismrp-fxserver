@@ -5,7 +5,7 @@ local hands_tied = false
 -- blindfold --
 ---------------
 RegisterNetEvent("crim:blindfold")
-AddEventHandler("crim:blindfold", function(on)
+AddEventHandler("crim:blindfold", function(on, dont_send_message)
   print("setting NUI focus: " .. tostring(on))
   --SetNuiFocus(on, false)
   SendNUIMessage({
@@ -13,10 +13,12 @@ AddEventHandler("crim:blindfold", function(on)
     enable = on,
     blindfold = on
   })
-  if on then
-    TriggerEvent("usa:notify", "You have been blindfolded!")
-  else
-    TriggerEvent("usa:notify", "Blindfold removed!")
+  if not dont_send_message then
+    if on then
+      TriggerEvent("usa:notify", "You have been blindfolded!")
+    else
+      TriggerEvent("usa:notify", "Blindfold removed!")
+    end
   end
 end)
 
@@ -188,6 +190,14 @@ end)
 RegisterNetEvent("crim:areHandsTied")
 AddEventHandler("crim:areHandsTied", function(from_source, to_source, action)
   print("inside crim:areHandsTied with hands_tied= " .. tostring(hands_tied))
+  -- don't need to check distance (or can't cause ped is in vehicle):
+  if action == "unseat" then
+    if hands_tied == true then
+      TriggerEvent("place:unseat", from_source)
+      return
+    end
+  end
+  -- need to check distance
   if hands_tied == true and closeEnoughToPlayer(from_source) then
     if action == "rob" then
       print("hands were tied, removing money..")
@@ -196,6 +206,10 @@ AddEventHandler("crim:areHandsTied", function(from_source, to_source, action)
     elseif action == "blindfold" then
       print("hands were tied, blindfolding..")
       TriggerServerEvent("crim:continueBlindfolding", true, from_source, to_source)
+    elseif action == "drag" then
+      TriggerEvent("dr:drag", from_source)
+    elseif action == "place" then
+      TriggerEvent("place")
     end
   else
     -- notify player that their target's hands were tied

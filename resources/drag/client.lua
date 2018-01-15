@@ -9,10 +9,10 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
+		Wait(0)
+		local ped = GetPlayerPed(GetPlayerFromServerId(otherid))
+		local myped = GetPlayerPed(-1)
 		if drag then
-			local ped = GetPlayerPed(GetPlayerFromServerId(otherid))
-			local myped = GetPlayerPed(-1)
 			if ped ~= myped then
 				Citizen.Trace("ped = " .. ped)
 				Citizen.Trace("myped = " .. myped)
@@ -23,6 +23,14 @@ Citizen.CreateThread(function()
 		else
 			DetachEntity(GetPlayerPed(-1), true, false)
 		end
+		--[[
+		-- stop dragging if far away
+		local dragged_ped_coords = GetEntityCoords(myped, 1)
+		local dragger_ped_coords = GetEntityCoords(ped, 1)
+		if Vdist(dragged_ped_coords, dragger_ped_coords) > 20.0 then
+			drag = false
+		end
+		--]]
 	end
 end)
 

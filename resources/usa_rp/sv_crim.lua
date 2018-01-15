@@ -4,7 +4,7 @@ local SETTINGS = {
     quantity_to_remove_per_use = 1
   },
   ["blindfold"] = {
-    required_item_name = "Duct Tape",
+    required_item_name = "Trash Bag",
     quantity_to_remove_per_use = 1
   }
 }
@@ -14,10 +14,10 @@ local SETTINGS = {
 ------------------------
 TriggerEvent('es:addCommand','removeblindfold', function(source, args, user)
   print("inside /removeblindfold command!")
+  local target_player_id = tonumber(args[2])
   if target_player_id ~= tonumber(source) then
     if type(tonumber(args[2])) == "number" then
       -- see if target player has their hands tied before blindfolding
-      local target_player_id = tonumber(args[2])
       TriggerClientEvent("crim:blindfold", target_player_id, false)
       -- play animation:
       local anim = {
