@@ -166,6 +166,19 @@ AddEventHandler("crim:areHandsUp", function(from_source, to_source)
   end
 end)
 
+RegisterNetEvent("crim:areHandsTied")
+AddEventHandler("crim:areHandsTied", function(from_source, to_source)
+  print("inside crim:areHandsTied with hands_tied= " .. tostring(hands_tied))
+  if hands_tied == true and closeEnoughToPlayer(from_source) then
+    print("hands were tied, removing money")
+    -- hands were up, continue stealing cash
+    TriggerServerEvent("crim:continueRobbing", true, from_source, to_source)
+  else
+    -- notify player that their target's hands were not up
+    TriggerServerEvent("crim:continueRobbing", false, from_source, to_source)
+  end
+end)
+
 function closeEnoughToPlayer(from_id)
   local lPed = GetPlayerPed(-1)
   -- see if close enough to target
