@@ -4,62 +4,9 @@ body {
     display: none;
 }
 
-#cursor {
-    position: absolute;
-    z-index: 999999;
-    display: none;
-}
-
-.dialog {
-    width: 500px;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 10px;
-    background-color: rgba(0, 0, 0, 0.5);
-    margin-top: 18em;
-    display: inline-block;
-}
-
-h4 {
-    margin-bottom: 0em;
-    padding-bottom: 0em;
-}
-
-#seal {
-    display:inline-block;
-}
-
-#jail-form-wrap {
-    width: 850px;
-    height: 700px;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 10px;
-    background-image: url("lspd-jail-menu.png");
-    background-size:cover;
-    margin-top: 12em;
-    border-radius: 3px;
-}
-
-form {
-    margin: 0;
-}
-
-input[type=text], input[type=password] {
-    width: 100%;
-    padding: 10px;
-    padding-bottom: 4px;
-    padding-top:2px;
-}
-
-button {
-    display: block;
-    margin-top: 5px;
-    padding: 10px;
-    background-color: #286090;
-    border: 0;
-    color: #fff;
-    width: 100%;
+#blindfold {
+  background-color: black;
+  width: 100%;
+  height: 100%;
+  display: none;
 }

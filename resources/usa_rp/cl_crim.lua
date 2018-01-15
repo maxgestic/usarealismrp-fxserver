@@ -1,6 +1,25 @@
 local hands_up = false
 local hands_tied = false
 
+---------------
+-- blindfold --
+---------------
+RegisterNetEvent("crim:blindfold")
+AddEventHandler("crim:blindfold", function(on)
+  print("setting NUI focus: " .. tostring(on))
+  --SetNuiFocus(on, false)
+  SendNUIMessage({
+    type = "enableui",
+    enable = on,
+    blindfold = on
+  })
+  if on then
+    TriggerEvent("usa:notify", "You have been blindfolded!")
+  else
+    TriggerEvent("usa:notify", "Blindfold removed!")
+  end
+end)
+
 RegisterNetEvent("crim:tieHands")
 AddEventHandler("crim:tieHands", function()
   local close_enough = false
@@ -167,14 +186,19 @@ AddEventHandler("crim:areHandsUp", function(from_source, to_source)
 end)
 
 RegisterNetEvent("crim:areHandsTied")
-AddEventHandler("crim:areHandsTied", function(from_source, to_source)
+AddEventHandler("crim:areHandsTied", function(from_source, to_source, action)
   print("inside crim:areHandsTied with hands_tied= " .. tostring(hands_tied))
   if hands_tied == true and closeEnoughToPlayer(from_source) then
-    print("hands were tied, removing money")
-    -- hands were up, continue stealing cash
-    TriggerServerEvent("crim:continueRobbing", true, from_source, to_source)
+    if action == "rob" then
+      print("hands were tied, removing money..")
+      -- hands were up, continue stealing cash
+      TriggerServerEvent("crim:continueRobbing", true, from_source, to_source)
+    elseif action == "blindfold" then
+      print("hands were tied, blindfolding..")
+      TriggerServerEvent("crim:continueBlindfolding", true, from_source, to_source)
+    end
   else
-    -- notify player that their target's hands were not up
+    -- notify player that their target's hands were tied
     TriggerServerEvent("crim:continueRobbing", false, from_source, to_source)
   end
 end)
