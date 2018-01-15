@@ -4,7 +4,7 @@ local SETTINGS = {
     quantity_to_remove_per_use = 1
   },
   ["blindfold"] = {
-    required_item_name = "Trash Bag",
+    required_item_name = "Bag",
     quantity_to_remove_per_use = 1
   }
 }
