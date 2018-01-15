@@ -26,15 +26,17 @@ end)
 
 RegisterNetEvent("crim:untieHands")
 AddEventHandler("crim:untieHands", function(from_id)
-  local lPed = GetPlayerPed(-1)
-  if DoesEntityExist(lPed) then
-    if closeEnoughToPlayer(from_id) then
-      print("ENTITY WAS ALREADY PLAYING TIED UP ANIM, RELEASING HANDS..")
-      ClearPedSecondaryTask(lPed)
-      SetEnableHandcuffs(lPed, false)
-      --FreezeEntityPosition(lPed, false)
-      TriggerEvent("usa:notify", "You have been ~g~released~w~.")
-      hands_tied = false
+  if hands_tied then
+    local lPed = GetPlayerPed(-1)
+    if DoesEntityExist(lPed) then
+      if closeEnoughToPlayer(from_id) then
+        print("ENTITY WAS ALREADY PLAYING TIED UP ANIM, RELEASING HANDS..")
+        ClearPedSecondaryTask(lPed)
+        SetEnableHandcuffs(lPed, false)
+        --FreezeEntityPosition(lPed, false)
+        TriggerEvent("usa:notify", "You have been ~g~released~w~.")
+        hands_tied = false
+      end
     end
   end
 end)
