@@ -3,7 +3,7 @@ local isCuffed = false
 local SOUND_ENABLE = true
 
 RegisterNetEvent("cuff:Handcuff")
-AddEventHandler("cuff:Handcuff", function(cuffer)
+AddEventHandler("cuff:Handcuff", function()
 	lPed = GetPlayerPed(-1)
 	if DoesEntityExist(lPed) then
 		Citizen.CreateThread(function()
@@ -11,7 +11,8 @@ AddEventHandler("cuff:Handcuff", function(cuffer)
 			while not HasAnimDictLoaded("mp_arresting") do
 				Citizen.Wait(100)
 			end
-			if IsEntityPlayingAnim(lPed, "mp_arresting", "idle", 3) then
+			--if IsEntityPlayingAnim(lPed, "mp_arresting", "idle", 3) then
+			if isCuffed then
 				Citizen.Trace("ENTITY WAS ALREADY PLAYING ARRESTED ANIM, UNCUFFING")
 				ClearPedSecondaryTask(lPed)
 				SetEnableHandcuffs(lPed, false)

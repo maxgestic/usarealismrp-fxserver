@@ -85,11 +85,9 @@ function isLocked(plate)
 end
 
 function setLocked(plate, locked)
-  if vehicles then
-    if vehicles[plate] then
-      vehicles[plate] = locked
-      print("plate #" .. plate .. " lock status set to: " .. tostring(locked))
-    end
+  if vehicles and plate then
+    vehicles[plate] = locked
+    print("plate #" .. plate .. " lock status set to: " .. tostring(locked))
   end
 end
 
