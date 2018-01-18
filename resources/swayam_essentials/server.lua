@@ -71,6 +71,7 @@ TriggerEvent('es:addCommand', 'mypos', function(source, args, user)
 			if user then
 				local mPos = user.getCoords()
 				TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "x = " .. mPos.x .. " | y = " .. mPos.y .. " | z = " .. mPos.z)				
+				print("x = " .. mPos.x .. " | y = " .. mPos.y .. " | z = " .. mPos.z)				
 			end
 		end)
 	else
