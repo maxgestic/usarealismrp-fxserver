@@ -1,324 +1,176 @@
-var characters = [{},{},{}];
-var default_money = 5000; // starting money
-var default_bank = 0; // starting bank
+$(function () {
+	var characters = []
 
-$(function() {
-    window.addEventListener('message', function(event) {
-        var eventData = event.data;
-        if (eventData.type == "toggleMenu") {
-            // rename
-            var menuStatus = eventData.menuStatus;
-            var menu = eventData.menu;
-            // show document
-            document.body.style.display = menuStatus ? "block" : "none";
-            // check menu type
-            if (menu != "") {
-                // show the menu
-                $("#menu--" + menu + "").show();
-                // populate the fields with character data if going to the home menu
-                if (menu == "home") {
-                    characters = eventData.data;
-                    populateHomeMenuCharacters();
-                }
-            }
-        } else if (eventData.type == "delete") {
-          var status = eventData.status;
-          if (status == "fail") {
-			  $("#delete-char-error").text("Sorry, you can't delete a character that is less than 7 days old!");
-            //alert("Sorry, you can't delete a character that is less than 7 days old!");
-            // todo: update interface to reflect failure?
-          }
-          else {
-            characters[slot] = {};
-            // send to homepage
-            $("#menu--delete-character .columns").html("");
-            $("#menu--delete-character").hide();
-            $("#menu--home").show();
-			$("#delete-char-error").text("");
-            populateHomeMenuCharacters();
-          }
-        }
-    });
+	window.addEventListener('message', function (event) {
+		if (event.data.type == "toggleMenu") {
+			var menuStatus = event.data.menuStatus;
+			var menu = event.data.menu;
+			// show document
+			document.body.style.display = menuStatus ? "flex" : "none";
+			if (menu == "") return;
 
-    <!-- ==== character selection hover effect ==== -->
-    $(".columns").on('mouseover', '.char--create-char-card', function() {
-        $(this).css("border-color", "#B22234");
-    });
-    $(".columns").on('mouseleave', '.char--create-char-card', function() {
-        $(this).css("border-color", "white");
-    });
-    $(".columns").on('mouseover', '.char-card', function() {
-        $(this).css("border-color", "#B22234");
-    });
-    $(".columns").on('mouseleave', '.char-card', function() {
-        $(this).css("border-color", "white");
-    });
-    <!-- ==== end character selection hover effect ==== -->
+			$('.create').hide()
+			$('.characters').show()
+			$('#select').show()
+			$('#delete').show()
+			$('#birth').hide()
+			$('a[href="http://character-selection/disconnect"]').show()
+			$('a[href="http://character-selection/list"]').hide()
+			$('.characters #character').remove()
 
-    <!-- ==== character selection ==== -->
-    $("#menu--home .columns").on('click', '.char-card', function() {
-		//get selected char slot
-        var slot = $(this).data("slot");
-		// clear out the html cards for next use
-		$(".columns").html("");
-        //alert("selecting slot #" + slot + "!");
-        $.post('http://character-selection/select-character', JSON.stringify({
-            character: characters[slot],
-            slot: slot
-        }));
-    });
-    <!-- ==== end character selection ==== -->
+			// event.data.characters = event.data.data.reverse();
+			event.data.characters = event.data.data;
+			characters = event.data.data;
 
-    <!-- ==== new character selection ==== -->
-    $(".columns").on('click', '.char--create-char-card', function() {
-        $("#menu--home").hide();
-        $("#menu--new-character").show();
-        $(".columns").html("");
-    });
-    <!-- ==== end new character selection ==== -->
+			if (event.data.characters.length == 3) {
+				var t = 0;
+				for (var i = 0; i < event.data.characters.length; i++) {
+					if (event.data.characters[i].firstName) t++;
+				}
+				if (t === 3) $('#new').css("display", "none");
+			}
 
-    <!-- ==== character deletion ==== -->
-    $("#menu--delete-character .columns").on('click', '.char-card', function() {
-        var confirmed = confirm("Are you sure you want to permanently delete that character?");
-        //var confirmed = true
-        if (confirmed) {
-            var slot = $(this).data("slot");
-            $.post('http://character-selection/delete-character', JSON.stringify({
-                slot: slot
-            }));
-        }
-    });
-    <!-- ==== end character deletion ==== -->
+			for (var i = 0; i < event.data.characters.length; i++) {
+				if (!event.data.characters[i].firstName) continue;
+				var div = document.createElement("div");
+				div.id = "character"
+				div.classList.add('character');
+				div.dataset.selected = i;
+				var first_name = document.createElement("h3");
+				first_name.innerHTML = "<b>First Name:</b> " + event.data.characters[i].firstName
+				div.appendChild(first_name);
+				var last_name = document.createElement("h3");
+				last_name.innerHTML = "<b>Last Name:</b> " + event.data.characters[i].lastName
+				div.appendChild(last_name);
+				var cash = document.createElement("h3");
+				cash.innerHTML = "<b>Cash:</b> <span>$</span>" + (event.data.characters[i].money).formatMoney(2, '.', ',');
+				cash.style = "padding-top: 25px"
+				div.appendChild(cash);
+				var bank = document.createElement("h3");
+				bank.innerHTML = "<b>Bank:</b> <span>$</span>" + (event.data.characters[i].bank).formatMoney(2, '.', ',');
+				div.appendChild(bank);
+				var dob = document.createElement("h3");
+				dob.innerHTML = "<b>DOB:</b> " + event.data.characters[i].dateOfBirth;
+				dob.style = "padding-top: 25px";
+				div.appendChild(dob);
+				$('.characters').prepend(div);
+			}
 
-    <!-- ==== new character back-btn ==== -->
-    $("#char--new-character-form").on('click', "#new-char-back-btn", function() {
-        $("#menu--new-character").hide();
-        $("#menu--home").show();
-        populateHomeMenuCharacters();
-    });
-    <!-- ==== end new character back-btn ==== -->
+			$('.characters #character').on("click", function () {
+				clicked = this
+				$(this).addClass("selected")
+				$("button#select").removeClass("disabled")
+				$("button#delete").removeClass("disabled")
+				$('.characters #character').each(function () {
+					if (clicked != this) $(this).removeClass("selected")
+				})
+			})
 
-    <!-- ==== new character creation form ==== -->
-    $("#char--new-character-form").on('click', "#new-character-submit", function() {
+			$("button#select").on('click', function () {
+				var i = 0, selected;
+				$('.characters #character').each(function () {
+					if (clicked == this) selected = this.dataset.selected
+					i++;
+				});
 
-        // valid input regex (alphabetical char or a dash)
-        var alphabet_regex = /^[a-zA-Z-]*$/
+				console.log(JSON.stringify({
+					character: event.data.characters[selected],
+					slot: selected
+				}))
 
-        // validate names
-        var first_name_validity = alphabet_regex.test($("input[name='first-name']").val());
-        var middle_name_validity = alphabet_regex.test($("input[name='middle-name']").val());
-        var last_name_validity = alphabet_regex.test($("input[name='last-name']").val());
-        if (!first_name_validity || !middle_name_validity || !last_name_validity) {
-            alert("Invalid name input entered! Try again!");
-            return
-        }
+				$.post('http://character-selection/select-character', JSON.stringify({
+					character: event.data.characters[selected],
+					slot: selected
+				}));
+			})
 
-        // validate date of birth
-        var dob = new Date($("input[name='date-of-birth']").val());
-        day = dob.getDate();
-        month = dob.getMonth() + 1;
-        year = dob.getFullYear();
-        //alert([day, month, year].join('/'));
-        if (year < 1900 || year > 2020 || isNaN(day) || isNaN(month) || isNaN(year)) {
-            alert("Invalid DOB entered!")
-            return
-        }
+			$("button#delete").on('click', function () {
+				var i = 0, selected;
+				$('.characters #character').each(function () {
+					if (clicked == this) selected = this.dataset.selected
+					i++;
+				});
 
-        // returns a lua style index for the open slot (+1)
-        var openSlot = findOpenSlot("js");
-        //alert("lua open slot = " + findOpenSlot("lua"));
+				var char = event.data.characters[selected];
+				var confirmed = confirm(`Are you sure you want to permanently delete "${char.firstName} ${char.lastName}"?`);
+				if (!confirmed) return;
 
-        var newCharData = {
-            firstName: $("input[name='first-name']").val(),
-            middleName: $("input[name='middle-name']").val(),
-            lastName: $("input[name='last-name']").val(),
-            dateOfBirth: $("input[name='date-of-birth']").val(),
-            money: default_money,
-            bank: default_bank,
-            slot: findOpenSlot("lua"),
-            active: false
-        }
+				$.post('http://character-selection/delete-character', JSON.stringify({
+					slot: selected
+				}));
+			})
 
-        //alert("saving JS character in array at slot #" + openSlot);
-        characters[openSlot] = newCharData;
+			$('#new').on('click', function () {
+				$('.create').show()
+				$('.characters').hide()
+				$('#select').hide()
+				$('#delete').hide()
+				$('#birth').show()
+				$('a[href="http://character-selection/disconnect"]').hide()
+				$('a[href="http://character-selection/list"]').show()
 
-        // call lua nui callback
-        $.post('http://character-selection/new-character-submit', JSON.stringify(newCharData));
+				$('.option p').on("click", function () {
+					clicked = this
+					$('.option p').each(function () {
+						if (clicked != this) $(this).removeClass("selected")
+					})
+					$(this).addClass("selected")
+				})
 
-        // clear fields for next use
-        $("input[name='first-name']").val("");
-        $("input[name='middle-name']").val("");
-        $("input[name='last-name']").val("");
-        $("input[name='date-of-birth']").val("");
+				for (var freeSlot = 0; freeSlot < characters.length; freeSlot++) {
+					const character = characters[freeSlot];
+					if (!character.firstName) break;
+				}
 
-        // hide this form
-        $("#menu--new-character").hide();
-        // show the home menu html
-        $("#menu--home").show();
-        // fill the home menu with character info from the stored characters variable
-        populateHomeMenuCharacters();
+				$('#birth').on('click', function () {
+					var first_name = $('#first_name').val()
+					var last_name = $('#last_name').val()
+					var gender = $('.option p.selected').attr('id')
 
-    });
-    <!-- ==== end new character creation form ==== -->
+					var dob = new Date($("input[name='date_of_birth']").val());
+					day = dob.getDate();
+					month = dob.getMonth() + 1;
+					year = dob.getFullYear();
 
-    <!-- ==== character deletion ==== -->
-    $(".buttons").on('click', '#home--delete-button', function() {
-        $("#menu--home .columns").html("");
-        $("#menu--home").hide();
-        $("#menu--delete-character").show();
-        populateDeleteCharacterPage();
-    });
+					if (first_name.length > 2 && last_name.length > 2 && (year > 1900 || year < 2020 || !isNaN(day) || !isNaN(month) || !isNaN(year))) {
+						var newCharData = {
+							firstName: $("input[name='first_name']").val(),
+							middleName: $("input[name='middle_name']").val(),
+							lastName: $("input[name='last_name']").val(),
+							dateOfBirth: $("input[name='date_of_birth']").val(),
+							slot: freeSlot+1
+						}
 
-    $(".buttons").on('click', '#delete-character--back-button', function() {
-        $("#menu--delete-character .columns").html("");
-        $("#menu--delete-character").hide();
-        $("#menu--home").show();
-		$("#delete-char-error").text("");
-        populateHomeMenuCharacters();
-    });
-    <!-- ==== end character deletion ==== -->
+						$.post('http://character-selection/new-character-submit', JSON.stringify(newCharData));
+					} else {
+						$('.notification').show()
+						$('.notification').html("Oh no you didn't supply enough information, please try again.")
+					}
+				})
+			})
+		} else if (event.data.type == "error") {
+			document.getElementsByClassName('notification')[0].style.display = "block";
+		} else if (event.data.type == "delete") {
+			if (event.data.status !== "fail") return;
+			$('.notification').show()
+			$('.notification').html("Can't delete a character whose age is less than one week.")
+		}
+	});
 
+	$(document).mousemove(function (event) {
+		cursorX = event.pageX;
+		cursorY = event.pageY;
+		UpdateCursorPos();
+	});
+
+	Number.prototype.formatMoney = function (c, d, t) {
+		var n = this,
+			c = isNaN(c = Math.abs(c)) ? 2 : c,
+			d = d == undefined ? "." : d,
+			t = t == undefined ? "," : t,
+			s = n < 0 ? "-" : "",
+			i = String(parseInt(n = Math.abs(Number(n) || 0).toFixed(c))),
+			j = (j = i.length) > 3 ? j % 3 : 0;
+		return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
+	};
 });
-
-function populateDeleteCharacterPage() {
-    for (var x = 0; x < characters.length; ++x) {
-        if (typeof (characters[x].firstName) != "undefined") {
-            // determine which char class # to add to the character card (char-first, char-second, or char-third)
-            var asideClasses = "char-card ";
-            switch(x) {
-                case 0:
-                    asideClasses = asideClasses + "char-first";
-                    break;
-                case 1:
-                    asideClasses = asideClasses + "char-second";
-                    break;
-                case 2:
-                    asideClasses = asideClasses + "char-third";
-                    break;
-                default:
-            }
-            var html = "<aside data-slot='" + x + "' class='" + asideClasses + "'>" +
-            "<header style='text-align:center;font-size: 28px;padding-bottom:0;margin-bottom:0;'>" +
-            "<span>Character #" + (x + 1) + "</span>" +
-            "</header>" +
-            "<section style='margin-top:0;padding-top:0;'>" +
-            "<ul>" +
-            "<li><b>Name:</b> <span>" + characters[x].firstName + " " + characters[x].middleName + " " + characters[x].lastName + "</span></li>" +
-            "<li><b>DOB:</b> <span>" + characters[x].dateOfBirth + "</li>" +
-            "<li><b>Money:</b> <span>$" + parseFloat(characters[x].money).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + "</span></li>" +
-            "<li><b>Bank:</b> <span>$" + parseFloat(characters[x].bank).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + "</span></li>" +
-            "</ul>" +
-            "</section>" +
-            "</aside>"
-            $("#menu--delete-character .columns").append(html);
-        }
-    }
-}
-
-function populateHomeMenuCharacters() {
-    var less_than_three_characters = false;
-    var empty_char_index = 0;
-    var first = false;
-    for (var x = 0; x < characters.length; ++x) {
-        if (typeof (characters[x].firstName) != "undefined") {
-            // determine which char class # to add to the character card (char-first, char-second, or char-third)
-            var asideClasses = "char-card ";
-            switch(x) {
-                case 0:
-                    asideClasses = asideClasses + "char-first";
-                    break;
-                case 1:
-                    asideClasses = asideClasses + "char-second";
-                    break;
-                case 2:
-                    asideClasses = asideClasses + "char-third";
-                    break;
-                default:
-            }
-            var html = "<aside data-slot='" + x + "' class='" + asideClasses + "'>" +
-            "<header style='text-align:center;font-size: 28px;padding-bottom:0;margin-bottom:0;'>" +
-            "<span>Character #" + (x + 1) + "</span>" +
-            "</header>" +
-            "<section style='margin-top:0;padding-top:0;'>" +
-            "<ul>" +
-            "<li><b>Name:</b> <span>" + characters[x].firstName + " " + characters[x].middleName + " " + characters[x].lastName + "</span></li>" +
-            "<li><b>DOB:</b> <span>" + characters[x].dateOfBirth + "</li>" +
-            "<li><b>Money:</b> <span>$" + parseFloat(characters[x].money).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + "</span></li>" +
-            "<li><b>Bank:</b> <span>$" + parseFloat(characters[x].bank).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + "</span></li>" +
-            "</ul>" +
-            "</section>" +
-            "</aside>"
-            $("#menu--home .columns").append(html);
-        } else {
-            //alert("setting empty char index to: " + empty_char_index);
-            if (!first) {
-                // pending new char button
-                less_than_three_characters = true;
-                empty_char_index = x;
-                first = true;
-            }
-        }
-    }
-    // append new char button
-    if (less_than_three_characters) {
-        //alert("user has less than 3 charactes, adding the new char button!");
-        var asideClasses = "";
-        switch(empty_char_index) {
-            case 0:
-                asideClasses = asideClasses + "char-first";
-                break;
-            case 1:
-                asideClasses = asideClasses + "char-second";
-                break;
-            case 2:
-                asideClasses = asideClasses + "char-third";
-                break;
-            default:
-        }
-        // todo: when this char card is clicked, trigger the create new char buttn in this slot #
-        var html = "<aside data-slot='" + x + "' class='" + asideClasses + " char--create-char-card'>" +
-        "<header style='text-align:center;font-size: 28px;padding-bottom:0;margin-bottom:0;'>" +
-        "<span>Character #" + (empty_char_index + 1) + "</span>" +
-        "</header>" +
-        "<section style='margin-top:10em;text-align:center;'>" +
-        "<span style='font-size:64px;'><b>+</b></span>" +
-        "</section>" +
-        "</aside>"
-        $("#menu--home .columns").append(html);
-    }
-}
-
-function findOpenSlot(style) {
-    //alert("inside of findOpenSlot()");
-    //alert("characters.length = " + characters.length);
-    var openSlot = 0;
-    if (characters.length == 0) { // check if no chars first
-        if (style == "js") { // javascript index style
-            // do nothing
-        } else {
-            openSlot++; // lua index style
-        }
-        //alert("findOpenSlot: returning openSlot = " + openSlot + " in [" + style + "] style.");
-        return openSlot;
-    } else { // player has characters, look for next empty slot
-        for (var x = 0; x < characters.length; ++x) {
-            //alert("characters[x].firstName = " + characters[x].firstName);
-            if (typeof (characters[x].firstName) == "undefined" || characters[x].firstName == null) {
-                if (style == "js") {
-                    openSlot = x;
-                } else {
-                    openSlot = x + 1;
-                }
-                //alert("findOpenSlot: returning openSlot = " + openSlot + " in [" + style + "] style.");
-                return openSlot;
-            }
-        }
-    }
-}
-
-function closeMenus() {
-    $("#menu--home").hide();
-    $("#menu--new-character").hide();
-    $(".columns").html("");
-    $.post('http://character-selection/escape', JSON.stringify({})); // close lua nui focus
-}

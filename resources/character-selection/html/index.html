@@ -1,74 +1,52 @@
 <html>
 <head>
-    <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
-    <link href="style.css" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300" rel="stylesheet">
-    <!-- todo: add a font! -->
+	<script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+	<script src="script.js" type="text/javascript"></script>
+	<link href="style.css" rel="stylesheet" type="text/css" />
 </head>
-<body>
-    <div class="wrapper">
-        <!-- ======= TOP ======= -->
-        <header class="header">
-            <p>
-                <b>WELCOME TO USARRP</b>!
-            </p>
-        </header>
-        <!-- ======= END TOP ======= -->
-        <!-- ======= HOME ======= -->
-        <section id="menu--home" class="content" style="display:none;">
-            <div class="columns">
-                <!-- characters are added dynamically with JS here -->
-            </div>
-            <div class="menu--home-buttons buttons">
-                <a id="home--delete-button" href="#" class="button-link">DELETE CHARACTER</a>
-            </div>
-        </section>
-        <!-- ======= END HOME ======= -->
-        <!-- ======= NEW CHARACTER ======= -->
-        <section id="menu--new-character" class="menu--new-character-wrap content" style="display:none;">
-            <header style="text-align: center; padding-top: 3em;color:white;">
-                <h2>New Character</h2>
-            </header>
-            <div class="char--new-character-form-wrap" style="margin: 0 auto;">
-                <form id="char--new-character-form">
-                    <label for="first-name">First Name: *</label>
-                    <input type="text" name="first-name">
-                    <label for="middle-name">Middle Name:</label>
-                    <input type="text" name="middle-name">
-                    <label for="last-name">Last Name: *</label>
-                    <input type="text" name="last-name">
-                    <label for="date-of-birth">DOB: *</label>
-                    <input type="date" name="date-of-birth">
-                    <div style="margin-top: 3em;margin-left: .5em;">
-                        <a href="#" id="new-char-back-btn" class="button-link">Back</a>
-                        <a href="#" id="new-character-submit" class="button-link">Submit</a>
-                    </div>
-                </form>
-            </div>
-        </section>
-        <!-- ======= END NEW CHARACTER ======= -->
-        <!-- ======= DELETE CHARACTER ======= -->
-        <section id="menu--delete-character" class="menu--delete-character-wrap content" style="display:none;">
-            <header style="text-align: center; padding: 0em; color: white;">
-                <h2 style="margin: 0;">Delete Character</h2>
-				<p id="delete-char-error" style='color:white;'></p>
-            </header>
-            <div class="char--delete-character-wrap" style="margin: 0 auto; padding: 0;">
-                <div class="columns">
-                    <!-- fill data here -->
-                </div>
-                <div class="menu--delete-character-buttons buttons">
-                    <a id="delete-character--back-button" class="button-link" href="#">BACK</a>
-                </div>
-            </div>
-        </section>
-        <!-- ======= END DELETE CHARACTER ======= -->
-        <!-- ======= BOTTOM ======= -->
-        <footer class="footer" style='margin-bottom: 1em;'>
-            <a><b>https://www.usarrp.net</b></a>
-        </footer>
-        <!-- ======= END BOTTOM ======= -->
-    </div>
-    <script src="script.js" type="text/javascript"></script>
+<body style="display: block;">
+	<div class="container">
+		<div class="header">
+			<h1>Welcome to USA Realism RP, Please select your character.</h1>
+		</div>
+		<div class="notification">You don't appear to have any characters please make one.</div>
+		<div class="body">
+			<div class="section characters">
+				<div class="character" id="new">
+					<div class="new">+</div>
+					<h4>Create New</h4>
+				</div>
+			</div>
+			<div class="section create">
+				<div class="form-item">
+					<label for="first_name">First Name *</label>
+					<input type="text" name="first_name" id="first_name" maxlength="50" />
+				</div>
+				<div class="form-item">
+					<label for="middle_name">Middle Name</label>
+					<input type="text" name="middle_name" id="middle_name" maxlength="50" />
+				</div>
+				<div class="form-item">
+					<label for="last_name">Last Name *</label>
+					<input type="text" name="last_name" id="last_name" maxlength="50" />
+				</div>
+				<div class="form-item">
+					<label for="dob">Date of Birth *</label>
+					<input type="date" name="date_of_birth" id="date_of_birth">
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<a href="http://character-selection/list">
+				<button class="disconnect">Back to Characters</button>
+			</a>
+			<a href="http://character-selection/disconnect">
+				<button class="disconnect">Disconnect</button>
+			</a>
+			<button id="birth">Create Character</button>
+			<button id="delete" class="disabled">Delete Character</button>
+			<button id="select" class="disabled">Select Character</button>
+		</div>
+	</div>
 </body>
 </html>
