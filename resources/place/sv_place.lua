@@ -1,13 +1,13 @@
 TriggerEvent('es:addCommand', 'place', function(source, args, user)
-    TriggerEvent('es:getPlayerFromId', source, function(user)
-      local user_job = user.getActiveCharacterData("job")
-        if user_job == "sheriff" or user_job == "ems" or user_job == "fire" then
-             local tPID = tonumber(args[2])
-             TriggerClientEvent("place", tPID)
-        else
-            TriggerClientEvent("place:invalidCommand", source, "Only ^3law enforcement/EMS ^0can use /place!")
-        end
-    end)
+  TriggerEvent('es:getPlayerFromId', source, function(user)
+    local user_job = user.getActiveCharacterData("job")
+    if user_job == "sheriff" or user_job == "ems" or user_job == "fire" then
+      local tPID = tonumber(args[2])
+      TriggerClientEvent("place", tPID)
+    else
+      TriggerClientEvent("crim:areHandsTied", tonumber(args[2]), source, tonumber(args[2]), "place")
+    end
+  end)
 end)
 
 RegisterServerEvent("place:placePerson")
@@ -26,5 +26,9 @@ TriggerEvent('es:addCommand', 'unseat', function(source, args, user)
     if user_job == "sheriff" or user_job == "cop" or user_job == "ems" or user_job == "fire" then
         local targetPlayer = args[2]
 	    TriggerClientEvent("place:unseat", targetPlayer, source)
+    else
+      if targetPlayer ~= source then
+        TriggerClientEvent("crim:areHandsTied", tonumber(args[2]), source, tonumber(args[2]), "unseat")
+      end
     end
 end)

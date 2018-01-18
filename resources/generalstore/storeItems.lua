@@ -26,6 +26,10 @@ storeItems = {
     },
     ["Misc"] = {
         { name = "Large Scissors", price = 80, type = "misc", quantity = 1, legality = "legal", weight = 2},
-        { name = "Sturdy Rope", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 12}
+        { name = "Sturdy Rope", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 12},
+        { name = "Bag", price = 70, type = "misc", quantity = 1, legality = "legal", weight = 10},
+        { name = "Tent", price = 200, type = "misc", quantity = 1, legality = "legal", weight = 30},
+        { name = "Wood", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 30},
+        { name = "Chair", price = 175, type = "misc", quantity = 1, legality = "legal", weight = 40}
     }
 }

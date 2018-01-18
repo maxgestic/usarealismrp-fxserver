@@ -11,6 +11,7 @@ local dead = false
 RegisterNetEvent("RPD:revivePerson")
 AddEventHandler("RPD:revivePerson", function()
 	allowRevive = true
+	TriggerEvent("crim:blindfold", false, true)
 end)
 
 local timer = 180000
@@ -57,7 +58,7 @@ AddEventHandler('RPD:startTimer', function()
 				pressed = true
 				TriggerEvent('chatMessage', "Death", {200,0,0}, "Respawned")
 				allowRespawn = true
-
+				TriggerEvent("crim:blindfold", false, true)
 				while pressed do
 					Wait(0)
 					if(IsControlPressed(0, 176) == false) then
