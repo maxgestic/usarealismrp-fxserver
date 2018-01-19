@@ -231,7 +231,14 @@ function toggleMenu(status, menu, data)
 		SetEnableHandcuffs(GetPlayerPed(-1), status)
 
 		DoScreenFadeIn(1000)
+
+		-- make sure player isn't dead on spawn in
+		if IsPedDeadOrDying(ped, true) then
+			print("ped was dead or dying! reviving!")
+			TriggerEvent("RPD:revivePerson")
+		end
 	end
+	-- should this be here? Seems like SendNUIMessage and SetNuiFocus will be called twice if status == false
 	print("status = " .. tostring(status))
 	print("ped = " .. ped)
 	DisplayHud(not status)
@@ -245,6 +252,7 @@ function toggleMenu(status, menu, data)
 		menu = menu,
 		data = data
 	})
+
 end
 
 Citizen.CreateThread(function()
@@ -255,4 +263,3 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
-;

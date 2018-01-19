@@ -157,12 +157,6 @@ $(function () {
 		}
 	});
 
-	$(document).mousemove(function (event) {
-		cursorX = event.pageX;
-		cursorY = event.pageY;
-		UpdateCursorPos();
-	});
-
 	Number.prototype.formatMoney = function (c, d, t) {
 		var n = this,
 			c = isNaN(c = Math.abs(c)) ? 2 : c,
