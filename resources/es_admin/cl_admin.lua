@@ -57,7 +57,8 @@ AddEventHandler('es_admin:spawnVehicle', function(v)
 		local playerCoords = GetEntityCoords(playerPed)
 
 		veh = CreateVehicle(carid, playerCoords, 0.0, true, false)
-		SetVehicleAsNoLongerNeeded(veh)
+		--SetVehicleAsNoLongerNeeded(veh)
+		SetEntityAsMissionEntity(veh, true, true)
 		TaskWarpPedIntoVehicle(playerPed, veh, -1)
 	end
 end)

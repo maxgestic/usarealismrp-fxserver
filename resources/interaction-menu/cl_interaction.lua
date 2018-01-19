@@ -272,13 +272,13 @@ function interactionMenuUse(itemName, wholeItem)
 		print("new player BAC: " .. player.BAC)
 		if player.BAC >= 0.12 then
 			intoxicate(false, "MOVE_M@DRUNK@VERYDRUNK")
-			reality(4)
+			reality(10)
 		elseif player.BAC >= 0.08 then
 			intoxicate(false, "MOVE_M@DRUNK@MODERATEDRUNK")
 			reality(7)
 		elseif player.BAC >= 0.04 then
 			intoxicate(false, "MOVE_M@DRUNK@SLIGHTLYDRUNK")
-			reality(10)
+			reality(4)
 		end
 	else
 		TriggerEvent("interaction:notify", "There is no use action for that item!")
