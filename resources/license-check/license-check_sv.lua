@@ -179,6 +179,7 @@ TriggerEvent('es:addCommand', '28', function(source, args, user)
 		local userSource = tonumber(source)
 		local plateNumber = args[2]
 		if plateNumber then
+			if string.len(plateNumber) < 7 or string.len(plateNumber) > 8 then TriggerClientEvent("usa:notify", source, "Invalid license plate format.") return end
 			TriggerEvent('altchat:localChatMessage', source, "^6* " .. user_name .. " runs plate.")
 			TriggerEvent("es:getPlayers", function(players)
 				for id, player in pairs(players) do
@@ -222,6 +223,7 @@ TriggerEvent('es:addCommand', 'runplate', function(source, args, user)
 		local userSource = tonumber(source)
 		local plateNumber = args[2]
 		if plateNumber then
+			if string.len(plateNumber) < 7 or string.len(plateNumber) > 8 then TriggerClientEvent("usa:notify", source, "Invalid license plate format.") return end
 			TriggerEvent('altchat:localChatMessage', source, "^6* " .. user_name .. " runs plate.")
 			TriggerEvent("es:getPlayers", function(players)
 				for id, player in pairs(players) do
