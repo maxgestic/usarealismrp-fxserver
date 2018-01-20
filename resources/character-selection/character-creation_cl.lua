@@ -131,6 +131,8 @@ RegisterNUICallback('select-character', function(data, cb)
 	TriggerServerEvent("character:loadCharacter", selectedCharacterSlot)
 	-- set active character slot
 	TriggerServerEvent("character:setActive", selectedCharacterSlot)
+	-- update bank balance:
+	TriggerEvent("banking:updateBalance", data.character.bank)
 	-- check jail status
 	--print("checking player jailed status")
 	--TriggerServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
