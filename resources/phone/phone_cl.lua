@@ -172,6 +172,11 @@ RegisterNUICallback('sendTowMessage', function(data, cb)
     cb('ok')
 end)
 
+RegisterNUICallback('sendTweet', function(data, cb)
+	TriggerServerEvent("phone:sendTweet", data)
+    cb('ok')
+end)
+
 RegisterNUICallback('escape', function(data, cb)
 	startedTask = false
 	ClearPedTasks(GetPlayerPed(-1))

@@ -55,8 +55,8 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
         local args = mysplit(message, " ")
         local firstWord = string.lower(args[1])
         if firstWord == "/tweet" then
-            table.remove(args, 1)
-            TriggerClientEvent('chatMessage', -1, "[TWEET] - " .. name, {29,161,242}, table.concat(args, " "))
+          local message = "Please use your cell phone to send a tweet!"
+          TriggerClientEvent("usa:notify", userSource, message)
         elseif firstWord == "/me" then
             print("/me detected!")
             print("msg = " .. table.concat(args, " "))

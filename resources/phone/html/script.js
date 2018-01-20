@@ -266,6 +266,12 @@ $(function() {
         $("#tow-phone-app-form").show();
     });
 
+    // Send a tweet inot the twittersphere
+    $("#tweet-btn").click(function() {
+        $("#phone-btns").hide();
+        $("#tweet-phone-app-form").show();
+    });
+
     // going back to phone app home from police form
     $(".phone-back-btn").click(function() {
         $("#phone-btns").show();
@@ -273,6 +279,7 @@ $(function() {
         $("#911-phone-app-form").hide();
         $("#tow-phone-app-form").hide();
         $("#taxi-phone-app-form").hide();
+        $("#tweet-phone-app-form").hide();
     });
 
     $("#phone-btns-back-btn").click(function() {
@@ -303,6 +310,15 @@ $(function() {
         // send the message to ems
         $.post('http://phone/sendTowMessage', JSON.stringify({
             message: $("#tow-message").val()
+        }));
+        // close phone
+        $.post('http://phone/escape', JSON.stringify({}));
+    });
+
+    $("#tweet-phone-app-form").submit(function() {
+        // send the message to ems
+        $.post('http://phone/sendTweet', JSON.stringify({
+            message: $("#tweet-message").val()
         }));
         // close phone
         $.post('http://phone/escape', JSON.stringify({}));

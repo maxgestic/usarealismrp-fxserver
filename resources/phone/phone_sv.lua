@@ -143,6 +143,17 @@ AddEventHandler("phone:sendTowMessage", function(data)
 	end)
 end)
 
+RegisterServerEvent("phone:sendTweet")
+AddEventHandler("phone:sendTweet", function(data)
+	TriggerEvent("es:getPlayerFromId", source, function(user)
+		if user then
+			local name = user.getActiveCharacterData("fullName")
+			TriggerClientEvent('chatMessage', -1, "[TWEET] - " .. name, {29,161,242}, data.message)
+		end
+	end)
+end)
+
+
 RegisterServerEvent("phone:sendTextToPlayer")
 AddEventHandler("phone:sendTextToPlayer", function(data)
 	local userSource = tonumber(source)
