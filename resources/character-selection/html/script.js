@@ -146,13 +146,24 @@ $(function () {
 					i++;
 				});
 
-				var char = event.data.characters[selected];
-				var confirmed = confirm(`Are you sure you want to permanently delete "${char.firstName} ${char.lastName}"?`);
-				if (!confirmed) return;
+				const modal = document.getElementById('confirm');
+				const deleteName = document.getElementById('confirm_name');
+				const deleteChar = document.getElementById('confirm_delete');
+				const cancelChar = document.getElementById('confirm_cancel');
 
-				$.post('http://character-selection/delete-character', JSON.stringify({
-					slot: selected
-				}));
+				modal.showModal();
+
+				var char = event.data.characters[selected];
+				deleteName.innerText = `${char.firstName} ${char.lastName}`;
+
+				deleteChar.addEventListener('click', function () {
+					$.post('http://character-selection/delete-character', JSON.stringify({ slot: selected }));
+					modal.close('removed');
+				});
+
+				cancelChar.addEventListener('click', function () {
+					modal.close('cancled');
+				});
 			});
 		} else if (event.data.type == "error") {
 			document.getElementsByClassName('notification')[0].style.display = "block";
