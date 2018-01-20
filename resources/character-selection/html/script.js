@@ -22,6 +22,61 @@ $(function () {
 			event.data.characters = event.data.data;
 			characters = event.data.data;
 
+			$('#new').on('click', function () {
+				$('.create').show()
+				$('.characters').hide()
+				$('#select').hide()
+				$('#delete').hide()
+				$('#birth').show()
+				$('a[href="http://character-selection/disconnect"]').hide()
+				$('a[href="http://character-selection/list"]').show()
+
+				$('.option p').on("click", function () {
+					clicked = this
+					$('.option p').each(function () {
+						if (clicked != this) $(this).removeClass("selected")
+					})
+					$(this).addClass("selected")
+				})
+
+				if (typeof characters != 'undefined') {
+					for (var freeSlot = 0; freeSlot < characters.length; freeSlot++) {
+						const character = characters[freeSlot];
+						if (!character.firstName) break;
+					}
+				} else {
+					var freeSlot = 0;
+				}
+
+				$('#birth').on('click', function () {
+					var first_name = $('#first_name').val()
+					var last_name = $('#last_name').val()
+					var gender = $('.option p.selected').attr('id')
+
+					var dob = new Date($("input[name='date_of_birth']").val());
+					day = dob.getDate();
+					month = dob.getMonth() + 1;
+					year = dob.getFullYear();
+
+					if (first_name.length > 2 && last_name.length > 2 && (year > 1900 || year < 2020 || !isNaN(day) || !isNaN(month) || !isNaN(year))) {
+						var newCharData = {
+							firstName: $("input[name='first_name']").val(),
+							middleName: $("input[name='middle_name']").val(),
+							lastName: $("input[name='last_name']").val(),
+							dateOfBirth: $("input[name='date_of_birth']").val(),
+							slot: freeSlot + 1
+						}
+
+						$.post('http://character-selection/new-character-submit', JSON.stringify(newCharData));
+					} else {
+						$('.notification').show()
+						$('.notification').html("Oh no you didn't supply enough information, please try again.")
+					}
+				})
+			});
+
+			if (!event.data.characters) return;
+
 			if (event.data.characters.length == 3) {
 				var t = 0;
 				for (var i = 0; i < event.data.characters.length; i++) {
@@ -98,56 +153,7 @@ $(function () {
 				$.post('http://character-selection/delete-character', JSON.stringify({
 					slot: selected
 				}));
-			})
-
-			$('#new').on('click', function () {
-				$('.create').show()
-				$('.characters').hide()
-				$('#select').hide()
-				$('#delete').hide()
-				$('#birth').show()
-				$('a[href="http://character-selection/disconnect"]').hide()
-				$('a[href="http://character-selection/list"]').show()
-
-				$('.option p').on("click", function () {
-					clicked = this
-					$('.option p').each(function () {
-						if (clicked != this) $(this).removeClass("selected")
-					})
-					$(this).addClass("selected")
-				})
-
-				for (var freeSlot = 0; freeSlot < characters.length; freeSlot++) {
-					const character = characters[freeSlot];
-					if (!character.firstName) break;
-				}
-
-				$('#birth').on('click', function () {
-					var first_name = $('#first_name').val()
-					var last_name = $('#last_name').val()
-					var gender = $('.option p.selected').attr('id')
-
-					var dob = new Date($("input[name='date_of_birth']").val());
-					day = dob.getDate();
-					month = dob.getMonth() + 1;
-					year = dob.getFullYear();
-
-					if (first_name.length > 2 && last_name.length > 2 && (year > 1900 || year < 2020 || !isNaN(day) || !isNaN(month) || !isNaN(year))) {
-						var newCharData = {
-							firstName: $("input[name='first_name']").val(),
-							middleName: $("input[name='middle_name']").val(),
-							lastName: $("input[name='last_name']").val(),
-							dateOfBirth: $("input[name='date_of_birth']").val(),
-							slot: freeSlot+1
-						}
-
-						$.post('http://character-selection/new-character-submit', JSON.stringify(newCharData));
-					} else {
-						$('.notification').show()
-						$('.notification').html("Oh no you didn't supply enough information, please try again.")
-					}
-				})
-			})
+			});
 		} else if (event.data.type == "error") {
 			document.getElementsByClassName('notification')[0].style.display = "block";
 		} else if (event.data.type == "delete") {
