@@ -10,8 +10,7 @@ local settings = {
 		["hunger"] = {text = "Full", x = 0.698, y = 1.62, r = 9, g = 179, b = 9, a = 255},
 		["thirst"] = {text = "Thirsty", x = 0.698, y = 1.645, r = 255, g = 128, b = 0, a = 255},
 		-- ["clock"] = {text = "0:00", x = 0.75, y = 1.645, r = 255, g = 255, b = 255, a = 255}
-		-- ["clock"] = {text = "0:00", x = 0.698, y = 1.595, r = 255, g = 255, b = 255, a = 255}
-		["clock"] = {text = "0:00", x = 0.66, y = 1.714, r = 255, g = 255, b = 255, a = 255}
+		["clock"] = {text = "0:00", x = 0.698, y = 1.595, r = 255, g = 255, b = 255, a = 255}
 	},
 	thirst_global_mult = 0.000295,
 	hunger_global_mult = 0.000235,
@@ -176,17 +175,17 @@ end)
 -- HUD FUNCTIONS --
 -------------------
 function drawTxt(x,y ,width,height,scale, text, r,g,b,a)
-		SetTextFont(6)
-		SetTextProportional(0)
-		SetTextScale(scale, scale)
-		SetTextColour(r, g, b, a)
-		SetTextDropShadow(0, 0, 0, 0,255)
-		SetTextEdge(1, 0, 0, 0, 255)
-		SetTextDropShadow()
-		SetTextOutline()
-		SetTextEntry("STRING")
-		AddTextComponentString(text)
-		DrawText(x - width/2, y - height/2 + 0.005)
+	SetTextFont(6)
+	SetTextProportional(0)
+	SetTextScale(scale, scale)
+	SetTextColour(r, g, b, a)
+	SetTextDropShadow(0, 0, 0, 0,255)
+	SetTextEdge(1, 0, 0, 0, 255)
+	SetTextDropShadow()
+	SetTextOutline()
+	SetTextEntry("STRING")
+	AddTextComponentString(text)
+	DrawText(x - width/2, y - height/2 + 0.005)
 end
 
 ---------------------------------
@@ -255,7 +254,11 @@ function drawHud(person)
 	------------
 	-- Draw It --
 	------------
-	drawTxt(settings.hud["clock"].x, settings.hud["clock"].y, 1.0, 1.5, 0.4, settings.hud["clock"].text, settings.hud["clock"].r, settings.hud["clock"].g, settings.hud["clock"].b, settings.hud["clock"].a)
+	if IsPedInAnyVehicle(GetPlayerPed(-1), false) then
+		drawTxt(0.66, 1.69, 1.0, 1.5, 0.4, settings.hud["clock"].text, 255, 255, 255, 255)
+	else
+		drawTxt(0.66, 1.714, 1.0, 1.5, 0.4, settings.hud["clock"].text, 255, 255, 255, 255)
+	end
 
 	-- Background
 	DrawRect(0.08555, 0.992, 0.14, 0.0149999999999998, 0, 0, 0, 140)
