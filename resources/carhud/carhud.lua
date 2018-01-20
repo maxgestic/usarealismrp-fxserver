@@ -66,7 +66,7 @@ Citizen.CreateThread(function()
 			r, b, g = table.unpack({ 165, 34, 34 })
 		end
 
-		DrawRect(0.015 + (Health / 2), 0.9755, Health, 0.00833, r, b, g, 230)
+		DrawRect(0.0155 + (Health / 2), 0.9755, Health, 0.00833, r, b, g, 230)
 		DrawRect(0.0504, 0.9755, 0.07, 0.00833, r, b, g, 130)
 		
 		-- ARMOR
@@ -75,7 +75,7 @@ Citizen.CreateThread(function()
 		Armour = (Armour / 100) * 0.069
 
 		DrawRect(0.0866+(Armour/2), 0.9755, Armour, 0.00833, 80, 150, 191, 230)
-		DrawRect(0.1214, 0.9755, 0.069, 0.00833, 80, 150, 191, 130)
+		DrawRect(0.1214, 0.9755, 0.07, 0.00833, 80, 150, 191, 130)
 	end
 end)
 
