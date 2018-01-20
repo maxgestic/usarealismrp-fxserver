@@ -123,7 +123,7 @@ TriggerEvent('es:addCommand', 'openbank', function(source, args, user)
 
 	local group = user.getGroup()
 
-    if group == "owner" or group == "admin" or group == "mod" then
+    if group == "owner" or group == "admin" or group == "superadmin" or group == "mod" then
         closed = false
         TriggerClientEvent("bank-robbery:notify", source, "BANK IS NOW ~g~OPEN")
     end
