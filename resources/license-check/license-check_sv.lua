@@ -1,3 +1,29 @@
+-- random names for when a local owns the car after doing /runplate or /28 on it
+random_names = {
+	"Jim Karen",
+	"Michael Phelps",
+	"Michael Jackson",
+	"Tanner Phillips",
+	"Mohammed Algierzran",
+	"Sarah Kennedy",
+	"Sierra Jones",
+	"Cassandra Pike",
+	"Larry McNab",
+	"Guy Fieri",
+	"Jamie Gonzalez",
+	"Denzel Adams",
+	"Hollis Pracht",
+	"Harvey Fudge",
+	"Rhonda Gentle",
+	"Gwyneth Dyson",
+	"Marvel Calo",
+	"Aimee Pettengill",
+	"Selma Behm",
+	"Coleen Kiesel",
+	"Hilton Fuhr",
+	"Maegan Gose"
+}
+
 function playerHasValidAutoInsurance(playerInsurance)
 	local timestamp = os.date("*t", os.time())
 		if playerInsurance.type == "auto" then
@@ -172,8 +198,13 @@ TriggerEvent('es:addCommand', '28', function(source, args, user)
 							return
 						end
 					end
+					local message = "~y~PLATE: ~w~" .. plateNumber .. "\n"
+					message = message .. "~y~RO: ~w~"
+					message = message .. random_names[math.random(#random_names)] .. "\n"
+					message = message .. "~y~MODEL: ~w~"
+					message = message .. "Unknown"
 					-- player not in game with that plate number or plate number owned by a local!
-					TriggerClientEvent("licenseCheck:notify", userSource, "This plate is not on file.")
+					TriggerClientEvent("licenseCheck:notify", userSource, message)
 				end
 			end)
 		else
@@ -212,8 +243,13 @@ TriggerEvent('es:addCommand', 'runplate', function(source, args, user)
 							end
 						end
 					end
+					local message = "~y~PLATE: ~w~" .. plateNumber .. "\n"
+					message = message .. "~y~RO: ~w~"
+					message = message .. random_names[math.random(#random_names)] .. "\n"
+					message = message .. "~y~MODEL: ~w~"
+					message = message .. "Unknown"
 					-- player not in game with that plate number or plate number owned by a local!
-					TriggerClientEvent("licenseCheck:notify", userSource, "This plate is not on file.")
+					TriggerClientEvent("licenseCheck:notify", userSource, message)
 				end
 			end)
 		else
