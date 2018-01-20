@@ -32,14 +32,4 @@ settings["fr"] = {
 	price = "prix"
 }
 
-
-
-hud_form = 1 -- 1 : Vertical | 2 = Horizontal
-hud_x = 0.181
-hud_y = 0.905
-
-text_x = 0.2575
-text_y = 0.975
-
-
 electricityPrice = 1 -- NOT RANOMED !!
