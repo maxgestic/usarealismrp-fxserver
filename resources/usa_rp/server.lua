@@ -164,7 +164,7 @@ AddEventHandler("usa:getPlayerItem", function(from_source, item_name, callback)
     for i = 1, #user_inventory do
       local item = user_inventory[i]
       if item then
-        if string.find(item_name, item.name) then
+        if string.find(item.name, item_name) then
           print("found item in inventory, returning it!")
           callback(item)
           return
