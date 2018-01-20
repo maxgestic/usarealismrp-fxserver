@@ -326,30 +326,40 @@ function CheckVeh()
 	end
 end
 
-
+local UI = { 
+	x =  0.000,
+	y = -0.001,
+}
 
 function renderBoxes()
 	if(IsPedInAnyVehicle(GetPlayerPed(-1), -1) and GetPedVehicleSeat(GetPlayerPed(-1)) == -1 and not isBlackListedModel()) then
+		DrawRect(0.086, 0.806, 0.142, 0.0149999999999998, 0, 0, 0, 130)
+		DrawRect(0.015+(essence/2), 0.8062, essence, 0.0087, 225, 146, 45, 255)
 
-		if(hud_form == 1) then
-			DrawRect(hud_x, hud_y, 0.0149999999999998, 0.15, 255, 255, 255, 200)
-			DrawRect(hud_x, hud_y, 0.0119999999999998, 0.142, 80, 80, 80, 255)
-			DrawRect(hud_x, hud_y, 0.0119999999999998, essence, 225, 146, 45, 255)
-			local percent = (essence/0.142)*100
-
-			--DrawAdvancedText(text_x, text_y, 0.005, 0.0028, 0.4,round(percent,1).."%", 255, 255, 255, 255, 0, 1)
-		else
-			DrawRect(hud_x, hud_y, 0.15, 0.0149999999999998, 255, 255, 255, 200)
-			DrawRect(hud_x, hud_y, 0.142, 0.0119999999999998, 80, 80, 80, 255)
-			DrawRect(hud_x, hud_y, essence, 0.0119999999999998, 225, 146, 45, 255)
-			local percent = (essence/0.142)*100
-
-			--DrawAdvancedText(text_x, text_y, 0.005, 0.0028, 0.4,round(percent,1).."%", 255, 255, 255, 255, 0, 1)
-		end
+		local percent = (essence/0.142)*100
+		drawRct(UI.x + 0.11, UI.y + 0.864, 0.046, 0.03, 0, 0, 0, 150)
+		drawTxt(UI.x + 0.61, UI.y + 1.3525, 1.0, 1.0, 0.64 , "~w~" .. math.floor(percent), 255, 255, 255, 255)
+		drawTxt(UI.x + 0.6355, UI.y + 1.36, 1.0, 1.0, 0.4, "~w~ Fuel", 255, 255, 255, 255)
 	end
 end
 
+function drawTxt(x,y ,width,height,scale, text, r,g,b,a)
+	SetTextFont(4)
+	SetTextProportional(0)
+	SetTextScale(scale, scale)
+	SetTextColour(r, g, b, a)
+	SetTextDropShadow(0, 0, 0, 0,255)
+	SetTextEdge(2, 0, 0, 0, 255)
+	SetTextDropShadow()
+	SetTextOutline()
+	SetTextEntry("STRING")
+	AddTextComponentString(text)
+	DrawText(x - width/2, y - height/2 + 0.005)
+end
 
+function drawRct(x,y,width,height,r,g,b,a)
+	DrawRect(x + width/2, y + height/2, width, height, r, g, b, a)
+end
 
 
 
