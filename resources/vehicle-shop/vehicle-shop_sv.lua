@@ -106,7 +106,7 @@ local vehicleShopItems = {
 			{make = "Brute", model = "Camper", price = 45500, hash = 1876516712, storage_capacity = 300.0},
 			{make = "Hennifers", model = "Taco Truck", price = 60500, hash = 1951180813, storage_capacity = 300.0}
 		},
-		["Sports"] = {
+		["Sports 1"] = {
 			{make = "Karin", model = "Sultan", price = 39500, hash = 970598228, storage_capacity = 145.0},
 			{make = "Ubermacht", model = "Zion Cabrio", price = 40015, hash = -1193103848, storage_capacity = 145.0},
 			{make = "Invetero", model = "Coquette", price = 65450, hash = 108773431, storage_capacity = 145.0},
@@ -115,7 +115,9 @@ local vehicleShopItems = {
 			{make = "Dewbauchee", model = "Massacro", price = 75000, hash = -142942670, storage_capacity = 145.0},
 			{make = "Benefactor", model = "Schafter V12", price = 82000, hash = -1485523546, storage_capacity = 145.0},
 			{make = "Dewbauchee", model = "Rapid GT", price = 94500, hash = -1934452204, storage_capacity = 145.0},
-			{make = "Annis", model = "Elegy Retro Custom", price = 95000, hash = 196747873, storage_capacity = 145.0},
+			{make = "Annis", model = "Elegy Retro Custom", price = 95000, hash = 196747873, storage_capacity = 145.0}
+		},
+		["Sports 2"] = {
 			{make = "Dewbauchee", model = "Seven-70", price = 110999, hash = -1757836725, storage_capacity = 145.0},
 			{make = "Dewbauchee", model = "Specter", price = 120000, hash = 1886268224, storage_capacity = 145.0},
 			{make = "Annis", model = "Elegy RH8", price = 175000, hash = -566387422, storage_capacity = 145.0},
