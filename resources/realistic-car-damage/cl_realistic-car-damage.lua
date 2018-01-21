@@ -65,7 +65,7 @@ Citizen.CreateThread(function()
                 --overheatVehicle(targetVehicle)
             if vehicleEngineHealth < engineDisabledThreshold then -- severe vehicle damage
                 --print("engine health is overheating the vehicle!!")
-                DrawSpecialTextTimed("Your vehicle was ~r~disabled~w~!", 5)
+                --DrawSpecialTextTimed("Your vehicle was ~r~disabled~w~!", 5)
                 SetVehicleUndriveable(targetVehicle, 1) -- disable car
                 SetVehicleEngineHealth(targetVehicle, 0.0) -- engine health to 0
             elseif vehicleEngineHealth >= engineDisabledThreshold and vehicleEngineHealth < civEngineOverheatThreshold and not IsPedInAnyPoliceVehicle(targetPed) then -- less severe vehicle damage, non police
@@ -148,7 +148,7 @@ function overheatVehicle(targetVehicle)
     local engineHealth = 100
     while timer > 0 do
         Citizen.Wait(0)
-        DrawSpecialText("You car is ~r~overheating~w~!")
+        --DrawSpecialText("You car is ~r~overheating~w~!")
         timer = timer - 10
         engineHealth = engineHealth - 10
         SetVehicleEngineHealth(targetVehicle, engineHealth) -- engine health slowly drop to 0
