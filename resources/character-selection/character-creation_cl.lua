@@ -172,7 +172,7 @@ function toggleMenu(status, menu, data)
 		-- RemoveAllPedWeapons(ped, true)
 
 		local ped = GetPlayerPed(-1)
-		SetEntityCoords(ped, 549.738, -2208.249, 68.981, 0.0, 0, 0, 1)
+		SetEntityCoords(ped, 751.31121826172, 6454.3813476563, 31.926473617554, 0.0, 0, 0, 1)
 		FreezeEntityPosition(ped, true)
 		DisplayHud(false)
 		DisplayRadar(false)
@@ -233,12 +233,6 @@ function toggleMenu(status, menu, data)
 		SetEnableHandcuffs(GetPlayerPed(-1), status)
 
 		DoScreenFadeIn(1000)
-
-		-- make sure player isn't dead on spawn in
-		if IsPedDeadOrDying(ped, true) then
-			print("ped was dead or dying! reviving!")
-			TriggerEvent("RPD:revivePerson")
-		end
 	end
 	-- should this be here? Seems like SendNUIMessage and SetNuiFocus will be called twice if status == false
 	print("status = " .. tostring(status))
@@ -261,7 +255,7 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(1)
 		if menuOpen then
-			SetEntityCoords(GetPlayerPed(-1), open_menu_spawn_coords.x, open_menu_spawn_coords.y, open_menu_spawn_coords.z, open_menu_spawn_coords.angle, 0, 0, 1)
+			SetEntityCoords(GetPlayerPed(-1), 751.31121826172, 6454.3813476563, 31.926473617554, open_menu_spawn_coords.angle, 0, 0, 1)
 		end
 	end
 end)

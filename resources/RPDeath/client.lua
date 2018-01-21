@@ -3,10 +3,15 @@ RegisterNetEvent('RPD:allowRevive')
 
 local allowRespawn = true
 local allowRevive = true
-local RPDeathEnabled = true
+local RPDeathEnabled = false
 local dead = false
 
 --TriggerServerEvent('RPD:addPlayer')
+
+RegisterNetEvent("RPD:toggle")
+AddEventHandler("RPD:toggle", function (toggle)
+	RPDeathEnabled = toggle
+end)
 
 RegisterNetEvent("RPD:revivePerson")
 AddEventHandler("RPD:revivePerson", function()
