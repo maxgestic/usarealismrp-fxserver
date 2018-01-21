@@ -14,7 +14,7 @@ local vehicleShopItems = {
 			{make = "Declasse", model = "Granger", price = 15000, hash = -1775728740, storage_capacity = 175.0},
 			{make = "Dundreary", model = "Landstalker", price = 15595, hash = 1269098716, storage_capacity = 175.0},
 			{make = "Benefactor", model = "Dubsta", price = 18000, hash = 1177543287, storage_capacity = 175.0},
-			{make = "Phatom", model = "DQ2", price = 20000, hash = -1137532101, storage_capacity = 175.0},
+			{make = "Phatom", model = "FQ2", price = 20000, hash = -1137532101, storage_capacity = 175.0},
 			{make = "Bravado", model = "Gresley", price = 20990, hash = -1543762099, storage_capacity = 175.0},
 			{make = "Albany", model = "Cavalcade", price = 19500, hash = -789894171, storage_capacity = 175.0},
 			{make = "Gallivanter", model = "Baller", price = 28700, hash = 634118882, storage_capacity = 200.0}
