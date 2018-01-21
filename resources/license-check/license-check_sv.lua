@@ -188,7 +188,7 @@ TriggerEvent('es:addCommand', '28', function(source, args, user)
 					local vehicles = player.getActiveCharacterData("vehicles")
 					for i = 1, #vehicles do
 						local vehicle = vehicles[i]
-						if tostring(vehicle.plate) == tostring(plateNumber) then
+						if string.lower(tostring(vehicle.plate)) == string.lower(tostring(plateNumber)) then
 							print("found matching plate number! triggering client event")
 							local message = "~y~PLATE: ~w~" .. vehicle.plate .. "\n"
 							message = message .. "~y~RO: ~w~"
@@ -199,7 +199,7 @@ TriggerEvent('es:addCommand', '28', function(source, args, user)
 							return
 						end
 					end
-					local message = "~y~PLATE: ~w~" .. plateNumber .. "\n"
+					local message = "~y~PLATE: ~w~" .. string.upper(plateNumber) .. "\n"
 					message = message .. "~y~RO: ~w~"
 					message = message .. random_names[math.random(#random_names)] .. "\n"
 					message = message .. "~y~MODEL: ~w~"
@@ -233,7 +233,7 @@ TriggerEvent('es:addCommand', 'runplate', function(source, args, user)
 					if vehicles then
 						for i = 1, #vehicles do
 							local vehicle = vehicles[i]
-							if tostring(vehicle.plate) == tostring(plateNumber) then
+							if string.lower(tostring(vehicle.plate)) == string.lower(tostring(plateNumber)) then
 								print("found matching plate number! triggering client event")
 								local message = "~y~PLATE: ~w~" .. vehicle.plate .. "\n"
 								message = message .. "~y~RO: ~w~"
@@ -245,7 +245,7 @@ TriggerEvent('es:addCommand', 'runplate', function(source, args, user)
 							end
 						end
 					end
-					local message = "~y~PLATE: ~w~" .. plateNumber .. "\n"
+					local message = "~y~PLATE: ~w~" .. string.upper(plateNumber) .. "\n"
 					message = message .. "~y~RO: ~w~"
 					message = message .. random_names[math.random(#random_names)] .. "\n"
 					message = message .. "~y~MODEL: ~w~"

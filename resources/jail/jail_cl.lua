@@ -29,6 +29,8 @@ RegisterNetEvent("jail:openMenu")
 AddEventHandler("jail:openMenu", function()
     EnableGui(true)
     SetPedCanSwitchWeapon(GetPlayerPed(-1), false)
+    -- look at clipboard:
+    TaskStartScenarioInPlace(GetPlayerPed(-1), "WORLD_HUMAN_CLIPBOARD", 0, 1)
 end)
 
 RegisterNUICallback('submit', function(data, cb)

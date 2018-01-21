@@ -94,8 +94,8 @@ local vehicleShopItems = {
 		},
 		["Motorcycles"] = {
 			{make = "Pegassi", model = "Faggio Sport", price = 1200, hash = -1842748181, storage_capacity = 30.0},
-			{make = "Dinka", model = "Enduro", price = 5500, hash = 1753414259, storage_capacity = 30.0},
-			{make = "Dinka", model = "Akuma", price = 7500, hash = 1672195559, storage_capacity = 30.0},
+			{make = "Dinka", model = "Enduro", price = 8900, hash = 1753414259, storage_capacity = 30.0},
+			{make = "Dinka", model = "Akuma", price = 12000, hash = 1672195559, storage_capacity = 30.0},
 			{make = "Maibatsu", model = "Sanchez", price = 17500, hash = -1453280962, storage_capacity = 30.0},
 			{make = "Shitzu", model = "Vader", price = 8500, hash = -140902153, storage_capacity = 30.0},
 			{make = "Western", model = "Bagger", price = 10500, hash = -2140431165, storage_capacity = 30.0},
@@ -442,14 +442,16 @@ Citizen.CreateThread(function()
 							else
 								vehName = vehicle.model
 							end
-							TriggerEvent("vehShop-GUI:Option", "+ ($" .. comma_value(vehicle.sellPrice) .. ") " .. vehName, function(cb)
-								if cb then
-									TriggerEvent("usa:notify", "~y~SOLD:~w~ " .. vehName .. "\n~y~PRICE: ~g~$" .. comma_value(vehicle.sellPrice))
-									table.remove(menu.vehicles, i)
-									TriggerServerEvent("vehShop:sellVehicle", vehicle)
-									menu.page = "home"
-								end
-							end)
+							if vehName and vehicle.sellPrice then
+								TriggerEvent("vehShop-GUI:Option", "+ ($" .. comma_value(vehicle.sellPrice) .. ") " .. vehName, function(cb)
+									if cb then
+										TriggerEvent("usa:notify", "~y~SOLD:~w~ " .. vehName .. "\n~y~PRICE: ~g~$" .. comma_value(vehicle.sellPrice))
+										table.remove(menu.vehicles, i)
+										TriggerServerEvent("vehShop:sellVehicle", vehicle)
+										menu.page = "home"
+									end
+								end)
+							end
 						end
 					end
 				end
@@ -567,6 +569,7 @@ Citizen.CreateThread(function()
 end)
 
 function comma_value(amount)
+	if not amount then return end
   local formatted = amount
   while true do
     formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')

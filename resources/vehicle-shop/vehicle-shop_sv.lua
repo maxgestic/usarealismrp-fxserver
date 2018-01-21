@@ -80,8 +80,8 @@ local vehicleShopItems = {
 		},
 		["Motorcycles"] = {
 			{make = "Pegassi", model = "Faggio Sport", price = 1200, hash = -1842748181, storage_capacity = 30.0},
-			{make = "Dinka", model = "Enduro", price = 5500, hash = 1753414259, storage_capacity = 30.0},
-			{make = "Dinka", model = "Akuma", price = 7500, hash = 1672195559, storage_capacity = 30.0},
+			{make = "Dinka", model = "Enduro", price = 8900, hash = 1753414259, storage_capacity = 30.0},
+			{make = "Dinka", model = "Akuma", price = 12000, hash = 1672195559, storage_capacity = 30.0},
 			{make = "Maibatsu", model = "Sanchez", price = 17500, hash = -1453280962, storage_capacity = 30.0},
 			{make = "Shitzu", model = "Vader", price = 8500, hash = -140902153, storage_capacity = 30.0},
 			{make = "Western", model = "Bagger", price = 10500, hash = -2140431165, storage_capacity = 30.0},
@@ -376,7 +376,8 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle)
 						if not alreadyHasVehicle(userSource, vehicleName) then
 							if tonumber(price) <= user_money then
 								-- todo: change below plate number
-								plate = tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9))
+								--plate = tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9))
+								plate = generate_random_number_plate()
 								if vehicles then
 									user.setActiveCharacterData("money", user_money - tonumber(price))
 									local vehicle = {
@@ -542,4 +543,25 @@ function playerHasValidAutoInsurance(playerInsurance)
 			-- no insurance at all
 			return false
 		end
+end
+
+function generate_random_number_plate()
+	local charset = {
+		numbers = {},
+		letters = {}
+	}
+	-- QWERTYUIOPASDFGHJKLZXCVBNM1234567890
+	for i = 48,  57 do table.insert(charset.numbers, string.char(i)) end -- add numbers 1 - 9
+	for i = 65,  90 do table.insert(charset.letters, string.char(i)) end -- add capital letters
+	local number_plate = ""
+	number_plate = number_plate .. charset.numbers[math.random(#charset.numbers)] -- number
+	number_plate = number_plate .. charset.numbers[math.random(#charset.numbers)] -- number
+	number_plate = number_plate .. charset.letters[math.random(#charset.letters)] -- letter
+	number_plate = number_plate .. charset.letters[math.random(#charset.letters)] -- letter
+	number_plate = number_plate .. charset.letters[math.random(#charset.letters)] -- letter
+	number_plate = number_plate .. charset.numbers[math.random(#charset.numbers)] -- number
+	number_plate = number_plate .. charset.numbers[math.random(#charset.numbers)] -- number
+	number_plate = number_plate .. charset.numbers[math.random(#charset.numbers)] -- number
+	print("created random plate: ")
+	return number_plate
 end
