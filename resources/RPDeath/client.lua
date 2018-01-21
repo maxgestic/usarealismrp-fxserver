@@ -3,7 +3,7 @@ RegisterNetEvent('RPD:allowRevive')
 
 local allowRespawn = true
 local allowRevive = true
-local RPDeathEnabled = false
+local RPDeathEnabled = true
 local dead = false
 
 --TriggerServerEvent('RPD:addPlayer')
