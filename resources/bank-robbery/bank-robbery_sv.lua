@@ -70,6 +70,9 @@ AddEventHandler("bank:beginRobbery", function(source)
 	end)
 	--TriggerClientEvent('chatMessage', -1, 'NEWS', { 255, 180, 0 }, '^0Someone is robbing the bank!')
 
+	print("calling startHacking!! source: " .. source)
+	TriggerClientEvent("bank-robbery:startHacking", tonumber(source))
+
 	-- wait 1.5 min seconds to get money
 	SetTimeout(90000, function()
 

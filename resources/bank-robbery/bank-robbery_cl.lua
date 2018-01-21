@@ -66,6 +66,27 @@ AddEventHandler("bank-robbery:notify", function(msg)
 	DrawCoolLookingNotification(msg)
 end)
 
+---------------
+-- mini game --
+---------------
+RegisterNetEvent("bank-robbery:startHacking")
+AddEventHandler("bank-robbery:startHacking", function()
+	print("inside startHacking event handler!")
+	--TriggerEvent("mhacking:show")
+	--TriggerEvent("mhacking:start",7,35,mycb)
+	TriggerEvent("mhacking:seqstart",{7,6,5,4},90,mycb)
+end)
+
+function mycb(success, timeremaining, finish)
+	if success then
+		print('Success with '..timeremaining..'s remaining.')
+		--TriggerEvent('mhacking:hide')
+	else
+		print('Failure to win hacking game!')
+		--TriggerEvent('mhacking:hide')
+	end
+end
+
 function DrawCoolLookingNotification(msg)
     SetNotificationTextEntry("STRING")
     AddTextComponentString(msg)
