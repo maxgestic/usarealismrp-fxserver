@@ -16,36 +16,48 @@ function getPlayerIdentifierEasyMode(source)
 	return playerIdentifier -- should usually be only 1 identifier according to the wiki
 end
 
+RegisterServerEvent("bank:setBusy")
+AddEventHandler("bank:setBusy", function(busy)
+	isBusy = busy
+end)
+
 local abletorob = true
 RegisterServerEvent("bank:isBusy")
 AddEventHandler("bank:isBusy", function()
+	local userSource = tonumber(source)
 
-	print("INSIDE isBusy with source = " .. source)
+	print("INSIDE isBusy with source = " .. userSource)
 	local busyStatus = isBusy
 
     if not closed then
         print("BANK WAS NOT CLOSED")
         if not abletorob then
-            TriggerClientEvent('chatMessage', source, 'SYSTEM', { 0, 141, 155 }, "^3The bank has already been robbed!")
+            TriggerClientEvent('chatMessage', userSource, 'SYSTEM', { 0, 141, 155 }, "^3The bank has already been robbed!")
         elseif busyStatus == "no" then
 
-            TriggerClientEvent('chatMessage', source, 'SYSTEM', { 0, 141, 155 }, "^3You are robbing the bank!")
-            TriggerClientEvent('chatMessage', source, 'SYSTEM', { 0, 141, 155 }, "^3Wait ^21 minute^3 to get all the money!")
-			TriggerClientEvent("bank-robbery:notify", source, "~r~Alarm activated!")
-
-            TriggerEvent("bank:beginRobbery", source)
-            abletorob = false
-
-            -- 1.5 hr cooldown
-            SetTimeout(5400000 , function()
-                abletorob = true
-            end)
+			TriggerEvent("usa:getPlayerItem", userSource, "Cell Phone", function(item)
+				if not item then
+					print("player did not have cell phone to hack the bank!")
+					TriggerClientEvent("bank-robbery:notify", userSource, "You need a cell phone to rob the bank!")
+					return
+				else
+					TriggerClientEvent('chatMessage', userSource, 'SYSTEM', { 0, 141, 155 }, "^3You are robbing the bank!")
+		            TriggerClientEvent('chatMessage', userSource, 'SYSTEM', { 0, 141, 155 }, "^3Wait ^21 minute^3 to get all the money!")
+					TriggerClientEvent("bank-robbery:notify", userSource, "~r~Alarm activated!")
+		            TriggerEvent("bank:beginRobbery", userSource)
+		            abletorob = false
+		            -- 1.5 hr cooldown
+		            SetTimeout(5400000, function()
+		                abletorob = true
+		            end)
+				end
+			end)
 
         else
-			TriggerClientEvent("bank-robbery:notify", source, "Someone is already robbing the bank!")
+			TriggerClientEvent("bank-robbery:notify", userSource, "Someone is already robbing the bank!")
         end
     else
-		TriggerClientEvent("bank-robbery:notify", source, "The bank has been ~r~closed~w~ by admins.")
+		TriggerClientEvent("bank-robbery:notify", userSource, "The bank has been ~r~closed~w~ by admins.")
     end
 
 end)
@@ -71,26 +83,15 @@ AddEventHandler("bank:beginRobbery", function(source)
 	--TriggerClientEvent('chatMessage', -1, 'NEWS', { 255, 180, 0 }, '^0Someone is robbing the bank!')
 
 	print("calling startHacking!! source: " .. source)
+	TriggerClientEvent("usa:playScenario", tonumber(source), "WORLD_HUMAN_STAND_MOBILE")
 	TriggerClientEvent("bank-robbery:startHacking", tonumber(source))
-
-	-- wait 1.5 min seconds to get money
-	SetTimeout(90000, function()
-
-		-- need to check player distance from bank point
-		-- if in range: give bag of loot
-		-- if not in rage: cancel robbery
-		TriggerClientEvent("bank:checkRange", source, source)
-		-- make npc not busy so it can be used again
-        isBusy = "no"
-
-	end)
 
 end)
 
 RegisterServerEvent("bank:inRange")
 AddEventHandler("bank:inRange", function()
 	local userSource = tonumber(source)
-	rewardMoney = math.random(20000, 60000)
+	rewardMoney = math.random(40000, 150000)
 	isBusy = "no"
 	local msg = "You stole ~g~$" .. comma_value(rewardMoney) .. "~w~!"
 	TriggerClientEvent("bank-robbery:notify", source, msg)
