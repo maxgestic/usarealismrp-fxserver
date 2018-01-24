@@ -127,16 +127,18 @@ local userSource = tonumber(source)
           local user_bank = user.getActiveCharacterData("bank")
            local user_money = user.getActiveCharacterData("money")
         local bankbalance = user_bank
-        if(tonumber(rounded) <= tonumber(bankbalance)) then
-          TriggerClientEvent("banking:updateBalance", userSource, (user_bank - rounded))
-         TriggerClientEvent("banking:removeBalance", userSource, rounded)
+		if bankbalance and tonumber(rounded) then
+			if(tonumber(rounded) <= tonumber(bankbalance)) then
+			  TriggerClientEvent("banking:updateBalance", userSource, (user_bank - rounded))
+			 TriggerClientEvent("banking:removeBalance", userSource, rounded)
 
-          --withdraw(userSource, rounded)
-          user.setActiveCharacterData("money", user_money + rounded)
-          user.setActiveCharacterData("bank", user_bank - rounded)
-        else
-          TriggerClientEvent('chatMessage', userSource, "", {0, 0, 200}, "^1Not enough money in account!^0")
-        end
+			  --withdraw(userSource, rounded)
+			  user.setActiveCharacterData("money", user_money + rounded)
+			  user.setActiveCharacterData("bank", user_bank - rounded)
+			else
+			  TriggerClientEvent('chatMessage', userSource, "", {0, 0, 200}, "^1Not enough money in account!^0")
+			end
+		end
       end
   end)
 end)
