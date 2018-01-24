@@ -437,6 +437,11 @@ AddEventHandler("usa:playSound", function(soundParams)
   PlaySoundFrontend(table.unpack(soundParams))
 end)
 
+RegisterNetEvent("usa:playScenario")
+AddEventHandler("usa:playScenario", function(scenario)
+    TaskStartScenarioInPlace(GetPlayerPed(-1), scenario, 0, 1)
+end)
+
 -- prevent falling through vehicle when eating/drink and entering vehicle:
 Citizen.CreateThread(function()
 	while true do
