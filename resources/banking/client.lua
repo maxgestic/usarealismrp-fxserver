@@ -310,7 +310,7 @@ AddEventHandler('bank:givecash', function(toPlayer, amount, fromName, src)
     local playing = IsPlayerPlaying(player2)
     if (playing ~= false) then
       TriggerServerEvent("bank:givecash", toPlayer, tonumber(amount))
-      TriggerEvent('chatMessage', "", {0, 0, 0}, fromName .. " has given you ^2$" .. amount .. "^0.");
+      TriggerEvent('chatMessage', "", {255, 255, 255}, fromName .. " has given you ^2$" .. amount .. "^0.");
       TriggerServerEvent('altchat:localChatMessage', src, "^6* " .. fromName .. " hands over money.")
     else
       TriggerEvent('chatMessage', "", {255, 0, 0}, "^1This player is not online!");

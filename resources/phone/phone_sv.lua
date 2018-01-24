@@ -86,10 +86,10 @@ AddEventHandler("phone:send911Message", function(data)
 			end
 		end
 		if help_online then
-			TriggerClientEvent('chatMessage', userSource, "", {0, 0, 0}, "^3911^0 was notified!")
+			TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, "^3911^0 was notified!")
 			TriggerClientEvent("usa:notify", userSource, "~r~911~w~ was notified!")
 		else
-			TriggerClientEvent('chatMessage', userSource, "", {0, 0, 0}, "Sorry, there is no one on duty to help!")
+			TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, "Sorry, there is no one on duty to help!")
 			TriggerClientEvent("usa:notify", userSource, "Sorry, there is no one on duty to help!")
 		end
 	end)
@@ -110,10 +110,10 @@ AddEventHandler("phone:sendTaxiMessage", function(data)
 			end
 		end
 		if tow_online then
-			TriggerClientEvent('chatMessage', userSource, "", {0, 0, 0}, "A ^3taxi^0 has been notified!")
+			TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, "A ^3taxi^0 has been notified!")
 			TriggerClientEvent("usa:notify", userSource, "A ~y~taxi ~w~has been notified!")
 		else
-			TriggerClientEvent('chatMessage', userSource, "", {0, 0, 0}, "Sorry, there is no one on duty as taxi!")
+			TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, "Sorry, there is no one on duty as taxi!")
 			TriggerClientEvent("usa:notify", userSource, "~y~Sorry, there is no one on duty as taxi!")
 		end
 	end)
@@ -134,10 +134,10 @@ AddEventHandler("phone:sendTowMessage", function(data)
 			end
 		end
 		if tow_online then
-			TriggerClientEvent('chatMessage', userSource, "", {0, 0, 0}, "A ^3tow truck^0 has been notified!")
+			TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, "A ^3tow truck^0 has been notified!")
 			TriggerClientEvent("usa:notify", userSource, "A ~y~tow truck~w~ has been notified!")
 		else
-			TriggerClientEvent('chatMessage', userSource, "", {0, 0, 0}, "Sorry, no one is on duty as tow!")
+			TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, "Sorry, no one is on duty as tow!")
 			TriggerClientEvent("usa:notify", userSource, "~y~Sorry, no one is on duty as tow!")
 		end
 	end)

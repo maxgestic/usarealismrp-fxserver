@@ -17,15 +17,8 @@ end)
 
 local usageStringHospital = "Usage: /dos *id* *seconds* *reason*"
 
-TriggerEvent('es:addCommand', 'dos', function(source, args, user)
-
+TriggerEvent('es:addJobCommand', 'dos', { "ems", "fire", "police", "sheriff" }, function(source, args, user)
 	local coroner_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
-
-	local user_job = user.getActiveCharacterData("job")
-	if user_job ~= "sheriff" and user_job ~= "ems" and user_job ~= "fire" then
-		CancelEvent()
-		return
-	end
 
 	local usageString = usageStringHospital
 	local ER = false
@@ -125,8 +118,14 @@ TriggerEvent('es:addCommand', 'dos', function(source, args, user)
 			TriggerClientEvent('chatMessage', -1, "SYSTEM", {100,0,0}, eventMessage)
 		end)
 	end
-
-end)
+end, {
+	help = "Send someone to the morge",
+	params = {
+		{ name = "id", help = "Players ID" },
+		{ name = "min", help = "Time in minutes" },
+		{ name = "reason", help = "Reason" }
+	}
+})
 
 
 -- String splits by the separator.

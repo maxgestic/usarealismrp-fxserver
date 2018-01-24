@@ -24,7 +24,7 @@ AddEventHandler('rconCommand', function(commandName, args)
           if status == "true" then
               user.setActiveCharacterData("policeRank", 1)
     					RconPrint("DEBUG: " .. playerId .. " whitelisted as LSPD")
-    					TriggerClientEvent('chatMessage', tonumber(playerId), "CONSOLE", {0, 0, 0}, "You have been whitelisted for LSPD")
+    					TriggerClientEvent('chatMessage', tonumber(playerId), "CONSOLE", {255, 255, 255}, "You have been whitelisted for LSPD")
                     else
                         user.setActiveCharacterData("policeRank", 0)
 						user.setActiveCharacterData("job", "civ")

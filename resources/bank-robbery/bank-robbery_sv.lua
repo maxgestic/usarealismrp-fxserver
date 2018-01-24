@@ -8,7 +8,7 @@ function getPlayerIdentifierEasyMode(source)
 		for key, value in pairs(rawIdentifiers) do
 			playerIdentifier = value
 		end
-    else
+	else
 		print("IDENTIFIERS DO NOT EXIST OR WERE NOT RETIREVED PROPERLY : " .. source)
 		return false
 	end
@@ -23,30 +23,30 @@ AddEventHandler("bank:isBusy", function()
 	print("INSIDE isBusy with source = " .. source)
 	local busyStatus = isBusy
 
-    if not closed then
-        print("BANK WAS NOT CLOSED")
-        if not abletorob then
-            TriggerClientEvent('chatMessage', source, 'SYSTEM', { 0, 141, 155 }, "^3The bank has already been robbed!")
-        elseif busyStatus == "no" then
+	if not closed then
+		print("BANK WAS NOT CLOSED")
+		if not abletorob then
+			TriggerClientEvent('chatMessage', source, 'SYSTEM', { 0, 141, 155 }, "^3The bank has already been robbed!")
+		elseif busyStatus == "no" then
 
-            TriggerClientEvent('chatMessage', source, 'SYSTEM', { 0, 141, 155 }, "^3You are robbing the bank!")
-            TriggerClientEvent('chatMessage', source, 'SYSTEM', { 0, 141, 155 }, "^3Wait ^21 minute^3 to get all the money!")
+			TriggerClientEvent('chatMessage', source, 'SYSTEM', { 0, 141, 155 }, "^3You are robbing the bank!")
+			TriggerClientEvent('chatMessage', source, 'SYSTEM', { 0, 141, 155 }, "^3Wait ^21 minute^3 to get all the money!")
 			TriggerClientEvent("bank-robbery:notify", source, "~r~Alarm activated!")
 
-            TriggerEvent("bank:beginRobbery", source)
-            abletorob = false
+			TriggerEvent("bank:beginRobbery", source)
+			abletorob = false
 
-            -- 1.5 hr cooldown
-            SetTimeout(5400000 , function()
-                abletorob = true
-            end)
+			-- 1.5 hr cooldown
+			SetTimeout(5400000 , function()
+				abletorob = true
+			end)
 
-        else
+		else
 			TriggerClientEvent("bank-robbery:notify", source, "Someone is already robbing the bank!")
-        end
-    else
+		end
+	else
 		TriggerClientEvent("bank-robbery:notify", source, "The bank has been ~r~closed~w~ by admins.")
-    end
+	end
 
 end)
 
@@ -56,7 +56,7 @@ AddEventHandler("bank:beginRobbery", function(source)
 	print("INSIDE beginRobbery with source = " .. source)
 
 	-- make npc busy so only one at a time can rob bank
-    isBusy = "yes"
+	isBusy = "yes"
 
 	TriggerEvent("es:getPlayers", function(pl)
 		for k, v in pairs(pl) do
@@ -78,7 +78,7 @@ AddEventHandler("bank:beginRobbery", function(source)
 		-- if not in rage: cancel robbery
 		TriggerClientEvent("bank:checkRange", source, source)
 		-- make npc not busy so it can be used again
-        isBusy = "no"
+		isBusy = "no"
 
 	end)
 
@@ -104,39 +104,31 @@ end)
 RegisterServerEvent("bank:outOfRange")
 AddEventHandler("bank:outOfRange", function()
 	TriggerClientEvent("bank-robbery:notify", source, "~y~Out of range! No money was taken.")
-    isBusy = "no"
-    abletorob = true
+	isBusy = "no"
+	abletorob = true
 end)
 
-TriggerEvent('es:addCommand', 'closebank', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'closebank', 'mod', function(source, args, user)
+	closed = true
+	TriggerClientEvent("bank-robbery:notify", source, "BANK IS NOW ~r~CLOSED")
+end, {
+	help = "Open the bank to be robbed"
+})
 
-	local group = user.getGroup()
-
-    if group == "owner" or group == "admin" or group == "superadmin" or group == "mod" then
-        closed = true
-		TriggerClientEvent("bank-robbery:notify", source, "BANK IS NOW ~r~CLOSED")
-    end
-
-end)
-
-TriggerEvent('es:addCommand', 'openbank', function(source, args, user)
-
-	local group = user.getGroup()
-
-    if group == "owner" or group == "admin" or group == "superadmin" or group == "mod" then
-        closed = false
-        TriggerClientEvent("bank-robbery:notify", source, "BANK IS NOW ~g~OPEN")
-    end
-
-end)
+TriggerEvent('es:addGroupCommand', 'openbank', 'mod', function(source, args, user)
+		closed = false
+		TriggerClientEvent("bank-robbery:notify", source, "BANK IS NOW ~g~OPEN")
+end, {
+	help = "Open the bank to be robbed"
+})
 
 function comma_value(amount)
   local formatted = amount
   while true do
-    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
-    if (k==0) then
-      break
-    end
+	formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+	if (k==0) then
+	  break
+	end
   end
   return formatted
 end

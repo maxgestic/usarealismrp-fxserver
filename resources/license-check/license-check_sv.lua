@@ -135,18 +135,14 @@ end
 
 
 -- Add a command everyone is able to run. Args is a table with all the arguments, and the user is the user object, containing all the user data.
-TriggerEvent('es:addCommand', 'mdt', function(source, args, user)
-	local playerJob = user.getActiveCharacterData("job")
-	local argument = args[2] -- player id to check license
-	if argument == nil or type(tonumber(argument)) == nil then
-		TriggerClientEvent("license:help", source)
-	elseif playerJob ~= "cop" and playerJob ~= "sheriff" and playerJob ~= "highwaypatrol" then
-		TriggerClientEvent("license:failureNotJurisdiction", source)
-	else -- player is a cop, so allow check and perform check with argument = player id to check license
-		--TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " opens MDT.") -- need to update name
-		TriggerEvent("license:searchForLicense", source, argument)
-	end
-end)
+TriggerEvent('es:addJobCommand', 'mdt', { "police", "sheriff" }, function(source, args, user)
+	TriggerEvent("license:searchForLicense", source, args[2])
+end, {
+	help = "mdt",
+	params = {
+		{ name = "id", help = "Players ID" }
+	}
+})
 
 -- license plate checking
 function fetchAllRegisteredVehicles(callback)

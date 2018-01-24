@@ -36,5 +36,7 @@ server_exports {
 	'getPlayerFromId',
 	'addAdminCommand',
 	'addCommand',
-	'addGroupCommand'
+	'addGroupCommand',
+	'getCommands',
+	'CanGroupTarget',
 }

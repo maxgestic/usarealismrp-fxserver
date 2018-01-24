@@ -7,20 +7,12 @@ local bans = {}
 
 -- Adding custom groups called owner, inhereting from superadmin. (It's higher then superadmin). And moderator, higher then user but lower then admin
 TriggerEvent("es:addGroup", "owner", "superadmin", function(group) end)
+TriggerEvent("es:addGroup", "superadmin", "admin", function(group) end)
+TriggerEvent("es:addGroup", "admin", "mod", function(group) end)
 TriggerEvent("es:addGroup", "mod", "user", function(group) end)
 
--- Default commands
-TriggerEvent('es:addCommand', 'admin', function(source, args, user)
-	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Level: ^*^2 " .. tostring(user.get('permission_level')))
-	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Group: ^*^2 " .. user.getGroup())
-end)
-
-TriggerEvent('es:addCommand', 'hash', function(source, args, user)
-	TriggerClientEvent('es_admin:getHash', source, args[2])
-end)
-
 -- staff pvt msg someone
-TriggerEvent('es:addGroupCommand', 'whisper', "mod", function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'whisper', 'mod', function(source, args, user)
 	local target = tonumber(args[2])
 	table.remove(args, 1)
 	table.remove(args, 1)
@@ -29,38 +21,42 @@ TriggerEvent('es:addGroupCommand', 'whisper', "mod", function(source, args, user
 		TriggerClientEvent('chatMessage', source, "STAFF to (" .. GetPlayerName(target) .. ")", {90, 90, 60}, message)
 		TriggerClientEvent('chatMessage', target, "STAFF (" .. GetPlayerName(source) .. ")", {90, 90, 60}, message)
 	end
-end, function(source, args, user)
-	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
-end)
+end, {
+	help = "Staff whisper a player",
+	params = {
+		{ name = "message", help = "Staff message to player" }
+	}
+})
 
 -- staff chat
-TriggerEvent('es:addCommand', 'staff', function(source, args, user)
-    local userGroup = user.getGroup()
-    if userGroup == "owner" or userGroup == "superadmin" or userGroup == "admin" or userGroup == "mod" then
-        local staffId = tonumber(source)
-        table.remove(args, 1) -- remove "/staff" from what the user enters into chat box
-        local message = table.concat(args, " ") -- get all the remaining words separated by spaces the user enters into chat box
-        if not message then
-            TriggerClientEvent("chatMessage", tonumber(source), "", {}, "^2Usage: ^0/staff [message]")
-            return
-        end
-        TriggerEvent("es:getPlayers", function(players)
-            if players then
-                for id, player in pairs(players) do
-                    if id and player then
-                        local playerGroup = player.getGroup()
-                        if playerGroup == "owner" or playerGroup == "superadmin" or playerGroup == "admin" or playerGroup == "mod" then
-                            TriggerClientEvent("chatMessage", id, "", {}, "^2STAFF:^0 "..GetPlayerName(staffId).." [#"..staffId.."]")
-                            TriggerClientEvent("chatMessage", id, "", {}, "^2MESSAGE:^0 " .. message)
-                        end
-                    end
-                end
-            end
-        end)
-    else
-        print("non-staff player tried using /staff")
-    end
-end)
+TriggerEvent('es:addGroupCommand', 'staff', 'mod', function(source, args, user)
+	local userGroup = user.getGroup()
+	local staffId = tonumber(source)
+	table.remove(args, 1) -- remove "/staff" from what the user enters into chat box
+	local message = table.concat(args, " ") -- get all the remaining words separated by spaces the user enters into chat box
+	if not message then
+		TriggerClientEvent("chatMessage", tonumber(source), "", {}, "^2Usage: ^0/staff [message]")
+		return
+	end
+	TriggerEvent("es:getPlayers", function(players)
+		if players then
+			for id, player in pairs(players) do
+				if id and player then
+					local playerGroup = player.getGroup()
+					if playerGroup == "owner" or playerGroup == "superadmin" or playerGroup == "admin" or playerGroup == "mod" then
+						TriggerClientEvent("chatMessage", id, "", {}, "^2STAFF:^0 "..GetPlayerName(staffId).." [#"..staffId.."]")
+						TriggerClientEvent("chatMessage", id, "", {}, "^2MESSAGE:^0 " .. message)
+					end
+				end
+			end
+		end
+	end)
+end, {
+	help = "Talk in staff chat",
+	params = {
+		{ name = "message", help = "Message to online staff" }
+	}
+})
 
 TriggerEvent('es:addCommand', 'report', function(source, args, user)
 	local reporterId = tonumber(source)
@@ -87,7 +83,13 @@ TriggerEvent('es:addCommand', 'report', function(source, args, user)
 			end
 		end
 	end)
-end)
+end, {
+	help = "Report a player",
+	params = {
+		{ name = "id", help = "Players ID" },
+		{ name = "message", help = "Reason for the report" }
+	}
+})
 
 -- Append a message
 function appendNewPos(msg)
@@ -114,79 +116,78 @@ AddEventHandler('es_admin:givePos', function(str)
 	appendNewPos(str)
 end)
 
-TriggerEvent('es:addGroupCommand', 'hashes', "owner", function(source, args, user)
-	TriggerClientEvent('es_admin:doHashes', source, doHashes())
-end, function(source, args, user)end)
-
 -- Noclip
 TriggerEvent('es:addGroupCommand', 'noclip', "mod", function(source, args, user)
 	TriggerClientEvent("es_admin:noclip", source)
-end, function(source, args, user)
-	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
-end)
+end, {
+	help = "Move freely around the map"
+})
 
 -- Kicking
 TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, user)
 	local userSource = source
-		if(GetPlayerName(tonumber(args[2])))then
-			local player = tonumber(args[2])
+	if(GetPlayerName(tonumber(args[2])))then
+		local player = tonumber(args[2])
 
-			-- User permission check
-			TriggerEvent("es:getPlayerFromId", player, function(target)
+		-- User permission check
+		TriggerEvent("es:getPlayerFromId", player, function(target)
 
-				local reason = args
-				table.remove(reason, 1)
-				table.remove(reason, 1)
-				if(#reason == 0)then
-					reason = "kicked"
-				else
-					reason = table.concat(reason, " ")
-				end
+			local reason = args
+			table.remove(reason, 1)
+			table.remove(reason, 1)
+			if(#reason == 0)then
+				reason = "kicked"
+			else
+				reason = table.concat(reason, " ")
+			end
 
-				-- send discord message
-				local targetPlayerName = target.getActiveCharacterData("firstName") .. " " .. target.getActiveCharacterData("lastName")
-				local allPlayerIdentifiers = GetPlayerIdentifiers(player)
-				local desc = "**Display Name:** " .. targetPlayerName
-				for i = 1, #allPlayerIdentifiers do
-					desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
-				end
-				desc = desc .. " \n**Reason:** " ..reason:gsub("Kicked: ", "").. " \n**Kicked By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
+			-- send discord message
+			local targetPlayerName = target.getActiveCharacterData("firstName") .. " " .. target.getActiveCharacterData("lastName")
+			local allPlayerIdentifiers = GetPlayerIdentifiers(player)
+			local desc = "**Display Name:** " .. targetPlayerName
+			for i = 1, #allPlayerIdentifiers do
+				desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
+			end
+			desc = desc .. " \n**Reason:** " ..reason:gsub("Kicked: ", "").. " \n**Kicked By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
 
-				local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
-						PerformHttpRequest(url, function(err, text, headers)
-							if text then
-								print(text)
-							end
-						end, "POST", json.encode({
-							embeds = {
-								{
-									description = desc,
-									color = 16777062,
-									author = {
-										name = "User Kicked From The Server"
-									}
+			local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
+					PerformHttpRequest(url, function(err, text, headers)
+						if text then
+							print(text)
+						end
+					end, "POST", json.encode({
+						embeds = {
+							{
+								description = desc,
+								color = 16777062,
+								author = {
+									name = "User Kicked From The Server"
 								}
 							}
-						}), { ["Content-Type"] = 'application/json' })
+						}
+					}), { ["Content-Type"] = 'application/json' })
 
-				--sendMessageToModsAndAdmins(GetPlayerName(player) .. " has been kicked (" .. reason .. ")")
-				TriggerClientEvent('chatMessage', -1, "", {0, 0, 0}, targetPlayerName .. " has been ^3kicked^0 (" .. reason .. ")")
-				DropPlayer(player, reason)
-			end)
-		else
-			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
-		end
-
-end, function(source, args, user)
-	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
-end)
+			--sendMessageToModsAndAdmins(GetPlayerName(player) .. " has been kicked (" .. reason .. ")")
+			TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^3kicked^0 (" .. reason .. ")")
+			DropPlayer(player, reason)
+		end)
+	else
+		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
+	end
+end, {
+	help = "Kick a player",
+	params = {
+		{ name = "id", help = "Players ID" },
+		{ name = "message", help = "Reason for the kick (INCLUDE YOUR NAME)" }
+	}
+})
 
 function stringsplit(self, delimiter)
   local a = self:Split(delimiter)
   local t = {}
 
   for i = 0, #a - 1 do
-     table.insert(t, a[i])
+	 table.insert(t, a[i])
   end
 
   return t
@@ -196,109 +197,121 @@ end
 TriggerEvent('es:addGroupCommand', 'announce', "mod", function(source, args, user)
 	table.remove(args, 1)
 	TriggerClientEvent('chatMessage', -1, "ANNOUNCEMENT", {255, 0, 0}, "" .. table.concat(args, " "))
-end, function(source, args, user)
-	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
-end)
+end, {
+	help = "Announce to all players",
+	params = {
+		{ name = "message", help = "Announcement message" }
+	}
+})
 
 -- Freezing
 local frozen = {}
 TriggerEvent('es:addGroupCommand', 'freeze', "mod", function(source, args, user)
-		if(GetPlayerName(tonumber(args[2])))then
-			local player = tonumber(args[2])
+	if(GetPlayerName(tonumber(args[2])))then
+		local player = tonumber(args[2])
 
-			-- User permission check
-			TriggerEvent("es:getPlayerFromId", player, function(target)
+		-- User permission check
+		TriggerEvent("es:getPlayerFromId", player, function(target)
 
-				if(frozen[player])then
-					frozen[player] = false
-				else
-					frozen[player] = true
-				end
+			if(frozen[player])then
+				frozen[player] = false
+			else
+				frozen[player] = true
+			end
 
-				TriggerClientEvent('es_admin:freezePlayer', player, frozen[player])
+			TriggerClientEvent('es_admin:freezePlayer', player, frozen[player])
 
-				local state = "unfrozen"
-				if(frozen[player])then
-					state = "frozen"
-				end
+			local state = "unfrozen"
+			if(frozen[player])then
+				state = "frozen"
+			end
 
-				TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have been " .. state .. " by ^2" .. GetPlayerName(source))
-				TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been " .. state)
-				TriggerEvent('es:getPlayers', function(players)
-					if players then
-						-- notify all admins/mods
-						for id, adminOrMod in pairs(players) do
-							if id and adminOrMod then
-								local adminOrModGroup = adminOrMod.getGroup()
-								if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
-									TriggerClientEvent('chatMessage', id, "", {0, 0, 0}, "Player ^2" .. user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName") .. "^0 froze " .. GetPlayerName(player))
-								end
+			TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have been " .. state .. " by ^2" .. GetPlayerName(source))
+			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been " .. state)
+			TriggerEvent('es:getPlayers', function(players)
+				if players then
+					-- notify all admins/mods
+					for id, adminOrMod in pairs(players) do
+						if id and adminOrMod then
+							local adminOrModGroup = adminOrMod.getGroup()
+							if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
+								TriggerClientEvent('chatMessage', id, "", {255, 255, 255}, "Player ^2" .. user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName") .. "^0 froze " .. GetPlayerName(player))
 							end
 						end
 					end
-				end)
+				end
 			end)
-		else
-			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
-		end
-end, function(source, args, user)
-	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
-end)
+		end)
+	else
+		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
+	end
+end, {
+	help = "Freeze a player",
+	params = {
+		{ name = "id", help = "Players ID" }
+	}
+})
 
 -- Bring
 local frozen = {}
 TriggerEvent('es:addGroupCommand', 'bring', "mod", function(source, args, user)
-		if(GetPlayerName(tonumber(args[2])))then
-			local player = tonumber(args[2])
+	if(GetPlayerName(tonumber(args[2])))then
+		local player = tonumber(args[2])
 
-			-- User permission check
-			TriggerEvent("es:getPlayerFromId", player, function(target)
+		-- User permission check
+		TriggerEvent("es:getPlayerFromId", player, function(target)
 
-				TriggerClientEvent('es_admin:teleportUser', target.get('source'), user.getCoords().x, user.getCoords().y, user.getCoords().z)
+			TriggerClientEvent('es_admin:teleportUser', target.get('source'), user.getCoords().x, user.getCoords().y, user.getCoords().z)
 
-				TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have brought by ^2" .. GetPlayerName(source))
-				TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been brought")
-				TriggerEvent('es:getPlayers', function(players)
-					if players then
-						-- notify all admins/mods
-						for id, adminOrMod in pairs(players) do
-							if id and adminOrMod then
-								local adminOrModGroup = adminOrMod.getGroup()
-								if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
-									TriggerClientEvent('chatMessage', id, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been brought by " .. GetPlayerName(source))
-								end
+			TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have brought by ^2" .. GetPlayerName(source))
+			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been brought")
+			TriggerEvent('es:getPlayers', function(players)
+				if players then
+					-- notify all admins/mods
+					for id, adminOrMod in pairs(players) do
+						if id and adminOrMod then
+							local adminOrModGroup = adminOrMod.getGroup()
+							if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
+								TriggerClientEvent('chatMessage', id, "", {255, 255, 255}, "Player ^2" .. GetPlayerName(player) .. "^0 has been brought by " .. GetPlayerName(source))
 							end
 						end
 					end
-				end)
+				end
 			end)
-		else
-			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
-		end
-end, function(source, args, user)
-	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
-end)
+		end)
+	else
+		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
+	end
+end, {
+	help = "Bring a player",
+	params = {
+		{ name = "id", help = "Players ID" }
+	}
+})
 
 -- Bring
 local frozen = {}
 TriggerEvent('es:addGroupCommand', 'slap', "admin", function(source, args, user)
-		if(GetPlayerName(tonumber(args[2])))then
-			local player = tonumber(args[2])
+	if(GetPlayerName(tonumber(args[2])))then
+		local player = tonumber(args[2])
 
-			-- User permission check
-			TriggerEvent("es:getPlayerFromId", player, function(target)
+		-- User permission check
+		TriggerEvent("es:getPlayerFromId", player, function(target)
 
-				TriggerClientEvent('es_admin:slap', player)
+			TriggerClientEvent('es_admin:slap', player)
 
-				TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have slapped by ^2" .. GetPlayerName(source))
-				TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been slapped")
-			end)
-		else
-			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
-		end
-end, function(source, args, user)
-	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
-end)
+			TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have slapped by ^2" .. GetPlayerName(source))
+			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been slapped")
+		end)
+	else
+		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
+	end
+end, {
+	help = "Slay a player / Make them fly into the air (TROLL DO NOT USE IN RP)",
+	params = {
+		{ name = "id", help = "Players ID" }
+	}
+})
 
 -- Freezing
 local frozen = {}
@@ -307,47 +320,66 @@ TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, user)
 		local pdCoords = {x=-447.256 , y=6000.667 , z=30.686}
 		TriggerClientEvent('es_admin:teleportUser', source, pdCoords.x, pdCoords.y, pdCoords.z)
 		return
+	elseif args[2] == "wp" then
+		TriggerClientEvent("swayam:gotoWP", source)
+		return
+	elseif args[2] == "fd" then
+		local pdCoords = {x=-366.30380249023, y=6102.0532226563, z=35.439697265625}
+		TriggerClientEvent('es_admin:teleportUser', source, pdCoords.x, pdCoords.y, pdCoords.z)
+		return
+	elseif args[2] == "247" then
+		local pdCoords = {}
+		TriggerClientEvent('es_admin:teleportUser', source, pdCoords.x, pdCoords.y, pdCoords.z)
+		return
+	elseif args[2] == "fd" then
+		local pdCoords = {}
+		TriggerClientEvent('es_admin:teleportUser', source, pdCoords.x, pdCoords.y, pdCoords.z)
+		return
 	end
 	if tonumber(args[2]) ~= nil then
-		if(GetPlayerName(tonumber(args[2])))then
+		if GetPlayerName(tonumber(args[2])) then
 			local player = tonumber(args[2])
 
-				-- User permission check
-				TriggerEvent("es:getPlayerFromId", player, function(target)
-					if(target)then
+			TriggerEvent("es:getPlayerFromId", player, function(target)
+				if (target) then
 
-						TriggerClientEvent('es_admin:teleportUser', source, target.getCoords().x, target.getCoords().y, target.getCoords().z)
+					TriggerClientEvent('es_admin:teleportUser', source, target.getCoords().x, target.getCoords().y, target.getCoords().z)
 
-						TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have been teleported to by ^2" .. GetPlayerName(source))
-						TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Teleported to player ^2" .. GetPlayerName(player) .. "")
-						TriggerEvent('es:getPlayers', function(players)
-							if players then
-								-- notify all admins/mods
-								for id, adminOrMod in pairs(players) do
-									if id and adminOrMod then
-										local adminOrModGroup = adminOrMod.getGroup()
-										if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
-											TriggerClientEvent('chatMessage', id, "", {0, 0, 0}, "Player ^2" .. GetPlayerName(source) .. "^0 teleported to " .. GetPlayerName(player))
-										end
+					TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have been teleported to by ^2" .. GetPlayerName(source))
+					TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Teleported to player ^2" .. GetPlayerName(player) .. "")
+					TriggerEvent('es:getPlayers', function(players)
+						if players then
+							-- notify all admins/mods
+							for id, adminOrMod in pairs(players) do
+								if id and adminOrMod then
+									local adminOrModGroup = adminOrMod.getGroup()
+									if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
+										TriggerClientEvent('chatMessage', id, "", {255, 255, 255}, "Player ^2" .. GetPlayerName(source) .. "^0 teleported to " .. GetPlayerName(player))
 									end
 								end
 							end
-						end)
-					end
-				end)
+						end
+					end)
+				end
+			end)
 		else
 			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
 		end
 	end
-end, function(source, args, user)
-	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
-end)
+end, {
+	help = "Teleport to player or warp",
+	params = {
+		{ name = "id", help = "Players ID or warp ID" }
+	}
+})
 
 -- Kill yourself
 TriggerEvent('es:addGroupCommand', 'die', "admin", function(source, args, user)
 	TriggerClientEvent('es_admin:kill', source)
 	TriggerClientEvent('chatMessage', source, "", {0,0,0}, "^1^*You killed yourself.")
-end)
+end, {
+	help = "Killyourself"
+})
 
 -- Killing
 TriggerEvent('es:addGroupCommand', 'slay', "admin", function(source, args, user)
@@ -365,56 +397,59 @@ TriggerEvent('es:addGroupCommand', 'slay', "admin", function(source, args, user)
 		else
 			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
 		end
-end, function(source, args, user)
-	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
-end)
+end, {
+	help = "Kill a player",
+	params = {
+		{ name = "id", help = "Players ID" }
+	}
+})
 
 -- Crashing
 TriggerEvent('es:addGroupCommand', 'crash', "superadmin", function(source, args, user)
-		if(GetPlayerName(tonumber(args[2])))then
-			local player = tonumber(args[2])
+	if(GetPlayerName(tonumber(args[2])))then
+		local player = tonumber(args[2])
 
-			-- User permission check
-			TriggerEvent("es:getPlayerFromId", player, function(target)
-
-				TriggerClientEvent('es_admin:crash', player)
-
-				TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been crashed.")
-			end)
-		else
-			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
-		end
-end, function(source, args, user)
-	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
-end)
+		TriggerEvent("es:getPlayerFromId", player, function(target)
+			TriggerClientEvent('es_admin:crash', player)
+			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been crashed.")
+		end)
+	else
+		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
+	end
+end, {
+	help = "Crash a players game",
+	params = {
+		{ name = "id", help = "Players ID" }
+	}
+})
 
 -- Position
 TriggerEvent('es:addGroupCommand', 'pos', "owner", function(source, args, user)
 	TriggerClientEvent('es_admin:givePosition', source)
-end, function(source, args, user)
-	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
-end)
+end, {
+	help = "Save pos to txt"
+})
 
-TriggerEvent('es:addCommand', 'car', function(source, args, user)
-	if user.getGroup() == "superadmin" or user.getGroup() == "owner" or user.getGroup() == "admin" then
-		TriggerClientEvent('es_admin:spawnVehicle', source, args[2])
-	else
-		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficient permissions!")
-	end
-end)
+TriggerEvent('es:addGroupCommand', 'car', 'admin', function(source, args, user)
+	TriggerClientEvent('es_admin:spawnVehicle', source, args[2])
+end, {
+	help = "Spawn a car",
+	params = {
+		{ name = "model", help = "Model of the car" }
+	}
+})
 
-TriggerEvent('es:addCommand', 'spectate', function(source, args, user)
-	local userGroup = user.getGroup()
-	local user_name = user.getActiveCharacterData("fullName")
-	if userGroup == "owner" or userGroup == "superadmin" or userGroup == "admin" or userGroup == "mod" then
-		local userSource = tonumber(source)
-		local targetPlayer = tonumber(args[2])
-		if not targetPlayer then return end
-		TriggerClientEvent("mini_admin:spectate", userSource, targetPlayer, GetPlayerName(targetPlayer), user_name)
-	else
-		print("non admin/mod (" .. GetPlayerName(userSource) .. ") tried to use /spectate")
-	end
-end)
+TriggerEvent('es:addGroupCommand', 'spectate', 'mod', function(source, args, user)
+	local userSource = tonumber(source)
+	local targetPlayer = tonumber(args[2])
+	if not targetPlayer then return end
+	TriggerClientEvent("mini_admin:spectate", userSource, targetPlayer, GetPlayerName(targetPlayer), user.getActiveCharacterData("fullName"))
+end, {
+	help = "Spectate a player",
+	params = {
+		{ name = "id", help = "Players ID" }
+	}
+})
 
 -- Rcon commands
 AddEventHandler('rconCommand', function(commandName, args)
@@ -474,7 +509,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 							if id and adminOrMod then
 								local adminOrModGroup = adminOrMod.getGroup()
 								if adminOrModGroup == "mod" or adminOrModGroup == "admin" or adminOrModGroup == "superadmin" or adminOrModGroup == "owner" then
-									TriggerClientEvent('chatMessage', id, "", {0, 0, 0}, "The server console^0 froze " .. GetPlayerName(player))
+									TriggerClientEvent('chatMessage', id, "", {255, 255, 255}, "The server console^0 froze " .. GetPlayerName(player))
 								end
 							end
 						end
@@ -508,9 +543,9 @@ AddEventHandler('rconCommand', function(commandName, args)
 				RconPrint("\n#"..i..": " .. allPlayerIdentifiers[i])
 			end
 			-- show message
-		    RconPrint(targetPlayerName .. " has been banned (" .. reason .. ")")
+			RconPrint(targetPlayerName .. " has been banned (" .. reason .. ")")
 			--sendMessageToModsAndAdmins(targetPlayerName .. " has been banned (" .. reason .. ")")
-			TriggerClientEvent('chatMessage', -1, "", {0, 0, 0}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
+			TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
 			-- send discord message
 			local desc = "**Display Name:** " .. targetPlayerName
 			for i = 1, #allPlayerIdentifiers do
@@ -563,7 +598,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 			if(true)then
 				print(args[1] .. " " .. args[2])
 				TriggerClientEvent('es:setPlayerDecorator', tonumber(args[1]), 'rank', tonumber(args[2]), true)
-				TriggerClientEvent('chatMessage', -1, "CONSOLE", {0, 0, 0}, "Permission level of ^2" .. GetPlayerName(tonumber(args[1])) .. "^0 has been set to ^2 " .. args[2])
+				TriggerClientEvent('chatMessage', -1, "CONSOLE", {255, 255, 255}, "Permission level of ^2" .. GetPlayerName(tonumber(args[1])) .. "^0 has been set to ^2 " .. args[2])
 			end
 		end)
 
@@ -590,7 +625,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 					if(true)then
 						print(args[1] .. " " .. args[2])
 						TriggerClientEvent('es:setPlayerDecorator', tonumber(args[1]), 'group', tonumber(args[2]), true)
-						TriggerClientEvent('chatMessage', -1, "CONSOLE", {0, 0, 0}, "Group of ^2^*" .. GetPlayerName(tonumber(args[1])) .. "^r^0 has been set to ^2^*" .. args[2])
+						TriggerClientEvent('chatMessage', -1, "CONSOLE", {255, 255, 255}, "Group of ^2^*" .. GetPlayerName(tonumber(args[1])) .. "^r^0 has been set to ^2^*" .. args[2])
 					end
 				end)
 			else
@@ -617,7 +652,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 				user.setActiveCharacterData("money", tonumber(args[2]))
 
 				RconPrint("Money set")
-				TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "Your money has been set to: ^2^*$" .. tonumber(args[2]))
+				TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {255, 255, 255}, "Your money has been set to: ^2^*$" .. tonumber(args[2]))
 			end
 		end)
 
@@ -696,8 +731,8 @@ fetchAllBans()
 			end
 
 			-- show message
-		    --sendMessageToModsAndAdmins(GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
-			TriggerClientEvent('chatMessage', -1, "", {0, 0, 0}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
+			--sendMessageToModsAndAdmins(GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
+			TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
 			-- TODO: change back to public kick / ban messages ?
 
 			-- send discord message
@@ -733,9 +768,13 @@ fetchAllBans()
 				fetchAllBans()
 			end)
 		end)
-	end, function(source,args,user)
-		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Insufficienct permissions!")
-	end)
+	end, {
+		help = "Ban player",
+		params = {
+			{ name = "id", help = "Players ID" },
+			{ name = "reason", help = "Reason for ban (INCLUDE YOUR NAME)" }
+		}
+	})
 
 RegisterServerEvent('mini:checkPlayerBannedOnSpawn')
 AddEventHandler('mini:checkPlayerBannedOnSpawn', function()
@@ -820,17 +859,17 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 						displayInsurance = insurance_month .. "/" .. insurance_year
 					end
 
-					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
-					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Name: " .. user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName") .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
-					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Police Rank: " .. user.getActiveCharacterData("policeRank") .. " | EMS Rank: " .. user.getActiveCharacterData("emsRank") .. " | Delta PMC Rank: " .. user.getActiveCharacterData("securityRank") .. " |  Job: " .. user.getActiveCharacterData("job") .. " |" )
-					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Cash: " .. user.getActiveCharacterData("money") .. " | Bank: " .. user.getActiveCharacterData("bank") .. " |  Ingame Time: " .. FormatSeconds(user.getActiveCharacterData("ingameTime")) .. " |" )
-					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
-					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
-					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Inventory: " .. inventorynames .. " |")
-					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Weight: " .. user.getActiveCharacterCurrentInventoryWeight())
-					TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Name: " .. user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName") .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Police Rank: " .. user.getActiveCharacterData("policeRank") .. " | EMS Rank: " .. user.getActiveCharacterData("emsRank") .. " | Delta PMC Rank: " .. user.getActiveCharacterData("securityRank") .. " |  Job: " .. user.getActiveCharacterData("job") .. " |" )
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Cash: " .. user.getActiveCharacterData("money") .. " | Bank: " .. user.getActiveCharacterData("bank") .. " |  Ingame Time: " .. FormatSeconds(user.getActiveCharacterData("ingameTime")) .. " |" )
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Inventory: " .. inventorynames .. " |")
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weight: " .. user.getActiveCharacterCurrentInventoryWeight())
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
 				else
-					TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "User not found!")
+					TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 255, 255}, "User not found!")
 				end
 			end)
 		end
@@ -886,17 +925,19 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 			displayInsurance = insurance_month .. "/" .. insurance_year
 		end
 
-		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
-		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Name: " .. user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName") .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
-		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Police Rank: " .. user.getActiveCharacterData("policeRank") .. " | EMS Rank: " .. user.getActiveCharacterData("emsRank") .. " | Delta PMC Rank: " .. user.getActiveCharacterData("securityRank") .. " |  Job: " .. user.getActiveCharacterData("job") .. " |" )
-		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Cash: " .. user.getActiveCharacterData("money") .. " | Bank: " .. user.getActiveCharacterData("bank") .. " |  Ingame Time: " .. FormatSeconds(user.getActiveCharacterData("ingameTime")) .. " |" )
-		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
-		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
-		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Inventory: " .. inventorynames .. " |")
-		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "Weight: " .. user.getActiveCharacterCurrentInventoryWeight())
-		TriggerClientEvent('chatMessage', source, "", {255, 0, 0}, "***********************************************************************")
+		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
+		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Name: " .. user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName") .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
+		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Police Rank: " .. user.getActiveCharacterData("policeRank") .. " | EMS Rank: " .. user.getActiveCharacterData("emsRank") .. " | Delta PMC Rank: " .. user.getActiveCharacterData("securityRank") .. " |  Job: " .. user.getActiveCharacterData("job") .. " |" )
+		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Cash: " .. user.getActiveCharacterData("money") .. " | Bank: " .. user.getActiveCharacterData("bank") .. " |  Ingame Time: " .. FormatSeconds(user.getActiveCharacterData("ingameTime")) .. " |" )
+		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
+		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
+		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Inventory: " .. inventorynames .. " |")
+		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weight: " .. user.getActiveCharacterCurrentInventoryWeight())
+		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
 	end
-end)
+end, {
+	help = "View characters stats"
+})
 
 function FormatSeconds(mins)
 	local output = ""

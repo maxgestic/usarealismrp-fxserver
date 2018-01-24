@@ -23,7 +23,7 @@ AddEventHandler('rconCommand', function(commandName, args)
                     if status == "true" then
               user.setActiveCharacterData("securityRank", 1)
     					RconPrint("DEBUG: " .. playerId .. " whitelisted for Private Security")
-    					--TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {0, 0, 0}, "You have been whitelist as EMS")
+    					--TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {255, 255, 255}, "You have been whitelist as EMS")
                     else
                         user.setActiveCharacterData("securityRank", 0)
                         user.setActiveCharacterData("job", "civ")

@@ -207,18 +207,18 @@ AddEventHandler('pv:tow', function()
 						AttachEntityToEntity(targetVehicle, vehicle, 20, -0.5, -5.0, 1.0, 0.0, 0.0, 0.0, false, false, false, false, 20, true)
 						currentlyTowedVehicle = targetVehicle
 						vehicleToImpound = currentlyTowedVehicle
-						TriggerEvent("chatMessage", "", {0, 0, 0}, "Vehicle successfully attached to towtruck!")
+						TriggerEvent("chatMessage", "", {255, 255, 255}, "Vehicle successfully attached to towtruck!")
 					else
-						TriggerEvent("chatMessage", "", {0, 0, 0}, "You can't tow your own tow truck with your own tow truck!")
+						TriggerEvent("chatMessage", "", {255, 255, 255}, "You can't tow your own tow truck with your own tow truck!")
 					end
 				end
 			else
-				TriggerEvent("chatMessage", "", {0, 0, 0}, "There is no vehicle to tow!")
+				TriggerEvent("chatMessage", "", {255, 255, 255}, "There is no vehicle to tow!")
 			end
 		else
 			AttachEntityToEntity(currentlyTowedVehicle, vehicle, 20, -0.5, -12.0, 1.0, 0.0, 0.0, 0.0, false, false, false, false, 20, true)
 			DetachEntity(currentlyTowedVehicle, true, true)
-			TriggerEvent("chatMessage", "", {0, 0, 0}, "The vehicle has been successfully detached!")
+			TriggerEvent("chatMessage", "", {255, 255, 255}, "The vehicle has been successfully detached!")
 			currentlyTowedVehicle = nil
 		end
 	end
