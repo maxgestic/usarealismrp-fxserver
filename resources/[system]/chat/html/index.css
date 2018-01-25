@@ -9,113 +9,115 @@
 .color-9{color: #cc0068;}
 
 * {
-  font-family: 'Lato', sans-serif;
-  margin: 0;
-  padding: 0;
+	font-family: 'Lato', sans-serif;
+	margin: 0;
+	padding: 0;
 }
 
 .no-grow {
-  flex-grow: 0;
+	flex-grow: 0;
 }
 
 em {
-  font-style: normal;
+	font-style: normal;
 }
 
 #app {
-  font-family: 'Lato', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: white;
+	font-family: "Segoe UI", "Segoe UI Symbol", "Segoe UI Emoji",	Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	color: white;
 }
 
 .chat-window {
-  position: absolute;
-  top: 15px;
-  left: 15px;
-  width: 38%;
-  height: 240px;
+	position: absolute;
+	top: 10px;
+	left: 10px;
+	width: 350px;
+	height: 295px;
 
-  background-color: rgba(52, 73, 94, 0.7);
-  -webkit-animation-duration: 2s;
+	-webkit-animation-duration: 1s;
+
+	border: 1px solid transparent;
 }
 
+.chat-window-active {
+	background: rgba(32, 39, 49, 0.7);
+	border: 1px solid rgba(36, 39, 48, 0.75);
+}
 
 .chat-messages {
-  position: relative;
-  height: 95%;
-  font-size: 1.2rem;
-  margin: 10px;
+	position: relative;
+	height: 95%;
+	font-size: 15px;
+	margin: 10px;
 
-  overflow-x: hidden;
-  overflow-y: hidden;
+	overflow-x: hidden;
+	overflow-y: hidden;
+
+	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
-
 
 .chat-input {
-  font-size: 1.2rem;
-  position: absolute;
+	font-size: 15px;
+	position: absolute;
 
-  top: 257px;
-  left: 15px;
-  width: 38%;
+	top: 287px;
+	left: 10px;
+	width: 602px;
 
-  box-sizing: border-box;
-}
-
-.prefix {
-  position: absolute;
-  margin-top: 2px;
-  left: 4px;
+	box-sizing: border-box;
 }
 
 textarea {
-  font-size: 1.1rem;
-  display: block;
-  box-sizing: border-box;
-  padding: 5px;
-  padding-left: 27px;
-  color: white;
-  background-color: rgba(44, 62, 80, 1.0);
-  width: 100%;
-  border-width: 0;
-  height: 34px;
-  overflow: hidden;
+	font-size: 1rem;
+	display: block;
+	box-sizing: border-box;
+	padding: 7px;
+	padding-left: 5px;
+	color: white;
+	background-color: #2D343D;
+	width: 100%;
+	border-width: 0;
+	height: 34px;
+	overflow: hidden;
+	resize: none;
 }
 
 textarea:focus, input:focus {
-    outline: none;
+	outline: none;
 }
 
 .msg {
-  margin-bottom: 3px;
+	margin-bottom: 3px;
 }
 
 .multiline {
-  margin-left: 1.5rem;
-  text-indent: -1.5rem;
-  white-space: pre-line;
+	margin-left: 1.5rem;
+	text-indent: -1.5rem;
+	white-space: pre-line;
 }
 
 .suggestions {
-  list-style-type: none;
-  padding: 5px;
-  padding-left: 27px;
-  font-size: 1.1rem;
-  box-sizing: border-box;
-  color: white;
-  background-color: rgba(44, 62, 80, 1.0);
-  width: 100%;
+	margin-top: 5px;
+	list-style-type: none;
+	padding: 5px;
+	padding-left: 27px;
+	font-size: 1.1rem;
+	box-sizing: border-box;
+	color: white;
+	background-color: rgba(32, 39, 49, 0.7);
+	width: 100%;
 }
 
 .help {
-  color: #b0bbbd;
+	color: #b0bbbd;
 }
 
 .disabled {
-  color: #b0bbbd;
+	color: #b0bbbd;
 }
 
 .suggestion {
-  margin-bottom: 5px;
+	margin-bottom: 5px;
 }

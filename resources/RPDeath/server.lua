@@ -84,55 +84,46 @@ AddEventHandler("RPD:removeWeapons", function()
 	end)
 end)
 
-AddEventHandler('chatMessage', function(from,name,message)
-	if(message:sub(1,1) == "/") then
-
-		local args = splitString(message, " ")
-		local cmd = args[1]
-
-
-		if (cmd == "/respawn") then
-			CancelEvent()
-			TriggerClientEvent('RPD:allowRespawn', from)
-		end
-
-		if (cmd == "/revive") then
-			CancelEvent()
-			TriggerEvent('es:getPlayerFromId', from, function(user)
-				if user then
-					local targetId = 0
-					local userJob = user.getActiveCharacterData("job")
-					if userJob == "cop" or
-						userJob == "sheriff" or
-						userJob == "highwaypatrol" or
-						userJob == "ems" or
-						userJob == "fire" or
-						user.getGroup() == "mod" or
-						user.getGroup() == "admin" or
-						user.getGroup() == "superadmin" or
-						user.getGroup() == "owner" then
-						if args[2] == nil then
-							targetId = 0
-							TriggerClientEvent("chatMessage", from, "SYSTEM", {255, 0, 0}, "Invalid command format. Ex: /revive [id]")
-							return
-						else
-							targetId = tonumber(args[2])
-						end
-						--print("PLAYER " .. GetPlayerName(source) .. " JUST USED /REVIVE!!!!")
-						--print("PLAYER " .. GetPlayerName(source) .. " JUST USED /REVIVE!!!!")
-						--print("PLAYER " .. GetPlayerName(source) .. " JUST USED /REVIVE!!!!")
-						--TriggerClientEvent('RPD:allowRevive', -1, from, user.getGroup(), size)
-						TriggerClientEvent("RPD:revivePerson", targetId)
-					else
-						TriggerClientEvent("chatMessage", from, "SYSTEM", {255, 0, 0}, "You don't have permissions to use this command.")
-					end
+TriggerEvent('es:addCommand', 'revive', function(source, args, user)
+	local from = source
+	TriggerEvent('es:getPlayerFromId', from, function(user)
+		if user then
+			local targetId = 0
+			local userJob = user.getActiveCharacterData("job")
+			if userJob == "cop" or
+				userJob == "sheriff" or
+				userJob == "highwaypatrol" or
+				userJob == "ems" or
+				userJob == "fire" or
+				user.getGroup() == "mod" or
+				user.getGroup() == "admin" or
+				user.getGroup() == "superadmin" or
+				user.getGroup() == "owner" then
+				if args[2] == nil then
+					targetId = 0
+					TriggerClientEvent("chatMessage", from, "SYSTEM", {255, 0, 0}, "Invalid command format. Ex: /revive [id]")
+					return
 				else
-					print("ERROR GETTING USER BY ID")
+					targetId = tonumber(args[2])
 				end
-			end)
+				TriggerClientEvent("RPD:revivePerson", targetId)
+			else
+				TriggerClientEvent("chatMessage", from, "SYSTEM", {255, 0, 0}, "You don't have permissions to use this command.")
+			end
+		else
+			print("ERROR GETTING USER BY ID")
 		end
-	end
-end)
+	end)
+end, {
+	help = "Revive a player (EMS/Staff)",
+	params = {
+		{ name = "id", help = "Player's ID" }
+	}
+})
+
+TriggerEvent('es:addCommand', 'respawn', function(source, args, user)
+	TriggerClientEvent('RPD:allowRespawn', source)
+end, { help = "Respawn while dead." })
 
 function splitString(inputstr, sep)
         if sep == nil then
@@ -201,7 +192,9 @@ TriggerEvent('es:addGroupCommand', 'log', "mod", function(source, args, user)
 		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "Killer: " .. deathLog[i].killerName .. " (#" .. deathLog[i].killerId .. ")")
 		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "Time: " .. deathLog[i].timestamp)
 	end
-end, function(source, args, user)end)
+end, {
+	help = "View death log"
+})
 
 RegisterServerEvent("RPD:newDeathLog")
 AddEventHandler("RPD:newDeathLog", function(log)

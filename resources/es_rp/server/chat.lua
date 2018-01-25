@@ -59,7 +59,7 @@ AddEventHandler('es_rp:doMessage', function(msg)
 						local tPos = v.getCoords()
 
 						if get3DDistance(tPos.x, tPos.y, tPos.z, mPos.x, mPos.y, mPos.z) < 20.0 then
-							TriggerClientEvent('chatMessage', k, "", {0, 0, 0}, "^2* " .. (playersNames[source] or GetPlayerName(source)) .. " " .. msg)
+							TriggerClientEvent('chatMessage', k, "", {255, 255, 255}, "^2* " .. (playersNames[source] or GetPlayerName(source)) .. " " .. msg)
 						
 							if ACT[msg] then
 								local emote = ACT[msg]
@@ -70,39 +70,6 @@ AddEventHandler('es_rp:doMessage', function(msg)
 				end)
 			end
 		end)
-	end
-end)
-
-TriggerEvent('es:addCommand', 'jc', function(source, args, user)
-	TriggerEvent('es:getPlayers', function(users)
-		table.remove(args, 1)
-		for s,u in pairs(users)do
-			if jobs[source].name == jobs[s].name then
-				TriggerClientEvent('chatMessage', s, "JOB", {255, 255, 0}, "^*^1" .. GetPlayerName(source) .. " ^2-> ^0^r" .. table.concat(args, " "))
-			end
-		end
-	end)
-end)
-
-TriggerEvent('es:addCommand', 'give', function(source, args, user)
-	if GetPlayerName(args[2]) then
-		if tonumber(args[3]) > 0 then
-			local amount = tonumber(args[3])
-			if user.getMoney() >= amount then
-				user.removeMoney(amount)
-				TriggerEvent('es:getPlayerFromId', tonumber(args[2]), function(target)
-					target.addMoney(amount)
-					TriggerClientEvent('es_rp:notify', source, "You paid ~b~" .. GetPlayerName(target.get('source')) .. "~w~ ~g~$" .. args[3])
-					TriggerClientEvent('es_rp:notify', source, "You were paid by ~b~" .. GetPlayerName(source) .. "~w~ ~g~$" .. args[3])
-				end)
-			else
-				TriggerClientEvent('es_rp:notify', source, "~r~You do not have the required amount")
-			end
-		else
-			TriggerClientEvent('es_rp:notify', source, "~r~Please enter a valid money amount")
-		end
-	else
-		TriggerClientEvent('es_rp:notify', source, "~r~Please enter a valid Player ID")
 	end
 end)
 

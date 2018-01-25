@@ -13,12 +13,17 @@ TriggerEvent('es:addCommand', 'setspikes', function(source, args, user)
             print("You can not spawn that many spike strips")
         end
     end
-end)
+end, {
+	help = "Place spike strip(s).",
+	params = {
+		{ name = "length", help = "Length from 1 to 3." }
+	}
+})
 
 TriggerEvent('es:addCommand', 'deletespikes', function(source, args, user)
     local s = tonumber(source)
     TriggerClientEvent("Spikestrips:RemoveSpikes", s)
-end)
+end, {help = "Remove spikestrips."})
 
 function stringsplit(inputstr, sep)
     if sep == nil then

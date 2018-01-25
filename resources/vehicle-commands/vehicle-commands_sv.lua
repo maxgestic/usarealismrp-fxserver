@@ -89,57 +89,38 @@ TriggerEvent('es:addCommand', 'spawn', function(source, args, user)
 	else
 		TriggerClientEvent("chatMessage", source, "SYSTEM", {255, 180, 0}, "^3Only cops/sheriffs/ems/fire/security can use /spawn.")
 	end
-end)
+end, {
+	help = "Spawn a job vehicle.",
+	params = {
+		{ name = "option", help = "Vehicle name" }
+	}
+})
 
-TriggerEvent('es:addCommand', 'livery', function(source, args, user)
-	TriggerEvent('es:getPlayerFromId', source, function(user)
-		if user then
-			local user_job = user.getActiveCharacterData("job")
-			if  user_job == "cop" or user_job == "sheriff" or user_job == "highwaypatrol" or user_job == "ems" or user_job == "fire" then
-				if args[2] then
-					TriggerClientEvent("vehicleCommands:setLivery", source, args[2])
-				else
-					TriggerClientEvent("chatMessage", source, "CAR", { 255, 180, 0 }, "Missing Livery.")
-				end
-			else
-				TriggerClientEvent("chatMessage", source, "SYSTEM", {255, 0, 0}, "You don't have permissions to use this command.")
-			end
-		else
-			print("ERROR GETTING USER BY ID")
-		end
-	end)
-end)
-
-TriggerEvent('es:addCommand', 'extra', function(source, args, user)
-	TriggerEvent('es:getPlayerFromId', source, function(user)
-		if user then
-			local user_job = user.getActiveCharacterData("job")
-			if user_job == "cop" or user_job == "sheriff" or user_job == "highwaypatrol" or user_job == "ems" or user_job == "fire" then
-				if args[2] then
-					TriggerClientEvent("vehicleCommands:setExtra", source, args[2], args[3])
-				else
-					TriggerClientEvent("chatMessage", source, "CAR", { 255, 180, 0 }, "Missing Extra.")
-				end
-			else
-				TriggerClientEvent("chatMessage", source, "SYSTEM", {255, 0, 0}, "You don't have permissions to use this command.")
-			end
-		else
-			print("ERROR GETTING USER BY ID")
-		end
-	end)
-end)
-
-TriggerEvent('es:addCommand', 'engine', function(source, args, user)
-	local user_job = user.getActiveCharacterData("job")
-	if user_job == "sheriff" then
-		local userSource = tonumber(source)
-		local param = args[2]
-		TriggerClientEvent("vehicleCommands:upgradeEngine", userSource, param)
-		--local engine = 11
-		--local totalOptions = GetNumVehicleMods()
-		--SetVehicleMod(currentvehicle, engine, param)
+TriggerEvent('es:addJobCommand', 'livery', { "police", "sheriff", "ems", "fire" }, function(source, args, user)
+	if args[2] then
+		TriggerClientEvent("vehicleCommands:setLivery", source, args[2])
+	else
+		TriggerClientEvent("chatMessage", source, "CAR", { 255, 180, 0 }, "Missing Livery.")
 	end
-end)
+end, {
+	help = "Set livery of vehicle.",
+	params = {
+		{ name = "livery", help = "Index number of livery" }
+	}
+})
+
+TriggerEvent('es:addJobCommand', 'extra', { "police", "sheriff", "ems", "fire" }, function(source, args, user)
+	if args[2] then
+		TriggerClientEvent("vehicleCommands:setExtra", source, args[2], args[3])
+	else
+		TriggerClientEvent("chatMessage", source, "CAR", { 255, 180, 0 }, "Missing Extra.")
+	end
+end, {
+	help = "Set extra of vehicle.",
+	params = {
+		{ name = "extra", help = "Index number of extra" }
+	}
+})
 
 local function power(a, b)
 	return a ^ b

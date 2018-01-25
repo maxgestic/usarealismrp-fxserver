@@ -13,7 +13,7 @@ function LoadUser(identifier, source, new)
 		TriggerClientEvent('es:setPlayerDecorator', source, 'rank', Users[source]:getPermissions())
 		TriggerClientEvent('es:setMoneyIcon', source,settings.defaultSettings.moneyIcon)
 
-		if(new)then
+		if new then
 			TriggerEvent('es:newPlayerLoaded', source, Users[source])
 		end
 	end)

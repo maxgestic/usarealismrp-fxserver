@@ -40,18 +40,15 @@ AddEventHandler("search:searchPlayer", function(source, playerId)
 end)
 
 -- Add a command everyone is able to run. Args is a table with all the arguments, and the user is the user object, containing all the user data.
-TriggerEvent('es:addCommand', 'search', function(source, args, user)
-	local user_job = user.getActiveCharacterData("job")
-	local argument = args[2] -- player id to search
-	if argument == nil or type(tonumber(argument)) == nil then
-		TriggerClientEvent("search:help", source)
-	elseif user_job ~= "cop" and user_job ~= "sheriff" and user_job ~= "highwaypatrol" then
-		TriggerClientEvent("search:failureNotJurisdiction", source)
-	else -- player is a cop, so allow search and perform search with argument = player id to search
-		TriggerEvent("altchat:localChatMessage", source, "^6* " .. GetPlayerName(source) .. " searches person.") -- send local me message
-		TriggerEvent("search:searchPlayer", source, argument)
-	end
-end)
+TriggerEvent('es:addJobCommand', 'search', { "police", "sheriff" }, function(source, args, user)
+	TriggerEvent("altchat:localChatMessage", source, "^6* " .. GetPlayerName(source) .. " searches person.") -- send local me message
+	TriggerEvent("search:searchPlayer", source, args[2])
+end, {
+	help = "Search a suspect.",
+	params = {
+		{ name = "id", help = "Player's ID" }
+	}
+})
 
 function comma_value(amount)
   local formatted = amount

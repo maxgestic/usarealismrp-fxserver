@@ -135,18 +135,14 @@ end
 
 
 -- Add a command everyone is able to run. Args is a table with all the arguments, and the user is the user object, containing all the user data.
-TriggerEvent('es:addCommand', 'mdt', function(source, args, user)
-	local playerJob = user.getActiveCharacterData("job")
-	local argument = args[2] -- player id to check license
-	if argument == nil or type(tonumber(argument)) == nil then
-		TriggerClientEvent("license:help", source)
-	elseif playerJob ~= "cop" and playerJob ~= "sheriff" and playerJob ~= "highwaypatrol" then
-		TriggerClientEvent("license:failureNotJurisdiction", source)
-	else -- player is a cop, so allow check and perform check with argument = player id to check license
-		--TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " opens MDT.") -- need to update name
-		TriggerEvent("license:searchForLicense", source, argument)
-	end
-end)
+TriggerEvent('es:addJobCommand', 'mdt', { "police", "sheriff" }, function(source, args, user)
+	TriggerEvent("license:searchForLicense", source, args[2])
+end, {
+	help = "Run a person's information through the police database.",
+	params = {
+		{ name = "id", help = "Player's ID" }
+	}
+})
 
 -- license plate checking
 function fetchAllRegisteredVehicles(callback)
@@ -214,7 +210,12 @@ TriggerEvent('es:addCommand', '28', function(source, args, user)
 			TriggerClientEvent("chatMessage", userSource, "", {}, "^3Usage: ^0/runplate <plate_number_here>")
 		end
 	end
-end)
+end, {
+	help = "Run a license plate.",
+	params = {
+		{ name = "plate", help = "Plate number to run" }
+	}
+})
 
 TriggerEvent('es:addCommand', 'runplate', function(source, args, user)
 	local user_job = user.getActiveCharacterData("job")
@@ -260,4 +261,9 @@ TriggerEvent('es:addCommand', 'runplate', function(source, args, user)
 			TriggerClientEvent("chatMessage", userSource, "", {}, "^3Usage: ^0/runplate <plate_number_here>")
 		end
 	end
-end)
+end, {
+	help = "Run a license plate.",
+	params = {
+		{ name = "plate", help = "Plate number to run" }
+	}
+})

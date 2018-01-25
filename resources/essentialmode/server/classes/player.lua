@@ -138,6 +138,26 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 							--print("bank saved!!")
 							--self.bank = data
 						--end)
+					elseif field == "job" then
+						TriggerClientEvent('chat:removeSuggestionAll', self.source)
+						for k,v in pairs(exports['essentialmode']:getCommands()) do
+							if v.job == "everyone" then
+								if exports['essentialmode']:CanGroupTarget(self.group, v.group) then
+									TriggerClientEvent('chat:addSuggestion', self.source, '/' .. k, v.help, v.params)
+								end
+							else
+								local allowed = 0;
+								for k,vc in pairs(v.job) do
+									if data == vc then
+										allowed = 1
+									end
+								end
+
+								if allowed == 1 then
+									TriggerClientEvent('chat:addSuggestion', self.source, '/' .. k, v.help, v.params)
+								end
+							end
+						end
 					end
 					-- update char
 					self.characters[i][field] = data
