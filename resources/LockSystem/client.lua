@@ -12,7 +12,7 @@ local Keys = {
 
 local notificationParam = 1 -- 1 = LockSystem notification | 2 = chatMessage notification | 3 = nothing
 local keyParam = Keys["U"] -- e.g : Keys["H"] will be change the U key to the H key for lock/unlock a vehicle
-local soundEnable = true -- Set to false for disable sounds
+local soundEnable = false -- Set to false for disable sounds
 local disableCar_NPC = true -- Set to false for enable NPC's car
 local soundDistance = 4 -- Distance of sounds lock / unlock (default: 10m)
 

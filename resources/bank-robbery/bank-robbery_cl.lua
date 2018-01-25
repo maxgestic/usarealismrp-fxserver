@@ -36,8 +36,8 @@ Citizen.CreateThread(function()
 
 		Citizen.Wait(0)
 		DrawMarker(1, markerX, markerY, markerZ, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
-		if getPlayerDistanceFromShop(markerX,markerY,markerZ) < 4 and not playerNotified then
-			TriggerEvent("chatMessage", "SYSTEM", { 0, 141, 155 }, "^3Press E then 'enter' to rob the bank.")
+		if getPlayerDistanceFromShop(markerX,markerY,markerZ) < 1.4 and not playerNotified then
+			TriggerEvent("chatMessage", "SYSTEM", { 0, 141, 155 }, "^3Press 'E' then 'ENTER' to rob the bank.")
 			playerNotified = true
 		end
 		if IsControlJustPressed(1,Keys["E"]) then
@@ -65,6 +65,38 @@ RegisterNetEvent("bank-robbery:notify")
 AddEventHandler("bank-robbery:notify", function(msg)
 	DrawCoolLookingNotification(msg)
 end)
+
+---------------
+-- mini game --
+---------------
+RegisterNetEvent("bank-robbery:startHacking")
+AddEventHandler("bank-robbery:startHacking", function()
+	print("inside startHacking event handler!")
+	-- start minigame:
+	TriggerEvent("mhacking:seqstart",{3,2,1}, 80, mycb)
+	-- play scenario:
+	TriggerEvent("usa:playScenario", "WORLD_HUMAN_STAND_MOBILE")
+end)
+
+local failed  = false
+function mycb(success, timeremaining, finish)
+	if success then
+		print('Success with '..timeremaining..'s remaining.')
+		if finish then
+			if not failed then
+				TriggerEvent("bank:checkRange", nil)
+				-- make not busy so it can be robbed again
+				TriggerServerEvent("bank:setBusy", "no")
+				TriggerEvent("usa:notify", "You hacked the bank!")
+			else
+				TriggerEvent("usa:notify", "You failed to hack the bank!")
+			end
+		end
+	else
+		failed = true
+		print('Failure to win hacking game!')
+	end
+end
 
 function DrawCoolLookingNotification(msg)
     SetNotificationTextEntry("STRING")
