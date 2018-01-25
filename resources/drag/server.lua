@@ -3,7 +3,7 @@ TriggerEvent('es:addCommand', 'drag', function(source, args, user)
 		local userJob = user.getActiveCharacterData("job")
 		local userGroup = user.getGroup()
 		local argument = args[2] -- player id to check license
-		if userJob == "sheriff" or userJob == "cop" or userJob == "ems" or userJob == "fire" then
+		if userJob == "sheriff" or userJob == "cop" or userJob == "ems" or userJob == "fire" or userGroup == "mod" or userGroup == "admin" or userGroup == "superadmin" or userGroup == "owner" then
 			if argument == nil or type(tonumber(argument)) == nil then
 				TriggerClientEvent("chatMessage", source, "SYSTEM", { 0, 141, 155 }, "example: /drag <id>")
 			else
