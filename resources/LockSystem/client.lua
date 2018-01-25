@@ -88,7 +88,7 @@ Citizen.CreateThread(function()
 				end
 
 				-- since only 7 letters are currently being used for license plates, trim off the last character (whitespace) since default gta uses 8 characters
-				plate = string.sub(plate, 1, 7)
+				--plate = string.sub(plate, 1, 7)
 				--TriggerServerEvent("ls:check", plate, vehicle, isPlayerInside, notificationParam)
 				TriggerServerEvent("lock:checkForKey", plate)
 
@@ -158,7 +158,7 @@ RegisterNetEvent("lock:notify")
 AddEventHandler("lock:notify", function(text, time)
 	SetNotificationTextEntry("STRING")
 	AddTextComponentString(text)
-	Citizen.InvokeNative(0x1E6611149DB3DB6B, "CHAR_LIFEINVADER", "CHAR_LIFEINVADER", true, 1, "Mini-Lock", "Version 1.0.1", time)
+	Citizen.InvokeNative(0x1E6611149DB3DB6B, "CHAR_LIFEINVADER", "CHAR_LIFEINVADER", true, 1, "Mini-Lock", "Version 1.0.2", time)
 	DrawNotification_4(false, true)
 end)
 
