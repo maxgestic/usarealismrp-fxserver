@@ -73,7 +73,7 @@ RegisterNetEvent("bank-robbery:startHacking")
 AddEventHandler("bank-robbery:startHacking", function()
 	print("inside startHacking event handler!")
 	-- start minigame:
-	TriggerEvent("mhacking:seqstart",{3,2,1}, 70, mycb)
+	TriggerEvent("mhacking:seqstart",{3,2,1}, 80, mycb)
 	-- play scenario:
 	TriggerEvent("usa:playScenario", "WORLD_HUMAN_STAND_MOBILE")
 end)
