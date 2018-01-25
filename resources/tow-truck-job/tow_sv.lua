@@ -13,7 +13,7 @@ end)
 TriggerEvent('es:addJobCommand', 'tow', { "tow" }, function(source, args, user)
 	TriggerClientEvent('pv:tow', source)
 end, {
-	help = "Tow the car infront of you."
+	help = "Load or unload the car in front of you onto a flatbed."
 })
 
 local timeout = false

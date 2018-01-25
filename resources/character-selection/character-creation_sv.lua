@@ -1,6 +1,6 @@
 TriggerEvent('es:addCommand', 'swap', function(source, args, user)
 	TriggerClientEvent("character:swap--check-distance", source)
-end, { help = "swap characters (Must be at the clothing store)" })
+end, { help = "Swap to another character (Must be at the clothing store)." })
 
 RegisterServerEvent("character:getCharactersAndOpenMenu")
 AddEventHandler("character:getCharactersAndOpenMenu", function(menu)

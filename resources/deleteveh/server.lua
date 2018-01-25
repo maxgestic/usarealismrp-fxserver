@@ -1,10 +1,10 @@
 TriggerEvent('es:addJobCommand', 'impound', { "police", "sheriff" }, function(source, args, user)
 	TriggerClientEvent('impoundVehicle', source)
-end, { help = "Impound a vehicle" })
+end, { help = "Impound a vehicle." })
 
 TriggerEvent('es:addGroupCommand', 'dv', 'mod', function(source, args, user)
 	TriggerClientEvent('impoundVehicle', source)
-end, { help = "(Delete) Impound a vehicle" })
+end, { help = "(Delete) Impound a vehicle." })
 
 RegisterServerEvent("impound:impoundVehicle")
 AddEventHandler("impound:impoundVehicle", function(vehicle, plate)

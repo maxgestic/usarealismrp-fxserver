@@ -89,7 +89,12 @@ TriggerEvent('es:addCommand', 'spawn', function(source, args, user)
 	else
 		TriggerClientEvent("chatMessage", source, "SYSTEM", {255, 180, 0}, "^3Only cops/sheriffs/ems/fire/security can use /spawn.")
 	end
-end)
+end, {
+	help = "Spawn a job vehicle.",
+	params = {
+		{ name = "option", help = "Vehicle name" }
+	}
+})
 
 TriggerEvent('es:addJobCommand', 'livery', { "police", "sheriff", "ems", "fire" }, function(source, args, user)
 	if args[2] then
@@ -98,7 +103,7 @@ TriggerEvent('es:addJobCommand', 'livery', { "police", "sheriff", "ems", "fire" 
 		TriggerClientEvent("chatMessage", source, "CAR", { 255, 180, 0 }, "Missing Livery.")
 	end
 end, {
-	help = "Set livery of vehicle",
+	help = "Set livery of vehicle.",
 	params = {
 		{ name = "livery", help = "Index number of livery" }
 	}
@@ -111,7 +116,7 @@ TriggerEvent('es:addJobCommand', 'extra', { "police", "sheriff", "ems", "fire" }
 		TriggerClientEvent("chatMessage", source, "CAR", { 255, 180, 0 }, "Missing Extra.")
 	end
 end, {
-	help = "Set extra of vehicle",
+	help = "Set extra of vehicle.",
 	params = {
 		{ name = "extra", help = "Index number of extra" }
 	}

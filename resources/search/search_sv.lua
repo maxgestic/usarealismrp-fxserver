@@ -44,9 +44,9 @@ TriggerEvent('es:addJobCommand', 'search', { "police", "sheriff" }, function(sou
 	TriggerEvent("altchat:localChatMessage", source, "^6* " .. GetPlayerName(source) .. " searches person.") -- send local me message
 	TriggerEvent("search:searchPlayer", source, args[2])
 end, {
-	help = "Search a suspect",
+	help = "Search a suspect.",
 	params = {
-		{ name = "id", help = "Players ID" }
+		{ name = "id", help = "Player's ID" }
 	}
 })
 

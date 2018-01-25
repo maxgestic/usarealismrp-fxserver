@@ -1,15 +1,15 @@
 -- this is where you edit the message seen by end user
 
 function helpText(source)
+	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "^0You will earn $250 every 10 minutes from welfare until you find another job.")
+	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "Look at the icons on your map to see where jobs available jobs are.")
+	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "You can get a cell phone at the general store. You can use it to call for a taxi, towtruck, police, EMS, etc")
+	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "Once you have one, do F1 > Cell Phone > Use to open it.")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "1) ^3/help^0 - this menu")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "2) ^3/commands^0 - available commands")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "3) ^3/discord^0 - discord server link")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "4) ^3/rules^0 - to see the server rules")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "^3WEBSITE: ^0https://www.usarrp.net")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "^0You will earn $250 every 10 minutes from welfare until you find another job.")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "^5Look at the icons on your map to see where jobs available jobs are.")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "^5If you don't have one, you should head to the general store to buy a cell phone. You can use it to call for a taxi, towtruck, police, EMS, etc")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "^5Once you have one, do F1 > Cell Phone > Use to open it.")
 end
 
 function commandsText(source)
@@ -30,48 +30,23 @@ function commandsText(source)
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "15) ^3/open [option]^0 options: hood, trunk, fr, fl, br, bl, ambulance")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "16) ^3/close [option]^0 options: hood, trunk, fr, fl, br, bl, ambulance")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "17) ^3/engine [option]^0 options: on, off")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "18) Open chat with ''^3T^0'then ^3Page Up^0 to scroll up")
+	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "18) Open chat with ''^3T^0' then use ^3Page Up^0 to scroll up")
 end
 
 -- end util functions / start commands
 
 TriggerEvent('es:addCommand', 'help', function(source, args, user)
 	helpText(source)
-end)
-
-TriggerEvent('es:addCommand', 'Help', function(source, args, user)
-	helpText(source)
-end)
-
-TriggerEvent('es:addCommand', 'HELP', function(source, args, user)
-	helpText(source)
-end)
+end, {help = "Show help commands."})
 
 TriggerEvent('es:addCommand', 'commands', function(source, args, user)
 	commandsText(source)
-end)
-
-TriggerEvent('es:addCommand', 'Commands', function(source, args, user)
-	commandsText(source)
-end)
-
-TriggerEvent('es:addCommand', 'COMMANDS', function(source, args, user)
-	commandsText(source)
-end)
-
-TriggerEvent('es:addCommand', 'cmd', function(source, args, user)
-	commandsText(source)
-end)
+end, {help = "Show some server commands. (Full list on website)"})
 
 TriggerEvent('es:addCommand', 'discord', function(source, args, user)
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "Discord: https://discord.gg/pFSZds8")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "^3Join the discord channel to keep up with the community!")
-end)
-
-TriggerEvent('es:addCommand', 'DISCORD', function(source, args, user)
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "Discord: https://discord.gg/pFSZds8")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "^3Join the discord channel to keep up with the community!")
-end)
+end, {help = "View the server's discord link."})
 
 TriggerEvent('es:addCommand', 'jobs', function(source, args, user)
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "1) Cannabis transport")
@@ -83,20 +58,6 @@ TriggerEvent('es:addCommand', 'jobs', function(source, args, user)
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "7) Downtown Taxi Co.")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "8) Convience store robberies")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "9) Create/sell methamphetamines")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "10) Anything else you can RP with :)")
+	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "10) Anything else you can think of to RP :)")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "11) Police and EMS are both whitelisted. You can apply for it at https://www.usarrp.net")
-end)
-
-TriggerEvent('es:addCommand', 'job', function(source, args, user)
-		TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "1) Cannabis transport")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "2) FridgeIt trucking")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "3) GoPostal transport")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "4) Bank Robbery")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "5) Bubba's Tow Truck Company")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "5) Fishing")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "7) Downtown Taxi Co.")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "8) Convience store robberies")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "9) Create/sell methamphetamines")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "10) Anything else you can RP with :)")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "11) Police and EMS are both whitelisted. You can apply for it at https://www.usarrp.net")
-end)
+end, {help = "Show some of the available jobs."})

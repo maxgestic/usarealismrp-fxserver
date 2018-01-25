@@ -1,3 +1,3 @@
 TriggerEvent('es:addCommand', 'rules', function(source, args, user)
 	TriggerClientEvent('rules:open', source)
-end, { help = "View the server rules" })
+end, { help = "View the server rules." })

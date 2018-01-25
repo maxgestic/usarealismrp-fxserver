@@ -138,9 +138,9 @@ end
 TriggerEvent('es:addJobCommand', 'mdt', { "police", "sheriff" }, function(source, args, user)
 	TriggerEvent("license:searchForLicense", source, args[2])
 end, {
-	help = "mdt",
+	help = "Run a person's information through the police database.",
 	params = {
-		{ name = "id", help = "Players ID" }
+		{ name = "id", help = "Player's ID" }
 	}
 })
 
@@ -210,7 +210,12 @@ TriggerEvent('es:addCommand', '28', function(source, args, user)
 			TriggerClientEvent("chatMessage", userSource, "", {}, "^3Usage: ^0/runplate <plate_number_here>")
 		end
 	end
-end)
+end, {
+	help = "Run a license plate.",
+	params = {
+		{ name = "plate", help = "Plate number to run" }
+	}
+})
 
 TriggerEvent('es:addCommand', 'runplate', function(source, args, user)
 	local user_job = user.getActiveCharacterData("job")
@@ -256,4 +261,9 @@ TriggerEvent('es:addCommand', 'runplate', function(source, args, user)
 			TriggerClientEvent("chatMessage", userSource, "", {}, "^3Usage: ^0/runplate <plate_number_here>")
 		end
 	end
-end)
+end, {
+	help = "Run a license plate.",
+	params = {
+		{ name = "plate", help = "Plate number to run" }
+	}
+})

@@ -22,8 +22,9 @@ TriggerEvent('es:addGroupCommand', 'whisper', 'mod', function(source, args, user
 		TriggerClientEvent('chatMessage', target, "STAFF (" .. GetPlayerName(source) .. ")", {90, 90, 60}, message)
 	end
 end, {
-	help = "Staff whisper a player",
+	help = "Send a message directly to a player.",
 	params = {
+		{ name = "id", help = "Player's id" },
 		{ name = "message", help = "Staff message to player" }
 	}
 })
@@ -52,9 +53,9 @@ TriggerEvent('es:addGroupCommand', 'staff', 'mod', function(source, args, user)
 		end
 	end)
 end, {
-	help = "Talk in staff chat",
+	help = "Talk to other staff members directly.",
 	params = {
-		{ name = "message", help = "Message to online staff" }
+		{ name = "message", help = "Message to send" }
 	}
 })
 
@@ -86,7 +87,7 @@ TriggerEvent('es:addCommand', 'report', function(source, args, user)
 end, {
 	help = "Report a player",
 	params = {
-		{ name = "id", help = "Players ID" },
+		{ name = "id", help = "Player's ID" },
 		{ name = "message", help = "Reason for the report" }
 	}
 })
@@ -120,7 +121,7 @@ end)
 TriggerEvent('es:addGroupCommand', 'noclip', "mod", function(source, args, user)
 	TriggerClientEvent("es_admin:noclip", source)
 end, {
-	help = "Move freely around the map"
+	help = "Move freely around the map."
 })
 
 -- Kicking
@@ -175,9 +176,9 @@ TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, user)
 		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
 	end
 end, {
-	help = "Kick a player",
+	help = "Kick a player.",
 	params = {
-		{ name = "id", help = "Players ID" },
+		{ name = "id", help = "Player's ID" },
 		{ name = "message", help = "Reason for the kick (INCLUDE YOUR NAME)" }
 	}
 })
@@ -198,9 +199,9 @@ TriggerEvent('es:addGroupCommand', 'announce', "mod", function(source, args, use
 	table.remove(args, 1)
 	TriggerClientEvent('chatMessage', -1, "ANNOUNCEMENT", {255, 0, 0}, "" .. table.concat(args, " "))
 end, {
-	help = "Announce to all players",
+	help = "Send a server-wide message.",
 	params = {
-		{ name = "message", help = "Announcement message" }
+		{ name = "message", help = "message to send" }
 	}
 })
 
@@ -246,9 +247,9 @@ TriggerEvent('es:addGroupCommand', 'freeze', "mod", function(source, args, user)
 		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
 	end
 end, {
-	help = "Freeze a player",
+	help = "Freeze a player.",
 	params = {
-		{ name = "id", help = "Players ID" }
+		{ name = "id", help = "Player's ID" }
 	}
 })
 
@@ -283,9 +284,9 @@ TriggerEvent('es:addGroupCommand', 'bring', "mod", function(source, args, user)
 		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
 	end
 end, {
-	help = "Bring a player",
+	help = "Bring a player.",
 	params = {
-		{ name = "id", help = "Players ID" }
+		{ name = "id", help = "Player's ID" }
 	}
 })
 
@@ -307,9 +308,9 @@ TriggerEvent('es:addGroupCommand', 'slap', "admin", function(source, args, user)
 		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
 	end
 end, {
-	help = "Slay a player / Make them fly into the air (TROLL DO NOT USE IN RP)",
+	help = "Slap a player / Make them fly into the air (TROLL DO NOT USE IN RP)",
 	params = {
-		{ name = "id", help = "Players ID" }
+		{ name = "id", help = "Player's ID" }
 	}
 })
 
@@ -367,9 +368,9 @@ TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, user)
 		end
 	end
 end, {
-	help = "Teleport to player or warp",
+	help = "Teleport to player or location.",
 	params = {
-		{ name = "id", help = "Players ID or warp ID" }
+		{ name = "id", help = "Player's ID or warp ID" }
 	}
 })
 
@@ -378,7 +379,7 @@ TriggerEvent('es:addGroupCommand', 'die', "admin", function(source, args, user)
 	TriggerClientEvent('es_admin:kill', source)
 	TriggerClientEvent('chatMessage', source, "", {0,0,0}, "^1^*You killed yourself.")
 end, {
-	help = "Killyourself"
+	help = "Commit suicide."
 })
 
 -- Killing
@@ -398,9 +399,9 @@ TriggerEvent('es:addGroupCommand', 'slay', "admin", function(source, args, user)
 			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
 		end
 end, {
-	help = "Kill a player",
+	help = "Kill a player.",
 	params = {
-		{ name = "id", help = "Players ID" }
+		{ name = "id", help = "Player's ID" }
 	}
 })
 
@@ -417,9 +418,9 @@ TriggerEvent('es:addGroupCommand', 'crash', "superadmin", function(source, args,
 		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
 	end
 end, {
-	help = "Crash a players game",
+	help = "Crash a player's game.",
 	params = {
-		{ name = "id", help = "Players ID" }
+		{ name = "id", help = "Player's ID" }
 	}
 })
 
@@ -433,7 +434,7 @@ end, {
 TriggerEvent('es:addGroupCommand', 'car', 'admin', function(source, args, user)
 	TriggerClientEvent('es_admin:spawnVehicle', source, args[2])
 end, {
-	help = "Spawn a car",
+	help = "Spawn a car (not to be abused, we are watching..)",
 	params = {
 		{ name = "model", help = "Model of the car" }
 	}
@@ -445,9 +446,9 @@ TriggerEvent('es:addGroupCommand', 'spectate', 'mod', function(source, args, use
 	if not targetPlayer then return end
 	TriggerClientEvent("mini_admin:spectate", userSource, targetPlayer, GetPlayerName(targetPlayer), user.getActiveCharacterData("fullName"))
 end, {
-	help = "Spectate a player",
+	help = "Spectate a player.",
 	params = {
-		{ name = "id", help = "Players ID" }
+		{ name = "id", help = "Player's ID" }
 	}
 })
 
@@ -769,10 +770,10 @@ fetchAllBans()
 			end)
 		end)
 	end, {
-		help = "Ban player",
+		help = "Ban a player from the server.",
 		params = {
-			{ name = "id", help = "Players ID" },
-			{ name = "reason", help = "Reason for ban (INCLUDE YOUR NAME)" }
+			{ name = "id", help = "Player's ID" },
+			{ name = "reason", help = "Reason (INCLUDE YOUR NAME)" }
 		}
 	})
 
@@ -936,7 +937,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
 	end
 end, {
-	help = "View characters stats"
+	help = "View character statistics."
 })
 
 function FormatSeconds(mins)

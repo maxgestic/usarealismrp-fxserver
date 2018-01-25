@@ -29,7 +29,12 @@ TriggerEvent('es:addCommand','removeblindfold', function(source, args, user)
 	else
 		print("can't target self when removing blindfold!")
 	end
-end)
+end, {
+	help = "Remove the blindfold off of someone.",
+	params = {
+		{ name = "id", help = "Player's ID" }
+	}
+})
 
 ------------------------
 -- Blindfold a person --
@@ -47,7 +52,12 @@ TriggerEvent('es:addCommand','blindfold', function(source, args, user)
 		}
 		TriggerClientEvent("usa:playAnimation", tonumber(source), anim.name, anim.dict, 3)
 	end
-end)
+end, {
+	help = "Place a bag over someone's head.",
+	params = {
+		{ name = "id", help = "Player's ID" }
+	}
+})
 
 ---------------------------
 -- Steal a player's cash --
@@ -65,7 +75,12 @@ TriggerEvent('es:addCommand','rob', function(source, args, user)
 		}
 		TriggerClientEvent("usa:playAnimation", tonumber(source), anim.name, anim.dict, 3)
 	end
-end)
+end, {
+	help = "Steal a player's money.",
+	params = {
+		{ name = "id", help = "Player's ID" }
+	}
+})
 
 ---------------------------------------
 -- bound a player's wrists with rope --
@@ -83,7 +98,12 @@ TriggerEvent('es:addCommand','tie', function(source, args, user)
 		}
 		TriggerClientEvent("usa:playAnimation", tonumber(source), anim.name, anim.dict, 3)
 	end
-end)
+end, {
+	help = "Tie a person's hands together.",
+	params = {
+		{ name = "id", help = "Player's ID" }
+	}
+})
 
 ----------------------
 -- untie the player --
@@ -104,7 +124,12 @@ TriggerEvent('es:addCommand','untie', function(source, args, user)
 			print("can't untie yourself!")
 		end
 	end
-end)
+end, {
+	help = "Untie a person's hands.",
+	params = {
+		{ name = "id", help = "Player's ID" }
+	}
+})
 
 RegisterServerEvent("crim:continueBounding")
 AddEventHandler("crim:continueBounding", function(bound, from_id, target_player_id)

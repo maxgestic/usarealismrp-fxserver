@@ -28,9 +28,9 @@ TriggerEvent('es:addCommand', 'drag', function(source, args, user)
 		-- user did not exist
 	end
 end, {
-	help = "Drag a tied up or handcuffed player",
+	help = "Drag a tied up or handcuffed player.",
 	params = {
-		{ name = "id", help = "Players ID" }
+		{ name = "id", help = "Player's ID" }
 	}
 })
 

@@ -143,15 +143,20 @@ end, {
 })
 
 -- R O L L  D I C E
-TriggerEvent('es:addCommand', 'roll', function(source, args, user)
+TriggerEvent('es:addCommand', 'roll', function(source, args, user, location)
 	local name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
 	local max = tonumber(args[2])
 	if max then
 		print("rolling " .. max)
 		local roll = math.random(1, max)
-		TriggerEvent('altchat:localChatMessage', source, "^6* " .. name .. " rolls a " .. roll .. " out of " .. max)
+		TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. GetPlayerName(source) .. " rolls a " .. roll .. ".", location)
 	end
-end)
+end, {
+	help = "Roll a random number.",
+	params = {
+		{ name = "max", help = "The max number to roll" }
+	}
+})
 
 -- U T I L I T Y  F U N C T I O N S
 RegisterServerEvent("usa:checkPlayerMoney")

@@ -121,7 +121,7 @@ TriggerEvent('es:addJobCommand', 'dos', { "ems", "fire", "police", "sheriff" }, 
 end, {
 	help = "Send someone to the morge",
 	params = {
-		{ name = "id", help = "Players ID" },
+		{ name = "id", help = "Player's ID" },
 		{ name = "min", help = "Time in minutes" },
 		{ name = "reason", help = "Reason" }
 	}

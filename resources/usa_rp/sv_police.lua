@@ -115,7 +115,12 @@ TriggerEvent('es:addCommand', 'lockbc', function(source, args, user)
 		if not tonumber(ServerID) then return end
 		TriggerClientEvent("simp:baitCarDisable", tonumber(ServerID))
 	end
-end)
+end, {
+	help = "Lock the bait car's doors and shut off the engine.",
+	params = {
+		{ name = "id", help = "Player's ID" }
+	}
+})
 
 TriggerEvent('es:addCommand', 'unlockbc', function(source, args, user)
 	local userjob = user.getActiveCharacterData("job")
@@ -124,7 +129,12 @@ TriggerEvent('es:addCommand', 'unlockbc', function(source, args, user)
 		if not tonumber(ServerID) then return end
 		TriggerClientEvent("simp:baitCarunlock", tonumber(ServerID))
 	end
-end)
+end, {
+	help = "Unlock the bait car's doors.",
+	params = {
+		{ name = "id", help = "Player's ID" }
+	}
+})
 -- end bait car
 
 -- start seize contraband
@@ -166,8 +176,8 @@ TriggerEvent('es:addJobCommand', 'seize', { "police", "sheriff" }, function(sour
 end, {
 	help = "Seize contraband or cash",
 	params = {
-		{ name = "type", help = "contraband or cash" },
-		{ name = "id", help = "Player ID" }
+		{ name = "type", help = "contraband OR cash" },
+		{ name = "id", help = "Player's' ID" }
 	}
 })
 
@@ -201,7 +211,7 @@ TriggerEvent('es:addJobCommand', 'breathalyze', { "police", "sheriff" }, functio
 end, {
 	help = "Breathalyze",
 	params = {
-		{ name = "id", help = "Players ID" }
+		{ name = "id", help = "Player's ID" }
 	}
 })
 

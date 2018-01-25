@@ -11,9 +11,9 @@ TriggerEvent('es:addJobCommand', 'cuff', { "police", "sheriff" }, function(sourc
 		TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 2)
 	end
 end, {
-	help = "Cuff a player",
+	help = "Cuff a player.",
 	params = {
-		{ name = "id", help = "Players ID" }
+		{ name = "id", help = "Player's ID" }
 	}
 })
 

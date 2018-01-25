@@ -72,7 +72,7 @@ TriggerEvent('es:addCommand', 'waypoint', function(source, args, user)
 		TriggerClientEvent('chatMessage', source, "y", {255,0,0}, activeJobs[source].y)
 		TriggerClientEvent('placeMarker', source, activeJobs[source].x, activeJobs[source].y)
 	end
-end)
+end, {help = "Reset a transport job waypoint"})
 
 AddEventHandler('playerDropped', function()
 	if activeJobs[source] then
@@ -88,4 +88,4 @@ TriggerEvent('es:addCommand', 'quitjob', function(source, args, user)
 		TriggerClientEvent('chatMessage', source, "", {}, "^3You have quit your active transport job!")
 		print("player used /quitjob, setting activeJob to nil")
 	end
-end)
+end, {help = "Quit current transport job"})

@@ -115,15 +115,15 @@ TriggerEvent('es:addCommand', 'revive', function(source, args, user)
 		end
 	end)
 end, {
-	help = "Revive Player (EMS/Staff)",
+	help = "Revive a player (EMS/Staff)",
 	params = {
-		{ name = "id", help = "Players ID" }
+		{ name = "id", help = "Player's ID" }
 	}
 })
 
 TriggerEvent('es:addCommand', 'respawn', function(source, args, user)
 	TriggerClientEvent('RPD:allowRespawn', source)
-end, { help = "Respawn while dead" })
+end, { help = "Respawn while dead." })
 
 function splitString(inputstr, sep)
         if sep == nil then
