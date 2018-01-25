@@ -13,7 +13,9 @@ TriggerEvent('es:addCommand', 'jail', function(source, args, user)
 	else
 		TriggerClientEvent("jail:notify", tonumber(source), "You have ~y~" .. user_jailtime .. " month(s) ~w~left in your jail sentence.")
 	end
-end)
+end, {
+	help = "See how much time you have left in jail / jail a player (police)."
+})
 
 RegisterServerEvent("jail:jailPlayerFromMenu")
 AddEventHandler("jail:jailPlayerFromMenu", function(data)

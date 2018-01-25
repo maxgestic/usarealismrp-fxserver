@@ -90,7 +90,12 @@ TriggerEvent('es:addCommand', 'setskin', function(source, args, user)
 	else
 		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "You're not authorized to use this command!")		
 	end
-end)
+end, {
+	help = "Change your skin.",
+	params = {
+		{ name = "model", help = "The model name" }
+	}
+})
 ----------------------------------------------------------------
 
 ----------------------------------------------------------------
@@ -100,7 +105,7 @@ TriggerEvent('es:addCommand', 'gotowp', function(source, args, user)
 	else
 		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "You're not authorized to use this command!")		
 	end
-end)
+end, {help = "Teleport to a set waypoint."})
 ----------------------------------------------------------------
 
 ----------------------------------------------------------------

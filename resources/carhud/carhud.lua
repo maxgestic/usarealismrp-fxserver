@@ -23,7 +23,11 @@ Citizen.CreateThread(function()
 			-- SPEED LIMITER
 			if maxSpeed then
 				drawRct(UI.x + 0.09, UI.y + 0.932, 0.066, 0.03, 0, 0, 0, 150)
-				drawTxt(UI.x + 0.59, UI.y + 1.42, 1.0, 1.0, 0.64 , "~w~" .. math.ceil(maxSpeed), 255, 255, 255, 255)
+				if on then
+					drawTxt(UI.x + 0.59, UI.y + 1.42, 1.0, 1.0, 0.64 , "~w~" .. math.ceil(maxSpeed), 255, 255, 255, 255)
+				else
+					drawTxt(UI.x + 0.59, UI.y + 1.42, 1.0, 1.0, 0.64 , "~w~OFF", 255, 255, 255, 255)
+				end
 				drawTxt(UI.x + 0.612, UI.y + 1.427, 1.0, 1.0, 0.4, "~w~ Max Speed", 255, 255, 255, 255)
 			end
 

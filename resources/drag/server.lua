@@ -27,7 +27,12 @@ TriggerEvent('es:addCommand', 'drag', function(source, args, user)
 		--print("user nil for drag")
 		-- user did not exist
 	end
-end)
+end, {
+	help = "Drag a tied up or handcuffed player.",
+	params = {
+		{ name = "id", help = "Player's ID" }
+	}
+})
 
 RegisterServerEvent("dr:dragPlayer")
 AddEventHandler("dr:dragPlayer", function(id)

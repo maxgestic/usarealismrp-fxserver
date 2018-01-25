@@ -8,7 +8,7 @@ function getPlayerIdentifierEasyMode(source)
 		for key, value in pairs(rawIdentifiers) do
 			playerIdentifier = value
 		end
-    else
+	else
 		print("IDENTIFIERS DO NOT EXIST OR WERE NOT RETIREVED PROPERLY : " .. source)
 		return false
 	end
@@ -67,7 +67,7 @@ AddEventHandler("bank:beginRobbery", function(source)
 	print("INSIDE beginRobbery with source = " .. source)
 
 	-- make npc busy so only one at a time can rob bank
-    isBusy = "yes"
+	isBusy = "yes"
 
 	TriggerEvent("es:getPlayers", function(pl)
 		for k, v in pairs(pl) do
@@ -107,39 +107,31 @@ end)
 RegisterServerEvent("bank:outOfRange")
 AddEventHandler("bank:outOfRange", function()
 	TriggerClientEvent("bank-robbery:notify", source, "~y~Out of range! No money was taken.")
-    isBusy = "no"
-    abletorob = true
+	isBusy = "no"
+	abletorob = true
 end)
 
-TriggerEvent('es:addCommand', 'closebank', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'closebank', 'mod', function(source, args, user)
+	closed = true
+	TriggerClientEvent("bank-robbery:notify", source, "BANK IS NOW ~r~CLOSED")
+end, {
+	help = "Open the bank to be robbed"
+})
 
-	local group = user.getGroup()
-
-    if group == "owner" or group == "admin" or group == "superadmin" or group == "mod" then
-        closed = true
-		TriggerClientEvent("bank-robbery:notify", source, "BANK IS NOW ~r~CLOSED")
-    end
-
-end)
-
-TriggerEvent('es:addCommand', 'openbank', function(source, args, user)
-
-	local group = user.getGroup()
-
-    if group == "owner" or group == "admin" or group == "superadmin" or group == "mod" then
-        closed = false
-        TriggerClientEvent("bank-robbery:notify", source, "BANK IS NOW ~g~OPEN")
-    end
-
-end)
+TriggerEvent('es:addGroupCommand', 'openbank', 'mod', function(source, args, user)
+		closed = false
+		TriggerClientEvent("bank-robbery:notify", source, "BANK IS NOW ~g~OPEN")
+end, {
+	help = "Open the bank to be robbed"
+})
 
 function comma_value(amount)
   local formatted = amount
   while true do
-    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
-    if (k==0) then
-      break
-    end
+	formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+	if (k==0) then
+	  break
+	end
   end
   return formatted
 end

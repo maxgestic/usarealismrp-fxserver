@@ -29,18 +29,23 @@ settings.defaultSettings = {
 	['commandDelimeter'] = '/'
 }
 settings.sessionSettings = {}
+commandSuggestions = {}
+
+function getCommands()
+	return commandSuggestions
+end
 
 -- Version check
-PerformHttpRequest("http://fivem.online/version.txt", function(err, rText, headers)
-	print("\nCurrent version: " .. _VERSION)
-	print("Updater version: " .. rText .. "\n")
+-- PerformHttpRequest("http://fivem.online/version.txt", function(err, rText, headers)
+-- 	print("\nCurrent version: " .. _VERSION)
+-- 	print("Updater version: " .. rText .. "\n")
 
-	if rText ~= _VERSION then
-		print("\nVersion mismatch, you are currently not using the newest stable version of essentialmode. Please update\n")
-	else
-		print("Everything is fine!\n")
-	end
-end, "GET", "", {what = 'this'})
+-- 	if rText ~= _VERSION then
+-- 		print("\nVersion mismatch, you are currently not using the newest stable version of essentialmode. Please update\n")
+-- 	else
+-- 		print("Everything is fine!\n")
+-- 	end
+-- end, "GET", "", {what = 'this'})
 
 AddEventHandler('playerDropped', function()
 	local numberSource = tonumber(source)
@@ -117,32 +122,45 @@ AddEventHandler("es:setDefaultSettings", function(tbl)
 	debugMsg("Default settings edited.")
 end)
 
-AddEventHandler('chatMessage', function(source, n, message)
+function CanGroupTarget(group, target)
+	if (group == nil or target == nil) then return false end
+	return groups[group]:canTarget(target)
+end
+
+AddEventHandler('chatMessageLocation', function(source, n, message, location)
 	if(startswith(message, settings.defaultSettings.commandDelimeter))then
 		local command_args = stringsplit(message, " ")
 
 		command_args[1] = string.gsub(command_args[1], settings.defaultSettings.commandDelimeter, "")
 
 		local command = commands[command_args[1]]
-
-		if(command)then
+		if command then
 			CancelEvent()
-			if(command.perm > 0)then
-				if(Users[source].getPermissions() >= command.perm or groups[Users[source].getGroup()]:canTarget(command.group))then
-					command.cmd(source, command_args, Users[source])
+			if command.perm > 0 then
+				if(Users[source].getPermissions() >= command.perm or groups[Users[source].getGroup()]:canTarget(command.group)) then
+					command.cmd(source, command_args, Users[source], location)
 					TriggerEvent("es:adminCommandRan", source, command_args, Users[source])
 				else
-					command.callbackfailed(source, command_args, Users[source])
+					TriggerClientEvent('chatMessage', source, "", {255, 50, 50}, "That command is for " .. command.group .. " and up only!");
 					TriggerEvent("es:adminCommandFailed", source, command_args, Users[source])
-
-					if(type(settings.defaultSettings.permissionDenied) == "string" and not WasEventCanceled())then
-						TriggerClientEvent('chatMessage', source, "", {0,0,0}, defaultSettings.permissionDenied)
-					end
-
 					debugMsg("Non admin (" .. GetPlayerName(source) .. ") attempted to run admin command: " .. command_args[1])
 				end
+			elseif command.job ~= "everyone" then
+				local allowed = 0;
+				for k,v in pairs(command.job) do
+					if Users[source].getActiveCharacterData("job") == v then
+						allowed = 1
+					end
+				end
+
+				if allowed == 1 then
+					command.cmd(source, command_args, Users[source], location)
+					TriggerEvent("es:commandRan", source, command_args, Users[source])
+				else
+					TriggerClientEvent('chatMessage', source, "", {255, 50, 50}, "That command is for " .. tostring(table.concat(command.job, ", ")) .. " only!");
+				end
 			else
-				command.cmd(source, command_args, Users[source])
+				command.cmd(source, command_args, Users[source], location)
 				TriggerEvent("es:userCommandRan", source, command_args)
 			end
 
@@ -159,45 +177,73 @@ AddEventHandler('chatMessage', function(source, n, message)
 	end
 end)
 
-function addCommand(command, callback)
+function addCommand(command, callback, suggestion)
 	commands[command] = {}
 	commands[command].perm = 0
 	commands[command].group = "user"
+	commands[command].job = "everyone"
 	commands[command].cmd = callback
+
+	if suggestion then
+		if not suggestion.params or not type(suggestion.params) == "table" then suggestion.params = {} end
+		if not suggestion.help or not type(suggestion.help) == "string" then suggestion.help = "" end
+		suggestion.job = "everyone"
+		suggestion.group = "user"
+
+		commandSuggestions[command] = suggestion
+	end
 
 	debugMsg("Command added: " .. command)
 end
 
-AddEventHandler('es:addCommand', function(command, callback)
-	addCommand(command, callback)
+AddEventHandler('es:addCommand', function(command, callback, suggestion)
+	addCommand(command, callback, suggestion)
 end)
 
-function addAdminCommand(command, perm, callback, callbackfailed)
+function addJobCommand(command, job, callback, suggestion)
 	commands[command] = {}
-	commands[command].perm = perm
-	commands[command].group = "superadmin"
+	commands[command].perm = 0
+	commands[command].group = "user"
+	commands[command].job = job
 	commands[command].cmd = callback
-	commands[command].callbackfailed = callbackfailed
 
-	debugMsg("Admin command added: " .. command .. ", requires permission level: " .. perm)
+	if suggestion then
+		if not suggestion.params or not type(suggestion.params) == "table" then suggestion.params = {} end
+		if not suggestion.help or not type(suggestion.help) == "string" then suggestion.help = "" end
+		suggestion.job = job
+		suggestion.group = "user"
+
+		commandSuggestions[command] = suggestion
+	end
+
+	debugMsg("Job command added: " .. command .. ", requires job level: " .. table.concat(job, ", "))
 end
 
-AddEventHandler('es:addAdminCommand', function(command, perm, callback, callbackfailed)
-	addAdminCommand(command, perm, callback, callbackfailed)
+AddEventHandler('es:addJobCommand', function(command, job, callback, suggestion)
+	addJobCommand(command, job, callback, suggestion)
 end)
 
-function addGroupCommand(command, group, callback, callbackfailed)
+function addGroupCommand(command, group, callback, suggestion)
 	commands[command] = {}
 	commands[command].perm = math.maxinteger
 	commands[command].group = group
+	commands[command].job = { "everyone" }
 	commands[command].cmd = callback
-	commands[command].callbackfailed = callbackfailed
+	
+	if suggestion then
+		if not suggestion.params or not type(suggestion.params) == "table" then suggestion.params = {} end
+		if not suggestion.help or not type(suggestion.help) == "string" then suggestion.help = "" end
+		suggestion.job = "everyone"
+		suggestion.group = group
+
+		commandSuggestions[command] = suggestion
+	end
 
 	debugMsg("Group command added: " .. command .. ", requires group: " .. group)
 end
 
-AddEventHandler('es:addGroupCommand', function(command, group, callback, callbackfailed)
-	addGroupCommand(command, group, callback, callbackfailed)
+AddEventHandler('es:addGroupCommand', function(command, perm, callback, suggestion)
+	addGroupCommand(command, perm, callback, suggestion)
 end)
 
 RegisterServerEvent('es:updatePositions')
@@ -206,15 +252,6 @@ AddEventHandler('es:updatePositions', function(x, y, z)
 		Users[source].setCoords(x, y, z)
 	end
 end)
-
--- Info command
-commands['info'] = {}
-commands['info'].perm = 0
-commands['info'].cmd = function(source, args, user)
-	TriggerClientEvent('chatMessage', source, 'SYSTEM', {255, 0, 0}, "^2[^3EssentialMode^2]^0 Version: ^2 " .. _VERSION)
-	TriggerClientEvent('chatMessage', source, 'SYSTEM', {255, 0, 0}, "^2[^3EssentialMode^2]^0 Commands loaded: ^2 " .. (returnIndexesInTable(commands) - 1))
-end
-
 
 Citizen.CreateThread(function()
 	local minutes = 15

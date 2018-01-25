@@ -1,6 +1,6 @@
 TriggerEvent('es:addCommand', 'swap', function(source, args, user)
 	TriggerClientEvent("character:swap--check-distance", source)
-end)
+end, { help = "Swap to another character (Must be at the clothing store)." })
 
 RegisterServerEvent("character:getCharactersAndOpenMenu")
 AddEventHandler("character:getCharactersAndOpenMenu", function(menu)
@@ -129,12 +129,20 @@ RegisterServerEvent("character:loadCharacter")
 AddEventHandler("character:loadCharacter", function(activeSlot)
 	print("trying to load character in active slot #" .. activeSlot)
 	local userSource = tonumber(source)
+	TriggerClientEvent('chat:removeSuggestionAll', userSource)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
 		if user then
 			local characters = user.getCharacters()
 			local character = characters[activeSlot]
+			local myGroup = user.getGroup()
 			TriggerClientEvent("character:setCharacter", userSource, character)
 			print("loaded character at slot #" .. activeSlot .. " with #weapons = " .. #(character.weapons))
+
+			for k,v in pairs(exports['essentialmode']:getCommands()) do
+				if v.job == "everyone" and exports['essentialmode']:CanGroupTarget(myGroup, v.group) then
+					TriggerClientEvent('chat:addSuggestion', userSource, '/' .. k, v.help, v.params)
+				end
+			end
 		end
 	end)
 end)
