@@ -41,8 +41,7 @@ AddEventHandler("bank:isBusy", function()
 					TriggerClientEvent("bank-robbery:notify", userSource, "You need a cell phone to rob the bank!")
 					return
 				else
-					TriggerClientEvent('chatMessage', userSource, 'SYSTEM', { 0, 141, 155 }, "^3You are robbing the bank!")
-		            TriggerClientEvent('chatMessage', userSource, 'SYSTEM', { 0, 141, 155 }, "^3Wait ^21 minute^3 to get all the money!")
+					TriggerClientEvent('chatMessage', userSource, 'SYSTEM', { 0, 141, 155 }, "^3You are robbing the bank! Hack the system to get the money!")
 					TriggerClientEvent("bank-robbery:notify", userSource, "~r~Alarm activated!")
 		            TriggerEvent("bank:beginRobbery", userSource)
 		            abletorob = false
@@ -91,7 +90,7 @@ end)
 RegisterServerEvent("bank:inRange")
 AddEventHandler("bank:inRange", function()
 	local userSource = tonumber(source)
-	rewardMoney = math.random(40000, 150000)
+	rewardMoney = math.random(60000, 230000)
 	isBusy = "no"
 	local msg = "You stole ~g~$" .. comma_value(rewardMoney) .. "~w~!"
 	TriggerClientEvent("bank-robbery:notify", source, msg)
