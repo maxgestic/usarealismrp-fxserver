@@ -115,7 +115,8 @@ local vehicleShopItems = {
 			{make = "Dewbauchee", model = "Massacro", price = 75000, hash = -142942670, storage_capacity = 145.0},
 			{make = "Benefactor", model = "Schafter V12", price = 82000, hash = -1485523546, storage_capacity = 145.0},
 			{make = "Dewbauchee", model = "Rapid GT", price = 94500, hash = -1934452204, storage_capacity = 145.0},
-			{make = "Annis", model = "Elegy Retro Custom", price = 95000, hash = 196747873, storage_capacity = 145.0}
+			{make = "Annis", model = "Elegy Retro Custom", price = 95000, hash = 196747873, storage_capacity = 145.0},
+			{make = "Mercedes", model = "CL65 AMG", price = 100000, hash = -746882698, storage_capacity = 145.0}
 		},
 		["Sports 2"] = {
 			{make = "Dewbauchee", model = "Seven-70", price = 110999, hash = -1757836725, storage_capacity = 145.0},
@@ -173,7 +174,6 @@ local vehicleShopItems = {
 		["Sedans"] = {
 			{make = "Albany", model = "Emperor", price = 3500, hash = -1883002148, storage_capacity = 165.0},
 			{make = "Albany", model = "Washington", price = 9989, hash = 1777363799, storage_capacity = 165.0},
-			{make = "Albany", model = "Primo", price = 6000, hash = -1150599089, storage_capacity = 165.0},
 			{make = "Karin", model = "Intruder", price = 6595, hash = 886934177, storage_capacity = 165.0},
 			{make = "Vulcan", model = "Ingot", price = 9500, hash = -1289722222, storage_capacity = 165.0},
 			{make = "Zinconium", model = "Stratum", price = 9500, hash = 1723137093, storage_capacity = 165.0},
@@ -184,8 +184,9 @@ local vehicleShopItems = {
 			{make = "Enus", model = "Cognoscenti", price = 85500, hash = -2030171296, storage_capacity = 165.0},
 			{make = "Enus", model = "Super Diamond", price = 95000, hash = 1123216662, storage_capacity = 165.0},
 			{make = "Obey", model = "Tailgater", price = 115000, hash = -1008861746, storage_capacity = 165.0},
-			{make = "Chrystler", model = "300 SRT8", price = 60000, hash = 736902334, storage_capacity = 165.0},
-			{make = "Mercedes", model = "E63 AMG", price = 80000, hash = -1255452397, storage_capacity = 155.0}
+			{make = "Chrystler", model = "300 SRT8", price = 60000, hash = -304802106, storage_capacity = 175.0},
+			{make = "Mercedes", model = "E63 AMG", price = 80000, hash = -1255452397, storage_capacity = 155.0},
+			{make = "Maserati", model = "Quattroporte", price = 150000, hash = 1909141499, storage_capacity = 155.0}
 		},
 		["Specials"] = {
 			{make = "Dundreary", model = "Stretch", price = 45000, hash = -1961627517, storage_capacity = 300.0},
