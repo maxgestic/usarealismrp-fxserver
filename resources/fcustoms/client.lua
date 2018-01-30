@@ -73,9 +73,9 @@ customs = {
     }},
     {title = "Transmission", data = {
         {name = "Stock Transmission",mod = -1,mt =13, cost = 0},
-        {name = "Street Transmission",mod = 0,mt =13, cost = 7000},
-        {name = "Sports Transmission",mod = 1,mt =13, cost = 10000},
-        {name = "Race Transmission",mod = 2,mt =13, cost = 13000},
+        {name = "Street Transmission",mod = 0,mt =13, cost = 35000},
+        {name = "Sports Transmission",mod = 1,mt =13, cost = 50000},
+        {name = "Race Transmission",mod = 2,mt =13, cost = 95000},
     }},
     {title = "Horn", data = {
         {name = "Stock Horn",mt = 14, mod = -1,cost =0},
