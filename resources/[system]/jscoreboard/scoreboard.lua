@@ -81,21 +81,21 @@ local function DrawPlayerList()
 			if v[4] then
 				local job = v[4]
 				if job == "sheriff" then
-					r = 0
-					g = 0
-					b = 255
+					r = 75
+					g = 146
+					b = 204
 				elseif job == "ems" or job == "fire" then
-					r = 255
-					g = 0
-					b = 0
+					r = 204
+					g = 40
+					b = 35
 				elseif job == "taxi" then
 					r = 255
-					g = 210
-					b = 64
+					g = 231
+					b = 43
 				elseif job == "tow" then
-					r = 23
-					g = 87
-					b = 67
+					r = 41
+					g = 153
+					b = 144
 				end
 			end
 
