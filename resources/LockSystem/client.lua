@@ -158,7 +158,7 @@ RegisterNetEvent("lock:notify")
 AddEventHandler("lock:notify", function(text, time)
 	SetNotificationTextEntry("STRING")
 	AddTextComponentString(text)
-	Citizen.InvokeNative(0x1E6611149DB3DB6B, "CHAR_LIFEINVADER", "CHAR_LIFEINVADER", true, 1, "Mini-Lock", "Version 1.0.2", time)
+	Citizen.InvokeNative(0x1E6611149DB3DB6B, "CHAR_LIFEINVADER", "CHAR_LIFEINVADER", true, 1, "Mini-Lock", "Version 1.0.3", time)
 	DrawNotification_4(false, true)
 end)
 
@@ -168,7 +168,19 @@ AddEventHandler("lock:printLockStatus", function()
 end)
 
 function GetVehicleInDirection(coordFrom, coordTo)
-	local rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 10, GetPlayerPed(-1), 0)
-	local a, b, c, d, vehicleResult = GetRaycastResult(rayHandle)
+	local rayHandle
+	--local rayHandle = StartShapeTestCapsule(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 4.0, 10, GetPlayerPed(-1), 7)
+	local a, b, c, d, vehicleResult
+
+	vehicleResult = 0
+
+	for i = 0.0, 2.0, 0.1 do
+		rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z - i, 10, GetPlayerPed(-1), 0)
+		a, b, c, d, vehicleResult = GetRaycastResult(rayHandle)
+		if vehicleResult ~= 0 then 
+			return vehicleResult
+		end
+	end
+
 	return vehicleResult
 end
