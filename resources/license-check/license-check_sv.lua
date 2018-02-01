@@ -52,7 +52,7 @@ AddEventHandler("license:searchForLicense", function(source, playerId)
 				return
 			end
 			local vehicles = user.getActiveCharacterData("vehicles")
-	    local licenses = user.getActiveCharacterData("licenses")
+	    	local licenses = user.getActiveCharacterData("licenses")
 			local insurancePlans = user.getActiveCharacterData("insurance")
 			local criminalHistory = user.getActiveCharacterData("criminalHistory")
 			local hasFirearmsPermit = false
@@ -98,10 +98,10 @@ AddEventHandler("license:searchForLicense", function(source, playerId)
 					if not crime.type then -- not a ticket
 						print("crime.type did not exist!")
 						local color = {187,94,187}
-						TriggerClientEvent("chatMessage", source, "DATE", color, crime.timestamp)
-						TriggerClientEvent("chatMessage", source, "CHARGE(S)", color, crime.charges)
-						TriggerClientEvent("chatMessage", source, "SENTENCE", color, crime.sentence .. " months")
-						TriggerClientEvent("chatMessage", source, "OFFICER", color, crime.arrestingOfficer)
+						TriggerClientEvent("chatMessage", source, "DATE", color, "^0" .. crime.timestamp)
+						TriggerClientEvent("chatMessage", source, "CHARGE(S)", color, "^0" .. crime.charges)
+						TriggerClientEvent("chatMessage", source, "SENTENCE", color, "^0" .. crime.sentence .. " months")
+						TriggerClientEvent("chatMessage", source, "OFFICER", color, "^0" .. crime.arrestingOfficer)
 					else
 						print("inserting ticket! crime.type: " .. crime.type)
 						table.insert(ticket_history, crime)
@@ -115,15 +115,15 @@ AddEventHandler("license:searchForLicense", function(source, playerId)
 						print("#tickets: " .. #ticket_history)
 						print("crime fine: " .. crime.fine)
 						local color = {149,149,184}
-						TriggerClientEvent("chatMessage", source, "DATE", color, crime.timestamp)
-						TriggerClientEvent("chatMessage", source, "FINE", color, "$" .. tostring(crime.fine))
-						TriggerClientEvent("chatMessage", source, "REASON", color, crime.reason)
+						TriggerClientEvent("chatMessage", source, "DATE", color, "^0" .. crime.timestamp)
+						TriggerClientEvent("chatMessage", source, "FINE", color, "^0$" .. tostring(crime.fine))
+						TriggerClientEvent("chatMessage", source, "REASON", color, "^0" .. crime.reason)
 					end
 				else
-					TriggerClientEvent("chatMessage", source, "", {0,0,0}, "No ticket history.")
+					TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0No ticket history.")
 				end
 			else
-				TriggerClientEvent("chatMessage", source, "", {0,0,0}, "No criminal history.")
+				TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0No criminal history.")
 			end
 	    end)
 end)
