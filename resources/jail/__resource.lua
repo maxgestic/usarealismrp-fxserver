@@ -9,5 +9,5 @@ files {
     'html/script.js',
     'html/style.css',
     'html/cursor.png',
-    'html/lspd-jail-menu.png'
+    'html/bcso-jail-menu.png'
 }
