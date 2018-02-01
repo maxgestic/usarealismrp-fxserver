@@ -81,6 +81,10 @@ AddEventHandler("RPD:removeWeapons", function()
 		-- save
 		user.setActiveCharacterData("inventory", user_inventory)
 		print("#inventory after death: " .. #user_inventory)
+		-- remove any rope/blindfolds person may have had on while being killed
+		-- remove blindfolds/tied hands
+		TriggerClientEvent("crim:untieHands", userSource, userSource)
+		TriggerClientEvent("crim:blindfold", userSource, false, true)
 	end)
 end)
 

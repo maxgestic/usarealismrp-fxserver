@@ -57,6 +57,9 @@ TriggerEvent('es:addJobCommand', 'dos', { "ems", "fire", "police", "sheriff" }, 
 	if playerID then
 		-- revive if dead
 		TriggerClientEvent("RPD:revivePerson", playerID)
+		-- remove blindfolds/tied hands
+		TriggerClientEvent("crim:untieHands", playerID, playerID)
+		TriggerClientEvent("crim:blindfold", playerID, false, true)
 		-- admit player ped to morgue
 		TriggerClientEvent('HOSPITAL:hospitalize', playerID, hospitalTime * 60, hospitalIdentifier)
 		-- remove all things and money from player
@@ -73,18 +76,6 @@ TriggerEvent('es:addJobCommand', 'dos', { "ems", "fire", "police", "sheriff" }, 
 					table.remove(target_inventory, i)
 				end
 			end
-			--[[
-			print("removing all items except cell phone!")
-			local target_inventory = user.getActiveCharacterData("inventory")
-			for i = 1,  #target_inventory do
-				local item = target_inventory[i]
-				if item then
-					if not string.find("Cell Phone", item.name) then
-						target_inventory[i] = nil
-					end
-				end
-			end
-			--]]
 			targetPlayer.setActiveCharacterData("inventory", target_inventory)
 			-- remove player licenses
 			print("removing licenses!")
