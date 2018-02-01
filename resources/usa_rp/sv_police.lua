@@ -196,7 +196,7 @@ AddEventHandler("police:seizeCash", function(amount)
 end)
 -- end seize contraband
 
-TriggerEvent('es:addJobCommand', 'breathalyze', { "police", "sheriff" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'breathalyze', { "police", "sheriff", "ems" }, function(source, args, user)
 	local targetId = tonumber(args[2])
 	if type(targetId) == "number" then
 		-- get BAC:

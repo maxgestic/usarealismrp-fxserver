@@ -43,6 +43,9 @@ AddEventHandler("ems:admitPatient", function()
     RequestCollisionAtCoord(hospitalCoords.x, hospitalCoords.y, hospitalCoords.z)
     SetEntityCoords(GetPlayerPed(-1), hospitalCoords.x, hospitalCoords.y, hospitalCoords.z, 1, 0, 0, 1) -- tp to hospital
     admitted = true
+    -- remove any blindfolds/tied hands
+    TriggerEvent("crim:untieHands", GetPlayerServerId(PlayerId()))
+    TriggerEvent("crim:blindfold", false, true)
 end)
 
 RegisterNetEvent("ems:releasePatient")
