@@ -29,6 +29,7 @@ storeWeapons = {
         { name = "Bullpup", type = "weapon", hash = 0x9D61E50F, price = 8750, legality = "legal", quantity = 1, weight = 30 },
         { name = "Musket", type = "weapon", hash = -1466123874, price = 8500, legality = "legal", quantity = 1, weight = 40 },
         { name = "Double Barrel", type = "weapon", hash = -275439685, price = 6500, legality = "legal", quantity = 1, weight = 40 },
+        { name = "Assault Shotgun", type = "weapon", hash = -494615257, price = 35000, legality = "legal", quantity = 1, weight = 50},
         { name = "Firework Gun", type = "weapon", hash = 2138347493, price = 60000, legality = "legal", quantity = 1, weight = 50}
     }
 }

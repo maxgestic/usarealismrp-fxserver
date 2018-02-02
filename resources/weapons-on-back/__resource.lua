@@ -1,0 +1,1 @@
+client_script 'cl_weapons-on-back.lua'

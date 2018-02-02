@@ -122,6 +122,90 @@ AddEventHandler("police:getMoneyInput", function()
     end )
 end)
 
+local grabbed_weapons = {}
+-- storing / retrieving police weapons from their vehicles
+RegisterNetEvent("police:grabWeapon")
+AddEventHandler("police:grabWeapon", function(wep_name)
+  local weapon = {hash = 0}
+  local target_veh = getVehicleInFrontOfUser()
+  if isPoliceVehicle(target_veh) and not grabbed_weapons[wep_name] then
+    if string.lower(wep_name) == "ar" then
+      weapon.hash = -2084633992
+    elseif string.lower(wep_name) == "shotgun" then
+      weapon.hash = 487013001
+    end
+    if weapon.hash ~= 0 then
+      grabbed_weapons[wep_name] = target_veh
+      TriggerEvent("usa:equipWeapon", weapon)
+      -- give flashlight:
+      GiveWeaponComponentToPed(GetPlayerPed(-1), 2210333304, 0x7BC4CDDC)
+      GiveWeaponComponentToPed(GetPlayerPed(-1), 2210333304, 0xC164F53)
+    end
+  else
+    --print("not a police vehicle!")
+    TriggerEvent("usa:notify", "Not a police vehicle or did not store grabbed weapon!")
+  end
+end)
+
+RegisterNetEvent("police:storeWeapon")
+AddEventHandler("police:storeWeapon", function(wep_name)
+  local me = GetPlayerPed(-1)
+  local weapon = {hash = 0}
+  if isPoliceVehicle(getVehicleInFrontOfUser()) then
+    if string.lower(wep_name) == "ar" then
+      weapon.hash = -2084633992
+    elseif string.lower(wep_name) == "shotgun" then
+      weapon.hash = 487013001
+    end
+    if GetSelectedPedWeapon(me) == weapon.hash or HasPedGotWeapon(me, weapon.hash, false) then
+      RemoveWeaponFromPed(me, weapon.hash)
+      grabbed_weapons[wep_name] = nil
+    end
+  else
+    print("not a police vehicle!")
+  end
+end)
+
+function isPoliceVehicle(veh_handle)
+  local policeVehicles = {
+      1171614426, -- ambulance
+      1127131465, -- fbi
+      -1647941228, -- fbi2
+      1938952078, -- firetruck
+      2046537925, -- police
+      -1627000575, -- police2
+      1912215274, -- police3
+      -1973172295, -- police4
+      0x9C32EB57, -- Police5
+      0xB2FF98F0, -- police 6
+      0xC4B53C5B, -- police 7
+      0xD0AF544F, -- police 8
+      -34623805, -- policeb
+      741586030, -- pranger
+      -1205689942 -- riot
+  }
+  for i = 1, #policeVehicles do
+    if IsVehicleModel(veh_handle, policeVehicles[i]) then
+      return true
+    end
+  end
+  return false
+end
+
+function getVehicleInFrontOfUser()
+	local playerped = GetPlayerPed(-1)
+	local coordA = GetEntityCoords(playerped, 1)
+	local coordB = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 2.0, 0.0)
+	local targetVehicle = getVehicleInDirection(coordA, coordB)
+	return targetVehicle
+end
+
+function getVehicleInDirection(coordFrom, coordTo)
+	local rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 10, GetPlayerPed(-1), 0)
+	local a, b, c, d, vehicle = GetRaycastResult(rayHandle)
+	return vehicle
+end
+
 function round(num, numDecimalPlaces)
   return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
 end
@@ -184,5 +268,5 @@ AddEventHandler("simp:baitCarunlock", function()
 end)
 
 -----------------------------------------------------------------------------------------------------------------------
--- CREATED BY TONI MORTON FOR THE FIVEM COMMUNITY, PLEASE GIVE CREDITS TO ME IF YOU USE THIS SCRIPT IN YOUR SERVER.  --
+-- BAITCAR SCRIPT CREATED BY TONI MORTON FOR THE FIVEM COMMUNITY, PLEASE GIVE CREDITS TO ME IF YOU USE THIS SCRIPT IN YOUR SERVER.  --
 -----------------------------------------------------------------------------------------------------------------------

@@ -230,3 +230,31 @@ AddEventHandler("breathalyze:receivedResults", function(BAC, officer_source)
 	local soundParams = {-1, "PIN_BUTTON", "ATM_SOUNDS", 1}
 	TriggerClientEvent("usa:playSound", tonumber(officer_source), soundParams)
 end)
+
+-- store AR/pump shotgun
+TriggerEvent('es:addJobCommand', 'store', { "police", "sheriff", "ems" }, function(source, args, user)
+	if args[2] then
+		TriggerClientEvent("police:storeWeapon", source, args[2])
+	else
+		TriggerClientEvent("usa:notify", "Invalid format!")
+	end
+end, {
+	help = "store",
+	params = {
+		{ name = "weapon", help = "ar, shotgun" }
+	}
+})
+
+-- retrieve AR/pump shotgun
+TriggerEvent('es:addJobCommand', 'grab', { "police", "sheriff", "ems" }, function(source, args, user)
+	if args[2] then
+		TriggerClientEvent("police:grabWeapon", source, args[2])
+	else
+		TriggerClientEvent("usa:notify", "Invalid format!")
+	end
+end, {
+	help = "grab",
+	params = {
+		{ name = "weapon", help = "ar, shotgun" }
+	}
+})

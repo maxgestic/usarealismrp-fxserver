@@ -140,7 +140,8 @@ RegisterNetEvent("policestation2:giveDefaultLoadout")
 AddEventHandler("policestation2:giveDefaultLoadout", function()
 	Citizen.Trace("true")
 	RemoveAllPedWeapons(GetPlayerPed(-1), true)
-	local playerWeapons = { "WEAPON_BZGAS", "WEAPON_FLARE" , "WEAPON_CARBINERIFLE" ,"WEAPON_COMBATPISTOL", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_PUMPSHOTGUN", "WEAPON_FLAREGUN", "WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER" }
+	--local playerWeapons = { "WEAPON_BZGAS", "WEAPON_FLARE" , "WEAPON_CARBINERIFLE" ,"WEAPON_COMBATPISTOL", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_PUMPSHOTGUN", "WEAPON_FLAREGUN", "WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER" }
+	local playerWeapons = { "WEAPON_BZGAS", "WEAPON_FLARE" ,"WEAPON_COMBATPISTOL", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_FLAREGUN", "WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER" }
 	local name, hash
 	for i = 1, #playerWeapons do
 		name = playerWeapons[i]
@@ -261,7 +262,7 @@ AddEventHandler("policestation2:ShowArmouryMenu", function()
 		if(cb) then
 			Citizen.Trace("true")
 			RemoveAllPedWeapons(GetPlayerPed(-1), true)
-			local playerWeapons = { "WEAPON_PISTOL", "WEAPON_PUMPSHOTGUN", "WEAPON_FLASHLIGHT" }
+			local playerWeapons = { "WEAPON_COMBATPISTOL", "WEAPON_STUNGUN" }
 			local name, hash
 			for i = 1, #playerWeapons do
 				name = playerWeapons[i]
@@ -270,7 +271,7 @@ AddEventHandler("policestation2:ShowArmouryMenu", function()
 			end
 			SetEntityHealth(GetPlayerPed(-1), GetEntityMaxHealth(GetPlayerPed(-1)))
 			SetPedArmour(GetPlayerPed(-1), 100)
-			Citizen.Trace("giving flashlight components to cop...")
+			--Citizen.Trace("giving flashlight components to cop...")
 			TriggerEvent("policestation2:notify","Undercover Loadout")
 			--menu_loadout = 2
 		end
@@ -289,9 +290,44 @@ AddEventHandler("policestation2:ShowArmouryMenu", function()
 			end
 			SetEntityHealth(GetPlayerPed(-1), GetEntityMaxHealth(GetPlayerPed(-1)))
 			SetPedArmour(GetPlayerPed(-1), 100)
-			Citizen.Trace("giving flashlight components to cop...")
+			--Citizen.Trace("giving flashlight components to cop...")
 			TriggerEvent("policestation2:notify","Prison Guard Loadout")
 			--menu_loadout = 2
+		end
+		end)
+
+		TriggerEvent("GUI2:Option", "Carbine Rifle", function(cb)
+		if(cb) then
+			local playerWeapons = {"WEAPON_CARBINERIFLE"}
+			local name, hash
+			for i = 1, #playerWeapons do
+				name = playerWeapons[i]
+				hash = GetHashKey(name)
+				GiveWeaponToPed(GetPlayerPed(-1), hash, 1000, 0, false) -- get hash given name of weapon
+			end
+			SetEntityHealth(GetPlayerPed(-1), GetEntityMaxHealth(GetPlayerPed(-1)))
+			SetPedArmour(GetPlayerPed(-1), 100)
+			-- give flashlights (not sure which is which atm):
+			GiveWeaponComponentToPed(GetPlayerPed(-1), 2210333304, 0x7BC4CDDC)
+			GiveWeaponComponentToPed(GetPlayerPed(-1), 2210333304, 0xC164F53)
+			Citizen.Trace("giving flashlight components to cop...")
+		end
+		end)
+
+		TriggerEvent("GUI2:Option", "Pump Shotgun", function(cb)
+		if(cb) then
+			local playerWeapons = {"WEAPON_PUMPSHOTGUN"}
+			local name, hash
+			for i = 1, #playerWeapons do
+				name = playerWeapons[i]
+				hash = GetHashKey(name)
+				GiveWeaponToPed(GetPlayerPed(-1), hash, 1000, 0, false) -- get hash given name of weapon
+			end
+			SetEntityHealth(GetPlayerPed(-1), GetEntityMaxHealth(GetPlayerPed(-1)))
+			SetPedArmour(GetPlayerPed(-1), 100)
+			-- give flashlights (not sure which is which atm):
+			GiveWeaponComponentToPed(GetPlayerPed(-1), 2210333304, 0x7BC4CDDC)
+			GiveWeaponComponentToPed(GetPlayerPed(-1), 2210333304, 0xC164F53)
 		end
 		end)
 
