@@ -24,11 +24,9 @@ local SETTINGS = {
     y_rotation = 165.0,
     z_rotation = 0.0,
     compatable_weapon_hashes = {
-        -- melee -- NEEDS ALTERED POSITION (looks awkward with current attach x,y,z values)
-        --[[
-        ["prop_golf_iron_01"] = 1141786504,
-        ["w_me_bat"] = -1786099057
-        --]]
+        -- melee:
+        --["prop_golf_iron_01"] = 1141786504, -- positioning still needs work
+        ["w_me_bat"] = -1786099057,
         -- assault rifles:
         ["w_ar_carbinerifle"] = -2084633992,
         ["w_ar_assaultrifle"] = -1074790547,
@@ -64,7 +62,7 @@ Citizen.CreateThread(function()
         for wep_name, wep_hash in pairs(SETTINGS.compatable_weapon_hashes) do
             if HasPedGotWeapon(me, wep_hash, false) then 
                 if not attached_weapons[wep_name] then
-                    AttachWeapon(wep_name, wep_hash, SETTINGS.back_bone, SETTINGS.x, SETTINGS.y, SETTINGS.z, SETTINGS.x_rotation, SETTINGS.y_rotation, SETTINGS.z_rotation)
+                    AttachWeapon(wep_name, wep_hash, SETTINGS.back_bone, SETTINGS.x, SETTINGS.y, SETTINGS.z, SETTINGS.x_rotation, SETTINGS.y_rotation, SETTINGS.z_rotation, isMeleeWeapon(wep_name))
                 end
             end
         end
@@ -89,7 +87,7 @@ Citizen.CreateThread(function()
     end
 end)
 
-function AttachWeapon(attachModel,modelHash,boneNumber,x,y,z,xR,yR,zR)
+function AttachWeapon(attachModel,modelHash,boneNumber,x,y,z,xR,yR,zR, isMelee)
 	local bone = GetPedBoneIndex(GetPlayerPed(-1), boneNumber)
 	RequestModel(attachModel)
 	while not HasModelLoaded(attachModel) do
@@ -99,5 +97,16 @@ function AttachWeapon(attachModel,modelHash,boneNumber,x,y,z,xR,yR,zR)
         hash = modelHash,
         handle = CreateObject(attachModel, 1.0, 1.0, 1.0, 1, 1, 0)
     }
+    if isMelee then x = 0.11 y = -0.14 z = 0.0 xR = -75.0 yR = 185.0 zR = 92.0 end -- reposition for melee items
 	AttachEntityToEntity(attached_weapons[attachModel].handle, GetPlayerPed(-1), bone, x, y, z, xR, yR, zR, 1, 1, 0, 0, 2, 1)
+end
+
+function isMeleeWeapon(wep_name)
+    if wep_name == "prop_golf_iron_01" then
+        return true
+    elseif wep_name == "w_me_bat" then
+        return true
+    else 
+        return false 
+    end
 end
