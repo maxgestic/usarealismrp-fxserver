@@ -159,12 +159,9 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 	local userSource = tonumber(source)
 	if type(tonumber(data.toNumber)) == "number" then --Check if phone number is valid
 		print(data.toNumber .. "is a number")
-
-		--[[
-				==========
-				VARIABLES
-				==========
-		]]
+		---------------
+		-- VARIABLES --
+		---------------
 		local toNumber = tonumber(data.toNumber)
 		local fromNumber = tonumber(data.fromNumber)
 		local toPlayer = 0
@@ -175,12 +172,10 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 		local msg = data.message
 		local from = "Undefined" -- what is displayed for the name of the sender of a text
 
-		--[[
-				==========
-				 Check all online players' inventories for a cell phone item with a phone number equal to 'toNumber'
-				 toNumber: the field passed in from the number field in the phone GUI
-				==========
-		]]
+		---------------------------------------------------------------------------------------------------------
+		-- Check all online players' inventories for a cell phone item with a phone number equal to 'toNumber' --
+		-- toNumber: the field passed in from the number field in the phone GUI
+		---------------------------------------------------------------------------------------------------------
 		TriggerEvent("es:getPlayers", function(players)
 			local allPlayers = players
 			if allPlayers then
@@ -192,7 +187,6 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 							--//Check entire user inventory for toNumber phone
 							for j = 1, #inventory do
 								if inventory[j] then
-									print("Checking item: " .. inventory[j].name)
 									-- check for a matching phone number in player items
 									if string.find(inventory[j].name, "Cell Phone") and tonumber(inventory[j].number) == tonumber(toNumber) then
 										print("phone found with toNumber...")
@@ -221,6 +215,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 													to = "Me",
 													message = msg
 												}
+												if #inventory[j].conversations[x].messages > 15 then table.remove(inventory[j].conversations[x].messages, 1) print("removed message! maxed out!") end
 												table.insert(inventory[j].conversations[x].messages, message)
 												player.setActiveCharacterData("inventory", inventory)
 												convoExistedForUser = true
@@ -287,7 +282,6 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 			TriggerEvent('es:getPlayerFromId', tonumber(userSource), function(user)
 				local inventory = user.getActiveCharacterData("inventory")
 				for j = 1, #inventory do
-					print("Checking " .. inventory[j].name)
 					if tonumber(inventory[j].number) == tonumber(fromNumber) then
 						print("found matching fromNumber!")
 						item = inventory[j]
@@ -313,6 +307,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 									to = toName,
 									message = msg
 								}
+								if #inventory[j].conversations[x].messages > 15 then table.remove(inventory[j].conversations[x].messages, 1) print("removed message! maxed out!") end
 								table.insert(inventory[j].conversations[x].messages, message)
 								user.setActiveCharacterData("inventory", inventory)
 								convoExistedForUser = true
@@ -390,10 +385,10 @@ AddEventHandler("phone:loadMessages", function(number)
 			if string.find(item.name, "Cell Phone") and item.number == number then
 				local conversations = item.conversations
 				if conversations then
-					print("loaded conversations with #: " .. #conversations)
+					print("loaded phone conversations with #: " .. #conversations)
 
 					for j = 1, 10 do
-						print("inserted convo #" .. j)
+						--print("inserted convo #" .. j)
 						table.insert(conversationsToSendToPhone, conversations[j])
 					end
 
