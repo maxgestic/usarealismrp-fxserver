@@ -395,6 +395,16 @@ Citizen.CreateThread(function()
 	end
 end)
 
+------------------------------------
+-- remove vehicle weapon rewards  --
+------------------------------------
+Citizen.CreateThread(function()
+    while true do
+        Wait(10)
+        DisablePlayerVehicleRewards(PlayerId())
+    end
+end)
+
 -----------------------
 -- UTILITY FUNCTIONS --
 -----------------------

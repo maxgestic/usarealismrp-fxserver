@@ -54,3 +54,148 @@ AddEventHandler("ems:checkPlayerMoney", function()
 		end
 	end)
 end)
+
+--------------------------------------
+-- inspect a downed player's wounds --
+--------------------------------------
+TriggerEvent('es:addJobCommand', 'inspect', { "ems", "fire", "police", "sheriff" }, function(source, args, user)
+	if type(tonumber(args[2])) == "number" then
+		TriggerClientEvent("EMS:inspect", tonumber(args[2]), source)
+	end
+end, {
+	help = "Inspect a player's wounds",
+	params = {
+		{ name = "id", help = "Player's ID" }
+	}
+})
+
+RegisterServerEvent("EMS:notifyResponderOfInjuries")
+AddEventHandler("EMS:notifyResponderOfInjuries", function(responder_id, killer_entity_type, damage_type, death_cause)
+	---------------
+	-- variables --
+	---------------
+	local weapon_type = "undefined"
+	local message = ""
+	-------------------------------------------------------
+	-- check for injuries caused by a vehicle or weapon  --
+	-------------------------------------------------------
+	if tonumber(killer_entity_type) == 2 then
+		--message = message .. "Person has " .. injuries.vehicle[math.random(#injuries.vehicle)] .. " from blunt force trauma."\
+		message = RandomInjuryMessage("vehicle")
+	else
+		if (damage_type == 0 or damage_type == 1) and not injured_by_vehicle then
+			weapon_type = "unknown"
+		elseif damage_type == 2 then -- melee 
+			-- check melee weapon type:
+			weapon_type = GetMeleeWeaponType(death_cause)
+		elseif damage_type == 3 then -- bullet
+			weapon_type = "bullet"
+		elseif damage_type == 4 or damage_type == 8 then -- force ragdoll fall ?
+			weapon_type = "fall"
+		elseif damage_type == 5 then -- explosive 
+			weapon_type = "explosion"
+		elseif damage_type == 6 then 
+			weapon_type = "fire"
+		elseif damage_type == 13 then 
+			weapon_type = "gas"
+		end
+		message = RandomInjuryMessage(weapon_type)
+	end
+	TriggerClientEvent("usa:notify", responder_id, message)
+	TriggerClientEvent("chatMessage", responder_id, "", {255, 255, 255}, message)
+end)
+
+function RandomInjuryMessage(wep_type)
+	local message = nil
+	local injuries = {
+		vehicle = {
+			"broken bone(s) and cuts",
+			"lacerations and scrapes",
+			"burn marks and road rash"
+		},
+		fist = {
+			"a small bruise and a cut on their face",
+			"red marks and a cut"
+		},
+		blunt_object = {
+			"a large bruise and is bleeding",
+			"a broken bone",
+			"a bleeding cranium",
+			"large red marks and some blood"
+		},
+		knife = {
+			"a large cut",
+			"a deep cut",
+			"a few small lacerations",
+			"a stab wound"
+		}
+	}
+	if wep_type == "vehicle" then
+		message = "Person has " .. injuries.vehicle[math.random(#injuries.vehicle)] .. " from blunt force trauma."
+	elseif wep_type == "fist" then
+		message = "Person has " .. injuries.fist[math.random(#injuries.fist)] .. " from blunt force trauma."
+	elseif wep_type == "blunt_object" then
+		message = "Person has " .. injuries.blunt_object[math.random(#injuries.blunt_object)] .. " from blunt force trauma."
+	elseif wep_type == "knife" then
+		message = "Person has " .. injuries.knife[math.random(#injuries.knife)] .. " from a sharp object."
+	elseif wep_type == "bullet" then
+		message = "Person is bleeding from a gunshot wound."
+	elseif wep_type == "fall" then 
+		message = "Person has an injury from falling."
+	elseif wep_type == "explosion" then 
+		message = "Person has extremely severe 3rd degree burns all over their body from an explosion."
+	elseif wep_type == "fire" then 
+		message = "Person has severe burns from a fire."
+	elseif wep_type == "gas" then
+		message = "Person has been incapacitated by non-lethal gas."
+	elseif wep_type == "unknown" then
+		message = "Person has unknown injuries."
+	end
+	return message
+end
+
+function GetMeleeWeaponType(hash)
+	if hash == -1569615261 then return "fist"
+	elseif hash == -656458692 then return "fist" -- brass knuckles
+	elseif hash == -1716189206 then return "knife" -- knife
+	elseif hash == -1834847097 then return "knife" -- dagger
+	elseif hash == -102973651 then return "knife" -- hatchet
+	elseif hash == -581044007 then return "knife" -- machete
+	elseif hash == -538741184 then return "knife" -- swtichblade
+	elseif hash == 419712736 then return "knife" -- wrench
+	elseif hash == 1737195953 then return "blunt_object" -- nightstick
+	elseif hash == 1317494643 then return "blunt_object" -- hammer
+	elseif hash == -1786099057 then return "blunt_object" -- bat
+	elseif hash == -2067956739 then return "blunt_object" -- crowbar
+	elseif hash == 1141786504 then return "blunt_object" -- golfclub
+	elseif hash == -1951375401 then return "blunt_object" -- flashlight
+	elseif hash == 419712736 then return "blunt_object" -- wrench
+	end
+end
+
+-- maybe use GetEntityType(...) to see if it was a vehicle? not sure if it detects weapons
+--[[
+	Returns:
+	0 = no entity
+	1 = ped
+	2 = vehicle
+	3 = object
+]]
+--[[
+    GetWeaponDamageType() return values:
+    0=unknown (or incorrect weaponHash)
+    1= no damage (flare,snowball, petrolcan)
+    2=melee
+    3=bullet
+    4=force ragdoll fall
+    5=explosive (RPG, Railgun, grenade)
+    6=fire(molotov)
+    8=fall(WEAPON_HELI_CRASH)
+    10=electric
+    11=barbed wire
+    12=extinguisher
+    13=gas
+    14=water cannon(WEAPON_HIT_BY_WATER_CANNON)
+]]
+
+--TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, message)

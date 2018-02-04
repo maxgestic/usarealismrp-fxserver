@@ -65,6 +65,54 @@ AddEventHandler("ems:healPlayer", function()
     TriggerEvent("ems:notify", "Your health has been restored!")
 end)
 
+-- inspect wounds:
+--[[
+    IS_THIS_MODEL_A_BICYCLE
+    IS_THIS_MODEL_A_BIKE
+    IS_THIS_MODEL_A_BOAT
+    IS_THIS_MODEL_A_CAR
+    IS_THIS_MODEL_A_HELI
+    IS_THIS_MODEL_A_PLANE
+    IS_THIS_MODEL_A_QUADBIKE
+    IS_THIS_MODEL_A_TRAIN
+]]
+--[[
+    GetWeaponDamageType() return values:
+    0=unknown (or incorrect weaponHash)
+    1= no damage (flare,snowball, petrolcan)
+    2=melee
+    3=bullet
+    4=force ragdoll fall
+    5=explosive (RPG, Railgun, grenade)
+    6=fire(molotov)
+    8=fall(WEAPON_HELI_CRASH)
+    10=electric
+    11=barbed wire
+    12=extinguisher
+    13=gas
+    14=water cannon(WEAPON_HIT_BY_WATER_CANNON)
+]]
+-- todo: add a distance check?
+RegisterNetEvent("EMS:inspect")
+AddEventHandler("EMS:inspect", function(responder_id)
+    local me = GetPlayerPed(-1)
+    if IsPedDeadOrDying(me) then
+        -- get cause of death:
+        local death_cause = GetPedCauseOfDeath(me)
+        local damage_type = GetWeaponDamageType(death_cause)
+        local killer = GetPedKiller(me)
+        local entity_type = GetEntityType(killer)
+        print("entity_type: " .. entity_type)
+        print("killer: " .. killer)
+        print("cause of death: " .. death_cause)
+        print("damage type: " .. damage_type)
+        -- notify responder of injuries:
+        TriggerServerEvent("EMS:notifyResponderOfInjuries", responder_id, entity_type, damage_type, death_cause)
+    else 
+        print("not dead!")
+    end
+end)
+
 Citizen.CreateThread(function()
     while true do
         Wait(1)
@@ -93,4 +141,18 @@ function DrawSpecialText(m_text)
 	SetTextEntry_2("STRING")
 	AddTextComponentString(m_text)
 	DrawSubtitleTimed(250, 1)
+end
+
+function IsHashSomeVehicle(hash)
+    local is_veh = false
+    if IsThisModelABicycle(hash) then is_veh = true end
+    if IsThisModelABike(hash) then is_veh = true end
+    if IsThisModelABoat(hash) then is_veh = true end
+    if IsThisModelACar(hash) then is_veh = true end
+    if IsThisModelAHeli(hash) then is_veh = true end
+    if IsThisModelAPlane(hash) then is_veh = true end
+    if IsThisModelAQuadbike(hash) then is_veh = true end
+    if IsThisModelATrain(hash) then is_veh = true end
+    print("returning is_veh: " .. tostring(is_veh))
+    return is_veh
 end

@@ -258,3 +258,8 @@ end, {
 		{ name = "weapon", help = "ar, shotgun" }
 	}
 })
+
+-- hand on radio:
+TriggerEvent('es:addJobCommand', 'r', { "police", "sheriff", "ems" }, function(source, args, user)
+	TriggerClientEvent("Radio", source)
+end, { help = "Put your hand on your dispatch radio microphone." })
