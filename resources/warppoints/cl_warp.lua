@@ -48,6 +48,7 @@ Citizen.CreateThread(function()
             print("job access: " ..locationCoords.job_access)
             Citizen.Wait(500)
             RequestCollisionAtCoord(locationCoords.exit.x+1.0, locationCoords.exit.y, locationCoords.exit.z)
+            Citizen.Wait(1500)
             SetEntityCoords(GetPlayerPed(-1), locationCoords.exit.x+1.0, locationCoords.exit.y, locationCoords.exit.z)
           else
             --print("job access: " ..locationCoords.job_access)
@@ -59,6 +60,7 @@ Citizen.CreateThread(function()
         if IsControlPressed(0, INTERACTION_KEY) then
           Citizen.Wait(500)
           RequestCollisionAtCoord(locationCoords.entrance.x+1.0, locationCoords.entrance.y, locationCoords.entrance.z)
+          Citizen.Wait(1500)
           SetEntityCoords(GetPlayerPed(-1), locationCoords.entrance.x+1.0, locationCoords.entrance.y, locationCoords.entrance.z)
         end
       end
@@ -70,6 +72,7 @@ RegisterNetEvent("warp:warpToPoint")
 AddEventHandler("warp:warpToPoint", function(locationCoords)
   Citizen.Wait(500)
   RequestCollisionAtCoord(locationCoords.exit.x+1.0, locationCoords.exit.y, locationCoords.exit.z)
+  Citizen.Wait(1500)
   SetEntityCoords(GetPlayerPed(-1), locationCoords.exit.x+1.0, locationCoords.exit.y, locationCoords.exit.z)
 end)
 
