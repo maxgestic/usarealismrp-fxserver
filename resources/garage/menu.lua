@@ -65,22 +65,30 @@ Citizen.CreateThread(function()
 			for i = 1, #ownedVehicles do
 				local vehicle = ownedVehicles[i]
 				-- each vehicle the player owns
-				local buttonText = ""
+				local buttonText = "Retrieve ~y~" .. vehicle.model
 				if vehicle.impounded == true then
-					buttonText = "Retrieve ~y~" .. vehicle.model .. " ~w~(~y~Impounded~w~)"
+					buttonText = buttonText .. " ~w~(~y~Impounded~w~)"
 				elseif vehicle.stored == false then
-					buttonText = "Retrieve ~y~" .. vehicle.model .. " ~w~(~r~Not Stored~w~)"
+					buttonText = buttonText .. " ~w~(~r~Not Stored~w~)"
 				else
-					buttonText = "Retrieve ~y~" .. vehicle.model .. " ~w~(~g~Stored~w~)"
+					buttonText = buttonText .. " ~w~(~g~Stored~w~)"
 				end
 				TriggerEvent("GUI:Option", buttonText, function(cb)
 					if(cb) then
-						Citizen.Trace("Trying to retrieve vehicle...")
+						--Citizen.Trace("Trying to retrieve vehicle...")
 						menu = false
 						if not alreadyCalled then
 							alreadyCalled = true
-							Citizen.Trace("calling garage:checkVehicleStatus with vehicle = " .. vehicle.model)
-							TriggerServerEvent("garage:checkVehicleStatus", vehicle)
+							--Citizen.Trace("calling garage:checkVehicleStatus with vehicle = " .. vehicle.model)
+							if GetVehiclePedIsIn(GetPlayerPed(-1), false) ~= 0 then
+								if GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), -1) == GetPlayerPed(-1) then
+									TriggerServerEvent("garage:checkVehicleStatus", vehicle)
+								else
+									TriggerEvent("usa:notify", "You must be in the driver's seat!")
+								end
+							else 
+								TriggerServerEvent("garage:checkVehicleStatus", vehicle)
+							end
 						else
 								Citizen.Trace("Vehicle already retrieved...")
 						end
