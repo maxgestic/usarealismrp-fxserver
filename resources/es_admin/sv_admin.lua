@@ -141,11 +141,15 @@ TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, user)
 			else
 				reason = table.concat(reason, " ")
 			end
-
 			-- send discord message
 			local targetPlayerName = target.getActiveCharacterData("firstName") .. " " .. target.getActiveCharacterData("lastName")
 			local allPlayerIdentifiers = GetPlayerIdentifiers(player)
-			local desc = "**Display Name:** " .. targetPlayerName
+			-- character name:
+			local player = exports["essentialmode"]:getPlayerFromId(targetPlayer)
+			local char_name = player.getActiveCharacterData("fullName")
+			-- send discord message
+			local desc = "**Character Name:** " .. char_name
+			desc = desc .. "\n**Display Name:** " .. targetPlayerName
 			for i = 1, #allPlayerIdentifiers do
 				desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
 			end
@@ -431,7 +435,7 @@ end, {
 	help = "Save pos to txt"
 })
 
-TriggerEvent('es:addGroupCommand', 'car', 'admin', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'car', 'superadmin', function(source, args, user)
 	TriggerClientEvent('es_admin:spawnVehicle', source, args[2])
 end, {
 	help = "Spawn a car (not to be abused, we are watching..)",
@@ -545,10 +549,13 @@ AddEventHandler('rconCommand', function(commandName, args)
 			end
 			-- show message
 			RconPrint(targetPlayerName .. " has been banned (" .. reason .. ")")
-			--sendMessageToModsAndAdmins(targetPlayerName .. " has been banned (" .. reason .. ")")
 			TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
+			-- character name:
+			local player = exports["essentialmode"]:getPlayerFromId(targetPlayer)
+			local char_name = player.getActiveCharacterData("fullName")
 			-- send discord message
-			local desc = "**Display Name:** " .. targetPlayerName
+			local desc = "**Character Name:** " .. char_name
+			desc = desc .. "\n**Steam Name:** " .. targetPlayerName
 			for i = 1, #allPlayerIdentifiers do
 				desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
 			end
@@ -570,7 +577,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 					}
 				}), { ["Content-Type"] = 'application/json' })
 			-- update db
-			GetDoc.createDocument("bans",  {name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+			GetDoc.createDocument("bans",  {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
 				RconPrint("player banned!")
 				-- drop player from session
 				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
@@ -730,14 +737,14 @@ fetchAllBans()
 			for i = 1, #allPlayerIdentifiers do
 				print("allPlayerIdentifiers[i] = " .. allPlayerIdentifiers[i])
 			end
-
 			-- show message
-			--sendMessageToModsAndAdmins(GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
 			TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
-			-- TODO: change back to public kick / ban messages ?
-
+			-- get char name:
+			local player = exports["essentialmode"]:getPlayerFromId(targetPlayer)
+			local char_name = player.getActiveCharacterData("fullName")
+			local desc = "**Character Name:** " .. char_name
 			-- send discord message
-			local desc = "**Display Name:** " .. targetPlayerName
+			desc = desc .. "\n**Display Name:** " .. targetPlayerName
 			for i = 1, #allPlayerIdentifiers do
 				desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
 			end
@@ -760,7 +767,7 @@ fetchAllBans()
 					}
 				}), { ["Content-Type"] = 'application/json' })
 			-- update db
-			GetDoc.createDocument("bans",  {name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+			GetDoc.createDocument("bans",  {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
 				print("player banned!")
 				-- drop player from session
 				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
