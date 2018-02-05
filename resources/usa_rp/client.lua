@@ -62,7 +62,7 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(0)
 		SetPedDensityMultiplierThisFrame(0.9)
-		SetVehicleDensityMultiplierThisFrame(0.0003) -- no npc vehicles causing havoc
+		SetVehicleDensityMultiplierThisFrame(0.0002) -- npc vehicle amount
 	end
 end)
 
@@ -142,6 +142,9 @@ local locations = {
         {x = 113.111, y = -1287.755, z = 27.586, animDict = "mini@strip_club@private_dance@part1", animName = "priv_dance_p1", model = "S_F_Y_Stripper_02", heading = (math.random(50, 360)) * 1.0},
         {x = 113.375, y = -1286.546, z = 27.586, animDict = "mini@strip_club@private_dance@part2", animName = "priv_dance_p2", model = "CSB_Stripper_02", heading = (math.random(50, 360)) * 1.0},
         {x = 129.442, y = -1283.407, z = 28.272, animDict = "missfbi3_party_d", animName = "stand_talk_loop_a_female", model = "S_F_Y_Bartender_01", heading = 122.471}
+    },
+    black_market = {
+        {x = -2166.786, y = 5197.684, z = 15.880, animDict = "", animName = "", model = "G_M_Y_SALVABOSS_01", heading = 122.471, scenario = "WORLD_HUMAN_SMOKING"}
     }
 }
 local spawnedPeds = {}
@@ -163,11 +166,15 @@ Citizen.CreateThread(function()
     		SetPedFleeAttributes(ped,0,0)
     		SetPedCombatAttributes(ped,17,1)
     		SetEntityInvincible(ped)
-            RequestAnimDict(location[i].animDict)
-            while not HasAnimDictLoaded(location[i].animDict) do
-                Citizen.Wait(100)
+            if not location[i].scenario then
+                RequestAnimDict(location[i].animDict)
+                while not HasAnimDictLoaded(location[i].animDict) do
+                    Citizen.Wait(100)
+                end
+                TaskPlayAnim(ped, location[i].animDict, location[i].animName, 8.0, -8, -1, 7, 0, 0, 0, 0)
+            else
+                TaskStartScenarioInPlace(ped, location[i].scenario, 0, 1)
             end
-            TaskPlayAnim(ped, location[i].animDict, location[i].animName, 8.0, -8, -1, 7, 0, 0, 0, 0)
         end
 	end
 end)
