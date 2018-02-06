@@ -105,6 +105,8 @@ function jailPlayer(data, officerName)
 				}
 			}
 		}), { ["Content-Type"] = 'application/json' })
+		-- remove any active warrants:
+		TriggerEvent("warrants:removeAnyActiveWarrants", inmate_name)
 	end)
 end
 

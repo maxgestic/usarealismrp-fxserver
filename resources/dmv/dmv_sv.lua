@@ -22,6 +22,7 @@ AddEventHandler("dmv:checkMoney", function(price)
 				number = "F" .. tostring(math.random(1, 2543678)),
 				quantity = 1,
 				ownerName = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName"),
+				ownerDob = user.getActiveCharacterData("dateOfBirth"),
 				expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
 				status = "valid",
 				type = "license"

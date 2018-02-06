@@ -85,6 +85,8 @@ AddEventHandler("RPD:removeWeapons", function()
 		-- remove blindfolds/tied hands
 		TriggerClientEvent("crim:untieHands", userSource, userSource)
 		TriggerClientEvent("crim:blindfold", userSource, false, true)
+		-- REMOVE ANY WARRANTS:
+		TriggerEvent("warrants:removeAnyActiveWarrants", user.getActiveCharacterData("fullName"))
 	end)
 end)
 

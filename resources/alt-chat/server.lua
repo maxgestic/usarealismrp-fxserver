@@ -14,6 +14,7 @@ end, {help = "Talk as yourself doing an action.", params = {{name = "message", h
 
 TriggerEvent('es:addCommand', 'showid', function(source, args, user, location)
 	local char_name = user.getActiveCharacterData("fullName")
+	local dob = user.getActiveCharacterData("dateOfBirth")
 	TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. char_name .. " shows ID.", location)
-	TriggerClientEvent('chatMessageLocation', -1, "[ID]", {171, 67, 227}, "^2Name: ^4" .. char_name .. " ^0- ^2SSN: ^4" .. source, location)
+	TriggerClientEvent('chatMessageLocation', -1, "[ID]", {171, 67, 227}, "^2Name: ^4" .. char_name .. " ^0- ^2SSN: ^4" .. source .. " ^0 - ^2DOB: ^4" .. dob, location)
 end, {help = "Present your identifcation card / DL."})

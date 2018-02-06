@@ -65,6 +65,7 @@ AddEventHandler("license:searchForLicense", function(source, playerId)
 						TriggerClientEvent("chatMessage", source, "", {0, 141, 155}, "^3Driver's License:")
 						TriggerClientEvent("chatMessage", source, "DL", {169, 44, 98}, license.number)
 						TriggerClientEvent("chatMessage", source, "FULL NAME", {169, 44, 98}, license.ownerName)
+						TriggerClientEvent("chatMessage", source, "DOB", {169, 44, 98}, license.ownerDob)
 						TriggerClientEvent("chatMessage", source, "EXPIRES", {169, 44, 98}, license.expire)
 						TriggerClientEvent("chatMessage", source, "STATUS", {169, 44, 98}, license.status)
 						hasDL = true
