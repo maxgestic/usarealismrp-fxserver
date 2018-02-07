@@ -41,6 +41,7 @@ loadWarrants()
 TriggerEvent('es:addJobCommand', 'createwarrant', { "police", "sheriff" }, function(source, args, user)
 	if args[2] and args[3] and args[4] then
 		local userSource = tonumber(source)
+		local officer_name = user.getActiveCharacterData("fullName")
 		-- get warrant details from user input:
 		local first_name = args[2]
 		local last_name = args[3]
@@ -53,13 +54,14 @@ TriggerEvent('es:addJobCommand', 'createwarrant', { "police", "sheriff" }, funct
 			first_name = first_name,
 			last_name = last_name,
 			notes = notes,
+			created_by = officer_name,
 			timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())
 		}
 		--- save warrant
 		table.insert(WARRANTS, warrant)
 		-- send warrant to discord:
 			-- send discord message
-			local desc = "\n**Name:** " .. first_name .. " " .. last_name .. "\n**Notes:** " .. notes .. "\n**Timestamp:** ".. warrant.timestamp
+			local desc = "\n**Name:** " .. first_name .. " " .. last_name .. "\n**Notes:** " .. notes ..  "\n**Officer:** " .. officer_name .. "\n**Timestamp:** ".. warrant.timestamp
 			local url = 'https://discordapp.com/api/webhooks/409961124780310528/mjiYli8X1jr9Uhwtf_QdbrkvWLcwRtuiphmCGfdVUoqAtZghi2FNOMe6dfNbaYZnr0yu'
 				PerformHttpRequest(url, function(err, text, headers)
 					if text then

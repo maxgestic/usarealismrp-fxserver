@@ -144,12 +144,9 @@ TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, user)
 			-- send discord message
 			local targetPlayerName = target.getActiveCharacterData("firstName") .. " " .. target.getActiveCharacterData("lastName")
 			local allPlayerIdentifiers = GetPlayerIdentifiers(player)
-			-- character name:
-			local player = exports["essentialmode"]:getPlayerFromId(targetPlayer)
-			local char_name = player.getActiveCharacterData("fullName")
 			-- send discord message
-			local desc = "**Character Name:** " .. char_name
-			desc = desc .. "\n**Display Name:** " .. targetPlayerName
+			local desc = "**Character Name:** " .. targetPlayerName
+			desc = desc .. "\n**Steam Name:** " .. GetPlayerName(player)
 			for i = 1, #allPlayerIdentifiers do
 				desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
 			end
