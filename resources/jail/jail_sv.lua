@@ -100,7 +100,7 @@ function jailPlayer(data, officerName)
 					description = "**Name:** " .. inmate_name .. " \n**Sentence:** " .. sentence .. " months" .. " \n**Charges:** " ..reason.. "\n**Fine:** $" .. fine .. "\n**Arresting Officer:** " ..officerName.."\n**Timestamp:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
 					color = 263172,
 					author = {
-						name = "LS Correctional Facility"
+						name = "Blaine County Correctional Facility"
 					}
 				}
 			}

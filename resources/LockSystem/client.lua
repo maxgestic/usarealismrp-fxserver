@@ -92,6 +92,8 @@ Citizen.CreateThread(function()
 				--TriggerServerEvent("ls:check", plate, vehicle, isPlayerInside, notificationParam)
 				TriggerServerEvent("lock:checkForKey", plate)
 
+			else 
+				print("if you see this then there was a problem trying to lock/unlock a vehicle!")
 			end
 		end
 	end
