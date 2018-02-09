@@ -14,7 +14,7 @@ end)
 RegisterServerEvent("jscoreboard:getPlayers")
 AddEventHandler("jscoreboard:getPlayers", function()
   local userSource = tonumber(source)
-  print("gettin players for scoreboard...")
+  --print("gettin players for scoreboard...")
   TriggerEvent("es:getPlayers", function(players)
     if players then
       local players_to_send = {}

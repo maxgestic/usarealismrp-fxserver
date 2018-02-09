@@ -17,7 +17,7 @@ local settings = {
 	walking_mult = 0.00050,
 	running_mult = 0.00095,
 	sprinting_mult = 0.00145,
-	biking_mult = 0.0019,
+	biking_mult = 0.00075,
 	--sound_params = {-1, "3_2_1", "HUD_MINI_GAME_SOUNDSET", 0},
 	sound_params = {-1, "FocusIn", "HintCamSounds", 1},
 	debug = false
@@ -120,8 +120,8 @@ Citizen.CreateThread(function()
 					if settings.debug then print("sprinting!") end
 					person.thirst_level = person.thirst_level - (settings.thirst_global_mult + settings.sprinting_mult)
 					person.hunger_level = person.hunger_level - (settings.hunger_global_mult + settings.sprinting_mult)
-				elseif IsPedOnAnyBike(myPed) then
-					if settings.debug then print("biking!") end
+				elseif GetVehicleClass(GetVehiclePedIsIn(myPed, false)) == 13 then -- bicycles
+					if settings.debug then print("bicycling!") end
 					person.thirst_level = person.thirst_level - (settings.thirst_global_mult + settings.biking_mult)
 					person.hunger_level = person.hunger_level - (settings.hunger_global_mult + settings.biking_mult)
 				else
