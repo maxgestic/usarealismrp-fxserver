@@ -1,6 +1,6 @@
 -- 12 hours = 43200 seconds
 local restartTimeHours = 20
-local restartTimeSeconds = 12 * 60 * 60
+local restartTimeSeconds = restartTimeHours * 60 * 60
 local restartTimeMilliseconds = restartTimeSeconds * 1000
 function sendRestartNotification()
     Citizen.CreateThreadNow(function()

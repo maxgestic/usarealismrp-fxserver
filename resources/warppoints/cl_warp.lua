@@ -26,6 +26,19 @@ local warp_locations = {
       z = 25.9
     },
     job_access = "emergency"
+  },
+  ["the courthouse"] = {
+	entrance = {
+      x = 317.283,
+	  y = -1631.1505,
+	  z = 31.59
+    },
+    exit = {
+      x = 234.547,
+      y = -413.567,
+      z = -119.365
+    },
+    job_access = "civ"
   }
 }
 
