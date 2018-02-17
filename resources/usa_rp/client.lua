@@ -61,7 +61,7 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
-		SetPedDensityMultiplierThisFrame(0.9)
+		SetPedDensityMultiplierThisFrame(1.0)
 		SetVehicleDensityMultiplierThisFrame(0.0002) -- npc vehicle amount
 	end
 end)

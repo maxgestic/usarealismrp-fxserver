@@ -5,7 +5,7 @@ local JOBS = {
     sell = {x = -57.3836, y = 6650.69, z = 28.79, heading = 10.0},
     peds = {
       {x = 2197.88, y = 5577.93, z = 52.88, heading = 270.0, hash = -264140789, scenario = "WORLD_HUMAN_SMOKING_POT", type="info", gives_directions_to = "process", name = "Gerard Mendoza"}, -- weed process info ped
-      {x = -57.3836, y = 6650.69, z = 28.79, heading = 10.0, hash = 653210662, scenario = "WORLD_HUMAN_SMOKING", type = "sale"}, -- weed buyer
+      --{x = -57.3836, y = 6650.69, z = 28.79, heading = 10.0, hash = 653210662, scenario = "WORLD_HUMAN_SMOKING", type = "sale"}, -- weed buyer
       {x = 1441.86, y = 6338.78, z = 24.7478, heading = 10.0, hash = 1191548746, scenario = "WORLD_HUMAN_HANG_OUT_STREET", type = "info", gives_directions_to = "sale", name = "Uncle Liam"}
     }
   }
@@ -71,6 +71,7 @@ Citizen.CreateThread(function()
           TriggerServerEvent("HPS:checkItem", job, places.process.time, "Process")
           Wait(places.process.time * 1000) -- prevent spamming
         end
+		--[[
       elseif Vdist(player_coords, places.sell.x, places.sell.y, places.sell.z) < 2.0 then
         print("player is close to sell job location:  " .. job)
         drawTxt("Press ~g~E~w~ to sell " .. job .. "!",0,1,0.5,0.8,0.6,255,255,255,255)
@@ -79,6 +80,8 @@ Citizen.CreateThread(function()
           --Sell(job, places.harvest_time)
         end
       end
+	  --]]
+	  end
       -- check for info peds:
       for i = 1, # places.peds do
         if Vdist(player_coords, places.peds[i].x, places.peds[i].y, places.peds[i].z) < 3.0 then
