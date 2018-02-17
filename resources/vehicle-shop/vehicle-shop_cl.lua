@@ -54,7 +54,7 @@ local vehicleShopItems = {
 		["Trucks"] = {
 			{make = "Karin", model = "Rebel", price = 10500, hash = -2045594037, storage_capacity = 230.0},
 			{make = "Vapid", model = "Bobcat XL", price = 10500, hash = 1069929536, storage_capacity = 230.0},
-			{make = "Vapid", model = "Sadler", price = 25500, hash = -599568815, storage_capacity = 230.0},
+			{make = "Ford", model = "F350 Super Duty", price = 55000, hash = -599568815, storage_capacity = 250.0},
 			{make = "Bravado", model = "Bison", price = 27110, hash = -16948145, storage_capacity = 230.0},
 			{make = "Vapid", model = "Slam Van", price = 24000, hash = 729783779, storage_capacity = 230.0},
 			{make = "Vapid", model = "Slam Van LR", price = 24000, hash = 1119641113, storage_capacity = 230.0},

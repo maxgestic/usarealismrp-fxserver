@@ -1,11 +1,12 @@
 storeItems = {
     ["Food"] = {
-      {name = "Tuna Sandwich", price = 40, type = "food", substance = 60.0, quantity = 1, legality = "legal", weight = 4},
+      {name = "Tuna Sandwich", price = 40, type = "food", substance = 70.0, quantity = 1, legality = "legal", weight = 4},
       {name = "Chocolate Pizza", price = 25, type = "food", substance = 25.0, quantity = 1, legality = "legal", weight = 3},
-      {name = "Cheeseburger", price = 50, type = "food", substance = 60.0, quantity = 1, legality = "legal", weight = 4},
-      {name = "Kosher Hot Dog", price = 40, type = "food", substance = 55.0, quantity = 1, legality = "legal", weight = 4},
-      {name = "Microwave Burrito", price = 45, type = "food", substance = 52.0, quantity = 1, legality = "legal", weight = 4},
+      {name = "Cheeseburger", price = 50, type = "food", substance = 70.0, quantity = 1, legality = "legal", weight = 4},
+      {name = "Kosher Hot Dog", price = 40, type = "food", substance = 70.0, quantity = 1, legality = "legal", weight = 4},
+      {name = "Microwave Burrito", price = 45, type = "food", substance = 65.0, quantity = 1, legality = "legal", weight = 4},
       {name = "Peanut Butter Cups", price = 45, type = "food", substance = 40.0, quantity = 1, legality = "legal", weight = 4},
+	  {name = "Donut", price = 35, type = "food", substance = 40.0, quantity = 1, legality = "legal", weight = 4},
       {name = "Taco", price = 58, type = "food", substance = 45.0, quantity = 1, legality = "legal", weight = 4},
       {name = "Nachos", price = 30, type = "food", substance = 30.0, quantity = 1, legality = "legal", weight = 4},
       {name = "Walkers Milk Chocolate Toffee", price = 35, type = "food", substance = 25.0, quantity = 1, legality = "legal", weight = 3},
@@ -16,7 +17,7 @@ storeItems = {
       {name = "Fries", price = 20, type = "food", substance = 40.0, quantity = 1, legality = "legal", weight = 3}
     },
     ["Drinks"] = {
-      {name = "Water", price = 30, type = "drink", substance = 60.0, quantity = 1, legality = "legal", weight = 4},
+      {name = "Water", price = 30, type = "drink", substance = 70.0, quantity = 1, legality = "legal", weight = 4},
       {name = "Arizona Iced Tea", price = 30, type = "drink", substance = 49.0, quantity = 1, legality = "legal", weight = 3},
       {name = "Caramel Iced Coffee", price = 40, type = "drink", substance = 49.0, quantity = 1, legality = "legal", weight = 3},
       {name = "Slurpee", price = 45, type = "drink", substance = 50.0, quantity = 1, legality = "legal", weight = 3},
