@@ -71,7 +71,7 @@ AddEventHandler("phone:addContact", function(data)
 end)
 
 RegisterServerEvent("phone:send911Message")
-AddEventHandler("phone:send911Message", function(data)
+AddEventHandler("phone:send911Message", function(data, dont_send_msg, no_caller_id)
 	local help_online  = false
 	local userSource = tonumber(source)
 	local message = data.message
@@ -80,17 +80,24 @@ AddEventHandler("phone:send911Message", function(data)
 			local playerSource = id
 			local player_job = player.getActiveCharacterData("job")
 			if player_job == "ems" or player_job == "sheriff" or player_job == "police" then
-				TriggerClientEvent('chatMessage', playerSource, "911 (Caller: #" .. userSource .. ")", {255, 20, 10}, message .. " (" .. data.location .. ")")
-				TriggerClientEvent("phone:notify", playerSource, "~r~911 (Caller: # ".. userSource .. "):\n~w~"..message)
+				if no_caller_id then
+					TriggerClientEvent('chatMessage', playerSource, "911", {255, 20, 10}, message .. " (" .. data.location .. ")")
+					TriggerClientEvent("phone:notify", playerSource, "~r~911:\n~w~"..message)
+				else
+					TriggerClientEvent('chatMessage', playerSource, "911 (Caller: #" .. userSource .. ")", {255, 20, 10}, message .. " (" .. data.location .. ")")
+					TriggerClientEvent("phone:notify", playerSource, "~r~911 (Caller: # ".. userSource .. "):\n~w~"..message)
+				end
 				help_online = true
 			end
 		end
-		if help_online then
-			TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, "^3911^0 was notified!")
-			TriggerClientEvent("usa:notify", userSource, "~r~911~w~ was notified!")
-		else
-			TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, "Sorry, there is no one on duty to help!")
-			TriggerClientEvent("usa:notify", userSource, "Sorry, there is no one on duty to help!")
+		if not dont_send_msg then
+			if help_online then
+				TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, "^3911^0 was notified!")
+				TriggerClientEvent("usa:notify", userSource, "~r~911~w~ was notified!")
+			else
+				TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, "Sorry, there is no one on duty to help!")
+				TriggerClientEvent("usa:notify", userSource, "Sorry, there is no one on duty to help!")
+			end
 		end
 	end)
 end)
