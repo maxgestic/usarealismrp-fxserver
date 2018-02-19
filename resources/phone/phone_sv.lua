@@ -88,6 +88,8 @@ AddEventHandler("phone:send911Message", function(data, dont_send_msg, no_caller_
 					TriggerClientEvent("phone:notify", playerSource, "~r~911 (Caller: # ".. userSource .. "):\n~w~"..message)
 				end
 				help_online = true
+				-- set temp blip
+				TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
 			end
 		end
 		if not dont_send_msg then
@@ -114,6 +116,8 @@ AddEventHandler("phone:sendTaxiMessage", function(data)
 				TriggerClientEvent('chatMessage', playerSource, "Taxi Requested! (Caller: #" .. userSource .. ")", {251, 229, 5}, message .. " (" .. data.location .. ")")
 				TriggerClientEvent("phone:notify", playerSource, "~y~TAXI REQUEST (Caller: # ".. userSource .. "):\n~w~"..message)
 				tow_online = true
+				-- set temp blip
+				TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
 			end
 		end
 		if tow_online then
@@ -138,6 +142,8 @@ AddEventHandler("phone:sendTowMessage", function(data)
 				TriggerClientEvent('chatMessage', playerSource, "Tow Requested! (Caller: #" .. userSource .. ")", {118, 120, 251}, message .. " (" .. data.location .. ")")
 				TriggerClientEvent("phone:notify", playerSource, "~y~TOW REQUEST (Caller: # ".. userSource .. "):\n~w~"..message)
 				tow_online = true
+				-- set temp blip
+				TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
 			end
 		end
 		if tow_online then

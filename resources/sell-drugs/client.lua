@@ -69,7 +69,8 @@ Citizen.CreateThread(function()
 															local loc = street1
 															if street2 ~= "" and street2 ~= " " and street2 then loc = loc .. " & " .. street2 end
 															-- dispatch to police:
-															TriggerServerEvent("phone:send911Message", {message = "Civilian report of a person(s) selling narcotics.", location = loc}, true, true)
+															TriggerServerEvent("phone:send911Message", {message = "Civilian report of a person(s) selling narcotics.", location = loc, pos = {x = pos.x, y = pos.y, z = pos.z}}, true, true)
+															
 														end
 												else			
 													-- sell
@@ -151,7 +152,28 @@ Citizen.CreateThread(function()
 	end	
 end)		
 
+local call_blips = {}
 
+RegisterNetEvent('drug-sell:createBlip')
+AddEventHandler('drug-sell:createBlip', function(coordsx, coordsy, coordsz)
+	Citizen.CreateThread(function()
+		local blip = AddBlipForCoord(coordsx, coordsy, coordsz)
+		table.insert(call_blips, blip)
+		SetBlipAsFriendly(blip, true)
+		SetBlipSprite(blip, 161)
+		BeginTextCommandSetBlipName("STRING");
+		AddTextComponentString(tostring("911 Call"))
+		EndTextCommandSetBlipName(blip)
+		-- remove after x seconds
+		local seconds = 20
+		while seconds > 0 do 
+			Wait(1000)
+			seconds = seconds - 1
+		end
+		RemoveBlip(blip)
+		print("removed blip!")
+	end)
+end)
 
 RegisterNetEvent('currentlySelling')
 AddEventHandler('currentlySelling', function()

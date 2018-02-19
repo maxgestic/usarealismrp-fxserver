@@ -2,8 +2,8 @@ local debug = true
 
 -- todo: randomize price based on each purchase instead of once
 local SELLABLE_ITEMS = {
-	["Hash"] = math.random(190, 260),
-	["Meth"] = math.random(300, 400),
+	["Hash"] = math.random(190, 300),
+	["Meth"] = math.random(325, 500),
 	["Weed Bud"] = math.random(100, 190)
 }
 
@@ -74,6 +74,19 @@ AddEventHandler('drug-sell:sell', function()
 			return
 		else
 			if debug then print("nothing to sell!!") end
+		end
+	end)
+end)
+
+RegisterServerEvent("drug-sell:set911Blip")
+AddEventHandler("drug-sell:set911Blip", function(coordsx, coordsy, coordsz)
+	TriggerEvent("es:getPlayers", function(players)
+		if players then 
+			for id, player in pairs(players) do 
+				if player.getActiveCharacterData("job") == "sheriff" then 
+					TriggerClientEvent("drug-sell:createBlip", id, coordsx, coordsy, coordsz)
+				end
+			end
 		end
 	end)
 end)
