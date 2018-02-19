@@ -177,41 +177,53 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 		if actionName == "use" then
 			interactionMenuUse(itemName, wholeItem)
 		elseif actionName == "drop" then
-			if not IsPedDeadOrDying(GetPlayerPed(-1), 1) and not IsPedCuffed(GetPlayerPed(-1)) then
-				TriggerEvent("interaction:notify", "Dropping item: " .. removeQuantityFromItemName(itemName))
-				TriggerServerEvent("interaction:dropItem", itemName)
-			else
-				print("player who was cuffed or dead was trying to drop an item!")
+			if not string.find(itemName, "Driver") then
+				if not IsPedDeadOrDying(GetPlayerPed(-1), 1) and not IsPedCuffed(GetPlayerPed(-1)) then
+					TriggerEvent("interaction:notify", "Dropping item: " .. removeQuantityFromItemName(itemName))
+					TriggerServerEvent("interaction:dropItem", itemName)
+				else
+					print("player who was cuffed or dead was trying to drop an item!")
+				end
+			else 
+				print("can't drop DL!!")
 			end
 		elseif string.find(actionName, "give") then
-			TriggerServerEvent("interaction:giveItemToPlayer", wholeItem, targetPlayerId)
+			if not string.find(itemName, "Driver") then
+				TriggerServerEvent("interaction:giveItemToPlayer", wholeItem, targetPlayerId)
+			else 
+				print("can't give DL!!")
+			end 
 		elseif actionName == "store" then
-			-- Get quantity to transfer from user input:
-			Citizen.CreateThread( function()
-				DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
-				while true do
-					if ( UpdateOnscreenKeyboard() == 1 ) then
-						local input_amount = GetOnscreenKeyboardResult()
-						if ( string.len( input_amount ) > 0 ) then
-							local amount = tonumber( input_amount )
-							if ( amount > 0 ) then
-								-- trigger server event to remove money
-								amount = round(amount, 0)
-								local quantity_to_transfer = amount
-								if quantity_to_transfer <= wholeItem.quantity then
-									TriggerEvent("vehicle:checkTargetVehicleForStorage", wholeItem, quantity_to_transfer)
+			if not string.find(itemName, "Driver") then
+				-- Get quantity to transfer from user input:
+				Citizen.CreateThread( function()
+					DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+					while true do
+						if ( UpdateOnscreenKeyboard() == 1 ) then
+							local input_amount = GetOnscreenKeyboardResult()
+							if ( string.len( input_amount ) > 0 ) then
+								local amount = tonumber( input_amount )
+								if ( amount > 0 ) then
+									-- trigger server event to remove money
+									amount = round(amount, 0)
+									local quantity_to_transfer = amount
+									if quantity_to_transfer <= wholeItem.quantity then
+										TriggerEvent("vehicle:checkTargetVehicleForStorage", wholeItem, quantity_to_transfer)
+									end
 								end
+								break
+							else
+								DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
 							end
+						elseif ( UpdateOnscreenKeyboard() == 2 ) then
 							break
-						else
-							DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
 						end
-					elseif ( UpdateOnscreenKeyboard() == 2 ) then
-						break
+						Citizen.Wait( 0 )
 					end
-					Citizen.Wait( 0 )
-				end
-			end )
+				end )
+			else 
+				print("can't store DL!!")
+			end 
 		end
 	end
 end)

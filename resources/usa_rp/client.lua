@@ -300,7 +300,7 @@ AddEventHandler('RollWindow', function()
     if IsPedInAnyVehicle(playerPed, false) then
         local playerCar = GetVehiclePedIsIn(playerPed, false)
 		if ( GetPedInVehicleSeat( playerCar, -1 ) == playerPed ) then
-            SetEntityAsMissionEntity( playerCar, true, true )
+            --SetEntityAsMissionEntity( playerCar, true, true )
 			if ( windowup ) then
 				RollDownWindow(playerCar, 0)
 				RollDownWindow(playerCar, 1)

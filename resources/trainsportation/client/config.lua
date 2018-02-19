@@ -15,6 +15,8 @@ Config.MarkerSize   = {x = 1.5, y = 1.5, z = 1.0}
 Config.MarkerColor  = {r = 0, g = 255, b = 0}
 Config.BlipSprite   = 79
 
+local train = nil
+
 --Debug
 Config.Debug = false
 
@@ -84,7 +86,11 @@ function getCanPassenger(veh)
 end
 
 function createTrain(type,x,y,z)
-	local train = CreateMissionTrain(type,x,y,z,true)
+	if not train then
+		train = CreateMissionTrain(type,x,y,z,true)
+	else 
+		print("already spawned train!")
+	end
 	SetTrainSpeed(train,0)
 	SetTrainCruiseSpeed(train,0)
 	SetEntityAsMissionEntity(train, true, false)
