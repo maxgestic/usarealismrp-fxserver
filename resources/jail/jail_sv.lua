@@ -109,6 +109,7 @@ function jailPlayer(data, officerName)
 		TriggerEvent("warrants:removeAnyActiveWarrants", inmate_name)
 		if GetDLSuspensionDays(reason) then
 			TriggerEvent("dmv:setLicenseStatus", "suspended", targetPlayer, GetDLSuspensionDays(reason))
+			TriggerClientEvent("usa:notify", targetPlayer, "Your driver's license has been suspended for " .. GetDLSuspensionDays(reason))
 		end
 	end)
 end

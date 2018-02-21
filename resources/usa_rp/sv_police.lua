@@ -236,7 +236,7 @@ TriggerEvent('es:addJobCommand', 'store', { "police", "sheriff", "ems" }, functi
 	if args[2] then
 		TriggerClientEvent("police:storeWeapon", source, args[2])
 	else
-		TriggerClientEvent("usa:notify", "Invalid format!")
+		TriggerClientEvent("usa:notify", source, "Invalid format!")
 	end
 end, {
 	help = "store",
@@ -250,7 +250,7 @@ TriggerEvent('es:addJobCommand', 'grab', { "police", "sheriff", "ems" }, functio
 	if args[2] then
 		TriggerClientEvent("police:grabWeapon", source, args[2])
 	else
-		TriggerClientEvent("usa:notify", "Invalid format!")
+		TriggerClientEvent("usa:notify", source, "Invalid format!")
 	end
 end, {
 	help = "grab",
@@ -258,8 +258,3 @@ end, {
 		{ name = "weapon", help = "ar, shotgun" }
 	}
 })
-
--- hand on radio:
-TriggerEvent('es:addJobCommand', 'r', { "police", "sheriff", "ems" }, function(source, args, user)
-	TriggerClientEvent("Radio", source)
-end, { help = "Put your hand on your dispatch radio microphone." })

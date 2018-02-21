@@ -9,9 +9,11 @@ AddEventHandler("go-postal:checkLicense", function()
           local item = user_licenses[i]
           if string.find(item.name, "Driver") then
             print("DL found! checking validity")
+			print("item.status: " .. item.status)
             if item.status == "valid" then
+				print("calling had DL!")
 				TriggerClientEvent("go-postal:hadDL", userSource)
-              return
+				return
             else 
 				TriggerClientEvent("usa:notify", userSource, "Your license is suspended!")
 				return

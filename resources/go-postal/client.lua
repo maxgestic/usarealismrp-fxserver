@@ -99,12 +99,13 @@ Citizen.CreateThread(function()
 	end
 end)
 
+local has_valid_dl = false
+
 RegisterNetEvent("go-postal:hadDL")
 AddEventHandler("go-postal:hadDL", function()
+	print("had DL!!")
 	has_valid_dl = true
 end)
-
-local has_valid_dl = false
 
 local pressed = false
 local distance = nil
@@ -120,9 +121,13 @@ Citizen.CreateThread(function()
 				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), info.x, info.y, info.z, true) < 2 and (IsPedInAnyVehicle(GetPlayerPed(-1), true) == false or GetVehiclePedIsIn(GetPlayerPed(-1), false) == lastTruck) then
 					DrawSpecialText("Press [ ~g~Enter~w~ ] to start working for Go Postal")
 			        if IsControlPressed(0, 176) then
-						if not has_valid_dl then TriggerServerEvent("go-postal:checkLicense") end
-						if has_valid_dl then
-							if not pressed then
+						if not has_valid_dl then
+							print("calling check license!")
+							TriggerServerEvent("go-postal:checkLicense")
+						elseif has_valid_dl then
+							has_valid_dl = false
+							print("has valid dl was true!")
+							--if not pressed then
 								job = gopostal[math.random(#gopostal)]
 								job.name = "Go Postal"
 								job.distance = GetDistanceBetweenCoords(job.x, job.y, job.z, GetEntityCoords(GetPlayerPed(-1)))
@@ -168,7 +173,7 @@ Citizen.CreateThread(function()
 										break
 									end
 								end
-							end
+							--end
 						end
 	                end
 				end
@@ -270,8 +275,8 @@ Citizen.CreateThread(function()
 					DrawSpecialText("Press [ ~g~E~w~ ] to deliver your Go Postal packages")
 			        if IsControlPressed(0, 86) then
 			            if not pressed then
-							if job.distance * 2 > 4000 then
-								pay = 4000
+							if job.distance * 2 > 3700 then
+								pay = 3700
 							else
 								pay = math.ceil(job.distance * 2)
 							end
@@ -334,8 +339,8 @@ Citizen.CreateThread(function()
 					DrawSpecialText("Press [ ~g~E~w~ ] to deliver your goods.")
 			        if IsControlPressed(0, 86) then
 			            if not pressed then
-							if job.distance * 2 > 4000 then
-								pay = 4000
+							if job.distance * 2 > 3000 then
+								pay = 3000
 							else
 								pay = math.ceil(job.distance * 2)
 							end
