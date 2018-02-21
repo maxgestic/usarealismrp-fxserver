@@ -2,9 +2,9 @@ local debug = true
 
 -- todo: randomize price based on each purchase instead of once
 local SELLABLE_ITEMS = {
-	["Hash"] = math.random(190, 300),
-	["Meth"] = math.random(325, 500),
-	["Weed Bud"] = math.random(100, 190)
+	["Hash"] = math.random(250, 400),
+	["Meth"] = math.random(500, 700),
+	["Weed Bud"] = math.random(150, 200)
 }
 
 -- since i think param 2 of usa:getPlayerItems needs to be in table form:
