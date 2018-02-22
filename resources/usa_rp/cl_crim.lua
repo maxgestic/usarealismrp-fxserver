@@ -1,5 +1,6 @@
 local hands_up = false
 local hands_tied = false
+local blindfolded = false
 
 ---------------
 -- blindfold --
@@ -13,6 +14,7 @@ AddEventHandler("crim:blindfold", function(on, dont_send_message)
     enable = on,
     blindfold = on
   })
+  blindfolded = on
   if not dont_send_message then
     if on then
       TriggerEvent("usa:notify", "You have been blindfolded!")
@@ -72,7 +74,7 @@ Citizen.CreateThread(function()
 			DisableControlAction(1, 29, true)
 			DisableControlAction(1, 322, true)
 
-			DisableControlAction(1, 18, true)
+			--DisableControlAction(1, 18, true)
 			DisableControlAction(1, 24, true)
 			DisableControlAction(1, 69, true)
 			DisableControlAction(1, 92, true)
@@ -81,7 +83,7 @@ Citizen.CreateThread(function()
 			DisableControlAction(1, 135, true)
 			DisableControlAction(1, 142, true)
 			DisableControlAction(1, 144, true)
-			DisableControlAction(1, 176, true)
+			--DisableControlAction(1, 176, true)
 			DisableControlAction(1, 223, true)
 			DisableControlAction(1, 229, true)
 			DisableControlAction(1, 237, true)
@@ -139,6 +141,12 @@ Citizen.CreateThread(function()
 				end
 				TaskPlayAnim(GetPlayerPed(-1), "mp_arresting", "idle", 8.0, -8, -1, 49, 0, 0, 0, 0)
 			end
+		end
+		-- remove blind folds if dead:
+		if IsPedDeadOrDying(GetPlayerPed(-1), 1) and blindfolded then
+			print("removing blindfold!")
+			TriggerEvent("crim:blindfold", false, true)
+			blindfolded = false
 		end
 	end
 end)

@@ -18,8 +18,6 @@ local skins = {
 	"S_M_Y_Sheriff_01",
 	"S_F_Y_Sheriff_01",
 	"ig_trafficwarden",
-	"mp_m_freemode_01",
-	"mp_f_freemode_01",
 	"mp_m_fibsec_01",
 	"ig_stevehains",
 	"ig_andreas",

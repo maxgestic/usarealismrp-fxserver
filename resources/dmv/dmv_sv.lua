@@ -37,29 +37,32 @@ AddEventHandler("dmv:checkMoney", function(price)
 end)
 
 RegisterServerEvent("dmv:checkSuspension")
-AddEventHandler("dmv:checkSuspension", function()
-	local userSource = source
+AddEventHandler("dmv:checkSuspension", function(id)
+	print("checking player license status!")
+	local userSource = id
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local licenses = user.getActiveCharacterData("licenses")
 		for i = 1, #licenses do
-			local license =  licenses[i]
-			if  license.name == "Driver's License" then
-				if license.status == "suspended" then 
-					--licenses[i].suspension_start = os.time()
-					--licenses[i].suspension_days = days
-					local reference = licenses[i].suspension_start
-					print("reference: " .. reference)
-					print("suspended days: " .. licenses[i].suspension_days)
-					local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
-					local wholedays = math.floor(daysfrom)
-					print("wholedays: " .. wholedays) -- today it prints "1"
-					if wholedays > licenses[i].suspension_days then
-						licenses[i].status = "valid"
-						user.setActiveCharacterData("licenses", licenses)
-						print("suspension period was over! setting to valid!")
+			if licenses then
+				local license =  licenses[i]
+				if  license.name == "Driver's License" then
+					if license.status == "suspended" then 
+						--licenses[i].suspension_start = os.time()
+						--licenses[i].suspension_days = days
+						local reference = licenses[i].suspension_start
+						print("reference: " .. reference)
+						print("suspended days: " .. licenses[i].suspension_days)
+						local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
+						local wholedays = math.floor(daysfrom)
+						print("wholedays: " .. wholedays) -- today it prints "1"
+						if wholedays > licenses[i].suspension_days then
+							licenses[i].status = "valid"
+							user.setActiveCharacterData("licenses", licenses)
+							print("suspension period was over! setting to valid!")
+						end
 					end
+					return
 				end
-				return
 			end
 		end
 		print("person had no DL!")

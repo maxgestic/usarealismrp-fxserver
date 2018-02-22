@@ -7,10 +7,6 @@ local locations = {
 	{x = 1855.458, y = 3688.599, z = 33.273} -- sandy
 }
 
-AddEventHandler("playerSpawned", function(spawn)
-	TriggerServerEvent("dmv:checkSuspension")
-end)
-
 RegisterNetEvent("dmv:insufficientFunds")
 AddEventHandler("dmv:insufficientFunds", function()
 
