@@ -6,7 +6,7 @@ storeItems = {
       {name = "Kosher Hot Dog", price = 40, type = "food", substance = 70.0, quantity = 1, legality = "legal", weight = 4},
       {name = "Microwave Burrito", price = 45, type = "food", substance = 65.0, quantity = 1, legality = "legal", weight = 4},
       {name = "Peanut Butter Cups", price = 45, type = "food", substance = 40.0, quantity = 1, legality = "legal", weight = 4},
-	  {name = "Donut", price = 35, type = "food", substance = 40.0, quantity = 1, legality = "legal", weight = 4},
+	    {name = "Donut", price = 35, type = "food", substance = 40.0, quantity = 1, legality = "legal", weight = 4},
       {name = "Taco", price = 58, type = "food", substance = 45.0, quantity = 1, legality = "legal", weight = 4},
       {name = "Nachos", price = 30, type = "food", substance = 30.0, quantity = 1, legality = "legal", weight = 4},
       {name = "Walkers Milk Chocolate Toffee", price = 35, type = "food", substance = 25.0, quantity = 1, legality = "legal", weight = 3},
@@ -44,6 +44,7 @@ storeItems = {
         { name = "Bag", price = 70, type = "misc", quantity = 1, legality = "legal", weight = 10},
         { name = "Tent", price = 200, type = "misc", quantity = 1, legality = "legal", weight = 30},
         { name = "Wood", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 30},
-        { name = "Chair", price = 175, type = "misc", quantity = 1, legality = "legal", weight = 40}
+        { name = "Chair", price = 175, type = "misc", quantity = 1, legality = "legal", weight = 40},
+        { name = "Binoculars", price = 350, type = "misc", quantity = 1, legality = "legal", weight = 2 }
     }
 }

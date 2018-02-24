@@ -196,15 +196,15 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 				else
 					print("player who was cuffed or dead was trying to drop an item!")
 				end
-			else 
+			else
 				print("can't drop DL!!")
 			end
 		elseif string.find(actionName, "give") then
 			if not string.find(itemName, "Driver") then
 				TriggerServerEvent("interaction:giveItemToPlayer", wholeItem, targetPlayerId)
-			else 
+			else
 				print("can't give DL!!")
-			end 
+			end
 		elseif actionName == "store" then
 			if not string.find(itemName, "Driver") then
 				-- Get quantity to transfer from user input:
@@ -233,9 +233,9 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 						Citizen.Wait( 0 )
 					end
 				end )
-			else 
+			else
 				print("can't store DL!!")
-			end 
+			end
 		end
 	end
 end)
@@ -264,6 +264,11 @@ function interactionMenuUse(itemName, wholeItem)
 	-------------------
 	elseif string.find(itemName, "Repair Kit") then
 		TriggerEvent("interaction:repairVehicle")
+	-------------------
+	-- Repair Kit --
+	-------------------
+	elseif string.find(itemName, "Binoculars") then
+		TriggerEvent("binoculars:Activate")
 	-------------------
 	-- Cell Phone --
 	-------------------
