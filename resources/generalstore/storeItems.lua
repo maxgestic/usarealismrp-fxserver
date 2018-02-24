@@ -45,6 +45,6 @@ storeItems = {
         { name = "Tent", price = 200, type = "misc", quantity = 1, legality = "legal", weight = 30},
         { name = "Wood", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 30},
         { name = "Chair", price = 175, type = "misc", quantity = 1, legality = "legal", weight = 40},
-        { name = "Binoculars", price = 350, type = "misc", quantity = 1, legality = "legal", weight = 2 }
+        { name = "Vortex Optics Binoculars", price = 350, type = "misc", quantity = 1, legality = "legal", weight = 2 }
     }
 }
