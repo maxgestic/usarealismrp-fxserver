@@ -1,3 +1,5 @@
+local MENU_KEY, TACKLE_KEY = 288, 101
+
 local scenarios = {
 	{name = "lean", scenarioName = "WORLD_HUMAN_LEANING"},
 	{name = "cop", scenarioName = "WORLD_HUMAN_COP_IDLES"},
@@ -46,11 +48,15 @@ local player = {
 }
 
 RegisterNUICallback('escape', function(data, cb)
-	TriggerEvent("test:escapeFromCSharp")
+	--TriggerEvent("test:escapeFromCSharp")
+	print("inside of escape calling disable gui....")
+	DisableGui()
 end)
 
 RegisterNUICallback('showPhone', function(data, cb)
-	TriggerEvent("test:escapeFromCSharp")
+	--TriggerEvent("test:escapeFromCSharp")
+	print("inside of SHOW PHONE calling disable gui....")
+	DisableGui()
 	TriggerServerEvent("interaction:checkForPhone")
 end)
 
@@ -68,7 +74,8 @@ end)
 
 -- this is called when the player clicks "retrieve" in the interaction menu on a vehicle inventory item
 RegisterNUICallback('retrieveVehicleItem', function(data, cb)
-	TriggerEvent("test:escapeFromCSharp")
+	--TriggerEvent("test:escapeFromCSharp")
+	DisableGui()
 	local target_vehicle_plate = data.target_vehicle_plate
 	local target_item = data.wholeItem
 	local current_job = data.current_job
@@ -121,7 +128,8 @@ RegisterNUICallback('retrieveVehicleItem', function(data, cb)
 end)
 
 RegisterNUICallback('playEmote', function(data, cb)
-	TriggerEvent("test:escapeFromCSharp")
+	--TriggerEvent("test:escapeFromCSharp")
+	DisableGui()
 	--Citizen.Trace("inside of NUI callback with emote: " .. data.emoteName)
 	local scenarioName = data.emoteName
 	if scenarioName == "cancel" then
@@ -143,7 +151,9 @@ RegisterNUICallback('playEmote', function(data, cb)
 end)
 
 RegisterNUICallback('setVoipLevel', function(data, cb)
-	TriggerEvent("test:escapeFromCSharp")
+	--TriggerEvent("test:escapeFromCSharp")
+	print("inside of setVoipLeve calling disable gui....")
+	DisableGui()
 	--Citizen.Trace("setting voice level = " .. data.level)
 	local YELL, NORMAL, WHISPER = 0,1,2
 	local selected = data.level
@@ -157,7 +167,8 @@ RegisterNUICallback('setVoipLevel', function(data, cb)
 end)
 
 RegisterNUICallback('performPoliceAction', function(data, cb)
-	TriggerEvent("test:escapeFromCSharp")
+	--TriggerEvent("test:escapeFromCSharp")
+	DisableGui()
 	local actionIndex = data.policeActionIndex
 	local actionName = string.lower(data.policeActionName)
 	local unseatIndex = string.lower(data.unseatIndex)
@@ -166,7 +177,8 @@ RegisterNUICallback('performPoliceAction', function(data, cb)
 end)
 
 RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
-  TriggerEvent("test:escapeFromCSharp")
+  --TriggerEvent("test:escapeFromCSharp")
+	DisableGui()
   local actionName = data.actionName
 	local itemName = data.itemName
 	local wholeItem = data.wholeItem
@@ -445,4 +457,258 @@ function getVehicleInDirection(coordFrom, coordTo)
 	local rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 10, GetPlayerPed(-1), 0)
 	local a, b, c, d, vehicle = GetRaycastResult(rayHandle)
 	return vehicle
+end
+
+-- rewrite from C#:
+local playerPed, targetPed
+local playerPedCoords, targetPedCoords, offsetCoords
+local distanceToTargetPed = 0.0
+local rayHandle
+local didHit
+local hitCoords, hitSurfaceCoords
+local hitHandlePed
+local hitHandleVehicle = 0
+local playerServerId = 0
+local playerName = ""
+local raycastResult = 0
+local voipLevel = 0.0
+local menuEnabled = false -- F1 menu gui
+
+-- implement somehow
+local draggingHelper = {
+	dragging = false,
+	targetId = 0
+}
+
+function EnableGui(target_vehicle_plate)
+	SetNuiFocus(true, true)
+	menuEnabled = true
+	SetPedCanSwitchWeapon(GetPlayerPed(-1), not menuEnabled)
+	SendNUIMessage({
+		type = "enableui",
+		enable = true,
+		playerName = playerName,
+		playerId = playerServerId,
+		voip = voipLevel,
+		target_vehicle_plate = target_vehicle_plate
+	})
+end
+
+function DisableGui()
+	SetNuiFocus(false, false)
+	menuEnabled = false
+	SetPedCanSwitchWeapon(GetPlayerPed(-1), not menuEnabled)
+	SendNUIMessage({
+		type = "enableui",
+		enable = false
+	})
+end
+
+-- event handlers
+RegisterNetEvent("interaction:setF1VoipLevel")
+AddEventHandler("interaction:setF1VoipLevel", function(level)
+	print("set voip level to: " .. level)
+	voipLevel = level
+end)
+
+RegisterNetEvent("interaction:performPoliceAction")
+AddEventHandler("interaction:performPoliceAction", function(action, unseatIndex)
+	if action == "cuff" then
+		if playerServerId ~= 0 then
+			TriggerServerEvent("cuff:Handcuff", playerServerId)
+		else
+			TriggerEvent("usa:notify", "No player found to cuff!")
+		end
+	elseif action == "drag" then
+		--if not draggingHelper.dragging then
+			if playerServerId ~= 0 then
+				TriggerServerEvent("dr:dragPlayer", playerServerId)
+				draggingHelper.dragging = not draggingHelper.dragging
+				draggingHelper.targetId = playerServerId
+			end
+		--end
+	elseif action == "search" then
+		if playerServerId ~= 0 then
+			local source = GetPlayerServerId(PlayerId())
+			TriggerServerEvent("search:searchPlayer", source, playerServerId)
+		end
+	elseif action == "mdt" then
+		if playerServerId ~= 0 then
+			local source = GetPlayerServerId(PlayerId())
+			TriggerServerEvent("license:searchForLicense", source, playerServerId)
+		end
+	elseif action == "place" then
+		if draggingHelper.dragging then
+			local source = GetPlayerServerId(PlayerId())
+			TriggerServerEvent("place:placePerson", draggingHelper.targetId)
+		else
+			print("no player found to place, must be dragging them!")
+		end
+	elseif action == "unseat" then
+		local driverSeatPlayerId = 0
+		local passengerSeatPlayerId = 0
+		local backLeftPlayerId = 0
+		local backRightPlayerId = 0
+		local playerIdToUnseat = 0
+		-- compare against all active players
+		for x = 0, 64 do
+			if NetworkIsPlayerActive(x) then
+				playerName = GetPlayerName(x)
+				playerServerId = GetPlayerServerId(x)
+				targetPed = GetPlayerPed(x)
+				targetPedCoords = GetEntityCoords(targetPed, false)
+				distanceToTargetPed = Vdist(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, targetPedCoords.x, targetPedCoords.y, targetPedCoords.z)
+				if GetPedInVehicleSeat(hitHandleVehicle, -1) == targetPed then
+					driverSeatPlayerId = playerServerId
+				elseif GetPedInVehicleSeat(hitHandleVehicle, 0) == targetPed then
+					passengerSeatPlayerId = playerServerId
+				elseif GetPedInVehicleSeat(hitHandleVehicle, 1) == targetPed then
+					backLeftPlayerId = playerServerId
+				elseif GetPedInVehicleSeat(hitHandleVehicle, 2) == targetPed then
+					backRightPlayerId = playerServerId
+				end
+			end
+		end
+		-- unseat proper position
+		if unseatIndex == "front left" then
+			TriggerServerEvent("place:unseatPerson", driverSeatPlayerId)
+			playerIdToUnseat = driverSeatPlayerId
+		elseif unseatIndex == "front right" then
+			TriggerServerEvent("place:unseatPerson", passengerSeatPlayerId)
+			playerIdToUnseat = passengerSeatPlayerId
+		elseif unseatIndex == "back left" then
+			TriggerServerEvent("place:unseatPerson", backLeftPlayerId)
+			playerIdToUnseat = backLeftPlayerId
+		elseif unseatIndex == "back right" then
+			TriggerServerEvent("place:unseatPerson", backRightPlayerId)
+			playerIdToUnseat = backRightPlayerId
+		end
+		-- drag them
+		if draggingHelper.targetId ~= playerIdToUnseat then
+			TriggerServerEvent("dr:dragPlayer", playerIdToUnseat)
+			draggingHelper.dragging = true
+			draggingHelper.targetId = playerIdToUnseat
+		end
+	elseif action == "impound" then
+		if hitHandleVehicle ~= 0 then
+			TriggerServerEvent("impound:impoundVehicle", hitHandleVehicle, GetVehicleNumberPlateText(hitHandleVehicle))
+			SetEntityAsMissionEntity(hitHandleVehicle, true, true)
+			DeleteEntity(hitHandleVehicle)
+		else
+			TriggerEvent("usa:notify", "No vehicle detected!")
+		end
+	elseif action == "seize veh" then
+		local veh = getVehicleInFrontOfUser()
+		local plate = GetVehicleNumberPlateText(veh)
+		TriggerServerEvent("vehicle:seizeContraband", plate)
+	end
+end)
+
+RegisterNetEvent("interaction:repairVehicle")
+AddEventHandler("interaction:repairVehicle", function(is_backpack_item)
+	if hitHandleVehicle ~= 0 then
+		if (GetVehicleEngineHealth(hitHandleVehicle) < 1000 or not IsVehicleDriveable(hitHandleVehicle, false) and not IsPedInAnyVehicle(GetPlayerPed(-1), true)) then
+			TriggerServerEvent("carDamage:checkForRepairKit", hitHandleVehicle, is_backpack_item)
+		end
+	else
+		TriggerEvent("usa:notify", "No vehicle detected!")
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		playerName = "no one"
+		playerServerId = 0
+		hitHandlePed = 0
+		hitHandleVehicle = 0
+		playerPed = GetPlayerPed(-1)
+		playerPedCoords = GetEntityCoords(playerPed, false)
+		--offsetCoords = GetOffsetFromEntityGivenWorldCoords(playerPed, playerPedCoords.x, playerPedCoords.y, playerPedCoords.z)
+		-- get nearest ped:
+		--rayHandle = CastRayPointToPoint(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, offsetCoords.x, offsetCoords.y, offsetCoords.z, 12, GetPlayerPed(-1), 0)
+		--rayHandle = StartShapeTestCapsule(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, offsetCoords.x, offsetCoords.y, offsetCoords.z, 1.0, 12, playerPed)
+		--a, b, c, d, hitHandlePed = GetRaycastResult(rayHandle)
+		-- get nearest veh (temp only get vehicle in front, todo: get closest vehicle regardless of where ped is facing):
+		hitHandleVehicle = getVehicleInFrontOfUser()
+		-- get closest player server id:
+		playerServerId, playerName = GetClosestPlayerInfo()
+
+		-- watch for open/close menu
+		if IsControlJustPressed( 0, MENU_KEY ) and GetLastInputMethod(2) then
+			local target_veh = getVehicleInFrontOfUser()
+			local target_veh_plate = GetVehicleNumberPlateText(target_veh)
+			EnableGui(target_veh_plate)
+			GiveWeaponToPed(GetPlayerPed(-1), 0xA2719263, 0, false, true)
+		end
+
+		-- tackling:
+		if IsControlJustPressed( 0, TACKLE_KEY ) and GetLastInputMethod(2) then
+			if not IsEntityDead(GetPlayerPed(-1)) and not IsPedInAnyVehicle(GetPlayerPed(-1), true) then
+				if playerServerId ~= 0 then
+					if distanceToTargetPed < 1.2 then
+						if not IsPedRagdoll(GetPlayerPed(-1)) and not IsPedCuffed(GetPlayerPed(-1)) then
+							TriggerServerEvent("interaction:tackle", playerServerId)
+							SetPedToRagdoll(GetPlayerPed(-1), 1000, 1000, 0, true, true, false)
+						end
+					else
+						TriggerEvent("usa:notify", "Player too far to tackle!")
+					end
+				else
+					TriggerEvent("usa:notify", "No player found to tackle!")
+				end
+			end
+		end
+
+		-- menu
+		if menuEnabled then
+			DisableControlAction(29, 241, menuEnabled)
+			DisableControlAction(29, 242, menuEnabled)
+			DisableControlAction(0, 1, menuEnabled)
+			DisableControlAction(0, 2, menuEnabled)
+			DisableControlAction(0, 142, menuEnabled)
+			DisableControlAction(0, 106, menuEnabled)
+			--if IsDisabledControlJustReleased(0, 142) then
+				--SendNUIMessage({
+					--type = "click"
+				--})
+			--end
+		end
+
+		Citizen.Wait(0)
+	end
+end)
+
+function GetClosestPlayerInfo()
+	local closestDistance = 0
+	local closestPlayerServerId = 0
+	local closestName = ""
+	for x = 0, 64 do
+		if NetworkIsPlayerActive(x) then
+			targetPed = GetPlayerPed(x)
+			targetPedCoords = GetEntityCoords(targetPed, false)
+			distanceToTargetPed = Vdist(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, targetPedCoords.x, targetPedCoords.y, targetPedCoords.z)
+			if targetPed ~= GetPlayerPed(-1) then
+				if distanceToTargetPed < 10 then
+					if closestDistance == 0 then
+						closestDistance = distanceToTargetPed
+						closestPlayerServerId = GetPlayerServerId(x)
+						closestName = GetPlayerName(x)
+						hitHandlePed = GetPlayerPed(x)
+						--rayHandle = CastRayPointToPoint(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, targetPedCoords.x, targetPedCoords.y, targetPedCoords.z, 12, GetPlayerPed(-1), 0)
+						--a, b, c, d, hitHandlePed = GetRaycastResult(rayHandle)
+					else
+						if distanceToTargetPed < closestDistance then
+							closestDistance = distanceToTargetPed
+							closestPlayerServerId = GetPlayerServerId(x)
+							closestName = GetPlayerName(x)
+							hitHandlePed = GetPlayerPed(x)
+							--rayHandle = CastRayPointToPoint(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, targetPedCoords.x, targetPedCoords.y, targetPedCoords.z, 12, GetPlayerPed(-1), 0)
+							--a, b, c, d, hitHandlePed = GetRaycastResult(rayHandle)
+						end
+					end
+				end
+			end
+		end
+	end
+	return closestPlayerServerId, closestName
 end

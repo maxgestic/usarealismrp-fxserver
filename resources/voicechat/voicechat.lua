@@ -29,7 +29,7 @@ AddEventHandler('voip', function(voipDistance)
 	setDistance = distanceSetting
 
 	print("setting interaction menu voip display: " .. distanceSetting)
-	TriggerEvent("test:setCSharpVoipLevel", distanceSetting)
+	TriggerEvent("interaction:setF1VoipLevel", distanceSetting)
 end)
 
 function NotificationMessage(message)

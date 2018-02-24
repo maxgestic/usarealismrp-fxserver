@@ -224,6 +224,7 @@ function populateInventory(inventory, weapons, licenses) {
 
 }
 
+var x = 0;
 /* Set the width of the side navigation to 0 */
 function closeNav() {
 	$("#mySidenav .veh-inventory-btn").remove();
@@ -240,6 +241,7 @@ function closeNav() {
 	$("#mySidenav .vehicle-item-actions-back-btn").remove();
 	$("#mySidenav .police-btn").remove();
 	document.getElementsByClassName("sidenav")[0].style.width = "0";
+	x = 0; // prevent menu from auto closing (document.keyup firing twice?)
 }
 
 $(function() {
@@ -275,25 +277,33 @@ $(function() {
 				}
 			}
 		} else if (event.data.type == "inventoryLoaded") {
-			playerInventory = event.data.inventory;
-			playerWeapons = event.data.weapons;
-			playerLicenses = event.data.licenses;
-			populateInventory(playerInventory, playerWeapons, playerLicenses);
+				playerInventory = event.data.inventory;
+				playerWeapons = event.data.weapons;
+				playerLicenses = event.data.licenses;
+				populateInventory(playerInventory, playerWeapons, playerLicenses);
 		} else if (event.data.type == "vehicleInventoryLoaded") {
-			target_vehicle_inventory = event.data.vehicle_inventory;
-			populateVehicleInventory(target_vehicle_inventory)
+				target_vehicle_inventory = event.data.vehicle_inventory;
+				populateVehicleInventory(target_vehicle_inventory);
 		} else if (event.data.type == "setPlayerJob") {
-			currentPlayerJob = event.data.job;
+				currentPlayerJob = event.data.job;
 		}
 	});
 
 	document.onkeyup = function (data) {
 		if (data.which == 27) { // Escape key
-			$.post('http://interaction-menu/escape', JSON.stringify({}));
-			closeNav();
+			if (x > 0) {
+				$.post('http://interaction-menu/escape', JSON.stringify({}));
+				closeNav();
+			} else {
+				x++;
+			}
 		} else if (data.which == 112) { // F1 key
-			$.post('http://interaction-menu/escape', JSON.stringify({}));
-			closeNav();
+			if (x > 0) {
+				$.post('http://interaction-menu/escape', JSON.stringify({}));
+				closeNav();
+			} else {
+				x++;
+			}
 		}
 	};
 

@@ -1,4 +1,4 @@
-client_scripts {"cl_interaction.lua", "example.net.dll"}
+client_scripts {"cl_interaction.lua"}
 server_script "sv_interaction.lua"
 
 ui_page 'html/index.html'

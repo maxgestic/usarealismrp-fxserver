@@ -13,10 +13,12 @@ m.suffix = ''
 -- You can make as many messages as you want.
 -- You can use ^0-^9 in your messages to change text color.
 m.messages = {
-    "^0Interested in joining the Blaine County Sheriff's Office? Apply today at https://www.usarrp.net!",
+  "^0Interested in joining the Blaine County Sheriff's Office? Apply today at https://www.usarrp.net!",
 	"^0Interested in becoming a paramedic? Apply today at https://www.usarrp.net!",
 	"^0Want to skip ahead in the queue? Confident in your RP? Apply to get whitelisted at https://www.usarrp.net.",
-	"^0You must drive your vehicle as you would in real life! You can do /rules for more info."
+	"^0You must drive your vehicle as you would in real life! You can do /rules for more info.",
+  "^0New to the city? Do /rules to read the rules.",
+  "^0Enjoy your stay!"
 }
 
 -- Player identifiers on this list will not receive any messages.
