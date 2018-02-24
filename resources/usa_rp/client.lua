@@ -61,7 +61,7 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
-		SetPedDensityMultiplierThisFrame(0.9)
+		SetPedDensityMultiplierThisFrame(1.0)
 		SetVehicleDensityMultiplierThisFrame(0.0002) -- npc vehicle amount
 	end
 end)
@@ -300,7 +300,7 @@ AddEventHandler('RollWindow', function()
     if IsPedInAnyVehicle(playerPed, false) then
         local playerCar = GetVehiclePedIsIn(playerPed, false)
 		if ( GetPedInVehicleSeat( playerCar, -1 ) == playerPed ) then
-            SetEntityAsMissionEntity( playerCar, true, true )
+            --SetEntityAsMissionEntity( playerCar, true, true )
 			if ( windowup ) then
 				RollDownWindow(playerCar, 0)
 				RollDownWindow(playerCar, 1)

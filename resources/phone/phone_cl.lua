@@ -125,6 +125,11 @@ RegisterNUICallback('send911Message', function(data, cb)
 		table.insert( street, GetStreetNameFromHashKey( lastStreetB ) )
 	end
 	data.location = table.concat( street, " & " )
+	data.pos = {
+		x = playerPos.x,
+		y = playerPos.y,
+		z = playerPos.z
+	}
 	TriggerServerEvent("phone:send911Message", data)
     cb('ok')
 end)
@@ -146,6 +151,11 @@ RegisterNUICallback('sendTaxiMessage', function(data, cb)
 		table.insert( street, GetStreetNameFromHashKey( lastStreetB ) )
 	end
 	data.location = table.concat( street, " & " )
+	data.pos = {
+		x = playerPos.x,
+		y = playerPos.y,
+		z = playerPos.z
+	}
 	-- call server function, check if any is online:
 	TriggerServerEvent("phone:sendTaxiMessage", data)
     cb('ok')
@@ -168,6 +178,11 @@ RegisterNUICallback('sendTowMessage', function(data, cb)
 		table.insert( street, GetStreetNameFromHashKey( lastStreetB ) )
 	end
 	data.location = table.concat( street, " & " )
+	data.pos = {
+		x = playerPos.x,
+		y = playerPos.y,
+		z = playerPos.z
+	}
 	TriggerServerEvent("phone:sendTowMessage", data)
     cb('ok')
 end)

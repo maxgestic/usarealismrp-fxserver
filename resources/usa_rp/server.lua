@@ -205,6 +205,42 @@ AddEventHandler("usa:getPlayerItem", function(from_source, item_name, callback)
 	end)
 end)
 
+-- see if user has item in Inventory:
+-- if player has it, return it
+-- if not, return nil
+RegisterServerEvent("usa:getPlayerItems")
+AddEventHandler("usa:getPlayerItems", function(from_source, item_names, callback)
+	print("inside usa:getPlayerItem!")
+	print("from_source: " .. from_source)
+	local userSource = tonumber(from_source)
+	local return_items = {}
+	local found = false
+	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+		local user_inventory = user.getActiveCharacterData("inventory")
+		for i = 1, #user_inventory do
+			local item = user_inventory[i]
+			if item then
+				for x = 1, #item_names do
+					if string.find(item.name, item_names[x]) then
+						print("found item in inventory, returning it!")
+						table.insert(return_items, item)
+						--callback(item)
+						--return
+						found = true
+					end
+				end
+			end
+		end
+		if found then
+			callback(return_items)
+		else
+			print("did not find inventory items")
+			-- not found if here, return nil:
+			callback(nil)
+		end
+	end)
+end)
+
 -- assumes quantity provided is less than or equal to_remove_item.quantity
 RegisterServerEvent("usa:removeItem")
 AddEventHandler("usa:removeItem", function(to_remove_item, quantity, from_source)

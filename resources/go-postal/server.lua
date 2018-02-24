@@ -1,5 +1,28 @@
 local activeJobs = {}
 
+RegisterServerEvent("go-postal:checkLicense")
+AddEventHandler("go-postal:checkLicense", function()
+	local userSource = source
+	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+		local user_licenses = user.getActiveCharacterData("licenses")
+		for i = 1, #user_licenses do
+          local item = user_licenses[i]
+          if string.find(item.name, "Driver") then
+            print("DL found! checking validity")
+			print("item.status: " .. item.status)
+            if item.status == "valid" then
+				print("calling had DL!")
+				TriggerClientEvent("go-postal:hadDL", userSource)
+				return
+            else 
+				TriggerClientEvent("usa:notify", userSource, "Your license is suspended!")
+				return
+			end
+          end
+        end
+	end)
+end)
+
 RegisterServerEvent("transport:giveMoney")
 AddEventHandler("transport:giveMoney", function(amount, job)
 	local userSource = tonumber(source)

@@ -67,7 +67,13 @@ AddEventHandler("license:searchForLicense", function(source, playerId)
 						TriggerClientEvent("chatMessage", source, "FULL NAME", {169, 44, 98}, license.ownerName)
 						TriggerClientEvent("chatMessage", source, "DOB", {169, 44, 98}, license.ownerDob)
 						TriggerClientEvent("chatMessage", source, "EXPIRES", {169, 44, 98}, license.expire)
-						TriggerClientEvent("chatMessage", source, "STATUS", {169, 44, 98}, license.status)
+						if license.status == "valid" then
+							TriggerClientEvent("chatMessage", source, "STATUS", {169, 44, 98}, license.status)
+						else 
+							TriggerClientEvent("chatMessage", source, "STATUS", {169, 44, 98}, "^1" .. license.status)
+							TriggerClientEvent("chatMessage", source, "DAYS", {169, 44, 98}, "^1" .. license.suspension_days)
+							TriggerClientEvent("chatMessage", source, "START DAY", {169, 44, 98}, "^1" .. license.suspension_start_date)
+						end
 						hasDL = true
 					elseif licenses[i].name == "Firearm Permit" then
 						TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^2Firearm Permit^0.")
@@ -75,7 +81,7 @@ AddEventHandler("license:searchForLicense", function(source, playerId)
 					end
 			end
 			if not hasDL then
-				TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0No driver's license.")
+				TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^1No driver's license.")
 			end
 			if not hasFirearmsPermit then
 				TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0No firearm permit on record.")

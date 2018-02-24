@@ -8,7 +8,8 @@ local WARRANTS = {}
 	reason,
 	isFelony,
 	notes,
-	timestamp
+	timestamp,
+	author
 ]]
 
 ---------------------------
@@ -170,7 +171,8 @@ TriggerEvent('es:addJobCommand', 'warrants', { "police", "sheriff" }, function(s
 		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "--------------------------------------------")
 		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^3WANTED: ^0" .. warrant.first_name .. " " .. warrant.last_name .. "")
 		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^3NOTES:^0 " .. warrant.notes)
-		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^3CREATED:^0 " .. warrant.timestamp)
+		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^3TIME:^0 " .. warrant.timestamp)
+		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^3AUTHOR^0 " .. warrant.created_by)
 		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "--------------------------------------------")
 	end
 end, { help = "Show all active warrants." })
@@ -193,8 +195,6 @@ AddEventHandler("warrants:removeAnyActiveWarrants", function(name)
 	end
 end)
 
--- todo: test support to show all warrants
--- todo: test deleting support for warrantS
 
 function delete_document(db, id, rev)
 	-- send DELETE http request

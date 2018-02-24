@@ -137,12 +137,14 @@ AddEventHandler("character:loadCharacter", function(activeSlot)
 			local myGroup = user.getGroup()
 			TriggerClientEvent("character:setCharacter", userSource, character)
 			print("loaded character at slot #" .. activeSlot .. " with #weapons = " .. #(character.weapons))
-
+			-- set commands
 			for k,v in pairs(exports['essentialmode']:getCommands()) do
 				if v.job == "everyone" and exports['essentialmode']:CanGroupTarget(myGroup, v.group) then
 					TriggerClientEvent('chat:addSuggestion', userSource, '/' .. k, v.help, v.params)
 				end
 			end
+			-- check dmv license status
+			TriggerEvent("dmv:checkSuspension", userSource)
 		end
 	end)
 end)

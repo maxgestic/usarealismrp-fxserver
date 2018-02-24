@@ -35,3 +35,58 @@ AddEventHandler("dmv:checkMoney", function(price)
 		end
 	end)
 end)
+
+RegisterServerEvent("dmv:checkSuspension")
+AddEventHandler("dmv:checkSuspension", function(id)
+	print("checking player license status!")
+	local userSource = id
+	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+		local licenses = user.getActiveCharacterData("licenses")
+		for i = 1, #licenses do
+			if licenses then
+				local license =  licenses[i]
+				if  license.name == "Driver's License" then
+					if license.status == "suspended" then 
+						--licenses[i].suspension_start = os.time()
+						--licenses[i].suspension_days = days
+						local reference = licenses[i].suspension_start
+						print("reference: " .. reference)
+						print("suspended days: " .. licenses[i].suspension_days)
+						local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
+						local wholedays = math.floor(daysfrom)
+						print("wholedays: " .. wholedays) -- today it prints "1"
+						if wholedays > licenses[i].suspension_days then
+							licenses[i].status = "valid"
+							user.setActiveCharacterData("licenses", licenses)
+							print("suspension period was over! setting to valid!")
+						end
+					end
+					return
+				end
+			end
+		end
+		print("person had no DL!")
+	end)
+end)
+
+RegisterServerEvent("dmv:setLicenseStatus")
+AddEventHandler("dmv:setLicenseStatus", function(status, target_id, days)
+	TriggerEvent('es:getPlayerFromId', target_id, function(user)
+		local licenses = user.getActiveCharacterData("licenses")
+		for i = 1, #licenses do
+			local license =  licenses[i]
+			if  license.name == "Driver's License" then
+				licenses[i].status = status
+				if status == "suspended" then 
+					licenses[i].suspension_start = os.time()
+					licenses[i].suspension_days = days
+					licenses[i].suspension_start_date = os.date('%m-%d-%Y %H:%M:%S', os.time())
+				end
+				print("license set to: " .. status)
+				user.setActiveCharacterData("licenses", licenses)
+				return
+			end
+		end
+		print("person had no DL!")
+	end)
+end)

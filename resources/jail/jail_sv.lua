@@ -107,7 +107,32 @@ function jailPlayer(data, officerName)
 		}), { ["Content-Type"] = 'application/json' })
 		-- remove any active warrants:
 		TriggerEvent("warrants:removeAnyActiveWarrants", inmate_name)
+		if GetDLSuspensionDays(reason) then
+			TriggerEvent("dmv:setLicenseStatus", "suspended", targetPlayer, GetDLSuspensionDays(reason))
+			TriggerClientEvent("usa:notify", targetPlayer, "Your driver's license has been suspended for " .. GetDLSuspensionDays(reason))
+		end
 	end)
+end
+
+function GetDLSuspensionDays(charges)
+	local words = {
+		["2800.1"] = 30,
+		["2800.2"] = 30,
+		["2800.3"] = 45,
+		["12500"] = 15,
+		["16028"] = 15,
+		["20001"] = 50,
+		["20002"] = 25,
+		["21453"] = 15,
+		["23103"] = 30,
+		["23153"] = 20
+	}
+	for code, days in pairs(words) do 
+		if string.find(charges, code) then 
+			return days
+		end
+	end
+	return nil
 end
 
 function jailStatusLoop()

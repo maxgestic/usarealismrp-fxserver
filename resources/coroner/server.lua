@@ -107,10 +107,12 @@ TriggerEvent('es:addJobCommand', 'dos', { "ems", "fire", "police", "sheriff" }, 
 			-- sent global chat message
 			local eventMessage = admitted_name .. " has been sent to the morgue for " .. tostring(hospitalReason) .. "."
 			TriggerClientEvent('chatMessage', -1, "SYSTEM", {100,0,0}, eventMessage)
+			-- REMOVE WARRANTS (if any)
+			TriggerEvent("warrants:removeAnyActiveWarrants", admitted_name)
 		end)
 	end
 end, {
-	help = "Send someone to the morge",
+	help = "Send someone to the mourge to be NLR'd.",
 	params = {
 		{ name = "id", help = "Player's ID" },
 		{ name = "min", help = "Time in minutes" },

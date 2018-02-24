@@ -15,6 +15,8 @@ TriggerEvent('es:addJobCommand', 'admit', { "ems", "fire", "police", "sheriff" }
 	SetTimeout(targetPlayerAdmissionTime*60000, function()
 		TriggerClientEvent("ems:releasePatient", targetPlayerId)
 	end)
+	-- get player's character name:
+	local target_player = exports["essentialmode"]:getPlayerFromId(targetPlayerId)
 	-- send to discord #ems-logs
 	local url = 'https://discordapp.com/api/webhooks/375425187014770699/i6quT1ZKnFoZgOC4rSpudTc2ucmvfXuAUQJXqDI0oeKoeqLGX0etu-GGMpIKbKuAqk70'
 	PerformHttpRequest(url, function(err, text, headers)
@@ -24,7 +26,7 @@ TriggerEvent('es:addJobCommand', 'admit', { "ems", "fire", "police", "sheriff" }
 	end, "POST", json.encode({
 		embeds = {
 			{
-				description = "**Name:** " .. GetPlayerName(targetPlayerId) .. " \n**Time:** " .. targetPlayerAdmissionTime .. " hour(s)" .. " \n**Reason:** " .. reasonForAdmission .. "\n**Responder:** " .. GetPlayerName(userSource) .."\n**Timestamp:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
+				description = "**Name:** " .. target_player.getActiveCharacterData("fullName") .. " \n**Time:** " .. targetPlayerAdmissionTime .. " hour(s)" .. " \n**Reason:** " .. reasonForAdmission .. "\n**Responder:** " .. GetPlayerName(userSource) .."\n**Timestamp:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
 				color = 263172,
 				author = {
 					name = "Pillbox Medical"

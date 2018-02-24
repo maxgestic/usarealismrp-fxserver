@@ -196,7 +196,7 @@ AddEventHandler("crim:continueBlindfolding", function(continue_blindfolding, fro
 				TriggerClientEvent("usa:notify", source, "You have blindfolded that person.")
 			else
 				print("player did not have required item for action!")
-				TriggerClientEvent("usa:notify", source, "You need duct tape to do that!")
+				TriggerClientEvent("usa:notify", source, "You need a bag to do that!")
 			end
 		end)
 	else

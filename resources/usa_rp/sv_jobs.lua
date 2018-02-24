@@ -87,12 +87,6 @@ AddEventHandler("usa_rp:giveItem", function(itemToGive)
 			inventory[i].quantity = inventory[i].quantity + itemToGive.quantity -- increment item in inventory
 			print("meth quantity added! at: " .. inventory[i].quantity)
 			user.setActiveCharacterData("inventory", inventory) -- save the inventory
-			-- todo: choose one of a few different drop off location coordinates here?
-			if itemToGive.name == "Meth" then
-			  dropoffCoords = {x = -402.63, y = 6316.12}
-			  TriggerEvent("go_postal:setActiveJob", userSource, dropoffCoords, "meth_dropoff")
-			end
-			TriggerClientEvent("usa_rp:setWaypoint", userSource, dropoffCoords)
 			TriggerClientEvent("usa_rp:notify", userSource, "You have successfully proccessed the materials into a meth product!")
 			return
 		  end
@@ -101,14 +95,6 @@ AddEventHandler("usa_rp:giveItem", function(itemToGive)
 		table.insert(inventory, itemToGive)
 		user.setActiveCharacterData("inventory", inventory)
 		print("gave meth to user!")
-		-- set waypoint
-		-- todo: choose one of a few different drop off location coordinates here?
-		if itemToGive.name == "Meth" then
-		  dropoffCoords = {x = -402.63, y = 6316.12}
-		  TriggerEvent("go_postal:setActiveJob", userSource, dropoffCoords, "meth_dropoff")
-		end
-		TriggerClientEvent("usa_rp:setWaypoint", userSource, dropoffCoords)
-		TriggerClientEvent("usa_rp:notify", userSource, "Here is your product and directions to your destination!")
 	  else
 		TriggerClientEvent("usa_rp:notify", userSource, "Your inventory is full. Can't carry anymore!")
 	  end
@@ -196,7 +182,7 @@ AddEventHandler("usa_rp:startTimer", function(timerType)
 	}
 	TriggerClientEvent("usa_rp:notify", userSource, messages[math.random(1, tonumber(#messages))])
 	if timerType == "meth_supplies_ped" then
-		local seconds = 50
+		local seconds = 30
 		local time = seconds * 1000
 		SetTimeout(time, function()
 			TriggerClientEvent("usa_rp:notify", userSource, "Here are the chemicals needed for cooking!")

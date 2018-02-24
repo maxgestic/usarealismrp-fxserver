@@ -24,7 +24,10 @@ AddEventHandler("taxi:setJob", function()
                 timeout = false
               end)
               return
-            end
+            else 
+				TriggerClientEvent("usa:notify", source, "Your license is suspended!")
+				return
+			end
           end
         end
         -- at this point, no valid DL was found

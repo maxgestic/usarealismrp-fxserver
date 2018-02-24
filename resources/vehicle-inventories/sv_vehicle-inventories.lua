@@ -13,12 +13,14 @@ AddEventHandler("vehicle:getInventory", function(target_plate_number)
     if players then
       for id, player in pairs(players) do
         local player_vehicles = player.getActiveCharacterData("vehicles")
-        for i = 1, #player_vehicles do
-          local veh = player_vehicles[i]
-          if string.find(target_plate_number, tostring(veh.plate)) then
-            TriggerClientEvent("vehicle:loadedInventory", userSource, veh.inventory)
-          end
-        end
+		if player_vehicles then
+			for i = 1, #player_vehicles do
+			  local veh = player_vehicles[i]
+			  if string.find(target_plate_number, tostring(veh.plate)) then
+				TriggerClientEvent("vehicle:loadedInventory", userSource, veh.inventory)
+			  end
+			end
+		end
       end
     end
   end)
