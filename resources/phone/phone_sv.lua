@@ -166,6 +166,71 @@ AddEventHandler("phone:sendTweet", function(data)
 	end)
 end)
 
+-- todo: fix caller ID only showing caller #
+-- todo: fix when one person ends a call, the other person stays on the line until they manually hang up
+
+-- request phone call (p2p voice)
+RegisterServerEvent("phone:requestCall")
+AddEventHandler("phone:requestCall", function(numbers)
+	local caller_source = source
+	TriggerEvent("es:getPlayers", function(players)
+		if players then
+			for id, player in pairs(players) do
+				if id and player then
+					print("searching inventory items of player at: " .. id .. " for a cell phone with target_phone_number")
+					local inventory = player.getActiveCharacterData("inventory")
+					if inventory then
+						--//Check entire user inventory for toNumber phone
+						for j = 1, #inventory do
+							if inventory[j] then
+								-- check for a matching phone number in player items
+								if string.find(inventory[j].name, "Cell Phone") and string.find(inventory[j].number, numbers.phone_number) then
+									print("phone found with toNumber...")
+									print("requesting phone call...")
+									local caller_name = getNameFromContacts(inventory[j], numbers.from_number)
+									if caller_name then print("caller_name: " .. caller_name) else print("caller with # " .. numbers.from_number .. " not found in contacts!") caller_name = numbers.from_number end
+									TriggerClientEvent("swayam:notification", id, "Whiz Wireless", "~y~Incoming call from:~w~ " .. caller_name, "CHAR_MP_DETONATEPHONE")
+									TriggerClientEvent("phone:requestCallPermission", id, numbers.phone_number, caller_source, caller_name)
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end)
+end)
+
+-- when a player responds to an inbound call:
+RegisterServerEvent("phone:respondedToCall")
+AddEventHandler("phone:respondedToCall", function(accepted, phone_number, caller_source, caller_name, isBusy)
+	local user_source = source
+	if accepted then
+		TriggerClientEvent("phone:startCall", user_source, phone_number, caller_source)
+		TriggerClientEvent("phone:startCall", caller_source, phone_number, user_source)
+		TriggerClientEvent("swayam:notification", user_source, "Whiz Wireless", "Call ~g~started~w~!", "CHAR_MP_DETONATEPHONE")
+		TriggerClientEvent("swayam:notification", caller_source, "Whiz Wireless", "Call ~g~started~w~!", "CHAR_MP_DETONATEPHONE")
+	else
+		if not isBusy then
+			TriggerClientEvent("swayam:notification", user_source, "Whiz Wireless", "You ~y~rejected~w~ the phone call!", "CHAR_MP_DETONATEPHONE")
+			TriggerClientEvent("swayam:notification", caller_source, "Whiz Wireless", "Person ~y~rejected~w~ your phone call!", "CHAR_MP_DETONATEPHONE")
+		else
+			TriggerClientEvent("swayam:notification", user_source, "Whiz Wireless", "Caller " .. caller_name .. " has been put on ~y~hold~w~.", "CHAR_MP_DETONATEPHONE")
+			TriggerClientEvent("swayam:notification", caller_source, "Whiz Wireless", "Person is already on a call.", "CHAR_MP_DETONATEPHONE")
+		end
+	end
+end)
+
+-- notify on phone call hang up
+RegisterServerEvent("phone:endedCall")
+AddEventHandler("phone:endedCall", function(partner_source)
+	print("caller_source: " .. partner_source)
+	if partner_source ~= source then
+		TriggerClientEvent("phone:endCall", tonumber(partner_source))
+	else
+		print("partner_source was == source!")
+	end
+end)
 
 RegisterServerEvent("phone:sendTextToPlayer")
 AddEventHandler("phone:sendTextToPlayer", function(data)
@@ -463,7 +528,7 @@ function getNameFromContacts(phone, number)
 	-- look through contact list for matching phone number
 	print("#contacts in phone passed in = " .. #contacts)
 	for i = 1, #contacts do
-		if tonumber(contacts[i].number) == number then
+		if string.find(contacts[i].number, number) then
 			print("matching number found in contacts!")
 			-- return name of contact with that phone number
 			return (contacts[i].first .. " " .. contacts[i].last)

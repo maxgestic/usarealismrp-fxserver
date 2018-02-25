@@ -1,5 +1,10 @@
 local scenario = "WORLD_HUMAN_STAND_MOBILE"
 local startedTask = false
+local on_call = false
+local cellphone_object = nil
+local partner_call_source = nil
+
+local TIME_TO_ANSWER_CALL = 15
 
 function DrawCoolLookingNotificationNoPic(msg)
 	SetNotificationTextEntry("STRING")
@@ -103,6 +108,88 @@ RegisterNUICallback('getMessages', function(data, cb)
     cb('ok')
 end)
 
+-- start a phone call:
+RegisterNUICallback('requestCall', function(data, cb)
+	print(data.from_number .. " is requesting a phone call with #: " .. data.phone_number)
+	TriggerServerEvent("phone:requestCall", data)
+end)
+
+local time_to_respond = TIME_TO_ANSWER_CALL
+local timer = false
+local responded = false
+-- accept/deny inbound phone call:
+RegisterNetEvent("phone:requestCallPermission")
+AddEventHandler("phone:requestCallPermission", function(phone_number, caller_source, caller_name)
+	if not on_call then
+		responded = false
+		timer = true
+		Citizen.CreateThread(function()
+				while not responded and time_to_respond > 0 do
+					-- handle response --
+					DrawSpecialText("Accept call from " .. caller_name .. "? ~g~Y~w~/~r~BACKSPACE~w~ (" .. time_to_respond .. ")" )
+					if IsControlJustPressed(1, 246) then -- Y key
+						Citizen.Trace("player accepted phone call from: " .. caller_name)
+						responded = true
+						TriggerServerEvent("phone:respondedToCall", true, phone_number, caller_source, caller_name)
+					elseif IsControlJustPressed(1, 177) then -- BACKSPACE key
+						Citizen.Trace("player rejected phone call from: " .. caller_name)
+						responded = true
+						TriggerServerEvent("phone:respondedToCall", false, phone_number, caller_source, caller_name)
+					end
+					Wait(0)
+				end
+		end)
+	else
+		print("Player was already on a call! Putting on busy!")
+		TriggerServerEvent("phone:respondedToCall", false, phone_number, caller_source, caller_name, true)
+		PlaySoundFrontend(-1, "Beep_Red", "DLC_HEIST_HACKING_SNAKE_SOUNDS", 1)
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		if timer then
+			while time_to_respond > 0 do
+				if not responded then
+					-------------------
+					-- play ringtone --
+					-------------------
+					--PlaySoundFrontend(-1, "HACKING_CLICK_GOOD", 0, 1)
+					--PlaySoundFrontend(-1, "GOLF_NEW_RECORD", "HUD_AWARDS", 1)
+					PlaySoundFrontend(-1, "HACKING_CLICK_GOOD", 0, 1)
+				end
+				-- decrement each second --
+				time_to_respond = time_to_respond - 1
+				Wait(1000)
+			end
+			time_to_respond = TIME_TO_ANSWER_CALL
+			timer = false
+			Wait(0)
+		end
+		Wait(0)
+	end
+end)
+
+-- start a connection (p2p voice call)
+RegisterNetEvent("phone:startCall")
+AddEventHandler("phone:startCall", function(phone_number, partner_source)
+	NetworkSetVoiceChannel(tonumber(phone_number))
+	print("call started with: " .. phone_number)
+	print("partner_source: " .. partner_source)
+	on_call = true
+	partner_call_source = partner_source
+end)
+
+-- other player ended a connection (p2p voice call)
+RegisterNetEvent("phone:endCall")
+AddEventHandler("phone:endCall", function()
+	NetworkClearVoiceChannel()
+	print("call ended!")
+	on_call = false
+	ClearPedTasks(GetPlayerPed(-1))
+	TriggerEvent("swayam:notification", "Whiz Wireless", "Call ~r~ended~w~.", "CHAR_MP_DETONATEPHONE")
+end)
+
 RegisterNUICallback('sendTextMessage', function(data, cb)
 	TriggerServerEvent("phone:sendTextToPlayer", data)
     cb('ok')
@@ -199,24 +286,75 @@ RegisterNUICallback('escape', function(data, cb)
     cb('ok')
 end)
 
+-- various things to help handle player phone call --
 Citizen.CreateThread(function()
-    while true do
-        if phoneEnabled then
+	while true do
+		-- disable some controls while phone GUI active, also play scenario --
+		if phoneEnabled then
 			if not startedTask and not IsPedInAnyVehicle(GetPlayerPed(-1), true) then
 				ClearPedTasks(GetPlayerPed(-1))
 				TaskStartScenarioInPlace(GetPlayerPed(-1), scenario, 0, true);
 				startedTask = true
 			end
-            DisableControlAction(0, 1, phoneEnabled) -- LookLeftRight
-            DisableControlAction(0, 2, phoneEnabled) -- LookUpDown
-            DisableControlAction(0, 142, phoneEnabled) -- MeleeAttackAlternate
-            DisableControlAction(0, 106, phoneEnabled) -- VehicleMouseControlOverride
-            if IsDisabledControlJustReleased(0, 142) then -- MeleeAttackAlternate
-                SendNUIMessage({
-                    type = "click"
-                })
-            end
-        end
-        Citizen.Wait(1)
-    end
+			DisableControlAction(0, 1, phoneEnabled) -- LookLeftRight
+			DisableControlAction(0, 2, phoneEnabled) -- LookUpDown
+			DisableControlAction(0, 142, phoneEnabled) -- MeleeAttackAlternate
+			DisableControlAction(0, 106, phoneEnabled) -- VehicleMouseControlOverride
+			if IsDisabledControlJustReleased(0, 142) then -- MeleeAttackAlternate
+				SendNUIMessage({
+					type = "click"
+				})
+			end
+		end
+		-- play phone call anim when on call --
+		if on_call then
+			-- give cell phone object --
+			if not cellphone_object then
+				AttachPhone()
+			end
+			-- make sure phone call anim is playing --
+			if not IsEntityPlayingAnim(GetPlayerPed(-1), 'cellphone@', 'cellphone_call_listen_base', 3) then
+				RequestAnimDict('cellphone@')
+				while not HasAnimDictLoaded('cellphone@') do
+					Citizen.Wait(100)
+				end
+				TaskPlayAnim(GetPlayerPed(-1), 'cellphone@', 'cellphone_call_listen_base', 1.0, -1, -1, 50, 0, false, false, false)
+			end
+			-- listen for phone call hang up --
+			if IsControlJustPressed(1, 177) then -- BACKSPACE key
+				on_call = false
+				NetworkClearVoiceChannel()
+				print("phone call ended!")
+				DeleteObject(cellphone_object)
+				cellphone_object = nil
+				ClearPedTasks(GetPlayerPed(-1))
+				TriggerServerEvent("phone:endedCall", partner_call_source) -- notify caller of hang up
+				TriggerEvent("swayam:notification", "Whiz Wireless", "Call ~r~ended~w~.", "CHAR_MP_DETONATEPHONE")
+			end
+			-- display help message
+			DrawSpecialText("Press ~y~BACKSPACE~w~ to hang up!")
+		end
+		Wait(1)
+	end
 end)
+
+-- utlity functions --
+function DrawSpecialText(m_text)
+  ClearPrints()
+	SetTextEntry_2("STRING")
+	AddTextComponentString(m_text)
+	DrawSubtitleTimed(250, 1)
+end
+
+local phoneModel = GetHashKey('prop_npc_phone_02')
+
+function AttachPhone()
+  local coords = GetEntityCoords(GetPlayerPed(-1))
+  local bone = GetPedBoneIndex(GetPlayerPed(-1), 28422)
+	RequestModel(phoneModel)
+	while not HasModelLoaded(phoneModel) do
+		Citizen.Wait(100)
+	end
+	cellphone_object = CreateObject(phoneModel, coords.x, coords.y, coords.z, 1, 1, 0)
+	AttachEntityToEntity(cellphone_object, GetPlayerPed(-1), bone, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1, 1, 0, 0, 2, 1)
+end

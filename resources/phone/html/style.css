@@ -166,12 +166,12 @@ li {
 
 .phone-btn {
     width: 75%;
-    height: 10%;
-    background-color: gray;
+    height: 9%;
+    background-color: #2D859E;
     text-align: center;
-    border-radius: 10px;
+    border-radius: 4px;
     margin: 1em auto;
-    padding-top: 1.2em;
+    padding-top: 1em;
     color: white;
 }
 
@@ -231,6 +231,14 @@ table tr:hover {
     height: 100%;
     z-index: 555;
     display: none;
+}
+
+.phone-back-btn {
+  background-color: #2D859E;
+}
+
+.color-me{
+  background-color: #2D859E;
 }
 
 /*
