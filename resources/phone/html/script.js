@@ -27,6 +27,7 @@ function showContactActions(index) {
     html += "<p>Number: " + contact.number + "</p>";
     html += "</div>";
     html += "<ul style='margin-top:0;'>;";
+    html += "<li id ='contact-action--call' data-number='" + contact.number + "'><a href='#' class='app-button'>Call</a></li>";
     html += "<li id ='contact-action--message' data-number='" + contact.number + "'><a href='#' class='app-button'>Message</a></li>";
     html += "<li id='contact-action--delete' data-number='" + contact.number + "'><a href='#' class='app-button'>Delete</a></li>";
     html += "</ul>";
@@ -110,6 +111,30 @@ $(function() {
             fromNumber: phone.number
         }));
         $.post('http://phone/escape', JSON.stringify({}));
+    });
+
+    // contact action message
+    $("#contacts-app-wrap").on("click", "#contact-action--call", function() {
+        var attr = $(this).attr("id");
+        var number = $(this).attr("data-number"); // number to call (from contact)
+        $.post('http://phone/requestCall', JSON.stringify({
+          phone_number: number,
+          from_number: phone.number
+        }));
+        $.post('http://phone/escape', JSON.stringify({})); // shut the phone
+    });
+
+    // contact action message
+    $("#contacts-app-wrap").on("click", "#contact-action--message", function() {
+        var attr = $(this).attr("id");
+        var number = $(this).attr("data-number");
+        $("#contacts-app-wrap").hide();
+        $("#text-message-app-wrap").show();
+        $("#text-message-app-home").hide();
+        $("#text-message-app-form").show();
+        // fill in reply number
+        $("#text-message-app-form #text-toNumber").val(number);
+        current_activity = "contact-message";
     });
 
     // contact action message
@@ -248,6 +273,12 @@ $(function() {
 
     /* PHONE APP BELOW */
 
+    // calling (p2p voice)
+    $("#call-btn").click(function() {
+        $("#phone-btns").hide();
+        $("#call-phone-app-form").show();
+    });
+
     // 'calling' 911
     $("#911-btn").click(function() {
         $("#phone-btns").hide();
@@ -276,6 +307,7 @@ $(function() {
     $(".phone-back-btn").click(function() {
         $("#phone-btns").show();
         // shut all forms
+        $("#call-phone-app-form").hide();
         $("#911-phone-app-form").hide();
         $("#tow-phone-app-form").hide();
         $("#taxi-phone-app-form").hide();
@@ -286,6 +318,17 @@ $(function() {
         $("#phone-app-wrap").hide();
         //$("#phone-btns").hide();
         $("#icons-wrap").show();
+    });
+
+    // p2p voice (phone call)
+    $("#call-phone-app-form").submit(function() {
+        // send the message to police
+        $.post('http://phone/requestCall', JSON.stringify({
+            phone_number: $("#phone-call").val(),
+            from_number: phone.number
+        }));
+        // close phone
+        $.post('http://phone/escape', JSON.stringify({}));
     });
 
     $("#911-phone-app-form").submit(function() {
