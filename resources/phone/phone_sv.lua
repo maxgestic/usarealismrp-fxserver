@@ -177,7 +177,7 @@ AddEventHandler("phone:requestCall", function(numbers)
 		if players then
 			for id, player in pairs(players) do
 				if id and player then
-					print("searching inventory items of player at: " .. id .. " for a cell phone with target_phone_number")
+					--print("searching inventory items of player at: " .. id .. " for a cell phone with target_phone_number")
 					local inventory = player.getActiveCharacterData("inventory")
 					if inventory then
 						--//Check entire user inventory for toNumber phone

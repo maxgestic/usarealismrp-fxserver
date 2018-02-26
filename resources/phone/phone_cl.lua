@@ -110,8 +110,12 @@ end)
 
 -- start a phone call:
 RegisterNUICallback('requestCall', function(data, cb)
-	print(data.from_number .. " is requesting a phone call with #: " .. data.phone_number)
-	TriggerServerEvent("phone:requestCall", data)
+	--print(data.from_number .. " is requesting a phone call with #: " .. data.phone_number)
+	if tonumber(data.phone_number) then 
+		TriggerServerEvent("phone:requestCall", data)
+	else
+		--print("invalid phone number format to call")
+	end
 end)
 
 local time_to_respond = TIME_TO_ANSWER_CALL
@@ -174,8 +178,8 @@ end)
 RegisterNetEvent("phone:startCall")
 AddEventHandler("phone:startCall", function(phone_number, partner_source)
 	NetworkSetVoiceChannel(tonumber(phone_number))
-	print("call started with: " .. phone_number)
-	print("partner_source: " .. partner_source)
+	--print("call started with: " .. phone_number)
+	--print("partner_source: " .. partner_source)
 	on_call = true
 	partner_call_source = partner_source
 end)
@@ -324,15 +328,20 @@ Citizen.CreateThread(function()
 			if IsControlJustPressed(1, 177) then -- BACKSPACE key
 				on_call = false
 				NetworkClearVoiceChannel()
-				print("phone call ended!")
-				DeleteObject(cellphone_object)
-				cellphone_object = nil
+				--print("phone call ended!")
+				--DeleteObject(cellphone_object)
+				--cellphone_object = nil
 				ClearPedTasks(GetPlayerPed(-1))
 				TriggerServerEvent("phone:endedCall", partner_call_source) -- notify caller of hang up
 				TriggerEvent("swayam:notification", "Whiz Wireless", "Call ~r~ended~w~.", "CHAR_MP_DETONATEPHONE")
 			end
 			-- display help message
 			DrawSpecialText("Press ~y~BACKSPACE~w~ to hang up!")
+		else 
+			if cellphone_object then 
+				DeleteObject(cellphone_object)
+				cellphone_object = nil
+			end
 		end
 		Wait(1)
 	end
