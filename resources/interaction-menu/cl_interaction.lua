@@ -40,8 +40,28 @@ local scenarios = {
 	{name = "clean", scenarioName = "WORLD_HUMAN_MAID_CLEAN"},
 	{name = "musician", scenarioName = "WORLD_HUMAN_MUSICIAN"},
 	{name = "party", scenarioName = "WORLD_HUMAN_PARTYING"},
-	{name = "prostitute", scenarioName = "WORLD_HUMAN_PROSTITUTE_HIGH_CLASS"}
+	{name = "prostitute", scenarioName = "WORLD_HUMAN_PROSTITUTE_HIGH_CLASS"},
+	{name = "hug", type = "emote", dict = "mp_ped_interaction", animname = "hugs_guy_a"},
+	{name = "fist bump", type = "emote", dict = "anim@mp_player_intcelebrationpaired@f_f_fist_bump", animname = "fist_bump_right"},
+	{name = "high five", type = "emote", dict = "mp_ped_interaction", animname = "highfive_guy_a"},
+	{name = "shag 1", type = "emote", dict = "misscarsteal2pimpsex", animname = "shagloop_pimp"},
+	{name = "shag 2", type = "emote", dict = "misscarsteal2pimpsex", animname = "shagloop_hooker"},
+	{name = "shag 3", type = "emote", dict = "misscarsteal2pimpsex", animname = "pimpsex_hooker"},
+	{name = "wave", type = "emote", dict = "gestures@m@standing@casual", animname = "gesture_hello"},
+	{name = "dance 1", type = "emote", dict = "mini@strip_club@private_dance@part1", animname = "priv_dance_p1"},
+	{name = "dance 2", type = "emote", dict = "mini@strip_club@private_dance@part2", animname = "priv_dance_p2"},
+	{name = "dance 3", type = "emote", dict = "mini@strip_club@private_dance@part3", animname = "priv_dance_p3"},
+	{name = "whatup", type = "emote", dict = "friends@laf@ig_5", animname = "whatupnigga"},
+	{name = "kiss", type = "emote", dict = "mp_ped_interaction", animname = "kisses_guy_a"},
+	{name = "handshake", type = "emote", dict = "mp_ped_interaction", animname = "handshake_guy_a"}
+	--{name = "hug", type = "emote", dict = "", animname = ""},
 }
+
+--[[
+	Game.get_Player().get_Character().TaskPlayAnim("mp_ped_interaction", "handshake_guy_a", 8, -1);
+	
+	Game.get_Player().get_Character().PlayAmbientSpeech("DRAW_GUN", true);
+--]]
 
 local player = {
 	BAC = 0.00
@@ -132,22 +152,31 @@ RegisterNUICallback('playEmote', function(data, cb)
 	DisableGui()
 	--Citizen.Trace("inside of NUI callback with emote: " .. data.emoteName)
 	local scenarioName = data.emoteName
-	if scenarioName == "cancel" then
-		local ped = GetPlayerPed(-1)
-		ClearPedTasks(ped)
-		playing_emote = false
-		return
-	end
-	for i = 1, #scenarios do
-		if scenarioName == scenarios[i].name then
-			Citizen.Trace("found scenario match for: " .. scenarioName)
+		if scenarioName == "cancel" then
 			local ped = GetPlayerPed(-1)
-			if ped then
-				TaskStartScenarioInPlace(ped, scenarios[i].scenarioName, 0, true);
-				playing_emote = true
+			ClearPedTasks(ped)
+			playing_emote = false
+			return
+		end
+		for i = 1, #scenarios do
+			if scenarioName == scenarios[i].name then
+				local ped = GetPlayerPed(-1)
+				if ped then
+					if scenarios[i].type ~= "emote" then
+						TaskStartScenarioInPlace(ped, scenarios[i].scenarioName, 0, true)
+					else
+						if string.find(scenarioName, "shag") then
+							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
+						else 
+							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5)
+						end
+					end
+					playing_emote = true
+				end
 			end
 		end
-	end
+		--TriggerEvent("usa:playAnimation", "bro_hug_left", "anim@mp_player_intcelebrationpaired@f_f_bro_hug", 4.0)
+		--TriggerEvent("usa:playAnimation", "fist_bump_right", "anim@mp_player_intcelebrationpaired@f_f_fist_bump", 4.0)
 end)
 
 RegisterNUICallback('setVoipLevel', function(data, cb)

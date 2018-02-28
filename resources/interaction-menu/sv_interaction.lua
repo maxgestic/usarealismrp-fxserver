@@ -276,3 +276,24 @@ function removeItemFromPlayer(item, userSource)
 		end
 	end)
 end
+
+--[[ hug emote
+TriggerEvent('es:addJobCommand', 'e', { "police", "sheriff" }, function(source, args, user)
+	local userSource = tonumber(source)
+	if args[2] ~= nil then
+		local tPID = tonumber(args[2])
+		TriggerClientEvent("cuff:Handcuff", tPID)
+		-- play anim:
+		local anim = {
+			dict = "anim@move_m@trash",
+			name = "pickup"
+		}
+		TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 2)
+	end
+end, {
+	help = "Cuff a player.",
+	params = {
+		{ name = "id", help = "Player's ID" }
+	}
+})
+--]]

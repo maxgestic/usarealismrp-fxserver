@@ -3,7 +3,10 @@ local timeout = false
 RegisterServerEvent("taxi:setJob")
 AddEventHandler("taxi:setJob", function()
   TriggerEvent("es:getPlayerFromId", source, function(user)
-    local name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
+  
+	local first, last = user.getActiveCharacterData("firstName"), user.getActiveCharacterData("lastName")
+	if not first then first = "" elseif not last then last = "" end
+	local name = first .. " " .. last
     local user_licenses = user.getActiveCharacterData("licenses")
     if user.getActiveCharacterData("job") == "taxi" then
       print("user " .. GetPlayerName(source) .. " just went off duty for downtown taxi cab co.!")

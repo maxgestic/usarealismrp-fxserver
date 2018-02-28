@@ -42,7 +42,7 @@ AddEventHandler("mini:giveMeMyWeaponsPlease", function()
     TriggerEvent('es:getPlayerFromId', source, function(user)
 		if user then
             local playerWeapons = user.getActiveCharacterData("weapons")
-            print("#playerWeapons = " .. #playerWeapons)
+            if playerWeapons then print("#playerWeapons = " .. #playerWeapons) end
             -- todo: ADD A CHECK FOR PLAYER JOB, ONLY GIVE WEAPONS IF POLICE
             TriggerClientEvent("CS:giveWeapons", source, playerWeapons)
 		else

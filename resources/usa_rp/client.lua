@@ -424,7 +424,7 @@ end)
 
 local playing_anim = nil
 RegisterNetEvent("usa:playAnimation")
-AddEventHandler("usa:playAnimation", function(animName, animDict, duration)
+AddEventHandler("usa:playAnimation", function(animName, animDict, duration, speed, loop)
   --print("inside of usa:playAnimation!!")
   if not IsPedInAnyVehicle(GetPlayerPed(-1), 1) then
     -- load animation
@@ -432,14 +432,38 @@ AddEventHandler("usa:playAnimation", function(animName, animDict, duration)
     while not HasAnimDictLoaded(animDict) do
       Citizen.Wait(100)
     end
-    for i = 1, duration do
-        -- play animation
-      if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) and not IsPedInAnyVehicle(GetPlayerPed(-1), 1) then
-        TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 53, 0, 0, 0, 0)
-        playing_anim = {dict = animDict, name = animName}
-      end
-      Wait(1000) -- wait one second * duration
-    end
+	if duration then
+		for i = 1, duration do
+			-- play animation
+		  if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) and not IsPedInAnyVehicle(GetPlayerPed(-1), 1) then
+			if speed then
+				print("speed existed!")
+				TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, -8, -1, 7, 0, 0, 0, 0)
+			else
+				print("speed did not exist!")
+				TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 53, 0, 0, 0, 0)
+			end
+			playing_anim = {dict = animDict, name = animName}
+		  end
+		  Wait(1000) -- wait one second * duration
+		end
+	else 
+		if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) and not IsPedInAnyVehicle(GetPlayerPed(-1), 1) then
+			if speed then
+				--print("speed existed!")
+				if loop then
+					--print("loop!")
+					TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, -8, -1, 7, 0, 0, 0, 0)
+				else 
+					TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, -8, -1, 8, 0, 0, 0, 0)
+				end
+			else
+				--print("speed did not exist!")
+				TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 53, 0, 0, 0, 0)
+			end
+			playing_anim = {dict = animDict, name = animName}
+		end
+	end
     -- after duration, stop playing animation:
     ClearPedSecondaryTask(GetPlayerPed(-1))
     StopAnimTask(GetPlayerPed(-1), animDict, animName, false)

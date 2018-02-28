@@ -1,7 +1,8 @@
 var policeActions = ["Cuff", "Drag", "Search", "MDT", "Place", "Unseat", "Impound", "Seize Veh"];
 var voipOptions = ["Yell", "Normal", "Whisper"];
-var emoteOptions = ["Cop", "Sit", "Chair", "Kneel", "Medic", "Notepad","Traffic", "Photo","Clipboard", "Lean", "Hangout", "Pot", "Fish", "Phone", "Yoga", "Bino", "Cheer", "Statue", "Jog",
-"Flex", "Sit up", "Push up", "Weld", "Mechanic","Smoke","Drink", "Bum 1", "Bum 2", "Bum 3", "Drill", "Blower", "Chillin'", "Mobile Film", "Planting", "Golf", "Hammer", "Clean", "Musician", "Party", "Prostitute"];
+var emoteOptions = ["Cop", "Sit", "Chair", "Kneel", "Medic", "Notepad","Traffic", "Photo","Clipboard", "Lean", "Hangout", "Pot", "Phone", "Yoga", "Cheer", "Statue", "Jog",
+"Flex", "Sit up", "Push up", "Weld", "Mechanic","Smoke","Drink", "Bum 1", "Bum 2", "Bum 3", "Drill", "Blower", "Chillin'", "Mobile Film", "Planting", "Golf", "Hammer", "Clean", "Musician", "Party", "Prostitute", "High Five", "Wave", "Hug", "Fist bump", "Dance 1", "Dance 2", "Dance 3", "Shag 1", "Shag 2", "Shag 3",
+"Whatup", "Kiss", "Handshake"];
 var emoteItemsPerPage = 8;
 var playerInventory;
 var playerWeapons;
@@ -92,7 +93,19 @@ function openEmotePage(pageNumber) {
 	} else if (pageNumber == "5") {
 		for(var z = (emoteItemsPerPage*4); z < (emoteItemsPerPage*pageNumber); z++) {
 			if (typeof emoteOptions[z] != "undefined") {
-			$("#mySidenav").append("<a onclick='playEmote("+(z)+")' class='emote-option'>"+emoteOptions[z]+"</a>");
+				$("#mySidenav").append("<a onclick='playEmote("+(z)+")' class='emote-option'>"+emoteOptions[z]+"</a>");
+			}
+		}
+	} else if (pageNumber == "6") {
+		for(var z = (emoteItemsPerPage*5); z < (emoteItemsPerPage*pageNumber); z++) {
+			if (typeof emoteOptions[z] != "undefined") {
+				$("#mySidenav").append("<a onclick='playEmote("+(z)+")' class='emote-option'>"+emoteOptions[z]+"</a>");
+			}
+		}
+	} else if (pageNumber == "7") {
+		for(var z = (emoteItemsPerPage*6); z < (emoteItemsPerPage*pageNumber); z++) {
+			if (typeof emoteOptions[z] != "undefined") {
+				$("#mySidenav").append("<a onclick='playEmote("+(z)+")' class='emote-option'>"+emoteOptions[z]+"</a>");
 			}
 		}
 	}
