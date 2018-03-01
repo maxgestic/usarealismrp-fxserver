@@ -131,11 +131,11 @@ Citizen.CreateThread(function()
 			drawTxt("HEAD BACK TO THE PIZZERIA TO COLLECT YOUR MONEY",4, 1, 0.45, 0.92, 0.70,255,255,255,255)
 			DrawMarker(1,pizzeria.x,pizzeria.y,pizzeria.z, 0, 0, 0, 0, 0, 0, 1.5001, 1.5001, 0.6001,255,255,51, 200, 0, 0, 0, 0)
 				if GetDistanceBetweenCoords(pizzeria.x,pizzeria.y,pizzeria.z, GetEntityCoords(GetPlayerPed(-1),true)) < 3 then
-					drawTxt("PRESS <E> TO BE CHARGED",2, 1, 0.45, 0.03, 0.80,255,255,51,255)
-					if IsVehicleModel(GetVehiclePedIsIn(GetPlayerPed(-1), true), GetHashKey("emperor2"))  then
+					drawTxt("PRESS <E> TO COLLECT REWARD",2, 1, 0.45, 0.03, 0.80,255,255,51,255)
+					--if IsVehicleModel(GetVehiclePedIsIn(GetPlayerPed(-1), true), GetHashKey("emperor2"))  then
 						if IsControlJustPressed(1,38) then
 							if IsInVehicle() then
-								TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0},"Thanks for doing the delivery, take your pay: $"..paga)
+								TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0},"Thanks for doing the delivery. Here is your pay: $"..paga)
 								TriggerServerEvent("pop_pizzero:propina", paga)
 								isToHouse = false
 								isToPizzaria = false
@@ -147,13 +147,14 @@ Citizen.CreateThread(function()
 								local vehicleu = GetVehiclePedIsIn(GetPlayerPed(-1), false)
 								SetEntityAsMissionEntity( vehicleu, true, true )
 			               		deleteCar( vehicleu )
+								-- remove active job
 							else
-								TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0},"I will not pay you if you do not give me my car, I'm sorry.")
+								TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0},"I will not pay you if you do not give me my car. I'm sorry.")
 							end
 						end
-					else
-						TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0},"I will not pay you if you do not give me my car, I'm sorry.")
-					end
+					--else
+						--TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0},"I will not pay you if you do not give me my car, I'm sorry.")
+					--end
 				end
 		end
 		if IsEntityDead(GetPlayerPed(-1)) then
@@ -194,6 +195,7 @@ function spawn_emperor2()
 	SetVehicleOnGroundProperly(spawned_car)
 	SetVehicleLivery(spawned_car, 2)
 	SetPedIntoVehicle(myPed, spawned_car, - 1)
+	SetEntityAsMissionEntity(spawned_car, true, true)
 	SetModelAsNoLongerNeeded(vehicle)
 	Citizen.InvokeNative(0xB736A491E64A32CF, Citizen.PointerValueIntInitialized(spawned_car))
 end
