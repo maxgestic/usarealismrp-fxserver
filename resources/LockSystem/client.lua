@@ -45,34 +45,36 @@ end
 local player = GetPlayerPed(-1) -- the player trying to lock/unlock
 local vehicle = nil -- vehicle to be kept locked/unlocked (either inside already or the vehicle in front of player)
 local isPlayerInside = nil -- is player inside of any vehicle when trying to lock/unlock?
+--local targetVehicle = nil
 
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
 
 		if IsControlJustPressed(1, keyParam) then
+		
+			player = GetPlayerPed(-1)
 
 			vehicle = GetVehiclePedIsIn(player, false)
 			isPlayerInside = IsPedInAnyVehicle(player, true)
 
-			player = GetPlayerPed(-1)
 			lastVehicle = GetPlayersLastVehicle()
 			px, py, pz = table.unpack(GetEntityCoords(player, true))
 			coordA = GetEntityCoords(player, true)
 
-			for i = 1, 32 do
+			for i = 0, 64 do
 				coordB = GetOffsetFromEntityInWorldCoords(player, 0.0, (6.281)/i, 0.0)
 				targetVehicle = GetVehicleInDirection(coordA, coordB)
 				if targetVehicle ~= nil and targetVehicle ~= 0 then
 					vx, vy, vz = table.unpack(GetEntityCoords(targetVehicle, false))
-						if GetDistanceBetweenCoords(px, py, pz, vx, vy, vz, false) then
-							distance = GetDistanceBetweenCoords(px, py, pz, vx, vy, vz, false)
-							break
-						end
+					if GetDistanceBetweenCoords(px, py, pz, vx, vy, vz, false) then
+						distance = GetDistanceBetweenCoords(px, py, pz, vx, vy, vz, false)
+						break
+					end
 				end
 			end
 
-			if distance ~= nil and distance <= 5 and targetVehicle ~= 0 or vehicle ~= 0 then
+			if (distance ~= nil and distance <= 5 and targetVehicle ~= 0) or vehicle ~= 0 then
 
 				if vehicle ~= 0 then
 					plate = GetVehicleNumberPlateText(vehicle)
@@ -87,14 +89,12 @@ Citizen.CreateThread(function()
 					print("vehicle = " .. vehicle)
 				end
 
-				-- since only 7 letters are currently being used for license plates, trim off the last character (whitespace) since default gta uses 8 characters
-				--plate = string.sub(plate, 1, 7)
-				--TriggerServerEvent("ls:check", plate, vehicle, isPlayerInside, notificationParam)
 				TriggerServerEvent("lock:checkForKey", plate)
 
 			else 
 				print("if you see this then there was a problem trying to lock/unlock a vehicle!")
 			end
+			
 		end
 	end
 end)
@@ -160,7 +160,7 @@ RegisterNetEvent("lock:notify")
 AddEventHandler("lock:notify", function(text, time)
 	SetNotificationTextEntry("STRING")
 	AddTextComponentString(text)
-	Citizen.InvokeNative(0x1E6611149DB3DB6B, "CHAR_LIFEINVADER", "CHAR_LIFEINVADER", true, 1, "Mini-Lock", "Version 1.0.3", time)
+	Citizen.InvokeNative(0x1E6611149DB3DB6B, "CHAR_LIFEINVADER", "CHAR_LIFEINVADER", true, 1, "Mini-Lock", "Version 1.0.3b", time)
 	DrawNotification_4(false, true)
 end)
 
