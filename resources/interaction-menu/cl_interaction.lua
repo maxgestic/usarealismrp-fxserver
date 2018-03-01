@@ -6,7 +6,7 @@ local scenarios = {
 	{name = "sit", scenarioName = "WORLD_HUMAN_PICNIC"},
 	{name = "chair", scenarioName = "PROP_HUMAN_SEAT_CHAIR_MP_PLAYER"},
 	{name = "kneel", scenarioName = "CODE_HUMAN_MEDIC_KNEEL"},
-	{name = "medic", scenarioName = "CODE_HUMAN_MEDIC_TEND_TO_DEAD"},
+	--{name = "medic", scenarioName = "CODE_HUMAN_MEDIC_TEND_TO_DEAD"},
 	{name = "notepad", scenarioName = "CODE_HUMAN_MEDIC_TIME_OF_DEATH"},
 	{name = "traffic", scenarioName = "WORLD_HUMAN_CAR_PARK_ATTENDANT"},
 	{name = "photo", scenarioName = "WORLD_HUMAN_PAPARAZZI"},
@@ -53,9 +53,15 @@ local scenarios = {
 	{name = "dance 3", type = "emote", dict = "mini@strip_club@private_dance@part3", animname = "priv_dance_p3"},
 	{name = "whatup", type = "emote", dict = "friends@laf@ig_5", animname = "whatupnigga"},
 	{name = "kiss", type = "emote", dict = "mp_ped_interaction", animname = "kisses_guy_a"},
-	{name = "handshake", type = "emote", dict = "mp_ped_interaction", animname = "handshake_guy_a"}
+	{name = "handshake", type = "emote", dict = "mp_ped_interaction", animname = "handshake_guy_a"},
+	{name = "cpr", type = "emote", dict = "mini@cpr@char_a@cpr_str", animname = "cpr_pumpchest"}
 	--{name = "hug", type = "emote", dict = "", animname = ""},
 }
+
+--
+--this._pumpAndIdleMedic.get_AddTask().PlayAnimation("mini@cpr@char_a@cpr_str", "cpr_pumpchest", 8f, 1000, true, 8f);
+--this._pumpAndIdleMedic.get_AddTask().PlayAnimation("mini@cpr@char_a@cpr_def", "cpr_pumpchest_idle", 8f, 100000, true, 8f);
+--
 
 --[[
 	Game.get_Player().get_Character().TaskPlayAnim("mp_ped_interaction", "handshake_guy_a", 8, -1);
@@ -159,13 +165,13 @@ RegisterNUICallback('playEmote', function(data, cb)
 			return
 		end
 		for i = 1, #scenarios do
-			if scenarioName == scenarios[i].name then
+			if scenarioName == string.lower(scenarios[i].name) then
 				local ped = GetPlayerPed(-1)
 				if ped then
 					if scenarios[i].type ~= "emote" then
 						TaskStartScenarioInPlace(ped, scenarios[i].scenarioName, 0, true)
 					else
-						if string.find(scenarioName, "shag") then
+						if string.find(scenarioName, "shag") or string.find(scenarioName, "cpr") then
 							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
 						else 
 							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5)

@@ -250,3 +250,17 @@ end)
 -----------------------------------------------------------------------------------------------------------------------
 -- BAITCAR SCRIPT CREATED BY TONI MORTON FOR THE FIVEM COMMUNITY, PLEASE GIVE CREDITS TO ME IF YOU USE THIS SCRIPT IN YOUR SERVER.  --
 -----------------------------------------------------------------------------------------------------------------------
+
+-- KEEP DOOR OPEN ON EXIT (HOLD F) --
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(0)
+		if IsPedInAnyPoliceVehicle(GetPlayerPed(-1)) and IsControlPressed( 2, 75 ) and GetLastInputMethod(2) then
+			Citizen.Wait(150)
+			if IsPedInAnyPoliceVehicle(GetPlayerPed(-1)) and IsControlPressed( 2, 75 ) then
+				local handle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
+				TaskLeaveVehicle(GetPlayerPed(-1), handle, 256)
+			end
+		end
+	end
+end)
