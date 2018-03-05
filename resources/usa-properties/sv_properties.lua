@@ -227,7 +227,7 @@ end
 -- Save property data every x minutes  --
 -----------------------------------------
 Citizen.CreateThread(function()
-	local minutes = 15
+	local minutes = 17
 	local interval = minutes * 60000
 	function savePropertyData()
 		print("calling savePropertyData()...")

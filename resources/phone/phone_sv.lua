@@ -538,3 +538,17 @@ function getNameFromContacts(phone, number)
 	print("no match was found for name in contacts! returning nil!")
 	return nil
 end
+
+-- show phone number command --
+TriggerEvent('es:addCommand', 'phonenumber', function(source, args, user, location)
+	local userSource = tonumber(source)
+	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+		local inventory = user.getActiveCharacterData("inventory")
+		for i = 1, #inventory do
+			local item = inventory[i]
+			if string.find(item.name, "Cell Phone") then
+				TriggerClientEvent('chatMessageLocation', -1, "", {}, " ^0" .. user.getActiveCharacterData("fullName") .. " writes down number: " .. item.number, location)
+			end 
+		end 
+	end)
+end, { help = "Write down your phone number for those around you."})

@@ -81,9 +81,9 @@ local function DrawPlayerList()
 			if v[4] then
 				local job = v[4]
 				if job == "sheriff" then
-					--r = 75
-					--g = 146
-					--b = 204
+					r = 75
+					g = 146
+					b = 204
 				elseif job == "ems" or job == "fire" then
 					r = 204
 					g = 40

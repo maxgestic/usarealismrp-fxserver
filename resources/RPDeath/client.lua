@@ -174,7 +174,7 @@ Citizen.CreateThread(function()
 					end
 
 					if deathLog.killerId == 0 then
-						print("killer ID was 0!")
+						--print("killer ID was 0!")
 						--print("killer: " .. deathLog.killer)
 						--print("cause: " .. deathLog.cause)
 						if deathLog.killer and deathLog.cause then
@@ -190,13 +190,13 @@ Citizen.CreateThread(function()
 								end
 							end
 						else
-							print("deathLog.killer or deathLog.cause or both were nil")
+							--print("deathLog.killer or deathLog.cause or both were nil")
 						end
 						--print("ped in veh seat: " .. ped_in_veh_seat)
 						--print("killer entity type = " .. killer_entity_type)
 						--print("cause entity type = " .. cause_entity_type)
 					else
-						print("killer ID was NOT 0!")
+						--print("killer ID was NOT 0!")
 					end
 
 					TriggerServerEvent("RPD:newDeathLog", deathLog)

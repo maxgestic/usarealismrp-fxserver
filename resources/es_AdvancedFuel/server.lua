@@ -66,6 +66,7 @@ AddEventHandler("essence:buy", function(amount, index, e, property)
 
 		local userJob = user.getActiveCharacterData("job")
 		local user_money = user.getActiveCharacterData("money")
+		local toPay = round(amount*70,0)
 		if userJob == "sheriff" or userJob == "ems" or userJob == "fire" then
 			TriggerClientEvent("essence:hasBuying", _source, amount)
 			-- give some money to store owner --
@@ -73,7 +74,7 @@ AddEventHandler("essence:buy", function(amount, index, e, property)
 				TriggerEvent("properties:addMoney", property.name, round(0.20 * toPay, 0))
 			end
 		else
-			local toPay = round(amount*price,0)
+			toPay = round(amount*price,0)
 			if(toPay > user_money) then
 					TriggerClientEvent("showNotif", _source, "~r~You don't have enough money.")
 			else

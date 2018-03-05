@@ -194,9 +194,9 @@ end)
 TriggerEvent('es:addGroupCommand', 'log', "mod", function(source, args, user)
 	for i = 1, #deathLog do
 		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^3DEATH #" .. i)
-		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "Died: " .. deathLog[i].deadPlayerName .. " (#" .. deathLog[i].deadPlayerId .. ")")
-		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "Killer: " .. deathLog[i].killerName .. " (#" .. deathLog[i].killerId .. ")")
-		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "Time: " .. deathLog[i].timestamp)
+		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0Died: " .. deathLog[i].deadPlayerName .. " (#" .. deathLog[i].deadPlayerId .. ")")
+		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0Killer: " .. deathLog[i].killerName .. " (#" .. deathLog[i].killerId .. ")")
+		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0Time: " .. deathLog[i].timestamp)
 	end
 end, {
 	help = "View death log"
