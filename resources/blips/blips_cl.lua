@@ -1,4 +1,5 @@
 local blips = {
+	--[[
 	{ title="Clothing Store", colour=67, id=73, x= 1.09696, y=6511.75, z=31.8778 }, -- paleto
 	{ title="Clothing Store", colour=67, id=73, x= 1692.16, y=4817.22, z=42.0631 }, -- grape seed
 	{ title="Clothing Store", colour=67, id=73, x= 1202.18, y=2707.79, z=38.2226 }, -- sandy shores 1
@@ -13,6 +14,7 @@ local blips = {
 	{ title="Clothing Store", colour=67, id=73, x= 422.92, y=-811.772, z=29.4911 }, -- vinewood 6
 	{ title="Clothing Store", colour=67, id=73, x= -816.335, y=-1072.93, z=11.3281 }, -- vinewood 7
 	{ title="Clothing Store", colour=67, id=73, x= 78.0717, y=-1387.25, z=29.3761 }, -- vinewood 8
+	--]]
 	{ title="Ammu-Nation", colour=41, id=110, x=-330.184, y=6083.23, z=31.4548 },
 	{ title="Ammu-Nation", colour=41, id=110, x=1701.292, y=3750.450, z=34.365 },
     { title="Ammu-Nation", colour=41, id=110, x=237.428, y=-43.655, z=69.698 },

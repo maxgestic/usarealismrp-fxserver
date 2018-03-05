@@ -150,28 +150,30 @@ AddEventHandler("vehicle:checkPlayerWeaponAmount", function(item, vehicle_plate)
           if players then
             for id, player in pairs(players) do
               local player_vehicles = player.getActiveCharacterData("vehicles")
-              for i = 1, #player_vehicles do
-                local veh = player_vehicles[i]
-                if string.find(vehicle_plate, tostring(veh.plate)) then -- this is the vehicle whose inventory we want to target
-                  local vehicle_inventory = veh.inventory
-                  for j = 1, #vehicle_inventory do
-                    local vehicle_inventory_item = vehicle_inventory[j]
-                    if vehicle_inventory_item.name == item.name then
-                      --if vehicle_inventory_item.quantity >= quantity then
-                        print("weapon was still in vehicle to retrieve!")
-                        TriggerClientEvent("vehicle:retrieveWeapon", userSource, item, vehicle_plate)
-                        --TriggerClientEvent("vehicle:continueRetrievingItem", userSource, plate, item, quantity)
-                        return
-                    --  else
-                    --    TriggerClientEvent("usa:notify", userSource, "Quantity input too high!")
-                      --  return
-                    --  end
-                    end
-                  end
-                  -- not in vehicle at all:
-                  TriggerClientEvent("usa:notify", userSource, "Item not in vehicle!")
-                end
-              end
+			  if player_vehicles then
+				  for i = 1, #player_vehicles do
+					local veh = player_vehicles[i]
+					if string.find(vehicle_plate, tostring(veh.plate)) then -- this is the vehicle whose inventory we want to target
+					  local vehicle_inventory = veh.inventory
+					  for j = 1, #vehicle_inventory do
+						local vehicle_inventory_item = vehicle_inventory[j]
+						if vehicle_inventory_item.name == item.name then
+						  --if vehicle_inventory_item.quantity >= quantity then
+							print("weapon was still in vehicle to retrieve!")
+							TriggerClientEvent("vehicle:retrieveWeapon", userSource, item, vehicle_plate)
+							--TriggerClientEvent("vehicle:continueRetrievingItem", userSource, plate, item, quantity)
+							return
+						--  else
+						--    TriggerClientEvent("usa:notify", userSource, "Quantity input too high!")
+						  --  return
+						--  end
+						end
+					  end
+					  -- not in vehicle at all:
+					  TriggerClientEvent("usa:notify", userSource, "Item not in vehicle!")
+					end
+				  end
+				end
             end
           end
         end)

@@ -43,7 +43,10 @@ Citizen.CreateThread(function ()
 				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), garageCoords2[1], garageCoords2[2], garageCoords2[3], true ) < 5 then
 					es_carwash_DrawSubtitleTimed("Press [~g~ENTER~s~] to wash your vehicle!")
 					if IsControlJustPressed(1, Key) then
-						TriggerServerEvent('es_carwash:checkmoney')
+						local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+						TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+							TriggerServerEvent('es_carwash:checkmoney', property)
+						end)
 					end
 				end
 			end

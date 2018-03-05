@@ -259,7 +259,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 			if allPlayers then
 				for id, player in pairs(allPlayers) do
 					if id and player then
-						print("searching inventory items of player at: " .. id .. " for a cell phone with toNumber")
+						--print("searching inventory items of player at: " .. id .. " for a cell phone with toNumber")
 						local inventory = player.getActiveCharacterData("inventory")
 						if inventory then
 							--//Check entire user inventory for toNumber phone
@@ -293,7 +293,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 													to = "Me",
 													message = msg
 												}
-												if #inventory[j].conversations[x].messages > 15 then table.remove(inventory[j].conversations[x].messages, 1) print("removed message! maxed out!") end
+												if #inventory[j].conversations[x].messages >= 8 then table.remove(inventory[j].conversations[x].messages, 1) print("removed message! maxed out!") end
 												table.insert(inventory[j].conversations[x].messages, message)
 												player.setActiveCharacterData("inventory", inventory)
 												convoExistedForUser = true
@@ -385,7 +385,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 									to = toName,
 									message = msg
 								}
-								if #inventory[j].conversations[x].messages > 15 then table.remove(inventory[j].conversations[x].messages, 1) print("removed message! maxed out!") end
+								if #inventory[j].conversations[x].messages > 8 then table.remove(inventory[j].conversations[x].messages, 1) print("removed message! maxed out!") end
 								table.insert(inventory[j].conversations[x].messages, message)
 								user.setActiveCharacterData("inventory", inventory)
 								convoExistedForUser = true

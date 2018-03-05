@@ -347,7 +347,7 @@ Citizen.CreateThread(function()
 		--	print("menu.page = " .. menu.page)
 		end
 
-		if getPlayerDistanceFromShop(markerX, markerY, markerZ) < 6 then
+		if getPlayerDistanceFromShop(markerX, markerY, markerZ) < 3 then
 			if IsControlJustPressed(1,38) and not menu.open then
 				menu.open = true
 				menu.page = "home"
@@ -534,7 +534,10 @@ Citizen.CreateThread(function()
 								if cb then
 								--	print("player wants to purchase vehicle: " .. vehicle.make .. " " .. vehicle.model)
 									-- todo: complete purchase ability here
-									TriggerServerEvent("mini:checkVehicleMoney", vehicle)
+									local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+									TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+										TriggerServerEvent("mini:checkVehicleMoney", vehicle, property)
+									end)
 									menu.open = false
 									menu.page = "home"
 								end

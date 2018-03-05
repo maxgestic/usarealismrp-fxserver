@@ -93,7 +93,7 @@ end
 
 RegisterNetEvent("towJob:success")
 AddEventHandler("towJob:success", function()
-	TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0You have impounded the vehicle for ^2$400^0!")
+	TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0You have impounded the vehicle for ^2$550^0!")
 end)
 
 function impoundVehicle()
@@ -105,7 +105,10 @@ function impoundVehicle()
 			SetEntityAsMissionEntity(vehicleToImpound, true, true )
 			deleteCar(vehicleToImpound)
 			vehicleToImpound = nil
-			TriggerServerEvent("towJob:giveReward")
+			local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+			TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+				TriggerServerEvent("towJob:giveReward", property)
+			end)
 		else
 			print("Trying to tow a vehicle that wasn't attached to your flatbed first!")
 		end

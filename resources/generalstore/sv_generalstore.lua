@@ -3,7 +3,7 @@ function round(num, numDecimalPlaces)
 end
 
 RegisterServerEvent("generalStore:buyItem")
-AddEventHandler("generalStore:buyItem", function(item)
+AddEventHandler("generalStore:buyItem", function(item, property)
   local userSource = source
   TriggerEvent('es:getPlayerFromId', userSource, function(user)
     if user.getCanActiveCharacterHoldItem(item) then
@@ -18,6 +18,11 @@ AddEventHandler("generalStore:buyItem", function(item)
                 inventory[i].quantity = inventory[i].quantity + 1
                 user.setActiveCharacterData("inventory", inventory)
                 TriggerClientEvent("usa:notify", userSource, "Purchased: ~y~" .. item.name)
+                if property then
+                  -- give to owner of property
+                  print("adding money from general store to property: " .. property.name)
+                  TriggerEvent("properties:addMoney", property.name, round(0.12 * item.price, 0))
+                end
                 return
               end
             end
@@ -26,6 +31,11 @@ AddEventHandler("generalStore:buyItem", function(item)
           table.insert(inventory, item)
           user.setActiveCharacterData("inventory", inventory)
           TriggerClientEvent("usa:notify", userSource, "Purchased: ~y~" .. item.name)
+          if property then
+            -- give to owner of property
+            print("adding money from general store to property: " .. property.name)
+            TriggerEvent("properties:addMoney", property.name, round(0.12 * item.price, 0))
+          end
         else
           --Generate number
           --Add Registered Owner
@@ -38,6 +48,11 @@ AddEventHandler("generalStore:buyItem", function(item)
           user.setActiveCharacterData("inventory", inventory)
           print(item.number .. " ---- " .. item.owner)
           TriggerClientEvent("usa:notify", userSource, "Purchased: ~y~" .. item.name)
+          if property then
+            -- give to owner of property
+            print("adding money from general store to property: " .. property.name)
+            TriggerEvent("properties:addMoney", property.name, round(0.12 * item.price, 0))
+          end 
         end
       else
         -- not enough money
@@ -48,3 +63,8 @@ AddEventHandler("generalStore:buyItem", function(item)
     end
   end)
 end)
+
+function round(num, numDecimalPlaces)
+	local mult = 5^(numDecimalPlaces or 0)
+	return math.floor(num * mult + 0.5) / mult
+end

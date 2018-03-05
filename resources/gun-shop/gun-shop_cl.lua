@@ -59,7 +59,10 @@ function buyPermit()
 end
 
 function buyWeapon(params)
-	TriggerServerEvent("mini:checkGunMoney",params)
+	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
+	TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+		TriggerServerEvent("mini:checkGunMoney",params, property)
+	end)
 	Menu.hidden = true -- close menu
 end
 
@@ -156,7 +159,7 @@ end
 function isPlayerAtGunShop()
 	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
 	for i = 1, #locations do
-		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,false) < 5 then
+		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,false) < 2 then
 			return true
 		end
 	end

@@ -1,7 +1,7 @@
 -- repair vehicle
 -- todo: change price based on body damage instead of only engine damage?
 RegisterServerEvent("customs:checkRepairMoney")
-AddEventHandler("customs:checkRepairMoney", function(engineHealth)
+AddEventHandler("customs:checkRepairMoney", function(engineHealth, property)
 	local userSource = tonumber(source)
 	print("engine health = " .. engineHealth)
 	local REPAIR_COST = 0
@@ -38,6 +38,10 @@ AddEventHandler("customs:checkRepairMoney", function(engineHealth)
 				TriggerClientEvent("customs:playerHadEnoughMoneyToRepair", userSource)
 				-- notify
 				TriggerClientEvent("usa:notify", userSource, "~y~Thanks for your business!~w~ Repair Cost: $" .. REPAIR_COST)
+				-- add money to property earnings --
+				if property then
+					TriggerEvent("properties:addMoney", property.name, round(0.1 * REPAIR_COST))
+				end
 			else
 				TriggerClientEvent("usa:notify", userSource, "~y~Sorry, we can't help you!~w~ Repair Cost: $" .. REPAIR_COST)
 			end
@@ -65,12 +69,16 @@ AddEventHandler("customs:saveCarData", function(data, plate)
 end)
 
 RegisterServerEvent("customs:check")
-AddEventHandler("customs:check",function(title, data, cost, value)
+AddEventHandler("customs:check",function(title, data, cost, value, property)
 	local source = tonumber(source)
     TriggerEvent('es:getPlayerFromId', source, function(user)
 		local user_money = user.getActiveCharacterData("money")
 	    if (tonumber(user_money) >= tonumber(cost)) then
 			user.setActiveCharacterData("money", user_money - cost)
+			-- add money to property earnings --
+			if property then
+				TriggerEvent("properties:addMoney", property.name, round(0.1 * cost))
+			end
 	    	TriggerClientEvent("customs:receive", source, title, data, value)
 	    else
 	    	TriggerClientEvent("pNotify:SendNotification", source, {text = "Insufficient funds!",type = "error",queue = "left",timeout = 2500,layout = "centerRight"})
@@ -79,12 +87,16 @@ AddEventHandler("customs:check",function(title, data, cost, value)
 end)
 
 RegisterServerEvent("customs:check2")
-AddEventHandler("customs:check2",function(title, data, cost, value, back)
+AddEventHandler("customs:check2",function(title, data, cost, value, back, property)
 	local source = tonumber(source)
     TriggerEvent('es:getPlayerFromId', source, function(user)
 		local user_money = user.getActiveCharacterData("money")
 	    if (tonumber(user_money) >= tonumber(cost)) then
 	    	user.setActiveCharacterData("money", user_money - cost)
+			-- add money to property earnings --
+			if property then
+				TriggerEvent("properties:addMoney", property.name, round(0.1 * cost))
+			end
 	    	TriggerClientEvent("customs:receive2", source, title, data, value, back)
 	    else
 	    	TriggerClientEvent("pNotify:SendNotification", source, {text = "Insufficient funds!",type = "error",queue = "left",timeout = 2500,layout = "centerRight"})
@@ -93,12 +105,16 @@ AddEventHandler("customs:check2",function(title, data, cost, value, back)
 end)
 
 RegisterServerEvent("customs:check3")
-AddEventHandler("customs:check3",function(title, data, cost, mod, back, name, wtype)
+AddEventHandler("customs:check3",function(title, data, cost, mod, back, name, wtype, property)
 	local source = tonumber(source)
     TriggerEvent('es:getPlayerFromId', source, function(user)
 		local user_money = user.getActiveCharacterData("money")
 	    if (tonumber(user_money) >= tonumber(cost)) then
 	    	user.setActiveCharacterData("money", user_money - cost)
+			-- add money to property earnings --
+			if property then
+				TriggerEvent("properties:addMoney", property.name, round(0.1 * cost))
+			end
 	    	TriggerClientEvent("customs:receive3", source, title, data, mod, back, name, wtype)
 	    else
 	    	TriggerClientEvent("pNotify:SendNotification", source, {text = "Insufficient funds!",type = "error",queue = "left",timeout = 2500,layout = "centerRight"})
@@ -137,3 +153,8 @@ AddEventHandler('playerDropped', function()
 		print("LS Customs status: "..json.encode(tbl))
 	end
 end)
+
+function round(num, numDecimalPlaces)
+	local mult = 5^(numDecimalPlaces or 0)
+	return math.floor(num * mult + 0.5) / mult
+end

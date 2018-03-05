@@ -1,97 +1,137 @@
+local COPS_NEEDED_TO_ROB = 2
+
 local stores = {
-	["paleto_tattoo"] = {
-		position = { ['x'] = -292.211, ['y'] = 6200.350, ['z'] = 31.487 },
-		reward = 3400,
-		nameofstore = "Tattoo Shop (Dulouz Ave. & Paleto Blvd.)",
+	["Los Santos Customs - Paleto"] = {
+		position = { ['x'] = 99.053, ['y'] = 6620.112, ['z'] = 32.44 },
+		nameofstore = "Los Santos Customs - Paleto",
 		lastrobbed = 0
 	},
-	["paleto_barber"] = {
-		position = { ['x'] = -277.842, ['y'] = 6230.185, ['z'] = 31.696 },
-		reward = 2500,
-		nameofstore = "Herr Kutz Barbershop (Dulouz Ave. & Paleto Blvd.)",
+	["Car Dealership - Paleto"] = {
+		position = { ['x'] = 123.356, ['y'] = 6629.426, ['z'] = 31.9117 },
+		nameofstore = "Car Dealership - Paleto",
 		lastrobbed = 0
 	},
-	["paleto_twentyfourseven"] = {
+	["24/7 Paleto"] = {
 		position = { ['x'] = 1728.77, ['y'] = 6417.61, ['z'] = 35.0372161865234 },
-		reward = 5000,
 		nameofstore = "24/7 (Paleto Bay)",
 		lastrobbed = 0
 	},
-	["sandyshores_tattoo"] = {
-		position = { ['x'] = 1862.851, ['y'] = 3748.209, ['z'] = 33.0 },
-		reward = 3500,
-		nameofstore = "Tattoo Shop (Sandy Shores)",
+	["Gun Store - Sandy Shores"] = {
+		position = { ['x'] = 1689.613, ['y'] = 3758.355, ['z'] = 34.705 },
+		nameofstore = "Gun Store - Sandy Shores",
 		lastrobbed = 0
 	},
-	["sandyshores_barber"] = {
-		position = { ['x'] = 1930.556, ['y'] = 3728.216, ['z'] = 32.8 },
-		reward = 3500,
-		nameofstore = "O'Sheas Barber Shop (Alhambra Dr. & Niland Ave.)",
+	["Pizza Delivery - Sandy Shores"] = {
+		position = { ['x'] = 1902.687, ['y'] = 3734.021, ['z'] = 32.588 },
+		nameofstore = "Pizza Delivery - Sandy Shores",
 		lastrobbed = 0
 	},
-	["sandyshores_twentyfourseven"] = {
-		position = { ['x'] = 1959.772, ['y'] = 3740.07, ['z'] = 32.344 },
-		reward = 5000,
+	["24/7 Sandy Shores"] = {
+		position = { ['x'] = 1960.033, ['y'] = 3748.403, ['z'] = 32.343 },
 		nameofstore = "24/7 (Sandy Shores)",
 		lastrobbed = 0
 	},
-	["bar_one"] = {
-		position = { ['x'] = 1986.1240234375, ['y'] = 3053.8747558594, ['z'] = 47.215171813965 },
-		reward = 5000,
-		nameofstore = "Yellow Jack. (Sandy Shores)",
+	["Los Santos Customs - Route 68, Harmony"] = {
+		position = { ['x'] = 1187.163, ['y'] = 2636.262, ['z'] = 38.401 },
+		nameofstore = "Los Santos Customs - Route 68, Harmony",
 		lastrobbed = 0
 	},
-	["harmony_twentyfourseven"] = {
-		position = { ['x'] = 549.563, ['y'] = 2669.187, ['z'] = 42.157 },
-		reward = 2500,
-		nameofstore = "24/7 (Route 68, Harmony)",
+	["Revsta's Boat Shop - Sandy Shores"] = {
+		position = { ['x'] = 2392.283, ['y'] = 4292.408, ['z'] = 31.998 },
+		nameofstore = "Revsta's Boat Shop - Sandy Shores",
+		lastrobbed = 0
+	},
+	["Revsta's Boat Shop - Paleto"] = {
+		position = { ['x'] = 254.205, ['y'] = 6635.504, ['z'] = 1.784 },
+		nameofstore = "Revsta's Boat Shop - Paleto",
+		lastrobbed = 0
+	},
+	["Seaview Aircraft - Grapeseed"] = {
+		position = { ['x'] = 2119.411, ['y'] = 4783.381, ['z'] = 40.97 },
+		nameofstore = "Seaview Aircraft - Grapeseed",
+		lastrobbed = 0
+	},
+	["Seaview Aircraft - Sandy Shores"] = {
+		position = { ['x'] = 1723.332, ['y'] = 3290.0451, ['z'] = 41.196 },
+		nameofstore = "Seaview Aircraft - Sandy Shores",
+		lastrobbed = 0
+	},
+	["Garage - Paleto"] = {
+		position = { ['x'] = -306.659, ['y'] = 6127.877, ['z'] = 31.499 },
+		nameofstore = "Garage - Paleto",
+		lastrobbed = 0
+	},
+	["Garage - Grapeseed"] = {
+		position = { ['x'] = 1702.25, ['y'] = 4938.936, ['z'] = 42.078 },
+		nameofstore = "Garage - Grapeseed",
+		lastrobbed = 0
+	},
+	["Clothing Store - Paleto"] = {
+		position = { ['x'] = 3.715, ['y'] = 6505.654, ['z'] = 31.877 },
+		nameofstore = "Clothing Store - Paleto",
+		lastrobbed = 0
+	},
+	["Blaine County Savings Bank"] = {
+		position = { ['x'] = 103.53, ['y'] = 6477.866, ['z'] = 31.626 },
+		nameofstore = "Blaine County Savings Bank",
+		lastrobbed = 0
+	},
+	["Gas Station - Sandy Shores"] = {
+		position = { ['x'] = 2001.7367, ['y'] = 3779.16, ['z'] = 32.18 },
+		nameofstore = "Gas Station - Sandy Shores",
+		lastrobbed = 0
+	},
+	["Gas Station - Paleto Blvd & Cascabel"] = {
+		position = { ['x'] = 95.917, ['y'] = 6412.034, ['z'] = 31.468 },
+		nameofstore = "Gas Station - Paleto Blvd & Cascabel",
+		lastrobbed = 0
+	},
+	["Gas Station - Great Ocean Hwy & Procopio Dr."] = {
+		position = { ['x'] = 180.0967, ['y'] = 6602.671, ['z'] = 31.868 },
+		nameofstore = "Gas Station - Great Ocean Hwy & Procopio Dr.",
+		lastrobbed = 0
+	},
+	["Car Wash - Paleto Blvd & Cascabel"] = {
+		position = { ['x'] = 68.998, ['y'] = 6430.853, ['z'] = 31.438 },
+		nameofstore = "Car Wash - Paleto Blvd & Cascabel",
+		lastrobbed = 0
+	},
+	["Fish Restaurant - Paleto"] = {
+		position = { ['x'] = 664.933, ['y'] = 5808.579, ['z'] = 17.518 },
+		nameofstore = "Fish Restaurant - Paleto",
+		lastrobbed = 0
+	},
+	["Ammunation - Route 68"] = {
+		position = { ['x'] = 1122.222, ['y'] = 2697.431, ['z'] = 18.554},
+		nameofstore = "Ammunation - Route 68",
+		lastrobbed = 0
+	},
+	["Gun Store - Paleto"] = {
+		position = { ['x'] = 334.4107, ['y'] = 6082.485, ['z'] = 31.455},
+		nameofstore = "Gun Store - Paleto",
+		lastrobbed = 0
+	},
+	-- below need testing: 
+	["Tow Truck - Paleto"] = {
+		position = { ['x'] = -191.731, ['y'] = 6269.85, ['z'] = 31.489},
+		nameofstore = "Tow Truck - Paleto",
+		lastrobbed = 0
+	},
+	["Taxi Cab Co. - Paleto"] = {
+		position = { ['x'] = -45.186, ['y'] = 6439.616, ['z'] = 31.490},
+		nameofstore = "Taxi Cab Co. - Paleto",
+		lastrobbed = 0
+	},
+	["Go-Postal - Paleto"] = {
+		position = { ['x'] = -422.1905, ['y'] = 6135.021, ['z'] = 31.877},
+		nameofstore = "Go-Postal - Paleto",
+		lastrobbed = 0
+	},
+	["FridgeIt Trucking - Paleto"] = {
+		position = { ['x'] = -422.1905, ['y'] = 5253.392, ['z'] = 70.487},
+		nameofstore = "FridgeIt Trucking - Paleto",
 		lastrobbed = 0
 	}
-	--[[
-	["littleseoul_twentyfourseven"] = {
-		position = { ['x'] = -709.17022705078, ['y'] = -904.21722412109, ['z'] = 19.215591430664 },
-		reward = 5000,
-		nameofstore = "24/7 (Little Seoul)",
-		lastrobbed = 0
-	},
-	-- custom
-	["innocence_twentyfourseven"] = {
-		position = { ['x'] = 30.1535, ['y'] = -1339.85, ['z'] = 29.497 },
-		reward = 5000,
-		nameofstore = "Twenty-Four Seven. (Innocence Blvd)",
-		lastrobbed = 0
-	},
-	["grove_twentyfourseven"] = {
-		position = { ['x'] = -43.0506, ['y'] = -1749.41, ['z'] = 29.421 },
-		reward = 5000,
-		nameofstore = "Twenty-Four Seven. (Grove St.)",
-		lastrobbed = 0
-	},
-	["mirrorParkVespucci_twentyfourseven"] = {
-		position = { ['x'] = 1130.58, ['y'] = -982.055, ['z'] = 46.4158 },
-		reward = 5000,
-		nameofstore = "Twenty-Four Seven. (Mirror Park & Vespucci)",
-		lastrobbed = 0
-	},
-	["sanAndreasBayCity_twentyfourseven"] = {
-		position = { ['x'] = -1221.14, ['y'] = -912.147, ['z'] = 12.3263 },
-		reward = 5000,
-		nameofstore = "Twenty-Four Seven. (San Andreas Ave. & Bay City Ave.)",
-		lastrobbed = 0
-	},
-	["prosperityBlvdDelPerro_twentyfourseven"] = {
-		position = { ['x'] = -1482.62, ['y'] = -376.534, ['z'] = 40.1634 },
-		reward = 5000,
-		nameofstore = "Twenty-Four Seven. (Prosperity St. & Blvd Del Perro)",
-		lastrobbed = 0
-	},
-	["clintonAve_twentyfourseven"] = {
-		position = { ['x'] = 373.058, ['y'] = 329.096, ['z'] = 103.566 },
-		reward = 5000,
-		nameofstore = "Twenty-Four Seven. (Clinton Ave.)",
-		lastrobbed = 0
-	}
-	--]]
 }
 
 local robbers = {}
@@ -111,41 +151,66 @@ end)
 
 RegisterServerEvent('es_holdup:rob')
 AddEventHandler('es_holdup:rob', function(robb)
-	if stores[robb] then
-		local store = stores[robb]
-		local robberyCooldown = 2100
-
-		if (os.time() - store.lastrobbed) < robberyCooldown and store.lastrobbed ~= 0 then
-			TriggerClientEvent('chatMessage', source, 'ROBBERY', {255, 0, 0}, "This has already been robbed recently. Please wait another: ^2" .. (1200 - (os.time() - store.lastrobbed)) .. "^0 seconds.")
-			return
-		end
-		--TriggerClientEvent('chatMessage', -1, 'NEWS', {255, 0, 0}, "Robbery in progress at ^2" .. store.nameofstore)
-		TriggerClientEvent('chatMessage', source, 'SYSTEM', {255, 0, 0}, "You started a robbery at: ^2" .. store.nameofstore .. "^0, do not get too far away from this point!")
-		TriggerClientEvent('chatMessage', source, 'SYSTEM', {255, 0, 0}, "The Alarm has been triggered!")
-		TriggerClientEvent('chatMessage', source, 'SYSTEM', {255, 0, 0}, "Hold the fort for ^12 ^0minutes and the money is yours!")
-		TriggerClientEvent('es_holdup:currentlyrobbing', source, robb)
-		--sendMessageToEmsAndPolice("^1DISPATCH: ^0Robbery in progress at ^2" .. store.nameofstore)
-		stores[robb].lastrobbed = os.time()
-		robbers[source] = robb
-		local savedSource = source
-		SetTimeout(120000, function()
-			if(robbers[savedSource])then
-				TriggerClientEvent('es_holdup:robberycomplete', savedSource, job)
-				TriggerEvent('es:getPlayerFromId', savedSource, function(target)
-					if(target)then
-						print("target existed...")
-					--target:addDirty_Money(store.reward)
-					print("adding stolen money amount of: " .. store.reward)
-					local user_money = target.getActiveCharacterData("money")
-					target.setActiveCharacterData("money", user_money  + store.reward)
-					--TriggerClientEvent('chatMessage', -1, 'NEWS', {255, 0, 0}, "Robbery is over at: ^2" .. store.nameofstore)
-					sendMessageToEmsAndPolice("^1DISPATCH: ^0Robbery is over at: ^2" .. store.nameofstore)
+	local savedSource = source
+	TriggerEvent("es:getPlayers", function(players)
+		local count = 0
+		if players then
+			for id, player in pairs(players) do
+				if id and player then
+					local playerJob = player.getActiveCharacterData("job")
+					if playerJob == "sheriff" or playerJob == "police" or playerJob == "cop" then
+						count = count + 1
 					end
-				end)
+				end
 			end
-		end)
-		sendMessageToEmsAndPolice("^1DISPATCH: ^0Robbery in progress at ^2" .. store.nameofstore)
-	end
+			print("cop count: " .. count)
+			print("cops needed: " .. COPS_NEEDED_TO_ROB)
+			if count >= COPS_NEEDED_TO_ROB then 
+				print("returning true! enough cops on")
+				if stores[robb] then
+					local store = stores[robb]
+					local robberyCooldown = 2100
+					if (os.time() - store.lastrobbed) < robberyCooldown and store.lastrobbed ~= 0 then
+						TriggerClientEvent('chatMessage', source, 'ROBBERY', {255, 0, 0}, "This has already been robbed recently. Please wait another: ^2" .. (1200 - (os.time() - store.lastrobbed)) .. "^0 seconds.")
+						return
+					end
+					--TriggerClientEvent('chatMessage', -1, 'NEWS', {255, 0, 0}, "Robbery in progress at ^2" .. store.nameofstore)
+					TriggerClientEvent('chatMessage', source, 'SYSTEM', {255, 0, 0}, "You started a robbery at: ^2" .. store.nameofstore .. "^0, do not get too far away from this point!")
+					TriggerClientEvent('chatMessage', source, 'SYSTEM', {255, 0, 0}, "The Alarm has been triggered!")
+					TriggerClientEvent('chatMessage', source, 'SYSTEM', {255, 0, 0}, "Hold the fort for ^12 ^0minutes and the money is yours!")
+					TriggerClientEvent('es_holdup:currentlyrobbing', source, robb)
+					--sendMessageToEmsAndPolice("^1DISPATCH: ^0Robbery in progress at ^2" .. store.nameofstore)
+					stores[robb].lastrobbed = os.time()
+					robbers[source] = robb
+					SetTimeout(120000, function()
+						if(robbers[savedSource])then
+							TriggerEvent('es:getPlayerFromId', savedSource, function(target)
+								if(target)then
+									print("target existed...")
+									--target:addDirty_Money(store.reward)
+									print("adding stolen money!")
+									local user_money = target.getActiveCharacterData("money")
+									TriggerEvent("properties:getPropertyMoney", robb, function(reward)
+										reward = round(reward * 0.40, 0)
+										print("property was robbed of: $" .. reward)
+										target.setActiveCharacterData("money", user_money  + reward)
+										--TriggerClientEvent('chatMessage', -1, 'NEWS', {255, 0, 0}, "Robbery is over at: ^2" .. store.nameofstore)
+										sendMessageToEmsAndPolice("^1DISPATCH: ^0Robbery is over at: ^2" .. store.nameofstore)
+										TriggerEvent("properties:withdraw", robb, reward)
+										TriggerClientEvent('es_holdup:robberycomplete', savedSource, reward)
+									end)
+								end
+							end)
+						end
+					end)
+					sendMessageToEmsAndPolice("^1DISPATCH: ^0Robbery in progress at ^2" .. store.nameofstore)
+				end
+			else 
+				print("returning false! not enough cops on")
+				TriggerClientEvent("usa:notify", savedSource, "Couldn't find any money!") -- not enough police on
+			end
+		end
+	end)
 end)
 
 function sendMessageToEmsAndPolice(msg)
@@ -161,4 +226,9 @@ function sendMessageToEmsAndPolice(msg)
 			end
 		end
 	end)
+end
+
+function round(num, numDecimalPlaces)
+	local mult = 5^(numDecimalPlaces or 0)
+	return math.floor(num * mult + 0.5) / mult
 end

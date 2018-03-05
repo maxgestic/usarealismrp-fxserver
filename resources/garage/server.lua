@@ -101,7 +101,7 @@ function playerHasValidAutoInsurance(playerInsurance, source)
 end
 
 RegisterServerEvent("garage:checkVehicleStatus")
-AddEventHandler("garage:checkVehicleStatus", function(vehicle)
+AddEventHandler("garage:checkVehicleStatus", function(vehicle, property)
 	print("inside checkVehicleStatus with vehicle = " .. vehicle.model)
 	local userSource = tonumber(source)
 	local withdraw_fee = 0
@@ -116,6 +116,10 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle)
 				TriggerClientEvent("garage:notify", userSource, "~g~BC IMPOUND: ~w~Here's your car!")
 				TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
 				user.setActiveCharacterData("money", user_money - withdraw_fee)
+				-- give money to garage owner --
+				if property then 
+					TriggerEvent("properties:addMoney", property.name, round(0.15 * withdraw_fee, 0))
+				end
 				--vehicle.impounded = false
 				for i = 1, #userVehicles do
 					local thisVeh = userVehicles[i]
@@ -164,6 +168,11 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle)
 					userVehicles[i].stored = false
 					user.setActiveCharacterData("vehicles", userVehicles)
 					user.setActiveCharacterData("money", user_money - withdraw_fee)
+					-- give money to garage owner --
+					if property then 
+						TriggerEvent("properties:addMoney", property.name, round(0.15 * withdraw_fee, 0))
+					end
+					return
 				end
 			end
 		end
@@ -195,3 +204,7 @@ AddEventHandler("garage:openMenu", function()
 		TriggerClientEvent("garage:openMenuWithVehiclesLoaded", userSource, playerVehicles)
 	end)
 end)
+
+function round(num, numDecimalPlaces)
+  return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+end

@@ -2,6 +2,8 @@ local isBusy = "no"
 
 local closed = false
 
+local COPS_NEEDED_TO_ROB = 2
+
 function getPlayerIdentifierEasyMode(source)
 	local rawIdentifiers = GetPlayerIdentifiers(source)
 	if rawIdentifiers then
@@ -29,35 +31,54 @@ AddEventHandler("bank:isBusy", function()
 	print("INSIDE isBusy with source = " .. userSource)
 	local busyStatus = isBusy
 
-    if not closed then
-        print("BANK WAS NOT CLOSED")
-        if not abletorob then
-            TriggerClientEvent('chatMessage', userSource, 'SYSTEM', { 0, 141, 155 }, "^3The bank has already been robbed!")
-        elseif busyStatus == "no" then
-
-			TriggerEvent("usa:getPlayerItem", userSource, "Cell Phone", function(item)
-				if not item then
-					print("player did not have cell phone to hack the bank!")
-					TriggerClientEvent("bank-robbery:notify", userSource, "You need a cell phone to rob the bank!")
-					return
-				else
-					TriggerClientEvent('chatMessage', userSource, 'SYSTEM', { 0, 141, 155 }, "^3You are robbing the bank! Hack the system to get the money!")
-					TriggerClientEvent("bank-robbery:notify", userSource, "~r~Alarm activated!")
-		            TriggerEvent("bank:beginRobbery", userSource)
-		            abletorob = false
-		            -- 1.5 hr cooldown
-		            SetTimeout(5400000, function()
-		                abletorob = true
-		            end)
+	local count = 0
+	TriggerEvent("es:getPlayers", function(players)
+		if players then
+			for id, player in pairs(players) do
+				if id and player then
+					local playerJob = player.getActiveCharacterData("job")
+					if playerJob == "sheriff" or playerJob == "police" or playerJob == "cop" then
+						count = count + 1
+					end
 				end
-			end)
+			end
+			print("cop count: " .. count)
+			print("cops needed: " .. COPS_NEEDED_TO_ROB)
+			if count >= COPS_NEEDED_TO_ROB then 
+				if not closed then
+					print("BANK WAS NOT CLOSED")
+					if not abletorob then
+						TriggerClientEvent('chatMessage', userSource, 'SYSTEM', { 0, 141, 155 }, "^3The bank has already been robbed!")
+					elseif busyStatus == "no" then
 
-        else
-			TriggerClientEvent("bank-robbery:notify", userSource, "Someone is already robbing the bank!")
-        end
-    else
-		TriggerClientEvent("bank-robbery:notify", userSource, "The bank has been ~r~closed~w~ by admins.")
-    end
+						TriggerEvent("usa:getPlayerItem", userSource, "Cell Phone", function(item)
+							if not item then
+								print("player did not have cell phone to hack the bank!")
+								TriggerClientEvent("bank-robbery:notify", userSource, "You need a cell phone to rob the bank!")
+								return
+							else
+								TriggerClientEvent('chatMessage', userSource, 'SYSTEM', { 0, 141, 155 }, "^3You are robbing the bank! Hack the system to get the money!")
+								TriggerClientEvent("bank-robbery:notify", userSource, "~r~Alarm activated!")
+								TriggerEvent("bank:beginRobbery", userSource)
+								abletorob = false
+								-- 1.5 hr cooldown
+								SetTimeout(5400000, function()
+									abletorob = true
+								end)
+							end
+						end)
+
+					else
+						TriggerClientEvent("bank-robbery:notify", userSource, "Someone is already robbing the bank!")
+					end
+				else
+					TriggerClientEvent("bank-robbery:notify", userSource, "The bank has been ~r~closed~w~ by admins.")
+				end
+			else 
+				TriggerClientEvent("bank-robbery:notify", userSource, "You are not able to access the bank lock!")
+			end
+		end
+	end)
 
 end)
 

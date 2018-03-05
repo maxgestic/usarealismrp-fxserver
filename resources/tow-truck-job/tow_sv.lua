@@ -1,9 +1,15 @@
+local TOW_REWARD = 550
+
 RegisterServerEvent("towJob:giveReward")
-AddEventHandler("towJob:giveReward", function(targetVehicle)
+AddEventHandler("towJob:giveReward", function(property)
 	local userSource = source
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local user_money = user.getActiveCharacterData("money")
-		user.setActiveCharacterData("money", user_money + 400)
+		user.setActiveCharacterData("money", user_money + TOW_REWARD)
+		-- give property owner money --
+		if property then 
+			TriggerEvent("properties:addMoney", property.name, round(0.20 * TOW_REWARD, 0))
+		end
 		TriggerClientEvent("towJob:success", userSource)
 	end)
 end)
@@ -62,3 +68,7 @@ AddEventHandler("tow:setJob", function(coords)
 		end
 	end)
 end)
+
+function round(num, numDecimalPlaces)
+  return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+end

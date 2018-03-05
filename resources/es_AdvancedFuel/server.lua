@@ -52,7 +52,7 @@ end)
 
 
 RegisterServerEvent("essence:buy")
-AddEventHandler("essence:buy", function(amount, index, e)
+AddEventHandler("essence:buy", function(amount, index, e, property)
 	local _source = source
 
 
@@ -68,18 +68,23 @@ AddEventHandler("essence:buy", function(amount, index, e)
 		local user_money = user.getActiveCharacterData("money")
 		if userJob == "sheriff" or userJob == "ems" or userJob == "fire" then
 			TriggerClientEvent("essence:hasBuying", _source, amount)
+			-- give some money to store owner --
+			if property then 
+				TriggerEvent("properties:addMoney", property.name, round(0.20 * toPay, 0))
+			end
 		else
 			local toPay = round(amount*price,0)
 			if(toPay > user_money) then
-					TriggerClientEvent("showNotif", _source, "~r~You don't have enought money.")
+					TriggerClientEvent("showNotif", _source, "~r~You don't have enough money.")
 			else
-				--
 				user.setActiveCharacterData("money", user_money - toPay)
-				--else
-					print("user.getJob() was not sheriff/ems/fire: " .. userJob)
-				--end
+				print("user.getJob() was not sheriff/ems/fire: " .. userJob)
 
 				TriggerClientEvent("essence:hasBuying", _source, amount)
+			end
+			-- give some money to store owner --
+			if property then 
+				TriggerEvent("properties:addMoney", property.name, round(0.20 * toPay, 0))
 			end
 		end
 	end)

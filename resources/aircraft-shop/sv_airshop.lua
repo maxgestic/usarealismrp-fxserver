@@ -22,7 +22,7 @@ local prices = {
 }
 
 RegisterServerEvent("airshop:rentVehicle")
-AddEventHandler("airshop:rentVehicle", function(vehicle)
+AddEventHandler("airshop:rentVehicle", function(vehicle, property)
   print("vehicle.name = " .. vehicle.name)
   print("vehicle.price = " .. vehicle.price)
   print("vehicle.hash = " .. vehicle.hash)
@@ -36,6 +36,10 @@ AddEventHandler("airshop:rentVehicle", function(vehicle)
         print("user existed")
         if user_money >= price then
           local new_money = user_money - price
+          -- give money to store owner --
+          if property then 
+            TriggerEvent("properties:addMoney", property.name, round(0.20 * price, 0))
+          end
           user.setActiveCharacterData("money", new_money)
           print("calling spawnAircraft")
           TriggerClientEvent("airshop:spawnAircraft", userSource, vehicle.hash)

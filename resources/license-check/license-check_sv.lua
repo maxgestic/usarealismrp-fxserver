@@ -189,27 +189,29 @@ TriggerEvent('es:addCommand', '28', function(source, args, user)
 					--print("id = " .. id)
 					--print("player.job = " .. player.job)
 					local vehicles = player.getActiveCharacterData("vehicles")
-					for i = 1, #vehicles do
-						local vehicle = vehicles[i]
-						if string.lower(tostring(vehicle.plate)) == string.lower(tostring(plateNumber)) then
-							print("found matching plate number! triggering client event")
-							local message = "~y~PLATE: ~w~" .. vehicle.plate .. "\n"
-							message = message .. "~y~RO: ~w~"
-							message = message .. vehicle.owner .. "\n"
-							message = message .. "~y~MODEL: ~w~"
-							message = message .. vehicle.model
-							TriggerClientEvent("licenseCheck:notify", userSource, message)
-							return
+					if vehicles then
+						for i = 1, #vehicles do
+							local vehicle = vehicles[i]
+							if string.lower(tostring(vehicle.plate)) == string.lower(tostring(plateNumber)) then
+								print("found matching plate number! triggering client event")
+								local message = "~y~PLATE: ~w~" .. vehicle.plate .. "\n"
+								message = message .. "~y~RO: ~w~"
+								message = message .. vehicle.owner .. "\n"
+								message = message .. "~y~MODEL: ~w~"
+								message = message .. vehicle.model
+								TriggerClientEvent("licenseCheck:notify", userSource, message)
+								return
+							end
 						end
 					end
 				end
-				local message = "~y~PLATE: ~w~" .. string.upper(plateNumber) .. "\n"
-				message = message .. "~y~RO: ~w~"
-				message = message .. random_names[math.random(#random_names)] .. "\n"
-				message = message .. "~y~MODEL: ~w~"
-				message = message .. "Unknown"
-				-- player not in game with that plate number or plate number owned by a local!
-				TriggerClientEvent("licenseCheck:notify", userSource, message)
+					local message = "~y~PLATE: ~w~" .. string.upper(plateNumber) .. "\n"
+					message = message .. "~y~RO: ~w~"
+					message = message .. random_names[math.random(#random_names)] .. "\n"
+					message = message .. "~y~MODEL: ~w~"
+					message = message .. "Unknown"
+					-- player not in game with that plate number or plate number owned by a local!
+					TriggerClientEvent("licenseCheck:notify", userSource, message)
 			end)
 		else
 			print("player did not enter a plate #")

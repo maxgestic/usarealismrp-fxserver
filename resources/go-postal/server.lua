@@ -29,6 +29,12 @@ AddEventHandler("transport:giveMoney", function(amount, job)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local user_money = user.getActiveCharacterData("money")
 		user.setActiveCharacterData("money", user_money + amount)
+		-- give money to shop owner (if any within 50m nearby)--
+		print("checking job closest property!")
+		if job.closest_property then 
+			print("existed! name: " .. job.closest_property.name)
+			TriggerEvent("properties:addMoney", job.closest_property.name, round(0.09 * amount, 0))
+		end
 		if job.name == "Cannabis Transport" then
 			local inventory = user.getActiveCharacterData("inventory")
 			for i = 1, #inventory do
@@ -112,3 +118,7 @@ TriggerEvent('es:addCommand', 'quitjob', function(source, args, user)
 		print("player used /quitjob, setting activeJob to nil")
 	end
 end, {help = "Quit current transport job"})
+
+function round(num, numDecimalPlaces)
+  return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+end

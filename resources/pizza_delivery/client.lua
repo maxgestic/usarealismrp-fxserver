@@ -118,7 +118,7 @@ Citizen.CreateThread(function()
 					if (posibilidad > 70) and (posibilidad < 90) then
 						propina = math.random(100, 300)
 						TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0},"Here's a tip, thanks! ~ $"..propina)
-						TriggerServerEvent("pop_pizzero:propina", propina)
+						TriggerServerEvent("pop_pizzero:propina", propina, property)
 					end
 					isToHouse = false
 					isToPizzaria = true
@@ -135,8 +135,11 @@ Citizen.CreateThread(function()
 					--if IsVehicleModel(GetVehiclePedIsIn(GetPlayerPed(-1), true), GetHashKey("emperor2"))  then
 						if IsControlJustPressed(1,38) then
 							if IsInVehicle() then
-								TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0},"Thanks for doing the delivery. Here is your pay: $"..paga)
-								TriggerServerEvent("pop_pizzero:propina", paga)
+								TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0},"Thanks for doing the delivery, take your pay: $"..paga)
+								local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+								TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+									TriggerServerEvent("pop_pizzero:propina", paga, property)
+								end)
 								isToHouse = false
 								isToPizzaria = false
 								isInJobPizz = false

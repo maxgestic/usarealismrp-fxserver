@@ -193,7 +193,10 @@ Citizen.CreateThread(function()
 					TriggerEvent("boatshopGUI:Option", "Rent ~y~"..item.name.."~w~ - ~g~$"..comma_value(item.rent), function(cb)
 						if(cb) then
 							Citizen.Trace("Trying to retrieve boat: " .. item.name)
-							TriggerServerEvent("boatshop:rentVehicle", item, closest_coords)
+							local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+							TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+								TriggerServerEvent("boatshop:rentVehicle", item, closest_coords, property)
+							end)
 							menu.open = false
 							menu.page = "home"
 							rental = item
@@ -219,7 +222,10 @@ Citizen.CreateThread(function()
 					TriggerEvent("boatshopGUI:Option", "Buy ~y~"..item.name.."~w~ - ~g~$"..comma_value(item.price), function(cb)
 						if(cb) then
 							Citizen.Trace("Trying to purchase boat: " .. item.name)
-							TriggerServerEvent("boatshop:purchaseBoat", item, closest_coords)
+							local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+							TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+								TriggerServerEvent("boatshop:purchaseBoat", item, closest_coords, property)
+							end)
 							menu.open = false
 							menu.page = "home"
 						end

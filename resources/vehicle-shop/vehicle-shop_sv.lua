@@ -209,18 +209,6 @@ local vehicleShopItems = {
 	}
 }
 
-function getPlayerIdentifierEasyMode(source)
-	local rawIdentifiers = GetPlayerIdentifiers(source)
-	if rawIdentifiers then
-		for key, value in pairs(rawIdentifiers) do
-			playerIdentifier = value
-		end
-    else
-		print("IDENTIFIERS DO NOT EXIST OR WERE NOT RETIREVED PROPERLY")
-	end
-	return playerIdentifier -- should usually be only 1 identifier according to the wiki
-end
-
 function stringSplit(inputstr, sep)
         if sep == nil then
                 sep = "%s"
@@ -360,8 +348,8 @@ AddEventHandler("vehShop:checkPlayerInsurance", function()
 end)
 
 RegisterServerEvent("mini:checkVehicleMoney")
-AddEventHandler("mini:checkVehicleMoney", function(vehicle)
-	local playerIdentifier = getPlayerIdentifierEasyMode(source)
+AddEventHandler("mini:checkVehicleMoney", function(vehicle, property)
+	local playerIdentifier = GetPlayerIdentifiers(source)[1]
 	local userSource = tonumber(source)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local allLicenses = user.getActiveCharacterData("licenses")
@@ -388,6 +376,10 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle)
 								plate = generate_random_number_plate()
 								if vehicles then
 									user.setActiveCharacterData("money", user_money - tonumber(price))
+									-- give money to car dealership owner --
+									if property then 
+										TriggerEvent("properties:addMoney", property.name, round(0.15 * price, 0))
+									end
 									local vehicle = {
 										owner = owner_name,
 										make = vehicle.make,

@@ -128,51 +128,55 @@ Citizen.CreateThread(function()
 							has_valid_dl = false
 							print("has valid dl was true!")
 							--if not pressed then
-								job = gopostal[math.random(#gopostal)]
-								job.name = "Go Postal"
-								job.distance = GetDistanceBetweenCoords(job.x, job.y, job.z, GetEntityCoords(GetPlayerPed(-1)))
-								job.truck = -1
-								if GetVehiclePedIsIn(GetPlayerPed(-1), false) ~= lastTruck or IsPedInAnyVehicle(GetPlayerPed(-1), true) == false then
-									-- vehicle = GetHashKey("adder")
-									vehicle = GetHashKey("boxville2")
-									RequestModel(vehicle)
-									while not HasModelLoaded(vehicle) do
+								local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+								TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+									job = gopostal[math.random(#gopostal)]
+									job.name = "Go Postal"
+									job.closest_property = property
+									job.distance = GetDistanceBetweenCoords(job.x, job.y, job.z, GetEntityCoords(GetPlayerPed(-1)))
+									job.truck = -1
+									if GetVehiclePedIsIn(GetPlayerPed(-1), false) ~= lastTruck or IsPedInAnyVehicle(GetPlayerPed(-1), true) == false then
+										-- vehicle = GetHashKey("adder")
+										vehicle = GetHashKey("boxville2")
 										RequestModel(vehicle)
-										Citizen.Wait(0)
+										while not HasModelLoaded(vehicle) do
+											RequestModel(vehicle)
+											Citizen.Wait(0)
+										end
+										job.truck = CreateVehicle(vehicle, info.x, info.y, info.z+1.0, 2.0, true, false)
+										SetEntityAsMissionEntity(job.truck, true, true)
+										table.insert(retrievedVehicles,job.truck)
+										print("inserted into retrievedVehicles: " .. job.truck)
+									else
+										job.truck = lastTruck
+										table.insert(retrievedVehicles,job.truck)
+										print("inserted into retrievedVehicles: " .. job.truck)
 									end
-									job.truck = CreateVehicle(vehicle, info.x, info.y, info.z+1.0, 2.0, true, false)
-									SetEntityAsMissionEntity(job.truck, true, true)
-									table.insert(retrievedVehicles,job.truck)
-									print("inserted into retrievedVehicles: " .. job.truck)
-								else
-									job.truck = lastTruck
-									table.insert(retrievedVehicles,job.truck)
-									print("inserted into retrievedVehicles: " .. job.truck)
-								end
-								if job.truck ~= -1 then
-									SetVehicleOnGroundProperly(job.truck)
-									SetVehRadioStation(job.truck, "OFF")
-									SetPedIntoVehicle(GetPlayerPed(-1), job.truck, -1)
-									SetVehicleEngineOn(job.truck, true, false, false)
-									SetEntityAsMissionEntity(job.truck, true, true)
+									if job.truck ~= -1 then
+										SetVehicleOnGroundProperly(job.truck)
+										SetVehRadioStation(job.truck, "OFF")
+										SetPedIntoVehicle(GetPlayerPed(-1), job.truck, -1)
+										SetVehicleEngineOn(job.truck, true, false, false)
+										SetEntityAsMissionEntity(job.truck, true, true)
 
-									SetNewWaypoint(job.x, job.y)
-									lastTruck = job.truck
-									TriggerServerEvent("transport:addJob", job)
-								else
-									SetNotificationTextEntry("STRING")
-									AddTextComponentString("Failed to get truck! Try again.")
-									DrawNotification(0,1)
-									job = nil
-								end
-								pressed = true
-								while pressed do
-									Wait(0)
-									if(IsControlPressed(0, 176) == false) then
-										pressed = false
-										break
+										SetNewWaypoint(job.x, job.y)
+										lastTruck = job.truck
+										TriggerServerEvent("transport:addJob", job)
+									else
+										SetNotificationTextEntry("STRING")
+										AddTextComponentString("Failed to get truck! Try again.")
+										DrawNotification(0,1)
+										job = nil
 									end
-								end
+									pressed = true
+									while pressed do
+										Wait(0)
+										if(IsControlPressed(0, 176) == false) then
+											pressed = false
+											break
+										end
+									end
+								end)
 							--end
 						end
 	                end
@@ -214,54 +218,58 @@ Citizen.CreateThread(function()
 						if not has_valid_dl then TriggerServerEvent("go-postal:checkLicense") end
 						if has_valid_dl then
 							if not pressed then
-								job = fridgeItTruckingDropOff[math.random(#fridgeItTruckingDropOff)]
-								job.name = "FridgeIt Trucking"
-								job.distance = GetDistanceBetweenCoords(job.x, job.y, job.z, GetEntityCoords(GetPlayerPed(-1)))
-								job.truck = -1
-								if GetVehiclePedIsIn(GetPlayerPed(-1), false) ~= lastTruck or IsPedInAnyVehicle(GetPlayerPed(-1), true) == false then
-									-- vehicle = GetHashKey("adder")
-									--vehicle = GetHashKey("boxville2")
-									vehicle = tonumber(2112052861) -- semi truck (pounder)
-									RequestModel(vehicle)
-									while not HasModelLoaded(vehicle) do
+								local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+								TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+									job = fridgeItTruckingDropOff[math.random(#fridgeItTruckingDropOff)]
+									job.closest_property = property
+									job.name = "FridgeIt Trucking"
+									job.distance = GetDistanceBetweenCoords(job.x, job.y, job.z, GetEntityCoords(GetPlayerPed(-1)))
+									job.truck = -1
+									if GetVehiclePedIsIn(GetPlayerPed(-1), false) ~= lastTruck or IsPedInAnyVehicle(GetPlayerPed(-1), true) == false then
+										-- vehicle = GetHashKey("adder")
+										--vehicle = GetHashKey("boxville2")
+										vehicle = tonumber(2112052861) -- semi truck (pounder)
 										RequestModel(vehicle)
-										Citizen.Wait(0)
+										while not HasModelLoaded(vehicle) do
+											RequestModel(vehicle)
+											Citizen.Wait(0)
+										end
+										job.truck = CreateVehicle(vehicle, info.x, info.y, info.z+1.0, 2.0, true, false)
+										SetEntityAsMissionEntity(job.truck, true, true)
+										table.insert(retrievedVehicles,job.truck)
+										print("inserted into retrievedVehicles: " .. job.truck)
+									else
+										job.truck = lastTruck
+										table.insert(retrievedVehicles,job.truck)
+										print("inserted into retrievedVehicles: " .. job.truck)
 									end
-									job.truck = CreateVehicle(vehicle, info.x, info.y, info.z+1.0, 2.0, true, false)
-									SetEntityAsMissionEntity(job.truck, true, true)
-									table.insert(retrievedVehicles,job.truck)
-									print("inserted into retrievedVehicles: " .. job.truck)
-								else
-									job.truck = lastTruck
-									table.insert(retrievedVehicles,job.truck)
-									print("inserted into retrievedVehicles: " .. job.truck)
-								end
-								if job.truck ~= -1 then
-									SetVehicleOnGroundProperly(job.truck)
-									SetVehRadioStation(job.truck, "OFF")
-									SetPedIntoVehicle(GetPlayerPed(-1), job.truck, -1)
-									SetVehicleEngineOn(job.truck, true, false, false)
-									SetEntityAsMissionEntity(job.truck, true, true)
-									SetNewWaypoint(job.x, job.y)
-									lastTruck = job.truck
-									TriggerServerEvent("transport:addJob", job)
-								else
+									if job.truck ~= -1 then
+										SetVehicleOnGroundProperly(job.truck)
+										SetVehRadioStation(job.truck, "OFF")
+										SetPedIntoVehicle(GetPlayerPed(-1), job.truck, -1)
+										SetVehicleEngineOn(job.truck, true, false, false)
+										SetEntityAsMissionEntity(job.truck, true, true)
+										SetNewWaypoint(job.x, job.y)
+										lastTruck = job.truck
+										TriggerServerEvent("transport:addJob", job)
+									else
+										SetNotificationTextEntry("STRING")
+										AddTextComponentString("Failed to get truck! Try again.")
+										DrawNotification(0,1)
+										job = nil
+									end
+									pressed = true
 									SetNotificationTextEntry("STRING")
-									AddTextComponentString("Failed to get truck! Try again.")
+									AddTextComponentString("Here are directions to your delivery location. Have a nice ride!")
 									DrawNotification(0,1)
-									job = nil
-								end
-								pressed = true
-								SetNotificationTextEntry("STRING")
-								AddTextComponentString("Here are directions to your delivery location. Have a nice ride!")
-								DrawNotification(0,1)
-								while pressed do
-									Wait(0)
-									if(IsControlPressed(0, 176) == false) then
-										pressed = false
-										break
+									while pressed do
+										Wait(0)
+										if(IsControlPressed(0, 176) == false) then
+											pressed = false
+											break
+										end
 									end
-								end
+								end)
 							end
 						end
 	                end

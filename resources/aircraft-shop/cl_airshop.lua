@@ -93,8 +93,10 @@ Citizen.CreateThread(function()
             					menu = false
             					if not alreadyCalled then
             						alreadyCalled = true
-                                    -- call this event with the vehicle.price
-            						TriggerServerEvent("airshop:rentVehicle", item)
+                                    local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+									TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+            							TriggerServerEvent("airshop:rentVehicle", item, property)
+									end)
                                     menu = false
                                     rental = item
             					end
@@ -166,16 +168,23 @@ end)
 
 
 local locations = {
-	{ ['x'] = -943.103, ['y'] = -2958.14, ['z'] = 13.9451}, -- LS
-	{ ['x'] = 2119.083, ['y'] = 4790.010, ['z'] = 41.139} -- Sandy Shores
+	{ ['x'] = -943.103, ['y'] = -2958.14, ['z'] = 13.9451 }, -- LS
+	{ ['x'] = 2119.083, ['y'] = 4790.010, ['z'] = 41.139 }, -- Grape Seed
+	{ ['x'] =  1727.8526, ['y'] = 3289.0103, ['z'] = 41.162 } -- sandy shores
 }
 
 local returnLocations = {
     {x = -993.573, y = -3015.14, z = 13.9451},
-	{x = 2141.445, y = 4818.229, z = 41.359 }
+	{x = 2141.445, y = 4818.229, z = 41.359 },
+	{x = 1700.487, y = 3271.906, z = 41.1502} -- sandy shores airfield
 }
 
 local spawnX, spawnY, spawnZ = -982.552, -2993.78, 13.9451
+
+local spawnz = {
+	{x = -982.552, y = -2993.78, z = 13.9451},
+	{x = 1742.931, y = 3283.37, z = 41.089}
+}
 
 Citizen.CreateThread(function()
 	while true do
@@ -262,10 +271,11 @@ AddEventHandler("airshop:spawnAircraft", function(hash)
             Citizen.Wait(0)
         end
         -- Model loaded, continue
-		if GetDistanceBetweenCoords(locations[1].x, locations[1].y, locations[1].z ,GetEntityCoords(GetPlayerPed(-1))) < 35 then
-			spawnX, spawnY, spawnZ = -982.552, -2993.78, 13.9451 -- LS
-		else
-			spawnX, spawnY, spawnZ = 2121.315, 4804.626, 41.196 -- grapeseed
+		local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+		for i = 1, #spawnz do 
+			if Vdist(playerCoords.x, playerCoords.y, playerCoords.z, spawnz[i].x, spawnz[i].y, spawnz[i].z) < 60 then 
+				spawnX, spawnY, spawnZ = spawnz[i].x, spawnz[i].y, spawnz[i].z
+			end
 		end
         -- Spawn the vehicle at the gas station car dealership in paleto and assign the vehicle handle to 'vehicle'
         local vehicle = CreateVehicle(numberHash, spawnX, spawnY, spawnZ, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])

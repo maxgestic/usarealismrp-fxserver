@@ -1,14 +1,24 @@
-function getPlayerIdentifierEasyMode(source)
-	local rawIdentifiers = GetPlayerIdentifiers(source)
-	if rawIdentifiers then
-		for key, value in pairs(rawIdentifiers) do
-			playerIdentifier = value
-		end
-    else
-		print("IDENTIFIERS DO NOT EXIST OR WERE NOT RETIREVED PROPERLY")
-	end
-	return playerIdentifier -- should usually be only 1 identifier according to the wiki
+function round(num, numDecimalPlaces)
+	local mult = 5^(numDecimalPlaces or 0)
+	return math.floor(num * mult + 0.5) / mult
 end
+
+-- charge customer --
+RegisterServerEvent("clothing-store:chargeCustomer")
+AddEventHandler("clothing-store:chargeCustomer", function(property)
+	local user_source = source
+	local amount = 100
+	local player = exports["essentialmode"]:getPlayerFromId(user_source)
+	local user_money = player.getActiveCharacterData("money")
+	if user_money - amount >= 0 then
+		TriggerClientEvent("usa:notify", user_source, "~y~Charged:~w~ $" .. amount) 
+		player.setActiveCharacterData("money", user_money - amount)
+		-- give money to store owner --
+		TriggerEvent("properties:addMoney", property.name, round(0.20 * amount, 0))
+	else 
+		TriggerClientEvent("usa:notify", user_source, "You don't have enough money!")
+	end
+end)
 
 RegisterServerEvent("mini:save")
 AddEventHandler("mini:save", function(appearance)
@@ -28,6 +38,7 @@ AddEventHandler("mini:save", function(appearance)
 		--TriggerEvent("mini:giveMeMyWeaponsPlease")
 	end)
 end)
+
 
 RegisterServerEvent("mini:giveMeMyWeaponsPlease")
 AddEventHandler("mini:giveMeMyWeaponsPlease", function()

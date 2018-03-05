@@ -61,8 +61,10 @@ Citizen.CreateThread(function()
 				TriggerEvent("fuelGUI:Option", settings[lang].confirm, function(cb)
 					if(cb) then
 						menu = not menu
-
-						TriggerServerEvent("essence:buy", int, stationNumber,false)
+						local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+						TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+							TriggerServerEvent("essence:buy", int, stationNumber,false, property)
+						end)
 					else
 
 					end
@@ -104,8 +106,10 @@ Citizen.CreateThread(function()
 				TriggerEvent("fuelGUI:Option", settings[lang].confirm, function(cb)
 					if(cb) then
 						menu = not menu
-
-						TriggerServerEvent("essence:buy", int, electricityPrice,true)
+						local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+						TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+							TriggerServerEvent("essence:buy", int, electricityPrice,true, property)
+						end)
 					else
 
 					end
@@ -145,8 +149,10 @@ Citizen.CreateThread(function()
 				TriggerEvent("fuelGUI:Option", settings[lang].confirm, function(cb)
 					if(cb) then
 						menu = not menu
-
-						TriggerServerEvent("essence:buy", int, stationBoatNumber,false)
+						local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+						TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+							TriggerServerEvent("essence:buy", int, stationBoatNumber,false, property)
+						end)
 					else
 
 					end
@@ -187,8 +193,10 @@ Citizen.CreateThread(function()
 				TriggerEvent("fuelGUI:Option", settings[lang].confirm, function(cb)
 					if(cb) then
 						menu = not menu
-
-						TriggerServerEvent("essence:buy", int, stationPlaneNumber,false)
+						local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+						TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+							TriggerServerEvent("essence:buy", int, stationPlaneNumber,false, property)
+						end)
 					else
 
 					end
@@ -229,8 +237,10 @@ Citizen.CreateThread(function()
 				TriggerEvent("fuelGUI:Option", settings[lang].confirm, function(cb)
 					if(cb) then
 						menu = not menu
-
-						TriggerServerEvent("essence:buy", int, stationHeliNumber,false)
+						local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+						TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+							TriggerServerEvent("essence:buy", int, stationHeliNumber,false, property)
+						end)
 					else
 
 					end

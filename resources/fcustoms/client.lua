@@ -923,7 +923,10 @@ function CustomsShop()
             if(Menu.Option("Repair Vehicle"))then
                 local engine_health = GetVehicleEngineHealth(GetVehiclePedIsIn(GetPlayerPed(-1), 1))
                 print("engine health = " .. engine_health)
-                TriggerServerEvent("customs:checkRepairMoney", engine_health)
+                local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+				TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+                    TriggerServerEvent("customs:checkRepairMoney", engine_health, property)
+                end)
             end
         end)
     end
@@ -988,7 +991,10 @@ function subCustoms(title,data)
                         Vehicledata[title] = mod
                         subCustoms(title,data)
                     else
-                        TriggerServerEvent("customs:check", title, data, v.cost, mod)
+                        local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+						TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+                            TriggerServerEvent("customs:check", title, data, v.cost, mod, property)
+                        end)
                     end
                 end
             end)
@@ -1095,7 +1101,10 @@ function displayPrimaryColours(title,data)
                     Vehicledata["Colours"][1] = v.colour
                     displayPrimaryColours(title,data)
                 else
-                    TriggerServerEvent("customs:check", title, data, v.cost, v.colour)
+                    local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+					TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+                        TriggerServerEvent("customs:check", title, data, v.cost, v.colour, property)
+                    end)
                 end
 	        end
 	    end)
@@ -1122,7 +1131,10 @@ function displaySecondaryColours(title,data)
                     Vehicledata["Colours"][2] = v.colour
                     displaySecondaryColours(title,data)
                 else
-                    TriggerServerEvent("customs:check", title, data, v.cost, v.colour)
+                    local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+					TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+                        TriggerServerEvent("customs:check", title, data, v.cost, v.colour, property)
+                    end)
                 end
             end
         end)
@@ -1220,7 +1232,10 @@ function displayCustomsLights(title,data,back)
                     end
                     displayCustomsLights(title,data,back)
                 else
-                    TriggerServerEvent("customs:check2", title, data, v.cost, value, back)
+                    local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+					TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+                        TriggerServerEvent("customs:check2", title, data, v.cost, value, back, property)
+                    end)
                 end
 	        end
 	    end)
@@ -1395,7 +1410,10 @@ function displayWheels(title,data,back)
                     end
                     displayWheels(title,data,back)
                 else
-                    TriggerServerEvent("customs:check3", title, data, v.cost, mod, back, v.name, wtype)
+                    local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+					TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+                        TriggerServerEvent("customs:check3", title, data, v.cost, mod, back, v.name, wtype, property)
+                    end)
                 end
 	        end
 	    end)

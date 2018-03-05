@@ -26,6 +26,10 @@ AddEventHandler("gunShop:buyPermit", function()
         table.insert(licenses, permit)
         print("saving inventory with gun permit inside of it")
         user.setActiveCharacterData("licenses", licenses)
+        -- give money to property owner --
+        if property then 
+            TriggerEvent("properties:addMoney", property.name, round(0.18 * cost, 0))
+        end
 		--TriggerEvent("sway:updateDB", userSource)
     end)
 end)
@@ -78,7 +82,7 @@ AddEventHandler("gunShop:sellWeapon",function(weapon)
 end)
 
 RegisterServerEvent("mini:checkGunMoney")
-AddEventHandler("mini:checkGunMoney", function(weapon)
+AddEventHandler("mini:checkGunMoney", function(weapon, property)
   local userSource = source
   TriggerEvent('es:getPlayerFromId', userSource, function(user)
     local weapons = user.getActiveCharacterData("weapons")
@@ -92,6 +96,10 @@ AddEventHandler("mini:checkGunMoney", function(weapon)
           user.setActiveCharacterData("weapons", weapons)
           TriggerClientEvent("mini:equipWeapon", userSource, userSource, weapon.hash, weapon.name) -- equip
           TriggerClientEvent("chatMessage", userSource, "Gun Store", {41, 103, 203}, "^0You now own a ^3" .. weapon.name .. "^0!")
+          if property then
+            -- give money to store owner --
+            TriggerEvent("properties:addMoney", property.name, round(0.20 * weapon.price, 0))
+          end
           --TriggerEvent("sway:updateDB", userSource)
         else
           TriggerClientEvent("mini:insufficientFunds", userSource, weapon.price, "gun")

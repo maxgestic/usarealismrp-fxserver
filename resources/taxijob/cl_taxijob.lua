@@ -47,7 +47,10 @@ Citizen.CreateThread(function()
 	    if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,taxiDutyX,taxiDutyY,taxiDutyZ,false) < 3 and not playerNotified then
         drawTxt("Press ~y~E~w~ to go on/off duty for Downtown Taxi Co.!",0,1,0.5,0.8,0.6,255,255,255,255)
     		if IsControlJustPressed(1,38) then
-					TriggerServerEvent("taxi:setJob")
+				local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+				TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+					TriggerServerEvent("taxi:setJob", property)
+				end)
     		end
         elseif GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,taxiDutyX,taxiDutyY,taxiDutyZ,false) > 3 then
             -- out of range

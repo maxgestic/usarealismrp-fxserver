@@ -24,7 +24,7 @@ AddEventHandler('es:playerLoaded', function(source, user)
 end)
 
 RegisterServerEvent("boatshop:purchaseBoat")
-AddEventHandler("boatshop:purchaseBoat", function(boat, coords)
+AddEventHandler("boatshop:purchaseBoat", function(boat, coords, property)
     print("boat.name = " .. boat.name)
     print("boat.price = " .. boat.price)
     print("boat.hash = " .. boat.hash)
@@ -39,6 +39,10 @@ AddEventHandler("boatshop:purchaseBoat", function(boat, coords)
             if user_money >= price then
                 -- charge player:
                 user.setActiveCharacterData("money", user_money - price)
+                -- give money to store owner --
+                if property then 
+                  TriggerEvent("properties:addMoney", property.name, round(0.20 * price, 0))
+                end
                 -- store in player object:
                 print("saving players' boats!")
                 local user_boats = user.getActiveCharacterData("watercraft")
@@ -70,7 +74,7 @@ AddEventHandler("boatshop:purchaseBoat", function(boat, coords)
 end)
 
 RegisterServerEvent("boatshop:rentVehicle")
-AddEventHandler("boatshop:rentVehicle", function(vehicle, coords)
+AddEventHandler("boatshop:rentVehicle", function(vehicle, coords, property)
     print("vehicle.name = " .. vehicle.name)
     print("vehicle.price = " .. vehicle.price)
     print("vehicle.hash = " .. vehicle.hash)
@@ -84,6 +88,10 @@ AddEventHandler("boatshop:rentVehicle", function(vehicle, coords)
             local user_money = user.getActiveCharacterData("money")
             if user_money >= price then
                 user.setActiveCharacterData("money", user_money - price)
+                -- give money to store owner --
+                if property then 
+                  TriggerEvent("properties:addMoney", property.name, round(0.20 * price, 0))
+                end
                 print("calling spawnAircraft")
                 TriggerClientEvent("boatshop:spawnSeacraft", userSource, vehicle, coords)
                 TriggerClientEvent("usa:notify", userSource, "Here is your rental! You can return it for cash back just over there at the blue circle.")
@@ -152,7 +160,6 @@ end)
 function round(num, numDecimalPlaces)
   return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
 end
-
 
 function comma_value(amount)
   local formatted = amount

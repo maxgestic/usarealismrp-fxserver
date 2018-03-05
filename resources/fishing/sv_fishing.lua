@@ -45,6 +45,8 @@ AddEventHandler("fishing:sellFish", function()
           local user_money = user.getActiveCharacterData("money")
           user.setActiveCharacterData("money", user_money + item.worth)
           TriggerClientEvent("usa_rp:notify", userSource, "You have sold (1x) " .. item.name .. " for $" .. item.worth)
+          -- give money to fish restuarant owner --
+          TriggerEvent("properties:addMoney", "Fish Restaurant - Paleto", round(0.20 * item.worth, 0))
           return
         end
       end
@@ -52,3 +54,7 @@ AddEventHandler("fishing:sellFish", function()
     TriggerClientEvent("usa:notify", userSource, "You have no fish to sell!")
   end)
 end)
+
+function round(num, numDecimalPlaces)
+    return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+end

@@ -31,7 +31,12 @@ function isPlayerAtGeneralStore()
 end
 
 function buyItem(item)
-    TriggerServerEvent("generalStore:buyItem", item)
+  local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
+  TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+    print("inside property coords callback!")
+    if not property then print("no property found!") end
+    TriggerServerEvent("generalStore:buyItem", item, property)
+  end)
 end
 
 Citizen.CreateThread(function()

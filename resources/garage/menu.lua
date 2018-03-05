@@ -82,12 +82,18 @@ Citizen.CreateThread(function()
 							--Citizen.Trace("calling garage:checkVehicleStatus with vehicle = " .. vehicle.model)
 							if GetVehiclePedIsIn(GetPlayerPed(-1), false) ~= 0 then
 								if GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), -1) == GetPlayerPed(-1) then
-									TriggerServerEvent("garage:checkVehicleStatus", vehicle)
+									local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+									TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+										TriggerServerEvent("garage:checkVehicleStatus", vehicle, property)
+									end)
 								else
 									TriggerEvent("usa:notify", "You must be in the driver's seat!")
 								end
 							else 
-								TriggerServerEvent("garage:checkVehicleStatus", vehicle)
+								local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+								TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+									TriggerServerEvent("garage:checkVehicleStatus", vehicle, property)
+								end)
 							end
 						else
 								Citizen.Trace("Vehicle already retrieved...")
