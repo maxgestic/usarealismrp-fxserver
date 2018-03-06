@@ -55,7 +55,6 @@ AddEventHandler("properties:addMoney", function(name, amount)
     print("$" .. amount .. " added!")
 end)
 
-
 ------------------
 -- REMOVE MONEY --
 ------------------
@@ -80,6 +79,7 @@ AddEventHandler("properties:withdraw", function(name, amount)
                 end
                 if doc then
                     print("doc found!")
+                    doc._rev = nil
                     db.updateDocument("properties", doc._id, PROPERTIES[name], function(status)
                         if status == true then
                             print("\nDocument successfully updated!")
@@ -120,36 +120,20 @@ AddEventHandler("properties:purchaseProperty", function(property)
         PROPERTIES[property.name].owner.name = char_name
         PROPERTIES[property.name].owner.purchase_date = os.date("%x", os.time())
         PROPERTIES[property.name].owner.identifier = GetPlayerIdentifiers(source)[1]
+        -- update all clients property info --
         TriggerClientEvent("properties:update", -1, PROPERTIES, true)
         -- subtract money --
         player.setActiveCharacterData("money", user_money - property.fee.price)
-        -- send discord msg to #property-logs --
-        -- send discord message
-			local desc = "\n**Business:** " .. property.name .. "\n**Purchase Price:** $" .. comma_value(property.fee.price) ..  "\n**Purchased By:** " .. char_name .. "\n**Purchase Date:** ".. PROPERTIES[property.name].owner.purchase_date .. "\n**End Date:** " .. PROPERTIES[property.name].fee.end_date
-			local url = 'https://discordapp.com/api/webhooks/419573361170055169/6v2NLnxzF8lSHgT8pSDccB_XN1R6miVuZDrEYtvNfPny6kSqddSN_9iJ9PPkbAbM01pW'
-				PerformHttpRequest(url, function(err, text, headers)
-					if text then
-						print(text)
-					end
-				end, "POST", json.encode({
-					embeds = {
-						{
-							description = desc,
-							color = 524288,
-							author = {
-								name = "BLAINE COUNTY PROPERTY MGMT"
-							}
-						}
-					}
-				}), { ["Content-Type"] = 'application/json' })
-        -- Get the document with that property name
+        -- Get the document with that property name --
         TriggerEvent('es:exposeDBFunctions', function(db)
             db.getDocumentByRow("properties", "name", property.name, function(doc, rText)
                 if rText then
                     --RconPrint("\nrText = " .. rText)
                 end
                 if doc then
+                    PROPERTIES[property.name]._rev = nil
                     db.updateDocument("properties", doc._id, PROPERTIES[property.name], function(status)
+                        print("called db.updateDocument checking status")
                         if status == true then
                             print("\nDocument updated.")
                         else
@@ -162,6 +146,24 @@ AddEventHandler("properties:purchaseProperty", function(property)
                 end
             end)
         end)
+        -- send discord msg to #property-logs --
+		local desc = "\n**Business:** " .. property.name .. "\n**Purchase Price:** $" .. comma_value(property.fee.price) ..  "\n**Purchased By:** " .. char_name .. "\n**Purchase Date:** ".. PROPERTIES[property.name].owner.purchase_date .. "\n**End Date:** " .. PROPERTIES[property.name].fee.end_date
+		local url = 'https://discordapp.com/api/webhooks/419573361170055169/6v2NLnxzF8lSHgT8pSDccB_XN1R6miVuZDrEYtvNfPny6kSqddSN_9iJ9PPkbAbM01pW'
+		PerformHttpRequest(url, function(err, text, headers)
+			if text then
+				print(text)
+			end
+		end, "POST", json.encode({
+			embeds = {
+				{
+					description = desc,
+					color = 524288,
+					author = {
+						name = "BLAINE COUNTY PROPERTY MGMT"
+					}
+				}
+			}
+		}), { ["Content-Type"] = 'application/json' })
     else 
         TriggerClientEvent("usa:notify", user_source, "You don't have enough money to purchase this property!")
     end
@@ -171,7 +173,7 @@ function GetWholeDaysFromTime(reference_time)
 	local timestamp = os.date("*t", os.time())
 	local daysfrom = os.difftime(os.time(), reference_time) / (24 * 60 * 60) -- seconds in a day
 	local wholedays = math.floor(daysfrom)
-	print("whole days: " .. wholedays) -- today it prints "1"
+	print("property owned whole days: " .. wholedays) -- today it prints "1"
 	return wholedays
 end
 
@@ -198,8 +200,6 @@ function Evict_Owner(name)
     PROPERTIES[name].owner.identifier = "undefined"
     PROPERTIES[name].storage.money = 0
     PROPERTIES[name].storage.items = {}
-
-    -- todo: update owner of property in DB --
     -- Get the document with that property name
         TriggerEvent('es:exposeDBFunctions', function(db)
             db.getDocumentByRow("properties", "name", name, function(doc, rText)
@@ -207,6 +207,7 @@ function Evict_Owner(name)
                     --RconPrint("\nrText = " .. rText)
                 end
                 if doc then
+                    doc._rev = nil
                     db.updateDocument("properties", doc._id, PROPERTIES[name], function(status)
                         if status == true then
                             print("\nDocument updated.")
@@ -220,6 +221,25 @@ function Evict_Owner(name)
                 end
             end)
         end)
+
+        -- send discord message
+			local desc = "\n" .. char_name .. " no longer owns " .. property.name .. "!"
+			local url = 'https://discordapp.com/api/webhooks/419573361170055169/6v2NLnxzF8lSHgT8pSDccB_XN1R6miVuZDrEYtvNfPny6kSqddSN_9iJ9PPkbAbM01pW'
+				PerformHttpRequest(url, function(err, text, headers)
+					if text then
+						print(text)
+					end
+				end, "POST", json.encode({
+					embeds = {
+						{
+							description = desc,
+							color = 524288,
+							author = {
+								name = "BLAINE COUNTY PROPERTY MGMT"
+							}
+						}
+					}
+				}), { ["Content-Type"] = 'application/json' })
 end
 -----------------------------------------
 
@@ -227,13 +247,16 @@ end
 -- Save property data every x minutes  --
 -----------------------------------------
 Citizen.CreateThread(function()
+
 	local minutes = 17
 	local interval = minutes * 60000
+
 	function savePropertyData()
 		print("calling savePropertyData()...")
 		SetTimeout(interval, function()
             TriggerEvent('es:exposeDBFunctions', function(db)
-                for name, info in pairs(PROPERTIES) do 
+                for name, info in pairs(PROPERTIES) do
+                    print("trying to save property: " .. name)
                     -- Get the document with that property name
                     db.getDocumentByRow("properties", "name", name, function(doc, rText)
                         if rText then
@@ -241,12 +264,17 @@ Citizen.CreateThread(function()
                         end
                         if doc then
                             print("doc found!")
+                            info._rev = nil
                             db.updateDocument("properties", doc._id, info, function(status)
+                                --print("info._rev: " .. info._rev)
+                                print("inside of db.updateDocument!")
+                                --print("doc._id = " .. doc._id)
+                                print("status: " .. tostring(status))
                                 if status == true then
                                     print("Property document successfully updated!")
                                 else
                                     --RconPrint("\nStatus Response: " .. status)
-                                    if status == "201" then
+                                    if tostring(status) == "202" then
                                         --RconPrint("\nDocument successfully updated!")
                                         print("Property document successfully updated!")
                                     end
@@ -259,7 +287,9 @@ Citizen.CreateThread(function()
 			savePropertyData()
 		end)
 	end
+
     savePropertyData()
+
 end)
 ---------------------------------------
 

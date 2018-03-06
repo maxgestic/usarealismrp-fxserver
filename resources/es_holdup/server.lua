@@ -1,5 +1,4 @@
 local COPS_NEEDED_TO_ROB = 2
-
 local stores = {
 	["Los Santos Customs - Paleto"] = {
 		position = { ['x'] = 99.053, ['y'] = 6620.112, ['z'] = 32.44 },
@@ -175,10 +174,10 @@ AddEventHandler('es_holdup:rob', function(robb)
 						return
 					end
 					--TriggerClientEvent('chatMessage', -1, 'NEWS', {255, 0, 0}, "Robbery in progress at ^2" .. store.nameofstore)
-					TriggerClientEvent('chatMessage', source, 'SYSTEM', {255, 0, 0}, "You started a robbery at: ^2" .. store.nameofstore .. "^0, do not get too far away from this point!")
-					TriggerClientEvent('chatMessage', source, 'SYSTEM', {255, 0, 0}, "The Alarm has been triggered!")
-					TriggerClientEvent('chatMessage', source, 'SYSTEM', {255, 0, 0}, "Hold the fort for ^12 ^0minutes and the money is yours!")
-					TriggerClientEvent('es_holdup:currentlyrobbing', source, robb)
+					TriggerClientEvent('chatMessage', savedSource, 'SYSTEM', {255, 0, 0}, "You started a robbery at: ^2" .. store.nameofstore .. "^0, do not get too far away from this point!")
+					TriggerClientEvent('chatMessage', savedSource, 'SYSTEM', {255, 0, 0}, "The Alarm has been triggered!")
+					TriggerClientEvent('chatMessage', savedSource, 'SYSTEM', {255, 0, 0}, "Hold the fort for ^12 ^0minutes and the money is yours!")
+					TriggerClientEvent('es_holdup:currentlyrobbing', savedSource, robb)
 					--sendMessageToEmsAndPolice("^1DISPATCH: ^0Robbery in progress at ^2" .. store.nameofstore)
 					stores[robb].lastrobbed = os.time()
 					robbers[source] = robb
@@ -191,7 +190,7 @@ AddEventHandler('es_holdup:rob', function(robb)
 									print("adding stolen money!")
 									local user_money = target.getActiveCharacterData("money")
 									TriggerEvent("properties:getPropertyMoney", robb, function(reward)
-										reward = round(reward * 0.40, 0)
+										reward = round(reward * 0.28, 0)
 										print("property was robbed of: $" .. reward)
 										target.setActiveCharacterData("money", user_money  + reward)
 										--TriggerClientEvent('chatMessage', -1, 'NEWS', {255, 0, 0}, "Robbery is over at: ^2" .. store.nameofstore)

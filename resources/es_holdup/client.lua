@@ -137,7 +137,7 @@ local stores = {
 	},
 	-- below need testing: 
 	["Tow Truck - Paleto"] = {
-		position = { ['x'] = -191.731.07, ['y'] = 6269.85, ['z'] = 31.489},
+		position = { ['x'] = -191.731, ['y'] = 6269.85, ['z'] = 31.489},
 		nameofstore = "Tow Truck - Paleto",
 		lastrobbed = 0
 	},
