@@ -65,34 +65,38 @@ AddEventHandler("properties:withdraw", function(name, amount)
         PROPERTIES[name].storage.money = PROPERTIES[name].storage.money - amount
         TriggerClientEvent("properties:update", -1, PROPERTIES, true)
         -- add to player --
-        local player = exports["essentialmode"]:getPlayerFromId(source)
-        local user_money = player.getActiveCharacterData("money")
-        player.setActiveCharacterData("money", user_money + amount)
-        TriggerClientEvent("usa:notify", source, "~y~Withdrawn: ~w~$" .. amount)
-        print("$" .. amount .. " withdrawn!")
-        -- update property info in DB --
-        -- Get the document with that property name
-        TriggerEvent('es:exposeDBFunctions', function(db)
-            db.getDocumentByRow("properties", "name", name, function(doc, rText)
-                if rText then
-                    --RconPrint("\nrText = " .. rText)
-                end
-                if doc then
-                    print("doc found!")
-                    doc._rev = nil
-                    db.updateDocument("properties", doc._id, PROPERTIES[name], function(status)
-                        if status == true then
-                            print("\nDocument successfully updated!")
-                        else
-                            --RconPrint("\nStatus Response: " .. status)
-                            if status == "201" then
-                                print("\nDocument successfully updated!")
-                            end
-                        end
-                    end)
-                end
-            end)
-        end)
+        local player = exports["essentialmode"]:getPlayerFromId(tonumber(source))
+		if player then
+			local user_money = player.getActiveCharacterData("money")
+			player.setActiveCharacterData("money", user_money + amount)
+			TriggerClientEvent("usa:notify", source, "~y~Withdrawn: ~w~$" .. amount)
+			print("$" .. amount .. " withdrawn!")
+			-- update property info in DB --
+			-- Get the document with that property name
+			TriggerEvent('es:exposeDBFunctions', function(db)
+				db.getDocumentByRow("properties", "name", name, function(doc, rText)
+					if rText then
+						--RconPrint("\nrText = " .. rText)
+					end
+					if doc then
+						print("doc found!")
+						doc._rev = nil
+						db.updateDocument("properties", doc._id, PROPERTIES[name], function(status)
+							if status == true then
+								print("\nDocument successfully updated!")
+							else
+								--RconPrint("\nStatus Response: " .. status)
+								if status == "201" then
+									print("\nDocument successfully updated!")
+								end
+							end
+						end)
+					end
+				end)
+			end)
+		else 
+			print("failed to retrieve player in properties:withdraw!")
+		end
     else 
         TriggerClientEvent("usa:notify", source, "Don't have that much to withdraw!")
     end
