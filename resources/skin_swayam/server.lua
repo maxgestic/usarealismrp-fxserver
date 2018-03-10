@@ -14,7 +14,9 @@ AddEventHandler("clothing-store:chargeCustomer", function(property)
 		TriggerClientEvent("usa:notify", user_source, "~y~Charged:~w~ $" .. amount) 
 		player.setActiveCharacterData("money", user_money - amount)
 		-- give money to store owner --
-		TriggerEvent("properties:addMoney", property.name, round(0.20 * amount, 0))
+		if property then
+			TriggerEvent("properties:addMoney", property.name, round(0.20 * amount, 0))
+		end
 	else 
 		TriggerClientEvent("usa:notify", user_source, "You don't have enough money!")
 	end

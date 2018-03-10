@@ -20,6 +20,8 @@ AddEventHandler("go-postal:checkLicense", function()
 			end
           end
         end
+		-- no license at this point
+		TriggerClientEvent("usa:notify", userSource, "You don't have a driver's license! Try the DMV.")
 	end)
 end)
 

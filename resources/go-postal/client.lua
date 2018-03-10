@@ -120,13 +120,13 @@ Citizen.CreateThread(function()
 				DrawMarker(1, info.x, info.y, info.z-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
 				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), info.x, info.y, info.z, true) < 2 and (IsPedInAnyVehicle(GetPlayerPed(-1), true) == false or GetVehiclePedIsIn(GetPlayerPed(-1), false) == lastTruck) then
 					DrawSpecialText("Press [ ~g~Enter~w~ ] to start working for Go Postal")
-			        if IsControlPressed(0, 176) then
+			        if IsControlJustPressed(0, 176) then
 						if not has_valid_dl then
-							print("calling check license!")
+							--print("calling check license!")
 							TriggerServerEvent("go-postal:checkLicense")
 						elseif has_valid_dl then
 							has_valid_dl = false
-							print("has valid dl was true!")
+							--print("has valid dl was true!")
 							--if not pressed then
 								local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
 								TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
@@ -146,11 +146,11 @@ Citizen.CreateThread(function()
 										job.truck = CreateVehicle(vehicle, info.x, info.y, info.z+1.0, 2.0, true, false)
 										SetEntityAsMissionEntity(job.truck, true, true)
 										table.insert(retrievedVehicles,job.truck)
-										print("inserted into retrievedVehicles: " .. job.truck)
+										--print("inserted into retrievedVehicles: " .. job.truck)
 									else
 										job.truck = lastTruck
 										table.insert(retrievedVehicles,job.truck)
-										print("inserted into retrievedVehicles: " .. job.truck)
+										--print("inserted into retrievedVehicles: " .. job.truck)
 									end
 									if job.truck ~= -1 then
 										SetVehicleOnGroundProperly(job.truck)
@@ -171,7 +171,7 @@ Citizen.CreateThread(function()
 									pressed = true
 									while pressed do
 										Wait(0)
-										if(IsControlPressed(0, 176) == false) then
+										if(IsControlJustPressed(0, 176) == false) then
 											pressed = false
 											break
 										end
@@ -187,7 +187,7 @@ Citizen.CreateThread(function()
 				DrawMarker(1, info.x, info.y, info.z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 32, 0, 90, 0, 0, 2, 0, 0, 0, 0)
 				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), info.x, info.y, info.z, true) < 2 then
 					DrawSpecialText("Press [ ~g~Enter~w~ ] to get a package of ~y~20g of concentrated cannabis")
-					if IsControlPressed(0, 176) then -- ENTER = 176
+					if IsControlJustPressed(0, 176) then -- ENTER = 176
 			            if not pressed then
 							job = weedBuyers[math.random(#weedBuyers)]
 							job.name = "Cannabis Transport"
@@ -200,7 +200,7 @@ Citizen.CreateThread(function()
 							DrawNotification(0,1)
 			                while pressed do
 			                    Wait(0)
-			                    if(IsControlPressed(0, 176) == false) then
+			                    if(IsControlJustPressed(0, 176) == false) then
 			                        pressed = false
 			                        break
 			                    end
@@ -214,7 +214,7 @@ Citizen.CreateThread(function()
 				DrawMarker(1, info.x, info.y, info.z-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
 				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), info.x, info.y, info.z, true) < 2 and (IsPedInAnyVehicle(GetPlayerPed(-1), true) == false or GetVehiclePedIsIn(GetPlayerPed(-1), false) == lastTruck) then
 					DrawSpecialText("Press [ ~g~Enter~w~ ] to start working for FridgeIt Trucking")
-			        if IsControlPressed(0, 176) then -- ENTER = 176
+			        if IsControlJustPressed(0, 176) then -- ENTER = 176
 						if not has_valid_dl then TriggerServerEvent("go-postal:checkLicense") end
 						if has_valid_dl then
 							if not pressed then
@@ -264,7 +264,7 @@ Citizen.CreateThread(function()
 									DrawNotification(0,1)
 									while pressed do
 										Wait(0)
-										if(IsControlPressed(0, 176) == false) then
+										if(IsControlJustPressed(0, 176) == false) then
 											pressed = false
 											break
 										end
@@ -281,10 +281,10 @@ Citizen.CreateThread(function()
 			if job.name == "Go Postal" then
 				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), job.x, job.y, job.z, true) < 4 and GetVehiclePedIsIn(GetPlayerPed(-1), false) == job.truck then
 					DrawSpecialText("Press [ ~g~E~w~ ] to deliver your Go Postal packages")
-			        if IsControlPressed(0, 86) then
+			        if IsControlJustPressed(0, 86) then
 			            if not pressed then
-							if job.distance * 2 > 3700 then
-								pay = 3700
+							if job.distance * 2 > 3600 then
+								pay = 3600
 							else
 								pay = math.ceil(job.distance * 2)
 							end
@@ -305,7 +305,7 @@ Citizen.CreateThread(function()
 							pressed = true
 			                while pressed do
 			                    Wait(0)
-			                    if(IsControlPressed(0, 86) == false) then
+			                    if(IsControlJustPressed(0, 86) == false) then
 			                        pressed = false
 			                        break
 			                    end
@@ -317,7 +317,7 @@ Citizen.CreateThread(function()
 				--DrawMarker(1, job.x, job.y, job.z-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
 				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), job.x, job.y, job.z, true) < 7 then
 					DrawSpecialText("Press [ ~g~E~w~ ] to deliver the cannabis!")
-					if IsControlPressed(0, 86) then -- E = 86
+					if IsControlJustPressed(0, 86) then -- E = 86
 						if not pressed then
 							if job.distance * 2 > 6000 then
 								pay = 6000
@@ -334,7 +334,7 @@ Citizen.CreateThread(function()
 							pressed = true
 							while pressed do
 								Wait(0)
-								if(IsControlPressed(0, 86) == false) then
+								if(IsControlJustPressed(0, 86) == false) then
 									pressed = false
 									break
 								end
@@ -345,7 +345,7 @@ Citizen.CreateThread(function()
 			elseif job.name == "FridgeIt Trucking" then
 				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), job.x, job.y, job.z, true) < 4 and GetVehiclePedIsIn(GetPlayerPed(-1), false) == job.truck then
 					DrawSpecialText("Press [ ~g~E~w~ ] to deliver your goods.")
-			        if IsControlPressed(0, 86) then
+			        if IsControlJustPressed(0, 86) then
 			            if not pressed then
 							if job.distance * 2 > 3000 then
 								pay = 3000
@@ -370,7 +370,7 @@ Citizen.CreateThread(function()
 							pressed = true
 			                while pressed do
 			                    Wait(0)
-			                    if(IsControlPressed(0, 86) == false) then
+			                    if(IsControlJustPressed(0, 86) == false) then
 			                        pressed = false
 			                        break
 			                    end

@@ -163,6 +163,9 @@ RegisterNUICallback('playEmote', function(data, cb)
 			ClearPedTasks(ped)
 			playing_emote = false
 			return
+		elseif scenarioName == "surrender" then 
+			TriggerEvent("KneelHU")
+			return
 		end
 		for i = 1, #scenarios do
 			if scenarioName == string.lower(scenarios[i].name) then

@@ -169,8 +169,8 @@ TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, user)
 						}
 					}), { ["Content-Type"] = 'application/json' })
 
-			--sendMessageToModsAndAdmins(GetPlayerName(player) .. " has been kicked (" .. reason .. ")")
-			TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^3kicked^0 (" .. reason .. ")")
+			sendMessageToModsAndAdmins(GetPlayerName(player) .. " has been kicked (" .. reason .. ")")
+			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^3kicked^0 (" .. reason .. ")")
 			DropPlayer(player, reason)
 		end)
 	else
@@ -546,7 +546,8 @@ AddEventHandler('rconCommand', function(commandName, args)
 			end
 			-- show message
 			RconPrint(targetPlayerName .. " has been banned (" .. reason .. ")")
-			TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
+			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
+			sendMessageToModsAndAdmins(targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
 			-- character name:
 			local player = exports["essentialmode"]:getPlayerFromId(targetPlayer)
 			local char_name = player.getActiveCharacterData("fullName")
@@ -735,7 +736,8 @@ fetchAllBans()
 				print("allPlayerIdentifiers[i] = " .. allPlayerIdentifiers[i])
 			end
 			-- show message
-			TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
+			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
+			sendMessageToModsAndAdmins(GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
 			-- get char name:
 			local player = exports["essentialmode"]:getPlayerFromId(targetPlayer)
 			local char_name = player.getActiveCharacterData("fullName")
