@@ -9,7 +9,7 @@ Config.Priority = {
 }
 
 Config.RequireSteam = true
-Config.PriorityOnly = false -- whitelist only server
+Config.PriorityOnly = true -- whitelist only server
 
 Config.IsBanned = function(src, callback)
     callback(false) -- not banned
@@ -26,7 +26,7 @@ Config.Language = {
     connectingerr = "Error adding you to connecting list",
     banned = "You are banned, you may appeal it at https://usarrp.enjin.com | Reason: %s",
     steam = "Error: Steam must be running",
-    prio = "You must be whitelisted to join this server. You may apply at https://usarrp.enjin.com"
+    prio = "You must be whitelisted to join this server. Apply at https://usarrp.net > Applications > Whitelist"
 }
 -----------------------------------------------------------------------------------------------------------------------
 
