@@ -23,6 +23,7 @@ $(function () {
 			characters = event.data.data;
 
 			$('#new').on('click', function () {
+				var freeSlot = 0;
 				$('.create').show()
 				$('.characters').hide()
 				$('#select').hide()
@@ -40,12 +41,11 @@ $(function () {
 				})
 
 				if (typeof characters != 'undefined') {
-					for (var freeSlot = 0; freeSlot < characters.length; freeSlot++) {
+					for (var x = 0; x < characters.length; x++) {
+						freeSlot = x;
 						const character = characters[freeSlot];
 						if (!character.firstName) break;
 					}
-				} else {
-					var freeSlot = 0;
 				}
 
 				$('#birth').on('click', function () {
@@ -70,7 +70,7 @@ $(function () {
 						$.post('http://character-selection/new-character-submit', JSON.stringify(newCharData));
 					} else {
 						$('.notification').show()
-						$('.notification').html("Oh no you didn't supply enough information, please try again.")
+						$('.notification').html("Uh-oh! You didn't supply enough information, please try again.")
 					}
 				})
 			});

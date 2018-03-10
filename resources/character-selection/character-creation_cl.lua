@@ -114,15 +114,18 @@ RegisterNUICallback('escape', function(data, cb)
 	cb('ok')
 end)
 
+local alreadyCreated = false
 RegisterNUICallback('new-character-submit', function(data, cb)
 	print("saving character " .. data.firstName)
-	TriggerServerEvent("character:new", data)
+	if not alreadyCreated then
+		TriggerServerEvent("character:new", data)
+	end
 	cb('ok')
 end)
 
 RegisterNUICallback('select-character', function(data, cb)
 	toggleMenu(false)
-	Citizen.Trace("selecting char: " .. data.character.firstName)
+	if data.character.firstName then print("selecting char: " .. data.character.firstName) end
 	selectedCharacter = data.character -- set selected character on lua side from selected js char card
 	selectedCharacterSlot = tonumber(data.slot) + 1
 	TriggerEvent("chat:setCharName", selectedCharacter) -- for chat messages
@@ -137,6 +140,7 @@ RegisterNUICallback('select-character', function(data, cb)
 	--print("checking player jailed status")
 	--TriggerServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
 	cb('ok')
+	alreadyCreated = false
 end)
 
 RegisterNUICallback('delete-character', function(data, cb)
@@ -144,6 +148,7 @@ RegisterNUICallback('delete-character', function(data, cb)
 	Citizen.Trace("deleting char at slot #" .. slot)
 	TriggerServerEvent("character:delete", slot)
 	cb('ok')
+	alreadyCreated = false
 end)
 
 RegisterNUICallback('disconnect', function(data, cb)
