@@ -106,7 +106,7 @@ local stores = {
 		lastrobbed = 0
 	},
 	["Gun Store - Paleto"] = {
-		position = { ['x'] = 334.4107, ['y'] = 6082.485, ['z'] = 31.455},
+		position = { ['x'] = -334.4107, ['y'] = 6082.485, ['z'] = 31.455},
 		nameofstore = "Gun Store - Paleto",
 		lastrobbed = 0
 	},
