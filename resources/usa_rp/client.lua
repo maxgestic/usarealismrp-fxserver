@@ -32,16 +32,16 @@ end)
 RegisterNetEvent('usa_rp:spawn')
 AddEventHandler('usa_rp:spawn', function(defaultModel, job, weapons, characters)
   if characters then
-    print("size of characters = " .. #characters)
+   -- print("size of characters = " .. #characters)
   end
   local spawn = {x = 0.0, y = 0.0, z = 0.0}
   spawn = civilianSpawns[math.random(1, #civilianSpawns)]
   exports.spawnmanager:spawnPlayer({x = spawn.x, y = spawn.y, z = spawn.z, model = defaultModel, heading = 0.0}, function()
     if not characters then
-      print("player did not have a first character...")
+      --print("player did not have a first character...")
       TriggerEvent("character:open", "new-character")
     else
-      print("player did have a first character!")
+      --print("player did have a first character!")
       TriggerEvent("character:open", "home", characters)
     end
     --[[ CHECK JAIL STATUS [moved]
@@ -318,12 +318,12 @@ end )
 
 RegisterNetEvent("veh:openDoor")
 AddEventHandler("veh:openDoor", function(index)
-    print("opening door with index = " .. index)
+   -- print("opening door with index = " .. index)
     local playerPed = GetPlayerPed(-1)
     if IsPedInAnyVehicle(playerPed, false) then
         local playerCar = GetVehiclePedIsIn(playerPed, false)
         if index == "trunk" then
-            print("index was trunk!")
+            --print("index was trunk!")
             SetVehicleDoorOpen(playerCar, 5, true, true)
         elseif index == "hood" then
             SetVehicleDoorOpen(playerCar, 4, true, true)
@@ -344,7 +344,7 @@ end)
 
 RegisterNetEvent("veh:shutDoor")
 AddEventHandler('veh:shutDoor', function(index)
-    print("inside shut door!")
+    --print("inside shut door!")
     local playerPed = GetPlayerPed(-1)
     if IsPedInAnyVehicle(playerPed, false) then
         local playerCar = GetVehiclePedIsIn(playerPed, false)
@@ -437,10 +437,10 @@ AddEventHandler("usa:playAnimation", function(animName, animDict, duration, spee
 			-- play animation
 		  if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) and not IsPedInAnyVehicle(GetPlayerPed(-1), 1) then
 			if speed then
-				print("speed existed!")
+				--print("speed existed!")
 				TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, -8, -1, 7, 0, 0, 0, 0)
 			else
-				print("speed did not exist!")
+				--print("speed did not exist!")
 				TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 53, 0, 0, 0, 0)
 			end
 			playing_anim = {dict = animDict, name = animName}
@@ -468,7 +468,7 @@ AddEventHandler("usa:playAnimation", function(animName, animDict, duration, spee
     ClearPedSecondaryTask(GetPlayerPed(-1))
     StopAnimTask(GetPlayerPed(-1), animDict, animName, false)
   else
-    print("ped was in vehicle, not playing animation")
+    --print("ped was in vehicle, not playing animation")
   end
 end)
 
