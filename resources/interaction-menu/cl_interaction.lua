@@ -515,6 +515,7 @@ end
 local playerPed, targetPed
 local playerPedCoords, targetPedCoords, offsetCoords
 local distanceToTargetPed = 0.0
+local distanceToClosestTargetPed = 0.0
 local rayHandle
 local didHit
 local hitCoords, hitSurfaceCoords
@@ -683,7 +684,7 @@ Citizen.CreateThread(function()
 		-- get nearest veh (temp only get vehicle in front, todo: get closest vehicle regardless of where ped is facing):
 		hitHandleVehicle = getVehicleInFrontOfUser()
 		-- get closest player server id:
-		playerServerId, playerName = GetClosestPlayerInfo()
+		playerServerId, playerName, distanceToClosestTargetPed = GetClosestPlayerInfo()
 
 		-- watch for open/close menu
 		if IsControlJustPressed( 0, MENU_KEY ) and GetLastInputMethod(2) then
@@ -697,7 +698,7 @@ Citizen.CreateThread(function()
 		if IsControlJustPressed( 0, TACKLE_KEY ) and GetLastInputMethod(2) then
 			if not IsEntityDead(GetPlayerPed(-1)) and not IsPedInAnyVehicle(GetPlayerPed(-1), true) then
 				if playerServerId ~= 0 then
-					if distanceToTargetPed < 1.2 then
+					if distanceToClosestTargetPed < 1.2 then
 						if not IsPedRagdoll(GetPlayerPed(-1)) and not IsPedCuffed(GetPlayerPed(-1)) then
 							TriggerServerEvent("interaction:tackle", playerServerId)
 							SetPedToRagdoll(GetPlayerPed(-1), 1000, 1000, 0, true, true, false)
@@ -749,7 +750,7 @@ function GetClosestPlayerInfo()
 						--rayHandle = CastRayPointToPoint(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, targetPedCoords.x, targetPedCoords.y, targetPedCoords.z, 12, GetPlayerPed(-1), 0)
 						--a, b, c, d, hitHandlePed = GetRaycastResult(rayHandle)
 					else
-						if distanceToTargetPed < closestDistance then
+						if distanceToTargetPed <= closestDistance then
 							closestDistance = distanceToTargetPed
 							closestPlayerServerId = GetPlayerServerId(x)
 							closestName = GetPlayerName(x)
@@ -762,5 +763,5 @@ function GetClosestPlayerInfo()
 			end
 		end
 	end
-	return closestPlayerServerId, closestName
+	return closestPlayerServerId, closestName, closestDistance
 end

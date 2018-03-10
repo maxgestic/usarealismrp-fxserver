@@ -246,7 +246,7 @@ customs = {
             ["Metallic"] = {
                 {name = "Black",cost = 500, colour = 0},
                 {name = "Carbon Black",cost = 500, colour = 147},
-                {name = "Hraphite",cost = 500, colour = 1},
+                {name = "Graphite",cost = 500, colour = 1},
                 {name = "Anhracite Black",cost = 500, colour = 11},
                 {name = "Black Steel",cost = 500, colour = 2},
                 {name = "Dark Steel",cost = 500, colour = 3},
