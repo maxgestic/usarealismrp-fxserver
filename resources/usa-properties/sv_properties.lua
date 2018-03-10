@@ -59,11 +59,13 @@ end)
 -- REMOVE MONEY --
 ------------------
 RegisterServerEvent("properties:withdraw")
-AddEventHandler("properties:withdraw", function(name, amount)
+AddEventHandler("properties:withdraw", function(name, amount, savedSource)
     if PROPERTIES[name].storage.money - amount >= 0 then 
         -- remove from store --
         PROPERTIES[name].storage.money = PROPERTIES[name].storage.money - amount
         TriggerClientEvent("properties:update", -1, PROPERTIES, true)
+		-- see if called from server file --
+		if savedSource then source = savedSource end
         -- add to player --
         local player = exports["essentialmode"]:getPlayerFromId(tonumber(source))
 		if player then

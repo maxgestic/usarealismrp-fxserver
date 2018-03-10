@@ -195,7 +195,7 @@ AddEventHandler('es_holdup:rob', function(robb)
 										target.setActiveCharacterData("money", user_money  + reward)
 										--TriggerClientEvent('chatMessage', -1, 'NEWS', {255, 0, 0}, "Robbery is over at: ^2" .. store.nameofstore)
 										sendMessageToEmsAndPolice("^1DISPATCH: ^0Robbery is over at: ^2" .. store.nameofstore)
-										TriggerEvent("properties:withdraw", robb, reward)
+										TriggerEvent("properties:withdraw", robb, reward, savedSource)
 										TriggerClientEvent('es_holdup:robberycomplete', savedSource, reward)
 									end)
 								end
