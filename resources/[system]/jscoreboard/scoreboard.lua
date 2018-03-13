@@ -89,13 +89,13 @@ local function DrawPlayerList()
 					g = 40
 					b = 35
 				elseif job == "taxi" then
-					--r = 255
-					--g = 231
-					--b = 43
+					r = 255
+					g = 231
+					b = 43
 				elseif job == "tow" then
-					--r = 41
-					--g = 153
-					--b = 144
+					r = 41
+					g = 153
+					b = 144
 				end
 			end
 
