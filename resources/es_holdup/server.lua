@@ -127,7 +127,7 @@ local stores = {
 		lastrobbed = 0
 	},
 	["FridgeIt Trucking - Paleto"] = {
-		position = { ['x'] = -422.1905, ['y'] = 5253.392, ['z'] = 70.487},
+		position = { ['x'] = -568.065, ['y'] = 5253.392, ['z'] = 70.487},
 		nameofstore = "FridgeIt Trucking - Paleto",
 		lastrobbed = 0
 	}

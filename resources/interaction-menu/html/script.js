@@ -350,9 +350,9 @@ $(function() {
 		if (itemName != "Back") {
 			$("#mySidenav a").hide();
 			$("#mySidenav").append("<a data-itemName='"+itemName+"' class='inventory-item inventory-action-item'>Use</a>");
-			$("#mySidenav").append("<a data-itemName='"+itemName+"' class='inventory-item inventory-action-item'>Drop</a>");
 			$("#mySidenav").append("<a data-itemName='"+itemName+"' class='inventory-item inventory-action-item' id='action-give'>Give to " + playerName + "</span></a>");
 			$("#mySidenav").append("<a data-itemName='"+itemName+"' class='inventory-item inventory-action-item'>Store</a>");
+			$("#mySidenav").append("<a data-itemName='"+itemName+"' class='inventory-item inventory-action-item'>Drop</a>");
 			$("#mySidenav").append("<a onclick='inventoryActionsBackBtn()' class='inventory-actions-back-btn'>Back</a>");
 		} else {
 			$("#mySidenav .inventory-item").remove();

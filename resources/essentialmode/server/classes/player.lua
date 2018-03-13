@@ -175,8 +175,6 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 		for i = 1, #self.characters do
 			local char = self.characters[i]
 			if char.active == true then
-				--print("found an active character at " .. i .. "!")
-				--print("target field to retrieve: " .. field)
 				if field == "fullName" then
 					--print("field was fullName! returning : " .. self.characters[i]["firstName"]  .. " " .. self.characters[i]["lastName"])
 					if self.characters[i]["firstName"] and self.characters[i]["lastName"] then
