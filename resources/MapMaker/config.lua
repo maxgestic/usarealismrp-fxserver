@@ -1,7 +1,7 @@
 lang = "en"
 
 MenuCanBeOpen = false ---- Set it to false if you don't want that the menu can be open
-MenuCanBeOpenByAllPlayers = true ---- If you set it to true, all players will access to the menu
+MenuCanBeOpenByAllPlayers = false ---- If you set it to true, all players will access to the menu
 
 MenuWhiteList = { --- List of poeple who can open the menu
 	"steam:000000000000000",
