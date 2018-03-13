@@ -27,7 +27,8 @@ local vehicleShopItems = {
 			{make = "Enus", model = "Cognoscenti Carbio", price = 33200, hash = 330661258, storage_capacity = 135.0},
 			{make = "Lampadati", model = "Felon", price = 34550, hash = -391594584, storage_capacity = 135.0},
 			{make = "Enus", model = "Windsor Cabrio", price = 105550, hash = -1930048799, storage_capacity = 135.0},
-			{make = "Nissan", model = "370z", price = 40550, hash = -377465520, storage_capacity = 135.0}
+			{make = "Nissan", model = "370z", price = 40550, hash = -377465520, storage_capacity = 135.0},
+			{make = "Ford", model = "Mustang GT", price = 41550, hash = 736902334, storage_capacity = 135.0}
 		},
 		["Bicycles"] = {
 			{make = "", model = "BMX", price = 500, hash = 1131912276, storage_capacity = 0.0},
