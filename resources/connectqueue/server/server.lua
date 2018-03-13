@@ -325,7 +325,7 @@ end
 
 Citizen.CreateThread(function()
     local function playerConnect(name, setKickReason, deferrals)
-        maxPlayers = GetConvarInt("sv_maxclients", 30)
+        maxPlayers = GetConvarInt("sv_maxclients", 32)
         debug = GetConvar("sv_debugqueue", "true") == "true" and true or false
         displayQueue = GetConvar("sv_displayqueue", "true") == "true" and true or false
         initHostName = not initHostName and GetConvar("sv_hostname") or initHostName
@@ -407,7 +407,7 @@ Citizen.CreateThread(function()
             return
         end
 
-        if Config.PriorityOnly and not Queue:IsPriority(ids) then done(Config.Language.prio) return end
+        if Config.PriorityOnly and not Queue:IsPriority(ids) then print("**player tried to connect who is NOT whitelisted!**") done(Config.Language.prio) return end
 
         local rejoined = false
 

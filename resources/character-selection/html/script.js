@@ -1,5 +1,6 @@
 $(function () {
 	var characters = []
+	var freeSlot = 0;
 
 	window.addEventListener('message', function (event) {
 		if (event.data.type == "toggleMenu") {
@@ -23,7 +24,6 @@ $(function () {
 			characters = event.data.data;
 
 			$('#new').on('click', function () {
-				var freeSlot = 0;
 				$('.create').show()
 				$('.characters').hide()
 				$('#select').hide()
