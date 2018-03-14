@@ -22,7 +22,7 @@ end)
 -----------------------------
 -- LOAD PROPERTIES FROM DB --
 -----------------------------
-function loadProperties()
+function loadProperties(cb)
 	print("fetching all properties...")
 	PerformHttpRequest("http://127.0.0.1:5984/properties/_all_docs?include_docs=true" --[[ string ]], function(err, text, headers)
 		print("finished getting properties...")
@@ -39,6 +39,9 @@ function loadProperties()
 			end
 			print("finished loading properties...")
 			--print("# of properties: " .. #PROPERTIES)
+			if cb then 
+				cb(true)
+			end
 		end
 	end, "GET", "", { ["Content-Type"] = 'application/json' })
 end
@@ -310,6 +313,19 @@ TriggerEvent('es:addCommand','loadproperties', function(source, args, user)
 end, {
 	help = "Debug for properties"
 })
+
+-- todo: rcon command that loads properties from db (so we can make changes) and refresh everyone's clientside property info (without removing their property identifier)
+AddEventHandler('rconCommand', function(commandName, args)
+	if commandName == "refreshproperties" then
+		loadProperties(function(status)
+			if status then
+				TriggerClientEvent("properties:update", -1, PROPERTIES, false)
+				print("all players property info refreshed!")
+			end
+		end)
+	end 
+	CancelEvent();
+end)
 
 function comma_value(amount)
   local formatted = amount
