@@ -144,7 +144,7 @@ AddEventHandler('es_holdup:toofar', function(robb)
 	if(robbers[source])then
 		TriggerClientEvent('es_holdup:toofarlocal', source)
 		robbers[source] = nil
-		TriggerClientEvent('chatMessage', -1, 'NEWS', {255, 0, 0}, "Robbery was cancelled at: ^2" .. stores[robb].nameofstore)
+		TriggerClientEvent('chatMessage', source, 'NEWS', {255, 0, 0}, "Robbery was cancelled at: ^2" .. stores[robb].nameofstore)
 	end
 end)
 

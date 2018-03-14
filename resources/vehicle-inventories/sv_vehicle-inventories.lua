@@ -68,7 +68,9 @@ end)
 
 RegisterServerEvent("vehicle:seizeContraband")
 AddEventHandler("vehicle:seizeContraband", function(target_vehicle_plate)
-  print("seizing contraband from veh with plate #: " .. target_vehicle_plate)
+	if target_vehicle_plate then
+		print("seizing contraband from veh with plate #: " .. target_vehicle_plate)
+	end
   local userSource = tonumber(source)
   TriggerEvent("es:getPlayers", function(players)
     if players then
