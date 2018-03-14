@@ -54,27 +54,19 @@ RegisterNetEvent("carFix:repairVehicle")
 AddEventHandler("carFix:repairVehicle", function()
 	print("inside carFix:repairVehicle")
 	DrawCoolLookingNotification("Your vehicle is  ~y~being repaired~w~!")
-	SetVehicleEngineOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), false, false, false) -- turn engine off
-	while timer > 0 do
-		Citizen.Wait(1)
-		timer = timer - 15
-		if timer < 16 then
-			print("timer was < 16!")
-			SetVehicleFixed(GetVehiclePedIsUsing(GetPlayerPed(-1)))
-			SetVehicleDirtLevel(GetVehiclePedIsUsing(GetPlayerPed(-1)),  0.0000000001) -- clean vehicle
-			SetVehicleDeformationFixed(GetVehiclePedIsUsing(GetPlayerPed(-1)))
-			SetVehicleUndriveable(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
-			SetVehicleEngineOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), true, false, false)
-			DrawCoolLookingNotification("Your vehicle has been ~g~repaired~w~!")
-		end
-	end
-	timer = 15000 -- reset timer
+	SetVehicleEngineOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), true, false, false)
+	SetVehicleFixed(GetVehiclePedIsUsing(GetPlayerPed(-1)))
+	SetVehicleDirtLevel(GetVehiclePedIsUsing(GetPlayerPed(-1)),  0.0000000001) -- clean vehicle
+	SetVehicleDeformationFixed(GetVehiclePedIsUsing(GetPlayerPed(-1)))
+	SetVehicleUndriveable(GetVehiclePedIsUsing(GetPlayerPed(-1)), false)
+	SetVehicleEngineOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), true, false, false)
+	DrawCoolLookingNotification("Your vehicle has been ~g~repaired~w~!")
 end)
 
-Citizen.CreateThread(function ()
+Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-		if IsPedSittingInAnyVehicle(GetPlayerPed(-1)) then -- todo: check for driver seat only
+		if IsPedSittingInAnyVehicle(GetPlayerPed(-1)) then
 			for i = 1, #vehicleRepairStation do
 				garageCoords2 = vehicleRepairStation[i]
 				DrawMarker(1, garageCoords2[1], garageCoords2[2], garageCoords2[3], 0, 0, 0, 0, 0, 0, 5.0, 5.0, 2.0, 0, 157, 0, 155, 0, 0, 2, 0, 0, 0, 0)
@@ -84,10 +76,19 @@ Citizen.CreateThread(function ()
 						DrawSpecialText("Press ~g~E~w~ to repair your vehicle!")
 						-- check if e is pressed:
 						if IsControlJustPressed(1, KEY) then
+							--Wait(100)
 							print("checking money for vehicle repair!")
 							local engineHealth = GetVehicleEngineHealth(veh)
 							local bodyHealth = GetVehicleBodyHealth(veh)
-							TriggerServerEvent("carFix:checkPlayerMoney", engineHealth, bodyHealth)
+							if not engineHealth then engineHealth = 0.0 end
+							if not bodyHealth then bodyHealth = 0.0 end
+							if bodyHealth < 1000.0 or engineHealth < 1000.0 then 
+								SetVehicleEngineOn(veh, false, false, false)
+								Wait(10000)
+								TriggerServerEvent("carFix:checkPlayerMoney", engineHealth, bodyHealth)
+							else 
+								TriggerEvent("usa:notify", "Your vehicle does not need any repairs!")
+							end
 						end
 					end
 				end
