@@ -66,7 +66,7 @@ AddEventHandler("properties:store", function(name, item, quantity)
 		if PROPERTIES[name].storage.items[i].name == item.name then
 			print("had_already was true!")
 			print("previous quantity: " .. PROPERTIES[name].storage.items[i].quantity)
-			-rint("quantity to add: " .. quantity)
+			print("quantity to add: " .. quantity)
 			had_already	= true
 			PROPERTIES[name].storage.items[i].quantity = PROPERTIES[name].storage.items[i].quantity + quantity
 			break
@@ -438,10 +438,30 @@ AddEventHandler('rconCommand', function(commandName, args)
 			if status then
 				TriggerClientEvent("properties:update", -1, PROPERTIES, false)
 				print("all players property info refreshed!")
+				TriggerEvent("es:getPlayers", function(players)
+					for id, player in pairs(players) do
+						if player then
+							print("setting player #" .. id .. " property ident to: " .. GetPlayerIdentifiers(id)[1])
+							TriggerClientEvent("properties:setPropertyIdentifier", id, GetPlayerIdentifiers(id)[1])
+						end
+					end
+				end)
 			end
 		end)
-	end 
-	CancelEvent();
+	elseif commandName == "properties" then
+		for name, info in pairs(PROPERTIES) do 
+			RconPrint("Name: " .. name)
+			RconPrint("Owner: " .. info.owner.name)
+			RconPrint("Ident: " .. info.owner.identifier)
+			RconPrint("Earnings: $" .. info.storage.money)
+			RconPrint("Items: ")
+			for k = 1, #info.storage.items do 
+				RconPrint("(" .. info.storage.items[k].quantity .. "x) " .. info.storage.items[k].name)
+			end
+			RconPrint("End Date: " .. info.fee.end_date .. "\n")
+		end
+	end
+	CancelEvent()
 end)
 
 function comma_value(amount)
