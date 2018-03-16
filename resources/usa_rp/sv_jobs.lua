@@ -182,7 +182,7 @@ AddEventHandler("usa_rp:startTimer", function(timerType)
 	}
 	TriggerClientEvent("usa_rp:notify", userSource, messages[math.random(1, tonumber(#messages))])
 	if timerType == "meth_supplies_ped" then
-		local seconds = 30
+		local seconds = 16
 		local time = seconds * 1000
 		SetTimeout(time, function()
 			TriggerClientEvent("usa_rp:notify", userSource, "Here are the chemicals needed for cooking!")

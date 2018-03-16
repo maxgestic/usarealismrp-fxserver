@@ -502,3 +502,10 @@ AddEventHandler("usa:equipWeapon", function(weapon)
   -- todo: store ammo count on weapon object
   GiveWeaponToPed(GetPlayerPed(-1), weapon.hash, 100, false, true)
 end)
+
+RegisterNetEvent("usa:dropWeapon")
+AddEventHandler("usa:dropWeapon", function(weapon_hash)
+	print("typeof weapon_hash: " .. type(weapon_hash))
+  RemoveWeaponFromPed(GetPlayerPed(-1), weapon_hash) -- right params?
+  --SetPedDropsWeapon(weapon_hash) -- or this? or both?
+end)

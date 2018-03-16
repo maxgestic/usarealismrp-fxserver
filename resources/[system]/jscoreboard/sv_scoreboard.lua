@@ -27,7 +27,7 @@ AddEventHandler("jscoreboard:getPlayers", function()
 		  local middle_name = player.getActiveCharacterData("middleName")
 		  local last_name = player.getActiveCharacterData("lastName")
 		  local final_name = first_name 
-		  if middle_name then final_name = final_name .. " " .. middle_name end 
+		  if middle_name then if middle_name ~= " " then final_name = final_name .. " " .. middle_name end end 
 		  if last_name then final_name = final_name .. " " .. last_name end
 		  table.insert(players_to_send, {id, final_name, GetPlayerPing(id), player.getActiveCharacterData("job")})
         end

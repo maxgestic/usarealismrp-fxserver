@@ -52,7 +52,8 @@ AddEventHandler("lock:foundKeys", function(found, plate)
             owner = "Stolen?",
             make = "???",
             model = "???",
-            plate = plate
+            plate = plate,
+			legality = "legal"
         }
         TriggerEvent("es:getPlayerFromId", source, function(user)
             local inv = user.getActiveCharacterData("inventory")

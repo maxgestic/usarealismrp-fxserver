@@ -256,11 +256,12 @@ AddEventHandler("usa:removeItem", function(to_remove_item, quantity, from_source
 			local item = user_inventory[a]
 			--print("checking item: " .. item.name)
 			if item.name == to_remove_item.name then
-				print("found a matching inventory item for usa:removeItem! removing: " .. item.name)
 				if to_remove_item.quantity - quantity <= 0 then -- assumes quantity provided is less than or equal to to_remove_item.quantity
+					print("found a matching inventory item for usa:removeItem! removing: " .. item.name)
 					table.remove(user_inventory, a)
 					user.setActiveCharacterData("inventory", user_inventory)
 				else
+					print("found a matching inventory item for usa:removeItem! decrementing: " .. item.name)
 					user_inventory[a].quantity = user_inventory[a].quantity - quantity
 					user.setActiveCharacterData("inventory", user_inventory)
 				end
@@ -289,11 +290,13 @@ AddEventHandler("usa:removeItem", function(to_remove_item, quantity, from_source
 			--print("checking item: " .. item.name)
 			if item.name == to_remove_item.name then
 				print("found a matching weapon for usa:removeItem! removing: " .. item.name)
-				if item.quantity == 1 then
+				if item.quantity - quantity <= 0 then
 					table.remove(user_weapons, c)
 					user.setActiveCharacterData("weapons", user_weapons)
+					-- drop weapon --
+					TriggerClientEvent("usa:dropWeapon", userSource, item.hash)
 				else
-					user_weapons[c].quantity = item.quantity - 1
+					user_weapons[c].quantity = item.quantity - quantity
 					user.setActiveCharacterData("weapons", user_weapons)
 				end
 				return

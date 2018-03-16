@@ -10,7 +10,10 @@ local nearest_property_info = nil
 
 local menu = {
     enabled = false,
-    key = 38
+	page = "home",
+    key = 38,
+	user_items = nil,
+	property_items = nil
 }
 
 ------------------------------------
@@ -37,6 +40,24 @@ AddEventHandler("properties:update", function(properties, close_menu)
     if close_menu then menu.enabled = false end
     --print("properties loaded!")
 end)
+
+-- list items to store --
+RegisterNetEvent("properties:setItemsToStore")
+AddEventHandler("properties:setItemsToStore", function(items)
+	menu.user_items = items
+	print("menu user items set!")
+end)
+
+-- list items to retrieve --
+RegisterNetEvent("properties:loadedStorage")
+AddEventHandler("properties:loadedStorage", function(items)
+	menu.property_items = items
+	print("**menu property items set!**")
+	for k = 1, #items do 
+		print("name: " .. items[k].name .. ", quantity: " .. items[k].quantity)
+	end
+end)
+--
 
 ---------------------------------------------
 -- get closest property from given (usually player) coords  --
@@ -82,10 +103,10 @@ Citizen.CreateThread(function()
                 end
             end
 			if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), info.x, info.y, info.z) < 2 then
+				nearest_property_info = PROPERTIES[name]
                 if not menu.enabled then
                     drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property menu!",0,1,0.5,0.8,0.6,255,255,255,255)
                     if IsControlJustPressed(0, menu.key) then
-                        nearest_property_info = PROPERTIES[name]
                         menu.enabled = true
                         closest.x, closest.y, closest.z = info.x, info.y, info.z
                     end
@@ -93,8 +114,11 @@ Citizen.CreateThread(function()
 			end
             -- close menu when out of range -- 
             if menu.enabled and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), closest.x, closest.y, closest.z) > 2 then 
-            closest.x, closest.y, closest.z = nil, nil, nil
-            menu.enabled = false
+				closest.x, closest.y, closest.z = nil, nil, nil
+				menu.enabled = false
+				menu.page = "home"
+				menu.property_items = nil
+				menu.user_items = nil
             end
 		end
 	end
@@ -176,48 +200,182 @@ Citizen.CreateThread(function()
                 -- see if this player is the owner --
                 -------------------------------------
                 if nearest_property_info.owner.identifier == my_property_identifier then
+				
+					if menu.page == "home" then
 
-                    TriggerEvent("properties-GUI:Option", "You own this property!", function(cb)
-                        if cb then end
-                    end)
+						TriggerEvent("properties-GUI:Option", "You own this property!", function(cb)
+							if cb then end
+						end)
 
-                    TriggerEvent("properties-GUI:Option", "Earnings: ~g~$" .. comma_value(nearest_property_info.storage.money), function(cb)
-                        if cb then end
-                    end)
+						TriggerEvent("properties-GUI:Option", "Earnings: ~g~$" .. comma_value(nearest_property_info.storage.money), function(cb)
+							if cb then end
+						end)
 
-                    --TriggerEvent("properties-GUI:Option", "Storage", function(cb) end)
+						TriggerEvent("properties-GUI:Option", "Storage", function(cb)
+							if cb then
+								menu.property_items = nil
+								TriggerServerEvent("properties:loadStorage", nearest_property_info.name)
+								--TriggerServerEvent("properties:getUserItemsToStore")
+								menu.page = "storage"
+							end
+						end)
 
-                    TriggerEvent("properties-GUI:Option", "Next Fee Due: " .. nearest_property_info.fee.end_date, function(cb) if cb then end end)
+						TriggerEvent("properties-GUI:Option", "Next Fee Due: " .. nearest_property_info.fee.end_date, function(cb) if cb then end end)
 
-                    TriggerEvent("properties-GUI:Option", "Withdraw", function(cb)
-                        if cb then
-                            --print("player wants to withdraw from their property!")
-                            menu.enabled = false
-                            -- get withdraw amount from user input --
-                            Citizen.CreateThread( function()
-                                DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
-                                while true do
-                                    if ( UpdateOnscreenKeyboard() == 1 ) then
-                                        local input_amount = GetOnscreenKeyboardResult()
-                                        if ( string.len( input_amount ) > 0 ) then
-                                            local amount = tonumber( input_amount )
-                                            if ( amount > 0 ) then
-                                                amount = round(amount, 0)
-                                                TriggerServerEvent("properties:withdraw", nearest_property_info.name, amount)
-                                            end
-                                            break
-                                        else
-                                            DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
-                                        end
-                                    elseif ( UpdateOnscreenKeyboard() == 2 ) then
-                                        break
-                                    end
-                                Citizen.Wait( 0 )
-                            end
-                        end )
-                            --TriggerServerEvent("properties:withdraw")
-                        end
-                    end)
+						TriggerEvent("properties-GUI:Option", "Withdraw", function(cb)
+							if cb then
+								--print("player wants to withdraw from their property!")
+								menu.enabled = false
+								-- get withdraw amount from user input --
+								Citizen.CreateThread( function()
+									DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+									while true do
+										if ( UpdateOnscreenKeyboard() == 1 ) then
+											local input_amount = GetOnscreenKeyboardResult()
+											if ( string.len( input_amount ) > 0 ) then
+												local amount = tonumber( input_amount )
+												if ( amount > 0 ) then
+													amount = round(amount, 0)
+													TriggerServerEvent("properties:withdraw", nearest_property_info.name, amount)
+												end
+												break
+											else
+												DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+											end
+										elseif ( UpdateOnscreenKeyboard() == 2 ) then
+											break
+										end
+										Citizen.Wait( 0 )
+									end
+								end )
+								--TriggerServerEvent("properties:withdraw")
+							end
+						end)
+						
+					else 
+					
+						if menu.page == "storage" then
+					
+							if menu.property_items and #menu.property_items > 0 then 
+							
+								for x = 1, #menu.property_items do 
+									local item = menu.property_items[x]
+									--print("item: " .. item.name .. ", quantity: " .. item.quantity)
+									local color = ""
+									if item.legality == "legal" then
+										color = "~w~"
+									else 
+										color = "~r~"
+									end
+									TriggerEvent("properties-GUI:Option", color .. "(" .. item.quantity.. "x) " .. item.name, function(cb)
+										if cb then 
+											-- ask for quantity to retrieve, then try to retrieve it
+											Citizen.CreateThread( function()
+												DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+												while true do
+													if ( UpdateOnscreenKeyboard() == 1 ) then
+														local input_amount = GetOnscreenKeyboardResult()
+														if ( string.len( input_amount ) > 0 ) then
+															local amount = tonumber( input_amount )
+															if ( amount > 0 ) then
+																amount = round(amount, 0)
+																if item.quantity - amount >= 0 then
+																	TriggerServerEvent("properties:retrieve", nearest_property_info.name, item, amount)
+																else 
+																	TriggerEvent("usa:notify", "Quantity input too high!")
+																end
+																menu.page = "home"
+															end
+															break
+														else
+															DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+														end
+													elseif ( UpdateOnscreenKeyboard() == 2 ) then
+														break
+													end
+													Citizen.Wait( 0 )
+												end
+											end )
+										end
+									end)
+								end
+							
+							else
+							
+								TriggerEvent("properties-GUI:Option", "No items stored!", function(cb) if cb then end end)
+							
+							end
+							
+							TriggerEvent("properties-GUI:Option", "~g~Store Items", function(cb)
+								if cb then 
+									-- remove previous items 
+									menu.user_items = nil
+									-- list items to store
+									menu.page = "storage--store"
+									-- get items to store --
+									TriggerServerEvent("properties:getUserItemsToStore")
+								end
+							end)
+							
+						elseif menu.page == "storage--store" then
+						
+							if menu.user_items then
+						
+								if #menu.user_items > 0 then 
+								
+									for x = 1, #menu.user_items do 
+										local item = menu.user_items[x]
+										local color = ""
+										if item.legality == "legal" then
+											color = "~w~"
+										else 
+											color = "~r~"
+										end
+										TriggerEvent("properties-GUI:Option", color .. "(" .. round(item.quantity, 0) .. "x) " .. item.name, function(cb)
+											if cb then 
+												-- ask for quantity to store, then try to store it --
+												Citizen.CreateThread( function()
+													DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+													while true do
+														if ( UpdateOnscreenKeyboard() == 1 ) then
+															local input_amount = GetOnscreenKeyboardResult()
+															if ( string.len( input_amount ) > 0 ) then
+																local amount = tonumber( input_amount )
+																if ( amount > 0 ) then
+																	amount = round(amount, 0)
+																	if item.quantity - amount >= 0 then
+																		print("storing item [" .. item.name .. "] with quantity [" .. item.quantity .. "]")
+																		TriggerServerEvent("properties:store", nearest_property_info.name, item, amount)
+																	else 
+																		TriggerEvent("usa:notify", "Quantity input too high!")
+																	end
+																	menu.page = "home"
+																end
+																break
+															else
+																DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+															end
+														elseif ( UpdateOnscreenKeyboard() == 2 ) then
+															break
+														end
+														Citizen.Wait( 0 )
+													end
+												end )
+											end
+										end)
+									end
+								
+								else
+								
+									TriggerEvent("properties-GUI:Option", "No items to store!", function(cb) if cb then end end)
+								
+								end
+							
+							end
+						
+						end
+					
+					end
 
                 ----------------------------------
                 -- this player is not the owner --
@@ -267,6 +425,7 @@ Citizen.CreateThread(function()
 			TriggerEvent("properties-GUI:Option", "Close", function(cb)
 				if(cb) then
 					menu.enabled = false
+					menu.page = "home"
 				end
 			end)
 

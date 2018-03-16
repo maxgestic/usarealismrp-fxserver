@@ -17,7 +17,7 @@ local Settings = {
 	["Key"] = 170,
 }
 
-local xOffset, yOffset = 0.55, 0
+local xOffset, yOffset = 0.68, 0
 
 local active_player_list = {}
 local player_list_open = false
