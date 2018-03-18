@@ -37,6 +37,8 @@ Queue.PlayerCount = 0
 Queue.Priority = {}
 Queue.Connecting = {}
 Queue.ThreadCount = 0
+Queue.PublicPlayerCount = 0
+Queue.MaxPublicPlayerCount = 0
 
 local debug = false
 local displayQueue = false
@@ -407,7 +409,17 @@ Citizen.CreateThread(function()
             return
         end
 
-        if Config.PriorityOnly and not Queue:IsPriority(ids) then print("**player tried to connect who is NOT whitelisted!**") done(Config.Language.prio) return end
+        if Config.PriorityOnly and not Queue:IsPriority(ids) then
+			print("**player tried to connect who is NOT whitelisted!**")
+			if Queue.PublicPlayerCount >= Queue.MaxPublicPlayerCount then
+				print("all public slots full!")
+				done(Config.Language.prio) 
+				return
+			else
+				print("***still " .. Queue.MaxPublicPlayerCount - Queue.PublicPlayerCount .. " public slots were available! letting non-whitelisted person join!***")
+				Queue.PublicPlayerCount = Queue.PublicPlayerCount + 1
+			end
+		end
 
         local rejoined = false
 
@@ -539,13 +551,20 @@ Citizen.CreateThread(function()
                 data.deferrals.done(Config.Language._err .. "[1]")
                 table_remove(Queue.QueueList, i)
                 Queue:DebugPrint(tostring(data.name) .. "[" .. tostring(data.ids[1]) .. "] was removed from the queue because it had invalid data")
-
+				if not Queue:IsPriority(data.ids) then 
+					print("**Decrementing public player count!**")
+					Queue.PublicPlayerCount = Queue.PublicPlayerCount - 1
+				end
             elseif (data.timeout >= 120) and data.source ~= "debug" and os_time() - data.firstconnect > 5 then
                 -- remove by source incase they rejoined and were duped in the queue somehow
                 data.deferrals.done(Config.Language._err .. "[2]")
                 Queue:RemoveFromQueue(data.source, true)
                 Queue:RemoveFromConnecting(data.source, true)
                 Queue:DebugPrint(data.name .. "[" .. data.ids[1] .. "] was removed from the queue because they timed out")
+				if not Queue:IsPriority(data.ids) then 
+					print("**Decrementing public player count!**")
+					Queue.PublicPlayerCount = Queue.PublicPlayerCount - 1
+				end
             else
                 i = i + 1
             end
@@ -564,6 +583,10 @@ Citizen.CreateThread(function()
                 Queue:RemoveFromQueue(data.source, true)
                 Queue:RemoveFromConnecting(data.source, true)
                 Queue:DebugPrint(data.name .. "[" .. data.ids[1] .. "] was removed from the connecting queue because they timed out")
+				if not Queue:IsPriority(data.ids) then 
+					print("**Decrementing public player count!**")
+					Queue.PublicPlayerCount = Queue.PublicPlayerCount - 1
+				end
             else
                 i = i + 1
             end
@@ -612,6 +635,10 @@ local function playerDropped()
         Queue.PlayerList[src] = nil
         Queue:RemoveFromQueue(ids)
         Queue:RemoveFromConnecting(ids)
+		if not Queue:IsPriority(ids) then 
+			print("**Decrementing public player count!**")
+			Queue.PublicPlayerCount = Queue.PublicPlayerCount - 1
+		end
     end
 end
 
