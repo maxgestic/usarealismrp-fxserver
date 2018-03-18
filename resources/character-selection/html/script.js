@@ -170,7 +170,7 @@ $(function () {
 		} else if (event.data.type == "delete") {
 			if (event.data.status !== "fail") return;
 			$('.notification').show()
-			$('.notification').html("Can't delete a character whose age is less than one week.")
+			$('.notification').html("Can't delete a character whose age is less than three days.")
 		}
 	});
 

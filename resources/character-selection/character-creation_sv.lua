@@ -1,3 +1,5 @@
+local WHOLE_DAYS_TO_DELETE = 3
+
 TriggerEvent('es:addCommand', 'swap', function(source, args, user)
 	TriggerClientEvent("character:swap--check-distance", source)
 end, { help = "Swap to another character (Must be at the clothing store)." })
@@ -112,7 +114,7 @@ AddEventHandler("character:delete", function(slot)
 			local characters = user.getCharacters()
 			-- See if character is at least one week old
 			local characterAge = getWholeDaysFromTime(characters[slot].created.time)
-			if characterAge >= 7 then
+			if characterAge >= WHOLE_DAYS_TO_DELETE then
 				characters[slot] = {active = false}
 				user.setCharacters(characters)
 				print("Done deleting character at slot #" .. slot .. ".")

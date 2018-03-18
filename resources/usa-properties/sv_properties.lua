@@ -139,7 +139,7 @@ end)
 -----------------------------
 -- LOAD PROPERTIES FROM DB --
 -----------------------------
-function loadProperties(cb)
+function loadProperties()
 	print("fetching all properties...")
 	PerformHttpRequest("http://127.0.0.1:5984/properties/_all_docs?include_docs=true" --[[ string ]], function(err, text, headers)
 		print("finished getting properties...")
@@ -156,8 +156,17 @@ function loadProperties(cb)
 			end
 			print("finished loading properties...")
 			--print("# of properties: " .. #PROPERTIES)
-			if cb then 
-				cb(true)
+			print("checking for owners to evict...")
+			---------------------------------------
+			-- Evict owners whose leases expired --
+			---------------------------------------
+			for name, info in pairs(PROPERTIES) do 
+				if info.fee.paid_time then
+					if GetWholeDaysFromTime(info.fee.paid_time) > PROPERTY_PAY_PERIOD_DAYS then
+						print("***Evicting owner of the " .. name .. " today!***")
+						Evict_Owner(name)
+					end
+				end
 			end
 		end
 	end, "GET", "", { ["Content-Type"] = 'application/json' })
@@ -303,78 +312,71 @@ function GetWholeDaysFromTime(reference_time)
 	return wholedays
 end
 
----------------------------------------
--- Evict owners whose leases expired --
----------------------------------------
-for name, info in pairs(PROPERTIES) do 
-    if info.paid_time then
-        if GetWholeDaysFromTime(info.fee.paid_time) > PROPERTY_PAY_PERIOD_DAYS then
-            print("***Evicting owner of the " .. name .. " today!***")
-            Evict_Owner(name)
-        end
-    end
-end
-
 function Evict_Owner(name)
-    PROPERTIES[name].fee.end_date = 0
-    PROPERTIES[name].fee.due_days = 0
-    PROPERTIES[name].fee.paid_time = 0
-    PROPERTIES[name].fee.paid = 0
-
-    PROPERTIES[name].owner.name = nil
-    PROPERTIES[name].owner.purchase_date = 0
-    PROPERTIES[name].owner.identifier = "undefined"
-    PROPERTIES[name].storage.money = 0
-    PROPERTIES[name].storage.items = {}
-    -- Get the document with that property name
-        TriggerEvent('es:exposeDBFunctions', function(db)
-            db.getDocumentByRow("properties", "name", name, function(doc, rText)
-                if rText then
-                    --RconPrint("\nrText = " .. rText)
-                end
-                if doc then
-                    doc._rev = nil
-                    db.updateDocument("properties", doc._id, PROPERTIES[name], function(status)
-                        if status == true then
-                            print("\nDocument updated.")
-                        else
-                            --RconPrint("\nStatus Response: " .. status)
-                            if status == "201" then
-                                print("\nDocument successfully updated!")
-                            end
-                        end
-                    end)
-                end
-            end)
-        end)
-
-        -- send discord message
-			local desc = "\n" .. char_name .. " no longer owns " .. property.name .. "!"
-			local url = 'https://discordapp.com/api/webhooks/419573361170055169/6v2NLnxzF8lSHgT8pSDccB_XN1R6miVuZDrEYtvNfPny6kSqddSN_9iJ9PPkbAbM01pW'
-				PerformHttpRequest(url, function(err, text, headers)
-					if text then
-						print(text)
+		--[[
+	if name and PROPERTIES[name].owner.name then 
+							--send discord message --
+							local desc = "\n" .. PROPERTIES[name].owner.name .. " no longer owns the " .. name .. "!"
+							local url = 'https://discordapp.com/api/webhooks/419573361170055169/6v2NLnxzF8lSHgT8pSDccB_XN1R6miVuZDrEYtvNfPny6kSqddSN_9iJ9PPkbAbM01pW'
+							PerformHttpRequest(url, function(err, text, headers)
+								if text then print(text) end
+								end, "POST", json.encode({
+									embeds = {
+										{
+											description = desc,
+											color = 524288,
+											author = {
+												name = "BLAINE COUNTY PROPERTY MGMT"
+											}
+										}
+								}
+							}), { ["Content-Type"] = 'application/json' })		
+	end
+	--]]
+	if name then
+		-- Get the document with that property name
+			TriggerEvent('es:exposeDBFunctions', function(db)
+				db.getDocumentByRow("properties", "name", name, function(doc, rText)
+					if rText then
+						--RconPrint("\nrText = " .. rText)
 					end
-				end, "POST", json.encode({
-					embeds = {
-						{
-							description = desc,
-							color = 524288,
-							author = {
-								name = "BLAINE COUNTY PROPERTY MGMT"
-							}
-						}
-					}
-				}), { ["Content-Type"] = 'application/json' })
+					if doc then
+						doc._rev = nil
+						db.updateDocument("properties", doc._id, PROPERTIES[name], function(status)
+							if status == true then
+								print("\nDocument updated.")
+							else
+								--RconPrint("\nStatus Response: " .. status)
+								if status == "201" then
+									print("\nDocument successfully updated!")
+								end
+							end
+							-- remove property owner information, make available for purchase --
+							PROPERTIES[name].fee.end_date = 0
+							PROPERTIES[name].fee.due_days = 0
+							PROPERTIES[name].fee.paid_time = 0
+							PROPERTIES[name].fee.paid = 0
+							PROPERTIES[name].owner.name = nil
+							PROPERTIES[name].owner.purchase_date = 0
+							PROPERTIES[name].owner.identifier = "undefined"
+							PROPERTIES[name].storage.money = 0
+							PROPERTIES[name].storage.items = {}
+						end)
+					end
+				end)
+			end)
+	else print("property name did not exist, not evicting!") end
 end
 -----------------------------------------
 
 -----------------------------------------
 -- Save property data every x minutes  --
+
+	-- todo: save everytime something is changed instead of every x minutes? (to prevent performance degredation like falling through the map?)
 -----------------------------------------
 Citizen.CreateThread(function()
 
-	local minutes = 17
+	local minutes = 32
 	local interval = minutes * 60000
 
 	function savePropertyData()
@@ -420,7 +422,7 @@ end)
 ---------------------------------------
 
 TriggerEvent('es:addCommand','loadproperties', function(source, args, user)
-    if user.getGroup() ~= "user" then
+    if user.getGroup() == "owner" then
         print("inside /loadproperties command!")
         loadProperties()
         local steam_hex = GetPlayerIdentifiers(source)[1]
@@ -450,15 +452,15 @@ AddEventHandler('rconCommand', function(commandName, args)
 		end)
 	elseif commandName == "properties" then
 		for name, info in pairs(PROPERTIES) do 
-			RconPrint("Name: " .. name)
-			RconPrint("Owner: " .. info.owner.name)
-			RconPrint("Ident: " .. info.owner.identifier)
-			RconPrint("Earnings: $" .. info.storage.money)
-			RconPrint("Items: ")
+			RconPrint("Name: " .. info.name)
+			RconPrint("\nOwner: " .. info.owner.name)
+			RconPrint("\nIdent: " .. info.owner.identifier)
+			RconPrint("\nEarnings: $" .. info.storage.money)
+			RconPrint("\nItems: ")
 			for k = 1, #info.storage.items do 
-				RconPrint("(" .. info.storage.items[k].quantity .. "x) " .. info.storage.items[k].name)
+				RconPrint("\n(" .. info.storage.items[k].quantity .. "x) " .. info.storage.items[k].name)
 			end
-			RconPrint("End Date: " .. info.fee.end_date .. "\n")
+			RconPrint("\nEnd Date: " .. info.fee.end_date .. "\n")
 		end
 	end
 	CancelEvent()
