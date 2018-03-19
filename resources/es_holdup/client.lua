@@ -121,7 +121,7 @@ local stores = {
 		lastrobbed = 0
 	},
 	["Fish Restaurant - Paleto"] = {
-		position = { ['x'] = 664.933, ['y'] = 5808.579, ['z'] = 17.518 },
+		position = { ['x'] = -664.933, ['y'] = 5808.579, ['z'] = 17.518 },
 		nameofstore = "Fish Restaurant - Paleto",
 		lastrobbed = 0
 	},

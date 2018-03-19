@@ -158,7 +158,7 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle, property)
 			--]]
 			TriggerClientEvent("garage:vehicleNotStored", userSource)
 		else
-			withdraw_fee = 150
+			withdraw_fee = 50
 			TriggerClientEvent("garage:notify", userSource, "Here's your car! Storage Fee: $" .. withdraw_fee)
 			TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
 			--vehicle.stored = false

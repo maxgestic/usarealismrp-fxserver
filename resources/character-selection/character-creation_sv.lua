@@ -107,7 +107,6 @@ end)
 
 RegisterServerEvent("character:delete")
 AddEventHandler("character:delete", function(slot)
-	print("trying to delete character at slot #" .. slot .. "...")
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
 		if user then
@@ -115,12 +114,13 @@ AddEventHandler("character:delete", function(slot)
 			-- See if character is at least one week old
 			local characterAge = getWholeDaysFromTime(characters[slot].created.time)
 			if characterAge >= WHOLE_DAYS_TO_DELETE then
+				print("debug: Deleting character at slot #" .. slot .. "...")
 				characters[slot] = {active = false}
 				user.setCharacters(characters)
-				print("Done deleting character at slot #" .. slot .. ".")
+				print("debug: Done deleting character at slot #" .. slot .. ".")
 				TriggerClientEvent("character:open", userSource, "home", characters)
 			else
-				print("Error: Can't delete a character whose age is less than one week.")
+				print("Error: Can't delete a character whose age is less than " .. WHOLE_DAYS_TO_DELETE .. "!")
 				TriggerClientEvent("character:send-nui-message", userSource, {type = "delete", status = "fail", slot = slot}) -- update nui menu
 			end
 		end
