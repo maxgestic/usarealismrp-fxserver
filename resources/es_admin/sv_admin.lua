@@ -584,7 +584,59 @@ AddEventHandler('rconCommand', function(commandName, args)
 				fetchAllBans()
 			end)
 		end)
-		CancelEvent() -- prevent default rcon msg
+	elseif commandName == "banid" then
+		-- see if input was correct --
+		RconPrint("BANID COMMAND CALLED FROM RCON!")
+		if #args < 4 then
+			RconPrint("Usage: banid [steam:123456789] [first name] [last name] [reason]\n")
+			CancelEvent()
+			return
+		end
+		-- enter player into ban table --
+		TriggerEvent('es:exposeDBFunctions', function(GetDoc)
+			-- get info from command
+			local banner = "console"
+			local bannerId = "console"
+			local targetPlayer = args[1]
+			local allPlayerIdentifiers = {}
+			table.insert(allPlayerIdentifiers, targetPlayer)
+			local targetPlayerName = args[2] .. " " .. args[3]
+			table.remove(args, 1) -- remove id
+			table.remove(args, 1) -- remove fname
+			table.remove(args, 1) -- remove lname
+			local reason = table.concat(args, " ")
+			RconPrint("\nPlayer Identifier: " .. args[1])
+			-- show message
+			RconPrint(targetPlayerName .. " has been banned (" .. reason .. ")")
+			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
+			sendMessageToModsAndAdmins(targetPlayerName .. " has been ^1banned^0 (" .. reason .. ").")
+			-- update db --
+			GetDoc.createDocument("bans",  {char_name = "?", name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+				RconPrint("player banned!")
+				-- refresh lua table of bans for this resource --
+				fetchAllBans()
+				-- send discord message --
+				local desc = "\n**Name:** " .. targetPlayerName
+				desc = desc .. "\n**Identifier:** " .. targetPlayer
+				desc = desc .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** Console\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
+				local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
+				PerformHttpRequest(url, function(err, text, headers)
+					if text then
+						print(text)
+					end
+				end, "POST", json.encode({
+					embeds = {
+						{
+							description = desc,
+							color = 14750740,
+							author = {
+								name = "User Banned From The Server"
+							}
+						}
+					}
+				}), { ["Content-Type"] = 'application/json' })
+			end)
+		end)
 	elseif commandName == 'setadmin' then
 		if #args ~= 2 then
 			RconPrint("Usage: setadmin [user-id] [permission-level]\n")
@@ -639,7 +691,6 @@ AddEventHandler('rconCommand', function(commandName, args)
 			end
 		end)
 
-		CancelEvent()
 	elseif commandName == 'setmoney' then
 		if #args ~= 2 then
 			RconPrint("Usage: setmoney [user-id] [money]\n")
@@ -662,8 +713,8 @@ AddEventHandler('rconCommand', function(commandName, args)
 			end
 		end)
 
-		CancelEvent()
 	end
+	CancelEvent()
 end)
 
 -- Logging
