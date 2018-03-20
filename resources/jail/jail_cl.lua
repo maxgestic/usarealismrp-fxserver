@@ -8,7 +8,7 @@ local imprisoned = false
 local menuEnabled = false
 
 function EnableGui(enable)
-    SetNuiFocus(enable)
+    SetNuiFocus(enable, enable)
     menuEnabled = enable
     SetPedCanSwitchWeapon(GetPlayerPed(-1), (not menuEnabled))
 
@@ -27,20 +27,20 @@ end)
 
 RegisterNetEvent("jail:openMenu")
 AddEventHandler("jail:openMenu", function()
-    EnableGui(true)
+    EnableGui(true, true)
     SetPedCanSwitchWeapon(GetPlayerPed(-1), false)
     -- look at clipboard:
     TaskStartScenarioInPlace(GetPlayerPed(-1), "WORLD_HUMAN_CLIPBOARD", 0, 1)
 end)
 
 RegisterNUICallback('submit', function(data, cb)
-	EnableGui(false) -- close form
+	EnableGui(false, false) -- close form
     TriggerServerEvent("jail:jailPlayerFromMenu", data)
     cb('ok')
 end)
 
 RegisterNUICallback('escape', function(data, cb)
-    EnableGui(false)
+    EnableGui(false, false)
     cb('ok')
 end)
 
@@ -125,23 +125,27 @@ AddEventHandler("jail:removeWeapons", function()
 end)
 
 RegisterNetEvent("jail:changeClothes")
-AddEventHandler("jail:changeClothes", function()
+AddEventHandler("jail:changeClothes", function(gender)
+	
+	-- only change clothes if male, since there is no female prisoner ped --
+	if gender == "male" or gender == "undefined" then
 
-    Citizen.CreateThread(function()
-        local model = GetHashKey("S_M_Y_Prisoner_01")
+		Citizen.CreateThread(function()
+			local model = GetHashKey("S_M_Y_Prisoner_01")
 
-        RequestModel(model)
-        while not HasModelLoaded(model) do -- Wait for model to load
-            RequestModel(model)
-            Citizen.Wait(0)
-        end
+			RequestModel(model)
+			while not HasModelLoaded(model) do -- Wait for model to load
+				RequestModel(model)
+				Citizen.Wait(0)
+			end
 
-        SetPlayerModel(PlayerId(), model)
-        SetModelAsNoLongerNeeded(model)
-        SetPedRandomComponentVariation(GetPlayerPed(-1), false)
-        -- todo: don't remove player's cell phone on jail
+			SetPlayerModel(PlayerId(), model)
+			SetModelAsNoLongerNeeded(model)
+			SetPedRandomComponentVariation(GetPlayerPed(-1), false)
 
-    end)
+		end)
+		
+	end
 
 end)
 

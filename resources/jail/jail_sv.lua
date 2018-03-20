@@ -25,6 +25,7 @@ AddEventHandler("jail:jailPlayerFromMenu", function(data)
 	print("data.charges: " .. data.charges)
 	print("data.id: " .. data.id)
 	print("data.fine: " .. data.fine)
+	print("data.gender: " .. data.gender)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local user_job = user.getActiveCharacterData("job")
 		local player_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
@@ -87,7 +88,7 @@ function jailPlayer(data, officerName)
 		table.insert(playerCriminalHistory, record)
 		user.setActiveCharacterData("criminalHistory", playerCriminalHistory)
 		-- give inmate clothing
-		TriggerClientEvent("jail:changeClothes", targetPlayer)
+		TriggerClientEvent("jail:changeClothes", targetPlayer, data.gender)
 		-- send to discord #jail-logs
 		local url = 'https://discordapp.com/api/webhooks/343037167821389825/yDdmSBi-ODYPcAbTzb0DaPjWPnVOhh232N78lwrQvlhbrvN8mV5TBfNOmnxwMZfQnttl'
 		PerformHttpRequest(url, function(err, text, headers)
@@ -109,7 +110,7 @@ function jailPlayer(data, officerName)
 		TriggerEvent("warrants:removeAnyActiveWarrants", inmate_name)
 		if GetDLSuspensionDays(reason) then
 			TriggerEvent("dmv:setLicenseStatus", "suspended", targetPlayer, GetDLSuspensionDays(reason))
-			TriggerClientEvent("usa:notify", targetPlayer, "Your driver's license has been suspended for " .. GetDLSuspensionDays(reason))
+			TriggerClientEvent("usa:notify", targetPlayer, "Your driver's license has been suspended for " .. GetDLSuspensionDays(reason) .. " day(s)")
 		end
 	end)
 end
