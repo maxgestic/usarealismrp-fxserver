@@ -184,7 +184,7 @@ AddEventHandler("phone:requestCall", function(numbers)
 						for j = 1, #inventory do
 							if inventory[j] then
 								-- check for a matching phone number in player items
-								if string.find(inventory[j].name, "Cell Phone") and string.find(inventory[j].number, numbers.phone_number) then
+								if string.find(inventory[j].name, "Cell Phone") and inventory[j].number == numbers.phone_number then
 									print("phone found with toNumber...")
 									print("requesting phone call...")
 									local caller_name = getNameFromContacts(inventory[j], numbers.from_number)

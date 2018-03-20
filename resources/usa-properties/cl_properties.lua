@@ -206,8 +206,10 @@ Citizen.CreateThread(function()
 						TriggerEvent("properties-GUI:Option", "You own this property!", function(cb)
 							if cb then end
 						end)
+						
+						TriggerEvent("properties-GUI:Option", "Next Fee Due: " .. nearest_property_info.fee.end_date, function(cb) if cb then end end)
 
-						TriggerEvent("properties-GUI:Option", "Earnings: ~g~$" .. comma_value(nearest_property_info.storage.money), function(cb)
+						TriggerEvent("properties-GUI:Option", "Money: ~g~$" .. comma_value(nearest_property_info.storage.money), function(cb)
 							if cb then end
 						end)
 
@@ -219,8 +221,6 @@ Citizen.CreateThread(function()
 								menu.page = "storage"
 							end
 						end)
-
-						TriggerEvent("properties-GUI:Option", "Next Fee Due: " .. nearest_property_info.fee.end_date, function(cb) if cb then end end)
 
 						TriggerEvent("properties-GUI:Option", "Withdraw", function(cb)
 							if cb then
@@ -235,7 +235,7 @@ Citizen.CreateThread(function()
 											if ( string.len( input_amount ) > 0 ) then
 												local amount = tonumber( input_amount )
 												if ( amount > 0 ) then
-													amount = round(amount, 0)
+													amount = math.floor(amount, 0)
 													TriggerServerEvent("properties:withdraw", nearest_property_info.name, amount)
 												end
 												break
@@ -267,7 +267,7 @@ Citizen.CreateThread(function()
 									else 
 										color = "~r~"
 									end
-									TriggerEvent("properties-GUI:Option", color .. "(" .. item.quantity.. "x) " .. item.name, function(cb)
+									TriggerEvent("properties-GUI:Option", color .. "(" .. math.floor(item.quantity) .. "x) " .. item.name, function(cb)
 										if cb then 
 											-- ask for quantity to retrieve, then try to retrieve it
 											Citizen.CreateThread( function()
@@ -277,14 +277,16 @@ Citizen.CreateThread(function()
 														local input_amount = GetOnscreenKeyboardResult()
 														if ( string.len( input_amount ) > 0 ) then
 															local amount = tonumber( input_amount )
+															amount = math.floor(amount, 0)
 															if ( amount > 0 ) then
-																amount = round(amount, 0)
 																if item.quantity - amount >= 0 then
 																	TriggerServerEvent("properties:retrieve", nearest_property_info.name, item, amount)
 																else 
 																	TriggerEvent("usa:notify", "Quantity input too high!")
 																end
 																menu.page = "home"
+															else 
+																TriggerEvent("usa:notify", "Quantity input too low!")
 															end
 															break
 														else
@@ -331,7 +333,7 @@ Citizen.CreateThread(function()
 										else 
 											color = "~r~"
 										end
-										TriggerEvent("properties-GUI:Option", color .. "(" .. round(item.quantity, 0) .. "x) " .. item.name, function(cb)
+										TriggerEvent("properties-GUI:Option", color .. "(" .. math.floor(item.quantity, 0) .. "x) " .. item.name, function(cb)
 											if cb then 
 												-- ask for quantity to store, then try to store it --
 												Citizen.CreateThread( function()
@@ -342,12 +344,16 @@ Citizen.CreateThread(function()
 															if ( string.len( input_amount ) > 0 ) then
 																local amount = tonumber( input_amount )
 																if ( amount > 0 ) then
-																	amount = round(amount, 0)
-																	if item.quantity - amount >= 0 then
-																		print("storing item [" .. item.name .. "] with quantity [" .. item.quantity .. "]")
-																		TriggerServerEvent("properties:store", nearest_property_info.name, item, amount)
+																	amount = math.floor(amount, 0)
+																	if amount > 0 then
+																		if item.quantity - amount >= 0 then
+																			print("storing item [" .. item.name .. "] with quantity [" .. item.quantity .. "]")
+																			TriggerServerEvent("properties:store", nearest_property_info.name, item, amount)
+																		else 
+																			TriggerEvent("usa:notify", "Quantity input too high!")
+																		end
 																	else 
-																		TriggerEvent("usa:notify", "Quantity input too high!")
+																		TriggerEvent("usa:notify", "Quantity input too low!")
 																	end
 																	menu.page = "home"
 																end

@@ -107,7 +107,7 @@ AddEventHandler("properties:retrieve", function(name, item, quantity)
 						TriggerClientEvent("usa:notify", user_source, "You don't have that much of that item in storage!")
 						return
 					else 
-						if prop_storage[i].quantity - quantity <= 0 then 
+						if prop_storage[i].quantity - quantity == 0 then 
 							print("property item removed!")
 							table.remove(PROPERTIES[name].storage.items, i)
 						else
@@ -282,7 +282,7 @@ AddEventHandler("properties:purchaseProperty", function(property)
             end)
         end)
         -- send discord msg to #property-logs --
-		local desc = "\n**Business:** " .. property.name .. "\n**Purchase Price:** $" .. comma_value(property.fee.price) ..  "\n**Purchased By:** " .. char_name .. "\n**Purchase Date:** ".. PROPERTIES[property.name].owner.purchase_date .. "\n**End Date:** " .. PROPERTIES[property.name].fee.end_date
+		local desc = "\n**Property:** " .. property.name .. "\n**Purchase Price:** $" .. comma_value(property.fee.price) ..  "\n**Purchased By:** " .. char_name .. "\n**Purchase Date:** ".. PROPERTIES[property.name].owner.purchase_date .. "\n**End Date:** " .. PROPERTIES[property.name].fee.end_date
 		local url = 'https://discordapp.com/api/webhooks/419573361170055169/6v2NLnxzF8lSHgT8pSDccB_XN1R6miVuZDrEYtvNfPny6kSqddSN_9iJ9PPkbAbM01pW'
 		PerformHttpRequest(url, function(err, text, headers)
 			if text then
@@ -451,16 +451,18 @@ AddEventHandler('rconCommand', function(commandName, args)
 			end
 		end)
 	elseif commandName == "properties" then
-		for name, info in pairs(PROPERTIES) do 
-			RconPrint("Name: " .. info.name)
-			RconPrint("\nOwner: " .. info.owner.name)
-			RconPrint("\nIdent: " .. info.owner.identifier)
-			RconPrint("\nEarnings: $" .. info.storage.money)
-			RconPrint("\nItems: ")
-			for k = 1, #info.storage.items do 
-				RconPrint("\n(" .. info.storage.items[k].quantity .. "x) " .. info.storage.items[k].name)
+		for name, info in pairs(PROPERTIES) do
+			if info.owner.name then
+				RconPrint("Name: " .. info.name)
+				RconPrint("\nOwner: " .. info.owner.name)
+				RconPrint("\nIdent: " .. info.owner.identifier)
+				RconPrint("\nCurrent Money: $" .. info.storage.money)
+				RconPrint("\nItems: ")
+				for k = 1, #info.storage.items do 
+					RconPrint("\n(" .. info.storage.items[k].quantity .. "x) " .. info.storage.items[k].name)
+				end
+				RconPrint("\nEnd Date: " .. info.fee.end_date .. "\n\n")
 			end
-			RconPrint("\nEnd Date: " .. info.fee.end_date .. "\n")
 		end
 	end
 	CancelEvent()

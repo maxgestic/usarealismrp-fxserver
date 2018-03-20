@@ -108,7 +108,7 @@ RegisterNUICallback('getMessages', function(data, cb)
     cb('ok')
 end)
 
--- start a phone call:
+-- request a phone call with user inputted phone number:
 RegisterNUICallback('requestCall', function(data, cb)
 	--print(data.from_number .. " is requesting a phone call with #: " .. data.phone_number)
 	if tonumber(data.phone_number) then 
