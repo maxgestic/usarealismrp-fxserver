@@ -212,13 +212,34 @@ Citizen.CreateThread(function()
 						TriggerEvent("properties-GUI:Option", "Money: ~g~$" .. comma_value(nearest_property_info.storage.money), function(cb)
 							if cb then end
 						end)
-
-						TriggerEvent("properties-GUI:Option", "Storage", function(cb)
+						
+						TriggerEvent("properties-GUI:Option", "Store Money", function(cb)
 							if cb then
-								menu.property_items = nil
-								TriggerServerEvent("properties:loadStorage", nearest_property_info.name)
-								--TriggerServerEvent("properties:getUserItemsToStore")
-								menu.page = "storage"
+								--print("player wants to withdraw from their property!")
+								menu.enabled = false
+								-- get withdraw amount from user input --
+								Citizen.CreateThread( function()
+									DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+									while true do
+										if ( UpdateOnscreenKeyboard() == 1 ) then
+											local input_amount = GetOnscreenKeyboardResult()
+											if ( string.len( input_amount ) > 0 ) then
+												local amount = tonumber( input_amount )
+												amount = math.floor(amount, 0)
+												if ( amount > 0 ) then
+													TriggerServerEvent("properties:storeMoney", nearest_property_info.name, amount)
+												end
+												break
+											else
+												DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+											end
+										elseif ( UpdateOnscreenKeyboard() == 2 ) then
+											break
+										end
+										Citizen.Wait( 0 )
+									end
+								end )
+								--TriggerServerEvent("properties:withdraw")
 							end
 						end)
 
@@ -234,8 +255,8 @@ Citizen.CreateThread(function()
 											local input_amount = GetOnscreenKeyboardResult()
 											if ( string.len( input_amount ) > 0 ) then
 												local amount = tonumber( input_amount )
+												amount = math.floor(amount, 0)
 												if ( amount > 0 ) then
-													amount = math.floor(amount, 0)
 													TriggerServerEvent("properties:withdraw", nearest_property_info.name, amount)
 												end
 												break
@@ -249,6 +270,15 @@ Citizen.CreateThread(function()
 									end
 								end )
 								--TriggerServerEvent("properties:withdraw")
+							end
+						end)
+						
+						TriggerEvent("properties-GUI:Option", "Storage", function(cb)
+							if cb then
+								menu.property_items = nil
+								TriggerServerEvent("properties:loadStorage", nearest_property_info.name)
+								--TriggerServerEvent("properties:getUserItemsToStore")
+								menu.page = "storage"
 							end
 						end)
 						
@@ -343,7 +373,7 @@ Citizen.CreateThread(function()
 															local input_amount = GetOnscreenKeyboardResult()
 															if ( string.len( input_amount ) > 0 ) then
 																local amount = tonumber( input_amount )
-																if ( amount > 0 ) then
+																
 																	amount = math.floor(amount, 0)
 																	if amount > 0 then
 																		if item.quantity - amount >= 0 then
@@ -356,7 +386,7 @@ Citizen.CreateThread(function()
 																		TriggerEvent("usa:notify", "Quantity input too low!")
 																	end
 																	menu.page = "home"
-																end
+															
 																break
 															else
 																DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )

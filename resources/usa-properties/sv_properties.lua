@@ -1,6 +1,7 @@
 local PROPERTIES = {} -- loaded and updated by database
 
-local PROPERTY_PAY_PERIOD_DAYS = 7
+local BUSINESS_PAY_PERIOD_DAYS = 7
+local HOUSE_PAY_PERIOD_DAYS = 30
 
 RegisterServerEvent("properties:getPropertyIdentifier")
 AddEventHandler("properties:getPropertyIdentifier", function()
@@ -39,6 +40,22 @@ AddEventHandler("properties:getUserItemsToStore", function(user_source)
 		for i = 1, #weapons do table.insert(items, weapons[i]) end
 		print("sending #" .. #items .. " items to client for storage menu")
 		TriggerClientEvent("properties:setItemsToStore", userSource, items)
+	end
+end)
+
+-- store cash in property --
+RegisterServerEvent("properties:storeMoney")
+AddEventHandler("properties:storeMoney", function(name, amount)
+	local user_source = source
+	local player = exports["essentialmode"]:getPlayerFromId(user_source)
+	local user_money = player.getActiveCharacterData("money")
+	if user_money - amount >= 0 then
+		-- remove from player --
+		player.setActiveCharacterData("money", user_money - amount)
+		-- add to property --
+		TriggerEvent("properties:addMoney", name, amount)
+	else 
+		TriggerClientEvent("usa:notify", user_source, "You don't have that much money on you!")
 	end
 end)
 
@@ -157,17 +174,7 @@ function loadProperties()
 			print("finished loading properties...")
 			--print("# of properties: " .. #PROPERTIES)
 			print("checking for owners to evict...")
-			---------------------------------------
-			-- Evict owners whose leases expired --
-			---------------------------------------
-			for name, info in pairs(PROPERTIES) do 
-				if info.fee.paid_time then
-					if GetWholeDaysFromTime(info.fee.paid_time) > PROPERTY_PAY_PERIOD_DAYS then
-						print("***Evicting owner of the " .. name .. " today!***")
-						Evict_Owner(name)
-					end
-				end
-			end
+			Evict_Owners()
 		end
 	end, "GET", "", { ["Content-Type"] = 'application/json' })
 end
@@ -238,18 +245,32 @@ end)
 -----------------------
 RegisterServerEvent("properties:purchaseProperty")
 AddEventHandler("properties:purchaseProperty", function(property)
-    local user_source = source
+	local user_source = source
+	
+	if not property.type then property.type = "business" print("set property type to business") end 
+	--if property.type == "business" then ownership_length = BUSINESS_PAY_PERIOD_DAYS
+	--elseif property.type == "house" then ownership_length = HOUSE_PAY_PERIOD_DAYS end
+	
+	local final_time = nil
+	local today = os.date("*t", os.time())
+	
     print("player #" .. source .. " wants to purchase " .. property.name)
     local player = exports["essentialmode"]:getPlayerFromId(user_source)
     local user_money = player.getActiveCharacterData("money")
     local char_name = player.getActiveCharacterData("fullName")
+	
     if user_money >= property.fee.price then
         -- set new property info --
         PROPERTIES[property.name].fee.paid_time = os.time() -- save the time the property was purchased
         PROPERTIES[property.name].fee.paid = true
-        PROPERTIES[property.name].fee.due_days = PROPERTY_PAY_PERIOD_DAYS
-        local today = os.date("*t", os.time())
-        local endtime = os.time({day = today.day + PROPERTY_PAY_PERIOD_DAYS, month = today.month, year = today.year})
+		if property.type == "business" then
+			PROPERTIES[property.name].fee.due_days = BUSINESS_PAY_PERIOD_DAYS
+			final_time = {day = today.day + BUSINESS_PAY_PERIOD_DAYS, month = today.month, year = today.year}
+		elseif property.type == "house" then 
+			PROPERTIES[property.name].fee.due_days = HOUSE_PAY_PERIOD_DAYS
+			final_time = {day = today.day, month = today.month + 1, year = today.year}
+		end
+        local endtime = os.time(final_time)
         PROPERTIES[property.name].fee.due_time = endtime
         PROPERTIES[property.name].fee.end_date = os.date("%x", endtime)
         PROPERTIES[property.name].owner.name = char_name
@@ -312,7 +333,7 @@ function GetWholeDaysFromTime(reference_time)
 	return wholedays
 end
 
-function Evict_Owner(name)
+function Evict_Owners()
 		--[[
 	if name and PROPERTIES[name].owner.name then 
 							--send discord message --
@@ -333,39 +354,59 @@ function Evict_Owner(name)
 							}), { ["Content-Type"] = 'application/json' })		
 	end
 	--]]
-	if name then
-		-- Get the document with that property name
-			TriggerEvent('es:exposeDBFunctions', function(db)
-				db.getDocumentByRow("properties", "name", name, function(doc, rText)
-					if rText then
-						--RconPrint("\nrText = " .. rText)
+			---------------------------------------
+			-- Evict owners whose leases expired --
+			---------------------------------------
+			for name, info in pairs(PROPERTIES) do 
+				-- below if statement only temporarily here to adjust any old DB documents that didn't get the type attribute --
+				if not info.type then 
+					PROPERTIES[name].type = "business"
+				end
+				-- see if eviction time has arrived
+				if info.fee.paid_time then
+					local max_ownable_days = 0
+					if info.type == "business" then
+						max_ownable_days = BUSINESS_PAY_PERIOD_DAYS
+					elseif info.type == "house" then 
+						max_ownable_days = HOUSE_PAY_PERIOD_DAYS
 					end
-					if doc then
-						doc._rev = nil
-						db.updateDocument("properties", doc._id, PROPERTIES[name], function(status)
-							if status == true then
-								print("\nDocument updated.")
-							else
-								--RconPrint("\nStatus Response: " .. status)
-								if status == "201" then
-									print("\nDocument successfully updated!")
-								end
-							end
-							-- remove property owner information, make available for purchase --
-							PROPERTIES[name].fee.end_date = 0
-							PROPERTIES[name].fee.due_days = 0
-							PROPERTIES[name].fee.paid_time = 0
-							PROPERTIES[name].fee.paid = 0
-							PROPERTIES[name].owner.name = nil
-							PROPERTIES[name].owner.purchase_date = 0
-							PROPERTIES[name].owner.identifier = "undefined"
-							PROPERTIES[name].storage.money = 0
-							PROPERTIES[name].storage.items = {}
-						end)
-					end
-				end)
-			end)
-	else print("property name did not exist, not evicting!") end
+						if GetWholeDaysFromTime(info.fee.paid_time) > max_ownable_days then
+							print("***Evicting owner of the " .. name .. " today!***")
+							-- Get the document with that property name
+							TriggerEvent('es:exposeDBFunctions', function(db)
+								db.getDocumentByRow("properties", "name", name, function(doc, rText)
+									if rText then
+										--RconPrint("\nrText = " .. rText)
+									end
+									if doc then
+										doc._rev = nil
+										db.updateDocument("properties", doc._id, PROPERTIES[name], function(status)
+											if status == true then
+												print("\nDocument updated.")
+											else
+												--RconPrint("\nStatus Response: " .. status)
+												if status == "201" then
+													print("\nDocument successfully updated!")
+												end
+											end
+											-- remove property owner information, make available for purchase --
+											PROPERTIES[name].fee.end_date = 0
+											PROPERTIES[name].fee.due_days = 0
+											PROPERTIES[name].fee.paid_time = 0
+											PROPERTIES[name].fee.paid = 0
+											PROPERTIES[name].owner.name = nil
+											PROPERTIES[name].owner.purchase_date = 0
+											PROPERTIES[name].owner.identifier = "undefined"
+											PROPERTIES[name].storage.money = 0
+											PROPERTIES[name].storage.items = {}
+										end)
+									end
+								end)
+							end)
+						end
+				end
+			end
+			
 end
 -----------------------------------------
 
