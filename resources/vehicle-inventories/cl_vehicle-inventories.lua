@@ -69,9 +69,9 @@ AddEventHandler("vehicle:retrieveWeapon", function(target_item, target_vehicle_p
                   local input_amount = GetOnscreenKeyboardResult()
                   if ( string.len( input_amount ) > 0 ) then
                       local amount = tonumber( input_amount )
+					  amount = math.floor(amount)
                       if ( amount > 0 ) then
                           -- trigger server event to remove money
-                          amount = round(amount, 0)
                           local quantity_to_transfer = amount
                           if quantity_to_transfer <= target_item.quantity then
                             -- Remove/decrement full item with name data.itemName from vehicle inventory with plate matching target_vehicle.plate:
@@ -82,8 +82,10 @@ AddEventHandler("vehicle:retrieveWeapon", function(target_item, target_vehicle_p
                           else
                             TriggerEvent("usa:notify", "Quantity input too high!")
                           end
-                      end
-                      -- experimental:
+                      else 
+						TriggerEvent("usa:notify", "Quantity input too low!")
+					  end
+                      -- kinda experimental:
                       TriggerServerEvent("vehicle:finishedUsingInventory", target_vehicle_plate)
                       break
                   else

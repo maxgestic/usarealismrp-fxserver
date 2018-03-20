@@ -120,23 +120,25 @@ RegisterNUICallback('retrieveVehicleItem', function(data, cb)
 						local input_amount = GetOnscreenKeyboardResult()
 						if ( string.len( input_amount ) > 0 ) then
 							local amount = tonumber( input_amount )
+							amount = math.floor(amount, 0)
 							if ( amount > 0 ) then
 								-- play animation:
 								local anim = {
 									dict = "anim@move_m@trash",
 									name = "pickup"
 								}
-								TriggerEvent("usa:playAnimation", anim.name, anim.dict, 4)
-									-- see if item is able to be removed:
-									amount = round(amount, 0)
-									local quantity_to_transfer = amount
-									if quantity_to_transfer <= target_item.quantity then
-										print("seeing if item is still in vehicle...")
-										TriggerServerEvent("vehicle:isItemStillInVehicle", target_vehicle_plate, target_item, quantity_to_transfer)
-									else
-										TriggerEvent("usa:notify", "Quantity input too high!")
-									end
+								-- see if item is able to be removed:
+								local quantity_to_transfer = amount
+								if quantity_to_transfer <= target_item.quantity then
+									print("seeing if item is still in vehicle...")
+									TriggerServerEvent("vehicle:isItemStillInVehicle", target_vehicle_plate, target_item, quantity_to_transfer)
+									TriggerEvent("usa:playAnimation", anim.name, anim.dict, 4)
+								else
+									TriggerEvent("usa:notify", "Quantity input too high!")
 								end
+							else 
+								TriggerEvent("usa:notify", "Quantity input too low!")
+							end
 							break
 						else
 							DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
@@ -151,7 +153,7 @@ RegisterNUICallback('retrieveVehicleItem', function(data, cb)
 	else
 		TriggerEvent("usa:notify", "Can't retrieve item. Vehicle is locked.")
 	end
-end)
+end)	
 
 RegisterNUICallback('playEmote', function(data, cb)
 	--TriggerEvent("test:escapeFromCSharp")
@@ -253,9 +255,9 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 							local input_amount = GetOnscreenKeyboardResult()
 							if ( string.len( input_amount ) > 0 ) then
 								local amount = tonumber( input_amount )
+								amount = math.floor(amount, 0)
 								if ( amount > 0 ) then
 									-- trigger server event to remove money
-									amount = round(amount, 0)
 									local quantity_to_transfer = amount
 									if quantity_to_transfer <= wholeItem.quantity then
 										TriggerEvent("vehicle:checkTargetVehicleForStorage", wholeItem, quantity_to_transfer)

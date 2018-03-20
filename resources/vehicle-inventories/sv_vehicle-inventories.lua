@@ -117,14 +117,15 @@ AddEventHandler("vehicle:removeItem", function(item_name, quantity, target_vehic
 				for j = 1, #vehicle_inventory do
 				  local vehicle_inventory_item = vehicle_inventory[j]
 				  if vehicle_inventory_item.name == item_name then
-					player_vehicles[i].inventory[j].quantity = player_vehicles[i].inventory[j].quantity - quantity
-					if player_vehicles[i].inventory[j].quantity <= 0 then
+					print("found matching item to remove, quantity after subtracting: " .. player_vehicles[i].inventory[j].quantity - quantity)
+					if player_vehicles[i].inventory[j].quantity - quantity <= 0 then
 					  print("removing item from vehicle inventory!")
 					  table.remove(player_vehicles[i].inventory, j)
 					  player.setActiveCharacterData("vehicles", player_vehicles)
 					  print("removed item from vehicle inventory!")
 					else
 					  print("decremented item quantity in vehicle inventory!")
+					  player_vehicles[i].inventory[j].quantity = player_vehicles[i].inventory[j].quantity - quantity
 					  player.setActiveCharacterData("vehicles", player_vehicles)
 					end
 					return
