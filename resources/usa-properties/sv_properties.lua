@@ -1,3 +1,8 @@
+--# Residential / Business Properties
+--# own, store stuff, be a bawse
+--# by: minipunch
+--# made for: USA REALISM RP
+
 local PROPERTIES = {} -- loaded and updated by database
 
 local BUSINESS_PAY_PERIOD_DAYS = 7

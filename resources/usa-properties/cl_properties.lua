@@ -1,6 +1,7 @@
---# by: MINIPUNCH
---# for: USA REALISM RP
---# desc: this is a script to simulate the owning of robbing of player owned properties
+--# Residential / Business Properties
+--# own, store stuff, be a bawse
+--# by: minipunch
+--# made for: USA REALISM RP
 
 local PROPERTIES = {} -- loaded from the server on first load or whenever a change is made. below data is only for reference whle making
 
@@ -52,9 +53,9 @@ end)
 RegisterNetEvent("properties:loadedStorage")
 AddEventHandler("properties:loadedStorage", function(items)
 	menu.property_items = items
-	print("**menu property items set!**")
+	--print("**menu property items set!**")
 	for k = 1, #items do 
-		print("name: " .. items[k].name .. ", quantity: " .. items[k].quantity)
+		--print("name: " .. items[k].name .. ", quantity: " .. items[k].quantity)
 	end
 end)
 --
@@ -431,14 +432,18 @@ Citizen.CreateThread(function()
                         --print("Person is trying to steal $" .. nearest_property_info.storage.money .. " from the " .. nearest_property_info.name .. "!")
                     end)
                     --]]
+					
+					if nearest_property_info.type == "business" then
 
-                    TriggerEvent("properties-GUI:Option", "~r~Rob", function(cb)
-                        if cb then
-                            print("player wants to rob store!")
-                            TriggerServerEvent('es_holdup:rob', nearest_property_info.name)
-                            menu.enabled = false
-                        end
-                    end)
+						TriggerEvent("properties-GUI:Option", "~r~Rob", function(cb)
+							if cb then
+								print("player wants to rob store!")
+								TriggerServerEvent('es_holdup:rob', nearest_property_info.name)
+								menu.enabled = false
+							end
+						end)
+					
+					end
 
                 end
 
