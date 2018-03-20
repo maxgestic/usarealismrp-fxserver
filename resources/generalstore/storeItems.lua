@@ -40,7 +40,8 @@ storeItems = {
         { name = "Cell Phone", price = 900, type = "misc", quantity = 1, legality = "legal", contacts = {}, conversations = {}, weight = 1}
     },
     ["Misc"] = {
-    { name = "Large Scissors", price = 40, type = "misc", quantity = 1, legality = "legal", weight = 5},
+		{ name = "First Aid Kit", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 5},
+	 { name = "Large Scissors", price = 40, type = "misc", quantity = 1, legality = "legal", weight = 5},
      { name = "Sturdy Rope", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 4},
      { name = "Bag", price = 70, type = "misc", quantity = 1, legality = "legal", weight = 3},
      { name = "The Daily Weazel", price = 2, type = "misc", quantity = 1, legality = "legal", weight = 1},

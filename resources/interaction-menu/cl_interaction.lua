@@ -305,7 +305,13 @@ function interactionMenuUse(itemName, wholeItem)
 	elseif string.find(itemName, "Repair Kit") then
 		TriggerEvent("interaction:repairVehicle")
 	-------------------
-	-- Repair Kit --
+	-- First Aid Kit --
+	-------------------
+	elseif string.find(itemName, "First Aid Kit") then
+		TriggerEvent("usa:heal", 35)
+		TriggerServerEvent("usa:removeItem", wholeItem, 1)
+	-------------------
+	-- Binoculars --
 	-------------------
 	elseif string.find(itemName, "Binoculars") then
 		TriggerEvent("binoculars:Activate")

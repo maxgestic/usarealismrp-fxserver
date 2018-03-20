@@ -483,6 +483,13 @@ AddEventHandler("usa:playScenario", function(scenario)
     TaskStartScenarioInPlace(GetPlayerPed(-1), scenario, 0, 1)
 end)
 
+RegisterNetEvent("usa:heal")
+AddEventHandler("usa:heal", function(amount)
+	local me = GetPlayerPed(-1)
+	local curr_hp = GetEntityHealth(me)
+	SetEntityHealth(me, curr_hp + amount)
+end)
+
 -- prevent falling through vehicle when eating/drink and entering vehicle:
 Citizen.CreateThread(function()
 	while true do
