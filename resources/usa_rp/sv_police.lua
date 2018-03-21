@@ -84,13 +84,13 @@ end, {
 
 
 -- /cone barrier
-TriggerEvent('es:addJobCommand', 'cone', { "police", "sheriff", "ems", "fire" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'cone', { "police", "sheriff", "ems", "fire", "tow" }, function(source, args, user)
 	TriggerClientEvent('c_setCone', source)
 end, {
 	help = "Drop a cone down"
 })
 
-TriggerEvent('es:addJobCommand', 'pickup', { "police", "sheriff", "ems", "fire" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'pickup', { "police", "sheriff", "ems", "fire", "tow" }, function(source, args, user)
 	TriggerClientEvent('c_removeCones', source)
 end, {
 	help = "Pick up cones"

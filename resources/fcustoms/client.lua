@@ -61,9 +61,9 @@ customs = {
     }},
     {title = "Engine", data = {
         {name = "EMS Upgrade, Level 1",mt = 11, mod = -1, cost = 10000},
-        {name = "EMS Upgrade, Level 2",mt = 11, mod = 0, cost = 20000},
-        {name = "EMS Upgrade, Level 3",mt = 11, mod = 1, cost = 30000},
-        {name = "EMS Upgrade, Level 4",mt = 11, mod = 2, cost = 40000},
+        {name = "EMS Upgrade, Level 2",mt = 11, mod = 0, cost = 30000},
+        {name = "EMS Upgrade, Level 3",mt = 11, mod = 1, cost = 50000},
+        {name = "EMS Upgrade, Level 4",mt = 11, mod = 2, cost = 70000},
     }},
     {title = "Brakes", data = {
         {name = "Stock Brakes",mt = 12, mod = -1, cost = 0},

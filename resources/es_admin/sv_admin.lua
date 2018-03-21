@@ -322,6 +322,9 @@ TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, user)
 		local pdCoords = {x=-447.256 , y=6000.667 , z=30.686}
 		TriggerClientEvent('es_admin:teleportUser', source, pdCoords.x, pdCoords.y, pdCoords.z)
 		return
+	elseif args[2] == "c" or args[2] == "coords" then
+		TriggerClientEvent('es_admin:teleportUser', source, tonumber(args[3]), tonumber(args[4]), tonumber(args[5]))
+		return
 	elseif args[2] == "wp" then
 		TriggerClientEvent("swayam:gotoWP", source)
 		return
