@@ -38,7 +38,7 @@ AddEventHandler("jscoreboard:gotPlayers", function(players)
 	print("just set already pressed to false")
 end)
 
-local function DrawPlayerList()
+function DrawPlayerList()
 
 	-- sort by server ID:
 	table.sort(active_player_list, function(a,b)
@@ -176,6 +176,8 @@ function ShowIds()
 	end
 end
 
+local last_press = 0
+
 Citizen.CreateThread( function()
 	RequestStreamedTextureDict( "mplobby" )
 	RequestStreamedTextureDict( "mpleaderboard" )
@@ -183,22 +185,38 @@ Citizen.CreateThread( function()
 		-- open/close
 		if not alreadyPressed then
 			if IsControlJustPressed( 0, Settings["Key"] ) and GetLastInputMethod(2) then
+				if player_list_open then
+					player_list_open = false
+					last_press = 0
+				else
+					last_press = GetGameTimer()
+					if GetGameTimer() < last_press + Settings["DisplayTime"] then
+						TriggerServerEvent("jscoreboard:getPlayers")
+					end
+				end
+				--[[
 				if not player_list_open then
-					print("opening player list!")
+					--print("opening player list!")
 					player_list_open = true
 					TriggerServerEvent("jscoreboard:getPlayers")
 					alreadyPressed = true
 				else
-					print("closing player list!")
+					--print("closing player list!")
 					player_list_open = false
 				end
+				--]]
 			end
 		else print("alreadyPressed was true") end
+		Wait(1)
 		-- drawing
-		if player_list_open then
+		if GetGameTimer() < last_press + Settings["DisplayTime"] then
 			DrawPlayerList()
 			ShowIds()
+			if not player_list_open then 
+				player_list_open = true 
+			end
+		else 
+			player_list_open = false 	
 		end
-		Wait(1)
 	end
 end)

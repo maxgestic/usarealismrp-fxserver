@@ -30,7 +30,7 @@ local blips = {
 	{ title="DMV", colour=4, id=355, x= -447.845, y = 6013.775, z = 30.716 },
 	{ title="Bubba's Tow Co.", colour=64, id=68, x = -196.027, y = 6265.625, z = 30.489 }, -- paleto
 	{ title="Bubba's Tow Co.", colour=64, id=68, x = 2363.89, y = 3126.85, z = 47.211 }, -- sandy shores
-	{ title="Black Market Dealer", colour = 59, id = 52, x= -2166.786, y = 5197.684, z = 15.880 },
+	--{ title="Black Market Dealer", colour = 59, id = 52, x= -2166.786, y = 5197.684, z = 15.880 },
     --[[
 	{ title="General Store", colour = 24 , id = 52, x=1729.59, y=6415.49, z=34.0 },
 	{ title="General Store", colour = 24 , id = 52, x=81.6779, y=-219.006, z=54.6367 },
@@ -79,13 +79,13 @@ local blips = {
 	{ title="Seaview Aircraft", colour = 60, id = 251, x=-943.103, y=-2958.14, z=13.9451 },
 	{ title="Seaview Aircraft", colour = 60, id = 251, x=2119.083, y=4790.010, z=41.139 },
 	--{ title="Meth", colour = 75, id = 499, x = 1389.28, y = 3604.6, z = 38.1 }, -- sandy shores ace liqour
-	{ title="Meth", colour = 75, id = 499, z = 42.3476, y = 4968.75,  x = 2434.47 }, -- grape seed meth lab house
+	--{ title="Meth", colour = 75, id = 499, z = 42.3476, y = 4968.75,  x = 2434.47 }, -- grape seed meth lab house
 	{ title="Boat Shop", colour = 57, id = 356, x = -250.183, y = 6632.84, z = 1.79 }, -- paleto
 	{ title="Boat Shop", colour = 57, id = 356, x = 2388.26, y = 4284.28, z = 30.6 }, -- sandy
 	{ title="Jail", colour = 4, id = 238, x=1686.668, y=2581.715, z=51.6 },
 	{ title="Watercraft Course", colour = 63, id = 38, x=2272.15, y=4321.29, z=39.8 },
 	{ title="Barber Shop", colour = 4, id = 71, x=-278.174, y=6226.93, z=51.6 },
-	{ title="Weed", colour = 2, id = 140, x = 2224.04, y = 5577.28, z = 52.7 },
+	--{ title="Weed", colour = 2, id = 140, x = 2224.04, y = 5577.28, z = 52.7 },
 	{ title="Courthouse", colour = 38, id = 475, x = 317.283, y = -1631.1505, z = 31.59 }
 }
 

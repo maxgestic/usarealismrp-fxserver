@@ -41,6 +41,7 @@ local vehicleShopItems = {
 		{make = "Imponte", model = "Dukes", price = 10500, hash = 723973206, storage_capacity = 160.0},
 		{make = "Declasse", model = "Vigero", price = 12500, hash = -825837129, storage_capacity = 160.0},
 		{make = "Albany", model = "Buccaneer", price = 12500, hash = -682211828, storage_capacity = 160.0},
+		{make = "Albany", model = "Buccaneer 2", price = 28000, hash = -1013450936, storage_capacity = 150.0},
 		{make = "Imponte", model = "Ruiner", price = 12575, hash = -227741703, storage_capacity = 160.0},
 		{make = "Imponte", model = "Nightshade", price = 15850, hash = -1943285540, storage_capacity = 160.0},
 		{make = "1969 Ford", model = "Mustang Boss 302", price = 16775, hash = -1685021548, storage_capacity = 130.0},
@@ -49,7 +50,8 @@ local vehicleShopItems = {
 		{make = "Willand", model = "Faction Custom", price = 25575, hash = -1790546981, storage_capacity = 160.0},
 		{make = "Willand", model = "Faction Custom Donk", price = 35575, hash = -2039755226, storage_capacity = 160.0},
 		{make = "Albany", model = "Virgo", price = 42000, hash = -498054846, storage_capacity = 160.0},
-		{make = "Declasse", model = "Tampa", price = 45000, hash = 972671128, storage_capacity = 160.0}
+		{make = "Declasse", model = "Tampa", price = 45000, hash = 972671128, storage_capacity = 160.0},
+		{make = "Vapid", model = "Chino Custom", price = 45000, hash = -1361687965, storage_capacity = 160.0}
 	},
 	["Trucks"] = {
 		{make = "Karin", model = "Rebel", price = 10500, hash = -2045594037, storage_capacity = 230.0},

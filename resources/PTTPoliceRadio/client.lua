@@ -35,6 +35,13 @@ local skins = {
 local weapons = {
 	"WEAPON_PISTOL",
 	"WEAPON_COMBATPISTOL",
+	"WEAPON_FLASHLIGHT",
+	"WEAPON_HAMMER",
+	"WEAPON_APPISTOL", 
+	"WEAPON_PISTOL50",
+	"WEAPON_FLARE",
+	"WEAPON_KNIFE",
+	"WEAPON_NIGHTSTICK"
 }
 
 local control = nil
