@@ -762,7 +762,7 @@ fetchAllBans()
 					local connectingPlayerId = allPlayerIdentifiers[k]
 					if bannedPlayerId == connectingPlayerId then
 						print(GetPlayerName(tonumber(source)) .. " has been banned from your server and should not be able to connect!")
-						setReason("Banned: " .. bannedPlayer.reason .. ". You may file an appeal at usarpp.enjin.com.")
+						setReason("Banned: " .. bannedPlayer.reason .. ". You may file an appeal at https://usarrp.net")
 						CancelEvent()
 						return
 					end

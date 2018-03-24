@@ -226,7 +226,7 @@ AddEventHandler("simp:baitCarDisable", function()
 			SetVehicleEngineOn(veh, false)
 			SetVehicleDoorsLocked(veh, 4)
 			SetNotificationTextEntry("STRING")
-			AddTextComponentString('~r~WARNING:~s~~n~You are currently inside of a Bait Car, You will be placed under arrest shortly.')
+			AddTextComponentString("~r~WARNING:~s~~n~This is the Blaine County Sheriff's Office. You are under arrest.")
 			DrawNotification(true, true)
 	end
 end)
@@ -242,7 +242,7 @@ AddEventHandler("simp:baitCarunlock", function()
 			SetVehicleDoorsLocked(GetVehiclePedIsIn(GetPlayerPed(-1)), 2)
 			SetVehicleDoorsLocked(GetVehiclePedIsIn(GetPlayerPed(-1)), 1)
 			SetNotificationTextEntry("STRING")
-			AddTextComponentString('~y~Info:~s~~n~Step out of the Vehicle and follow the instructions you are given.')
+			AddTextComponentString('~y~Info:~s~~n~Step out of the vehicle and follow the instructions you are given.')
 			DrawNotification(true, true)
 	end
 end)
@@ -265,23 +265,137 @@ Citizen.CreateThread(function()
 	end
 end)
 
---------------------------------------------
+------------------end baitcar--------------------------
 
+---------------------------------------------------------------------------------------
+-- Gun Shot Resdiue(GSR) & Shots fired notifications (based on area + random chance) --
+---------------------------------------------------------------------------------------
 local me = nil
 local last_shot_time = 0
 local duration = 25 * 60 * 1000 -- 25 minutes to ms
+local sending_msg = false
+local already_sent_msg = false
+local jacked = false
 
 -- Gun Shot Resdiue(GSR) --
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
 		me = GetPlayerPed(-1)
-		if IsPedShooting(me) then 
-			--print("ped shooting!")
-			last_shot_time = GetGameTimer()
+		---------------------------------
+		-- shooting notification / gsr --
+		---------------------------------
+		if IsPedShooting(me) then		
+			last_shot_time = GetGameTimer()		
+			--print("IsInPopulatedArea(): " .. tostring(IsInPopulatedArea()))		
+			if IsInPopulatedArea() then		
+				if math.random(100) < 35 then
+					if not sending_msg then
+						sending_msg = true
+						send911Message("(10-32) Report of shots fired.")
+						sending_msg = false
+					end
+				end			
+			end		
+		end
+		------------------------------
+		-- car jacking notification --
+		------------------------------
+		if IsPedJacking(me) then 
+			if not already_sent_msg then
+				if IsInPopulatedArea() then
+					if math.random(100) < 90 then
+						already_sent_msg = true
+						jacked = true
+					end 		
+				end
+			end
+		else 
+			if jacked then 
+				local handle = GetVehiclePedIsIn(me, true)
+				if handle ~= 0 then
+					--print("veh handle: " .. handle)
+					local display_name = GetDisplayNameFromVehicleModel(GetEntityModel(handle))
+					--print("jacked car display name: " .. display_name)
+					if display_name == "SADLER" then 
+						display_name = "Ford 350 Superduty"
+					elseif display_name == "FUGITIVE" then 
+						display_name = "Maserati Quattroporte"
+					elseif display_name == "PENUMBRA" then 
+						display_name = "Nissan 370z"
+					end
+					local r,g,b = GetVehicleColor(handle)
+					print("r: " .. r)
+					print("g: " .. g)
+					print("b: " .. b)
+					send911Message("(10-28F) Reported car jacking of a " .. display_name)
+				end
+				jacked = false
+			end
+			already_sent_msg = false
 		end
 	end
 end)
+
+-- todo: somehow convet RGB value of vehicle color to human readable name for 911 report above
+-- 15, 15, 15 or anything less = black
+-- 240, 240, 240 or greater = white
+-- 63, 66, 40 = dark green
+-- 28, 30, 33 = gray
+-- 74, 10, 10 = red
+
+function IsInPopulatedArea()
+	local AREAS = {
+		{x = 1491.839, y = 3112.53, z = 40.656, range = 330}, -- sandy shores airport area // 75 - 150 probably range
+		{x = 151.62, y = 1038.808, z = 32.735, range = 1400}, -- los santos // 600 - 900 ish?
+		{x = -3161.96, y = 790.088, z = 6.824, range = 650}, -- west coast, NW of los santos // 300 - 400 ish?
+		{x = 2356.744, y = 4776.75, z = 34.613, range = 700}, -- grape seed // 350 - 450 ish?
+		{x = 145.209, y = 6304.922, z = 40.277, range = 850}, -- paleto bay // 500 - 600
+		{x = -1070.5, y = 5323.5, z = 46.339, range = 720}, -- S of Paleto Bay // 350 - 500 ish
+		{x = -2550.21, y = 2321.747, z = 33.059, range = 450}, -- west of map, gas station // 100 - 200
+		{x = 1927.374, y = 3765.77, z = 32.309, range = 350}, -- sandy shores
+		{x = 895.649, y = 2697.049, z = 41.985, range = 200}, -- harmony
+		{x = -1093.773, y = -2970.00, z = 13.944, range = 300}, -- LS airport
+		{x = 1070.506, y = -3111.021, z = 5.9, range = 450} -- LS ship cargo area
+	}
+	local me = GetPlayerPed(-1)
+	local my_coords = GetEntityCoords(me, true)
+	for k = 1, #AREAS do
+		if Vdist(my_coords.x, my_coords.y, my_coords.z, AREAS[k].x, AREAS[k].y, AREAS[k].z) <= AREAS[k].range then 
+			print("within range of populated area!")
+			return true
+		end
+	end
+	return false
+end
+
+function send911Message(msg) 
+						-- send 911 message --
+						-- get location of sender and send to server function:
+						local data = {}
+						local playerPos = GetEntityCoords( GetPlayerPed( -1 ), true )
+						local streetA, streetB = Citizen.InvokeNative( 0x2EB41072B4C1E4C0, playerPos.x, playerPos.y, playerPos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt() )
+						local street = {}
+						if not ((streetA == lastStreetA or streetA == lastStreetB) and (streetB == lastStreetA or streetB == lastStreetB)) then
+							-- Ignores the switcharoo while doing circles on intersections
+							lastStreetA = streetA
+							lastStreetB = streetB
+						end
+						if lastStreetA ~= 0 then
+							table.insert( street, GetStreetNameFromHashKey( lastStreetA ) )
+						end
+						if lastStreetB ~= 0 then
+							table.insert( street, GetStreetNameFromHashKey( lastStreetB ) )
+						end
+						data.location = table.concat( street, " & " )
+						data.pos = {
+							x = playerPos.x,
+							y = playerPos.y,
+							z = playerPos.z
+						}
+						data.message = msg
+						TriggerServerEvent("phone:send911Message", data, true, true)
+end
 
 RegisterNetEvent("police:performGSR")
 AddEventHandler("police:performGSR", function(source)
@@ -289,13 +403,6 @@ AddEventHandler("police:performGSR", function(source)
 	local id, name, dist = GetClosestPlayerInfo()
 	--print("closest: " .. name .. ", id: " .. id)
 	TriggerServerEvent("police:getGSRResult", id, source)
-	
-	--if GetGameTimer() - last_shot_time > duration then
-		--print("passed duration!")
-	--else 
-		--print("player shot weapon recently! gsr detected!")
-		
-	--end
 end)
 
 RegisterNetEvent("police:testForGSR")

@@ -89,6 +89,21 @@ function jailPlayer(data, officerName)
 		user.setActiveCharacterData("criminalHistory", playerCriminalHistory)
 		-- give inmate clothing --
 		TriggerClientEvent("jail:changeClothes", targetPlayer, data.gender)
+		-- remove any active warrants --
+		TriggerEvent("warrants:removeAnyActiveWarrants", inmate_name)
+		-- suspend license if necessary --
+		local suspensions = nil
+		if GetDLSuspensionDays(reason) then
+			TriggerEvent("dmv:setLicenseStatus", "suspended", targetPlayer, GetDLSuspensionDays(reason))
+			TriggerClientEvent("usa:notify", targetPlayer, "Your driver's license has been suspended for " .. GetDLSuspensionDays(reason) .. " day(s)")
+			suspensions = "\nDL suspended for " .. GetDLSuspensionDays(reason) .. " day(s)"
+		end
+		-- suspend gun permit if necessary --
+		if GetFPSuspensionDays(reason) then 
+			TriggerEvent("police:setFirearmPermitStatus", "suspended", targetPlayer, GetFPSuspensionDays(reason))
+			TriggerClientEvent("usa:notify", targetPlayer, "Your firearm permit has been suspended for " .. GetFPSuspensionDays(reason) .. " day(s)")
+			suspensions = suspensions .. "\nFP suspended for " .. GetFPSuspensionDays(reason) .. " day(s)"
+		end
 		-- send to discord #jail-logs --
 		local url = 'https://discordapp.com/api/webhooks/343037167821389825/yDdmSBi-ODYPcAbTzb0DaPjWPnVOhh232N78lwrQvlhbrvN8mV5TBfNOmnxwMZfQnttl'
 		PerformHttpRequest(url, function(err, text, headers)
@@ -98,7 +113,7 @@ function jailPlayer(data, officerName)
 		end, "POST", json.encode({
 			embeds = {
 				{
-					description = "**Name:** " .. inmate_name .. " \n**Sentence:** " .. sentence .. " months" .. " \n**Charges:** " ..reason.. "\n**Fine:** $" .. fine .. "\n**Arresting Officer:** " ..officerName.."\n**Timestamp:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
+					description = "**Name:** " .. inmate_name .. " \n**Sentence:** " .. sentence .. " months" .. " \n**Charges:** " ..reason.. "\n**Fine:** $" .. fine .. "\n**Suspensions:** " .. suspensions .. "\n**Arresting Officer:** " ..officerName.."\n**Timestamp:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
 					color = 263172,
 					author = {
 						name = "Blaine County Correctional Facility"
@@ -106,18 +121,6 @@ function jailPlayer(data, officerName)
 				}
 			}
 		}), { ["Content-Type"] = 'application/json' })
-		-- remove any active warrants --
-		TriggerEvent("warrants:removeAnyActiveWarrants", inmate_name)
-		-- suspend license if necessary --
-		if GetDLSuspensionDays(reason) then
-			TriggerEvent("dmv:setLicenseStatus", "suspended", targetPlayer, GetDLSuspensionDays(reason))
-			TriggerClientEvent("usa:notify", targetPlayer, "Your driver's license has been suspended for " .. GetDLSuspensionDays(reason) .. " day(s)")
-		end
-		-- suspend gun permit if necessary --
-		if GetFPSuspensionDays(reason) then 
-			TriggerEvent("police:setFirearmPermitStatus", "suspended", targetPlayer, GetFPSuspensionDays(reason))
-			TriggerClientEvent("usa:notify", targetPlayer, "Your firearm permit has been suspended for " .. GetFPSuspensionDays(reason) .. " day(s)")
-		end
 	end)
 end
 
