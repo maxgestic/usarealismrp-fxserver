@@ -229,7 +229,7 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 		if actionName == "use" then
 			interactionMenuUse(itemName, wholeItem)
 		elseif actionName == "drop" then
-			if not string.find(itemName, "Driver") then
+			if not string.find(itemName, "Driver") and not string.find(itemName, "Firearm") then
 				if not IsPedDeadOrDying(GetPlayerPed(-1), 1) and not IsPedCuffed(GetPlayerPed(-1)) then
 					TriggerEvent("interaction:notify", "Dropping item: " .. removeQuantityFromItemName(itemName))
 					TriggerServerEvent("interaction:dropItem", itemName)
@@ -237,7 +237,7 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 					print("player who was cuffed or dead was trying to drop an item!")
 				end
 			else
-				print("can't drop DL!!")
+				print("can't drop DL or firearm permit!!")
 			end
 		elseif string.find(actionName, "give") then
 			if not string.find(itemName, "Driver") then

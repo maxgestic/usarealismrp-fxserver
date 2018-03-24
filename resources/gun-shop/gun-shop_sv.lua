@@ -42,8 +42,13 @@ AddEventHandler("gunShop:checkPermit", function()
         for i = 1, #licenses do
             local item = licenses[i]
             if item.name == "Firearm Permit" then
-                TriggerClientEvent("gunShop:showGunShopMenu", userSource)
-                return
+				if item.status == "suspended" then 
+					TriggerClientEvent("usa:notify", userSource, "Your firearm permit is suspended!")
+					return
+				else 
+					TriggerClientEvent("gunShop:showGunShopMenu", userSource)
+					return
+				end
             end
         end
         TriggerClientEvent("gunShop:showNoPermitMenu", userSource)

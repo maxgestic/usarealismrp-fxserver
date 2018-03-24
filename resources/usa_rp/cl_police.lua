@@ -264,3 +264,83 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
+
+--------------------------------------------
+
+local me = nil
+local last_shot_time = 0
+local duration = 25 * 60 * 1000 -- 25 minutes to ms
+
+-- Gun Shot Resdiue(GSR) --
+Citizen.CreateThread(function()
+	while true do
+		Wait(0)
+		me = GetPlayerPed(-1)
+		if IsPedShooting(me) then 
+			--print("ped shooting!")
+			last_shot_time = GetGameTimer()
+		end
+	end
+end)
+
+RegisterNetEvent("police:performGSR")
+AddEventHandler("police:performGSR", function(source)
+	--print("performing GSR test")
+	local id, name, dist = GetClosestPlayerInfo()
+	--print("closest: " .. name .. ", id: " .. id)
+	TriggerServerEvent("police:getGSRResult", id, source)
+	
+	--if GetGameTimer() - last_shot_time > duration then
+		--print("passed duration!")
+	--else 
+		--print("player shot weapon recently! gsr detected!")
+		
+	--end
+end)
+
+RegisterNetEvent("police:testForGSR")
+AddEventHandler("police:testForGSR", function(to_notify_id)
+	if GetGameTimer() - last_shot_time > duration then
+		--print("passed duration! notify id: " .. to_notify_id)
+		TriggerServerEvent("police:notifyGSR", to_notify_id, false)
+	else 
+		--print("player shot weapon recently! gsr detected! notify id: " .. to_notify_id)
+		TriggerServerEvent("police:notifyGSR", to_notify_id, true)
+	end
+end)
+
+function GetClosestPlayerInfo()
+	local closestDistance = 0
+	local closestPlayerServerId = 0
+	local closestName = ""
+	for x = 0, 64 do
+		if NetworkIsPlayerActive(x) then
+			targetPed = GetPlayerPed(x)
+			targetPedCoords = GetEntityCoords(targetPed, false)
+			playerPedCoords = GetEntityCoords(GetPlayerPed(-1), false)
+			distanceToTargetPed = Vdist(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, targetPedCoords.x, targetPedCoords.y, targetPedCoords.z)
+			if targetPed ~= GetPlayerPed(-1) then
+				if distanceToTargetPed < 10 then
+					if closestDistance == 0 then
+						closestDistance = distanceToTargetPed
+						closestPlayerServerId = GetPlayerServerId(x)
+						closestName = GetPlayerName(x)
+						hitHandlePed = GetPlayerPed(x)
+						--rayHandle = CastRayPointToPoint(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, targetPedCoords.x, targetPedCoords.y, targetPedCoords.z, 12, GetPlayerPed(-1), 0)
+						--a, b, c, d, hitHandlePed = GetRaycastResult(rayHandle)
+					else
+						if distanceToTargetPed <= closestDistance then
+							closestDistance = distanceToTargetPed
+							closestPlayerServerId = GetPlayerServerId(x)
+							closestName = GetPlayerName(x)
+							hitHandlePed = GetPlayerPed(x)
+							--rayHandle = CastRayPointToPoint(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, targetPedCoords.x, targetPedCoords.y, targetPedCoords.z, 12, GetPlayerPed(-1), 0)
+							--a, b, c, d, hitHandlePed = GetRaycastResult(rayHandle)
+						end
+					end
+				end
+			end
+		end
+	end
+	return closestPlayerServerId, closestName, closestDistance
+end

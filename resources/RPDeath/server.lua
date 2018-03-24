@@ -28,7 +28,7 @@ AddEventHandler('RPD:userDead', function(userName, street)
 					if k ~= source then
 						local user_job = user.getActiveCharacterData("job")
 						if user_job == "cop" or user_job == "sheriff" or user_job == "highwaypatrol" or user_job == "ems" or user_job == "fire" then
-							TriggerClientEvent("chatMessage", k, "911", {255, 0, 0}, "Report of an injured person(s) (" .. street .. ").")
+							TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "Report of an injured person(s) (" .. street .. ").")
 						end
 					end
 				end)

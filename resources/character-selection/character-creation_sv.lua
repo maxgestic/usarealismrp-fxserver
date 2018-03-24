@@ -145,8 +145,9 @@ AddEventHandler("character:loadCharacter", function(activeSlot)
 					TriggerClientEvent('chat:addSuggestion', userSource, '/' .. k, v.help, v.params)
 				end
 			end
-			-- check dmv license status
-			TriggerEvent("dmv:checkSuspension", userSource)
+			-- check dmv / firearm permit license status
+			TriggerEvent("police:checkSuspension", userSource)
+			
 		end
 	end)
 end)

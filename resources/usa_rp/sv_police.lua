@@ -239,7 +239,7 @@ TriggerEvent('es:addJobCommand', 'store', { "police", "sheriff", "ems" }, functi
 		TriggerClientEvent("usa:notify", source, "Invalid format!")
 	end
 end, {
-	help = "store",
+	help = "store a weapon",
 	params = {
 		{ name = "weapon", help = "ar, shotgun" }
 	}
@@ -253,8 +253,107 @@ TriggerEvent('es:addJobCommand', 'grab', { "police", "sheriff", "ems" }, functio
 		TriggerClientEvent("usa:notify", source, "Invalid format!")
 	end
 end, {
-	help = "grab",
+	help = "grab a weapon",
 	params = {
 		{ name = "weapon", help = "ar, shotgun" }
 	}
 })
+
+-- panic button --
+TriggerEvent('es:addJobCommand', 'p', { "police", "sheriff", "ems" }, function(source, args, user)
+	TriggerEvent('es:getPlayerFromId', source, function(user)
+		TriggerEvent("es:getPlayers", function(pl)
+			for k, v in pairs(pl) do	
+				local user_job = v.getActiveCharacterData("job")
+				if user_job == "cop" or user_job == "sheriff" or user_job == "highwaypatrol" or user_job == "ems" or user_job == "fire" then
+					for i = 1, 3 do
+						TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "(10-99) Panic button pressed by " .. user.getActiveCharacterData("fullName"))
+						local params = {-1, "Event_Message_Purple", "GTAO_FM_Events_Soundset", 1}
+						TriggerClientEvent("usa:playSound", k, params)
+					end
+				end		
+			end
+		end)
+	end)
+end, { help = "Press your panic button. Only for use in extreme emergencies."})
+
+-- GSR test --
+TriggerEvent('es:addJobCommand', 'gsr', { "police", "sheriff" }, function(source, args, user)
+	TriggerClientEvent("police:performGSR", source, source)
+end, { help = "Perform a gun shot residue test on the nearest person."})
+
+RegisterServerEvent("police:getGSRResult")
+AddEventHandler("police:getGSRResult", function(id, from_id)
+	print("GSR Testing ID#: " .. id .. ", from id: " .. from_id)
+	TriggerClientEvent("police:testForGSR", id, from_id)
+end)
+
+RegisterServerEvent("police:notifyGSR")
+AddEventHandler("police:notifyGSR", function(id, passed)
+	local message = ""
+	if passed then
+		message = "Gun shot residue ~r~detected~w~!"
+		-- todo: play sound
+	else 
+		message = "No gun shot residue detected."
+		-- todo: play sound
+	end
+	TriggerClientEvent("usa:notify", id, message)
+end)
+
+-- suspend gun license / firearm permit --
+RegisterServerEvent("police:setFirearmPermitStatus")
+AddEventHandler("police:setFirearmPermitStatus", function(status, id, days)
+	TriggerEvent('es:getPlayerFromId', id, function(user)
+		local licenses = user.getActiveCharacterData("licenses")
+		for i = 1, #licenses do
+			local license =  licenses[i]
+			if  license.name == "Firearm Permit" then
+				licenses[i].status = status
+				if status == "suspended" then 
+					licenses[i].suspension_start = os.time()
+					licenses[i].suspension_days = days
+					licenses[i].suspension_start_date = os.date('%m-%d-%Y %H:%M:%S', os.time())
+				end
+				print("gun permit set to: " .. status .. " for " .. days)
+				user.setActiveCharacterData("licenses", licenses)
+				return
+			end
+		end
+		print("person had no firearm permit!")
+	end)
+end)
+
+-- check suspension dates -- 
+RegisterServerEvent("police:checkSuspension")
+AddEventHandler("police:checkSuspension", function(id)
+	print("checking player license status!")
+	local userSource = id
+	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+		local licenses = user.getActiveCharacterData("licenses")
+		for i = 1, #licenses do
+			if licenses then
+				local license =  licenses[i]
+				if  license.name == "Driver's License" or license.name == "Firearm Permit"  then
+					if license.status == "suspended" then 
+						--licenses[i].suspension_start = os.time()
+						--licenses[i].suspension_days = days
+						local reference = licenses[i].suspension_start
+						print("reference: " .. reference)
+						print("suspended days: " .. licenses[i].suspension_days)
+						local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
+						local wholedays = math.floor(daysfrom)
+						print("wholedays: " .. wholedays) -- today it prints "1"
+						if wholedays > licenses[i].suspension_days then
+							licenses[i].status = "valid"
+							user.setActiveCharacterData("licenses", licenses)
+							print("suspension period was over! setting to valid!")
+						end
+					end
+					return
+				end
+			end
+		end
+		print("person had no DL or FP!")
+	end)
+end)

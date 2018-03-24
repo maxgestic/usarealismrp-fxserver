@@ -77,7 +77,7 @@ function jailPlayer(data, officerName)
 		end
 		-- notify of fine:
 		TriggerClientEvent("usa:notify", targetPlayer, "You have been fined: $" .. fine)
-		-- add to criminal history
+		-- add to criminal history --
 		local playerCriminalHistory = user.getActiveCharacterData("criminalHistory")
 		local record = {
 			sentence = sentence,
@@ -87,9 +87,9 @@ function jailPlayer(data, officerName)
 		}
 		table.insert(playerCriminalHistory, record)
 		user.setActiveCharacterData("criminalHistory", playerCriminalHistory)
-		-- give inmate clothing
+		-- give inmate clothing --
 		TriggerClientEvent("jail:changeClothes", targetPlayer, data.gender)
-		-- send to discord #jail-logs
+		-- send to discord #jail-logs --
 		local url = 'https://discordapp.com/api/webhooks/343037167821389825/yDdmSBi-ODYPcAbTzb0DaPjWPnVOhh232N78lwrQvlhbrvN8mV5TBfNOmnxwMZfQnttl'
 		PerformHttpRequest(url, function(err, text, headers)
 			if text then
@@ -106,27 +106,50 @@ function jailPlayer(data, officerName)
 				}
 			}
 		}), { ["Content-Type"] = 'application/json' })
-		-- remove any active warrants:
+		-- remove any active warrants --
 		TriggerEvent("warrants:removeAnyActiveWarrants", inmate_name)
+		-- suspend license if necessary --
 		if GetDLSuspensionDays(reason) then
 			TriggerEvent("dmv:setLicenseStatus", "suspended", targetPlayer, GetDLSuspensionDays(reason))
 			TriggerClientEvent("usa:notify", targetPlayer, "Your driver's license has been suspended for " .. GetDLSuspensionDays(reason) .. " day(s)")
 		end
+		-- suspend gun permit if necessary --
+		if GetFPSuspensionDays(reason) then 
+			TriggerEvent("police:setFirearmPermitStatus", "suspended", targetPlayer, GetFPSuspensionDays(reason))
+			TriggerClientEvent("usa:notify", targetPlayer, "Your firearm permit has been suspended for " .. GetFPSuspensionDays(reason) .. " day(s)")
+		end
 	end)
 end
 
-function GetDLSuspensionDays(charges)
+function GetFPSuspensionDays(charges) -- firearm permit
 	local words = {
-		["2800.1"] = 7,
-		["2800.2"] = 7,
-		["2800.3"] = 14,
-		["12500"] = 7,
-		["16028"] = 7,
-		["20001"] = 14,
-		["20002"] = 7,
+		["187"] = 12,
+        ["245"] = 6,
+        ["246"] = 4,
+        ["417"] = 3,
+        ["16590"] = 6,
+        ["25850"] = 3
+	}
+	for code, days in pairs(words) do 
+		if string.find(charges, code) then 
+			return days
+		end
+	end
+	return nil
+end
+
+function GetDLSuspensionDays(charges) -- driver license
+	local words = {
+		["2800.1"] = 6,
+		["2800.2"] = 6,
+		["2800.3"] = 10,
+		["12500"] = 6,
+		["16028"] = 6,
+		["20001"] = 10,
+		["20002"] = 6,
 		["21453"] = 3,
-		["23103"] = 7,
-		["23153"] = 10
+		["23103"] = 6,
+		["23153"] = 8
 	}
 	for code, days in pairs(words) do 
 		if string.find(charges, code) then 

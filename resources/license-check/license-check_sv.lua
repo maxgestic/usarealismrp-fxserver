@@ -71,12 +71,19 @@ AddEventHandler("license:searchForLicense", function(source, playerId)
 							TriggerClientEvent("chatMessage", source, "STATUS", {169, 44, 98}, license.status)
 						else 
 							TriggerClientEvent("chatMessage", source, "STATUS", {169, 44, 98}, "^1" .. license.status)
-							TriggerClientEvent("chatMessage", source, "DAYS", {169, 44, 98}, "^1" .. license.suspension_days)
-							TriggerClientEvent("chatMessage", source, "START DAY", {169, 44, 98}, "^1" .. license.suspension_start_date)
+							TriggerClientEvent("chatMessage", source, "DAYS", {169, 44, 98}, license.suspension_days)
+							TriggerClientEvent("chatMessage", source, "START DAY", {169, 44, 98}, license.suspension_start_date)
 						end
 						hasDL = true
 					elseif licenses[i].name == "Firearm Permit" then
-						TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^2Firearm Permit^0.")
+						TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^3Firearm Permit:")
+						if licenses[i].status == "suspended" then
+							TriggerClientEvent("chatMessage", source, "STATUS", {169, 44, 98}, "^1" .. licenses[i].status)
+							TriggerClientEvent("chatMessage", source, "DAYS", {169, 44, 98}, licenses[i].suspension_days)
+							TriggerClientEvent("chatMessage", source, "START DAY", {169, 44, 98}, licenses[i].suspension_start_date)
+						else 
+							TriggerClientEvent("chatMessage", source, "STATUS", {169, 44, 98}, "^0" .. licenses[i].status)
+						end
 						hasFirearmsPermit = true
 					end
 			end
