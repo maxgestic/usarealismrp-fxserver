@@ -19,7 +19,7 @@ AddEventHandler('paycheck:welfare', function()
 		elseif job == "taxi" then
 			paycheckAmount = 650
 		elseif job == "tow" then
-			paycheckAmount = 250
+			paycheckAmount = 650
 		else
 			paycheckAmount = 250 -- welfare amount (no job)
 		end
