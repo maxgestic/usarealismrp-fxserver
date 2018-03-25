@@ -38,9 +38,11 @@ function NotificationMessage(message)
 	DrawNotification(0,1)
 end
 
+local r,g,b
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(1)
+		-- toggle voip range with hotkey --
 		if GetLastInputMethod(2) then -- check for keyboard use only
 			if IsControlJustPressed(1,voip_toggle_key) then
 				print("distanceName is: " .. distanceName)
@@ -53,5 +55,57 @@ Citizen.CreateThread(function()
 				end
 			end
 		end
+		-- voip range HUD display color --
+		for id = 0, 64 do 
+			if NetworkIsPlayerActive(id) and GetPlayerPed(-1) == GetPlayerPed(id) then
+				if NetworkIsPlayerTalking(id) then
+					r = 57
+					g = 176
+					b = 132
+				else 
+					r = 224
+					g = 227
+					b = 218
+				end
+				-- draw voip range HUD display --
+				if IsPedInAnyVehicle(GetPlayerPed(-1), false) then
+					drawTxt(0.66, 1.665, 1.0, 1.5, 0.4, "R: " .. GetDisplayName(distanceName), r, g, b, 255) -- voip range
+				else
+					drawTxt(0.66, 1.69, 1.0, 1.5, 0.4, "R: " .. GetDisplayName(distanceName), r, g, b, 255) -- voip range
+				end
+			end
+		end
+		-- draw voip range HUD display --
+		if IsPedInAnyVehicle(GetPlayerPed(-1), false) then
+			drawTxt(0.66, 1.665, 1.0, 1.5, 0.4, "R: " .. GetDisplayName(distanceName), r, g, b, 255) -- voip range
+		else
+			drawTxt(0.66, 1.69, 1.0, 1.5, 0.4, "R: " .. GetDisplayName(distanceName), r, g, b, 255) -- voip range
+		end
 	end
 end)
+
+function GetDisplayName(name)
+	local names = {
+		["default"] = "Normal",
+		["yell"] = "Yell",
+		["whisper"] = "Whisper"
+	}
+	return names[name]
+end
+
+-------------------
+-- HUD FUNCTIONS --
+-------------------
+function drawTxt(x,y ,width,height,scale, text, r,g,b,a)
+	SetTextFont(6)
+	SetTextProportional(0)
+	SetTextScale(scale, scale)
+	SetTextColour(r, g, b, a)
+	SetTextDropShadow(0, 0, 0, 0,255)
+	SetTextEdge(1, 0, 0, 0, 255)
+	SetTextDropShadow()
+	SetTextOutline()
+	SetTextEntry("STRING")
+	AddTextComponentString(text)
+	DrawText(x - width/2, y - height/2 + 0.005)
+end

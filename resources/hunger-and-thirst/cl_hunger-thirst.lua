@@ -10,7 +10,7 @@ local settings = {
 		["hunger"] = {text = "Full", x = 0.698, y = 1.62, r = 9, g = 179, b = 9, a = 255},
 		["thirst"] = {text = "Thirsty", x = 0.698, y = 1.645, r = 255, g = 128, b = 0, a = 255},
 		-- ["clock"] = {text = "0:00", x = 0.75, y = 1.645, r = 255, g = 255, b = 255, a = 255}
-		["clock"] = {text = "0:00", x = 0.698, y = 1.595, r = 255, g = 255, b = 255, a = 255}
+		["clock"] = {text = "0:00", x = 0.698, y = 1.595, r = 224, g = 227, b = 218, a = 255}
 	},
 	thirst_global_mult = 0.000245,
 	hunger_global_mult = 0.000185,
@@ -255,9 +255,9 @@ function drawHud(person)
 	-- Draw It --
 	------------
 	if IsPedInAnyVehicle(GetPlayerPed(-1), false) then
-		drawTxt(0.66, 1.69, 1.0, 1.5, 0.4, settings.hud["clock"].text, 255, 255, 255, 255)
+		drawTxt(0.66, 1.69, 1.0, 1.5, 0.4, settings.hud["clock"].text, settings.hud["clock"].r, settings.hud["clock"].g, settings.hud["clock"].b, 255) 
 	else
-		drawTxt(0.66, 1.714, 1.0, 1.5, 0.4, settings.hud["clock"].text, 255, 255, 255, 255)
+		drawTxt(0.66, 1.714, 1.0, 1.5, 0.4, settings.hud["clock"].text, settings.hud["clock"].r, settings.hud["clock"].g, settings.hud["clock"].b, 255)
 	end
 
 	-- Background

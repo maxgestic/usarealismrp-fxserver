@@ -285,11 +285,12 @@ Citizen.CreateThread(function()
 		---------------------------------
 		-- shooting notification / gsr --
 		---------------------------------
-		if IsPedShooting(me) then		
+		--print("GetSelectedPedWeapon(me): " .. GetSelectedPedWeapon(me))
+		if IsPedShooting(me) and GetSelectedPedWeapon(me) ~= 101631238 then		
 			last_shot_time = GetGameTimer()		
 			--print("IsInPopulatedArea(): " .. tostring(IsInPopulatedArea()))		
 			if IsInPopulatedArea() then		
-				if math.random(100) < 35 then
+				if math.random(100) < 32 then
 					if not sending_msg then
 						sending_msg = true
 						send911Message("(10-32) Report of shots fired.")

@@ -39,7 +39,7 @@ Citizen.CreateThread(function ()
 					direction .. " | " ..
 					tostring(GetStreetNameFromHashKey(var1)) .. " | " ..
 					current_zone
-				, 255, 255, 255, 255)
+				, 224, 227, 218, 255)
 			end
 		end
 	end
