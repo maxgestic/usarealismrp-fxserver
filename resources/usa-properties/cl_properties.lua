@@ -283,6 +283,15 @@ Citizen.CreateThread(function()
 							end
 						end)
 						
+						TriggerEvent("properties-GUI:Option", "Spawn Here", function(cb)
+							if cb then
+								print("setting spawn to: " .. nearest_property_info.name)
+								local spawn = { x = nearest_property_info.x, y = nearest_property_info.y, z = nearest_property_info.z }
+								TriggerServerEvent("character:setSpawnPoint", spawn)
+								TriggerEvent("usa:notify", "Spawn point set!")
+							end
+						end)
+						
 					else 
 					
 						if menu.page == "storage" then

@@ -48,6 +48,7 @@ AddEventHandler("character:new", function(data)
 		emsRank = 0,
 		securityRank = 0,
 		ingameTime = 0,
+		spawn = nil,
 		created = {
 			date = os.date('%m-%d-%Y %H:%M:%S', os.time()),
 			time = os.time()
@@ -150,6 +151,14 @@ AddEventHandler("character:loadCharacter", function(activeSlot)
 			
 		end
 	end)
+end)
+
+RegisterServerEvent("character:setSpawnPoint")
+AddEventHandler("character:setSpawnPoint", function(spawn)
+	print("inside character:setSpawnPoint!")
+	local user_source = source
+	local player = exports["essentialmode"]:getPlayerFromId(user_source)
+	player.setActiveCharacterData("spawn", spawn)
 end)
 
 function getWholeDaysFromTime(time)

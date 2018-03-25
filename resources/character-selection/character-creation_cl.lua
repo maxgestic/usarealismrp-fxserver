@@ -124,6 +124,17 @@ RegisterNUICallback('new-character-submit', function(data, cb)
 end)
 
 RegisterNUICallback('select-character', function(data, cb)
+	if data.character.spawn then 
+		spawn_coords_closed_menu = data.character.spawn
+	else
+		print("data.character.spawn did not exist")
+		spawn_coords_closed_menu = {
+			x = 177.596,
+			y = 6636.183,
+			z = 31.638,
+			angle = 168.2
+		}
+	end
 	toggleMenu(false)
 	if data.character.firstName then print("selecting char: " .. data.character.firstName) end
 	selectedCharacter = data.character -- set selected character on lua side from selected js char card
