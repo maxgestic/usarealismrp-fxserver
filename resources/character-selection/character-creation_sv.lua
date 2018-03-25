@@ -158,7 +158,14 @@ AddEventHandler("character:setSpawnPoint", function(spawn)
 	print("inside character:setSpawnPoint!")
 	local user_source = source
 	local player = exports["essentialmode"]:getPlayerFromId(user_source)
-	player.setActiveCharacterData("spawn", spawn)
+	local player_spawn = player.getActiveCharacterData("spawn")
+	if not player_spawn then
+		player.setActiveCharacterData("spawn", spawn)
+		TriggerClientEvent("usa:notify", user_source, "Spawn set!")
+	else 
+		player.setActiveCharacterData("spawn", nil)
+		TriggerClientEvent("usa:notify", user_source, "Spawn cleared!")
+	end
 end)
 
 function getWholeDaysFromTime(time)
