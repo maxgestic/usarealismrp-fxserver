@@ -115,7 +115,7 @@ end)
 
 ------------------
 -- Draw Markers --
-------------------
+--[[----------------
 Citizen.CreateThread(function()
   while true do
     for job, places in pairs(JOBS) do
@@ -124,6 +124,7 @@ Citizen.CreateThread(function()
     Wait(0)
   end
 end)
+--]]
 
 -------------------
 -- CUSTOM EVENTS --

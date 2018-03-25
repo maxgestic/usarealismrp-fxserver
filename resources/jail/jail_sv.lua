@@ -106,6 +106,7 @@ function jailPlayer(data, officerName)
 		end
 		-- send to discord #jail-logs --
 		local url = 'https://discordapp.com/api/webhooks/343037167821389825/yDdmSBi-ODYPcAbTzb0DaPjWPnVOhh232N78lwrQvlhbrvN8mV5TBfNOmnxwMZfQnttl'
+		if not suspensions then suspensions = "None" end
 		PerformHttpRequest(url, function(err, text, headers)
 			if text then
 				print(text)

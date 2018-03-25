@@ -26,7 +26,7 @@ TriggerEvent('es:addJobCommand', 'admit', { "ems", "fire", "police", "sheriff" }
 	end, "POST", json.encode({
 		embeds = {
 			{
-				description = "**Name:** " .. target_player.getActiveCharacterData("fullName") .. " \n**Time:** " .. targetPlayerAdmissionTime .. " hour(s)" .. " \n**Reason:** " .. reasonForAdmission .. "\n**Responder:** " .. GetPlayerName(userSource) .."\n**Timestamp:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
+				description = "**Name:** " .. target_player.getActiveCharacterData("fullName") .. " \n**Time:** " .. targetPlayerAdmissionTime .. " hour(s)" .. " \n**Reason:** " .. reasonForAdmission .. "\n**Responder:** " .. user.getActiveCharacterData("fullName") .."\n**Timestamp:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
 				color = 263172,
 				author = {
 					name = "Pillbox Medical"
