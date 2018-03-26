@@ -160,7 +160,8 @@ RegisterServerEvent("phone:sendTweet")
 AddEventHandler("phone:sendTweet", function(data)
 	TriggerEvent("es:getPlayerFromId", source, function(user)
 		if user then
-			local name = user.getActiveCharacterData("fullName")
+			local name = "@" .. user.getActiveCharacterData("firstName") .. "_" .. user.getActiveCharacterData("lastName")
+			name = string.lower(name)
 			TriggerClientEvent('chatMessage', -1, "[TWEET] - " .. name, {29,161,242}, data.message)
 		end
 	end)

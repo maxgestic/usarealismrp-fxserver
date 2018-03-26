@@ -1,4 +1,4 @@
-local TOW_REWARD = 550
+local TOW_REWARD = 700
 
 RegisterServerEvent("towJob:giveReward")
 AddEventHandler("towJob:giveReward", function(property)
@@ -7,7 +7,7 @@ AddEventHandler("towJob:giveReward", function(property)
 		local user_money = user.getActiveCharacterData("money")
 		user.setActiveCharacterData("money", user_money + TOW_REWARD)
 		-- give property owner money --
-		if property then 
+		if property then
 			TriggerEvent("properties:addMoney", property.name, round(0.20 * TOW_REWARD, 0))
 		end
 		TriggerClientEvent("towJob:success", userSource)

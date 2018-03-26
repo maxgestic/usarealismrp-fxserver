@@ -54,9 +54,19 @@ local scenarios = {
 	{name = "whatup", type = "emote", dict = "friends@laf@ig_5", animname = "whatupnigga"},
 	{name = "kiss", type = "emote", dict = "mp_ped_interaction", animname = "kisses_guy_a"},
 	{name = "handshake", type = "emote", dict = "mp_ped_interaction", animname = "handshake_guy_a"},
-	{name = "cpr", type = "emote", dict = "mini@cpr@char_a@cpr_str", animname = "cpr_pumpchest"}
+	{name = "cpr", type = "emote", dict = "mini@cpr@char_a@cpr_str", animname = "cpr_pumpchest"},
+	{name = "cross arms", type = "emote", dict = "amb@world_human_hang_out_street@female_arms_crossed@base", animname = "base"}
 	--{name = "hug", type = "emote", dict = "", animname = ""},
 }
+
+--amb@prop_human_seat_chair@female@arms_folded@idle_a
+--idle_a
+
+--mp_safehousevagos@boss
+--vagos_boss_keyboard_a
+
+--amb@prop_human_seat_computer@male@base
+--base
 
 --
 --this._pumpAndIdleMedic.get_AddTask().PlayAnimation("mini@cpr@char_a@cpr_str", "cpr_pumpchest", 8f, 1000, true, 8f);
@@ -65,7 +75,7 @@ local scenarios = {
 
 --[[
 	Game.get_Player().get_Character().TaskPlayAnim("mp_ped_interaction", "handshake_guy_a", 8, -1);
-	
+
 	Game.get_Player().get_Character().PlayAmbientSpeech("DRAW_GUN", true);
 --]]
 
@@ -136,7 +146,7 @@ RegisterNUICallback('retrieveVehicleItem', function(data, cb)
 								else
 									TriggerEvent("usa:notify", "Quantity input too high!")
 								end
-							else 
+							else
 								TriggerEvent("usa:notify", "Quantity input too low!")
 							end
 							break
@@ -153,7 +163,7 @@ RegisterNUICallback('retrieveVehicleItem', function(data, cb)
 	else
 		TriggerEvent("usa:notify", "Can't retrieve item. Vehicle is locked.")
 	end
-end)	
+end)
 
 RegisterNUICallback('playEmote', function(data, cb)
 	--TriggerEvent("test:escapeFromCSharp")
@@ -165,7 +175,7 @@ RegisterNUICallback('playEmote', function(data, cb)
 			ClearPedTasks(ped)
 			playing_emote = false
 			return
-		elseif scenarioName == "surrender" then 
+		elseif scenarioName == "surrender" then
 			TriggerEvent("KneelHU")
 			return
 		end
@@ -176,9 +186,9 @@ RegisterNUICallback('playEmote', function(data, cb)
 					if scenarios[i].type ~= "emote" then
 						TaskStartScenarioInPlace(ped, scenarios[i].scenarioName, 0, true)
 					else
-						if string.find(scenarioName, "shag") or string.find(scenarioName, "cpr") then
+						if string.find(scenarioName, "shag") or string.find(scenarioName, "cpr") or string.find(scenarioName, "cross arms") then
 							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
-						else 
+						else
 							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5)
 						end
 					end

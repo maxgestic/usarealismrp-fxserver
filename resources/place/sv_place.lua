@@ -1,9 +1,10 @@
-TriggerEvent('es:addCommand', 'place', function(source, args, user)
+TriggerEvent('es:addCommand', 'place', function(source, args, user, location)
 	TriggerEvent('es:getPlayerFromId', source, function(user)
 		local user_job = user.getActiveCharacterData("job")
 		if user_job == "sheriff" or user_job == "ems" or user_job == "fire" then
 			local tPID = tonumber(args[2])
 			TriggerClientEvent("place", tPID)
+			TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. user.getActiveCharacterData("fullName") .. " places person in vehicle.", location)
 		else
 			TriggerClientEvent("crim:areHandsTied", tonumber(args[2]), source, tonumber(args[2]), "place")
 		end

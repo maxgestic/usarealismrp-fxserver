@@ -93,10 +93,11 @@ end
 
 RegisterNetEvent("towJob:success")
 AddEventHandler("towJob:success", function()
-	TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0You have impounded the vehicle for ^2$550^0!")
+	TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0You have impounded the vehicle for ^2$700^0!")
 end)
 
 function impoundVehicle()
+	--[[
 	local targetVehicle = getVehicleInFrontOfUser()
 	if targetVehicle ~= 0 then
 		--TriggerServerEvent("towJob:impoundVehicle", targetVehicle)
@@ -115,6 +116,13 @@ function impoundVehicle()
 	else
 		TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0There is no vehicle no impound!")
 	end
+	--]]
+	TriggerEvent("impoundVehicle")
+	vehicleToImpound = nil
+	local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+	TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+		TriggerServerEvent("towJob:giveReward", property)
+	end)
 	Menu.hidden = true -- close menu
 end
 
@@ -129,7 +137,7 @@ end
 function towJobMenu()
 	MenuTitle = "Tow Job"
 	ClearMenu()
-	Menu.addButton("Impound Vehicle (+$400)", "impoundVehicle")
+	Menu.addButton("Impound Vehicle (+$700)", "impoundVehicle")
 end
 
 function getPlayerDistanceFromShop(shopX,shopY,shopZ)
