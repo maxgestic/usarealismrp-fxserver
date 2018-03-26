@@ -640,6 +640,63 @@ AddEventHandler('rconCommand', function(commandName, args)
 				}), { ["Content-Type"] = 'application/json' })
 			end)
 		end)
+	elseif commandName == "tempbanid" then
+		-- see if input was correct --
+		RconPrint("TEMPBANID COMMAND CALLED FROM RCON!")
+		if #args < 4 then
+			RconPrint("Usage: tempbanid [steam:123456789] [time] [first name] [last name] [reason]\n")
+			RconPrint("Note: if you don't know the first or last name just put an 'x' or '?' in place of it\n")
+			CancelEvent()
+			return
+		end
+		-- enter player into ban table --
+		TriggerEvent('es:exposeDBFunctions', function(GetDoc)
+			-- get info from command
+			local banner = "console"
+			local bannerId = "console"
+			local targetPlayer = args[1]
+			local time = tonumber(args[2])
+			local allPlayerIdentifiers = {}
+			table.insert(allPlayerIdentifiers, targetPlayer)
+			local targetPlayerName = args[3] .. " " .. args[4]
+			table.remove(args, 1) -- remove id
+			table.remove(args, 1) -- remove time
+			table.remove(args, 1) -- remove fname
+			table.remove(args, 1) -- remove lname
+			local reason = table.concat(args, " ")
+			RconPrint("\nPlayer Identifier: " .. args[1])
+			-- show message
+			RconPrint(targetPlayerName .. " has been banned (" .. reason .. ")")
+			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
+			sendMessageToModsAndAdmins(targetPlayerName .. " has been ^1banned^0 (" .. reason .. ").")
+			-- update db --
+			GetDoc.createDocument("bans",  {time = os.time(), duration = time, char_name = "?", name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+				RconPrint("player banned!")
+				-- refresh lua table of bans for this resource --
+				fetchAllBans()
+				-- send discord message --
+				local desc = "\n**Name:** " .. targetPlayerName
+				desc = desc .. "\n**Identifier:** " .. targetPlayer
+				desc = desc .. " \n**Time:** " .. time .. " hour(s)"
+				desc = desc .. " \n**Reason:** " ..reason:gsub("Temp Banned: ", "").. " \n**Banned By:** Console\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
+				local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
+				PerformHttpRequest(url, function(err, text, headers)
+					if text then
+						print(text)
+					end
+				end, "POST", json.encode({
+					embeds = {
+						{
+							description = desc,
+							color = 14750740,
+							author = {
+								name = "User Temp Banned From The Server"
+							}
+						}
+					}
+				}), { ["Content-Type"] = 'application/json' })
+			end)
+		end)
 	elseif commandName == 'setadmin' then
 		if #args ~= 2 then
 			RconPrint("Usage: setadmin [user-id] [permission-level]\n")
@@ -749,27 +806,54 @@ end
 -- Fetch all bans when resource starts
 fetchAllBans()
 
-	-- check for player being banned
-	AddEventHandler('playerConnecting', function(name, setReason)
-		--local identifier = GetPlayerIdentifiers(source)[1]
-		local allPlayerIdentifiers = GetPlayerIdentifiers(tonumber(source))
-		for i = 1, #bans do
-			local bannedPlayer = bans[i]
-			local allBannedPlayerIdentifiers = bannedPlayer.identifiers
+-- check for player being banned
+AddEventHandler('playerConnecting', function(name, setReason)
+	--local identifier = GetPlayerIdentifiers(source)[1]
+	local allPlayerIdentifiers = GetPlayerIdentifiers(tonumber(source))
+	for i = 1, #bans do
+		local bannedPlayer = bans[i]
+		local allBannedPlayerIdentifiers = bannedPlayer.identifiers
+		if allBannedPlayerIdentifiers then
 			for j = 1, #allBannedPlayerIdentifiers do
 				local bannedPlayerId = allBannedPlayerIdentifiers[j]
 				for k = 1, #allPlayerIdentifiers do
 					local connectingPlayerId = allPlayerIdentifiers[k]
 					if bannedPlayerId == connectingPlayerId then
-						print(GetPlayerName(tonumber(source)) .. " has been banned from your server and should not be able to connect!")
-						setReason("Banned: " .. bannedPlayer.reason .. ". You may file an appeal at https://usarrp.net")
-						CancelEvent()
-						return
+						if bannedPlayer.duration then
+							if getHoursFromTime(bannedPlayer.time) < bannedPlayer.duration then
+								print("getHoursFromTime(bannedPlayer.time): " .. getHoursFromTime(bannedPlayer.time))
+								print(GetPlayerName(tonumber(source)) .. " has been temp banned from your server and should not be able to play!")
+								setReason("Temp Banned: " .. bannedPlayer.reason .. ". This ban is in place for " .. bannedPlayer.duration .. " hour(s). You may file an appeal at https://usarrp.net")
+								CancelEvent()
+								return
+							else
+								local docid = bannedPlayer._id
+								local docRev = bannedPlayer._rev
+								--RconPrint("\nfound a matching identifer to unban for "..bannedPlayer.name.."!")
+								-- found a match, unban
+								PerformHttpRequest("http://127.0.0.1:5984/bans/"..docid.."?rev="..docRev, function(err, rText, headers)
+									if err == 0 then
+										print("\nrText = " .. rText)
+										print("\nerr = " .. err)
+									else
+										fetchAllBans()
+									end
+								end, "DELETE", "", {["Content-Type"] = 'application/json'})
+								print("\nPlayer "..bannedPlayer.name.." has been unbanned!")
+								return
+							end
+						else
+							print(GetPlayerName(tonumber(source)) .. " has been perma banned from your server and should not be able to play!")
+							setReason("Banned: " .. bannedPlayer.reason .. ". You may file an appeal at https://usarrp.net")
+							CancelEvent()
+							return
+						end
 					end
 				end
 			end
 		end
-	end)
+	end
+end)
 
 	-- ban command
 	TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, user)
@@ -824,7 +908,7 @@ fetchAllBans()
 				print("player banned!")
 				-- drop player from session
 				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
-				DropPlayer(targetPlayer, "Banned: " .. reason)
+				DropPlayer(targetPlayer, "Banned: " .. reason .. " -- You can file an appeal at https://usarrp.net")
 				-- refresh lua table of bans for this resource
 				fetchAllBans()
 			end)
@@ -833,7 +917,77 @@ fetchAllBans()
 		help = "Ban a player from the server.",
 		params = {
 			{ name = "id", help = "Player's ID" },
-			{ name = "reason", help = "Reason (INCLUDE YOUR NAME)" }
+			{ name = "reason", help = "The reason of the ban. Please include as much detail as possible."  }
+		}
+	})
+
+	-- temp ban command // Usage: /tempban id time (in hours) reason
+	TriggerEvent('es:addGroupCommand', 'tempban', "admin", function(source, args, user)
+		local userSource = tonumber(source)
+		-- add player to ban list
+		TriggerEvent('es:exposeDBFunctions', function(GetDoc)
+			-- get info from command
+			local banner = GetPlayerName(userSource)
+			local bannerId = GetPlayerIdentifiers(userSource)[1]
+			local targetPlayer = tonumber(args[2])
+			local targetPlayerName = GetPlayerName(targetPlayer)
+			local time = tonumber(args[3])
+			local allPlayerIdentifiers = GetPlayerIdentifiers(targetPlayer)
+			table.remove(args,1) -- remove /tempban
+			table.remove(args, 1) -- remove id
+			table.remove(args, 1) -- remove time
+			local reason = table.concat(args, " ")
+			local allPlayerIdentifiers = GetPlayerIdentifiers(targetPlayer)
+			print("#allPlayerIdentifiers = " .. #allPlayerIdentifiers)
+			for i = 1, #allPlayerIdentifiers do
+				print("allPlayerIdentifiers[i] = " .. allPlayerIdentifiers[i])
+			end
+			-- show message
+			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
+			sendMessageToModsAndAdmins(GetPlayerName(targetPlayer) .. " has been ^1temp banned^0 (" .. reason .. ")")
+			-- get char name:
+			local player = exports["essentialmode"]:getPlayerFromId(targetPlayer)
+			local char_name = player.getActiveCharacterData("fullName")
+			local desc = "**Character Name:** " .. char_name
+			-- send discord message
+			desc = desc .. "\n**Display Name:** " .. targetPlayerName
+			for i = 1, #allPlayerIdentifiers do
+				desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
+			end
+			desc = desc .. " \n**Time:** " .. time .. " hour(s)"
+			desc = desc .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
+			local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
+				PerformHttpRequest(url, function(err, text, headers)
+					if text then
+						print(text)
+					end
+				end, "POST", json.encode({
+					embeds = {
+						{
+							description = desc,
+							color = 14750740,
+							author = {
+								name = "User Temp Banned From The Server"
+							}
+						}
+					}
+				}), { ["Content-Type"] = 'application/json' })
+			-- update db
+			GetDoc.createDocument("bans",  {time = os.time(), duration = time, char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+				print("player banned!")
+				-- drop player from session
+				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
+				DropPlayer(targetPlayer, "Temp Banned: " .. reason .. " -- You can file an appeal at https://usarrp.net")
+				-- refresh lua table of bans for this resource
+				fetchAllBans()
+			end)
+		end)
+	end, {
+		help = "Tempban a player from the server.",
+		params = {
+			{ name = "id", help = "Player's ID" },
+			{ name = "duration", help = "Duration of ban (in hours)" },
+			{ name = "reason", help = "The reason of the temp ban. Please include as much detail as possible." }
 		}
 	})
 
@@ -844,14 +998,36 @@ AddEventHandler('mini:checkPlayerBannedOnSpawn', function()
 	for i = 1, #bans do
 		local bannedPlayer = bans[i]
 		local allBannedPlayerIdentifiers = bannedPlayer.identifiers
-		for j = 1, #allBannedPlayerIdentifiers do
-			local bannedPlayerId = allBannedPlayerIdentifiers[j]
-			for k = 1, #allPlayerIdentifiers do
-				local connectingPlayerId = allPlayerIdentifiers[k]
-				if bannedPlayerId == connectingPlayerId then
-					print(GetPlayerName(tonumber(source)) .. " has been banned from your server and should not be able to connect!")
-					DropPlayer(tonumber(source), "Banned: " .. bannedPlayer.reason)
-					return
+		if allBannedPlayerIdentifiers then
+			for j = 1, #allBannedPlayerIdentifiers do
+				local bannedPlayerId = allBannedPlayerIdentifiers[j]
+				for k = 1, #allPlayerIdentifiers do
+					local connectingPlayerId = allPlayerIdentifiers[k]
+					if bannedPlayerId == connectingPlayerId then
+						if bannedPlayer.duration then
+							if getHoursFromTime(bannedPlayer.time) < bannedPlayer.duration then
+								print(GetPlayerName(tonumber(source)) .. " has been temp banned from your server and should not be able to play!")
+								DropPlayer(tonumber(source), "Temp Banned: " .. bannedPlayer.reason)
+							else
+								local docid = bannedPlayer._id
+								local docRev = bannedPlayer._rev
+										--RconPrint("\nfound a matching identifer to unban for "..bannedPlayer.name.."!")
+										-- found a match, unban
+										PerformHttpRequest("http://127.0.0.1:5984/bans/"..docid.."?rev="..docRev, function(err, rText, headers)
+											if err == 0 then
+												print("\nrText = " .. rText)
+												print("\nerr = " .. err)
+											else
+												fetchAllBans()
+											end
+										end, "DELETE", "", {["Content-Type"] = 'application/json'})
+										print("\nPlayer "..bannedPlayer.name.." has been unbanned!")
+							end
+						else
+							print(GetPlayerName(tonumber(source)) .. " has been temp banned from your server and should not be able to play!")
+							DropPlayer(tonumber(source), "Temp Banned: " .. bannedPlayer.reason)
+						end
+					end
 				end
 			end
 		end
@@ -1035,4 +1211,12 @@ function sendMessageToModsAndAdmins(msg)
 			end
 		end
 	end)
+end
+
+function getHoursFromTime(time)
+	local reference = time
+	local hoursfrom = os.difftime(os.time(), reference) / (60 * 60) -- seconds in a day
+	local hours = math.floor(hoursfrom)
+	print("hours = " .. hours) -- today it prints "1"
+	return hours
 end
