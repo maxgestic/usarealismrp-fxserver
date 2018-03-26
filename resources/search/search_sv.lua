@@ -5,6 +5,12 @@ AddEventHandler("search:searchPlayer", function(source, playerId)
 			TriggerClientEvent("search:notifyNoExist", source, playerId) -- player does not exist
 			return
 		end
+		-- play animation:
+		local anim = {
+			dict = "anim@move_m@trash",
+			name = "pickup"
+		}
+		TriggerClientEvent("usa:playAnimation", source, anim.name, anim.dict, 4)
 		local user_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
 		local items = {}
 		local licenses = user.getActiveCharacterData("licenses")
@@ -40,8 +46,10 @@ AddEventHandler("search:searchPlayer", function(source, playerId)
 end)
 
 -- Add a command everyone is able to run. Args is a table with all the arguments, and the user is the user object, containing all the user data.
-TriggerEvent('es:addJobCommand', 'search', { "police", "sheriff" }, function(source, args, user)
-	TriggerEvent("altchat:localChatMessage", source, "^6* " .. GetPlayerName(source) .. " searches person.") -- send local me message
+TriggerEvent('es:addJobCommand', 'search', { "police", "sheriff" }, function(source, args, user, location)
+	if GetPlayerName(tonumber(args[2])) then
+			TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. user.getActiveCharacterData("fullName") .. " searches person.", location)
+	end
 	TriggerEvent("search:searchPlayer", source, args[2])
 end, {
 	help = "Search a suspect.",

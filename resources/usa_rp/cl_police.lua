@@ -286,50 +286,50 @@ Citizen.CreateThread(function()
 		-- shooting notification / gsr --
 		---------------------------------
 		--print("GetSelectedPedWeapon(me): " .. GetSelectedPedWeapon(me))
-		if IsPedShooting(me) and GetSelectedPedWeapon(me) ~= 101631238 then		
-			last_shot_time = GetGameTimer()		
-			--print("IsInPopulatedArea(): " .. tostring(IsInPopulatedArea()))		
-			if IsInPopulatedArea() then		
+		if IsPedShooting(me) and GetSelectedPedWeapon(me) ~= 101631238 then
+			last_shot_time = GetGameTimer()
+			--print("IsInPopulatedArea(): " .. tostring(IsInPopulatedArea()))
+			if IsInPopulatedArea() then
 				if math.random(100) < 32 then
 					if not sending_msg then
 						sending_msg = true
 						send911Message("(10-32) Report of shots fired.")
 						sending_msg = false
 					end
-				end			
-			end		
+				end
+			end
 		end
 		------------------------------
 		-- car jacking notification --
 		------------------------------
-		if IsPedJacking(me) then 
+		if IsPedJacking(me) then
 			if not already_sent_msg then
 				if IsInPopulatedArea() then
 					if math.random(100) < 90 then
 						already_sent_msg = true
 						jacked = true
-					end 		
+					end
 				end
 			end
-		else 
-			if jacked then 
+		else
+			if jacked then
 				local handle = GetVehiclePedIsIn(me, true)
 				if handle ~= 0 then
 					--print("veh handle: " .. handle)
 					local display_name = GetDisplayNameFromVehicleModel(GetEntityModel(handle))
 					--print("jacked car display name: " .. display_name)
-					if display_name == "SADLER" then 
+					if display_name == "SADLER" then
 						display_name = "Ford 350 Superduty"
-					elseif display_name == "FUGITIVE" then 
+					elseif display_name == "FUGITIVE" then
 						display_name = "Maserati Quattroporte"
-					elseif display_name == "PENUMBRA" then 
+					elseif display_name == "PENUMBRA" then
 						display_name = "Nissan 370z"
 					end
 					local r,g,b = GetVehicleColor(handle)
 					print("r: " .. r)
 					print("g: " .. g)
 					print("b: " .. b)
-					send911Message("(10-28F) Reported car jacking of a " .. display_name)
+					send911Message("(10-28F) Reported car jacking of a " .. display_name .. " with plate " .. GetVehicleNumberPlateText(handle))
 				end
 				jacked = false
 			end
@@ -362,7 +362,7 @@ function IsInPopulatedArea()
 	local me = GetPlayerPed(-1)
 	local my_coords = GetEntityCoords(me, true)
 	for k = 1, #AREAS do
-		if Vdist(my_coords.x, my_coords.y, my_coords.z, AREAS[k].x, AREAS[k].y, AREAS[k].z) <= AREAS[k].range then 
+		if Vdist(my_coords.x, my_coords.y, my_coords.z, AREAS[k].x, AREAS[k].y, AREAS[k].z) <= AREAS[k].range then
 			print("within range of populated area!")
 			return true
 		end
@@ -370,7 +370,7 @@ function IsInPopulatedArea()
 	return false
 end
 
-function send911Message(msg) 
+function send911Message(msg)
 						-- send 911 message --
 						-- get location of sender and send to server function:
 						local data = {}
@@ -411,7 +411,7 @@ AddEventHandler("police:testForGSR", function(to_notify_id)
 	if GetGameTimer() - last_shot_time > duration then
 		--print("passed duration! notify id: " .. to_notify_id)
 		TriggerServerEvent("police:notifyGSR", to_notify_id, false)
-	else 
+	else
 		--print("player shot weapon recently! gsr detected! notify id: " .. to_notify_id)
 		TriggerServerEvent("police:notifyGSR", to_notify_id, true)
 	end

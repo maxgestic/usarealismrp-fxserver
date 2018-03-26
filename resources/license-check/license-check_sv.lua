@@ -45,7 +45,6 @@ end
 
 RegisterServerEvent("license:searchForLicense")
 AddEventHandler("license:searchForLicense", function(source, playerId)
-	TriggerEvent('altchat:localChatMessage', source, "^6* " .. GetPlayerName(source) .. " opens MDT.")
 	    TriggerEvent('es:getPlayerFromId', tonumber(playerId), function(user)
 			if not user then
 				TriggerClientEvent("license:notifyNoExist", source, playerId) -- player not in game with that id
@@ -69,7 +68,7 @@ AddEventHandler("license:searchForLicense", function(source, playerId)
 						TriggerClientEvent("chatMessage", source, "EXPIRES", {169, 44, 98}, license.expire)
 						if license.status == "valid" then
 							TriggerClientEvent("chatMessage", source, "STATUS", {169, 44, 98}, license.status)
-						else 
+						else
 							TriggerClientEvent("chatMessage", source, "STATUS", {169, 44, 98}, "^1" .. license.status)
 							TriggerClientEvent("chatMessage", source, "DAYS", {169, 44, 98}, license.suspension_days)
 							TriggerClientEvent("chatMessage", source, "START DAY", {169, 44, 98}, license.suspension_start_date)
@@ -81,7 +80,7 @@ AddEventHandler("license:searchForLicense", function(source, playerId)
 							TriggerClientEvent("chatMessage", source, "STATUS", {169, 44, 98}, "^1" .. licenses[i].status)
 							TriggerClientEvent("chatMessage", source, "DAYS", {169, 44, 98}, licenses[i].suspension_days)
 							TriggerClientEvent("chatMessage", source, "START DAY", {169, 44, 98}, licenses[i].suspension_start_date)
-						else 
+						else
 							TriggerClientEvent("chatMessage", source, "STATUS", {169, 44, 98}, "^0" .. licenses[i].status)
 						end
 						hasFirearmsPermit = true
@@ -149,7 +148,10 @@ end
 
 
 -- Add a command everyone is able to run. Args is a table with all the arguments, and the user is the user object, containing all the user data.
-TriggerEvent('es:addJobCommand', 'mdt', { "police", "sheriff" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'mdt', { "police", "sheriff" }, function(source, args, user, location)
+	if GetPlayerName(tonumber(args[2])) then
+		TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. user.getActiveCharacterData("fullName") .. " opens MDT.", location)
+	end
 	TriggerEvent("license:searchForLicense", source, args[2])
 end, {
 	help = "Run a person's information through the police database.",
@@ -182,7 +184,7 @@ function fetchAllRegisteredVehicles(callback)
 end
 
 -- running vehicle plates
-TriggerEvent('es:addCommand', '28', function(source, args, user)
+TriggerEvent('es:addCommand', '28', function(source, args, user, location)
 	local user_job = user.getActiveCharacterData("job")
 	local user_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
 	if user_job == "sheriff" or user_job == "police" then
@@ -190,7 +192,7 @@ TriggerEvent('es:addCommand', '28', function(source, args, user)
 		local plateNumber = args[2]
 		if plateNumber then
 			if string.len(plateNumber) < 7 or string.len(plateNumber) > 8 then TriggerClientEvent("usa:notify", source, "Invalid license plate format.") return end
-			TriggerEvent('altchat:localChatMessage', source, "^6* " .. user_name .. " runs plate.")
+			TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. user_name .. " runs plate.", location)
 			TriggerEvent("es:getPlayers", function(players)
 				for id, player in pairs(players) do
 					--print("id = " .. id)
@@ -233,7 +235,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addCommand', 'runplate', function(source, args, user)
+TriggerEvent('es:addCommand', 'runplate', function(source, args, user, location)
 	local user_job = user.getActiveCharacterData("job")
 	local user_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
 	if user_job == "sheriff" or user_job == "police" then
@@ -241,7 +243,7 @@ TriggerEvent('es:addCommand', 'runplate', function(source, args, user)
 		local plateNumber = args[2]
 		if plateNumber then
 			if string.len(plateNumber) < 7 or string.len(plateNumber) > 8 then TriggerClientEvent("usa:notify", source, "Invalid license plate format.") return end
-			TriggerEvent('altchat:localChatMessage', source, "^6* " .. user_name .. " runs plate.")
+			TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. user_name .. " runs plate.", location)
 			TriggerEvent("es:getPlayers", function(players)
 				for id, player in pairs(players) do
 					--print("id = " .. id)
