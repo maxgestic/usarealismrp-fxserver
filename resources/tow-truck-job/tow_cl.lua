@@ -117,12 +117,15 @@ function impoundVehicle()
 		TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0There is no vehicle no impound!")
 	end
 	--]]
-	TriggerEvent("impoundVehicle")
-	vehicleToImpound = nil
-	local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
-	TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-		TriggerServerEvent("towJob:giveReward", property)
-	end)
+	local targetVehicle = getVehicleInFrontOfUser()
+	if targetVehicle == vehicleToImpound then
+		TriggerEvent("impoundVehicle")
+		vehicleToImpound = nil
+		local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+		TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+			TriggerServerEvent("towJob:giveReward", property)
+		end)
+	end
 	Menu.hidden = true -- close menu
 end
 

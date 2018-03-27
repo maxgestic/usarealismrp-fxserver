@@ -63,68 +63,68 @@ end)
 -- storing vehicle --
 RegisterNetEvent("properties:storeVehicle")
 AddEventHandler("properties:storeVehicle", function()
-	local veh = GetVehiclePedIsIn(GetPlayerPed(-1), true)
-	local plate = GetVehicleNumberPlateText(veh)
-	TriggerEvent("usa:notify", "~g~Vehicle stored!")
-	SetEntityAsMissionEntity(veh, true, true)
-	Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(veh))
-	-- store vehicle key with vehicle
-	--print("attempting to storing vehicle key!")
-	TriggerServerEvent("garage:storeKey", plate)
+  local veh = GetVehiclePedIsIn(GetPlayerPed(-1), true)
+  local plate = GetVehicleNumberPlateText(veh)
+  TriggerEvent("usa:notify", "~g~Vehicle stored!")
+  SetEntityAsMissionEntity(veh, true, true)
+  Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(veh))
+  -- store vehicle key with vehicle
+  --print("attempting to storing vehicle key!")
+  TriggerServerEvent("garage:storeKey", plate)
 end)
 
 -- retrieving vehicle --
 RegisterNetEvent("properties:retrieveVehicle")
 AddEventHandler("properties:retrieveVehicle", function(vehicle)
-	local playerVehicle = vehicle
-	local modelHash = vehicle.hash
-	local plateText = vehicle.plate
-	local numberHash = modelHash
+  local playerVehicle = vehicle
+  local modelHash = vehicle.hash
+  local plateText = vehicle.plate
+  local numberHash = modelHash
 
---[[
-	local vehicle_key = {
-		name = "Key -- " .. vehicle.plate,
-		quantity = 1,
-		type = "key",
-		owner = vehicle.owner,
-		make = vehicle.make,
-		model = vehicle.model,
-		plate = vehicle.plate
-	}
+  --[[
+  local vehicle_key = {
+  name = "Key -- " .. vehicle.plate,
+  quantity = 1,
+  type = "key",
+  owner = vehicle.owner,
+  make = vehicle.make,
+  model = vehicle.model,
+  plate = vehicle.plate
+}
 
-	-- give key to owner
-	TriggerServerEvent("garage:giveKey", vehicle_key)
+-- give key to owner
+TriggerServerEvent("garage:giveKey", vehicle_key)
 --]]
 
-	if type(modelHash) ~= "number" then
-		numberHash = tonumber(modelHash)
-	end
+if type(modelHash) ~= "number" then
+  numberHash = tonumber(modelHash)
+end
 
-	Citizen.CreateThread(function()
-		RequestModel(numberHash)
+Citizen.CreateThread(function()
+  RequestModel(numberHash)
 
-		while not HasModelLoaded(numberHash) do
-			RequestModel(numberHash)
-			Citizen.Wait(0)
-		end
+  while not HasModelLoaded(numberHash) do
+    RequestModel(numberHash)
+    Citizen.Wait(0)
+  end
 
-		local playerPed = GetPlayerPed(-1)
-		local playerCoords = GetEntityCoords(playerPed, false)
-		local heading = GetEntityHeading(playerPed)
-		local vehicle = CreateVehicle(numberHash, playerCoords.x, playerCoords.y, playerCoords.z, heading, true, false)
-		SetVehicleNumberPlateText(vehicle, plateText)
-		SetVehicleOnGroundProperly(vehicle)
-		SetVehRadioStation(vehicle, "OFF")
-		SetPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
-		SetVehicleEngineOn(vehicle, true, false, false)
-		SetEntityAsMissionEntity(vehicle, true, true)
+  local playerPed = GetPlayerPed(-1)
+  local playerCoords = GetEntityCoords(playerPed, false)
+  local heading = GetEntityHeading(playerPed)
+  local vehicle = CreateVehicle(numberHash, playerCoords.x, playerCoords.y, playerCoords.z, heading, true, false)
+  SetVehicleNumberPlateText(vehicle, plateText)
+  SetVehicleOnGroundProperly(vehicle)
+  SetVehRadioStation(vehicle, "OFF")
+  SetPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
+  SetVehicleEngineOn(vehicle, true, false, false)
+  SetEntityAsMissionEntity(vehicle, true, true)
 
-		-- car customizations
-		if playerVehicle.customizations then
-			TriggerEvent("customs:applyCustomizations", playerVehicle.customizations)
-		end
+  -- car customizations
+  if playerVehicle.customizations then
+    TriggerEvent("customs:applyCustomizations", playerVehicle.customizations)
+  end
 
-	end)
+end)
 
 end)
 
@@ -193,11 +193,15 @@ Citizen.CreateThread(function()
           nearest_property_info = PROPERTIES[name]
           closest.x, closest.y, closest.z = info.garage_coords.x, info.garage_coords.y, info.garage_coords.z
           if IsPedInAnyVehicle(me, true) then
-            drawTxt("Press [ ~b~E~w~ ] to store your vehicle in the garage!",0,1,0.5,0.8,0.6,255,255,255,255)
-            if IsControlJustPressed(0, menu.key) then
-              local vehicle = GetVehiclePedIsIn(me, false)
-              local numberPlateText = GetVehicleNumberPlateText(vehicle)
-              TriggerServerEvent("properties:storeVehicle", nearest_property_info.name, numberPlateText)
+            if nearest_property_info.owner then
+              if nearest_property_info.owner.identifier == my_property_identifier then
+                drawTxt("Press [ ~b~E~w~ ] to store your vehicle in the garage!",0,1,0.5,0.8,0.6,255,255,255,255)
+                if IsControlJustPressed(0, menu.key) then
+                  local vehicle = GetVehiclePedIsIn(me, false)
+                  local numberPlateText = GetVehicleNumberPlateText(vehicle)
+                  TriggerServerEvent("properties:storeVehicle", nearest_property_info.name, numberPlateText)
+                end
+              end
             end
           else
             if not menu.enabled then
@@ -288,6 +292,8 @@ Citizen.CreateThread(function()
   while true do
 
     if(menu.enabled) then
+
+      --print("page: " .. menu.page)
 
       TriggerEvent("properties-GUI:Title", nearest_property_info.name)
 
@@ -538,77 +544,77 @@ Citizen.CreateThread(function()
 
               --[[
               TriggerEvent("properties-GUI:Option", "You own this property!", function(cb)
-                if cb then end
-              end)
-              --]]
-
-            end
+              if cb then end
+            end)
+            --]]
 
           end
 
-          ----------------------------------
-          -- this player is not the owner --
-          ----------------------------------
-        else
-
-          TriggerEvent("properties-GUI:Option", "~y~Owner:~w~ " .. nearest_property_info.owner.name, function(cb) end)
-
-          TriggerEvent("properties-GUI:Option", "~y~End Date:~w~ " .. nearest_property_info.fee.end_date, function(cb) end)
-
-          -- todo: add a peek option to see store inventory items before robbnig --
-
-          --[[
-          TriggerEvent("properties-GUI:StringArray", "Rob:", rob_options, selected_index, function(cb)
-          selected_index = cb
-          print("selected index to rob: " .. selected_index)
-          --print("Person is trying to steal $" .. nearest_property_info.storage.money .. " from the " .. nearest_property_info.name .. "!")
-        end)
-        --]]
-
-        if nearest_property_info.type == "business" then
-
-          TriggerEvent("properties-GUI:Option", "~r~Rob", function(cb)
-            if cb then
-              print("player wants to rob store!")
-              TriggerServerEvent('es_holdup:rob', nearest_property_info.name)
-              menu.enabled = false
-            end
-          end)
-
         end
+
+        ----------------------------------
+        -- this player is not the owner --
+        ----------------------------------
+      else
+
+        TriggerEvent("properties-GUI:Option", "~y~Owner:~w~ " .. nearest_property_info.owner.name, function(cb) end)
+
+        TriggerEvent("properties-GUI:Option", "~y~End Date:~w~ " .. nearest_property_info.fee.end_date, function(cb) end)
+
+        -- todo: add a peek option to see store inventory items before robbnig --
+
+        --[[
+        TriggerEvent("properties-GUI:StringArray", "Rob:", rob_options, selected_index, function(cb)
+        selected_index = cb
+        print("selected index to rob: " .. selected_index)
+        --print("Person is trying to steal $" .. nearest_property_info.storage.money .. " from the " .. nearest_property_info.name .. "!")
+      end)
+      --]]
+
+      if nearest_property_info.type == "business" then
+
+        TriggerEvent("properties-GUI:Option", "~r~Rob", function(cb)
+          if cb then
+            print("player wants to rob store!")
+            TriggerServerEvent('es_holdup:rob', nearest_property_info.name)
+            menu.enabled = false
+          end
+        end)
 
       end
-
-      ------------------------
-      -- store has no owner --
-      ------------------------
-    else
-
-      TriggerEvent("properties-GUI:Option", "Price: $" .. comma_value(nearest_property_info.fee.price), function(cb) if cb then end end)
-
-      TriggerEvent("properties-GUI:Option", "~g~Purchase", function(cb)
-        if cb then
-          -- if player has enough money, make them the owner of the property
-          TriggerServerEvent("properties:purchaseProperty", nearest_property_info)
-        end
-      end)
 
     end
 
-    TriggerEvent("properties-GUI:Option", "Close", function(cb)
-      if(cb) then
-        menu.enabled = false
-        menu.page = "home"
+    ------------------------
+    -- store has no owner --
+    ------------------------
+  else
+
+    TriggerEvent("properties-GUI:Option", "Price: $" .. comma_value(nearest_property_info.fee.price), function(cb) if cb then end end)
+
+    TriggerEvent("properties-GUI:Option", "~g~Purchase", function(cb)
+      if cb then
+        -- if player has enough money, make them the owner of the property
+        TriggerServerEvent("properties:purchaseProperty", nearest_property_info)
       end
     end)
 
-    --[[
-    TriggerEvent("properties-GUI:Bool", "bool", bool, function(cb)
-    bool = cb
+  end
+
+  TriggerEvent("properties-GUI:Option", "Close", function(cb)
+    if(cb) then
+      menu.enabled = false
+      menu.page = "home"
+    end
   end)
 
-  TriggerEvent("properties-GUI:Int", "int", int, 0, 55, function(cb)
-  int = cb
+  --[[
+  TriggerEvent("properties-GUI:Bool", "bool", bool, function(cb)
+  bool = cb
+end)
+
+TriggerEvent("properties-GUI:Int", "int", int, 0, 55, function(cb)
+int = cb
 end)
 
 TriggerEvent("properties-GUI:StringArray", "string:", array, position, function(cb)
