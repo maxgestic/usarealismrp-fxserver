@@ -117,9 +117,9 @@ AddEventHandler("properties:storeVehicle", function(property_name, plate)
 			local vehicle = userVehicles[i]
 			if plate and vehicle then
 				if string.match(plate,tostring(vehicle.plate)) or plate == vehicle.plate then -- player actually owns car that is being stored
-					--userVehicles[i].stored = true (for public garages)
-					--user.setActiveCharacterData("vehicles", userVehicles)
-          table.insert(PROPERTIES[property_name].vehicles, vehicle)
+					userVehicles[i].stored_location = property_name
+					user.setActiveCharacterData("vehicles", userVehicles)
+          table.insert(PROPERTIES[property_name].vehicles, userVehicles[i])
           TriggerClientEvent("properties:update", -1, PROPERTIES, true)
 					TriggerClientEvent("properties:storeVehicle", userSource)
 					return
@@ -133,12 +133,27 @@ end)
 -- retrieve vehicle from property --
 RegisterServerEvent("properties:retrieveVehicle")
 AddEventHandler("properties:retrieveVehicle", function(property_name, vehicle)
+  local userSource = source
   local vehs = PROPERTIES[property_name].vehicles
+  -- does property have the vehicle? --
   for i = 1, #vehs do
+    -- match by plate --
     if vehs[i].plate == vehicle.plate then
       table.remove(PROPERTIES[property_name].vehicles, i)
+      -- retrieve vehicle from property --
       TriggerClientEvent("properties:retrieveVehicle", source, vehicle)
+      -- update properties table --
       TriggerClientEvent("properties:update", -1, PROPERTIES, true)
+      -- update player vehicle stored location variable --
+      local player = exports["essentialmode"]:getPlayerFromId(userSource)
+      local player_vehicles = player.getActiveCharacterData("vehicles")
+      for j = 1, #player_vehicles do
+        if player_vehicles[j].plate == vehicle.plate then
+          player_vehicles[j].stored_location = nil
+          player.setActiveCharacterData("vehicles", player_vehicles)
+          return
+        end
+      end
       return
     end
   end

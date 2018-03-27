@@ -287,7 +287,13 @@ end)
 RegisterNetEvent("vehShop:loadedVehicles")
 AddEventHandler("vehShop:loadedVehicles", function(vehicles, check_insurance)
 	if vehicles then
-		menu.vehicles = vehicles
+		--menu.vehicles = vehicles
+		menu.vehicles = {}
+		for i = 1, #vehicles do
+			if not vehicles[i].stored_location then
+				table.insert(menu.vehicles, vehicles[i]) -- add only vehicles not stored at a property (prevent duplication by making a claim when stored at your house)
+			end
+		end
 	end
 	if check_insurance then menu.page = "insurance_claim" end
 end)
