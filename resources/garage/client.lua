@@ -35,7 +35,7 @@ Citizen.CreateThread(function()
 							Citizen.Wait(50)
 							if IsPedInAnyVehicle(GetPlayerPed(-1), true) then
 								local handle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
-								local numberPlateText = GetVehicleNumberPlateText(GetVehiclePedIsIn(GetPlayerPed(-1), false))
+								local numberPlateText = GetVehicleNumberPlateText(handle)
 								TriggerServerEvent("garage:storeVehicle", handle, numberPlateText)
 							else
 								--TriggerServerEvent("garage:checkVehicleStatus")

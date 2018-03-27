@@ -466,21 +466,23 @@ AddEventHandler('rconCommand', function(commandName, args)
 			local identifiers = bannedPlayer.identifiers
 			local docid = bannedPlayer._id
 			local docRev = bannedPlayer._rev
-			for j = 1, #identifiers do
-				if string.sub(identifiers[j],1,20) == string.sub(identifierToUnban,1,20) then
-					--RconPrint("\nfound a matching identifer to unban for "..bannedPlayer.name.."!")
-					-- found a match, unban
-					PerformHttpRequest("http://127.0.0.1:5984/bans/"..docid.."?rev="..docRev, function(err, rText, headers)
-						if err == 0 then
-							RconPrint("\nrText = " .. rText)
-							RconPrint("\nerr = " .. err)
-						else
-							fetchAllBans()
-						end
-					end, "DELETE", "", {["Content-Type"] = 'application/json'})
-					RconPrint("\nPlayer "..bannedPlayer.name.." has been unbanned!")
-					CancelEvent()
-					return
+			if identifiers then
+				for j = 1, #identifiers do
+					if string.sub(identifiers[j],1,20) == string.sub(identifierToUnban,1,20) then
+						--RconPrint("\nfound a matching identifer to unban for "..bannedPlayer.name.."!")
+						-- found a match, unban
+						PerformHttpRequest("http://127.0.0.1:5984/bans/"..docid.."?rev="..docRev, function(err, rText, headers)
+							if err == 0 then
+								RconPrint("\nrText = " .. rText)
+								RconPrint("\nerr = " .. err)
+							else
+								fetchAllBans()
+							end
+						end, "DELETE", "", {["Content-Type"] = 'application/json'})
+						RconPrint("\nPlayer "..bannedPlayer.name.." has been unbanned!")
+						CancelEvent()
+						return
+					end
 				end
 			end
 		end

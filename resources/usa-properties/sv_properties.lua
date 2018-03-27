@@ -37,7 +37,7 @@ AddEventHandler("properties:getUserItemsToStore", function(user_source)
 	local userSource = source
 	if user_source then userSource = user_source end
     local player = exports["essentialmode"]:getPlayerFromId(userSource)
-	if player then 
+	if player then
 		local items = {}
 		local inventory = player.getActiveCharacterData("inventory")
 		local weapons = player.getActiveCharacterData("weapons")
@@ -59,7 +59,7 @@ AddEventHandler("properties:storeMoney", function(name, amount)
 		player.setActiveCharacterData("money", user_money - amount)
 		-- add to property --
 		TriggerEvent("properties:addMoney", name, amount)
-	else 
+	else
 		TriggerClientEvent("usa:notify", user_source, "You don't have that much money on you!")
 	end
 end)
@@ -84,7 +84,7 @@ AddEventHandler("properties:store", function(name, item, quantity)
 	local had_already = false
 	print("storing item at property: " .. name)
 	-- insert into property --
-	for i = 1, #PROPERTIES[name].storage.items do 
+	for i = 1, #PROPERTIES[name].storage.items do
 		if PROPERTIES[name].storage.items[i].name == item.name then
 			print("had_already was true!")
 			print("previous quantity: " .. PROPERTIES[name].storage.items[i].quantity)
@@ -101,10 +101,47 @@ AddEventHandler("properties:store", function(name, item, quantity)
 		--print("item.quantity to store is now after setting: " .. copy.quantity)
 		table.insert(PROPERTIES[name].storage.items, copy)
 		--print("added item! property now has:")
-		for k = 1, #PROPERTIES[name].storage.items do 
+		for k = 1, #PROPERTIES[name].storage.items do
 			print("name: " .. PROPERTIES[name].storage.items[k].name .. ", quantity: " .. PROPERTIES[name].storage.items[k].quantity)
 		end
 	end
+end)
+
+-- store vehicle at property --
+RegisterServerEvent("properties:storeVehicle")
+AddEventHandler("properties:storeVehicle", function(property_name, plate)
+  local userSource = tonumber(source)
+	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+		local userVehicles = user.getActiveCharacterData("vehicles")
+		for i = 1, #userVehicles do
+			local vehicle = userVehicles[i]
+			if plate and vehicle then
+				if string.match(plate,tostring(vehicle.plate)) or plate == vehicle.plate then -- player actually owns car that is being stored
+					--userVehicles[i].stored = true (for public garages)
+					--user.setActiveCharacterData("vehicles", userVehicles)
+          table.insert(PROPERTIES[property_name].vehicles, vehicle)
+          TriggerClientEvent("properties:update", -1, PROPERTIES, true)
+					TriggerClientEvent("properties:storeVehicle", userSource)
+					return
+				end
+			end
+		end
+		TriggerClientEvent("garage:notify", userSource, "~r~You do not own that vehicle!")
+	end)
+end)
+
+-- retrieve vehicle from property --
+RegisterServerEvent("properties:retrieveVehicle")
+AddEventHandler("properties:retrieveVehicle", function(property_name, vehicle)
+  local vehs = PROPERTIES[property_name].vehicles
+  for i = 1, #vehs do
+    if vehs[i].plate == vehicle.plate then
+      table.remove(PROPERTIES[property_name].vehicles, i)
+      TriggerClientEvent("properties:retrieveVehicle", source, vehicle)
+      TriggerClientEvent("properties:update", -1, PROPERTIES, true)
+      return
+    end
+  end
 end)
 
 -- try to retrieve item (assumed to already be in the property) --
@@ -122,14 +159,14 @@ AddEventHandler("properties:retrieve", function(name, item, quantity)
 			local prop_storage = PROPERTIES[name].storage.items
 			for i = 1, #prop_storage do
 				print("checking item in property storage: " .. prop_storage[i].name .. " against " .. item.name)
-				if prop_storage[i].name == item.name then 
+				if prop_storage[i].name == item.name then
 					print("wants: " .. quantity .. ", has: " .. prop_storage[i].quantity)
 					if prop_storage[i].quantity - quantity < 0 then
 						print("tried to retrieve too much of item! wanted: " .. quantity .. ", had: " .. prop_storage[i].quantity)
 						TriggerClientEvent("usa:notify", user_source, "You don't have that much of that item in storage!")
 						return
-					else 
-						if prop_storage[i].quantity - quantity == 0 then 
+					else
+						if prop_storage[i].quantity - quantity == 0 then
 							print("property item removed!")
 							table.remove(PROPERTIES[name].storage.items, i)
 						else
@@ -148,11 +185,11 @@ AddEventHandler("properties:retrieve", function(name, item, quantity)
 			--TriggerClientEvent("properties:update", -1, PROPERTIES, true)
 			-- refresh menu property items --
 			print("setting client's property storage items to:")
-			for k = 1, #PROPERTIES[name].storage.items do 
+			for k = 1, #PROPERTIES[name].storage.items do
 				print("item: " .. PROPERTIES[name].storage.items[k].name .. ", quantity: " .. PROPERTIES[name].storage.items[k].quantity)
 			end
 			TriggerClientEvent("properties:loadedStorage", user_source, PROPERTIES[name].storage.items)
-		else 
+		else
 			TriggerClientEvent("usa:notify", user_source, "Inventory full.")
 		end
 	end
@@ -201,7 +238,7 @@ end)
 ------------------
 RegisterServerEvent("properties:withdraw")
 AddEventHandler("properties:withdraw", function(name, amount, savedSource)
-    if PROPERTIES[name].storage.money - amount >= 0 then 
+    if PROPERTIES[name].storage.money - amount >= 0 then
         -- remove from store --
         PROPERTIES[name].storage.money = PROPERTIES[name].storage.money - amount
         TriggerClientEvent("properties:update", -1, PROPERTIES, true)
@@ -237,10 +274,10 @@ AddEventHandler("properties:withdraw", function(name, amount, savedSource)
 					end
 				end)
 			end)
-		else 
+		else
 			print("failed to retrieve player in properties:withdraw!")
 		end
-    else 
+    else
         TriggerClientEvent("usa:notify", source, "Don't have that much to withdraw!")
     end
 end)
@@ -251,19 +288,19 @@ end)
 RegisterServerEvent("properties:purchaseProperty")
 AddEventHandler("properties:purchaseProperty", function(property)
 	local user_source = source
-	
-	if not property.type then property.type = "business" print("set property type to business") end 
+
+	if not property.type then property.type = "business" print("set property type to business") end
 	--if property.type == "business" then ownership_length = BUSINESS_PAY_PERIOD_DAYS
 	--elseif property.type == "house" then ownership_length = HOUSE_PAY_PERIOD_DAYS end
-	
+
 	local final_time = nil
 	local today = os.date("*t", os.time())
-	
+
     print("player #" .. source .. " wants to purchase " .. property.name)
     local player = exports["essentialmode"]:getPlayerFromId(user_source)
     local user_money = player.getActiveCharacterData("money")
     local char_name = player.getActiveCharacterData("fullName")
-	
+
     if user_money >= property.fee.price then
         -- set new property info --
         PROPERTIES[property.name].fee.paid_time = os.time() -- save the time the property was purchased
@@ -271,7 +308,7 @@ AddEventHandler("properties:purchaseProperty", function(property)
 		if property.type == "business" then
 			PROPERTIES[property.name].fee.due_days = BUSINESS_PAY_PERIOD_DAYS
 			final_time = {day = today.day + BUSINESS_PAY_PERIOD_DAYS, month = today.month, year = today.year}
-		elseif property.type == "house" then 
+		elseif property.type == "house" then
 			PROPERTIES[property.name].fee.due_days = HOUSE_PAY_PERIOD_DAYS
 			final_time = {day = today.day, month = today.month + 1, year = today.year}
 		end
@@ -325,7 +362,7 @@ AddEventHandler("properties:purchaseProperty", function(property)
 				}
 			}
 		}), { ["Content-Type"] = 'application/json' })
-    else 
+    else
         TriggerClientEvent("usa:notify", user_source, "You don't have enough money to purchase this property!")
     end
 end)
@@ -340,7 +377,7 @@ end
 
 function Evict_Owners()
 		--[[
-	if name and PROPERTIES[name].owner.name then 
+	if name and PROPERTIES[name].owner.name then
 							--send discord message --
 							local desc = "\n" .. PROPERTIES[name].owner.name .. " no longer owns the " .. name .. "!"
 							local url = 'https://discordapp.com/api/webhooks/419573361170055169/6v2NLnxzF8lSHgT8pSDccB_XN1R6miVuZDrEYtvNfPny6kSqddSN_9iJ9PPkbAbM01pW'
@@ -356,15 +393,15 @@ function Evict_Owners()
 											}
 										}
 								}
-							}), { ["Content-Type"] = 'application/json' })		
+							}), { ["Content-Type"] = 'application/json' })
 	end
 	--]]
 			---------------------------------------
 			-- Evict owners whose leases expired --
 			---------------------------------------
-			for name, info in pairs(PROPERTIES) do 
+			for name, info in pairs(PROPERTIES) do
 				-- below if statement only temporarily here to adjust any old DB documents that didn't get the type attribute --
-				if not info.type then 
+				if not info.type then
 					PROPERTIES[name].type = "business"
 				end
 				-- see if eviction time has arrived
@@ -372,7 +409,7 @@ function Evict_Owners()
 					local max_ownable_days = 0
 					if info.type == "business" then
 						max_ownable_days = BUSINESS_PAY_PERIOD_DAYS
-					elseif info.type == "house" then 
+					elseif info.type == "house" then
 						max_ownable_days = HOUSE_PAY_PERIOD_DAYS
 					end
 						if GetWholeDaysFromTime(info.fee.paid_time) > max_ownable_days then
@@ -411,7 +448,7 @@ function Evict_Owners()
 						end
 				end
 			end
-			
+
 end
 -----------------------------------------
 
@@ -504,7 +541,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 				RconPrint("\nIdent: " .. info.owner.identifier)
 				RconPrint("\nCurrent Money: $" .. info.storage.money)
 				RconPrint("\nItems: ")
-				for k = 1, #info.storage.items do 
+				for k = 1, #info.storage.items do
 					RconPrint("\n(" .. info.storage.items[k].quantity .. "x) " .. info.storage.items[k].name)
 				end
 				RconPrint("\nEnd Date: " .. info.fee.end_date .. "\n\n")
