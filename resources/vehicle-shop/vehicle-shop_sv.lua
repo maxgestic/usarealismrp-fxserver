@@ -96,7 +96,13 @@ local vehicleShopItems = {
 		{make = "Dinka", model = "Thrust", price = 23500, hash = 1836027715, storage_capacity = 30.0},
 		{make = "Nagasaki", model = "Carbon RS", price = 30000, hash = 11251904, storage_capacity = 30.0},
 		{make = "Nagasaki", model = "Chimera", price = 35000, hash = 6774487, storage_capacity = 30.0},
-		{make = "LCC", model = "Sanctus", price = 225000, hash = 1491277511, storage_capacity = 30.0}
+		{make = "LCC", model = "Innovation", price = 60000, hash = 2006142190, storage_capacity = 30.0},
+		{make = "LCC", model = "Sanctus", price = 200000, hash = 1491277511, storage_capacity = 30.0},
+		{make = "Western", model = "Daemon 2", price = 28000, hash = -1404136503, storage_capacity = 30.0},
+		{make = "Western", model = "Daemon 2", price = 28000, hash = -1404136503, storage_capacity = 30.0},
+		{make = "Maibatsu", model = "Manchez", price = 28000, hash = -1523428744, storage_capacity = 30.0},
+		{make = "Western", model = "Sovereign", price = 18000, hash = 743478836, storage_capacity = 30.0},
+		{make = "Western", model = "Wolfsbane", price = 27500, hash = -618617997, storage_capacity = 30.0}
 	},
 	["Vans"] = {
 		{make = "Vapid", model = "Speedo", price = 18000, hash = -810318068, storage_capacity = 300.0},
@@ -378,7 +384,7 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle, property)
 								if vehicles then
 									user.setActiveCharacterData("money", user_money - tonumber(price))
 									-- give money to car dealership owner --
-									if property then 
+									if property then
 										TriggerEvent("properties:addMoney", property.name, round(0.15 * price, 0))
 									end
 									local vehicle = {

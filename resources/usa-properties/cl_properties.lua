@@ -70,12 +70,14 @@ AddEventHandler("properties:storeVehicle", function()
   Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(veh))
   -- store vehicle key with vehicle
   --print("attempting to storing vehicle key!")
-  TriggerServerEvent("garage:storeKey", plate)
+  --TriggerServerEvent("garage:storeKey", plate)
 end)
 
 -- retrieving vehicle --
 RegisterNetEvent("properties:retrieveVehicle")
 AddEventHandler("properties:retrieveVehicle", function(vehicle)
+  print("type(vehicle): " .. type(vehicle))
+  print("veh name: " .. vehicle.make .. " " .. vehicle.model)
   local playerVehicle = vehicle
   local modelHash = vehicle.hash
   local plateText = vehicle.plate

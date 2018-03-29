@@ -11,7 +11,7 @@
     p2 seems to be 1 most of the time.
 
     2) HasPedGotWeapon(me, weapon, false)
-    
+
     3) GetPedSelectedWeapon(ped)
 --]]
 
@@ -54,13 +54,13 @@ local SETTINGS = {
 local attached_weapons = {}
 
 Citizen.CreateThread(function()
-    while true do 
+    while true do
         local me = GetPlayerPed(-1)
         ---------------------------------------
         -- attach if player has large weapon --
         ---------------------------------------
         for wep_name, wep_hash in pairs(SETTINGS.compatable_weapon_hashes) do
-            if HasPedGotWeapon(me, wep_hash, false) then 
+            if HasPedGotWeapon(me, wep_hash, false) then
                 if not attached_weapons[wep_name] then
                     AttachWeapon(wep_name, wep_hash, SETTINGS.back_bone, SETTINGS.x, SETTINGS.y, SETTINGS.z, SETTINGS.x_rotation, SETTINGS.y_rotation, SETTINGS.z_rotation, isMeleeWeapon(wep_name))
                 end
@@ -72,13 +72,13 @@ Citizen.CreateThread(function()
         for name, attached_object in pairs(attached_weapons) do
             -- equipped? delete it from back:
             if GetSelectedPedWeapon(me) ==  attached_object.hash then -- equipped
-                    print("weapon was equipped! removing: " .. name .. ", hash: " .. attached_object.hash)
+                    --print("weapon was equipped! removing: " .. name .. ", hash: " .. attached_object.hash)
                     DeleteObject(attached_object.handle)
                     attached_weapons[name] = nil
             end
             -- not equipped but still in attached objects list? drop that attached weapon:
-            if not HasPedGotWeapon(me, attached_object.hash, false) then 
-                print("weapon was not equipped! dropping: " .. name)
+            if not HasPedGotWeapon(me, attached_object.hash, false) then
+                --print("weapon was not equipped! dropping: " .. name)
                 DetachEntity(attached_object.handle, true, true)
                 attached_weapons[name] = nil
             end
@@ -106,7 +106,7 @@ function isMeleeWeapon(wep_name)
         return true
     elseif wep_name == "w_me_bat" then
         return true
-    else 
-        return false 
+    else
+        return false
     end
 end

@@ -133,6 +133,8 @@ end)
 -- retrieve vehicle from property --
 RegisterServerEvent("properties:retrieveVehicle")
 AddEventHandler("properties:retrieveVehicle", function(property_name, vehicle)
+  print("retrieving vehicle with name: " .. vehicle.make .. " " .. vehicle.model)
+  print("from: " .. property_name)
   local userSource = source
   local vehs = PROPERTIES[property_name].vehicles
   -- does property have the vehicle? --
