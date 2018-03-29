@@ -162,7 +162,7 @@ function Harvest(to_harvest_item_name, harvest_time)
     }
     TriggerEvent("usa:playAnimation", anim.name, anim.dict, harvest_time)
     -- play sound:
-    if SOUND_ENABLE then TriggerServerEvent("InteractSound_SV:PlayWithinDistance", 2.5, "trimming", 0.1) end
+    if SOUND_ENABLE then TriggerServerEvent("InteractSound_SV:PlayOnSource", "trimming", 0.1) end
   end
   -- pause for time
   Wait(harvest_time * 1000)
@@ -183,7 +183,7 @@ function Process(to_process_item_name, process_time)
     }
     TriggerEvent("usa:playAnimation", anim.name, anim.dict, process_time)
     -- play sound:
-    if SOUND_ENABLE then TriggerServerEvent("InteractSound_SV:PlayWithinDistance", 1.8, "weed-process", 0.105) end
+    if SOUND_ENABLE then TriggerServerEvent("InteractSound_SV:PlayOnSource", "weed-process", 0.105) end
   end
   -- pause for time
   Wait(process_time * 1000)
