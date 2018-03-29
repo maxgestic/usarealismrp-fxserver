@@ -9,7 +9,7 @@ end, {help = "Send a server-wide advertisement.", params = {{name = "message", h
 
 TriggerEvent('es:addCommand', 'me', function(source, args, user, location)
 	table.remove(args,1)
-	TriggerClientEvent('chatMessageLocation', -1, "", {}, " ^6" .. user.getActiveCharacterData("fullName") .. " " .. table.concat(args, " "), location)
+	TriggerClientEvent('chatMessageLocation', -1, "", {}, "* ^0" .. user.getActiveCharacterData("fullName") .. " " .. table.concat(args, " "), location)
 end, {help = "Talk as yourself doing an action.", params = {{name = "message", help = "the action"}}})
 
 TriggerEvent('es:addCommand', 'showid', function(source, args, user, location)

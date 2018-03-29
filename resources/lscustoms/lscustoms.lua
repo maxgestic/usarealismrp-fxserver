@@ -79,6 +79,8 @@ RegisterNetEvent("customs:applyCustomizations")
 AddEventHandler("customs:applyCustomizations", function(veh)
     currentvehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
 
+		print("typeof veh: " .. type(veh))
+
 		local customizations = veh.mods
 		local extracolor = veh.extracolor
 		local color = veh.color
@@ -91,17 +93,25 @@ AddEventHandler("customs:applyCustomizations", function(veh)
 		-- set mods --
     SetVehicleModKit(currentvehicle,0)
 		for x = 0, 48 do
-			if x == 18 or x == 20 or x == 22 then
-				if x == 22 then
-					print("x == 22!") -- for some reason 22 aka xeon head lights will not work
-					print("type: " .. type(customizations[x].mod))
-					print("customizations[x].mod: " .. tostring(customizations[x].mod))
-					SetVehicleMod(currentvehicle, x, customizations[x].mod)
+			if x == 18 or x == 20 or x == 22 then -- turbo, xeon headlights, tyre smoke
+				print("toggling vehicle mod!")
+				if customizations[x] then
+					ToggleVehicleMod(currentvehicle, x, customizations[x].mod)
 				else
-					SetVehicleMod(currentvehicle, x, not not customizations[x].mod)
+					ToggleVehicleMod(currentvehicle, x, customizations[tostring(x)].mod)
+				end
+			elseif x == 23 or x == 24 then -- custom tires
+				if customizations[x] then
+					SetVehicleMod(currentvehicle, x, customizations[x].mod, customizations[x].variation)
+				else
+					SetVehicleMod(currentvehicle, x, customizations[tostring(x)].mod, customizations[tostring(x)].variation)
 				end
 			else
-				SetVehicleMod(currentvehicle, x, customizations[x].mod)
+				if customizations[x] then
+					SetVehicleMod(currentvehicle, x, customizations[x].mod)
+				else
+					SetVehicleMod(currentvehicle, x, customizations[tostring(x)].mod)
+				end
 			end
 		end
   	-- set other mod stuff --

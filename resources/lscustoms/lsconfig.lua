@@ -1,5 +1,5 @@
 --[[
-Los Santos Customs V1.1 
+Los Santos Customs V1.1
 Credits - MythicalBro
 /////License/////
 Do not reupload/re release any part of this script without my permission
@@ -92,58 +92,58 @@ LSC_Config.prices = {
 
 -------Respray--------
 ----Primary color---
-	--Chrome 
+	--Chrome
 	chrome = {
 		colors = {
 			{name = "Chrome", colorindex = 120}
 		},
 		price = 1000
 	},
-	--Classic 
+	--Classic
 	classic = {
 		colors = colors,
 		price = 200
 	},
-	--Matte 
+	--Matte
 	matte = {
 		colors = mattecolors,
 		price = 500
 	},
-	--Metallic 
+	--Metallic
 	metallic = {
 		colors = colors,
 		price = 300
 	},
-	--Metals 
+	--Metals
 	metal = {
 		colors = metalcolors,
 		price = 300
 	},
 
 ----Secondary color---
-	--Chrome 
+	--Chrome
 	chrome2 = {
 		colors = {
 			{name = "Chrome", colorindex = 120}
 		},
 		price = 1000
 	},
-	--Classic 
+	--Classic
 	classic2 = {
 		colors = colors,
 		price = 200
 	},
-	--Matte 
+	--Matte
 	matte2 = {
 		colors = mattecolors,
 		price = 500
 	},
-	--Metallic 
+	--Metallic
 	metallic2 = {
 		colors = colors,
 		price = 300
 	},
-	--Metals 
+	--Metals
 	metal2 = {
 		colors = metalcolors,
 		price = 300
@@ -169,7 +169,7 @@ LSC_Config.prices = {
 		{ name = "Purple", neon = {153,0,153}, price = 1000},
 		{ name = "Brown", neon = {139,69,19}, price = 1000},
 	},
-	
+
 --------Plates---------
 	plates = {
 		{ name = "Blue on White 1", plateindex = 0, price = 200},
@@ -178,13 +178,13 @@ LSC_Config.prices = {
 		{ name = "Yellow on Blue", plateindex = 2, price = 300},
 		{ name = "Yellow on Black", plateindex = 1, price = 600},
 	},
-	
+
 --------Wheels--------
 ----Wheel accessories----
 	wheelaccessories = {
 		{ name = "Stock Tires", price = 1000},
 		{ name = "Custom Tires", price = 1250},
-		{ name = "Bulletproof Tires", price = 5000},
+		--{ name = "Bulletproof Tires", price = 5000},
 		{ name = "White Tire Smoke",smokecolor = {254,254,254}, price = 3000},
 		{ name = "Black Tire Smoke", smokecolor = {1,1,1}, price = 3000},
 		{ name = "BLue Tire Smoke", smokecolor = {0,150,255}, price = 3000},
@@ -396,40 +396,40 @@ LSC_Config.prices = {
 		{name = "Sixgun", wtype = 1, mod = 15, price = 1000},
 		{name = "Mercenary", wtype = 1, mod = 16, price = 1000},
 	},
-	
+
 ---------Trim color--------
 	trim = {
 		colors = colors,
 		price = 1000
 	},
-	
+
 ----------Mods-----------
 	mods = {
-	
+
 ----------Liveries--------
 	[48] = {
 		startprice = 15000,
 		increaseby = 2500
 	},
-	
+
 ----------Windows--------
 	[46] = {
 		startprice = 5000,
 		increaseby = 1250
 	},
-	
+
 ----------Tank--------
 	[45] = {
 		startprice = 5000,
 		increaseby = 1250
 	},
-	
+
 ----------Trim--------
 	[44] = {
 		startprice = 5000,
 		increaseby = 1250
 	},
-	
+
 ----------Aerials--------
 	[43] = {
 		startprice = 5000,
@@ -447,13 +447,13 @@ LSC_Config.prices = {
 		startprice = 5000,
 		increaseby = 1250
 	},
-	
+
 ----------Air filter--------
 	[40] = {
 		startprice = 5000,
 		increaseby = 1250
 	},
-	
+
 ----------Engine block--------
 	[39] = {
 		startprice = 5000,
@@ -465,7 +465,7 @@ LSC_Config.prices = {
 		startprice = 15000,
 		increaseby = 2500
 	},
-	
+
 ----------Trunk--------
 	[37] = {
 		startprice = 5000,
@@ -483,25 +483,25 @@ LSC_Config.prices = {
 		startprice = 5000,
 		increaseby = 1250
 	},
-	
+
 ----------Shift leavers--------
 	[34] = {
 		startprice = 5000,
 		increaseby = 1250
 	},
-	
+
 ----------Steeringwheel--------
 	[33] = {
 		startprice = 5000,
 		increaseby = 1250
 	},
-	
+
 ----------Seats--------
 	[32] = {
 		startprice = 5000,
 		increaseby = 1250
 	},
-	
+
 ----------Door speaker--------
 	[31] = {
 		startprice = 5000,
@@ -518,50 +518,50 @@ LSC_Config.prices = {
 		startprice = 5000,
 		increaseby = 1250
 	},
-	
+
 ----------Ornaments--------
 	[28] = {
 		startprice = 5000,
 		increaseby = 1250
 	},
-	
+
 ----------Trim--------
 	[27] = {
 		startprice = 5000,
 		increaseby = 1250
 	},
-	
+
 ----------Vanity plates--------
 	[26] = {
 		startprice = 5000,
 		increaseby = 1250
 	},
-	
+
 ----------Plate holder--------
 	[25] = {
 		startprice = 5000,
 		increaseby = 1250
 	},
-	
+
 ---------Headlights---------
 	[22] = {
 		{name = "Stock Lights", mod = 0, price = 0},
 		{name = "Xenon Lights", mod = 1, price = 1625},
 	},
-	
+
 ----------Turbo---------
 	[18] = {
 		{ name = "None", mod = 0, price = 0},
 		{ name = "Turbo Tuning", mod = 1, price = 15000},
 	},
-	
+
 -----------Armor-------------
 	[16] = {
-		{name = "Armor Upgrade 20%",modtype = 16, mod = 0, price = 2500},
-		{name = "Armor Upgrade 40%",modtype = 16, mod = 1, price = 5000},
-		{name = "Armor Upgrade 60%",modtype = 16, mod = 2, price = 7500},
-		{name = "Armor Upgrade 80%",modtype = 16, mod = 3, price = 10000},
-		{name = "Armor Upgrade 100%",modtype = 16, mod = 4, price = 12500},
+		{name = "Armor Upgrade 20%",modtype = 16, mod = 0, price = 28000}
+		--{name = "Armor Upgrade 40%",modtype = 16, mod = 1, price = 5000},
+		--{name = "Armor Upgrade 60%",modtype = 16, mod = 2, price = 7500},
+		--{name = "Armor Upgrade 80%",modtype = 16, mod = 3, price = 10000},
+		--{name = "Armor Upgrade 100%",modtype = 16, mod = 4, price = 12500},
 	},
 
 ---------Suspension-----------
@@ -617,82 +617,82 @@ LSC_Config.prices = {
 		{name = "Sports Transmission", mod = 1, price = 12500},
 		{name = "Race Transmission", mod = 2, price = 15000},
 	},
-	
+
 -----------Brakes-------------
 	[12] = {
 		{name = "Street Brakes", mod = 0, price = 6500},
 		{name = "Sport Brakes", mod = 1, price = 8775},
 		{name = "Race Brakes", mod = 2, price = 11375},
 	},
-	
+
 ------------Engine----------
 	[11] = {
-		{name = "EMS Upgrade, Level 2", mod = 0, price = 4500},
-		{name = "EMS Upgrade, Level 3", mod = 1, price = 8000},
-		{name = "EMS Upgrade, Level 4", mod = 2, price = 10500},
+		{name = "EMS Upgrade, Level 2", mod = 0, price = 10000},
+		{name = "EMS Upgrade, Level 3", mod = 1, price = 25000},
+		{name = "EMS Upgrade, Level 4", mod = 2, price = 45000},
 	},
-	
+
 -------------Roof----------
 	[10] = {
 		startprice = 1250,
 		increaseby = 400
 	},
-	
+
 ------------Fenders---------
 	[8] = {
 		startprice = 1500,
 		increaseby = 400
 	},
-	
+
 ------------Hood----------
 	[7] = {
 		startprice = 1500,
 		increaseby = 400
 	},
-	
+
 ----------Grille----------
 	[6] = {
 		startprice = 1250,
 		increaseby = 400
 	},
-	
+
 ----------Roll cage----------
 	[5] = {
 		startprice = 1250,
 		increaseby = 400
 	},
-	
+
 ----------Exhaust----------
 	[4] = {
 		startprice = 1000,
 		increaseby = 400
 	},
-	
+
 ----------Skirts----------
 	[3] = {
 		startprice = 1250,
 		increaseby = 400
 	},
-	
+
 -----------Rear bumpers----------
 	[2] = {
 		startprice = 2500,
 		increaseby = 500
 	},
-	
+
 ----------Front bumpers----------
 	[1] = {
 		startprice = 2500,
 		increaseby = 500
 	},
-	
+
 ----------Spoiler----------
 	[0] = {
 		startprice = 2500,
 		increaseby = 400
 	},
 	}
-	
+
 }
 
 ------Model Blacklist--------
@@ -738,7 +738,7 @@ LSC_Config.menu = {
 		sbg_color = { r = 255,g = 255, b = 0, a = 200},
 	},]]
 	theme = "light",
-	
+
 --------Max buttons------
 	--Default: 10
 	maxbuttons = 10,
