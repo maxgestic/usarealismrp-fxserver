@@ -175,7 +175,7 @@ Citizen.CreateThread(function()
         end
         -- draw garage marker --
         if info.garage_coords then
-          DrawMarker(27, info.garage_coords.x, info.garage_coords.y, info.garage_coords.z-0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 183 --[[r]], 240 --[[g]], 65 --[[b]], 90, 0, 0, 2, 0, 0, 0, 0)
+          DrawMarker(27, info.garage_coords.x, info.garage_coords.y, info.garage_coords.z-0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 255 --[[r]], 92 --[[g]], 92 --[[b]], 90, 0, 0, 2, 0, 0, 0, 0)
         end
       end
       if GetDistanceBetweenCoords(GetEntityCoords(me), info.x, info.y, info.z) < 2 then
