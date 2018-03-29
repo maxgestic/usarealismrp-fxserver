@@ -236,7 +236,7 @@ function SetWeaponDrops() -- This function will set the closest entity to you as
     local finished = false -- FindNextPed will turn the first variable to false when it fails to find another ped in the index
     repeat
         if not IsEntityDead(ped) then
-                pedindex[ped] = {}
+          pedindex[ped] = {}
         end
         finished, ped = FindNextPed(handle) -- first param returns true while entities are found
     until not finished
@@ -518,3 +518,50 @@ AddEventHandler("usa:dropWeapon", function(weapon_hash)
   RemoveWeaponFromPed(GetPlayerPed(-1), weapon_hash) -- right params?
   --SetPedDropsWeapon(weapon_hash) -- or this? or both?
 end)
+
+RegisterNetEvent("usa:getClosestPlayer")
+AddEventHandler("usa:getClosestPlayer", function(range, cb)
+	local id, name, dist = GetClosestPlayerInfo(range)
+  local player = {
+    id = id,
+    name = name,
+    dist = dist
+  }
+  cb(player)
+end)
+
+function GetClosestPlayerInfo(range)
+	local closestDistance = 0
+	local closestPlayerServerId = 0
+	local closestName = ""
+	for x = 0, 64 do
+		if NetworkIsPlayerActive(x) then
+			targetPed = GetPlayerPed(x)
+			targetPedCoords = GetEntityCoords(targetPed, false)
+			playerPedCoords = GetEntityCoords(GetPlayerPed(-1), false)
+			distanceToTargetPed = Vdist(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, targetPedCoords.x, targetPedCoords.y, targetPedCoords.z)
+			if targetPed ~= GetPlayerPed(-1) then
+				if distanceToTargetPed < 10 then
+					if closestDistance == 0 then
+						closestDistance = distanceToTargetPed
+						closestPlayerServerId = GetPlayerServerId(x)
+						closestName = GetPlayerName(x)
+						hitHandlePed = GetPlayerPed(x)
+						--rayHandle = CastRayPointToPoint(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, targetPedCoords.x, targetPedCoords.y, targetPedCoords.z, 12, GetPlayerPed(-1), 0)
+						--a, b, c, d, hitHandlePed = GetRaycastResult(rayHandle)
+					else
+						if distanceToTargetPed <= closestDistance then
+							closestDistance = distanceToTargetPed
+							closestPlayerServerId = GetPlayerServerId(x)
+							closestName = GetPlayerName(x)
+							hitHandlePed = GetPlayerPed(x)
+							--rayHandle = CastRayPointToPoint(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, targetPedCoords.x, targetPedCoords.y, targetPedCoords.z, 12, GetPlayerPed(-1), 0)
+							--a, b, c, d, hitHandlePed = GetRaycastResult(rayHandle)
+						end
+					end
+				end
+			end
+		end
+	end
+	return closestPlayerServerId, closestName, closestDistance
+end

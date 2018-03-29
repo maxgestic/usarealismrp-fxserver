@@ -348,12 +348,12 @@ end)
 function IsInPopulatedArea()
 	local AREAS = {
 		{x = 1491.839, y = 3112.53, z = 40.656, range = 330}, -- sandy shores airport area // 75 - 150 probably range
-		{x = 151.62, y = 1038.808, z = 32.735, range = 1400}, -- los santos // 600 - 900 ish?
+		{x = 151.62, y = 1038.808, z = 32.735, range = 1200}, -- los santos // 600 - 900 ish?
 		{x = -3161.96, y = 790.088, z = 6.824, range = 650}, -- west coast, NW of los santos // 300 - 400 ish?
-		{x = 2356.744, y = 4776.75, z = 34.613, range = 700}, -- grape seed // 350 - 450 ish?
-		{x = 145.209, y = 6304.922, z = 40.277, range = 850}, -- paleto bay // 500 - 600
-		{x = -1070.5, y = 5323.5, z = 46.339, range = 720}, -- S of Paleto Bay // 350 - 500 ish
-		{x = -2550.21, y = 2321.747, z = 33.059, range = 450}, -- west of map, gas station // 100 - 200
+		{x = 2356.744, y = 4776.75, z = 34.613, range = 600}, -- grape seed // 350 - 450 ish?
+		{x = 145.209, y = 6304.922, z = 40.277, range = 650}, -- paleto bay // 500 - 600
+		{x = -1070.5, y = 5323.5, z = 46.339, range = 700}, -- S of Paleto Bay // 350 - 500 ish
+		{x = -2550.21, y = 2321.747, z = 33.059, range = 350}, -- west of map, gas station // 100 - 200
 		{x = 1927.374, y = 3765.77, z = 32.309, range = 350}, -- sandy shores
 		{x = 895.649, y = 2697.049, z = 41.985, range = 200}, -- harmony
 		{x = -1093.773, y = -2970.00, z = 13.944, range = 300}, -- LS airport
@@ -417,7 +417,7 @@ AddEventHandler("police:testForGSR", function(to_notify_id)
 	end
 end)
 
-function GetClosestPlayerInfo()
+function GetClosestPlayerInfo(range)
 	local closestDistance = 0
 	local closestPlayerServerId = 0
 	local closestName = ""
@@ -428,7 +428,7 @@ function GetClosestPlayerInfo()
 			playerPedCoords = GetEntityCoords(GetPlayerPed(-1), false)
 			distanceToTargetPed = Vdist(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, targetPedCoords.x, targetPedCoords.y, targetPedCoords.z)
 			if targetPed ~= GetPlayerPed(-1) then
-				if distanceToTargetPed < 10 then
+				if distanceToTargetPed < range then
 					if closestDistance == 0 then
 						closestDistance = distanceToTargetPed
 						closestPlayerServerId = GetPlayerServerId(x)

@@ -2,6 +2,22 @@ local lPed
 local isCuffed = false
 local SOUND_ENABLE = true
 
+RegisterNetEvent("cuff:attemptToCuffNearest")
+AddEventHandler("cuff:attemptToCuffNearest", function()
+	TriggerEvent("usa:getClosestPlayer", 1.65, function(player)
+		if player then
+			print("closest: ")
+			print("name: " .. player.name)
+			print("id: " .. player.id)
+			if tonumber(player.id) ~= 0 then
+				TriggerServerEvent("cuff:Handcuff", player.id)
+			else
+				DrawCoolLookingNotificationNoPic("No target found to cuff!")
+			end
+		end
+	end)
+end)
+
 RegisterNetEvent("cuff:Handcuff")
 AddEventHandler("cuff:Handcuff", function()
 	lPed = GetPlayerPed(-1)

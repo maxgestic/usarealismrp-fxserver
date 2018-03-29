@@ -56,7 +56,7 @@ function DrawPlayerList()
 	SetTextDropShadow( 0, 0, 0, 0, 255 )
 	SetTextEdge( 1, 0, 0, 0, 255 )
 	SetTextEntry( "STRING" )
-	AddTextComponentString( "Players: " .. #active_player_list )
+	AddTextComponentString( "Player(s): " .. #active_player_list )
 	DrawText( 0.01 + xOffset, 0.007 )
 
 	for k, v in pairs( active_player_list ) do
@@ -212,11 +212,11 @@ Citizen.CreateThread( function()
 		if GetGameTimer() < last_press + Settings["DisplayTime"] then
 			DrawPlayerList()
 			ShowIds()
-			if not player_list_open then 
-				player_list_open = true 
+			if not player_list_open then
+				player_list_open = true
 			end
-		else 
-			player_list_open = false 	
+		else
+			player_list_open = false
 		end
 	end
 end)

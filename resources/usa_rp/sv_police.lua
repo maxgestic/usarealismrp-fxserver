@@ -263,7 +263,7 @@ end, {
 TriggerEvent('es:addJobCommand', 'p', { "police", "sheriff", "ems" }, function(source, args, user)
 	TriggerEvent('es:getPlayerFromId', source, function(user)
 		TriggerEvent("es:getPlayers", function(pl)
-			for k, v in pairs(pl) do	
+			for k, v in pairs(pl) do
 				local user_job = v.getActiveCharacterData("job")
 				if user_job == "cop" or user_job == "sheriff" or user_job == "highwaypatrol" or user_job == "ems" or user_job == "fire" then
 					for i = 1, 3 do
@@ -271,7 +271,7 @@ TriggerEvent('es:addJobCommand', 'p', { "police", "sheriff", "ems" }, function(s
 						local params = {-1, "Event_Message_Purple", "GTAO_FM_Events_Soundset", 1}
 						TriggerClientEvent("usa:playSound", k, params)
 					end
-				end		
+				end
 			end
 		end)
 	end)
@@ -294,7 +294,7 @@ AddEventHandler("police:notifyGSR", function(id, passed)
 	if passed then
 		message = "Gun shot residue ~r~detected~w~!"
 		-- todo: play sound
-	else 
+	else
 		message = "No gun shot residue detected."
 		-- todo: play sound
 	end
@@ -310,7 +310,7 @@ AddEventHandler("police:setFirearmPermitStatus", function(status, id, days)
 			local license =  licenses[i]
 			if  license.name == "Firearm Permit" then
 				licenses[i].status = status
-				if status == "suspended" then 
+				if status == "suspended" then
 					licenses[i].suspension_start = os.time()
 					licenses[i].suspension_days = days
 					licenses[i].suspension_start_date = os.date('%m-%d-%Y %H:%M:%S', os.time())
@@ -324,7 +324,7 @@ AddEventHandler("police:setFirearmPermitStatus", function(status, id, days)
 	end)
 end)
 
--- check suspension dates -- 
+-- check suspension dates --
 RegisterServerEvent("police:checkSuspension")
 AddEventHandler("police:checkSuspension", function(id)
 	print("checking player license status!")
@@ -335,7 +335,7 @@ AddEventHandler("police:checkSuspension", function(id)
 			if licenses then
 				local license =  licenses[i]
 				if  license.name == "Driver's License" or license.name == "Firearm Permit"  then
-					if license.status == "suspended" then 
+					if license.status == "suspended" then
 						--licenses[i].suspension_start = os.time()
 						--licenses[i].suspension_days = days
 						local reference = licenses[i].suspension_start
@@ -357,3 +357,34 @@ AddEventHandler("police:checkSuspension", function(id)
 		print("person had no DL or FP!")
 	end)
 end)
+
+-- license debug --
+TriggerEvent('es:addGroupCommand', 'removesuspension', 'admin', function(source, args, user)
+	print("removing suspension")
+	local type = string.lower(args[2])
+	local target = tonumber(args[3])
+	local target_item_name = nil
+	if type and target then
+		if type == "dl" then
+			target_item_name = "Driver's License"
+		elseif type == "fp" then
+			target_item_name = "Firearm Permit"
+		end
+		local target_player = exports["essentialmode"]:getPlayerFromId(target)
+		local licenses = target_player.getActiveCharacterData("licenses")
+		for i = 1, #licenses do
+			if licenses[i].name == target_item_name then
+				if licenses[i].status == "suspended" then
+					licenses[i].status = "valid"
+					user.setActiveCharacterData("licenses", licenses)
+				end
+			end
+		end
+	end
+end, {
+	help = "Remove a license/firearm permit suspension",
+	params = {
+		{ name = "license type", help = "either FP or DL" },
+		{ name = "id", help = "id of player" }
+	}
+})

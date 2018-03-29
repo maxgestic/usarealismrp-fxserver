@@ -24,6 +24,39 @@ AddEventHandler("crim:blindfold", function(on, dont_send_message)
   end
 end)
 
+RegisterNetEvent("crim:attemptToBlindfoldNearestPerson")
+AddEventHandler("crim:attemptToBlindfoldNearestPerson", function(blindfold)
+  TriggerEvent("usa:getClosestPlayer", 1.5, function(player)
+    if player.id ~= 0 then
+      TriggerServerEvent("crim:foundPlayerToBlindfold", player.id, blindfold)
+    else
+      TriggerEvent("usa:notify", "No person found to blindfold!")
+    end
+  end)
+end)
+
+RegisterNetEvent("crim:attemptToRobNearestPerson")
+AddEventHandler("crim:attemptToRobNearestPerson", function()
+  TriggerEvent("usa:getClosestPlayer", 1.5, function(player)
+    if player.id ~= 0 then
+      TriggerServerEvent("crim:foundPlayerToRob", player.id)
+    else
+      TriggerEvent("usa:notify", "No person found to rob!")
+    end
+  end)
+end)
+
+RegisterNetEvent("crim:attemptToTieNearestPerson")
+AddEventHandler("crim:attemptToTieNearestPerson", function(tying_up)
+  TriggerEvent("usa:getClosestPlayer", 1.5, function(player)
+    if player.id ~= 0 then
+      TriggerServerEvent("crim:foundPlayerToTie", player.id, tying_up)
+    else
+      TriggerEvent("usa:notify", "No person found to tie!")
+    end
+  end)
+end)
+
 RegisterNetEvent("crim:tieHands")
 AddEventHandler("crim:tieHands", function()
   local close_enough = false

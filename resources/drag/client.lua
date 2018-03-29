@@ -1,6 +1,17 @@
 otherid = 0
 drag = false
 
+RegisterNetEvent("drag:attemptToDragNearest")
+AddEventHandler('drag:attemptToDragNearest', function()
+	TriggerEvent("usa:getClosestPlayer", 1.65, function(player)
+		if player.id ~= 0 then
+			TriggerServerEvent("dr:dragPlayer", player.id)
+		else
+			TriggerEvent("usa:notify", "No player to drag!")
+		end
+	end)
+end)
+
 RegisterNetEvent("dr:drag")
 AddEventHandler('dr:drag', function(pl)
 	otherid = tonumber(pl)
