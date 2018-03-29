@@ -614,8 +614,8 @@ LSC_Config.prices = {
 ----------Transmission---------
 	[13] = {
 		{name = "Street Transmission", mod = 0, price = 10000},
-		{name = "Sports Transmission", mod = 1, price = 12500},
-		{name = "Race Transmission", mod = 2, price = 15000},
+		{name = "Sports Transmission", mod = 1, price = 19500},
+		{name = "Race Transmission", mod = 2, price = 25000},
 	},
 
 -----------Brakes-------------

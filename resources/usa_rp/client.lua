@@ -378,11 +378,13 @@ AddEventHandler('veh:toggleEngine', function(status)
                 local vehicleEngineHealth = GetVehicleEngineHealth(targetVehicle)
                 if vehicleEngineHealth > 850 then
                     SetVehicleEngineOn(targetVehicle, true, false, false)
+                    SetVehicleUndriveable(targetVehicle, false)
                 else
                     TriggerEvent("usa:notify", "Your vehicle is disabled! Can't turn the engine on.")
                 end
             elseif status == "off" then
                 SetVehicleEngineOn(targetVehicle, false, false, false)
+                SetVehicleUndriveable(targetVehicle, true)
             end
         end
     end
@@ -447,14 +449,14 @@ AddEventHandler("usa:playAnimation", function(animName, animDict, duration, spee
 		  end
 		  Wait(1000) -- wait one second * duration
 		end
-	else 
+	else
 		if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) and not IsPedInAnyVehicle(GetPlayerPed(-1), 1) then
 			if speed then
 				--print("speed existed!")
 				if loop then
 					--print("loop!")
 					TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, -8, -1, 7, 0, 0, 0, 0)
-				else 
+				else
 					TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, -8, -1, 8, 0, 0, 0, 0)
 				end
 			else
