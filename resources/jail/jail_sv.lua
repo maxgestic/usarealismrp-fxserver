@@ -92,14 +92,14 @@ function jailPlayer(data, officerName)
 		-- remove any active warrants --
 		TriggerEvent("warrants:removeAnyActiveWarrants", inmate_name)
 		-- suspend license if necessary --
-		local suspensions = nil
+		local suspensions = ""
 		if GetDLSuspensionDays(reason) then
 			TriggerEvent("dmv:setLicenseStatus", "suspended", targetPlayer, GetDLSuspensionDays(reason))
 			TriggerClientEvent("usa:notify", targetPlayer, "Your driver's license has been suspended for " .. GetDLSuspensionDays(reason) .. " day(s)")
 			suspensions = "\nDL suspended for " .. GetDLSuspensionDays(reason) .. " day(s)"
 		end
 		-- suspend gun permit if necessary --
-		if GetFPSuspensionDays(reason) then 
+		if GetFPSuspensionDays(reason) then
 			TriggerEvent("police:setFirearmPermitStatus", "suspended", targetPlayer, GetFPSuspensionDays(reason))
 			TriggerClientEvent("usa:notify", targetPlayer, "Your firearm permit has been suspended for " .. GetFPSuspensionDays(reason) .. " day(s)")
 			suspensions = suspensions .. "\nFP suspended for " .. GetFPSuspensionDays(reason) .. " day(s)"
@@ -134,8 +134,8 @@ function GetFPSuspensionDays(charges) -- firearm permit
         ["16590"] = 6,
         ["25850"] = 3
 	}
-	for code, days in pairs(words) do 
-		if string.find(charges, code) then 
+	for code, days in pairs(words) do
+		if string.find(charges, code) then
 			return days
 		end
 	end
@@ -155,8 +155,8 @@ function GetDLSuspensionDays(charges) -- driver license
 		["23103"] = 6,
 		["23153"] = 8
 	}
-	for code, days in pairs(words) do 
-		if string.find(charges, code) then 
+	for code, days in pairs(words) do
+		if string.find(charges, code) then
 			return days
 		end
 	end
