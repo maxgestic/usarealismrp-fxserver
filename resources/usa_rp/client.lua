@@ -519,6 +519,24 @@ AddEventHandler("usa:dropWeapon", function(weapon_hash)
   --SetPedDropsWeapon(weapon_hash) -- or this? or both?
 end)
 
+RegisterNetEvent("usa:setPlayerComponents")
+AddEventHandler("usa:setPlayerComponents", function(character)
+  if character.hash then
+    for key, value in pairs(character["components"]) do
+      SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
+    end
+    for key, value in pairs(character["props"]) do
+      SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
+    end
+  end
+  ClearPedDecorations(GetPlayerPed(-1))
+  if character.tattoos then
+    for i = 1, #character.tattoos do
+      ApplyPedOverlay(GetPlayerPed(-1), GetHashKey(character.tattoos[i].category), GetHashKey(character.tattoos[i].hash_name))
+    end
+  end
+end)
+
 RegisterNetEvent("usa:getClosestPlayer")
 AddEventHandler("usa:getClosestPlayer", function(range, cb)
 	local id, name, dist = GetClosestPlayerInfo(range)

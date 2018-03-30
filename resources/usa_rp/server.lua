@@ -378,6 +378,20 @@ AddEventHandler("usa:insertItem", function(to_insert_item, quantity, player_sour
 	end)
 end)
 
+RegisterServerEvent("usa:loadPlayerComponents")
+AddEventHandler("usa:loadPlayerComponents", function(id)
+	local usource = source
+	if id then usource = id end
+	local player = exports["essentialmode"]:getPlayerFromId(usource)
+	local chars = player.getCharacters()
+	for i = 1, #chars do
+		if chars[i].active == true then
+			TriggerClientEvent("usa:setPlayerComponents", usource, chars[i].appearance)
+			return
+		end
+	end
+end)
+
 RegisterServerEvent("usa:notifyStaff")
 AddEventHandler("usa:notifyStaff", function(msg)
 	sendMessageToModsAndAdmins(msg)

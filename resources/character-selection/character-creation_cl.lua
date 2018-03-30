@@ -89,6 +89,15 @@ AddEventHandler("character:setCharacter", function(character)
 					for key, value in pairs(character.appearance["props"]) do
 						SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character.appearance["propstexture"][key], true)
 					end
+					-- add any tattoos if they have any --
+					if character.appearance.tattoos then
+						print("applying tattoos!")
+						for i = 1, #character.appearance.tattoos do
+							ApplyPedOverlay(GetPlayerPed(-1), GetHashKey(character.appearance.tattoos[i].category), GetHashKey(character.appearance.tattoos[i].hash_name))
+						end
+					else
+						print("no tattoos!!!")
+					end
 					print("GIVING WEAPONS TO PED! # = " .. #weapons)
 					-- G I V E  W E A P O N S
 					for i =1, #weapons do
@@ -124,7 +133,7 @@ RegisterNUICallback('new-character-submit', function(data, cb)
 end)
 
 RegisterNUICallback('select-character', function(data, cb)
-	if data.character.spawn then 
+	if data.character.spawn then
 		spawn_coords_closed_menu = data.character.spawn
 	else
 		print("data.character.spawn did not exist")
