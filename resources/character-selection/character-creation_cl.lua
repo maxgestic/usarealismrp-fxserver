@@ -62,13 +62,13 @@ end)
 RegisterNetEvent("character:setCharacter")
 AddEventHandler("character:setCharacter", function(character)
 	RemoveAllPedWeapons(GetPlayerPed(-1), true) -- remove weapons for the case where a different character is selected after choosing one with weapons initially
-	print("setting character!")
+	---print("setting character!")
 	local weapons
 	if character then
-		print("character existed")
+		--print("character existed")
 		weapons = character.weapons
 		if character.appearance then
-			print("character.appearance existed")
+			--print("character.appearance existed")
 			if character.appearance.hash then
 				print("character.appearance.hash existed")
 				local name, model
@@ -98,15 +98,51 @@ AddEventHandler("character:setCharacter", function(character)
 					else
 						print("no tattoos!!!")
 					end
-					print("GIVING WEAPONS TO PED! # = " .. #weapons)
+					-- add any barber shop customizations if any --
+					if character.appearance.head_customizations then
+						print("barber shop customizations existed!")
+						local head = character.appearance.head_customizations
+						local ped = GetPlayerPed(-1)
+				    SetPedHeadBlendData(ped, head.parent1, head.parent2, head.parent3, head.skin1, head.skin2, head.skin3, head.mix1, head.mix2, head.mix3, false)
+				    --[[ customize face features --
+				    if face then
+				      local i = 0
+				      for name, value in pairs(face) do
+				        print("name: " .. name)
+				        print("setting index " .. i .. " to value: " .. value / 100.0)
+				        SetPedFaceFeature(ped, i, value / 100.0)
+				        i = i + 1
+				      end
+				    end
+				    --]] -- on hold cause it wouldn't work
+				    -- facial stuff like beards and ageing and what not --
+						for i = 1, #head.other do
+				      SetPedHeadOverlay(ped, i - 1, head.other[i][2], 1.0)
+				      if head.other[i][2] ~= 255 then
+				        if i == 2 or i == 3 or i == 11 then -- chest hair, facial hair, eyebrows
+				          SetPedHeadOverlayColor(ped, i - 1, 1, head.other[i][4])
+				        elseif i == 6 or i == 9 then -- blush, lipstick
+				          SetPedHeadOverlayColor(ped, i - 1, 2, head.other[i][4])
+				        elseif i == 14 then -- hair
+									print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
+				          SetPedComponentVariation(ped, 2, head.other[i][2], GetNumberOfPedTextureVariations(ped,2, 0), 2)
+				          SetPedHairColor(ped, head.other[i][4], head.other[i][4])
+				        end
+				      end
+				    end
+						TriggerEvent("barber:loadCustomizations", character.appearance.head_customizations)
+					else
+						print("no barber shop customizations!")
+					end
+					--print("GIVING WEAPONS TO PED! # = " .. #weapons)
 					-- G I V E  W E A P O N S
 					for i =1, #weapons do
 						GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
 					end
 				end)
 			else
-				Citizen.Trace("Could not find saved character skin!")
-				print("GIVING WEAPONS TO PED! # = " .. #weapons)
+				--Citizen.Trace("Could not find saved character skin!")
+				--print("GIVING WEAPONS TO PED! # = " .. #weapons)
 				-- G I V E  W E A P O N S
 				for i =1, #weapons do
 					GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)

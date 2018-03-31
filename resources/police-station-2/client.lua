@@ -199,11 +199,57 @@ AddEventHandler("policestation2:setciv", function(character, playerWeapons)
 		-- give model customizations if available
 		if character.hash then
 			for key, value in pairs(character["components"]) do
-				SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
+				--if tonumber(key) ~= 0 or tonumber(key) ~= 1 or tonumber(key) ~= 2 then -- emit barber shop features
+					SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
+				--end
 			end
 			for key, value in pairs(character["props"]) do
 				SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
 			end
+		end
+		-- add any tattoos if they have any --
+		if character.tattoos then
+			--print("applying tattoos!")
+			for i = 1, #character.tattoos do
+				ApplyPedOverlay(GetPlayerPed(-1), GetHashKey(character.tattoos[i].category), GetHashKey(character.tattoos[i].hash_name))
+			end
+		else
+			--print("no tattoos!!!")
+		end
+		-- add any barber shop customizations if any --
+		if character.head_customizations then
+			--print("barber shop customizations existed!")
+			local head = character.head_customizations
+			local ped = GetPlayerPed(-1)
+			SetPedHeadBlendData(ped, head.parent1, head.parent2, head.parent3, head.skin1, head.skin2, head.skin3, head.mix1, head.mix2, head.mix3, false)
+			--[[ customize face features --
+			if face then
+				local i = 0
+				for name, value in pairs(face) do
+					print("name: " .. name)
+					print("setting index " .. i .. " to value: " .. value / 100.0)
+					SetPedFaceFeature(ped, i, value / 100.0)
+					i = i + 1
+				end
+			end
+			--]] -- on hold cause it wouldn't work
+			-- facial stuff like beards and ageing and what not --
+			for i = 1, #head.other do
+				SetPedHeadOverlay(ped, i - 1, head.other[i][2], 1.0)
+				if head.other[i][2] ~= 255 then
+					if i == 2 or i == 3 or i == 11 then -- chest hair, facial hair, eyebrows
+						SetPedHeadOverlayColor(ped, i - 1, 1, head.other[i][4])
+					elseif i == 6 or i == 9 then -- blush, lipstick
+						SetPedHeadOverlayColor(ped, i - 1, 2, head.other[i][4])
+					elseif i == 14 then -- hair
+						--print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
+						SetPedComponentVariation(ped, 2, head.other[i][2], GetNumberOfPedTextureVariations(ped,2, 0), 2)
+						SetPedHairColor(ped, head.other[i][4], head.other[i][4])
+					end
+				end
+			end
+		else
+			print("no barber shop customizations!")
 		end
 		-- give weapons
 		if playerWeapons then
@@ -358,18 +404,18 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 			--drawTxt(ply,0,1,0.5,0.8,0.6,255,255,255,255)
 			SetPedDefaultComponentVariation(ply)
 			if arrSkinGeneralValues[position] == "mp_m_freemode_01" then
-				SetPedComponentVariation(ply, 2, 19, 1, 0)
+				--SetPedComponentVariation(ply, 2, 19, 1, 0)
 				SetPedComponentVariation(ply, 4, 35, 0, 0)
-				SetPedComponentVariation(ply, 6, 24, 0, 0)
+				--SetPedComponentVariation(ply, 6, 24, 0, 0)
 				SetPedComponentVariation(ply, 8, 58, 0, 0)
 				SetPedComponentVariation(ply, 11, 55, 0, 0)
 			end
 			if arrSkinGeneralValues[position] == "mp_f_freemode_01" then
-				SetPedComponentVariation(ply, 0, 33, 0, 0)
-				SetPedComponentVariation(ply, 2, 4, 4, 0)
+				--SetPedComponentVariation(ply, 0, 33, 0, 0)
+				--SetPedComponentVariation(ply, 2, 4, 4, 0)
 				SetPedComponentVariation(ply, 3, 14, 0, 0)
 				SetPedComponentVariation(ply, 4, 34, 0, 0)
-				SetPedComponentVariation(ply, 6, 27, 0, 0)
+				--SetPedComponentVariation(ply, 6, 27, 0, 0)
 				SetPedComponentVariation(ply, 8, 35, 0, 0)
 				SetPedComponentVariation(ply, 11, 48, 0, 0)
 
@@ -454,7 +500,7 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 		end
 		end)
 
-	TriggerEvent("GUI2:Option", "Off-Duty", function(cb)
+	TriggerEvent("GUI2:Option", "Off Duty", function(cb)
 		if(cb) then
 			Citizen.Trace("true")
 			TriggerServerEvent("policestation2:offduty")
