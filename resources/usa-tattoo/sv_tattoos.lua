@@ -1,3 +1,6 @@
+--# made by: minipunch
+--# for: USA REALISM RP
+
 -----------------------------------------------------
 -- tattoo list, separated into pages (2, 2, and 3) --
 -----------------------------------------------------
@@ -170,6 +173,7 @@ AddEventHandler("tattoo:checkout", function(purchased_tattoos, property)
 		end
     player.setActiveCharacterData("appearance", appearance)
     TriggerEvent("usa:loadPlayerComponents", usource)
+		TriggerClientEvent("usa:notify", usource, "~y~You payed: ~w~$" .. cost)
     if property then
       TriggerEvent("properties:addMoney", property.name, math.floor(0.25 * cost, 0))
     end

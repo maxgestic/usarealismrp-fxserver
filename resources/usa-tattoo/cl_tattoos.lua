@@ -1,3 +1,8 @@
+--# made by: minipunch
+--# for: USA REALISM RP
+
+-- ped coord: x = -292.095, y = 6200.811, z = 31.48 (paleto)
+
 local SHOPS = {
   {x = -293.711, y = 6200.428, z = 31.487}, -- paleto
   {x = 1863.775, y = 3747.57, z = 33.03}, -- sandy shores
@@ -153,16 +158,18 @@ local TATTOOS = {
 function RemoveClothes()
   local me = GetPlayerPed(-1)
   -- remove clothing (to see tattoos) --
-  if(GetEntityModel(me) == -1667301416) then -- female
-    SetPedComponentVariation(me, 8, 34,0, 2)
-    SetPedComponentVariation(me, 3, 15,0, 2)
-    SetPedComponentVariation(me, 11, 101,1, 2)
-    SetPedComponentVariation(me, 4, 16,0, 2)
-  else -- male
-    SetPedComponentVariation(me, 8, 15,0, 2)
-    SetPedComponentVariation(me, 3, 15,0, 2)
-    SetPedComponentVariation(me, 11, 91,0, 2)
-    SetPedComponentVariation(me, 4, 14,0, 2)
+  if IsPedModel(me,"mp_m_freemode_01") or IsPedModel(me,"mp_f_freemode_01") then
+    if(GetEntityModel(me) == -1667301416) then -- female
+      SetPedComponentVariation(me, 8, 34,0, 2)
+      SetPedComponentVariation(me, 3, 15,0, 2)
+      SetPedComponentVariation(me, 11, 101,1, 2)
+      SetPedComponentVariation(me, 4, 16,0, 2)
+    else -- male
+      SetPedComponentVariation(me, 8, 15,0, 2)
+      SetPedComponentVariation(me, 3, 15,0, 2)
+      SetPedComponentVariation(me, 11, 91,0, 2)
+      SetPedComponentVariation(me, 4, 14,0, 2)
+    end
   end
   -- remove weird black box on back/front? --
   SetPedComponentVariation(me, 10, 0, 0, 0)
@@ -229,85 +236,85 @@ Citizen.CreateThread(function()
         end
       elseif menu.page == 1 then
         for name, info in pairs(TATTOOS["mpbeach_overlays"][1]) do
-          TriggerEvent("GUI-tattoo:Option", name, function(cb)
+          TriggerEvent("GUI-tattoo:Option", "($" .. info[2] .. ") " .. name, function(cb)
             if(cb) then
-              if IsPedModel(me,"mp_m_freemode_01") or IsPedModel(me,"mp_f_freemode_01") then
+              --if IsPedModel(me,"mp_m_freemode_01") or IsPedModel(me,"mp_f_freemode_01") then
                 --print("applying overlay " .. name .. "!\n\nname: " .. GetHashKey(name))
                 ApplyPedOverlay(me, GetHashKey("mpbeach_overlays"), GetHashKey(info[1]))
                 table.insert(purchased_tattoos, {category = "mpbeach_overlays", human_readable_name = name, hash_name = info[1]})
-              end
+              --end
             end
           end)
         end
       elseif menu.page == 2 then
         for name, info in pairs(TATTOOS["mpbeach_overlays"][2]) do
-          TriggerEvent("GUI-tattoo:Option", name, function(cb)
+          TriggerEvent("GUI-tattoo:Option", "($" .. info[2] .. ") " .. name, function(cb)
             if(cb) then
-              if IsPedModel(me,"mp_m_freemode_01") or IsPedModel(me,"mp_f_freemode_01") then
+              --if IsPedModel(me,"mp_m_freemode_01") or IsPedModel(me,"mp_f_freemode_01") then
                 --print("applying overlay " .. name .. "!\n\nname: " .. GetHashKey(name))
                 ApplyPedOverlay(me, GetHashKey("mpbeach_overlays"), GetHashKey(info[1]))
                 table.insert(purchased_tattoos, {category = "mpbeach_overlays", human_readable_name = name, hash_name = info[1]})
-              end
+              --end
             end
           end)
         end
       elseif menu.page == 3 then
         for name, info in pairs(TATTOOS["mpbusiness_overlays"][1]) do
-          TriggerEvent("GUI-tattoo:Option", name, function(cb)
+          TriggerEvent("GUI-tattoo:Option", "($" .. info[2] .. ") " .. name, function(cb)
             if(cb) then
-              if IsPedModel(me,"mp_m_freemode_01") or IsPedModel(me,"mp_f_freemode_01") then
+              --if IsPedModel(me,"mp_m_freemode_01") or IsPedModel(me,"mp_f_freemode_01") then
                 --print("applying overlay " .. name .. "!\n\nname: " .. GetHashKey(name))
                 ApplyPedOverlay(me, GetHashKey("mpbusiness_overlays"), GetHashKey(info[1]))
                 table.insert(purchased_tattoos, {category = "mpbusiness_overlays", human_readable_name = name, hash_name = info[1]})
-              end
+              --end
             end
           end)
         end
       elseif menu.page == 4 then
         for name, info in pairs(TATTOOS["mpbusiness_overlays"][2]) do
-          TriggerEvent("GUI-tattoo:Option", name, function(cb)
+          TriggerEvent("GUI-tattoo:Option", "($" .. info[2] .. ") " .. name, function(cb)
             if(cb) then
-              if IsPedModel(me,"mp_m_freemode_01") or IsPedModel(me,"mp_f_freemode_01") then
+              --if IsPedModel(me,"mp_m_freemode_01") or IsPedModel(me,"mp_f_freemode_01") then
                 --print("applying overlay " .. name .. "!\n\nname: " .. GetHashKey(name))
                 ApplyPedOverlay(me, GetHashKey("mpbusiness_overlays"), GetHashKey(info[1]))
                 table.insert(purchased_tattoos, {category = "mpbusiness_overlays", human_readable_name = name, hash_name = info[1]})
-              end
+              --end
             end
           end)
         end
       elseif menu.page == 5 then
         for name, info in pairs(TATTOOS["mphipster_overlays"][1]) do
-          TriggerEvent("GUI-tattoo:Option", name, function(cb)
+          TriggerEvent("GUI-tattoo:Option", "($" .. info[2] .. ") " .. name, function(cb)
             if(cb) then
-              if IsPedModel(me,"mp_m_freemode_01") or IsPedModel(me,"mp_f_freemode_01") then
+              --if IsPedModel(me,"mp_m_freemode_01") or IsPedModel(me,"mp_f_freemode_01") then
                 --print("applying overlay " .. name .. "!\n\nname: " .. GetHashKey(name))
                 ApplyPedOverlay(me, GetHashKey("mphipster_overlays"), GetHashKey(info[1]))
                 table.insert(purchased_tattoos, {category = "mphipster_overlays", human_readable_name = name, hash_name = info[1]})
-              end
+              --end
             end
           end)
         end
       elseif menu.page == 6 then
         for name, info in pairs(TATTOOS["mphipster_overlays"][2]) do
-          TriggerEvent("GUI-tattoo:Option", name, function(cb)
+          TriggerEvent("GUI-tattoo:Option", "($" .. info[2] .. ") " .. name, function(cb)
             if(cb) then
-              if IsPedModel(me,"mp_m_freemode_01") or IsPedModel(me,"mp_f_freemode_01") then
+              --if IsPedModel(me,"mp_m_freemode_01") or IsPedModel(me,"mp_f_freemode_01") then
                 --print("applying overlay " .. name .. "!\n\nname: " .. GetHashKey(name))
                 ApplyPedOverlay(me, GetHashKey("mphipster_overlays"), GetHashKey(info[1]))
                 table.insert(purchased_tattoos, {category = "mphipster_overlays", human_readable_name = name, hash_name = info[1]})
-              end
+              --end
             end
           end)
         end
       elseif menu.page == 7 then
         for name, info in pairs(TATTOOS["mphipster_overlays"][3]) do
-          TriggerEvent("GUI-tattoo:Option", name, function(cb)
+          TriggerEvent("GUI-tattoo:Option", "($" .. info[2] .. ") " .. name, function(cb)
             if(cb) then
-              if IsPedModel(me,"mp_m_freemode_01") or IsPedModel(me,"mp_f_freemode_01") then
+              --if IsPedModel(me,"mp_m_freemode_01") or IsPedModel(me,"mp_f_freemode_01") then
                 --print("applying overlay " .. name .. "!\n\nname: " .. GetHashKey(name))
                 ApplyPedOverlay(me, GetHashKey("mphipster_overlays"), GetHashKey(info[1]))
                 table.insert(purchased_tattoos, {category = "mphipster_overlays", human_readable_name = name, hash_name = info[1]})
-              end
+              --end
             end
           end)
         end
@@ -333,6 +340,7 @@ Citizen.CreateThread(function()
       				end)
             else
               TriggerEvent("usa:notify", "No tattoos selected!")
+              TriggerServerEvent("usa:loadPlayerComponents")
             end
           end
         end)

@@ -25,7 +25,9 @@ AddEventHandler("jail:jailPlayerFromMenu", function(data)
 	print("data.charges: " .. data.charges)
 	print("data.id: " .. data.id)
 	print("data.fine: " .. data.fine)
-	print("data.gender: " .. data.gender)
+	if data.gender then
+		print("data.gender: " .. data.gender)
+	end
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local user_job = user.getActiveCharacterData("job")
 		local player_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")

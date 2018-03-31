@@ -202,6 +202,7 @@ Citizen.CreateThread(function()
                   local vehicle = GetVehiclePedIsIn(me, false)
                   local numberPlateText = GetVehicleNumberPlateText(vehicle)
                   TriggerServerEvent("properties:storeVehicle", nearest_property_info.name, numberPlateText)
+                  Wait(1000)
                 end
               end
             end
