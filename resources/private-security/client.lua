@@ -408,6 +408,7 @@ Citizen.CreateThread(function()
 	end
 	end)
 
+--[[
 Citizen.CreateThread(function()
 	for _, item in pairs(LockerRooms) do
 		item.blip = AddBlipForCoord(item.x, item.y, item.z)
@@ -419,6 +420,7 @@ Citizen.CreateThread(function()
 		EndTextCommandSetBlipName(item.blip)
 	end
 	end)
+--]]
 
 RegisterNetEvent("CS:giveWeapons")
 AddEventHandler("CS:giveWeapons", function(weapons)

@@ -21,6 +21,6 @@ AddEventHandler("barber:checkout", function(customizations, property)
       TriggerEvent("properties:addMoney", property.name, math.floor(0.75 * BARBER_FEE, 0))
     end
   else
-    TriggerClientEvent("usa:notify", usource, "You don't have enough money to pay the total: $" .. cost)
+    TriggerClientEvent("usa:notify", usource, "You don't have enough money to pay the total: $" .. BARBER_FEE)
   end
 end)
