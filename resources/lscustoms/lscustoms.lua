@@ -73,7 +73,6 @@ local function EndFade()
 	end)
 end
 
--- todo: fix xeon head lights & tire smoke
 -- mini's added function to save customizations
 RegisterNetEvent("customs:applyCustomizations")
 AddEventHandler("customs:applyCustomizations", function(veh)
@@ -90,6 +89,19 @@ AddEventHandler("customs:applyCustomizations", function(veh)
 		local wheeltype = veh.wheeltype
 		local bulletProofTyres = veh.bulletProofTyres
 
+		SetVehicleColours(currentvehicle, veh.color[1], veh.color[2])
+		SetVehicleExtraColours(currentvehicle, veh.extracolor[1], veh.extracolor[2])
+		SetVehicleNeonLightsColour(currentvehicle, veh.neoncolor[1],veh.neoncolor[2],veh.neoncolor[3])
+		SetVehicleTyreSmokeColor(currentvehicle,veh.smokecolor[1],veh.smokecolor[2],veh.smokecolor[3])
+		SetVehicleNumberPlateTextIndex(currentvehicle,veh.plateindex)
+		SetVehicleWheelType(currentvehicle, veh.wheeltype)
+		SetVehicleTyresCanBurst(currentvehicle, not not veh.bulletProofTyres)
+		SetVehicleWindowTint(currentvehicle,veh.windowtint)
+		SetVehicleNeonLightEnabled(currentvehicle, 0, not not veh.neonlightenabled)
+		SetVehicleNeonLightEnabled(currentvehicle, 1, not not veh.neonlightenabled)
+		SetVehicleNeonLightEnabled(currentvehicle, 2, not not veh.neonlightenabled)
+		SetVehicleNeonLightEnabled(currentvehicle, 3, not not veh.neonlightenabled)
+
 		-- set mods --
     SetVehicleModKit(currentvehicle,0)
 		for x = 0, 48 do
@@ -100,10 +112,24 @@ AddEventHandler("customs:applyCustomizations", function(veh)
 				else
 					ToggleVehicleMod(currentvehicle, x, customizations[tostring(x)].mod)
 				end
-			elseif x == 23 or x == 24 then -- custom tires
+			elseif x == 23 then -- custom tires
 				if customizations[x] then
+					print("customizations[x].mod: " .. customizations[x].mod)
+					print("variation: " .. tostring(customizations[x].variation))
 					SetVehicleMod(currentvehicle, x, customizations[x].mod, customizations[x].variation)
 				else
+					print("customizations[tostring(x)].mod: " .. customizations[tostring(x)].mod)
+					print("variation: " .. tostring(customizations[tostring(x)].variation))
+					SetVehicleMod(currentvehicle, x, customizations[tostring(x)].mod, customizations[tostring(x)].variation)
+				end
+			elseif x == 24 and IsThisModelABike(GetEntityModel(currentvehicle)) then
+				if customizations[x] then
+					print("customizations[x].mod: " .. customizations[x].mod)
+					print("variation: " .. tostring(customizations[x].variation))
+					SetVehicleMod(currentvehicle, x, customizations[x].mod, customizations[x].variation)
+				else
+					print("customizations[tostring(x)].mod: " .. customizations[tostring(x)].mod)
+					print("variation: " .. tostring(customizations[tostring(x)].variation))
 					SetVehicleMod(currentvehicle, x, customizations[tostring(x)].mod, customizations[tostring(x)].variation)
 				end
 			else
@@ -114,20 +140,6 @@ AddEventHandler("customs:applyCustomizations", function(veh)
 				end
 			end
 		end
-  	-- set other mod stuff --
-		SetVehicleColours(currentvehicle, veh.color[1], veh.color[2])
-		SetVehicleExtraColours(currentvehicle, veh.extracolor[1], veh.extracolor[2])
-		SetVehicleNeonLightsColour(currentvehicle, veh.neoncolor[1],veh.neoncolor[2],veh.neoncolor[3])
-		SetVehicleTyreSmokeColor(currentvehicle,veh.smokecolor[1],veh.smokecolor[2],veh.smokecolor[3]) -- not working?
-		SetVehicleNumberPlateTextIndex(currentvehicle,veh.plateindex)
-		SetVehicleWheelType(currentvehicle, veh.wheeltype)
-		SetVehicleTyresCanBurst(currentvehicle, not not veh.bulletProofTyres)
-		SetVehicleWindowTint(currentvehicle,veh.windowtint)
-		SetVehicleNeonLightEnabled(currentvehicle, 0, not not veh.neonlightenabled)
-		SetVehicleNeonLightEnabled(currentvehicle, 1, not not veh.neonlightenabled)
-		SetVehicleNeonLightEnabled(currentvehicle, 2, not not veh.neonlightenabled)
-		SetVehicleNeonLightEnabled(currentvehicle, 3, not not veh.neonlightenabled)
-
 end)
 ------------
 

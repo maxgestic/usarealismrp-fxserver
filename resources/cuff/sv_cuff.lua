@@ -1,9 +1,13 @@
 TriggerEvent('es:addJobCommand', 'cuff', { "police", "sheriff" }, function(source, args, user, location)
 	local userSource = tonumber(source)
-	--local tPID = tonumber(args[2])
-	--if GetPlayerName(tPID) then
+	if args[2] then -- id was passed as param
+		local tPID = tonumber(args[2])
+		if GetPlayerName(tPID) then
+			TriggerClientEvent("cuff:Handcuff", tPID)
+		end
+	else -- no ID, find nearest person to target
 		TriggerClientEvent("cuff:attemptToCuffNearest", userSource)
-		--TriggerClientEvent("cuff:Handcuff", tPID)
+	end
 		-- play anim:
 		local anim = {
 			dict = "anim@move_m@trash",
@@ -12,7 +16,7 @@ TriggerEvent('es:addJobCommand', 'cuff', { "police", "sheriff" }, function(sourc
 		TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 2)
 		TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. user.getActiveCharacterData("fullName") .. " handcuffs person.", location)
 	--end
-end, {help = "Cuff the nearest player."})
+end, {help = "Cuff the nearest player.", id = "ID # (Optional)"})
 
 RegisterServerEvent("cuff:Handcuff")
 AddEventHandler("cuff:Handcuff", function(id)

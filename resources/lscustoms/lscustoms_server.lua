@@ -123,7 +123,6 @@ AddEventHandler("LSC:finished", function(veh)
 
 	--print("type(mods[12]): " .. type(mods[12].mod))
 
---[[
 	local color = veh.color
 	local extracolor = veh.extracolor
 	local neoncolor = veh.neoncolor
@@ -132,7 +131,8 @@ AddEventHandler("LSC:finished", function(veh)
 	local windowtint = veh.windowtint
 	local wheeltype = veh.wheeltype
 	local bulletProofTyres = veh.bulletProofTyres
-
+	
+--[[
 	--  mod debug info: --
 	for i = 1, #mods do
 		print("mod #" .. i .. ": " .. tostring(mods[i].mod))
@@ -188,7 +188,6 @@ AddEventHandler("LSC:finished", function(veh)
 	else
 		print("windowtint: " .. tostring(windowtint))
 	end
-
 	if type(wheeltype) == "table" then
 		print("wheeltype: ")
 		for i = 1, #wheeltype do
