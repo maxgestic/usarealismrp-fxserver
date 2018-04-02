@@ -29,7 +29,7 @@ local warp_locations = {
   },
   ["the courthouse"] = {
 	entrance = {
-      x = 317.283,
+    x = 317.283,
 	  y = -1631.1505,
 	  z = 31.59
     },
@@ -37,6 +37,32 @@ local warp_locations = {
       x = 234.547,
       y = -413.567,
       z = -119.365
+    },
+    job_access = "civ"
+  },
+  ["24/7 Paleto Back Door"] = {
+  	entrance = {
+      x = 1741.144,
+      y = 6420.12,
+      z = 34.044
+    },
+    exit = {
+      x = 1736.67,
+      y = 6419.22,
+      z = 34.04
+    },
+    job_access = "civ"
+  },
+  ["24/7 Sandy Back Door"] = {
+  	entrance = {
+      x = 1963.97,
+      y = 3750.105,
+      z = 31.256
+    },
+    exit = {
+      x = 1962.048,
+      y = 3749.229,
+      z = 31.34
     },
     job_access = "civ"
   }
@@ -49,7 +75,8 @@ Citizen.CreateThread(function()
       -- draw the markers
       if GetDistanceBetweenCoords(locationCoords.entrance.x, locationCoords.entrance.y, locationCoords.entrance.z,GetEntityCoords(GetPlayerPed(-1))) < 50 then
         DrawMarker(27, locationCoords.entrance.x, locationCoords.entrance.y, locationCoords.entrance.z, 0, 0, 0, 0, 0, 0, 1.5, 1.5, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
-      elseif GetDistanceBetweenCoords(locationCoords.exit.x, locationCoords.exit.y, locationCoords.exit.z,GetEntityCoords(GetPlayerPed(-1))) < 50 then
+      end
+      if GetDistanceBetweenCoords(locationCoords.exit.x, locationCoords.exit.y, locationCoords.exit.z,GetEntityCoords(GetPlayerPed(-1))) < 50 then
         DrawMarker(27, locationCoords.exit.x, locationCoords.exit.y, locationCoords.exit.z, 0, 0, 0, 0, 0, 0, 1.5, 1.5, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
       end
       -- enter/exit
@@ -59,9 +86,11 @@ Citizen.CreateThread(function()
           -- is location access restricted to certain jobs?
           if locationCoords.job_access == "civ" then
             print("job access: " ..locationCoords.job_access)
+            DoScreenFadeOut(500)
             Citizen.Wait(500)
             RequestCollisionAtCoord(locationCoords.exit.x+1.0, locationCoords.exit.y, locationCoords.exit.z)
             Citizen.Wait(1500)
+            DoScreenFadeIn(1500)
             SetEntityCoords(GetPlayerPed(-1), locationCoords.exit.x+1.0, locationCoords.exit.y, locationCoords.exit.z)
           else
             --print("job access: " ..locationCoords.job_access)
@@ -71,9 +100,11 @@ Citizen.CreateThread(function()
       elseif GetDistanceBetweenCoords(locationCoords.exit.x, locationCoords.exit.y, locationCoords.exit.z,GetEntityCoords(GetPlayerPed(-1))) < 1.6 then
         DrawSpecialText("Press [ ~b~E~w~ ] to exit " .. locationName .. "!")
         if IsControlPressed(0, INTERACTION_KEY) then
+          DoScreenFadeOut(500)
           Citizen.Wait(500)
           RequestCollisionAtCoord(locationCoords.entrance.x+1.0, locationCoords.entrance.y, locationCoords.entrance.z)
           Citizen.Wait(1500)
+          DoScreenFadeIn(1500)
           SetEntityCoords(GetPlayerPed(-1), locationCoords.entrance.x+1.0, locationCoords.entrance.y, locationCoords.entrance.z)
         end
       end
