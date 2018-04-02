@@ -1,0 +1,54 @@
+local VEHICLES = {
+  {name = "ORACLE", reward = 5000},
+  {name = "ORACLE2", reward = 5000},
+  {name = "FLATBED", reward = 8000},
+  {name = "SADLER", reward = 8000}, -- ford 150
+  {name = "EMPEROR", reward = 3000},
+  {name = "BFINJECT", reward = 3200},
+  {name = "SANCHEZ02", reward = 3000},
+  {name = "REBEL02", reward = 3300},
+  {name = "SEMINOLE", reward = 3300},
+  {name = "BOBCATXL", reward = 4300},
+  {name = "BUFFALO", reward = 4300}, -- chrystler 300
+  {name = "RUINER", reward = 4100},
+  {name = "BLISTA2", reward = 4100},
+  {name = "SCRAP", reward = 4000},
+  {name = "TORNADO3", reward = 2500},
+  {name = "SABREGT", reward = 6000}, -- ford mustang boss
+  {name = "FUGITIVE", reward = 7000}, -- masseratti quattroporte
+  {name = "DUBSTA", reward = 5700},
+  {name = "PEYOTE", reward = 4700},
+  {name = "SANDKING", reward = 6400}
+}
+
+RegisterServerEvent("chopshop:startJob")
+AddEventHandler("chopshop:startJob", function()
+  local usource = source
+  local wanted_vehicles = {}
+  for i = 1, 5 do
+    local random_vehicle = VEHICLES[math.random(#VEHICLES)]
+    table.insert(wanted_vehicles, random_vehicle)
+    print("inserted: " .. random_vehicle.name)
+  end
+  TriggerClientEvent("chopshop:startJob", usource, wanted_vehicles)
+end)
+
+RegisterServerEvent("chopshop:reward")
+AddEventHandler("chopshop:reward", function(veh_name, damage)
+  local usource = source
+  local player = exports["essentialmode"]:getPlayerFromId(usource)
+  local user_money = player.getActiveCharacterData("money")
+  local reward = GetRewardFromName(veh_name)
+  player.setActiveCharacterData("money", user_money + (reward - damage))
+  TriggerClientEvent("usa:notify", usource, "~y~Reward:~w~ $" .. (reward - damage) .. "\nThere was $" .. damage .. " in damages.")
+  print("chop shop turn in damage: -$" .. damage)
+end)
+
+function GetRewardFromName(name)
+  for i = 1, #VEHICLES do
+    if string.lower(name) == string.lower(VEHICLES[i].name) then
+      return VEHICLES[i].reward
+    end
+  end
+  return 0
+end
