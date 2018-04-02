@@ -137,7 +137,6 @@ AddEventHandler("CS:ShowMainMenu", function()
 				--drawTxt(ply,0,1,0.5,0.8,0.6,255,255,255,255)
 				SetPedRandomComponentVariation(ply, false)
 				SetModelAsNoLongerNeeded(modelhashed)
-				SetPedComponentVariation(ply, 0, 27, 0, 1)
 			end)
 		else
 
@@ -245,7 +244,8 @@ AddEventHandler("CS:ShowMainMenu", function()
 				debugstr = debugstr .. character.props[i] .. "->" .. character.propstexture[i] .. ","
 			end
 			debugstr = debugstr .. "| Components: "
-			for i=0,11 do
+			for i=0,11
+				do
 				character.components[i] = GetPedDrawableVariation(ply, i)
 				character.componentstexture[i] = GetPedTextureVariation(ply, i)
 				debugstr = debugstr .. character.components[i] .. "->" .. character.componentstexture[i] .. ","
@@ -311,7 +311,6 @@ AddEventHandler("CS:ShowPropsMenu", function()
 
 end)
 
--- second first of components array --
 RegisterNetEvent("CS:ShowComponentsMenu1")
 AddEventHandler("CS:ShowComponentsMenu1", function()
 	local components = {"Face","Head","Hair","Arms/Hands","Legs","Back","Feet","Ties","Acessories","Vests","Textures","Torso"}
@@ -325,90 +324,31 @@ AddEventHandler("CS:ShowComponentsMenu1", function()
 		end
 		end)
 	local ply = GetPlayerPed(-1)
-	local i = 1
-	local selectedComponent = GetPedDrawableVariation(ply, i)
-	local selectedTexture = GetPedTextureVariation(ply, i)
-	local maxComponent = GetNumberOfPedDrawableVariations(ply, i)
-	local maxTexture = GetNumberOfPedTextureVariations(ply, i, selectedComponent)
-	if(maxComponent > 1) then
-		TriggerEvent("GUI2:Int", components[i+1] .. " (" .. maxComponent .. ")", selectedComponent, 0, maxComponent - 1, function(cb)
-			selectedComponent = cb
-			-- SetPedComponentVariation(ply, i, selectedComponent, 0, 0)
-			SetPedComponentVariation(ply, i, selectedComponent, 0, 2)
-			selectedTexture = 0
-		end)
-	end
-	if(maxTexture > 1) then
-		TriggerEvent("GUI2:Int", components[i+1] .. " Texture (" .. maxTexture .. ")", selectedTexture, 0, maxTexture - 1, function(cb)
-			selectedTexture = cb
-			-- SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 0)
-			SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 2)
-		end)
-	end
-	i = 3
-	local selectedComponent = GetPedDrawableVariation(ply, i)
-	local selectedTexture = GetPedTextureVariation(ply, i)
-	local maxComponent = GetNumberOfPedDrawableVariations(ply, i)
-	local maxTexture = GetNumberOfPedTextureVariations(ply, i, selectedComponent)
-	if(maxComponent > 1) then
-		TriggerEvent("GUI2:Int", components[i+1] .. " (" .. maxComponent .. ")", selectedComponent, 0, maxComponent - 1, function(cb)
-			selectedComponent = cb
-			-- SetPedComponentVariation(ply, i, selectedComponent, 0, 0)
-			SetPedComponentVariation(ply, i, selectedComponent, 0, 2)
-			selectedTexture = 0
-		end)
-	end
-	if(maxTexture > 1) then
-		TriggerEvent("GUI2:Int", components[i+1] .. " Texture (" .. maxTexture .. ")", selectedTexture, 0, maxTexture - 1, function(cb)
-			selectedTexture = cb
-			-- SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 0)
-			SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 2)
-		end)
-	end
-	i = 4
-	local selectedComponent = GetPedDrawableVariation(ply, i)
-	local selectedTexture = GetPedTextureVariation(ply, i)
-	local maxComponent = GetNumberOfPedDrawableVariations(ply, i)
-	local maxTexture = GetNumberOfPedTextureVariations(ply, i, selectedComponent)
-	if(maxComponent > 1) then
-		TriggerEvent("GUI2:Int", components[i+1] .. " (" .. maxComponent .. ")", selectedComponent, 0, maxComponent - 1, function(cb)
-			selectedComponent = cb
-			-- SetPedComponentVariation(ply, i, selectedComponent, 0, 0)
-			SetPedComponentVariation(ply, i, selectedComponent, 0, 2)
-			selectedTexture = 0
-		end)
-	end
-	if(maxTexture > 1) then
-		TriggerEvent("GUI2:Int", components[i+1] .. " Texture (" .. maxTexture .. ")", selectedTexture, 0, maxTexture - 1, function(cb)
-			selectedTexture = cb
-			-- SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 0)
-			SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 2)
-		end)
-	end
-	i = 5
-	local selectedComponent = GetPedDrawableVariation(ply, i)
-	local selectedTexture = GetPedTextureVariation(ply, i)
-	local maxComponent = GetNumberOfPedDrawableVariations(ply, i)
-	local maxTexture = GetNumberOfPedTextureVariations(ply, i, selectedComponent)
-	if(maxComponent > 1) then
-		TriggerEvent("GUI2:Int", components[i+1] .. " (" .. maxComponent .. ")", selectedComponent, 0, maxComponent - 1, function(cb)
-			selectedComponent = cb
-			-- SetPedComponentVariation(ply, i, selectedComponent, 0, 0)
-			SetPedComponentVariation(ply, i, selectedComponent, 0, 2)
-			selectedTexture = 0
-		end)
-	end
-	if(maxTexture > 1) then
-		TriggerEvent("GUI2:Int", components[i+1] .. " Texture (" .. maxTexture .. ")", selectedTexture, 0, maxTexture - 1, function(cb)
-			selectedTexture = cb
-			-- SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 0)
-			SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 2)
-		end)
+	for i=0,5
+		do
+		local selectedComponent = GetPedDrawableVariation(ply, i)
+		local selectedTexture = GetPedTextureVariation(ply, i)
+		local maxComponent = GetNumberOfPedDrawableVariations(ply, i)
+		local maxTexture = GetNumberOfPedTextureVariations(ply, i, selectedComponent)
+		if(maxComponent > 1) then
+			TriggerEvent("GUI2:Int", components[i+1] .. " (" .. maxComponent .. ")", selectedComponent, 0, maxComponent - 1, function(cb)
+				selectedComponent = cb
+				-- SetPedComponentVariation(ply, i, selectedComponent, 0, 0)
+				SetPedComponentVariation(ply, i, selectedComponent, 0, 2)
+				selectedTexture = 0
+			end)
+		end
+		if(maxTexture > 1) then
+			TriggerEvent("GUI2:Int", components[i+1] .. " Texture (" .. maxTexture .. ")", selectedTexture, 0, maxTexture - 1, function(cb)
+				selectedTexture = cb
+				-- SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 0)
+				SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 2)
+			end)
+		end
 	end
 	TriggerEvent("GUI2:Update")
 end)
 
--- second half of components array --
 RegisterNetEvent("CS:ShowComponentsMenu2")
 AddEventHandler("CS:ShowComponentsMenu2", function()
 	local components = {"Face","Head","Hair","Arms/Hands","Legs","Back","Feet","Ties","Acessories","Vests","Textures","Torso"}
