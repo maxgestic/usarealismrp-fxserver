@@ -82,7 +82,7 @@ AddEventHandler("jail:release", function(character)
 	    SetEntityCoords(GetPlayerPed(-1), releaseX, releaseY, releaseZ, 1, 0, 0, 1) -- release from jail
         imprisoned = false
         if not character.hash then
-    		model = GetHashKey("a_m_y_skater_01")
+    		    model = GetHashKey("a_m_y_skater_01")
             RequestModel(model)
             while not HasModelLoaded(model) do -- Wait for model to load
                 RequestModel(model)
@@ -107,6 +107,7 @@ AddEventHandler("jail:release", function(character)
                 SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
             end
         end
+        TriggerEvent("usa:setPlayerComponents", character)
     end)
 end)
 
@@ -126,7 +127,7 @@ end)
 
 RegisterNetEvent("jail:changeClothes")
 AddEventHandler("jail:changeClothes", function(gender)
-	
+
 	-- only change clothes if male, since there is no female prisoner ped --
 	if gender == "male" or gender == "undefined" then
 
@@ -144,7 +145,7 @@ AddEventHandler("jail:changeClothes", function(gender)
 			SetPedRandomComponentVariation(GetPlayerPed(-1), false)
 
 		end)
-		
+
 	end
 
 end)

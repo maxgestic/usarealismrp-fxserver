@@ -344,7 +344,7 @@ AddEventHandler("police:checkSuspension", function(id)
 						local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
 						local wholedays = math.floor(daysfrom)
 						print("wholedays: " .. wholedays) -- today it prints "1"
-						if wholedays > licenses[i].suspension_days then
+						if wholedays >= licenses[i].suspension_days then
 							licenses[i].status = "valid"
 							user.setActiveCharacterData("licenses", licenses)
 							print("suspension period was over! setting to valid!")

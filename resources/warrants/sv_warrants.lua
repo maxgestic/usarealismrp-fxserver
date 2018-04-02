@@ -90,7 +90,7 @@ TriggerEvent('es:addJobCommand', 'createwarrant', { "police", "sheriff" }, funct
 				loadWarrants()
 			end)
 		end)
-	else 
+	else
 		TriggerClientEvent("usa:notify", source, "Invalid warrant format.")
 	end
 end, {
@@ -110,14 +110,15 @@ TriggerEvent('es:addJobCommand', '29', { "police", "sheriff" }, function(source,
 	table.remove(args,1)
 	local name_to_check = table.concat(args, " ")
 	TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^3CHECKING WARRANTS MATCHING:^0 " .. name_to_check .. "...")
-	for i = 1, #WARRANTS do 
+	for i = 1, #WARRANTS do
 		local warrant = WARRANTS[i]
-		if string.find(string.lower(warrant.first_name .. " " .. warrant.last_name), string.lower(name_to_check)) then 
+		if string.find(string.lower(warrant.first_name .. " " .. warrant.last_name), string.lower(name_to_check)) then
 			print("found an outstanding warrant for " .. name_to_check .. "!")
 			-- notify:
 			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^3Warrant found for: ^0" .. warrant.first_name .. " " .. warrant.last_name .. "")
 			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^3NOTES:^0 " .. warrant.notes)
 			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^3CREATED:^0 " .. warrant.timestamp)
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^3AUTHOR^0 " .. warrant.created_by)
 			had_results = true
 		end
 	end
@@ -135,7 +136,7 @@ end, {
 TriggerEvent('es:addJobCommand', 'deletewarrant', { "police", "sheriff" }, function(source, args, user)
 	if args[2] and args[3] then
 		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^3CHECKING WARRANTS MATCHING:^0 " .. args[2] .. " " .. args[3] .. "...")
-		for i = 1, #WARRANTS do 
+		for i = 1, #WARRANTS do
 			local warrant = WARRANTS[i]
 			if string.lower(warrant.first_name) == string.lower(args[2]) and string.lower(warrant.last_name) == string.lower(args[3]) then
 				print("found an outstanding warrant for " .. args[2] .. " " .. args[3] .. "!")
@@ -149,7 +150,7 @@ TriggerEvent('es:addJobCommand', 'deletewarrant', { "police", "sheriff" }, funct
 				return
 			end
 		end
-	else 
+	else
 		TriggerClientEvent("usa:notify", source, "Invalid command format.")
 	end
 end, {
@@ -165,7 +166,7 @@ end, {
 -----------------------------------
 TriggerEvent('es:addJobCommand', 'warrants', { "police", "sheriff" }, function(source, args, user)
 	TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^3ACTIVE WARRANTS:")
-	for i = 1, #WARRANTS do 
+	for i = 1, #WARRANTS do
 		local warrant = WARRANTS[i]
 		-- display warrant:
 		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "--------------------------------------------")
@@ -183,10 +184,10 @@ end, { help = "Show all active warrants." })
 RegisterServerEvent("warrants:removeAnyActiveWarrants")
 AddEventHandler("warrants:removeAnyActiveWarrants", function(name)
 	name = string.lower(name)
-	for i = #WARRANTS, 1, -1 do 
+	for i = #WARRANTS, 1, -1 do
 		local warrant = WARRANTS[i]
 		local warrant_name = string.lower(warrant.first_name .. " " .. warrant.last_name)
-		if string.find(warrant_name, name) then 
+		if string.find(warrant_name, name) then
 			-- match found, remove warrant
 			-- remove from DB:
 			delete_document("warrants", warrant._id, warrant._rev)
@@ -202,7 +203,7 @@ function delete_document(db, id, rev)
 		if err == 0 then
 			RconPrint("\nrText = " .. rText)
 			RconPrint("\nerr = " .. err)
-		else 
+		else
 			loadWarrants() -- refresh warrants
 		end
 	end, "DELETE", "", {["Content-Type"] = 'application/json'})
