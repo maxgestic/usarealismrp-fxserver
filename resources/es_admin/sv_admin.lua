@@ -825,7 +825,7 @@ AddEventHandler('playerConnecting', function(name, setReason)
 							if getHoursFromTime(bannedPlayer.time) < bannedPlayer.duration then
 								print("getHoursFromTime(bannedPlayer.time): " .. getHoursFromTime(bannedPlayer.time))
 								print(GetPlayerName(tonumber(source)) .. " has been temp banned from your server and should not be able to play!")
-								setReason("Temp Banned: " .. bannedPlayer.reason .. ". This ban is in place for " .. bannedPlayer.duration .. " hour(s). You may file an appeal at https://usarrp.net")
+								setReason("Temp Banned: " .. bannedPlayer.reason .. ". This ban is in place for " .. bannedPlayer.duration .. " hour(s).")
 								CancelEvent()
 								return
 							else
@@ -946,7 +946,7 @@ end)
 			end
 			-- show message
 			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
-			sendMessageToModsAndAdmins(GetPlayerName(targetPlayer) .. " has been ^1temp banned^0 (" .. reason .. ")")
+			sendMessageToModsAndAdmins(GetPlayerName(targetPlayer) .. " has been ^1temp banned^0 for " .. time .. " (" .. reason .. ")")
 			-- get char name:
 			local player = exports["essentialmode"]:getPlayerFromId(targetPlayer)
 			local char_name = player.getActiveCharacterData("fullName")
@@ -979,7 +979,7 @@ end)
 				print("player banned!")
 				-- drop player from session
 				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
-				DropPlayer(targetPlayer, "Temp Banned: " .. reason .. " -- You can file an appeal at https://usarrp.net")
+				DropPlayer(targetPlayer, "Temp Banned: " .. reason .. " This ban is in place for " .. time .. " hour(s).")
 				-- refresh lua table of bans for this resource
 				fetchAllBans()
 			end)
@@ -1009,7 +1009,7 @@ AddEventHandler('mini:checkPlayerBannedOnSpawn', function()
 						if bannedPlayer.duration then
 							if getHoursFromTime(bannedPlayer.time) < bannedPlayer.duration then
 								print(GetPlayerName(tonumber(source)) .. " has been temp banned from your server and should not be able to play!")
-								DropPlayer(tonumber(source), "Temp Banned: " .. bannedPlayer.reason)
+								DropPlayer(tonumber(source), "Temp Banned: " .. bannedPlayer.reason .. " This ban is in place for " .. bannedPlayer.duration .. " hour(s).")
 							else
 								local docid = bannedPlayer._id
 								local docRev = bannedPlayer._rev
@@ -1026,8 +1026,8 @@ AddEventHandler('mini:checkPlayerBannedOnSpawn', function()
 										print("\nPlayer "..bannedPlayer.name.." has been unbanned!")
 							end
 						else
-							print(GetPlayerName(tonumber(source)) .. " has been temp banned from your server and should not be able to play!")
-							DropPlayer(tonumber(source), "Temp Banned: " .. bannedPlayer.reason)
+							print(GetPlayerName(tonumber(source)) .. " has been banned from your server and should not be able to play!")
+							DropPlayer(tonumber(source), "Banned: " .. bannedPlayer.reason)
 						end
 					end
 				end
