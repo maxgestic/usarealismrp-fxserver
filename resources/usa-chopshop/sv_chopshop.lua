@@ -39,8 +39,12 @@ AddEventHandler("chopshop:reward", function(veh_name, damage)
   local player = exports["essentialmode"]:getPlayerFromId(usource)
   local user_money = player.getActiveCharacterData("money")
   local reward = GetRewardFromName(veh_name)
-  player.setActiveCharacterData("money", user_money + (reward - damage))
-  TriggerClientEvent("usa:notify", usource, "~y~Reward:~w~ $" .. (reward - damage) .. "\nThere was $" .. damage .. " in damages.")
+  if (reward - damage) >= 0 then
+    player.setActiveCharacterData("money", user_money + (reward - damage))
+    TriggerClientEvent("usa:notify", usource, "~y~Reward:~w~ $" .. (reward - damage) .. "\nThere was $" .. damage .. " in damages.")
+  else
+    TriggerClientEvent("usa:notify", usource, "This vehicle is too damaged. I am not giving you any money for this!")
+  end
   print("chop shop turn in damage: -$" .. damage)
 end)
 

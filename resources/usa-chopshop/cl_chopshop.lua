@@ -24,7 +24,7 @@ local current_job = {
   start_time = 0
 }
 
-local chop_time = 10000 -- in ms
+local chop_time = 18000 -- in ms
 
 local me = GetPlayerPed(-1)
 local playerCoords = GetEntityCoords(me, false)
@@ -206,7 +206,7 @@ function GetVehicleBodyDamage(veh)
   local damage = 0
   damage = (maxvehhp - GetVehicleBodyHealth(veh))/100
   --LSCMenu:addPurchase("Repair vehicle",round(250+150*damage,0), "Full body repair and engine service.")
-  return (math.floor(250+650*damage) or 0)
+  return (math.floor(250+75*damage) or 0)
 end
 
 function ResetJob()
