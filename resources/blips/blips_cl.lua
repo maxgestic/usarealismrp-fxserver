@@ -26,7 +26,7 @@ local blips = {
     { title="Ammu-Nation", colour=41, id=110, x=-3157.450, y=1079.633, z=20.692 },
     { title="Ammu-Nation", colour=41, id=110, x=16.6405, y=-1116.9636, z=29.7911 },
     { title="Ammu-Nation", colour=41, id=110, x=812.4276, y=-2145.2118, z=29.3063 },
-	{ title="Car Dealership", colour=76, id=225, x=120.924, y=6624.605, z=31.000 },
+	--{ title="Car Dealership", colour=76, id=225, x=120.924, y=6624.605, z=31.000 },
 	{ title="DMV", colour=4, id=355, x= -447.845, y = 6013.775, z = 30.716 },
 	{ title="Bubba's Tow Co.", colour=64, id=68, x = -196.027, y = 6265.625, z = 30.489 }, -- paleto
 	{ title="Bubba's Tow Co.", colour=64, id=68, x = 2363.89, y = 3126.85, z = 47.211 }, -- sandy shores

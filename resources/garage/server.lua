@@ -69,7 +69,7 @@ AddEventHandler("garage:storeVehicle", function(handle, numberPlateText)
 		for i = 1, #userVehicles do
 			local vehicle = userVehicles[i]
 			if numberPlateText and vehicle then
-				if string.match(numberPlateText,tostring(vehicle.plate)) ~= nil or numberPlateText == vehicle.plate then -- player actually owns car that is being stored
+				if string.match(numberPlateText,tostring(vehicle.plate)) or numberPlateText == vehicle.plate then -- player actually owns car that is being stored
 					userVehicles[i].stored = true
 					user.setActiveCharacterData("vehicles", userVehicles)
 					TriggerClientEvent("garage:storeVehicle", userSource)
@@ -117,7 +117,7 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle, property)
 				TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
 				user.setActiveCharacterData("money", user_money - withdraw_fee)
 				-- give money to garage owner --
-				if property then 
+				if property then
 					TriggerEvent("properties:addMoney", property.name, round(0.15 * withdraw_fee, 0))
 				end
 				--vehicle.impounded = false
@@ -169,7 +169,7 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle, property)
 					user.setActiveCharacterData("vehicles", userVehicles)
 					user.setActiveCharacterData("money", user_money - withdraw_fee)
 					-- give money to garage owner --
-					if property then 
+					if property then
 						TriggerEvent("properties:addMoney", property.name, round(0.15 * withdraw_fee, 0))
 					end
 					return
