@@ -2,8 +2,8 @@ local debug = true
 
 -- todo: randomize price based on each purchase instead of once
 local SELLABLE_ITEMS = {
-	["Hash"] = math.random(250, 400),
-	["Meth"] = math.random(500, 700),
+	["Hash"] = math.random(300, 500),
+	["Meth"] = math.random(675, 700),
 	["Weed Bud"] = math.random(150, 200)
 }
 

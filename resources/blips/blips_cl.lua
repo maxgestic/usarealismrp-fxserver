@@ -15,17 +15,17 @@ local blips = {
 	{ title="Clothing Store", colour=67, id=73, x= -816.335, y=-1072.93, z=11.3281 }, -- vinewood 7
 	{ title="Clothing Store", colour=67, id=73, x= 78.0717, y=-1387.25, z=29.3761 }, -- vinewood 8
 	--]]
-	{ title="Ammu-Nation", colour=41, id=110, x=-330.184, y=6083.23, z=31.4548 },
-	{ title="Ammu-Nation", colour=41, id=110, x=1701.292, y=3750.450, z=34.365 },
-    { title="Ammu-Nation", colour=41, id=110, x=237.428, y=-43.655, z=69.698 },
-    { title="Ammu-Nation", colour=41, id=110, x=843.604, y=-1017.784, z=27.546 },
-    { title="Ammu-Nation", colour=41, id=110, x=-663.8073, y=-947.5537, z=21.509 },
-    { title="Ammu-Nation", colour=41, id=110, x=-1320.983, y=-389.260, z=36.483 },
-    { title="Ammu-Nation", colour=41, id=110, x=-1109.053, y=2686.300, z=18.775 },
-    { title="Ammu-Nation", colour=41, id=110, x=2568.379, y=309.629, z=108.461 },
-    { title="Ammu-Nation", colour=41, id=110, x=-3157.450, y=1079.633, z=20.692 },
-    { title="Ammu-Nation", colour=41, id=110, x=16.6405, y=-1116.9636, z=29.7911 },
-    { title="Ammu-Nation", colour=41, id=110, x=812.4276, y=-2145.2118, z=29.3063 },
+	{ title="Ammu-Nation", colour=4, id=110, x=-330.184, y=6083.23, z=31.4548 },
+	{ title="Ammu-Nation", colour=4, id=110, x=1701.292, y=3750.450, z=34.365 },
+    { title="Ammu-Nation", colour=4, id=110, x=237.428, y=-43.655, z=69.698 },
+    { title="Ammu-Nation", colour=4, id=110, x=843.604, y=-1017.784, z=27.546 },
+    { title="Ammu-Nation", colour=4, id=110, x=-663.8073, y=-947.5537, z=21.509 },
+    { title="Ammu-Nation", colour=4, id=110, x=-1320.983, y=-389.260, z=36.483 },
+    { title="Ammu-Nation", colour=4, id=110, x=-1109.053, y=2686.300, z=18.775 },
+    { title="Ammu-Nation", colour=4, id=110, x=2568.379, y=309.629, z=108.461 },
+    { title="Ammu-Nation", colour=4, id=110, x=-3157.450, y=1079.633, z=20.692 },
+    { title="Ammu-Nation", colour=4, id=110, x=16.6405, y=-1116.9636, z=29.7911 },
+    { title="Ammu-Nation", colour=4, id=110, x=812.4276, y=-2145.2118, z=29.3063 },
 	{ title="Car Dealership", colour=76, id=225, x=120.924, y=6624.605, z=31.000 },
 	{ title="DMV", colour=4, id=355, x= -447.845, y = 6013.775, z = 30.716 },
 	{ title="Bubba's Tow Co.", colour=64, id=68, x = -196.027, y = 6265.625, z = 30.489 }, -- paleto
@@ -86,7 +86,8 @@ local blips = {
 	{ title="Watercraft Course", colour = 63, id = 38, x=2272.15, y=4321.29, z=39.8 },
 	--{ title="Barber Shop", colour = 4, id = 71, x=-278.174, y=6226.93, z=51.6 },
 	--{ title="Weed", colour = 2, id = 140, x = 2224.04, y = 5577.28, z = 52.7 },
-	{ title="Courthouse", colour = 38, id = 475, x = 317.283, y = -1631.1505, z = 31.59 }
+	{ title="Courthouse", colour = 38, id = 475, x = 317.283, y = -1631.1505, z = 31.59 },
+	{ title="Burns Events Center", colour = 4, id = 354, x = 1228.009, y = 3642.315, z = 32.79 }
 }
 
 Citizen.CreateThread(function()
