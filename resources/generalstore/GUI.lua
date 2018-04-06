@@ -1,7 +1,7 @@
 GUI = {}
 Menu = {}
 
-GUI.maxVisOptions = 16
+GUI.maxVisOptions = 20
 
 GUI.titleText = {255, 255, 255, 255, 7}
 GUI.titleRect = {52, 73, 94, 255}

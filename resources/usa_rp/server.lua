@@ -149,7 +149,7 @@ TriggerEvent('es:addCommand', 'roll', function(source, args, user, location)
 	if max then
 		print("rolling " .. max)
 		local roll = math.random(1, max)
-		TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. GetPlayerName(source) .. " rolls a " .. roll .. ".", location)
+		TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. name .. " rolls a " .. roll .. ".", location)
 	end
 end, {
 	help = "Roll a random number.",

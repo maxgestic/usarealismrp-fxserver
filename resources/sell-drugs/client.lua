@@ -44,7 +44,7 @@ Citizen.CreateThread(function()
 							 	if distance <= 2.0 and ped  ~= GetPlayerPed(-1) then
 									if not HasInteractedWithPedRecently(ped) then
 										--print("have not interacted with ped: " .. ped)
-										if IsControlJustPressed(1, 38) then 
+										if IsControlJustPressed(1, 38) then
 											TriggerServerEvent('drug-sell:check') -- check for item to sell
 											if has then -- has item to sell
 												oldped = ped
@@ -69,10 +69,11 @@ Citizen.CreateThread(function()
 															local loc = street1
 															if street2 ~= "" and street2 ~= " " and street2 then loc = loc .. " & " .. street2 end
 															-- dispatch to police:
+															Wait(20000) -- wait 20 seconds to make more realistic
 															TriggerServerEvent("phone:send911Message", {message = "Civilian report of a person(s) selling narcotics.", location = loc, pos = {x = pos.x, y = pos.y, z = pos.z}}, true, true)
-															
+
 														end
-												else			
+												else
 													-- sell
 													TaskStandStill(ped, 9.0)
 													pos1 = GetEntityCoords(ped)
@@ -90,12 +91,12 @@ Citizen.CreateThread(function()
 		until not success
 
 		EndFindPed(handle)
-	end	
+	end
 end)
 
 local blah = false
 Citizen.CreateThread(function()
-	
+
 	while true do
 		Wait(0)
 		local player = GetPlayerPed(-1)
@@ -109,14 +110,14 @@ Citizen.CreateThread(function()
 				if distance > 6 then
 					TriggerEvent("usa:notify", "You went out of range!")
 				    selling = false
-				   
+
 				    SetEntityAsMissionEntity(oldped)
 					SetPedAsNoLongerNeeded(oldped)
 				end
 				if secondsRemaining == 0 then
 					blah = true
 					local pid = PlayerPedId()
-											            
+
 					SetEntityAsMissionEntity(oldped)
 					RequestAnimDict("amb@prop_human_bum_bin@idle_b")
 					while (not HasAnimDictLoaded("amb@prop_human_bum_bin@idle_b")) do Citizen.Wait(0) end
@@ -125,23 +126,23 @@ Citizen.CreateThread(function()
 					StopAnimTask(pid, "amb@prop_human_bum_bin@idle_b","idle_d", 1.0)
 					SetPedAsNoLongerNeeded(oldped)
 
-				end	
-		end	
+				end
+		end
 
 		if rejected then
 			drawTxt(0.90, 1.40, 1.0,1.0,0.4, "Person ~r~rejected ~w~your offer ~r~", 255, 255, 255, 255)
-			
-		end
-		
 
-	end	
-end)	
+		end
+
+
+	end
+end)
 
 Citizen.CreateThread(function()
-	
+
 	while true do
 		Wait(0)
-		
+
 		if blah then
 			-- remove item + give player money:
 			TriggerServerEvent('drug-sell:sell')
@@ -149,8 +150,8 @@ Citizen.CreateThread(function()
 			selling = false
 		end
 
-	end	
-end)		
+	end
+end)
 
 local call_blips = {}
 
@@ -166,7 +167,7 @@ AddEventHandler('drug-sell:createBlip', function(coordsx, coordsy, coordsz)
 		EndTextCommandSetBlipName(blip)
 		-- remove after x seconds
 		local seconds = 20
-		while seconds > 0 do 
+		while seconds > 0 do
 			Wait(1000)
 			seconds = seconds - 1
 		end
@@ -185,7 +186,7 @@ end)
 RegisterNetEvent('cancel')
 AddEventHandler('cancel', function()
 	blah = false
-	
+
 end)
 
 RegisterNetEvent('done')

@@ -1,9 +1,21 @@
+--# by: minipunch
+--# for: USA REALISM RP
+--# simple vehicle shop script to preview and purchase a vehicle
+
+local SHOPS = {
+	{name = "Paleto Bay", store_x = 120.9, store_y = 6624.605, store_z = 31.0, vehspawn_x = 131.04, vehspawn_y = 6625.39, vehspawn_z = 31.71, vehspawn_heading = 315.0},
+	{name = "Los Santos", store_x = -43.2616, store_y = -1097.37, store_z = 25.5523, vehspawn_x = -48.884, vehspawn_y = -1113.75, vehspawn_z = 26.4358, vehspawn_heading = 315.0}
+}
+
+
 local markerX, markerY, markerZ = 120.924,6624.605,31.000 -- paleto
 --local markerX, markerY, markerZ = -43.2616, -1097.37, 25.3523 (los santos)
 --local spawnX, spawnY, spawnZ = -48.884, -1113.75, 26.4358 -- (los santos)
 local spawnX, spawnY, spawnZ = 131.04, 6625.39, 31.71 -- (paleto)
 
-local menu = {}
+local menu = {
+	key = 38
+}
 
 -- VEHICLES
 local vehicleShopItems = {
@@ -231,7 +243,7 @@ AddEventHandler("vehShop:spawnPlayersVehicle", function(hash, plate)
 		end
 		-- Model loaded, continue
 		-- Spawn the vehicle at the gas station car dealership in paleto and assign the vehicle handle to 'vehicle'
-		local vehicle = CreateVehicle(numberHash, spawnX, spawnY, spawnZ, 315.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
+		local vehicle = CreateVehicle(numberHash, menu.closest_store.vehspawn_x, menu.closest_store.vehspawn_y, menu.closest_store.vehspawn_z, menu.closest_store.vehspawn_heading --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
 		SetVehicleNumberPlateText(vehicle, plate)
 		SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
 		--SetVehicleAsNoLongerNeeded(vehicle)
@@ -349,24 +361,36 @@ AddEventHandler("vehShop-GUI:Update", function()
 end)
 
 Citizen.CreateThread(function()
+	----------------
+	-- draw blips --
+	----------------
+	addBlips()
 	while true do
-		Wait(1)
-
-		--print("drawing marker!")
-		DrawMarker(27, markerX, markerY, markerZ, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 88, 230, 88, 90, 0, 0, 2, 0, 0, 0, 0)
-
-		if menu.page then
-		--	print("menu.page = " .. menu.page)
-		end
-
-		if getPlayerDistanceFromShop(markerX, markerY, markerZ) < 3 then
-			if IsControlJustPressed(1,38) and not menu.open then
-				menu.open = true
-				menu.page = "home"
-				menu.vehicles = nil
+		local me = GetPlayerPed(-1)
+		------------------
+		-- draw markers --
+		------------------
+		for k = 1, #SHOPS do
+			if getPlayerDistanceFromShop(SHOPS[k].store_x, SHOPS[k].store_y, SHOPS[k].store_z) < 40 then
+				DrawMarker(27, SHOPS[k].store_x, SHOPS[k].store_y, SHOPS[k].store_z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 88, 230, 88, 90, 0, 0, 2, 0, 0, 0, 0)
 			end
-		else
-			menu.open = false
+			-----------------------------------------------------------
+			-- watch for entering store and menu open keypress event --
+			-----------------------------------------------------------
+			if getPlayerDistanceFromShop(SHOPS[k].store_x, SHOPS[k].store_y, SHOPS[k].store_z) < 3 then
+				if not menu.open then
+					drawTxt("Press [~y~E~w~] to open the vehicle shop menu",0,1,0.5,0.8,0.6,255,255,255,255)
+				end
+				if IsControlJustPressed(1, menu.key) and not menu.open then
+					menu.open = true
+					menu.page = "home"
+					menu.vehicles = nil
+					menu.closest_store = SHOPS[k]
+					print("set closest store!")
+				end
+			else
+				--menu.open = false
+			end
 		end
 
 		if menu.open == true then
@@ -546,7 +570,7 @@ Citizen.CreateThread(function()
 								if cb then
 								--	print("player wants to purchase vehicle: " .. vehicle.make .. " " .. vehicle.model)
 									-- todo: complete purchase ability here
-									local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+									local playerCoords = GetEntityCoords(me, false)
 									TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
 										TriggerServerEvent("mini:checkVehicleMoney", vehicle, property)
 									end)
@@ -572,7 +596,7 @@ Citizen.CreateThread(function()
 
 		end
 
-
+	Wait(1)
 	end
 
 end)
@@ -587,4 +611,31 @@ function comma_value(amount)
     end
   end
   return formatted
+end
+
+function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
+	SetTextFont(font)
+	SetTextProportional(0)
+	SetTextScale(scale, scale)
+	SetTextColour(r, g, b, a)
+	SetTextDropShadow(0, 0, 0, 0,255)
+	SetTextEdge(1, 0, 0, 0, 255)
+	SetTextDropShadow()
+	SetTextOutline()
+	SetTextCentre(centre)
+	SetTextEntry("STRING")
+	AddTextComponentString(text)
+	DrawText(x , y)
+end
+
+function addBlips()
+	for i = 1, #SHOPS do
+		local blip = AddBlipForCoord(SHOPS[i].store_x, SHOPS[i].store_y, SHOPS[i].store_z)
+		SetBlipSprite(blip, 225)
+		SetBlipColour(blip, 76)
+		SetBlipAsShortRange(blip, true)
+		BeginTextCommandSetBlipName("STRING")
+		AddTextComponentString("Car Dealership")
+		EndTextCommandSetBlipName(blip)
+	end
 end

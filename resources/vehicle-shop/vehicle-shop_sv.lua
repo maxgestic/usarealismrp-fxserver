@@ -1,3 +1,7 @@
+--# by: minipunch
+--# for: USA REALISM RP
+--# simple vehicle shop script to preview and purchase a vehicle
+
 local price, vehicleName, hash, plate
 local MAX_PLAYER_VEHICLES = 6
 
