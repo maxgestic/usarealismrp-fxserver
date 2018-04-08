@@ -45,12 +45,15 @@ AddEventHandler("LSC:buttonSelected", function(name, button, property)
 	local usource = source
 	local player = exports["essentialmode"]:getPlayerFromId(usource)
 	local mymoney = player.getActiveCharacterData("money")
+	local myjob = player.getActiveCharacterData("job")
 	if button.price then -- check if button have price
-		if button.price <= mymoney then
+		if button.price <= mymoney or myjob == "sheriff" or myjob == "police" or myjob == "ems" or myjob == "fire" then
 			-- take money from player, apply customization --
 			TriggerClientEvent("LSC:buttonSelected", usource, name, button, true)
-			mymoney  = mymoney - button.price
-			player.setActiveCharacterData("money", mymoney)
+			if myjob ~= "sheriff" and myjob ~= "police" and myjob ~= "ems" and myjob ~= "fire" then
+				mymoney  = mymoney - button.price
+				player.setActiveCharacterData("money", mymoney)
+			end
 			-- give portion to property owner --
 			if property then
 				TriggerEvent("properties:addMoney", property.name, math.floor(0.2 * button.price))

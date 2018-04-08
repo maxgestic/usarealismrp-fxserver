@@ -484,6 +484,8 @@ AddEventHandler('rconCommand', function(commandName, args)
 						return
 					end
 				end
+			else 
+			
 			end
 		end
 		RconPrint("\nNo match found for identifier: " .. identifierToUnban .. "!")

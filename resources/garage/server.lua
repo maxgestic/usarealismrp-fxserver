@@ -170,7 +170,7 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle, property)
 					user.setActiveCharacterData("money", user_money - withdraw_fee)
 					-- give money to garage owner --
 					if property then
-						TriggerEvent("properties:addMoney", property.name, round(0.15 * withdraw_fee, 0))
+						TriggerEvent("properties:addMoney", property.name, round(0.30 * withdraw_fee, 0))
 					end
 					return
 				end

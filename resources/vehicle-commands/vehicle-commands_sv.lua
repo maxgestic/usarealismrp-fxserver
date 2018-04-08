@@ -21,7 +21,13 @@ local spawnableVehicles = {
 		'scorcher',
 		'predator',
 		'chpcvpi',
-		'firetruk'
+		'unmarked1',
+		'unmarked3',
+		'unmarked4',
+		'unmarked6',
+		'unmarked7',
+		'unmarked8',
+		'unmarked9'
 	}
 }
 

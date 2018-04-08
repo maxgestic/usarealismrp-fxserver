@@ -113,6 +113,8 @@ local vehicleShopItems = {
 		{make = "Vapid", model = "Minivan", price = 19000, hash = -310465116, storage_capacity = 300.0},
 		{make = "Vapid", model = "Clown", price = 29599, hash = 728614474, storage_capacity = 300.0},
 		{make = "Declasse", model = "Burrito", price = 21000, hash = -1743316013, storage_capacity = 300.0},
+		{make = "Declasse", model = "Burrito 2", price = 21000, hash = -907477130, storage_capacity = 300.0},
+		{make = "Declasse", model = "Burrito 3", price = 21000, hash = 893081117, storage_capacity = 300.0},
 		{make = "BF", model = "Surfer", price = 22500, hash = 699456151, storage_capacity = 300.0},
 		{make = "Bravado", model = "Youga Classic", price = 24000, hash = 1026149675, storage_capacity = 300.0},
 		{make = "Bravado", model = "Rumpo Custom", price = 38000, hash = 1475773103, storage_capacity = 300.0},
