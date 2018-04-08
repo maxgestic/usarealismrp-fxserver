@@ -225,3 +225,42 @@ AddEventHandler("crim:continueBlindfolding", function(continue_blindfolding, fro
 		TriggerClientEvent("usa:notify", source, "Person does not have their hands tied or is too far away!")
 	end
 end)
+
+local walkstyles = {
+    {display_name = "Tough (Male)", clipset_name ="MOVE_M@TOUGH_GUY@"},
+    {display_name = "Tough (Female)", clipset_name ="MOVE_F@TOUGH_GUY@"},
+    {display_name = "Posh (Male)", clipset_name ="MOVE_M@POSH@"},
+    {display_name = "Posh (Female)", clipset_name ="MOVE_F@POSH@"},
+    {display_name = "Gangster 1 (Male)", clipset_name ="MOVE_M@GANGSTER@NG"},
+    {display_name = "Gangster 1 (Female)", clipset_name ="MOVE_F@GANGSTER@NG"},
+    {display_name = "Femme (Male)", clipset_name ="MOVE_M@FEMME@"},
+    {display_name = "Femme (Female)", clipset_name ="MOVE_F@FEMME@"},
+    {display_name = "Slow", clipset_name ="move_p_m_zero_slow"},
+    {display_name = "Gangster 2", clipset_name ="move_m@gangster@var_i"},
+    {display_name = "Casual", clipset_name ="move_m@casual@d"},
+    {display_name = "Very Drunk", clipset_name ="MOVE_M@DRUNK@VERYDRUNK"}
+}
+
+----------------------------
+-- Change your walk style --
+----------------------------
+TriggerEvent('es:addCommand', 'walkstyle', function(source, args, user, location)
+	local style_number = args[2]
+	if not style_number then 
+		TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0" .. "[0] Default")
+		for i = 1, #walkstyles do
+			TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0" .. "[" .. i .. "] " .. walkstyles[i].display_name)
+		end
+	else
+		if tonumber(style_number) ~= 0 then
+			TriggerClientEvent("civ:changeWalkStyle", source, walkstyles[tonumber(style_number)].clipset_name)
+		else 
+			TriggerClientEvent("civ:changeWalkStyle", source, tonumber(style_number))
+		end
+	end
+end, {
+	help = "Change your walking style.",
+	params = {
+		{ name = "style name", help = "Options: 1 - " .. #walkstyles .. ", do /walkstyle for list" }
+	}
+})

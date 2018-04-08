@@ -258,6 +258,15 @@ AddEventHandler("crim:areHandsTied", function(from_source, to_source, action)
   end
 end)
 
+RegisterNetEvent("civ:changeWalkStyle")
+AddEventHandler("civ:changeWalkStyle", function(style)
+	if style ~= 0 then
+		SetClipset(style)
+	else 
+		ResetPedMovementClipset(GetPlayerPed(-1), 0 ) 
+	end
+end)
+
 function closeEnoughToPlayer(from_id)
   local lPed = GetPlayerPed(-1)
   -- see if close enough to target
@@ -276,4 +285,20 @@ function closeEnoughToPlayer(from_id)
     end
   end
   return false
+end
+
+function SetClipset(clipset)
+  local ped = GetPlayerPed( -1 )
+  if DoesEntityExist(ped) and not IsEntityDead(ped) then
+    if not IsPauseMenuActive() then
+      if not IsPedInAnyVehicle(ped, true) then
+		ResetPedMovementClipset(ped, 0 )
+        RequestAnimSet(clipset)
+        while not HasAnimSetLoaded(clipset) do
+            Citizen.Wait(1)
+        end
+        SetPedMovementClipset(ped, clipset, 0.25)
+      end
+    end
+  end
 end

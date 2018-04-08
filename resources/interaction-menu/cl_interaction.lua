@@ -712,7 +712,7 @@ Citizen.CreateThread(function()
 			local target_veh = getVehicleInFrontOfUser()
 			local target_veh_plate = GetVehicleNumberPlateText(target_veh)
 			EnableGui(target_veh_plate)
-			GiveWeaponToPed(GetPlayerPed(-1), 0xA2719263, 0, false, true)
+			--GiveWeaponToPed(GetPlayerPed(-1), 0xA2719263, 0, false, true)
 		end
 
 		-- tackling:
