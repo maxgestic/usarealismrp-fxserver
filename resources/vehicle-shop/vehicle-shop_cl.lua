@@ -247,8 +247,10 @@ AddEventHandler("vehShop:spawnPlayersVehicle", function(hash, plate)
 		-- Spawn the vehicle at the gas station car dealership in paleto and assign the vehicle handle to 'vehicle'
 		local vehicle = CreateVehicle(numberHash, menu.closest_store.vehspawn_x, menu.closest_store.vehspawn_y, menu.closest_store.vehspawn_z, menu.closest_store.vehspawn_heading --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
 		SetVehicleNumberPlateText(vehicle, plate)
-		SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
+		SetVehicleExplodesOnHighExplosionDamage(vehicle, false)
 		--SetVehicleAsNoLongerNeeded(vehicle)
+		SetEntityAsMissionEntity(vehicle, true, true)
+		--SetVehicleHasBeenOwnedByPlayer(vehicle, true)
 	end)
 
 end)

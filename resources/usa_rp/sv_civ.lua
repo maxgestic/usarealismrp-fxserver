@@ -238,6 +238,12 @@ local walkstyles = {
     {display_name = "Slow", clipset_name ="move_p_m_zero_slow"},
     {display_name = "Gangster 2", clipset_name ="move_m@gangster@var_i"},
     {display_name = "Casual", clipset_name ="move_m@casual@d"},
+	{display_name = "Injured", clipset_name ="move_injured_generic"},
+	{display_name = "Flee", clipset_name ="move_f@flee@a"},
+	{display_name = "Scared", clipset_name ="move_f@scared"},
+	{display_name = "Sexy", clipset_name ="move_f@sexy@a"},
+	{display_name = "Slightly Drunk", clipset_name ="MOVE_M@DRUNK@SLIGHTLYDRUNK"},
+	{display_name = "Moderately Drunk", clipset_name ="MOVE_M@DRUNK@MODERATEDRUNK_HEAD_UP"},
     {display_name = "Very Drunk", clipset_name ="MOVE_M@DRUNK@VERYDRUNK"}
 }
 

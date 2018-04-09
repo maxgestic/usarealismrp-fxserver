@@ -120,6 +120,8 @@ Citizen.CreateThread(function()
   SetPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
   SetVehicleEngineOn(vehicle, true, false, false)
   SetEntityAsMissionEntity(vehicle, true, true)
+  --SetVehicleHasBeenOwnedByPlayer(vehicle, true)
+  SetVehicleExplodesOnHighExplosionDamage(vehicle, false)
 
   -- car customizations
   if playerVehicle.customizations then
