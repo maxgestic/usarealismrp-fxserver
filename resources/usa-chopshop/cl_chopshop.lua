@@ -196,6 +196,36 @@ function ConvertRealCarToGtaCar(name)
     return "Masseratti Quattroporte"
   elseif string.lower(name) == "buffalo" then
     return "Chrystler 300C"
+  elseif string.lower(name) == "ruiner" then
+	return "Imponte Ruiner"
+  elseif string.lower(name) == "bobcatxl" then
+	return "Vapid Bobcat XL"
+  elseif string.lower(name) == "dubsta" then
+	return "Benefactor Dubsta"
+  elseif string.lower(name) == "tornado3" then
+	return "Declasse Tornado"
+  elseif string.lower(name) == "oracle2" then
+	return "Ubermacht Oracle XS"
+  elseif string.lower(name) == "rebel02" then
+	return "Karin Rebel"
+  elseif string.lower(name) == "sanchez02" then
+	return "Miabatsu Sanchez"
+  elseif string.lower(name) == "sandking" then
+	return "Vapid Sandking XL"
+  elseif string.lower(name) == "emperor" then
+	return "Albany Emperor"
+  elseif string.lower(name) == "seminole" then
+	return "Canis Seminole"
+  elseif string.lower(name) == "blista2" then
+	return "Dinka Blista Compact"
+  elseif string.lower(name) == "flatbed" then
+	return "MTL Flatbed (tow)"
+  elseif string.lower(name) == "scrap" then
+	return "Utility Scrap Truck"
+  elseif string.lower(name) == "peyote" then
+	return "Vapid Peyote"
+  elseif string.lower(name) == "bfinject" then
+	return "BF Injection"
   else
     return name
   end

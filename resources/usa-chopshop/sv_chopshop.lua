@@ -1,5 +1,5 @@
 local VEHICLES = {
-  {name = "ORACLE", reward = 5000},
+  --{name = "ORACLE", reward = 5000},
   {name = "ORACLE2", reward = 5000},
   {name = "FLATBED", reward = 8000},
   {name = "SADLER", reward = 8000}, -- ford 150
