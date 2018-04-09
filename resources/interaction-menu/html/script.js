@@ -3,7 +3,6 @@ var voipOptions = ["Yell", "Normal", "Whisper"];
 var emoteOptions = ["Cop", "Sit", "Chair", "Kneel", "CPR", "Notepad","Traffic", "Photo","Clipboard", "Lean", "Hangout", "Pot", "Phone", "Yoga", "Cheer", "Statue", "Jog",
 "Flex", "Sit up", "Push up", "Weld", "Mechanic","Smoke","Drink", "Bum 1", "Bum 2", "Bum 3", "Drill", "Blower", "Chillin'", "Mobile Film", "Planting", "Golf", "Hammer", "Clean", "Musician", "Party", "Prostitute", "High Five", "Wave", "Hug", "Fist bump", "Dance 1", "Dance 2", "Dance 3", "Shag 1", "Shag 2", "Shag 3",
 "Whatup", "Kiss", "Handshake", "Surrender", "Cross Arms"];
-var emoteItemsPerPage = 8;
 var playerInventory;
 var playerWeapons;
 var playerLicenses;
@@ -46,8 +45,9 @@ function emotePageBackBtn() {
 
 function emoteBackBtn() {
 	$("#mySidenav .emote-option").remove();
-	$("#mySidenav .emote-page-option").show();
-	$(".player-meta-data").hide();
+	//$("#mySidenav .emote-page-option").show();
+	$("#mySidenav a").show();
+	$(".player-meta-data").show();
 }
 
 function playEmote(emoteNumber) {
@@ -66,65 +66,17 @@ function playEmote(emoteNumber) {
 	closeNav();
 }
 
-function openEmotePage(pageNumber) {
+function openEmoteMenu() {
 	$("#mySidenav a").hide();
 	$(".player-meta-data").hide();
 	// Cancel Emote btn
 	$("#mySidenav").append("<a onclick='playEmote()' class='emote-option'>Cancel Emote</a>");
-	// emotes
-	if (pageNumber == "1") {
-		for(var x = 0; x < emoteItemsPerPage; x++) {
-			$("#mySidenav").append("<a onclick='playEmote("+(x)+")' class='emote-option'>"+emoteOptions[x]+"</a>");
-		}
-	} else if (pageNumber == "2") {
-		for(var y = emoteItemsPerPage; y < (emoteItemsPerPage*pageNumber); y++) {
-			$("#mySidenav").append("<a onclick='playEmote("+(y)+")' class='emote-option'>"+emoteOptions[y]+"</a>");
-		}
-	} else if (pageNumber == "3") {
-		for(var z = (emoteItemsPerPage*2); z < (emoteItemsPerPage*pageNumber); z++) {
-			$("#mySidenav").append("<a onclick='playEmote("+(z)+")' class='emote-option'>"+emoteOptions[z]+"</a>");
-		}
-	} else if (pageNumber == "4") {
-		for(var z = (emoteItemsPerPage*3); z < (emoteItemsPerPage*pageNumber); z++) {
-			if (typeof emoteOptions[z] != "undefined") {
-				$("#mySidenav").append("<a onclick='playEmote("+(z)+")' class='emote-option'>"+emoteOptions[z]+"</a>");
-			}
-		}
-	} else if (pageNumber == "5") {
-		for(var z = (emoteItemsPerPage*4); z < (emoteItemsPerPage*pageNumber); z++) {
-			if (typeof emoteOptions[z] != "undefined") {
-				$("#mySidenav").append("<a onclick='playEmote("+(z)+")' class='emote-option'>"+emoteOptions[z]+"</a>");
-			}
-		}
-	} else if (pageNumber == "6") {
-		for(var z = (emoteItemsPerPage*5); z < (emoteItemsPerPage*pageNumber); z++) {
-			if (typeof emoteOptions[z] != "undefined") {
-				$("#mySidenav").append("<a onclick='playEmote("+(z)+")' class='emote-option'>"+emoteOptions[z]+"</a>");
-			}
-		}
-	} else if (pageNumber == "7") {
-		for(var z = (emoteItemsPerPage*6); z < (emoteItemsPerPage*pageNumber); z++) {
-			if (typeof emoteOptions[z] != "undefined") {
-				$("#mySidenav").append("<a onclick='playEmote("+(z)+")' class='emote-option'>"+emoteOptions[z]+"</a>");
-			}
-		}
+	// list all emotes
+	for(var x = 0; x < emoteOptions.length; x++) {
+		$("#mySidenav").append("<a onclick='playEmote("+(x)+")' class='emote-option'>"+emoteOptions[x]+"</a>");
 	}
 	//back btn
 	$("#mySidenav").append("<a onclick='emoteBackBtn()' id='emote-back-btn' class='emote-option'>Back</a>");
-}
-
-function openEmoteMenu() {
-	$("#mySidenav a").hide();
-	var size = emoteOptions.length;
-	var pageCount = Math.ceil(size / emoteItemsPerPage);
-	// Cancel Emote btn
-	$("#mySidenav").append("<a onclick='playEmote()' class='emote-page-option'>Cancel Emote</a>");
-	// emote pages
-	for(var x = 0; x < pageCount; x++) {
-		$("#mySidenav").append("<a onclick='openEmotePage("+(x+1)+")' class='emote-page-option'>Emotes "+(x+1)+"</a>");
-	}
-	// back btn
-	$("#mySidenav").append("<a onclick='emotePageBackBtn()' id='emote-page-back-btn' class='emote-page-option'>Back</a>");
 }
 
 function openVoipMenu() {
