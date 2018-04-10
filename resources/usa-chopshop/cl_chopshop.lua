@@ -57,13 +57,12 @@ Citizen.CreateThread(function()
   local handle = 0
   local display_name = "Undefined"
   while true do
-    --[[ to get names of vehicles easy:
+	me = GetPlayerPed(-1)
+	
     --handle = GetVehiclePedIsIn(me, true)
-    --display_name = string.lower(GetDisplayNameFromVehicleModel(GetEntityModel(handle)))
-    --print("display_name: " .. (display_name or ""))
-    --]]
-    Wait(0)
-    me = GetPlayerPed(-1)
+    --display_name = GetEntityModel(handle)
+    --print("entity model: " .. (display_name or "undefined"))
+    
     if current_job.active then
       for i = 1, #drop_offs do
         DrawMarker(27, drop_offs[i].x, drop_offs[i].y, drop_offs[i].z - 1.0, 0, 0, 0, 0, 0, 0, 5.0, 5.0, 5.0, 255 --[[r]], 92 --[[g]], 92 --[[b]], 90, 0, 0, 2, 0, 0, 0, 0)
@@ -82,7 +81,7 @@ Citizen.CreateThread(function()
                   found = true
                   OpenAllDoors(handle)
                   TaskLeaveVehicle(me, handle, 256)
-                  Wait(chop_time)
+                  Wait(chop_time) -- delay giving reward
                   RemoveFromWantedVehicles(display_name)
                   NotifyOfUpdatedWantedVehicles()
                   TriggerServerEvent("chopshop:reward", display_name, GetVehicleBodyDamage(handle))
@@ -108,6 +107,7 @@ Citizen.CreateThread(function()
         ResetJob()
       end
     end
+	Wait(0)
   end
 end)
 

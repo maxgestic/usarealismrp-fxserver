@@ -350,10 +350,10 @@ AddEventHandler("police:checkSuspension", function(id)
 							print("suspension period was over! setting to valid!")
 						end
 					end
-					return
 				end
 			end
 		end
+		return
 		print("person had no DL or FP!")
 	end)
 end)

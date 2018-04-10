@@ -19,7 +19,15 @@ local policeVehicles = {
     0xD0AF544F, -- police 8
     -34623805, -- policeb
     741586030, -- pranger
-    -1205689942 -- riot
+    -1205689942, -- riot
+	-672516475, -- unmarked9
+	-1960928017, -- unmarked8
+	-59441254, -- unmarked7 (slicktop)
+	-1663942570, -- unmarked6
+	1109330673, -- unmarked4
+	-1285460620, -- unmarked3
+	1383443358 -- unmarked1
+	
 }
 
 Citizen.CreateThread(function()

@@ -3,7 +3,7 @@
 --# simple vehicle shop script to preview and purchase a vehicle
 
 local price, vehicleName, hash, plate
-local MAX_PLAYER_VEHICLES = 6
+local MAX_PLAYER_VEHICLES = 12
 
 -- prevent memory edit cheaters
 local MIN_VEHICLE_PRICE = 500
