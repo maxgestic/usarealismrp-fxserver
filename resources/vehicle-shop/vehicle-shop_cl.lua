@@ -250,7 +250,7 @@ AddEventHandler("vehShop:spawnPlayersVehicle", function(hash, plate)
 		SetVehicleExplodesOnHighExplosionDamage(vehicle, false)
 		--SetVehicleAsNoLongerNeeded(vehicle)
 		SetEntityAsMissionEntity(vehicle, true, true)
-		--SetVehicleHasBeenOwnedByPlayer(vehicle, true)
+		SetVehicleHasBeenOwnedByPlayer(vehicle, true)
 	end)
 
 end)
@@ -393,7 +393,16 @@ Citizen.CreateThread(function()
 					print("set closest store!")
 				end
 			else
-				--menu.open = false
+			--[[ NOTE: need to save closest location for this to work
+				menu.open = false
+				menu.page = "home"
+				if menu.preview then
+					if menu.preview.handle then -- remove preview car if applicable
+						deleteCar(menu.preview.handle)
+						menu.preview.handle = nil
+					end
+				end
+				--]]
 			end
 		end
 
@@ -404,7 +413,7 @@ Citizen.CreateThread(function()
 			--	print("setting up home buttons!")
 				TriggerEvent("vehShop-GUI:Title", "Home")
 
-				TriggerEvent("vehShop-GUI:Option", "Buy", function(cb) -- todo: complete ability to purchase selected vehicle
+				TriggerEvent("vehShop-GUI:Option", "Buy", function(cb)
 					--print("inside of vehShop-GUI:option: 'Buy'")
 					if(cb) then
 						menu.page = "buy"
@@ -412,7 +421,7 @@ Citizen.CreateThread(function()
 				end)
 
 
-				TriggerEvent("vehShop-GUI:Option", "Sell", function(cb) -- todo: complete this menu
+				TriggerEvent("vehShop-GUI:Option", "Sell", function(cb)
 					--print("inside of vehShop-GUI:option: 'Sell'")
 					if(cb) then
 						menu.page = "sell"
@@ -420,7 +429,7 @@ Citizen.CreateThread(function()
 					end
 				end)
 
-				TriggerEvent("vehShop-GUI:Option", "Insurance", function(cb) -- todo: complete this menu
+				TriggerEvent("vehShop-GUI:Option", "Insurance", function(cb)
 					if(cb) then
 						menu.page = "insurance"
 					end
@@ -437,8 +446,6 @@ Citizen.CreateThread(function()
 			elseif menu.page == "buy" then
 
 			TriggerEvent("vehShop-GUI:Title", "Buy")
-
-			--	print("menu.page: 'buy'!!!")
 
 			--	print("type of vehicle shop items: " .. type(vehicleShopItems))
 
@@ -464,7 +471,6 @@ Citizen.CreateThread(function()
 
 				TriggerEvent("vehShop-GUI:Title", "Sell")
 
-				-- todo: complete this section
 				if menu.vehicles then
 					for i = 1, #menu.vehicles do
 						local vehicle = menu.vehicles[i]
@@ -556,6 +562,35 @@ Citizen.CreateThread(function()
 						end
 					end)
 				end
+				
+			elseif menu.page == "preview" then
+			
+				TriggerEvent("vehShop-GUI:Title", menu.preview.name)
+				
+				PreviewVehicle()
+				
+				TriggerEvent("vehShop-GUI:Option", "Purchase", function(cb)
+					if cb then
+						local playerCoords = GetEntityCoords(me, false)
+						TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+							TriggerServerEvent("mini:checkVehicleMoney", menu.preview.vehicle, property)
+						end)
+						menu.open = false
+						menu.page = "home"
+						deleteCar(menu.preview.handle) -- remove preview vehicle
+						menu.preview.handle = nil
+					end
+				end)
+				
+				TriggerEvent("vehShop-GUI:Option", "Back", function(cb)
+					if cb then
+						menu.page = menu.preview.previous_page
+						deleteCar(menu.preview.handle) -- remove preview vehicle
+						menu.preview.handle = nil
+						SetEntityCoords(me, table.unpack(menu.preview.previous_coords))
+					end
+				end)
+				
 			else
 
 				--print("in else clause!")
@@ -572,14 +607,17 @@ Citizen.CreateThread(function()
 							--print("adding vehicle: " .. vehicle.make .. " " .. vehicle.model .. " to menu")
 							TriggerEvent("vehShop-GUI:Option", "($" .. comma_value(vehicle.price) .. ") " .. vehicle.make .. " " .. vehicle.model .. " (C: ".. vehicle.storage_capacity .. ")", function(cb)
 								if cb then
-								--	print("player wants to purchase vehicle: " .. vehicle.make .. " " .. vehicle.model)
-									-- todo: complete purchase ability here
-									local playerCoords = GetEntityCoords(me, false)
-									TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-										TriggerServerEvent("mini:checkVehicleMoney", vehicle, property)
-									end)
-									menu.open = false
-									menu.page = "home"
+				
+									menu.page = "preview"
+									menu.preview = {
+										name = vehicle.make .. " " .. vehicle.model,
+										hash = vehicle.hash,
+										handle = nil,
+										vehicle = vehicle,
+										previous_coords = GetEntityCoords(me),
+										previous_page = k
+									}
+							
 								end
 							end)
 						end
@@ -604,6 +642,50 @@ Citizen.CreateThread(function()
 	end
 
 end)
+
+
+--------------------------------
+-- handle the vehicle preview --
+--------------------------------
+function PreviewVehicle()
+	if not menu.preview.handle then
+		-- spawn vehicle (networked = false, to remain invisible while previewing to prevent others from blocking the view)
+		-- remove collision
+		-- put player inside
+		local numberHash = tonumber(menu.preview.hash)
+		-- thread code stuff below was taken from an example on the wiki
+		-- Create a thread so that we don't 'wait' the entire game
+		Citizen.CreateThread(function()
+			-- Request the model so that it can be spawned
+			RequestModel(numberHash)
+			-- Check if it's loaded, if not then wait and re-request it.
+			while not HasModelLoaded(numberHash) do
+				RequestModel(numberHash)
+				Citizen.Wait(0)
+			end
+			-- Model loaded, continue
+			-- Spawn the vehicle at the gas station car dealership in paleto and assign the vehicle handle to 'vehicle'
+			local vehicle = CreateVehicle(numberHash, menu.closest_store.vehspawn_x, menu.closest_store.vehspawn_y, menu.closest_store.vehspawn_z, menu.closest_store.vehspawn_heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
+			menu.preview.handle = vehicle
+			--SetVehicleNumberPlateText(vehicle, plate)
+			SetVehicleExplodesOnHighExplosionDamage(vehicle, false)
+			--SetVehicleAsNoLongerNeeded(vehicle)
+			--SetEntityAsMissionEntity(vehicle, true, true)
+			--SetVehicleHasBeenOwnedByPlayer(vehicle, true)
+			SetVehicleOnGroundProperly(vehicle)
+			SetVehRadioStation(vehicle, "OFF")
+			SetPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
+			SetVehicleEngineOn(vehicle, true, false, false)
+			FreezeEntityPosition(vehicle, true)
+			SetVehicleDoorsLocked(vehicle, 4)
+		end)
+		Wait(1000)
+	end
+end
+
+function deleteCar( entity )
+    Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( entity ) )
+end
 
 function comma_value(amount)
 	if not amount then return end

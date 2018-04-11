@@ -315,16 +315,8 @@ Citizen.CreateThread(function()
 			if jacked then
 				local handle = GetVehiclePedIsIn(me, true)
 				if handle ~= 0 then
-					--print("veh handle: " .. handle)
 					local display_name = GetDisplayNameFromVehicleModel(GetEntityModel(handle))
-					--print("jacked car display name: " .. display_name)
-					if display_name == "SADLER" then
-						display_name = "Ford 350 Superduty"
-					elseif display_name == "FUGITIVE" then
-						display_name = "Maserati Quattroporte"
-					elseif display_name == "PENUMBRA" then
-						display_name = "Nissan 370z"
-					end
+					display_name = ConvertRealCarToGtaCar(display_name)
 					local r,g,b = GetVehicleColor(handle)
 					print("r: " .. r)
 					print("g: " .. g)
@@ -451,4 +443,50 @@ function GetClosestPlayerInfo(range)
 		end
 	end
 	return closestPlayerServerId, closestName, closestDistance
+end
+
+function ConvertRealCarToGtaCar(name)
+  if string.lower(name) == "sabregt" then
+    return "Ford Mustang Boss 302"
+  elseif string.lower(name) == "sadler" then
+    return "Ford F350 Super Duty"
+  elseif string.lower(name) == "fugitive" then
+    return "Masseratti Quattroporte"
+  elseif string.lower(name) == "buffalo" then
+    return "Chrystler 300C"
+  elseif string.lower(name) == "ruiner" then
+	return "Imponte Ruiner"
+  elseif string.lower(name) == "bobcatxl" then
+	return "Vapid Bobcat XL"
+  elseif string.lower(name) == "dubsta" then
+	return "Benefactor Dubsta"
+  elseif string.lower(name) == "tornado3" then
+	return "Declasse Tornado"
+  elseif string.lower(name) == "oracle2" then
+	return "Ubermacht Oracle XS"
+  elseif string.lower(name) == "rebel02" then
+	return "Karin Rebel"
+  elseif string.lower(name) == "sanchez02" then
+	return "Miabatsu Sanchez"
+  elseif string.lower(name) == "sandking" then
+	return "Vapid Sandking XL"
+  elseif string.lower(name) == "emperor" then
+	return "Albany Emperor"
+  elseif string.lower(name) == "seminole" then
+	return "Canis Seminole"
+  elseif string.lower(name) == "blista2" then
+	return "Dinka Blista Compact"
+  elseif string.lower(name) == "flatbed" then
+	return "MTL Flatbed (tow)"
+  elseif string.lower(name) == "scrap" then
+	return "Utility Scrap Truck"
+  elseif string.lower(name) == "peyote" then
+	return "Vapid Peyote"
+  elseif string.lower(name) == "bfinject" then
+	return "BF Injection"	
+  elseif string.lower(name) == "penumbra" then
+	return "Nissan 370z"
+  else
+    return name
+  end
 end

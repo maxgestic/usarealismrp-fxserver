@@ -58,10 +58,6 @@ Citizen.CreateThread(function()
   local display_name = "Undefined"
   while true do
 	me = GetPlayerPed(-1)
-	
-    --handle = GetVehiclePedIsIn(me, true)
-    --display_name = GetEntityModel(handle)
-    --print("entity model: " .. (display_name or "undefined"))
     
     if current_job.active then
       for i = 1, #drop_offs do
@@ -225,7 +221,9 @@ function ConvertRealCarToGtaCar(name)
   elseif string.lower(name) == "peyote" then
 	return "Vapid Peyote"
   elseif string.lower(name) == "bfinject" then
-	return "BF Injection"
+	return "BF Injection"	
+  elseif string.lower(name) == "penumbra" then
+	return "Nissan 370z"
   else
     return name
   end
