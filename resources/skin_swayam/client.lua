@@ -113,7 +113,8 @@ AddEventHandler("CS:ShowMainMenu", function()
 				--SetPedDefaultComponentVariation(PlayerId());
 				local ply = GetPlayerPed(-1)
 				--drawTxt(ply,0,1,0.5,0.8,0.6,255,255,255,255)
-				SetPedRandomComponentVariation(ply, false)
+				--SetPedRandomComponentVariation(ply, false)
+				SetPedComponentVariation(ply, 0, 1, 0, 2)
 				SetModelAsNoLongerNeeded(modelhashed)
 			end)
 		else
@@ -135,7 +136,8 @@ AddEventHandler("CS:ShowMainMenu", function()
 				--SetPedDefaultComponentVariation(PlayerId());
 				local ply = GetPlayerPed(-1)
 				--drawTxt(ply,0,1,0.5,0.8,0.6,255,255,255,255)
-				SetPedRandomComponentVariation(ply, false)
+				--SetPedRandomComponentVariation(ply, false)
+				SetPedComponentVariation(ply, 0, 33, 0, 2)
 				SetModelAsNoLongerNeeded(modelhashed)
 			end)
 		else

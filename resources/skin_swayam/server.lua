@@ -30,7 +30,12 @@ AddEventHandler("mini:save", function(appearance)
 		for i = 1, #characters do
 			--print("characters[i].active = " .. tostring(characters[i].active))
 			if characters[i].active == true then
-				characters[i].appearance = appearance
+				--characters[i].appearance = appearance -- this line is probably the reason why barbershop/tatto customizations aren't saving when a player hits the save button at the clothing store
+				characters[i].appearance.hash = appearance.hash
+				characters[i].appearance.componentstexture = appearance.componentstexture
+				characters[i].appearance.components = appearance.components
+				characters[i].appearance.propstexture = appearance.propstexture
+				characters[i].appearance.props = appearance.props
 				user.setCharacter(characters[i], i)
 				print("PLAYER MODEL SAVED")
 				TriggerClientEvent("chatMessage", source, "SYSTEM", {0, 128, 255}, "Your player character has been saved.")
