@@ -1,16 +1,17 @@
 TriggerEvent('es:addCommand', 'drag', function(source, args, user)
 	local usource = source
-	local userJob = user.getActiveCharacterData("job")
-	local userGroup = user.getGroup()
-	if userJob == "sheriff" or userJob == "cop" or userJob == "ems" or userJob == "fire" or userGroup == "mod" or userGroup == "admin" or userGroup == "superadmin" or userGroup == "owner" then
+	--local userJob = user.getActiveCharacterData("job")
+	--local userGroup = user.getGroup()
+	--if userJob == "sheriff" or userJob == "cop" or userJob == "ems" or userJob == "fire" or userGroup == "mod" or userGroup == "admin" or userGroup == "superadmin" or userGroup == "owner" then
 		if tonumber(args[2]) then
 			TriggerClientEvent("dr:drag", tonumber(args[2]), usource)
 		else
 			TriggerClientEvent("drag:attemptToDragNearest", usource)
 		end
-	else
+	--else
+		--TriggerClientEvent("drag:attemptToDragNearest", usource)
 		--TriggerClientEvent("crim:areHandsTied", tonumber(argument), source, tonumber(argument), "drag")
-	end
+	--end
 end, {help = "Drag a tied up or handcuffed player."})
 
 RegisterServerEvent("dr:dragPlayer")
