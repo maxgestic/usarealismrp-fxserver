@@ -25,6 +25,54 @@ AddEventHandler("properties:getPropertyMoney", function(name, cb)
     cb(PROPERTIES[name].storage.money)
 end)
 
+----------------------
+-- WARDROBE --
+----------------------
+RegisterServerEvent("properties:deleteOutfitByName")
+AddEventHandler("properties:deleteOutfitByName", function(property_name, outfit_name)
+    ----------------------------------------
+    -- remove outfit from property --
+    ----------------------------------------
+    local wardrobe = PROPERTIES[property_name].wardrobe
+    if  not wardrobe then
+        wardrobe = {}
+    end
+    -- search for matching outfit to delete --
+    for i = 1, #wardrobe do
+        if wardrobe[i].name == outfit_name then
+            --print("matching outfit found to delete!")
+            -- remove --
+            table.remove(PROPERTIES[property_name].wardrobe, i)
+            -- update menu --
+            TriggerClientEvent("properties:loadWardrobe", source, PROPERTIES[property_name].wardrobe)
+            -- update properties --
+            TriggerClientEvent("properties:update", -1, PROPERTIES, false)
+            return
+        end
+    end
+end)
+
+RegisterServerEvent("properties:saveOutfit")
+AddEventHandler("properties:saveOutfit", function(property_name, outfit)
+    -- add outfit to property --
+    if  not PROPERTIES[property_name].wardrobe then
+        PROPERTIES[property_name].wardrobe = {}
+    end
+    table.insert(PROPERTIES[property_name].wardrobe, outfit)
+    -- update menu --
+    TriggerClientEvent("properties:loadWardrobe", source, PROPERTIES[property_name].wardrobe)
+    -- update properties --
+	TriggerClientEvent("properties:update", -1, PROPERTIES, false)
+end)
+
+RegisterServerEvent("properties:getWardrobe")
+AddEventHandler("properties:getWardrobe", function(property_name)
+    TriggerClientEvent("properties:loadWardrobe", source, PROPERTIES[property_name].wardrobe)
+end)
+
+----------------------------
+-- ITEM STORAGE --
+----------------------------
 -- load stored items --
 RegisterServerEvent("properties:loadStorage")
 AddEventHandler("properties:loadStorage", function(name)

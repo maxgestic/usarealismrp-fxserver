@@ -331,23 +331,25 @@ AddEventHandler("police:checkSuspension", function(id)
 	local userSource = id
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local licenses = user.getActiveCharacterData("licenses")
-		for i = 1, #licenses do
-			if licenses then
-				local license =  licenses[i]
-				if  license.name == "Driver's License" or license.name == "Firearm Permit"  then
-					if license.status == "suspended" then
-						--licenses[i].suspension_start = os.time()
-						--licenses[i].suspension_days = days
-						local reference = licenses[i].suspension_start
-						print("reference: " .. reference)
-						print("suspended days: " .. licenses[i].suspension_days)
-						local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
-						local wholedays = math.floor(daysfrom)
-						print("wholedays: " .. wholedays) -- today it prints "1"
-						if wholedays >= licenses[i].suspension_days then
-							licenses[i].status = "valid"
-							user.setActiveCharacterData("licenses", licenses)
-							print("suspension period was over! setting to valid!")
+		if licenses then
+			for i = 1, #licenses do
+				if licenses then
+					local license =  licenses[i]
+					if  license.name == "Driver's License" or license.name == "Firearm Permit"  then
+						if license.status == "suspended" then
+							--licenses[i].suspension_start = os.time()
+							--licenses[i].suspension_days = days
+							local reference = licenses[i].suspension_start
+							print("reference: " .. reference)
+							print("suspended days: " .. licenses[i].suspension_days)
+							local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
+							local wholedays = math.floor(daysfrom)
+							print("wholedays: " .. wholedays) -- today it prints "1"
+							if wholedays >= licenses[i].suspension_days then
+								licenses[i].status = "valid"
+								user.setActiveCharacterData("licenses", licenses)
+								print("suspension period was over! setting to valid!")
+							end
 						end
 					end
 				end
