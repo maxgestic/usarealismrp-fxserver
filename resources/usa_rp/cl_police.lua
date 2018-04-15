@@ -276,6 +276,10 @@ local duration = 25 * 60 * 1000 -- 25 minutes to ms
 local sending_msg = false
 local already_sent_msg = false
 local jacked = false
+local timer = {
+  last_press = 0,
+  delay = 6000 -- 6 seconds
+}
 
 -- Gun Shot Resdiue(GSR) --
 Citizen.CreateThread(function()
@@ -293,7 +297,10 @@ Citizen.CreateThread(function()
 				if math.random(100) < 32 then
 					if not sending_msg then
 						sending_msg = true
-						send911Message("(10-32) Report of shots fired.")
+  					if GetGameTimer() > timer.last_press + timer.delay then
+						  send911Message("(10-32) Report of shots fired.")
+              timer.last_press = GetGameTimer()
+            end
 						sending_msg = false
 					end
 				end
@@ -483,7 +490,7 @@ function ConvertRealCarToGtaCar(name)
   elseif string.lower(name) == "peyote" then
 	return "Vapid Peyote"
   elseif string.lower(name) == "bfinject" then
-	return "BF Injection"	
+	return "BF Injection"
   elseif string.lower(name) == "penumbra" then
 	return "Nissan 370z"
   else

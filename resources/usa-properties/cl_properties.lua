@@ -587,15 +587,17 @@ Citizen.CreateThread(function()
                                     Citizen.CreateThread(function()
                                         -- get user input for name
                                         local name = GetUserInput()
-                                        --print("name: " .. name)
-                                        -- save player's outfit
-                                        local clothing = GetPedOutfit()
-                                        -- build the object
-                                        local outfit = {
-                                            name = name,
-                                            clothing = clothing
-                                        }
-                                        TriggerServerEvent("properties:saveOutfit", nearest_property_info.name, outfit)
+                                        if name then
+                                          --print("name: " .. name)
+                                          -- save player's outfit
+                                          local clothing = GetPedOutfit()
+                                          -- build the object
+                                          local outfit = {
+                                              name = name,
+                                              clothing = clothing
+                                          }
+                                          TriggerServerEvent("properties:saveOutfit", nearest_property_info.name, outfit)
+                                        end
                                     end)
                                 end
                             end)
@@ -740,40 +742,30 @@ end)
 --------------------------------------------------------------------
 --------------------------------------------------------------------
 
---[[ notes
---local selectedComponent = GetPedDrawableVariation(ply, i)
---local selectedTexture = GetPedTextureVariation(ply, i)
---SetPedComponentVariation(me, 8, 15,0, 2)
---SetPedComponentVariation(me, 3, 15,0, 2)
---SetPedComponentVariation(me, 11, 91,0, 2)
---SetPedComponentVariation(me, 4, 14,0, 2)
-]]
-
 -----------------------
 -- utility functions --
 -----------------------
 function SetPedOutfit(outfit)
-  --print("applying ped outfit!")
-  local ped = GetPlayerPed(-1)
-  for key, value in pairs(outfit) do
-    if type(value) == "table" then -- since first version was not a table, this will ignore those outfits
-      if key ~= "props" then
-        -- clothing --
-        --print("setting " .. key .. " to " .. value.component_value .. ", " .. value.texture_value) -- debug
-        SetPedComponentVariation(ped, key, value.component_value, value.texture_value, 2)
-      elseif key == "props" then
-        ClearPedProps()
-        -- hats / glasses / earrings / that kinda what not --
-        for prop_index, prop_values in pairs(value) do
-          SetPedPropIndex(ped, prop_index, prop_values.prop_value, prop_values.prop_texture_value, true)
+  Citizen.CreateThread(function()
+    --print("applying ped outfit!")
+    local ped = GetPlayerPed(-1)
+    for key, value in pairs(outfit) do
+      if type(value) == "table" then -- since first version was not a table, this will ignore those outfits
+        if key ~= "props" then
+          -- clothing --
+          --print("setting " .. key .. " to " .. value.component_value .. ", " .. value.texture_value) -- debug
+          SetPedComponentVariation(ped, tonumber(key), value.component_value, value.texture_value, 2)
+        elseif key == "props" then
+          ClearPedProps()
+          -- hats / glasses / earrings / that kinda what not --
+          for prop_index, prop_values in pairs(value) do
+            SetPedPropIndex(ped, prop_index, prop_values.prop_value, prop_values.prop_texture_value, true)
+          end
         end
       end
     end
-  end
+  end)
 end
-
--- todo:
--- 2) add hat prop support to GetPedOutfit() function
 
 function ClearPedProps()
   for i = 0, 3 do

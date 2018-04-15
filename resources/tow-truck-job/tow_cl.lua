@@ -1,6 +1,7 @@
 local on_duty = "no"
 local currentlyTowedVehicle = nil
 local vehicleToImpound = nil
+local last_spawned_vehicle = nil
 
 local locations = {
 	["Paleto"] = {
@@ -283,6 +284,7 @@ function spawnVehicle(coords)
         SetEntityAsMissionEntity(vehicle, true, true)
 				SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
 				--SetVehicleAsNoLongerNeeded(vehicle)
+				last_spawned_vehicle = vehicle
     end)
 end
 
@@ -301,6 +303,7 @@ end)
 
 RegisterNetEvent("tow:offDuty")
 AddEventHandler("tow:offDuty", function()
+	deleteCar(last_spawned_vehicle)
 	DrawCoolLookingNotificationWithTowPic("You have clocked out! Have a good one!")
 	on_duty = "no"
 end)
