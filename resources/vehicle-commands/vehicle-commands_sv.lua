@@ -31,6 +31,17 @@ local spawnableVehicles = {
 	}
 }
 
+local VEH_RANKS = {
+	[1] = {"police", "police2", "police3", "scorcher", "police7", "predator", "pbus", "policet"},
+	[2] = {"police", "police2", "police3", "scorcher", "police7", "policeb", "police6", "unmarked7", "predator", "pbus", "policet"},
+	[3] = {"police", "police2", "police3", "scorcher", "police7", "policeb", "police6", "unmarked7", "predator", "polmav", "pbus", "policet"},
+	[4] = {"police", "police2", "police3", "scorcher", "police7", "policeb", "police6", "unmarked7", "unmarked8", "fbi", "fbi2", "police4", "sheriff", "unmarked6", "unmarked1", "predator", "polmav", "pbus", "policet", "riot"},
+	[5] = {"police", "police2", "police3", "scorcher", "police7", "policeb", "police6", "unmarked7", "unmarked8", "fbi", "fbi2", "police4", "sheriff", "unmarked6", "unmarked1", "unmarked3", "unmarked9", "predator", "polmav", "pbus", "policet", "riot"},
+	[6] = {'policeb','sheriff','sheriff2','sheriff3','pbus','policet','police','police2','police3','police4','police5','police6',	'police7','police8','fbi','fbi2',	'riot','polmav','scorcher','predator','chpcvpi','unmarked1','unmarked3','unmarked4','unmarked6','unmarked7','unmarked8','unmarked9'},
+}
+
+-- TODO: compact above two tables into one single table
+
 function isSpawnable(modelName)
 	for i =1, #spawnableVehicles["sheriff"] do
 		if spawnableVehicles["sheriff"][i] == modelName then
@@ -46,15 +57,22 @@ TriggerEvent('es:addCommand', 'spawn', function(source, args, user)
 	local model = args[2]
 	local user_job = user.getActiveCharacterData("job")
 	if user_job == "sheriff" then
+		local user_police_rank = tonumber(user.getActiveCharacterData("policeRank"))
 		if model ~= nil and model ~= '' then
 			if isSpawnable(model) then
-				TriggerClientEvent("vehicleCommands:spawnVehicle", source, model)
+				print("police rank: " .. user_police_rank)
+				if IsHighEnoughRank(model, user_police_rank) then
+					TriggerClientEvent("vehicleCommands:spawnVehicle", source, model)
+				else
+					TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^3You are not a high enough rank for that vehicle option.")
+				end
 			else
 				TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^3Invalid spawn option!")
 			end
 		else
 			TriggerClientEvent("vehicleCommands:error", source, "^1Invalid model name. Usage: /spawn <name>")
-			TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 predator, scorcher, policeb, sheriff, sheriff2, sheriff3, police, police2, police3, police4, police5, police6, police7, police8, policet, pbus, chpcvpi, fbi, fbi2, riot, polmav")
+			DisplaySpawnOptionsBasedOnRank(source, user_police_rank)
+			--TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 predator, scorcher, policeb, sheriff, sheriff2, sheriff3, police, police2, police3, police4, police5, police6, police7, police8, policet, pbus, chpcvpi, fbi, fbi2, riot, polmav")
 		end
 	elseif user_job == "ems" then
 		if args[2] == "ambulance" then
@@ -127,6 +145,33 @@ end, {
 		{ name = "extra", help = "Index number of extra" }
 	}
 })
+
+function IsHighEnoughRank(model, user_rank)
+	-- see if user is high enough rank  to spawn vehicle --
+	for rank, vehicles in pairs(VEH_RANKS) do
+		if user_rank >= rank then
+			for k = 1, #vehicles do
+				if model == vehicles[k] then
+					return true
+				end
+			end
+		end
+	end
+	return false
+end
+
+function DisplaySpawnOptionsBasedOnRank(source, user_rank)
+	local string = "police"
+	for rank, vehicles in pairs(VEH_RANKS) do
+		if rank == user_rank then
+			for k = 1, #vehicles do
+				string = string .. ", " .. vehicles[k]
+			end
+			break
+		end
+	end
+	TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^3Options: " .. string)
+end
 
 local function power(a, b)
 	return a ^ b
