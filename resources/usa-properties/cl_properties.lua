@@ -759,7 +759,7 @@ function SetPedOutfit(outfit)
           ClearPedProps()
           -- hats / glasses / earrings / that kinda what not --
           for prop_index, prop_values in pairs(value) do
-            SetPedPropIndex(ped, prop_index, prop_values.prop_value, prop_values.prop_texture_value, true)
+            SetPedPropIndex(ped, tonumber(prop_index), tonumber(prop_values.prop_value), tonumber(prop_values.prop_texture_value), true)
           end
         end
       end

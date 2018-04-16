@@ -69,7 +69,7 @@ Citizen.CreateThread(function()
 															local loc = street1
 															if street2 ~= "" and street2 ~= " " and street2 then loc = loc .. " & " .. street2 end
 															-- dispatch to police:
-															Wait(20000) -- wait 20 seconds to make more realistic
+															Wait(10000) -- wait 10 seconds to make more realistic
 															TriggerServerEvent("phone:send911Message", {message = "Civilian report of a person(s) selling narcotics.", location = loc, pos = {x = pos.x, y = pos.y, z = pos.z}}, true, true)
 
 														end
