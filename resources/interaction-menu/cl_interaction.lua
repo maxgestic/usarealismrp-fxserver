@@ -40,6 +40,7 @@ local scenarios = {
 	{name = "clean", scenarioName = "WORLD_HUMAN_MAID_CLEAN"},
 	{name = "musician", scenarioName = "WORLD_HUMAN_MUSICIAN"},
 	{name = "party", scenarioName = "WORLD_HUMAN_PARTYING"},
+	{name ="prone", scenarioName = "WORLD_HUMAN_SUNBATHE"},
 	{name = "prostitute", scenarioName = "WORLD_HUMAN_PROSTITUTE_HIGH_CLASS"},
 	{name = "hug", type = "emote", dict = "mp_ped_interaction", animname = "hugs_guy_a"},
 	{name = "fist bump", type = "emote", dict = "anim@mp_player_intcelebrationpaired@f_f_fist_bump", animname = "fist_bump_right"},
@@ -689,6 +690,8 @@ AddEventHandler("interaction:repairVehicle", function(is_backpack_item)
 	end
 end)
 
+local last_tackle_time = 0
+local tackle_delay = 10000 -- 10 second delay
 Citizen.CreateThread(function()
 	while true do
 		playerName = "no one"
@@ -712,7 +715,7 @@ Citizen.CreateThread(function()
 			local target_veh = getVehicleInFrontOfUser()
 			local target_veh_plate = GetVehicleNumberPlateText(target_veh)
 			EnableGui(target_veh_plate)
-			--GiveWeaponToPed(GetPlayerPed(-1), 0xA2719263, 0, false, true)
+			GiveWeaponToPed(GetPlayerPed(-1), 0xA2719263, 0, false, true)
 		end
 
 		-- tackling:
@@ -721,8 +724,14 @@ Citizen.CreateThread(function()
 				if playerServerId ~= 0 then
 					if distanceToClosestTargetPed < 1.2 then
 						if not IsPedRagdoll(GetPlayerPed(-1)) and not IsPedCuffed(GetPlayerPed(-1)) then
-							TriggerServerEvent("interaction:tackle", playerServerId)
-							SetPedToRagdoll(GetPlayerPed(-1), 1000, 1000, 0, true, true, false)
+							if GetGameTimer() > last_tackle_time + tackle_delay then 
+								TriggerServerEvent("interaction:tackle", playerServerId)
+								SetPedToRagdoll(GetPlayerPed(-1), 1000, 1000, 0, true, true, false)
+								last_tackle_time = GetGameTimer()
+							else 
+								local seconds_left = ((last_tackle_time + tackle_delay) - GetGameTimer())/1000
+								TriggerEvent("usa:notify", "Please wait " .. seconds_left .. " more seconds!") -- need to test tackle delay!!!
+							end
 						end
 					else
 						TriggerEvent("usa:notify", "Player too far to tackle!")

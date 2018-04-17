@@ -53,6 +53,31 @@ local locations = {
 			heading = 0.0,
 			model = "amm_farmer_01"
 		}
+	},
+	["Los Santos - Davis"] = {
+		duty = {
+			x = 409.78,
+			y = -1623.41,
+			z = 28.29
+		},
+		truck_spawn = {
+			x = 398.82,
+			y = -1637.94,
+			z = 29.29,
+			heading = 347.428
+		},
+		impound = {
+			x = 403.24,
+			y = -1633.48,
+			z = 28.29
+		}, 
+		ped = {
+			x = 408.03,
+			y = -1624.62,
+			z = 28.29,
+			heading = -90.0,
+			model = "amy_downtown_01"
+		}
 	}
 }
 
@@ -172,7 +197,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 
 		for name, data in pairs(locations) do
-			DrawMarker(1, data.impound.x, data.impound.y, data.impound.z, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 1.0, 100, 85, 161, 92, 0, 0, 2, 0, 0, 0, 0)
+			DrawMarker(27, data.impound.x, data.impound.y, data.impound.z, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 1.0, 100, 85, 161, 92, 0, 0, 2, 0, 0, 0, 0)
 		end
 
 		if isPlayerAtTowSpot() and not playerNotified then
@@ -249,7 +274,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		for name, data in pairs(locations) do
-			DrawMarker(1, data.duty.x, data.duty.y, data.duty.z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 130, 105, 90, 0, 0, 2, 0, 0, 0, 0)
+			DrawMarker(27, data.duty.x, data.duty.y, data.duty.z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 130, 105, 90, 0, 0, 2, 0, 0, 0, 0)
 			local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
 			if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,data.duty.x,data.duty.y,data.duty.z,false) < 3 then
 				--DrawCoolLookingNotification("Press ~y~E~w~ to go work for Downtown Taxi Co.!")

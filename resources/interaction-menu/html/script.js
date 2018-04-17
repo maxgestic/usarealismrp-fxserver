@@ -1,7 +1,7 @@
 var policeActions = ["Cuff", "Drag", "Search", "MDT", "Place", "Unseat", "Impound", "Seize Veh"];
 var voipOptions = ["Yell", "Normal", "Whisper"];
 var emoteOptions = ["Cop", "Sit", "Chair", "Kneel", "CPR", "Notepad","Traffic", "Photo","Clipboard", "Lean", "Hangout", "Pot", "Phone", "Yoga", "Cheer", "Statue", "Jog",
-"Flex", "Sit up", "Push up", "Weld", "Mechanic","Smoke","Drink", "Bum 1", "Bum 2", "Bum 3", "Drill", "Blower", "Chillin'", "Mobile Film", "Planting", "Golf", "Hammer", "Clean", "Musician", "Party", "Prostitute", "High Five", "Wave", "Hug", "Fist bump", "Dance 1", "Dance 2", "Dance 3", "Shag 1", "Shag 2", "Shag 3",
+"Flex", "Sit up", "Push up", "Weld", "Mechanic","Smoke","Drink", "Prone", "Bum 1", "Bum 2", "Bum 3", "Drill", "Blower", "Chillin'", "Mobile Film", "Planting", "Golf", "Hammer", "Clean", "Musician", "Party", "Prostitute", "High Five", "Wave", "Hug", "Fist bump", "Dance 1", "Dance 2", "Dance 3", "Shag 1", "Shag 2", "Shag 3",
 "Whatup", "Kiss", "Handshake", "Surrender", "Cross Arms"];
 var playerInventory;
 var playerWeapons;
