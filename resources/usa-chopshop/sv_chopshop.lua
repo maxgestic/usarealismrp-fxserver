@@ -34,7 +34,7 @@ AddEventHandler("chopshop:startJob", function()
 end)
 
 RegisterServerEvent("chopshop:reward")
-AddEventHandler("chopshop:reward", function(veh_name, damage)
+AddEventHandler("chopshop:reward", function(veh_name, damage, property)
   local usource = source
   local player = exports["essentialmode"]:getPlayerFromId(usource)
   local user_money = player.getActiveCharacterData("money")
@@ -42,6 +42,10 @@ AddEventHandler("chopshop:reward", function(veh_name, damage)
   if (reward - damage) >= 0 then
     player.setActiveCharacterData("money", user_money + (reward - damage))
     TriggerClientEvent("usa:notify", usource, "~y~Reward:~w~ $" .. (reward - damage) .. "\nThere was $" .. damage .. " in damages.")
+	if property then 
+		-- give money to property owner --
+		TriggerEvent("properties:addMoney", property.name, math.floor(0.75 * (reward - damage), 0))
+	end
   else
     TriggerClientEvent("usa:notify", usource, "This vehicle is too damaged. I am not giving you any money for this!")
   end

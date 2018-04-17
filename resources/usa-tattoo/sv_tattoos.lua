@@ -175,7 +175,7 @@ AddEventHandler("tattoo:checkout", function(purchased_tattoos, property)
     TriggerEvent("usa:loadPlayerComponents", usource)
 		TriggerClientEvent("usa:notify", usource, "~y~You payed: ~w~$" .. cost)
     if property then
-      TriggerEvent("properties:addMoney", property.name, math.floor(0.25 * cost, 0))
+      TriggerEvent("properties:addMoney", property.name, math.floor(0.75 * cost, 0))
     end
   else
     TriggerClientEvent("usa:notify", usource, "You don't have enough money to pay the total: $" .. cost)

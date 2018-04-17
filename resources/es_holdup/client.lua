@@ -155,6 +155,26 @@ local stores = {
 		position = { ['x'] = -568.065, ['y'] = 5253.392, ['z'] = 70.487},
 		nameofstore = "FridgeIt Trucking - Paleto",
 		lastrobbed = 0
+	},
+	["Herr Kutz Barber - Paleto"] = {
+		position = { ['x'] = -277.958, ['y'] = 6229.62, ['z'] = 31.69},
+		nameofstore = "Herr Kuts Barber - Paleto",
+		lastrobbed = 0
+	},
+	["Tattoo Shop - Paleto"] = {
+		position = { ['x'] = 292.94, ['y'] = 6197.46, ['z'] = 31.48},
+		nameofstore = "Tattoo Shop - Paleto",
+		lastrobbed = 0
+	},
+	["Herr Kutz Barber - Sandy Shores"] = {
+		position = { ['x'] = 1930.88, ['y'] = 3728.8, ['z'] = 32.844},
+		nameofstore = "Herr Kuts Barber - Sandy Shores",
+		lastrobbed = 0
+	},
+	["Tattoo Shop - Sandy Shores"] = {
+		position = { ['x'] = 1863.22, ['y'] = 3751.12, ['z'] = 33.03},
+		nameofstore = "Tattoo Shop - Sandy Shores",
+		lastrobbed = 0
 	}
 }
 

@@ -80,7 +80,10 @@ Citizen.CreateThread(function()
                   Wait(chop_time) -- delay giving reward
                   RemoveFromWantedVehicles(display_name)
                   NotifyOfUpdatedWantedVehicles()
-                  TriggerServerEvent("chopshop:reward", display_name, GetVehicleBodyDamage(handle))
+				  local playerCoords = GetEntityCoords(me, false)
+				  TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+					TriggerServerEvent("chopshop:reward", display_name, GetVehicleBodyDamage(handle), property)
+				  end)
                   SetEntityAsMissionEntity( handle, true, true )
                   DeleteCar(handle)
                 end
