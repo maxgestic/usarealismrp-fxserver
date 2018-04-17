@@ -13,7 +13,7 @@ AddEventHandler('rconCommand', function(commandName, args)
       CancelEvent()
       return
     elseif not rank then
-      RconPrint("\nYou must enter a rank for that player: 0 to un-whitelist. 1 is probationary deputy, 6 is max.")
+      RconPrint("\nYou must enter a rank for that player: 0 to un-whitelist. 1 is probationary deputy, 7 is max.")
       CancelEvent()
       return
     end
@@ -24,7 +24,7 @@ AddEventHandler('rconCommand', function(commandName, args)
           if rank > 0 then
             user.setActiveCharacterData("policeRank", rank)
             RconPrint("DEBUG: " .. playerId .. "'s police rank has been set to: " .. rank .. "!")
-            TriggerClientEvent('chatMessage', tonumber(playerId), "CONSOLE", {255, 255, 255}, "You have been whitelisted for LSPD")
+            TriggerClientEvent('chatMessage', tonumber(playerId), "CONSOLE", {255, 255, 255}, "You have been whitelisted for police, rank: " .. rank)
           else
             user.setActiveCharacterData("policeRank", 0)
             user.setActiveCharacterData("job", "civ")
@@ -32,7 +32,21 @@ AddEventHandler('rconCommand', function(commandName, args)
           end
         end
       end)
-    end
+    elseif type == "ems" then 
+		TriggerEvent("es:getPlayerFromId", tonumber(playerId), function(user)
+        if(user)then
+          if rank > 0 then
+            user.setActiveCharacterData("emsRank", rank)
+            RconPrint("DEBUG: " .. playerId .. "'s EMS rank has been set to: " .. rank .. "!")
+            TriggerClientEvent('chatMessage', tonumber(playerId), "CONSOLE", {255, 255, 255}, "You have been whitelisted for EMS, rank: " .. rank)
+          else
+            user.setActiveCharacterData("emsRank", 0)
+            user.setActiveCharacterData("job", "civ")
+            RconPrint("DEBUG: " .. playerId .. " un-whitelisted as EMS.")
+          end
+        end
+      end)
+	end
 
     --RconPrint("\nError: failed to whitelist player " .. GetPlayerName(playerId) .. " for POLICE.")
     CancelEvent()
@@ -69,7 +83,7 @@ TriggerEvent('es:addCommand', 'whitelist', function(source, args, user)
     return
   elseif not rank then
     print("You must enter a whitelist status for that player: true or false")
-    TriggerClientEvent("usa:notify", source, "You must enter a rank for that player: 0 to un-whitelist. 1 is probationary deputy, 6 is max.")
+    TriggerClientEvent("usa:notify", source, "You must enter a rank for that player: 0 to un-whitelist. 1 is probationary deputy, 7 is max.")
     return
   end
   TriggerEvent('es:getPlayerFromId', playerId, function(targetUser)
@@ -100,7 +114,7 @@ end, {
 	params = {
 		{ name = "id", help = "The player's server ID #" },
     { name = "type", help = "'police' or 'ems'" },
-    { name = "rank", help = "0 to remove whitelist, 1 for probationary, 6 is max permissions" }
+    { name = "rank", help = "0 to remove whitelist, 1 for probationary, 7 is max permissions" }
 	}
 })
 
