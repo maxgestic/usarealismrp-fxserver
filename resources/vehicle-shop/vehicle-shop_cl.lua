@@ -120,9 +120,11 @@ local vehicleShopItems = {
 		{make = "Vapid", model = "Speedo", price = 18000, hash = -810318068, storage_capacity = 300.0},
 		{make = "Vapid", model = "Minivan", price = 19000, hash = -310465116, storage_capacity = 300.0},
 		{make = "Vapid", model = "Clown", price = 29599, hash = 728614474, storage_capacity = 300.0},
-		{make = "Declasse", model = "Burrito", price = 21000, hash = -1743316013, storage_capacity = 300.0},
+		{make = "Declasse", model = "Burrito 1", price = 21000, hash = -1346687836, storage_capacity = 300.0},
 		{make = "Declasse", model = "Burrito 2", price = 21000, hash = -907477130, storage_capacity = 300.0},
-		{make = "Declasse", model = "Burrito 3", price = 21000, hash = 893081117, storage_capacity = 300.0},
+		{make = "Declasse", model = "Burrito 3", price = 21000, hash = -1743316013, storage_capacity = 300.0},
+		{make = "Declasse", model = "Burrito 4", price = 21000, hash = 893081117, storage_capacity = 300.0},
+		{make = "Declasse", model = "Burrito 5", price = 21000, hash = 1132262048, storage_capacity = 300.0},
 		{make = "BF", model = "Surfer", price = 22500, hash = 699456151, storage_capacity = 300.0},
 		{make = "Bravado", model = "Youga Classic", price = 24000, hash = 1026149675, storage_capacity = 300.0},
 		{make = "Bravado", model = "Rumpo Custom", price = 38000, hash = 1475773103, storage_capacity = 300.0},
@@ -562,13 +564,13 @@ Citizen.CreateThread(function()
 						end
 					end)
 				end
-				
+
 			elseif menu.page == "preview" then
-			
+
 				TriggerEvent("vehShop-GUI:Title", menu.preview.name)
-				
+
 				PreviewVehicle()
-				
+
 				TriggerEvent("vehShop-GUI:Option", "Purchase", function(cb)
 					if cb then
 						local playerCoords = GetEntityCoords(me, false)
@@ -581,7 +583,7 @@ Citizen.CreateThread(function()
 						menu.preview.handle = nil
 					end
 				end)
-				
+
 				TriggerEvent("vehShop-GUI:Option", "Back", function(cb)
 					if cb then
 						menu.page = menu.preview.previous_page
@@ -590,7 +592,7 @@ Citizen.CreateThread(function()
 						SetEntityCoords(me, table.unpack(menu.preview.previous_coords))
 					end
 				end)
-				
+
 			else
 
 				--print("in else clause!")
@@ -607,7 +609,7 @@ Citizen.CreateThread(function()
 							--print("adding vehicle: " .. vehicle.make .. " " .. vehicle.model .. " to menu")
 							TriggerEvent("vehShop-GUI:Option", "($" .. comma_value(vehicle.price) .. ") " .. vehicle.make .. " " .. vehicle.model .. " (C: ".. vehicle.storage_capacity .. ")", function(cb)
 								if cb then
-				
+
 									menu.page = "preview"
 									menu.preview = {
 										name = vehicle.make .. " " .. vehicle.model,
@@ -617,7 +619,7 @@ Citizen.CreateThread(function()
 										previous_coords = GetEntityCoords(me),
 										previous_page = k
 									}
-							
+
 								end
 							end)
 						end
