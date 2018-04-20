@@ -127,7 +127,9 @@ local vehicleShopItems = {
 		{make = "Declasse", model = "Burrito 5", price = 21000, hash = 1132262048, storage_capacity = 300.0},
 		{make = "BF", model = "Surfer", price = 22500, hash = 699456151, storage_capacity = 300.0},
 		{make = "Bravado", model = "Youga Classic", price = 24000, hash = 1026149675, storage_capacity = 300.0},
-		{make = "Bravado", model = "Rumpo Custom", price = 38000, hash = 1475773103, storage_capacity = 300.0},
+		{make = "Bravado", model = "Rumpo 1", price = 18000, hash = 1162065741, storage_capacity = 300.0},
+		{make = "Bravado", model = "Rumpo 2", price = 28000, hash = -1776615689, storage_capacity = 300.0},
+		{make = "Bravado", model = "Rumpo 3", price = 38000, hash = 1475773103, storage_capacity = 300.0},
 		{make = "Brute", model = "Camper", price = 45500, hash = 1876516712, storage_capacity = 300.0},
 		{make = "Hennifers", model = "Taco Truck", price = 60500, hash = 1951180813, storage_capacity = 300.0}
 	},
