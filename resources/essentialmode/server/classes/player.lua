@@ -64,12 +64,11 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 				---------------------------------------------------------------------------------------
 				-- done adding all the inventory item weights, see if player has room for given item --
 				---------------------------------------------------------------------------------------
-				if item_to_add.weight then
-					if current_weight + (item_to_add.weight * item_to_add.quantity) <= 100.0 then
-						return true
-					else
-						return false
-					end
+				if not item_to_add.weight then item_to_add.weight = 1.0 end
+				if current_weight + (item_to_add.weight * item_to_add.quantity) <= 100.0 then
+					return true
+				else
+					return false
 				end
 			end
 		end
