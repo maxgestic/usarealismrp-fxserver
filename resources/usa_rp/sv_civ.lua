@@ -9,6 +9,8 @@ local SETTINGS = {
 	}
 }
 
+local VEH_GARAGE_MAXIMUM_STORAGE_NUM = 12
+
 ------------------------
 -- Blindfold a person --
 ------------------------
@@ -252,7 +254,7 @@ local walkstyles = {
 ----------------------------
 TriggerEvent('es:addCommand', 'walkstyle', function(source, args, user, location)
 	local style_number = args[2]
-	if not style_number then 
+	if not style_number then
 		TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0" .. "[0] Default")
 		for i = 1, #walkstyles do
 			TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0" .. "[" .. i .. "] " .. walkstyles[i].display_name)
@@ -260,7 +262,7 @@ TriggerEvent('es:addCommand', 'walkstyle', function(source, args, user, location
 	else
 		if tonumber(style_number) ~= 0 then
 			TriggerClientEvent("civ:changeWalkStyle", source, walkstyles[tonumber(style_number)].clipset_name)
-		else 
+		else
 			TriggerClientEvent("civ:changeWalkStyle", source, tonumber(style_number))
 		end
 	end
@@ -270,3 +272,134 @@ end, {
 		{ name = "style name", help = "Options: 1 - " .. #walkstyles .. ", do /walkstyle for list" }
 	}
 })
+
+------------------------------------------------
+-- trade / sell vehicles to other players --
+------------------------------------------------
+TriggerEvent('es:addCommand', 'sellvehicle', function(source, args, user, location)
+	local veh_number = tonumber(args[2])
+	local target = tonumber(args[3])
+	local price = tonumber(args[4])
+	local user_vehicles = user.getActiveCharacterData("vehicles")
+	if veh_number and GetPlayerName(target) and price and target ~= tonumber(source) then
+		price = math.floor(price)
+		local veh_to_sell = user_vehicles[veh_number]
+		if veh_to_sell then
+			local target_player = exports["essentialmode"]:getPlayerFromId(target)
+			local target_player_vehicles = target_player.getActiveCharacterData("vehicles")
+			local target_player_money  = target_player.getActiveCharacterData("money")
+			local target_player_bank = target_player.getActiveCharacterData("bank")
+			if #target_player_vehicles < VEH_GARAGE_MAXIMUM_STORAGE_NUM then
+				local seller = user.getActiveCharacterData("fullName")
+				if target_player_money >= price or target_player_bank >= price then
+					local details = {
+						source = source,
+						target = target,
+						user = user,
+						target_player = target_player,
+						user_vehicles = user_vehicles,
+						target_player_vehicles = target_player_vehicles,
+						seller = seller,
+						price = price,
+						veh_to_sell = veh_to_sell,
+						target_player_money = target_player_money,
+						target_player_bank = target_player_bank,
+						veh_number = veh_number
+					}
+					TriggerClientEvent("vehicle:confirmSell", target, details)
+				end
+			else
+				print("Error: target player has reached limit of " .. VEH_GARAGE_MAXIMUM_STORAGE_NUM .. " vehicles!")
+			end
+		end
+	else
+		-- print list of vehs --
+		for i = 1, #user_vehicles do
+			local vehicle = user_vehicles[i]
+			TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0---------------------- #" .. i .. " -------------------------")
+			TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0VEH: " .. vehicle.make .. " " .. vehicle.model)
+			TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0PLATE: " .. vehicle.plate)
+			TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0----------------------------------------------------")
+		end
+	end
+end, {
+	help = "Offer one of your vehicles to another player.",
+	params = {
+		{ name = "vehicle #", help = "The vehicle number from your list of vehicles [hint: do /sellvehicle]." },
+		{ name = "target", help = "The ID # of the player to sell the vehicle to." },
+		{ name = "price", help = "The price you are offering the vehicle for." }
+	}
+})
+
+RegisterServerEvent("vehicle:confirmSell")
+AddEventHandler("vehicle:confirmSell", function(details, wants_to_buy)
+	if wants_to_buy then
+		TradeVehicle(details)
+	else
+		TriggerClientEvent("usa:notify", details.source, "Person ~r~rejected~w~ your offer!")
+		TriggerClientEvent("usa:notify", details.target, "You ~r~rejected~w~ the offer!")
+	end
+end)
+
+function SendDiscordMessage(content, url, color)
+	PerformHttpRequest(url, function(err, text, headers)
+		if text then
+			print(text)
+		end
+	end, "POST", json.encode({
+		embeds = {
+			{
+				description = content,
+				color = color, --524288
+				author = {
+					name = "Department of Motor Vehicles"
+				}
+			}
+		}
+	}), { ["Content-Type"] = 'application/json' })
+end
+
+function TradeVehicle(details)
+	local buyer = exports["essentialmode"]:getPlayerFromId(details.target)
+	local seller = exports["essentialmode"]:getPlayerFromId(details.source)
+	-- trade money --
+	if details.target_player_money >= details.price then
+		print("player had enough money!")
+		buyer.setActiveCharacterData("money", details.target_player_money - details.price)
+		seller.setActiveCharacterData("money", seller.getActiveCharacterData("money") + details.price)
+	elseif details.target_player_bank >= details.price then
+		buyer.setActiveCharacterData("bank", details.target_player_bank - details.price)
+		seller.setActiveCharacterData("bank", seller.getActiveCharacterData("bank") + details.price)
+	else
+		TriggerClientEvent("usa:notify", details.target, "Not enough money to pruchase vehicle!")
+		TriggerClientEvent("usa:notify", details.source, "Person did not have enough money to pruchase vehicle!")
+		return
+	end
+	-- remove vehicle from seller --
+	print("veh to sell: " .. details.veh_to_sell.make .. " " .. details.veh_to_sell.model)
+	table.remove(details.user_vehicles, details.veh_number)
+	seller.setActiveCharacterData("vehicles", details.user_vehicles)
+	print("removed vehicle from: " .. GetPlayerName(details.source))
+	print("giving to player: " .. GetPlayerName(details.target))
+	-- transfer ownership details --
+	details.veh_to_sell.owner = buyer.getActiveCharacterData("fullName")
+	-- give vehicle to target --
+	table.insert(details.target_player_vehicles, details.veh_to_sell)
+	buyer.setActiveCharacterData("vehicles", details.target_player_vehicles)
+	print("vehicle successfully transferred!")
+	-- send discord msg to log --
+	local timestamp = os.date("*t", os.time())
+	local desc = "\n**Vehicle:** " .. details.veh_to_sell.make .. " " .. details.veh_to_sell.model ..
+	"\n**Seller:** " .. details.seller ..
+	"\n**Buyer:** " .. details.veh_to_sell.owner ..
+	"\n**Price:** $" .. details.price ..
+	"\n**Date:** ".. timestamp.month .. "/" .. timestamp.day .."/" .. timestamp.year
+	SendDiscordMessage(desc, "https://discordapp.com/api/webhooks/436965351004307466/FY-o_sGScUYFQpo9Y18-ZP-L_HdWRXoDZ1eO2AeD7uXzmg5JwWzqlb07Bbf1Yvv0_W-k", 524288)
+	TriggerClientEvent("usa:notify", details.source, "Transaction ~g~successful~w~!")
+	TriggerClientEvent("usa:notify", details.target, "Transaction ~g~successful~w~!")
+end
+
+-- todo:
+-- 1) add confirmation message for buyer before seller finishes transaction // need testing
+-- 2) add discord #dmv-log to post when a vehicle is traded [https://discordapp.com/api/webhooks/436965351004307466/FY-o_sGScUYFQpo9Y18-ZP-L_HdWRXoDZ1eO2AeD7uXzmg5JwWzqlb07Bbf1Yvv0_W-k] // done
+-- 3) test when a cop runs the license plate #, see if the returned name is proper

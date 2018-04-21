@@ -161,7 +161,7 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 					end
 					-- update char
 					self.characters[i][field] = data
-					print("set!")
+					--print("set!")
 				else
 					--print("Error: field " .. field .. " did not exist on the character! can't set it!")
 					print("INFO: field " .. field .. " did not exist on the character! Creating the field...")

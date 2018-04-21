@@ -59,7 +59,7 @@ AddEventHandler("police:ticket", function(amount, reason, fromPlayerId)
                 Citizen.Trace("player wants to pay ticket!")
                 responded = true
                 TriggerServerEvent("police:payTicket", fromPlayerId, amount, reason, true) -- remove money & notify officer of signature
-            elseif IsControlJustPressed(1, 249) then -- N key
+            elseif IsControlJustPressed(1, 177) then -- Backspace key
                 Citizen.Trace("player does not want to pay ticket!")
                 responded = true
                 TriggerServerEvent("police:payTicket", fromPlayerId, amount, reason, false) -- notify officer of denial to sign
@@ -192,7 +192,7 @@ end
 
 function DrawTicketNotification(amount, reason)
 	SetNotificationTextEntry("STRING")
-	AddTextComponentString("~y~TICKET: ~w~$" .. amount .. "\n~y~REASON: ~w~" .. reason .. "\nPay? ~g~Y~w~/~r~N")
+	AddTextComponentString("~y~TICKET: ~w~$" .. amount .. "\n~y~REASON: ~w~" .. reason .. "\nPay? ~g~Y~w~/~r~Backspace")
 	DrawNotification(0,1)
 end
 

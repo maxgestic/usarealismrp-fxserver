@@ -262,9 +262,32 @@ RegisterNetEvent("civ:changeWalkStyle")
 AddEventHandler("civ:changeWalkStyle", function(style)
 	if style ~= 0 then
 		SetClipset(style)
-	else 
-		ResetPedMovementClipset(GetPlayerPed(-1), 0 ) 
+	else
+		ResetPedMovementClipset(GetPlayerPed(-1), 0 )
 	end
+end)
+
+-- trading/selling vehicles --
+RegisterNetEvent("vehicle:confirmSell")
+AddEventHandler("vehicle:confirmSell", function(details)
+    local responded = false
+    local message = "~y~OFFER: ~w~$" .. details.price .. " for ~w~" .. details.veh_to_sell.make .. " " .. details.veh_to_sell.model .. " [" .. details.veh_to_sell.plate .. "]" .. "\nAccept? ~g~Y~w~/~r~Backspace"
+    TriggerEvent("usa:notify", message)
+    Citizen.CreateThread(function()
+        while not responded do
+            Citizen.Wait(0)
+            DrawSpecialText( "~y~OFFER: ~w~$" .. details.price .. " for ~w~" .. details.veh_to_sell.make .. " " .. details.veh_to_sell.model .. " [" .. details.veh_to_sell.plate .. "]" .. "\nAccept? ~g~Y~w~/~r~Backspace" )
+            if IsControlJustPressed(1, 246) then -- Y key
+                print("player wants to buy vehicle!")
+                responded = true
+                TriggerServerEvent("vehicle:confirmSell", details, true)
+            elseif IsControlJustPressed(1, 177) then -- Backspace key
+                print("player does not want to buy vehicle!")
+                responded = true
+                TriggerServerEvent("vehicle:confirmSell", details, false)
+            end
+        end
+    end)
 end)
 
 function closeEnoughToPlayer(from_id)
