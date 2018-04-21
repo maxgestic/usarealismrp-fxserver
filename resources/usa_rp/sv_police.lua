@@ -289,9 +289,9 @@ AddEventHandler("police:getGSRResult", function(id, from_id)
 end)
 
 RegisterServerEvent("police:notifyGSR")
-AddEventHandler("police:notifyGSR", function(id, passed)
+AddEventHandler("police:notifyGSR", function(id, was_detected)
 	local message = ""
-	if passed then
+	if was_detected then
 		message = "Gun shot residue ~r~detected~w~!"
 		-- todo: play sound
 	else

@@ -290,17 +290,17 @@ Citizen.CreateThread(function()
 		-- shooting notification / gsr --
 		---------------------------------
 		--print("GetSelectedPedWeapon(me): " .. GetSelectedPedWeapon(me))
-		if IsPedShooting(me) and GetSelectedPedWeapon(me) ~= 101631238 then
+		if IsPedShooting(me) and GetSelectedPedWeapon(me) ~= 101631238 and GetSelectedPedWeapon(me) ~= 911657153 then
 			last_shot_time = GetGameTimer()
 			--print("IsInPopulatedArea(): " .. tostring(IsInPopulatedArea()))
 			if IsInPopulatedArea() then
 				if math.random(100) < 32 then
 					if not sending_msg then
 						sending_msg = true
-  					if GetGameTimer() > timer.last_press + timer.delay then
-						  send911Message("(10-32) Report of shots fired.")
-              timer.last_press = GetGameTimer()
-            end
+						if GetGameTimer() > timer.last_press + timer.delay then
+							send911Message("(10-32) Report of shots fired.")
+							timer.last_press = GetGameTimer()
+						end
 						sending_msg = false
 					end
 				end
@@ -400,18 +400,18 @@ end
 RegisterNetEvent("police:performGSR")
 AddEventHandler("police:performGSR", function(source)
 	--print("performing GSR test")
-	local id, name, dist = GetClosestPlayerInfo()
+	local id, name, dist = GetClosestPlayerInfo(1.5)
 	--print("closest: " .. name .. ", id: " .. id)
 	TriggerServerEvent("police:getGSRResult", id, source)
 end)
 
 RegisterNetEvent("police:testForGSR")
 AddEventHandler("police:testForGSR", function(to_notify_id)
-	if GetGameTimer() - last_shot_time > duration then
-		--print("passed duration! notify id: " .. to_notify_id)
+	if GetGameTimer() - last_shot_time >= duration or last_shot_time == 0 then
+		print("passed duration! notify id: " .. to_notify_id)
 		TriggerServerEvent("police:notifyGSR", to_notify_id, false)
 	else
-		--print("player shot weapon recently! gsr detected! notify id: " .. to_notify_id)
+		print("player shot weapon recently! gsr detected! notify id: " .. to_notify_id)
 		TriggerServerEvent("police:notifyGSR", to_notify_id, true)
 	end
 end)
