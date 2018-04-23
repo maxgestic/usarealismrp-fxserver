@@ -48,6 +48,13 @@ Citizen.CreateThread(function()
 					vehModel == GetHashKey("policet") or
 					vehModel == GetHashKey("policeb") or
 					vehModel == GetHashKey("sheriff") or
+					vehModel == -672516475 or -- unmarked9
+					vehModel == -1960928017 or -- unmarked8
+					vehModel == -59441254 or -- unmarked7
+					vehModel == -1663942570 or -- unmarked6
+					vehModel == 1109330673 or -- unmarked4
+					vehModel == -1285460620 or -- unmarked3
+					vehModel == 1383443358 or -- unmarked1
 					vehModel == GetHashKey("sheriff2") then
 					drawTxt(0.105,0.808,0.185,0.206, 0.40, info, 255,255,255,255)
 				end
@@ -55,6 +62,16 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
+
+--[[
+	-672516475, -- unmarked9
+	-1960928017, -- unmarked8
+	-59441254, -- unmarked7 (slicktop)
+	-1663942570, -- unmarked6
+	1109330673, -- unmarked4
+	-1285460620, -- unmarked3
+	1383443358 -- unmarked1
+	]]
 
 function GetCurrentTargetCar()
     local ped = GetPlayerPed(-1)

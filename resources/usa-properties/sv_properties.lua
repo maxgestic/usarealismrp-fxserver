@@ -504,8 +504,8 @@ function Evict_Owners()
 											PROPERTIES[name].owner.name = nil
 											PROPERTIES[name].owner.purchase_date = 0
 											PROPERTIES[name].owner.identifier = "undefined"
-											PROPERTIES[name].storage.money = 0
-											PROPERTIES[name].storage.items = {}
+											--PROPERTIES[name].storage.money = 0
+											--PROPERTIES[name].storage.items = {}
 										end)
 									end
 								end)
