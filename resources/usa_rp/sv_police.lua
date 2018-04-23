@@ -1,6 +1,6 @@
 local target_player_id = 0
 
-TriggerEvent('es:addJobCommand', 'ticket', { 'sheriff', 'police' }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'ticket', { 'sheriff', 'police' , 'judge'}, function(source, args, user)
 	local targetPlayer = tonumber(args[2])
 	local amount = tonumber(args[3])
 	table.remove(args, 1)
@@ -359,34 +359,3 @@ AddEventHandler("police:checkSuspension", function(id)
 		print("person had no DL or FP!")
 	end)
 end)
-
--- license debug --
-TriggerEvent('es:addGroupCommand', 'removesuspension', 'admin', function(source, args, user)
-	print("removing suspension")
-	local type = string.lower(args[2])
-	local target = tonumber(args[3])
-	local target_item_name = nil
-	if type and target then
-		if type == "dl" then
-			target_item_name = "Driver's License"
-		elseif type == "fp" then
-			target_item_name = "Firearm Permit"
-		end
-		local target_player = exports["essentialmode"]:getPlayerFromId(target)
-		local licenses = target_player.getActiveCharacterData("licenses")
-		for i = 1, #licenses do
-			if licenses[i].name == target_item_name then
-				if licenses[i].status == "suspended" then
-					licenses[i].status = "valid"
-					user.setActiveCharacterData("licenses", licenses)
-				end
-			end
-		end
-	end
-end, {
-	help = "Remove a license/firearm permit suspension",
-	params = {
-		{ name = "license type", help = "either FP or DL" },
-		{ name = "id", help = "id of player" }
-	}
-})

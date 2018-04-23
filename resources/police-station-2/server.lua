@@ -46,6 +46,20 @@ AddEventHandler('rconCommand', function(commandName, args)
           end
         end
       end)
+	elseif type == "judge" then 
+		TriggerEvent("es:getPlayerFromId", tonumber(playerId), function(user)
+			if(user)then
+				if rank > 0 then
+					user.setActiveCharacterData("judgeRank", rank)
+					RconPrint("DEBUG: " .. playerId .. "'s judge rank has been set to: " .. rank .. "!")
+					TriggerClientEvent('chatMessage', tonumber(playerId), "CONSOLE", {255, 255, 255}, "You have been whitelisted for judge, rank: " .. rank)
+				else
+					user.setActiveCharacterData("judgeRank", 0)
+					user.setActiveCharacterData("job", "civ")
+					RconPrint("DEBUG: " .. playerId .. " un-whitelisted as judge.")
+				end
+			end
+		end)
 	end
 
     --RconPrint("\nError: failed to whitelist player " .. GetPlayerName(playerId) .. " for POLICE.")
