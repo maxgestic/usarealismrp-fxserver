@@ -148,7 +148,7 @@ AddEventHandler("character:loadCharacter", function(activeSlot)
 			end
 			-- check dmv / firearm permit license status
 			TriggerEvent("police:checkSuspension", userSource)
-			
+			TriggerEvent("properties:checkSpawnPoint", userSource)
 		end
 	end)
 end)

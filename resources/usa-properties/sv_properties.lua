@@ -25,6 +25,24 @@ AddEventHandler("properties:getPropertyMoney", function(name, cb)
     cb(PROPERTIES[name].storage.money)
 end)
 
+RegisterServerEvent("properties:checkSpawnPoint")
+AddEventHandler("properties:checkSpawnPoint", function(usource)
+	local player = exports["essentialmode"]:getPlayerFromId(usource)
+	local spawn = player.getActiveCharacterData("spawn")
+	if type(spawn) ~= "nil" then 
+		print("spawn existed! checking if spawn is still valid after evictions!")
+		for i = 1, #PROPERTIES do 
+			if PROPERTIES[i].x == spawn.x and PROPERTIES[i].y == spawn.y and PROPERTIES[i].z == spawn.z then 
+				print("property still valid after eviction!")
+				return
+			end
+		end
+		-- not valid at this point, remove
+		print("invalid spawn detected!")
+		player.setActiveCharacterData("spawn", nil)
+	end
+end)
+
 ----------------------
 -- WARDROBE --
 ----------------------
@@ -478,7 +496,7 @@ function Evict_Owners()
 						max_ownable_days = HOUSE_PAY_PERIOD_DAYS
 					end
 						if GetWholeDaysFromTime(info.fee.paid_time) > max_ownable_days then
-							print("***Evicting owner of the " .. name .. " today!***")
+							print("***Evicting owner of the " .. name .. " today, owner identifier: " .. PROPERTIES[name].owner.identifier .. "***")
 							-- Get the document with that property name
 							TriggerEvent('es:exposeDBFunctions', function(db)
 								db.getDocumentByRow("properties", "name", name, function(doc, rText)
