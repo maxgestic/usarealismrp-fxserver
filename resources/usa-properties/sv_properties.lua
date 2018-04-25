@@ -31,8 +31,8 @@ AddEventHandler("properties:checkSpawnPoint", function(usource)
 	local spawn = player.getActiveCharacterData("spawn")
 	if type(spawn) ~= "nil" then 
 		print("spawn existed! checking if spawn is still valid after evictions!")
-		for i = 1, #PROPERTIES do 
-			if PROPERTIES[i].x == spawn.x and PROPERTIES[i].y == spawn.y and PROPERTIES[i].z == spawn.z then 
+		for name, info in pairs(PROPERTIES) do
+			if info.x == spawn.x and info.y == spawn.y and info.z == spawn.z then 
 				print("property still valid after eviction!")
 				return
 			end

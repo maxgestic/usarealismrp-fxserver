@@ -150,12 +150,15 @@ end)
 -- DO NOT REMOVE THESE! --
 
 function CheckSkin(ped)
+	--[[
 	for i = 1, #skins do
 		if GetHashKey(skins[i]) == GetEntityModel(ped) then
 			return true
 		end
 	end
 	return false
+	--]]
+	return true
 end
 
 function CheckWeapon(ped)
