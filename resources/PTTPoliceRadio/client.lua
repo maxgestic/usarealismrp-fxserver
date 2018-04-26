@@ -141,7 +141,7 @@ end )
 					ClearPedTasks(ped)
 					holstered = true
 				end
-				SetPedComponentVariation(ped, 9, 1, 0, 0)
+				--SetPedComponentVariation(ped, 9, 1, 0, 0)
 			end
 		end
 	end
