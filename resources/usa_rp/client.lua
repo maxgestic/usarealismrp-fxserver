@@ -58,6 +58,8 @@ end)
 -------------------
 
 -- ped/vehicle npcs
+-- TODO: modify this using the previous code it used to use. something about remove vehicle generators from area or something like that. or possibly if that doesn't work just
+--       remove this thread completely and see if it's managable with NPC traffic or w/e
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
