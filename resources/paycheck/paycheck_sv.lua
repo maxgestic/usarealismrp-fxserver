@@ -11,7 +11,21 @@ AddEventHandler('paycheck:welfare', function()
 		local job = user.getActiveCharacterData("job")
 
 		if job == "cop" or job == "sheriff" or job == "highwaypatrol" or job == "fbi" then
-			paycheckAmount = 1000
+      local cop_rank = user.getActiveCharacterData("policeRank")
+			paycheckAmount = 750
+      if cop_rank == 2 then
+        paycheckAmount = 1100
+      elseif cop_rank == 3 then
+        paycheckAmount = 1500
+      elseif cop_rank == 4 then
+        paycheckAmount = 1600
+      elseif cop_rank == 5 then
+        paycheckAmount = 1800
+      elseif cop_rank == 6 then
+        paycheckAmount = 2100
+      elseif cop_rank == 7 then
+        paycheckAmount = 2600
+      end
 		elseif job == "ems" or job == "fire" then
 			paycheckAmount = 1000
 		elseif job == "security" then
@@ -21,7 +35,7 @@ AddEventHandler('paycheck:welfare', function()
 		elseif job == "tow" then
 			paycheckAmount = 650
 		elseif job == "judge" then
-			paycheckAmount = 1500
+			paycheckAmount = 2600
 		else
 			paycheckAmount = 250 -- welfare amount (no job)
 		end
@@ -40,7 +54,9 @@ AddEventHandler('paycheck:welfare', function()
 				msg = msg .. "of $" .. paycheckAmount .. " from ^3Downtown Taxi Co.^0!"
 			elseif job == "tow" then
 				msg = msg .. "of $" .. paycheckAmount .. " from ^3Bubba's Tow Co.^0!"
-			else
+      elseif job == "sheriff" then
+				msg = msg .. "of $" .. paycheckAmount .. " from the ^3Blaine County Sheriff's Office^0!"
+      else
 				msg = msg .. "of $" .. paycheckAmount .. "."
 			end
 			-- Notify the user

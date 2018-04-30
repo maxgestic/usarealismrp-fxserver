@@ -318,12 +318,18 @@ AddEventHandler('RollWindow', function()
 	end
 end )
 
+local last_car = 0
+
 RegisterNetEvent("veh:openDoor")
 AddEventHandler("veh:openDoor", function(index)
    -- print("opening door with index = " .. index)
     local playerPed = GetPlayerPed(-1)
-    if IsPedInAnyVehicle(playerPed, false) then
         local playerCar = GetVehiclePedIsIn(playerPed, false)
+        if playerCar ~= 0 then
+          last_car = playerCar
+        else
+          playerCar = last_car
+        end
         if index == "trunk" then
             --print("index was trunk!")
             SetVehicleDoorOpen(playerCar, 5, true, true)
@@ -341,15 +347,18 @@ AddEventHandler("veh:openDoor", function(index)
             SetVehicleDoorOpen(playerCar, 2, true, true)
             SetVehicleDoorOpen(playerCar, 3, true, true)
         end
-    end
 end)
 
 RegisterNetEvent("veh:shutDoor")
 AddEventHandler('veh:shutDoor', function(index)
     --print("inside shut door!")
     local playerPed = GetPlayerPed(-1)
-    if IsPedInAnyVehicle(playerPed, false) then
         local playerCar = GetVehiclePedIsIn(playerPed, false)
+        if playerCar ~= 0 then
+          last_car = playerCar
+        else
+          playerCar = last_car
+        end
         if index == "trunk" then
             SetVehicleDoorShut(playerCar, 5, false)
         elseif index == "hood" then
@@ -366,7 +375,6 @@ AddEventHandler('veh:shutDoor', function(index)
             SetVehicleDoorShut(playerCar, 2, false)
             SetVehicleDoorShut(playerCar, 3, false)
         end
-    end
 end)
 
 RegisterNetEvent("veh:toggleEngine")
