@@ -29,7 +29,7 @@ AddEventHandler("impound:impoundVehicle", function(vehicle, plate)
 								end
 								--print("vehicles[i].plate = " .. type(vehicles[i].plate))
 								--print("plate = " .. type(plate))
-								if tonumber(plate) == tonumber(vehicles[i].plate) then
+								if tostring(plate) == tostring(vehicles[i].plate) then
 									--print("found matching plate = " .. plate)
 									--print("setting vehicle.impounded = true!")
 									vehicles[i].impounded = true
