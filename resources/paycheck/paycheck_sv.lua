@@ -11,23 +11,37 @@ AddEventHandler('paycheck:welfare', function()
 		local job = user.getActiveCharacterData("job")
 
 		if job == "cop" or job == "sheriff" or job == "highwaypatrol" or job == "fbi" then
-      local cop_rank = user.getActiveCharacterData("policeRank")
+			local cop_rank = user.getActiveCharacterData("policeRank")
 			paycheckAmount = 750
-      if cop_rank == 2 then
-        paycheckAmount = 1100
-      elseif cop_rank == 3 then
-        paycheckAmount = 1500
-      elseif cop_rank == 4 then
-        paycheckAmount = 1600
-      elseif cop_rank == 5 then
-        paycheckAmount = 1800
-      elseif cop_rank == 6 then
-        paycheckAmount = 2100
-      elseif cop_rank == 7 then
-        paycheckAmount = 2600
-      end
+			  if cop_rank == 2 then
+				paycheckAmount = 1100
+			  elseif cop_rank == 3 then
+				paycheckAmount = 1500
+			  elseif cop_rank == 4 then
+				paycheckAmount = 1600
+			  elseif cop_rank == 5 then
+				paycheckAmount = 1800
+			  elseif cop_rank == 6 then
+				paycheckAmount = 2100
+			  elseif cop_rank == 7 then
+				paycheckAmount = 2600
+			  end
 		elseif job == "ems" or job == "fire" then
-			paycheckAmount = 1000
+			local rank = user.getActiveCharacterData("emsRank")
+			paycheckAmount = 750
+			if rank == 2 then
+				paycheckAmount = 1100
+			  elseif rank == 3 then
+				paycheckAmount = 1500
+			  elseif rank == 4 then
+				paycheckAmount = 1600
+			  elseif rank == 5 then
+				paycheckAmount = 1800
+			  elseif rank == 6 then
+				paycheckAmount = 2100
+			  elseif rank == 7 then
+				paycheckAmount = 2600
+			  end
 		elseif job == "security" then
 			paycheckAmount = 500
 		elseif job == "taxi" then
@@ -54,9 +68,11 @@ AddEventHandler('paycheck:welfare', function()
 				msg = msg .. "of $" .. paycheckAmount .. " from ^3Downtown Taxi Co.^0!"
 			elseif job == "tow" then
 				msg = msg .. "of $" .. paycheckAmount .. " from ^3Bubba's Tow Co.^0!"
-      elseif job == "sheriff" then
+			elseif job == "sheriff" then
 				msg = msg .. "of $" .. paycheckAmount .. " from the ^3Blaine County Sheriff's Office^0!"
-      else
+			elseif job == "ems" then
+				msg = msg .. "of $" .. paycheckAmount .. " from ^3American Medical Response^0!"
+			else
 				msg = msg .. "of $" .. paycheckAmount .. "."
 			end
 			-- Notify the user

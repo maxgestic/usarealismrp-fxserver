@@ -80,6 +80,11 @@ TriggerEvent('es:addCommand', 'whitelist', function(source, args, user)
   elseif type == "police" then
     user_rank = tonumber(user.getActiveCharacterData("policeRank"))
   end
+  
+	if user_group == "admin" or user_group == "superadmin" or user_group == "owner" then
+		user_rank = 999999 -- so admins can use /whitelist
+	end
+
   if user_rank < 5 then
     TriggerClientEvent("usa:notify", source, "Error: must be ranked as Sergeant or above to set permissions!")
     return
