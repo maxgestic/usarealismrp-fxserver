@@ -7,6 +7,7 @@ local PROPERTIES = {} -- loaded and updated by database
 
 local BUSINESS_PAY_PERIOD_DAYS = 7
 local HOUSE_PAY_PERIOD_DAYS = 30
+local MAX_NUM_OF_PROPERTIES_SINGLE_PERSON = 5
 
 RegisterServerEvent("properties:getPropertyIdentifier")
 AddEventHandler("properties:getPropertyIdentifier", function()
@@ -371,83 +372,89 @@ end)
 RegisterServerEvent("properties:purchaseProperty")
 AddEventHandler("properties:purchaseProperty", function(property)
 	local user_source = source
+	local ident = GetPlayerIdentifiers(user_source)[1]
+	
+	if GetNumberOfOwnedProperties(ident) < MAX_NUM_OF_PROPERTIES_SINGLE_PERSON then
 
-	if not property.type then property.type = "business" print("set property type to business") end
-	--if property.type == "business" then ownership_length = BUSINESS_PAY_PERIOD_DAYS
-	--elseif property.type == "house" then ownership_length = HOUSE_PAY_PERIOD_DAYS end
+		if not property.type then property.type = "business" print("set property type to business") end
+		--if property.type == "business" then ownership_length = BUSINESS_PAY_PERIOD_DAYS
+		--elseif property.type == "house" then ownership_length = HOUSE_PAY_PERIOD_DAYS end
 
-	local final_time = nil
-	local today = os.date("*t", os.time())
+		local final_time = nil
+		local today = os.date("*t", os.time())
 
-    print("player #" .. source .. " wants to purchase " .. property.name)
-    local player = exports["essentialmode"]:getPlayerFromId(user_source)
-    local user_money = player.getActiveCharacterData("money")
-    local char_name = player.getActiveCharacterData("fullName")
+		print("player #" .. user_source .. " wants to purchase " .. property.name)
+		local player = exports["essentialmode"]:getPlayerFromId(user_source)
+		local user_money = player.getActiveCharacterData("money")
+		local char_name = player.getActiveCharacterData("fullName")
 
-    if user_money >= property.fee.price then
-        -- set new property info --
-        PROPERTIES[property.name].fee.paid_time = os.time() -- save the time the property was purchased
-        PROPERTIES[property.name].fee.paid = true
-		if property.type == "business" then
-			PROPERTIES[property.name].fee.due_days = BUSINESS_PAY_PERIOD_DAYS
-			final_time = {day = today.day + BUSINESS_PAY_PERIOD_DAYS, month = today.month, year = today.year}
-		elseif property.type == "house" then
-			PROPERTIES[property.name].fee.due_days = HOUSE_PAY_PERIOD_DAYS
-			final_time = {day = today.day, month = today.month + 1, year = today.year}
-		end
-        local endtime = os.time(final_time)
-        PROPERTIES[property.name].fee.due_time = endtime
-        PROPERTIES[property.name].fee.end_date = os.date("%x", endtime)
-        PROPERTIES[property.name].owner.name = char_name
-        PROPERTIES[property.name].owner.purchase_date = os.date("%x", os.time())
-        PROPERTIES[property.name].owner.identifier = GetPlayerIdentifiers(source)[1]
-        -- update all clients property info --
-        TriggerClientEvent("properties:update", -1, PROPERTIES, true)
-        -- subtract money --
-        player.setActiveCharacterData("money", user_money - property.fee.price)
-        -- Get the document with that property name --
-        TriggerEvent('es:exposeDBFunctions', function(db)
-            db.getDocumentByRow("properties", "name", property.name, function(doc, rText)
-                if rText then
-                    --RconPrint("\nrText = " .. rText)
-                end
-                if doc then
-                    PROPERTIES[property.name]._rev = nil
-                    db.updateDocument("properties", doc._id, PROPERTIES[property.name], function(status)
-                        print("called db.updateDocument checking status")
-                        if status == true then
-                            print("\nDocument updated.")
-                        else
-                            --RconPrint("\nStatus Response: " .. status)
-                            if status == "201" then
-                                print("\nDocument successfully updated!")
-                            end
-                        end
-                    end)
-                end
-            end)
-        end)
-        -- send discord msg to #property-logs --
-		local desc = "\n**Property:** " .. property.name .. "\n**Purchase Price:** $" .. comma_value(property.fee.price) ..  "\n**Purchased By:** " .. char_name .. "\n**Purchase Date:** ".. PROPERTIES[property.name].owner.purchase_date .. "\n**End Date:** " .. PROPERTIES[property.name].fee.end_date
-		local url = 'https://discordapp.com/api/webhooks/419573361170055169/6v2NLnxzF8lSHgT8pSDccB_XN1R6miVuZDrEYtvNfPny6kSqddSN_9iJ9PPkbAbM01pW'
-		PerformHttpRequest(url, function(err, text, headers)
-			if text then
-				print(text)
+		if user_money >= property.fee.price then
+			-- set new property info --
+			PROPERTIES[property.name].fee.paid_time = os.time() -- save the time the property was purchased
+			PROPERTIES[property.name].fee.paid = true
+			if property.type == "business" then
+				PROPERTIES[property.name].fee.due_days = BUSINESS_PAY_PERIOD_DAYS
+				final_time = {day = today.day + BUSINESS_PAY_PERIOD_DAYS, month = today.month, year = today.year}
+			elseif property.type == "house" then
+				PROPERTIES[property.name].fee.due_days = HOUSE_PAY_PERIOD_DAYS
+				final_time = {day = today.day, month = today.month + 1, year = today.year}
 			end
-		end, "POST", json.encode({
-			embeds = {
-				{
-					description = desc,
-					color = 524288,
-					author = {
-						name = "BLAINE COUNTY PROPERTY MGMT"
+			local endtime = os.time(final_time)
+			PROPERTIES[property.name].fee.due_time = endtime
+			PROPERTIES[property.name].fee.end_date = os.date("%x", endtime)
+			PROPERTIES[property.name].owner.name = char_name
+			PROPERTIES[property.name].owner.purchase_date = os.date("%x", os.time())
+			PROPERTIES[property.name].owner.identifier = ident
+			-- update all clients property info --
+			TriggerClientEvent("properties:update", -1, PROPERTIES, true)
+			-- subtract money --
+			player.setActiveCharacterData("money", user_money - property.fee.price)
+			-- Get the document with that property name --
+			TriggerEvent('es:exposeDBFunctions', function(db)
+				db.getDocumentByRow("properties", "name", property.name, function(doc, rText)
+					if rText then
+						--RconPrint("\nrText = " .. rText)
+					end
+					if doc then
+						PROPERTIES[property.name]._rev = nil
+						db.updateDocument("properties", doc._id, PROPERTIES[property.name], function(status)
+							print("called db.updateDocument checking status")
+							if status == true then
+								print("\nDocument updated.")
+							else
+								--RconPrint("\nStatus Response: " .. status)
+								if status == "201" then
+									print("\nDocument successfully updated!")
+								end
+							end
+						end)
+					end
+				end)
+			end)
+			-- send discord msg to #property-logs --
+			local desc = "\n**Property:** " .. property.name .. "\n**Purchase Price:** $" .. comma_value(property.fee.price) ..  "\n**Purchased By:** " .. char_name .. "\n**Purchase Date:** ".. PROPERTIES[property.name].owner.purchase_date .. "\n**End Date:** " .. PROPERTIES[property.name].fee.end_date
+			local url = 'https://discordapp.com/api/webhooks/419573361170055169/6v2NLnxzF8lSHgT8pSDccB_XN1R6miVuZDrEYtvNfPny6kSqddSN_9iJ9PPkbAbM01pW'
+			PerformHttpRequest(url, function(err, text, headers)
+				if text then
+					print(text)
+				end
+			end, "POST", json.encode({
+				embeds = {
+					{
+						description = desc,
+						color = 524288,
+						author = {
+							name = "BLAINE COUNTY PROPERTY MGMT"
+						}
 					}
 				}
-			}
-		}), { ["Content-Type"] = 'application/json' })
-    else
-        TriggerClientEvent("usa:notify", user_source, "You don't have enough money to purchase this property!")
-    end
+			}), { ["Content-Type"] = 'application/json' })
+		else
+			TriggerClientEvent("usa:notify", user_source, "You don't have enough money to purchase this property!")
+		end
+	else 
+		TriggerClientEvent("usa:notify", user_source, "You have reached your max number of properties!")
+	end
 end)
 
 function GetWholeDaysFromTime(reference_time)
@@ -488,7 +495,7 @@ function Evict_Owners()
 					PROPERTIES[name].type = "business"
 				end
 				-- see if eviction time has arrived
-				if info.fee.paid_time then
+				if info.fee.paid_time then 
 					local max_ownable_days = 0
 					if info.type == "business" then
 						max_ownable_days = BUSINESS_PAY_PERIOD_DAYS
@@ -524,7 +531,7 @@ function Evict_Owners()
 											PROPERTIES[name].owner.identifier = "undefined"
 											--PROPERTIES[name].storage.money = 0
 											--PROPERTIES[name].storage.items = {}
-										end)
+										end) 
 									end
 								end)
 							end)
@@ -633,6 +640,17 @@ AddEventHandler('rconCommand', function(commandName, args)
 	end
 	CancelEvent()
 end)
+
+function GetNumberOfOwnedProperties(identifier)
+	local count = 0
+	for name, info in pairs(PROPERTIES) do
+		if info.owner.identifier == identifier then 
+			count = count + 1
+		end
+	end
+	print("player with identifier [" .. identifier .. "] owns " .. count .. " properties")
+	return count
+end
 
 function comma_value(amount)
   local formatted = amount
