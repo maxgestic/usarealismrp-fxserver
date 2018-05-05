@@ -30,10 +30,10 @@ RegisterServerEvent("properties:checkSpawnPoint")
 AddEventHandler("properties:checkSpawnPoint", function(usource)
 	local player = exports["essentialmode"]:getPlayerFromId(usource)
 	local spawn = player.getActiveCharacterData("spawn")
-	if type(spawn) ~= "nil" then 
+	if type(spawn) ~= "nil" then
 		print("spawn existed! checking if spawn is still valid after evictions!")
 		for name, info in pairs(PROPERTIES) do
-			if info.x == spawn.x and info.y == spawn.y and info.z == spawn.z then 
+			if info.x == spawn.x and info.y == spawn.y and info.z == spawn.z then
 				print("property still valid after eviction!")
 				return
 			end
@@ -66,6 +66,8 @@ AddEventHandler("properties:deleteOutfitByName", function(property_name, outfit_
             TriggerClientEvent("properties:loadWardrobe", source, PROPERTIES[property_name].wardrobe)
             -- update properties --
             TriggerClientEvent("properties:update", -1, PROPERTIES, false)
+            -- save property --
+            SavePropertyData(property_name)
             return
         end
     end
@@ -82,6 +84,8 @@ AddEventHandler("properties:saveOutfit", function(property_name, outfit)
     TriggerClientEvent("properties:loadWardrobe", source, PROPERTIES[property_name].wardrobe)
     -- update properties --
 	TriggerClientEvent("properties:update", -1, PROPERTIES, false)
+  -- save property --
+  SavePropertyData(property_name)
 end)
 
 RegisterServerEvent("properties:getWardrobe")
@@ -172,6 +176,8 @@ AddEventHandler("properties:store", function(name, item, quantity)
 			print("name: " .. PROPERTIES[name].storage.items[k].name .. ", quantity: " .. PROPERTIES[name].storage.items[k].quantity)
 		end
 	end
+  -- save property --
+  SavePropertyData(name)
 end)
 
 -- store vehicle at property --
@@ -189,6 +195,8 @@ AddEventHandler("properties:storeVehicle", function(property_name, plate)
           table.insert(PROPERTIES[property_name].vehicles, userVehicles[i])
           TriggerClientEvent("properties:update", -1, PROPERTIES, true)
 					TriggerClientEvent("properties:storeVehicle", userSource)
+          -- save property --
+          SavePropertyData(property_name)
 					return
 				end
 			end
@@ -213,6 +221,8 @@ AddEventHandler("properties:retrieveVehicle", function(property_name, vehicle)
       TriggerClientEvent("properties:retrieveVehicle", source, vehicle)
       -- update properties table --
       TriggerClientEvent("properties:update", -1, PROPERTIES, true)
+      -- save property --
+      SavePropertyData(property_name)
       -- update player vehicle stored location variable --
       local player = exports["essentialmode"]:getPlayerFromId(userSource)
       local player_vehicles = player.getActiveCharacterData("vehicles")
@@ -273,6 +283,8 @@ AddEventHandler("properties:retrieve", function(name, item, quantity)
 				print("item: " .. PROPERTIES[name].storage.items[k].name .. ", quantity: " .. PROPERTIES[name].storage.items[k].quantity)
 			end
 			TriggerClientEvent("properties:loadedStorage", user_source, PROPERTIES[name].storage.items)
+      -- save property --
+      SavePropertyData(name)
 		else
 			TriggerClientEvent("usa:notify", user_source, "Inventory full.")
 		end
@@ -315,6 +327,8 @@ AddEventHandler("properties:addMoney", function(name, amount)
     PROPERTIES[name].storage.money = PROPERTIES[name].storage.money + amount
     TriggerClientEvent("properties:update", -1, PROPERTIES, true)
     print("$" .. amount .. " added!")
+    -- save property --
+    SavePropertyData(name)
 end)
 
 ------------------
@@ -335,6 +349,9 @@ AddEventHandler("properties:withdraw", function(name, amount, savedSource)
 			player.setActiveCharacterData("money", user_money + amount)
 			TriggerClientEvent("usa:notify", source, "~y~Withdrawn: ~w~$" .. amount)
 			print("$" .. amount .. " withdrawn!")
+      -- save property --
+      SavePropertyData(name)
+      --[[
 			-- update property info in DB --
 			-- Get the document with that property name
 			TriggerEvent('es:exposeDBFunctions', function(db)
@@ -358,6 +375,7 @@ AddEventHandler("properties:withdraw", function(name, amount, savedSource)
 					end
 				end)
 			end)
+      --]]
 		else
 			print("failed to retrieve player in properties:withdraw!")
 		end
@@ -373,7 +391,7 @@ RegisterServerEvent("properties:purchaseProperty")
 AddEventHandler("properties:purchaseProperty", function(property)
 	local user_source = source
 	local ident = GetPlayerIdentifiers(user_source)[1]
-	
+
 	if GetNumberOfOwnedProperties(ident) < MAX_NUM_OF_PROPERTIES_SINGLE_PERSON then
 
 		if not property.type then property.type = "business" print("set property type to business") end
@@ -409,6 +427,9 @@ AddEventHandler("properties:purchaseProperty", function(property)
 			TriggerClientEvent("properties:update", -1, PROPERTIES, true)
 			-- subtract money --
 			player.setActiveCharacterData("money", user_money - property.fee.price)
+      -- save property --
+      SavePropertyData(property.name)
+      --[[
 			-- Get the document with that property name --
 			TriggerEvent('es:exposeDBFunctions', function(db)
 				db.getDocumentByRow("properties", "name", property.name, function(doc, rText)
@@ -431,6 +452,7 @@ AddEventHandler("properties:purchaseProperty", function(property)
 					end
 				end)
 			end)
+      --]]
 			-- send discord msg to #property-logs --
 			local desc = "\n**Property:** " .. property.name .. "\n**Purchase Price:** $" .. comma_value(property.fee.price) ..  "\n**Purchased By:** " .. char_name .. "\n**Purchase Date:** ".. PROPERTIES[property.name].owner.purchase_date .. "\n**End Date:** " .. PROPERTIES[property.name].fee.end_date
 			local url = 'https://discordapp.com/api/webhooks/419573361170055169/6v2NLnxzF8lSHgT8pSDccB_XN1R6miVuZDrEYtvNfPny6kSqddSN_9iJ9PPkbAbM01pW'
@@ -452,7 +474,7 @@ AddEventHandler("properties:purchaseProperty", function(property)
 		else
 			TriggerClientEvent("usa:notify", user_source, "You don't have enough money to purchase this property!")
 		end
-	else 
+	else
 		TriggerClientEvent("usa:notify", user_source, "You have reached your max number of properties!")
 	end
 end)
@@ -495,7 +517,7 @@ function Evict_Owners()
 					PROPERTIES[name].type = "business"
 				end
 				-- see if eviction time has arrived
-				if info.fee.paid_time then 
+				if info.fee.paid_time then
 					local max_ownable_days = 0
 					if info.type == "business" then
 						max_ownable_days = BUSINESS_PAY_PERIOD_DAYS
@@ -504,7 +526,19 @@ function Evict_Owners()
 					end
 						if GetWholeDaysFromTime(info.fee.paid_time) > max_ownable_days then
 							print("***Evicting owner of the " .. name .. " today, owner identifier: " .. PROPERTIES[name].owner.identifier .. "***")
-							-- Get the document with that property name
+              -- remove property owner information, make available for purchase --
+              PROPERTIES[name].fee.end_date = 0
+              PROPERTIES[name].fee.due_days = 0
+              PROPERTIES[name].fee.paid_time = 0
+              PROPERTIES[name].fee.paid = 0
+              PROPERTIES[name].owner.name = nil
+              PROPERTIES[name].owner.purchase_date = 0
+              PROPERTIES[name].owner.identifier = "undefined"
+              --PROPERTIES[name].storage.money = 0
+              --PROPERTIES[name].storage.items = {}
+							-- save property --
+              SavePropertyData(name)
+              --[[
 							TriggerEvent('es:exposeDBFunctions', function(db)
 								db.getDocumentByRow("properties", "name", name, function(doc, rText)
 									if rText then
@@ -521,20 +555,11 @@ function Evict_Owners()
 													print("\nDocument successfully updated!")
 												end
 											end
-											-- remove property owner information, make available for purchase --
-											PROPERTIES[name].fee.end_date = 0
-											PROPERTIES[name].fee.due_days = 0
-											PROPERTIES[name].fee.paid_time = 0
-											PROPERTIES[name].fee.paid = 0
-											PROPERTIES[name].owner.name = nil
-											PROPERTIES[name].owner.purchase_date = 0
-											PROPERTIES[name].owner.identifier = "undefined"
-											--PROPERTIES[name].storage.money = 0
-											--PROPERTIES[name].storage.items = {}
-										end) 
+										end)
 									end
 								end)
 							end)
+              --]]
 						end
 				end
 			end
@@ -542,11 +567,38 @@ function Evict_Owners()
 end
 -----------------------------------------
 
+------------------------
+-- Save Property Data --
+------------------------
+function SavePropertyData(property_name)
+  -- Get the document with that property name --
+  TriggerEvent('es:exposeDBFunctions', function(db)
+    db.getDocumentByRow("properties", "name", property_name, function(doc, rText)
+      if rText then
+        --RconPrint("\nrText = " .. rText)
+      end
+      if doc then
+        PROPERTIES[property_name]._rev = nil
+        db.updateDocument("properties", doc._id, PROPERTIES[property_name], function(status)
+          print("called db.updateDocument checking status")
+          if status == true then
+            print("\nDocument updated.")
+          else
+            print("\nStatus Response: " .. status)
+            if tostring(status) == "201" then
+              print("\nDocument successfully updated!")
+            end
+          end
+        end)
+      end
+    end)
+  end)
+end
+
 -----------------------------------------
 -- Save property data every x minutes  --
-
-	-- todo: save everytime something is changed instead of every x minutes? (to prevent performance degredation like falling through the map?)
 -----------------------------------------
+--[[
 Citizen.CreateThread(function()
 
 	local minutes = 32
@@ -588,10 +640,9 @@ Citizen.CreateThread(function()
 			savePropertyData()
 		end)
 	end
-
     savePropertyData()
-
 end)
+-]]
 ---------------------------------------
 
 TriggerEvent('es:addCommand','loadproperties', function(source, args, user)
@@ -644,7 +695,7 @@ end)
 function GetNumberOfOwnedProperties(identifier)
 	local count = 0
 	for name, info in pairs(PROPERTIES) do
-		if info.owner.identifier == identifier then 
+		if info.owner.identifier == identifier then
 			count = count + 1
 		end
 	end
