@@ -198,6 +198,7 @@ Citizen.CreateThread(function()
     end
 end)
 
+--[[
 ----------------------
 -- player crouching --
 ----------------------
@@ -228,6 +229,7 @@ Citizen.CreateThread( function()
     end
   end
 end)
+--]]
 
 -----------------------------
 -- peds don't drop weapons --

@@ -1,8 +1,10 @@
 local crouched = false
 local proned = false
 local standing = true
-crouchKey = 26
-proneKey = 36
+local crouchKey = 26
+local l_alt_key = 19
+local w_key = 32
+local s_key = 33
 
 Citizen.CreateThread( function()
 	while true do
@@ -10,10 +12,11 @@ Citizen.CreateThread( function()
 		local ped = GetPlayerPed( -1 )
 		if ( DoesEntityExist( ped ) and not IsEntityDead( ped ) ) then
 			ProneMovement()
-			DisableControlAction( 0, proneKey, true )
-			DisableControlAction( 0, crouchKey, true )
+			--DisableControlAction( 0, proneKey, true )
+			--DisableControlAction( 0, crouchKey, true )
 			if ( not IsPauseMenuActive() ) then
-				if IsDisabledControlJustPressed(0, crouchKey) and not IsPedInAnyVehicle(ped, true) then
+				if IsControlPressed(0, l_alt_key) and IsControlJustPressed(0, w_key)  and not IsPedInAnyVehicle(ped, true) then
+				--if IsDisabledControlJustPressed(0, crouchKey) and not IsPedInAnyVehicle(ped, true) then
 					if standing then
 						RequestAnimSet( "move_ped_crouched" )
 
