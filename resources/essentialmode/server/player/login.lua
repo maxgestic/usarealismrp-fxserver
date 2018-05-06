@@ -16,6 +16,8 @@ function LoadUser(identifier, source, new)
 		if new then
 			TriggerEvent('es:newPlayerLoaded', source, Users[source])
 		end
+
+		TriggerEvent("chat:sendToLogFile", source, "joined the server! Timestamp: " .. os.date('%m-%d-%Y %H:%M:%S', os.time()))
 	end)
 end
 

@@ -7,16 +7,20 @@ RegisterServerEvent('_chat:messageEntered')
 RegisterServerEvent('chat:clear')
 RegisterServerEvent('__cfx_internal:commandFallback')
 
+-- open and clear new log file --
+os.remove("C:/wamp/www/log.txt")
+
+local LOG_FILE
+
 AddEventHandler('_chat:messageEntered', function(name, color, message, location)
 	if not name or not color or not message or #color ~= 3 then
 		return
 	end
 
 	local userSource = source
-	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		if user then
 			local job = user.getActiveCharacterData("job")
-
 			if(job == "cop") then
 				name = "LSPD | " .. name
 				color = {2, 111, 218}
@@ -36,7 +40,14 @@ AddEventHandler('_chat:messageEntered', function(name, color, message, location)
 		else
 			print("ERROR GETTING USER BY ID")
 		end
-	end)
+
+		---------------------------------
+		-- write to admin log LOG_FILE --
+		---------------------------------
+		LOG_FILE = io.open("C:/wamp/www/log.txt", "a")
+		io.output(LOG_FILE)
+		io.write(name .. " [" .. GetPlayerName(userSource) .. " / " .. GetPlayerIdentifiers(userSource)[1] .. "]" .. ': ' .. message .. "\r\n")
+		io.close(LOG_FILE)
 
 	TriggerEvent('chatMessageLocation', userSource, name, message, location)
 
@@ -44,7 +55,7 @@ AddEventHandler('_chat:messageEntered', function(name, color, message, location)
 		TriggerClientEvent('chatMessageLocation', -1, "[OOC] - " .. name .. " (" .. userSource .. ")",  { 255, 255, 255 }, message, location)
 	end
 
-	print(name .. ': ' .. message)
+	print(name .. " (" .. GetPlayerName(userSource) .. ") " .. ': ' .. message)
 end)
 
 AddEventHandler('__cfx_internal:commandFallback', function(command)
@@ -53,7 +64,7 @@ AddEventHandler('__cfx_internal:commandFallback', function(command)
 	TriggerEvent('chatMessage', source, name, '/' .. command)
 
 	if not WasEventCanceled() then
-		TriggerClientEvent('chatMessage', -1, name, { 255, 255, 255 }, '/' .. command) 
+		TriggerClientEvent('chatMessage', -1, name, { 255, 255, 255 }, '/' .. command)
 	end
 
 	CancelEvent()
@@ -61,4 +72,14 @@ end)
 
 RegisterCommand('say', function(source, args, rawCommand)
 	TriggerClientEvent('chatMessage', -1, (source == 0) and 'Government' or GetPlayerName(source), { 255, 255, 255 }, rawCommand:sub(5))
+end)
+
+-- test this
+RegisterServerEvent("chat:sendToLogFile")
+AddEventHandler("chat:sendToLogFile", function(source, message)
+	local player = exports["essentialmode"]:getPlayerFromId(source)
+	LOG_FILE = io.open("C:/wamp/www/log.txt", "a")
+	io.output(LOG_FILE)
+	io.write("[" .. GetPlayerName(source) .. " / " .. GetPlayerIdentifiers(source)[1] .. "]" .. ': ' .. message .. "\r\n")
+	io.close(LOG_FILE)
 end)

@@ -52,6 +52,7 @@ AddEventHandler('playerDropped', function()
 
 	if(Users[numberSource])then
 		print("player " .. GetPlayerName(numberSource) .. " dropped from the server!")
+		TriggerEvent("chat:sendToLogFile", numberSource, "dropped from the server! Timestamp: " .. os.date('%m-%d-%Y %H:%M:%S', os.time()))
 		local inventory = Users[numberSource].getActiveCharacterData("inventory")
 		if inventory then
 			for i = 1, #inventory do
@@ -229,7 +230,7 @@ function addGroupCommand(command, group, callback, suggestion)
 	commands[command].group = group
 	commands[command].job = { "everyone" }
 	commands[command].cmd = callback
-	
+
 	if suggestion then
 		if not suggestion.params or not type(suggestion.params) == "table" then suggestion.params = {} end
 		if not suggestion.help or not type(suggestion.help) == "string" then suggestion.help = "" end

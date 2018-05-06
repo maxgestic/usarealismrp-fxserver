@@ -30,7 +30,8 @@ local swap_locations = {
 {name="Clothes Store", x = 125.403, y = -223.887, z = 54.0578}, -- vinewood 5
 {name="Clothes Store", x = 423.474, y = -809.565, z = 29.0911}, -- vinewood 6
 {name="Clothes Store", x = -818.509, y = -1074.14, z = 11.0281}, -- vinewood 7
-{name="Clothes Store", x = 77.7774, y = -1389.87, z = 29.0761} -- vinewood 8
+{name="Clothes Store", x = 77.7774, y = -1389.87, z = 29.0761}, -- vinewood 8
+{name="Morgue", x = 260.16, y = -1347.09, z = 24.00} -- morgue
 }
 
 RegisterNetEvent("character:swap--check-distance")

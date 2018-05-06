@@ -211,6 +211,7 @@ AddEventHandler("RPD:newDeathLog", function(log)
 	end
 	table.insert(deathLog, log)
 	print("Player " .. log.killerName .. " (#" .. log.killerId .. ") just killed player " .. log.deadPlayerName .. "(#" .. log.deadPlayerId .. ").")
+	TriggerEvent("chat:sendToLogFile", source, "has died. " .. log.killerName .. " (#" .. log.killerId .. ") just killed player " .. log.deadPlayerName .. "(#" .. log.deadPlayerId .. "), cause [" .. log.cause .. "]. Timestamp: " .. os.date('%m-%d-%Y %H:%M:%S', os.time()))
 end)
 
 -- END DEATH LOG
