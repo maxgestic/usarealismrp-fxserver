@@ -324,7 +324,7 @@ function interactionMenuUse(itemName, wholeItem)
 	-------------------
 	-- Lockpick  --
 	-------------------
-	elseif string.find(itemName, "Lock pick") then
+elseif string.find(itemName, "Lock Pick") then
 		local me = GetPlayerPed(-1)
 		local veh = getVehicleInFrontOfUser()
 		if veh ~= 0 then
