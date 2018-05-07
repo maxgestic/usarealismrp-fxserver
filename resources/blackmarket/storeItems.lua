@@ -1,6 +1,6 @@
 storeItems = {
     ["weapons"] = {
-      { name = "Lockpick", type = "misc", hash = 615608432, price = 400, legality = "illegal", quantity = 1, weight = 5 },
+      { name = "Lock pick", type = "misc", hash = 615608432, price = 400, legality = "illegal", quantity = 1, weight = 5 },
         { name = "Molotov", type = "weapon", hash = 615608432, price = 650, legality = "illegal", quantity = 1, weight = 20 },
         { name = "Brass Knuckles", type = "weapon", hash = -656458692, price = 650, legality = "illegal", quantity = 1, weight = 5 },
         { name = "Dagger", type = "weapon", hash = -1834847097, price = 750, legality = "illegal", quantity = 1, weight = 10 },

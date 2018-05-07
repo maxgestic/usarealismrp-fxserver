@@ -324,7 +324,7 @@ function interactionMenuUse(itemName, wholeItem)
 	-------------------
 	-- Lockpick  --
 	-------------------
-	elseif string.find(itemName, "Lockpick") then
+	elseif string.find(itemName, "Lock pick") then
 		local me = GetPlayerPed(-1)
 		local veh = getVehicleInFrontOfUser()
 		if veh ~= 0 then
@@ -349,20 +349,20 @@ function interactionMenuUse(itemName, wholeItem)
 						TaskPlayAnim(me, anim.dict, anim.name, 8.0, -8, -1, 48, 0, 0, 0, 0)
 					end
 					--]]
-					DrawSpecialText("~y~Lockpicking ~w~[" .. math.ceil((start_time + duration - GetGameTimer()) / 1000) .. "s]")
+					DrawSpecialText("~y~Picking lock ~w~[" .. math.ceil((start_time + duration - GetGameTimer()) / 1000) .. "s]")
 					local car_coords = GetEntityCoords(veh, 1)
 					local my_coords = GetEntityCoords(me, 1)
 					if Vdist(car_coords, my_coords) > 2.0 then
-						TriggerEvent("usa:notify", "Lockpick failed, out of range!")
+						TriggerEvent("usa:notify", "Lock pick ~r~failed~w~, out of range!")
 						ClearPedTasks(me)
 						return
 					end
 				end
 				if math.random(100) < 27 then
 					SetVehicleDoorsLocked(veh, 1)
-					TriggerEvent("usa:notify", "Lockpick success!")
+					TriggerEvent("usa:notify", "Lock pick ~g~success!")
 				else
-					TriggerEvent("usa:notify", "Lockpick failed!")
+					TriggerEvent("usa:notify", "Lock pick ~r~failed!")
 				end
 				TriggerServerEvent("usa:removeItem", wholeItem, 1)
 			else
