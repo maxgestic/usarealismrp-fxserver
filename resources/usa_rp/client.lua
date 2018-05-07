@@ -56,17 +56,24 @@ end)
 -------------------
 -- RANDOM THINGS --
 -------------------
-
+--[[
 -- ped/vehicle npcs
 -- TODO: modify this using the previous code it used to use. something about remove vehicle generators from area or something like that. or possibly if that doesn't work just
 --       remove this thread completely and see if it's managable with NPC traffic or w/e
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
+
 		SetPedDensityMultiplierThisFrame(1.0)
 		SetVehicleDensityMultiplierThisFrame(0.0002) -- npc vehicle amount
+
+    local playerPed = GetPlayerPed(-1)
+		local pos = GetEntityCoords(playerPed)
+		RemoveVehiclesFromGeneratorsInArea(pos['x'] - 500.0, pos['y'] - 500.0, pos['z'] - 500.0, pos['x'] + 500.0, pos['y'] + 500.0, pos['z'] + 500.0);
+
 	end
 end)
+-]]
 
 -- no police npc / never wanted
 Citizen.CreateThread(function()
@@ -379,24 +386,21 @@ AddEventHandler('veh:shutDoor', function(index)
         end
 end)
 
+-- void SET_VEHICLE_NEEDS_TO_BE_HOTWIRED(Vehicle vehicle, BOOL toggle);
+
 RegisterNetEvent("veh:toggleEngine")
 AddEventHandler('veh:toggleEngine', function(status)
     local playerPed = GetPlayerPed(-1)
     if IsPedInAnyVehicle(playerPed, false) then
-        local playerCar = GetVehiclePedIsIn(playerPed, false)
-        local targetVehicle = GetVehiclePedIsIn(playerPed, 1)
+        --local playerCar = GetVehiclePedIsIn(playerPed, false)
+        local targetVehicle = GetVehiclePedIsIn(playerPed, false)
         if GetPedInVehicleSeat(targetVehicle, -1) == playerPed then
             if status == "on" then
-                local vehicleEngineHealth = GetVehicleEngineHealth(targetVehicle)
-                if vehicleEngineHealth > 850 then
-                    SetVehicleEngineOn(targetVehicle, true, false, false)
-                    SetVehicleUndriveable(targetVehicle, false)
-                else
-                    TriggerEvent("usa:notify", "Your vehicle is disabled! Can't turn the engine on.")
-                end
+              TriggerServerEvent("vehicle:checkForKey", GetVehicleNumberPlateText(targetVehicle))
             elseif status == "off" then
                 SetVehicleEngineOn(targetVehicle, false, false, false)
                 SetVehicleUndriveable(targetVehicle, true)
+                TriggerEvent("vehicle:setEngineStatus", false)
             end
         end
     end

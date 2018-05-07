@@ -1,5 +1,6 @@
 storeItems = {
     ["weapons"] = {
+      { name = "Lockpick", type = "misc", hash = 615608432, price = 400, legality = "illegal", quantity = 1, weight = 5 },
         { name = "Molotov", type = "weapon", hash = 615608432, price = 650, legality = "illegal", quantity = 1, weight = 20 },
         { name = "Brass Knuckles", type = "weapon", hash = -656458692, price = 650, legality = "illegal", quantity = 1, weight = 5 },
         { name = "Dagger", type = "weapon", hash = -1834847097, price = 750, legality = "illegal", quantity = 1, weight = 10 },
@@ -12,7 +13,7 @@ storeItems = {
         { name = "Tommy Gun", type = "weapon", hash = 1627465347, price = 9750, legality = "illegal", quantity = 1, weight = 45 },
         { name = "AK47", type = "weapon", hash = -1074790547, price = 20500, legality = "illegal", quantity = 1, weight = 45 },
         { name = "Carbine", type = "weapon", hash = -2084633992, price = 19500, legality = "illegal", quantity = 1, weight = 45 },
-        { name = "Compact Rifle", type = "weapon", hash = 1649403952, price = 19550, legality = "illegal", quantity = 1, weight = 55 },
+        --{ name = "Compact Rifle", type = "weapon", hash = 1649403952, price = 19550, legality = "illegal", quantity = 1, weight = 55 },
         --{ name = "MK2 Assault Rifle", type = "weapon", hash = 961495388, price = 19550, legality = "illegal", quantity = 1, weight = 45 },
         { name = "Bullpup Rifle", type = "weapon", hash = 2132975508, price = 19550, legality = "illegal", quantity = 1, weight = 45 },
         --{ name = "Advanced Rifle", type = "weapon", hash = -1357824103, price = 20550, legality = "illegal", quantity = 1, weight = 45 },

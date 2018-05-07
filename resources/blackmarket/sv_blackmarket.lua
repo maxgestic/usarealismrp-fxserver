@@ -40,29 +40,40 @@ AddEventHandler("blackMarket:checkGunMoney", function(weapon)
     local userSource = source
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
       if user.getCanActiveCharacterHoldItem(weapon) then
-        local weapons = user.getActiveCharacterData("weapons")
-        if not weapons then
-            weapons = {}
-        end
-        if #weapons < MAX_PLAYER_WEAPON_SLOTS then
-            local user_money = user.getActiveCharacterData("money")
-            if weapon.price <= user_money then -- see if user has enough money
-                print("player had enough money! (" .. user_money .. ")")
-                table.insert(weapons, weapon)
-                user.setActiveCharacterData("weapons", weapons)
-                print("setting money after buying to : $" .. user_money - weapon.price)
-                user.setActiveCharacterData("money", user_money - weapon.price)
-                print("equipping weapon with type source : source = " .. type(source) .. " : " .. source)
-                print("weapon.name = " .. weapon.name)
-                TriggerClientEvent("blackMarket:equipWeapon", userSource, userSource, weapon.hash, weapon.name) -- equip
-                TriggerClientEvent("blackMarket:notify", userSource, "You have purchased a ~r~" .. weapon.name .. ".")
-				--TriggerEvent("sway:updateDB", userSource)
-            else
-                print("player did not have enough money to purchase weapon")
-                TriggerClientEvent("mini:insufficientFunds", userSource, weapon.price, "gun")
-            end
+        if weapon.type == "weapon" then
+          local weapons = user.getActiveCharacterData("weapons")
+          if not weapons then
+              weapons = {}
+          end
+          if #weapons < MAX_PLAYER_WEAPON_SLOTS then
+              local user_money = user.getActiveCharacterData("money")
+              if weapon.price <= user_money then -- see if user has enough money
+                  print("player had enough money! (" .. user_money .. ")")
+                  table.insert(weapons, weapon)
+                  user.setActiveCharacterData("weapons", weapons)
+                  print("setting money after buying to : $" .. user_money - weapon.price)
+                  user.setActiveCharacterData("money", user_money - weapon.price)
+                  print("equipping weapon with type source : source = " .. type(source) .. " : " .. source)
+                  print("weapon.name = " .. weapon.name)
+                  if weapon.type == "weapon" then
+                    TriggerClientEvent("blackMarket:equipWeapon", userSource, userSource, weapon.hash, weapon.name) -- equip
+                  end
+                  TriggerClientEvent("blackMarket:notify", userSource, "You have purchased a ~r~" .. weapon.name .. ".")
+  				--TriggerEvent("sway:updateDB", userSource)
+              else
+                  print("player did not have enough money to purchase weapon")
+                  TriggerClientEvent("mini:insufficientFunds", userSource, weapon.price, "gun")
+              end
+          else
+              TriggerClientEvent("blackMarket:notify", userSource, "~r~All weapons slot are full! (" .. MAX_PLAYER_WEAPON_SLOTS .. "/" .. MAX_PLAYER_WEAPON_SLOTS .. ")")
+          end
         else
-            TriggerClientEvent("blackMarket:notify", userSource, "~r~All weapons slot are full! (" .. MAX_PLAYER_WEAPON_SLOTS .. "/" .. MAX_PLAYER_WEAPON_SLOTS .. ")")
+          local user_money = user.getActiveCharacterData("money")
+          if weapon.price <= user_money then -- see if user has enough money
+            TriggerEvent("usa:insertItem", weapon, 1, userSource)
+            user.setActiveCharacterData("money", user_money - weapon.price)
+            TriggerClientEvent("blackMarket:notify", userSource, "You have purchased a ~r~" .. weapon.name .. ".")
+          end
         end
       else
         TriggerClientEvent("blackMarket:notify", userSource, "Inventory is full!")

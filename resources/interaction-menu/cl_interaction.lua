@@ -322,6 +322,56 @@ function interactionMenuUse(itemName, wholeItem)
 		TriggerEvent("usa:heal", 35)
 		TriggerServerEvent("usa:removeItem", wholeItem, 1)
 	-------------------
+	-- Lockpick  --
+	-------------------
+	elseif string.find(itemName, "Lockpick") then
+		local me = GetPlayerPed(-1)
+		local veh = getVehicleInFrontOfUser()
+		if veh ~= 0 then
+			if GetVehicleDoorLockStatus(veh) ~= 1 then
+				local start_time = GetGameTimer()
+				local duration = 20000
+				-- play animation:
+		    local anim = {
+		      dict = "anim@move_m@trash",
+		      name = "pickup"
+		    }
+			RequestAnimDict(anim.dict)
+            while not HasAnimDictLoaded(anim.dict) do
+				Citizen.Wait(100)
+            end
+			TaskPlayAnim(me, anim.dict, anim.name, 8.0, -8, -1, 49, 0, 0, 0, 0)
+				while GetGameTimer() < start_time + duration do
+					Wait(1)
+					--[[
+					--print("IsEntityPlayingAnim(me, anim.dict, anim.name, 3): " .. tostring(IsEntityPlayingAnim(me, anim.dict, anim.name, 3)))
+					if not IsEntityPlayingAnim(me, anim.dict, anim.name, 3) then
+						TaskPlayAnim(me, anim.dict, anim.name, 8.0, -8, -1, 48, 0, 0, 0, 0)
+					end
+					--]]
+					DrawSpecialText("~y~Lockpicking ~w~[" .. math.ceil((start_time + duration - GetGameTimer()) / 1000) .. "s]")
+					local car_coords = GetEntityCoords(veh, 1)
+					local my_coords = GetEntityCoords(me, 1)
+					if Vdist(car_coords, my_coords) > 2.0 then
+						TriggerEvent("usa:notify", "Lockpick failed, out of range!")
+						ClearPedTasks(me)
+						return
+					end
+				end
+				if math.random(100) < 27 then
+					SetVehicleDoorsLocked(veh, 1)
+					TriggerEvent("usa:notify", "Lockpick success!")
+				else
+					TriggerEvent("usa:notify", "Lockpick failed!")
+				end
+				TriggerServerEvent("usa:removeItem", wholeItem, 1)
+			else
+				TriggerEvent("usa:notify", "Door is already unlocked!")
+			end
+		else
+			TriggerEvent("usa:notify", "No vehicle detected!")
+		end
+	-------------------
 	-- Binoculars --
 	-------------------
 	elseif string.find(itemName, "Binoculars") then
@@ -724,11 +774,11 @@ Citizen.CreateThread(function()
 				if playerServerId ~= 0 then
 					if distanceToClosestTargetPed < 1.2 then
 						if not IsPedRagdoll(GetPlayerPed(-1)) and not IsPedCuffed(GetPlayerPed(-1)) then
-							if GetGameTimer() > last_tackle_time + tackle_delay then 
+							if GetGameTimer() > last_tackle_time + tackle_delay then
 								TriggerServerEvent("interaction:tackle", playerServerId)
 								SetPedToRagdoll(GetPlayerPed(-1), 1000, 1000, 0, true, true, false)
 								last_tackle_time = GetGameTimer()
-							else 
+							else
 								local seconds_left = ((last_tackle_time + tackle_delay) - GetGameTimer())/1000
 								TriggerEvent("usa:notify", "Please wait " .. seconds_left .. " more seconds!") -- need to test tackle delay!!!
 							end
@@ -794,4 +844,11 @@ function GetClosestPlayerInfo()
 		end
 	end
 	return closestPlayerServerId, closestName, closestDistance
+end
+
+function DrawSpecialText(m_text)
+    ClearPrints()
+	SetTextEntry_2("STRING")
+	AddTextComponentString(m_text)
+	DrawSubtitleTimed(250, 1)
 end

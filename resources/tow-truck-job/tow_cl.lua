@@ -197,7 +197,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 
 		for name, data in pairs(locations) do
-			DrawMarker(27, data.impound.x, data.impound.y, data.impound.z, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 1.0, 100, 85, 161, 92, 0, 0, 2, 0, 0, 0, 0)
+			DrawMarker(1, data.impound.x, data.impound.y, data.impound.z, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 1.0, 100, 85, 161, 92, 0, 0, 2, 0, 0, 0, 0)
 		end
 
 		if isPlayerAtTowSpot() and not playerNotified then

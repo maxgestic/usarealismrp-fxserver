@@ -1,3 +1,6 @@
+--# made by: minipunch
+--# some more realistic feautres added to vehicles like engine damage to overheat and disable, also keep cars running until turned off with key
+
 local targetVehicle, targetPed
 local civEngineOverheatThreshold, copEngineOverheatThreshold = 960.0, 955.0 -- non-severe accidents (busted radiator)
 local engineDisabledThreshold = 945.0
@@ -27,9 +30,12 @@ local policeVehicles = {
 	1109330673, -- unmarked4
 	-1285460620, -- unmarked3
 	1383443358 -- unmarked1
-	
+
 }
 
+----------------------------------------
+-- KEEP VEHICLES ON UNTIL KEY IS USED --
+----------------------------------------
 Citizen.CreateThread(function()
     while true do
         Wait(1)
@@ -47,14 +53,66 @@ Citizen.CreateThread(function()
            --Citizen.Trace("ped not in vehicle")
             if engineIsOn and not IsVehicleEngineOn(savedVehicle, false) then
                 --Citizen.Trace("engine should be on.. turning last vehicle engine on")
-                for i = 1, #policeVehicles do
-                    if IsVehicleModel(savedVehicle, policeVehicles[i]) then
+                --for i = 1, #policeVehicles do
+                    --if IsVehicleModel(savedVehicle, policeVehicles[i]) then
                         SetVehicleEngineOn(savedVehicle, true, true, true)
-                    end
-                end
+                    --end
+              --  end
             end
         end
      end
+end)
+
+RegisterNetEvent("vehicle:setEngineStatus")
+AddEventHandler("vehicle:setEngineStatus", function(on)
+  --print("setting engineIsOn to " .. tostring(on))
+  engineIsOn = on
+  if engineIsOn then
+    local vehicleEngineHealth = GetVehicleEngineHealth(savedVehicle)
+    if vehicleEngineHealth > 850 then
+        SetVehicleEngineOn(savedVehicle, true, false, false)
+        SetVehicleUndriveable(savedVehicle, false)
+    else
+        TriggerEvent("usa:notify", "Your vehicle is disabled! Can't turn the engine on.")
+    end
+  end
+end)
+
+--------------------
+----- HOTWIRE ------
+--------------------
+RegisterNetEvent("vehicle:hotwire")
+AddEventHandler("vehicle:hotwire", function()
+  local hotwire_time = 15000
+  local me = GetPlayerPed(-1)
+  local veh = GetVehiclePedIsIn(me)
+  if IsPedInAnyVehicle(me) and not IsVehicleEngineOn(veh, false) then
+    local random = math.random(100)
+    --[[
+    local anim = {
+      dict = "veh@golfcaddy@ds@base",
+      name = "pov_hotwire"
+    }
+    TriggerEvent("usa:playAnimation", anim.name, anim.dict, 10)
+    --]]
+    TriggerEvent("usa:notify", "Attempting to hotwire vehicle!")
+    local start = GetGameTimer()
+    while GetGameTimer() < start + hotwire_time do
+      Wait(1)
+      DrawSpecialText("~y~Hotwiring ~w~[" .. math.ceil((start + hotwire_time - GetGameTimer()) / 1000) .. "s]")
+    end
+    if random < 30 then
+      if IsPedInAnyVehicle(me) and not IsVehicleEngineOn(veh, false) then
+        SetVehicleNeedsToBeHotwired(veh, true)
+      else
+        TriggerEvent("usa:notify", "Not in vehicle!")
+      end
+    else
+      TriggerEvent("usa:notify", "You failed to hotwire the vehicle!")
+    end
+  else
+
+  end
 end)
 
 -- TODO: disable on high body damage! USE: GetVehicleBodyHealth(veh)
