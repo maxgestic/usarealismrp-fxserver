@@ -688,6 +688,75 @@ AddEventHandler('rconCommand', function(commandName, args)
 				RconPrint("\nEnd Date: " .. info.fee.end_date .. "\n\n")
 			end
 		end
+	elseif commandName == "addproperty" then
+		-- usage: addproperty [door X] [door Y] [door Z] [garage X] [garage Y] [garage Z] [price] [name]
+		local price = tonumber(args[7])
+		local coords = {
+			door = {
+				x = tonumber(args[1]),
+				y = tonumber(args[2]),
+				z = tonumber(args[3])
+			},
+			garage = {
+				x = tonumber(args[4]),
+				y = tonumber(args[5]),
+				z = tonumber(args[6])
+			}
+		}
+		table.remove(args, 1)
+		table.remove(args, 1)
+		table.remove(args, 1)
+		table.remove(args, 1)
+		table.remove(args, 1)
+		table.remove(args, 1)
+		table.remove(args, 1)
+		local name = table.concat(args, " ")
+		local new_property = {
+			owner = {
+				name = null,
+				purchase_date = 0,
+				identifier = "undefined"
+			},
+			type = "house",
+			name = name,
+			fee = {
+				price =  price,
+				paid_time = 0,
+				due_time = 0,
+				paid =  false,
+				end_date = 0,
+				due_days = 0
+			  },
+			y = coords.door.x,
+			x = coords.door.y,
+			z = coords.door.z,
+			storage =  {
+				money = 0,
+				items = {}
+			},
+		   garage_coords = {
+				x = coords.garage.x,
+				y = coords.garage.y,
+				z = coords.garage.z,
+				heading = 214.7
+			 },
+			vehicles = {}
+		}
+		if name and price and coords.door.x and coords.garage.x then 
+			-- add to db --
+			TriggerEvent('es:exposeDBFunctions', function(GetDoc)
+				-- insert into db
+				GetDoc.createDocument("properties", new_property, function()
+					-- notify:
+					RconPrint("\nProperty [" .. name .. "] added successfully! Make sure the circles are there next restart.")
+					-- refresh properties:
+					--loadProperties()
+					-- can do refreshproperties for it to show up
+				end)
+			end)
+		else 
+			RconPrint("\nInvalid command format! Usage: addproperty [door X] [door Y] [door Z] [garage X] [garage Y] [garage Z] [price] [name]")
+		end
 	end
 	CancelEvent()
 end)
