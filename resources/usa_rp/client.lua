@@ -58,8 +58,6 @@ end)
 -------------------
 --[[
 -- ped/vehicle npcs
--- TODO: modify this using the previous code it used to use. something about remove vehicle generators from area or something like that. or possibly if that doesn't work just
---       remove this thread completely and see if it's managable with NPC traffic or w/e
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
@@ -205,7 +203,6 @@ Citizen.CreateThread(function()
     end
 end)
 
---[[
 ----------------------
 -- player crouching --
 ----------------------
@@ -215,7 +212,7 @@ local KEY_2 = 173 -- down arrow
 local clipset = "move_ped_crouched"
 Citizen.CreateThread( function()
   while true do
-    Citizen.Wait( 1 )
+    Citizen.Wait( 10 )
     local ped = GetPlayerPed( -1 )
     if ( DoesEntityExist( ped ) and not IsEntityDead( ped ) ) then
       if ( not IsPauseMenuActive() ) then
@@ -236,7 +233,6 @@ Citizen.CreateThread( function()
     end
   end
 end)
---]]
 
 -----------------------------
 -- peds don't drop weapons --

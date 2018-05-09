@@ -40,7 +40,7 @@ TriggerEvent('es:addJobCommand', 'removesuspension', {'judge', 'lawyer'}, functi
 			if licenses[i].name == target_item_name then
 				if licenses[i].status == "suspended" then
 					licenses[i].status = "valid"
-					target_player.setActiveCharacterData("licenses", licenses)
+					user.setActiveCharacterData("licenses", licenses)
 					TriggerClientEvent("usa:notify", target, "Your " .. target_item_name .. " has been ~g~reinstated~w~!")
 					TriggerClientEvent("usa:notify", usource, "You reinstated " .. player_name .. "'s " .. target_item_name .. "!")
 				end
@@ -111,7 +111,7 @@ TriggerEvent('es:addJobCommand', 'changesuspension', {'judge', 'lawyer'}, functi
 			if licenses[i].name == target_item_name then
 				if licenses[i].status == "suspended" then
 					licenses[i].suspension_days = days
-					target_player.setActiveCharacterData("licenses", licenses)
+					user.setActiveCharacterData("licenses", licenses)
 					TriggerClientEvent("usa:notify", target, "Your " .. target_item_name .. " suspension was modified to end in " .. days .. " day(s).")
 					TriggerClientEvent("usa:notify", usource, "You changed " .. player_name .. "'s " .. target_item_name .. " suspension to end in " .. days .. " day(s).")
 					return
@@ -136,7 +136,6 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'lawyer'}, function(source, 
 	local target_item_name = nil
 	local target_item = nil
 	if type and GetPlayerName(target) then
-		local target_player = exports["essentialmode"]:getPlayerFromId(target)
 		local timestamp = os.date("*t", os.time())
 		if type == "dl" then
 			target_item_name = "Driver's License"
@@ -144,8 +143,7 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'lawyer'}, function(source, 
 				name = "Driver\'s License",
 				number = "F" .. tostring(math.random(1, 2543678)),
 				quantity = 1,
-				ownerName = target_player.getActiveCharacterData("fullName"),
-				issued_by = user.getActiveCharacterData("fullName"),
+				ownerName = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName"),
 				ownerDob = user.getActiveCharacterData("dateOfBirth"),
 				expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
 				status = "valid",
@@ -157,13 +155,13 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'lawyer'}, function(source, 
 				name = "Firearm Permit",
 				number = "G" .. tostring(math.random(1, 254367)),
 				quantity = 1,
-				ownerName = target_player.getActiveCharacterData("fullName"),
-				issued_by = user.getActiveCharacterData("fullName"),
+				ownerName = user.getActiveCharacterData("fullName"),
 				expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
 				status = "valid",
 				type = "license"
 			}
 		end
+		local target_player = exports["essentialmode"]:getPlayerFromId(target)
 		local licenses = target_player.getActiveCharacterData("licenses")
         local player_name = target_player.getActiveCharacterData("fullName")
 		for i = 1, #licenses do
@@ -174,7 +172,6 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'lawyer'}, function(source, 
 		end
 		-- not found at this point, issue it to them --
 		table.insert(licenses, target_item)
-		target_player.setActiveCharacterData("licenses", licenses)
 		TriggerClientEvent("usa:notify", usource, "You issued a " .. target_item_name .. " to " .. player_name .. "!")
 		TriggerClientEvent("usa:notify", target, "You were issued a " .. target_item_name .. "!")
 	end
@@ -204,7 +201,7 @@ TriggerEvent('es:addJobCommand', 'suspend', {'judge', 'lawyer'}, function(source
         end
 		local target_player = exports["essentialmode"]:getPlayerFromId(target)
 		local licenses = target_player.getActiveCharacterData("licenses")
-        local target_player_name = target_player.getActiveCharacterData("fullName")
+        local target_player_name = user.getActiveCharacterData("fullName")
         for i = 1, #licenses do
             local license =  licenses[i]
             if  license.name == target_item_name then
@@ -214,8 +211,7 @@ TriggerEvent('es:addJobCommand', 'suspend', {'judge', 'lawyer'}, function(source
                 licenses[i].suspension_start_date = os.date('%m-%d-%Y %H:%M:%S', os.time())
                 print(target_item_name .. " suspended for " .. days)
                 TriggerClientEvent("usa:notify", usource,  "You have suspended " .. target_player_name .. "'s " .. target_item_name .. " for " .. days .. " day(s).")
-                TriggerClientEvent("usa:notify", target,  "Your " .. target_item_name .. " has been suspended for " .. days .. " day(s).")
-				target_player.setActiveCharacterData("licenses", licenses)
+                user.setActiveCharacterData("licenses", licenses)
                 return
             end
         end
