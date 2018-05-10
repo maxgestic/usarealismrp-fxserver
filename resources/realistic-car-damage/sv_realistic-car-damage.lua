@@ -1,3 +1,5 @@
+local vehicles = {}
+
 RegisterServerEvent("carDamage:checkForRepairKit")
 AddEventHandler("carDamage:checkForRepairKit", function(vehicle)
     local userSource = tonumber(source)
@@ -27,6 +29,19 @@ AddEventHandler("carDamage:checkForRepairKit", function(vehicle)
     end)
 end)
 
+RegisterServerEvent("vehicle:playerActivated")
+AddEventHandler("vehicle:playerActivated", function()
+  print("loaded client vehicle engine status list.")
+  TriggerClientEvent("vehicle:update", source, vehicles)
+end)
+
+RegisterServerEvent("vehicle:setVehicle")
+AddEventHandler("vehicle:setVehicle", function(plate, engine_status)
+  print("setting " .. plate .. " to engine status: " .. tostring(engine_status))
+  vehicles[plate] = engine_status
+  TriggerClientEvent("vehicle:update", -1, vehicles)
+end)
+
 RegisterServerEvent("vehicle:checkForKey")
 AddEventHandler("vehicle:checkForKey", function(plate)
   local userSource = tonumber(source)
@@ -37,6 +52,7 @@ AddEventHandler("vehicle:checkForKey", function(plate)
       if item then
         if string.find(item.name, "Key") then
           if string.find(plate, item.plate) then
+            print("found matching key!")
             TriggerClientEvent("vehicle:setEngineStatus", userSource, true)
             return
           end
@@ -51,7 +67,7 @@ TriggerEvent('es:addCommand', 'hotwire', function(source, args, user)
   TriggerEvent("usa:getPlayerItem", source, "Toolkit", function(item)
     if item then
       TriggerClientEvent('vehicle:hotwire', source)
-      TriggerEvent("usa:removeItem", item, 1, source)
+      --TriggerEvent("usa:removeItem", item, 1, source)
     else
       TriggerClientEvent("usa:notify", source, "You don't have the tools required!")
     end
