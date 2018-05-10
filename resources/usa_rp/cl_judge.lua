@@ -24,7 +24,7 @@ Citizen.CreateThread(function()
 			end
 		end
 		-- wait --
-		Wait(0)
+		Wait(100)
 	end
 end)
 

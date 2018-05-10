@@ -148,6 +148,7 @@ AddEventHandler("character:loadCharacter", function(activeSlot)
 			end
 			-- check dmv / firearm permit license status
 			TriggerEvent("police:checkSuspension", userSource)
+			-- see if spawn point is still valid
 			TriggerEvent("properties:checkSpawnPoint", userSource)
 		end
 	end)
@@ -162,7 +163,7 @@ AddEventHandler("character:setSpawnPoint", function(spawn)
 	if not player_spawn then
 		player.setActiveCharacterData("spawn", spawn)
 		TriggerClientEvent("usa:notify", user_source, "Spawn set!")
-	else 
+	else
 		player.setActiveCharacterData("spawn", nil)
 		TriggerClientEvent("usa:notify", user_source, "Spawn cleared!")
 	end

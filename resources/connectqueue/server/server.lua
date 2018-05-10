@@ -26,7 +26,7 @@ Config.Language = {
     connectingerr = "Error adding you to connecting list",
     banned = "You are banned, you may appeal it at https://usarrp.enjin.com | Reason: %s",
     steam = "Error: Steam must be running",
-    prio = "You must be whitelisted to join this server. Apply at https://usarrp.net > Applications > Whitelist"
+    prio = "All public slots are full! Apply for a reserved spot at https://usarrp.net > Applications > Whitelist!"
 }
 -----------------------------------------------------------------------------------------------------------------------
 
@@ -38,7 +38,7 @@ Queue.Priority = {}
 Queue.Connecting = {}
 Queue.ThreadCount = 0
 Queue.PublicPlayerCount = 0
-Queue.MaxPublicPlayerCount = 0
+Queue.MaxPublicPlayerCount = 12
 
 local debug = false
 local displayQueue = false
@@ -413,7 +413,7 @@ Citizen.CreateThread(function()
 			print("**player tried to connect who is NOT whitelisted!**")
 			if Queue.PublicPlayerCount >= Queue.MaxPublicPlayerCount then
 				print("all public slots full!")
-				done(Config.Language.prio) 
+				done(Config.Language.prio)
 				return
 			else
 				print("***still " .. Queue.MaxPublicPlayerCount - Queue.PublicPlayerCount .. " public slots were available! letting non-whitelisted person join!***")
@@ -454,6 +454,11 @@ Citizen.CreateThread(function()
 
             RemoveFromQueue(ids)
             RemoveFromConnecting(ids)
+
+            -- experimental: added by minipunch to test fixing broken player count staying too high
+            if not Queue:IsPriority(ids) then
+              Queue.PublicPlayerCount = Queue.PublicPlayerCount - 1
+            end
 
             CancelEvent()
             return
@@ -498,6 +503,10 @@ Citizen.CreateThread(function()
                     Queue:RemoveFromQueue(ids)
                     Queue:RemoveFromConnecting(ids)
                     Queue.ThreadCount = Queue.ThreadCount - 1
+                    -- experimental: added by minipunch to test fixing broken player count staying too high
+                    if not Queue:IsPriority(ids) then
+                      Queue.PublicPlayerCount = Queue.PublicPlayerCount - 1
+                    end
                     return
                 end
 
@@ -512,6 +521,7 @@ Citizen.CreateThread(function()
                         data.deferrals.done(Config.Language.connectingerr)
                         CancelEvent()
                         Queue.ThreadCount = Queue.ThreadCount - 1
+                        -- maybe dec pub player count here too?
                         return
                     end
 
@@ -551,7 +561,7 @@ Citizen.CreateThread(function()
                 data.deferrals.done(Config.Language._err .. "[1]")
                 table_remove(Queue.QueueList, i)
                 Queue:DebugPrint(tostring(data.name) .. "[" .. tostring(data.ids[1]) .. "] was removed from the queue because it had invalid data")
-				if not Queue:IsPriority(data.ids) then 
+				if not Queue:IsPriority(data.ids) then
 					print("**Decrementing public player count!**")
 					Queue.PublicPlayerCount = Queue.PublicPlayerCount - 1
 				end
@@ -561,7 +571,7 @@ Citizen.CreateThread(function()
                 Queue:RemoveFromQueue(data.source, true)
                 Queue:RemoveFromConnecting(data.source, true)
                 Queue:DebugPrint(data.name .. "[" .. data.ids[1] .. "] was removed from the queue because they timed out")
-				if not Queue:IsPriority(data.ids) then 
+				if not Queue:IsPriority(data.ids) then
 					print("**Decrementing public player count!**")
 					Queue.PublicPlayerCount = Queue.PublicPlayerCount - 1
 				end
@@ -583,7 +593,7 @@ Citizen.CreateThread(function()
                 Queue:RemoveFromQueue(data.source, true)
                 Queue:RemoveFromConnecting(data.source, true)
                 Queue:DebugPrint(data.name .. "[" .. data.ids[1] .. "] was removed from the connecting queue because they timed out")
-				if not Queue:IsPriority(data.ids) then 
+				if not Queue:IsPriority(data.ids) then
 					print("**Decrementing public player count!**")
 					Queue.PublicPlayerCount = Queue.PublicPlayerCount - 1
 				end
@@ -635,7 +645,7 @@ local function playerDropped()
         Queue.PlayerList[src] = nil
         Queue:RemoveFromQueue(ids)
         Queue:RemoveFromConnecting(ids)
-		if not Queue:IsPriority(ids) then 
+		if not Queue:IsPriority(ids) then
 			print("**Decrementing public player count!**")
 			Queue.PublicPlayerCount = Queue.PublicPlayerCount - 1
 		end
@@ -686,7 +696,17 @@ AddEventHandler("rconCommand", function(command, args)
   OR
   prioritize [steam-id] false (remove record)
   ]]
-  if command == "prioritize" then
+  if command == "settotalcount" then
+    local total = tonumber(args[1])
+    if total then
+      Queue.PlayerCount = total
+    end
+  elseif command == "setpubliccount" then
+      local count = tonumber(args[1])
+      if count then
+        Queue.PublicPlayerCount = count
+      end
+  elseif command == "prioritize" then
     local player = {}
     local streamIdentifier, priorityLevel, name
     if #args < 2 then -- incorrect usage
@@ -845,9 +865,15 @@ AddEventHandler("rconCommand", function(command, args)
     end
     CancelEvent()
 
+  elseif command == "printplist" then
+    print("Player List:")
+    for i = 1, #Queue.PlayerList do
+      print(i .. ": " .. tostring(Queue.PlayerList[i]))
+    end
     -- prints the current player count
   elseif command == "printcount" then
-    print("Player Count: " .. Queue.PlayerCount)
+    print("Total Player Count: " .. Queue.PlayerCount)
+    print("Public Player Count: " .. Queue.PublicPlayerCount)
     CancelEvent()
 
   elseif command == "printt" then

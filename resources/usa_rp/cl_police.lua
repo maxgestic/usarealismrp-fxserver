@@ -254,7 +254,7 @@ end)
 -- KEEP DOOR OPEN ON EXIT (HOLD F) --
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
+		Citizen.Wait(5)
 		if IsPedInAnyPoliceVehicle(GetPlayerPed(-1)) and IsControlPressed( 2, 75 ) and GetLastInputMethod(2) then
 			Citizen.Wait(150)
 			if IsPedInAnyPoliceVehicle(GetPlayerPed(-1)) and IsControlPressed( 2, 75 ) then
@@ -284,7 +284,7 @@ local timer = {
 -- Gun Shot Resdiue(GSR) --
 Citizen.CreateThread(function()
 	while true do
-		Wait(0)
+		Wait(10)
 		me = GetPlayerPed(-1)
 		---------------------------------
 		-- shooting notification / gsr --

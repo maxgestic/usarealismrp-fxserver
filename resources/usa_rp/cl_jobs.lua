@@ -1,5 +1,5 @@
 --
---  MADE BY MINIPUNCH
+-- MADE BY MINIPUNCH
 -- A player will get close to a designated blip on the map within this script, press "E", and begin gathering.
 -- This same concept within the script will handle all aspects of a job from getting supplies, processing, to selling, etc.
 --
@@ -136,14 +136,14 @@ Citizen.CreateThread(function ()
             onJob = false
             TriggerServerEvent("usa_rp:giveChemicals")
         end
-		Citizen.Wait(0)
+		Citizen.Wait(1)
     end
 end)
 
 -- help handle job animations
 Citizen.CreateThread(function ()
 	while true do
-		Citizen.Wait(0)
+		Citizen.Wait(10)
         if not onJob then
             for i = 1, #jobs do
                 -- check distance for any of the locations required for the jobs being < 3 in distance

@@ -89,7 +89,7 @@ end)
 local passengerDriveBy = true
 Citizen.CreateThread(function()
 	while true do
-		Wait(1)
+		Wait(10)
 		playerPed = GetPlayerPed(-1)
 		car = GetVehiclePedIsIn(playerPed, false)
         --Citizen.InvokeNative(0xB736A491E64A32CF,Citizen.PointerValueIntInitialized(car)) -- auto car clean up for unused vehicles
@@ -189,7 +189,7 @@ end)
 -- save player vehicle wheel position on exit?
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(0)
+        Citizen.Wait(5)
         if IsPedInAnyVehicle(PlayerPedId(), true) then
             veh = GetVehiclePedIsUsing(PlayerPedId())
             angle = GetVehicleSteeringAngle(veh)
@@ -268,7 +268,7 @@ end)
 --------------------------------------------
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(0)
+        Citizen.Wait(10)
 		local ped = PlayerPedId()
         if IsPedArmed(ped, 6) then
 	        DisableControlAction(1, 140, true)
@@ -284,7 +284,7 @@ end)
 local antiShuffleEnabled = true
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
+		Citizen.Wait(5)
 		if IsPedInAnyVehicle(GetPlayerPed(-1), false) and antiShuffleEnabled then
 			if GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), 0) == GetPlayerPed(-1) then
 				if GetIsTaskActive(GetPlayerPed(-1), 165) then
@@ -409,7 +409,7 @@ local tiempo = 8000 -- in miliseconds >> 1000 ms = 1s
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
+		Citizen.Wait(10)
 		if IsPedBeingStunned(GetPlayerPed(-1)) then
 		    SetPedMinGroundTimeForStungun(GetPlayerPed(-1), tiempo)
 		end
@@ -507,7 +507,7 @@ end)
 -- prevent falling through vehicle when eating/drink and entering vehicle:
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
+		Citizen.Wait(10)
     --print("trying to enter: " .. GetVehiclePedIsTryingToEnter(PlayerPedId(GetPlayerPed(-1))))
 		if DoesEntityExist(GetVehiclePedIsTryingToEnter(PlayerPedId(GetPlayerPed(-1)))) then
       --ClearPedSecondaryTask(GetPlayerPed(-1))

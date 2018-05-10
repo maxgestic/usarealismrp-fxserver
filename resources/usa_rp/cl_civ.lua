@@ -99,7 +99,7 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		Wait(0)
+		Wait(5)
 		if hands_tied then
 			--DisableControlAction(1, 245, true) 245 = 5 FOR TEXT CHAT
 			DisableControlAction(1, 117, true)
@@ -212,7 +212,7 @@ Citizen.CreateThread(function()
         TaskPlayAnim(lPed, "random@mugging3", "handsup_standing_base", 8.0, -8, -1, 49, 0, 0, 0, 0)
       end
     end
-    Wait(0)
+    Wait(2)
   end
 end)
 
@@ -275,7 +275,7 @@ AddEventHandler("vehicle:confirmSell", function(details)
     TriggerEvent("usa:notify", message)
     Citizen.CreateThread(function()
         while not responded do
-            Citizen.Wait(0)
+            Citizen.Wait(1)
             DrawSpecialText( "~y~OFFER: ~w~$" .. details.price .. " for ~w~" .. details.veh_to_sell.make .. " " .. details.veh_to_sell.model .. " [" .. details.veh_to_sell.plate .. "]" .. "\nAccept? ~g~Y~w~/~r~Backspace" )
             if IsControlJustPressed(1, 246) then -- Y key
                 print("player wants to buy vehicle!")
