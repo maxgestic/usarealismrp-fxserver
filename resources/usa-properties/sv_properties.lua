@@ -658,6 +658,7 @@ end, {
 })
 
 TriggerEvent('es:addCommand','addproperty', function(source, args, user)
+	local usource = source
   local group = user.getGroup()
     if group == "owner" or group == "superadmin" or group == "admin" then
         print("inside /addproperty command!")
@@ -721,14 +722,15 @@ TriggerEvent('es:addCommand','addproperty', function(source, args, user)
             -- insert into db
             GetDoc.createDocument("properties", new_property, function()
               -- notify:
-              RconPrint("\nProperty [" .. name .. "] added successfully! Make sure the circles are there next restart.")
+				print("**Property [" .. name .. "] added successfully! Make sure the circles are there next restart.**")
+				TriggerClientEvent("usa:notify", usource, "Property [" .. name .. "] added successfully! Make sure the circles are there next restart.")
               -- refresh properties:
               --loadProperties()
               -- can do refreshproperties for it to show up
             end)
           end)
         else
-          RconPrint("\nInvalid command format! Usage: /addproperty [door X] [door Y] [door Z] [garage X] [garage Y] [garage Z] [price] [name]")
+          TriggerClientEvent("usa:notify", usource, "Invalid command format! Usage: /addproperty [door X] [door Y] [door Z] [garage X] [garage Y] [garage Z] [price] [name]")
         end
     end
 end, {

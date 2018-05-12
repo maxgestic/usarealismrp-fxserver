@@ -12,7 +12,7 @@ local chatStreetAlerts = true
 local chanceForSpread = 700 -- basically a thousand sided dice is rolled and if it gets above this number then the fire spreads once
 local spawnRandomFires = true -- set to true and put x,y,z locations and amount of time before their is a chance of a fire spawning
 local spawnRandomFireChance = 600 -- basically a thousand sided dice is rolled and if it gets above this number then a fire spawns at one of the locations specified
-local randomSpawnTime = 7200000 --7200000 -- time to wait before trying ot spawn another random fire in milliseconds / 2 hr = 7200000 ms
+local randomSpawnTime = 10800000 --7200000 -- time to wait before trying ot spawn another random fire in milliseconds / 2 hr = 7200000 ms
 local randomFireLocations = { --  this is the format you need to put in for your possible locations.
 	--{ ['x'] = -46.56327, ['y'] = -1097.382, ['z'] = 25.99875 },
 	--{ ['x'] = 455.40682983398, ['y'] = -1016.9927368164, ['z'] = 28.412754058838 },
