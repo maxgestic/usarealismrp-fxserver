@@ -700,8 +700,8 @@ TriggerEvent('es:addCommand','addproperty', function(source, args, user)
             end_date = 0,
             due_days = 0
             },
-          y = coords.door.x,
-          x = coords.door.y,
+          y = coords.door.y,
+          x = coords.door.x,
           z = coords.door.z,
           storage =  {
             money = 0,
@@ -805,8 +805,8 @@ AddEventHandler('rconCommand', function(commandName, args)
 				end_date = 0,
 				due_days = 0
 			  },
-			y = coords.door.x,
-			x = coords.door.y,
+			y = coords.door.y,
+			x = coords.door.x,
 			z = coords.door.z,
 			storage =  {
 				money = 0,
