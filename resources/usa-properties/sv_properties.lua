@@ -306,8 +306,16 @@ function loadProperties()
 			-- insert all properties from 'properties' db into lua table
 			for i = 1, #(response.rows) do
 				--table.insert(PROPERTIES, response.rows[i].doc)
-                PROPERTIES[response.rows[i].doc.name] = response.rows[i].doc
-                print("loaded property: " .. response.rows[i].doc.name)
+				if response.rows[i] then
+					if response.rows[i].doc.name then
+						PROPERTIES[response.rows[i].doc.name] = response.rows[i].doc
+						print("loaded property: " .. response.rows[i].doc.name)
+					else 
+						print("Error loading property document at index #" .. i)
+					end
+				else 
+					print("Error loading property at index #" .. i)
+				end
 			end
 			print("finished loading properties...")
 			--print("# of properties: " .. #PROPERTIES)
@@ -740,8 +748,8 @@ end, {
 -- todo: rcon command that loads properties from db (so we can make changes) and refresh everyone's clientside property info (without removing their property identifier)
 AddEventHandler('rconCommand', function(commandName, args)
 	if commandName == "refreshproperties" then
-		loadProperties(function(status)
-			if status then
+		--loadProperties(function(status)
+			--if status then
 				TriggerClientEvent("properties:update", -1, PROPERTIES, false)
 				print("all players property info refreshed!")
 				TriggerEvent("es:getPlayers", function(players)
@@ -752,8 +760,8 @@ AddEventHandler('rconCommand', function(commandName, args)
 						end
 					end
 				end)
-			end
-		end)
+			--end
+		--end)
 	elseif commandName == "properties" then
 		for name, info in pairs(PROPERTIES) do
 			if info.owner.name then
