@@ -665,7 +665,8 @@ end, {
 	help = "Debug for properties"
 })
 
-TriggerEvent('es:addCommand','addproperty', function(source, args, user)
+--TriggerEvent('es:addCommand','addproperty', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'addproperty', 'admin', function(source, args, user)
 	local usource = source
   local group = user.getGroup()
     if group == "owner" or group == "superadmin" or group == "admin" then
