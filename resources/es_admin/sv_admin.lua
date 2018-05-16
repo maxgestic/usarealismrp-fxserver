@@ -948,7 +948,7 @@ end)
 			end
 			-- show message
 			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
-			sendMessageToModsAndAdmins(GetPlayerName(targetPlayer) .. " has been ^1temp banned^0 for " .. time .. " (" .. reason .. ")")
+			sendMessageToModsAndAdmins(GetPlayerName(targetPlayer) .. " has been ^1temp banned^0 for " .. time .. " hour(s) (" .. reason .. ").")
 			-- get char name:
 			local player = exports["essentialmode"]:getPlayerFromId(targetPlayer)
 			local char_name = player.getActiveCharacterData("fullName")
