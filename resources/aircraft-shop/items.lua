@@ -16,7 +16,7 @@ ITEMS = {
         {name = "Vestra", price = 40000, hash =  1341619767},
         {name = "Nimbus", price = 55000, hash =  -1295027632},
         {name = "Shamal", price = 55000, hash =  -1214505995},
-        {name = "Luxor", price = 60000, hash =  621481054},
+        {name = "Luxor", price = 70000, hash =  621481054},
         {name = "Luxor 2", price = 100000, hash =  -1214293858}
         --{name = "747 Jet", price = 8000000, hash =  1058115860}
     }

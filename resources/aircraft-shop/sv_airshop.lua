@@ -3,22 +3,22 @@ local MAX_AIRCRAFT_RETURN_AMOUNT = .25 * 250000
 local MIN_AIRCRAFT_PRICE = 15000
 
 local prices = {
-    ["Frogger"] = 35000,
-    ["Supervolito"] = 45000,
-    ["Swift"] = 55000,
-    ["Swift 2"] = 65000,
-    ["Volatus"] = 75000,
-    ["Cuban 800"] = 20000,
-    ["Dodo"] = 21000,
-    ["Duster"] = 15000,
-    ["Mammatus"] = 30000,
-    ["Stunt"] = 45000,
-    ["Velum"] = 55000,
-    ["Vestra"] = 60000,
-    ["Nimbus"] = 75000,
-    ["Shamal"] = 75000,
-    ["Luxor"] = 200000,
-    ["Luxor 2"] = 250000
+    ["Frogger"] = 15000,
+    ["Supervolito"] = 25000,
+    ["Swift"] = 35000,
+    ["Swift 2"] = 40000,
+    ["Volatus"] = 50000,
+    ["Cuban 800"] = 10000,
+    ["Dodo"] = 10000,
+    ["Duster"] = 6000,
+    ["Mammatus"] = 15000,
+    ["Stunt"] = 25000,
+    ["Velum"] = 35000,
+    ["Vestra"] = 40000,
+    ["Nimbus"] = 55000,
+    ["Shamal"] = 55000,
+    ["Luxor"] = 70000,
+    ["Luxor 2"] = 100000
 }
 
 RegisterServerEvent("airshop:rentVehicle")
