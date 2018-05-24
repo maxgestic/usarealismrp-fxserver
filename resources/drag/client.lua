@@ -15,64 +15,19 @@ end)
 RegisterNetEvent("dr:drag")
 AddEventHandler('dr:drag', function(pl)
 	otherid = tonumber(pl)
-	drag = not drag
-end)
-
-Citizen.CreateThread(function()
-	while true do
-		Wait(0)
-		local ped = GetPlayerPed(GetPlayerFromServerId(otherid))
-		local myped = GetPlayerPed(-1)
+	local ped = GetPlayerPed(GetPlayerFromServerId(otherid))
+	local myped = GetPlayerPed(-1)
+	if ped ~= myped then
 		if drag then
-			if ped ~= myped then
-				Citizen.Trace("ped = " .. ped)
-				Citizen.Trace("myped = " .. myped)
-				AttachEntityToEntity(myped, ped, 11816, 0.54, 0.54, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
-			else
-				drag = false
-			end
-		else
 			DetachEntity(GetPlayerPed(-1), true, false)
+		else
+			AttachEntityToEntity(myped, ped, 11816, 0.54, 0.54, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
 		end
-		--[[
-		-- stop dragging if far away
-		local dragged_ped_coords = GetEntityCoords(myped, 1)
-		local dragger_ped_coords = GetEntityCoords(ped, 1)
-		if Vdist(dragged_ped_coords, dragger_ped_coords) > 20.0 then
-			drag = false
-		end
-		--]]
+
+		drag = not drag
 	end
 end)
 
--- new stuff below: --
-Citizen.CreateThread(function()
-	while true do
-		Wait(0)
-		local target = GetCurrentTargetCar()
-		playerId = 0
-		playerName = ""
-		for id = 0, 64 do
-			if NetworkIsPlayerActive(id) then
-				if GetPlayerPed(id) == target then
-					playerId = GetPlayerServerId(id)
-					playerName = GetPlayerName(id)
-				end
-			end
-		end
-		-- Citizen.Trace("target = " .. target)
-		if target ~= nil then
-			if IsControlJustPressed(1, 246) then -- Y = 246, E = 38
-				--Citizen.Trace("E DETECTED!")
-				--Citizen.Trace("target = " .. target)
-				if playerId ~= 0 then
-					Citizen.Trace("dragging playerid: " .. playerId)
-					TriggerServerEvent("dr:drag", playerId)
-				end
-			end
-		end
-	end
-end)
 
 function GetCurrentTargetCar()
     local ped = GetPlayerPed(-1)

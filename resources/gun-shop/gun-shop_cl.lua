@@ -26,10 +26,10 @@ end)
 
 RegisterNetEvent("mini:equipWeapon")
 AddEventHandler("mini:equipWeapon", function(source, hash, name)
-    Citizen.Trace("hash = " .. hash)
-    Citizen.Trace("name = " .. name)
 	local playerPed = GetPlayerPed(-1)
-	GiveWeaponToPed(playerPed, hash, 60, false, true)
+	if hash ~= GetHashKey("GADGET_PARACHUTE") then	--Dont auto equip parachutes from gunstore
+		GiveWeaponToPed(playerPed, hash, 60, false, true)
+	end
 end)
 
 RegisterNetEvent("mini:insufficientFunds")
@@ -104,6 +104,16 @@ function ShotgunsMenu()
 	end
 end
 
+function ExtrasMenu()
+	MenuTitle = "Extras"
+	ClearMenu()
+	local weapon
+	for i = 1, #storeWeapons["extras"] do
+		weapon = storeWeapons["extras"][i]
+		Menu.addButton(weapon.name .. " ($" .. weapon.price .. ")","buyWeapon", weapon)
+	end
+end
+
 function gunShopMenu()
 	MenuTitle = "Weapon Shop"
 	ClearMenu()
@@ -124,6 +134,7 @@ function buyMenu()
 	Menu.addButton("Melee","MeleeMenu", nil)
 	Menu.addButton("Handguns","HandgunsMenu", nil)
 	Menu.addButton("Shotguns","ShotgunsMenu", nil)
+	Menu.addButton("Extras","ExtrasMenu", nil)
 end
 
 function sellWeapon(weapon)

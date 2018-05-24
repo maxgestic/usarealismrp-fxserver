@@ -27,5 +27,8 @@ storeWeapons = {
         { name = "Bullpup", type = "weapon", hash = 0x9D61E50F, price = 8750, legality = "legal", quantity = 1, weight = 25 },
         { name = "Musket", type = "weapon", hash = -1466123874, price = 8500, legality = "legal", quantity = 1, weight = 30 },
         { name = "Firework Gun", type = "weapon", hash = 2138347493, price = 60000, legality = "legal", quantity = 1, weight = 50}
-    }
+    },
+	["extras"] = {
+        { name = "Parachute", type = "weapon", hash = GetHashKey("GADGET_PARACHUTE"), price = 350, legality = "legal", quantity = 1, weight = 20 }
+    },
 }

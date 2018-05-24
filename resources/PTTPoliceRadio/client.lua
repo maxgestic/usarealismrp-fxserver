@@ -58,20 +58,20 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait( 0 )
 		local ped = PlayerPedId()
-		if control ~= nil then
+		if control ~= nil and GetPedParachuteState(ped) == -1 then
 			if DoesEntityExist( ped ) and not IsEntityDead( ped ) and CheckSkin(ped) then
 				if not IsPauseMenuActive() then 
 					loadAnimDict( "random@arrests" )
-					if IsControlJustReleased( 0, control ) then -- INPUT_CHARACTER_WHEEL (LEFT ALT)
+					if IsControlJustReleased( 0, control ) then
 						--TriggerServerEvent('InteractSound_SV:PlayOnSource', 'off', 0.1)
 						ClearPedTasks(ped)
 						SetEnableHandcuffs(ped, false)
 					else
-						if IsControlJustPressed( 0, control ) and CheckSkin(ped) and not IsPlayerFreeAiming(PlayerId()) then -- INPUT_CHARACTER_WHEEL (LEFT ALT)
+						if IsControlJustPressed( 0, control ) and CheckSkin(ped) and not IsPlayerFreeAiming(PlayerId()) then 
 							--TriggerServerEvent('InteractSound_SV:PlayOnSource', 'on', 0.1)
 							TaskPlayAnim(ped, "random@arrests", "generic_radio_enter", 8.0, 2.0, -1, 50, 2.0, 0, 0, 0 )
 							SetEnableHandcuffs(ped, true)
-						elseif IsControlJustPressed( 0, control ) and CheckSkin(ped) and IsPlayerFreeAiming(PlayerId()) then -- INPUT_CHARACTER_WHEEL (LEFT ALT)
+						elseif IsControlJustPressed( 0, control ) and CheckSkin(ped) and IsPlayerFreeAiming(PlayerId()) then 
 							--TriggerServerEvent('InteractSound_SV:PlayOnSource', 'on', 0.1)
 							TaskPlayAnim(ped, "random@arrests", "radio_chatter", 8.0, 2.0, -1, 50, 2.0, 0, 0, 0 )
 							SetEnableHandcuffs(ped, true)
@@ -94,28 +94,63 @@ Citizen.CreateThread( function()
 	while true do 
 		Citizen.Wait( 0 )
 		local ped = PlayerPedId()
-		if DoesEntityExist( ped ) and not IsEntityDead( ped ) and not IsPedInAnyVehicle(PlayerPedId(), true) and CheckSkin(ped) then 
-			DisableControlAction( 0, 20, true ) -- INPUT_MULTIPLAYER_INFO (Z)
-			if not IsPauseMenuActive() then 
-				loadAnimDict( "reaction@intimidation@cop@unarmed" )		
-				if IsDisabledControlJustReleased( 0, 20 ) then -- INPUT_MULTIPLAYER_INFO (Z)
-					ClearPedTasks(ped)
-					SetEnableHandcuffs(ped, false)
-					SetCurrentPedWeapon(ped, GetHashKey("WEAPON_UNARMED"), true)
-				else
-					if IsDisabledControlJustPressed( 0, 20 ) and CheckSkin(ped) then -- INPUT_MULTIPLAYER_INFO (Z)
-						SetEnableHandcuffs(ped, true)
-						SetCurrentPedWeapon(ped, GetHashKey("WEAPON_UNARMED"), true) 
-						TaskPlayAnim(ped, "reaction@intimidation@cop@unarmed", "intro", 8.0, 2.0, -1, 50, 2.0, 0, 0, 0 )
+		if GetPedParachuteState(ped) == -1 then 
+			if DoesEntityExist( ped ) and not IsEntityDead( ped ) and not IsPedInAnyVehicle(PlayerPedId(), true) and CheckSkin(ped) then 
+				DisableControlAction( 0, 20, true ) -- INPUT_MULTIPLAYER_INFO (Z)
+				if not IsPauseMenuActive() then 
+					loadAnimDict( "reaction@intimidation@cop@unarmed" )		
+					if IsDisabledControlJustReleased( 0, 20 ) then -- INPUT_MULTIPLAYER_INFO (Z)
+						ClearPedTasks(ped)
+						SetEnableHandcuffs(ped, false)
+						SetCurrentPedWeapon(ped, GetHashKey("WEAPON_UNARMED"), true)
+					else
+						if IsDisabledControlJustPressed( 0, 20 ) and CheckSkin(ped) then -- INPUT_MULTIPLAYER_INFO (Z)
+							SetEnableHandcuffs(ped, true)
+							SetCurrentPedWeapon(ped, GetHashKey("WEAPON_UNARMED"), true) 
+							TaskPlayAnim(ped, "reaction@intimidation@cop@unarmed", "intro", 8.0, 2.0, -1, 50, 2.0, 0, 0, 0 )
+						end
+						if IsEntityPlayingAnim(GetPlayerPed(PlayerId()), "reaction@intimidation@cop@unarmed", "intro", 3) then 
+							DisableActions(ped)
+						end	
 					end
-					if IsEntityPlayingAnim(GetPlayerPed(PlayerId()), "reaction@intimidation@cop@unarmed", "intro", 3) then 
-						DisableActions(ped)
-					end	
-				end
-			end 
-		end 
+				end 
+			end
+		end
 	end
 end )
+
+--[[
+
+GET_PED_PARACHUTE_STATE #
+// 0x79CFD9827CC979B6 0x7D4BC475
+// GetPedParachuteState
+int GET_PED_PARACHUTE_STATE(Ped ped);
+Returns:
+
+-1: Normal
+0: Wearing parachute on back
+1: Parachute opening
+2: Parachute open
+3: Falling to doom (e.g. after exiting parachute)
+
+Normal means no parachute?
+
+
+
+IS_PED_IN_PARACHUTE_FREE_FALL #
+// 0x7DCE8BDA0F1C1200 0xCD71F11B
+// IsPedInParachuteFreeFall
+BOOL IS_PED_IN_PARACHUTE_FREE_FALL(Ped ped);
+
+
+
+
+SET_AUTO_GIVE_PARACHUTE_WHEN_ENTER_PLANE #
+// 0x9F343285A00B4BB6 0xA97C2059
+// SetAutoGiveParachuteWhenEnterPlane
+void SET_AUTO_GIVE_PARACHUTE_WHEN_ENTER_PLANE(Player player, BOOL toggle);
+
+]]
 
 -- HOLSTER/UNHOLSTER PISTOL --
  
@@ -123,25 +158,27 @@ end )
 	while true do
 		Citizen.Wait(0)
 		local ped = PlayerPedId()
-		if DoesEntityExist( ped ) and not IsEntityDead( ped ) and not IsPedInAnyVehicle(PlayerPedId(), true) and CheckSkin(ped) then
-			loadAnimDict( "rcmjosh4" )
-			loadAnimDict( "weapons@pistol@" )
-			if CheckWeapon(ped) then
-				if holstered then
-					TaskPlayAnim(ped, "rcmjosh4", "josh_leadout_cop2", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
-					Citizen.Wait(600)
-					ClearPedTasks(ped)
-					holstered = false
+		if GetPedParachuteState(ped) == -1 then 
+			if DoesEntityExist( ped ) and not IsEntityDead( ped ) and not IsPedInAnyVehicle(PlayerPedId(), true) and CheckSkin(ped) then
+				loadAnimDict( "rcmjosh4" )
+				loadAnimDict( "weapons@pistol@" )
+				if CheckWeapon(ped) then
+					if holstered then
+						TaskPlayAnim(ped, "rcmjosh4", "josh_leadout_cop2", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
+						Citizen.Wait(600)
+						ClearPedTasks(ped)
+						holstered = false
+					end
+					SetPedComponentVariation(ped, 9, 0, 0, 0)
+				elseif not CheckWeapon(ped) then
+					if not holstered then
+						TaskPlayAnim(ped, "weapons@pistol@", "aim_2_holster", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
+						Citizen.Wait(500)
+						ClearPedTasks(ped)
+						holstered = true
+					end
+					--SetPedComponentVariation(ped, 9, 1, 0, 0)
 				end
-				SetPedComponentVariation(ped, 9, 0, 0, 0)
-			elseif not CheckWeapon(ped) then
-				if not holstered then
-					TaskPlayAnim(ped, "weapons@pistol@", "aim_2_holster", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
-					Citizen.Wait(500)
-					ClearPedTasks(ped)
-					holstered = true
-				end
-				--SetPedComponentVariation(ped, 9, 1, 0, 0)
 			end
 		end
 	end

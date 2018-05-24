@@ -416,6 +416,10 @@ elseif string.find(itemName, "Lock Pick") then
 			intoxicate(false, "MOVE_M@DRUNK@SLIGHTLYDRUNK")
 			reality(4)
 		end
+	elseif string.find(itemName, "Parachute") then
+		GiveWeaponToPed(GetPlayerPed(-1), GetHashKey("GADGET_PARACHUTE"), 150, true, true)
+		SetPedComponentVariation(GetPlayerPed(-1), 5, 1, 0, 0)
+		TriggerServerEvent("parachute:usedParachute")
 	else
 		TriggerEvent("interaction:notify", "There is no use action for that item!")
 	end
@@ -496,7 +500,7 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		-- cancel emote when walking forward
-		if IsControlJustPressed(1, 32) then -- INPUT_MOVE_UP_ONLY
+		if IsControlJustPressed(1, 32) and playing_emote then -- INPUT_MOVE_UP_ONLY
 			local ped = GetPlayerPed(-1)
 			ClearPedTasks(ped);
 			playing_emote = false
