@@ -33,11 +33,18 @@ AddEventHandler("properties:setPropertyIdentifier", function(ident)
     --print("property identifier set!")
 end)
 
----------------------------------------
--- update client list of properties  --
----------------------------------------
+-------------------------------
+-- update client properties  --
+-------------------------------
 RegisterNetEvent("properties:update")
-AddEventHandler("properties:update", function(properties, close_menu)
+AddEventHandler("properties:update", function(property, close_menu)
+    PROPERTIES[property.name] = property
+    if close_menu then menu.enabled = false end
+    --print("properties loaded!")
+end)
+
+RegisterNetEvent("properties:updateAll")
+AddEventHandler("properties:updateAll", function(properties, close_menu)
     PROPERTIES = properties
     if close_menu then menu.enabled = false end
     --print("properties loaded!")
