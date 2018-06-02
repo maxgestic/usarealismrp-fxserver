@@ -72,11 +72,11 @@ function jailPlayer(data, officerName)
 		-- fine the player using amount supplied from the form
 		local user_bank = user.getActiveCharacterData("bank")
 		local bank_after_fine = user_bank - fine
-		if  bank_after_fine >= 0 then
+		--if  bank_after_fine >= 0 then
 			user.setActiveCharacterData("bank", user_bank - fine)
-		else
-			user.setActiveCharacterData("bank", 0)
-		end
+		--else
+			--user.setActiveCharacterData("bank", 0)
+		--end
 		-- notify of fine:
 		TriggerClientEvent("usa:notify", targetPlayer, "You have been fined: $" .. fine)
 		-- add to criminal history --

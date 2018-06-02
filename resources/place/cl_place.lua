@@ -41,13 +41,15 @@ end)
 
 -- unseat
 RegisterNetEvent('place:unseat')
-AddEventHandler('place:unseat', function(targetPlayerId)
-	local pos = GetEntityCoords(GetPlayerPed(targetPlayerId))
+AddEventHandler('place:unseat', function(destinationPlayerId)
+	--local pos = GetEntityCoords(GetPlayerPed(targetPlayerId)) -- this is probably not the right argument for GetPlayerPed (should be the player id, some number from 0 to 32)
+	local otherped = GetPlayerPed(GetPlayerFromServerId(destinationPlayerId))
+	local pos = GetEntityCoords(otherped)
 	RequestCollisionAtCoord(pos.x, pos.y, pos.z)
-	while not HasCollisionLoadedAroundEntity(GetPlayerPed(-1)) do
+	while not HasCollisionLoadedAroundEntity(otherped) do
 		RequestCollisionAtCoord(pos.x, pos.y, pos.z)
-		Citizen.Wait(0)
+		Citizen.Wait(10)
 	end
-	SetEntityCoords(GetPlayerPed(-1), pos.x, pos.y, pos.z + 1.0)
+	SetEntityCoords(GetPlayerPed(-1), pos.x, pos.y + 1.0, pos.z + 0.5)
 	states.frozenPos = pos
 end)
