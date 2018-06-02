@@ -337,6 +337,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 												partnerId = fromNumber,
 												messages = {message}
 											}
+											if #inventory[j].conversations > 6 then table.remove(inventory[j].conversations) print("removed conversation! maxed out!") end
 											table.insert(inventory[j].conversations, 1, conversation) -- insert at front
 											player.setActiveCharacterData("inventory", inventory)
 											TriggerClientEvent("swayam:notification", userSource, "Whiz Wireless", "Message Sent.", "CHAR_MP_DETONATEPHONE")
@@ -422,6 +423,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 								partnerId = toNumber,
 								messages = {message}
 							}
+							if #inventory[j].conversations > 6 then table.remove(inventory[j].conversations) print("removed conversation! maxed out!") end
 							table.insert(inventory[j].conversations, 1, conversation) -- insert at front
 							user.setActiveCharacterData("inventory", inventory)
 							print("convo inserted!")
