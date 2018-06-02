@@ -2,7 +2,7 @@ local m = {} -- <<< Don't touch this!
 -----------[ SETTINGS ]---------------------------------------------------
 
 -- Delay in minutes between messages
-m.delay = 45
+m.delay = 90
 
 -- Prefix appears in front of each message.
 -- Suffix appears on the end of each message.
@@ -13,12 +13,10 @@ m.suffix = ''
 -- You can make as many messages as you want.
 -- You can use ^0-^9 in your messages to change text color.
 m.messages = {
-  "^0Interested in joining the Blaine County Sheriff's Office? Apply today at https://www.usarrp.net!",
-	"^0Interested in becoming a paramedic? Apply today at https://www.usarrp.net!",
-	"^0Want to skip ahead in the queue? Confident in your RP? Apply to get whitelisted at https://www.usarrp.net.",
-	"^0You must drive your vehicle as you would in real life! You can do /rules for more info.",
-  "^0New to the city? Do /rules to read the rules.",
-  "^0Enjoy your stay!"
+  "^0Interested in joining the Blaine County Sheriff's Office? We're hiring! Apply today at https://www.usarrp.net > Applications",
+	"^0Interested in becoming a paramedic? Join American Medical Response today at https://www.usarrp.net > Applications",
+	"^0Get unlimited access to reserved slots and skip ahead of public players in queue when you get white listed at https://www.usarrp.net > Applications",
+	"^0New? Please take a second to review our rules by doing /rules so you don't end up getting in trouble."
 }
 
 -- Player identifiers on this list will not receive any messages.

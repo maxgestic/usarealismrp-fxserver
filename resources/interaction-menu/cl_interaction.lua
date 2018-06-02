@@ -497,15 +497,18 @@ AddEventHandler("interaction:vehicleInventoryLoaded", function(inventory)
 	})
 end)
 
+local EMOTE_CANCEL = 32
 Citizen.CreateThread(function()
 	while true do
-		-- cancel emote when walking forward
-		if IsControlJustPressed(1, 32) and playing_emote then -- INPUT_MOVE_UP_ONLY
+		--print("GetPedParachuteState(GetPlayerPed(-1)): " .. GetPedParachuteState(GetPlayerPed(-1)))
+		-- cancel emote when walking forward & not parachuting --
+		--if IsControlPressed(1, 32) and (GetPedParachuteState(GetPlayerPed(-1)) == -1 or GetPedParachuteState(GetPlayerPed(-1)) == 0) then
+		if IsControlPressed(1, 32) and playing_emote then
 			local ped = GetPlayerPed(-1)
-			ClearPedTasks(ped);
+			ClearPedTasks(ped)
 			playing_emote = false
 		end
-		Citizen.Wait(0)
+		Citizen.Wait(100)
 	end
 end)
 

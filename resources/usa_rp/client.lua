@@ -56,7 +56,6 @@ end)
 -------------------
 -- RANDOM THINGS --
 -------------------
---[[
 -- ped/vehicle npcs
 Citizen.CreateThread(function()
 	while true do
@@ -71,12 +70,11 @@ Citizen.CreateThread(function()
 
 	end
 end)
--]]
 
 -- no police npc / never wanted
 Citizen.CreateThread(function()
     while true do
-        Wait(1)
+        Wait(1000)
         if GetPlayerWantedLevel(PlayerId()) ~= 0 then
             SetPlayerWantedLevel(PlayerId(),0,false)
             SetPlayerWantedLevelNow(PlayerId(),false)
@@ -89,7 +87,7 @@ end)
 local passengerDriveBy = true
 Citizen.CreateThread(function()
 	while true do
-		Wait(10)
+		Wait(100)
 		playerPed = GetPlayerPed(-1)
 		car = GetVehiclePedIsIn(playerPed, false)
         --Citizen.InvokeNative(0xB736A491E64A32CF,Citizen.PointerValueIntInitialized(car)) -- auto car clean up for unused vehicles
@@ -136,7 +134,7 @@ end
 Citizen.CreateThread( function()
     while true do
         ManageReticle()
-        Citizen.Wait( 0 )
+        Citizen.Wait( 1 )
     end
 end )
 
@@ -284,7 +282,7 @@ end)
 local antiShuffleEnabled = true
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(5)
+		Citizen.Wait(10)
 		if IsPedInAnyVehicle(GetPlayerPed(-1), false) and antiShuffleEnabled then
 			if GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), 0) == GetPlayerPed(-1) then
 				if GetIsTaskActive(GetPlayerPed(-1), 165) then
@@ -392,11 +390,18 @@ AddEventHandler('veh:toggleEngine', function(status)
         local targetVehicle = GetVehiclePedIsIn(playerPed, false)
         if GetPedInVehicleSeat(targetVehicle, -1) == playerPed then
             if status == "on" then
-              TriggerServerEvent("vehicle:checkForKey", GetVehicleNumberPlateText(targetVehicle))
-            elseif status == "off" then
+              --TriggerServerEvent("vehicle:checkForKey", GetVehicleNumberPlateText(targetVehicle))
+				local vehicleEngineHealth = GetVehicleEngineHealth(targetVehicle)
+				if vehicleEngineHealth > 850 then
+					SetVehicleEngineOn(targetVehicle, true, false, false)
+					SetVehicleUndriveable(targetVehicle, false)
+				else
+					TriggerEvent("usa:notify", "Your vehicle is disabled! Can't turn the engine on.")
+				end
+			elseif status == "off" then
                 SetVehicleEngineOn(targetVehicle, false, false, false)
                 SetVehicleUndriveable(targetVehicle, true)
-                TriggerEvent("vehicle:setEngineStatus", false)
+                --TriggerEvent("vehicle:setEngineStatus", false)
             end
         end
     end

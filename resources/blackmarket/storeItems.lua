@@ -1,6 +1,6 @@
 storeItems = {
     ["weapons"] = {
-      { name = "Lock Pick", type = "misc", hash = 615608432, price = 400, legality = "illegal", quantity = 1, weight = 5 },
+		--{ name = "Lock Pick", type = "misc", hash = 615608432, price = 400, legality = "illegal", quantity = 1, weight = 5 },
         { name = "Molotov", type = "weapon", hash = 615608432, price = 650, legality = "illegal", quantity = 1, weight = 20 },
         { name = "Brass Knuckles", type = "weapon", hash = -656458692, price = 650, legality = "illegal", quantity = 1, weight = 5 },
         { name = "Dagger", type = "weapon", hash = -1834847097, price = 750, legality = "illegal", quantity = 1, weight = 10 },
@@ -18,6 +18,6 @@ storeItems = {
         { name = "Bullpup Rifle", type = "weapon", hash = 2132975508, price = 19550, legality = "illegal", quantity = 1, weight = 45 },
         --{ name = "Advanced Rifle", type = "weapon", hash = -1357824103, price = 20550, legality = "illegal", quantity = 1, weight = 45 },
         --{ name = "Assault SMG", type = "weapon", hash = -270015777, price = 19550, legality = "illegal", quantity = 1, weight = 45 }
-        --{ name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 20550, legality = "illegal", quantity = 1, weight = 45 }
+        { name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 20550, legality = "illegal", quantity = 1, weight = 45 }
     }
 }

@@ -23,7 +23,6 @@ AddEventHandler('dr:drag', function(pl)
 		else
 			AttachEntityToEntity(myped, ped, 11816, 0.54, 0.54, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
 		end
-
 		drag = not drag
 	end
 end)
@@ -41,3 +40,21 @@ function GetCurrentTargetCar()
 
     return vehicleHandle
 end
+
+-- prevent people from escaping drag with emotes --
+Citizen.CreateThread(function()
+	while true do
+		Wait(75)
+		local ped = GetPlayerPed(GetPlayerFromServerId(otherid))
+		local myped = GetPlayerPed(-1)
+		if drag then
+			if ped ~= myped then
+				AttachEntityToEntity(myped, ped, 11816, 0.54, 0.54, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
+			else
+				drag = false
+			end
+		else
+			--DetachEntity(GetPlayerPed(-1), true, false)
+		end
+	end
+end)

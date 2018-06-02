@@ -1,13 +1,8 @@
---# made by: minipunch
---# some more realistic feautres added to vehicles like engine damage to overheat and disable, also keep cars running until turned off with key
-local vehicles = {}
-
 local targetVehicle, targetPed
 local civEngineOverheatThreshold, copEngineOverheatThreshold = 960.0, 955.0 -- non-severe accidents (busted radiator)
 local engineDisabledThreshold = 945.0
 --local bodyOverheatThreshold = 255.0
-local engineIsOn = false
-local savedVehicle
+local engineIsOn, savedVehicle
 
 local policeVehicles = {
     1171614426, -- ambulance
@@ -32,14 +27,10 @@ local policeVehicles = {
 	1109330673, -- unmarked4
 	-1285460620, -- unmarked3
 	1383443358 -- unmarked1
-
+	
 }
 
-----------------------------------------
--- KEEP VEHICLES ON UNTIL KEY IS USED --
-----------------------------------------
 Citizen.CreateThread(function()
-  local plate = nil
     while true do
         Wait(1)
         local userPed = GetPlayerPed(-1)
@@ -48,116 +39,22 @@ Citizen.CreateThread(function()
         if IsPedInAnyVehicle(userPed) then -- ped is in a vehicle
             --Citizen.Trace("ped is in a vehicle")
             savedVehicle = GetVehiclePedIsIn(userPed)
-            plate = GetVehicleNumberPlateText(savedVehicle)
-            if type(vehicles[plate]) ~= "nil" then
-              --print("plate existed in veh list!")
-              if tostring(vehicles[plate]) == "false" and IsVehicleEngineOn(savedVehicle, false) then
-                --print("turning engine off!")
-                SetVehicleEngineOn(savedVehicle, false, false, false)
-                SetVehicleUndriveable(savedVehicle, true)
-              elseif tostring(vehicles[plate]) == "true" and not IsVehicleEngineOn(savedVehicle, false) then
-                --print("turning engine on!")
-                SetVehicleEngineOn(savedVehicle, true, true, true)
-                SetVehicleUndriveable(savedVehicle, false)
-              end
-            else
-              --print("type of vehicles[plate] was nil!")
-            end
-            --[[
             if IsVehicleEngineOn(GetVehiclePedIsIn(userPed), false) then -- engine is running
                 --Citizen.Trace("setting engineIsOn to true with vehicle = " .. GetVehiclePedIsIn(userPed))
                 if not engineIsOn then engineIsOn = true end
             end
-            -]]
         else
            --Citizen.Trace("ped not in vehicle")
             if engineIsOn and not IsVehicleEngineOn(savedVehicle, false) then
                 --Citizen.Trace("engine should be on.. turning last vehicle engine on")
-                --for i = 1, #policeVehicles do
-                    --if IsVehicleModel(savedVehicle, policeVehicles[i]) then
+                for i = 1, #policeVehicles do
+                    if IsVehicleModel(savedVehicle, policeVehicles[i]) then
                         SetVehicleEngineOn(savedVehicle, true, true, true)
-                    --end
-                --end
-            elseif not engineIsOn and IsVehicleEngineOn(savedVehicle, false) then
-              SetVehicleEngineOn(savedVehicle, false, true, true)
+                    end
+                end
             end
         end
      end
-end)
-
----------------------------------------------
--- client vehicle list on their first load in
----------------------------------------------
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(0)
-		if NetworkIsSessionStarted() then
-			TriggerServerEvent("vehicle:playerActivated")
-			return
-		end
-	end
-end)
-
-RegisterNetEvent("vehicle:update")
-AddEventHandler("vehicle:update", function(vehs)
-  vehicles = vehs
-  --print("vehicles set!")
-end)
-
-RegisterNetEvent("vehicle:setEngineStatus")
-AddEventHandler("vehicle:setEngineStatus", function(on)
-  engineIsOn = on
-  if engineIsOn then
-    local vehicleEngineHealth = GetVehicleEngineHealth(savedVehicle)
-    if vehicleEngineHealth > 850 then
-        SetVehicleEngineOn(savedVehicle, true, false, false)
-        SetVehicleUndriveable(savedVehicle, false)
-    else
-        TriggerEvent("usa:notify", "Your vehicle is disabled! Can't turn the engine on.")
-    end
-  end
-  local plate = GetVehicleNumberPlateText(savedVehicle)
-  TriggerServerEvent("vehicle:setVehicle", plate, engineIsOn)
-  --print("set veh engine status!")
-end)
-
---------------------
------ HOTWIRE ------
---------------------
-RegisterNetEvent("vehicle:hotwire")
-AddEventHandler("vehicle:hotwire", function()
-  local hotwire_time = 15000
-  local me = GetPlayerPed(-1)
-  local veh = GetVehiclePedIsIn(me)
-  if IsPedInAnyVehicle(me) and not IsVehicleEngineOn(veh, false) then
-    local random = math.random(100)
-    --[[
-    local anim = {
-      dict = "veh@golfcaddy@ds@base",
-      name = "pov_hotwire"
-    }
-    TriggerEvent("usa:playAnimation", anim.name, anim.dict, 10)
-    --]]
-    TriggerEvent("usa:notify", "Attempting to hotwire vehicle!")
-    local start = GetGameTimer()
-    while GetGameTimer() < start + hotwire_time do
-      Wait(1)
-      DrawSpecialText("~y~Hotwiring ~w~[" .. math.ceil((start + hotwire_time - GetGameTimer()) / 1000) .. "s]")
-    end
-    if random < 35 then
-      if IsPedInAnyVehicle(me) and not IsVehicleEngineOn(veh, false) then
-        local plate = GetVehicleNumberPlateText(veh)
-        SetVehicleNeedsToBeHotwired(veh, true)
-        TriggerServerEvent("vehicle:setVehicle", plate, true)
-      else
-        TriggerEvent("usa:notify", "Not in vehicle!")
-      end
-    else
-      TriggerEvent("usa:notify", "You failed to hotwire the vehicle!")
-    end
-  else
-
-  end
 end)
 
 -- TODO: disable on high body damage! USE: GetVehicleBodyHealth(veh)

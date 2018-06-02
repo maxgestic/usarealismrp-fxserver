@@ -71,24 +71,24 @@ end)
 RegisterServerEvent("lock:addPlate")
 AddEventHandler("lock:addPlate", function(plate)
     vehicles[plate] = false
-    print("added plate #" .. plate .. " to lock toggle list!")
+    --print("added plate #" .. plate .. " to lock toggle list!")
 end)
 
 RegisterServerEvent("lock:removePlate")
 AddEventHandler("lock:removePlate", function(plate)
     vehicles[plate] = nil
-    print("removed plate #" .. plate .. " from lock toggle list!")
+    --print("removed plate #" .. plate .. " from lock toggle list!")
 end)
 
 function isLocked(plate)
-    print("vehicles[plate] = " .. tostring(vehicles[tostring(plate)]))
+    --print("vehicles[plate] = " .. tostring(vehicles[tostring(plate)]))
     return vehicles[plate]
 end
 
 function setLocked(plate, locked)
   if vehicles and plate then
     vehicles[plate] = locked
-    print("plate #" .. plate .. " lock status set to: " .. tostring(locked))
+   -- print("plate #" .. plate .. " lock status set to: " .. tostring(locked))
   end
 end
 
@@ -99,8 +99,8 @@ end)
 
 TriggerEvent('es:addCommand', 'locklist', function(source, args, user)
     for k, v in pairs(vehicles) do
-        print("key = " .. k .. ", type = " .. type(k))
-        print("val = " .. tostring(v))
+       -- print("key = " .. k .. ", type = " .. type(k))
+      --  print("val = " .. tostring(v))
     end
 end)
 
