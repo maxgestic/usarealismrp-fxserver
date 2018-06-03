@@ -280,7 +280,7 @@ AddEventHandler("airshop:spawnAircraft", function(hash)
 		end
         -- Spawn the vehicle at the gas station car dealership in paleto and assign the vehicle handle to 'vehicle'
         local vehicle = CreateVehicle(numberHash, spawnX, spawnY, spawnZ, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
-        SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
+        SetVehicleExplodesOnHighExplosionDamage(vehicle, false)
     end)
 end)
 

@@ -1,6 +1,6 @@
 -- TO PREVENT MEMORY EDIT CHEATERS
-local MAX_AIRCRAFT_RETURN_AMOUNT = .25 * 250000
-local MIN_AIRCRAFT_PRICE = 15000
+local MAX_AIRCRAFT_RETURN_AMOUNT = .25 * 100000
+local MIN_AIRCRAFT_PRICE = 6000
 
 local prices = {
     ["Frogger"] = 15000,
@@ -38,7 +38,7 @@ AddEventHandler("airshop:rentVehicle", function(vehicle, property)
           local new_money = user_money - price
           -- give money to store owner --
           if property then 
-            TriggerEvent("properties:addMoney", property.name, round(0.20 * price, 0))
+            TriggerEvent("properties:addMoney", property.name, round(0.30 * price, 0))
           end
           user.setActiveCharacterData("money", new_money)
           print("calling spawnAircraft")
