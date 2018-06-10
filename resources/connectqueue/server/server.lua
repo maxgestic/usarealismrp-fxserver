@@ -427,8 +427,10 @@ Citizen.CreateThread(function()
             rejoined = true
             Queue:UpdatePosData(src, ids, deferrals)
             Queue:DebugPrint(string_format("%s[%s] has rejoined queue after cancelling", name, ids[1]))
-			Queue.PublicPlayerCount = Queue.PublicPlayerCount - 1
-			print("Decremented public player count, at: " .. Queue.PublicPlayerCount)
+			if not Queue:IsPriority(ids) then
+				Queue.PublicPlayerCount = Queue.PublicPlayerCount - 1
+				print("Decremented public player count after player rejoined, at: " .. Queue.PublicPlayerCount)
+			end
         else
             Queue:AddToQueue(ids, connectTime, name, src, deferrals)
         end
