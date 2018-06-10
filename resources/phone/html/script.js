@@ -48,6 +48,7 @@ $(function() {
                // first reset to prevent duplications
                 // add person
                 $("#text-message-app-home section").append("<div class='textMessageConvoBtn' data-id='" + loadedConversations[convo].partnerId + "'>" + loadedConversations[convo].partnerName + "</div>");
+				$("#text-message-app-home section").css("overflow-y", "scroll");
             }
         } else if (event.data.type == "messagesHaveLoaded") {
             var messages = event.data.messages;
