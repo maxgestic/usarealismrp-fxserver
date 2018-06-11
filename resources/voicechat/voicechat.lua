@@ -1,3 +1,7 @@
+local SETTINGS = {
+	TALKING_CIRCLE_ENABLED = false
+}
+
 local voip = {}
 voip['off'] = {name = 'off', setting = 0.0}
 voip['default'] = {name = 'default', setting = 8.5}
@@ -12,6 +16,11 @@ local voip_toggle_key = 289 -- 38 = "E", 289 = "F2"
 
 AddEventHandler('onClientMapStart', function()
 	NetworkSetTalkerProximity(voip['default'].setting)
+end)
+
+RegisterNetEvent('voip:toggleTalkingCircle')
+AddEventHandler('voip:toggleTalkingCircle', function()
+	SETTINGS.TALKING_CIRCLE_ENABLED = not SETTINGS.TALKING_CIRCLE_ENABLED
 end)
 
 RegisterNetEvent('voip')
@@ -38,6 +47,13 @@ function NotificationMessage(message)
 	DrawNotification(0,1)
 end
 
+function DrawTalkingCircle(ped)
+	if GetPlayerPed(-1) ~= ped then
+		local x, y, z = table.unpack(GetEntityCoords(ped, true))
+		DrawMarker(27, x, y, z - 1.0, 0, 0, 0, 0, 0, 0, 0.5, 0.5, 0.5, 57 --[[r]], 176 --[[g]], 132 --[[b]], 70, 0, 0, 2, 0, 0, 0, 0)
+	end
+end
+
 local r,g,b
 Citizen.CreateThread(function()
 	while true do
@@ -57,21 +73,34 @@ Citizen.CreateThread(function()
 		end
 		-- voip range HUD display color --
 		for id = 0, 64 do 
-			if NetworkIsPlayerActive(id) and GetPlayerPed(-1) == GetPlayerPed(id) then
-				if NetworkIsPlayerTalking(id) then
-					r = 57
-					g = 176
-					b = 132
-				else 
-					r = 224
-					g = 227
-					b = 218
+			if NetworkIsPlayerActive(id) then
+				----------------------------
+				-- talking cirlce at feet --
+				----------------------------
+				if SETTINGS.TALKING_CIRCLE_ENABLED then
+					if NetworkIsPlayerTalking(id) then
+						DrawTalkingCircle(GetPlayerPed(GetPlayerFromServerId(GetPlayerServerId(id))))
+					end
 				end
-				-- draw voip range HUD display --
-				if IsPedInAnyVehicle(GetPlayerPed(-1), false) then
-					drawTxt(0.66, 1.665, 1.0, 1.5, 0.4, "R: " .. GetDisplayName(distanceName), r, g, b, 255) -- voip range
-				else
-					drawTxt(0.66, 1.69, 1.0, 1.5, 0.4, "R: " .. GetDisplayName(distanceName), r, g, b, 255) -- voip range
+				-----------------------------
+				-- talking notifier on HUD --
+				-----------------------------
+				if GetPlayerPed(-1) == GetPlayerPed(id) then
+					if NetworkIsPlayerTalking(id) then
+						r = 57
+						g = 176
+						b = 132
+					else 
+						r = 224
+						g = 227
+						b = 218
+					end
+					-- draw voip range HUD display --
+					if IsPedInAnyVehicle(GetPlayerPed(-1), false) then
+						drawTxt(0.66, 1.665, 1.0, 1.5, 0.4, "R: " .. GetDisplayName(distanceName), r, g, b, 255) -- voip range
+					else
+						drawTxt(0.66, 1.69, 1.0, 1.5, 0.4, "R: " .. GetDisplayName(distanceName), r, g, b, 255) -- voip range
+					end
 				end
 			end
 		end
