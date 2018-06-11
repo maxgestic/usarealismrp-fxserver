@@ -168,10 +168,14 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
 	  if user.getCanActiveCharacterHoldItem(item) then
 		if not item.type or item.type == "license" then
 		  -- must be a license (no item.type)
-		  print("giving a license!")
+			print("tried to give a license!")
+			TriggerClientEvent("usa:notify", targetPlayerId, "Can't trade licenses. Sorry!")
+			return
+			--[[ prevent trading licenses for now
 		  local licenses = user.getActiveCharacterData("licenses")
 		  table.insert(licenses, item)
-		  user.setActiveCharacterData("licenses", licenses)
+			user.setActiveCharacterData("licenses", licenses)
+			--]]
 		else
 		  if item.type == "weapon" then
 			print("giving a weapon!")
@@ -205,8 +209,8 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
 		end
 		-- remove from source player
 		removeItemFromPlayer(item, userSource)
-		TriggerClientEvent("interaction:notify", userSource, "You gave " .. GetPlayerName(targetPlayerId) .. ": (x1) " .. item.name)
-		TriggerClientEvent("interaction:notify", targetPlayerId, GetPlayerName(userSource) .. " has given you " .. ": (x1) " .. item.name)
+		TriggerClientEvent("usa:notify", userSource, "You gave " .. GetPlayerName(targetPlayerId) .. ": (x1) " .. item.name)
+		TriggerClientEvent("usa:notify", targetPlayerId, GetPlayerName(userSource) .. " has given you " .. ": (x1) " .. item.name)
 		-- play animation:
 		local anim = {
 		  dict = "anim@move_m@trash",
