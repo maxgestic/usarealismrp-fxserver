@@ -1,3 +1,15 @@
+local POLICE_RANKS = {
+	[1] = "Probationary",
+	[2] = "Deputy",
+	[3] = "Senior Deputy",
+	[4] = "Probationary Sergeant",
+	[5] = "Sergeant",
+	[6] = "Lieutenant",
+	[7] = "Captain",
+	[8] = "Undersheriff",
+	[9] = "Sheriff"
+}
+
 local target_player_id = 0
 
 TriggerEvent('es:addJobCommand', 'ticket', { 'sheriff', 'police' , 'judge'}, function(source, args, user)
@@ -195,6 +207,22 @@ AddEventHandler("police:seizeCash", function(amount)
 	end)
 end)
 -- end seize contraband
+
+-- retrieve AR/pump shotgun
+TriggerEvent('es:addJobCommand', 'showbadge', { "police", "sheriff" }, function(source, args, user, location)
+	
+	local police_rank = tonumber(user.getActiveCharacterData("policeRank"))
+	local char_name = user.getActiveCharacterData("fullName")
+	if police_rank > 0 then
+		TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^0" .. char_name .. " shows official police badge.", location)
+		TriggerClientEvent('chatMessageLocation', -1, "[ID]", {171, 67, 227}, "^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2Police Rank: ^0" .. GetRankName(police_rank), location)
+	end
+
+end, { help = "Present your official police or EMS identification." })
+
+function GetRankName(rank)
+	return POLICE_RANKS[rank]
+end
 
 TriggerEvent('es:addJobCommand', 'breathalyze', { "police", "sheriff", "ems" }, function(source, args, user)
 	local targetId = tonumber(args[2])
