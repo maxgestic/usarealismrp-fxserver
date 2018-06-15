@@ -63,7 +63,7 @@ TriggerEvent('es:addJobCommand', 'dos', { "ems", "fire", "police", "sheriff" }, 
 		-- admit player ped to morgue
 		TriggerClientEvent('HOSPITAL:hospitalize', playerID, hospitalTime * 60, hospitalIdentifier)
 		-- remove all things and money from player
-		TriggerEvent("es:getPlayerFromId", playerID, function(targetPlayer)
+		local targetPlayer = exports["essentialmode"]:getPlayerFromId(playerID)
 			-- remove player weapons
 			print("removing weapons!")
 			targetPlayer.setActiveCharacterData("weapons", {})
@@ -83,6 +83,8 @@ TriggerEvent('es:addJobCommand', 'dos', { "ems", "fire", "police", "sheriff" }, 
 			-- remove player insurance
 			print("removing insurance!")
 			targetPlayer.setActiveCharacterData("insurance", {})
+			-- remove player crim historyr
+			targetPlayer.setActiveCharacterData("criminalHistory", {})
 			-- remove player money on hand
 			print("DISABLED: removing money!")
 			--targetPlayer.setActiveCharacterData("money", 0)
@@ -109,7 +111,6 @@ TriggerEvent('es:addJobCommand', 'dos', { "ems", "fire", "police", "sheriff" }, 
 			TriggerClientEvent('chatMessage', -1, "SYSTEM", {100,0,0}, eventMessage)
 			-- REMOVE WARRANTS (if any)
 			TriggerEvent("warrants:removeAnyActiveWarrants", admitted_name)
-		end)
 	end
 end, {
 	help = "Send someone to the mourge to be NLR'd.",

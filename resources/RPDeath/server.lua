@@ -52,7 +52,7 @@ AddEventHandler("RPD:removeWeapons", function()
 				user.setActiveCharacterData("money", user_money - DEATH_PENALTY)
 			end
 			user.setActiveCharacterData("weapons", {})
-			user.setActiveCharacterData("criminalHistory", {})
+			--user.setActiveCharacterData("criminalHistory", {})
 			--user.setLicenses({})
 			--user.setVehicles({})
 			--user.setInsurance({})
@@ -65,8 +65,8 @@ AddEventHandler("RPD:removeWeapons", function()
 		for i = #user_inventory, 1, -1 do
 			local item = user_inventory[i]
 			if item == nil or not string.find(item.name, "Cell Phone") then
-        table.remove(user_inventory, i)
-    	end
+				table.remove(user_inventory, i)
+			end
 		end
 		--[[
 		for i = 1, #user_inventory do
