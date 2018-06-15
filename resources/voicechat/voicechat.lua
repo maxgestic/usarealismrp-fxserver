@@ -1,5 +1,5 @@
 local SETTINGS = {
-	TALKING_CIRCLE_ENABLED = false
+	TALKING_CIRCLE_ENABLED = true
 }
 
 local voip = {}
@@ -50,7 +50,7 @@ end
 function DrawTalkingCircle(ped)
 	if GetPlayerPed(-1) ~= ped then
 		local x, y, z = table.unpack(GetEntityCoords(ped, true))
-		DrawMarker(27, x, y, z - 1.0, 0, 0, 0, 0, 0, 0, 0.5, 0.5, 0.5, 57 --[[r]], 176 --[[g]], 132 --[[b]], 70, 0, 0, 2, 0, 0, 0, 0)
+		DrawMarker(27, x, y, z - 0.96, 0, 0, 0, 0, 0, 0, 0.71, 0.71, 0.71, 57 --[[r]], 176 --[[g]], 132 --[[b]], 70, 0, 0, 2, 0, 0, 0, 0)
 	end
 end
 

@@ -4,4 +4,4 @@ end)
 
 TriggerEvent('es:addCommand', 'talkingcircle', function(source, args, user)
 	TriggerClientEvent('voip:toggleTalkingCircle', source)
-end)
+end, {help = "Toggle talking cirlces (markers at feet when players speak)"})

@@ -161,10 +161,12 @@ Citizen.CreateThread(function()
 								SetBlipColour(blip, 3)
 								SetBlipSprite(blip, 1)
 								SetBlipScale( blip, 1.0)
+								SetBlipAsShortRange(blip, true)
 							else
 								SetBlipSprite(blip, 1)
 								SetBlipScale( blip, 1.0)
 								SetBlipColour(blip, 3)
+								SetBlipAsShortRange(blip, true)
 							end
 							SetBlipNameToPlayerName(blip, id)
 							--Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, true ) -- Player Blip indicator
@@ -176,10 +178,12 @@ Citizen.CreateThread(function()
 								SetBlipColour(blip, 1)
 								SetBlipSprite(blip, 1)
 								SetBlipScale( blip, 1.0)
+								SetBlipAsShortRange(blip, true)
 							else
 								SetBlipSprite(blip, 1)
 								SetBlipScale( blip, 1.0)
 								SetBlipColour(blip, 1)
+								SetBlipAsShortRange(blip, true)
 							end
 							SetBlipNameToPlayerName(blip, id)
 							--Citizen.InvokeNative( 0x5FBCA48327B914DF, blip, true ) -- Player Blip indicator
