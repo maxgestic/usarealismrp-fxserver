@@ -35,9 +35,11 @@ end
 
 -- end util functions / start commands
 
+--[[
 TriggerEvent('es:addCommand', 'help', function(source, args, user)
 	helpText(source)
 end, {help = "Show help commands."})
+--]]
 
 TriggerEvent('es:addCommand', 'commands', function(source, args, user)
 	commandsText(source)
