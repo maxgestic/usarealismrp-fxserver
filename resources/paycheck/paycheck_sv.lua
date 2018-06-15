@@ -25,6 +25,12 @@ AddEventHandler('paycheck:welfare', function()
 				paycheckAmount = 2100
 			  elseif cop_rank == 7 then
 				paycheckAmount = 2600
+			  elseif cop_rank == 8 then
+				paycheckAmount = 2900
+			  elseif cop_rank == 9 then
+				paycheckAmount = 3100
+			  elseif cop_rank == 10 then
+				paycheckAmount = 3500
 			  end
 		elseif job == "ems" or job == "fire" then
 			local rank = user.getActiveCharacterData("emsRank")

@@ -202,16 +202,16 @@ TriggerEvent('es:addCommand', 'givecash', function(source, args, user)
 	if (args[2] ~= nil and tonumber(args[3]) > 0) then
 		fromPlayer = tonumber(source)
 		toPlayer = tonumber(args[2])
-		TriggerEvent("es:getPlayerFromId", toPlayer, function(toUser)
-			if toUser then
-				local to_user_name = toUser.getActiveCharacterData("firstName") .. " " .. toUser.getActiveCharacterData("lastName")
-				amount = tonumber(args[3])
-				amount = round(amount, 0)
-				-- todo: update names when giving cash to character names
-				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Giving " .. to_user_name .. " ^2$" .. amount .. "^0...");
-				TriggerClientEvent('bank:givecash', source, toPlayer, amount, from_user_name, source)
-			end
-		end)
+		local toUser = exports["essentialmode"]:getPlayerFromId(toPlayer)
+		--TriggerEvent("es:getPlayerFromId", toPlayer, function(toUser)
+		if toUser then
+			local to_user_name = toUser.getActiveCharacterData("fullName")
+			amount = tonumber(args[3])
+			amount = round(amount, 0)
+			--TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Giving " .. to_user_name .. " ^2$" .. amount .. "^0...");
+			TriggerClientEvent('bank:givecash', source, toPlayer, amount, from_user_name, source)
+		end
+		--end)
 	else
 		TriggerClientEvent('chatMessage', source, "", {0, 0, 200}, "^1Use format /givecash [id] [amount]^0")
 		return false
@@ -230,12 +230,15 @@ AddEventHandler('bank:givecash', function(toPlayer, amount)
 		local user_money_1 = user.getActiveCharacterData("money")
 		if (tonumber(user_money_1) >= tonumber(amount)) then
 			user.setActiveCharacterData("money", user_money_1 - amount)
-			TriggerEvent('es:getPlayerFromId', toPlayer, function(recipient)
-				local user_money_2 = recipient.getActiveCharacterData("money")
-				recipient.setActiveCharacterData("money", user_money_2 + amount)
-				TriggerClientEvent("es_freeroam:notify", source, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Gave cash: ~r~-$".. amount .." ~n~~s~Wallet: ~g~$" .. user_money_1 - amount)
-				TriggerClientEvent("es_freeroam:notify", toPlayer, "CHAR_BANK_MAZE", 1, "Maze Bank", false, "Received cash: ~g~$".. amount .." ~n~~s~Wallet: ~g~$" .. user_money_2 + amount)
-			end)
+			--TriggerEvent('es:getPlayerFromId', toPlayer, function(recipient)
+			local recipient = exports["essentialmode"]:getPlayerFromId(toPlayer)
+			local user_money_2 = recipient.getActiveCharacterData("money")
+			recipient.setActiveCharacterData("money", user_money_2 + amount)
+			TriggerClientEvent("usa:notify", source, "You gave " .. recipient.getActiveCharacterData("fullName") .. " ~y~$".. amount)
+			TriggerClientEvent("usa:notify", toPlayer, user.getActiveCharacterData("fullName") .. " gave you ~g~$".. amount)
+			TriggerClientEvent('chatMessage', source, "", {0, 0, 200}, "^0You gave " .. recipient.getActiveCharacterData("fullName") .. " ^3$".. amount)
+			TriggerClientEvent('chatMessage', toPlayer, "", {0, 0, 200}, "^0" .. user.getActiveCharacterData("fullName") .. " gave you ^2$".. amount)
+			--end)
 		else
 			if (tonumber(user_money_1) < tonumber(amount)) then
 				TriggerClientEvent('chatMessage', source, "", {0, 0, 200}, "^1Not enough money in wallet!^0")
