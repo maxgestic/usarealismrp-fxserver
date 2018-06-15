@@ -261,9 +261,10 @@ TriggerEvent('es:addGroupCommand', 'bring', "mod", function(source, args, user)
 		local player = tonumber(args[2])
 
 		-- User permission check
-		TriggerEvent("es:getPlayerFromId", player, function(target)
+		--TriggerEvent("es:getPlayerFromId", player, function(target)
+			local target = exports["essentialmode"]:getPlayerFromId(player)
 
-			TriggerClientEvent('es_admin:teleportUser', target.get('source'), user.getCoords().x, user.getCoords().y, user.getCoords().z)
+			TriggerClientEvent('es_admin:teleportUser', target.get('source'), source)
 
 			TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have brought by ^2" .. GetPlayerName(source))
 			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Player ^2" .. GetPlayerName(player) .. "^0 has been brought")
@@ -280,7 +281,7 @@ TriggerEvent('es:addGroupCommand', 'bring', "mod", function(source, args, user)
 					end
 				end
 			end)
-		end)
+		--end)
 	else
 		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
 	end
@@ -320,35 +321,37 @@ local frozen = {}
 TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, user)
 	if args[2] == "pd" then
 		local pdCoords = {x=-447.256 , y=6000.667 , z=30.686}
-		TriggerClientEvent('es_admin:teleportUser', source, pdCoords.x, pdCoords.y, pdCoords.z)
+		TriggerClientEvent('es_admin:teleportUserByCoords', source, pdCoords.x, pdCoords.y, pdCoords.z)
 		return
 	elseif args[2] == "c" or args[2] == "coords" then
-		TriggerClientEvent('es_admin:teleportUser', source, tonumber(args[3]), tonumber(args[4]), tonumber(args[5]))
+		TriggerClientEvent('es_admin:teleportUserByCoords', source, tonumber(args[3]), tonumber(args[4]), tonumber(args[5]))
 		return
 	elseif args[2] == "wp" then
 		TriggerClientEvent("swayam:gotoWP", source)
 		return
 	elseif args[2] == "fd" then
 		local pdCoords = {x=-366.30380249023, y=6102.0532226563, z=35.439697265625}
-		TriggerClientEvent('es_admin:teleportUser', source, pdCoords.x, pdCoords.y, pdCoords.z)
+		TriggerClientEvent('es_admin:teleportUserByCoords', source, pdCoords.x, pdCoords.y, pdCoords.z)
 		return
 	elseif args[2] == "247" then
 		local pdCoords = {}
-		TriggerClientEvent('es_admin:teleportUser', source, pdCoords.x, pdCoords.y, pdCoords.z)
+		TriggerClientEvent('es_admin:teleportUserByCoords', source, pdCoords.x, pdCoords.y, pdCoords.z)
 		return
 	elseif args[2] == "fd" then
 		local pdCoords = {}
-		TriggerClientEvent('es_admin:teleportUser', source, pdCoords.x, pdCoords.y, pdCoords.z)
+		TriggerClientEvent('es_admin:teleportUserByCoords', source, pdCoords.x, pdCoords.y, pdCoords.z)
 		return
 	end
 	if tonumber(args[2]) ~= nil then
 		if GetPlayerName(tonumber(args[2])) then
 			local player = tonumber(args[2])
 
-			TriggerEvent("es:getPlayerFromId", player, function(target)
+			--TriggerEvent("es:getPlayerFromId", player, function(target)
+				local target = exports["essentialmode"]:getPlayerFromId(player)
+
 				if (target) then
 
-					TriggerClientEvent('es_admin:teleportUser', source, target.getCoords().x, target.getCoords().y, target.getCoords().z)
+					TriggerClientEvent('es_admin:teleportUser', source, player)
 
 					TriggerClientEvent('chatMessage', player, "SYSTEM", {255, 0, 0}, "You have been teleported to by ^2" .. GetPlayerName(source))
 					TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Teleported to player ^2" .. GetPlayerName(player) .. "")
@@ -366,7 +369,7 @@ TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, user)
 						end
 					end)
 				end
-			end)
+			--end)
 		else
 			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Incorrect player ID!")
 		end

@@ -117,7 +117,14 @@ AddEventHandler("es_admin:freezePlayer", function(state)
 end)
 
 RegisterNetEvent('es_admin:teleportUser')
-AddEventHandler('es_admin:teleportUser', function(x, y, z)
+AddEventHandler('es_admin:teleportUser', function(destination_server_id)
+	local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(destination_server_id))))
+	SetEntityCoords(GetPlayerPed(-1), x, y, z)
+	states.frozenPos = {x = x, y = y, z = z}
+end)
+
+RegisterNetEvent('es_admin:teleportUserByCoords')
+AddEventHandler('es_admin:teleportUserByCoords', function(x, y, z)
 	SetEntityCoords(GetPlayerPed(-1), x, y, z)
 	states.frozenPos = {x = x, y = y, z = z}
 end)

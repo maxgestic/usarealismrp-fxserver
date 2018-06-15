@@ -22,13 +22,14 @@ local loaded = false
 local cashy = 0
 local oldPos
 
+--[[
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(1000)
 		local pos = GetEntityCoords(GetPlayerPed(-1))
 
 		if(oldPos ~= pos)then
-			TriggerServerEvent('es:updatePositions', pos.x, pos.y, pos.z)
+			--TriggerServerEvent('es:updatePositions', pos.x, pos.y, pos.z)
 
 			if(loaded)then
 				SendNUIMessage({
@@ -42,6 +43,7 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
+--]]
 
 local myDecorators = {}
 
