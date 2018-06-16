@@ -25,7 +25,7 @@ TriggerEvent('es:addGroupCommand', 'whisper', 'mod', function(source, args, user
 					if id and player then
 						local playerGroup = player.getGroup()
 						if playerGroup == "owner" or playerGroup == "superadmin" or playerGroup == "admin" or playerGroup == "mod" then
-							TriggerClientEvent('chatMessage', source, "STAFF to (" .. GetPlayerName(target) .. ")", {90, 90, 60}, message)
+							TriggerClientEvent('chatMessage', id, "STAFF to (" .. GetPlayerName(target) .. ")", {90, 90, 60}, message)
 						end
 					end
 				end

@@ -35,11 +35,17 @@ AddEventHandler("properties:checkSpawnPoint", function(usource)
 		for name, info in pairs(PROPERTIES) do
 			if info.x == spawn.x and info.y == spawn.y and info.z == spawn.z then
 				print("property still valid after eviction!")
+				if info.owner.identifier == GetPlayerIdentifiers(usource)[1] then
+					print("Still owns property, leaving spawn!")
+				else 
+					print("does not own property anymore, resetting spawn!")
+					player.setActiveCharacterData("spawn", nil)
+				end
 				return
 			end
 		end
 		-- not valid at this point, remove
-		print("invalid spawn detected!")
+		print("removing set spawn!")
 		player.setActiveCharacterData("spawn", nil)
 	end
 end)
