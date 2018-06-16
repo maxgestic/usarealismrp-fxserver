@@ -96,6 +96,10 @@ function DrawPlayerList()
 					r = 41
 					g = 153
 					b = 144
+				elseif job == "reporter" then
+					r = 247
+					g = 152
+					b = 64
 				elseif job == "judge" then
 					r = 140
 					g = 33

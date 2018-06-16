@@ -54,6 +54,8 @@ AddEventHandler('paycheck:welfare', function()
 			paycheckAmount = 650
 		elseif job == "tow" then
 			paycheckAmount = 650
+		elseif job == "reporter" then
+			paycheckAmount = 650
 		elseif job == "judge" then
 			paycheckAmount = 2600
 		else
@@ -74,6 +76,8 @@ AddEventHandler('paycheck:welfare', function()
 				msg = msg .. "of $" .. paycheckAmount .. " from ^3Downtown Taxi Co.^0!"
 			elseif job == "tow" then
 				msg = msg .. "of $" .. paycheckAmount .. " from ^3Bubba's Tow Co.^0!"
+			elseif job == "reporter" then
+				msg = msg .. "of $" .. paycheckAmount .. " from ^3Weazel News^0!"
 			elseif job == "sheriff" then
 				msg = msg .. "of $" .. paycheckAmount .. " from the ^3Blaine County Sheriff's Office^0!"
 			elseif job == "ems" then
