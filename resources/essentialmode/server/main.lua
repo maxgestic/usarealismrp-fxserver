@@ -5,6 +5,10 @@
 
 _VERSION = '4.1.4'
 
+---------------------------------------------------------------------------
+-- Variable Declarations --
+---------------------------------------------------------------------------
+
 -- Server
 Users = {}
 commands = {}
@@ -30,22 +34,81 @@ settings.defaultSettings = {
 }
 settings.sessionSettings = {}
 commandSuggestions = {}
+local justJoined = {}
+
+---------------------------------------------------------------------------
+-- Function Definitions --
+---------------------------------------------------------------------------
 
 function getCommands()
 	return commandSuggestions
 end
 
--- Version check
--- PerformHttpRequest("http://fivem.online/version.txt", function(err, rText, headers)
--- 	print("\nCurrent version: " .. _VERSION)
--- 	print("Updater version: " .. rText .. "\n")
+function CanGroupTarget(group, target)
+	if (group == nil or target == nil) then return false end
+	return groups[group]:canTarget(target)
+end
 
--- 	if rText ~= _VERSION then
--- 		print("\nVersion mismatch, you are currently not using the newest stable version of essentialmode. Please update\n")
--- 	else
--- 		print("Everything is fine!\n")
--- 	end
--- end, "GET", "", {what = 'this'})
+function addCommand(command, callback, suggestion)
+	commands[command] = {}
+	commands[command].perm = 0
+	commands[command].group = "user"
+	commands[command].job = "everyone"
+	commands[command].cmd = callback
+
+	if suggestion then
+		if not suggestion.params or not type(suggestion.params) == "table" then suggestion.params = {} end
+		if not suggestion.help or not type(suggestion.help) == "string" then suggestion.help = "" end
+		suggestion.job = "everyone"
+		suggestion.group = "user"
+
+		commandSuggestions[command] = suggestion
+	end
+
+	debugMsg("Command added: " .. command)
+end
+
+function addJobCommand(command, job, callback, suggestion)
+	commands[command] = {}
+	commands[command].perm = 0
+	commands[command].group = "user"
+	commands[command].job = job
+	commands[command].cmd = callback
+
+	if suggestion then
+		if not suggestion.params or not type(suggestion.params) == "table" then suggestion.params = {} end
+		if not suggestion.help or not type(suggestion.help) == "string" then suggestion.help = "" end
+		suggestion.job = job
+		suggestion.group = "user"
+
+		commandSuggestions[command] = suggestion
+	end
+
+	debugMsg("Job command added: " .. command .. ", requires job level: " .. table.concat(job, ", "))
+end
+
+function addGroupCommand(command, group, callback, suggestion)
+	commands[command] = {}
+	commands[command].perm = math.maxinteger
+	commands[command].group = group
+	commands[command].job = { "everyone" }
+	commands[command].cmd = callback
+
+	if suggestion then
+		if not suggestion.params or not type(suggestion.params) == "table" then suggestion.params = {} end
+		if not suggestion.help or not type(suggestion.help) == "string" then suggestion.help = "" end
+		suggestion.job = "everyone"
+		suggestion.group = group
+
+		commandSuggestions[command] = suggestion
+	end
+
+	debugMsg("Group command added: " .. command .. ", requires group: " .. group)
+end
+
+---------------------------------------------------------------------------
+-- Event Handlers --
+---------------------------------------------------------------------------
 
 AddEventHandler('playerDropped', function()
 	local numberSource = tonumber(source)
@@ -85,8 +148,6 @@ AddEventHandler('sway:updateDB', function(source)
 	--]]
 end)
 
-local justJoined = {}
-
 RegisterServerEvent('es:firstJoinProper')
 AddEventHandler('es:firstJoinProper', function()
 	registerUser(GetPlayerIdentifiers(source)[1], tonumber(source))
@@ -122,11 +183,6 @@ AddEventHandler("es:setDefaultSettings", function(tbl)
 
 	debugMsg("Default settings edited.")
 end)
-
-function CanGroupTarget(group, target)
-	if (group == nil or target == nil) then return false end
-	return groups[group]:canTarget(target)
-end
 
 AddEventHandler('chatMessageLocation', function(source, n, message, location)
 	if(startswith(message, settings.defaultSettings.commandDelimeter))then
@@ -178,70 +234,13 @@ AddEventHandler('chatMessageLocation', function(source, n, message, location)
 	end
 end)
 
-function addCommand(command, callback, suggestion)
-	commands[command] = {}
-	commands[command].perm = 0
-	commands[command].group = "user"
-	commands[command].job = "everyone"
-	commands[command].cmd = callback
-
-	if suggestion then
-		if not suggestion.params or not type(suggestion.params) == "table" then suggestion.params = {} end
-		if not suggestion.help or not type(suggestion.help) == "string" then suggestion.help = "" end
-		suggestion.job = "everyone"
-		suggestion.group = "user"
-
-		commandSuggestions[command] = suggestion
-	end
-
-	debugMsg("Command added: " .. command)
-end
-
 AddEventHandler('es:addCommand', function(command, callback, suggestion)
 	addCommand(command, callback, suggestion)
 end)
 
-function addJobCommand(command, job, callback, suggestion)
-	commands[command] = {}
-	commands[command].perm = 0
-	commands[command].group = "user"
-	commands[command].job = job
-	commands[command].cmd = callback
-
-	if suggestion then
-		if not suggestion.params or not type(suggestion.params) == "table" then suggestion.params = {} end
-		if not suggestion.help or not type(suggestion.help) == "string" then suggestion.help = "" end
-		suggestion.job = job
-		suggestion.group = "user"
-
-		commandSuggestions[command] = suggestion
-	end
-
-	debugMsg("Job command added: " .. command .. ", requires job level: " .. table.concat(job, ", "))
-end
-
 AddEventHandler('es:addJobCommand', function(command, job, callback, suggestion)
 	addJobCommand(command, job, callback, suggestion)
 end)
-
-function addGroupCommand(command, group, callback, suggestion)
-	commands[command] = {}
-	commands[command].perm = math.maxinteger
-	commands[command].group = group
-	commands[command].job = { "everyone" }
-	commands[command].cmd = callback
-
-	if suggestion then
-		if not suggestion.params or not type(suggestion.params) == "table" then suggestion.params = {} end
-		if not suggestion.help or not type(suggestion.help) == "string" then suggestion.help = "" end
-		suggestion.job = "everyone"
-		suggestion.group = group
-
-		commandSuggestions[command] = suggestion
-	end
-
-	debugMsg("Group command added: " .. command .. ", requires group: " .. group)
-end
 
 AddEventHandler('es:addGroupCommand', function(command, perm, callback, suggestion)
 	addGroupCommand(command, perm, callback, suggestion)
@@ -254,32 +253,46 @@ AddEventHandler('es:updatePositions', function(x, y, z)
 	end
 end)
 
+---------------------------------------------------------------------------
+-- Threads --
+---------------------------------------------------------------------------
+
 Citizen.CreateThread(function()
-	local minutes = 15
-	local interval = minutes * 60000
+	
 	function saveData()
 		print("calling saveData()...")
-		SetTimeout(interval, function()
-			print("inside of the SetTimeout()")
-			TriggerEvent("es:getPlayers", function(players)
-				print("inside of es:getPlayers")
-				if players then
-					print("players existed")
-					for id, player in pairs(players) do
-						if player then
-							print("player existed")
-							local ems_char = player.getEmsCharacter()
-							if not ems_char then ems_char = {} end
-							db.updateUser(player.get('identifier'), {characters = player.getCharacters(), policeCharacter = player.getPoliceCharacter(), emsCharacter = ems_char}, function()
-								print("saved player #" .. id .. "'s data!'")
-							end)
-						end
-					end
+		TriggerEvent("es:getPlayers", function(players)
+			print("inside of es:getPlayers")
+			if not players then
+				return
+			end
+
+			print("players existed")
+			for id, player in pairs(players) do
+				if not player then
+					return
 				end
-			end)
-			saveData()
+				print("player existed")
+
+				db.updateUser(
+					player.get('identifier'),
+					{
+						characters = player.getCharacters(),
+						policeCharacter = (player.getPoliceCharacter() or {}),
+						emsCharacter = (player.getEmsCharacter() or {})
+					},
+					function()
+						print("saved player #" .. id .. "'s data!'")
+					end
+				)
+			end
 		end)
 	end
-
-	saveData()
+	
+	local minutes = 15
+	
+	while true do
+		Citizen.Wait(minutes * 60000)
+		saveData()
+	end
 end)
