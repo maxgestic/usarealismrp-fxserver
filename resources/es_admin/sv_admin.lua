@@ -127,9 +127,9 @@ TriggerEvent('es:addCommand', 'help', function(source, args, user)
 		TriggerClientEvent("chatMessage", tonumber(source), "", {}, "^3Usage: ^0/help [message]")
 	end
 end, {
-	help = "A place to ask for OOC support from staff",
+	help = "A way to ask staff for support or help",
 	params = {
-		{ name = "message", help = "Reason for the report" }
+		{ name = "message", help = "Your message to the support team" }
 	}
 })
 
