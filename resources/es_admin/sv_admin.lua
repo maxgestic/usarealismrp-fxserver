@@ -105,23 +105,27 @@ end, {
 
 TriggerEvent('es:addCommand', 'help', function(source, args, user)
 	table.remove(args, 1)
-	local message = table.concat(args, " ")
-	if not message then
-		TriggerClientEvent("chatMessage", tonumber(source), "", {}, "^3Usage: ^0/help [message]")
-		return
-	end
-	TriggerEvent("es:getPlayers", function(players)
-		if players then
-			for id, player in pairs(players) do
-				if id and player then
-					local playerGroup = player.getGroup()
-					if playerGroup == "owner" or playerGroup == "superadmin" or playerGroup == "admin" or playerGroup == "mod" then
-						TriggerClientEvent("chatMessage", id, "", {}, "^4HELP [" .. user.getActiveCharacterData("fullName") .. " / #" .. source .. "] : ^0" .. message)
+	if #args > 0 then
+		local message = table.concat(args, " ")
+		if not message then
+			TriggerClientEvent("chatMessage", tonumber(source), "", {}, "^3Usage: ^0/help [message]")
+			return
+		end
+		TriggerEvent("es:getPlayers", function(players)
+			if players then
+				for id, player in pairs(players) do
+					if id and player then
+						local playerGroup = player.getGroup()
+						if playerGroup == "owner" or playerGroup == "superadmin" or playerGroup == "admin" or playerGroup == "mod" then
+							TriggerClientEvent("chatMessage", id, "", {}, "^4HELP [" .. user.getActiveCharacterData("fullName") .. " / #" .. source .. "] : ^0" .. message)
+						end
 					end
 				end
 			end
-		end
-	end)
+		end)
+	else 
+		TriggerClientEvent("chatMessage", tonumber(source), "", {}, "^3Usage: ^0/help [message]")
+	end
 end, {
 	help = "A place to ask for OOC support from staff",
 	params = {

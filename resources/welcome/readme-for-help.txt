@@ -1,1 +1,0 @@
-server.lua in this folder is where custom '/' commands go

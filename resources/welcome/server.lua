@@ -5,7 +5,7 @@ function helpText(source)
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "Look at the icons on your map to see where jobs available jobs are.")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "You can get a cell phone at the general store. You can use it to call for a taxi, towtruck, police, EMS, etc")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "Once you have one, do F1 > Cell Phone > Use to open it.")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "1) ^3/help^0 - this menu")
+	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "1) ^3/info^0 - this menu")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "2) ^3/commands^0 - available commands")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "3) ^3/discord^0 - discord server link")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "4) ^3/rules^0 - to see the server rules")
@@ -35,11 +35,9 @@ end
 
 -- end util functions / start commands
 
---[[
-TriggerEvent('es:addCommand', 'help', function(source, args, user)
+TriggerEvent('es:addCommand', 'info', function(source, args, user)
 	helpText(source)
 end, {help = "Show help commands."})
---]]
 
 TriggerEvent('es:addCommand', 'commands', function(source, args, user)
 	commandsText(source)
