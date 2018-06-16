@@ -103,7 +103,18 @@ RegisterServerEvent("interaction:dropItem")
 AddEventHandler("interaction:dropItem", function(itemName)
 	local userSource = tonumber(source)
 	itemName = removeQuantityFromItemName(itemName)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--------------------
+	-- play animation --
+	--------------------
+	local anim = {
+		dict = "anim@move_m@trash",
+		name = "pickup"
+	}
+	TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 1)
+	----------------
+	-- drop item  --
+	----------------
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		-- inventory
 		local inventory = user.getActiveCharacterData("inventory")
 		for i = 1, #inventory do
@@ -144,7 +155,6 @@ AddEventHandler("interaction:dropItem", function(itemName)
 				return
 			end
 		end
-	end)
 end)
 
 function removeQuantityFromItemName(itemName)
