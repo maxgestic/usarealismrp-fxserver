@@ -21,7 +21,7 @@ local clientid = -1
 
 RegisterNetEvent("swayam:SetWayPoint")
 AddEventHandler("swayam:SetWayPoint", function(x, y, z, sprite, route_color, wp_name)
-	
+
 	--Citizen.Trace("Sprite: " .. sprite .. " | Route Color: " .. route_color)
 	if myblip ~= "" then
 		RemoveBlip(myblip)
@@ -39,7 +39,7 @@ end)
 --Waypoint that disables when you reach it
 RegisterNetEvent("swayam:SetWayPointWithAutoDisable")
 AddEventHandler("swayam:SetWayPointWithAutoDisable", function(x, y, z, sprite, route_color, wp_name)
-	
+
 	--Citizen.Trace("Sprite: " .. sprite .. " | Route Color: " .. route_color)
 	if myblip ~= nil then
 		RemoveBlip(myblip)
@@ -51,13 +51,13 @@ AddEventHandler("swayam:SetWayPointWithAutoDisable", function(x, y, z, sprite, r
 	BeginTextCommandSetBlipName("STRING")
 	AddTextComponentString(wp_name)
 	EndTextCommandSetBlipName(myblip)
-	
-	
+
+
 	Citizen.CreateThread(function()
-	
+
 		local playerReachedWayPoint = true
 		while playerReachedWayPoint do
-			
+
 			--DrawMarker(1, tonumber(x),  tonumber(y), tonumber(z), 0, 0, 0, 0, 0, 0, 10.0, 10.0, 1.0, 0, 0, 255, 90, 0, 0, 2, 0, 0, 0, 0)
 			local ply = GetPlayerPed(-1)
 			local plyCoords = GetEntityCoords(ply, 0)
@@ -67,11 +67,11 @@ AddEventHandler("swayam:SetWayPointWithAutoDisable", function(x, y, z, sprite, r
 				playerReachedWayPoint = false
 			end
 			Wait(0)
-			
+
 		end
 		--Citizen.Trace("Reached...disabling wp")
 		TriggerEvent("swayam:RemoveWayPoint")
-	end)	
+	end)
 
 end)
 
@@ -83,7 +83,7 @@ AddEventHandler("swayam:SetWayPointToPlayer", function(sprite, route_color, serv
 		if myblip ~= "" then
 			Citizen.Trace("DEBUG: Blip exists, removing" )
 			RemoveBlip(myblip)
-		end	
+		end
 		for id = 0, 64 do
 		if NetworkIsPlayerActive(id) and GetPlayerServerId(id) == tonumber(serverid) then
 				clientid = id
@@ -129,10 +129,10 @@ AddEventHandler("swayam:SetWayPointToPlayer", function(sprite, route_color, serv
 				AddTextComponentString(wp_name)
 				EndTextCommandSetBlipName(myblip)
 				Wait(500)
-			end			
+			end
 		end)
-	end	
-	
+	end
+
 end)
 
 RegisterNetEvent("swayam:RemoveWayPoint")
@@ -177,7 +177,7 @@ AddEventHandler("swayam:gotoWP", function(model)
 	end
 
 	local waypointBlip = GetFirstBlipInfoId(8) -- 8 = Waypoint ID
-	local x,y,z = table.unpack(Citizen.InvokeNative(0xFA7C7F0AADF25D09, waypointBlip, Citizen.ResultAsVector())) 
+	local x,y,z = table.unpack(Citizen.InvokeNative(0xFA7C7F0AADF25D09, waypointBlip, Citizen.ResultAsVector()))
 
 
 
@@ -206,7 +206,7 @@ AddEventHandler("swayam:gotoWP", function(model)
 
 	SetEntityCoordsNoOffset(targetPed, x,y,z, 0, 0, 1)
 	TriggerEvent('chatMessage', "SYSTEM", {255, 0, 0}, "Teleported to waypoint")
-	
+
 end)
 -------------------------------------------------------------------
 
@@ -249,5 +249,10 @@ AddEventHandler("swayam:notification", function(name, msg, icon)
 	DrawNotification(0,1)
 end)
 
--------------------------------------------------------------------
+RegisterNetEvent("swayam:getCoords")
+AddEventHandler("swayam:getCoords", function()
+	local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1)))
+  TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0x = " .. x .. " | y = " .. y .. " | z = " .. z)
+end)
 
+-------------------------------------------------------------------
