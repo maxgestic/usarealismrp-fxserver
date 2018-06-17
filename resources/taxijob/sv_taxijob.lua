@@ -2,6 +2,17 @@ local timeout = false
 
 local DUTY_FEE = 300
 
+local BASE_PAY = 200
+
+RegisterServerEvent("taxi:payDriver")
+AddEventHandler("taxi:payDriver", function(distance)
+	local reward = math.ceil(BASE_PAY + (0.40 * distance))
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	local user_money = user.getActiveCharacterData("money")
+	user.setActiveCharacterData("money", user_money + reward)
+	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "^0You were payed: ^2$" .. reward)
+end)
+
 RegisterServerEvent("taxi:setJob")
 AddEventHandler("taxi:setJob", function(property)
 	local userSource = source
@@ -26,7 +37,7 @@ AddEventHandler("taxi:setJob", function(property)
 			TriggerClientEvent("usa:notify", userSource, "You don't have enough money to pay the security fee!")
 			return
 		end
-		
+
 		if timeout then
 			print("player is on timeout and cannot go on duty for downtown taxi co!")
 			TriggerClientEvent("usa:notify", userSource, "Can't retrieve another car! Please wait a little.")
