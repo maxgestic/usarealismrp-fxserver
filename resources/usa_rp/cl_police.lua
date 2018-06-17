@@ -294,7 +294,7 @@ Citizen.CreateThread(function()
 			last_shot_time = GetGameTimer()
 			--print("IsInPopulatedArea(): " .. tostring(IsInPopulatedArea()))
 			if IsInPopulatedArea() then
-				if math.random(100) < 32 then
+				if math.random(100) < 28 then
 					if not sending_msg then
 						sending_msg = true
 						if GetGameTimer() > timer.last_press + timer.delay then
@@ -362,7 +362,7 @@ function IsInPopulatedArea()
 	local my_coords = GetEntityCoords(me, true)
 	for k = 1, #AREAS do
 		if Vdist(my_coords.x, my_coords.y, my_coords.z, AREAS[k].x, AREAS[k].y, AREAS[k].z) <= AREAS[k].range then
-			print("within range of populated area!")
+			--print("within range of populated area!")
 			return true
 		end
 	end

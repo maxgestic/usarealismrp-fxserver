@@ -65,8 +65,7 @@ Citizen.CreateThread(function()
 		print("requesting hash...")
 		RequestModel(peds[i].hash)
 		while not HasModelLoaded(peds[i].hash) do
-			RequestModel(peds[i].hash)
-			Citizen.Wait(0)
+			Citizen.Wait(100)
 		end
 		print("spawning ped...")
 		print("hash: " .. peds[i].hash)
