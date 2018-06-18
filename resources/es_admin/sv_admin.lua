@@ -970,7 +970,7 @@ end)
 	})
 
 	-- temp ban command // Usage: /tempban id time (in hours) reason
-	TriggerEvent('es:addGroupCommand', 'tempban', "admin", function(source, args, user)
+	TriggerEvent('es:addGroupCommand', 'tempban', "mod", function(source, args, user)
 		local userSource = tonumber(source)
 		-- add player to ban list
 		TriggerEvent('es:exposeDBFunctions', function(GetDoc)

@@ -20,16 +20,6 @@ AddEventHandler("phone:notify", function(msg)
 	DrawCoolLookingNotificationNoPic(msg)
 end)
 
-RegisterNetEvent("pm:sendMessage")
-AddEventHandler("pm:sendMessage", function(from, msg)
-	TriggerEvent("chatMessage", "TEXT (" .. from .. ")", { 255, 162, 0 }, msg)
-end)
-
-RegisterNetEvent("pm:help")
-AddEventHandler("pm:help", function()
-	TriggerEvent("chatMessage", "TEXT", { 255, 162, 0 }, "^0Usage: /text <id> <msg>")
-end)
-
 -- start of NUI menu
 
 local phoneEnabled = false
@@ -128,23 +118,31 @@ AddEventHandler("phone:requestCallPermission", function(phone_number, caller_sou
 		responded = false
 		timer = true
 		Citizen.CreateThread(function()
-				while not responded and time_to_respond > 0 do
-					-- handle response --
-					DrawSpecialText("Accept call from " .. caller_name .. "? ~g~Y~w~/~r~BACKSPACE~w~ (" .. time_to_respond .. ")" )
-					if IsControlJustPressed(1, 246) then -- Y key
-						Citizen.Trace("player accepted phone call from: " .. caller_name)
-						responded = true
-						TriggerServerEvent("phone:respondedToCall", true, phone_number, caller_source, caller_name)
-					elseif IsControlJustPressed(1, 177) then -- BACKSPACE key
-						Citizen.Trace("player rejected phone call from: " .. caller_name)
-						responded = true
-						TriggerServerEvent("phone:respondedToCall", false, phone_number, caller_source, caller_name)
-					end
-					Wait(0)
+			while not responded and time_to_respond > 0 do
+				-- handle response --
+				DrawSpecialText("Accept call from " .. caller_name .. "? ~g~Y~w~/~r~BACKSPACE~w~ (" .. time_to_respond .. ")" )
+				if IsControlJustPressed(1, 246) then -- Y key
+					--print("player accepted phone call from: " .. caller_name)
+					TriggerEvent("chatMessage", "", {}, "Started call with: " .. caller_name)
+					responded = true
+					TriggerServerEvent("phone:respondedToCall", true, phone_number, caller_source, caller_name)
+					return
+				elseif IsControlJustPressed(1, 177) then -- BACKSPACE key
+					--print("player rejected phone call from: " .. caller_name)
+					TriggerEvent("chatMessage", "", {}, "Rejected call from: " .. caller_name)
+					responded = true
+					TriggerServerEvent("phone:respondedToCall", false, phone_number, caller_source, caller_name)
+					return
 				end
+				Wait(0)
+			end
+			-------------------------------
+			-- missed call at this point --
+			-------------------------------
+			TriggerEvent("chatMessage", "", {}, "Missed call from: " .. caller_name)
 		end)
 	else
-		print("Player was already on a call! Putting on busy!")
+		--print("Player was already on a call! Putting on busy!")
 		TriggerServerEvent("phone:respondedToCall", false, phone_number, caller_source, caller_name, true)
 		PlaySoundFrontend(-1, "Beep_Red", "DLC_HEIST_HACKING_SNAKE_SOUNDS", 1)
 	end
@@ -168,9 +166,9 @@ Citizen.CreateThread(function()
 			end
 			time_to_respond = TIME_TO_ANSWER_CALL
 			timer = false
-			Wait(0)
+			Wait(1)
 		end
-		Wait(0)
+		Wait(1)
 	end
 end)
 
@@ -188,7 +186,7 @@ end)
 RegisterNetEvent("phone:endCall")
 AddEventHandler("phone:endCall", function()
 	NetworkClearVoiceChannel()
-	print("call ended!")
+	--print("call ended!")
 	on_call = false
 	ClearPedTasks(GetPlayerPed(-1))
 	TriggerEvent("swayam:notification", "Whiz Wireless", "Call ~r~ended~w~.", "CHAR_MP_DETONATEPHONE")
