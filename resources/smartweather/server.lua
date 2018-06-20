@@ -26,10 +26,10 @@ weatherTree = {
 	["FOGGY"] = {"CLEAR","CLOUDS","SMOG","OVERCAST"},
 	["OVERCAST"] = {"CLEAR","CLOUDS","SMOG","FOGGY","RAIN","CLEARING"},
 	["RAIN"] = {"THUNDER","CLEARING","SNOW","SNOWLIGHT","OVERCAST"},
-	["THUNDER"] = {"RAIN","CLEARING","BLIZZARD"},
+	["THUNDER"] = {"RAIN","CLEARING"},
 	["CLEARING"] = {"CLEAR","CLOUDS","OVERCAST","FOGGY","SMOG","RAIN","SNOWLIGHT"},
 	["SNOW"] = {"BLIZZARD","RAIN","SNOWLIGHT"},
-	["BLIZZARD"] = {"SNOW","SNOWLIGHT","THUNDER"},
+	--["BLIZZARD"] = {"SNOW","SNOWLIGHT","THUNDER"},
 	["SNOWLIGHT"] = {"SNOW","RAIN","CLEARING"},
 }
 
@@ -38,7 +38,7 @@ windWeathers = {
 	["OVERCAST"] = true,
 	["RAIN"] = true,
 	["THUNDER"] = true,
-	["BLIZZARD"] = true,
+	--["BLIZZARD"] = true,
 	["XMAS"] = true,
 	["SNOW"] = true,
 	["CLOUDS"] = true
@@ -48,7 +48,7 @@ local resetFlag = false
 
 function getTableLength(T)
 	local count = 0
-	for _ in pairs(T) do 
+	for _ in pairs(T) do
 		count = count + 1
 	end
 	return count
@@ -91,11 +91,11 @@ end
 function getIdentifier( source, identifier )
     local ids = GetPlayerIdentifiers( source )
 
-    for k, v in pairs( ids ) do 
+    for k, v in pairs( ids ) do
         if(string.find(v, identifier..":"))then
             return v
         end
-    end 
+    end
 
     return nil
 end
@@ -242,7 +242,7 @@ function weatherCheck()
 	else
 		print("SmartWeather is currently disabled")
 	end
-	
+
 	weatherCheck() -- Start wait cycle again
 end
 

@@ -47,7 +47,7 @@ RegisterServerEvent("aircraft:getOwnedAircraft")
 AddEventHandler("aircraft:getOwnedAircraft", function()
   local usource = source
   local user = exports["essentialmode"]:getPlayerFromId(usource)
-  local user_aircraft = user.getActiveCharacterData("aircraft")
+  local user_aircraft = user.getActiveCharacterData("aircraft") or {}
   TriggerClientEvent("aircraft:ownedAircraftLoaded", usource, user_aircraft)
 end)
 
@@ -56,7 +56,7 @@ AddEventHandler("airshop:purchaseAircraft", function(aircraft, property)
   local price = prices.purchase[aircraft.name]
   local usource = tonumber(source)
   local user = exports["essentialmode"]:getPlayerFromId(usource)
-  local user_aircraft = user.getActiveCharacterData("aircraft")
+  local user_aircraft = user.getActiveCharacterData("aircraft") or {}
   if DEBUG then print("#aircraft: " .. #user_aircraft) end
   local umoney = user.getActiveCharacterData("money")
   if umoney - price >= 0 then
@@ -117,7 +117,7 @@ AddEventHandler("airshop:sellAircraft", function(aircraft)
   local user_money = user.getActiveCharacterData("money")
   local new_money = user_money + return_amount
   user.setActiveCharacterData("money", new_money)
-  local user_aircraft = user.getActiveCharacterData("aircraft")
+  local user_aircraft = user.getActiveCharacterData("aircraft") or {}
   for i = 1, #user_aircraft do
     if user_aircraft[i].id == aircraft.id then
       table.remove(user_aircraft, i)

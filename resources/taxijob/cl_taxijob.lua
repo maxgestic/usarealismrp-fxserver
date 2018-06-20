@@ -111,6 +111,7 @@ Citizen.CreateThread(function()
 		end
 		JOB.customer_ped = CreatePed(4, model, start_location.x, start_location.y, start_location.z, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
 		-- TODO: make ped start random scenario
+		SetEntityAsMissionEntity(JOB.customer_ped, true, true)
 		JOB.isOnJob = true
 		JOB.start = start_location
 		JOB.destination = end_location
