@@ -121,5 +121,7 @@ function myJob(job, source)
 		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "You currently work for ^4EMS^0.")
 	elseif job == "fire" then
 		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "You currently work for the ^1Fire Department^0.")
+  elseif job == "chickenFactory" then
+		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "You currently work for the ^3Cluckin' Bell^0.")
 	end
 end

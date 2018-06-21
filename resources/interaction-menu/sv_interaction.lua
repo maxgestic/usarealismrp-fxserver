@@ -126,6 +126,9 @@ AddEventHandler("interaction:dropItem", function(itemName)
 					user.setActiveCharacterData("inventory", inventory)
 					return
 				else
+					if inventory[i].name == "Chicken" then
+						TriggerClientEvent("chickenJob:spawnChicken", userSource)
+					end
 					table.remove(inventory, i)
 					user.setActiveCharacterData("inventory", inventory)
 					return

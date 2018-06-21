@@ -88,7 +88,8 @@ local blips = {
 	--{ title="Weed", colour = 2, id = 140, x = 2224.04, y = 5577.28, z = 52.7 },
 	{ title="Courthouse", colour = 38, id = 475, x = 317.283, y = -1631.1505, z = 31.59 },
 	{ title="Burns Events Center", colour = 4, id = 354, x = 1228.009, y = 3642.315, z = 32.79 },
-	{ title="Weazel News", colour = 4, id = 184, x = -249.6443, y = 6235.7524, z = 30.4893 }
+	{ title="Weazel News", colour = 4, id = 184, x = -249.6443, y = 6235.7524, z = 30.4893 },
+	{ title="Cluckin' Bell", colour = 4, id = 89, x = -69.9295, y = 6251.2900, z = 30.4893, scale = 0.7 }
 }
 
 Citizen.CreateThread(function()
@@ -96,7 +97,7 @@ Citizen.CreateThread(function()
 		info.blip = AddBlipForCoord(info.x, info.y, info.z)
 		SetBlipSprite(info.blip, info.id)
 		SetBlipDisplay(info.blip, 4)
-		SetBlipScale(info.blip, 0.9)
+		SetBlipScale(info.blip, info.scale or 0.8)
 		SetBlipColour(info.blip, info.colour)
 		SetBlipAsShortRange(info.blip, true)
 		BeginTextCommandSetBlipName("STRING")

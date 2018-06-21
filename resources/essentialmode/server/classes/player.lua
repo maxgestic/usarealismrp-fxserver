@@ -31,6 +31,7 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 
 	local rTable = {}
 
+	-- legacy function. Please use getCanActiveCharacterHoldItems() from now on
 	rTable.getCanActiveCharacterHoldItem = function(item_to_add)
 		--print("getting active character inventory weight!")
 		local current_weight = 0.0
@@ -64,8 +65,53 @@ function CreatePlayer(source, permission_level, identifier, group, characters, p
 				---------------------------------------------------------------------------------------
 				-- done adding all the inventory item weights, see if player has room for given item --
 				---------------------------------------------------------------------------------------
+				if not item_to_add.quantity then item_to_add.quantity = 1 end
 				if not item_to_add.weight then item_to_add.weight = 1.0 end
 				if current_weight + (item_to_add.weight * item_to_add.quantity) <= 100.0 then
+					return true
+				else
+					return false
+				end
+			end
+		end
+	end
+
+	-- allows for any quantity to be considered
+	rTable.getCanActiveCharacterHoldItems = function(item_to_add, quantity)
+		--print("getting active character inventory weight!")
+		local current_weight = 0.0
+		for i = 1, #self.characters do
+			local char = self.characters[i]
+			if char.active == true then
+				-----------------------------
+				-- ADD UP INVENTORY WEIGHT --
+				-----------------------------
+				local char_inventory = char.inventory
+				for j = 1, #char_inventory do
+					local item = char_inventory[j]
+					if item then
+						if not item.weight then item.weight = 1.0 end -- for players with old items that don't have a weight property yet
+						--print("adding item: " .. item.name .. ", weight: " .. item.weight)
+						current_weight = current_weight + (item.weight * item.quantity)
+					end
+				end
+				-----------------------------
+				-- ADD UP WEAPONS WEIGHT --
+				-----------------------------
+				local char_weapons = char.weapons
+				for j = 1, #char_weapons do
+					local item = char_weapons[j]
+					if item then
+						if not item.weight then item.weight = 5.0 end -- for players with old weapon items that don't have a weight property yet
+						--print("adding item: " .. item.name .. ", weight: " .. item.weight)
+						current_weight = current_weight + (item.weight * item.quantity)
+					end
+				end
+				---------------------------------------------------------------------------------------
+				-- done adding all the inventory item weights, see if player has room for given item --
+				---------------------------------------------------------------------------------------
+				if not item_to_add.weight then item_to_add.weight = 1.0 end
+				if current_weight + (item_to_add.weight * quantity) <= 100.0 then
 					return true
 				else
 					return false
