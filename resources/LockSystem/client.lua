@@ -49,10 +49,9 @@ local isPlayerInside = nil -- is player inside of any vehicle when trying to loc
 
 Citizen.CreateThread(function()
 	while true do
-		Wait(0)
 
 		if IsControlJustPressed(1, keyParam) then
-		
+
 			player = GetPlayerPed(-1)
 
 			vehicle = GetVehiclePedIsIn(player, false)
@@ -62,19 +61,10 @@ Citizen.CreateThread(function()
 			px, py, pz = table.unpack(GetEntityCoords(player, true))
 			coordA = GetEntityCoords(player, true)
 
-			for i = 0, 64 do
-				coordB = GetOffsetFromEntityInWorldCoords(player, 0.0, (6.281)/i, 0.0)
-				targetVehicle = GetVehicleInDirection(coordA, coordB)
-				if targetVehicle ~= nil and targetVehicle ~= 0 then
-					vx, vy, vz = table.unpack(GetEntityCoords(targetVehicle, false))
-					if GetDistanceBetweenCoords(px, py, pz, vx, vy, vz, false) then
-						distance = GetDistanceBetweenCoords(px, py, pz, vx, vy, vz, false)
-						break
-					end
-				end
-			end
+			coordB = GetOffsetFromEntityInWorldCoords(player, 0.0, 3.0, 0.0)
+			targetVehicle = GetVehicleInDirection(coordA, coordB) -- performs a scan on the z-axis from coordA to coordB, (for motorcycles that have fallen over, or low vehicles)
 
-			if (distance ~= nil and distance <= 5 and targetVehicle ~= 0) or vehicle ~= 0 then
+			if targetVehicle ~= 0 or vehicle ~= 0 then
 
 				if vehicle ~= 0 then
 					plate = GetVehicleNumberPlateText(vehicle)
@@ -91,11 +81,14 @@ Citizen.CreateThread(function()
 
 				TriggerServerEvent("lock:checkForKey", plate)
 
-			else 
-				print("if you see this then there was a problem trying to lock/unlock a vehicle!")
+			else
+				print("***** ERROR: if you see this then there was a problem trying to lock/unlock a vehicle! ******")
 			end
-			
+
 		end
+
+		Wait(1)
+
 	end
 end)
 
@@ -179,7 +172,7 @@ function GetVehicleInDirection(coordFrom, coordTo)
 	for i = 0.0, 2.0, 0.1 do
 		rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z - i, 10, GetPlayerPed(-1), 0)
 		a, b, c, d, vehicleResult = GetRaycastResult(rayHandle)
-		if vehicleResult ~= 0 then 
+		if vehicleResult ~= 0 then
 			return vehicleResult
 		end
 	end
