@@ -96,10 +96,10 @@ TriggerEvent('es:addCommand', 'report', function(source, args, user)
 		end
 	end)
 end, {
-	help = "Report a player",
+	help = "Report a player for extreme rule breaks such as MASS RDM/VDM ONLY. Use /help [msg] for minor things.",
 	params = {
 		{ name = "id", help = "Player's ID" },
-		{ name = "message", help = "Reason for the report" }
+		{ name = "message", help = "Reason for report" }
 	}
 })
 
@@ -123,7 +123,7 @@ TriggerEvent('es:addCommand', 'help', function(source, args, user)
 				end
 			end
 		end)
-	else 
+	else
 		TriggerClientEvent("chatMessage", tonumber(source), "", {}, "^3Usage: ^0/help [message]")
 	end
 end, {
@@ -528,8 +528,8 @@ AddEventHandler('rconCommand', function(commandName, args)
 						return
 					end
 				end
-			else 
-			
+			else
+
 			end
 		end
 		RconPrint("\nNo match found for identifier: " .. identifierToUnban .. "!")
