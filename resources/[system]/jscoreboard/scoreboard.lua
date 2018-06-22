@@ -115,7 +115,7 @@ function DrawPlayerList()
 			SetTextScale( 0.45, 0.45 )
 			SetTextColour( 255, 255, 255, 255 )
 			SetTextEntry( "STRING" )
-			AddTextComponentString( v[1] .. " | " .. v[2] .. " (" .. v[3] .. "ms)")
+			AddTextComponentString( v[1] .. " | " .. v[2] .. " (" .. v[3] .. " ms)")
 			DrawText( 0.01 + xOffset, 0.007 + ( k * 0.03 ) )
 
 		end

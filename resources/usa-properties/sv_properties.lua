@@ -758,9 +758,11 @@ AddEventHandler('rconCommand', function(commandName, args)
 				print("all players property info refreshed!")
 				TriggerEvent("es:getPlayers", function(players)
 					for id, player in pairs(players) do
-						if player then
-							print("setting player #" .. id .. " property ident to: " .. GetPlayerIdentifiers(id)[1])
-							TriggerClientEvent("properties:setPropertyIdentifier", id, GetPlayerIdentifiers(id)[1])
+						if id and player then
+							if GetPlayerIdentifiers(id)[1] then
+								print("setting player #" .. id .. " property ident to: " .. GetPlayerIdentifiers(id)[1])
+								TriggerClientEvent("properties:setPropertyIdentifier", id, GetPlayerIdentifiers(id)[1])
+							end
 						end
 					end
 				end)
