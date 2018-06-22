@@ -121,6 +121,15 @@ Citizen.CreateThread(function()
 
 	while true do
 		Citizen.Wait(1)
+		------------------------------------------------
+		-- unlock the door just in case it was locked --
+		------------------------------------------------
+		if JOB.customer_ped then
+			local npcs_target_vehicle = GetVehiclePedIsTryingToEnter(JOB.customer_ped)
+			if GetVehicleDoorLockStatus(npcs_target_vehicle) ~= 1 then
+				SetVehicleDoorsLocked(npcs_target_vehicle, 1)
+			end
+		end
 		----------------
 		-- NOT ON JOB --
 		----------------
@@ -159,6 +168,7 @@ Citizen.CreateThread(function()
 				JOB.destination.arrived = true
 				JOB.isOnJob = false
 				JOB.end_time = GetGameTimer()
+				JOB.customer_ped = nil
 				TriggerServerEvent("taxi:payDriver", Vdist(JOB.start.x, JOB.start.y, JOB.start.z, JOB.destination.x, JOB.destination.y, JOB.destination.z))
 				TriggerEvent("usa:notify", "Thanks!")
 			end
@@ -198,7 +208,7 @@ Citizen.CreateThread(function()
 		end
 		print("spawning ped, heading: " .. ped_heading)
 		print("hash: " .. hash)
-		local ped = CreatePed(4, hash, taxiDutyX, taxiDutyY, taxiDutyZ, ped_heading --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
+		local ped = CreatePed(4, hash, taxiDutyX, taxiDutyY, taxiDutyZ, ped_heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
 		SetEntityCanBeDamaged(ped,false)
 		SetPedCanRagdollFromPlayerImpact(ped,false)
 		TaskSetBlockingOfNonTemporaryEvents(ped,true)
