@@ -85,8 +85,7 @@ AddEventHandler("jail:release", function(character)
     		    model = GetHashKey("a_m_y_skater_01")
             RequestModel(model)
             while not HasModelLoaded(model) do -- Wait for model to load
-                RequestModel(model)
-                Citizen.Wait(0)
+                Citizen.Wait(100)
             end
             SetPlayerModel(PlayerId(), model)
             SetModelAsNoLongerNeeded(model)
@@ -94,8 +93,7 @@ AddEventHandler("jail:release", function(character)
             model = tonumber(character.hash)
             RequestModel(model)
             while not HasModelLoaded(model) do -- Wait for model to load
-                RequestModel(model)
-                Citizen.Wait(0)
+                Citizen.Wait(100)
             end
             SetPlayerModel(PlayerId(), model)
             SetModelAsNoLongerNeeded(model)
@@ -125,28 +123,95 @@ AddEventHandler("jail:removeWeapons", function()
 
 end)
 
+--[[
+MALE
+Legs - 7
+Legs Texture - 15
+Feet - 42
+Feet Texture - 2
+Torso - 1
+Torso Texture - 0
+Accessories - 1
+Accessories Texture - 0
+Ties - 0
+Vests - 0
+Textures - 0
+Arms/Hands - 0
+Back - 0
+
+FEMALE
+Legs - 3
+Legs Texture - 15
+Back - 0
+Feet - 1
+Feet Texture - 0
+Ties - 0
+Torso - 9
+Torso Texture - 1
+Accessories - 2
+Vests - 0
+Textures - 0
+Arms/Hands - 0(edited)
+Prison clothes ^
+]]
+
 RegisterNetEvent("jail:changeClothes")
 AddEventHandler("jail:changeClothes", function(gender)
+
+  local me = PlayerPedId()
 
 	-- only change clothes if male, since there is no female prisoner ped --
 	if gender == "male" or gender == "undefined" then
 
-		Citizen.CreateThread(function()
-			local model = GetHashKey("S_M_Y_Prisoner_01")
+    if not IsPedModel(me,"mp_m_freemode_01") then
 
-			RequestModel(model)
-			while not HasModelLoaded(model) do -- Wait for model to load
-				RequestModel(model)
-				Citizen.Wait(0)
-			end
+  		Citizen.CreateThread(function()
+  			local model = GetHashKey("S_M_Y_Prisoner_01")
 
-			SetPlayerModel(PlayerId(), model)
-			SetModelAsNoLongerNeeded(model)
-			SetPedRandomComponentVariation(GetPlayerPed(-1), false)
+  			RequestModel(model)
+  			while not HasModelLoaded(model) do -- Wait for model to load
+  				Citizen.Wait(100)
+  			end
 
-		end)
+  			SetPlayerModel(PlayerId(), model)
+  			SetModelAsNoLongerNeeded(model)
+  			SetPedRandomComponentVariation(me, false)
 
-	end
+  		end)
+
+    else
+
+      --SetPedComponentVariation(me, 4, 7, 15, 0)
+      SetPedComponentVariation(me, 4, 7, 15, 2)
+      SetPedComponentVariation(me, 6, 42, 2, 2)
+      SetPedComponentVariation(me, 11, 1, 0, 2)
+      SetPedComponentVariation(me, 8, 1, 0, 2)
+      SetPedComponentVariation(me, 7, 0, 0, 2)
+      SetPedComponentVariation(me, 9, 0, 0, 2)
+      SetPedComponentVariation(me, 10, 0, 0, 2)
+      SetPedComponentVariation(me, 3, 0, 0, 2)
+      SetPedComponentVariation(me, 5, 0, 0, 2)
+
+    end
+
+	else
+
+    if IsPedModel(me,"mp_f_freemode_01") then
+
+      SetPedComponentVariation(me, 4, 3, 15, 2)
+      SetPedComponentVariation(me, 5, 0, 0, 2)
+      SetPedComponentVariation(me, 4, 3, 15, 2)
+      SetPedComponentVariation(me, 6, 1, 0, 2)
+      SetPedComponentVariation(me, 7, 0, 0, 2)
+      SetPedComponentVariation(me, 11, 9, 1, 2)
+      SetPedComponentVariation(me, 8, 2, 15, 2)
+      SetPedComponentVariation(me, 3, 0, 0, 2)
+      SetPedComponentVariation(me, 10, 0, 0, 2)
+      SetPedComponentVariation(me, 9, 0, 0, 2)
+
+    end
+
+  end
 
 end)
 

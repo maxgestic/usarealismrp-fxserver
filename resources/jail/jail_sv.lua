@@ -69,6 +69,7 @@ function jailPlayer(data, officerName)
 		TriggerClientEvent("jail:removeWeapons", targetPlayer) -- take from ped
 		user.setActiveCharacterData("weapons", {})
 		user.setActiveCharacterData("jailtime", sentence)
+		user.setActiveCharacterData("job", "civ")
 		-- fine the player using amount supplied from the form
 		local user_bank = user.getActiveCharacterData("bank")
 		local bank_after_fine = user_bank - fine

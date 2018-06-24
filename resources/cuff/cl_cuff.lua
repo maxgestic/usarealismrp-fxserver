@@ -35,6 +35,9 @@ AddEventHandler("cuff:Handcuff", function()
 				--FreezeEntityPosition(lPed, false)
 				DrawCoolLookingNotificationNoPic("You have been ~g~released~w~.")
 				isCuffed = false
+			  if IsPedModel(lPed,"mp_m_freemode_01") or IsPedModel(lPed,"mp_f_freemode_01") then
+					SetPedComponentVariation(lPed, 7, 0, 0, 2)
+				end
 			else
 				Citizen.Trace("ENTITY WAS NOT PLAYING ARRESTED ANIM, CUFFING")
 				TaskPlayAnim(lPed, "mp_arresting", "idle", 8.0, -8, -1, 49, 0, 0, 0, 0)
@@ -44,6 +47,11 @@ AddEventHandler("cuff:Handcuff", function()
 				DrawCoolLookingNotificationNoPic("You have been ~r~detained~w~.")
 				isCuffed = true
 				if SOUND_ENABLE then TriggerServerEvent("InteractSound_SV:PlayWithinDistance", 1.0, "handcuff", 0.2) end
+				if IsPedModel(lPed,"mp_m_freemode_01") then
+					SetPedComponentVariation(lPed, 7, 41, 0, 2)
+				elseif IsPedModel(lPed,"mp_f_freemode_01") then
+					SetPedComponentVariation(lPed, 7, 25, 0, 2)
+				end
 			end
 		end)
 	end
