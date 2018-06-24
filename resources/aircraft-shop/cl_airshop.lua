@@ -385,8 +385,7 @@ AddEventHandler("airshop:spawnAircraft", function(aircraft, addToRetrievedAircra
 		RequestModel(numberHash)
 		-- Check if it's loaded, if not then wait and re-request it.
 		while not HasModelLoaded(numberHash) do
-			RequestModel(numberHash)
-			Citizen.Wait(0)
+			Citizen.Wait(100)
 		end
 		-- Model loaded, continue
 		local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)

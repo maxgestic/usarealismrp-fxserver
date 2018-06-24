@@ -47,8 +47,7 @@ Citizen.CreateThread(function()
 	        RequestModel(hash)
 	        -- Check if it's loaded, if not then wait and re-request it.
 	        while not HasModelLoaded(hash) do
-		        RequestModel(hash)
-		        Citizen.Wait(0)
+		        Citizen.Wait(100)
 	        end
 	         -- Model loaded, continue
             local x = jobs[i].peds[j].x

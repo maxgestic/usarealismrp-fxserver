@@ -160,8 +160,7 @@ Citizen.CreateThread(function()
             local hash = GetHashKey(location[i].model)
             RequestModel(hash)
         	while not HasModelLoaded(hash) do
-        		RequestModel(hash)
-        		Citizen.Wait(0)
+        		Citizen.Wait(100)
         	end
     		local ped = CreatePed(4, hash, location[i].x, location[i].y, location[i].z, location[i].heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
             table.insert(spawnedPeds, ped)

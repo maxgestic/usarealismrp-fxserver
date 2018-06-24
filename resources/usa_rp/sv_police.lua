@@ -120,13 +120,10 @@ function comma_value(amount)
 end
 
 -- start bait car
-TriggerEvent('es:addCommand', 'lockbc', function(source, args, user)
-	local userjob = user.getActiveCharacterData("job")
-	if userjob == "sheriff" then
-		local ServerID = args[2]
-		if not tonumber(ServerID) then return end
-		TriggerClientEvent("simp:baitCarDisable", tonumber(ServerID))
-	end
+TriggerEvent('es:addJobCommand', 'lockbc',  {"sheriff"}, function(source, args, user)
+	local ServerID = args[2]
+	if not tonumber(ServerID) then return end
+	TriggerClientEvent("simp:baitCarDisable", tonumber(ServerID))
 end, {
 	help = "Lock the bait car's doors and shut off the engine.",
 	params = {
@@ -134,13 +131,10 @@ end, {
 	}
 })
 
-TriggerEvent('es:addCommand', 'unlockbc', function(source, args, user)
-	local userjob = user.getActiveCharacterData("job")
-	if userjob == "sheriff" then
-		local ServerID = args[2]
-		if not tonumber(ServerID) then return end
-		TriggerClientEvent("simp:baitCarunlock", tonumber(ServerID))
-	end
+TriggerEvent('es:addJobCommand', 'unlockbc',  {"sheriff"}, function(source, args, user)
+	local ServerID = args[2]
+	if not tonumber(ServerID) then return end
+	TriggerClientEvent("simp:baitCarunlock", tonumber(ServerID))
 end, {
 	help = "Unlock the bait car's doors.",
 	params = {
@@ -210,7 +204,7 @@ end)
 
 -- retrieve AR/pump shotgun
 TriggerEvent('es:addJobCommand', 'showbadge', { "police", "sheriff" }, function(source, args, user, location)
-	
+
 	local police_rank = tonumber(user.getActiveCharacterData("policeRank"))
 	local char_name = user.getActiveCharacterData("fullName")
 	if police_rank > 0 then

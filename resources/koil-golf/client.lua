@@ -96,7 +96,7 @@ function spawnCart()
 	RequestModel(vehicle)
 
 	while not HasModelLoaded(vehicle) do
-		Citizen.Wait(0)
+		Citizen.Wait(100)
 	end
 	local spawned_car = CreateVehicle(vehicle, -1332.7823486328,128.18229675293,56.032329559326, 180, true, false)
 	SetVehicleOnGroundProperly(spawned_car)

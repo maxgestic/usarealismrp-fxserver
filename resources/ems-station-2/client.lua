@@ -98,8 +98,7 @@ AddEventHandler("emsstation2:setciv", function(character, playerWeapons)
 		end
         RequestModel(model)
         while not HasModelLoaded(model) do -- Wait for model to load
-            RequestModel(model)
-            Citizen.Wait(0)
+            Citizen.Wait(100)
         end
         SetPlayerModel(PlayerId(), model)
         SetModelAsNoLongerNeeded(model)
@@ -190,8 +189,7 @@ AddEventHandler("emsstation2:setCharacter", function(character)
             Citizen.CreateThread(function()
                 RequestModel(model)
                 while not HasModelLoaded(model) do -- Wait for model to load
-                    RequestModel(model)
-                    Citizen.Wait(0)
+                    Citizen.Wait(100)
                 end
                 SetPlayerModel(PlayerId(), model)
                 SetModelAsNoLongerNeeded(model)
@@ -237,8 +235,7 @@ AddEventHandler("emsstation2:ShowMainMenu", function()
 			Citizen.Trace("caption = " .. arrSkinGeneralCaptions[position])
 			RequestModel(modelhashed)
 			while not HasModelLoaded(modelhashed) do
-				RequestModel(modelhashed)
-				Citizen.Wait(0)
+				Citizen.Wait(100)
 			end
 			SetPlayerModel(PlayerId(), modelhashed)
 			--SetPedDefaultComponentVariation(PlayerId());

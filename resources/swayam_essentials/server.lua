@@ -81,16 +81,12 @@ TriggerEvent('es:addCommand', 'mypos', function(source, args, user)
 end)
 
 ----------------------------------------------------------------
-TriggerEvent('es:addCommand', 'setskin', function(source, args, user)
-	if user.getGroup() == "admin" or user.getGroup() == "superadmin" or user.getGroup() == "owner" then
+TriggerEvent('es:addGroupCommand', 'setskin', 'superadmin', function(source, args, user)
 		if args[2] then
 			TriggerClientEvent("swayam:SetSkin", source, args[2])
 		else
 			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "USAGE: /setskin model")
 		end
-	else
-		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "You're not authorized to use this command!")
-	end
 end, {
 	help = "Change your skin.",
 	params = {

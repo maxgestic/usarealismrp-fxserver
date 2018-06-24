@@ -119,8 +119,7 @@ Citizen.CreateThread(function()
     RequestModel(numberHash)
 
     while not HasModelLoaded(numberHash) do
-        RequestModel(numberHash)
-        Citizen.Wait(0)
+        Citizen.Wait(100)
     end
 
     local playerPed = GetPlayerPed(-1)

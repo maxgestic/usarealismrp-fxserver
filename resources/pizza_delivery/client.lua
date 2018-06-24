@@ -187,7 +187,7 @@ function spawn_emperor2()
 	RequestModel(vehicle)
 
 	while not HasModelLoaded(vehicle) do
-		Wait(1)
+		Wait(100)
 	end
 
 	local plate = math.random(100, 900)

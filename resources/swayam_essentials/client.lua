@@ -151,8 +151,7 @@ AddEventHandler("swayam:SetSkin", function(model)
 		Citizen.Trace(modelhashed)
 		RequestModel(modelhashed)
 		while not HasModelLoaded(modelhashed) do
-			RequestModel(modelhashed)
-			Citizen.Wait(0)
+			Citizen.Wait(100)
 		end
 		SetPlayerModel(PlayerId(), modelhashed)
 		SetPedDefaultComponentVariation(PlayerId());

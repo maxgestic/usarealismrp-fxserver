@@ -106,8 +106,7 @@ AddEventHandler("CS:ShowMainMenu", function()
 				local modelhashed = GetHashKey("mp_m_freemode_01")
 				RequestModel(modelhashed)
 				while not HasModelLoaded(modelhashed) do
-					RequestModel(modelhashed)
-					Citizen.Wait(0)
+					Citizen.Wait(100)
 				end
 				SetPlayerModel(PlayerId(), modelhashed)
 				--SetPedDefaultComponentVariation(PlayerId());
@@ -129,8 +128,7 @@ AddEventHandler("CS:ShowMainMenu", function()
 				local modelhashed = GetHashKey("mp_f_freemode_01")
 				RequestModel(modelhashed)
 				while not HasModelLoaded(modelhashed) do
-					RequestModel(modelhashed)
-					Citizen.Wait(0)
+					Citizen.Wait(100)
 				end
 				SetPlayerModel(PlayerId(), modelhashed)
 				--SetPedDefaultComponentVariation(PlayerId());
@@ -156,8 +154,7 @@ AddEventHandler("CS:ShowMainMenu", function()
 			--Citizen.Trace("caption = " .. arrSkinGeneralCaptions[position])
 			RequestModel(modelhashed)
 			while not HasModelLoaded(modelhashed) do
-				RequestModel(modelhashed)
-				Citizen.Wait(0)
+				Citizen.Wait(100)
 			end
 			SetPlayerModel(PlayerId(), modelhashed)
 			--SetPedDefaultComponentVariation(PlayerId());
@@ -205,8 +202,7 @@ AddEventHandler("CS:ShowMainMenu", function()
 		local randomSkinValue = math.random ( 1, #arrSkinGeneralValues)
 		local modelhashed = GetHashKey(arrSkinGeneralValues[randomSkinValue])
 		while not HasModelLoaded(modelhashed) do
-			RequestModel(modelhashed)
-			Wait(0)
+			Wait(100)
 		end
 		SetPlayerModel(PlayerId(), modelhashed)
 		--SetPedDefaultComponentVariation(PlayerId());

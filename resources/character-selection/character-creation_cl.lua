@@ -78,8 +78,7 @@ AddEventHandler("character:setCharacter", function(character)
 				Citizen.CreateThread(function()
 					RequestModel(model)
 					while not HasModelLoaded(model) do -- Wait for model to load
-						RequestModel(model)
-						Citizen.Wait(0)
+						Citizen.Wait(100)
 					end
 					SetPlayerModel(PlayerId(), model)
 					SetModelAsNoLongerNeeded(model)

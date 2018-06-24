@@ -244,8 +244,7 @@ AddEventHandler("vehShop:spawnPlayersVehicle", function(hash, plate)
 		RequestModel(numberHash)
 		-- Check if it's loaded, if not then wait and re-request it.
 		while not HasModelLoaded(numberHash) do
-			RequestModel(numberHash)
-			Citizen.Wait(0)
+			Citizen.Wait(100)
 		end
 		-- Model loaded, continue
 		-- Spawn the vehicle at the gas station car dealership in paleto and assign the vehicle handle to 'vehicle'
@@ -664,8 +663,7 @@ function PreviewVehicle()
 			RequestModel(numberHash)
 			-- Check if it's loaded, if not then wait and re-request it.
 			while not HasModelLoaded(numberHash) do
-				RequestModel(numberHash)
-				Citizen.Wait(0)
+				Citizen.Wait(100)
 			end
 			-- Model loaded, continue
 			-- Spawn the vehicle at the gas station car dealership in paleto and assign the vehicle handle to 'vehicle'
