@@ -131,7 +131,7 @@ Citizen.CreateThread(function()
 		SetEntityCoordsNoOffset(ped, coords.x, coords.y, coords.z, false, false, false, true)
 		NetworkResurrectLocalPlayer(coords.x, coords.y, coords.z, coords.heading, true, false)
 
-		SetPlayerInvincible(ped, false)
+		--SetPlayerInvincible(ped, false)
 
 		TriggerEvent('playerSpawned', coords.x, coords.y, coords.z, coords.heading)
 		ClearPedBloodDamage(ped)
@@ -147,7 +147,7 @@ Citizen.CreateThread(function()
 		if (RPDeathEnabled) then
 			if (IsEntityDead(ped)) then
 
-				SetPlayerInvincible(ped, true)
+				--SetPlayerInvincible(ped, true)
 				SetEntityHealth(ped, 1)
 				if not dead then
 
@@ -239,7 +239,7 @@ Citizen.CreateThread(function()
 					local playerPos = GetEntityCoords(ped, true)
 
 					NetworkResurrectLocalPlayer(playerPos, true, true, false)
-					SetPlayerInvincible(ped, false)
+					--SetPlayerInvincible(ped, false)
 					ClearPedBloodDamage(ped)
 
 					allowRevive = false
