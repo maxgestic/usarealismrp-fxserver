@@ -14,7 +14,7 @@ AddEventHandler("go-postal:checkLicense", function()
 				print("calling had DL!")
 				TriggerClientEvent("go-postal:hadDL", userSource)
 				return
-            else 
+            else
 				TriggerClientEvent("usa:notify", userSource, "Your license is suspended!")
 				return
 			end
@@ -33,7 +33,7 @@ AddEventHandler("transport:giveMoney", function(amount, job)
 		user.setActiveCharacterData("money", user_money + amount)
 		-- give money to shop owner (if any within 50m nearby)--
 		print("checking job closest property!")
-		if job.closest_property then 
+		if job.closest_property then
 			print("existed! name: " .. job.closest_property.name)
 			TriggerEvent("properties:addMoney", job.closest_property.name, round(0.09 * amount, 0))
 		end
@@ -93,6 +93,7 @@ AddEventHandler("go_postal:removeActiveJob", function(source)
 	end
 end)
 
+--[[ DEPRECATED due to new single player blip routes
 TriggerEvent('es:addCommand', 'waypoint', function(source, args, user)
 	print("/waypoint called!")
 	if activeJobs[source] == nil then
@@ -104,6 +105,7 @@ TriggerEvent('es:addCommand', 'waypoint', function(source, args, user)
 		TriggerClientEvent('placeMarker', source, activeJobs[source].x, activeJobs[source].y)
 	end
 end, {help = "Reset a transport job waypoint"})
+--]]
 
 AddEventHandler('playerDropped', function()
 	if activeJobs[source] then

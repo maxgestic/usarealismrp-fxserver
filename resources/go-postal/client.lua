@@ -158,8 +158,8 @@ Citizen.CreateThread(function()
 										SetPedIntoVehicle(GetPlayerPed(-1), job.truck, -1)
 										SetVehicleEngineOn(job.truck, true, false, false)
 										SetEntityAsMissionEntity(job.truck, true, true)
-
-										SetNewWaypoint(job.x, job.y)
+										--SetNewWaypoint(job.x, job.y)
+										TriggerEvent("swayam:SetWayPointWithAutoDisable", job.x, job.y, job.z, 1, 60, "Go Postal Destination")
 										lastTruck = job.truck
 										TriggerServerEvent("transport:addJob", job)
 									else
@@ -249,7 +249,8 @@ Citizen.CreateThread(function()
 										SetPedIntoVehicle(GetPlayerPed(-1), job.truck, -1)
 										SetVehicleEngineOn(job.truck, true, false, false)
 										SetEntityAsMissionEntity(job.truck, true, true)
-										SetNewWaypoint(job.x, job.y)
+										--SetNewWaypoint(job.x, job.y)
+										TriggerEvent("swayam:SetWayPointWithAutoDisable", job.x, job.y, job.z, 1, 60, "FridgeIt Destination")
 										lastTruck = job.truck
 										TriggerServerEvent("transport:addJob", job)
 									else
@@ -299,7 +300,8 @@ Citizen.CreateThread(function()
 							job.name = "Go Postal"
 							job.distance = GetDistanceBetweenCoords(job.x, job.y, job.z, GetEntityCoords(GetPlayerPed(-1)))
 							job.truck = temp_truck
-							SetNewWaypoint(job.x, job.y)
+							--SetNewWaypoint(job.x, job.y)
+							TriggerEvent("swayam:SetWayPointWithAutoDisable", job.x, job.y, job.z, 1, 60, "GoPostal Destination")
 							TriggerServerEvent("transport:addJob", job)
 							-- not sure what below code is for:
 							pressed = true
@@ -364,7 +366,8 @@ Citizen.CreateThread(function()
 							job.distance = GetDistanceBetweenCoords(job.x, job.y, job.z, GetEntityCoords(GetPlayerPed(-1)))
 							job.truck = temp_truck
 							print("setting new trucking WP: x = " .. job.x .. ", y = " .. job.y)
-							SetNewWaypoint(job.x, job.y)
+							--SetNewWaypoint(job.x, job.y)
+							TriggerEvent("swayam:SetWayPointWithAutoDisable", job.x, job.y, job.z, 1, 60, "FridgeIt Destination")
 							TriggerServerEvent("transport:addJob", job)
 							-- not sure what below code is for:
 							pressed = true
@@ -385,7 +388,8 @@ end)
 
 RegisterNetEvent("transport:quitJob")
 AddEventHandler("transport:quitJob", function()
-	ClearGpsPlayerWaypoint()
+	--ClearGpsPlayerWaypoint()
+	TriggerEvent("swayam:RemoveWayPoint")
 	pressed = false
 	distance = nil
 	job = nil
@@ -405,9 +409,10 @@ function deleteCar( entity )
 end
 
 RegisterNetEvent("placeMarker")
-AddEventHandler("placeMarker", function(x, y)
-	ClearGpsPlayerWaypoint()
-	SetNewWaypoint(x, y)
+AddEventHandler("placeMarker", function(x, y, z) -- todo: add Z parameter to all calls
+	--ClearGpsPlayerWaypoint()
+	--SetNewWaypoint(x, y)
+	TriggerEvent("swayam:SetWayPointWithAutoDisable", x, y, z, 280, 60, "Go Postal Destination")
 end)
 
 function DrawSpecialText(m_text)
