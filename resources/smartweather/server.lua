@@ -4,7 +4,7 @@ local SmartWeatherEnabled = true -- Should this script be enabled?
 local adminOnlyPlugin = true     -- Should chat commands be limited to the `admins` list?
 -- Add STEAM ids here in below format to allow these people to toggle and change the weather
 local admins = {
-	"steam:110000106e1eac6",
+	"steam:1100001007a8797",
 }
 
 
@@ -124,6 +124,16 @@ function updateWeatherString()
 	else
 		local currentOptions = weatherTree[currentWeatherData["weatherString"]]
 		newWeatherString = currentOptions[math.random(1,getTableLength(currentOptions))]
+	end
+
+	-- 50% chance to cancel a rain or thunder event --
+	if newWeatherString == "RAIN" or newWeatherString == "THUNDER" or newWeatherString == "SNOWLIGHT" or newWeatherString == "SNOW" then
+		local roll = math.random(100)
+		print("rolled a: " .. roll)
+		if roll < 50 then
+			print("**cancelling rain!**")
+			return
+		end
 	end
 
 	-- 50/50 Chance to enabled wind at a random heading for the specified weathers.
