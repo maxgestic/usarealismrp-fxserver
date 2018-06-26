@@ -31,9 +31,18 @@ local person = {
 ---------------
 -- API FUNCS --
 ---------------
+
+function RemoveRagdoll()
+	SetPedToRagdoll(myPed, 0, 0, 0, true, true, false)
+end
+
 RegisterNetEvent("hungerAndThirst:replenish")
 AddEventHandler("hungerAndThirst:replenish", function(type, item)
 	if type == "hunger" then
+		-- revive if passed out --
+		if person.hunger_level <= 10.0 then
+			RemoveRagdoll()
+		end
 		local animation = {
 			dict = "amb@code_human_wander_eating_donut@male@idle_a",
 			name = "idle_c",
@@ -57,6 +66,10 @@ AddEventHandler("hungerAndThirst:replenish", function(type, item)
 		-- play animation:
 		TriggerEvent("usa:playAnimation", animation.name, animation.dict, animation.duration)
 	elseif type == "drink" then
+		-- revive if passed out --
+		if person.thirst_level <= 10.0 then
+			RemoveRagdoll()
+		end
 		local animation = {
 			dict = "amb@code_human_wander_drinking_fat@male@idle_a",
 			name = "idle_c",
@@ -90,12 +103,12 @@ Citizen.CreateThread(function()
 	local notified = false
 
 	while true do
-		Citizen.Wait(1)
+		Wait(1)
 		local myPed = GetPlayerPed(-1)
 		--------------------
 		-- debug messages --
 		--------------------
-		if settings.debug and not IsPedDeadOrDying(myPed, 1) then
+		if settings.debug and not IsPedRagdoll(myPed) then
 			print("thirst_level: " .. person.thirst_level)
 			print("hunger_level: " .. person.hunger_level)
 		end
@@ -106,7 +119,7 @@ Citizen.CreateThread(function()
 		-----------------------------------------------------------------------
 		-- Tick down hunger & thirst levels until death (if not replenished) --
 		-----------------------------------------------------------------------
-		if not IsPedDeadOrDying(myPed, 1) then
+		if not IsPedRagdoll(myPed) then
 			if person.thirst_level > 0.0 and person.hunger_level > 0.0 then
 				if IsPedWalking(myPed) then
 					if settings.debug then print("walking!") end
@@ -151,21 +164,29 @@ Citizen.CreateThread(function()
 				if person.thirst_level <= 0.0 then cause = "Thirst" end
 				if settings.debug then
 					print("person died from hunger or thirst!")
-					print("HP: " .. GetEntityHealth(myPed))
 					print("Hunger Level: " .. person.hunger_level)
 					print("Thirst Level: " .. person.thirst_level)
-					print("killing...")
+					print("ragdolling...")
 					print("cause: " .. cause)
 				end
-				SetEntityHealth(myPed, 0.0)
-				person.thirst_level = 100.0
-				person.hunger_level = 100.0
-				TriggerEvent("usa:notify", "You have died from: ~y~" .. cause)
-				TriggerEvent("chatMessage", "", {}, "You have died from: ^3" .. cause)
+				--SetEntityHealth(myPed, 0.0)
+				TriggerEvent("usa:notify", "You have passed out from: ~y~" .. cause)
+				TriggerEvent("chatMessage", "", {}, "You have passed out from: ^3" .. cause)
+				local time_until_death = 140000
+				local passed_out_time = GetGameTimer()
+				while person.hunger_level <= 0.0 or person.thirst_level <= 0.0 do
+					Wait(10)
+					SetPedToRagdoll(myPed, 5500, 5500, 0, true, true, false)
+					if GetGameTimer() - passed_out_time >= time_until_death then 
+						SetEntityHealth(myPed, 0.0)
+						person.hunger_level = 100.0
+						person.thirst_level = 100.0
+					end
+				end
 			end
 		else
 			if settings.debug then
-				print("person is dead!")
+				print("person is passed out!")
 			end
 		end
 	end
@@ -255,7 +276,7 @@ function drawHud(person)
 	-- Draw It --
 	------------
 	if IsPedInAnyVehicle(GetPlayerPed(-1), false) then
-		drawTxt(0.66, 1.69, 1.0, 1.5, 0.4, settings.hud["clock"].text, settings.hud["clock"].r, settings.hud["clock"].g, settings.hud["clock"].b, 255) 
+		drawTxt(0.66, 1.69, 1.0, 1.5, 0.4, settings.hud["clock"].text, settings.hud["clock"].r, settings.hud["clock"].g, settings.hud["clock"].b, 255)
 	else
 		drawTxt(0.66, 1.714, 1.0, 1.5, 0.4, settings.hud["clock"].text, settings.hud["clock"].r, settings.hud["clock"].g, settings.hud["clock"].b, 255)
 	end
