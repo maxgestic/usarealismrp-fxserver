@@ -113,6 +113,7 @@ end
 AddEventHandler('playerDropped', function()
 	local numberSource = tonumber(source)
 
+	TriggerEvent("anticheese:playerDropped", numberSource)
 	if(Users[numberSource])then
 		print("player " .. GetPlayerName(numberSource) .. " dropped from the server!")
 		TriggerEvent("chat:sendToLogFile", numberSource, "dropped from the server! Timestamp: " .. os.date('%m-%d-%Y %H:%M:%S', os.time()))
