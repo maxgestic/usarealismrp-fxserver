@@ -192,7 +192,7 @@ TriggerEvent('es:addCommand', '28', function(source, args, user, location)
 		local plateNumber = args[2]
 		if plateNumber then
 			if string.len(plateNumber) < 7 or string.len(plateNumber) > 8 then TriggerClientEvent("usa:notify", source, "Invalid license plate format.") return end
-			TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. user_name .. " runs plate.", location)
+			--TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. user_name .. " runs plate.", location)
 			TriggerEvent("es:getPlayers", function(players)
 				for id, player in pairs(players) do
 					--print("id = " .. id)
@@ -243,7 +243,7 @@ TriggerEvent('es:addCommand', 'runplate', function(source, args, user, location)
 		local plateNumber = args[2]
 		if plateNumber then
 			if string.len(plateNumber) < 7 or string.len(plateNumber) > 8 then TriggerClientEvent("usa:notify", source, "Invalid license plate format.") return end
-			TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. user_name .. " runs plate.", location)
+			--TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. user_name .. " runs plate.", location)
 			TriggerEvent("es:getPlayers", function(players)
 				for id, player in pairs(players) do
 					--print("id = " .. id)
