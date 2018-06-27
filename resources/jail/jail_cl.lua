@@ -1,7 +1,7 @@
-local jailX, jailY, jailZ = 1714.893, 2542.678, 45.565
 local releaseX, releaseY, releaseZ = 1847.086, 2585.990, 45.672
 local lPed
 local imprisoned = false
+local assigned_cell = nil
 
 -- start of NUI menu
 
@@ -66,47 +66,55 @@ end)
 -- end of NUI menu stuff
 
 RegisterNetEvent("jail:jail")
-AddEventHandler("jail:jail", function()
+AddEventHandler("jail:jail", function(cell)
 
-    lPed = GetPlayerPed(-1)
-	FreezeEntityPosition(lPed, false) -- fix for the /cuff command freezing the player in place
-	SetEntityCoords(GetPlayerPed(-1), jailX, jailY, jailZ, 1, 0, 0, 1) -- tp to jail
-    imprisoned = true
+  print("x: " .. cell.x)
+  print("y: " .. cell.y)
+  print("z: " .. cell.z)
+
+  assigned_cell = cell
+
+  lPed = GetPlayerPed(-1)
+  FreezeEntityPosition(lPed, false) -- fix for the /cuff command freezing the player in place
+  SetEntityCoords(GetPlayerPed(-1), assigned_cell.x, assigned_cell.y, assigned_cell.z, 1, 0, 0, 1) -- tp to jail
+  TriggerEvent("cuff:unCuff")
+  imprisoned = true
 
 end)
 
 RegisterNetEvent("jail:release")
 AddEventHandler("jail:release", function(character)
-    Citizen.CreateThread(function()
-	    local model
-	    SetEntityCoords(GetPlayerPed(-1), releaseX, releaseY, releaseZ, 1, 0, 0, 1) -- release from jail
-        imprisoned = false
-        if not character.hash then
-    		    model = GetHashKey("a_m_y_skater_01")
-            RequestModel(model)
-            while not HasModelLoaded(model) do -- Wait for model to load
-                Citizen.Wait(100)
-            end
-            SetPlayerModel(PlayerId(), model)
-            SetModelAsNoLongerNeeded(model)
-        else
-            model = tonumber(character.hash)
-            RequestModel(model)
-            while not HasModelLoaded(model) do -- Wait for model to load
-                Citizen.Wait(100)
-            end
-            SetPlayerModel(PlayerId(), model)
-            SetModelAsNoLongerNeeded(model)
-            -- set customizations
-            for key, value in pairs(character["components"]) do
-                SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
-            end
-            for key, value in pairs(character["props"]) do
-                SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
-            end
-        end
-        TriggerEvent("usa:setPlayerComponents", character)
-    end)
+  Citizen.CreateThread(function()
+    local model
+    SetEntityCoords(GetPlayerPed(-1), releaseX, releaseY, releaseZ, 1, 0, 0, 1) -- release from jail
+    imprisoned = false
+    if not character.hash then
+      model = GetHashKey("a_m_y_skater_01")
+      RequestModel(model)
+      while not HasModelLoaded(model) do -- Wait for model to load
+        Citizen.Wait(100)
+      end
+      SetPlayerModel(PlayerId(), model)
+      SetModelAsNoLongerNeeded(model)
+    else
+      model = tonumber(character.hash)
+      RequestModel(model)
+      while not HasModelLoaded(model) do -- Wait for model to load
+        Citizen.Wait(100)
+      end
+      SetPlayerModel(PlayerId(), model)
+      SetModelAsNoLongerNeeded(model)
+      -- set customizations
+      for key, value in pairs(character["components"]) do
+        SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
+      end
+      for key, value in pairs(character["props"]) do
+        SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
+      end
+    end
+    TriggerEvent("usa:setPlayerComponents", character)
+    TriggerServerEvent("jail:clearCell", assigned_cell)
+  end)
 end)
 
 RegisterNetEvent("jail:wrongPw")
@@ -123,42 +131,8 @@ AddEventHandler("jail:removeWeapons", function()
 
 end)
 
---[[
-MALE
-Legs - 7
-Legs Texture - 15
-Feet - 42
-Feet Texture - 2
-Torso - 1
-Torso Texture - 0
-Accessories - 1
-Accessories Texture - 0
-Ties - 0
-Vests - 0
-Textures - 0
-Arms/Hands - 0
-Back - 0
-
-FEMALE
-Legs - 3
-Legs Texture - 15
-Back - 0
-Feet - 1
-Feet Texture - 0
-Ties - 0
-Torso - 9
-Torso Texture - 1
-Accessories - 2
-Vests - 0
-Textures - 0
-Arms/Hands - 0(edited)
-Prison clothes ^
-]]
-
 RegisterNetEvent("jail:changeClothes")
 AddEventHandler("jail:changeClothes", function(gender)
-
-  local me = PlayerPedId()
 
 	-- only change clothes if male, since there is no female prisoner ped --
 	if gender == "male" or gender == "undefined" then
@@ -175,22 +149,22 @@ AddEventHandler("jail:changeClothes", function(gender)
 
   			SetPlayerModel(PlayerId(), model)
   			SetModelAsNoLongerNeeded(model)
-  			SetPedRandomComponentVariation(me, false)
+  			SetPedRandomComponentVariation(GetPlayerPed(-1), false)
 
   		end)
 
     else
 
       --SetPedComponentVariation(me, 4, 7, 15, 0)
-      SetPedComponentVariation(me, 4, 7, 15, 2)
-      SetPedComponentVariation(me, 6, 42, 2, 2)
-      SetPedComponentVariation(me, 11, 1, 0, 2)
-      SetPedComponentVariation(me, 8, 1, 0, 2)
-      SetPedComponentVariation(me, 7, 0, 0, 2)
-      SetPedComponentVariation(me, 9, 0, 0, 2)
-      SetPedComponentVariation(me, 10, 0, 0, 2)
-      SetPedComponentVariation(me, 3, 0, 0, 2)
-      SetPedComponentVariation(me, 5, 0, 0, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 4, 7, 15, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 6, 42, 2, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 11, 1, 0, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 8, 1, 0, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 7, 0, 0, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 9, 0, 0, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 10, 0, 0, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 3, 0, 0, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 5, 0, 0, 2)
 
     end
 
@@ -198,16 +172,16 @@ AddEventHandler("jail:changeClothes", function(gender)
 
     if IsPedModel(me,"mp_f_freemode_01") then
 
-      SetPedComponentVariation(me, 4, 3, 15, 2)
-      SetPedComponentVariation(me, 5, 0, 0, 2)
-      SetPedComponentVariation(me, 4, 3, 15, 2)
-      SetPedComponentVariation(me, 6, 1, 0, 2)
-      SetPedComponentVariation(me, 7, 0, 0, 2)
-      SetPedComponentVariation(me, 11, 9, 1, 2)
-      SetPedComponentVariation(me, 8, 2, 15, 2)
-      SetPedComponentVariation(me, 3, 0, 0, 2)
-      SetPedComponentVariation(me, 10, 0, 0, 2)
-      SetPedComponentVariation(me, 9, 0, 0, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 4, 3, 15, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 5, 0, 0, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 4, 3, 15, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 6, 1, 0, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 7, 0, 0, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 11, 9, 1, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 8, 2, 15, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 3, 0, 0, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 10, 0, 0, 2)
+      SetPedComponentVariation(GetPlayerPed(-1), 9, 0, 0, 2)
 
     end
 
@@ -215,6 +189,7 @@ AddEventHandler("jail:changeClothes", function(gender)
 
 end)
 
+--[[
 Citizen.CreateThread(function()
     while true do
         Wait(1)
@@ -223,8 +198,9 @@ Citizen.CreateThread(function()
         end
     end
 end)
+--]]
 
 function getPlayerDistanceFromCoords(x,y,z)
 	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
-	return GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,x,y,z,false)
+	return GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,x,y,z,true)
 end

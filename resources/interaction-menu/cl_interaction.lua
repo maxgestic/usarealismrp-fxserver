@@ -179,6 +179,10 @@ RegisterNUICallback('playEmote', function(data, cb)
 		elseif scenarioName == "surrender" then
 			TriggerEvent("KneelHU")
 			return
+		elseif scenarioName == "chair" or scenarioName == "mechanic" then
+			TriggerServerEvent("interaction:checkJailedStatusBeforeEmote", scenarioName)
+			playing_emote = true
+			return
 		end
 		for i = 1, #scenarios do
 			if scenarioName == string.lower(scenarios[i].name) then

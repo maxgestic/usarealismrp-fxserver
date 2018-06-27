@@ -1,8 +1,16 @@
-function table_copy(t)
-	local u = { }
-	for k, v in pairs(t) do u[k] = v end
-	return setmetatable(u, getmetatable(t))
-end
+-- Each cell block floor starts from the leftmost cell and wraps around until finished (cell numbers)
+local CELLS = {
+	{x = 1746.0, y = 2632.1, z = 45.6, occupant = nil},
+	{x = 1727.3, y = 2624.0, z = 45.6, occupant = nil},
+	{x = 1727.5, y = 2632.1, z = 45.6, occupant = nil},
+	{x = 1746.4, y = 2636.1, z = 45.6, occupant = nil},
+	{x = 1727.1, y = 2636.2, z = 45.6, occupant = nil},
+	{x = 1746.7, y = 2640.0, z = 45.6, occupant = nil},
+	{x = 1726.0, y = 2640.3, z = 45.6, occupant = nil},
+	{x = 1746.5, y = 2644.5, z = 45.6, occupant = nil},
+	{x = 1727.4, y = 2644.4, z = 45.6, occupant = nil},
+	{x = 1746.4, y = 2648.3, z = 45.6, occupant = nil} -- last cell on first florr
+}
 
 -- V2
 TriggerEvent('es:addCommand', 'jail', function(source, args, user)
@@ -40,7 +48,7 @@ end)
 
 function jailPlayer(data, officerName)
 	local targetPlayer = tonumber(data.id)
-	if not targetPlayer then TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^1Error: ^0You did not enter a player to jail!") return end
+	if not GetPlayerName(targetPlayer) then TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^1Error: ^0You did not enter a player to jail!") return end
 	local sentence = tonumber(data.sentence)
 	local reason = data.charges
 	local fine = data.fine
@@ -58,13 +66,25 @@ function jailPlayer(data, officerName)
 		fine = round(fine, 0)
 		print("after rounding, fine: " .. fine)
 	end
-	TriggerEvent("es:getPlayerFromId", targetPlayer, function(user)
-		-- jail player
+	--TriggerEvent("es:getPlayerFromId", targetPlayer, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(targetPlayer)
+		-- assign an open cell --
+		local assigned_cell = CELLS[1] -- use CELLS[1] just in case there are no open cells (lol)
+		for i = 1, #CELLS do
+			if not CELLS[i].occupant then
+				CELLS[i].occupant = {
+					name = user.getActiveCharacterData("fullName")
+				}
+				assigned_cell = CELLS[i]
+				break
+			end
+		end
+		-- send to assigned cell --
 		local inmate_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
 		TriggerClientEvent('chatMessage', -1, "SYSTEM", {255,180,0}, inmate_name .. " has been jailed for ^3" .. sentence .. "^0 month(s).")
 		TriggerClientEvent('chatMessage', -1, "SYSTEM", {255,180,0}, "Charges: " .. reason)
 		TriggerClientEvent('chatMessage', -1, "SYSTEM", {255,180,0}, "Fine: $" .. fine)
-		TriggerClientEvent("jail:jail", targetPlayer)
+		TriggerClientEvent("jail:jail", targetPlayer, assigned_cell)
 		-- remove items from player
 		TriggerClientEvent("jail:removeWeapons", targetPlayer) -- take from ped
 		user.setActiveCharacterData("weapons", {})
@@ -125,8 +145,19 @@ function jailPlayer(data, officerName)
 				}
 			}
 		}), { ["Content-Type"] = 'application/json' })
-	end)
+	--end)
 end
+
+RegisterServerEvent("jail:clearCell")
+AddEventHandler("jail:clearCell", function(cell)
+	for i = 1, #CELLS do
+		if CELLS[i].occupant.name == cell.occupant.name then
+			print("evicting person from cell #: " .. i .. "!")
+			CELLS[i].occupant = nil
+			return
+		end
+	end
+end)
 
 function GetFPSuspensionDays(charges) -- firearm permit
 	local words = {

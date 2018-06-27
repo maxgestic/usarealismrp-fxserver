@@ -1,3 +1,18 @@
+RegisterServerEvent("interaction:checkJailedStatusBeforeEmote")
+AddEventHandler("interaction:checkJailedStatusBeforeEmote", function(scenario)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	print("user.getActiveCharacterData(\"jailtime\"):" .. user.getActiveCharacterData("jailtime"))
+	if user.getActiveCharacterData("jailtime") > 0 then
+		TriggerClientEvent("usa:notify", source, "Can't use that while imprisoned!")
+	else
+		local scenario_name = ""
+		if scenario == "mechanic" then scenario_name = "WORLD_HUMAN_VEHICLE_MECHANIC" end
+		if scenario == "chair" then scenario_name = "PROP_HUMAN_SEAT_CHAIR_MP_PLAYER" end
+		TriggerClientEvent("usa:playScenario", source, scenario_name)
+	end
+end)
+
+
 RegisterServerEvent("interaction:tackle")
 AddEventHandler("interaction:tackle", function(targetId)
 	TriggerClientEvent("interaction:ragdoll", targetId)

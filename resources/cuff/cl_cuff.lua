@@ -18,6 +18,18 @@ AddEventHandler("cuff:attemptToCuffNearest", function()
 	end)
 end)
 
+RegisterNetEvent("cuff:unCuff")
+AddEventHandler("cuff:unCuff", function()
+	ClearPedSecondaryTask(lPed)
+	SetEnableHandcuffs(lPed, false)
+	--FreezeEntityPosition(lPed, false)
+	DrawCoolLookingNotificationNoPic("You have been ~g~released~w~.")
+	isCuffed = false
+	if IsPedModel(lPed,"mp_m_freemode_01") or IsPedModel(lPed,"mp_f_freemode_01") then
+		SetPedComponentVariation(lPed, 7, 0, 0, 2)
+	end
+end)
+
 RegisterNetEvent("cuff:Handcuff")
 AddEventHandler("cuff:Handcuff", function()
 	lPed = GetPlayerPed(-1)
