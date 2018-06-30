@@ -378,6 +378,20 @@ AddEventHandler("usa:insertItem", function(to_insert_item, quantity, player_sour
 	end)
 end)
 
+RegisterServerEvent("usa:loadCivCharacter")
+AddEventHandler("usa:loadCivCharacter", function(id)
+	local usource = source
+	if id then usource = id end
+	local player = exports["essentialmode"]:getPlayerFromId(usource)
+	local chars = player.getCharacters()
+	for i = 1, #chars do
+		if chars[i].active == true then
+			TriggerClientEvent("usa:loadCivCharacter", usource, chars[i].appearance, chars[i].weapons)
+			return
+		end
+	end
+end)
+
 RegisterServerEvent("usa:loadPlayerComponents")
 AddEventHandler("usa:loadPlayerComponents", function(id)
 	local usource = source

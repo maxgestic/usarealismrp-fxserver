@@ -6,7 +6,7 @@ AddEventHandler("carDamage:checkForRepairKit", function(vehicle)
         for i = 1, #inventory do
             if i <= #inventory and i ~= 0 then
                 if inventory[i].name == "Repair Kit" then
-                    if math.random(1, 100) < 70 then -- 70% chance to repair
+                    if math.random(100) <= 80 then -- 80% chance to repair
                         TriggerClientEvent("carDamage:repairVehicle", userSource, vehicle)
                     else
                         TriggerClientEvent("carDamage:notifiyCarRepairFailed", userSource)

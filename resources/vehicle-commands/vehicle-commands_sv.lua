@@ -137,7 +137,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'extra', { "police", "sheriff", "ems", "fire" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'extra', { "police", "sheriff", "ems", "fire", "corrections" }, function(source, args, user)
 	if args[2] then
 		TriggerClientEvent("vehicleCommands:setExtra", source, args[2], args[3])
 	else

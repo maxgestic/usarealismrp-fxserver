@@ -3,9 +3,9 @@ TriggerEvent('es:addCommand', 'drag', function(source, args, user)
 		if tonumber(args[2]) then
 			local userJob = user.getActiveCharacterData("job")
 			local userGroup = user.getGroup()
-			if userJob == "sheriff" or userJob == "cop" or userJob == "ems" or userJob == "fire" or userGroup == "mod" or userGroup == "admin" or userGroup == "superadmin" or userGroup == "owner" then
+			if userJob == "corrections" or userJob == "sheriff" or userJob == "cop" or userJob == "ems" or userJob == "fire" or userGroup == "mod" or userGroup == "admin" or userGroup == "superadmin" or userGroup == "owner" then
 				TriggerClientEvent("dr:drag", tonumber(args[2]), usource)
-			else 
+			else
 				TriggerClientEvent("drag:attemptToDragNearest", usource)
 			end
 		else

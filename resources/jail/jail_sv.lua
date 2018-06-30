@@ -37,12 +37,9 @@ AddEventHandler("jail:jailPlayerFromMenu", function(data)
 		print("data.gender: " .. data.gender)
 	end
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
-		local user_job = user.getActiveCharacterData("job")
 		local player_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
-		if user_job == "sheriff" or user_job == "cop" then
-			local arrestingOfficerName = player_name
-			jailPlayer(data, arrestingOfficerName)
-		end
+		local arrestingOfficerName = player_name
+		jailPlayer(data, arrestingOfficerName)
 	end)
 end)
 

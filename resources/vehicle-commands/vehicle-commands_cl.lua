@@ -24,8 +24,7 @@ AddEventHandler("vehicleCommands:spawnVehicle", function(modelName)
 
 		-- Spawn the vehicle and assign the vehicle handle to 'vehicle'
 		local vehicle = CreateVehicle(hash, playerCoords.x, playerCoords.y + 4.5, playerCoords.z, heading --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
-
-		SetVehicleNumberPlateText(vehicle, GetPlayerName(PlayerId()))
+		
 		SetEntityAsMissionEntity(vehicle, true, true)
 		SetVehicleHasBeenOwnedByPlayer(vehicle, true)
 		SetVehicleExplodesOnHighExplosionDamage(vehicle, false)

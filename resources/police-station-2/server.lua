@@ -1,14 +1,14 @@
 AddEventHandler('rconCommand', function(commandName, args)
   if commandName:lower() == 'whitelist' then
     local playerId = table.remove(args, 1)
-    local type = table.remove(args, 1)
+    local wl_type = table.remove(args, 1)
     local rank = tonumber(table.remove(args, 1)) -- 0 for unwhitelist, remove whitelist
     --RconPrint(type)
     if not GetPlayerName(playerId) then
       RconPrint("\nError: player with id #" .. playerId .. " does not exist!")
       CancelEvent()
       return
-    elseif not type then
+    elseif not wl_type then
       RconPrint("\nYou must enter a whitelist type: police or  ems")
       CancelEvent()
       return
@@ -18,7 +18,7 @@ AddEventHandler('rconCommand', function(commandName, args)
       return
     end
 
-    if type == "police" then
+    if wl_type == "police" then
       TriggerEvent("es:getPlayerFromId", tonumber(playerId), function(user)
         if(user)then
           if rank > 0 then
@@ -32,8 +32,8 @@ AddEventHandler('rconCommand', function(commandName, args)
           end
         end
       end)
-    elseif type == "ems" then 
-		TriggerEvent("es:getPlayerFromId", tonumber(playerId), function(user)
+    elseif wl_type == "ems" then
+      TriggerEvent("es:getPlayerFromId", tonumber(playerId), function(user)
         if(user)then
           if rank > 0 then
             user.setActiveCharacterData("emsRank", rank)
@@ -46,23 +46,56 @@ AddEventHandler('rconCommand', function(commandName, args)
           end
         end
       end)
-	elseif type == "judge" then 
-		TriggerEvent("es:getPlayerFromId", tonumber(playerId), function(user)
-			if(user)then
-				if rank > 0 then
-					user.setActiveCharacterData("judgeRank", rank)
-					RconPrint("DEBUG: " .. playerId .. "'s judge rank has been set to: " .. rank .. "!")
-					TriggerClientEvent('chatMessage', tonumber(playerId), "CONSOLE", {255, 255, 255}, "You have been whitelisted for judge, rank: " .. rank)
-				else
-					user.setActiveCharacterData("judgeRank", 0)
-					user.setActiveCharacterData("job", "civ")
-					RconPrint("DEBUG: " .. playerId .. " un-whitelisted as judge.")
-				end
-			end
-		end)
-	end
+    elseif wl_type == "judge" then
+      TriggerEvent("es:getPlayerFromId", tonumber(playerId), function(user)
+        if(user)then
+          if rank > 0 then
+            user.setActiveCharacterData("judgeRank", rank)
+            RconPrint("DEBUG: " .. playerId .. "'s judge rank has been set to: " .. rank .. "!")
+            TriggerClientEvent('chatMessage', tonumber(playerId), "CONSOLE", {255, 255, 255}, "You have been whitelisted for judge, rank: " .. rank)
+          else
+            user.setActiveCharacterData("judgeRank", 0)
+            user.setActiveCharacterData("job", "civ")
+            RconPrint("DEBUG: " .. playerId .. " un-whitelisted as judge.")
+          end
+        end
+      end)
+    elseif wl_type == "corrections" then
+    	if not GetPlayerName(playerId) or not tonumber(rank) then
+    		RconPrint("Error: bad format!")
+    		return
+    	end
+      local target_ident = GetPlayerIdentifiers(playerId)[1]
+    	TriggerEvent('es:exposeDBFunctions', function(GetDoc)
+    		GetDoc.getDocumentByRow("correctionaldepartment", "identifier" , target_ident, function(result)
 
-    --RconPrint("\nError: failed to whitelist player " .. GetPlayerName(playerId) .. " for POLICE.")
+          local target = exports["essentialmode"]:getPlayerFromId(tonumber(playerId))
+          local employee = {
+            identifier = target_ident,
+            name = target.getActiveCharacterData("fullName"),
+            rank = tonumber(rank)
+          }
+
+    			if type(result) ~= "boolean" then -- exists (table)
+            GetDoc.updateDocument("correctionaldepartment", result._id, {rank = employee.rank}, function()
+              RconPrint("Rank updated to: " .. employee.rank)
+              RconPrint("\nEmployee " .. employee.name .. "updated, rank: " .. employee.rank .. "!")
+              --loadDOCEmployees()
+              TriggerEvent("doc:refreshEmployees") -- TODO: CREATE HANDLER FOR THIS EVENT in prisonfive/server.lua
+            end)
+    			else -- did not exist already, create doc
+            GetDoc.createDocument("correctionaldepartment", employee, function()
+              print("employee created!")
+              -- notify:
+              RconPrint("Employee " .. employee.name .. "created, rank: " .. employee.rank .. "!")
+              -- refresh employees:
+              --loadDOCEmployees()
+              TriggerEvent("doc:refreshEmployees")
+            end)
+          end
+        end)
+    	end)
+    end
     CancelEvent()
   end
 end)
@@ -80,10 +113,10 @@ TriggerEvent('es:addCommand', 'whitelist', function(source, args, user)
   elseif type == "police" then
     user_rank = tonumber(user.getActiveCharacterData("policeRank"))
   end
-  
-	if user_group == "admin" or user_group == "superadmin" or user_group == "owner" then
-		user_rank = 999999 -- so admins can use /whitelist
-	end
+
+  if user_group == "admin" or user_group == "superadmin" or user_group == "owner" then
+    user_rank = 999999 -- so admins can use /whitelist
+  end
 
   if user_rank < 5 then
     TriggerClientEvent("usa:notify", source, "Error: must be ranked as Sergeant or above to set permissions!")
@@ -129,12 +162,12 @@ TriggerEvent('es:addCommand', 'whitelist', function(source, args, user)
     end
   end)
 end, {
-	help = "Set a person's police or EMS rank.",
-	params = {
-		{ name = "id", help = "The player's server ID #" },
+  help = "Set a person's police or EMS rank.",
+  params = {
+    { name = "id", help = "The player's server ID #" },
     { name = "type", help = "'police' or 'ems'" },
     { name = "rank", help = "0 to remove whitelist, 1 for probationary, 7 is max permissions" }
-	}
+  }
 })
 
 RegisterServerEvent("policestation2:checkWhitelist")

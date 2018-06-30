@@ -148,7 +148,7 @@ end
 
 
 -- Add a command everyone is able to run. Args is a table with all the arguments, and the user is the user object, containing all the user data.
-TriggerEvent('es:addJobCommand', 'mdt', { "police", "sheriff", "judge" }, function(source, args, user, location)
+TriggerEvent('es:addJobCommand', 'mdt', { "police", "sheriff", "judge", "corrections" }, function(source, args, user, location)
 	if GetPlayerName(tonumber(args[2])) then
 		TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. user.getActiveCharacterData("fullName") .. " opens MDT.", location)
 	end

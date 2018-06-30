@@ -80,10 +80,6 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(0)
 
-		if getPlayerDistanceFromCoords(jailX, jailY, jailZ) <= 80 then
-			isCuffed = false
-		end
-
 		if isCuffed then
 			--DisableControlAction(1, 245, true) 245 = 5 FOR TEXT CHAT
 			DisableControlAction(1, 117, true)

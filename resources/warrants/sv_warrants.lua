@@ -79,7 +79,7 @@ TriggerEvent('es:addJobCommand', 'createwarrant', { "police", "sheriff", "judge"
 						}
 					}
 				}), { ["Content-Type"] = 'application/json' })
-		-- add player to ban list
+		-- add warrant to warrant list
 		TriggerEvent('es:exposeDBFunctions', function(GetDoc)
 			-- insert into db
 			GetDoc.createDocument("warrants", warrant, function()

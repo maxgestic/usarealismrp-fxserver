@@ -1,4 +1,4 @@
-TriggerEvent('es:addJobCommand', 'impound', { "police", "sheriff", "ems" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'impound', { "police", "sheriff", "ems", "corrections" }, function(source, args, user)
 	TriggerClientEvent('impoundVehicle', source)
 end, { help = "Impound a vehicle." })
 

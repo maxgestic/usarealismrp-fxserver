@@ -1,4 +1,4 @@
-TriggerEvent('es:addJobCommand', 'cuff', { "police", "sheriff" }, function(source, args, user, location)
+TriggerEvent('es:addJobCommand', 'cuff', { "police", "sheriff", "corrections" }, function(source, args, user, location)
 	local userSource = tonumber(source)
 	if args[2] then -- id was passed as param
 		local tPID = tonumber(args[2])
@@ -23,8 +23,7 @@ AddEventHandler("cuff:Handcuff", function(id)
 	local usource = source
 	TriggerEvent("es:getPlayerFromId", usource, function(user)
 		playerJob = user.getActiveCharacterData("job")
-		if playerJob == "sheriff" or
-			playerJob == "cop" then
+		if playerJob == "sheriff" or playerJob == "cop" or playerJob == "corrections" then
 			print("cuffing player with id: " .. id)
 			TriggerClientEvent("cuff:Handcuff", tonumber(id), GetPlayerName(usource))
 		end
