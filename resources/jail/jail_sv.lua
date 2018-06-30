@@ -16,7 +16,7 @@ local CELLS = {
 TriggerEvent('es:addCommand', 'jail', function(source, args, user)
 	local user_job = user.getActiveCharacterData("job")
 	local user_jailtime = user.getActiveCharacterData("jailtime")
-	if user_job == "sheriff" or user_job == "cop" then
+	if user_job == "sheriff" or user_job == "cop" or user_job == "corrections" then
 		TriggerClientEvent("jail:openMenu", tonumber(source))
 	else
 		TriggerClientEvent("jail:notify", tonumber(source), "You have ~y~" .. user_jailtime .. " month(s) ~w~left in your jail sentence.")

@@ -127,8 +127,12 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(3)
 
-		if IsControlJustPressed(1, 51) then
-			TriggerServerEvent("jail:checkJobForWarp")
+		for k,v in ipairs(teleports) do
+			if Vdist(GetEntityCoords(GetPlayerPed(-1), true), v.pos) < 2.0 then
+				if IsControlJustPressed(1, 51) then
+					TriggerServerEvent("jail:checkJobForWarp")
+				end
+			end
 		end
 
 	end

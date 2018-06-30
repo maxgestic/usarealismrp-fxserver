@@ -68,9 +68,13 @@ end)
 RegisterNetEvent("jail:jail")
 AddEventHandler("jail:jail", function(cell)
 
-  print("x: " .. cell.x)
-  print("y: " .. cell.y)
-  print("z: " .. cell.z)
+  --print("x: " .. cell.x)
+  --print("y: " .. cell.y)
+  --print("z: " .. cell.z)
+
+  if not cell then
+    cell = {x = 1727.1, y = 2636.2, z = 45.6, occupant = nil}
+  end
 
   assigned_cell = cell
 
@@ -137,7 +141,7 @@ AddEventHandler("jail:changeClothes", function(gender)
 	-- only change clothes if male, since there is no female prisoner ped --
 	if gender == "male" or gender == "undefined" then
 
-    if not IsPedModel(me,"mp_m_freemode_01") then
+    if not IsPedModel(GetPlayerPed(-1), GetHashKey("mp_m_freemode_01")) then
 
   		Citizen.CreateThread(function()
   			local model = GetHashKey("S_M_Y_Prisoner_01")
@@ -170,7 +174,7 @@ AddEventHandler("jail:changeClothes", function(gender)
 
 	else
 
-    if IsPedModel(me,"mp_f_freemode_01") then
+    if IsPedModel(GetPlayerPed(-1), GetHashKey("mp_f_freemode_01")) then
 
       SetPedComponentVariation(GetPlayerPed(-1), 4, 3, 15, 2)
       SetPedComponentVariation(GetPlayerPed(-1), 5, 0, 0, 2)

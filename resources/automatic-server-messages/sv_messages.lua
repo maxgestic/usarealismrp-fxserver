@@ -10,7 +10,7 @@ function sendRestartNotification()
                 TriggerClientEvent("chatMessage", -1, "", {255, 255, 255}, "SERVER RESTARTING IN 10 MINUTES!!!")
             end
         end)
-        SetTimeout(restartTimeMilliseconds-150000, function()
+        SetTimeout(restartTimeMilliseconds-190000, function()
             print("****sending 1.5 minute warning...****")
             for i = 1, 8 do
                 TriggerClientEvent("chatMessage", -1, "", {255, 255, 255}, "^1SERVER RESTARTING IN 60 SECONDS! ^3DISCONNECT OR RISK DATA LOSS!!!")

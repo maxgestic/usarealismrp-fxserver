@@ -243,13 +243,13 @@ AddEventHandler('pv:tow', function()
 		if currentlyTowedVehicle == nil then
 			if targetVehicle ~= 0 then
 				if not IsPedInAnyVehicle(playerped, true) then
-					if vehicle ~= targetVehicle then
+					if vehicle ~= targetVehicle and IsVehicleSeatFree(targetVehicle, -1) then
 						AttachEntityToEntity(targetVehicle, vehicle, 20, -0.5, -5.0, 1.0, 0.0, 0.0, 0.0, false, false, false, false, 20, true)
 						currentlyTowedVehicle = targetVehicle
 						vehicleToImpound = currentlyTowedVehicle
 						TriggerEvent("chatMessage", "", {255, 255, 255}, "Vehicle successfully attached to towtruck!")
 					else
-						TriggerEvent("chatMessage", "", {255, 255, 255}, "You can't tow your own tow truck with your own tow truck!")
+						TriggerEvent("chatMessage", "", {255, 255, 255}, "You can't tow that vehicle!")
 					end
 				end
 			else

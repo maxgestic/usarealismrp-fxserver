@@ -87,6 +87,8 @@ AddEventHandler("RPD:removeWeapons", function()
 		TriggerClientEvent("crim:blindfold", userSource, false, true)
 		-- REMOVE ANY WARRANTS:
 		TriggerEvent("warrants:removeAnyActiveWarrants", user.getActiveCharacterData("fullName"))
+		-- check jailed status --
+		TriggerEvent("usa_rp:checkJailedStatusOnPlayerJoin", userSource)
 	end)
 end)
 
