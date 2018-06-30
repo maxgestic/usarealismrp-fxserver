@@ -11,7 +11,7 @@ local COORDS_TO_ALLOW_TELEPORTATION_FROM = {
 	{ x = 1819.9, y = 3688.5, z = 34.22 },
 	{ x  = 353.5, y = -588.9, z = 43.3 },
 	{ x = 177.6, y = 6646.2, z = 31.6 }, -- LS Customs parking lot spawn point
-	{ x = 751.3, y = 6454.3, z = 31.9} -- character selection menu (prevent /swap from triggering)
+	{ x = 751.3, y = 6454.3, z = 31.9}, -- character selection menu (prevent /swap from triggering)
 	{ x = 1714.893, y = 2542.678, z = 45.565 }, -- jail 1
 	{ x = 1847.086, y = 2585.990, z = 45.672 } -- jail 2
 }
