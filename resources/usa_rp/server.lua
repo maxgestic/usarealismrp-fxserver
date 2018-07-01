@@ -75,15 +75,14 @@ AddEventHandler("usa_rp:spawnPlayer", function()
 end)
 
 RegisterServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
-AddEventHandler("usa_rp:checkJailedStatusOnPlayerJoin", function(source)
+AddEventHandler("usa_rp:checkJailedStatusOnPlayerJoin", function(id)
+	if id then source = id end
 	print("inside of checkJailedStatusOnPlayerJoin event handler...")
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
 		if user then
 			if user.getActiveCharacterData("jailtime") > 0 then
 				TriggerClientEvent("jail:jail", userSource)
-				TriggerClientEvent("jail:removeWeapons", userSource)
-				TriggerClientEvent("jail:changeClothes", userSource)
 			end
 		end
 	end)

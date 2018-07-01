@@ -163,12 +163,16 @@ Citizen.CreateThread(function()
 				DrawMarker(27, uncuff_locations[i].x, uncuff_locations[i].y, uncuff_locations[i].z - 0.9, 0, 0, 0, 0, 0, 0, 3.0, 3.0, 3.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
 				local playercoords = GetEntityCoords(GetPlayerPed(-1))
 				if Vdist(uncuff_locations[i].x, uncuff_locations[i].y, uncuff_locations[i].z, playercoords.x, playercoords.y, playercoords.z) < 5.0 then
-					TriggerEvent("usa:notify", "Cutting off your cuffs!")
+					TriggerEvent("usa:notify", "Cutting off your cuffs! Stay nearby!")
 					local start = GetGameTimer()
-					while GetGameTimer() - start < 10000 do
-						Wait(1000)
+					while GetGameTimer() - start < 20000 do
+						Wait(20000)
 					end
-					TriggerEvent("cuff:unCuff")
+					if Vdist(uncuff_locations[i].x, uncuff_locations[i].y, uncuff_locations[i].z, playercoords.x, playercoords.y, playercoords.z) > 5.0 then
+						TriggerClientEvent("usa:notify", "You went out of range!")
+					else
+						TriggerEvent("cuff:unCuff")
+					end
 					break
 				end
 			end

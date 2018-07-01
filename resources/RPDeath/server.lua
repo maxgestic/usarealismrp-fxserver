@@ -21,6 +21,7 @@ RegisterServerEvent('RPD:userDead')
 AddEventHandler('RPD:userDead', function(userName, street)
 	TriggerEvent('es:getPlayerFromId', source, function(user)
 		downedUser = user
+		--[[
 		TriggerEvent("es:getPlayers", function(pl)
 			local meta = {}
 			for k, v in pairs(pl) do
@@ -34,6 +35,7 @@ AddEventHandler('RPD:userDead', function(userName, street)
 				end)
 			end
 		end)
+		--]]
 	end)
 end)
 
@@ -99,6 +101,7 @@ TriggerEvent('es:addCommand', 'revive', function(source, args, user)
 			local targetId = 0
 			local userJob = user.getActiveCharacterData("job")
 			if userJob == "cop" or
+				userJob == "corrections" or
 				userJob == "sheriff" or
 				userJob == "highwaypatrol" or
 				userJob == "ems" or

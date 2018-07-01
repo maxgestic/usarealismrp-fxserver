@@ -84,9 +84,10 @@ AddEventHandler("character:setActive", function(slot)
 			end
 			user.setCharacters(characters)
 			user.setActiveCharacterData("money", money_to_display) -- set money GUI in top right (?)
-			-- check jailed status
+			--[[ check jailed status [ MOVED ]
 			print("calling checkJailedStatusOnPlayerJoin server function!")
 			TriggerEvent("usa_rp:checkJailedStatusOnPlayerJoin", userSource)
+			--]]
 		end
 	end)
 end)

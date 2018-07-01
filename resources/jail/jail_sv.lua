@@ -82,8 +82,6 @@ function jailPlayer(data, officerName)
 		TriggerClientEvent('chatMessage', -1, "SYSTEM", {255,180,0}, "Charges: " .. reason)
 		TriggerClientEvent('chatMessage', -1, "SYSTEM", {255,180,0}, "Fine: $" .. fine)
 		TriggerClientEvent("jail:jail", targetPlayer, assigned_cell)
-		-- remove items from player
-		TriggerClientEvent("jail:removeWeapons", targetPlayer) -- take from ped
 		user.setActiveCharacterData("weapons", {})
 		user.setActiveCharacterData("jailtime", sentence)
 		user.setActiveCharacterData("job", "civ")
@@ -107,8 +105,6 @@ function jailPlayer(data, officerName)
 		}
 		table.insert(playerCriminalHistory, record)
 		user.setActiveCharacterData("criminalHistory", playerCriminalHistory)
-		-- give inmate clothing --
-		TriggerClientEvent("jail:changeClothes", targetPlayer, data.gender)
 		-- remove any active warrants --
 		TriggerEvent("warrants:removeAnyActiveWarrants", inmate_name)
 		-- suspend license if necessary --
@@ -148,10 +144,12 @@ end
 RegisterServerEvent("jail:clearCell")
 AddEventHandler("jail:clearCell", function(cell, clearJailTime)
 	for i = 1, #CELLS do
-		if CELLS[i].occupant.name == cell.occupant.name then
-			print("evicting person from cell #: " .. i .. "!")
-			CELLS[i].occupant = nil
-			return
+		if CELLS[i].occupant.name and cell.occupant.name then
+			if CELLS[i].occupant.name == cell.occupant.name then
+				print("evicting person from cell #: " .. i .. "!")
+				CELLS[i].occupant = nil
+				return
+			end
 		end
 	end
 	-- clear jail time --
@@ -222,6 +220,7 @@ function jailStatusLoop()
 									if chars[i].active == true then
 										print("found an active char to release with...")
 										TriggerClientEvent("jail:release", tonumber(id), chars[i].appearance) -- need to test
+										-- TODO: notify corrections
 										break
 									end
 								end

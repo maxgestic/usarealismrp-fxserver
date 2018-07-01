@@ -60,7 +60,7 @@ end)
 --------------------------------------
 -- inspect a downed player's wounds --
 --------------------------------------
-TriggerEvent('es:addJobCommand', 'inspect', { "ems", "fire", "police", "sheriff" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'inspect', { "ems", "fire", "police", "sheriff", "corrections" }, function(source, args, user)
 	if type(tonumber(args[2])) == "number" then
 		TriggerClientEvent("EMS:inspect", tonumber(args[2]), source)
 	end
@@ -87,18 +87,18 @@ AddEventHandler("EMS:notifyResponderOfInjuries", function(responder_id, killer_e
 	else
 		if (damage_type == 0 or damage_type == 1) and not injured_by_vehicle then
 			weapon_type = "unknown"
-		elseif damage_type == 2 then -- melee 
+		elseif damage_type == 2 then -- melee
 			-- check melee weapon type:
 			weapon_type = GetMeleeWeaponType(death_cause)
 		elseif damage_type == 3 then -- bullet
 			weapon_type = "bullet"
 		elseif damage_type == 4 or damage_type == 8 then -- force ragdoll fall ?
 			weapon_type = "fall"
-		elseif damage_type == 5 then -- explosive 
+		elseif damage_type == 5 then -- explosive
 			weapon_type = "explosion"
-		elseif damage_type == 6 then 
+		elseif damage_type == 6 then
 			weapon_type = "fire"
-		elseif damage_type == 13 then 
+		elseif damage_type == 13 then
 			weapon_type = "gas"
 		end
 		message = RandomInjuryMessage(weapon_type)
@@ -142,11 +142,11 @@ function RandomInjuryMessage(wep_type)
 		message = "Person has " .. injuries.knife[math.random(#injuries.knife)] .. " from a sharp object."
 	elseif wep_type == "bullet" then
 		message = "Person is bleeding from a gunshot wound."
-	elseif wep_type == "fall" then 
+	elseif wep_type == "fall" then
 		message = "Person has an injury from falling."
-	elseif wep_type == "explosion" then 
+	elseif wep_type == "explosion" then
 		message = "Person has extremely severe 3rd degree burns all over their body from an explosion."
-	elseif wep_type == "fire" then 
+	elseif wep_type == "fire" then
 		message = "Person has severe burns from a fire."
 	elseif wep_type == "gas" then
 		message = "Person has been incapacitated by non-lethal gas."

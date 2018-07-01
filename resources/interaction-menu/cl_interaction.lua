@@ -4,7 +4,7 @@ local scenarios = {
 	{name = "lean", scenarioName = "WORLD_HUMAN_LEANING"},
 	{name = "cop", scenarioName = "WORLD_HUMAN_COP_IDLES"},
 	{name = "sit", scenarioName = "WORLD_HUMAN_PICNIC"},
-	{name = "chair", scenarioName = "PROP_HUMAN_SEAT_CHAIR_MP_PLAYER"},
+	{name = "chair", scenarioName = "PROP_HUMAN_SEAT_CHAIR"},
 	{name = "kneel", scenarioName = "CODE_HUMAN_MEDIC_KNEEL"},
 	--{name = "medic", scenarioName = "CODE_HUMAN_MEDIC_TEND_TO_DEAD"},
 	{name = "notepad", scenarioName = "CODE_HUMAN_MEDIC_TIME_OF_DEATH"},

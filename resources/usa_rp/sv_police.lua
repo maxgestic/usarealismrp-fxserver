@@ -282,21 +282,27 @@ end, {
 })
 
 -- panic button --
-TriggerEvent('es:addJobCommand', 'p', { "police", "sheriff", "ems" }, function(source, args, user)
-	TriggerEvent('es:getPlayerFromId', source, function(user)
+TriggerEvent('es:addJobCommand', 'p', { "police", "sheriff", "ems", "corrections" }, function(source, args, user, location)
+	--TriggerEvent('es:getPlayerFromId', source, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	local source_user_job = user.getActiveCharacterData("job")
 		TriggerEvent("es:getPlayers", function(pl)
 			for k, v in pairs(pl) do
 				local user_job = v.getActiveCharacterData("job")
-				if user_job == "cop" or user_job == "sheriff" or user_job == "highwaypatrol" or user_job == "ems" or user_job == "fire" then
+				if user_job == "cop" or user_job == "sheriff" or user_job == "highwaypatrol" or user_job == "ems" or user_job == "fire" or user_job == "corrections" then
 					for i = 1, 3 do
-						TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "(10-99) Panic button pressed by " .. user.getActiveCharacterData("fullName"))
+						if source_user_job ~= "corrections" then
+							TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "(10-99) Panic button pressed by " .. user.getActiveCharacterData("fullName")) -- need to implement automatic street name locations here
+						else
+							TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "(10-99) Panic button pressed by " .. user.getActiveCharacterData("fullName") .. " (Department of Corrections, Senora Fwy)")
+						end
 						local params = {-1, "Event_Message_Purple", "GTAO_FM_Events_Soundset", 1}
 						TriggerClientEvent("usa:playSound", k, params)
 					end
 				end
 			end
 		end)
-	end)
+	--end)
 end, { help = "Press your panic button. Only for use in extreme emergencies."})
 
 -- GSR test --

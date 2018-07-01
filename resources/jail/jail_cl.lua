@@ -87,11 +87,13 @@ AddEventHandler("jail:jail", function(cell)
 
   assigned_cell = cell
 
-  lPed = GetPlayerPed(-1)
-  FreezeEntityPosition(lPed, false) -- fix for the /cuff command freezing the player in place
+  local lPed = GetPlayerPed(-1)
   SetEntityCoords(GetPlayerPed(-1), assigned_cell.x, assigned_cell.y, assigned_cell.z, 1, 0, 0, 1) -- tp to jail
   TriggerEvent("cuff:unCuff")
   imprisoned = true
+
+  TriggerEvent("jail:changeClothes")
+  TriggerEvent("jail:removeWeapons")
 
 end)
 
@@ -110,23 +112,10 @@ AddEventHandler("jail:release", function(character)
       SetPlayerModel(PlayerId(), model)
       SetModelAsNoLongerNeeded(model)
     else
-      model = tonumber(character.hash)
-      RequestModel(model)
-      while not HasModelLoaded(model) do -- Wait for model to load
-        Citizen.Wait(100)
-      end
-      SetPlayerModel(PlayerId(), model)
-      SetModelAsNoLongerNeeded(model)
-      -- set customizations
-      for key, value in pairs(character["components"]) do
-        SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
-      end
-      for key, value in pairs(character["props"]) do
-        SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
-      end
+      TriggerEvent("usa:setPlayerComponents", character)
     end
-    TriggerEvent("usa:setPlayerComponents", character)
     TriggerServerEvent("jail:clearCell", assigned_cell, false)
+    TriggerEvent("cuff:unCuff")
     assigned_cell = nil
   end)
 end)
@@ -156,7 +145,7 @@ RegisterNetEvent("jail:changeClothes")
 AddEventHandler("jail:changeClothes", function(gender)
 
 	-- only change clothes if male, since there is no female prisoner ped --
-	if gender == "male" or gender == "undefined" then
+	if gender == "male" or gender == "undefined" or not gender then
 
     if not IsPedModel(GetPlayerPed(-1), GetHashKey("mp_m_freemode_01")) then
 
