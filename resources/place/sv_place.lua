@@ -1,7 +1,7 @@
 TriggerEvent('es:addCommand', 'place', function(source, args, user, location)
 	TriggerEvent('es:getPlayerFromId', source, function(user)
 		local user_job = user.getActiveCharacterData("job")
-		if user_job == "sheriff" or user_job == "ems" or user_job == "fire" then
+		if user_job == "sheriff" or user_job == "ems" or user_job == "fire" or user_job == "corrections" then
 			local tPID = tonumber(args[2])
 			TriggerClientEvent("place", tPID)
 			TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. user.getActiveCharacterData("fullName") .. " places person in vehicle.", location)
@@ -29,7 +29,7 @@ end)
 -- unseat
 TriggerEvent('es:addCommand', 'unseat', function(source, args, user)
 	local user_job = user.getActiveCharacterData("job")
-	if user_job == "sheriff" or user_job == "cop" or user_job == "ems" or user_job == "fire" then
+	if user_job == "sheriff" or user_job == "cop" or user_job == "ems" or user_job == "fire" or user_job == "corrections" then
 		local targetPlayer = args[2]
 		TriggerClientEvent("place:unseat", targetPlayer, source)
 	else
