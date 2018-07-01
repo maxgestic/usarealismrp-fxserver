@@ -69,17 +69,18 @@ AddEventHandler("cuff:Handcuff", function()
 	end
 end)
 
-local jailX, jailY, jailZ = 1714.893, 2542.678, 45.565
-
 function getPlayerDistanceFromCoords(x,y,z)
 	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
 	return GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,x,y,z,false)
 end
 
+local uncuff_locations = {
+	{x = -533.3, y = 5291.5, z = 74.2}
+}
+
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
-
 		if isCuffed then
 			--DisableControlAction(1, 245, true) 245 = 5 FOR TEXT CHAT
 			DisableControlAction(1, 117, true)
@@ -154,6 +155,24 @@ Citizen.CreateThread(function()
 				end
 				TaskPlayAnim(lPed, "mp_arresting", "idle", 8.0, -8, -1, 49, 0, 0, 0, 0)
 			end
+
+			----------------------
+			-- uncuffing circle --
+			----------------------
+			for i = 1, #uncuff_locations do
+				DrawMarker(27, uncuff_locations[i].x, uncuff_locations[i].y, uncuff_locations[i].z - 0.9, 0, 0, 0, 0, 0, 0, 3.0, 3.0, 3.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
+				local playercoords = GetEntityCoords(GetPlayerPed(-1))
+				if Vdist(uncuff_locations[i].x, uncuff_locations[i].y, uncuff_locations[i].z, playercoords.x, playercoords.y, playercoords.z) < 5.0 then
+					TriggerEvent("usa:notify", "Cutting off your cuffs!")
+					local start = GetGameTimer()
+					while GetGameTimer() - start < 10000 do
+						Wait(1000)
+					end
+					TriggerEvent("cuff:unCuff")
+					break
+				end
+			end
+
 		end
 	end
 end)

@@ -82,6 +82,8 @@ AddEventHandler('paycheck:welfare', function()
 				msg = msg .. "of $" .. paycheckAmount .. " from ^3Weazel News^0!"
 			elseif job == "sheriff" then
 				msg = msg .. "of $" .. paycheckAmount .. " from the ^3Blaine County Sheriff's Office^0!"
+			elseif job == "corrections" then
+				msg = msg .. "of $" .. paycheckAmount .. " from the ^3San Andreas Department of Corrections^0!"
 			elseif job == "ems" then
 				msg = msg .. "of $" .. paycheckAmount .. " from ^3American Medical Response^0!"
 			else

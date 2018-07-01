@@ -45,22 +45,31 @@ RegisterNUICallback('escape', function(data, cb)
 end)
 
 Citizen.CreateThread(function()
-    while true do
-        if menuEnabled then
-            DisableControlAction(29, 241, menuEnabled) -- scroll up
-            DisableControlAction(29, 242, menuEnabled) -- scroll down
-            DisableControlAction(0, 1, menuEnabled) -- LookLeftRight
-            DisableControlAction(0, 2, menuEnabled) -- LookUpDown
-            DisableControlAction(0, 142, menuEnabled) -- MeleeAttackAlternate
-            DisableControlAction(0, 106, menuEnabled) -- VehicleMouseControlOverride
-            if IsDisabledControlJustReleased(0, 142) then -- MeleeAttackAlternate
-                SendNUIMessage({
-                    type = "click"
-                })
-            end
-        end
-        Citizen.Wait(0)
+  while true do
+    -- jail menu check --
+    if menuEnabled then
+      DisableControlAction(29, 241, menuEnabled) -- scroll up
+      DisableControlAction(29, 242, menuEnabled) -- scroll down
+      DisableControlAction(0, 1, menuEnabled) -- LookLeftRight
+      DisableControlAction(0, 2, menuEnabled) -- LookUpDown
+      DisableControlAction(0, 142, menuEnabled) -- MeleeAttackAlternate
+      DisableControlAction(0, 106, menuEnabled) -- VehicleMouseControlOverride
+      if IsDisabledControlJustReleased(0, 142) then -- MeleeAttackAlternate
+        SendNUIMessage({
+          type = "click"
+        })
+      end
     end
+    -- escaping jail check --
+    if assigned_cell then
+      local mycoords = GetEntityCoords(GetPlayerPed(-1))
+      if Vdist(mycoords.x, mycoords.y, mycoords.z, assigned_cell.x, assigned_cell.y, assigned_cell.z) > 350 then
+        TriggerEvent("jail:escaped")
+        assigned_cell = nil
+      end
+    end
+    Citizen.Wait(0)
+  end
 end)
 
 -- end of NUI menu stuff
@@ -117,8 +126,16 @@ AddEventHandler("jail:release", function(character)
       end
     end
     TriggerEvent("usa:setPlayerComponents", character)
-    TriggerServerEvent("jail:clearCell", assigned_cell)
+    TriggerServerEvent("jail:clearCell", assigned_cell, false)
+    assigned_cell = nil
   end)
+end)
+
+RegisterNetEvent("jail:escaped")
+AddEventHandler("jail:escaped", function()
+  imprisoned = false
+  TriggerServerEvent("jail:clearCell", assigned_cell, true)
+  TriggerEvent("usa:notify", "You escaped prison!")
 end)
 
 RegisterNetEvent("jail:wrongPw")

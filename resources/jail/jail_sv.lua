@@ -146,13 +146,18 @@ function jailPlayer(data, officerName)
 end
 
 RegisterServerEvent("jail:clearCell")
-AddEventHandler("jail:clearCell", function(cell)
+AddEventHandler("jail:clearCell", function(cell, clearJailTime)
 	for i = 1, #CELLS do
 		if CELLS[i].occupant.name == cell.occupant.name then
 			print("evicting person from cell #: " .. i .. "!")
 			CELLS[i].occupant = nil
 			return
 		end
+	end
+	-- clear jail time --
+	if clearJailTime then
+		local user = exports["essentialmode"]:getPlayerFromId(source)
+		user.setActiveCharacterData("jailtime", 0)
 	end
 end)
 

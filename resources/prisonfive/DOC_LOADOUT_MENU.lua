@@ -5,7 +5,7 @@ local weapons = {
   { name = 1593441988, display_name = "Combat Pistol", rank = 2},
   { name = -1600701090, display_name = "BZ Gas", rank = 2},
   { name = -2084633992, display_name = "Carbine Rifle", rank = 3},
-  { name = -952879014, display_name = "Marksman Rifle", rank = 3}
+  { name = 100416529, display_name = "Marksman Rifle", rank = 3}
 }
 
 local vehicles = {
@@ -16,6 +16,7 @@ local uniforms = {
   males = {
     components = {
       [1] = {values = {-1, 121}, textures = {-1, 0, 1, 2}, name = "Earpiece", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- earpiece
+      [3] = {values = {-1, 0, 11}, textures = {-1, 0}, name = "Arms/Hands", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- Arms/Hands
       [4] = {values = {-1, 47, 31}, textures = {0, 1, 2}, name = "Legs", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- legs
       [6] = {values = {-1, 25}, textures = {0, 1}, name = "Feet", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- feet
       [7] = {values = {-1, 125}, textures = {-1, 0}, name = "Badge", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- ties
@@ -31,6 +32,7 @@ local uniforms = {
   females = {
     components = {
         [1] = {values = {-1, 121}, textures = {-1, 0, 1, 2}, name = "Earpiece", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- earpiece
+        [3] = {values = {0}, textures = {-1, 0}, name = "Arms/Hands", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- Arms/Hands
         [4] = {values = {-1, 49, 30}, textures = {0, 1, 2}, name = "Legs", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- legs
         [6] = {values = {-1, 25}, textures = {0, 1}, name = "Feet", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- feet
         [7] = {values = {-1, 95}, textures = {-1, 0}, name = "Badge", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- ties
@@ -193,6 +195,7 @@ function addCustomUniformsMale(id)
       base_model = GetEntityModel(GetPlayerPed(-1)),
       components = {
         [1] = {uniforms.males.components[1].current_value, uniforms.males.components[1].current_texture},
+        [3] = {uniforms.males.components[3].current_value, uniforms.males.components[3].current_texture},
         [4] = {uniforms.males.components[4].current_value, uniforms.males.components[4].current_texture},
         [6] = {uniforms.males.components[6].current_value, uniforms.males.components[6].current_texture},
         [7] = {uniforms.males.components[7].current_value, uniforms.males.components[7].current_texture},
@@ -289,6 +292,7 @@ function addCustomUniformsFemale(id)
     local uniform = {
       base_model = GetEntityModel(GetPlayerPed(-1)),
       components = {
+        [3] = {uniforms.females.components[3].current_value, uniforms.females.components[3].current_texture},
         [4] = {uniforms.females.components[4].current_value, uniforms.females.components[4].current_texture},
         [6] = {uniforms.females.components[6].current_value, uniforms.females.components[6].current_texture},
         [9] = {uniforms.females.components[9].current_value, uniforms.females.components[9].current_texture},
