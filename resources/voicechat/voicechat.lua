@@ -15,6 +15,7 @@ local distanceSetting = 0
 local voip_toggle_key = 289 -- 38 = "E", 289 = "F2"
 
 AddEventHandler('onClientMapStart', function()
+	NetworkSetVoiceActive(true)
 	NetworkSetTalkerProximity(voip['default'].setting)
 end)
 

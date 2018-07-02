@@ -254,7 +254,7 @@ end)
 -- KEEP DOOR OPEN ON EXIT (HOLD F) --
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(1)
+		Citizen.Wait(0)
 		if IsPedInAnyPoliceVehicle(GetPlayerPed(-1)) and IsControlPressed( 2, 75 ) and GetLastInputMethod(2) then
 			Citizen.Wait(150)
 			if IsPedInAnyPoliceVehicle(GetPlayerPed(-1)) and IsControlPressed( 2, 75 ) then

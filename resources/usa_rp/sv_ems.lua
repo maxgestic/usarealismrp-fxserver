@@ -60,7 +60,7 @@ end)
 --------------------------------------
 -- inspect a downed player's wounds --
 --------------------------------------
-TriggerEvent('es:addJobCommand', 'inspect', { "ems", "fire", "police", "sheriff", "corrections" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'inspect', { "ems", "fire", "police", "sheriff", "corrections", "civ" }, function(source, args, user)
 	if type(tonumber(args[2])) == "number" then
 		TriggerClientEvent("EMS:inspect", tonumber(args[2]), source)
 	end
