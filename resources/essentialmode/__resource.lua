@@ -12,7 +12,7 @@ ui_page 'ui.html'
 
 -- Server
 server_scripts { 
-	'config.lua',
+	'sv_es-DB-config.lua',
 	'server/util.lua',
 	'server/main.lua',
 	'server/db.lua',
