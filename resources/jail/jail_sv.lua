@@ -39,11 +39,11 @@ AddEventHandler("jail:jailPlayerFromMenu", function(data)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local player_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
 		local arrestingOfficerName = player_name
-		jailPlayer(data, arrestingOfficerName)
+		jailPlayer(data, arrestingOfficerName, data.gender)
 	end)
 end)
 
-function jailPlayer(data, officerName)
+function jailPlayer(data, officerName, gender)
 	local targetPlayer = tonumber(data.id)
 	if not GetPlayerName(targetPlayer) then TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^1Error: ^0You did not enter a player to jail!") return end
 	local sentence = tonumber(data.sentence)
@@ -81,7 +81,7 @@ function jailPlayer(data, officerName)
 		TriggerClientEvent('chatMessage', -1, "SYSTEM", {255,180,0}, inmate_name .. " has been jailed for ^3" .. sentence .. "^0 month(s).")
 		TriggerClientEvent('chatMessage', -1, "SYSTEM", {255,180,0}, "Charges: " .. reason)
 		TriggerClientEvent('chatMessage', -1, "SYSTEM", {255,180,0}, "Fine: $" .. fine)
-		TriggerClientEvent("jail:jail", targetPlayer, assigned_cell)
+		TriggerClientEvent("jail:jail", targetPlayer, assigned_cell, gender)
 		user.setActiveCharacterData("weapons", {})
 		user.setActiveCharacterData("jailtime", sentence)
 		user.setActiveCharacterData("job", "civ")
@@ -144,7 +144,7 @@ end
 RegisterServerEvent("jail:clearCell")
 AddEventHandler("jail:clearCell", function(cell, clearJailTime)
 	for i = 1, #CELLS do
-		if CELLS[i].occupant.name and cell.occupant.name then
+		if CELLS[i].occupant and cell.occupant then
 			if CELLS[i].occupant.name == cell.occupant.name then
 				print("evicting person from cell #: " .. i .. "!")
 				CELLS[i].occupant = nil

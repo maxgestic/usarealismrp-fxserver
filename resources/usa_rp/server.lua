@@ -305,7 +305,7 @@ AddEventHandler("usa:removeItem", function(to_remove_item, quantity, from_source
 end)
 
 RegisterServerEvent("usa:insertItem")
-AddEventHandler("usa:insertItem", function(to_insert_item, quantity, player_source)
+AddEventHandler("usa:insertItem", function(to_insert_item, quantity, player_source, cb)
 	print("inside usa:insertItem!")
 	if player_source then source = player_source end
 	local userSource = tonumber(source)
@@ -322,6 +322,7 @@ AddEventHandler("usa:insertItem", function(to_insert_item, quantity, player_sour
 						print("quantity increased for license item!")
 						user_licenses[i].quantity = user_licenses[i].quantity + quantity
 						user.setActiveCharacterData("licenses", user_licenses)
+						if cb then cb(true) end
 						return
 					end
 				end
@@ -330,6 +331,7 @@ AddEventHandler("usa:insertItem", function(to_insert_item, quantity, player_sour
 				to_insert_item.quantity = quantity
 				table.insert(user_licenses, to_insert_item)
 				user.setActiveCharacterData("licenses", user_licenses)
+				if cb then cb(true) end
 			elseif to_insert_item.type == "weapon" then
 				print("inserting/incrementing weapon item!")
 				-- insert into weapons, assuming that we've checked that player had < 3 weapons
@@ -340,6 +342,7 @@ AddEventHandler("usa:insertItem", function(to_insert_item, quantity, player_sour
 						print("quantity increased for weapon item!")
 						user_weapons[i].quantity = user_weapons[i].quantity + quantity
 						user.setActiveCharacterData("weapons", user_weapons)
+						if cb then cb(true) end
 						return
 					end
 				end
@@ -349,6 +352,7 @@ AddEventHandler("usa:insertItem", function(to_insert_item, quantity, player_sour
 				table.insert(user_weapons, to_insert_item)
 				user.setActiveCharacterData("weapons", user_weapons)
 				TriggerClientEvent("usa:equipWeapon", userSource, to_insert_item)
+				if cb then cb(true) end
 			else
 				--print("inserting/incrementing inventory item!")
 				--print("to_insert_item.name: " .. to_insert_item.name)
@@ -362,6 +366,7 @@ AddEventHandler("usa:insertItem", function(to_insert_item, quantity, player_sour
 						print("quantity increased for inventory item!")
 						user_inventory[z].quantity = user_inventory[z].quantity + quantity
 						user.setActiveCharacterData("inventory", user_inventory)
+						if cb then cb(true) end
 						return
 					end
 				end
@@ -370,9 +375,11 @@ AddEventHandler("usa:insertItem", function(to_insert_item, quantity, player_sour
 				to_insert_item.quantity = quantity
 				table.insert(user_inventory, to_insert_item)
 				user.setActiveCharacterData("inventory", user_inventory)
+				if cb then cb(true) end
 			end
 		else
 			TriggerClientEvent("usa:notify", userSource, "Inventory full.")
+			if cb then cb(false) end
 		end
 	end)
 end)

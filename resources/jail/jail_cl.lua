@@ -75,7 +75,7 @@ end)
 -- end of NUI menu stuff
 
 RegisterNetEvent("jail:jail")
-AddEventHandler("jail:jail", function(cell)
+AddEventHandler("jail:jail", function(cell, gender)
 
   --print("x: " .. cell.x)
   --print("y: " .. cell.y)
@@ -92,8 +92,9 @@ AddEventHandler("jail:jail", function(cell)
   TriggerEvent("cuff:unCuff")
   imprisoned = true
 
-  TriggerEvent("jail:changeClothes")
+  TriggerEvent("jail:changeClothes", gender)
   TriggerEvent("jail:removeWeapons")
+  TriggerEvent("RPD:toggle", false)
 
 end)
 
@@ -117,6 +118,7 @@ AddEventHandler("jail:release", function(character)
     TriggerServerEvent("jail:clearCell", assigned_cell, false)
     TriggerEvent("cuff:unCuff")
     assigned_cell = nil
+    TriggerEvent("RPD:toggle", true)
   end)
 end)
 
@@ -198,17 +200,6 @@ AddEventHandler("jail:changeClothes", function(gender)
   end
 
 end)
-
---[[
-Citizen.CreateThread(function()
-    while true do
-        Wait(1)
-        if imprisoned and getPlayerDistanceFromCoords(jailX, jailY, jailZ) > 80 then
-            SetEntityCoords(GetPlayerPed(-1), jailX, jailY, jailZ, 1, 0, 0, 1)
-        end
-    end
-end)
---]]
 
 function getPlayerDistanceFromCoords(x,y,z)
 	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)

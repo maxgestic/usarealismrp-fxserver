@@ -125,17 +125,17 @@ Citizen.CreateThread(function()
 	--createSpawnPoint(-247, -245, 6328, 6332, 33.5, 0) -- Paleto
 	--createSpawnPoint(360.31, -590.445, 28.6563) -- LS hospital
 
-
+	-- TODO:
+	-- 1) if inmate dies in prison, leave them dead until a CO helps them or prison sentence ends
+	-- 2) if an inmate is dead and they get released from prison, make sure to revive them if dead (should also fix old glitch when timer would get stuck on screen)
+		-- NOTE: possibly easiest to just disable RPDeath when in prison? enable when they get released?
 
 	function respawnPed(ped,coords)
 		SetEntityCoordsNoOffset(ped, coords.x, coords.y, coords.z, false, false, false, true)
 		NetworkResurrectLocalPlayer(coords.x, coords.y, coords.z, coords.heading, true, false)
-
 		--SetPlayerInvincible(ped, false)
-
 		TriggerEvent('playerSpawned', coords.x, coords.y, coords.z, coords.heading)
 		ClearPedBloodDamage(ped)
-
 		RemoveAllPedWeapons(GetPlayerPed(-1), true) -- strip weapons
 		-- remove player weapons from db
 		TriggerServerEvent("RPD:removeWeapons")
@@ -219,7 +219,7 @@ Citizen.CreateThread(function()
 					if lastStreetB ~= 0 then
 						table.insert( street, GetStreetNameFromHashKey( lastStreetB ) )
 					end
-					TriggerServerEvent("RPD:userDead", GetPlayerName(PlayerId()), table.concat( street, " & " ))
+					--TriggerServerEvent("RPD:userDead", GetPlayerName(PlayerId()), table.concat( street, " & " ))
 					TriggerEvent("RPD:startTimer")
 				end
 
@@ -234,7 +234,7 @@ Citizen.CreateThread(function()
 					respawnCount = respawnCount + 1
 					math.randomseed( playerIndex * respawnCount )
 
-					TriggerServerEvent("gps:removeEMSReqLookup")
+					--TriggerServerEvent("gps:removeEMSReqLookup")
 				elseif (allowRevive) then
 					local playerPos = GetEntityCoords(ped, true)
 
@@ -247,7 +247,7 @@ Citizen.CreateThread(function()
 					timer = 0
 					Wait(0)
 
-					TriggerServerEvent("gps:removeEMSReqLookup")
+					--TriggerServerEvent("gps:removeEMSReqLookup")
 				else
 		  			Wait(0)
 				end
