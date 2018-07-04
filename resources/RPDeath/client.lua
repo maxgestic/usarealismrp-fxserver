@@ -5,8 +5,14 @@ local allowRespawn = true
 local allowRevive = true
 local RPDeathEnabled = true
 local dead = false
+local jailed = false
 
 --TriggerServerEvent('RPD:addPlayer')
+
+RegisterNetEvent("RPD:toggleJailed")
+AddEventHandler("RPD:toggleJailed", function (toggle)
+	jailed = toggle
+end)
 
 RegisterNetEvent("RPD:toggle")
 AddEventHandler("RPD:toggle", function (toggle)
@@ -21,58 +27,62 @@ end)
 
 local timer = 180000
 AddEventHandler('RPD:startTimer', function()
-	while timer > 0 do
-		raw_seconds = timer/1000
-		raw_minutes = raw_seconds/60
-		minutes = stringSplit(raw_minutes, ".")[1]
-		seconds = stringSplit(raw_seconds-(minutes*60), ".")[1]
+	if not jailed then
+		while timer > 0 do
+			raw_seconds = timer/1000
+			raw_minutes = raw_seconds/60
+			minutes = stringSplit(raw_minutes, ".")[1]
+			seconds = stringSplit(raw_seconds-(minutes*60), ".")[1]
 
-		SetTextFont(0)
-		SetTextProportional(0)
-		SetTextScale(0.0, 0.5)
-		SetTextColour(255, 255, 255, 255)
-		SetTextDropshadow(0, 0, 0, 0, 255)
-		SetTextEdge(1, 0, 0, 0, 255)
-		SetTextDropShadow()
-		SetTextOutline()
-		SetTextEntry("STRING")
-		AddTextComponentString("Waiting ~g~" .. minutes .. " minutes " .. seconds .. " seconds ~w~to respawn.")
-		SetTextCentre(true)
-		DrawText(0.5, 0.1)
-		timer = timer - 15
-		Citizen.Wait(0)
-	end
-	local pressed = false
-	while dead do
-		Citizen.Wait(0)
-		SetTextFont(0)
-		SetTextProportional(0)
-		SetTextScale(0.0, 0.5)
-		SetTextColour(255, 255, 255, 255)
-		SetTextDropshadow(0, 0, 0, 0, 255)
-		SetTextEdge(1, 0, 0, 0, 255)
-		SetTextDropShadow()
-		SetTextOutline()
-		SetTextEntry("STRING")
-		AddTextComponentString("Press [ ~g~Enter~w~ ] to respawn")
-		SetTextCentre(true)
-		DrawText(0.5, 0.45)
+			SetTextFont(0)
+			SetTextProportional(0)
+			SetTextScale(0.0, 0.4)
+			SetTextColour(255, 255, 255, 255)
+			SetTextDropshadow(0, 0, 0, 0, 255)
+			SetTextEdge(1, 0, 0, 0, 255)
+			SetTextDropShadow()
+			SetTextOutline()
+			SetTextEntry("STRING")
+			AddTextComponentString("Waiting ~g~" .. minutes .. " minutes " .. seconds .. " seconds ~w~to respawn.")
+			SetTextCentre(true)
+			DrawText(0.5, 0.1)
+			timer = timer - 15
+			Citizen.Wait(0)
+		end
+		local pressed = false
+		while dead do
+			Citizen.Wait(0)
+			SetTextFont(0)
+			SetTextProportional(0)
+			SetTextScale(0.0, 0.5)
+			SetTextColour(255, 255, 255, 255)
+			SetTextDropshadow(0, 0, 0, 0, 255)
+			SetTextEdge(1, 0, 0, 0, 255)
+			SetTextDropShadow()
+			SetTextOutline()
+			SetTextEntry("STRING")
+			AddTextComponentString("Press [ ~g~Enter~w~ ] to respawn")
+			SetTextCentre(true)
+			DrawText(0.5, 0.45)
 
-		if IsControlPressed(0, 176) then
-			if not pressed then
-				pressed = true
-				TriggerEvent('chatMessage', "Death", {200,0,0}, "Respawned")
-				allowRespawn = true
-				TriggerEvent("crim:blindfold", false, true)
-				while pressed do
-					Wait(0)
-					if(IsControlPressed(0, 176) == false) then
-						pressed = false
-						break
+			if IsControlPressed(0, 176) then
+				if not pressed then
+					pressed = true
+					TriggerEvent('chatMessage', "Death", {200,0,0}, "Respawned")
+					allowRespawn = true
+					TriggerEvent("crim:blindfold", false, true)
+					while pressed do
+						Wait(0)
+						if(IsControlPressed(0, 176) == false) then
+							pressed = false
+							break
+						end
 					end
 				end
 			end
 		end
+	else
+		TriggerEvent('chatMessage', "", {0,0,0}, "^0You've passed out. Wait until you are released or a correctional officer helps you.")
 	end
 end)
 

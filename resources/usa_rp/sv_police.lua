@@ -12,7 +12,7 @@ local POLICE_RANKS = {
 
 local target_player_id = 0
 
-TriggerEvent('es:addJobCommand', 'ticket', { 'sheriff', 'police' , 'judge'}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'ticket', { 'sheriff', 'police' , 'judge', "corrections"}, function(source, args, user)
 	local targetPlayer = tonumber(args[2])
 	local amount = tonumber(args[3])
 	table.remove(args, 1)

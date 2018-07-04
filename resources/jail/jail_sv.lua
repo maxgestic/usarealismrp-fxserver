@@ -1,3 +1,7 @@
+--# Created by: minipunch
+--# for USA REALISM rep
+--# requres 'globals' resource to send notifications and usa_rp to change their model, check their jail time on join, and stuff like that
+
 -- Each cell block floor starts from the leftmost cell and wraps around until finished (cell numbers)
 local CELLS = {
 	{x = 1746.0, y = 2632.1, z = 45.6, occupant = nil},
@@ -214,13 +218,14 @@ function jailStatusLoop()
 								player.setActiveCharacterData("jailtime", player_jailtime - 1)
 							else
 								player.setActiveCharacterData("jailtime", player_jailtime - 1)
-								print("player jail time was 0!! release this player!!")
+								print("player jail time was 0! releasing this player!")
 								local chars = player.getCharacters()
 								for i = 1, #chars do
 									if chars[i].active == true then
-										print("found an active char to release with...")
+										-- release person from custody --
 										TriggerClientEvent("jail:release", tonumber(id), chars[i].appearance) -- need to test
-										-- TODO: notify corrections
+										-- notify corrections of release --
+										exports["globals"]:notifyPlayersWithJob("corrections", "^3CORRECTIONS:^0 " .. chars[i].firstName .. " " .. chars[i].lastName .. " has been released.")
 										break
 									end
 								end
@@ -230,7 +235,6 @@ function jailStatusLoop()
 				end
 			end
 		end)
-		print("calling jail status loop again!")
 		jailStatusLoop()
 	end)
 end

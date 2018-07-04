@@ -1,3 +1,7 @@
+--# Created by: minipunch
+--# for USA REALISM rep
+--# requres 'globals' resource to send notifications and usa_rp to change their model, check their jail time on join, and stuff like that
+
 local releaseX, releaseY, releaseZ = 1847.086, 2585.990, 45.672
 local lPed
 local imprisoned = false
@@ -94,7 +98,7 @@ AddEventHandler("jail:jail", function(cell, gender)
 
   TriggerEvent("jail:changeClothes", gender)
   TriggerEvent("jail:removeWeapons")
-  TriggerEvent("RPD:toggle", false)
+  TriggerEvent("RPD:toggleJailed", true)
 
 end)
 
@@ -113,12 +117,13 @@ AddEventHandler("jail:release", function(character)
       SetPlayerModel(PlayerId(), model)
       SetModelAsNoLongerNeeded(model)
     else
+      TriggerEvent("RPD:revivePerson")
       TriggerEvent("usa:setPlayerComponents", character)
     end
     TriggerServerEvent("jail:clearCell", assigned_cell, false)
     TriggerEvent("cuff:unCuff")
     assigned_cell = nil
-    TriggerEvent("RPD:toggle", true)
+    TriggerEvent("RPD:toggleJailed", false)
   end)
 end)
 

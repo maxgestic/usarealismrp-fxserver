@@ -9,7 +9,8 @@ local weapons = {
 }
 
 local vehicles = {
-  { name = "CVPI", hash = GetHashKey("police7") }
+  { name = "CVPI", hash = GetHashKey("police7") },
+  { name = "Cart", hash = GetHashKey("caddy") }
 }
 
 local uniforms = {
