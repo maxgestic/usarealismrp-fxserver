@@ -18,6 +18,8 @@ local locations = {
 	{ x=810.295, y=-2157.112, z=28.6190 }
 }
 
+local created_menus = {}
+
 -------------------
 -- utility funcs --
 -------------------
@@ -30,6 +32,23 @@ function comma_value(amount)
     end
   end
   return formatted
+end
+
+function IsAnyMenuVisible()
+	for i = 1, #created_menus do
+		if created_menus[i]:Visible() then
+			return true
+		end
+	end
+	return false
+end
+
+function CloseAllMenus()
+	for i = 1, #created_menus do
+		if created_menus[i]:Visible() then
+			created_menus[i]:Visible(false)
+		end
+	end
 end
 
 ----------------------
@@ -61,6 +80,7 @@ function CreateWeaponShopMenu(menu)
   -----------------------------------
   for category, weapons in pairs(storeWeapons) do
     local submenu = _menuPool:AddSubMenu(menu, category, "See our selection of " .. category, true --[[KEEP POSITION]])
+		table.insert(created_menus, submenu)
     for i = 1, #weapons do
       ---------------------------------------------
       -- Button for each weapon in each category --
@@ -90,22 +110,35 @@ _menuPool:RefreshIndex()
 -- open menu when near gun shop location --
 -------------------------------------------
 Citizen.CreateThread(function()
+	local menu_opened = false
+	local closest_location = nil
   while true do
     Citizen.Wait(0)
     _menuPool:MouseControlsEnabled(false)
     _menuPool:ControlDisablingEnabled(false)
     _menuPool:ProcessMenus()
     local mycoords = GetEntityCoords(GetPlayerPed(-1))
+		-- see if close to any stores --
     for i = 1, #locations do
       if Vdist(mycoords.x, mycoords.y, mycoords.z, locations[i].x, locations[i].y, locations[i].z) < 50.0 then
         DrawMarker(27, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
-        if IsControlJustPressed(1, MENU_KEY) then
+        if IsControlJustPressed(1, MENU_KEY) and not IsAnyMenuVisible() then
           if Vdist(mycoords.x, mycoords.y, mycoords.z, locations[i].x, locations[i].y, locations[i].z) < 4.0 then
             mainMenu:Visible(not mainMenu:Visible())
+						closest_location = locations[i]
           end
         end
       end
     end
+		-- close menu when far away --
+		if closest_location then
+			if Vdist(mycoords.x, mycoords.y, mycoords.z, closest_location.x, closest_location.y, closest_location.z) > 4.0 then
+				if IsAnyMenuVisible() then
+					closest_location = nil
+					CloseAllMenus()
+				end
+			end
+		end
   end
 end)
 

@@ -86,24 +86,24 @@ local player = {
 
 RegisterNUICallback('escape', function(data, cb)
 	--TriggerEvent("test:escapeFromCSharp")
-	print("inside of escape calling disable gui....")
+	--print("inside of escape calling disable gui....")
 	DisableGui()
 end)
 
 RegisterNUICallback('showPhone', function(data, cb)
 	--TriggerEvent("test:escapeFromCSharp")
-	print("inside of SHOW PHONE calling disable gui....")
+	--print("inside of SHOW PHONE calling disable gui....")
 	DisableGui()
 	TriggerServerEvent("interaction:checkForPhone")
 end)
 
 RegisterNUICallback('loadInventory', function(data, cb)
-	Citizen.Trace("inventory loading...")
+	--Citizen.Trace("inventory loading...")
 	TriggerServerEvent("interaction:loadInventoryForInteraction")
 end)
 
 RegisterNUICallback('getVehicleInventory', function(data, cb)
-	Citizen.Trace("vehicle inventory loading...")
+	--Citizen.Trace("vehicle inventory loading...")
 		print("plate #: " .. data.target_vehicle_plate)
 	TriggerServerEvent("interaction:loadVehicleInventoryForInteraction", data.target_vehicle_plate)
 		--SetVehicleDoorOpen(data.target_vehicle.id, 5, false, false) -- experimental
@@ -141,7 +141,7 @@ RegisterNUICallback('retrieveVehicleItem', function(data, cb)
 								-- see if item is able to be removed:
 								local quantity_to_transfer = amount
 								if quantity_to_transfer <= target_item.quantity then
-									print("seeing if item is still in vehicle...")
+									--print("seeing if item is still in vehicle...")
 									TriggerServerEvent("vehicle:isItemStillInVehicle", target_vehicle_plate, target_item, quantity_to_transfer)
 									TriggerEvent("usa:playAnimation", anim.name, anim.dict, 4)
 								else
@@ -207,7 +207,7 @@ end)
 
 RegisterNUICallback('setVoipLevel', function(data, cb)
 	--TriggerEvent("test:escapeFromCSharp")
-	print("inside of setVoipLeve calling disable gui....")
+	--print("inside of setVoipLeve calling disable gui....")
 	DisableGui()
 	--Citizen.Trace("setting voice level = " .. data.level)
 	local YELL, NORMAL, WHISPER = 0,1,2
@@ -384,32 +384,32 @@ elseif string.find(itemName, "Lock Pick") then
 	-- Cell Phone --
 	-------------------
 	elseif string.find(itemName, "Cell Phone") then
-		print("Player is using a cell phone from the F1 menu with its number = " .. wholeItem.number)
+		--print("Player is using a cell phone from the F1 menu with its number = " .. wholeItem.number)
 		TriggerEvent("phone:openPhone", wholeItem)
 	-------------------
 	-- Food Item  --
 	-------------------
 	elseif wholeItem.type and wholeItem.type == "food" then
-		print("Player used inventory item of type: food!")
-		print("item name: " .. wholeItem.name)
+		--print("Player used inventory item of type: food!")
+		--print("item name: " .. wholeItem.name)
 		TriggerEvent("hungerAndThirst:replenish", "hunger", wholeItem)
 	-------------------
 	-- Drink Item  --
 	-------------------
 	elseif wholeItem.type and wholeItem.type == "drink" then
-		print("Player used inventory item of type: drink!")
-		print("item name: " .. wholeItem.name)
+		--print("Player used inventory item of type: drink!")
+		--print("item name: " .. wholeItem.name)
 		TriggerEvent("hungerAndThirst:replenish", "drink", wholeItem)
 	---------------------------
 	-- Alcoholic Drink Item  --
 	---------------------------
 	elseif wholeItem.type and wholeItem.type == "alcohol" then
-		print("Player used inventory item of type: alcohol!")
-		print("item name: " .. wholeItem.name)
+		--print("Player used inventory item of type: alcohol!")
+		--print("item name: " .. wholeItem.name)
 		TriggerEvent("hungerAndThirst:replenish", "drink", wholeItem)
-		print("old player BAC: " .. player.BAC)
+		--print("old player BAC: " .. player.BAC)
 		player.BAC = player.BAC + wholeItem.strength
-		print("new player BAC: " .. player.BAC)
+		--print("new player BAC: " .. player.BAC)
 		if player.BAC >= 0.12 then
 			intoxicate(false, "MOVE_M@DRUNK@VERYDRUNK")
 			reality(10)
@@ -436,13 +436,13 @@ Citizen.CreateThread(function()
 		if player.BAC > 0.00 then
 			local new_BAC = player.BAC - decrement_amount
 			if new_BAC >= 0.00 then
-				print("decrementing BAC! now at: " .. new_BAC)
+				--print("decrementing BAC! now at: " .. new_BAC)
 				player.BAC = new_BAC
 			else
 				player.BAC = 0.00
 			end
 		else
-			print("player BAC was not >= 0.00")
+			--print("player BAC was not >= 0.00")
 		end
 		Wait(timer) -- every x seconds, decrement player.BAC
 	end
@@ -493,8 +493,8 @@ end)
 
 RegisterNetEvent("interaction:vehicleInventoryLoaded")
 AddEventHandler("interaction:vehicleInventoryLoaded", function(inventory)
-	print("client received vehicle inventory... sending NUI message")
-	if inventory then print("#inventory: " .. #inventory) end
+	--print("client received vehicle inventory... sending NUI message")
+	--if inventory then print("#inventory: " .. #inventory) end
 	SendNUIMessage({
 		type = "vehicleInventoryLoaded",
 		vehicle_inventory = inventory
