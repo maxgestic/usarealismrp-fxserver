@@ -1,6 +1,10 @@
+--# Gun store that also inserts a firearm permit.
+--# For this to work without modification, you will need the latest copy of the usa_rp resource
+--# Created for USA REALISM RP
+--# by: minipunch
+local MENU_KEY = 38 -- "E"
 local playerWeapons
-local shopX,shopY,shopZ = -330.803, 6085.742, 31.455
- locations = {
+local locations = {
 	{ x=-330.290, y=6083.839, z=30.500 },
 	{ x=-3172.045, y=1087.621, z=19.838 },
 	{ x=-1117.707, y=2698.373, z=17.554 },
@@ -11,17 +15,98 @@ local shopX,shopY,shopZ = -330.803, 6085.742, 31.455
 	{ x=21.913, y=-1107.593, z=28.797 },
 	{ x=842.328, y=-1033.175, z=27.194 },
 	{ x=2567.881, y=294.578, z=107.734 },
-	{ x=810.295, y=-2157.112, z=28.6190 },
+	{ x=810.295, y=-2157.112, z=28.6190 }
 }
 
-function round(num, numDecimalPlaces)
-  return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+-------------------
+-- utility funcs --
+-------------------
+function comma_value(amount)
+  local formatted = amount
+  while true do
+    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+    if (k==0) then
+      break
+    end
+  end
+  return formatted
 end
 
-RegisterNetEvent("gunShop:showSellMenu")
-AddEventHandler("gunShop:showSellMenu", function(weapons)
-    Citizen.Trace("calling sellMenu with #weapons = " .. #weapons)
-    sellMenu(weapons)
+----------------------
+-- Set up main menu --
+----------------------
+_menuPool = NativeUI.CreatePool()
+mainMenu = NativeUI.CreateMenu("Ammunation", "~b~Welcome!", 0 --[[X COORD]], 320 --[[Y COORD]])
+_menuPool:Add(mainMenu)
+
+--------------------------------
+-- Construct GUI menu buttons --
+--------------------------------
+function CreateWeaponShopMenu(menu)
+  ----------------------------
+  -- Purchase permit button --
+  ----------------------------
+  local item = NativeUI.CreateItem("Purchase Firearm License", "Purchase price: $2,000")
+  item:SetLeftBadge(BadgeStyle.Star)
+  item.Activated = function(parentmenu, selected)
+    local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
+    TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+      TriggerServerEvent("gunShop:buyPermit", property)
+      --item:SetLeftBadge(BadgeStyle.None)
+    end)
+  end
+  menu:AddItem(item)
+  -----------------------------------
+  -- Adds button for each category --
+  -----------------------------------
+  for category, weapons in pairs(storeWeapons) do
+    local submenu = _menuPool:AddSubMenu(menu, category, "See our selection of " .. category, true --[[KEEP POSITION]])
+    for i = 1, #weapons do
+      ---------------------------------------------
+      -- Button for each weapon in each category --
+      ---------------------------------------------
+      local item = NativeUI.CreateItem(weapons[i].name, "Purchase price: $" .. comma_value(weapons[i].price))
+      item.Activated = function(parentmenu, selected)
+        local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
+        TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+          TriggerServerEvent("gunShop:requestPurchase", category, i, property)
+        end)
+      end
+      ----------------------------------------
+      -- add to sub menu created previously --
+      ----------------------------------------
+      submenu:AddItem(item)
+    end
+  end
+end
+
+----------------
+-- add to GUI --
+----------------
+CreateWeaponShopMenu(mainMenu)
+_menuPool:RefreshIndex()
+
+-------------------------------------------
+-- open menu when near gun shop location --
+-------------------------------------------
+Citizen.CreateThread(function()
+  while true do
+    Citizen.Wait(0)
+    _menuPool:MouseControlsEnabled(false)
+    _menuPool:ControlDisablingEnabled(false)
+    _menuPool:ProcessMenus()
+    local mycoords = GetEntityCoords(GetPlayerPed(-1))
+    for i = 1, #locations do
+      if Vdist(mycoords.x, mycoords.y, mycoords.z, locations[i].x, locations[i].y, locations[i].z) < 50.0 then
+        DrawMarker(27, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
+        if IsControlJustPressed(1, MENU_KEY) then
+          if Vdist(mycoords.x, mycoords.y, mycoords.z, locations[i].x, locations[i].y, locations[i].z) < 4.0 then
+            mainMenu:Visible(not mainMenu:Visible())
+          end
+        end
+      end
+    end
+  end
 end)
 
 RegisterNetEvent("mini:equipWeapon")
@@ -32,188 +117,15 @@ AddEventHandler("mini:equipWeapon", function(source, hash, name)
 	end
 end)
 
-RegisterNetEvent("mini:insufficientFunds")
-AddEventHandler("mini:insufficientFunds", function(price, purchaseType)
-
-	if purchaseType == "gun" then
-		TriggerEvent("chatMessage", "Dealer:", { 255,99,71 }, "^0You don't have enough money to purchase that! Sorry!")
-	end
-
-end)
-
-RegisterNetEvent("gunShop:showGunShopMenu")
-AddEventHandler("gunShop:showGunShopMenu", function()
-    gunShopMenu()
-    Menu.hidden = not Menu.hidden
-end)
-
-RegisterNetEvent("gunShop:showNoPermitMenu")
-AddEventHandler("gunShop:showNoPermitMenu", function()
-    noPermitMenu()
-    Menu.hidden = not Menu.hidden
-end)
-
-function buyPermit()
-    TriggerServerEvent("gunShop:buyPermit")
-    Menu.hidden = not Menu.hidden
-end
-
-function buyWeapon(params)
-	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
-	TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-		TriggerServerEvent("mini:checkGunMoney",params, property)
-	end)
-	Menu.hidden = true -- close menu
-end
-
-function MeleeMenu()
-
-	MenuTitle = "Melee Weapons"
-	ClearMenu()
-
-	local weapon
-
-	for i = 1, #storeWeapons["melee"] do
-		weapon = storeWeapons["melee"][i]
-		Menu.addButton(weapon.name .. " ($" .. weapon.price .. ")","buyWeapon", weapon)
-	end
-
-end
-
-function HandgunsMenu()
-
-	MenuTitle = "Handguns"
-	ClearMenu()
-
-	local weapon
-
-	for i = 1, #storeWeapons["handguns"] do
-		weapon = storeWeapons["handguns"][i]
-		Menu.addButton(weapon.name .. " ($" .. weapon.price .. ")","buyWeapon", weapon)
-	end
-
-end
-
-function ShotgunsMenu()
-	MenuTitle = "Shotguns"
-	ClearMenu()
-	local weapon
-	for i = 1, #storeWeapons["shotguns"] do
-		weapon = storeWeapons["shotguns"][i]
-		Menu.addButton(weapon.name .. " ($" .. weapon.price .. ")","buyWeapon", weapon)
-	end
-end
-
-function ExtrasMenu()
-	MenuTitle = "Extras"
-	ClearMenu()
-	local weapon
-	for i = 1, #storeWeapons["extras"] do
-		weapon = storeWeapons["extras"][i]
-		Menu.addButton(weapon.name .. " ($" .. weapon.price .. ")","buyWeapon", weapon)
-	end
-end
-
-function gunShopMenu()
-	MenuTitle = "Weapon Shop"
-	ClearMenu()
-	Menu.addButton("Buy","buyMenu", nil)
-	Menu.addButton("Sell","loadWeapons", nil)
-	Menu.hidden = true
-end
-
-function noPermitMenu()
-    Menu.title = "Buy a permit"
-    ClearMenu()
-    Menu.addButton("($2,000) Permit", "buyPermit", nil)
-end
-
-function buyMenu()
-	MenuTitle = "Purchase"
-	ClearMenu()
-	Menu.addButton("Melee","MeleeMenu", nil)
-	Menu.addButton("Handguns","HandgunsMenu", nil)
-	Menu.addButton("Shotguns","ShotgunsMenu", nil)
-	Menu.addButton("Extras","ExtrasMenu", nil)
-end
-
-function sellWeapon(weapon)
-	--remove weapon
-	--update player inventory / money
-	print("inside sellWeapon with weapon.name = " .. weapon.name)
-	RemoveWeaponFromPed(GetPlayerPed(-1),weapon.hash)
-	TriggerServerEvent("gunShop:sellWeapon", weapon)
-	Menu.hidden = true
-end
-
-function loadWeapons()
-	ClearMenu()
-	TriggerServerEvent("gunShop:refreshWeaponList")
-end
-
-function sellMenu(playerWeapons)
-	MenuTitle = "Sell"
-	ClearMenu()
-	Menu.hidden = false
-	for i=1, #playerWeapons do
-		local weapon = playerWeapons[i]
-		Menu.addButton("($" .. round(.50*weapon.price, 0) .. ") " .. weapon.name, "sellWeapon", weapon)
-	end
-end
-
-function getPlayerDistanceFromShop(shopX,shopY,shopZ)
-	-- Get the player coords so that we know where to spawn it
-	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
-	return GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,shopX,shopY,shopZ,false)
-end
-
-function isPlayerAtGunShop()
-	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
-	for i = 1, #locations do
-		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,false) < 2 then
-			return true
-		end
-	end
-	return false
-end
-
-local playerNotified = false
-
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(0)
-		for i = 1, #locations do
-			DrawMarker(27, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
-		end
-		if isPlayerAtGunShop() and not playerNotified then
-			TriggerEvent("chatMessage", "SYSTEM", { 0, 141, 155 }, "^3Press E to open weapon menu!")
-			playerNotified = true
-		end
-		if IsControlJustPressed(1,Keys["E"]) then
-            Citizen.Trace("'E' was just pressed")
-			if isPlayerAtGunShop() then
-                Citizen.Trace("player was at gun shop")
-                TriggerServerEvent("gunShop:checkPermit")
-                --Menu.hidden = not Menu.hidden
-			end
-		elseif not isPlayerAtGunShop() then
-			playerNotified = false
-			Menu.hidden = true
-		end
-		Menu.renderGUI()     -- Draw menu on each tick if Menu.hidden = false
-	end
-end)
-
 --------------------
 -- Spawn job peds --
 --------------------
 local JOB_PEDS = {
   {x = -331.043, y = 6086.09, z = 30.40, heading = 180.0}
 }
--- S P A W N  J O B  P E D S
 Citizen.CreateThread(function()
 	for i = 1, #JOB_PEDS do
-		local hash = -1064078846 
+		local hash = -1064078846
 		--local hash = GetHashKey(data.ped.model)
 		print("requesting hash...")
 		RequestModel(hash)
