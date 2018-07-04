@@ -29,7 +29,7 @@ local sv_storeWeapons = {
     { name = "Firework Gun", type = "weapon", hash = 2138347493, price = 60000, legality = "legal", quantity = 1, weight = 50}
   },
   ["Extras"] = {
-    { name = "Parachute", type = "weapon", hash = GetHashKey("GADGET_PARACHUTE"), price = 350, legality = "legal", quantity = 1, weight = 20 }
+    { name = "Parachute", type = "weapon", hash = "GADGET_PARACHUTE", price = 350, legality = "legal", quantity = 1, weight = 20 }
   }
 }
 
@@ -42,6 +42,11 @@ AddEventHandler("gunShop:requestPurchase", function(category, index, property)
   if permit_status == "valid" then
     local user_money = user.getActiveCharacterData("money")
     if user_money - sv_storeWeapons[category][index].price >= 0 then
+	  local user_weapons = user.getActiveCharacterData("weapons")
+	  if #user_weapons >= 3 then
+		TriggerClientEvent("usa:notify", source, "Can't carry more than 3 weapons!")
+		return
+	  end
       TriggerEvent("usa:insertItem", sv_storeWeapons[category][index], 1, usource, function(success)
         if success then
           user.setActiveCharacterData("money", user_money - sv_storeWeapons[category][index].price)
@@ -63,7 +68,7 @@ AddEventHandler("gunShop:requestPurchase", function(category, index, property)
 end)
 
 RegisterServerEvent("gunShop:buyPermit")
-AddEventHandler("gunShop:buyPermit", function()
+AddEventHandler("gunShop:buyPermit", function(property)
   local userSource = source
   local user = exports["essentialmode"]:getPlayerFromId(userSource)
   if checkPermit(user) ~= "none" then
@@ -90,7 +95,7 @@ AddEventHandler("gunShop:buyPermit", function()
   TriggerClientEvent("usa:notify", userSource, "You already have a firearm permit!")
   -- give money to property owner --
   if property then
-    TriggerEvent("properties:addMoney", property.name, round(0.40 * cost, 0))
+    TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * cost))
   end
 end)
 
