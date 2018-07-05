@@ -399,7 +399,17 @@ function TradeVehicle(details)
 	TriggerClientEvent("usa:notify", details.target, "Transaction ~g~successful~w~!")
 end
 
--- todo:
--- 1) add confirmation message for buyer before seller finishes transaction // need testing
--- 2) add discord #dmv-log to post when a vehicle is traded [https://discordapp.com/api/webhooks/436965351004307466/FY-o_sGScUYFQpo9Y18-ZP-L_HdWRXoDZ1eO2AeD7uXzmg5JwWzqlb07Bbf1Yvv0_W-k] // done
--- 3) test when a cop runs the license plate #, see if the returned name is proper
+-- Hat prop on / off --
+TriggerEvent('es:addCommand', 'hat', function(source, args, user, location)
+	TriggerClientEvent("civ:toggleProp", source, 0)
+end, { help = "Take your hat on / off." })
+
+-- Glasses prop on / off --
+TriggerEvent('es:addCommand', 'glasses', function(source, args, user, location)
+	TriggerClientEvent("civ:toggleProp", source, 1)
+end, { help = "Take your glasses on / off." })
+
+-- Glasses prop on / off --
+TriggerEvent('es:addCommand', 'mask', function(source, args, user, location)
+	TriggerClientEvent("civ:toggleComponent", source, 1)
+end, { help = "Take your mask on / off." })

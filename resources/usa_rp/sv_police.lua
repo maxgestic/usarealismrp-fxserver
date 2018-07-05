@@ -289,15 +289,21 @@ TriggerEvent('es:addJobCommand', 'p', { "police", "sheriff", "ems", "corrections
 		TriggerEvent("es:getPlayers", function(pl)
 			for k, v in pairs(pl) do
 				local user_job = v.getActiveCharacterData("job")
-				if user_job == "cop" or user_job == "sheriff" or user_job == "highwaypatrol" or user_job == "ems" or user_job == "fire" or user_job == "corrections" then
+				if user_job == "cop" or user_job == "sheriff" or user_job == "highwaypatrol" or user_job == "ems" or user_job == "fire" then
 					for i = 1, 3 do
 						if source_user_job ~= "corrections" then
 							TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "(10-99) Panic button pressed by " .. user.getActiveCharacterData("fullName")) -- need to implement automatic street name locations here
-						else
-							TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "(10-99) Panic button pressed by " .. user.getActiveCharacterData("fullName") .. " (Department of Corrections, Senora Fwy)")
+							local params = {-1, "Event_Message_Purple", "GTAO_FM_Events_Soundset", 1}
+							TriggerClientEvent("usa:playSound", k, params)
 						end
-						local params = {-1, "Event_Message_Purple", "GTAO_FM_Events_Soundset", 1}
-						TriggerClientEvent("usa:playSound", k, params)
+					end
+				elseif user_job == "corrections" then
+					for i = 1, 3 do
+						if source_user_job == "corrections" then
+							TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "(10-99) Panic button pressed by " .. user.getActiveCharacterData("fullName") .. " (Department of Corrections, Senora Fwy)")
+							local params = {-1, "Event_Message_Purple", "GTAO_FM_Events_Soundset", 1}
+							TriggerClientEvent("usa:playSound", k, params)
+						end
 					end
 				end
 			end

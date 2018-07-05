@@ -325,3 +325,78 @@ function SetClipset(clipset)
     end
   end
 end
+
+-- Toggling props --
+local head_props = {
+  [0] = {
+    value = nil,
+    texture = nil,
+    on = true
+  },
+  [1] = {
+    value = nil,
+    texture = nil,
+    on = true
+  }
+}
+RegisterNetEvent("civ:toggleProp")
+AddEventHandler("civ:toggleProp", function(prop_index)
+  local ped = GetPlayerPed(-1)
+  -- play animation --
+  local anim = {
+    dict = "clothingspecs",
+    name = "try_glasses_neutral_c"
+  }
+  TriggerEvent("usa:playAnimation", anim.name, anim.dict, 1.5)
+  -- toggle prop --
+  if head_props[prop_index].on then
+    local value = GetPedPropIndex(ped, prop_index)
+    local texture = GetPedPropTextureIndex(ped, prop_index)
+    -- not stored, store it --
+    head_props[prop_index].value = tonumber(value)
+    head_props[prop_index].texture = tonumber(texture)
+    ClearPedProp(ped, prop_index)
+    head_props[prop_index].on = false
+  else
+    -- stored, put back on --
+    SetPedPropIndex(ped, prop_index, tonumber(head_props[prop_index].value), tonumber(head_props[prop_index].texture), true) -- put head prop back on
+    head_props[prop_index].on = true
+  end
+end)
+
+-- Toggling components --
+local components = {
+  [1] = {
+    value = nil,
+    texture = nil,
+    on = true
+  }
+}
+RegisterNetEvent("civ:toggleComponent")
+AddEventHandler("civ:toggleComponent", function(component_index)
+  local ped = GetPlayerPed(-1)
+  -- play animation --
+  local anim = {
+    dict = "clothingspecs",
+    name = "try_glasses_neutral_c"
+  }
+  TriggerEvent("usa:playAnimation", anim.name, anim.dict, 1.5)
+  -- toggle component --
+  if components[component_index].on then
+    local value = GetPedDrawableVariation(ped, 1)
+    local texture = GetPedTextureVariation(ped, 1)
+    -- not stored, store it --
+    components[component_index].value = tonumber(value)
+    components[component_index].texture = tonumber(texture)
+    SetPedComponentVariation(ped, component_index, -1, 0, 2)
+    components[component_index].on = false
+  else
+    -- stored, put back on --
+    SetPedComponentVariation(ped, component_index, components[component_index].value, components[component_index].texture, 2)
+    components[component_index].on = true
+  end
+end)
+
+-- for head components like masks:
+-- local value = GetPedDrawableVariation(ped, 1)
+-- local texture = GetPedTextureVariation(ped, 1)
