@@ -17,7 +17,7 @@ storeItems = {
         --{ name = "MK2 Assault Rifle", type = "weapon", hash = 961495388, price = 19550, legality = "illegal", quantity = 1, weight = 45 },
         { name = "Bullpup Rifle", type = "weapon", hash = 2132975508, price = 19550, legality = "illegal", quantity = 1, weight = 45 },
         --{ name = "Advanced Rifle", type = "weapon", hash = -1357824103, price = 20550, legality = "illegal", quantity = 1, weight = 45 },
-        --{ name = "Assault SMG", type = "weapon", hash = -270015777, price = 19550, legality = "illegal", quantity = 1, weight = 45 }
+        { name = "Assault SMG", type = "weapon", hash = -270015777, price = 19550, legality = "illegal", quantity = 1, weight = 45 }
         --{ name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 20550, legality = "illegal", quantity = 1, weight = 45 }
     }
 }

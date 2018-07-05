@@ -1,84 +1,66 @@
+local sv_storeItems = {
+    ["weapons"] = {
+		--{ name = "Lock Pick", type = "misc", hash = 615608432, price = 400, legality = "illegal", quantity = 1, weight = 5 },
+        { name = "Molotov", type = "weapon", hash = 615608432, price = 650, legality = "illegal", quantity = 1, weight = 20 },
+        { name = "Brass Knuckles", type = "weapon", hash = -656458692, price = 650, legality = "illegal", quantity = 1, weight = 5 },
+        { name = "Dagger", type = "weapon", hash = -1834847097, price = 750, legality = "illegal", quantity = 1, weight = 10 },
+        { name = "Switchblade", type = "weapon", hash = -538741184, price = 1000, legality = "illegal", quantity = 1, weight = 10 },
+        { name = "AP Pistol", type = "weapon", hash = 0x22D8FE39, price = 6550, legality = "illegal", quantity = 1, weight = 15 },
+        { name = "Sawn-off", type = "weapon", hash = 0x7846A318, price = 8000, legality = "illegal", quantity = 1, weight = 30 },
+        { name = "Micro SMG", type = "weapon", hash = 324215364, price = 9700, legality = "illegal", quantity = 1, weight = 30 },
+        { name = "SMG", type = "weapon", hash = 736523883, price = 13700, legality = "illegal", quantity = 1, weight = 45 },
+        { name = "Machine Pistol", type = "weapon", hash = -619010992, price = 9500, legality = "illegal", quantity = 1, weight = 20 },
+        { name = "Tommy Gun", type = "weapon", hash = 1627465347, price = 9750, legality = "illegal", quantity = 1, weight = 45 },
+        { name = "AK47", type = "weapon", hash = -1074790547, price = 20500, legality = "illegal", quantity = 1, weight = 45 },
+        { name = "Carbine", type = "weapon", hash = -2084633992, price = 19500, legality = "illegal", quantity = 1, weight = 45 },
+        --{ name = "Compact Rifle", type = "weapon", hash = 1649403952, price = 19550, legality = "illegal", quantity = 1, weight = 55 },
+        --{ name = "MK2 Assault Rifle", type = "weapon", hash = 961495388, price = 19550, legality = "illegal", quantity = 1, weight = 45 },
+        { name = "Bullpup Rifle", type = "weapon", hash = 2132975508, price = 19550, legality = "illegal", quantity = 1, weight = 45 },
+        --{ name = "Advanced Rifle", type = "weapon", hash = -1357824103, price = 20550, legality = "illegal", quantity = 1, weight = 45 },
+        { name = "Assault SMG", type = "weapon", hash = -270015777, price = 19550, legality = "illegal", quantity = 1, weight = 45 }
+        --{ name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 20550, legality = "illegal", quantity = 1, weight = 45 }
+    }
+}
+
 local MAX_PLAYER_WEAPON_SLOTS = 3
 
-function round(num, numDecimalPlaces)
-    return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
-end
-
-RegisterServerEvent("blackMarket:getWeaponsAndDisplaySellMenu")
-AddEventHandler("blackMarket:getWeaponsAndDisplaySellMenu", function()
-    local userSource = source
-    TriggerEvent('es:getPlayerFromId', userSource, function(user)
-        local weapons = user.getActiveCharacterData("weapons")
-        TriggerClientEvent("blackMarket:displaySellMenu", userSource, weapons)
-    end)
-end)
-
-RegisterServerEvent("blackMarket:sellWeapon")
-AddEventHandler("blackMarket:sellWeapon",function(weapon)
-	local userSource = source
-    TriggerEvent('es:getPlayerFromId', source, function(user)
-        local weapons = user.getActiveCharacterData("weapons")
+RegisterServerEvent("blackMarket:requestPurchase")
+AddEventHandler("blackMarket:requestPurchase", function(index)
+  local userSource = source
+  local user = exports["essentialmode"]:getPlayerFromId(userSource)
+  local weapon = sv_storeItems["weapons"][index]
+  if user.getCanActiveCharacterHoldItem(weapon) then
+    if weapon.type == "weapon" then
+      local weapons = user.getActiveCharacterData("weapons")
+      if not weapons then
+        weapons = {}
+      end
+      if #weapons < MAX_PLAYER_WEAPON_SLOTS then
         local user_money = user.getActiveCharacterData("money")
-        if weapons then
-            for i = 1, #weapons do
-                if weapons[i].name == weapon.name then
-                    table.remove(weapons, i)
-                    user.setActiveCharacterData("weapons", weapons)
-                    user.setActiveCharacterData("money", user_money + round(.50*weapon.price, 0))
-					--TriggerEvent("sway:updateDB", userSource)
-                    break
-                end
-            end
+        if weapon.price <= user_money then -- see if user has enough money
+          TriggerEvent("usa:insertItem", weapon, 1, userSource)
+          user.setActiveCharacterData("money", user_money - weapon.price)
+          if weapon.type == "weapon" then
+            TriggerClientEvent("blackMarket:equipWeapon", userSource, userSource, weapon.hash, weapon.name) -- equip
+          end
+          TriggerClientEvent("usa:notify", userSource, "You have purchased a ~r~" .. weapon.name .. ".")
         else
-            print("player had no weapons to sell")
-        end
-    end)
-end)
-
-RegisterServerEvent("blackMarket:checkGunMoney")
-AddEventHandler("blackMarket:checkGunMoney", function(weapon)
-    local userSource = source
-    TriggerEvent('es:getPlayerFromId', userSource, function(user)
-      if user.getCanActiveCharacterHoldItem(weapon) then
-        if weapon.type == "weapon" then
-          local weapons = user.getActiveCharacterData("weapons")
-          if not weapons then
-              weapons = {}
-          end
-          if #weapons < MAX_PLAYER_WEAPON_SLOTS then
-              local user_money = user.getActiveCharacterData("money")
-              if weapon.price <= user_money then -- see if user has enough money
-                  print("player had enough money! (" .. user_money .. ")")
-                  table.insert(weapons, weapon)
-                  user.setActiveCharacterData("weapons", weapons)
-                  print("setting money after buying to : $" .. user_money - weapon.price)
-                  user.setActiveCharacterData("money", user_money - weapon.price)
-                  print("equipping weapon with type source : source = " .. type(source) .. " : " .. source)
-                  print("weapon.name = " .. weapon.name)
-                  if weapon.type == "weapon" then
-                    TriggerClientEvent("blackMarket:equipWeapon", userSource, userSource, weapon.hash, weapon.name) -- equip
-                  end
-                  TriggerClientEvent("blackMarket:notify", userSource, "You have purchased a ~r~" .. weapon.name .. ".")
-  				--TriggerEvent("sway:updateDB", userSource)
-              else
-                  print("player did not have enough money to purchase weapon")
-                  TriggerClientEvent("mini:insufficientFunds", userSource, weapon.price, "gun")
-              end
-          else
-              TriggerClientEvent("blackMarket:notify", userSource, "~r~All weapons slot are full! (" .. MAX_PLAYER_WEAPON_SLOTS .. "/" .. MAX_PLAYER_WEAPON_SLOTS .. ")")
-          end
-        else
-          local user_money = user.getActiveCharacterData("money")
-          if weapon.price <= user_money then -- see if user has enough money
-            TriggerEvent("usa:insertItem", weapon, 1, userSource)
-            user.setActiveCharacterData("money", user_money - weapon.price)
-            TriggerClientEvent("blackMarket:notify", userSource, "You have purchased a ~r~" .. weapon.name .. ".")
-          end
+          TriggerClientEvent("usa:notify", userSource, "Not enough money!")
         end
       else
-        TriggerClientEvent("blackMarket:notify", userSource, "Inventory is full!")
+        TriggerClientEvent("usa:notify", userSource, "~r~All weapons slot are full! (" .. MAX_PLAYER_WEAPON_SLOTS .. "/" .. MAX_PLAYER_WEAPON_SLOTS .. ")")
       end
-    end)
+    else
+      local user_money = user.getActiveCharacterData("money")
+      if weapon.price <= user_money then -- see if user has enough money
+        TriggerEvent("usa:insertItem", weapon, 1, userSource)
+        user.setActiveCharacterData("money", user_money - weapon.price)
+        TriggerClientEvent("usa:notify", userSource, "You have purchased a ~r~" .. weapon.name .. ".")
+      end
+    end
+  else
+    TriggerClientEvent("usa:notify", userSource, "Inventory is full!")
+  end
 end)
 
 

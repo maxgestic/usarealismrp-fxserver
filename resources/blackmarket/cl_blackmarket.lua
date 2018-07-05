@@ -1,12 +1,27 @@
--- paleto island : x: -2166.786 y: 5197.684 Z: 16.880 Angle: 133.791
+local MENU_KEY = 38 -- "E"
+
 locations = {
 	--{ x=129.345, y=-1920.89, z=20.0187 },
-    { x= -2166.786, y = 5197.684, z = 15.880}
+    { x= -2166.786, y = 5197.684, z = 15.880} -- island north of map by paleto
 }
 
-function round(num, numDecimalPlaces)
-  return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+function comma_value(amount)
+  local formatted = amount
+  while true do
+    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+    if (k==0) then
+      break
+    end
+  end
+  return formatted
 end
+
+----------------------
+-- Set up main menu --
+----------------------
+_menuPool = NativeUI.CreatePool()
+mainMenu = NativeUI.CreateMenu("Gun Trader", "~b~What are you looking for?", 0 --[[X COORD]], 320 --[[Y COORD]])
+_menuPool:Add(mainMenu)
 
 RegisterNetEvent("blackMarket:equipWeapon")
 AddEventHandler("blackMarket:equipWeapon", function(source, hash, name)
@@ -14,84 +29,17 @@ AddEventHandler("blackMarket:equipWeapon", function(source, hash, name)
 	GiveWeaponToPed(playerPed, hash, 60, false, true)
 end)
 
-RegisterNetEvent("blackMarket:insufficientFunds")
-AddEventHandler("blackMarket:insufficientFunds", function(price, purchaseType)
-	if purchaseType == "gun" then
-        DrawCoolLookingNotification("You don't have enough money to purchase that! Sorry!")
-	end
-end)
-
-RegisterNetEvent("blackMarket:notify")
-AddEventHandler("blackMarket:notify", function(msg)
-    DrawCoolLookingNotification(msg)
-end)
-
-RegisterNetEvent("blackMarket:displaySellMenu")
-AddEventHandler("blackMarket:displaySellMenu", function(weapons)
-    if not weapons then
-        DrawCoolLookingNotification("You have no weapons to sell.")
-        return
-    elseif #weapons <= 0 then
-        DrawCoolLookingNotification("You have no weapons to sell.")
-        return
+function CreateItemList(menu)
+  ---------------------------------------------
+  -- Button for each weapon in each category --
+  ---------------------------------------------
+  for i = 1, #storeItems["weapons"] do
+    local item = NativeUI.CreateItem(storeItems["weapons"][i].name, "Purchase price: $" .. comma_value(storeItems["weapons"][i].price))
+    item.Activated = function(parentmenu, selected)
+      TriggerServerEvent("blackMarket:requestPurchase", i)
     end
-        sellMenu(weapons)
-end)
-
-function buyWeapon(params)
-    Citizen.Trace("inside of buyWeapon func")
-	TriggerServerEvent("blackMarket:checkGunMoney",params)
-	Menu.hidden = true -- close menu
-end
-
-function WeaponsMenu()
-	MenuTitle = "Weapons"
-	ClearMenu()
-	local weapon
-	for i = 1, #storeItems["weapons"] do
-		weapon = storeItems["weapons"][i]
-		Menu.addButton(weapon.name .. " ($" .. weapon.price .. ")","buyWeapon", weapon)
-	end
-end
-
-function gunShopMenu()
-	MenuTitle = "Weapon Shop"
-	ClearMenu()
-	Menu.addButton("Buy","buyMenu", nil)
-	Menu.addButton("Sell","loadWeapons", nil)
-	Menu.hidden = true
-end
-
-function buyMenu()
-	MenuTitle = "Purchase"
-	ClearMenu()
-	Menu.addButton("Weapons","WeaponsMenu", nil)
-end
-
-function sellWeapon(weapon)
-	--remove weapon
-	--update player inventory / money
-	print("inside sellWeapon with weapon.name = " .. weapon.name)
-	RemoveWeaponFromPed(GetPlayerPed(-1),weapon.hash)
-	TriggerServerEvent("blackMarket:sellWeapon", weapon)
-	Menu.hidden = true
-end
-
-function loadWeapons()
-    Menu.hidden = not Menu.hidden
-	ClearMenu()
-	TriggerServerEvent("blackMarket:getWeaponsAndDisplaySellMenu")
-end
-
-function sellMenu(weapons)
-	MenuTitle = "Sell"
-	ClearMenu()
-	Menu.hidden = false
-    Citizen.Trace("at sell menu client func, #weapons = " .. #weapons)
-    for i=1, #weapons do
-    	local weapon = weapons[i]
-    	Menu.addButton("($" .. round(.50*weapon.price, 0) .. ") " .. weapon.name, "sellWeapon", weapon)
-    end
+    menu:AddItem(item)
+  end
 end
 
 function isPlayerAtBlackMarket()
@@ -104,34 +52,33 @@ function isPlayerAtBlackMarket()
 	return false
 end
 
-local playerNotified = false
+----------------
+-- add to GUI --
+----------------
+CreateItemList(mainMenu)
+_menuPool:RefreshIndex()
 
 Citizen.CreateThread(function()
 
 	while true do
 		Citizen.Wait(0)
+    -- Process Menu --
+    _menuPool:MouseControlsEnabled(false)
+    _menuPool:ControlDisablingEnabled(false)
+    _menuPool:ProcessMenus()
+    ------------------
+    -- Draw Markers --
+    ------------------
 		for i = 1, #locations do
-			DrawMarker(1, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 32, 0, 90, 0, 0, 2, 0, 0, 0, 0)
+			DrawMarker(27, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 32, 0, 90, 0, 0, 2, 0, 0, 0, 0)
 		end
-		if isPlayerAtBlackMarket() and not playerNotified then
-            DrawCoolLookingNotification("Press ~y~E~w~ to open black market menu!")
-			playerNotified = true
-		end
-		if IsControlJustPressed(1,Keys["E"]) then
+    --------------------------
+    -- Listen for menu open --
+    --------------------------
+		if IsControlJustPressed(1, MENU_KEY) then
 			if isPlayerAtBlackMarket() then
-				gunShopMenu()              -- Menu to draw
-				Menu.hidden = not Menu.hidden    -- Hide/Show the menu
+        mainMenu:Visible(not mainMenu:Visible())
 			end
-		elseif not isPlayerAtBlackMarket() then
-			playerNotified = false
-			Menu.hidden = true
 		end
-		Menu.renderGUI()     -- Draw menu on each tick if Menu.hidden = false
 	end
 end)
-
-function DrawCoolLookingNotification(msg)
-    SetNotificationTextEntry("STRING")
-    AddTextComponentString(msg)
-    DrawNotification(0,1)
-end

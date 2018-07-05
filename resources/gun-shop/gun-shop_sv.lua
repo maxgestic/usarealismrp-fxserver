@@ -26,7 +26,7 @@ local sv_storeWeapons = {
     { name = "Pump Shotgun", type = "weapon", hash = 0x1D073A89, price = 2000, legality = "legal", quantity = 1, weight = 20 },
     { name = "Bullpup", type = "weapon", hash = 0x9D61E50F, price = 8750, legality = "legal", quantity = 1, weight = 25 },
     { name = "Musket", type = "weapon", hash = -1466123874, price = 8500, legality = "legal", quantity = 1, weight = 30 },
-    { name = "Firework Gun", type = "weapon", hash = 2138347493, price = 60000, legality = "legal", quantity = 1, weight = 50}
+    { name = "Firework Gun", type = "weapon", hash = 2138347493, price = 20000, legality = "legal", quantity = 1, weight = 50}
   },
   ["Extras"] = {
     { name = "Parachute", type = "weapon", hash = "GADGET_PARACHUTE", price = 350, legality = "legal", quantity = 1, weight = 20 }
