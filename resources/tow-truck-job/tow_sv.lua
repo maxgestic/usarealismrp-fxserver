@@ -50,6 +50,7 @@ AddEventHandler("tow:setJob", function(coords)
 				  end
 				end
 				if has_dl then
+					TriggerClientEvent("chatMessage", userSource, "", {}, "^0You can use /dispatch [id] [msg] to set a waypoint to the caller id of the last tow request.")
 					user.setActiveCharacterData("job", "tow")
 					TriggerClientEvent("tow:onDuty", userSource, coords)
 					timeout = true

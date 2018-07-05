@@ -37,7 +37,7 @@ AddEventHandler("properties:checkSpawnPoint", function(usource)
 				print("property still valid after eviction!")
 				if info.owner.identifier == GetPlayerIdentifiers(usource)[1] then
 					print("Still owns property, leaving spawn!")
-				else 
+				else
 					print("does not own property anymore, resetting spawn!")
 					player.setActiveCharacterData("spawn", nil)
 				end
@@ -313,10 +313,10 @@ function loadProperties()
 					if response.rows[i].doc.name then
 						PROPERTIES[response.rows[i].doc.name] = response.rows[i].doc
 						print("loaded property: " .. response.rows[i].doc.name)
-					else 
+					else
 						print("Error loading property document at index #" .. i)
 					end
-				else 
+				else
 					print("Error loading property at index #" .. i)
 				end
 			end
@@ -417,7 +417,8 @@ AddEventHandler("properties:purchaseProperty", function(property)
 		local user_money = player.getActiveCharacterData("money")
 		local char_name = player.getActiveCharacterData("fullName")
 
-		if user_money >= property.fee.price then
+		--if user_money >= property.fee.price then
+    if user_money >= PROPERTIES[property.name].fee.price then
 			-- set new property info --
 			PROPERTIES[property.name].fee.paid_time = os.time() -- save the time the property was purchased
 			PROPERTIES[property.name].fee.paid = true
@@ -437,35 +438,11 @@ AddEventHandler("properties:purchaseProperty", function(property)
 			-- update all clients property info --
 			TriggerClientEvent("properties:update", -1, PROPERTIES[property.name], true)
 			-- subtract money --
-			player.setActiveCharacterData("money", user_money - property.fee.price)
+			player.setActiveCharacterData("money", user_money - PROPERTIES[property.name].fee.price)
       -- save property --
       SavePropertyData(property.name)
-      --[[
-			-- Get the document with that property name --
-			TriggerEvent('es:exposeDBFunctions', function(db)
-				db.getDocumentByRow("properties", "name", property.name, function(doc, rText)
-					if rText then
-						--RconPrint("\nrText = " .. rText)
-					end
-					if doc then
-						PROPERTIES[property.name]._rev = nil
-						db.updateDocument("properties", doc._id, PROPERTIES[property.name], function(status)
-							print("called db.updateDocument checking status")
-							if status == true then
-								print("\nDocument updated.")
-							else
-								--RconPrint("\nStatus Response: " .. status)
-								if status == "201" then
-									print("\nDocument successfully updated!")
-								end
-							end
-						end)
-					end
-				end)
-			end)
-      --]]
 			-- send discord msg to #property-logs --
-			local desc = "\n**Property:** " .. property.name .. "\n**Purchase Price:** $" .. comma_value(property.fee.price) ..  "\n**Purchased By:** " .. char_name .. "\n**Purchase Date:** ".. PROPERTIES[property.name].owner.purchase_date .. "\n**End Date:** " .. PROPERTIES[property.name].fee.end_date
+			local desc = "\n**Property:** " .. property.name .. "\n**Purchase Price:** $" .. comma_value(PROPERTIES[property.name].fee.price) ..  "\n**Purchased By:** " .. char_name .. "\n**Purchase Date:** ".. PROPERTIES[property.name].owner.purchase_date .. "\n**End Date:** " .. PROPERTIES[property.name].fee.end_date
 			local url = 'https://discordapp.com/api/webhooks/419573361170055169/6v2NLnxzF8lSHgT8pSDccB_XN1R6miVuZDrEYtvNfPny6kSqddSN_9iJ9PPkbAbM01pW'
 			PerformHttpRequest(url, function(err, text, headers)
 				if text then
