@@ -4,6 +4,5 @@ server_script 'sv_blackmarket.lua'
 
 client_scripts {
 	'@NativeUI/NativeUI.lua',
-	'storeItems.lua',
 	'cl_blackmarket.lua'
 }

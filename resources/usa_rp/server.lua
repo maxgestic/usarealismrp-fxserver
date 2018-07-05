@@ -336,6 +336,7 @@ AddEventHandler("usa:insertItem", function(to_insert_item, quantity, player_sour
 				print("inserting/incrementing weapon item!")
 				-- insert into weapons, assuming that we've checked that player had < 3 weapons
 				local user_weapons = user.getActiveCharacterData("weapons")
+				--[[
 				for i = 1, #user_weapons do
 					local item = user_weapons[i]
 					if item.name == to_insert_item.name then
@@ -346,6 +347,7 @@ AddEventHandler("usa:insertItem", function(to_insert_item, quantity, player_sour
 						return
 					end
 				end
+				--]]
 				print("weapon inserted!")
 				-- not in weapons already. insert:
 				to_insert_item.quantity = quantity
