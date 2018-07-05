@@ -41,13 +41,6 @@ local vehicleShopItems = {
 		{make = "Enus", model = "Windsor Cabrio", price = 105550, hash = -1930048799, storage_capacity = 135.0},
 		{make = "Nissan", model = "370z", price = 40550, hash = -377465520, storage_capacity = 135.0}
 	},
-	["Bicycles"] = {
-		{make = "", model = "BMX", price = 500, hash = 1131912276, storage_capacity = 0.0},
-		{make = "", model = "Cruiser", price = 500, hash = 448402357, storage_capacity = 0.0},
-		{make = "", model = "Fixster", price = 850, hash = -836512833, storage_capacity = 0.0},
-		{make = "", model = "Scorcher", price = 1200, hash = -186537451, storage_capacity = 0.0},
-		{make = "", model = "TriBike", price = 1350, hash = 1127861609, storage_capacity = 0.0}
-	},
 	["Muscles"] = {
 		{make = "Willand", model = "Faction", price = 10500, hash = -2119578145, storage_capacity = 160.0},
 		{make = "Imponte", model = "Dukes", price = 10500, hash = 723973206, storage_capacity = 160.0},
@@ -386,7 +379,7 @@ Citizen.CreateThread(function()
 			-----------------------------------------------------------
 			if getPlayerDistanceFromShop(SHOPS[k].store_x, SHOPS[k].store_y, SHOPS[k].store_z) < 3 then
 				if not menu.open then
-					drawTxt("Press [~y~E~w~] to open the vehicle shop menu",0,1,0.5,0.8,0.6,255,255,255,255)
+					drawTxt("Press [~y~E~w~] to open the vehicle shop menu",0,1,0.5,0.8,0.5,255,255,255,255)
 				end
 				if IsControlJustPressed(1, menu.key) and not menu.open then
 					menu.open = true
