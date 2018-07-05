@@ -8,7 +8,7 @@ AddEventHandler("towJob:giveReward", function(property)
 		user.setActiveCharacterData("money", user_money + TOW_REWARD)
 		-- give property owner money --
 		if property then
-			TriggerEvent("properties:addMoney", property.name, round(0.20 * TOW_REWARD, 0))
+			TriggerEvent("properties:addMoney", property.name, math.ceil(0.20 * TOW_REWARD))
 		end
 		TriggerClientEvent("towJob:success", userSource)
 	end)
@@ -50,7 +50,8 @@ AddEventHandler("tow:setJob", function(coords)
 				  end
 				end
 				if has_dl then
-					TriggerClientEvent("chatMessage", userSource, "", {}, "^0You can use /dispatch [id] [msg] to set a waypoint to the caller id of the last tow request.")
+					TriggerClientEvent("chatMessage", userSource, "", {}, "^3HELP: ^0You can use /dispatch [id] [msg] to set a waypoint to the caller id of the last tow request.")
+					TriggerClientEvent("chatMessage", userSource, "", {}, "^3HELP: ^0You can use /tow when you face a vehicle to load and unload it onto your vehicle.")
 					user.setActiveCharacterData("job", "tow")
 					TriggerClientEvent("tow:onDuty", userSource, coords)
 					timeout = true
@@ -69,7 +70,3 @@ AddEventHandler("tow:setJob", function(coords)
 		end
 	end)
 end)
-
-function round(num, numDecimalPlaces)
-  return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
-end

@@ -53,7 +53,7 @@ AddEventHandler("taxi:setJob", function(property)
 					TriggerClientEvent("usa:notify", userSource, "Your license is suspended!")
 					return
 				end
-				TriggerClientEvent("chatMessage", userSource, "", {}, "^0You can use /dispatch [id] [msg] to set a waypoint to the caller id of the last taxi request.")
+				TriggerClientEvent("chatMessage", userSource, "", {}, "^3HELP: ^0You can use /dispatch [id] [msg] to set a waypoint to the caller id of the last taxi request.")
 				user.setActiveCharacterData("job", "taxi")
 				TriggerClientEvent("taxi:onDuty", userSource, name)
 				-- take money --

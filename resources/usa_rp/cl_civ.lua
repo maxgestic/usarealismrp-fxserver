@@ -348,6 +348,7 @@ AddEventHandler("civ:toggleProp", function(prop_index)
     name = "try_glasses_neutral_c"
   }
   TriggerEvent("usa:playAnimation", anim.name, anim.dict, 1.5)
+  Wait(1000)
   -- toggle prop --
   if head_props[prop_index].on then
     local value = GetPedPropIndex(ped, prop_index)
@@ -381,6 +382,7 @@ AddEventHandler("civ:toggleComponent", function(component_index)
     name = "try_glasses_neutral_c"
   }
   TriggerEvent("usa:playAnimation", anim.name, anim.dict, 1.5)
+  Wait(1000)
   -- toggle component --
   if components[component_index].on then
     local value = GetPedDrawableVariation(ped, 1)

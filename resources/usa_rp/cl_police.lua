@@ -298,7 +298,7 @@ Citizen.CreateThread(function()
 					if not sending_msg then
 						sending_msg = true
 						if GetGameTimer() > timer.last_press + timer.delay then
-							send911Message("(10-32) Report of shots fired.")
+							send911Message("(10-32) Report of shots fired.", "sheriff")
 							timer.last_press = GetGameTimer()
 						end
 						sending_msg = false
@@ -328,7 +328,7 @@ Citizen.CreateThread(function()
 					print("r: " .. r)
 					print("g: " .. g)
 					print("b: " .. b)
-					send911Message("(10-28F) Reported car jacking of a " .. display_name .. " with plate " .. GetVehicleNumberPlateText(handle))
+					send911Message("(10-28F) Reported car jacking of a " .. display_name .. " with plate " .. GetVehicleNumberPlateText(handle), "sheriff")
 				end
 				jacked = false
 			end
@@ -369,7 +369,7 @@ function IsInPopulatedArea()
 	return false
 end
 
-function send911Message(msg)
+function send911Message(msg, type)
 						-- send 911 message --
 						-- get location of sender and send to server function:
 						local data = {}
@@ -394,7 +394,7 @@ function send911Message(msg)
 							z = playerPos.z
 						}
 						data.message = msg
-						TriggerServerEvent("phone:send911Message", data, true, true)
+						TriggerServerEvent("phone:send911Message", data, true, true, type)
 end
 
 RegisterNetEvent("police:performGSR")

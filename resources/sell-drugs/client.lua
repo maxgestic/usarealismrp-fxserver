@@ -59,7 +59,7 @@ Citizen.CreateThread(function()
 													selling = false
 													SetEntityAsMissionEntity(ped)
 													SetPedAsNoLongerNeeded(ped)
-													-- send 911 call?
+													-- send 911 call --
 													local randomReport = math.random(1, 3)
 														if randomReport == 2 then
 															local plyPos = GetEntityCoords(GetPlayerPed(-1),  true)
@@ -70,8 +70,7 @@ Citizen.CreateThread(function()
 															if street2 ~= "" and street2 ~= " " and street2 then loc = loc .. " & " .. street2 end
 															-- dispatch to police:
 															Wait(10000) -- wait 10 seconds to make more realistic
-															TriggerServerEvent("phone:send911Message", {message = "Civilian report of a person(s) selling narcotics.", location = loc, pos = {x = pos.x, y = pos.y, z = pos.z}}, true, true)
-
+															TriggerServerEvent("phone:send911Message", {message = "Civilian report of a person(s) selling narcotics.", location = loc, pos = {x = pos.x, y = pos.y, z = pos.z}}, true, true, "sheriff")
 														end
 												else
 													-- sell

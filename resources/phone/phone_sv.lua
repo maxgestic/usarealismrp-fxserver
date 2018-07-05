@@ -71,7 +71,7 @@ AddEventHandler("phone:addContact", function(data)
 end)
 
 RegisterServerEvent("phone:send911Message")
-AddEventHandler("phone:send911Message", function(data, dont_send_msg, no_caller_id)
+AddEventHandler("phone:send911Message", function(data, dont_send_msg, no_caller_id, intended_emergency_type)
 	local help_online  = false
 	local userSource = tonumber(source)
 	local message = data.message
@@ -79,17 +79,32 @@ AddEventHandler("phone:send911Message", function(data, dont_send_msg, no_caller_
 		for id, player in pairs(players) do
 			local playerSource = id
 			local player_job = player.getActiveCharacterData("job")
-			if player_job == "ems" or player_job == "sheriff" or player_job == "police" then
-				if no_caller_id then
-					TriggerClientEvent('chatMessage', playerSource, "911", {255, 20, 10}, message .. " (" .. data.location .. ")")
-					TriggerClientEvent("phone:notify", playerSource, "~r~911:\n~w~"..message)
-				else
-					TriggerClientEvent('chatMessage', playerSource, "911 (Caller: #" .. userSource .. ")", {255, 20, 10}, message .. " (" .. data.location .. ")")
-					TriggerClientEvent("phone:notify", playerSource, "~r~911 (Caller: # ".. userSource .. "):\n~w~"..message)
+			if intended_emergency_type then
+				if player_job == intended_emergency_type then
+					if no_caller_id then
+						TriggerClientEvent('chatMessage', playerSource, "911", {255, 20, 10}, message .. " (" .. data.location .. ")")
+						TriggerClientEvent("phone:notify", playerSource, "~r~911:\n~w~"..message)
+					else
+						TriggerClientEvent('chatMessage', playerSource, "911 (Caller: #" .. userSource .. ")", {255, 20, 10}, message .. " (" .. data.location .. ")")
+						TriggerClientEvent("phone:notify", playerSource, "~r~911 (Caller: # ".. userSource .. "):\n~w~"..message)
+					end
+					help_online = true
+					-- set temp blip
+					TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
 				end
-				help_online = true
-				-- set temp blip
-				TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
+			else
+				if player_job == "sheriff" or player_job == "ems" or player_job == "fire" then
+					if no_caller_id then
+						TriggerClientEvent('chatMessage', playerSource, "911", {255, 20, 10}, message .. " (" .. data.location .. ")")
+						TriggerClientEvent("phone:notify", playerSource, "~r~911:\n~w~"..message)
+					else
+						TriggerClientEvent('chatMessage', playerSource, "911 (Caller: #" .. userSource .. ")", {255, 20, 10}, message .. " (" .. data.location .. ")")
+						TriggerClientEvent("phone:notify", playerSource, "~r~911 (Caller: # ".. userSource .. "):\n~w~"..message)
+					end
+					help_online = true
+					-- set temp blip
+					TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
+				end
 			end
 		end
 		if not dont_send_msg then
@@ -550,7 +565,7 @@ TriggerEvent('es:addCommand', 'phonenumber', function(source, args, user, locati
 			local item = inventory[i]
 			if string.find(item.name, "Cell Phone") then
 				TriggerClientEvent('chatMessageLocation', -1, "", {}, " ^0" .. user.getActiveCharacterData("fullName") .. " writes down number: " .. item.number, location)
-			end 
-		end 
+			end
+		end
 	end)
 end, { help = "Write down your phone number for those around you."})
