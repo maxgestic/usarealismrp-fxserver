@@ -102,31 +102,15 @@ end
 
 RegisterNetEvent("policestation2:setCharacter")
 AddEventHandler("policestation2:setCharacter", function(character)
-	--Citizen.Trace("Inside is whitelisted client evnet")
-	--menu = 1
-	if character.hash then
-            local name, model
-            model = tonumber(character.hash)
-            Citizen.Trace("giving loading with customizations with hash = " .. model)
-            Citizen.CreateThread(function()
-                RequestModel(model)
-                while not HasModelLoaded(model) do -- Wait for model to load
-                    RequestModel(model)
-                    Citizen.Wait(0)
-                end
-                SetPlayerModel(PlayerId(), model)
-                SetModelAsNoLongerNeeded(model)
-                -- ADD CUSTOMIZATIONS FROM CLOTHING STORE
-                for key, value in pairs(character["components"]) do
-                    SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
-                end
-                for key, value in pairs(character["props"]) do
-                    SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
-                end
-				TriggerEvent("policestation2:giveDefaultLoadout")
-			end)
+	if character then
+		for key, value in pairs(character["components"]) do
+			SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
+		end
+		for key, value in pairs(character["props"]) do
+			SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
+		end
+		TriggerEvent("policestation2:giveDefaultLoadout")
 	end
-	--menu_armoury = 1
 end)
 
 RegisterNetEvent("policestation2:notify")
@@ -221,17 +205,6 @@ AddEventHandler("policestation2:setciv", function(character, playerWeapons)
 			local head = character.head_customizations
 			local ped = GetPlayerPed(-1)
 			SetPedHeadBlendData(ped, head.parent1, head.parent2, head.parent3, head.skin1, head.skin2, head.skin3, head.mix1, head.mix2, head.mix3, false)
-			--[[ customize face features --
-			if face then
-				local i = 0
-				for name, value in pairs(face) do
-					print("name: " .. name)
-					print("setting index " .. i .. " to value: " .. value / 100.0)
-					SetPedFaceFeature(ped, i, value / 100.0)
-					i = i + 1
-				end
-			end
-			--]] -- on hold cause it wouldn't work
 			-- facial stuff like beards and ageing and what not --
 			for i = 1, #head.other do
 				SetPedHeadOverlay(ped, i - 1, head.other[i][2], 1.0)
@@ -387,29 +360,14 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 	TriggerEvent("GUI2:StringArray", "Skin:", arrSkinGeneralCaptions, position, function(cb)
 		Citizen.CreateThread(function()
 			position = cb
-			local modelhashed = GetHashKey(arrSkinGeneralValues[position])
-			Citizen.Trace("setting model to hash: " .. modelhashed)
-			Citizen.Trace("index = " .. position)
-			Citizen.Trace("value = " .. arrSkinGeneralValues[position])
-			Citizen.Trace("caption = " .. arrSkinGeneralCaptions[position])
-			RequestModel(modelhashed)
-			while not HasModelLoaded(modelhashed) do
-				RequestModel(modelhashed)
-				Citizen.Wait(0)
-			end
-			SetPlayerModel(PlayerId(), modelhashed)
-			--SetPedDefaultComponentVariation(PlayerId());
 			local ply = GetPlayerPed(-1)
-			--drawTxt(ply,0,1,0.5,0.8,0.6,255,255,255,255)
-			SetPedDefaultComponentVariation(ply)
 			if arrSkinGeneralValues[position] == "mp_m_freemode_01" then
 				--SetPedComponentVariation(ply, 2, 19, 1, 0)
 				SetPedComponentVariation(ply, 4, 35, 0, 0)
 				--SetPedComponentVariation(ply, 6, 24, 0, 0)
 				SetPedComponentVariation(ply, 8, 58, 0, 0)
 				SetPedComponentVariation(ply, 11, 55, 0, 0)
-			end
-			if arrSkinGeneralValues[position] == "mp_f_freemode_01" then
+			elseif arrSkinGeneralValues[position] == "mp_f_freemode_01" then
 				--SetPedComponentVariation(ply, 0, 33, 0, 0)
 				--SetPedComponentVariation(ply, 2, 4, 4, 0)
 				SetPedComponentVariation(ply, 3, 14, 0, 0)
@@ -417,9 +375,18 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 				--SetPedComponentVariation(ply, 6, 27, 0, 0)
 				SetPedComponentVariation(ply, 8, 35, 0, 0)
 				SetPedComponentVariation(ply, 11, 48, 0, 0)
-
+			else
+				local modelhashed = GetHashKey(arrSkinGeneralValues[position])
+				RequestModel(modelhashed)
+				while not HasModelLoaded(modelhashed) do
+					Citizen.Wait(100)
+				end
+				SetPlayerModel(PlayerId(), modelhashed)
+				--SetPedDefaultComponentVariation(PlayerId());
+				--drawTxt(ply,0,1,0.5,0.8,0.6,255,255,255,255)
+				SetPedDefaultComponentVariation(ply)
+				SetModelAsNoLongerNeeded(modelhashed)
 			end
-			SetModelAsNoLongerNeeded(modelhashed)
 			TriggerEvent("policestation2:giveDefaultLoadout")
 			TriggerServerEvent("policestation2:onduty")
 			TriggerEvent("interaction:setPlayersJob", "police") -- set interaction menu javascript job variable to "police"
@@ -468,15 +435,13 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 		if(cb) then
 			Citizen.Trace("true")
 			local character = {
-				["hash"] = "",
 				["components"] = {},
 				["componentstexture"] = {},
 				["props"] = {},
 				["propstexture"] = {}
 			}
 			local ply = GetPlayerPed(-1)
-			character.hash = GetEntityModel(GetPlayerPed(-1))
-			local debugstr = "Player Hash: " .. character.hash .. "| Props: "
+			local debugstr = "| Props: "
 			for i=0,2 -- instead of 3?
 				do
 				character.props[i] = GetPedPropIndex(ply, i)
@@ -596,7 +561,7 @@ end)
 
 RegisterNetEvent("policestation2:ShowComponentsMenu1")
 AddEventHandler("policestation2:ShowComponentsMenu1", function()
-	local components = {"Face","Head","Hair","Torso","Legs","Hands","Feet","Eyes","Acessories","Tasks","Textures","Torso2"}
+	local components = {"Face","Head","Hair","Arms/Hands","Legs","Back","Feet","Ties","Shirt","Vests","Textures","Torso"}
 	TriggerEvent("GUI2:Title", "Components 1")
 	TriggerEvent("GUI2:Option", "..Back", function(cb)
 		if(cb) then
@@ -609,7 +574,7 @@ AddEventHandler("policestation2:ShowComponentsMenu1", function()
 	local ply = GetPlayerPed(-1)
 	for i=0,5
 		do
-		if ( arrSkinGeneralValues[position] == "mp_m_freemode_01" or arrSkinGeneralValues[position] == "mp_f_freemode_01" ) and ( i == 11 or i == 8 or i == 4 ) then
+		if ( arrSkinGeneralValues[position] == "mp_m_freemode_01" or arrSkinGeneralValues[position] == "mp_f_freemode_01" ) and ( i == 0 or i == 2 or i == 5 ) then -- ignore head and hair options
 			-- do nothing
 		else
 			local selectedComponent = GetPedDrawableVariation(ply, i)
@@ -636,7 +601,7 @@ end)
 
 RegisterNetEvent("policestation2:ShowComponentsMenu2")
 AddEventHandler("policestation2:ShowComponentsMenu2", function()
-	local components = {"Face","Head","Hair","Torso","Legs","Hands","Feet","Eyes","Acessories","Tasks","Textures","Torso2"}
+	local components = {"Face","Head","Hair","Arms/Hands","Legs","Back","Feet","Ties","Shirt","Vests","Textures","Torso"}
 	TriggerEvent("GUI2:Title", "Components 2")
 	TriggerEvent("GUI2:Option", "..Back", function(cb)
 		if(cb) then
@@ -649,7 +614,7 @@ AddEventHandler("policestation2:ShowComponentsMenu2", function()
 	local ply = GetPlayerPed(-1)
 	for i=6,11
 		do
-		if ( arrSkinGeneralValues[position] == "mp_m_freemode_01" or arrSkinGeneralValues[position] == "mp_f_freemode_01" ) and ( i == 11 or i == 8 or i == 4 ) then
+		if ( arrSkinGeneralValues[position] == "mp_m_freemode_01" or arrSkinGeneralValues[position] == "mp_f_freemode_01" ) and ( i == -1 ) then
 			-- do nothing
 		else
 			local selectedComponent = GetPedDrawableVariation(ply, i)

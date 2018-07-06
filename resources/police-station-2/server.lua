@@ -213,11 +213,8 @@ AddEventHandler("policestation2:saveasdefault", function(character)
   TriggerEvent("es:getPlayerFromId", userSource, function(user)
     local user_job = user.getActiveCharacterData("job")
     if user_job == "sheriff" or user_job == "cop" then
-      --user.setCharacters(character)
-      --print("PLAYER MODEL SAVED")
       user.setPoliceCharacter(character) -- this is right... right??
       TriggerClientEvent("policestation2:notify", userSource, "Default ~b~LSPD~w~ uniform saved.")
-      --TriggerEvent("mini:giveMeMyWeaponsPlease")
     else
       TriggerClientEvent("policestation2:notify", userSource, "You need to be ~r~10-8~w~ to save default uniform.")
     end
