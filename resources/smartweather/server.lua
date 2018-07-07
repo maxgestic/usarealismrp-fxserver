@@ -130,7 +130,7 @@ function updateWeatherString()
 	if newWeatherString == "RAIN" or newWeatherString == "THUNDER" or newWeatherString == "SNOWLIGHT" or newWeatherString == "SNOW" then
 		local roll = math.random(100)
 		print("rolled a: " .. roll)
-		if roll <= 75 then
+		if roll <= 85 then
 			print("**cancelling rain!**")
 			return
 		end

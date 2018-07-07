@@ -117,7 +117,7 @@ Citizen.CreateThread(function()
     while true do
         Wait(5)
         for i = 1, #healStations do
-            DrawMarker(1, healStations[i].x, healStations[i].y, healStations[i].z, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
+            DrawMarker(27, healStations[i].x, healStations[i].y, healStations[i].z, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
             if getPlayerDistanceFromCoords(healStations[i].x, healStations[i].y, healStations[i].z) < 3 then
                 DrawSpecialText("Press [~b~E~w~] to restore your health ($500)!")
                 if IsControlJustPressed(1, 38) then -- 38 = E
