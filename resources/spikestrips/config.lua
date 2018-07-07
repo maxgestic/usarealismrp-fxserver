@@ -3,7 +3,7 @@ SpikeConfig = setmetatable(SpikeConfig, {})
 
 SpikeConfig.MaxSpikes = 3
 
-SpikeConfig.PedRestriction = true
+SpikeConfig.PedRestriction = false
 SpikeConfig.PedsList = {
 	"s_m_y_cop_01",
 	"s_f_y_cop_01",
