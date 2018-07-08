@@ -229,6 +229,7 @@ AddEventHandler("policestation2:loadDefaultUniform", function()
     TriggerClientEvent("policestation2:setCharacter", userSource, character)
     TriggerClientEvent("policestation2:giveDefaultLoadout", userSource)
     user.setActiveCharacterData("job", "sheriff")
+    TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 3}, true)
   end)
 end)
 
@@ -239,6 +240,7 @@ AddEventHandler("policestation2:onduty", function()
     local user_job = user.getActiveCharacterData("job")
     if user_job ~= "sheriff" or user_job ~= "cop" or user_job ~= "police" then
       user.setActiveCharacterData("job", "sheriff")
+      TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 3}, true)
     end
   end)
 end)
@@ -257,5 +259,6 @@ AddEventHandler("policestation2:offduty", function()
       end
     end
     user.setActiveCharacterData("job", "civ")
+    TriggerEvent("eblips:remove", userSource)
   end)
 end)

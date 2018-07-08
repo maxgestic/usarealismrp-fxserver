@@ -1,7 +1,3 @@
-TriggerEvent('es:addCommand', 'getparachute', function(source, args, user)
-	TriggerClientEvent("parachute:getparachute", source)
-end, {help = "get a parachute"})
-
 RegisterServerEvent("parachute:usedParachute")
 AddEventHandler("parachute:usedParachute", function()
 	local userSource = tonumber(source)

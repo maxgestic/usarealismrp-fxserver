@@ -46,8 +46,8 @@ local EMSLockerRooms = {
 {x=1692.13, y=3586.27, z=34.7209} -- sandy
 }
 
-local arrSkinGeneralCaptions = {"Fireman", "Paramedic - Male", "Paramedic - Female", "Doctor"}
-local arrSkinGeneralValues = {"s_m_y_fireman_01","s_m_m_paramedic_01","s_f_y_scrubs_01", "s_m_m_doctor_01"}
+local arrSkinGeneralCaptions = {"MP Male", "MP Female", "Fireman", "Paramedic - Male", "Paramedic - Female", "Doctor"}
+local arrSkinGeneralValues = {"mp_m_freemode_01", "mp_f_freemode_01", "s_m_y_fireman_01","s_m_m_paramedic_01","s_f_y_scrubs_01", "s_m_m_doctor_01"}
 local arrSkinHashes = {}
 for i=1,#arrSkinGeneralValues
 	do
@@ -126,17 +126,6 @@ AddEventHandler("emsstation2:setciv", function(character, playerWeapons)
 			local head = character.head_customizations
 			local ped = GetPlayerPed(-1)
 			SetPedHeadBlendData(ped, head.parent1, head.parent2, head.parent3, head.skin1, head.skin2, head.skin3, head.mix1, head.mix2, head.mix3, false)
-			--[[ customize face features --
-			if face then
-				local i = 0
-				for name, value in pairs(face) do
-					print("name: " .. name)
-					print("setting index " .. i .. " to value: " .. value / 100.0)
-					SetPedFaceFeature(ped, i, value / 100.0)
-					i = i + 1
-				end
-			end
-			--]] -- on hold cause it wouldn't work
 			-- facial stuff like beards and ageing and what not --
 			for i = 1, #head.other do
 				SetPedHeadOverlay(ped, i - 1, head.other[i][2], 1.0)
@@ -180,30 +169,15 @@ end)
 
 RegisterNetEvent("emsstation2:setCharacter")
 AddEventHandler("emsstation2:setCharacter", function(character)
-	--Citizen.Trace("Inside is whitelisted client evnet")
-	--menu = 1
-	if character.hash then
-            local name, model
-            model = tonumber(character.hash)
-            Citizen.Trace("giving loading with customizations with hash = " .. model)
-            Citizen.CreateThread(function()
-                RequestModel(model)
-                while not HasModelLoaded(model) do -- Wait for model to load
-                    Citizen.Wait(100)
-                end
-                SetPlayerModel(PlayerId(), model)
-                SetModelAsNoLongerNeeded(model)
-                -- ADD CUSTOMIZATIONS FROM CLOTHING STORE
-                for key, value in pairs(character["components"]) do
-                    SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
-                end
-                for key, value in pairs(character["props"]) do
-                    SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
-                end
-				TriggerEvent("emsstation2:giveDefaultLoadout")
-			end)
+	if character then
+		for key, value in pairs(character["components"]) do
+			SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
+		end
+		for key, value in pairs(character["props"]) do
+			SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
+		end
+		TriggerEvent("emsstation2:giveDefaultLoadout")
 	end
-	--menu_armoury = 1
 end)
 
 RegisterNetEvent("emsstation2:giveDefaultLoadout")
@@ -228,21 +202,35 @@ AddEventHandler("emsstation2:ShowMainMenu", function()
 	TriggerEvent("GUI2:StringArray", "Skin:", arrSkinGeneralCaptions, position, function(cb)
 		Citizen.CreateThread(function()
 			position = cb
-			local modelhashed = GetHashKey(arrSkinGeneralValues[position])
-			Citizen.Trace("setting model to hash: " .. modelhashed)
-			Citizen.Trace("index = " .. position)
-			Citizen.Trace("value = " .. arrSkinGeneralValues[position])
-			Citizen.Trace("caption = " .. arrSkinGeneralCaptions[position])
-			RequestModel(modelhashed)
-			while not HasModelLoaded(modelhashed) do
-				Citizen.Wait(100)
-			end
-			SetPlayerModel(PlayerId(), modelhashed)
-			--SetPedDefaultComponentVariation(PlayerId());
 			local ply = GetPlayerPed(-1)
-			--drawTxt(ply,0,1,0.5,0.8,0.6,255,255,255,255)
-			SetPedDefaultComponentVariation(ply)
-			SetModelAsNoLongerNeeded(modelhashed)
+			if arrSkinGeneralValues[position] == "mp_m_freemode_01" then
+				SetPedComponentVariation(ply, 1, 121, 0, 0)
+				SetPedComponentVariation(ply, 3, 85, 0, 0)
+				SetPedComponentVariation(ply, 4, 25, 3, 0)
+				SetPedComponentVariation(ply, 6, 61, 0, 0)
+				SetPedComponentVariation(ply, 7, 126, 0, 0)
+				SetPedComponentVariation(ply, 8, 129, 0, 0)
+				SetPedComponentVariation(ply, 11, 250, 1, 0)
+			elseif arrSkinGeneralValues[position] == "mp_f_freemode_01" then
+				SetPedComponentVariation(ply, 1, 121, 0, 0)
+				SetPedComponentVariation(ply, 3, 96, 0, 0)
+				SetPedComponentVariation(ply, 4, 37, 0, 0)
+				SetPedComponentVariation(ply, 6, 74, 1, 0)
+				SetPedComponentVariation(ply, 7, 96, 0, 0)
+				SetPedComponentVariation(ply, 8, 159, 0, 0)
+				SetPedComponentVariation(ply, 11, 250, 1, 0)
+			else
+				local modelhashed = GetHashKey(arrSkinGeneralValues[position])
+				RequestModel(modelhashed)
+				while not HasModelLoaded(modelhashed) do
+					Citizen.Wait(100)
+				end
+				SetPlayerModel(PlayerId(), modelhashed)
+				--SetPedDefaultComponentVariation(PlayerId());
+				--drawTxt(ply,0,1,0.5,0.8,0.6,255,255,255,255)
+				SetPedDefaultComponentVariation(ply)
+				SetModelAsNoLongerNeeded(modelhashed)
+			end
 			TriggerEvent("emsstation2:giveDefaultLoadout")
 			TriggerServerEvent("emsstation2:onduty")
 			TriggerEvent("interaction:setPlayersJob", "ems") -- set interaction menu javascript job variable to "ems"
@@ -288,7 +276,6 @@ AddEventHandler("emsstation2:ShowMainMenu", function()
 		TriggerEvent("GUI2:Option", "Save as default", function(cb)
 			if(cb) then
 				local character = {
-					["hash"] = "",
 					["components"] = {},
 					["componentstexture"] = {},
 					["props"] = {},
@@ -389,24 +376,27 @@ AddEventHandler("emsstation2:ShowComponentsMenu1", function()
 		end
 		end)
 	local ply = GetPlayerPed(-1)
-	for i=0,5
-		do
-		local selectedComponent = GetPedDrawableVariation(ply, i)
-		local selectedTexture = GetPedTextureVariation(ply, i)
-		local maxComponent = GetNumberOfPedDrawableVariations(ply, i)
-		local maxTexture = GetNumberOfPedTextureVariations(ply, i, selectedComponent)
-		if(maxComponent > 1) then
-			TriggerEvent("GUI2:Int", components[i+1] .. " (" .. maxComponent .. ")", selectedComponent, 0, maxComponent - 1, function(cb)
-				selectedComponent = cb
-				SetPedComponentVariation(ply, i, selectedComponent, 0, 0)
-				selectedTexture = 0
-				end)
-		end
-		if(maxTexture > 1) then
-			TriggerEvent("GUI2:Int", components[i+1] .. " Texture (" .. maxTexture .. ")", selectedTexture, 0, maxTexture - 1, function(cb)
-				selectedTexture = cb
-				SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 0)
-				end)
+	for i=0,5 do
+		if i == 0 or i == 2 or i == 5 then -- ignore head and hair options
+			-- do nothing
+		else
+			local selectedComponent = GetPedDrawableVariation(ply, i)
+			local selectedTexture = GetPedTextureVariation(ply, i)
+			local maxComponent = GetNumberOfPedDrawableVariations(ply, i)
+			local maxTexture = GetNumberOfPedTextureVariations(ply, i, selectedComponent)
+			if(maxComponent > 1) then
+				TriggerEvent("GUI2:Int", components[i+1] .. " (" .. maxComponent .. ")", selectedComponent, 0, maxComponent - 1, function(cb)
+					selectedComponent = cb
+					SetPedComponentVariation(ply, i, selectedComponent, 0, 0)
+					selectedTexture = 0
+					end)
+			end
+			if(maxTexture > 1) then
+				TriggerEvent("GUI2:Int", components[i+1] .. " Texture (" .. maxTexture .. ")", selectedTexture, 0, maxTexture - 1, function(cb)
+					selectedTexture = cb
+					SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 0)
+					end)
+			end
 		end
 	end
 	TriggerEvent("GUI2:Update")

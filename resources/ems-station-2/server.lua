@@ -45,6 +45,7 @@ AddEventHandler("emsstation2:loadDefaultUniform", function()
 		TriggerClientEvent("emsstation2:setCharacter", userSource, character)
 		TriggerClientEvent("emsstation2:giveDefaultLoadout", userSource)
     user.setActiveCharacterData("job", "ems")
+    TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 1}, true)
 	end)
 end)
 
@@ -71,6 +72,7 @@ AddEventHandler("emsstation2:onduty", function()
     TriggerEvent('es:getPlayerFromId', userSource, function(user)
         if user.getActiveCharacterData("job") ~= "ems" then
             user.setActiveCharacterData("job", "ems")
+            TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 1}, true)
         end
     end)
 end)
@@ -88,6 +90,7 @@ AddEventHandler("emsstation2:offduty", function()
           end
         end
         user.setActiveCharacterData("job", "civ")
+        TriggerEvent("eblips:remove", userSource)
     end)
 end)
 
