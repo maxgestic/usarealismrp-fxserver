@@ -1,3 +1,20 @@
+function notifyPlayersWithJobs(target_jobs, msg)
+  TriggerEvent("es:getPlayers", function(players)
+		if players then
+			for id, player in pairs(players) do
+				if id and player then
+					local job = player.getActiveCharacterData("job")
+          for i = 1, #target_jobs do
+            if job == target_jobs[i] then
+              TriggerClientEvent("chatMessage", id, "", {}, "^0" .. msg)
+            end
+          end
+				end
+			end
+		end
+	end)
+end
+
 function notifyPlayersWithJob(target_job, msg)
   TriggerEvent("es:getPlayers", function(players)
 		if players then

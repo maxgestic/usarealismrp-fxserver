@@ -7,5 +7,6 @@ exports {}
 -- global server functions/tables
 server_exports {
   "notifyPlayersWithJob",
+  "notifyPlayersWithJobs",
   "setJob"
 }

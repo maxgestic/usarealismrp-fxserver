@@ -82,9 +82,11 @@ function jailPlayer(data, officerName, gender)
 		end
 		-- send to assigned cell --
 		local inmate_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
-		TriggerClientEvent('chatMessage', -1, "SYSTEM", {255,180,0}, inmate_name .. " has been jailed for ^3" .. sentence .. "^0 month(s).")
-		TriggerClientEvent('chatMessage', -1, "SYSTEM", {255,180,0}, "Charges: " .. reason)
-		TriggerClientEvent('chatMessage', -1, "SYSTEM", {255,180,0}, "Fine: $" .. fine)
+
+		exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^Jail: ^0".. inmate_name .. " has been jailed for ^3" .. sentence .. "^0 month(s).")
+		exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3Charges:^0 " .. reason)
+		exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3Fine:^0 $" .. fine)
+
 		TriggerClientEvent("jail:jail", targetPlayer, assigned_cell, gender)
 		user.setActiveCharacterData("weapons", {})
 		user.setActiveCharacterData("jailtime", sentence)
