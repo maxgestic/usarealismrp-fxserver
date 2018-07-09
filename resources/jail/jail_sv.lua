@@ -83,7 +83,7 @@ function jailPlayer(data, officerName, gender)
 		-- send to assigned cell --
 		local inmate_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
 
-		exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^Jail: ^0".. inmate_name .. " has been jailed for ^3" .. sentence .. "^0 month(s).")
+		exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3Jail: ^0".. inmate_name .. " has been jailed for ^3" .. sentence .. "^0 month(s).")
 		exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3Charges:^0 " .. reason)
 		exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3Fine:^0 $" .. fine)
 
