@@ -129,8 +129,18 @@ AddEventHandler("character:setCharacter", function(character)
 						end
 						--print("GIVING WEAPONS TO PED! # = " .. #weapons)
 						-- G I V E  W E A P O N S
-						for i =1, #weapons do
+						for i = 1, #weapons do
 							GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
+							if weapons[i].components then
+								if #weapons[i].components > 0 then
+									for x = 1, #weapons[i].components do
+										GiveWeaponComponentToPed(GetPlayerPed(-1), weapons[i].hash, GetHashKey(weapons[i].components[x]))
+									end
+								end
+							end
+							if weapons[i].tint then
+								SetPedWeaponTintIndex(GetPlayerPed(-1), weapons[i].hash, weapons[i].tint)
+							end
 						end
 
 				else
@@ -139,6 +149,16 @@ AddEventHandler("character:setCharacter", function(character)
 					-- G I V E  W E A P O N S
 					for i =1, #weapons do
 						GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
+						if weapons[i].components then
+							if #weapons[i].components > 0 then
+								for x = 1, #weapons[i].components do
+									GiveWeaponComponentToPed(GetPlayerPed(-1), weapons[i].hash, GetHashKey(weapons[i].components[x]))
+								end
+							end
+						end
+						if weapons[i].tint then
+							SetPedWeaponTintIndex(GetPlayerPed(-1), weapons[i].hash, weapons[i].tint)
+						end
 					end
 				end
 			end

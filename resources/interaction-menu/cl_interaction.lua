@@ -571,6 +571,16 @@ RegisterNetEvent("interaction:equipWeapon")
 AddEventHandler("interaction:equipWeapon", function(item, equip)
 	if equip then
 		GiveWeaponToPed(GetPlayerPed(-1), item.hash, 1000, false, false)
+		if item.components then
+			if #item.components > 0 then
+				for x = 1, #item.components do
+					GiveWeaponComponentToPed(GetPlayerPed(-1), item.hash, GetHashKey(item.components[x]))
+				end
+			end
+		end
+		if item.tint then
+			SetPedWeaponTintIndex(GetPlayerPed(-1), item.hash, item.tint)
+		end
 	else
 		RemoveWeaponFromPed(GetPlayerPed(-1), item.hash)
 	end

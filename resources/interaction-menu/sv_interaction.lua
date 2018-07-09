@@ -191,10 +191,9 @@ end
 RegisterServerEvent("interaction:giveItemToPlayer")
 AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
   local userSource = tonumber(source)
-  print("inside of interaction:giveItemToPlayer with target id = " .. targetPlayerId)
-  print("item.name = " .. item.name)
+  print("inside of interaction:giveItemToPlayer with target id = " .. targetPlayerId .. ", item: " .. item.name)
   -- give item to nearest player
-  TriggerEvent("es:getPlayerFromId", targetPlayerId, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(targetPlayerId)
 	if user then
 	  if user.getCanActiveCharacterHoldItem(item) then
 		if not item.type or item.type == "license" then
@@ -256,7 +255,6 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
 	  print("player with id #" .. targetPlayerId .. " is not in game!")
 	  return
 	end
-  end)
 end)
 
 function removeItemFromPlayer(item, userSource)

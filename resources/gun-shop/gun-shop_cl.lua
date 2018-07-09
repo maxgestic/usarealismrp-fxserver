@@ -58,6 +58,8 @@ _menuPool = NativeUI.CreatePool()
 mainMenu = NativeUI.CreateMenu("Ammunation", "~b~Welcome!", 0 --[[X COORD]], 320 --[[Y COORD]])
 _menuPool:Add(mainMenu)
 
+table.insert(created_menus, mainMenu)
+
 --------------------------------
 -- Construct GUI menu buttons --
 --------------------------------
@@ -123,7 +125,7 @@ Citizen.CreateThread(function()
       if Vdist(mycoords.x, mycoords.y, mycoords.z, locations[i].x, locations[i].y, locations[i].z) < 50.0 then
         DrawMarker(27, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
         if IsControlJustPressed(1, MENU_KEY) and not IsAnyMenuVisible() then
-          if Vdist(mycoords.x, mycoords.y, mycoords.z, locations[i].x, locations[i].y, locations[i].z) < 4.0 then
+          if Vdist(mycoords.x, mycoords.y, mycoords.z, locations[i].x, locations[i].y, locations[i].z) < 1.3 then
             mainMenu:Visible(not mainMenu:Visible())
 						closest_location = locations[i]
           end
@@ -132,7 +134,7 @@ Citizen.CreateThread(function()
     end
 		-- close menu when far away --
 		if closest_location then
-			if Vdist(mycoords.x, mycoords.y, mycoords.z, closest_location.x, closest_location.y, closest_location.z) > 4.0 then
+			if Vdist(mycoords.x, mycoords.y, mycoords.z, closest_location.x, closest_location.y, closest_location.z) > 1.3 then
 				if IsAnyMenuVisible() then
 					closest_location = nil
 					CloseAllMenus()
@@ -160,14 +162,11 @@ Citizen.CreateThread(function()
 	for i = 1, #JOB_PEDS do
 		local hash = -1064078846
 		--local hash = GetHashKey(data.ped.model)
-		print("requesting hash...")
 		RequestModel(hash)
 		while not HasModelLoaded(hash) do
 			RequestModel(hash)
 			Citizen.Wait(0)
 		end
-		print("spawning ped, heading: " .. JOB_PEDS[i].heading)
-		print("hash: " .. hash)
 		local ped = CreatePed(4, hash, JOB_PEDS[i].x, JOB_PEDS[i].y, JOB_PEDS[i].z, JOB_PEDS[i].heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
 		SetEntityCanBeDamaged(ped,false)
 		SetPedCanRagdollFromPlayerImpact(ped,false)

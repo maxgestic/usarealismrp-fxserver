@@ -150,6 +150,9 @@ local locations = {
     },
     black_market = {
         {x = -2166.786, y = 5197.684, z = 15.880, animDict = "", animName = "", model = "G_M_Y_SALVABOSS_01", heading = 122.471, scenario = "WORLD_HUMAN_SMOKING"}
+    },
+    illegal_weapon_extra_shop = {
+      {x = 181.4, y = 2792.8, z = 45.7, animDict = "", animName = "", model = "G_M_Y_SALVABOSS_01", heading = 302.471, scenario = "WORLD_HUMAN_SMOKING"}
     }
 }
 local spawnedPeds = {}
@@ -526,6 +529,16 @@ RegisterNetEvent("usa:equipWeapon")
 AddEventHandler("usa:equipWeapon", function(weapon)
   -- todo: store ammo count on weapon object
   GiveWeaponToPed(GetPlayerPed(-1), weapon.hash, 100, false, true)
+  if weapon.components then
+    if #weapon.components > 0 then
+      for x = 1, #weapon.components do
+        GiveWeaponComponentToPed(GetPlayerPed(-1), weapon.hash, GetHashKey(weapon.components[x]))
+      end
+    end
+  end
+  if weapon.tint then
+    SetPedWeaponTintIndex(GetPlayerPed(-1), weapon.hash, weapon.tint)
+  end
 end)
 
 RegisterNetEvent("usa:dropWeapon")
