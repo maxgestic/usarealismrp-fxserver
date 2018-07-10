@@ -366,7 +366,7 @@ Citizen.CreateThread(function()
                             end
                         end)
 
-                        TriggerEvent("properties-GUI:Option", "Withdraw", function(cb)
+                        TriggerEvent("properties-GUI:Option", "Withdraw Money", function(cb)
                             if cb then
                                 --print("player wants to withdraw from their property!")
                                 menu.enabled = false

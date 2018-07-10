@@ -76,13 +76,13 @@ AddEventHandler("vehicle:retrieveWeapon", function(target_item, target_vehicle_p
                           if quantity_to_transfer <= target_item.quantity then
                             -- Remove/decrement full item with name data.itemName from vehicle inventory with plate matching target_vehicle.plate:
                             print("removing item (" .. target_item.name .. ") from vehicle inventory, quantity: " .. quantity_to_transfer)
-                            TriggerServerEvent("vehicle:removeItem", target_item.name, quantity_to_transfer, target_vehicle_plate)
+                            TriggerServerEvent("vehicle:removeItem", target_item, quantity_to_transfer, target_vehicle_plate)
                             -- Add/increment full item with name data.itemName into player's inventory:
                             TriggerServerEvent("usa:insertItem", target_item, quantity_to_transfer)
                           else
                             TriggerEvent("usa:notify", "Quantity input too high!")
                           end
-                      else 
+                      else
 						TriggerEvent("usa:notify", "Quantity input too low!")
 					  end
                       -- kinda experimental:
@@ -105,7 +105,7 @@ RegisterNetEvent("vehicle:continueRetrievingItem")
 AddEventHandler("vehicle:continueRetrievingItem", function(plate, item, quantity)
   -- Remove/decrement full item with name data.itemName from vehicle inventory with plate matching target_vehicle.plate:
   print("removing item (" .. item.name .. ") from vehicle inventory, quantity: " .. quantity)
-  TriggerServerEvent("vehicle:removeItem", item.name, quantity, plate)
+  TriggerServerEvent("vehicle:removeItem", item, quantity, plate)
   -- Add/increment full item with name data.itemName into player's inventory:
   item.quantity = quantity
   TriggerServerEvent("usa:insertItem", item, quantity)

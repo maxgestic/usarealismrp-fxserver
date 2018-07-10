@@ -47,7 +47,9 @@ AddEventHandler("gunShop:requestPurchase", function(category, index, property)
 		TriggerClientEvent("usa:notify", source, "Can't carry more than 3 weapons!")
 		return
 	  end
-      TriggerEvent("usa:insertItem", sv_storeWeapons[category][index], 1, usource, function(success)
+    local weapon = sv_storeWeapons[category][index]
+    weapon.uuid = math.random(999999999)
+      TriggerEvent("usa:insertItem", weapon, 1, usource, function(success)
         if success then
           user.setActiveCharacterData("money", user_money - sv_storeWeapons[category][index].price)
           TriggerClientEvent("mini:equipWeapon", usource, usource, sv_storeWeapons[category][index].hash, sv_storeWeapons[category][index].name) -- equip

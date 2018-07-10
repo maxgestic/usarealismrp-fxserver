@@ -45,12 +45,14 @@ AddEventHandler("vehicle:storeItem", function(vehicle_plate, item, quantity)
                 vehicle_inventory = {}
                 player_vehicles[i].inventory = {}
               end
-              for j = 1, #vehicle_inventory do
-                local vehicle_inventory_item = vehicle_inventory[j]
-                if vehicle_inventory_item.name == item.name then
-                  player_vehicles[i].inventory[j].quantity = player_vehicles[i].inventory[j].quantity + quantity
-                  player.setActiveCharacterData("vehicles", player_vehicles)
-                  return
+              if item.type ~= "weapon" then
+                for j = 1, #vehicle_inventory do
+                  local vehicle_inventory_item = vehicle_inventory[j]
+                  if vehicle_inventory_item.name == item.name then
+                    player_vehicles[i].inventory[j].quantity = player_vehicles[i].inventory[j].quantity + quantity
+                    player.setActiveCharacterData("vehicles", player_vehicles)
+                    return
+                  end
                 end
               end
               item.quantity = quantity -- set quantity to the one provided as user input, assumes quantity provided is <= to item.quantity
@@ -100,40 +102,46 @@ AddEventHandler("vehicle:seizeContraband", function(target_vehicle_plate)
 end)
 
 RegisterServerEvent("vehicle:removeItem")
-AddEventHandler("vehicle:removeItem", function(item_name, quantity, target_vehicle_plate)
+AddEventHandler("vehicle:removeItem", function(whole_item, quantity, target_vehicle_plate)
   print("inside vehicle:removeItem!")
-  print("target item name: " .. item_name)
+  print("target item name: " .. whole_item.name)
   print("target plate #: " .. target_vehicle_plate)
   local userSource = tonumber(source)
   TriggerEvent("es:getPlayers", function(players)
     if players then
       for id, player in pairs(players) do
         local player_vehicles = player.getActiveCharacterData("vehicles")
-		if player_vehicles then
-			for i = 1, #player_vehicles do
-			  local veh = player_vehicles[i]
-			  if string.find(target_vehicle_plate, tostring(veh.plate)) then -- this is the vehicle whose inventory we want to target
-				local vehicle_inventory = veh.inventory
-				for j = 1, #vehicle_inventory do
-				  local vehicle_inventory_item = vehicle_inventory[j]
-				  if vehicle_inventory_item.name == item_name then
-					print("found matching item to remove, quantity after subtracting: " .. player_vehicles[i].inventory[j].quantity - quantity)
-					if player_vehicles[i].inventory[j].quantity - quantity <= 0 then
-					  print("removing item from vehicle inventory!")
-					  table.remove(player_vehicles[i].inventory, j)
-					  player.setActiveCharacterData("vehicles", player_vehicles)
-					  print("removed item from vehicle inventory!")
-					else
-					  print("decremented item quantity in vehicle inventory!")
-					  player_vehicles[i].inventory[j].quantity = player_vehicles[i].inventory[j].quantity - quantity
-					  player.setActiveCharacterData("vehicles", player_vehicles)
-					end
-					return
-				  end
-				end
-			  end
-			end
-		end
+        if player_vehicles then
+          for i = 1, #player_vehicles do
+            local veh = player_vehicles[i]
+            if string.find(target_vehicle_plate, tostring(veh.plate)) then -- this is the vehicle whose inventory we want to target
+              local vehicle_inventory = veh.inventory
+              for j = 1, #vehicle_inventory do
+                local vehicle_inventory_item = vehicle_inventory[j]
+                if (vehicle_inventory_item.name == whole_item.name and vehicle_inventory_item.type ~= "weapon") or (vehicle_inventory_item.type == "weapon" and vehicle_inventory_item.uuid == whole_item.uuid) then
+                  print("found matching item to remove, quantity after subtracting: " .. player_vehicles[i].inventory[j].quantity - quantity)
+                  if player_vehicles[i].inventory[j].quantity - quantity <= 0 then
+                    print("removing item from vehicle inventory!")
+                    table.remove(player_vehicles[i].inventory, j)
+                    player.setActiveCharacterData("vehicles", player_vehicles)
+                    print("removed item from vehicle inventory!")
+                  else
+                    print("decremented item quantity in vehicle inventory!")
+                    player_vehicles[i].inventory[j].quantity = player_vehicles[i].inventory[j].quantity - quantity
+                    player.setActiveCharacterData("vehicles", player_vehicles)
+                  end
+                  return
+                else
+                  if whole_item.type == "weapon" and not whole_item.uuid then
+                    table.remove(player_vehicles[i].inventory, j)
+                    print("removed weapon from vehicle with no UUID!")
+                    return
+                  end
+                end
+              end
+            end
+          end
+        end
       end
     end
   end)

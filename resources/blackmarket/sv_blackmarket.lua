@@ -29,6 +29,7 @@ AddEventHandler("blackMarket:requestPurchase", function(index)
   local userSource = source
   local user = exports["essentialmode"]:getPlayerFromId(userSource)
   local weapon = sv_storeItems["weapons"][index]
+  weapon.uuid = math.random(999999999)
   if user.getCanActiveCharacterHoldItem(weapon) then
     if weapon.type == "weapon" then
       local weapons = user.getActiveCharacterData("weapons")

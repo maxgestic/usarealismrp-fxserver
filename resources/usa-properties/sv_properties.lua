@@ -146,36 +146,39 @@ RegisterServerEvent("properties:store")
 AddEventHandler("properties:store", function(name, item, quantity)
 	--print("inside properties:store!")
 	local user_source = source
-	print("recevied item [" .. item.name .. "] to store at property with quantity [" .. item.quantity .. "]")
+	--print("recevied item [" .. item.name .. "] to store at property with quantity [" .. item.quantity .. "]")
 	local saved_quantity = item.quantity
 		-- remove from player --
-	print("sending into usa:remove item [" .. item.name .. "] item.quantity = " .. item.quantity .. ", quantity to remove = " .. quantity)
+	--print("sending into usa:remove item [" .. item.name .. "] item.quantity = " .. item.quantity .. ", quantity to remove = " .. quantity)
 	TriggerEvent("usa:removeItem", item, quantity, user_source)
 	local copy = item
 	copy.quantity = quantity
 	local had_already = false
-	print("storing item at property: " .. name)
+	--print("storing item at property: " .. name)
 	-- insert into property --
 	for i = 1, #PROPERTIES[name].storage.items do
 		if PROPERTIES[name].storage.items[i].name == item.name then
-			print("had_already was true!")
-			print("previous quantity: " .. PROPERTIES[name].storage.items[i].quantity)
-			print("quantity to add: " .. quantity)
-			had_already	= true
-			PROPERTIES[name].storage.items[i].quantity = PROPERTIES[name].storage.items[i].quantity + quantity
-			break
+			--print("had_already was true!")
+			--print("previous quantity: " .. PROPERTIES[name].storage.items[i].quantity)
+			--print("quantity to add: " .. quantity)
+      if PROPERTIES[name].storage.items[i].type ~= "weapon" then
+  			had_already	= true
+  			PROPERTIES[name].storage.items[i].quantity = PROPERTIES[name].storage.items[i].quantity + quantity
+      end
+      break
 		end
 	end
 	if not had_already then
-		print("had_already was false!")
+		--print("had_already was false!")
 		--print("quantity param: " .. quantity)
 		--print("item.quantity from inventory was: " .. saved_quantity)
 		--print("item.quantity to store is now after setting: " .. copy.quantity)
 		table.insert(PROPERTIES[name].storage.items, copy)
+    print("inserted item into house storage: " .. copy.name .. ", type: " .. copy.type .. ", customizations: " .. type(copy.components))
 		--print("added item! property now has:")
-		for k = 1, #PROPERTIES[name].storage.items do
-			print("name: " .. PROPERTIES[name].storage.items[k].name .. ", quantity: " .. PROPERTIES[name].storage.items[k].quantity)
-		end
+		--for k = 1, #PROPERTIES[name].storage.items do
+			--print("name: " .. PROPERTIES[name].storage.items[k].name .. ", quantity: " .. PROPERTIES[name].storage.items[k].quantity)
+		--end
 	end
 	-- update properties --
 	TriggerClientEvent("properties:update", -1, PROPERTIES[name], true)
@@ -248,18 +251,17 @@ AddEventHandler("properties:retrieve", function(name, item, quantity)
 	local user_source = source
 	local player = exports["essentialmode"]:getPlayerFromId(user_source)
 	if player then
-		print("player existed!")
 		item.quantity = quantity
 		if player.getCanActiveCharacterHoldItem(item) then
-			print("player can hold [" .. item.name .. "] with quantity: " .. item.quantity .. " - " .. quantity .. "!")
+			--print("player can hold [" .. item.name .. "] with quantity: " .. item.quantity .. " - " .. quantity .. "!")
 			-- remove from property --
 			local prop_storage = PROPERTIES[name].storage.items
 			for i = 1, #prop_storage do
-				print("checking item in property storage: " .. prop_storage[i].name .. " against " .. item.name)
-				if prop_storage[i].name == item.name then
-					print("wants: " .. quantity .. ", has: " .. prop_storage[i].quantity)
+				--print("checking item in property storage: " .. prop_storage[i].name .. " against " .. item.name)
+				if (prop_storage[i].name == item.name and item.type ~= "weapon") or (item.type == "weapon" and item.uuid == prop_storage[i].uuid) then
+					--print("wants: " .. quantity .. ", has: " .. prop_storage[i].quantity)
 					if prop_storage[i].quantity - quantity < 0 then
-						print("tried to retrieve too much of item! wanted: " .. quantity .. ", had: " .. prop_storage[i].quantity)
+						--print("tried to retrieve too much of item! wanted: " .. quantity .. ", had: " .. prop_storage[i].quantity)
 						TriggerClientEvent("usa:notify", user_source, "You don't have that much of that item in storage!")
 						return
 					else
@@ -267,24 +269,31 @@ AddEventHandler("properties:retrieve", function(name, item, quantity)
 							print("property item removed!")
 							table.remove(PROPERTIES[name].storage.items, i)
 						else
-							print("previous quantity: " .. PROPERTIES[name].storage.items[i].quantity)
-							print("quantity to decrement by: " .. quantity)
+							--print("previous quantity: " .. PROPERTIES[name].storage.items[i].quantity)
+							--print("quantity to decrement by: " .. quantity)
 							PROPERTIES[name].storage.items[i].quantity = PROPERTIES[name].storage.items[i].quantity - quantity
 						end
 						break
 					end
-				end
+				else
+          if item.type == "weapon" and not item.uuid then
+            table.remove(PROPERTIES[name].storage.items, i)
+            print("removed weapon with no UUID!")
+            break
+          end
+        end
 			end
 			-- insert into player inventory --
 			TriggerEvent("usa:insertItem", item, quantity, user_source)
+      print("inserted item into player inventory from property: " .. item.name .. ", type: " .. item.type .. ", customizations: " .. type(item.components))
 			-- update properties for all --
-			print("updating properties!")
-			--TriggerClientEvent("properties:update", -1, PROPERTIES, true)
+			--print("updating properties!")
+			TriggerClientEvent("properties:update", -1, PROPERTIES[name], true)
 			-- refresh menu property items --
-			print("setting client's property storage items to:")
-			for k = 1, #PROPERTIES[name].storage.items do
-				print("item: " .. PROPERTIES[name].storage.items[k].name .. ", quantity: " .. PROPERTIES[name].storage.items[k].quantity)
-			end
+			--print("setting client's property storage items to:")
+			--for k = 1, #PROPERTIES[name].storage.items do
+				--print("item: " .. PROPERTIES[name].storage.items[k].name .. ", quantity: " .. PROPERTIES[name].storage.items[k].quantity)
+			--end
 			TriggerClientEvent("properties:loadedStorage", user_source, PROPERTIES[name].storage.items)
       -- save property --
       SavePropertyData(name)
