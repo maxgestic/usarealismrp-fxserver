@@ -159,7 +159,7 @@ local ITEMS = { -- must be kept in sync with one in cl_weaponeaxtrashop.lua --
 }
 
 RegisterServerEvent("weaponExtraShop:requestTintPurchase")
-AddEventHandler("weaponExtraShop:requestTintPurchase", function(tintId, wephash)
+AddEventHandler("weaponExtraShop:requestTintPurchase", function(tintId, wephash, property)
   local user = exports["essentialmode"]:getPlayerFromId(source)
   local tint = ITEMS["Tints"][tintId]
   local user_weapons = user.getActiveCharacterData("weapons")
@@ -174,6 +174,10 @@ AddEventHandler("weaponExtraShop:requestTintPurchase", function(tintId, wephash)
         --TriggerClientEvent("bikeShop:toggleMenu", source, false)
         user_weapons[i].tint = tintId
         user.setActiveCharacterData("weapons", user_weapons)
+        -- give money to property owner --
+        if property then
+          TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * tint.price))
+        end
       else
         TriggerClientEvent("usa:notify", source, "Not enough money!")
       end
@@ -183,7 +187,7 @@ AddEventHandler("weaponExtraShop:requestTintPurchase", function(tintId, wephash)
 end)
 
 RegisterServerEvent("weaponExtraShop:requestComponentPurchase")
-AddEventHandler("weaponExtraShop:requestComponentPurchase", function(weapon, componentIndex, wephash, legal)
+AddEventHandler("weaponExtraShop:requestComponentPurchase", function(weapon, componentIndex, wephash, legal, property)
   local user = exports["essentialmode"]:getPlayerFromId(source)
   local component
   if legal then
@@ -206,6 +210,10 @@ AddEventHandler("weaponExtraShop:requestComponentPurchase", function(weapon, com
         end
         table.insert(user_weapons[i].components, component.value)
         user.setActiveCharacterData("weapons", user_weapons)
+        -- give money to property owner --
+        if property then
+          TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * component.price))
+        end
       else
         TriggerClientEvent("usa:notify", source, "Not enough money!")
       end

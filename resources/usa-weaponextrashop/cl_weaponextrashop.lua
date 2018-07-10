@@ -248,11 +248,11 @@ function CreateTintMenu(menu)
     -------------------
     local item = NativeUI.CreateItem(info.name, "Purchase price: $" .. comma_value(info.price))
     item.Activated = function(parentmenu, selected)
-      --local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
-      --TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-      local equipped_weapon = GetSelectedPedWeapon(GetPlayerPed(-1))
-      TriggerServerEvent("weaponExtraShop:requestTintPurchase", id, equipped_weapon)
-      --end)
+      local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
+      TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+        local equipped_weapon = GetSelectedPedWeapon(GetPlayerPed(-1))
+        TriggerServerEvent("weaponExtraShop:requestTintPurchase", id, equipped_weapon, property)
+      end)
     end
     submenu:AddItem(item)
   end
@@ -272,19 +272,19 @@ function CreateLegalExtrasMenu(menu)
       ---------------------------------------------
       local item = NativeUI.CreateItem(components[i].name, "Purchase price: $" .. comma_value(components[i].price))
       item.Activated = function(parentmenu, selected)
-        --local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
-        --TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-        local equipped_weapon = GetSelectedPedWeapon(GetPlayerPed(-1))
-        if equipped_weapon == components[i].weapon_hash then
-          if not HasPedGotWeaponComponent(GetPlayerPed(-1), equipped_weapon, GetHashKey(components[i].value)) then
-            TriggerServerEvent("weaponExtraShop:requestComponentPurchase", weapon, i, equipped_weapon, true)
+        local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
+        TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+          local equipped_weapon = GetSelectedPedWeapon(GetPlayerPed(-1))
+          if equipped_weapon == components[i].weapon_hash then
+            if not HasPedGotWeaponComponent(GetPlayerPed(-1), equipped_weapon, GetHashKey(components[i].value)) then
+              TriggerServerEvent("weaponExtraShop:requestComponentPurchase", weapon, i, equipped_weapon, true, property)
+            else
+                TriggerEvent("usa:notify", "You already have that upgrade!")
+            end
           else
-              TriggerEvent("usa:notify", "You already have that upgrade!")
+            TriggerEvent("usa:notify", "Please equip the weapon before upgrading!")
           end
-        else
-          TriggerEvent("usa:notify", "Please equip the weapon before upgrading!")
-        end
-        --end)
+        end)
       end
       ----------------------------------------
       -- add to sub menu created previously --
@@ -308,19 +308,19 @@ function CreateIllegalExtrasMenu(menu)
       ---------------------------------------------
       local item = NativeUI.CreateItem(components[i].name, "Purchase price: $" .. comma_value(components[i].price))
       item.Activated = function(parentmenu, selected)
-        --local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
-        --TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-        local equipped_weapon = GetSelectedPedWeapon(GetPlayerPed(-1))
-        if equipped_weapon == components[i].weapon_hash then
-          if not HasPedGotWeaponComponent(GetPlayerPed(-1), equipped_weapon, GetHashKey(components[i].value)) then
-            TriggerServerEvent("weaponExtraShop:requestComponentPurchase", weapon, i, equipped_weapon, false)
+        local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
+        TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+          local equipped_weapon = GetSelectedPedWeapon(GetPlayerPed(-1))
+          if equipped_weapon == components[i].weapon_hash then
+            if not HasPedGotWeaponComponent(GetPlayerPed(-1), equipped_weapon, GetHashKey(components[i].value)) then
+              TriggerServerEvent("weaponExtraShop:requestComponentPurchase", weapon, i, equipped_weapon, false, property)
+            else
+                TriggerEvent("usa:notify", "You already have that upgrade!")
+            end
           else
-              TriggerEvent("usa:notify", "You already have that upgrade!")
+            TriggerEvent("usa:notify", "Please equip the weapon before upgrading!")
           end
-        else
-          TriggerEvent("usa:notify", "Please equip the weapon before upgrading!")
-        end
-        --end)
+        end)
       end
       ----------------------------------------
       -- add to sub menu created previously --
@@ -357,20 +357,12 @@ Citizen.CreateThread(function()
     -------------------
     local closest_shop = isPlayerAtWeaponExtraShop()
     if closest_shop then
-      drawTxt("Press [~y~E~w~] to open the weapon extra shop menu",0,1,0.5,0.8,0.5,255,255,255,255)
+      drawTxt("Press [~y~E~w~] to open the weapon extra shop menu",7,1,0.5,0.8,0.5,255,255,255,255)
     else
       if IsAnyMenuVisible() then
         closest_shop = nil
         CloseAllMenus()
       end
-      --[[
-      if legalShopMenu:Visible() then
-        legalShopMenu:Visible(false)
-      end
-      if illegalShopMenu:Visible() then
-        illegalShopMenu:Visible(false)
-      end
-      --]]
     end
     --------------------------
     -- Listen for menu open --

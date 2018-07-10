@@ -51,6 +51,21 @@ function CloseAllMenus()
 	end
 end
 
+function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
+	SetTextFont(font)
+	SetTextProportional(0)
+	SetTextScale(scale, scale)
+	SetTextColour(r, g, b, a)
+	SetTextDropShadow(0, 0, 0, 0,255)
+	SetTextEdge(1, 0, 0, 0, 255)
+	SetTextDropShadow()
+	SetTextOutline()
+	SetTextCentre(centre)
+	SetTextEntry("STRING")
+	AddTextComponentString(text)
+	DrawText(x , y)
+end
+
 ----------------------
 -- Set up main menu --
 ----------------------
@@ -124,12 +139,15 @@ Citizen.CreateThread(function()
     for i = 1, #locations do
       if Vdist(mycoords.x, mycoords.y, mycoords.z, locations[i].x, locations[i].y, locations[i].z) < 50.0 then
         DrawMarker(27, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
-        if IsControlJustPressed(1, MENU_KEY) and not IsAnyMenuVisible() then
-          if Vdist(mycoords.x, mycoords.y, mycoords.z, locations[i].x, locations[i].y, locations[i].z) < 1.3 then
+				if Vdist(mycoords.x, mycoords.y, mycoords.z, locations[i].x, locations[i].y, locations[i].z) < 1.3 then
+					drawTxt("Press [~y~E~w~] to open the Ammunation menu",7,1,0.5,0.8,0.5,255,255,255,255)
+        	if IsControlJustPressed(1, MENU_KEY) and not IsAnyMenuVisible() then
+          --if Vdist(mycoords.x, mycoords.y, mycoords.z, locations[i].x, locations[i].y, locations[i].z) < 1.3 then
             mainMenu:Visible(not mainMenu:Visible())
 						closest_location = locations[i]
-          end
-        end
+          --end
+        	end
+				end
       end
     end
 		-- close menu when far away --
