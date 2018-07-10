@@ -58,13 +58,13 @@ Citizen.CreateThread(function()
   local display_name = "Undefined"
   while true do
 	me = GetPlayerPed(-1)
-    
+
     if current_job.active then
       for i = 1, #drop_offs do
         DrawMarker(27, drop_offs[i].x, drop_offs[i].y, drop_offs[i].z - 1.0, 0, 0, 0, 0, 0, 0, 5.0, 5.0, 5.0, 255 --[[r]], 92 --[[g]], 92 --[[b]], 90, 0, 0, 2, 0, 0, 0, 0)
         playerCoords = GetEntityCoords(me, false)
         if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,drop_offs[i].x,drop_offs[i].y,drop_offs[i].z,false) < 3 then
-          drawTxt("Press [~y~E~w~] to start chopping the vehicle",0,1,0.5,0.8,0.6,255,255,255,255)
+          drawTxt("Press [~y~E~w~] to start chopping the vehicle",7,1,0.5,0.8,0.6,255,255,255,255)
           if IsControlJustPressed(1,KEY) then
             local found = false
             handle = GetVehiclePedIsIn(me, true)
@@ -224,7 +224,7 @@ function ConvertRealCarToGtaCar(name)
   elseif string.lower(name) == "peyote" then
 	return "Vapid Peyote"
   elseif string.lower(name) == "bfinject" then
-	return "BF Injection"	
+	return "BF Injection"
   elseif string.lower(name) == "penumbra" then
 	return "Nissan 370z"
   else

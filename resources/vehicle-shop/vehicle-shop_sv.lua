@@ -388,7 +388,7 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle, property)
 									user.setActiveCharacterData("money", user_money - tonumber(price))
 									-- give money to car dealership owner --
 									if property then
-										TriggerEvent("properties:addMoney", property.name, round(0.15 * price, 0))
+										TriggerEvent("properties:addMoney", property.name, round(0.40 * price, 0))
 									end
 									local vehicle = {
 										owner = owner_name,

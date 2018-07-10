@@ -93,7 +93,7 @@ Citizen.CreateThread(function()
     -- draw help txt --
     -------------------
     if isPlayerAtBikeShop() then
-      drawTxt("Press [~y~E~w~] to open the bike shop menu",0,1,0.5,0.8,0.5,255,255,255,255)
+      drawTxt("Press [~y~E~w~] to open the bike shop menu",7,1,0.5,0.8,0.5,255,255,255,255)
     else
       if mainMenu:Visible() then
         mainMenu:Visible(false)

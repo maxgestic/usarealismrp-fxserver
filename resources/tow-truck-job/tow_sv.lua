@@ -8,7 +8,7 @@ AddEventHandler("towJob:giveReward", function(property)
 		user.setActiveCharacterData("money", user_money + TOW_REWARD)
 		-- give property owner money --
 		if property then
-			TriggerEvent("properties:addMoney", property.name, math.ceil(0.20 * TOW_REWARD))
+			TriggerEvent("properties:addMoney", property.name, math.ceil(0.70 * TOW_REWARD))
 		end
 		TriggerClientEvent("towJob:success", userSource)
 	end)

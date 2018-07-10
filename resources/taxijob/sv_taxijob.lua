@@ -60,7 +60,7 @@ AddEventHandler("taxi:setJob", function(property)
 				user.setActiveCharacterData("money", user_money - DUTY_FEE)
 				-- give money to taxi shop owner --
 				if property then
-					TriggerEvent("properties:addMoney", property.name, round(0.20 * DUTY_FEE, 0))
+					TriggerEvent("properties:addMoney", property.name, DUTY_FEE)
 				end
 
 				timeout = true
@@ -74,7 +74,3 @@ AddEventHandler("taxi:setJob", function(property)
 		TriggerClientEvent("usa:notify", userSource, "You don't have a valid driver's license!")
 	end
 end)
-
-function round(num, numDecimalPlaces)
-  return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
-end

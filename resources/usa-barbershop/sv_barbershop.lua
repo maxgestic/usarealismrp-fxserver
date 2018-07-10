@@ -18,7 +18,7 @@ AddEventHandler("barber:checkout", function(customizations, property)
 		print("barber shop customizations saved!")
 		TriggerClientEvent("usa:notify", usource, "~y~You payed: ~w~$" .. BARBER_FEE)
     if property then
-      TriggerEvent("properties:addMoney", property.name, math.floor(0.75 * BARBER_FEE, 0))
+      TriggerEvent("properties:addMoney", property.name, BARBER_FEE)
     end
   else
     TriggerClientEvent("usa:notify", usource, "You don't have enough money to pay the total: $" .. BARBER_FEE)

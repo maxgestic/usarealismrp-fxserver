@@ -34,7 +34,7 @@ AddEventHandler("generalStore:buyItem", function(item, property)
           if property then
             -- give to owner of property
             print("adding money from general store to property: " .. property.name)
-            TriggerEvent("properties:addMoney", property.name, round(0.12 * item.price, 0))
+            TriggerEvent("properties:addMoney", property.name, round(0.40 * item.price, 0))
           end
         else
           --Generate number
@@ -52,7 +52,7 @@ AddEventHandler("generalStore:buyItem", function(item, property)
             -- give to owner of property
             print("adding money from general store to property: " .. property.name)
             TriggerEvent("properties:addMoney", property.name, round(0.12 * item.price, 0))
-          end 
+          end
         end
       else
         -- not enough money

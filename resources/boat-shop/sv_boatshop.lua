@@ -31,7 +31,7 @@ AddEventHandler("boatshop:purchaseBoat", function(boat, coords, property)
     local price = prices.boats[boat.name].buy
     print("boat price = $" .. price)
     local userSource = tonumber(source)
-    TriggerEvent("es:getPlayerFromId", userSource, function(user)
+    local user = exports["essentialmode"]:getPlayerFromId(userSource)
         print("inside of get player from id")
         if user then
             print("user existed")
@@ -40,8 +40,8 @@ AddEventHandler("boatshop:purchaseBoat", function(boat, coords, property)
                 -- charge player:
                 user.setActiveCharacterData("money", user_money - price)
                 -- give money to store owner --
-                if property then 
-                  TriggerEvent("properties:addMoney", property.name, round(0.20 * price, 0))
+                if property then
+                  TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * price))
                 end
                 -- store in player object:
                 print("saving players' boats!")
@@ -70,7 +70,6 @@ AddEventHandler("boatshop:purchaseBoat", function(boat, coords, property)
                 print("player did not have enough money")
             end
         end
-    end)
 end)
 
 RegisterServerEvent("boatshop:rentVehicle")
@@ -89,8 +88,8 @@ AddEventHandler("boatshop:rentVehicle", function(vehicle, coords, property)
             if user_money >= price then
                 user.setActiveCharacterData("money", user_money - price)
                 -- give money to store owner --
-                if property then 
-                  TriggerEvent("properties:addMoney", property.name, round(0.20 * price, 0))
+                if property then
+                  TriggerEvent("properties:addMoney", property.name, math.ceil(0.20 * price))
                 end
                 print("calling spawnAircraft")
                 TriggerClientEvent("boatshop:spawnSeacraft", userSource, vehicle, coords)
@@ -150,16 +149,12 @@ end)
 RegisterServerEvent("boatshop:returnRental")
 AddEventHandler("boatshop:returnRental", function(item)
   local userSource = tonumber(source)
-  local return_amount = round(prices.boats[item.name].rent * 0.25, 0)
+  local return_amount = math.ceil(prices.boats[item.name].rent * 0.25)
   TriggerEvent("es:getPlayerFromId", userSource, function(user)
     local user_money = user.getActiveCharacterData("money")
     user.setActiveCharacterData("money", user_money + return_amount)
   end)
 end)
-
-function round(num, numDecimalPlaces)
-  return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
-end
 
 function comma_value(amount)
   local formatted = amount

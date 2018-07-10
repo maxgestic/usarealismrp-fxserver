@@ -198,7 +198,7 @@ Citizen.CreateThread(function()
                 nearest_property_info = PROPERTIES[name]
                 closest.x, closest.y, closest.z = info.x, info.y, info.z
                 if not menu.enabled then
-                    drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property menu!",0,1,0.5,0.8,0.6,255,255,255,255)
+                    drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property menu!",7,1,0.5,0.8,0.6,255,255,255,255)
                     if IsControlJustPressed(0, menu.key) then
                         menu.enabled = true
                         menu.page = "home"
@@ -211,7 +211,7 @@ Citizen.CreateThread(function()
                     if IsPedInAnyVehicle(me, true) then
                         if nearest_property_info.owner then
                             if nearest_property_info.owner.identifier == my_property_identifier then
-                                drawTxt("Press [ ~b~E~w~ ] to store your vehicle in the garage!",0,1,0.5,0.8,0.6,255,255,255,255)
+                                drawTxt("Press [ ~b~E~w~ ] to store your vehicle in the garage!",7,1,0.5,0.8,0.6,255,255,255,255)
                                 if IsControlJustPressed(0, menu.key) then
                                     local vehicle = GetVehiclePedIsIn(me, false)
                                     local numberPlateText = GetVehicleNumberPlateText(vehicle)
@@ -222,7 +222,7 @@ Citizen.CreateThread(function()
                         end
                     else
                         if not menu.enabled then
-                            drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property garage!",0,1,0.5,0.8,0.6,255,255,255,255)
+                            drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property garage!",7,1,0.5,0.8,0.6,255,255,255,255)
                             if IsControlJustPressed(0, menu.key) then
                                 --print("opening garage menu!")
                                 menu.enabled = true

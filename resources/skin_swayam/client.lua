@@ -399,7 +399,7 @@ Citizen.CreateThread(function()
 	while true do
 		if (IsNearStore() == true) then
 			if(menu == 0) then
-				drawTxt('Press ~g~E~s~ to open Clothes Menu',0,1,0.5,0.8,0.6,255,255,255,255)
+				drawTxt('Press ~g~E~s~ to open Clothes Menu',7,1,0.5,0.8,0.6,255,255,255,255)
 			end
 		else
 			menu = 0

@@ -57,7 +57,7 @@ Citizen.CreateThread(function()
 			DrawMarker(27, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 15, 0, 190, 90, 0, 0, 2, 0, 0, 0, 0)
 		end
 		if isPlayerAtGeneralStore() and not menu.open then
-			drawTxt("Press ~g~E~w~ to open the general store menu!",0,1,0.5,0.8,0.6,255,255,255,255)
+			drawTxt("Press ~g~E~w~ to open the general store menu!",7,1,0.5,0.8,0.6,255,255,255,255)
 		end
     -----------------------
     -- OPEN / CLOSE MENU --

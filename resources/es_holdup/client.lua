@@ -9,7 +9,7 @@ function DisplayHelpText(str)
 end
 
 function drawTxt(x,y ,width,height,scale, text, r,g,b,a, outline)
-    SetTextFont(0)
+    SetTextFont(7)
     SetTextProportional(0)
     SetTextScale(scale, scale)
     SetTextColour(r, g, b, a)
@@ -135,7 +135,7 @@ local stores = {
 		nameofstore = "Gun Store - Paleto",
 		lastrobbed = 0
 	},
-	-- below need testing: 
+	-- below need testing:
 	["Tow Truck - Paleto"] = {
 		position = { ['x'] = -191.731, ['y'] = 6269.85, ['z'] = 31.489},
 		nameofstore = "Tow Truck - Paleto",

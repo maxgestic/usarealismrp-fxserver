@@ -1,5 +1,5 @@
-randomPrice = false --Random the price of each stations
-price = 25 --If random price is on False, set the price here for 1 liter
+randomPrice = true --Random the price of each stations
+price = 20 --If random price is on False, set the price here for 1 liter
 
 local players = {}
 local serverEssenceArray = {}
@@ -70,7 +70,7 @@ AddEventHandler("essence:buy", function(amount, index, e, property)
 		if userJob == "sheriff" or userJob == "ems" or userJob == "fire" then
 			TriggerClientEvent("essence:hasBuying", _source, amount)
 			-- give some money to store owner --
-			if property then 
+			if property then
 				TriggerEvent("properties:addMoney", property.name, round(0.20 * toPay, 0))
 			end
 		else
@@ -84,7 +84,7 @@ AddEventHandler("essence:buy", function(amount, index, e, property)
 				TriggerClientEvent("essence:hasBuying", _source, amount)
 			end
 			-- give some money to store owner --
-			if property then 
+			if property then
 				TriggerEvent("properties:addMoney", property.name, round(0.20 * toPay, 0))
 			end
 		end

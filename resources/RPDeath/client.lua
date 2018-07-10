@@ -34,7 +34,7 @@ AddEventHandler('RPD:startTimer', function()
 			minutes = stringSplit(raw_minutes, ".")[1]
 			seconds = stringSplit(raw_seconds-(minutes*60), ".")[1]
 
-			SetTextFont(0)
+			SetTextFont(7)
 			SetTextProportional(0)
 			SetTextScale(0.0, 0.4)
 			SetTextColour(255, 255, 255, 255)

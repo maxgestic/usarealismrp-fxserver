@@ -379,7 +379,7 @@ Citizen.CreateThread(function()
 			-----------------------------------------------------------
 			if getPlayerDistanceFromShop(SHOPS[k].store_x, SHOPS[k].store_y, SHOPS[k].store_z) < 3 then
 				if not menu.open then
-					drawTxt("Press [~y~E~w~] to open the vehicle shop menu",0,1,0.5,0.8,0.5,255,255,255,255)
+					drawTxt("Press [~y~E~w~] to open the vehicle shop menu",7,1,0.5,0.8,0.5,255,255,255,255)
 				end
 				if IsControlJustPressed(1, menu.key) and not menu.open then
 					menu.open = true

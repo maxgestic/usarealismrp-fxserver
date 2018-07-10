@@ -53,10 +53,10 @@ AddEventHandler("LSC:buttonSelected", function(name, button, property)
 			if myjob ~= "sheriff" and myjob ~= "police" and myjob ~= "ems" and myjob ~= "fire" then
 				mymoney  = mymoney - button.price
 				player.setActiveCharacterData("money", mymoney)
-			end
-			-- give portion to property owner --
-			if property then
-				TriggerEvent("properties:addMoney", property.name, math.floor(0.2 * button.price))
+				-- give portion to property owner --
+				if property then
+					TriggerEvent("properties:addMoney", property.name, math.floor(0.2 * button.price))
+				end
 			end
 		else
 			TriggerClientEvent("LSC:buttonSelected", usource, name, button, false)
@@ -134,7 +134,7 @@ AddEventHandler("LSC:finished", function(veh)
 	local windowtint = veh.windowtint
 	local wheeltype = veh.wheeltype
 	local bulletProofTyres = veh.bulletProofTyres
-	
+
 --[[
 	--  mod debug info: --
 	for i = 1, #mods do
