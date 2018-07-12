@@ -16,7 +16,7 @@ m.messages = {
   "^0Interested in joining the Blaine County Sheriff's Office? We're hiring! Apply today at https://www.usarrp.net > Applications",
 	"^0Interested in becoming a paramedic? Join American Medical Response today at https://www.usarrp.net > Applications",
 	"^0Get unlimited access to reserved slots and skip ahead of public players in queue when you get white listed at https://www.usarrp.net > Applications",
-	"^0New? Please take a second to review our rules by doing /rules so you don't end up getting in trouble."
+	"^0Interested in joining the San Andreas Department of Corrections? We're hiring! Apply today at https://www.usarrp.net > Applications"
 }
 
 -- Player identifiers on this list will not receive any messages.
