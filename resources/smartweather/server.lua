@@ -192,7 +192,7 @@ function handleAdminCheck(from)
 	return true
 end
 
-
+--[[
 -- Example of how to toggle weather. Added basic chat command.
 AddEventHandler('chatMessage', function(from,name,message)
 	if(string.sub(message,1,1) == "/") then
@@ -234,7 +234,11 @@ AddEventHandler('chatMessage', function(from,name,message)
 	end
 
 end)
+--]]
 
+TriggerEvent('es:addGroupCommand', 'updatetime', "owner", function(source, args, user)
+	TriggerClientEvent("smartweather:updateTime", source, tonumber(args[2]), tonumber(args[3]))
+end)
 
 function weatherCheck()
 	for i=0,secondsToWait,1 do

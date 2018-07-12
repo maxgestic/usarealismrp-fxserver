@@ -41,3 +41,8 @@ AddEventHandler('playerSpawned', function(spawn)
 	TriggerServerEvent('smartweather:syncWeather')
 	print("Synced Weather with server settings :)")
 end)
+
+RegisterNetEvent("smartweather:updateTime")
+AddEventHandler("smartweather:updateTime", function(hour, minute)
+	NetworkOverrideClockTime(hour, minute, 0)
+end)

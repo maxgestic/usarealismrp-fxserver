@@ -149,6 +149,7 @@ end
 
 RegisterServerEvent("jail:clearCell")
 AddEventHandler("jail:clearCell", function(cell, clearJailTime)
+	local usource = source
 	for i = 1, #CELLS do
 		if CELLS[i].occupant and cell.occupant then
 			if CELLS[i].occupant.name == cell.occupant.name then
@@ -160,7 +161,7 @@ AddEventHandler("jail:clearCell", function(cell, clearJailTime)
 	end
 	-- clear jail time --
 	if clearJailTime then
-		local user = exports["essentialmode"]:getPlayerFromId(source)
+		local user = exports["essentialmode"]:getPlayerFromId(usource)
 		user.setActiveCharacterData("jailtime", 0)
 	end
 end)
