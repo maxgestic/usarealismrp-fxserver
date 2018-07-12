@@ -311,165 +311,173 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 end)
 
 function interactionMenuUse(itemName, wholeItem)
-	-------------------
-	-- Meth --
-	-------------------
-	if string.find(itemName, "Meth") then
-		--Citizen.Trace("meth found to use!!")
-		TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
-		TriggerEvent("interaction:notify", "You have used: (x1) Meth")
-		intoxicate(true, nil)
-		reality(5)
-	-------------------
-	-- Hash --
-	-------------------
-	elseif string.find(itemName, "Hash") then
-		--Citizen.Trace("meth found to use!!")
-		TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
-		TriggerEvent("interaction:notify", "You have used: (x1) Hash")
-		intoxicate(true, nil)
-		reality(3)
-	-------------------
-	-- Repair Kit --
-	-------------------
-	elseif string.find(itemName, "Repair Kit") then
-		TriggerEvent("interaction:repairVehicle")
-	---------------
-	-- Jerry Can --
-	---------------
-elseif string.find(itemName, "Jerry Can") then
-	local JERRY_CAN_ANIMATION = {
-		dict = "weapon@w_sp_jerrycan",
-		name = "fire"
-	}
-	if tonumber(hitHandleVehicle) ~= 0 then
-		TriggerServerEvent("usa:removeItem", wholeItem, 1)
-		local jcan = 883325847
-		GiveWeaponToPed(GetPlayerPed(-1), jcan, 20, false, true) -- easiest way to remove jerry can object off back when using it (from weapons-on-back resource)
-		-- put jerry can object in hand --
-		--local can_prop = AttachEntityToPed('prop_ld_jerrycan_01', 36029, 0, 0, 0, 90.0, 90.0, 85.0)
-		local can_prop = AttachEntityToPed('prop_ld_jerrycan_01', 36029, 0, 0, 0, 3.0, 173.0, 0.0)
-		-- play anim --
-		TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.name, JERRY_CAN_ANIMATION.dict, false, 6.5, true)
-		Wait(25000)
-		ClearPedTasksImmediately(GetPlayerPed(-1))
-		-- refuel --
-		TriggerServerEvent("essence:refuelWithJerryCan", exports.es_AdvancedFuel:getEssence(), GetVehicleNumberPlateText(hitHandleVehicle), GetDisplayNameFromVehicleModel(GetEntityModel(hitHandleVehicle)))
-		-- remove jerry can object from hand --
-		DeleteEntity(can_prop)
-		-- remove jerry can from weapon wheel --
-		RemoveWeaponFromPed(GetPlayerPed(-1), jcan)
-	else
-		TriggerEvent("usa:notify", "No vehicle found!")
-	end
-	-------------------
-	-- First Aid Kit --
-	-------------------
-	elseif string.find(itemName, "First Aid Kit") then
-		TriggerEvent("usa:heal", 35)
-		TriggerServerEvent("usa:removeItem", wholeItem, 1)
-	-------------------
-	-- Lockpick  --
-	-------------------
-elseif string.find(itemName, "Lock Pick") then
-		local me = GetPlayerPed(-1)
-		local veh = getVehicleInFrontOfUser()
-		if veh ~= 0 then
-			if GetVehicleDoorLockStatus(veh) ~= 1 then
-				local start_time = GetGameTimer()
-				local duration = 20000
-				-- play animation:
-		    local anim = {
-		      dict = "anim@move_m@trash",
-		      name = "pickup"
-		    }
-			RequestAnimDict(anim.dict)
-            while not HasAnimDictLoaded(anim.dict) do
-				Citizen.Wait(100)
-            end
-			TaskPlayAnim(me, anim.dict, anim.name, 8.0, -8, -1, 49, 0, 0, 0, 0)
-				while GetGameTimer() < start_time + duration do
-					Wait(1)
-					--[[
-					--print("IsEntityPlayingAnim(me, anim.dict, anim.name, 3): " .. tostring(IsEntityPlayingAnim(me, anim.dict, anim.name, 3)))
-					if not IsEntityPlayingAnim(me, anim.dict, anim.name, 3) then
-						TaskPlayAnim(me, anim.dict, anim.name, 8.0, -8, -1, 48, 0, 0, 0, 0)
-					end
-					--]]
-					DrawSpecialText("~y~Picking lock ~w~[" .. math.ceil((start_time + duration - GetGameTimer()) / 1000) .. "s]")
-					local car_coords = GetEntityCoords(veh, 1)
-					local my_coords = GetEntityCoords(me, 1)
-					if Vdist(car_coords, my_coords) > 2.0 then
-						TriggerEvent("usa:notify", "Lock pick ~r~failed~w~, out of range!")
-						ClearPedTasks(me)
-						return
-					end
-				end
-				if math.random(100) < 27 then
-					SetVehicleDoorsLocked(veh, 1)
-					TriggerEvent("usa:notify", "Lock pick ~g~success!")
-				else
-					TriggerEvent("usa:notify", "Lock pick ~r~failed!")
-				end
-				TriggerServerEvent("usa:removeItem", wholeItem, 1)
-			else
-				TriggerEvent("usa:notify", "Door is already unlocked!")
-			end
+	Citizen.CreateThread(function()
+		-------------------
+		-- Meth --
+		-------------------
+		if string.find(itemName, "Meth") then
+			--Citizen.Trace("meth found to use!!")
+			TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
+			TriggerEvent("interaction:notify", "You have used: (x1) Meth")
+			intoxicate(true, nil)
+			reality(5)
+		-------------------
+		-- Hash --
+		-------------------
+		elseif string.find(itemName, "Hash") then
+			--Citizen.Trace("meth found to use!!")
+			TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
+			TriggerEvent("interaction:notify", "You have used: (x1) Hash")
+			intoxicate(true, nil)
+			reality(3)
+		-------------------
+		-- Repair Kit --
+		-------------------
+		elseif string.find(itemName, "Repair Kit") then
+			TriggerEvent("interaction:repairVehicle")
+		---------------
+		-- Jerry Can --
+		---------------
+	elseif string.find(itemName, "Jerry Can") then
+		local JERRY_CAN_ANIMATION = {
+			dict = "weapon@w_sp_jerrycan",
+			name = "fire"
+		}
+		
+		RequestAnimDict(JERRY_CAN_ANIMATION.dict)
+		while not HasAnimDictLoaded(JERRY_CAN_ANIMATION.dict) do
+			Wait(100)
+		end
+
+		if tonumber(hitHandleVehicle) ~= 0 then
+			TriggerServerEvent("usa:removeItem", wholeItem, 1)
+			local jcan = 883325847
+			GiveWeaponToPed(GetPlayerPed(-1), jcan, 20, false, true) -- easiest way to remove jerry can object off back when using it (from weapons-on-back resource)
+			-- put jerry can object in hand --
+			--local can_prop = AttachEntityToPed('prop_ld_jerrycan_01', 36029, 0, 0, 0, 90.0, 90.0, 85.0)
+			local can_prop = AttachEntityToPed('prop_ld_jerrycan_01', 36029, 0, 0, 0, 3.0, 173.0, 0.0)
+			-- play anim --
+			TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.name, JERRY_CAN_ANIMATION.dict, false, 6.5, true)
+			Wait(25000)
+			ClearPedTasksImmediately(GetPlayerPed(-1))
+			-- refuel --
+			TriggerServerEvent("essence:refuelWithJerryCan", exports.es_AdvancedFuel:getEssence(), GetVehicleNumberPlateText(hitHandleVehicle), GetDisplayNameFromVehicleModel(GetEntityModel(hitHandleVehicle)))
+			-- remove jerry can object from hand --
+			DeleteEntity(can_prop)
+			-- remove jerry can from weapon wheel --
+			RemoveWeaponFromPed(GetPlayerPed(-1), jcan)
 		else
-			TriggerEvent("usa:notify", "No vehicle detected!")
+			TriggerEvent("usa:notify", "No vehicle found!")
 		end
-	-------------------
-	-- Binoculars --
-	-------------------
-	elseif string.find(itemName, "Binoculars") then
-		TriggerEvent("binoculars:Activate")
-	-------------------
-	-- Cell Phone --
-	-------------------
-	elseif string.find(itemName, "Cell Phone") then
-		--print("Player is using a cell phone from the F1 menu with its number = " .. wholeItem.number)
-		TriggerEvent("phone:openPhone", wholeItem)
-	-------------------
-	-- Food Item  --
-	-------------------
-	elseif wholeItem.type and wholeItem.type == "food" then
-		--print("Player used inventory item of type: food!")
-		--print("item name: " .. wholeItem.name)
-		TriggerEvent("hungerAndThirst:replenish", "hunger", wholeItem)
-	-------------------
-	-- Drink Item  --
-	-------------------
-	elseif wholeItem.type and wholeItem.type == "drink" then
-		--print("Player used inventory item of type: drink!")
-		--print("item name: " .. wholeItem.name)
-		TriggerEvent("hungerAndThirst:replenish", "drink", wholeItem)
-	---------------------------
-	-- Alcoholic Drink Item  --
-	---------------------------
-	elseif wholeItem.type and wholeItem.type == "alcohol" then
-		--print("Player used inventory item of type: alcohol!")
-		--print("item name: " .. wholeItem.name)
-		TriggerEvent("hungerAndThirst:replenish", "drink", wholeItem)
-		--print("old player BAC: " .. player.BAC)
-		player.BAC = player.BAC + wholeItem.strength
-		--print("new player BAC: " .. player.BAC)
-		if player.BAC >= 0.12 then
-			intoxicate(false, "MOVE_M@DRUNK@VERYDRUNK")
-			reality(10)
-		elseif player.BAC >= 0.08 then
-			intoxicate(false, "MOVE_M@DRUNK@MODERATEDRUNK")
-			reality(7)
-		elseif player.BAC >= 0.04 then
-			intoxicate(false, "MOVE_M@DRUNK@SLIGHTLYDRUNK")
-			reality(4)
+		-------------------
+		-- First Aid Kit --
+		-------------------
+		elseif string.find(itemName, "First Aid Kit") then
+			TriggerEvent("usa:heal", 35)
+			TriggerServerEvent("usa:removeItem", wholeItem, 1)
+		-------------------
+		-- Lockpick  --
+		-------------------
+	elseif string.find(itemName, "Lock Pick") then
+			local me = GetPlayerPed(-1)
+			local veh = getVehicleInFrontOfUser()
+			if veh ~= 0 then
+				if GetVehicleDoorLockStatus(veh) ~= 1 then
+					local start_time = GetGameTimer()
+					local duration = 20000
+					-- play animation:
+			    local anim = {
+			      dict = "anim@move_m@trash",
+			      name = "pickup"
+			    }
+				RequestAnimDict(anim.dict)
+	            while not HasAnimDictLoaded(anim.dict) do
+					Citizen.Wait(100)
+	            end
+				TaskPlayAnim(me, anim.dict, anim.name, 8.0, -8, -1, 49, 0, 0, 0, 0)
+					while GetGameTimer() < start_time + duration do
+						Wait(1)
+						--[[
+						--print("IsEntityPlayingAnim(me, anim.dict, anim.name, 3): " .. tostring(IsEntityPlayingAnim(me, anim.dict, anim.name, 3)))
+						if not IsEntityPlayingAnim(me, anim.dict, anim.name, 3) then
+							TaskPlayAnim(me, anim.dict, anim.name, 8.0, -8, -1, 48, 0, 0, 0, 0)
+						end
+						--]]
+						DrawSpecialText("~y~Picking lock ~w~[" .. math.ceil((start_time + duration - GetGameTimer()) / 1000) .. "s]")
+						local car_coords = GetEntityCoords(veh, 1)
+						local my_coords = GetEntityCoords(me, 1)
+						if Vdist(car_coords, my_coords) > 2.0 then
+							TriggerEvent("usa:notify", "Lock pick ~r~failed~w~, out of range!")
+							ClearPedTasks(me)
+							return
+						end
+					end
+					if math.random(100) < 27 then
+						SetVehicleDoorsLocked(veh, 1)
+						TriggerEvent("usa:notify", "Lock pick ~g~success!")
+					else
+						TriggerEvent("usa:notify", "Lock pick ~r~failed!")
+					end
+					TriggerServerEvent("usa:removeItem", wholeItem, 1)
+				else
+					TriggerEvent("usa:notify", "Door is already unlocked!")
+				end
+			else
+				TriggerEvent("usa:notify", "No vehicle detected!")
+			end
+		-------------------
+		-- Binoculars --
+		-------------------
+		elseif string.find(itemName, "Binoculars") then
+			TriggerEvent("binoculars:Activate")
+		-------------------
+		-- Cell Phone --
+		-------------------
+		elseif string.find(itemName, "Cell Phone") then
+			--print("Player is using a cell phone from the F1 menu with its number = " .. wholeItem.number)
+			TriggerEvent("phone:openPhone", wholeItem)
+		-------------------
+		-- Food Item  --
+		-------------------
+		elseif wholeItem.type and wholeItem.type == "food" then
+			--print("Player used inventory item of type: food!")
+			--print("item name: " .. wholeItem.name)
+			TriggerEvent("hungerAndThirst:replenish", "hunger", wholeItem)
+		-------------------
+		-- Drink Item  --
+		-------------------
+		elseif wholeItem.type and wholeItem.type == "drink" then
+			--print("Player used inventory item of type: drink!")
+			--print("item name: " .. wholeItem.name)
+			TriggerEvent("hungerAndThirst:replenish", "drink", wholeItem)
+		---------------------------
+		-- Alcoholic Drink Item  --
+		---------------------------
+		elseif wholeItem.type and wholeItem.type == "alcohol" then
+			--print("Player used inventory item of type: alcohol!")
+			--print("item name: " .. wholeItem.name)
+			TriggerEvent("hungerAndThirst:replenish", "drink", wholeItem)
+			--print("old player BAC: " .. player.BAC)
+			player.BAC = player.BAC + wholeItem.strength
+			--print("new player BAC: " .. player.BAC)
+			if player.BAC >= 0.12 then
+				intoxicate(false, "MOVE_M@DRUNK@VERYDRUNK")
+				reality(10)
+			elseif player.BAC >= 0.08 then
+				intoxicate(false, "MOVE_M@DRUNK@MODERATEDRUNK")
+				reality(7)
+			elseif player.BAC >= 0.04 then
+				intoxicate(false, "MOVE_M@DRUNK@SLIGHTLYDRUNK")
+				reality(4)
+			end
+		elseif string.find(itemName, "Parachute") then
+			GiveWeaponToPed(GetPlayerPed(-1), GetHashKey("GADGET_PARACHUTE"), 150, true, true)
+			SetPedComponentVariation(GetPlayerPed(-1), 5, 1, 0, 0)
+			TriggerServerEvent("parachute:usedParachute")
+		else
+			TriggerEvent("interaction:notify", "There is no use action for that item!")
 		end
-	elseif string.find(itemName, "Parachute") then
-		GiveWeaponToPed(GetPlayerPed(-1), GetHashKey("GADGET_PARACHUTE"), 150, true, true)
-		SetPedComponentVariation(GetPlayerPed(-1), 5, 1, 0, 0)
-		TriggerServerEvent("parachute:usedParachute")
-	else
-		TriggerEvent("interaction:notify", "There is no use action for that item!")
-	end
+	end)
 end
 
 Citizen.CreateThread(function()
@@ -905,9 +913,18 @@ function DrawSpecialText(m_text)
 end
 
 function AttachEntityToPed(prop,bone_ID,x,y,z,RotX,RotY,RotZ)
+
+	local hashed = GetHashKey(prop)
+
+	RequestModel(hashed)
+	while not HasModelLoaded(hashed) do
+		Citizen.Wait(100)
+	end
+
 	local me = GetPlayerPed(-1)
 	BoneID = GetPedBoneIndex(me, bone_ID)
-	obj = CreateObject(GetHashKey(prop),  1729.73,  6403.90,  34.56,  true,  true,  false)
+	obj = CreateObject(hashed,  1729.73,  6403.90,  34.56,  true,  true,  false)
 	AttachEntityToEntity(obj,  me,  BoneID, x,y,z, RotX,RotY,RotZ,  1, 1, false, false, 0, true)
 	return obj
+
 end

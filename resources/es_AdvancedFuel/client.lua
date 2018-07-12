@@ -740,7 +740,7 @@ Citizen.CreateThread(function()
 				end
 			end
 		end
-		Wait(1)
+		Wait(0)
 	end
 end)
 
@@ -752,4 +752,6 @@ function CreateJerryCanPickups()
 	end
 end
 
-CreateJerryCanPickups()
+Citizen.CreateThread(function()
+	CreateJerryCanPickups()
+end)
