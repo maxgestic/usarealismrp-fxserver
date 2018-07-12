@@ -398,18 +398,3 @@ function TradeVehicle(details)
 	TriggerClientEvent("usa:notify", details.source, "Transaction ~g~successful~w~!")
 	TriggerClientEvent("usa:notify", details.target, "Transaction ~g~successful~w~!")
 end
-
--- Hat prop on / off --
-TriggerEvent('es:addCommand', 'hat', function(source, args, user, location)
-	TriggerClientEvent("civ:toggleProp", source, 0)
-end, { help = "Take your hat on / off." })
-
--- Glasses prop on / off --
-TriggerEvent('es:addCommand', 'glasses', function(source, args, user, location)
-	TriggerClientEvent("civ:toggleProp", source, 1)
-end, { help = "Take your glasses on / off." })
-
--- Glasses prop on / off --
-TriggerEvent('es:addCommand', 'mask', function(source, args, user, location)
-	TriggerClientEvent("civ:toggleComponent", source, 1)
-end, { help = "Take your mask on / off." })

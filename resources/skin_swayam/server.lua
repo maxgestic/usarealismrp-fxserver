@@ -38,7 +38,11 @@ AddEventHandler("mini:save", function(appearance)
 				characters[i].appearance.props = appearance.props
 				user.setCharacter(characters[i], i)
 				print("PLAYER MODEL SAVED")
-				TriggerClientEvent("chatMessage", source, "SYSTEM", {0, 128, 255}, "Your player character has been saved.")
+
+				TriggerClientEvent("headprops:cacheMask", userSource, appearance.components[1], appearance.componentstexture[1])
+				TriggerClientEvent("headprops:cacheHat", userSource, appearance.props[0], appearance.propstexture[0])
+				TriggerClientEvent("headprops:cacheGlasses", userSource, appearance.props[1], appearance.propstexture[1])
+				TriggerClientEvent("chatMessage", userSource, "SYSTEM", {0, 128, 255}, "Your player character has been saved.")
 				return
 			end
 		end

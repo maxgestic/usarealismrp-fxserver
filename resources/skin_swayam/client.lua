@@ -235,15 +235,13 @@ AddEventHandler("CS:ShowMainMenu", function()
 			local ply = GetPlayerPed(-1)
 			character.hash = GetEntityModel(GetPlayerPed(-1))
 			local debugstr = "Player Hash: " .. character.hash .. "| Props: "
-			for i=0,2 -- instead of 3?
-				do
+			for i=0,2 do
 				character.props[i] = GetPedPropIndex(ply, i)
 				character.propstexture[i] = GetPedPropTextureIndex(ply, i)
 				debugstr = debugstr .. character.props[i] .. "->" .. character.propstexture[i] .. ","
 			end
 			debugstr = debugstr .. "| Components: "
-			for i=0,11
-				do
+			for i=0,11 do
 				character.components[i] = GetPedDrawableVariation(ply, i)
 				character.componentstexture[i] = GetPedTextureVariation(ply, i)
 				debugstr = debugstr .. character.components[i] .. "->" .. character.componentstexture[i] .. ","
@@ -255,7 +253,7 @@ AddEventHandler("CS:ShowMainMenu", function()
 				TriggerServerEvent("mini:giveMeMyWeaponsPlease")
 				skin_saved = true
 			end
-			menu = false
+			menu = 0
 		else
 
 		end
