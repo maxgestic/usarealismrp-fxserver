@@ -84,6 +84,21 @@ local player = {
 	BAC = 0.00
 }
 
+local playerPed, targetPed
+local playerPedCoords, targetPedCoords, offsetCoords
+local distanceToTargetPed = 0.0
+local distanceToClosestTargetPed = 0.0
+local rayHandle
+local didHit
+local hitCoords, hitSurfaceCoords
+local hitHandlePed
+local hitHandleVehicle = 0
+local playerServerId = 0
+local playerName = ""
+local raycastResult = 0
+local voipLevel = 0.0
+local menuEnabled = false -- F1 menu gui
+
 RegisterNUICallback('escape', function(data, cb)
 	--TriggerEvent("test:escapeFromCSharp")
 	--print("inside of escape calling disable gui....")
@@ -319,6 +334,34 @@ function interactionMenuUse(itemName, wholeItem)
 	-------------------
 	elseif string.find(itemName, "Repair Kit") then
 		TriggerEvent("interaction:repairVehicle")
+	---------------
+	-- Jerry Can --
+	---------------
+elseif string.find(itemName, "Jerry Can") then
+	local JERRY_CAN_ANIMATION = {
+		dict = "weapon@w_sp_jerrycan",
+		name = "fire"
+	}
+	if tonumber(hitHandleVehicle) ~= 0 then
+		TriggerServerEvent("usa:removeItem", wholeItem, 1)
+		local jcan = 883325847
+		GiveWeaponToPed(GetPlayerPed(-1), jcan, 20, false, true) -- easiest way to remove jerry can object off back when using it (from weapons-on-back resource)
+		-- put jerry can object in hand --
+		--local can_prop = AttachEntityToPed('prop_ld_jerrycan_01', 36029, 0, 0, 0, 90.0, 90.0, 85.0)
+		local can_prop = AttachEntityToPed('prop_ld_jerrycan_01', 36029, 0, 0, 0, 3.0, 173.0, 0.0)
+		-- play anim --
+		TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.name, JERRY_CAN_ANIMATION.dict, false, 6.5, true)
+		Wait(25000)
+		ClearPedTasksImmediately(GetPlayerPed(-1))
+		-- refuel --
+		TriggerServerEvent("essence:refuelWithJerryCan", exports.es_AdvancedFuel:getEssence(), GetVehicleNumberPlateText(hitHandleVehicle), GetDisplayNameFromVehicleModel(GetEntityModel(hitHandleVehicle)))
+		-- remove jerry can object from hand --
+		DeleteEntity(can_prop)
+		-- remove jerry can from weapon wheel --
+		RemoveWeaponFromPed(GetPlayerPed(-1), jcan)
+	else
+		TriggerEvent("usa:notify", "No vehicle found!")
+	end
 	-------------------
 	-- First Aid Kit --
 	-------------------
@@ -604,21 +647,7 @@ function getVehicleInDirection(coordFrom, coordTo)
 	return vehicle
 end
 
--- rewrite from C#:
-local playerPed, targetPed
-local playerPedCoords, targetPedCoords, offsetCoords
-local distanceToTargetPed = 0.0
-local distanceToClosestTargetPed = 0.0
-local rayHandle
-local didHit
-local hitCoords, hitSurfaceCoords
-local hitHandlePed
-local hitHandleVehicle = 0
-local playerServerId = 0
-local playerName = ""
-local raycastResult = 0
-local voipLevel = 0.0
-local menuEnabled = false -- F1 menu gui
+-- rewrite from C#: --
 
 -- implement somehow
 local draggingHelper = {
@@ -778,6 +807,7 @@ Citizen.CreateThread(function()
 		--a, b, c, d, hitHandlePed = GetRaycastResult(rayHandle)
 		-- get nearest veh (temp only get vehicle in front, todo: get closest vehicle regardless of where ped is facing):
 		hitHandleVehicle = getVehicleInFrontOfUser()
+		--print("veh: " .. hitHandleVehicle)
 		-- get closest player server id:
 		playerServerId, playerName, distanceToClosestTargetPed = GetClosestPlayerInfo()
 
@@ -872,4 +902,12 @@ function DrawSpecialText(m_text)
 	SetTextEntry_2("STRING")
 	AddTextComponentString(m_text)
 	DrawSubtitleTimed(250, 1)
+end
+
+function AttachEntityToPed(prop,bone_ID,x,y,z,RotX,RotY,RotZ)
+	local me = GetPlayerPed(-1)
+	BoneID = GetPedBoneIndex(me, bone_ID)
+	obj = CreateObject(GetHashKey(prop),  1729.73,  6403.90,  34.56,  true,  true,  false)
+	AttachEntityToEntity(obj,  me,  BoneID, x,y,z, RotX,RotY,RotZ,  1, 1, false, false, 0, true)
+	return obj
 end

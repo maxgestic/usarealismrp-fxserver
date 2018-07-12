@@ -36,6 +36,26 @@ AddEventHandler("playerDropped", function(reason)
 	players = newPlayers
 end)
 
+RegisterServerEvent("essence:refuelWithJerryCan")
+AddEventHandler("essence:refuelWithJerryCan", function(essence, vplate, vmodel)
+	local percent = math.random(65, 75)
+	local new_amount = (percent/100)*0.142
+	local _source = source
+	local bool, ind = searchByModelAndPlate(vplate, vmodel)
+	if(bool and ind ~= nil) then
+		if serverEssenceArray[ind].es < new_amount then
+			serverEssenceArray[ind].es = new_amount -- set to 75% of a full tank
+			TriggerClientEvent("usa:notify", _source, "Refuel complete!")
+		else
+			TriggerClientEvent("usa:notify", _source, "Tank already filled!")
+		end
+	else
+		if(vplate ~= nil and vmodel~= nil) then
+			table.insert(serverEssenceArray,{plate=vplate,model=vmodel,es=new_amount})
+			TriggerClientEvent("usa:notify", _source, "Refuel complete!")
+		end
+	end
+end)
 
 RegisterServerEvent("essence:setToAllPlayerEscense")
 AddEventHandler("essence:setToAllPlayerEscense", function(essence, vplate, vmodel)
@@ -46,10 +66,10 @@ AddEventHandler("essence:setToAllPlayerEscense", function(essence, vplate, vmode
 	else
 		if(vplate ~=nil and vmodel~=nil and essence ~=nil) then
 			table.insert(serverEssenceArray,{plate=vplate,model=vmodel,es=essence})
+			print("inserted vehicle: " .. vmodel)
 		end
 	end
 end)
-
 
 RegisterServerEvent("essence:buy")
 AddEventHandler("essence:buy", function(amount, index, e, property)
@@ -121,7 +141,7 @@ end
 function renderPrice()
     for i=0,34 do
         if(randomPrice) then
-            StationsPrice[i] = math.random(15,50)/100
+            StationsPrice[i] = math.random(15,35)
         else
         	StationsPrice[i] = price
         end

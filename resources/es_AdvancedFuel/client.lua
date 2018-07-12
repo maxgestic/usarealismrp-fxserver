@@ -266,7 +266,7 @@ Citizen.CreateThread(function()
 			wasInAVeh = true
 			local index = getVehIndex()
 			TriggerServerEvent("essence:setToAllPlayerEscense", essence, GetVehicleNumberPlateText(GetVehiclePedIsUsing(GetPlayerPed(-1))), GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(GetPlayerPed(-1)))))
-			Citizen.Wait(1000)
+			Citizen.Wait(3000)
 		else
 			if(wasInAVeh) then
 				TriggerServerEvent("essence:setToAllPlayerEscense", essence, GetVehicleNumberPlateText(GetVehiclePedIsUsing(GetPlayerPed(-1))), GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(GetPlayerPed(-1)))))
@@ -336,7 +336,7 @@ function CheckVeh()
 	end
 end
 
-local UI = { 
+local UI = {
 	x =  0.000,
 	y = -0.001,
 }
@@ -370,11 +370,6 @@ end
 function drawRct(x,y,width,height,r,g,b,a)
 	DrawRect(x + width/2, y + height/2, width, height, r, g, b, a)
 end
-
-
-
-
-
 
 function isNearStation()
 	local ped = GetPlayerPed(-1)
@@ -638,12 +633,6 @@ AddEventHandler("showNotif", function(text)
 	DrawNotification(false, false)
 end)
 
-
-
-
-
-
-
 RegisterNetEvent("advancedFuel:setEssence")
 AddEventHandler("advancedFuel:setEssence", function(percent, plate, model)
 	local toEssence = (percent/100)*0.142
@@ -667,10 +656,6 @@ AddEventHandler('essence:sendEssence', function(array)
 	end
 end)
 
-
-
-
-
 function IsVehInArray()
 	for i,k in pairs(vehiclesUsed) do
 		if(k.plate == GetVehicleNumberPlateText(GetVehiclePedIsUsing(GetPlayerPed(-1))) and k.model == GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(GetPlayerPed(-1))))) then
@@ -681,7 +666,6 @@ function IsVehInArray()
 	return false
 end
 
-
 function searchByModelAndPlate(plate, model)
 	for i,k in pairs(vehiclesUsed) do
 		if(k.plate == plate and k.model == model) then
@@ -691,7 +675,6 @@ function searchByModelAndPlate(plate, model)
 
 	return false, nil
 end
-
 
 function getVehIndex()
 	local index = -1
@@ -704,3 +687,69 @@ function getVehIndex()
 
 	return index
 end
+
+function getEssence()
+	return essence
+end
+
+----------------
+-- jerry cans --
+----------------
+local JERRY_CAN_LOCATIONS = {
+	{x = 173.0, y = 6601.7, z = 31.8 }, -- paleto ron station
+	{x = 1695.5, y = 6419.4, z = 32.6 }, -- paleto 24/7
+	{x = 459.7, y = -990.9, z = 30.6}, -- mission row locker room
+	{x = -359.7, y = 6109.2, z = 31.4}, -- paleto FD
+	{x = -2554.6, y = 2327.1, z = 33.1}, -- route 1 / route 68 gas station
+	{x = 1691.6, y = 4930.3, z = 42.1}, -- grapeseed gas tation
+	{x = 2005.9, y = 3781.4, z = 32.2}, -- sandy shores gas station
+	{x = 180.1, y = 6602.9, z = 31.8}, -- paleto ron station 2
+	{x = 187.0, y = 6604.3, z = 31.8}, -- paleto ron station 3
+	{x = 1204.6, y = 2663.4, z = 37.8}, -- route 68
+	{x = 1039.3, y = 2668.0, z = 39.5}, -- route 68
+	{x = 2681.6, y = 3267.5, z = 55.4}, -- senora fwy 1
+	{x = 261.8, y = 2598.4, z = 44.7}, -- route 68
+	{x = 45.7, y = 2781.7, z = 57.8}, -- route 68
+	{x = 1182.9, y = -329.7, z = 69.2}, -- LS 1
+	{x = 620.8, y = 269.2, z = 103.1} -- LS 2
+}
+
+local JERRY_CAN_HASH = -962731009
+
+local JERRY_CAN_KEY = 38 -- "E"
+
+Citizen.CreateThread(function()
+	while true do
+		local me = GetPlayerPed(-1)
+		local mycoords = GetEntityCoords(me)
+		-- picking up jerry can --
+		for i = 1, #JERRY_CAN_LOCATIONS do
+			if Vdist(mycoords.x, mycoords.y, mycoords.z, JERRY_CAN_LOCATIONS[i].x, JERRY_CAN_LOCATIONS[i].y, JERRY_CAN_LOCATIONS[i].z) < 4.0 then
+				if IsControlJustPressed(1, JERRY_CAN_KEY) then
+					if IsPickupWithinRadius(JERRY_CAN_HASH, JERRY_CAN_LOCATIONS[i].x, JERRY_CAN_LOCATIONS[i].y, JERRY_CAN_LOCATIONS[i].z, 4.0) and not IsPedInAnyVehicle(me, true) then
+						-- give jerry can item in inventory for use --
+						--print("giving jerry can to id: " .. GetPlayerServerId(PlayerId()))
+						local jerry_can = {
+							name = "Jerry Can",
+							quantity = 1,
+							legality = "legal",
+							type = "misc"
+						}
+						TriggerServerEvent("usa:insertItem", jerry_can, jerry_can.quantity, GetPlayerServerId(PlayerId()))
+					end
+				end
+			end
+		end
+		Wait(1)
+	end
+end)
+
+function CreateJerryCanPickups()
+	for i = 1, #JERRY_CAN_LOCATIONS do
+		local can = JERRY_CAN_LOCATIONS[i]
+		local pickup = CreatePickupRotate(JERRY_CAN_HASH, can.x, can.y, can.z - 0.5, 0, 0, 0, 512, 1, 1, 1, JERRY_CAN_HASH)
+    SetPickupRegenerationTime(pickup, 180)
+	end
+end
+
+CreateJerryCanPickups()
