@@ -31,7 +31,8 @@ local vehicleShopItems = {
 		{make = "Enus", model = "Cognoscenti Carbio", price = 33200, hash = 330661258, storage_capacity = 135.0},
 		{make = "Lampadati", model = "Felon", price = 34550, hash = -391594584, storage_capacity = 135.0},
 		{make = "Enus", model = "Windsor Cabrio", price = 105550, hash = -1930048799, storage_capacity = 135.0},
-		{make = "Nissan", model = "370z", price = 40550, hash = -377465520, storage_capacity = 135.0}
+		{make = "Nissan", model = "370z", price = 40550, hash = -377465520, storage_capacity = 135.0},
+		{make = "Coil", model = "Voltic", price = 55550, hash = -1622444098, storage_capacity = 135.0}
 	},
 	["Muscles"] = {
 		{make = "Willand", model = "Faction", price = 10500, hash = -2119578145, storage_capacity = 160.0},
@@ -161,7 +162,9 @@ local vehicleShopItems = {
 	},
 	["Supers 2"] = {
 		{make = "Ferrari", model = "California", price = 650000, hash = 2072687711, storage_capacity = 100.0},
-		{make = "Grotti", model = "Turismo R", price = 2800000, hash = 408192225, storage_capacity = 100.0}
+		{make = "Grotti", model = "Turismo R", price = 2800000, hash = 408192225, storage_capacity = 100.0},
+		{make = "Progen", model = "Tyrus", price = 2900000, hash = 2067820283, storage_capacity = 100.0},
+		{make = "Annis", model = "RE7B", price = 2900000, hash = -1232836011, storage_capacity = 100.0}
 	},
 	["Classic"] = {
 		{make = "Declasse", model = "Tornado", price = 30000, hash = 464687292, storage_capacity = 150.0},
@@ -181,6 +184,13 @@ local vehicleShopItems = {
 		{make = "Albany", model = "Manana", price = 24500, hash = -2124201592, storage_capacity = 140.0},
 		{make = "Lampadati", model = "Pigalle", price = 24000, hash = 1078682497, storage_capacity = 125.0},
 		{make = "Pegassi", model = "Torero", price = 300000, hash = 1504306544, storage_capacity = 100.0}
+	},
+	["Classic 2"] = {
+		{make = "Declasse", model = "Tornado 6", price = 30000, hash = -1558399629, storage_capacity = 100.0},
+		--{make = "Truffade", model = "ZType", price = 85000, hash = 75889561, storage_capacity = 100.0},
+		{make = "", model = "BType", price = 95000, hash = 117401876, storage_capacity = 100.0},
+		{make = "", model = "BType 2", price = 125000, hash = -831834716, storage_capacity = 100.0}
+
 	},
 	["Sedans"] = {
 		{make = "Albany", model = "Emperor", price = 3500, hash = -1883002148, storage_capacity = 165.0},
