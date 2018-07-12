@@ -247,7 +247,12 @@ end)
 -- try to retrieve item (assumed to already be in the property) --
 RegisterServerEvent("properties:retrieve")
 AddEventHandler("properties:retrieve", function(name, item, quantity)
+  --[[
 	print("inside properties:retrieve!")
+  print("property name: " .. name)
+  print("item name: " .. item.name)
+  print("retrieve quantity: " .. quantity)
+  --]]
 	local user_source = source
 	local player = exports["essentialmode"]:getPlayerFromId(user_source)
 	if player then
@@ -255,11 +260,16 @@ AddEventHandler("properties:retrieve", function(name, item, quantity)
 		if player.getCanActiveCharacterHoldItem(item) then
 			--print("player can hold [" .. item.name .. "] with quantity: " .. item.quantity .. " - " .. quantity .. "!")
 			-- remove from property --
+      --print("looking for item in storage to retrieve!")
 			local prop_storage = PROPERTIES[name].storage.items
 			for i = 1, #prop_storage do
 				--print("checking item in property storage: " .. prop_storage[i].name .. " against " .. item.name)
-				if (prop_storage[i].name == item.name and item.type ~= "weapon") or (item.type == "weapon" and item.uuid == prop_storage[i].uuid) then
+        --print("item.uuid: " .. type(item.uuid))
+        --print("prop_storage[i].uuid: " .. type(prop_storage[i].uuid))
+				if (prop_storage[i].name == item.name and item.type ~= "weapon") or (item.type == "weapon" and prop_storage[i].type == "weapon" and item.uuid == prop_storage[i].uuid and prop_storage[i].name == item.name) then
+          print("found matching item! on line 263! name: " .. prop_storage[i].name)
 					--print("wants: " .. quantity .. ", has: " .. prop_storage[i].quantity)
+          print("prop_storage[i].quantity - quantity: " .. prop_storage[i].quantity - quantity)
 					if prop_storage[i].quantity - quantity < 0 then
 						--print("tried to retrieve too much of item! wanted: " .. quantity .. ", had: " .. prop_storage[i].quantity)
 						TriggerClientEvent("usa:notify", user_source, "You don't have that much of that item in storage!")
@@ -271,21 +281,26 @@ AddEventHandler("properties:retrieve", function(name, item, quantity)
 						else
 							--print("previous quantity: " .. PROPERTIES[name].storage.items[i].quantity)
 							--print("quantity to decrement by: " .. quantity)
+              print("decrementing item quantity!")
 							PROPERTIES[name].storage.items[i].quantity = PROPERTIES[name].storage.items[i].quantity - quantity
 						end
+            print("breaking!")
 						break
 					end
 				else
-          if item.type == "weapon" and not item.uuid then
+          --print("did not found weapon on first check, looking for weapons without uuids...")
+          if (item.type == "weapon" and PROPERTIES[name].storage.items[i].type == "weapon") and (not item.uuid and not PROPERTIES[name].storage.items[i].uuid) and (item.name == PROPERTIES[name].storage.items[i].name) then
+          --if item.type == "weapon" and not item.uuid then
+          --print("removing: " .. PROPERTIES[name].storage.items[i].name .. ", quantity: " .. PROPERTIES[name].storage.items[i].quantity)
             table.remove(PROPERTIES[name].storage.items, i)
-            print("removed weapon with no UUID!")
+            --print("removed weapon with no UUID!")
             break
           end
         end
 			end
 			-- insert into player inventory --
 			TriggerEvent("usa:insertItem", item, quantity, user_source)
-      print("inserted item into player inventory from property: " .. item.name .. ", type: " .. item.type .. ", customizations: " .. type(item.components))
+      --print("inserted item into player inventory from property: " .. item.name .. ", type: " .. item.type .. ", customizations: " .. type(item.components))
 			-- update properties for all --
 			--print("updating properties!")
 			TriggerClientEvent("properties:update", -1, PROPERTIES[name], true)

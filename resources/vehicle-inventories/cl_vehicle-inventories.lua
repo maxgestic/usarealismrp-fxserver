@@ -7,7 +7,7 @@ local SETTINGS = {
 --------------------
 RegisterNetEvent("vehicle:loadedInventory")
 AddEventHandler("vehicle:loadedInventory", function(target_vehicle_inventory)
-  print("loaded target vehicle inventory with #: " .. #target_vehicle_inventory)
+  --print("loaded target vehicle inventory with #: " .. #target_vehicle_inventory)
   if target_vehicle_inventory then
     if #target_vehicle_inventory > 0 then
       for i = 1, #target_vehicle_inventory do
@@ -28,7 +28,7 @@ AddEventHandler("vehicle:checkTargetVehicleForStorage", function(item, quantity)
   -- 2) store item with given quantity
   -- 3) remove item from user inventory or decrement appropriate quantity
   local target_vehicle = getVehicleInFrontOfUser()
-  print("target_vehicle: " .. target_vehicle)
+  --print("target_vehicle: " .. target_vehicle)
   -- see if car is locked or not:
   local lock_status = GetVehicleDoorLockStatus(target_vehicle)
   if lock_status ~= 2 then -- not locked
@@ -63,48 +63,48 @@ RegisterNetEvent("vehicle:retrieveWeapon")
 AddEventHandler("vehicle:retrieveWeapon", function(target_item, target_vehicle_plate)
   -- Get quantity to transfer from user input:
   Citizen.CreateThread( function()
+    DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+    while true do
+      if ( UpdateOnscreenKeyboard() == 1 ) then
+        local input_amount = GetOnscreenKeyboardResult()
+        if ( string.len( input_amount ) > 0 ) then
+          local amount = tonumber( input_amount )
+          amount = math.floor(amount)
+          if ( amount > 0 ) then
+            -- trigger server event to remove money
+            local quantity_to_transfer = amount
+            if quantity_to_transfer <= target_item.quantity then
+              -- Remove/decrement full item with name data.itemName from vehicle inventory with plate matching target_vehicle.plate:
+              --print("removing item (" .. target_item.name .. ") from vehicle inventory, quantity: " .. quantity_to_transfer)
+              TriggerServerEvent("vehicle:removeItem", target_item, quantity_to_transfer, target_vehicle_plate)
+              -- Add/increment full item with name data.itemName into player's inventory:
+              TriggerServerEvent("usa:insertItem", target_item, quantity_to_transfer)
+            else
+              TriggerEvent("usa:notify", "Quantity input too high!")
+            end
+          else
+            TriggerEvent("usa:notify", "Quantity input too low!")
+          end
+          -- kinda experimental:
+          TriggerServerEvent("vehicle:finishedUsingInventory", target_vehicle_plate)
+          break
+        else
           DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
-          while true do
-              if ( UpdateOnscreenKeyboard() == 1 ) then
-                  local input_amount = GetOnscreenKeyboardResult()
-                  if ( string.len( input_amount ) > 0 ) then
-                      local amount = tonumber( input_amount )
-					  amount = math.floor(amount)
-                      if ( amount > 0 ) then
-                          -- trigger server event to remove money
-                          local quantity_to_transfer = amount
-                          if quantity_to_transfer <= target_item.quantity then
-                            -- Remove/decrement full item with name data.itemName from vehicle inventory with plate matching target_vehicle.plate:
-                            print("removing item (" .. target_item.name .. ") from vehicle inventory, quantity: " .. quantity_to_transfer)
-                            TriggerServerEvent("vehicle:removeItem", target_item, quantity_to_transfer, target_vehicle_plate)
-                            -- Add/increment full item with name data.itemName into player's inventory:
-                            TriggerServerEvent("usa:insertItem", target_item, quantity_to_transfer)
-                          else
-                            TriggerEvent("usa:notify", "Quantity input too high!")
-                          end
-                      else
-						TriggerEvent("usa:notify", "Quantity input too low!")
-					  end
-                      -- kinda experimental:
-                      TriggerServerEvent("vehicle:finishedUsingInventory", target_vehicle_plate)
-                      break
-                  else
-                      DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
-                  end
-              elseif ( UpdateOnscreenKeyboard() == 2 ) then
-                  -- experimental:
-                  TriggerServerEvent("vehicle:finishedUsingInventory", target_vehicle_plate)
-                  break
-              end
-          Citizen.Wait( 0 )
+        end
+      elseif ( UpdateOnscreenKeyboard() == 2 ) then
+        -- experimental:
+        TriggerServerEvent("vehicle:finishedUsingInventory", target_vehicle_plate)
+        break
       end
+      Citizen.Wait( 0 )
+    end
   end )
 end)
 
 RegisterNetEvent("vehicle:continueRetrievingItem")
 AddEventHandler("vehicle:continueRetrievingItem", function(plate, item, quantity)
   -- Remove/decrement full item with name data.itemName from vehicle inventory with plate matching target_vehicle.plate:
-  print("removing item (" .. item.name .. ") from vehicle inventory, quantity: " .. quantity)
+  --print("removing item (" .. item.name .. ") from vehicle inventory, quantity: " .. quantity)
   TriggerServerEvent("vehicle:removeItem", item, quantity, plate)
   -- Add/increment full item with name data.itemName into player's inventory:
   item.quantity = quantity
@@ -115,7 +115,7 @@ end)
 
 RegisterNetEvent("vehicle:continueStoringItem")
 AddEventHandler("vehicle:continueStoringItem", function(vehId, plate, item, quantity)
-  print("inside continue storing item function....")
+  --print("inside continue storing item function....")
   SetVehicleDoorOpen(vehId, 5, false, false)
   -- play animation:
   local anim = {
@@ -140,10 +140,10 @@ Citizen.CreateThread(function()
     --print("waiting for key press in veh inventories resource...")
 		if IsControlJustPressed(1, SETTINGS.inventory_key) then
       local target_vehicle = getVehicleInFrontOfUser()
-      print("target_vehicle: " .. target_vehicle)
+      --print("target_vehicle: " .. target_vehicle)
       if target_vehicle ~= 0 then
         local target_vehicle_plate = GetVehicleNumberPlateText(target_vehicle)
-        print("plate #: " .. target_vehicle_plate)
+        --print("plate #: " .. target_vehicle_plate)
         SetVehicleDoorOpen(target_vehicle, 5, false, false)
         TriggerServerEvent("vehicle:getInventory", target_vehicle_plate)
       end
