@@ -26,51 +26,46 @@ end, false)
 
 RegisterNetEvent("Spikestrips:SpawnSpikes")
 AddEventHandler("Spikestrips:SpawnSpikes", function(config, amount)
+	local netid
 			for a = 1, amount do
 				local plyCoords = GetOffsetFromEntityInWorldCoords(GetPlayerPed(PlayerId()), 0.0, 3.0 * a + 0.5, 0.0)
 				local plyHead = GetEntityHeading(GetPlayerPed(PlayerId()))
 				local spike = CreateObject(GetHashKey("P_ld_stinger_s"), plyCoords.x, plyCoords.y, plyCoords.z, true, 1, true)
+				netid = ObjToNet(spike)
+				SetNetworkIdExistsOnAllMachines(netid, true)
+				--NetworkSetNetworkIdDynamic(netid, true)
+				SetNetworkIdCanMigrate(netid, false)
 				local spikeHeight = GetEntityHeightAboveGround(spike)
 				SetEntityCoords(spike, plyCoords.x, plyCoords.y, plyCoords.z - spikeHeight + 0.05, 0.0, 0.0, 0.0, 0.0)
 				SetEntityHeading(spike, plyHead)
 				SetEntityAsMissionEntity(spike, 1, 1)
 				SetEntityCollision(spike, false, false)
-				table.insert(SpawnedSpikes, spike)
+				table.insert(SpawnedSpikes, netid)
 			end
 			SpikesSpawned = true
 end)
 
 RegisterNetEvent("Spikestrips:RemoveSpikes")
 AddEventHandler("Spikestrips:RemoveSpikes", function()
+	print("removing spikes!")
 	if SpikesSpawned then
 		for i = #SpawnedSpikes, 1, -1 do
-			--local netId = NetworkGetNetworkIdFromEntity(SpawnedSpikes[i])
-
-			--NetworkRequestControlOfNetworkId(netId)
-			--while not NetworkHasControlOfNetworkId(netId) do
-				--Citizen.Wait(0)
-				--NetworkRequestControlOfNetworkId(netId)
-			--end
-
-			--local entity = NetworkGetEntityFromNetworkId(netId)
-			--[[
-			DeleteEntity(SpawnedSpikes[i])
+			DeleteEntity(NetToObj(SpawnedSpikes[i]))
 			table.remove(SpawnedSpikes, i)
-			SpikesSpawned = false
-			--]]
-			local mycoords = GetEntityCoords(GetPlayerPed(-1))
-			local spikestrip = GetClosestObjectOfType(mycoords.x, mycoords.y, mycoords.z, 35.0, GetHashKey("P_ld_stinger_s"), false, 1, 1)
-			local spikeCoords = GetEntityCoords(spikestrip)
-			local distance = Vdist(mycoords.x, mycoords.y, mycoords.z, spikeCoords.x, spikeCoords.y, spikeCoords.z)
-			if distance < 35.0 then
-				SetEntityAsMissionEntity( spikestrip, true, true )
-				DeleteEntity(spikestrip)
-				table.remove(SpawnedSpikes, i)
-			end
 		end
 		SpikesSpawned = false
 	end
 end)
+
+function DeleteAllSpikesInArea()
+	for i = 1, 3 do
+		local mycoords = GetEntityCoords(GetPlayerPed(-1))
+		local spikestrip = GetClosestObjectOfType(mycoords.x, mycoords.y, mycoords.z, 75.0, GetHashKey("P_ld_stinger_s"), false, 1, 1)
+		local spikeCoords = GetEntityCoords(spikestrip)
+		SetEntityAsMissionEntity( spikestrip, true, true )
+		DeleteEntity(spikestrip)
+	end
+end
 
 function CheckDistanceToStrips()
 	local vehicle = GetVehiclePedIsIn(GetPlayerPed(PlayerId()), false)
@@ -87,10 +82,9 @@ function FrontLeftTire(vehicle)
 	local distance = Vdist(tirePosition.x, tirePosition.y, tirePosition.z, spikeCoords.x, spikeCoords.y, spikeCoords.z)
 
 	if distance < 1.8 then
-			--print("bursting tire!")
 			SetVehicleTyreBurst(vehicle, 0, false, 1000.0)
 			SetEntityAsMissionEntity( spikestrip, true, true )
-			DeleteEntity(spikestrip)
+			DeleteAllSpikesInArea()
 	end
 
 end
@@ -105,7 +99,7 @@ function FrontRightTire(vehicle)
 			SetVehicleTyreBurst(vehicle, 1, false, 1000.0)
 			--todo: add interact sound tire pop noise so people in the car hear it too
 			SetEntityAsMissionEntity( spikestrip, true, true )
-			DeleteEntity(spikestrip)
+			DeleteAllSpikesInArea()
 	end
 
 end
@@ -120,7 +114,7 @@ function BackLeftTire(vehicle)
 			SetVehicleTyreBurst(vehicle, 4, false, 1000.0)
 			SetVehicleTyreBurst(vehicle , 2, false, 1000.0)
 			SetEntityAsMissionEntity( spikestrip, true, true )
-			DeleteEntity(spikestrip)
+			DeleteAllSpikesInArea()
 	end
 end
 
@@ -134,7 +128,7 @@ function BackRightTire(vehicle)
 			SetVehicleTyreBurst(vehicle, 5, false, 1000.0)
 			SetVehicleTyreBurst(vehicle , 3, false, 1000.0)
 			SetEntityAsMissionEntity( spikestrip, true, true )
-			DeleteEntity(spikestrip)
+			DeleteAllSpikesInArea()
 	end
 end
 

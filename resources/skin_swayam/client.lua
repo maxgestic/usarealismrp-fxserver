@@ -406,14 +406,18 @@ Citizen.CreateThread(function()
 
 		if(IsControlJustPressed(1, 51) and IsNearStore() == true) then
 			if(menu == 0) then
-				local playerhash = GetEntityModel(GetPlayerPed(-1))
-				for i=1,#arrSkinHashes
-					do
-					if(arrSkinHashes[i] == playerhash) then
-						position = i
+				if not IsPedDeadOrDying(GetPlayerPed(-1)) then
+					local playerhash = GetEntityModel(GetPlayerPed(-1))
+					for i=1,#arrSkinHashes
+						do
+						if(arrSkinHashes[i] == playerhash) then
+							position = i
+						end
 					end
+					menu = 1
+				else
+					TriggerEvent("usa:notify", "Can't use that when dead!")
 				end
-				menu = 1
 			else
 				menu = 0
 			end

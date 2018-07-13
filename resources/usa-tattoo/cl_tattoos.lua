@@ -188,7 +188,7 @@ Citizen.CreateThread(function()
           if Vdist(player_coords.x, player_coords.y, player_coords.z, SHOPS[i].x, SHOPS[i].y, SHOPS[i].z) < 3.0 then
             last_entered = SHOPS[i]
             drawTxt("Press [~y~E~w~] to open the tattoo shop menu",7,1,0.5,0.8,0.6,255,255,255,255)
-            if IsControlJustPressed(1,menu.key) then
+            if IsControlJustPressed(1,menu.key) and not IsPedDeadOrDying(GetPlayerPed(-1)) then
               local playerCoords = GetEntityCoords(me, false)
               menu.open = true
               RemoveClothes()
