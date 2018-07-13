@@ -528,22 +528,29 @@ end)
 RegisterNetEvent("usa:equipWeapon")
 AddEventHandler("usa:equipWeapon", function(weapon)
   -- todo: store ammo count on weapon object
-  GiveWeaponToPed(GetPlayerPed(-1), weapon.hash, 100, false, true)
-  if weapon.components then
-    if #weapon.components > 0 then
-      for x = 1, #weapon.components do
-        GiveWeaponComponentToPed(GetPlayerPed(-1), weapon.hash, GetHashKey(weapon.components[x]))
+  if weapon.name ~= "Jerry Can" then
+    GiveWeaponToPed(GetPlayerPed(-1), weapon.hash, 100, false, true)
+    if weapon.components then
+      if #weapon.components > 0 then
+        for x = 1, #weapon.components do
+          GiveWeaponComponentToPed(GetPlayerPed(-1), weapon.hash, GetHashKey(weapon.components[x]))
+        end
       end
     end
-  end
-  if weapon.tint then
-    SetPedWeaponTintIndex(GetPlayerPed(-1), weapon.hash, weapon.tint)
+    if weapon.tint then
+      SetPedWeaponTintIndex(GetPlayerPed(-1), weapon.hash, weapon.tint)
+    end
+  else
+    --print("equipping jerry can! giving ammo!")
+    -- give more ammo if jerry can --
+    --print("max ammo: " .. GetMaxAmmoInClip(GetPlayerPed(-1), weapon.hash, 1))
+    SetPedAmmo(GetPlayerPed(-1), weapon.hash, math.random(1000, 4500))
   end
 end)
 
 RegisterNetEvent("usa:dropWeapon")
 AddEventHandler("usa:dropWeapon", function(weapon_hash)
-	print("typeof weapon_hash: " .. type(weapon_hash))
+	--print("typeof weapon_hash: " .. type(weapon_hash))
   RemoveWeaponFromPed(GetPlayerPed(-1), weapon_hash) -- right params?
   --SetPedDropsWeapon(weapon_hash) -- or this? or both?
 end)
@@ -553,10 +560,10 @@ AddEventHandler("usa:loadCivCharacter", function(character, playerWeapons)
   Citizen.CreateThread(function()
     local model
     if not character.hash then -- does not have any customizations saved
-      print("did not find character.hash!")
+      --print("did not find character.hash!")
       model = -408329255 -- some random black dude with no shirt on, lawl
     else
-      print("found a character hash!")
+      --print("found a character hash!")
       model = character.hash
     end
     RequestModel(model)

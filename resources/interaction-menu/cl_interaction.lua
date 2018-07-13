@@ -343,19 +343,19 @@ function interactionMenuUse(itemName, wholeItem)
 			dict = "weapon@w_sp_jerrycan",
 			name = "fire"
 		}
-		
+
 		RequestAnimDict(JERRY_CAN_ANIMATION.dict)
 		while not HasAnimDictLoaded(JERRY_CAN_ANIMATION.dict) do
 			Wait(100)
 		end
 
 		if tonumber(hitHandleVehicle) ~= 0 then
-			TriggerServerEvent("usa:removeItem", wholeItem, 1)
 			local jcan = 883325847
 			GiveWeaponToPed(GetPlayerPed(-1), jcan, 20, false, true) -- easiest way to remove jerry can object off back when using it (from weapons-on-back resource)
+			Wait(1000)
 			-- put jerry can object in hand --
 			--local can_prop = AttachEntityToPed('prop_ld_jerrycan_01', 36029, 0, 0, 0, 90.0, 90.0, 85.0)
-			local can_prop = AttachEntityToPed('prop_ld_jerrycan_01', 36029, 0, 0, 0, 3.0, 173.0, 0.0)
+			--local can_prop_net_id = AttachEntityToPed('prop_ld_jerrycan_01', 36029, 0, 0, 0, 3.0, 173.0, 0.0)
 			-- play anim --
 			TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.name, JERRY_CAN_ANIMATION.dict, false, 6.5, true)
 			Wait(25000)
@@ -363,9 +363,9 @@ function interactionMenuUse(itemName, wholeItem)
 			-- refuel --
 			TriggerServerEvent("essence:refuelWithJerryCan", exports.es_AdvancedFuel:getEssence(), GetVehicleNumberPlateText(hitHandleVehicle), GetDisplayNameFromVehicleModel(GetEntityModel(hitHandleVehicle)))
 			-- remove jerry can object from hand --
-			DeleteEntity(can_prop)
-			-- remove jerry can from weapon wheel --
-			RemoveWeaponFromPed(GetPlayerPed(-1), jcan)
+			--DeleteEntity(NetToObj(can_prop_net_id))
+			-- remove jerry can weapon from inventory --
+			TriggerServerEvent("usa:removeItem", wholeItem, 1)
 		else
 			TriggerEvent("usa:notify", "No vehicle found!")
 		end
@@ -913,18 +913,21 @@ function DrawSpecialText(m_text)
 end
 
 function AttachEntityToPed(prop,bone_ID,x,y,z,RotX,RotY,RotZ)
+		local hashed = GetHashKey(prop)
 
-	local hashed = GetHashKey(prop)
+		RequestModel(hashed)
+		while not HasModelLoaded(hashed) do
+			Citizen.Wait(100)
+		end
 
-	RequestModel(hashed)
-	while not HasModelLoaded(hashed) do
-		Citizen.Wait(100)
-	end
-
-	local me = GetPlayerPed(-1)
-	BoneID = GetPedBoneIndex(me, bone_ID)
-	obj = CreateObject(hashed,  1729.73,  6403.90,  34.56,  true,  true,  false)
-	AttachEntityToEntity(obj,  me,  BoneID, x,y,z, RotX,RotY,RotZ,  1, 1, false, false, 0, true)
-	return obj
-
+		local me = GetPlayerPed(-1)
+		BoneID = GetPedBoneIndex(me, bone_ID)
+		obj = CreateObject(hashed,  1729.73,  6403.90,  34.56,  true,  true,  false)
+		Wait(1000)
+		local netid = ObjToNet(obj)
+		SetNetworkIdExistsOnAllMachines(netid, true)
+		--NetworkSetNetworkIdDynamic(netid, true)
+		SetNetworkIdCanMigrate(netid, false)
+		AttachEntityToEntity(obj,  me,  BoneID, x,y,z, RotX,RotY,RotZ,  1, 1, false, false, 0, true)
+		return netid
 end
