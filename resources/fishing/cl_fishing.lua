@@ -54,7 +54,7 @@ local fish = {
 }
 
 local peds = {
-	{x = -666.794,y = 5805.77,z = 17.5,heading = 312.352,hash = 261586155}
+	{x = -666.794,y = 5805.77,z = 16.5,heading = 280.352,hash = 261586155}
 }
 --------------------------------EDITS--------------------------------
 
@@ -75,8 +75,8 @@ Citizen.CreateThread(function()
 		TaskSetBlockingOfNonTemporaryEvents(ped,true)
 		SetPedFleeAttributes(ped,0,0)
 		SetPedCombatAttributes(ped,17,1)
-		SetEntityInvincible(ped)
 		SetPedRandomComponentVariation(ped, true)
+		TaskStartScenarioInPlace(ped, "WORLD_HUMAN_STAND_MOBILE", 0, true);
 	end
 end)
 

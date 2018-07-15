@@ -158,10 +158,6 @@ local function freezePlayer(id, freeze)
     local ped = GetPlayerPed(player)
 
     if not freeze then
-        if not IsEntityVisible(ped) then
-            SetEntityVisible(ped, true)
-        end
-
         if not IsPedInAnyVehicle(ped) then
             SetEntityCollision(ped, true)
         end
@@ -170,10 +166,6 @@ local function freezePlayer(id, freeze)
         --SetCharNeverTargetted(ped, false)
         SetPlayerInvincible(player, false)
     else
-        if IsEntityVisible(ped) then
-            SetEntityVisible(ped, false)
-        end
-
         SetEntityCollision(ped, false)
         FreezeEntityPosition(ped, true)
         --SetCharNeverTargetted(ped, true)

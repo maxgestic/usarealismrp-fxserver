@@ -239,9 +239,8 @@ Citizen.CreateThread(function()
 		TaskSetBlockingOfNonTemporaryEvents(ped,true)
 		SetPedFleeAttributes(ped,0,0)
 		SetPedCombatAttributes(ped,17,1)
-		SetEntityInvincible(ped)
 		SetPedRandomComponentVariation(ped, true)
-		TaskStartScenarioInPlace(ped, "WORLD_HUMAN_AA_SMOKE", 0, true);
+		TaskStartScenarioInPlace(ped, "WORLD_HUMAN_AA_SMOKE", 0, true)
 	end
 end)
 

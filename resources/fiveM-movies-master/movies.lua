@@ -182,19 +182,19 @@ Citizen.CreateThread(function()
       FreezeEntityPosition(GetPlayerPed(-1), 0)
       SetFollowPedCamViewMode(fistPerson)
       DeconstructMovie()
-      SetPlayerInvincible(PlayerId(), false)
+      --SetPlayerInvincible(PlayerId(), false)
       --ClearRoomForEntity(playerPed)
       MovieState = false
     end
     if GetRoomKeyFromEntity(PlayerPedId()) == -1337806789 then
       --SetPlayerInvisibleLocally(PlayerId(),  true)
-      SetEntityVisible(PlayerPedId(-1), false)
-      SetPlayerInvincible(PlayerId(), true)
+      --SetEntityVisible(PlayerPedId(-1), false)
+      --SetPlayerInvincible(PlayerId(), true)
       SetCurrentPedWeapon(PlayerPedId(), GetHashKey("weapon_unarmed"), 1)
       SetFollowPedCamViewMode(4)
     else
-      SetEntityVisible(PlayerPedId(-1), true)
-      SetPlayerInvincible(PlayerId(), false)
+      --SetEntityVisible(PlayerPedId(-1), true)
+      --SetPlayerInvincible(PlayerId(), false)
     end
   end
 end)

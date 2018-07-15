@@ -15,12 +15,14 @@ local COORDS_TO_ALLOW_TELEPORTATION_FROM = {
 	{ x = 1714.893, y = 2542.678, z = 45.565 }, -- jail 1
 	{ x = 1847.086, y = 2585.990, z = 45.672 }, -- jail 2
 	{ x = 1723.7, y = 2630.4, z = 45.6 }, -- jail 3
-	{ x = 1738.3, y = 2644.7, z = 45.6 }  -- jail 4
+	{ x = 1738.3, y = 2644.7, z = 45.6 },  -- jail 4
+	{ x = -145.09, y = 6304.72, z = 31.55 },  -- Movies entrance
+	{ x = 320.21, y = 263.80, z = 82.97 }  -- Movie room
 }
 
 
 BlacklistedWeapons = { -- weapons that will get people banned
-	"WEAPON_RAILGUN",
+	GetHashKey("WEAPON_RAILGUN"),
 	 -1813897027, -- grenade
 	 741814745, -- sticky bomb
 	 -1420407917, -- prox. mine
@@ -34,7 +36,9 @@ BlacklistedWeapons = { -- weapons that will get people banned
 	 125959754, -- compact launcher
 	 205991906, -- heavy sniper
 	 -952879014, -- marksman sniper rifle
-	 -1660422300 -- heavy machine gun
+	 -1660422300, -- heavy machine gun
+	 GetHashKey("WEAPON_SNOWBALL"),
+	 GetHashKey("WEAPON_BALL"),
 }
 
 
@@ -57,28 +61,26 @@ end)
 --]]
 
 Citizen.CreateThread(function()
+	local Seconds = 3
+	local MaxRunSpeedPerSecond = 10
+	local MaxVehSpeedPerSecond = 150
+	local MaxFlySpeedPerSecond = 200
+
 	Citizen.Wait(60000)
 	while true do
-		Citizen.Wait(1)
 		local ped = PlayerPedId()
-		local posx,posy,posz = table.unpack(GetEntityCoords(ped,true))
-		local still = IsPedStill(ped)
-		local vel = GetEntitySpeed(ped)
+		local posx, posy, posz = table.unpack(GetEntityCoords(ped,true))
+		--local still = IsPedStill(ped)
+		--local vel = GetEntitySpeed(ped)
 		local veh = IsPedInAnyVehicle(ped, true)
-		local speed = GetEntitySpeed(ped)
+		--local speed = GetEntitySpeed(ped)
 		local para = GetPedParachuteState(ped)
 		local flyveh = IsPedInFlyingVehicle(ped)
 		local rag = IsPedRagdoll(ped)
 		local fall = IsPedFalling(ped)
 		local parafall = IsPedInParachuteFreeFall(ped)
-		SetEntityVisible(PlayerPedId(), true) -- make sure player is visible
-		Wait(3000) -- wait 10 seconds and check again
 
-		local more = speed - 9.0 -- avarage running speed is 7.06 so just incase someone runs a bit faster it wont trigger
-
-		local rounds = tonumber(string.format("%.2f", speed))
-		local roundm = tonumber(string.format("%.2f", more))
-
+		Citizen.Wait(Seconds * 1000) -- wait X seconds and check again
 
 		--[[ DISABLED JUST IN CASE PEOPLE GO INVISIBLE ACCIDENTLY SOME HOW? MAYBE CLOTHING STORE?
 		if not IsEntityVisible(PlayerPedId()) then
@@ -86,31 +88,39 @@ Citizen.CreateThread(function()
 		end
 		--]]
 
-		newx,newy,newz = table.unpack(GetEntityCoords(ped,true))
-		newPed = PlayerPedId() -- make sure the peds are still the same, otherwise the player probably respawned
+		local newx, newy, newz = table.unpack(GetEntityCoords(ped,true))
+		local newPed = PlayerPedId() -- make sure the peds are still the same, otherwise the player probably respawned
 		--if GetDistanceBetweenCoords(posx,posy,posz, newx,newy,newz) > 200 and still == IsPedStill(ped) and vel == GetEntitySpeed(ped) and ped == newPed then
-		if  ped == newPed and (para == -1 or para == 0) and not flyveh and not fall and not parafall and not rag then
+		local speedhack, noclip = false
+		if ped == newPed and (para == -1 or para == 0) and not fall and not parafall and not rag then
 			if not isAtAWarpPoint(newx, newy, newz) then
-				if GetDistanceBetweenCoords(posx,posy,posz, newx,newy,newz) > 450 and veh then
-					--print("** Noclip detected! **")
-					TriggerServerEvent("AntiCheese:NoclipFlag", GetDistanceBetweenCoords(posx,posy,posz, newx,newy,newz))
-				elseif GetDistanceBetweenCoords(posx,posy,posz, newx,newy,newz) > 170 and not veh then
-					TriggerServerEvent("AntiCheese:NoclipFlag", GetDistanceBetweenCoords(posx,posy,posz, newx,newy,newz))
+				local dist = GetDistanceBetweenCoords(posx,posy,posz, newx,newy,newz)
+				if flyveh and dist > (MaxFlySpeedPerSecond * Seconds) then
+					speedhack = true
+					if IsPedStill(ped) then
+						noclip = true
+					end
+				elseif veh and dist > (MaxVehSpeedPerSecond * Seconds) then
+					speedhack = true
+					if IsPedStill(ped) then
+						noclip = true
+					end
+				elseif dist > (MaxRunSpeedPerSecond * Seconds) then
+					speedhack = true
+					if IsPedStill(ped) then
+						noclip = true
+					end
+				end
+
+				if speedhack then
+					if noclip then
+						TriggerServerEvent("AntiCheese:NoclipFlag", dist)
+					else
+						TriggerServerEvent("AntiCheese:SpeedFlag", dist)
+					end
 				end
 			end
-		else
-		--	print(GetDistanceBetweenCoords(posx,posy,posz, newx,newy,newz))
-			--print(tostring(still == IsPedStill(ped)))
-			--print(tostring(vel == GetEntitySpeed(ped)))
-			--print(tostring(ped == newPed))
 		end
-
-		--[[
-		if speed > 9.0 and not veh and (para == -1 or para == 0) and not flyveh and not fall and not parafall and not rag then
-			--dont activate this, its broken!
-			--TriggerServerEvent("AntiCheese:SpeedFlag", rounds, roundm) -- send alert along with the rounded speed and how much faster they are
-		end
-		--]]
 	end
 end)
 
@@ -168,8 +178,8 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10000)
 		SetPedInfiniteAmmoClip(PlayerPedId(), false)
-		--SetEntityInvincible(PlayerPedId(), false)
-		--SetEntityCanBeDamaged(PlayerPedId(), true)
+		SetEntityInvincible(PlayerPedId(), false)
+		SetEntityCanBeDamaged(PlayerPedId(), true)
 		ResetEntityAlpha(PlayerPedId())
 		local fallin = IsPedFalling(PlayerPedId())
 		local ragg = IsPedRagdoll(PlayerPedId())
@@ -184,14 +194,22 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(3000)
-		for _,theWeapon in ipairs(BlacklistedWeapons) do
+		Citizen.Wait(10000)
+		if not IsEntityVisible(PlayerPedId()) then
+			TriggerServerEvent("AntiCheese:InvisibilityFlag")
+			SetEntityVisible(PlayerPedId(), true, 0)
+		end
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(8000)
+		for _, theWeapon in ipairs(BlacklistedWeapons) do
 			Wait(1)
-			if not tonumber(theWeapon) then
-				theWeapon = GetHashKey(theWeapon)
-			end
 			if HasPedGotWeapon(PlayerPedId(), theWeapon, false) == 1 then
-					RemoveAllPedWeapons(PlayerPedId(),false)
+				TriggerServerEvent("AntiCheese:WeaponFlag", theWeapon)
+				RemoveAllPedWeapons(PlayerPedId(), false)
 			end
 		end
 	end
@@ -256,3 +274,18 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
+
+Citizen.CreateThread(function()
+	while true do
+		TriggerServerEvent("AntiCheese:LifeCheck")
+		Citizen.Wait(30000)
+	end
+end)
+
+--[[
+RegisterNetEvent("AntiCheese:memoryHackCheck")
+AddEventHandler("AntiCheese:memoryHackCheck", function(target, targetName, spectator_name)
+	print("MEMORY CHECK!!")
+	TriggerServerEvent("AntiCheese:memoryHackCheckResponse")
+end)
+]]

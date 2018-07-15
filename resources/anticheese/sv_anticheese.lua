@@ -4,7 +4,7 @@ Components = {
 	GodMode = true,
 	Speedhack = true,
 	WeaponBlacklist = true,
-	CustomFlag = true,
+	Invisibility = true,
 }
 
 --[[
@@ -38,16 +38,19 @@ Triggering these events from the clientside is not recommended as these get disa
 ]]
 
 
-Users = {}
+--Users = {}
 violations = {}
+userLifeChecks = {}
 
+webhook = "https://discordapp.com/api/webhooks/459801084316352519/aYvDyiMOIt1OZJiyOZ3jg73qYsMUYLAP8iBv-EOovSqsDa1QTzwbPi3G3z4kKPwvHraQ"
 
 
 
 
 AddEventHandler('anticheese:playerDropped', function(userSource)
-	if(Users[userSource])then
-		Users[userSource] = nil
+	userLifeChecks[userSource] = nil
+	if(violations[userSource])then
+		violations[userSource] = nil
 	end
 end)
 --[[
@@ -56,6 +59,7 @@ AddEventHandler("anticheese:kick", function(reason)
 	DropPlayer(source, reason)
 end)
 ]]
+--[[  DISABLING THESE TO KEEP A CLEVER ATTACKER FROM DISABLING THEM FOR US
 AddEventHandler("anticheese:SetComponentStatus", function(component, state)
 	if type(component) == "string" and type(state) == "boolean" then
 		Components[component] = state -- changes the component to the wished status
@@ -75,11 +79,8 @@ AddEventHandler("anticheese:SetAllComponents", function(state)
 		end
 	end
 end)
-
+]]
 Citizen.CreateThread(function()
-	webhook = "https://discordapp.com/api/webhooks/459801084316352519/aYvDyiMOIt1OZJiyOZ3jg73qYsMUYLAP8iBv-EOovSqsDa1QTzwbPi3G3z4kKPwvHraQ"
-
-
 	function SendWebhookMessage(webhook,message)
 		if webhook ~= "none" then
 			--PerformHttpRequest(webhook, function(err, text, headers) end, 'POST', json.encode({content =  "**Hey,** <@&393914689823965185>\n".. message}), { ['Content-Type'] = 'application/json' })
@@ -87,20 +88,18 @@ Citizen.CreateThread(function()
 		end
 	end
 
-	function WarnPlayer(playername, reason)
+	function WarnPlayer(playername)
 		local isKnown = false
 		local isKnownCount = 1
 		local isKnownExtraText = ""
-		for i,thePlayer in ipairs(violations) do
+		for i, thePlayer in ipairs(violations) do
 			if thePlayer.name == playername then
 				isKnown = true
 				if violations[i].count >= 3 then
-					--TriggerEvent("banCheater", source,"Cheating")
 					isKnownCount = violations[i].count
-					table.remove(violations,i)
 					isKnownExtraText = " | PROBABLE CHEATER"
 				else
-					violations[i].count = violations[i].count+1
+					violations[i].count = violations[i].count + 1
 					isKnownCount = violations[i].count
 				end
 			end
@@ -117,9 +116,9 @@ Citizen.CreateThread(function()
 		local ids = GetPlayerIdentifiers(player)
 		for i,theIdentifier in ipairs(ids) do
 			if string.find(theIdentifier,"license:") or -1 > -1 then
-				license = theIdentifier
+				local license = theIdentifier
 			elseif string.find(theIdentifier,"steam:") or -1 > -1 then
-				steam = theIdentifier
+				local steam = theIdentifier
 			end
 		end
 		if not steam then
@@ -147,38 +146,38 @@ Citizen.CreateThread(function()
 	--]]
 
 	RegisterServerEvent('AntiCheese:SpeedFlag')
-	AddEventHandler('AntiCheese:SpeedFlag', function(rounds, roundm)
-		if Components.Speedhack and not IsPlayerAceAllowed(source,"anticheese.bypass") then
-			license, steam = GetPlayerNeededIdentifiers(source)
+	AddEventHandler('AntiCheese:SpeedFlag', function(distance)
+		local userSource = source
+		if Components.Speedhack then
+			print("*****speed flag trigged (source: #" .. userSource .. ")!!****")
+			if not isStaffMember(userSource) then
+				local license, steam = GetPlayerNeededIdentifiers(userSource)
+				local player = exports["essentialmode"]:getPlayerFromId(userSource)
+				local name = player.getActiveCharacterData("fullName")
+				local steamName = GetPlayerName(player)
 
-			name = GetPlayerName(source)
+				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name)
+				if not isKnown then  -- don't warn on first offense
+					return
+				end
 
-			isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name,"Speed Hacking")
+				if not license then
+					license = "No License Found!"
+				end
+				if not steam then
+					steam = "No Steam ID Found!"
+				end
+				if not name then
+					name = "Could not get player name"
+				end
+				if not steamName then
+					steamName = "Could not get player's steam name"
+				end
 
-			SendWebhookMessage(webhook, "**Speed Hacker detected!** \n```\nUser:"..name.."\n"..license.."\n"..steam.."\nWas travelling "..rounds.. " units. That's "..roundm.." more than normal! \nAnticheat Flags:"..isKnownCount..""..isKnownExtraText.." ```")
-		end
-	end)
-
-
-	-- TODO:
-	-- 1) ignore if staff member / done
-	-- 2) include server ID and character name for detection alert / done
-	-- 3) send in game message to staff / done
-	RegisterServerEvent('AntiCheese:NoclipFlag')
-	AddEventHandler('AntiCheese:NoclipFlag', function(distance)
-		print("*****noclip flag trigged (source: #" .. source .. ")!!****")
-		if Components.Speedhack and not IsPlayerAceAllowed(source,"anticheese.bypass") then
-			if not isStaffMember(source) then
-				license, steam = GetPlayerNeededIdentifiers(source)
-				name = exports["essentialmode"]:getPlayerFromId(source).getActiveCharacterData("fullName")
-
-				isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name,"Noclip/Teleport Hacking")
-
-				local msg = "```Noclip/Teleport hacker detected!\nID #: " .. source .. "\nUser: "..name.."\n"..license.."\n"..steam.."\nCaught with "..math.ceil(distance).." units between last checked location\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
-				local staff_msg = "^3*Noclip/teleport hacker detected!* ID #: ^0" .. source .. "^3, Name: ^0" .. name
+				local msg = "```Speed/Teleport hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nCaught with "..math.ceil(distance).." units between last checked location\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
+				local staff_msg = "^3*Speed/Teleport hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
 
 				TriggerEvent("usa:notifyStaff", staff_msg)
-
 				SendWebhookMessage(webhook, msg)
 			else
 				print("**not sending message, was a staff member**")
@@ -186,38 +185,79 @@ Citizen.CreateThread(function()
 		end
 	end)
 
+	RegisterServerEvent('AntiCheese:NoclipFlag')
+	AddEventHandler('AntiCheese:NoclipFlag', function(distance)
+		local userSource = source
+		if Components.Speedhack then
+			print("*****noclip flag trigged (source: #" .. userSource .. ")!!****")
+			if not isStaffMember(userSource) then
+				local license, steam = GetPlayerNeededIdentifiers(userSource)
+				local player = exports["essentialmode"]:getPlayerFromId(userSource)
+				local name = player.getActiveCharacterData("fullName")
+				local steamName = GetPlayerName(player)
 
-	RegisterServerEvent('AntiCheese:CustomFlag')
-	AddEventHandler('AntiCheese:CustomFlag', function(reason,extrainfo)
-		if Components.CustomFlag and not IsPlayerAceAllowed(source,"anticheese.bypass") then
-			license, steam = GetPlayerNeededIdentifiers(source)
-			name = GetPlayerName(source)
-			if not extrainfo then extrainfo = "no extra informations provided" end
-			isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name,reason)
+				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name)
+				if not isKnown then  -- don't warn on first offense
+					return
+				end
 
-			SendWebhookMessage(webhook,"**"..reason.."** \n```\nUser:"..name.."\n"..license.."\n"..steam.."\n"..extrainfo.."\nAnticheat Flags:"..isKnownCount..""..isKnownExtraText.." ```")
+				if not license then
+					license = "No License Found!"
+				end
+				if not steam then
+					steam = "No Steam ID Found!"
+				end
+				if not name then
+					name = "Could not get player name"
+				end
+				if not steamName then
+					steamName = "Could not get player's steam name"
+				end
+
+				local msg = "```Noclip hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nCaught with "..math.ceil(distance).." units between last checked location\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
+				local staff_msg = "^3*Noclip hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
+
+				TriggerEvent("usa:notifyStaff", staff_msg)
+				SendWebhookMessage(webhook, msg)
+			else
+				print("**not sending message, was a staff member**")
+			end
 		end
 	end)
 
 	RegisterServerEvent('AntiCheese:HealthFlag')
 	AddEventHandler('AntiCheese:HealthFlag', function(invincible,oldHealth, newHealth, curWait)
-		print("*****health flag trigged (source: #" .. source .. ")!!****")
-		if Components.GodMode and not IsPlayerAceAllowed(source,"anticheese.bypass") then
-			if not isStaffMember(source) then
-				license, steam = GetPlayerNeededIdentifiers(source)
-				name = exports["essentialmode"]:getPlayerFromId(source).getActiveCharacterData("fullName")
+		local userSource = source
+		if Components.GodMode then
+			print("*****health flag trigged (source: #" .. userSource .. ")!!****")
+			if not isStaffMember(userSource) then
+				local license, steam = GetPlayerNeededIdentifiers(userSource)
+				local player = exports["essentialmode"]:getPlayerFromId(userSource)
+				local name = player.getActiveCharacterData("fullName")
+				local steamName = GetPlayerName(player)
 
-				isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name,"Health Hacking")
+				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name)
 
-				local msg = nil
-				local staff_msg = nil
+				if not license then
+					license = "No License Found!"
+				end
+				if not steam then
+					steam = "No Steam ID Found!"
+				end
+				if not name then
+					name = "Could not get player name"
+				end
+				if not steamName then
+					steamName = "Could not get player's steam name"
+				end
 
+				local msg, staff_msg = nil
 				if invincible then
-					msg = "```Health hacker detected!\nID #: " .. source .. "\nUser: "..name.."\n"..license.."\n"..steam.."\nRegenerated "..newHealth-oldHealth.."hp ( to reach "..newHealth.."hp ) in "..curWait.."ms! ( PlayerPed was invincible )\nAnticheat Flags:"..isKnownCount..""..isKnownExtraText.." ```"
-					staff_msg = "^3*Health hacker detected!* ID #: ^0" .. source .. "^3, Name: ^0" .. name .. "^3 made themselves invincible!"
+					msg = "```Health hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nPlayer was set to invincible! Player reset to mortal.\nAnticheat Flags:"..isKnownCount..""..isKnownExtraText.." ```"
+					staff_msg = "^3*Health hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name .. "^3 made themselves invincible!"
 				else
-					msg = "```Health hacker detected!\nID #: " .. source .. "\nUser: "..name.."\n"..license.."\n"..steam.."\nRegenerated "..newHealth-oldHealth.."hp ( to reach "..newHealth.."hp ) in "..curWait.."ms! ( Health was Forced )\nAnticheat Flags:"..isKnownCount..""..isKnownExtraText.." ```"
-					staff_msg = "^3*Health hacker detected!* ID #: ^0" .. source .. "^3, Name: ^0" .. name
+					msg = "```Health hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nRegenerated "..newHealth-oldHealth.."hp ( to reach "..newHealth.."hp ) in "..curWait.."ms! ( Health was Forced )\nAnticheat Flags:"..isKnownCount..""..isKnownExtraText.." ```"
+					staff_msg = "^3*Health hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
 				end
 
 				TriggerEvent("usa:notifyStaff", staff_msg)
@@ -226,31 +266,105 @@ Citizen.CreateThread(function()
 			else
 				print("**not sending message, was a staff member**")
 			end
-
 		end
 	end)
 
 	RegisterServerEvent('AntiCheese:JumpFlag')
 	AddEventHandler('AntiCheese:JumpFlag', function(jumplength)
-		if Components.SuperJump and not IsPlayerAceAllowed(source,"anticheese.bypass") then
-			license, steam = GetPlayerNeededIdentifiers(source)
-			name = GetPlayerName(source)
+		local userSource = source
+		if Components.SuperJump then
+			print("*****super jump flag trigged (source: #" .. userSource .. ")!!****")
+			local license, steam = GetPlayerNeededIdentifiers(userSource)
+			local player = exports["essentialmode"]:getPlayerFromId(userSource)
+			local name = player.getActiveCharacterData("fullName")
+			local steamName = GetPlayerName(player)
 
-			isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name,"SuperJump Hacking")
+			local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name)
 
-			SendWebhookMessage(webhook,"**SuperJump Hack!** \n```\nUser: "..name.."\n"..license.."\n"..steam.."\nJumped "..jumplength.."ms long\nAnticheat Flags:"..isKnownCount..""..isKnownExtraText.." ```")
+			if not license then
+				license = "No License Found!"
+			end
+			if not steam then
+				steam = "No Steam ID Found!"
+			end
+			if not name then
+				name = "ERROR: Could not get player name"
+			end
+			if not steamName then
+				steamName = "Could not get player's steam name"
+			end
+
+			local msg = "```Super jump hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
+			local staff_msg = "^3*Super jump hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name	
+
+			TriggerEvent("usa:notifyStaff", staff_msg)
+			SendWebhookMessage(webhook, msg)
 		end
 	end)
 
 	RegisterServerEvent('AntiCheese:WeaponFlag')
 	AddEventHandler('AntiCheese:WeaponFlag', function(weapon)
-		if Components.WeaponBlacklist and not IsPlayerAceAllowed(source,"anticheese.bypass") then
-			license, steam = GetPlayerNeededIdentifiers(source)
-			name = GetPlayerName(source)
+		local userSource = source
+		if Components.WeaponBlacklist then
+			print("*****blacklisted weapon flag trigged (source: #" .. userSource .. ")!!****")
+			local license, steam = GetPlayerNeededIdentifiers(userSource)
+			local player = exports["essentialmode"]:getPlayerFromId(userSource)
+			local name = player.getActiveCharacterData("fullName")
+			local steamName = GetPlayerName(player)
 
-			isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name,"Inventory Cheating")
+			local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name)
 
-			SendWebhookMessage(webhook,"**Inventory Hack!** \n```\nUser: "..name.."\n"..license.."\n"..steam.."\nGot Weapon: "..weapon.."( Blacklisted )\nAnticheat Flags:"..isKnownCount..""..isKnownExtraText.." ```")
+			if not license then
+				license = "No License Found!"
+			end
+			if not steam then
+				steam = "No Steam ID Found!"
+			end
+			if not name then
+				name = "Could not get player name"
+			end
+			if not steamName then
+				steamName = "Could not get player's steam name"
+			end
+
+			local msg = "```Weapon hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nPlayer caught with a blacklisted weapon!\nWeapon hash: "..weapon.."\nAll weapons were deleted.\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
+			local staff_msg = "^3*Player with a blacklisted weapon detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
+
+			TriggerEvent("usa:notifyStaff", staff_msg)
+			SendWebhookMessage(webhook, msg)
+		end
+	end)
+	
+	RegisterServerEvent('AntiCheese:InvisibilityFlag')
+	AddEventHandler('AntiCheese:InvisibilityFlag', function()
+		local userSource = source
+		if Components.Invisibility then
+			print("*****invisibility flag trigged (source: #" .. userSource .. ")!!****")
+			local license, steam = GetPlayerNeededIdentifiers(userSource)
+			local player = exports["essentialmode"]:getPlayerFromId(userSource)
+			local name = player.getActiveCharacterData("fullName")
+			local steamName = GetPlayerName(player)
+
+			local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name)
+
+			if not license then
+				license = "No License Found!"
+			end
+			if not steam then
+				steam = "No Steam ID Found!"
+			end
+			if not name then
+				name = "Could not get player name"
+			end
+			if not steamName then
+				steamName = "Could not get player's steam name"
+			end
+
+			local msg = "```Invisibility hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
+			local staff_msg = "^3*Invisibility hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name	
+
+			TriggerEvent("usa:notifyStaff", staff_msg)
+			SendWebhookMessage(webhook, msg)
 		end
 	end)
 end)
@@ -277,6 +391,71 @@ Citizen.CreateThread( function()
 	end, "GET", "", {version = 'this'})
 end)
 
+RegisterServerEvent('AntiCheese:LifeCheck')
+AddEventHandler('AntiCheese:LifeCheck', function()
+	local userSource = source
+	userLifeChecks[userSource] = os.time()
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(10000)
+		players = GetPlayers()
+		for _, id in pairs(players) do
+			-- if the last check in from a client was over a minute ago, anticheese resource must not be running
+			if userLifeChecks[id] and os.time() - userLifeChecks[id] > 60 then
+				print("*****Player disabled Anticheese (source: #" .. id .. ")!!****")
+				local license, steam = GetPlayerNeededIdentifiers(id)
+				local player = exports["essentialmode"]:getPlayerFromId(id)
+				local name = player.getActiveCharacterData("fullName")
+				local steamName = GetPlayerName(player)
+
+				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name)
+
+				if not license then
+					license = "No License Found!"
+				end
+				if not steam then
+					steam = "No Steam ID Found!"
+				end
+				if not name then
+					name = "Could not get player name"
+				end
+				if not steamName then
+					steamName = "Could not get player's steam name"
+				end
+
+				local msg = "```Hacker disabled Anticheese!\nID #: " .. id .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
+				local staff_msg = "^3*Hacker disabled Anticheese!* ID #: ^0" .. id .. "^3, Name: ^0" .. name
+
+				TriggerEvent("usa:notifyStaff", staff_msg)
+				SendWebhookMessage(webhook, msg)
+			end
+		end
+	end
+end)
+
+--[[
+Citizen.CreateThread(function()
+	while true do
+		--Citizen.Wait(1000)
+		Citizen.Wait(60000)
+		TriggerEvent("es:getPlayers", function(players)
+			if players then
+				for id, player in pairs(players) do
+					userMemChecks[id] = true
+					TriggerClientEvent("AntiCheese:memoryHackCheck", id)
+				end
+			end
+		end)
+	end
+end)
+
+RegisterServerEvent('AntiCheese:memoryHackCheckResponse')
+AddEventHandler('AntiCheese:memoryHackCheckResponse', function(weapon)
+	
+end)
+]]
 function isStaffMember(src)
 	local player = exports["essentialmode"]:getPlayerFromId(src)
 	if player.getGroup() ~= "user" then

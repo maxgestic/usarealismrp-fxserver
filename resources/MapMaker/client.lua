@@ -192,7 +192,7 @@ function launchSystem()
 
 
 		coordsBefore = GetEntityCoords(GetPlayerPed(-1))
-		SetEntityVisible(GetPlayerPed(-1), false)
+		--SetEntityVisible(GetPlayerPed(-1), false)
 		SetEntityCollision(GetPlayerPed(-1), false)
 
 		FreezeEntityPosition(GetPlayerPed(-1), true)
@@ -212,7 +212,7 @@ function launchSystem()
 
 		DeleteObject(object)
 
-		SetEntityVisible(GetPlayerPed(-1), true)
+		--SetEntityVisible(GetPlayerPed(-1), true)
 		SetEntityCollision(GetPlayerPed(-1), true)
 		FreezeEntityPosition(GetPlayerPed(-1), false)
 	end

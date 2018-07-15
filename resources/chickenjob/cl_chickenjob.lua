@@ -57,9 +57,8 @@ Citizen.CreateThread(function()
 	TaskSetBlockingOfNonTemporaryEvents(ped,true)
 	SetPedFleeAttributes(ped,0,0)
 	SetPedCombatAttributes(ped,17,1)
-	SetEntityInvincible(ped)
 	SetPedRandomComponentVariation(ped, true)
-	TaskStartScenarioInPlace(ped, "WORLD_HUMAN_GUARD_STAND_ARMY", 0, true);
+	TaskStartScenarioInPlace(ped, "WORLD_HUMAN_GUARD_STAND_ARMY", 0, true)
 end)
 
 Citizen.CreateThread(function()

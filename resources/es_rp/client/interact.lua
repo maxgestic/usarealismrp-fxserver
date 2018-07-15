@@ -107,7 +107,6 @@ Citizen.CreateThread(function()
 
 		local ped = CreatePed(4, GetHashKey(sellPoints[i].npc), sellPoints[i].x, sellPoints[i].y, sellPoints[i].z, sellPoints[i].heading, false, false)
 		FreezeEntityPosition(ped, true)
-		SetEntityInvincible(ped, true)
 		SetBlockingOfNonTemporaryEvents(ped, true)
 		SetPedFleeAttributes(ped, 0, 0)
 	end

@@ -42,7 +42,6 @@ Citizen.CreateThread(function()
   		TaskSetBlockingOfNonTemporaryEvents(ped,true)
   		SetPedFleeAttributes(ped,0,0)
   		SetPedCombatAttributes(ped,17,1)
-  		SetEntityInvincible(ped)
   		SetPedRandomComponentVariation(ped, true)
       TaskStartScenarioInPlace(ped, data.peds[i].scenario, 0, true);
     end

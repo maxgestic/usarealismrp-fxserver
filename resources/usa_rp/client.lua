@@ -173,7 +173,6 @@ Citizen.CreateThread(function()
     		TaskSetBlockingOfNonTemporaryEvents(ped,true)
     		SetPedFleeAttributes(ped,0,0)
     		SetPedCombatAttributes(ped,17,1)
-    		SetEntityInvincible(ped)
             if not location[i].scenario then
                 RequestAnimDict(location[i].animDict)
                 while not HasAnimDictLoaded(location[i].animDict) do

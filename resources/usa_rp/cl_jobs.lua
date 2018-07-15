@@ -61,7 +61,6 @@ Citizen.CreateThread(function()
             TaskSetBlockingOfNonTemporaryEvents(ped,true)
             SetPedFleeAttributes(ped,0,0)
             SetPedCombatAttributes(ped,17,1)
-            SetEntityInvincible(ped)
             -- add to peds collection
             if x == 70.0828 then
                 table.insert(peds, {name = "meth_supplies_ped", handle = ped})
