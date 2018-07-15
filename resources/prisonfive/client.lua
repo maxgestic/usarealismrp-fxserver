@@ -160,6 +160,7 @@ Citizen.CreateThread(function()
 
 					if obj.cellblockDoor then
 						jailDoors[o] = true
+						--SetEntityRotation(o, 0, 0, 90, 2, true)
 					end
 
 					obj.object = o
@@ -167,7 +168,7 @@ Citizen.CreateThread(function()
 			elseif not shouldHave and obj.object then
 				DeleteObject(obj.object)
 				if obj.cellblockDoor then
-					if jailDoors[o]then
+					if jailDoors[o] then
 						jailDoors[o] = nil
 					end
 				end
