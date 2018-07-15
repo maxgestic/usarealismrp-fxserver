@@ -104,41 +104,6 @@ Citizen.CreateThread(function()
 	end
 end)
 
---[[------------------------------------------------------------------------
-    Remove Reticle on ADS (Third Person)
-------------------------------------------------------------------------]]--
-local scopedWeapons = {
-    100416529,  -- WEAPON_SNIPERRIFLE
-    205991906,  -- WEAPON_HEAVYSNIPER
-    3342088282  -- WEAPON_MARKSMANRIFLE
-}
-
-function HashInTable( hash )
-    for k, v in pairs( scopedWeapons ) do
-        if ( hash == v ) then
-            return true
-        end
-    end
-    return false
-end
-
-function ManageReticle()
-    local ped = GetPlayerPed( -1 )
-    if ( DoesEntityExist( ped ) and not IsEntityDead( ped ) ) then
-        local _, hash = GetCurrentPedWeapon( ped, true )
-        if not HashInTable( hash ) then
-            HideHudComponentThisFrame( 14 )
-        end
-    end
-end
-
-Citizen.CreateThread( function()
-    while true do
-        ManageReticle()
-        Citizen.Wait( 1 )
-    end
-end )
-
 -- spawn peds
 local locations = {
     stripclub = {
@@ -260,21 +225,6 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(10000)
         SetWeaponDrops()
-    end
-end)
-
---------------------------------------------
--- disable pistol whipping (weapon melee) --
---------------------------------------------
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(10)
-		local ped = PlayerPedId()
-        if IsPedArmed(ped, 6) then
-	        DisableControlAction(1, 140, true)
-            DisableControlAction(1, 141, true)
-            DisableControlAction(1, 142, true)
-        end
     end
 end)
 
