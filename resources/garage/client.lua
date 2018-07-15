@@ -134,6 +134,7 @@ end)
 function DrawSpecialText(m_text)
     ClearPrints()
 	SetTextEntry_2("STRING")
+	SetTextFont(7)
 	AddTextComponentString(m_text)
 	DrawSubtitleTimed(250, 1)
 end
