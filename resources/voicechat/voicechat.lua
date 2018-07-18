@@ -51,7 +51,7 @@ end
 function DrawTalkingCircle(ped)
 	if GetPlayerPed(-1) ~= ped then
 		local x, y, z = table.unpack(GetEntityCoords(ped, true))
-		DrawMarker(27, x, y, z - 0.96, 0, 0, 0, 0, 0, 0, 0.71, 0.71, 0.71, 57 --[[r]], 176 --[[g]], 132 --[[b]], 70, 0, 0, 2, 0, 0, 0, 0)
+		DrawMarker(27, x, y, z - 0.96, 0, 0, 0, 0, 0, 0, 0.71, 0.71, 0.71, 57 --[[r]], 176 --[[g]], 132 --[[b]], 90 --[[alpha]], 0, 0, 2, 0, 0, 0, 0)
 	end
 end
 
@@ -73,7 +73,7 @@ Citizen.CreateThread(function()
 			end
 		end
 		-- voip range HUD display color --
-		for id = 0, 64 do 
+		for id = 0, 64 do
 			if NetworkIsPlayerActive(id) then
 				----------------------------
 				-- talking cirlce at feet --
@@ -91,7 +91,7 @@ Citizen.CreateThread(function()
 						r = 57
 						g = 176
 						b = 132
-					else 
+					else
 						r = 224
 						g = 227
 						b = 218

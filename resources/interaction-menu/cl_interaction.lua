@@ -460,14 +460,14 @@ function interactionMenuUse(itemName, wholeItem)
 			--print("old player BAC: " .. player.BAC)
 			player.BAC = player.BAC + wholeItem.strength
 			--print("new player BAC: " .. player.BAC)
-			if player.BAC >= 0.12 then
-				intoxicate(false, "MOVE_M@DRUNK@VERYDRUNK")
+			if player.BAC >= 0.14 then
+				intoxicate(false, "MOVE_M@DRUNK@VERYDRUNK", 1.0)
 				reality(10)
 			elseif player.BAC >= 0.08 then
-				intoxicate(false, "MOVE_M@DRUNK@MODERATEDRUNK")
+				intoxicate(false, "MOVE_M@DRUNK@MODERATEDRUNK", 0.6)
 				reality(7)
 			elseif player.BAC >= 0.04 then
-				intoxicate(false, "MOVE_M@DRUNK@SLIGHTLYDRUNK")
+				intoxicate(false, "MOVE_M@DRUNK@SLIGHTLYDRUNK", 0.3)
 				reality(4)
 			end
 		elseif string.find(itemName, "Parachute") then
@@ -568,7 +568,7 @@ Citizen.CreateThread(function()
 end)
 
 -- getting drunk / high effect
-function intoxicate(playScenario, clipset)
+function intoxicate(playScenario, clipset, intensity)
 	if playScenario then
 		TaskStartScenarioInPlace(GetPlayerPed(-1), "WORLD_HUMAN_DRUG_DEALER", 0, 1)
 	end
@@ -579,7 +579,7 @@ function intoxicate(playScenario, clipset)
 	SetTimecycleModifier("spectator5")
 	SetPedMotionBlur(GetPlayerPed(-1), true)
 		if clipset then
-		print("setting movement clipset to: " .. clipset)
+		--print("setting movement clipset to: " .. clipset)
 		ResetPedMovementClipset(GetPlayerPed(-1), 0)
 		RequestAnimSet( clipset )
 		while ( not HasAnimSetLoaded( clipset ) ) do
@@ -589,6 +589,9 @@ function intoxicate(playScenario, clipset)
 	end
 	SetPedIsDrunk(GetPlayerPed(-1), true)
 	DoScreenFadeIn(1000)
+	if intensity then
+		ShakeGameplayCam("DRUNK_SHAKE", intensity)
+	end
  end
 
  function reality(minutes)
@@ -602,8 +605,9 @@ function intoxicate(playScenario, clipset)
 	ResetPedMovementClipset(GetPlayerPed(-1), 0)
 	SetPedIsDrunk(GetPlayerPed(-1), false)
 	SetPedMotionBlur(GetPlayerPed(-1), false)
+	StopGameplayCamShaking(true)
 	-- Stop the mini mission
-	Citizen.Trace("Going back to reality\n")
+	--Citizen.Trace("Going back to reality\n")
  end
 
  -- end drunk / high effect

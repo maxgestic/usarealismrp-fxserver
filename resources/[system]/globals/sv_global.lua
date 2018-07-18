@@ -40,9 +40,7 @@ function setJob(src, job)
 end
 
 TriggerEvent('es:addGroupCommand', 'setjob', 'owner', function(source, args, user)
-  if user.getGroup() == "owner" then
-    setJob(source, args[2])
-  end
+  setJob(source, args[2])
 end, {
 	help = "DEBUG: SET YOUR JOB"
 })
