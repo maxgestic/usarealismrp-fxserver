@@ -63,8 +63,8 @@ end)
 Citizen.CreateThread(function()
 	local Seconds = 3
 	local MaxRunSpeedPerSecond = 10
-	local MaxVehSpeedPerSecond = 150
-	local MaxFlySpeedPerSecond = 200
+	local MaxVehSpeedPerSecond = 130
+	local MaxFlySpeedPerSecond = 150
 
 	Citizen.Wait(60000)
 	while true do
@@ -94,16 +94,20 @@ Citizen.CreateThread(function()
 		local speedhack, noclip = false
 		if ped == newPed and (para == -1 or para == 0) and not fall and not parafall and not rag then
 			if not isAtAWarpPoint(newx, newy, newz) then
-				local dist = GetDistanceBetweenCoords(posx,posy,posz, newx,newy,newz)
-				if flyveh and dist > (MaxFlySpeedPerSecond * Seconds) then
-					speedhack = true
-					if IsPedStill(ped) then
-						noclip = true
+				local dist = GetDistanceBetweenCoords(posx,posy,posz, newx,newy,newz, true)
+				if flyveh then
+					if dist > (MaxFlySpeedPerSecond * Seconds) then
+						speedhack = true
+						if IsPedStill(ped) then
+							noclip = true
+						end
 					end
-				elseif veh and dist > (MaxVehSpeedPerSecond * Seconds) then
-					speedhack = true
-					if IsPedStill(ped) then
-						noclip = true
+				elseif veh then
+					if dist > (MaxVehSpeedPerSecond * Seconds) then
+						speedhack = true
+						if IsPedStill(ped) then
+							noclip = true
+						end
 					end
 				elseif dist > (MaxRunSpeedPerSecond * Seconds) then
 					speedhack = true

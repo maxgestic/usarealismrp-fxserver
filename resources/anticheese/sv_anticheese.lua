@@ -88,42 +88,36 @@ Citizen.CreateThread(function()
 		end
 	end
 
-	function WarnPlayer(playername)
+	function WarnPlayer(src)
 		local isKnown = false
 		local isKnownCount = 1
 		local isKnownExtraText = ""
-		for i, thePlayer in ipairs(violations) do
-			if thePlayer.name == playername then
-				isKnown = true
-				if violations[i].count >= 3 then
-					isKnownCount = violations[i].count
-					isKnownExtraText = " | PROBABLE CHEATER"
-				else
-					violations[i].count = violations[i].count + 1
-					isKnownCount = violations[i].count
-				end
+		local vInfo = violations[tostring(src)]
+		if vInfo then
+			isKnown = true
+			if vInfo.count >= 2 then
+				isKnownExtraText = " | PROBABLE CHEATER"
 			end
+			vInfo.count = vInfo.count + 1
+			isKnownCount = vInfo.count
+		else
+			violations[tostring(src)] = { count = 1 }
 		end
 
-		if not isKnown then
-			table.insert(violations, { name = name, count = 1 })
-		end
-
-		return isKnown, isKnownCount,isKnownExtraText
+		return isKnown, isKnownCount, isKnownExtraText
 	end
 
 	function GetPlayerNeededIdentifiers(player)
 		local ids = GetPlayerIdentifiers(player)
-		for i,theIdentifier in ipairs(ids) do
-			if string.find(theIdentifier,"license:") or -1 > -1 then
-				local license = theIdentifier
-			elseif string.find(theIdentifier,"steam:") or -1 > -1 then
-				local steam = theIdentifier
+		local license, steam
+		for i = 1, #ids do
+			if string.find(ids[i], "license:") then
+				license = ids[i]
 			end
-		end
-		if not steam then
-			steam = "steam: missing"
-		end
+			if string.find(ids[i], "steam:") then
+				steam = ids[i]
+			end
+	    end
 		return license, steam
 	end
 
@@ -154,10 +148,11 @@ Citizen.CreateThread(function()
 				local license, steam = GetPlayerNeededIdentifiers(userSource)
 				local player = exports["essentialmode"]:getPlayerFromId(userSource)
 				local name = player.getActiveCharacterData("fullName")
-				local steamName = GetPlayerName(player)
+				local steamName = GetPlayerName(userSource)
 
-				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name)
+				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
 				if not isKnown then  -- don't warn on first offense
+					print("**First offense, no alert**")
 					return
 				end
 
@@ -194,10 +189,11 @@ Citizen.CreateThread(function()
 				local license, steam = GetPlayerNeededIdentifiers(userSource)
 				local player = exports["essentialmode"]:getPlayerFromId(userSource)
 				local name = player.getActiveCharacterData("fullName")
-				local steamName = GetPlayerName(player)
+				local steamName = GetPlayerName(userSource)
 
-				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name)
+				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
 				if not isKnown then  -- don't warn on first offense
+					print("**First offense, no alert**")
 					return
 				end
 
@@ -214,8 +210,8 @@ Citizen.CreateThread(function()
 					steamName = "Could not get player's steam name"
 				end
 
-				local msg = "```Noclip hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nCaught with "..math.ceil(distance).." units between last checked location\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
-				local staff_msg = "^3*Noclip hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
+				local msg = "```Noclip/Teleport hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nCaught with "..math.ceil(distance).." units between last checked location\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
+				local staff_msg = "^3*Noclip/Teleport hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
 
 				TriggerEvent("usa:notifyStaff", staff_msg)
 				SendWebhookMessage(webhook, msg)
@@ -234,9 +230,9 @@ Citizen.CreateThread(function()
 				local license, steam = GetPlayerNeededIdentifiers(userSource)
 				local player = exports["essentialmode"]:getPlayerFromId(userSource)
 				local name = player.getActiveCharacterData("fullName")
-				local steamName = GetPlayerName(player)
+				local steamName = GetPlayerName(userSource)
 
-				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name)
+				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
 
 				if not license then
 					license = "No License Found!"
@@ -277,9 +273,9 @@ Citizen.CreateThread(function()
 			local license, steam = GetPlayerNeededIdentifiers(userSource)
 			local player = exports["essentialmode"]:getPlayerFromId(userSource)
 			local name = player.getActiveCharacterData("fullName")
-			local steamName = GetPlayerName(player)
+			local steamName = GetPlayerName(userSource)
 
-			local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name)
+			local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
 
 			if not license then
 				license = "No License Found!"
@@ -310,9 +306,9 @@ Citizen.CreateThread(function()
 			local license, steam = GetPlayerNeededIdentifiers(userSource)
 			local player = exports["essentialmode"]:getPlayerFromId(userSource)
 			local name = player.getActiveCharacterData("fullName")
-			local steamName = GetPlayerName(player)
+			local steamName = GetPlayerName(userSource)
 
-			local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name)
+			local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
 
 			if not license then
 				license = "No License Found!"
@@ -343,9 +339,9 @@ Citizen.CreateThread(function()
 			local license, steam = GetPlayerNeededIdentifiers(userSource)
 			local player = exports["essentialmode"]:getPlayerFromId(userSource)
 			local name = player.getActiveCharacterData("fullName")
-			local steamName = GetPlayerName(player)
+			local steamName = GetPlayerName(userSource)
 
-			local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name)
+			local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
 
 			if not license then
 				license = "No License Found!"
@@ -408,9 +404,9 @@ Citizen.CreateThread(function()
 				local license, steam = GetPlayerNeededIdentifiers(id)
 				local player = exports["essentialmode"]:getPlayerFromId(id)
 				local name = player.getActiveCharacterData("fullName")
-				local steamName = GetPlayerName(player)
+				local steamName = GetPlayerName(userSource)
 
-				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name)
+				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
 
 				if not license then
 					license = "No License Found!"
