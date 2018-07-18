@@ -77,7 +77,9 @@ local vehicleShopItems = {
 		{make = "Nagasaki", model = "Blazer", price = 14000, hash = -2128233223, storage_capacity = 170.0},
 		{make = "Coil", model = "Brawler", price = 48500, hash = -1479664699, storage_capacity = 170.0},
 		{make = "BF", model = "Bifta", price = 75350, hash = -349601129, storage_capacity = 170.0},
-		{make = "Canis", model = "Mesa", price = 30500, hash = -2064372143, storage_capacity = 170.0}
+		{make = "Canis", model = "Mesa", price = 30500, hash = -2064372143, storage_capacity = 170.0},
+		{make = "Vapid", model = "Trophy Truck", price = 50000, hash = 101905590, storage_capacity = 100.0},
+		{make = "Vapid", model = "Trophy Truck 2", price = 70000, hash = -663299102, storage_capacity = 100.0}
 	},
 	["Motorcycles"] = {
 		{make = "Pegassi", model = "Faggio Sport", price = 1200, hash = -1842748181, storage_capacity = 30.0},
