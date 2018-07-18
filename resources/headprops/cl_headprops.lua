@@ -65,7 +65,7 @@ AddEventHandler("headprops:toggleComponent", function(component_index)
 			TriggerServerEvent("headprops:loadHeadProp", 2)
 		end
 		Wait(waitTime)
-		SetPedComponentVariation(ped, component_index, tonumber(components[component_index].value), tonumber(components[component_index]).texture, 2)
+		SetPedComponentVariation(ped, component_index, tonumber(components[component_index].value), tonumber(components[component_index].texture), 2)
 	end
 end)
 
