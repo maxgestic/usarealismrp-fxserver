@@ -380,7 +380,7 @@ Citizen.CreateThread(function()
                                                 local amount = tonumber( input_amount )
                                                 amount = math.floor(amount, 0)
                                                 if ( amount > 0 ) then
-                                                    TriggerServerEvent("properties:withdraw", nearest_property_info.name, amount)
+                                                    TriggerServerEvent("properties:withdraw", nearest_property_info.name, amount, nil, true)
                                                 end
                                                 break
                                             else
@@ -692,8 +692,13 @@ Citizen.CreateThread(function()
                     TriggerEvent("properties-GUI:Option", "~r~Rob", function(cb)
                         if cb then
                             --print("player wants to rob store!")
-                            TriggerServerEvent('es_holdup:rob', nearest_property_info.name)
-                            menu.enabled = false
+                            -- TODO: check if player is armed here before robbing
+                            if IsPedArmed(GetPlayerPed(-1), 7) then
+                              TriggerServerEvent('es_holdup:rob', nearest_property_info.name)
+                              menu.enabled = false
+                            else
+                              TriggerEvent("usa:notify", "I am not threatend!")
+                            end
                         end
                     end)
 

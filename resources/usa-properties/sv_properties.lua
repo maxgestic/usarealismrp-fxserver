@@ -370,53 +370,31 @@ end)
 -- REMOVE MONEY --
 ------------------
 RegisterServerEvent("properties:withdraw")
-AddEventHandler("properties:withdraw", function(name, amount, savedSource)
-    if PROPERTIES[name].storage.money - amount >= 0 then
-        -- remove from store --
-        PROPERTIES[name].storage.money = PROPERTIES[name].storage.money - amount
-        TriggerClientEvent("properties:update", -1, PROPERTIES[name], true)
-		-- see if called from server file --
-		if savedSource then source = savedSource end
-        -- add to player --
-        local player = exports["essentialmode"]:getPlayerFromId(tonumber(source))
-		if player then
-			local user_money = player.getActiveCharacterData("money")
-			player.setActiveCharacterData("money", user_money + amount)
-			TriggerClientEvent("usa:notify", source, "~y~Withdrawn: ~w~$" .. amount)
-			print("$" .. amount .. " withdrawn!")
-      -- save property --
-      SavePropertyData(name)
-      --[[
-			-- update property info in DB --
-			-- Get the document with that property name
-			TriggerEvent('es:exposeDBFunctions', function(db)
-				db.getDocumentByRow("properties", "name", name, function(doc, rText)
-					if rText then
-						--RconPrint("\nrText = " .. rText)
-					end
-					if doc then
-						print("doc found!")
-						doc._rev = nil
-						db.updateDocument("properties", doc._id, PROPERTIES[name], function(status)
-							if status == true then
-								print("\nDocument successfully updated!")
-							else
-								--RconPrint("\nStatus Response: " .. status)
-								if status == "201" then
-									print("\nDocument successfully updated!")
-								end
-							end
-						end)
-					end
-				end)
-			end)
-      --]]
-		else
-			print("failed to retrieve player in properties:withdraw!")
-		end
-    else
-        TriggerClientEvent("usa:notify", source, "Don't have that much to withdraw!")
+AddEventHandler("properties:withdraw", function(name, amount, savedSource, give_money_to_player)
+  if PROPERTIES[name].storage.money - amount >= 0 then
+    -- remove from store --
+    PROPERTIES[name].storage.money = PROPERTIES[name].storage.money - amount
+    TriggerClientEvent("properties:update", -1, PROPERTIES[name], true)
+    -- see if called from server file --
+    if savedSource then source = savedSource end
+    -- only take money if asked to --
+    if give_money_to_player then
+      -- add to player --
+      local player = exports["essentialmode"]:getPlayerFromId(tonumber(source))
+      if player then
+        local user_money = player.getActiveCharacterData("money")
+        player.setActiveCharacterData("money", user_money + amount)
+        TriggerClientEvent("usa:notify", source, "~y~Withdrawn: ~w~$" .. amount)
+        print("$" .. amount .. " withdrawn!")
+      else
+        print("failed to retrieve player in properties:withdraw!")
+      end
     end
+    -- save property --
+    SavePropertyData(name)
+  else
+    TriggerClientEvent("usa:notify", source, "Don't have that much to withdraw!")
+  end
 end)
 
 -----------------------

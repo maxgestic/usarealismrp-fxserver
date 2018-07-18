@@ -110,7 +110,7 @@ local stores = {
 		nameofstore = "Gun Store - Paleto",
 		lastrobbed = 0
 	},
-	-- below need testing: 
+	-- below need testing:
 	["Tow Truck - Paleto"] = {
 		position = { ['x'] = -191.731, ['y'] = 6269.85, ['z'] = 31.489},
 		nameofstore = "Tow Truck - Paleto",
@@ -184,7 +184,7 @@ AddEventHandler('es_holdup:rob', function(robb)
 			end
 			print("cop count: " .. count)
 			print("cops needed: " .. COPS_NEEDED_TO_ROB)
-			if count >= COPS_NEEDED_TO_ROB then 
+			if count >= COPS_NEEDED_TO_ROB then
 				print("returning true! enough cops on")
 				if stores[robb] then
 					local store = stores[robb]
@@ -210,12 +210,12 @@ AddEventHandler('es_holdup:rob', function(robb)
 									print("adding stolen money!")
 									local user_money = target.getActiveCharacterData("money")
 									TriggerEvent("properties:getPropertyMoney", robb, function(reward)
-										reward = round(reward * 0.28, 0)
+										reward = math.ceil(reward * 0.35)
 										print("property was robbed of: $" .. reward)
-										target.setActiveCharacterData("money", user_money  + reward)
+										target.setActiveCharacterData("money", user_money + reward)
 										--TriggerClientEvent('chatMessage', -1, 'NEWS', {255, 0, 0}, "Robbery is over at: ^2" .. store.nameofstore)
 										sendMessageToEmsAndPolice("^1DISPATCH: ^0Robbery is over at: ^2" .. store.nameofstore)
-										TriggerEvent("properties:withdraw", robb, reward, savedSource)
+										TriggerEvent("properties:withdraw", robb, reward, savedSource, false)
 										TriggerClientEvent('es_holdup:robberycomplete', savedSource, reward)
 									end)
 								end
@@ -224,7 +224,7 @@ AddEventHandler('es_holdup:rob', function(robb)
 					end)
 					sendMessageToEmsAndPolice("^1DISPATCH: ^0Security Alarm Triggered at ^2" .. store.nameofstore)
 				end
-			else 
+			else
 				print("returning false! not enough cops on")
 				TriggerClientEvent("usa:notify", savedSource, "Couldn't find any money!") -- not enough police on
 			end
@@ -245,9 +245,4 @@ function sendMessageToEmsAndPolice(msg)
 			end
 		end
 	end)
-end
-
-function round(num, numDecimalPlaces)
-	local mult = 5^(numDecimalPlaces or 0)
-	return math.floor(num * mult + 0.5) / mult
 end
