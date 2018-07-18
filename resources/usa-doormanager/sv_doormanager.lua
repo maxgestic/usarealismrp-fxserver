@@ -3,6 +3,8 @@
 --# This script keeps a server sided track of frozen states on objects like doors or gates that can be toggled by being in the activation area and pressing "E"
 --# make sure both the DOORS collection on the sv file and the DOORS_TO_MANAGE collection on the cl file have an equal # of entries, and their "locked" attirbute are matching to work properly
 
+-- TODO: remove the coords attribute (not used anymore)
+
 local DOORS = {
   [1] = {locked = false, coords = nil},
   [2] = {locked = false, coords = nil},
@@ -18,8 +20,8 @@ local DOORS = {
   [12] = {locked = false, coords = nil},
   [13] = {locked = false, coords = nil},
   [14] = {locked = false, coords = nil},
-  [15] = {locked = true, coords = nil},
-  [16] = {locked = true, coords = nil},
+  [15] = {locked = false, coords = nil},
+  [16] = {locked = false, coords = nil},
   [17] = {locked = true, coords = nil},
   [18] = {locked = true, coords = nil},
   [19] = {locked = true, coords = nil},
@@ -55,6 +57,8 @@ local DOORS = {
   [49] = {locked = true, coords = nil},
   [50] = {locked = true, coords = nil},
   [51] = {locked = true, coords = nil},
+  [52] = {locked = true, coords = nil},
+  [52] = {locked = true, coords = nil},
   [52] = {locked = true, coords = nil}
 }
 
@@ -65,23 +69,19 @@ AddEventHandler("doormanager:checkDoorLock", function(index, door, x, y, z)
   if user_job == "sheriff" or user_job == "corrections" or user_job == "ems" or user_job == "judge" then
     if not DOORS[index].locked then
       DOORS[index].locked = true
-      --print("locking door #" .. index)
       TriggerClientEvent("usa:notify", source, "Door has been ~y~locked")
     else
       DOORS[index].locked = false
-      --print("unlocking door #" .. index)
       TriggerClientEvent("usa:notify", source, "Door has been ~y~unlocked")
     end
     TriggerClientEvent("doormanager:toggleDoorLock", -1, index, DOORS[index].locked, x, y, z)
+    if DOORS[index].locked then
+      TriggerClientEvent("chatMessage", source, "", {}, "^0You locked " .. door.name .. ".")
+    else
+      TriggerClientEvent("chatMessage", source, "", {}, "^0You unlocked " .. door.name .. ".")
+    end
   else
     TriggerClientEvent("usa:notify", source,"Area prohibited!")
-  end
-end)
-
-RegisterServerEvent("doormanager:updateCoords")
-AddEventHandler("doormanager:updateCoords", function(index, coords)
-  if not DOORS[index].coords then
-    DOORS[index].coords = coords
   end
 end)
 
@@ -89,3 +89,9 @@ RegisterNetEvent("doormanager:firstJoin")
 AddEventHandler("doormanager:firstJoin", function()
   TriggerClientEvent("doormanager:update", source, DOORS)
 end)
+
+TriggerEvent('es:addGroupCommand', 'lockdebug', 'owner', function(source, args, user)
+  TriggerClientEvent("doormanager:debug", source)
+end, {
+	help = "DEBUG: Debug the door lock system"
+})

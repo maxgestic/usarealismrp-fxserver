@@ -3,14 +3,17 @@
 --# This script keeps a server sided track of frozen states on objects like doors or gates that can be toggled by being in the activation area and pressing "E"
 
 -- TODO:
--- 1) Make a parameter for GetObject() that allows for retrieval of more than one entity of the closest object of the specified model so that one activation point can lock 2 doors (like for paleto SO front doors)
--- 2) Add an optional parameter for GetObject() that allows to ignore the first certain # of objects to get to the desired one
 -- 3) Add below:
--- BCSO Paleto -- Side gate: x = -431.42, y = 5986.6, z = 31.5, model = -1156020871
+-- BCSO Paleto -- Side gate 1: x = -429.9, y = 5986.8, z = 31.5, model = -1156020871
+-- BCSO Paleto -- Side gate 2: x = -431.4, y = 5988.3, z = 31.5, model = -1156020871
+
+
 
 local DOORS_TO_MANAGE = {
   {name = "Bolingbroke Prison", locations = {{x = 1836.1, y = 2604.6,  z = 45.6}, {x = 1847.1, y = 2604.7, z = 45.6}}, distance = 30.0, model = 741314661, locked = false, draw_marker = true},
   {name = "Bolingbroke Prison", locations = {{x = 1826.6, y = 2605.1, z = 45.6}, {x = 1816.5, y = 2602.8, z = 45.6}}, distance = 30.0, model = 741314661, locked = false, draw_marker = true},
+  {name = "BCSO Paleto / Side 1", locations = {{x = -429.9, y = 5986.8, z = 31.5}}, distance = 30.0, model = -1156020871, locked = false, draw_marker = true},
+  {name = "BCSO Paleto / Side 2", locations = {{x = -431.4, y = 5988.3, z = 31.5}}, distance = 30.0, model = -1156020871, locked = false, draw_marker = true},
   {name = "Mission Row / Door 1", x = 464.2, y = -1002.6, z = 24.9, distance = 2.0, model = -1033001619, locked = false, draw_marker = false},
   {name = "Mission Row / Door 2", x = 463.8, y = -991.9, z = 24.9, distance = 2.0, model = 631614199, locked = false, draw_marker = false},
   {name = "Mission Row / Cell 1", x = 462.8, y = -993.7, z = 24.9, distance = 2.0, model = 631614199, locked = false, draw_marker = false},
@@ -69,14 +72,23 @@ local LOCK_KEY = 38 -- "E"
 local ACTIVATE_LOCK_SWITCH_DISTANCE = 1.5
 local DRAW_MARKER_RANGE = 50
 local DRAW_3D_TEXT_RANGE = 2.5
+local RELOCK_DISTANCE = 50.0
+local DEBUG = false
 
 local FIRST_JOIN = true
+
+local me = GetPlayerPed(-1)
+local mycoords = GetEntityCoords(me)
+
+RegisterNetEvent("doormanager:debug")
+AddEventHandler("doormanager:debug", function()
+  DEBUG = not DEBUG
+end)
 
 RegisterNetEvent("doormanager:update")
 AddEventHandler("doormanager:update", function(doors)
   for k, v in pairs(doors) do
     DOORS_TO_MANAGE[k].locked = v.locked
-    DOORS_TO_MANAGE[k].coords = v.coords
   end
 end)
 
@@ -90,12 +102,20 @@ Citizen.CreateThread(function()
       TriggerServerEvent("doormanager:firstJoin")
       FIRST_JOIN = false
     end
-    local me = GetPlayerPed(-1)
-    local mycoords = GetEntityCoords(me, 1)
+
+    me = GetPlayerPed(-1)
+    mycoords = GetEntityCoords(me, 1)
+
+    -----------------------------
+    -- CHECK DIST TO EACH DOOR --
+    -----------------------------
     for i = 1, #DOORS_TO_MANAGE do
+
+      -- below if statement used to convert locations not set up as a table yet --
       if not DOORS_TO_MANAGE[i].locations then
         DOORS_TO_MANAGE[i].locations = {{x = DOORS_TO_MANAGE[i].x, y = DOORS_TO_MANAGE[i].y, z = DOORS_TO_MANAGE[i].z}}
       end
+
       for j = 1, #DOORS_TO_MANAGE[i].locations do
         -----------------------------------
         -- LISTEN FOR DOOR TOGGLE EVENTS --
@@ -107,28 +127,19 @@ Citizen.CreateThread(function()
             --if SOUND_ENABLE then TriggerServerEvent("InteractSound_SV:PlayWithinDistance", 1.2, "cell-lock", 0.2) end
           end
         end
-        -------------------
-        -- DRAW MARKERS  --
-        -------------------
+        --------------------------
+        -- DRAW MARKERS / TEXT  --
+        --------------------------
         if Vdist(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, mycoords.x, mycoords.y, mycoords.z) < DRAW_MARKER_RANGE then
-          --[[
-          if DOORS_TO_MANAGE[i].locked then
-            if DOORS_TO_MANAGE[i].draw_marker then
-              DrawMarker(27, DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z - 0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 40, 40, 240, 90, 0, 0, 2, 0, 0, 0, 0)
-            end
-            DrawText3Ds(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, "Press [E] to Unlock")
-          else
-            if DOORS_TO_MANAGE[i].draw_marker then
-              DrawMarker(27, DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z - 0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 40, 40, 240, 90, 0, 0, 2, 0, 0, 0, 0)
-            end
-            DrawText3Ds(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, "Press [E] to Lock")
-          end
-          --]]
-
+          -------------------------
+          -- draw ground markers --
+          -------------------------
           if DOORS_TO_MANAGE[i].draw_marker then
             DrawMarker(27, DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z - 0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 40, 40, 240, 90, 0, 0, 2, 0, 0, 0, 0)
           end
-
+          ------------------
+          -- draw 3d text --
+          ------------------
           if Vdist(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, mycoords.x, mycoords.y, mycoords.z) < DRAW_3D_TEXT_RANGE then
             if DOORS_TO_MANAGE[i].locked then
               DrawText3Ds(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, "Press [E] to Unlock")
@@ -136,35 +147,52 @@ Citizen.CreateThread(function()
               DrawText3Ds(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, "Press [E] to Lock")
             end
           end
-
         end
       end
-      ------------------------------------------------------------------------------------
-      -- MAKE SURE DOORS STAY LOCKED (things like leaving the area would unlock things) --
-      ------------------------------------------------------------------------------------
-      if DOORS_TO_MANAGE[i].coords then
-        if Vdist(DOORS_TO_MANAGE[i].coords.x, DOORS_TO_MANAGE[i].coords.y, DOORS_TO_MANAGE[i].coords.z, mycoords.x, mycoords.y, mycoords.z) < DOORS_TO_MANAGE[i].distance then
-            local ent = GetObject(DOORS_TO_MANAGE[i].model, DOORS_TO_MANAGE[i].distance, DOORS_TO_MANAGE[i].locations[1].x, DOORS_TO_MANAGE[i].locations[1].y, DOORS_TO_MANAGE[i].locations[1].z)
-            if not DOORS_TO_MANAGE[i].cell_block then
-              if DOORS_TO_MANAGE[i].locked then
-                FreezeEntityPosition(ent, true)
-                --print("locking: " .. DOORS_TO_MANAGE[i].name)
-              end
-            elseif DOORS_TO_MANAGE[i].cell_block then
-              SetEntityAsMissionEntity(door_entity, true, true)
-              if DOORS_TO_MANAGE[i].locked then
-                SetEntityVisible(ent, true)
-              else
-                SetEntityVisible(ent, false)
-                SetEntityCollision(ent, false, true)
-                --SetEntityRotation(ent, 0, 0, 90, 2, true)
+
+    end
+	end
+end)
+
+Citizen.CreateThread(function()
+  while true do
+    ------------------------------------------------------------------------------------
+    -- MAKE SURE DOORS STAY LOCKED (things like leaving the area would unlock things) --
+    ------------------------------------------------------------------------------------
+    for i = 1, #DOORS_TO_MANAGE do
+      -- below if statement used to convert locations not set up as a table yet --
+      if not DOORS_TO_MANAGE[i].locations then
+        DOORS_TO_MANAGE[i].locations = {{x = DOORS_TO_MANAGE[i].x, y = DOORS_TO_MANAGE[i].y, z = DOORS_TO_MANAGE[i].z}}
+      end
+
+      for j = 1, #DOORS_TO_MANAGE[i].locations do
+      --if DOORS_TO_MANAGE[i].coords then
+        if Vdist(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, mycoords.x, mycoords.y, mycoords.z) <= RELOCK_DISTANCE then
+          if DEBUG then print("making sure door is locked: " .. DOORS_TO_MANAGE[i].name) end
+            --local ent = GetObject(DOORS_TO_MANAGE[i].model, DOORS_TO_MANAGE[i].distance, DOORS_TO_MANAGE[i].locations[1].x, DOORS_TO_MANAGE[i].locations[1].y, DOORS_TO_MANAGE[i].locations[1].z)
+            local ent = GetObject(DOORS_TO_MANAGE[i].model, DOORS_TO_MANAGE[i].distance, DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z)
+            if ent then
+              if DEBUG then print("ent: " .. ent) end
+              if not DOORS_TO_MANAGE[i].cell_block then
+                if DOORS_TO_MANAGE[i].locked then
+                  FreezeEntityPosition(ent, true)
+                end
+              elseif DOORS_TO_MANAGE[i].cell_block then
+                SetEntityAsMissionEntity(ent, true, true)
+                if DOORS_TO_MANAGE[i].locked then
+                  SetEntityVisible(ent, true)
+                else
+                  SetEntityVisible(ent, false)
+                  SetEntityCollision(ent, false, true)
+                end
               end
             end
         end
+      --end
       end
     end
-
-	end
+    Wait(2000) -- check approx. every 2 seconds
+  end
 end)
 
 RegisterNetEvent("doormanager:toggleDoorLock")
@@ -173,11 +201,6 @@ AddEventHandler("doormanager:toggleDoorLock", function(index, locked, x, y, z)
   local door_entity = GetObject(door.model, door.distance, x, y, z)
   if not door.cell_block then
     FreezeEntityPosition(door_entity, locked)
-    if locked then
-      TriggerEvent("chatMessage", "", {}, "^0You locked " .. door.name .. ".")
-    else
-      TriggerEvent("chatMessage", "", {}, "^0You unlocked " .. door.name .. ".")
-    end
   else
     SetEntityAsMissionEntity(door_entity, true, true)
     if locked then
@@ -191,13 +214,6 @@ AddEventHandler("doormanager:toggleDoorLock", function(index, locked, x, y, z)
     end
   end
   DOORS_TO_MANAGE[index].locked = locked
-  local hm = GetEntityCoords(door_entity)
-  DOORS_TO_MANAGE[index].coords = {
-    x = hm.x,
-    y = hm.y,
-    z = hm.z
-  }
-  TriggerServerEvent("doormanager:updateCoords", index, DOORS_TO_MANAGE[index].coords)
 end)
 
 function DrawSpecialText(m_text)
