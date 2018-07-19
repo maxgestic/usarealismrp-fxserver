@@ -8,7 +8,7 @@ reason, you might want it to be restarted ... this script does that.
 
 # To start a FiveM server with it do:
 
-keepalive.py ..\run.cmd +exec server.cfg
+minikeepalive.py ..\run.cmd +exec server.cfg
 
 from the server-data directory.
 """
