@@ -1,5 +1,9 @@
 cache/
 resources/essentialmode/sv_es-DB-config.lua
+resources/paleto
+resources/assets
+resources/sandyairfield
+resources/unmarked-police-pack
 
 MapMakerList.xml
 server_internal.cfg
