@@ -52,14 +52,16 @@ AddEventHandler("spotlight:spotlight", function()
       }
       TriggerServerEvent("spotlight:addSpotlight", spotlight)
       MY_SPOTLIGHT = spotlight
-      print("spotlight on!")
+      --print("spotlight on!")
+	  TriggerEvent("usa:notify", "Spotlight ~g~on")
     else
       TriggerEvent("usa:notify", "Not in vehicle!")
     end
   else
     TriggerServerEvent("spotlight:removeSpotlight", MY_SPOTLIGHT)
     MY_SPOTLIGHT = nil
-    print("spotlight off!")
+    --print("spotlight off!")
+	TriggerEvent("usa:notify", "Spotlight ~r~off")
   end
 end)
 

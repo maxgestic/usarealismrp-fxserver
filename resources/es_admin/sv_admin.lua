@@ -656,7 +656,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 			table.remove(args, 1) -- remove fname
 			table.remove(args, 1) -- remove lname
 			local reason = table.concat(args, " ")
-			RconPrint("\nPlayer Identifier: " .. args[1])
+			RconPrint("\nPlayer Identifier: " .. targetPlayer .. "\n")
 			-- show message
 			RconPrint(targetPlayerName .. " has been banned (" .. reason .. ")")
 			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
@@ -712,7 +712,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 			table.remove(args, 1) -- remove fname
 			table.remove(args, 1) -- remove lname
 			local reason = table.concat(args, " ")
-			RconPrint("\nPlayer Identifier: " .. args[1])
+			RconPrint("\nPlayer Identifier: " .. targetPlayer .. "\n")
 			-- show message
 			RconPrint(targetPlayerName .. " has been banned (" .. reason .. ")")
 			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")

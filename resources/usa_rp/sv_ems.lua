@@ -172,6 +172,8 @@ function GetMeleeWeaponType(hash)
 	elseif hash == 1141786504 then return "blunt_object" -- golfclub
 	elseif hash == -1951375401 then return "blunt_object" -- flashlight
 	elseif hash == 419712736 then return "blunt_object" -- wrench
+	elseif hash == GetHashKey("WEAPON_RAMMED_BY_CAR") then return "blunt_object" -- needs testing
+	elseif hash == GetHashKey("WEAPON_RUN_OVER_BY_CAR") then return "blunt_object" -- needs testing
 	end
 end
 

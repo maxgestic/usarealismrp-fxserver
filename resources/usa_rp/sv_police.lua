@@ -78,14 +78,18 @@ end)
 -- /dispatch
 TriggerEvent('es:addJobCommand', 'dispatch', { "police", "sheriff", "ems", "fire", "taxi", "tow" }, function(source, args, user)
 	local userSource = tonumber(source)
-	local target = args[2]
-	table.remove(args,1)
-	table.remove(args,1)
-	TriggerClientEvent('chatMessage', target, "DISPATCH", {255, 20, 10}, table.concat(args, " "))
-	TriggerClientEvent('chatMessage', userSource, "DISPATCH", {255, 20, 10}, table.concat(args, " "))
-	-- set waypoint...
-	print("setting waypoint with target = " .. target)
-	TriggerClientEvent("dispatch:setWaypoint", userSource, tonumber(target))
+	local target = tonumber(args[2])
+	if GetPlayerName(target) then
+		table.remove(args,1)
+		table.remove(args,1)
+		TriggerClientEvent('chatMessage', target, "DISPATCH", {255, 20, 10}, table.concat(args, " "))
+		TriggerClientEvent('chatMessage', userSource, "DISPATCH", {255, 20, 10}, table.concat(args, " "))
+		-- set waypoint...
+		print("setting waypoint with target = " .. target)
+		TriggerClientEvent("dispatch:setWaypoint", userSource, tonumber(target))
+	else
+		TriggerClientEvent("usa:notify", userSource, "Error: caller id # not entered")
+	end
 end, {
 	help = "Send a message as dispatch",
 	params = {
