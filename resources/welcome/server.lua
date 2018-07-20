@@ -2,7 +2,7 @@
 
 function helpText(source)
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "^0You will earn $250 every 10 minutes from welfare until you find another job.")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "Look at the icons on your map to see where jobs available jobs are.")
+	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "Look at the icons on your map to see where some of the available jobs are.")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "You can get a cell phone at the general store. You can use it to call for a taxi, towtruck, police, EMS, etc")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "Once you have one, do F1 > Cell Phone > Use to open it.")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "1) ^3/info^0 - this menu")
