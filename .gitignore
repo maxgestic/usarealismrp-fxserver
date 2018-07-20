@@ -5,6 +5,8 @@ resources/assets
 resources/sandyairfield
 resources/unmarked-police-pack
 resources/peds
+resources/guns
+resources/eventscenter
 
 MapMakerList.xml
 server_internal.cfg

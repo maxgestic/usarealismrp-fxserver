@@ -57,7 +57,7 @@ weatherTree = {
 		{"CLOUDS", 15},
 		{"SNOWLIGHT", 5},
 		{"FOGGY", 20},
-		{"RAIN", 10},
+		{"RAIN", 5},
 		{"CLEARING", 15},
 	},
 	["RAIN"] = {
