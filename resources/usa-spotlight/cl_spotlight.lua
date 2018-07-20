@@ -160,6 +160,6 @@ Citizen.CreateThread(function()
         TriggerServerEvent("spotlight:updateSpotlight", MY_SPOTLIGHT)
       end
     end
-    Wait(2)
+    Wait(0)
   end
 end)
