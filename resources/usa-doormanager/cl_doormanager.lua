@@ -191,7 +191,7 @@ Citizen.CreateThread(function()
       --end
       end
     end
-    Wait(2000) -- check approx. every 2 seconds
+    Wait(5000) -- check approx. every 2 seconds
   end
 end)
 

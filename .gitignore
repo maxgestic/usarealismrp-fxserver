@@ -4,6 +4,7 @@ resources/paleto
 resources/assets
 resources/sandyairfield
 resources/unmarked-police-pack
+resources/peds
 
 MapMakerList.xml
 server_internal.cfg
