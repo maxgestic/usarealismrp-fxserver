@@ -7,6 +7,7 @@ resources/unmarked-police-pack
 resources/peds
 resources/guns
 resources/eventscenter
+resources/lguard2
 
 MapMakerList.xml
 server_internal.cfg
