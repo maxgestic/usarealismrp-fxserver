@@ -67,7 +67,7 @@ local vehicleShopItems = {
 		{make = "Vapid", model = "Slam Van", price = 24000, hash = 729783779, storage_capacity = 230.0},
 		{make = "Vapid", model = "Slam Van LR", price = 24000, hash = 1119641113, storage_capacity = 230.0},
 		{make = "Vapid", model = "Sandking", price = 35000, hash = -1189015600, storage_capacity = 230.0},
-		{make = "Lifted Dodge", model = "Ram", price = 85000, hash = 989381445, storage_capacity = 230.0},
+		{make = "Lifted Dodge", model = "Ram", price = 120000, hash = 989381445, storage_capacity = 230.0},
 		{make = "Vapid", model = "Contender", price = 40500, hash = 683047626, storage_capacity = 230.0},
 		{make = "Vapid", model = "Guardian", price = 350000, hash =  -2107990196, storage_capacity = 230.0}
 	},
@@ -126,7 +126,7 @@ local vehicleShopItems = {
 		{make = "Bravado", model = "Youga Classic", price = 24000, hash = 1026149675, storage_capacity = 300.0},
 		{make = "Bravado", model = "Rumpo 1", price = 18000, hash = 1162065741, storage_capacity = 300.0},
 		{make = "Bravado", model = "Rumpo 3", price = 38000, hash = 1475773103, storage_capacity = 300.0},
-		{make = "Lifted Chevy", model = "Blazer", price = 55000, hash = -1776615689, storage_capacity = 300.0},
+		--{make = "Lifted Chevy", model = "Blazer", price = 55000, hash = -1776615689, storage_capacity = 300.0},
 		{make = "Brute", model = "Camper", price = 45500, hash = 1876516712, storage_capacity = 300.0},
 		{make = "Hennifers", model = "Taco Truck", price = 60500, hash = 1951180813, storage_capacity = 300.0}
 	},
