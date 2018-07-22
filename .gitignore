@@ -8,6 +8,7 @@ resources/peds
 resources/guns
 resources/eventscenter
 resources/lguard2
+resources/courthouse
 
 MapMakerList.xml
 server_internal.cfg
