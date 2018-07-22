@@ -86,7 +86,12 @@ Citizen.CreateThread(function()
 							if bodyHealth < 1000.0 or engineHealth < 1000.0 then
 								SetVehicleEngineOn(veh, false, false, false)
 								SetVehicleUndriveable(veh, true)
-								Wait(10000)
+								local started = GetGameTimer()
+								while GetGameTimer() - started < 10000 do
+									Wait(5)
+									SetVehicleEngineOn(veh, false, false, false)
+									SetVehicleUndriveable(veh, true)
+								end
 								--SetVehicleEngineOn(veh, true, true, true)
 								TriggerServerEvent("carFix:checkPlayerMoney", engineHealth, bodyHealth)
 							else

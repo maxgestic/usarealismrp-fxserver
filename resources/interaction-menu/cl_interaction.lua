@@ -792,10 +792,10 @@ AddEventHandler("interaction:performPoliceAction", function(action, unseatIndex)
 end)
 
 RegisterNetEvent("interaction:repairVehicle")
-AddEventHandler("interaction:repairVehicle", function(is_backpack_item)
+AddEventHandler("interaction:repairVehicle", function()
 	if hitHandleVehicle ~= 0 then
 		if (GetVehicleEngineHealth(hitHandleVehicle) < 1000 or not IsVehicleDriveable(hitHandleVehicle, false) and not IsPedInAnyVehicle(GetPlayerPed(-1), true)) then
-			TriggerServerEvent("carDamage:checkForRepairKit", hitHandleVehicle, is_backpack_item)
+			TriggerServerEvent("carDamage:checkForRepairKit", hitHandleVehicle)
 		end
 	else
 		TriggerEvent("usa:notify", "No vehicle detected!")
