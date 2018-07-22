@@ -734,7 +734,8 @@ Citizen.CreateThread(function()
 							quantity = 1,
 							legality = "legal",
 							type = "weapon",
-							hash = 883325847
+							hash = 883325847,
+							weight = 10.0
 						}
 						TriggerServerEvent("usa:insertItem", jerry_can, jerry_can.quantity, GetPlayerServerId(PlayerId()))
 					end

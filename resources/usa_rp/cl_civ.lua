@@ -325,3 +325,24 @@ function SetClipset(clipset)
     end
   end
 end
+
+---------------------------------------
+-- Make vehicle radio louder / quiet --
+---------------------------------------
+local IS_VEHICLE_LOUD = false
+
+RegisterNetEvent("civ:radioLoudToggle")
+AddEventHandler("civ:radioLoudToggle", function()
+  local veh = GetVehiclePedIsIn(GetPlayerPed(-1), false)
+  if veh ~= 0 then
+    IS_VEHICLE_LOUD = not IS_VEHICLE_LOUD
+    SetVehicleRadioLoud(veh, IS_VEHICLE_LOUD)
+    if IS_VEHICLE_LOUD then
+      exports.globals:notify("Radio: ~g~loud~w~!")
+    else
+      exports.globals:notify("Radio: ~y~normal~w~!")
+    end
+  else
+    exports.globals:notify("Must be in a vehicle!")
+  end
+end)

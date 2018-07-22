@@ -17,23 +17,6 @@ local VEH_GARAGE_MAXIMUM_STORAGE_NUM = 12
 TriggerEvent('es:addCommand','removeblindfold', function(source, args, user)
 	print("inside /removeblindfold command!")
 	TriggerClientEvent("crim:attemptToBlindfoldNearestPerson", source, false)
-	--[[
-	local target_player_id = tonumber(args[2])
-	if target_player_id ~= tonumber(source) then
-		if type(tonumber(args[2])) == "number" then
-			-- see if target player has their hands tied before blindfolding
-			TriggerClientEvent("crim:blindfold", target_player_id, false)
-			-- play animation:
-			local anim = {
-				dict = "anim@move_m@trash",
-				name = "pickup"
-			}
-			TriggerClientEvent("usa:playAnimation", tonumber(source), anim.name, anim.dict, 3)
-		end
-	else
-		print("can't target self when removing blindfold!")
-	end
-	--]]
 end, {
 	help = "Remove the blindfold off of the nearest person."
 })
@@ -44,19 +27,6 @@ end, {
 TriggerEvent('es:addCommand','blindfold', function(source, args, user)
 	print("inside /blindfold command!")
 	TriggerClientEvent("crim:attemptToBlindfoldNearestPerson", source, true)
-	--[[
-	if type(tonumber(args[2])) == "number" then
-		-- see if target player has their hands tied before blindfolding
-		local target_player_id = tonumber(args[2])
-		TriggerClientEvent("crim:areHandsTied", target_player_id, source, target_player_id, "blindfold")
-		-- play animation:
-		local anim = {
-			dict = "anim@move_m@trash",
-			name = "pickup"
-		}
-		TriggerClientEvent("usa:playAnimation", tonumber(source), anim.name, anim.dict, 3)
-	end
-	--]]
 end, {
 	help = "Place a bag over the nearest person's head."
 })
@@ -81,19 +51,6 @@ end)
 ---------------------------
 TriggerEvent('es:addCommand','rob', function(source, args, user)
 	print("inside /rob command!")
-	--[[
-	if type(tonumber(args[2])) == "number" then
-		-- see if target player has their hands in the air before tying up
-		local target_player_id = tonumber(args[2])
-		TriggerClientEvent("crim:areHandsTied", target_player_id, source, target_player_id, "rob")
-		-- play animation:
-		local anim = {
-			dict = "anim@move_m@trash",
-			name = "pickup"
-		}
-		TriggerClientEvent("usa:playAnimation", tonumber(source), anim.name, anim.dict, 3)
-	end
-	--]]
 	TriggerClientEvent("crim:attemptToRobNearestPerson", source)
 end, {
 	help = "Steal the nearest player's money."
@@ -116,18 +73,6 @@ end)
 TriggerEvent('es:addCommand','tie', function(source, args, user)
 	print("inside /tie command!")
 	TriggerClientEvent("crim:attemptToTieNearestPerson", source, true)
-	--if type(tonumber(args[2])) == "number" then
-		-- see if target player has their hands in the air before tying up
-		--local target_player_id = tonumber(args[2])
-		--TriggerClientEvent("crim:areHandsUp", target_player_id, source, target_player_id)
-		--[[ play animation:
-		local anim = {
-			dict = "anim@move_m@trash",
-			name = "pickup"
-		}
-		TriggerClientEvent("usa:playAnimation", tonumber(source), anim.name, anim.dict, 3)
-		--]]
-	--end
 end, {
 	help = "Tie the nearest person's hands together."
 })
@@ -398,3 +343,12 @@ function TradeVehicle(details)
 	TriggerClientEvent("usa:notify", details.source, "Transaction ~g~successful~w~!")
 	TriggerClientEvent("usa:notify", details.target, "Transaction ~g~successful~w~!")
 end
+
+-----------------------------
+-- Make radio loud / quiet --
+-----------------------------
+TriggerEvent('es:addCommand', 'loud', function(source, args, user, location)
+	TriggerClientEvent("civ:radioLoudToggle", source)
+end, {
+	help = "Make your radio louder!"
+})
