@@ -87,11 +87,13 @@ TriggerEvent('es:addCommand', 'spawn', function(source, args, user)
 			TriggerClientEvent("vehicleCommands:spawnVehicle", source, "polmav")
 		elseif args[2] == "blazer" then
 			TriggerClientEvent("vehicleCommands:spawnVehicle", source, "blazer2")
+		elseif args[2] == "lguard2" then
+			TriggerClientEvent("vehicleCommands:spawnVehicle", source, "lguard2")
 		elseif args[2] == "firetruck" then
 			TriggerClientEvent("vehicleCommands:spawnVehicle", source, "firetruk")
 		else
 			TriggerClientEvent("vehicleCommands:error", source, "^1Invalid model name. Usage: /spawn <name>")
-			TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 ambulance, suv, firetruck, heli, blazer")
+			TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 ambulance, suv, firetruck, heli, blazer, lguard2")
 		end
 	elseif user_job == "fire" then
 		if args[2] == "firetruck" then
@@ -100,24 +102,8 @@ TriggerEvent('es:addCommand', 'spawn', function(source, args, user)
 			TriggerClientEvent("vehicleCommands:error", source, "^1Invalid model name. Usage: /spawn <name>")
 			TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 firetruck")
 		end
-    elseif user_job == "security" then
-		local mPos = user.getCoords()
-		if get3DDistance(3502.5, 3762.45, 29.010, mPos.x, mPos.y, mPos.z) < 20.0 then
-			if args[2] == "barracks" then
-				TriggerClientEvent("vehicleCommands:spawnVehicle", source, "barracks")
-			elseif args[2] == "crusader" then
-				TriggerClientEvent("vehicleCommands:spawnVehicle", source, "crusader")
-			elseif args[2] == "buzzard2" then
-				TriggerClientEvent("vehicleCommands:spawnVehicle", source, "buzzard2")
-			else
-				TriggerClientEvent("vehicleCommands:error", source, "^1Invalid model name. Usage: /spawn <name>")
-				TriggerClientEvent("vehicleCommands:error", source, "^3options:^0 barracks, crusader, buzzard2")
-			end
-		else
-			TriggerClientEvent("vehicleCommands:error", source, "^1Vehicles can only be spawned at HQ!")
-		end
 	else
-		TriggerClientEvent("chatMessage", source, "SYSTEM", {255, 180, 0}, "^3Only cops/sheriffs/ems/fire/security can use /spawn.")
+		TriggerClientEvent("chatMessage", source, "SYSTEM", {255, 180, 0}, "^3Only cops/sheriffs/ems/fire can use /spawn.")
 	end
 end, {
 	help = "Spawn a job vehicle.",
