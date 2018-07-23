@@ -19,7 +19,10 @@ local prices = {
     ["Nimbus"] = 55000,
     ["Shamal"] = 55000,
     ["Luxor"] = 70000,
-    ["Luxor 2"] = 100000
+    ["Luxor 2"] = 100000,
+    ["Microlight"] = 15000,
+    ["Alpha Z1"] = 35000,
+    ["Seabreeze"] = 30000
   },
   purchase = {
     ["Frogger"] = 135000,
@@ -37,7 +40,10 @@ local prices = {
     ["Nimbus"] = 260000,
     ["Shamal"] = 350000,
     ["Luxor"] = 450000,
-    ["Luxor 2"] = 500000
+    ["Luxor 2"] = 500000,
+    ["Microlight"] = 55000,
+    ["Alpha Z1"] = 110000,
+    ["Seabreeze"] = 90000
   }
 }
 
