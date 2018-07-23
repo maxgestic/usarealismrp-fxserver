@@ -279,7 +279,7 @@ RegisterNetEvent("veh:openDoor")
 AddEventHandler("veh:openDoor", function(index)
    -- print("opening door with index = " .. index)
     local playerPed = GetPlayerPed(-1)
-        local playerCar = GetVehiclePedIsIn(playerPed, false)
+        local playerCar = GetVehiclePedIsIn(playerPed, true)
         if playerCar ~= 0 then
           last_car = playerCar
         else
@@ -357,6 +357,56 @@ AddEventHandler('veh:toggleEngine', function(status)
             end
         end
     end
+end)
+
+-- engine specific --
+local engineIsOn, lastVehicle
+
+local policeVehicles = {
+    1171614426, -- ambulance
+    1127131465, -- fbi
+    -1647941228, -- fbi2
+    1938952078, -- firetruck
+    2046537925, -- police
+    -1627000575, -- police2
+    1912215274, -- police3
+    -1973172295, -- police4
+    0x9C32EB57, -- Police5
+    0xB2FF98F0, -- police 6
+    0xC4B53C5B, -- police 7
+    0xD0AF544F, -- police 8
+    -34623805, -- policeb
+    741586030, -- pranger
+    -1205689942, -- riot
+	-672516475, -- unmarked9
+	-1960928017, -- unmarked8
+	-59441254, -- unmarked7 (slicktop)
+	-1663942570, -- unmarked6
+	1109330673, -- unmarked4
+	-1285460620, -- unmarked3
+	1383443358 -- unmarked1
+
+}
+
+Citizen.CreateThread(function()
+    while true do
+        Wait(1)
+        local me = GetPlayerPed(-1)
+        if IsPedInAnyVehicle(me) then
+            lastVehicle = GetVehiclePedIsIn(me, false)
+            if IsVehicleEngineOn(lastVehicle, false) then -- engine is running
+                if not engineIsOn then engineIsOn = true end
+            end
+        else
+            if engineIsOn and not IsVehicleEngineOn(lastVehicle, false) then
+                for i = 1, #policeVehicles do
+                    if IsVehicleModel(lastVehicle, policeVehicles[i]) then
+                        SetVehicleEngineOn(lastVehicle, true, true, true)
+                    end
+                end
+            end
+        end
+     end
 end)
 
 --------------------------------------
