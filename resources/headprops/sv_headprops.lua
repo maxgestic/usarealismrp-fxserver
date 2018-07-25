@@ -22,19 +22,23 @@ AddEventHandler("headprops:loadHeadProp", function(propid)
 	for i = 1, #characters do
 		if characters[i].active == true then
 			if propid == 0 then  -- hat
-				TriggerClientEvent(
-					"headprops:cacheHat",
-					userSource,
-					characters[i].appearance.props["0"],
-					characters[i].appearance.propstexture["0"]
-				)
+				if characters[i].appearance.props then
+					TriggerClientEvent(
+						"headprops:cacheHat",
+						userSource,
+						characters[i].appearance.props["0"],
+						characters[i].appearance.propstexture["0"]
+					)
+				end
 			elseif propid == 1 then  -- glasses
-				TriggerClientEvent(
-					"headprops:cacheGlasses",
-					userSource,
-					characters[i].appearance.props["1"],
-					characters[i].appearance.propstexture["1"]
-				)
+				if characters[i].appearance.props then
+					TriggerClientEvent(
+						"headprops:cacheGlasses",
+						userSource,
+						characters[i].appearance.props["1"],
+						characters[i].appearance.propstexture["1"]
+					)
+				end
 			else -- mask
 				TriggerClientEvent(
 					"headprops:cacheMask",
