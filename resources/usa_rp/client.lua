@@ -334,33 +334,35 @@ end)
 
 -- void SET_VEHICLE_NEEDS_TO_BE_HOTWIRED(Vehicle vehicle, BOOL toggle);
 
+-- engine specific --
+local engineIsOn = true
+local lastVehicle = nil
+
 RegisterNetEvent("veh:toggleEngine")
 AddEventHandler('veh:toggleEngine', function(status)
-    local playerPed = GetPlayerPed(-1)
-    if IsPedInAnyVehicle(playerPed, false) then
-        --local playerCar = GetVehiclePedIsIn(playerPed, false)
-        local targetVehicle = GetVehiclePedIsIn(playerPed, false)
-        if GetPedInVehicleSeat(targetVehicle, -1) == playerPed then
-            if status == "on" then
-              --TriggerServerEvent("vehicle:checkForKey", GetVehicleNumberPlateText(targetVehicle))
-				local vehicleEngineHealth = GetVehicleEngineHealth(targetVehicle)
-				if vehicleEngineHealth > 850 then
-					SetVehicleEngineOn(targetVehicle, true, false, false)
-					SetVehicleUndriveable(targetVehicle, false)
-				else
-					TriggerEvent("usa:notify", "Your vehicle is disabled! Can't turn the engine on.")
-				end
-			elseif status == "off" then
-                SetVehicleEngineOn(targetVehicle, false, false, false)
-                SetVehicleUndriveable(targetVehicle, true)
-                --TriggerEvent("vehicle:setEngineStatus", false)
-            end
+  local playerPed = GetPlayerPed(-1)
+  if IsPedInAnyVehicle(playerPed, false) and lastVehicle and tonumber(lastVehicle) ~= 0 then
+    --local playerCar = GetVehiclePedIsIn(playerPed, false)
+    --lastVehicle = GetVehiclePedIsIn(playerPed, false)
+    if GetPedInVehicleSeat(lastVehicle, -1) == playerPed then
+      if status == "on" then
+        --TriggerServerEvent("vehicle:checkForKey", GetVehicleNumberPlateText(targetVehicle))
+        if GetVehicleEngineHealth(lastVehicle) > 360 then
+          SetVehicleUndriveable(lastVehicle, false)
+          SetVehicleEngineOn(lastVehicle, true, false, false)
+          engineIsOn = true
+        else
+          TriggerEvent("usa:notify", "Your vehicle is disabled! Can't turn the engine on.")
         end
+      elseif status == "off" then
+        SetVehicleEngineOn(lastVehicle, false, false, false)
+        engineIsOn = false
+        SetVehicleUndriveable(lastVehicle, true)
+        --TriggerEvent("vehicle:setEngineStatus", false)
+      end
     end
+  end
 end)
-
--- engine specific --
-local engineIsOn, lastVehicle
 
 local policeVehicles = {
     1171614426, -- ambulance
@@ -389,24 +391,40 @@ local policeVehicles = {
 }
 
 Citizen.CreateThread(function()
-    while true do
-        Wait(1)
-        local me = GetPlayerPed(-1)
-        if IsPedInAnyVehicle(me) then
-            lastVehicle = GetVehiclePedIsIn(me, false)
-            if IsVehicleEngineOn(lastVehicle, false) then -- engine is running
-                if not engineIsOn then engineIsOn = true end
-            end
-        else
-            if engineIsOn and not IsVehicleEngineOn(lastVehicle, false) then
-                for i = 1, #policeVehicles do
-                    if IsVehicleModel(lastVehicle, policeVehicles[i]) then
-                        SetVehicleEngineOn(lastVehicle, true, true, true)
-                    end
-                end
-            end
+  while true do
+    Wait(5)
+    ----------------------
+    -- set last vehicle --
+    ----------------------
+    local me = GetPlayerPed(-1)
+    if IsPedInAnyVehicle(me, false) then
+      local veh = GetVehiclePedIsIn(me, false)
+      if GetPedInVehicleSeat(veh, -1) == me then
+        if lastVehicle ~= veh then
+          lastVehicle = veh
         end
-     end
+      end
+    end
+    --------------------------------------
+    -- adjust engine status accordingly --
+    --------------------------------------
+    if lastVehicle and tonumber(lastVehicle) ~= 0 then
+      if GetVehicleEngineHealth(lastVehicle) > 360 then
+        if engineIsOn and not GetIsVehicleEngineRunning(lastVehicle) then
+          --for i = 1, #policeVehicles do
+            --if IsVehicleModel(lastVehicle, policeVehicles[i]) then
+          SetVehicleEngineOn(lastVehicle, true, true, true)
+          SetVehicleUndriveable(lastVehicle, false)
+              --break
+            --end
+          --end
+        elseif not engineIsOn and GetIsVehicleEngineRunning(lastVehicle) then
+          SetVehicleEngineOn(lastVehicle, false, false, false)
+          SetVehicleUndriveable(lastVehicle, true)
+        end
+      end
+    end
+  end
 end)
 
 --------------------------------------
