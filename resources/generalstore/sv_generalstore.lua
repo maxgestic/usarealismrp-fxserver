@@ -74,8 +74,6 @@ RegisterServerEvent("generalStore:buyItem")
 AddEventHandler("generalStore:buyItem", function(property, item)
   local userSource = source
   item.price = GetServerPrice(item)
-  --local item = GENERAL_STORE_ITEMS[category][index]
-  --TriggerEvent('es:getPlayerFromId', userSource, function(user)
   local user = exports["essentialmode"]:getPlayerFromId(userSource)
     if user.getCanActiveCharacterHoldItem(item) then
       local user_money = user.getActiveCharacterData("money")
@@ -89,11 +87,8 @@ AddEventHandler("generalStore:buyItem", function(property, item)
                 inventory[i].quantity = inventory[i].quantity + 1
                 user.setActiveCharacterData("inventory", inventory)
                 TriggerClientEvent("usa:notify", userSource, "Purchased: ~y~" .. item.name)
-                if property then
-                  -- give to owner of property
-                  --# by minipunch
-                  --# for USA REALISM rp
-                  --# Made for the 24/7 stores as general stores for various items("adding money from general store to property: " .. property.name)
+                if property and property ~= 0 then
+                  -- give to owner of property --
                   TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * item.price))
                 end
                 return

@@ -116,7 +116,11 @@ function CreateGeneralStoreMenu(menu)
       item.Activated = function(parentmenu, selected)
         local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
         TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-          TriggerServerEvent("generalStore:buyItem", property, items[i])
+          if property then
+            TriggerServerEvent("generalStore:buyItem", property, items[i])
+          else
+            TriggerServerEvent("generalStore:buyItem", 0, items[i])
+          end
         end)
       end
       ----------------------------------------
