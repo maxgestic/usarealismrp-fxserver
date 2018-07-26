@@ -4,7 +4,8 @@ local hospitalCoords = {x = 354.032, y = -589.411, z = 42.415}
 local releaseCoords = {
     {x = -240.10, y = 6324.22, z = 32.43}, -- paleto
     {x = 307.63, y = -593.948, z = 42.2919}, -- LS
-    {x = 1814.914, y = 3685.767, z = 34.224} -- sandy
+    {x = 1814.914, y = 3685.767, z = 34.224}, -- sandy
+    {x = 1690.7, y = 2591.9, z = 45.8} -- bolingbroke prison
 }
 local healStations = {
     {x = 307.63, y = -593.948, z = 42.2919}, -- LS
@@ -108,7 +109,7 @@ AddEventHandler("EMS:inspect", function(responder_id)
         print("damage type: " .. damage_type)
         -- notify responder of injuries:
         TriggerServerEvent("EMS:notifyResponderOfInjuries", responder_id, entity_type, damage_type, death_cause)
-    else 
+    else
         print("not dead!")
     end
 end)

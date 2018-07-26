@@ -43,10 +43,11 @@ end)
 RegisterServerEvent("LSC:buttonSelected")
 AddEventHandler("LSC:buttonSelected", function(name, button, property)
 	local usource = source
-	local player = exports["essentialmode"]:getPlayerFromId(usource)
-	local mymoney = player.getActiveCharacterData("money")
-	local myjob = player.getActiveCharacterData("job")
 	if button.price then -- check if button have price
+		local player = exports["essentialmode"]:getPlayerFromId(usource)
+		local mymoney = player.getActiveCharacterData("money")
+		local myjob = player.getActiveCharacterData("job")
+		button.price = math.abs(button.price) -- prevent mem hack to gain money
 		if button.price <= mymoney or myjob == "sheriff" or myjob == "police" or myjob == "ems" or myjob == "fire" then
 			-- take money from player, apply customization --
 			TriggerClientEvent("LSC:buttonSelected", usource, name, button, true)

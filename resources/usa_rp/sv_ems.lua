@@ -1,5 +1,5 @@
 -- /admit [id] [time] [reason]
-TriggerEvent('es:addJobCommand', 'admit', { "ems", "fire", "police", "sheriff" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'admit', { "ems", "fire", "police", "sheriff", "corrections" }, function(source, args, user)
 	local userSource = tonumber(source)
 	local targetPlayerId = tonumber(args[2])
 	local targetPlayerAdmissionTime = tonumber(args[3])
