@@ -20,3 +20,20 @@ function sendRestartNotification()
 end
 
 sendRestartNotification()
+
+-- TODO: prevent joining on server start within certain time (breaks queue and doesn't let anyone join if people spam join after a restart?)
+local SECONDS_TO_DELAY = 30
+local ABLE_TO_JOIN = false
+
+Citizen.CreateThread(function()
+  Wait(SECONDS_TO_DELAY * 1000)
+  ABLE_TO_JOIN = true
+end)
+
+AddEventHandler('playerConnecting', function(name, setReason)
+  if not ABLE_TO_JOIN then
+    print("** Person tried to join too earlier, rejecting connection! **")
+    setReason("Please wait " .. SECONDS_TO_DELAY .. " seconds before joining.")
+    CancelEvent()
+  end
+end)

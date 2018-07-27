@@ -5,6 +5,7 @@ local MIN_AIRCRAFT_PRICE = 6000
 local prices = {
   rent = {
     ["Frogger"] = 15000,
+    ["Havok"] = 15000,
     ["Supervolito"] = 25000,
     ["Swift"] = 35000,
     ["Swift 2"] = 40000,
@@ -26,6 +27,7 @@ local prices = {
   },
   purchase = {
     ["Frogger"] = 135000,
+    ["Havok"] = 95000,
     ["Supervolito"] = 200000,
     ["Swift"] = 2750000,
     ["Swift 2"] = 300000,

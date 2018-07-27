@@ -1,6 +1,7 @@
 ITEMS = {
     helicopters = {
-        {name = "Frogger", price = 15000, buy_price = 135000, hash = 744705981},
+        {name = "Havok", price = 15000, buy_price = 95000, hash = GetHashKey("havok")},
+        {name = "Frogger", price = 20000, buy_price = 135000, hash = 744705981},
         {name = "Supervolito", price = 25000, buy_price = 200000, hash = 710198397},
         {name = "Swift", price = 35000, buy_price = 2750000, hash = -339587598},
         {name = "Swift 2", price = 40000, buy_price = 300000, hash =  1075432268},
