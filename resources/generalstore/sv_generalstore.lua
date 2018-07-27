@@ -99,7 +99,7 @@ AddEventHandler("generalStore:buyItem", function(property, item)
           table.insert(inventory, item)
           user.setActiveCharacterData("inventory", inventory)
           TriggerClientEvent("usa:notify", userSource, "Purchased: ~y~" .. item.name)
-          if property then
+          if property and property ~= 0 then
             -- give to owner of property
             print("adding money from general store to property: " .. property.name)
             TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * item.price))
@@ -116,7 +116,7 @@ AddEventHandler("generalStore:buyItem", function(property, item)
           user.setActiveCharacterData("inventory", inventory)
           print(item.number .. " ---- " .. item.owner)
           TriggerClientEvent("usa:notify", userSource, "Purchased: ~y~" .. item.name)
-          if property then
+          if property and property ~= 0 then
             -- give to owner of property
             print("adding money from general store to property: " .. property.name)
             TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * item.price))

@@ -6,7 +6,7 @@ local BASE_PAY = 200
 
 RegisterServerEvent("taxi:payDriver")
 AddEventHandler("taxi:payDriver", function(distance)
-	local reward = math.ceil(BASE_PAY + (0.40 * distance))
+	local reward = math.ceil(BASE_PAY + (0.60 * distance))
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local user_money = user.getActiveCharacterData("money")
 	user.setActiveCharacterData("money", user_money + reward)
