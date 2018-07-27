@@ -96,7 +96,7 @@ end)
 
 TriggerEvent('es:addCommand', 'revive', function(source, args, user)
 	local from = source
-	TriggerEvent('es:getPlayerFromId', from, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(from)
 		if user then
 			local targetId = 0
 			local userJob = user.getActiveCharacterData("job")
@@ -111,24 +111,21 @@ TriggerEvent('es:addCommand', 'revive', function(source, args, user)
 				user.getGroup() == "superadmin" or
 				user.getGroup() == "owner" then
 				if args[2] == nil then
-					targetId = 0
-					TriggerClientEvent("chatMessage", from, "SYSTEM", {255, 0, 0}, "Invalid command format. Ex: /revive [id]")
-					return
+					TriggerClientEvent("RPD:reviveNearestDeadPed", from)
 				else
 					targetId = tonumber(args[2])
+					TriggerClientEvent("RPD:revivePerson", targetId)
 				end
-				TriggerClientEvent("RPD:revivePerson", targetId)
 			else
 				TriggerClientEvent("chatMessage", from, "SYSTEM", {255, 0, 0}, "You don't have permissions to use this command.")
 			end
 		else
 			print("ERROR GETTING USER BY ID")
 		end
-	end)
 end, {
 	help = "Revive a player (EMS/Staff)",
 	params = {
-		{ name = "id", help = "Player's ID" }
+		{ name = "id", help = "Player's ID (omit to revive nearest ped)" }
 	}
 })
 

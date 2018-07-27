@@ -25,6 +25,11 @@ AddEventHandler("RPD:revivePerson", function()
 	TriggerEvent("crim:blindfold", false, true)
 end)
 
+RegisterNetEvent("RPD:reviveNearestDeadPed")
+AddEventHandler("RPD:reviveNearestDeadPed", function()
+	ReviveNearestDeadPed()
+end)
+
 local timer = 180000
 AddEventHandler('RPD:startTimer', function()
 	if not jailed then
@@ -135,11 +140,6 @@ Citizen.CreateThread(function()
 	--createSpawnPoint(-247, -245, 6328, 6332, 33.5, 0) -- Paleto
 	--createSpawnPoint(360.31, -590.445, 28.6563) -- LS hospital
 
-	-- TODO:
-	-- 1) if inmate dies in prison, leave them dead until a CO helps them or prison sentence ends
-	-- 2) if an inmate is dead and they get released from prison, make sure to revive them if dead (should also fix old glitch when timer would get stuck on screen)
-		-- NOTE: possibly easiest to just disable RPDeath when in prison? enable when they get released?
-
 	function respawnPed(ped,coords)
 		SetEntityCoordsNoOffset(ped, coords.x, coords.y, coords.z, false, false, false, true)
 		NetworkResurrectLocalPlayer(coords.x, coords.y, coords.z, coords.heading, true, false)
@@ -149,6 +149,26 @@ Citizen.CreateThread(function()
 		RemoveAllPedWeapons(GetPlayerPed(-1), true) -- strip weapons
 		-- remove player weapons from db
 		TriggerServerEvent("RPD:removeWeapons")
+	end
+
+	function ReviveNearestDeadPed()
+		local mycoords = GetEntityCoords(GetPlayerPed(-1))
+		for ped in exports.globals:EnumeratePeds() do
+			if ped ~= PlayerPedId() then
+				local pedcoords = GetEntityCoords(ped)
+				if IsPedDeadOrDying(ped) then
+					if Vdist(pedcoords.x, pedcoords.y, pedcoords.z, mycoords.x, mycoords.y, mycoords.z) < 5.0 then
+						local model = GetEntityModel(ped)
+						DeleteEntity(ped)
+						local clone = CreatePed(4, model, pedcoords.x, pedcoords.y, pedcoords.z, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
+						Wait(500)
+						ClearPedTasksImmediately(clone)
+						TaskWanderInArea(clone, pedcoords.x, pedcoords.y, pedcoords.z, 500.0, 100.0, 10.0)
+						return
+					end
+				end
+			end
+		end
 	end
 
 	while true do

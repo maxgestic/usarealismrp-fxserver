@@ -3,7 +3,8 @@ server_script 'sv_global.lua'
 
 -- global client functions/tables
 exports {
-  'notify'
+  'notify',
+  'EnumeratePeds'
 }
 
 -- global server functions/tables
