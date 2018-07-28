@@ -69,7 +69,7 @@ TriggerEvent('es:addJobCommand', 'inspect', { "ems", "fire", "police", "sheriff"
 end, {
 	help = "Inspect a player's wounds",
 	params = {
-		{ name = "id", help = "Player's ID" }
+		{ name = "id", help = "Player's ID (omit to search for nearest ped)" }
 	}
 })
 
