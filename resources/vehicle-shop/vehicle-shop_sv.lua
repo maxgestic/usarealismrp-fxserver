@@ -209,7 +209,7 @@ local vehicleShopItems = {
 		{make = "Ubermacht", model = "Oracle", price = 55000, hash = -511601230, storage_capacity = 165.0},
 		{make = "Enus", model = "Cognoscenti", price = 85500, hash = -2030171296, storage_capacity = 165.0},
 		{make = "Enus", model = "Super Diamond", price = 95000, hash = 1123216662, storage_capacity = 165.0},
-		{make = "Obey", model = "Tailgater", price = 115000, hash = -1008861746, storage_capacity = 165.0},
+		--{make = "Obey", model = "Tailgater", price = 115000, hash = -1008861746, storage_capacity = 165.0},
 		{make = "Chrystler", model = "300 SRT8", price = 60000, hash = -304802106, storage_capacity = 175.0},
 		{make = "Audi", model = "A8", price = 60000, hash = -1008861746, storage_capacity = 155.0},
 		{make = "Mercedes", model = "E63 AMG", price = 80000, hash = -1255452397, storage_capacity = 155.0},

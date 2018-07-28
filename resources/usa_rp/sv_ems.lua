@@ -63,6 +63,8 @@ end)
 TriggerEvent('es:addJobCommand', 'inspect', { "ems", "fire", "police", "sheriff", "corrections", "civ" }, function(source, args, user)
 	if type(tonumber(args[2])) == "number" then
 		TriggerClientEvent("EMS:inspect", tonumber(args[2]), source)
+	else
+		TriggerClientEvent("EMS:inspectNearestPed", source, source)
 	end
 end, {
 	help = "Inspect a player's wounds",

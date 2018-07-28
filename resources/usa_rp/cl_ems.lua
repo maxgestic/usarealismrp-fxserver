@@ -114,6 +114,25 @@ AddEventHandler("EMS:inspect", function(responder_id)
     end
 end)
 
+RegisterNetEvent("EMS:inspectNearestPed")
+AddEventHandler("EMS:inspectNearestPed", function(responder_id)
+  local mycoords = GetEntityCoords(GetPlayerPed(-1))
+  for ped in exports.globals:EnumeratePeds() do
+    if IsPedDeadOrDying(ped) then
+      local pedcoords = GetEntityCoords(ped)
+      if Vdist(pedcoords.x, pedcoords.y, pedcoords.z, mycoords.x, mycoords.y, mycoords.z) < 5.0 then
+        local death_cause = GetPedCauseOfDeath(ped)
+        local damage_type = GetWeaponDamageType(death_cause)
+        local killer = GetPedKiller(ped)
+        local entity_type = GetEntityType(killer)
+        TriggerServerEvent("EMS:notifyResponderOfInjuries", responder_id, entity_type, damage_type, death_cause)
+        return
+      end
+    end
+  end
+  exports.globals:notify("No injured person found!")
+end)
+
 Citizen.CreateThread(function()
     while true do
         Wait(5)
