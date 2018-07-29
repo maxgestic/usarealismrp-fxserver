@@ -4,7 +4,10 @@ server_script 'sv_global.lua'
 -- global client functions/tables
 exports {
   'notify',
-  'EnumeratePeds'
+  'EnumerateObjects',
+  'EnumeratePeds',
+  'EnumerateVehicles',
+  'EnumeratePickups',
 }
 
 -- global server functions/tables
