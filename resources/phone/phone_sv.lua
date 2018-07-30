@@ -1,73 +1,173 @@
+--# by: minipunch
+--# for USA REALISM rp
+--# Phone script to make phone calls and send texts in game with GUI phone
+--# requires database(s): "phones"
+
+local PHONES = {}
+
+function CreateNewPhone(phone)
+	if not PHONES[phone.number] then
+		TriggerEvent('es:exposeDBFunctions', function(couchdb)
+			couchdb.createDocument("phones", phone, function()
+					--PHONES[phone.number] = phone
+					print("* Phone created!! *")
+			end)
+		end)
+	else
+		print("* Error creating phone. A phone with the same number already existed. *")
+	end
+end
+
+function IsPhoneCached(number)
+	if PHONES[number] then
+		return true
+	else
+		return false
+	end
+end
+
+function GetPhoneFromCacheByNumber(number)
+	if PHONES[number] then
+		print("Phone was cached!")
+		return PHONES[number]
+	else
+		return nil
+	end
+end
+
+function GetPhoneFromDatabaseByNumber(number, cb)
+	TriggerEvent('es:exposeDBFunctions', function(couchdb)
+		couchdb.getDocumentByRow("phones", "number" , number, function(result)
+			if result then
+				print("found in DB: " .. result.number)
+				PHONES[number] = result
+				cb(result)
+			else
+				print("Error retrieving phone. Not found in cache or DB.")
+				cb(nil)
+			end
+		end)
+	end)
+end
+
+function SavePhoneWithNumber(number, phone)
+	-- update cache --
+	print("* Phone updated in cache! *")
+	PHONES[number] = phone
+	-- update DB --
+	TriggerEvent('es:exposeDBFunctions', function(couchdb)
+		couchdb.getDocumentByRow("phones", "number", number, function(result)
+			if result then
+				couchdb.updateDocument("phones", result._id, phone, function()
+					print("* Phone updated in DB! *")
+				end)
+			else
+				print("* Error saving phone to DB. Result was nil *")
+			end
+		end)
+	end)
+end
+
+function CreateNewPhoneFromExisting(src, number, cb)
+	local user = exports["essentialmode"]:getPlayerFromId(src)
+	local inventory = user.getActiveCharacterData("inventory")
+	for i = 1, #inventory do
+		if string.find(inventory[i].name, "Cell Phone") and inventory[i].number == number then
+			print("Found matching phone to transfer data from...")
+			inventory[i].conversations = {}
+			CreateNewPhone(inventory[i])
+			inventory[i].contacts = {}
+			user.setActiveCharacterData("inventory", inventory)
+			print("Phone data transfer complete!")
+			cb(inventory[i])
+		end
+	end
+end
+
 RegisterServerEvent("phone:deleteContact")
 AddEventHandler("phone:deleteContact", function(data)
-	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
-		local inventory = user.getActiveCharacterData("inventory")
-		for i = 1, #inventory do
-			local item = inventory[i]
-			if string.find(item.name, "Cell Phone") and item.number == data.phone then
-				local contacts = item.contacts
-				print("phone found!")
-				for j = 1, #contacts do
-					local contact = contacts[j]
-					if contact.number == data.numberToDelete then
-						print("matching contact found to delete!")
-						table.remove(contacts, j)
-						print("contact removed from table!")
-						inventory[i].contacts = contacts
-						user.setActiveCharacterData("inventory", inventory)
-						print("contact removed!")
-						for k = 1, #inventory[i].contacts do
-							print("inventory[i].contacts[k].first = " .. inventory[i].contacts[k].first)
-						end
-						return
-					end
-				end
+	local phone = nil
+	if IsPhoneCached(data.phone) then
+		phone = GetPhoneFromCacheByNumber(data.phone)
+		for i = 1, #phone.contacts do
+			local contact = phone.contacts[i]
+			if contact.number == data.numberToDelete then
+				print("Deleting contact: " .. data.numberToDelete)
+				table.remove(phone.contacts, i)
+				SavePhoneWithNumber(data.phone, phone)
 				return
 			end
 		end
-	end)
+	else
+		GetPhoneFromDatabaseByNumber(data.phone, function(phone)
+			for i = 1, #phone.contacts do
+				local contact = phone.contacts[i]
+				if contact.number == data.numberToDelete then
+					print("Deleting contact: " .. data.numberToDelete)
+					table.remove(phone.contacts, i)
+					SavePhoneWithNumber(data.phone, phone)
+					return
+				end
+			end
+		end)
+	end
 end)
 
 RegisterServerEvent("phone:getContacts")
 AddEventHandler("phone:getContacts", function(number)
-	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
-		local inventory = user.getActiveCharacterData("inventory")
-		for i = 1, #inventory do
-			local item = inventory[i]
-			if string.find(item.name, "Cell Phone") and item.number == number then
-				local contacts = item.contacts
-				print("retrieved contacts!")
-				TriggerClientEvent("phone:loadedContacts", userSource, contacts)
-				return
-			end
+	local usource = source
+	local phone = nil
+	if IsPhoneCached(number) then
+		phone = GetPhoneFromCacheByNumber(number)
+		if phone then
+			TriggerClientEvent("phone:loadedContacts", usource, phone.contacts)
+		else
+			print("* Error loading phone to get contacts! *")
 		end
-	end)
+	else
+		GetPhoneFromDatabaseByNumber(number, function(phone)
+			if phone then
+				TriggerClientEvent("phone:loadedContacts", usource, phone.contacts)
+			else
+				print("* Error loading phone to get contacts! *")
+			end
+		end)
+	end
 end)
 
 RegisterServerEvent("phone:addContact")
 AddEventHandler("phone:addContact", function(data)
-	local userSource = tonumber(source)
-	local sourcePhone = data.source
-	local newContact = {
-		number = data.number,
-		first = data.first,
-		last = data.last
-	}
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
-		local inventory = user.getActiveCharacterData("inventory")
-		for i = 1, #inventory do
-			local item = inventory[i]
-			if string.find(item.name, "Cell Phone") and item.number == sourcePhone then
-				local contacts = item.contacts
-				table.insert(inventory[i].contacts, newContact)
-				user.setActiveCharacterData("inventory", inventory)
-				print("contact saved!")
-				return
-			end
+	local phone = nil
+	if IsPhoneCached(data.source) then
+		phone = GetPhoneFromCacheByNumber(data.source)
+		if phone then
+			local newContact = {
+				number = data.number,
+				first = data.first,
+				last = data.last
+			}
+			table.insert(phone.contacts, newContact)
+			SavePhoneWithNumber(data.source, phone)
+			print("* Contact added! *")
+		else
+			print("* Error getting phone to add contact! *")
 		end
-	end)
+	else
+		GetPhoneFromDatabaseByNumber(data.source, function(phone)
+			if phone then
+				local newContact = {
+					number = data.number,
+					first = data.first,
+					last = data.last
+				}
+				table.insert(phone.contacts, newContact)
+				SavePhoneWithNumber(data.source, phone)
+				print("* Contact added! *")
+			else
+				print("* Error getting phone to add contact! *")
+			end
+		end)
+	end
 end)
 
 RegisterServerEvent("phone:send911Message")
@@ -173,13 +273,12 @@ end)
 
 RegisterServerEvent("phone:sendTweet")
 AddEventHandler("phone:sendTweet", function(data)
-	TriggerEvent("es:getPlayerFromId", source, function(user)
+		local user = exports["essentialmode"]:getPlayerFromId(source)
 		if user then
 			local name = "@" .. user.getActiveCharacterData("firstName") .. "_" .. user.getActiveCharacterData("lastName")
 			name = string.lower(name)
 			TriggerClientEvent('chatMessage', -1, "[TWEET] - " .. name, {29,161,242}, data.message)
 		end
-	end)
 end)
 
 -- request phone call (p2p voice)
@@ -249,12 +348,11 @@ RegisterServerEvent("phone:sendTextToPlayer")
 AddEventHandler("phone:sendTextToPlayer", function(data)
 	local userSource = tonumber(source)
 	if type(tonumber(data.toNumber)) == "number" then --Check if phone number is valid
-		print(data.toNumber .. "is a number")
 		---------------
 		-- VARIABLES --
 		---------------
-		local toNumber = tonumber(data.toNumber)
-		local fromNumber = tonumber(data.fromNumber)
+		local toNumber = data.toNumber
+		local fromNumber = data.fromNumber
 		local toPlayer = 0
 		local fromPlayer = userSource
 		local toName = "Unknown"
@@ -267,100 +365,157 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 		-- Check all online players' inventories for a cell phone item with a phone number equal to 'toNumber' --
 		-- toNumber: the field passed in from the number field in the phone GUI
 		---------------------------------------------------------------------------------------------------------
+		-- send message to phone --
+		convoExistedForUser = false
+		if IsPhoneCached(toNumber) then
+			local target_phone = GetPhoneFromCacheByNumber(toNumber)
+			if target_phone then
+				----------------------------------------
+				-- see if conversation already exists --
+				----------------------------------------
+				for x = 1, #target_phone.conversations do
+					local conversation = target_phone.conversations[x]
+					if conversation.partnerId == fromNumber then
+						---------------------------------------------
+						-- convert to name in contact if available --
+						---------------------------------------------
+						local tmp = getNameFromContacts(target_phone, fromNumber)
+						if tmp then
+							from = tmp
+						else
+							from = fromNumber
+						end
+						-----------------------
+						-- construct message --
+						-----------------------
+						local message = {
+							timestamp = os.date("%c", os.time()),
+							from = from,
+							to = "Me",
+							message = msg
+						}
+						-----------------------
+						-- insert into convo --
+						-----------------------
+						table.insert(target_phone.conversations[x].messages, message)
+						SavePhoneWithNumber(toNumber, target_phone)
+						convoExistedForUser = true
+						--TriggerClientEvent("swayam:notification", tonumber(toPlayer), from, msg, "CHAR_DEFAULT")
+						--TriggerClientEvent("chatMessage", toPlayer, "", {}, "^3Message Received (" .. from .. "):^0 " .. msg)
+						break
+					end
+				end
+				if not convoExistedForUser then
+					local tmp = getNameFromContacts(target_phone, fromNumber)
+					if tmp then
+						from = tmp
+					else
+						from = fromNumber
+					end
+					local message = {
+						timestamp = os.date("%c", os.time()),
+						from = from,
+						to = "Me",
+						message = msg
+					}
+					local conversation = {
+						partnerName = from,
+						partnerId = fromNumber,
+						messages = {message}
+					}
+					table.insert(target_phone.conversations, 1, conversation) -- insert at front
+					SavePhoneWithNumber(toNumber, target_phone)
+					--TriggerClientEvent("swayam:notification", tonumber(toPlayer), from, msg, "CHAR_DEFAULT")
+					--TriggerClientEvent("chatMessage", toPlayer, "", {}, "^3Message Received (" .. from .. "):^0 " .. msg)
+				end
+			else
+				print("* Error sending text. Could not find target phone *")
+				return
+			end
+		else
+			GetPhoneFromDatabaseByNumber(toNumber, function(target_phone)
+				if target_phone then
+					----------------------------------------
+					-- see if conversation already exists --
+					----------------------------------------
+					for x = 1, #target_phone.conversations do
+						local conversation = target_phone.conversations[x]
+						if conversation.partnerId == fromNumber then
+							---------------------------------------------
+							-- convert to name in contact if available --
+							---------------------------------------------
+							local tmp = getNameFromContacts(target_phone, fromNumber)
+							if tmp then
+								from = tmp
+							else
+								from = fromNumber
+							end
+							-----------------------
+							-- construct message --
+							-----------------------
+							local message = {
+								timestamp = os.date("%c", os.time()),
+								from = from,
+								to = "Me",
+								message = msg
+							}
+							-----------------------
+							-- insert into convo --
+							-----------------------
+							table.insert(target_phone.conversations[x].messages, message)
+							SavePhoneWithNumber(toNumber, target_phone)
+							convoExistedForUser = true
+							--TriggerClientEvent("swayam:notification", tonumber(toPlayer), from, msg, "CHAR_DEFAULT")
+							--TriggerClientEvent("chatMessage", toPlayer, "", {}, "^3Message Received (" .. from .. "):^0 " .. msg)
+							break
+						end
+					end
+					if not convoExistedForUser then
+						local tmp = getNameFromContacts(item, fromNumber)
+						if tmp then
+							from = tmp
+						else
+							from = fromNumber
+						end
+						local message = {
+							timestamp = os.date("%c", os.time()),
+							from = from,
+							to = "Me",
+							message = msg
+						}
+						local conversation = {
+							partnerName = from,
+							partnerId = fromNumber,
+							messages = {message}
+						}
+						table.insert(target_phone.conversations, 1, conversation) -- insert at front
+						SavePhoneWithNumber(toNumber, target_phone)
+						--TriggerClientEvent("swayam:notification", tonumber(toPlayer), from, msg, "CHAR_DEFAULT")
+						--TriggerClientEvent("chatMessage", toPlayer, "", {}, "^3Message Received (" .. from .. "):^0 " .. msg)
+					end
+				else
+					print("* Error sending text. Could not find target phone *")
+					return
+				end
+			end)
+		end
+		-- notify player if online --
 		TriggerEvent("es:getPlayers", function(players)
 			local allPlayers = players
 			if allPlayers then
 				for id, player in pairs(allPlayers) do
 					if id and player then
-						--print("searching inventory items of player at: " .. id .. " for a cell phone with toNumber")
+						-- search inventory items of player at [id] for a cell phone with toNumber --
 						local inventory = player.getActiveCharacterData("inventory")
 						if inventory then
-							--//Check entire user inventory for toNumber phone
+							-- Check entire user inventory for toNumber phone --
 							for j = 1, #inventory do
-								if inventory[j] then
+								if inventory[j].name and inventory[j].number then
 									-- check for a matching phone number in player items
-									if string.find(inventory[j].name, "Cell Phone") and tonumber(inventory[j].number) == tonumber(toNumber) then
-										--print("phone found with toNumber...")
-										-- phone found with toNumber
-										convoExistedForUser = false
-										toPlayer = tonumber(id)
-										--toName = inventory[j].owner
-										-- Add conversation to and from phone
-										item = inventory[j]
-										-- Check for existing conversation with fromNumber
-										for x = 1, #item.conversations do
-											local conversation = item.conversations[x]
-											-- does this phone already have a conversation with that phone number?
-											if conversation.partnerId == fromNumber then
-												--print("Player #" .. toPlayer .. " had existing convo with partnerId = " .. fromNumber)
-												-- see if that number is in this phone's contact list, if so set the from sender name to the readable name
-												if getNameFromContacts(item, fromNumber) then
-													from = getNameFromContacts(item, fromNumber)
-												else
-													from = fromNumber
-												end
-												local message = {
-													timestamp = os.date("%c", os.time()),
-													from = from,
-													--to = item.owner,
-													to = "Me",
-													message = msg
-												}
-												if #inventory[j].conversations[x].messages >= 8 then table.remove(inventory[j].conversations[x].messages, 1) print("removed message! maxed out!") end
-												table.insert(inventory[j].conversations[x].messages, message)
-												player.setActiveCharacterData("inventory", inventory)
-												convoExistedForUser = true
-												TriggerClientEvent("swayam:notification", userSource, "Whiz Wireless", "Message Sent.", "CHAR_MP_DETONATEPHONE")
-												TriggerClientEvent("swayam:notification", tonumber(toPlayer), from, msg, "CHAR_DEFAULT")
-												messageSent = true
-												--print("matching convo found for player receiving text!")
-												TriggerClientEvent("chatMessage", toPlayer, "", {}, "^3Message Received (" .. from .. "):^0 " .. msg)
-												--TriggerClientEvent("swayam:notification", toPlayer, "From Someone", "Some Message", "CHAR_DEFAULT")
-												--return
-												break
-											end
-										end
-										if not convoExistedForUser then
-											--print("no convo found for users! creating and inserting now!")
-											-- no previous converstaion with that partner, create new one
-											-- see if that number is in this phone's contact list, if so set the from sender name to the readable name
-											if getNameFromContacts(item, fromNumber) then
-												from = getNameFromContacts(item, fromNumber)
-												--print("name set for from field!!")
-											else
-												from = fromNumber
-												print("name not set for from field!!")
-											end
-											print("creating text message...")
-											--print("from = " .. from)
-											--print("to = 'Me'")
-											--print("msg = " .. msg)
-											local message = {
-												timestamp = os.date("%c", os.time()),
-												from = from,
-												--to = item.owner,
-												to = "Me",
-												message = msg
-											}
-											print("creating conversation...")
-											--print("partnerName = " .. fromName)
-											--print("partnerId = " .. fromNumber)
-											local conversation = {
-												partnerName = from,
-												partnerId = fromNumber,
-												messages = {message}
-											}
-											if #inventory[j].conversations > 6 then table.remove(inventory[j].conversations) print("removed conversation! maxed out!") end
-											table.insert(inventory[j].conversations, 1, conversation) -- insert at front
-											player.setActiveCharacterData("inventory", inventory)
-											TriggerClientEvent("swayam:notification", userSource, "Whiz Wireless", "Message Sent.", "CHAR_MP_DETONATEPHONE")
-											TriggerClientEvent("swayam:notification", tonumber(toPlayer), from, msg, "CHAR_DEFAULT")
-											--TriggerClientEvent("swayam:notification", tonumber(toPlayer), "From Someone", "Some Message", "CHAR_DEFAULT")
-											messageSent = true
-											--print("convo inserted!")
-											TriggerClientEvent("chatMessage", toPlayer, "", {}, "^3Message Received (" .. from .. "):^0 " .. msg)
-											--return
-										end
+									if string.find(inventory[j].name, "Cell Phone") and inventory[j].number == toNumber then
+										TriggerClientEvent("swayam:notification", id, from, msg, "CHAR_DEFAULT")
+										TriggerClientEvent("chatMessage", id, "", {}, "^3Message Received (" .. from .. "):^0 " .. msg)
+										return
 									end
 								end
 							end
@@ -369,172 +524,208 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 				end
 			end
 		end)
-		--print("SECOND HALF! INSERTING MSG INTO SENDING PLAYER CELL PHONE")
-		if messageSent == true then
-			--print("messageSent = true!")
+		-- SECOND HALF! INSERTING MSG INTO SENDING PLAYER CELL PHONE --
+		--if messageSent == true then
 			convoExistedForUser = false
-			TriggerEvent('es:getPlayerFromId', tonumber(userSource), function(user)
-				local inventory = user.getActiveCharacterData("inventory")
-				for j = 1, #inventory do
-					if tonumber(inventory[j].number) == tonumber(fromNumber) then
-						--print("found matching fromNumber!")
-						item = inventory[j]
-						for x = 1, #item.conversations do
-							local conversation = item.conversations[x]
-							if conversation.partnerId == toNumber then
-								--print("player already had a conversation with that toNumber!")
-								-- see if that number is in this phone's contact list, if so set the from sender name to the readable name
-								if getNameFromContacts(item, toNumber) then
-									toName = getNameFromContacts(item, toNumber)
-									--print("name set for from toName!!")
-								else
-									toName = toNumber
-									--print("name not set for from toName!!")
-								end
-								print("creating text message...")
-								--print("from = Me")
-								--print("to = " .. toName)
-								--print("msg = " .. msg)
-								local message = {
-									timestamp = os.date("%c", os.time()),
-									from = "Me",
-									to = toName,
-									message = msg
-								}
-								if #inventory[j].conversations[x].messages > 8 then table.remove(inventory[j].conversations[x].messages, 1) print("removed message! maxed out!") end
-								table.insert(inventory[j].conversations[x].messages, message)
-								user.setActiveCharacterData("inventory", inventory)
-								convoExistedForUser = true
-								--print("convo also existed for the user who sent the text message!")
-							end
+			if IsPhoneCached(fromNumber) then
+				local item = GetPhoneFromCacheByNumber(fromNumber)
+				for x = 1, #item.conversations do
+					local conversation = item.conversations[x]
+					if conversation.partnerId == toNumber then
+						local tmp = getNameFromContacts(item, toNumber)
+						if tmp then
+							toName = tmp
+						else
+							toName = toNumber
 						end
-						if not convoExistedForUser then
-							print("no convo found for users! creating and inserting now!")
-							-- no previous converstaion with that partner, create new one
+						print("creating text message...")
+						local message = {
+							timestamp = os.date("%c", os.time()),
+							from = "Me",
+							to = toName,
+							message = msg
+						}
+						table.insert(item.conversations[x].messages, message)
+						SavePhoneWithNumber(fromNumber, item)
+						convoExistedForUser = true
+					end
+				end
+				if not convoExistedForUser then
+					print("no convo found for users! creating and inserting now!")
+					-- no previous converstaion with that partner, create new one
+					-- see if that number is in this phone's contact list, if so set the from sender name to the readable name
+					local tmp = getNameFromContacts(item, toNumber)
+					if tmp then
+						toName = tmp
+					else
+						toName = toNumber
+					end
+					print("creating text message...")
+					local message = {
+						timestamp = os.date("%c", os.time()),
+						from = "Me",
+						to = toName,
+						message = msg
+					}
+					print("creating conversation...")
+					local conversation = {
+						partnerName = toName,
+						partnerId = toNumber,
+						messages = {message}
+					}
+					table.insert(item.conversations, 1, conversation) -- insert at front
+					SavePhoneWithNumber(fromNumber, item)
+				end
+				TriggerClientEvent("swayam:notification", userSource, "Whiz Wireless", "Message Sent.", "CHAR_MP_DETONATEPHONE")
+			else
+				GetPhoneFromDatabaseByNumber(fromNumber, function(item)
+					for x = 1, #item.conversations do
+						local conversation = item.conversations[x]
+						if conversation.partnerId == toNumber then
+							--print("player already had a conversation with that toNumber!")
 							-- see if that number is in this phone's contact list, if so set the from sender name to the readable name
-							if getNameFromContacts(item, toNumber) then
-								toName = getNameFromContacts(item, toNumber)
-								--print("name set for from toName!!")
+							local tmp = getNameFromContacts(item, toNumber)
+							if tmp then
+								toName = tmp
 							else
 								toName = toNumber
-								--print("name not set for from toName!!")
 							end
 							print("creating text message...")
-							--print("from = Me")
-							--print("to = " .. toName)
-							--print("msg = " .. msg)
 							local message = {
 								timestamp = os.date("%c", os.time()),
 								from = "Me",
 								to = toName,
 								message = msg
 							}
-							print("creating conversation...")
-							--print("partnerName = " .. toName)
-							--print("partnerId = " .. toNumber)
-							local conversation = {
-								partnerName = toName,
-								partnerId = toNumber,
-								messages = {message}
-							}
-							if #inventory[j].conversations > 6 then table.remove(inventory[j].conversations) print("removed conversation! maxed out!") end
-							table.insert(inventory[j].conversations, 1, conversation) -- insert at front
-							user.setActiveCharacterData("inventory", inventory)
-							--print("convo inserted!")
+							table.insert(item.conversations[x].messages, message)
+							SavePhoneWithNumber(fromNumber, item)
+							convoExistedForUser = true
 						end
 					end
-				end
-			end)
-		else
-			TriggerClientEvent("swayam:notification", userSource, "Whiz Wireless", "Number does not exist or out of coverage area. Please check the number and try again.", "CHAR_MP_DETONATEPHONE")
-		end
+					if not convoExistedForUser then
+						print("no convo found for users! creating and inserting now!")
+						-- no previous converstaion with that partner, create new one
+						-- see if that number is in this phone's contact list, if so set the from sender name to the readable name
+						local tmp = getNameFromContacts(item, toNumber)
+						if tmp then
+							toName = tmp
+						else
+							toName = toNumber
+						end
+						print("creating text message...")
+						local message = {
+							timestamp = os.date("%c", os.time()),
+							from = "Me",
+							to = toName,
+							message = msg
+						}
+						print("creating conversation...")
+						local conversation = {
+							partnerName = toName,
+							partnerId = toNumber,
+							messages = {message}
+						}
+						table.insert(item.conversations, 1, conversation) -- insert at front
+						SavePhoneWithNumber(fromNumber, item)
+						TriggerClientEvent("swayam:notification", userSource, "Whiz Wireless", "Message Sent.", "CHAR_MP_DETONATEPHONE")
+					end
+				end)
+			end
+		--else
+			--TriggerClientEvent("swayam:notification", userSource, "Whiz Wireless", "Number does not exist or out of coverage area. Please check the number and try again.", "CHAR_MP_DETONATEPHONE")
+		--end
 	else -- Phone number is invalid
 		TriggerClientEvent("swayam:notification", userSource, "Whiz Wireless", "Please check the number and try again.", "CHAR_MP_DETONATEPHONE")
 	end
 end)
 
-RegisterServerEvent("phone:checkForPhone")
-AddEventHandler("phone:checkForPhone", function()
-	TriggerEvent("es:getPlayerFromId", source, function(user)
-		local inventory = user.getActiveCharacterData("inventory")
-		for i = 1, #inventory do
-			local item = inventory[i]
-			if item.name == "Cell Phone" then
-				TriggerClientEvent("phone:openPhone", source)
-				return
+RegisterServerEvent("phone:loadAndOpenPhone")
+AddEventHandler("phone:loadAndOpenPhone", function(number)
+	local usource = source
+	if IsPhoneCached(number) then
+		local phone = GetPhoneFromCacheByNumber(number)
+		print("returning with phone with number: " .. phone.number)
+		TriggerClientEvent("phone:openPhone", usource, phone)
+	else
+		GetPhoneFromDatabaseByNumber(number, function(phone)
+			if phone then
+				print("returning phone from DB with number: " .. phone.number)
+				TriggerClientEvent("phone:openPhone", usource, phone)
+			else
+				print("creating phone in DB...")
+				CreateNewPhoneFromExisting(usource, number, function(new_phone)
+					TriggerClientEvent("phone:openPhone", usource, new_phone)
+				end)
 			end
-		end
-		-- at this point, the player has no cell phone
-		TriggerClientEvent("chatMessage", source, "", {}, "^3You do not own a cell phone!")
-		--print("found no cell phone on player! not opening cell phone ui!")
-	end)
+		end)
+	end
 end)
 
 RegisterServerEvent("phone:loadMessages")
 AddEventHandler("phone:loadMessages", function(number)
-	TriggerEvent("es:getPlayerFromId", source, function(user)
+	local usource = source
+	if IsPhoneCached(number) then
+		local phone = GetPhoneFromCacheByNumber(number)
+		print("getting messages from phone with number: " .. phone.number)
 		local conversationsToSendToPhone = {}
-		local inventory = user.getActiveCharacterData("inventory")
-		for i = 1, #inventory do
-			local item = inventory[i]
-			if string.find(item.name, "Cell Phone") and item.number == number then
-				local conversations = item.conversations
-				if conversations then
-					print("loaded phone conversations with #: " .. #conversations)
-
-					for j = 1, 10 do
-						--print("inserted convo #" .. j)
-						table.insert(conversationsToSendToPhone, conversations[j])
-					end
-
-					TriggerClientEvent("phone:loadedMessages", source, conversationsToSendToPhone)
+		if phone then
+			for i = 1, 10 do
+				if phone.conversations[i] then
+					print("adding conversation from cache #" .. i)
+					table.insert(conversationsToSendToPhone, phone.conversations[i])
+				else
+					break
 				end
 			end
+			TriggerClientEvent("phone:loadedMessages", usource, conversationsToSendToPhone)
+		else
+			print("* Error retrieving phone to load messages from! *")
 		end
-	end)
+	else
+		GetPhoneFromDatabaseByNumber(number, function(phone)
+			local conversationsToSendToPhone = {}
+			if phone then
+				for i = 1, 10 do
+					if phone.conversations[i] then
+						print("adding conversation from db: #" .. i)
+						table.insert(conversationsToSendToPhone, phone.conversations[i])
+					else
+						break
+					end
+				end
+				TriggerClientEvent("phone:loadMessages", usource, conversationsToSendToPhone)
+			else
+				print("* Error retrieving phone to load messages from! *")
+			end
+		end)
+	end
 end)
 
 RegisterServerEvent("phone:getMessagesWithThisId")
-AddEventHandler("phone:getMessagesWithThisId", function(targetId)
-	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
-		local inventory = user.getActiveCharacterData("inventory")
-		for i = 1, #inventory do
-			local item = inventory[i]
-			if string.find(item.name, "Cell Phone") then
-				local conversations = item.conversations
-				for x = 1, #conversations do
-					print("checking conversation #" .. x)
-					if conversations[x].partnerId == tonumber(targetId) then
-						print("found matching conversation for id: " .. targetId)
-						print("#conversations[x].messages = " .. #(conversations[x].messages))
-						TriggerClientEvent("phone:loadedMessagesFromId", userSource, conversations[x].messages, targetId)
-						return
-					end
-				end
-				-- no matching conversation found
+AddEventHandler("phone:getMessagesWithThisId", function(targetId, sourcePhone)
+	local usource = source
+	-- load phone --
+	if IsPhoneCached(sourcePhone) then
+		local phone = GetPhoneFromCacheByNumber(sourcePhone)
+		-- load conversation messages with specified ID --
+		local conversations = phone.conversations
+		for x = 1, #conversations do
+			if conversations[x].partnerId == targetId then
+				TriggerClientEvent("phone:loadedMessagesFromId", usource, conversations[x].messages, targetId)
+				return
 			end
 		end
-		-- no cell phone found
-	end)
-end)
-
---//To test phone:sendTextToPlayer args[2] = message, args[3] = toNumber, args[4] = fromNumber, args[5] = fromName
-TriggerEvent('es:addCommand', 'testsms', function(source, args, user)
-	if user.getGroup() == "admin" or user.getGroup() == "superadmin" or user.getGroup() == "owner" then
-		if args[2] and args[3] and args[4] and args[5] then
-			data = {
-				message = args[2],
-				id = args[3],
-				fromId = args[4],
-				fromName = args[5]
-			}
-			TriggerEvent("phone:sendTextToPlayer", source, data)
-		else
-			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "USAGE: /testsms message toNumber fromNumber fromName")
-		end
 	else
-		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "You're not authorized to use this command!")
+		GetPhoneFromDatabaseByNumber(sourcePhone, function(phone)
+			-- load conversation messages with specified ID --
+			local conversations = phone.conversations
+			for x = 1, #conversations do
+				if conversations[x].partnerId == targetId then
+					TriggerClientEvent("phone:loadedMessagesFromId", usource, conversations[x].messages, targetId)
+					return
+				end
+			end
+		end)
 	end
 end)
 
@@ -559,7 +750,7 @@ end
 -- show phone number command --
 TriggerEvent('es:addCommand', 'phonenumber', function(source, args, user, location)
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+		local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local inventory = user.getActiveCharacterData("inventory")
 		for i = 1, #inventory do
 			local item = inventory[i]
@@ -567,5 +758,4 @@ TriggerEvent('es:addCommand', 'phonenumber', function(source, args, user, locati
 				TriggerClientEvent('chatMessageLocation', -1, "", {}, " ^0" .. user.getActiveCharacterData("fullName") .. " writes down number: " .. item.number, location)
 			end
 		end
-	end)
-end, { help = "Write down your phone number for those around you."})
+end, { help = "Write down your phone number(s) for those around you."})

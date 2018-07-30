@@ -105,12 +105,11 @@ AddEventHandler("generalStore:buyItem", function(property, item)
             TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * item.price))
           end
         else
-          --Generate number
-          --Add Registered Owner
-          --print(os.time())
           item.number = string.sub(tostring(os.time()), -8)
           item.owner = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
           item.name = item.name .. " - " .. item.number
+          exports["phone"]:CreateNewPhone(item)
+          -- insert dummie item --
           local inventory = user.getActiveCharacterData("inventory")
           table.insert(inventory, item)
           user.setActiveCharacterData("inventory", inventory)

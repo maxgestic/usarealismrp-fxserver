@@ -1,3 +1,8 @@
+--# by: minipunch
+--# for USA REALISM rp
+--# Phone script to make phone calls and send texts in game with GUI phone
+--# requires database(s): "phones"
+
 local scenario = "WORLD_HUMAN_STAND_MOBILE"
 local startedTask = false
 local on_call = false
@@ -26,11 +31,11 @@ local phoneEnabled = false
 
 function EnableGui(enable, phone)
 	print("inside of enablegui with phone = " .. type(phone))
-    SetNuiFocus(enable, enable)
-    phoneEnabled = enable
+	SetNuiFocus(enable, enable)
+	phoneEnabled = enable
 	SendNUIMessage({
-	    type = "enableui",
-	    enable = enable,
+		type = "enableui",
+		enable = enable,
 		phone = phone
 	})
 end
@@ -64,12 +69,9 @@ end)
 
 RegisterNetEvent("phone:openPhone")
 AddEventHandler("phone:openPhone", function(phone)
-	if phone then
-		print("inside of phone:openPhone with phone set!")
-    	EnableGui(true, phone)
-	else
-		EnableGui(true)
-	end
+	print("opening phone: " .. type(phone))
+	print("opening phone with number: " .. phone.number)
+	EnableGui(true, phone)
 end)
 
 RegisterNUICallback('deleteContact', function(data, cb)
@@ -89,8 +91,9 @@ end)
 
 RegisterNUICallback('getMessagesFromConvo', function(data, cb)
 	local partnerId = data.partnerId
+	local sourcePhone = data.sourcePhone
 	Citizen.Trace("partnerId = " .. partnerId)
-	TriggerServerEvent("phone:getMessagesWithThisId", partnerId)
+	TriggerServerEvent("phone:getMessagesWithThisId", partnerId, sourcePhone)
 end)
 
 RegisterNUICallback('getMessages', function(data, cb)
@@ -101,7 +104,7 @@ end)
 -- request a phone call with user inputted phone number:
 RegisterNUICallback('requestCall', function(data, cb)
 	--print(data.from_number .. " is requesting a phone call with #: " .. data.phone_number)
-	if tonumber(data.phone_number) then 
+	if tonumber(data.phone_number) then
 		TriggerServerEvent("phone:requestCall", data)
 	else
 		--print("invalid phone number format to call")
@@ -156,8 +159,6 @@ Citizen.CreateThread(function()
 					-------------------
 					-- play ringtone --
 					-------------------
-					--PlaySoundFrontend(-1, "HACKING_CLICK_GOOD", 0, 1)
-					--PlaySoundFrontend(-1, "GOLF_NEW_RECORD", "HUD_AWARDS", 1)
 					PlaySoundFrontend(-1, "HACKING_CLICK_GOOD", 0, 1)
 				end
 				-- decrement each second --
@@ -176,8 +177,6 @@ end)
 RegisterNetEvent("phone:startCall")
 AddEventHandler("phone:startCall", function(phone_number, partner_source)
 	NetworkSetVoiceChannel(tonumber(phone_number))
-	--print("call started with: " .. phone_number)
-	--print("partner_source: " .. partner_source)
 	on_call = true
 	partner_call_source = partner_source
 end)
@@ -326,17 +325,14 @@ Citizen.CreateThread(function()
 			if IsControlJustPressed(1, 177) then -- BACKSPACE key
 				on_call = false
 				NetworkClearVoiceChannel()
-				--print("phone call ended!")
-				--DeleteObject(cellphone_object)
-				--cellphone_object = nil
 				ClearPedTasks(GetPlayerPed(-1))
 				TriggerServerEvent("phone:endedCall", partner_call_source) -- notify caller of hang up
 				TriggerEvent("swayam:notification", "Whiz Wireless", "Call ~r~ended~w~.", "CHAR_MP_DETONATEPHONE")
 			end
 			-- display help message
 			DrawSpecialText("Press ~y~BACKSPACE~w~ to hang up!")
-		else 
-			if cellphone_object then 
+		else
+			if cellphone_object then
 				DeleteObject(cellphone_object)
 				cellphone_object = nil
 			end

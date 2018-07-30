@@ -1,3 +1,8 @@
+//# by: minipunch
+//# for USA REALISM rp
+//# Phone script to make phone calls and send texts in game with GUI phone
+//# requires database(s): "phones"
+
 /*
     ================
     PHONE VARIABLES
@@ -46,9 +51,9 @@ $(function() {
             loadedConversations = event.data.conversations;
             for (var convo in loadedConversations) {
                // first reset to prevent duplications
-                // add person
-                $("#text-message-app-home section").append("<div class='textMessageConvoBtn' data-id='" + loadedConversations[convo].partnerId + "'>" + loadedConversations[convo].partnerName + "</div>");
-				$("#text-message-app-home section").css("overflow-y", "scroll");
+              // add person
+              $("#text-message-app-home section").append("<div class='textMessageConvoBtn' data-id='" + loadedConversations[convo].partnerId + "'>" + loadedConversations[convo].partnerName + "</div>");
+				       $("#text-message-app-home section").css("overflow-y", "scroll");
             }
         } else if (event.data.type == "messagesHaveLoaded") {
             var messages = event.data.messages;
@@ -230,7 +235,8 @@ $(function() {
         var partnerName = $(this).text();
         var partnerId = $(this).attr("data-id");
         $.post('http://phone/getMessagesFromConvo', JSON.stringify({
-            partnerId: partnerId
+            partnerId: partnerId,
+            sourcePhone: phone.number
         }));
     });
 

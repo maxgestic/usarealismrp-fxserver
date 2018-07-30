@@ -11,3 +11,8 @@ files {
     'html/style.css',
     'html/samsung-phone.png'
 }
+
+server_exports {
+  'CreateNewPhone',
+  'GetPhoneFromNumber'
+}
