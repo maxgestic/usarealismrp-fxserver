@@ -227,14 +227,35 @@ end
 function exposedDB.createDocument(db, rows, cb)
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/_uuids", function(err, rText, headers)
 		PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. json.decode(rText).uuids[1], function(err, rText, headers)
-			if err == 0 then
-				cb(true, 0)
+			rText = json.decode(rText)
+			if rText.ok then
+				cb(true)
 			else
-				cb(false, rText)
+				cb(false)
 			end
 		end, "PUT", json.encode(rows), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 	end, "GET", "", {Authorization = "Basic " .. auth})
 end
+
+function exposedDB.createDocumentWithId(db, rows, docid, cb)
+	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/_uuids", function(err, rText, headers)
+		local id
+		if not docid then
+			id = json.decode(rText).uuids[1]
+		else
+			id = docid
+		end
+		PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. id, function(err, rText, headers)
+			rText = json.decode(rText)
+			if rText.ok then
+				cb(true)
+			else
+				cb(false)
+			end
+		end, "PUT", json.encode(rows), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
+	end, "GET", "", {Authorization = "Basic " .. auth})
+end
+
 --[[
 function exposedDB.getAllDocumentsFromDb(db, callback)
 	local qu = {keys = {'true'}}
@@ -252,11 +273,11 @@ function exposedDB.getAllDocumentsFromDb(db, callback)
 	end, "GET", "", {["Content-Type"] = 'application/json'})
 end
 --]]
+
 function exposedDB.getDocumentByRow(db, row, value, callback)
 	local qu = {selector = {[row] = value}}
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/_find", function(err, rText, headers)
 		local t = json.decode(rText)
-
 		if(t)then
 			if t.docs then
 				if(t.docs[1])then

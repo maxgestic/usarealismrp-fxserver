@@ -45,7 +45,8 @@ $(function() {
             cursor.style.display = event.data.enable ? "block" : "none";
             document.body.style.display = event.data.enable ? "block" : "none";
             if (event.data.enable) {
-                phone = event.data.phone;
+                phone.number = event.data.number;
+                phone.owner = event.data.owner;
             }
         } else if (event.data.type == "textMessage") {
             loadedConversations = event.data.conversations;

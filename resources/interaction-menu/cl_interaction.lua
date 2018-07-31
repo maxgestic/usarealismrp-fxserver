@@ -435,8 +435,7 @@ function interactionMenuUse(itemName, wholeItem)
 		-------------------
 		elseif string.find(itemName, "Cell Phone") then
 			print("Player is using a cell phone from the F1 menu with its number = " .. wholeItem.number)
-			--TriggerEvent("phone:openPhone", wholeItem.number)
-			TriggerServerEvent("phone:loadAndOpenPhone", wholeItem.number)
+			TriggerEvent("phone:openPhone", wholeItem)
 		-------------------
 		-- Food Item  --
 		-------------------

@@ -33,11 +33,19 @@ function EnableGui(enable, phone)
 	print("inside of enablegui with phone = " .. type(phone))
 	SetNuiFocus(enable, enable)
 	phoneEnabled = enable
-	SendNUIMessage({
-		type = "enableui",
-		enable = enable,
-		phone = phone
-	})
+	if phone then
+		SendNUIMessage({
+			type = "enableui",
+			enable = enable,
+			number = phone.number,
+			owner = phone.owner
+		})
+	else
+		SendNUIMessage({
+			type = "enableui",
+			enable = enable
+		})
+	end
 end
 
 RegisterNetEvent("phone:loadedMessagesFromId")
@@ -69,7 +77,6 @@ end)
 
 RegisterNetEvent("phone:openPhone")
 AddEventHandler("phone:openPhone", function(phone)
-	print("opening phone: " .. type(phone))
 	print("opening phone with number: " .. phone.number)
 	EnableGui(true, phone)
 end)
