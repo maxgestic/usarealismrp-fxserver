@@ -19,6 +19,21 @@ local COORDS_TO_ALLOW_TELEPORTATION_FROM = {
 	{ x = -145.09, y = 6304.72, z = 31.55 },  -- Movies entrance
 	{ x = 320.21, y = 263.80, z = 82.97 },  -- Movie room
 	{ x = 256.459, y = -1347.748, z = 24.538 },  -- Morgue
+	{ x = 1770.7, y = 2515.5, z = 45.6 }, -- prison entrance
+	{ x = 1617.3, y = 2530.5, z = 45.7 }, -- prison yard exit 1
+	{ x = 1636.6, y = 2564.2, z = 45.6 }, -- hallway entrance 1
+	{ x = 1633.4, y = 2576.5 , z = 45.6 }, -- hallway, inside 1
+	{ x = 1655.9, y = 2576.6, z = 45.5 }, -- laundry room entrance
+	{ x = 1775.4, y = 2509.1, z = 45.6 }, -- prison yard entrance 1
+	{ x = 1658.8, y = 2575.9, z = 45.6 }, -- hallway exit 1
+	{ x = 1725.2, y = 2584.3, z = 45.6 }, -- meal room entrance from hallway
+	{ x = 1729.1, y = 2591.4, z = 45.6 }, -- meal room entrance to cell block
+	{ x = 1748.0, y = 2581.8, z = 45.6 }, -- visitor area entrance from meal room
+	{ x = 1835.4, y = 2570.9, z = 45.8 }, -- visitor area exit to meal room
+	{ x = 1840.5, y = 2578.9, z = 45.8 }, -- visitory area exit to front
+	{ x = 1725.6, y = 2566.9, z = 49.6 }, -- prison office entrance
+	{ x = 1691.1, y = 2539.2, z = 50.0 }, -- prison office exit
+	{ x = 1745.5, y = 2625.3, z = 45.6 } -- prison cell block exit to meal room
 }
 
 
