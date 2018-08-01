@@ -22,7 +22,7 @@ end
 sendRestartNotification()
 
 -- TODO: prevent joining on server start within certain time (breaks queue and doesn't let anyone join if people spam join after a restart?)
-local SECONDS_TO_DELAY = 30
+local SECONDS_TO_DELAY = 120
 local ABLE_TO_JOIN = false
 
 Citizen.CreateThread(function()

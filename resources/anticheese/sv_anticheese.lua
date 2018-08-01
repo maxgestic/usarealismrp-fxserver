@@ -253,7 +253,7 @@ Citizen.CreateThread(function()
 			local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
 
 			local msg = "```Super jump hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
-			local staff_msg = "^3*Super jump hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name	
+			local staff_msg = "^3*Super jump hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
 
 			TriggerEvent("usa:notifyStaff", staff_msg)
 			SendWebhookMessage(webhook, msg)
@@ -276,7 +276,7 @@ Citizen.CreateThread(function()
 			SendWebhookMessage(webhook, msg)
 		end
 	end)
-	
+
 	RegisterServerEvent('AntiCheese:InvisibilityFlag')
 	AddEventHandler('AntiCheese:InvisibilityFlag', function()
 		local userSource = source
@@ -287,7 +287,7 @@ Citizen.CreateThread(function()
 			local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
 
 			local msg = "```Invisibility hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
-			local staff_msg = "^3*Invisibility hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name	
+			local staff_msg = "^3*Invisibility hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
 
 			TriggerEvent("usa:notifyStaff", staff_msg)
 			SendWebhookMessage(webhook, msg)
@@ -309,9 +309,9 @@ Citizen.CreateThread(function()
 			-- if the last check in from a client was over a minute ago, anticheese resource must not be running
 			if userLifeChecks[tostring(id)] and os.time() - userLifeChecks[tostring(id)] > 60 then
 				print("*****Player disabled Anticheese (source: #" .. id .. ")!!****")
-				local license, steam, steamName, name = GetPlayerInfo(userSource)
+				local license, steam, steamName, name = GetPlayerInfo(id)
 
-				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
+				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(id)
 
 				local msg = "```Hacker disabled Anticheese!\nID #: " .. id .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
 				local staff_msg = "^3*Hacker disabled Anticheese!* ID #: ^0" .. id .. "^3, Name: ^0" .. name
@@ -341,7 +341,7 @@ end)
 
 RegisterServerEvent('AntiCheese:memoryHackCheckResponse')
 AddEventHandler('AntiCheese:memoryHackCheckResponse', function(weapon)
-	
+
 end)
 ]]
 function isStaffMember(src)
