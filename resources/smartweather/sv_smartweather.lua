@@ -20,13 +20,13 @@ manualWeathers = {
 weatherTree = {
 	["EXTRASUNNY"] = {
 		{"CLEAR", 37},
-		{"SMOG", 25},
+		{"SMOG", 15},
 	},
 	["SMOG"] = {
 		{"FOGGY", 20},
 		{"CLEAR", 20},
 		{"CLEARING", 10},
-		{"OVERCAST", 10},
+		{"OVERCAST", 7},
 		{"CLOUDS", 15},
 		{"EXTRASUNNY", 10},
 	},
@@ -36,21 +36,21 @@ weatherTree = {
 		{"CLEARING", 10},
 		{"SMOG", 14},
 		{"FOGGY", 10},
-		{"OVERCAST", 10},
+		{"OVERCAST", 7},
 	},
 	["CLOUDS"] = {
 		{"CLEAR", 12},
 		{"SMOG", 10},
 		{"FOGGY", 10},
 		{"CLEARING", 20},
-		{"OVERCAST", 20},
+		{"OVERCAST", 10},
 		{"SNOWLIGHT", 5},
 	},
 	["FOGGY"] = {
 		{"CLEAR", 15},
 		{"CLOUDS", 20},
 		{"SMOG", 15},
-		{"OVERCAST", 15},
+		{"OVERCAST", 8},
 	},
 	["OVERCAST"] = {
 		{"CLEAR", 10},
@@ -72,7 +72,7 @@ weatherTree = {
 	["CLEARING"] = {
 		{"CLEAR", 30},
 		{"CLOUDS", 14},
-		{"OVERCAST", 14},
+		{"OVERCAST", 10},
 		{"FOGGY", 12},
 		{"SMOG", 10},
 		{"RAIN", 5},
@@ -157,7 +157,7 @@ function updateWeather()
 			print("ERROR: Current weather is not in weatherTree")
 			return
 		end
-		
+
 		for _, wTable in pairs(currentOptions) do
 			local weight = wTable[2]
 			if runningTotal < target and target <= weight + runningTotal then
@@ -271,7 +271,7 @@ TriggerEvent('es:addGroupCommand', 'setweather', "admin", function(source, args,
 		TriggerClientEvent('chatMessage', userSource, "SmartWeather", {200,0,0} , "Weather is already set to " .. wtype)
 		return
 	end
-	
+
 	CancelEvent() -- whatever this does...
 
 	if wtype == nil then

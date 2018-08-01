@@ -21,7 +21,7 @@ local DOORS = {
   [13] = {locked = false, coords = nil},
   [14] = {locked = false, coords = nil},
   [15] = {locked = false, coords = nil},
-  [16] = {locked = false, coords = nil},
+  [16] = {locked = true, coords = nil},
   [17] = {locked = true, coords = nil},
   [18] = {locked = true, coords = nil},
   [19] = {locked = true, coords = nil},
@@ -58,8 +58,8 @@ local DOORS = {
   [50] = {locked = true, coords = nil},
   [51] = {locked = true, coords = nil},
   [52] = {locked = true, coords = nil},
-  [52] = {locked = true, coords = nil},
-  [52] = {locked = true, coords = nil}
+  [53] = {locked = true, coords = nil},
+  [54] = {locked = true, coords = nil}
 }
 
 RegisterServerEvent("doormanager:checkDoorLock")
