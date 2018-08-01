@@ -1,4 +1,3 @@
-RegisterNetEvent('HOSPITAL:hospitalize')
 
 local isHospitalized = false
 local hospitalIdentifier = 0
@@ -15,7 +14,7 @@ local return_coords = { x = -239.493, y = 6323.375, z = 32.426 }
 	HEADING COORDINATE = randomSpawnPoint.heading
 --]]
 
-
+RegisterNetEvent('HOSPITAL:hospitalize')
 AddEventHandler('HOSPITAL:hospitalize', function(customTime, hospIdentifier)
 	isHospitalized = true
 	hospitalDuration = tonumber(customTime)

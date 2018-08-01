@@ -17,7 +17,8 @@ local COORDS_TO_ALLOW_TELEPORTATION_FROM = {
 	{ x = 1723.7, y = 2630.4, z = 45.6 }, -- jail 3
 	{ x = 1738.3, y = 2644.7, z = 45.6 },  -- jail 4
 	{ x = -145.09, y = 6304.72, z = 31.55 },  -- Movies entrance
-	{ x = 320.21, y = 263.80, z = 82.97 }  -- Movie room
+	{ x = 320.21, y = 263.80, z = 82.97 },  -- Movie room
+	{ x = 256.459, y = -1347.748, z = 24.538 },  -- Morgue
 }
 
 
@@ -62,9 +63,9 @@ end)
 
 Citizen.CreateThread(function()
 	local Seconds = 3
-	local MaxRunSpeedPerSecond = 10
-	local MaxVehSpeedPerSecond = 130
-	local MaxFlySpeedPerSecond = 150
+	local MaxRunSpeed = 10
+	local MaxVehSpeed = 130
+	local MaxFlySpeed = 150
 
 	Citizen.Wait(60000)
 	while true do
@@ -96,20 +97,20 @@ Citizen.CreateThread(function()
 			if not isAtAWarpPoint(newx, newy, newz) then
 				local dist = GetDistanceBetweenCoords(posx,posy,posz, newx,newy,newz, true)
 				if flyveh then
-					if dist > (MaxFlySpeedPerSecond * Seconds) then
+					if dist > (MaxFlySpeed * Seconds) then
 						speedhack = true
 						if IsPedStill(ped) then
 							noclip = true
 						end
 					end
 				elseif veh then
-					if dist > (MaxVehSpeedPerSecond * Seconds) then
+					if dist > (MaxVehSpeed * Seconds) then
 						speedhack = true
 						if IsPedStill(ped) then
 							noclip = true
 						end
 					end
-				elseif dist > (MaxRunSpeedPerSecond * Seconds) then
+				elseif dist > (MaxRunSpeed * Seconds) then
 					speedhack = true
 					if IsPedStill(ped) then
 						noclip = true
@@ -133,7 +134,7 @@ function isAtAWarpPoint(x, y, z)
 	for i = 1, #COORDS_TO_ALLOW_TELEPORTATION_FROM do
 		local warp_to_check_against = COORDS_TO_ALLOW_TELEPORTATION_FROM[i]
 		--print(Vdist(x, y, z, warp_to_check_against.x, warp_to_check_against.y, warp_to_check_against.z))
-		if Vdist(x, y, z, warp_to_check_against.x, warp_to_check_against.y, warp_to_check_against.z) < 30.0 then
+		if Vdist(x, y, z, warp_to_check_against.x, warp_to_check_against.y, warp_to_check_against.z) < 15.0 then
 			return true
 		end
 	end

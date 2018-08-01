@@ -6,39 +6,10 @@ Components = {
 	WeaponBlacklist = true,
 	Invisibility = true,
 }
+SPAMLIMIT = 5
+LOGSUPRESSIONTIMEOUT = SPAMLIMIT * 5 * 1000  -- SPAMLIMIT * secs * ms
+LOGSURPRESSTIME = 10 * 60 * 1000  -- mins * secs * ms (10 minutes)
 
---[[
-event examples are:
-
-anticheese:SetComponentStatus( component, state )
-	enables or disables specific components
-		component:
-			an AntiCheese component, such as the ones listed above, must be a string
-		state:
-			the state to what the component should be set to, accepts booleans such as "true" for enabled and "false" for disabled
-
-
-anticheese:ToggleComponent( component )
-	sets a component to the opposite mode ( e.g. enabled becomes disabled ), there is no reason to use this.
-		component:
-			an AntiCheese component, such as the ones listed above, must be a string
-
-anticheese:SetAllComponents( state )
-	enables or disables **all** components
-		state:
-			the state to what the components should be set to, accepts booleans such as "true" for enabled and "false" for disabled
-
-
-These can be used by triggering them like following:
-	TriggerEvent("anticheese:SetComponentStatus", "Teleport", false)
-
-Triggering these events from the clientside is not recommended as these get disabled globally and not just for one player.
-
-
-]]
-
-
---Users = {}
 violations = {}
 userLifeChecks = {}
 
@@ -48,38 +19,11 @@ webhook = "https://discordapp.com/api/webhooks/459801084316352519/aYvDyiMOIt1OZJ
 
 
 AddEventHandler('anticheese:playerDropped', function(userSource)
-	userLifeChecks[userSource] = nil
-	if(violations[userSource])then
-		violations[userSource] = nil
-	end
-end)
---[[
-RegisterServerEvent("anticheese:kick")
-AddEventHandler("anticheese:kick", function(reason)
-	DropPlayer(source, reason)
-end)
-]]
---[[  DISABLING THESE TO KEEP A CLEVER ATTACKER FROM DISABLING THEM FOR US
-AddEventHandler("anticheese:SetComponentStatus", function(component, state)
-	if type(component) == "string" and type(state) == "boolean" then
-		Components[component] = state -- changes the component to the wished status
-	end
+	local key = tostring(userSource)
+	userLifeChecks[key] = nil
+	violations[key] = nil
 end)
 
-AddEventHandler("anticheese:ToggleComponent", function(component)
-	if type(component) == "string" then
-		Components[component] = not Components[component]
-	end
-end)
-
-AddEventHandler("anticheese:SetAllComponents", function(state)
-	if type(state) == "boolean" then
-		for i,theComponent in pairs(Components) do
-			Components[i] = state
-		end
-	end
-end)
-]]
 Citizen.CreateThread(function()
 	function SendWebhookMessage(webhook,message)
 		if webhook ~= "none" then
@@ -121,6 +65,28 @@ Citizen.CreateThread(function()
 		return license, steam
 	end
 
+	function GetPlayerInfo(src)
+		local license, steam = GetPlayerNeededIdentifiers(src)
+		local steamName = GetPlayerName(src)
+		local player = exports["essentialmode"]:getPlayerFromId(src)
+		local name = player.getActiveCharacterData("fullName")
+
+		if not license then
+			license = "No License Found!"
+		end
+		if not steam then
+			steam = "No Steam ID Found!"
+		end
+		if not steamName then
+			steamName = "Could not get player's steam name"
+		end
+		if not name then
+			name = "Could not get player name"
+		end
+
+		return license, steam, steamName, name
+	end
+
 	--[[ DISABLED FOR NOW, UNTIL SPEED BECOMES A NOTICABLE ISSUE
 	RegisterServerEvent("anticheese:timer")
 	AddEventHandler("anticheese:timer", function()
@@ -139,16 +105,65 @@ Citizen.CreateThread(function()
 	end)
 	--]]
 
+	-- Have to use a stupid static variable because I cant find a way to pass information into the callback with parameters...
+	-- I have tried CreateThread and SetTimeout with many variations and zero luck. This is ugly but it works.
+	CACHE_A = nil
+	CACHE_B = nil
+	function setAlertTimeoutFor(src, timeout)
+		CACHE_A = src
+		CACHE_B = timeout
+		Citizen.CreateThread(function()
+			local cachedSrc = CACHE_A
+			Citizen.Wait(CACHE_B)
+			violations[tostring(cachedSrc)].flagTable = nil
+			violations[tostring(cachedSrc)].limitLogging = false
+		end)
+	end
+
+	-- Anti spam function for noclip/speedhack alerts
+	function limitLogging(userSource)
+		local vInfo = violations[tostring(userSource)]
+		if vInfo.limitLogging then
+			return true  -- player is currently flagged as desyncing
+		end
+		if not vInfo.flagTable then
+			vInfo.flagTable = {}
+		end
+		for i = 1, SPAMLIMIT do
+			if not vInfo.flagTable[i] then
+				if i == 1 then
+					setAlertTimeoutFor(userSource, LOGSUPRESSIONTIMEOUT)
+				end
+				vInfo.flagTable[i] = true
+				break
+			end
+		end
+		if vInfo.flagTable[SPAMLIMIT] then
+			vInfo.limitLogging = true
+			setAlertTimeoutFor(userSource, LOGSURPRESSTIME)
+			return true
+		end
+		return false
+	end
+
+	function shouldSendAlert(userSource)
+		local chance = 1
+		if limitLogging(userSource) then
+			chance = 10
+		end
+		if math.random(1, chance) > 1 then
+			return false
+		end
+		return true
+	end
+
 	RegisterServerEvent('AntiCheese:SpeedFlag')
 	AddEventHandler('AntiCheese:SpeedFlag', function(distance)
 		local userSource = source
 		if Components.Speedhack then
 			print("*****speed flag trigged (source: #" .. userSource .. ")!!****")
 			if not isStaffMember(userSource) then
-				local license, steam = GetPlayerNeededIdentifiers(userSource)
-				local player = exports["essentialmode"]:getPlayerFromId(userSource)
-				local name = player.getActiveCharacterData("fullName")
-				local steamName = GetPlayerName(userSource)
+				local license, steam, steamName, name = GetPlayerInfo(userSource)
 
 				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
 				if not isKnown then  -- don't warn on first offense
@@ -156,17 +171,8 @@ Citizen.CreateThread(function()
 					return
 				end
 
-				if not license then
-					license = "No License Found!"
-				end
-				if not steam then
-					steam = "No Steam ID Found!"
-				end
-				if not name then
-					name = "Could not get player name"
-				end
-				if not steamName then
-					steamName = "Could not get player's steam name"
+				if not shouldSendAlert(userSource) then
+					return  -- Don't send an alert
 				end
 
 				local msg = "```Speed/Teleport hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nCaught with "..math.ceil(distance).." units between last checked location\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
@@ -186,10 +192,7 @@ Citizen.CreateThread(function()
 		if Components.Speedhack then
 			print("*****noclip flag trigged (source: #" .. userSource .. ")!!****")
 			if not isStaffMember(userSource) then
-				local license, steam = GetPlayerNeededIdentifiers(userSource)
-				local player = exports["essentialmode"]:getPlayerFromId(userSource)
-				local name = player.getActiveCharacterData("fullName")
-				local steamName = GetPlayerName(userSource)
+				local license, steam, steamName, name = GetPlayerInfo(userSource)
 
 				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
 				if not isKnown then  -- don't warn on first offense
@@ -197,17 +200,8 @@ Citizen.CreateThread(function()
 					return
 				end
 
-				if not license then
-					license = "No License Found!"
-				end
-				if not steam then
-					steam = "No Steam ID Found!"
-				end
-				if not name then
-					name = "Could not get player name"
-				end
-				if not steamName then
-					steamName = "Could not get player's steam name"
+				if not shouldSendAlert(userSource) then
+					return  -- Don't send an alert
 				end
 
 				local msg = "```Noclip/Teleport hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nCaught with "..math.ceil(distance).." units between last checked location\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
@@ -222,30 +216,14 @@ Citizen.CreateThread(function()
 	end)
 
 	RegisterServerEvent('AntiCheese:HealthFlag')
-	AddEventHandler('AntiCheese:HealthFlag', function(invincible,oldHealth, newHealth, curWait)
+	AddEventHandler('AntiCheese:HealthFlag', function(invincible, oldHealth, newHealth, curWait)
 		local userSource = source
 		if Components.GodMode then
 			print("*****health flag trigged (source: #" .. userSource .. ")!!****")
 			if not isStaffMember(userSource) then
-				local license, steam = GetPlayerNeededIdentifiers(userSource)
-				local player = exports["essentialmode"]:getPlayerFromId(userSource)
-				local name = player.getActiveCharacterData("fullName")
-				local steamName = GetPlayerName(userSource)
+				local license, steam, steamName, name = GetPlayerInfo(userSource)
 
 				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
-
-				if not license then
-					license = "No License Found!"
-				end
-				if not steam then
-					steam = "No Steam ID Found!"
-				end
-				if not name then
-					name = "Could not get player name"
-				end
-				if not steamName then
-					steamName = "Could not get player's steam name"
-				end
 
 				local msg, staff_msg = nil
 				if invincible then
@@ -270,25 +248,9 @@ Citizen.CreateThread(function()
 		local userSource = source
 		if Components.SuperJump then
 			print("*****super jump flag trigged (source: #" .. userSource .. ")!!****")
-			local license, steam = GetPlayerNeededIdentifiers(userSource)
-			local player = exports["essentialmode"]:getPlayerFromId(userSource)
-			local name = player.getActiveCharacterData("fullName")
-			local steamName = GetPlayerName(userSource)
+			local license, steam, steamName, name = GetPlayerInfo(userSource)
 
 			local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
-
-			if not license then
-				license = "No License Found!"
-			end
-			if not steam then
-				steam = "No Steam ID Found!"
-			end
-			if not name then
-				name = "ERROR: Could not get player name"
-			end
-			if not steamName then
-				steamName = "Could not get player's steam name"
-			end
 
 			local msg = "```Super jump hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
 			local staff_msg = "^3*Super jump hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name	
@@ -303,25 +265,9 @@ Citizen.CreateThread(function()
 		local userSource = source
 		if Components.WeaponBlacklist then
 			print("*****blacklisted weapon flag trigged (source: #" .. userSource .. ")!!****")
-			local license, steam = GetPlayerNeededIdentifiers(userSource)
-			local player = exports["essentialmode"]:getPlayerFromId(userSource)
-			local name = player.getActiveCharacterData("fullName")
-			local steamName = GetPlayerName(userSource)
+			local license, steam, steamName, name = GetPlayerInfo(userSource)
 
 			local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
-
-			if not license then
-				license = "No License Found!"
-			end
-			if not steam then
-				steam = "No Steam ID Found!"
-			end
-			if not name then
-				name = "Could not get player name"
-			end
-			if not steamName then
-				steamName = "Could not get player's steam name"
-			end
 
 			local msg = "```Weapon hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nPlayer caught with a blacklisted weapon!\nWeapon hash: "..weapon.."\nAll weapons were deleted.\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
 			local staff_msg = "^3*Player with a blacklisted weapon detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
@@ -336,25 +282,9 @@ Citizen.CreateThread(function()
 		local userSource = source
 		if Components.Invisibility then
 			print("*****invisibility flag trigged (source: #" .. userSource .. ")!!****")
-			local license, steam = GetPlayerNeededIdentifiers(userSource)
-			local player = exports["essentialmode"]:getPlayerFromId(userSource)
-			local name = player.getActiveCharacterData("fullName")
-			local steamName = GetPlayerName(userSource)
+			local license, steam, steamName, name = GetPlayerInfo(userSource)
 
 			local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
-
-			if not license then
-				license = "No License Found!"
-			end
-			if not steam then
-				steam = "No Steam ID Found!"
-			end
-			if not name then
-				name = "Could not get player name"
-			end
-			if not steamName then
-				steamName = "Could not get player's steam name"
-			end
 
 			local msg = "```Invisibility hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
 			local staff_msg = "^3*Invisibility hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name	
@@ -365,32 +295,10 @@ Citizen.CreateThread(function()
 	end)
 end)
 
-local verFile = LoadResourceFile(GetCurrentResourceName(), "version.json")
-local curVersion = json.decode(verFile).version
-Citizen.CreateThread( function()
-	local updatePath = "/Bluethefurry/anticheese-anticheat"
-	local resourceName = "AntiCheese ("..GetCurrentResourceName()..")"
-	PerformHttpRequest("https://raw.githubusercontent.com"..updatePath.."/master/version.json", function(err, response, headers)
-		local data = json.decode(response)
-
-
-		if curVersion ~= data.version and tonumber(curVersion) < tonumber(data.version) then
-			print("\n--------------------------------------------------------------------------")
-			print("\n"..resourceName.." is outdated.\nCurrent Version: "..data.version.."\nYour Version: "..curVersion.."\nPlease update it from https://github.com"..updatePath.."")
-			print("\nUpdate Changelog:\n"..data.changelog)
-			print("\n--------------------------------------------------------------------------")
-		elseif tonumber(curVersion) > tonumber(data.version) then
-			print("Your version of "..resourceName.." seems to be higher than the current version.")
-		else
-			print(resourceName.." is up to date!")
-		end
-	end, "GET", "", {version = 'this'})
-end)
-
 RegisterServerEvent('AntiCheese:LifeCheck')
 AddEventHandler('AntiCheese:LifeCheck', function()
-	local userSource = source
-	userLifeChecks[userSource] = os.time()
+	local key = tostring(source)
+	userLifeChecks[key] = os.time()
 end)
 
 Citizen.CreateThread(function()
@@ -399,27 +307,11 @@ Citizen.CreateThread(function()
 		players = GetPlayers()
 		for _, id in pairs(players) do
 			-- if the last check in from a client was over a minute ago, anticheese resource must not be running
-			if userLifeChecks[id] and os.time() - userLifeChecks[id] > 60 then
+			if userLifeChecks[tostring(id)] and os.time() - userLifeChecks[tostring(id)] > 60 then
 				print("*****Player disabled Anticheese (source: #" .. id .. ")!!****")
-				local license, steam = GetPlayerNeededIdentifiers(id)
-				local player = exports["essentialmode"]:getPlayerFromId(id)
-				local name = player.getActiveCharacterData("fullName")
-				local steamName = GetPlayerName(userSource)
+				local license, steam, steamName, name = GetPlayerInfo(userSource)
 
 				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
-
-				if not license then
-					license = "No License Found!"
-				end
-				if not steam then
-					steam = "No Steam ID Found!"
-				end
-				if not name then
-					name = "Could not get player name"
-				end
-				if not steamName then
-					steamName = "Could not get player's steam name"
-				end
 
 				local msg = "```Hacker disabled Anticheese!\nID #: " .. id .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
 				local staff_msg = "^3*Hacker disabled Anticheese!* ID #: ^0" .. id .. "^3, Name: ^0" .. name
