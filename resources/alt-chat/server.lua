@@ -21,7 +21,7 @@ TriggerEvent('es:addCommand', 'id', function(source, args, user, location)
 	showid(source, user)
 end, {help = "Present your identifcation card / DL."})
 
-function showid(u)
+function showid(source, u)
 	local char_name = u.getActiveCharacterData("fullName")
 	local dob = u.getActiveCharacterData("dateOfBirth")
 	exports["globals"]:sendLocalActionMessage(char_name .. " shows ID.", location)
