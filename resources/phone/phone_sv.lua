@@ -86,7 +86,7 @@ AddEventHandler("phone:deleteContact", function(data)
 			if contact.number == data.numberToDelete then
 				print("Deleting contact: " .. data.numberToDelete)
 				table.remove(phone.contacts, i)
-				UpdatePhoneWithNumber(data.phone, "conversations", phone.conversations)
+				UpdatePhoneWithNumber(data.phone, "contacts", phone.contacts)
 				return
 			end
 		end
@@ -252,10 +252,12 @@ AddEventHandler("phone:requestCall", function(numbers)
 								if string.find(inventory[j].name, "Cell Phone") and inventory[j].number == numbers.phone_number then
 									print("phone found with toNumber...")
 									print("requesting phone call...")
-									local caller_name = getNameFromContacts(inventory[j], numbers.from_number)
-									if caller_name then print("caller_name: " .. caller_name) else print("caller with # " .. numbers.from_number .. " not found in contacts!") caller_name = numbers.from_number end
-									TriggerClientEvent("swayam:notification", id, "Whiz Wireless", "~y~Incoming call from:~w~ " .. caller_name, "CHAR_MP_DETONATEPHONE")
-									TriggerClientEvent("phone:requestCallPermission", id, numbers.phone_number, caller_source, caller_name)
+									GetPhoneFromDatabaseByNumber(caller_source, numbers.phone_number, function(phone)
+										local caller_name = getNameFromContacts(phone, numbers.from_number)
+										if caller_name then print("caller_name: " .. caller_name) else print("caller with # " .. numbers.from_number .. " not found in contacts!") caller_name = numbers.from_number end
+										TriggerClientEvent("swayam:notification", id, "Whiz Wireless", "~y~Incoming call from:~w~ " .. caller_name, "CHAR_MP_DETONATEPHONE")
+										TriggerClientEvent("phone:requestCallPermission", id, numbers.phone_number, caller_source, caller_name)
+									end)
 								end
 							end
 						end
@@ -515,7 +517,7 @@ TriggerEvent('es:addCommand', 'phonenumber', function(source, args, user, locati
 		for i = 1, #inventory do
 			local item = inventory[i]
 			if string.find(item.name, "Cell Phone") then
-				local msg = user.getActiveCharacterData("fullName") .. " writes down number: ^0" .. item.number
+				local msg = "^0" .. user.getActiveCharacterData("fullName") .. " writes down number: " .. item.number
 				exports["globals"]:sendLocalActionMessage(msg, location)
 			end
 		end
