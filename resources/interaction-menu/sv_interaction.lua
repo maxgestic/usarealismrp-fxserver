@@ -6,7 +6,6 @@ AddEventHandler("interaction:checkJailedStatusBeforeEmote", function(scenario)
 	else
 		local scenario_name = ""
 		if scenario == "mechanic" then scenario_name = "WORLD_HUMAN_VEHICLE_MECHANIC" end
-		if scenario == "chair" then scenario_name = "PROP_HUMAN_SEAT_CHAIR" end
 		if scenario == "sit" then scenario_name = "WORLD_HUMAN_PICNIC" end
 		if scenario == "drill" then scenario_name = "WORLD_HUMAN_CONST_DRILL" end
 		if scenario == "chillin'" then scenario_name = "WORLD_HUMAN_DRUG_DEALER_HARD" end
