@@ -1,11 +1,3 @@
-function showid(u)
-	local char_name = u.getActiveCharacterData("fullName")
-	local dob = u.getActiveCharacterData("dateOfBirth")
-	exports["globals"]:sendLocalActionMessage(char_name .. " shows ID.", location)
-	local msg = "^*[ID]^r ^2Name: ^4" .. char_name .. " ^0- ^2SSN: ^4" .. source .. " ^0 - ^2DOB: ^4" .. dob
-	exports["globals"]:sendLocalActionMessage(msg, location)
-end
-
 TriggerEvent('es:addCommand', '911', function(source, args, user)
 	TriggerClientEvent('chatMessage', tonumber(source), "", {255, 255, 255}, "^3/911 is no longer a usable command, buy a phone from the general store and use it to call 911.")
 end)
@@ -22,9 +14,17 @@ TriggerEvent('es:addCommand', 'me', function(source, args, user, location)
 end, {help = "Talk as yourself doing an action.", params = {{name = "message", help = "the action"}}})
 
 TriggerEvent('es:addCommand', 'showid', function(source, args, user, location)
-	showid(user)
+	showid(source, user)
 end, {help = "Present your identifcation card / DL."})
 
 TriggerEvent('es:addCommand', 'id', function(source, args, user, location)
-	showid(user)
+	showid(source, user)
 end, {help = "Present your identifcation card / DL."})
+
+function showid(u)
+	local char_name = u.getActiveCharacterData("fullName")
+	local dob = u.getActiveCharacterData("dateOfBirth")
+	exports["globals"]:sendLocalActionMessage(char_name .. " shows ID.", location)
+	local msg = "^*[ID]^r ^2Name: ^4" .. char_name .. " ^0- ^2SSN: ^4" .. source .. " ^0 - ^2DOB: ^4" .. dob
+	exports["globals"]:sendLocalActionMessage(msg, location)
+end
