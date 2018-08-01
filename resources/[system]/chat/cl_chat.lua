@@ -45,8 +45,8 @@ end)
 
 -- Create Loction Based Messaged
 RegisterNetEvent('chatMessageLocation')
-AddEventHandler('chatMessageLocation', function(name, color, message, pos)
-	if string.sub(message, 1, string.len("/")) ~= "/" and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), pos[1], pos[2], pos[3], true) < 50 then
+AddEventHandler('chatMessageLocation', function(name, color, message, pos, range)
+	if string.sub(message, 1, string.len("/")) ~= "/" and GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), pos[1], pos[2], pos[3], true) < range then
 		local args = { message }
 		if name ~= "" then
 			table.insert(args, 1, name)

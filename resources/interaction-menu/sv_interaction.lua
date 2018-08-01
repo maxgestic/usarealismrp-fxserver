@@ -118,7 +118,7 @@ AddEventHandler("interaction:removeItemFromPlayer", function(itemName)
 end)
 
 RegisterServerEvent("interaction:dropItem")
-AddEventHandler("interaction:dropItem", function(itemName)
+AddEventHandler("interaction:dropItem", function(itemName, posX, posY, posZ)
 	local userSource = tonumber(source)
 	itemName = removeQuantityFromItemName(itemName)
 	--------------------
@@ -133,49 +133,74 @@ AddEventHandler("interaction:dropItem", function(itemName)
 	-- drop item  --
 	----------------
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		-- inventory
-		local inventory = user.getActiveCharacterData("inventory")
-		for i = 1, #inventory do
-			local item = inventory[i]
-			if item.name == itemName then
-				--print("found matching item to drop!")
-				if item.quantity > 1 then
-					inventory[i].quantity = item.quantity - 1
-					user.setActiveCharacterData("inventory", inventory)
-					return
-				else
-					if inventory[i].name == "Chicken" then
-						TriggerClientEvent("chickenJob:spawnChicken", userSource)
-					end
-					table.remove(inventory, i)
-					user.setActiveCharacterData("inventory", inventory)
-					return
+	local location = {
+		[1] = posX,
+		[2] = posY,
+		[3] = posZ
+	}
+
+	-- 1/3 chance to print notification message to all players in the area
+	math.randomseed(GetGameTimer())
+	if math.random(1, 3) == 1 then
+		local grammar = "a "
+		local iName = itemName
+		if string.sub(iName, 1, 3) == "Key" then  -- check if the item is a key
+			iName = "key"
+		elseif string.sub(iName, 1, 10) == "Cell Phone" then  -- check if the item is a phone
+			iName = "phone"
+		elseif string.sub(iName, -1) == ")" then  -- check if the item is alcohol or has info at the end
+			local i = string.find(iName, "(", 1, true)
+			iName = string.sub(iName, 1, i - 2)
+		end
+		if string.sub(iName, -1) == "s" then  -- check if the item name is plural
+			grammar = ""
+		end
+		local msg = " ^6" .. user.getActiveCharacterData("fullName") .. " discards " .. grammar .. iName .. " on the ground."
+		exports["globals"]:sendLocalActionMessage(msg, location, 10)
+	end
+
+	-- inventory
+	local inventory = user.getActiveCharacterData("inventory")
+	for i = 1, #inventory do
+		local item = inventory[i]
+		if item.name == itemName then
+			if item.quantity > 1 then
+				inventory[i].quantity = item.quantity - 1
+				user.setActiveCharacterData("inventory", inventory)
+				return
+			else
+				if inventory[i].name == "Chicken" then
+					TriggerClientEvent("chickenJob:spawnChicken", userSource)
 				end
-			end
-		end
-		-- weapons
-		local weapons = user.getActiveCharacterData("weapons")
-		for i = 1, #weapons do
-			local item = weapons[i]
-			if item.name == itemName then
-				--print("found matching item to drop!")
-				table.remove(weapons, i)
-				user.setActiveCharacterData("weapons", weapons)
-				TriggerClientEvent("interaction:equipWeapon", userSource, item, false)
+				table.remove(inventory, i)
+				user.setActiveCharacterData("inventory", inventory)
 				return
 			end
 		end
-		-- licenses
-		local licenses = user.getActiveCharacterData("licenses")
-		for i = 1, #licenses do
-			local item = licenses[i]
-			if item.name == itemName then
-				--print("found matching item to drop!")
-				table.remove(licenses, i)
-				user.setActiveCharacterData("licenses", licenses)
-				return
-			end
+	end
+	-- weapons
+	local weapons = user.getActiveCharacterData("weapons")
+	for i = 1, #weapons do
+		local item = weapons[i]
+		if item.name == itemName then
+			--print("found matching item to drop!")
+			table.remove(weapons, i)
+			user.setActiveCharacterData("weapons", weapons)
+			TriggerClientEvent("interaction:equipWeapon", userSource, item, false)
+			return
 		end
+	end
+	-- licenses
+	local licenses = user.getActiveCharacterData("licenses")
+	for i = 1, #licenses do
+		local item = licenses[i]
+		if item.name == itemName then
+			--print("found matching item to drop!")
+			table.remove(licenses, i)
+			user.setActiveCharacterData("licenses", licenses)
+			return
+		end
+	end
 end)
 
 function removeQuantityFromItemName(itemName)

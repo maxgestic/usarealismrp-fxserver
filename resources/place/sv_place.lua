@@ -4,7 +4,8 @@ TriggerEvent('es:addCommand', 'place', function(source, args, user, location)
 		if user_job == "sheriff" or user_job == "ems" or user_job == "fire" or user_job == "corrections" then
 			local tPID = tonumber(args[2])
 			TriggerClientEvent("place", tPID)
-			TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. user.getActiveCharacterData("fullName") .. " places person in vehicle.", location)
+			local msg = user.getActiveCharacterData("fullName") .. " places person in vehicle."
+			exports["globals"]:sendLocalActionMessage(msg, location)
 		else
 			TriggerClientEvent("crim:areHandsTied", tonumber(args[2]), source, tonumber(args[2]), "place")
 		end

@@ -12,6 +12,7 @@ exports {
 
 -- global server functions/tables
 server_exports {
+  "sendLocalActionMessage",
   "notifyPlayersWithJob",
   "notifyPlayersWithJobs",
   "setJob"

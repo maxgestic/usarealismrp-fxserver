@@ -150,7 +150,8 @@ end
 -- Add a command everyone is able to run. Args is a table with all the arguments, and the user is the user object, containing all the user data.
 TriggerEvent('es:addJobCommand', 'mdt', { "police", "sheriff", "judge", "corrections" }, function(source, args, user, location)
 	if GetPlayerName(tonumber(args[2])) then
-		TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. user.getActiveCharacterData("fullName") .. " opens MDT.", location)
+		local msg = user.getActiveCharacterData("fullName") .. " opens MDT."
+		exports["globals"]:sendLocalActionMessage(msg, location)
 	end
 	TriggerEvent("license:searchForLicense", source, args[2])
 end, {
@@ -192,7 +193,6 @@ TriggerEvent('es:addCommand', '28', function(source, args, user, location)
 		local plateNumber = args[2]
 		if plateNumber then
 			if string.len(plateNumber) < 7 or string.len(plateNumber) > 8 then TriggerClientEvent("usa:notify", source, "Invalid license plate format.") return end
-			--TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. user_name .. " runs plate.", location)
 			TriggerEvent("es:getPlayers", function(players)
 				for id, player in pairs(players) do
 					--print("id = " .. id)
@@ -243,7 +243,6 @@ TriggerEvent('es:addCommand', 'runplate', function(source, args, user, location)
 		local plateNumber = args[2]
 		if plateNumber then
 			if string.len(plateNumber) < 7 or string.len(plateNumber) > 8 then TriggerClientEvent("usa:notify", source, "Invalid license plate format.") return end
-			--TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^6" .. user_name .. " runs plate.", location)
 			TriggerEvent("es:getPlayers", function(players)
 				for id, player in pairs(players) do
 					--print("id = " .. id)

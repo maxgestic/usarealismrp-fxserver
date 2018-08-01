@@ -261,8 +261,8 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 		elseif actionName == "drop" then
 			if not string.find(itemName, "Driver") and not string.find(itemName, "Firearm") then
 				if not IsPedDeadOrDying(GetPlayerPed(-1), 1) and not IsPedCuffed(GetPlayerPed(-1)) then
-					TriggerEvent("interaction:notify", "Dropping item: " .. removeQuantityFromItemName(itemName))
-					TriggerServerEvent("interaction:dropItem", itemName)
+					local pos = GetEntityCoords(GetPlayerPed(-1), true)
+					TriggerServerEvent("interaction:dropItem", itemName, pos.x, pos.y, pos.z)
 				else
 					print("player who was cuffed or dead was trying to drop an item!")
 				end

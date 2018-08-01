@@ -55,7 +55,7 @@ AddEventHandler('_chat:messageEntered', function(name, color, message, location)
 	TriggerEvent('chatMessageLocation', userSource, name, message, location)
 
 	if not WasEventCanceled() then
-		TriggerClientEvent('chatMessageLocation', -1, "[Local OOC] - " .. name .. " (" .. userSource .. ")",  { 255, 255, 255 }, message, location)
+		TriggerClientEvent('chatMessageLocation', -1, "[Local OOC] - " .. name .. " (" .. userSource .. ")",  { 255, 255, 255 }, message, location, 50)
 	end
 
 	print(name .. " (" .. GetPlayerName(userSource) .. ") " .. ': ' .. message)

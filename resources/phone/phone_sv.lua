@@ -515,7 +515,8 @@ TriggerEvent('es:addCommand', 'phonenumber', function(source, args, user, locati
 		for i = 1, #inventory do
 			local item = inventory[i]
 			if string.find(item.name, "Cell Phone") then
-				TriggerClientEvent('chatMessageLocation', -1, "", {}, " ^0" .. user.getActiveCharacterData("fullName") .. " writes down number: " .. item.number, location)
+				local msg = user.getActiveCharacterData("fullName") .. " writes down number: ^0" .. item.number
+				exports["globals"]:sendLocalActionMessage(msg, location)
 			end
 		end
 end, { help = "Write down your phone number(s) for those around you."})

@@ -212,8 +212,9 @@ TriggerEvent('es:addJobCommand', 'showbadge', { "police", "sheriff" }, function(
 	local police_rank = tonumber(user.getActiveCharacterData("policeRank"))
 	local char_name = user.getActiveCharacterData("fullName")
 	if police_rank > 0 then
-		TriggerClientEvent('chatMessageLocation', -1, "", {255, 0, 0}, " ^0" .. char_name .. " shows official police badge.", location)
-		TriggerClientEvent('chatMessageLocation', -1, "[ID]", {171, 67, 227}, "^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2Police Rank: ^0" .. GetRankName(police_rank), location)
+		exports["globals"]:sendLocalActionMessage(char_name .. " shows official police badge.", location)
+		local msg = "^*[ID]^r ^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2Police Rank: ^0" .. GetRankName(police_rank)
+		exports["globals"]:sendLocalActionMessage(msg, location)
 	end
 
 end, { help = "Present your official police or EMS identification." })
