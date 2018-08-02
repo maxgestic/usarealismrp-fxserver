@@ -1,118 +1,103 @@
+local MENU_KEY = 38 -- "E"
+
 local locations = {
 	--{ x=-447.723, y=6013.65, z=30.700 },
 	--{ x=441.301, y=-981.434, z=29.689 },
 	--{ x=1853.616, y=3687.966, z=33.267 },
 	-- {x = -544.857, y = -204.422, z = 37.2152} -- LS
-	{x= -447.845, y = 6013.775, z = 30.719}, -- paleto
-	{x = 1855.458, y = 3688.599, z = 33.273} -- sandy
+	{x= -447.845, y = 6013.775, z = 31.719}, -- paleto
+	{x = 1855.458, y = 3688.599, z = 34.273} -- sandy
 }
 
-RegisterNetEvent("dmv:insufficientFunds")
-AddEventHandler("dmv:insufficientFunds", function()
-
-	TriggerEvent("chatMessage", "DMV", { 255,99,71 }, "^0You don't have enough money to afford a license right now! Sorry!")
-
-end)
-
-RegisterNetEvent("dmv:success")
-AddEventHandler("dmv:success", function()
-
-	TriggerEvent("chatMessage", "DMV", { 255,99,71 }, "^0You now have a valid driver's license.")
-
-end)
-
-RegisterNetEvent("dmv:alreadyHaveLicense")
-AddEventHandler("dmv:alreadyHaveLicense", function()
-
-	TriggerEvent("chatMessage", "DMV", { 255,99,71 }, "^0You already have a valid driver's license.")
-
-end)
-
-RegisterNetEvent("dmv:notify")
-AddEventHandler("dmv:notify", function(msg)
-	DrawCoolLookingNotification(msg)
-end)
-
-function buyLicense(price)
-
-	TriggerServerEvent("dmv:checkMoney", price)
-
-	Menu.hidden = true -- close menu
-
-end
-
-function dmvMenu()
-	MenuTitle = "DMV"
-	ClearMenu()
-	Menu.addButton("Driver's License ($250)", "buyLicense", 250)
-end
-
-function getPlayerDistanceFromShop(shopX,shopY,shopZ)
-	-- Get the player coords so that we know where to spawn it
-	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
-	return GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,shopX,shopY,shopZ,false)
-end
+local DL_PRICE = 250
 
 function isPlayerAtDMV()
 	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
 	for i = 1, #locations do
-		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,false) < 1.5 then
+		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,false) < 2.0 then
 			return true
 		end
 	end
 	return false
 end
 
-local playerNotified = false
+function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
+	SetTextFont(font)
+	SetTextProportional(0)
+	SetTextScale(scale, scale)
+	SetTextColour(r, g, b, a)
+	SetTextDropShadow(0, 0, 0, 0,255)
+	SetTextEdge(1, 0, 0, 0, 255)
+	SetTextDropShadow()
+	SetTextOutline()
+	SetTextCentre(centre)
+	SetTextEntry("STRING")
+	AddTextComponentString(text)
+	DrawText(x , y)
+end
+
+----------------------
+-- Set up main menu --
+----------------------
+_menuPool = NativeUI.CreatePool()
+mainMenu = NativeUI.CreateMenu("DMV", "~b~Department of Motor Vehicles", 0 --[[X COORD]], 320 --[[Y COORD]])
+_menuPool:Add(mainMenu)
+
+function CreateDMVMenu(menu)
+  ----------------------
+  -- Purchase License --
+  ----------------------
+  local item = NativeUI.CreateItem("Driver's License", "Purchase price: $" .. DL_PRICE)
+  item.Activated = function(parentmenu, selected)
+    TriggerServerEvent("dmv:buyLicense")
+  end
+  menu:AddItem(item)
+	-------------------------
+	-- See any suspensions --
+	-------------------------
+	local item = NativeUI.CreateItem("Suspensions", "Purchase price: $" .. DL_PRICE)
+	item.Activated = function(parentmenu, selected)
+		TriggerServerEvent("dmv:getLicenseStatus")
+	end
+	menu:AddItem(item)
+end
+
+----------------
+-- add to GUI --
+----------------
+CreateDMVMenu(mainMenu)
+_menuPool:RefreshIndex()
 
 Citizen.CreateThread(function()
-
 	while true do
-
 		Citizen.Wait(0)
-
+    -- Process Menu --
+    _menuPool:MouseControlsEnabled(false)
+    _menuPool:ControlDisablingEnabled(false)
+    _menuPool:ProcessMenus()
+    ------------------
+    -- Draw Markers --
+    ------------------
 		for i = 1, #locations do
-			DrawMarker(27, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
+			DrawMarker(27, locations[i].x, locations[i].y, locations[i].z - 1.0, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 170, 0, 170, 0, 0, 2, 0, 0, 0, 0)
 		end
-
-		if isPlayerAtDMV() then
-			DrawSpecialText("Press ~g~E~w~ to access the DMV menu",0,1,0.5,0.8,0.6,255,255,255,255)
-		end
-		if IsControlJustPressed(1,Keys["E"]) then
-
+    -------------------
+    -- draw help txt --
+    -------------------
+    if isPlayerAtDMV() then
+      drawTxt("Press [~y~E~w~] to open the DMV menu",7,1,0.5,0.8,0.5,255,255,255,255)
+    else
+      if mainMenu:Visible() then
+        mainMenu:Visible(false)
+      end
+    end
+    --------------------------
+    -- Listen for menu open --
+    --------------------------
+		if IsControlJustPressed(1, MENU_KEY) then
 			if isPlayerAtDMV() then
-
-				dmvMenu()              -- Menu to draw
-				Menu.hidden = not Menu.hidden    -- Hide/Show the menu
-
+        mainMenu:Visible(not mainMenu:Visible())
 			end
-
-		elseif not isPlayerAtDMV() then
-			Menu.hidden = true
 		end
-
-		Menu.renderGUI()     -- Draw menu on each tick if Menu.hidden = false
-
 	end
 end)
-
-function DrawCoolLookingNotification(msg)
-    SetNotificationTextEntry("STRING")
-    AddTextComponentString(msg)
-    DrawNotification(0,1)
-end
-
-function DrawSpecialText(text,font,centre,x,y,scale,r,g,b,a)
-		SetTextFont(font)
-		SetTextProportional(0)
-		SetTextScale(scale, scale)
-		SetTextColour(r, g, b, a)
-		SetTextDropShadow(0, 0, 0, 0,255)
-		SetTextEdge(1, 0, 0, 0, 255)
-		SetTextDropShadow()
-		SetTextOutline()
-		SetTextCentre(centre)
-		SetTextEntry("STRING")
-		AddTextComponentString(text)
-		DrawText(x , y)
-end
