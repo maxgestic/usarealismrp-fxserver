@@ -89,8 +89,6 @@ AddEventHandler("jail:jail", function(cell, gender)
     cell = {x = 1727.1, y = 2636.2, z = 45.6, occupant = nil}
   end
 
-  assigned_cell = cell
-
   local lPed = GetPlayerPed(-1)
   RequestCollisionAtCoord(cell.x, cell.y, cell.z)
   Wait(1000)
@@ -99,6 +97,7 @@ AddEventHandler("jail:jail", function(cell, gender)
       Citizen.Wait(100)
       SetEntityCoords(lPed, cell.x, cell.y, cell.z, 1, 0, 0, 1) -- tp to jail
   end
+  assigned_cell = cell
   TriggerEvent("cuff:unCuff")
   imprisoned = true
 

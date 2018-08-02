@@ -35,7 +35,6 @@ RegisterNetEvent("jscoreboard:gotPlayers")
 AddEventHandler("jscoreboard:gotPlayers", function(players)
 	active_player_list = players
 	alreadyPressed = false
-	print("just set already pressed to false")
 end)
 
 function DrawPlayerList()
