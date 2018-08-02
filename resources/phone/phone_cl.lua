@@ -11,6 +11,8 @@ local partner_call_source = nil
 
 local TIME_TO_ANSWER_CALL = 15
 
+local cached_phone = nil
+
 function DrawCoolLookingNotificationNoPic(msg)
 	SetNotificationTextEntry("STRING")
 	AddTextComponentString(msg)
@@ -30,7 +32,6 @@ end)
 local phoneEnabled = false
 
 function EnableGui(enable, phone)
-	print("inside of enablegui with phone = " .. type(phone))
 	SetNuiFocus(enable, enable)
 	phoneEnabled = enable
 	if phone then
@@ -79,6 +80,9 @@ RegisterNetEvent("phone:openPhone")
 AddEventHandler("phone:openPhone", function(phone)
 	print("opening phone with number: " .. phone.number)
 	EnableGui(true, phone)
+	if not cached_phone then
+		cached_phone = phone
+	end
 end)
 
 RegisterNUICallback('deleteContact', function(data, cb)
@@ -290,8 +294,8 @@ end)
 RegisterNUICallback('escape', function(data, cb)
 	startedTask = false
 	ClearPedTasks(GetPlayerPed(-1))
-    EnableGui(false)
-    cb('ok')
+	EnableGui(false)
+  cb('ok')
 end)
 
 -- various things to help handle player phone call --
@@ -344,6 +348,25 @@ Citizen.CreateThread(function()
 				cellphone_object = nil
 			end
 		end
+
+		--[[
+		-- listen for phone hotkey press --
+		--if IsControlPressed(1, 19) and IsControlJustPressed(1, 27) then -- ALT + UP ARROW
+		if IsControlJustPressed(1, 244) then -- "M"
+			if not phoneEnabled then
+				if cached_phone then
+					TriggerEvent("phone:openPhone", cached_phone)
+				else
+					TriggerServerEvent("phone:getPhone")
+				end
+			else
+				startedTask = false
+				ClearPedTasks(GetPlayerPed(-1))
+			  EnableGui(false)
+			end
+		end
+		--]]
+		
 		Wait(1)
 	end
 end)

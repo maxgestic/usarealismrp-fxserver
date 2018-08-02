@@ -78,6 +78,18 @@ function CreateNewPhoneFromExisting(src, number, cb)
 	end
 end
 
+RegisterServerEvent("phone:getPhone")
+AddEventHandler("phone:getPhone", function()
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	local inv = user.getActiveCharacterData("inventory")
+	for i = 1, #inv do
+		if string.find(inv[i].name, "Cell Phone") then
+			TriggerClientEvent("phone:openPhone", source, inv[i])
+			return
+		end
+	end
+end)
+
 RegisterServerEvent("phone:deleteContact")
 AddEventHandler("phone:deleteContact", function(data)
 	GetPhoneFromDatabaseByNumber(source, data.phone, function(phone)

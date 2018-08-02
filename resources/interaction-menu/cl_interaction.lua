@@ -1,4 +1,6 @@
-local MENU_KEY, TACKLE_KEY = 288, 101
+local MENU_KEY1 = 244
+local MENU_KEY2 = 288
+local TACKLE_KEY = 101
 
 local scenarios = {
 	{name = "lean", scenarioName = "WORLD_HUMAN_LEANING"},
@@ -827,7 +829,7 @@ Citizen.CreateThread(function()
 		playerServerId, playerName, distanceToClosestTargetPed = GetClosestPlayerInfo()
 
 		-- watch for open/close menu
-		if IsControlJustPressed( 0, MENU_KEY ) and GetLastInputMethod(2) then
+		if (IsControlJustPressed( 0, MENU_KEY1 ) or IsControlJustPressed( 0, MENU_KEY2 )) and GetLastInputMethod(2) then
 			local target_veh = getVehicleInFrontOfUser()
 			local target_veh_plate = GetVehicleNumberPlateText(target_veh)
 			EnableGui(target_veh_plate)

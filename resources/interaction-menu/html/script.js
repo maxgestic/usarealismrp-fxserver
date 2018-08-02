@@ -255,14 +255,7 @@ $(function() {
 	});
 
 	document.onkeyup = function (data) {
-		if (data.which == 27) { // Escape key
-			if (x > 0) {
-				$.post('http://interaction-menu/escape', JSON.stringify({}));
-				closeNav();
-			} else {
-				x++;
-			}
-		} else if (data.which == 112) { // F1 key
+		if (data.which == 27 || data.which == 112 || data.which == 77) { // Escape key or F1 or M
 			if (x > 0) {
 				$.post('http://interaction-menu/escape', JSON.stringify({}));
 				closeNav();

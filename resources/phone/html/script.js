@@ -93,8 +93,8 @@ $(function() {
     });
 
     // handle's closing the phone gui
-    document.onkeyup = function (data) {
-        if (data.which == 27 || data.which == 112) { // ESC or F1
+    document.onkeydown = function (data) {
+        if (data.which == 27 || data.which == 112 || data.which == 77) { // ESC or F1 or M
             // call lua client NUI callback in 'phone' resource with name of 'escape'
             $.post('http://phone/escape', JSON.stringify({}));
             // hide all html
