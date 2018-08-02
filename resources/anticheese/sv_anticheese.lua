@@ -187,7 +187,7 @@ Citizen.CreateThread(function()
 	end)
 
 	RegisterServerEvent('AntiCheese:NoclipFlag')
-	AddEventHandler('AntiCheese:NoclipFlag', function(distance)
+	AddEventHandler('AntiCheese:NoclipFlag', function()
 		local userSource = source
 		if Components.Speedhack then
 			print("*****noclip flag trigged (source: #" .. userSource .. ")!!****")
@@ -204,8 +204,8 @@ Citizen.CreateThread(function()
 					return  -- Don't send an alert
 				end
 
-				local msg = "```Noclip/Teleport hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nCaught with "..math.ceil(distance).." units between last checked location\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
-				local staff_msg = "^3*Noclip/Teleport hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
+				local msg = "```Noclip hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."Flag Count:"..isKnownCount..""..isKnownExtraText.." ```"
+				local staff_msg = "^3*Noclip hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
 
 				TriggerEvent("usa:notifyStaff", staff_msg)
 				SendWebhookMessage(webhook, msg)
