@@ -221,15 +221,10 @@ RegisterNUICallback('playEmote', function(data, cb)
 				end
 			end
 		end
-		--TriggerEvent("usa:playAnimation", "bro_hug_left", "anim@mp_player_intcelebrationpaired@f_f_bro_hug", 4.0)
-		--TriggerEvent("usa:playAnimation", "fist_bump_right", "anim@mp_player_intcelebrationpaired@f_f_fist_bump", 4.0)
 end)
 
 RegisterNUICallback('setVoipLevel', function(data, cb)
-	--TriggerEvent("test:escapeFromCSharp")
-	--print("inside of setVoipLeve calling disable gui....")
 	DisableGui()
-	--Citizen.Trace("setting voice level = " .. data.level)
 	local YELL, NORMAL, WHISPER = 0,1,2
 	local selected = data.level
 	if selected == YELL then
@@ -241,26 +236,77 @@ RegisterNUICallback('setVoipLevel', function(data, cb)
 	end
 end)
 
+RegisterNUICallback('openVehicleDoor', function(data, cb)
+	DisableGui()
+	local name = string.lower(data.name)
+	if name == "hood" then
+		TriggerEvent("veh:openDoor", name)
+	elseif name == "trunk" then
+		TriggerEvent("veh:openDoor", name)
+	elseif name == "f left" then
+		TriggerEvent("veh:openDoor", "fl")
+	elseif name == "f right" then
+		TriggerEvent("veh:openDoor", "fr")
+	elseif name == "b left" then
+		TriggerEvent("veh:openDoor", "bl")
+	elseif name == "b right" then
+		TriggerEvent("veh:openDoor", "br")
+	end
+end)
+
+RegisterNUICallback('closeVehicleDoor', function(data, cb)
+	DisableGui()
+	local name = string.lower(data.name)
+	if name == "hood" then
+		TriggerEvent("veh:shutDoor", name)
+	elseif name == "trunk" then
+		TriggerEvent("veh:shutDoor", name)
+	elseif name == "f left" then
+		TriggerEvent("veh:shutDoor", "fl")
+	elseif name == "f right" then
+		TriggerEvent("veh:shutDoor", "fr")
+	elseif name == "b left" then
+		TriggerEvent("veh:shutDoor", "bl")
+	elseif name == "b right" then
+		TriggerEvent("veh:shutDoor", "br")
+	end
+end)
+
+RegisterNUICallback('doVehicleAction', function(data, cb)
+	DisableGui()
+	local name = string.lower(data.name)
+	if name == "engine" then
+		TriggerEvent("veh:toggleEngine")
+	elseif name == "hood" then
+		TriggerEvent("veh:toggleDoor", name)
+	elseif name == "trunk" then
+		TriggerEvent("veh:toggleDoor", name)
+	elseif name == "f left" then
+		TriggerEvent("veh:toggleDoor", "fl")
+	elseif name == "f right" then
+		TriggerEvent("veh:toggleDoor", "fr")
+	elseif name == "b left" then
+		TriggerEvent("veh:toggleDoor", "bl")
+	elseif name == "b right" then
+		TriggerEvent("veh:toggleDoor", "br")
+	end
+end)
+
 RegisterNUICallback('performPoliceAction', function(data, cb)
-	--TriggerEvent("test:escapeFromCSharp")
 	DisableGui()
 	local actionIndex = data.policeActionIndex
 	local actionName = string.lower(data.policeActionName)
 	local unseatIndex = string.lower(data.unseatIndex)
-	Citizen.Trace("unseat index = " .. unseatIndex)
 	TriggerEvent("interaction:performPoliceAction", actionName, unseatIndex)
 end)
 
 RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
-  --TriggerEvent("test:escapeFromCSharp")
 	DisableGui()
   local actionName = data.actionName
 	local itemName = data.itemName
 	local wholeItem = data.wholeItem
 	local targetPlayerId = data.playerId
-	--Citizen.Trace("data.playerId = " .. data.playerId)
 	if actionName and itemName and wholeItem and targetPlayerId then
-		--Citizen.Trace("button name = " .. actionName .. ", item = " .. itemName)
 		if actionName == "use" then
 			interactionMenuUse(itemName, wholeItem)
 		elseif actionName == "drop" then
@@ -682,7 +728,8 @@ function EnableGui(target_vehicle_plate)
 		playerName = playerName,
 		playerId = playerServerId,
 		voip = voipLevel,
-		target_vehicle_plate = target_vehicle_plate
+		target_vehicle_plate = target_vehicle_plate,
+		isInVehicle = IsPedInAnyVehicle(GetPlayerPed(-1), true)
 	})
 end
 
@@ -701,6 +748,11 @@ RegisterNetEvent("interaction:setF1VoipLevel")
 AddEventHandler("interaction:setF1VoipLevel", function(level)
 	print("set voip level to: " .. level)
 	voipLevel = level
+end)
+
+RegisterNetEvent("interaction:doVehicleAction")
+AddEventHandler("interaction:doVehicleAction", function(action, unseatIndex)
+
 end)
 
 RegisterNetEvent("interaction:performPoliceAction")

@@ -165,8 +165,8 @@ Citizen.CreateThread(function()
 				if Vdist(uncuff_locations[i].x, uncuff_locations[i].y, uncuff_locations[i].z, playercoords.x, playercoords.y, playercoords.z) < 5.0 then
 					TriggerEvent("usa:notify", "Cutting off your cuffs! Stay nearby!")
 					local start = GetGameTimer()
-					while GetGameTimer() - start < 20000 do
-						Wait(20000)
+					while GetGameTimer() - start < 45000 do
+						Wait(45000)
 					end
 					if Vdist(uncuff_locations[i].x, uncuff_locations[i].y, uncuff_locations[i].z, playercoords.x, playercoords.y, playercoords.z) > 5.0 then
 						TriggerClientEvent("usa:notify", "You went out of range!")

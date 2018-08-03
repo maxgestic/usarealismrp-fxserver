@@ -40,7 +40,9 @@ local vehicleShopItems = {
 		{make = "Lampadati", model = "Felon", price = 34550, hash = -391594584, storage_capacity = 135.0},
 		{make = "Enus", model = "Windsor Cabrio", price = 105550, hash = -1930048799, storage_capacity = 135.0},
 		{make = "Nissan", model = "370z", price = 40550, hash = -377465520, storage_capacity = 135.0},
-		{make = "Coil", model = "Voltic", price = 55550, hash = -1622444098, storage_capacity = 135.0}
+		{make = "Coil", model = "Voltic", price = 55550, hash = -1622444098, storage_capacity = 135.0},
+		{make = "Pfister", model = "Comet 1", price = 55550, hash = -1045541610, storage_capacity = 125.0},
+		{make = "Pfister", model = "Comet 2", price = 55550, hash = -2022483795, storage_capacity = 125.0}
 	},
 	["Muscles"] = {
 		{make = "Willand", model = "Faction", price = 10500, hash = -2119578145, storage_capacity = 160.0},

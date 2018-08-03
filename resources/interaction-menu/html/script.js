@@ -114,6 +114,35 @@ function performPoliceAction(policeActionIndex) {
 	closeNav();
 }
 
+function doVehicleAction(name) {
+	$.post('http://interaction-menu/doVehicleAction', JSON.stringify({
+		name: name
+	}));
+	closeNav();
+}
+
+function openVehicleDoor(name) {
+	$.post('http://interaction-menu/openVehicleDoor', JSON.stringify({
+		open: true,
+		name: name
+	}));
+	closeNav();
+}
+
+function closeVehicleDoor(name) {
+	$.post('http://interaction-menu/closeVehicleDoor', JSON.stringify({
+		open: false,
+		name: name
+	}));
+	closeNav();
+}
+
+function openVehicleDoorOptions(name) {
+	$("#mySidenav a").hide();
+	$("#mySidenav .sidenav-buttons").append("<a onclick='openVehicleDoor(\"" + name + "\")' class='remove-on-close'>Open</a>");
+	$("#mySidenav .sidenav-buttons").append("<a onclick='closeVehicleDoor(\"" + name + "\")' class='remove-on-close'>Close</a>");
+}
+
 function showVehicleUnseatOptions() {
 	$("#mySidenav a").hide();
 	$("#mySidenav .sidenav-buttons").append("<a onclick='performPoliceAction(\"front left\")' class='police-action'>Front Left</a>");
@@ -132,6 +161,18 @@ function showPoliceActions() {
 		} else {
 			$("#mySidenav .sidenav-buttons").append("<a onclick='performPoliceAction("+i+")' class='police-action'>" + policeActions[i] + "</a>");
 		}
+	}
+}
+
+function showVehicleOptions() {
+	var options = ["Engine", "Hood", "Trunk", "F Right", "F Left", "B Right", "B Left"]
+	$("#mySidenav a").hide();
+	$(".player-meta-data").hide();
+	for (i in options) {
+		if (options[i] == "Engine")
+			$("#mySidenav .sidenav-buttons").append("<a onclick='doVehicleAction(\"" + options[i] + "\")' class='remove-on-close'>" + options[i] + "</a>");
+		else
+			$("#mySidenav .sidenav-buttons").append("<a onclick='openVehicleDoorOptions(\"" + options[i] + "\")' class='remove-on-close'>" + options[i] + "</a>");
 	}
 }
 
@@ -192,6 +233,7 @@ function populateInventory(inventory, weapons, licenses) {
 var x = 0;
 /* Set the width of the side navigation to 0 */
 function closeNav() {
+	$("#mySidenav .remove-on-close").remove();
 	$("#mySidenav .veh-inventory-btn").remove();
 	$("#mySidenav .inventory-item").remove();
 	$("#mySidenav .vehicle-item").remove();
@@ -220,7 +262,6 @@ $(function() {
 			$(".player-meta-data").show();
 			if (event.data.enable) {
 				handleMenuItemForJob(currentPlayerJob); // set player job specific menu item
-				//alert("setting = " + event.data.voip);
 				if (event.data.voip == 8.5) {
 					$("#voip-level-value").text("Normal");
 				} else if (event.data.voip == 23) {
@@ -232,13 +273,13 @@ $(function() {
 				targetPlayerName = event.data.playerName;
 				// vehicle inventory:
 				if (event.data.target_vehicle_plate && typeof event.data.target_vehicle_plate !== "undefined") {
-					// alert("target vehicle loaded. Plate #: " + event.data.target_vehicle_plate)
 					// add interaction menu item for vehicle inventory:
 					$("#mySidenav .sidenav-buttons").prepend("<a onclick='getVehicleInventory()' class='veh-inventory-btn'>Veh Inventory</a>");
 					target_vehicle_plate = event.data.target_vehicle_plate;
-					//target_vehicle_id = event.data.target_vehicle_id;
-				} else {
-					//alert("problem loading target veh");
+				}
+				// vehicle door / engine options (if inside)
+				if (event.data.isInVehicle) {
+					$("#mySidenav .sidenav-buttons").prepend("<a onclick='showVehicleOptions()' class='veh-inventory-btn'>Vehicle</a>");
 				}
 			}
 		} else if (event.data.type == "inventoryLoaded") {

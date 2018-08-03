@@ -352,13 +352,27 @@ AddEventHandler('veh:toggleEngine', function(status)
           SetVehicleEngineOn(lastVehicle, true, false, false)
           engineIsOn = true
         else
-          TriggerEvent("usa:notify", "Your vehicle is disabled! Can't turn the engine on.")
+          exports.globals:notify("Your vehicle is disabled! Can't turn the engine on.")
         end
       elseif status == "off" then
         SetVehicleEngineOn(lastVehicle, false, false, false)
         engineIsOn = false
         SetVehicleUndriveable(lastVehicle, true)
         --TriggerEvent("vehicle:setEngineStatus", false)
+      else
+        if GetIsVehicleEngineRunning(lastVehicle) then
+          SetVehicleEngineOn(lastVehicle, false, false, false)
+          engineIsOn = false
+          SetVehicleUndriveable(lastVehicle, true)
+        else
+          if GetVehicleEngineHealth(lastVehicle) > 360 then
+            SetVehicleUndriveable(lastVehicle, false)
+            SetVehicleEngineOn(lastVehicle, true, false, false)
+            engineIsOn = true
+          else
+            exports.globals:notify("Your vehicle is disabled! Can't turn the engine on.")
+          end
+        end
       end
     end
   end
