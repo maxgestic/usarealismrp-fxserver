@@ -58,8 +58,8 @@ local vehicleShopItems = {
 		{make = "Vapid", model = "Bobcat XL", price = 10500, hash = 1069929536, storage_capacity = 230.0},
 		{make = "Ford", model = "F350 Super Duty", price = 55000, hash = -599568815, storage_capacity = 250.0},
 		{make = "Bravado", model = "Bison", price = 27110, hash = -16948145, storage_capacity = 230.0},
-		{make = "Declasse", model = "Yosemite", price = 30000, hash = GetHashKey("yosemite"), storage_capacity = 230.0},
-		{make = "Vapid", model = "Riata", price = 40000, hash = GetHashKey("riata"), storage_capacity = 230.0},
+		{make = "Declasse", model = "Yosemite", price = 30000, hash = "yosemite", storage_capacity = 230.0},
+		{make = "Vapid", model = "Riata", price = 40000, hash = "riata", storage_capacity = 230.0},
 		{make = "Vapid", model = "Slam Van", price = 24000, hash = 729783779, storage_capacity = 230.0},
 		{make = "Vapid", model = "Slam Van LR", price = 24000, hash = 1119641113, storage_capacity = 230.0},
 		{make = "Vapid", model = "Sandking", price = 35000, hash = -1189015600, storage_capacity = 230.0},
@@ -232,7 +232,7 @@ local vehicleShopItems = {
 		{make = "BF", model = "Raptor", price = 1000000, hash = -674927303, storage_capacity = 30.0},
 		{make = "Dewbauchee", model = "Massacro Special", price = 1800000, hash = -631760477, storage_capacity = 130.0},
 		{make = "Dinka", model = "Jester Special", price = 2500000, hash = -1106353882, storage_capacity = 120.0},
-		{make = "Coil", model = "Raider", price = 300000, hash = GetHashKey("raiden"), storage_capacity = 150.0}
+		{make = "Coil", model = "Raider", price = 300000, hash = "raiden", storage_capacity = 150.0}
 		}
 	}
 }

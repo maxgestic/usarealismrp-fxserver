@@ -114,7 +114,12 @@ AddEventHandler("character:delete", function(slot)
 		if user then
 			local characters = user.getCharacters()
 			-- See if character is at least one week old
-			local characterAge = getWholeDaysFromTime(characters[slot].created.time)
+			local characterAge
+			if not characters[slot].created then
+				characterAge = 999999999999 -- just to make it old enough to delete (for people without the .created property for some reason)
+			else 
+				characterAge = getWholeDaysFromTime(characters[slot].created.time)
+			end
 			if characterAge >= WHOLE_DAYS_TO_DELETE then
 				print("debug: Deleting character at slot #" .. slot .. "...")
 				characters[slot] = {active = false}
