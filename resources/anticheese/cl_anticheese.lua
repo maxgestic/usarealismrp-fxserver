@@ -111,8 +111,10 @@ Citizen.CreateThread(function()
 			local dist = GetDistanceBetweenCoords(posx,posy,posz, newx,newy,newz, true)
 
 			if GetEntitySpeed(GetPlayerPed(-1)) == 0 then
-				if dist > (MaxRunSpeed * Seconds) then
-					TriggerServerEvent("AntiCheese:NoclipFlag")
+				if not isAtAWarpPoint(newx, newy, newz) then
+					if dist > (MaxRunSpeed * Seconds) then
+						TriggerServerEvent("AntiCheese:NoclipFlag")
+					end
 				end
 			elseif (para == -1 or para == 0) and not fall and not parafall and not rag then
 				if not isAtAWarpPoint(newx, newy, newz) then
@@ -162,25 +164,25 @@ Citizen.CreateThread(function()
 		Citizen.Wait(60000)
 		local curPed = PlayerPedId()
 		local curHealth = GetEntityHealth( curPed )
-		SetEntityHealth( curPed, curHealth-2)
+		SetEntityHealth(curPed, curHealth - 2)
 		local curWait = math.random(10,150)
-		-- this will substract 2hp from the current player, wait 50ms and then add it back, this is to check for hacks that force HP at 200
+		-- this will substract 2hp from the current player, wait between 10 & 150ms and then add it back, this is to check for hacks that force HP at 200
 		Citizen.Wait(curWait)
 
 		if not IsPlayerDead(PlayerId()) then
 			if PlayerPedId() == curPed and GetEntityHealth(curPed) == curHealth and GetEntityHealth(curPed) ~= 0 then
-				TriggerServerEvent("AntiCheese:HealthFlag", false, curHealth-2, GetEntityHealth( curPed ),curWait )
-			elseif GetEntityHealth(curPed) == curHealth-2 then
-				SetEntityHealth(curPed, GetEntityHealth(curPed)+2)
+				TriggerServerEvent("AntiCheese:HealthFlag", false, curHealth - 2, GetEntityHealth(curPed), curWait)
+			elseif GetEntityHealth(curPed) == curHealth - 2 then
+				SetEntityHealth(curPed, GetEntityHealth(curPed) + 2)
 			end
 		end
 		if GetEntityHealth(curPed) > 400 then
-			TriggerServerEvent("AntiCheese:HealthFlag", false, GetEntityHealth( curPed )-200, GetEntityHealth( curPed ),curWait )
+			TriggerServerEvent("AntiCheese:HealthFlag", false, GetEntityHealth(curPed) - 200, GetEntityHealth(curPed), curWait)
 		end
 
-		if GetPlayerInvincible( PlayerId() ) then -- if the player is invincible, flag him as a cheater and then disable their invincibility
-			TriggerServerEvent("AntiCheese:HealthFlag", true, curHealth-2, GetEntityHealth( curPed ),curWait )
-			SetPlayerInvincible( PlayerId(), false )
+		if GetPlayerInvincible(PlayerId()) then  -- if the player is invincible, flag him as a cheater and then disable their invincibility
+			TriggerServerEvent("AntiCheese:HealthFlag", true, curHealth - 2, GetEntityHealth(curPed), curWait)
+			SetPlayerInvincible(PlayerId(), false)
 		end
 	end
 end)

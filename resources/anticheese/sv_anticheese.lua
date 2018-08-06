@@ -204,7 +204,7 @@ Citizen.CreateThread(function()
 					return  -- Don't send an alert
 				end
 
-				local msg = "```Noclip hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."Flag Count:"..isKnownCount..""..isKnownExtraText.." ```"
+				local msg = "```Noclip hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
 				local staff_msg = "^3*Noclip hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
 
 				TriggerEvent("usa:notifyStaff", staff_msg)
@@ -230,13 +230,12 @@ Citizen.CreateThread(function()
 					msg = "```Health hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nPlayer was set to invincible! Player reset to mortal.\nAnticheat Flags:"..isKnownCount..""..isKnownExtraText.." ```"
 					staff_msg = "^3*Health hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name .. "^3 made themselves invincible!"
 				else
-					msg = "```Health hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nRegenerated "..newHealth-oldHealth.."hp ( to reach "..newHealth.."hp ) in "..curWait.."ms! ( Health was Forced )\nAnticheat Flags:"..isKnownCount..""..isKnownExtraText.." ```"
+					msg = "```Health hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nRegenerated "..newHealth-oldHealth.."hp ( to reach "..newHealth.."hp ) in "..curWait.."ms!\nAnticheat Flags:"..isKnownCount..""..isKnownExtraText.." ```"
 					staff_msg = "^3*Health hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
 				end
 
 				TriggerEvent("usa:notifyStaff", staff_msg)
 				SendWebhookMessage(webhook, msg)
-
 			else
 				print("**not sending message, was a staff member**")
 			end
