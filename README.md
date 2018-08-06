@@ -8,7 +8,7 @@ To get started with your own testing environment:
     * Go to "Your Account" and create an admin account
     * Base64 encode your username and password in the format `username:password`
         - Save it for the next step
-    * Create databases named `bans`, `correctionaldepartment`, `properties`, `warrants`, and `whitelist`
+    * Create databases named `bans`, `correctionaldepartment`, `properties`, `warrants`, 'phones', and `whitelist`
         - Temporary step, these need to be auto created
 2) Create the file `resources/essentialmode/sv_es-DB-config.lua`  
     * Set the variable `ip` to your couchDB IP
