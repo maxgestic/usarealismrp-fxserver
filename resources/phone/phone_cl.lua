@@ -312,11 +312,13 @@ Citizen.CreateThread(function()
 			DisableControlAction(0, 2, phoneEnabled) -- LookUpDown
 			DisableControlAction(0, 142, phoneEnabled) -- MeleeAttackAlternate
 			DisableControlAction(0, 106, phoneEnabled) -- VehicleMouseControlOverride
+			--[[
 			if IsDisabledControlJustReleased(0, 142) then -- MeleeAttackAlternate
 				SendNUIMessage({
 					type = "click"
 				})
 			end
+			--]]
 		end
 		-- play phone call anim when on call --
 		if on_call then
@@ -366,7 +368,7 @@ Citizen.CreateThread(function()
 			end
 		end
 		--]]
-		
+
 		Wait(1)
 	end
 end)

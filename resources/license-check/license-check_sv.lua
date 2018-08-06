@@ -106,17 +106,15 @@ AddEventHandler("license:searchForLicense", function(source, playerId)
 			local ticket_history = {}
 			if #criminalHistory > 0 then
 				for i = 1, #criminalHistory do
-					if i == 15 then break end --  TODO: only shows first 15 charges (should show the MOST RECENT charges instead)
 					local crime = criminalHistory[i]
 					if not crime.type then -- not a ticket
-						print("crime.type did not exist!")
 						local color = {187,94,187}
 						TriggerClientEvent("chatMessage", source, "DATE", color, "^0" .. crime.timestamp)
 						TriggerClientEvent("chatMessage", source, "CHARGE(S)", color, "^0" .. crime.charges)
 						TriggerClientEvent("chatMessage", source, "SENTENCE", color, "^0" .. crime.sentence .. " months")
 						TriggerClientEvent("chatMessage", source, "OFFICER", color, "^0" .. crime.arrestingOfficer)
 					else
-						print("inserting ticket! crime.type: " .. crime.type)
+						print("inserting ticket!")
 						table.insert(ticket_history, crime)
 					end
 				end
