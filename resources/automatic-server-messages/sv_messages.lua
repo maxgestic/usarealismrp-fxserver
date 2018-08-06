@@ -1,27 +1,6 @@
--- 12 hours = 43200 seconds
-local restartTimeHours = 24
-local restartTimeSeconds = restartTimeHours * 60 * 60
-local restartTimeMilliseconds = restartTimeSeconds * 1000
-function sendRestartNotification()
-    Citizen.CreateThreadNow(function()
-        SetTimeout(restartTimeMilliseconds-600000, function()
-            print("****sending 10 minute warning...****")
-            for i = 1, 8 do
-                TriggerClientEvent("chatMessage", -1, "", {255, 255, 255}, "SERVER RESTARTING IN 10 MINUTES!!!")
-            end
-        end)
-        SetTimeout(restartTimeMilliseconds-190000, function()
-            print("****sending 1.5 minute warning...****")
-            for i = 1, 8 do
-                TriggerClientEvent("chatMessage", -1, "", {255, 255, 255}, "^1SERVER RESTARTING IN 60 SECONDS! ^3DISCONNECT OR RISK DATA LOSS!!!")
-            end
-        end)
-    end)
-end
-
-sendRestartNotification()
-
--- TODO: prevent joining on server start within certain time (breaks queue and doesn't let anyone join if people spam join after a restart?)
+------------------------------------------
+-- Server join delay after start up --
+------------------------------------------
 local SECONDS_TO_DELAY = 120
 local ABLE_TO_JOIN = false
 
@@ -36,4 +15,26 @@ AddEventHandler('playerConnecting', function(name, setReason)
     setReason("Please wait " .. SECONDS_TO_DELAY .. " seconds before joining.")
     CancelEvent()
   end
+end)
+
+local CHECK_TIME = 60000 -- every minute
+------------------------------
+-- Send restart message --
+-------------------------------
+Citizen.CreateThread(function()
+    while true do
+        Wait(CHECK_TIME)
+        local date = os.date("*t", os.time())
+        if date.hour == 3 and date.min == 20 then
+            print("****sending 10 minute warning...****")
+            for i = 1, 8 do
+                TriggerClientEvent("chatMessage", -1, "", {255, 255, 255}, "SERVER RESTARTING IN 10 MINUTES!!!")
+            end
+        elseif date.hour == 3 and date.min == 29 then
+            print("****sending 1 minute warning...****")
+            for i = 1, 8 do
+                TriggerClientEvent("chatMessage", -1, "", {255, 255, 255}, "^1SERVER RESTARTING IN 60 SECONDS! ^3DISCONNECT NOW OR RISK DATA LOSS!!!")
+            end
+        end
+    end
 end)

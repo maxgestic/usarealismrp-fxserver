@@ -20,23 +20,23 @@ manualWeathers = {
 weatherTree = {
 	["EXTRASUNNY"] = {
 		{"CLEAR", 37},
-		{"SMOG", 15},
+		{"SMOG", 10},
 	},
 	["SMOG"] = {
 		{"FOGGY", 20},
 		{"CLEAR", 20},
 		{"CLEARING", 10},
 		{"OVERCAST", 7},
-		{"CLOUDS", 15},
-		{"EXTRASUNNY", 10},
+		{"CLOUDS", 13},
+		{"EXTRASUNNY", 15},
 	},
 	["CLEAR"] = {
 		{"CLOUDS", 14},
 		{"EXTRASUNNY", 14},
 		{"CLEARING", 10},
-		{"SMOG", 14},
-		{"FOGGY", 10},
-		{"OVERCAST", 7},
+		{"SMOG", 8},
+		{"FOGGY", 8},
+		{"OVERCAST", 9},
 	},
 	["CLOUDS"] = {
 		{"CLEAR", 12},
@@ -44,20 +44,20 @@ weatherTree = {
 		{"FOGGY", 10},
 		{"CLEARING", 20},
 		{"OVERCAST", 10},
-		{"SNOWLIGHT", 5},
+		{"SNOWLIGHT", 3},
 	},
 	["FOGGY"] = {
 		{"CLEAR", 15},
 		{"CLOUDS", 20},
-		{"SMOG", 15},
+		{"SMOG", 10},
 		{"OVERCAST", 8},
 	},
 	["OVERCAST"] = {
 		{"CLEAR", 10},
 		{"CLOUDS", 15},
 		{"SNOWLIGHT", 5},
-		{"FOGGY", 20},
-		{"RAIN", 5},
+		{"FOGGY", 10},
+		{"RAIN", 3},
 		{"CLEARING", 15},
 	},
 	["RAIN"] = {
@@ -75,7 +75,7 @@ weatherTree = {
 		{"OVERCAST", 10},
 		{"FOGGY", 12},
 		{"SMOG", 10},
-		{"RAIN", 5},
+		{"RAIN", 3},
 		{"SNOWLIGHT", 5},
 	},
 	["SNOWLIGHT"] = {
