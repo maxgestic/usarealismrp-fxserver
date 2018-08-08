@@ -357,6 +357,13 @@ end, {
 	}
 })
 
+------------------------------
+-- go to any coordinate --
+------------------------------
+TriggerEvent('es:addGroupCommand', 'gotoc', "mod", function(source, args, user)
+	TriggerClientEvent('es_admin:teleportUserByCoords', source, tonumber(args[2]), tonumber(args[3]), tonumber(args[4]))
+end)
+
 -- Freezing
 local frozen = {}
 TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, user)
