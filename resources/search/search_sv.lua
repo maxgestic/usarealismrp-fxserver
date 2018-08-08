@@ -25,13 +25,11 @@ AddEventHandler("search:searchPlayer", function(playerId, src)
 		local name = items[i].name
 		local quantity = items[i].quantity
 		local legality = items[i].legality
-		local color = {0, 50, 0}
 		if legality == "illegal" then
-			color = {255, 0, 0}
+			TriggerClientEvent("chatMessage", usource, "", {}, "^1(x" .. quantity .. ") " .. name) -- print item red
 		else
-			color = {0, 50, 0}
+			TriggerClientEvent("chatMessage", usource, "", {}, "^0(x" .. quantity .. ") " .. name) -- print item
 		end
-		TriggerClientEvent("chatMessage", usource, "", color, "^0(x" .. quantity .. ") " .. name) -- print item
 		if items[i].components then
 			for k = 1, #items[i].components do
 				TriggerClientEvent("chatMessage", usource, "", {0, 50, 0}, "^0		+ " .. items[i].components[k])
