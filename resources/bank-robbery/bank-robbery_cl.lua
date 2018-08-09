@@ -90,6 +90,7 @@ function mycb(success, timeremaining, finish)
 				TriggerEvent("usa:notify", "You hacked the bank!")
 			else
 				TriggerEvent("usa:notify", "You failed to hack the bank!")
+				TriggerServerEvent("bank:setBusy", "no")
 			end
 		end
 	else

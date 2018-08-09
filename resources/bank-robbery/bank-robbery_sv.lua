@@ -4,20 +4,6 @@ local closed = false
 
 local COPS_NEEDED_TO_ROB = 2
 
-function getPlayerIdentifierEasyMode(source)
-	local rawIdentifiers = GetPlayerIdentifiers(source)
-	if rawIdentifiers then
-		for key, value in pairs(rawIdentifiers) do
-			playerIdentifier = value
-		end
-	else
-		print("IDENTIFIERS DO NOT EXIST OR WERE NOT RETIREVED PROPERLY : " .. source)
-		return false
-	end
-	print("INSIDE getPlayerIdEasyMode about to retrun playerIdentifier = " .. playerIdentifier)
-	return playerIdentifier -- should usually be only 1 identifier according to the wiki
-end
-
 RegisterServerEvent("bank:setBusy")
 AddEventHandler("bank:setBusy", function(busy)
 	isBusy = busy
@@ -44,7 +30,7 @@ AddEventHandler("bank:isBusy", function()
 			end
 			print("cop count: " .. count)
 			print("cops needed: " .. COPS_NEEDED_TO_ROB)
-			if count >= COPS_NEEDED_TO_ROB then 
+			if count >= COPS_NEEDED_TO_ROB then
 				if not closed then
 					print("BANK WAS NOT CLOSED")
 					if not abletorob then
@@ -61,8 +47,8 @@ AddEventHandler("bank:isBusy", function()
 								TriggerClientEvent("bank-robbery:notify", userSource, "~r~Alarm activated!")
 								TriggerEvent("bank:beginRobbery", userSource)
 								abletorob = false
-								-- 1.5 hr cooldown
-								SetTimeout(5400000, function()
+								-- 3 hr cooldown
+								SetTimeout(10800000, function()
 									abletorob = true
 								end)
 							end
@@ -74,7 +60,7 @@ AddEventHandler("bank:isBusy", function()
 				else
 					TriggerClientEvent("bank-robbery:notify", userSource, "The bank has been ~r~closed~w~ by admins.")
 				end
-			else 
+			else
 				TriggerClientEvent("bank-robbery:notify", userSource, "You are not able to access the bank lock!")
 			end
 		end
