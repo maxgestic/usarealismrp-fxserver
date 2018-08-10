@@ -23,7 +23,7 @@ local random_names = {
 	"Maegan Gose"
 }
 
-TriggerEvent('es:addJobCommand', 'mdt', { "sheriff", "judge", "corrections" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'mdt', { "sheriff"}, function(source, args, user)
 	TriggerClientEvent('mdt:toggleVisibilty', source)
 end, { help = "Open MDT" })
 
