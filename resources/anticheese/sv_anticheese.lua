@@ -48,7 +48,7 @@ Citizen.CreateThread(function()
 			violations[tostring(src)] = { count = 1 }
 		end
 
-		return isKnown, isKnownCount, isKnownExtraText
+		return isKnown, "Flag Count:" .. isKnownCount .. isKnownExtraText
 	end
 
 	function GetPlayerNeededIdentifiers(player)
@@ -105,6 +105,30 @@ Citizen.CreateThread(function()
 	end)
 	--]]
 
+	-- log formating functions --
+	function getTimeString()
+		return "** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()) .. " **\n"
+	end
+
+	function getUserInfoString(userSource)
+		local license, steam, steamName, name = GetPlayerInfo(userSource)
+		return name, "ID #: " .. userSource .. "\nUser: " .. name.. "\nSteam Name: " .. steamName .. "\n" .. license .. "\n" .. steam .. "\n"
+	end
+	-- end log formating functions --
+
+	function roundToNthDecimal(num, n)
+	  local mult = 10^(n or 0)
+	  return math.floor(num * mult + 0.5) / mult
+	end
+
+	function roundCoords(x, y, z)
+		local n = 2
+		x = roundToNthDecimal(x, n)
+		y = roundToNthDecimal(y, n)
+		z = roundToNthDecimal(z, n)
+		return x, y, z
+	end
+
 	-- Have to use a stupid static variable because I cant find a way to pass information into the callback with parameters...
 	-- I have tried CreateThread and SetTimeout with many variations and zero luck. This is ugly but it works.
 	CACHE_A = nil
@@ -158,14 +182,14 @@ Citizen.CreateThread(function()
 	end
 
 	RegisterServerEvent('AntiCheese:SpeedFlag')
-	AddEventHandler('AntiCheese:SpeedFlag', function(distance)
+	AddEventHandler('AntiCheese:SpeedFlag', function(state, distance, oldx,oldy,oldz, newx,newy,newz)
 		local userSource = source
 		if Components.Speedhack then
-			print("*****speed flag trigged (source: #" .. userSource .. ")!!****")
+			print("*****speed/teleport flag trigged (source: #" .. userSource .. ")!!****")
 			if not isStaffMember(userSource) then
-				local license, steam, steamName, name = GetPlayerInfo(userSource)
+				local name, userInfoStr = getUserInfoString(userSource)
 
-				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
+				local isKnown, flagStr = WarnPlayer(userSource)
 				if not isKnown then  -- don't warn on first offense
 					print("**First offense, no alert**")
 					return
@@ -175,7 +199,17 @@ Citizen.CreateThread(function()
 					return  -- Don't send an alert
 				end
 
-				local msg = "```Speed/Teleport hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nCaught with "..math.ceil(distance).." units between last checked location\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
+				oldx, oldy, oldz = roundCoords(oldx, oldy, oldz)
+				newx, newy, newz = roundCoords(newx, newy, newz)
+
+				local msg = "```" .. getTimeString() ..
+					"Speed/Teleport hacker detected!\n" ..
+					userInfoStr ..
+					"Player was " .. math.ceil(distance) .. " units from their last checked location\n" ..
+					"Previous coordinates: (" .. oldx .. ", " .. oldy .. ", " .. oldz .. ")\n" ..
+					"Current coordinates: (" .. newx .. ", " .. newy .. ", " .. newz .. ")\n" ..
+					"Player flagged while " .. state .. "\n" ..
+					flagStr .. "```"
 				local staff_msg = "^3*Speed/Teleport hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
 
 				TriggerEvent("usa:notifyStaff", staff_msg)
@@ -187,14 +221,14 @@ Citizen.CreateThread(function()
 	end)
 
 	RegisterServerEvent('AntiCheese:NoclipFlag')
-	AddEventHandler('AntiCheese:NoclipFlag', function()
+	AddEventHandler('AntiCheese:NoclipFlag', function(distance, oldx,oldy,oldz, newx,newy,newz)
 		local userSource = source
 		if Components.Speedhack then
 			print("*****noclip flag trigged (source: #" .. userSource .. ")!!****")
 			if not isStaffMember(userSource) then
-				local license, steam, steamName, name = GetPlayerInfo(userSource)
+				local name, userInfoStr = getUserInfoString(userSource)
 
-				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
+				local isKnown, flagStr = WarnPlayer(userSource)
 				if not isKnown then  -- don't warn on first offense
 					print("**First offense, no alert**")
 					return
@@ -204,7 +238,16 @@ Citizen.CreateThread(function()
 					return  -- Don't send an alert
 				end
 
-				local msg = "```Noclip hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
+				oldx, oldy, oldz = roundCoords(oldx, oldy, oldz)
+				newx, newy, newz = roundCoords(newx, newy, newz)
+
+				local msg = "```" .. getTimeString() ..
+					"Noclip hacker detected!\n" ..
+					userInfoStr ..
+					"Player was " .. math.ceil(distance) .. " units from their last checked location\n" ..
+					"Previous coordinates: (" .. oldx .. ", " .. oldy .. ", " .. oldz .. ")\n" ..
+					"Current coordinates: (" .. newx .. ", " .. newy .. ", " .. newz .. ")\n" ..
+					flagStr .. "```"
 				local staff_msg = "^3*Noclip hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
 
 				TriggerEvent("usa:notifyStaff", staff_msg)
@@ -221,16 +264,24 @@ Citizen.CreateThread(function()
 		if Components.GodMode then
 			print("*****health flag trigged (source: #" .. userSource .. ")!!****")
 			if not isStaffMember(userSource) then
-				local license, steam, steamName, name = GetPlayerInfo(userSource)
+				local name, userInfoStr = getUserInfoString(userSource)
 
-				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
+				local isKnown, flagStr = WarnPlayer(userSource)
 
-				local msg, staff_msg = nil
+				local msg, staff_msg = "Error in AntiCheese:HealthFlag"
 				if invincible then
-					msg = "```Health hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nPlayer was set to invincible! Player reset to mortal.\nAnticheat Flags:"..isKnownCount..""..isKnownExtraText.." ```"
-					staff_msg = "^3*Health hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name .. "^3 made themselves invincible!"
+					msg = "```" .. getTimeString() ..
+						"Health hacker detected!\n" ..
+						userInfoStr ..
+						"Player was set to invincible! Player reset to mortal.\n" ..
+						flagStr .. "```"
+					staff_msg = "^3*Health hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name .. "^3 was set to invincible!"
 				else
-					msg = "```Health hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nRegenerated "..newHealth-oldHealth.."hp ( to reach "..newHealth.."hp ) in "..curWait.."ms!\nAnticheat Flags:"..isKnownCount..""..isKnownExtraText.." ```"
+					msg = "```" .. getTimeString() ..
+						"Health hacker detected!\n" ..
+						userInfoStr ..
+						"Regenerated " .. newHealth - oldHealth .. "hp ( to reach " .. newHealth .. "hp ) in " .. curWait .. "ms!\n" ..
+						flagStr .. "```"
 					staff_msg = "^3*Health hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
 				end
 
@@ -247,11 +298,14 @@ Citizen.CreateThread(function()
 		local userSource = source
 		if Components.SuperJump then
 			print("*****super jump flag trigged (source: #" .. userSource .. ")!!****")
-			local license, steam, steamName, name = GetPlayerInfo(userSource)
+			local name, userInfoStr = getUserInfoString(userSource)
 
-			local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
+			local isKnown, flagStr = WarnPlayer(userSource)
 
-			local msg = "```Super jump hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
+			local msg = "```" .. getTimeString() ..
+				"Super jump hacker detected!\n" ..
+				userInfoStr ..
+				flagStr .. "```"
 			local staff_msg = "^3*Super jump hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
 
 			TriggerEvent("usa:notifyStaff", staff_msg)
@@ -260,15 +314,21 @@ Citizen.CreateThread(function()
 	end)
 
 	RegisterServerEvent('AntiCheese:WeaponFlag')
-	AddEventHandler('AntiCheese:WeaponFlag', function(weapon)
+	AddEventHandler('AntiCheese:WeaponFlag', function(weaponHash)
 		local userSource = source
 		if Components.WeaponBlacklist then
 			print("*****blacklisted weapon flag trigged (source: #" .. userSource .. ")!!****")
-			local license, steam, steamName, name = GetPlayerInfo(userSource)
+			local name, userInfoStr = getUserInfoString(userSource)
 
-			local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
+			local isKnown, flagStr = WarnPlayer(userSource)
 
-			local msg = "```Weapon hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nPlayer caught with a blacklisted weapon!\nWeapon hash: "..weapon.."\nAll weapons were deleted.\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
+			local msg = "```" .. getTimeString() ..
+				"Weapon hacker detected!\n" ..
+				userInfoStr ..
+				"Player caught with a blacklisted weapon!\n" ..
+				"Weapon hash: " .. weaponHash .. "\n" ..
+				"All weapons were deleted.\n" ..
+				flagStr .. "```"
 			local staff_msg = "^3*Player with a blacklisted weapon detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
 
 			TriggerEvent("usa:notifyStaff", staff_msg)
@@ -281,11 +341,15 @@ Citizen.CreateThread(function()
 		local userSource = source
 		if Components.Invisibility then
 			print("*****invisibility flag trigged (source: #" .. userSource .. ")!!****")
-			local license, steam, steamName, name = GetPlayerInfo(userSource)
+			local name, userInfoStr = getUserInfoString(userSource)
 
-			local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(userSource)
+			local isKnown, flagStr = WarnPlayer(userSource)
 
-			local msg = "```Invisibility hacker detected!\nID #: " .. userSource .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
+			local msg = "```" .. getTimeString() ..
+				"Invisibility hacker detected!\n" ..
+				userInfoStr ..
+				"Player was invisible! Player reset to visible.\n" ..
+				flagStr .. "```"
 			local staff_msg = "^3*Invisibility hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
 
 			TriggerEvent("usa:notifyStaff", staff_msg)
@@ -308,11 +372,15 @@ Citizen.CreateThread(function()
 			-- if the last check in from a client was over a minute ago, anticheese resource must not be running
 			if userLifeChecks[tostring(id)] and os.time() - userLifeChecks[tostring(id)] > 60 then
 				print("*****Player disabled Anticheese (source: #" .. id .. ")!!****")
-				local license, steam, steamName, name = GetPlayerInfo(id)
+				local name, userInfoStr = getUserInfoString(tonumber(id))
 
-				local isKnown, isKnownCount, isKnownExtraText = WarnPlayer(id)
+				local isKnown, flagStr = WarnPlayer(tonumber(id))
 
-				local msg = "```Hacker disabled Anticheese!\nID #: " .. id .. "\nUser: "..name.."\nSteam Name: "..steamName.."\n"..license.."\n"..steam.."\nFlag Count:"..isKnownCount..""..isKnownExtraText.." ```"
+				local msg = "```" .. getTimeString() ..
+					"Hacker disabled Anticheese!\n" ..
+					userInfoStr ..
+					"!!!!! THIS SHOULD NOT HAPPEN BY ACCIDENT !!!!!\n" ..
+					flagStr .. "```"
 				local staff_msg = "^3*Hacker disabled Anticheese!* ID #: ^0" .. id .. "^3, Name: ^0" .. name
 
 				TriggerEvent("usa:notifyStaff", staff_msg)

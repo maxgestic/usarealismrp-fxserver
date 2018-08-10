@@ -107,31 +107,32 @@ Citizen.CreateThread(function()
 		local newx, newy, newz = table.unpack(GetEntityCoords(ped,true))
 		local newPed = PlayerPedId() -- used to make sure the peds are still the same, otherwise the player probably respawned
 		local speedhack = false
-		if ped == newPed then
+		if ped == newPed and (para == -1 or para == 0) and not fall and not parafall and not rag then
 			local dist = GetDistanceBetweenCoords(posx,posy,posz, newx,newy,newz, true)
 
-			if GetEntitySpeed(GetPlayerPed(-1)) == 0 then
-				if not isAtAWarpPoint(newx, newy, newz) then
+			if not isAtAWarpPoint(newx, newy, newz) then
+				if GetEntitySpeed(GetPlayerPed(-1)) == 0 then
 					if dist > (MaxRunSpeed * Seconds) then
-						TriggerServerEvent("AntiCheese:NoclipFlag")
+						TriggerServerEvent("AntiCheese:NoclipFlag", dist, posx,posy,posz, newx,newy,newz)
 					end
-				end
-			elseif (para == -1 or para == 0) and not fall and not parafall and not rag then
-				if not isAtAWarpPoint(newx, newy, newz) then
+				else
 					if flyveh then
 						if dist > MaxFlySpeed * Seconds then
+							state = "in an aircraft"
 							speedhack = true
 						end
 					elseif veh then
 						if dist > MaxVehSpeed * Seconds then
+							state = "in a vehicle"
 							speedhack = true
 						end
 					elseif dist > MaxRunSpeed * Seconds then
+						state = "on foot"
 						speedhack = true
 					end
 
 					if speedhack then
-						TriggerServerEvent("AntiCheese:SpeedFlag", dist)
+						TriggerServerEvent("AntiCheese:SpeedFlag", state, dist, posx,posy,posz, newx,newy,newz)
 					end
 				end
 			end
@@ -161,7 +162,7 @@ end
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(60000)
+		Citizen.Wait(40000)
 		local curPed = PlayerPedId()
 		local curHealth = GetEntityHealth( curPed )
 		SetEntityHealth(curPed, curHealth - 2)
