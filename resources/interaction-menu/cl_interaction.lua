@@ -27,7 +27,8 @@ local scenarios = {
 	{name = "push up", scenarioName = "WORLD_HUMAN_PUSH_UPS"},
 	{name = "weld", scenarioName = "WORLD_HUMAN_WELDING"},
 	{name = "mechanic", scenarioName = "WORLD_HUMAN_VEHICLE_MECHANIC"},
-	{name = "smoke", scenarioName = "WORLD_HUMAN_SMOKING"},
+	--{name = "smoke", scenarioName = "WORLD_HUMAN_SMOKING"},
+	{name = "smoke", type = "emote", dict = "amb@world_human_aa_smoke@male@idle_a", animname = "idle_c"},
 	{name = "drink", scenarioName = "WORLD_HUMAN_DRINKING"},
 	{name = "bum 1", scenarioName = "WORLD_HUMAN_BUM_FREEWAY"},
 	{name = "bum 2", scenarioName = "WORLD_HUMAN_BUM_SLUMPED"},
@@ -82,10 +83,11 @@ local scenarios = {
 	Game.get_Player().get_Character().PlayAmbientSpeech("DRAW_GUN", true);
 --]]
 
-local playing_emote = false
-local notepad_model = GetHashKey('prop_notepad_01')
-local anim_notepad = nil
-local lefthandbone = 60309
+local spawned_object = nil
+local playing_scenario = false
+local playing_anim = false
+local left_hand = 60309
+local right_hand = 58868
 
 local player = {
 	BAC = 0.00
@@ -196,8 +198,9 @@ RegisterNUICallback('playEmote', function(data, cb)
 	----------------------------------------------------------------
 	-- remove any objects for animiations if applicable --
 	----------------------------------------------------------------
-	if anim_notepad then
-		RemoveNotepadObject()
+	if spawned_object then
+		RemovePedObject()
+		playing_anim = nil
 	end
 	-------------------------------
 	-- play anim / scenario  --
@@ -206,14 +209,14 @@ RegisterNUICallback('playEmote', function(data, cb)
 		if scenarioName == "cancel" then
 			local ped = GetPlayerPed(-1)
 			ClearPedTasksImmediately(ped)
-			playing_emote = false
+			playing_scenario = false
 			return
 		elseif scenarioName == "surrender" then
 			TriggerEvent("KneelHU")
 			return
 		elseif scenarioName == "mechanic" or scenarioName == "sit" or scenarioName == "drill" or scenarioName == "chillin'" or scenarioName == "golf" then
 			TriggerServerEvent("interaction:checkJailedStatusBeforeEmote", scenarioName)
-			playing_emote = true
+			playing_scenario = true
 			return
 		elseif scenarioName == "chair" then
 			TriggerEvent("sit:sitOnNearest")
@@ -225,27 +228,44 @@ RegisterNUICallback('playEmote', function(data, cb)
 				if ped then
 					if scenarios[i].type ~= "emote" then
 						TaskStartScenarioInPlace(ped, scenarios[i].scenarioName, 0, true)
-						playing_emote = true
+						playing_scenario = true
 					else
 						if string.find(scenarioName, "shag") then
 							local flag = 7
 							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true, flag)
-							playing_emote = true
+							playing_scenario = true
 						elseif string.find(scenarioName, "cpr") or string.find(scenarioName, "cross arms") then
 							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
-							playing_emote = true
+							playing_scenario = true
 						elseif string.find(scenarioName, "notepad") then
 							-----------------------------
 							-- give notepad object --
 							-----------------------------
-							GiveNotepadObject()
+							GivePedObject(left_hand, "prop_notepad_01")
 							---------------------------
 							-- play notepad anim --
 							---------------------------
 							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
+							playing_anim = {
+								dict = scenarios[i].dict,
+								name = scenarios[i].animname
+							}
+						elseif string.find(scenarioName, "smoke") then
+							-------------------------------
+							-- give cigarrette object --
+							-------------------------------
+							GivePedObject(right_hand, "prop_cs_ciggy_01", 0.05, 0.00, 0.02, -270.0, 90.0, 0.0)
+							-----------------------------
+							-- play smoking anim --
+							-----------------------------
+							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
+							playing_anim = {
+								dict = scenarios[i].dict,
+								name = scenarios[i].animname
+							}
 						else
 							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5)
-							playing_emote = true
+							playing_scenario = true
 						end
 					end
 				end
@@ -253,21 +273,26 @@ RegisterNUICallback('playEmote', function(data, cb)
 		end
 end)
 
-function GiveNotepadObject()
+function GivePedObject(target_bone, object, x, y, z, rotX, rotY, rotZ)
+	object = GetHashKey(object)
 	local ped = GetPlayerPed(-1)
 	local coords = GetEntityCoords(ped)
-    local bone = GetPedBoneIndex(ped, lefthandbone)
-  	RequestModel(notepad_model)
-  	while not HasModelLoaded(notepad_model) do
+    local bone = GetPedBoneIndex(ped, target_bone)
+  	RequestModel(object)
+  	while not HasModelLoaded(object) do
   		Citizen.Wait(100)
   	end
-  	anim_notepad = CreateObject(notepad_model, coords.x, coords.y, coords.z, 1, 1, 0)
-  	AttachEntityToEntity(anim_notepad, ped, bone, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1, 1, 0, 0, 2, 1)
+  	spawned_object = CreateObject(object, coords.x, coords.y, coords.z, 1, 1, 0)
+	if rotX and rotY and rotZ and x and y and z then
+  		AttachEntityToEntity(spawned_object, ped, bone, x, y, z, rotX, rotY, rotZ, 1, 1, 0, 0, 2, 1)
+	else
+		AttachEntityToEntity(spawned_object, ped, bone, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1, 1, 0, 0, 2, 1)
+	end
 end
 
-function RemoveNotepadObject()
-	DeleteObject(anim_notepad)
-	anim_notepad = nil
+function RemovePedObject()
+	DeleteObject(spawned_object)
+	spawned_object = nil
 end
 
 RegisterNUICallback('setVoipLevel', function(data, cb)
@@ -652,13 +677,19 @@ end)
 local EMOTE_CANCEL = 32
 Citizen.CreateThread(function()
 	while true do
-		--print("GetPedParachuteState(GetPlayerPed(-1)): " .. GetPedParachuteState(GetPlayerPed(-1)))
-		-- cancel emote when walking forward & not parachuting --
-		--if IsControlPressed(1, 32) and (GetPedParachuteState(GetPlayerPed(-1)) == -1 or GetPedParachuteState(GetPlayerPed(-1)) == 0) then
-		if IsControlPressed(1, 32) and playing_emote then
-			local ped = GetPlayerPed(-1)
+		local ped = GetPlayerPed(-1)
+		------------------------------------------------
+		-- cancel scenario when W is pressed --
+		------------------------------------------------
+		if IsControlPressed(1, 32) and playing_scenario then
 			ClearPedTasks(ped)
-			playing_emote = false
+			playing_scenario = false
+		end
+		--------------------------------------------
+		-- Make sure emote stays playing  --
+		--------------------------------------------
+		if playing_anim and not IsEntityPlayingAnim(ped, playing_anim.dict, playing_anim.name, 3) then
+			TaskPlayAnim(ped, playing_anim.dict, playing_anim.name, 8.0, 1, -1, 49, 0, 0, 0, 0)
 		end
 		Citizen.Wait(100)
 	end

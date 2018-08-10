@@ -491,10 +491,10 @@ AddEventHandler("usa:playAnimation", function(animName, animDict, duration, spee
 		  if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) and not IsPedInAnyVehicle(GetPlayerPed(-1), 1) then
 			if speed then
 				--print("speed existed!")
-				TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, -8, -1, 7, 0, 0, 0, 0)
+				TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, -8, 1, 7, 0, 0, 0, 0)
 			else
 				--print("speed did not exist!")
-				TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 53, 0, 0, 0, 0)
+				TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, 1, 53, 0, 0, 0, 0)
 			end
 			playing_anim = {dict = animDict, name = animName}
 		  end
@@ -512,11 +512,11 @@ AddEventHandler("usa:playAnimation", function(animName, animDict, duration, spee
                         TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, 5, 5, 31, 0, 0, 0, 0)
                     end
 				else
-					TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, -8, -1, 8, 0, 0, 0, 0)
+					TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, 1, 1, 8, 0, 0, 0, 0)
 				end
 			else
 				--print("speed did not exist!")
-				TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 53, 0, 0, 0, 0)
+				TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 1.0, 1, -1, 53, 0, 0, 0, 0)
 			end
 			playing_anim = {dict = animDict, name = animName}
 		end
