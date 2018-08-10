@@ -477,7 +477,7 @@ end)
 
 local playing_anim = nil
 RegisterNetEvent("usa:playAnimation")
-AddEventHandler("usa:playAnimation", function(animName, animDict, duration, speed, loop)
+AddEventHandler("usa:playAnimation", function(animName, animDict, duration, speed, loop, flag)
   --print("inside of usa:playAnimation!!")
   if not IsPedInAnyVehicle(GetPlayerPed(-1), 1) then
     -- load animation
@@ -506,7 +506,11 @@ AddEventHandler("usa:playAnimation", function(animName, animDict, duration, spee
 				--print("speed existed!")
 				if loop then
 					--print("loop!")
-					TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, -8, -1, 7, 0, 0, 0, 0)
+                    if flag then
+                        TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, 5, 5, flag, 0, 0, 0, 0)
+                    else
+                        TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, 5, 5, 31, 0, 0, 0, 0)
+                    end
 				else
 					TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, -8, -1, 8, 0, 0, 0, 0)
 				end

@@ -6,10 +6,10 @@ local scenarios = {
 	{name = "lean", scenarioName = "WORLD_HUMAN_LEANING"},
 	{name = "cop", scenarioName = "WORLD_HUMAN_COP_IDLES"},
 	{name = "sit", scenarioName = "WORLD_HUMAN_PICNIC"},
-	{name = "chair", scenarioName = "PROP_HUMAN_SEAT_CHAIR"},
+	--{name = "chair", scenarioName = "PROP_HUMAN_SEAT_CHAIR"},
+	{name = "cross arms", type = "emote", dict = "amb@world_human_hang_out_street@female_arms_crossed@base", animname = "base"},
 	{name = "kneel", scenarioName = "CODE_HUMAN_MEDIC_KNEEL"},
-	--{name = "medic", scenarioName = "CODE_HUMAN_MEDIC_TEND_TO_DEAD"},
-	{name = "notepad", scenarioName = "CODE_HUMAN_MEDIC_TIME_OF_DEATH"},
+	{name = "notepad", type = "emote", dict = "amb@medic@standing@timeofdeath@base", animname = "base"},
 	{name = "traffic", scenarioName = "WORLD_HUMAN_CAR_PARK_ATTENDANT"},
 	{name = "photo", scenarioName = "WORLD_HUMAN_PAPARAZZI"},
 	{name = "clipboard", scenarioName = "WORLD_HUMAN_CLIPBOARD"},
@@ -81,6 +81,11 @@ local scenarios = {
 
 	Game.get_Player().get_Character().PlayAmbientSpeech("DRAW_GUN", true);
 --]]
+
+local playing_emote = false
+local notepad_model = GetHashKey('prop_notepad_01')
+local anim_notepad = nil
+local lefthandbone = 60309
 
 local player = {
 	BAC = 0.00
@@ -184,13 +189,23 @@ RegisterNUICallback('retrieveVehicleItem', function(data, cb)
 end)
 
 RegisterNUICallback('playEmote', function(data, cb)
-	--TriggerEvent("test:escapeFromCSharp")
+	-----------------
+	-- shut GUI --
+	-----------------
 	DisableGui()
-	--Citizen.Trace("inside of NUI callback with emote: " .. data.emoteName)
+	----------------------------------------------------------------
+	-- remove any objects for animiations if applicable --
+	----------------------------------------------------------------
+	if anim_notepad then
+		RemoveNotepadObject()
+	end
+	-------------------------------
+	-- play anim / scenario  --
+	-------------------------------
 	local scenarioName = data.emoteName
 		if scenarioName == "cancel" then
 			local ped = GetPlayerPed(-1)
-			ClearPedTasks(ped)
+			ClearPedTasksImmediately(ped)
 			playing_emote = false
 			return
 		elseif scenarioName == "surrender" then
@@ -210,18 +225,50 @@ RegisterNUICallback('playEmote', function(data, cb)
 				if ped then
 					if scenarios[i].type ~= "emote" then
 						TaskStartScenarioInPlace(ped, scenarios[i].scenarioName, 0, true)
+						playing_emote = true
 					else
-						if string.find(scenarioName, "shag") or string.find(scenarioName, "cpr") or string.find(scenarioName, "cross arms") then
+						if string.find(scenarioName, "shag") then
+							local flag = 7
+							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true, flag)
+							playing_emote = true
+						elseif string.find(scenarioName, "cpr") or string.find(scenarioName, "cross arms") then
+							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
+							playing_emote = true
+						elseif string.find(scenarioName, "notepad") then
+							-----------------------------
+							-- give notepad object --
+							-----------------------------
+							GiveNotepadObject()
+							---------------------------
+							-- play notepad anim --
+							---------------------------
 							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
 						else
 							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5)
+							playing_emote = true
 						end
 					end
-					playing_emote = true
 				end
 			end
 		end
 end)
+
+function GiveNotepadObject()
+	local ped = GetPlayerPed(-1)
+	local coords = GetEntityCoords(ped)
+    local bone = GetPedBoneIndex(ped, lefthandbone)
+  	RequestModel(notepad_model)
+  	while not HasModelLoaded(notepad_model) do
+  		Citizen.Wait(100)
+  	end
+  	anim_notepad = CreateObject(notepad_model, coords.x, coords.y, coords.z, 1, 1, 0)
+  	AttachEntityToEntity(anim_notepad, ped, bone, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1, 1, 0, 0, 2, 1)
+end
+
+function RemoveNotepadObject()
+	DeleteObject(anim_notepad)
+	anim_notepad = nil
+end
 
 RegisterNUICallback('setVoipLevel', function(data, cb)
 	DisableGui()
@@ -485,7 +532,6 @@ function interactionMenuUse(itemName, wholeItem)
 		-- Cell Phone --
 		-------------------
 		elseif string.find(itemName, "Cell Phone") then
-			print("Player is using a cell phone from the F1 menu with its number = " .. wholeItem.number)
 			TriggerEvent("phone:openPhone", wholeItem)
 		-------------------
 		-- Food Item  --
