@@ -36,6 +36,53 @@ end
 
 loadWarrants()
 
+function getWarrants()
+	return WARRANTS
+end
+
+function createWarrant(src, warrant, notify_with_nui)
+	--- save warrant
+	table.insert(WARRANTS, warrant)
+	-- send warrant to discord:
+		-- send discord message
+		local desc = "\n**Name:** " .. warrant.first_name .. " " .. warrant.last_name .. "\n**Notes:** " .. warrant.notes ..  "\n**Officer:** " .. warrant.created_by .. "\n**Timestamp:** ".. warrant.timestamp
+		local url = 'https://discordapp.com/api/webhooks/409961124780310528/mjiYli8X1jr9Uhwtf_QdbrkvWLcwRtuiphmCGfdVUoqAtZghi2FNOMe6dfNbaYZnr0yu'
+			PerformHttpRequest(url, function(err, text, headers)
+				if text then
+					print(text)
+				end
+			end, "POST", json.encode({
+				embeds = {
+					{
+						description = desc,
+						color = 524288,
+						author = {
+							name = "BLAINE COUNTY WARRANT"
+						}
+					}
+				}
+			}), { ["Content-Type"] = 'application/json' })
+	-- add warrant to warrant list
+	TriggerEvent('es:exposeDBFunctions', function(GetDoc)
+		-- insert into db
+		GetDoc.createDocument("warrants", warrant, function()
+			print("warrant saved!")
+			if not notify_with_nui then
+				-- notify:
+				TriggerClientEvent('chatMessage', src, "", {255, 255, 255}, "^3Warrant created for:^0 " .. first_name .. " " .. last_name .. "! ^3Notes:^0 " .. notes)
+			else
+				local msg = {
+		            type = "warrantInfo",
+		            message  = "Warrant successfully created for: " .. warrant.first_name .. " " .. warrant.last_name
+		        }
+				TriggerClientEvent("mdt:sendNUIMessage", src, msg)
+			end
+			-- refresh warrants:
+			loadWarrants()
+		end)
+	end)
+end
+
 --------------------
 -- CREATE WARRANT --
 --------------------
@@ -145,7 +192,7 @@ TriggerEvent('es:addJobCommand', 'deletewarrant', { "police", "sheriff", "judge"
 				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^3Notes:^0 " .. warrant.notes)
 				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^3CREATED:^0 " .. warrant.timestamp)
 				-- remove from DB:
-				delete_document("warrants", warrant._id, warrant._rev)
+				deleteWarrant("warrants", warrant._id, warrant._rev)
 				table.remove(WARRANTS, i)
 				return
 			end
@@ -190,7 +237,7 @@ AddEventHandler("warrants:removeAnyActiveWarrants", function(name)
 		if string.find(warrant_name, name) then
 			-- match found, remove warrant
 			-- remove from DB:
-			delete_document("warrants", warrant._id, warrant._rev)
+			deleteWarrant("warrants", warrant._id, warrant._rev)
 			table.remove(WARRANTS, i)
 			return
 		end
@@ -198,7 +245,7 @@ AddEventHandler("warrants:removeAnyActiveWarrants", function(name)
 end)
 
 
-function delete_document(db, id, rev)
+function deleteWarrant(db, id, rev)
 	-- send DELETE http request
 	PerformHttpRequest("http://127.0.0.1:5984/"..db.."/"..id.."?rev="..rev, function(err, rText, headers)
 		if err == 0 then

@@ -1,0 +1,437 @@
+<html style="overflow-y: hidden;">
+<head>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+    body {
+        display: none;
+    }
+    body, h1,h2,h3,h4,h4,h6 {
+        font-family: 'Roboto Mono', monospace;
+    }
+    ul {
+        list-style-type: none;
+        padding-left: 1em;
+    }
+    /* Set the width of the sidebar to 120px */
+    .w3-sidebar {
+        width: 120px;
+        background: #222;
+        border-right: 4px solid #FFC41B;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+    }
+    /* Add a left margin to the "page content" that matches the width of the sidebar (120px) */
+    #content {
+        margin-left: 120px;
+    }
+    .nav-active {
+        background-color: #666;
+    }
+    .padding-1 {
+        padding: 1em;
+    }
+    .margin-bottom-1 {
+        margin-bottom: 1em;
+    }
+    #content_container {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        height: 850px !important;
+        margin-top: 7em;
+        border: 50px solid transparent;
+        border-image: url('mdt-border.png') 45 stretch;
+    }
+    #icon_navbar {
+        height: 100% !important;
+        padding-bottom: 0;
+        margin-bottom: 0;
+        background-color: black;
+    }
+    .gold {
+        color: #FFC41B;
+    }
+    main {
+        position: relative;
+        height: 75%;
+    }
+    header {
+        height: 20% !important;
+    }
+    </style>
+</head>
+<body>
+    <div id="content_container">
+
+        <!-- Icon Bar Nav-->
+        <nav id="icon_navbar" class="w3-sidebar w3-bar-block w3-center w3-text-white">
+            <div v-on:click="changePage('Person(s) Check')" id="person_check" class="w3-bar-item w3-button w3-padding-large">
+                <i class="fa fa-user w3-xxlarge"></i>
+                <p>Person Check</p>
+            </div>
+            <div v-on:click="changePage('Plate Check')" id="plate_check" class="w3-bar-item w3-button w3-padding-large">
+                <i class="fa fa-car w3-xxlarge"></i>
+                <p>Plate Check</p>
+            </div>
+            <div v-on:click="changePage('Warrants')" id="warrants" class="w3-bar-item w3-button w3-padding-large">
+                <i class="fa fa-archive w3-xxlarge"></i>
+                <p>Warrants</p>
+            </div>
+            <div v-on:click="changePage('BOLO')" id="bolo" class="w3-bar-item w3-button w3-padding-large">
+                <i class="fa fa-binoculars w3-xxlarge"></i>
+                <p>BOLOs</p>
+            </div>
+            <div v-on:click="changePage('Police Reports')" id="reports" class="w3-bar-item w3-button w3-padding-large">
+                <i class="fa fa-sticky-note w3-xxlarge"></i>
+                <p>Police Reports</p>
+            </div>
+        </nav>
+
+        <!-- Main Content  -->
+        <div id="content">
+            <section class="w3-container w3-black" id="home" style="padding-left: 0 !important; padding-right: 0 !important; height: 100%;">
+
+                <!-- Header -->
+                <header class="w3-cell-row">
+                    <img src="bcso-badge.png" alt="BCSO" width="160px" style="position: absolute; left: 300; top: 15;">
+                    <div class="w3-container w3-center w3-padding-24" style="width: 100%;">
+                        <div class="w3-container w3-center w3-padding-16 gold" style="display: inline-block;">
+                            <h1 style="font-size: 30px;"><b><i>Blaine County Sheriff's Office</i></b></h1>
+                            <p><i>Welcome, {{ employee.rank }} {{ employee.lname  }}!</i></p>
+                        </div>
+                    </div>
+                    <img src="bcso-badge.png" alt="BCSO" width="160px" style="position: absolute; right: 150; top: 15;">
+                </header>
+
+                <main style="border-top: 4px solid #FFC41B; overflow-y: scroll; padding-left: 2em; padding-right: 2em;">
+
+                    <!-- Title -->
+                    <h3 class="w3-center" style="padding-top: 1em; padding-bottom: 1em;">{{ current_tab }}</h3>
+
+                    <!-- Error box -->
+                    <div class="w3-text-red">{{ error }}</div>
+
+                    <!-- Person Check -->
+                    <div v-if="current_tab == 'Person(s) Check'">
+
+                        <!-- Input form for SSN -->
+                        <form class="w3-container w3-card-4" style="padding-left: 0 !important;">
+                            <br>
+                            <p>
+                                <label class="w3-text-white">SSN</label>
+                                <input v-model="person_check.ssn" class="w3-input w3-border" type="text"  placeholder="Enter an SSN to search..." required>
+                            </p>
+                            <br>
+                            <p><button v-on:click="PerformPersonCheck" type="button" class="w3-btn w3-padding w3-text-black" style="width:120px; background-color: lightgray;">Search &nbsp; &#10095;</button></p>
+                        </form>
+
+                        <h4><b>Name:</b></h4>
+
+                        <table v-if="person_check.name" class="w3-table-all w3-small">
+                            <tr>
+                                <td>{{ person_check.name }}</td>
+                            </tr>
+                        </table>
+
+                        <h4><b>Driver's License:</b></h4>
+
+                        <table v-if="person_check.drivers_license" class="w3-table-all w3-small">
+                            <tr>
+                                <th>Number</th>
+                                <th>Status</th>
+                                <th>Expire</th>
+                            </tr>
+                            <tr>
+                                <td>{{ person_check.drivers_license.number }}</td>
+                                <td>{{ person_check.drivers_license.status }}</td>
+                                <td>{{ person_check.drivers_license.expire }}</td>
+                            </tr>
+                        </table>
+                        <span v-else-if="person_check.drivers_license == false" style="color: red"><b>No driver's license found!</b></span>
+
+                        <h4><b>Firearm Permit:</b></h4>
+
+                        <table v-if="person_check.firearm_permit" class="w3-table-all w3-small">
+                            <tr>
+                                <th>Number</th>
+                                <th>Status</th>
+                                <th>Expire</th>
+                            </tr>
+                            <tr>
+                                <td>{{ person_check.firearm_permit.number }}</td>
+                                <td>{{ person_check.firearm_permit.status }}</td>
+                                <td>{{ person_check.firearm_permit.expire }}</td>
+                            </tr>
+                        </table>
+                        <span v-else-if="person_check.firearm_permit == false" style="color: red"><b>No firearm permit found!</b></span>
+
+                        <h4><b>Insurance:</b></h4>
+
+                        <table v-if="person_check.insurance" class="w3-table-all w3-small">
+                            <tr>
+                                <th>Name</th>
+                                <th>Valid</th>
+                                <th>Purchase Date</th>
+                            </tr>
+                            <tr>
+                                <td>{{person_check.insurance.planName }}</td>
+                                <td>{{ person_check.insurance.valid }}</td>
+                                <td>{{ person_check.insurance.purchaseDate }}</td>
+                            </tr>
+                        </table>
+                        <span v-else-if="person_check.insurance == false" style="color: red"><b>No insurance found!</b></span>
+
+                        <h4><b>Arrest(s):</b></h4>
+
+                        <table v-if="person_check.criminal_history.crimes" class="w3-table-all w3-small">
+                            <tr>
+                                <th>Charge(s)</th>
+                                <th>Sentence</th>
+                                <th>Arresting Officer</th>
+                                <th>Date</th>
+                            </tr>
+                            <tr v-for="crime in person_check.criminal_history.crimes">
+                                <td>{{ crime.charges }}</td>
+                                <td>{{ crime.sentence }}</td>
+                                <td>{{ crime.arrestingOfficer }}</td>
+                                <td>{{ crime.timestamp }}</td>
+                            </tr>
+                        </table>
+                        <span v-else-if="person_check.criminal_history.crimes == false" style="color: red"><b>No criminal history found!</b></span>
+
+                        <h4><b>Ticket(s):</b></h4>
+
+                        <table v-if="person_check.criminal_history.tickets" class="w3-table-all w3-small">
+                            <tr>
+                                <th>Infraction(s)</th>
+                                <th>Fine</th>
+                                <th>Date</th>
+                            </tr>
+                            <tr v-for="crime in person_check.criminal_history.tickets">
+                                <td>{{ crime.reason }}</td>
+                                <td>{{ crime.fine }}</td>
+                                <td>{{ crime.timestamp }}</td>
+                            </tr>
+                        </table>
+                        <span v-else-if="person_check.criminal_history.tickets == false" style="color: red"><b>No ticket history found!</b></span>
+
+                    </div>
+
+                    <!-- Plate Check -->
+                    <div v-if="current_tab == 'Plate Check'">
+                        <!-- Input form -->
+                        <form class="w3-container w3-card-4" style="padding-left: 0 !important;">
+                            <br>
+                            <p>
+                                <label class="w3-text-white">Plate #:</label>
+                                <input v-model="plate_check.search_input" class="w3-input w3-border" type="text"  placeholder="Enter a vehicle plate # to search..." required>
+                            </p>
+                            <br>
+                            <p><button v-on:click="PerformPlateCheck" type="button" class="w3-btn w3-padding w3-text-black" style="width:120px; background-color: lightgray;">Search &nbsp; &#10095;</button></p>
+                        </form>
+                        <!-- Plate check results -->
+                        <h3><b>Plate:</b></h3>
+
+                        <table v-if="plate_check.plate" class="w3-table-all w3-small">
+                            <tr>
+                                <td>{{ plate_check.plate }}</td>
+                            </tr>
+                        </table>
+                        <span v-else style="color: red"><b>No plate found!</b></span>
+
+                        <h3><b>RO:</b></h3>
+
+                        <table v-if="plate_check.registered_owner" class="w3-table-all w3-small">
+                            <tr>
+                                <td>{{ plate_check.registered_owner }}</td>
+                            </tr>
+                        </table>
+                        <span v-else style="color: red"><b>No owner found!</b></span>
+
+                        <h3><b>Make/Model:</b></h3>
+
+                        <table v-if="plate_check.veh_name" class="w3-table-all w3-small">
+                            <tr>
+                                <td>{{ plate_check.veh_name }}</td>
+                            </tr>
+                        </table>
+                        <span v-else style="color: red"><b>No make or model found!</b></span>
+
+                    </div>
+
+                    <!-- Warrants -->
+                    <div v-if="current_tab == 'Warrants'">
+                            <div style="height: 60%; overflow-y: scroll; border: 2px solid lightgray;">
+                                <table class="w3-table-all w3-small" style="margin-bottom: 3em;">
+                                    <tr>
+                                        <th><b>First</b></th>
+                                        <th><b>Last</b></th>
+                                        <th><b>Notes</b></th>
+                                        <th><b>Author</b></th>
+                                        <th><b>Timestamp</b></th>
+                                    </tr>
+                                    <tr v-on:click="OpenWarrantDetails(warrant._id)" v-for="warrant in filtered_warrants" class="w3-hover-gray">
+                                        <td>{{ warrant.first_name }}</td>
+                                        <td>{{ warrant.last_name }}</td>
+                                        <td>{{ warrant.notes }}</td>
+                                        <td>{{ warrant.created_by }}</td>
+                                        <td>{{ warrant.timestamp }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <input v-model="warrant_search" class="w3-input w3-border" type="text"  placeholder="Search for a warrant..." required>
+                            <h3 style="text-align: center; margin-top: 2em;">Create a warrant</h3>
+                            <!-- Notification box -->
+                            <div class="w3-text-white">{{ notification }}</div>
+                            <!-- New warrant form -->
+                            <form class="w3-container w3-card-4" style="padding-left: 0 !important;">
+                                <br>
+                                <div>
+                                    <label class="w3-text-white">First Name: *</label>
+                                    <input  v-model="new_warrant.first_name" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: Jane" required>
+                                    <label class="w3-text-white">Last Name: *</label>
+                                    <input v-model="new_warrant.last_name" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: Doe" required>
+                                    <label class="w3-text-white">Charge(s): *</label>
+                                    <input v-model="new_warrant.charges" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: VC 2800.2, PC 245" required>
+                                    <label class="w3-text-white">Suspect Description:</label>
+                                    <input v-model="new_warrant.suspect_description" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: White female adult with a tattoo of a fish on leg and black hair, last seen ...">
+                                    <label class="w3-text-white">Police Report #:</label>
+                                    <input v-model="new_warrant.police_report_number" class="w3-input w3-border" type="text"  placeholder="Ex: 7fefe9181f42a6e128b2dec4a001ae6f">
+                                </div>
+                                <br>
+                                <p><button v-on:click="CreateWarrant" type="button" class="w3-btn w3-padding w3-text-black" style="width:120px; background-color: lightgray;">Submit</button></p>
+                            </form>
+                    </div>
+
+                    <!-- Warrant details -->
+                    <div v-if="current_tab == 'Warrant Detail'">
+                        <div class="w3-padding-16 gold"><b>Police Report #:</b></div>
+                        {{ current_warrant.police_report_number }}
+                        <div class="w3-padding-16 gold"><b>First Name:</b></div>
+                        {{ current_warrant.first_name }}
+                        <div class="w3-padding-16 gold"><b>Last Name:</b></div>
+                        {{ current_warrant.last_name }}
+                        <div class="w3-padding-16 gold"><b>Suspect Description:</b></div>
+                        {{ current_warrant.suspect_description }}
+                        <div class="w3-padding-16 gold"><b>Charge(s):</b></div>
+                        <div>{{ current_warrant.charges }}</div>
+                        <div class="w3-padding-16 gold"><b>Author:</b></div>
+                        {{ current_warrant.created_by }}
+                        <div class="w3-padding-16 gold"><b>Date:</b></div>
+                        {{ current_warrant.timestamp}}
+                        <!-- <button>Edit</button> -->
+                        <div class="w3-margin-bottom">
+                            <button v-on:click="changePage('Warrants')" class="w3-margin-top">Back</button>
+                            <button v-on:click="DeleteWarrant(current_warrant._id)" class="w3-margin-top">Delete</button>
+                        </div>
+                    </div>
+
+                    <!-- BOLOs -->
+                    <div v-if="current_tab == 'BOLO'">
+                            <div style="height: 60%; overflow-y: scroll; border: 2px solid lightgray;">
+                                <table class="w3-table-all w3-small" style="margin-bottom: 3em;">
+                                    <tr>
+                                        <th><b>Descripton</b></th>
+                                        <th><b>Author</b></th>
+                                        <th><b>Timestamp</b></th>
+                                        <th><b>Delete</b></th>
+                                    </tr>
+                                    <tr v-for="bolo in filtered_bolos" class="w3-hover-gray">
+                                        <td>{{ bolo.description }}</td>
+                                        <td>{{ bolo.author }}</td>
+                                        <td>{{ bolo.timestamp }}</td>
+                                        <td v-on:click="DeleteBOLO(bolo._id)"><i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <input v-model="bolo_search" class="w3-input w3-border" type="text"  placeholder="Search for a BOLO..." required>
+                            <h3 style="text-align: center; margin-top: 2em;">Create a BOLO</h3>
+                            <!-- Notification box -->
+                            <div class="w3-text-white">{{ notification }}</div>
+                            <!-- New BOLO form -->
+                            <form class="w3-container w3-card-4" style="padding-left: 0 !important;">
+                                <br>
+                                <div>
+                                    <label class="w3-text-white">BOLO:*</label>
+                                    <input v-model="new_bolo.description" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: White female adult with a tattoo of a fish on leg and black hair, last seen ..." required>
+                                </div>
+                                <br>
+                                <p><button v-on:click="CreateBOLO" type="button" class="w3-btn w3-padding w3-text-black" style="background-color: lightgray;" style="width:120px">Submit</button></p>
+                            </form>
+                    </div>
+
+                    <!-- Police Reports -->
+                    <div v-if="current_tab == 'Police Reports'">
+                            <div style="height: 60%; overflow-y: scroll; border: 2px solid lightgray;">
+                                <table class="w3-table-all w3-small" style="margin-bottom: 3em;">
+                                    <tr>
+                                        <th><b>Report #</b></th>
+                                        <th><b>Incident</b></th>
+                                        <th><b>Location</b></th>
+                                        <th><b>Author</b></th>
+                                        <th><b>Timestamp</b></th>
+                                    </tr>
+                                    <tr v-on:click="OpenPoliceReportDetails(report._id)" v-for="report in filtered_police_reports" class="w3-hover-gray">
+                                        <td>{{ report._id }}</td>
+                                        <td>{{ report.incident }}</td>
+                                        <td>{{ report.location }}</td>
+                                        <td>{{ report.author }}</td>
+                                        <td>{{ report.timestamp }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <input v-model="report_search" class="w3-input w3-border" type="text"  placeholder="Search for a report..." required>
+                            <h3 style="text-align: center; margin-top: 2em;">Create an incident report</h3>
+                            <!-- Notification box -->
+                            <div class="w3-text-white">{{ notification }}</div>
+                            <!-- New police report form -->
+                            <form class="w3-container w3-card-4" style="padding-left: 0 !important;">
+                                <br>
+                                <div>
+                                    <label class="w3-text-white">Incident Details: *</label>
+                                    <textarea v-model="new_police_report.incident" class="w3-input w3-border margin-bottom-1" rows="6" cols="100" placeholder="Ex: At 5:35 PM, I responded to a report of a disturbance on Paleto Blvd. and Procopio Dr. and upon arrival..."></textarea>
+                                    <label class="w3-text-white">Location: *</label>
+                                    <input v-model="new_police_report.location" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: Paleto Blvd / Cascabel Ave." required>
+                                    <label class="w3-text-white">Other Responder(s):</label>
+                                    <input v-model="new_police_report.other_responders" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: Jesse King (U-102), Hack Gambino (L-2)">
+                                </div>
+                                <br>
+                                <p><button v-on:click="CreatePoliceReport" type="button" class="w3-btn w3-padding w3-text-black" style="background-color: lightgray;">Submit Report</button></p>
+                            </form>
+                    </div>
+
+                    <!-- Police Report details -->
+                    <div v-if="current_tab == 'Incident Detail'">
+                        <div class="w3-padding-16 gold"><b>Report #:</b></div>
+                        {{ current_report._id }}
+                        <div class="w3-padding-16 gold"><b>Timestamp:</b></div>
+                        {{ current_report.timestamp }}
+                        <div class="w3-padding-16 gold"><b>Author:</b></div>
+                        {{ current_report.author }}}
+                        <div class="w3-padding-16 gold"><b>Other Responder(s):</b></div>
+                        {{ current_report.other_responders }}
+                        <div class="w3-padding-16 gold"><b>Incident Details:</b></div>
+                        {{ current_report.incident }}
+                        <div class="w3-margin-bottom">
+                            <button v-on:click="changePage('Police Reports')" class="w3-margin-top">Back</button>
+                            <button v-on:click="DeletePoliceReport(current_report._id)" class="w3-margin-top">Delete</button>
+                        </div>
+                    </div>
+
+        </main>
+
+    </section>
+</div>
+
+</div>
+<script src="vue.min.js"></script>
+<script
+src="https://code.jquery.com/jquery-3.3.1.min.js"
+integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+crossorigin="anonymous"></script>
+<script src="script.js"></script>
+</body>
+</html>
