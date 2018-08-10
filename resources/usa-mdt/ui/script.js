@@ -30,7 +30,8 @@ const mdtApp = new Vue({
         bolo_search: "",
         report_search: "",
         new_bolo: {
-            description:  ""
+            description:  "",
+            police_report_number: ""
         },
         new_warrant: {
             first_name: "",
@@ -107,6 +108,7 @@ const mdtApp = new Vue({
                 }));
                 this.notification = "BOLO created!";
                 this.new_bolo.description = "";
+                this.new_bolo.police_report_number = "";
             } else {
                 this.notification = "Please fill in all required fields!";
             }
@@ -304,7 +306,8 @@ document.onkeydown = function (data) {
         $.post('http://usa-mdt/close', JSON.stringify({}));
     } else if (data.which == 13) { // enter
         /* prevent enter key from closing MDT for some reason */
-        return false;
+        if (!$("textarea").hasFocus())
+            return false;
     }
 };
 

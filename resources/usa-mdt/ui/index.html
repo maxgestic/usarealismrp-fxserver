@@ -334,12 +334,14 @@
                             <div style="height: 60%; overflow-y: scroll; border: 2px solid lightgray;">
                                 <table class="w3-table-all w3-small" style="margin-bottom: 3em;">
                                     <tr>
-                                        <th><b>Descripton</b></th>
+                                        <th><b>Report #</b></th>
+                                        <th><b>Details</b></th>
                                         <th><b>Author</b></th>
                                         <th><b>Timestamp</b></th>
                                         <th><b>Delete</b></th>
                                     </tr>
                                     <tr v-for="bolo in filtered_bolos" class="w3-hover-gray">
+                                        <td>{{ bolo.police_report_number }}</td>
                                         <td>{{ bolo.description }}</td>
                                         <td>{{ bolo.author }}</td>
                                         <td>{{ bolo.timestamp }}</td>
@@ -357,6 +359,7 @@
                                 <div>
                                     <label class="w3-text-white">BOLO:*</label>
                                     <input v-model="new_bolo.description" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: White female adult with a tattoo of a fish on leg and black hair, last seen ..." required>
+                                    <input v-model="new_bolo.police_report_number" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: 9293cfa014d9ab8d258a395af20c68e5">
                                 </div>
                                 <br>
                                 <p><button v-on:click="CreateBOLO" type="button" class="w3-btn w3-padding w3-text-black" style="background-color: lightgray;" style="width:120px">Submit</button></p>
