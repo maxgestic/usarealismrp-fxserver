@@ -2,7 +2,7 @@ local isBusy = "no"
 
 local closed = false
 
-local COPS_NEEDED_TO_ROB = 2
+local COPS_NEEDED_TO_ROB = 3
 
 RegisterServerEvent("bank:setBusy")
 AddEventHandler("bank:setBusy", function(busy)

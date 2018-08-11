@@ -543,12 +543,14 @@ end)
 function GetVehiclePrice(vehicle)
 	for k, v in pairs(vehicleShopItems["vehicles"]) do
 		for i = 1, #v do
-			if vehicle.hash == v[i].hash then
+			local name1 = vehicle.make .. " " .. vehicle.model
+			local name2 = v[i].make .. " " .. v[i].model
+			if name1 == name2 then
 				print("matching hash found for vehicle price!")
 				return v[i].price
 			end
 		end
-		print("no matching hash found to sell! hash: " .. vehicle.hash)
+		print("Error getting vehicle price! no matching hash found to sell!")
 	end
 end
 
