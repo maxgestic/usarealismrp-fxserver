@@ -64,7 +64,9 @@ AddEventHandler("hungerAndThirst:replenish", function(type, item)
 		end
 		--print("playing food animation!")
 		-- play animation:
-		TriggerEvent("usa:playAnimation", animation.name, animation.dict, animation.duration)
+		--TriggerEvent("usa:playAnimation", animation.name, animation.dict, animation.duration)
+		--TriggerEvent("usa:playAnimation", animation.dict, animation.name, 5, 1, animation.duration * 1000, 31, 0, 0, 0, 0)
+		TriggerEvent("usa:playAnimation", animation.dict, animation.name, -8, 1, -1, 53, 0, 0, 0, 0,  animation.duration)
 	elseif type == "drink" then
 		-- revive if passed out --
 		if person.thirst_level <= 10.0 then
@@ -90,7 +92,9 @@ AddEventHandler("hungerAndThirst:replenish", function(type, item)
 		end
 		--print("playing drink animation!")
 		-- play animation:
-		TriggerEvent("usa:playAnimation", animation.name, animation.dict, animation.duration)
+		--TriggerEvent("usa:playAnimation", animation.name, animation.dict, animation.duration)
+		--TriggerEvent("usa:playAnimation", animation.dict, animation.name, 5, 1, animation.duration * 1000, 31, 0, 0, 0, 0)
+		TriggerEvent("usa:playAnimation", animation.dict, animation.name, -8, 1, -1, 53, 0, 0, 0, 0,  animation.duration)
 	else
 		print("error: no item type specified!")
 	end
@@ -177,7 +181,7 @@ Citizen.CreateThread(function()
 				while person.hunger_level <= 0.0 or person.thirst_level <= 0.0 do
 					Wait(10)
 					SetPedToRagdoll(myPed, 5500, 5500, 0, true, true, false)
-					if GetGameTimer() - passed_out_time >= time_until_death then 
+					if GetGameTimer() - passed_out_time >= time_until_death then
 						SetEntityHealth(myPed, 0.0)
 						person.hunger_level = 100.0
 						person.thirst_level = 100.0

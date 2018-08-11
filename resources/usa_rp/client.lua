@@ -477,6 +477,26 @@ end)
 
 local playing_anim = nil
 RegisterNetEvent("usa:playAnimation")
+AddEventHandler("usa:playAnimation", function(animDict, animName, speed, speedMult, duration, flag, playbackRate, lockX, lockY, lockZ, actualDuration)
+    local ped = GetPlayerPed(-1)
+    if not IsPedInAnyVehicle(ped, 1) then
+      -- load animation
+      RequestAnimDict(animDict)
+      while not HasAnimDictLoaded(animDict) do
+        Citizen.Wait(100)
+      end
+      TaskPlayAnim(ped, animDict, animName, speed, speedMult, duration, flag, playbackRate, lockX, lockY, lockZ)
+      if actualDuration then
+          Wait(actualDuration * 1000)
+          ClearPedTasksImmediately(ped)
+          StopAnimTask(ped, animDict, animName, false)
+      end
+  end
+end)
+
+--[[
+local playing_anim = nil
+RegisterNetEvent("usa:playAnimation")
 AddEventHandler("usa:playAnimation", function(animName, animDict, duration, speed, loop, flag)
   --print("inside of usa:playAnimation!!")
   if not IsPedInAnyVehicle(GetPlayerPed(-1), 1) then
@@ -528,6 +548,7 @@ AddEventHandler("usa:playAnimation", function(animName, animDict, duration, spee
     --print("ped was in vehicle, not playing animation")
   end
 end)
+--]]
 
 RegisterNetEvent("usa:playSound")
 AddEventHandler("usa:playSound", function(soundParams)

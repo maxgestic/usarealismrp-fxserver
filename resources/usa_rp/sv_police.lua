@@ -233,7 +233,9 @@ TriggerEvent('es:addJobCommand', 'breathalyze', { "police", "sheriff", "ems" }, 
 			name = "base",
 			dict = "amb@world_human_security_shine_torch@male@base"
 		}
-		TriggerClientEvent("usa:playAnimation", source, anim.name, anim.dict, 3)
+		--TriggerClientEvent("usa:playAnimation", source, anim.name, anim.dict, 3)
+		--TriggerClientEvent("usa:playAnimation", source, anim.dict, anim.name, 5, 1, 3000, 31, 0, 0, 0, 0)
+		TriggerClientEvent("usa:playAnimation", source, anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 3)
 	end
 end, {
 	help = "Breathalyze",

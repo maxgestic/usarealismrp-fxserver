@@ -127,7 +127,8 @@ AddEventHandler("interaction:dropItem", function(itemName, posX, posY, posZ)
 		dict = "anim@move_m@trash",
 		name = "pickup"
 	}
-	TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 1)
+	--TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 1)
+	TriggerClientEvent("usa:playAnimation", userSource, anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 1.5)
 	----------------
 	-- drop item  --
 	----------------
@@ -270,7 +271,10 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
 		  dict = "anim@move_m@trash",
 		  name = "pickup"
 		}
-		TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 2)
+		--TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 2)
+		--TriggerClientEvent("usa:playAnimation", userSource, anim.dict, anim.name, 5, 1, 2000, 31, 0, 0, 0, 0)
+		TriggerClientEvent("usa:playAnimation", userSource, anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 2)
+
 	  else
 		TriggerClientEvent("usa:notify", userSource, "Player can't hold anymore items! Inventory full.")
 		TriggerClientEvent("usa:notify", targetPlayerId, "You can't hold that item! Inventory full.")
@@ -333,24 +337,3 @@ function removeItemFromPlayer(item, userSource)
 		end
 	end)
 end
-
---[[ hug emote
-TriggerEvent('es:addJobCommand', 'e', { "police", "sheriff" }, function(source, args, user)
-	local userSource = tonumber(source)
-	if args[2] ~= nil then
-		local tPID = tonumber(args[2])
-		TriggerClientEvent("cuff:Handcuff", tPID)
-		-- play anim:
-		local anim = {
-			dict = "anim@move_m@trash",
-			name = "pickup"
-		}
-		TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 2)
-	end
-end, {
-	help = "Cuff a player.",
-	params = {
-		{ name = "id", help = "Player's ID" }
-	}
-})
---]]

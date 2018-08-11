@@ -45,7 +45,9 @@ AddEventHandler("usa_rp:sellItem", function(job)
 						dict = "anim@move_m@trash",
 						name = "pickup"
 					  }
-					  TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 2)
+					  --TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 2)
+					  --TriggerClientEvent("usa:playAnimation", userSource, anim.dict, anim.name, 5, 1, 2000, 31, 0, 0, 0, 0)
+					  TriggerClientEvent("usa:playAnimation", userSource, anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 2)
 						local reward = 500
 						local user_money = user.getActiveCharacterData("money")
 						user.setActiveCharacterData("money", user_money + reward)

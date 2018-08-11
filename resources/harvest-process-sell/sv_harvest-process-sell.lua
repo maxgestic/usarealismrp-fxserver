@@ -62,7 +62,9 @@ AddEventHandler("HPS:checkItem", function(job_name, process_time, stage)
               user.setActiveCharacterData("money", user_money + REWARDS[job_name].reward_amount)
               TriggerClientEvent("usa:notify", userSource, "Here is the cash!")
               local anim = {dict = "anim@move_m@trash", name = "pickup"}
-              TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 3)
+              --TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 3)
+              --TriggerClientEvent("usa:playAnimation", userSource, anim.dict, anim.name, 5, 1, 3000, 31, 0, 0, 0, 0)
+              TriggerClientEvent("usa:playAnimation", userSource, anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 3)
             end
             return
           end

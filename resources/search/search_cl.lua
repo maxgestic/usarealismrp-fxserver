@@ -28,7 +28,9 @@ AddEventHandler("search:attemptToSearchNearest", function()
 				dict = "anim@move_m@trash",
 				name = "pickup"
 			}
-			TriggerEvent("usa:playAnimation", anim.name, anim.dict, 4)
+			--TriggerEvent("usa:playAnimation", anim.name, anim.dict, 4)
+			--TriggerEvent("usa:playAnimation", anim.dict, anim.name, 5, 1, 4000, 31, 0, 0, 0, 0)
+			TriggerEvent("usa:playAnimation", anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 4)
 			TriggerServerEvent("search:searchPlayer", player.id)
 		else
 			TriggerEvent("usa:notify", "No person found to search!")

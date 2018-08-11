@@ -15,7 +15,9 @@ RegisterNetEvent("headprops:toggleProp")
 AddEventHandler("headprops:toggleProp", function(prop_index)
 	local ped = GetPlayerPed(-1)
 	local waitTime = 1000
-	TriggerEvent("usa:playAnimation", "try_glasses_neutral_c", "clothingspecs", 1.5)
+	--TriggerEvent("usa:playAnimation", "try_glasses_neutral_c", "clothingspecs", 1.5)
+	--TriggerEvent("usa:playAnimation", "clothingspecs", "try_glasses_neutral_c", 5, 1, 1500, 31, 0, 0, 0, 0)
+	TriggerEvent("usa:playAnimation", "clothingspecs", "try_glasses_neutral_c", -8, 1, -1, 53, 0, 0, 0, 0,  1.5)
 
 	-- toggle prop --
 	if GetPedPropIndex(ped, prop_index) >= 0 then -- prop is on
@@ -48,7 +50,9 @@ RegisterNetEvent("headprops:toggleComponent")
 AddEventHandler("headprops:toggleComponent", function(component_index)
 	local ped = GetPlayerPed(-1)
 	local waitTime = 1000
-	TriggerEvent("usa:playAnimation", "try_glasses_neutral_c", "clothingspecs", 1.5)
+	--TriggerEvent("usa:playAnimation", "try_glasses_neutral_c", "clothingspecs", 1.5)
+	--TriggerEvent("usa:playAnimation", "clothingspecs", "try_glasses_neutral_c", 5, 1, 1500, 31, 0, 0, 0, 0)
+	TriggerEvent("usa:playAnimation", "clothingspecs", "try_glasses_neutral_c", -8, 1, -1, 53, 0, 0, 0, 0,  1.5)
 
 	-- toggle component --
 	if GetPedDrawableVariation(ped, 1) > 0 then -- mask is on
@@ -86,4 +90,3 @@ AddEventHandler("headprops:cacheMask", function(maskVal, maskTex)
 	components[1].value = tonumber(maskVal)
 	components[1].texture = tonumber(maskTex)
 end)
-

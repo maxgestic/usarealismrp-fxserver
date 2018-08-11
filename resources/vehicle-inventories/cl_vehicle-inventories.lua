@@ -122,7 +122,9 @@ AddEventHandler("vehicle:continueStoringItem", function(vehId, plate, item, quan
     dict = "anim@mp_fireworks",
     name = "place_firework_1_rocket"
   }
-  TriggerEvent("usa:playAnimation", anim.name, anim.dict, 4)
+  --TriggerEvent("usa:playAnimation", anim.name, anim.dict, 4)
+  --TriggerEvent("usa:playAnimation", anim.dict, anim.name, 5, 1, 4000, 31, 0, 0, 0, 0)
+  TriggerEvent("usa:playAnimation", anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 4)
   --print("calling vehicle:storeItem with item.quantity: " .. item.quantity .. ", which will be changed to: " .. quantity)
   TriggerServerEvent("vehicle:storeItem", plate, item, quantity)
   TriggerServerEvent("usa:removeItem", item, quantity)

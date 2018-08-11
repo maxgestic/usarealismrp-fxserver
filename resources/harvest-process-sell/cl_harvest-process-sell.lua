@@ -159,7 +159,9 @@ function Harvest(to_harvest_item_name, harvest_time)
       dict = "anim@move_m@trash",
       name = "pickup"
     }
-    TriggerEvent("usa:playAnimation", anim.name, anim.dict, harvest_time)
+    --TriggerEvent("usa:playAnimation", anim.name, anim.dict, harvest_time)
+    --TriggerEvent("usa:playAnimation", anim.dict, anim.name, 5, 1,  harvest_time * 1000, 31, 0, 0, 0, 0)
+    TriggerEvent("usa:playAnimation", anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, harvest_time)
     -- play sound:
     if SOUND_ENABLE then TriggerServerEvent("InteractSound_SV:PlayOnSource", "trimming", 0.1) end
   end
@@ -180,7 +182,9 @@ function Process(to_process_item_name, process_time)
       dict = "timetable@jimmy@ig_1@idle_a",
       name = "hydrotropic_bud_or_something"
     }
-    TriggerEvent("usa:playAnimation", anim.name, anim.dict, process_time)
+    --TriggerEvent("usa:playAnimation", anim.name, anim.dict, process_time)
+    --TriggerEvent("usa:playAnimation", anim.dict, anim.name, 5, 1,  process_time * 1000, 31, 0, 0, 0, 0)
+    TriggerEvent("usa:playAnimation", anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, process_time)
     -- play sound:
     if SOUND_ENABLE then TriggerServerEvent("InteractSound_SV:PlayOnSource", "weed-process", 0.105) end
   end

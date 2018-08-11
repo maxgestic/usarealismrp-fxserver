@@ -43,7 +43,9 @@ AddEventHandler("crim:foundPlayerToBlindfold", function(id, blindfold)
 		dict = "anim@move_m@trash",
 		name = "pickup"
 	}
-	TriggerClientEvent("usa:playAnimation", tonumber(source), anim.name, anim.dict, 3)
+	--TriggerClientEvent("usa:playAnimation", tonumber(source), anim.name, anim.dict, 3)
+	--TriggerClientEvent("usa:playAnimation", tonumber(source), anim.dict, anim.name, 5, 1, 3000, 31, 0, 0, 0, 0)
+	TriggerClientEvent("usa:playAnimation", tonumber(source), anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 3)
 end)
 
 ---------------------------
@@ -64,7 +66,9 @@ AddEventHandler("crim:foundPlayerToRob", function(id)
 		dict = "anim@move_m@trash",
 		name = "pickup"
 	}
-	TriggerClientEvent("usa:playAnimation", tonumber(source), anim.name, anim.dict, 3)
+	--TriggerClientEvent("usa:playAnimation", tonumber(source), anim.name, anim.dict, 3)
+	--TriggerClientEvent("usa:playAnimation", tonumber(source), anim.dict, anim.name, 5, 1, 3000, 31, 0, 0, 0, 0)
+	TriggerClientEvent("usa:playAnimation", tonumber(source), anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 3)
 end)
 
 ---------------------------------------
@@ -88,7 +92,9 @@ AddEventHandler("crim:foundPlayerToTie", function(id, tying_up)
 		dict = "anim@move_m@trash",
 		name = "pickup"
 	}
-	TriggerClientEvent("usa:playAnimation", tonumber(source), anim.name, anim.dict, 3)
+	--TriggerClientEvent("usa:playAnimation", tonumber(source), anim.name, anim.dict, 3)
+	--TriggerClientEvent("usa:playAnimation", tonumber(source), anim.dict, anim.name, 5, 1, 3000, 31, 0, 0, 0, 0)
+	TriggerClientEvent("usa:playAnimation", tonumber(source), anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 3)
 end)
 
 ----------------------

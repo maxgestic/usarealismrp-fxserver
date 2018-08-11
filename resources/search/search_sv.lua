@@ -43,6 +43,7 @@ TriggerEvent('es:addJobCommand', 'search', { "police", "sheriff", "corrections" 
 	if not tonumber(args[2]) then
 		TriggerClientEvent("search:attemptToSearchNearest", source)
 	else
+		TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 4)
 		TriggerEvent("search:searchPlayer", tonumber(args[2]), source)
 	end
 end, {

@@ -85,7 +85,7 @@ local scenarios = {
 
 local spawned_object = nil
 local playing_scenario = false
-local playing_anim = false
+local playing_anim = nil
 local left_hand = 60309
 local right_hand = 58868
 
@@ -167,7 +167,9 @@ RegisterNUICallback('retrieveVehicleItem', function(data, cb)
 								if quantity_to_transfer <= target_item.quantity then
 									--print("seeing if item is still in vehicle...")
 									TriggerServerEvent("vehicle:isItemStillInVehicle", target_vehicle_plate, target_item, quantity_to_transfer)
-									TriggerEvent("usa:playAnimation", anim.name, anim.dict, 4)
+									--TriggerEvent("usa:playAnimation", anim.name, anim.dict, 4)
+									--TriggerEvent("usa:playAnimation", anim.dict, anim.name, 5, 1, 4000, 31, 0, 0, 0, 0)
+									TriggerEvent("usa:playAnimation", anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0,  4)
 								else
 									TriggerEvent("usa:notify", "Quantity input too high!")
 								end
@@ -191,6 +193,10 @@ RegisterNUICallback('retrieveVehicleItem', function(data, cb)
 end)
 
 RegisterNUICallback('playEmote', function(data, cb)
+	local ped = GetPlayerPed(-1)
+	ClearPedTasksImmediately(ped)
+	playing_anim = false
+	playing_scenario = false
 	-----------------
 	-- shut GUI --
 	-----------------
@@ -207,36 +213,43 @@ RegisterNUICallback('playEmote', function(data, cb)
 	-------------------------------
 	local scenarioName = data.emoteName
 		if scenarioName == "cancel" then
-			local ped = GetPlayerPed(-1)
-			ClearPedTasksImmediately(ped)
 			playing_scenario = false
+			playing_anim = nil
 			return
 		elseif scenarioName == "surrender" then
 			TriggerEvent("KneelHU")
+			playing_scenario = true
 			return
 		elseif scenarioName == "mechanic" or scenarioName == "sit" or scenarioName == "drill" or scenarioName == "chillin'" or scenarioName == "golf" then
 			TriggerServerEvent("interaction:checkJailedStatusBeforeEmote", scenarioName)
 			playing_scenario = true
 			return
-		elseif scenarioName == "chair" then
-			TriggerEvent("sit:sitOnNearest")
-			return
 		end
 		for i = 1, #scenarios do
 			if scenarioName == string.lower(scenarios[i].name) then
-				local ped = GetPlayerPed(-1)
 				if ped then
 					if scenarios[i].type ~= "emote" then
 						TaskStartScenarioInPlace(ped, scenarios[i].scenarioName, 0, true)
 						playing_scenario = true
 					else
 						if string.find(scenarioName, "shag") then
-							local flag = 7
-							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true, flag)
-							playing_scenario = true
+							--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true, flag)
+							--TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, 5, 1, 1000, 7, 0, 0, 0, 0)
+							TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 31, 0, 0, 0, 0)
+							playing_anim = {
+								dict = scenarios[i].dict,
+								name = scenarios[i].animname,
+								flag = 31
+							}
 						elseif string.find(scenarioName, "cpr") or string.find(scenarioName, "cross arms") then
-							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
-							playing_scenario = true
+							--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
+							--TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, 5, 1, 1000, 31, 0, 0, 0, 0)
+							TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 53, 0, 0, 0, 0)
+							playing_anim = {
+								dict = scenarios[i].dict,
+								name = scenarios[i].animname,
+								flag = 53
+							}
 						elseif string.find(scenarioName, "notepad") then
 							-----------------------------
 							-- give notepad object --
@@ -245,10 +258,13 @@ RegisterNUICallback('playEmote', function(data, cb)
 							---------------------------
 							-- play notepad anim --
 							---------------------------
-							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
+							--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
+							--TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, 5, 1, 1000, 31, 0, 0, 0, 0)
+							TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 53, 0, 0, 0, 0)
 							playing_anim = {
 								dict = scenarios[i].dict,
-								name = scenarios[i].animname
+								name = scenarios[i].animname,
+								flag = 53
 							}
 						elseif string.find(scenarioName, "smoke") then
 							-------------------------------
@@ -258,14 +274,23 @@ RegisterNUICallback('playEmote', function(data, cb)
 							-----------------------------
 							-- play smoking anim --
 							-----------------------------
-							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
+							--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
+							--TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, 5, 1, 1000, 31, 0, 0, 0, 0)
+							TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 53, 0, 0, 0, 0)
 							playing_anim = {
 								dict = scenarios[i].dict,
-								name = scenarios[i].animname
+								name = scenarios[i].animname,
+								flag = 53
 							}
 						else
-							TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5)
-							playing_scenario = true
+							--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5)
+							--TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, 5, 1, 1000, 31, 0, 0, 0, 0)
+							TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 53, 0, 0, 0, 0)
+							playing_anim = {
+								dict = scenarios[i].dict,
+								name = scenarios[i].animname,
+								flag = 53
+							}
 						end
 					end
 				end
@@ -480,7 +505,9 @@ function interactionMenuUse(itemName, wholeItem)
 			--local can_prop = AttachEntityToPed('prop_ld_jerrycan_01', 36029, 0, 0, 0, 90.0, 90.0, 85.0)
 			--local can_prop_net_id = AttachEntityToPed('prop_ld_jerrycan_01', 36029, 0, 0, 0, 3.0, 173.0, 0.0)
 			-- play anim --
-			TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.name, JERRY_CAN_ANIMATION.dict, false, 6.5, true)
+			--TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.name, JERRY_CAN_ANIMATION.dict, false, 6.5, true)
+			--TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.dict, JERRY_CAN_ANIMATION.name, 5, 1, 25000, 31, 0, 0, 0, 0)
+			TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.dict, JERRY_CAN_ANIMATION.name, -8, 1, -1, 53, 0, 0, 0, 0, 24)
 			Wait(25000)
 			ClearPedTasksImmediately(GetPlayerPed(-1))
 			-- refuel --
@@ -689,7 +716,7 @@ Citizen.CreateThread(function()
 		-- Make sure emote stays playing  --
 		--------------------------------------------
 		if playing_anim and not IsEntityPlayingAnim(ped, playing_anim.dict, playing_anim.name, 3) then
-			TaskPlayAnim(ped, playing_anim.dict, playing_anim.name, 8.0, 1, -1, 49, 0, 0, 0, 0)
+			TaskPlayAnim(ped, playing_anim.dict, playing_anim.name, -8, 1, -1, playing_anim.flag, 0, 0, 0, 0)
 		end
 		Citizen.Wait(100)
 	end
