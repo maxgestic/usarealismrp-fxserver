@@ -530,7 +530,7 @@ TriggerEvent('es:addCommand', 'phonenumber', function(source, args, user, locati
 			local item = inventory[i]
 			if string.find(item.name, "Cell Phone") then
 				local msg = "^0" .. user.getActiveCharacterData("fullName") .. " writes down number: " .. item.number
-				exports["globals"]:sendLocalActionMessage(msg, location)
+				exports["globals"]:sendLocalActionMessageChat(msg, location)
 			end
 		end
 end, { help = "Write down your phone number(s) for those around you."})

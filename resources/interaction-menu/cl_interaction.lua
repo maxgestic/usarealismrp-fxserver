@@ -232,14 +232,14 @@ RegisterNUICallback('playEmote', function(data, cb)
 						TaskStartScenarioInPlace(ped, scenarios[i].scenarioName, 0, true)
 						playing_scenario = true
 					else
-						if string.find(scenarioName, "shag") then
+						if string.find(scenarioName, "shag") or string.find(scenarioName, "dance 1") or string.find(scenarioName, "dance 2") or string.find(scenarioName, "dance 3") then
 							--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true, flag)
 							--TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, 5, 1, 1000, 7, 0, 0, 0, 0)
 							TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 31, 0, 0, 0, 0)
 							playing_anim = {
 								dict = scenarios[i].dict,
 								name = scenarios[i].animname,
-								flag = 31
+								flag = 7
 							}
 						elseif string.find(scenarioName, "cpr") or string.find(scenarioName, "cross arms") then
 							--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
@@ -285,7 +285,7 @@ RegisterNUICallback('playEmote', function(data, cb)
 						else
 							--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5)
 							--TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, 5, 1, 1000, 31, 0, 0, 0, 0)
-							TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 53, 0, 0, 0, 0)
+							TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 53, 0, 0, 0, 0, 2)
 							playing_anim = {
 								dict = scenarios[i].dict,
 								name = scenarios[i].animname,

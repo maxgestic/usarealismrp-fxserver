@@ -24,7 +24,7 @@ end, {help = "Present your identifcation card / DL."})
 function showid(src, u, location)
 	local char_name = u.getActiveCharacterData("fullName")
 	local dob = u.getActiveCharacterData("dateOfBirth")
-	exports["globals"]:sendLocalActionMessage(source, char_name .. " shows ID.")
+	exports["globals"]:sendLocalActionMessage(src, "Shows ID.")
 	local msg = "^0*[ID]^r ^2Name: ^4" .. char_name .. " ^0- ^2SSN: ^4" .. src .. " ^0 - ^2DOB: ^4" .. dob
-	exports["globals"]:sendLocalActionMessage(source, msg)
+	exports["globals"]:sendLocalActionMessageChat(msg, location)
 end

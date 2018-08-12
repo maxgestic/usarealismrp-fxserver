@@ -15,8 +15,8 @@ TriggerEvent('es:addJobCommand', 'cuff', { "police", "sheriff", "corrections" },
 		}
 		--TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 2)
 		TriggerClientEvent("usa:playAnimation", userSource, anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 1.5)
-		local msg = user.getActiveCharacterData("fullName") .. " handcuffs person."
-		exports["globals"]:sendLocalActionMessage(msg, location)
+		local msg = "Handcuffs person."
+		exports["globals"]:sendLocalActionMessage(userSource, msg)
 end, {help = "Cuff the nearest player.", id = "ID # (Optional)"})
 
 RegisterServerEvent("cuff:Handcuff")

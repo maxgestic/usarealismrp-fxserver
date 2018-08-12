@@ -1,3 +1,21 @@
+function sendLocalActionMessageChat(message, location, range)
+	-- set default range
+	if not range then
+		range = 30
+	end
+
+	--TriggerClientEvent("globals:startActionMessage", -1, message, range, src)
+
+	TriggerClientEvent(
+		'chatMessageLocation',
+		-1,
+		"",
+		{171, 67, 227},
+		message,
+		location,
+		range
+	)
+end
 
 function sendLocalActionMessage(src, message, location, range)
 	-- set default range

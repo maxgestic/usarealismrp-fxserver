@@ -1,15 +1,15 @@
 TriggerEvent('es:addCommand', 'place', function(source, args, user, location)
-	TriggerEvent('es:getPlayerFromId', source, function(user)
-		local user_job = user.getActiveCharacterData("job")
-		if user_job == "sheriff" or user_job == "ems" or user_job == "fire" or user_job == "corrections" then
-			local tPID = tonumber(args[2])
-			TriggerClientEvent("place", tPID)
-			local msg = user.getActiveCharacterData("fullName") .. " places person in vehicle."
-			exports["globals"]:sendLocalActionMessage(msg, location)
-		else
-			TriggerClientEvent("crim:areHandsTied", tonumber(args[2]), source, tonumber(args[2]), "place")
-		end
-	end)
+	local usource = source
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	local user_job = user.getActiveCharacterData("job")
+	if user_job == "sheriff" or user_job == "ems" or user_job == "fire" or user_job == "corrections" then
+		local tPID = tonumber(args[2])
+		TriggerClientEvent("place", tPID)
+		local msg = "Places person in vehicle."
+		exports["globals"]:sendLocalActionMessage(usource, msg)
+	else
+		TriggerClientEvent("crim:areHandsTied", tonumber(args[2]), source, tonumber(args[2]), "place")
+	end
 end, {
 	help = "Place tied or handcuffed player in a car",
 	params = {
@@ -33,6 +33,8 @@ TriggerEvent('es:addCommand', 'unseat', function(source, args, user)
 	if user_job == "sheriff" or user_job == "cop" or user_job == "ems" or user_job == "fire" or user_job == "corrections" then
 		local targetPlayer = args[2]
 		TriggerClientEvent("place:unseat", targetPlayer, source)
+		local msg = "Removes from vehicle."
+		exports["globals"]:sendLocalActionMessage(source, msg)
 	else
 		if targetPlayer ~= source then
 			TriggerClientEvent("crim:areHandsTied", tonumber(args[2]), source, tonumber(args[2]), "unseat")

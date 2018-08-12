@@ -155,9 +155,11 @@ AddEventHandler("interaction:dropItem", function(itemName, posX, posY, posZ)
 		if string.sub(iName, -1) == "s" then  -- check if the item name is plural
 			grammar = ""
 		end
-		local msg = " ^6" .. user.getActiveCharacterData("fullName") .. " discards " .. grammar .. iName .. " on the ground."
-		exports["globals"]:sendLocalActionMessage(msg, location, 10)
+		local msg = "Discards " .. grammar .. iName .. " on the ground."
+		exports["globals"]:sendLocalActionMessage(userSource, msg)
 	end
+
+	-- TODO: just use usa:removeItem and check for chicken first instead of below code
 
 	-- inventory
 	local inventory = user.getActiveCharacterData("inventory")

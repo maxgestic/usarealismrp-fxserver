@@ -148,10 +148,10 @@ end
 -- Add a command everyone is able to run. Args is a table with all the arguments, and the user is the user object, containing all the user data.
 TriggerEvent('es:addJobCommand', 'backgroundcheck', { "judge", "corrections" }, function(source, args, user, location)
 	if GetPlayerName(tonumber(args[2])) then
-		local msg = user.getActiveCharacterData("fullName") .. " looks at notes."
-		exports["globals"]:sendLocalActionMessage(msg, location)
+		local msg = "Looks at notes."
+		exports["globals"]:sendLocalActionMessage(source, msg)
+		TriggerEvent("license:searchForLicense", source, args[2])
 	end
-	TriggerEvent("license:searchForLicense", source, args[2])
 end, {
 	help = "Perform a background check on a person.",
 	params = {

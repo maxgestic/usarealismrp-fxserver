@@ -143,13 +143,13 @@ end, {
 
 -- R O L L  D I C E
 TriggerEvent('es:addCommand', 'roll', function(source, args, user, location)
-	local name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
 	local max = tonumber(args[2])
 	if max then
 		print("rolling " .. max)
 		local roll = math.random(1, max)
-		local msg = name .. " rolls a " .. roll .. " out of " .. max .. "."
-		exports["globals"]:sendLocalActionMessage(msg, location)
+		local msg = "Rolls a " .. roll .. " out of " .. max .. "."
+		exports["globals"]:sendLocalActionMessageChat(msg, location)
+		exports["globals"]:sendLocalActionMessage(source, msg)
 	end
 end, {
 	help = "Roll a random number.",
