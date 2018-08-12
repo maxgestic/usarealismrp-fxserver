@@ -65,8 +65,7 @@ end
 -------------------------------------
 -- Start action (me) message --
 -------------------------------------
-local ACTION_MESSAGE_TIME_SECONDS = 4
-local last_msg_coords = nil
+local ACTION_MESSAGE_TIME_SECONDS = 5
 RegisterNetEvent("globals:startActionMessage")
 AddEventHandler("globals:startActionMessage", function(msg, range, playerId)
     Citizen.CreateThread(function()
@@ -81,7 +80,7 @@ AddEventHandler("globals:startActionMessage", function(msg, range, playerId)
                 coords = GetEntityCoords(ped)
                 mycoords = GetEntityCoords(myped)
                 Draw3DText(coords.x, coords.y, coords.z + 0.3, msg)
-                Wait(1)
+                Wait(0)
             end
         end
     end)
