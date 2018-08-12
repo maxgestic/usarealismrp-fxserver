@@ -235,7 +235,7 @@ RegisterNUICallback('playEmote', function(data, cb)
 						if string.find(scenarioName, "shag") or string.find(scenarioName, "dance 1") or string.find(scenarioName, "dance 2") or string.find(scenarioName, "dance 3") then
 							--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true, flag)
 							--TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, 5, 1, 1000, 7, 0, 0, 0, 0)
-							TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 31, 0, 0, 0, 0)
+							TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 7, 0, 0, 0, 0)
 							playing_anim = {
 								dict = scenarios[i].dict,
 								name = scenarios[i].animname,
@@ -285,12 +285,14 @@ RegisterNUICallback('playEmote', function(data, cb)
 						else
 							--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5)
 							--TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, 5, 1, 1000, 31, 0, 0, 0, 0)
-							TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 53, 0, 0, 0, 0, 2)
+							TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 53, 0, 0, 0, 0, 4)
+							--[[
 							playing_anim = {
 								dict = scenarios[i].dict,
 								name = scenarios[i].animname,
 								flag = 53
 							}
+							--]]
 						end
 					end
 				end
@@ -507,7 +509,7 @@ function interactionMenuUse(itemName, wholeItem)
 			-- play anim --
 			--TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.name, JERRY_CAN_ANIMATION.dict, false, 6.5, true)
 			--TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.dict, JERRY_CAN_ANIMATION.name, 5, 1, 25000, 31, 0, 0, 0, 0)
-			TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.dict, JERRY_CAN_ANIMATION.name, -8, 1, -1, 53, 0, 0, 0, 0, 24)
+			TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.dict, JERRY_CAN_ANIMATION.name, -8, 1, -1, 53, 0, 0, 0, 0, 24.5)
 			Wait(25000)
 			ClearPedTasksImmediately(GetPlayerPed(-1))
 			-- refuel --
