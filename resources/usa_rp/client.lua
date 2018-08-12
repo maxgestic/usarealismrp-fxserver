@@ -486,69 +486,19 @@ AddEventHandler("usa:playAnimation", function(animDict, animName, speed, speedMu
         Citizen.Wait(100)
       end
       TaskPlayAnim(ped, animDict, animName, speed, speedMult, duration, flag, playbackRate, lockX, lockY, lockZ)
+      playing_anim = {
+          dict = animDict,
+          name = animName
+      }
       if actualDuration then
           Wait(actualDuration * 1000)
-          ClearPedTasksImmediately(ped)
-          StopAnimTask(ped, animDict, animName, false)
+          if not IsPedInAnyVehicle(ped) then
+              ClearPedTasksImmediately(ped)
+          end
+          StopAnimTask(ped, animDict, animName, 1.0)
       end
   end
 end)
-
---[[
-local playing_anim = nil
-RegisterNetEvent("usa:playAnimation")
-AddEventHandler("usa:playAnimation", function(animName, animDict, duration, speed, loop, flag)
-  --print("inside of usa:playAnimation!!")
-  if not IsPedInAnyVehicle(GetPlayerPed(-1), 1) then
-    -- load animation
-    RequestAnimDict(animDict)
-    while not HasAnimDictLoaded(animDict) do
-      Citizen.Wait(100)
-    end
-	if duration then
-		for i = 1, duration do
-			-- play animation
-		  if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) and not IsPedInAnyVehicle(GetPlayerPed(-1), 1) then
-			if speed then
-				--print("speed existed!")
-				TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, -8, 1, 7, 0, 0, 0, 0)
-			else
-				--print("speed did not exist!")
-				TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, 1, 53, 0, 0, 0, 0)
-			end
-			playing_anim = {dict = animDict, name = animName}
-		  end
-		  Wait(1000) -- wait one second * duration
-		end
-	else
-		if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) and not IsPedInAnyVehicle(GetPlayerPed(-1), 1) then
-			if speed then
-				--print("speed existed!")
-				if loop then
-					--print("loop!")
-                    if flag then
-                        TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, 5, 5, flag, 0, 0, 0, 0)
-                    else
-                        TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, 5, 5, 31, 0, 0, 0, 0)
-                    end
-				else
-					TaskPlayAnim(GetPlayerPed(-1), animDict, animName, speed, 1, 1, 8, 0, 0, 0, 0)
-				end
-			else
-				--print("speed did not exist!")
-				TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 1.0, 1, -1, 53, 0, 0, 0, 0)
-			end
-			playing_anim = {dict = animDict, name = animName}
-		end
-	end
-    -- after duration, stop playing animation:
-    ClearPedSecondaryTask(GetPlayerPed(-1))
-    StopAnimTask(GetPlayerPed(-1), animDict, animName, false)
-  else
-    --print("ped was in vehicle, not playing animation")
-  end
-end)
---]]
 
 RegisterNetEvent("usa:playSound")
 AddEventHandler("usa:playSound", function(soundParams)
@@ -576,7 +526,7 @@ Citizen.CreateThread(function()
 		if DoesEntityExist(GetVehiclePedIsTryingToEnter(PlayerPedId(GetPlayerPed(-1)))) then
       --ClearPedSecondaryTask(GetPlayerPed(-1))
       if playing_anim then
-        StopAnimTask(GetPlayerPed(-1), playing_anim.dict, playing_anim.name, false)
+        StopAnimTask(GetPlayerPed(-1), playing_anim.dict, playing_anim.name, 1.0)
       end
 		end
 	end
