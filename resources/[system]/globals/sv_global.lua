@@ -1,11 +1,14 @@
 
-function sendLocalActionMessage(message, location, range)
+function sendLocalActionMessage(src, message, location, range)
 	-- set default range
 	if not range then
-		range = 50
+		range = 30
 	end
 
-	TriggerClientEvent(
+	TriggerClientEvent("globals:startActionMessage", -1, message, range, src)
+
+		--[[
+		TriggerClientEvent(
 		'chatMessageLocation',
 		-1,
 		"",
@@ -14,6 +17,7 @@ function sendLocalActionMessage(message, location, range)
 		location,
 		range
 	)
+	--]]
 end
 
 function notifyPlayersWithJobs(target_jobs, msg)

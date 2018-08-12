@@ -9,8 +9,8 @@ end, {help = "Send a server-wide advertisement.", params = {{name = "message", h
 
 TriggerEvent('es:addCommand', 'me', function(source, args, user, location)
 	table.remove(args,1)
-	local msg = "^0* " .. user.getActiveCharacterData("fullName") .. " " .. table.concat(args, " ")
-	exports["globals"]:sendLocalActionMessage(msg, location)
+	local msg = table.concat(args, " ")
+	exports["globals"]:sendLocalActionMessage(source, msg)
 end, {help = "Talk as yourself doing an action.", params = {{name = "message", help = "the action"}}})
 
 TriggerEvent('es:addCommand', 'showid', function(source, args, user, location)
@@ -24,7 +24,7 @@ end, {help = "Present your identifcation card / DL."})
 function showid(src, u, location)
 	local char_name = u.getActiveCharacterData("fullName")
 	local dob = u.getActiveCharacterData("dateOfBirth")
-	exports["globals"]:sendLocalActionMessage(char_name .. " shows ID.", location)
+	exports["globals"]:sendLocalActionMessage(source, char_name .. " shows ID.")
 	local msg = "^0*[ID]^r ^2Name: ^4" .. char_name .. " ^0- ^2SSN: ^4" .. src .. " ^0 - ^2DOB: ^4" .. dob
-	exports["globals"]:sendLocalActionMessage(msg, location)
+	exports["globals"]:sendLocalActionMessage(source, msg)
 end
