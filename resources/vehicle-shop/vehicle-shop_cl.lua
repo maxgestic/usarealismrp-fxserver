@@ -60,7 +60,8 @@ local vehicleShopItems = {
 			{make = "Willand", model = "Faction Custom Donk", price = 35575, hash = -2039755226, storage_capacity = 160.0},
 			{make = "Albany", model = "Virgo", price = 42000, hash = -498054846, storage_capacity = 160.0},
 			{make = "Declasse", model = "Tampa", price = 45000, hash = 972671128, storage_capacity = 160.0},
-			{make = "Vapid", model = "Chino Custom", price = 45000, hash = -1361687965, storage_capacity = 160.0}
+			{make = "Vapid", model = "Chino Custom", price = 45000, hash = -1361687965, storage_capacity = 160.0},
+			{make = "Vapid", model = "Ellie", price = 155000, hash = GetHashKey("ellie"), storage_capacity = 100.0}
 		},
 		["Trucks"] = {
 			{make = "Karin", model = "Rebel", price = 10500, hash = -2045594037, storage_capacity = 230.0},
@@ -158,7 +159,8 @@ local vehicleShopItems = {
 			{make = "Obey", model = "9F", price = 250700, hash = 1032823388, storage_capacity = 145.0},
 			{make = "Obey", model = "9F Cabrio", price = 285500, hash = -1461482751, storage_capacity = 145.0},
 			{make = "Dinka", model = "Jester", price = 350000, hash = -1297672541, storage_capacity = 145.0},
-			{make = "Karin", model = "Kuruma", price = 370000, hash = -1372848492, storage_capacity = 145.0}
+			{make = "Karin", model = "Kuruma", price = 370000, hash = -1372848492, storage_capacity = 145.0},
+			{make = "Vapid", model = "GB200", price = 120000, hash = GetHashKey("gb200"), storage_capacity = 100.0}
 		},
 		["Supers 1"] = {
 			{make = "Pegassi", model = "Infernus", price = 500500, hash = 418536135, storage_capacity = 100.0},
