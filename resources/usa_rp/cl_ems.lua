@@ -5,12 +5,16 @@ local releaseCoords = {
     {x = -240.10, y = 6324.22, z = 32.43}, -- paleto
     {x = 307.63, y = -593.948, z = 42.2919}, -- LS
     {x = 1814.914, y = 3685.767, z = 34.224}, -- sandy
-    {x = 1690.7, y = 2591.9, z = 45.8} -- bolingbroke prison
+    {x = 1690.7, y = 2591.9, z = 45.8}, -- bolingbroke prison
+    {x = 308.1, y = -1434.7,  z = 29.9}, -- davis
+    {x = 360.3, y = -548.9, z = 28.8} -- pillbox hill
 }
 local healStations = {
     {x = 307.63, y = -593.948, z = 42.2919}, -- LS
     {x = -380.562, y = 6119.039, z = 30.631}, -- PALETO FD
-    {x = -247.546, y = 6331.111, z = 31.426} -- PALETO HOSPITAL
+    {x = -247.546, y = 6331.111, z = 31.426}, -- PALETO HOSPITAL
+    {x = 308.1, y = -1434.7,  z = 29.9}, -- davis
+    {x = 360.3, y = -548.9, z = 28.8} -- pillbox hill
 }
 
 RegisterNetEvent("ems:notify")
@@ -42,7 +46,12 @@ AddEventHandler("ems:admitPatient", function()
     -- admit
     lPed = GetPlayerPed(-1)
     RequestCollisionAtCoord(hospitalCoords.x, hospitalCoords.y, hospitalCoords.z)
-    SetEntityCoords(GetPlayerPed(-1), hospitalCoords.x, hospitalCoords.y, hospitalCoords.z, 1, 0, 0, 1) -- tp to hospital
+    Wait(1000)
+    SetEntityCoords(lPed, hospitalCoords.x, hospitalCoords.y, hospitalCoords.z, 1, 0, 0, 1) -- tp to hospital
+    while not HasCollisionLoadedAroundEntity(lPed) do
+        Citizen.Wait(100)
+        SetEntityCoords(lPed, hospitalCoords.x, hospitalCoords.y, hospitalCoords.z, 1, 0, 0, 1) -- tp to hospital
+    end
     admitted = true
     -- remove any blindfolds/tied hands
     TriggerEvent("crim:untieHands", GetPlayerServerId(PlayerId()))
