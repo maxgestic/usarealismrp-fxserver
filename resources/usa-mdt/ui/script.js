@@ -219,7 +219,10 @@ const mdtApp = new Vue({
         },
         filtered_bolos() {
             return this.bolos.filter(bolo => {
-                if (bolo.description.toLowerCase().search(this.bolo_search.toLowerCase()) != -1)
+                if (
+                    bolo.description.toLowerCase().search(this.bolo_search.toLowerCase()) != -1 ||
+                    bolo.author.toLowerCase().search(this.bolo_search.toLowerCase()) != -1
+                    )
                     return bolo;
             })
         },
@@ -227,7 +230,8 @@ const mdtApp = new Vue({
             return this.police_reports.filter(report => {
                 if (
                     report.incident.toLowerCase().search(this.report_search.toLowerCase()) != -1 ||
-                    report._id.toLowerCase().search(this.report_search.toLowerCase()) != -1
+                    report._id.toLowerCase().search(this.report_search.toLowerCase()) != -1 ||
+                    report.author.toLowerCase().search(this.report_search.toLowerCase()) != -1
                     )
                     return report;
             })
