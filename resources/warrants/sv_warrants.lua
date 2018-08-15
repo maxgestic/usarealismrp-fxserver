@@ -86,7 +86,7 @@ end
 --------------------
 -- CREATE WARRANT --
 --------------------
-TriggerEvent('es:addJobCommand', 'createwarrant', { "police", "sheriff", "judge" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'createwarrant', { "judge" }, function(source, args, user)
 	if args[2] and args[3] and args[4] then
 		local userSource = tonumber(source)
 		local officer_name = user.getActiveCharacterData("fullName")
@@ -152,7 +152,7 @@ end, {
 ------------------------
 -- SEARCH FOR WARRANT --
 ------------------------
-TriggerEvent('es:addJobCommand', '29', { "police", "sheriff", "judge" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', '29', { "judge" }, function(source, args, user)
 	local had_results = false
 	table.remove(args,1)
 	local name_to_check = table.concat(args, " ")
@@ -180,7 +180,7 @@ end, {
 ----------------------
 -- DELETE A WARRANT --
 ----------------------
-TriggerEvent('es:addJobCommand', 'deletewarrant', { "police", "sheriff", "judge" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'deletewarrant', {  "judge" }, function(source, args, user)
 	if args[2] and args[3] then
 		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^3CHECKING WARRANTS MATCHING:^0 " .. args[2] .. " " .. args[3] .. "...")
 		for i = 1, #WARRANTS do
@@ -211,7 +211,7 @@ end, {
 -----------------------------------
 -- SHOW ALL OUTSTANDING WARRANTS --
 -----------------------------------
-TriggerEvent('es:addJobCommand', 'warrants', { "police", "sheriff", "judge" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'warrants', { "judge" }, function(source, args, user)
 	TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^3ACTIVE WARRANTS:")
 	for i = 1, #WARRANTS do
 		local warrant = WARRANTS[i]

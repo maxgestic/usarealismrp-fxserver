@@ -85,15 +85,11 @@ local locations = {
 Citizen.CreateThread(function()
 	for name, data in pairs(locations) do
 		local hash = -1806291497
-		--local hash = GetHashKey(data.ped.model)
-		print("requesting hash...")
 		RequestModel(hash)
 		while not HasModelLoaded(hash) do
 			RequestModel(hash)
 			Citizen.Wait(0)
 		end
-		print("spawning ped, heading: " .. data.ped.heading)
-		print("hash: " .. hash)
 		local ped = CreatePed(4, hash, data.ped.x, data.ped.y, data.ped.z, data.ped.heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
 		SetEntityCanBeDamaged(ped,false)
 		SetPedCanRagdollFromPlayerImpact(ped,false)
@@ -122,26 +118,6 @@ AddEventHandler("towJob:success", function()
 end)
 
 function impoundVehicle()
-	--[[
-	local targetVehicle = getVehicleInFrontOfUser()
-	if targetVehicle ~= 0 then
-		--TriggerServerEvent("towJob:impoundVehicle", targetVehicle)
-		if targetVehicle == vehicleToImpound then
-			print("impounding vehicle!")
-			SetEntityAsMissionEntity(vehicleToImpound, true, true )
-			deleteCar(vehicleToImpound)
-			vehicleToImpound = nil
-			local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
-			TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-				TriggerServerEvent("towJob:giveReward", property)
-			end)
-		else
-			print("Trying to tow a vehicle that wasn't attached to your flatbed first!")
-		end
-	else
-		TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0There is no vehicle no impound!")
-	end
-	--]]
 	local targetVehicle = getVehicleInFrontOfUser()
 	if targetVehicle == vehicleToImpound then
 		TriggerEvent("impoundVehicle")
@@ -228,10 +204,10 @@ RegisterNetEvent('pv:tow')
 AddEventHandler('pv:tow', function()
 
 	local playerped = GetPlayerPed(-1)
-	local vehicle = GetVehiclePedIsIn(playerped, true)
+	local towtruckveh = GetVehiclePedIsIn(playerped, true)
 
 	local towmodel = GetHashKey('flatbed')
-	local isVehicleTow = IsVehicleModel(vehicle, towmodel)
+	local isVehicleTow = IsVehicleModel(towtruckveh, towmodel)
 
 	if isVehicleTow then
 
@@ -242,11 +218,17 @@ AddEventHandler('pv:tow', function()
 		if currentlyTowedVehicle == nil then
 			if targetVehicle ~= 0 then
 				if not IsPedInAnyVehicle(playerped, true) then
-					if vehicle ~= targetVehicle and IsVehicleSeatFree(targetVehicle, -1) then
-						AttachEntityToEntity(targetVehicle, vehicle, 20, -0.5, -5.0, 1.0, 0.0, 0.0, 0.0, false, false, false, false, 20, true)
-						currentlyTowedVehicle = targetVehicle
-						vehicleToImpound = currentlyTowedVehicle
-						TriggerEvent("chatMessage", "", {255, 255, 255}, "Vehicle successfully attached to towtruck!")
+					if towtruckveh ~= targetVehicle and IsVehicleSeatFree(targetVehicle, -1) then
+						local vehcoords = GetEntityCoords(targetVehicle)
+						local towtruckcoords = GetEntityCoords(towtruckveh)
+						if Vdist(towtruckcoords.x, towtruckcoords.y, towtruckcoords.z, vehcoords.x, vehcoords.y, vehcoords.z) < 15.5 then
+							AttachEntityToEntity(targetVehicle, towtruckveh, 20, -0.5, -5.0, 1.0, 0.0, 0.0, 0.0, false, false, false, false, 20, true)
+							currentlyTowedVehicle = targetVehicle
+							vehicleToImpound = currentlyTowedVehicle
+							TriggerEvent("chatMessage", "", {255, 255, 255}, "Vehicle successfully attached to towtruck!")
+						else
+							exports["globals"]:notify("Too far from target vehicle!")
+						end
 					else
 						TriggerEvent("chatMessage", "", {255, 255, 255}, "You can't tow that vehicle!")
 					end
@@ -255,19 +237,13 @@ AddEventHandler('pv:tow', function()
 				TriggerEvent("chatMessage", "", {255, 255, 255}, "There is no vehicle to tow!")
 			end
 		else
-			AttachEntityToEntity(currentlyTowedVehicle, vehicle, 20, -0.5, -12.0, 1.0, 0.0, 0.0, 0.0, false, false, false, false, 20, true)
+			AttachEntityToEntity(currentlyTowedVehicle, towtruckveh, 20, -0.5, -12.0, 1.0, 0.0, 0.0, 0.0, false, false, false, false, 20, true)
 			DetachEntity(currentlyTowedVehicle, true, true)
 			TriggerEvent("chatMessage", "", {255, 255, 255}, "The vehicle has been successfully detached!")
 			currentlyTowedVehicle = nil
 		end
 	end
 end)
-
-function getVehicleInDirection(coordFrom, coordTo)
-	local rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 10, GetPlayerPed(-1), 0)
-	local a, b, c, d, vehicle = GetRaycastResult(rayHandle)
-	return vehicle
-end
 
 Citizen.CreateThread(function()
 	while true do
