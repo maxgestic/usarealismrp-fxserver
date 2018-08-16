@@ -53,15 +53,18 @@ AddEventHandler("doc:refreshEmployees", function()
 end)
 
 RegisterServerEvent("doc:checkWhitelist")
-AddEventHandler("doc:checkWhitelist", function()
+AddEventHandler("doc:checkWhitelist", function(loc)
+	local usource = source
 	for i = 1, #DOC_EMPLOYEES do
-		if DOC_EMPLOYEES[i].identifier == GetPlayerIdentifiers(source)[1] then
+		if DOC_EMPLOYEES[i].identifier == GetPlayerIdentifiers(usource)[1] then
 			if tonumber(DOC_EMPLOYEES[i].rank) <= 0 then
 				print("DOC EMPLOYEE DID NOT EXIST")
-				TriggerClientEvent("usa:notify", source, "You don't work here!")
+				TriggerClientEvent("usa:notify", usource, "You don't work here!")
 			else
 				print("DOC EMPLOYEE EXISTED")
-				TriggerClientEvent("universal:menuOpen", source)
+				exports["essentialmode"]:getPlayerFromId(usource).setActiveCharacterData("job", "corrections")
+				TriggerClientEvent("usa:notify", usource, "You clocked in!")
+				TriggerClientEvent("doc:open", usource)
 			end
 			return
 		end
@@ -72,54 +75,34 @@ end)
 
 RegisterServerEvent("doc:clockOut")
 AddEventHandler("doc:clockOut", function()
-	local user = exports["essentialmode"]:getPlayerFromId(source)
+	local usource = source
+	local user = exports["essentialmode"]:getPlayerFromId(usource)
 	local job = user.getActiveCharacterData("job")
 	-------------------------
 	-- put back to civ job --
 	-------------------------
 	user.setActiveCharacterData("job", "civ")
-	TriggerClientEvent("usa:notify", source, "You have clocked out!")
+	TriggerClientEvent("usa:notify", usource, "You have clocked out!")
 	-----------------------------------
 	-- change back into civ clothing --
 	-----------------------------------
-	TriggerEvent("usa:loadCivCharacter", source)
+	TriggerEvent("usa:loadCivCharacter", usource)
+	print("closing DOC menu!")
+	TriggerClientEvent("doc:close", usource)
 end)
 
 RegisterServerEvent("doc:forceDuty")
-AddEventHandler("doc:forceDuty", function(id)
-	if id then source = id end
-	local user = exports["essentialmode"]:getPlayerFromId(source)
+AddEventHandler("doc:forceDuty", function()
+	local usource = source
+	local user = exports["essentialmode"]:getPlayerFromId(usource)
 	local job = user.getActiveCharacterData("job")
 	if job ~= "corrections" then
 		----------------------------
 		-- set to corrections job --
 		----------------------------
 		user.setActiveCharacterData("job", "corrections")
-		TriggerEvent("doc:loadUniform", source)
-		TriggerClientEvent("usa:notify", source, "You have clocked in!")
-	end
-end)
-
-RegisterServerEvent("doc:toggleDuty")
-AddEventHandler("doc:toggleDuty", function()
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local job = user.getActiveCharacterData("job")
-	if job ~= "corrections" then
-		----------------------------
-		-- set to corrections job --
-		----------------------------
-		user.setActiveCharacterData("job", "corrections")
-		TriggerEvent("doc:forceDuty", source)
-	else
-		-------------------------
-		-- put back to civ job --
-		-------------------------
-		user.setActiveCharacterData("job", "civ")
-		TriggerClientEvent("usa:notify", source, "You have clocked out!")
-		-----------------------------------
-		-- change back into civ clothing --
-		-----------------------------------
-		TriggerEvent("usa:loadCivCharacter", source)
+		TriggerEvent("doc:loadUniform", usource)
+		TriggerClientEvent("usa:notify", usource, "You have clocked in!")
 	end
 end)
 
