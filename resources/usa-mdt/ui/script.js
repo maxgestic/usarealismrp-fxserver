@@ -9,6 +9,7 @@ const mdtApp = new Vue({
         person_check: {
             ssn: null,
             name: null,
+            dob: null,
             drivers_license: null,
             firearm_permit: null,
             insurance: null,
@@ -26,6 +27,8 @@ const mdtApp = new Vue({
         warrants: [],
         bolos: [],
         police_reports: [],
+        fname_search: "",
+        lname_search: "",
         warrant_search: "",
         bolo_search: "",
         report_search: "",
@@ -65,11 +68,32 @@ const mdtApp = new Vue({
     },
     methods: {
         PerformPersonCheck() {
-            if (this.person_check.ssn != 0 && this.person_check) {
-                /* request person info */
-                $.post('http://usa-mdt/PerformPersonCheck', JSON.stringify({
-                    ssn: this.person_check.ssn
-                }));
+
+            this.error = "";
+
+            if (this.person_check) {
+
+                if (this.person_check.ssn != 0 && this.person_check.ssn) {
+                    $.post('http://usa-mdt/PerformPersonCheckBySSN', JSON.stringify({
+                        ssn: this.person_check.ssn
+                    }));
+                    return;
+                }
+
+                if (this.fname_search != "" && this.lname_search != "") {
+                    $.post('http://usa-mdt/PerformPersonCheckByName', JSON.stringify({
+                        fname: this.fname_search,
+                        lname: this.lname_search
+                    }));
+                    return;
+                }
+
+                if ((this.fname_search != "" && this.lname_search == "") || (this.lname_search != "" && this.fname_search == ""))
+                    this.error = "Please enter both a first and last name to search!";
+
+                if ((!this.person_check.ssn || this.person_check.ssn == 0) && this.fname_search == "" && this.lname_search == "")
+                    this.error = "Please enter an SSN or a first and last name to perform a person check!";
+
             }
         },
         PerformPlateCheck() {
@@ -284,6 +308,7 @@ document.onreadystatechange = () => {
                     mdtApp.person_check = {
                             ssn: null,
                             name: null,
+                            dob: null,
                             drivers_license: null,
                             firearm_permit: null,
                             insurance: null,

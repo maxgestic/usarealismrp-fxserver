@@ -27,8 +27,8 @@ TriggerEvent('es:addJobCommand', 'mdt', { "sheriff"}, function(source, args, use
 	TriggerClientEvent('mdt:toggleVisibilty', source)
 end, { help = "Open MDT" })
 
-RegisterServerEvent("mdt:performPersonCheck")
-AddEventHandler("mdt:performPersonCheck", function(ssn)
+RegisterServerEvent("mdt:PerformPersonCheckBySSN")
+AddEventHandler("mdt:PerformPersonCheckBySSN", function(ssn)
     local person = exports["essentialmode"]:getPlayerFromId(ssn)
     if not person then
         local msg = {
@@ -42,6 +42,7 @@ AddEventHandler("mdt:performPersonCheck", function(ssn)
     local person_info  = {
         ssn = ssn,
         name = person.getActiveCharacterData("fullName"),
+		dob = person.getActiveCharacterData("dateOfBirth"),
         drivers_license = false,
         firearm_permit = false,
         insurance = false,
@@ -96,6 +97,105 @@ AddEventHandler("mdt:performPersonCheck", function(ssn)
 
     TriggerClientEvent("mdt:performPersonCheck", source, person_info)
 
+end)
+
+RegisterServerEvent("mdt:PerformPersonCheckByName")
+AddEventHandler("mdt:PerformPersonCheckByName", function(data)
+	local usource = source
+	TriggerEvent('es:exposeDBFunctions', function(couchdb)
+		local query = {
+			["characters"] = {
+				["$elemMatch"] = {
+					--["firstName"] = data.fname,
+					--["lastName"] = data.lname
+					["firstName"] = {
+						["$regex"] = "(?i)" .. data.fname
+					},
+					["lastName"] = {
+						["$regex"] = "(?i)" .. data.lname
+					}
+				}
+			}
+		}
+		local fields = {
+			"characters"
+		}
+		-- insert into db
+		couchdb.getSpecificFieldFromDocumentByRows("essentialmode", query, fields, function(doc)
+			if doc then
+				print(data.fname .. " " .. data.lname .. " found in DB search!")
+				for i = 1, #doc.characters do
+					if string.lower(doc.characters[i].firstName) == string.lower(data.fname) and string.lower(doc.characters[i].lastName) == string.lower(data.lname) then
+						local person = doc.characters[i]
+					    -- values have to be false by default to work with UI --
+					    local person_info  = {
+					        ssn = ssn,
+					        name = firstToUpper(person.firstName) .. " " .. firstToUpper(person.lastName),
+							dob = person.dateOfBirth,
+					        drivers_license = false,
+					        firearm_permit = false,
+					        insurance = false,
+					        criminal_history = {
+					            crimes = {},
+					            tickets = {}
+					        }
+					    }
+					    --------------------
+					    -- get licenses --
+					    --------------------
+					    local licenses = person.licenses
+					    if #licenses > 0 then
+					        for i = 1, #licenses do
+					            local license = licenses[i]
+					                if license.name == "Driver's License" then
+					                    person_info.drivers_license = license
+					                elseif license.name == "Firearm Permit" then
+					                    person_info.firearm_permit = license
+					                end
+					        end
+					    end
+					    ---------------------
+					    -- get insurance --
+					    ---------------------
+					    local insurance = person.insurance
+					    if insurance.planName then
+					        person_info.insurance = insurance
+					    end
+					    -----------------------------
+					    -- get criminal history --
+					    -----------------------------
+					    local criminal_history = person.criminalHistory
+					    if #criminal_history > 0 then
+					        for i = 1, #criminal_history do
+					            local crime = criminal_history[i]
+					                if not crime.type then -- not a ticket
+					                    table.insert(person_info.criminal_history.crimes, crime)
+					                else
+					                    table.insert(person_info.criminal_history.tickets, crime)
+					                end
+					        end
+					        if #person_info.criminal_history.crimes <= 0 then
+					            person_info.criminal_history.crimes = false
+					        end
+					        if #person_info.criminal_history.tickets <= 0 then
+					            person_info.criminal_history.tickets = false
+					        end
+					    end
+
+					    TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
+					end
+				end
+			else
+				print("person NOT found!")
+				local msg = {
+					type = "error",
+					message  = "No person found matching name " .. data.fname .. " " .. data.lname .. "!"
+				}
+				TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
+				return
+			end
+		end)
+	end)
 end)
 
 RegisterServerEvent("mdt:performPlateCheck")
@@ -353,4 +453,8 @@ function playerHasValidAutoInsurance(playerInsurance)
 			-- no insurance at all
 			return false
 		end
+end
+
+function firstToUpper(str)
+    return (str:gsub("^%l", string.upper))
 end

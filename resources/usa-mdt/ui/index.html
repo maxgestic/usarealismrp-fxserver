@@ -121,7 +121,10 @@
                         <form class="w3-container w3-card-4" style="padding-left: 0 !important;">
                             <br>
                             <p>
-                                <label class="w3-text-white">SSN</label>
+                                <p>BY NAME:</p>
+                                <input v-model="fname_search" class="w3-input w3-border" type="text"  placeholder="Enter a first  name to search..." required>
+                                <input v-model="lname_search" class="w3-input w3-border" type="text"  placeholder="Enter a last name to search..." required>
+                                <p>BY SSN:</p>
                                 <input v-model="person_check.ssn" class="w3-input w3-border" type="text"  placeholder="Enter an SSN to search..." required>
                             </p>
                             <br>
@@ -133,6 +136,14 @@
                         <table v-if="person_check.name" class="w3-table-all w3-small">
                             <tr>
                                 <td>{{ person_check.name }}</td>
+                            </tr>
+                        </table>
+
+                        <h4><b>DOB:</b></h4>
+
+                        <table v-if="person_check.dob" class="w3-table-all w3-small">
+                            <tr>
+                                <td>{{ person_check.dob }}</td>
                             </tr>
                         </table>
 

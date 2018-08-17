@@ -274,6 +274,47 @@ function exposedDB.getAllDocumentsFromDb(db, callback)
 end
 --]]
 
+function exposedDB.getSpecificFieldFromDocumentByRows(db, rowsAndValues, fields, callback)
+	local qu = {selector = rowsAndValues, fields = fields}
+	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/_find", function(err, rText, headers)
+		local t = json.decode(rText)
+		if(t)then
+			if t.docs then
+				if(t.docs[1])then
+					callback(t.docs[1])
+				else
+					callback(false)
+				end
+			else
+				callback(false)
+			end
+		else
+			callback(false, rText)
+		end
+	end, "POST", json.encode(qu), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
+end
+
+function exposedDB.getDocumentByRows(db, rowsAndValues, callback)
+	--local qu = {selector = {[row] = value}}
+	local qu = {selector = rowsAndValues}
+	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/_find", function(err, rText, headers)
+		local t = json.decode(rText)
+		if(t)then
+			if t.docs then
+				if(t.docs[1])then
+					callback(t.docs[1])
+				else
+					callback(false)
+				end
+			else
+				callback(false)
+			end
+		else
+			callback(false, rText)
+		end
+	end, "POST", json.encode(qu), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
+end
+
 function exposedDB.getDocumentByRow(db, row, value, callback)
 	local qu = {selector = {[row] = value}}
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/_find", function(err, rText, headers)

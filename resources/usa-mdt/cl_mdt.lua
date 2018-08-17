@@ -15,8 +15,13 @@ RegisterNUICallback("close", function(data, cb)
     cb('ok')
 end)
 
-RegisterNUICallback("PerformPersonCheck", function(data, cb)
-    TriggerServerEvent("mdt:performPersonCheck", tonumber(data.ssn))
+RegisterNUICallback("PerformPersonCheckBySSN", function(data, cb)
+    TriggerServerEvent("mdt:PerformPersonCheckBySSN", tonumber(data.ssn))
+    cb('ok')
+end)
+
+RegisterNUICallback("PerformPersonCheckByName", function(data, cb)
+    TriggerServerEvent("mdt:PerformPersonCheckByName", data)
     cb('ok')
 end)
 
