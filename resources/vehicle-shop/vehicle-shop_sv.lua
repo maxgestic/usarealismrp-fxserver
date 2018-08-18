@@ -35,7 +35,7 @@ local vehicleShopItems = {
 			{make = "Pfister", model = "Comet 1", price = 55550, hash = -1045541610, storage_capacity = 125.0},
 			{make = "Pfister", model = "Comet 2", price = 55550, hash = -2022483795, storage_capacity = 125.0},
 			{make = "Pfister", model = "Comet 5", price = 95000, hash = "comet5", storage_capacity = 125.0},
-			{make = "Annis", model = "Savestra", price = 120000, hash = "savestra", storage_capacity = 125.0}
+			--{make = "Annis", model = "Savestra", price = 120000, hash = "savestra", storage_capacity = 125.0}
 		},
 		["Muscles"] = {
 			{make = "Willand", model = "Faction", price = 10500, hash = -2119578145, storage_capacity = 160.0},
@@ -51,9 +51,14 @@ local vehicleShopItems = {
 			{make = "Willand", model = "Faction Custom", price = 25575, hash = -1790546981, storage_capacity = 160.0},
 			{make = "Willand", model = "Faction Custom Donk", price = 35575, hash = -2039755226, storage_capacity = 160.0},
 			{make = "Albany", model = "Virgo", price = 42000, hash = -498054846, storage_capacity = 160.0},
+			{make = "Albany", model = "Virgo 2", price = 45000, hash = -899509638, storage_capacity = 130.0},
+			{make = "Declasse", model = "Voodoo", price = 45000, hash = 2006667053, storage_capacity = 130.0},
 			{make = "Declasse", model = "Tampa", price = 45000, hash = 972671128, storage_capacity = 160.0},
 			{make = "Vapid", model = "Chino Custom", price = 45000, hash = -1361687965, storage_capacity = 160.0},
-			{make = "Vapid", model = "Ellie", price = 155000, hash = "ellie", storage_capacity = 100.0}
+			{make = "Vapid", model = "Ellie", price = 155000, hash = "ellie", storage_capacity = 100.0},
+			{make = "Declasse", model = "Sabre GT", price = 35000, hash = -1685021548, storage_capacity = 155.0},
+			{make = "Declasse", model = "Sabre Turbo Custom", price = 65000, hash = 223258115, storage_capacity = 130.0},
+			{make = "Declasse", model = "Stallion", price = 35000, hash = 1923400478, storage_capacity = 155.0}
 		},
 		["Trucks"] = {
 			{make = "Karin", model = "Rebel", price = 10500, hash = -2045594037, storage_capacity = 230.0},
@@ -90,7 +95,7 @@ local vehicleShopItems = {
 			{make = "Canis", model = "Kamacho", price = 150000, hash = "kamacho", storage_capacity = 130.0}
 		},
 		["Motorcycles"] = {
-			{make = "Pegassi", model = "Faggio Sport", price = 1200, hash = -1842748181, storage_capacity = 30.0},
+			{make = "Pegassi", model = "Faggio", price = 1200, hash = -1842748181, storage_capacity = 30.0},
 			{make = "Dinka", model = "Enduro", price = 12500, hash = 1753414259, storage_capacity = 30.0},
 			{make = "Dinka", model = "Akuma", price = 17500, hash = 1672195559, storage_capacity = 30.0},
 			{make = "Maibatsu", model = "Sanchez", price = 17500, hash = -1453280962, storage_capacity = 30.0},
@@ -106,15 +111,28 @@ local vehicleShopItems = {
 			{make = "Nagasaki", model = "Chimera", price = 35000, hash = 6774487, storage_capacity = 30.0},
 			{make = "LCC", model = "Innovation", price = 60000, hash = 2006142190, storage_capacity = 30.0},
 			{make = "LCC", model = "Sanctus", price = 200000, hash = 1491277511, storage_capacity = 30.0},
-			{make = "Western", model = "Daemon 2", price = 28000, hash = -1404136503, storage_capacity = 30.0},
-			{make = "Western", model = "Daemon 2", price = 28000, hash = -1404136503, storage_capacity = 30.0},
+			{make = "Western", model = "Daemon", price = 28000, hash = 2006142190, storage_capacity = 30.0},
+			{make = "Western", model = "Daemon 2", price = 38000, hash = -1404136503, storage_capacity = 30.0},
 			{make = "Maibatsu", model = "Manchez", price = 28000, hash = -1523428744, storage_capacity = 30.0},
 			{make = "Western", model = "Sovereign", price = 18000, hash = 743478836, storage_capacity = 30.0},
 			{make = "Western", model = "Wolfsbane", price = 27500, hash = -618617997, storage_capacity = 30.0}
 		},
+		["Motorcycles 2"] = {
+			{make = "Principe", model = "Lectro", price = 27500, hash = "lectro", storage_capacity = 30.0},
+			{make = "LCC", model = "Avarus", price = 53000, hash = "avarus", storage_capacity = 30.0},
+			{make = "Pegassi", model = "Faggio Mod", price = 15000, hash = 55628203, storage_capacity = 50.0},
+			{make = "Pegassi", model = "Faggio Sport", price = 17000, hash = -1289178744, storage_capacity = 60.0},
+			{make = "Shitzu", model = "Defiler", price = 37000, hash = 822018448, storage_capacity = 60.0},
+			{make = "Shitzu", model = "Hakuchou", price = 95000, hash = 1265391242, storage_capacity = 60.0},
+			{make = "Shitzu", model = "Hakuchou Drag", price = 115000, hash = -255678177, storage_capacity = 60.0},
+			{make = "Western", model = "Ratbike", price = 28000, hash = 1873600305, storage_capacity = 45.0},
+			{make = "Pegassi", model = "Esskey", price = 45000, hash = 2035069708, storage_capacity = 45.0},
+			{make = "Pegassi", model = "Vortex", price = 50000, hash = -609625092, storage_capacity = 45.0}
+		},
 		["Vans"] = {
 			{make = "Vapid", model = "Speedo", price = 18000, hash = -810318068, storage_capacity = 300.0},
 			{make = "Vapid", model = "Minivan", price = 19000, hash = -310465116, storage_capacity = 300.0},
+			{make = "Vapid", model = "Minivan 2", price = 45000, hash = -1126264336, storage_capacity = 250.0},
 			{make = "Vapid", model = "Clown", price = 29599, hash = 728614474, storage_capacity = 300.0},
 			{make = "Declasse", model = "Burrito 1", price = 21000, hash = -1346687836, storage_capacity = 300.0},
 			{make = "Declasse", model = "Burrito 2", price = 21000, hash = -907477130, storage_capacity = 300.0},
@@ -125,7 +143,6 @@ local vehicleShopItems = {
 			{make = "Bravado", model = "Youga Classic", price = 24000, hash = 1026149675, storage_capacity = 300.0},
 			{make = "Bravado", model = "Rumpo 1", price = 18000, hash = 1162065741, storage_capacity = 300.0},
 			{make = "Bravado", model = "Rumpo 3", price = 38000, hash = 1475773103, storage_capacity = 300.0},
-			--{make = "Lifted Chevy", model = "Blazer", price = 55000, hash = -1776615689, storage_capacity = 300.0},
 			{make = "Brute", model = "Camper", price = 45500, hash = 1876516712, storage_capacity = 300.0},
 			{make = "Hennifers", model = "Taco Truck", price = 60500, hash = 1951180813, storage_capacity = 300.0}
 		},
@@ -201,7 +218,7 @@ local vehicleShopItems = {
 		},
 		["Classic 2"] = {
 			{make = "Declasse", model = "Tornado 6", price = 30000, hash = -1558399629, storage_capacity = 100.0},
-			--{make = "Truffade", model = "ZType", price = 85000, hash = 75889561, storage_capacity = 100.0},
+			{make = "Truffade", model = "ZType", price = 85000, hash = "ztype", storage_capacity = 100.0},
 			{make = "", model = "BType", price = 95000, hash = 117401876, storage_capacity = 100.0},
 			{make = "", model = "BType 2", price = 125000, hash = -831834716, storage_capacity = 100.0},
 			{make = "Grotti", model = "GT 500", price = 100000, hash = "gt500", storage_capacity = 100.0},
@@ -221,7 +238,6 @@ local vehicleShopItems = {
 			{make = "Ubermacht", model = "Oracle", price = 55000, hash = -511601230, storage_capacity = 165.0},
 			{make = "Enus", model = "Cognoscenti", price = 85500, hash = -2030171296, storage_capacity = 165.0},
 			{make = "Enus", model = "Super Diamond", price = 95000, hash = 1123216662, storage_capacity = 165.0},
-			--{make = "Obey", model = "Tailgater", price = 115000, hash = -1008861746, storage_capacity = 165.0},
 			{make = "Chrystler", model = "300 SRT8", price = 60000, hash = -304802106, storage_capacity = 175.0},
 			{make = "Audi", model = "A8", price = 60000, hash = -1008861746, storage_capacity = 155.0},
 			{make = "Mercedes", model = "E63 AMG", price = 80000, hash = -1255452397, storage_capacity = 155.0},
@@ -246,7 +262,8 @@ local vehicleShopItems = {
 		["Electric"] = {
 			{make = "Coil", model = "Raider", price = 300000, hash = "raiden", storage_capacity = 150.0},
 			{make = "Coil", model = "Voltic", price = 55550, hash = "voltic", storage_capacity = 135.0},
-			{make = "Pfister", model = "Neon", price = 55550, hash = "neon", storage_capacity = 135.0}
+			{make = "Pfister", model = "Neon", price = 55550, hash = "neon", storage_capacity = 135.0},
+			{make = "Cheval", model = "Surge", price = 55550, hash = "surge", storage_capacity = 135.0}
 		}
 	}
 }

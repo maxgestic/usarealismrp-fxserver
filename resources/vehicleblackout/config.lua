@@ -11,7 +11,7 @@ Config.BlackoutDamageRequired = 25
 
 -- Enable blacking out due to speed deceleration
 -- If a vehicle slows down rapidly over this threshold, the player blacks out
-Config.BlackoutFromSpeed = true
+Config.BlackoutFromSpeed = false
 Config.BlackoutSpeedRequired = 45 -- Speed in MPH
 
 -- Enable the disabling of controls if the player is blacked out

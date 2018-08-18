@@ -2,16 +2,9 @@
 --# for USA REALISM rp
 --# This script keeps a server sided track of frozen states on objects like doors or gates that can be toggled by being in the activation area and pressing "E"
 
--- TODO:
--- 3) Add below:
--- BCSO Paleto -- Side gate 1: x = -429.9, y = 5986.8, z = 31.5, model = -1156020871
--- BCSO Paleto -- Side gate 2: x = -431.4, y = 5988.3, z = 31.5, model = -1156020871
-
-
-
 local DOORS_TO_MANAGE = {
-  {name = "Bolingbroke Prison", locations = {{x = 1836.1, y = 2604.6,  z = 45.6}, {x = 1847.1, y = 2604.7, z = 45.6}}, distance = 30.0, model = 741314661, locked = false, draw_marker = true},
-  {name = "Bolingbroke Prison", locations = {{x = 1826.6, y = 2605.1, z = 45.6}, {x = 1816.5, y = 2602.8, z = 45.6}}, distance = 30.0, model = 741314661, locked = false, draw_marker = true},
+  {name = "Bolingbroke Prison", locations = {{x = 1836.1, y = 2604.6,  z = 45.6}, {x = 1852.8, y = 2613.3, z = 45.7}}, distance = 30.0, model = 741314661, locked = false, draw_marker = true},
+  {name = "Bolingbroke Prison", locations = {{x = 1826.6, y = 2605.1, z = 45.6}, {x = 1812.6, y = 2598.2, z = 45.5}}, distance = 30.0, model = 741314661, locked = false, draw_marker = true},
   {name = "BCSO Paleto / Side 1", locations = {{x = -429.9, y = 5986.8, z = 31.5}}, distance = 30.0, model = -1156020871, locked = false, draw_marker = true},
   {name = "BCSO Paleto / Side 2", locations = {{x = -431.4, y = 5988.3, z = 31.5}}, distance = 30.0, model = -1156020871, locked = false, draw_marker = true},
   {name = "Mission Row / Door 1", x = 464.2, y = -1002.6, z = 24.9, distance = 2.0, model = -1033001619, locked = false, draw_marker = false},
