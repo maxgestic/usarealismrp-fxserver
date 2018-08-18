@@ -1,6 +1,19 @@
 local INTERACTION_KEY = 86 -- "E"
 
 local warp_locations = {
+    ["the Comedy Club"] = {
+        entrance = {
+            x = -429.9,
+            y = 261.6,
+            z = 82.1
+        },
+        exit = {
+            x = -458.4,
+            y = 284.7,
+            z = 77.6
+        },
+        job_access = "civ"
+    },
   ["the Hen House"] = {
       entrance = {
           x = -299.48,
@@ -8,9 +21,9 @@ local warp_locations = {
           z = 30.53
       },
       exit = {
-          x = -1387.47,
-          y = -588.195,
-          z = 29.3195
+          x = -302.9,
+          y = 6257.8,
+          z = 31.7
       },
       job_access = "civ"
   },
