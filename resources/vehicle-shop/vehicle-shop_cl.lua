@@ -117,7 +117,7 @@ local vehicleShopItems = {
 			{make = "Dinka", model = "Thrust", price = 23500, hash = 1836027715, storage_capacity = 30.0},
 			{make = "Nagasaki", model = "Carbon RS", price = 30000, hash = 11251904, storage_capacity = 30.0},
 			{make = "Nagasaki", model = "Chimera", price = 35000, hash = 6774487, storage_capacity = 30.0},
-			{make = "LCC", model = "Innovation", price = 60000, hash = 2006142190, storage_capacity = 30.0},
+			--{make = "LCC", model = "Innovation", price = 60000, hash = 2006142190, storage_capacity = 30.0},
 			{make = "LCC", model = "Sanctus", price = 200000, hash = 1491277511, storage_capacity = 30.0},
 			{make = "Western", model = "Daemon", price = 28000, hash = 2006142190, storage_capacity = 30.0},
 			{make = "Western", model = "Daemon 2", price = 38000, hash = -1404136503, storage_capacity = 30.0},
@@ -132,7 +132,7 @@ local vehicleShopItems = {
 			{make = "Pegassi", model = "Faggio Sport", price = 17000, hash = -1289178744, storage_capacity = 60.0},
 			{make = "Shitzu", model = "Defiler", price = 57000, hash = 822018448, storage_capacity = 60.0},
 			{make = "Shitzu", model = "Hakuchou", price = 65000, hash = 1265391242, storage_capacity = 60.0},
-			{make = "Shitzu", model = "Hakuchou Drag", price = 85000, hash = -255678177, storage_capacity = 60.0},
+			{make = "Shitzu", model = "Hakuchou Drag", price = 115000, hash = -255678177, storage_capacity = 60.0},
 			{make = "Western", model = "Ratbike", price = 28000, hash = 1873600305, storage_capacity = 45.0},
 			{make = "Pegassi", model = "Esskey", price = 45000, hash = 2035069708, storage_capacity = 45.0},
 			{make = "Pegassi", model = "Vortex", price = 50000, hash = -609625092, storage_capacity = 45.0}
@@ -226,7 +226,7 @@ local vehicleShopItems = {
 		},
 		["Classic 2"] = {
 			{make = "Declasse", model = "Tornado 6", price = 30000, hash = -1558399629, storage_capacity = 100.0},
-			{make = "Truffade", model = "ZType", price = 85000, hash = GetHashKey("ztype"), storage_capacity = 100.0},
+			{make = "Truffade", model = "ZType", price = 500000, hash = GetHashKey("ztype"), storage_capacity = 100.0},
 			{make = "", model = "BType", price = 95000, hash = 117401876, storage_capacity = 100.0},
 			{make = "", model = "BType 2", price = 125000, hash = -831834716, storage_capacity = 100.0},
 			{make = "Grotti", model = "GT 500", price = 100000, hash = GetHashKey("gt500"), storage_capacity = 100.0},
