@@ -66,7 +66,9 @@ local DOORS = {
   {name = "Mission Row / Cells Door 1", x = 443.9, y = -988.6, z = 30.7, distance = 2.0, model = 185711165, locked = false, draw_marker = false, cell_block = false},
   {name = "Mission Row / Cells Door 2", x = 445.4, y = -988.6, z = 30.7, distance = 2.0, model = 185711165, locked = false, draw_marker = false, cell_block = false},
   {name = "Mission Row / Side Room 1", x = 443.7, y = -992.4, z = 30.7, distance = 2.0, model = -131296141, locked = false, draw_marker = false, cell_block = false},
-  {name = "Mission Row / Side Room 2", x = 443.6, y = -993.9, z = 30.7, distance = 2.0, model = -131296141, locked = false, draw_marker = false, cell_block = false}
+  {name = "Mission Row / Side Room 2", x = 443.6, y = -993.9, z = 30.7, distance = 2.0, model = -131296141, locked = false, draw_marker = false, cell_block = false},
+  {name = "Mission Row / Vehicle Gate", locations = {{x = 406.3, y = -1016.8, z = 29.4}, {x = 422.6, y = -1018.5, z = 29.1}}, distance = 30.0, model = 725274945, locked = false, draw_marker = true, cell_block = false},
+  {name = "Mission Row / Vehicle Access", x = 423.9, y = -998.8, z = 30.7, distance = 5.0, model = -1635579193, locked = false, draw_marker = false, cell_block = false}
 }
 
 RegisterServerEvent("doormanager:checkDoorLock")
