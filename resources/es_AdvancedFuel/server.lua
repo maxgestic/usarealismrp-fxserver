@@ -87,7 +87,7 @@ AddEventHandler("essence:buy", function(amount, index, e, property)
 		local userJob = user.getActiveCharacterData("job")
 		local user_money = user.getActiveCharacterData("money")
 		local toPay = round(amount*70,0)
-		if userJob == "sheriff" or userJob == "ems" or userJob == "fire" then
+		if userJob == "sheriff" or userJob == "ems" or userJob == "fire" or userJob == "corrections" then
 			TriggerClientEvent("essence:hasBuying", _source, amount)
 			-- give some money to store owner --
 			if property then
