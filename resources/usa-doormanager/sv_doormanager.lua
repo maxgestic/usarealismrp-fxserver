@@ -57,7 +57,16 @@ local DOORS = {
   {name = "Prison Block / Cell 37", x = 1743.8, y = 2635.70, z = 53.08, distance = 30.0, model = -642608865, locked = true, draw_marker = false, cell_block = true},
   {name = "Prison Block / Cell 38", x = 1743.8, y = 2639.80, z = 53.09, distance = 30.0, model = -642608865, locked = true, draw_marker = false, cell_block = true},
   {name = "Prison Block / Cell 39", x = 1743.8, y = 2643.80, z = 53.09, distance = 30.0, model = -642608865, locked = true, draw_marker = false, cell_block = true},
-  {name = "Prison Block / Cell 40", x = 1743.8, y = 2647.95, z = 53.10, distance = 30.0, model = -642608865, locked = true, draw_marker = false, cell_block = true}
+  {name = "Prison Block / Cell 40", x = 1743.8, y = 2647.95, z = 53.10, distance = 30.0, model = -642608865, locked = true, draw_marker = false, cell_block = true},
+  {name = "Mission Row / Holding Cells Entrance 1", x = 469.3, y = -1015.2, z = 26.4, distance = 5.0, model = -2023754432, locked = false, draw_marker = false, cell_block = false},
+  {name = "Mission Row / Holding Cells Entrance 2", x = 468.1, y = -1015.1, z = 26.4, distance = 5.0, model = -2023754432, locked = false, draw_marker = false, cell_block = false},
+  {name = "Mission Row / Front Door 1", x = 434.3, y = -980.9, z = 30.7, distance = 2.0, model = -1215222675, locked = false, draw_marker = false, cell_block = false},
+  {name = "Mission Row / Front Door 2", x = 434.1, y = -982.6, z = 30.7, distance = 2.0, model = 320433149, locked = false, draw_marker = false, cell_block = false},
+  {name = "Mission Row / Back Gate", locations = {{x = 487.4, y = -1024.3, z = 28.1}, {x = 490.1, y = -1024.1, z = 28.1}}, distance = 30.0, model = -1603817716, locked = false, draw_marker = true, cell_block = false},
+  {name = "Mission Row / Cells Door 1", x = 443.9, y = -988.6, z = 30.7, distance = 2.0, model = 185711165, locked = false, draw_marker = false, cell_block = false},
+  {name = "Mission Row / Cells Door 2", x = 445.4, y = -988.6, z = 30.7, distance = 2.0, model = 185711165, locked = false, draw_marker = false, cell_block = false},
+  {name = "Mission Row / Side Room 1", x = 443.7, y = -992.4, z = 30.7, distance = 2.0, model = -131296141, locked = false, draw_marker = false, cell_block = false},
+  {name = "Mission Row / Side Room 2", x = 443.6, y = -993.9, z = 30.7, distance = 2.0, model = -131296141, locked = false, draw_marker = false, cell_block = false}
 }
 
 RegisterServerEvent("doormanager:checkDoorLock")
