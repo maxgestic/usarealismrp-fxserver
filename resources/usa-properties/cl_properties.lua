@@ -15,7 +15,9 @@ local menu = {
     key = 38,
     user_items = nil,
     property_items = nil,
-    wardrobe = {}
+    wardrobe = {},
+    vehicles = {},
+    money = 0
 }
 
 ------------------------------------
@@ -24,13 +26,11 @@ local menu = {
 AddEventHandler('playerSpawned', function(spawn)
     TriggerServerEvent("properties:getPropertyIdentifier")
     TriggerServerEvent("properties:getProperties")
-    --print("getting property list and property identifier!")
 end)
 
 RegisterNetEvent("properties:setPropertyIdentifier")
 AddEventHandler("properties:setPropertyIdentifier", function(ident)
     my_property_identifier = ident
-    --print("property identifier set!")
 end)
 
 -------------------------------
@@ -40,14 +40,12 @@ RegisterNetEvent("properties:update")
 AddEventHandler("properties:update", function(property, close_menu)
     PROPERTIES[property.name] = property
     if close_menu then menu.enabled = false end
-    --print("properties loaded!")
 end)
 
 RegisterNetEvent("properties:updateAll")
 AddEventHandler("properties:updateAll", function(properties, close_menu)
     PROPERTIES = properties
     if close_menu then menu.enabled = false end
-    --print("properties loaded!")
 end)
 
 RegisterNetEvent("properties:loadWardrobe")
@@ -59,19 +57,26 @@ end)
 RegisterNetEvent("properties:setItemsToStore")
 AddEventHandler("properties:setItemsToStore", function(items)
     menu.user_items = items
-    --print("menu user items set!")
 end)
 
 -- list items to retrieve --
 RegisterNetEvent("properties:loadedStorage")
 AddEventHandler("properties:loadedStorage", function(items)
     menu.property_items = items
-    --print("**menu property items set!**")
-    for k = 1, #items do
-        --print("name: " .. items[k].name .. ", quantity: " .. items[k].quantity)
-    end
 end)
 --
+
+-- money from property --
+RegisterNetEvent("properties:loadMoneyForMenu")
+AddEventHandler("properties:loadMoneyForMenu", function(money)
+    menu.money = money
+end)
+
+-- vehicles from property --
+RegisterNetEvent("properties:loadVehiclesForMenu")
+AddEventHandler("properties:loadVehiclesForMenu", function(vehicles)
+    menu.vehicles = vehicles
+end)
 
 -- storing vehicle --
 RegisterNetEvent("properties:storeVehicle")
@@ -96,51 +101,36 @@ AddEventHandler("properties:retrieveVehicle", function(vehicle)
     local plateText = vehicle.plate
     local numberHash = modelHash
 
-    --[[
-    local vehicle_key = {
-    name = "Key -- " .. vehicle.plate,
-    quantity = 1,
-    type = "key",
-    owner = vehicle.owner,
-    make = vehicle.make,
-    model = vehicle.model,
-    plate = vehicle.plate
-}
-
--- give key to owner
-TriggerServerEvent("garage:giveKey", vehicle_key)
---]]
-
-if type(modelHash) ~= "number" then
-    numberHash = tonumber(modelHash)
-end
-
-Citizen.CreateThread(function()
-    RequestModel(numberHash)
-
-    while not HasModelLoaded(numberHash) do
-        Citizen.Wait(100)
+    if type(modelHash) ~= "number" then
+        numberHash = tonumber(modelHash)
     end
 
-    local playerPed = GetPlayerPed(-1)
-    local playerCoords = GetEntityCoords(playerPed, false)
-    local heading = GetEntityHeading(playerPed)
-    local vehicle = CreateVehicle(numberHash, playerCoords.x, playerCoords.y, playerCoords.z, heading, true, false)
-    SetVehicleNumberPlateText(vehicle, plateText)
-    SetVehicleOnGroundProperly(vehicle)
-    SetVehRadioStation(vehicle, "OFF")
-    SetPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
-    SetVehicleEngineOn(vehicle, true, false, false)
-    SetEntityAsMissionEntity(vehicle, true, true)
-    SetVehicleHasBeenOwnedByPlayer(vehicle, true)
-    SetVehicleExplodesOnHighExplosionDamage(vehicle, false)
+    Citizen.CreateThread(function()
+        RequestModel(numberHash)
 
-    -- car customizations
-    if playerVehicle.customizations then
-        TriggerEvent("customs:applyCustomizations", playerVehicle.customizations)
-    end
+        while not HasModelLoaded(numberHash) do
+            Citizen.Wait(100)
+        end
 
-end)
+        local playerPed = GetPlayerPed(-1)
+        local playerCoords = GetEntityCoords(playerPed, false)
+        local heading = GetEntityHeading(playerPed)
+        local vehicle = CreateVehicle(numberHash, playerCoords.x, playerCoords.y, playerCoords.z, heading, true, false)
+        SetVehicleNumberPlateText(vehicle, plateText)
+        SetVehicleOnGroundProperly(vehicle)
+        SetVehRadioStation(vehicle, "OFF")
+        SetPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
+        SetVehicleEngineOn(vehicle, true, false, false)
+        SetEntityAsMissionEntity(vehicle, true, true)
+        SetVehicleHasBeenOwnedByPlayer(vehicle, true)
+        SetVehicleExplodesOnHighExplosionDamage(vehicle, false)
+
+        -- car customizations
+        if playerVehicle.customizations then
+            TriggerEvent("customs:applyCustomizations", playerVehicle.customizations)
+        end
+
+    end)
 
 end)
 
@@ -202,6 +192,9 @@ Citizen.CreateThread(function()
                     if IsControlJustPressed(0, menu.key) then
                         menu.enabled = true
                         menu.page = "home"
+                        if nearest_property_info.owner.identifier == my_property_identifier then
+                            TriggerServerEvent("properties:loadMoneyForMenu", nearest_property_info.name)
+                        end
                     end
                 end
             elseif info.garage_coords then
@@ -227,6 +220,7 @@ Citizen.CreateThread(function()
                                 --print("opening garage menu!")
                                 menu.enabled = true
                                 menu.page = "garage"
+                                TriggerServerEvent("properties:loadVehiclesForMenu", nearest_property_info.name)
                             end
                         end
                     end
@@ -284,19 +278,9 @@ AddEventHandler("properties-GUI:Update", function()
     Menu.updateSelection()
 end)
 
+--------------------------------------------
 -- custom events / functions menu --
-
-------------------------------------
-
---[[
-potential scenarios:
-[No owner] = menu items needed will be only the purchase price, a purchase button, and an exit button
-[An owner] = {
-visitor = menu items needed will be owner name, a button to rob available items or money, a button to Exit,
-owner = menu items needed will be Earnings, storage section button which has buttons to store, list, and retrieve items,
-Fee section with next fee due date and a button to pay the fee and an item to display paid status, and an Exit button
-}
-]]
+--------------------------------------------
 
 Citizen.CreateThread(function()
 
@@ -332,7 +316,7 @@ Citizen.CreateThread(function()
 
                         TriggerEvent("properties-GUI:Option", "Next Fee Due: " .. nearest_property_info.fee.end_date, function(cb) if cb then end end)
 
-                        TriggerEvent("properties-GUI:Option", "Money: ~g~$" .. comma_value(nearest_property_info.storage.money), function(cb)
+                        TriggerEvent("properties-GUI:Option", "Money: ~g~$" .. comma_value(menu.money), function(cb)
                             if cb then end
                         end)
 
@@ -550,9 +534,9 @@ Citizen.CreateThread(function()
 
                         elseif menu.page == "garage" then
 
-                            if #nearest_property_info.vehicles > 0 then
-                                for i = 1, #nearest_property_info.vehicles do
-                                    local veh = nearest_property_info.vehicles[i]
+                            if #menu.vehicles > 0 then
+                                for i = 1, #menu.vehicles do
+                                    local veh = menu.vehicles[i]
                                     TriggerEvent("properties-GUI:Option", veh.make .. " " .. veh.model, function(cb)
                                         if cb then
                                             --print("retrieving stored vehicle from property")
@@ -594,40 +578,19 @@ Citizen.CreateThread(function()
                                         -- get user input for name
                                         local name = GetUserInput()
                                         if name then
-                                          --print("name: " .. name)
-                                          -- save player's outfit
-                                          local clothing = GetPedOutfit()
-                                          -- build the object
-                                          local outfit = {
-                                              name = name,
-                                              clothing = clothing
-                                          }
-                                          TriggerServerEvent("properties:saveOutfit", nearest_property_info.name, outfit)
+                                            --print("name: " .. name)
+                                            -- save player's outfit
+                                            local clothing = GetPedOutfit()
+                                            -- build the object
+                                            local outfit = {
+                                                name = name,
+                                                clothing = clothing
+                                            }
+                                            TriggerServerEvent("properties:saveOutfit", nearest_property_info.name, outfit)
                                         end
                                     end)
                                 end
                             end)
-                            --[[
-                            -----------------
-                            -- delete btn--
-                            -----------------
-                            if menu.wardrobe then
-                                if #menu.wardrobe > 0 then
-                                    local string_array = {}
-                                    for i = 1, #menu.wardrobe do
-                                        table.insert(string_array, menu.wardrobe[i].name)
-                                    end
-                                    TriggerEvent("properties-GUI:StringArray", "Delete:", string_array, selected_index, function(cb)
-                                        print("str array cb: " .. cb)
-                                        if cb then
-                                            selected_index = cb
-                                            --print("selected outfit to delete: " .. string_array[selected_index])
-                                            TriggerServerEvent("properties:deleteOutfitByName", nearest_property_info.name, string_array[selected_index])
-                                        end
-                                    end)
-                                end
-                            end
-                            --]]
                             ---------------
                             -- back btn--
                             ---------------
@@ -677,78 +640,53 @@ Citizen.CreateThread(function()
 
                     TriggerEvent("properties-GUI:Option", "~y~End Date:~w~ " .. nearest_property_info.fee.end_date, function(cb) end)
 
-                    -- todo: add a peek option to see store inventory items before robbnig --
+                    if nearest_property_info.type == "business" then
 
-                    --[[
-                    TriggerEvent("properties-GUI:StringArray", "Rob:", rob_options, selected_index, function(cb)
-                    selected_index = cb
-                    print("selected index to rob: " .. selected_index)
-                    --print("Person is trying to steal $" .. nearest_property_info.storage.money .. " from the " .. nearest_property_info.name .. "!")
-                end)
-                --]]
-
-                if nearest_property_info.type == "business" then
-
-                    TriggerEvent("properties-GUI:Option", "~r~Rob", function(cb)
-                        if cb then
-                            --print("player wants to rob store!")
-                            -- TODO: check if player is armed here before robbing
-                            if IsPedArmed(GetPlayerPed(-1), 7) then
-                              TriggerServerEvent('es_holdup:rob', nearest_property_info.name)
-                              menu.enabled = false
-                            else
-                              TriggerEvent("usa:notify", "I am not threatend!")
+                        TriggerEvent("properties-GUI:Option", "~r~Rob", function(cb)
+                            if cb then
+                                --print("player wants to rob store!")
+                                if IsPedArmed(GetPlayerPed(-1), 7) then
+                                    TriggerServerEvent('es_holdup:rob', nearest_property_info.name)
+                                    menu.enabled = false
+                                else
+                                    TriggerEvent("usa:notify", "I am not threatend!")
+                                end
                             end
-                        end
-                    end)
+                        end)
+
+                    end
 
                 end
 
+                ------------------------
+                -- store has no owner --
+                ------------------------
+            else
+
+                TriggerEvent("properties-GUI:Option", "Price: $" .. comma_value(nearest_property_info.fee.price), function(cb) if cb then end end)
+
+                TriggerEvent("properties-GUI:Option", "~g~Purchase", function(cb)
+                    if cb then
+                        -- if player has enough money, make them the owner of the property
+                        TriggerServerEvent("properties:purchaseProperty", nearest_property_info)
+                    end
+                end)
+
             end
 
-            ------------------------
-            -- store has no owner --
-            ------------------------
-        else
-
-            TriggerEvent("properties-GUI:Option", "Price: $" .. comma_value(nearest_property_info.fee.price), function(cb) if cb then end end)
-
-            TriggerEvent("properties-GUI:Option", "~g~Purchase", function(cb)
-                if cb then
-                    -- if player has enough money, make them the owner of the property
-                    TriggerServerEvent("properties:purchaseProperty", nearest_property_info)
+            TriggerEvent("properties-GUI:Option", "Close", function(cb)
+                if(cb) then
+                    menu.enabled = false
+                    menu.page = "home"
                 end
             end)
 
+            TriggerEvent("properties-GUI:Update")
         end
 
-        TriggerEvent("properties-GUI:Option", "Close", function(cb)
-            if(cb) then
-                menu.enabled = false
-                menu.page = "home"
-            end
-        end)
+        Wait(0)
 
-        --[[
-        TriggerEvent("properties-GUI:Bool", "bool", bool, function(cb)
-        bool = cb
-    end)
-
-    TriggerEvent("properties-GUI:Int", "int", int, 0, 55, function(cb)
-    int = cb
-end)
-
-TriggerEvent("properties-GUI:StringArray", "string:", array, position, function(cb)
-position = cb
-end)
---]]
-
-TriggerEvent("properties-GUI:Update")
-end
-
-Wait(0)
-
-end
+    end
 end)
 --------------------------------------------------------------------
 --------------------------------------------------------------------
@@ -788,57 +726,50 @@ function GetPedOutfit()
     --print("saving clothing:")
     local ped = GetPlayerPed(-1)
     local clothing = {
-    [8] = { -- torso (undershirt)
+        [8] = { -- torso (undershirt)
         component_value = GetPedDrawableVariation(ped, 8),
         texture_value = GetPedTextureVariation(ped, 8)
-    },
-    [7] = { -- ties
-    component_value = GetPedDrawableVariation(ped, 7),
-    texture_value = GetPedTextureVariation(ped, 7)
-    },
-    [3] = { -- arms/hands
-    component_value = GetPedDrawableVariation(ped, 3),
-    texture_value = GetPedTextureVariation(ped, 3)
-    },
-    [11] = { -- torso 2 (jackets)
-    component_value = GetPedDrawableVariation(ped,11),
-    texture_value = GetPedTextureVariation(ped,11)
-    },
-    [4] = { -- legs
-    component_value = GetPedDrawableVariation(ped, 4),
-    texture_value = GetPedTextureVariation(ped, 4)
-    },
-    [6] = { -- feet
-    component_value = GetPedDrawableVariation(ped, 6),
-    texture_value = GetPedTextureVariation(ped, 6)
-    },
-    ["props"] = {
-        [0] = {
-            prop_value = GetPedPropIndex(ped, 0),
-            prop_texture_value = GetPedPropTextureIndex(ped, 0)
         },
-        [1] = {
-            prop_value = GetPedPropIndex(ped, 1),
-            prop_texture_value = GetPedPropTextureIndex(ped, 1)
+        [7] = { -- ties
+        component_value = GetPedDrawableVariation(ped, 7),
+        texture_value = GetPedTextureVariation(ped, 7)
         },
-        [2] = {
-            prop_value = GetPedPropIndex(ped, 2),
-            prop_texture_value = GetPedPropTextureIndex(ped, 2)
+        [3] = { -- arms/hands
+        component_value = GetPedDrawableVariation(ped, 3),
+        texture_value = GetPedTextureVariation(ped, 3)
         },
-        [3] = {
-            prop_value = GetPedPropIndex(ped, 3),
-            prop_texture_value = GetPedPropTextureIndex(ped, 3)
+        [11] = { -- torso 2 (jackets)
+        component_value = GetPedDrawableVariation(ped,11),
+        texture_value = GetPedTextureVariation(ped,11)
+        },
+        [4] = { -- legs
+        component_value = GetPedDrawableVariation(ped, 4),
+        texture_value = GetPedTextureVariation(ped, 4)
+        },
+        [6] = { -- feet
+        component_value = GetPedDrawableVariation(ped, 6),
+        texture_value = GetPedTextureVariation(ped, 6)
+        },
+        ["props"] = {
+            [0] = {
+                prop_value = GetPedPropIndex(ped, 0),
+                prop_texture_value = GetPedPropTextureIndex(ped, 0)
+            },
+            [1] = {
+                prop_value = GetPedPropIndex(ped, 1),
+                prop_texture_value = GetPedPropTextureIndex(ped, 1)
+            },
+            [2] = {
+                prop_value = GetPedPropIndex(ped, 2),
+                prop_texture_value = GetPedPropTextureIndex(ped, 2)
+            },
+            [3] = {
+                prop_value = GetPedPropIndex(ped, 3),
+                prop_texture_value = GetPedPropTextureIndex(ped, 3)
+            }
         }
     }
-}
--- debug --
---[[
-for k, v in pairs(clothing) do
-print("k: " .. k)
-print("v1: " .. v.component_value .. ", v2: " .. v.texture_value)
-end
---]]
-return clothing
+    return clothing
 end
 
 function GetUserInput()

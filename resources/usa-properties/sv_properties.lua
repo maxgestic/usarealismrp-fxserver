@@ -4,6 +4,7 @@
 --# made for: USA REALISM RP
 
 local PROPERTIES = {} -- loaded and updated by database
+local PROPERTIES_FOR_CLIENT = nil
 
 local BUSINESS_PAY_PERIOD_DAYS = 7
 local HOUSE_PAY_PERIOD_DAYS = 30
@@ -18,7 +19,12 @@ end)
 
 RegisterServerEvent("properties:getProperties")
 AddEventHandler("properties:getProperties", function()
-    TriggerClientEvent("properties:updateAll", source, PROPERTIES, false)
+    if PROPERTIES_FOR_CLIENT then
+        TriggerClientEvent("properties:updateAll", source, PROPERTIES_FOR_CLIENT, false)
+        print(" ** Properties loaded for client! ** ")
+    else
+        print("** Error loading properties, PROPERTIES_FOR_CLIENT was nil! **")
+    end
 end)
 
 RegisterServerEvent("properties:getPropertyMoney")
@@ -70,8 +76,6 @@ AddEventHandler("properties:deleteOutfitByName", function(property_name, outfit_
             table.remove(PROPERTIES[property_name].wardrobe, i)
             -- update menu --
             TriggerClientEvent("properties:loadWardrobe", source, PROPERTIES[property_name].wardrobe)
-            -- update properties --
-            TriggerClientEvent("properties:update", -1, PROPERTIES[property_name], false)
             -- save property --
             SavePropertyData(property_name)
             return
@@ -88,8 +92,6 @@ AddEventHandler("properties:saveOutfit", function(property_name, outfit)
     table.insert(PROPERTIES[property_name].wardrobe, outfit)
     -- update menu --
     TriggerClientEvent("properties:loadWardrobe", source, PROPERTIES[property_name].wardrobe)
-    -- update properties --
-	TriggerClientEvent("properties:update", -1, PROPERTIES[property_name], false)
   -- save property --
   SavePropertyData(property_name)
 end)
@@ -180,10 +182,20 @@ AddEventHandler("properties:store", function(name, item, quantity)
 			--print("name: " .. PROPERTIES[name].storage.items[k].name .. ", quantity: " .. PROPERTIES[name].storage.items[k].quantity)
 		--end
 	end
-	-- update properties --
-	TriggerClientEvent("properties:update", -1, PROPERTIES[name], true)
   -- save property --
   SavePropertyData(name)
+end)
+
+-- load stored money --
+RegisterServerEvent("properties:loadMoneyForMenu")
+AddEventHandler("properties:loadMoneyForMenu", function(name)
+	TriggerClientEvent("properties:loadMoneyForMenu", source, PROPERTIES[name].storage.money)
+end)
+
+-- load stored vehicles --
+RegisterServerEvent("properties:loadVehiclesForMenu")
+AddEventHandler("properties:loadVehiclesForMenu", function(name)
+	TriggerClientEvent("properties:loadVehiclesForMenu", source, PROPERTIES[name].vehicles)
 end)
 
 -- store vehicle at property --
@@ -199,7 +211,6 @@ AddEventHandler("properties:storeVehicle", function(property_name, plate)
 					userVehicles[i].stored_location = property_name
 					user.setActiveCharacterData("vehicles", userVehicles)
           table.insert(PROPERTIES[property_name].vehicles, userVehicles[i])
-          TriggerClientEvent("properties:update", -1, PROPERTIES[property_name], true)
 					TriggerClientEvent("properties:storeVehicle", userSource)
           -- save property --
           SavePropertyData(property_name)
@@ -225,8 +236,6 @@ AddEventHandler("properties:retrieveVehicle", function(property_name, vehicle)
       table.remove(PROPERTIES[property_name].vehicles, i)
       -- retrieve vehicle from property --
       TriggerClientEvent("properties:retrieveVehicle", source, vehicle)
-      -- update properties table --
-      TriggerClientEvent("properties:update", -1, PROPERTIES[property_name], true)
       -- save property --
       SavePropertyData(property_name)
       -- update player vehicle stored location variable --
@@ -303,7 +312,6 @@ AddEventHandler("properties:retrieve", function(name, item, quantity)
       --print("inserted item into player inventory from property: " .. item.name .. ", type: " .. item.type .. ", customizations: " .. type(item.components))
 			-- update properties for all --
 			--print("updating properties!")
-			TriggerClientEvent("properties:update", -1, PROPERTIES[name], true)
 			-- refresh menu property items --
 			--print("setting client's property storage items to:")
 			--for k = 1, #PROPERTIES[name].storage.items do
@@ -329,6 +337,7 @@ function loadProperties()
 		local response = json.decode(text)
 		if response.rows then
 			PROPERTIES = {} -- reset table
+            PROPERTIES_FOR_CLIENT = {} -- set as table from nil
 			print("#(response.rows) = " .. #(response.rows))
 			-- insert all properties from 'properties' db into lua table
 			for i = 1, #(response.rows) do
@@ -336,6 +345,19 @@ function loadProperties()
 				if response.rows[i] then
 					if response.rows[i].doc.name then
 						PROPERTIES[response.rows[i].doc.name] = response.rows[i].doc
+                        PROPERTIES_FOR_CLIENT[response.rows[i].doc.name] = { -- only give client needed information for each property for performance reasons
+                            name = response.rows[i].doc.name,
+                            storage = {
+                                money = response.rows[i].doc.storage.money
+                            },
+                            fee = response.rows[i].doc.fee,
+                            x = response.rows[i].doc.x,
+                            y = response.rows[i].doc.y,
+                            z = response.rows[i].doc.z,
+                            garage_coords = response.rows[i].doc.garage_coords,
+                            owner = response.rows[i].doc.owner,
+                            type = response.rows[i].doc.type
+                        }
 						print("loaded property: " .. response.rows[i].doc.name)
 					else
 						print("Error loading property document at index #" .. i)
@@ -360,7 +382,6 @@ loadProperties()
 RegisterServerEvent("properties:addMoney")
 AddEventHandler("properties:addMoney", function(name, amount)
     PROPERTIES[name].storage.money = PROPERTIES[name].storage.money + amount
-    TriggerClientEvent("properties:update", -1, PROPERTIES[name], true)
     print("$" .. amount .. " added!")
     -- save property --
     SavePropertyData(name)
@@ -374,7 +395,6 @@ AddEventHandler("properties:withdraw", function(name, amount, savedSource, give_
   if PROPERTIES[name].storage.money - amount >= 0 then
     -- remove from store --
     PROPERTIES[name].storage.money = PROPERTIES[name].storage.money - amount
-    TriggerClientEvent("properties:update", -1, PROPERTIES[name], true)
     -- see if called from server file --
     if savedSource then source = savedSource end
     -- only take money if asked to --
@@ -438,7 +458,20 @@ AddEventHandler("properties:purchaseProperty", function(property)
 			PROPERTIES[property.name].owner.purchase_date = os.date("%x", os.time())
 			PROPERTIES[property.name].owner.identifier = ident
 			-- update all clients property info --
-			TriggerClientEvent("properties:update", -1, PROPERTIES[property.name], true)
+            local PROPERTY_FOR_CLIENT = { -- only give client needed information for each property for performance reasons
+                name = property.name,
+                storage = {
+                    money = PROPERTIES[property.name].storage.money
+                },
+                fee = PROPERTIES[property.name].fee,
+                x = PROPERTIES[property.name].x,
+                y = PROPERTIES[property.name].y,
+                z = PROPERTIES[property.name].z,
+                garage_coords = PROPERTIES[property.name].garage_coords,
+                owner = PROPERTIES[property.name].owner,
+                type = PROPERTIES[property.name].type
+            }
+			TriggerClientEvent("properties:update", -1, PROPERTY_FOR_CLIENT, true)
 			-- subtract money --
 			player.setActiveCharacterData("money", user_money - PROPERTIES[property.name].fee.price)
       -- save property --
@@ -526,7 +559,22 @@ function Evict_Owners()
               PROPERTIES[name].owner.identifier = "undefined"
               --PROPERTIES[name].storage.money = 0
               --PROPERTIES[name].storage.items = {}
-							-- save property --
+              -- update clients --
+              local PROPERTY_FOR_CLIENT = { -- only give client needed information for each property for performance reasons
+                  name = name,
+                  storage = {
+                      money = PROPERTIES[name].storage.money
+                  },
+                  fee = PROPERTIES[name].fee,
+                  x = PROPERTIES[name].x,
+                  y = PROPERTIES[name].y,
+                  z = PROPERTIES[name].z,
+                  garage_coords = PROPERTIES[name].garage_coords,
+                  owner = PROPERTIES[name].owner,
+                  type = PROPERTIES[name].type
+              }
+            TriggerClientEvent("properties:update", -1, PROPERTY_FOR_CLIENT, true)
+			-- save property --
               SavePropertyData(name)
               --[[
 							TriggerEvent('es:exposeDBFunctions', function(db)
@@ -635,17 +683,19 @@ end)
 -]]
 ---------------------------------------
 
+--[[
 TriggerEvent('es:addCommand','loadproperties', function(source, args, user)
     if user.getGroup() == "owner" then
         print("inside /loadproperties command!")
         loadProperties()
         local steam_hex = GetPlayerIdentifiers(source)[1]
         TriggerClientEvent("properties:setPropertyIdentifier", source, steam_hex)
-        TriggerClientEvent("properties:updateAll", -1, PROPERTIES, false)
+        --TriggerClientEvent("properties:updateAll", -1, PROPERTIES, false)
     end
 end, {
 	help = "Debug for properties"
 })
+--]]
 
 --TriggerEvent('es:addCommand','addproperty', function(source, args, user)
 TriggerEvent('es:addGroupCommand', 'addproperty', 'admin', function(source, args, user)
@@ -725,16 +775,25 @@ TriggerEvent('es:addGroupCommand', 'addproperty', 'admin', function(source, args
         end
     end
 end, {
-	help = "Add a new property"
+	help = "Add a new property",
+    params = {
+        { name = "Circle X", help = "Main circle X coordinate" },
+        { name = "Circle Y", help = "Main circle Y coordinate" },
+        { name = "Circle Z", help = "Main circle Z coordinate" },
+        { name = "Garage X", help = "Garage circle X coordinate" },
+        { name = "Garage Y", help = "Garage circle Y coordinate" },
+        { name = "Garage Z", help = "Garage circle Z coordinate" },
+        { name = "Price", help = "Price of house (ex: 40000). NO COMMAS OR DOLLAR SIGN!" },
+        { name = "Name", help = "The name of the property" }
+    }
 })
 
 -- todo: rcon command that loads properties from db (so we can make changes) and refresh everyone's clientside property info (without removing their property identifier)
 AddEventHandler('rconCommand', function(commandName, args)
 	if commandName == "refreshproperties" then
+
 		--loadProperties(function(status)
 			--if status then
-				TriggerClientEvent("properties:updateAll", -1, PROPERTIES, false)
-				print("all players property info refreshed!")
 				TriggerEvent("es:getPlayers", function(players)
 					for id, player in pairs(players) do
 						if id and player then
@@ -747,6 +806,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 				end)
 			--end
 		--end)
+
 	elseif commandName == "properties" then
 		for name, info in pairs(PROPERTIES) do
 			if info.owner.name then
