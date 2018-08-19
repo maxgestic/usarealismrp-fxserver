@@ -703,6 +703,7 @@ objects = {
 {hash = -133590469, pos = vector3(1745.87, 2602.13, 46.1), cellblockDoor = false, dynamic = false, rot = vector3(1.001765E-05, 5.0090257E-06, 89.99793)},
 {hash = -133590469, pos = vector3(1745.87, 2602.13, 47.07), cellblockDoor = false, dynamic = false, rot = vector3(1.001765E-05, 5.0090257E-06, 89.99793)},
 {hash = -133590469, pos = vector3(1607.71, 2627.36, 46.02501), cellblockDoor = false, dynamic = false, rot = vector3(0.000001, 0.000001, 0.000001)},
+--[[
 {hash = -1992828732, pos = vector3(434.69, -984.81, 29.6895943), cellblockDoor = false, dynamic = false, rot = vector3(1.00178859E-05, 5.00895567E-06, 89.9997253)},
 {hash = -1992828732, pos = vector3(467.3005, -1013.46844, 27.1923), cellblockDoor = false, dynamic = false, rot = vector3(0.000001, 0.000001, 0.000001)},
 {hash = -1992828732, pos = vector3(464.207245, -980.8226, 42.6919327), cellblockDoor = false, dynamic = false, rot = vector3(1.00177258E-05, -5.00900751E-06, -89.9988556)},
@@ -710,6 +711,7 @@ objects = {
 {hash = 295312387, pos = vector3(458.110474, -982.054565, 30.3249912), cellblockDoor = false, dynamic = false, rot = vector3(0.000001, 0.000001, 0.000001)},
 {hash = 191751313, pos = vector3(457.854523, -980.184, 30.1395988), cellblockDoor = false, dynamic = false, rot = vector3(0.000001, 0.000001, -74.9999161)},
 {hash = -1256478069, pos = vector3(462.4439, -983.077454, 31.2021446), cellblockDoor = false, dynamic = false, rot = vector3(0.000001, 0.000001, 84.99976)},
+--]]
 {hash = -1256478069, pos = vector3(461.158, -983.0843, 31.2021446), cellblockDoor = false, dynamic = false, rot = vector3(0.000001, 0.000001, 84.99976)},
 {hash = -1874162628, pos = vector3(1724.87073, 2616.40723, 47.2922668), cellblockDoor = false, dynamic = false, rot = vector3(1.001782E-05, -5.00883743E-06, 89.51643)},
 {hash = -1874162628, pos = vector3(1746.11865, 2616.37549, 47.2922668), cellblockDoor = false, dynamic = false, rot = vector3(1.00177149E-05, -5.008981E-06, -88.98227)},

@@ -283,7 +283,6 @@ AddEventHandler("MapMaker:sendData", function(data)
 	print("get")
 	print(#data)
 	for i,k in pairs(data) do
-		print(k.n)
 		local toSpawn = CreateObject(GetHashKey(k.n), k.x, k.y, k.z, false, true, false)
 		FreezeEntityPosition(toSpawn, true)
 		SetEntityHeading(toSpawn, k.h)

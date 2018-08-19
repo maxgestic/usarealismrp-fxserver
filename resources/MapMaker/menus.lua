@@ -50,7 +50,7 @@ function renderDefaultMenu()
 		if(cb) then
 			askDelete()
 		else
-					
+
 		end
 	end)
 
@@ -58,7 +58,7 @@ function renderDefaultMenu()
 		if(cb) then
 			placeObjectByName()
 		else
-						
+
 		end
 	end)
 
@@ -67,7 +67,7 @@ function renderDefaultMenu()
 		if(cb) then
 			searchObjectModel()
 		else
-						
+
 		end
 	end)
 
@@ -76,7 +76,7 @@ function renderDefaultMenu()
 		if(cb) then
 			placeMenu(lastObjectModel,0)
 		else
-			
+
 		end
 	end)
 
@@ -94,7 +94,7 @@ function renderDefaultMenu()
 			activate = false
 			launchSystem()
 		else
-				
+
 		end
 	end)
 
@@ -106,7 +106,7 @@ function renderDefaultMenu()
 			countMax = 23
 			searchObjectModelArrayCount = #lData
 		else
-						
+
 		end
 	end)
 
@@ -128,7 +128,7 @@ function renderDefaultMenu()
 					menuId = k.id
 				end
 			else
-					
+
 			end
 		end)
 
@@ -145,7 +145,7 @@ function showCategorieMenu(id)
 		if(cb) then
 				menuId = 0
 		else
-					
+
 		end
 	end)
 
@@ -155,7 +155,7 @@ function showCategorieMenu(id)
 				menuId = -1
 				placeMenu(k,id)
 			else
-					
+
 			end
 		end)
 	end
@@ -193,7 +193,7 @@ function placeMenu(name, id)
 					inSubMod = false
 					mainMenu = true
 				else
-						
+
 				end
 			end)
 
@@ -252,7 +252,7 @@ function placeMenu(name, id)
 					activate = false
 					launchSystem()
 				else
-					
+
 				end
 			end)
 
@@ -270,7 +270,7 @@ function placeMenu(name, id)
 					activate = false
 					launchSystem()
 				else
-						
+
 				end
 			end)
 
@@ -302,7 +302,7 @@ function renderSubMenu()
 				print(currentParent)
 				inSubMod = true
 			else
-						
+
 			end
 		end)
 
@@ -322,7 +322,7 @@ function renderSubMod()
 			inSubMod = false
 			menuId = 0
 		else
-			
+
 		end
 	end)
 
@@ -333,7 +333,7 @@ function renderSubMod()
 					menuId = -1
 					placeMenu(k,id)
 				else
-					
+
 				end
 			end)
 		end
@@ -408,10 +408,10 @@ function placeObjectByName()
 							edmenu.show = 1
 							edmenu.row = 0
 						end
-				
+
 
 				end
-			else 
+			else
 				stop = true
 			end
 		end
@@ -469,7 +469,7 @@ function searchObjectModel()
 							edmenu.row = 0
 							edmenu.input = 0
 							stop = true
-							
+
 						end
 				elseif UpdateOnscreenKeyboard() == 2 then
 						edmenu.input = 0
@@ -477,10 +477,10 @@ function searchObjectModel()
 							edmenu.show = 1
 							edmenu.row = 0
 						end
-				
+
 
 				end
-			else 
+			else
 				stop = true
 				menuId = 0
 				stopped = true
@@ -498,12 +498,12 @@ function searchObjectModel()
 				count = count+1
 			end
 		end
-		
+
 		searchObjectModelArrayCount = count
 		countMin = 1
 		countMax = 23
 
-		
+
 		searchMenu = true
 		while activate and not stopped do
 			Citizen.Wait(0)
@@ -517,7 +517,7 @@ function searchObjectModel()
 					mainMenu = true
 					searchMenu = false
 				else
-						
+
 				end
 			end)
 			for i,k in pairs(awnserArray) do
@@ -529,7 +529,7 @@ function searchObjectModel()
 							placeMenu(k,id)
 							searchMenu = false
 						else
-					
+
 						end
 					end)
 				end
@@ -553,21 +553,19 @@ function renderDelMenu()
 			inSubMod = false
 			menuId = 0
 		else
-			
+
 		end
 	end)
 
 
 	for i,k in pairs(lData) do
-		print(i)
-		print(k)
 		if(i>=countMin and i<=countMax) then
 			TriggerEvent("GUI:MapDelOption",k.n, k.oID, function(cb)
 				if(cb) then
 					TriggerServerEvent("MapMaker:askDeleteObject", i, k.oID)
 					menuId = 0
 				else
-			
+
 				end
 			end)
 		end

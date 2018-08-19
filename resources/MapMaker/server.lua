@@ -152,7 +152,6 @@ function recupObjects()
 	end
 
 	for i=1,count do
-		print("inserting xml object!")
 		table.insert(MapObjects, {n=nameValues[i],x=xValues[i],y=yValues[i],z=zValues[i],h=hValues[i]})
 	end
 
