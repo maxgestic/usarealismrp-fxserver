@@ -171,7 +171,7 @@ Citizen.CreateThread(function()
 			RequestModel(hash)
 			Citizen.Wait(0)
 		end
-		local ped = CreatePed(4, hash, peds[i].x, peds[i].y, peds[i].z, -90.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
+		local ped = CreatePed(4, hash, peds[i].x, peds[i].y, peds[i].z, -90.0 --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
 		SetEntityCanBeDamaged(ped,false)
 		SetPedCanRagdollFromPlayerImpact(ped,false)
 		TaskSetBlockingOfNonTemporaryEvents(ped,true)
