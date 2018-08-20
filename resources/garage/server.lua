@@ -2,13 +2,12 @@ RegisterServerEvent("garage:giveKey")
 AddEventHandler("garage:giveKey", function(key)
 	local already_has_key = false
 	local userSource = tonumber(source)
-	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local inv = user.getActiveCharacterData("inventory")
 		for i = 1, #inv do
 			local item = inv[i]
 			if item then
 				if string.find(item.name, "Key") then
-					print("found a key!!")
 					if string.find(key.plate, item.plate) then
 						already_has_key = true
 					end
@@ -18,35 +17,24 @@ AddEventHandler("garage:giveKey", function(key)
 		if not already_has_key then
 			table.insert(inv, key)
 			user.setActiveCharacterData("inventory", inv)
-			print("giving owner key with plate #" .. key.plate)
 		end
 		-- add to server side list of plates being tracked for locking resource:
 		TriggerEvent("lock:addPlate", key.plate)
 		return
-	end)
 end)
 
 RegisterServerEvent("garage:storeKey")
 AddEventHandler("garage:storeKey", function(plate)
 	local userSource = tonumber(source)
-	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local inv = user.getActiveCharacterData("inventory")
 		if inv then
 			for i = 1, #inv do
 				local item = inv[i]
 				if item then
-					--print("checking item: " .. item.name .. " for a matching plate # to store key!")
 					if string.find(item.name, "Key") then
-						--print("found a key!!")
-						--print("checking plate...")
-						--print("type of item.plate = " .. type(item.plate))
 						if plate then
-							--print("type of plate param = " .. type(plate))
-							--print("item.plate = " .. item.plate)
-							--print("plate param = " .. plate)
 							if string.find(plate, item.plate) then
-							--	print("matching plate found!")
-								print("storing key for plate #" .. plate)
 								table.remove(inv, i)
 								user.setActiveCharacterData("inventory", inv)
 								-- remove key from lock resource toggle list:
@@ -58,13 +46,12 @@ AddEventHandler("garage:storeKey", function(plate)
 				end
 			end
 		end
-	end)
 end)
 
 RegisterServerEvent("garage:storeVehicle")
 AddEventHandler("garage:storeVehicle", function(handle, numberPlateText)
 	local userSource = tonumber(source)
-	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local userVehicles = user.getActiveCharacterData("vehicles")
 		for i = 1, #userVehicles do
 			local vehicle = userVehicles[i]
@@ -78,7 +65,6 @@ AddEventHandler("garage:storeVehicle", function(handle, numberPlateText)
 			end
 		end
 		TriggerClientEvent("garage:notify", userSource, "~r~You do not own that vehicle!")
-	end)
 end)
 
 function playerHasValidAutoInsurance(playerInsurance, source)
@@ -105,13 +91,12 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle, property)
 	print("inside checkVehicleStatus with vehicle = " .. vehicle.model)
 	local userSource = tonumber(source)
 	local withdraw_fee = 0
-	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local userVehicles = user.getActiveCharacterData("vehicles")
 		local playerInsurance = user.getActiveCharacterData("insurance")
 		local user_money = user.getActiveCharacterData("money")
 		if vehicle.impounded == true then
 			withdraw_fee = 2000
-			print("users vehicle was impounded!")
 			if user_money >= withdraw_fee then
 				TriggerClientEvent("garage:notify", userSource, "~g~BC IMPOUND: ~w~Here's your car!")
 				TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
@@ -124,7 +109,6 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle, property)
 				for i = 1, #userVehicles do
 					local thisVeh = userVehicles[i]
 					if thisVeh.plate == vehicle.plate then
-						print("user retrieved an impounded vehicle.. setting impounded to false")
 						userVehicles[i].impounded = false
 						user.setActiveCharacterData("vehicles", userVehicles)
 					end
@@ -176,7 +160,6 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle, property)
 				end
 			end
 		end
-	end)
 end)
 
 --[[

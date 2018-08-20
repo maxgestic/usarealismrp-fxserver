@@ -15,14 +15,13 @@ local randomMsg = {	"You found the keys in the ignition!"
 RegisterServerEvent("lock:checkForKey")
 AddEventHandler("lock:checkForKey", function(plate)
   local userSource = tonumber(source)
-  TriggerEvent("es:getPlayerFromId", userSource, function(user)
+  local user = exports["essentialmode"]:getPlayerFromId(userSource)
     local inv = user.getActiveCharacterData("inventory")
     for i = 1, #inv do
       local item = inv[i]
       if item then
         if string.find(item.name, "Key") then
-          if string.find(plate, item.plate) then
-            print("found plate match!")
+          if string.find(plate, item.plate) thens
             if isLocked(plate) then
               setLocked(plate, false)
               TriggerClientEvent("lock:unlockVehicle", userSource)
@@ -38,7 +37,6 @@ AddEventHandler("lock:checkForKey", function(plate)
     -- no key owned for vehicle trying to lock/unlock
     print("Player did not have the key to unlock vehicle with plate #" .. plate)
     TriggerClientEvent("lock:lookForKeys", userSource, plate)
-  end)
 end)
 
 RegisterServerEvent("lock:foundKeys")
@@ -55,14 +53,13 @@ AddEventHandler("lock:foundKeys", function(found, plate)
             plate = plate,
 			legality = "legal"
         }
-        TriggerEvent("es:getPlayerFromId", source, function(user)
+		local user = exports["essentialmode"]:getPlayerFromId(source)
             local inv = user.getActiveCharacterData("inventory")
             table.insert(inv, vehicle_key)
             user.setActiveCharacterData("inventory", inv)
             local length = #(randomMsg)
     		local randomNbr = math.random(1, tonumber(length))
     		TriggerClientEvent("lock:sendNotification", userSource, 1, randomMsg[randomNbr], 0.5)
-        end)
     else
         TriggerClientEvent("lock:sendNotification", userSource, 1, "You don't have the keys to the vehicle!", 0.5)
     end
