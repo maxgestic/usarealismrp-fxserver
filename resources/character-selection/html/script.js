@@ -1,5 +1,5 @@
 $(function () {
-	var characters = []
+	var characters = [];
 	var freeSlot = 0;
 
 	window.addEventListener('message', function (event) {
@@ -10,34 +10,38 @@ $(function () {
 			document.body.style.display = menuStatus ? "flex" : "none";
 			if (menu == "") return;
 
-			$('.create').hide()
-			$('.characters').show()
-			$('#select').show()
-			$('#delete').show()
-			$('#birth').hide()
-			$('a[href="http://character-selection/disconnect"]').show()
-			$('a[href="http://character-selection/list"]').hide()
-			$('.characters #character').remove()
+			$('.create').hide();
+			$('.characters').show();
+			$('#select').show();
+			$('#delete').show();
+			$('#birth').hide();
+			$("#go").hide();
+			$("#spawn-select-back").hide();
+			$(".spawn-select").hide();
+			$("#badly-placed-spawn-select-header").hide();
+			$('a[href="http://character-selection/disconnect"]').show();
+			$('a[href="http://character-selection/list"]').hide();
+			$('.characters #character').remove();
 
 			// event.data.characters = event.data.data.reverse();
 			event.data.characters = event.data.data;
 			characters = event.data.data;
 
 			$('#new').on('click', function () {
-				$('.create').show()
-				$('.characters').hide()
-				$('#select').hide()
-				$('#delete').hide()
-				$('#birth').show()
-				$('a[href="http://character-selection/disconnect"]').hide()
-				$('a[href="http://character-selection/list"]').show()
+				$('.create').show();
+				$('.characters').hide();
+				$('#select').hide();
+				$('#delete').hide();
+				$('#birth').show();
+				$('a[href="http://character-selection/disconnect"]').hide();
+				$('a[href="http://character-selection/list"]').show();
 
 				$('.option p').on("click", function () {
-					clicked = this
+					clicked = this;
 					$('.option p').each(function () {
-						if (clicked != this) $(this).removeClass("selected")
+						if (clicked != this) $(this).removeClass("selected");
 					})
-					$(this).addClass("selected")
+					$(this).addClass("selected");
 				})
 
 				if (typeof characters != 'undefined') {
@@ -49,9 +53,9 @@ $(function () {
 				}
 
 				$('#birth').on('click', function () {
-					var first_name = $('#first_name').val()
-					var last_name = $('#last_name').val()
-					var gender = $('.option p.selected').attr('id')
+					var first_name = $('#first_name').val();
+					var last_name = $('#last_name').val();
+					var gender = $('.option p.selected').attr('id');
 
 					var dob = new Date($("input[name='date_of_birth']").val());
 					day = dob.getDate();
@@ -121,22 +125,37 @@ $(function () {
 				})
 			})
 
+			var selected;
+			var selected_character_index = null;
+			var selected_spawn = "Paleto Bay";
+
 			$("button#select").on('click', function () {
-				var i = 0, selected;
+				/* store which character index was selected */
+				var i = 0;
 				$('.characters #character').each(function () {
-					if (clicked == this) selected = this.dataset.selected
+					if (clicked == this) {
+						selected = this.dataset.selected
+						selected_character_index = i
+					}
 					i++;
 				});
 
-				console.log(JSON.stringify({
-					character: event.data.characters[selected],
-					slot: selected
-				}))
+				/* go to spawn selection screen */
+				$('.characters').hide();
+				$('#select').hide();
+				$('#delete').hide();
+				$('a[href="http://character-selection/disconnect"]').hide();
 
-				$.post('http://character-selection/select-character', JSON.stringify({
-					character: event.data.characters[selected],
-					slot: selected
-				}));
+				$('.spawn-select').show();
+				$('#go').show();
+				$("#spawn-select-back").show();
+				$("#badly-placed-spawn-select-header").show();
+
+				if (characters[selected_character_index].spawn)
+					$("#spawn-point--saved section").text("Saved Location");
+				else
+					$("#spawn-point--saved").hide();
+
 			})
 
 			$("button#delete").on('click', function () {
@@ -165,6 +184,41 @@ $(function () {
 					modal.close('cancled');
 				});
 			});
+
+			$("button#go").on('click', function() {
+				if (!$(this).hasClass("disabled")) {
+
+					$.post('http://character-selection/select-character', JSON.stringify({
+						character: event.data.characters[selected],
+						slot: selected,
+						spawn: selected_spawn
+					}));
+
+				}
+			});
+
+			$(".spawn-select .spawn-point").on('click', function() {
+				$('.spawn-select .spawn-point').each(function () {
+					$(this).css("border", "2px solid #ddd");
+				})
+				$(this).css("border", "2px solid #308bcd");
+				$("button#go").removeClass("disabled");
+				selected_spawn = $(this).text();
+			});
+
+			$("#spawn-select-back").on('click', function() {
+				/* go to characters screen */
+				$('.spawn-select').hide();
+				$('#go').hide();
+				$("#spawn-select-back").hide();
+				$("#badly-placed-spawn-select-header").hide();
+
+				$('.characters').show();
+				$('#select').show();
+				$('#delete').show();
+				$('a[href="http://character-selection/disconnect"]').show();
+			});
+
 		} else if (event.data.type == "error") {
 			document.getElementsByClassName('notification')[0].style.display = "block";
 		} else if (event.data.type == "delete") {

@@ -16,6 +16,12 @@ local spawn_coords_closed_menu = {
 	angle = 168.2
 }
 
+local while_menu_open_location = {
+	x = 751.31121826172,
+	y = 6454.3813476563,
+	z = 31.926473617554
+}
+
 local swap_locations = {
 {name="Clothes Store", x = 1.27486, y = 6511.89, z = 30.8778}, -- paleto bay
 {name="Clothes Store", x = 1692.24, y = 4819.79, z = 41.0631}, -- grape seed
@@ -45,7 +51,7 @@ AddEventHandler("character:swap--check-distance", function()
   end
 end)
 
-TriggerServerEvent("character:getCharactersAndOpenMenu", "home") -- REMOVE
+TriggerServerEvent("character:getCharactersAndOpenMenu", "home")
 
 RegisterNetEvent("character:open")
 AddEventHandler("character:open", function(menu, data)
@@ -185,16 +191,29 @@ RegisterNUICallback('new-character-submit', function(data, cb)
 end)
 
 RegisterNUICallback('select-character', function(data, cb)
-	if data.character.spawn then
-		spawn_coords_closed_menu = data.character.spawn
-	else
-		print("data.character.spawn did not exist")
-		spawn_coords_closed_menu = {
-			x = 177.596,
-			y = 6636.183,
-			z = 31.638,
-			angle = 168.2
-		}
+	if data.spawn then -- default is set in JS file (currently paleto bay)
+		spawn_coords_closed_menu = {}
+		if data.spawn:find("Paleto Bay") then
+			spawn_coords_closed_menu = {
+				x = 177.596,
+				y = 6636.183,
+				z = 31.638
+			}
+		elseif data.spawn:find("Sandy Shores")  then
+			spawn_coords_closed_menu = {
+				x = 1501.02,
+				y = 3776.2,
+				z = 33.5
+			}
+		elseif data.spawn:find("Los Santos")  then
+			spawn_coords_closed_menu = {
+				x = -269.5,
+				y = -776.9,
+				z = 32.3
+			}
+		elseif data.spawn:find("Saved Location") then
+			spawn_coords_closed_menu = data.character.spawn
+		end
 	end
 	toggleMenu(false)
 	if data.character.firstName then print("selecting char: " .. data.character.firstName) end
@@ -208,9 +227,6 @@ RegisterNUICallback('select-character', function(data, cb)
 	TriggerServerEvent("character:setActive", selectedCharacterSlot)
 	-- update bank balance:
 	TriggerEvent("banking:updateBalance", data.character.bank)
-	-- check jail status
-	--print("checking player jailed status")
-	--TriggerServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
 	cb('ok')
 	alreadyCreated = false
 end)
@@ -243,10 +259,6 @@ function toggleMenu(status, menu, data)
 	-- set player position
 	local ped = GetPlayerPed(-1)
 	if status then
-		-- SetEntityCoords(ped, open_menu_spawn_coords.x, open_menu_spawn_coords.y, open_menu_spawn_coords.z, open_menu_spawn_coords.angle, 0, 0, 1)
-		-- FreezeEntityPosition(GetPlayerPed(-1), status)
-		-- SetEnableHandcuffs(GetPlayerPed(-1), status)
-		-- RemoveAllPedWeapons(ped, true)
 
 		local ped = GetPlayerPed(-1)
 		SetEntityCoords(ped, 751.31121826172, 6454.3813476563, 31.926473617554, 0.0, 0, 0, 1)
@@ -332,7 +344,7 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(1)
 		if menuOpen then
-			SetEntityCoords(GetPlayerPed(-1), 751.31121826172, 6454.3813476563, 31.926473617554, open_menu_spawn_coords.angle, 0, 0, 1)
+			SetEntityCoords(GetPlayerPed(-1), while_menu_open_location.x, while_menu_open_location.y, while_menu_open_location.z, open_menu_spawn_coords.angle, 0, 0, 1)
 		end
 	end
 end)

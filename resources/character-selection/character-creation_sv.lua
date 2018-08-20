@@ -8,12 +8,11 @@ RegisterServerEvent("character:getCharactersAndOpenMenu")
 AddEventHandler("character:getCharactersAndOpenMenu", function(menu)
 	print("loading characters to open menu...")
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 	if user then
 		local characters = user.getCharacters()
 		TriggerClientEvent("character:open", userSource, menu, characters)
 	end
-	end)
 end)
 
 local default_money = 5000
@@ -54,7 +53,7 @@ AddEventHandler("character:new", function(data)
 			time = os.time()
 		}
 	}
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		if user then
 			local characters = user.getCharacters()
 			print("trying to save character data into slot #" .. slot .. "...")
@@ -64,13 +63,12 @@ AddEventHandler("character:new", function(data)
 
 			TriggerClientEvent("character:open", userSource, "home", characters)
 		end
-	end)
 end)
 
 RegisterServerEvent("character:setActive")
 AddEventHandler("character:setActive", function(slot)
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		if user then
 			local money_to_display = 0
 			local characters = user.getCharacters()
@@ -89,14 +87,13 @@ AddEventHandler("character:setActive", function(slot)
 			TriggerEvent("usa_rp:checkJailedStatusOnPlayerJoin", userSource)
 			--]]
 		end
-	end)
 end)
 
 RegisterServerEvent("character:save")
 AddEventHandler("character:save", function(characterData, slot)
 print("***INSIDE OF CHARACTER:SAVE***")
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		if user then
 			local characters = user.getCharacters()
 			print("trying to save character data into slot #" .. slot .. "...")
@@ -104,20 +101,19 @@ print("***INSIDE OF CHARACTER:SAVE***")
 			user.setCharacters(characters)
 			print("done saving character data into slot #" .. slot)
 		end
-	end)
 end)
 
 RegisterServerEvent("character:delete")
 AddEventHandler("character:delete", function(slot)
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		if user then
 			local characters = user.getCharacters()
 			-- See if character is at least one week old
 			local characterAge
 			if not characters[slot].created then
 				characterAge = 999999999999 -- just to make it old enough to delete (for people without the .created property for some reason)
-			else 
+			else
 				characterAge = getWholeDaysFromTime(characters[slot].created.time)
 			end
 			if characterAge >= WHOLE_DAYS_TO_DELETE then
@@ -131,7 +127,6 @@ AddEventHandler("character:delete", function(slot)
 				TriggerClientEvent("character:send-nui-message", userSource, {type = "delete", status = "fail", slot = slot}) -- update nui menu
 			end
 		end
-	end)
 end)
 
 RegisterServerEvent("character:loadCharacter")
@@ -139,7 +134,7 @@ AddEventHandler("character:loadCharacter", function(activeSlot)
 	print("trying to load character in active slot #" .. activeSlot)
 	local userSource = tonumber(source)
 	TriggerClientEvent('chat:removeSuggestionAll', userSource)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		if user then
 			local characters = user.getCharacters()
 			local character = characters[activeSlot]
@@ -157,7 +152,6 @@ AddEventHandler("character:loadCharacter", function(activeSlot)
 			-- see if spawn point is still valid
 			TriggerEvent("properties:checkSpawnPoint", userSource)
 		end
-	end)
 end)
 
 RegisterServerEvent("character:setSpawnPoint")

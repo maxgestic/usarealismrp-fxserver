@@ -9,7 +9,7 @@
 		<div class="header">
 			<h1>Welcome to <b>USA Realism RP!</b> -- <span style="font-size: 16px;">https://www.usarrp.net</span></h1>
 		</div>
-		<div class="notification">You don't appear to have any characters please make one.</div>
+		<div class="notification">You don't appear to have any characters! Create one!</div>
 		<div class="body">
 			<div class="section characters">
 				<div class="character" id="new">
@@ -35,6 +35,21 @@
 					<input type="date" name="date_of_birth" id="date_of_birth">
 				</div>
 			</div>
+			<header id="badly-placed-spawn-select-header">Select a spawn point!</header>
+			<div class="section spawn-select">
+					<div class="spawn-point">
+						<section id="spawn-point--paleto-bay">Paleto Bay</section>
+					</div>
+					<div class="spawn-point">
+						<section id="spawn-point--sandy-shores">Sandy Shores</section>
+					</div>
+					<div class="spawn-point">
+						<section id="spawn-point--los-santos">Los Santos</section>
+					</div>
+					<div class="spawn-point" id="spawn-point--saved">
+						<section></section>
+					</div>
+			</div>
 		</div>
 		<div class="footer">
 			<a href="http://character-selection/list">
@@ -46,17 +61,19 @@
 			<button id="birth">Create Character</button>
 			<button id="delete" class="disabled">Delete Character</button>
 			<button id="select" class="disabled">Select Character</button>
+			<button id="spawn-select-back">Back</button>
+			<button id="go" class="disabled">Go &#10095;</button>
 		</div>
 	</div>
 	<dialog id="confirm">
 		<h3 class="modal-header">Confirm Character Deletion</h3>
 		<div class="modal-body">
-			<p>Are you sure you want to permanently delete character?</p>
-			<h3><span id="confirm_name">John Doe</span></h3>
+			<p>Are you sure you want to permanently delete that character?</p>
+			<h3><span id="confirm_name">Bert Wierzbowski</span></h3>
 		</div>
 		<footer class="modal-footer">
-			<button id="confirm_cancel" type="button">No keep him alive!</button>
-			<button id="confirm_delete" type="button">Kill him off!</button>
+			<button id="confirm_cancel" type="button">No! Keep him alive!</button>
+			<button id="confirm_delete" type="button">I'm sure, delete it!</button>
 		</footer>
 	</dialog>
 </body>

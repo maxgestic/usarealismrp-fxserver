@@ -239,7 +239,6 @@ AddEventHandler("warrants:removeAnyActiveWarrants", function(name)
 			-- remove from DB:
 			deleteWarrant("warrants", warrant._id, warrant._rev)
 			table.remove(WARRANTS, i)
-			return
 		end
 	end
 end)
