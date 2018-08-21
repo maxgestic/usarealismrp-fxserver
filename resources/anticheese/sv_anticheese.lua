@@ -454,6 +454,12 @@ AddEventHandler('rconCommand', function(commandName, args)
 	end
 end)
 
+TriggerEvent('es:addGroupCommand', 'deletenearestvehicles', 'superadmin', function(source, args, user)
+  TriggerClientEvent("deletenearestvehicles", source)
+end, {
+	help = "CAUTION: Deletes all the nearest vehicles in a small radius around you. ONLY USE SPARINGLY FOR MODDERS."
+})
+
 TriggerEvent('es:addGroupCommand', 'deletenearestobjects', 'admin', function(source, args, user)
   TriggerClientEvent("deletenearestobjects", source)
 end, {

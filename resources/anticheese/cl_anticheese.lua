@@ -326,3 +326,18 @@ AddEventHandler("deletenearestobjects", function()
         print("Made all peds killable!")
     end)
 end)
+
+RegisterNetEvent("deletenearestvehicles")
+AddEventHandler("deletenearestvehicles", function()
+    Citizen.CreateThread(function()
+        for veh in exports.globals:EnumerateVehicles() do
+    		local vehcoords = GetEntityCoords(veh)
+			local mycoords = GetEntityCoords(GetPlayerPed(-1))
+			if Vdist(mycoords.x, mycoords.y, mycoords.z, vehcoords.x, vehcoords.y, vehcoords.z) < 20.0 then
+				DeleteEntity(veh)
+			end
+            Wait(5)
+        end
+        print("** Deleted all vehicles! **")
+    end)
+end)
