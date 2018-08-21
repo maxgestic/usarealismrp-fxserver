@@ -60,20 +60,3 @@ function GetRewardFromName(name)
   end
   return 0
 end
-
-AddEventHandler('rconCommand', function(commandName, args)
-	if commandName == "makepedskillable" then
-        RconPrint("Making all peds killable!")
-        TriggerEvent("es:getPlayers", function(players)
-            for id, person in pairs(players) do
-                if id and person then
-                    if person.getGroup() == "owner" then
-                        TriggerClientEvent("makepedskillable", id)
-                        CancelEvent()
-                        return
-                    end
-                end
-            end
-        end)
-    end
-end)

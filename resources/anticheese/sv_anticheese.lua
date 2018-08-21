@@ -11,7 +11,7 @@ LOGSUPRESSIONTIMEOUT = SPAMLIMIT * 5 * 1000  -- SPAMLIMIT * secs * ms
 LOGSURPRESSTIME = 10 * 60 * 1000  -- mins * secs * ms (10 minutes)
 
 violations = {}
-userLifeChecks = {}
+--userLifeChecks = {}
 
 webhook = "https://discordapp.com/api/webhooks/459801084316352519/aYvDyiMOIt1OZJiyOZ3jg73qYsMUYLAP8iBv-EOovSqsDa1QTzwbPi3G3z4kKPwvHraQ"
 
@@ -20,7 +20,7 @@ webhook = "https://discordapp.com/api/webhooks/459801084316352519/aYvDyiMOIt1OZJ
 
 AddEventHandler('anticheese:playerDropped', function(userSource)
 	local key = tostring(userSource)
-	userLifeChecks[key] = nil
+	--userLifeChecks[key] = nil
 	violations[key] = nil
 end)
 
@@ -358,12 +358,15 @@ Citizen.CreateThread(function()
 	end)
 end)
 
+--[[
 RegisterServerEvent('AntiCheese:LifeCheck')
 AddEventHandler('AntiCheese:LifeCheck', function()
 	local key = tostring(source)
 	userLifeChecks[key] = os.time()
 end)
+--]]
 
+--[[
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10000)
@@ -389,6 +392,7 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
+--]]
 
 --[[
 Citizen.CreateThread(function()
@@ -419,3 +423,33 @@ function isStaffMember(src)
 		return false
 	end
 end
+
+AddEventHandler('rconCommand', function(commandName, args)
+	if commandName == "makepedskillable" then
+        RconPrint("Making all peds killable!")
+        TriggerEvent("es:getPlayers", function(players)
+            for id, person in pairs(players) do
+                if id and person then
+                    if person.getGroup() == "owner" or person.getGroup() == "superadmin" then
+                        TriggerClientEvent("makepedskillable", id)
+                        CancelEvent()
+                        return
+                    end
+                end
+            end
+        end)
+    elseif commandName == "deletenearestobjects" then
+		RconPrint("Deleting nearest objects!")
+		TriggerEvent("es:getPlayers", function(players)
+			for id, person in pairs(players) do
+				if id and person then
+					if person.getGroup() == "owner" or person.getGroup() == "superadmin" then
+						TriggerClientEvent("deletenearestobjects", id)
+						CancelEvent()
+						return
+					end
+				end
+			end
+		end)
+	end
+end)

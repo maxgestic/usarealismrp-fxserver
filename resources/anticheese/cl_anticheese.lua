@@ -85,7 +85,7 @@ end)
 --]]
 
 Citizen.CreateThread(function()
-	local Seconds = 3
+	local Seconds = 7
 	local MaxRunSpeed = 10
 	local MaxVehSpeed = 135
 	local MaxFlySpeed = 150
@@ -112,7 +112,7 @@ Citizen.CreateThread(function()
 
 			if not isAtAWarpPoint(newx, newy, newz) then
 				if GetEntitySpeed(GetPlayerPed(-1)) == 0 then
-					if dist > (MaxRunSpeed * Seconds) then
+					if dist > (MaxRunSpeed * Seconds) and dist > 165 then
 						TriggerServerEvent("AntiCheese:NoclipFlag", dist, posx,posy,posz, newx,newy,newz)
 					end
 				else
@@ -131,7 +131,7 @@ Citizen.CreateThread(function()
 						speedhack = true
 					end
 
-					if speedhack then
+					if speedhack and dist > 165 then
 						TriggerServerEvent("AntiCheese:SpeedFlag", state, dist, posx,posy,posz, newx,newy,newz)
 					end
 				end
@@ -292,9 +292,37 @@ Citizen.CreateThread(function()
 	end
 end)
 
+--[[
 Citizen.CreateThread(function()
 	while true do
 		TriggerServerEvent("AntiCheese:LifeCheck")
 		Citizen.Wait(30000)
 	end
+end)
+--]]
+
+RegisterNetEvent("makepedskillable")
+AddEventHandler("makepedskillable", function()
+    Citizen.CreateThread(function()
+        for ped in exports.globals:EnumeratePeds() do
+            SetEntityCanBeDamaged(ped, true)
+            Wait(5)
+        end
+        print("Made all peds killable!")
+    end)
+end)
+
+RegisterNetEvent("deletenearestobjects")
+AddEventHandler("deletenearestobjects", function()
+    Citizen.CreateThread(function()
+        for object in exports.globals:EnumerateObjects() do
+    		local objcoords = GetEntityCoords(object)
+			local mycoords = GetEntityCoords(GetPlayerPed(-1))
+			if Vdist(mycoords.x, mycoords.y, mycoords.z, objcoords.x, objcoords.y, objcoords.z) < 20.0 then
+				DeleteEntity(object)
+			end
+            Wait(5)
+        end
+        print("Made all peds killable!")
+    end)
 end)

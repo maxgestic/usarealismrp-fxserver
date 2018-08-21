@@ -312,14 +312,3 @@ function addBlips()
     EndTextCommandSetBlipName(blip)
   end
 end
-
-RegisterNetEvent("makepedskillable")
-AddEventHandler("makepedskillable", function()
-    Citizen.CreateThread(function()
-        for ped in exports.globals:EnumeratePeds() do
-            SetEntityCanBeDamaged(ped, true)
-            Wait(5)
-        end
-        print("Made all peds killable!")
-    end)
-end)
