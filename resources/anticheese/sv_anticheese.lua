@@ -453,3 +453,15 @@ AddEventHandler('rconCommand', function(commandName, args)
 		end)
 	end
 end)
+
+TriggerEvent('es:addGroupCommand', 'deletenearestobjects', 'admin', function(source, args, user)
+  TriggerClientEvent("deletenearestobjects", source)
+end, {
+	help = "Delete the nearest spawned objects. Useful for getting rid of UFOs and other things modders spawn in."
+})
+
+TriggerEvent('es:addGroupCommand', 'makepedskillable', 'admin', function(source, args, user)
+  TriggerClientEvent("makepedskillable", source)
+end, {
+	help = "Make all peds killable. Useful for getting rid of invulnerable peds modders like to sometimes spawn in."
+})
