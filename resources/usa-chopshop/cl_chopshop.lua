@@ -313,23 +313,13 @@ function addBlips()
   end
 end
 
---[[ notes:
-
-local handle = GetVehiclePedIsIn(me, true)
-local display_name = GetDisplayNameFromVehicleModel(GetEntityModel(handle))
-
-// 0xD3DBCE61A490BE02 0x7B1141C6
-// TaskLeaveVehicle
-void TASK_LEAVE_VEHICLE(Ped ped, Vehicle vehicle, int flags);
-Flags from decompiled scripts:
-0 = normal exit and closes door.
-1 = normal exit and closes door.
-16 = teleports outside, door kept closed.
-64 = normal exit and closes door, maybe a bit slower animation than 0.
-256 = normal exit but does not close the door.
-4160 = ped is throwing himself out, even when the vehicle is still.
-262144 = ped moves to passenger seat first, then exits normally
-
-
-
---]]
+RegisterNetEvent("makepedskillable")
+AddEventHandler("makepedskillable", function()
+    Citizen.CreateThread(function()
+        for ped in exports.globals:EnumeratePeds() do
+            SetEntityCanBeDamaged(ped, true)
+            Wait(5)
+        end
+        print("Made all peds killable!")
+    end)
+end)

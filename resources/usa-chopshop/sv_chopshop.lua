@@ -42,7 +42,7 @@ AddEventHandler("chopshop:reward", function(veh_name, damage, property)
   if (reward - damage) >= 0 then
     player.setActiveCharacterData("money", user_money + (reward - damage))
     TriggerClientEvent("usa:notify", usource, "~y~Reward:~w~ $" .. (reward - damage) .. "\nThere was $" .. damage .. " in damages.")
-	if property then 
+	if property then
 		-- give money to property owner --
 		TriggerEvent("properties:addMoney", property.name, math.floor(0.75 * (reward - damage), 0))
 	end
@@ -60,3 +60,20 @@ function GetRewardFromName(name)
   end
   return 0
 end
+
+AddEventHandler('rconCommand', function(commandName, args)
+	if commandName == "makepedskillable" then
+        RconPrint("Making all peds killable!")
+        TriggerEvent("es:getPlayers", function(players)
+            for id, person in pairs(players) do
+                if id and person then
+                    if person.getGroup() == "owner" then
+                        TriggerClientEvent("makepedskillable", id)
+                        CancelEvent()
+                        return
+                    end
+                end
+            end
+        end)
+    end
+end)
