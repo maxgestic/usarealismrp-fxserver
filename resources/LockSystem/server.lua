@@ -21,7 +21,7 @@ AddEventHandler("lock:checkForKey", function(plate)
       local item = inv[i]
       if item then
         if string.find(item.name, "Key") then
-          if string.find(plate, item.plate) thens
+          if string.find(plate, item.plate) then
             if isLocked(plate) then
               setLocked(plate, false)
               TriggerClientEvent("lock:unlockVehicle", userSource)
