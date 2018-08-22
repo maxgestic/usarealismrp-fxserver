@@ -55,7 +55,7 @@ AddEventHandler("taxi:setJob", function(property)
 				end
 				TriggerClientEvent("chatMessage", userSource, "", {}, "^3HELP: ^0You can use /dispatch [id] [msg] to set a waypoint to the caller id of the last taxi request.")
 				user.setActiveCharacterData("job", "taxi")
-				TriggerClientEvent("taxi:onDuty", userSource, name)
+				TriggerClientEvent("taxi:onDuty", userSource)
 				-- take money --
 				user.setActiveCharacterData("money", user_money - DUTY_FEE)
 				-- give money to taxi shop owner --

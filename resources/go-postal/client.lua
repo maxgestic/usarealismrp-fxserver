@@ -4,7 +4,8 @@ local blips = {
 	{ title="Go Postal", colour=60, id=85, x=-3157.6508, y=1128.9541, z=20.8447 },
 	{ title="Go Postal", colour=60, id=85, x=2983.7958, y=3488.7570, z=71.3818 },
 	--{ title="Cannabis Transport", colour = 25, id = 469, x = -1004.18, y = 4848.26, z = 274.01},
-	{ title="FridgeIt Trucking", colour = 51, id = 477, x = -574.042, y = 5251.671, z = 70.469  }
+	{ title="FridgeIt Trucking", colour = 51, id = 477, x = -574.042, y = 5251.671, z = 70.469  },
+	{ title="FridgeIt Trucking", colour = 51, id = 477, x = -588.4, y = -1797.8, z = 23.0  }
 }
 
 local peds = {

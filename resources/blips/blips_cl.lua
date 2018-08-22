@@ -28,8 +28,10 @@ local blips = {
     { title="Ammu-Nation", colour=4, id=110, x=812.4276, y=-2145.2118, z=29.3063 },
 	{ title="Car Dealership", colour=76, id=225, x=120.924, y=6624.605, z=31.000 },
 	{ title="DMV", colour=4, id=355, x= -447.845, y = 6013.775, z = 30.716 },
+	{ title="DMV", colour=4, id=355, x = -544.857, y = -204.422, z = 37.2152 },
 	{ title="Bubba's Tow Co.", colour=64, id=68, x = -196.027, y = 6265.625, z = 30.489 }, -- paleto
 	{ title="Bubba's Tow Co.", colour=64, id=68, x = 2363.89, y = 3126.85, z = 47.211 }, -- sandy shores
+	{ title="Bubba's Tow Co.", colour=64, id=68, x = 408.03, y = -1624.62, z = 28.29 }, -- los santos
 	--{ title="Black Market Dealer", colour = 59, id = 52, x= -2166.786, y = 5197.684, z = 15.880 },
     --[[
 	{ title="General Store", colour = 24 , id = 52, x=1729.59, y=6415.49, z=34.0 },
@@ -76,6 +78,7 @@ local blips = {
 	{ title="Yellow Jack", colour = 46, id = 93, x = 1986.1, y = 3050.57, z = 47.2151 },
 	--{ title="Downtown Taxi", colour = 60, id = 198, x=895.563, y=-179.536, z=74.7003 },
 	{ title="Downtown Taxi", colour = 60, id = 198, x = -41.306, y = 6436.432, z = 30.490 },
+	{ title="Downtown Taxi", colour = 60, id = 198, x = 895.2, y = -179.5, z = 74.7 },
 	--{ title="Bank", colour = 24, id = 108, x=-106.358, y=6474.25, z=30.600 },
 	{ title="Seaview Aircraft", colour = 60, id = 251, x=-943.103, y=-2958.14, z=13.9451 },
 	{ title="Seaview Aircraft", colour = 60, id = 251, x=2119.083, y=4790.010, z=41.139 },
@@ -83,6 +86,7 @@ local blips = {
 	--{ title="Meth", colour = 75, id = 499, z = 42.3476, y = 4968.75,  x = 2434.47 }, -- grape seed meth lab house
 	{ title="Boat Shop", colour = 57, id = 356, x = -250.183, y = 6632.84, z = 1.79 }, -- paleto
 	{ title="Boat Shop", colour = 57, id = 356, x = 2388.26, y = 4284.28, z = 30.6 }, -- sandy
+	{ title="Boat Shop", colour = 57, id = 356, x = -782.1, y = -1441.0, z = 1.6 }, -- Los Santos
 	{ title="Jail", colour = 4, id = 238, x=1686.668, y=2581.715, z=51.6 },
 	{ title="Watercraft Course", colour = 63, id = 38, x=2272.15, y=4321.29, z=39.8 },
 	--{ title="Barber Shop", colour = 4, id = 71, x=-278.174, y=6226.93, z=51.6 },
@@ -90,6 +94,7 @@ local blips = {
 	{ title="Courthouse", colour = 38, id = 475, x = 317.283, y = -1631.1505, z = 31.59 },
 	{ title="Burns Events Center", colour = 4, id = 354, x = 1228.009, y = 3642.315, z = 32.79 },
 	{ title="Weazel News", colour = 4, id = 184, x = -249.6443, y = 6235.7524, z = 30.4893 },
+	{ title="Weazel News", colour = 4, id = 184, x = -599.5, y = -931.9, z = 23.9 },
 	{ title="Cluckin' Bell", colour = 4, id = 89, x = -69.9295, y = 6251.2900, z = 30.4893, scale = 0.7 }
 }
 

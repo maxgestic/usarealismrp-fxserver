@@ -27,6 +27,21 @@ local locations = {
 			z = 30.4895,
 			heading = -138.0
 		}
+	},
+	["Los Santos"] = {
+		duty_ped = {
+			x = -599.5,
+			y = -931.9,
+			z = 23.9,
+			heading = 180.0,
+			model = "a_m_y_business_01"
+		},
+		van_garage = {
+			x = -620.3,
+			y = -924.0,
+			z = 23.1,
+			heading = -138.0
+		}
 	}
 }
 
@@ -67,7 +82,7 @@ AddEventHandler("weazelnews:ToggleCam", function()
         while not HasModelLoaded(GetHashKey(camModel)) do
             Citizen.Wait(100)
         end
-		
+
         local plyCoords = GetOffsetFromEntityInWorldCoords(GetPlayerPed(PlayerId()), 0.0, 0.0, -5.0)
         local camspawned = CreateObject(GetHashKey(camModel), plyCoords.x, plyCoords.y, plyCoords.z, 1, 1, 1)
         Citizen.Wait(1000)
@@ -143,7 +158,7 @@ Citizen.CreateThread(function()
 			SetTimecycleModifier("default")
 
 			SetTimecycleModifierStrength(0.3)
-			
+
 			local scaleform = RequestScaleformMovie("security_camera")
 			local scaleform2 = RequestScaleformMovie("breaking_news")
 
@@ -184,7 +199,7 @@ Citizen.CreateThread(function()
 
 				DrawScaleformMovieFullscreen(scaleform, 255, 255, 255, 255)
 				DrawScaleformMovie(scaleform2, 0.5, 0.63, 1.0, 1.0, 255, 255, 255, 255)
-				
+
 				local camHeading = GetGameplayCamRelativeHeading()
 				local camPitch = GetGameplayCamRelativePitch()
 				if camPitch < -70.0 then
@@ -193,17 +208,17 @@ Citizen.CreateThread(function()
 					camPitch = 42.0
 				end
 				camPitch = (camPitch + 70.0) / 112.0
-				
+
 				if camHeading < -180.0 then
 					camHeading = -180.0
 				elseif camHeading > 180.0 then
 					camHeading = 180.0
 				end
 				camHeading = (camHeading + 180.0) / 360.0
-				
+
 				Citizen.InvokeNative(0xD5BB4025AE449A4E, GetPlayerPed(-1), "Pitch", camPitch)
 				Citizen.InvokeNative(0xD5BB4025AE449A4E, GetPlayerPed(-1), "Heading", camHeading * -1.0 + 1.0)
-				
+
 				--RenderFirstPersonCam(true, 0, 3)
 				Citizen.Wait(10)
 			end
@@ -380,7 +395,7 @@ AddEventHandler("weazelnews:ToggleMic", function()
         while not HasModelLoaded(GetHashKey(micModel)) do
             Citizen.Wait(100)
         end
-		
+
 		while not HasAnimDictLoaded(micanimDict) do
 			RequestAnimDict(micanimDict)
 			Citizen.Wait(100)

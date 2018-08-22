@@ -56,6 +56,31 @@ local locations = {
 			heading = 312.352,
 			model = "amy_beach_01"
 		}
+	},
+	["Los Santos"] = {
+		rent = {
+			x = -782.1,
+			y = -1441.0,
+			z = 1.6
+		},
+		return_rental = {
+			x = -771.3,
+			y = -1413.3,
+			z = 1.5,
+			heading = 347.428
+		},
+		spawn = {
+			x = -793.2,
+			y = -1434.7,
+			z = 1.6
+		},
+		ped = {
+			x = -782.1,
+			y = -1441.0,
+			z = 1.6,
+			heading = 312.352,
+			model = "amy_beach_01"
+		}
 	}
 }
 
