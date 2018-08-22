@@ -13,7 +13,6 @@ local myveh = 0
 
 RegisterNetEvent("spotlight:syncSpotlights")
 AddEventHandler("spotlight:syncSpotlights", function(spotlights)
-  --print("synced all spotlights!")
   SPOTLIGHTS = spotlights
 end)
 
@@ -52,16 +51,14 @@ AddEventHandler("spotlight:spotlight", function()
       }
       TriggerServerEvent("spotlight:addSpotlight", spotlight)
       MY_SPOTLIGHT = spotlight
-      --print("spotlight on!")
-	  TriggerEvent("usa:notify", "Spotlight ~g~on")
+      exports.globals:notify("Spotlight ~g~on")
     else
-      TriggerEvent("usa:notify", "Not in vehicle!")
+      exports.globals:notify("Not in vehicle!")
     end
   else
     TriggerServerEvent("spotlight:removeSpotlight", MY_SPOTLIGHT)
     MY_SPOTLIGHT = nil
-    --print("spotlight off!")
-	TriggerEvent("usa:notify", "Spotlight ~r~off")
+    exports.globals:notify("Spotlight ~r~off")
   end
 end)
 

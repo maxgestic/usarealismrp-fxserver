@@ -89,6 +89,7 @@ Citizen.CreateThread(function()
 	local MaxRunSpeed = 10
 	local MaxVehSpeed = 135
 	local MaxFlySpeed = 150
+	local MinTriggerDistance = 300
 
 	Citizen.Wait(60000)
 	while true do
@@ -112,7 +113,7 @@ Citizen.CreateThread(function()
 
 			if not isAtAWarpPoint(newx, newy, newz) then
 				if GetEntitySpeed(GetPlayerPed(-1)) == 0 then
-					if dist > (MaxRunSpeed * Seconds) and dist > 165 then
+					if dist > (MaxRunSpeed * Seconds) and dist > MinTriggerDistance then
 						TriggerServerEvent("AntiCheese:NoclipFlag", dist, posx,posy,posz, newx,newy,newz)
 					end
 				else
@@ -131,7 +132,7 @@ Citizen.CreateThread(function()
 						speedhack = true
 					end
 
-					if speedhack and dist > 165 then
+					if speedhack and dist > MinTriggerDistance then
 						TriggerServerEvent("AntiCheese:SpeedFlag", state, dist, posx,posy,posz, newx,newy,newz)
 					end
 				end

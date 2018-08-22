@@ -496,7 +496,7 @@ Citizen.CreateThread(function()
 			healthBodyLast = healthBodyNew
 			healthPetrolTankLast = healthPetrolTankNew
 			lastVehicle=vehicle
-			if cfg.randomTireBurstInterval ~= 0 and GetEntitySpeed(vehicle) > 10 then tireBurstLottery() end
+			if cfg.randomTireBurstInterval ~= 0 and GetEntitySpeed(vehicle) > 80 then tireBurstLottery() end
 		else
 			if pedInSameVehicleLast == true then
 				-- We just got out of the vehicle

@@ -499,7 +499,7 @@ TriggerEvent('es:addGroupCommand', 'spectate', 'mod', function(source, args, use
 	local userSource = tonumber(source)
 	local targetPlayer = tonumber(args[2])
 	if not targetPlayer then return end
-	TriggerClientEvent("mini_admin:spectate", userSource, targetPlayer, GetPlayerName(targetPlayer), user.getActiveCharacterData("fullName"))
+	TriggerClientEvent("mini_admin:spectate", userSource, targetPlayer, GetPlayerName(targetPlayer), GetPlayerName(userSource))
 end, {
 	help = "Spectate a player.",
 	params = {
