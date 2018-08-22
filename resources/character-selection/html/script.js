@@ -116,17 +116,16 @@ $(function () {
 			}
 
 			$('.characters #character').on("click", function () {
-				clicked = this
-				$(this).addClass("selected")
-				$("button#select").removeClass("disabled")
-				$("button#delete").removeClass("disabled")
+				clicked = this;
+				$(this).addClass("selected");
+				$("button#select").removeClass("disabled");
+				$("button#delete").removeClass("disabled");
 				$('.characters #character').each(function () {
-					if (clicked != this) $(this).removeClass("selected")
+					if (clicked != this) $(this).removeClass("selected");
 				})
 			})
 
 			var selected;
-			var selected_character_index = null;
 			var selected_spawn = "Paleto Bay";
 
 			$("button#select").on('click', function () {
@@ -134,8 +133,7 @@ $(function () {
 				var i = 0;
 				$('.characters #character').each(function () {
 					if (clicked == this) {
-						selected = this.dataset.selected
-						selected_character_index = i
+						selected = this.dataset.selected;
 					}
 					i++;
 				});
@@ -151,10 +149,12 @@ $(function () {
 				$("#spawn-select-back").show();
 				$("#badly-placed-spawn-select-header").show();
 
-				if (characters[selected_character_index].spawn)
+				if (characters[selected].spawn) {
 					$("#spawn-point--saved section").text("Saved Location");
-				else
+					$("#spawn-point--saved").show();
+				} else {
 					$("#spawn-point--saved").hide();
+				}
 
 			})
 
