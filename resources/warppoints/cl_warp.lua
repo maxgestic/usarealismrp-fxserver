@@ -34,12 +34,25 @@ local warp_locations = {
       z = 30.7
     },
     exit = {
-      x = 450.957,
-      y = -986.462,
-      z = 25.9
+      x = 451.9,
+      y = -987.9,
+      z = 25.75
     },
     job_access = "emergency"
   },
+  ["the photo room"] = {
+    entrance = {
+     x = 446.8,
+     y = -986.4,
+     z = 25.75
+    },
+    exit = {
+        x = 404.5,
+        y = -984.4,
+        z = -100.0
+    },
+    job_access = "emergency"
+},
   ["the courthouse"] = {
 	entrance = {
     x = 317.283,
