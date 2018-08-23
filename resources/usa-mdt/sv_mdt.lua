@@ -443,6 +443,7 @@ function fetchPoliceReports(src)
 			for i = 1, #(response.rows) do
 				local report = {
 					_id = response.rows[i].doc._id,
+					_rev = response.rows[i].doc._rev,
 					timestamp = response.rows[i].doc.timestamp,
 					location = response.rows[i].doc.location,
 					other_responders = response.rows[i].doc.other_responders,
