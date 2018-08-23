@@ -65,6 +65,11 @@ RegisterNUICallback("fetchPoliceReports", function(data, cb)
     cb('ok')
 end)
 
+RegisterNUICallback("fetchPoliceReportDetails", function(data, cb)
+    TriggerServerEvent("mdt:fetchPoliceReportDetails", data.id)
+    cb('ok')
+end)
+
 RegisterNUICallback("CreatePoliceReport", function(data, cb)
     TriggerServerEvent("mdt:createPoliceReport", data.report)
     cb('ok')

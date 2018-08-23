@@ -176,7 +176,11 @@ const mdtApp = new Vue({
             }
             this.error = "Error: did not find a matching warrant for that uuid!";
         },
-        OpenPoliceReportDetails(uuid) {
+        OpenPoliceReportDetails(id) {
+            $.post('http://usa-mdt/fetchPoliceReportDetails', JSON.stringify({
+                id: id
+            }));
+            /*
             for (var key in this.police_reports) {
                 if (uuid == this.police_reports[key]._id) {
                     this.error = "";
@@ -186,6 +190,7 @@ const mdtApp = new Vue({
                 }
             }
             this.error = "Error: did not find a matching police report for that uuid!";
+            */
         },
         DeleteWarrant(uuid) {
             for (var index in this.warrants) {
@@ -253,8 +258,9 @@ const mdtApp = new Vue({
         filtered_police_reports() {
             return this.police_reports.filter(report => {
                 if (
-                    report.incident.toLowerCase().search(this.report_search.toLowerCase()) != -1 ||
                     report._id.toLowerCase().search(this.report_search.toLowerCase()) != -1 ||
+                    report.timestamp.search(this.report_search) != -1 ||
+                    report.location.toLowerCase().search(this.report_search.toLowerCase()) != -1 ||
                     report.author.toLowerCase().search(this.report_search.toLowerCase()) != -1
                     )
                     return report;
@@ -291,8 +297,12 @@ document.onreadystatechange = () => {
                 mdtApp.bolos = event.data.bolos;
             } else if (event.data.type == "employeeLoaded") {
                 mdtApp.employee = event.data.employee;
-            }else if (event.data.type == "policeReportsLoaded") {
+            } else if (event.data.type == "policeReportsLoaded") {
                 mdtApp.police_reports = event.data.police_reports;
+            } else if (event.data.type == "police_report_details_loaded") {
+                mdtApp.error = "";
+                mdtApp.current_report = event.data.report;
+                mdtApp.current_tab = "Incident Detail";
             } else if (event.data.type == "warrantInfo") {
                 /* warrant created successfully, fetch again to update list */
                 $.post('http://usa-mdt/fetchWarrants', JSON.stringify({}));

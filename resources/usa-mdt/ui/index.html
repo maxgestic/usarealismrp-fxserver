@@ -383,14 +383,14 @@
                                 <table class="w3-table-all w3-small" style="margin-bottom: 3em;">
                                     <tr>
                                         <th><b>Report #</b></th>
-                                        <th><b>Incident</b></th>
+                                        <!-- <th><b>Incident</b></th> -->
                                         <th><b>Location</b></th>
                                         <th><b>Author</b></th>
                                         <th><b>Timestamp</b></th>
                                     </tr>
                                     <tr v-on:click="OpenPoliceReportDetails(report._id)" v-for="report in filtered_police_reports" class="w3-hover-gray">
                                         <td>{{ report._id }}</td>
-                                        <td>{{ report.incident }}</td>
+                                        <!-- <td>{{ report.incident }}</td> -->
                                         <td>{{ report.location }}</td>
                                         <td>{{ report.author }}</td>
                                         <td>{{ report.timestamp }}</td>

@@ -298,6 +298,23 @@ AddEventHandler("mdt:fetchPoliceReports", function()
 	fetchPoliceReports(source)
 end)
 
+RegisterServerEvent("mdt:fetchPoliceReportDetails")
+AddEventHandler("mdt:fetchPoliceReportDetails", function(id)
+	local usource = source
+	PerformHttpRequest("http://127.0.0.1:5984/policereports/" .. id, function(err, text, headers)
+		print("finished getting police report details for id: " .. id)
+		print("error code: " .. err)
+		local response = json.decode(text)
+		if response.incident then
+			local msg = {
+				type = "police_report_details_loaded",
+				report = response
+			}
+			TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
+		end
+	end, "GET", "", { ["Content-Type"] = 'application/json' })
+end)
+
 RegisterServerEvent("mdt:createPoliceReport")
 AddEventHandler("mdt:createPoliceReport", function(report)
 	if type(report) == "table" then
@@ -424,7 +441,14 @@ function fetchPoliceReports(src)
 			print("#(response.rows) = " .. #(response.rows))
 			-- insert all warrants from 'bolos' db into lua table
 			for i = 1, #(response.rows) do
-				table.insert(police_reports, response.rows[i].doc)
+				local report = {
+					_id = response.rows[i].doc._id,
+					timestamp = response.rows[i].doc.timestamp,
+					location = response.rows[i].doc.location,
+					other_responders = response.rows[i].doc.other_responders,
+					author = response.rows[i].doc.author
+				}
+				table.insert(police_reports, report)
 			end
 			print("finished loading police reports...")
 			print("# of police reports: " .. #police_reports)
