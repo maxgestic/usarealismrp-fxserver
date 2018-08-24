@@ -57,6 +57,15 @@ end)
 -------------------
 -- RANDOM THINGS --
 -------------------
+-- Pause Menu Title --
+function AddTextEntry(key, value)
+	Citizen.InvokeNative(GetHashKey("ADD_TEXT_ENTRY"), key, value)
+end
+
+Citizen.CreateThread(function()
+  AddTextEntry('FE_THDR_GTAO', 'USA REALISM RP - HTTPS://USARRP.NET')
+end)
+
 -- ped/vehicle npcs
 Citizen.CreateThread(function()
 	while true do
