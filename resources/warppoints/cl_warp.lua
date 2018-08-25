@@ -27,6 +27,7 @@ local warp_locations = {
       },
       job_access = "civ"
   },
+  --[[
   ["the jail cells"] = {
     entrance = {
       x = -447.414,

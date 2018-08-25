@@ -9,7 +9,7 @@ files {
     "ui/index.html",
     "ui/vue.min.js",
     "ui/script.js",
-	"ui/bcso-badge.png",
+    "ui/sasp-badge.png",
     "ui/mdt-border.png"
 }
 

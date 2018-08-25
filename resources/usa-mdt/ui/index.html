@@ -18,7 +18,8 @@
     .w3-sidebar {
         width: 120px;
         background: #222;
-        border-right: 4px solid #FFC41B;
+        /* border-right: 4px solid #FFC41B; */
+        border-right: 4px solid #4A9EC3;
         border-top-left-radius: 5px;
         border-bottom-left-radius: 5px;
     }
@@ -49,10 +50,11 @@
         height: 100% !important;
         padding-bottom: 0;
         margin-bottom: 0;
-        background-color: black;
+        background-color: lightgray;
     }
-    .gold {
-        color: #FFC41B;
+    .theme-color {
+        /* color: #FFC41B; */
+        color: #4A9EC3;
     }
     main {
         position: relative;
@@ -67,7 +69,7 @@
     <div id="content_container">
 
         <!-- Icon Bar Nav-->
-        <nav id="icon_navbar" class="w3-sidebar w3-bar-block w3-center w3-text-white">
+        <nav id="icon_navbar" class="w3-sidebar w3-bar-block w3-center">
             <div v-on:click="changePage('Person(s) Check')" id="person_check" class="w3-bar-item w3-button w3-padding-large">
                 <i class="fa fa-user w3-xxlarge"></i>
                 <p>Person Check</p>
@@ -92,21 +94,21 @@
 
         <!-- Main Content  -->
         <div id="content">
-            <section class="w3-container w3-black" id="home" style="padding-bottom: 2em; padding-left: 0 !important; padding-right: 0 !important; height: 100%;">
+            <section class="w3-container" id="home" style="padding-bottom: 2em; padding-left: 0 !important; padding-right: 0 !important; height: 100%; background-color: lightgray;">
 
                 <!-- Header -->
                 <header class="w3-cell-row">
-                    <img src="bcso-badge.png" alt="BCSO" width="160px" style="position: absolute; left: 300; top: 15;">
+                    <img src="sasp-badge.png" alt="SASP" width="170px" style="position: absolute; left: 300; top: 15;">
                     <div class="w3-container w3-center w3-padding-24" style="width: 100%;">
-                        <div class="w3-container w3-center w3-padding-16 gold" style="display: inline-block;">
-                            <h1 style="font-size: 30px;"><b><i>Blaine County Sheriff's Office</i></b></h1>
+                        <div class="w3-container w3-center w3-padding-16 theme-color" style="display: inline-block;">
+                            <h1 style="font-size: 36px;"><b><i>San Andreas State Police</i></b></h1>
                             <p><i>Welcome, {{ employee.rank }} {{ employee.lname  }}!</i></p>
                         </div>
                     </div>
-                    <img src="bcso-badge.png" alt="BCSO" width="160px" style="position: absolute; right: 150; top: 15;">
+                    <img src="sasp-badge.png" alt="SASP" width="170px" style="position: absolute; right: 150; top: 15;">
                 </header>
 
-                <main style="border-top: 4px solid #FFC41B; overflow-y: scroll; padding-left: 2em; padding-right: 2em;">
+                <main style="border-top: 4px solid #4A9EC3; overflow-y: scroll; padding-left: 2em; padding-right: 2em;">
 
                     <!-- Title -->
                     <h3 class="w3-center" style="padding-top: 1em; padding-bottom: 1em;">{{ current_tab }}</h3>
@@ -118,7 +120,7 @@
                     <div v-if="current_tab == 'Person(s) Check'">
 
                         <!-- Input form for SSN -->
-                        <form class="w3-container w3-card-4" style="padding-left: 0 !important;">
+                        <form class="w3-container" style="padding-left: 0 !important;">
                             <br>
                             <p>
                                 <p>BY NAME:</p>
@@ -128,7 +130,7 @@
                                 <input v-model="person_check.ssn" class="w3-input w3-border" type="text"  placeholder="Enter an SSN to search..." required>
                             </p>
                             <br>
-                            <p><button v-on:click="PerformPersonCheck" type="button" class="w3-btn w3-padding w3-text-black" style="width:120px; background-color: lightgray;">Search &nbsp; &#10095;</button></p>
+                            <p><button v-on:click="PerformPersonCheck" type="button" class="w3-btn w3-padding w3-text-black" style="width:120px; background-color: #4A9EC3;">Search &nbsp; &#10095;</button></p>
                         </form>
 
                         <h4><b>Name:</b></h4>
@@ -234,14 +236,14 @@
                     <!-- Plate Check -->
                     <div v-if="current_tab == 'Plate Check'">
                         <!-- Input form -->
-                        <form class="w3-container w3-card-4" style="padding-left: 0 !important;">
+                        <form class="w3-container" style="padding-left: 0 !important;">
                             <br>
                             <p>
-                                <label class="w3-text-white">Plate #:</label>
+                                <label>Plate #:</label>
                                 <input v-model="plate_check.search_input" class="w3-input w3-border" type="text"  placeholder="Enter a vehicle plate # to search..." required>
                             </p>
                             <br>
-                            <p><button v-on:click="PerformPlateCheck" type="button" class="w3-btn w3-padding w3-text-black" style="width:120px; background-color: lightgray;">Search &nbsp; &#10095;</button></p>
+                            <p><button v-on:click="PerformPlateCheck" type="button" class="w3-btn w3-padding w3-text-black" style="width:120px; background-color: #4A9EC3;">Search &nbsp; &#10095;</button></p>
                         </form>
                         <!-- Plate check results -->
                         <h3><b>Plate:</b></h3>
@@ -296,24 +298,24 @@
                             <input v-model="warrant_search" class="w3-input w3-border" type="text"  placeholder="Search for a warrant..." required>
                             <h3 style="text-align: center; margin-top: 2em;">Create a warrant</h3>
                             <!-- Notification box -->
-                            <div class="w3-text-white">{{ notification }}</div>
+                            <div>{{ notification }}</div>
                             <!-- New warrant form -->
-                            <form class="w3-container w3-card-4" style="padding-left: 0 !important;">
+                            <form class="w3-container" style="padding-left: 0 !important;">
                                 <br>
                                 <div>
-                                    <label class="w3-text-white">First Name: *</label>
+                                    <label >First Name: *</label>
                                     <input  v-model="new_warrant.first_name" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: Jane" required>
-                                    <label class="w3-text-white">Last Name: *</label>
+                                    <label >Last Name: *</label>
                                     <input v-model="new_warrant.last_name" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: Doe" required>
-                                    <label class="w3-text-white">Charge(s): *</label>
+                                    <label >Charge(s): *</label>
                                     <input v-model="new_warrant.charges" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: VC 2800.2, PC 245" required>
-                                    <label class="w3-text-white">Suspect Description:</label>
+                                    <label >Suspect Description:</label>
                                     <input v-model="new_warrant.suspect_description" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: White female adult with a tattoo of a fish on leg and black hair, last seen ...">
-                                    <label class="w3-text-white">Police Report #:</label>
+                                    <label >Police Report #:</label>
                                     <input v-model="new_warrant.police_report_number" class="w3-input w3-border" type="text"  placeholder="Ex: 7fefe9181f42a6e128b2dec4a001ae6f">
                                 </div>
                                 <br>
-                                <p><button v-on:click="CreateWarrant" type="button" class="w3-btn w3-padding w3-text-black" style="width:120px; background-color: lightgray;">Submit</button></p>
+                                <p><button v-on:click="CreateWarrant" type="button" class="w3-btn w3-padding w3-text-black" style="width:120px; background-color: #4A9EC3;">Submit</button></p>
                             </form>
                     </div>
 
@@ -363,17 +365,17 @@
                             <input v-model="bolo_search" class="w3-input w3-border" type="text"  placeholder="Search for a BOLO..." required>
                             <h3 style="text-align: center; margin-top: 2em;">Create a BOLO</h3>
                             <!-- Notification box -->
-                            <div class="w3-text-white">{{ notification }}</div>
+                            <div>{{ notification }}</div>
                             <!-- New BOLO form -->
-                            <form class="w3-container w3-card-4" style="padding-left: 0 !important;">
+                            <form class="w3-container" style="padding-left: 0 !important;">
                                 <br>
                                 <div>
-                                    <label class="w3-text-white">BOLO:*</label>
+                                    <label>BOLO:*</label>
                                     <input v-model="new_bolo.description" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: White female adult with a tattoo of a fish on leg and black hair, last seen ..." required>
                                     <input v-model="new_bolo.police_report_number" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: 9293cfa014d9ab8d258a395af20c68e5">
                                 </div>
                                 <br>
-                                <p><button v-on:click="CreateBOLO" type="button" class="w3-btn w3-padding w3-text-black" style="background-color: lightgray;" style="width:120px">Submit</button></p>
+                                <p><button v-on:click="CreateBOLO" type="button" class="w3-btn w3-padding w3-text-black" style="background-color: #4A9EC3;" style="width:120px">Submit</button></p>
                             </form>
                     </div>
 
@@ -400,20 +402,20 @@
                             <input v-model="report_search" class="w3-input w3-border" type="text"  placeholder="Search for a report..." required>
                             <h3 style="text-align: center; margin-top: 2em;">Create an incident report</h3>
                             <!-- Notification box -->
-                            <div class="w3-text-white">{{ notification }}</div>
+                            <div>{{ notification }}</div>
                             <!-- New police report form -->
-                            <form class="w3-container w3-card-4" style="padding-left: 0 !important;">
+                            <form class="w3-container" style="padding-left: 0 !important;">
                                 <br>
                                 <div>
-                                    <label class="w3-text-white">Incident Details: *</label>
+                                    <label>Incident Details: *</label>
                                     <textarea v-model="new_police_report.incident" class="w3-input w3-border margin-bottom-1" rows="6" cols="100" placeholder="Ex: At 5:35 PM, I responded to a report of a disturbance on Paleto Blvd. and Procopio Dr. and upon arrival..."></textarea>
-                                    <label class="w3-text-white">Location: *</label>
+                                    <label>Location: *</label>
                                     <input v-model="new_police_report.location" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: Paleto Blvd / Cascabel Ave." required>
-                                    <label class="w3-text-white">Other Responder(s):</label>
+                                    <label>Other Responder(s):</label>
                                     <input v-model="new_police_report.other_responders" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: Jesse King (U-102), Hack Gambino (L-2)">
                                 </div>
                                 <br>
-                                <p><button v-on:click="CreatePoliceReport" type="button" class="w3-btn w3-padding w3-text-black" style="background-color: lightgray;">Submit Report</button></p>
+                                <p><button v-on:click="CreatePoliceReport" type="button" class="w3-btn w3-padding w3-text-black" style="background-color: #4A9EC3;">Submit Report</button></p>
                             </form>
                     </div>
 
