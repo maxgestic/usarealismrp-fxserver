@@ -15,6 +15,11 @@ RegisterNUICallback("close", function(data, cb)
     cb('ok')
 end)
 
+RegisterNUICallback("updatePhoto", function(data, cb)
+    TriggerServerEvent("mdt:updatePhoto", data.url, data.fname, data.lname, data.dob)
+    cb('ok')
+end)
+
 RegisterNUICallback("PerformPersonCheckBySSN", function(data, cb)
     TriggerServerEvent("mdt:PerformPersonCheckBySSN", tonumber(data.ssn))
     cb('ok')

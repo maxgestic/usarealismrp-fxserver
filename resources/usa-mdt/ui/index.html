@@ -119,6 +119,9 @@
                     <!-- Person Check -->
                     <div v-if="current_tab == 'Person(s) Check'">
 
+                        <!-- Notification box -->
+                        <div class="w3-text-white">{{ notification }}</div>
+
                         <!-- Input form for SSN -->
                         <form class="w3-container" style="padding-left: 0 !important;">
                             <br>
@@ -130,24 +133,47 @@
                                 <input v-model="person_check.ssn" class="w3-input w3-border" type="text"  placeholder="Enter an SSN to search..." required>
                             </p>
                             <br>
-                            <p><button v-on:click="PerformPersonCheck" type="button" class="w3-btn w3-padding w3-text-black" style="width:120px; background-color: #4A9EC3;">Search &nbsp; &#10095;</button></p>
+                            <button v-on:click="PerformPersonCheck" type="button" class="w3-btn w3-padding w3-text-black" style="width:120px; background-color: lightgray;">Search &nbsp; &#10095;</button>
+                            <button onclick="document.getElementById('photo-update').style.display='block'" type="button" class="w3-btn w3-padding w3-text-black" style="width:140px; background-color: lightgray;">Update Photo</button>
                         </form>
 
-                        <h4><b>Name:</b></h4>
+                        <div>
 
-                        <table v-if="person_check.name" class="w3-table-all w3-small">
-                            <tr>
-                                <td>{{ person_check.name }}</td>
-                            </tr>
-                        </table>
+                            <!-- Mugshot Photo Update Modal -->
+                            <div id="photo-update" class="w3-modal">
+                              <div class="w3-modal-content">
+                                <div class="w3-container" style="padding: 0 2em 2em 2em;">
+                                     <span onclick="document.getElementById('photo-update').style.display='none'"
+                                     class="w3-button w3-display-topright w3-text-black">&times;</span>
+                                    <h3>Update a photo</h3>
+                                     <p>Please provide the URL for {{person_check.fname + " " + person_check.lname}}'s mughot photo below.</p>
+                                     <input v-model="mugshot_url" class="w3-input w3-border" type="text" placeholder="URL to photo" required>
+                                     <button v-on:click="UpdatePhoto" type="button" class="w3-btn w3-padding w3-text-black" style="width:120px; background-color: lightgray; margin-top: 1em;">Save Photo</button>
+                                </div>
+                              </div>
+                            </div>
 
-                        <h4><b>DOB:</b></h4>
+                            <div style="display: inline-block; width: 60%; margin-right: 3em;">
+                                <h4><b>Name:</b></h4>
 
-                        <table v-if="person_check.dob" class="w3-table-all w3-small">
-                            <tr>
-                                <td>{{ person_check.dob }}</td>
-                            </tr>
-                        </table>
+                                <table v-if="person_check.fname" class="w3-table-all w3-small">
+                                    <tr>
+                                        <td>{{ person_check.fname + " " + person_check.lname }}</td>
+                                    </tr>
+                                </table>
+
+                                <h4><b>DOB:</b></h4>
+
+                                <table v-if="person_check.dob" class="w3-table-all w3-small">
+                                    <tr>
+                                        <td>{{ person_check.dob }}</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <img v-if="person_check.dob" v-bind:src="person_check.mugshot" alt="Mug Shot" height="300" width="235">
+
+                        </div>
 
                         <h4><b>Driver's License:</b></h4>
 

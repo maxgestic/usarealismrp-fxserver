@@ -8,7 +8,8 @@ const mdtApp = new Vue({
         },
         person_check: {
             ssn: null,
-            name: null,
+            fname: null,
+            lname: null,
             dob: null,
             drivers_license: null,
             firearm_permit: null,
@@ -16,7 +17,8 @@ const mdtApp = new Vue({
             criminal_history: {
                 crimes: null,
                 tickets: null
-            }
+            },
+            mugshot: "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg"
         },
         plate_check: {
             search_input: null,
@@ -62,11 +64,27 @@ const mdtApp = new Vue({
             location: "",
             other_responders: ""
         },
+        mugshot_url: null,
         error: null,
         notification: null,
         current_tab: "Person(s) Check" // default tab
     },
     methods: {
+        UpdatePhoto() {
+            $("#photo-update").hide();
+            if (this.person_check.dob) {
+                $.post('http://usa-mdt/updatePhoto', JSON.stringify({
+                    fname: this.person_check.fname,
+                    lname: this.person_check.lname,
+                    dob: this.person_check.dob,
+                    url: this.mugshot_url
+                }));
+                this.notification = "Photo updated!";
+                this.mugshot_url = "";
+            } else {
+                this.error = "You must look up the person before updating their photo!";
+            }
+        },
         PerformPersonCheck() {
 
             this.error = "";
@@ -317,7 +335,8 @@ document.onreadystatechange = () => {
                 if  (mdtApp.current_tab == "Person(s) Check") {
                     mdtApp.person_check = {
                             ssn: null,
-                            name: null,
+                            fname: null,
+                            lname: null,
                             dob: null,
                             drivers_license: null,
                             firearm_permit: null,
@@ -325,7 +344,8 @@ document.onreadystatechange = () => {
                             criminal_history: {
                                 crimes: null,
                                 tickets: null
-                            }
+                            },
+                            mugshot: "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg"
                         }
                 } else if (mdtApp.current_tab == "Plate Check") {
                     mdtApp.plate_check = {

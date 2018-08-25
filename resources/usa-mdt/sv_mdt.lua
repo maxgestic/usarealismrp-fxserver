@@ -27,6 +27,73 @@ TriggerEvent('es:addJobCommand', 'mdt', { "sheriff"}, function(source, args, use
 	TriggerClientEvent('mdt:toggleVisibilty', source)
 end, { help = "Open MDT" })
 
+RegisterServerEvent("mdt:updatePhoto")
+AddEventHandler("mdt:updatePhoto", function(url, fname, lname, dob)
+	print("Saving mugshot photo for " .. fname ..  " " .. lname .. "(" .. dob .. ") with url: " .. url)
+	TriggerEvent('es:exposeDBFunctions', function(couchdb)
+		local query = {
+			["characters"] = {
+				["$elemMatch"] = {
+					--["firstName"] = data.fname,
+					--["lastName"] = data.lname
+					["firstName"] = {
+						["$regex"] = "(?i)" .. fname
+					},
+					["lastName"] = {
+						["$regex"] = "(?i)" .. lname
+					},
+					["dateOfBirth"] = dob
+				}
+			}
+		}
+		local fields = {
+			"_id",
+			"characters"
+		}
+		couchdb.getSpecificFieldFromDocumentByRows("essentialmode", query, fields, function(doc)
+			if doc then
+				print(fname .. " " .. lname .. " found in DB search!")
+				for i = 1, #doc.characters do
+					if doc.characters[i].firstName and doc.characters[i].lastName and fname and lname then
+						if string.lower(doc.characters[i].firstName) == string.lower(fname) and string.lower(doc.characters[i].lastName) == string.lower(lname) then
+							doc.characters[i].mugshot = url
+							-- update DB --
+						    couchdb.updateDocument("essentialmode", doc._id, {characters = doc.characters}, function()
+								print("Mugshot updated in DB!")
+							end)
+							--------------------------------------------------
+							-- update any online players user object --
+							--------------------------------------------------
+							TriggerEvent("es:getPlayers", function(players)
+								if players then
+									for id, user in pairs(players) do
+										if id and user then
+											if user.getActiveCharacterData("fullName") == (doc.characters[i].firstName .. " " .. doc.characters[i].lastName) then
+												user.setActiveCharacterData("mugshot", url)
+												print("Online player's mugshot updated!")
+												break
+											end
+										end
+									end
+								end
+							end)
+							break
+						end
+					end
+				end
+			else
+				print("person NOT found!")
+				local msg = {
+					type = "error",
+					message  = "No person found matching name " .. data.fname .. " " .. data.lname .. "!"
+				}
+				TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
+				return
+			end
+		end)
+	end)
+end)
+
 RegisterServerEvent("mdt:PerformPersonCheckBySSN")
 AddEventHandler("mdt:PerformPersonCheckBySSN", function(ssn)
     local person = exports["essentialmode"]:getPlayerFromId(ssn)
@@ -41,7 +108,9 @@ AddEventHandler("mdt:PerformPersonCheckBySSN", function(ssn)
     -- values have to be false by default to work with UI --
     local person_info  = {
         ssn = ssn,
-        name = person.getActiveCharacterData("fullName"),
+        --name = person.getActiveCharacterData("fullName"),
+		fname = firstToUpper(person.getActiveCharacterData("firstName")),
+		lname = firstToUpper(person.getActiveCharacterData("lastName")),
 		dob = person.getActiveCharacterData("dateOfBirth"),
         drivers_license = false,
         firearm_permit = false,
@@ -49,8 +118,15 @@ AddEventHandler("mdt:PerformPersonCheckBySSN", function(ssn)
         criminal_history = {
             crimes = {},
             tickets = {}
-        }
+        },
+		mugshot = "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg" -- generic place holder img
     }
+	--------------------
+	-- get mugshot --
+	--------------------
+	if person.getActiveCharacterData("mugshot") then
+		person_info.mugshot = person.getActiveCharacterData("mugshot")
+	end
     --------------------
     -- get licenses --
     --------------------
@@ -120,69 +196,79 @@ AddEventHandler("mdt:PerformPersonCheckByName", function(data)
 		local fields = {
 			"characters"
 		}
-		-- insert into db
 		couchdb.getSpecificFieldFromDocumentByRows("essentialmode", query, fields, function(doc)
 			if doc then
 				print(data.fname .. " " .. data.lname .. " found in DB search!")
 				for i = 1, #doc.characters do
-					if string.lower(doc.characters[i].firstName) == string.lower(data.fname) and string.lower(doc.characters[i].lastName) == string.lower(data.lname) then
-						local person = doc.characters[i]
-					    -- values have to be false by default to work with UI --
-					    local person_info  = {
-					        ssn = ssn,
-					        name = firstToUpper(person.firstName) .. " " .. firstToUpper(person.lastName),
-							dob = person.dateOfBirth,
-					        drivers_license = false,
-					        firearm_permit = false,
-					        insurance = false,
-					        criminal_history = {
-					            crimes = {},
-					            tickets = {}
-					        }
-					    }
-					    --------------------
-					    -- get licenses --
-					    --------------------
-					    local licenses = person.licenses
-					    if #licenses > 0 then
-					        for i = 1, #licenses do
-					            local license = licenses[i]
-					                if license.name == "Driver's License" then
-					                    person_info.drivers_license = license
-					                elseif license.name == "Firearm Permit" then
-					                    person_info.firearm_permit = license
-					                end
-					        end
-					    end
-					    ---------------------
-					    -- get insurance --
-					    ---------------------
-					    local insurance = person.insurance
-					    if insurance.planName then
-					        person_info.insurance = insurance
-					    end
-					    -----------------------------
-					    -- get criminal history --
-					    -----------------------------
-					    local criminal_history = person.criminalHistory
-					    if #criminal_history > 0 then
-					        for i = 1, #criminal_history do
-					            local crime = criminal_history[i]
-					                if not crime.type then -- not a ticket
-					                    table.insert(person_info.criminal_history.crimes, crime)
-					                else
-					                    table.insert(person_info.criminal_history.tickets, crime)
-					                end
-					        end
-					        if #person_info.criminal_history.crimes <= 0 then
-					            person_info.criminal_history.crimes = false
-					        end
-					        if #person_info.criminal_history.tickets <= 0 then
-					            person_info.criminal_history.tickets = false
-					        end
-					    end
+					if doc.characters[i].firstName and doc.characters[i].lastName and data.fname and data.lname then
+						if string.lower(doc.characters[i].firstName) == string.lower(data.fname) and string.lower(doc.characters[i].lastName) == string.lower(data.lname) then
+							local person = doc.characters[i]
+						    -- values have to be false by default to work with UI --
+						    local person_info  = {
+						        ssn = ssn,
+						        --name = firstToUpper(person.firstName) .. " " .. firstToUpper(person.lastName),
+								fname = firstToUpper(person.firstName),
+								lname = firstToUpper(person.lastName),
+								dob = person.dateOfBirth,
+						        drivers_license = false,
+						        firearm_permit = false,
+						        insurance = false,
+						        criminal_history = {
+						            crimes = {},
+						            tickets = {}
+						        },
+								mugshot = "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg" -- generic placeholder img
+						    }
+							---------------------
+							-- get mug shot --
+							---------------------
+							if person.mugshot then
+								person_info.mugshot = person.mugshot
+							end
+							--------------------
+						    -- get licenses --
+						    --------------------
+						    local licenses = person.licenses
+						    if #licenses > 0 then
+						        for i = 1, #licenses do
+						            local license = licenses[i]
+						                if license.name == "Driver's License" then
+						                    person_info.drivers_license = license
+						                elseif license.name == "Firearm Permit" then
+						                    person_info.firearm_permit = license
+						                end
+						        end
+						    end
+						    ---------------------
+						    -- get insurance --
+						    ---------------------
+						    local insurance = person.insurance
+						    if insurance.planName then
+						        person_info.insurance = insurance
+						    end
+						    -----------------------------
+						    -- get criminal history --
+						    -----------------------------
+						    local criminal_history = person.criminalHistory
+						    if #criminal_history > 0 then
+						        for i = 1, #criminal_history do
+						            local crime = criminal_history[i]
+						                if not crime.type then -- not a ticket
+						                    table.insert(person_info.criminal_history.crimes, crime)
+						                else
+						                    table.insert(person_info.criminal_history.tickets, crime)
+						                end
+						        end
+						        if #person_info.criminal_history.crimes <= 0 then
+						            person_info.criminal_history.crimes = false
+						        end
+						        if #person_info.criminal_history.tickets <= 0 then
+						            person_info.criminal_history.tickets = false
+						        end
+						    end
 
-					    TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
+						    TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
+						end
 					end
 				end
 			else
@@ -283,7 +369,6 @@ end)
 
 RegisterServerEvent("mdt:fetchBOLOs")
 AddEventHandler("mdt:fetchBOLOs", function()
-	print("Fetching BOLOs!!!")
 	fetchBOLOs(source)
 end)
 
@@ -294,7 +379,6 @@ end)
 
 RegisterServerEvent("mdt:fetchPoliceReports")
 AddEventHandler("mdt:fetchPoliceReports", function()
-	print("Fetching police reports!!!")
 	fetchPoliceReports(source)
 end)
 
@@ -302,8 +386,8 @@ RegisterServerEvent("mdt:fetchPoliceReportDetails")
 AddEventHandler("mdt:fetchPoliceReportDetails", function(id)
 	local usource = source
 	PerformHttpRequest("http://127.0.0.1:5984/policereports/" .. id, function(err, text, headers)
-		print("finished getting police report details for id: " .. id)
-		print("error code: " .. err)
+		--print("finished getting police report details for id: " .. id)
+		--print("error code: " .. err)
 		local response = json.decode(text)
 		if response.incident then
 			local msg = {
@@ -317,11 +401,6 @@ end)
 
 RegisterServerEvent("mdt:createPoliceReport")
 AddEventHandler("mdt:createPoliceReport", function(report)
-	if type(report) == "table" then
-		print("report was table")
-	else
-		print("report was string: " .. report)
-	end
 	local usource = source
 	local author = exports["essentialmode"]:getPlayerFromId(usource)
 	report.author = author.getActiveCharacterData("fullName")
@@ -387,29 +466,19 @@ end
 function deleteBOLO(db, id, rev)
 	-- send DELETE http request
 	PerformHttpRequest("http://127.0.0.1:5984/"..db.."/"..id.."?rev="..rev, function(err, rText, headers)
-		if err == 0 then
-			RconPrint("\nrText = " .. rText)
-			RconPrint("\nerr = " .. err)
-		end
 	end, "DELETE", "", {["Content-Type"] = 'application/json'})
 end
 
 function fetchBOLOs(src)
 	local BOLOs = {}
-	print("fetching all BOLOs...")
 	PerformHttpRequest("http://127.0.0.1:5984/bolos/_all_docs?include_docs=true" --[[ string ]], function(err, text, headers)
-		print("finished getting BOLOs...")
-		print("error code: " .. err)
 		local response = json.decode(text)
 		if response.rows then
 			BOLOs = {} -- reset table
-			print("#(response.rows) = " .. #(response.rows))
 			-- insert all warrants from 'bolos' db into lua table
 			for i = 1, #(response.rows) do
 				table.insert(BOLOs, response.rows[i].doc)
 			end
-			print("finished loading BOLOs...")
-			print("# of BOLOs: " .. #BOLOs)
 			local msg = {
 				type = "bolosLoaded",
 				bolos = BOLOs
@@ -422,23 +491,15 @@ end
 function deletePoliceReport(db, id, rev)
 	-- send DELETE http request
 	PerformHttpRequest("http://127.0.0.1:5984/"..db.."/"..id.."?rev="..rev, function(err, rText, headers)
-		if err == 0 then
-			RconPrint("\nrText = " .. rText)
-			RconPrint("\nerr = " .. err)
-		end
 	end, "DELETE", "", {["Content-Type"] = 'application/json'})
 end
 
 function fetchPoliceReports(src)
 	local police_reports = {}
-	print("fetching all police reports...")
 	PerformHttpRequest("http://127.0.0.1:5984/policereports/_all_docs?include_docs=true" --[[ string ]], function(err, text, headers)
-		print("finished getting police reports...")
-		print("error code: " .. err)
 		local response = json.decode(text)
 		if response.rows then
 			police_reports = {} -- reset table
-			print("#(response.rows) = " .. #(response.rows))
 			-- insert all warrants from 'bolos' db into lua table
 			for i = 1, #(response.rows) do
 				local report = {
@@ -451,8 +512,6 @@ function fetchPoliceReports(src)
 				}
 				table.insert(police_reports, report)
 			end
-			print("finished loading police reports...")
-			print("# of police reports: " .. #police_reports)
 			local msg = {
 				type = "policeReportsLoaded",
 				police_reports = police_reports
