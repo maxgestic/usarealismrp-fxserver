@@ -124,7 +124,13 @@ end, {
 TriggerEvent('es:addJobCommand', 'pickup', { "police", "sheriff", "ems", "fire", "tow" }, function(source, args, user)
 	TriggerClientEvent('c_removeCones', source)
 end, {
-	help = "Pick up cones"
+	help = "Pick up cones or barriers"
+})
+
+TriggerEvent('es:addJobCommand', 'removecones', { "police", "sheriff", "ems", "fire", "tow" }, function(source, args, user)
+	TriggerClientEvent('c_removeCones', source)
+end, {
+	help = "Pick up cones or barriers"
 })
 
 function comma_value(amount)
