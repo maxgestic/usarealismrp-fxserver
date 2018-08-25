@@ -11,8 +11,13 @@ AddEventHandler("dispatch:setWaypoint", function(targetServerId)
     Citizen.Trace("waypoint set!")
 end)
 
+-- barrier --
+RegisterNetEvent('createObject')
+AddEventHandler('createObject', function(obj)
+    SetObjectOnGround(obj)
+end)
 
--- barrier
+-- cone --
 RegisterNetEvent('c_setCone')
 AddEventHandler('c_setCone', function()
     SetConeOnGround()
@@ -23,15 +28,33 @@ AddEventHandler('c_removeCones', function()
     removeCones()
 end)
 
+function SetObjectOnGround(obj)
+    barrier = GetHashKey(obj)
+    RequestModel(barrier)
+    while not HasModelLoaded(barrier) do
+      Wait(1)
+    end
+    local playerped = GetPlayerPed(-1)
+    local coords = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 2.0, 0.0)
+    local object = CreateObject(barrier, coords.x, coords.y, coords.z-1.9, true, true, false)
+    PlaceObjectOnGroundProperly(object)
+    local player_heading =  GetEntityHeading(playerped)
+    SetEntityHeading(object, player_heading)
+    table.insert(spawnedCones, object)
+end
+
 function SetConeOnGround()
-    x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
     barrier = GetHashKey("prop_mp_cone_01")
     RequestModel(barrier)
     while not HasModelLoaded(barrier) do
       Citizen.Wait(1)
     end
-    local object = CreateObject(barrier, x, y+1, z-1.9, true, true, false) -- x+1
+    local playerped = GetPlayerPed(-1)
+    local coords = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 2.0, 0.0)
+    local object = CreateObject(barrier, coords.x, coords.y, coords.z-1.9, true, true, false)
     PlaceObjectOnGroundProperly(object)
+    local player_heading =  GetEntityHeading(playerped)
+    SetEntityHeading(object, player_heading)
     table.insert(spawnedCones, object)
 end
 

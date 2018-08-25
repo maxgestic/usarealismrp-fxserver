@@ -441,11 +441,11 @@ end)
 
 function GetRankDisplayName(rank)
 	if rank == 1 then
-		return "Pr. Deputy"
+		return "Cadet"
 	elseif rank == 2 then
-		return "Deputy"
+		return "Trooper"
 	elseif rank == 3 then
-		return "Sr. Deputy"
+		return "Sr. Trooper"
 	elseif rank == 4 then
 		return "Pr. Sgt."
 	elseif rank == 5 then
@@ -455,9 +455,9 @@ function GetRankDisplayName(rank)
 	elseif rank == 7 then
 		return "Capt."
 	elseif rank == 8 then
-		return "Undersheriff"
+		return "Deputy Commissioner"
 	elseif rank == 9 then
-		return "Sheriff"
+		return "Commissioner"
 	elseif rank == 10 then
 		return "Director"
 	end

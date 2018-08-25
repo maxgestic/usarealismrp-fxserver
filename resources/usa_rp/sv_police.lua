@@ -1,13 +1,13 @@
 local POLICE_RANKS = {
-	[1] = "Probationary",
-	[2] = "Deputy",
-	[3] = "Senior Deputy",
+	[1] = "Cadet",
+	[2] = "Trooper",
+	[3] = "Senior Trooper",
 	[4] = "Probationary Sergeant",
 	[5] = "Sergeant",
 	[6] = "Lieutenant",
 	[7] = "Captain",
-	[8] = "Undersheriff",
-	[9] = "Sheriff"
+	[8] = "Deputy Commissioner",
+	[9] = "Commissioner"
 }
 
 local target_player_id = 0
@@ -98,6 +98,21 @@ end, {
 	}
 })
 
+-- /cone barrier
+TriggerEvent('es:addJobCommand', 'barrier', { "police", "sheriff", "ems", "fire"}, function(source, args, user)
+	local obj = nil
+	if args[2] == "1" then
+		obj = "prop_mp_cone_01"
+	elseif args[2] == "2" then
+		obj = "prop_barrier_work05"
+	end
+	TriggerClientEvent('createObject', source, obj)
+end, {
+	help = "Place a barrier",
+	params = {
+		{ name = "Barrier Number", help = "Either 1 or 2. 1 = cone, 2 = wood barrier" }
+	}
+})
 
 -- /cone barrier
 TriggerEvent('es:addJobCommand', 'cone', { "police", "sheriff", "ems", "fire", "tow" }, function(source, args, user)

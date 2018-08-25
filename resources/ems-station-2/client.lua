@@ -1,4 +1,19 @@
+-- Global Variables --
+local EMSLockerRooms = {
+{x = 319.27481079102, y = -559.21624755859, z = 28.743782043457}, -- pillbox medical
+{x = -447.24325561523, y= -329.1171875, z = 34.501892089844}, -- mt. zonoah
+{x = 1196.320435703, y = -1465.4461669922, z = 34.859535217285}, -- LS fire station 9
+{x = 207.106, y = -1641.45, z = 28.5},
+{x = 373.269, y = -1441.48, z = 28.5},
+{x=-366.269, y = 6102.27, z = 34.6397}, -- paleto
+--{x=1692.13, y=3586.27, z=34.7209} -- sandy
+{x = 1701.4, y = 3604.1, z = 35.9} -- sandy (interior / ymap)
+}
+
 -- MENU CODE
+local menu = 0
+local position = 1
+
 RegisterNetEvent("GUI2:Title")
 AddEventHandler("GUI2:Title", function(title)
 	Menu.Title(title)
@@ -35,17 +50,6 @@ AddEventHandler("GUI2:Update", function()
 	Menu.updateSelection()
 	end)
 -- /MENU CODE
-
---Global Variables
-local menu = 0
-local position = 1
-local EMSLockerRooms = {
-{x = 207.106, y = -1641.45, z = 28.5},
-{x = 373.269, y = -1441.48, z = 28.5},
-{x=-366.269, y = 6102.27, z = 34.6397}, -- paleto
---{x=1692.13, y=3586.27, z=34.7209} -- sandy
-{x = 1701.4, y = 3604.1, z = 35.9} -- sandy (interior / ymap)
-}
 
 local arrSkinGeneralCaptions = {"MP Male", "MP Female", "Fireman", "Paramedic - Male", "Paramedic - Female", "Doctor"}
 local arrSkinGeneralValues = {"mp_m_freemode_01", "mp_f_freemode_01", "s_m_y_fireman_01","s_m_m_paramedic_01","s_f_y_scrubs_01", "s_m_m_doctor_01"}
