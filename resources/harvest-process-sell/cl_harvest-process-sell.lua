@@ -1,6 +1,6 @@
 local JOBS = {
   ["Weed"] = {
-    harvest = {x = 2224.04, y = 5577.28, z = 52.7, reward_item_name = "Weed Bud", time = 28},
+    harvest = {x = 2224.04, y = 5577.28, z = 52.7, reward_item_name = "Weed Bud", time = 15},
     process = {x = 1442.84, y = 6332.9, z = 22.9, time = 30, reward_item_name = "Hash"},
     sell = {x = -57.3836, y = 6650.69, z = 28.79, heading = 10.0},
     peds = {

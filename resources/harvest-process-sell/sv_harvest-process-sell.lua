@@ -4,14 +4,14 @@ local REWARDS = {
     harvest_item = {
       name = "Weed Bud",
       quantity = 1,
-      weight = 8.0,
+      weight = 4.0,
       type = "drug",
       legality = "illegal"
     },
     processed_item = {
       name = "Hash",
       quantity = 1,
-      weight = 6.0,
+      weight = 2.0,
       type = "drug",
       legality = "illegal"
     },

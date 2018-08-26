@@ -44,7 +44,8 @@ local blips = {
 	--]]
 	{ title="General Store", colour = 24 , id = 52, x=1961.061, y=3741.604, z=32.343 },
     { title="General Store", colour = 24 , id = 52, x=374.586, y=326.037, z=103.566     },
-    { title="General Store", colour = 24 , id = 52, x=1136.534, y=-971.131, z=46.415 },
+    --{ title="General Store", colour = 24 , id = 52, x=1136.534, y=-971.131, z=46.415 },
+	{ title="General Store", colour = 24 , id = 52, x = 1136.3, y = -981.0, z = 45.5 },
     { title="General Store", colour = 24 , id = 52, x=-1224.188, y=-907.065, z=12.326 },
     { title="General Store", colour = 24 , id = 52, x=26.453, y=-1347.059, z=29.497 },
     { title="General Store", colour = 24 , id = 52, x=-48.437, y=-1756.889, z=29.421 },
