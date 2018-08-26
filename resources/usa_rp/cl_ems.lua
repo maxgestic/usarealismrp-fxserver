@@ -8,7 +8,8 @@ local releaseCoords = {
     {x = 1814.914, y = 3685.767, z = 34.224}, -- sandy
     {x = 1690.7, y = 2591.9, z = 45.8}, -- bolingbroke prison
     {x = 308.1, y = -1434.7,  z = 29.9}, -- davis
-    {x = 360.3, y = -548.9, z = 28.8} -- pillbox hill
+    {x = 360.3, y = -548.9, z = 28.8}, -- pillbox hill
+    {x = -448.13555908203, y = -340.85577392578, z = 34.50177648926} -- mt. zonaoh
 }
 local healStations = {
     {x = 307.63, y = -593.948, z = 42.3919}, -- LS
@@ -17,6 +18,7 @@ local healStations = {
     {x = -247.546, y = 6331.111, z = 31.426}, -- PALETO HOSPITAL
     {x = 308.1, y = -1434.7,  z = 29.9}, -- davis
     --{x = 360.3, y = -548.9, z = 28.8} -- ls
+    {x = -448.13555908203, y = -340.85577392578, z = 34.50177648926} -- mt. zonaoh
 }
 
 RegisterNetEvent("ems:notify")
