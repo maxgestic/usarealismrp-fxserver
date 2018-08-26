@@ -249,7 +249,7 @@ AddEventHandler("simp:baitCarDisable", function()
 			SetVehicleEngineOn(veh, false)
 			SetVehicleDoorsLocked(veh, 4)
 			SetNotificationTextEntry("STRING")
-			AddTextComponentString("~r~WARNING:~s~~n~This is the Blaine County Sheriff's Office. You are under arrest.")
+			AddTextComponentString("~r~WARNING:~s~~n~This is the SA State Police. You are under arrest.")
 			DrawNotification(true, true)
 	end
 end)
