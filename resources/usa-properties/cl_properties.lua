@@ -183,44 +183,45 @@ Citizen.CreateThread(function()
                 if info.garage_coords then
                     DrawMarker(27, info.garage_coords.x, info.garage_coords.y, info.garage_coords.z-0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 255 --[[r]], 92 --[[g]], 92 --[[b]], 90, 0, 0, 2, 0, 0, 0, 0)
                 end
-            end
-            if GetDistanceBetweenCoords(GetEntityCoords(me), info.x, info.y, info.z) < 2 then
-                nearest_property_info = PROPERTIES[name]
-                closest.x, closest.y, closest.z = info.x, info.y, info.z
-                if not menu.enabled then
-                    drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property menu!",7,1,0.5,0.8,0.6,255,255,255,255)
-                    if IsControlJustPressed(0, menu.key) then
-                        menu.enabled = true
-                        menu.page = "home"
-                        if nearest_property_info.owner.identifier == my_property_identifier then
-                            TriggerServerEvent("properties:loadMoneyForMenu", nearest_property_info.name)
-                        end
-                    end
-                end
-            elseif info.garage_coords then
-                if GetDistanceBetweenCoords(GetEntityCoords(me), info.garage_coords.x, info.garage_coords.y, info.garage_coords.z) < 2 then
+                -- see if close to display menu --
+                if GetDistanceBetweenCoords(GetEntityCoords(me), info.x, info.y, info.z) < 2 then
                     nearest_property_info = PROPERTIES[name]
-                    closest.x, closest.y, closest.z = info.garage_coords.x, info.garage_coords.y, info.garage_coords.z
-                    if IsPedInAnyVehicle(me, true) then
-                        if nearest_property_info.owner then
+                    closest.x, closest.y, closest.z = info.x, info.y, info.z
+                    if not menu.enabled then
+                        drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property menu!",7,1,0.5,0.8,0.6,255,255,255,255)
+                        if IsControlJustPressed(0, menu.key) then
+                            menu.enabled = true
+                            menu.page = "home"
                             if nearest_property_info.owner.identifier == my_property_identifier then
-                                drawTxt("Press [ ~b~E~w~ ] to store your vehicle in the garage!",7,1,0.5,0.8,0.6,255,255,255,255)
-                                if IsControlJustPressed(0, menu.key) then
-                                    local vehicle = GetVehiclePedIsIn(me, false)
-                                    local numberPlateText = GetVehicleNumberPlateText(vehicle)
-                                    TriggerServerEvent("properties:storeVehicle", nearest_property_info.name, numberPlateText)
-                                    Wait(1000)
-                                end
+                                TriggerServerEvent("properties:loadMoneyForMenu", nearest_property_info.name)
                             end
                         end
-                    else
-                        if not menu.enabled then
-                            drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property garage!",7,1,0.5,0.8,0.6,255,255,255,255)
-                            if IsControlJustPressed(0, menu.key) then
-                                --print("opening garage menu!")
-                                menu.enabled = true
-                                menu.page = "garage"
-                                TriggerServerEvent("properties:loadVehiclesForMenu", nearest_property_info.name)
+                    end
+                elseif info.garage_coords then
+                    if GetDistanceBetweenCoords(GetEntityCoords(me), info.garage_coords.x, info.garage_coords.y, info.garage_coords.z) < 2 then
+                        nearest_property_info = PROPERTIES[name]
+                        closest.x, closest.y, closest.z = info.garage_coords.x, info.garage_coords.y, info.garage_coords.z
+                        if IsPedInAnyVehicle(me, true) then
+                            if nearest_property_info.owner then
+                                if nearest_property_info.owner.identifier == my_property_identifier then
+                                    drawTxt("Press [ ~b~E~w~ ] to store your vehicle in the garage!",7,1,0.5,0.8,0.6,255,255,255,255)
+                                    if IsControlJustPressed(0, menu.key) then
+                                        local vehicle = GetVehiclePedIsIn(me, false)
+                                        local numberPlateText = GetVehicleNumberPlateText(vehicle)
+                                        TriggerServerEvent("properties:storeVehicle", nearest_property_info.name, numberPlateText)
+                                        Wait(1000)
+                                    end
+                                end
+                            end
+                        else
+                            if not menu.enabled then
+                                drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property garage!",7,1,0.5,0.8,0.6,255,255,255,255)
+                                if IsControlJustPressed(0, menu.key) then
+                                    --print("opening garage menu!")
+                                    menu.enabled = true
+                                    menu.page = "garage"
+                                    TriggerServerEvent("properties:loadVehiclesForMenu", nearest_property_info.name)
+                                end
                             end
                         end
                     end

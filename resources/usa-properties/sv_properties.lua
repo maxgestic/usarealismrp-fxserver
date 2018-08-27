@@ -359,7 +359,7 @@ function loadProperties()
                             type = response.rows[i].doc.type
                         }
 						print("loaded property: " .. response.rows[i].doc.name)
-					else
+                    else
 						print("Error loading property document at index #" .. i)
 					end
 				else
