@@ -76,7 +76,7 @@ Citizen.CreateThread(function()
 
     local playerPed = GetPlayerPed(-1)
 		local pos = GetEntityCoords(playerPed)
-		RemoveVehiclesFromGeneratorsInArea(pos['x'] - 500.0, pos['y'] - 500.0, pos['z'] - 500.0, pos['x'] + 500.0, pos['y'] + 500.0, pos['z'] + 500.0);
+		RemoveVehiclesFromGeneratorsInArea(pos['x'] - 1500.0, pos['y'] - 1500.0, pos['z'] - 1500.0, pos['x'] + 1500.0, pos['y'] + 1500.0, pos['z'] + 1500.0);
 
 	end
 end)
