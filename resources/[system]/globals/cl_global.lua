@@ -75,7 +75,7 @@ AddEventHandler("globals:startActionMessage", function(msg, range, playerId)
         local myped = GetPlayerPed(-1)
         local mycoords = GetEntityCoords(myped)
         local start = GetGameTimer()
-        if Vdist(mycoords.x, mycoords.y, mycoords.z, coords.x, coords.y, coords.z) <= range then
+        if Vdist(mycoords.x, mycoords.y, mycoords.z, coords.x, coords.y, coords.z) <= range and Vdist(mycoords.x, mycoords.y, mycoords.z, coords.x, coords.y, coords.z) > 0.0 then
             while GetGameTimer() - start < ACTION_MESSAGE_TIME_SECONDS * 1000 do
                 coords = GetEntityCoords(ped)
                 mycoords = GetEntityCoords(myped)
