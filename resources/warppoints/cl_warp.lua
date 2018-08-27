@@ -41,6 +41,7 @@ local warp_locations = {
     },
     job_access = "emergency"
   },
+  --]]
   ["the photo room"] = {
     entrance = {
      x = 446.8,
