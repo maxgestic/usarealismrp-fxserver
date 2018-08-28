@@ -356,7 +356,7 @@ AddEventHandler('veh:toggleEngine', function(status)
     if GetPedInVehicleSeat(lastVehicle, -1) == playerPed then
       if status == "on" then
         --TriggerServerEvent("vehicle:checkForKey", GetVehicleNumberPlateText(targetVehicle))
-        if GetVehicleEngineHealth(lastVehicle) > 360 then
+        if GetVehicleEngineHealth(lastVehicle) > 360 and  GetVehicleFuelLevel(lastVehicle) > 0.9 then
           SetVehicleUndriveable(lastVehicle, false)
           SetVehicleEngineOn(lastVehicle, true, false, false)
           engineIsOn = true
@@ -433,7 +433,7 @@ Citizen.CreateThread(function()
     --------------------------------------
     if lastVehicle and tonumber(lastVehicle) ~= 0 then
       if GetVehicleEngineHealth(lastVehicle) > 360 then
-        if engineIsOn and not GetIsVehicleEngineRunning(lastVehicle) then
+        if engineIsOn and not GetIsVehicleEngineRunning(lastVehicle) and GetVehicleFuelLevel(lastVehicle) > 0.9 then
           --for i = 1, #policeVehicles do
             --if IsVehicleModel(lastVehicle, policeVehicles[i]) then
           SetVehicleEngineOn(lastVehicle, true, true, true)
