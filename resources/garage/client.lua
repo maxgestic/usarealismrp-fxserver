@@ -6,7 +6,14 @@ local locations = {
 	{ ['x'] = 2544.4921875, ['y'] = -389.66342163086, ['z'] = 92.992828369141 },
 	{ ['x'] = 1185.3264160156, ['y'] = -1546.4693603516, ['z'] = 39.400947570801 },
 	{ ['x'] = -307.64028930664, ['y'] = -757.61248779297, ['z'] = 33.968524932861 },
-	{ ['x'] = 248.066, ['y'] = -746.955, ['z'] = 30.8214 }
+	{ ['x'] = 248.066, ['y'] = -746.955, ['z'] = 30.8214 },
+	{ ["x"] = -455.9, ["y"] = 6040.9, ["z"] = 31.3, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- paleto PD
+	{["x"] = -357.1, ["y"] = 6094.2, ["z"] = 31.4, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"}}, -- paleto FD
+	{["x"] = 1865.5, ["y"] = 3695.9, ["z"] = 33.7, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"}}, -- sandy PD
+	{["x"] = 1712.8, ["y"] = 3599.5, ["z"] = 35.3, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"}}, -- sandy FD
+	{["x"] = 447.1, ["y"] = -1024.5, ["z"] = 28.6, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"}}, -- LS PD mission row
+	{["x"] = 343.7, ["y"] = -560.4, ["z"] = 28.7, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"}}, -- pillbox medical
+	{["x"] = 326.4, ["y"] = -1475.6, ["z"] = 29.8, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"}} -- one of the hospitals in LS, forgot exaclty the name
 }
 
 Citizen.CreateThread(function()
@@ -36,10 +43,10 @@ Citizen.CreateThread(function()
 							if IsPedInAnyVehicle(GetPlayerPed(-1), true) then
 								local handle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
 								local numberPlateText = GetVehicleNumberPlateText(handle)
-								TriggerServerEvent("garage:storeVehicle", handle, numberPlateText)
+								TriggerServerEvent("garage:storeVehicle", handle, numberPlateText, info["jobs"])
 							else
 								--TriggerServerEvent("garage:checkVehicleStatus")
-								TriggerServerEvent("garage:openMenu")
+								TriggerServerEvent("garage:openMenu", info["jobs"])
 								--Citizen.Wait(60000)
 							end
 						end

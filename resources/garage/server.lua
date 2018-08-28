@@ -49,9 +49,30 @@ AddEventHandler("garage:storeKey", function(plate)
 end)
 
 RegisterServerEvent("garage:storeVehicle")
-AddEventHandler("garage:storeVehicle", function(handle, numberPlateText)
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
+AddEventHandler("garage:storeVehicle", function(handle, numberPlateText, required_jobs)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	if required_job then
+		local userJob = user.getActiveCharacterData("job")
+		for i = 1, #required_jobs do
+			if required_jobs[i] == userJob then
+				local userVehicles = user.getActiveCharacterData("vehicles")
+				for i = 1, #userVehicles do
+					local vehicle = userVehicles[i]
+					if numberPlateText and vehicle then
+						if string.match(numberPlateText,tostring(vehicle.plate)) or numberPlateText == vehicle.plate then -- player actually owns car that is being stored
+							userVehicles[i].stored = true
+							user.setActiveCharacterData("vehicles", userVehicles)
+							TriggerClientEvent("garage:storeVehicle", source)
+							return
+						end
+					end
+				end
+				TriggerClientEvent("garage:notify", source, "~r~You do not own that vehicle!")
+				return
+			end
+		end
+		TriggerClientEvent("usa:notify", source, "Garage prohibited!")
+	else
 		local userVehicles = user.getActiveCharacterData("vehicles")
 		for i = 1, #userVehicles do
 			local vehicle = userVehicles[i]
@@ -59,12 +80,13 @@ AddEventHandler("garage:storeVehicle", function(handle, numberPlateText)
 				if string.match(numberPlateText,tostring(vehicle.plate)) or numberPlateText == vehicle.plate then -- player actually owns car that is being stored
 					userVehicles[i].stored = true
 					user.setActiveCharacterData("vehicles", userVehicles)
-					TriggerClientEvent("garage:storeVehicle", userSource)
+					TriggerClientEvent("garage:storeVehicle", source)
 					return
 				end
 			end
 		end
-		TriggerClientEvent("garage:notify", userSource, "~r~You do not own that vehicle!")
+		TriggerClientEvent("garage:notify", source, "~r~You do not own that vehicle!")
+	end
 end)
 
 function playerHasValidAutoInsurance(playerInsurance, source)
@@ -180,12 +202,22 @@ end)
 -- new
 
 RegisterServerEvent("garage:openMenu")
-AddEventHandler("garage:openMenu", function()
-	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+AddEventHandler("garage:openMenu", function(required_jobs)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	if required_jobs then
+		local userJob = user.getActiveCharacterData("job")
+		for i = 1, #required_jobs do
+			if required_jobs[i] == userJob then
+				local playerVehicles = user.getActiveCharacterData("vehicles")
+				TriggerClientEvent("garage:openMenuWithVehiclesLoaded", source, playerVehicles)
+				return
+			end
+			TriggerClientEvent("usa:notify", source, "Garage prohibited!")
+		end
+	else
 		local playerVehicles = user.getActiveCharacterData("vehicles")
-		TriggerClientEvent("garage:openMenuWithVehiclesLoaded", userSource, playerVehicles)
-	end)
+		TriggerClientEvent("garage:openMenuWithVehiclesLoaded", source, playerVehicles)
+	end
 end)
 
 function round(num, numDecimalPlaces)
