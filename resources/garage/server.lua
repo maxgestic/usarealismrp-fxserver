@@ -51,7 +51,7 @@ end)
 RegisterServerEvent("garage:storeVehicle")
 AddEventHandler("garage:storeVehicle", function(handle, numberPlateText, required_jobs)
 	local user = exports["essentialmode"]:getPlayerFromId(source)
-	if required_job then
+	if required_jobs then
 		local userJob = user.getActiveCharacterData("job")
 		for i = 1, #required_jobs do
 			if required_jobs[i] == userJob then
