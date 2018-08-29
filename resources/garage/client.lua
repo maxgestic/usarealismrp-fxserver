@@ -18,15 +18,17 @@ local locations = {
 
 Citizen.CreateThread(function()
     for _, info in pairs(locations) do
-		info.blip = AddBlipForCoord(info['x'], info['y'], info['z'])
-		SetBlipSprite(info.blip, 357)
-		SetBlipDisplay(info.blip, 4)
-		SetBlipScale(info.blip, 0.9)
-		SetBlipColour(info.blip, 4)
-		SetBlipAsShortRange(info.blip, true)
-		BeginTextCommandSetBlipName("STRING")
-		AddTextComponentString("Garage")
-		EndTextCommandSetBlipName(info.blip)
+		if type(info["jobs"]) == "nil" then
+			info.blip = AddBlipForCoord(info['x'], info['y'], info['z'])
+			SetBlipSprite(info.blip, 357)
+			SetBlipDisplay(info.blip, 4)
+			SetBlipScale(info.blip, 0.9)
+			SetBlipColour(info.blip, 4)
+			SetBlipAsShortRange(info.blip, true)
+			BeginTextCommandSetBlipName("STRING")
+			AddTextComponentString("Garage")
+			EndTextCommandSetBlipName(info.blip)
+		end
     end
 end)
 
