@@ -185,7 +185,9 @@ function isPoliceVehicle(veh_handle)
       0xD0AF544F, -- police 8
       -34623805, -- policeb
       741586030, -- pranger
-      -1205689942 -- riot
+      -1205689942, -- riot
+      GetHashKey("sheriff"),
+      GetHashKey("sheriff2")
   }
   for i = 1, #policeVehicles do
     if IsVehicleModel(veh_handle, policeVehicles[i]) then

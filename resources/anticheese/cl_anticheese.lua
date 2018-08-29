@@ -151,10 +151,11 @@ function isAtAWarpPoint(x, y, z)
 	return false
 end
 
-function isAtAnLSC(x, y, z)
+function isAtAnLSC()
+	local x, y, z = table.unpack(GetEntityCoords(PlayerPedId(),true))
 	for i = 1, #COORDS_THAT_ALLOW_INVISIBILITY do
 		local warp_to_check_against = COORDS_THAT_ALLOW_INVISIBILITY[i]
-		if Vdist(x, y, z, warp_to_check_against.x, warp_to_check_against.y, warp_to_check_against.z) < 10.0 then
+		if Vdist(x, y, z, warp_to_check_against.x, warp_to_check_against.y, warp_to_check_against.z) < 20.0 then
 			return true
 		end
 	end
@@ -182,7 +183,7 @@ Citizen.CreateThread(function()
 			TriggerServerEvent("AntiCheese:HealthFlag", false, GetEntityHealth(curPed) - 200, GetEntityHealth(curPed), curWait)
 		end
 
-		if GetPlayerInvincible(PlayerId()) then  -- if the player is invincible, flag him as a cheater and then disable their invincibility
+		if GetPlayerInvincible(PlayerId()) and not isAtAnLSC() then  -- if the player is invincible, flag him as a cheater and then disable their invincibility
 			TriggerServerEvent("AntiCheese:HealthFlag", true, curHealth - 2, GetEntityHealth(curPed), curWait)
 			SetPlayerInvincible(PlayerId(), false)
 		end
@@ -211,8 +212,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(5000)
 		if not IsEntityVisible(PlayerPedId()) then
-			local x, y, z = table.unpack(GetEntityCoords(PlayerPedId(),true))
-			if not isAtAnLSC(x, y, z) then
+			if not isAtAnLSC() then
 				TriggerServerEvent("AntiCheese:InvisibilityFlag")
 				SetEntityVisible(PlayerPedId(), true, 0)
 			end
