@@ -4,16 +4,38 @@ local lastModel = 0
 
 local vehiclesUsed = {}
 
-
+Citizen.CreateThread(function()
+	while true do
+		Wait(3000)
+		CheckVeh()
+	end
+end)
 
 Citizen.CreateThread(function()
 	TriggerServerEvent("essence:addPlayer")
 	while true do
-		Citizen.Wait(0)
-		CheckVeh()
+		Wait(0)
 		renderBoxes()
 	end
+end)
 
+local isNearFuelStation
+local stationNumber
+local isNearFuelPStation
+local stationPlaneNumber
+local isNearFuelHStation
+local stationHeliNumber
+local isNearFuelBStation
+local stationBoatNumber
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(6000)
+		isNearFuelStation, stationNumber = isNearStation()
+		isNearFuelPStation, stationPlaneNumber = isNearPlaneStation()
+		isNearFuelHStation, stationHeliNumber = isNearHeliStation()
+		isNearFuelBStation, stationBoatNumber = isNearBoatStation()
+	end
 end)
 
 
@@ -28,10 +50,12 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 
+		--[[
 		local isNearFuelStation, stationNumber = isNearStation()
 		local isNearFuelPStation, stationPlaneNumber = isNearPlaneStation()
 		local isNearFuelHStation, stationHeliNumber = isNearHeliStation()
 		local isNearFuelBStation, stationBoatNumber = isNearBoatStation()
+		--]]
 
 
 		------------------------------- VEHICLE FUEL PART -------------------------------
@@ -261,16 +285,17 @@ local wasInAVeh = false
 Citizen.CreateThread(function()
 
 	while true do
-		Citizen.Wait(0)
+		Wait(10000)
 		if(vehiclesUsed ~= nil and IsPedInAnyVehicle(GetPlayerPed(-1)) and GetPedVehicleSeat(GetPlayerPed(-1)) == -1 and not isBlackListedModel()) then
 			wasInAVeh = true
 			local index = getVehIndex()
 			TriggerServerEvent("essence:setToAllPlayerEscense", essence, GetVehicleNumberPlateText(GetVehiclePedIsUsing(GetPlayerPed(-1))), GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(GetPlayerPed(-1)))))
-			Citizen.Wait(3000)
+			Wait(5000)
 		else
 			if(wasInAVeh) then
 				TriggerServerEvent("essence:setToAllPlayerEscense", essence, GetVehicleNumberPlateText(GetVehiclePedIsUsing(GetPlayerPed(-1))), GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(GetPlayerPed(-1)))))
 				wasInAVeh = false
+				Wait(5000)
 			end
 		end
 	end
@@ -281,7 +306,7 @@ end)
 Citizen.CreateThread(function()
 
 	while true do
-		Citizen.Wait(1000)
+		Citizen.Wait(5000)
 
 		if(IsPedInAnyVehicle(GetPlayerPed(-1), -1) and GetPedVehicleSeat(GetPlayerPed(-1)) == -1 and not isBlackListedModel()) then
 			local kmh = GetEntitySpeed(GetVehiclePedIsIn(GetPlayerPed(-1), false)) * 3.6
@@ -327,6 +352,7 @@ function CheckVeh()
 			TriggerServerEvent("vehicule:getFuel", GetVehicleNumberPlateText(GetVehiclePedIsUsing(GetPlayerPed(-1))), GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(GetPlayerPed(-1)))))
 			lastModel = GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(GetPlayerPed(-1))))
 			lastPlate = GetVehicleNumberPlateText(GetVehiclePedIsUsing(GetPlayerPed(-1)))
+			Wait(10000)
 		end
 	end
 
@@ -351,20 +377,6 @@ function renderBoxes()
 		drawTxt(UI.x + 0.61, UI.y + 1.3525, 1.0, 1.0, 0.64 , "~w~" .. math.floor(percent), 255, 255, 255, 255)
 		drawTxt(UI.x + 0.6355, UI.y + 1.36, 1.0, 1.0, 0.4, "~w~ Fuel", 255, 255, 255, 255)
 	end
-end
-
-function drawTxt(x,y ,width,height,scale, text, r,g,b,a)
-	SetTextFont(4)
-	SetTextProportional(0)
-	SetTextScale(scale, scale)
-	SetTextColour(r, g, b, a)
-	SetTextDropShadow(0, 0, 0, 0,255)
-	SetTextEdge(2, 0, 0, 0, 255)
-	SetTextDropShadow()
-	SetTextOutline()
-	SetTextEntry("STRING")
-	AddTextComponentString(text)
-	DrawText(x - width/2, y - height/2 + 0.005)
 end
 
 function drawRct(x,y,width,height,r,g,b,a)
@@ -542,12 +554,6 @@ function drawTxt(x,y ,width,height,scale, text, r,g,b,a)
     AddTextComponentString(text)
     DrawText(x - width/2, y - height/2 + 0.005)
 end
-
-function drawRct(x,y,width,height,r,g,b,a)
-	DrawRect(x + width/2, y + height/2, width, height, r, g, b, a)
-end
-
-
 
 RegisterNetEvent("essence:setEssence")
 AddEventHandler("essence:setEssence", function(ess,vplate,vmodel)
