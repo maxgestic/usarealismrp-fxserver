@@ -791,7 +791,6 @@ end, {
 -- todo: rcon command that loads properties from db (so we can make changes) and refresh everyone's clientside property info (without removing their property identifier)
 AddEventHandler('rconCommand', function(commandName, args)
 	if commandName == "refreshproperties" then
-
 		--loadProperties(function(status)
 			--if status then
 				TriggerEvent("es:getPlayers", function(players)
@@ -800,6 +799,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 							if GetPlayerIdentifiers(id)[1] then
 								print("setting player #" .. id .. " property ident to: " .. GetPlayerIdentifiers(id)[1])
 								TriggerClientEvent("properties:setPropertyIdentifier", id, GetPlayerIdentifiers(id)[1])
+                                TriggerClientEvent("properties:getProperties", id)
 							end
 						end
 					end

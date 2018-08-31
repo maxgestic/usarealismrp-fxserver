@@ -3,21 +3,37 @@
 --# by: minipunch
 --# made for: USA REALISM RP
 
+--[[
+Going to need:
+    - Property has owner:
+        - Not the owner:
+            -  Residential:
+                - Owner, end date
+            - Business:
+                - Owner, end date, rob
+        - Owner:
+            - Home Page
+            - Item Storage menu & submenus
+            - Vehicle Garage menu
+            - Outfits menu & submenus
+    - Property has no owner:
+        - Price, purchase, close
+]]
+
 local PROPERTIES = {} -- loaded from the server on first load or whenever a change is made. below data is only for reference whle making
 
 local my_property_identifier = nil -- gets updated by the server on first load, this is the hex steam ID of the player
 
 local nearest_property_info = nil
 
-local menu = {
-    enabled = false,
-    page = "home",
-    key = 38,
+local MENU_KEY = 38
+
+local menu_data = {
     user_items = nil,
     property_items = nil,
-    wardrobe = {},
-    vehicles = {},
-    money = 0
+    wardrobe = nil,
+    vehicles = nil,
+    money = nil
 }
 
 ------------------------------------
@@ -28,54 +44,54 @@ AddEventHandler('playerSpawned', function(spawn)
     TriggerServerEvent("properties:getProperties")
 end)
 
+RegisterNetEvent("properties:getProperties")
+AddEventHandler("properties:getProperties", function()
+    TriggerServerEvent("properties:getProperties")
+end)
+
 RegisterNetEvent("properties:setPropertyIdentifier")
 AddEventHandler("properties:setPropertyIdentifier", function(ident)
     my_property_identifier = ident
 end)
 
--------------------------------
--- update client properties  --
--------------------------------
 RegisterNetEvent("properties:update")
-AddEventHandler("properties:update", function(property, close_menu)
+AddEventHandler("properties:update", function(property)
     PROPERTIES[property.name] = property
-    if close_menu then menu.enabled = false end
 end)
 
 RegisterNetEvent("properties:updateAll")
-AddEventHandler("properties:updateAll", function(properties, close_menu)
+AddEventHandler("properties:updateAll", function(properties)
     PROPERTIES = properties
-    if close_menu then menu.enabled = false end
 end)
 
 RegisterNetEvent("properties:loadWardrobe")
 AddEventHandler("properties:loadWardrobe", function(wardrobe)
-    menu.wardrobe = wardrobe
+    menu_data.wardrobe = wardrobe
 end)
 
 -- list items to store --
 RegisterNetEvent("properties:setItemsToStore")
 AddEventHandler("properties:setItemsToStore", function(items)
-    menu.user_items = items
+    menu_data.user_items = items
 end)
 
 -- list items to retrieve --
 RegisterNetEvent("properties:loadedStorage")
 AddEventHandler("properties:loadedStorage", function(items)
-    menu.property_items = items
+    menu_data.property_items = items
 end)
 --
 
 -- money from property --
 RegisterNetEvent("properties:loadMoneyForMenu")
 AddEventHandler("properties:loadMoneyForMenu", function(money)
-    menu.money = money
+    menu_data.money = money
 end)
 
 -- vehicles from property --
 RegisterNetEvent("properties:loadVehiclesForMenu")
 AddEventHandler("properties:loadVehiclesForMenu", function(vehicles)
-    menu.vehicles = vehicles
+    menu_data.vehicles = vehicles
 end)
 
 -- storing vehicle --
@@ -86,16 +102,11 @@ AddEventHandler("properties:storeVehicle", function()
     TriggerEvent("usa:notify", "~g~Vehicle stored!")
     SetEntityAsMissionEntity(veh, true, true)
     Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(veh))
-    -- store vehicle key with vehicle
-    --print("attempting to storing vehicle key!")
-    --TriggerServerEvent("garage:storeKey", plate)
 end)
 
 -- retrieving vehicle --
 RegisterNetEvent("properties:retrieveVehicle")
 AddEventHandler("properties:retrieveVehicle", function(vehicle)
-    --print("type(vehicle): " .. type(vehicle))
-    --print("veh name: " .. vehicle.make .. " " .. vehicle.model)
     local playerVehicle = vehicle
     local modelHash = vehicle.hash
     local plateText = vehicle.plate
@@ -141,20 +152,15 @@ RegisterNetEvent("properties:getPropertyGivenCoords")
 AddEventHandler("properties:getPropertyGivenCoords", function(x,y,z, cb)
     local closest = 1000000000000.0
     local closest_property = nil
-    --print("getting property given coords! x: " .. x)
     for name, info in pairs(PROPERTIES) do
-        --print("Vdist(x, y, z, info.x, info.y, info.z): " .. Vdist(x, y, z, info.x, info.y, info.z))
         if Vdist(x, y, z, info.x, info.y, info.z)  < 50.0 and Vdist(x, y, z, info.x, info.y, info.z) < closest then
             closest = Vdist(x, y, z, info.x, info.y, info.z)
             closest_property = info
-            --print("found new closest store: " .. info.name)
         end
     end
     if closest_property then
-        --print("returning closest property: " .. closest_property.name)
         cb(closest_property)
     else
-        --print("no store found! returning nil")
         cb(nil)
     end
 end)
@@ -170,7 +176,7 @@ Citizen.CreateThread(function()
     closest.z = nil
     while true do
         Wait(0)
-        me = GetPlayerPed(-1)
+        local me = GetPlayerPed(-1)
         for name, info in pairs(PROPERTIES) do
             if GetDistanceBetweenCoords(info.x, info.y, info.z, GetEntityCoords(GetPlayerPed(-1))) < 50 then
                 -- draw main property marker --
@@ -187,243 +193,83 @@ Citizen.CreateThread(function()
                 if GetDistanceBetweenCoords(GetEntityCoords(me), info.x, info.y, info.z) < 2 then
                     nearest_property_info = PROPERTIES[name]
                     closest.x, closest.y, closest.z = info.x, info.y, info.z
-                    if not menu.enabled then
                         drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property menu!",7,1,0.5,0.8,0.6,255,255,255,255)
-                        if IsControlJustPressed(0, menu.key) then
-                            menu.enabled = true
-                            menu.page = "home"
-                            if nearest_property_info.owner.identifier == my_property_identifier then
-                                TriggerServerEvent("properties:loadMoneyForMenu", nearest_property_info.name)
-                            end
-                        end
-                    end
-                elseif info.garage_coords then
-                    if GetDistanceBetweenCoords(GetEntityCoords(me), info.garage_coords.x, info.garage_coords.y, info.garage_coords.z) < 2 then
-                        nearest_property_info = PROPERTIES[name]
-                        closest.x, closest.y, closest.z = info.garage_coords.x, info.garage_coords.y, info.garage_coords.z
-                        if IsPedInAnyVehicle(me, true) then
-                            if nearest_property_info.owner then
-                                if nearest_property_info.owner.identifier == my_property_identifier then
-                                    drawTxt("Press [ ~b~E~w~ ] to store your vehicle in the garage!",7,1,0.5,0.8,0.6,255,255,255,255)
-                                    if IsControlJustPressed(0, menu.key) then
-                                        local vehicle = GetVehiclePedIsIn(me, false)
-                                        local numberPlateText = GetVehicleNumberPlateText(vehicle)
-                                        TriggerServerEvent("properties:storeVehicle", nearest_property_info.name, numberPlateText)
-                                        Wait(1000)
-                                    end
-                                end
-                            end
-                        else
-                            if not menu.enabled then
-                                drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property garage!",7,1,0.5,0.8,0.6,255,255,255,255)
-                                if IsControlJustPressed(0, menu.key) then
-                                    --print("opening garage menu!")
-                                    menu.enabled = true
-                                    menu.page = "garage"
-                                    TriggerServerEvent("properties:loadVehiclesForMenu", nearest_property_info.name)
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-            -- close menu when out of range --
-            if menu.enabled and GetDistanceBetweenCoords(GetEntityCoords(me), closest.x, closest.y, closest.z) > 2 then
-                --print("closing menu!")
-                closest.x, closest.y, closest.z = nil, nil, nil
-                menu.enabled = false
-                menu.page = "home"
-                menu.property_items = nil
-                menu.user_items = nil
-            end
-        end
-    end
-end)
-
-----------------------
--- M E N U  C O D E --
-----------------------
-RegisterNetEvent("properties-GUI:Title")
-AddEventHandler("properties-GUI:Title", function(title)
-    Menu.Title(title)
-end)
-
-RegisterNetEvent("properties-GUI:Option")
-AddEventHandler("properties-GUI:Option", function(option, cb)
-    cb(Menu.Option(option))
-end)
-
-RegisterNetEvent("properties-GUI:Bool")
-AddEventHandler("properties-GUI:Bool", function(option, bool, cb)
-    Menu.Bool(option, bool, function(data)
-        cb(data)
-    end)
-end)
-
-RegisterNetEvent("properties-GUI:Int")
-AddEventHandler("properties-GUI:Int", function(option, int, min, max, cb)
-    Menu.Int(option, int, min, max, function(data)
-        cb(data)
-    end)
-end)
-
-RegisterNetEvent("properties-GUI:StringArray")
-AddEventHandler("properties-GUI:StringArray", function(option, array, position, cb)
-    Menu.StringArray(option, array, position, function(data)
-        cb(data)
-    end)
-end)
-
-RegisterNetEvent("properties-GUI:Update")
-AddEventHandler("properties-GUI:Update", function()
-    Menu.updateSelection()
-end)
-
---------------------------------------------
--- custom events / functions menu --
---------------------------------------------
-
-Citizen.CreateThread(function()
-
-    --local menu = false
-    --local bool = false
-    --local int = 0
-    local selected_index = 1
-    local rob_options = {"Money", "Items"}
-
-    while true do
-
-        if(menu.enabled) then
-
-            --print("page: " .. menu.page)
-
-            TriggerEvent("properties-GUI:Title", nearest_property_info.name)
-
-            -------------------------
-            -- check for any owner --
-            -------------------------
-            if nearest_property_info.owner.name then
-
-                -------------------------------------
-                -- see if this player is the owner --
-                -------------------------------------
-                if nearest_property_info.owner.identifier == my_property_identifier then
-
-                    if menu.page == "home" then
-
-                        TriggerEvent("properties-GUI:Option", "You own this property!", function(cb)
-                            if cb then end
-                        end)
-
-                        TriggerEvent("properties-GUI:Option", "Next Fee Due: " .. nearest_property_info.fee.end_date, function(cb) if cb then end end)
-
-                        TriggerEvent("properties-GUI:Option", "Money: ~g~$" .. comma_value(menu.money), function(cb)
-                            if cb then end
-                        end)
-
-                        TriggerEvent("properties-GUI:Option", "Store Money", function(cb)
-                            if cb then
-                                --print("player wants to withdraw from their property!")
-                                menu.enabled = false
-                                -- get withdraw amount from user input --
-                                Citizen.CreateThread( function()
-                                    DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
-                                    while true do
-                                        if ( UpdateOnscreenKeyboard() == 1 ) then
-                                            local input_amount = GetOnscreenKeyboardResult()
-                                            if ( string.len( input_amount ) > 0 ) then
-                                                local amount = tonumber( input_amount )
-                                                amount = math.floor(amount, 0)
-                                                if ( amount > 0 ) then
-                                                    TriggerServerEvent("properties:storeMoney", nearest_property_info.name, amount)
-                                                end
-                                                break
-                                            else
-                                                DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
-                                            end
-                                        elseif ( UpdateOnscreenKeyboard() == 2 ) then
-                                            break
+                        if IsControlJustPressed(0, MENU_KEY) then
+                            Citizen.CreateThread(function()
+                                _menuPool = NativeUI.CreatePool()
+                                ------------------------------
+                                -- check for any owner --
+                                ------------------------------
+                                if nearest_property_info.owner.name then
+                                    ---------------------------------------
+                                    -- check if this client is owner --
+                                    ---------------------------------------
+                                    if nearest_property_info.owner.identifier == my_property_identifier then
+                                        ----------------------------
+                                        -- create main menu  --
+                                        ----------------------------
+                                        mainMenu = NativeUI.CreateMenu(name, "~b~You own this property!", 50 --[[X COORD]], 320 --[[Y COORD]])
+                                        ---------------------------
+                                        -- next fee due date  --
+                                        ---------------------------
+                                        local item = NativeUI.CreateItem("Next Fee Due: " .. nearest_property_info.fee.end_date, "This property expires on: " .. nearest_property_info.fee.end_date)
+                                        mainMenu:AddItem(item)
+                                        ------------------------------
+                                        -- load /display money --
+                                        ------------------------------
+                                        TriggerServerEvent("properties:loadMoneyForMenu", nearest_property_info.name)
+                                        while not menu_data.money do
+                                            Wait(10)
                                         end
-                                        Citizen.Wait( 0 )
-                                    end
-                                end )
-                                --TriggerServerEvent("properties:withdraw")
-                            end
-                        end)
-
-                        TriggerEvent("properties-GUI:Option", "Withdraw Money", function(cb)
-                            if cb then
-                                --print("player wants to withdraw from their property!")
-                                menu.enabled = false
-                                -- get withdraw amount from user input --
-                                Citizen.CreateThread( function()
-                                    DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
-                                    while true do
-                                        if ( UpdateOnscreenKeyboard() == 1 ) then
-                                            local input_amount = GetOnscreenKeyboardResult()
-                                            if ( string.len( input_amount ) > 0 ) then
-                                                local amount = tonumber( input_amount )
-                                                amount = math.floor(amount, 0)
-                                                if ( amount > 0 ) then
-                                                    TriggerServerEvent("properties:withdraw", nearest_property_info.name, amount, nil, true)
-                                                end
-                                                break
-                                            else
+                                        local item = NativeUI.CreateItem("Money: ~g~$" .. comma_value(menu_data.money), "Amount of money stored at this property.")
+                                        mainMenu:AddItem(item)
+                                        --------------------
+                                        -- store money --
+                                        --------------------
+                                        local item = NativeUI.CreateItem("Store Money", "Store an amount of money at this property.")
+                                        item.Activated = function(parentmenu, selected)
+                                            -----------------------------
+                                            -- get amount to store --
+                                            -----------------------------
+                                            -- 1) close menu
+                                            RemoveMenuPool(_menuPool)
+                                            -- 2) get input
+                                            Citizen.CreateThread( function()
                                                 DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
-                                            end
-                                        elseif ( UpdateOnscreenKeyboard() == 2 ) then
-                                            break
+                                                while true do
+                                                    if ( UpdateOnscreenKeyboard() == 1 ) then
+                                                        local input_amount = GetOnscreenKeyboardResult()
+                                                        print("keyboard result: " .. input_amount)
+                                                        if ( string.len( input_amount ) > 0 ) then
+                                                            local amount = tonumber( input_amount )
+                                                            amount = math.floor(amount, 0)
+                                                            if ( amount > 0 ) then
+                                                                print("storing: $" .. amount)
+                                                                TriggerServerEvent("properties:storeMoney", nearest_property_info.name, amount)
+                                                            end
+                                                            break
+                                                        else
+                                                            DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+                                                        end
+                                                    elseif ( UpdateOnscreenKeyboard() == 2 ) then
+                                                        break
+                                                    end
+                                                    Wait( 0 )
+                                                end
+                                            end )
                                         end
-                                        Citizen.Wait( 0 )
-                                    end
-                                end )
-                                --TriggerServerEvent("properties:withdraw")
-                            end
-                        end)
-
-                        TriggerEvent("properties-GUI:Option", "Storage", function(cb)
-                            if cb then
-                                menu.property_items = nil
-                                TriggerServerEvent("properties:loadStorage", nearest_property_info.name)
-                                --TriggerServerEvent("properties:getUserItemsToStore")
-                                menu.page = "storage"
-                            end
-                        end)
-
-                        TriggerEvent("properties-GUI:Option", "Wardrobe", function(cb)
-                            if cb then
-                                TriggerServerEvent("properties:getWardrobe", nearest_property_info.name)
-                                menu.page = "wardrobe"
-                            end
-                        end)
-
-                        TriggerEvent("properties-GUI:Option", "Spawn Here", function(cb)
-                            if cb then
-                                --print("setting spawn to: " .. nearest_property_info.name)
-                                local spawn = { x = nearest_property_info.x, y = nearest_property_info.y, z = nearest_property_info.z }
-                                TriggerServerEvent("character:setSpawnPoint", spawn)
-                                --TriggerEvent("usa:notify", "Spawn point set!")
-                            end
-                        end)
-
-                    else
-
-                        if menu.page == "storage" then
-
-                            if menu.property_items and #menu.property_items > 0 then
-
-                                for x = 1, #menu.property_items do
-                                    local item = menu.property_items[x]
-                                    --print("item: " .. item.name .. ", quantity: " .. item.quantity)
-                                    local color = ""
-                                    if item.legality == "legal" then
-                                        color = "~w~"
-                                    else
-                                        color = "~r~"
-                                    end
-                                    TriggerEvent("properties-GUI:Option", color .. "(" .. math.floor(item.quantity) .. "x) " .. item.name, function(cb)
-                                        if cb then
-                                            -- ask for quantity to retrieve, then try to retrieve it
+                                        mainMenu:AddItem(item)
+                                        --------------------------
+                                        -- withdraw money --
+                                        --------------------------
+                                        local item = NativeUI.CreateItem("Withdraw Money", "Withdraw an amount of money from this property.")
+                                        item.Activated = function(parentmenu, selected)
+                                            ----------------------------------
+                                            -- get amount to withdraw --
+                                            ----------------------------------
+                                            -- close menu --
+                                            RemoveMenuPool(_menuPool)
+                                            -- get input to withdraw --
                                             Citizen.CreateThread( function()
                                                 DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
                                                 while true do
@@ -433,14 +279,7 @@ Citizen.CreateThread(function()
                                                             local amount = tonumber( input_amount )
                                                             amount = math.floor(amount, 0)
                                                             if ( amount > 0 ) then
-                                                                if item.quantity - amount >= 0 then
-                                                                    TriggerServerEvent("properties:retrieve", nearest_property_info.name, item, amount)
-                                                                else
-                                                                    TriggerEvent("usa:notify", "Quantity input too high!")
-                                                                end
-                                                                menu.page = "home"
-                                                            else
-                                                                TriggerEvent("usa:notify", "Quantity input too low!")
+                                                                TriggerServerEvent("properties:withdraw", nearest_property_info.name, amount, nil, true)
                                                             end
                                                             break
                                                         else
@@ -449,252 +288,304 @@ Citizen.CreateThread(function()
                                                     elseif ( UpdateOnscreenKeyboard() == 2 ) then
                                                         break
                                                     end
-                                                    Citizen.Wait( 0 )
+                                                    Wait( 0 )
                                                 end
                                             end )
                                         end
-                                    end)
-                                end
-
-                            else
-
-                                TriggerEvent("properties-GUI:Option", "No items stored!", function(cb) if cb then end end)
-
-                            end
-
-                            TriggerEvent("properties-GUI:Option", "~g~Store Items", function(cb)
-                                if cb then
-                                    -- remove previous items
-                                    menu.user_items = nil
-                                    -- list items to store
-                                    menu.page = "storage--store"
-                                    -- get items to store --
-                                    TriggerServerEvent("properties:getUserItemsToStore")
-                                end
-                            end)
-
-                        elseif menu.page == "storage--store" then
-
-                            if menu.user_items then
-
-                                if #menu.user_items > 0 then
-
-                                    for x = 1, #menu.user_items do
-                                        local item = menu.user_items[x]
-                                        local color = ""
-                                        if item.legality == "legal" then
-                                            color = "~w~"
-                                        else
-                                            color = "~r~"
+                                        mainMenu:AddItem(item)
+                                        ---------------------
+                                        -- item retrieval  --
+                                        ---------------------
+                                        local retrieval_submenu = _menuPool:AddSubMenu(mainMenu, "Storage", "Retrieve items from this property.", true --[[KEEP POSITION]])
+                                        TriggerServerEvent("properties:loadStorage", nearest_property_info.name)
+                                        while not menu_data.property_items do
+                                            Wait(10)
                                         end
-                                        TriggerEvent("properties-GUI:Option", color .. "(" .. math.floor(item.quantity, 0) .. "x) " .. item.name, function(cb)
-                                            if cb then
-                                                -- ask for quantity to store, then try to store it --
-                                                Citizen.CreateThread( function()
-                                                    DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
-                                                    while true do
-                                                        if ( UpdateOnscreenKeyboard() == 1 ) then
-                                                            local input_amount = GetOnscreenKeyboardResult()
-                                                            if ( string.len( input_amount ) > 0 ) then
-                                                                local amount = tonumber( input_amount )
-
-                                                                amount = math.floor(amount, 0)
-                                                                if amount > 0 then
-                                                                    if item.quantity - amount >= 0 then
-                                                                        print("storing item [" .. item.name .. "] with quantity [" .. item.quantity .. "]")
-                                                                        TriggerServerEvent("properties:store", nearest_property_info.name, item, amount)
+                                        if #menu_data.property_items > 0 then
+                                            for i = 1, #menu_data.property_items do
+                                                local item = menu_data.property_items[i]
+                                                local color = ""
+                                                if item.legality == "legal" then
+                                                    color = ""
+                                                else
+                                                    color = "~r~"
+                                                end
+                                                local itembtn = NativeUI.CreateItem(color .. "(" .. item.quantity .. "x) " .. item.name, "Withdraw some amount of this item.")
+                                                itembtn.Activated = function(parentmenu, selected)
+                                                    RemoveMenuPool(_menuPool)
+                                                    ----------------------------------------------------------------
+                                                    -- ask for quantity to retrieve, then try to retrieve it --
+                                                    ----------------------------------------------------------------
+                                                    Citizen.CreateThread( function()
+                                                        DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+                                                        while true do
+                                                            if ( UpdateOnscreenKeyboard() == 1 ) then
+                                                                local input_amount = GetOnscreenKeyboardResult()
+                                                                if ( string.len( input_amount ) > 0 ) then
+                                                                    local amount = tonumber( input_amount )
+                                                                    amount = math.floor(amount, 0)
+                                                                    if ( amount > 0 ) then
+                                                                        if item.quantity - amount >= 0 then
+                                                                            TriggerServerEvent("properties:retrieve", nearest_property_info.name, item, amount)
+                                                                        else
+                                                                            exports.globals:notify("Quantity input too high!")
+                                                                        end
                                                                     else
-                                                                        TriggerEvent("usa:notify", "Quantity input too high!")
+                                                                        exports.globals:notify("Quantity input too low!")
                                                                     end
+                                                                    break
                                                                 else
-                                                                    TriggerEvent("usa:notify", "Quantity input too low!")
+                                                                    DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
                                                                 end
-                                                                menu.page = "home"
-
+                                                            elseif ( UpdateOnscreenKeyboard() == 2 ) then
                                                                 break
-                                                            else
-                                                                DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
                                                             end
-                                                        elseif ( UpdateOnscreenKeyboard() == 2 ) then
-                                                            break
+                                                            Wait( 0 )
                                                         end
-                                                        Citizen.Wait( 0 )
-                                                    end
-                                                end )
+                                                    end )
+                                                end
+                                                retrieval_submenu:AddItem(itembtn)
                                             end
-                                        end)
+                                        else
+                                            local item = NativeUI.CreateItem("You have nothing stored here!", "Press \"Store Items\" to store something here.")
+                                            retrieval_submenu:AddItem(item)
+                                        end
+                                        --------------------
+                                        -- item storage --
+                                        --------------------
+                                        local storage_submenu = _menuPool:AddSubMenu(mainMenu, "Store Items", "Store items at this property.", true --[[KEEP POSITION]])
+                                        TriggerServerEvent("properties:getUserItemsToStore")
+                                        while not menu_data.user_items do
+                                            Wait(10)
+                                        end
+                                        if #menu_data.user_items > 0 then
+                                            for i = 1, #menu_data.user_items do
+                                                local item = menu_data.user_items[i]
+                                                local color = ""
+                                                if item.legality == "legal" then
+                                                    color = ""
+                                                else
+                                                    color = "~r~"
+                                                end
+                                                local itembtn = NativeUI.CreateItem(color .. "(" .. item.quantity .. "x) " .. item.name, "Store some amount of this item.")
+                                                itembtn.Activated = function(parentmenu, selected)
+                                                    RemoveMenuPool(_menuPool)
+                                                    -- ask for quantity to store, then try to store it --
+                                                    Citizen.CreateThread( function()
+                                                        DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+                                                        while true do
+                                                            if ( UpdateOnscreenKeyboard() == 1 ) then
+                                                                local input_amount = GetOnscreenKeyboardResult()
+                                                                if ( string.len( input_amount ) > 0 ) then
+                                                                    local amount = tonumber( input_amount )
+                                                                    amount = math.floor(amount, 0)
+                                                                    if amount > 0 then
+                                                                        if not item.quantity then item.quantity = 1 end
+                                                                        if item.quantity - amount >= 0 then
+                                                                            print("storing item [" .. item.name .. "] with quantity [" .. item.quantity .. "]")
+                                                                            TriggerServerEvent("properties:store", nearest_property_info.name, item, amount)
+                                                                        else
+                                                                            exports.globals:notify("Quantity input too high!")
+                                                                        end
+                                                                    else
+                                                                        exports.globals:notify("Quantity input too low!")
+                                                                    end
+                                                                    break
+                                                                else
+                                                                    DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+                                                                end
+                                                            elseif ( UpdateOnscreenKeyboard() == 2 ) then
+                                                                break
+                                                            end
+                                                            Wait( 0 )
+                                                        end
+                                                    end )
+                                                end
+                                                storage_submenu:AddItem(itembtn)
+                                            end
+                                        else
+                                            local item = NativeUI.CreateItem("No items to store!", "You have nothing to store.")
+                                            storage_submenu:AddItem(item)
+                                        end
+                                        -----------------
+                                        -- wardrobe --
+                                        -----------------
+                                        local wardrobe_submenu = _menuPool:AddSubMenu(mainMenu, "Wardrobe", "Store and retrieve outfits here.", true --[[KEEP POSITION]])
+                                        TriggerServerEvent("properties:getWardrobe", nearest_property_info.name)
+                                        while not menu_data.wardrobe do
+                                            Wait(10)
+                                        end
+                                        if menu_data.wardrobe and #menu_data.wardrobe > 0 then
+                                            for x  = 1, #menu_data.wardrobe do
+                                                local outfit = menu_data.wardrobe[x]
+                                                ---------------------------------------------
+                                                -- submenu for each wardrobe item --
+                                                ---------------------------------------------
+                                                local wardrobe_submenu2 = _menuPool:AddSubMenu(wardrobe_submenu, outfit.name, "Put on or delete " .. outfit.name, true --[[KEEP POSITION]])
+                                                local putonbtn = NativeUI.CreateItem("Put On", "Put on " .. outfit.name)
+                                                putonbtn.Activated = function(parentmenu, selected)
+                                                    SetPedOutfit(outfit.clothing)
+                                                    RemoveMenuPool(_menuPool)
+                                                end
+                                                wardrobe_submenu2:AddItem(putonbtn)
+                                                local deletebtn = NativeUI.CreateItem("Delete", "Delete " .. outfit.name)
+                                                deletebtn.Activated = function(parentmenu, selected)
+                                                    TriggerServerEvent("properties:deleteOutfitByName", nearest_property_info.name, outfit.name)
+                                                    RemoveMenuPool(_menuPool)
+                                                end
+                                                wardrobe_submenu2:AddItem(deletebtn)
+                                            end
+                                        end
+                                        -------------------
+                                        -- save button --
+                                        -------------------
+                                        local savebtn = NativeUI.CreateItem("Save Current Outfit", "Save your current outfit.")
+                                        savebtn.Activated = function(parentmenu, selected)
+                                            RemoveMenuPool(_menuPool)
+                                            Citizen.CreateThread(function()
+                                                -- get user input for name
+                                                local outfitname = GetUserInput()
+                                                if outfitname then
+                                                    --print("name: " .. name)
+                                                    -- save player's outfit
+                                                    local clothing = GetPedOutfit()
+                                                    -- build the object
+                                                    local outfit = {
+                                                        name = outfitname,
+                                                        clothing = clothing
+                                                    }
+                                                    TriggerServerEvent("properties:saveOutfit", nearest_property_info.name, outfit)
+                                                    RemoveMenuPool(_menuPool)
+                                                end
+                                            end)
+                                        end
+                                        wardrobe_submenu:AddItem(savebtn)
+                                        -------------------
+                                        -- spawn here --
+                                        -------------------
+                                        local spawnbtn = NativeUI.CreateItem("Spawn Here", "Set your spawn to this location.")
+                                        spawnbtn.Activated = function(parentmenu, selected)
+                                            local spawn = { x = nearest_property_info.x, y = nearest_property_info.y, z = nearest_property_info.z }
+                                            TriggerServerEvent("character:setSpawnPoint", spawn)
+                                        end
+                                        mainMenu:AddItem(spawnbtn)
+                                    else
+                                        mainMenu = NativeUI.CreateMenu(name, "", 50 --[[X COORD]], 320 --[[Y COORD]])
+                                        local itembtn = NativeUI.CreateItem("Owner: " .. nearest_property_info.owner.name, nearest_property_info.owner.name .. " owns this property.")
+                                        mainMenu:AddItem(itembtn)
+                                        local itembtn2 = NativeUI.CreateItem("End Date: " .. nearest_property_info.fee.end_date, "This property will be up for sale on " .. nearest_property_info.fee.end_date)
+                                        mainMenu:AddItem(itembtn2)
+                                        if nearest_property_info.type == "business" then
+                                            local itembtn3 = NativeUI.CreateItem("~r~Rob", "Rob this property of its money!")
+                                            itembtn3.Activated = function(parentmenu, selected)
+                                                if IsPedArmed(GetPlayerPed(-1), 7) then
+                                                    TriggerServerEvent('es_holdup:rob', nearest_property_info.name)
+                                                    RemoveMenuPool(_menuPool)
+                                                else
+                                                    TriggerEvent("usa:notify", "I am not threatend!")
+                                                end
+                                            end
+                                            mainMenu:AddItem(itembtn3)
+                                        end
                                     end
-
                                 else
-
-                                    TriggerEvent("properties-GUI:Option", "No items to store!", function(cb) if cb then end end)
-
-                                end
-
-                            end
-
-                        elseif menu.page == "garage" then
-
-                            if #menu.vehicles > 0 then
-                                for i = 1, #menu.vehicles do
-                                    local veh = menu.vehicles[i]
-                                    TriggerEvent("properties-GUI:Option", veh.make .. " " .. veh.model, function(cb)
-                                        if cb then
-                                            --print("retrieving stored vehicle from property")
-                                            TriggerServerEvent("properties:retrieveVehicle", nearest_property_info.name, veh)
-                                        end
-                                    end)
-                                end
-                            else
-                                TriggerEvent("properties-GUI:Option", "You have no vehicles stored here!", function(cb)
-                                    if cb then end
-                                end)
-                            end
-
-                        elseif menu.page == "wardrobe" then
-
-                            --------------------------------------------
-                            -- add button for each saved outfit --
-                            --------------------------------------------
-                            if menu.wardrobe then
-                                if #menu.wardrobe > 0 then
-                                    for x  = 1, #menu.wardrobe do
-                                        local outfit = menu.wardrobe[x]
-                                        TriggerEvent("properties-GUI:Option", outfit.name, function(cb)
-                                            if cb then
-                                                -- go to outfit options page --
-                                                menu.selected_outfit = outfit
-                                                menu.page = "outfit-options"
-                                            end
-                                        end)
+                                    ---------------------------
+                                    -- create main menu --
+                                    ---------------------------
+                                    mainMenu = NativeUI.CreateMenu(name, "This property is for sale!", 50 --[[X COORD]], 320 --[[Y COORD]])
+                                    -----------------
+                                    -- no owner --
+                                    -----------------
+                                    local pricebtn = NativeUI.CreateItem("Price : $" .. comma_value(nearest_property_info.fee.price), "This property costs $" .. comma_value(nearest_property_info.fee.price))
+                                    mainMenu:AddItem(pricebtn)
+                                    local purchasebtn = NativeUI.CreateItem("Purchase", "Buy this property for $" .. comma_value(nearest_property_info.fee.price) .. "!")
+                                    purchasebtn.Activated = function(parentmenu, selected)
+                                        TriggerServerEvent("properties:purchaseProperty", nearest_property_info)
+                                        RemoveMenuPool(_menuPool)
                                     end
+                                    mainMenu:AddItem(purchasebtn)
                                 end
-                            end
-                            --------------------------------
-                            -- save current outfit btn --
-                            --------------------------------
-                            TriggerEvent("properties-GUI:Option", "Save Current Outfit", function(cb)
-                                if cb then
-                                    Citizen.CreateThread(function()
-                                        -- get user input for name
-                                        local name = GetUserInput()
-                                        if name then
-                                            --print("name: " .. name)
-                                            -- save player's outfit
-                                            local clothing = GetPedOutfit()
-                                            -- build the object
-                                            local outfit = {
-                                                name = name,
-                                                clothing = clothing
-                                            }
-                                            TriggerServerEvent("properties:saveOutfit", nearest_property_info.name, outfit)
-                                        end
-                                    end)
+                                ----------------
+                                -- close btn --
+                                ----------------
+                                local closebtn = NativeUI.CreateItem("Close Menu", "Close this property menu.")
+                                closebtn.Activated = function(parentmenu, selected)
+                                    RemoveMenuPool(_menuPool)
                                 end
-                            end)
-                            ---------------
-                            -- back btn--
-                            ---------------
-                            TriggerEvent("properties-GUI:Option", "Back", function(cb)
-                                if cb then
-                                    menu.page = "home"
-                                    -- reset player to previous outfit
-                                end
-                            end)
-
-                        elseif menu.page == "outfit-options" then
-                            ---------------
-                            -- apply btn--
-                            ---------------
-                            TriggerEvent("properties-GUI:Option", "Put on", function(cb)
-                                if cb then
-                                    SetPedOutfit(menu.selected_outfit.clothing)
-                                end
-                            end)
-                            ---------------
-                            -- delete btn--
-                            ---------------
-                            TriggerEvent("properties-GUI:Option", "Delete", function(cb)
-                                if cb then
-                                    TriggerServerEvent("properties:deleteOutfitByName", nearest_property_info.name, menu.selected_outfit.name)
-                                    menu.page = "wardrobe"
-                                end
-                            end)
-                            ---------------
-                            -- back btn--
-                            ---------------
-                            TriggerEvent("properties-GUI:Option", "Back", function(cb)
-                                if cb then
-                                    menu.page = "wardrobe"
-                                end
+                                mainMenu:AddItem(closebtn)
+                                _menuPool:RefreshIndex()
+                                _menuPool:Add(mainMenu)
+                                mainMenu:Visible(true)
                             end)
                         end
-
-                    end
-
-                    ----------------------------------
-                    -- this player is not the owner --
-                    ----------------------------------
-                else
-
-                    TriggerEvent("properties-GUI:Option", "~y~Owner:~w~ " .. nearest_property_info.owner.name, function(cb) end)
-
-                    TriggerEvent("properties-GUI:Option", "~y~End Date:~w~ " .. nearest_property_info.fee.end_date, function(cb) end)
-
-                    if nearest_property_info.type == "business" then
-
-                        TriggerEvent("properties-GUI:Option", "~r~Rob", function(cb)
-                            if cb then
-                                --print("player wants to rob store!")
-                                if IsPedArmed(GetPlayerPed(-1), 7) then
-                                    TriggerServerEvent('es_holdup:rob', nearest_property_info.name)
-                                    menu.enabled = false
-                                else
-                                    TriggerEvent("usa:notify", "I am not threatend!")
+                elseif info.garage_coords then
+                    if GetDistanceBetweenCoords(GetEntityCoords(me), info.garage_coords.x, info.garage_coords.y, info.garage_coords.z) < 2 then
+                        nearest_property_info = PROPERTIES[name]
+                        closest.x, closest.y, closest.z = info.garage_coords.x, info.garage_coords.y, info.garage_coords.z
+                        if IsPedInAnyVehicle(me, true) then
+                            if nearest_property_info.owner then
+                                if nearest_property_info.owner.identifier == my_property_identifier then
+                                    drawTxt("Press [ ~b~E~w~ ] to store your vehicle in the garage!",7,1,0.5,0.8,0.6,255,255,255,255)
+                                    if IsControlJustPressed(0, MENU_KEY) then
+                                        local vehicle = GetVehiclePedIsIn(me, false)
+                                        local numberPlateText = GetVehicleNumberPlateText(vehicle)
+                                        TriggerServerEvent("properties:storeVehicle", nearest_property_info.name, numberPlateText)
+                                        Wait(1000)
+                                    end
                                 end
                             end
-                        end)
-
+                        else
+                            drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property garage!",7,1,0.5,0.8,0.6,255,255,255,255)
+                            if IsControlJustPressed(0, MENU_KEY) then
+                                if nearest_property_info.owner then
+                                    if nearest_property_info.owner.identifier == my_property_identifier then
+                                        Citizen.CreateThread(function()
+                                            TriggerServerEvent("properties:loadVehiclesForMenu", nearest_property_info.name)
+                                            while not menu_data.vehicles do
+                                                Wait(10)
+                                            end
+                                            _menuPool = NativeUI.CreatePool()
+                                            mainMenu = NativeUI.CreateMenu(nearest_property_info.name, "~b~Property Garage", 50 --[[X COORD]], 320 --[[Y COORD]])
+                                            ---------------------------
+                                            -- next fee due date  --
+                                            ---------------------------
+                                            for i = 1, #menu_data.vehicles do
+                                                local veh = menu_data.vehicles[i]
+                                                local item = NativeUI.CreateItem(veh.make .. " " .. veh.model, "Press enter to withdraw this vehicle.")
+                                                item.Activated = function(parentmenu, selected)
+                                                    RemoveMenuPool(_menuPool)
+                                                    TriggerServerEvent("properties:retrieveVehicle", name, veh)
+                                                end
+                                                mainMenu:AddItem(item)
+                                            end
+                                            ---------------------------------------
+                                            -- Add to menu pool and open --
+                                            ---------------------------------------
+                                            _menuPool:RefreshIndex()
+                                            _menuPool:Add(mainMenu)
+                                            mainMenu:Visible(true)
+                                        end)
+                                    end
+                                end
+                            end
+                        end
                     end
-
                 end
-
-                ------------------------
-                -- store has no owner --
-                ------------------------
-            else
-
-                TriggerEvent("properties-GUI:Option", "Price: $" .. comma_value(nearest_property_info.fee.price), function(cb) if cb then end end)
-
-                TriggerEvent("properties-GUI:Option", "~g~Purchase", function(cb)
-                    if cb then
-                        -- if player has enough money, make them the owner of the property
-                        TriggerServerEvent("properties:purchaseProperty", nearest_property_info)
-                    end
-                end)
-
             end
-
-            TriggerEvent("properties-GUI:Option", "Close", function(cb)
-                if(cb) then
-                    menu.enabled = false
-                    menu.page = "home"
-                end
-            end)
-
-            TriggerEvent("properties-GUI:Update")
+            -- close menu when out of range --
+            if _menuPool and GetDistanceBetweenCoords(GetEntityCoords(me), closest.x, closest.y, closest.z) > 2 then
+                closest.x, closest.y, closest.z = nil, nil, nil
+                RemoveMenuPool(_menuPool)
+            end
         end
-
-        Wait(0)
-
+        if _menuPool then
+            _menuPool:MouseControlsEnabled(false)
+            _menuPool:ControlDisablingEnabled(false)
+            _menuPool:ProcessMenus()
+        end
     end
 end)
---------------------------------------------------------------------
---------------------------------------------------------------------
 
------------------------
--- utility functions --
------------------------
 function SetPedOutfit(outfit)
   Citizen.CreateThread(function()
     --print("applying ped outfit!")
@@ -807,11 +698,6 @@ function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
     DrawText(x , y)
 end
 
-function round(num, numDecimalPlaces)
-    local mult = 5^(numDecimalPlaces or 0)
-    return math.floor(num * mult + 0.5) / mult
-end
-
 function comma_value(amount)
     local formatted = amount
     while true do
@@ -821,4 +707,14 @@ function comma_value(amount)
         end
     end
     return formatted
+end
+
+function RemoveMenuPool(pool)
+    menu_data.property_items = nil
+    menu_data.user_items = nil
+    menu_data.money = nil
+    menu_data.vehicles = nil
+    menu_data.wardrobe = nil
+    pool:CloseAllMenus()
+    pool:Remove()
 end
