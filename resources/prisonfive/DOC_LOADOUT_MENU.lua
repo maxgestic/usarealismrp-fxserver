@@ -12,7 +12,9 @@ local weapons = {
 
 local vehicles = {
   { name = "CVPI", hash = GetHashKey("police7") },
-  { name = "Cart", hash = GetHashKey("caddy") }
+  { name = "Cart", hash = GetHashKey("caddy") },
+  { name = "Bus", hash = GetHashKey("pbus") },
+  { name = "Van", hash = GetHashKey("policet") }
 }
 
 local PRISON_GUARD_SIGN_IN_LOCATIONS = {
@@ -525,7 +527,7 @@ function SpawnVehicle(model)
     SetEntityAsMissionEntity(veh, true, true)
     SetVehicleHasBeenOwnedByPlayer(veh, true)
     SetVehicleExplodesOnHighExplosionDamage(veh, false)
-    SetVehicleLivery(veh, 3) -- DOC SKIN
+    SetVehicleLivery(veh, 1) -- DOC SKIN
   end)
 end
 
