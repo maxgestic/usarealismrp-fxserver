@@ -5,18 +5,17 @@ function HelpText(text)
 end
 
 Citizen.CreateThread(function()
-	Log("Train Markers Init.")
-	while true do		
+	while true do
 		Wait(0)
-		if Config.ModelsLoaded then	
+		if Config.ModelsLoaded then
 			for i=1, #Config.TrainLocations, 1 do
 				local coords = GetEntityCoords(GetPlayerPed(-1))
 				local trainLocation = Config.TrainLocations[i]
 				if(GetDistanceBetweenCoords(coords, trainLocation.x, trainLocation.y, trainLocation.z, true) < Config.DrawDistance) then
 					DrawMarker(Config.MarkerType, trainLocation.x, trainLocation.y, trainLocation.z, 0.0, 0.0, 0.0, 0, 0.0, 0.0, Config.MarkerSize.x, Config.MarkerSize.y, Config.MarkerSize.z-2.0, Config.MarkerColor.r, Config.MarkerColor.g, Config.MarkerColor.b, 100, false, true, 2, false, false, false, false)
-					HelpText("Press ~INPUT_DETONATE~ to spawn a ~g~train")
 				end
-				if(GetDistanceBetweenCoords(coords, trainLocation.x, trainLocation.y, trainLocation.z, true) < Config.MarkerSize.x / 2) then
+				if(GetDistanceBetweenCoords(coords, trainLocation.x, trainLocation.y, trainLocation.z, true) < 5.0) then
+                    HelpText("Press ~INPUT_DETONATE~ to spawn a ~g~train")
 					if(IsControlPressed(0,58) and(GetGameTimer() - Config.EnterExitDelay) > Config.EnterExitDelayMax) then -- G
 						Config.EnterExitDelay = 0
 						Wait(60)
@@ -48,7 +47,7 @@ function doTrains()
 				debugLog("S: " .. Config.Speed)
 				Config.Speed = Config.Speed - getTrainSpeeds(Config.TrainVeh).Dccel
 			end
-			
+
 			SetTrainCruiseSpeed(Config.TrainVeh,Config.Speed)
 		elseif IsPedInAnyTrain(GetPlayerPed(-1)) then -- Should fix not being able to drive trains after restart resource.
 			debugLog("I'm in a train? Did the resource restart...")
@@ -64,7 +63,7 @@ function doTrains()
 		-- Enter/Exit (F)
 		if(IsControlPressed(0,75) and(GetGameTimer() - Config.EnterExitDelay) > Config.EnterExitDelayMax) then
 			Config.EnterExitDelay = 0
-			
+
 			if(Config.inTrain or Config.inTrainAsPas) then
 				debugLog("exit")
 				if (Config.TrainVeh ~= 0) then
@@ -92,7 +91,7 @@ function doTrains()
 				end
 			end
 		end
-		
+
 		-- KP8 to delete train infront
 		if(IsControlPressed(0,111) and(GetGameTimer() - Config.EnterExitDelay) > Config.EnterExitDelayMax) then
 			Config.EnterExitDelay = 0
@@ -136,10 +135,10 @@ Citizen.CreateThread(function()
 		Config.ModelsLoaded = true
 	end
 	LoadTrainModels()
-	
+
 	Log("Loading Train Blips.")
 	for i=1, #Config.TrainLocations, 1 do
-		local blip = AddBlipForCoord(Config.TrainLocations[i].x, Config.TrainLocations[i].y, Config.TrainLocations[i].z)      
+		local blip = AddBlipForCoord(Config.TrainLocations[i].x, Config.TrainLocations[i].y, Config.TrainLocations[i].z)
 		SetBlipSprite (blip, Config.BlipSprite)
 		SetBlipDisplay(blip, 4)
 		SetBlipScale  (blip, 0.9)
@@ -150,7 +149,7 @@ Citizen.CreateThread(function()
 		EndTextCommandSetBlipName(blip)
 	end
 	Log("Done Loading Train Blips.")
-	
+
 	while true do
 		Wait(0)
 		doTrains()

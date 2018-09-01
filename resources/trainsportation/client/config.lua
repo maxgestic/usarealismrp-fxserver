@@ -9,7 +9,7 @@ Config.EnterExitDelay = 0
 Config.EnterExitDelayMax = 600
 --Marker and Locations
 Config.MarkerType   = 1
-Config.DrawDistance = 100.0
+Config.DrawDistance = 50.0
 Config.MarkerType   = 1
 Config.MarkerSize   = {x = 1.5, y = 1.5, z = 1.0}
 Config.MarkerColor  = {r = 0, g = 255, b = 0}
@@ -43,15 +43,15 @@ function findNearestTrain()
 	local localPedPos = GetEntityCoords(GetPlayerPed(-1))
 	local entityWorld = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 120.0, 0.0)
 	local veh = getVehicleInDirection(localPedPos, entityWorld)
-	
+
 	if veh > 0 and IsEntityAVehicle(veh) and IsThisModelATrain(GetEntityModel(veh)) then
-		if Config.Debug then 
+		if Config.Debug then
 			debugLog("Checking ".. GetEntityModel(veh))
 			DrawLine(localPedPos, entityWorld, 0,255,0,255)
 		end
 		return veh
 	else
-		if Config.Debug then 
+		if Config.Debug then
 			DrawLine(localPedPos, entityWorld, 255,0,0,255)
 		end
 		return 0
@@ -64,7 +64,7 @@ function getTrainSpeeds(veh)
 	ret.MaxSpeed = 0
 	ret.Accel = 0
 	ret.Dccel = 0
-	
+
 	if Config.TrainSpeeds[model] then
 		local tcfg = Config.TrainSpeeds[model]
 		ret.MaxSpeed = tcfg.MaxSpeed -- Heavy, but fast.
@@ -77,7 +77,7 @@ end
 function getCanPassenger(veh)
 	local model = GetEntityModel(veh)
 	local ret = false
-	
+
 	if Config.TrainSpeeds[model] ~= nil then
 		local tcfg = Config.TrainSpeeds[model]
 		ret = tcfg.Pass
@@ -88,7 +88,7 @@ end
 function createTrain(type,x,y,z)
 	if not train then
 		train = CreateMissionTrain(type,x,y,z,true)
-	else 
+	else
 		print("already spawned train!")
 	end
 	SetTrainSpeed(train,0)
