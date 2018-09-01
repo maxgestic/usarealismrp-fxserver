@@ -66,6 +66,7 @@ Citizen.CreateThread(function()
   AddTextEntry('FE_THDR_GTAO', 'USA REALISM RP - HTTPS://USARRP.NET')
 end)
 
+--[[
 -- ped/vehicle npcs
 Citizen.CreateThread(function()
 	while true do
@@ -80,6 +81,7 @@ Citizen.CreateThread(function()
 
 	end
 end)
+--]]
 
 -- no police npc / never wanted
 Citizen.CreateThread(function()
