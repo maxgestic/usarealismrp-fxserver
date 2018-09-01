@@ -36,6 +36,8 @@ local menu_data = {
     money = nil
 }
 
+local _menuPool = nil
+
 ------------------------------------
 -- set player property identifier --
 ------------------------------------
@@ -578,6 +580,7 @@ Citizen.CreateThread(function()
                 RemoveMenuPool(_menuPool)
             end
         end
+        --print("typeof _menuPool: " .. type(_menuPool))
         if _menuPool then
             _menuPool:MouseControlsEnabled(false)
             _menuPool:ControlDisablingEnabled(false)
@@ -717,4 +720,5 @@ function RemoveMenuPool(pool)
     menu_data.wardrobe = nil
     pool:CloseAllMenus()
     pool:Remove()
+    _menuPool = nil
 end
