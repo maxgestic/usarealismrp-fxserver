@@ -4,7 +4,8 @@
 
 local SHOPS = {
 	{name = "Paleto Bay", store_x = 120.9, store_y = 6624.605, store_z = 31.0, vehspawn_x = 131.04, vehspawn_y = 6625.39, vehspawn_z = 31.71, vehspawn_heading = 315.0},
-	{name = "Los Santos", store_x = -43.2616, store_y = -1097.37, store_z = 25.5523, vehspawn_x = -48.884, vehspawn_y = -1113.75, vehspawn_z = 26.4358, vehspawn_heading = 315.0}
+	{name = "Los Santos", store_x = -43.2616, store_y = -1097.37, store_z = 25.5523, vehspawn_x = -48.884, vehspawn_y = -1113.75, vehspawn_z = 26.4358, vehspawn_heading = 315.0},
+	{name = "Sandy Shores", store_x = 1224.7, store_y = 2727.3, store_z = 37.0, vehspawn_x = 1228.5, vehspawn_y = 2718.0, vehspawn_z = 38.0, vehspawn_heading = 260.0}
 }
 
 

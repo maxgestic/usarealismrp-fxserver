@@ -9,10 +9,12 @@ local ITEMS = { -- must be kept in sync with one in sv_bike-shop.lua --
 }
 
 local locations = {
-	{ x = 125.1, y = 6629.6, z = 32.0 }
+	{ x = 125.1, y = 6629.6, z = 32.0 }, -- paleto
+    {x = -1107.0, y = -1693.8, z = 4.4}, -- LS
+    {x = 1231.5, y = 2726.0, z = 38.0} -- sandy
 }
 
-local spawnX, spawnY, spawnZ = 129.9, 6630.3, 31.7-- (paleto)
+local closest = nil
 
 function comma_value(amount)
   local formatted = amount
@@ -29,6 +31,7 @@ function isPlayerAtBikeShop()
 	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
 	for i = 1, #locations do
 		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,false) < 2.0 then
+            closest = locations[i]
 			return true
 		end
 	end
@@ -64,7 +67,7 @@ function CreateItemList(menu)
   for i = 1, #ITEMS do
     local item = NativeUI.CreateItem(ITEMS[i].name, "Purchase price: $" .. comma_value(ITEMS[i].price))
     item.Activated = function(parentmenu, selected)
-      TriggerServerEvent("bikeShop:requestPurchase", i)
+      TriggerServerEvent("bikeShop:requestPurchase", i, closest)
     end
     menu:AddItem(item)
   end
@@ -116,7 +119,7 @@ AddEventHandler("bikeShop:toggleMenu", function(toggle)
 end)
 
 RegisterNetEvent("bikeShop:spawnBike")
-AddEventHandler("bikeShop:spawnBike", function(bike)
+AddEventHandler("bikeShop:spawnBike", function(bike, location)
   -- thread code stuff below was taken from an example on the wiki
   -- Create a thread so that we don't 'wait' the entire game
   Citizen.CreateThread(function()
@@ -128,7 +131,7 @@ AddEventHandler("bikeShop:spawnBike", function(bike)
     end
     -- Model loaded, continue
     -- Spawn the vehicle at the gas station car dealership in paleto and assign the vehicle handle to 'vehicle'
-    local vehicle = CreateVehicle(bike.hash, spawnX, spawnY, spawnZ, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
+    local vehicle = CreateVehicle(bike.hash, location.x, location.y, location.z, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
     SetEntityAsMissionEntity(vehicle, true, true)
     SetVehicleHasBeenOwnedByPlayer(vehicle, true)
   end)

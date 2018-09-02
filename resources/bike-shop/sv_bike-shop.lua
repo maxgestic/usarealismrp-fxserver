@@ -7,7 +7,7 @@ local SV_ITEMS = { -- must be kept in sync with one in cl_bike-shop.lua --
 }
 
 RegisterServerEvent("bikeShop:requestPurchase")
-AddEventHandler("bikeShop:requestPurchase", function(index)
+AddEventHandler("bikeShop:requestPurchase", function(index, location)
   local userSource = source
   local user = exports["essentialmode"]:getPlayerFromId(userSource)
   local bike = SV_ITEMS[index]
@@ -15,7 +15,7 @@ AddEventHandler("bikeShop:requestPurchase", function(index)
   if bike.price <= user_money then -- see if user has enough money
     user.setActiveCharacterData("money", user_money - bike.price)
     TriggerClientEvent("usa:notify", userSource, "You have purchased a ~r~" .. bike.name .. ".")
-    TriggerClientEvent("bikeShop:spawnBike", userSource, bike)
+    TriggerClientEvent("bikeShop:spawnBike", userSource, bike, location)
     TriggerClientEvent("bikeShop:toggleMenu", userSource, false)
   else
     TriggerClientEvent("usa:notify", userSource, "Not enough money!")
