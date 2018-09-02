@@ -206,6 +206,7 @@ Citizen.CreateThread(function()
                                     ---------------------------------------
                                     -- check if this client is owner --
                                     ---------------------------------------
+									
                                     if nearest_property_info.owner.identifier == my_property_identifier then
                                         ----------------------------
                                         -- create main menu  --
@@ -414,9 +415,6 @@ Citizen.CreateThread(function()
                                         -----------------
                                         local wardrobe_submenu = _menuPool:AddSubMenu(mainMenu, "Wardrobe", "Store and retrieve outfits here.", true --[[KEEP POSITION]])
                                         TriggerServerEvent("properties:getWardrobe", nearest_property_info.name)
-                                        while not menu_data.wardrobe do
-                                            Wait(10)
-                                        end
                                         if menu_data.wardrobe and #menu_data.wardrobe > 0 then
                                             for x  = 1, #menu_data.wardrobe do
                                                 local outfit = menu_data.wardrobe[x]
@@ -437,7 +435,10 @@ Citizen.CreateThread(function()
                                                 end
                                                 wardrobe_submenu2:AddItem(deletebtn)
                                             end
-                                        end
+                                        else 
+											local noitemsbtn = NativeUI.CreateItem("You have no outfits saved!", "Press the 'Save Current Outfit' button to save an outfit.")
+											wardrobe_submenu:AddItem(noitemsbtn)
+										end
                                         -------------------
                                         -- save button --
                                         -------------------

@@ -66,14 +66,14 @@ Citizen.CreateThread(function()
   AddTextEntry('FE_THDR_GTAO', 'USA REALISM RP - HTTPS://USARRP.NET')
 end)
 
---[[
+
 -- ped/vehicle npcs
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
 
-		SetPedDensityMultiplierThisFrame(1.0)
-		SetVehicleDensityMultiplierThisFrame(0.0002) -- npc vehicle amount
+		--SetPedDensityMultiplierThisFrame(1.0)
+		SetVehicleDensityMultiplierThisFrame(0.6) -- npc vehicle amount
 
     local playerPed = GetPlayerPed(-1)
 		local pos = GetEntityCoords(playerPed)
@@ -81,7 +81,7 @@ Citizen.CreateThread(function()
 
 	end
 end)
---]]
+
 
 -- no police npc / never wanted
 Citizen.CreateThread(function()
