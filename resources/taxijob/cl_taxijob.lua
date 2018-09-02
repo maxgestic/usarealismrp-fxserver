@@ -80,6 +80,9 @@ local LOCATIONS = {
 	{x = 1696.9, y = 3771.3, z = 34.7, name = "Algonquin Blvd.", arrived = false},
 	{x = 1513.0, y = 3766.3, z = 34.2, name = "Sandy Shores Garage", arrived = false},
 	{x = 1992.7, y = 3759.2, z = 32.2, name = "Alhambra Dr.", arrived = false},
+	{x = 1853.4, y = 2582.1, z = 45.7, name = "Bolingbroke Prison", arrived = false},
+	{x = 1853.3, y = 2592.5, z = 45.7, name = "Bolingbroke Prison", arrived = false},
+	{x = 1852.5, y = 2615.1, z = 45.7, name = "Bolingbroke Prison", arrived = false}
 }
 
 RegisterNetEvent("taxi:onDuty")
