@@ -3,7 +3,7 @@
 --# simple vehicle shop script to preview and purchase a vehicle
 
 local price, vehicleName, hash, plate
-local MAX_PLAYER_VEHICLES = 12
+local MAX_PLAYER_VEHICLES = 500
 
 -- prevent memory edit cheaters
 local MIN_VEHICLE_PRICE = 500
@@ -317,9 +317,14 @@ function alreadyHasAnyVehicle(source)
 	end)
 end
 
+RegisterServerEvent("vehicle-shop:loadItems")
+AddEventHandler("vehicle-shop:loadItems", function()
+	TriggerClientEvent("vehicle-shop:loadItems", source, vehicleShopItems)
+end)
+
 RegisterServerEvent("vehShop:buyInsurance")
 AddEventHandler("vehShop:buyInsurance", function(userSource)
-	print("user source = " .. userSource)
+	--print("user source = " .. userSource)
 	local INSURANCE_COVERAGE_MONTHLY_COST = 7500
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local insurance = user.getActiveCharacterData("insurance")
@@ -409,6 +414,8 @@ end)
 
 RegisterServerEvent("mini:checkVehicleMoney")
 AddEventHandler("mini:checkVehicleMoney", function(vehicle, property)
+	print("checking vehicle money")
+	print("location: " .. type(location))
 	local playerIdentifier = GetPlayerIdentifiers(source)[1]
 	local userSource = tonumber(source)
 	TriggerEvent('es:getPlayerFromId', userSource, function(user)
@@ -481,20 +488,19 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle, property)
 									TriggerClientEvent("vehShop:spawnPlayersVehicle", userSource, hash, plate)
 								end
 							else
-								TriggerClientEvent("mini:insufficientFunds", userSource, price, "vehicle")
+								TriggerClientEvent("usa:notify", userSource, "Not enough money for that vehicle!")
 							end
 						else
-							TriggerClientEvent("vehShop:alreadyOwnVehicle", userSource)
+							TriggerClientEvent("usa:notify", userSource, "Already have that vehicle!")
 						end
 					end
 				else
-					TriggerClientEvent("mini:invalidLicense", userSource)
+					TriggerClientEvent("usa:notify", userSource, "Come back when your license is valid!")
 				end
 			else
-				TriggerClientEvent("mini:noLicense", userSource)
+				TriggerClientEvent("usa:notify", userSource, "Come back when you have a driver's license!")
 			end
 		else
-			print("NOT buying vehicle...")
 			TriggerClientEvent("vehShop:notify", userSource, "Sorry, you can't own more than " .. MAX_PLAYER_VEHICLES .. " vehicles at this time!")
 		end
 	end)
@@ -519,6 +525,7 @@ end)
 
 RegisterServerEvent("vehShop:loadVehicles")
 AddEventHandler("vehShop:loadVehicles", function(check_insurance)
+	local vehicles_to_send = {}
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
 		if check_insurance then
@@ -527,18 +534,29 @@ AddEventHandler("vehShop:loadVehicles", function(check_insurance)
 				print("player has valid auto insurance!")
 				local vehicles = user.getActiveCharacterData("vehicles")
 				if vehicles then
-					print("vehicles loaded! # = " .. #vehicles)
-					TriggerClientEvent("vehShop:loadedVehicles", userSource, vehicles, true)
+					for i = 1, #vehicles do
+						if not vehicles[i].stored then
+							table.insert(vehicles_to_send, vehicles[i])
+						end
+					end
+					print("vehicles loaded! # = " .. #vehicles_to_send)
+					TriggerClientEvent("vehShop:loadedVehicles", userSource, vehicles_to_send, true)
 				end
 			else
 				print("player has no auto insurance!")
-				TriggerClientEvent("usa:notify", userSource, "You do not have any auto insurance!")
+				TriggerClientEvent("chatMessage", userSource, "T. END'S INSURANCE", {255, 78, 0}, "You do not have any auto insurance! Can't make a claim!")
+				TriggerClientEvent("vehShop:loadedVehicles", userSource, vehicles_to_send, true)
 			end
 		else
 			local vehicles = user.getActiveCharacterData("vehicles")
 			if vehicles then
-				print("vehicles loaded! # = " .. #vehicles)
-				TriggerClientEvent("vehShop:loadedVehicles", userSource, vehicles, false)
+				for i = 1, #vehicles do
+					if not vehicles[i].stored then
+						table.insert(vehicles_to_send, vehicles[i])
+					end
+				end
+				print("vehicles loaded! # = " .. #vehicles_to_send)
+				TriggerClientEvent("vehShop:loadedVehicles", userSource, vehicles_to_send)
 			end
 		end
 	end)
@@ -572,6 +590,7 @@ AddEventHandler("vehShop:sellVehicle", function(toSellVehicle)
 end)
 
 function GetVehiclePrice(vehicle)
+	print("vehicle: " .. vehicle.make .. " " .. vehicle.model)
 	for k, v in pairs(vehicleShopItems["vehicles"]) do
 		for i = 1, #v do
 			local name1 = vehicle.make .. " " .. vehicle.model
