@@ -38,6 +38,12 @@ local menu_data = {
 
 local _menuPool = nil
 
+local closest_coords = {
+	x = nil,
+	y = nil,
+	z = nil
+}
+
 ------------------------------------
 -- set player property identifier --
 ------------------------------------
@@ -167,36 +173,17 @@ AddEventHandler("properties:getPropertyGivenCoords", function(x,y,z, cb)
     end
 end)
 
---------------------------------------------
--- see if player is close to any property --
---------------------------------------------
 Citizen.CreateThread(function()
-    local closest = {}
-    local me = GetPlayerPed(-1)
-    closest.x = nil
-    closest.y = nil
-    closest.z = nil
-    while true do
-        Wait(0)
-        local me = GetPlayerPed(-1)
-        for name, info in pairs(PROPERTIES) do
-            if GetDistanceBetweenCoords(info.x, info.y, info.z, GetEntityCoords(GetPlayerPed(-1))) < 50 then
-                -- draw main property marker --
-                if info.owner.name then
-                    DrawMarker(27, info.x, info.y, info.z-0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 124--[[r]], 41 --[[g]], 153 --[[b]], 90, 0, 0, 2, 0, 0, 0, 0)
-                else
-                    DrawMarker(27, info.x, info.y, info.z-0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 183 --[[r]], 240 --[[g]], 65 --[[b]], 90, 0, 0, 2, 0, 0, 0, 0)
-                end
-                -- draw garage marker --
-                if info.garage_coords then
-                    DrawMarker(27, info.garage_coords.x, info.garage_coords.y, info.garage_coords.z-0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 255 --[[r]], 92 --[[g]], 92 --[[b]], 90, 0, 0, 2, 0, 0, 0, 0)
-                end
-                -- see if close to display menu --
+	while true do
+		if IsControlJustPressed(0, MENU_KEY) then
+			local me = GetPlayerPed(-1)
+			for name, info in pairs(PROPERTIES) do
+				-- see if close to display menu --
                 if GetDistanceBetweenCoords(GetEntityCoords(me), info.x, info.y, info.z) < 2 then
                     nearest_property_info = PROPERTIES[name]
-                    closest.x, closest.y, closest.z = info.x, info.y, info.z
-                        drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property menu!",7,1,0.5,0.8,0.6,255,255,255,255)
-                        if IsControlJustPressed(0, MENU_KEY) then
+                    closest_coords.x, closest_coords.y, closest_coords.z = info.x, info.y, info.z
+                        --drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property menu!",7,1,0.5,0.8,0.6,255,255,255,255)
+                        --if IsControlJustPressed(0, MENU_KEY) then
                             Citizen.CreateThread(function()
                                 _menuPool = NativeUI.CreatePool()
                                 ------------------------------
@@ -520,26 +507,26 @@ Citizen.CreateThread(function()
                                 _menuPool:Add(mainMenu)
                                 mainMenu:Visible(true)
                             end)
-                        end
+                        --end
                 elseif info.garage_coords then
                     if GetDistanceBetweenCoords(GetEntityCoords(me), info.garage_coords.x, info.garage_coords.y, info.garage_coords.z) < 2 then
                         nearest_property_info = PROPERTIES[name]
-                        closest.x, closest.y, closest.z = info.garage_coords.x, info.garage_coords.y, info.garage_coords.z
+                        closest_coords.x, closest_coords.y, closest_coords.z = info.garage_coords.x, info.garage_coords.y, info.garage_coords.z
                         if IsPedInAnyVehicle(me, true) then
                             if nearest_property_info.owner then
                                 if nearest_property_info.owner.identifier == my_property_identifier then
-                                    drawTxt("Press [ ~b~E~w~ ] to store your vehicle in the garage!",7,1,0.5,0.8,0.6,255,255,255,255)
-                                    if IsControlJustPressed(0, MENU_KEY) then
+                                    --drawTxt("Press [ ~b~E~w~ ] to store your vehicle in the garage!",7,1,0.5,0.8,0.6,255,255,255,255)
+                                    --if IsControlJustPressed(0, MENU_KEY) then
                                         local vehicle = GetVehiclePedIsIn(me, false)
                                         local numberPlateText = GetVehicleNumberPlateText(vehicle)
                                         TriggerServerEvent("properties:storeVehicle", nearest_property_info.name, numberPlateText)
                                         Wait(1000)
-                                    end
+                                    --end
                                 end
                             end
                         else
-                            drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property garage!",7,1,0.5,0.8,0.6,255,255,255,255)
-                            if IsControlJustPressed(0, MENU_KEY) then
+                            --drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property garage!",7,1,0.5,0.8,0.6,255,255,255,255)
+                            --if IsControlJustPressed(0, MENU_KEY) then
                                 if nearest_property_info.owner then
                                     if nearest_property_info.owner.identifier == my_property_identifier then
                                         Citizen.CreateThread(function()
@@ -570,15 +557,53 @@ Citizen.CreateThread(function()
                                         end)
                                     end
                                 end
-                            end
+                            --end
                         end
                     end
                 end
-            end
-            -- close menu when out of range --
-            if _menuPool and GetDistanceBetweenCoords(GetEntityCoords(me), closest.x, closest.y, closest.z) > 2 then
-                closest.x, closest.y, closest.z = nil, nil, nil
-                RemoveMenuPool(_menuPool)
+			end
+		end
+		Wait(5)
+	end
+end)
+
+--------------------------------------------
+-- draw markers / close menu when far away --
+--------------------------------------------
+Citizen.CreateThread(function()
+    local me = GetPlayerPed(-1)
+    while true do
+        Wait(10)
+        local me = GetPlayerPed(-1)
+		local mycoords = GetEntityCoords(me)
+        for name, info in pairs(PROPERTIES) do
+            if GetDistanceBetweenCoords(info.x, info.y, info.z, mycoords) < 50 then
+                -- draw main property marker --
+                if info.owner.name then
+                    DrawMarker(27, info.x, info.y, info.z-0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 124--[[r]], 41 --[[g]], 153 --[[b]], 90, 0, 0, 2, 0, 0, 0, 0)
+                else
+                    DrawMarker(27, info.x, info.y, info.z-0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 183 --[[r]], 240 --[[g]], 65 --[[b]], 90, 0, 0, 2, 0, 0, 0, 0)
+                end
+                -- draw garage marker --
+                if info.garage_coords then
+                    DrawMarker(27, info.garage_coords.x, info.garage_coords.y, info.garage_coords.z-0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 255 --[[r]], 92 --[[g]], 92 --[[b]], 90, 0, 0, 2, 0, 0, 0, 0)
+                end
+				-- draw special text --
+				if GetDistanceBetweenCoords(info.x, info.y, info.z, mycoords) < 3 then
+					drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property menu!",7,1,0.5,0.8,0.6,255,255,255,255)
+				elseif info.garage_coords then
+					if GetDistanceBetweenCoords(info.garage_coords.x, info.garage_coords.y, info.garage_coords.z, mycoords) < 3 then
+						if IsPedInAnyVehicle(me, true) then
+								if nearest_property_info.owner then
+									if nearest_property_info.owner.identifier == my_property_identifier then
+										drawTxt("Press [ ~b~E~w~ ] to store your vehicle in the garage!",7,1,0.5,0.8,0.6,255,255,255,255)
+									end
+								end
+						else 
+							drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property garage!",7,1,0.5,0.8,0.6,255,255,255,255)
+						end
+					end
+				end
             end
         end
         --print("typeof _menuPool: " .. type(_menuPool))
@@ -586,6 +611,12 @@ Citizen.CreateThread(function()
             _menuPool:MouseControlsEnabled(false)
             _menuPool:ControlDisablingEnabled(false)
             _menuPool:ProcessMenus()
+			if closest_coords then
+				if GetDistanceBetweenCoords(GetEntityCoords(me), closest_coords.x, closest_coords.y, closest_coords.z) > 2 then 
+					closest_coords.x, closest_coords.y, closest_coords.z = nil, nil, nil
+					RemoveMenuPool(_menuPool)
+				end
+			end
         end
     end
 end)

@@ -343,6 +343,7 @@ function loadProperties()
 			for i = 1, #(response.rows) do
 				--table.insert(PROPERTIES, response.rows[i].doc)
 				if response.rows[i] then
+					--if response.rows[i].doc.doc then response.rows[i].doc = response.rows[i].doc.doc end
 					if response.rows[i].doc.name then
 						PROPERTIES[response.rows[i].doc.name] = response.rows[i].doc
                         PROPERTIES_FOR_CLIENT[response.rows[i].doc.name] = { -- only give client needed information for each property for performance reasons
