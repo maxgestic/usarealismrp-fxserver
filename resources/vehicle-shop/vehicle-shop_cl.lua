@@ -168,7 +168,7 @@ function UpdatePreviewMenu()
 	---------------
 	local item = NativeUI.CreateItem("Preview", "Preview the " .. menu_data.preview.vehicle.make .. " " .. menu_data.preview.vehicle.model)
 	item.Activated = function(parentmenu, selected)
-		if not menu_data.preview.start_coords then
+		if not menu_data.preview.handle then
 			menu_data.preview.start_coords = GetEntityCoords(me)
 			PreviewVehicle(menu_data.preview.vehicle)
 		else
