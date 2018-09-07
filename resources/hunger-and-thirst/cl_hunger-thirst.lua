@@ -266,13 +266,14 @@ function drawHud(person)
 	---------------
 	local hours = GetClockHours()
 	local minutes = GetClockMinutes()
-	local suffix = ""
-	if hours > 12 then
+	local suffix = "AM"
+	if hours == 12 then
+		suffix = "PM"
+	elseif hours > 12 then
 		hours = hours - 12
 		suffix = "PM"
-	else
-		if hours == 0 then hours = 12 end
-		suffix = "AM"
+	elseif hours == 0 then
+		hours = 12
 	end
 	local display_time = string.format("%d:%02d %s", hours, minutes, suffix)
 	settings.hud["clock"].text = display_time
