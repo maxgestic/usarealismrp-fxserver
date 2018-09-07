@@ -57,7 +57,7 @@ Citizen.CreateThread(function()
 		local isNearFuelHStation, stationHeliNumber = isNearHeliStation()
 		local isNearFuelBStation, stationBoatNumber = isNearBoatStation()
 		--]]
-		
+
 		local me = GetPlayerPed(-1)
 		local is_in_veh = IsPedInAnyVehicle(me, -1)
 		local is_in_heli = IsPedInAnyHeli(me)
@@ -66,7 +66,7 @@ Citizen.CreateThread(function()
 		------------------------------- VEHICLE FUEL PART -------------------------------
 
 		if(isNearFuelStation and is_in_veh and not is_in_heli and not isBlackListedModel()) then
-			if not isElectricModel() then
+			if isElectricModel() then
 				Info(settings[lang].electricError)
 			else
 				Info(settings[lang].openMenu)
@@ -105,7 +105,7 @@ Citizen.CreateThread(function()
 					TriggerEvent("fuelGUI:Update")
 				end
 			end
-		elseif (isNearElectricStation() and is_in_veh and not is_in_heli and not isBlackListedModel()) then
+		elseif (isNearElectricStation(me) and is_in_veh and not is_in_heli and not isBlackListedModel()) then
 			if isElectricModel() then
 				Info(settings[lang].openMenu)
 
@@ -142,7 +142,7 @@ Citizen.CreateThread(function()
 
 					TriggerEvent("fuelGUI:Update")
 				end
-			else 
+			else
 				Info(settings[lang].fuelError)
 			end
 		elseif(isNearFuelBStation and is_in_veh and not IsPedInAnyHeli(me) and not isBlackListedModel()) then
@@ -217,7 +217,7 @@ Citizen.CreateThread(function()
 
 					TriggerEvent("fuelGUI:Update")
 				end
-			else 
+			else
 				Info(settings[lang].fuelError)
 			end
 		elseif(isNearFuelHStation and is_in_veh and not isBlackListedModel()) then
@@ -257,7 +257,7 @@ Citizen.CreateThread(function()
 
 					TriggerEvent("fuelGUI:Update")
 				end
-			else 
+			else
 				Info(settings[lang].fuelError)
 			end
 		end
@@ -466,15 +466,15 @@ function isBlackListedModel()
 end
 
 function isElectricModel()
-	local model = GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsIn(GetPlayerPed(-1))))
+	--local model = GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsIn(GetPlayerPed(-1))))
+	local hash = GetEntityModel(GetVehiclePedIsIn(GetPlayerPed(-1)))
 	local isEL = false
 	for _,k in pairs(electric_model) do
-		if(k==model) then
+		if(GetHashKey(k)==hash) then
 			isEL = true
 			break;
 		end
 	end
-
 	return isEL
 end
 
