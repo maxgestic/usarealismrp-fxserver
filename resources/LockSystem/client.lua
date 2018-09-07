@@ -68,15 +68,15 @@ Citizen.CreateThread(function()
 
 				if vehicle ~= 0 then
 					plate = GetVehicleNumberPlateText(vehicle)
-					print("inside of vehicle already!")
-					print("checking lock key & lock status for plate " .. plate)
-					print("vehicle = " .. vehicle)
+					--print("inside of vehicle already!")
+					--print("checking lock key & lock status for plate " .. plate)
+					--print("vehicle = " .. vehicle)
 				else
 					vehicle = targetVehicle
 					plate = GetVehicleNumberPlateText(vehicle)
-					print("not inside a vehicle! target = " .. targetVehicle)
-					print("checking lock key & lock status for plate " .. plate)
-					print("vehicle = " .. vehicle)
+					--print("not inside a vehicle! target = " .. targetVehicle)
+					--print("checking lock key & lock status for plate " .. plate)
+					--print("vehicle = " .. vehicle)
 				end
 
 				TriggerServerEvent("lock:checkForKey", plate)
@@ -95,13 +95,13 @@ end)
 RegisterNetEvent("lock:lockVehicle")
 AddEventHandler("lock:lockVehicle", function()
 	local lockStatus = GetVehicleDoorLockStatus(vehicle)
-	print("inside lockVehicle with lockStatus = " .. lockStatus)
+	--print("inside lockVehicle with lockStatus = " .. lockStatus)
 
 	if IsVehicleEngineOn(vehicle) then
 		--SetVehicleUndriveable(vehicle, true)
 	end
 
-	print("locking doors!")
+	--print("locking doors!")
 	SetVehicleDoorsLocked(vehicle, 2)
 	--SetVehicleDoorsLockedForAllPlayers(vehicle, true)
 
@@ -114,13 +114,13 @@ end)
 RegisterNetEvent("lock:unlockVehicle")
 AddEventHandler("lock:unlockVehicle", function()
 	local lockStatus = GetVehicleDoorLockStatus(vehicle)
-	print("inside unlockVehicle with lockStatus = " .. lockStatus)
+	--print("inside unlockVehicle with lockStatus = " .. lockStatus)
 
 	if not IsVehicleEngineOn(vehicle) then
 		--SetVehicleUndriveable(vehicle, false)
 	end
 
-	print("unlocking doors!")
+	--print("unlocking doors!")
 	SetVehicleDoorsLocked(vehicle, 1)
 	--SetVehicleDoorsLockedForAllPlayers(vehicle, false)
 

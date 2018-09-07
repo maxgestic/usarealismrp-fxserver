@@ -594,8 +594,8 @@ Citizen.CreateThread(function()
 				elseif info.garage_coords then
 					if GetDistanceBetweenCoords(info.garage_coords.x, info.garage_coords.y, info.garage_coords.z, mycoords) < 3 then
 						if IsPedInAnyVehicle(me, true) then
-								if nearest_property_info.owner then
-									if nearest_property_info.owner.identifier == my_property_identifier then
+								if info.owner then
+									if info.owner.identifier == my_property_identifier then
 										drawTxt("Press [ ~b~E~w~ ] to store your vehicle in the garage!",7,1,0.5,0.8,0.6,255,255,255,255)
 									end
 								end
