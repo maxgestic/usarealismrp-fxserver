@@ -31,10 +31,11 @@ local stationBoatNumber
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(6000)
-		isNearFuelStation, stationNumber = isNearStation()
-		isNearFuelPStation, stationPlaneNumber = isNearPlaneStation()
-		isNearFuelHStation, stationHeliNumber = isNearHeliStation()
-		isNearFuelBStation, stationBoatNumber = isNearBoatStation()
+		local me = GetPlayerPed(-1)
+		isNearFuelStation, stationNumber = isNearStation(me)
+		isNearFuelPStation, stationPlaneNumber = isNearPlaneStation(me)
+		isNearFuelHStation, stationHeliNumber = isNearHeliStation(me)
+		isNearFuelBStation, stationBoatNumber = isNearBoatStation(me)
 	end
 end)
 
@@ -56,100 +57,95 @@ Citizen.CreateThread(function()
 		local isNearFuelHStation, stationHeliNumber = isNearHeliStation()
 		local isNearFuelBStation, stationBoatNumber = isNearBoatStation()
 		--]]
+		
+		local me = GetPlayerPed(-1)
+		local is_in_veh = IsPedInAnyVehicle(me, -1)
+		local is_in_heli = IsPedInAnyHeli(me)
 
 
 		------------------------------- VEHICLE FUEL PART -------------------------------
 
-		if(isNearFuelStation and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not IsPedInAnyHeli(GetPlayerPed(-1)) and not isBlackListedModel() and not isElectricModel()) then
-			Info(settings[lang].openMenu)
-
-			if(IsControlJustPressed(1, 38)) then
-				menu = not menu
-				int = 0
-				--[[Menu.hidden = not Menu.hidden
-
-				Menu.Title = "Station essence"
-				ClearMenu()
-				Menu.addButton("Eteindre le moteur", "stopMotor")]]--
-			end
-
-			if(menu) then
-				TriggerEvent("fuelGUI:Title", settings[lang].buyFuel)
-
-				local maxEscense = 60-(essence/0.142)*60
-
-				TriggerEvent("fuelGUI:Int", settings[lang].liters.." : ", int, 0, maxEscense, function(cb)
-					int = cb
-				end)
-
-				TriggerEvent("fuelGUI:Option", settings[lang].confirm, function(cb)
-					if(cb) then
-						menu = not menu
-						local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
-						TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-							TriggerServerEvent("essence:buy", int, stationNumber,false, property)
-						end)
-					else
-
-					end
-				end)
-
-				TriggerEvent("fuelGUI:Update")
-			end
-		else
-			if(isNearFuelStation and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not IsPedInAnyHeli(GetPlayerPed(-1)) and not isBlackListedModel()) then
+		if(isNearFuelStation and is_in_veh and not is_in_heli and not isBlackListedModel()) then
+			if not isElectricModel() then
 				Info(settings[lang].electricError)
+			else
+				Info(settings[lang].openMenu)
+
+				if(IsControlJustPressed(1, 38)) then
+					menu = not menu
+					int = 0
+					--[[Menu.hidden = not Menu.hidden
+
+					Menu.Title = "Station essence"
+					ClearMenu()
+					Menu.addButton("Eteindre le moteur", "stopMotor")]]--
+				end
+
+				if(menu) then
+					TriggerEvent("fuelGUI:Title", settings[lang].buyFuel)
+
+					local maxEscense = 60-(essence/0.142)*60
+
+					TriggerEvent("fuelGUI:Int", settings[lang].liters.." : ", int, 0, maxEscense, function(cb)
+						int = cb
+					end)
+
+					TriggerEvent("fuelGUI:Option", settings[lang].confirm, function(cb)
+						if(cb) then
+							menu = not menu
+							local playerCoords = GetEntityCoords(me, false)
+							TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+								TriggerServerEvent("essence:buy", int, stationNumber,false, property)
+							end)
+						else
+
+						end
+					end)
+
+					TriggerEvent("fuelGUI:Update")
+				end
 			end
-		end
+		elseif (isNearElectricStation() and is_in_veh and not is_in_heli and not isBlackListedModel()) then
+			if isElectricModel() then
+				Info(settings[lang].openMenu)
 
+				if(IsControlJustPressed(1, 38)) then
+					menu = not menu
+					int = 0
+					--[[Menu.hidden = not Menu.hidden
 
-		------------------------------- ELECTRIC VEHICLE PART -------------------------------
+					Menu.Title = "Station essence"
+					ClearMenu()
+					Menu.addButton("Eteindre le moteur", "stopMotor")]]--
+				end
 
-		if(isNearElectricStation() and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not IsPedInAnyHeli(GetPlayerPed(-1)) and not isBlackListedModel() and isElectricModel()) then
-			Info(settings[lang].openMenu)
+				if(menu) then
+					TriggerEvent("fuelGUI:Title", settings[lang].buyFuel)
 
-			if(IsControlJustPressed(1, 38)) then
-				menu = not menu
-				int = 0
-				--[[Menu.hidden = not Menu.hidden
+					local maxEssence = 60-(essence/0.142)*60
 
-				Menu.Title = "Station essence"
-				ClearMenu()
-				Menu.addButton("Eteindre le moteur", "stopMotor")]]--
-			end
+					TriggerEvent("fuelGUI:Int", settings[lang].percent.." : ", int, 0, maxEssence, function(cb)
+						int = cb
+					end)
 
-			if(menu) then
-				TriggerEvent("fuelGUI:Title", settings[lang].buyFuel)
+					TriggerEvent("fuelGUI:Option", settings[lang].confirm, function(cb)
+						if(cb) then
+							menu = not menu
+							local playerCoords = GetEntityCoords(me, false)
+							TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+								TriggerServerEvent("essence:buy", int, electricityPrice,true, property)
+							end)
+						else
 
-				local maxEssence = 60-(essence/0.142)*60
+						end
+					end)
 
-				TriggerEvent("fuelGUI:Int", settings[lang].percent.." : ", int, 0, maxEssence, function(cb)
-					int = cb
-				end)
-
-				TriggerEvent("fuelGUI:Option", settings[lang].confirm, function(cb)
-					if(cb) then
-						menu = not menu
-						local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
-						TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-							TriggerServerEvent("essence:buy", int, electricityPrice,true, property)
-						end)
-					else
-
-					end
-				end)
-
-				TriggerEvent("fuelGUI:Update")
-			end
-		else
-			if(isNearElectricStation()  and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not IsPedInAnyHeli(GetPlayerPed(-1)) and not isBlackListedModel()) then
+					TriggerEvent("fuelGUI:Update")
+				end
+			else 
 				Info(settings[lang].fuelError)
 			end
-		end
-
-		------------------------------- BOAT PART -------------------------------
-
-		if(isNearFuelBStation and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not IsPedInAnyHeli(GetPlayerPed(-1)) and not isBlackListedModel()) then
+		elseif(isNearFuelBStation and is_in_veh and not IsPedInAnyHeli(me) and not isBlackListedModel()) then
 			Info(settings[lang].openMenu)
 
 			if(IsControlJustPressed(1, 38)) then
@@ -173,7 +169,7 @@ Citizen.CreateThread(function()
 				TriggerEvent("fuelGUI:Option", settings[lang].confirm, function(cb)
 					if(cb) then
 						menu = not menu
-						local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+						local playerCoords = GetEntityCoords(me, false)
 						TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
 							TriggerServerEvent("essence:buy", int, stationBoatNumber,false, property)
 						end)
@@ -184,96 +180,84 @@ Citizen.CreateThread(function()
 
 				TriggerEvent("fuelGUI:Update")
 			end
-		else
-			if(isNearFuelBStation  and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not IsPedInAnyHeli(GetPlayerPed(-1)) and not isBlackListedModel()) then
+		elseif(isNearFuelPStation and is_in_veh and not isBlackListedModel()) then
+			if isPlaneModel() then
+				Info(settings[lang].openMenu)
+
+				if(IsControlJustPressed(1, 38)) then
+					menu = not menu
+					int = 0
+					--[[Menu.hidden = not Menu.hidden
+
+					Menu.Title = "Station essence"
+					ClearMenu()
+					Menu.addButton("Eteindre le moteur", "stopMotor")]]--
+				end
+
+				if(menu) then
+					TriggerEvent("fuelGUI:Title", settings[lang].buyFuel)
+
+					local maxEssence = 60-(essence/0.142)*60
+
+					TriggerEvent("fuelGUI:Int", settings[lang].percent.." : ", int, 0, maxEssence, function(cb)
+						int = cb
+					end)
+
+					TriggerEvent("fuelGUI:Option", settings[lang].confirm, function(cb)
+						if(cb) then
+							menu = not menu
+							local playerCoords = GetEntityCoords(me, false)
+							TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+								TriggerServerEvent("essence:buy", int, stationPlaneNumber,false, property)
+							end)
+						else
+
+						end
+					end)
+
+					TriggerEvent("fuelGUI:Update")
+				end
+			else 
 				Info(settings[lang].fuelError)
 			end
-		end
+		elseif(isNearFuelHStation and is_in_veh and not isBlackListedModel()) then
+			if isHeliModel() then
+				Info(settings[lang].openMenu)
 
-		------------------------------- PLANE PART -------------------------------
+				if(IsControlJustPressed(1, 38)) then
+					menu = not menu
+					int = 0
+					--[[Menu.hidden = not Menu.hidden
 
-		if(isNearFuelPStation and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not isBlackListedModel() and isPlaneModel()) then
-			Info(settings[lang].openMenu)
+					Menu.Title = "Station essence"
+					ClearMenu()
+					Menu.addButton("Eteindre le moteur", "stopMotor")]]--
+				end
 
-			if(IsControlJustPressed(1, 38)) then
-				menu = not menu
-				int = 0
-				--[[Menu.hidden = not Menu.hidden
+				if(menu) then
+					TriggerEvent("fuelGUI:Title", settings[lang].buyFuel)
 
-				Menu.Title = "Station essence"
-				ClearMenu()
-				Menu.addButton("Eteindre le moteur", "stopMotor")]]--
-			end
+					local maxEssence = 60-(essence/0.142)*60
 
-			if(menu) then
-				TriggerEvent("fuelGUI:Title", settings[lang].buyFuel)
+					TriggerEvent("fuelGUI:Int", settings[lang].percent.." : ", int, 0, maxEssence, function(cb)
+						int = cb
+					end)
 
-				local maxEssence = 60-(essence/0.142)*60
+					TriggerEvent("fuelGUI:Option", settings[lang].confirm, function(cb)
+						if(cb) then
+							menu = not menu
+							local playerCoords = GetEntityCoords(me, false)
+							TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+								TriggerServerEvent("essence:buy", int, stationHeliNumber,false, property)
+							end)
+						else
 
-				TriggerEvent("fuelGUI:Int", settings[lang].percent.." : ", int, 0, maxEssence, function(cb)
-					int = cb
-				end)
+						end
+					end)
 
-				TriggerEvent("fuelGUI:Option", settings[lang].confirm, function(cb)
-					if(cb) then
-						menu = not menu
-						local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
-						TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-							TriggerServerEvent("essence:buy", int, stationPlaneNumber,false, property)
-						end)
-					else
-
-					end
-				end)
-
-				TriggerEvent("fuelGUI:Update")
-			end
-		else
-			if(isNearFuelPStation  and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not isBlackListedModel() and not isPlaneModel()) then
-				Info(settings[lang].fuelError)
-			end
-		end
-
-		------------------------------- HELI PART -------------------------------
-
-		if(isNearFuelHStation and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not isBlackListedModel() and isHeliModel()) then
-			Info(settings[lang].openMenu)
-
-			if(IsControlJustPressed(1, 38)) then
-				menu = not menu
-				int = 0
-				--[[Menu.hidden = not Menu.hidden
-
-				Menu.Title = "Station essence"
-				ClearMenu()
-				Menu.addButton("Eteindre le moteur", "stopMotor")]]--
-			end
-
-			if(menu) then
-				TriggerEvent("fuelGUI:Title", settings[lang].buyFuel)
-
-				local maxEssence = 60-(essence/0.142)*60
-
-				TriggerEvent("fuelGUI:Int", settings[lang].percent.." : ", int, 0, maxEssence, function(cb)
-					int = cb
-				end)
-
-				TriggerEvent("fuelGUI:Option", settings[lang].confirm, function(cb)
-					if(cb) then
-						menu = not menu
-						local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
-						TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-							TriggerServerEvent("essence:buy", int, stationHeliNumber,false, property)
-						end)
-					else
-
-					end
-				end)
-
-				TriggerEvent("fuelGUI:Update")
-			end
-		else
-			if(isNearFuelHStation  and IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not isBlackListedModel() and not isHeliModel()) then
+					TriggerEvent("fuelGUI:Update")
+				end
+			else 
 				Info(settings[lang].fuelError)
 			end
 		end
@@ -286,14 +270,15 @@ Citizen.CreateThread(function()
 
 	while true do
 		Wait(10000)
-		if(vehiclesUsed ~= nil and IsPedInAnyVehicle(GetPlayerPed(-1)) and GetPedVehicleSeat(GetPlayerPed(-1)) == -1 and not isBlackListedModel()) then
+		local me = GetPlayerPed(-1)
+		if(vehiclesUsed ~= nil and IsPedInAnyVehicle(me) and GetPedVehicleSeat(me) == -1 and not isBlackListedModel()) then
 			wasInAVeh = true
 			local index = getVehIndex()
-			TriggerServerEvent("essence:setToAllPlayerEscense", essence, GetVehicleNumberPlateText(GetVehiclePedIsUsing(GetPlayerPed(-1))), GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(GetPlayerPed(-1)))))
+			TriggerServerEvent("essence:setToAllPlayerEscense", essence, GetVehicleNumberPlateText(GetVehiclePedIsUsing(me)), GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(me))))
 			Wait(5000)
 		else
 			if(wasInAVeh) then
-				TriggerServerEvent("essence:setToAllPlayerEscense", essence, GetVehicleNumberPlateText(GetVehiclePedIsUsing(GetPlayerPed(-1))), GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(GetPlayerPed(-1)))))
+				TriggerServerEvent("essence:setToAllPlayerEscense", essence, GetVehicleNumberPlateText(GetVehiclePedIsUsing(me)), GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(me))))
 				wasInAVeh = false
 				Wait(5000)
 			end
@@ -307,8 +292,8 @@ Citizen.CreateThread(function()
 
 	while true do
 		Citizen.Wait(5000)
-
-		if(IsPedInAnyVehicle(GetPlayerPed(-1), -1) and GetPedVehicleSeat(GetPlayerPed(-1)) == -1 and not isBlackListedModel()) then
+		local me = GetPlayerPed(-1)
+		if(IsPedInAnyVehicle(me, -1) and GetPedVehicleSeat(me) == -1 and not isBlackListedModel()) then
 			local kmh = GetEntitySpeed(GetVehiclePedIsIn(GetPlayerPed(-1), false)) * 3.6
 			local vitesse = math.ceil(kmh)
 
@@ -333,7 +318,7 @@ Citizen.CreateThread(function()
 				essence = essence - stade
 			else
 				essence = 0
-				SetVehicleUndriveable(GetVehiclePedIsUsing(GetPlayerPed(-1)), true)
+				SetVehicleUndriveable(GetVehiclePedIsUsing(me), true)
 			end
 		end
 	end
@@ -345,20 +330,21 @@ end)
 
 local lastPlate = 0
 function CheckVeh()
-	if(IsPedInAnyVehicle(GetPlayerPed(-1), -1) and not isBlackListedModel()) then
+	local me = GetPlayerPed(-1)
+	if(IsPedInAnyVehicle(me, -1) and not isBlackListedModel()) then
 
 		--if((lastPlate == GetVehicleNumberPlateText(GetVehiclePedIsUsing(GetPlayerPed(-1))) and lastModel ~= GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(GetPlayerPed(-1))))) or (lastPlate ~= GetVehicleNumberPlateText(GetVehiclePedIsUsing(GetPlayerPed(-1))) and lastModel == GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(GetPlayerPed(-1))))) or (lastPlate ~= GetVehicleNumberPlateText(GetVehiclePedIsUsing(GetPlayerPed(-1))) and lastModel ~= GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(GetPlayerPed(-1))))) then
 		if(not wasInAVeh) then
-			TriggerServerEvent("vehicule:getFuel", GetVehicleNumberPlateText(GetVehiclePedIsUsing(GetPlayerPed(-1))), GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(GetPlayerPed(-1)))))
-			lastModel = GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(GetPlayerPed(-1))))
-			lastPlate = GetVehicleNumberPlateText(GetVehiclePedIsUsing(GetPlayerPed(-1)))
+			TriggerServerEvent("vehicule:getFuel", GetVehicleNumberPlateText(GetVehiclePedIsUsing(me)), GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(me))))
+			lastModel = GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(me)))
+			lastPlate = GetVehicleNumberPlateText(GetVehiclePedIsUsing(me))
 			Wait(10000)
 		end
 	end
 
 
-	if(essence == 0 and GetVehiclePedIsUsing(GetPlayerPed(-1)) ~= nil) then
-		SetVehicleEngineOn(GetVehiclePedIsUsing(GetPlayerPed(-1)), false, false, false)
+	if(essence == 0 and GetVehiclePedIsUsing(me) ~= nil) then
+		SetVehicleEngineOn(GetVehiclePedIsUsing(me), false, false, false)
 	end
 end
 
@@ -368,7 +354,8 @@ local UI = {
 }
 
 function renderBoxes()
-	if(IsPedInAnyVehicle(GetPlayerPed(-1), -1) and GetPedVehicleSeat(GetPlayerPed(-1)) == -1 and not isBlackListedModel()) then
+	local me = GetPlayerPed(-1)
+	if(IsPedInAnyVehicle(me, -1) and GetPedVehicleSeat(me) == -1 and not isBlackListedModel()) then
 		DrawRect(0.086, 0.806, 0.142, 0.0149999999999998, 0, 0, 0, 130)
 		DrawRect(0.015+(essence/2), 0.8062, essence, 0.0087, 225, 146, 45, 255)
 
@@ -383,9 +370,8 @@ function drawRct(x,y,width,height,r,g,b,a)
 	DrawRect(x + width/2, y + height/2, width, height, r, g, b, a)
 end
 
-function isNearStation()
-	local ped = GetPlayerPed(-1)
-	local plyCoords = GetEntityCoords(GetPlayerPed(-1), 0)
+function isNearStation(ped)
+	local plyCoords = GetEntityCoords(ped, 0)
 
 	for _,items in pairs(station) do
 		if(GetDistanceBetweenCoords(items.x, items.y, items.z, plyCoords["x"], plyCoords["y"], plyCoords["z"], true) < 2) then
@@ -397,9 +383,8 @@ function isNearStation()
 end
 
 
-function isNearPlaneStation()
-	local ped = GetPlayerPed(-1)
-	local plyCoords = GetEntityCoords(GetPlayerPed(-1), 0)
+function isNearPlaneStation(ped)
+	local plyCoords = GetEntityCoords(ped, 0)
 
 	for _,items in pairs(avion_stations) do
 		if(GetDistanceBetweenCoords(items.x, items.y, items.z, plyCoords["x"], plyCoords["y"], plyCoords["z"], true) < 10) then
@@ -411,9 +396,8 @@ function isNearPlaneStation()
 end
 
 
-function isNearHeliStation()
-	local ped = GetPlayerPed(-1)
-	local plyCoords = GetEntityCoords(GetPlayerPed(-1), 0)
+function isNearHeliStation(ped)
+	local plyCoords = GetEntityCoords(ped, 0)
 
 	for _,items in pairs(heli_stations) do
 		if(GetDistanceBetweenCoords(items.x, items.y, items.z, plyCoords["x"], plyCoords["y"], plyCoords["z"], true) < 10) then
@@ -425,9 +409,8 @@ function isNearHeliStation()
 end
 
 
-function isNearBoatStation()
-	local ped = GetPlayerPed(-1)
-	local plyCoords = GetEntityCoords(GetPlayerPed(-1), 0)
+function isNearBoatStation(ped)
+	local plyCoords = GetEntityCoords(ped, 0)
 
 	for _,items in pairs(boat_stations) do
 		if(GetDistanceBetweenCoords(items.x, items.y, items.z, plyCoords["x"], plyCoords["y"], plyCoords["z"], true) < 10) then
@@ -439,9 +422,8 @@ function isNearBoatStation()
 end
 
 
-function isNearElectricStation()
-	local ped = GetPlayerPed(-1)
-	local plyCoords = GetEntityCoords(GetPlayerPed(-1), 0)
+function isNearElectricStation(ped)
+	local plyCoords = GetEntityCoords(ped, 0)
 
 	for _,items in pairs(electric_stations) do
 		if(GetDistanceBetweenCoords(items.x, items.y, items.z, plyCoords["x"], plyCoords["y"], plyCoords["z"], true) < 2) then

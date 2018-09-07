@@ -411,9 +411,11 @@ Citizen.CreateThread(function()
 	TriggerServerEvent("essence:requestPrice")
 	Wait(5000)
 	while true do
-		Citizen.Wait(0)
+		Wait(0)
+		local ped = GetPlayerPed(-1)
+		local plyCoords = GetEntityCoords(ped, 0)
 		for _, item in pairs(station) do
-			if(isNearStationMarker(item)) then
+			if(isNearStationMarker(item, ped, plyCoords)) then
 				DrawMarker(1, item.x, item.y, item.z-1.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0, 1.0,     132, 52, 0, 255      , 0, 0, 1, 0, 0, 0, 0)
 				local x = stationsText[item.s].x
 				local y = stationsText[item.s].y
@@ -425,14 +427,14 @@ Citizen.CreateThread(function()
 		end
 
 		for _, item in pairs(electric_stations) do
-			if(isNearElectricStationMarker(item)) then
+			if(isNearElectricStationMarker(item, ped, plyCoords)) then
 				DrawMarker(1, item.x, item.y, item.z-1.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0, 1.0,     90, 255, 90, 255      , 0, 0, 1, 0, 0, 0, 0)
 			end
 		end
 
 
 		for _, item in pairs(boat_stations) do
-			if(isNearBoatStationMarker(item)) then
+			if(isNearBoatStationMarker(item, ped, plyCoords)) then
 				DrawMarker(1, item.x, item.y, item.z-1.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0, 1.0,     0, 0, 255, 75      , 0, 0, 1, 0, 0, 0, 0)
 				local x = stationsText[item.s].x
 				local y = stationsText[item.s].y
@@ -445,7 +447,7 @@ Citizen.CreateThread(function()
 
 
 		for _, item in pairs(avion_stations) do
-			if(isNearStationMarker(item)) then
+			if(isNearStationMarker(item, ped, plyCoords)) then
 				DrawMarker(1, item.x, item.y, item.z-1.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0, 1.0,     132, 52, 0, 255      , 0, 0, 1, 0, 0, 0, 0)
 				local x = stationsText[item.s].x
 				local y = stationsText[item.s].y
@@ -458,7 +460,7 @@ Citizen.CreateThread(function()
 
 
 		for _, item in pairs(heli_stations) do
-			if(isNearStationMarker(item)) then
+			if(isNearStationMarker(item, ped, plyCoords)) then
 				DrawMarker(1, item.x, item.y, item.z-1.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.0, 2.0, 1.0,     132, 52, 0, 255      , 0, 0, 1, 0, 0, 0, 0)
 				local x = stationsText[item.s].x
 				local y = stationsText[item.s].y
@@ -474,9 +476,7 @@ end)
 
 
 
-function isNearStationMarker(items)
-	local ped = GetPlayerPed(-1)
-	local plyCoords = GetEntityCoords(GetPlayerPed(-1), 0)
+function isNearStationMarker(items, ped, plyCoords)
 
 	if(GetDistanceBetweenCoords(items.x, items.y, items.z, plyCoords["x"], plyCoords["y"], plyCoords["z"], true) < 10) then
 		return true
@@ -486,9 +486,7 @@ function isNearStationMarker(items)
 end
 
 
-function isNearBoatStationMarker(items)
-	local ped = GetPlayerPed(-1)
-	local plyCoords = GetEntityCoords(GetPlayerPed(-1), 0)
+function isNearBoatStationMarker(items, ped, plyCoords)
 
 	if(GetDistanceBetweenCoords(items.x, items.y, items.z, plyCoords["x"], plyCoords["y"], plyCoords["z"], true) < 10) then
 		return true
@@ -498,9 +496,7 @@ function isNearBoatStationMarker(items)
 end
 
 
-function isNearElectricStationMarker(items)
-	local ped = GetPlayerPed(-1)
-	local plyCoords = GetEntityCoords(GetPlayerPed(-1), 0)
+function isNearElectricStationMarker(items, ped, plyCoords)
 
 	if (GetDistanceBetweenCoords(items.x, items.y, items.z, plyCoords["x"], plyCoords["y"], plyCoords["z"], true) < 10) then
 		return true
