@@ -196,8 +196,20 @@ end)
 TriggerEvent('es:addGroupCommand', 'log', "mod", function(source, args, user)
 	for i = 1, #deathLog do
 		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^3DEATH #" .. i)
-		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0Died: " .. deathLog[i].deadPlayerName .. " (#" .. deathLog[i].deadPlayerId .. ")")
-		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0Killer: " .. deathLog[i].killerName .. " (#" .. deathLog[i].killerId .. ")")
+		if deathLog[i].deadPlayerId ~= 0 then
+			local player = exports["essentialmode"]:getPlayerFromId(deathLog[i].deadPlayerId)
+			local name = player.getActiveCharacterData("fullName")
+			TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0Died: " .. name .. " (#" .. deathLog[i].deadPlayerId .. " / " .. deathLog[i].deadPlayerName .. ")")
+		else
+			TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0Died: Unknown")
+		end
+		if deathLog[i].killerId ~= 0 then
+			local player = exports["essentialmode"]:getPlayerFromId(deathLog[i].killerId)
+			local name = player.getActiveCharacterData("fullName")
+			TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0Killer: " .. name .. " (#" .. deathLog[i].killerId .. " / " .. deathLog[i].killerName .. ")")
+		else
+			TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0Killer: Unknown")
+		end
 		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0Time: " .. deathLog[i].timestamp)
 	end
 end, {
