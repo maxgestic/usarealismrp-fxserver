@@ -82,11 +82,10 @@ TriggerEvent('es:addJobCommand', 'dispatch', { "police", "sheriff", "ems", "fire
 	if GetPlayerName(target) then
 		table.remove(args,1)
 		table.remove(args,1)
-		TriggerClientEvent('chatMessage', target, "DISPATCH", {255, 20, 10}, table.concat(args, " "))
-		TriggerClientEvent('chatMessage', userSource, "DISPATCH", {255, 20, 10}, table.concat(args, " "))
-		-- set waypoint...
-		print("setting waypoint with target = " .. target)
-		TriggerClientEvent("dispatch:setWaypoint", userSource, tonumber(target))
+		local msg = table.concat(args, " ")
+		TriggerClientEvent('chatMessage', target, "DISPATCHER", {255, 20, 10}, msg) -- send to caller
+		exports["globals"]:notifyPlayersWithJob(user.getActiveCharacterData("job"), "^1DISPATCHER <" .. user.getActiveCharacterData("lastName") .. "> to #" .. target ..": ^0" .. msg) -- send to all others players with same job as dispatcher
+		TriggerClientEvent("dispatch:setWaypoint", userSource, tonumber(target)) -- set waypoint for dispatcher
 	else
 		TriggerClientEvent("usa:notify", userSource, "Error: caller id # not entered")
 	end

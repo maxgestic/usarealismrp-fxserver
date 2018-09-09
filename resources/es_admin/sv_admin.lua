@@ -183,7 +183,7 @@ TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, user)
 				reason = table.concat(reason, " ")
 			end
 			-- send discord message
-			local targetPlayerName = target.getActiveCharacterData("firstName") .. " " .. target.getActiveCharacterData("lastName")
+			local targetPlayerName = target.getActiveCharacterData("firstName") .. " " .. target.getActiveCharacterData("middleName") .. " " ..  target.getActiveCharacterData("lastName")
 			local allPlayerIdentifiers = GetPlayerIdentifiers(player)
 			-- send discord message
 			local desc = "**Character Name:** " .. targetPlayerName
@@ -608,7 +608,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 			sendMessageToModsAndAdmins(targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
 			-- character name:
 			local player = exports["essentialmode"]:getPlayerFromId(targetPlayer)
-			local char_name = player.getActiveCharacterData("fullName")
+			local char_name = player.getActiveCharacterData("firstName") .. " " .. player.getActiveCharacterData("middleName") .. " " ..  player.getActiveCharacterData("lastName")
 			-- send discord message
 			local desc = "**Character Name:** " .. char_name
 			desc = desc .. "\n**Steam Name:** " .. targetPlayerName
@@ -933,7 +933,7 @@ end)
 			sendMessageToModsAndAdmins(GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
 			-- get char name:
 			local player = exports["essentialmode"]:getPlayerFromId(targetPlayer)
-			local char_name = player.getActiveCharacterData("fullName")
+			local char_name = player.getActiveCharacterData("firstName") .. " " .. player.getActiveCharacterData("middleName") .. " " ..  player.getActiveCharacterData("lastName")
 			local desc = "**Character Name:** " .. char_name
 			-- send discord message
 			desc = desc .. "\n**Display Name:** " .. targetPlayerName
@@ -1002,7 +1002,7 @@ end)
 			sendMessageToModsAndAdmins(GetPlayerName(targetPlayer) .. " has been ^1temp banned^0 for " .. time .. " hour(s) (" .. reason .. ").")
 			-- get char name:
 			local player = exports["essentialmode"]:getPlayerFromId(targetPlayer)
-			local char_name = player.getActiveCharacterData("fullName")
+			local char_name = player.getActiveCharacterData("firstName") .. " " .. player.getActiveCharacterData("middleName") .. " " ..  player.getActiveCharacterData("lastName")
 			local desc = "**Character Name:** " .. char_name
 			-- send discord message
 			desc = desc .. "\n**Display Name:** " .. targetPlayerName

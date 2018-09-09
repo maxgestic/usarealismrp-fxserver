@@ -65,7 +65,7 @@ end
 -------------------------------------
 -- Start action (me) message --
 -------------------------------------
-local ACTION_MESSAGE_TIME_SECONDS = 5
+local ACTION_MESSAGE_TIME_SECONDS = 6.5
 RegisterNetEvent("globals:startActionMessage")
 AddEventHandler("globals:startActionMessage", function(msg, range, playerId)
     Citizen.CreateThread(function()

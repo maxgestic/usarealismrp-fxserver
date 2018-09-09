@@ -113,32 +113,15 @@ AddEventHandler('RPD:allowRevive', function(from, group, size)
 end)
 
 Citizen.CreateThread(function()
-	Citizen.Trace("INSIDE OF RPDEATH CREATED THREAD")
 	local respawnCount = 0
-	local spawnPoints = {}
+	local spawnPoints = {
+		{x = 360.3, y = -548.9, z = 28.8},
+		{x = -240.10, y = 6324.22, z = 32.43},
+		{x = 1814.914, y = 3685.767, z = 34.224}
+	}
 	local playerIndex = NetworkGetPlayerIndex(-1)
 
 	math.randomseed(playerIndex)
-
-	function createSpawnPoint(x1,x2,y1,y2,z,heading)
-		--local xValue = math.random(x1,x2) + 0.0001
-		--local yValue = math.random(y1,y2) + 0.0001
-
-		local newObject = {
-			x = -240.10,
-			y = 6324.22,
-			z = 32.43+ 0.0001,
-			heading = 0 + 0.0001
-		}
-		table.insert(spawnPoints,newObject)
-	end
-
-	--createSpawnPoint(-448, -448, -340, -329, 35.5, 0) -- Mount Zonah
-	--createSpawnPoint(372, 375, -596, -594, 30.0, 0)   -- Pillbox Hill
-	createSpawnPoint(-240, -245, 6324, 6319, 32.43, 0) -- Central Los Santos x = -240.10, y = 6324.22, z = 32.43
-	--createSpawnPoint(1850, 1854, 3700, 3704, 35.0, 0) -- Sandy Shores
-	--createSpawnPoint(-247, -245, 6328, 6332, 33.5, 0) -- Paleto
-	--createSpawnPoint(360.31, -590.445, 28.6563) -- LS hospital
 
 	function respawnPed(ped,coords)
 		SetEntityCoordsNoOffset(ped, coords.x, coords.y, coords.z, false, false, false, true)
@@ -254,9 +237,22 @@ Citizen.CreateThread(function()
 				end
 
 				if (allowRespawn) then
-					local coords = spawnPoints[math.random(1,#spawnPoints)]
+					--local coords = spawnPoints[math.random(1,#spawnPoints)]
+					print("# spawn points: " .. #spawnPoints)
+					local closest = spawnPoints[1]
+					local pedcoords = GetEntityCoords(ped)
+					for i = 1, #spawnPoints do
+						print("checking index: " .. i)
+						print("dist 1: " .. Vdist(pedcoords.x, pedcoords.y, pedcoords.z, spawnPoints[i].x, spawnPoints[i].y, spawnPoints[i].z))
+						print("dist 2: " .. Vdist(pedcoords.x, pedcoords.y, pedcoords.z, closest.x, closest.y, closest.z))
+						if Vdist(pedcoords.x, pedcoords.y, pedcoords.z, spawnPoints[i].x, spawnPoints[i].y, spawnPoints[i].z) < Vdist(pedcoords.x, pedcoords.y, pedcoords.z, closest.x, closest.y, closest.z) then
+							closest = spawnPoints[i]
+							print("closest found! x: " .. closest.x)
+						end
+					end
 
-					respawnPed(ped, coords)
+					print("closest spawn point x: " .. closest.x)
+					respawnPed(ped, closest)
 
 			  		allowRespawn = false
 					dead = false

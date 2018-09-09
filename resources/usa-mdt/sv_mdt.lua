@@ -20,7 +20,17 @@ local random_names = {
 	"Selma Behm",
 	"Coleen Kiesel",
 	"Hilton Fuhr",
-	"Maegan Gose"
+	"Maegan Gose",
+	"Kurt Angle",
+	"Jame Mcginley",
+	"Julianna Mixer",
+	"Aletha Pizzo",
+	"Danika Rebello",
+	"Mandy Sanzone",
+	"Leilani Cureton",
+	"Sherlyn Snelling",
+	"Vernetta Klann",
+	"Machelle Pauli"
 }
 
 TriggerEvent('es:addJobCommand', 'mdt', { "sheriff"}, function(source, args, user)
