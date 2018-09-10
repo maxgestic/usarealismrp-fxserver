@@ -67,7 +67,7 @@ Citizen.CreateThread(function()
 end)
 
 
--- ped/vehicle npcs
+--[[ ped/vehicle npcs
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
@@ -81,6 +81,7 @@ Citizen.CreateThread(function()
 
 	end
 end)
+--]]
 
 
 -- no police npc / never wanted
