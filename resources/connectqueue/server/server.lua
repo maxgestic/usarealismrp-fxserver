@@ -680,8 +680,10 @@ function fetchWhitelistFromDb()
 			print("#(response.rows) = " .. #(response.rows))
 			-- insert all bans from 'bans' db into lua table
 			for i = 1, #(response.rows) do
-                local playerDoc = response.rows[i].doc
-                Queue.Priority[playerDoc.steam] = playerDoc.priority
+                if response.rows[i] then
+                    local playerDoc = response.rows[i].doc
+                    Queue.Priority[playerDoc.steam] = playerDoc.priority
+                end
 			end
 			print("finished loading whitelisted players table...")
 			print("# of WL players: " .. #(response.rows))
