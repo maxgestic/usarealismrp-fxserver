@@ -178,11 +178,27 @@ end)
 --------------------
 local JOB_PEDS = {
   --{x = -331.043, y = 6086.09, z = 30.40, heading = 180.0}
-  {x = 1727.7, y = 6415.6, z = 35.0, heading = 180.0}
+  {x = 1727.7, y = 6415.6, z = 35.0, heading = 180.0},
+  {x = 549.2, y = 2670.9, z = 42.2, heading = 130.0, hash = -573920724}, -- harmony
+  {x = 1165.9, y = 2710.9, z = 38.2, heading = 180.0, hash = -573920724}, -- harmony
+  {x = 1959.96, y = 3740.2, z = 32.3, heading = 180.0, hash = -573920724}, -- sandy shores
+  {x = -3242.6, y = 999.9, z = 12.8, heading = 320.0, hash = -573920724}, -- north west los santos coast
+  {x = -3039.1, y = 584.5, z = 7.9, heading = 30.0, hash = -573920724}, -- north west los santos coast
+  {x = -2966.1, y = 390.8, z = 15.0, heading = 120.0, hash = -573920724}, -- north west los santos coast
+  {x = 372.5, y = 326.7, z = 103.6, heading = 180.0, hash = -573920724}, -- los santos
+  {x = -1221.7, y = -908.5, z = 12.3, heading = 60.0, hash = -573920724}, -- los santos
+  {x = 1133.9, y = -982.6, z = 46.2, heading = 260.0, hash = -573920724}, -- los santos
+  {x = -47.0, y = -1758.6, z = 29.4, heading = 90.0} -- los santos
 }
+
 Citizen.CreateThread(function()
 	for i = 1, #JOB_PEDS do
 		local hash = -840346158
+
+        if JOB_PEDS[i].hash then
+            hash = JOB_PEDS[i].hash
+        end
+        
 		--local hash = GetHashKey(data.ped.model)
 		RequestModel(hash)
 		while not HasModelLoaded(hash) do

@@ -2,6 +2,7 @@ Citizen.CreateThread(function()
 	LoadMpDlcMaps()
 	EnableMpDlcMaps(true)
 	-- north yankton --
+	--[[
 	RequestIpl("prologue01")
 	RequestIpl("prologue01c")
 	RequestIpl("prologue01d")
@@ -32,6 +33,7 @@ Citizen.CreateThread(function()
 	RequestIpl("prologuerd")
 	RequestIpl("prologuerdb")
 	--end north yankton --
+	--]]
 	-- yachts --
 	RequestIpl("smboat")
 	RequestIpl("smboat_lod")

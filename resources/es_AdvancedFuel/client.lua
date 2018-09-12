@@ -494,10 +494,11 @@ end
 
 
 function isPlaneModel()
-	local model = GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsIn(GetPlayerPed(-1))))
+	--local model = GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsIn(GetPlayerPed(-1))))
+	local hash = GetEntityModel(GetVehiclePedIsIn(GetPlayerPed(-1)))
 	local isPl = false
 	for _,k in pairs(plane_model) do
-		if(k==model) then
+		if(GetHashKey(k)==hash) then
 			isPl = true
 			break;
 		end

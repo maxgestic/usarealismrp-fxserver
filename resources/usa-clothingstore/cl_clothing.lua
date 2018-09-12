@@ -211,6 +211,11 @@ function CreateMenu()
 						SetPedComponentVariation(me, adjusted_index, GetPedDrawableVariation(me, adjusted_index), val, 0)
 					end
 				end
+				local clearbtn = NativeUI.CreateItem("Clear", "Clear this component")
+				clearbtn.Activated = function(parentmenu, selected)
+					SetPedComponentVariation(me, adjusted_index, 0, 0, 0)
+				end
+				ComponentValuesMenu:AddItem(clearbtn)
 				ComponentValuesMenu:Visible(true)
 			end
 			components_submenu:AddItem(item)
@@ -318,6 +323,12 @@ function UpdateValueChangerMenu(me, adjusted_index, oldval, isProp)
 				SetPedComponentVariation(me, adjusted_index, GetPedDrawableVariation(me, adjusted_index), val2, 0)
 			end
 		end
+		local clearbtn = NativeUI.CreateItem("Clear", "Clear this component")
+		clearbtn.Activated = function(parentmenu, selected)
+			SetPedComponentVariation(me, adjusted_index, 0, 0, 0)
+		end
+		ComponentValuesMenu:AddItem(clearbtn)
+		ComponentValuesMenu:GoUp()
 	else
 		local prop_texture_variations_total = {} for i = 1, GetNumberOfPedPropTextureVariations(me, adjusted_index, GetPedPropIndex(me, adjusted_index)) - 1 do table.insert(prop_texture_variations_total, i) end
 		local prop_variations_total = {} for i = 1, GetNumberOfPedPropDrawableVariations(me, adjusted_index) - 1 do table.insert(prop_variations_total, i) end
