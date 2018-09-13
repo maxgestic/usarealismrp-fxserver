@@ -682,7 +682,9 @@ function fetchWhitelistFromDb()
 			for i = 1, #(response.rows) do
                 if response.rows[i] then
                     local playerDoc = response.rows[i].doc
-                    Queue.Priority[playerDoc.steam] = playerDoc.priority
+                    if playerDoc.steam and playerDoc.priority then
+                        Queue.Priority[playerDoc.steam] = playerDoc.priority
+                    end
                 end
 			end
 			print("finished loading whitelisted players table...")
