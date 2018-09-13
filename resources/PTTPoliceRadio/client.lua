@@ -1,9 +1,16 @@
--- Created by Deziel0495 and IllusiveTea --
+-- Created by Deziel0495 and IllusiveTea, and modified by minipunch --
 
 -- NOTICE
 -- This script is licensed under "No License". https://choosealicense.com/no-license/
 -- You are allowed to: Download, Use and Edit the Script.
 -- You are not allowed to: Copy, re-release, re-distribute it without our written permission.
+
+local IS_COP = false
+
+RegisterNetEvent("ptt:iscop")
+AddEventHandler("ptt:iscop", function(status)
+	IS_COP = status
+end)
 
 --- DO NOT EDIT THIS
 local holstered = true
@@ -35,13 +42,16 @@ local skins = {
 local weapons = {
 	"WEAPON_PISTOL",
 	"WEAPON_COMBATPISTOL",
-	"WEAPON_FLASHLIGHT",
-	"WEAPON_HAMMER",
 	"WEAPON_APPISTOL",
 	"WEAPON_PISTOL50",
-	"WEAPON_FLARE",
-	"WEAPON_KNIFE",
-	"WEAPON_NIGHTSTICK"
+	"WEAPON_HEAVYPISTOL",
+	"WEAPON_SNSPISTOL",
+	"WEAPON_VINTAGEPISTOL",
+	"WEAPON_MARKSMANPISTOL",
+	"WEAPON_SAWNOFFSHOTGUN",
+	"WEAPON_HAMMER",
+	"WEAPON_WRENCH",
+	"WEAPON_HATCHET"
 }
 
 local control = nil
@@ -156,20 +166,26 @@ void SET_AUTO_GIVE_PARACHUTE_WHEN_ENTER_PLANE(Player player, BOOL toggle);
 
  Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
+		Wait(0)
 		local ped = PlayerPedId()
 		if GetPedParachuteState(ped) == -1 then
 			if DoesEntityExist( ped ) and not IsEntityDead( ped ) and not IsPedInAnyVehicle(PlayerPedId(), true) and CheckSkin(ped) then
-				loadAnimDict( "rcmjosh4" )
+				loadAnimDict( "reaction@intimidation@1h" )
 				loadAnimDict( "weapons@pistol@" )
+				loadAnimDict(  "rcmjosh4" )
 				if CheckWeapon(ped) then
 					if holstered then
-						TaskPlayAnim(ped, "rcmjosh4", "josh_leadout_cop2", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
-						Citizen.Wait(600)
-						ClearPedTasks(ped)
+						if not IS_COP and GetPedDrawableVariation(ped, 8) ~= 122 and GetPedDrawableVariation(ped, 8) ~= 130 then
+							TaskPlayAnim(ped, "reaction@intimidation@1h", "intro", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
+							Citizen.Wait(2900)
+							ClearPedTasks(ped)
+						else
+							TaskPlayAnim(ped, "rcmjosh4", "josh_leadout_cop2", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
+							Citizen.Wait(600)
+							ClearPedTasks(ped)
+						end
 						holstered = false
 					end
-					--SetPedComponentVariation(ped, 9, 0, 0, 0)
 				elseif not CheckWeapon(ped) then
 					if not holstered then
 						TaskPlayAnim(ped, "weapons@pistol@", "aim_2_holster", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
@@ -177,7 +193,6 @@ void SET_AUTO_GIVE_PARACHUTE_WHEN_ENTER_PLANE(Player player, BOOL toggle);
 						ClearPedTasks(ped)
 						holstered = true
 					end
-					--SetPedComponentVariation(ped, 9, 1, 0, 0)
 				end
 			end
 		end

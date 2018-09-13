@@ -143,7 +143,6 @@ end)
 
 RegisterNetEvent("policestation2:isWhitelisted")
 AddEventHandler("policestation2:isWhitelisted", function()
-	Citizen.Trace("Inside is whitelisted client event. setting NUI job variable to: police")
 	local playerhash = GetEntityModel(GetPlayerPed(-1))
 	for i=1,#arrSkinHashes
 	do
@@ -400,6 +399,7 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 			TriggerEvent("policestation2:giveDefaultLoadout")
 			TriggerServerEvent("policestation2:onduty")
 			TriggerEvent("interaction:setPlayersJob", "police") -- set interaction menu javascript job variable to "police"
+			TriggerEvent("ptt:iscop", true)
 		end)
 	end)
 
@@ -435,6 +435,7 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 			Citizen.Trace("true")
 			TriggerServerEvent("policestation2:loadDefaultUniform", character)
 			TriggerEvent("interaction:setPlayersJob", "police") -- set interaction menu javascript job variable to "police"
+			TriggerEvent("ptt:iscop", true)
 			--menu = 4
 		else
 
@@ -479,6 +480,7 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 			Citizen.Trace("true")
 			TriggerServerEvent("policestation2:offduty")
 			TriggerEvent("interaction:setPlayersJob", "civ") -- set interaction menu javascript job variable to "civ"
+			TriggerEvent("ptt:iscop", false)
 			--menu = 4
 		else
 

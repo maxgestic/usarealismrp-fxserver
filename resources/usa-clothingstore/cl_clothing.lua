@@ -312,6 +312,7 @@ function UpdateValueChangerMenu(me, adjusted_index, oldval, isProp)
 		ComponentValuesMenu:AddItem(component_changer)
 		if #texture_variations_total > 0 then
 			ComponentValuesMenu:AddItem(texture_changer)
+			ComponentValuesMenu:GoUp()
 		end
 		ComponentValuesMenu.OnListChange = function(sender, item, index)
 			if item == component_changer then
@@ -328,7 +329,6 @@ function UpdateValueChangerMenu(me, adjusted_index, oldval, isProp)
 			SetPedComponentVariation(me, adjusted_index, 0, 0, 0)
 		end
 		ComponentValuesMenu:AddItem(clearbtn)
-		ComponentValuesMenu:GoUp()
 	else
 		local prop_texture_variations_total = {} for i = 1, GetNumberOfPedPropTextureVariations(me, adjusted_index, GetPedPropIndex(me, adjusted_index)) - 1 do table.insert(prop_texture_variations_total, i) end
 		local prop_variations_total = {} for i = 1, GetNumberOfPedPropDrawableVariations(me, adjusted_index) - 1 do table.insert(prop_variations_total, i) end

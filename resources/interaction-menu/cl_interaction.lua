@@ -59,7 +59,9 @@ local scenarios = {
 	{name = "kiss", type = "emote", dict = "mp_ped_interaction", animname = "kisses_guy_a"},
 	{name = "handshake", type = "emote", dict = "mp_ped_interaction", animname = "handshake_guy_a"},
 	{name = "cpr", type = "emote", dict = "mini@cpr@char_a@cpr_str", animname = "cpr_pumpchest"},
-	{name = "cross arms", type = "emote", dict = "amb@world_human_hang_out_street@female_arms_crossed@base", animname = "base"}
+	{name = "cross arms", type = "emote", dict = "amb@world_human_hang_out_street@female_arms_crossed@base", animname = "base"},
+	{name = "dance 4", type = "emote", dict = "rcmnigel1bnmt_1b", animname = "dance_loop_tyler"},
+	{name = "dance 5", type = "emote", dict = "missfbi3_sniping", animname =  "dance_m_default"}
 	--{name = "hug", type = "emote", dict = "", animname = ""},
 }
 
@@ -232,7 +234,7 @@ RegisterNUICallback('playEmote', function(data, cb)
 						TaskStartScenarioInPlace(ped, scenarios[i].scenarioName, 0, true)
 						playing_scenario = true
 					else
-						if string.find(scenarioName, "shag") or string.find(scenarioName, "dance 1") or string.find(scenarioName, "dance 2") or string.find(scenarioName, "dance 3") then
+						if string.find(scenarioName, "shag") or string.find(scenarioName, "dance") then
 							--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true, flag)
 							--TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, 5, 1, 1000, 7, 0, 0, 0, 0)
 							TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 7, 0, 0, 0, 0)
