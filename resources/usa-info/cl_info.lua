@@ -2,41 +2,41 @@ local display = true
 
 function displayRules()
 	Citizen.CreateThread(function()
-		TriggerEvent('rules:display', true)
+		TriggerEvent('info:display', true)
 
 		while display do
 			Citizen.Wait(1)
-			if (IsControlJustPressed(1, 51)) then
+			if IsControlJustPressed(1, 51) then
 				display = false
-				TriggerEvent('rules:display', false)
+				TriggerEvent('info:display', false)
 			end
 			HideHudAndRadarThisFrame()
 		end
 	end)
 end
 
-RegisterNetEvent('rules:open')
-AddEventHandler('rules:open', function()
+RegisterNetEvent('info:open')
+AddEventHandler('info:open', function()
 	displayRules()
 end)
 
-RegisterNetEvent('rules:display')
-AddEventHandler('rules:display', function(value)
+RegisterNetEvent('info:display')
+AddEventHandler('info:display', function(value)
 	SendNUIMessage({
-		type = "rules",
+		type = "info",
 		display = value
 	})
 
 	display = value;
 
 	if value then
-		SetNuiFocus(true)
+		SetNuiFocus(true, true)
 		DisableControlAction(0, 1, true) -- LookLeftRight
 		DisableControlAction(0, 2, true) -- LookUpDown
 		DisableControlAction(0, 142, true) -- MeleeAttackAlternate
 		DisableControlAction(0, 106, true) -- VehicleMouseControlOverride
 	else
-		SetNuiFocus(false)
+		SetNuiFocus(false, false)
 		EnableControlAction(0, 1, true) -- LookLeftRight
 		EnableControlAction(0, 2, true) -- LookUpDown
 		EnableControlAction(0, 142, true) -- MeleeAttackAlternate
@@ -45,6 +45,6 @@ AddEventHandler('rules:display', function(value)
 end)
 
 RegisterNUICallback('accept', function(data, cb)
-	TriggerEvent('rules:display', false)
+	TriggerEvent('info:display', false)
 	display = false
 end)

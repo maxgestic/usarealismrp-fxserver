@@ -1,5 +1,6 @@
 -- this is where you edit the message seen by end user
 
+--[[
 function helpText(source)
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "^0You will earn $250 every 10 minutes from welfare until you find another job.")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "Look at the icons on your map to see where some of the available jobs are.")
@@ -11,6 +12,7 @@ function helpText(source)
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "4) ^3/rules^0 - to see the server rules")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "^3WEBSITE: ^0https://www.usarrp.net")
 end
+--]]
 
 function commandsText(source)
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "1) ^3/myjob <msg>^0 - see who you are currently employed with")
@@ -33,10 +35,6 @@ function commandsText(source)
 end
 
 -- end util functions / start commands
-
-TriggerEvent('es:addCommand', 'info', function(source, args, user)
-	helpText(source)
-end, {help = "Show help commands."})
 
 TriggerEvent('es:addCommand', 'commands', function(source, args, user)
 	commandsText(source)

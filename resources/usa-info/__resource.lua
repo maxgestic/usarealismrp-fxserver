@@ -6,5 +6,5 @@ files {
   'ui/script.js'
 }
 
-client_script "client.lua"
-server_script "server.lua"
+client_script "cl_info.lua"
+server_script "sv_info.lua"

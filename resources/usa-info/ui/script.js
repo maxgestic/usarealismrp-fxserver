@@ -3,20 +3,25 @@ $(function(){
 		window.addEventListener('message', function(event){
 
 			var item = event.data;
-			if (item !== undefined && item.type === "rules") {
+			if (item !== undefined && item.type === "info") {
 
 				if (item.display === true) {
-					$('#rules').delay(1000).fadeIn("slow");
+					$('#info').fadeIn("slow");
 				} else if (item.display === false) {
-					$('#rules').fadeOut("slow");
+					$('#info').fadeOut("slow");
 				}
 			}
 		});
 
 		document.addEventListener('keypress', (e) => {
 			if (e.keyCode == 101 || e.keyCode == 13) {
-				$.get('http://rules/accept', function(data) {});
+				$.get('http://usa-info/accept', function(data) {});
 			}
 		});
+
+		$("button").click(function(){
+			$.get('http://usa-info/accept', function(data) {});
+		});
+
 	};
 });
