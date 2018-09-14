@@ -63,9 +63,11 @@ end)
 TriggerEvent('es:addJobCommand', 'inspect', { "ems", "fire", "police", "sheriff", "corrections", "civ" }, function(source, args, user)
 	if type(tonumber(args[2])) == "number" then
 		TriggerClientEvent("EMS:inspect", tonumber(args[2]), source)
+		exports["globals"]:sendLocalActionMessage(source, "Inspects person", 15)
 	else
 		TriggerClientEvent("EMS:inspectNearestPed", source, source)
 	end
+	exports["globals"]:sendLocalActionMessage(source, "Inspects person", 15)
 end, {
 	help = "Inspect a player's wounds",
 	params = {

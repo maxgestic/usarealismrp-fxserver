@@ -45,7 +45,7 @@ AddEventHandler("character:swap--check-distance", function()
   for i = 1, #swap_locations do
 	local location = swap_locations[i]
 	if GetDistanceBetweenCoords(location.x, location.y, location.z,GetEntityCoords(GetPlayerPed(-1))) < 7 then
-	  print("Player is at a swap location!")
+	  --print("Player is at a swap location!")
 	  TriggerServerEvent("character:getCharactersAndOpenMenu", "home")
 	end
   end
@@ -216,7 +216,7 @@ RegisterNUICallback('select-character', function(data, cb)
 		end
 	end
 	toggleMenu(false)
-	if data.character.firstName then print("selecting char: " .. data.character.firstName) end
+	--if data.character.firstName then print("selecting char: " .. data.character.firstName) end
 	selectedCharacter = data.character -- set selected character on lua side from selected js char card
 	selectedCharacterSlot = tonumber(data.slot) + 1
 	TriggerEvent("chat:setCharName", selectedCharacter) -- for chat messages
@@ -320,12 +320,14 @@ function toggleMenu(status, menu, data)
 		SetEntityCoords(ped, spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z, 0.0, 0, 0, 1)
 		FreezeEntityPosition(GetPlayerPed(-1), status)
 		SetEnableHandcuffs(GetPlayerPed(-1), status)
-
 		DoScreenFadeIn(1000)
+		
+		-- welcome info --
+		TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0Welcome to ^1U^0S^5A ^3REALISM RP^0!")
+		TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0Type ^3'/info' ^0for more help and information!")
+		TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0Press ^3F1 ^0or ^3M ^0to open the interaction menu.")
 	end
 	-- should this be here? Seems like SendNUIMessage and SetNuiFocus will be called twice if status == false
-	print("status = " .. tostring(status))
-	print("ped = " .. ped)
 	DisplayHud(not status)
 	DisplayRadar(not status)
 	-- open / close menu

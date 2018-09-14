@@ -1,5 +1,0 @@
-AddEventHandler("playerSpawned", function(spawn)
-    TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0Welcome to ^1U^0S^5A ^3REALISM RP^0!")
-	TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0Type ^3'/info' ^0for more help and information!")
-    TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0Press ^3F1 ^0or ^3M ^0to open the interaction menu.")
-end)

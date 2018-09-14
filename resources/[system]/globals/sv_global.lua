@@ -17,7 +17,7 @@ function sendLocalActionMessageChat(message, location, range)
 	)
 end
 
-function sendLocalActionMessage(src, message, location, range)
+function sendLocalActionMessage(src, message, range)
 	-- set default range
 	if not range then
 		range = 30
