@@ -184,6 +184,7 @@ Citizen.CreateThread(function()
 	end
 end)
 
+-- hands up animation --
 Citizen.CreateThread(function()
   while true do
     local lPed = GetPlayerPed(-1)
@@ -211,6 +212,7 @@ Citizen.CreateThread(function()
         --print("hands_up was true but lped was not playing anim.. starting anim with lped: " .. lPed)
         TaskPlayAnim(lPed, "random@mugging3", "handsup_standing_base", 8.0, -8, -1, 49, 0, 0, 0, 0)
       end
+      BlockWeaponWheelThisFrame()
     end
     Wait(2)
   end
