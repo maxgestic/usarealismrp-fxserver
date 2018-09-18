@@ -8,7 +8,7 @@ local PROPERTIES_FOR_CLIENT = nil
 
 local BUSINESS_PAY_PERIOD_DAYS = 7
 local HOUSE_PAY_PERIOD_DAYS = 30
-local MAX_NUM_OF_PROPERTIES_SINGLE_PERSON = 5
+local MAX_NUM_OF_PROPERTIES_SINGLE_PERSON = 7
 
 RegisterServerEvent("properties:getPropertyIdentifier")
 AddEventHandler("properties:getPropertyIdentifier", function()
@@ -512,96 +512,61 @@ function GetWholeDaysFromTime(reference_time)
 end
 
 function Evict_Owners()
-		--[[
-	if name and PROPERTIES[name].owner.name then
-							--send discord message --
-							local desc = "\n" .. PROPERTIES[name].owner.name .. " no longer owns the " .. name .. "!"
-							local url = 'https://discordapp.com/api/webhooks/419573361170055169/6v2NLnxzF8lSHgT8pSDccB_XN1R6miVuZDrEYtvNfPny6kSqddSN_9iJ9PPkbAbM01pW'
-							PerformHttpRequest(url, function(err, text, headers)
-								if text then print(text) end
-								end, "POST", json.encode({
-									embeds = {
-										{
-											description = desc,
-											color = 524288,
-											author = {
-												name = "BLAINE COUNTY PROPERTY MGMT"
-											}
-										}
-								}
-							}), { ["Content-Type"] = 'application/json' })
-	end
-	--]]
-			---------------------------------------
-			-- Evict owners whose leases expired --
-			---------------------------------------
-			for name, info in pairs(PROPERTIES) do
-				-- below if statement only temporarily here to adjust any old DB documents that didn't get the type attribute --
-				if not info.type then
-					PROPERTIES[name].type = "business"
-				end
-				-- see if eviction time has arrived
-				if info.fee.paid_time then
-					local max_ownable_days = 0
-					if info.type == "business" then
-						max_ownable_days = BUSINESS_PAY_PERIOD_DAYS
-					elseif info.type == "house" then
-						max_ownable_days = HOUSE_PAY_PERIOD_DAYS
-					end
-						if GetWholeDaysFromTime(info.fee.paid_time) > max_ownable_days then
-							print("***Evicting owner of the " .. name .. " today, owner identifier: " .. PROPERTIES[name].owner.identifier .. "***")
-              -- remove property owner information, make available for purchase --
-              PROPERTIES[name].fee.end_date = 0
-              PROPERTIES[name].fee.due_days = 0
-              PROPERTIES[name].fee.paid_time = 0
-              PROPERTIES[name].fee.paid = 0
-              PROPERTIES[name].owner.name = nil
-              PROPERTIES[name].owner.purchase_date = 0
-              PROPERTIES[name].owner.identifier = "undefined"
-              --PROPERTIES[name].storage.money = 0
-              --PROPERTIES[name].storage.items = {}
-              -- update clients --
-              local PROPERTY_FOR_CLIENT = { -- only give client needed information for each property for performance reasons
-                  name = name,
-                  storage = {
-                      money = PROPERTIES[name].storage.money
-                  },
-                  fee = PROPERTIES[name].fee,
-                  x = PROPERTIES[name].x,
-                  y = PROPERTIES[name].y,
-                  z = PROPERTIES[name].z,
-                  garage_coords = PROPERTIES[name].garage_coords,
-                  owner = PROPERTIES[name].owner,
-                  type = PROPERTIES[name].type
-              }
-            TriggerClientEvent("properties:update", -1, PROPERTY_FOR_CLIENT, true)
-			-- save property --
-              SavePropertyData(name)
-              --[[
-							TriggerEvent('es:exposeDBFunctions', function(db)
-								db.getDocumentByRow("properties", "name", name, function(doc, rText)
-									if rText then
-										--RconPrint("\nrText = " .. rText)
-									end
-									if doc then
-										doc._rev = nil
-										db.updateDocument("properties", doc._id, PROPERTIES[name], function(status)
-											if status == true then
-												print("\nDocument updated.")
-											else
-												--RconPrint("\nStatus Response: " .. status)
-												if status == "201" then
-													print("\nDocument successfully updated!")
-												end
-											end
-										end)
-									end
-								end)
-							end)
-              --]]
-						end
-				end
-			end
+    ---------------------------------------
+    -- Evict owners whose leases expired --
+    ---------------------------------------
+    for name, info in pairs(PROPERTIES) do
+        -- below if statement only temporarily here to adjust any old DB documents that didn't get the type attribute --
+        if not info.type then
+            PROPERTIES[name].type = "business"
+        end
+        -- see if eviction time has arrived
+        if info.fee.paid_time then
+            local max_ownable_days = 0
+            if info.type == "business" then
+                max_ownable_days = BUSINESS_PAY_PERIOD_DAYS
+            elseif info.type == "house" then
+                max_ownable_days = HOUSE_PAY_PERIOD_DAYS
+            end
+            if GetWholeDaysFromTime(info.fee.paid_time) >= max_ownable_days then
+                if info.type == "house" then
+                    if info.storage.money >= info.fee.price then
+                        print("** Money from property (" .. name .. ") storage was used to pay for a month of rent. **")
+                        PROPERTIES[name].storage.money = PROPERTIES[name].storage.money - info.fee.price
+                        SavePropertyData(name)
+                    else
+                        print("***Not enough money, evicting owner of the " .. name .. " today, owner identifier: " .. PROPERTIES[name].owner.identifier .. "***")
+                        -- remove property owner information, make available for purchase --
+                        PROPERTIES[name].fee.end_date = 0
+                        PROPERTIES[name].fee.due_days = 0
+                        PROPERTIES[name].fee.paid_time = 0
+                        PROPERTIES[name].fee.paid = 0
+                        PROPERTIES[name].owner.name = nil
+                        PROPERTIES[name].owner.purchase_date = 0
+                        PROPERTIES[name].owner.identifier = "undefined"
+                        --PROPERTIES[name].storage.money = 0
+                        --PROPERTIES[name].storage.items = {}
+                        -- save property --
+                        SavePropertyData(name)
+                    end
+                else
+                    print("***Evicting owner of the " .. name .. " business today, owner identifier: " .. PROPERTIES[name].owner.identifier .. "***")
+                    -- remove property owner information, make available for purchase --
+                    PROPERTIES[name].fee.end_date = 0
+                    PROPERTIES[name].fee.due_days = 0
+                    PROPERTIES[name].fee.paid_time = 0
+                    PROPERTIES[name].fee.paid = 0
+                    PROPERTIES[name].owner.name = nil
+                    PROPERTIES[name].owner.purchase_date = 0
+                    PROPERTIES[name].owner.identifier = "undefined"
+                    --PROPERTIES[name].storage.money = 0
+                    --PROPERTIES[name].storage.items = {}
+                    -- save property --
+                    SavePropertyData(name)
+                end
+        end
+    end
+end
 
 end
 -----------------------------------------
