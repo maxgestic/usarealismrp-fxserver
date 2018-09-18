@@ -118,7 +118,7 @@ Citizen.CreateThread(function()
 					if (posibilidad > 70) and (posibilidad < 90) then
 						propina = math.random(100, 300)
 						TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0},"Here's a tip, thanks! ~ $"..propina)
-						TriggerServerEvent("pop_pizzero:propina", propina, property)
+						TriggerServerEvent("pizzaJob:payForDelivery", propina, property)
 					end
 					isToHouse = false
 					isToPizzaria = true

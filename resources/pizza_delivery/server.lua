@@ -5,8 +5,8 @@
 --SIN PERMISOS DEL CREADOR DE EL SCRIPT.
 -----------------------------------------------------------------------------------------------
 
-RegisterServerEvent('pop_pizzero:propina')
-AddEventHandler('pop_pizzero:propina',function(pay, property)
+RegisterServerEvent('pizzaJob:payForDelivery')
+AddEventHandler('pizzaJob:pay',function(pay, property)
 	TriggerEvent('es:getPlayerFromId',source, function(user)
 		user.setActiveCharacterData("money", user.getActiveCharacterData("money") + pay)
 		print("payed $" .. pay .. " for pizza delivery!")

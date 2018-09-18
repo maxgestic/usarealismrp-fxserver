@@ -11,13 +11,13 @@ AddEventHandler("clothing-store:chargeCustomer", function(property)
 	local player = exports["essentialmode"]:getPlayerFromId(user_source)
 	local user_money = player.getActiveCharacterData("money")
 	if user_money - amount >= 0 then
-		TriggerClientEvent("usa:notify", user_source, "~y~Charged:~w~ $" .. amount) 
+		TriggerClientEvent("usa:notify", user_source, "~y~Charged:~w~ $" .. amount)
 		player.setActiveCharacterData("money", user_money - amount)
 		-- give money to store owner --
 		if property then
 			TriggerEvent("properties:addMoney", property.name, round(0.20 * amount, 0))
 		end
-	else 
+	else
 		TriggerClientEvent("usa:notify", user_source, "You don't have enough money!")
 	end
 end)
@@ -37,12 +37,14 @@ AddEventHandler("mini:save", function(appearance)
 				characters[i].appearance.propstexture = appearance.propstexture
 				characters[i].appearance.props = appearance.props
 				user.setCharacter(characters[i], i)
-				print("PLAYER MODEL SAVED")
 
-				TriggerClientEvent("headprops:cacheMask", userSource, appearance.components[1], appearance.componentstexture[1])
-				TriggerClientEvent("headprops:cacheHat", userSource, appearance.props[0], appearance.propstexture[0])
-				TriggerClientEvent("headprops:cacheGlasses", userSource, appearance.props[1], appearance.propstexture[1])
+				TriggerClientEvent("headprops:cacheProp", userSource, 0, appearance.props[9], appearance.propstexture[9])
+				TriggerClientEvent("headprops:cacheProp", userSource, 1, appearance.props[9], appearance.propstexture[9])
+				TriggerClientEvent("headprops:cacheComponent", userSource, 1, appearance.components[1], appearance.componentstexture[1])
+				TriggerClientEvent("headprops:cacheComponent", userSource, 9, appearance.components[9], appearance.componentstexture[9])
+
 				TriggerClientEvent("chatMessage", userSource, "SYSTEM", {0, 128, 255}, "Your player character has been saved.")
+
 				return
 			end
 		end
