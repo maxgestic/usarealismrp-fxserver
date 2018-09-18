@@ -69,7 +69,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait( 0 )
 		local ped = PlayerPedId()
 		if control ~= nil and GetPedParachuteState(ped) == -1 then
-			if DoesEntityExist( ped ) and not IsEntityDead( ped ) and CheckSkin(ped) then
+			if DoesEntityExist( ped ) and not IsEntityDead( ped ) then
 				if not IsPauseMenuActive() then
 					loadAnimDict( "random@arrests" )
 					if IsControlJustReleased( 0, control ) then
@@ -77,11 +77,11 @@ Citizen.CreateThread(function()
 						ClearPedTasks(ped)
 						SetEnableHandcuffs(ped, false)
 					else
-						if IsControlJustPressed( 0, control ) and CheckSkin(ped) and not IsPlayerFreeAiming(PlayerId()) then
+						if IsControlJustPressed( 0, control ) and not IsPlayerFreeAiming(PlayerId()) then
 							--TriggerServerEvent('InteractSound_SV:PlayOnSource', 'on', 0.1)
 							TaskPlayAnim(ped, "random@arrests", "generic_radio_enter", 8.0, 2.0, -1, 50, 2.0, 0, 0, 0 )
 							SetEnableHandcuffs(ped, true)
-						elseif IsControlJustPressed( 0, control ) and CheckSkin(ped) and IsPlayerFreeAiming(PlayerId()) then
+						elseif IsControlJustPressed( 0, control ) and IsPlayerFreeAiming(PlayerId()) then
 							--TriggerServerEvent('InteractSound_SV:PlayOnSource', 'on', 0.1)
 							TaskPlayAnim(ped, "random@arrests", "radio_chatter", 8.0, 2.0, -1, 50, 2.0, 0, 0, 0 )
 							SetEnableHandcuffs(ped, true)
@@ -105,7 +105,7 @@ Citizen.CreateThread( function()
 		Citizen.Wait( 0 )
 		local ped = PlayerPedId()
 		if GetPedParachuteState(ped) == -1 then
-			if DoesEntityExist( ped ) and not IsEntityDead( ped ) and not IsPedInAnyVehicle(PlayerPedId(), true) and CheckSkin(ped) then
+			if DoesEntityExist( ped ) and not IsEntityDead( ped ) and not IsPedInAnyVehicle(PlayerPedId(), true) then
 				DisableControlAction( 0, 20, true ) -- INPUT_MULTIPLAYER_INFO (Z)
 				if not IsPauseMenuActive() then
 					loadAnimDict( "reaction@intimidation@cop@unarmed" )
@@ -114,7 +114,7 @@ Citizen.CreateThread( function()
 						SetEnableHandcuffs(ped, false)
 						SetCurrentPedWeapon(ped, GetHashKey("WEAPON_UNARMED"), true)
 					else
-						if IsDisabledControlJustPressed( 0, 20 ) and CheckSkin(ped) then -- INPUT_MULTIPLAYER_INFO (Z)
+						if IsDisabledControlJustPressed( 0, 20 ) then -- INPUT_MULTIPLAYER_INFO (Z)
 							SetEnableHandcuffs(ped, true)
 							SetCurrentPedWeapon(ped, GetHashKey("WEAPON_UNARMED"), true)
 							TaskPlayAnim(ped, "reaction@intimidation@cop@unarmed", "intro", 8.0, 2.0, -1, 50, 2.0, 0, 0, 0 )
@@ -129,56 +129,27 @@ Citizen.CreateThread( function()
 	end
 end )
 
---[[
-
-GET_PED_PARACHUTE_STATE #
-// 0x79CFD9827CC979B6 0x7D4BC475
-// GetPedParachuteState
-int GET_PED_PARACHUTE_STATE(Ped ped);
-Returns:
-
--1: Normal
-0: Wearing parachute on back
-1: Parachute opening
-2: Parachute open
-3: Falling to doom (e.g. after exiting parachute)
-
-Normal means no parachute?
-
-
-
-IS_PED_IN_PARACHUTE_FREE_FALL #
-// 0x7DCE8BDA0F1C1200 0xCD71F11B
-// IsPedInParachuteFreeFall
-BOOL IS_PED_IN_PARACHUTE_FREE_FALL(Ped ped);
-
-
-
-
-SET_AUTO_GIVE_PARACHUTE_WHEN_ENTER_PLANE #
-// 0x9F343285A00B4BB6 0xA97C2059
-// SetAutoGiveParachuteWhenEnterPlane
-void SET_AUTO_GIVE_PARACHUTE_WHEN_ENTER_PLANE(Player player, BOOL toggle);
-
-]]
-
 -- HOLSTER/UNHOLSTER PISTOL --
-
  Citizen.CreateThread(function()
 	while true do
 		Wait(0)
 		local ped = PlayerPedId()
 		if GetPedParachuteState(ped) == -1 then
-			if DoesEntityExist( ped ) and not IsEntityDead( ped ) and not IsPedInAnyVehicle(PlayerPedId(), true) and CheckSkin(ped) then
+			if DoesEntityExist( ped ) and not IsEntityDead( ped ) and not IsPedInAnyVehicle(PlayerPedId(), true) then
 				loadAnimDict( "reaction@intimidation@1h" )
 				loadAnimDict( "weapons@pistol@" )
 				loadAnimDict(  "rcmjosh4" )
 				if CheckWeapon(ped) then
 					if holstered then
 						if not IS_COP and GetPedDrawableVariation(ped, 8) ~= 122 and GetPedDrawableVariation(ped, 8) ~= 130 then
+							local togive = GetSelectedPedWeapon(ped) -- to prevent gun from coming out too early for animation, remove the gun when it starts and only give at right time
+							SetCurrentPedWeapon(ped, GetHashKey("WEAPON_UNARMED"), true)
 							TaskPlayAnim(ped, "reaction@intimidation@1h", "intro", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
-							Citizen.Wait(2900)
+							Wait(1400)
+							SetCurrentPedWeapon(ped, togive, true)
+							Wait(1500)
 							ClearPedTasks(ped)
+							SetCurrentPedWeapon(ped, togive, true)
 						else
 							TaskPlayAnim(ped, "rcmjosh4", "josh_leadout_cop2", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
 							Citizen.Wait(600)
@@ -200,19 +171,6 @@ void SET_AUTO_GIVE_PARACHUTE_WHEN_ENTER_PLANE(Player player, BOOL toggle);
 end)
 
 -- DO NOT REMOVE THESE! --
-
-function CheckSkin(ped)
-	--[[
-	for i = 1, #skins do
-		if GetHashKey(skins[i]) == GetEntityModel(ped) then
-			return true
-		end
-	end
-	return false
-	--]]
-	return true
-end
-
 function CheckWeapon(ped)
 	for i = 1, #weapons do
 		if GetHashKey(weapons[i]) == GetSelectedPedWeapon(ped) then
