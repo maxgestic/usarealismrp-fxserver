@@ -57,7 +57,11 @@ AddEventHandler("headprops:toggleComponent", function(component_index)
 	local ped = GetPlayerPed(-1)
 	local waitTime = 1000
 
-	TriggerEvent("usa:playAnimation", "clothingspecs", "try_glasses_neutral_c", -8, 1, -1, 53, 0, 0, 0, 0,  1.5)
+	if component_index ~= 9 then
+		TriggerEvent("usa:playAnimation", "clothingspecs", "try_glasses_neutral_c", -8, 1, -1, 53, 0, 0, 0, 0,  1.5)
+	else
+		TriggerEvent("usa:playAnimation", "clothingshirt", "try_shirt_neutral_c", -8, 1, -1, 53, 0, 0, 0, 0,  1.5)
+	end
 
 	-- toggle component --
 	if GetPedDrawableVariation(ped, component_index) > 0 then -- component is on, take off
