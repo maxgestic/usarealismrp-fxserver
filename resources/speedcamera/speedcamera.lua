@@ -14,6 +14,7 @@ end
 
 local lastScan = { plate = "--", speed = 0.00 }
 Citizen.CreateThread(function()
+    Wait(30000)
 	while true do
 		Wait(0)
 		local car = GetVehiclePedIsIn(GetPlayerPed(-1), false)
