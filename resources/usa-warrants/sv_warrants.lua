@@ -34,7 +34,8 @@ function loadWarrants()
 	end, "GET", "", { ["Content-Type"] = 'application/json' })
 end
 
-loadWarrants()
+-- PERFORM FIRST TIME DB CHECK --
+exports["globals"]:PerformDBCheck("usa-warrants", "warrants", loadWarrants)
 
 function getWarrants()
 	return WARRANTS

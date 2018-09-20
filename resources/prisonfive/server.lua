@@ -45,7 +45,8 @@ function loadDOCEmployees()
 	end, "GET", "", { ["Content-Type"] = 'application/json' })
 end
 
-loadDOCEmployees()
+-- PERFORM FIRST TIME DB CHECK--
+exports["globals"]:PerformDBCheck("correctionaldepartment", "correctionaldepartment", loadDOCEmployees)
 
 RegisterServerEvent("doc:refreshEmployees")
 AddEventHandler("doc:refreshEmployees", function()

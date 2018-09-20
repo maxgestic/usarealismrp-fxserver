@@ -88,3 +88,33 @@ TriggerEvent('es:addGroupCommand', 'setjob', 'owner', function(source, args, use
 end, {
 	help = "DEBUG: SET YOUR JOB"
 })
+
+
+exports("PerformDBCheck", function(scriptName, db, doneFunc)
+	PerformHttpRequest("http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. "/" .. db .. "/_compact", function(err, rText, headers)
+	end, "POST", "", {["Content-Type"] = "application/json", Authorization = "Basic " .. exports["essentialmode"]:getAuth()})
+
+	PerformHttpRequest("http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. "/" .. db, function(err, rText, headers)
+		if err == 0 then
+			print("-------------------------------------------------------------")
+			print("--- No errors detected, " .. scriptName .. " is setup properely. ---")
+			print("-------------------------------------------------------------")
+		elseif err == 412 then
+			print("-------------------------------------------------------------")
+			print("--- No errors detected, " .. scriptName .. " is setup properely. ---")
+			print("-------------------------------------------------------------")
+		elseif err == 401 then
+			print("------------------------------------------------------------------------------------------------")
+			print("--- Error detected in authentication, please take a look at config.lua inside essentialmode. ---")
+			print("------------------------------------------------------------------------------------------------")
+		else
+			print("------------------------------------------------------------------------------------------------")
+			print("--- Unknown error detected ( " .. err .. " ): " .. rText)
+			print("------------------------------------------------------------------------------------------------")
+		end
+		-- Function to execute when finished checking DB --
+		if doneFunc then
+			doneFunc()
+		end
+	end, "PUT", "", {Authorization = "Basic " .. exports["essentialmode"]:getAuth()})
+end)

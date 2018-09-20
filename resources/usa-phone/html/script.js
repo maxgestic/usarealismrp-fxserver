@@ -95,7 +95,7 @@ $(function() {
     document.onkeydown = function (data) {
         if (data.which == 27 || data.which == 112) { // ESC or F1
             // call lua client NUI callback in 'phone' resource with name of 'escape'
-            $.post('http://phone/escape', JSON.stringify({}));
+            $.post('http://usa-phone/escape', JSON.stringify({}));
             // hide all html
             $("#icons-wrap").show();
             $("#phone-app-wrap").hide();
@@ -110,24 +110,24 @@ $(function() {
 
     // on text msg form submission
     $("#text-message-app-form").submit(function(){
-        $.post('http://phone/sendTextMessage', JSON.stringify({
+        $.post('http://usa-phone/sendTextMessage', JSON.stringify({
             toNumber: $("#text-toNumber").val(),
             message: $("#text-message").val(),
             fromName: phone.owner,
             fromNumber: phone.number
         }));
-        $.post('http://phone/escape', JSON.stringify({}));
+        $.post('http://usa-phone/escape', JSON.stringify({}));
     });
 
     // contact action message
     $("#contacts-app-wrap").on("click", "#contact-action--call", function() {
         var attr = $(this).attr("id");
         var number = $(this).attr("data-number"); // number to call (from contact)
-        $.post('http://phone/requestCall', JSON.stringify({
+        $.post('http://usa-phone/requestCall', JSON.stringify({
           phone_number: number,
           from_number: phone.number
         }));
-        $.post('http://phone/escape', JSON.stringify({})); // shut the phone
+        $.post('http://usa-phone/escape', JSON.stringify({})); // shut the phone
     });
 
     // contact action message
@@ -162,7 +162,7 @@ $(function() {
         var confirmed = confirm("Are you sure you want to permantently delete that contact?");
         if (confirmed) {
             DeleteContact(number_to_delete);
-            $.post('http://phone/deleteContact', JSON.stringify({
+            $.post('http://usa-phone/deleteContact', JSON.stringify({
                 numberToDelete: number_to_delete,
                 phone: phone.number
             }));
@@ -181,13 +181,13 @@ $(function() {
 
     // submit new contact form
     $("#new-contact-form").submit(function(){
-        $.post('http://phone/addNewContact', JSON.stringify({
+        $.post('http://usa-phone/addNewContact', JSON.stringify({
             number: $("#new-contact--number").val(),
             first: $("#new-contact--first").val(),
             last: $("#new-contact--last").val(),
             source: phone.number
         }));
-        $.post('http://phone/escape', JSON.stringify({}));
+        $.post('http://usa-phone/escape', JSON.stringify({}));
     });
 
     // new contact form back btn
@@ -210,7 +210,7 @@ $(function() {
         $("#contacts-app-wrap").show();
         $("#contacts-app-home section").show();
         // todo: implement below nui callback
-        $.post('http://phone/getContacts', JSON.stringify({
+        $.post('http://usa-phone/getContacts', JSON.stringify({
             number: phone.number
         }));
     });
@@ -224,7 +224,7 @@ $(function() {
     $( "#text-message-icon" ).click(function() {
         $("#icons-wrap").hide();
         $("#text-message-app-wrap").show();
-        $.post('http://phone/getMessages', JSON.stringify({
+        $.post('http://usa-phone/getMessages', JSON.stringify({
             number: phone.number
         }));
         current_activity = "text-message";
@@ -234,7 +234,7 @@ $(function() {
     $('#text-message-app-home section').on('click', '.textMessageConvoBtn', function() {
         var partnerName = $(this).text();
         var partnerId = $(this).attr("data-id");
-        $.post('http://phone/getMessagesFromConvo', JSON.stringify({
+        $.post('http://usa-phone/getMessagesFromConvo', JSON.stringify({
             partnerId: partnerId,
             sourcePhone: phone.number
         }));
@@ -330,48 +330,48 @@ $(function() {
     // p2p voice (phone call)
     $("#call-phone-app-form").submit(function() {
         // send the message to police
-        $.post('http://phone/requestCall', JSON.stringify({
+        $.post('http://usa-phone/requestCall', JSON.stringify({
             phone_number: $("#phone-call").val(),
             from_number: phone.number
         }));
         // close phone
-        $.post('http://phone/escape', JSON.stringify({}));
+        $.post('http://usa-phone/escape', JSON.stringify({}));
     });
 
     $("#911-phone-app-form").submit(function() {
         // send the message to police
-        $.post('http://phone/send911Message', JSON.stringify({
+        $.post('http://usa-phone/send911Message', JSON.stringify({
             message: $("#911-message").val()
         }));
         // close phone
-        $.post('http://phone/escape', JSON.stringify({}));
+        $.post('http://usa-phone/escape', JSON.stringify({}));
     });
 
     $("#taxi-phone-app-form").submit(function() {
         // send the message to ems
-        $.post('http://phone/sendTaxiMessage', JSON.stringify({
+        $.post('http://usa-phone/sendTaxiMessage', JSON.stringify({
             message: $("#taxi-message").val()
         }));
         // close phone
-        $.post('http://phone/escape', JSON.stringify({}));
+        $.post('http://usa-phone/escape', JSON.stringify({}));
     });
 
     $("#tow-phone-app-form").submit(function() {
         // send the message to ems
-        $.post('http://phone/sendTowMessage', JSON.stringify({
+        $.post('http://usa-phone/sendTowMessage', JSON.stringify({
             message: $("#tow-message").val()
         }));
         // close phone
-        $.post('http://phone/escape', JSON.stringify({}));
+        $.post('http://usa-phone/escape', JSON.stringify({}));
     });
 
     $("#tweet-phone-app-form").submit(function() {
         // send the message to ems
-        $.post('http://phone/sendTweet', JSON.stringify({
+        $.post('http://usa-phone/sendTweet', JSON.stringify({
             message: $("#tweet-message").val()
         }));
         // close phone
-        $.post('http://phone/escape', JSON.stringify({}));
+        $.post('http://usa-phone/escape', JSON.stringify({}));
     });
 
 });

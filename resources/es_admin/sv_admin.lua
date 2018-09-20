@@ -858,8 +858,8 @@ function fetchAllBans()
 	end, "GET", "", { ["Content-Type"] = 'application/json' })
 end
 
--- Fetch all bans when resource starts
-fetchAllBans()
+-- PERFORM FIRST TIME DB CHECK --
+exports["globals"]:PerformDBCheck("BANS", "bans", fetchAllBans)
 
 -- check for player being banned
 AddEventHandler('playerConnecting', function(name, setReason)

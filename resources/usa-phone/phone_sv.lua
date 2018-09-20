@@ -534,3 +534,6 @@ TriggerEvent('es:addCommand', 'phonenumber', function(source, args, user, locati
 			end
 		end
 end, { help = "Write down your phone number(s) for those around you."})
+
+-- PERFORM FIRST TIME DB CHECK--
+exports["globals"]:PerformDBCheck("usa-phone", "phones")

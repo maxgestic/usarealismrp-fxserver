@@ -552,3 +552,7 @@ end
 function firstToUpper(str)
     return (str:gsub("^%l", string.upper))
 end
+
+-- PERFORM FIRST TIME DB CHECKS --
+exports["globals"]:PerformDBCheck("POLICE REPORTS", "policereports")
+exports["globals"]:PerformDBCheck("BOLOS", "bolos")

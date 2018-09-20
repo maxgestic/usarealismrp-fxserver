@@ -375,7 +375,8 @@ function loadProperties()
 	end, "GET", "", { ["Content-Type"] = 'application/json' })
 end
 
-loadProperties()
+-- PERFORM FIRST TIME DB CHECK --
+exports["globals"]:PerformDBCheck("usa-properties", "properties", loadProperties)
 
 --------------------------------
 -- ADD MONEY (from purchases) --

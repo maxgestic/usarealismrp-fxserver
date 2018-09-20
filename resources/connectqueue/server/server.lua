@@ -668,10 +668,9 @@ end)
 -- debugging / testing commands
 local testAdds = 0
 
-
 function fetchWhitelistFromDb()
 	print("fetching all whitelisted players from DB...")
-	PerformHttpRequest("http://127.0.0.1:5984/whitelist/_all_docs?include_docs=true" --[[ string ]], function(err, text, headers)
+	PerformHttpRequest("http://127.0.0.1:5984/whitelist/_all_docs?include_docs=true", function(err, text, headers)
 		print("finished getting whitelisted players...")
 		print("error code: " .. err)
 		local response = json.decode(text)
@@ -693,8 +692,8 @@ function fetchWhitelistFromDb()
 	end, "GET", "", { ["Content-Type"] = 'application/json' })
 end
 
--- get the whitelisted/prioritized players on resource start
-fetchWhitelistFromDb()
+-- PERFORM FIRST TIME DB CHECK--
+exports["globals"]:PerformDBCheck("connectqueue whitelist", "whitelist", fetchWhitelistFromDb)
 
 AddEventHandler("rconCommand", function(command, args)
   --[[
