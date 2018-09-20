@@ -1,13 +1,9 @@
 files {
     'index.html',
-	'timeout.html',
-    'music/kifflom.mp3',
     'music/loadscreen.mp3',
-	'music/pause.mp3',
     'img/loading.gif',
 	'img/loadscreen.jpg',
     'img/logo.png',
-	'img/usarrp.jpg',
 	'img/bg-1.jpg',
     'img/bg-2.jpg',
 	'img/bg-3.jpg',
