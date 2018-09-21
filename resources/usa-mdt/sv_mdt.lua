@@ -334,7 +334,7 @@ end)
 RegisterServerEvent("mdt:fetchWarrants")
 AddEventHandler("mdt:fetchWarrants", function()
 	local usource = source
-	local warrants = exports["warrants"]:getWarrants()
+	local warrants = exports["usa-warrants"]:getWarrants()
 	print("finished fething warrants! #: " .. #warrants)
 	TriggerClientEvent("mdt:fetchWarrants", usource, warrants)
 end)
@@ -347,12 +347,12 @@ AddEventHandler("mdt:createWarrant", function(warrant)
 	warrant.created_by = author.getActiveCharacterData("fullName")
 	warrant.notes = warrant.charges .. " | " .. warrant.suspect_description
 	warrant.timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())
-	exports["warrants"]:createWarrant(usource, warrant, true)
+	exports["usa-warrants"]:createWarrant(usource, warrant, true)
 end)
 
 RegisterServerEvent("mdt:deleteWarrant")
 AddEventHandler("mdt:deleteWarrant", function(id, rev)
-	exports["warrants"]:deleteWarrant("warrants", id, rev)
+	exports["usa-warrants"]:deleteWarrant("warrants", id, rev)
 end)
 
 RegisterServerEvent("mdt:createBOLO")

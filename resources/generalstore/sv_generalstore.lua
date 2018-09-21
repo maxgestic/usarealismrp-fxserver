@@ -108,7 +108,7 @@ AddEventHandler("generalStore:buyItem", function(property, item)
           item.number = string.sub(tostring(os.time()), -8)
           item.owner = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
           item.name = item.name .. " - " .. item.number
-          exports["phone"]:CreateNewPhone(item)
+          exports["usa-phone"]:CreateNewPhone(item)
           -- insert dummie item --
           local inventory = user.getActiveCharacterData("inventory")
           table.insert(inventory, item)
