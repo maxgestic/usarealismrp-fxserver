@@ -129,6 +129,7 @@ Citizen.CreateThread( function()
 	end
 end )
 
+local UNHOLSTERED_WEAPON = nil
 -- HOLSTER/UNHOLSTER PISTOL --
  Citizen.CreateThread(function()
 	while true do
@@ -137,7 +138,7 @@ end )
 		if GetPedParachuteState(ped) == -1 then
 			if DoesEntityExist( ped ) and not IsEntityDead( ped ) and not IsPedInAnyVehicle(PlayerPedId(), true) then
 				loadAnimDict( "reaction@intimidation@1h" )
-				loadAnimDict( "weapons@pistol@" )
+				--loadAnimDict( "weapons@pistol@" )
 				loadAnimDict(  "rcmjosh4" )
 				if CheckWeapon(ped) then
 					if holstered then
@@ -150,6 +151,7 @@ end )
 							Wait(1500)
 							ClearPedTasks(ped)
 							SetCurrentPedWeapon(ped, togive, true)
+							UNHOLSTERED_WEAPON = togive
 						else
 							TaskPlayAnim(ped, "rcmjosh4", "josh_leadout_cop2", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
 							Citizen.Wait(600)
@@ -159,9 +161,17 @@ end )
 					end
 				elseif not CheckWeapon(ped) then
 					if not holstered then
-						TaskPlayAnim(ped, "weapons@pistol@", "aim_2_holster", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
-						Citizen.Wait(500)
-						ClearPedTasks(ped)
+						if not IS_COP and GetPedDrawableVariation(ped, 8) ~= 122 and GetPedDrawableVariation(ped, 8) ~= 130 then
+							SetCurrentPedWeapon(ped, UNHOLSTERED_WEAPON, true)
+							TaskPlayAnim(ped, "reaction@intimidation@1h", "outro", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
+							Citizen.Wait(1350)
+							ClearPedTasks(ped)
+							SetCurrentPedWeapon(ped, GetHashKey("WEAPON_UNARMED"), true)
+						else
+							TaskPlayAnim(ped, "weapons@pistol@", "aim_2_holster", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
+							Citizen.Wait(500)
+							ClearPedTasks(ped)
+						end
 						holstered = true
 					end
 				end

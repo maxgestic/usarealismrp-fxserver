@@ -1,12 +1,7 @@
--- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
--- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
--- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
--- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
-
 -- Manifest
 resource_manifest_version '44febabe-d386-4d18-afbe-5e627f4af937'
 
-description 'EssentialMode by Kanersps.'
+description 'EssentialMode base by Kanersps. Modified by minipunch for USA REALISM RP.'
 
 ui_page 'ui.html'
 
@@ -40,3 +35,4 @@ server_exports {
 	'getCommands',
 	'CanGroupTarget',
 }
+
