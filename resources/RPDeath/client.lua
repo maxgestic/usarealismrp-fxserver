@@ -190,9 +190,15 @@ Citizen.CreateThread(function()
 						--print("killer ID was 0!")
 						--print("killer: " .. deathLog.killer)
 						--print("cause: " .. deathLog.cause)
+						local killer_entity_type = 0
+						local cause_entity_type = 0
 						if deathLog.killer and deathLog.cause then
-							local killer_entity_type = GetEntityType(deathLog.killer)
-							local cause_entity_type = GetEntityType(deathLog.cause)
+							if DoesEntityExist(deathLog.killer) then
+								killer_entity_type = GetEntityType(deathLog.killer)
+							end
+							if DoesEntityExist(deathLog.cause) then
+								cause_entity_type = GetEntityType(deathLog.cause)
+							end
 							local ped_in_veh_seat = GetPedInVehicleSeat(deathLog.killer, -1)
 							for id = 0, 64 do
 								if NetworkIsPlayerActive(id) then
