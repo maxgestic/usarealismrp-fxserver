@@ -6,7 +6,7 @@
 -----------------------------------------------------------------------------------------------
 
 RegisterServerEvent('pizzaJob:payForDelivery')
-AddEventHandler('pizzaJob:pay',function(pay, property)
+AddEventHandler('pizzaJob:payForDelivery',function(pay, property)
 	TriggerEvent('es:getPlayerFromId',source, function(user)
 		user.setActiveCharacterData("money", user.getActiveCharacterData("money") + pay)
 		print("payed $" .. pay .. " for pizza delivery!")

@@ -138,16 +138,18 @@ AddEventHandler("crim:continueRobbing", function(continue_robbing, from_id, targ
 	local source = tonumber(from_id)
 	if continue_robbing then
 		local to_steal_amount = 0
-		TriggerEvent("es:getPlayerFromId", tonumber(target_player_id), function(victim)
-			to_steal_amount = victim.getActiveCharacterData("money")
+		local victim = exports["essentialmode"]:getPlayerFromId(target_player_id)
+		to_steal_amount = victim.getActiveCharacterData("money")
+		if to_steal_amount >= 0 then
 			victim.setActiveCharacterData("money", 0)
-		end)
-		-- give to person stealing:
-		print("player is stealing amount $" .. to_steal_amount .. " from a person!")
-		TriggerEvent("es:getPlayerFromId", source, function(person_commiting_crime)
+			-- give to person stealing:
+			print("player is stealing amount $" .. to_steal_amount .. " from a person!")
+			local person_commiting_crime = exports["essentialmode"]:getPlayerFromId(source)
 			local before_robbery_amount = person_commiting_crime.getActiveCharacterData("money")
 			person_commiting_crime.setActiveCharacterData("money", before_robbery_amount + to_steal_amount)
-		end)
+		else 
+			TriggerClientEvent("usa:notify", source, "Person has no money on them!")
+		end
 	else
 		TriggerClientEvent("usa:notify", source, "Person does not have their hands tied or is too far away!")
 	end
