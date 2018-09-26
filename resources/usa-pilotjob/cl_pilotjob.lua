@@ -296,7 +296,7 @@ function GetNextCheckpoint()
             active_job.current_marker = checkpoint.coords
             -- Send Mission Help Text --
             exports["globals"]:notify(checkpoint.requirement)
-            TriggerEvent('chatMessage', "", {0, 0, 0}, "^2MISSION TASK:^0" .. checkpoint.requirement)
+            TriggerEvent('chatMessage', "", {0, 0, 0}, "^2MISSION TASK: ^0" .. checkpoint.requirement)
             DrawSpecialTextTimed(checkpoint.requirement, 10)
             return
         end
