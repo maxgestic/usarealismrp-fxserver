@@ -139,16 +139,6 @@ AddEventHandler('playerDropped', function()
 	end
 end)
 
-RegisterServerEvent('sway:updateDB')
-AddEventHandler('sway:updateDB', function(source)
-	--[[ todo: need to update this to use active character
-	local numberSource = tonumber(source)
-	db.updateUser(Users[numberSource].get('identifier'), {money = Users[numberSource].getMoney(), bank = Users[numberSource].getBank(), model = Users[numberSource].getModel(), inventory = Users[numberSource].getInventory(), weapons = Users[numberSource].getWeapons(), vehicles = Users[numberSource].getVehicles(), insurance = Users[numberSource].getInsurance(), job = Users[numberSource].getJob(), licenses = Users[numberSource].getLicenses(), criminalHistory = Users[numberSource].getCriminalHistory(), characters = Users[numberSource].getCharacters(), jailtime = Users[numberSource].getJailtime(), policeRank = Users[numberSource].getPoliceRank(), policeCharacter = Users[numberSource].getPoliceCharacter(), EMSRank = Users[numberSource].getEMSRank(), securityRank = Users[numberSource].getSecurityRank(), ingameTime = Users[numberSource].getIngameTime()}, function()
-			print("Updated db for player " .. numberSource)
-		end)
-	--]]
-end)
-
 RegisterServerEvent('es:firstJoinProper')
 AddEventHandler('es:firstJoinProper', function()
 	registerUser(GetPlayerIdentifiers(source)[1], tonumber(source))
@@ -259,7 +249,7 @@ end)
 ---------------------------------------------------------------------------
 
 Citizen.CreateThread(function()
-	
+
 	function saveData()
 		print("calling saveData()...")
 		TriggerEvent("es:getPlayers", function(players)
@@ -289,9 +279,9 @@ Citizen.CreateThread(function()
 			end
 		end)
 	end
-	
+
 	local minutes = 15
-	
+
 	while true do
 		Citizen.Wait(minutes * 60000)
 		saveData()

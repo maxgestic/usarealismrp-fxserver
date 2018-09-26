@@ -107,6 +107,10 @@ exports("PerformDBCheck", function(scriptName, db, doneFunc)
 			print("------------------------------------------------------------------------------------------------")
 			print("--- Error detected in authentication, please take a look at config.lua inside essentialmode. ---")
 			print("------------------------------------------------------------------------------------------------")
+		elseif err == 201 then
+			print("-------------------------------------------------------------")
+			print("--- No errors detected, " .. scriptName .. " is setup properely. ---")
+			print("-------------------------------------------------------------")
 		else
 			print("------------------------------------------------------------------------------------------------")
 			print("--- Unknown error detected ( " .. err .. " ): " .. rText)

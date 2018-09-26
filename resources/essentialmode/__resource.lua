@@ -6,7 +6,7 @@ description 'EssentialMode base by Kanersps. Modified by minipunch for USA REALI
 ui_page 'ui.html'
 
 -- Server
-server_scripts { 
+server_scripts {
 	'sv_es-DB-config.lua',
 	'server/util.lua',
 	'server/main.lua',
@@ -33,6 +33,5 @@ server_exports {
 	'addCommand',
 	'addGroupCommand',
 	'getCommands',
-	'CanGroupTarget',
+	'CanGroupTarget'
 }
-
