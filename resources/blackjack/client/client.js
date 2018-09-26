@@ -4,7 +4,7 @@ for (var i = 0; i < Config.Markers.length; i++) {
     SetBlipSprite(blip, Config.MarkerInfo.BlipSprite);
     SetBlipDisplay(blip, 4);
     SetBlipScale(blip, 0.9);
-    SetBlipColour(blip, 40);
+    SetBlipColour(blip, 9);
     SetBlipAsShortRange(blip, true);
     BeginTextCommandSetBlipName("STRING");
     AddTextComponentString("Casino");
@@ -13,8 +13,17 @@ for (var i = 0; i < Config.Markers.length; i++) {
 
 RegisterNuiCallbackType("escape");
 on("__cfx_nui:escape", (data, cb) => {
-	console.log("didescape");
 	ShowMenu(false);
+})
+
+RegisterNuiCallbackType("win");
+on("__cfx_nui:win", (data, cb) => {
+	emitNet("blackjack:win", data.bet)
+})
+
+RegisterNuiCallbackType("lose");
+on("__cfx_nui:lose", (data, cb) => {
+	emitNet("blackjack:lose", data.bet)
 })
 
 function ShowMenu(enable) {
@@ -23,7 +32,7 @@ function ShowMenu(enable) {
 	} else {
 		SetNuiFocus(false, false);
 	}
-	
+
 	window.SendNuiMessage(JSON.stringify({
 		type: "enableui",
 		enable: enable
@@ -40,7 +49,7 @@ function HelpText(text) {
 function SendBlackJackMessage(message) {
 	emit('chat:addMessage', { multiline: true, args: [ 'BlackJack', message ] });
 }
-	
+
 setTick(() => {
     for (var i = 0; i < Config.Locations.length; i++) {
         var playerCoord = GetEntityCoords(GetPlayerPed(-1), true); // array [x,y,z] 0 1 2
@@ -54,7 +63,7 @@ setTick(() => {
 				HelpText("Press ~INPUT_DETONATE~ to play Black Jack");
 				if (IsControlJustReleased(0, 58)) { // G
 					ShowMenu(true);
-					
+
 					//set PlayingBlackJack = true;
 				}
 			}
