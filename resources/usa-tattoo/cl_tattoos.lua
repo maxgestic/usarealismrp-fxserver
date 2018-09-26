@@ -3,7 +3,8 @@ local SHOPS = {
   {x = 1863.775, y = 3747.57, z = 33.03}, -- sandy shores
   {x = 323.947, y = 179.87, z = 103.586}, -- los santos, vinewood area
   {x = 1321.550, y = -1653.529, z = 52.27}, -- los santos, east side
-  {x = -1155.323, y = -1426.81, z = 4.9} -- los santos, west side vespucci beach
+  {x = -1155.323, y = -1426.81, z = 4.9}, -- los santos, west side vespucci beach
+  {x = -3169.1, y = 1076.8, z = 20.8} -- ls, west coast
 }
 
 local TATTOOS = nil
