@@ -168,7 +168,7 @@ end, {
 -- end bait car
 
 -- start seize contraband
-TriggerEvent('es:addJobCommand', 'seize', { "police", "sheriff" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'seize', { "police", "sheriff", "corrections" }, function(source, args, user)
 	local arg = args[2]
 	local targetId = tonumber(args[3])
 	local name = user.getActiveCharacterData("firstName") .. user.getActiveCharacterData("lastName")
