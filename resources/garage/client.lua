@@ -17,6 +17,8 @@ local locations = {
 	{["x"] = 326.4, ["y"] = -1475.6, ["z"] = 29.8, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"}} -- one of the hospitals in LS, forgot exaclty the name
 }
 
+local VEHICLE_DAMAGES = {}
+
 Citizen.CreateThread(function()
     for _, info in pairs(locations) do
 		if type(info["jobs"]) == "nil" then
@@ -63,17 +65,29 @@ RegisterNetEvent("garage:storeVehicle")
 AddEventHandler("garage:storeVehicle", function()
 	local veh = GetVehiclePedIsIn(GetPlayerPed(-1), true)
 	local plate = GetVehicleNumberPlateText(veh)
-	TriggerEvent("garage:notify", "~g~We'll keep this fine thing safe for you.")
+	exports.globals:notify("~g~We'll keep this fine thing safe for you.")
+	-- store engine / body damage --
+	VEHICLE_DAMAGES[plate] = {
+		engine_health = GetVehicleEngineHealth(veh),
+		body_health = GetVehicleBodyHealth(veh),
+		dirt_level = GetVehicleDirtLevel(veh),
+		windows = {
+			[0] = IsVehicleWindowIntact(veh, 0),
+			[1] = IsVehicleWindowIntact(veh, 1),
+			[2] = IsVehicleWindowIntact(veh, 2),
+			[3] = IsVehicleWindowIntact(veh, 3)
+		}
+	}
+	-- delete veh --
 	SetEntityAsMissionEntity(veh, true, true)
 	Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(veh))
 	-- store vehicle key with vehicle
-	print("attempting to storing vehicle key!")
 	TriggerServerEvent("garage:storeKey", plate)
 end)
 
 RegisterNetEvent("garage:vehicleNotStored")
 AddEventHandler("garage:vehicleNotStored", function()
-	TriggerEvent("garage:notify", "~r~Sorry! That vehicle is not stored at any of our garages.")
+	exports.globals:notify("~r~Sorry! That vehicle is not stored at any of our garages.")
 end)
 
 RegisterNetEvent("garage:vehicleStored")
@@ -109,7 +123,7 @@ AddEventHandler("garage:spawn", function(vehicle)
 		RequestModel(numberHash)
 
 		while not HasModelLoaded(numberHash) do
-			Citizen.Wait(100)
+			Wait(100)
 		end
 
 		local playerPed = GetPlayerPed(-1)
@@ -128,6 +142,18 @@ AddEventHandler("garage:spawn", function(vehicle)
 		-- car customizations
 		if playerVehicle.customizations then
 			TriggerEvent("customs:applyCustomizations", playerVehicle.customizations)
+		end
+
+		-- apply any stored engine / body damage --
+		if VEHICLE_DAMAGES[playerVehicle.plate] then
+			SetVehicleBodyHealth(vehicle, VEHICLE_DAMAGES[playerVehicle.plate].body_health)
+			SetVehicleEngineHealth(vehicle, VEHICLE_DAMAGES[playerVehicle.plate].engine_health)
+			SetVehicleDirtLevel(vehicle, VEHICLE_DAMAGES[playerVehicle.plate].dirt_level)
+			for index, intact in pairs(VEHICLE_DAMAGES[playerVehicle.plate].windows) do
+				if not intact then
+					SmashVehicleWindow(vehicle, index)
+				end
+			end
 		end
 
 	end)

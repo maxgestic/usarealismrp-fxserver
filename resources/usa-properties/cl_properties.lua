@@ -3,23 +3,6 @@
 --# by: minipunch
 --# made for: USA REALISM RP
 
---[[
-Going to need:
-    - Property has owner:
-        - Not the owner:
-            -  Residential:
-                - Owner, end date
-            - Business:
-                - Owner, end date, rob
-        - Owner:
-            - Home Page
-            - Item Storage menu & submenus
-            - Vehicle Garage menu
-            - Outfits menu & submenus
-    - Property has no owner:
-        - Price, purchase, close
-]]
-
 local PROPERTIES = {} -- loaded from the server on first load or whenever a change is made. below data is only for reference whle making
 
 local my_property_identifier = nil -- gets updated by the server on first load, this is the hex steam ID of the player
@@ -43,6 +26,8 @@ local closest_coords = {
 	y = nil,
 	z = nil
 }
+
+local VEHICLE_DAMAGES = {}
 
 ------------------------------------
 -- set player property identifier --
@@ -108,6 +93,19 @@ AddEventHandler("properties:storeVehicle", function()
     local veh = GetVehiclePedIsIn(GetPlayerPed(-1), true)
     local plate = GetVehicleNumberPlateText(veh)
     TriggerEvent("usa:notify", "~g~Vehicle stored!")
+    -- store engine / body damage --
+    VEHICLE_DAMAGES[plate] = {
+        engine_health = GetVehicleEngineHealth(veh),
+        body_health = GetVehicleBodyHealth(veh),
+		dirt_level = GetVehicleDirtLevel(veh),
+		windows = {
+			[0] = IsVehicleWindowIntact(veh, 0),
+			[1] = IsVehicleWindowIntact(veh, 1),
+			[2] = IsVehicleWindowIntact(veh, 2),
+			[3] = IsVehicleWindowIntact(veh, 3)
+		}
+    }
+    -- delete veh --
     SetEntityAsMissionEntity(veh, true, true)
     Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(veh))
 end)
@@ -147,6 +145,18 @@ AddEventHandler("properties:retrieveVehicle", function(vehicle)
         -- car customizations
         if playerVehicle.customizations then
             TriggerEvent("customs:applyCustomizations", playerVehicle.customizations)
+        end
+
+        -- apply any stored engine / body damage --
+        if VEHICLE_DAMAGES[playerVehicle.plate] then
+            SetVehicleBodyHealth(vehicle, VEHICLE_DAMAGES[playerVehicle.plate].body_health)
+            SetVehicleEngineHealth(vehicle, VEHICLE_DAMAGES[playerVehicle.plate].engine_health)
+            SetVehicleDirtLevel(vehicle, VEHICLE_DAMAGES[playerVehicle.plate].dirt_level)
+            for index, intact in pairs(VEHICLE_DAMAGES[playerVehicle.plate].windows) do
+				if not intact then
+					SmashVehicleWindow(vehicle, index)
+				end
+			end
         end
 
     end)
@@ -193,7 +203,7 @@ Citizen.CreateThread(function()
                                     ---------------------------------------
                                     -- check if this client is owner --
                                     ---------------------------------------
-									
+
                                     if nearest_property_info.owner.identifier == my_property_identifier then
                                         ----------------------------
                                         -- create main menu  --
@@ -422,7 +432,7 @@ Citizen.CreateThread(function()
                                                 end
                                                 wardrobe_submenu2:AddItem(deletebtn)
                                             end
-                                        else 
+                                        else
 											local noitemsbtn = NativeUI.CreateItem("You have no outfits saved!", "Press the 'Save Current Outfit' button to save an outfit.")
 											wardrobe_submenu:AddItem(noitemsbtn)
 										end
@@ -599,7 +609,7 @@ Citizen.CreateThread(function()
 										drawTxt("Press [ ~b~E~w~ ] to store your vehicle in the garage!",7,1,0.5,0.8,0.6,255,255,255,255)
 									end
 								end
-						else 
+						else
 							drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property garage!",7,1,0.5,0.8,0.6,255,255,255,255)
 						end
 					end
@@ -612,7 +622,7 @@ Citizen.CreateThread(function()
             _menuPool:ControlDisablingEnabled(false)
             _menuPool:ProcessMenus()
 			if closest_coords then
-				if GetDistanceBetweenCoords(GetEntityCoords(me), closest_coords.x, closest_coords.y, closest_coords.z) > 2 then 
+				if GetDistanceBetweenCoords(GetEntityCoords(me), closest_coords.x, closest_coords.y, closest_coords.z) > 2 then
 					closest_coords.x, closest_coords.y, closest_coords.z = nil, nil, nil
 					RemoveMenuPool(_menuPool)
 				end

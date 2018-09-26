@@ -407,7 +407,25 @@
 
                     <!-- Police Reports -->
                     <div v-if="current_tab == 'Police Reports'">
-                            <div style="height: 60%; overflow-y: scroll; border: 2px solid lightgray;">
+                            <h3 style="text-align: center; margin-top: 2em;">Create an incident report</h3>
+                            <!-- Notification box -->
+                            <div>{{ notification }}</div>
+                            <!-- New police report form -->
+                            <form class="w3-container" style="padding-left: 0 !important;">
+                                <br>
+                                <div>
+                                    <label>Incident Details: *</label>
+                                    <textarea v-model="new_police_report.incident" class="w3-input w3-border margin-bottom-1" rows="6" cols="100" placeholder="Ex: At 5:35 PM, I responded to a report of a disturbance on Paleto Blvd. and Procopio Dr. and upon arrival..."></textarea>
+                                    <label>Location: *</label>
+                                    <input v-model="new_police_report.location" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: Paleto Blvd / Cascabel Ave." required>
+                                    <label>Other Responder(s):</label>
+                                    <input v-model="new_police_report.other_responders" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: Jesse King (U-102), Hack Gambino (L-2)">
+                                </div>
+                                <br>
+                                <p><button v-on:click="CreatePoliceReport" type="button" class="w3-btn w3-padding w3-text-black" style="background-color: #4A9EC3;">Submit Report</button></p>
+                            </form>
+                            <h3 style="text-align: center; margin-top: 2em;">All Reports</h3>
+							<div style="height: 60%; overflow-y: scroll; border: 2px solid lightgray;">
                                 <table class="w3-table-all w3-small" style="margin-bottom: 3em;">
                                     <tr>
                                         <th><b>Report #</b></th>
@@ -426,23 +444,6 @@
                                 </table>
                             </div>
                             <input v-model="report_search" class="w3-input w3-border" type="text"  placeholder="Search for a report..." required>
-                            <h3 style="text-align: center; margin-top: 2em;">Create an incident report</h3>
-                            <!-- Notification box -->
-                            <div>{{ notification }}</div>
-                            <!-- New police report form -->
-                            <form class="w3-container" style="padding-left: 0 !important;">
-                                <br>
-                                <div>
-                                    <label>Incident Details: *</label>
-                                    <textarea v-model="new_police_report.incident" class="w3-input w3-border margin-bottom-1" rows="6" cols="100" placeholder="Ex: At 5:35 PM, I responded to a report of a disturbance on Paleto Blvd. and Procopio Dr. and upon arrival..."></textarea>
-                                    <label>Location: *</label>
-                                    <input v-model="new_police_report.location" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: Paleto Blvd / Cascabel Ave." required>
-                                    <label>Other Responder(s):</label>
-                                    <input v-model="new_police_report.other_responders" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: Jesse King (U-102), Hack Gambino (L-2)">
-                                </div>
-                                <br>
-                                <p><button v-on:click="CreatePoliceReport" type="button" class="w3-btn w3-padding w3-text-black" style="background-color: #4A9EC3;">Submit Report</button></p>
-                            </form>
                     </div>
 
                     <!-- Police Report details -->
