@@ -7,7 +7,7 @@ for (var i = 0; i < Config.Markers.length; i++) {
     SetBlipColour(blip, 40);
     SetBlipAsShortRange(blip, true);
     BeginTextCommandSetBlipName("STRING");
-    AddTextComponentString("Black Jack");
+    AddTextComponentString("Casino");
     EndTextCommandSetBlipName(blip);
 }
 
