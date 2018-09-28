@@ -26,6 +26,18 @@ on("__cfx_nui:lose", (data, cb) => {
 	emitNet("blackjack:lose", data.bet)
 })
 
+RegisterNuiCallbackType("checkMoney");
+on("__cfx_nui:checkMoney", (data, cb) => {
+	emitNet("blackjack:checkMoney", data.bet)
+})
+
+onNet("blackjack:startNewGame", (bet) => {
+	//console.log("checked money, starting new game!!")
+	window.SendNuiMessage(JSON.stringify({
+		type: "startNewGame"
+	}))
+});
+
 function ShowMenu(enable) {
 	if (enable) {
 		SetNuiFocus(true, true);
