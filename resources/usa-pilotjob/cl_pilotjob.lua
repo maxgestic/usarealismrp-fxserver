@@ -328,9 +328,10 @@ function MarkCurrentCheckpointComplete()
             -- check for passengers to exit --
             if checkpoint.passengers_exit then
                 if active_job.current_passengers then
-                    for i = 1, #active_job.current_passengers do
+                    for i = #active_job.current_passengers, 1, -1 do
                         TaskLeaveVehicle(active_job.current_passengers[i], active_job.current_vehicle, 1)
                         TaskWanderStandard(active_job.current_passengers[i], 10.0, 10)
+                        table.remove(active_job.current_passengers, i)
                     end
                 end
             end

@@ -483,7 +483,7 @@ local MISSIONS = {
                 plane_spawn = {
                     model = "vestra",
                     location = { x = -962.2, y = -2991.7, z = 13.9 },
-                    passengers = 4
+                    passengers = 1
                 }
         }
     },
@@ -716,7 +716,7 @@ local MISSIONS = {
                 plane_spawn = {
                     model = "vestra",
                     location = { x = -962.2, y = -2991.7, z = 13.9 },
-                    passengers = 4
+                    passengers = 1
                 }
         },
         {
