@@ -11,7 +11,7 @@ AddEventHandler("mdt:toggleVisibilty", function()
 end)
 
 RegisterNUICallback("close", function(data, cb)
-    ToggleGUI()
+    ToggleGUI(false)
     cb('ok')
 end)
 
@@ -90,14 +90,17 @@ RegisterNUICallback("fetchEmployee", function(data, cb)
     cb('ok')
 end)
 
-function ToggleGUI()
+function ToggleGUI(explicit_status)
+  if explicit_status ~= nil then
+    isVisible = explicit_status
+  else
     isVisible = not isVisible
-    print("setting menu on to: " .. tostring(isVisible))
-    SetNuiFocus(isVisible, isVisible)
-    SendNUIMessage({
-        type = "enable",
-        isVisible = isVisible
-    })
+  end
+  SetNuiFocus(isVisible, isVisible)
+  SendNUIMessage({
+    type = "enable",
+    isVisible = isVisible
+  })
 end
 
 ----------------------
