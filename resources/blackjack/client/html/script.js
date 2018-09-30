@@ -395,6 +395,7 @@ $(function() {
 						$hit.textContent = 'New Game ($0) (Busted! ' + BlackJack.getScore(BlackJack.hand) + ')';
 						$stay.textContent = 'Change Bet Up ($100)';
 						$score.textContent = 'Change Bet Down (-$100)';
+						BlackJack.Lost();
 					}
 				});
 
@@ -422,6 +423,8 @@ $(function() {
 	$topbar.appendChild($stay);
 	$topbar.appendChild($score);
 
+	var onHold = false;
+
 	$hit.addEventListener('click', function () {
 		if (!canAct())
 			return;
@@ -437,6 +440,15 @@ $(function() {
 	$stay.addEventListener('click', function () {
 		if (!canAct())
 		return;
+
+		if (onHold)
+			return;
+
+		onHold = true;
+
+		setTimeout(function() {
+			onHold = false;
+		}, 500);
 
 		if ($stay.textContent.includes("Change Bet Up")) {
 			//Check to see if can bet up. Then bet up with what ever you are using to handle money.
