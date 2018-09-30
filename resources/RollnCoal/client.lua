@@ -40,40 +40,42 @@ local car_net = nil
 Citizen.CreateThread(function()
 
     while true do
-        Citizen.Wait(0)
+        Wait(0)
 
         local ped = GetPlayerPed(PlayerId())
         local vehicle = GetVehiclePedIsIn(ped, false)
         --local class = GetVehicleClass(vehicle)
 
-       if IsPedInAnyVehicle(ped, false) then
+        if IsControlJustPressed(1, key) then
+            if IsPedInAnyVehicle(ped, false) then
 
-        --if class == 9 or class == 10 then -- Add more classes allowed to use it
-        if ValidVehicle(vehicle) then
+                --if class == 9 or class == 10 then -- Add more classes allowed to use it
+                if ValidVehicle(vehicle) then
 
-            if  IsControlJustPressed(1, key) and IsPedTheDriver(vehicle, ped) then
+                    if  IsPedTheDriver(vehicle, ped) then
 
-                RequestNamedPtfxAsset(particleDict)
-                while not HasNamedPtfxAssetLoaded(particleDict) do
-                    Citizen.Wait(10)
-                end
+                        RequestNamedPtfxAsset(particleDict)
+                        while not HasNamedPtfxAssetLoaded(particleDict) do
+                            Citizen.Wait(10)
+                        end
 
-                local netid = VehToNet(vehicle)
+                        local netid = VehToNet(vehicle)
 
-                SetNetworkIdExistsOnAllMachines(netid, 1)
-                NetworkSetNetworkIdDynamic(netid, 0)
-                SetNetworkIdCanMigrate(netid, 0)
-                car_net = netid
-                TriggerServerEvent("Smoke:SyncStartParticles", car_net)
+                        SetNetworkIdExistsOnAllMachines(netid, 1)
+                        NetworkSetNetworkIdDynamic(netid, 0)
+                        SetNetworkIdCanMigrate(netid, 0)
+                        car_net = netid
+                        TriggerServerEvent("Smoke:SyncStartParticles", car_net)
 
-            elseif IsControlJustPressed(1, key) then
-                    print ("You cannot do this as passenger")
+                    else
+                        print ("You cannot do this as passenger")
+                        end
+                    end
+
                 end
             end
-
         end
-    end
-end)
+    end)
 
 RegisterNetEvent("Smoke:StartParticles")
 AddEventHandler("Smoke:StartParticles", function(carid)
