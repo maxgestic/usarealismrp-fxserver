@@ -969,7 +969,7 @@ end)
 			end)
 		end)
 	end, {
-		help = "Ban a player from the server.",
+		help = "CAUTION: ONLY USE FOR SERIOUS OFFENSES. Please consider using /tempban instead.",
 		params = {
 			{ name = "id", help = "Player's ID" },
 			{ name = "reason", help = "The reason of the ban. Please include as much detail as possible."  }
