@@ -28,55 +28,20 @@ end)
 RegisterServerEvent("transport:giveMoney")
 AddEventHandler("transport:giveMoney", function(amount, job)
 	local userSource = tonumber(source)
-	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local user_money = user.getActiveCharacterData("money")
-		user.setActiveCharacterData("money", user_money + amount)
 		-- give money to shop owner (if any within 50m nearby)--
 		print("checking job closest property!")
 		if job.closest_property then
 			print("existed! name: " .. job.closest_property.name)
-			TriggerEvent("properties:addMoney", job.closest_property.name, round(0.09 * amount, 0))
+			TriggerEvent("properties:addMoney", job.closest_property.name, math.ceil(0.09 * amount))
 		end
-		if job.name == "Cannabis Transport" then
-			local inventory = user.getActiveCharacterData("inventory")
-			for i = 1, #inventory do
-				local item = inventory[i]
-				if item then
-					if item.name == "20g of concentrated cannabis" then
-						table.remove(inventory, i)
-						user.setActiveCharacterData("inventory", inventory)
-						return
-					end
-				end
-			end
-		end
-	end)
+		user.setActiveCharacterData("money", user_money + amount)
 end)
 
 RegisterServerEvent("transport:addJob")
 AddEventHandler("transport:addJob", function(job)
 	activeJobs[source] = job
-	if job.name == "Cannabis Transport" then
-		TriggerEvent('es:getPlayerFromId', tonumber(source), function(user)
-			local inventory = user.getActiveCharacterData("inventory")
-			for i = 1, #inventory do
-				local item = inventory[i]
-				if item.name == "20g of concentrated cannabis" then
-					print("job " .. job.name .. " started by player " .. GetPlayerName(tonumber(source)))
-					return
-				end
-			end
-			-- no weed in inventory at this point, so add it
-			local weedPackage = {
-				name = "20g of concentrated cannabis",
-				quantity = 1,
-				type = "drug",
-				legality = "illegal"
-			}
-			table.insert(inventory, weedPackage)
-			user.setActiveCharacterData("inventory", inventory)
-		end)
-	end
 end)
 
 RegisterServerEvent("go_postal:setActiveJob")
@@ -92,20 +57,6 @@ AddEventHandler("go_postal:removeActiveJob", function(source)
 		activeJobs[source] = nil
 	end
 end)
-
---[[ DEPRECATED due to new single player blip routes
-TriggerEvent('es:addCommand', 'waypoint', function(source, args, user)
-	print("/waypoint called!")
-	if activeJobs[source] == nil then
-		TriggerClientEvent('chatMessage', source, "", {}, "You do not currently have any waypoints set!")
-	else
-		TriggerClientEvent('chatMessage', source, "", {}, "Your waypoint has been added to the map again!")
-		TriggerClientEvent('chatMessage', source, "x", {255,0,0}, activeJobs[source].x)
-		TriggerClientEvent('chatMessage', source, "y", {255,0,0}, activeJobs[source].y)
-		TriggerClientEvent('placeMarker', source, activeJobs[source].x, activeJobs[source].y)
-	end
-end, {help = "Reset a transport job waypoint"})
---]]
 
 AddEventHandler('playerDropped', function()
 	if activeJobs[source] then
@@ -123,6 +74,75 @@ TriggerEvent('es:addCommand', 'quitjob', function(source, args, user)
 	end
 end, {help = "Quit current transport job"})
 
-function round(num, numDecimalPlaces)
-  return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
-end
+local COCAINE_PED_BUSY = false
+local RETREIVAL_COORDS = {x = 32.4, y = -1927.5, z = 21.8}
+local STANDING_COORDS = {x = 29.8, y = -1924.4, z = 21.6}
+
+RegisterServerEvent("cocaine:checkPedBusy")
+AddEventHandler("cocaine:checkPedBusy", function()
+	local src = source
+	local wait_time_seconds = 35
+	if not COCAINE_PED_BUSY then
+		TriggerClientEvent("usa:notify", source, "I'll be right back.")
+		TriggerClientEvent("cocaine:makePedWalk", src, RETREIVAL_COORDS)
+		COCAINE_PED_BUSY = true
+		SetTimeout(wait_time_seconds * 1000, function()
+			TriggerClientEvent("cocaine:continuePickingUpCocaine", src)
+			COCAINE_PED_BUSY = false
+			TriggerClientEvent("cocaine:makePedWalk", src, STANDING_COORDS)
+		end)
+	else
+		TriggerClientEvent("usa:notify", source, "Francisco is busy! Please wait!")
+	end
+end)
+
+RegisterServerEvent("cocaine:sellCocaine")
+AddEventHandler("cocaine:sellCocaine", function()
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	local user_money = user.getActiveCharacterData("money")
+	local inventory = user.getActiveCharacterData("inventory")
+	local coke_payment_per_package = 525
+	for i = #inventory, 1, -1 do
+		local item = inventory[i]
+		if item then
+			if item.name == "Uncut Cocaine" then
+					local coke_reward_total = coke_payment_per_package * item.quantity
+					user.setActiveCharacterData("money", user_money + coke_reward_total)
+					TriggerClientEvent("usa:notify", source, "Thanks, here is $" .. coke_reward_total)
+					print("coke reward: $" .. coke_reward_total)
+					table.remove(inventory, i)
+					user.setActiveCharacterData("inventory", inventory)
+					return
+			end
+		end
+	end
+	TriggerClientEvent("usa:notify", source, "You have nothing to sell.")
+end)
+
+RegisterServerEvent("cocaine:givePackage")
+AddEventHandler("cocaine:givePackage", function()
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	local cocainePackage = {
+		name = "Uncut Cocaine",
+		quantity = 1,
+		type = "drug",
+		legality = "illegal",
+		weight = 7.0
+	}
+	if user.getCanActiveCharacterHoldItem(cocainePackage) then
+		local inventory = user.getActiveCharacterData("inventory")
+		for i = 1, #inventory do
+			local item = inventory[i]
+			if item.name == "Uncut Cocaine" then
+				inventory[i].quantity = item.quantity + 1
+				user.setActiveCharacterData("inventory", inventory)
+				return
+			end
+		end
+		-- not already in inventory at this point, so add it
+		table.insert(inventory, cocainePackage)
+		user.setActiveCharacterData("inventory", inventory)
+	else
+		TriggerClientEvent("usa:notify", source, "Inventory full!")
+	end
+end)
