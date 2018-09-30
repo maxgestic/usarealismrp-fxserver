@@ -1,7 +1,7 @@
 RegisterServerEvent("blackjack:win")
 AddEventHandler("blackjack:win", function(bet)
     --print("won blackjack game, bet: " .. bet)
-    if tonumber(bet) < 20000 then
+    if tonumber(bet) <= 15000 then
         local player = exports["essentialmode"]:getPlayerFromId(source)
         player.setActiveCharacterData("money", player.getActiveCharacterData("money") + bet)
     else

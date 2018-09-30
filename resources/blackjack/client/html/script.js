@@ -373,7 +373,7 @@ $(function() {
 						if (canAct()) {
 							res()
 						}
-					}, 1000);
+					}, 50);
 				}).then(function() {
 					$stay.textContent = "Stay: " + BlackJack.getScore(BlackJack.hand);
 					$score.textContent = "Dealer: " + BlackJack.getScore(BlackJack.dealerHand.slice(0, 1)) + "+" + "?";
@@ -386,7 +386,7 @@ $(function() {
 						if (canAct()) {
 							res();
 						}
-					}, 1000);
+					}, 50);
 				}).then(function() {
 					$stay.textContent = "Stay: " + BlackJack.getScore(BlackJack.hand);
 
@@ -429,6 +429,15 @@ $(function() {
 		if (!canAct())
 			return;
 
+		if (onHold)
+			return;
+
+		onHold = true;
+
+		setTimeout(function() {
+			onHold = false;
+		}, 1000);
+
 		//console.log("checking money for bet: " + BlackJack.bet);
 		//emitNet("blackjack:checkMoney", BlackJack.bet);
 		$.post('http://blackjack/checkMoney', JSON.stringify({
@@ -448,12 +457,11 @@ $(function() {
 
 		setTimeout(function() {
 			onHold = false;
-		}, 500);
+		}, 1000);
 
 		if ($stay.textContent.includes("Change Bet Up")) {
 			//Check to see if can bet up. Then bet up with what ever you are using to handle money.
 			BlackJack.bet += 100;
-
 			$hit.textContent = 'New Game ($'+BlackJack.bet+')';
 		} else if (BlackJack.myTurn) {
 			BlackJack.myTurn = false;
@@ -506,7 +514,7 @@ $(function() {
 						if (canAct()) {
 							res();
 						}
-					}, 1000);
+					}, 50);
 				}).then(function() {
 					$stay.textContent = "Stay: " + BlackJack.getScore(BlackJack.hand);
 
