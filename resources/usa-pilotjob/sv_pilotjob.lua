@@ -188,9 +188,7 @@ local MISSIONS = {
                 plane_spawn = {
                     model = "vestra",
                     location = { x = -962.2, y = -2991.7, z = 13.9 },
-                    passengers = {
-                        { model = -413447396 }
-                    }
+					passengers = 0
                 }
         }
     },
@@ -447,44 +445,6 @@ local MISSIONS = {
                 location = { x = -962.2, y = -2991.7, z = 13.9 },
                 passengers = 7
             }
-        },
-        {
-                name = "Vestra Flight to Grapeseed",
-                description = "Take the Vestra and its passengers to the Grapeseed airfield and make a clean landing.",
-                checkpoints = {
-                    {
-                        name = "Vestra",
-                        coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                        requirement = "Get into the Vestra and prepare yourself and your passengers for flight."
-                    },
-                    {
-                        name = "Runway 1",
-                        coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                        requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                        sound = "atc3"
-                    },
-                    {
-                        name = "Grapeseed Airport",
-                        coords = { x = 2124.5, y = 4806.1, z = 41.2 },
-                        requirement = "Fly safely and properly to the Grapeseed Airport and make a clean landing."
-                    },
-                    {
-                        name = "LSA",
-                        coords = { x = -1072.3, y = -3102.5, z = 13.9 },
-                        requirement = "Take the Vestra back to Los Santos Airport."
-                    },
-                    {
-                        name = "LSA Hangar",
-                        coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                        requirement = "Park the Vestra in the hangar, and check in with staff, and that will be all for this flight!"
-                    }
-                },
-                pay = 9000,
-                plane_spawn = {
-                    model = "vestra",
-                    location = { x = -962.2, y = -2991.7, z = 13.9 },
-                    passengers = 1
-                }
         }
     },
     ["First Officer"] = {
@@ -680,44 +640,6 @@ local MISSIONS = {
                 location = { x = -962.2, y = -2991.7, z = 13.9 },
                 passengers = 7
             }
-        },
-        {
-                name = "Vestra Flight to Grapeseed",
-                description = "Take the Vestra and its passengers to the Grapeseed airfield and make a clean landing.",
-                checkpoints = {
-                    {
-                        name = "Vestra",
-                        coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                        requirement = "Get into the Vestra and prepare yourself and your passengers for flight."
-                    },
-                    {
-                        name = "Runway 1",
-                        coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                        requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                        sound = "atc3"
-                    },
-                    {
-                        name = "Grapeseed Airport",
-                        coords = { x = 2124.5, y = 4806.1, z = 41.2 },
-                        requirement = "Fly safely and properly to the Grapeseed Airport and make a clean landing."
-                    },
-                    {
-                        name = "LSA",
-                        coords = { x = -1072.3, y = -3102.5, z = 13.9 },
-                        requirement = "Take the Vestra back to Los Santos Airport."
-                    },
-                    {
-                        name = "LSA Hangar",
-                        coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                        requirement = "Park the Vestra in the hangar, and check in with staff, and that will be all for this flight!"
-                    }
-                },
-                pay = 9000,
-                plane_spawn = {
-                    model = "vestra",
-                    location = { x = -962.2, y = -2991.7, z = 13.9 },
-                    passengers = 1
-                }
         },
         {
                 name = "Velum Flight to Grapeseed",
