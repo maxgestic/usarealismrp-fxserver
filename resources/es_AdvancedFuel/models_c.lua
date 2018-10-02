@@ -41,7 +41,9 @@ plane_model = {
 	"VELUM",
 	"VELUM2",
 	"VESTRA",
-	"SEABREEZE"
+	"SEABREEZE",
+	"MICROLIGHT",
+	"ALPHAZ1"
 }
 
 
