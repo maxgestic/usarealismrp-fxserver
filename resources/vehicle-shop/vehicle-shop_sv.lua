@@ -35,6 +35,7 @@ local vehicleShopItems = {
 			{make = "Pfister", model = "Comet 1", price = 55550, hash = -1045541610, storage_capacity = 125.0},
 			{make = "Pfister", model = "Comet 2", price = 55550, hash = -2022483795, storage_capacity = 125.0},
 			{make = "Pfister", model = "Comet 5", price = 95000, hash = "comet5", storage_capacity = 125.0},
+			{make = "Benefactor", model = "Schwartzer", price = 80000, hash = "schwarzer", storage_capacity = 135.0}
 			--{make = "Annis", model = "Savestra", price = 120000, hash = "savestra", storage_capacity = 125.0}
 		},
 		["Muscles"] = {
@@ -58,7 +59,8 @@ local vehicleShopItems = {
 			{make = "Vapid", model = "Ellie", price = 155000, hash = "ellie", storage_capacity = 100.0},
 			{make = "Declasse", model = "Sabre GT", price = 35000, hash = -1685021548, storage_capacity = 155.0},
 			{make = "Declasse", model = "Sabre Turbo Custom", price = 65000, hash = 223258115, storage_capacity = 130.0},
-			{make = "Declasse", model = "Stallion", price = 35000, hash = 1923400478, storage_capacity = 155.0}
+			{make = "Declasse", model = "Stallion", price = 40000, hash = 1923400478, storage_capacity = 155.0},
+			{make = "Cheval", model = "Picador", price = 35000, hash = "picador", storage_capacity = 170.0}
 		},
 		["Trucks"] = {
 			{make = "Karin", model = "Rebel", price = 10500, hash = -2045594037, storage_capacity = 230.0},

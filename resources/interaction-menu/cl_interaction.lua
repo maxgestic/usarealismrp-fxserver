@@ -467,10 +467,10 @@ function interactionMenuUse(itemName, wholeItem)
 		-------------------
 		-- Meth --
 		-------------------
-		if string.find(itemName, "Meth") then
+		if string.find(itemName, "Meth") or string.find(itemName, "Uncut Cocaine") then
 			--Citizen.Trace("meth found to use!!")
 			TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
-			TriggerEvent("interaction:notify", "You have used: (x1) Meth")
+			TriggerEvent("interaction:notify", "You have used: (x1) " .. itemName:sub(6))
 			intoxicate(true, nil)
 			reality(5)
 		-------------------

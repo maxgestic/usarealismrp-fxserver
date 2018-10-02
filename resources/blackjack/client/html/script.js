@@ -436,7 +436,7 @@ $(function() {
 
 		setTimeout(function() {
 			onHold = false;
-		}, 1000);
+		}, 300);
 
 		//console.log("checking money for bet: " + BlackJack.bet);
 		//emitNet("blackjack:checkMoney", BlackJack.bet);
@@ -457,7 +457,7 @@ $(function() {
 
 		setTimeout(function() {
 			onHold = false;
-		}, 1000);
+		}, 300);
 
 		if ($stay.textContent.includes("Change Bet Up")) {
 			//Check to see if can bet up. Then bet up with what ever you are using to handle money.
