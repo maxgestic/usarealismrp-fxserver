@@ -77,7 +77,7 @@ Citizen.CreateThread(function()
                 if Vdist(mycoords.x, mycoords.y, mycoords.z, JOB_PEDS[i].x, JOB_PEDS[i].y, JOB_PEDS[i].z) < 2.0 then
                     drawTxt("Press [~y~E~w~] to start working for Air San Andreas!",7,1,0.5,0.8,0.5,255,255,255,255)
                     if IsControlJustPressed(1, KEY_E) then
-                        print("Starting job for Air San Andreas!")
+                        --print("Starting job for Air San Andreas!")
                         TriggerServerEvent("pilotjob:newJob")
                     end
                 end
@@ -169,7 +169,7 @@ end)
 
 RegisterNetEvent("pilotjob:beginJob")
 AddEventHandler("pilotjob:beginJob", function(job)
-    print("starting job: " .. job.name)
+    --print("starting job: " .. job.name)
     active_job = job
     active_job.start_time = GetGameTimer()
     ------------------------
@@ -251,10 +251,10 @@ function SpawnPlane(plane)
                     while not HasModelLoaded(model) do
                         Citizen.Wait(100)
                     end
-                    local ped = CreatePed(4, model, plane.location.x + 5.0, plane.location.y + 3.0, plane.location.z, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
-                    table.insert(active_job.current_passengers, ped)
                     if IsVehicleSeatFree(active_job.current_vehicle, i) then
-                        TaskWarpPedIntoVehicle(ped, active_job.current_vehicle, i)
+                      local ped = CreatePed(4, model, plane.location.x + 5.0, plane.location.y + 3.0, plane.location.z, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
+                      table.insert(active_job.current_passengers, ped)
+                      TaskWarpPedIntoVehicle(ped, active_job.current_vehicle, i)
                     end
                 end
             elseif type(plane.passengers) == "number" then
@@ -274,7 +274,7 @@ function SpawnPlane(plane)
                     end
                 end
             end
-            print("creating and adding passengers!")
+            --print("creating and adding passengers!")
         end
     end)
 end
@@ -301,7 +301,7 @@ function GetNextCheckpoint()
             return
         end
     end
-    print("All checkpoints completed!")
+    --print("All checkpoints completed!")
     local givemoney = true
     if active_job.current_vehicle then
         local vehcoords = GetEntityCoords(active_job.current_vehicle)
@@ -361,7 +361,7 @@ function MarkCurrentCheckpointComplete()
             PlaySoundFrontend(-1, "Mission_Pass_Notify", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", true)
             -- play take off interactSound sound if on second checkpoint (runway takeoff hopefully) --
             if checkpoint.sound  then
-                print("playing ATC3.ogg!")
+                --print("playing ATC3.ogg!")
                 TriggerServerEvent("InteractSound_SV:PlayOnSource", checkpoint.sound, 0.3)
             end
             return
