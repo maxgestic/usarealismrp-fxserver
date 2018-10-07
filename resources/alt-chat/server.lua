@@ -11,6 +11,7 @@ TriggerEvent('es:addCommand', 'me', function(source, args, user, location)
 	table.remove(args,1)
 	local msg = table.concat(args, " ")
 	exports["globals"]:sendLocalActionMessage(source, msg)
+	exports["globals"]:sendLocalActionMessageChat(user.getActiveCharacterData("fullName") .. " " .. msg, location)
 end, {help = "Talk as yourself doing an action.", params = {{name = "message", help = "the action"}}})
 
 TriggerEvent('es:addCommand', 'showid', function(source, args, user, location)

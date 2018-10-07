@@ -10,7 +10,7 @@ function sendLocalActionMessageChat(message, location, range)
 		'chatMessageLocation',
 		-1,
 		"",
-		{171, 67, 227},
+		{255, 240, 240},
 		message,
 		location,
 		range
@@ -24,18 +24,6 @@ function sendLocalActionMessage(src, message, range)
 	end
 
 	TriggerClientEvent("globals:startActionMessage", -1, message, range, src)
-
-		--[[
-		TriggerClientEvent(
-		'chatMessageLocation',
-		-1,
-		"",
-		{171, 67, 227},
-		message,
-		location,
-		range
-	)
-	--]]
 end
 
 function notifyPlayersWithJobs(target_jobs, msg)

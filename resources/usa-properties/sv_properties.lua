@@ -538,6 +538,8 @@ AddEventHandler("properties:addCoOwner", function(property_name, id)
     table.insert(PROPERTIES[property_name].coowners, coowner)
     -- save --
     SavePropertyData(property_name)
+    -- update all clients --
+    TriggerClientEvent("properties:update", -1, PROPERTIES[property_name])
     -- notify --
     TriggerClientEvent("usa:notify", source, coowner.name .. " has been successfully added!")
   else
@@ -559,6 +561,8 @@ AddEventHandler("properties:removeCoOwner", function(property_name, index)
     table.remove(PROPERTIES[property_name].coowners, index)
     -- save --
     SavePropertyData(property_name)
+    -- update all clients --
+    TriggerClientEvent("properties:update", -1, PROPERTIES[property_name])
     -- notify --
     TriggerClientEvent("usa:notify", source, "Co-owner removed!")
   end

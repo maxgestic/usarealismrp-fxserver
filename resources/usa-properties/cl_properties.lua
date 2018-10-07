@@ -536,7 +536,6 @@ Citizen.CreateThread(function()
                                                         if ( string.len( server_id ) > 0 ) then
                                                             local server_id = tonumber( server_id )
                                                             if ( server_id > 0 ) then
-                                                                print("adding co owner with server id: " .. server_id)
                                                                 TriggerServerEvent("properties:addCoOwner", nearest_property_info.name, server_id)
                                                             end
                                                             break
