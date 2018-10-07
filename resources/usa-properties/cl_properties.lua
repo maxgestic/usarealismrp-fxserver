@@ -16,7 +16,8 @@ local menu_data = {
     property_items = nil,
     wardrobe = nil,
     vehicles = nil,
-    money = nil
+    money = nil,
+    coowners = nil
 }
 
 local _menuPool = nil
@@ -85,6 +86,12 @@ end)
 RegisterNetEvent("properties:loadVehiclesForMenu")
 AddEventHandler("properties:loadVehiclesForMenu", function(vehicles)
     menu_data.vehicles = vehicles
+end)
+
+-- getting co owners --
+RegisterNetEvent("properties:getCoOwners")
+AddEventHandler("properties:getCoOwners", function(coowners)
+    menu_data.coowners = coowners
 end)
 
 -- storing vehicle --
@@ -203,12 +210,37 @@ Citizen.CreateThread(function()
                                     ---------------------------------------
                                     -- check if this client is owner --
                                     ---------------------------------------
-
+                                    local can_open = {
+                                      status = false,
+                                      owner = false
+                                    }
                                     if nearest_property_info.owner.identifier == my_property_identifier then
+                                      can_open = {
+                                        status = true,
+                                        owner = true
+                                      }
+                                    else
+                                      if nearest_property_info.coowners then
+                                        for i = 1, #nearest_property_info.coowners do
+                                          if nearest_property_info.coowners[i].identifier == my_property_identifier then
+                                            can_open = {
+                                              status = true,
+                                              owner = false
+                                            }
+                                            break
+                                          end
+                                        end
+                                      end
+                                    end
+                                    if can_open.status == true then
                                         ----------------------------
                                         -- create main menu  --
                                         ----------------------------
-                                        mainMenu = NativeUI.CreateMenu(name, "~b~You own this property!", 50 --[[X COORD]], 320 --[[Y COORD]])
+                                        if can_open.owner == true then
+                                          mainMenu = NativeUI.CreateMenu(name, "~b~You own this property!", 50 --[[X COORD]], 320 --[[Y COORD]])
+                                        else
+                                          mainMenu = NativeUI.CreateMenu(name, "~b~You co-own this property!", 50 --[[X COORD]], 320 --[[Y COORD]])
+                                        end
                                         ---------------------------
                                         -- next fee due date  --
                                         ---------------------------
@@ -469,6 +501,57 @@ Citizen.CreateThread(function()
                                             TriggerServerEvent("character:setSpawnPoint", spawn)
                                         end
                                         mainMenu:AddItem(spawnbtn)
+                                        if can_open.owner == true then -- only allow true owners (non co owners) to modify co owners
+                                          ----------------------------
+                                          -- add / remove property co-owners --
+                                          ----------------------------
+                                          local coowners_submenu = _menuPool:AddSubMenu(mainMenu, "Owners", "Manage property co-owners.", true --[[KEEP POSITION]])
+                                          TriggerServerEvent("properties:getCoOwners", nearest_property_info.name)
+                                          while not menu_data.coowners do
+                                            Wait(1)
+                                          end
+                                          for i = 1, #menu_data.coowners do
+                                            local coowner_submenu = _menuPool:AddSubMenu(coowners_submenu, menu_data.coowners[i].name, "Manage this person's ownership status" , true --[[KEEP POSITION]])
+                                            -- remove as owner --
+                                            local removeownerbtn = NativeUI.CreateItem("Remove", "Click to remove this person as a co-owner.")
+                                            removeownerbtn.Activated = function(pmenu, selected)
+                                              RemoveMenuPool(_menuPool)
+                                              TriggerServerEvent("properties:removeCoOwner", nearest_property_info.name, i)
+                                            end
+                                            coowner_submenu:AddItem(removeownerbtn)
+                                          end
+                                          local add_owner_btn = NativeUI.CreateItem("Add Owner", "Add a co-owner to this property.")
+                                          add_owner_btn.Activated = function(parentmenu, selected)
+                                            ------------------------------------------------
+                                            -- get server ID of player to add as co-owner --
+                                            ------------------------------------------------
+                                            -- 1) close menu
+                                            RemoveMenuPool(_menuPool)
+                                            -- 2) get input
+                                            Citizen.CreateThread( function()
+                                                DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+                                                while true do
+                                                    if ( UpdateOnscreenKeyboard() == 1 ) then
+                                                        local server_id = GetOnscreenKeyboardResult()
+                                                        if ( string.len( server_id ) > 0 ) then
+                                                            local server_id = tonumber( server_id )
+                                                            if ( server_id > 0 ) then
+                                                                print("adding co owner with server id: " .. server_id)
+                                                                TriggerServerEvent("properties:addCoOwner", nearest_property_info.name, server_id)
+                                                            end
+                                                            break
+                                                        else
+                                                            DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
+                                                        end
+                                                    elseif ( UpdateOnscreenKeyboard() == 2 ) then
+                                                        break
+                                                    end
+                                                    Wait( 0 )
+                                                end
+                                            end )
+                                          end
+                                          coowners_submenu:AddItem(add_owner_btn)
+                                        end
                                     else
                                         mainMenu = NativeUI.CreateMenu(name, "", 50 --[[X COORD]], 320 --[[Y COORD]])
                                         local itembtn = NativeUI.CreateItem("Owner: " .. nearest_property_info.owner.name, nearest_property_info.owner.name .. " owns this property.")
@@ -505,6 +588,7 @@ Citizen.CreateThread(function()
                                     end
                                     mainMenu:AddItem(purchasebtn)
                                 end
+                                --[[
                                 ----------------
                                 -- close btn --
                                 ----------------
@@ -513,6 +597,7 @@ Citizen.CreateThread(function()
                                     RemoveMenuPool(_menuPool)
                                 end
                                 mainMenu:AddItem(closebtn)
+                                --]]
                                 _menuPool:RefreshIndex()
                                 _menuPool:Add(mainMenu)
                                 mainMenu:Visible(true)
@@ -760,6 +845,7 @@ function RemoveMenuPool(pool)
     menu_data.money = nil
     menu_data.vehicles = nil
     menu_data.wardrobe = nil
+    menu_data.coowners = nil
     pool:CloseAllMenus()
     pool:Remove()
     _menuPool = nil

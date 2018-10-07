@@ -357,7 +357,8 @@ function loadProperties()
                             z = response.rows[i].doc.z,
                             garage_coords = response.rows[i].doc.garage_coords,
                             owner = response.rows[i].doc.owner,
-                            type = response.rows[i].doc.type
+                            type = response.rows[i].doc.type,
+                            coowners = response.rows[i].doc.coowners
                         }
 						print("loaded property: " .. response.rows[i].doc.name)
                     else
@@ -491,7 +492,7 @@ AddEventHandler("properties:purchaseProperty", function(property)
 						description = desc,
 						color = 524288,
 						author = {
-							name = "BLAINE COUNTY PROPERTY MGMT"
+							name = "SAN ANDREAS PROPERTY MGMT"
 						}
 					}
 				}
@@ -502,6 +503,65 @@ AddEventHandler("properties:purchaseProperty", function(property)
 	else
 		TriggerClientEvent("usa:notify", user_source, "You have reached your max number of properties!")
 	end
+end)
+
+----------------------------
+-- GET PROPERTY CO-OWNERS --
+----------------------------
+RegisterServerEvent("properties:getCoOwners")
+AddEventHandler("properties:getCoOwners", function(property_name)
+  -- check if property has any co owners already --
+  if not PROPERTIES[property_name].coowners then
+    PROPERTIES[property_name].coowners = {}
+  end
+  -- return to client --
+  TriggerClientEvent("properties:getCoOwners", source, PROPERTIES[property_name].coowners)
+end)
+
+---------------------------
+-- ADD PROPERTY CO-OWNER --
+---------------------------
+RegisterServerEvent("properties:addCoOwner")
+AddEventHandler("properties:addCoOwner", function(property_name, id)
+  if GetPlayerName(id) then
+    -- check if property has any co owners already --
+    if not PROPERTIES[property_name].coowners then
+      PROPERTIES[property_name].coowners = {}
+    end
+    -- create person --
+    local person = exports["essentialmode"]:getPlayerFromId(id)
+    local coowner = {
+      name = person.getActiveCharacterData("fullName"),
+      identifier = GetPlayerIdentifiers(id)[1]
+    }
+    -- add person to list of co owners --
+    table.insert(PROPERTIES[property_name].coowners, coowner)
+    -- save --
+    SavePropertyData(property_name)
+    -- notify --
+    TriggerClientEvent("usa:notify", source, coowner.name .. " has been successfully added!")
+  else
+    TriggerClientEvent("usa:notify", source, "Person does not exist!")
+  end
+end)
+
+------------------------------
+-- REMOVE PROPERTY CO-OWNER --
+------------------------------
+RegisterServerEvent("properties:removeCoOwner")
+AddEventHandler("properties:removeCoOwner", function(property_name, index)
+  -- check if property has any co owners already --
+  if not PROPERTIES[property_name].coowners then
+    PROPERTIES[property_name] = {}
+  end
+  -- remove at index --
+  if PROPERTIES[property_name].coowners[index] then
+    table.remove(PROPERTIES[property_name].coowners, index)
+    -- save --
+    SavePropertyData(property_name)
+    -- notify --
+    TriggerClientEvent("usa:notify", source, "Co-owner removed!")
+  end
 end)
 
 function GetWholeDaysFromTime(reference_time)
@@ -545,6 +605,7 @@ function Evict_Owners()
                         PROPERTIES[name].owner.name = nil
                         PROPERTIES[name].owner.purchase_date = 0
                         PROPERTIES[name].owner.identifier = "undefined"
+                        PROPERTIES[name].coowners = {}
                         --PROPERTIES[name].storage.money = 0
                         --PROPERTIES[name].storage.items = {}
                         -- save property --
@@ -560,6 +621,7 @@ function Evict_Owners()
                     PROPERTIES[name].owner.name = nil
                     PROPERTIES[name].owner.purchase_date = 0
                     PROPERTIES[name].owner.identifier = "undefined"
+                    PROPERTIES[name].coowners = {}
                     --PROPERTIES[name].storage.money = 0
                     --PROPERTIES[name].storage.items = {}
                     -- save property --
