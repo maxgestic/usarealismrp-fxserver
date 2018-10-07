@@ -609,7 +609,29 @@ Citizen.CreateThread(function()
                         closest_coords.x, closest_coords.y, closest_coords.z = info.garage_coords.x, info.garage_coords.y, info.garage_coords.z
                         if IsPedInAnyVehicle(me, true) then
                             if nearest_property_info.owner then
-                                if nearest_property_info.owner.identifier == my_property_identifier then
+                              local can_open = {
+                                status = false,
+                                owner = false
+                              }
+                              if nearest_property_info.owner.identifier == my_property_identifier then
+                                can_open = {
+                                  status = true,
+                                  owner = true
+                                }
+                              else
+                                if nearest_property_info.coowners then
+                                  for i = 1, #nearest_property_info.coowners do
+                                    if nearest_property_info.coowners[i].identifier == my_property_identifier then
+                                      can_open = {
+                                        status = true,
+                                        owner = false
+                                      }
+                                      break
+                                    end
+                                  end
+                                end
+                              end
+                                if can_open.status == true then
                                     --drawTxt("Press [ ~b~E~w~ ] to store your vehicle in the garage!",7,1,0.5,0.8,0.6,255,255,255,255)
                                     --if IsControlJustPressed(0, MENU_KEY) then
                                         local vehicle = GetVehiclePedIsIn(me, false)
@@ -623,7 +645,29 @@ Citizen.CreateThread(function()
                             --drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property garage!",7,1,0.5,0.8,0.6,255,255,255,255)
                             --if IsControlJustPressed(0, MENU_KEY) then
                                 if nearest_property_info.owner then
-                                    if nearest_property_info.owner.identifier == my_property_identifier then
+                                  local can_open = {
+                                    status = false,
+                                    owner = false
+                                  }
+                                  if nearest_property_info.owner.identifier == my_property_identifier then
+                                    can_open = {
+                                      status = true,
+                                      owner = true
+                                    }
+                                  else
+                                    if nearest_property_info.coowners then
+                                      for i = 1, #nearest_property_info.coowners do
+                                        if nearest_property_info.coowners[i].identifier == my_property_identifier then
+                                          can_open = {
+                                            status = true,
+                                            owner = false
+                                          }
+                                          break
+                                        end
+                                      end
+                                    end
+                                  end
+                                    if can_open.status == true then
                                         Citizen.CreateThread(function()
                                             TriggerServerEvent("properties:loadVehiclesForMenu", nearest_property_info.name)
                                             while not menu_data.vehicles do
@@ -690,7 +734,29 @@ Citizen.CreateThread(function()
 					if GetDistanceBetweenCoords(info.garage_coords.x, info.garage_coords.y, info.garage_coords.z, mycoords) < 3 then
 						if IsPedInAnyVehicle(me, true) then
 								if info.owner then
-									if info.owner.identifier == my_property_identifier then
+                  local can_open = {
+                    status = false,
+                    owner = false
+                  }
+                  if info.owner.identifier == my_property_identifier then
+                    can_open = {
+                      status = true,
+                      owner = true
+                    }
+                  else
+                    if info.coowners then
+                      for i = 1, #info.coowners do
+                        if info.coowners[i].identifier == my_property_identifier then
+                          can_open = {
+                            status = true,
+                            owner = false
+                          }
+                          break
+                        end
+                      end
+                    end
+                  end
+									if can_open.status == true then
 										drawTxt("Press [ ~b~E~w~ ] to store your vehicle in the garage!",7,1,0.5,0.8,0.6,255,255,255,255)
 									end
 								end
