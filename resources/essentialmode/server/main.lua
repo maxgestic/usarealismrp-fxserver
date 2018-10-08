@@ -280,7 +280,7 @@ Citizen.CreateThread(function()
 		end)
 	end
 
-	local minutes = 15
+	local minutes = 30
 
 	while true do
 		Citizen.Wait(minutes * 60000)
