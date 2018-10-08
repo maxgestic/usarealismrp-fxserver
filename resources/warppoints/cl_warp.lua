@@ -93,6 +93,19 @@ local warp_locations = {
       z = 31.34
     },
     job_access = "civ"
+  },
+    ["Pillbox Helipad"] = {
+  	entrance = {
+		x = 299.3,
+		y = -598.7,
+		z = 42.3
+    },
+    exit = {
+		x = 339.7,
+		y = -584.3,
+		z = 73.2
+    },
+    job_access = "emergency"
   }
 }
 
