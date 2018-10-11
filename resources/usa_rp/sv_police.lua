@@ -304,7 +304,7 @@ TriggerEvent('es:addJobCommand', 'grab', { "police", "sheriff", "ems" }, functio
 end, {
 	help = "grab a weapon",
 	params = {
-		{ name = "weapon", help = "ar, shotgun" }
+		{ name = "weapon", help = "ar, shotgun, flaregun" }
 	}
 })
 

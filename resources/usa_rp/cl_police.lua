@@ -136,6 +136,8 @@ AddEventHandler("police:grabWeapon", function(wep_name)
       weapon.hash = -2084633992
     elseif string.lower(wep_name) == "shotgun" then
       weapon.hash = 487013001
+    elseif string.lower(wep_name) == "flaregun" then
+      weapon.hash = GetHashKey("WEAPON_FLAREGUN")
     end
     if weapon.hash ~= 0 then
       grabbed_weapons[wep_name] = target_veh
@@ -159,6 +161,8 @@ AddEventHandler("police:storeWeapon", function(wep_name)
       weapon.hash = -2084633992
     elseif string.lower(wep_name) == "shotgun" then
       weapon.hash = 487013001
+    elseif string.lower(wep_name) == "flaregun" then
+      weapon.hash = GetHashKey("WEAPON_FLAREGUN")
     end
     if GetSelectedPedWeapon(me) == weapon.hash or HasPedGotWeapon(me, weapon.hash, false) then
       RemoveWeaponFromPed(me, weapon.hash)
