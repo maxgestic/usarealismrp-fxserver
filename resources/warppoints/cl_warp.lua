@@ -106,6 +106,19 @@ local warp_locations = {
 		z = 73.2
     },
     job_access = "emergency"
+  },
+  ["Movie Star Way Flat"] = {
+    entrance = {
+      x = -906.8768,
+      y = -451.7297,
+      z = 38.7052
+    },
+    exit = {
+      x = -907.6741,
+      y = -453.494,
+      z = 125.6344
+    },
+    job_access = "civ"
   }
 }
 
