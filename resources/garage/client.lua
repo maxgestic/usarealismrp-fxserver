@@ -62,6 +62,13 @@ Citizen.CreateThread(function()
 	end
 end)
 
+RegisterNetEvent("garage:removeDamages")
+AddEventHandler("garage:removeDamages", function(plate)
+	if VEHICLE_DAMAGES[plate] then
+		VEHICLE_DAMAGES[plate] = nil
+	end
+end)
+
 RegisterNetEvent("garage:storeVehicle")
 AddEventHandler("garage:storeVehicle", function()
 	local veh = GetVehiclePedIsIn(GetPlayerPed(-1), true)

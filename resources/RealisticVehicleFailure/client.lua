@@ -177,7 +177,7 @@ AddEventHandler('carDamage:repairKit', function(target_vehicle)
 			-- stop animation --
 			ClearPedTasks(GetPlayerPed(-1))
 			-- attempt to repair --
-			if GetVehicleOilLevel(target_vehicle) > 0 then
+			--if GetVehicleOilLevel(target_vehicle) > 0 then
 				SetVehicleUndriveable(target_vehicle,false)
 				SetVehicleEngineHealth(target_vehicle, cfg.cascadingFailureThreshold + 5)
 				SetVehiclePetrolTankHealth(target_vehicle, 750.0)
@@ -188,9 +188,9 @@ AddEventHandler('carDamage:repairKit', function(target_vehicle)
 				exports.globals:notify("~g~" .. repairCfg.fixMessages[fixMessagePos] .. ", now get to a mechanic!")
 				fixMessagePos = fixMessagePos + 1
 				if fixMessagePos > repairCfg.fixMessageCount then fixMessagePos = 1 end
-			else
-				exports.globals:notify("~r~Your vehicle was too badly damaged. Unable to repair!")
-			end
+			--else
+				--exports.globals:notify("~r~Your vehicle was too badly damaged. Unable to repair!")
+			--end
 		elseif IsAnyVehicleTireBursted(target_vehicle) then
 			exports.globals:notify("Repairing!")
 			TaskStartScenarioInPlace(GetPlayerPed(-1), "CODE_HUMAN_MEDIC_KNEEL", 0, true)
@@ -213,6 +213,7 @@ function IsAnyVehicleTireBursted(veh)
 	if IsVehicleTyreBurst(veh, 2, false) then return true end
 	if IsVehicleTyreBurst(veh, 3, false) then return true end
 	if IsVehicleTyreBurst(veh, 4, false) then return true end
+	return false
 end
 
 function FixAllTires(veh)

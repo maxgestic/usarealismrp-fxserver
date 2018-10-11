@@ -353,7 +353,7 @@ end)
 RegisterServerEvent("vehShop:fileClaim")
 AddEventHandler("vehShop:fileClaim", function(vehicle_to_claim)
 	local userSource = tonumber(source)
-	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local user_vehicles = user.getActiveCharacterData("vehicles")
 		local user_bank = user.getActiveCharacterData("bank")
 		if user_vehicles then
@@ -361,22 +361,25 @@ AddEventHandler("vehShop:fileClaim", function(vehicle_to_claim)
 				local veh = user_vehicles[i]
 				if veh then
 					if veh.plate == vehicle_to_claim.plate then
-						-- todo: add a realistic time delay for 'processing' before setting stored = true above
 						local BASE_FEE = 300
 						local PERCENTAGE = .10
 						local CLAIM_PROCESSING_FEE = round(BASE_FEE + (PERCENTAGE * vehicle_to_claim.price))
-						print("claim fee: $" .. CLAIM_PROCESSING_FEE)
 						if CLAIM_PROCESSING_FEE <= user_bank then
+							-- set vehicle stats --
 							user_vehicles[i].inventory = {} -- empty inventory to prevent duplicating
 							user_vehicles[i].stored = true -- set to true for retrieval from garage
 							user_vehicles[i].impounded = false
 							user.setActiveCharacterData("vehicles", user_vehicles)
+							-- remove money --
 							user.setActiveCharacterData("bank", user_bank - CLAIM_PROCESSING_FEE)
+							-- notifiy --
 							if veh.make and veh.model then
 								TriggerClientEvent("usa:notify", userSource, "Filed an insurance claim for your " .. veh.make .. " " .. veh.model .. ".\n~y~Fee:~w~ $" .. CLAIM_PROCESSING_FEE)
 							else
 								TriggerClientEvent("usa:notify", userSource, "Filed an insurance claim for your " .. veh.model .. ".\n~y~Fee:~w~ $" .. CLAIM_PROCESSING_FEE)
 							end
+							-- remove vehicle damages if any --
+							TriggerClientEvent("garage:removeDamages", userSource, veh.plate)
 						else
 							TriggerClientEvent("usa:notify", userSource, "You don't have enough money to make a claim on that vehicle.")
 						end
@@ -384,7 +387,6 @@ AddEventHandler("vehShop:fileClaim", function(vehicle_to_claim)
 				end
 			end
 		end
-	end)
 end)
 
 -- function to format expiration month correctly
