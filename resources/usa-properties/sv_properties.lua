@@ -598,6 +598,15 @@ function Evict_Owners()
                     if info.storage.money >= info.fee.price then
                         print("** Money from property (" .. name .. ") storage was used to pay for a month of rent. **")
                         PROPERTIES[name].storage.money = PROPERTIES[name].storage.money - info.fee.price
+                        PROPERTIES[name].fee.paid_time = os.time()
+                  			PROPERTIES[name].fee.paid = true
+                        local final_time = nil
+                    		local today = os.date("*t", os.time())
+                        PROPERTIES[name].fee.due_days = HOUSE_PAY_PERIOD_DAYS
+                				final_time = {day = today.day, month = today.month + 1, year = today.year}
+                        local endtime = os.time(final_time)
+                  			PROPERTIES[name].fee.due_time = endtime
+                        PROPERTIES[name].fee.end_date = os.date("%x", endtime)
                         SavePropertyData(name)
                     else
                         print("***Not enough money, evicting owner of the " .. name .. " today, owner identifier: " .. PROPERTIES[name].owner.identifier .. "***")
