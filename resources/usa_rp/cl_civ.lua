@@ -2,12 +2,13 @@ local hands_up = false
 local hands_tied = false
 local blindfolded = false
 
+local bag = nil;
+
 ---------------
 -- blindfold --
 ---------------
 RegisterNetEvent("crim:blindfold")
 AddEventHandler("crim:blindfold", function(on, dont_send_message)
-  print("setting NUI focus: " .. tostring(on))
   --SetNuiFocus(on, false)
   SendNUIMessage({
     type = "enableui",
@@ -18,8 +19,12 @@ AddEventHandler("crim:blindfold", function(on, dont_send_message)
   if not dont_send_message then
     if on then
       TriggerEvent("usa:notify", "You have been blindfolded!")
+      bag = CreateObject(GetHashKey("prop_money_bag_01"), 0, 0, 0, true, true, true) -- Create head bag object!
+      AttachEntityToEntity(bag, GetPlayerPed(-1), GetPedBoneIndex(GetPlayerPed(-1), 12844), 0.2, 0.04, 0, 0, 270.0, 60.0, true, true, false, true, 1, true) -- Attach object to head
     else
       TriggerEvent("usa:notify", "Blindfold removed!")
+      DeleteEntity(bag)
+      SetEntityAsNoLongerNeeded(bag)
     end
   end
 end)
@@ -170,14 +175,13 @@ Citizen.CreateThread(function()
 			if not IsEntityPlayingAnim(GetPlayerPed(-1), "mp_arresting", "idle", 3) then
 				RequestAnimDict("mp_arresting")
 				while not HasAnimDictLoaded("mp_arresting") do
-					Citizen.Wait(100)
+					Wait(100)
 				end
 				TaskPlayAnim(GetPlayerPed(-1), "mp_arresting", "idle", 8.0, -8, -1, 49, 0, 0, 0, 0)
 			end
 		end
 		-- remove blind folds if dead:
 		if IsPedDeadOrDying(GetPlayerPed(-1), 1) and blindfolded then
-			print("removing blindfold!")
 			TriggerEvent("crim:blindfold", false, true)
 			blindfolded = false
 		end
@@ -277,7 +281,7 @@ AddEventHandler("vehicle:confirmSell", function(details)
     TriggerEvent("usa:notify", message)
     Citizen.CreateThread(function()
         while not responded do
-            Citizen.Wait(1)
+            Wait(1)
             DrawSpecialText( "~y~OFFER: ~w~$" .. details.price .. " for ~w~" .. details.veh_to_sell.make .. " " .. details.veh_to_sell.model .. " [" .. details.veh_to_sell.plate .. "]" .. "\nAccept? ~g~Y~w~/~r~Backspace" )
             if IsControlJustPressed(1, 246) then -- Y key
                 print("player wants to buy vehicle!")
@@ -299,9 +303,7 @@ function closeEnoughToPlayer(from_id)
     if NetworkIsPlayerActive(id) then
       if GetPlayerServerId(id) == tonumber(from_id) then
         local target_ped = GetPlayerPed(id)
-        print("distance to #" .. GetPlayerServerId(id) .." = " .. Vdist(GetEntityCoords(lPed, 1), GetEntityCoords(target_ped, 1)))
         if Vdist(GetEntityCoords(lPed, 1), GetEntityCoords(target_ped, 1)) < 1.0 then
-          print("close enough to get tied up by someone!")
           return true
         else
           return false
