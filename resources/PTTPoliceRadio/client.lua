@@ -51,7 +51,9 @@ local weapons = {
 	"WEAPON_SAWNOFFSHOTGUN",
 	"WEAPON_HAMMER",
 	"WEAPON_WRENCH",
-	"WEAPON_HATCHET"
+	"WEAPON_HATCHET",
+	3219281620,
+	-619010992
 }
 
 local control = nil
@@ -183,8 +185,14 @@ end)
 -- DO NOT REMOVE THESE! --
 function CheckWeapon(ped)
 	for i = 1, #weapons do
-		if GetHashKey(weapons[i]) == GetSelectedPedWeapon(ped) then
-			return true
+		if type(weapons[i]) ~= "number" then
+			if GetHashKey(weapons[i]) == GetSelectedPedWeapon(ped) then
+				return true
+			end
+		else
+			if weapons[i] == GetSelectedPedWeapon(ped) then
+				return true
+			end
 		end
 	end
 	return false
