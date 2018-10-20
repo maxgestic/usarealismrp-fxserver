@@ -52,7 +52,7 @@ local weapons = {
 	"WEAPON_HAMMER",
 	"WEAPON_WRENCH",
 	"WEAPON_HATCHET",
-	3219281620,
+	-1075685676,
 	-619010992
 }
 
@@ -185,6 +185,7 @@ end)
 -- DO NOT REMOVE THESE! --
 function CheckWeapon(ped)
 	for i = 1, #weapons do
+		--print("Checking against: " .. weapons[i])
 		if type(weapons[i]) ~= "number" then
 			if GetHashKey(weapons[i]) == GetSelectedPedWeapon(ped) then
 				return true
