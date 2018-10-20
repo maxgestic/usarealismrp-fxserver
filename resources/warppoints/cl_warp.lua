@@ -119,6 +119,58 @@ local warp_locations = {
       z = 125.6344
     },
     job_access = "civ"
+  },
+  ["Del Perro Heights / 107"] = {
+    entrance = {
+      x = -1447.5,
+      y = -538.1,
+      z = 33.9
+    },
+    exit = {
+      x = -1452.7,
+      y = -539.97,
+      z = -73.2
+    },
+    job_access = "civ"
+  },
+  ["Tinsel Towers / Flat 102"] = {
+    entrance = {
+      x = -621.1,
+      y = 45.3,
+      z = 42.8
+    },
+    exit = {
+      x = -603.76,
+      y = 58.9,
+      z = 98.2
+    },
+    job_access = "civ"
+  },
+  ["Flat 103 Eclipse"] = {
+    entrance = {
+      x = -784.4,
+      y = 323.8,
+      z = 211.3
+    },
+    exit = {
+      x = -777.4,
+      y = 319.5,
+      z = 84.76
+    },
+    job_access = "civ"
+  },
+  ["Flat 101 Eclipse"] = {
+    entrance = {
+      x = -770.6,
+      y = 318.9,
+      z = 85.66
+    },
+    exit = {
+      x = -781.87,
+      y = 326.0,
+      z = 176.0
+    },
+    job_access = "civ"
   }
 }
 
