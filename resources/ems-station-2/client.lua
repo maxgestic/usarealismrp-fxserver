@@ -249,6 +249,7 @@ AddEventHandler("emsstation2:ShowMainMenu", function()
 			TriggerEvent("emsstation2:giveDefaultLoadout")
 			TriggerServerEvent("emsstation2:onduty")
 			TriggerEvent("interaction:setPlayersJob", "ems") -- set interaction menu javascript job variable to "ems"
+			TriggerEvent("ptt:isEmergency", true)
 		end)
 	end)
 
@@ -284,6 +285,7 @@ AddEventHandler("emsstation2:ShowMainMenu", function()
 				Citizen.Trace("true")
 				TriggerServerEvent("emsstation2:loadDefaultUniform", character)
 				TriggerEvent("interaction:setPlayersJob", "ems") -- set interaction menu javascript job variable to "police"
+				TriggerEvent("ptt:isEmergency", true)
 				--menu = 4
 			end
 		end)
@@ -324,6 +326,7 @@ AddEventHandler("emsstation2:ShowMainMenu", function()
 			Citizen.Trace("true")
 			TriggerServerEvent("emsstation2:offduty")
 			TriggerEvent("interaction:setPlayersJob", "civ") -- set interaction menu javascript job variable to "civ"
+			TriggerEvent("ptt:isEmergency", false)
 			--menu = 4
 		else
 		end

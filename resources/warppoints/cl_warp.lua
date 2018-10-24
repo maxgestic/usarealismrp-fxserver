@@ -129,7 +129,7 @@ local warp_locations = {
     exit = {
       x = -1452.7,
       y = -539.97,
-      z = -73.2
+      z = 73.2
     },
     job_access = "civ"
   },

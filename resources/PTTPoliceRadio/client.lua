@@ -7,8 +7,8 @@
 
 local IS_COP = false
 
-RegisterNetEvent("ptt:iscop")
-AddEventHandler("ptt:iscop", function(status)
+RegisterNetEvent("ptt:isEmergency")
+AddEventHandler("ptt:isEmergency", function(status)
 	IS_COP = status
 end)
 

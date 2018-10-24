@@ -66,6 +66,7 @@ AddEventHandler("doc:checkWhitelist", function(loc)
 				exports["essentialmode"]:getPlayerFromId(usource).setActiveCharacterData("job", "corrections")
 				TriggerClientEvent("usa:notify", usource, "You clocked in!")
 				TriggerClientEvent("doc:open", usource)
+				TriggerClientEvent("ptt:isEmergency", usource, true)
 			end
 			return
 		end
@@ -90,6 +91,8 @@ AddEventHandler("doc:clockOut", function()
 	TriggerEvent("usa:loadCivCharacter", usource)
 	print("closing DOC menu!")
 	TriggerClientEvent("doc:close", usource)
+	-- PTT --
+	TriggerClientEvent("ptt:isEmergency", usource, false)
 end)
 
 RegisterServerEvent("doc:forceDuty")
@@ -104,6 +107,7 @@ AddEventHandler("doc:forceDuty", function()
 		user.setActiveCharacterData("job", "corrections")
 		TriggerEvent("doc:loadUniform", usource)
 		TriggerClientEvent("usa:notify", usource, "You have clocked in!")
+		TriggerClientEvent("ptt:isEmergency", usource, true)
 	end
 end)
 

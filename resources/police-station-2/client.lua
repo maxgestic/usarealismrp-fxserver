@@ -399,7 +399,7 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 			TriggerEvent("policestation2:giveDefaultLoadout")
 			TriggerServerEvent("policestation2:onduty")
 			TriggerEvent("interaction:setPlayersJob", "police") -- set interaction menu javascript job variable to "police"
-			TriggerEvent("ptt:iscop", true)
+			TriggerEvent("ptt:isEmergency", true)
 		end)
 	end)
 
@@ -435,7 +435,7 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 			Citizen.Trace("true")
 			TriggerServerEvent("policestation2:loadDefaultUniform", character)
 			TriggerEvent("interaction:setPlayersJob", "police") -- set interaction menu javascript job variable to "police"
-			TriggerEvent("ptt:iscop", true)
+			TriggerEvent("ptt:isEmergency", true)
 			--menu = 4
 		else
 
@@ -480,7 +480,7 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 			Citizen.Trace("true")
 			TriggerServerEvent("policestation2:offduty")
 			TriggerEvent("interaction:setPlayersJob", "civ") -- set interaction menu javascript job variable to "civ"
-			TriggerEvent("ptt:iscop", false)
+			TriggerEvent("ptt:isEmergency", false)
 			--menu = 4
 		else
 
