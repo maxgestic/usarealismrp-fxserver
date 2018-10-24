@@ -22,26 +22,26 @@ end)
 
 RegisterServerEvent("test:cuff")
 AddEventHandler("test:cuff", function(playerId, playerName)
-	print("going to cuff " .. playerName .. " with id of " .. playerId)
+	--print("going to cuff " .. playerName .. " with id of " .. playerId)
 	--TriggerClientEvent("cuff:Handcuff", tonumber(1), GetPlayerName(source))
 	TriggerEvent("es:getPlayerFromId", source, function(user)
 		if user then
 			playerJob = user.getActiveCharacterData("job")
 			if playerJob == "sheriff" or playerJob == "cop" then
-				print("cuffing player " .. GetPlayerName(source) .. "...")
+				--print("cuffing player " .. GetPlayerName(source) .. "...")
 				TriggerClientEvent("cuff:Handcuff", tonumber(playerId), GetPlayerName(source))
 			else
-				print("player was not on duty to cuff")
+				--print("player was not on duty to cuff")
 			end
 		else
-			print("player with that ID # did not exist...")
+			--print("player with that ID # did not exist...")
 		end
 	end)
 end)
 
 RegisterServerEvent("interaction:loadVehicleInventoryForInteraction")
 AddEventHandler("interaction:loadVehicleInventoryForInteraction", function(plate)
-	print("loading vehicle inventory with plate #: " .. plate)
+	--print("loading vehicle inventory with plate #: " .. plate)
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayers", function(players)
 		if players then
@@ -51,7 +51,7 @@ AddEventHandler("interaction:loadVehicleInventoryForInteraction", function(plate
 					for i = 1, #player_vehicles do
 						local veh = player_vehicles[i]
 						if string.find(plate, tostring(veh.plate)) then
-							print("found a matching plate! sending inventory to client!")
+							--print("found a matching plate! sending inventory to client!")
 							TriggerClientEvent("interaction:vehicleInventoryLoaded", userSource, veh.inventory)
 						end
 					end
@@ -63,7 +63,7 @@ end)
 
 RegisterServerEvent("interaction:loadInventoryForInteraction")
 AddEventHandler("interaction:loadInventoryForInteraction", function()
-	print("loading inventory for interaction menu...")
+	--print("loading inventory for interaction menu...")
 	local userSource = tonumber(source)
 	TriggerEvent("es:getPlayerFromId", userSource, function(user)
 		if user then
@@ -72,7 +72,7 @@ AddEventHandler("interaction:loadInventoryForInteraction", function()
 			local licenses = user.getActiveCharacterData("licenses")
 			TriggerClientEvent("interaction:inventoryLoaded", userSource, inventory, weapons, licenses)
 		else
-			print("interaction: user did not exist")
+			--print("interaction: user did not exist")
 		end
 	end)
 end)
@@ -218,14 +218,14 @@ end
 RegisterServerEvent("interaction:giveItemToPlayer")
 AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
   local userSource = tonumber(source)
-  print("inside of interaction:giveItemToPlayer with target id = " .. targetPlayerId .. ", item: " .. item.name)
+  --print("inside of interaction:giveItemToPlayer with target id = " .. targetPlayerId .. ", item: " .. item.name)
   -- give item to nearest player
 	local user = exports["essentialmode"]:getPlayerFromId(targetPlayerId)
 	if user then
 	  if user.getCanActiveCharacterHoldItem(item) then
 		if not item.type or item.type == "license" then
 		  -- must be a license (no item.type)
-			print("tried to give a license!")
+			--print("tried to give a license!")
 			TriggerClientEvent("usa:notify", targetPlayerId, "Can't trade licenses. Sorry!")
 			return
 			--[[ prevent trading licenses for now
@@ -235,7 +235,7 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
 			--]]
 		else
 		  if item.type == "weapon" then
-			print("giving a weapon!")
+			--print("giving a weapon!")
 			local weapons = user.getActiveCharacterData("weapons")
 			if #weapons < 3 then
 			  table.insert(weapons, item)
@@ -248,7 +248,7 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
 			end
 		  else
 			local found = false
-			print("giving an inventory item!")
+			--print("giving an inventory item!")
 			local inventory = user.getActiveCharacterData("inventory")
 			for i = 1, #inventory do
 			  if inventory[i].name == item.name then
@@ -282,7 +282,7 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
 		TriggerClientEvent("usa:notify", targetPlayerId, "You can't hold that item! Inventory full.")
 	  end
 	else
-	  print("player with id #" .. targetPlayerId .. " is not in game!")
+	  --print("player with id #" .. targetPlayerId .. " is not in game!")
 	  return
 	end
 end)
@@ -293,7 +293,7 @@ function removeItemFromPlayer(item, userSource)
 		if user then
 			if not item.type then
 				-- must be a license (no item.type)
-				print("removing a license!")
+				--print("removing a license!")
 				local licenses = user.getActiveCharacterData("licenses")
 				for i = 1, #licenses do
 					if licenses[i].name == item.name and licenses[i].ownerName == item.ownerName then
@@ -305,22 +305,22 @@ function removeItemFromPlayer(item, userSource)
 				end
 			else
 				if item.type == "weapon" then
-					print("removing a weapon!")
+					--print("removing a weapon!")
 					local weapons = user.getActiveCharacterData("weapons")
 					for i = 1, #weapons do
 						if weapons[i].name == item.name then
-							print("found a matching weapon to remove!")
+							--print("found a matching weapon to remove!")
 							table.remove(weapons,i)
 							user.setActiveCharacterData("weapons", weapons)
 							return
 						end
 					end
 				else
-					print("removing an inventory item!")
+					--print("removing an inventory item!")
 					local inventory = user.getActiveCharacterData("inventory")
 					for i = 1, #inventory do
 						if inventory[i].name == item.name then
-							print("found matching item to remove!")
+							--print("found matching item to remove!")
 							if inventory[i].quantity > 1 then
 								inventory[i].quantity = inventory[i].quantity - 1
 								user.setActiveCharacterData("inventory", inventory)
@@ -335,7 +335,7 @@ function removeItemFromPlayer(item, userSource)
 				end
 			end
 		else
-			print("player with id #" .. targetPlayerId .. " is not in game!")
+			--print("player with id #" .. targetPlayerId .. " is not in game!")
 		end
 	end)
 end

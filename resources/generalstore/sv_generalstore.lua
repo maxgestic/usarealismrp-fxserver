@@ -101,7 +101,7 @@ AddEventHandler("generalStore:buyItem", function(property, item)
           TriggerClientEvent("usa:notify", userSource, "Purchased: ~y~" .. item.name)
           if property and property ~= 0 then
             -- give to owner of property
-            print("adding money from general store to property: " .. property.name)
+            --print("adding money from general store to property: " .. property.name)
             TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * item.price))
           end
         else
@@ -117,7 +117,7 @@ AddEventHandler("generalStore:buyItem", function(property, item)
           TriggerClientEvent("usa:notify", userSource, "Purchased: ~y~" .. item.name)
           if property and property ~= 0 then
             -- give to owner of property
-            print("adding money from general store to property: " .. property.name)
+            --print("adding money from general store to property: " .. property.name)
             TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * item.price))
           end
         end

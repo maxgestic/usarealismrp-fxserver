@@ -31,6 +31,8 @@ local created_menus = {}
 
 local MENU_KEY = 38
 
+local TIMEOUT = nil
+
 -------------------
 -- utility funcs --
 -------------------
@@ -111,18 +113,27 @@ function CreateGeneralStoreMenu(menu)
 		table.insert(created_menus, submenu)
     for i = 1, #items do
       ---------------------------------------------
-      -- Button for each weapon in each category --
+      -- Button for each item in each category --
       ---------------------------------------------
       local item = NativeUI.CreateItem(items[i].name, "Purchase price: $" .. comma_value(items[i].price))
       item.Activated = function(parentmenu, selected)
-        local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
-        TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-          if property then
-            TriggerServerEvent("generalStore:buyItem", property, items[i])
-          else
-            TriggerServerEvent("generalStore:buyItem", 0, items[i])
-          end
-        end)
+        if not TIMEOUT then
+          TIMEOUT = GetGameTimer()
+          local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
+          TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+            if property then
+              TriggerServerEvent("generalStore:buyItem", property, items[i])
+            else
+              TriggerServerEvent("generalStore:buyItem", 0, items[i])
+            end
+          end)
+          Citizen.CreateThread(function()
+            while GetGameTimer() - TIMEOUT < 900 do
+              Wait(100)
+            end
+            TIMEOUT = nil
+          end)
+        end
       end
       ----------------------------------------
       -- add to sub menu created previously --
@@ -198,7 +209,7 @@ Citizen.CreateThread(function()
         if JOB_PEDS[i].hash then
             hash = JOB_PEDS[i].hash
         end
-        
+
 		--local hash = GetHashKey(data.ped.model)
 		RequestModel(hash)
 		while not HasModelLoaded(hash) do
