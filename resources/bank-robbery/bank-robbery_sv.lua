@@ -81,7 +81,7 @@ AddEventHandler("bank:beginRobbery", function(source)
 			TriggerEvent("es:getPlayerFromId", k, function(user)
 				local userJob = user.getActiveCharacterData("job")
 					if userJob == "cop" or userJob == "sheriff" or userJob == "highwaypatrol" or userJob == "ems" or userJob == "fire" then
-						TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "Alarm activated at ^3Blaine County Savings Bank^0 on Cascabel Ave.")
+						TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "Alarm activated at the ^3Pacific Standard Bank^0 on Vinewood Blvd.")
 					end
 			end)
 		end
