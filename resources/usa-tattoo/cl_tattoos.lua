@@ -121,7 +121,7 @@ Citizen.CreateThread(function()
         local category_submenu = _menuPool:AddSubMenu(tattoos_submenu, category, "See our selection of " .. category .. " tattoos.", true --[[KEEP POSITION]])
         for i = 1, #items.tattoos do
             local tat = items.tattoos[i]
-            local tattoo = NativeUI.CreateItem(tat.LocalizedName, "Zone: " .. tat.Zone .. ", Price: " .. comma_value(tat.Price))
+            local tattoo = NativeUI.CreateItem(tat.LocalizedName, "Zone: " .. tat.Zone .. ", Price: $" .. comma_value(tat.Price))
             tattoo.Activated = function(pmenu, selected)
                 local hashname = tat.HashNameMale
                 if IsPedModel(GetPlayerPed(-1), "mp_m_freemode_01") then

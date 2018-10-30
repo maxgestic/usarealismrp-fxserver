@@ -150,6 +150,46 @@ local stores = {
 		position = { ['x'] = 1863.22, ['y'] = 3751.12, ['z'] = 33.03},
 		nameofstore = "Tattoo Shop - Sandy Shores",
 		lastrobbed = 0
+	},
+	["24/7 Market - Innocence Blvd"] = {
+		position = { ['x'] = 24.9, ['y'] = -1343.6, ['z'] = 29.5 },
+		nameofstore = "24/7 Market - Innocence Blvd",
+		lastrobbed = 0
+	},
+	["Car Dealership - Los Santos"] = {
+		position = { ['x'] = -31.5, ['y'] = -1106.9, ['z'] = 26.4 },
+		nameofstore = "Car Dealership - Los Santos",
+		lastrobbed = 0
+	},
+	["Clothing Store - Sinner St."] = {
+		position = { ['x'] = 429.4, ['y'] = -808.3, ['z'] = 29.5 },
+		nameofstore = "Car Dealership - Los Santos",
+		lastrobbed = 0
+	},
+	["Ammunation - Adam's Apple Blvd."] = {
+		position = { ['x'] = 14.3, ['y'] = -1106.2, ['z'] = 29.8 },
+		nameofstore = "Ammunation - Adam's Apple Blvd.",
+		lastrobbed = 0
+	},
+	["Benny's Garage - Strawberry Ave."] = {
+		position = { ['x'] = -207.7, ['y'] = -1339.3, ['z'] = 34.9 },
+		nameofstore = "Benny's Garage - Strawberry Ave.",
+		lastrobbed = 0
+	},
+	["Blazing Tattoo - Vinewood Blvd."] = {
+		position = { ['x'] = 320.6, ['y'] = 182.8, ['z'] = 103.6 },
+		nameofstore = "Blazing Tattoo - Vinewood Blvd.",
+		lastrobbed = 0
+	},
+	["24/7 Market - San Andreas Ave"] = {
+		position = { ['x'] = -1220.3, ['y'] = -907.9, ['z'] = 12.3 },
+		nameofstore = "24/7 Market - San Andreas Ave",
+		lastrobbed = 0
+	},
+	["Tattoo Shop - Vespucci Beach"] = {
+		position = { ['x'] = -1150.7, ['y'] = -1425, ['z'] = 4.9 },
+		nameofstore = "Tattoo Shop - Vespucci Beach",
+		lastrobbed = 0
 	}
 }
 
