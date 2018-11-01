@@ -527,7 +527,7 @@ function SpawnVehicle(model)
     SetEntityAsMissionEntity(veh, true, true)
     SetVehicleHasBeenOwnedByPlayer(veh, true)
     SetVehicleExplodesOnHighExplosionDamage(veh, false)
-    SetVehicleLivery(veh, 1) -- DOC SKIN
+    SetVehicleLivery(veh, 2) -- DOC SKIN
   end)
 end
 
