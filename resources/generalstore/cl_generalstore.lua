@@ -23,6 +23,7 @@ local GENERAL_STORE_LOCATIONS = {
     { x=-3242.260, y=1001.569, z=11.830 },
     {x=-2968.126, y=390.579, z=14.043 },
     { x=-1487.241, y=379.843, z=39.163 },
+	{x = 1743.3, y = 2578.1, z = 44.6}
 }
 
 local GENERAL_STORE_ITEMS = {} -- loaded from server
