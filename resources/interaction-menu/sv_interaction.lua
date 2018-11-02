@@ -339,3 +339,18 @@ function removeItemFromPlayer(item, userSource)
 		end
 	end)
 end
+
+-- /e [emoteName]
+TriggerEvent('es:addCommand', 'e', function(source, args, user)
+	if args[2] then
+		table.remove(args, 1)
+		TriggerClientEvent('emotes:playEmote', source, table.concat(args, ' '))
+	else
+		TriggerClientEvent('emotes:showHelp', source)
+	end
+end, {
+	help = "Play an emote",
+	params = {
+		{ name = "name", help = "The name of the emote to play" }
+	}
+})
