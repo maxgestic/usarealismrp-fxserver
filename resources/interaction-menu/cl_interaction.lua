@@ -67,8 +67,7 @@ local scenarios = {
 	{name = "gang 1", type = "emote", dict = "mp_player_int_uppergang_sign_a", animname =  "mp_player_int_gang_sign_a"},
 	{name = "gang 2", type = "emote", dict = "mp_player_int_uppergang_sign_b", animname =  "mp_player_int_gang_sign_b"},
 	{name = "damn", type = "emote", dict = "gestures@m@standing@casual", animname =  "gesture_damn", cancelTime = 1.5},
-	{name = "salute", type = "emote", dict = "anim@mp_player_intuppersalute", animname = "idle_a"},
-	{name = "dead", type = "emote", dict = "misslamar1dead_body", animname = "dead_idle"}
+	{name = "salute", type = "emote", dict = "anim@mp_player_intuppersalute", animname = "idle_a"}
 	--{name = "hug", type = "emote", dict = "", animname = ""},
 }
 
