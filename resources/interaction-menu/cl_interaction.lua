@@ -347,8 +347,8 @@ AddEventHandler("emotes:playEmote", function(scenarioName)
 			return
 		end
 		for i = 1, #scenarios do
-			if string.find(scenarios[i].name, scenarioName) then
-			--if scenarioName == string.lower(scenarios[i].name) then
+			--if string.find(scenarios[i].name, scenarioName) then
+			if scenarioName == string.lower(scenarios[i].name) then
 				if ped then
 					if scenarios[i].type ~= "emote" then
 						TaskStartScenarioInPlace(ped, scenarios[i].scenarioName, 0, true)
