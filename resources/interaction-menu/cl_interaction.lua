@@ -52,7 +52,7 @@ local scenarios = {
 	{name = "shag 1", type = "emote", dict = "misscarsteal2pimpsex", animname = "shagloop_pimp"},
 	{name = "shag 2", type = "emote", dict = "misscarsteal2pimpsex", animname = "shagloop_hooker"},
 	{name = "shag 3", type = "emote", dict = "misscarsteal2pimpsex", animname = "pimpsex_hooker"},
-	{name = "wave", type = "emote", dict = "gestures@m@standing@casual", animname = "gesture_hello"},
+	{name = "wave", type = "emote", dict = "gestures@m@standing@casual", animname = "gesture_hello", cancelTime = 0.9},
 	{name = "dance 1", type = "emote", dict = "mini@strip_club@private_dance@part1", animname = "priv_dance_p1"},
 	{name = "dance 2", type = "emote", dict = "mini@strip_club@private_dance@part2", animname = "priv_dance_p2"},
 	{name = "dance 3", type = "emote", dict = "mini@strip_club@private_dance@part3", animname = "priv_dance_p3"},
