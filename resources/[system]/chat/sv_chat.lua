@@ -25,7 +25,7 @@ AddEventHandler('_chat:messageEntered', function(name, color, message, location)
 				name = "LSPD | " .. name
 				color = {2, 111, 218}
 			elseif job == "sheriff" then
-				name = "BCSO | " .. name
+				name = "SASP | " .. name
 				color = {2, 111, 218}
 			elseif job == "corrections" then
 				name = "DOC | " .. name
@@ -81,7 +81,7 @@ end)
 RegisterServerEvent("chat:sendToLogFile")
 AddEventHandler("chat:sendToLogFile", function(source, message)
 	local player = exports["essentialmode"]:getPlayerFromId(source)
-	LOG_FILE = io.open("C:/wamp/www/log.txt", "a")
+	LOG_FILE = io.open(exports["usa_rp"]:GetLogFilePath(), "a")
 	io.output(LOG_FILE)
 	io.write("[" .. GetPlayerName(source) .. " (#" .. source .. ") / " .. GetPlayerIdentifiers(source)[1] .. "]" .. ': ' .. message .. "\r\n")
 	io.close(LOG_FILE)
