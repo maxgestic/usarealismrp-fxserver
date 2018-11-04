@@ -109,6 +109,7 @@ function jailPlayer(data, officerName, gender)
 			arrestingOfficer = officerName,
 			timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())
 		}
+		if #playerCriminalHistory > 10 then table.remove(playerCriminalHistory, 1) end -- temporary patch until criminal history is moved into separate DB
 		table.insert(playerCriminalHistory, record)
 		user.setActiveCharacterData("criminalHistory", playerCriminalHistory)
 		-- remove any active warrants --
