@@ -156,7 +156,7 @@ AddEventHandler("jail:clearCell", function(cell, clearJailTime)
 			if CELLS[i].occupant.name == cell.occupant.name then
 				print("evicting person from cell #: " .. i .. "!")
 				CELLS[i].occupant = nil
-				return
+				break
 			end
 		end
 	end

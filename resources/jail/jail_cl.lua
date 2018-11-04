@@ -137,6 +137,7 @@ AddEventHandler("jail:escaped", function()
   imprisoned = false
   TriggerServerEvent("jail:clearCell", assigned_cell, true)
   TriggerEvent("usa:notify", "You escaped prison!")
+  TriggerEvent("RPD:toggleJailed", false)
 end)
 
 RegisterNetEvent("jail:wrongPw")
