@@ -12,7 +12,7 @@ local DOORS = {
   {name = "Mission Row / Cell 1", x = 462.8, y = -993.7, z = 24.9, distance = 2.0, model = 631614199, locked = false, draw_marker = false},
   {name = "Mission Row / Cell 2", x = 462.75, y = -998.3, z = 24.9, distance = 2.0, model = 631614199, locked = false, draw_marker = false},
   {name = "Mission Row / Cell 3", x = 462.7, y = -1001.9, z = 24.9, distance = 2.0, model = 631614199, locked = false, draw_marker = false},
-  {name = "Mission Row / Locker Room", x = 449.6, y = -986.4, z = 30.7, distance = 2.0, model = 1557126584, locked = false, draw_marker = false},
+  {name = "Mission Row / Roof", x = 460.8, y = -985.8, z = 30.7, distance = 2.0, model = 749848321, locked = false, draw_marker = false},
   {name = "Mission Row / Office", x = 447.3,  y = -980.4, z = 30.7, distance = 2.0, model = -1320876379, locked = false, draw_marker = false},
   {name = "EMS Station - Paleto", x = -361.8, y = 6129.8, z = 31.4, distance = 30.0, model = -250842784, locked = false, draw_marker = false},
   {name = "BCSO Station Gate - Paleto", locations = {{x = -455.4, y = 6031.7, z = 31.3}, {x = -459.3, y = 6015.6, z = 31.5}}, distance = 30.0, model = -1483471451, locked = false, draw_marker = true},
