@@ -23,7 +23,7 @@ vehicleRepairStation = {
 	{447.534, -997.033, 24.3635}, -- los santos police department on atlee & sinner st
 	{201.339, -1656.36, 27.2832}, -- los santos fire department in davis
 	{1146.7, -775.8, 56.79},
-	{-35.4, -1088.7, 26.4}
+	{-35.4, -1088.7, 25.55} -- ls dealership
 }
 
 blips = {
