@@ -243,6 +243,7 @@ AddEventHandler("phone:sendTweet", function(data)
 			local name = "@" .. user.getActiveCharacterData("firstName") .. "_" .. user.getActiveCharacterData("lastName")
 			name = string.lower(name)
 			TriggerClientEvent('chatMessage', -1, "[TWEET] - " .. name, {29,161,242}, data.message)
+			TriggerEvent("chat:sendToLogFile", source, "[TWEET] - " .. name .. ": " .. data.message)
 		end
 end)
 
