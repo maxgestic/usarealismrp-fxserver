@@ -4,6 +4,7 @@ local TACKLE_KEY = 101
 
 local scenarios = {
 	{name = "cancel", type = "cancel", dict = "", animname = ""},
+	{name = "stop", type = "cancel", dict = "", animname = ""},
 	{name = "lean", scenarioName = "WORLD_HUMAN_LEANING"},
 	{name = "cop", scenarioName = "WORLD_HUMAN_COP_IDLES"},
 	{name = "sit", scenarioName = "WORLD_HUMAN_PICNIC"},
@@ -220,7 +221,7 @@ RegisterNUICallback('playEmote', function(data, cb)
 	-- play anim / scenario  --
 	-------------------------------
 	local scenarioName = data.emoteName
-		if scenarioName == "cancel" then
+		if scenarioName == "cancel" scenarioName == "stop" then
 			playing_scenario = false
 			playing_anim = nil
 			return
