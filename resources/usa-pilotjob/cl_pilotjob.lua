@@ -1,3 +1,6 @@
+--# by: minipunch
+--# for USA REALISM RP
+
 local KEY_E = 38
 
 local me = nil

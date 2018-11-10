@@ -221,7 +221,7 @@ RegisterNUICallback('playEmote', function(data, cb)
 	-- play anim / scenario  --
 	-------------------------------
 	local scenarioName = data.emoteName
-		if scenarioName == "cancel" scenarioName == "stop" then
+		if scenarioName == "cancel" or scenarioName == "stop" then
 			playing_scenario = false
 			playing_anim = nil
 			return

@@ -5,7 +5,18 @@ end)
 TriggerEvent('es:addCommand', 'ad', function(source, args, user)
 	table.remove(args, 1)
 	TriggerClientEvent('chatMessage', -1, "[Advertisement] - " .. user.getActiveCharacterData("fullName"), {171, 67, 227}, table.concat(args, " "))
-end, {help = "Send a server-wide advertisement.", params = {{name = "message", help = "the advertisement"}}})
+end, {help = "Send an advertisement.", params = {{name = "message", help = "the advertisement"}}})
+
+TriggerEvent('es:addCommand', 'anonad', function(source, args, user)
+	local umoney = user.getActiveCharacterData("money")
+	if umoney > 200 then
+		table.remove(args, 1)
+		TriggerClientEvent('chatMessage', -1, "[Advertisement]", {171, 67, 227}, table.concat(args, " "))
+		user.setActiveCharacterData("money", umoney - 200)
+	else
+		TriggerClientEvent("usa:notify", source, "You don't have enough money!")
+	end
+end, {help = "Send an anonymous advertisement. ($200)", params = {{name = "message", help = "the advertisement"}}})
 
 TriggerEvent('es:addCommand', 'me', function(source, args, user, location)
 	table.remove(args,1)

@@ -1,3 +1,6 @@
+--# by: minipunch
+--# for USA REALISM RP
+
 -- PERFORM FIRST TIME DB CHECK--
 exports["globals"]:PerformDBCheck("usa-pilotjob", "pilotjob")
 
