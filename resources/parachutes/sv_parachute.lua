@@ -1,7 +1,8 @@
 RegisterServerEvent("parachute:usedParachute")
 AddEventHandler("parachute:usedParachute", function()
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
 		local inventory = user.getActiveCharacterData("weapons")
 		for i = 1, #inventory do
 			local item = inventory[i]
@@ -15,5 +16,5 @@ AddEventHandler("parachute:usedParachute", function()
 				break
 			end
 		end
-	end)
+	--end)
 end)

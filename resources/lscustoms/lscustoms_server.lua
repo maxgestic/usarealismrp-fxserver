@@ -216,7 +216,8 @@ end)
 RegisterServerEvent("customs:saveCarData")
 AddEventHandler("customs:saveCarData", function(data, plate, source)
 	local userSource = tonumber(source)
-    TriggerEvent('es:getPlayerFromId', userSource, function(user)
+    --TriggerEvent('es:getPlayerFromId', userSource, function(user)
+		local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		if user then
 			local userVehicles = user.getActiveCharacterData("vehicles")
 			for i = 1, #userVehicles do
@@ -229,5 +230,5 @@ AddEventHandler("customs:saveCarData", function(data, plate, source)
 				end
 			end
 		end
-	end)
+	--end)
 end)

@@ -46,7 +46,8 @@ end, {
 RegisterServerEvent("ems:checkPlayerMoney")
 AddEventHandler("ems:checkPlayerMoney", function()
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		if user then
 			if user.getActiveCharacterData("money") >= 500 then
 				local user_money = user.getActiveCharacterData("money")
@@ -54,7 +55,7 @@ AddEventHandler("ems:checkPlayerMoney", function()
 				TriggerClientEvent("ems:healPlayer", userSource)
 			end
 		end
-	end)
+	--end)
 end)
 
 --------------------------------------

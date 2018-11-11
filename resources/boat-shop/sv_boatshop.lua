@@ -80,7 +80,8 @@ AddEventHandler("boatshop:rentVehicle", function(vehicle, coords, property)
     local price = prices.boats[vehicle.name].rent
     print("rental boat price = $" .. price)
     local userSource = tonumber(source)
-    TriggerEvent("es:getPlayerFromId", userSource, function(user)
+    --TriggerEvent("es:getPlayerFromId", userSource, function(user)
+      local user = exports["essentialmode"]:getPlayerFromId(userSource)
         print("inside of get player from id")
         if user then
             print("user existed")
@@ -98,14 +99,15 @@ AddEventHandler("boatshop:rentVehicle", function(vehicle, coords, property)
                 print("player did not have enough money")
             end
         end
-    end)
+    --end)
 end)
 
 RegisterNetEvent("boatShop:loadBoats")
 AddEventHandler("boatShop:loadBoats", function(source2)
   if source2 then source = source2 end
   local userSource = tonumber(source)
-  TriggerEvent("es:getPlayerFromId", userSource, function(user)
+  --TriggerEvent("es:getPlayerFromId", userSource, function(user)
+  local user = exports["essentialmode"]:getPlayerFromId(userSource)
     local user_boats = user.getActiveCharacterData("watercraft")
     if user_boats then
       if #user_boats > 0 then
@@ -118,13 +120,14 @@ AddEventHandler("boatShop:loadBoats", function(source2)
       TriggerClientEvent("boatShop:setPage", userSource, "home")
       TriggerClientEvent("usa:notify", userSource, "You don't own any watercraft!")
     end
-  end)
+  --end)
 end)
 
 RegisterServerEvent("boatShop:sellBoat")
 AddEventHandler("boatShop:sellBoat", function(item)
   local userSource = tonumber(source)
-  TriggerEvent("es:getPlayerFromId", userSource, function(user)
+  --TriggerEvent("es:getPlayerFromId", userSource, function(user)
+  local user = exports["essentialmode"]:getPlayerFromId(userSource)
     local user_boats = user.getActiveCharacterData("watercraft")
     if user_boats then
       if #user_boats > 0 then
@@ -143,17 +146,18 @@ AddEventHandler("boatShop:sellBoat", function(item)
         end
       end
     end
-  end)
+  --end)
 end)
 
 RegisterServerEvent("boatshop:returnRental")
 AddEventHandler("boatshop:returnRental", function(item)
   local userSource = tonumber(source)
   local return_amount = math.ceil(prices.boats[item.name].rent * 0.25)
-  TriggerEvent("es:getPlayerFromId", userSource, function(user)
+  --TriggerEvent("es:getPlayerFromId", userSource, function(user)
+  local user = exports["essentialmode"]:getPlayerFromId(userSource)
     local user_money = user.getActiveCharacterData("money")
     user.setActiveCharacterData("money", user_money + return_amount)
-  end)
+  --end)
 end)
 
 function comma_value(amount)

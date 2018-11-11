@@ -40,11 +40,12 @@ AddEventHandler("jail:jailPlayerFromMenu", function(data)
 	if data.gender then
 		print("data.gender: " .. data.gender)
 	end
-	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
+	--TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local player_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
 		local arrestingOfficerName = player_name
 		jailPlayer(data, arrestingOfficerName, data.gender)
-	end)
+	--end)
 end)
 
 function jailPlayer(data, officerName, gender)

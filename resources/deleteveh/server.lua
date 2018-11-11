@@ -10,7 +10,8 @@ RegisterServerEvent("impound:impoundVehicle")
 AddEventHandler("impound:impoundVehicle", function(vehicle, plate)
 	print("inside of impound:impoundVehicle!")
 	local userSource = tonumber(source)
-	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
+	--TriggerEvent('es:getPlayerFromId', userSource, function(user)
 		local playerJob = user.getActiveCharacterData("job")
 		local userGroup = user.getGroup()
 		if playerJob == "sheriff" or playerJob == "ems" or playerJob == "fire" or userGroup == "owner" or userGroup == "admin" or userGroup == "mod" or userGroup == "superadmin" then
@@ -45,7 +46,7 @@ AddEventHandler("impound:impoundVehicle", function(vehicle, plate)
 		else
 			TriggerClientEvent("impound:notify", userSource, "Only ~y~law enforcement~w~,~y~medics~w~, and ~y~admins~w~ can use /impound!")
 		end
-	end)
+	--end)
 end)
 --[[
 if key == "plate" then

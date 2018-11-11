@@ -82,7 +82,9 @@ AddEventHandler("essence:buy", function(amount, index, e, property)
 		price = index
 	end
 
-	TriggerEvent("es:getPlayerFromId", _source,function(user)
+	--TriggerEvent("es:getPlayerFromId", _source,function(user)
+
+	local user = exports["essentialmode"]:getPlayerFromId(_source)
 
 		local userJob = user.getActiveCharacterData("job")
 		local user_money = user.getActiveCharacterData("money")
@@ -108,7 +110,7 @@ AddEventHandler("essence:buy", function(amount, index, e, property)
 				TriggerEvent("properties:addMoney", property.name, round(0.20 * toPay, 0))
 			end
 		end
-	end)
+	--end)
 
 end)
 

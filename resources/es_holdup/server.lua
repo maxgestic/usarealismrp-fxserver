@@ -243,7 +243,8 @@ AddEventHandler('es_holdup:rob', function(robb)
 					robbers[source] = robb
 					SetTimeout(120000, function()
 						if(robbers[savedSource])then
-							TriggerEvent('es:getPlayerFromId', savedSource, function(target)
+							--TriggerEvent('es:getPlayerFromId', savedSource, function(target)
+							local target = exports["essentialmode"]:getPlayerFromId(savedSource)
 								if(target)then
 									print("target existed...")
 									--target:addDirty_Money(store.reward)
@@ -259,7 +260,7 @@ AddEventHandler('es_holdup:rob', function(robb)
 										TriggerClientEvent('es_holdup:robberycomplete', savedSource, reward)
 									end)
 								end
-							end)
+						--	end)
 						end
 					end)
 					sendMessageToEmsAndPolice("^1DISPATCH: ^0Security Alarm Triggered at ^2" .. store.nameofstore)

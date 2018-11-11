@@ -16,7 +16,8 @@ local timeout = false
 RegisterServerEvent("weazelnews:toggleDuty")
 AddEventHandler("weazelnews:toggleDuty", function()
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local user_job = user.getActiveCharacterData("job")
 		if user_job == "reporter" then
 			print("user " .. GetPlayerName(userSource) .. " just went off duty for Weazel News!")
@@ -44,7 +45,7 @@ AddEventHandler("weazelnews:toggleDuty", function()
 				TriggerClientEvent("usa:notify", userSource, "You are clocking in and out too fast!")
 			end
 		end
-	end)
+	--end)
 end)
 
 RegisterServerEvent("weazelnews:verifySpawnVan")
@@ -54,7 +55,7 @@ AddEventHandler("weazelnews:verifySpawnVan", function(locationName)
 		TriggerClientEvent("weazelnews:notify", userSource, "You already have a van checked out!")
 		return
 	end
-	
+
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 	local user_job = user.getActiveCharacterData("job")
 	if user_job == "reporter" then
@@ -65,7 +66,7 @@ AddEventHandler("weazelnews:verifySpawnVan", function(locationName)
 			if string.find(item.name, "Driver") and item.status ~= "suspended" then
 				local plate = generate_random_number_plate()
 				vans_out[userSource] = plate
-				
+
 				-- take van deposit amount from player
 				local user_money = user.getActiveCharacterData("money")
 				if user_money < VAN_DEPOSIT_AMOUNT then
@@ -73,7 +74,7 @@ AddEventHandler("weazelnews:verifySpawnVan", function(locationName)
 					return
 				end
 				user.setActiveCharacterData("money", user_money - VAN_DEPOSIT_AMOUNT)
-				
+
 				TriggerClientEvent("weazelnews:notify", userSource, "Make sure to bring that van back!")
 				TriggerClientEvent("weazelnews:spawnVan", userSource, locationName, plate)
 				return
@@ -89,7 +90,7 @@ AddEventHandler("weazelnews:verifyReturnVan", function(plate)
 	local userSource = source
 	if vans_out[userSource] == plate then
 		vans_out[userSource] = nil
-		
+
 		-- pay back van deposit
 		local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local user_money = user.getActiveCharacterData("money")
@@ -134,5 +135,3 @@ function generate_random_number_plate()
 	print("created random plate: ")
 	return number_plate
 end
-
-

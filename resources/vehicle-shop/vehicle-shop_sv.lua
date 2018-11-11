@@ -286,7 +286,8 @@ end
 
 function getPlayersLicense(source) -- TODO: UPDATE THIS FUNCTION TO CORRECLATE TO UPDATED DB DOCUMENT STRUCTURE
 	local userSource = tonumber(source)
-	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	--TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local licenses = user.getActiveCharacterData("license")
 		for i = 1, #licenses do
 			if licenses[i].name == "Driver's License" then
@@ -295,11 +296,12 @@ function getPlayersLicense(source) -- TODO: UPDATE THIS FUNCTION TO CORRECLATE T
 			end
 		end
 		return nil
-	end)
+	--end)
 end
 
 function alreadyHasVehicle(source, vehName)
-	TriggerEvent('es:getPlayerFromId', source, function(user)
+	--TriggerEvent('es:getPlayerFromId', source, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
 		local vehicles = user.getActiveCharacterData("vehicles")
 		for i = 1, #vehicles do
 			if vehicles[i].model == vehName then
@@ -307,18 +309,19 @@ function alreadyHasVehicle(source, vehName)
 			end
 		end
 		return false
-	end)
+	--end)
 end
 
 function alreadyHasAnyVehicle(source)
-	TriggerEvent('es:getPlayerFromId', source, function(user)
+	--TriggerEvent('es:getPlayerFromId', source, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
 		local cars = user.getActiveCharacterData("vehicles")
 		if #cars > 0 then
 			return true
 		else
 			return false
 		end
-	end)
+	--end)
 end
 
 RegisterServerEvent("vehicle-shop:loadItems")
@@ -400,7 +403,8 @@ RegisterServerEvent("vehShop:checkPlayerInsurance")
 AddEventHandler("vehShop:checkPlayerInsurance", function()
 	print("checking for auto insurance!")
 	local userSource = tonumber(source)
-	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	--TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local playerInsurance = user.getActiveCharacterData("insurance")
 		if playerInsurance.type == "auto" then
 			print("found player auto insurance!")
@@ -415,7 +419,7 @@ AddEventHandler("vehShop:checkPlayerInsurance", function()
 			print("no auto insurance found!")
 			TriggerEvent("vehShop:buyInsurance", userSource)
 		end
-	end)
+	--end)
 end)
 
 RegisterServerEvent("mini:checkVehicleMoney")
@@ -424,7 +428,8 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle, property)
 	print("location: " .. type(location))
 	local playerIdentifier = GetPlayerIdentifiers(source)[1]
 	local userSource = tonumber(source)
-	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	--TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local allLicenses = user.getActiveCharacterData("licenses")
 		local license = nil
 		local vehicles = user.getActiveCharacterData("vehicles")
@@ -509,13 +514,14 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle, property)
 		else
 			TriggerClientEvent("vehShop:notify", userSource, "Sorry, you can't own more than " .. MAX_PLAYER_VEHICLES .. " vehicles at this time!")
 		end
-	end)
+	--end)
 end)
 
 RegisterServerEvent("vehShop:loadVehiclesToSell")
 AddEventHandler("vehShop:loadVehiclesToSell", function()
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local vehicles = user.getActiveCharacterData("vehicles")
 		for i = 1, #vehicles do
 			local vehicle = vehicles[i]
@@ -526,14 +532,15 @@ AddEventHandler("vehShop:loadVehiclesToSell", function()
 		end
 		print("vehicles loaded! # = " .. #vehicles)
 		TriggerClientEvent("vehShop:displayVehiclesToSell", userSource, vehicles)
-	end)
+	--end)
 end)
 
 RegisterServerEvent("vehShop:loadVehicles")
 AddEventHandler("vehShop:loadVehicles", function(check_insurance)
 	local vehicles_to_send = {}
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		if check_insurance then
 			local user_insurance = user.getActiveCharacterData("insurance")
 			if user_insurance.type == "auto" then
@@ -565,13 +572,14 @@ AddEventHandler("vehShop:loadVehicles", function(check_insurance)
 				TriggerClientEvent("vehShop:loadedVehicles", userSource, vehicles_to_send)
 			end
 		end
-	end)
+	--end)
 end)
 
 RegisterServerEvent("vehShop:sellVehicle")
 AddEventHandler("vehShop:sellVehicle", function(toSellVehicle)
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local vehicles = user.getActiveCharacterData("vehicles")
 		for i = 1, #vehicles do
 			local vehicle = vehicles[i]
@@ -592,7 +600,7 @@ AddEventHandler("vehShop:sellVehicle", function(toSellVehicle)
 				end
 			end
 		end
-	end)
+	--end)
 end)
 
 function GetVehiclePrice(vehicle)

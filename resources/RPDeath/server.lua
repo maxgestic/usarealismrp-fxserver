@@ -19,7 +19,8 @@ end)
 
 RegisterServerEvent('RPD:userDead')
 AddEventHandler('RPD:userDead', function(userName, street)
-	TriggerEvent('es:getPlayerFromId', source, function(user)
+	--TriggerEvent('es:getPlayerFromId', source, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
 		downedUser = user
 		--[[
 		TriggerEvent("es:getPlayers", function(pl)
@@ -36,7 +37,7 @@ AddEventHandler('RPD:userDead', function(userName, street)
 			end
 		end)
 		--]]
-	end)
+	--end)
 end)
 
 RegisterServerEvent("RPD:removeWeapons")
@@ -44,7 +45,8 @@ AddEventHandler("RPD:removeWeapons", function()
 	local DEATH_PENALTY = 2000
 	local userSource = source
 	print("inside of RPD:removeWeapons")
-	TriggerEvent("es:getPlayerFromId", source, function(user)
+	--TriggerEvent("es:getPlayerFromId", source, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
 
 		if user.getActiveCharacterData("job") == "civ" then
 			-- empty out everything since person has died and NLR is in place
@@ -91,7 +93,7 @@ AddEventHandler("RPD:removeWeapons", function()
 		--TriggerEvent("warrants:removeAnyActiveWarrants", user.getActiveCharacterData("fullName"))
 		-- check jailed status --
 		TriggerEvent("usa_rp:checkJailedStatusOnPlayerJoin", userSource)
-	end)
+	--end)
 end)
 
 TriggerEvent('es:addCommand', 'revive', function(source, args, user)

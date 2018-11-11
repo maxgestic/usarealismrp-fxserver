@@ -22,11 +22,12 @@ end, {help = "Cuff the nearest player.", id = "ID # (Optional)"})
 RegisterServerEvent("cuff:Handcuff")
 AddEventHandler("cuff:Handcuff", function(id)
 	local usource = source
-	TriggerEvent("es:getPlayerFromId", usource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(usource)
+	--TriggerEvent("es:getPlayerFromId", usource, function(user)
 		playerJob = user.getActiveCharacterData("job")
 		if playerJob == "sheriff" or playerJob == "cop" or playerJob == "corrections" then
 			print("cuffing player with id: " .. id)
 			TriggerClientEvent("cuff:Handcuff", tonumber(id), GetPlayerName(usource))
 		end
-	end)
+	--end)
 end)

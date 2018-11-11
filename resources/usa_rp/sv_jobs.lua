@@ -6,7 +6,8 @@
 
 function removeOrDecrementItem(itemNameBeingGiven)
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		if user then
 			local inventory = user.getActiveCharacterData("inventory")
 			if itemNameBeingGiven == "Meth" then
@@ -27,14 +28,15 @@ function removeOrDecrementItem(itemNameBeingGiven)
 				end
 			end
 		end
-	end)
+	--end)
 end
 
 RegisterServerEvent("usa_rp:sellItem")
 AddEventHandler("usa_rp:sellItem", function(job)
 	if job.name == "Meth" then
 		local userSource = tonumber(source)
-		TriggerEvent("es:getPlayerFromId", userSource, function(user)
+		--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+		local user = exports["essentialmode"]:getPlayerFromId(userSource)
 			if user then
 				local inventory = user.getActiveCharacterData("inventory")
 				for i = 1, #inventory do
@@ -68,7 +70,7 @@ AddEventHandler("usa_rp:sellItem", function(job)
 					end
 				end
 			end
-		end)
+		--end)
 	end
 end)
 
@@ -77,7 +79,8 @@ AddEventHandler("usa_rp:giveItem", function(itemToGive)
   local dropoffCoords = {x = 0.0, y = 0.0}
   print("inside of usa_rp:giveItem!")
   local userSource = tonumber(source)
-  TriggerEvent("es:getPlayerFromId", userSource, function(user)
+  --TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 	if user then
 	  print("seeing if user can carry more weight of: " .. itemToGive.weight * itemToGive.quantity)
 	  if user.getCanActiveCharacterHoldItem(itemToGive) then
@@ -101,13 +104,14 @@ AddEventHandler("usa_rp:giveItem", function(itemToGive)
 		TriggerClientEvent("usa_rp:notify", userSource, "Your inventory is full. Can't carry anymore!")
 	  end
 	end
-  end)
+  --end)
 end)
 
 RegisterServerEvent("usa_rp:checkUserJobSupplies")
 AddEventHandler("usa_rp:checkUserJobSupplies", function(supply)
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		if user then
 			local inventory = user.getActiveCharacterData("inventory")
 			for i = 1, #inventory do
@@ -132,7 +136,7 @@ AddEventHandler("usa_rp:checkUserJobSupplies", function(supply)
 			TriggerClientEvent("usa_rp:doesUserHaveJobSupply", userSource, false)
 			print("player had job supply!!")
 		end
-	end)
+	--end)
 end)
 
 RegisterServerEvent("usa_rp:giveChemicals")
@@ -145,7 +149,8 @@ AddEventHandler("usa_rp:giveChemicals", function()
 		weight = 10
 	}
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		if user then
 			local inventory = user.getActiveCharacterData("inventory")
 			for i = 1, #inventory do
@@ -169,7 +174,7 @@ AddEventHandler("usa_rp:giveChemicals", function()
 			user.setActiveCharacterData("inventory", inventory)
 			print("player went out of range, giving back Suspicious Chemicals")
 		end
-	end)
+	--end)
 end)
 
 RegisterServerEvent("usa_rp:startTimer")
@@ -191,7 +196,8 @@ AddEventHandler("usa_rp:startTimer", function(timerType)
 			-- return ped to start position
 			TriggerClientEvent("usa_rp:returnPedToStartPosition", userSource, timerType)
 			-- give loot
-			TriggerEvent("es:getPlayerFromId", userSource, function(user)
+			--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+			local user = exports["essentialmode"]:getPlayerFromId(userSource)
 				if user then
 					local inventory = user.getActiveCharacterData("inventory")
 					for i = 1, #inventory do
@@ -214,8 +220,7 @@ AddEventHandler("usa_rp:startTimer", function(timerType)
 					user.setActiveCharacterData("inventory", inventory)
 					print("added suspicious chemicals!")
 				end
-			end)
-		end)
+			--end)
 	end
 end)
 
@@ -223,7 +228,8 @@ RegisterServerEvent("methJob:checkUserMoney")
 AddEventHandler("methJob:checkUserMoney", function(amount)
   local MAX_CHEMICALS = 10
   local userSource = tonumber(source)
-  TriggerEvent("es:getPlayerFromId", userSource, function(user)
+  --TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 	local suspicious_chems = {
 	  name = "chems bruh",
 	  weight = 10,
@@ -251,7 +257,7 @@ AddEventHandler("methJob:checkUserMoney", function(amount)
 	else
 	  TriggerClientEvent("usa_rp:notify", userSource, "Inventory is full.")
 	end
-  end)
+  --end)
 end)
 
 function hasItem(itemName, inventory, quantity)

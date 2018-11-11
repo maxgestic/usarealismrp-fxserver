@@ -45,7 +45,8 @@ end
 
 RegisterServerEvent("license:searchForLicense")
 AddEventHandler("license:searchForLicense", function(source, playerId)
-	    TriggerEvent('es:getPlayerFromId', tonumber(playerId), function(user)
+	    --TriggerEvent('es:getPlayerFromId', tonumber(playerId), function(user)
+			local user = exports["essentialmode"]:getPlayerFromId(playerId)
 			if not user then
 				TriggerClientEvent("license:notifyNoExist", source, playerId) -- player not in game with that id
 				return
@@ -136,7 +137,7 @@ AddEventHandler("license:searchForLicense", function(source, playerId)
 			else
 				TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0No criminal history.")
 			end
-	    end)
+	    --end)
 end)
 
 -- function to format expiration month correctly

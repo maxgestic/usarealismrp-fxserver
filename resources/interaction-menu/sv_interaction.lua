@@ -24,7 +24,8 @@ RegisterServerEvent("test:cuff")
 AddEventHandler("test:cuff", function(playerId, playerName)
 	--print("going to cuff " .. playerName .. " with id of " .. playerId)
 	--TriggerClientEvent("cuff:Handcuff", tonumber(1), GetPlayerName(source))
-	TriggerEvent("es:getPlayerFromId", source, function(user)
+	--TriggerEvent("es:getPlayerFromId", source, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
 		if user then
 			playerJob = user.getActiveCharacterData("job")
 			if playerJob == "sheriff" or playerJob == "cop" then
@@ -36,7 +37,7 @@ AddEventHandler("test:cuff", function(playerId, playerName)
 		else
 			--print("player with that ID # did not exist...")
 		end
-	end)
+	--end)
 end)
 
 RegisterServerEvent("interaction:loadVehicleInventoryForInteraction")
@@ -65,7 +66,8 @@ RegisterServerEvent("interaction:loadInventoryForInteraction")
 AddEventHandler("interaction:loadInventoryForInteraction", function()
 	--print("loading inventory for interaction menu...")
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		if user then
 			local inventory = user.getActiveCharacterData("inventory")
 			local weapons = user.getActiveCharacterData("weapons")
@@ -74,13 +76,14 @@ AddEventHandler("interaction:loadInventoryForInteraction", function()
 		else
 			--print("interaction: user did not exist")
 		end
-	end)
+	--end)
 end)
 
 RegisterServerEvent("interaction:checkForPhone")
 AddEventHandler("interaction:checkForPhone", function()
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
 		local inventory = user.getActiveCharacterData("inventory")
 		for i = 1, #inventory do
 			local item = inventory[i]
@@ -90,14 +93,15 @@ AddEventHandler("interaction:checkForPhone", function()
 			end
 		end
 		TriggerClientEvent("interaction:notify", userSource, "You have no cell phone to open!")
-	end)
+	--end)
 end)
 
 RegisterServerEvent("interaction:removeItemFromPlayer")
 AddEventHandler("interaction:removeItemFromPlayer", function(itemName)
 	itemName = removeQuantityFromItemName(itemName)
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
 		local inventory = user.getActiveCharacterData("inventory")
 		for i = 1, #inventory do
 			local item = inventory[i]
@@ -113,7 +117,7 @@ AddEventHandler("interaction:removeItemFromPlayer", function(itemName)
 				end
 			end
 		end
-	end)
+	--end)
 end)
 
 RegisterServerEvent("interaction:dropItem")
@@ -289,7 +293,8 @@ end)
 
 function removeItemFromPlayer(item, userSource)
 	-- remove item from player
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		if user then
 			if not item.type then
 				-- must be a license (no item.type)
@@ -337,7 +342,7 @@ function removeItemFromPlayer(item, userSource)
 		else
 			--print("player with id #" .. targetPlayerId .. " is not in game!")
 		end
-	end)
+	--end)
 end
 
 -- /e [emoteName]

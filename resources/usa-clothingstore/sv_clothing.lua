@@ -25,7 +25,8 @@ end)
 RegisterServerEvent("mini:save")
 AddEventHandler("mini:save", function(appearance)
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local characters = user.getCharacters()
 		for i = 1, #characters do
 			--print("characters[i].active = " .. tostring(characters[i].active))
@@ -49,7 +50,7 @@ AddEventHandler("mini:save", function(appearance)
 			end
 		end
 		--TriggerEvent("mini:giveMeMyWeaponsPlease")
-	end)
+	--end)
 end)
 
 
@@ -63,7 +64,8 @@ AddEventHandler("mini:giveMeMyWeaponsPlease", function()
 	--print("typeof source = " .. type(source))
 
     -- Gives the loaded user corresponding to the given player id(second argument).
-    TriggerEvent('es:getPlayerFromId', source, function(user)
+    --TriggerEvent('es:getPlayerFromId', source, function(user)
+		local user = exports["essentialmode"]:getPlayerFromId(source)
 		if user then
             local playerWeapons = user.getActiveCharacterData("weapons")
             if playerWeapons then print("#playerWeapons = " .. #playerWeapons) end
@@ -72,6 +74,6 @@ AddEventHandler("mini:giveMeMyWeaponsPlease", function()
 		else
 			print("no user found!")
 		end
-    end)
+    --end)
 
 end)

@@ -7,11 +7,12 @@
 
 RegisterServerEvent('pizzaJob:payForDelivery')
 AddEventHandler('pizzaJob:payForDelivery',function(pay, property)
-	TriggerEvent('es:getPlayerFromId',source, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	--TriggerEvent('es:getPlayerFromId',source, function(user)
 		user.setActiveCharacterData("money", user.getActiveCharacterData("money") + pay)
 		print("payed $" .. pay .. " for pizza delivery!")
 		if property then
 			TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * pay))
 		end
-	end)
+	--end)
 end)

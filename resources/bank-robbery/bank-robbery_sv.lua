@@ -78,12 +78,12 @@ AddEventHandler("bank:beginRobbery", function(source)
 
 	TriggerEvent("es:getPlayers", function(pl)
 		for k, v in pairs(pl) do
-			TriggerEvent("es:getPlayerFromId", k, function(user)
-				local userJob = user.getActiveCharacterData("job")
+			--TriggerEvent("es:getPlayerFromId", k, function(user)
+				local userJob = v.getActiveCharacterData("job")
 					if userJob == "cop" or userJob == "sheriff" or userJob == "highwaypatrol" or userJob == "ems" or userJob == "fire" then
 						TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "Alarm activated at the ^3Pacific Standard Bank^0 on Vinewood Blvd.")
 					end
-			end)
+			--end)
 		end
 	end)
 	--TriggerClientEvent('chatMessage', -1, 'NEWS', { 255, 180, 0 }, '^0Someone is robbing the bank!')
@@ -101,14 +101,15 @@ AddEventHandler("bank:inRange", function()
 	isBusy = "no"
 	local msg = "You stole ~g~$" .. comma_value(rewardMoney) .. "~w~!"
 	TriggerClientEvent("bank-robbery:notify", source, msg)
-	TriggerEvent('es:getPlayerFromId', source, function(user)
-		if user then
-			local user_money = user.getActiveCharacterData("money")
-			local new_money = user_money + rewardMoney
-			user.setActiveCharacterData("money", new_money)
-			print("player " .. GetPlayerName(userSource) .. " successfully robbed the bank and now has: " .. new_money)
-		end
-	end)
+	--TriggerEvent('es:getPlayerFromId', source, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	if user then
+		local user_money = user.getActiveCharacterData("money")
+		local new_money = user_money + rewardMoney
+		user.setActiveCharacterData("money", new_money)
+		print("player " .. GetPlayerName(userSource) .. " successfully robbed the bank and now has: " .. new_money)
+	end
+	--end)
 end)
 
 RegisterServerEvent("bank:outOfRange")

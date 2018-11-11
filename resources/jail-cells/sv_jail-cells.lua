@@ -13,7 +13,8 @@ local JAIL_CELLS = {
 RegisterServerEvent("jail:checkDoorLock")
 AddEventHandler("jail:checkDoorLock", function(number)
   local userSource = tonumber(source)
-  TriggerEvent("es:getPlayerFromId", userSource, function(user)
+  local user = exports["essentialmode"]:getPlayerFromId(userSource)
+  --TriggerEvent("es:getPlayerFromId", userSource, function(user)
     local user_job = user.getActiveCharacterData("job")
     if user_job == "sheriff" then
       local current_lock_status = JAIL_CELLS[number].locked
@@ -28,5 +29,5 @@ AddEventHandler("jail:checkDoorLock", function(number)
       end
       TriggerClientEvent("jail:toggleDoorLock", -1, number, JAIL_CELLS[number].locked)
     end
-  end)
+  --end)
 end)

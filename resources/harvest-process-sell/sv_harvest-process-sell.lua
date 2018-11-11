@@ -39,7 +39,8 @@ AddEventHandler("HPS:checkItem", function(job_name, process_time, stage)
   --print("item_name: " .. item_name)
   if item_name then
     local userSource = tonumber(source)
-    TriggerEvent("es:getPlayerFromId", userSource, function(user)
+    --TriggerEvent("es:getPlayerFromId", userSource, function(user)
+    local user = exports["essentialmode"]:getPlayerFromId(userSource)
       local inventory = user.getActiveCharacterData("inventory")
       for i = 1, #inventory do
         local item = inventory[i]
@@ -78,7 +79,7 @@ AddEventHandler("HPS:checkItem", function(job_name, process_time, stage)
       elseif stage == "Sale" then
         TriggerClientEvent("usa:notify", userSource, "Don't have any " .. REWARDS[job_name].processed_item.name .. " to sell!")
       end
-    end)
+    --end)
   end
 end)
 
@@ -92,7 +93,8 @@ AddEventHandler("HPS:rewardItem", function(job_name, stage)
         print("giving player harvested item: " .. data.harvest_item.name)
         TriggerEvent("usa:insertItem", data.harvest_item, data.harvest_item.quantity, userSource)
       elseif stage == "Process" then
-        TriggerEvent("es:getPlayerFromId", userSource, function(user)
+        --TriggerEvent("es:getPlayerFromId", userSource, function(user)
+        local user = exports["essentialmode"]:getPlayerFromId(userSource)
           local inventory = user.getActiveCharacterData("inventory")
           for i = 1, #inventory do
             local item = inventory[i]
@@ -112,7 +114,7 @@ AddEventHandler("HPS:rewardItem", function(job_name, stage)
           end
           -- at this point, item was not found
           TriggerClientEvent("usa:notify", userSource, "You don't have enough " .. data.harvest_item.name .. " to process!")
-        end)
+        --end)
       end
     end
   end

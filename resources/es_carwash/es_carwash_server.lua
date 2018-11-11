@@ -8,14 +8,15 @@ price = 50 -- you may edit this to your liking. if "enableprice = false" ignore 
 
 RegisterServerEvent('es_carwash:checkmoney')
 AddEventHandler('es_carwash:checkmoney', function (property)
-	TriggerEvent('es:getPlayerFromId', source, function (user)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	--TriggerEvent('es:getPlayerFromId', source, function (user)
 		if enableprice == true then
 			userMoney = user.getActiveCharacterData("money")
 			if userMoney >= price then
 				user.setActiveCharacterData("money", userMoney - price)
 				TriggerClientEvent('es_carwash:success', source, price)
 				-- give money to gas station owner --
-				if property then 
+				if property then
                   TriggerEvent("properties:addMoney", property.name, round(0.30 * price, 0))
                 end
 			else
@@ -25,7 +26,7 @@ AddEventHandler('es_carwash:checkmoney', function (property)
 		else
 			TriggerClientEvent('es_carwash:free', source)
 		end
-	end)
+	--end)
 end)
 
 function round(num, numDecimalPlaces)

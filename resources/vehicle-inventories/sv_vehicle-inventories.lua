@@ -163,7 +163,8 @@ AddEventHandler("vehicle:checkPlayerWeaponAmount", function(item, vehicle_plate)
   if not vehicles_being_checked[vehicle_plate] then
     vehicles_being_checked[vehicle_plate] = true
     --print("checking user weapon #...")
-    TriggerEvent("es:getPlayerFromId", userSource, function(user)
+    --TriggerEvent("es:getPlayerFromId", userSource, function(user)
+    local user = exports["essentialmode"]:getPlayerFromId(userSource)
       local user_weapons = user.getActiveCharacterData("weapons")
       if #user_weapons < 3 then
         TriggerEvent("es:getPlayers", function(players)
@@ -196,7 +197,7 @@ AddEventHandler("vehicle:checkPlayerWeaponAmount", function(item, vehicle_plate)
       else
         TriggerClientEvent("usa:notify", userSource, "Can't carry more than 3 weapons!")
       end
-    end)
+    --end)
   else
     print("****discontinuing weapon retreival****")
     TriggerClientEvent("usa:notify", userSource, "Please wait a moment.")
@@ -209,7 +210,8 @@ AddEventHandler("vehicle:isItemStillInVehicle", function(plate, item, quantity)
   if not vehicles_being_checked[plate] then
     vehicles_being_checked[plate] = true
     --print("inside vehicle:isItemStillInVehicle...")
-    TriggerEvent("es:getPlayerFromId", userSource, function(user)
+    --TriggerEvent("es:getPlayerFromId", userSource, function(user)
+    local user = exports["essentialmode"]:getPlayerFromId(userSource)
       if not item.weight then item.weight = 2 end
       local temp_item = { weight = item.weight, quantity = quantity}
       --print("seeing if user can hold item with weight: " .. temp_item.weight * temp_item.quantity)
@@ -248,7 +250,7 @@ AddEventHandler("vehicle:isItemStillInVehicle", function(plate, item, quantity)
         vehicles_being_checked[plate] = nil
         TriggerClientEvent("usa:notify", userSource, "Inventory is full.")
       end
-    end)
+    --end)
   else
     print("****discontinuing inventory item retrieval****")
     TriggerClientEvent("usa:notify", userSource, "Please wait a moment.")

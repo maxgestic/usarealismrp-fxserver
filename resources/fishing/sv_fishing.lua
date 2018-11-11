@@ -1,7 +1,8 @@
 RegisterServerEvent("fishing:giveFish")
 AddEventHandler("fishing:giveFish", function(fish)
   local userSource = tonumber(source)
-  TriggerEvent("es:getPlayerFromId", userSource, function(user)
+  --TriggerEvent("es:getPlayerFromId", userSource, function(user)
+  local user = exports["essentialmode"]:getPlayerFromId(userSource)
     if user.getCanActiveCharacterHoldItem(fish) then
       local inventory = user.getActiveCharacterData("inventory")
       for i = 1, #inventory do
@@ -23,13 +24,14 @@ AddEventHandler("fishing:giveFish", function(fish)
     else
       TriggerClientEvent("usa:notify", userSource, "Inventory is full!")
     end
-  end)
+  --end)
 end)
 
 RegisterServerEvent("fishing:sellFish")
 AddEventHandler("fishing:sellFish", function()
   local userSource = tonumber(source)
-  TriggerEvent("es:getPlayerFromId", userSource, function(user)
+  --TriggerEvent("es:getPlayerFromId", userSource, function(user)
+  local user = exports["essentialmode"]:getPlayerFromId(userSource)
     local inventory = user.getActiveCharacterData("inventory")
     for i = 1, #inventory do
       local item = inventory[i]
@@ -52,7 +54,7 @@ AddEventHandler("fishing:sellFish", function()
       end
     end
     TriggerClientEvent("usa:notify", userSource, "You have no fish to sell!")
-  end)
+  --end)
 end)
 
 function round(num, numDecimalPlaces)

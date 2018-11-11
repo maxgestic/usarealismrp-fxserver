@@ -3,7 +3,8 @@ local activeJobs = {}
 RegisterServerEvent("go-postal:checkLicense")
 AddEventHandler("go-postal:checkLicense", function()
 	local userSource = source
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local user_licenses = user.getActiveCharacterData("licenses")
 		for i = 1, #user_licenses do
           local item = user_licenses[i]
@@ -22,7 +23,7 @@ AddEventHandler("go-postal:checkLicense", function()
         end
 		-- no license at this point
 		TriggerClientEvent("usa:notify", userSource, "You don't have a driver's license! Try the DMV.")
-	end)
+	--end)
 end)
 
 RegisterServerEvent("transport:giveMoney")

@@ -3,7 +3,8 @@ local TOW_REWARD = 700
 RegisterServerEvent("towJob:giveReward")
 AddEventHandler("towJob:giveReward", function(property)
 	local userSource = source
-	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	--TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local user_money = user.getActiveCharacterData("money")
 		user.setActiveCharacterData("money", user_money + TOW_REWARD)
 		-- give property owner money --
@@ -11,7 +12,7 @@ AddEventHandler("towJob:giveReward", function(property)
 			TriggerEvent("properties:addMoney", property.name, math.ceil(0.70 * TOW_REWARD))
 		end
 		TriggerClientEvent("towJob:success", userSource)
-	end)
+	--end)
 end)
 
 -- pv-tow :
@@ -27,7 +28,8 @@ local timeout = false
 RegisterServerEvent("tow:setJob")
 AddEventHandler("tow:setJob", function(coords)
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local user_job = user.getActiveCharacterData("job")
 		local user_licenses = user.getActiveCharacterData("licenses")
 		local has_dl = false
@@ -68,5 +70,5 @@ AddEventHandler("tow:setJob", function(coords)
 				TriggerClientEvent("tow:onTimeout", userSource, true)
 			end
 		end
-	end)
+	--end)
 end)

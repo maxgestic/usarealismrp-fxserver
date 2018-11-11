@@ -13,7 +13,8 @@ AddEventHandler("carFix:checkPlayerMoney", function(engineHealth, bodyHealth)
   --local added_cost = 8 * (body_diff + engine_diff)
   --repair_price = repair_price + added_cost
   --if engineHealth < 1000.0 or bodyHealth < 1000.0 then
-  TriggerEvent("es:getPlayerFromId", userSource, function(user)
+  --TriggerEvent("es:getPlayerFromId", userSource, function(user)
+  local user = exports["essentialmode"]:getPlayerFromId(userSource)
     local user_money = user.getActiveCharacterData("money")
     local user_job = user.getActiveCharacterData("job")
     if user_job == "sheriff" or user_job == "ems" or user_job == "fire" then
@@ -29,7 +30,7 @@ AddEventHandler("carFix:checkPlayerMoney", function(engineHealth, bodyHealth)
     else
       TriggerClientEvent("usa:notify", userSource, "Sorry, you don't have enough money to repair your vehicle! Cost: $" .. repair_price)
     end
-  end)
+  --end)
   --else
   --  TriggerClientEvent("usa:notify", userSource, "Your vehicle does not need any repairs!")
   --end

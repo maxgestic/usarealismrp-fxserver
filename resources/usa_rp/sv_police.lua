@@ -38,7 +38,8 @@ RegisterServerEvent("police:payTicket")
 AddEventHandler("police:payTicket", function(fromPlayerId, amount, reason, wantsToPay)
 	local userSource = tonumber(source)
 	if wantsToPay then
-		TriggerEvent('es:getPlayerFromId', userSource, function(user)
+		--TriggerEvent('es:getPlayerFromId', userSource, function(user)
+		local user = exports["essentialmode"]:getPlayerFromId(userSource)
 			if user then
 				local user_char_name = user.getActiveCharacterData("fullName")
 				local user_money = user.getActiveCharacterData("money")
@@ -68,7 +69,7 @@ AddEventHandler("police:payTicket", function(fromPlayerId, amount, reason, wants
 				table.insert(user_history, ticket)
 				user.setActiveCharacterData("criminalHistory", user_history)
 			end
-		end)
+		--end)
 	else
 		TriggerClientEvent("police:notify", userSource, "You have ~r~denied~w~ to sign your ticket of $" .. amount .. "!")
 		TriggerClientEvent("police:notify", fromPlayerId, GetPlayerName(userSource) .. " has ~r~denied~w~ to sign their ticket of $" .. comma_value(amount) .. "!")
@@ -175,7 +176,8 @@ TriggerEvent('es:addJobCommand', 'seize', { "police", "sheriff", "corrections" }
 	if arg and targetId then
 		if arg == "contraband" then
 			print(name .. " is seizing contraband!")
-			TriggerEvent('es:getPlayerFromId', targetId, function(target)
+			--TriggerEvent('es:getPlayerFromId', targetId, function(target)
+			local target = exports["essentialmode"]:getPlayerFromId(targetId)
 				local targetInventory = target.getActiveCharacterData("inventory")
 				local targetWeapons = target.getActiveCharacterData("weapons")
 				for i = #targetInventory, 1, -1 do
@@ -196,7 +198,7 @@ TriggerEvent('es:addJobCommand', 'seize', { "police", "sheriff", "corrections" }
 				end
 				target.setActiveCharacterData("inventory", targetInventory)
 				target.setActiveCharacterData("weapons", targetWeapons)
-			end)
+			--end)
 		elseif arg == "cash" then
 			print(name .. " is seizing a player's cash!")
 			target_player_id = targetId
@@ -215,14 +217,15 @@ RegisterServerEvent("police:seizeCash")
 AddEventHandler("police:seizeCash", function(amount)
 	local userSource = tonumber(source)
 	print("seizing cash from id #" .. target_player_id .. "! amount: $" .. amount)
-	TriggerEvent('es:getPlayerFromId', target_player_id, function(target)
+	--TriggerEvent('es:getPlayerFromId', target_player_id, function(target)
+	local target = exports["essentialmode"]:getPlayerFromId(target_player_id)
 		local target_money = target.getActiveCharacterData("money")
 		if target_money - amount >= 0 then
 			target.setActiveCharacterData("money", target_money - amount)
 			TriggerClientEvent("usa:notify", userSource, "~y~Seized: ~w~$" .. amount)
 			TriggerClientEvent("usa:notify", target_player_id, "~y~Seized: ~w~$" .. amount)
 		end
-	end)
+	--end)
 end)
 -- end seize contraband
 
@@ -372,7 +375,8 @@ end)
 -- suspend gun license / firearm permit --
 RegisterServerEvent("police:setFirearmPermitStatus")
 AddEventHandler("police:setFirearmPermitStatus", function(status, id, days)
-	TriggerEvent('es:getPlayerFromId', id, function(user)
+	--TriggerEvent('es:getPlayerFromId', id, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(id)
 		local licenses = user.getActiveCharacterData("licenses")
 		for i = 1, #licenses do
 			local license =  licenses[i]
@@ -389,7 +393,7 @@ AddEventHandler("police:setFirearmPermitStatus", function(status, id, days)
 			end
 		end
 		print("person had no firearm permit!")
-	end)
+	--end)
 end)
 
 -- check suspension dates --
@@ -397,7 +401,8 @@ RegisterServerEvent("police:checkSuspension")
 AddEventHandler("police:checkSuspension", function(id)
 	print("checking player license status!")
 	local userSource = id
-	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	--TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local licenses = user.getActiveCharacterData("licenses")
 		if licenses then
 			for i = 1, #licenses do
@@ -425,5 +430,5 @@ AddEventHandler("police:checkSuspension", function(id)
 		end
 		return
 		print("person had no DL or FP!")
-	end)
+	--end)
 end)

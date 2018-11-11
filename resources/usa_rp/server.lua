@@ -52,7 +52,8 @@ RegisterServerEvent("usa_rp:spawnPlayer")
 AddEventHandler("usa_rp:spawnPlayer", function()
 	print("inside of usa_rp:spawnPlayer!")
 	local userSource = tonumber(source)
-	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	--TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local characters = user.getCharacters()
 		local job = user.getActiveCharacterData("job")
 		if job then
@@ -71,7 +72,7 @@ AddEventHandler("usa_rp:spawnPlayer", function()
 
 		-- todo: remove unused passed in parameters below??
 		TriggerClientEvent("usa_rp:spawn", userSource, model, job, weapons, characters)
-	end)
+	--end)
 end)
 
 RegisterServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
@@ -79,13 +80,14 @@ AddEventHandler("usa_rp:checkJailedStatusOnPlayerJoin", function(id)
 	if id then source = id end
 	print("inside of checkJailedStatusOnPlayerJoin event handler...")
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		if user then
 			if user.getActiveCharacterData("jailtime") > 0 then
 				TriggerClientEvent("jail:jail", userSource)
 			end
 		end
-	end)
+	--end)
 end)
 
 -- V E H I C L E  C O N T R O L S
@@ -162,7 +164,8 @@ end, {
 RegisterServerEvent("usa:checkPlayerMoney")
 AddEventHandler("usa:checkPlayerMoney", function(activity, amount, callbackEventName, isServerEvent, takeMoney)
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local user_money = user.getActiveCharacterData("money")
 		if user_money >= amount then
 			if takeMoney then
@@ -176,7 +179,7 @@ AddEventHandler("usa:checkPlayerMoney", function(activity, amount, callbackEvent
 		else
 			TriggerClientEvent("usa:notify", userSource, "Sorry, you don't have enough money to " .. activity .. "!")
 		end
-	end)
+	--end)
 end)
 
 -- see if user has item in Inventory:
@@ -187,7 +190,8 @@ AddEventHandler("usa:getPlayerItem", function(from_source, item_name, callback)
 	print("inside usa:getPlayerItem!")
 	print("from_source: " .. from_source)
 	local userSource = tonumber(from_source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local user_inventory = user.getActiveCharacterData("inventory")
 		for i = 1, #user_inventory do
 			local item = user_inventory[i]
@@ -202,7 +206,7 @@ AddEventHandler("usa:getPlayerItem", function(from_source, item_name, callback)
 		print("did not find inventory item with name: " .. item_name)
 		-- not found if here, return nil:
 		callback(nil)
-	end)
+	--end)
 end)
 
 -- see if user has item in Inventory:
@@ -215,7 +219,8 @@ AddEventHandler("usa:getPlayerItems", function(from_source, item_names, callback
 	local userSource = tonumber(from_source)
 	local return_items = {}
 	local found = false
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local user_inventory = user.getActiveCharacterData("inventory")
 		for i = 1, #user_inventory do
 			local item = user_inventory[i]
@@ -238,7 +243,7 @@ AddEventHandler("usa:getPlayerItems", function(from_source, item_names, callback
 			-- not found if here, return nil:
 			callback(nil)
 		end
-	end)
+	--end)
 end)
 
 -- assumes quantity provided is less than or equal to_remove_item.quantity
@@ -247,7 +252,8 @@ AddEventHandler("usa:removeItem", function(to_remove_item, quantity, from_source
 	print("inside usa:removeItem!")
 	if from_source then source = from_source end
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local user_inventory = user.getActiveCharacterData("inventory")
 		local user_weapons = user.getActiveCharacterData("weapons")
 		local user_licenses = user.getActiveCharacterData("licenses")
@@ -302,7 +308,7 @@ AddEventHandler("usa:removeItem", function(to_remove_item, quantity, from_source
 				return
 			end
 		end
-	end)
+	--end)
 end)
 
 RegisterServerEvent("usa:insertItem")
@@ -310,7 +316,8 @@ AddEventHandler("usa:insertItem", function(to_insert_item, quantity, player_sour
 	print("inside usa:insertItem!")
 	if player_source then source = player_source end
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		to_insert_item.quantity = quantity
 		if user.getCanActiveCharacterHoldItem(to_insert_item) then
 			if to_insert_item.type == "license" then
@@ -384,7 +391,7 @@ AddEventHandler("usa:insertItem", function(to_insert_item, quantity, player_sour
 			TriggerClientEvent("usa:notify", userSource, "Inventory full.")
 			if cb then cb(false) end
 		end
-	end)
+	--end)
 end)
 
 RegisterServerEvent("usa:loadCivCharacter")

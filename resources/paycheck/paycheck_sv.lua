@@ -6,7 +6,8 @@ AddEventHandler('paycheck:welfare', function()
 
   	local paycheckAmount
 
-	TriggerEvent('es:getPlayerFromId', source, function(user)
+	--TriggerEvent('es:getPlayerFromId', source, function(user)
+  local user = exports["essentialmode"]:getPlayerFromId(source)
 
 		local job = user.getActiveCharacterData("job")
 
@@ -96,7 +97,7 @@ AddEventHandler('paycheck:welfare', function()
 		else
 			-- no active char, don't pay
 		end
- 	end)
+ 	--end)
 
 end)
 

@@ -9,12 +9,13 @@ end)
 
 RegisterServerEvent('playerSpawned')
 AddEventHandler('playerSpawned', function()
-	TriggerEvent('es:getPlayerFromId', source, function(user)
-		local bank = user.getActiveCharacterData("bank")
-		balances[source] = bank
+	--TriggerEvent('es:getPlayerFromId', source, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	local bank = user.getActiveCharacterData("bank")
+	balances[source] = bank
 
-		TriggerClientEvent('banking:updateBalance', source, bank)
-	end)
+	TriggerClientEvent('banking:updateBalance', source, bank)
+	--end)
 end)
 
 AddEventHandler('playerDropped', function()
@@ -77,39 +78,41 @@ end)
 RegisterServerEvent('bank:deposit')
 AddEventHandler('bank:deposit', function(amount)
 local userSource = tonumber(source)
-	TriggerEvent('es:getPlayerFromId', userSource, function(user)
-		if notAllowedToDeposit[userSource] == nil then
-			local rounded = math.ceil(tonumber(amount))
-			print("rounded = " .. rounded)
-			if(string.len(rounded) >= 9) then
-				TriggerClientEvent('chatMessage', userSource, "", {0, 0, 200}, "^1Input too high^0")
-			else
-					local user_money = user.getActiveCharacterData("money")
-					local user_bank = user.getActiveCharacterData("bank")
-				if(rounded <= user_money and rounded > 0) then
-					--TriggerClientEvent("banking:updateBalance", userSource, (user.getBank() + rounded))
-					--TriggerClientEvent("banking:addBalance", userSource, rounded)
-		 print("updating user balance! " .. (user_bank + rounded))
-					TriggerClientEvent("banking:updateBalance", userSource, (user_bank + rounded))
-					TriggerClientEvent("banking:addBalance", userSource, rounded)
-					user.setActiveCharacterData("money", user_money - rounded)
-					user.setActiveCharacterData("bank", user_bank + rounded)
-					--deposit(userSource, rounded)
-					--local new_balance = user.getBank()
-				else
-					TriggerClientEvent('chatMessage', userSource, "", {0, 0, 200}, "^1Not enough cash!^0")
-				end
-			end
+	--TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
+	if notAllowedToDeposit[userSource] == nil then
+		local rounded = math.ceil(tonumber(amount))
+		print("rounded = " .. rounded)
+		if(string.len(rounded) >= 9) then
+			TriggerClientEvent('chatMessage', userSource, "", {0, 0, 200}, "^1Input too high^0")
 		else
-				TriggerClientEvent('es_rp:notify', userSource, "~r~You cannot deposit recently stolen money, please wait 5 minutes.")
+				local user_money = user.getActiveCharacterData("money")
+				local user_bank = user.getActiveCharacterData("bank")
+			if(rounded <= user_money and rounded > 0) then
+				--TriggerClientEvent("banking:updateBalance", userSource, (user.getBank() + rounded))
+				--TriggerClientEvent("banking:addBalance", userSource, rounded)
+	 print("updating user balance! " .. (user_bank + rounded))
+				TriggerClientEvent("banking:updateBalance", userSource, (user_bank + rounded))
+				TriggerClientEvent("banking:addBalance", userSource, rounded)
+				user.setActiveCharacterData("money", user_money - rounded)
+				user.setActiveCharacterData("bank", user_bank + rounded)
+				--deposit(userSource, rounded)
+				--local new_balance = user.getBank()
+			else
+				TriggerClientEvent('chatMessage', userSource, "", {0, 0, 200}, "^1Not enough cash!^0")
+			end
 		end
-	end)
+	else
+			TriggerClientEvent('es_rp:notify', userSource, "~r~You cannot deposit recently stolen money, please wait 5 minutes.")
+	end
+	--end)
 end)
 
 RegisterServerEvent('bank:withdraw')
 AddEventHandler('bank:withdraw', function(amount)
 local userSource = tonumber(source)
-  TriggerEvent('es:getPlayerFromId', userSource, function(user)
+  --TriggerEvent('es:getPlayerFromId', userSource, function(user)
+		local user = exports["essentialmode"]:getPlayerFromId(userSource)
       local rounded = round(tonumber(amount), 0)
       if(string.len(tostring(rounded)) >= 9) then
         TriggerClientEvent('chatMessage', userSource, "", {0, 0, 200}, "^1Input too high^0")
@@ -130,7 +133,7 @@ local userSource = tonumber(source)
 			end
 		end
       end
-  end)
+  --end)
 end)
 
 -- Bank Transfer
@@ -226,7 +229,8 @@ end, {
 
 RegisterServerEvent('bank:givecash')
 AddEventHandler('bank:givecash', function(toPlayer, amount)
-	TriggerEvent('es:getPlayerFromId', source, function(user)
+	--TriggerEvent('es:getPlayerFromId', source, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
 		local user_money_1 = user.getActiveCharacterData("money")
 		if (tonumber(user_money_1) >= tonumber(amount)) then
 			user.setActiveCharacterData("money", user_money_1 - amount)
@@ -244,7 +248,7 @@ AddEventHandler('bank:givecash', function(toPlayer, amount)
 				TriggerClientEvent('chatMessage', source, "", {0, 0, 200}, "^1Not enough money in wallet!^0")
 			end
 		end
-	end)
+	--end)
 end)
 
 TriggerEvent('es:addCommand', 'bank', function(source, args, user)

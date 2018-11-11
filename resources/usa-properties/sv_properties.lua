@@ -202,7 +202,8 @@ end)
 RegisterServerEvent("properties:storeVehicle")
 AddEventHandler("properties:storeVehicle", function(property_name, plate)
   local userSource = tonumber(source)
-	TriggerEvent('es:getPlayerFromId', userSource, function(user)
+	--TriggerEvent('es:getPlayerFromId', userSource, function(user)
+  local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local userVehicles = user.getActiveCharacterData("vehicles")
 		for i = 1, #userVehicles do
 			local vehicle = userVehicles[i]
@@ -219,7 +220,7 @@ AddEventHandler("properties:storeVehicle", function(property_name, plate)
 			end
 		end
 		TriggerClientEvent("garage:notify", userSource, "~r~You do not own that vehicle!")
-	end)
+	--end)
 end)
 
 -- retrieve vehicle from property --

@@ -1,13 +1,14 @@
 -- Gets called when a player is fully loaded.
 AddEventHandler('es:playerLoaded', function(source)
-  print("INSIDE JSCOREBOARD PLAYER LOADED!")
+  --print("INSIDE JSCOREBOARD PLAYER LOADED!")
   local userSource = tonumber(source)
   print("userSource = " .. userSource)
-  TriggerEvent("es:getPlayerFromId", userSource, function(user)
-    local user_group = user.getGroup()
-    print("scoreboard user group = " .. user_group)
-    TriggerClientEvent("jscoreboard:setUserGroup", userSource, user_group)
-  end)
+  --TriggerEvent("es:getPlayerFromId", userSource, function(user)
+  local user = exports["essentialmode"]:getPlayerFromId(userSource)
+  local user_group = user.getGroup()
+  print("scoreboard user group = " .. user_group)
+  TriggerClientEvent("jscoreboard:setUserGroup", userSource, user_group)
+  --end)
 end)
 
 -- used to load active players for scoreboard list

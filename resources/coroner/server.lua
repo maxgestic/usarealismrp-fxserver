@@ -2,10 +2,11 @@ RegisterServerEvent('HOSPITAL:released')
 
 AddEventHandler('HOSPITAL:released', function()
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
 		TriggerClientEvent('chatMessage', -1, "SYSTEM", {200,0,0}, name .. " has been given a new life.")
-	end)
+	--end)
 end)
 
 RegisterServerEvent('HOSPITAL:reminder')
