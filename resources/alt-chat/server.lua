@@ -7,16 +7,28 @@ TriggerEvent('es:addCommand', 'ad', function(source, args, user)
 	TriggerClientEvent('chatMessage', -1, "[Advertisement] - " .. user.getActiveCharacterData("fullName"), {171, 67, 227}, table.concat(args, " "))
 end, {help = "Send an advertisement.", params = {{name = "message", help = "the advertisement"}}})
 
+local lastAnonAdAuthor = nil
 TriggerEvent('es:addCommand', 'anonad', function(source, args, user)
 	local umoney = user.getActiveCharacterData("money")
 	if umoney > 200 then
 		table.remove(args, 1)
 		TriggerClientEvent('chatMessage', -1, "[Advertisement]", {171, 67, 227}, table.concat(args, " "))
 		user.setActiveCharacterData("money", umoney - 200)
+		lastAnonAdAuthor = "(#" .. source .. ") " .. user.getActiveCharacterData("fullName")
 	else
 		TriggerClientEvent("usa:notify", source, "You don't have enough money!")
 	end
 end, {help = "Send an anonymous advertisement. ($200)", params = {{name = "message", help = "the advertisement"}}})
+
+TriggerEvent('es:addGroupCommand', 'lastanonad', 'mod', function(source, args, user)
+	if lastAnonAdAuthor then
+		TriggerClientEvent('chatMessage', source, "SYSTEM", {171, 67, 227}, "The last anon ad was sent by: " .. lastAnonAdAuthor)
+	else
+		TriggerClientEvent('chatMessage', source, "SYSTEM", {171, 67, 227}, "There is no last anon ad author recorded.")
+	end
+end, {
+	help = "Find out who sent the last anonymous advertisement"
+})
 
 TriggerEvent('es:addCommand', 'me', function(source, args, user, location)
 	table.remove(args,1)
