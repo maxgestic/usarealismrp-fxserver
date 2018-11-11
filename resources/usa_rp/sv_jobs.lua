@@ -181,11 +181,11 @@ RegisterServerEvent("usa_rp:startTimer")
 AddEventHandler("usa_rp:startTimer", function(timerType)
 	local userSource = tonumber(source)
 	local messages = {
-	  "Sup! You can chill out here while I get your stuff.",
-	  "Long time no see!",
-	  "What's up good lookin!",
-	  "Back already?",
-	  "Miss me already?"
+		"Sup! You can chill out here while I get your stuff.",
+		"Long time no see!",
+		"What's up good lookin!",
+		"Back already?",
+		"Miss me already?"
 	}
 	TriggerClientEvent("usa_rp:notify", userSource, messages[math.random(1, tonumber(#messages))])
 	if timerType == "meth_supplies_ped" then
@@ -198,29 +198,29 @@ AddEventHandler("usa_rp:startTimer", function(timerType)
 			-- give loot
 			--TriggerEvent("es:getPlayerFromId", userSource, function(user)
 			local user = exports["essentialmode"]:getPlayerFromId(userSource)
-				if user then
-					local inventory = user.getActiveCharacterData("inventory")
-					for i = 1, #inventory do
-						local item = inventory[i]
-						if item.name == "Suspicious Chemicals" then
-							inventory[i].quantity = inventory[i].quantity + 1
-							user.setActiveCharacterData("inventory", inventory)
-							print("Suspicious Chemicals quantity increased at: " .. inventory[i].quantity)
-							return
-						end
+			if user then
+				local inventory = user.getActiveCharacterData("inventory")
+				for i = 1, #inventory do
+					local item = inventory[i]
+					if item.name == "Suspicious Chemicals" then
+						inventory[i].quantity = inventory[i].quantity + 1
+						user.setActiveCharacterData("inventory", inventory)
+						print("Suspicious Chemicals quantity increased at: " .. inventory[i].quantity)
+						return
 					end
-					local suspiciousChemicals = {
-						name = "Suspicious Chemicals",
-						legality = "illegal",
-						quantity = 1,
-						type = "chemical",
-						weight = 10
-					}
-					table.insert(inventory, suspiciousChemicals)
-					user.setActiveCharacterData("inventory", inventory)
-					print("added suspicious chemicals!")
 				end
-			--end)
+				local suspiciousChemicals = {
+					name = "Suspicious Chemicals",
+					legality = "illegal",
+					quantity = 1,
+					type = "chemical",
+					weight = 10
+				}
+				table.insert(inventory, suspiciousChemicals)
+				user.setActiveCharacterData("inventory", inventory)
+				print("added suspicious chemicals!")
+			end
+		end)
 	end
 end)
 
