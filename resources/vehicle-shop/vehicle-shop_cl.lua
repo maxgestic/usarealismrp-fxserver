@@ -77,7 +77,7 @@ function CreateMenu(menu)
 		for category, items in pairs(vehicleShopItems["vehicles"]) do
 		  local category_submenu = _menuPool:AddSubMenu(buy_submenu, category, "See our selection of " .. category, true)
 		  for i = 1, #items do
-			  local item = NativeUI.CreateItem("($" .. comma_value(items[i].price) .. ") " .. items[i].make .. " " .. items[i].model, "Browse options for the " .. items[i].make .. " " .. items[i].model)
+			  local item = NativeUI.CreateItem("($" .. comma_value(items[i].price) .. ") " .. items[i].make .. " " .. items[i].model, "Browse options for the " .. items[i].make .. " " .. items[i].model .. " (Storage Capacity: " .. items[i].storage_capacity .. ")")
 			  item.Activated = function(parentmenu, selected)
 				parentmenu:Visible(false)
 				previewMenu:Visible(true)
