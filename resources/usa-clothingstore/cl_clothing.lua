@@ -15,7 +15,8 @@ local CLOTHING_STORE_LOCATIONS = {
 	{name="Clothing Store", colour=15, id=73, x = 125.403, y = -223.887, z = 54.0578}, -- vinewood 5
 	{name="Clothing Store", colour=15, id=73, x = 423.474, y = -809.565, z = 29.0911}, -- vinewood 6
 	{name="Clothing Store", colour=15, id=73, x = -818.509, y = -1074.14, z = 11.0281}, -- vinewood 7
-	{name="Clothing Store", colour=15, id=73, x = 77.7774, y = -1389.87, z = 29.0761} -- vinewood 8
+	{name="Clothing Store", colour=15, id=73, x = 77.7774, y = -1389.87, z = 29.0761}, -- vinewood 
+	{name="Clothing Store", colour = 15, id = 73, x = 105.8, y = -1302.9, z = 28.7, noblip = true} -- vanilla unicorn
 }
 local me = nil
 local mycoords = nil
@@ -47,12 +48,14 @@ end
 -- add blips --
 Citizen.CreateThread(function()
 			for _, item in pairs(CLOTHING_STORE_LOCATIONS) do
-				item.blip = AddBlipForCoord(item.x, item.y, item.z)
-				SetBlipSprite(item.blip, item.id)
-				SetBlipAsShortRange(item.blip, true)
-				BeginTextCommandSetBlipName("STRING")
-				AddTextComponentString(item.name)
-				EndTextCommandSetBlipName(item.blip)
+				if not item.noblip then
+					item.blip = AddBlipForCoord(item.x, item.y, item.z)
+					SetBlipSprite(item.blip, item.id)
+					SetBlipAsShortRange(item.blip, true)
+					BeginTextCommandSetBlipName("STRING")
+					AddTextComponentString(item.name)
+					EndTextCommandSetBlipName(item.blip)
+				end
 			end
 end)
 
