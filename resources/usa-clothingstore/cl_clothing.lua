@@ -15,7 +15,7 @@ local CLOTHING_STORE_LOCATIONS = {
 	{name="Clothing Store", colour=15, id=73, x = 125.403, y = -223.887, z = 54.0578}, -- vinewood 5
 	{name="Clothing Store", colour=15, id=73, x = 423.474, y = -809.565, z = 29.0911}, -- vinewood 6
 	{name="Clothing Store", colour=15, id=73, x = -818.509, y = -1074.14, z = 11.0281}, -- vinewood 7
-	{name="Clothing Store", colour=15, id=73, x = 77.7774, y = -1389.87, z = 29.0761}, -- vinewood 
+	{name="Clothing Store", colour=15, id=73, x = 77.7774, y = -1389.87, z = 29.0761}, -- vinewood
 	{name="Clothing Store", colour = 15, id = 73, x = 105.8, y = -1302.9, z = 28.7, noblip = true} -- vanilla unicorn
 }
 local me = nil
@@ -30,8 +30,19 @@ _menuPool:Add(ComponentValuesMenu)
 
 local previous_menu = nil
 
-local COMPONENTS = {"Face","Head","Hair","Arms/Hands","Legs","Back","Feet","Ties","Acessories","Vests","Textures","Torso"}
+local COMPONENTS = {"Face","Head","Hair","Arms/Hands","Legs","Back","Feet","Ties","Accessories","Vests","Textures","Torso"}
 local PROPS = { "Head", "Glasses", "Ear Acessories"}
+
+local BLACKLISTED_ITEMS = {
+	["components"] = {
+		[8] = {67, 97, 71, 72, 41, 43}, -- accessories
+		[11] = {17, 18, 19, 24, 26, 29, 30, 31, 32, 35, 36,  38, 39, 40, 29, 51, 52, 64, 70, 74, 75, 80, 81, 93, 94, 97, 98, 100, 101, 102, 103, 143, 149, 150, 154, 183, 123, 118},
+		[9] = {4, 7, 10, 12, 15, 17, 18, 20, 21, 26, 27} -- vest
+	},
+	["props"] = {
+		[0] = {8, 10, 13, 17, 33, 44, 45, 48}
+	}
+}
 
 ------------------------------------------------------------------------------------------------------
 -- Swayam's way of setting up data structures with skins, basically 3 parallel arrays --
@@ -152,6 +163,17 @@ function IsNearStore()
 			end
 end
 
+function IsBlacklisted(type, adjusted_index, val)
+	if BLACKLISTED_ITEMS[type][adjusted_index] then
+		for x = 1, #BLACKLISTED_ITEMS[type][adjusted_index] do
+			if val == BLACKLISTED_ITEMS[type][adjusted_index][x] then
+				return true
+			end
+		end
+	end
+	return false
+end
+
 function CreateMenu()
 	Citizen.CreateThread(function()
 		--------------------
@@ -207,8 +229,11 @@ function CreateMenu()
 				ComponentValuesMenu.OnListChange = function(sender, item, index)
  					if item == component_changer then
 						 local val = item:IndexToItem(index)
-						 SetPedComponentVariation(me, adjusted_index, val, 0, 0)
-						 UpdateValueChangerMenu(me, adjusted_index, val, false)
+						 if not IsBlacklisted("components", adjusted_index, val) then
+							 --print("setting adjusted index " .. adjusted_index .. " to val " .. val)
+							 SetPedComponentVariation(me, adjusted_index, val, 0, 0)
+							 UpdateValueChangerMenu(me, adjusted_index, val, false)
+						 end
 					elseif item == texture_changer then
 						local val = item:IndexToItem(index)
 						SetPedComponentVariation(me, adjusted_index, GetPedDrawableVariation(me, adjusted_index), val, 0)
@@ -246,8 +271,17 @@ function CreateMenu()
  					if item == prop_changer then
 						 local val = item:IndexToItem(index)
 						 ClearPedProp(me, adjusted_index)
-						 SetPedPropIndex(me, adjusted_index, val, 0, true)
-						 UpdateValueChangerMenu(me, adjusted_index, val, true)
+						 if val then
+							 if not IsBlacklisted("props", adjusted_index, val) then
+								 --print("adjusted index: " .. adjusted_index .. ", val: " .. val)
+								 SetPedPropIndex(me, adjusted_index, val, 0, true)
+								 UpdateValueChangerMenu(me, adjusted_index, val, true)
+							 end
+						 else
+							 SetPedPropIndex(me, adjusted_index, 0, 0, true)
+							 UpdateValueChangerMenu(me, adjusted_index, 0, true)
+							 val = 0
+						 end
 					elseif item == prop_texture_changer then
 						local val = item:IndexToItem(index)
 						ClearPedProp(me, adjusted_index)
@@ -320,8 +354,11 @@ function UpdateValueChangerMenu(me, adjusted_index, oldval, isProp)
 		ComponentValuesMenu.OnListChange = function(sender, item, index)
 			if item == component_changer then
 				 local val2 = item:IndexToItem(index)
-				 SetPedComponentVariation(me, adjusted_index, val2, 0, 0)
-				 UpdateValueChangerMenu(me, adjusted_index, val2)
+				 if not IsBlacklisted("components", adjusted_index, val2) then
+					 --print("setting adjusted index " .. adjusted_index .. " to val2 " .. val2)
+					 SetPedComponentVariation(me, adjusted_index, val2, 0, 0)
+					 UpdateValueChangerMenu(me, adjusted_index, val2)
+				 end
 			elseif item == texture_changer then
 				local val2 = item:IndexToItem(index)
 				SetPedComponentVariation(me, adjusted_index, GetPedDrawableVariation(me, adjusted_index), val2, 0)
@@ -345,8 +382,17 @@ function UpdateValueChangerMenu(me, adjusted_index, oldval, isProp)
 			if item == prop_changer then
 				 local val2 = item:IndexToItem(index)
 				 ClearPedProp(me, adjusted_index)
-				 SetPedPropIndex(me, adjusted_index, val2, 0, true)
-				 UpdateValueChangerMenu(me, adjusted_index, val2, true)
+				 if val2 then
+					 if not IsBlacklisted("props", adjusted_index, val2) then
+						 --print("adjusted index: " .. adjusted_index .. ", val2: " .. val2)
+						 SetPedPropIndex(me, adjusted_index, val2, 0, true)
+						 UpdateValueChangerMenu(me, adjusted_index, val2, true)
+					 end
+				 else
+					 SetPedPropIndex(me, adjusted_index, 0, 0, true)
+					 UpdateValueChangerMenu(me, adjusted_index, 0, true)
+					 val2 = 0
+				 end
 			elseif item == prop_texture_changer then
 				local val2 = item:IndexToItem(index)
 				local saved = GetPedPropIndex(me, adjusted_index)

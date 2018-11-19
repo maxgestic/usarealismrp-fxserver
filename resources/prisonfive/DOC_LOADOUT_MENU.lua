@@ -25,23 +25,23 @@ local PRISON_GUARD_SIGN_IN_LOCATIONS = {
 local uniforms = {
   males = {
     components = {
-      [1] = {values = {-1, 121}, textures = {-1, 0, 1, 2}, name = "Earpiece", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- earpiece
-      [3] = {values = {-1, 0, 11}, textures = {-1, 0}, name = "Arms/Hands", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- Arms/Hands
-      [4] = {values = {-1, 47, 31}, textures = {0, 1, 2}, name = "Legs", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- legs
+      [1] = {values = {-1, 1, 121}, textures = {-1, 1}, name = "Earpiece", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- earpiece
+      [3] = {values = {-1, 0, 1, 11}, textures = {-1, 1}, name = "Arms/Hands", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- Arms/Hands
+      [4] = {values = {-1, 25}, textures = {3}, name = "Legs", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- legs
       [6] = {values = {-1, 25}, textures = {0, 1}, name = "Feet", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- feet
-      [7] = {values = {-1, 125}, textures = {-1, 0}, name = "Badge", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- ties
-      [8] = {values = {-1, 122}, textures = {-1, 0}, name = "Duty Belt", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- accessories
-      [9] = {values = {-1, 23}, textures = {6, 9}, name = "Vest", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- vest
-      [11] = {values = {-1, 13, 242}, textures = {0, 1, 2, 3}, name = "Torso", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0} -- torso
+      [7] = {values = {-1, 6}, textures = {-1, 1}, name = "Badge", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- ties
+      [8] = {values = {-1, 39}, textures = {-1, 2}, name = "Duty Belt", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- accessories
+      [9] = {values = {-1, 7, 14}, textures = {3}, name = "Vest", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- vest
+      [11] = {values = {-1, 101}, textures = {0, 1}, name = "Torso", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0} -- torso
     },
     props = {
-      [0] = {values = {-1, 58}, textures = {0, 1, 2, 3, 4, 5}, offset3 = 0, offset4 = 0, current_value = -1, current_texture = 1, name = "Hat"},
+      [0] = {values = {-1, 121}, textures = {0, 1, 2, 3, 4, 5}, offset3 = 0, offset4 = 0, current_value = -1, current_texture = 1, name = "Hat"},
       [1] = {values = {-1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25}, textures = {0, 1, 2, 3, 4, 5}, offset3 = 0, offset4 = 0, current_value = -1, current_texture = 1, name = "Glasses"}
     }
   },
   females = {
     components = {
-        [1] = {values = {-1, 121}, textures = {-1, 0, 1, 2}, name = "Earpiece", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- earpiece
+        [1] = {values = {-1, 121}, textures = {1}, name = "Earpiece", offset1 = 0, offset2 = 0, current_value = 1, current_texture = 1}, -- earpiece
         [3] = {values = {0}, textures = {-1, 0}, name = "Arms/Hands", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- Arms/Hands
         [4] = {values = {-1, 49, 30}, textures = {0, 1, 2}, name = "Legs", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- legs
         [6] = {values = {-1, 25}, textures = {0, 1}, name = "Feet", offset1 = 0, offset2 = 0, current_value = 0, current_texture = 0}, -- feet
@@ -114,8 +114,9 @@ table.insert(created_menus, mainMenu)
 -- Construct GUI menu buttons --
 ----------------------------------------
 
+--[[
 function CreateUniformMenu(menu)
-    local submenu = _menuPool:AddSubMenu(menu, "Uniforms", "Select your uniform.", true --[[KEEP POSITION]])
+    local submenu = _menuPool:AddSubMenu(menu, "Uniforms", "Select your uniform.", true)
 	table.insert(created_menus, submenu)
     ----------------------
     -- Show ped options --
@@ -136,18 +137,18 @@ function CreateUniformMenu(menu)
     ---------------------
     -- Show MP options --
     ---------------------
-    local submenu2 = _menuPool:AddSubMenu(submenu, "Custom", "For use with MP model", true --[[KEEP POSITION]])
+    local submenu2 = _menuPool:AddSubMenu(submenu, "Custom", "For use with MP model", true)
     table.insert(created_menus, submenu2)
     ------------
     -- male --
     ------------
-    local submenu3 = _menuPool:AddSubMenu(submenu2, "Male", "For use with the male MP model", true --[[KEEP POSITION]])
+    local submenu3 = _menuPool:AddSubMenu(submenu2, "Male", "For use with the male MP model", true)
     table.insert(created_menus, submenu3)
     ----------------------------
     -- create components menu --
     ----------------------------
     for k, v in pairs(uniforms.males.components) do
-        local submenu5 = _menuPool:AddSubMenu(submenu3, v.name, "Select to change variations for " .. v.name, true --[[KEEP POSITION]])
+        local submenu5 = _menuPool:AddSubMenu(submenu3, v.name, "Select to change variations for " .. v.name, true)
         table.insert(created_menus, submenu5)
         local item = NativeUI.CreateItem("Component", "Change the component value")
         item.Activated = function(parentmenu, selected)
@@ -182,7 +183,7 @@ function CreateUniformMenu(menu)
     -- create prop menu --
     ----------------------
       for k, v in pairs(uniforms.males.props) do
-          local submenu5 = _menuPool:AddSubMenu(submenu3, v.name, "Select to change variations for " .. v.name, true --[[KEEP POSITION]])
+          local submenu5 = _menuPool:AddSubMenu(submenu3, v.name, "Select to change variations for " .. v.name, true)
           table.insert(created_menus, submenu5)
           local item = NativeUI.CreateItem("Component", "Change the component value")
           item.Activated = function(parentmenu, selected)
@@ -246,13 +247,13 @@ function CreateUniformMenu(menu)
       --------------
       -- female --
       --------------
-      local fsubmenu3 = _menuPool:AddSubMenu(submenu2, "Female", "For use with the female MP model", true --[[KEEP POSITION]])
+      local fsubmenu3 = _menuPool:AddSubMenu(submenu2, "Female", "For use with the female MP model", true --[[KEEP POSITION)
       table.insert(created_menus, fsubmenu3)
       ----------------------------
       -- create components menu --
       ----------------------------
       for k, v in pairs(uniforms.females.components) do
-          local fsubmenu5 = _menuPool:AddSubMenu(fsubmenu3, v.name, "Select to change variations for " .. v.name, true --[[KEEP POSITION]])
+          local fsubmenu5 = _menuPool:AddSubMenu(fsubmenu3, v.name, "Select to change variations for " .. v.name, true --[[KEEP POSITION)
           table.insert(created_menus, fsubmenu5)
           local item = NativeUI.CreateItem("Component", "Change the component value")
           item.Activated = function(parentmenu, selected)
@@ -287,7 +288,7 @@ function CreateUniformMenu(menu)
       -- create prop menu --
       ----------------------
         for k, v in pairs(uniforms.females.props) do
-            local fsubmenu5 = _menuPool:AddSubMenu(fsubmenu3, v.name, "Select to change variations for " .. v.name, true --[[KEEP POSITION]])
+            local fsubmenu5 = _menuPool:AddSubMenu(fsubmenu3, v.name, "Select to change variations for " .. v.name, true --[[KEEP POSITION)
             table.insert(created_menus, fsubmenu5)
             local item = NativeUI.CreateItem("Component", "Change the component value")
             item.Activated = function(parentmenu, selected)
@@ -353,6 +354,45 @@ function CreateUniformMenu(menu)
             TriggerServerEvent("doc:loadUniform")
         end
         submenu:AddItem(loadbtn)
+end
+--]]
+
+function SetJobClothing()
+    --ClearPedProp(me, 0)
+    local me = GetPlayerPed(-1)
+    if IsPedModel(me,"mp_f_freemode_01") then
+      SetPedComponentVariation(me, 1, 121, 0, 2) -- head
+      SetPedComponentVariation(me, 3, 14, 0, 2) -- arms/hands
+      SetPedComponentVariation(me, 11, 38, 0, 2) -- torso
+      SetPedComponentVariation(me, 8, 8, 0, 2) -- accessories
+      SetPedComponentVariation(me, 9, 4, 0, 2) -- vest
+      SetPedComponentVariation(me, 7, 8, 0, 2) -- ties
+      SetPedComponentVariation(me, 4, 48, 0, 2) -- legs
+      SetPedComponentVariation(me, 6, 24, 0, 2) -- feet
+      --SetPedPropIndex(me, 0, 0, math.random(1, 7), true) -- add headet on head(need to find right prop)
+      SetPedPropIndex(me, 0, 43, 1, true) -- hat
+    elseif IsPedModel(me,"mp_m_freemode_01") then -- male
+      SetPedComponentVariation(me, 1, 121, 0, 2) -- head
+      SetPedComponentVariation(me, 3, 15, 0, 2) -- arms/hands
+      SetPedComponentVariation(me, 11, 101, 0, 2) -- torso
+      SetPedComponentVariation(me, 8, 58, 0, 2) -- accessories
+      SetPedComponentVariation(me, 9, 7, 3, 2) -- vest
+      SetPedComponentVariation(me, 7, 6,1, 2) -- ties
+      SetPedComponentVariation(me, 4, 25, 3, 2) -- legs
+      SetPedComponentVariation(me, 6, 25, 0, 2) -- feet
+      --SetPedPropIndex(me, 0, 0, math.random(1, 7), true) -- add headet on head(need to find right prop)
+      SetPedPropIndex(me, 0, 44, 1, true) -- hat
+    end
+    -- remove weird black box on back/front? --
+    SetPedComponentVariation(me, 10, 0, 0, 0)
+end
+
+function CreateUniformMenu(menu)
+  local item = NativeUI.CreateItem("Put on uniform", "")
+  item.Activated = function(parentmenu, selected)
+      SetJobClothing()
+  end
+  menu:AddItem(item)
 end
 
 function CreateWeaponsMenu(menu)
