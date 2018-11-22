@@ -9,9 +9,10 @@ local ITEMS = { -- must be kept in sync with one in sv_bike-shop.lua --
 }
 
 local locations = {
-	{ x = 125.1, y = 6629.6, z = 32.0 }, -- paleto
-    {x = -1107.0, y = -1693.8, z = 4.4}, -- LS
-    {x = 1231.5, y = 2726.0, z = 38.0} -- sandy
+	{ x = 125.1, y = 6629.6, z = 32.0, heading = 210.0 }, -- paleto
+  {x = -1107.0, y = -1693.8, z = 4.4}, -- LS beach
+  {x = 1508.9, y = 3769.7, z = 34.2, heading = 180.0}, -- sandy
+  {x = -272.4, y = -775.8, z = 32.3, heading = -95.0} -- ls garage
 }
 
 local closest = nil
@@ -135,4 +136,25 @@ AddEventHandler("bikeShop:spawnBike", function(bike, location)
     SetEntityAsMissionEntity(vehicle, true, true)
     SetVehicleHasBeenOwnedByPlayer(vehicle, true)
   end)
+end)
+
+-- S P A W N  P E D S --
+Citizen.CreateThread(function()
+	for i = 1, #locations do
+    if locations[i].heading then
+  		local hash = -771835772
+  		RequestModel(hash)
+  		while not HasModelLoaded(hash) do
+  			Wait(100)
+  		end
+  		local ped = CreatePed(4, hash, locations[i].x, locations[i].y, locations[i].z, locations[i].heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
+  		SetEntityCanBeDamaged(ped,false)
+  		SetPedCanRagdollFromPlayerImpact(ped,false)
+  		TaskSetBlockingOfNonTemporaryEvents(ped,true)
+  		SetPedFleeAttributes(ped,0,0)
+  		SetPedCombatAttributes(ped,17,1)
+  		SetPedRandomComponentVariation(ped, true)
+  		TaskStartScenarioInPlace(ped, "WORLD_HUMAN_HANG_OUT_STREET", 0, true)
+    end
+	end
 end)

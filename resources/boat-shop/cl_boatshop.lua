@@ -88,15 +88,10 @@ local locations = {
 Citizen.CreateThread(function()
 	for name, data in pairs(locations) do
 		local hash = -771835772
-		print("spawing boat ped, name = " .. name)
-		--local hash = GetHashKey(data.ped.model)
-		print("requesting hash...")
 		RequestModel(hash)
 		while not HasModelLoaded(hash) do
 			Citizen.Wait(100)
 		end
-		print("spawning ped, heading: " .. data.ped.heading)
-		print("hash: " .. hash)
 		local ped = CreatePed(4, hash, data.ped.x, data.ped.y, data.ped.z, data.ped.heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
 		SetEntityCanBeDamaged(ped,false)
 		SetPedCanRagdollFromPlayerImpact(ped,false)
