@@ -170,7 +170,9 @@ local vehicleShopItems = {
 			{make = "Dinka", model = "Jester", price = 350000, hash = -1297672541, storage_capacity = 145.0},
 			{make = "Karin", model = "Kuruma", price = 370000, hash = -1372848492, storage_capacity = 145.0},
 			{make = "Vapid", model = "GB200", price = 120000, hash = "gb200", storage_capacity = 100.0},
-			{make = "Lampadati", model = "Furore GT", price = 110000, hash = -1089039904, storage_capacity = 100.0}
+			{make = "Lampadati", model = "Furore GT", price = 110000, hash = -1089039904, storage_capacity = 100.0},
+			{make = "Grotti", model = "Bestia GTS", price = 150000, hash = 1274868363, storage_capacity = 120.0},
+			{make = "Bravado", model = "Banshee 990R", price = 190000, hash = 633712403, storage_capacity = 100.0}
 		},
 		["Supers"] = {
 			{make = "Pegassi", model = "Infernus", price = 500500, hash = 418536135, storage_capacity = 100.0},

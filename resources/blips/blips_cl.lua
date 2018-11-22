@@ -72,6 +72,7 @@ local blips = {
 	--{ title="Hospital", colour = 48, id = 61, x = 360.3, y = -548.9, z = 28.8 }, -- LS, pillbox hill
 	{ title="Hospital", colour = 48, id = 61, x = 308.1, y = -1434.7,  z = 29.9 },
 	{ title="Hospital", colour = 48, id = 61, x = 360.5, y = -584.7, z = 28.8 },
+	{ title="Hospital", colour = 48, id = 61, x = -473.4, y = -339.6, z = 35.2 }, -- mt. zonoah
 	{ title="Strip Club", colour = 48, id = 121, x=129.607, y=-1299.83, z=29.2327 },
 	--{ title="FBI", colour = 47, id = 88, x=140.577, y=-768.375, z=45.752 },
 	{ title="Airport", colour = 30, id = 307, x=-1329.32, y=-3045.92, z=13.944 },
