@@ -1,4 +1,4 @@
-local TOW_REWARD = 700
+local TOW_REWARD = math.random(900, 1500)
 
 RegisterServerEvent("towJob:giveReward")
 AddEventHandler("towJob:giveReward", function(property)
