@@ -1,5 +1,7 @@
 local activeJobs = {}
 
+local coke_payment_per_package = math.random(625, 1200)
+
 RegisterServerEvent("go-postal:checkLicense")
 AddEventHandler("go-postal:checkLicense", function()
 	local userSource = source
@@ -102,7 +104,6 @@ AddEventHandler("cocaine:sellCocaine", function()
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local user_money = user.getActiveCharacterData("money")
 	local inventory = user.getActiveCharacterData("inventory")
-	local coke_payment_per_package = 525
 	for i = #inventory, 1, -1 do
 		local item = inventory[i]
 		if item then

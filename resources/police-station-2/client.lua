@@ -42,16 +42,24 @@ local menu_loadout = 0
 local menu_armoury = 0
 local position = 1
 local policeLockerRooms = {
-{x=451.255 , y=-992.41 , z=29.689},
- {x=1853.2, y=3687.74, z=33.267}, -- sandy
- --{x=-447.256 , y=6000.667 , z=30.686} -- paleto
- {x = -449.471, y = 6010.7, z = 30.85}
+	{x = -1107.5, y = -847.5, z = 18.4}, -- vespucci PD
+	{x = 370.3, y = -1608.4, z = 28.3}, -- davis PD
+	{x = 826.5, y = -1291.3, z = 27.3}, -- la mesa PD
+	{x = 638.9, y = 1.9, z = 81.8}, -- vinewood PD, elgin ave.
+	{x=451.255 , y=-992.41 , z=29.689},
+ 	{x=1853.2, y=3687.74, z=33.267}, -- sandy
+ 	--{x=-447.256 , y=6000.667 , z=30.686} -- paleto
+ 	{x = -449.471, y = 6010.7, z = 30.85}
 }
 local policeArmourys = {
-{x=451.564 , y=-980.095 , z=29.6896},
-{x=1851.34 , y=3683.64 , z=33.2671}, -- sandy
---{x=-452.361 , y=6006.11 , z=30.8409} -- paleto
-{x = -447.9, y = 6008.7, z = 30.85}
+	{x = -1109.6, y = -844.7, z = 18.4}, -- vespucci PD
+	{x = 371.8, y = -1612.1, z = 28.4}, -- davis PD
+	{x = 826.6, y = -1288.8, z = 28.2}, -- la mesa PD
+	{x = 637.5, y = -2.7, z = 81.8}, -- vinewood PD, elgine ave.
+	{x=451.564 , y=-980.095 , z=29.6896},
+	{x=1851.34 , y=3683.64 , z=33.2671}, -- sandy
+	--{x=-452.361 , y=6006.11 , z=30.8409} -- paleto
+	{x = -447.9, y = 6008.7, z = 30.85}
 }
 
 local arrSkinGeneralCaptions = {"LSPD Male","LSPD Female","Motor Unit","SWAT","Sheriff Male","Sheriff Female","Traffic Warden","Custom Male","Custom Female","FBI 1","FBI 2","FBI 3","FBI 4","Detective Male","Detective Female","Ranger Male", "Ranger Female", "Tactical", "Pilot"}

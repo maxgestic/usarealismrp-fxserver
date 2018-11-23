@@ -46,23 +46,27 @@ local blips = {
     { title="General Store", colour = 24 , id = 52, x=374.586, y=326.037, z=103.566     },
     --{ title="General Store", colour = 24 , id = 52, x=1136.534, y=-971.131, z=46.415 },
 	{ title="General Store", colour = 24 , id = 52, x = 1136.3, y = -981.0, z = 45.5 },
-    { title="General Store", colour = 24 , id = 52, x=-1224.188, y=-907.065, z=12.326 },
-    { title="General Store", colour = 24 , id = 52, x=26.453, y=-1347.059, z=29.497 },
-    { title="General Store", colour = 24 , id = 52, x=-48.437, y=-1756.889, z=29.421 },
-    { title="General Store", colour = 24 , id = 52, x=-707.712, y=-914.231, z=19.215 },
-    { title="General Store", colour = 24 , id = 52, x=1166.5310, y=2708.920, z=38.157 },
-    { title="General Store", colour = 24 , id = 52, x=1698.458, y=4924.744, z=43.063 },
-    { title="General Store", colour = 24 , id = 52, x=1729.413, y=6414.426, z=35.037 },
-    { title="General Store", colour = 24 , id = 52, x=-3039.294, y=586.014, z=7.908 },
-    { title="General Store", colour = 24 , id = 52, x=1162.799, y=-324.155, z=69.205 },
-    { title="General Store", colour = 24 , id = 52, x=2556.836, y=382.416, z=108.622 },
-    { title="General Store", colour = 24 , id = 52, x=2678.409, y=3280.871, z=55.241 },
-    { title="General Store", colour = 24 , id = 52, x=547.486, y=2670.635, z=42.156 },
-    { title="General Store", colour = 24 , id = 52, x=-1820.852, y=792.453, z=138.119 },
-    { title="General Store", colour = 24 , id = 52, x=-3242.260, y=1001.569, z=12.830 },
-    { title="General Store", colour = 24 , id = 52, x=-2968.126, y=390.579, z=15.043 },
-    --{ title="General Store", colour = 24 , id = 52, x=-1487.241, y=379.843, z=40.163 },
+  { title="General Store", colour = 24 , id = 52, x=-1224.188, y=-907.065, z=12.326 },
+  { title="General Store", colour = 24 , id = 52, x=26.453, y=-1347.059, z=29.497 },
+  { title="General Store", colour = 24 , id = 52, x=-48.437, y=-1756.889, z=29.421 },
+  { title="General Store", colour = 24 , id = 52, x=-707.712, y=-914.231, z=19.215 },
+  { title="General Store", colour = 24 , id = 52, x=1166.5310, y=2708.920, z=38.157 },
+  { title="General Store", colour = 24 , id = 52, x=1698.458, y=4924.744, z=43.063 },
+  { title="General Store", colour = 24 , id = 52, x=1729.413, y=6414.426, z=35.037 },
+  { title="General Store", colour = 24 , id = 52, x=-3039.294, y=586.014, z=7.908 },
+  { title="General Store", colour = 24 , id = 52, x=1162.799, y=-324.155, z=69.205 },
+  { title="General Store", colour = 24 , id = 52, x=2556.836, y=382.416, z=108.622 },
+  { title="General Store", colour = 24 , id = 52, x=2678.409, y=3280.871, z=55.241 },
+  { title="General Store", colour = 24 , id = 52, x=547.486, y=2670.635, z=42.156 },
+  { title="General Store", colour = 24 , id = 52, x=-1820.852, y=792.453, z=138.119 },
+  { title="General Store", colour = 24 , id = 52, x=-3242.260, y=1001.569, z=12.830 },
+  { title="General Store", colour = 24 , id = 52, x=-2968.126, y=390.579, z=15.043 },
+  --{ title="General Store", colour = 24 , id = 52, x=-1487.241, y=379.843, z=40.163 },
 	{ title="Police Department", colour = 38 , id = 60, x=451.255, y=-992.41, z=30.6896 }, -- LOS SANTOS
+	{ title="Police Department", colour = 38 , id = 60, x = 638.9, y = 1.9, z = 81.8 }, -- LOS SANTOS, vinewood, elgin ave.
+	{ title="Police Department", colour = 38 , id = 60, x = 826.5, y = -1291.3, z = 27.3 }, -- LOS SANTOS, la mesa PD
+	{ title="Police Department", colour = 38 , id = 60, x = 370.3, y = -1608.4, z = 28.3 }, -- LOS SANTOS, davis PD
+	{ title="Police Department", colour = 38 , id = 60, x = -1107.5, y = -847.5, z = 19.3 }, -- LOS SANTOS, vespucci PD
 	{ title="Sheriff's Office", colour = 38 , id = 60, x=1853.2, y=3687.74, z=34.267 }, -- SANDY
 	{ title="Sheriff's Office", colour = 38 , id = 60, x=-447.041, y=6012.97, z=31.7164 }, -- PALETO
 	{ title="Fire Department", colour = 59, id = 60, x=207.106, y=-1641.45, z=28.5 }, -- LOS SANTOS

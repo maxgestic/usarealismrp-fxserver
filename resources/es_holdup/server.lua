@@ -1,5 +1,60 @@
 local COPS_NEEDED_TO_ROB = 2
 local stores = {
+	["24/7 Market - Vespucci Blvd. & Mirror Park Dr."] = {
+		position = { ['x'] = 1131.3, ['y'] = -979.3, ['z'] = 46.4 },
+		nameofstore = "24/7 Market - Vespucci Blvd. & Mirror Park Dr.",
+		lastrobbed = 0
+	},
+	["Blazing Tattoo - Vinewood Blvd."] = {
+		position = { ['x'] = 320.6, ['y'] = 182.8, ['z'] = 103.6 },
+		nameofstore = "Blazing Tattoo - Vinewood Blvd.",
+		lastrobbed = 0
+	},
+	["Clothing Store - Sinner St."] = {
+		position = { ['x'] = 429.4, ['y'] = -808.3, ['z'] = 29.5 },
+		nameofstore = "Clothing Store - Sinner St.",
+		lastrobbed = 0
+	},
+	["Ponsbys Clothing"] = {
+		position = { ['x'] = -167.1, ['y'] = -299.57, ['z'] = 39.73 },
+		nameofstore = "Ponsbys Clothing",
+		lastrobbed = 0
+	},
+	["LTD Gasoline - Ginger St."] = {
+		position = { ['x'] = -708.22, ['y'] = -906.09, ['z'] = 19.21 },
+		nameofstore = "LTD Gasoline - Ginger St.",
+		lastrobbed = 0
+	},
+	["Xero Gas - Strawberry Ave"] = {
+		position = { ['x'] = 265.22, ['y'] = -1263.16, ['z'] = 29.29 },
+		nameofstore = "Xero Gas - Strawberry Ave",
+		lastrobbed = 0
+	},
+	["Car Dealership - Harmony"] = {
+		position = { ['x'] = 1234.466186, ['y'] = 2737.436035, ['z'] = 38.00539 },
+		nameofstore = "Car Dealership - Harmony",
+		lastrobbed = 0
+	},
+	["Auto Repair Shop - Elgin Ave."] = {
+		position = { ['x'] = 548.4, ['y'] = -173.3, ['z'] = 54.5 },
+		nameofstore = "Auto Repair Shop - Elgin Ave.",
+		lastrobbed = 0
+	},
+	["LS Customs - Vespucci Blvd. & Popular St."] = {
+		position = { ['x'] = 726.3, ['y'] = -1072.1, ['z'] = 28.3 },
+		nameofstore = "LS Customs - Vespucci Blvd. & Popular St.",
+		lastrobbed = 0
+	},
+	["Herr Kutz Barbershop - Davis/Carson Ave"] = {
+		position = { ['x'] = 135.11, ['y'] = -1707.67, ['z'] = 29.29 },
+		nameofstore = "Herr Kutz Barbershop - Davis/Carson Ave",
+		lastrobbed = 0
+	},
+	["Clothing Store - Innocence Blvd"] = {
+		position = { ['x'] = 71.75, ['y'] = -1390.96, ['z'] = 29.37 },
+		nameofstore = "Clothing Store - Innocence Blvd",
+		lastrobbed = 0
+	},
 	["Los Santos Customs - Paleto"] = {
 		position = { ['x'] = 99.053, ['y'] = 6620.112, ['z'] = 32.44 },
 		nameofstore = "Los Santos Customs - Paleto",
