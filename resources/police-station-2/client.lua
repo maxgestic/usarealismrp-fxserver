@@ -42,7 +42,6 @@ local menu_loadout = 0
 local menu_armoury = 0
 local position = 1
 local policeLockerRooms = {
-{x=439.817 , y=-993.397 , z=29.689},
 {x=451.255 , y=-992.41 , z=29.689},
  {x=1853.2, y=3687.74, z=33.267}, -- sandy
  --{x=-447.256 , y=6000.667 , z=30.686} -- paleto

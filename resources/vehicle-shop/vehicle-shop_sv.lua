@@ -13,11 +13,13 @@ local MAX_VEHICLE_SELL_PRICE = .50 * 4000000
 local vehicleShopItems = {
 	["vehicles"] = {
 		["Suvs"] = {
-			{make = "Canis", model = "Seminole", price = 10995, hash = 1221512915, storage_capacity = 175.0},
-			{make = "Obey", model = "Rocoto", price = 12000, hash = 2136773105, storage_capacity = 175.0},
+			{make = "Canis", model = "Seminole", price = 12995, hash = 1221512915, storage_capacity = 175.0},
+			{make = "Obey", model = "Rocoto", price = 13000, hash = 2136773105, storage_capacity = 175.0},
 			{make = "Declasse", model = "Granger", price = 30000, hash = -1775728740, storage_capacity = 185.0},
-			{make = "Dundreary", model = "Landstalker", price = 15595, hash = 1269098716, storage_capacity = 175.0},
-			{make = "Benefactor", model = "Dubsta", price = 18000, hash = 1177543287, storage_capacity = 175.0},
+			{make = "Dundreary", model = "Landstalker", price = 25595, hash = 1269098716, storage_capacity = 175.0},
+			{make = "Benefactor", model = "Dubsta", price = 50000, hash = 1177543287, storage_capacity = 175.0},
+			{make = "Benefactor", model = "Dubsta 2", price = 80000, hash = -394074634, storage_capacity = 175.0},
+			{make = "Benefactor", model = "Dubsta 6x6", price = 160000, hash = -1237253773, storage_capacity = 215.0},
 			{make = "Phatom", model = "FQ2", price = 20000, hash = -1137532101, storage_capacity = 175.0},
 			{make = "Bravado", model = "Gresley", price = 20990, hash = -1543762099, storage_capacity = 175.0},
 			{make = "Albany", model = "Cavalcade", price = 19500, hash = -789894171, storage_capacity = 175.0},
@@ -29,7 +31,8 @@ local vehicleShopItems = {
 			{make = "Ocelot", model = "Jackal", price = 24700, hash = -624529134, storage_capacity = 135.0},
 			{make = "BMW", model = "M6", price = 100000, hash = -1122289213, storage_capacity = 140.0},
 			{make = "Dewbauchee", model = "Exemplar", price = 28070, hash = -5153954, storage_capacity = 135.0},
-			{make = "Ubermacht", model = "Sentinel XS", price = 30020, hash = 1349725314, storage_capacity = 135.0},
+			{make = "Ubermacht", model = "Sentinel", price = 30020, hash = "sentinel2", storage_capacity = 135.0},
+			{make = "Ubermacht", model = "Sentinel XS", price = 40020, hash = "sentinel", storage_capacity = 135.0},
 			{make = "Enus", model = "Cognoscenti Carbio", price = 33200, hash = 330661258, storage_capacity = 135.0},
 			{make = "Lampadati", model = "Felon", price = 34550, hash = -391594584, storage_capacity = 135.0},
 			{make = "Enus", model = "Windsor Cabrio", price = 105550, hash = -1930048799, storage_capacity = 135.0},

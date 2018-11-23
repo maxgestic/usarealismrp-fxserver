@@ -138,6 +138,7 @@ Citizen.CreateThread(function()
                         MarkCurrentCheckpointComplete()
                         active_job = nil
                         exports.globals:notify("Job ended! A passenger was injured!")
+                        break
                     end
                 end
             end

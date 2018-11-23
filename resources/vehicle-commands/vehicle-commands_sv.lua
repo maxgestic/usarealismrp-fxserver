@@ -32,7 +32,7 @@ local spawnableVehicles = {
 }
 
 local VEH_RANKS = {
-	[1] = {"police", "police2", "police3", "police5", "scorcher", "police7", "predator", "pbus", "policet", "sheriff", "sheriff2"},
+	[1] = {"police", "police2", "police3", "police5", "scorcher", "police7", "predator", "pbus", "policet", "sheriff"},
 	[2] = {"police", "police2", "police3", "police5", "scorcher", "police7", "policeb", "police6", "unmarked7", "predator", "pbus", "policet", "sheriff", "sheriff2"},
 	[3] = {"police", "police2", "police3", "police5", "scorcher", "police7", "policeb", "police6", "unmarked7", "predator", "polmav", "pbus", "policet", "sheriff", "sheriff2", "fbi2"},
 	[4] = {"police", "police2", "police3", "police5", "scorcher", "police7", "policeb", "police6", "unmarked1", "unmarked7", "unmarked8", "fbi", "fbi2", "police4", "sheriff", "predator", "polmav", "pbus", "policet", "riot", "sheriff", "sheriff2"},
