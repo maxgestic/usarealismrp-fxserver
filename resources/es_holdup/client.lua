@@ -25,6 +25,11 @@ function drawTxt(x,y ,width,height,scale, text, r,g,b,a, outline)
 end
 
 local stores = {
+	["Tattoo Shop - Vespucci Beach"] = {
+		position = { ['x'] = -1150.7, ['y'] = -1425.7, ['z'] = 4.9 },
+		nameofstore = "Tattoo Shop - Vespucci Beach",
+		lastrobbed = 0
+	},
 	["24/7 Market - Vespucci Blvd. & Mirror Park Dr."] = {
 		position = { ['x'] = 1131.3, ['y'] = -979.3, ['z'] = 46.4 },
 		nameofstore = "24/7 Market - Vespucci Blvd. & Mirror Park Dr.",
