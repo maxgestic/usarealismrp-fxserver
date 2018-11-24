@@ -33,8 +33,9 @@ end)
 local timer = 180000
 AddEventHandler('RPD:startTimer', function()
 	if not jailed then
-		while timer > 0 do
-			raw_seconds = timer/1000
+		local died_at_time = GetGameTimer()
+		while GetGameTimer() - died_at_time < timer and dead do
+			raw_seconds = (timer - (GetGameTimer() - died_at_time))/1000
 			raw_minutes = raw_seconds/60
 			minutes = stringSplit(raw_minutes, ".")[1]
 			seconds = stringSplit(raw_seconds-(minutes*60), ".")[1]
@@ -51,12 +52,11 @@ AddEventHandler('RPD:startTimer', function()
 			AddTextComponentString("Waiting ~g~" .. minutes .. " minutes " .. seconds .. " seconds ~w~to respawn.")
 			SetTextCentre(true)
 			DrawText(0.5, 0.1)
-			timer = timer - 15
-			Citizen.Wait(0)
+			Wait(0)
 		end
 		local pressed = false
 		while dead do
-			Citizen.Wait(0)
+			Wait(0)
 			SetTextFont(0)
 			SetTextProportional(0)
 			SetTextScale(0.0, 0.5)
@@ -92,7 +92,7 @@ AddEventHandler('RPD:startTimer', function()
 end)
 
 AddEventHandler('RPD:allowRespawn', function(from)
-	if timer <= 0 then
+	if GetGameTimer() - died_at_time >= timer then
 		TriggerEvent('chatMessage', "Death", {200,0,0}, "Respawned")
 		allowRespawn = true
 	else
@@ -244,25 +244,18 @@ Citizen.CreateThread(function()
 
 				if (allowRespawn) then
 					--local coords = spawnPoints[math.random(1,#spawnPoints)]
-					print("# spawn points: " .. #spawnPoints)
 					local closest = spawnPoints[1]
 					local pedcoords = GetEntityCoords(ped)
 					for i = 1, #spawnPoints do
-						print("checking index: " .. i)
-						print("dist 1: " .. Vdist(pedcoords.x, pedcoords.y, pedcoords.z, spawnPoints[i].x, spawnPoints[i].y, spawnPoints[i].z))
-						print("dist 2: " .. Vdist(pedcoords.x, pedcoords.y, pedcoords.z, closest.x, closest.y, closest.z))
 						if Vdist(pedcoords.x, pedcoords.y, pedcoords.z, spawnPoints[i].x, spawnPoints[i].y, spawnPoints[i].z) < Vdist(pedcoords.x, pedcoords.y, pedcoords.z, closest.x, closest.y, closest.z) then
 							closest = spawnPoints[i]
-							print("closest found! x: " .. closest.x)
 						end
 					end
 
-					print("closest spawn point x: " .. closest.x)
 					respawnPed(ped, closest)
 
-			  		allowRespawn = false
+			  	allowRespawn = false
 					dead = false
-					timer = 0
 					respawnCount = respawnCount + 1
 					math.randomseed( playerIndex * respawnCount )
 
@@ -276,7 +269,6 @@ Citizen.CreateThread(function()
 
 					allowRevive = false
 					dead = false
-					timer = 0
 					Wait(0)
 
 					--TriggerServerEvent("gps:removeEMSReqLookup")
@@ -284,9 +276,8 @@ Citizen.CreateThread(function()
 		  			Wait(0)
 				end
 			else
-		  		allowRespawn = false
-		  		allowRevive = false
-				timer = 180000
+		  	allowRespawn = false
+		  	allowRevive = false
 				Wait(0)
 			end
 
