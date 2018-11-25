@@ -247,7 +247,7 @@ end)
 ---------------------------------------------------------------------------
 -- Threads --
 ---------------------------------------------------------------------------
-
+--[[ disabled to see if it stops the mass timeout issue
 Citizen.CreateThread(function()
 
 	function saveData()
@@ -287,3 +287,4 @@ Citizen.CreateThread(function()
 		saveData()
 	end
 end)
+--]]
