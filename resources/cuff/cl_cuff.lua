@@ -199,7 +199,7 @@ function DrawCoolLookingNotificationNoPic(msg)
 	DrawNotification(0,1)
 end
 
--- new stuff below: --
+--[[ CUFFING HOT KEY (NEEDS TO BE ADJUSTED / OPTIMIZED)
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
@@ -240,3 +240,4 @@ function GetCurrentTargetCar()
 
     return vehicleHandle
 end
+CUFFING HOT KEY (NEEDS TO BE ADJUSTED / OPTIMIZED) --]]

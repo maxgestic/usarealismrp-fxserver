@@ -45,9 +45,9 @@ end
 Citizen.CreateThread(function()
 	while true do
 		Wait(75)
-		local ped = GetPlayerPed(GetPlayerFromServerId(otherid))
-		local myped = GetPlayerPed(-1)
 		if drag then
+			local ped = GetPlayerPed(GetPlayerFromServerId(otherid))
+			local myped = GetPlayerPed(-1)
 			if ped ~= myped then
 				AttachEntityToEntity(myped, ped, 11816, 0.54, 0.54, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
 			else
