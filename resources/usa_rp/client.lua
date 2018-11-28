@@ -16,6 +16,11 @@ local civilianSpawns = {
     -- Meth Delivery -402.63 y 6316.12 z 28.95 heading 222.26 DONE
 }
 
+-- DISCORD RICH PRESENCE --
+SetDiscordAppId("517228692834091033")
+SetDiscordRichPresenceAsset("5a158f46d2aefd14d3c7a16f3f4bc72b")
+SetDiscordRichPresenceAssetText("USARRP")
+
 ------------------------------
 -- FIRST LOAD / SPAWNING IN --
 ------------------------------
