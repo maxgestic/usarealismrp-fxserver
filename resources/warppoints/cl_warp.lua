@@ -14,7 +14,7 @@ local warp_locations = {
         },
         job_access = "civ"
     },
-  ["the Hen House"] = {
+  --[[["the Hen House"] = {
       entrance = {
           x = -299.48,
           y = 6255.23,
@@ -27,6 +27,7 @@ local warp_locations = {
       },
       job_access = "civ"
   },
+  --]]
   --[[
   ["the jail cells"] = {
     entrance = {
@@ -177,16 +178,20 @@ local warp_locations = {
 Citizen.CreateThread(function()
   while true do
     Wait(1)
+    local ped = GetPlayerPed(-1)
+    local entitycoords = GetEntityCoords(ped)
     for locationName, locationCoords in pairs(warp_locations) do
+      local dist1 = GetDistanceBetweenCoords(locationCoords.entrance.x, locationCoords.entrance.y, locationCoords.entrance.z,entitycoords, true)
+      local dist2 = GetDistanceBetweenCoords(locationCoords.exit.x, locationCoords.exit.y, locationCoords.exit.z,entitycoords, true)
       -- draw the markers
-      if GetDistanceBetweenCoords(locationCoords.entrance.x, locationCoords.entrance.y, locationCoords.entrance.z,GetEntityCoords(GetPlayerPed(-1)), true) < 50 then
+      if dist1 < 50 then
         DrawMarker(27, locationCoords.entrance.x, locationCoords.entrance.y, locationCoords.entrance.z, 0, 0, 0, 0, 0, 0, 1.5, 1.5, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
       end
-      if GetDistanceBetweenCoords(locationCoords.exit.x, locationCoords.exit.y, locationCoords.exit.z,GetEntityCoords(GetPlayerPed(-1)), true) < 50 then
+      if dist2 < 50 then
         DrawMarker(27, locationCoords.exit.x, locationCoords.exit.y, locationCoords.exit.z, 0, 0, 0, 0, 0, 0, 1.5, 1.5, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
       end
       -- enter/exit
-      if GetDistanceBetweenCoords(locationCoords.entrance.x, locationCoords.entrance.y, locationCoords.entrance.z,GetEntityCoords(GetPlayerPed(-1)), true) < 1.6 then
+      if dist1 < 1.6 then
         DrawSpecialText("Press [ ~b~E~w~ ] to enter " .. locationName .. "!")
         if IsControlPressed(0, INTERACTION_KEY) then
           -- is location access restricted to certain jobs?
@@ -203,7 +208,7 @@ Citizen.CreateThread(function()
             TriggerServerEvent("warp:checkJob", locationCoords)
           end
         end
-    elseif GetDistanceBetweenCoords(locationCoords.exit.x, locationCoords.exit.y, locationCoords.exit.z,GetEntityCoords(GetPlayerPed(-1)), true) < 1.6 then
+      elseif dist2 < 1.6 then
         DrawSpecialText("Press [ ~b~E~w~ ] to exit " .. locationName .. "!")
         if IsControlPressed(0, INTERACTION_KEY) then
           DoScreenFadeOut(500)

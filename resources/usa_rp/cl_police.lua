@@ -1,3 +1,5 @@
+local me = nil
+
 local spawnedCones = {}
 
 RegisterNetEvent("dispatch:setWaypoint")
@@ -284,11 +286,12 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-		if IsPedInAnyPoliceVehicle(GetPlayerPed(-1)) and IsControlPressed( 2, 75 ) and GetLastInputMethod(2) then
+    me = GetPlayerPed(-1)
+		if IsPedInAnyPoliceVehicle(me) and IsControlPressed( 2, 75 ) and GetLastInputMethod(2) then
 			Citizen.Wait(150)
-			if IsPedInAnyPoliceVehicle(GetPlayerPed(-1)) and IsControlPressed( 2, 75 ) then
+			if IsPedInAnyPoliceVehicle(me) and IsControlPressed( 2, 75 ) then
 				local handle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
-				TaskLeaveVehicle(GetPlayerPed(-1), handle, 256)
+				TaskLeaveVehicle(me, handle, 256)
 			end
 		end
 	end
@@ -299,7 +302,6 @@ end)
 ---------------------------------------------------------------------------------------
 -- Gun Shot Resdiue(GSR) & Shots fired notifications (based on area + random chance) --
 ---------------------------------------------------------------------------------------
-local me = nil
 local last_shot_time = 0
 local duration = 25 * 60 * 1000 -- 25 minutes to ms
 local sending_msg = false
@@ -314,7 +316,6 @@ local timer = {
 Citizen.CreateThread(function()
 	while true do
 		Wait(10)
-		me = GetPlayerPed(-1)
 		---------------------------------
 		-- shooting notification / gsr --
 		---------------------------------
@@ -387,7 +388,6 @@ function IsInPopulatedArea()
 		{x = -1093.773, y = -2970.00, z = 13.944, range = 300}, -- LS airport
 		{x = 1070.506, y = -3111.021, z = 5.9, range = 450} -- LS ship cargo area
 	}
-	local me = GetPlayerPed(-1)
 	local my_coords = GetEntityCoords(me, true)
 	for k = 1, #AREAS do
 		if Vdist(my_coords.x, my_coords.y, my_coords.z, AREAS[k].x, AREAS[k].y, AREAS[k].z) <= AREAS[k].range then

@@ -16,6 +16,9 @@ local civilianSpawns = {
     -- Meth Delivery -402.63 y 6316.12 z 28.95 heading 222.26 DONE
 }
 
+local playerPed = GetPlayerPed(-1)
+local isInVeh = IsPedInAnyVehicle(playerPed)
+
 -- DISCORD RICH PRESENCE --
 SetDiscordAppId("517228692834091033")
 SetDiscordRichPresenceAsset("5a158f46d2aefd14d3c7a16f3f4bc72b")
@@ -104,18 +107,18 @@ local passengerDriveBy = true
 Citizen.CreateThread(function()
 	while true do
 		Wait(100)
-		playerPed = GetPlayerPed(-1)
-		car = GetVehiclePedIsIn(playerPed, false)
-        --Citizen.InvokeNative(0xB736A491E64A32CF,Citizen.PointerValueIntInitialized(car)) -- auto car clean up for unused vehicles
-		if car then
-			if GetPedInVehicleSeat(car, -1) == playerPed then
-				SetPlayerCanDoDriveBy(PlayerId(), false)
-			elseif passengerDriveBy then
-				SetPlayerCanDoDriveBy(PlayerId(), true)
-			else
-				SetPlayerCanDoDriveBy(PlayerId(), false)
-			end
-		end
+    if isInVeh then
+  		car = GetVehiclePedIsIn(playerPed, false)
+  		if car then
+  			if GetPedInVehicleSeat(car, -1) == playerPed then
+  				SetPlayerCanDoDriveBy(PlayerId(), false)
+  			elseif passengerDriveBy then
+  				SetPlayerCanDoDriveBy(PlayerId(), true)
+  			else
+  				SetPlayerCanDoDriveBy(PlayerId(), false)
+  			end
+  		end
+    end
 	end
 end)
 
@@ -170,7 +173,8 @@ end)
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(5)
-        if IsPedInAnyVehicle(PlayerPedId(), true) then
+        isInVeh = IsPedInAnyVehicle(PlayerPedId(), true)
+        if isInVeh then
             veh = GetVehiclePedIsUsing(PlayerPedId())
             angle = GetVehicleSteeringAngle(veh)
             veh2 = GetPlayersLastVehicle()
@@ -193,19 +197,18 @@ local clipset = "move_ped_crouched"
 Citizen.CreateThread( function()
   while true do
     Citizen.Wait( 10 )
-    local ped = GetPlayerPed( -1 )
-    if ( DoesEntityExist( ped ) and not IsEntityDead( ped ) ) then
+    if ( DoesEntityExist( playerPed ) and not IsEntityDead( playerPed ) ) then
       if ( not IsPauseMenuActive() ) then
-        if ( IsControlPressed( 1, KEY_1 ) and IsControlJustPressed( 1, KEY_2 ) and not IsPedInAnyVehicle(GetPlayerPed(-1), true)) then
+        if ( IsControlPressed( 1, KEY_1 ) and IsControlJustPressed( 1, KEY_2 ) and not isInVeh ) then
           RequestAnimSet( clipset )
           while ( not HasAnimSetLoaded( clipset ) ) do
             Citizen.Wait( 100 )
           end
           if ( crouched == true ) then
-            ResetPedMovementClipset( ped, 0 )
+            ResetPedMovementClipset( playerPed, 0 )
             crouched = false
           elseif ( crouched == false ) then
-            SetPedMovementClipset( ped, clipset, 0.25 )
+            SetPedMovementClipset( playerPed, clipset, 0.25 )
             crouched = true
           end
         end
@@ -221,10 +224,10 @@ local antiShuffleEnabled = true
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10)
-		if IsPedInAnyVehicle(GetPlayerPed(-1), false) and antiShuffleEnabled then
-			if GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), 0) == GetPlayerPed(-1) then
-				if GetIsTaskActive(GetPlayerPed(-1), 165) then
-					SetPedIntoVehicle(GetPlayerPed(-1), GetVehiclePedIsIn(GetPlayerPed(-1), false), 0)
+		if isInVeh and antiShuffleEnabled then
+			if GetPedInVehicleSeat(GetVehiclePedIsIn(playerPed, false), 0) == playerPed then
+				if GetIsTaskActive(playerPed, 165) then
+					SetPedIntoVehicle(playerPed, GetVehiclePedIsIn(playerPed, false), 0)
 				end
 			end
 		end
@@ -239,24 +242,23 @@ end)
 local windowup = true
 RegisterNetEvent("RollWindow")
 AddEventHandler('RollWindow', function()
-    local playerPed = GetPlayerPed(-1)
-    if IsPedInAnyVehicle(playerPed, false) then
-        local playerCar = GetVehiclePedIsIn(playerPed, false)
-		if ( GetPedInVehicleSeat( playerCar, -1 ) == playerPed ) then
-            --SetEntityAsMissionEntity( playerCar, true, true )
-			if ( windowup ) then
-				RollDownWindow(playerCar, 0)
-				RollDownWindow(playerCar, 1)
-				--TriggerEvent('chatMessage', '', {255,0,0}, 'Windows down')
-				windowup = false
-			else
-				RollUpWindow(playerCar, 0)
-				RollUpWindow(playerCar, 1)
-				--TriggerEvent('chatMessage', '', {255,0,0}, 'Windows up')
-				windowup = true
-			end
-		end
-	end
+  if isInVeh then
+    local playerCar = GetVehiclePedIsIn(playerPed, false)
+    if ( GetPedInVehicleSeat( playerCar, -1 ) == playerPed ) then
+      --SetEntityAsMissionEntity( playerCar, true, true )
+      if ( windowup ) then
+        RollDownWindow(playerCar, 0)
+        RollDownWindow(playerCar, 1)
+        --TriggerEvent('chatMessage', '', {255,0,0}, 'Windows down')
+        windowup = false
+      else
+        RollUpWindow(playerCar, 0)
+        RollUpWindow(playerCar, 1)
+        --TriggerEvent('chatMessage', '', {255,0,0}, 'Windows up')
+        windowup = true
+      end
+    end
+  end
 end )
 
 local last_car = 0
@@ -264,7 +266,6 @@ local last_car = 0
 RegisterNetEvent("veh:openDoor")
 AddEventHandler("veh:openDoor", function(index)
    -- print("opening door with index = " .. index)
-    local playerPed = GetPlayerPed(-1)
         local playerCar = GetVehiclePedIsIn(playerPed, true)
         if playerCar ~= 0 then
           last_car = playerCar
@@ -293,7 +294,6 @@ end)
 RegisterNetEvent("veh:shutDoor")
 AddEventHandler('veh:shutDoor', function(index)
     --print("inside shut door!")
-    local playerPed = GetPlayerPed(-1)
         local playerCar = GetVehiclePedIsIn(playerPed, false)
         if playerCar ~= 0 then
           last_car = playerCar
@@ -326,8 +326,7 @@ local lastVehicle = nil
 
 RegisterNetEvent("veh:toggleEngine")
 AddEventHandler('veh:toggleEngine', function(status)
-  local playerPed = GetPlayerPed(-1)
-  if IsPedInAnyVehicle(playerPed, false) and lastVehicle and tonumber(lastVehicle) ~= 0 then
+  if isInVeh and lastVehicle and tonumber(lastVehicle) ~= 0 then
     --local playerCar = GetVehiclePedIsIn(playerPed, false)
     --lastVehicle = GetVehiclePedIsIn(playerPed, false)
     if GetPedInVehicleSeat(lastVehicle, -1) == playerPed then
@@ -396,10 +395,9 @@ Citizen.CreateThread(function()
     ----------------------
     -- set last vehicle --
     ----------------------
-    local me = GetPlayerPed(-1)
-    if IsPedInAnyVehicle(me, false) then
-      local veh = GetVehiclePedIsIn(me, false)
-      if GetPedInVehicleSeat(veh, -1) == me then
+    if isInVeh then
+      local veh = GetVehiclePedIsIn(playerPed, false)
+      if GetPedInVehicleSeat(veh, -1) == playerPed then
         if lastVehicle ~= veh then
           lastVehicle = veh
         end
@@ -408,19 +406,21 @@ Citizen.CreateThread(function()
     --------------------------------------
     -- adjust engine status accordingly --
     --------------------------------------
-    if lastVehicle and tonumber(lastVehicle) ~= 0 then
-      if GetVehicleEngineHealth(lastVehicle) > 360 then
-        if engineIsOn and not GetIsVehicleEngineRunning(lastVehicle) and GetVehicleFuelLevel(lastVehicle) > 0.9 then
-          --for i = 1, #policeVehicles do
-            --if IsVehicleModel(lastVehicle, policeVehicles[i]) then
-          SetVehicleEngineOn(lastVehicle, true, true, true)
-          SetVehicleUndriveable(lastVehicle, false)
-              --break
+    if DoesEntityExist(lastVehicle) then
+      if lastVehicle and tonumber(lastVehicle) ~= 0 then
+        if GetVehicleEngineHealth(lastVehicle) > 360 then
+          if engineIsOn and not GetIsVehicleEngineRunning(lastVehicle) and GetVehicleFuelLevel(lastVehicle) > 0.9 then
+            --for i = 1, #policeVehicles do
+              --if IsVehicleModel(lastVehicle, policeVehicles[i]) then
+            SetVehicleEngineOn(lastVehicle, true, true, true)
+            SetVehicleUndriveable(lastVehicle, false)
+                --break
+              --end
             --end
-          --end
-        elseif not engineIsOn and GetIsVehicleEngineRunning(lastVehicle) then
-          SetVehicleEngineOn(lastVehicle, false, false, false)
-          SetVehicleUndriveable(lastVehicle, true)
+          elseif not engineIsOn and GetIsVehicleEngineRunning(lastVehicle) then
+            SetVehicleEngineOn(lastVehicle, false, false, false)
+            SetVehicleUndriveable(lastVehicle, true)
+          end
         end
       end
     end
@@ -435,8 +435,9 @@ local tiempo = 8000 -- in miliseconds >> 1000 ms = 1s
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10)
-		if IsPedBeingStunned(GetPlayerPed(-1)) then
-		    SetPedMinGroundTimeForStungun(GetPlayerPed(-1), tiempo)
+    playerPed = GetPlayerPed(-1) -- IMPORTANT!! DO NOT REMOVE!! THIS IS USED TO SET THE GLOBAL PLAYER PED FOR THE WHOLE FILE! --
+		if IsPedBeingStunned(playerPed) then
+		    SetPedMinGroundTimeForStungun(playerPed, tiempo)
 		end
 	end
 end)
@@ -464,24 +465,23 @@ end)
 local playing_anim = nil
 RegisterNetEvent("usa:playAnimation")
 AddEventHandler("usa:playAnimation", function(animDict, animName, speed, speedMult, duration, flag, playbackRate, lockX, lockY, lockZ, actualDuration)
-    local ped = GetPlayerPed(-1)
-    if not IsPedInAnyVehicle(ped, 1) then
+    if not isInVeh then
       -- load animation
       RequestAnimDict(animDict)
       while not HasAnimDictLoaded(animDict) do
         Citizen.Wait(100)
       end
-      TaskPlayAnim(ped, animDict, animName, speed, speedMult, duration, flag, playbackRate, lockX, lockY, lockZ)
+      TaskPlayAnim(playerPed, animDict, animName, speed, speedMult, duration, flag, playbackRate, lockX, lockY, lockZ)
       playing_anim = {
           dict = animDict,
           name = animName
       }
       if actualDuration then
           Wait(actualDuration * 1000)
-          if not IsPedInAnyVehicle(ped) then
-              ClearPedTasksImmediately(ped)
+          if not isInVeh then
+              ClearPedTasksImmediately(playerPed)
           end
-          StopAnimTask(ped, animDict, animName, 1.0)
+          StopAnimTask(playerPed, animDict, animName, 1.0)
       end
   end
 end)
@@ -494,14 +494,13 @@ end)
 
 RegisterNetEvent("usa:playScenario")
 AddEventHandler("usa:playScenario", function(scenario)
-    TaskStartScenarioInPlace(GetPlayerPed(-1), scenario, 0, 1)
+    TaskStartScenarioInPlace(playerPed, scenario, 0, 1)
 end)
 
 RegisterNetEvent("usa:heal")
 AddEventHandler("usa:heal", function(amount)
-	local me = GetPlayerPed(-1)
-	local curr_hp = GetEntityHealth(me)
-	SetEntityHealth(me, curr_hp + amount)
+	local curr_hp = GetEntityHealth(playerPed)
+	SetEntityHealth(playerPed, curr_hp + amount)
 end)
 
 -- prevent falling through vehicle when eating/drink and entering vehicle:
@@ -509,10 +508,10 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10)
     --print("trying to enter: " .. GetVehiclePedIsTryingToEnter(PlayerPedId(GetPlayerPed(-1))))
-		if DoesEntityExist(GetVehiclePedIsTryingToEnter(PlayerPedId(GetPlayerPed(-1)))) then
+		if DoesEntityExist(GetVehiclePedIsTryingToEnter(PlayerPedId(playerPed))) then
       --ClearPedSecondaryTask(GetPlayerPed(-1))
       if playing_anim then
-        StopAnimTask(GetPlayerPed(-1), playing_anim.dict, playing_anim.name, 1.0)
+        StopAnimTask(playerPed, playing_anim.dict, playing_anim.name, 1.0)
       end
 		end
 	end
@@ -522,29 +521,29 @@ RegisterNetEvent("usa:equipWeapon")
 AddEventHandler("usa:equipWeapon", function(weapon)
   -- todo: store ammo count on weapon object
   if weapon.name ~= "Jerry Can" then
-    GiveWeaponToPed(GetPlayerPed(-1), weapon.hash, 100, false, true)
+    GiveWeaponToPed(playerPed, weapon.hash, 100, false, true)
     if weapon.components then
       if #weapon.components > 0 then
         for x = 1, #weapon.components do
-          GiveWeaponComponentToPed(GetPlayerPed(-1), weapon.hash, GetHashKey(weapon.components[x]))
+          GiveWeaponComponentToPed(playerPed, weapon.hash, GetHashKey(weapon.components[x]))
         end
       end
     end
     if weapon.tint then
-      SetPedWeaponTintIndex(GetPlayerPed(-1), weapon.hash, weapon.tint)
+      SetPedWeaponTintIndex(playerPed, weapon.hash, weapon.tint)
     end
   else
     --print("equipping jerry can! giving ammo!")
     -- give more ammo if jerry can --
     --print("max ammo: " .. GetMaxAmmoInClip(GetPlayerPed(-1), weapon.hash, 1))
-    SetPedAmmo(GetPlayerPed(-1), weapon.hash, math.random(1000, 4500))
+    SetPedAmmo(playerPed, weapon.hash, math.random(1000, 4500))
   end
 end)
 
 RegisterNetEvent("usa:dropWeapon")
 AddEventHandler("usa:dropWeapon", function(weapon_hash)
 	--print("typeof weapon_hash: " .. type(weapon_hash))
-  RemoveWeaponFromPed(GetPlayerPed(-1), weapon_hash) -- right params?
+  RemoveWeaponFromPed(playerPed, weapon_hash) -- right params?
   --SetPedDropsWeapon(weapon_hash) -- or this? or both?
 end)
 
@@ -568,16 +567,16 @@ AddEventHandler("usa:loadCivCharacter", function(character, playerWeapons)
     -- give model customizations if available
     if character.hash then
       for key, value in pairs(character["components"]) do
-        SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
+        SetPedComponentVariation(playerPed, tonumber(key), value, character["componentstexture"][key], 0)
       end
       for key, value in pairs(character["props"]) do
-        SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
+        SetPedPropIndex(playerPed, tonumber(key), value, character["propstexture"][key], true)
       end
     end
     -- add any tattoos if they have any --
     if character.tattoos then
       for i = 1, #character.tattoos do
-        ApplyPedOverlay(GetPlayerPed(-1), GetHashKey(character.tattoos[i].category), GetHashKey(character.tattoos[i].hash_name))
+        ApplyPedOverlay(playerPed, GetHashKey(character.tattoos[i].category), GetHashKey(character.tattoos[i].hash_name))
       end
     else
       --print("no tattoos!!!")
@@ -586,31 +585,30 @@ AddEventHandler("usa:loadCivCharacter", function(character, playerWeapons)
     if character.head_customizations then
       --print("barber shop customizations existed!")
       local head = character.head_customizations
-      local ped = GetPlayerPed(-1)
       SetPedHeadBlendData(ped, head.parent1, head.parent2, head.parent3, head.skin1, head.skin2, head.skin3, head.mix1, head.mix2, head.mix3, false)
       -- facial stuff like beards and ageing and what not --
       for i = 1, #head.other do
-        SetPedHeadOverlay(ped, i - 1, head.other[i][2], 1.0)
+        SetPedHeadOverlay(playerPed, i - 1, head.other[i][2], 1.0)
         if head.other[i][2] ~= 255 then
           if i == 2 or i == 3 or i == 11 then -- chest hair, facial hair, eyebrows
-            SetPedHeadOverlayColor(ped, i - 1, 1, head.other[i][4])
+            SetPedHeadOverlayColor(playerPed, i - 1, 1, head.other[i][4])
           elseif i == 6 or i == 9 then -- blush, lipstick
-            SetPedHeadOverlayColor(ped, i - 1, 2, head.other[i][4])
+            SetPedHeadOverlayColor(playerPed, i - 1, 2, head.other[i][4])
           elseif i == 14 then -- hair
             --print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
-            SetPedComponentVariation(ped, 2, head.other[i][2], GetNumberOfPedTextureVariations(ped,2, 0), 2)
-            SetPedHairColor(ped, head.other[i][4], head.other[i][4])
+            SetPedComponentVariation(playerPed, 2, head.other[i][2], GetNumberOfPedTextureVariations(playerPed,2, 0), 2)
+            SetPedHairColor(playerPed, head.other[i][4], head.other[i][4])
           end
         end
       end
     else
-      print("no barber shop customizations!")
+      --print("no barber shop customizations!")
     end
     -- give weapons
     if playerWeapons then
       for i = 1, #playerWeapons do
-        print("playerWeapons[i].hash = " .. playerWeapons[i].hash)
-        GiveWeaponToPed(GetPlayerPed(-1), playerWeapons[i].hash, 1000, false, false)
+        --print("playerWeapons[i].hash = " .. playerWeapons[i].hash)
+        GiveWeaponToPed(playerPed, playerWeapons[i].hash, 1000, false, false)
       end
     end
   end)
@@ -618,20 +616,19 @@ end)
 
 RegisterNetEvent("usa:setPlayerComponents")
 AddEventHandler("usa:setPlayerComponents", function(character)
-  local ped = GetPlayerPed(-1)
   -- set model and clothing --
   if character.hash then
     if character.hash == GetHashKey("mp_m_freemode_01") or character.hash == GetHashKey("mp_f_freemode_01") then
       -- set clothing --
       for key, value in pairs(character["components"]) do
-        SetPedComponentVariation(ped, tonumber(key), value, character["componentstexture"][key], 0)
+        SetPedComponentVariation(playerPed, tonumber(key), value, character["componentstexture"][key], 0)
       end
       -- set props --
       for key, value in pairs(character["props"]) do
-        SetPedPropIndex(ped, tonumber(key), value, character["propstexture"][key], true)
+        SetPedPropIndex(playerPed, tonumber(key), value, character["propstexture"][key], true)
       end
       -- set tattoos --
-      ClearPedDecorations(GetPlayerPed(-1))
+      ClearPedDecorations(playerPed)
       if character.tattoos then
         for i = 1, #character.tattoos do
           ApplyPedOverlay(ped, GetHashKey(character.tattoos[i].category), GetHashKey(character.tattoos[i].hash_name))
@@ -641,28 +638,28 @@ AddEventHandler("usa:setPlayerComponents", function(character)
       if character.head_customizations then
         print("player had barber shop customizations! applying!")
         local head = character.head_customizations
-        SetPedHeadBlendData(ped, head.parent1, head.parent2, head.parent3, head.skin1, head.skin2, head.skin3, head.mix1, head.mix2, head.mix3, false)
+        SetPedHeadBlendData(playerPed, head.parent1, head.parent2, head.parent3, head.skin1, head.skin2, head.skin3, head.mix1, head.mix2, head.mix3, false)
         -- facial stuff like beards and ageing and what not --
         for i = 1, #head.other do
-          SetPedHeadOverlay(ped, i - 1, head.other[i][2], 1.0)
+          SetPedHeadOverlay(playerPed, i - 1, head.other[i][2], 1.0)
           if head.other[i][2] ~= 255 then
             if i == 2 or i == 3 or i == 11 then -- chest hair, facial hair, eyebrows
-              SetPedHeadOverlayColor(ped, i - 1, 1, head.other[i][4])
+              SetPedHeadOverlayColor(playerPed, i - 1, 1, head.other[i][4])
             elseif i == 6 or i == 9 then -- blush, lipstick
-              SetPedHeadOverlayColor(ped, i - 1, 2, head.other[i][4])
+              SetPedHeadOverlayColor(playerPed, i - 1, 2, head.other[i][4])
             elseif i == 14 then -- hair
               print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
-              SetPedComponentVariation(ped, 2, head.other[i][2], GetNumberOfPedTextureVariations(ped,2, 0), 2)
-              SetPedHairColor(ped, head.other[i][4], head.other[i][4])
+              SetPedComponentVariation(playerPed, 2, head.other[i][2], GetNumberOfPedTextureVariations(playerPed,2, 0), 2)
+              SetPedHairColor(playerPed, head.other[i][4], head.other[i][4])
             end
           end
         end
       else
-        print("no barber customizations!")
+        --print("no barber customizations!")
         -- set default values --
         -- default head & skin details --
         local p1, p2 = 0, 0
-        if(GetEntityModel(ped) == -1667301416) then -- female
+        if(GetEntityModel(playerPed) == -1667301416) then -- female
           p1, p2 = 27
         end
         local old_head = {
@@ -693,9 +690,9 @@ AddEventHandler("usa:setPlayerComponents", function(character)
             {"Hair", 0, 100, 0}
           }
         }
-        SetPedHeadBlendData(ped, old_head.parent1, old_head.parent2, old_head.parent3, old_head.skin1, old_head.skin2, old_head.skin3, old_head.mix1, old_head.mix2, old_head.mix3, false) -- needed to apply head overlays like facial hair
+        SetPedHeadBlendData(playerPed, old_head.parent1, old_head.parent2, old_head.parent3, old_head.skin1, old_head.skin2, old_head.skin3, old_head.mix1, old_head.mix2, old_head.mix3, false) -- needed to apply head overlays like facial hair
         for i = 1, #old_head.other do
-          SetPedHeadOverlay(ped, i - 1, 255, 1.0)
+          SetPedHeadOverlay(playerPed, i - 1, 255, 1.0)
           --[[
           if i == 2 or i == 3 or i == 11 then -- chest hair, facial hair, eyebrows
             SetPedHeadOverlayColor(ped, i - 1, 1, old_head.other[i][3])
@@ -713,7 +710,7 @@ AddEventHandler("usa:setPlayerComponents", function(character)
 					Citizen.Wait(100)
 				end
 				SetPlayerModel(PlayerId(), character.hash)
-				SetPedRandomComponentVariation(GetPlayerPed(-1), true)
+				SetPedRandomComponentVariation(playerPed, true)
 				SetModelAsNoLongerNeeded(character.hash)
 			end)
     end
@@ -726,7 +723,7 @@ AddEventHandler("usa:setPlayerComponents", function(character)
         Citizen.Wait(100)
       end
       SetPlayerModel(PlayerId(), model)
-      SetPedRandomComponentVariation(GetPlayerPed(-1), true)
+      SetPedRandomComponentVariation(playerPed, true)
       SetModelAsNoLongerNeeded(model)
     end)
   end
@@ -782,9 +779,9 @@ function GetClosestPlayerInfo(range)
 		if NetworkIsPlayerActive(x) then
 			targetPed = GetPlayerPed(x)
 			targetPedCoords = GetEntityCoords(targetPed, false)
-			playerPedCoords = GetEntityCoords(GetPlayerPed(-1), false)
+			playerPedCoords = GetEntityCoords(playerPed, false)
 			distanceToTargetPed = Vdist(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, targetPedCoords.x, targetPedCoords.y, targetPedCoords.z)
-			if targetPed ~= GetPlayerPed(-1) then
+			if targetPed ~= playerPed then
 				if distanceToTargetPed < 10 then
 					if closestDistance == 0 then
 						closestDistance = distanceToTargetPed

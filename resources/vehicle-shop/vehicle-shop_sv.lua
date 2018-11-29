@@ -56,7 +56,7 @@ local vehicleShopItems = {
 			{make = "Dodge", model = "Challenger", price = 75400, hash = -1800170043, storage_capacity = 160.0},
 			{make = "Willand", model = "Faction Custom", price = 25575, hash = -1790546981, storage_capacity = 160.0},
 			{make = "Willand", model = "Faction Custom Donk", price = 35575, hash = -2039755226, storage_capacity = 160.0},
-			{make = "Albany", model = "Virgo", price = 42000, hash = -498054846, storage_capacity = 160.0},
+			{make = "Albany", model = "Virgo 1", price = 42000, hash = -498054846, storage_capacity = 160.0},
 			{make = "Albany", model = "Virgo 2", price = 45000, hash = -899509638, storage_capacity = 130.0},
 			{make = "Declasse", model = "Voodoo", price = 45000, hash = 2006667053, storage_capacity = 130.0},
 			{make = "Declasse", model = "Tampa", price = 45000, hash = 972671128, storage_capacity = 160.0},
@@ -68,7 +68,8 @@ local vehicleShopItems = {
 			{make = "Cheval", model = "Picador", price = 35000, hash = "picador", storage_capacity = 170.0}
 		},
 		["Trucks"] = {
-			{make = "Karin", model = "Rebel", price = 10500, hash = -2045594037, storage_capacity = 230.0},
+			{make = "Karin", model = "Rebel", price = 19500, hash = 1207771834, storage_capacity = 230.0},
+			{make = "Karin", model = "Rebel 2", price = 30500, hash = -2045594037, storage_capacity = 230.0},
 			{make = "Vapid", model = "Bobcat XL", price = 10500, hash = 1069929536, storage_capacity = 230.0},
 			{make = "Ford", model = "F350 Super Duty", price = 55000, hash = -599568815, storage_capacity = 250.0},
 			{make = "Bravado", model = "Bison", price = 27110, hash = -16948145, storage_capacity = 230.0},
@@ -97,10 +98,12 @@ local vehicleShopItems = {
 			{make = "Nagasaki", model = "Blazer", price = 14000, hash = -2128233223, storage_capacity = 170.0},
 			{make = "Coil", model = "Brawler", price = 48500, hash = -1479664699, storage_capacity = 170.0},
 			{make = "BF", model = "Bifta", price = 75350, hash = -349601129, storage_capacity = 170.0},
-			{make = "Canis", model = "Mesa", price = 30500, hash = -2064372143, storage_capacity = 170.0},
+			{make = "Canis", model = "Mesa 2", price = 45500, hash = -2064372143, storage_capacity = 170.0},
+			{make = "Canis", model = "Mesa", price = 25500, hash = 914654722, storage_capacity = 170.0},
 			{make = "Vapid", model = "Trophy Truck", price = 50000, hash = 101905590, storage_capacity = 100.0},
 			{make = "Vapid", model = "Trophy Truck 2", price = 70000, hash = -663299102, storage_capacity = 100.0},
-			{make = "Canis", model = "Kamacho", price = 150000, hash = "kamacho", storage_capacity = 130.0}
+			{make = "Canis", model = "Kamacho", price = 150000, hash = "kamacho", storage_capacity = 130.0},
+			{make = "Dune", model = "Buggy", price = 95000, hash = -1661854193, storage_capacity = 70.0}
 		},
 		["Motorcycles"] = {
 			{make = "Pegassi", model = "Faggio", price = 1200, hash = -1842748181, storage_capacity = 30.0},

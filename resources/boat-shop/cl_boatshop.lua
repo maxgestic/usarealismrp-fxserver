@@ -350,15 +350,18 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 		-- for accessing shops
 		for name, data in pairs(locations) do
-			DrawMarker(1, data.rent.x, data.rent.y, data.rent.z-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0) -- for rental
-			DrawMarker(1, data.return_rental.x, data.return_rental.y, data.return_rental.z-0.5, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0) -- for return
-			if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), data.rent.x, data.rent.y, data.rent.z, true) < 3 then
-				DrawSpecialText("Press [ ~b~E~w~ ] to access Revsta's Boat Shop!")
-				if IsControlPressed(0, 86) then
-					Citizen.Wait(500)
-					menu.open = true
-					closest_coords = data.spawn
-					print("opening menu! closest coords x = " .. closest_coords.x)
+			local dist = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), data.rent.x, data.rent.y, data.rent.z, true)
+			if dist < 100 then
+				DrawMarker(1, data.rent.x, data.rent.y, data.rent.z-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0) -- for rental
+				DrawMarker(1, data.return_rental.x, data.return_rental.y, data.return_rental.z-0.5, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0) -- for return
+				if dist < 3 then
+					DrawSpecialText("Press [ ~b~E~w~ ] to access Revsta's Boat Shop!")
+					if IsControlPressed(0, 86) then
+						Citizen.Wait(500)
+						menu.open = true
+						closest_coords = data.spawn
+						print("opening menu! closest coords x = " .. closest_coords.x)
+					end
 				end
 			end
 			if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), data.return_rental.x, data.return_rental.y, data.return_rental.z, true) < 5 then

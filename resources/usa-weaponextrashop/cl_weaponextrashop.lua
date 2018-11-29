@@ -339,6 +339,8 @@ CreateLegalExtrasMenu(legalShopMenu)
 CreateIllegalExtrasMenu(illegalShopMenu)
 _menuPool:RefreshIndex()
 
+local closest_shop = nil
+
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -346,16 +348,27 @@ Citizen.CreateThread(function()
     _menuPool:MouseControlsEnabled(false)
     _menuPool:ControlDisablingEnabled(false)
     _menuPool:ProcessMenus()
-    ------------------
-    -- Draw Markers --
-    ------------------
-		for i = 1, #locations do
-			DrawMarker(27, locations[i].x, locations[i].y, locations[i].z - 1.0, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 170, 0, 170, 0, 0, 2, 0, 0, 0, 0)
-		end
+    -------------------------------------
+    -- Draw Markers / set closest shop --
+    -------------------------------------
+    local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
+    local isCloseToAny = false
+    for i = 1, #locations do
+      local dist = GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,true)
+      if dist < 100 then
+        DrawMarker(27, locations[i].x, locations[i].y, locations[i].z - 1.0, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 170, 0, 170, 0, 0, 2, 0, 0, 0, 0)
+        if dist < 1.3 then
+          closest_shop = locations[i]
+          isCloseToAny = true
+        end
+      end
+    end
+    if not isCloseToAny then
+      closest_shop = nil
+    end
     -------------------
     -- draw help txt --
     -------------------
-    local closest_shop = isPlayerAtWeaponExtraShop()
     if closest_shop then
       drawTxt("Press [~y~E~w~] to open the weapon extra shop menu",7,1,0.5,0.8,0.5,255,255,255,255)
     else
