@@ -632,12 +632,12 @@ AddEventHandler("usa:setPlayerComponents", function(character)
       ClearPedDecorations(playerPed)
       if character.tattoos then
         for i = 1, #character.tattoos do
-          ApplyPedOverlay(ped, GetHashKey(character.tattoos[i].category), GetHashKey(character.tattoos[i].hash_name))
+          ApplyPedOverlay(playerPed, GetHashKey(character.tattoos[i].category), GetHashKey(character.tattoos[i].hash_name))
         end
       end
       -- set barbershop customizations --
       if character.head_customizations then
-        print("player had barber shop customizations! applying!")
+        --print("player had barber shop customizations! applying!")
         local head = character.head_customizations
         SetPedHeadBlendData(playerPed, head.parent1, head.parent2, head.parent3, head.skin1, head.skin2, head.skin3, head.mix1, head.mix2, head.mix3, false)
         -- facial stuff like beards and ageing and what not --
@@ -649,7 +649,7 @@ AddEventHandler("usa:setPlayerComponents", function(character)
             elseif i == 6 or i == 9 then -- blush, lipstick
               SetPedHeadOverlayColor(playerPed, i - 1, 2, head.other[i][4])
             elseif i == 14 then -- hair
-              print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
+              --print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
               SetPedComponentVariation(playerPed, 2, head.other[i][2], GetNumberOfPedTextureVariations(playerPed,2, 0), 2)
               SetPedHairColor(playerPed, head.other[i][4], head.other[i][4])
             end
