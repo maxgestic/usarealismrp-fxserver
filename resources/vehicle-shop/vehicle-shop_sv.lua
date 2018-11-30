@@ -17,6 +17,7 @@ local vehicleShopItems = {
 			{make = "Obey", model = "Rocoto", price = 13000, hash = 2136773105, storage_capacity = 175.0},
 			{make = "Declasse", model = "Granger", price = 30000, hash = -1775728740, storage_capacity = 185.0},
 			{make = "Dundreary", model = "Landstalker", price = 25595, hash = 1269098716, storage_capacity = 175.0},
+			{make = "Benefactor", model = "Streiter", price = 40595, hash = "streiter", storage_capacity = 175.0},
 			{make = "Benefactor", model = "Dubsta", price = 50000, hash = 1177543287, storage_capacity = 175.0},
 			{make = "Benefactor", model = "Dubsta 2", price = 80000, hash = -394074634, storage_capacity = 175.0},
 			{make = "Benefactor", model = "Dubsta 6x6", price = 160000, hash = -1237253773, storage_capacity = 215.0},
@@ -264,7 +265,8 @@ local vehicleShopItems = {
 			{make = "Vapid", model = "Dominator Special", price = 825000, hash = -915704871, storage_capacity = 155.0},
 			{make = "BF", model = "Raptor", price = 1000000, hash = -674927303, storage_capacity = 30.0},
 			{make = "Dewbauchee", model = "Massacro Special", price = 1800000, hash = -631760477, storage_capacity = 130.0},
-			{make = "Dinka", model = "Jester Special", price = 2500000, hash = -1106353882, storage_capacity = 120.0}
+			{make = "Dinka", model = "Jester Special", price = 2500000, hash = -1106353882, storage_capacity = 120.0},
+			{make = "Brute", model = "Tour Bus", price = 80000, hash = 1941029835, storage_capacity = 180.0}
 		},
 		["Electric"] = {
 			{make = "Coil", model = "Raider", price = 300000, hash = "raiden", storage_capacity = 150.0},

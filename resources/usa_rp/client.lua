@@ -550,6 +550,7 @@ end)
 RegisterNetEvent("usa:loadCivCharacter")
 AddEventHandler("usa:loadCivCharacter", function(character, playerWeapons)
   Citizen.CreateThread(function()
+    local ped = GetPlayerPed(-1)
     local model
     if not character.hash then -- does not have any customizations saved
       --print("did not find character.hash!")
@@ -567,16 +568,16 @@ AddEventHandler("usa:loadCivCharacter", function(character, playerWeapons)
     -- give model customizations if available
     if character.hash then
       for key, value in pairs(character["components"]) do
-        SetPedComponentVariation(playerPed, tonumber(key), value, character["componentstexture"][key], 0)
+        SetPedComponentVariation(ped, tonumber(key), value, character["componentstexture"][key], 0)
       end
       for key, value in pairs(character["props"]) do
-        SetPedPropIndex(playerPed, tonumber(key), value, character["propstexture"][key], true)
+        SetPedPropIndex(ped, tonumber(key), value, character["propstexture"][key], true)
       end
     end
     -- add any tattoos if they have any --
     if character.tattoos then
       for i = 1, #character.tattoos do
-        ApplyPedOverlay(playerPed, GetHashKey(character.tattoos[i].category), GetHashKey(character.tattoos[i].hash_name))
+        ApplyPedOverlay(ped, GetHashKey(character.tattoos[i].category), GetHashKey(character.tattoos[i].hash_name))
       end
     else
       --print("no tattoos!!!")
@@ -588,16 +589,16 @@ AddEventHandler("usa:loadCivCharacter", function(character, playerWeapons)
       SetPedHeadBlendData(ped, head.parent1, head.parent2, head.parent3, head.skin1, head.skin2, head.skin3, head.mix1, head.mix2, head.mix3, false)
       -- facial stuff like beards and ageing and what not --
       for i = 1, #head.other do
-        SetPedHeadOverlay(playerPed, i - 1, head.other[i][2], 1.0)
+        SetPedHeadOverlay(ped, i - 1, head.other[i][2], 1.0)
         if head.other[i][2] ~= 255 then
           if i == 2 or i == 3 or i == 11 then -- chest hair, facial hair, eyebrows
-            SetPedHeadOverlayColor(playerPed, i - 1, 1, head.other[i][4])
+            SetPedHeadOverlayColor(ped, i - 1, 1, head.other[i][4])
           elseif i == 6 or i == 9 then -- blush, lipstick
-            SetPedHeadOverlayColor(playerPed, i - 1, 2, head.other[i][4])
+            SetPedHeadOverlayColor(ped, i - 1, 2, head.other[i][4])
           elseif i == 14 then -- hair
             --print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
-            SetPedComponentVariation(playerPed, 2, head.other[i][2], GetNumberOfPedTextureVariations(playerPed,2, 0), 2)
-            SetPedHairColor(playerPed, head.other[i][4], head.other[i][4])
+            SetPedComponentVariation(ped, 2, head.other[i][2], GetNumberOfPedTextureVariations(ped,2, 0), 2)
+            SetPedHairColor(ped, head.other[i][4], head.other[i][4])
           end
         end
       end
@@ -608,7 +609,7 @@ AddEventHandler("usa:loadCivCharacter", function(character, playerWeapons)
     if playerWeapons then
       for i = 1, #playerWeapons do
         --print("playerWeapons[i].hash = " .. playerWeapons[i].hash)
-        GiveWeaponToPed(playerPed, playerWeapons[i].hash, 1000, false, false)
+        GiveWeaponToPed(ped, playerWeapons[i].hash, 1000, false, false)
       end
     end
   end)

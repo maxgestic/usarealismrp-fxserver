@@ -88,8 +88,7 @@ AddEventHandler("doc:clockOut", function()
 	-----------------------------------
 	-- change back into civ clothing --
 	-----------------------------------
-	TriggerEvent("usa:loadCivCharacter", usource)
-	print("closing DOC menu!")
+	--print("closing DOC menu!")
 	TriggerClientEvent("doc:close", usource)
 	-- PTT --
 	TriggerClientEvent("ptt:isEmergency", usource, false)

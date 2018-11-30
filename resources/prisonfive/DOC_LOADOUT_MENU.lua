@@ -432,6 +432,7 @@ function CreateClockOutButton(menu)
     local item = NativeUI.CreateItem("Clock Out", "")
     item.Activated = function(parentmenu, selected)
         TriggerServerEvent("doc:clockOut")
+        TriggerServerEvent("usa:loadPlayerComponents")
     end
     menu:AddItem(item)
 end
