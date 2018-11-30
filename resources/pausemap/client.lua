@@ -9,7 +9,7 @@ Citizen.CreateThread(function()
 					--TaskStartScenarioInPlace(GetPlayerPed(-1), "WORLD_HUMAN_TOURIST_MAP", 0, false) -- Start the scenario
 					wasmenuopen = true
 			end
-			
+
 			if not IsPauseMenuActive() and wasmenuopen then
 					Wait(2000)
 					TriggerEvent("Map:ToggleMap")
@@ -23,6 +23,7 @@ local mapModel = "prop_tourist_map_01"
 local animDict = "amb@world_human_tourist_map@male@base"
 local animName = "base"
 local map_net = nil
+local map_local = nil
 
 -- Toggle Map --
 
@@ -40,13 +41,13 @@ AddEventHandler("Map:ToggleMap", function()
         end
 
         local plyCoords = GetOffsetFromEntityInWorldCoords(GetPlayerPed(PlayerId()), 0.0, 0.0, -5.0)
-        local mapspawned = CreateObject(GetHashKey(mapModel), plyCoords.x, plyCoords.y, plyCoords.z, 1, 1, 1)
+      	map_local = CreateObject(GetHashKey(mapModel), plyCoords.x, plyCoords.y, plyCoords.z, 1, 1, 1)
         Citizen.Wait(1000)
-        local netid = ObjToNet(mapspawned)
+        local netid = ObjToNet(map_local)
         SetNetworkIdExistsOnAllMachines(netid, true)
         NetworkSetNetworkIdDynamic(netid, true)
         SetNetworkIdCanMigrate(netid, false)
-        AttachEntityToEntity(mapspawned, GetPlayerPed(PlayerId()), GetPedBoneIndex(GetPlayerPed(PlayerId()), 28422), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1, 1, 0, 1, 0, 1)
+        AttachEntityToEntity(map_local, GetPlayerPed(PlayerId()), GetPedBoneIndex(GetPlayerPed(PlayerId()), 28422), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1, 1, 0, 1, 0, 1)
         TaskPlayAnim(GetPlayerPed(PlayerId()), 1.0, -1, -1, 50, 0, 0, 0, 0) -- 50 = 32 + 16 + 2
         TaskPlayAnim(GetPlayerPed(PlayerId()), animDict, animName, 1.0, -1, -1, 50, 0, 0, 0, 0)
         map_net = netid
@@ -55,6 +56,11 @@ AddEventHandler("Map:ToggleMap", function()
         ClearPedSecondaryTask(GetPlayerPed(PlayerId()))
         DetachEntity(NetToObj(map_net), 1, 1)
         DeleteEntity(NetToObj(map_net))
+				if DoesEntityExist(map_local) then
+					DetachEntity(map_local, 1, 1)
+					DeleteEntity(map_local)
+				end
+				map_local = nil
         map_net = nil
         holdingMap = false
     end
