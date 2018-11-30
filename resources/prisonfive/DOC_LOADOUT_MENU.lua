@@ -433,6 +433,7 @@ function CreateClockOutButton(menu)
     item.Activated = function(parentmenu, selected)
         TriggerServerEvent("doc:clockOut")
         TriggerServerEvent("usa:loadPlayerComponents")
+        TriggerServerEvent("mini:giveMeMyWeaponsPlease")
     end
     menu:AddItem(item)
 end
