@@ -207,7 +207,8 @@ local vehicleShopItems = {
 			{make = "Progen", model = "Tyrus", price = 2900000, hash = 2067820283, storage_capacity = 100.0},
 			{make = "Annis", model = "RE7B", price = 2900000, hash = -1232836011, storage_capacity = 100.0},
 			{make = "Ubermacht", model = "SC1", price = 1500000, hash = "SC1", storage_capacity = 100.0},
-			{make = "Overflod", model = "Autarch", price = 2500000, hash = "autarch", storage_capacity = 100.0}
+			{make = "Overflod", model = "Autarch", price = 2500000, hash = "autarch", storage_capacity = 100.0},
+			{make = "Overflod", model = "Tyrant", price = 3300000, hash = "tyrant", storage_capacity = 100.0}
 		},
 		["Classic"] = {
 			{make = "Declasse", model = "Tornado", price = 30000, hash = 464687292, storage_capacity = 150.0},
