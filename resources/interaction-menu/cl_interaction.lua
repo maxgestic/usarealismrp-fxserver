@@ -31,8 +31,8 @@ local scenarios = {
 	{name = "push up", scenarioName = "WORLD_HUMAN_PUSH_UPS"},
 	{name = "weld", scenarioName = "WORLD_HUMAN_WELDING"},
 	{name = "mechanic", scenarioName = "WORLD_HUMAN_VEHICLE_MECHANIC"},
-	--{name = "smoke", scenarioName = "WORLD_HUMAN_SMOKING"},
-	{name = "smoke", type = "emote", dict = "amb@world_human_aa_smoke@male@idle_a", animname = "idle_c"},
+	{name = "smoke 1", scenarioName = "WORLD_HUMAN_SMOKING"},
+	{name = "smoke 2", type = "emote", dict = "amb@world_human_aa_smoke@male@idle_a", animname = "idle_c"},
 	{name = "drink", scenarioName = "WORLD_HUMAN_DRINKING"},
 	{name = "bum 1", scenarioName = "WORLD_HUMAN_BUM_FREEWAY"},
 	{name = "bum 2", scenarioName = "WORLD_HUMAN_BUM_SLUMPED"},
@@ -694,7 +694,7 @@ function interactionMenuUse(itemName, wholeItem)
 					isLockpicking = true
 					-- start picking --
 					local start_time = GetGameTimer()
-					local duration = 30000
+					local duration = 45000
 					-- play animation:
 			    local anim = {
 			      dict = "anim@move_m@trash",

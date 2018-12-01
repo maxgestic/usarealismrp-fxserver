@@ -41,7 +41,8 @@ local vehicleShopItems = {
 			{make = "Pfister", model = "Comet 1", price = 55550, hash = -1045541610, storage_capacity = 125.0},
 			{make = "Pfister", model = "Comet 2", price = 55550, hash = -2022483795, storage_capacity = 125.0},
 			{make = "Pfister", model = "Comet 5", price = 95000, hash = "comet5", storage_capacity = 125.0},
-			{make = "Dinka", model = "Jester 3", price = 100000, hash = "jester3", storage_capacity = 125.0}
+			{make = "Dinka", model = "Jester 3", price = 120000, hash = "jester3", storage_capacity = 125.0},
+			{make = "Ocelot", model = "Pariah", price = 120000, hash = "pariah", storage_capacity = 145.0}
 			--{make = "Benefactor", model = "Schwartzer", price = 80000, hash = "schwarzer", storage_capacity = 135.0}
 			--{make = "Annis", model = "Savestra", price = 120000, hash = "savestra", storage_capacity = 125.0}
 		},
