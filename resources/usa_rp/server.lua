@@ -143,6 +143,25 @@ end, {
 	}
 })
 
+RegisterServerEvent("veh:checkForKey")
+AddEventHandler("veh:checkForKey", function(plate, status)
+	local userSource = tonumber(source)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
+	local inv = user.getActiveCharacterData("inventory")
+	for i = 1, #inv do
+		local item = inv[i]
+		if item then
+			if string.find(item.name, "Key") then
+				if string.find(plate, item.plate) then
+					TriggerClientEvent("veh:continueToggleEngine", userSource, status)
+					return
+				end
+			end
+		end
+	end
+	TriggerEvent("lock:foundKeys", false, plate, userSource)
+end)
+
 -- R O L L  D I C E
 TriggerEvent('es:addCommand', 'roll', function(source, args, user, location)
 	local max = tonumber(args[2])

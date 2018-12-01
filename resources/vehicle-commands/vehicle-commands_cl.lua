@@ -28,6 +28,20 @@ AddEventHandler("vehicleCommands:spawnVehicle", function(modelName)
 		SetEntityAsMissionEntity(vehicle, true, true)
 		SetVehicleHasBeenOwnedByPlayer(vehicle, true)
 		SetVehicleExplodesOnHighExplosionDamage(vehicle, false)
+		SetVehicleEngineOn(vehicle, true, true, false)
+
+		local vehicle_key = {
+			name = "Key -- " .. GetVehicleNumberPlateText(vehicle),
+			quantity = 1,
+			type = "key",
+			owner = "GOVT",
+			make = "GOVT",
+			model = "GOVT",
+			plate = GetVehicleNumberPlateText(vehicle)
+		}
+
+		-- give key to owner
+		TriggerServerEvent("garage:giveKey", vehicle_key)
 
 		--[[
 		local netid = NetworkGetNetworkIdFromEntity(spike)

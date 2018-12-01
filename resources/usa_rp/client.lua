@@ -324,14 +324,23 @@ end)
 local engineIsOn = true
 local lastVehicle = nil
 
+RegisterNetEvent("veh:setEngineOnVariable")
+AddEventHandler('veh:setEngineOnVariable', function(status)
+  engineIsOn = status
+end)
+
 RegisterNetEvent("veh:toggleEngine")
 AddEventHandler('veh:toggleEngine', function(status)
-  if isInVeh and lastVehicle and tonumber(lastVehicle) ~= 0 then
-    --local playerCar = GetVehiclePedIsIn(playerPed, false)
-    --lastVehicle = GetVehiclePedIsIn(playerPed, false)
+  if isInVeh then
+    TriggerServerEvent("veh:checkForKey", GetVehicleNumberPlateText(GetVehiclePedIsIn(playerPed)), status)
+  end
+end)
+
+RegisterNetEvent("veh:continueToggleEngine")
+AddEventHandler('veh:continueToggleEngine', function(status)
+  lastVehicle = GetVehiclePedIsIn(playerPed)
     if GetPedInVehicleSeat(lastVehicle, -1) == playerPed then
       if status == "on" then
-        --TriggerServerEvent("vehicle:checkForKey", GetVehicleNumberPlateText(targetVehicle))
         if GetVehicleEngineHealth(lastVehicle) > 360 and  GetVehicleFuelLevel(lastVehicle) > 0.9 then
           SetVehicleUndriveable(lastVehicle, false)
           SetVehicleEngineOn(lastVehicle, true, false, false)
@@ -360,7 +369,6 @@ AddEventHandler('veh:toggleEngine', function(status)
         end
       end
     end
-  end
 end)
 
 local policeVehicles = {
@@ -395,6 +403,7 @@ Citizen.CreateThread(function()
     ----------------------
     -- set last vehicle --
     ----------------------
+    --[[
     if isInVeh then
       local veh = GetVehiclePedIsIn(playerPed, false)
       if GetPedInVehicleSeat(veh, -1) == playerPed then
@@ -403,13 +412,15 @@ Citizen.CreateThread(function()
         end
       end
     end
+    --]]
     --------------------------------------
     -- adjust engine status accordingly --
     --------------------------------------
     if DoesEntityExist(lastVehicle) then
-      if lastVehicle and tonumber(lastVehicle) ~= 0 then
+      local veh = GetVehiclePedIsIn(playerPed, false)
+      if lastVehicle and tonumber(lastVehicle) ~= 0 and lastVehicle == veh then
         if GetVehicleEngineHealth(lastVehicle) > 360 then
-          if engineIsOn and not GetIsVehicleEngineRunning(lastVehicle) and GetVehicleFuelLevel(lastVehicle) > 0.9 then
+          if engineIsOn and not GetIsVehicleEngineRunning(lastVehicle) and GetVehicleFuelLevel(lastVehicle) > 0.9 and not IsVehicleNeedsToBeHotwired(lastVehicle) then
             --for i = 1, #policeVehicles do
               --if IsVehicleModel(lastVehicle, policeVehicles[i]) then
             SetVehicleEngineOn(lastVehicle, true, true, true)

@@ -16,32 +16,34 @@ RegisterServerEvent("lock:checkForKey")
 AddEventHandler("lock:checkForKey", function(plate)
   local userSource = tonumber(source)
   local user = exports["essentialmode"]:getPlayerFromId(userSource)
-    local inv = user.getActiveCharacterData("inventory")
-    for i = 1, #inv do
-      local item = inv[i]
-      if item then
-        if string.find(item.name, "Key") then
-          if string.find(plate, item.plate) then
-            if isLocked(plate) then
-              setLocked(plate, false)
-              TriggerClientEvent("lock:unlockVehicle", userSource)
-            else
-              setLocked(plate, true)
-              TriggerClientEvent("lock:lockVehicle", userSource)
-            end
-            return
+  local inv = user.getActiveCharacterData("inventory")
+  for i = 1, #inv do
+    local item = inv[i]
+    if item then
+      if string.find(item.name, "Key") then
+        if string.find(plate, item.plate) then
+          if isLocked(plate) then
+            setLocked(plate, false)
+            TriggerClientEvent("lock:unlockVehicle", userSource)
+          else
+            setLocked(plate, true)
+            TriggerClientEvent("lock:lockVehicle", userSource)
           end
+          return
         end
       end
     end
-    -- no key owned for vehicle trying to lock/unlock
-    print("Player did not have the key to unlock vehicle with plate #" .. plate)
-    TriggerClientEvent("lock:lookForKeys", userSource, plate)
+  end
+  -- no key owned for vehicle trying to lock/unlock
+  --print("Player did not have the key to unlock vehicle with plate #" .. plate)
+  --TriggerClientEvent("lock:lookForKeys", userSource, plate)
+  TriggerEvent("lock:foundKeys", false, plate, userSource)
 end)
 
 RegisterServerEvent("lock:foundKeys")
-AddEventHandler("lock:foundKeys", function(found, plate)
+AddEventHandler("lock:foundKeys", function(found, plate, src)
     local userSource = tonumber(source)
+    if src then userSource = src end
     if found then
         local vehicle_key = {
             name = "Key -- " .. plate,
