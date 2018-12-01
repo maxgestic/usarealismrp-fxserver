@@ -41,6 +41,7 @@ local vehicleShopItems = {
 			{make = "Pfister", model = "Comet 1", price = 55550, hash = -1045541610, storage_capacity = 125.0},
 			{make = "Pfister", model = "Comet 2", price = 55550, hash = -2022483795, storage_capacity = 125.0},
 			{make = "Pfister", model = "Comet 5", price = 95000, hash = "comet5", storage_capacity = 125.0},
+			{make = "Dinka", model = "Jester 3", price = 100000, hash = "jester3", storage_capacity = 125.0}
 			--{make = "Benefactor", model = "Schwartzer", price = 80000, hash = "schwarzer", storage_capacity = 135.0}
 			--{make = "Annis", model = "Savestra", price = 120000, hash = "savestra", storage_capacity = 125.0}
 		},
@@ -53,7 +54,8 @@ local vehicleShopItems = {
 			{make = "Imponte", model = "Ruiner", price = 12575, hash = -227741703, storage_capacity = 160.0},
 			{make = "Imponte", model = "Nightshade", price = 15850, hash = -1943285540, storage_capacity = 160.0},
 			{make = "1969 Ford", model = "Mustang Boss 302", price = 16775, hash = -1685021548, storage_capacity = 130.0},
-			{make = "Vapid", model = "Dominator", price = 19400, hash = 80636076, storage_capacity = 160.0},
+			{make = "Vapid", model = "Dominator", price = 25500, hash = 80636076, storage_capacity = 160.0},
+			{make = "Vapid", model = "Dominator 3", price = 100000, hash = "dominator3", storage_capacity = 140.0},
 			{make = "Dodge", model = "Challenger", price = 75400, hash = -1800170043, storage_capacity = 160.0},
 			{make = "Willand", model = "Faction Custom", price = 25575, hash = -1790546981, storage_capacity = 160.0},
 			{make = "Willand", model = "Faction Custom Donk", price = 35575, hash = -2039755226, storage_capacity = 160.0},
