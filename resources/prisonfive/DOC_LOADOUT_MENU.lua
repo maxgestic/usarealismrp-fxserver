@@ -431,6 +431,7 @@ end
 function CreateClockOutButton(menu)
     local item = NativeUI.CreateItem("Clock Out", "")
     item.Activated = function(parentmenu, selected)
+      RemoveAllPedWeapons(GetPlayerPed(-1), true)
         TriggerServerEvent("doc:clockOut")
         TriggerServerEvent("usa:loadPlayerComponents")
         TriggerServerEvent("mini:giveMeMyWeaponsPlease")
