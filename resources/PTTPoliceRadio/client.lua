@@ -60,37 +60,20 @@ local control = nil
 
 RegisterNetEvent("ptt:radio")
 AddEventHandler("ptt:radio", function(key)
+	print("radio key set!")
 	control = key
 end)
-
-local ped = nil
-local parachuting = nil
-local exists = nil
-local dead = nil
-local isInVeh = nil
 
 -- RADIO ANIMATIONS --
 
 Citizen.CreateThread(function()
 	while true do
-		Wait(400)
-		ped = PlayerPedId()
-		parachuting = GetPedParachuteState(ped)
-		exists = DoesEntityExist( ped )
-		dead = IsEntityDead( ped )
-		isInVeh = IsPedInAnyVehicle(PlayerPedId(), true)
-	end
-end)
-
-Citizen.CreateThread(function()
-	while true do
 		Citizen.Wait( 0 )
-		if control ~= nil and parachuting == -1 then
-			if exists and not dead then
+		local ped = PlayerPedId()
+		if control ~= nil and GetPedParachuteState(ped) == -1 then
+			if DoesEntityExist( ped ) and not IsEntityDead( ped ) then
 				if not IsPauseMenuActive() then
-					if not HasAnimDictLoaded( "random@arrests" ) then
-						loadAnimDict( "random@arrests" )
-					end
+					loadAnimDict( "random@arrests" )
 					if IsControlJustReleased( 0, control ) then
 						--TriggerServerEvent('InteractSound_SV:PlayOnSource', 'off', 0.1)
 						ClearPedTasks(ped)
@@ -122,13 +105,12 @@ end )
 Citizen.CreateThread( function()
 	while true do
 		Citizen.Wait( 0 )
-		if parachuting == -1 then
-			if exists and not dead and not isInVeh then
+		local ped = PlayerPedId()
+		if GetPedParachuteState(ped) == -1 then
+			if DoesEntityExist( ped ) and not IsEntityDead( ped ) and not IsPedInAnyVehicle(PlayerPedId(), true) then
 				DisableControlAction( 0, 20, true ) -- INPUT_MULTIPLAYER_INFO (Z)
 				if not IsPauseMenuActive() then
-					if not HasAnimDictLoaded( "reaction@intimidation@cop@unarmed" ) then
-						loadAnimDict( "reaction@intimidation@cop@unarmed" )
-					end
+					loadAnimDict( "reaction@intimidation@cop@unarmed" )
 					if IsDisabledControlJustReleased( 0, 20 ) then -- INPUT_MULTIPLAYER_INFO (Z)
 						ClearPedTasks(ped)
 						SetEnableHandcuffs(ped, false)
@@ -154,17 +136,13 @@ local UNHOLSTERED_WEAPON = nil
  Citizen.CreateThread(function()
 	while true do
 		Wait(0)
-		if parachuting == -1 then
-			if exists and not dead and not isInVeh then
-				if not HasAnimDictLoaded( "reaction@intimidation@1h" ) then
-					loadAnimDict( "reaction@intimidation@1h" )
-				end
+		local ped = PlayerPedId()
+		if GetPedParachuteState(ped) == -1 then
+			if DoesEntityExist( ped ) and not IsEntityDead( ped ) and not IsPedInAnyVehicle(PlayerPedId(), true) then
+				loadAnimDict( "reaction@intimidation@1h" )
 				--loadAnimDict( "weapons@pistol@" )
-				if not HasAnimDictLoaded( "rcmjosh4" ) then
-					loadAnimDict(  "rcmjosh4" )
-				end
-				local weaponcheck = CheckWeapon(ped)
-				if weaponcheck then
+				loadAnimDict(  "rcmjosh4" )
+				if CheckWeapon(ped) then
 					if holstered then
 						if not IS_COP and GetPedDrawableVariation(ped, 8) ~= 122 and GetPedDrawableVariation(ped, 8) ~= 130 then
 							local togive = GetSelectedPedWeapon(ped) -- to prevent gun from coming out too early for animation, remove the gun when it starts and only give at right time
@@ -183,7 +161,7 @@ local UNHOLSTERED_WEAPON = nil
 						end
 						holstered = false
 					end
-				elseif not weaponcheck then
+				elseif not CheckWeapon(ped) then
 					if not holstered then
 						if not IS_COP and GetPedDrawableVariation(ped, 8) ~= 122 and GetPedDrawableVariation(ped, 8) ~= 130 then
 							SetCurrentPedWeapon(ped, UNHOLSTERED_WEAPON, true)
