@@ -41,22 +41,23 @@ AddEventHandler("essence:refuelWithJerryCan", function(essence, vplate, vmodel)
 	local percent = math.random(65, 75)
 	local new_amount = (percent/100)*0.142
 	local _source = source
-
-	if serverEssenceArray[vplate] then
-		if serverEssenceArray[vplate].es < new_amount then
-			serverEssenceArray[vplate].es = new_amount -- set to 75% of a full tank
-			TriggerClientEvent("usa:notify", _source, "Refuel complete!")
+	if vplate then
+		if serverEssenceArray[vplate] then
+			if serverEssenceArray[vplate].es < new_amount then
+				serverEssenceArray[vplate].es = new_amount -- set to 75% of a full tank
+				TriggerClientEvent("usa:notify", _source, "Refuel complete!")
+			else
+				TriggerClientEvent("usa:notify", _source, "Tank already filled!")
+			end
 		else
-			TriggerClientEvent("usa:notify", _source, "Tank already filled!")
+			local newEntry = {
+				plate = vplate,
+				model = vmodel,
+				es = new_amount
+			}
+			serverEssenceArray[vplate] = newEntry
+			TriggerClientEvent("usa:notify", _source, "Refuel complete!")
 		end
-	else
-		local newEntry = {
-			plate = vplate,
-			model = vmodel,
-			es = new_amount
-		}
-		serverEssenceArray[vplate] = newEntry
-		TriggerClientEvent("usa:notify", _source, "Refuel complete!")
 	end
 
 	--[[
@@ -80,17 +81,19 @@ end)
 RegisterServerEvent("essence:setToAllPlayerEscense")
 AddEventHandler("essence:setToAllPlayerEscense", function(essence, vplate, vmodel)
 	local _source = source
-	if serverEssenceArray[vplate] then
-		serverEssenceArray[vplate].es = essence
-		--print("essence updated: " .. essence)
-	else
-		local newEntry = {
-			plate = vplate,
-			model = vmodel,
-			es = essence
-		}
-		serverEssenceArray[vplate] = newEntry
-		--print("new entry added: " .. vplate)
+	if vplate then
+		if serverEssenceArray[vplate] then
+			serverEssenceArray[vplate].es = essence
+			--print("essence updated: " .. essence)
+		else
+			local newEntry = {
+				plate = vplate,
+				model = vmodel,
+				es = essence
+			}
+			serverEssenceArray[vplate] = newEntry
+			--print("new entry added: " .. vplate)
+		end
 	end
 	--[[
 	local bool, ind = searchByModelAndPlate(vplate, vmodel)
@@ -156,12 +159,14 @@ end)
 
 
 RegisterServerEvent("vehicule:getFuel")
-AddEventHandler("vehicule:getFuel", function(plate,model)
+AddEventHandler("vehicule:getFuel", function(vplate,model)
 	local _source = source
-	if serverEssenceArray[vplate] then
-		TriggerClientEvent("vehicule:sendFuel", _source, 1, serverEssenceArray[vplate].es)
-	else
-		TriggerClientEvent("vehicule:sendFuel", _source, 0, 0)
+	if vplate then
+		if serverEssenceArray[vplate] then
+			TriggerClientEvent("vehicule:sendFuel", _source, 1, serverEssenceArray[vplate].es)
+		else
+			TriggerClientEvent("vehicule:sendFuel", _source, 0, 0)
+		end
 	end
 	--[[
 	local bool, ind = searchByModelAndPlate(plate, model)
