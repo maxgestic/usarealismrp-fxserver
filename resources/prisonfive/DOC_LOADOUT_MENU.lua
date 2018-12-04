@@ -571,6 +571,18 @@ function SpawnVehicle(model)
     SetVehicleHasBeenOwnedByPlayer(veh, true)
     SetVehicleExplodesOnHighExplosionDamage(veh, false)
     SetVehicleLivery(veh, 2) -- DOC SKIN
+
+    -- give key to owner
+    local vehicle_key = {
+      name = "Key -- " .. GetVehicleNumberPlateText(veh),
+      quantity = 1,
+      type = "key",
+      owner = "GOVT",
+      make = "GOVT",
+      model = "GOVT",
+      plate = GetVehicleNumberPlateText(veh)
+    }
+		TriggerServerEvent("garage:giveKey", vehicle_key)
   end)
 end
 

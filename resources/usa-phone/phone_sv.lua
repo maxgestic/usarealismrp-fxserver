@@ -360,6 +360,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 						-----------------------
 						-- insert into convo --
 						-----------------------
+						if #target_phone.conversations[x].messages > 20 then table.remove(target_phone.conversations[x].messages, 1) end -- temporary until messages separated into own DB
 						table.insert(target_phone.conversations[x].messages, message)
 						UpdatePhoneWithNumber(toNumber, "conversations", target_phone.conversations)
 						convoExistedForUser = true
@@ -406,6 +407,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 						to = toName,
 						message = msg
 					}
+					if #item.conversations[x].messages > 20 then table.remove(item.conversations[x].messages, 1) end -- temporary until messages separated into own DB
 					table.insert(item.conversations[x].messages, message)
 					UpdatePhoneWithNumber(fromNumber, "conversations", item.conversations)
 					convoExistedForUser = true
