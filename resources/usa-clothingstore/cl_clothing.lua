@@ -70,6 +70,14 @@ Citizen.CreateThread(function()
 			end
 end)
 
+RegisterNetEvent("clothing-store:openMenu")
+AddEventHandler("clothing-store:openMenu", function()
+	--------------------
+	-- Open Menu --
+	--------------------
+	MainMenu:Visible(true)
+end)
+
 -- menu processing / opening --
 Citizen.CreateThread(function()
 			while true do
@@ -88,10 +96,6 @@ Citizen.CreateThread(function()
 									TriggerEvent("properties:getPropertyGivenCoords", mycoords.x, mycoords.y, mycoords.z, function(property)
 										TriggerServerEvent("clothing-store:chargeCustomer", property)
 									end)
-									--------------------
-									-- Open Menu --
-									--------------------
-									MainMenu:Visible(true)
 								else
 									TriggerEvent("usa:notify", "Can't use the clothing store when dead!")
 								end

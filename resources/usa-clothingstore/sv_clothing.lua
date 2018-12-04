@@ -17,6 +17,8 @@ AddEventHandler("clothing-store:chargeCustomer", function(property)
 		if property then
 			TriggerEvent("properties:addMoney", property.name, round(0.20 * amount, 0))
 		end
+		-- OPEN MENU --
+		TriggerClientEvent("clothing-store:openMenu", user_source)
 	else
 		TriggerClientEvent("usa:notify", user_source, "You don't have enough money!")
 	end

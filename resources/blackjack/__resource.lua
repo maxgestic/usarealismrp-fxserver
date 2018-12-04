@@ -6,7 +6,6 @@ server_scripts {
 
 client_scripts {
 	'shared.js',
-	'client/blackjack.js',
 	'client/client.js'
 }
 
