@@ -70,7 +70,10 @@ local vehicleShopItems = {
 			{make = "Declasse", model = "Sabre GT", price = 35000, hash = -1685021548, storage_capacity = 155.0},
 			{make = "Declasse", model = "Sabre Turbo Custom", price = 65000, hash = 223258115, storage_capacity = 130.0},
 			{make = "Declasse", model = "Stallion", price = 40000, hash = 1923400478, storage_capacity = 155.0},
-			{make = "Cheval", model = "Picador", price = 35000, hash = "picador", storage_capacity = 170.0}
+			{make = "Cheval", model = "Picador", price = 35000, hash = "picador", storage_capacity = 170.0},
+			{make = "Vapid", model = "Blade", price = 55000, hash = "blade", storage_capacity = 170.0},
+			{make = "Vapid", model = "Hotknife", price = 90000, hash = "hotknife", storage_capacity = 170.0},
+			{make = "Imponte", model = "Phoenix", price = 90000, hash = "phoenix", storage_capacity = 170.0}
 		},
 		["Trucks"] = {
 			{make = "Karin", model = "Rebel", price = 19500, hash = 1207771834, storage_capacity = 230.0},
@@ -86,16 +89,21 @@ local vehicleShopItems = {
 			--{make = "Lifted Dodge", model = "Ram", price = 120000, hash = 989381445, storage_capacity = 230.0},
 			{make = "Vapid", model = "Sandking 2", price = 120000, hash = 989381445, storage_capacity = 230.0},
 			{make = "Vapid", model = "Contender", price = 40500, hash = 683047626, storage_capacity = 230.0},
-			{make = "Vapid", model = "Guardian", price = 350000, hash =  -2107990196, storage_capacity = 230.0}
+			{make = "Vapid", model = "Guardian", price = 350000, hash =  -2107990196, storage_capacity = 230.0},
+			{make = "Bravado", model = "Rat-Truck", price = 110000, hash =  "ratloader2", storage_capacity = 230.0},
+			{make = "Bravado", model = "Duneloader", price = 85000, hash =  "dloader", storage_capacity = 230.0},
 		},
 		["Compacts"] = {
 			{make = "Weedems", model = "Caddy", price = 3000, hash = -537896628, storage_capacity = 80.0},
-			{make = "Karin", model = "Dilettante", price = 5500, hash = -1130810103, storage_capacity = 170.0},
-			{make = "Benefactor", model = "Panto", price = 6000, hash = -431692672, storage_capacity = 125.0},
-			{make = "Declasse", model = "Rhapsody", price = 6500, hash = 841808271, storage_capacity = 125.0},
-			{make = "Dinka", model = "Blista Compact", price = 6500, hash = 1039032026, storage_capacity = 135.0},
+			{make = "Karin", model = "Dilettante", price = 11500, hash = -1130810103, storage_capacity = 170.0},
+			{make = "Benefactor", model = "Panto", price = 12000, hash = -431692672, storage_capacity = 125.0},
+			{make = "Declasse", model = "Rhapsody", price = 8000, hash = 841808271, storage_capacity = 125.0},
+			{make = "Dinka", model = "Blista Compact", price = 10000, hash = 1039032026, storage_capacity = 135.0},
 			{make = "Bollocan", model = "Prairie", price = 8000, hash = -1450650718, storage_capacity = 125.0},
-			{make = "Weeny", model = "Issi", price = 8500, hash = -1177863319, storage_capacity = 125.0}
+			{make = "Weeny", model = "Issi", price = 16000, hash = -1177863319, storage_capacity = 125.0},
+			{make = "Weeny", model = "Issi Classic", price = 15000, hash = "issi3", storage_capacity = 125.0},
+			{make = "Grotti", model = "Brioso", price = 35000, hash = -1177863319, storage_capacity = 125.0},
+			{make = "Karin", model = "Futo", price = 35000, hash = "futo", storage_capacity = 125.0}
 		},
 		["Offroads"] = {
 			{make = "Canis", model = "Kalahari", price = 10600, hash = 92612664, storage_capacity = 170.0},
@@ -108,7 +116,10 @@ local vehicleShopItems = {
 			{make = "Vapid", model = "Trophy Truck", price = 50000, hash = 101905590, storage_capacity = 100.0},
 			{make = "Vapid", model = "Trophy Truck 2", price = 70000, hash = -663299102, storage_capacity = 100.0},
 			{make = "Canis", model = "Kamacho", price = 150000, hash = "kamacho", storage_capacity = 130.0},
-			{make = "Dune", model = "Buggy", price = 95000, hash = -1661854193, storage_capacity = 70.0}
+			{make = "Dune", model = "Buggy", price = 95000, hash = -1661854193, storage_capacity = 70.0},
+			{make = "BF", model = "Injection", price = 50000, hash = 1126868326, storage_capacity = 70.0},
+			{make = "Canis", model = "Bodhi", price = 50000, hash = "bodhi2", storage_capacity = 70.0},
+			{make = "Nagasaki", model = "Hot Rod Blazer", price = 60000, hash = "blazer3", storage_capacity = 70.0}
 		},
 		["Motorcycles"] = {
 			{make = "Pegassi", model = "Faggio", price = 1200, hash = -1842748181, storage_capacity = 30.0},
