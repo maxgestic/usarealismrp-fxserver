@@ -213,6 +213,7 @@ AddEventHandler("LSC:finished", function(veh)
 	--Do w/e u need with all this stuff when vehicle drives out of lsc
 end)
 
+-- TODO: index vehicles as hash map with plate as key for faster look up
 RegisterServerEvent("customs:saveCarData")
 AddEventHandler("customs:saveCarData", function(data, plate, source)
 	local userSource = tonumber(source)
@@ -227,6 +228,7 @@ AddEventHandler("customs:saveCarData", function(data, plate, source)
 					vehicle.customizations = data
 					userVehicles[i] = vehicle
 					user.setActiveCharacterData("vehicles", userVehicles)
+					break
 				end
 			end
 		end

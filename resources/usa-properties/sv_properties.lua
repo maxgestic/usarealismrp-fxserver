@@ -667,80 +667,23 @@ end
 ------------------------
 -- Save Property Data --
 ------------------------
+-- TODO: pass into save property data the specific field to update, instead of writing entire document every save
 function SavePropertyData(property_name)
-  -- Get the document with that property name --
-  TriggerEvent('es:exposeDBFunctions', function(db)
-    db.getDocumentByRow("properties", "name", property_name, function(doc, rText)
-      if rText then
-        --RconPrint("\nrText = " .. rText)
-      end
-      if doc then
-        PROPERTIES[property_name]._rev = nil
-        db.updateDocument("properties", doc._id, PROPERTIES[property_name], function(status)
-          print("called db.updateDocument checking status")
-          if status == true then
-            print("\nDocument updated.")
-          else
-            print("\nStatus Response: " .. status)
-            if tostring(status) == "201" then
-              print("\nDocument successfully updated!")
-            end
-          end
-        end)
+  TriggerEvent('es:exposeDBFunctions', function(couchdb)
+    PROPERTIES[property_name]._rev = nil
+    couchdb.updateDocument("properties", PROPERTIES[property_name]._id, PROPERTIES[property_name], function(status)
+      print("called db.updateDocument checking status")
+      if status == true then
+        print("\nDocument updated.")
+      else
+        print("\nStatus Response: " .. status)
+        if tostring(status) == "201" then
+          print("\nDocument successfully updated!")
+        end
       end
     end)
   end)
 end
-
------------------------------------------
--- Save property data every x minutes  --
------------------------------------------
---[[
-Citizen.CreateThread(function()
-
-	local minutes = 32
-	local interval = minutes * 60000
-
-	function savePropertyData()
-		print("calling savePropertyData()...")
-		SetTimeout(interval, function()
-            TriggerEvent('es:exposeDBFunctions', function(db)
-                for name, info in pairs(PROPERTIES) do
-                    print("trying to save property: " .. name)
-                    -- Get the document with that property name
-                    db.getDocumentByRow("properties", "name", name, function(doc, rText)
-                        if rText then
-                            --RconPrint("\nrText = " .. rText)
-                        end
-                        if doc then
-                            print("doc found!")
-                            info._rev = nil
-                            db.updateDocument("properties", doc._id, info, function(status)
-                                --print("info._rev: " .. info._rev)
-                                print("inside of db.updateDocument!")
-                                --print("doc._id = " .. doc._id)
-                                print("status: " .. tostring(status))
-                                if status == true then
-                                    print("Property document successfully updated!")
-                                else
-                                    --RconPrint("\nStatus Response: " .. status)
-                                    if tostring(status) == "202" then
-                                        --RconPrint("\nDocument successfully updated!")
-                                        print("Property document successfully updated!")
-                                    end
-                                end
-                            end)
-                        end
-                    end)
-                end
-            end)
-			savePropertyData()
-		end)
-	end
-    savePropertyData()
-end)
--]]
----------------------------------------
 
 --[[
 TriggerEvent('es:addCommand','loadproperties', function(source, args, user)
