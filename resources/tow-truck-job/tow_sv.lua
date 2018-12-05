@@ -11,7 +11,7 @@ AddEventHandler("towJob:giveReward", function(property)
 		if property then
 			TriggerEvent("properties:addMoney", property.name, math.ceil(0.70 * TOW_REWARD))
 		end
-		TriggerClientEvent("towJob:success", userSource)
+		TriggerClientEvent("towJob:success", userSource, TOW_REWARD)
 	--end)
 end)
 

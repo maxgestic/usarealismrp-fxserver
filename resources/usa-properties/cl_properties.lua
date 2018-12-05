@@ -497,7 +497,7 @@ Citizen.CreateThread(function()
                                         -------------------
                                         local spawnbtn = NativeUI.CreateItem("Spawn Here", "Set your spawn to this location.")
                                         spawnbtn.Activated = function(parentmenu, selected)
-                                            local spawn = { x = nearest_property_info.x, y = nearest_property_info.y, z = nearest_property_info.z }
+                                            local spawn = { x = nearest_property_info.x, y = nearest_property_info.y, z = nearest_property_info.z, name = nearest_property_info.name }
                                             TriggerServerEvent("character:setSpawnPoint", spawn)
                                         end
                                         mainMenu:AddItem(spawnbtn)

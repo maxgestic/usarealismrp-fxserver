@@ -32,27 +32,43 @@ AddEventHandler("properties:getPropertyMoney", function(name, cb)
     cb(PROPERTIES[name].storage.money)
 end)
 
+-- TODO: see if hittch frame warnings stop after a little
 RegisterServerEvent("properties:checkSpawnPoint")
 AddEventHandler("properties:checkSpawnPoint", function(usource)
 	local player = exports["essentialmode"]:getPlayerFromId(usource)
 	local spawn = player.getActiveCharacterData("spawn")
 	if type(spawn) ~= "nil" then
 		print("spawn existed! checking if spawn is still valid after evictions!")
-		for name, info in pairs(PROPERTIES) do
-			if info.x == spawn.x and info.y == spawn.y and info.z == spawn.z then
-				print("property still valid after eviction!")
-				if info.owner.identifier == GetPlayerIdentifiers(usource)[1] then
-					print("Still owns property, leaving spawn!")
-				else
-					print("does not own property anymore, resetting spawn!")
-					player.setActiveCharacterData("spawn", nil)
-				end
-				return
-			end
-		end
-		-- not valid at this point, remove
-		print("removing set spawn!")
-		player.setActiveCharacterData("spawn", nil)
+    -- faster look up --
+    if spawn.name then
+      if PROPERTIES[spawn.name] then
+        if PROPERTIES[spawn.name].owner.identifier == GetPlayerIdentifiers(usource)[1] then
+          print("Still owns property, leaving spawn!")
+        else
+          print("does not own property anymore, resetting spawn!")
+          player.setActiveCharacterData("spawn", nil)
+        end
+      end
+    else
+      -- for backwards compatability (with spawns that have no .name property set yet) --
+  		for name, info in pairs(PROPERTIES) do
+  			if info.x == spawn.x and info.y == spawn.y and info.z == spawn.z then
+  				print("property still valid after eviction!")
+  				if info.owner.identifier == GetPlayerIdentifiers(usource)[1] then
+  					print("Still owns property, leaving spawn!")
+            spawn.name = name
+            player.setActiveCharacterData("spawn", spawn)
+  				else
+  					print("does not own property anymore, resetting spawn!")
+  					player.setActiveCharacterData("spawn", nil)
+  				end
+  				return
+  			end
+  		end
+      -- not valid at this point, remove
+      print("removing set spawn!")
+      player.setActiveCharacterData("spawn", nil)
+    end
 	end
 end)
 

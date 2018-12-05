@@ -234,7 +234,7 @@ local vehicleShopItems = {
 			{make = "Grotti", model = "Stinger GT", price = 315600, hash = -2098947590, storage_capacity = 135.0},
 			{make = "Pegassi", model = "Infernus Classic", price = 350750, hash = -1405937764, storage_capacity = 135.0},
 			{make = "Albany", model = "Roosevelt Valor", price = 550350, hash = -602287871, storage_capacity = 135.0},
-			{make = "Grotti", model = "Cheetah Clasic", price = 100000, hash = 223240013, storage_capacity = 120.0},
+			{make = "Grotti", model = "Cheetah Classic", price = 100000, hash = 223240013, storage_capacity = 120.0},
 			{make = "Invetero", model = "Coquette Classic", price = 100000, hash = 1011753235, storage_capacity = 120.0},
 			{make = "Invetero", model = "Coquette Blackfin", price = 130000, hash = 784565758, storage_capacity = 120.0},
 			{make = "Dewbauchee", model = "JB 700", price = 100000, hash = 1051415893, storage_capacity = 120.0},

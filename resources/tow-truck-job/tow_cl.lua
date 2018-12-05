@@ -113,8 +113,8 @@ function getVehicleInDirection(coordFrom, coordTo)
 end
 
 RegisterNetEvent("towJob:success")
-AddEventHandler("towJob:success", function()
-	TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0You have impounded the vehicle for ^2$700^0!")
+AddEventHandler("towJob:success", function(reward)
+	TriggerEvent("chatMessage", "Tow", { 255,99,71 }, "^0You have impounded the vehicle for ^2$" .. reward .. "^0!")
 end)
 
 function impoundVehicle()

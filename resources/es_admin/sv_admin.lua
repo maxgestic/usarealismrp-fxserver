@@ -527,7 +527,8 @@ AddEventHandler('rconCommand', function(commandName, args)
 								RconPrint("\nrText = " .. rText)
 								RconPrint("\nerr = " .. err)
 							else
-								fetchAllBans()
+								--fetchAllBans()
+								table.remove(bans, i)
 							end
 						end, "DELETE", "", {["Content-Type"] = 'application/json'})
 						RconPrint("\nPlayer "..bannedPlayer.name.." has been unbanned!")
@@ -639,7 +640,8 @@ AddEventHandler('rconCommand', function(commandName, args)
 				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
 				DropPlayer(targetPlayer, "Banned: " .. reason)
 				-- refresh lua table of bans for this resource
-				fetchAllBans()
+				--fetchAllBans()
+				table.insert(bans, {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())})
 			end)
 		end)
 	elseif commandName == "banid" then
@@ -672,7 +674,8 @@ AddEventHandler('rconCommand', function(commandName, args)
 			GetDoc.createDocument("bans",  {char_name = "?", name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
 				RconPrint("player banned!")
 				-- refresh lua table of bans for this resource --
-				fetchAllBans()
+				--fetchAllBans()
+				table.insert(bans, {char_name = "?", name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())})
 				-- send discord message --
 				local desc = "\n**Name:** " .. targetPlayerName
 				desc = desc .. "\n**Identifier:** " .. targetPlayer
@@ -728,7 +731,8 @@ AddEventHandler('rconCommand', function(commandName, args)
 			GetDoc.createDocument("bans",  {time = os.time(), duration = time, char_name = "?", name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
 				RconPrint("player banned!")
 				-- refresh lua table of bans for this resource --
-				fetchAllBans()
+				--fetchAllBans()
+				table.insert(bans, {time = os.time(), duration = time, char_name = "?", name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())})
 				-- send discord message --
 				local desc = "\n**Name:** " .. targetPlayerName
 				desc = desc .. "\n**Identifier:** " .. targetPlayer
@@ -839,6 +843,7 @@ end)
 
 --------------- BAN MANAGEMENT: -------------------
 
+-- TODO: remove server sided bans table completely, will need to need to modify unban rcon command
 function fetchAllBans()
 	print("fetching all bans...")
 	PerformHttpRequest("http://127.0.0.1:5984/bans/_all_docs?include_docs=true" --[[ string ]], function(err, text, headers)
@@ -861,56 +866,62 @@ end
 -- PERFORM FIRST TIME DB CHECK --
 exports["globals"]:PerformDBCheck("BANS", "bans", fetchAllBans)
 
--- check for player being banned
+--[[check for player being banned --
 AddEventHandler('playerConnecting', function(name, setReason)
+	local usource = source
 	--local identifier = GetPlayerIdentifiers(source)[1]
-	local allPlayerIdentifiers = GetPlayerIdentifiers(tonumber(source))
-	for i = 1, #bans do
-		local bannedPlayer = bans[i]
-		local allBannedPlayerIdentifiers = bannedPlayer.identifiers
-		if allBannedPlayerIdentifiers then
-			for j = 1, #allBannedPlayerIdentifiers do
-				local bannedPlayerId = allBannedPlayerIdentifiers[j]
-				for k = 1, #allPlayerIdentifiers do
-					local connectingPlayerId = allPlayerIdentifiers[k]
-					if bannedPlayerId == connectingPlayerId then
-						if bannedPlayer.duration then
-							if getHoursFromTime(bannedPlayer.time) < bannedPlayer.duration then
-								print("getHoursFromTime(bannedPlayer.time): " .. getHoursFromTime(bannedPlayer.time))
-								print(GetPlayerName(tonumber(source)) .. " has been temp banned from your server and should not be able to play!")
-								setReason("Temp Banned: " .. bannedPlayer.reason .. ". This ban is in place for " .. bannedPlayer.duration .. " hour(s).")
-								CancelEvent()
-								return
-							else
-								local docid = bannedPlayer._id
-								local docRev = bannedPlayer._rev
-								--RconPrint("\nfound a matching identifer to unban for "..bannedPlayer.name.."!")
-								-- found a match, unban
-								PerformHttpRequest("http://127.0.0.1:5984/bans/"..docid.."?rev="..docRev, function(err, rText, headers)
-									if err == 0 then
-										print("\nrText = " .. rText)
-										print("\nerr = " .. err)
-									else
-										fetchAllBans()
-									end
-								end, "DELETE", "", {["Content-Type"] = 'application/json'})
-								print("\nPlayer "..bannedPlayer.name.." has been unbanned!")
-								return
-							end
-						else
-							print(GetPlayerName(tonumber(source)) .. " has been perma banned from your server and should not be able to play!")
-							setReason("Banned: " .. bannedPlayer.reason .. ". You may file an appeal at https://usarrp.net")
-							CancelEvent()
-							return
-						end
-					end
-				end
-			end
+	local allPlayerIdentifiers = GetPlayerIdentifiers(tonumber(usource))
+	local gameLicense
+	for j = 1, #allPlayerIdentifiers do
+		if string.find(allPlayerIdentifiers[j], "license") then
+			gameLicense = allPlayerIdentifiers[j]
+			break
 		end
 	end
+	TriggerEvent('es:exposeDBFunctions', function(couchdb)
+		local query = {
+			["identifiers"] = {
+				["$elemMatch"] = {
+					["$eq"] = gameLicense
+				}
+			}
+		}
+		couchdb.getDocumentByRows("bans", query, function(doc)
+			if doc then
+				print("found banned player document, name: " .. doc.name)
+				if doc.duration then
+					if getHoursFromTime(doc.time) < doc.duration then
+						print("getHoursFromTime(bannedPlayer.time): " .. getHoursFromTime(doc.time))
+						print(name .. " has been temp banned from your server and should not be able to play!")
+						setReason("Temp Banned: " .. doc.reason .. ". This ban is in place for " .. doc.duration .. " hour(s).")
+						CancelEvent()
+					else
+						local docid = doc._id
+						local docRev = doc._rev
+						--RconPrint("\nfound a matching identifer to unban for "..bannedPlayer.name.."!")
+						-- found a match, unban
+						PerformHttpRequest("http://127.0.0.1:5984/bans/"..docid.."?rev="..docRev, function(err, rText, headers)
+							if err == 0 then
+								print("\nrText = " .. rText)
+								print("\nerr = " .. err)
+							else
+								fetchAllBans()
+							end
+						end, "DELETE", "", {["Content-Type"] = 'application/json'})
+						print("\nPlayer ".. doc.name .." has been unbanned!")
+					end
+				else
+					--print(name .. " has been perma banned from your server and should not be able to play!")
+					--setReason("Banned: " .. doc.reason .. ". You may file an appeal at https://usarrp.net")
+					CancelEvent()
+				end
+			end
+		end)
+	end)
 end)
+--]]
 
-	-- ban command
+	-- ban command --
 	TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, user)
 		local userSource = tonumber(source)
 		-- add player to ban list
@@ -965,7 +976,8 @@ end)
 				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
 				DropPlayer(targetPlayer, "Banned: " .. reason .. " -- You can file an appeal at https://usarrp.net")
 				-- refresh lua table of bans for this resource
-				fetchAllBans()
+				--fetchAllBans()
+				table.insert(bans, {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())})
 			end)
 		end)
 	end, {
@@ -1028,13 +1040,14 @@ end)
 					}
 				}), { ["Content-Type"] = 'application/json' })
 			-- update db
-			GetDoc.createDocument("bans",  {time = os.time(), duration = time, char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+			GetDoc.createDocument("bans", {time = os.time(), duration = time, char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
 				print("player banned!")
 				-- drop player from session
 				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
 				DropPlayer(targetPlayer, "Temp Banned: " .. reason .. " This ban is in place for " .. time .. " hour(s).")
 				-- refresh lua table of bans for this resource
-				fetchAllBans()
+				--fetchAllBans()
+				table.insert(bans, {time = os.time(), duration = time, char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())})
 			end)
 		end)
 	end, {
@@ -1049,44 +1062,54 @@ end)
 RegisterServerEvent('mini:checkPlayerBannedOnSpawn')
 AddEventHandler('mini:checkPlayerBannedOnSpawn', function()
 	print("checking if loaded player is banned...")
-	local allPlayerIdentifiers = GetPlayerIdentifiers(tonumber(source))
-	for i = 1, #bans do
-		local bannedPlayer = bans[i]
-		local allBannedPlayerIdentifiers = bannedPlayer.identifiers
-		if allBannedPlayerIdentifiers then
-			for j = 1, #allBannedPlayerIdentifiers do
-				local bannedPlayerId = allBannedPlayerIdentifiers[j]
-				for k = 1, #allPlayerIdentifiers do
-					local connectingPlayerId = allPlayerIdentifiers[k]
-					if bannedPlayerId == connectingPlayerId then
-						if bannedPlayer.duration then
-							if getHoursFromTime(bannedPlayer.time) < bannedPlayer.duration then
-								print(GetPlayerName(tonumber(source)) .. " has been temp banned from your server and should not be able to play!")
-								DropPlayer(tonumber(source), "Temp Banned: " .. bannedPlayer.reason .. " This ban is in place for " .. bannedPlayer.duration .. " hour(s).")
-							else
-								local docid = bannedPlayer._id
-								local docRev = bannedPlayer._rev
-										--RconPrint("\nfound a matching identifer to unban for "..bannedPlayer.name.."!")
-										-- found a match, unban
-										PerformHttpRequest("http://127.0.0.1:5984/bans/"..docid.."?rev="..docRev, function(err, rText, headers)
-											if err == 0 then
-												print("\nrText = " .. rText)
-												print("\nerr = " .. err)
-											else
-												fetchAllBans()
-											end
-										end, "DELETE", "", {["Content-Type"] = 'application/json'})
-										print("\nPlayer "..bannedPlayer.name.." has been unbanned!")
-							end
-						else
-							print(GetPlayerName(tonumber(source)) .. " has been banned from your server and should not be able to play!")
-							DropPlayer(tonumber(source), "Banned: " .. bannedPlayer.reason)
-						end
-					end
-				end
-			end
+	local usource = source
+	--local identifier = GetPlayerIdentifiers(source)[1]
+	local allPlayerIdentifiers = GetPlayerIdentifiers(tonumber(usource))
+	local gameLicense
+	for j = 1, #allPlayerIdentifiers do
+		if string.find(allPlayerIdentifiers[j], "license") then
+			gameLicense = allPlayerIdentifiers[j]
+			break
 		end
 	end
+	TriggerEvent('es:exposeDBFunctions', function(couchdb)
+		local query = {
+			["identifiers"] = {
+				["$elemMatch"] = {
+					["$eq"] = gameLicense
+				}
+			}
+		}
+		couchdb.getDocumentByRows("bans", query, function(doc)
+			if doc then
+				print("found banned player document, name: " .. doc.name)
+				if doc.duration then
+					if getHoursFromTime(doc.time) < doc.duration then
+						print(GetPlayerName(tonumber(usource)) .. " has been temp banned from your server and should not be able to play!")
+						DropPlayer(tonumber(usource), "Temp Banned: " .. doc.reason .. " This ban is in place for " .. doc.duration .. " hour(s).")
+					else
+						local docid = doc._id
+						local docRev = doc._rev
+						--RconPrint("\nfound a matching identifer to unban for "..bannedPlayer.name.."!")
+						-- found a match, unban
+						PerformHttpRequest("http://127.0.0.1:5984/bans/"..docid.."?rev="..docRev, function(err, rText, headers)
+							if err == 0 then
+								print("\nrText = " .. rText)
+								print("\nerr = " .. err)
+							else
+								fetchAllBans()
+							end
+						end, "DELETE", "", {["Content-Type"] = 'application/json'})
+						print("\nPlayer ".. doc.name .." has been unbanned!")
+						return
+					end
+				else
+					print(GetPlayerName(tonumber(usource)) .. " has been perma banned from your server and should not be able to play!")
+					DropPlayer(tonumber(usource), "Banned: " .. doc.reason)
+				end
+			end
+		end)
+	end)
 end)
 
 -- unban stuff im gunna need:
