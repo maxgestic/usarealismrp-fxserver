@@ -102,7 +102,7 @@ local vehicleShopItems = {
 			{make = "Bollocan", model = "Prairie", price = 8000, hash = -1450650718, storage_capacity = 125.0},
 			{make = "Weeny", model = "Issi", price = 16000, hash = -1177863319, storage_capacity = 125.0},
 			{make = "Weeny", model = "Issi Classic", price = 15000, hash = "issi3", storage_capacity = 125.0},
-			{make = "Grotti", model = "Brioso", price = 35000, hash = -1177863319, storage_capacity = 125.0},
+			{make = "Grotti", model = "Brioso", price = 35000, hash = "brioso", storage_capacity = 125.0},
 			{make = "Karin", model = "Futo", price = 35000, hash = "futo", storage_capacity = 125.0}
 		},
 		["Offroads"] = {
