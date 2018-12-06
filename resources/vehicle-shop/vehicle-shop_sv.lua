@@ -269,8 +269,8 @@ local vehicleShopItems = {
 			{make = "Chrysler", model = "300 SRT8", price = 60000, hash = -304802106, storage_capacity = 175.0},
 			{make = "Audi", model = "A8", price = 60000, hash = -1008861746, storage_capacity = 155.0},
 			{make = "Mercedes", model = "E63 AMG", price = 80000, hash = -1255452397, storage_capacity = 155.0},
-			{make = "Maserati", model = "Quattroporte", price = 150000, hash = 1909141499, storage_capacity = 155.0},
-			{make = "Ubermacht", model = "Revolter", price = 200000, hash = "revolter", storage_capacity = 155.0}
+			{make = "Maserati", model = "Quattroporte", price = 150000, hash = 1909141499, storage_capacity = 155.0}
+			--{make = "Ubermacht", model = "Revolter", price = 200000, hash = "revolter", storage_capacity = 155.0} -- has miniguns in LSC
 		},
 		["Specials"] = {
 			{make = "Dundreary", model = "Stretch", price = 45000, hash = -1961627517, storage_capacity = 300.0},
