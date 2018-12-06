@@ -43,7 +43,8 @@ local vehicleShopItems = {
 			{make = "Pfister", model = "Comet 2", price = 55550, hash = -2022483795, storage_capacity = 125.0},
 			{make = "Pfister", model = "Comet 5", price = 95000, hash = "comet5", storage_capacity = 125.0},
 			{make = "Dinka", model = "Jester 3", price = 120000, hash = "jester3", storage_capacity = 125.0},
-			{make = "Ocelot", model = "Pariah", price = 120000, hash = "pariah", storage_capacity = 145.0}
+			{make = "Ocelot", model = "Pariah", price = 120000, hash = "pariah", storage_capacity = 145.0},
+			{make = "Hijak", model = "Ruston", price = 210000, hash = "ruston", storage_capacity = 90.0}
 			--{make = "Benefactor", model = "Schwartzer", price = 80000, hash = "schwarzer", storage_capacity = 135.0}
 			--{make = "Annis", model = "Savestra", price = 120000, hash = "savestra", storage_capacity = 125.0}
 		},
@@ -119,7 +120,8 @@ local vehicleShopItems = {
 			{make = "Dune", model = "Buggy", price = 95000, hash = -1661854193, storage_capacity = 70.0},
 			{make = "BF", model = "Injection", price = 50000, hash = 1126868326, storage_capacity = 70.0},
 			{make = "Canis", model = "Bodhi", price = 50000, hash = "bodhi2", storage_capacity = 70.0},
-			{make = "Nagasaki", model = "Hot Rod Blazer", price = 60000, hash = "blazer3", storage_capacity = 70.0}
+			{make = "Nagasaki", model = "Hot Rod Blazer", price = 60000, hash = "blazer3", storage_capacity = 70.0},
+			{make = "Nagasaki", model = "Street Blazer", price = 90000, hash = "blazer4", storage_capacity = 70.0}
 		},
 		["Motorcycles"] = {
 			{make = "Pegassi", model = "Faggio", price = 1200, hash = -1842748181, storage_capacity = 30.0},
@@ -196,7 +198,8 @@ local vehicleShopItems = {
 			{make = "Vapid", model = "GB200", price = 120000, hash = "gb200", storage_capacity = 100.0},
 			{make = "Lampadati", model = "Furore GT", price = 110000, hash = -1089039904, storage_capacity = 100.0},
 			{make = "Grotti", model = "Bestia GTS", price = 150000, hash = 1274868363, storage_capacity = 120.0},
-			{make = "Bravado", model = "Banshee 990R", price = 190000, hash = 633712403, storage_capacity = 100.0}
+			{make = "Bravado", model = "Banshee 990R", price = 190000, hash = 633712403, storage_capacity = 100.0},
+			{make = "Lampadati", model = "Tropos Rallye", price = 190000, hash = "tropos", storage_capacity = 100.0}
 		},
 		["Supers"] = {
 			{make = "Pegassi", model = "Infernus", price = 500500, hash = 418536135, storage_capacity = 100.0},
@@ -267,6 +270,7 @@ local vehicleShopItems = {
 			{make = "Audi", model = "A8", price = 60000, hash = -1008861746, storage_capacity = 155.0},
 			{make = "Mercedes", model = "E63 AMG", price = 80000, hash = -1255452397, storage_capacity = 155.0},
 			{make = "Maserati", model = "Quattroporte", price = 150000, hash = 1909141499, storage_capacity = 155.0},
+			{make = "Ubermacht", model = "Revolter", price = 200000, hash = "revolter", storage_capacity = 155.0}
 		},
 		["Specials"] = {
 			{make = "Dundreary", model = "Stretch", price = 45000, hash = -1961627517, storage_capacity = 300.0},
@@ -283,7 +287,10 @@ local vehicleShopItems = {
 			{make = "BF", model = "Raptor", price = 1000000, hash = -674927303, storage_capacity = 30.0},
 			{make = "Dewbauchee", model = "Massacro Special", price = 1800000, hash = -631760477, storage_capacity = 130.0},
 			{make = "Dinka", model = "Jester Special", price = 2500000, hash = -1106353882, storage_capacity = 120.0},
-			{make = "Brute", model = "Tour Bus", price = 80000, hash = 1941029835, storage_capacity = 180.0}
+			{make = "Brute", model = "Tour Bus", price = 80000, hash = 1941029835, storage_capacity = 180.0},
+			{make = "Vapid", model = "Benson", price = 200000, hash = "benson", storage_capacity = 500.0},
+			{make = "Mammoth", model = "Patriot Stretch", price = 180000, hash = "patriot2", storage_capacity = 270.0},
+			{make = "Declasse", model = "Hotring Sabre", price = 250000, hash = "hotring", storage_capacity = 90.0}
 		},
 		["Electric"] = {
 			{make = "Coil", model = "Raider", price = 300000, hash = "raiden", storage_capacity = 150.0},
