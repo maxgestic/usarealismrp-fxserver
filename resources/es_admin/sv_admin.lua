@@ -1065,18 +1065,21 @@ AddEventHandler('mini:checkPlayerBannedOnSpawn', function()
 	local usource = source
 	--local identifier = GetPlayerIdentifiers(source)[1]
 	local allPlayerIdentifiers = GetPlayerIdentifiers(tonumber(usource))
-	local gameLicense
+	local gameLicense, steamLicense
 	for j = 1, #allPlayerIdentifiers do
 		if string.find(allPlayerIdentifiers[j], "license") then
 			gameLicense = allPlayerIdentifiers[j]
-			break
+		elseif string.find(allPlayerIdentifiers[j], "steam") then
+			steamLicense = allPlayerIdentifiers[j]
 		end
 	end
 	TriggerEvent('es:exposeDBFunctions', function(couchdb)
 		local query = {
 			["identifiers"] = {
 				["$elemMatch"] = {
-					["$eq"] = gameLicense
+					["$or"]= {
+						gameLicense, steamLicense
+					}
 				}
 			}
 		}

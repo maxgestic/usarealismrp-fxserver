@@ -289,7 +289,7 @@ local vehicleShopItems = {
 			{make = "Dinka", model = "Jester Special", price = 2500000, hash = -1106353882, storage_capacity = 120.0},
 			{make = "Brute", model = "Tour Bus", price = 80000, hash = 1941029835, storage_capacity = 180.0},
 			{make = "Vapid", model = "Benson", price = 200000, hash = "benson", storage_capacity = 500.0},
-			{make = "Mammoth", model = "Patriot Stretch", price = 180000, hash = "patriot2", storage_capacity = 270.0},
+			--{make = "Mammoth", model = "Patriot Stretch", price = 180000, hash = "patriot2", storage_capacity = 270.0},
 			{make = "Declasse", model = "Hotring Sabre", price = 250000, hash = "hotring", storage_capacity = 90.0}
 		},
 		["Electric"] = {
