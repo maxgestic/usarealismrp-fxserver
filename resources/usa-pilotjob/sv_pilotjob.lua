@@ -29,7 +29,7 @@ local MISSIONS = {
                 },
                 {
                     name = "LSA",
-                    coords = { x = -1072.3, y = -3102.5, z = 13.9 },
+                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
                     requirement = "You did it! Now let's take the Mammatus back to Los Santos Airport."
                 },
                 {
@@ -69,7 +69,7 @@ local MISSIONS = {
                     },
                     {
                         name = "LSA",
-                        coords = { x = -1072.3, y = -3102.5, z = 13.9 },
+                        coords = { x = -1220.7, y = -3211.9, z = 13.9 },
                         requirement = "Nice job! You did it! Now take the Cuban 800 back to Los Santos Airport."
                     },
                     {
@@ -107,7 +107,7 @@ local MISSIONS = {
                     },
                     {
                         name = "LSA",
-                        coords = { x = -1072.3, y = -3102.5, z = 13.9 },
+                        coords = { x = -1220.7, y = -3211.9, z = 13.9 },
                         requirement = "Nice! Now take this thing back to LSA for another nice, smooth landing!"
                     },
                     {
@@ -178,7 +178,7 @@ local MISSIONS = {
                     },
                     {
                         name = "LSA",
-                        coords = { x = -1072.3, y = -3102.5, z = 13.9 },
+                        coords = { x = -1220.7, y = -3211.9, z = 13.9 },
                         requirement = "Nice job! You did it! Now take the Vestra back to Los Santos Airport."
                     },
                     {
@@ -219,7 +219,7 @@ local MISSIONS = {
                 },
                 {
                     name = "LSA",
-                    coords = { x = -1072.3, y = -3102.5, z = 13.9 },
+                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
                     requirement = "Take the Shamal back to Los Santos Airport."
                 },
                 {
@@ -258,7 +258,7 @@ local MISSIONS = {
                 },
                 {
                     name = "LSA",
-                    coords = { x = -1072.3, y = -3102.5, z = 13.9 },
+                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
                     requirement = "Take the Nimbus back to Los Santos Airport."
                 },
                 {
@@ -297,7 +297,7 @@ local MISSIONS = {
                 },
                 {
                     name = "LSA",
-                    coords = { x = -1072.3, y = -3102.5, z = 13.9 },
+                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
                     requirement = "Take the Luxor back to Los Santos Airport."
                 },
                 {
@@ -355,7 +355,7 @@ local MISSIONS = {
                 },
                 {
                     name = "LSA",
-                    coords = { x = -1072.3, y = -3102.5, z = 13.9 },
+                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
                     requirement = "Take the Nimbus back to Los Santos Airport."
                 },
                 {
@@ -394,7 +394,7 @@ local MISSIONS = {
                 },
                 {
                     name = "LSA",
-                    coords = { x = -1072.3, y = -3102.5, z = 13.9 },
+                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
                     requirement = "Take the Shamal back to Los Santos Airport."
                 },
                 {
@@ -433,7 +433,7 @@ local MISSIONS = {
                 },
                 {
                     name = "LSA",
-                    coords = { x = -1072.3, y = -3102.5, z = 13.9 },
+                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
                     requirement = "Take the Luxor back to Los Santos Airport."
                 },
                 {
@@ -474,7 +474,7 @@ local MISSIONS = {
                 },
                 {
                     name = "LSA",
-                    coords = { x = -1072.3, y = -3102.5, z = 13.9 },
+                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
                     requirement = "Take the Titan back to Los Santos Airport."
                 },
                 {
@@ -512,7 +512,7 @@ local MISSIONS = {
                 },
                 {
                     name = "LSA",
-                    coords = { x = -1072.3, y = -3102.5, z = 13.9 },
+                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
                     requirement = "Take the Titan back to Los Santos Airport."
                 },
                 {
@@ -550,7 +550,7 @@ local MISSIONS = {
                 },
                 {
                     name = "LSA",
-                    coords = { x = -1072.3, y = -3102.5, z = 13.9 },
+                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
                     requirement = "Take the Nimbus back to Los Santos Airport."
                 },
                 {
@@ -589,7 +589,7 @@ local MISSIONS = {
                 },
                 {
                     name = "LSA",
-                    coords = { x = -1072.3, y = -3102.5, z = 13.9 },
+                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
                     requirement = "Take the Shamal back to Los Santos Airport."
                 },
                 {
@@ -628,7 +628,7 @@ local MISSIONS = {
                 },
                 {
                     name = "LSA",
-                    coords = { x = -1072.3, y = -3102.5, z = 13.9 },
+                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
                     requirement = "Take the Luxor back to Los Santos Airport."
                 },
                 {
@@ -666,7 +666,7 @@ local MISSIONS = {
                     },
                     {
                         name = "LSA",
-                        coords = { x = -1072.3, y = -3102.5, z = 13.9 },
+                        coords = { x = -1220.7, y = -3211.9, z = 13.9 },
                         requirement = "Take the Velum back to Los Santos Airport."
                     },
                     {
@@ -705,7 +705,7 @@ local MISSIONS = {
                 },
                 {
                     name = "LSA",
-                    coords = { x = -1072.3, y = -3102.5, z = 13.9 },
+                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
                     requirement = "Take the Shamal back to Los Santos Airport."
                 },
                 {
@@ -744,7 +744,7 @@ local MISSIONS = {
                 },
                 {
                     name = "LSA",
-                    coords = { x = -1072.3, y = -3102.5, z = 13.9 },
+                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
                     requirement = "Take the Nimbus back to Los Santos Airport."
                 },
                 {
