@@ -90,6 +90,41 @@ Citizen.CreateThread(function()
 	end
 end)
 
+------------------------------
+-- WALK INJURED WITH LOW HP --
+------------------------------
+local recovered = true
+Citizen.CreateThread(function()
+	while true do
+		Wait(1000)
+    local hp = GetEntityHealth(playerPed)
+		if hp <= 150 then
+			setHurt()
+      recovered = false
+		elseif hp > 151 and not recovered then
+      setNotHurt()
+      recovered = true
+		end
+	end
+end)
+
+function setHurt()
+  setNotHurt()
+	RequestAnimSet("move_m@injured")
+	SetPedMovementClipset(GetPlayerPed(-1), "move_m@injured", true)
+end
+
+function setNotHurt()
+  if WALKSTYLE_IS_SET then -- WALKSTYLE_IS_SET is set in cl_civ.lua when user does /walkstyle command
+    RequestAnimSet(WALKSTYLE_IS_SET)
+    SetPedMovementClipset(GetPlayerPed(-1), WALKSTYLE_IS_SET, true)
+  else
+    ResetPedMovementClipset(GetPlayerPed(-1))
+  	ResetPedWeaponMovementClipset(GetPlayerPed(-1))
+  	ResetPedStrafeClipset(GetPlayerPed(-1))
+  end
+end
+
 -- no police npc / never wanted
 Citizen.CreateThread(function()
     while true do

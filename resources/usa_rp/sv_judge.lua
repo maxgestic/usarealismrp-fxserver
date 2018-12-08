@@ -7,11 +7,15 @@ AddEventHandler("judge:duty", function()
   local user = exports["essentialmode"]:getPlayerFromId(usource)
   local user_job = user.getActiveCharacterData("job")
   local user_judge_rank = user.getActiveCharacterData("judgeRank")
+  if not user_judge_rank then
+    TriggerClientEvent("usa:notify", usource, "You are not a judge!")
+    return
+  end
   if user_job ~= "judge" and user_judge_rank > 0 then
-	local user_char_name = user.getActiveCharacterData("fullName")
-    user.setActiveCharacterData("job", "judge")
-    TriggerClientEvent("usa:notify", usource, "You are now ~g~on duty~w~ as a judge.")
-	TriggerClientEvent('chatMessage', -1, "", {0, 0, 0}, "^0" .. user_char_name .. " has just gone on duty as an official judge.")
+	   local user_char_name = user.getActiveCharacterData("fullName")
+     user.setActiveCharacterData("job", "judge")
+     TriggerClientEvent("usa:notify", usource, "You are now ~g~on duty~w~ as a judge.")
+	   TriggerClientEvent('chatMessage', -1, "", {0, 0, 0}, "^0" .. user_char_name .. " has just gone on duty as an official judge.")
   else
     user.setActiveCharacterData("job", "civ")
     TriggerClientEvent("usa:notify", usource, "You are now ~y~off duty~w~ as a judge.")

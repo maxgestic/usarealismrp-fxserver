@@ -264,13 +264,21 @@ AddEventHandler("crim:areHandsTied", function(from_source, to_source, action)
   end
 end)
 
+WALKSTYLE_IS_SET = nil
+
 RegisterNetEvent("civ:changeWalkStyle")
 AddEventHandler("civ:changeWalkStyle", function(style)
-	if style ~= 0 then
-		SetClipset(style)
-	else
-		ResetPedMovementClipset(GetPlayerPed(-1), 0 )
-	end
+  if GetEntityHealth(GetPlayerPed(-1)) > 151 then
+  	if style and style ~= 0 then
+  		SetClipset(style)
+      WALKSTYLE_IS_SET = style -- used in client.lua to set walk style when recovered from low hp
+  	else
+  		ResetPedMovementClipset(GetPlayerPed(-1), 0 )
+      WALKSTYLE_IS_SET = nil
+  	end
+  else
+    exports.globals:notify("You are injured!")
+  end
 end)
 
 -- trading/selling vehicles --

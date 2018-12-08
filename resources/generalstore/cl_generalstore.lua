@@ -129,7 +129,7 @@ function CreateGeneralStoreMenu(menu)
             end
           end)
           Citizen.CreateThread(function()
-            while GetGameTimer() - TIMEOUT < 900 do
+            while GetGameTimer() - TIMEOUT < 200 do
               Wait(100)
             end
             TIMEOUT = nil
