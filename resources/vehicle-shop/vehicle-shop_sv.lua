@@ -298,7 +298,7 @@ local vehicleShopItems = {
 			{make = "Albany", model = "Primo", price = 76000, hash = "primo", storage_capacity = 155.0},
 			{make = "Albany", model = "Primo Custom", price = 90000, hash = "primo2", storage_capacity = 155.0},
 			{make = "Cheval", model = "Fugitive", price = 60000, hash = "fugitive", storage_capacity = 155.0},
-			{make = "Benefactor", model = "Schafter", price = 60000, hash = "schafter2", storage_capacity = 155.0},
+			--{make = "Benefactor", model = "Schafter", price = 60000, hash = "schafter2", storage_capacity = 155.0},
 			{make = "Dundreary", model = "Regina", price = 55000, hash = "regina", storage_capacity = 155.0}
 			--{make = "Ubermacht", model = "Revolter", price = 200000, hash = "revolter", storage_capacity = 155.0} -- has miniguns in LSC
 		},
