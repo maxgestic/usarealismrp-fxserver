@@ -1,6 +1,6 @@
 local activeJobs = {}
 
-local coke_payment_per_package = math.random(625, 1200)
+local coke_payment_per_package = math.random(625, 700)
 
 RegisterServerEvent("go-postal:checkLicense")
 AddEventHandler("go-postal:checkLicense", function()
@@ -11,10 +11,10 @@ AddEventHandler("go-postal:checkLicense", function()
 		for i = 1, #user_licenses do
           local item = user_licenses[i]
           if string.find(item.name, "Driver") then
-            print("DL found! checking validity")
-			print("item.status: " .. item.status)
+            --print("DL found! checking validity")
+			--print("item.status: " .. item.status)
             if item.status == "valid" then
-				print("calling had DL!")
+				--print("calling had DL!")
 				TriggerClientEvent("go-postal:hadDL", userSource)
 				return
             else
@@ -34,9 +34,9 @@ AddEventHandler("transport:giveMoney", function(amount, job)
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local user_money = user.getActiveCharacterData("money")
 		-- give money to shop owner (if any within 50m nearby)--
-		print("checking job closest property!")
+	--	print("checking job closest property!")
 		if job.closest_property then
-			print("existed! name: " .. job.closest_property.name)
+			--print("existed! name: " .. job.closest_property.name)
 			TriggerEvent("properties:addMoney", job.closest_property.name, math.ceil(0.09 * amount))
 		end
 		user.setActiveCharacterData("money", user_money + amount)

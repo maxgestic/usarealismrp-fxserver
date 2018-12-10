@@ -75,12 +75,24 @@ Citizen.CreateThread(function()
             if GetSelectedPedWeapon(me) ==  attached_object.hash then -- equipped
                     --print("weapon was equipped! removing: " .. name .. ", hash: " .. attached_object.hash)
                     DeleteObject(attached_object.handle)
+                    if attached_object.net then
+                      if NetworkDoesNetworkIdExist(attached_object.net) then
+                        --print("deleting net weapon: " .. attached_object.net)
+                        DeleteObject(NetToObj(attached_object.net))
+                      end
+                    end
                     attached_weapons[name] = nil
             end
             -- not equipped but still in attached objects list? drop that attached weapon:
             if not HasPedGotWeapon(me, attached_object.hash, false) then
                 --print("weapon was not equipped! dropping: " .. name)
                 DetachEntity(attached_object.handle, true, true)
+                if attached_object.net then
+                  if NetworkDoesNetworkIdExist(attached_object.net) then
+                    --print("deleting net weapon: " .. attached_object.net)
+                    DetachEntity(NetToObj(attached_object.net))
+                  end
+                end
                 attached_weapons[name] = nil
             end
         end
@@ -94,12 +106,20 @@ function AttachWeapon(attachModel,modelHash,boneNumber,x,y,z,xR,yR,zR, isMelee)
 	while not HasModelLoaded(attachModel) do
 		Citizen.Wait(100)
 	end
-    attached_weapons[attachModel] = {
-        hash = modelHash,
-        handle = CreateObject(attachModel, 1.0, 1.0, 1.0, 1, 1, 0)
-    }
-    if isMelee then x = 0.11 y = -0.14 z = 0.0 xR = -75.0 yR = 185.0 zR = 92.0 end -- reposition for melee items
-    if attachModel == "prop_ld_jerrycan_01" then x = x + 0.3 end
+  --print("creating object: " .. attachModel)
+  --print("handle: " .. h)
+  attached_weapons[attachModel] = {
+    hash = modelHash,
+    handle = CreateObject(GetHashKey(attachModel), 1.0, 1.0, 1.0, true, true, false)
+  }
+  --print("hash: " ..   attached_weapons[attachModel].hash)
+  --print("handle: " .. h)
+  attached_weapons[attachModel].net = ObjToNet(attached_weapons[attachModel].handle)
+  SetNetworkIdExistsOnAllMachines(attached_weapons[attachModel].net, true)
+  NetworkSetNetworkIdDynamic(attached_weapons[attachModel].net, true)
+  SetNetworkIdCanMigrate(attached_weapons[attachModel].net, false)
+  if isMelee then x = 0.11 y = -0.14 z = 0.0 xR = -75.0 yR = 185.0 zR = 92.0 end -- reposition for melee items
+  if attachModel == "prop_ld_jerrycan_01" then x = x + 0.3 end
 	AttachEntityToEntity(attached_weapons[attachModel].handle, GetPlayerPed(-1), bone, x, y, z, xR, yR, zR, 1, 1, 0, 0, 2, 1)
 end
 
