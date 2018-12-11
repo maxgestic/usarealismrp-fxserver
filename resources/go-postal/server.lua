@@ -1,6 +1,6 @@
 local activeJobs = {}
 
-local coke_payment_per_package = math.random(625, 700)
+local coke_payment_per_package = math.random(400, 500)
 
 RegisterServerEvent("go-postal:checkLicense")
 AddEventHandler("go-postal:checkLicense", function()
