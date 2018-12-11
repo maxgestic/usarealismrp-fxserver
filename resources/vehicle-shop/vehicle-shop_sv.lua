@@ -281,6 +281,7 @@ local vehicleShopItems = {
 		},
 		["Sedans"] = {
 			{make = "Albany", model = "Emperor", price = 3500, hash = -1883002148, storage_capacity = 165.0},
+			{make = "Albany", model = "Emperor 2", price = 15500, hash = -685276541, storage_capacity = 165.0},
 			{make = "Albany", model = "Washington", price = 9989, hash = 1777363799, storage_capacity = 165.0},
 			{make = "Karin", model = "Intruder", price = 6595, hash = 886934177, storage_capacity = 165.0},
 			{make = "Vulcan", model = "Ingot", price = 9500, hash = -1289722222, storage_capacity = 165.0},

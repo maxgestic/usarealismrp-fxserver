@@ -120,53 +120,67 @@ end)
 -- retrieving vehicle --
 RegisterNetEvent("properties:retrieveVehicle")
 AddEventHandler("properties:retrieveVehicle", function(vehicle)
-    local playerVehicle = vehicle
-    local modelHash = vehicle.hash
-    local plateText = vehicle.plate
-    local numberHash = modelHash
+  local playerVehicle = vehicle
+  local modelHash = vehicle.hash
+  local plateText = vehicle.plate
+  local numberHash = modelHash
 
-    if type(modelHash) ~= "number" then
-        numberHash = tonumber(modelHash)
+  if type(modelHash) ~= "number" then
+    numberHash = tonumber(modelHash)
+  end
+
+  Citizen.CreateThread(function()
+    RequestModel(numberHash)
+
+    while not HasModelLoaded(numberHash) do
+      Citizen.Wait(100)
     end
 
-    Citizen.CreateThread(function()
-        RequestModel(numberHash)
+    local playerPed = GetPlayerPed(-1)
+    local playerCoords = GetEntityCoords(playerPed, false)
+    local heading = GetEntityHeading(playerPed)
+    local vehicle = CreateVehicle(numberHash, playerCoords.x, playerCoords.y, playerCoords.z, heading, true, false)
+    SetVehicleNumberPlateText(vehicle, plateText)
+    SetVehicleOnGroundProperly(vehicle)
+    SetVehRadioStation(vehicle, "OFF")
+    SetPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
+    SetVehicleEngineOn(vehicle, true, false, false)
+    SetEntityAsMissionEntity(vehicle, true, true)
+    SetVehicleHasBeenOwnedByPlayer(vehicle, true)
+    SetVehicleExplodesOnHighExplosionDamage(vehicle, false)
 
-        while not HasModelLoaded(numberHash) do
-            Citizen.Wait(100)
+    -- car customizations
+    if playerVehicle.customizations then
+      TriggerEvent("customs:applyCustomizations", playerVehicle.customizations)
+    end
+
+    -- apply any stored engine / body damage --
+    if VEHICLE_DAMAGES[playerVehicle.plate] then
+      SetVehicleBodyHealth(vehicle, VEHICLE_DAMAGES[playerVehicle.plate].body_health)
+      SetVehicleEngineHealth(vehicle, VEHICLE_DAMAGES[playerVehicle.plate].engine_health)
+      SetVehicleDirtLevel(vehicle, VEHICLE_DAMAGES[playerVehicle.plate].dirt_level)
+      for index, intact in pairs(VEHICLE_DAMAGES[playerVehicle.plate].windows) do
+        if not intact then
+          SmashVehicleWindow(vehicle, index)
         end
+      end
+    end
 
-        local playerPed = GetPlayerPed(-1)
-        local playerCoords = GetEntityCoords(playerPed, false)
-        local heading = GetEntityHeading(playerPed)
-        local vehicle = CreateVehicle(numberHash, playerCoords.x, playerCoords.y, playerCoords.z, heading, true, false)
-        SetVehicleNumberPlateText(vehicle, plateText)
-        SetVehicleOnGroundProperly(vehicle)
-        SetVehRadioStation(vehicle, "OFF")
-        SetPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
-        SetVehicleEngineOn(vehicle, true, false, false)
-        SetEntityAsMissionEntity(vehicle, true, true)
-        SetVehicleHasBeenOwnedByPlayer(vehicle, true)
-        SetVehicleExplodesOnHighExplosionDamage(vehicle, false)
+    -- give key to owner --
+    local vehicle_key = {
+      name = "Key -- " .. playerVehicle.plate,
+      quantity = 1,
+      type = "key",
+      owner = playerVehicle.owner,
+      make = playerVehicle.make,
+      model = playerVehicle.model,
+      plate = playerVehicle.plate
+    }
 
-        -- car customizations
-        if playerVehicle.customizations then
-            TriggerEvent("customs:applyCustomizations", playerVehicle.customizations)
-        end
+    -- give key to owner
+    TriggerServerEvent("garage:giveKey", vehicle_key)
 
-        -- apply any stored engine / body damage --
-        if VEHICLE_DAMAGES[playerVehicle.plate] then
-            SetVehicleBodyHealth(vehicle, VEHICLE_DAMAGES[playerVehicle.plate].body_health)
-            SetVehicleEngineHealth(vehicle, VEHICLE_DAMAGES[playerVehicle.plate].engine_health)
-            SetVehicleDirtLevel(vehicle, VEHICLE_DAMAGES[playerVehicle.plate].dirt_level)
-            for index, intact in pairs(VEHICLE_DAMAGES[playerVehicle.plate].windows) do
-				if not intact then
-					SmashVehicleWindow(vehicle, index)
-				end
-			end
-        end
-
-    end)
+  end)
 
 end)
 
