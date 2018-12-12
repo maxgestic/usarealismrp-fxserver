@@ -24,6 +24,17 @@ SetDiscordAppId("517228692834091033")
 SetDiscordRichPresenceAsset("5a158f46d2aefd14d3c7a16f3f4bc72b")
 SetDiscordRichPresenceAssetText("USARRP")
 
+-- REMOVE AI WEAPON DROPS --
+Citizen.CreateThread(function()
+  while true do
+    Citizen.Wait(300)
+    -- List of pickup hashes (https://pastebin.com/8EuSv2r1)
+    RemoveAllPickupsOfType(0xDF711959) -- carbine rifle
+    RemoveAllPickupsOfType(0xF9AFB48F) -- pistol
+    RemoveAllPickupsOfType(0xA9355DCD) -- pumpshotgun
+  end
+end)
+
 ------------------------------
 -- FIRST LOAD / SPAWNING IN --
 ------------------------------
@@ -40,9 +51,6 @@ end)
 
 RegisterNetEvent('usa_rp:spawn')
 AddEventHandler('usa_rp:spawn', function(defaultModel, job, weapons, characters)
-  if characters then
-   -- print("size of characters = " .. #characters)
-  end
   local spawn = {x = 0.0, y = 0.0, z = 0.0}
   spawn = civilianSpawns[math.random(1, #civilianSpawns)]
   exports.spawnmanager:spawnPlayer({x = spawn.x, y = spawn.y, z = spawn.z, model = defaultModel, heading = 0.0}, function()
@@ -53,10 +61,6 @@ AddEventHandler('usa_rp:spawn', function(defaultModel, job, weapons, characters)
       --print("player did have a first character!")
       TriggerEvent("character:open", "home", characters)
     end
-    --[[ CHECK JAIL STATUS [moved]
-    Citizen.Trace("calling checkJailedStatusOnPlayerJoin server function")
-    TriggerServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
-    --]]
     -- CHECK BAN STATUS
     TriggerServerEvent('mini:checkPlayerBannedOnSpawn')
   end)
@@ -93,6 +97,7 @@ end)
 ------------------------------
 -- WALK INJURED WITH LOW HP --
 ------------------------------
+--[[
 local recovered = true
 Citizen.CreateThread(function()
 	while true do
@@ -124,6 +129,7 @@ function setNotHurt()
   	ResetPedStrafeClipset(GetPlayerPed(-1))
   end
 end
+--]]
 
 -- no police npc / never wanted
 Citizen.CreateThread(function()
@@ -176,32 +182,32 @@ local locations = {
 }
 local spawnedPeds = {}
 Citizen.CreateThread(function()
-	for _, location in pairs(locations) do
-        for i = 1, #location do
-            Wait(1000)
-            local hash = GetHashKey(location[i].model)
-            RequestModel(hash)
-        	while not HasModelLoaded(hash) do
-        		Citizen.Wait(100)
-        	end
-    		local ped = CreatePed(4, hash, location[i].x, location[i].y, location[i].z, location[i].heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
-            table.insert(spawnedPeds, ped)
-            SetEntityCanBeDamaged(ped,false)
-    		SetPedCanRagdollFromPlayerImpact(ped,false)
-    		TaskSetBlockingOfNonTemporaryEvents(ped,true)
-    		SetPedFleeAttributes(ped,0,0)
-    		SetPedCombatAttributes(ped,17,1)
-            if not location[i].scenario then
-                RequestAnimDict(location[i].animDict)
-                while not HasAnimDictLoaded(location[i].animDict) do
-                    Citizen.Wait(100)
-                end
-                TaskPlayAnim(ped, location[i].animDict, location[i].animName, 8.0, -8, -1, 7, 0, 0, 0, 0)
-            else
-                TaskStartScenarioInPlace(ped, location[i].scenario, 0, 1)
-            end
+  for _, location in pairs(locations) do
+    for i = 1, #location do
+      Wait(1000)
+      local hash = GetHashKey(location[i].model)
+      RequestModel(hash)
+      while not HasModelLoaded(hash) do
+        Citizen.Wait(100)
+      end
+      local ped = CreatePed(4, hash, location[i].x, location[i].y, location[i].z, location[i].heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
+      table.insert(spawnedPeds, ped)
+      SetEntityCanBeDamaged(ped,false)
+      SetPedCanRagdollFromPlayerImpact(ped,false)
+      TaskSetBlockingOfNonTemporaryEvents(ped,true)
+      SetPedFleeAttributes(ped,0,0)
+      SetPedCombatAttributes(ped,17,1)
+      if not location[i].scenario then
+        RequestAnimDict(location[i].animDict)
+        while not HasAnimDictLoaded(location[i].animDict) do
+          Citizen.Wait(100)
         end
-	end
+        TaskPlayAnim(ped, location[i].animDict, location[i].animName, 8.0, -8, -1, 7, 0, 0, 0, 0)
+      else
+        TaskStartScenarioInPlace(ped, location[i].scenario, 0, 1)
+      end
+    end
+  end
 end)
 
 -- save player vehicle wheel position on exit?
