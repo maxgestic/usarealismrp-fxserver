@@ -5,7 +5,7 @@ locations = {
     { x= -2166.786, y = 5197.684, z = 15.880} -- island north of map by paleto
 }
 
-local sv_storeItems = {
+local storeItems = {
     ["weapons"] = {
 		    { name = "Lock Pick", type = "misc", hash = 615608432, price = 1000, legality = "illegal", quantity = 1, weight = 5 },
         { name = "Molotov", type = "weapon", hash = 615608432, price = 650, legality = "illegal", quantity = 1, weight = 20 },

@@ -79,6 +79,24 @@
 
     wrapperCentering();
 
+    /* Load USARRP.NET gallery images */
+	/*
+    $.ajax({
+      url: "https://www.usarrp.net/api/gallery/images",
+
+      beforeSend: function( xhr ) {
+        xhr.setRequestHeader ("Authorization", "Basic " + btoa("5f220a6c894e0aefc03fec8fbdbc0df4:"));
+      }
+
+    })
+    .done(function( data ) {
+      if ( console && console.log ) {
+        //console.log( "Sample of data:", data.slice( 0, 100 ) );
+        console.log("hey, ajax finished...");
+      }
+    });
+	*/
+
   });
 
   // Preloader
