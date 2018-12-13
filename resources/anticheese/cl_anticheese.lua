@@ -73,7 +73,6 @@ BlacklistedWeapons = { -- weapons that will get people banned
 	 205991906, -- heavy sniper
 	 -952879014, -- marksman sniper rifle
 	 -1660422300, -- heavy machine gun
-	 GetHashKey("WEAPON_SNOWBALL"),
 	 GetHashKey("WEAPON_BALL"),
 }
 
