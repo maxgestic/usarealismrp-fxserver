@@ -320,7 +320,7 @@ Citizen.CreateThread(function()
 		-- shooting notification / gsr --
 		---------------------------------
 		--print("GetSelectedPedWeapon(me): " .. GetSelectedPedWeapon(me))
-		if IsPedShooting(me) and GetSelectedPedWeapon(me) ~= 101631238 and GetSelectedPedWeapon(me) ~= 911657153 and GetSelectedPedWeapon(me) ~= 883325847 then
+		if IsPedShooting(me) and GetSelectedPedWeapon(me) ~= 101631238 and GetSelectedPedWeapon(me) ~= 911657153 and GetSelectedPedWeapon(me) ~= 883325847 and GetSelectedPedWeapon(me) ~= GetHashKey("WEAPON_SNOWBALL") then
 			last_shot_time = GetGameTimer()
 			--print("IsInPopulatedArea(): " .. tostring(IsInPopulatedArea()))
 			if IsInPopulatedArea() then

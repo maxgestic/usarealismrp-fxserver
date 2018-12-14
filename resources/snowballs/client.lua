@@ -8,10 +8,10 @@ local G_KEY = 47
 
 -- No need to touch anything below.
 Citizen.CreateThread(function()
-    
+
     local showHelp = true
     local loaded = false
-    
+
     while true do
         if enableWeatherControl then
             SetWeatherTypeNowPersist('XMAS')
@@ -21,10 +21,10 @@ Citizen.CreateThread(function()
             -- enable frozen water effect (water isn't actually ice, just looks like there's an ice layer on top of the water)
             N_0xc54a08c85ae4d410(3.0)
             -- preview: https://vespura.com/hi/i/2eb901ad4b1.gif
-            
+
             SetForceVehicleTrails(true)
             SetForcePedFootstepsTracks(true)
-            
+
             if not loaded then
                 RequestScriptAudioBank("ICE_FOOTSTEPS", false)
                 RequestScriptAudioBank("SNOW_FOOTSTEPS", false)
@@ -52,7 +52,7 @@ Citizen.CreateThread(function()
             SetForcePedFootstepsTracks(false)
         end
         if GetSelectedPedWeapon(PlayerPedId()) == GetHashKey('WEAPON_SNOWBALL') then
-            SetPlayerWeaponDamageModifier(PlayerId(), 0.0)
+          SetPlayerWeaponDamageModifier(PlayerId(), 0.0)
         end
     end
 end)

@@ -646,7 +646,6 @@ AddEventHandler('rconCommand', function(commandName, args)
 		end)
 	elseif commandName == "banid" then
 		-- see if input was correct --
-		RconPrint("BANID COMMAND CALLED FROM RCON!")
 		if #args < 4 then
 			RconPrint("Usage: banid [steam:123456789] [first name] [last name] [reason]\n")
 			CancelEvent()
@@ -700,7 +699,6 @@ AddEventHandler('rconCommand', function(commandName, args)
 		end)
 	elseif commandName == "tempbanid" then
 		-- see if input was correct --
-		RconPrint("TEMPBANID COMMAND CALLED FROM RCON!")
 		if #args < 4 then
 			RconPrint("Usage: tempbanid [steam:123456789] [time] [first name] [last name] [reason]\n")
 			RconPrint("Note: if you don't know the first or last name just put an 'x' or '?' in place of it\n")
