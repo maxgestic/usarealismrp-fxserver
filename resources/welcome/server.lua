@@ -31,7 +31,8 @@ function commandsText(source)
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "15) ^3/open [option]^0 options: hood, trunk, fr, fl, br, bl, ambulance")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "16) ^3/close [option]^0 options: hood, trunk, fr, fl, br, bl, ambulance")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "17) ^3/engine [option]^0 options: on, off")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "18) Open chat with ''^3T^0' then use ^3Page Up^0 to scroll up")
+	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "17) ^3K^0 to toggle your seat belt")
+	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "18) Open chat with '^3T^0' then use ^3Page Up^0 to scroll up")
 end
 
 -- end util functions / start commands

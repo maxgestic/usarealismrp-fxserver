@@ -27,7 +27,7 @@ local vehicleShopItems = {
 			{make = "Gallivanter", model = "Baller", price = 28700, hash = 634118882, storage_capacity = 200.0},
 			{make = "Enus", model = "Huntley", price = 29700, hash = 486987393, storage_capacity = 200.0},
 			{make = "Mammoth", model = "Patriot", price = 35700, hash = -808457413, storage_capacity = 200.0},
-			{make = "Emperor", model = "Habenaro", price = 35700, hash = "habenaro", storage_capacity = 200.0},
+			{make = "Emperor", model = "Habenaro", price = 35700, hash = "habanero", storage_capacity = 200.0},
 			{make = "Karin", model = "BeeJay XL", price = 55700, hash = "bjxl", storage_capacity = 200.0},
 			{make = "Benefactor", model = "XLS", price = 55700, hash = "xls", storage_capacity = 200.0}
 		},
