@@ -444,6 +444,19 @@ AddEventHandler("weazelnews:spawnVan", function(locationName, plate)
 		SetVehicleNumberPlateText(vehicle, plate)
 		SetEntityAsMissionEntity(vehicle, true, true)
 		SetVehicleLivery(vehicle, 0)
+
+		local vehicle_key = {
+			name = "Key -- " .. GetVehicleNumberPlateText(vehicle),
+			quantity = 1,
+			type = "key",
+			owner = "Weazel News",
+			make = "Vapid",
+			model = "Van",
+			plate = GetVehicleNumberPlateText(vehicle)
+		}
+
+		-- give key to owner
+		TriggerServerEvent("garage:giveKey", vehicle_key)
 	end)
 end)
 
