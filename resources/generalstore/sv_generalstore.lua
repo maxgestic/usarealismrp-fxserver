@@ -55,8 +55,7 @@ local GENERAL_STORE_ITEMS = {
     { name = "Tent", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 20},
     { name = "Wood", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 30},
     { name = "Chair", price = 25, type = "misc", quantity = 1, legality = "legal", weight = 20},
-    { name = "Vortex Optics Binoculars", price = 350, type = "misc", quantity = 1, legality = "legal", weight = 2},
-    { name = "Toolkit", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 20}
+    { name = "Vortex Optics Binoculars", price = 350, type = "misc", quantity = 1, legality = "legal", weight = 2}
   }
 }
 

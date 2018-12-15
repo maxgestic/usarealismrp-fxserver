@@ -435,8 +435,8 @@ end )
 
 Citizen.CreateThread( function()
     while true do
-        -- K has just been pressed
-        if (IsControlJustPressed( 1, 311 ) and GetLastInputMethod(2)) then
+        -- LCTRL + K has just been pressed
+        if IsControlPressed( 1, 36 ) and IsControlJustPressed( 1, 311 ) and GetLastInputMethod(2) then
             if IsPedInAnyPoliceVehicle(GetPlayerPed(-1)) then
                 TriggerEvent( 'wk:radarRC' )
             end

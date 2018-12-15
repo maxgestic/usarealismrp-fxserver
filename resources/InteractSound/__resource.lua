@@ -21,7 +21,9 @@ ui_page('client/html/index.html')
 files({
     'client/html/index.html',
     -- Begin Sound Files Here...
-	'client/html/sounds/atc3.ogg',
+    'client/html/sounds/seatbelt-in.ogg',
+    'client/html/sounds/seatbelt-out.ogg',
+	  'client/html/sounds/atc3.ogg',
     'client/html/sounds/cell-lock.ogg',
     'client/html/sounds/handcuff.ogg',
     'client/html/sounds/weed-process.ogg',
