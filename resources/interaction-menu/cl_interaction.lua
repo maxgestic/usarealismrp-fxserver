@@ -778,13 +778,13 @@ function interactionMenuUse(itemName, wholeItem)
 			--print("new player BAC: " .. player.BAC)
 			if player.BAC >= 0.14 then
 				intoxicate(false, "MOVE_M@DRUNK@VERYDRUNK", 1.0)
-				reality(10)
+				reality(16)
 			elseif player.BAC >= 0.08 then
 				intoxicate(false, "MOVE_M@DRUNK@MODERATEDRUNK", 0.6)
-				reality(7)
+				reality(11)
 			elseif player.BAC >= 0.04 then
 				intoxicate(false, "MOVE_M@DRUNK@SLIGHTLYDRUNK", 0.3)
-				reality(4)
+				reality(7)
 			end
 		elseif string.find(itemName, "Parachute") then
 			GiveWeaponToPed(GetPlayerPed(-1), GetHashKey("GADGET_PARACHUTE"), 150, true, true)
