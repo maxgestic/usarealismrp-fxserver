@@ -285,6 +285,19 @@ function spawnVehicle(coords)
 				SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
 				--SetVehicleAsNoLongerNeeded(vehicle)
 				last_spawned_vehicle = vehicle
+
+				local vehicle_key = {
+					name = "Key -- " .. GetVehicleNumberPlateText(vehicle),
+					quantity = 1,
+					type = "key",
+					owner = "Bubba's Tow",
+					make = "MTL",
+					model = "Flatbed",
+					plate = GetVehicleNumberPlateText(vehicle)
+				}
+
+				-- give key to owner
+				TriggerServerEvent("garage:giveKey", vehicle_key)
     end)
 end
 

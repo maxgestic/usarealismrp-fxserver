@@ -2,7 +2,7 @@ local timeout = false
 
 local DUTY_FEE = 100
 
-local BASE_PAY = 700
+local BASE_PAY = 800
 
 RegisterServerEvent("taxi:payDriver")
 AddEventHandler("taxi:payDriver", function(distance)

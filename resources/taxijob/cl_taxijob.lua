@@ -263,20 +263,33 @@ Citizen.CreateThread(function()
 end)
 
 function spawnVehicle()
-    local numberHash = -956048545
-    Citizen.CreateThread(function()
-        RequestModel(numberHash)
-        while not HasModelLoaded(numberHash) do
-            RequestModel(numberHash)
-            Citizen.Wait(0)
-        end
-        local playerPed = GetPlayerPed(-1)
-        JOB.taxi = CreateVehicle(numberHash, closest_location.spawn.x, closest_location.spawn.y, closest_location.spawn.z, 0.0, true, false)
-        SetVehicleOnGroundProperly(vehicle)
-        SetVehRadioStation(vehicle, "OFF")
-        SetEntityAsMissionEntity(vehicle, true, true)
-		SetVehicleNumberPlateText(vehicle, name)
-    end)
+  local numberHash = -956048545
+  Citizen.CreateThread(function()
+      RequestModel(numberHash)
+      while not HasModelLoaded(numberHash) do
+          RequestModel(numberHash)
+          Citizen.Wait(0)
+      end
+      local playerPed = GetPlayerPed(-1)
+      JOB.taxi = CreateVehicle(numberHash, closest_location.spawn.x, closest_location.spawn.y, closest_location.spawn.z, 0.0, true, false)
+      SetVehicleOnGroundProperly(vehicle)
+      SetVehRadioStation(vehicle, "OFF")
+      SetEntityAsMissionEntity(vehicle, true, true)
+			SetVehicleNumberPlateText(vehicle, name)
+
+			local vehicle_key = {
+				name = "Key -- " .. GetVehicleNumberPlateText(vehicle),
+				quantity = 1,
+				type = "key",
+				owner = "Downtown Taxi Co.",
+				make = "Vapid",
+				model = "Stanier",
+				plate = GetVehicleNumberPlateText(vehicle)
+			}
+
+			-- give key to owner
+			TriggerServerEvent("garage:giveKey", vehicle_key)
+  end)
 end
 
 function DrawCoolLookingNotificationWithTaxiPic(name, msg)
