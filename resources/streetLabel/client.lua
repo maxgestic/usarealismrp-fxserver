@@ -18,26 +18,30 @@ local directions = { [0] = 'N', [45] = 'NW', [90] = 'W', [135] = 'SW', [180] = '
 Citizen.CreateThread(function ()
 	while true do
 		Citizen.Wait(1)
-		local pos = GetEntityCoords(GetPlayerPed(-1))
+		local ped = GetPlayerPed(-1)
+		local pos = GetEntityCoords(ped)
 		local var1, var2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z, Citizen.ResultAsInteger(), Citizen.ResultAsInteger())
-		local current_zone = zones[GetNameOfZone(pos.x, pos.y, pos.z)]
+		local nameOfZone = GetNameOfZone(pos.x, pos.y, pos.z)
+		local current_zone = zones[nameOfZone]
 
+		direction = GetEntityHeading(ped)
 		for k,v in pairs(directions) do
-			direction = GetEntityHeading(GetPlayerPed(-1))
 			if math.abs(direction - k) < 22.5 then
 				direction = v
 				break;
 			end
 		end
 
-		if GetStreetNameFromHashKey(var1) and GetNameOfZone(pos.x, pos.y, pos.z) and IsPedInAnyVehicle(GetPlayerPed(-1), false) then
-			if zones[GetNameOfZone(pos.x, pos.y, pos.z)] and tostring(GetStreetNameFromHashKey(var1)) then
-				if tostring(GetStreetNameFromHashKey(var2)) ~= "" then
-					current_zone = tostring(GetStreetNameFromHashKey(var2)) .. ", " .. zones[GetNameOfZone(pos.x, pos.y, pos.z)]
+		local streetName1 = GetStreetNameFromHashKey(var1)
+		if streetName1 and nameOfZone and IsPedInAnyVehicle(ped, false) then
+			if zones[nameOfZone] and streetName1 then
+				local streetName2 = GetStreetNameFromHashKey(var2)
+				if streetName2 ~= "" then
+					current_zone = streetName2 .. ", " .. zones[nameOfZone]
 				end
 				drawTxt(0.66, 1.714, 1.0, 1.5, 0.4,
 					direction .. " | " ..
-					tostring(GetStreetNameFromHashKey(var1)) .. " | " ..
+					streetName1 .. " | " ..
 					current_zone
 				, 224, 227, 218, 255)
 			end

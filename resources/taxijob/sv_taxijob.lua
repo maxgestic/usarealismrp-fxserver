@@ -2,7 +2,7 @@ local timeout = false
 
 local DUTY_FEE = 100
 
-local BASE_PAY = 800
+local BASE_PAY = math.random(900, 1100)
 
 RegisterServerEvent("taxi:payDriver")
 AddEventHandler("taxi:payDriver", function(distance)
@@ -53,7 +53,7 @@ AddEventHandler("taxi:setJob", function(property)
 					TriggerClientEvent("usa:notify", userSource, "Your license is suspended!")
 					return
 				end
-				TriggerClientEvent("chatMessage", userSource, "", {}, "^3HELP: ^0You can use /dispatch [id] [msg] to set a waypoint to the caller id of the last taxi request.")
+				TriggerClientEvent("chatMessage", userSource, "", {}, "^3HELP: ^0You can use ^3/dispatch [id] [msg]^0 to set a waypoint to the caller id of the last taxi request and ^3/togglerequests^0 to toggle NPC pick up requests.")
 				user.setActiveCharacterData("job", "taxi")
 				TriggerClientEvent("taxi:onDuty", userSource)
 				-- take money --
@@ -74,3 +74,10 @@ AddEventHandler("taxi:setJob", function(property)
 		TriggerClientEvent("usa:notify", userSource, "You don't have a valid driver's license!")
 	end
 end)
+
+TriggerEvent('es:addJobCommand', 'togglerequests', {'taxi'}, function(source, args, user)
+	print("Toggling NPC taxi requests!")
+	TriggerClientEvent("taxi:toggleNPCRequests", source)
+end, {
+	help = "Toggle getting random NPC requests"
+})

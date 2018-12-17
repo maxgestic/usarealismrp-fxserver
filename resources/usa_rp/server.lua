@@ -85,6 +85,7 @@ AddEventHandler("usa_rp:checkJailedStatusOnPlayerJoin", function(id)
 		if user then
 			if user.getActiveCharacterData("jailtime") > 0 then
 				TriggerClientEvent("jail:jail", userSource)
+				exports["globals"]:notifyPlayersWithJobs({"corrections"}, "^3INFO: ^0" .. user.getActiveCharacterData("fullName") .. " has woken up from a nap.")
 			end
 		end
 	--end)

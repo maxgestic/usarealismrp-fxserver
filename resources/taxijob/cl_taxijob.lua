@@ -27,6 +27,17 @@ local taxi_duty_locations = {
 
 local ped_heading = 40.0
 
+local NPC_REQUESTS_ENABLED = true
+
+local JOB = {
+	taxi = nil,
+	isOnJob = false,
+	start = nil,
+	destination = nil,
+	customer_ped = nil,
+	end_time = nil
+}
+
 --------------------
 -- list of models --
 --------------------
@@ -82,8 +93,46 @@ local LOCATIONS = {
 	{x = 1992.7, y = 3759.2, z = 32.2, name = "Alhambra Dr.", arrived = false},
 	{x = 1853.4, y = 2582.1, z = 45.7, name = "Bolingbroke Prison", arrived = false},
 	{x = 1853.3, y = 2592.5, z = 45.7, name = "Bolingbroke Prison", arrived = false},
-	{x = 1852.5, y = 2615.1, z = 45.7, name = "Bolingbroke Prison", arrived = false}
+	{x = 1852.5, y = 2615.1, z = 45.7, name = "Bolingbroke Prison", arrived = false},
+	{x = 77.2, y = -972.4, z = 29.4, name = "Vespucci Blvd. / Elgin Ave.", arrived = false},
+	{x = 197.5, y = -1066.3, z = 29.3, name = "Strawberry Ave. / Vespucci Blvd.", arrived = false},
+	{x = 90.6, y = -1076.7, z = 29.3, name = "Elgin Ave.", arrived = false},
+	{x = 5.6, y = -1124.3, z = 28.4, name = "Adam's Apple Blvd.", arrived = false},
+	{x = -191.9, y = -1295.3, z = 31.3, name = "Benny's / Power St.", arrived = false},
+	{x = -171.5, y = -1415.2, z = 31.1, name = "Innocence Blvd.", arrived = false},
+	{x = 5.3, y = -1594.8, z = 29.3, name = "Strawberry Ave.", arrived = false},
+	{x = 104.3, y = -1429.4, z = 29.3, name = "Strawberry Ave.", arrived = false},
+	{x = 112.0, y = -1344.6, z = 29.3, name = "Vanilla Unicorn", arrived = false},
+	{x = 162.4, y = -891.2, z = 30.5, name = "Legion Square", arrived = false},
+	{x = 224.8, y = -857.7, z = 30.11, name = "Legion Square", arrived = false},
+	{x = 216.2, y = -817.9, z = 30.6, name = "Legion Square", arrived = false},
+	{x = 282.1, y = -610.7, z = 43.3, name = "Pillbox Hill Hospital", arrived = false},
+	{x = 315.7, y = 167.9, z = 103.8, name = "Vinewood Blvd.", arrived = false},
+	{x = 280.1, y = 180.9, z = 104.5, name = "Vinewood Blvd.", arrived = false},
+	{x = -429.0, y = 255.7, z = 83.1, name = "Eclipse Blvd.", arrived = false},
+	{x = -558.2, y = 269.7, z = 83.02, name = "Tequilala", arrived = false},
+	{x = -576.5, y = 271.4, z = 82.8, name = "Tequilala", arrived = false},
+	{x = -610.5, y = -167.5, z = 37.8, name = "Eastbourne Way", arrived = false},
+	{x = -1013.4, y = -690.7, z = 21.3, name = "San Andreas Ave.", arrived = false},
+	{x = -1069.9, y = -795.9, z = 19.3, name = "South Rockford Dr.", arrived = false},
+	{x = -190.9, y = -1610.9, z = 33.9, name = "Forum Dr.", arrived = false},
+	{x = -102.7, y = -1775.7, z = 29.5, name = "Grove St.", arrived = false}
 }
+
+RegisterNetEvent("taxi:toggleNPCRequests")
+AddEventHandler("taxi:toggleNPCRequests", function()
+	if NPC_REQUESTS_ENABLED and JOB.isOnJob then
+		JOB.isOnJob = false
+		JOB.end_time = GetGameTimer()
+		TriggerEvent("swayam:RemoveWayPoint")
+	end
+	NPC_REQUESTS_ENABLED = not NPC_REQUESTS_ENABLED
+	if NPC_REQUESTS_ENABLED then
+		exports.globals:notify("NPC requests turned ~g~on~w~!")
+	else
+		exports.globals:notify("NPC requests turned ~r~off~w~!")
+	end
+end)
 
 RegisterNetEvent("taxi:onDuty")
 AddEventHandler("taxi:onDuty", function()
@@ -105,15 +154,6 @@ end)
 --------------------------------------
 -- GENERATE RANDOM NPC JOB PICK UPS --
 --------------------------------------
-local JOB = {
-	taxi = nil,
-	isOnJob = false,
-	start = nil,
-	destination = nil,
-	customer_ped = nil,
-	end_time = nil
-}
-
 Citizen.CreateThread(function()
 
 	local AUTO_JOB_TIME_DELAY = 120000 -- in milliseconds
@@ -158,14 +198,16 @@ Citizen.CreateThread(function()
 		----------------
 		-- NOT ON JOB --
 		----------------
-		if not JOB.isOnJob and GetVehiclePedIsIn(GetPlayerPed(-1), false) == JOB.taxi then
-			if JOB.end_time then -- had previous job
-				if GetGameTimer() - JOB.end_time >= AUTO_JOB_TIME_DELAY then
+		if NPC_REQUESTS_ENABLED then
+			if not JOB.isOnJob and GetVehiclePedIsIn(GetPlayerPed(-1), false) == JOB.taxi then
+				if JOB.end_time then -- had previous job
+					if GetGameTimer() - JOB.end_time >= AUTO_JOB_TIME_DELAY then
+						GenerateNPCJob()
+					end
+				else -- this will be first job
+					Wait(math.random(30000, 90000))
 					GenerateNPCJob()
 				end
-			else -- this will be first job
-				Wait(math.random(30000, 90000))
-				GenerateNPCJob()
 			end
 		end
 		----------------------
@@ -263,33 +305,34 @@ Citizen.CreateThread(function()
 end)
 
 function spawnVehicle()
-  local numberHash = -956048545
-  Citizen.CreateThread(function()
-      RequestModel(numberHash)
-      while not HasModelLoaded(numberHash) do
-          RequestModel(numberHash)
-          Citizen.Wait(0)
-      end
-      local playerPed = GetPlayerPed(-1)
-      JOB.taxi = CreateVehicle(numberHash, closest_location.spawn.x, closest_location.spawn.y, closest_location.spawn.z, 0.0, true, false)
-      SetVehicleOnGroundProperly(vehicle)
-      SetVehRadioStation(vehicle, "OFF")
-      SetEntityAsMissionEntity(vehicle, true, true)
-			SetVehicleNumberPlateText(vehicle, name)
+	local numberHash = -956048545
+	Citizen.CreateThread(function()
+		RequestModel(numberHash)
+		while not HasModelLoaded(numberHash) do
+			Wait(100)
+		end
+		local playerPed = GetPlayerPed(-1)
+		JOB.taxi = CreateVehicle(numberHash, closest_location.spawn.x, closest_location.spawn.y, closest_location.spawn.z, 0.0, true, false)
+		print("taxi: " .. JOB.taxi)
+		SetVehicleOnGroundProperly(JOB.taxi)
+		SetVehRadioStation(JOB.taxi, "OFF")
+		SetEntityAsMissionEntity(JOB.taxi, true, true)
+		SetVehicleNumberPlateText(JOB.taxi, GetPlayerName(PlayerId()))
+		SetVehicleEngineOn(JOB.taxi, true, true, true)
 
-			local vehicle_key = {
-				name = "Key -- " .. GetVehicleNumberPlateText(vehicle),
-				quantity = 1,
-				type = "key",
-				owner = "Downtown Taxi Co.",
-				make = "Vapid",
-				model = "Stanier",
-				plate = GetVehicleNumberPlateText(vehicle)
-			}
+		local vehicle_key = {
+			name = "Key -- " .. GetVehicleNumberPlateText(JOB.taxi),
+			quantity = 1,
+			type = "key",
+			owner = "Downtown Taxi Co.",
+			make = "Vapid",
+			model = "Stanier",
+			plate = GetVehicleNumberPlateText(JOB.taxi)
+		}
 
-			-- give key to owner
-			TriggerServerEvent("garage:giveKey", vehicle_key)
-  end)
+		-- give key to owner
+		TriggerServerEvent("garage:giveKey", vehicle_key)
+	end)
 end
 
 function DrawCoolLookingNotificationWithTaxiPic(name, msg)

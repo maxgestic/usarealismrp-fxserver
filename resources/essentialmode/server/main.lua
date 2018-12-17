@@ -112,24 +112,21 @@ end
 
 AddEventHandler('playerDropped', function()
 	local numberSource = tonumber(source)
-
+	-- update anticheese (per MrFrz's change) --
 	TriggerEvent("anticheese:playerDropped", numberSource)
+	-- drop player --
 	if(Users[numberSource])then
+		-- log --
 		print("player " .. GetPlayerName(numberSource) .. " dropped from the server!")
 		TriggerEvent("chat:sendToLogFile", numberSource, "dropped from the server! Timestamp: " .. os.date('%m-%d-%Y %H:%M:%S', os.time()))
-		local inventory = Users[numberSource].getActiveCharacterData("inventory")
-		if inventory then
-			for i = 1, #inventory do
-				local item = inventory[i]
-				if item then
-					if item.name == "20g of concentrated cannabis" then
-						table.remove(inventory, i)
-						Users[numberSource].setActiveCharacterData("inventory", inventory)
-						print("player dropped with cannabis, removing it...")
-					end
-				end
+		-- notify DOC of player disconnect while in jail --
+		local jailtime = Users[numberSource].getActiveCharacterData("jailtime")
+		if jailtime then
+			if jailtime > 0 then
+				exports["globals"]:notifyPlayersWithJobs({"corrections"}, "^3INFO: ^0" .. Users[numberSource].getActiveCharacterData("fullName") .. " has fallen asleep.")
 			end
 		end
+		-- Trigger event / save player data --
 		TriggerEvent("es:playerDropped", Users[numberSource])
 		db.updateUser(Users[numberSource].get('identifier'), {characters = Users[numberSource].getCharacters(), policeCharacter = Users[numberSource].getPoliceCharacter(), emsCharacter = Users[numberSource].getEmsCharacter()}, function()
 			Users[numberSource] = nil

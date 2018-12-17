@@ -5,12 +5,12 @@ local spawnedCones = {}
 RegisterNetEvent("dispatch:setWaypoint")
 AddEventHandler("dispatch:setWaypoint", function(targetServerId)
     local targetPed = GetPlayerFromServerId(targetServerId)
-    Citizen.Trace("targetPed = " .. targetPed)
+    --Citizen.Trace("targetPed = " .. targetPed)
     local x,y,z = table.unpack(GetEntityCoords(GetPlayerPed(targetPed), false))
-    Citizen.Trace("x = " .. x .. ", y = " .. y .. ", z = " .. z)
+    --Citizen.Trace("x = " .. x .. ", y = " .. y .. ", z = " .. z)
     ClearGpsPlayerWaypoint()
     SetNewWaypoint(x,y)
-    Citizen.Trace("waypoint set!")
+    --Citizen.Trace("waypoint set!")
 end)
 
 -- barrier --
@@ -303,7 +303,7 @@ end)
 -- Gun Shot Resdiue(GSR) & Shots fired notifications (based on area + random chance) --
 ---------------------------------------------------------------------------------------
 local last_shot_time = 0
-local duration = 25 * 60 * 1000 -- 25 minutes to ms
+local duration = 50 * 60 * 1000 -- 25 minutes to ms
 local sending_msg = false
 local already_sent_msg = false
 local jacked = false

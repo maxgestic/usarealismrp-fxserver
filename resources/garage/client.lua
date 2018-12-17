@@ -16,7 +16,8 @@ local locations = {
 	{["x"] = 447.1, ["y"] = -1024.5, ["z"] = 28.6, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"}}, -- LS PD mission row
 	{["x"] = 343.7, ["y"] = -560.4, ["z"] = 28.7, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"}}, -- pillbox medical
 	{["x"] = 326.4, ["y"] = -1475.6, ["z"] = 29.8, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"}}, -- one of the hospitals in LS, forgot exaclty the name
-	{["x"] = 1834.5, ["y"] = 2542.2, ["z"] = 45.9, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"}}
+	{["x"] = 1834.5, ["y"] = 2542.2, ["z"] = 45.9, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"}},
+	{['x'] = 911.6, ['y'] = -163.6, ['z'] = 74.4, ["jobs"] = {"taxi"}}
 }
 
 local VEHICLE_DAMAGES = {}
