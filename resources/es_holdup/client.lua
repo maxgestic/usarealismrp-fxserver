@@ -275,6 +275,16 @@ local stores = {
 		position = { ['x'] = -1150.7, ['y'] = -1425, ['z'] = 4.9 },
 		nameofstore = "Tattoo Shop - Vespucci Beach",
 		lastrobbed = 0
+	},
+	["Gas Station - Vespucci Blvd."] = {
+		position = { ['x'] = 817.96417236328, ['y'] = -1040.6236572266, ['z'] = 26.750793457031 },
+		nameofstore = "Gas Station - Vespucci Blvd.",
+		lastrobbed = 0
+	},
+	["Ammunation - Vespucci Blvd."] = {
+		position = { ['x'] = 846.16217041016, ['y'] = -1035.3648681641, ['z'] = 28.294628114331 },
+		nameofstore = "Ammunation - Vespucci Blvd.",
+		lastrobbed = 0
 	}
 }
 
