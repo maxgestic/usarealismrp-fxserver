@@ -13,6 +13,8 @@ Citizen.CreateThread(function()
     local loaded = false
 
     while true do
+        local ped = GetPlayerPed(-1)
+
         if enableWeatherControl then
             SetWeatherTypeNowPersist('XMAS')
         end
@@ -36,10 +38,10 @@ Citizen.CreateThread(function()
                 loaded = true
             end
             RequestAnimDict('anim@mp_snowball') -- pre-load the animation
-            if IsControlJustReleased(0, G_KEY) and not IsPedInAnyVehicle(GetPlayerPed(-1), true) and not IsPlayerFreeAiming(PlayerId()) and not IsPedSwimming(PlayerPedId()) and not IsPedSwimmingUnderWater(PlayerPedId()) and not IsPedRagdoll(PlayerPedId()) and not IsPedFalling(PlayerPedId()) and not IsPedRunning(PlayerPedId()) and not IsPedSprinting(PlayerPedId()) and GetInteriorFromEntity(PlayerPedId()) == 0 and not IsPedShooting(PlayerPedId()) and not IsPedUsingAnyScenario(PlayerPedId()) and not IsPedInCover(PlayerPedId(), 0) then -- check if the snowball should be picked up
-                TaskPlayAnim(PlayerPedId(), 'anim@mp_snowball', 'pickup_snowball', 8.0, -1, -1, 0, 1, 0, 0, 0) -- pickup the snowball
+            if IsControlJustReleased(0, G_KEY) and not IsPedInAnyVehicle(ped, true) and not IsPlayerFreeAiming(PlayerId()) and not IsPedSwimming(ped) and not IsPedSwimmingUnderWater(ped) and not IsPedRagdoll(ped) and not IsPedFalling(PlayerPedId()) and not IsPedRunning(ped) and not IsPedSprinting(ped) and GetInteriorFromEntity(ped) == 0 and not IsPedShooting(ped) and not IsPedUsingAnyScenario(ped) and not IsPedInCover(ped, 0) then -- check if the snowball should be picked up
+                TaskPlayAnim(ped, 'anim@mp_snowball', 'pickup_snowball', 8.0, -1, -1, 0, 1, 0, 0, 0) -- pickup the snowball
                 Citizen.Wait(1950) -- wait 1.95 seconds to prevent spam clicking and getting a lot of snowballs without waiting for animatin to finish.
-                GiveWeaponToPed(GetPlayerPed(-1), GetHashKey('WEAPON_SNOWBALL'), 2, false, true) -- get 2 snowballs each time.
+                GiveWeaponToPed(ped, GetHashKey('WEAPON_SNOWBALL'), 2, false, true) -- get 2 snowballs each time.
             end
         else
             -- disable frozen water effect
@@ -51,9 +53,11 @@ Citizen.CreateThread(function()
             SetForceVehicleTrails(false)
             SetForcePedFootstepsTracks(false)
         end
-        if GetSelectedPedWeapon(PlayerPedId()) == GetHashKey('WEAPON_SNOWBALL') then
-          SetPlayerWeaponDamageModifier(PlayerId(), 0.0)
-        end
+            if GetSelectedPedWeapon(PlayerPedId()) == GetHashKey('WEAPON_SNOWBALL') then
+                SetPlayerWeaponDamageModifier(PlayerId(), 0.0)
+            else
+                SetPlayerWeaponDamageModifier(PlayerId(), 1.0)
+            end
     end
 end)
 
