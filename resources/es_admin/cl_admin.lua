@@ -60,6 +60,20 @@ AddEventHandler('es_admin:spawnVehicle', function(v)
 		--SetVehicleAsNoLongerNeeded(veh)
 		SetEntityAsMissionEntity(veh, true, true)
 		TaskWarpPedIntoVehicle(playerPed, veh, -1)
+
+		local vehicle_key = {
+			name = "Key -- " .. GetVehicleNumberPlateText(veh),
+			quantity = 1,
+			type = "key",
+			owner = "GOVT",
+			make = "GOVT",
+			model = "GOVT",
+			plate = GetVehicleNumberPlateText(veh)
+		}
+
+		-- give key to owner
+		TriggerServerEvent("garage:giveKey", vehicle_key)
+
 	end
 end)
 
