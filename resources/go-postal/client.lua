@@ -168,6 +168,19 @@ Citizen.CreateThread(function()
 									SetEntityAsMissionEntity(job.truck, true, true)
 									table.insert(retrievedVehicles,job.truck)
 									--print("inserted into retrievedVehicles: " .. job.truck)
+									-- give owner vehicle key --
+									local vehicle_key = {
+										name = "Key -- " .. GetVehicleNumberPlateText(job.truck),
+										quantity = 1,
+										type = "key",
+										owner = "GOVT",
+										make = "GOVT",
+										model = "GOVT",
+										plate = GetVehicleNumberPlateText(job.truck)
+									}
+
+									-- give key to owner
+									TriggerServerEvent("garage:giveKey", vehicle_key)
 								else
 									job.truck = lastTruck
 									table.insert(retrievedVehicles,job.truck)
@@ -257,7 +270,19 @@ Citizen.CreateThread(function()
 										job.truck = CreateVehicle(vehicle, info.x, info.y, info.z+1.0, 2.0, true, false)
 										SetEntityAsMissionEntity(job.truck, true, true)
 										table.insert(retrievedVehicles,job.truck)
-										print("inserted into retrievedVehicles: " .. job.truck)
+										-- give owner vehicle key --
+										local vehicle_key = {
+											name = "Key -- " .. GetVehicleNumberPlateText(job.truck),
+											quantity = 1,
+											type = "key",
+											owner = "GOVT",
+											make = "GOVT",
+											model = "GOVT",
+											plate = GetVehicleNumberPlateText(job.truck)
+										}
+
+										-- give key to owner
+										TriggerServerEvent("garage:giveKey", vehicle_key)
 									else
 										job.truck = lastTruck
 										table.insert(retrievedVehicles,job.truck)
