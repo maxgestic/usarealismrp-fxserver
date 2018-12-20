@@ -224,8 +224,8 @@ function CreateBarberShopMenu(menu)
     ---------------------
     local reset_item = NativeUI.CreateItem("Reset", "Reset your changes.")
     reset_item.Activated = function(parentmenu, selected)
-      SetPedDefaultHead(GetPlayerPed(-1))
-      -- TODO: call server event to get character customizations then call barber:loadCustomizations with returned customizations to save appearance in 'old_head' var
+      --SetPedDefaultHead(GetPlayerPed(-1))
+      -- TODO: call server event to get character customizations then call barber:loadCustomizations with returned customizations to save appearance in 'old_head' var // left off here, just do this and it should be perfect
       -- then call TriggerServerEvent("usa:loadPlayerComponents") to reset appearance
     end
     menu:AddItem(reset_item)
@@ -288,7 +288,6 @@ Citizen.CreateThread(function()
                     drawTxt("Press [~y~E~w~] to open the barber shop menu",7,1,0.5,0.8,0.5,255,255,255,255)
                     if IsControlJustPressed(1, MENU_OPEN_KEY) then
                         mainMenu:Visible(not mainMenu:Visible())
-                        PlayPoliceReport("SCRIPTED_SCANNER_REPORT_JSH_2A_04", 0.0) -- test
                     end
                 else
                     if closest_shop then
