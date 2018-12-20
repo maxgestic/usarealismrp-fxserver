@@ -1,12 +1,7 @@
 --# made by: minipunch
 --# for: USA REALISM RP
 
--- property coord: x = -274.606, y = 6226.58, z = 31.69 (paleto)
-
--- ped coord: x = -277.637, y = 6230.133, z = 31.69 (cashier, paleto)
--- peed coord: x = -278.04, y = 6224.733, z = 31.705 (barber, paleto)
-
-local SHOPS = {
+local BARBER_SHOPS = {
   {x = -279.154, y = 6226.192, z = 31.705}, -- paleto,
   {x = -34.97777557373, y = -150.9037322998, z = 57.086517333984},
   {x = 1211.0759277344, y = -475.00064086914, z = 66.218032836914},
@@ -14,21 +9,11 @@ local SHOPS = {
   {x = -1281.9802246094, y = -1119.6861572266, z = 7.0001249313354},
   {x = 139.21583557129, y = -1708.9689941406, z = 29.301620483398},
   {x = -815.59008789063, y = -182.16806030273, z = 37.568920135498}
-
-}
-
-local menu = {
-  open = false,
-  key = 38, -- "E",
-  page = "home",
-  settings = {
-    MAX_PARENTS_OPTIONS = 45
-  }
 }
 
 local purchases = {}
 
-local last_entered = nil
+local closest_shop = nil --// keep track of closest shop to help keep track of shop player is currently at
 
 local old_head = {
   parent1 = 0,
@@ -61,19 +46,49 @@ local old_head = {
   }
 }
 
-RegisterNetEvent("barber:loadCustomizations")
-AddEventHandler("barber:loadCustomizations", function(customizations)
-  old_head.parent1 = customizations.parent1
-  old_head.parent2 = customizations.parent2
-  old_head.parent3 = customizations.parent3
-  old_head.skin1 = customizations.skin1
-  old_head.skin2 = customizations.skin2
-  old_head.skin3 = customizations.skin3
-  old_head.isParent = customizations.isParent
-  old_head.other = customizations.other
-end)
+local MENU_OPEN_KEY = 38
 
--- reset to default values --
+local MAX_PARENT_OPTIONS = 45
+local MAX_COLOR_OPTIONS = 85
+
+---------------------------
+-- Set up main menu --
+---------------------------
+_menuPool = NativeUI.CreatePool()
+mainMenu = NativeUI.CreateMenu("Barber Shop", "~b~Herr Kutz Barber", 0 --[[X COORD]], 320 --[[Y COORD]])
+_menuPool:Add(mainMenu)
+
+-- Functions --
+function UpdateHead(ped, head)
+  -- customize head stuff, like beards and skin tone and what not --
+  SetPedHeadBlendData(ped, head.parent1, head.parent2, head.parent3, head.skin1, head.skin2, head.skin3, head.mix1, head.mix2, head.mix3, false)
+  --[[ customize face features --
+  if face then
+    local i = 0
+    for name, value in pairs(face) do
+      print("name: " .. name)
+      print("setting index " .. i .. " to value: " .. value / 100.0)
+      SetPedFaceFeature(ped, i, value / 100.0)
+      i = i + 1
+    end
+  end
+  --]] -- on hold cause it wouldn't work
+  -- facial stuff like beards and ageing and what not --
+  for i = 1, #head.other do
+    SetPedHeadOverlay(ped, i - 1, head.other[i][2], 1.0)
+    if head.other[i][2] ~= 255 then
+      if i == 2 or i == 3 or i == 11 then -- chest hair, facial hair, eyebrows
+        SetPedHeadOverlayColor(ped, i - 1, 1, head.other[i][4])
+      elseif i == 6 or i == 9 then -- blush, lipstick
+        SetPedHeadOverlayColor(ped, i - 1, 2, head.other[i][4])
+      elseif i == 14 then -- hair
+        SetPedComponentVariation(ped, 2, head.other[i][2], 0, 1)
+        SetPedHairColor(ped, head.other[i][4], 0)
+      end
+    end
+  end
+end
+
 function SetPedDefaultHead(ped)
   -- head & skin details --
   old_head.other = {
@@ -105,218 +120,190 @@ function SetPedDefaultHead(ped)
   end
 end
 
-function UpdateHead(ped, head)
-  -- customize head stuff, like beards and skin tone and what not --
-  SetPedHeadBlendData(ped, head.parent1, head.parent2, head.parent3, head.skin1, head.skin2, head.skin3, head.mix1, head.mix2, head.mix3, false)
-  --[[ customize face features --
-  if face then
-    local i = 0
-    for name, value in pairs(face) do
-      print("name: " .. name)
-      print("setting index " .. i .. " to value: " .. value / 100.0)
-      SetPedFaceFeature(ped, i, value / 100.0)
-      i = i + 1
-    end
-  end
-  --]] -- on hold cause it wouldn't work
-  -- facial stuff like beards and ageing and what not --
-  for i = 1, #head.other do
-    SetPedHeadOverlay(ped, i - 1, head.other[i][2], 1.0)
-    if head.other[i][2] ~= 255 then
-      if i == 2 or i == 3 or i == 11 then -- chest hair, facial hair, eyebrows
-        SetPedHeadOverlayColor(ped, i - 1, 1, head.other[i][4])
-      elseif i == 6 or i == 9 then -- blush, lipstick
-        SetPedHeadOverlayColor(ped, i - 1, 2, head.other[i][4])
-      elseif i == 14 then -- hair
-        SetPedComponentVariation(ped, 2, head.other[i][2], 0, 1)
-        SetPedHairColor(ped, head.other[i][4], head.other[i][4])
-      end
-    end
-  end
-end
-
--------------------------
--- SHOP DETECTION LOOP --
--------------------------
-Citizen.CreateThread(function()
-  addBlips()
-  while true do
-    local me = GetPlayerPed(-1)
-    local player_coords = GetEntityCoords(GetPlayerPed(-1))
-    for i = 1, #SHOPS do
-      if not menu.open then
-        if Vdist(player_coords.x, player_coords.y, player_coords.z, SHOPS[i].x, SHOPS[i].y, SHOPS[i].z) < 3.0 then
-          last_entered = SHOPS[i]
-          drawTxt("Press [~y~E~w~] to open the barber shop menu",0,1,0.5,0.8,0.6,255,255,255,255)
-          if IsControlJustPressed(1,menu.key) and not IsPedDeadOrDying(GetPlayerPed(-1)) then
-            local playerCoords = GetEntityCoords(me, false)
-            menu.open = true
-            purchases = {}
-            --SetPedHeadBlendData(me, 0, 4, 25, 6, 4, 20, .5, 0.5, 0.2 , false) -- needed to apply head overlays like facial hair
-          end
-        end
-      else
-        if last_entered then
-          if Vdist(player_coords.x, player_coords.y, player_coords.z, last_entered.x, last_entered.y, last_entered.z) >= 3.0 then
-            last_entered = nil
-            if menu.open == true then
-              menu.page = "home"
-              menu.open = false
-              TriggerServerEvent("usa:loadPlayerComponents")
-            end
-          end
-        end
-      end
-    end
-    --drawMarkers()
-    Wait(0)
-  end
+RegisterNetEvent("barber:loadCustomizations")
+AddEventHandler("barber:loadCustomizations", function(customizations)
+  old_head.parent1 = customizations.parent1
+  old_head.parent2 = customizations.parent2
+  old_head.parent3 = customizations.parent3
+  old_head.skin1 = customizations.skin1
+  old_head.skin2 = customizations.skin2
+  old_head.skin3 = customizations.skin3
+  old_head.isParent = customizations.isParent
+  old_head.other = customizations.other
 end)
 
----------------
--- MENU LOOP --
----------------
-Citizen.CreateThread(function()
-  while true do
-    local me = GetPlayerPed(-1)
-    if menu.open then
-      TriggerEvent("GUI-barbershop:Title", "Herr Kutz Barber")
-      if menu.page == "home" then
-        ----------
-        -- HOME --
-        ----------
-        TriggerEvent("GUI-barbershop:Option", "Head & Skin Color >", function(cb)
-          if(cb) then
-            menu.page = "head"
-          end
-        end)
-        -------------------
-        -- OTHER OPTIONS --
-        -------------------
-        for i = 1, #old_head.other do
-          TriggerEvent("GUI-barbershop:Int", old_head.other[i][1], old_head.other[i][2], 0, old_head.other[i][3], function(cb)
-            if(cb) then
-              old_head.other[i][2] = cb
-              --print("settng " .. old_head.other[i][1] .. " to val: " .. cb)
-              UpdateHead(me, old_head)
-            end
-          end)
-          if i == 2 or i == 3 or i == 11 or i == 6 or i == 9 or i == 14 then
-            TriggerEvent("GUI-barbershop:Int", old_head.other[i][1] .. " color", old_head.other[i][4], 0, 85, function(cb)
-              if(cb) then
-                old_head.other[i][4] = cb
-                --print("settng " .. old_head.other[i][1] .. " color to val: " .. cb)
-                UpdateHead(me, old_head)
-              end
-            end)
-          end
-        end
-        ---------------------
-        -- EXIT / CHECKOUT --
-        ---------------------
-        TriggerEvent("GUI-barbershop:Option", "~y~Checkout", function(cb)
-          if(cb) then
-            menu.page = "home"
-            menu.open = false
-            local playerCoords = GetEntityCoords(me, false)
-            TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-              TriggerServerEvent("barber:checkout", old_head, property)
-            end)
-          end
-        end)
-        TriggerEvent("GUI-barbershop:Option", "~r~Reset", function(cb)
-          if(cb) then
-            SetPedDefaultHead(me)
-          end
-        end)
-        TriggerEvent("GUI-barbershop:Option", "~y~Exit", function(cb)
-          if(cb) then
-            menu.page = "home"
-            menu.open = false
-            TriggerServerEvent("usa:loadPlayerComponents")
-          end
-        end)
-      else
-        ------------------------
-        -- head customization --
-        ------------------------
-        if menu.page == "head" then
-          -------------
-          -- PARENTS --
-          -------------
-          TriggerEvent("GUI-barbershop:Int", "Parent 1", old_head.parent1, 0, menu.settings.MAX_PARENTS_OPTIONS, function(cb)
-            if(cb) then
-              --("selected index: " .. selected_index)
-              --SetPedHeadOverlay(me, 1, selected_index, 1.0)
-  	          --SetPedHeadOverlayColor(ped, 0, v[2], v[3], v[3])
-              --SetPedComponentVariation(me, 2, selected_index, 0, 1)
-              old_head.parent1 = cb
-              UpdateHead(me, old_head)
-            end
-          end)
-          TriggerEvent("GUI-barbershop:Int", "Parent 2", old_head.parent2, 0, menu.settings.MAX_PARENTS_OPTIONS, function(cb)
-            if(cb) then
-              old_head.parent2 = cb
-              UpdateHead(me, old_head)
-            end
-          end)
-          ----------------
-          -- SKIN COLOR --
-          ----------------
-          TriggerEvent("GUI-barbershop:Int", "Skin 1", old_head.skin1, 0, menu.settings.MAX_PARENTS_OPTIONS, function(cb)
-            if(cb) then
-              old_head.skin1 = cb
-              UpdateHead(me, old_head)
-            end
-          end)
-          TriggerEvent("GUI-barbershop:Int", "Skin 2", old_head.skin2, 0, menu.settings.MAX_PARENTS_OPTIONS, function(cb)
-            if(cb) then
-              old_head.skin2 = cb
-              UpdateHead(me, old_head)
-            end
-          end)
-          ------------------
-          -- reset button --
-          ------------------
-          TriggerEvent("GUI-barbershop:Option", "~r~Reset", function(cb)
-            if(cb) then
-              --old_head.parent1, old_head.parent2, old_head.skin1, old_head.skin2 = 0, 0, 0, 0
-              SetPedHeadBlendData(me, old_head.parent1, old_head.parent2, old_head.parent3, old_head.skin1, old_head.skin2, old_head.skin3, old_head.mix1, old_head.mix2, old_head.mix3, old_head.isParent)
-            end
-          end)
-          -----------------
-          -- back button --
-          -----------------
-          TriggerEvent("GUI-barbershop:Option", "Back", function(cb)
-            if(cb) then
-              menu.page = "home"
-            end
-          end)
-        end
-      end
-      ----------
-      -- UPDATE --
-      ----------
-      TriggerEvent("GUI-barbershop:Update")
+-- Main Menu --
+function CreateBarberShopMenu(menu)
+    --// overview:
+    -- parent and skin color submenu
+    -- customization buttons
+    -- checkout button
+    -- reset button
+    -- exit button
+
+    ---------------------------------------
+    -- Parent / Skin Color Buttons --
+    ---------------------------------------
+    local parentValuesArr = {}
+    for j = 1, MAX_PARENT_OPTIONS do parentValuesArr[j] = j end
+
+    local parent_item_1 = UIMenuSliderItem.New("Parent 1", parentValuesArr, 1, "Customize Parent 1")
+    parent_item_1.OnSliderChanged = function(menu, item, index)
+        old_head.parent1 = index
+        UpdateHead(GetPlayerPed(-1), old_head)
     end
-    Wait(0)
-  end
+    menu:AddItem(parent_item_1)
+
+    local parent_item_2 = UIMenuSliderItem.New("Parent 2", parentValuesArr, 1, "Customize Parent 2")
+    parent_item_2.OnSliderChanged = function(menu, item, index)
+        old_head.parent2 = index
+        UpdateHead(GetPlayerPed(-1), old_head)
+    end
+    menu:AddItem(parent_item_2)
+
+    local skin_item_1 = UIMenuSliderItem.New("Skin 1", parentValuesArr, 1, "Customize Skin 1")
+    skin_item_1.OnSliderChanged = function(menu, item, index)
+        old_head.skin1 = index
+        UpdateHead(GetPlayerPed(-1), old_head)
+    end
+    menu:AddItem(skin_item_1)
+
+    local skin_item_2 = UIMenuSliderItem.New("Skin 2", parentValuesArr, 1, "Customize Skin 2")
+    skin_item_2.OnSliderChanged = function(menu, item, index)
+        old_head.skin2 = index
+        UpdateHead(GetPlayerPed(-1), old_head)
+    end
+    menu:AddItem(skin_item_2)
+
+    ---------------------------------
+    -- Customization Buttons --
+    ---------------------------------
+    for i = 1, #old_head.other do
+        local option_name =  old_head.other[i][1]
+        local max_options = old_head.other[i][3]
+        local valuesArr = {}
+        for j = 1, max_options do
+            valuesArr[j] = j
+        end
+        local newitem = UIMenuSliderItem.New(option_name, valuesArr, 1, "Customize " .. old_head.other[i][1])
+        newitem.OnSliderChanged = function(menu, item, index)
+            old_head.other[i][2] = index
+            UpdateHead(GetPlayerPed(-1), old_head)
+        end
+        menu:AddItem(newitem)
+        -- Color variations --
+        if i == 2 or i == 3 or i == 11 or i == 6 or i == 9 or i == 14 then
+            local colorArr = {}
+            for j = 1, MAX_COLOR_OPTIONS do colorArr[j] = j end
+            local newVariationitem = UIMenuSliderItem.New(option_name .. " color", colorArr, 1, "Customize " .. option_name .. " color")
+            newVariationitem.OnSliderChanged = function(menu, item, index)
+                old_head.other[i][4] = index
+                UpdateHead(GetPlayerPed(-1), old_head)
+            end
+            menu:AddItem(newVariationitem)
+          end
+    end
+
+    --------------------------
+    -- Checkout Button --
+    --------------------------
+    local checkout_item = NativeUI.CreateItem("Checkout", "Save your changes.")
+    checkout_item.Activated = function(parentmenu, selected)
+      -- Close Menu --
+      _menuPool:CloseAllMenus()
+      -- Finish Checkout  / Save --
+      local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+      TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+        TriggerServerEvent("barber:checkout", old_head, property)
+      end)
+    end
+    menu:AddItem(checkout_item)
+
+    ---------------------
+    -- Reset Button --
+    ---------------------
+    local reset_item = NativeUI.CreateItem("Reset", "Reset your changes.")
+    reset_item.Activated = function(parentmenu, selected)
+      SetPedDefaultHead(GetPlayerPed(-1))
+      -- TODO: call server event to get character customizations then call barber:loadCustomizations with returned customizations to save appearance in 'old_head' var
+      -- then call TriggerServerEvent("usa:loadPlayerComponents") to reset appearance
+    end
+    menu:AddItem(reset_item)
+
+    ---------------------
+    -- Exit Button --
+    ---------------------
+    local exit_item = NativeUI.CreateItem("Exit", "Exit the barber shop menu.")
+    exit_item.Activated = function(parentmenu, selected)
+        _menuPool:CloseAllMenus()
+        TriggerServerEvent("usa:loadPlayerComponents")
+    end
+    menu:AddItem(exit_item)
+end
+
+-- add map blips --
+Citizen.CreateThread(function()
+
+    local function addBlips()
+      for i = 1, #BARBER_SHOPS do
+        local blip = AddBlipForCoord(BARBER_SHOPS[i].x, BARBER_SHOPS[i].y, BARBER_SHOPS[i].z)
+        SetBlipSprite(blip, 71)
+        SetBlipColour(blip, 4)
+        SetBlipAsShortRange(blip, true)
+        BeginTextCommandSetBlipName("STRING")
+        AddTextComponentString("Barber Shop")
+        EndTextCommandSetBlipName(blip)
+      end
+    end
+
+    addBlips()
 end)
 
-------------------------
---- utility functions --
-------------------------
-function addBlips()
-  for i = 1, #SHOPS do
-    local blip = AddBlipForCoord(SHOPS[i].x, SHOPS[i].y, SHOPS[i].z)
-    SetBlipSprite(blip, 71)
-    SetBlipColour(blip, 4)
-    SetBlipAsShortRange(blip, true)
-    BeginTextCommandSetBlipName("STRING")
-    AddTextComponentString("Barber Shop")
-    EndTextCommandSetBlipName(blip)
-  end
-end
+-------------------
+-- add to GUI --
+-------------------
+CreateBarberShopMenu(mainMenu)
+_menuPool:RefreshIndex()
+
+-- Draw Markers / Help Text / Listen for menu open key press --
+Citizen.CreateThread(function()
+    while true do
+        Wait(0)
+        -- vars --
+        local me = GetPlayerPed(-1)
+        local playerCoords = GetEntityCoords(me, false)
+
+        -----------------------
+        -- Process Menu --
+        -----------------------
+        _menuPool:MouseControlsEnabled(false)
+        _menuPool:ControlDisablingEnabled(false)
+        _menuPool:ProcessMenus()
+
+    	for i = 1, #BARBER_SHOPS do
+    		if Vdist(playerCoords.x,playerCoords.y,playerCoords.z,BARBER_SHOPS[i].x,BARBER_SHOPS[i].y,BARBER_SHOPS[i].z)  <  50 then
+    		    DrawMarker(27, BARBER_SHOPS[i].x, BARBER_SHOPS[i].y, BARBER_SHOPS[i].z - 1.0, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 32, 0, 90, 0, 0, 2, 0, 0, 0, 0)
+                if Vdist(playerCoords.x,playerCoords.y,playerCoords.z,BARBER_SHOPS[i].x,BARBER_SHOPS[i].y,BARBER_SHOPS[i].z)  <  5 then
+                    closest_shop = BARBER_SHOPS[i] --// set shop player is at
+                    drawTxt("Press [~y~E~w~] to open the barber shop menu",7,1,0.5,0.8,0.5,255,255,255,255)
+                    if IsControlJustPressed(1, MENU_OPEN_KEY) then
+                        mainMenu:Visible(not mainMenu:Visible())
+                        PlayPoliceReport("SCRIPTED_SCANNER_REPORT_JSH_2A_04", 0.0) -- test
+                    end
+                else
+                    if closest_shop then
+                        closest_shop = nil
+                        TriggerServerEvent("usa:loadPlayerComponents")
+                        if mainMenu:Visible() then
+                            mainMenu:Visible(false)
+                        end
+                    end
+                end
+            end
+    	end
+
+    end
+end)
 
 function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
   SetTextFont(font)
@@ -332,42 +319,3 @@ function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
   AddTextComponentString(text)
   DrawText(x , y)
 end
-
-----------------
--- MENU STUFF --
-----------------
-RegisterNetEvent("GUI-barbershop:Title")
-AddEventHandler("GUI-barbershop:Title", function(title)
-  Menu.Title(title)
-end)
-
-RegisterNetEvent("GUI-barbershop:Option")
-AddEventHandler("GUI-barbershop:Option", function(option, cb)
-  cb(Menu.Option(option))
-end)
-
-RegisterNetEvent("GUI-barbershop:Bool")
-AddEventHandler("GUI-barbershop:Bool", function(option, bool, cb)
-  Menu.Bool(option, bool, function(data)
-    cb(data)
-  end)
-end)
-
-RegisterNetEvent("GUI-barbershop:Int")
-AddEventHandler("GUI-barbershop:Int", function(option, int, min, max, cb)
-  Menu.Int(option, int, min, max, function(data)
-    cb(data)
-  end)
-end)
-
-RegisterNetEvent("GUI-barbershop:StringArray")
-AddEventHandler("GUI-barbershop:StringArray", function(option, array, position, cb)
-  Menu.StringArray(option, array, position, function(data)
-    cb(data)
-  end)
-end)
-
-RegisterNetEvent("GUI-barbershop:Update")
-AddEventHandler("GUI-barbershop:Update", function()
-  Menu.updateSelection()
-end)

@@ -126,12 +126,12 @@ AddEventHandler("character:setCharacter", function(character)
 					          SetPedHeadOverlayColor(ped, i - 1, 2, head.other[i][4])
 					        elseif i == 14 then -- hair
 										--print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
-					          SetPedComponentVariation(ped, 2, head.other[i][2], GetNumberOfPedTextureVariations(ped,2, 0), 2)
-					          SetPedHairColor(ped, head.other[i][4], head.other[i][4])
+					          SetPedComponentVariation(ped, 2, head.other[i][2], 0, 1)
+					          SetPedHairColor(ped, head.other[i][4], 0)
 					        end
 					      end
 					    end
-							TriggerEvent("barber:loadCustomizations", character.appearance.head_customizations)
+							TriggerEvent("barber:loadCustomizations", character.appearance.head_customizations) --// used in 'usa-barbershop' resource
 						end
 						--print("GIVING WEAPONS TO PED! # = " .. #weapons)
 						-- G I V E  W E A P O N S
@@ -321,7 +321,7 @@ function toggleMenu(status, menu, data)
 		FreezeEntityPosition(GetPlayerPed(-1), status)
 		SetEnableHandcuffs(GetPlayerPed(-1), status)
 		DoScreenFadeIn(1000)
-		
+
 		-- welcome info --
 		TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0Welcome to ^1U^0S^5A ^3REALISM RP^0!")
 		TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0Type ^3'/info' ^0for more help and information!")
