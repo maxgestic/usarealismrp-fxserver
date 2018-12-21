@@ -1,127 +1,70 @@
-local menu = false
-local ownedVehicles = {}
-local alreadyCalled = false
+local MENU_OPEN_KEY = 38
+local closest_shop = nil
 
-RegisterNetEvent("GUI:Title")
-AddEventHandler("GUI:Title", function(title)
-	Menu.Title(title)
-end)
+---------------------------
+-- Set up main menu --
+---------------------------
+_menuPool = NativeUI.CreatePool()
+mainMenu = NativeUI.CreateMenu("Garage", "~b~Public Parking", 0 --[[X COORD]], 320 --[[Y COORD]])
+_menuPool:Add(mainMenu)
 
-RegisterNetEvent("GUI:Option")
-AddEventHandler("GUI:Option", function(option, cb)
-	cb(Menu.Option(option))
-end)
-
-RegisterNetEvent("GUI:Bool")
-AddEventHandler("GUI:Bool", function(option, bool, cb)
-	Menu.Bool(option, bool, function(data)
-		cb(data)
-	end)
-end)
-
-RegisterNetEvent("GUI:Int")
-AddEventHandler("GUI:Int", function(option, int, min, max, cb)
-	Menu.Int(option, int, min, max, function(data)
-		cb(data)
-	end)
-end)
-
-RegisterNetEvent("GUI:StringArray")
-AddEventHandler("GUI:StringArray", function(option, array, position, cb)
-	Menu.StringArray(option, array, position, function(data)
-		cb(data)
-	end)
-end)
-
-RegisterNetEvent("GUI:Update")
-AddEventHandler("GUI:Update", function()
-	Menu.updateSelection()
-end)
-
--- custom events
-
+-- custom events --
 RegisterNetEvent("garage:openMenuWithVehiclesLoaded")
 AddEventHandler("garage:openMenuWithVehiclesLoaded", function(userVehicles)
-	ownedVehicles = userVehicles
-	alreadyCalled = false
-	menu = true
+	CreateBarberShopMenu(mainMenu, userVehicles)
 end)
+-- end custom events --
 
--- end custom events
-
-Citizen.CreateThread(function()
-
-	--local menu = false
-	--local bool = false
-	--local int = 0
-	--local position = 1
-	--local array = {"TEST", "TEST2", "TEST3", "TEST4"}
-
-	while true do
-
-		if(menu) then
-			-- title of menu
-			TriggerEvent("GUI:Title", "LS Storage")
-			for i = 1, #ownedVehicles do
-				local vehicle = ownedVehicles[i]
-				-- each vehicle the player owns
-				local buttonText = "Retrieve ~y~" .. vehicle.model
-				if vehicle.impounded == true then
-					buttonText = buttonText .. " ~w~(~y~Impounded~w~)"
-				elseif vehicle.stored == false then
-					buttonText = buttonText .. " ~w~(~r~Not Stored~w~)"
+function CreateBarberShopMenu(menu, vehicles)
+	-- remove any previous versions --
+	mainMenu:Clear()
+	-- Add vehicles to menu --
+	for i = 1, #vehicles do
+		-- button text --
+		local vehicle = vehicles[i]
+		local buttonText = "Retrieve " .. vehicle.make .. " " .. vehicle.model
+		if vehicle.impounded == true then
+			buttonText = buttonText .. " (~y~Impounded~w~)"
+		elseif vehicle.stored == false then
+			buttonText = buttonText .. " (~r~Not Stored~w~)"
+		else
+			buttonText = buttonText .. " (~g~Stored~w~)"
+		end
+		-- make button --
+		local item = NativeUI.CreateItem(buttonText, "")
+		item.Activated = function(parentmenu, selected)
+			if GetVehiclePedIsIn(GetPlayerPed(-1), false) ~= 0 then
+				if GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), -1) == GetPlayerPed(-1) then
+					local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+					TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+						TriggerServerEvent("garage:checkVehicleStatus", vehicle, property)
+					end)
 				else
-					buttonText = buttonText .. " ~w~(~g~Stored~w~)"
+					TriggerEvent("usa:notify", "You must be in the driver's seat!")
 				end
-				TriggerEvent("GUI:Option", buttonText, function(cb)
-					if(cb) then
-						--Citizen.Trace("Trying to retrieve vehicle...")
-						menu = false
-						if not alreadyCalled then
-							alreadyCalled = true
-							--Citizen.Trace("calling garage:checkVehicleStatus with vehicle = " .. vehicle.model)
-							if GetVehiclePedIsIn(GetPlayerPed(-1), false) ~= 0 then
-								if GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), -1) == GetPlayerPed(-1) then
-									local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
-									TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-										TriggerServerEvent("garage:checkVehicleStatus", vehicle, property)
-									end)
-								else
-									TriggerEvent("usa:notify", "You must be in the driver's seat!")
-								end
-							else 
-								local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
-								TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-									TriggerServerEvent("garage:checkVehicleStatus", vehicle, property)
-								end)
-							end
-						else
-								Citizen.Trace("Vehicle already retrieved...")
-						end
-					else
-					end
+			else
+				local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
+				TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
+					TriggerServerEvent("garage:checkVehicleStatus", vehicle, property)
 				end)
 			end
-			TriggerEvent("GUI:Option", "Close Menu", function(cb)
-				if(cb) then
-					menu = false
-				end
-			end)
-			--[[
-			TriggerEvent("GUI:Bool", "bool", bool, function(cb)
-				bool = cb
-			end)
-
-			TriggerEvent("GUI:Int", "int", int, 0, 55, function(cb)
-				int = cb
-			end)
-
-			TriggerEvent("GUI:StringArray", "string:", array, position, function(cb)
-				position = cb
-			end)
-			--]]
-			TriggerEvent("GUI:Update")
+			-- close menu --
+			mainMenu:Visible(not mainMenu:Visible())
 		end
+	    menu:AddItem(item)
+	end
+	-- Open Menu --
+	mainMenu:Visible(not mainMenu:Visible())
+end
+
+Citizen.CreateThread(function()
+	while true do
+
+		-- Process Menu --
+		_menuPool:MouseControlsEnabled(false)
+		_menuPool:ControlDisablingEnabled(false)
+		_menuPool:ProcessMenus()
+		-----------------------
 
 		Wait(0)
 	end

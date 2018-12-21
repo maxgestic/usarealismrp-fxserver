@@ -16,7 +16,7 @@ local locations = {
 		return_rental = {
 			x = -239.193,
 			y = 6681.12,
-			z = 1.3,
+			z = 0.9,
 			heading = 347.428
 		},
 		spawn = {

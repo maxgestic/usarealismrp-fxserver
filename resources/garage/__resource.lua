@@ -1,2 +1,9 @@
-client_scripts {'GUI.lua', 'menu.lua', 'client.lua'}
+resource_manifest_version '44febabe-d386-4d18-afbe-5e627f4af937'
+
+client_scripts {
+    '@NativeUI/NativeUI.lua',
+    'menu.lua',
+    'client.lua'
+}
+
 server_script 'server.lua'

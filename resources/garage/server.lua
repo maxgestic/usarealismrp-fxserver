@@ -67,7 +67,7 @@ AddEventHandler("garage:storeVehicle", function(handle, numberPlateText, require
 						end
 					end
 				end
-				TriggerClientEvent("garage:notify", source, "~r~You do not own that vehicle!")
+				TriggerClientEvent("usa:notify", source, "~r~You do not own that vehicle!")
 				return
 			end
 		end
@@ -85,7 +85,7 @@ AddEventHandler("garage:storeVehicle", function(handle, numberPlateText, require
 				end
 			end
 		end
-		TriggerClientEvent("garage:notify", source, "~r~You do not own that vehicle!")
+		TriggerClientEvent("usa:notify", source, "~r~You do not own that vehicle!")
 	end
 end)
 
@@ -99,7 +99,7 @@ function playerHasValidAutoInsurance(playerInsurance, source)
 			if wholedays < 32 then
 				return true -- valid insurance, it was purchased 31 or less days ago
 			else
-				TriggerClientEvent("garage:notify", source, "~r~T. ENDS INSURANCE: ~w~Sorry! Your insurance coverage expired. We won't be able to help you.")
+				TriggerClientEvent("usa:notify", source, "~r~T. ENDS INSURANCE: ~w~Sorry! Your insurance coverage expired. We won't be able to help you.")
 				return false
 			end
 		else
@@ -110,7 +110,7 @@ end
 
 RegisterServerEvent("garage:checkVehicleStatus")
 AddEventHandler("garage:checkVehicleStatus", function(vehicle, property)
-	print("inside checkVehicleStatus with vehicle = " .. vehicle.model)
+	--print("inside checkVehicleStatus with vehicle = " .. vehicle.model)
 	local userSource = tonumber(source)
 	local withdraw_fee = 0
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
@@ -120,7 +120,7 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle, property)
 		if vehicle.impounded == true then
 			withdraw_fee = 2000
 			if user_money >= withdraw_fee then
-				TriggerClientEvent("garage:notify", userSource, "~g~BC IMPOUND: ~w~Here's your car!")
+				TriggerClientEvent("usa:notify", userSource, "~g~BC IMPOUND: ~w~Here's your car!")
 				TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
 				user.setActiveCharacterData("money", user_money - withdraw_fee)
 				-- give money to garage owner --
@@ -136,7 +136,7 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle, property)
 					end
 				end
 			else
-				TriggerClientEvent("garage:notify", userSource, "~r~BC IMPOUND: ~w~Your car is impounded and can be retrieved for $2,000!")
+				TriggerClientEvent("usa:notify", userSource, "~r~BC IMPOUND: ~w~Your car is impounded and can be retrieved for $2,000!")
 			end
 			return
 		end
@@ -165,7 +165,7 @@ AddEventHandler("garage:checkVehicleStatus", function(vehicle, property)
 			TriggerClientEvent("garage:vehicleNotStored", userSource)
 		else
 			withdraw_fee = 50
-			TriggerClientEvent("garage:notify", userSource, "Here's your car! Storage Fee: $" .. withdraw_fee)
+			TriggerClientEvent("usa:notify", userSource, "Here's your car! Storage Fee: $" .. withdraw_fee)
 			TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
 			--vehicle.stored = false
 			for i = 1, #userVehicles do

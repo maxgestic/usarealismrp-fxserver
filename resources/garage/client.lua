@@ -1,4 +1,4 @@
-local locations = {
+locations = {
 	{ ['x'] = -301.94973754883, ['y'] = 6123.2309570313, ['z'] = 31.499670028687 },
 	{ ['x'] = 1698.5390625, ['y'] = 4941.4189453125, ['z'] = 42.126735687256 },
 	{ ['x'] = 1502.3321533203, ['y'] = 3758.8825683594, ['z'] = 33.960582733154 },
@@ -40,16 +40,17 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
+		Wait(0)
+		local ped = GetPlayerPed(-1)
 	    for _, info in pairs(locations) do
-			if GetDistanceBetweenCoords(info['x'], info['y'], info['z'],GetEntityCoords(GetPlayerPed(-1))) < 50 then
+			if GetDistanceBetweenCoords(info['x'], info['y'], info['z'],GetEntityCoords(ped)) < 50 then
 				DrawMarker(1, info['x'], info['y'], info['z']-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 0, 155, 255, 200, 0, 0, 0, 0)
-				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), info['x'], info['y'], info['z'], true) < 2 then
+				if GetDistanceBetweenCoords(GetEntityCoords(ped), info['x'], info['y'], info['z'], true) < 2 then
 						DrawSpecialText("Press [ ~b~E~w~ ] to access the garage!")
-						if IsControlPressed(0, 86) then
+						if IsControlJustPressed(0, 86) then
 							Citizen.Wait(50)
-							if IsPedInAnyVehicle(GetPlayerPed(-1), true) then
-								local handle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
+							if IsPedInAnyVehicle(ped, true) then
+								local handle = GetVehiclePedIsIn(ped, false)
 								local numberPlateText = GetVehicleNumberPlateText(handle)
 								TriggerServerEvent("garage:storeVehicle", handle, numberPlateText, info["jobs"])
 							else
@@ -168,13 +169,6 @@ AddEventHandler("garage:spawn", function(vehicle)
 
 	end)
 
-end)
-
-RegisterNetEvent("garage:notify")
-AddEventHandler("garage:notify", function(message)
-	SetNotificationTextEntry("STRING")
-	AddTextComponentString(message)
-	DrawNotification(0,1)
 end)
 
 function DrawSpecialText(m_text)
