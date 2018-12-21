@@ -704,7 +704,7 @@ AddEventHandler("usa:setPlayerComponents", function(character)
               --print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
               --SetPedComponentVariation(playerPed, 2, head.other[i][2], GetNumberOfPedTextureVariations(playerPed,2, 0), 2)
               SetPedComponentVariation(playerPed, 2, head.other[i][2], 0, 1)
-              SetPedHairColor(playerPed, head.other[i][4], 0)
+              SetPedHairColor(playerPed, head.other[i][4], head.other[i][5] or 0)
             end
           end
         end

@@ -42,7 +42,7 @@ local old_head = {
     {"Chest Hair", 255, 16, 0},
     {"Body Blemishes", 255, 11},
     {"Add Body Blemishes", 255, 1},
-    {"Hair", 0, 100, 0} -- change max ?
+    {"Hair", 0, 100, 0, 0} -- change max ?
   }
 }
 
@@ -83,7 +83,7 @@ function UpdateHead(ped, head)
         SetPedHeadOverlayColor(ped, i - 1, 2, head.other[i][4])
       elseif i == 14 then -- hair
         SetPedComponentVariation(ped, 2, head.other[i][2], 0, 1)
-        SetPedHairColor(ped, head.other[i][4], 0)
+        SetPedHairColor(ped, head.other[i][4], head.other[i][5] or 0)
       end
     end
   end
@@ -105,7 +105,7 @@ function SetPedDefaultHead(ped)
     {"Chest Hair", 255, 16, 0},
     {"Body Blemishes", 255, 11}, -- same here, also test going on/off duty for ems/police
     {"Add Body Blemishes", 255, 1}, -- see if necessary
-    {"Hair", 0, 100, 0}
+    {"Hair", 0, 100, 0 --[[ main color]], 0 --[[2nd color]]}
   }
   --SetPedHeadBlendData(ped, old_head.parent1, old_head.parent2, old_head.parent3, old_head.skin1, old_head.skin2, old_head.skin3, old_head.mix1, old_head.mix2, old_head.mix3, false) -- needed to apply head overlays like facial hair
   for i = 1, #old_head.other do
@@ -121,7 +121,7 @@ function SetPedDefaultHead(ped)
 end
 
 RegisterNetEvent("barber:loadCustomizations")
-AddEventHandler("barber:loadCustomizations", function(customizations)
+AddEventHandler("barber:loadCustomizations", function(customizations, doUpdate)
   old_head.parent1 = customizations.parent1
   old_head.parent2 = customizations.parent2
   old_head.parent3 = customizations.parent3
@@ -130,6 +130,9 @@ AddEventHandler("barber:loadCustomizations", function(customizations)
   old_head.skin3 = customizations.skin3
   old_head.isParent = customizations.isParent
   old_head.other = customizations.other
+  if doUpdate then
+    UpdateHead(GetPlayerPed(-1), old_head)
+  end
 end)
 
 -- Main Menu --
@@ -201,7 +204,16 @@ function CreateBarberShopMenu(menu)
                 UpdateHead(GetPlayerPed(-1), old_head)
             end
             menu:AddItem(newVariationitem)
-          end
+        end
+        -- hair color 2 (second color option like highlights) --
+        local colorArr = {}
+        for j = 1, MAX_COLOR_OPTIONS do colorArr[j] = j end
+        local secondColorVariationitem = UIMenuSliderItem.New(option_name .. " color 2", colorArr, 1, "Customize " .. option_name .. " color 2")
+        secondColorVariationitem.OnSliderChanged = function(menu, item, index)
+            old_head.other[i][5] = index
+            UpdateHead(GetPlayerPed(-1), old_head)
+        end
+        menu:AddItem(secondColorVariationitem)
     end
 
     --------------------------
@@ -224,9 +236,7 @@ function CreateBarberShopMenu(menu)
     ---------------------
     local reset_item = NativeUI.CreateItem("Reset", "Reset your changes.")
     reset_item.Activated = function(parentmenu, selected)
-      --SetPedDefaultHead(GetPlayerPed(-1))
-      -- TODO: call server event to get character customizations then call barber:loadCustomizations with returned customizations to save appearance in 'old_head' var // left off here, just do this and it should be perfect
-      -- then call TriggerServerEvent("usa:loadPlayerComponents") to reset appearance
+      TriggerServerEvent("barber:getCustomizations")
     end
     menu:AddItem(reset_item)
 

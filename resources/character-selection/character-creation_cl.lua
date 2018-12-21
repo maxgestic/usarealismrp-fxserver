@@ -127,7 +127,7 @@ AddEventHandler("character:setCharacter", function(character)
 					        elseif i == 14 then -- hair
 										--print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
 					          SetPedComponentVariation(ped, 2, head.other[i][2], 0, 1)
-					          SetPedHairColor(ped, head.other[i][4], 0)
+					          SetPedHairColor(ped, head.other[i][4], head.other[i][5] or 0)
 					        end
 					      end
 					    end
