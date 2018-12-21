@@ -51,8 +51,15 @@ function CreateBarberShopMenu(menu, vehicles)
 			-- close menu --
 			mainMenu:Visible(not mainMenu:Visible())
 		end
-	    menu:AddItem(item)
+	  menu:AddItem(item)
 	end
+	-- exit button --
+	local item = NativeUI.CreateItem("Close", "")
+	item.Activated = function(parentmenu, selected)
+		-- close menu --
+		mainMenu:Visible(not mainMenu:Visible())
+	end
+	menu:AddItem(item)
 	-- Open Menu --
 	mainMenu:Visible(not mainMenu:Visible())
 end
