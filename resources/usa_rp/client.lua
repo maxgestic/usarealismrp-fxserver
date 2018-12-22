@@ -174,7 +174,7 @@ local locations = {
         {x = 129.442, y = -1283.407, z = 28.272, animDict = "missfbi3_party_d", animName = "stand_talk_loop_a_female", model = "S_F_Y_Bartender_01", heading = 122.471}
     },
     black_market = {
-        {x = -2166.786, y = 5197.684, z = 15.880, animDict = "", animName = "", model = "G_M_Y_SALVABOSS_01", heading = 122.471, scenario = "WORLD_HUMAN_SMOKING"}
+        {x = -315.1, y = -2780.9, z = 4.8, animDict = "", animName = "", model = "G_M_Y_SALVABOSS_01", heading = 10.471, scenario = "WORLD_HUMAN_SMOKING"}
     },
     illegal_weapon_extra_shop = {
       {x = 181.4, y = 2792.8, z = 45.7, animDict = "", animName = "", model = "G_M_Y_SALVABOSS_01", heading = 302.471, scenario = "WORLD_HUMAN_SMOKING"}
@@ -184,7 +184,6 @@ local spawnedPeds = {}
 Citizen.CreateThread(function()
   for _, location in pairs(locations) do
     for i = 1, #location do
-      Wait(1000)
       local hash = GetHashKey(location[i].model)
       RequestModel(hash)
       while not HasModelLoaded(hash) do
