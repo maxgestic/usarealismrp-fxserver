@@ -201,13 +201,13 @@ Citizen.CreateThread(function()
     for i = 1, #SHOPS do
         if not MainMenu:Visible() then
           if Vdist(player_coords.x, player_coords.y, player_coords.z, SHOPS[i].x, SHOPS[i].y, SHOPS[i].z) < 3.0 then
-            closest_shop = SHOPS[i]
             drawTxt("Press [~y~E~w~] to open the tattoo shop menu",7,1,0.5,0.8,0.6,255,255,255,255)
             if IsControlJustPressed(1, MENU_KEY) and not IsPedDeadOrDying(me) then
-              MainMenu:Visible(true)
-              RemoveClothes()
-              --ClearPedDecorations(me)
-              purchased_tattoos = {}
+                closest_shop = SHOPS[i]
+                MainMenu:Visible(true)
+                RemoveClothes()
+                --ClearPedDecorations(me)
+                purchased_tattoos = {}
             end
           end
       end
