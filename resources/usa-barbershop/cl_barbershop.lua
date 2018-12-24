@@ -294,9 +294,9 @@ Citizen.CreateThread(function()
     		if Vdist(playerCoords.x,playerCoords.y,playerCoords.z,BARBER_SHOPS[i].x,BARBER_SHOPS[i].y,BARBER_SHOPS[i].z)  <  50 then
     		    DrawMarker(27, BARBER_SHOPS[i].x, BARBER_SHOPS[i].y, BARBER_SHOPS[i].z - 1.0, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 32, 0, 90, 0, 0, 2, 0, 0, 0, 0)
                 if Vdist(playerCoords.x,playerCoords.y,playerCoords.z,BARBER_SHOPS[i].x,BARBER_SHOPS[i].y,BARBER_SHOPS[i].z)  <  5 then
-                    closest_shop = BARBER_SHOPS[i] --// set shop player is at
                     drawTxt("Press [~y~E~w~] to open the barber shop menu",7,1,0.5,0.8,0.5,255,255,255,255)
                     if IsControlJustPressed(1, MENU_OPEN_KEY) then
+                        closest_shop = BARBER_SHOPS[i] --// set shop player is at
                         mainMenu:Visible(not mainMenu:Visible())
                     end
                 else

@@ -2,7 +2,8 @@ local MENU_KEY = 38 -- "E"
 
 locations = {
 	--{ x=129.345, y=-1920.89, z=20.0187 },
-    { x= -2166.786, y = 5197.684, z = 15.880} -- island north of map by paleto
+    --{ x= -2166.786, y = 5197.684, z = 15.880} -- island north of map by paleto
+    { x = -315.1, y = -2780.9, z = 5.1 } -- South LS (docks, where marcus suggested)
 }
 
 local storeItems = {
@@ -108,7 +109,7 @@ Citizen.CreateThread(function()
     -- Draw Markers --
     ------------------
 		for i = 1, #locations do
-			DrawMarker(27, locations[i].x, locations[i].y, locations[i].z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 32, 0, 90, 0, 0, 2, 0, 0, 0, 0)
+			DrawMarker(27, locations[i].x, locations[i].y, locations[i].z - 1.0, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 32, 0, 90, 0, 0, 2, 0, 0, 0, 0)
 		end
     -------------------
     -- draw help txt --
@@ -125,7 +126,7 @@ Citizen.CreateThread(function()
     --------------------------
 		if IsControlJustPressed(1, MENU_KEY) then
 			if isPlayerAtBlackMarket() then
-        mainMenu:Visible(not mainMenu:Visible())
+                mainMenu:Visible(not mainMenu:Visible())
 			end
 		end
 	end
