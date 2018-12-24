@@ -27,7 +27,8 @@ local spawnableVehicles = {
 		'unmarked6',
 		'unmarked7',
 		'unmarked8',
-		'unmarked9'
+		'unmarked9',
+		'pranger'
 	}
 }
 
