@@ -35,13 +35,13 @@ local VEH_RANKS = {
 	[1] = {"police", "police2", "police3", "police5", "scorcher", "police7", "predator", "pbus", "policet", "sheriff"},
 	[2] = {"police", "police2", "police3", "police5", "scorcher", "police7", "policeb", "police6", "unmarked7", "predator", "pbus", "policet", "sheriff", "sheriff2"},
 	[3] = {"police", "police2", "police3", "police5", "scorcher", "police7", "policeb", "police6", "unmarked7", "predator", "polmav", "pbus", "policet", "sheriff", "sheriff2", "fbi2"},
-	[4] = {"police", "police2", "police3", "police5", "scorcher", "police7", "policeb", "police6", "unmarked1", "unmarked7", "unmarked8", "fbi", "fbi2", "police4", "sheriff", "predator", "polmav", "pbus", "policet", "riot", "sheriff", "sheriff2"},
-	[5] = {"police", "police2", "police3", "police5", "scorcher", "police7", "policeb", "police6", "unmarked1", "unmarked6", "unmarked7", "unmarked8", "fbi", "fbi2", "police4", "sheriff", "unmarked3", "unmarked9", "predator", "polmav", "pbus", "policet", "riot", "sheriff", "sheriff2"},
-	[6] = {'policeb','sheriff','sheriff2','sheriff3','pbus','policet','police','police2','police3','police4','police5','police6','police7','police8','fbi','fbi2',	'riot','polmav','scorcher','predator','chpcvpi','unmarked1','unmarked3','unmarked6','unmarked7','unmarked8','unmarked9', "sheriff", "sheriff2"},
-	[7] = {'policeb','sheriff','sheriff2','sheriff3','pbus','policet','police','police2','police3','police4','police5','police6','police7','police8','fbi','fbi2',	'riot','polmav','scorcher','predator','chpcvpi','unmarked1','unmarked3', 'unmarked4', 'unmarked6','unmarked7','unmarked8','unmarked9', "sheriff", "sheriff2"},
-	[8] = {'policeb','sheriff','sheriff2','sheriff3','pbus','policet','police','police2','police3','police4','police5','police6','police7','police8','fbi','fbi2',	'riot','polmav','scorcher','predator','chpcvpi','unmarked1','unmarked3', 'unmarked4', 'unmarked6','unmarked7','unmarked8','unmarked9', "sheriff", "sheriff2"},
-	[9] = {'policeb','sheriff','sheriff2','sheriff3','pbus','policet','police','police2','police3','police4','police5','police6','police7','police8','fbi','fbi2',	'riot','polmav','scorcher','predator','chpcvpi','unmarked1','unmarked3', 'unmarked4', 'unmarked6','unmarked7','unmarked8','unmarked9', "sheriff", "sheriff2"},
-	[10] = {'policeb','sheriff','sheriff2','sheriff3','pbus','policet','police','police2','police3','police4','police5','police6','police7','police8','fbi','fbi2',	'riot','polmav','scorcher','predator','chpcvpi','unmarked1','unmarked3', 'unmarked4', 'unmarked6','unmarked7','unmarked8','unmarked9', "sheriff", "sheriff2"}
+	[4] = {"pranger", "police", "police2", "police3", "police5", "scorcher", "police7", "policeb", "police6", "unmarked1", "unmarked7", "unmarked8", "fbi", "fbi2", "police4", "sheriff", "predator", "polmav", "pbus", "policet", "riot", "sheriff", "sheriff2"},
+	[5] = {"pranger", "police", "police2", "police3", "police5", "scorcher", "police7", "policeb", "police6", "unmarked1", "unmarked6", "unmarked7", "unmarked8", "fbi", "fbi2", "police4", "sheriff", "unmarked3", "unmarked9", "predator", "polmav", "pbus", "policet", "riot", "sheriff", "sheriff2"},
+	[6] = {"pranger", 'policeb','sheriff','sheriff2','sheriff3','pbus','policet','police','police2','police3','police4','police5','police6','police7','police8','fbi','fbi2',	'riot','polmav','scorcher','predator','chpcvpi','unmarked1','unmarked3','unmarked6','unmarked7','unmarked8','unmarked9', "sheriff", "sheriff2"},
+	[7] = {"pranger", 'policeb','sheriff','sheriff2','sheriff3','pbus','policet','police','police2','police3','police4','police5','police6','police7','police8','fbi','fbi2',	'riot','polmav','scorcher','predator','chpcvpi','unmarked1','unmarked3', 'unmarked4', 'unmarked6','unmarked7','unmarked8','unmarked9', "sheriff", "sheriff2"},
+	[8] = {"pranger", 'policeb','sheriff','sheriff2','sheriff3','pbus','policet','police','police2','police3','police4','police5','police6','police7','police8','fbi','fbi2',	'riot','polmav','scorcher','predator','chpcvpi','unmarked1','unmarked3', 'unmarked4', 'unmarked6','unmarked7','unmarked8','unmarked9', "sheriff", "sheriff2"},
+	[9] = {"pranger", 'policeb','sheriff','sheriff2','sheriff3','pbus','policet','police','police2','police3','police4','police5','police6','police7','police8','fbi','fbi2',	'riot','polmav','scorcher','predator','chpcvpi','unmarked1','unmarked3', 'unmarked4', 'unmarked6','unmarked7','unmarked8','unmarked9', "sheriff", "sheriff2"},
+	[10] = {"pranger", 'policeb','sheriff','sheriff2','sheriff3','pbus','policet','police','police2','police3','police4','police5','police6','police7','police8','fbi','fbi2',	'riot','polmav','scorcher','predator','chpcvpi','unmarked1','unmarked3', 'unmarked4', 'unmarked6','unmarked7','unmarked8','unmarked9', "sheriff", "sheriff2"}
 	}
 
 -- TODO: compact above two tables into one single table
@@ -66,7 +66,7 @@ TriggerEvent('es:addCommand', 'spawn', function(source, args, user)
 			if isSpawnable(model) then
 				print("police rank: " .. user_police_rank)
 				if IsHighEnoughRank(model, user_police_rank) then
-					TriggerClientEvent("vehicleCommands:spawnVehicle", source, model)
+					TriggerClientEvent("vehicleCommands:spawnVehicle", source, model, user_job)
 				else
 					TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^3You are not a high enough rank for that vehicle option.")
 				end
@@ -82,7 +82,8 @@ TriggerEvent('es:addCommand', 'spawn', function(source, args, user)
 		if args[2] == "ambulance" then
 			TriggerClientEvent("vehicleCommands:spawnVehicle", source, "ambulance")
 		elseif args[2] == "suv" then
-			TriggerClientEvent("vehicleCommands:spawnVehicle", source, "pranger")
+			--TriggerClientEvent("vehicleCommands:spawnVehicle", source, "pranger")
+			TriggerClientEvent("vehicleCommands:spawnVehicle", source, "sheriff2", user_job)
 		elseif args[2] == "heli" then
 			TriggerClientEvent("vehicleCommands:spawnVehicle", source, "polmav")
 		elseif args[2] == "blazer" then

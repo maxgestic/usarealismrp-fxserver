@@ -1,5 +1,5 @@
 RegisterNetEvent("vehicleCommands:spawnVehicle")
-AddEventHandler("vehicleCommands:spawnVehicle", function(modelName)
+AddEventHandler("vehicleCommands:spawnVehicle", function(modelName, userJob)
 
 		local hash = GetHashKey(modelName)
 
@@ -29,6 +29,17 @@ AddEventHandler("vehicleCommands:spawnVehicle", function(modelName)
 		SetVehicleHasBeenOwnedByPlayer(vehicle, true)
 		SetVehicleExplodesOnHighExplosionDamage(vehicle, false)
 		SetVehicleEngineOn(vehicle, true, true, false)
+
+		-- set livery for sheriff2 model since EMS & PD can use it --
+		if userJob then
+			if modelName == "sheriff2" then
+				if userJob == "ems" then
+					SetVehicleLivery(vehicle, 1)
+				elseif userJob == "sheriff" then
+					SetVehicleLivery(vehicle, 2)
+				end
+			end
+		end
 
 		local vehicle_key = {
 			name = "Key -- " .. GetVehicleNumberPlateText(vehicle),
