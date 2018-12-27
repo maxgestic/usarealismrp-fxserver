@@ -175,90 +175,74 @@ AddEventHandler("policestation2:checkWhitelist", function(clientevent)
   local playerIdentifiers = GetPlayerIdentifiers(source)
   local playerGameLicense = ""
   local userSource = tonumber(source)
-  TriggerEvent("es:getPlayerFromId", userSource, function(user)
-    if user.getActiveCharacterData("policeRank") > 0 then
-      --TriggerClientEvent("policestation2:isWhitelisted", userSource)
-      if clientevent == "policestation2:showArmoury" then
-        local user_job = user.getActiveCharacterData("job")
-        if user_job == "sheriff" or user_job == "cop" then
-          TriggerClientEvent(clientevent, userSource)
-        else
-          TriggerClientEvent("policestation2:notify", userSource, "You need to be ~r~10-8 ~w~ to access LSPD armoury.")
-        end
-      else
+  local user = exports["essentialmode"]:getPlayerFromId(userSource)
+  if user.getActiveCharacterData("policeRank") > 0 then
+    --TriggerClientEvent("policestation2:isWhitelisted", userSource)
+    if clientevent == "policestation2:showArmoury" then
+      local user_job = user.getActiveCharacterData("job")
+      if user_job == "sheriff" or user_job == "cop" then
         TriggerClientEvent(clientevent, userSource)
+      else
+        TriggerClientEvent("usa:notify", userSource, "You need to be ~r~10-8 ~w~ to access LSPD armoury.")
       end
     else
-      TriggerClientEvent("policestation2:notify", userSource, "~y~You are not whitelisted for POLICE. Apply at ~b~https://www.usarrp.net~w~.")
-    end
-  end)
-
-end)
-
-function getPlayerIdentifierEasyMode(source)
-  local rawIdentifiers = GetPlayerIdentifiers(source)
-  if rawIdentifiers then
-    for key, value in pairs(rawIdentifiers) do
-      playerIdentifier = value
+      TriggerClientEvent(clientevent, userSource)
     end
   else
-    print("IDENTIFIERS DO NOT EXIST OR WERE NOT RETIREVED PROPERLY")
+    TriggerClientEvent("usa:notify", userSource, "~y~You are not whitelisted for POLICE. Apply at ~b~https://www.usarrp.net~w~.")
   end
-  return playerIdentifier -- should usually be only 1 identifier according to the wiki
-end
+
+end)
 
 RegisterServerEvent("policestation2:saveasdefault")
 AddEventHandler("policestation2:saveasdefault", function(character)
   local userSource = tonumber(source)
-  TriggerEvent("es:getPlayerFromId", userSource, function(user)
-    local user_job = user.getActiveCharacterData("job")
-    if user_job == "sheriff" or user_job == "cop" then
-      user.setPoliceCharacter(character) -- this is right... right??
-      TriggerClientEvent("policestation2:notify", userSource, "Default ~b~LSPD~w~ uniform saved.")
-    else
-      TriggerClientEvent("policestation2:notify", userSource, "You need to be ~r~10-8~w~ to save default uniform.")
-    end
-  end)
+  local user = exports["essentialmode"]:getPlayerFromId(userSource)
+  local user_job = user.getActiveCharacterData("job")
+  if user_job == "sheriff" or user_job == "cop" then
+    user.setPoliceCharacter(character)
+    TriggerClientEvent("usa:notify", userSource, "Default ~b~SASP~w~ uniform saved.")
+  else
+    TriggerClientEvent("usa:notify", userSource, "You need to be ~r~10-8~w~ to save default uniform.")
+  end
 end)
 
 RegisterServerEvent("policestation2:loadDefaultUniform")
 AddEventHandler("policestation2:loadDefaultUniform", function()
   local userSource = tonumber(source)
-  TriggerEvent("es:getPlayerFromId", userSource, function(user)
-    character = user.getPoliceCharacter()
-    TriggerClientEvent("policestation2:setCharacter", userSource, character)
-    TriggerClientEvent("policestation2:giveDefaultLoadout", userSource)
-    user.setActiveCharacterData("job", "sheriff")
-    TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 3}, true)
-  end)
+  local user = exports["essentialmode"]:getPlayerFromId(userSource)
+  --TriggerEvent("es:getPlayerFromId", userSource, function(user)
+  character = user.getPoliceCharacter()
+  TriggerClientEvent("policestation2:setCharacter", userSource, character)
+  --TriggerClientEvent("policestation2:giveDefaultLoadout", userSource)
+  user.setActiveCharacterData("job", "sheriff")
+  TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 3}, true)
+  --end)
 end)
 
 RegisterServerEvent("policestation2:onduty")
 AddEventHandler("policestation2:onduty", function()
   local userSource = tonumber(source)
-  TriggerEvent('es:getPlayerFromId', userSource, function(user)
-    local user_job = user.getActiveCharacterData("job")
-    if user_job ~= "sheriff" or user_job ~= "cop" or user_job ~= "police" then
-      user.setActiveCharacterData("job", "sheriff")
-      TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 3}, true)
-    end
-  end)
+  local user = exports["essentialmode"]:getPlayerFromId(userSource)
+  local user_job = user.getActiveCharacterData("job")
+  if user_job ~= "sheriff" or user_job ~= "cop" or user_job ~= "police" then
+    user.setActiveCharacterData("job", "sheriff")
+    TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 3}, true)
+  end
 end)
 
 RegisterServerEvent("policestation2:offduty")
 AddEventHandler("policestation2:offduty", function()
   local userSource = tonumber(source)
-  TriggerEvent('es:getPlayerFromId', userSource, function(user)
-    local playerWeapons = user.getActiveCharacterData("weapons")
-    local chars = user.getCharacters()
-    for i = 1, #chars do
-      if chars[i].active == true then
-        print("found matching active character for off duty!")
-        TriggerClientEvent("policestation2:setciv", userSource, chars[i].appearance, playerWeapons) -- need to test
-        break
-      end
+  local user = exports["essentialmode"]:getPlayerFromId(userSource)
+  local playerWeapons = user.getActiveCharacterData("weapons")
+  local chars = user.getCharacters()
+  for i = 1, #chars do
+    if chars[i].active == true then
+      TriggerClientEvent("policestation2:setciv", userSource, chars[i].appearance, playerWeapons)
+      break
     end
-    user.setActiveCharacterData("job", "civ")
-    TriggerEvent("eblips:remove", userSource)
-  end)
+  end
+  user.setActiveCharacterData("job", "civ")
+  TriggerEvent("eblips:remove", userSource)
 end)

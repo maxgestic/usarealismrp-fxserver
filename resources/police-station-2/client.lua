@@ -1,56 +1,14 @@
--- MENU CODE
-RegisterNetEvent("GUI2:Title")
-AddEventHandler("GUI2:Title", function(title)
-	Menu.Title(title)
-	end)
-
-RegisterNetEvent("GUI2:Option")
-AddEventHandler("GUI2:Option", function(option, cb)
-	cb(Menu.Option(option))
-	end)
-
-RegisterNetEvent("GUI2:Bool")
-AddEventHandler("GUI2:Bool", function(option, bool, cb)
-	Menu.Bool(option, bool, function(data)
-		cb(data)
-		end)
-	end)
-
-RegisterNetEvent("GUI2:Int")
-AddEventHandler("GUI2:Int", function(option, int, min, max, cb)
-	Menu.Int(option, int, min, max, function(data)
-		cb(data)
-		end)
-	end)
-
-RegisterNetEvent("GUI2:StringArray")
-AddEventHandler("GUI2:StringArray", function(option, array, position, cb)
-	Menu.StringArray(option, array, position, function(data)
-		cb(data)
-		end)
-	end)
-
-RegisterNetEvent("GUI2:Update")
-AddEventHandler("GUI2:Update", function()
-	Menu.updateSelection()
-	end)
--- /MENU CODE
-
---Global Variables
-
-local menu_loadout = 0
-local menu_armoury = 0
-local position = 1
 local policeLockerRooms = {
 	{x = -1107.5, y = -847.5, z = 18.4}, -- vespucci PD
 	{x = 370.3, y = -1608.4, z = 28.3}, -- davis PD
 	{x = 826.5, y = -1291.3, z = 27.3}, -- la mesa PD
 	{x = 638.9, y = 1.9, z = 81.8}, -- vinewood PD, elgin ave.
 	{x=451.255 , y=-992.41 , z=29.689},
- 	{x=1853.2, y=3687.74, z=33.267}, -- sandy
+ 	{x=1853.2, y=3687.74, z=34.267}, -- sandy
  	--{x=-447.256 , y=6000.667 , z=30.686} -- paleto
- 	{x = -449.471, y = 6010.7, z = 30.85}
+ 	{x = -449.471, y = 6010.7, z = 31.85}
 }
+
 local policeArmourys = {
 	{x = -1109.6, y = -844.7, z = 18.4}, -- vespucci PD
 	{x = 371.8, y = -1612.1, z = 28.4}, -- davis PD
@@ -59,7 +17,7 @@ local policeArmourys = {
 	{x=451.564 , y=-980.095 , z=29.6896},
 	{x=1851.34 , y=3683.64 , z=33.2671}, -- sandy
 	--{x=-452.361 , y=6006.11 , z=30.8409} -- paleto
-	{x = -447.9, y = 6008.7, z = 30.85}
+	{x = -447.9, y = 6008.7, z = 31.85}
 }
 
 local arrSkinGeneralCaptions = {"LSPD Male","LSPD Female","Motor Unit","SWAT","Sheriff Male","Sheriff Female","Traffic Warden","Custom Male","Custom Female","FBI 1","FBI 2","FBI 3","FBI 4","Detective Male","Detective Female","Ranger Male", "Ranger Female", "Tactical", "Pilot"}
@@ -70,118 +28,26 @@ local arrSkinHashes = {}
 		arrSkinHashes[i] = GetHashKey(arrSkinGeneralValues[i])
 	end
 
-function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
-	SetTextFont(font)
-	SetTextProportional(0)
-	SetTextScale(scale, scale)
-	SetTextColour(r, g, b, a)
-	SetTextDropShadow(0, 0, 0, 0,255)
-	SetTextEdge(1, 0, 0, 0, 255)
-	SetTextDropShadow()
-	SetTextOutline()
-	SetTextCentre(centre)
-	SetTextEntry("STRING")
-	AddTextComponentString(text)
-	DrawText(x , y)
-end
+local components = {"Face","Head","Hair","Arms/Hands","Legs","Back","Feet","Ties","Shirt","Vests","Textures","Torso"}
+local props = { "Head", "Glasses", "Ear Acessories", "Watch"}
 
-function IsNearStore()
-	local ply = GetPlayerPed(-1)
-	local plyCoords = GetEntityCoords(ply, 0)
-	for _, item in pairs(policeLockerRooms) do
-		local distance = GetDistanceBetweenCoords(item.x, item.y, item.z,  plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
-		if(distance <= 1.5) then
-			return true
-		end
-	end
-end
+local MENU_OPEN_KEY = 38
 
-function IsNearArmoury()
-	local ply = GetPlayerPed(-1)
-	local plyCoords = GetEntityCoords(ply, 0)
-	for _, item in pairs(policeArmourys) do
-		local distance = GetDistanceBetweenCoords(item.x, item.y, item.z,  plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
-		if(distance <= 2) then
-			return true
-		end
-	end
-end
+local closest_shop = nil
 
-RegisterNetEvent("policestation2:setCharacter")
-AddEventHandler("policestation2:setCharacter", function(character)
-	if character then
-		for key, value in pairs(character["components"]) do
-			SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
-		end
-		for key, value in pairs(character["props"]) do
-			SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
-		end
-		TriggerEvent("policestation2:giveDefaultLoadout")
-	end
-end)
-
-RegisterNetEvent("policestation2:notify")
-AddEventHandler("policestation2:notify", function(msg)
-	SetNotificationTextEntry("STRING")
-	AddTextComponentString(msg)
-	DrawNotification(0,1)
-end)
-
-RegisterNetEvent("policestation2:giveDefaultLoadout")
-AddEventHandler("policestation2:giveDefaultLoadout", function()
-	Citizen.Trace("true")
-	RemoveAllPedWeapons(GetPlayerPed(-1), true)
-	--local playerWeapons = { "WEAPON_BZGAS", "WEAPON_FLARE" , "WEAPON_CARBINERIFLE" ,"WEAPON_COMBATPISTOL", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_PUMPSHOTGUN", "WEAPON_FLAREGUN", "WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER" }
-	local playerWeapons = { "WEAPON_BZGAS", "WEAPON_FLARE" ,"WEAPON_COMBATPISTOL", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER" }
-	local name, hash
-	for i = 1, #playerWeapons do
-		name = playerWeapons[i]
-		hash = GetHashKey(name)
-		 GiveWeaponToPed(GetPlayerPed(-1), hash, 1000, 0, false) -- get hash given name of weapon
-	end
-	SetEntityHealth(GetPlayerPed(-1), GetEntityMaxHealth(GetPlayerPed(-1)))
-	SetPedArmour(GetPlayerPed(-1), 100)
-	Citizen.Trace("giving flashlight components to cop...")
-	GiveWeaponComponentToPed(GetPlayerPed(-1), 1593441988 , 0x359B7AAE)
-	GiveWeaponComponentToPed(GetPlayerPed(-1), 2210333304, 0x7BC4CDDC)
-	GiveWeaponComponentToPed(GetPlayerPed(-1), 2210333304 , 0xC164F53)
-
-end)
-
-RegisterNetEvent("policestation2:isWhitelisted")
-AddEventHandler("policestation2:isWhitelisted", function()
-	local playerhash = GetEntityModel(GetPlayerPed(-1))
-	for i=1,#arrSkinHashes
-	do
-		if(arrSkinHashes[i] == playerhash) then
-			position = i
-		end
-	end
-	menu_loadout = 1
-end)
-
-RegisterNetEvent("policestation2:showArmoury")
-AddEventHandler("policestation2:showArmoury", function()
-	--Citizen.Trace("Inside is whitelisted client evnet")
-	--menu = 1
-
-	menu_armoury = 1
-end)
-
+-- Events --
 RegisterNetEvent("policestation2:setciv")
 AddEventHandler("policestation2:setciv", function(character, playerWeapons)
 	Citizen.CreateThread(function()
 		local model
 		if not character.hash then -- does not have any customizations saved
-			print("did not find character.hash!")
 			model = -408329255 -- some random black dude with no shirt on, lawl
 		else
-			print("found a character hash!")
 			model = character.hash
 		end
         RequestModel(model)
         while not HasModelLoaded(model) do -- Wait for model to load
-            Citizen.Wait(100)
+            Wait(100)
         end
         SetPlayerModel(PlayerId(), model)
         SetModelAsNoLongerNeeded(model)
@@ -222,17 +88,14 @@ AddEventHandler("policestation2:setciv", function(character, playerWeapons)
 					elseif i == 14 then -- hair
 						--print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
 						SetPedComponentVariation(ped, 2, head.other[i][2], GetNumberOfPedTextureVariations(ped,2, 0), 2)
-						SetPedHairColor(ped, head.other[i][4], head.other[i][4])
+						SetPedHairColor(ped, head.other[i][4], head.other[i][5] or 0)
 					end
 				end
 			end
-		else
-			print("no barber shop customizations!")
 		end
 		-- give weapons
 		if playerWeapons then
 			for i = 1, #playerWeapons do
-				print("playerWeapons[i].hash = " .. playerWeapons[i].hash)
 				GiveWeaponToPed(GetPlayerPed(-1), playerWeapons[i].hash, 1000, false, false)
 				if playerWeapons[i].components then
 			    if #playerWeapons[i].components > 0 then
@@ -249,141 +112,113 @@ AddEventHandler("policestation2:setciv", function(character, playerWeapons)
     end)
 end)
 
-RegisterNetEvent("policestation2:ShowArmouryMenu")
-AddEventHandler("policestation2:ShowArmouryMenu", function()
-
-	TriggerEvent("GUI2:Title", "LSPD Armoury")
-
-	TriggerEvent("GUI2:Option", "Armour", function(cb)
-		if(cb) then
-			Citizen.Trace("true")
-			SetEntityHealth(GetPlayerPed(-1), GetEntityMaxHealth(GetPlayerPed(-1)))
-			SetPedArmour(GetPlayerPed(-1), 100)
-			TriggerEvent("policestation2:notify","Armour and Health Restored")
-			--menu_loadout = 2
+RegisterNetEvent("policestation2:isWhitelisted")
+AddEventHandler("policestation2:isWhitelisted", function()
+	--[[
+	local playerhash = GetEntityModel(GetPlayerPed(-1))
+	for i=1, #arrSkinHashes do
+		if arrSkinHashes[i] == playerhash then
+			position = i
 		end
-		end)
-
-	TriggerEvent("GUI2:Option", "Default Loadout", function(cb)
-		if(cb) then
-			TriggerEvent("policestation2:giveDefaultLoadout")
-			TriggerEvent("policestation2:notify","Default Loadout")
-		end
-		end)
-
-	TriggerEvent("GUI2:Option", "Marksman Loadout", function(cb)
-		if(cb) then
-			Citizen.Trace("true")
-			RemoveAllPedWeapons(GetPlayerPed(-1), true)
-			local playerWeapons = { "WEAPON_FLARE" , "WEAPON_COMBATPISTOL", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_FLAREGUN", "WEAPON_FLASHLIGHT", "WEAPON_SNIPERRIFLE"}
-			local name, hash
-			for i = 1, #playerWeapons do
-				name = playerWeapons[i]
-				hash = GetHashKey(name)
-				 GiveWeaponToPed(GetPlayerPed(-1), hash, 1000, 0, false) -- get hash given name of weapon
-			end
-			SetEntityHealth(GetPlayerPed(-1), GetEntityMaxHealth(GetPlayerPed(-1)))
-			SetPedArmour(GetPlayerPed(-1), 100)
-			GiveWeaponComponentToPed(GetPlayerPed(-1), 1593441988 , 0x359B7AAE)
-			GiveWeaponComponentToPed(GetPlayerPed(-1), 100416529 , 0xBC54DA77)
-			TriggerEvent("policestation2:notify","Marksman Loadout")
-
-			--menu_loadout = 2
-		end
-		end)
-
-	TriggerEvent("GUI2:Option", "Undercover Loadout", function(cb)
-		if(cb) then
-			Citizen.Trace("true")
-			RemoveAllPedWeapons(GetPlayerPed(-1), true)
-			local playerWeapons = { "WEAPON_COMBATPISTOL", "WEAPON_STUNGUN" }
-			local name, hash
-			for i = 1, #playerWeapons do
-				name = playerWeapons[i]
-				hash = GetHashKey(name)
-				 GiveWeaponToPed(GetPlayerPed(-1), hash, 1000, 0, false) -- get hash given name of weapon
-			end
-			SetEntityHealth(GetPlayerPed(-1), GetEntityMaxHealth(GetPlayerPed(-1)))
-			SetPedArmour(GetPlayerPed(-1), 100)
-			--Citizen.Trace("giving flashlight components to cop...")
-			TriggerEvent("policestation2:notify","Undercover Loadout")
-			--menu_loadout = 2
-		end
-		end)
-
-	TriggerEvent("GUI2:Option", "Prison Guard Loadout", function(cb)
-		if(cb) then
-			Citizen.Trace("true")
-			RemoveAllPedWeapons(GetPlayerPed(-1), true)
-			local playerWeapons = {"WEAPON_FLASHLIGHT", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK"}
-			local name, hash
-			for i = 1, #playerWeapons do
-				name = playerWeapons[i]
-				hash = GetHashKey(name)
-				 GiveWeaponToPed(GetPlayerPed(-1), hash, 1000, 0, false) -- get hash given name of weapon
-			end
-			SetEntityHealth(GetPlayerPed(-1), GetEntityMaxHealth(GetPlayerPed(-1)))
-			SetPedArmour(GetPlayerPed(-1), 100)
-			--Citizen.Trace("giving flashlight components to cop...")
-			TriggerEvent("policestation2:notify","Prison Guard Loadout")
-			--menu_loadout = 2
-		end
-		end)
-
-		TriggerEvent("GUI2:Option", "Carbine Rifle", function(cb)
-		if(cb) then
-			local playerWeapons = {"WEAPON_CARBINERIFLE"}
-			local name, hash
-			for i = 1, #playerWeapons do
-				name = playerWeapons[i]
-				hash = GetHashKey(name)
-				GiveWeaponToPed(GetPlayerPed(-1), hash, 1000, 0, false) -- get hash given name of weapon
-			end
-			SetEntityHealth(GetPlayerPed(-1), GetEntityMaxHealth(GetPlayerPed(-1)))
-			SetPedArmour(GetPlayerPed(-1), 100)
-			-- give flashlights (not sure which is which atm):
-			GiveWeaponComponentToPed(GetPlayerPed(-1), 2210333304, 0x7BC4CDDC)
-			GiveWeaponComponentToPed(GetPlayerPed(-1), 2210333304, 0xC164F53)
-			Citizen.Trace("giving flashlight components to cop...")
-		end
-		end)
-
-		TriggerEvent("GUI2:Option", "Pump Shotgun", function(cb)
-		if(cb) then
-			local playerWeapons = {"WEAPON_PUMPSHOTGUN"}
-			local name, hash
-			for i = 1, #playerWeapons do
-				name = playerWeapons[i]
-				hash = GetHashKey(name)
-				GiveWeaponToPed(GetPlayerPed(-1), hash, 1000, 0, false) -- get hash given name of weapon
-			end
-			SetEntityHealth(GetPlayerPed(-1), GetEntityMaxHealth(GetPlayerPed(-1)))
-			SetPedArmour(GetPlayerPed(-1), 100)
-			-- give flashlights (not sure which is which atm):
-			GiveWeaponComponentToPed(GetPlayerPed(-1), 2210333304, 0x7BC4CDDC)
-			GiveWeaponComponentToPed(GetPlayerPed(-1), 2210333304, 0xC164F53)
-		end
-		end)
-
-	TriggerEvent("GUI2:Update")
+	end
+	--]]
+	CreateUniformMenu(mainMenu)
+	mainMenu:Visible(true)
 end)
 
-RegisterNetEvent("policestation2:ShowMainMenu")
-AddEventHandler("policestation2:ShowMainMenu", function()
+RegisterNetEvent("policestation2:showArmoury")
+AddEventHandler("policestation2:showArmoury", function()
+	CreateArmoryMenu(mainMenu)
+	mainMenu:Visible(true)
+end)
 
-	TriggerEvent("GUI2:Title", "LSPD Loadout")
+RegisterNetEvent("policestation2:giveDefaultLoadout")
+AddEventHandler("policestation2:giveDefaultLoadout", function()
+	local ped = GetPlayerPed(-1)
+	RemoveAllPedWeapons(ped, true)
+	--local playerWeapons = { "WEAPON_BZGAS", "WEAPON_FLARE" , "WEAPON_CARBINERIFLE" ,"WEAPON_COMBATPISTOL", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_PUMPSHOTGUN", "WEAPON_FLAREGUN", "WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER" }
+	local playerWeapons = { "WEAPON_BZGAS", "WEAPON_FLARE" ,"WEAPON_COMBATPISTOL", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_FLASHLIGHT", "WEAPON_FIREEXTINGUISHER" }
+	local name, hash
+	for i = 1, #playerWeapons do
+		name = playerWeapons[i]
+		hash = GetHashKey(name)
+		GiveWeaponToPed(ped, hash, 1000, 0, false) -- get hash given name of weapon
+	end
+	SetEntityHealth(ped, GetEntityMaxHealth(ped))
+	SetPedArmour(ped, 100)
+	GiveWeaponComponentToPed(ped, 1593441988 , 0x359B7AAE)
+	GiveWeaponComponentToPed(ped, 2210333304, 0x7BC4CDDC)
+	GiveWeaponComponentToPed(ped, 2210333304 , 0xC164F53)
+end)
 
-	TriggerEvent("GUI2:StringArray", "Skin:", arrSkinGeneralCaptions, position, function(cb)
-		Citizen.CreateThread(function()
-			position = cb
+RegisterNetEvent("policestation2:setCharacter")
+AddEventHandler("policestation2:setCharacter", function(character)
+	local ped = GetPlayerPed(-1)
+	if character then
+		for key, value in pairs(character["components"]) do
+			SetPedComponentVariation(ped, tonumber(key), value, character["componentstexture"][key], 0)
+		end
+		for key, value in pairs(character["props"]) do
+			SetPedPropIndex(ped, tonumber(key), value, character["propstexture"][key], true)
+		end
+		TriggerEvent("policestation2:giveDefaultLoadout")
+	end
+end)
+
+-- Menu --
+--// Main Menu
+--//	Skin Selection (array)
+--//  Components (submenu)
+--//  Props (submenu)
+--//  Load Default Uniform
+--//  Save Default Uniform
+--//  Off Duty
+
+-----------------
+-- Set up menu --
+-----------------
+_menuPool = NativeUI.CreatePool()
+mainMenu = NativeUI.CreateMenu("SASP", "~b~San Andreas State Police", 0 --[[X COORD]], 320 --[[Y COORD]])
+_menuPool:Add(mainMenu)
+
+function CreateUniformMenu(menu)
+	local ped = GetPlayerPed(-1)
+	menu:Clear()
+	-- Model --
+	local listitem = UIMenuListItem.New("Uniforms", arrSkinGeneralCaptions, 1)
+	menu:AddItem(listitem)
+	listitem.OnListSelected = function(sender, item, index)
+		if item == listitem then
+			print("Selected ~b~" .. item:IndexToItem(index) .. "~w~...")
+			local position = index
 			local ply = GetPlayerPed(-1)
 			if arrSkinGeneralValues[position] == "mp_m_freemode_01" then
+				if not IsPedModel(ply, GetHashKey("mp_m_freemode_01")) then
+					local model = GetHashKey("mp_m_freemode_01")
+	  			RequestModel(model)
+	  			while not HasModelLoaded(model) do -- Wait for model to load
+	  				Wait(100)
+	  			end
+	  			SetPlayerModel(PlayerId(), model)
+	  			SetModelAsNoLongerNeeded(model)
+					ply = GetPlayerPed(-1)
+				end
 				--SetPedComponentVariation(ply, 2, 19, 1, 0)
 				SetPedComponentVariation(ply, 4, 35, 0, 0)
 				--SetPedComponentVariation(ply, 6, 24, 0, 0)
 				SetPedComponentVariation(ply, 8, 58, 0, 0)
 				SetPedComponentVariation(ply, 11, 55, 0, 0)
 			elseif arrSkinGeneralValues[position] == "mp_f_freemode_01" then
+				if not IsPedModel(ply, GetHashKey("mp_f_freemode_01")) then
+					local model = GetHashKey("mp_f_freemode_01")
+	  			RequestModel(model)
+	  			while not HasModelLoaded(model) do -- Wait for model to load
+	  				Wait(100)
+	  			end
+	  			SetPlayerModel(PlayerId(), model)
+	  			SetModelAsNoLongerNeeded(model)
+					ply = GetPlayerPed(-1)
+				end
 				--SetPedComponentVariation(ply, 0, 33, 0, 0)
 				--SetPedComponentVariation(ply, 2, 4, 4, 0)
 				SetPedComponentVariation(ply, 3, 14, 0, 0)
@@ -395,7 +230,7 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 				local modelhashed = GetHashKey(arrSkinGeneralValues[position])
 				RequestModel(modelhashed)
 				while not HasModelLoaded(modelhashed) do
-					Citizen.Wait(100)
+					Wait(100)
 				end
 				SetPlayerModel(PlayerId(), modelhashed)
 				--SetPedDefaultComponentVariation(PlayerId());
@@ -407,335 +242,295 @@ AddEventHandler("policestation2:ShowMainMenu", function()
 			TriggerServerEvent("policestation2:onduty")
 			TriggerEvent("interaction:setPlayersJob", "police") -- set interaction menu javascript job variable to "police"
 			TriggerEvent("ptt:isEmergency", true)
-		end)
-	end)
-
-	TriggerEvent("GUI2:Option", "Primary Components", function(cb)
-		if(cb) then
-			Citizen.Trace("true")
-			menu_loadout = 2
-		else
-
 		end
-		end)
-
-	TriggerEvent("GUI2:Option", "Secondary Components", function(cb)
-		if(cb) then
-			Citizen.Trace("true")
-			menu_loadout = 3
-		else
-
-		end
-		end)
-
-	TriggerEvent("GUI2:Option", "Props", function(cb)
-		if(cb) then
-			Citizen.Trace("true")
-			menu_loadout = 4
-		else
-
-		end
-		end)
-
-	TriggerEvent("GUI2:Option", "Load Default", function(cb)
-		if(cb) then
-			Citizen.Trace("true")
-			TriggerServerEvent("policestation2:loadDefaultUniform", character)
-			TriggerEvent("interaction:setPlayersJob", "police") -- set interaction menu javascript job variable to "police"
-			TriggerEvent("ptt:isEmergency", true)
-			--menu = 4
-		else
-
-		end
-		end)
-
-	TriggerEvent("GUI2:Option", "Save as Default", function(cb)
-		if(cb) then
-			Citizen.Trace("true")
-			local character = {
-				["components"] = {},
-				["componentstexture"] = {},
-				["props"] = {},
-				["propstexture"] = {}
-			}
-			local ply = GetPlayerPed(-1)
-			local debugstr = "| Props: "
-			for i=0,2 -- instead of 3?
-				do
-				character.props[i] = GetPedPropIndex(ply, i)
-				character.propstexture[i] = GetPedPropTextureIndex(ply, i)
-				debugstr = debugstr .. character.props[i] .. "->" .. character.propstexture[i] .. ","
+	end
+	-- Components --
+	local submenu = _menuPool:AddSubMenu(menu, "Components", "Modify components", true --[[KEEP POSITION]])
+	for i = 1, #components do
+		local selectedComponent = GetPedDrawableVariation(ped, i - 1)
+		local selectedTexture = GetPedTextureVariation(ped, i - 1)
+		local maxComponent = GetNumberOfPedDrawableVariations(ped, i - 1)
+		local maxTexture = GetNumberOfPedTextureVariations(ped, i - 1, selectedComponent)
+		local arr = {}
+		for j = 0, maxComponent do arr[j] = j - 1 end
+		local listitem = UIMenuListItem.New(components[i], arr, selectedComponent)
+		listitem.OnListChanged = function(sender, item, index)
+			if item == listitem then
+				--print("Selected ~b~" .. index .. "~w~...")
+				selectedComponent = index
+				SetPedComponentVariation(ped, i - 1, index, 0, 0)
+				selectedTexture = 0
 			end
-			debugstr = debugstr .. "| Components: "
-			for i=0,11
-				do
-				character.components[i] = GetPedDrawableVariation(ply, i)
-				character.componentstexture[i] = GetPedTextureVariation(ply, i)
-				debugstr = debugstr .. character.components[i] .. "->" .. character.componentstexture[i] .. ","
-			end
-			Citizen.Trace(debugstr)
-			TriggerServerEvent("policestation2:saveasdefault", character)
-			--Citizen.Trace("calling server function: giveMeMyWeaponsPlease...")
-			--TriggerServerEvent("mini:giveMeMyWeaponsPlease")
-		else
-
 		end
-		end)
-
-	TriggerEvent("GUI2:Option", "Off Duty", function(cb)
-		if(cb) then
-			Citizen.Trace("true")
-			TriggerServerEvent("policestation2:offduty")
-			TriggerEvent("interaction:setPlayersJob", "civ") -- set interaction menu javascript job variable to "civ"
-			TriggerEvent("ptt:isEmergency", false)
-			--menu = 4
-		else
-
-		end
-		end)
-
-	--[[TriggerEvent("GUI2:Option", "Save", function(cb)
-		if(cb) then
-			--Citizen.Trace("true")
-			local character = {
-				["hash"] = "",
-				["components"] = {},
-				["componentstexture"] = {},
-				["props"] = {},
-				["propstexture"] = {}
-			}
-			local ply = GetPlayerPed(-1)
-			character.hash = GetEntityModel(GetPlayerPed(-1))
-			local debugstr = "Player Hash: " .. character.hash .. "| Props: "
-			for i=0,2 -- instead of 3?
-				do
-				character.props[i] = GetPedPropIndex(ply, i)
-				character.propstexture[i] = GetPedPropTextureIndex(ply, i)
-				debugstr = debugstr .. character.props[i] .. "->" .. character.propstexture[i] .. ","
-			end
-			debugstr = debugstr .. "| Components: "
-			for i=0,11
-				do
-				character.components[i] = GetPedDrawableVariation(ply, i)
-				character.componentstexture[i] = GetPedTextureVariation(ply, i)
-				debugstr = debugstr .. character.components[i] .. "->" .. character.componentstexture[i] .. ","
-			end
-			Citizen.Trace(debugstr)
-			TriggerServerEvent("mini:save", character)
-			Citizen.Trace("calling server function: giveMeMyWeaponsPlease...")
-			TriggerServerEvent("mini:giveMeMyWeaponsPlease")
-			menu = false
-		else
-
-		end
-	end)]]--
-	TriggerEvent("GUI2:Update")
-end)
-
-RegisterNetEvent("policestation2:ShowPropsMenu")
-AddEventHandler("policestation2:ShowPropsMenu", function()
-	TriggerEvent("GUI2:Title", "Props")
-	TriggerEvent("GUI2:Option", "..Back", function(cb)
-		if(cb) then
-			Citizen.Trace("true")
-			menu_loadout = 1
-		else
-
-		end
-		end)
-
-	local props = { "Head", "Glasses", "Ear Acessories", "Watch"};
-	local ply = GetPlayerPed(-1)
-	for i=0,3
-		do
-		local selectedProp = GetPedPropIndex(ply, i)
-		local selectedPropTexture = GetPedPropTextureIndex(ply, i)
-		local maxProp = GetNumberOfPedPropDrawableVariations(ply, i)
-		local maxPropTexture = GetNumberOfPedPropTextureVariations(ply, i, selectedProp)
-		--local maxPropTexture = GetNumberOfPedPropTextureVariations(ply, i
-		if(maxProp > 0) then
-		TriggerEvent("GUI2:Int", props[i+1] .. " (" .. maxProp .. ")", selectedProp, -1, maxProp - 1, function(cb)
-				selectedProp = cb
-				if(selectedProp > -1) then
-					SetPedPropIndex(ply, i, selectedProp, 0, true)
-				else
-					ClearPedProp(ply, i)
+		submenu:AddItem(listitem)
+		if maxTexture > 1 then
+			arr = {}
+			for j = 0, maxTexture do arr[j] = j - 1 end
+			local listitem = UIMenuListItem.New(components[i] .. " Texture", arr, selectedTexture)
+			listitem.OnListChanged = function(sender, item, index)
+				if item == listitem then
+					selectedTexture = index
+					SetPedComponentVariation(ped, i - 1, selectedComponent, selectedTexture, 0)
 				end
-				--selectedTexture = 0
-				end)
-		end
-		if (maxPropTexture > 1 and selectedProp > -1) then
-			TriggerEvent("GUI2:Int", props[i+1] .. " Texture (" .. maxPropTexture .. ")", selectedPropTexture, 0, maxPropTexture - 1, function(cb)
-				selectedPropTexture = cb
-					SetPedPropIndex(ply, i, selectedProp, selectedPropTexture, true)
-				--selectedTexture = 0
-				end)
+			end
+			submenu:AddItem(listitem)
 		end
 	end
-
-
-	TriggerEvent("GUI2:Update")
-
-end)
-
-RegisterNetEvent("policestation2:ShowComponentsMenu1")
-AddEventHandler("policestation2:ShowComponentsMenu1", function()
-	local components = {"Face","Head","Hair","Arms/Hands","Legs","Back","Feet","Ties","Shirt","Vests","Textures","Torso"}
-	TriggerEvent("GUI2:Title", "Components 1")
-	TriggerEvent("GUI2:Option", "..Back", function(cb)
-		if(cb) then
-			Citizen.Trace("true")
-			menu_loadout = 1
-		else
-
+	-- Props --
+	local submenu = _menuPool:AddSubMenu(menu, "Props", "Modify props", true --[[KEEP POSITION]])
+	for i = 1, 3 do
+		local selectedProp = GetPedPropIndex(ped, i - 1)
+		local selectedPropTexture = GetPedPropTextureIndex(ped, i - 1)
+		local maxProp = GetNumberOfPedPropDrawableVariations(ped, i - 1)
+		local maxPropTexture = GetNumberOfPedPropTextureVariations(ped, i - 1, selectedProp)
+		local arr = {}
+		for j = 0, maxProp do arr[j] = j - 1 end
+		local listitem = UIMenuListItem.New(props[i], arr, selectedProp)
+		listitem.OnListChanged = function(sender, item, index)
+			if item == listitem then
+				--print("Selected ~b~" .. index .. "~w~...")
+				selectedProp = index
+				if selectedProp > -1 then
+					SetPedPropIndex(ped, i - 1, selectedProp, 0, true)
+				else
+					ClearPedProp(ped, i - 1)
+				end
+			end
 		end
-		end)
-	local ply = GetPlayerPed(-1)
-	for i=0,5
-		do
-		if ( arrSkinGeneralValues[position] == "mp_m_freemode_01" or arrSkinGeneralValues[position] == "mp_f_freemode_01" ) and ( i == 0 or i == 2 or i == 5 ) then -- ignore head and hair options
-			-- do nothing
-		else
-			local selectedComponent = GetPedDrawableVariation(ply, i)
-			local selectedTexture = GetPedTextureVariation(ply, i)
-			local maxComponent = GetNumberOfPedDrawableVariations(ply, i)
-			local maxTexture = GetNumberOfPedTextureVariations(ply, i, selectedComponent)
-			if(maxComponent > 1) then
-				TriggerEvent("GUI2:Int", components[i+1] .. " (" .. maxComponent .. ")", selectedComponent, 0, maxComponent - 1, function(cb)
-					selectedComponent = cb
-					SetPedComponentVariation(ply, i, selectedComponent, 0, 0)
-					selectedTexture = 0
-					end)
+		submenu:AddItem(listitem)
+		if maxPropTexture > 1 and selectedProp > -1 then
+			arr = {}
+			for j = 0, maxPropTexture do arr[j] = j - 1 end
+			local listitem = UIMenuListItem.New(props[i] .. " Texture", arr, selectedPropTexture)
+			listitem.OnListChanged = function(sender, item, index)
+				if item == listitem then
+					--print("Selected ~b~" .. index .. "~w~...")
+					selectedPropTexture = index
+					SetPedPropIndex(ped, i - 1, selectedProp, selectedPropTexture, true)
+				end
 			end
-			if(maxTexture > 1) then
-				TriggerEvent("GUI2:Int", components[i+1] .. " Texture (" .. maxTexture .. ")", selectedTexture, 0, maxTexture - 1, function(cb)
-					selectedTexture = cb
-					SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 0)
-					end)
-			end
+			submenu:AddItem(listitem)
 		end
 	end
-	TriggerEvent("GUI2:Update")
-end)
-
-RegisterNetEvent("policestation2:ShowComponentsMenu2")
-AddEventHandler("policestation2:ShowComponentsMenu2", function()
-	local components = {"Face","Head","Hair","Arms/Hands","Legs","Back","Feet","Ties","Shirt","Vests","Textures","Torso"}
-	TriggerEvent("GUI2:Title", "Components 2")
-	TriggerEvent("GUI2:Option", "..Back", function(cb)
-		if(cb) then
-			Citizen.Trace("true")
-			menu_loadout = 1
-		else
-
-		end
-		end)
-	local ply = GetPlayerPed(-1)
-	for i=6,11
-		do
-		if ( arrSkinGeneralValues[position] == "mp_m_freemode_01" or arrSkinGeneralValues[position] == "mp_f_freemode_01" ) and ( i == -1 ) then
-			-- do nothing
-		else
-			local selectedComponent = GetPedDrawableVariation(ply, i)
-			local selectedTexture = GetPedTextureVariation(ply, i)
-			local maxComponent = GetNumberOfPedDrawableVariations(ply, i)
-			local maxTexture = GetNumberOfPedTextureVariations(ply, i, selectedComponent)
-			if(maxComponent > 1) then
-				TriggerEvent("GUI2:Int", components[i+1] .. " (" .. maxComponent .. ")", selectedComponent, 0, maxComponent - 1, function(cb)
-					selectedComponent = cb
-					SetPedComponentVariation(ply, i, selectedComponent, 0, 0)
-					selectedTexture = 0
-					end)
-			end
-			if(maxTexture > 1) then
-				TriggerEvent("GUI2:Int", components[i+1] .. " Texture (" .. maxTexture .. ")", selectedTexture, 0, maxTexture - 1, function(cb)
-					selectedTexture = cb
-					SetPedComponentVariation(ply, i, selectedComponent, selectedTexture, 0)
-					end)
-			end
-		end
+	local item = NativeUI.CreateItem("Clear Props", "Reset props.")
+	item.Activated = function(parentmenu, selected)
+		ClearPedProp(ped, 0)
+		ClearPedProp(ped, 1)
+		ClearPedProp(ped, 2)
 	end
-	TriggerEvent("GUI2:Update")
-end)
+	submenu:AddItem(item)
+	-- Load Default Uniform --
+	local item = NativeUI.CreateItem("Load Stored", "Load your stored uniform")
+	item.Activated = function(parentmenu, selected)
+		TriggerServerEvent("policestation2:loadDefaultUniform")
+		TriggerEvent("interaction:setPlayersJob", "police") -- set interaction menu javascript job variable to "police"
+		TriggerEvent("ptt:isEmergency", true)
+	end
+	menu:AddItem(item)
+	-- Save Default Uniform --
+	local item = NativeUI.CreateItem("Save Uniform", "Save as your stored uniform.")
+	item.Activated = function(parentmenu, selected)
+		local character = {
+				["components"] = {},
+				["componentstexture"] = {},
+				["props"] = {},
+				["propstexture"] = {}
+			}
+			local ply = GetPlayerPed(-1)
+			--local debugstr = "| Props: "
+			for i=0,2 -- instead of 3?
+				do
+				character.props[i] = GetPedPropIndex(ply, i)
+				character.propstexture[i] = GetPedPropTextureIndex(ply, i)
+				--debugstr = debugstr .. character.props[i] .. "->" .. character.propstexture[i] .. ","
+			end
+			--debugstr = debugstr .. "| Components: "
+			for i=0,11
+				do
+				character.components[i] = GetPedDrawableVariation(ply, i)
+				character.componentstexture[i] = GetPedTextureVariation(ply, i)
+				--debugstr = debugstr .. character.components[i] .. "->" .. character.componentstexture[i] .. ","
+			end
+			--print(debugstr)
+			TriggerServerEvent("policestation2:saveasdefault", character)
+	end
+	menu:AddItem(item)
+	-- Clock Out --
+	local item = NativeUI.CreateItem("Clock Out", "Sign off duty.")
+	item.Activated = function(parentmenu, selected)
+		TriggerServerEvent("policestation2:offduty")
+		TriggerEvent("interaction:setPlayersJob", "civ") -- set interaction menu javascript job variable to "civ"
+		TriggerEvent("ptt:isEmergency", false)
+	end
+	menu:AddItem(item)
+end
 
---[[Citizen.CreateThread(function()
-	--for _, item in pairs(policeLockerRooms) do
-		--Citizen.Wait(0)
-		--DrawMarker(1, item.x, item.y, item.z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
-	--end
-end)]]--
+function CreateArmoryMenu(menu)
+	local ped = GetPlayerPed(-1)
+	menu:Clear()
 
+	local item = NativeUI.CreateItem("Armor", "Get a new armored vest.")
+	item.Activated = function(parentmenu, selected)
+		SetEntityHealth(ped, GetEntityMaxHealth(ped))
+		SetPedArmour(ped, 100)
+		exports.globals:notify("Armor and Health restored")
+	end
+	menu:AddItem(item)
+
+	local item = NativeUI.CreateItem("Default Load Out", "Get the default load out.")
+	item.Activated = function(parentmenu, selected)
+		TriggerEvent("policestation2:giveDefaultLoadout")
+		exports.globals:notify("Default Load Out")
+	end
+	menu:AddItem(item)
+
+	local item = NativeUI.CreateItem("Marksman Load Out", "Get the marksman load out.")
+	item.Activated = function(parentmenu, selected)
+		RemoveAllPedWeapons(ped, true)
+		local playerWeapons = { "WEAPON_FLARE" , "WEAPON_COMBATPISTOL", "WEAPON_STUNGUN", "WEAPON_NIGHTSTICK", "WEAPON_FLAREGUN", "WEAPON_FLASHLIGHT", "WEAPON_SNIPERRIFLE"}
+		local name, hash
+		for i = 1, #playerWeapons do
+			name = playerWeapons[i]
+			hash = GetHashKey(name)
+		  GiveWeaponToPed(ped, hash, 1000, 0, false) -- get hash given name of weapon
+		end
+		SetEntityHealth(ped, GetEntityMaxHealth(ped))
+		SetPedArmour(ped, 100)
+		GiveWeaponComponentToPed(ped, 1593441988 , 0x359B7AAE)
+		GiveWeaponComponentToPed(ped, 100416529 , 0xBC54DA77)
+		exports.globals:notify("Marksman Load Out")
+	end
+	menu:AddItem(item)
+
+	local item = NativeUI.CreateItem("Undercover Load Out", "Get the undercover load out.")
+	item.Activated = function(parentmenu, selected)
+		RemoveAllPedWeapons(ped, true)
+		local playerWeapons = { "WEAPON_COMBATPISTOL", "WEAPON_STUNGUN" }
+		local name, hash
+		for i = 1, #playerWeapons do
+			name = playerWeapons[i]
+			hash = GetHashKey(name)
+		  GiveWeaponToPed(ped, hash, 1000, 0, false) -- get hash given name of weapon
+		end
+		SetEntityHealth(ped, GetEntityMaxHealth(ped))
+		SetPedArmour(ped, 100)
+		exports.globals:notify("Undercover Load Out")
+	end
+	menu:AddItem(item)
+
+	local item = NativeUI.CreateItem("Carbine Rifle", "Get a carbine rifle.")
+	item.Activated = function(parentmenu, selected)
+		local playerWeapons = { "WEAPON_CARBINERIFLE" }
+		local name, hash
+		for i = 1, #playerWeapons do
+			name = playerWeapons[i]
+			hash = GetHashKey(name)
+		  GiveWeaponToPed(ped, hash, 1000, 0, false) -- get hash given name of weapon
+		end
+		SetEntityHealth(ped, GetEntityMaxHealth(ped))
+		-- give flashlights (not sure which is which atm):
+		GiveWeaponComponentToPed(ped, 2210333304, 0x7BC4CDDC)
+		GiveWeaponComponentToPed(ped, 2210333304, 0xC164F53)
+	end
+	menu:AddItem(item)
+
+	local item = NativeUI.CreateItem("Pump Shotgun", "Get a pump shotgun.")
+	item.Activated = function(parentmenu, selected)
+		local playerWeapons = { "WEAPON_PUMPSHOTGUN" }
+		local name, hash
+		for i = 1, #playerWeapons do
+			name = playerWeapons[i]
+			hash = GetHashKey(name)
+			GiveWeaponToPed(ped, hash, 1000, 0, false) -- get hash given name of weapon
+		end
+		SetEntityHealth(ped, GetEntityMaxHealth(ped))
+		-- give flashlights (not sure which is which atm):
+		GiveWeaponComponentToPed(ped, 2210333304, 0x7BC4CDDC)
+		GiveWeaponComponentToPed(ped, 2210333304, 0xC164F53)
+	end
+	menu:AddItem(item)
+end
+
+_menuPool:RefreshIndex()
+
+-- Functions --
+function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
+	SetTextFont(font)
+	SetTextProportional(0)
+	SetTextScale(scale, scale)
+	SetTextColour(r, g, b, a)
+	SetTextDropShadow(0, 0, 0, 0,255)
+	SetTextEdge(1, 0, 0, 0, 255)
+	SetTextDropShadow()
+	SetTextOutline()
+	SetTextCentre(centre)
+	SetTextEntry("STRING")
+	AddTextComponentString(text)
+	DrawText(x , y)
+end
+
+-- Script Loop --
 Citizen.CreateThread(function()
-
 	while true do
-		for _, item in pairs(policeLockerRooms) do
-			DrawMarker(27, item.x,item.y,item.z, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0, 0, 255, 90, 0, 0, 2, 0, 0, 0, 0)
-		end
-		for _, item in pairs(policeArmourys) do
-			DrawMarker(27, item.x,item.y,item.z, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 255, 0, 0, 90, 0, 0, 2, 0, 0, 0, 0)
-		end
-		if (IsNearStore() == true) then
-			if(menu_loadout == 0) then
-				drawTxt('Press ~g~E~s~ to open Loadout Menu',0,1,0.5,0.8,0.6,255,255,255,255)
-			end
-		else
-			menu_loadout = 0
-		end
-		if (IsNearArmoury() == true) then
-			if(menu_armoury == 0) then
-				drawTxt('Press ~g~E~s~ to open Armoury Menu',0,1,0.5,0.8,0.6,255,255,255,255)
-			end
-		else
-			menu_armoury = 0
-		end
-
-		if(IsControlJustPressed(1, 51) and IsNearStore() == true) then
-			if(menu_loadout == 0) then
-				TriggerServerEvent("policestation2:checkWhitelist", "policestation2:isWhitelisted")
-			else
-				menu_loadout = 0
-			end
-
-		end
-
-		if(IsControlJustPressed(1, 51) and IsNearArmoury() == true) then
-			if(menu_armoury == 0) then
-				--TriggerServerEvent("policestation2:checkWhitelist", "policestation2:isWhitelisted")
-				TriggerServerEvent("policestation2:checkWhitelist", "policestation2:showArmoury")
-				--TriggerEvent("policestation2:showArmoury")
-			else
-				menu_armoury = 0
-			end
-
-		end
-
-
-
-		if(menu_loadout == 1) then
-			--Show main menu
-			TriggerEvent("policestation2:ShowMainMenu")
-			elseif(menu_loadout == 2) then
-			--Show components menu
-			TriggerEvent("policestation2:ShowComponentsMenu1")
-			elseif(menu_loadout == 3) then
-			--Show Props Menu
-			TriggerEvent("policestation2:ShowComponentsMenu2")
-			elseif(menu_loadout == 4) then
-			--Show Props Menu
-			TriggerEvent("policestation2:ShowPropsMenu")
-		end
-		if(menu_armoury == 1) then
-			TriggerEvent("policestation2:ShowArmouryMenu")
-		end
 		Wait(0)
-	end
-	end)
+		-- vars --
+		local me = GetPlayerPed(-1)
+		local playerCoords = GetEntityCoords(me, false)
 
-RegisterNetEvent("CS:giveWeapons")
-AddEventHandler("CS:giveWeapons", function(weapons)
-	-- weapons
-	for i = 1, #weapons do
-		local weaponHash = weapons[i].hash
-		GiveWeaponToPed(GetPlayerPed(-1), weaponHash, 1000, 0, false) -- name already is the hash
+    -- Process Menu --
+    _menuPool:MouseControlsEnabled(false)
+    _menuPool:ControlDisablingEnabled(false)
+    _menuPool:ProcessMenus()
+
+		for i = 1, #policeLockerRooms do
+			if Vdist(playerCoords.x,playerCoords.y,playerCoords.z,policeLockerRooms[i].x,policeLockerRooms[i].y,policeLockerRooms[i].z)  <  50 then
+				DrawMarker(27, policeLockerRooms[i].x, policeLockerRooms[i].y, policeLockerRooms[i].z - 1.0, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0, 0, 255, 90, 0, 0, 2, 0, 0, 0, 0)
+				DrawMarker(27, policeArmourys[i].x, policeArmourys[i].y, policeArmourys[i].z - 1.0, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 255, 0, 0, 90, 0, 0, 2, 0, 0, 0, 0)
+				if Vdist(playerCoords.x,playerCoords.y,playerCoords.z,policeLockerRooms[i].x,policeLockerRooms[i].y,policeLockerRooms[i].z)  <  2 then
+						drawTxt("Press [~y~E~w~] to access the locker room",7,1,0.5,0.8,0.5,255,255,255,255)
+						if IsControlJustPressed(1, MENU_OPEN_KEY) then
+								closest_shop = policeLockerRooms[i] --// set shop player is at
+								--mainMenu:Visible(not mainMenu:Visible())
+								if not mainMenu:Visible() then
+
+									-- TODO: first check white list status before opening menu --
+									TriggerServerEvent("policestation2:checkWhitelist", "policestation2:isWhitelisted")
+
+									--CreateUniformMenu(mainMenu)
+									--mainMenu:Visible(true)
+								else
+									mainMenu:Visible(false)
+									mainMenu:Clear()
+								end
+						end
+				elseif Vdist(playerCoords.x,playerCoords.y,playerCoords.z,policeArmourys[i].x,policeArmourys[i].y,policeArmourys[i].z)  <  2 then
+					drawTxt("Press [~y~E~w~] to access the police armory",7,1,0.5,0.8,0.5,255,255,255,255)
+					if IsControlJustPressed(1, MENU_OPEN_KEY) then
+							closest_shop = policeArmourys[i] --// set shop player is at
+							--mainMenu:Visible(not mainMenu:Visible())
+							if not mainMenu:Visible() then
+
+								-- TODO: first check white list status before opening menu --
+								TriggerServerEvent("policestation2:checkWhitelist", "policestation2:showArmoury")
+
+								--CreateUniformMenu(mainMenu)
+								--mainMenu:Visible(true)
+							else
+								mainMenu:Visible(false)
+								mainMenu:Clear()
+							end
+					end
+				else
+						if closest_shop then
+								closest_shop = nil
+								if mainMenu:Visible() then
+										mainMenu:Visible(false)
+										mainMenu:Clear()
+								end
+						end
+				end
+			end
+		end
+
 	end
 end)
