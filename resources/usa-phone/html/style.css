@@ -247,3 +247,10 @@ table tr:hover {
     overflow-y: scroll;
 }
 */
+
+/* Resize for laptops / small displays */
+@media screen and (max-width: 1500px) {
+    #phone-wrap {
+        top: -200;
+    }
+}
