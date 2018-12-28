@@ -70,7 +70,7 @@ AddEventHandler("emsstation2:checkWhitelist", function(clientevent)
 			--TriggerClientEvent("policestation2:isWhitelisted", userSource)
 			TriggerClientEvent(clientevent, userSource)
 		else
-			TriggerClientEvent("emsstation2:notify", userSource, "~y~You are not whitelisted for EMS. Apply at ~b~https://www.usarrp.net~w~.")
+			TriggerClientEvent("usa:notify", userSource, "~y~You are not whitelisted for EMS. Apply at ~b~https://www.usarrp.net~w~.")
 		end
 	--end)
 

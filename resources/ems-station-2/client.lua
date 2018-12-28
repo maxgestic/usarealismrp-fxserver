@@ -5,51 +5,10 @@ local EMSLockerRooms = {
 {x = 1196.320435703, y = -1465.4461669922, z = 34.859535217285}, -- LS fire station 9
 {x = 207.106, y = -1641.45, z = 28.5},
 {x = 373.269, y = -1441.48, z = 28.5},
-{x=-366.269, y = 6102.27, z = 34.6397}, -- paleto
+{x=-366.269, y = 6102.27, z = 35.6397}, -- paleto
 --{x=1692.13, y=3586.27, z=34.7209} -- sandy
 {x = 1701.4, y = 3604.1, z = 35.9} -- sandy (interior / ymap)
 }
-
--- MENU CODE
-local menu = 0
-local position = 1
-
-RegisterNetEvent("GUI2:Title")
-AddEventHandler("GUI2:Title", function(title)
-	Menu.Title(title)
-	end)
-
-RegisterNetEvent("GUI2:Option")
-AddEventHandler("GUI2:Option", function(option, cb)
-	cb(Menu.Option(option))
-	end)
-
-RegisterNetEvent("GUI2:Bool")
-AddEventHandler("GUI2:Bool", function(option, bool, cb)
-	Menu.Bool(option, bool, function(data)
-		cb(data)
-		end)
-	end)
-
-RegisterNetEvent("GUI2:Int")
-AddEventHandler("GUI2:Int", function(option, int, min, max, cb)
-	Menu.Int(option, int, min, max, function(data)
-		cb(data)
-		end)
-	end)
-
-RegisterNetEvent("GUI2:StringArray")
-AddEventHandler("GUI2:StringArray", function(option, array, position, cb)
-	Menu.StringArray(option, array, position, function(data)
-		cb(data)
-		end)
-	end)
-
-RegisterNetEvent("GUI2:Update")
-AddEventHandler("GUI2:Update", function()
-	Menu.updateSelection()
-	end)
--- /MENU CODE
 
 local arrSkinGeneralCaptions = {"MP Male", "MP Female", "Fireman", "Paramedic - Male", "Paramedic - Female", "Doctor"}
 local arrSkinGeneralValues = {"mp_m_freemode_01", "mp_f_freemode_01", "s_m_y_fireman_01","s_m_m_paramedic_01","s_f_y_scrubs_01", "s_m_m_doctor_01"}
@@ -58,6 +17,19 @@ for i=1,#arrSkinGeneralValues
 	do
 	arrSkinHashes[i] = GetHashKey(arrSkinGeneralValues[i])
 end
+
+local components = {"Face","Head","Hair","Arms/Hands","Legs","Back","Feet","Ties","Shirt","Vests","Textures","Torso"}
+local props = { "Head", "Glasses", "Ear Acessories", "Watch"}
+
+local MAX_COMPONENT = 200
+local MAX_COMPONENT_TEXTURE = 100
+
+local MAX_PROP = 200
+local MAX_PROP_TEXTURE = 100
+
+local MENU_OPEN_KEY = 38
+
+local closest_shop = nil
 
 function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
 	SetTextFont(font)
@@ -73,13 +45,6 @@ function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
 	AddTextComponentString(text)
 	DrawText(x , y)
 end
-
-RegisterNetEvent("emsstation2:notify")
-AddEventHandler("emsstation2:notify", function(msg)
-	SetNotificationTextEntry("STRING")
-	AddTextComponentString(msg)
-	DrawNotification(0,1)
-end)
 
 function IsNearEMSLocker()
 	local ply = GetPlayerPed(-1)
@@ -142,7 +107,7 @@ AddEventHandler("emsstation2:setciv", function(character, playerWeapons)
 					elseif i == 14 then -- hair
 						--print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
 						SetPedComponentVariation(ped, 2, head.other[i][2], GetNumberOfPedTextureVariations(ped,2, 0), 2)
-						SetPedHairColor(ped, head.other[i][4], head.other[i][4])
+						SetPedHairColor(ped, head.other[i][4], head.other[i][5] or 0)
 					end
 				end
 			end
@@ -171,7 +136,7 @@ end)
 
 RegisterNetEvent("emsstation2:isWhitelisted")
 AddEventHandler("emsstation2:isWhitelisted", function()
-	--Citizen.Trace("Inside is whitelisted client evnet")
+	--[[
 	local playerhash = GetEntityModel(GetPlayerPed(-1))
 	for i=1,#arrSkinHashes
 	do
@@ -180,6 +145,9 @@ AddEventHandler("emsstation2:isWhitelisted", function()
 		end
 	end
 	menu = 1
+	--]]
+	CreateMenu(mainMenu)
+	mainMenu:Visible(true)
 end)
 
 RegisterNetEvent("emsstation2:setCharacter")
@@ -209,6 +177,202 @@ AddEventHandler("emsstation2:giveDefaultLoadout", function()
 	SetEntityHealth(GetPlayerPed(-1), GetEntityMaxHealth(GetPlayerPed(-1)))
 end)
 
+-----------------
+-- Set up menu --
+-----------------
+_menuPool = NativeUI.CreatePool()
+mainMenu = NativeUI.CreateMenu("EMS", "~b~San Andreas Medical Services", 0 --[[X COORD]], 320 --[[Y COORD]])
+_menuPool:Add(mainMenu)
+
+function CreateMenu(menu)
+	local ped = GetPlayerPed(-1)
+	menu:Clear()
+	-- Model --
+	local listitem = UIMenuListItem.New("Uniforms", arrSkinGeneralCaptions, 1)
+	menu:AddItem(listitem)
+	listitem.OnListSelected = function(sender, item, index)
+		if item == listitem then
+			print("Selected ~b~" .. item:IndexToItem(index) .. "~w~...")
+			local position = index
+			local ply = GetPlayerPed(-1)
+			if arrSkinGeneralValues[position] == "mp_m_freemode_01" then
+				if not IsPedModel(ply, GetHashKey("mp_m_freemode_01")) then
+					local model = GetHashKey("mp_m_freemode_01")
+					RequestModel(model)
+					while not HasModelLoaded(model) do -- Wait for model to load
+						Wait(100)
+					end
+					SetPlayerModel(PlayerId(), model)
+					SetModelAsNoLongerNeeded(model)
+					ply = GetPlayerPed(-1)
+				end
+				SetPedComponentVariation(ply, 1, 121, 0, 0)
+				SetPedComponentVariation(ply, 3, 85, 0, 0)
+				SetPedComponentVariation(ply, 4, 25, 3, 0)
+				SetPedComponentVariation(ply, 6, 61, 0, 0)
+				SetPedComponentVariation(ply, 7, 126, 0, 0)
+				SetPedComponentVariation(ply, 8, 129, 0, 0)
+				SetPedComponentVariation(ply, 11, 250, 1, 0)
+			elseif arrSkinGeneralValues[position] == "mp_f_freemode_01" then
+				if not IsPedModel(ply, GetHashKey("mp_f_freemode_01")) then
+					local model = GetHashKey("mp_f_freemode_01")
+					RequestModel(model)
+					while not HasModelLoaded(model) do -- Wait for model to load
+						Wait(100)
+					end
+					SetPlayerModel(PlayerId(), model)
+					SetModelAsNoLongerNeeded(model)
+					ply = GetPlayerPed(-1)
+				end
+				SetPedComponentVariation(ply, 1, 121, 0, 0)
+				SetPedComponentVariation(ply, 3, 96, 0, 0)
+				SetPedComponentVariation(ply, 4, 37, 0, 0)
+				SetPedComponentVariation(ply, 6, 74, 1, 0)
+				SetPedComponentVariation(ply, 7, 96, 0, 0)
+				SetPedComponentVariation(ply, 8, 159, 0, 0)
+				SetPedComponentVariation(ply, 11, 250, 1, 0)
+			else
+				local modelhashed = GetHashKey(arrSkinGeneralValues[position])
+				RequestModel(modelhashed)
+				while not HasModelLoaded(modelhashed) do
+					Wait(100)
+				end
+				SetPlayerModel(PlayerId(), modelhashed)
+				--SetPedDefaultComponentVariation(PlayerId());
+				--drawTxt(ply,0,1,0.5,0.8,0.6,255,255,255,255)
+				SetPedDefaultComponentVariation(ply)
+				SetModelAsNoLongerNeeded(modelhashed)
+			end
+			TriggerEvent("emsstation2:giveDefaultLoadout")
+			TriggerServerEvent("emsstation2:onduty")
+			TriggerEvent("interaction:setPlayersJob", "ems") -- set interaction menu javascript job variable to "ems"
+			TriggerEvent("ptt:isEmergency", true)
+		end
+	end
+	-- Components --
+	local submenu = _menuPool:AddSubMenu(menu, "Components", "Modify components", true --[[KEEP POSITION]])
+	for i = 1, #components do
+		local selectedComponent = GetPedDrawableVariation(ped, i - 1)
+		local selectedTexture = GetPedTextureVariation(ped, i - 1)
+		--local maxComponent = GetNumberOfPedDrawableVariations(ped, i - 1)
+		--local maxTexture = GetNumberOfPedTextureVariations(ped, i - 1, selectedComponent)
+		local arr = {}
+		for j = 0, MAX_COMPONENT do arr[j] = j - 1 end
+		local listitem = UIMenuListItem.New(components[i], arr, selectedComponent)
+		listitem.OnListChanged = function(sender, item, index)
+			if item == listitem then
+				--print("Selected ~b~" .. index .. "~w~...")
+				selectedComponent = index
+				SetPedComponentVariation(ped, i - 1, index, 0, 0)
+				selectedTexture = 0
+			end
+		end
+		submenu:AddItem(listitem)
+		--if maxTexture > 1 then
+				arr = {}
+				for j = 0, MAX_COMPONENT_TEXTURE do arr[j] = j - 1 end
+				local listitem = UIMenuListItem.New(components[i] .. " Texture", arr, selectedTexture)
+				listitem.OnListChanged = function(sender, item, index)
+					if item == listitem then
+						selectedTexture = index
+						SetPedComponentVariation(ped, i - 1, selectedComponent, selectedTexture, 0)
+					end
+				end
+				submenu:AddItem(listitem)
+		--end
+	end
+	-- Props --
+	local submenu = _menuPool:AddSubMenu(menu, "Props", "Modify props", true --[[KEEP POSITION]])
+	for i = 1, 3 do
+		local selectedProp = GetPedPropIndex(ped, i - 1)
+		local selectedPropTexture = GetPedPropTextureIndex(ped, i - 1)
+		--local maxProp = GetNumberOfPedPropDrawableVariations(ped, i - 1)
+		--local maxPropTexture = GetNumberOfPedPropTextureVariations(ped, i - 1, selectedProp)
+		local arr = {}
+			for j = 0, MAX_PROP do arr[j] = j - 1 end
+		local listitem = UIMenuListItem.New(props[i], arr, selectedProp)
+		listitem.OnListChanged = function(sender, item, index)
+			if item == listitem then
+				--print("Selected ~b~" .. index .. "~w~...")
+				selectedProp = index
+				if selectedProp > -1 then
+					SetPedPropIndex(ped, i - 1, selectedProp, 0, true)
+				else
+					ClearPedProp(ped, i - 1)
+				end
+			end
+		end
+		submenu:AddItem(listitem)
+		--if maxPropTexture > 1 and selectedProp > -1 then
+			arr = {}
+			for j = 0, MAX_PROP_TEXTURE do arr[j] = j - 1 end
+			local listitem = UIMenuListItem.New(props[i] .. " Texture", arr, selectedPropTexture)
+			listitem.OnListChanged = function(sender, item, index)
+				if item == listitem then
+					--print("Selected ~b~" .. index .. "~w~...")
+					selectedPropTexture = index
+					SetPedPropIndex(ped, i - 1, selectedProp, selectedPropTexture, true)
+				end
+			end
+			submenu:AddItem(listitem)
+		--end
+	end
+	-- clear props button --
+	local item = NativeUI.CreateItem("Clear Props", "Reset props.")
+	item.Activated = function(parentmenu, selected)
+		ClearPedProp(ped, 0)
+		ClearPedProp(ped, 1)
+		ClearPedProp(ped, 2)
+	end
+	submenu:AddItem(item)
+	-- Load Default Uniform --
+	local item = NativeUI.CreateItem("Load Stored", "Load your stored uniform")
+	item.Activated = function(parentmenu, selected)
+		TriggerServerEvent("emsstation2:loadDefaultUniform", character)
+		TriggerEvent("interaction:setPlayersJob", "ems") -- set interaction menu javascript job variable to "ems"
+		TriggerEvent("ptt:isEmergency", true)
+	end
+	menu:AddItem(item)
+	-- Save Default Uniform --
+	local item = NativeUI.CreateItem("Save Uniform", "Save your current uniform")
+	item.Activated = function(parentmenu, selected)
+		local character = {
+			["components"] = {},
+			["componentstexture"] = {},
+			["props"] = {},
+			["propstexture"] = {}
+		}
+		local ply = GetPlayerPed(-1)
+		character.hash = GetEntityModel(GetPlayerPed(-1))
+		--local debugstr = "Player Hash: " .. character.hash .. "| Props: "
+		for i=0,2 -- instead of 3?
+			do
+			character.props[i] = GetPedPropIndex(ply, i)
+			character.propstexture[i] = GetPedPropTextureIndex(ply, i)
+			--debugstr = debugstr .. character.props[i] .. "->" .. character.propstexture[i] .. ","
+		end
+		--debugstr = debugstr .. "| Components: "
+		for i=0,11
+			do
+			character.components[i] = GetPedDrawableVariation(ply, i)
+			character.componentstexture[i] = GetPedTextureVariation(ply, i)
+			--debugstr = debugstr .. character.components[i] .. "->" .. character.componentstexture[i] .. ","
+		end
+		--Citizen.Trace(debugstr)
+		TriggerServerEvent("emsstation2:saveasdefault", character)
+	end
+	menu:AddItem(item)
+	local item = NativeUI.CreateItem("Clock Out", "Sign off duty.")
+	item.Activated = function(parentmenu, selected)
+		TriggerServerEvent("emsstation2:offduty")
+		TriggerEvent("interaction:setPlayersJob", "civ") -- set interaction menu javascript job variable to "civ"
+		TriggerEvent("ptt:isEmergency", false)
+		parentmenu:Visible(false)
+	end
+	menu:AddItem(item)
+end
+
+--[[
 RegisterNetEvent("emsstation2:ShowMainMenu")
 AddEventHandler("emsstation2:ShowMainMenu", function()
 
@@ -455,43 +619,52 @@ AddEventHandler("emsstation2:ShowComponentsMenu2", function()
 	end
 	TriggerEvent("GUI2:Update")
 end)
+--]]
 
 Citizen.CreateThread(function()
 
 	while true do
-		for _, item in pairs(EMSLockerRooms) do
-			DrawMarker(27, item.x,item.y,item.z, 0, 0, 0, 0, 0, 0, 2.0, 2.0, 1.0, 255, 102, 255, 90, 0, 0, 2, 0, 0, 0, 0)
-		end
-		if (IsNearEMSLocker() == true) then
-			if(menu == 0) then
-				drawTxt('Press ~g~E~s~ to open EMS Menu',0,1,0.5,0.8,0.6,255,255,255,255)
+		-- vars --
+		local me = GetPlayerPed(-1)
+		local playerCoords = GetEntityCoords(me, false)
+
+    -- Process Menu --
+    _menuPool:MouseControlsEnabled(false)
+    _menuPool:ControlDisablingEnabled(false)
+    _menuPool:ProcessMenus()
+
+		for i = 1, #EMSLockerRooms do
+			if Vdist(playerCoords.x,playerCoords.y,playerCoords.z,EMSLockerRooms[i].x,EMSLockerRooms[i].y,EMSLockerRooms[i].z)  <  50 then
+				DrawMarker(27, EMSLockerRooms[i].x, EMSLockerRooms[i].y, EMSLockerRooms[i].z - 1.0, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 0, 0, 255, 90, 0, 0, 2, 0, 0, 0, 0)
+				if Vdist(playerCoords.x,playerCoords.y,playerCoords.z,EMSLockerRooms[i].x,EMSLockerRooms[i].y,EMSLockerRooms[i].z)  <  2 then
+						drawTxt("Press [~y~E~w~] to access the locker room",7,1,0.5,0.8,0.5,255,255,255,255)
+						if IsControlJustPressed(1, MENU_OPEN_KEY) then
+								closest_shop = EMSLockerRooms[i] --// set shop player is at
+								--mainMenu:Visible(not mainMenu:Visible())
+								if not mainMenu:Visible() then
+
+									-- TODO: first check white list status before opening menu --
+									TriggerServerEvent("emsstation2:checkWhitelist", "emsstation2:isWhitelisted")
+
+									--CreateUniformMenu(mainMenu)
+									--mainMenu:Visible(true)
+								else
+									mainMenu:Visible(false)
+									mainMenu:Clear()
+								end
+						end
+				else
+						if closest_shop then
+								closest_shop = nil
+								if mainMenu:Visible() then
+										mainMenu:Visible(false)
+										mainMenu:Clear()
+								end
+						end
+				end
 			end
-		else
-			menu = 0
-		end
-
-		if(IsControlJustPressed(1, 51) and IsNearEMSLocker() == true) then
-			if(menu == 0) then
-				TriggerServerEvent("emsstation2:checkWhitelist", "emsstation2:isWhitelisted")
-			else
-				menu = 0
-			end
-
-		end
-
-		if(menu == 1) then
-			--Show main menu
-			TriggerEvent("emsstation2:ShowMainMenu")
-			elseif(menu == 2) then
-			--Show components menu
-			TriggerEvent("emsstation2:ShowComponentsMenu1")
-			elseif(menu == 3) then
-			--Show Props Menu
-			TriggerEvent("emsstation2:ShowComponentsMenu2")
-			elseif(menu == 4) then
-			--Show Props Menu
-			TriggerEvent("emsstation2:ShowPropsMenu")
 		end
 		Wait(0)
 	end
+
 end)

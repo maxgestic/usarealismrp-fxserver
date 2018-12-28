@@ -191,7 +191,6 @@ AddEventHandler("policestation2:checkWhitelist", function(clientevent)
     end
   else
     TriggerClientEvent("usa:notify", userSource, "~y~You are not whitelisted for POLICE. Apply at ~b~https://www.usarrp.net~w~.")
-
   end
 
 end)

@@ -194,7 +194,6 @@ function CreateUniformMenu(menu)
 	local listitem = UIMenuListItem.New("Uniforms", arrSkinGeneralCaptions, 1)
 	menu:AddItem(listitem)
 	listitem.OnListSelected = function(sender, item, index)
-		if item == listitem then
 			--print("Selected ~b~" .. item:IndexToItem(index) .. "~w~...")
 			local position = index
 			local ply = GetPlayerPed(-1)
