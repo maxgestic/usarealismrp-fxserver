@@ -186,10 +186,12 @@ AddEventHandler("policestation2:checkWhitelist", function(clientevent)
         TriggerClientEvent("usa:notify", userSource, "You need to be ~r~10-8 ~w~ to access LSPD armoury.")
       end
     else
-      TriggerClientEvent(clientevent, userSource)
+        user.setActiveCharacterData("job", "sheriff")
+        TriggerClientEvent(clientevent, userSource)
     end
   else
     TriggerClientEvent("usa:notify", userSource, "~y~You are not whitelisted for POLICE. Apply at ~b~https://www.usarrp.net~w~.")
+
   end
 
 end)

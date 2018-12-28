@@ -20,6 +20,12 @@ local policeArmourys = {
 	{x = -447.9, y = 6008.7, z = 31.85}
 }
 
+local MAX_COMPONENT = 200
+local MAX_COMPONENT_TEXTURE = 100
+
+local MAX_PROP = 200
+local MAX_PROP_TEXTURE = 100
+
 local arrSkinGeneralCaptions = {"LSPD Male","LSPD Female","Motor Unit","SWAT","Sheriff Male","Sheriff Female","Traffic Warden","Custom Male","Custom Female","FBI 1","FBI 2","FBI 3","FBI 4","Detective Male","Detective Female","Ranger Male", "Ranger Female", "Tactical", "Pilot"}
 local arrSkinGeneralValues = {"s_m_y_cop_01","s_f_y_cop_01","S_M_Y_HwayCop_01","S_M_Y_SWAT_01","S_M_Y_Sheriff_01","S_F_Y_Sheriff_01","ig_trafficwarden","mp_m_freemode_01","mp_f_freemode_01","mp_m_fibsec_01","ig_stevehains","ig_andreas","s_m_m_fiboffice_01","s_m_m_ciasec_01","ig_karen_daniels","S_M_Y_Ranger_01","S_F_Y_Ranger_01", "s_m_y_blackops_01", "s_m_m_pilot_02"}
 local arrSkinHashes = {}
@@ -189,7 +195,7 @@ function CreateUniformMenu(menu)
 	menu:AddItem(listitem)
 	listitem.OnListSelected = function(sender, item, index)
 		if item == listitem then
-			print("Selected ~b~" .. item:IndexToItem(index) .. "~w~...")
+			--print("Selected ~b~" .. item:IndexToItem(index) .. "~w~...")
 			local position = index
 			local ply = GetPlayerPed(-1)
 			if arrSkinGeneralValues[position] == "mp_m_freemode_01" then
@@ -249,47 +255,47 @@ function CreateUniformMenu(menu)
 	for i = 1, #components do
 		local selectedComponent = GetPedDrawableVariation(ped, i - 1)
 		local selectedTexture = GetPedTextureVariation(ped, i - 1)
-		local maxComponent = GetNumberOfPedDrawableVariations(ped, i - 1)
-		local maxTexture = GetNumberOfPedTextureVariations(ped, i - 1, selectedComponent)
+		--local maxComponent = GetNumberOfPedDrawableVariations(ped, i - 1)
+		--local maxTexture = GetNumberOfPedTextureVariations(ped, i - 1, selectedComponent)
 		local arr = {}
-		for j = 0, maxComponent do arr[j] = j - 1 end
+		for j = 0, MAX_COMPONENT + 1 do arr[j] = j - 1 end
 		local listitem = UIMenuListItem.New(components[i], arr, selectedComponent)
 		listitem.OnListChanged = function(sender, item, index)
 			if item == listitem then
 				--print("Selected ~b~" .. index .. "~w~...")
-				selectedComponent = index
-				SetPedComponentVariation(ped, i - 1, index, 0, 0)
+				selectedComponent = index - 1
+				SetPedComponentVariation(ped, i - 1, selectedComponent, 0, 0)
 				selectedTexture = 0
 			end
 		end
 		submenu:AddItem(listitem)
-		if maxTexture > 1 then
+		--if maxTexture > 1 then
 			arr = {}
-			for j = 0, maxTexture do arr[j] = j - 1 end
+			for j = 0, MAX_COMPONENT_TEXTURE + 1 do arr[j] = j - 1 end
 			local listitem = UIMenuListItem.New(components[i] .. " Texture", arr, selectedTexture)
 			listitem.OnListChanged = function(sender, item, index)
 				if item == listitem then
-					selectedTexture = index
+					selectedTexture = index - 1
 					SetPedComponentVariation(ped, i - 1, selectedComponent, selectedTexture, 0)
 				end
 			end
 			submenu:AddItem(listitem)
-		end
+		--end
 	end
 	-- Props --
 	local submenu = _menuPool:AddSubMenu(menu, "Props", "Modify props", true --[[KEEP POSITION]])
 	for i = 1, 3 do
 		local selectedProp = GetPedPropIndex(ped, i - 1)
 		local selectedPropTexture = GetPedPropTextureIndex(ped, i - 1)
-		local maxProp = GetNumberOfPedPropDrawableVariations(ped, i - 1)
-		local maxPropTexture = GetNumberOfPedPropTextureVariations(ped, i - 1, selectedProp)
+		--local maxProp = GetNumberOfPedPropDrawableVariations(ped, i - 1)
+		--local maxPropTexture = GetNumberOfPedPropTextureVariations(ped, i - 1, selectedProp)
 		local arr = {}
-		for j = 0, maxProp do arr[j] = j - 1 end
+		for j = 0, MAX_PROP + 1 do arr[j] = j - 1 end
 		local listitem = UIMenuListItem.New(props[i], arr, selectedProp)
 		listitem.OnListChanged = function(sender, item, index)
 			if item == listitem then
 				--print("Selected ~b~" .. index .. "~w~...")
-				selectedProp = index
+				selectedProp = index - 1
 				if selectedProp > -1 then
 					SetPedPropIndex(ped, i - 1, selectedProp, 0, true)
 				else
@@ -298,19 +304,20 @@ function CreateUniformMenu(menu)
 			end
 		end
 		submenu:AddItem(listitem)
-		if maxPropTexture > 1 and selectedProp > -1 then
+		-- add texture variation --
+		--if maxPropTexture > 1 and selectedProp > -1 then
 			arr = {}
-			for j = 0, maxPropTexture do arr[j] = j - 1 end
+			for j = 0, MAX_PROP_TEXTURE do arr[j] = j - 1 end
 			local listitem = UIMenuListItem.New(props[i] .. " Texture", arr, selectedPropTexture)
 			listitem.OnListChanged = function(sender, item, index)
 				if item == listitem then
 					--print("Selected ~b~" .. index .. "~w~...")
-					selectedPropTexture = index
+					selectedPropTexture = index - 1
 					SetPedPropIndex(ped, i - 1, selectedProp, selectedPropTexture, true)
 				end
 			end
 			submenu:AddItem(listitem)
-		end
+		--end
 	end
 	local item = NativeUI.CreateItem("Clear Props", "Reset props.")
 	item.Activated = function(parentmenu, selected)

@@ -17,3 +17,13 @@ To get started with your own testing environment:
     * write `sv_licenseKey <license key>`, replacing `<license key>` with a [FiveM license key](https://keymaster.fivem.net/)
 4) Create the path `C:/wamp/www/` to house the auto generated chat log file
     * Temporary step, path should be auto generated
+	
+** Job Types **
+1) "civ"
+2) "sheriff" (AKA SASP)
+3) "ems"
+4) "corrections"
+5) "judge"
+6) "taxi"
+7) "tow"
+8) "reporter" (weazel news)
