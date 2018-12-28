@@ -86,10 +86,10 @@ TriggerEvent('es:addCommand', 'report', function(source, args, user)
 				if id and player then
 					local playerGroup = player.getGroup()
 					if playerGroup == "owner" or playerGroup == "superadmin" or playerGroup == "admin" or playerGroup == "mod" then
-						TriggerClientEvent("chatMessage", id, "", {}, "^3****")
-						TriggerClientEvent("chatMessage", id, "", {}, "^3REPORT FROM:^0 "..GetPlayerName(reporterId).." [#"..reporterId.."]")
-						TriggerClientEvent("chatMessage", id, "", {}, "^3MESSAGE:^0 " .. reportedId .. " " .. message)
-						TriggerClientEvent("chatMessage", id, "", {}, "^3****")
+						--TriggerClientEvent("chatMessage", id, "", {}, "^3****")
+						TriggerClientEvent("chatMessage", id, "", {}, "^3REPORT FROM:^0 "..GetPlayerName(reporterId).." [#"..reporterId.."] ^3MESSAGE:^0 " .. reportedId .. " " .. message)
+						--TriggerClientEvent("chatMessage", id, "", {}, "^3MESSAGE:^0 " .. reportedId .. " " .. message)
+						--TriggerClientEvent("chatMessage", id, "", {}, "^3****")
 					end
 				end
 			end

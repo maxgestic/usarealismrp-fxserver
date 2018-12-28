@@ -93,7 +93,7 @@ AddEventHandler("policestation2:setciv", function(character, playerWeapons)
 						SetPedHeadOverlayColor(ped, i - 1, 2, head.other[i][4])
 					elseif i == 14 then -- hair
 						--print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
-						SetPedComponentVariation(ped, 2, head.other[i][2], GetNumberOfPedTextureVariations(ped,2, 0), 2)
+						SetPedComponentVariation(ped, 2, head.other[i][2], 0, 1)
 						SetPedHairColor(ped, head.other[i][4], head.other[i][5] or 0)
 					end
 				end
@@ -194,60 +194,59 @@ function CreateUniformMenu(menu)
 	local listitem = UIMenuListItem.New("Uniforms", arrSkinGeneralCaptions, 1)
 	menu:AddItem(listitem)
 	listitem.OnListSelected = function(sender, item, index)
-			--print("Selected ~b~" .. item:IndexToItem(index) .. "~w~...")
-			local position = index
-			local ply = GetPlayerPed(-1)
-			if arrSkinGeneralValues[position] == "mp_m_freemode_01" then
-				if not IsPedModel(ply, GetHashKey("mp_m_freemode_01")) then
-					local model = GetHashKey("mp_m_freemode_01")
-	  			RequestModel(model)
-	  			while not HasModelLoaded(model) do -- Wait for model to load
-	  				Wait(100)
-	  			end
-	  			SetPlayerModel(PlayerId(), model)
-	  			SetModelAsNoLongerNeeded(model)
-					ply = GetPlayerPed(-1)
-				end
-				--SetPedComponentVariation(ply, 2, 19, 1, 0)
-				SetPedComponentVariation(ply, 4, 35, 0, 0)
-				--SetPedComponentVariation(ply, 6, 24, 0, 0)
-				SetPedComponentVariation(ply, 8, 58, 0, 0)
-				SetPedComponentVariation(ply, 11, 55, 0, 0)
-			elseif arrSkinGeneralValues[position] == "mp_f_freemode_01" then
-				if not IsPedModel(ply, GetHashKey("mp_f_freemode_01")) then
-					local model = GetHashKey("mp_f_freemode_01")
-	  			RequestModel(model)
-	  			while not HasModelLoaded(model) do -- Wait for model to load
-	  				Wait(100)
-	  			end
-	  			SetPlayerModel(PlayerId(), model)
-	  			SetModelAsNoLongerNeeded(model)
-					ply = GetPlayerPed(-1)
-				end
-				--SetPedComponentVariation(ply, 0, 33, 0, 0)
-				--SetPedComponentVariation(ply, 2, 4, 4, 0)
-				SetPedComponentVariation(ply, 3, 14, 0, 0)
-				SetPedComponentVariation(ply, 4, 34, 0, 0)
-				--SetPedComponentVariation(ply, 6, 27, 0, 0)
-				SetPedComponentVariation(ply, 8, 35, 0, 0)
-				SetPedComponentVariation(ply, 11, 48, 0, 0)
-			else
-				local modelhashed = GetHashKey(arrSkinGeneralValues[position])
-				RequestModel(modelhashed)
-				while not HasModelLoaded(modelhashed) do
-					Wait(100)
-				end
-				SetPlayerModel(PlayerId(), modelhashed)
-				--SetPedDefaultComponentVariation(PlayerId());
-				--drawTxt(ply,0,1,0.5,0.8,0.6,255,255,255,255)
-				SetPedDefaultComponentVariation(ply)
-				SetModelAsNoLongerNeeded(modelhashed)
+		--print("Selected ~b~" .. item:IndexToItem(index) .. "~w~...")
+		local position = index
+		local ply = GetPlayerPed(-1)
+		if arrSkinGeneralValues[position] == "mp_m_freemode_01" then
+			if not IsPedModel(ply, GetHashKey("mp_m_freemode_01")) then
+				local model = GetHashKey("mp_m_freemode_01")
+  			RequestModel(model)
+  			while not HasModelLoaded(model) do -- Wait for model to load
+  				Wait(100)
+  			end
+  			SetPlayerModel(PlayerId(), model)
+  			SetModelAsNoLongerNeeded(model)
+				ply = GetPlayerPed(-1)
 			end
-			TriggerEvent("policestation2:giveDefaultLoadout")
-			TriggerServerEvent("policestation2:onduty")
-			TriggerEvent("interaction:setPlayersJob", "police") -- set interaction menu javascript job variable to "police"
-			TriggerEvent("ptt:isEmergency", true)
+			--SetPedComponentVariation(ply, 2, 19, 1, 0)
+			SetPedComponentVariation(ply, 4, 35, 0, 0)
+			--SetPedComponentVariation(ply, 6, 24, 0, 0)
+			SetPedComponentVariation(ply, 8, 58, 0, 0)
+			SetPedComponentVariation(ply, 11, 55, 0, 0)
+		elseif arrSkinGeneralValues[position] == "mp_f_freemode_01" then
+			if not IsPedModel(ply, GetHashKey("mp_f_freemode_01")) then
+				local model = GetHashKey("mp_f_freemode_01")
+  			RequestModel(model)
+  			while not HasModelLoaded(model) do -- Wait for model to load
+  				Wait(100)
+  			end
+  			SetPlayerModel(PlayerId(), model)
+  			SetModelAsNoLongerNeeded(model)
+				ply = GetPlayerPed(-1)
+			end
+			--SetPedComponentVariation(ply, 0, 33, 0, 0)
+			--SetPedComponentVariation(ply, 2, 4, 4, 0)
+			SetPedComponentVariation(ply, 3, 14, 0, 0)
+			SetPedComponentVariation(ply, 4, 34, 0, 0)
+			--SetPedComponentVariation(ply, 6, 27, 0, 0)
+			SetPedComponentVariation(ply, 8, 35, 0, 0)
+			SetPedComponentVariation(ply, 11, 48, 0, 0)
+		else
+			local modelhashed = GetHashKey(arrSkinGeneralValues[position])
+			RequestModel(modelhashed)
+			while not HasModelLoaded(modelhashed) do
+				Wait(100)
+			end
+			SetPlayerModel(PlayerId(), modelhashed)
+			--SetPedDefaultComponentVariation(PlayerId());
+			--drawTxt(ply,0,1,0.5,0.8,0.6,255,255,255,255)
+			SetPedDefaultComponentVariation(ply)
+			SetModelAsNoLongerNeeded(modelhashed)
 		end
+		TriggerEvent("policestation2:giveDefaultLoadout")
+		TriggerServerEvent("policestation2:onduty")
+		TriggerEvent("interaction:setPlayersJob", "police") -- set interaction menu javascript job variable to "police"
+		TriggerEvent("ptt:isEmergency", true)
 	end
 	-- Components --
 	local submenu = _menuPool:AddSubMenu(menu, "Components", "Modify components", true --[[KEEP POSITION]])
@@ -337,28 +336,28 @@ function CreateUniformMenu(menu)
 	local item = NativeUI.CreateItem("Save Uniform", "Save as your stored uniform.")
 	item.Activated = function(parentmenu, selected)
 		local character = {
-				["components"] = {},
-				["componentstexture"] = {},
-				["props"] = {},
-				["propstexture"] = {}
-			}
-			local ply = GetPlayerPed(-1)
-			--local debugstr = "| Props: "
-			for i=0,2 -- instead of 3?
-				do
-				character.props[i] = GetPedPropIndex(ply, i)
-				character.propstexture[i] = GetPedPropTextureIndex(ply, i)
-				--debugstr = debugstr .. character.props[i] .. "->" .. character.propstexture[i] .. ","
-			end
-			--debugstr = debugstr .. "| Components: "
-			for i=0,11
-				do
-				character.components[i] = GetPedDrawableVariation(ply, i)
-				character.componentstexture[i] = GetPedTextureVariation(ply, i)
-				--debugstr = debugstr .. character.components[i] .. "->" .. character.componentstexture[i] .. ","
-			end
-			--print(debugstr)
-			TriggerServerEvent("policestation2:saveasdefault", character)
+			["components"] = {},
+			["componentstexture"] = {},
+			["props"] = {},
+			["propstexture"] = {}
+		}
+		local ply = GetPlayerPed(-1)
+		--local debugstr = "| Props: "
+		for i=0,2 -- instead of 3?
+			do
+			character.props[i] = GetPedPropIndex(ply, i)
+			character.propstexture[i] = GetPedPropTextureIndex(ply, i)
+			--debugstr = debugstr .. character.props[i] .. "->" .. character.propstexture[i] .. ","
+		end
+		--debugstr = debugstr .. "| Components: "
+		for i=0,11
+			do
+			character.components[i] = GetPedDrawableVariation(ply, i)
+			character.componentstexture[i] = GetPedTextureVariation(ply, i)
+			--debugstr = debugstr .. character.components[i] .. "->" .. character.componentstexture[i] .. ","
+		end
+		--print(debugstr)
+		TriggerServerEvent("policestation2:saveasdefault", character)
 	end
 	menu:AddItem(item)
 	-- Clock Out --
