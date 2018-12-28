@@ -52,6 +52,9 @@
         margin-bottom: 0;
         background-color: lightgray;
     }
+    #tabTitle {
+        padding: 1em 0;
+    }
     .theme-color {
         /* color: #FFC41B; */
         color: #4A9EC3;
@@ -63,6 +66,38 @@
     header {
         height: 20% !important;
     }
+    #left-badge {
+        position: absolute; left: 300; top: 15;
+    }
+    #right-badge {
+        position: absolute; right: 150; top: 15;
+    }
+
+    /* Adjust for Laptops / Small displays*/
+      @media screen and (max-width: 1500px) {
+        #content_container {
+            margin-top: 0;
+            height: 770px !important;
+        }
+        #tabTitle {
+            padding: 0;
+        }
+        .mini-smaller {
+            font-size: 19px;
+        }
+        #left-badge {
+            width: 110px;
+            position: absolute; left: 150; top: 15;
+        }
+        #right-badge {
+            width: 110px;
+            position: absolute; right: 30; top: 15;
+        }
+        .sm-no-bottom-padding {
+            padding-bottom: 0 !important;
+        }
+      }
+
     </style>
 </head>
 <body>
@@ -98,20 +133,20 @@
 
                 <!-- Header -->
                 <header class="w3-cell-row">
-                    <img src="sasp-badge.png" alt="SASP" width="170px" style="position: absolute; left: 300; top: 15;">
-                    <div class="w3-container w3-center w3-padding-24" style="width: 100%;">
+                    <img id="left-badge" src="sasp-badge.png" alt="SASP" width="170px">
+                    <div class="w3-container w3-center w3-padding-24 sm-no-bottom-padding" style="width: 100%;">
                         <div class="w3-container w3-center w3-padding-16 theme-color" style="display: inline-block;">
                             <h1 style="font-size: 36px;"><b><i>San Andreas State Police</i></b></h1>
                             <p><i>Welcome, {{ employee.rank }} {{ employee.lname  }}!</i></p>
                         </div>
                     </div>
-                    <img src="sasp-badge.png" alt="SASP" width="170px" style="position: absolute; right: 150; top: 15;">
+                    <img id="right-badge" src="sasp-badge.png" alt="SASP" width="170px">
                 </header>
 
                 <main style="border-top: 4px solid #4A9EC3; overflow-y: scroll; padding-left: 2em; padding-right: 2em;">
 
                     <!-- Title -->
-                    <h3 class="w3-center" style="padding-top: 1em; padding-bottom: 1em;">{{ current_tab }}</h3>
+                    <h3 id="tabTitle" class="w3-center">{{ current_tab }}</h3>
 
                     <!-- Error box -->
                     <div class="w3-text-red">{{ error }}</div>
@@ -272,7 +307,7 @@
                             <p><button v-on:click="PerformPlateCheck" type="button" class="w3-btn w3-padding w3-text-black" style="width:120px; background-color: #4A9EC3;">Search &nbsp; &#10095;</button></p>
                         </form>
                         <!-- Plate check results -->
-                        <h3><b>Plate:</b></h3>
+                        <h3 class="mini-smaller"><b>Plate:</b></h3>
 
                         <table v-if="plate_check.plate" class="w3-table-all w3-small">
                             <tr>
@@ -281,7 +316,7 @@
                         </table>
                         <span v-else style="color: red"><b>No plate found!</b></span>
 
-                        <h3><b>RO:</b></h3>
+                        <h3 class="mini-smaller"><b>RO:</b></h3>
 
                         <table v-if="plate_check.registered_owner" class="w3-table-all w3-small">
                             <tr>
@@ -290,7 +325,7 @@
                         </table>
                         <span v-else style="color: red"><b>No owner found!</b></span>
 
-                        <h3><b>Make/Model:</b></h3>
+                        <h3 class="mini-smaller"><b>Make/Model:</b></h3>
 
                         <table v-if="plate_check.veh_name" class="w3-table-all w3-small">
                             <tr>
