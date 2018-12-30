@@ -74,6 +74,7 @@ AddEventHandler("usa_rp:sellItem", function(job)
 	end
 end)
 
+-- give's meth to person --
 RegisterServerEvent("usa_rp:giveItem")
 AddEventHandler("usa_rp:giveItem", function(itemToGive)
   local dropoffCoords = {x = 0.0, y = 0.0}

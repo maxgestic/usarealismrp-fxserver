@@ -3,8 +3,6 @@ local permission = {
 	ban = 4
 }
 
-local bans = {}
-
 -- Adding custom groups called owner, inhereting from superadmin. (It's higher then superadmin). And moderator, higher then user but lower then admin
 TriggerEvent("es:addGroup", "owner", "superadmin", function(group) end)
 TriggerEvent("es:addGroup", "superadmin", "admin", function(group) end)
@@ -510,37 +508,42 @@ end, {
 -- Rcon commands
 AddEventHandler('rconCommand', function(commandName, args)
 	if commandName == "unban" then
+		-- identifier argument --
 		local identifierToUnban = args[1]
+		print("looking to unban: " .. identifierToUnban)
+		-- valid input check --
 		if not identifierToUnban then RconPrint("Usage: unban [identifier] ") CancelEvent() return end
-		for i = 1, #bans do
-			local bannedPlayer = bans[i]
-			local identifiers = bannedPlayer.identifiers
-			local docid = bannedPlayer._id
-			local docRev = bannedPlayer._rev
-			if identifiers then
-				for j = 1, #identifiers do
-					if string.sub(identifiers[j],1,20) == string.sub(identifierToUnban,1,20) then
-						--RconPrint("\nfound a matching identifer to unban for "..bannedPlayer.name.."!")
-						-- found a match, unban
-						PerformHttpRequest("http://127.0.0.1:5984/bans/"..docid.."?rev="..docRev, function(err, rText, headers)
-							if err == 0 then
-								RconPrint("\nrText = " .. rText)
-								RconPrint("\nerr = " .. err)
-							else
-								--fetchAllBans()
-								table.remove(bans, i)
-							end
-						end, "DELETE", "", {["Content-Type"] = 'application/json'})
-						RconPrint("\nPlayer "..bannedPlayer.name.." has been unbanned!")
-						CancelEvent()
-						return
-					end
+		-- Search for banned doc with that identifier --
+		TriggerEvent('es:exposeDBFunctions', function(couchdb)
+			local query = {
+				["identifiers"] = {
+					["$elemMatch"] = {
+						["$regex"] = "(?i)" .. identifierToUnban
+					}
+				}
+			}
+			local fields = {
+				"_id",
+				"_rev",
+				"name"
+			}
+			couchdb.getSpecificFieldFromDocumentByRows("bans", query, fields, function(doc)
+				if doc then
+					print(doc.name .. " found in DB search!")
+					PerformHttpRequest("http://127.0.0.1:5984/bans/".. doc._id .. "?rev=" .. doc._rev, function(err, rText, headers)
+						--RconPrint("\nrText = " .. rText)
+						RconPrint("\nResponse Code = " .. err)
+						if tonumber(err) == 200 then
+							RconPrint("\nBan successfully removed!")
+						else
+							RconPrint("\nSomething might have gone wrong, response code was: " .. err)
+						end
+					end, "DELETE", "", {["Content-Type"] = 'application/json'})
+				else
+					RconPrint("\nIdentifier NOT found!")
 				end
-			else
-
-			end
-		end
-		RconPrint("\nNo match found for identifier: " .. identifierToUnban .. "!")
+			end)
+		end)
 		CancelEvent()
 	elseif commandName == "freeze" then
 		if(GetPlayerName(tonumber(args[1])))then
@@ -639,9 +642,6 @@ AddEventHandler('rconCommand', function(commandName, args)
 				-- drop player from session
 				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
 				DropPlayer(targetPlayer, "Banned: " .. reason)
-				-- refresh lua table of bans for this resource
-				--fetchAllBans()
-				table.insert(bans, {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())})
 			end)
 		end)
 	elseif commandName == "banid" then
@@ -672,9 +672,6 @@ AddEventHandler('rconCommand', function(commandName, args)
 			-- update db --
 			GetDoc.createDocument("bans",  {char_name = "?", name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
 				RconPrint("player banned!")
-				-- refresh lua table of bans for this resource --
-				--fetchAllBans()
-				table.insert(bans, {char_name = "?", name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())})
 				-- send discord message --
 				local desc = "\n**Name:** " .. targetPlayerName
 				desc = desc .. "\n**Identifier:** " .. targetPlayer
@@ -728,9 +725,6 @@ AddEventHandler('rconCommand', function(commandName, args)
 			-- update db --
 			GetDoc.createDocument("bans",  {time = os.time(), duration = time, char_name = "?", name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
 				RconPrint("player banned!")
-				-- refresh lua table of bans for this resource --
-				--fetchAllBans()
-				table.insert(bans, {time = os.time(), duration = time, char_name = "?", name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())})
 				-- send discord message --
 				local desc = "\n**Name:** " .. targetPlayerName
 				desc = desc .. "\n**Identifier:** " .. targetPlayer
@@ -821,16 +815,16 @@ AddEventHandler('rconCommand', function(commandName, args)
 			return
 		end
 
-		TriggerEvent("es:getPlayerFromId", tonumber(args[1]), function(user)
-			if(user)then
+		local user = exports["essentialmode"]:getPlayerFromId(tonumber(args[1]))
+			if user then
 				user.setActiveCharacterData("money", tonumber(args[2]))
 
 				RconPrint("Money set")
 				TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {255, 255, 255}, "Your money has been set to: ^2^*$" .. tonumber(args[2]))
 			end
-		end)
 
 	end
+
 	CancelEvent()
 end)
 
@@ -840,84 +834,8 @@ AddEventHandler("es:adminCommandRan", function(source, command)
 end)
 
 --------------- BAN MANAGEMENT: -------------------
-
--- TODO: remove server sided bans table completely, will need to need to modify unban rcon command
-function fetchAllBans()
-	print("fetching all bans...")
-	PerformHttpRequest("http://127.0.0.1:5984/bans/_all_docs?include_docs=true" --[[ string ]], function(err, text, headers)
-		print("finished getting bans...")
-		print("error code: " .. err)
-		local response = json.decode(text)
-		if response.rows then
-			bans = {} -- reset table
-			print("#(response.rows) = " .. #(response.rows))
-			-- insert all bans from 'bans' db into lua table
-			for i = 1, #(response.rows) do
-				table.insert(bans, response.rows[i].doc)
-			end
-			print("finished loading bans...")
-			print("# of bans: " .. #bans)
-		end
-	end, "GET", "", { ["Content-Type"] = 'application/json' })
-end
-
 -- PERFORM FIRST TIME DB CHECK --
 exports["globals"]:PerformDBCheck("BANS", "bans", fetchAllBans)
-
---[[check for player being banned --
-AddEventHandler('playerConnecting', function(name, setReason)
-	local usource = source
-	--local identifier = GetPlayerIdentifiers(source)[1]
-	local allPlayerIdentifiers = GetPlayerIdentifiers(tonumber(usource))
-	local gameLicense
-	for j = 1, #allPlayerIdentifiers do
-		if string.find(allPlayerIdentifiers[j], "license") then
-			gameLicense = allPlayerIdentifiers[j]
-			break
-		end
-	end
-	TriggerEvent('es:exposeDBFunctions', function(couchdb)
-		local query = {
-			["identifiers"] = {
-				["$elemMatch"] = {
-					["$eq"] = gameLicense
-				}
-			}
-		}
-		couchdb.getDocumentByRows("bans", query, function(doc)
-			if doc then
-				print("found banned player document, name: " .. doc.name)
-				if doc.duration then
-					if getHoursFromTime(doc.time) < doc.duration then
-						print("getHoursFromTime(bannedPlayer.time): " .. getHoursFromTime(doc.time))
-						print(name .. " has been temp banned from your server and should not be able to play!")
-						setReason("Temp Banned: " .. doc.reason .. ". This ban is in place for " .. doc.duration .. " hour(s).")
-						CancelEvent()
-					else
-						local docid = doc._id
-						local docRev = doc._rev
-						--RconPrint("\nfound a matching identifer to unban for "..bannedPlayer.name.."!")
-						-- found a match, unban
-						PerformHttpRequest("http://127.0.0.1:5984/bans/"..docid.."?rev="..docRev, function(err, rText, headers)
-							if err == 0 then
-								print("\nrText = " .. rText)
-								print("\nerr = " .. err)
-							else
-								fetchAllBans()
-							end
-						end, "DELETE", "", {["Content-Type"] = 'application/json'})
-						print("\nPlayer ".. doc.name .." has been unbanned!")
-					end
-				else
-					--print(name .. " has been perma banned from your server and should not be able to play!")
-					--setReason("Banned: " .. doc.reason .. ". You may file an appeal at https://usarrp.net")
-					CancelEvent()
-				end
-			end
-		end)
-	end)
-end)
---]]
 
 	-- ban command --
 	TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, user)
@@ -973,9 +891,6 @@ end)
 				-- drop player from session
 				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
 				DropPlayer(targetPlayer, "Banned: " .. reason .. " -- You can file an appeal at https://usarrp.net")
-				-- refresh lua table of bans for this resource
-				--fetchAllBans()
-				table.insert(bans, {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())})
 			end)
 		end)
 	end, {
@@ -1043,9 +958,6 @@ end)
 				-- drop player from session
 				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
 				DropPlayer(targetPlayer, "Temp Banned: " .. reason .. " This ban is in place for " .. time .. " hour(s).")
-				-- refresh lua table of bans for this resource
-				--fetchAllBans()
-				table.insert(bans, {time = os.time(), duration = time, char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())})
 			end)
 		end)
 	end, {
@@ -1075,7 +987,7 @@ AddEventHandler('mini:checkPlayerBannedOnSpawn', function()
 		local query = {
 			["identifiers"] = {
 				["$elemMatch"] = {
-					["$or"]= {
+					["$or"] = {
 						gameLicense, steamLicense
 					}
 				}
@@ -1093,15 +1005,11 @@ AddEventHandler('mini:checkPlayerBannedOnSpawn', function()
 						local docRev = doc._rev
 						--RconPrint("\nfound a matching identifer to unban for "..bannedPlayer.name.."!")
 						-- found a match, unban
-						PerformHttpRequest("http://127.0.0.1:5984/bans/"..docid.."?rev="..docRev, function(err, rText, headers)
-							if err == 0 then
-								print("\nrText = " .. rText)
-								print("\nerr = " .. err)
-							else
-								fetchAllBans()
-							end
+						PerformHttpRequest("http://127.0.0.1:5984/bans/" .. docid .. "?rev=" .. docRev, function(err, rText, headers)
+							print("\nrText = " .. rText)
+							print("\nerr = " .. err)
 						end, "DELETE", "", {["Content-Type"] = 'application/json'})
-						print("\nPlayer ".. doc.name .." has been unbanned!")
+						print("\nPlayer ".. doc.name .." has been unbanned due to tempban expiration!")
 						return
 					end
 				else
@@ -1113,81 +1021,72 @@ AddEventHandler('mini:checkPlayerBannedOnSpawn', function()
 	end)
 end)
 
--- unban stuff im gunna need:
---[[
-idents = GetPlayerIdentifiers(source)
-TriggerEvent('es:exposeDBFunctions', function(usersTable)
-usersTable.getDocumentByRow("dbnamehere", "identifier" , idents[1], function(result)
-docid = result._id (except probably change to the _rev instead)
---]]
-
 TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 	if args[2] then
 		--admins only
 		if user.getGroup() == "mod" or user.getGroup() == "admin" or user.getGroup() == "superadmin" or user.getGroup() == "owner" then
-			TriggerEvent("es:getPlayerFromId", tonumber(args[2]), function(user)
-				if user then
-					local vehiclenames = ""
-					local userVehicles = user.getActiveCharacterData("vehicles")
-					for i = 1, #userVehicles do
-						local vehicle = userVehicles[i]
-						vehiclenames = vehiclenames .. userVehicles[i].model
-						if i ~= #userVehicles then
-							vehiclenames = vehiclenames .. ", "
-						end
+			local user = exports["essentialmode"]:getPlayerFromId(tonumber(args[2]))
+			if user then
+				local vehiclenames = ""
+				local userVehicles = user.getActiveCharacterData("vehicles")
+				for i = 1, #userVehicles do
+					local vehicle = userVehicles[i]
+					vehiclenames = vehiclenames .. userVehicles[i].model
+					if i ~= #userVehicles then
+						vehiclenames = vehiclenames .. ", "
 					end
-					local weaponnames = ""
-					local userWeapons = user.getActiveCharacterData("weapons")
-					for i = 1, #userWeapons do
-						local weapon = userWeapons[i]
-						weaponnames = weaponnames .. userWeapons[i].name
-						if i ~= #userWeapons then
-							weaponnames = weaponnames .. ", "
-						end
-					end
-					local inventorynames = ""
-					local userInventory = user.getActiveCharacterData("inventory")
-					for i = 1, #userInventory do
-						--local inventory = userInventory[i]
-						--local quantity = inventory.quantity
-						inventorynames = inventorynames .. userInventory[i].name .. "(" .. userInventory[i].quantity .. ")"
-						if i ~= #userInventory then
-							inventorynames = inventorynames .. ", "
-						end
-					end
-					local firearms_permit = "Invalid"
-					local driving_license = "Invalid"
-					local userLicenses = user.getActiveCharacterData("licenses")
-					for i = 1, #userLicenses do
-						local license = userLicenses[i]
-						if license.name == "Driver's License"  then
-							driving_license = "Valid"
-						elseif license.name == "Firearm Permit" then
-							firearms_permit = "Valid"
-						end
-					end
-
-					local insurance = user.getActiveCharacterData("insurance")
-					local insurance_month = insurance.expireMonth
-					local insurance_year = insurance.expireYear
-					local displayInsurance = "Invalid"
-					if insurance_month and insurance_year then
-						displayInsurance = insurance_month .. "/" .. insurance_year
-					end
-
-					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
-					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Name: " .. user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName") .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
-					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Police Rank: " .. user.getActiveCharacterData("policeRank") .. " | EMS Rank: " .. user.getActiveCharacterData("emsRank") .. " |  Job: " .. user.getActiveCharacterData("job") .. " |" )
-					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Cash: " .. comma_value(user.getActiveCharacterData("money")) .. " | Bank: " .. comma_value(user.getActiveCharacterData("bank")) .. " |  Ingame Time: " .. FormatSeconds(user.getActiveCharacterData("ingameTime")) .. " |" )
-					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
-					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
-					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Inventory: " .. inventorynames .. " |")
-					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weight: " .. user.getActiveCharacterCurrentInventoryWeight())
-					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
-				else
-					TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 255, 255}, "User not found!")
 				end
-			end)
+				local weaponnames = ""
+				local userWeapons = user.getActiveCharacterData("weapons")
+				for i = 1, #userWeapons do
+					local weapon = userWeapons[i]
+					weaponnames = weaponnames .. userWeapons[i].name
+					if i ~= #userWeapons then
+						weaponnames = weaponnames .. ", "
+					end
+				end
+				local inventorynames = ""
+				local userInventory = user.getActiveCharacterData("inventory")
+				for i = 1, #userInventory do
+					--local inventory = userInventory[i]
+					--local quantity = inventory.quantity
+					inventorynames = inventorynames .. userInventory[i].name .. "(" .. userInventory[i].quantity .. ")"
+					if i ~= #userInventory then
+						inventorynames = inventorynames .. ", "
+					end
+				end
+				local firearms_permit = "Invalid"
+				local driving_license = "Invalid"
+				local userLicenses = user.getActiveCharacterData("licenses")
+				for i = 1, #userLicenses do
+					local license = userLicenses[i]
+					if license.name == "Driver's License"  then
+						driving_license = "Valid"
+					elseif license.name == "Firearm Permit" then
+						firearms_permit = "Valid"
+					end
+				end
+
+				local insurance = user.getActiveCharacterData("insurance")
+				local insurance_month = insurance.expireMonth
+				local insurance_year = insurance.expireYear
+				local displayInsurance = "Invalid"
+				if insurance_month and insurance_year then
+					displayInsurance = insurance_month .. "/" .. insurance_year
+				end
+
+				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
+				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Name: " .. user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName") .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
+				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Police Rank: " .. user.getActiveCharacterData("policeRank") .. " | EMS Rank: " .. user.getActiveCharacterData("emsRank") .. " |  Job: " .. user.getActiveCharacterData("job") .. " |" )
+				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Cash: " .. comma_value(user.getActiveCharacterData("money")) .. " | Bank: " .. comma_value(user.getActiveCharacterData("bank")) .. " |  Ingame Time: " .. FormatSeconds(user.getActiveCharacterData("ingameTime")) .. " |" )
+				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
+				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
+				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Inventory: " .. inventorynames .. " |")
+				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weight: " .. user.getActiveCharacterCurrentInventoryWeight())
+				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
+			else
+				TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 255, 255}, "User not found!")
+			end
 		end
 	else
 		--show player stats

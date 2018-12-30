@@ -517,24 +517,26 @@ local playing_anim = nil
 RegisterNetEvent("usa:playAnimation")
 AddEventHandler("usa:playAnimation", function(animDict, animName, speed, speedMult, duration, flag, playbackRate, lockX, lockY, lockZ, actualDuration)
     if not isInVeh then
-      -- load animation
-      RequestAnimDict(animDict)
-      while not HasAnimDictLoaded(animDict) do
-        Citizen.Wait(100)
-      end
-      TaskPlayAnim(playerPed, animDict, animName, speed, speedMult, duration, flag, playbackRate, lockX, lockY, lockZ)
-      playing_anim = {
-          dict = animDict,
-          name = animName
-      }
-      if actualDuration then
-          Wait(actualDuration * 1000)
-          if not isInVeh then
-              ClearPedTasksImmediately(playerPed)
-          end
-          StopAnimTask(playerPed, animDict, animName, 1.0)
-      end
-  end
+        if not IsPedDeadOrDying(GetPlayerPed(-1)) then
+            -- load animation
+            RequestAnimDict(animDict)
+            while not HasAnimDictLoaded(animDict) do
+                Citizen.Wait(100)
+            end
+            TaskPlayAnim(playerPed, animDict, animName, speed, speedMult, duration, flag, playbackRate, lockX, lockY, lockZ)
+            playing_anim = {
+                dict = animDict,
+                name = animName
+            }
+            if actualDuration then
+                Wait(actualDuration * 1000)
+                if not isInVeh then
+                    ClearPedTasksImmediately(playerPed)
+                end
+                StopAnimTask(playerPed, animDict, animName, 1.0)
+            end
+        end
+    end
 end)
 
 RegisterNetEvent("usa:playSound")
