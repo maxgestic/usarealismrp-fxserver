@@ -185,10 +185,13 @@ function CreateBarberShopMenu(menu)
         local option_name =  old_head.other[i][1]
         local max_options = old_head.other[i][3]
         local valuesArr = {}
+        local v = 0
         for j = 1, max_options do
-            valuesArr[j] = j
+            table.insert(valuesArr, v)
+            v = v + 1
         end
-        local newitem = UIMenuSliderItem.New(option_name, valuesArr, 1, "Customize " .. old_head.other[i][1])
+        table.insert(valuesArr, 1,  -1) -- to clear style = -1
+        local newitem = UIMenuSliderItem.New(option_name, valuesArr, -1, "Customize " .. old_head.other[i][1])
         newitem.OnSliderChanged = function(menu, item, index)
             old_head.other[i][2] = index
             UpdateHead(GetPlayerPed(-1), old_head)
