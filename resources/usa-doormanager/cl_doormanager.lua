@@ -132,22 +132,24 @@ end)
 RegisterNetEvent("doormanager:toggleDoorLock")
 AddEventHandler("doormanager:toggleDoorLock", function(index, locked, x, y, z)
   local door = DOORS_TO_MANAGE[index]
-  local door_entity = GetObject(door.model, door.distance, x, y, z)
-  if not door.cell_block then
-    FreezeEntityPosition(door_entity, locked)
-  else
-    SetEntityAsMissionEntity(door_entity, true, true)
-    if locked then
-      SetEntityVisible(door_entity, true)
-      SetEntityCollision(door_entity, true, true)
-      --SetEntityRotation(door_entity, 0, 0, 0, 2, true)
-    else
-      SetEntityVisible(door_entity, false)
-      SetEntityCollision(door_entity, false, true)
-      --SetEntityRotation(door_entity, 0, 0, 90, 2, true)
-    end
+  if door then
+      local door_entity = GetObject(door.model, door.distance, x, y, z)
+      if not door.cell_block then
+        FreezeEntityPosition(door_entity, locked)
+      else
+        SetEntityAsMissionEntity(door_entity, true, true)
+        if locked then
+          SetEntityVisible(door_entity, true)
+          SetEntityCollision(door_entity, true, true)
+          --SetEntityRotation(door_entity, 0, 0, 0, 2, true)
+        else
+          SetEntityVisible(door_entity, false)
+          SetEntityCollision(door_entity, false, true)
+          --SetEntityRotation(door_entity, 0, 0, 90, 2, true)
+        end
+      end
+      DOORS_TO_MANAGE[index].locked = locked
   end
-  DOORS_TO_MANAGE[index].locked = locked
 end)
 
 function DrawSpecialText(m_text)

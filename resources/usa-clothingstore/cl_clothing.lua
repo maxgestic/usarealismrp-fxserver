@@ -30,13 +30,13 @@ _menuPool:Add(ComponentValuesMenu)
 
 local previous_menu = nil
 
-local COMPONENTS = {"Face","Head","Hair","Arms/Hands","Legs","Back","Feet","Ties","Accessories","Vests","Textures","Torso"}
+local COMPONENTS = {"Face","Head","Hair","Arms/Hands","Legs","Back","Feet","Ties","Torso 1","Vests","Textures","Torso 2"}
 local PROPS = { "Head", "Glasses", "Ear Acessories"}
 
 local BLACKLISTED_ITEMS = {
 	["components"] = {
-		[8] = {67, 97, 71, 72, 41, 43}, -- accessories
-		[11] = {17, 18, 19, 24, 26, 29, 30, 31, 32, 35, 36,  38, 39, 40, 29, 51, 52, 64, 70, 74, 75, 80, 81, 93, 94, 97, 98, 100, 101, 102, 103, 143, 149, 150, 154, 183, 123, 118},
+		[8] = {67, 97, 71, 72, 41, 43}, -- torso 1
+		[11] = {17, 18, 19, 24, 26, 29, 30, 31, 32, 35, 36,  38, 39, 40, 29, 51, 52, 64, 70, 74, 75, 80, 81, 93, 94, 97, 98, 100, 101, 102, 103, 111, 143, 149, 150, 154, 183, 123, 118}, -- torso 2
 		[9] = {4, 7, 10, 12, 15, 17, 18, 20, 21, 26, 27} -- vest
 	},
 	["props"] = {
