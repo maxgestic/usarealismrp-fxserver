@@ -30,7 +30,7 @@ AddEventHandler("RPD:reviveNearestDeadPed", function()
 	ReviveNearestDeadPed()
 end)
 
-local timer = 180000
+local timer = 300000 -- 5 minutes
 AddEventHandler('RPD:startTimer', function()
 	if not jailed then
 		local died_at_time = GetGameTimer()
@@ -66,7 +66,7 @@ AddEventHandler('RPD:startTimer', function()
 			SetTextDropShadow()
 			SetTextOutline()
 			SetTextEntry("STRING")
-			AddTextComponentString("Press [ ~g~Enter~w~ ] to respawn")
+			AddTextComponentString("Press [ ~g~Enter~w~ ] to respawn (NLR rule applies)")
 			SetTextCentre(true)
 			DrawText(0.5, 0.45)
 
