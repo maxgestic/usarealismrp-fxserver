@@ -84,13 +84,13 @@ function DrawPlayerList()
 					--g = 146
 					--b = 204
 				elseif job == "corrections" then
-					r = 75
-					g = 146
-					b = 204
+					--r = 75
+					--g = 146
+					--b = 204
 				elseif job == "ems" or job == "fire" then
-					r = 204
-					g = 40
-					b = 35
+					--r = 204
+					--g = 40
+					--b = 35
 				elseif job == "taxi" then
 					r = 255
 					g = 231
