@@ -847,6 +847,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 			RconPrint("\nUsage: changename [prevFirst] [prevLast] [DOB] [newFirst] [newMiddle] [newLast] -> Full Name Change")
 			RconPrint("\nOR")
 			RconPrint("\nchangename [prevFirst] [prevLast] [DOB] [newFirst] [newLast] -> No Middle Name Change")
+			RconPrint("\nDOB must be in YYYY-MM-DD format, i.e. 1980-01-15")
 			CancelEvent()
 			return
 		end
@@ -899,7 +900,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 			couchdb.getSpecificFieldFromDocumentByRows("essentialmode", query, fields, function(doc)
 				if doc then
 					-- modify and update player's document in DB --
-					print(prevFirst .. " " .. prevLast .. " found in DB search!")
+					--print(prevFirst .. " " .. prevLast .. " found in DB search!")
 					for i = 1, #doc.characters do
 						if doc.characters[i].firstName and doc.characters[i].lastName and prevFirst and prevLast then
 							if string.lower(doc.characters[i].firstName) == string.lower(prevFirst) and string.lower(doc.characters[i].lastName) == string.lower(prevLast) then
@@ -940,7 +941,64 @@ AddEventHandler('rconCommand', function(commandName, args)
 								end
 								-- update --
 								couchdb.updateDocument("essentialmode", doc._id, {characters = doc.characters}, function()
-									print("Name updated in DB!")
+									RconPrint("Name updated in DB!")
+								end)
+								CancelEvent()
+								return
+							end
+						end
+					end
+				else
+					RconPrint("\nError: unable to find person ".. prevFirst .. " " .. (prevMiddle or "") .. " " .. prevLast .. " in database!")
+				end
+			end)
+		end)
+	elseif commandName == "changedob" then
+		if #args ~= 4 then
+			RconPrint("\nUsage: changedob [prevFirst] [prevLast] [prevDOB] [newDOB]")
+			RconPrint("\nDOB must be in YYYY-MM-DD format, i.e. 1980-01-15")
+			CancelEvent()
+			return
+		end
+
+		local prevFirst = args[1]
+		local prevLast = args[2]
+		local prevDob = args[3]
+		local newDob = args[4]
+
+		local query = {
+			["characters"] = {
+				["$elemMatch"] = {
+					["firstName"] = {
+						["$regex"] = "(?i)" .. prevFirst
+					},
+					["lastName"] = {
+						["$regex"] = "(?i)" .. prevLast
+					},
+					["dateOfBirth"] = prevDob
+				}
+			}
+		}
+
+		-- search for player's document in DB --
+		TriggerEvent('es:exposeDBFunctions', function(couchdb)
+			local fields = {
+				"_id",
+				"_rev",
+				"characters"
+			}
+			couchdb.getSpecificFieldFromDocumentByRows("essentialmode", query, fields, function(doc)
+				if doc then
+					-- modify and update player's document in DB --
+					--RconPrint(prevFirst .. " " .. prevLast .. " found in DB search!")
+					for i = 1, #doc.characters do
+						if doc.characters[i].firstName and doc.characters[i].lastName and prevFirst and prevLast then
+							if string.lower(doc.characters[i].firstName) == string.lower(prevFirst) and string.lower(doc.characters[i].lastName) == string.lower(prevLast) then
+								-- modify --
+								doc.characters[i].dateOfBirth = newDOB
+								-- update --
+								couchdb.updateDocument("essentialmode", doc._id, {characters = doc.characters}, function()
+									RconPrint("DOB updated in DB!")
 								end)
 								CancelEvent()
 								return
