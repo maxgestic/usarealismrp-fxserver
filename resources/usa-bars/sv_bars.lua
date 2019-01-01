@@ -26,7 +26,7 @@ local ITEMS = {
     ["Food"] = {
         ["Fried Dill Pickles"] = { name = "Fried Dill Pickles", price = 25, type = "food", substance = 35.0, quantity = 1, legality = "legal", weight = 10, caption = "Dill pickle slices are breaded, then deep fried in peanut oil." },
         ["Onion Straws"] = { name = "Onion Straws", price = 25, type = "food", substance = 35.0, quantity = 1, legality = "legal", weight = 10, caption = "Flavorful, crispy, and addicting!" },
-        ["Bacon Mac N' Cheese"] = { name = "Bacon Mac N' Cheese", price = 20, type = "food", substance = 40.0, quantity = 1, legality = "legal", weight = 10, caption = "The ultimate classic comfort food, is a house favorite. " },
+        ["Bacon Mac N Cheese"] = { name = "Bacon Mac N Cheese", price = 20, type = "food", substance = 40.0, quantity = 1, legality = "legal", weight = 10, caption = "The ultimate classic comfort food, is a house favorite. " },
         ["Pulled Pork Queso Dip"] = { name = "Pulled Pork Queso Dip", price = 25, type = "food", substance = 25.0, quantity = 1, legality = "legal", weight = 10, caption = "Pulled Pork Queso Dip made with all natural ingredients." },
         ["Artichoke Spinach Dip"] = { name = "Artichoke Spinach Dip", price = 25, type = "food", substance = 25.0, quantity = 1, legality = "legal", weight = 10, caption = "Artichokes and spinach blended with cheeses." },
         ["Chicken Wings"] = { name = "Chicken Wings", price = 25, type = "food", substance = 25.0, quantity = 1, legality = "legal", weight = 10, caption = "Coated in a sauce consisting of a vinegar-based cayenne pepper hot sauce and melted butter" },

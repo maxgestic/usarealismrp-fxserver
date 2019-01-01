@@ -801,7 +801,6 @@ AddEventHandler('rconCommand', function(commandName, args)
 				RconPrint("This group does not exist.\n")
 			end
 		end)
-
 	elseif commandName == 'setmoney' then
 		if #args ~= 2 then
 			RconPrint("Usage: setmoney [user-id] [money]\n")
@@ -822,7 +821,137 @@ AddEventHandler('rconCommand', function(commandName, args)
 				RconPrint("Money set")
 				TriggerClientEvent('chatMessage', tonumber(args[1]), "CONSOLE", {255, 255, 255}, "Your money has been set to: ^2^*$" .. tonumber(args[2]))
 			end
+	elseif commandName == "addmoney" or commandName == "givemoney" then
+		-- TODO
+		if #args ~= 2 then
+			RconPrint("Usage: setmoney [user-id] [money]\n")
+			CancelEvent()
+			return
+		end
 
+		local targetId = tonumber(args[1])
+		local amount = tonumber(args[2])
+
+		if not GetPlayerName(targetId) then
+			RconPrint("Player not in game\n")
+			CancelEvent()
+			return
+		end
+
+		-- give and save money --
+		local user = exports["essentialmode"]:getPlayerFromId(targetId)
+		user.setActiveCharacterData("money", user.getActiveCharacterData("money") + amount)
+	elseif commandName == "changename" then
+
+		if #args ~= 6 and #args ~= 5 then
+			RconPrint("\nUsage: changename [prevFirst] [prevLast] [DOB] [newFirst] [newMiddle] [newLast] -> Full Name Change")
+			RconPrint("\nOR")
+			RconPrint("\nchangename [prevFirst] [prevLast] [DOB] [newFirst] [newLast] -> No Middle Name Change")
+			CancelEvent()
+			return
+		end
+
+		local prevFirst
+		local prevLast
+		local dob
+		local newFirst
+		local newMiddle
+		local newLast
+
+		if #args == 6 then
+			prevFirst = args[1]
+			prevLast = args[2]
+			dob = args[3]
+			newFirst = args[4]
+			newMiddle = args[5]
+			newLast = args[6]
+		else
+			prevFirst = args[1]
+			prevLast = args[2]
+			dob = args[3]
+			newFirst = args[4]
+			newLast = args[5]
+		end
+
+		local query = {
+			["characters"] = {
+				["$elemMatch"] = {
+					--["firstName"] = data.fname,
+					--["lastName"] = data.lname
+					["firstName"] = {
+						["$regex"] = "(?i)" .. prevFirst
+					},
+					["lastName"] = {
+						["$regex"] = "(?i)" .. prevLast
+					},
+					["dateOfBirth"] = dob
+				}
+			}
+		}
+
+		-- search for player's document in DB --
+		TriggerEvent('es:exposeDBFunctions', function(couchdb)
+			local fields = {
+				"_id",
+				"_rev",
+				"characters"
+			}
+			couchdb.getSpecificFieldFromDocumentByRows("essentialmode", query, fields, function(doc)
+				if doc then
+					-- modify and update player's document in DB --
+					print(prevFirst .. " " .. prevLast .. " found in DB search!")
+					for i = 1, #doc.characters do
+						if doc.characters[i].firstName and doc.characters[i].lastName and prevFirst and prevLast then
+							if string.lower(doc.characters[i].firstName) == string.lower(prevFirst) and string.lower(doc.characters[i].lastName) == string.lower(prevLast) then
+								-- modify --
+								doc.characters[i].firstName = newFirst
+								if newMiddle then
+									doc.characters[i].middleName = newMiddle
+								end
+								doc.characters[i].lastName = newLast
+								-- inventory items --
+								for j = 1, #doc.characters[i].inventory do
+									if doc.characters[i].inventory[j].owner then
+										doc.characters[i].inventory[j].owner = newFirst .. " " .. newLast
+									end
+								end
+								-- vehicles --
+								for j = 1, #doc.characters[i].vehicles do
+									if doc.characters[i].vehicles[j].owner then
+										doc.characters[i].vehicles[j].owner = newFirst .. " " .. newLast
+									end
+									-- vehicle inventory items --
+									if doc.characters[i].vehicles[j].inventory then
+										for k = 1, #doc.characters[i].vehicles[j].inventory do
+											if doc.characters[i].vehicles[j].inventory[k].owner then
+												doc.characters[i].vehicles[j].inventory[k].owner = newFirst .. " " .. newLast
+											end
+										end
+									end
+								end
+								-- licenses --
+								for j = 1, #doc.characters[i].licenses do
+									-- only change DL since FP was using steam name instead of char name --
+									if doc.characters[i].licenses[j].name ~= "Firearm Permit" then
+										if doc.characters[i].licenses[j].ownerName then
+											doc.characters[i].licenses[j].ownerName = newFirst .. " " .. newLast
+										end
+									end
+								end
+								-- update --
+								couchdb.updateDocument("essentialmode", doc._id, {characters = doc.characters}, function()
+									print("Name updated in DB!")
+								end)
+								CancelEvent()
+								return
+							end
+						end
+					end
+				else
+					RconPrint("\nError: unable to find person ".. prevFirst .. " " .. (prevMiddle or "") .. " " .. prevLast .. " in database!")
+				end
+			end)
+		end)
 	end
 
 	CancelEvent()

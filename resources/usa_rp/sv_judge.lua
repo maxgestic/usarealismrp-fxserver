@@ -25,12 +25,19 @@ end)
 -----------------------------
 -- LAWYER / JUDGE COMMANDS --
 -----------------------------
-TriggerEvent('es:addJobCommand', 'removesuspension', {'judge', 'lawyer'}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'removesuspension', {'judge', 'lawyer', 'sheriff'}, function(source, args, user)
 	print("removing suspension")
 	local usource = source
 	local type = string.lower(args[2])
 	local target = tonumber(args[3])
 	local target_item_name = nil
+    -- check SGT + rank for police --
+    if user.getActiveCharacterData("job") == "sheriff" then
+        if user.getActiveCharacterData("policeRank") < 4 then
+            TriggerClientEvent("usa:notify", usource, "Not high enough rank!")
+            return
+        end
+    end
 	if type and GetPlayerName(target) then
 		if type == "dl" then
 			target_item_name = "Driver's License"
@@ -59,7 +66,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'checksuspensions', {'judge', 'lawyer'}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'checksuspensions', {'judge', 'lawyer', 'sheriff'}, function(source, args, user)
 	print("checking suspension")
 	local usource = source
 	local target = tonumber(args[2])
@@ -102,6 +109,13 @@ TriggerEvent('es:addJobCommand', 'changesuspension', {'judge', 'lawyer'}, functi
 	local target = tonumber(args[3])
 	local days = tonumber(args[4])
 	local target_item_name = nil
+    -- check SGT + rank for police --
+    if user.getActiveCharacterData("job") == "sheriff" then
+        if user.getActiveCharacterData("policeRank") < 4 then
+            TriggerClientEvent("usa:notify", usource, "Not high enough rank!")
+            return
+        end
+    end
 	if type and GetPlayerName(target) and days then
 		if type == "dl" then
 			target_item_name = "Driver's License"
@@ -132,13 +146,20 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'issue', {'judge', 'lawyer'}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'issue', {'judge', 'lawyer', 'sheriff'}, function(source, args, user)
 	print("removing suspension")
 	local usource = source
 	local type = string.lower(args[2])
 	local target = tonumber(args[3])
 	local target_item_name = nil
 	local target_item = nil
+    -- check SGT + rank for police --
+    if user.getActiveCharacterData("job") == "sheriff" then
+        if user.getActiveCharacterData("policeRank") < 4 then
+            TriggerClientEvent("usa:notify", usource, "Not high enough rank!")
+            return
+        end
+    end
 	if type and GetPlayerName(target) then
 		local target_player = exports["essentialmode"]:getPlayerFromId(target)
 		local timestamp = os.date("*t", os.time())
@@ -190,13 +211,21 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'suspend', {'judge', 'lawyer'}, function(source, args, user)
+-- TODO: check if police rank is SGT + for use of below command ...
+TriggerEvent('es:addJobCommand', 'suspend', {'judge', 'lawyer', "sheriff"}, function(source, args, user)
 	print("adding suspension")
 	local usource = source
 	local type = string.lower(args[2])
 	local target = tonumber(args[3])
     local days = tonumber(args[4])
 	local target_item_name = nil
+    -- check SGT + rank for police --
+    if user.getActiveCharacterData("job") == "sheriff" then
+        if user.getActiveCharacterData("policeRank") < 4 then
+            TriggerClientEvent("usa:notify", usource, "Not high enough rank!")
+            return
+        end
+    end
 	if type and GetPlayerName(target) then
 		if type == "dl" then
 			target_item_name = "Driver's License"
