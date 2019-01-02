@@ -510,9 +510,9 @@ AddEventHandler('rconCommand', function(commandName, args)
 	if commandName == "unban" then
 		-- identifier argument --
 		local identifierToUnban = args[1]
-		print("looking to unban: " .. identifierToUnban)
+		RconPrint("\nlooking to unban: " .. identifierToUnban)
 		-- valid input check --
-		if not identifierToUnban then RconPrint("Usage: unban [identifier] ") CancelEvent() return end
+		if not identifierToUnban then RconPrint("\nUsage: unban [identifier] ") CancelEvent() return end
 		-- Search for banned doc with that identifier --
 		TriggerEvent('es:exposeDBFunctions', function(couchdb)
 			local query = {
@@ -529,7 +529,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 			}
 			couchdb.getSpecificFieldFromDocumentByRows("bans", query, fields, function(doc)
 				if doc then
-					print(doc.name .. " found in DB search!")
+					--print(doc.name .. " found in DB search!")
 					PerformHttpRequest("http://127.0.0.1:5984/bans/".. doc._id .. "?rev=" .. doc._rev, function(err, rText, headers)
 						--RconPrint("\nrText = " .. rText)
 						RconPrint("\nResponse Code = " .. err)
