@@ -260,6 +260,11 @@ local stores = {
 		position = { ['x'] = 846.16217041016, ['y'] = -1035.3648681641, ['z'] = 28.294628114331 },
 		nameofstore = "Ammunation - Vespucci Blvd.",
 		lastrobbed = 0
+	},
+	["The Yellow Jack"] = {
+		position = { ['x'] = 1982.1, ['y'] = 3052.6, ['z'] = 47.2 },
+		nameofstore = "The Yellow Jack (Sandy Shores)",
+		lastrobbed = 0
 	}
 }
 

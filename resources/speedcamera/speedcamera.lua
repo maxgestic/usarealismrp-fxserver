@@ -56,7 +56,8 @@ Citizen.CreateThread(function()
 					vehModel == 1109330673 or -- unmarked4
 					vehModel == -1285460620 or -- unmarked3
 					vehModel == 1383443358 or -- unmarked1
-					vehModel == GetHashKey("sheriff2") then
+					vehModel == GetHashKey("sheriff2") or
+                    vehModel == GetHashKey("pranger") then
 					drawTxt(0.105,0.808,0.185,0.206, 0.40, info, 255,255,255,255)
 				end
 			end

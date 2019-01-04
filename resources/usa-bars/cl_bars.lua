@@ -1,7 +1,8 @@
 local LOCATIONS = {
     {x = 1986.0, y = 3054.3, z = 47.3}, -- yellow jack
     {x = -560.2, y = 286.7, z = 82.3}, -- tequilala
-    {x = -1393.6, y = -606.6, z = 30.4} -- bahama mamas
+    {x = -1393.6, y = -606.6, z = 30.4}, -- bahama mamas
+    {x = 127.4, y = -1284.6, z = 29.3} -- vanilla unicorn
 }
 
 local ITEMS = {} -- loaded from server
