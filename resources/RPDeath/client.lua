@@ -7,6 +7,9 @@ local RPDeathEnabled = true
 local dead = false
 local jailed = false
 
+local ENTER_KEY = 176
+local CTRL_KEY = 36
+
 --TriggerServerEvent('RPD:addPlayer')
 
 RegisterNetEvent("RPD:toggleJailed")
@@ -39,7 +42,6 @@ AddEventHandler('RPD:startTimer', function()
 			raw_minutes = raw_seconds/60
 			minutes = stringSplit(raw_minutes, ".")[1]
 			seconds = stringSplit(raw_seconds-(minutes*60), ".")[1]
-
 			SetTextFont(7)
 			SetTextProportional(0)
 			SetTextScale(0.0, 0.4)
@@ -59,18 +61,17 @@ AddEventHandler('RPD:startTimer', function()
 			Wait(0)
 			SetTextFont(0)
 			SetTextProportional(0)
-			SetTextScale(0.0, 0.5)
+			SetTextScale(0.0, 0.35)
 			SetTextColour(255, 255, 255, 255)
 			SetTextDropshadow(0, 0, 0, 0, 255)
 			SetTextEdge(1, 0, 0, 0, 255)
 			SetTextDropShadow()
 			SetTextOutline()
 			SetTextEntry("STRING")
-			AddTextComponentString("Press [ ~g~Enter~w~ ] to respawn (NLR rule applies)")
+			AddTextComponentString("Press [~g~CTRL~w~ + ~g~Enter~w~] to respawn (NLR rule applies)")
 			SetTextCentre(true)
-			DrawText(0.5, 0.45)
-
-			if IsControlPressed(0, 176) then
+			DrawText(0.45, 0.75)
+			if IsControlPressed( 1, CTRL_KEY ) and IsControlJustPressed(0, ENTER_KEY) then
 				if not pressed then
 					pressed = true
 					TriggerEvent('chatMessage', "Death", {200,0,0}, "Respawned")
