@@ -59,7 +59,7 @@ AddEventHandler('RPD:startTimer', function()
 		local pressed = false
 		while dead do
 			Wait(0)
-			SetTextFont(0)
+			SetTextFont(7)
 			SetTextProportional(0)
 			SetTextScale(0.0, 0.35)
 			SetTextColour(255, 255, 255, 255)
