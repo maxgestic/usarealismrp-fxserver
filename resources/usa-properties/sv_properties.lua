@@ -43,9 +43,9 @@ AddEventHandler("properties:checkSpawnPoint", function(usource)
     if spawn.name then
       if PROPERTIES[spawn.name] then
         if PROPERTIES[spawn.name].owner.identifier == GetPlayerIdentifiers(usource)[1] then
-          print("Still owns property, leaving spawn!")
+          print("Still owns property, leaving spawn! 1")
         else
-          print("does not own property anymore, resetting spawn!")
+          print("does not own property anymore, resetting spawn! 1")
           player.setActiveCharacterData("spawn", nil)
         end
       end
@@ -53,13 +53,12 @@ AddEventHandler("properties:checkSpawnPoint", function(usource)
       -- for backwards compatability (with spawns that have no .name property set yet) --
   		for name, info in pairs(PROPERTIES) do
   			if info.x == spawn.x and info.y == spawn.y and info.z == spawn.z then
-  				print("property still valid after eviction!")
   				if info.owner.identifier == GetPlayerIdentifiers(usource)[1] then
-  					print("Still owns property, leaving spawn!")
+  					print("Still owns property, leaving spawn! 2")
             spawn.name = name
             player.setActiveCharacterData("spawn", spawn)
   				else
-  					print("does not own property anymore, resetting spawn!")
+  					print("does not own property anymore, resetting spawn! 2")
   					player.setActiveCharacterData("spawn", nil)
   				end
   				return
@@ -138,7 +137,7 @@ AddEventHandler("properties:getUserItemsToStore", function(user_source)
 		local weapons = player.getActiveCharacterData("weapons")
 		for i = 1, #inventory do table.insert(items, inventory[i]) end
 		for i = 1, #weapons do table.insert(items, weapons[i]) end
-		print("sending #" .. #items .. " items to client for storage menu")
+		--print("sending #" .. #items .. " items to client for storage menu")
 		TriggerClientEvent("properties:setItemsToStore", userSource, items)
 	end
 end)
@@ -162,44 +161,29 @@ end)
 -- try to store item --
 RegisterServerEvent("properties:store")
 AddEventHandler("properties:store", function(name, item, quantity)
-	--print("inside properties:store!")
-	local user_source = source
-	--print("recevied item [" .. item.name .. "] to store at property with quantity [" .. item.quantity .. "]")
-	local saved_quantity = item.quantity
-		-- remove from player --
-	--print("sending into usa:remove item [" .. item.name .. "] item.quantity = " .. item.quantity .. ", quantity to remove = " .. quantity)
-	TriggerEvent("usa:removeItem", item, quantity, user_source)
-	local copy = item
-	copy.quantity = quantity
-	local had_already = false
-	--print("storing item at property: " .. name)
-	-- insert into property --
-	for i = 1, #PROPERTIES[name].storage.items do
-		if PROPERTIES[name].storage.items[i].name == item.name then
-			--print("had_already was true!")
-			--print("previous quantity: " .. PROPERTIES[name].storage.items[i].quantity)
-			--print("quantity to add: " .. quantity)
-      if PROPERTIES[name].storage.items[i].type ~= "weapon" then
-  			had_already	= true
-  			PROPERTIES[name].storage.items[i].quantity = PROPERTIES[name].storage.items[i].quantity + quantity
-      end
-      break
-		end
-	end
-	if not had_already then
-		--print("had_already was false!")
-		--print("quantity param: " .. quantity)
-		--print("item.quantity from inventory was: " .. saved_quantity)
-		--print("item.quantity to store is now after setting: " .. copy.quantity)
-		table.insert(PROPERTIES[name].storage.items, copy)
-    print("inserted item into house storage: " .. copy.name .. ", type: " .. copy.type .. ", customizations: " .. type(copy.components))
-		--print("added item! property now has:")
-		--for k = 1, #PROPERTIES[name].storage.items do
-			--print("name: " .. PROPERTIES[name].storage.items[k].name .. ", quantity: " .. PROPERTIES[name].storage.items[k].quantity)
-		--end
-	end
-  -- save property --
-  SavePropertyData(name)
+    local user_source = source
+    local saved_quantity = item.quantity
+    -- remove from player --
+    TriggerEvent("usa:removeItem", item, quantity, user_source)
+    local copy = item
+    copy.quantity = quantity
+    local had_already = false
+    -- insert into property --
+    for i = 1, #PROPERTIES[name].storage.items do
+        if PROPERTIES[name].storage.items[i].name == item.name then
+            if PROPERTIES[name].storage.items[i].type ~= "weapon" then
+                had_already	= true
+                PROPERTIES[name].storage.items[i].quantity = PROPERTIES[name].storage.items[i].quantity + quantity
+            end
+            break
+        end
+    end
+    if not had_already then
+        table.insert(PROPERTIES[name].storage.items, copy)
+        --print("inserted item into house storage: " .. copy.name .. ", type: " .. copy.type .. ", customizations: " .. type(copy.components))
+    end
+    -- save property --
+    SavePropertyData(name)
 end)
 
 -- load stored money --
@@ -211,63 +195,52 @@ end)
 -- load stored vehicles --
 RegisterServerEvent("properties:loadVehiclesForMenu")
 AddEventHandler("properties:loadVehiclesForMenu", function(name)
-	TriggerClientEvent("properties:loadVehiclesForMenu", source, PROPERTIES[name].vehicles)
+    local usource = source
+    GetVehiclesForMenu(name, function(vehs)
+        TriggerClientEvent("properties:loadVehiclesForMenu", usource, vehs)
+    end)
 end)
 
 -- store vehicle at property --
 RegisterServerEvent("properties:storeVehicle")
-AddEventHandler("properties:storeVehicle", function(property_name, plate)
-  local userSource = tonumber(source)
-	--TriggerEvent('es:getPlayerFromId', userSource, function(user)
-  local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		local userVehicles = user.getActiveCharacterData("vehicles")
-		for i = 1, #userVehicles do
-			local vehicle = userVehicles[i]
-			if plate and vehicle then
-				if string.match(plate,tostring(vehicle.plate)) or plate == vehicle.plate then -- player actually owns car that is being stored
-					userVehicles[i].stored_location = property_name
-					user.setActiveCharacterData("vehicles", userVehicles)
-          table.insert(PROPERTIES[property_name].vehicles, userVehicles[i])
-					TriggerClientEvent("properties:storeVehicle", userSource)
-          -- save property --
-          SavePropertyData(property_name)
-					return
-				end
-			end
-		end
-		TriggerClientEvent("garage:notify", userSource, "~r~You do not own that vehicle!")
-	--end)
+AddEventHandler("properties:storeVehicle", function(property_name, plate) --IMPLEMENT
+    local usource = tonumber(source)
+    -- check if player owns veh trying to store --
+    local owns = false
+    local user = exports["essentialmode"]:getPlayerFromId(usource)
+    local uvehicles = user.getActiveCharacterData("vehicles")
+    for i = 1, #uvehicles do
+        if plate == uvehicles[i] then
+            owns = true
+        end
+    end
+    if owns then
+        -- store vehicle if owner --
+        TriggerEvent('es:exposeDBFunctions', function(couchdb)
+            couchdb.updateDocument("vehicles", plate, { stored_location = property_name }, function()
+                -- delete vehicle on client --
+                TriggerClientEvent("properties:storeVehicle", usource)
+            end)
+        end)
+    else
+        TriggerClientEvent("usa:notify", usource, "You do not own that vehicle!")
+    end
 end)
 
 -- retrieve vehicle from property --
 RegisterServerEvent("properties:retrieveVehicle")
-AddEventHandler("properties:retrieveVehicle", function(property_name, vehicle)
-  print("retrieving vehicle with name: " .. vehicle.make .. " " .. vehicle.model)
-  print("from: " .. property_name)
-  local userSource = source
-  local vehs = PROPERTIES[property_name].vehicles
-  -- does property have the vehicle? --
-  for i = 1, #vehs do
-    -- match by plate --
-    if vehs[i].plate == vehicle.plate then
-      table.remove(PROPERTIES[property_name].vehicles, i)
-      -- retrieve vehicle from property --
-      TriggerClientEvent("properties:retrieveVehicle", source, vehicle)
-      -- save property --
-      SavePropertyData(property_name)
-      -- update player vehicle stored location variable --
-      local player = exports["essentialmode"]:getPlayerFromId(userSource)
-      local player_vehicles = player.getActiveCharacterData("vehicles")
-      for j = 1, #player_vehicles do
-        if player_vehicles[j].plate == vehicle.plate then
-          player_vehicles[j].stored_location = nil
-          player.setActiveCharacterData("vehicles", player_vehicles)
-          return
-        end
-      end
-      return
-    end
-  end
+AddEventHandler("properties:retrieveVehicle", function(property_name, vehicle) -- IMPLEMENT
+  local usource = source
+  TriggerEvent('es:exposeDBFunctions', function(couchdb)
+      couchdb.updateDocument("vehicles", vehicle.plate, { stored_location = "" }, function(err)
+         -- print("INFO: stored location set to nil!")
+          GetVehicleCustomizations(vehicle.plate, function(customizations)
+              -- retrieve vehicle --
+              vehicle.customizations = customizations
+              TriggerClientEvent("properties:retrieveVehicle", usource, vehicle)
+          end)
+      end)
+  end)
 end)
 
 -- try to retrieve item (assumed to already be in the property) --
@@ -887,6 +860,8 @@ AddEventHandler('rconCommand', function(commandName, args)
 		--end)
 
 	elseif commandName == "properties" then
+        -- TODO: pass in property name as argument and only display its data instead of all properties
+        --[[
 		for name, info in pairs(PROPERTIES) do
 			if info.owner.name then
 				RconPrint("Name: " .. info.name)
@@ -900,6 +875,8 @@ AddEventHandler('rconCommand', function(commandName, args)
 				RconPrint("\nEnd Date: " .. info.fee.end_date .. "\n\n")
 			end
 		end
+        --]]
+        RconPrint("\nUpdating this command, currently unavailable...")
 	elseif commandName == "addproperty" then
 		-- usage: addproperty [door X] [door Y] [door Z] [garage X] [garage Y] [garage Z] [price] [name]
 		local price = tonumber(args[7])
@@ -993,4 +970,58 @@ function comma_value(amount)
     end
   end
   return formatted
+end
+
+-- get all vehicles stored at certain property, DEPENDS ON COUCH DB INDEX ON "stored_location" --
+function GetVehiclesForMenu(property_name, cb)
+    -- query for the information needed from each vehicle --
+    local endpoint = "/vehicles/_find"
+    local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+    PerformHttpRequest(url, function(err, responseText, headers)
+        if responseText then
+            local responseVehArray = {}
+            --print(responseText)
+            local data = json.decode(responseText)
+            if data.docs then
+              for i = 1, #data.docs do
+                  local veh = {
+                      make = data.docs[i].make,
+                      model = data.docs[i].model,
+                      plate = data.docs[i].plate,
+                      hash = data.docs[i].hash,
+                      owner = data.docs[i].owner
+                  }
+                  table.insert(responseVehArray, veh)
+              end
+            end
+            -- send vehicles to client for displaying --
+            --print("# of vehicles loaded for menu: " .. #responseVehArray)
+            cb(responseVehArray)
+        end
+    end, "POST", json.encode({
+        selector = {
+            ["stored_location"] = property_name
+        },
+        fields = { "make", "model", "plate", "hash", "owner" }
+    }), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+end
+
+function GetVehicleCustomizations(plate, cb)
+	-- query for the information needed from each vehicle --
+	local endpoint = "/vehicles/_design/vehicleFilters/_view/getVehicleCustomizationsByPlate"
+	local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+	PerformHttpRequest(url, function(err, responseText, headers)
+		if responseText then
+      local customizations = {}
+			--print(responseText)
+			local data = json.decode(responseText)
+      if data.rows and data.rows[1].value then
+			  customizations = data.rows[1].value[1] -- customizations
+      end
+			cb(customizations)
+		end
+	end, "POST", json.encode({
+		keys = { plate }
+		--keys = { "86CSH075" }
+	}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 end

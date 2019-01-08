@@ -1,3 +1,7 @@
+--# Public vehicle parking garages to store player vehicles
+--# For: USA Realism RP
+--# By: minipunch
+
 locations = {
 	{ ['x'] = -301.94973754883, ['y'] = 6123.2309570313, ['z'] = 31.499670028687 },
 	{ ['x'] = 1698.5390625, ['y'] = 4941.4189453125, ['z'] = 42.126735687256 },
@@ -94,11 +98,6 @@ AddEventHandler("garage:storeVehicle", function()
 	Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(veh))
 	-- store vehicle key with vehicle
 	TriggerServerEvent("garage:storeKey", plate)
-end)
-
-RegisterNetEvent("garage:vehicleNotStored")
-AddEventHandler("garage:vehicleNotStored", function()
-	exports.globals:notify("~r~Sorry! That vehicle is not stored at any of our garages.")
 end)
 
 RegisterNetEvent("garage:vehicleStored")

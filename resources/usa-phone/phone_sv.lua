@@ -2,6 +2,7 @@
 --# for USA REALISM rp
 --# Phone script to make phone calls and send texts in game with GUI phone
 --# requires database(s): "phones"
+-- TODO: instead of fetching entire phone document from DB, only fetch specific fields needed
 
 function CreateNewPhone(phone)
 	TriggerEvent('es:exposeDBFunctions', function(couchdb)

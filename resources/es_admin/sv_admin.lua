@@ -1211,131 +1211,138 @@ end)
 TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 	if args[2] then
 		--admins only
-		if user.getGroup() == "mod" or user.getGroup() == "admin" or user.getGroup() == "superadmin" or user.getGroup() == "owner" then
+		local group = user.getGroup()
+		if group == "mod" or group == "admin" or group == "superadmin" or group == "owner" then
 			local user = exports["essentialmode"]:getPlayerFromId(tonumber(args[2]))
 			if user then
-				local vehiclenames = ""
-				local userVehicles = user.getActiveCharacterData("vehicles")
-				for i = 1, #userVehicles do
-					local vehicle = userVehicles[i]
-					vehiclenames = vehiclenames .. userVehicles[i].model
-					if i ~= #userVehicles then
-						vehiclenames = vehiclenames .. ", "
+				local ownedVehicles = user.getActiveCharacterData("vehicles")
+				GetMakeModelPlate(ownedVehicles, function(vehs)
+					local vehiclenames = ""
+					local userVehicles = vehs
+					for i = 1, #userVehicles do
+						local vehicle = userVehicles[i]
+						vehiclenames = vehiclenames .. userVehicles[i].model
+						if i ~= #userVehicles then
+							vehiclenames = vehiclenames .. ", "
+						end
 					end
-				end
-				local weaponnames = ""
-				local userWeapons = user.getActiveCharacterData("weapons")
-				for i = 1, #userWeapons do
-					local weapon = userWeapons[i]
-					weaponnames = weaponnames .. userWeapons[i].name
-					if i ~= #userWeapons then
-						weaponnames = weaponnames .. ", "
+					local weaponnames = ""
+					local userWeapons = user.getActiveCharacterData("weapons")
+					for i = 1, #userWeapons do
+						local weapon = userWeapons[i]
+						weaponnames = weaponnames .. userWeapons[i].name
+						if i ~= #userWeapons then
+							weaponnames = weaponnames .. ", "
+						end
 					end
-				end
-				local inventorynames = ""
-				local userInventory = user.getActiveCharacterData("inventory")
-				for i = 1, #userInventory do
-					--local inventory = userInventory[i]
-					--local quantity = inventory.quantity
-					inventorynames = inventorynames .. userInventory[i].name .. "(" .. userInventory[i].quantity .. ")"
-					if i ~= #userInventory then
-						inventorynames = inventorynames .. ", "
+					local inventorynames = ""
+					local userInventory = user.getActiveCharacterData("inventory")
+					for i = 1, #userInventory do
+						--local inventory = userInventory[i]
+						--local quantity = inventory.quantity
+						inventorynames = inventorynames .. userInventory[i].name .. "(" .. userInventory[i].quantity .. ")"
+						if i ~= #userInventory then
+							inventorynames = inventorynames .. ", "
+						end
 					end
-				end
-				local firearms_permit = "Invalid"
-				local driving_license = "Invalid"
-				local userLicenses = user.getActiveCharacterData("licenses")
-				for i = 1, #userLicenses do
-					local license = userLicenses[i]
-					if license.name == "Driver's License"  then
-						driving_license = "Valid"
-					elseif license.name == "Firearm Permit" then
-						firearms_permit = "Valid"
+					local firearms_permit = "Invalid"
+					local driving_license = "Invalid"
+					local userLicenses = user.getActiveCharacterData("licenses")
+					for i = 1, #userLicenses do
+						local license = userLicenses[i]
+						if license.name == "Driver's License"  then
+							driving_license = "Valid"
+						elseif license.name == "Firearm Permit" then
+							firearms_permit = "Valid"
+						end
 					end
-				end
 
-				local insurance = user.getActiveCharacterData("insurance")
-				local insurance_month = insurance.expireMonth
-				local insurance_year = insurance.expireYear
-				local displayInsurance = "Invalid"
-				if insurance_month and insurance_year then
-					displayInsurance = insurance_month .. "/" .. insurance_year
-				end
+					local insurance = user.getActiveCharacterData("insurance")
+					local insurance_month = insurance.expireMonth
+					local insurance_year = insurance.expireYear
+					local displayInsurance = "Invalid"
+					if insurance_month and insurance_year then
+						displayInsurance = insurance_month .. "/" .. insurance_year
+					end
 
-				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
-				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Name: " .. user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName") .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
-				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Police Rank: " .. user.getActiveCharacterData("policeRank") .. " | EMS Rank: " .. user.getActiveCharacterData("emsRank") .. " |  Job: " .. user.getActiveCharacterData("job") .. " |" )
-				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Cash: " .. comma_value(user.getActiveCharacterData("money")) .. " | Bank: " .. comma_value(user.getActiveCharacterData("bank")) .. " |  Ingame Time: " .. FormatSeconds(user.getActiveCharacterData("ingameTime")) .. " |" )
-				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
-				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
-				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Inventory: " .. inventorynames .. " |")
-				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weight: " .. user.getActiveCharacterCurrentInventoryWeight())
-				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Name: " .. user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName") .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Police Rank: " .. user.getActiveCharacterData("policeRank") .. " | EMS Rank: " .. user.getActiveCharacterData("emsRank") .. " |  Job: " .. user.getActiveCharacterData("job") .. " |" )
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Cash: " .. comma_value(user.getActiveCharacterData("money")) .. " | Bank: " .. comma_value(user.getActiveCharacterData("bank")) .. " |  Ingame Time: " .. FormatSeconds(user.getActiveCharacterData("ingameTime")) .. " |" )
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Inventory: " .. inventorynames .. " |")
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weight: " .. user.getActiveCharacterCurrentInventoryWeight())
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
+				end)
 			else
 				TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 255, 255}, "User not found!")
 			end
 		end
 	else
-		--show player stats
-		local vehiclenames = ""
-		local userVehicles = user.getActiveCharacterData("vehicles")
-		for i = 1, #userVehicles do
-			local vehicle = userVehicles[i]
-			vehiclenames = vehiclenames .. userVehicles[i].model
-			if i ~= #userVehicles then
-				vehiclenames = vehiclenames .. ", "
-			end
-		end
-		local weaponnames = ""
-		local userWeapons = user.getActiveCharacterData("weapons")
-		for i = 1, #userWeapons do
-			local weapon = userWeapons[i]
-			weaponnames = weaponnames .. userWeapons[i].name
-			if i ~= #userWeapons then
-				weaponnames = weaponnames .. ", "
-			end
-		end
-		local inventorynames = ""
-		local userInventory = user.getActiveCharacterData("inventory")
-		for i = 1, #userInventory do
-			--local inventory = userInventory[i]
-			--local quantity = inventory.quantity
-			if userInventory[i] then
-				inventorynames = inventorynames .. userInventory[i].name .. "(" .. userInventory[i].quantity .. ")"
-				if i ~= #userInventory then
-					inventorynames = inventorynames .. ", "
+		local ownedVehicles = user.getActiveCharacterData("vehicles")
+		GetMakeModelPlate(ownedVehicles, function(vehs)
+			--show player stats
+			local vehiclenames = ""
+			local userVehicles = vehs
+			for i = 1, #userVehicles do
+				local vehicle = userVehicles[i]
+				vehiclenames = vehiclenames .. userVehicles[i].model
+				if i ~= #userVehicles then
+					vehiclenames = vehiclenames .. ", "
 				end
 			end
-		end
-		local firearms_permit = "Invalid"
-		local driving_license = "Invalid"
-		local userLicenses = user.getActiveCharacterData("licenses")
-		for i = 1, #userLicenses do
-			local license = userLicenses[i]
-			if license.name == "Driver's License"  then
-				driving_license = "Valid"
-			elseif license.name == "Firearm Permit" then
-				firearms_permit = "Valid"
+			local weaponnames = ""
+			local userWeapons = user.getActiveCharacterData("weapons")
+			for i = 1, #userWeapons do
+				local weapon = userWeapons[i]
+				weaponnames = weaponnames .. userWeapons[i].name
+				if i ~= #userWeapons then
+					weaponnames = weaponnames .. ", "
+				end
 			end
-		end
+			local inventorynames = ""
+			local userInventory = user.getActiveCharacterData("inventory")
+			for i = 1, #userInventory do
+				--local inventory = userInventory[i]
+				--local quantity = inventory.quantity
+				if userInventory[i] then
+					inventorynames = inventorynames .. userInventory[i].name .. "(" .. userInventory[i].quantity .. ")"
+					if i ~= #userInventory then
+						inventorynames = inventorynames .. ", "
+					end
+				end
+			end
+			local firearms_permit = "Invalid"
+			local driving_license = "Invalid"
+			local userLicenses = user.getActiveCharacterData("licenses")
+			for i = 1, #userLicenses do
+				local license = userLicenses[i]
+				if license.name == "Driver's License"  then
+					driving_license = "Valid"
+				elseif license.name == "Firearm Permit" then
+					firearms_permit = "Valid"
+				end
+			end
 
-		local insurance = user.getActiveCharacterData("insurance")
-		local insurance_month = insurance.expireMonth
-		local insurance_year = insurance.expireYear
-		local displayInsurance = "Invalid"
-		if insurance_month and insurance_year then
-			displayInsurance = insurance_month .. "/" .. insurance_year
-		end
+			local insurance = user.getActiveCharacterData("insurance")
+			local insurance_month = insurance.expireMonth
+			local insurance_year = insurance.expireYear
+			local displayInsurance = "Invalid"
+			if insurance_month and insurance_year then
+				displayInsurance = insurance_month .. "/" .. insurance_year
+			end
 
-		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
-		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Name: " .. user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName") .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
-		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Police Rank: " .. user.getActiveCharacterData("policeRank") .. " | EMS Rank: " .. user.getActiveCharacterData("emsRank") .. " |  Job: " .. user.getActiveCharacterData("job") .. " |" )
-		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Cash: " .. comma_value(user.getActiveCharacterData("money")) .. " | Bank: " .. comma_value(user.getActiveCharacterData("bank")) .. " |  Ingame Time: " .. FormatSeconds(user.getActiveCharacterData("ingameTime")) .. " |" )
-		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
-		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
-		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Inventory: " .. inventorynames .. " |")
-		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weight: " .. user.getActiveCharacterCurrentInventoryWeight())
-		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Name: " .. user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName") .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Police Rank: " .. user.getActiveCharacterData("policeRank") .. " | EMS Rank: " .. user.getActiveCharacterData("emsRank") .. " |  Job: " .. user.getActiveCharacterData("job") .. " |" )
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Cash: " .. comma_value(user.getActiveCharacterData("money")) .. " | Bank: " .. comma_value(user.getActiveCharacterData("bank")) .. " |  Ingame Time: " .. FormatSeconds(user.getActiveCharacterData("ingameTime")) .. " |" )
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Inventory: " .. inventorynames .. " |")
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weight: " .. user.getActiveCharacterCurrentInventoryWeight())
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
+		end)
 	end
 end, {
 	help = "View character statistics."
@@ -1395,4 +1402,33 @@ function getHoursFromTime(time)
 	local hours = math.floor(hoursfrom)
 	print("hours = " .. hours) -- today it prints "1"
 	return hours
+end
+
+function GetMakeModelPlate(plates, cb)
+	-- query for the information needed from each vehicle --
+	local endpoint = "/vehicles/_design/vehicleFilters/_view/getMakeModelPlate"
+	local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+	PerformHttpRequest(url, function(err, responseText, headers)
+		if responseText then
+			local responseVehArray = {}
+			--print(responseText)
+			local data = json.decode(responseText)
+			if data.rows then
+				for i = 1, #data.rows do
+					local veh = {
+						plate = data.rows[i].value[1], -- plate
+						make = data.rows[i].value[2], -- make
+						model = data.rows[i].value[3] -- model
+					}
+					table.insert(responseVehArray, veh)
+				end
+			end
+			-- send vehicles to client for displaying --
+			--print("# of vehicles loaded for menu: " .. #responseVehArray)
+			cb(responseVehArray)
+		end
+	end, "POST", json.encode({
+		keys = plates
+		--keys = { "86CSH075" }
+	}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 end

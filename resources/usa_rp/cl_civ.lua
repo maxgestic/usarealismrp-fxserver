@@ -285,12 +285,12 @@ end)
 RegisterNetEvent("vehicle:confirmSell")
 AddEventHandler("vehicle:confirmSell", function(details)
     local responded = false
-    local message = "~y~OFFER: ~w~$" .. details.price .. " for ~w~" .. details.veh_to_sell.make .. " " .. details.veh_to_sell.model .. " [" .. details.veh_to_sell.plate .. "]" .. "\nAccept? ~g~Y~w~/~r~Backspace"
+    local message = "~y~OFFER: ~w~$" .. details.price .. " for ~w~" .. details.make .. " " .. details.model .. " [" .. details.plate .. "]" .. "\nAccept? ~g~Y~w~/~r~Backspace"
     TriggerEvent("usa:notify", message)
     Citizen.CreateThread(function()
         while not responded do
             Wait(1)
-            DrawSpecialText( "~y~OFFER: ~w~$" .. details.price .. " for ~w~" .. details.veh_to_sell.make .. " " .. details.veh_to_sell.model .. " [" .. details.veh_to_sell.plate .. "]" .. "\nAccept? ~g~Y~w~/~r~Backspace" )
+            DrawSpecialText( "~y~OFFER: ~w~$" .. details.price .. " for ~w~" .. details.make .. " " .. details.model .. " [" .. details.plate .. "]" .. "\nAccept? ~g~Y~w~/~r~Backspace" )
             if IsControlJustPressed(1, 246) then -- Y key
                 print("player wants to buy vehicle!")
                 responded = true

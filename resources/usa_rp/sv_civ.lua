@@ -147,7 +147,7 @@ AddEventHandler("crim:continueRobbing", function(continue_robbing, from_id, targ
 			local person_commiting_crime = exports["essentialmode"]:getPlayerFromId(source)
 			local before_robbery_amount = person_commiting_crime.getActiveCharacterData("money")
 			person_commiting_crime.setActiveCharacterData("money", before_robbery_amount + to_steal_amount)
-		else 
+		else
 			TriggerClientEvent("usa:notify", source, "Person has no money on them!")
 		end
 	else
@@ -230,19 +230,20 @@ end, {
 -- trade / sell vehicles to other players --
 ------------------------------------------------
 TriggerEvent('es:addCommand', 'sellvehicle', function(source, args, user, location)
-	local veh_number = tonumber(args[2])
+	local usource = source
+	local plate_number = args[2]
 	local target = tonumber(args[3])
 	local price = tonumber(args[4])
 	local user_vehicles = user.getActiveCharacterData("vehicles")
-	if veh_number and GetPlayerName(target) and price and target ~= tonumber(source) then
-		price = math.floor(price)
-		local veh_to_sell = user_vehicles[veh_number]
-		if veh_to_sell then
-			local target_player = exports["essentialmode"]:getPlayerFromId(target)
-			local target_player_vehicles = target_player.getActiveCharacterData("vehicles")
-			local target_player_money  = target_player.getActiveCharacterData("money")
-			local target_player_bank = target_player.getActiveCharacterData("bank")
-			if #target_player_vehicles < VEH_GARAGE_MAXIMUM_STORAGE_NUM then
+	if plate_number and GetPlayerName(target) and price and target ~= tonumber(usource) then
+		for i = 1, #user_vehicles do
+			if string.lower(user_vehicles[i]) == string.lower(plate_number) then -- only let player sell vehicles they own
+				local veh_to_sell = user_vehicles[i]
+				price = math.floor(price)
+				local target_player = exports["essentialmode"]:getPlayerFromId(target)
+				local target_player_vehicles = target_player.getActiveCharacterData("vehicles")
+				local target_player_money  = target_player.getActiveCharacterData("money")
+				local target_player_bank = target_player.getActiveCharacterData("bank")
 				local seller = user.getActiveCharacterData("fullName")
 				if target_player_money >= price or target_player_bank >= price then
 					local details = {
@@ -256,29 +257,39 @@ TriggerEvent('es:addCommand', 'sellvehicle', function(source, args, user, locati
 						price = price,
 						veh_to_sell = veh_to_sell,
 						target_player_money = target_player_money,
-						target_player_bank = target_player_bank,
-						veh_number = veh_number
+						target_player_bank = target_player_bank
 					}
-					TriggerClientEvent("vehicle:confirmSell", target, details)
+					GetMakeModelPlate({ details.veh_to_sell }, function(vehs)
+						if vehs[1] then
+							details.make = vehs[1].make
+							details.model = vehs[1].model
+							details.plate = vehs[1].plate
+							TriggerClientEvent("vehicle:confirmSell", target, details)
+						else
+							TriggerClientEvent("usa:notify", usource, "Vehicle does not exist!")
+						end
+					end)
+					return
 				end
-			else
-				print("Error: target player has reached limit of " .. VEH_GARAGE_MAXIMUM_STORAGE_NUM .. " vehicles!")
 			end
 		end
+		TriggerClientEvent("usa:notify", usource, "You don't own that vehicle!")
 	else
 		-- print list of vehs --
-		for i = 1, #user_vehicles do
-			local vehicle = user_vehicles[i]
-			TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0---------------------- #" .. i .. " -------------------------")
-			TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0VEH: " .. vehicle.make .. " " .. vehicle.model)
-			TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0PLATE: " .. vehicle.plate)
-			TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0----------------------------------------------------")
-		end
+		GetMakeModelPlate(user_vehicles, function(vehs)
+			for i = 1, #vehs do
+				local vehicle = vehs[i]
+				TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0---------------------- #" .. i .. " -------------------------")
+				TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0VEH: " .. vehicle.make .. " " .. vehicle.model)
+				TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0PLATE: " .. vehicle.plate)
+				TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0----------------------------------------------------")
+			end
+		end)
 	end
 end, {
 	help = "Offer one of your vehicles to another player.",
 	params = {
-		{ name = "vehicle #", help = "The vehicle number from your list of vehicles [hint: do /sellvehicle]." },
+		{ name = "plate #", help = "The plate number of the vehicle to be sold [hint: do /sellvehicle]." },
 		{ name = "target", help = "The ID # of the player to sell the vehicle to." },
 		{ name = "price", help = "The price you are offering the vehicle for." }
 	}
@@ -317,7 +328,6 @@ function TradeVehicle(details)
 	local seller = exports["essentialmode"]:getPlayerFromId(details.source)
 	-- trade money --
 	if details.target_player_money >= details.price then
-		print("player had enough money!")
 		buyer.setActiveCharacterData("money", details.target_player_money - details.price)
 		seller.setActiveCharacterData("money", seller.getActiveCharacterData("money") + details.price)
 	elseif details.target_player_bank >= details.price then
@@ -329,27 +339,90 @@ function TradeVehicle(details)
 		return
 	end
 	-- remove vehicle from seller --
-	print("veh to sell: " .. details.veh_to_sell.make .. " " .. details.veh_to_sell.model)
-	table.remove(details.user_vehicles, details.veh_number)
-	seller.setActiveCharacterData("vehicles", details.user_vehicles)
-	print("removed vehicle from: " .. GetPlayerName(details.source))
-	print("giving to player: " .. GetPlayerName(details.target))
+	for i = 1, #details.user_vehicles do
+		if details.user_vehicles[i] ==  details.veh_to_sell then
+			table.remove(details.user_vehicles, i)
+			seller.setActiveCharacterData("vehicles", details.user_vehicles)
+			break
+		end
+	end
 	-- transfer ownership details --
-	details.veh_to_sell.owner = buyer.getActiveCharacterData("fullName")
-	-- give vehicle to target --
-	table.insert(details.target_player_vehicles, details.veh_to_sell)
-	buyer.setActiveCharacterData("vehicles", details.target_player_vehicles)
-	print("vehicle successfully transferred!")
-	-- send discord msg to log --
-	local timestamp = os.date("*t", os.time())
-	local desc = "\n**Vehicle:** " .. details.veh_to_sell.make .. " " .. details.veh_to_sell.model ..
-	"\n**Seller:** " .. details.seller ..
-	"\n**Buyer:** " .. details.veh_to_sell.owner ..
-	"\n**Price:** $" .. details.price ..
-	"\n**Date:** ".. timestamp.month .. "/" .. timestamp.day .."/" .. timestamp.year
-	SendDiscordMessage(desc, "https://discordapp.com/api/webhooks/436965351004307466/FY-o_sGScUYFQpo9Y18-ZP-L_HdWRXoDZ1eO2AeD7uXzmg5JwWzqlb07Bbf1Yvv0_W-k", 524288)
-	TriggerClientEvent("usa:notify", details.source, "Transaction ~g~successful~w~!")
-	TriggerClientEvent("usa:notify", details.target, "Transaction ~g~successful~w~!")
+	local newOwnerName = buyer.getActiveCharacterData("fullName")
+	TriggerEvent('es:exposeDBFunctions', function(couchdb)
+		couchdb.updateDocument("vehicles", details.veh_to_sell, {owner = newOwnerName}, function()
+			-- give vehicle to buyer --
+			table.insert(details.target_player_vehicles, details.veh_to_sell)
+			buyer.setActiveCharacterData("vehicles", details.target_player_vehicles)
+			-- send discord msg to log --
+				local timestamp = os.date("*t", os.time())
+				local desc = "\n**Vehicle:** " .. details.make .. " " .. details.model ..
+				"\n**Seller:** " .. details.seller ..
+				"\n**Buyer:** " .. newOwnerName ..
+				"\n**Price:** $" .. details.price ..
+				"\n**Date:** ".. timestamp.month .. "/" .. timestamp.day .."/" .. timestamp.year
+				SendDiscordMessage(desc, "https://discordapp.com/api/webhooks/436965351004307466/FY-o_sGScUYFQpo9Y18-ZP-L_HdWRXoDZ1eO2AeD7uXzmg5JwWzqlb07Bbf1Yvv0_W-k", 524288)
+			TriggerClientEvent("usa:notify", details.source, "Transaction ~g~successful~w~!")
+			TriggerClientEvent("usa:notify", details.target, "Transaction ~g~successful~w~!")
+		end)
+	end)
+end
+
+function GetMakeModelPlate(plates, cb)
+	-- query for the information needed from each vehicle --
+	local endpoint = "/vehicles/_design/vehicleFilters/_view/getMakeModelPlate"
+	local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+	PerformHttpRequest(url, function(err, responseText, headers)
+		if responseText then
+			local responseVehArray = {}
+			--print(responseText)
+			local data = json.decode(responseText)
+			if data.rows[1] then
+				for i = 1, #data.rows do
+					local veh = {
+						plate = data.rows[i].value[1], -- plate
+						make = data.rows[i].value[2], -- make
+						model = data.rows[i].value[3] -- model
+					}
+					table.insert(responseVehArray, veh)
+				end
+			end
+			-- send vehicles to client for displaying --
+			--print("# of vehicles loaded for menu: " .. #responseVehArray)
+			cb(responseVehArray)
+		end
+	end, "POST", json.encode({
+		keys = plates
+		--keys = { "86CSH075" }
+	}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+end
+
+function GetMakeModelOwner(plates, cb) -- test
+	-- query for the information needed from each vehicle --
+	local endpoint = "/vehicles/_design/vehicleFilters/_view/getMakeModelOwner"
+	local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+	PerformHttpRequest(url, function(err, responseText, headers)
+		if responseText then
+			local responseVehArray = {}
+			--print(responseText)
+			local data = json.decode(responseText)
+			if data.rows then
+				for i = 1, #data.rows do
+					local veh = {
+						owner = data.rows[i].value[1], -- owner
+						make = data.rows[i].value[2], -- make
+						model = data.rows[i].value[3] -- model
+					}
+					table.insert(responseVehArray, veh)
+				end
+			end
+			-- send vehicles to client for displaying --
+			--print("# of vehicles loaded for menu: " .. #responseVehArray)
+			cb(responseVehArray)
+		end
+	end, "POST", json.encode({
+		keys = plates
+		--keys = { "86CSH075" }
+	}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 -----------------------------

@@ -7,303 +7,235 @@ end)
 
 RegisterServerEvent("vehicle:getInventory")
 AddEventHandler("vehicle:getInventory", function(target_plate_number)
-  print("inside vehicle:getInventory...")
   local userSource = tonumber(source)
-  TriggerEvent("es:getPlayers", function(players)
-    if players then
-      for id, player in pairs(players) do
-        local player_vehicles = player.getActiveCharacterData("vehicles")
-		if player_vehicles then
-			for i = 1, #player_vehicles do
-			  local veh = player_vehicles[i]
-			  if target_plate_number then
-				  if string.find(target_plate_number, tostring(veh.plate)) then
-					TriggerClientEvent("vehicle:loadedInventory", userSource, veh.inventory)
-				  end
-			  end
-			end
-		end
-      end
-    end
+  GetVehicleInventory(target_plate_number, function(inv)
+      TriggerClientEvent("vehicle:loadedInventory", userSource, inv)
   end)
-end)
+end) -- TO TEST
 
 -- store an item in a vehicle
 -- note: assumes that the quantity provided is <= item.quantiy
 RegisterServerEvent("vehicle:storeItem")
 AddEventHandler("vehicle:storeItem", function(vehicle_plate, item, quantity)
   local userSource = tonumber(source)
-  TriggerEvent("es:getPlayers", function(players)
-    if players then
-      for id, player in pairs(players) do
-        local player_vehicles = player.getActiveCharacterData("vehicles")
-        if player_vehicles then
-          for i = 1, #player_vehicles do
-            local veh = player_vehicles[i]
-            if string.find(vehicle_plate, tostring(veh.plate)) then
-              local vehicle_inventory = veh.inventory
-              if not vehicle_inventory then
-                print("vehicle inventory did not exist, setting to {}")
-                vehicle_inventory = {}
-                player_vehicles[i].inventory = {}
-              end
-              if item.type ~= "weapon" then
-                for j = 1, #vehicle_inventory do
-                  local vehicle_inventory_item = vehicle_inventory[j]
-                  if vehicle_inventory_item.name == item.name then
-                    player_vehicles[i].inventory[j].quantity = player_vehicles[i].inventory[j].quantity + quantity
-                    player.setActiveCharacterData("vehicles", player_vehicles)
-                    return
-                  end
-                end
-              end
-              item.quantity = quantity -- set quantity to the one provided as user input, assumes quantity provided is <= to item.quantity
-              -- not already in inventory, add it:
-              print("adding item to vehicle: " .. item.name .. ", quantity: " .. quantity)
-              table.insert(player_vehicles[i].inventory, item)
-              player.setActiveCharacterData("vehicles", player_vehicles)
-            end
+  GetVehicleInventory(vehicle_plate, function(inv)
+      -- for storing weapons --
+      if item.type ~= "weapon" then
+        for j = 1, #inv do
+          local vehicle_inventory_item = inv[j]
+          if vehicle_inventory_item.name == item.name then
+            inv[j].quantity = inv[j].quantity + quantity
+            -- update vehicle storage --
+            TriggerEvent('es:exposeDBFunctions', function(couchdb)
+    			couchdb.updateDocument("vehicles", vehicle_plate, { inventory = inv }, function()
+    				--print("DEBUG: finished updating DB in vehicle:storeItem")
+    			end)
+    		end)
+            return
           end
         end
       end
-    end
+      -- weapon type items --
+      item.quantity = quantity -- set quantity to the one provided as user input, assumes quantity provided is <= to item.quantity
+      table.insert(inv, item)
+      -- not already in inventory, add it:
+     -- print("adding item to vehicle: " .. item.name .. ", quantity: " .. quantity)
+      -- update vehicle storage --
+      TriggerEvent('es:exposeDBFunctions', function(couchdb)
+          couchdb.updateDocument("vehicles", vehicle_plate, { inventory = inv }, function()
+              --print("DEBUG: finished updating DB in vehicle:storeItem")
+          end)
+      end)
   end)
-end)
+end) -- TEST
 
 RegisterServerEvent("vehicle:seizeContraband")
 AddEventHandler("vehicle:seizeContraband", function(target_vehicle_plate)
-	if target_vehicle_plate then
-		print("seizing contraband from veh with plate #: " .. target_vehicle_plate)
-	end
-  local userSource = tonumber(source)
-  TriggerEvent("es:getPlayers", function(players)
-    if players then
-      for id, player in pairs(players) do
-        local player_vehicles = player.getActiveCharacterData("vehicles")
-        for i = 1, #player_vehicles do
-          local veh = player_vehicles[i]
-          if target_vehicle_plate then
-            if string.find(target_vehicle_plate, tostring(veh.plate)) then -- this is the vehicle whose inventory we want to target
-              local vehicle_inventory = veh.inventory
-              for j = #vehicle_inventory, 1, -1 do
-                if vehicle_inventory[j].legality then
-                  if vehicle_inventory[j].legality == "illegal" then
-                    TriggerClientEvent("usa:notify", userSource, "~y~Seized:~w~ " .. "(x" .. vehicle_inventory[j].quantity .. ") " .. vehicle_inventory[j].name)
-                    TriggerClientEvent("chatMessage", userSource, "^3Seized:^0 " .. "(x" .. vehicle_inventory[j].quantity .. ") " .. vehicle_inventory[j].name)
-                    table.remove(player_vehicles[i].inventory, j)
-                  end
-                end
-              end
-              -- save:
-              player.setActiveCharacterData("vehicles", player_vehicles)
-              return
+    local userSource = tonumber(source)
+    GetVehicleInventory(target_vehicle_plate, function(inv)
+        -- remove illegal items --
+        for j = #inv, 1, -1 do
+          if inv[j].legality then
+            if inv[j].legality == "illegal" then
+              TriggerClientEvent("usa:notify", userSource, "~y~Seized:~w~ " .. "(x" .. inv[j].quantity .. ") " .. inv[j].name)
+              TriggerClientEvent("chatMessage", "", userSource, {}, "^3Seized:^0 " .. "(x" .. inv[j].quantity .. ") " .. inv[j].name)
+              table.remove(inv, j)
             end
           end
         end
-      end
-    end
-  end)
-end)
+        -- update vehicle storage --
+        TriggerEvent('es:exposeDBFunctions', function(couchdb)
+            couchdb.updateDocument("vehicles", target_vehicle_plate, { inventory = inv }, function()
+                --print("DEBUG: finished updating DB in vehicle:storeItem")
+            end)
+        end)
+    end)
+end) -- TEST
 
 RegisterServerEvent("vehicle:removeItem")
 AddEventHandler("vehicle:removeItem", function(whole_item, quantity, target_vehicle_plate)
-  --[[
-  print("inside vehicle:removeItem!")
-  print("target item name: " .. whole_item.name)
-  print("target plate #: " .. target_vehicle_plate)
-  --]]
-  local userSource = tonumber(source)
-  TriggerEvent("es:getPlayers", function(players)
-    if players then
-      for id, player in pairs(players) do
-        local player_vehicles = player.getActiveCharacterData("vehicles")
-        if player_vehicles then
-          for i = 1, #player_vehicles do
-            local veh = player_vehicles[i]
-            if string.find(target_vehicle_plate, tostring(veh.plate)) then -- this is the vehicle whose inventory we want to target
-              local vehicle_inventory = veh.inventory
-              for j = 1, #vehicle_inventory do
-                local vehicle_inventory_item = vehicle_inventory[j]
-                if (vehicle_inventory_item.name == whole_item.name and whole_item.type ~= "weapon") or (whole_item.type == "weapon" and vehicle_inventory_item.type == "weapon" and vehicle_inventory_item.uuid == whole_item.uuid and whole_item.name == vehicle_inventory_item.name) then
-                  --print("found matching item to remove, quantity after subtracting: " .. player_vehicles[i].inventory[j].quantity - quantity)
-                  if player_vehicles[i].inventory[j].quantity - quantity <= 0 then
-                    --print("removing item from vehicle inventory!")
-                    table.remove(player_vehicles[i].inventory, j)
-                    player.setActiveCharacterData("vehicles", player_vehicles)
-                    --print("removed item from vehicle inventory!")
-                  else
-                    --print("decremented item quantity in vehicle inventory!")
-                    player_vehicles[i].inventory[j].quantity = player_vehicles[i].inventory[j].quantity - quantity
-                    player.setActiveCharacterData("vehicles", player_vehicles)
-                  end
-                  return
+    local userSource = tonumber(source)
+    GetVehicleInventory(target_vehicle_plate, function(inv)
+        for j = 1, #inv do
+            local vehicle_inventory_item = inv[j]
+            if (vehicle_inventory_item.name == whole_item.name and whole_item.type ~= "weapon") or (whole_item.type == "weapon" and vehicle_inventory_item.type == "weapon" and vehicle_inventory_item.uuid == whole_item.uuid and whole_item.name == vehicle_inventory_item.name) then
+                if inv[j].quantity - quantity <= 0 then
+                    table.remove(inv, j)
                 else
-                  print("*** Error: item not found!! ***")
-                  --[[
-                  if whole_item.type == "weapon" and not whole_item.uuid then
-                    table.remove(player_vehicles[i].inventory, j)
-                    print("removed weapon from vehicle with no UUID!")
-                    return
-                  end
-                  --]]
+                    inv[j].quantity = inv[j].quantity - quantity
                 end
-              end
+                -- update vehicle in DB --
+                TriggerEvent('es:exposeDBFunctions', function(couchdb)
+                    couchdb.updateDocument("vehicles", target_vehicle_plate, { inventory = inv }, function()
+                        --print("DEBUG: finished updating DB in vehicle:removeItem")
+                    end)
+                end)
+                return
+            else
+                print("*** Error: item not found!! ***")
             end
-          end
         end
-      end
-    end
-  end)
-end)
+    end)
+end) -- TEST
 
 -- when retrieving a weapon from a vehicle, first check if player has room for it
 RegisterServerEvent("vehicle:checkPlayerWeaponAmount")
 AddEventHandler("vehicle:checkPlayerWeaponAmount", function(item, vehicle_plate)
-  local userSource = tonumber(source)
-  if not vehicles_being_checked[vehicle_plate] then
-    vehicles_being_checked[vehicle_plate] = true
-    --print("checking user weapon #...")
-    --TriggerEvent("es:getPlayerFromId", userSource, function(user)
-    local user = exports["essentialmode"]:getPlayerFromId(userSource)
-      local user_weapons = user.getActiveCharacterData("weapons")
-      if #user_weapons < 3 then
-        TriggerEvent("es:getPlayers", function(players)
-          if players then
-            for id, player in pairs(players) do
-              local player_vehicles = player.getActiveCharacterData("vehicles")
-              if player_vehicles then
-                for i = 1, #player_vehicles do
-                  local veh = player_vehicles[i]
-                  if string.find(vehicle_plate, tostring(veh.plate)) then -- this is the vehicle whose inventory we want to target
-                    local vehicle_inventory = veh.inventory
-                    for j = 1, #vehicle_inventory do
-                      local vehicle_inventory_item = vehicle_inventory[j]
-                      if vehicle_inventory_item.name == item.name then
-                        --if vehicle_inventory_item.quantity >= quantity then
-                        --print("weapon was still in vehicle to retrieve!")
+    local userSource = tonumber(source)
+    if not vehicles_being_checked[vehicle_plate] then
+        vehicles_being_checked[vehicle_plate] = true
+        local user = exports["essentialmode"]:getPlayerFromId(userSource)
+        local user_weapons = user.getActiveCharacterData("weapons")
+        if #user_weapons < 3 then
+            GetVehicleInventory(vehicle_plate, function(inv)
+                for j = 1, #inv do
+                    local vehicle_inventory_item = inv[j]
+                    if vehicle_inventory_item.name == item.name then
                         TriggerClientEvent("vehicle:retrieveWeapon", userSource, item, vehicle_plate)
-                        --TriggerClientEvent("vehicle:continueRetrievingItem", userSource, plate, item, quantity)
                         return
-                      end
                     end
-                    -- not in vehicle at all:
-                    TriggerClientEvent("usa:notify", userSource, "Item not in vehicle!")
-                  end
                 end
-              end
-            end
-          end
-        end)
-      else
-        TriggerClientEvent("usa:notify", userSource, "Can't carry more than 3 weapons!")
-      end
-    --end)
-  else
-    print("****discontinuing weapon retreival****")
-    TriggerClientEvent("usa:notify", userSource, "Please wait a moment.")
-  end
-end)
+                -- not in vehicle at all:
+                TriggerClientEvent("usa:notify", userSource, "Item not in vehicle!")
+            end)
+        else
+            TriggerClientEvent("usa:notify", userSource, "Can't carry more than 3 weapons!")
+        end
+    else
+        print("****discontinuing weapon retreival****")
+        TriggerClientEvent("usa:notify", userSource, "Please wait a moment.")
+    end
+end) -- TEST
 
 RegisterServerEvent("vehicle:isItemStillInVehicle")
 AddEventHandler("vehicle:isItemStillInVehicle", function(plate, item, quantity)
-  local userSource = tonumber(source)
-  if not vehicles_being_checked[plate] then
-    vehicles_being_checked[plate] = true
-    --print("inside vehicle:isItemStillInVehicle...")
-    --TriggerEvent("es:getPlayerFromId", userSource, function(user)
-    local user = exports["essentialmode"]:getPlayerFromId(userSource)
-      if not item.weight then item.weight = 2 end
-      local temp_item = { weight = item.weight, quantity = quantity}
-      --print("seeing if user can hold item with weight: " .. temp_item.weight * temp_item.quantity)
-      if user.getCanActiveCharacterHoldItem(temp_item) then
-        TriggerEvent("es:getPlayers", function(players)
-          if players then
-            for id, player in pairs(players) do
-              local player_vehicles = player.getActiveCharacterData("vehicles")
-              if player_vehicles then
-                for i = 1, #player_vehicles do
-                  local veh = player_vehicles[i]
-                  if string.find(plate, tostring(veh.plate)) then -- this is the vehicle whose inventory we want to target
-                    local vehicle_inventory = veh.inventory
-                    for j = 1, #vehicle_inventory do
-                      local vehicle_inventory_item = vehicle_inventory[j]
-                      if vehicle_inventory_item.name == item.name then
+    local userSource = tonumber(source)
+    if not vehicles_being_checked[plate] then
+        vehicles_being_checked[plate] = true
+        local user = exports["essentialmode"]:getPlayerFromId(userSource)
+        if not item.weight then item.weight = 2 end
+        local temp_item = { weight = item.weight, quantity = quantity}
+        if user.getCanActiveCharacterHoldItem(temp_item) then
+            GetVehicleInventory(plate, function(inv)
+                for j = 1, #inv do
+                    local vehicle_inventory_item = inv[j]
+                    if vehicle_inventory_item.name == item.name then
                         if vehicle_inventory_item.quantity >= quantity then
-                          print("item was still in vehicle to retrieve and had enough quantity!")
-                          TriggerClientEvent("vehicle:continueRetrievingItem", userSource, plate, item, quantity)
-                          return
+                            -- item was still in vehicle to retrieve and had enough quantity --
+                            TriggerClientEvent("vehicle:continueRetrievingItem", userSource, plate, item, quantity)
+                            return
                         else
-                          TriggerClientEvent("usa:notify", userSource, "Quantity input too high!")
-                          return
+                            TriggerClientEvent("usa:notify", userSource, "Quantity input too high!")
+                            return
                         end
-                      end
                     end
-                    -- not in vehicle at all:
-                    TriggerClientEvent("usa:notify", userSource, "Item not in vehicle!")
-                  end
                 end
-              end
-            end
-          end
-        end)
-      else
+                -- not in vehicle at all:
+                TriggerClientEvent("usa:notify", userSource, "Item not in vehicle!")
+            end)
+        else
+            vehicles_being_checked[plate] = nil
+            TriggerClientEvent("usa:notify", userSource, "Inventory is full.")
+        end
+    else
+        print("****discontinuing inventory item retrieval****")
+        TriggerClientEvent("usa:notify", userSource, "Please wait a moment.")
+        -- experimental:
         vehicles_being_checked[plate] = nil
-        TriggerClientEvent("usa:notify", userSource, "Inventory is full.")
-      end
-    --end)
-  else
-    print("****discontinuing inventory item retrieval****")
-    TriggerClientEvent("usa:notify", userSource, "Please wait a moment.")
-    -- experimental:
-    vehicles_being_checked[plate] = nil
-  end
-end)
+    end
+end) -- TEST
 
 RegisterServerEvent("vehicle:canVehicleHoldItem")
 AddEventHandler("vehicle:canVehicleHoldItem", function(vehId, plate, item, quantity)
-  print("checking to see if vehicle has enough room for item: " .. item.name .. ", quantity: " .. quantity)
-  local userSource = tonumber(source)
-  local current_weight = 0.0
-  TriggerEvent("es:getPlayers", function(players)
-    if players then
-      for id, player in pairs(players) do
-        local player_vehicles = player.getActiveCharacterData("vehicles")
-        if player_vehicles then
-          for i = 1, #player_vehicles do
-            local veh = player_vehicles[i]
-			if plate and tostring(veh.plate) then
-				if string.find(plate, tostring(veh.plate)) then -- this is the vehicle whose inventory we want to target
-				  local vehicle_inventory = veh.inventory
-				  for j = 1, #vehicle_inventory do
-					local vehicle_inventory_item = vehicle_inventory[j]
-					if not vehicle_inventory_item.weight then vehicle_inventory_item.weight = 2.0 end
-					current_weight = current_weight + (vehicle_inventory_item.weight * vehicle_inventory_item.quantity) -- add item weight to total
-				  end
-				  print("current veh weight: " .. current_weight)
-				  print("type veh.storage_capacity: " .. type(veh.storage_capacity))
-				  -- add check for old vehicles that didn't have storage capacity property when purchased:
-				  if not veh.storage_capacity then print("veh.storage_capacity did not exist! setting to 100.0!") veh.storage_capacity = 100.0 else print("vehicle.storage_capacity already existed! at: " .. veh.storage_capacity) end
-				  -- add check for items with no weight property:
-				  if not item.weight then item.weight = 1 end
-				  -- total weight calculated, call appropriate client function
-				  if current_weight + (item.weight * quantity) <= veh.storage_capacity then
-					-- not full, able to store item
-					print("not full, storing item inside a: " .. veh.model .. "...")
-					print("veh storage: " .. current_weight + (item.weight * quantity) .. "/" .. veh.storage_capacity)
-					TriggerClientEvent("vehicle:continueStoringItem", userSource, vehId, plate, item, quantity)
-					TriggerClientEvent("usa:notify", userSource, "Item stored! (" .. current_weight + (item.weight * quantity) .. "/" .. veh.storage_capacity .. ")")
-				  else
-					-- vehicle storage full
-					print("veh storage full, not storing item!")
-					print("veh storage: " .. current_weight .. "/" .. veh.storage_capacity)
-					TriggerClientEvent("usa:notify", userSource, "Vehicle storage full! (" .. current_weight .. "/" .. veh.storage_capacity .. ")")
-				  end
-				  return
-				end
-			end
-          end
+    print("checking to see if vehicle has enough room for item: " .. item.name .. ", quantity: " .. quantity)
+    local userSource = tonumber(source)
+    local current_weight = 0.0
+    GetVehicleInventoryAndCapacity(plate, function(inv, capacity)
+        for j = 1, #inv do
+            local vehicle_inventory_item = inv[j]
+            if not vehicle_inventory_item.weight then
+                vehicle_inventory_item.weight = 2.0
+            end
+            current_weight = current_weight + (vehicle_inventory_item.weight * vehicle_inventory_item.quantity) -- add item weight to total
         end
+        -- add check for old vehicles that didn't have storage capacity property when purchased:
+        if not capacity then
+            -- veh.storage_capacity did not exist! set to to 100.0 --
+            capacity = 100.0
+        end
+        -- add check for items with no weight property:
+        if not item.weight then item.weight = 1 end
+        -- total weight calculated, call appropriate client function
+        if current_weight + (item.weight * quantity) <= capacity then
+            -- not full, able to store item
+            TriggerClientEvent("vehicle:continueStoringItem", userSource, vehId, plate, item, quantity)
+            TriggerClientEvent("usa:notify", userSource, "Item stored! (" .. current_weight + (item.weight * quantity) .. "/" .. capacity .. ")")
+        else
+            -- vehicle storage full
+            TriggerClientEvent("usa:notify", userSource, "Vehicle storage full! (" .. current_weight .. "/" .. capacity .. ")")
+        end
+        return
+    end)
+end) -- TEST
+
+function GetVehicleInventory(plate, cb)
+	-- query for the information needed from each vehicle --
+	local endpoint = "/vehicles/_design/vehicleFilters/_view/getVehicleInventoryByPlate"
+	local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+	PerformHttpRequest(url, function(err, responseText, headers)
+		if responseText then
+      local inventory = {}
+			--print("veh inventory: " .. responseText)
+			local data = json.decode(responseText)
+      if data.rows and data.rows[1].value then
+			     inventory = data.rows[1].value[1] -- inventory
       end
-    end
-  end)
-end)
+			cb(inventory)
+		end
+	end, "POST", json.encode({
+		keys = { plate }
+		--keys = { "86CSH075" }
+	}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+end
+
+function GetVehicleInventoryAndCapacity(plate, cb)
+	-- query for the information needed from each vehicle --
+	local endpoint = "/vehicles/_design/vehicleFilters/_view/getVehicleInventoryAndCapacityByPlate"
+	local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+	PerformHttpRequest(url, function(err, responseText, headers)
+		if responseText then
+      local inventory = {}
+      local capacity = 0.0
+			--print("veh inventory: " .. responseText)
+			local data = json.decode(responseText)
+      if data.rows[1] then
+  			inventory = data.rows[1].value[1] -- inventory
+        capacity = data.rows[1].value[2] -- capacity
+      end
+			cb(inventory, capacity)
+		end
+	end, "POST", json.encode({
+		keys = { plate }
+		--keys = { "86CSH075" }
+	}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+end

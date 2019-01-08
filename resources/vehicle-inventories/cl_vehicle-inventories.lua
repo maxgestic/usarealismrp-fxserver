@@ -7,7 +7,7 @@ local SETTINGS = {
 --------------------
 RegisterNetEvent("vehicle:loadedInventory")
 AddEventHandler("vehicle:loadedInventory", function(target_vehicle_inventory)
-  --print("loaded target vehicle inventory with #: " .. #target_vehicle_inventory)
+  print("loaded target vehicle inventory with #: " .. #target_vehicle_inventory)
   if target_vehicle_inventory then
     if #target_vehicle_inventory > 0 then
       for i = 1, #target_vehicle_inventory do
@@ -33,25 +33,7 @@ AddEventHandler("vehicle:checkTargetVehicleForStorage", function(item, quantity)
   local lock_status = GetVehicleDoorLockStatus(target_vehicle)
   if lock_status ~= 2 then -- not locked
     if target_vehicle ~= 0 then -- there is a detected vehicle
-
       local target_vehicle_plate = GetVehicleNumberPlateText(target_vehicle)
-      --[[
-      --print("plate #: " .. target_vehicle_plate)
-      SetVehicleDoorOpen(target_vehicle, 5, false, false)
-      -- play animation:
-      local anim = {
-        dict = "anim@mp_fireworks",
-        name = "place_firework_1_rocket"
-      }
-      TriggerEvent("usa:playAnimation", anim.name, anim.dict, 4)
-      --print("calling vehicle:storeItem with item.quantity: " .. item.quantity .. ", which will be changed to: " .. quantity)
-      TriggerServerEvent("vehicle:storeItem", target_vehicle_plate, item, quantity)
-      TriggerServerEvent("usa:removeItem", item, quantity)
-      -- remove weapon from ped if type was weapon:
-      if item.type == "weapon" then
-        RemoveWeaponFromPed(GetPlayerPed(-1), item.hash)
-      end
-      --]]
       TriggerServerEvent("vehicle:canVehicleHoldItem", target_vehicle, target_vehicle_plate, item, quantity)
     end
   else
@@ -103,8 +85,6 @@ end)
 
 RegisterNetEvent("vehicle:continueRetrievingItem")
 AddEventHandler("vehicle:continueRetrievingItem", function(plate, item, quantity)
-  -- Remove/decrement full item with name data.itemName from vehicle inventory with plate matching target_vehicle.plate:
-  --print("removing item (" .. item.name .. ") from vehicle inventory, quantity: " .. quantity)
   TriggerServerEvent("vehicle:removeItem", item, quantity, plate)
   -- Add/increment full item with name data.itemName into player's inventory:
   item.quantity = quantity
@@ -137,20 +117,17 @@ end)
 -- OPEN/CLOSE TARGET VEHICLE INVENTORY --
 -----------------------------------------
 Citizen.CreateThread(function()
-	while true do
-		Wait(0)
-    --print("waiting for key press in veh inventories resource...")
-		if IsControlJustPressed(1, SETTINGS.inventory_key) then
-      local target_vehicle = getVehicleInFrontOfUser()
-      --print("target_vehicle: " .. target_vehicle)
-      if target_vehicle ~= 0 then
-        local target_vehicle_plate = GetVehicleNumberPlateText(target_vehicle)
-        --print("plate #: " .. target_vehicle_plate)
-        SetVehicleDoorOpen(target_vehicle, 5, false, false)
-        TriggerServerEvent("vehicle:getInventory", target_vehicle_plate)
-      end
+    while true do
+        Wait(0)
+        if IsControlJustPressed(1, SETTINGS.inventory_key) then
+            local target_vehicle = getVehicleInFrontOfUser()
+            if target_vehicle ~= 0 then
+                local target_vehicle_plate = GetVehicleNumberPlateText(target_vehicle)
+                SetVehicleDoorOpen(target_vehicle, 5, false, false)
+                TriggerServerEvent("vehicle:getInventory", target_vehicle_plate)
+            end
+        end
     end
-	end
 end)
 
 -----------------------

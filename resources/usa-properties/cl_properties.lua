@@ -120,6 +120,7 @@ end)
 -- retrieving vehicle --
 RegisterNetEvent("properties:retrieveVehicle")
 AddEventHandler("properties:retrieveVehicle", function(vehicle)
+    print("retrieving vehicle! hash: " .. vehicle.hash)
   local playerVehicle = vehicle
   local modelHash = vehicle.hash
   local plateText = vehicle.plate
@@ -693,7 +694,7 @@ Citizen.CreateThread(function()
                                             ---------------------------
                                             for i = 1, #menu_data.vehicles do
                                                 local veh = menu_data.vehicles[i]
-                                                local item = NativeUI.CreateItem(veh.make .. " " .. veh.model, "Press enter to withdraw this vehicle.")
+                                                local item = NativeUI.CreateItem((veh.make or "INVALIDMAKE") .. " " .. (veh.model or "INVALIDMODEL"), "Press enter to withdraw this vehicle.")
                                                 item.Activated = function(parentmenu, selected)
                                                     RemoveMenuPool(_menuPool)
                                                     TriggerServerEvent("properties:retrieveVehicle", name, veh)

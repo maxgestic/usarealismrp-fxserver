@@ -1,3 +1,7 @@
+--# Public vehicle parking garages to store player vehicles
+--# For: USA Realism RP
+--# By: minipunch
+
 local MENU_OPEN_KEY = 38
 local closest_shop = nil
 
@@ -11,11 +15,11 @@ _menuPool:Add(mainMenu)
 -- custom events --
 RegisterNetEvent("garage:openMenuWithVehiclesLoaded")
 AddEventHandler("garage:openMenuWithVehiclesLoaded", function(userVehicles)
-	CreateBarberShopMenu(mainMenu, userVehicles)
+	CreateGarageMenu(mainMenu, userVehicles)
 end)
 -- end custom events --
 
-function CreateBarberShopMenu(menu, vehicles)
+function CreateGarageMenu(menu, vehicles)
 	-- remove any previous versions --
 	mainMenu:Clear()
 	-- Add vehicles to menu --
@@ -37,7 +41,7 @@ function CreateBarberShopMenu(menu, vehicles)
 				if GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), -1) == GetPlayerPed(-1) then
 					local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
 					TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-						TriggerServerEvent("garage:checkVehicleStatus", vehicle, property)
+						TriggerServerEvent("garage:vehicleSelected", vehicle, property)
 					end)
 				else
 					TriggerEvent("usa:notify", "You must be in the driver's seat!")
@@ -45,7 +49,7 @@ function CreateBarberShopMenu(menu, vehicles)
 			else
 				local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
 				TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-					TriggerServerEvent("garage:checkVehicleStatus", vehicle, property)
+					TriggerServerEvent("garage:vehicleSelected", vehicle, property)
 				end)
 			end
 			-- close menu --

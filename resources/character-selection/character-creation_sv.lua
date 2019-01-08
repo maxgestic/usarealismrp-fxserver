@@ -135,23 +135,25 @@ AddEventHandler("character:loadCharacter", function(activeSlot)
 	local userSource = tonumber(source)
 	TriggerClientEvent('chat:removeSuggestionAll', userSource)
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		if user then
-			local characters = user.getCharacters()
-			local character = characters[activeSlot]
-			local myGroup = user.getGroup()
-			TriggerClientEvent("character:setCharacter", userSource, character)
-			print("loaded character at slot #" .. activeSlot .. " with #weapons = " .. #(character.weapons))
-			-- set commands
-			for k,v in pairs(exports['essentialmode']:getCommands()) do
-				if v.job == "everyone" and exports['essentialmode']:CanGroupTarget(myGroup, v.group) then
-					TriggerClientEvent('chat:addSuggestion', userSource, '/' .. k, v.help, v.params)
-				end
+	if user then
+		local characters = user.getCharacters()
+		local character = characters[activeSlot]
+		local myGroup = user.getGroup()
+		TriggerClientEvent("character:setCharacter", userSource, character)
+		print("loaded character at slot #" .. activeSlot .. " with #weapons = " .. #(character.weapons))
+		-- set commands --
+		for k,v in pairs(exports['essentialmode']:getCommands()) do
+			if v.job == "everyone" and exports['essentialmode']:CanGroupTarget(myGroup, v.group) then
+				TriggerClientEvent('chat:addSuggestion', userSource, '/' .. k, v.help, v.params)
 			end
-			-- check dmv / firearm permit license status
-			TriggerEvent("police:checkSuspension", userSource)
-			-- see if spawn point is still valid
-			TriggerEvent("properties:checkSpawnPoint", userSource)
 		end
+		-- check dmv / firearm permit license status --
+		TriggerEvent("police:checkSuspension", userSource)
+		-- see if spawn point is still valid --
+		TriggerEvent("properties:checkSpawnPoint", userSource)
+		-- Temporary event to automatically migrate existing player vehicles into new DB --
+		TriggerEvent("vehicles:migrateCheck", user, activeSlot)
+	end
 end)
 
 RegisterServerEvent("character:setSpawnPoint")

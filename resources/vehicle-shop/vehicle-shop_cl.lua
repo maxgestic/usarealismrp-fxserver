@@ -39,8 +39,8 @@ mainMenu.OnItemSelect = function(menu, item, index)
 		sell_submenu:Clear()
 		TriggerServerEvent("vehShop:loadVehiclesToSell")
 		while not menu_data.vehicles_to_sell do
-			Wait(100)
-			print("waiting for vehicles to sell")
+			Wait(50)
+			--print("waiting for vehicles to sell")
 		end
 		if #menu_data.vehicles_to_sell > 0 then
 			for i = 1, #menu_data.vehicles_to_sell do
@@ -112,17 +112,17 @@ function CreateMenu(menu)
 		insurance_submenu:AddItem(item)
 		-- Listeners --
 		insurance_submenu.OnItemSelect = function(menu, item, index)
-			print("item selected!")
+			--print("item selected!")
 			local selected = item.Text._Text
 			if selected == "Make a claim" then
 				menu_data.vehicles_to_claim = nil
 				claim_submenu:Clear()
-				print("loading vehs to claim")
+				--print("loading vehs to claim")
 				TriggerServerEvent("vehShop:loadVehicles", true)
 
 				while not menu_data.vehicles_to_claim do
 					Wait(100)
-					print("waiting for vehicles to claim")
+					--print("waiting for vehicles to claim")
 				end
 
 				if menu_data.vehicles_to_claim then
@@ -235,7 +235,7 @@ RegisterNetEvent("vehShop:displayVehiclesToSell")
 AddEventHandler("vehShop:displayVehiclesToSell", function(vehicles)
 	if vehicles then
 		if #vehicles > 0 then
-			print("#vehicles " .. #vehicles)
+			--print("#vehicles " .. #vehicles)
 			menu_data.vehicles_to_sell = vehicles
 		else
 			menu_data.vehicles_to_sell = {}
@@ -249,7 +249,7 @@ AddEventHandler("vehShop:loadedVehicles", function(vehicles)
 		--menu.vehicles = vehicles
 		menu_data.vehicles_to_claim = {}
 		for i = 1, #vehicles do
-			if not vehicles[i].stored_location then
+			if not vehicles[i].stored_location  or vehicles[i].stored_location == "" then
 				table.insert(menu_data.vehicles_to_claim, vehicles[i]) -- add only vehicles not stored at a property (prevent duplication by making a claim when stored at your house)
 			end
 		end

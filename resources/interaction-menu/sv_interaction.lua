@@ -44,56 +44,60 @@ RegisterServerEvent("interaction:loadVehicleInventoryForInteraction")
 AddEventHandler("interaction:loadVehicleInventoryForInteraction", function(plate)
 	--print("loading vehicle inventory with plate #: " .. plate)
 	local userSource = tonumber(source)
-	TriggerEvent("es:getPlayers", function(players)
-		if players then
-			for id, player in pairs(players) do
-				local player_vehicles = player.getActiveCharacterData("vehicles")
-				if player_vehicles then
-					for i = 1, #player_vehicles do
-						local veh = player_vehicles[i]
-						if string.find(plate, tostring(veh.plate)) then
-							--print("found a matching plate! sending inventory to client!")
-							TriggerClientEvent("interaction:vehicleInventoryLoaded", userSource, veh.inventory)
-						end
-					end
-				end
-			end
-		end
+	GetVehicleInventory(plate, function(inv)
+		--print("found a matching plate! sending inventory to client!")
+		TriggerClientEvent("interaction:vehicleInventoryLoaded", userSource, inv)
 	end)
 end)
+
+function GetVehicleInventory(plate, cb)
+	-- query for the information needed from each vehicle --
+	local endpoint = "/vehicles/_design/vehicleFilters/_view/getVehicleInventoryByPlate"
+	local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+	PerformHttpRequest(url, function(err, responseText, headers)
+		if responseText then
+			local inventory = {}
+			--print("veh inventory: " .. responseText)
+			local data = json.decode(responseText)
+			if data.rows[1] then
+				inventory = data.rows[1].value[1] -- inventory
+			end
+			cb(inventory)
+		end
+	end, "POST", json.encode({
+		keys = { plate }
+		--keys = { "86CSH075" }
+	}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+end
 
 RegisterServerEvent("interaction:loadInventoryForInteraction")
 AddEventHandler("interaction:loadInventoryForInteraction", function()
 	--print("loading inventory for interaction menu...")
 	local userSource = tonumber(source)
-	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		if user then
-			local inventory = user.getActiveCharacterData("inventory")
-			local weapons = user.getActiveCharacterData("weapons")
-			local licenses = user.getActiveCharacterData("licenses")
-			TriggerClientEvent("interaction:inventoryLoaded", userSource, inventory, weapons, licenses)
-		else
-			--print("interaction: user did not exist")
-		end
-	--end)
+	if user then
+		local inventory = user.getActiveCharacterData("inventory")
+		local weapons = user.getActiveCharacterData("weapons")
+		local licenses = user.getActiveCharacterData("licenses")
+		TriggerClientEvent("interaction:inventoryLoaded", userSource, inventory, weapons, licenses)
+	else
+		--print("interaction: user did not exist")
+	end
 end)
 
 RegisterServerEvent("interaction:checkForPhone")
 AddEventHandler("interaction:checkForPhone", function()
 	local userSource = tonumber(source)
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
-		local inventory = user.getActiveCharacterData("inventory")
-		for i = 1, #inventory do
-			local item = inventory[i]
-			if item.name == "Cell Phone" then
-				TriggerClientEvent("interaction:playerHadPhone", userSource)
-				return
-			end
+	local inventory = user.getActiveCharacterData("inventory")
+	for i = 1, #inventory do
+		local item = inventory[i]
+		if item.name == "Cell Phone" then
+			TriggerClientEvent("interaction:playerHadPhone", userSource)
+			return
 		end
-		TriggerClientEvent("interaction:notify", userSource, "You have no cell phone to open!")
-	--end)
+	end
+	TriggerClientEvent("interaction:notify", userSource, "You have no cell phone to open!")
 end)
 
 RegisterServerEvent("interaction:removeItemFromPlayer")
@@ -101,23 +105,21 @@ AddEventHandler("interaction:removeItemFromPlayer", function(itemName)
 	itemName = removeQuantityFromItemName(itemName)
 	local userSource = tonumber(source)
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
-		local inventory = user.getActiveCharacterData("inventory")
-		for i = 1, #inventory do
-			local item = inventory[i]
-			if item.name == itemName then
-				if item.quantity > 1 then
-					inventory[i].quantity = item.quantity - 1
-					user.setActiveCharacterData("inventory", inventory)
-					return
-				else
-					table.remove(inventory, i)
-					user.setActiveCharacterData("inventory", inventory)
-					return
-				end
+	local inventory = user.getActiveCharacterData("inventory")
+	for i = 1, #inventory do
+		local item = inventory[i]
+		if item.name == itemName then
+			if item.quantity > 1 then
+				inventory[i].quantity = item.quantity - 1
+				user.setActiveCharacterData("inventory", inventory)
+				return
+			else
+				table.remove(inventory, i)
+				user.setActiveCharacterData("inventory", inventory)
+				return
 			end
 		end
-	--end)
+	end
 end)
 
 RegisterServerEvent("interaction:dropItem")

@@ -213,24 +213,11 @@ AddEventHandler("LSC:finished", function(veh)
 	--Do w/e u need with all this stuff when vehicle drives out of lsc
 end)
 
--- TODO: index vehicles as hash map with plate as key for faster look up
 RegisterServerEvent("customs:saveCarData")
 AddEventHandler("customs:saveCarData", function(data, plate, source)
-	local userSource = tonumber(source)
-    --TriggerEvent('es:getPlayerFromId', userSource, function(user)
-		local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		if user then
-			local userVehicles = user.getActiveCharacterData("vehicles")
-			for i = 1, #userVehicles do
-				local vehicle = userVehicles[i]
-				if string.match(plate,tostring(vehicle.plate)) ~= nil or plate == vehicle.plate then -- player actually owns car that is being stored
-					print("player vehicle found.. saving data")
-					vehicle.customizations = data
-					userVehicles[i] = vehicle
-					user.setActiveCharacterData("vehicles", userVehicles)
-					break
-				end
-			end
-		end
-	--end)
+	TriggerEvent('es:exposeDBFunctions', function(couchdb)
+		couchdb.updateDocument("vehicles", plate, { customizations = data }, function()
+			print("Customizations saved!")
+		end)
+	end)
 end)

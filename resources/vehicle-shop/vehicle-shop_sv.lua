@@ -2,12 +2,11 @@
 --# for: USA REALISM RP
 --# simple vehicle shop script to preview and purchase a vehicle
 
+-- PERFORM FIRST TIME DB CHECK --
+exports["globals"]:PerformDBCheck("vehicle-shop", "vehicles", nil)
+
 local price, vehicleName, hash, plate
 local MAX_PLAYER_VEHICLES = 500
-
--- prevent memory edit cheaters
-local MIN_VEHICLE_PRICE = 500
-local MAX_VEHICLE_SELL_PRICE = .50 * 4000000
 
 -- VEHICLES
 local vehicleShopItems = {
@@ -83,7 +82,7 @@ local vehicleShopItems = {
 			{make = "Imponte", model = "Phoenix", price = 90000, hash = "phoenix", storage_capacity = 170.0}
 		},
 		["Trucks"] = {
-			{make = "Karin", model = "Rebel", price = 19500, hash = 1207771834, storage_capacity = 230.0},
+			{make = "Karin", model = "Rebel", price = 19500, hash = "rebel", storage_capacity = 230.0},
 			{make = "Karin", model = "Rebel 2", price = 30500, hash = -2045594037, storage_capacity = 230.0},
 			{make = "Vapid", model = "Bobcat XL", price = 10500, hash = 1069929536, storage_capacity = 230.0},
 			{make = "Ford", model = "F350 Super Duty", price = 55000, hash = -599568815, storage_capacity = 250.0},
@@ -333,57 +332,45 @@ local vehicleShopItems = {
 	}
 }
 
-function stringSplit(inputstr, sep)
-        if sep == nil then
-                sep = "%s"
-        end
-        local t={} ; i=1
-        for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-                t[i] = str
-                i = i + 1
-        end
-        return t
-end
-
-function getPlayersLicense(source) -- TODO: UPDATE THIS FUNCTION TO CORRECLATE TO UPDATED DB DOCUMENT STRUCTURE
-	local userSource = tonumber(source)
-	--TriggerEvent('es:getPlayerFromId', userSource, function(user)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		local licenses = user.getActiveCharacterData("license")
-		for i = 1, #licenses do
-			if licenses[i].name == "Driver's License" then
-				license = licenses[i]
-				return license
+-- Temporary event handler to help move data from character to separate db, leaving only array of foreign keys (plate #'s) --
+RegisterServerEvent("vehicles:migrateCheck")
+AddEventHandler("vehicles:migrateCheck", function(user, slot)
+	--print("started vehicle DB migration check!")
+	local characters = user.getCharacters()
+	local character = characters[slot]
+	local toAdd = {}
+	-- extract vehicles from user document --
+	for i = 1, #character.vehicles do
+		if type(character.vehicles[i]) == "table" then -- need to convert to STRING array of plate numbers
+			if character.vehicles[i].plate then
+				-- add document to vehicles that will be saved to database --
+				character.vehicles[i]._id = character.vehicles[i].plate
+				table.insert(toAdd, character.vehicles[i])
+				-- convert to string --
+				local plate = character.vehicles[i].plate
+				character.vehicles[i] = plate
+				characters[slot] = character
 			end
 		end
-		return nil
-	--end)
-end
-
-function alreadyHasVehicle(source, vehName)
-	--TriggerEvent('es:getPlayerFromId', source, function(user)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-		local vehicles = user.getActiveCharacterData("vehicles")
-		for i = 1, #vehicles do
-			if vehicles[i].model == vehName then
-				return true
-			end
-		end
-		return false
-	--end)
-end
-
-function alreadyHasAnyVehicle(source)
-	--TriggerEvent('es:getPlayerFromId', source, function(user)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-		local cars = user.getActiveCharacterData("vehicles")
-		if #cars > 0 then
-			return true
-		else
-			return false
-		end
-	--end)
-end
+	end
+	-- add to vehicles database --
+	if #toAdd > 0 then
+		-- save updated vehicle array on user --
+		user.setCharacters(characters)
+		--print("ended vehicle DB migration check!")
+		-- add new vehicles to DB --
+		local endpoint = "/vehicles/_bulk_docs"
+		local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+		PerformHttpRequest(url, function(err, responseText, headers)
+			print("** Post bulk vehicle migration check error code: " .. err .. " **")
+			--print("response: "  .. responseText)
+		end, "POST", json.encode({
+			docs = toAdd
+		}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+	else
+		print("Did not need to perform vehicle DB migration!")
+	end
+end)
 
 RegisterServerEvent("vehicle-shop:loadItems")
 AddEventHandler("vehicle-shop:loadItems", function()
@@ -394,278 +381,265 @@ RegisterServerEvent("vehShop:buyInsurance")
 AddEventHandler("vehShop:buyInsurance", function(userSource)
 	--print("user source = " .. userSource)
 	local INSURANCE_COVERAGE_MONTHLY_COST = 7500
-	TriggerEvent('es:getPlayerFromId', userSource, function(user)
-		local insurance = user.getActiveCharacterData("insurance")
-		local user_money = user.getActiveCharacterData("money")
-		if user_money >= INSURANCE_COVERAGE_MONTHLY_COST then
-			local insurancePlan = {
-				planName = "T. Ends Auto Insurance",
-				type = "auto",
-				valid = true,
-				purchaseDate = os.date('%m-%d-%Y %H:%M:%S', os.time()),
-				purchaseTime = os.time()
-			}
-			user.setActiveCharacterData("insurance", insurancePlan)
-			print("taking $" .. INSURANCE_COVERAGE_MONTHLY_COST .. " from player for auto insurance!")
-			user.setActiveCharacterData("money", user_money - INSURANCE_COVERAGE_MONTHLY_COST)
-			TriggerClientEvent("vehShop:notify", userSource, "~w~Thanks for purchasing auto insurance coverage! Your coverage expires in ~y~31~w~ days.")
-		else
-			print("player did not have enough money to buy insurance")
-			TriggerClientEvent("vehShop:notify", userSource, "You ~r~don't have enough money~w~ to buy auto insurance coverage!")
-		end
-	end)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
+	local insurance = user.getActiveCharacterData("insurance")
+	local user_money = user.getActiveCharacterData("money")
+	if user_money >= INSURANCE_COVERAGE_MONTHLY_COST then
+		local insurancePlan = {
+			planName = "T. Ends Auto Insurance",
+			type = "auto",
+			valid = true,
+			purchaseDate = os.date('%m-%d-%Y %H:%M:%S', os.time()),
+			purchaseTime = os.time()
+		}
+		user.setActiveCharacterData("insurance", insurancePlan)
+		print("taking $" .. INSURANCE_COVERAGE_MONTHLY_COST .. " from player for auto insurance!")
+		user.setActiveCharacterData("money", user_money - INSURANCE_COVERAGE_MONTHLY_COST)
+		TriggerClientEvent("vehShop:notify", userSource, "~w~Thanks for purchasing auto insurance coverage! Your coverage expires in ~y~31~w~ days.")
+	else
+		print("player did not have enough money to buy insurance")
+		TriggerClientEvent("vehShop:notify", userSource, "You ~r~don't have enough money~w~ to buy auto insurance coverage!")
+	end
 end)
 
 RegisterServerEvent("vehShop:fileClaim")
 AddEventHandler("vehShop:fileClaim", function(vehicle_to_claim)
 	local userSource = tonumber(source)
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		local user_vehicles = user.getActiveCharacterData("vehicles")
-		local user_bank = user.getActiveCharacterData("bank")
-		if user_vehicles then
-			for i = 1, #user_vehicles do
-				local veh = user_vehicles[i]
-				if veh then
-					if veh.plate == vehicle_to_claim.plate then
-						local BASE_FEE = 300
-						local PERCENTAGE = .10
-						local CLAIM_PROCESSING_FEE = round(BASE_FEE + (PERCENTAGE * vehicle_to_claim.price))
-						if CLAIM_PROCESSING_FEE <= user_bank then
-							-- set vehicle stats --
-							user_vehicles[i].inventory = {} -- empty inventory to prevent duplicating
-							user_vehicles[i].stored = true -- set to true for retrieval from garage
-							user_vehicles[i].impounded = false
-							user.setActiveCharacterData("vehicles", user_vehicles)
-							-- remove money --
-							user.setActiveCharacterData("bank", user_bank - CLAIM_PROCESSING_FEE)
-							-- notifiy --
-							if veh.make and veh.model then
-								TriggerClientEvent("usa:notify", userSource, "Filed an insurance claim for your " .. veh.make .. " " .. veh.model .. ".\n~y~Fee:~w~ $" .. CLAIM_PROCESSING_FEE)
-							else
-								TriggerClientEvent("usa:notify", userSource, "Filed an insurance claim for your " .. veh.model .. ".\n~y~Fee:~w~ $" .. CLAIM_PROCESSING_FEE)
-							end
-							-- remove vehicle damages if any --
-							TriggerClientEvent("garage:removeDamages", userSource, veh.plate)
-						else
-							TriggerClientEvent("usa:notify", userSource, "You don't have enough money to make a claim on that vehicle.")
-						end
-					end
+	local user_bank = user.getActiveCharacterData("bank")
+	local BASE_FEE = 300
+	local PERCENTAGE = .10
+	local CLAIM_PROCESSING_FEE = math.floor(BASE_FEE + (PERCENTAGE * vehicle_to_claim.price))
+	if CLAIM_PROCESSING_FEE <= user_bank then
+		-- set vehicle stats --
+		TriggerEvent('es:exposeDBFunctions', function(couchdb)
+		    couchdb.updateDocument("vehicles", vehicle_to_claim.plate, {inventory = {}, stored = true, impounded = false}, function()
+				print("** Vehicle updated in DB! **")
+				-- remove money --
+				user.setActiveCharacterData("bank", user_bank - CLAIM_PROCESSING_FEE)
+				-- notifiy --
+				if vehicle_to_claim.make and vehicle_to_claim.model then
+					TriggerClientEvent("usa:notify", userSource, "Filed an insurance claim for your " .. vehicle_to_claim.make .. " " .. vehicle_to_claim.model .. ".\n~y~Fee:~w~ $" .. CLAIM_PROCESSING_FEE)
+				else
+					TriggerClientEvent("usa:notify", userSource, "Filed an insurance claim for your " .. vehicle_to_claim.model .. ".\n~y~Fee:~w~ $" .. CLAIM_PROCESSING_FEE)
 				end
-			end
-		end
+				-- remove vehicle damages if any --
+				TriggerClientEvent("garage:removeDamages", userSource, vehicle_to_claim.plate)
+			end)
+		end)
+	else
+		TriggerClientEvent("usa:notify", userSource, "You don't have enough money to make a claim on that vehicle.")
+	end
 end)
 
--- function to format expiration month correctly
-function padzero(s, count)
-    return string.rep("0", count-string.len(s)) .. s
-end
+-- for claim --
+RegisterServerEvent("vehShop:loadVehicles")
+AddEventHandler("vehShop:loadVehicles", function(check_insurance)
+	local vehicles_to_send = {}
+	local userSource = tonumber(source)
+	local user = exports["essentialmode"]:getPlayerFromId(userSource)
+	if check_insurance then
+		local user_insurance = user.getActiveCharacterData("insurance")
+		if user_insurance.type == "auto" then
+			-- get the plates of the desired vehicles to use in the query --
+			local vehicles = user.getActiveCharacterData("vehicles")
+			-- query for the information needed from each vehicle --
+			local endpoint = "/vehicles/_design/vehicleFilters/_view/getVehiclesForMenuWithPlates"
+			local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+			PerformHttpRequest(url, function(err, responseText, headers)
+				if responseText then
+					local responseVehArray = {}
+					--print(responseText)
+					local data = json.decode(responseText)
+					if data.rows then
+						for i = 1, #data.rows do
+							local veh = {
+								make = data.rows[i].value[1], -- make
+								model = data.rows[i].value[2], -- model
+								price = data.rows[i].value[3], -- price
+								stored = data.rows[i].value[4], -- 'stored' bool value
+								stored_location = data.rows[i].value[5], -- stored_location
+								plate = data.rows[i].value[6] -- plate
+							}
+							if not veh.stored then
+								table.insert(responseVehArray, veh)
+							end
+						end
+					end
+					-- send vehicles to client for displaying --
+					print("# of vehicles loaded for menu: " .. #responseVehArray)
+					TriggerClientEvent("vehShop:loadedVehicles", userSource, responseVehArray, true)
+				end
+			end, "POST", json.encode({
+				keys = vehicles
+				--keys = { "86CSH075" }
+			}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+		else
+			print("player has no auto insurance!")
+			TriggerClientEvent("chatMessage", userSource, "T. END'S INSURANCE", {255, 78, 0}, "You do not have any auto insurance! Can't make a claim!")
+			TriggerClientEvent("vehShop:loadedVehicles", userSource, vehicles_to_send, true)
+		end
+	end
+end)
 
 RegisterServerEvent("vehShop:checkPlayerInsurance")
 AddEventHandler("vehShop:checkPlayerInsurance", function()
 	print("checking for auto insurance!")
 	local userSource = tonumber(source)
-	--TriggerEvent('es:getPlayerFromId', userSource, function(user)
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		local playerInsurance = user.getActiveCharacterData("insurance")
-		if playerInsurance.type == "auto" then
-			print("found player auto insurance!")
-			if playerHasValidAutoInsurance(playerInsurance) then
-				TriggerClientEvent("chatMessage", userSource, "T. END'S INSURANCE", {255, 78, 0}, "You are already insured!")
-			else
-				print("renewing auto insurance!")
-				TriggerClientEvent("chatMessage", userSource, "T. END'S INSURANCE", {255, 78, 0}, "Your auto insurance coverage was ~r~expired~w~! Renewing...")
-				TriggerEvent("vehShop:buyInsurance", userSource)
-			end
+	local playerInsurance = user.getActiveCharacterData("insurance")
+	if playerInsurance.type == "auto" then
+		print("found player auto insurance!")
+		if playerHasValidAutoInsurance(playerInsurance) then
+			TriggerClientEvent("chatMessage", userSource, "T. END'S INSURANCE", {255, 78, 0}, "You are already insured!")
 		else
-			print("no auto insurance found!")
+			print("renewing auto insurance!")
+			TriggerClientEvent("chatMessage", userSource, "T. END'S INSURANCE", {255, 78, 0}, "Your auto insurance coverage was ~r~expired~w~! Renewing...")
 			TriggerEvent("vehShop:buyInsurance", userSource)
 		end
-	--end)
+	else
+		print("no auto insurance found!")
+		TriggerEvent("vehShop:buyInsurance", userSource)
+	end
 end)
 
 RegisterServerEvent("mini:checkVehicleMoney")
 AddEventHandler("mini:checkVehicleMoney", function(vehicle, property)
-	print("checking vehicle money")
-	print("location: " .. type(location))
 	local playerIdentifier = GetPlayerIdentifiers(source)[1]
 	local userSource = tonumber(source)
-	--TriggerEvent('es:getPlayerFromId', userSource, function(user)
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		local allLicenses = user.getActiveCharacterData("licenses")
-		local license = nil
-		local vehicles = user.getActiveCharacterData("vehicles")
-		local user_money = user.getActiveCharacterData("money")
-		local owner_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
-		if #vehicles <= MAX_PLAYER_VEHICLES then
-			for i = 1, #allLicenses do
-				if allLicenses[i].name == "Driver's License" then
-					license = allLicenses[i]
-					break
-				end
-			end
-			if license ~= nil then
-				if license.status == "valid" then
-					hash = vehicle.hash
-					price = GetVehiclePrice(vehicle)
-					if price >= MIN_VEHICLE_PRICE then
-						if not alreadyHasVehicle(userSource, vehicleName) then
-							if tonumber(price) <= user_money then
-								-- todo: change below plate number
-								--plate = tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9)) .. tostring(math.random(1,9))
-								plate = generate_random_number_plate()
-								if vehicles then
-									user.setActiveCharacterData("money", user_money - tonumber(price))
-									-- give money to car dealership owner --
-									if property then
-										TriggerEvent("properties:addMoney", property.name, round(0.40 * price, 0))
-									end
-									local vehicle = {
-										owner = owner_name,
-										make = vehicle.make,
-										model = vehicle.model,
-										hash = hash,
-										plate = plate,
-										stored = false,
-										price = price,
-										inventory = {},
-										storage_capacity = vehicle.storage_capacity
-									}
-									local vehicle_key = {
-										name = "Key -- " .. plate,
-										quantity = 1,
-										type = "key",
-										owner = owner_name,
-										make = vehicle.make,
-										model = vehicle.model,
-										plate = plate
-									}
-									--  prevent gui menu from breaking i believe (i think 16 is max # of menu items possible)
-									print("buying vehicle")
-									table.insert(vehicles, vehicle)
-									user.setActiveCharacterData("vehicles", vehicles)
-									print("vehicle purchased!")
-									print("vehicle.owner = " .. vehicle.owner)
-									print("vehicle.model = " .. vehicle.model)
-									print("vehicle.plate = " .. vehicle.plate)
-									print("vehicle.stored = " .. tostring(vehicle.stored))
-									print("vehicle.storage_capacity = " .. vehicle.storage_capacity)
-									-- give player the key to the whip
-									local inv = user.getActiveCharacterData("inventory")
-									table.insert(inv, vehicle_key)
-									user.setActiveCharacterData("inventory", inv)
-									-- add vehicle plate to locking resource list:
-									TriggerEvent("lock:addPlate", vehicle.plate)
-									--TriggerEvent("sway:updateDB", userSource)
-									TriggerClientEvent("usa:notify", userSource, "Here are the keys! Thanks for your business!")
-									TriggerClientEvent("vehShop:spawnPlayersVehicle", userSource, hash, plate)
-								end
-							else
-								TriggerClientEvent("usa:notify", userSource, "Not enough money for that vehicle!")
-							end
-						else
-							TriggerClientEvent("usa:notify", userSource, "Already have that vehicle!")
-						end
+	local allLicenses = user.getActiveCharacterData("licenses")
+	local license = nil
+	local vehicles = user.getActiveCharacterData("vehicles")
+	local user_money = user.getActiveCharacterData("money")
+	local owner_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
+	for i = 1, #allLicenses do
+		if allLicenses[i].name == "Driver's License" then
+			license = allLicenses[i]
+			break
+		end
+	end
+	if license ~= nil then
+		if license.status == "valid" then
+			hash = vehicle.hash
+			price = GetVehiclePrice(vehicle)
+			if tonumber(price) <= user_money then
+				-- generate plate # --
+				plate = generate_random_number_plate()
+				if vehicles then
+					-- take user money --
+					user.setActiveCharacterData("money", user_money - tonumber(price))
+					-- give money to car dealership owner --
+					if property then
+						TriggerEvent("properties:addMoney", property.name, math.floor(0.40 * price))
 					end
-				else
-					TriggerClientEvent("usa:notify", userSource, "Come back when your license is valid!")
+					local vehicle = {
+						owner = owner_name,
+						make = vehicle.make,
+						model = vehicle.model,
+						hash = hash,
+						plate = plate,
+						stored = false,
+						price = price,
+						inventory = {},
+						storage_capacity = vehicle.storage_capacity
+					}
+					local vehicle_key = {
+						name = "Key -- " .. plate,
+						quantity = 1,
+						type = "key",
+						owner = owner_name,
+						make = vehicle.make,
+						model = vehicle.model,
+						plate = plate
+					}
+					-- give player vehicle --
+					table.insert(vehicles, vehicle.plate)
+					user.setActiveCharacterData("vehicles", vehicles)
+					print("vehicle purchased (" .. vehicle.model .. ")!")
+					-- add to database --
+					AddVehicleToDB(vehicle)
+					-- give player the key to the whip --
+					local inv = user.getActiveCharacterData("inventory")
+					table.insert(inv, vehicle_key)
+					user.setActiveCharacterData("inventory", inv)
+					-- add vehicle plate to locking resource list --
+					TriggerEvent("lock:addPlate", vehicle.plate)
+					TriggerClientEvent("usa:notify", userSource, "Here are the keys! Thanks for your business!")
+					TriggerClientEvent("vehShop:spawnPlayersVehicle", userSource, hash, plate)
 				end
 			else
-				TriggerClientEvent("usa:notify", userSource, "Come back when you have a driver's license!")
+				TriggerClientEvent("usa:notify", userSource, "Not enough money for that vehicle!")
 			end
 		else
-			TriggerClientEvent("vehShop:notify", userSource, "Sorry, you can't own more than " .. MAX_PLAYER_VEHICLES .. " vehicles at this time!")
+			TriggerClientEvent("usa:notify", userSource, "Come back when your license is valid!")
 		end
-	--end)
+	else
+		TriggerClientEvent("usa:notify", userSource, "Come back when you have a driver's license!")
+	end
 end)
 
 RegisterServerEvent("vehShop:loadVehiclesToSell")
 AddEventHandler("vehShop:loadVehiclesToSell", function()
 	local userSource = tonumber(source)
-	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
+		-- get the plates of the desired vehicles to use in the query --
 		local vehicles = user.getActiveCharacterData("vehicles")
-		for i = 1, #vehicles do
-			local vehicle = vehicles[i]
-			if vehicle then
-				local sellPrice = round(vehicle.price * .5,0)
-				vehicles[i].sellPrice = sellPrice
-			end
-		end
-		print("vehicles loaded! # = " .. #vehicles)
-		TriggerClientEvent("vehShop:displayVehiclesToSell", userSource, vehicles)
-	--end)
-end)
-
-RegisterServerEvent("vehShop:loadVehicles")
-AddEventHandler("vehShop:loadVehicles", function(check_insurance)
-	local vehicles_to_send = {}
-	local userSource = tonumber(source)
-	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		if check_insurance then
-			local user_insurance = user.getActiveCharacterData("insurance")
-			if user_insurance.type == "auto" then
-				print("player has valid auto insurance!")
-				local vehicles = user.getActiveCharacterData("vehicles")
-				if vehicles then
-					for i = 1, #vehicles do
-						if not vehicles[i].stored then
-							table.insert(vehicles_to_send, vehicles[i])
-						end
-					end
-					print("vehicles loaded! # = " .. #vehicles_to_send)
-					TriggerClientEvent("vehShop:loadedVehicles", userSource, vehicles_to_send, true)
-				end
-			else
-				print("player has no auto insurance!")
-				TriggerClientEvent("chatMessage", userSource, "T. END'S INSURANCE", {255, 78, 0}, "You do not have any auto insurance! Can't make a claim!")
-				TriggerClientEvent("vehShop:loadedVehicles", userSource, vehicles_to_send, true)
-			end
-		else
-			local vehicles = user.getActiveCharacterData("vehicles")
-			if vehicles then
-				for i = 1, #vehicles do
-					if not vehicles[i].stored then
-						table.insert(vehicles_to_send, vehicles[i])
+		-- query for the information needed from each vehicle --
+		local endpoint = "/vehicles/_design/vehicleFilters/_view/getVehiclesToSellWithPlates"
+		local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+		PerformHttpRequest(url, function(err, responseText, headers)
+			if responseText then
+				local responseVehArray = {}
+				--print(responseText)
+				local data = json.decode(responseText)
+				if data.rows then
+					for i = 1, #data.rows do
+						local veh = {
+							plate = data.rows[i].value[1], -- plate
+							make = data.rows[i].value[2], -- make
+							model = data.rows[i].value[3], -- model
+							price = data.rows[i].value[4], -- price
+							_rev = data.rows[i].value[5] -- _rev
+						}
+						table.insert(responseVehArray, veh)
 					end
 				end
-				print("vehicles loaded! # = " .. #vehicles_to_send)
-				TriggerClientEvent("vehShop:loadedVehicles", userSource, vehicles_to_send)
+				-- send vehicles to client for displaying --
+				print("# of vehicles loaded to sell: " .. #responseVehArray)
+				TriggerClientEvent("vehShop:displayVehiclesToSell", userSource, responseVehArray)
 			end
-		end
-	--end)
+		end, "POST", json.encode({
+			keys = vehicles
+			--keys = newVehs
+			--keys = { "86CSH075" }
+		}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 end)
 
 RegisterServerEvent("vehShop:sellVehicle")
 AddEventHandler("vehShop:sellVehicle", function(toSellVehicle)
 	local userSource = tonumber(source)
-	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		local vehicles = user.getActiveCharacterData("vehicles")
-		for i = 1, #vehicles do
-			local vehicle = vehicles[i]
-			if vehicle.plate == toSellVehicle.plate then
-				table.remove(vehicles, i)
-				local oldMoney = user.getActiveCharacterData("money")
-				local vehiclePrice = GetVehiclePrice(toSellVehicle)
-				if not vehiclePrice then vehiclePrice = 10000 end
-				local newMoney = round(oldMoney + (vehiclePrice * .50),0)
-				if (vehicle.price * .50) <= MAX_VEHICLE_SELL_PRICE then
-					user.setActiveCharacterData("money", newMoney)
-					user.setActiveCharacterData("vehicles", vehicles)
-					print("vehicle " .. vehicle.model .. " sold for $" .. newMoney)
-					return
-				else
-					print("*** PLAYER " .. GetPlayerName(userSource) .. " tried to exploit money from the vehicle shop! ***")
-					return
-				end
-			end
+	-- remove from user veh collection --
+	local userVehs = user.getActiveCharacterData("vehicles")
+	for i = 1, #userVehs do
+		if userVehs[i] == toSellVehicle.plate then
+			table.remove(userVehs, i)
+			user.setActiveCharacterData("vehicles", userVehs)
+			break
 		end
-	--end)
+	end
+	-- remove from DB / take money --
+	RemoveVehicleFromDB(toSellVehicle, function(err, resp)
+		local prevMoney = user.getActiveCharacterData("money")
+		local vehiclePrice = GetVehiclePrice(toSellVehicle)
+		local newMoney = math.floor(prevMoney + (vehiclePrice * .50))
+		user.setActiveCharacterData("money", newMoney)
+	end)
 end)
 
 function GetVehiclePrice(vehicle)
-	print("vehicle: " .. vehicle.make .. " " .. vehicle.model)
+	--print("vehicle: " .. vehicle.make .. " " .. vehicle.model)
 	for k, v in pairs(vehicleShopItems["vehicles"]) do
 		for i = 1, #v do
 			local name1 = vehicle.make .. " " .. vehicle.model
@@ -675,12 +649,8 @@ function GetVehiclePrice(vehicle)
 				return v[i].price
 			end
 		end
-		print("Error getting vehicle price! no matching hash found to sell!")
 	end
-end
-
-function round(num, numDecimalPlaces)
-  return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
+	print("Error getting vehicle price! no matching hash found to sell!")
 end
 
 function playerHasValidAutoInsurance(playerInsurance)
@@ -720,4 +690,26 @@ function generate_random_number_plate()
 	number_plate = number_plate .. charset.numbers[math.random(#charset.numbers)] -- number
 	print("created random plate: ")
 	return number_plate
+end
+
+-- Insert new vehicle into DB --
+function AddVehicleToDB(vehicle)
+	TriggerEvent('es:exposeDBFunctions', function(couchdb)
+		couchdb.createDocumentWithId("vehicles", vehicle, vehicle.plate, function(success)
+			if success then
+				print("* Vehicle created in DB!! *")
+			else
+				print("* Error: vehicle was not created in DB!! *")
+			end
+		end)
+	end)
+end
+
+-- Delete vehicle from DB --
+function RemoveVehicleFromDB(vehicle, cb)
+	PerformHttpRequest("http://127.0.0.1:5984/".."vehicles".."/".. vehicle.plate .."?rev=" .. vehicle._rev, function(err, rText, headers)
+		RconPrint("\nerr = " .. err)
+		RconPrint("\nrText = " .. rText)
+		cb(err, rText)
+	end, "DELETE", "", {["Content-Type"] = 'application/json'})
 end

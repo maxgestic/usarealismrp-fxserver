@@ -17,7 +17,7 @@ To get started with your own testing environment:
     * write `sv_licenseKey <license key>`, replacing `<license key>` with a [FiveM license key](https://keymaster.fivem.net/)
 4) Create the path `C:/wamp/www/` to house the auto generated chat log file
     * Temporary step, path should be auto generated
-	
+
 ** Job Types **
 1) "civ"
 2) "sheriff" (AKA SASP)
@@ -27,3 +27,7 @@ To get started with your own testing environment:
 6) "taxi"
 7) "tow"
 8) "reporter" (weazel news)
+
+** DB Notes **
+1)``vehicles`` database requires an index to be created on the "stored_location" field for usa-properties
+2)  Must create all the views required for various scripts

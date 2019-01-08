@@ -296,6 +296,8 @@ end)
 
 RegisterServerEvent("mdt:performPlateCheck")
 AddEventHandler("mdt:performPlateCheck", function(plateNumber)
+	local usource = source
+	plateNumber = string.upper(plateNumber)
 	-- check format --
 	if not plateNumber or string.len(plateNumber) < 7 or string.len(plateNumber) > 8 then
 		local msg = {
@@ -306,28 +308,21 @@ AddEventHandler("mdt:performPlateCheck", function(plateNumber)
 		return
 	end
 	-- look for any player with vehicle --
-	TriggerEvent("es:getPlayers", function(players)
-		for id, player in pairs(players) do
-			local vehicles = player.getActiveCharacterData("vehicles")
-			if vehicles then
-				for i = 1, #vehicles do
-					local vehicle = vehicles[i]
-					if string.lower(tostring(vehicle.plate)) == string.lower(tostring(plateNumber)) then
-						vehicle.veh_name = vehicle.make .. " " .. vehicle.model
-						vehicle.registered_owner = player.getActiveCharacterData("fullName")
-						vehicle.plate = vehicle.plate
-						TriggerClientEvent("mdt:performPlateCheck", source, vehicle)
-						return
-					end
-				end
-			end
+	GetMakeModelOwner({ plateNumber }, function(vehs)
+		if vehs[1] then
+			local vehicle = {}
+			vehicle.veh_name = vehs[1].make .. " " .. vehs[1].model
+			vehicle.registered_owner = vehs[1].owner
+			vehicle.plate = plateNumber
+			TriggerClientEvent("mdt:performPlateCheck", usource, vehicle)
+		else
+			-- make a random registration for the vehicle --
+			local vehicle = {}
+			vehicle.veh_name = "Undefined"
+			vehicle.registered_owner = random_names[math.random(#random_names)]
+			vehicle.plate = plateNumber
+			TriggerClientEvent("mdt:performPlateCheck", usource, vehicle)
 		end
-		-- make a random registration for the vehicle --
-		local vehicle = {}
-		vehicle.veh_name = "Unknown"
-		vehicle.registered_owner = random_names[math.random(#random_names)]
-		vehicle.plate = plateNumber
-		TriggerClientEvent("mdt:performPlateCheck", source, vehicle)
 	end)
 end)
 
@@ -551,6 +546,35 @@ end
 
 function firstToUpper(str)
     return (str:gsub("^%l", string.upper))
+end
+
+function GetMakeModelOwner(plates, cb) -- test
+	-- query for the information needed from each vehicle --
+	local endpoint = "/vehicles/_design/vehicleFilters/_view/getMakeModelOwner"
+	local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+	PerformHttpRequest(url, function(err, responseText, headers)
+		if responseText then
+			local responseVehArray = {}
+			--print(responseText)
+			local data = json.decode(responseText)
+			if data.rows then
+				for i = 1, #data.rows do
+					local veh = {
+						owner = data.rows[i].value[1], -- owner
+						make = data.rows[i].value[2], -- make
+						model = data.rows[i].value[3] -- model
+					}
+					table.insert(responseVehArray, veh)
+				end
+			end
+			-- send vehicles to client for displaying --
+			--print("# of vehicles loaded for menu: " .. #responseVehArray)
+			cb(responseVehArray)
+		end
+	end, "POST", json.encode({
+		keys = plates
+		--keys = { "86CSH075" }
+	}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 -- PERFORM FIRST TIME DB CHECKS --
