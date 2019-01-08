@@ -18,32 +18,32 @@ To get started with your own testing environment:
 4) Create the path `C:/wamp/www/` to house the auto generated chat log file
     * Temporary step, path should be auto generated
 
-** Job Types **
-1) "civ"
-2) "sheriff" (AKA SASP)
-3) "ems"
-4) "corrections"
-5) "judge"
-6) "taxi"
-7) "tow"
-8) "reporter" (weazel news)
+**Job Types**
+1. "civ"
+2. "sheriff" (AKA SASP)
+3. "ems"
+4. "corrections"
+5. "judge"
+6. "taxi"
+7. "tow"
+8. "reporter" (weazel news)
 
-** DB Notes **
-1)``vehicles`` database requires an index to be created on the "stored_location" field for usa-properties
-2)  Must create following couch db views in a ``vehicleFilters`` design doc:
-	**getMakeModelOwner**
-	``emit(doc._id, [doc.owner, doc.make, doc.model]);``
-	**getMakeModelPlate**
-	``emit(doc._id, [doc.plate, doc.make, doc.model]);``
-	**getVehicleCustomizationsByPlate**
-	``emit(doc._id, [doc.customizations]);``
-	**getVehicleInventoryAndCapacityByPlate**
-	``emit(doc._id, [doc.inventory, doc.storage_capacity]);``
-	**getVehicleInventoryByPlate**
-	``emit(doc._id, [doc.inventory]);``
-	**getVehiclesForGarageMenu**
-	``emit(doc._id, [doc.plate, doc.make, doc.model, doc.impounded, doc.stored, doc.hash, doc.owner]);``
-	**getVehiclesForMenuWithPlates**
-	``emit(doc._id, [doc.make, doc.model, doc.price, doc.stored, doc.stored_location, doc._id]);``
-	**getVehiclesToSellWithPlates**
-	``emit(doc._id, [doc.plate, doc.make, doc.model, doc.price, doc._rev]);``
+**DB Notes**
+1. ``vehicles`` database requires an index to be created on the "stored_location" field for usa-properties
+2.  Must create following couch db views in a ``vehicleFilters`` design doc:  
+	**getMakeModelOwner**  
+	``emit(doc._id, [doc.owner, doc.make, doc.model]);``  
+	**getMakeModelPlate**  
+	``emit(doc._id, [doc.plate, doc.make, doc.model]);``  
+	**getVehicleCustomizationsByPlate**  
+	``emit(doc._id, [doc.customizations]);``  
+	**getVehicleInventoryAndCapacityByPlate** 
+	``emit(doc._id, [doc.inventory, doc.storage_capacity]);``  
+	**getVehicleInventoryByPlate**  
+	``emit(doc._id, [doc.inventory]);``  
+	**getVehiclesForGarageMenu**  
+	``emit(doc._id, [doc.plate, doc.make, doc.model, doc.impounded, doc.stored, doc.hash, doc.owner]);``  
+	**getVehiclesForMenuWithPlates**  
+	``emit(doc._id, [doc.make, doc.model, doc.price, doc.stored, doc.stored_location, doc._id]);``  
+	**getVehiclesToSellWithPlates**  
+	``emit(doc._id, [doc.plate, doc.make, doc.model, doc.price, doc._rev]);``  
