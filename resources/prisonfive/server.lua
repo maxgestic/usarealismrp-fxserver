@@ -1,3 +1,23 @@
+-- Check inmates remaining jail time --
+TriggerEvent('es:addJobCommand', 'roster', {"corrections"}, function(source, args, user)
+	local hasInmates = false
+	TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^0** Jail Roster **")
+	TriggerEvent("es:getPlayers", function(players)
+		for id, player in pairs(players) do
+			if id and player then
+				local time = player.getActiveCharacterData("jailtime")
+				if time > 0 then
+					hasInmates = true
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^0 - " .. player.getActiveCharacterData("fullName") .. " - " .. time .. " month(s)")
+				end
+			end
+		end
+		if not hasInmates then
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^0There are no inmates at this time")
+		end
+	end)
+end)
+
 ----------------
 -- the prison --
 ----------------
