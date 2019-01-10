@@ -76,3 +76,9 @@ button {
     color: #fff;
     width: 100%;
 }
+
+@media screen and (max-width: 1500px) {
+  #jail-form-wrap {
+    margin-top: 2em;
+  }
+}
