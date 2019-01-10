@@ -360,7 +360,14 @@ end, {
 ------------------------------
 TriggerEvent('es:addGroupCommand', 'gotoc', "mod", function(source, args, user)
 	TriggerClientEvent('es_admin:teleportUserByCoords', source, tonumber(args[2]), tonumber(args[3]), tonumber(args[4]))
-end)
+end, {
+	help = "Go to specified coordinate",
+	params = {
+		{ name = "X", help = "X coordinate" },
+		{ name = "Y", help = "Y coordinate" },
+		{ name = "Z", help = "Z coordinate" }
+	}
+})
 
 -- Freezing
 local frozen = {}

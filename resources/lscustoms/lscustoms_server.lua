@@ -215,9 +215,11 @@ end)
 
 RegisterServerEvent("customs:saveCarData")
 AddEventHandler("customs:saveCarData", function(data, plate, source)
-	TriggerEvent('es:exposeDBFunctions', function(couchdb)
-		couchdb.updateDocument("vehicles", plate, { customizations = data }, function()
-			print("Customizations saved!")
+	if plate then
+		TriggerEvent('es:exposeDBFunctions', function(couchdb)
+			couchdb.updateDocument("vehicles", plate, { customizations = data }, function()
+				print("Customizations saved!")
+			end)
 		end)
-	end)
+	end
 end)

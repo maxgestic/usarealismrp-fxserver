@@ -131,6 +131,25 @@ function setNotHurt()
 end
 --]]
 
+-- DISTRITIC'S RAGDOLL ON JUMP --
+local ragdoll_chance = 0.6 -- 80 = 80%
+
+Citizen.CreateThread(function()
+	while true do
+		Wait(100) -- check every 100 ticks, performance matters
+		local ped = PlayerPedId()
+		if IsPedOnFoot(ped) and not IsPedSwimming(ped) and (IsPedRunning(ped) or IsPedSprinting(ped)) and not IsPedClimbing(ped) and IsPedJumping(ped) and not IsPedRagdoll(ped) then
+      local chance_result = math.random()
+			if chance_result < ragdoll_chance then
+				Wait(600) -- roughly when the ped loses grip
+				SetPedToRagdoll(ped, 5000, 1, 2)
+			else
+				Wait(2000) -- cooldown before continuing
+			end
+		end
+	end
+end)
+
 -- no police npc / never wanted
 Citizen.CreateThread(function()
     while true do

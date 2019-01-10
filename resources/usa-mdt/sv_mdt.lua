@@ -166,10 +166,10 @@ AddEventHandler("mdt:PerformPersonCheckBySSN", function(ssn)
         for i = 1, #criminal_history do
             local crime = criminal_history[i]
                 if not crime.type then -- not a ticket
-                    print("inserted crime")
+                    --print("inserted crime")
                     table.insert(person_info.criminal_history.crimes, crime)
                 else
-                    print("inserted ticket")
+                    --print("inserted ticket")
                     table.insert(person_info.criminal_history.tickets, crime)
                 end
         end

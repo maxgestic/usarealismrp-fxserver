@@ -207,8 +207,8 @@ function GetVehicleInventory(plate, cb)
       local inventory = {}
 			--print("veh inventory: " .. responseText)
 			local data = json.decode(responseText)
-      if data.rows and data.rows[1].value then
-			     inventory = data.rows[1].value[1] -- inventory
+      if data and data.rows and data.rows[1] and data.rows[1].value then
+			  inventory = data.rows[1].value[1] -- inventory
       end
 			cb(inventory)
 		end
