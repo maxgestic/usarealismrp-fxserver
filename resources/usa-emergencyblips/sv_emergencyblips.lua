@@ -1,3 +1,7 @@
+-- by: minipunch
+-- for: USA Realism RP
+-- purpose: provide public servant with blips for all other active emergency personnel
+
 local ACTIVE_EMERGENCY_PERSONNEL = {}
 
 --[[

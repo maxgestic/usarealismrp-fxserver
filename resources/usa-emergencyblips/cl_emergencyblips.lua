@@ -1,3 +1,7 @@
+-- by: minipunch
+-- for: USA Realism RP
+-- purpose: provide public servant with blips for all other active emergency personnel
+
 local ACTIVE = false
 local ACTIVE_EMERGENCY_PERSONNEL = {}
 
@@ -60,7 +64,7 @@ Citizen.CreateThread(function()
 			for src, info in pairs(ACTIVE_EMERGENCY_PERSONNEL) do
 				local player = GetPlayerFromServerId(src)
 				local ped = GetPlayerPed(player)
-				if GetPlayerPed(-1) ~= ped then
+				--if GetPlayerPed(-1) ~= ped then
 					if GetBlipFromEntity(ped) == 0 then
 						local blip = AddBlipForEntity(ped)
 						SetBlipSprite(blip, 1)
@@ -72,7 +76,7 @@ Citizen.CreateThread(function()
 						AddTextComponentString(info.name)
 						EndTextCommandSetBlipName(blip)
 					end
-				end
+				--end
 			end
 		end
 		Wait(1)

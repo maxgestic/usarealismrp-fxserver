@@ -13,6 +13,8 @@ local TIME_TO_ANSWER_CALL = 15
 
 local cached_phone = nil
 
+local BACKSPACE_KEY = 177
+
 function DrawCoolLookingNotificationNoPic(msg)
 	SetNotificationTextEntry("STRING")
 	AddTextComponentString(msg)
@@ -51,7 +53,7 @@ end
 
 RegisterNetEvent("phone:loadedMessagesFromId")
 AddEventHandler("phone:loadedMessagesFromId", function(messages, replyIdent)
-	Citizen.Trace("loaded msgs with # = " .. #messages)
+	--print("loaded msgs with # = " .. #messages)
 	SendNUIMessage({
 		type = "messagesHaveLoaded",
 		messages = messages,
@@ -61,7 +63,7 @@ end)
 
 RegisterNetEvent("phone:loadedMessages")
 AddEventHandler("phone:loadedMessages", function(conversations)
-	print("loaded conversations with #conversations = " .. #conversations)
+	--print("loaded conversations with #conversations = " .. #conversations)
 	SendNUIMessage({
 		type = "textMessage",
 		conversations = conversations
@@ -78,7 +80,7 @@ end)
 
 RegisterNetEvent("phone:openPhone")
 AddEventHandler("phone:openPhone", function(phone)
-	print("opening phone with number: " .. phone.number)
+	--print("opening phone with number: " .. phone.number)
 	EnableGui(true, phone)
 	if not cached_phone then
 		cached_phone = phone
@@ -86,17 +88,17 @@ AddEventHandler("phone:openPhone", function(phone)
 end)
 
 RegisterNUICallback('deleteContact', function(data, cb)
-	print("attempting to delete phone contact!")
+	--print("attempting to delete phone contact!")
 	TriggerServerEvent("phone:deleteContact", data)
 end)
 
 RegisterNUICallback('getContacts', function(data, cb)
-	print("retrieving contacts!")
+	--print("retrieving contacts!")
 	TriggerServerEvent("phone:getContacts", data.number)
 end)
 
 RegisterNUICallback('addNewContact', function(data, cb)
-	print("adding new contact!")
+	--print("adding new contact!")
 	TriggerServerEvent("phone:addContact", data)
 end)
 
@@ -335,15 +337,18 @@ Citizen.CreateThread(function()
 				TaskPlayAnim(GetPlayerPed(-1), 'cellphone@', 'cellphone_call_listen_base', 1.0, -1, -1, 50, 0, false, false, false)
 			end
 			-- listen for phone call hang up --
-			if IsControlJustPressed(1, 177) then -- BACKSPACE key
-				on_call = false
-				NetworkClearVoiceChannel()
-				ClearPedTasks(GetPlayerPed(-1))
-				TriggerServerEvent("phone:endedCall", partner_call_source) -- notify caller of hang up
-				TriggerEvent("swayam:notification", "Whiz Wireless", "Call ~r~ended~w~.", "CHAR_MP_DETONATEPHONE")
+			if IsControlJustPressed( 1, BACKSPACE_KEY ) then
+				Wait(500)
+				if IsControlPressed( 1, BACKSPACE_KEY ) then
+					on_call = false
+					NetworkClearVoiceChannel()
+					ClearPedTasks(GetPlayerPed(-1))
+					TriggerServerEvent("phone:endedCall", partner_call_source) -- notify caller of hang up
+					TriggerEvent("swayam:notification", "Whiz Wireless", "Call ~r~ended~w~.", "CHAR_MP_DETONATEPHONE")
+				end
 			end
 			-- display help message
-			DrawSpecialText("Press ~y~BACKSPACE~w~ to hang up!")
+			--DrawSpecialText("Press ~y~CTRL~w~ + ~y~BACKSPACE~w~ to hang up!")
 		else
 			if cellphone_object then
 				DeleteObject(cellphone_object)
@@ -370,6 +375,15 @@ Citizen.CreateThread(function()
 		--]]
 
 		Wait(1)
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		Wait(2)
+		if on_call then
+			DrawSpecialText("Hold ~y~BACKSPACE~w~ to hang up!")
+		end
 	end
 end)
 

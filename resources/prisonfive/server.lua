@@ -83,10 +83,12 @@ AddEventHandler("doc:checkWhitelist", function(loc)
 				TriggerClientEvent("usa:notify", usource, "You don't work here!")
 			else
 				print("DOC EMPLOYEE EXISTED")
-				exports["essentialmode"]:getPlayerFromId(usource).setActiveCharacterData("job", "corrections")
+				local user = exports["essentialmode"]:getPlayerFromId(usource)
+				user.setActiveCharacterData("job", "corrections")
 				TriggerClientEvent("usa:notify", usource, "You clocked in!")
 				TriggerClientEvent("doc:open", usource)
 				TriggerClientEvent("ptt:isEmergency", usource, true)
+				TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = usource, color = 82}, true)
 			end
 			return
 		end
@@ -105,6 +107,7 @@ AddEventHandler("doc:clockOut", function()
 	-------------------------
 	user.setActiveCharacterData("job", "civ")
 	TriggerClientEvent("usa:notify", usource, "You have clocked out!")
+	TriggerEvent("eblips:remove", usource)
 	-----------------------------------
 	-- change back into civ clothing --
 	-----------------------------------
@@ -127,6 +130,7 @@ AddEventHandler("doc:forceDuty", function()
 		TriggerEvent("doc:loadUniform", usource)
 		TriggerClientEvent("usa:notify", usource, "You have clocked in!")
 		TriggerClientEvent("ptt:isEmergency", usource, true)
+		TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = usource, color = 82}, true)
 	end
 end)
 
