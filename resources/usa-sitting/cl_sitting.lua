@@ -35,7 +35,8 @@ local CHAIR_MODELS = {
   {hash = 536071214, offset = 0.5},
   {hash = 1005957871, offset = -0.3},
   {hash = -171943901, offset = 0.5},
-  {hash = 475561894, offset = 0.5}
+  {hash = 475561894, offset = 0.5},
+  {hash = 2142033519, offset = 0.3}
 }
 
 local sitting_on = nil
@@ -57,11 +58,8 @@ function FindNearest()
   for obj in exports.globals:EnumerateObjects() do
     for i = 1, #CHAIR_MODELS do
       if GetEntityModel(obj) == CHAIR_MODELS[i].hash then
-        --print("found matching chair model!")
         local objcoords = GetEntityCoords(obj)
-        --print("vdist: " .. Vdist(objcoords.x, objcoords.y, objcoords.z, mycoords.x, mycoords.y, mycoords.z))
-        if Vdist(objcoords.x, objcoords.y, objcoords.z, mycoords.x, mycoords.y, mycoords.z) < 1.5 then
-          --print("attempting to sit on: " .. obj .. ", model: " .. GetEntityModel(obj))
+        if Vdist(objcoords.x, objcoords.y, objcoords.z, mycoords.x, mycoords.y, mycoords.z) < 2.0 then
           Sit(me, obj, CHAIR_MODELS[i].offset)
           return
         end
@@ -73,17 +71,17 @@ end
 function GetUp()
   local ped = GetPlayerPed(-1)
   DetachEntity(ped, true, true)
-  --ClearPedTasksImmediately(ped)
-  --"amb@prop_human_seat_chair@male@generic@exit", "exit_forward"
   TaskPlayAnim(ped, "amb@prop_human_seat_chair@male@generic@exit", "exit_forward", 8.0, -8, -1, 8, 0, 0, 0, 0) -- sitting animation (looped)
   sitting_on = nil
-  --print("getting up!")
 end
 
 RegisterNetEvent("sit:sitOnNearest")
 AddEventHandler("sit:sitOnNearest", function()
   if not sitting_on then
-    FindNearest()
+    local ped = GetPlayerPed(-1)
+    if not IsPedCuffed(ped) then
+      FindNearest()
+    end
   else
     GetUp()
   end

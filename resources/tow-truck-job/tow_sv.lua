@@ -3,7 +3,6 @@ local TOW_REWARD = math.random(900, 1500)
 RegisterServerEvent("towJob:giveReward")
 AddEventHandler("towJob:giveReward", function(property)
 	local userSource = source
-	--TriggerEvent('es:getPlayerFromId', userSource, function(user)
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		local user_money = user.getActiveCharacterData("money")
 		user.setActiveCharacterData("money", user_money + TOW_REWARD)
@@ -12,7 +11,6 @@ AddEventHandler("towJob:giveReward", function(property)
 			TriggerEvent("properties:addMoney", property.name, math.ceil(0.70 * TOW_REWARD))
 		end
 		TriggerClientEvent("towJob:success", userSource, TOW_REWARD)
-	--end)
 end)
 
 -- pv-tow :

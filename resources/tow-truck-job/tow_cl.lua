@@ -141,7 +141,7 @@ end
 function towJobMenu()
 	MenuTitle = "Tow Job"
 	ClearMenu()
-	Menu.addButton("Impound Vehicle (+$700)", "impoundVehicle")
+	Menu.addButton("Impound Vehicle", "impoundVehicle")
 end
 
 function getPlayerDistanceFromShop(shopX,shopY,shopZ)

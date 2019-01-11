@@ -252,6 +252,7 @@ AddEventHandler("usa:getPlayerItems", function(from_source, item_names, callback
 						--callback(item)
 						--return
 						found = true
+						break
 					end
 				end
 			end

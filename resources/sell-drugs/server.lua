@@ -57,7 +57,7 @@ AddEventHandler('drug-sell:sell', function()
 			-- randomize quantity ped is buying:
 			quantity = math.random(1, random.quantity)
 			-- restrict to 8 or lower at a time to sell:
-			while quantity > 8 do quantity = math.random(random.quantity) end
+			while quantity > 6 do quantity = math.random(random.quantity) end
 			-- give proper reward amount:
 			local reward = SELLABLE_ITEMS[random.name] * quantity
 			-- remove item:
