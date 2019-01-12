@@ -76,6 +76,7 @@ local vehicleShopItems = {
 			{make = "Declasse", model = "Sabre GT", price = 35000, hash = -1685021548, storage_capacity = 155.0},
 			{make = "Declasse", model = "Sabre Turbo Custom", price = 65000, hash = 223258115, storage_capacity = 130.0},
 			{make = "Declasse", model = "Stallion", price = 40000, hash = 1923400478, storage_capacity = 155.0},
+			{make = "Declasse", model = "Impaler", price = 60000, hash = "impaler", storage_capacity = 155.0},
 			{make = "Cheval", model = "Picador", price = 35000, hash = "picador", storage_capacity = 170.0},
 			{make = "Vapid", model = "Blade", price = 55000, hash = "blade", storage_capacity = 170.0},
 			{make = "Vapid", model = "Hotknife", price = 90000, hash = "hotknife", storage_capacity = 170.0},
@@ -111,7 +112,8 @@ local vehicleShopItems = {
 			{make = "Grotti", model = "Brioso", price = 35000, hash = "brioso", storage_capacity = 125.0},
 			{make = "Karin", model = "Futo", price = 35000, hash = "futo", storage_capacity = 125.0},
 			{make = "Rune", model = "Cheburek", price = 95000, hash = "cheburek", storage_capacity = 115.0},
-			{make = "Vapid", model = "Retinue", price = 115000, hash = "retinue", storage_capacity = 115.0}
+			{make = "Vapid", model = "Retinue", price = 115000, hash = "retinue", storage_capacity = 115.0},
+			{make = "Vapid", model = "Clique", price = 140000, hash = "clique", storage_capacity = 115.0}
 		},
 		["Offroads"] = {
 			{make = "Canis", model = "Kalahari", price = 10600, hash = 92612664, storage_capacity = 170.0},
@@ -238,6 +240,7 @@ local vehicleShopItems = {
 			{make = "Ubermacht", model = "SC1", price = 1500000, hash = "SC1", storage_capacity = 100.0},
 			{make = "Ocelot", model = "Penetrator", price = 850000, hash = "penetrator", storage_capacity = 110.0},
 			{make = "Emperor", model = "ETR 1", price = 950000, hash = "sheava", storage_capacity = 110.0},
+			{make = "Grotti", model = "Itali GTO", price = 1200000, hash = "italigto", storage_capacity = 110.0},
 			{make = "Overflod", model = "Autarch", price = 2500000, hash = "autarch", storage_capacity = 100.0},
 			{make = "Overflod", model = "Tyrant", price = 3300000, hash = "tyrant", storage_capacity = 100.0},
 			{make = "Cheval", model = "Taipan", price = 1900000, hash = "taipan", storage_capacity = 110.0},
@@ -299,7 +302,8 @@ local vehicleShopItems = {
 			{make = "Albany", model = "Primo Custom", price = 90000, hash = "primo2", storage_capacity = 155.0},
 			{make = "Cheval", model = "Fugitive", price = 60000, hash = "fugitive", storage_capacity = 155.0},
 			--{make = "Benefactor", model = "Schafter", price = 60000, hash = "schafter2", storage_capacity = 155.0},
-			{make = "Dundreary", model = "Regina", price = 55000, hash = "regina", storage_capacity = 155.0}
+			{make = "Dundreary", model = "Regina", price = 55000, hash = "regina", storage_capacity = 155.0},
+			{make = "Pegassi", model = "Toros", price = 255000, hash = "toros", storage_capacity = 155.0}
 			--{make = "Ubermacht", model = "Revolter", price = 200000, hash = "revolter", storage_capacity = 155.0} -- has miniguns in LSC
 		},
 		["Specials"] = {

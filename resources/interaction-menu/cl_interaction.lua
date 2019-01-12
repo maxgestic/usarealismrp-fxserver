@@ -605,7 +605,7 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 						elseif ( UpdateOnscreenKeyboard() == 2 ) then
 							break
 						end
-						Citizen.Wait( 0 )
+						Wait( 0 )
 					end
 				end )
 			else
@@ -686,62 +686,63 @@ function interactionMenuUse(itemName, wholeItem)
 		-- Lockpick  --
 		-------------------
 	elseif string.find(itemName, "Lock Pick") then
-			local me = GetPlayerPed(-1)
-			local veh = getVehicleInFrontOfUser()
-			if veh ~= 0 and GetEntityType(veh) == 2 then
-				if GetVehicleDoorLockStatus(veh) ~= 1 then
-					-- prevent using /e to hide animation --
-					isLockpicking = true
-					-- start picking --
-					local start_time = GetGameTimer()
-					local duration = 45000
-					-- play animation:
-			    local anim = {
-			      dict = "anim@move_m@trash",
-			      name = "pickup"
-			    }
+		local me = GetPlayerPed(-1)
+		local veh = getVehicleInFrontOfUser()
+		if veh ~= 0 and GetEntityType(veh) == 2 then
+			if GetVehicleDoorLockStatus(veh) ~= 1 then
+				-- prevent using /e to hide animation --
+				isLockpicking = true
+				-- start picking --
+				local start_time = GetGameTimer()
+				local duration = 45000
+				-- play animation:
+				local anim = {
+					dict = "anim@move_m@trash",
+					name = "pickup"
+				}
 				RequestAnimDict(anim.dict)
-	            while not HasAnimDictLoaded(anim.dict) do
-					Citizen.Wait(100)
-	            end
-				TaskPlayAnim(me, anim.dict, anim.name, 8.0, -8, -1, 49, 0, 0, 0, 0)
-					while GetGameTimer() < start_time + duration do
-						Wait(0)
-						DisableControlAction(0, 73, true)
-						DisableControlAction(0, 244, true)
-						DisableControlAction(0, 301, true)
-						--print("IsEntityPlayingAnim(me, anim.dict, anim.name, 3): " .. tostring(IsEntityPlayingAnim(me, anim.dict, anim.name, 3)))
-						if not IsEntityPlayingAnim(me, anim.dict, anim.name, 3) then
-							TaskPlayAnim(me, anim.dict, anim.name, 8.0, -8, -1, 48, 0, 0, 0, 0)
-						end
-						DrawSpecialText("~y~Picking lock ~w~[" .. math.ceil((start_time + duration - GetGameTimer()) / 1000) .. "s]")
-						local car_coords = GetEntityCoords(veh, 1)
-						local my_coords = GetEntityCoords(me, 1)
-						if Vdist(car_coords, my_coords) > 2.0 then
-							TriggerEvent("usa:notify", "Lock pick ~r~failed~w~, out of range!")
-							ClearPedTasksImmediately(me)
-							isLockpicking = false
-							return
-						end
-					end
-					if math.random(100) < 40 then
-						SetVehicleDoorsLocked(veh, 1)
-						if not GetIsVehicleEngineRunning(veh) then
-							SetVehicleNeedsToBeHotwired(veh, true)
-						end
-						TriggerEvent("usa:notify", "Lock pick ~g~success!")
-					else
-						TriggerEvent("usa:notify", "Lock pick ~r~failed!")
-					end
-					isLockpicking = false
-					ClearPedTasksImmediately(me)
-					TriggerServerEvent("usa:removeItem", wholeItem, 1)
-				else
-					TriggerEvent("usa:notify", "Door is already unlocked!")
+				while not HasAnimDictLoaded(anim.dict) do
+					Wait(100)
 				end
+				TaskPlayAnim(me, anim.dict, anim.name, 8.0, -8, -1, 49, 0, 0, 0, 0)
+				while GetGameTimer() < start_time + duration do
+					Wait(0)
+					DisableControlAction(0, 73, true)
+					DisableControlAction(0, 244, true)
+					DisableControlAction(0, 301, true)
+					--print("IsEntityPlayingAnim(me, anim.dict, anim.name, 3): " .. tostring(IsEntityPlayingAnim(me, anim.dict, anim.name, 3)))
+					if not IsEntityPlayingAnim(me, anim.dict, anim.name, 3) then
+						TaskPlayAnim(me, anim.dict, anim.name, 8.0, -8, -1, 48, 0, 0, 0, 0)
+					end
+					DrawSpecialText("~y~Picking lock ~w~[" .. math.ceil((start_time + duration - GetGameTimer()) / 1000) .. "s]")
+					local car_coords = GetEntityCoords(veh, 1)
+					local my_coords = GetEntityCoords(me, 1)
+					if Vdist(car_coords, my_coords) > 2.0 then
+						TriggerEvent("usa:notify", "Lock pick ~r~failed~w~, out of range!")
+						ClearPedTasksImmediately(me)
+						isLockpicking = false
+						return
+					end
+				end
+				if math.random(100) < 40 then
+					SetVehicleDoorsLocked(veh, 1)
+					SetVehicleDoorsLockedForAllPlayers(veh, 0)
+					if not GetIsVehicleEngineRunning(veh) then
+						SetVehicleNeedsToBeHotwired(veh, true)
+					end
+					TriggerEvent("usa:notify", "Lock pick ~g~success!")
+				else
+					TriggerEvent("usa:notify", "Lock pick ~r~failed!")
+				end
+				isLockpicking = false
+				ClearPedTasksImmediately(me)
+				TriggerServerEvent("usa:removeItem", wholeItem, 1)
 			else
-				TriggerEvent("usa:notify", "No vehicle detected!")
+				TriggerEvent("usa:notify", "Door is already unlocked!")
 			end
+		else
+			TriggerEvent("usa:notify", "No vehicle detected!")
+		end
 		-------------------
 		-- Binoculars --
 		-------------------

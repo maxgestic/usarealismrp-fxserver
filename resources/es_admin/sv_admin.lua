@@ -383,16 +383,16 @@ TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, user)
 		TriggerClientEvent("swayam:gotoWP", source)
 		return
 	elseif args[2] == "fd" then
-		local pdCoords = {x=-366.30380249023, y=6102.0532226563, z=35.439697265625}
-		TriggerClientEvent('es_admin:teleportUserByCoords', source, pdCoords.x, pdCoords.y, pdCoords.z)
+		local fdCoords = {x=-366.30380249023, y=6102.0532226563, z=35.439697265625}
+		TriggerClientEvent('es_admin:teleportUserByCoords', source, fdCoords.x, fdCoords.y, fdCoords.z)
 		return
 	elseif args[2] == "247" then
-		local pdCoords = {}
-		TriggerClientEvent('es_admin:teleportUserByCoords', source, pdCoords.x, pdCoords.y, pdCoords.z)
+		local twentyFourSevenCoords = {}
+		TriggerClientEvent('es_admin:teleportUserByCoords', source, twentyFourSevenCoords.x, twentyFourSevenCoords.y, twentyFourSevenCoords.z)
 		return
-	elseif args[2] == "fd" then
-		local pdCoords = {}
-		TriggerClientEvent('es_admin:teleportUserByCoords', source, pdCoords.x, pdCoords.y, pdCoords.z)
+	elseif args[2] == "blackmarket" then
+		local blackmarketCoords = {x = -315.1, y = -2780.9, z = 5.1}
+		TriggerClientEvent('es_admin:teleportUserByCoords', source, blackmarketCoords.x, blackmarketCoords.y, blackmarketCoords.z)
 		return
 	end
 	if tonumber(args[2]) ~= nil then
