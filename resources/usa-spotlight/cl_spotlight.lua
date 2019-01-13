@@ -33,6 +33,7 @@ AddEventHandler("spotlight:spotlight", function()
     local mycoords = GetEntityCoords(me)
     myveh = GetVehiclePedIsIn(me, false)
     if myveh ~= 0 then
+      SetVehicleFullbeam(myveh, true)
       local vehcoords = GetEntityCoords(veh)
       local forward = GetOffsetFromEntityInWorldCoords(me, OFFSET_X, OFFSET_Y, OFFSET_Z)
       local target = forward - mycoords
@@ -56,6 +57,7 @@ AddEventHandler("spotlight:spotlight", function()
       exports.globals:notify("Not in vehicle!")
     end
   else
+    SetVehicleFullbeam(myveh, false)
     TriggerServerEvent("spotlight:removeSpotlight", MY_SPOTLIGHT)
     MY_SPOTLIGHT = nil
     exports.globals:notify("Spotlight ~r~off")
