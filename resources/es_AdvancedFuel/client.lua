@@ -288,27 +288,28 @@ Citizen.CreateThread(function()
 end)
 
 
+-- This appears to be what actually "consumes" the vehicle's fuel
 Citizen.CreateThread(function()
 
 	while true do
 		Citizen.Wait(5000)
 		local me = GetPlayerPed(-1)
 		if(IsPedInAnyVehicle(me, -1) and GetPedVehicleSeat(me) == -1 and not isBlackListedModel()) then
-			local kmh = GetEntitySpeed(GetVehiclePedIsIn(GetPlayerPed(-1), false)) * 3.6
+			local kmh = GetEntitySpeed(GetVehiclePedIsIn(me, false)) * 3.6
 			local vitesse = math.ceil(kmh)
 
 			if(vitesse > 0 and vitesse <20) then
-				stade = 0.00001
+				stade = 0.00010
 			elseif(vitesse >= 20 and vitesse <50) then
-				stade = 0.00002
+				stade = 0.00011
 			elseif(vitesse >= 50 and vitesse < 70) then
-				stade = 0.00003
+				stade = 0.00012
 			elseif(vitesse >= 70 and vitesse <90) then
-				stade = 0.00004
+				stade = 0.00013
 			elseif(vitesse >=90 and vitesse <130) then
-				stade = 0.00005
+				stade = 0.00014
 			elseif(vitesse >= 130) then
-				stade = 0.00006
+				stade = 0.00025
 			else
 				stade = 0
 			end

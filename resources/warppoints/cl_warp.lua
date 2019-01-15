@@ -172,6 +172,15 @@ local warp_locations = {
       z = 176.0
     },
     job_access = "civ"
+  },
+  ["Sandy Shores Jail"] = {
+    entrance = {
+      x = 1848.9, y = 3689.8, z = 33.35
+    },
+    exit = {
+      x = 1853.9, y = 3715.9, z = 0.1
+    },
+    job_access = "emergency"
   }
 }
 
