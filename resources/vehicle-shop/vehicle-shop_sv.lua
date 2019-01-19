@@ -300,7 +300,7 @@ local vehicleShopItems = {
 			{make = "Maserati", model = "Quattroporte", price = 150000, hash = 1909141499, storage_capacity = 155.0},
 			{make = "Albany", model = "Primo", price = 76000, hash = "primo", storage_capacity = 155.0},
 			{make = "Albany", model = "Primo Custom", price = 90000, hash = "primo2", storage_capacity = 155.0},
-			{make = "Cheval", model = "Fugitive", price = 60000, hash = "fugitive", storage_capacity = 155.0},
+			--{make = "Cheval", model = "Fugitive", price = 60000, hash = "fugitive", storage_capacity = 155.0},
 			--{make = "Benefactor", model = "Schafter", price = 60000, hash = "schafter2", storage_capacity = 155.0},
 			{make = "Dundreary", model = "Regina", price = 55000, hash = "regina", storage_capacity = 155.0},
 			{make = "Pegassi", model = "Toros", price = 255000, hash = "toros", storage_capacity = 155.0}
