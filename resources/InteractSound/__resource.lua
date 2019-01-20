@@ -30,5 +30,6 @@ files({
     'client/html/sounds/trimming.ogg',
     'client/html/sounds/lock.ogg',
     'client/html/sounds/unlock.ogg',
-    'client/html/sounds/demo.ogg'
+    'client/html/sounds/demo.ogg',
+	'client/html/sounds/cuffing.ogg'
 })

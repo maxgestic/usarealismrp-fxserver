@@ -1,21 +1,63 @@
 local lPed
 local isCuffed = false
-local SOUND_ENABLE = true
+local isHardcuffed = false
+local cuffanimplaying = false
 
 RegisterNetEvent("cuff:attemptToCuffNearest")
 AddEventHandler("cuff:attemptToCuffNearest", function()
 	TriggerEvent("usa:getClosestPlayer", 1.65, function(player)
 		if player then
-			print("closest: ")
-			print("name: " .. player.name)
-			print("id: " .. player.id)
 			if tonumber(player.id) ~= 0 then
-				TriggerServerEvent("cuff:Handcuff", player.id)
+				local x,y,z=table.unpack(GetEntityCoords(GetPlayerPed(-1)))
+    			local heading = GetEntityHeading(GetPlayerPed(-1))
+				TriggerServerEvent("cuff:Handcuff", player.id, true)
+				TriggerServerEvent("cuff:triggerSuspectAnim", player.id, x, y, z, heading)
+				TriggerEvent('cuff:playPoliceAnim', 1)
 			else
 				DrawCoolLookingNotificationNoPic("No target found to cuff!")
 			end
 		end
 	end)
+end)
+
+RegisterNetEvent('cuff:playPoliceAnim')
+AddEventHandler('cuff:playPoliceAnim', function(animType)
+	if animType == 1 then
+		local ped = GetPlayerPed(-1)
+	    RequestAnimDict('mp_arrest_paired')
+	    RequestAnimDict('missprologueig_2')
+	    while not HasAnimDictLoaded('mp_arrest_paired') do
+	        Citizen.Wait(0)
+	    end
+	    while not HasAnimDictLoaded('missprologueig_2') do
+	        Citizen.Wait(0)
+	    end
+	    FreezeEntityPosition(ped, true)
+	    TaskPlayAnim(ped, "mp_arrest_paired", "cop_p2_back_right", 8.0, -8, -1, 48, 0, 0, 0, 0)
+	    Citizen.Wait(2000)
+        TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 1, 'cuffing', 1.0)
+        Citizen.Wait(1600)
+	    ClearPedTasks(ped)
+	elseif animType == 2 then
+		local anim = {
+			dict = "anim@move_m@trash",
+			name = "pickup"
+		}
+		TriggerEvent("usa:playAnimation", anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 1.5)
+	end
+end)
+
+RegisterNetEvent('cuff:playSuspectAnim')
+AddEventHandler('cuff:playSuspectAnim', function(x,y,z,heading)
+    ped = GetPlayerPed(-1)
+    RequestAnimDict('mp_arrest_paired')
+    while not HasAnimDictLoaded('mp_arrest_paired') do
+        Citizen.Wait(0)
+    end
+    cuffanimplaying = true
+    TaskPlayAnim(ped, "mp_arrest_paired", "crook_p2_back_right", 8.0, -8, -1, 32, 0, 0, 0, 0)
+    Citizen.Wait(3000)
+    cuffanimplaying = false
 end)
 
 RegisterNetEvent("cuff:unCuff")
@@ -41,16 +83,23 @@ AddEventHandler("cuff:Handcuff", function()
 			end
 			--if IsEntityPlayingAnim(lPed, "mp_arresting", "idle", 3) then
 			if isCuffed then
+				while IsEntityPlayingAnim(GetPlayerPed(-1), "mp_arrest_paired", "crook_p2_back_right", 3) or cuffanimplaying do
+					Citizen.Wait(5)
+				end
 				Citizen.Trace("ENTITY WAS ALREADY PLAYING ARRESTED ANIM, UNCUFFING")
 				ClearPedSecondaryTask(lPed)
 				SetEnableHandcuffs(lPed, false)
 				--FreezeEntityPosition(lPed, false)
 				DrawCoolLookingNotificationNoPic("You have been ~g~released~w~.")
 				isCuffed = false
+				isHardcuffed = false
 			  if IsPedModel(lPed,"mp_m_freemode_01") or IsPedModel(lPed,"mp_f_freemode_01") then
 					SetPedComponentVariation(lPed, 7, 0, 0, 2)
 				end
 			else
+				while IsEntityPlayingAnim(GetPlayerPed(-1), "mp_arrest_paired", "crook_p2_back_right", 3) or cuffanimplaying do
+					Citizen.Wait(5)
+				end
 				Citizen.Trace("ENTITY WAS NOT PLAYING ARRESTED ANIM, CUFFING")
 				TaskPlayAnim(lPed, "mp_arresting", "idle", 8.0, -8, -1, 49, 0, 0, 0, 0)
 				SetEnableHandcuffs(lPed, true)
@@ -58,7 +107,7 @@ AddEventHandler("cuff:Handcuff", function()
 				-- FreezeEntityPosition(lPed, true)
 				DrawCoolLookingNotificationNoPic("You have been ~r~detained~w~.")
 				isCuffed = true
-				if SOUND_ENABLE then TriggerServerEvent("InteractSound_SV:PlayWithinDistance", 1.0, "handcuff", 0.2) end
+				isHardcuffed = false
 				if IsPedModel(lPed,"mp_m_freemode_01") then
 					SetPedComponentVariation(lPed, 7, 41, 0, 2)
 				elseif IsPedModel(lPed,"mp_f_freemode_01") then
@@ -148,6 +197,12 @@ Citizen.CreateThread(function()
 			--SetEntityVelocity(GetPlayerPed(-1), 0.3, 0.3, 0.0)
 			DisableControlAction(0, 21, true)
 
+			if isHardcuffed then
+				DisableControlAction(0, 30, true)
+				DisableControlAction(0, 31, true)
+				DisableControlAction(0, 19, true)
+			end
+
 			if not IsEntityPlayingAnim(GetPlayerPed(-1), "mp_arresting", "idle", 3) then
 				RequestAnimDict("mp_arresting")
 				while not HasAnimDictLoaded("mp_arresting") do
@@ -199,45 +254,56 @@ function DrawCoolLookingNotificationNoPic(msg)
 	DrawNotification(0,1)
 end
 
---[[ CUFFING HOT KEY (NEEDS TO BE ADJUSTED / OPTIMIZED)
 Citizen.CreateThread(function()
-	while true do
-		Wait(0)
-		local target = GetCurrentTargetCar()
-		playerId = 0
-		playerName = ""
-		for id = 0, 64 do
-			if NetworkIsPlayerActive(id) then
-				if GetPlayerPed(id) == target then
-					playerId = GetPlayerServerId(id)
-					playerName = GetPlayerName(id)
-				end
-			end
-		end
-		-- Citizen.Trace("target = " .. target)
-		if target ~= nil then
-			if ( IsControlPressed( 1, 36 ) and IsControlJustPressed( 1, 38 ) ) then -- LCTRL + e to cuff
-				--Citizen.Trace("Y DETECTED!")
-				--Citizen.Trace("target = " .. target)
-				if playerId ~= 0 then
-					--Citizen.Trace("SENDING CUFF!")
-					TriggerServerEvent("cuff:Handcuff", playerId)
-				end
-			end
-		end
+    while true do
+        Citizen.Wait(0)
+        local ped = PlayerPedId()
+        if not isCuffed and IsControlPressed(0, 19) and IsControlJustPressed(0, 38) and not IsPedRagdoll(ped) and not IsEntityDead(ped) and DoesEntityExist(ped) and not IsPedSittingInAnyVehicle( ped ) and not IsPedInMeleeCombat(ped) then
+        	TriggerServerEvent('pdmenu:checkWhitelist', 'cuff:triggerHotkeyCuff')
+        end
+    end
+end)
+
+RegisterNetEvent('cuff:triggerHotkeyCuff')
+AddEventHandler('cuff:triggerHotkeyCuff', function()
+	local pedtocuff = GetPedInFront()
+    local pedsource = GetPlayerServerId(GetPlayerFromPed(pedtocuff))
+    local x,y,z=table.unpack(GetEntityCoords(GetPlayerPed(-1)))
+    local heading = GetEntityHeading(GetPlayerPed(-1))
+    local px,py,pz=table.unpack(GetEntityCoords(pedtocuff))
+    local dist = GetDistanceBetweenCoords(px,py,pz, x,y,z)
+    if dist < 1 and not IsPedInMeleeCombat(pedtocuff) and not IsPedSprinting(pedtocuff) and not IsPedJumping(pedtocuff) and not IsPedRunning(pedtocuff) and IsPedAPlayer(pedtocuff) then
+        TriggerEvent('cuff:playPoliceAnim', 1)
+        TriggerServerEvent('cuff:triggerSuspectAnim', pedsource, x,y,z,heading)
+        TriggerServerEvent('cuff:Handcuff', pedsource)
+    end
+end)
+
+RegisterNetEvent('cuff:toggleHardcuff')
+AddEventHandler('cuff:toggleHardcuff', function(value)
+	isHardcuffed = value
+	if isHardcuffed then
+		DrawCoolLookingNotificationNoPic("You have been hardcuffed to an object!")
+	else
+		DrawCoolLookingNotificationNoPic("You are free to walk...")
 	end
 end)
 
-function GetCurrentTargetCar()
-    local ped = GetPlayerPed(-1)
-    local coords = GetEntityCoords(ped)
-
-    local entityWorld = GetOffsetFromEntityInWorldCoords(ped, 0.0, 5.0, 0.0)
-    local rayHandle = CastRayPointToPoint(coords.x, coords.y, coords.z, entityWorld.x, entityWorld.y, entityWorld.z, 2, ped, 0)
-    local a, b, c, d, vehicleHandle = GetRaycastResult(rayHandle)
-
-	--DrawMarker(4, entityWorld.x, entityWorld.y, entityWorld.z, 0, GetEntityHeading(GetPlayerPed(-1)), 0, 0, 0.0, 0, 1.5, 1.0, 1.25, 255, 255, 255, 200, 0, false, 0, 0)
-
-    return vehicleHandle
+function GetPedInFront()
+    local player = PlayerId()
+    local plyPed = GetPlayerPed(player)
+    local plyPos = GetEntityCoords(plyPed, false)
+    local plyOffset = GetOffsetFromEntityInWorldCoords(plyPed, 0.0, 1.3, 0.0)
+    local rayHandle = StartShapeTestCapsule(plyPos.x, plyPos.y, plyPos.z, plyOffset.x, plyOffset.y, plyOffset.z, 1.0, 12, plyPed, 7)
+    local _, _, _, _, ped = GetShapeTestResult(rayHandle)
+    return ped
 end
-CUFFING HOT KEY (NEEDS TO BE ADJUSTED / OPTIMIZED) --]]
+
+function GetPlayerFromPed(ped)
+    for a = 0, 64 do
+        if GetPlayerPed(a) == ped then
+            return a
+        end
+    end
+    return -1
+end

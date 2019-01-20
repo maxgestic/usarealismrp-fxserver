@@ -138,6 +138,9 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(100) -- check every 100 ticks, performance matters
 		local ped = PlayerPedId()
+    if DoesEntityExist(ped) and IsPedUsingActionMode(ped)  then -- disable action mode/combat stance when engaged in combat (thing which makes you run around like an idiot when shooting)
+        SetPedUsingActionMode(ped, false, -1, 0)
+    end
 		if IsPedOnFoot(ped) and not IsPedSwimming(ped) and (IsPedRunning(ped) or IsPedSprinting(ped)) and not IsPedClimbing(ped) and IsPedJumping(ped) and not IsPedRagdoll(ped) then
       local chance_result = math.random()
 			if chance_result < ragdoll_chance then
@@ -149,6 +152,7 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
+
 
 -- no police npc / never wanted
 Citizen.CreateThread(function()

@@ -107,6 +107,8 @@ AddEventHandler("lock:lockVehicle", function()
 
 	-- ## Notifications
 		if soundEnable then TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "lock", 1.0) end
+		PlayLockAnim()
+		Citizen.Wait(500)
 		TriggerEvent("lock:sendNotification", notificationParam, "Vehicle locked.", 0.080)
 	-- ## Notifications
 end)
@@ -126,6 +128,8 @@ AddEventHandler("lock:unlockVehicle", function()
 
 	-- ## Notifications
 		if soundEnable then	TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "unlock", 1.0) end
+		PlayLockAnim()
+		Citizen.Wait(500)
 		TriggerEvent("lock:sendNotification", notificationParam, "Vehicle unlocked.", 0.080)
 	-- ## Notifications
 
@@ -178,4 +182,19 @@ function GetVehicleInDirection(coordFrom, coordTo)
 	end
 
 	return vehicleResult
+end
+
+function PlayLockAnim()
+    if not IsPedCuffed(GetPlayerPed(-1)) then
+        loadAnimDict('anim@mp_player_intmenu@key_fob@')
+        ped = GetPlayerPed(-1)
+        TaskPlayAnim(ped, "anim@mp_player_intmenu@key_fob@", "fob_click", 8.0, 1.0, -1, 48)
+    end
+end
+
+function loadAnimDict( dict )
+    while ( not HasAnimDictLoaded( dict ) ) do
+        RequestAnimDict( dict )
+        Citizen.Wait( 0 )
+    end
 end
