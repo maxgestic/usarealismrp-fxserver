@@ -1,0 +1,1 @@
+draggedPlayers = {} -- list of players being dragged where draggedPlayers[sourceDragging] = sourceBeingDragged
