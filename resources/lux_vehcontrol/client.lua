@@ -400,11 +400,12 @@ Citizen.CreateThread(function()
 						DisableControlAction(0, 81, true) -- INPUT_VEH_NEXT_RADIO
 						DisableControlAction(0, 82, true) -- INPUT_VEH_PREV_RADIO
 						DisableControlAction(0, 19, true) -- INPUT_CHARACTER_WHEEL 
-						DisableControlAction(0, 85, true) -- INPUT_VEH_RADIO_WHEEL 
+						DisableControlAction(0, 58, true) -- INPUT_THROW_GRENADE 
 						DisableControlAction(0, 80, true) -- INPUT_VEH_CIN_CAM 
+						-- hopefully this fixes the radio issue, i took the script from my previous test server and replaced this one...
+						-- that one seemed to work fine**
 					
-						SetVehRadioStation(veh, "OFF")
-						SetVehicleRadioEnabled(veh, false)
+						SetVehicleRadioEnabled(veh, true)
 						
 						if state_lxsiren[veh] ~= 1 and state_lxsiren[veh] ~= 2 and state_lxsiren[veh] ~= 3 then
 							state_lxsiren[veh] = 0
@@ -439,7 +440,7 @@ Citizen.CreateThread(function()
 						if not IsPauseMenuActive() then
 						
 							-- TOG DFLT SRN LIGHTS
-							if IsDisabledControlJustReleased(0, 85) or IsDisabledControlJustReleased(0, 246) then
+							if IsDisabledControlJustReleased(0, 58) or IsDisabledControlJustReleased(0, 246) then
 								if IsVehicleSirenOn(veh) then
 									PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 									SetVehicleSiren(veh, false)

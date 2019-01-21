@@ -1,34 +1,30 @@
-local draggedBy = -1
 local drag = false
+local draggedBy = nil -- source of the PERSON the ped is 'DRAGGED BY'
 local wasDragged = false
 local playDragAnim = false
-local draggedPedSource = nil
+local draggedPedSource = nil -- source of the ped the PERSON is 'DRAGGING'
 
 RegisterNetEvent("drag:attemptToDragNearest")
 AddEventHandler('drag:attemptToDragNearest', function()
 	TriggerEvent("usa:getClosestPlayer", 1.65, function(player)
-		if player.id ~= 0 then
-			TriggerServerEvent("dr:dragPlayer", player.id)
-			TriggerEvent('police:playDragAnim')
+		if not draggedPedSource then
+			if player.id ~= 0 then
+				draggedPedSource = player.id
+				TriggerServerEvent("police:drag", player.id)
+				TriggerEvent('police:playDragAnim')
+			else
+				TriggerEvent("usa:notify", "No player to drag!")
+			end
 		else
-			TriggerEvent("usa:notify", "No player to drag!")
+			print('undragging')
+			print('argued as not nil: '.. draggedPedSource)
+			ClearPedTasksImmediately(myped)
+			TriggerServerEvent('police:drag', draggedPedSource)
+			draggedPedSource = nil
+			playDragAnim = false
+			ClearPedTasksImmediately(PlayerPedId())
 		end
 	end)
-end)
-
-RegisterNetEvent("dr:drag")
-AddEventHandler('dr:drag', function(pl)
-	draggedBy = tonumber(pl)
-	local ped = GetPlayerPed(GetPlayerFromServerId(draggedBy))
-	local myped = GetPlayerPed(-1)
-	if ped ~= myped then
-		if drag then
-			DetachEntity(GetPlayerPed(-1), true, false)
-		else
-			AttachEntityToEntity(myped, ped, 11816, 0.61, 0.24, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
-		end
-		drag = not drag
-	end
 end)
 
 -----------------------------------------------------------------------------------------------------------------------------
@@ -43,6 +39,22 @@ RegisterNetEvent("police:dragtoggle")
 AddEventHandler("police:dragtoggle", function(_source)
     draggedBy = _source
     drag = not drag
+end)
+
+RegisterNetEvent('police:preformCheck')
+AddEventHandler('police:preformCheck', function(sourceToDrag)
+	if not draggedPedSource then
+		TriggerServerEvent('police:drag', sourceToDrag)
+	else
+		print('undragging')
+		print('argued as not nil: '.. draggedPedSource)
+		TriggerEvent("usa:notify", "Already dragging a player, detaching!")
+		ClearPedTasksImmediately(myped)
+		TriggerServerEvent('police:drag', draggedPedSource)
+		draggedPedSource = nil
+		playDragAnim = false
+		ClearPedTasksImmediately(PlayerPedId())
+	end
 end)
 
 Citizen.CreateThread(function()

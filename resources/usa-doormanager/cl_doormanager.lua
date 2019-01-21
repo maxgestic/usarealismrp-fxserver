@@ -7,9 +7,10 @@ local DOORS_TO_MANAGE = {} -- loaded from server file on start of resource
 local LOCK_KEY = 38 -- "E"
 local ACTIVATE_LOCK_SWITCH_DISTANCE = 1.5
 local DRAW_MARKER_RANGE = 50
-local DRAW_3D_TEXT_RANGE = 2.5
+local DRAW_3D_TEXT_RANGE = 2.0
 local RELOCK_DISTANCE = 50.0
 local DEBUG = false
+local doorBeingLocked = nil
 
 local FIRST_JOIN = true
 
@@ -29,62 +30,75 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
-    ---------------------------------------
-    -- LOAD STATE OF DOORS ON FIRST JOIN --
-    ---------------------------------------
-    if FIRST_JOIN then
-      TriggerServerEvent("doormanager:firstJoin")
-      FIRST_JOIN = false
-    end
+		---------------------------------------
+		-- LOAD STATE OF DOORS ON FIRST JOIN --
+		---------------------------------------
+		if FIRST_JOIN then
+			TriggerServerEvent("doormanager:firstJoin")
+			FIRST_JOIN = false
+		end
 
-    me = GetPlayerPed(-1)
-    mycoords = GetEntityCoords(me, 1)
+		me = GetPlayerPed(-1)
+		mycoords = GetEntityCoords(me, 1)
 
-    -----------------------------
-    -- CHECK DIST TO EACH DOOR --
-    -----------------------------
-    for i = 1, #DOORS_TO_MANAGE do
+		-----------------------------
+		-- CHECK DIST TO EACH DOOR --
+		-----------------------------
+		for i = 1, #DOORS_TO_MANAGE do
 
-      -- below if statement used to convert locations not set up as a table yet --
-      if not DOORS_TO_MANAGE[i].locations then
-        DOORS_TO_MANAGE[i].locations = {{x = DOORS_TO_MANAGE[i].x, y = DOORS_TO_MANAGE[i].y, z = DOORS_TO_MANAGE[i].z}}
-      end
+			-- below if statement used to convert locations not set up as a table yet --
+			if not DOORS_TO_MANAGE[i].locations then
+				DOORS_TO_MANAGE[i].locations = {{x = DOORS_TO_MANAGE[i].x, y = DOORS_TO_MANAGE[i].y, z = DOORS_TO_MANAGE[i].z}}
+			end
 
-      for j = 1, #DOORS_TO_MANAGE[i].locations do
-        -----------------------------------
-        -- LISTEN FOR DOOR TOGGLE EVENTS --
-        -----------------------------------
-        if Vdist(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, mycoords.x, mycoords.y, mycoords.z) <= ACTIVATE_LOCK_SWITCH_DISTANCE then
-          DrawSpecialText("Press ~g~E~w~ to toggle lock at: " .. DOORS_TO_MANAGE[i].name)
-          if IsControlJustPressed(1, LOCK_KEY) then
-            TriggerServerEvent("doormanager:checkDoorLock", i, DOORS_TO_MANAGE[i], DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z)
-            --if SOUND_ENABLE then TriggerServerEvent("InteractSound_SV:PlayWithinDistance", 1.2, "cell-lock", 0.2) end
-          end
-        end
-        --------------------------
-        -- DRAW MARKERS / TEXT  --
-        --------------------------
-        if Vdist(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, mycoords.x, mycoords.y, mycoords.z) < DRAW_MARKER_RANGE then
-          -------------------------
-          -- draw ground markers --
-          -------------------------
-          if DOORS_TO_MANAGE[i].draw_marker then
-            DrawMarker(27, DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z - 0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 40, 40, 240, 90, 0, 0, 2, 0, 0, 0, 0)
-          end
-          ------------------
-          -- draw 3d text --
-          ------------------
-          if Vdist(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, mycoords.x, mycoords.y, mycoords.z) < DRAW_3D_TEXT_RANGE then
-            if DOORS_TO_MANAGE[i].locked then
-              DrawText3Ds(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, "Press [E] to Unlock")
-            else
-              DrawText3Ds(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, "Press [E] to Lock")
-            end
-          end
-        end
-      end
-
-    end
+			for j = 1, #DOORS_TO_MANAGE[i].locations do
+				-----------------------------------
+				-- LISTEN FOR DOOR TOGGLE EVENTS --
+				-----------------------------------
+				if Vdist(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, mycoords.x, mycoords.y, mycoords.z) <= DOORS_TO_MANAGE[i]._dist and not DOORS_TO_MANAGE[i].static then
+					if IsControlJustPressed(1, LOCK_KEY) and DOORS_TO_MANAGE[i] ~= doorBeingLocked then
+						PlayLockAnim()
+						Citizen.Wait(400)
+						TriggerServerEvent("doormanager:checkDoorLock", i, DOORS_TO_MANAGE[i], DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z)
+						--if SOUND_ENABLE then TriggerServerEvent("InteractSound_SV:PlayWithinDistance", 1.2, "cell-lock", 0.2) end
+					end
+				end
+				------------------
+				-- draw 3d text --
+				------------------
+				if Vdist(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, mycoords.x, mycoords.y, mycoords.z) < DRAW_3D_TEXT_RANGE and not DOORS_TO_MANAGE[i].static and not DOORS_TO_MANAGE[i].ymap and DOORS_TO_MANAGE[i] ~= doorBeingLocked then
+					local doorObject = GetClosestObjectOfType(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, 1.0, DOORS_TO_MANAGE[i].model, false, false, false)
+					--print("heading: " .. GetEntityHeading(doorObject))
+					local door = GetEntityCoords(doorObject)
+					local angle = math.rad(DOORS_TO_MANAGE[i].angle+GetEntityHeading(doorObject))
+					local r = DOORS_TO_MANAGE[i].offsetY
+					local x=door.x+r*math.cos(angle)
+					local y=door.y+r*math.sin(angle)
+					if DOORS_TO_MANAGE[i].locked then
+					DrawText3Ds(x+DOORS_TO_MANAGE[i].offsetX, y, door.z+DOORS_TO_MANAGE[i].offsetZ, "[E] - Locked")
+					else
+					DrawText3Ds(x+DOORS_TO_MANAGE[i].offsetX, y, door.z+DOORS_TO_MANAGE[i].offsetZ, "[E] - Unlocked")
+					end
+				elseif Vdist(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, mycoords.x, mycoords.y, mycoords.z) < DRAW_3D_TEXT_RANGE and not DOORS_TO_MANAGE[i].static and DOORS_TO_MANAGE[i].ymap then
+					if DOORS_TO_MANAGE[i].locked then
+						DrawText3Ds(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, "[E] - Locked")
+					else
+						DrawText3Ds(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, "[E] - Unlocked")
+					end
+				end
+				--------------------------	
+				-- DRAW MARKERS / TEXT  --	
+				--------------------------	
+				if Vdist(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, mycoords.x, mycoords.y, mycoords.z) < DRAW_MARKER_RANGE and not DOORS_TO_MANAGE[i].static then	
+					-------------------------	
+					-- draw ground markers --	
+					-------------------------	
+					if DOORS_TO_MANAGE[i].draw_marker then	
+						DrawMarker(27, DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z - 0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 40, 40, 240, 90, 0, 0, 2, 0, 0, 0, 0)	
+					end
+				end
+			end
+		end
 	end
 end)
 
@@ -135,6 +149,19 @@ AddEventHandler("doormanager:toggleDoorLock", function(index, locked, x, y, z)
   if door then
       local door_entity = GetObject(door.model, door.distance, x, y, z)
       if not door.cell_block then
+        if locked and not door.ymap then
+          while math.floor(GetEntityHeading(door_entity)) ~= door.heading do
+            doorBeingLocked = door
+            local door = GetEntityCoords(door_entity)
+            local angle = math.rad(DOORS_TO_MANAGE[index].angle+GetEntityHeading(door_entity))
+            local r = DOORS_TO_MANAGE[index].offsetY
+            local x=door.x+r*math.cos(angle)
+            local y=door.y+r*math.sin(angle)
+            Citizen.Wait(1)
+            DrawText3Ds(x+DOORS_TO_MANAGE[index].offsetX, y, door.z+DOORS_TO_MANAGE[index].offsetZ, "Locking...", 320, 2)
+            doorBeingLocked = nil
+          end
+        end
         FreezeEntityPosition(door_entity, locked)
       else
         SetEntityAsMissionEntity(door_entity, true, true)
@@ -207,4 +234,19 @@ function DrawText3Ds(x,y,z, text)
     DrawText(_x,_y)
     --local factor = (string.len(text)) / 370
     --DrawRect(_x,_y+0.0125, 0.015+ factor, 0.03, 41, 11, 41, 68)
+end
+
+function loadAnimDict( dict )
+    while ( not HasAnimDictLoaded( dict ) ) do
+        RequestAnimDict( dict )
+        Citizen.Wait( 0 )
+    end
+end
+
+function PlayLockAnim()
+    if not IsPedCuffed(GetPlayerPed(-1)) then
+        loadAnimDict('anim@mp_player_intmenu@key_fob@')
+        ped = GetPlayerPed(-1)
+        TaskPlayAnim(ped, "anim@mp_player_intmenu@key_fob@", "fob_click", 8.0, 1.0, -1, 48)
+    end
 end

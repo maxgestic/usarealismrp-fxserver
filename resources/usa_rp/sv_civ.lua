@@ -199,7 +199,8 @@ local walkstyles = {
 	{display_name = "Sexy", clipset_name ="move_f@sexy@a"},
 	{display_name = "Slightly Drunk", clipset_name ="MOVE_M@DRUNK@SLIGHTLYDRUNK"},
 	{display_name = "Moderately Drunk", clipset_name ="MOVE_M@DRUNK@MODERATEDRUNK_HEAD_UP"},
-    {display_name = "Very Drunk", clipset_name ="MOVE_M@DRUNK@VERYDRUNK"}
+    {display_name = "Very Drunk", clipset_name ="MOVE_M@DRUNK@VERYDRUNK"},
+    {display_name = "Grooving", clipset_name="ANIM@MOVE_M@GROOVING@SLOW@"}
 }
 
 ----------------------------

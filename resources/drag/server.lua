@@ -4,8 +4,7 @@ TriggerEvent('es:addCommand', 'drag', function(source, args, user)
 			local userJob = user.getActiveCharacterData("job")
 			local userGroup = user.getGroup()
 			if userJob == "corrections" or userJob == "sheriff" or userJob == "cop" or userJob == "ems" or userJob == "fire" or userGroup == "mod" or userGroup == "admin" or userGroup == "superadmin" or userGroup == "owner" then
-				TriggerClientEvent("dr:drag", tonumber(args[2]), usource)
-				TriggerClientEvent('police:playDragAnim', usource)
+				TriggerClientEvent('police:preformCheck', usource, tonumber(args[2])) -- checks if the usource is already dragging anyone, if not, will continue...
 			else
 				TriggerClientEvent("drag:attemptToDragNearest", usource)
 			end

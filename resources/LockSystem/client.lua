@@ -185,7 +185,7 @@ function GetVehicleInDirection(coordFrom, coordTo)
 end
 
 function PlayLockAnim()
-    if not IsPedCuffed(GetPlayerPed(-1)) then
+    if not IsPedCuffed(GetPlayerPed(-1)) and not IsPedInAnyVehicle(GetPlayerPed(-1), true) then
         loadAnimDict('anim@mp_player_intmenu@key_fob@')
         ped = GetPlayerPed(-1)
         TaskPlayAnim(ped, "anim@mp_player_intmenu@key_fob@", "fob_click", 8.0, 1.0, -1, 48)

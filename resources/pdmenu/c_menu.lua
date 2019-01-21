@@ -101,8 +101,24 @@ function AddGarageMenuItems(menu)
 						spawnedVeh = CreateVehicle(vehicleHash, policeGarages[i]._x,policeGarages[i]._y,policeGarages[i]._z, policeGarages[i]._heading, true)
 					end
 				end
-		        SetEntityAsMissionEntity(spawnedVeh)
-		        TaskWarpPedIntoVehicle(GetPlayerPed(-1), spawnedVeh, -1)
+				SetVehicleHasBeenOwnedByPlayer(spawnedVeh, true)
+				SetVehicleExplodesOnHighExplosionDamage(spawnedVeh, false)
+				SetVehicleEngineOn(spawnedVeh, true, true, false)
+		    SetEntityAsMissionEntity(spawnedVeh)
+		    TaskWarpPedIntoVehicle(GetPlayerPed(-1), spawnedVeh, -1)
+
+				local vehicle_key = {
+					name = "Key -- " .. GetVehicleNumberPlateText(spawnedVeh),
+					quantity = 1,
+					type = "key",
+					owner = "GOVT",
+					make = "GOVT",
+					model = "GOVT",
+					plate = GetVehicleNumberPlateText(spawnedVeh)
+				}
+
+				-- give key to owner
+				TriggerServerEvent("garage:giveKey", vehicle_key)
 			else
 				ShowNotification('You must return your current vehicle first!')
 			end
@@ -111,7 +127,7 @@ function AddGarageMenuItems(menu)
 end
 
 function AddCustomization(menu)
-	menuPool:TotalItemsPerPage(20)
+	menuPool:TotalItemsPerPage(10)
 	local engineupgrades = {
 		"None",
 		"EMS Upgrade, Level 1",
@@ -202,25 +218,26 @@ function AddCustomization(menu)
 			SetVehicleExtra(GetVehiclePedIsUsing(GetPlayerPed(-1)), 12, (not checked_))
 		end
 	end
-	menu.OnListChange = function(sender, item, index)
-		if item == engines then
-			local vehicle = GetVehiclePedIsUsing(GetPlayerPed(-1))
-			local engine = item:IndexToItem(index)
-			if engine == "EMS Upgrade, Level 1" then
-				SetVehicleMod(vehicle, 11, 0)
-			elseif engine == "EMS Upgrade, Level 2" then
-				SetVehicleMod(vehicle, 11, 1)
-			elseif engine == "EMS Upgrade, Level 3" then
-				SetVehicleMod(vehicle, 11, 2)
-			elseif engine == "EMS Upgrade, Level 4" then
-				SetVehicleMod(vehicle, 11, 3)
-			else
-				SetVehicleMod(vehicle, 11, -1)
-			end
-		elseif item == color then
-			x = item:IndexToItem(index)
-			SetVehicleColours(GetVehiclePedIsUsing(GetPlayerPed(-1)), colors[x], colors[x])
+	color.OnListSelected = function(sender, item, index)
+		x = item:IndexToItem(index)
+		SetVehicleColours(GetVehiclePedIsUsing(GetPlayerPed(-1)), colors[x], colors[x])	
+		ShowNotification('Applied: '..x)
+	end
+	engines.OnListSelected = function(sender, item, index)
+		local vehicle = GetVehiclePedIsUsing(GetPlayerPed(-1))
+		local engine = item:IndexToItem(index)
+		if engine == "EMS Upgrade, Level 1" then
+			SetVehicleMod(vehicle, 11, 0)
+		elseif engine == "EMS Upgrade, Level 2" then
+			SetVehicleMod(vehicle, 11, 1)
+		elseif engine == "EMS Upgrade, Level 3" then
+			SetVehicleMod(vehicle, 11, 2)
+		elseif engine == "EMS Upgrade, Level 4" then
+			SetVehicleMod(vehicle, 11, 3)
+		else
+			SetVehicleMod(vehicle, 11, -1)
 		end
+		ShowNotification('Applied: '..engine)
 	end
 end
 
@@ -239,14 +256,14 @@ Citizen.CreateThread(function()
        	local px,py,pz=table.unpack(GetEntityCoords(GetPlayerPed(-1)))
         if IsControlJustPressed(0, 38) then
         	for i = 1, #policeGarages do
-        		if Vdist(px,py,pz,policeGarages[i].x,policeGarages[i].y,policeGarages[i].z)  <  9 then
+        		if Vdist(px,py,pz,policeGarages[i].x,policeGarages[i].y,policeGarages[i].z)  <  5 then
 					TriggerServerEvent('pdmenu:checkWhitelist', 'pdmenu:openGarageMenu')
 				end
 			end
 		end
        	if IsControlJustPressed(0, 303) then
        		for i = 1, #policeGarages do
-        		if Vdist(px,py,pz,policeGarages[i].x,policeGarages[i].y,policeGarages[i].z)  <  9 then
+        		if Vdist(px,py,pz,policeGarages[i].x,policeGarages[i].y,policeGarages[i].z)  <  5 then
 					TriggerServerEvent('pdmenu:checkWhitelist', 'pdmenu:openCustomizationMenu')
 				end
 			end
