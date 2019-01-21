@@ -330,7 +330,7 @@ end)
 
 RegisterNetEvent("emotes:playEmote")
 AddEventHandler("emotes:playEmote", function(scenarioName)
-	if not isLockpicking then
+	if not isLockpicking and not IsPedRagdoll(GetPlayerPed(-1)) then
 		scenarioName = string.lower(scenarioName)
 		local ped = GetPlayerPed(-1)
 		ClearPedTasksImmediately(ped)
@@ -1161,14 +1161,15 @@ Citizen.CreateThread(function()
 		end
 
 		-- tackling:
-		if IsControlJustPressed( 0, TACKLE_KEY ) and GetLastInputMethod(2) then
+		if IsControlJustPressed( 0, TACKLE_KEY ) and GetLastInputMethod(2) and GetEntitySpeed(playerPed) > 3.0 then
 			if not IsEntityDead(GetPlayerPed(-1)) and not IsPedInAnyVehicle(GetPlayerPed(-1), true) then
 				if playerServerId ~= 0 then
-					if distanceToClosestTargetPed < 1.2 then
+					if distanceToClosestTargetPed < 1.5 then
 						if not IsPedRagdoll(GetPlayerPed(-1)) and not IsPedCuffed(GetPlayerPed(-1)) then
 							if GetGameTimer() > last_tackle_time + tackle_delay then
-								TriggerServerEvent("interaction:tackle", playerServerId)
-								SetPedToRagdoll(GetPlayerPed(-1), 1000, 1000, 0, true, true, false)
+								local fwdvector = GetEntityForwardVector(PlayerPedId())
+								TriggerServerEvent("interaction:tackle", playerServerId, fwdvector.x, fwdvector.y, fwdvector.z)
+								SetPedToRagdollWithFall(playerPed, 1500, 2000, 0, fwdvector, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 								last_tackle_time = GetGameTimer()
 							else
 								local seconds_left = ((last_tackle_time + tackle_delay) - GetGameTimer())/1000
@@ -1182,6 +1183,10 @@ Citizen.CreateThread(function()
 					TriggerEvent("usa:notify", "No player found to tackle!")
 				end
 			end
+		end
+
+		if IsPedRagdoll(playerPed) then
+			DisableControlAction(0, 19, true)
 		end
 
 		-- menu
@@ -1201,6 +1206,11 @@ Citizen.CreateThread(function()
 
 		Citizen.Wait(0)
 	end
+end)
+
+RegisterNetEvent('interaction:tackleMe')
+AddEventHandler('interaction:tackleMe', function(fwdVectorX, fwdVectorY, fwdVectorZ)
+	SetPedToRagdollWithFall(PlayerPedId(), 5500, 5500, 0, fwdVectorX, fwdVectorY, fwdVectorZ, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 end)
 
 function GetClosestPlayerInfo()

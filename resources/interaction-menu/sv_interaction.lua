@@ -16,8 +16,8 @@ end)
 
 
 RegisterServerEvent("interaction:tackle")
-AddEventHandler("interaction:tackle", function(targetId)
-	TriggerClientEvent("interaction:ragdoll", targetId)
+AddEventHandler("interaction:tackle", function(targetId, fwdVectorX, fwdVectorY, fwdVectorZ)
+	TriggerClientEvent("interaction:tackleMe", targetId, fwdVectorX, fwdVectorY, fwdVectorZ)
 end)
 
 RegisterServerEvent("test:cuff")

@@ -1,124 +1,89 @@
-local drag = false
 local draggedBy = nil -- source of the PERSON the ped is 'DRAGGED BY'
-local wasDragged = false
-local playDragAnim = false
-local draggedPedSource = nil -- source of the ped the PERSON is 'DRAGGING'
+local isDragged = false
+
+local sourceDragged = nil
+local isDragging = false
 
 RegisterNetEvent("drag:attemptToDragNearest")
 AddEventHandler('drag:attemptToDragNearest', function()
-	TriggerEvent("usa:getClosestPlayer", 1.65, function(player)
-		if not draggedPedSource then
-			if player.id ~= 0 then
-				draggedPedSource = player.id
-				TriggerServerEvent("police:drag", player.id)
-				TriggerEvent('police:playDragAnim')
-			else
-				TriggerEvent("usa:notify", "No player to drag!")
-			end
-		else
-			print('undragging')
-			print('argued as not nil: '.. draggedPedSource)
-			ClearPedTasksImmediately(myped)
-			TriggerServerEvent('police:drag', draggedPedSource)
-			draggedPedSource = nil
-			playDragAnim = false
-			ClearPedTasksImmediately(PlayerPedId())
-		end
-	end)
-end)
-
------------------------------------------------------------------------------------------------------------------------------
-
-RegisterNetEvent('police:playDragAnim')
-AddEventHandler('police:playDragAnim', function()
-	playDragAnim = not playDragAnim
-	ClearPedTasksImmediately(PlayerPedId())
-end)
-
-RegisterNetEvent("police:dragtoggle")
-AddEventHandler("police:dragtoggle", function(_source)
-    draggedBy = _source
-    drag = not drag
-end)
-
-RegisterNetEvent('police:preformCheck')
-AddEventHandler('police:preformCheck', function(sourceToDrag)
-	if not draggedPedSource then
-		TriggerServerEvent('police:drag', sourceToDrag)
-	else
-		print('undragging')
-		print('argued as not nil: '.. draggedPedSource)
-		TriggerEvent("usa:notify", "Already dragging a player, detaching!")
-		ClearPedTasksImmediately(myped)
-		TriggerServerEvent('police:drag', draggedPedSource)
-		draggedPedSource = nil
-		playDragAnim = false
-		ClearPedTasksImmediately(PlayerPedId())
+	local myPed = PlayerPedId()
+	local pedInFront = GetPedInFront()
+	local sourceInFront = GetPlayerServerId(GetPlayerFromPed(pedInFront))
+	if not isDragging and sourceInFront then
+		TriggerServerEvent('drag:sendDragPlayer', sourceInFront)
+		sourceDragged = sourceInFront
+	elseif isDragging and sourceDragged then
+		TriggerServerEvent('drag:sendDragPlayer', sourceDragged)
+		sourceDragged = nil
 	end
-end)
-
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0)
-        if drag then
-            wasDragged = true
-            AttachEntityToEntity(PlayerPedId(), GetPlayerPed(GetPlayerFromServerId(draggedBy)), 11816, 0.61, 0.24, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
-            DisablePlayerFiring(PlayerPedId(), true)
-            DisableControlAction(24, 37, true)
-            DisableControlAction(0, 25, true)
-        else
-            if not IsPedInParachuteFreeFall(PlayerPedId()) and wasDragged then
-                wasDragged = false
-                DetachEntity(PlayerPedId(), true, false)
-            end
-        end
-    end
 end)
 
 DetachEntity(PlayerPedId(), true, false)
 
+-----------------------------------------------------------------------------------------------------------------------------
+
+RegisterNetEvent('drag:dragPlayer')
+AddEventHandler('drag:dragPlayer', function(playerDraggedBy)
+	if draggedBy ~= playerDraggedBy then
+		if not isDragged then
+			draggedBy = playerDraggedBy
+			TriggerServerEvent('drag:toggleDragAction', draggedBy, true)
+			AttachEntityToEntity(PlayerPedId(), GetPlayerPed(GetPlayerFromServerId(draggedBy)), 11816, 0.61, 0.24, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
+			isDragged = true
+			-- dragging
+		end
+	elseif draggedBy == playerDraggedBy then
+		if isDragged then
+			TriggerServerEvent('drag:toggleDragAction', draggedBy, false)
+			DetachEntity(PlayerPedId(), true, false)
+			draggedBy = nil
+			isDragged = false
+			-- undragging
+		end
+	end
+end)
+
+RegisterNetEvent('drag:toggleDragAction')
+AddEventHandler('drag:toggleDragAction', function(toggleOn, _source)
+	isDragging = toggleOn
+	sourceDragged = _source
+	ClearPedTasksImmediately(PlayerPedId())
+end)
 
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-		local pedtoDrag = GetPedInFront()
-		local myped = PlayerPedId()
 		if IsControlPressed(0, 19) and IsControlJustPressed(0, 47) then
-			if draggedPedSource ~= nil then
-				print('undragging')
-				print('argued as not nil: '.. draggedPedSource)
-				ClearPedTasksImmediately(myped)
-				TriggerServerEvent('police:drag', draggedPedSource)
-				draggedPedSource = nil
-				playDragAnim = false
-			elseif IsPedAPlayer(pedtoDrag) then
-				print('dragging')
-				local playerToDrag = GetPlayerFromPed(pedtoDrag)
-				local playerSourceToDrag = GetPlayerServerId(playerToDrag)
-				TriggerServerEvent('police:drag', playerSourceToDrag)
-				draggedPedSource = playerSourceToDrag
-				if not IsEntityDead(pedtoDrag) then
-					playDragAnim = true
-				else
-					print('Dragged ped is down and drag animation won\'t play')
-				end
+			local myPed = PlayerPedId()
+			local pedInFront = GetPedInFront()
+			local sourceInFront = GetPlayerServerId(GetPlayerFromPed(pedInFront))
+			if not isDragging and sourceInFront then
+				TriggerServerEvent('drag:sendDragPlayer', sourceInFront)
+				sourceDragged = sourceInFront
+			elseif isDragging and sourceDragged then
+				TriggerServerEvent('drag:sendDragPlayer', sourceDragged)
+				sourceDragged = nil
 			end
 		end
-		if playDragAnim then
-			DisableControlAction(0, 22, true)
+		if isDragged then
+        	DisablePlayerFiring(PlayerPedId(), true)
+            DisableControlAction(24, 37, true)
+            DisableControlAction(0, 25, true)
+    	elseif isDragging then
+    		DisableControlAction(0, 22, true)
 			DisableControlAction(0, 44, true)
 			DisableControlAction(0, 23, true)
 			DisableControlAction(0, 21, true)
 			DisableControlAction(0, 25, true)
-			DisablePlayerFiring(myped, true)
+			DisablePlayerFiring(PlayerPedId(), true)
 		end
 	end
 end)
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(500)
-		if playDragAnim then
+		Citizen.Wait(100)
+		if isDragging then
 			local dict = "weapons@projectile@"
 			local anim = "aim_m"
 			RequestAnimDict(dict)
@@ -126,7 +91,7 @@ Citizen.CreateThread(function()
 				Citizen.Wait(100)
 			end
 			local x, y, z = table.unpack(GetEntityCoords(PlayerPedId()))
-	        local rx, ry, rz = table.unpack(GetEntityRotation(PlayerPedId()))
+			local rx, ry, rz = table.unpack(GetEntityRotation(PlayerPedId()))
 			TaskPlayAnim(PlayerPedId(), dict, anim, 8.0, 1.0, -1, 49, 0.0, 0, 0, 0)
 			Citizen.Wait(1800)
 		end

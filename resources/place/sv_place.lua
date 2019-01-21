@@ -5,9 +5,11 @@ TriggerEvent('es:addCommand', 'place', function(source, args, user, location)
 	if user_job == "sheriff" or user_job == "ems" or user_job == "fire" or user_job == "corrections" then
 		local tPID = tonumber(args[2])
 		TriggerClientEvent("place", tPID)
+		TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), source)
 		local msg = "Places person in vehicle."
 		exports["globals"]:sendLocalActionMessage(usource, msg)
 	else
+		TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), source)
 		TriggerClientEvent("crim:areHandsTied", tonumber(args[2]), source, tonumber(args[2]), "place")
 	end
 end, {

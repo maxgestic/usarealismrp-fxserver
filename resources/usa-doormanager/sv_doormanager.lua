@@ -117,3 +117,4 @@ TriggerEvent('es:addGroupCommand', 'lockdebug', 'owner', function(source, args, 
 end, {
 	help = "DEBUG: Debug the door lock system"
 })
+

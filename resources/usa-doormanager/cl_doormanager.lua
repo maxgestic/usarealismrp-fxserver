@@ -151,16 +151,19 @@ AddEventHandler("doormanager:toggleDoorLock", function(index, locked, x, y, z)
       if not door.cell_block then
         if locked and not door.ymap then
           while math.floor(GetEntityHeading(door_entity)) ~= door.heading do
-            doorBeingLocked = door
-            local door = GetEntityCoords(door_entity)
-            local angle = math.rad(DOORS_TO_MANAGE[index].angle+GetEntityHeading(door_entity))
-            local r = DOORS_TO_MANAGE[index].offsetY
-            local x=door.x+r*math.cos(angle)
-            local y=door.y+r*math.sin(angle)
+            local mycoords = GetEntityCoords(PlayerPedId())
             Citizen.Wait(1)
-            DrawText3Ds(x+DOORS_TO_MANAGE[index].offsetX, y, door.z+DOORS_TO_MANAGE[index].offsetZ, "Locking...", 320, 2)
-            doorBeingLocked = nil
+            if Vdist(door.x, door.y, door.z, mycoords.x, mycoords.y, mycoords.z) < DRAW_3D_TEXT_RANGE then
+              doorBeingLocked = door
+              local door = GetEntityCoords(door_entity)
+              local angle = math.rad(DOORS_TO_MANAGE[index].angle+GetEntityHeading(door_entity))
+              local r = DOORS_TO_MANAGE[index].offsetY
+              local x=door.x+r*math.cos(angle)
+              local y=door.y+r*math.sin(angle)
+              DrawText3Ds(x+DOORS_TO_MANAGE[index].offsetX, y, door.z+DOORS_TO_MANAGE[index].offsetZ, "Locking...", 320, 2)
+            end
           end
+          doorBeingLocked = nil
         end
         FreezeEntityPosition(door_entity, locked)
       else

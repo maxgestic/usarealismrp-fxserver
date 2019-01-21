@@ -1,10 +1,20 @@
+draggedPlayers = {} -- list of dragging players
+
 TriggerEvent('es:addCommand', 'drag', function(source, args, user)
 	local usource = source
-		if tonumber(args[2]) and tonumber(args[2]) ~= usource then
+		if tonumber(args[2]) then
 			local userJob = user.getActiveCharacterData("job")
 			local userGroup = user.getGroup()
 			if userJob == "corrections" or userJob == "sheriff" or userJob == "cop" or userJob == "ems" or userJob == "fire" or userGroup == "mod" or userGroup == "admin" or userGroup == "superadmin" or userGroup == "owner" then
-				TriggerClientEvent('police:preformCheck', usource, tonumber(args[2])) -- checks if the usource is already dragging anyone, if not, will continue...
+				if tonumber(args[2]) ~= usource and not draggedPlayers[usource] then
+					draggedPlayers[usource] = tonumber(args[2])
+					TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), usource)
+				elseif draggedPlayers[usource] == tonumber(args[2]) then
+					draggedPlayers[usource] = nil
+					TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), usource)
+				else
+					TriggerClientEvent('usa:notify', usource, 'You cannot drag yourself, or are already dragging a person!')
+				end
 			else
 				TriggerClientEvent("drag:attemptToDragNearest", usource)
 			end
@@ -17,13 +27,19 @@ TriggerEvent('es:addCommand', 'drag', function(source, args, user)
 	--end
 end, {help = "Drag a tied up or handcuffed player."})
 
-RegisterServerEvent("dr:dragPlayer")
-AddEventHandler("dr:dragPlayer", function(id)
-	TriggerClientEvent("dr:drag", tonumber(id), source)
+RegisterServerEvent('drag:toggleDragAction')
+AddEventHandler('drag:toggleDragAction', function(_source, toggleOn)
+	local sourceToToggle = _source	
+	TriggerClientEvent('drag:toggleDragAction', sourceToToggle, toggleOn, source)
 end)
 
-RegisterServerEvent('police:drag')
-AddEventHandler('police:drag', function(playerSourceToDrag)
-	psource = source
-	TriggerClientEvent('police:dragtoggle', playerSourceToDrag, psource)
+RegisterServerEvent('drag:sendDragPlayer')
+AddEventHandler('drag:sendDragPlayer', function(sourceBeingDragged)
+	local sourceDragging = source
+	if not draggedPlayers[sourceDragging] then
+		draggedPlayers[sourceDragging] = sourceBeingDragged
+	else
+		draggedPlayers[sourceDragging] = nil
+	end
+	TriggerClientEvent('drag:dragPlayer', sourceBeingDragged, sourceDragging)
 end)
