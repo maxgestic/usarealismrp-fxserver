@@ -1,19 +1,25 @@
+draggedPlayers = {}
+
 TriggerEvent('es:addCommand', 'place', function(source, args, user, location)
 	local usource = source
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local user_job = user.getActiveCharacterData("job")
 	if user_job == "sheriff" or user_job == "ems" or user_job == "fire" or user_job == "corrections" then
 		local tPID = tonumber(args[2])
+		TriggerEvent('drag:passTable', 'place:updateDragTable')
 		if draggedPlayers[usource] == tonumber(args[2]) then
-			TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), source)
+			TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), usource)
+			draggedPlayers[usource] = nil
+			TriggerEvent('place:returnUpdatedTable', draggedPlayers)
 		end
 		TriggerClientEvent("place", tPID)
-		TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), source)
 		local msg = "Places person in vehicle."
 		exports["globals"]:sendLocalActionMessage(usource, msg)
 	else
 		if draggedPlayers[usource] == tonumber(args[2]) then
-			TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), source)
+			TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), usource)
+			draggedPlayers[usource] = nil
+			TriggerEvent('place:returnUpdatedTable', draggedPlayers)
 		end
 		TriggerClientEvent("crim:areHandsTied", tonumber(args[2]), source, tonumber(args[2]), "place")
 	end
@@ -53,3 +59,8 @@ end, {
 		{ name = "id", help = "Players ID" }
 	}
 })
+
+RegisterServerEvent('place:updateDragTable')
+AddEventHandler('place:updateDragTable', function(table)
+	draggedPlayers = table
+end)

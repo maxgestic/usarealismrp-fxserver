@@ -1,4 +1,4 @@
-draggedPlayers = {} -- list of dragging players
+draggedPlayers = {}
 
 TriggerEvent('es:addCommand', 'drag', function(source, args, user)
 	local usource = source
@@ -42,4 +42,14 @@ AddEventHandler('drag:sendDragPlayer', function(sourceBeingDragged)
 		draggedPlayers[sourceDragging] = nil
 	end
 	TriggerClientEvent('drag:dragPlayer', sourceBeingDragged, sourceDragging)
+end)
+
+RegisterServerEvent('drag:passTable')
+AddEventHandler('drag:passTable', function(eventName)
+	TriggerEvent(eventName, draggedPlayers)
+end)
+
+RegisterServerEvent('place:returnUpdatedTable')
+AddEventHandler('place:returnUpdatedTable', function(table)
+	draggedPlayers = table
 end)

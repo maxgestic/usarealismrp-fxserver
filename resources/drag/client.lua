@@ -23,7 +23,7 @@ DetachEntity(PlayerPedId(), true, false)
 -----------------------------------------------------------------------------------------------------------------------------
 
 RegisterNetEvent('drag:dragPlayer')
-AddEventHandler('drag:dragPlayer', function(playerDraggedBy)
+AddEventHandler('drag:dragPlayer', function(playerDraggedBy, forceDrag)
 	if draggedBy ~= playerDraggedBy then
 		if not isDragged then
 			draggedBy = playerDraggedBy
@@ -45,6 +45,8 @@ end)
 
 RegisterNetEvent('drag:toggleDragAction')
 AddEventHandler('drag:toggleDragAction', function(toggleOn, _source)
+	print('isDragging: '..tostring(toggleOn))
+	print('sourceDragged: '..tostring(_source))
 	isDragging = toggleOn
 	sourceDragged = _source
 	ClearPedTasksImmediately(PlayerPedId())
