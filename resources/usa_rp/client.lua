@@ -153,6 +153,16 @@ Citizen.CreateThread(function()
 	end
 end)
 
+-- clear NPC cops --
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(100)
+		local playerPed = GetPlayerPed(-1)
+		local playerLocalisation = GetEntityCoords(playerPed)
+		ClearAreaOfCops(playerLocalisation.x, playerLocalisation.y, playerLocalisation.z, 400.0)
+	end
+end)
+
 
 -- no police npc / never wanted
 Citizen.CreateThread(function()
