@@ -83,42 +83,45 @@ function AddGarageMenuItems(menu)
 	    		local vehicleHash = GetHashKey(selectedVeh)
 				RequestModel(vehicleHash)
 		        local waiting = 0
-		        while not HasModelLoaded(vehicleHash) do
-		            waiting = waiting + 100
-		            Citizen.Wait(100)
-		            if waiting > 5000 then
-		                ShowNotification("~r~Could not load the vehicle model in time, please try again.")
-		                break
-		            end
-		        end
+		        if not HasModelLoaded(vehicleHash) then
+		        	ShowNotification("Loading vehicle model...")
+			        while not HasModelLoaded(vehicleHash) do
+			            waiting = waiting + 100
+			            Citizen.Wait(100)
+			            if waiting > 5000 then
+			                ShowNotification("~r~Could not load the vehicle model in time, please try again.")
+			                break
+			            end
+			        end
+			    end
 		        -- spawn vehicle --
 		        garageMenu:Visible(false)
 	        	local coords = GetEntityCoords(GetPlayerPed(-1), false)
 	        	local px,py,pz=table.unpack(GetEntityCoords(GetPlayerPed(-1)))
 	        	local spawnedVeh = nil
 	        	for i = 1, #policeGarages do
-	        		if Vdist(px,py,pz,policeGarages[i].x,policeGarages[i].y,policeGarages[i].z)  <  9 then
+	        		if Vdist(px,py,pz,policeGarages[i].x,policeGarages[i].y,policeGarages[i].z)  <  9 and waiting < 5000 then
 						spawnedVeh = CreateVehicle(vehicleHash, policeGarages[i]._x,policeGarages[i]._y,policeGarages[i]._z, policeGarages[i]._heading, true)
+						SetVehicleHasBeenOwnedByPlayer(spawnedVeh, true)
+						SetVehicleExplodesOnHighExplosionDamage(spawnedVeh, false)
+						SetVehicleEngineOn(spawnedVeh, true, true, false)
+					    SetEntityAsMissionEntity(spawnedVeh)
+					    TaskWarpPedIntoVehicle(GetPlayerPed(-1), spawnedVeh, -1)
+
+						local vehicle_key = {
+							name = "Key -- " .. GetVehicleNumberPlateText(spawnedVeh),
+							quantity = 1,
+							type = "key",
+							owner = "GOVT",
+							make = "GOVT",
+							model = "GOVT",
+							plate = GetVehicleNumberPlateText(spawnedVeh)
+						}
+
+						-- give key to owner
+						TriggerServerEvent("garage:giveKey", vehicle_key)
 					end
 				end
-				SetVehicleHasBeenOwnedByPlayer(spawnedVeh, true)
-				SetVehicleExplodesOnHighExplosionDamage(spawnedVeh, false)
-				SetVehicleEngineOn(spawnedVeh, true, true, false)
-		    SetEntityAsMissionEntity(spawnedVeh)
-		    TaskWarpPedIntoVehicle(GetPlayerPed(-1), spawnedVeh, -1)
-
-				local vehicle_key = {
-					name = "Key -- " .. GetVehicleNumberPlateText(spawnedVeh),
-					quantity = 1,
-					type = "key",
-					owner = "GOVT",
-					make = "GOVT",
-					model = "GOVT",
-					plate = GetVehicleNumberPlateText(spawnedVeh)
-				}
-
-				-- give key to owner
-				TriggerServerEvent("garage:giveKey", vehicle_key)
 			else
 				ShowNotification('You must return your current vehicle first!')
 			end

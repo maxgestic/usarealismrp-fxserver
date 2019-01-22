@@ -67,3 +67,8 @@ TriggerEvent('es:addJobCommand', 'sc', {"police", "sheriff", "corrections"}, fun
 		end
 	end
 end, {help = 'Softcuff the player specified, player must be cuffed first.', params = {{name = "id", help = "Target player ID #"}}})
+
+RegisterServerEvent('cuff:forceHandsDown')
+AddEventHandler('cuff:forceHandsDown', function()
+	TriggerClientEvent('usa:forceHandsDown', source)
+end)

@@ -188,6 +188,10 @@ Citizen.CreateThread(function()
 	end
 end)
 
+RegisterNetEvent('usa:forceHandsDown')
+AddEventHandler('usa:forceHandsDown', function()
+  hands_up = false
+end)
 -- hands up animation --
 Citizen.CreateThread(function()
   while true do

@@ -2,6 +2,9 @@ local lPed
 local isCuffed = false
 local isHardcuffed = false
 local cuffanimplaying = false
+local awaitingHandsDown = false
+local prevMaleVariation = 0
+local prevFemaleVariation = 0
 
 RegisterNetEvent("cuff:attemptToCuffNearest")
 AddEventHandler("cuff:attemptToCuffNearest", function()
@@ -74,6 +77,8 @@ end)
 
 RegisterNetEvent("cuff:Handcuff")
 AddEventHandler("cuff:Handcuff", function()
+	TriggerServerEvent('cuff:forceHandsDown')
+	Citizen.Wait(100)
 	lPed = GetPlayerPed(-1)
 	if DoesEntityExist(lPed) then
 		Citizen.CreateThread(function()
@@ -83,9 +88,6 @@ AddEventHandler("cuff:Handcuff", function()
 			end
 			--if IsEntityPlayingAnim(lPed, "mp_arresting", "idle", 3) then
 			if isCuffed then
-				while IsEntityPlayingAnim(GetPlayerPed(-1), "mp_arrest_paired", "crook_p2_back_right", 3) or cuffanimplaying do
-					Citizen.Wait(5)
-				end
 				Citizen.Trace("ENTITY WAS ALREADY PLAYING ARRESTED ANIM, UNCUFFING")
 				ClearPedSecondaryTask(lPed)
 				SetEnableHandcuffs(lPed, false)
@@ -93,9 +95,11 @@ AddEventHandler("cuff:Handcuff", function()
 				DrawCoolLookingNotificationNoPic("You have been ~g~released~w~.")
 				isCuffed = false
 				isHardcuffed = false
-			  if IsPedModel(lPed,"mp_m_freemode_01") or IsPedModel(lPed,"mp_f_freemode_01") then
-					SetPedComponentVariation(lPed, 7, 0, 0, 2)
-				end
+				if IsPedModel(lPed,"mp_f_freemode_01") then
+	            	SetPedComponentVariation(lPed, 7, prevFemaleVariation, 0, 0)
+	        	elseif IsPedModel(lPed, "mp_m_freemode_01") then
+	            	SetPedComponentVariation(lPed, 7, prevMaleVariation, 0, 0)
+	        	end
 			else
 				while IsEntityPlayingAnim(GetPlayerPed(-1), "mp_arrest_paired", "crook_p2_back_right", 3) or cuffanimplaying do
 					Citizen.Wait(5)
@@ -108,10 +112,12 @@ AddEventHandler("cuff:Handcuff", function()
 				DrawCoolLookingNotificationNoPic("You have been ~r~detained~w~.")
 				isCuffed = true
 				isHardcuffed = false
-				if IsPedModel(lPed,"mp_m_freemode_01") then
-					SetPedComponentVariation(lPed, 7, 41, 0, 2)
-				elseif IsPedModel(lPed,"mp_f_freemode_01") then
-					SetPedComponentVariation(lPed, 7, 25, 0, 2)
+				if IsPedModel(lPed,"mp_f_freemode_01") then
+			  		prevFemaleVariation = GetPedDrawableVariation(lPed, 7)
+					SetPedComponentVariation(lPed, 7, 25, 0, 0)
+				elseif IsPedModel(lPed,"mp_m_freemode_01") then
+					prevMaleVariation = GetPedDrawableVariation(lPed, 7)
+            		SetPedComponentVariation(lPed, 7, 41, 0, 0)
 				end
 			end
 		end)
@@ -307,3 +313,4 @@ function GetPlayerFromPed(ped)
     end
     return -1
 end
+
