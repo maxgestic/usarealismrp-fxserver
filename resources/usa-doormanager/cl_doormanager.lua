@@ -70,7 +70,12 @@ Citizen.CreateThread(function()
 					local doorObject = GetClosestObjectOfType(DOORS_TO_MANAGE[i].locations[j].x, DOORS_TO_MANAGE[i].locations[j].y, DOORS_TO_MANAGE[i].locations[j].z, 1.0, DOORS_TO_MANAGE[i].model, false, false, false)
 					--print("heading: " .. GetEntityHeading(doorObject))
 					local door = GetEntityCoords(doorObject)
-					local angle = math.rad(DOORS_TO_MANAGE[i].angle+GetEntityHeading(doorObject))
+					local angle = 0
+					if DOORS_TO_MANAGE[i].angle then
+						angle = math.rad(DOORS_TO_MANAGE[i].angle+GetEntityHeading(doorObject))
+					else
+						print("USA-DOORMANAGER: " .. DOORS_TO_MANAGE[i].name .. " IS MISSING AN ANGLE PROPERTY, PLEASE ADD")
+					end
 					local r = DOORS_TO_MANAGE[i].offsetY
 					local x=door.x+r*math.cos(angle)
 					local y=door.y+r*math.sin(angle)
