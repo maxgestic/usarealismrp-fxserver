@@ -1,119 +1,68 @@
-RegisterNetEvent('RPD:allowRespawn')
-RegisterNetEvent('RPD:allowRevive')
-
-local allowRespawn = true
-local allowRevive = true
-local RPDeathEnabled = true
-local dead = false
-local jailed = false
-
-local ENTER_KEY = 176
-local CTRL_KEY = 36
-
---TriggerServerEvent('RPD:addPlayer')
-
-RegisterNetEvent("RPD:toggleJailed")
-AddEventHandler("RPD:toggleJailed", function (toggle)
-	jailed = toggle
+RegisterNetEvent('death:allowRespawn')
+RegisterNetEvent('death:allowRevive')
+-- Turn off automatic respawn here instead of updating FiveM file.
+AddEventHandler('onClientMapStart', function()
+	exports.spawnmanager:spawnPlayer() -- Ensure player spawns into server.
+	Citizen.Wait(2500)
+	exports.spawnmanager:setAutoSpawn(false)
 end)
 
-RegisterNetEvent("RPD:toggle")
-AddEventHandler("RPD:toggle", function (toggle)
-	RPDeathEnabled = toggle
+local diedTime = nil
+
+AddEventHandler('death:allowRespawn', function()
+	allowRespawn = true
 end)
 
-RegisterNetEvent("RPD:revivePerson")
-AddEventHandler("RPD:revivePerson", function()
+AddEventHandler('death:allowRevive', function()
+	if(not IsEntityDead(GetPlayerPed(-1)))then
+		-- You are alive, do nothing.
+		return
+	end
+	-- Revive the player.
 	allowRevive = true
+end)
+
+
+function revivePed(ped, anim)
+	local playerPos = GetEntityCoords(ped, true)
+	FreezeEntityPosition(ped, false)
+	NetworkResurrectLocalPlayer(playerPos, true, true, false)
+	SetPlayerInvincible(ped, false)
+	ClearPedBloodDamage(ped)
 	TriggerEvent("crim:blindfold", false, true)
-end)
-
-RegisterNetEvent("RPD:reviveNearestDeadPed")
-AddEventHandler("RPD:reviveNearestDeadPed", function()
-	ReviveNearestDeadPed()
-end)
-
-local timer = 300000 -- 5 minutes
-AddEventHandler('RPD:startTimer', function()
-	if not jailed then
-		local died_at_time = GetGameTimer()
-		while GetGameTimer() - died_at_time < timer and dead do
-			raw_seconds = (timer - (GetGameTimer() - died_at_time))/1000
-			raw_minutes = raw_seconds/60
-			minutes = stringSplit(raw_minutes, ".")[1]
-			seconds = stringSplit(raw_seconds-(minutes*60), ".")[1]
-			SetTextFont(7)
-			SetTextProportional(0)
-			SetTextScale(0.0, 0.4)
-			SetTextColour(255, 255, 255, 255)
-			SetTextDropshadow(0, 0, 0, 0, 255)
-			SetTextEdge(1, 0, 0, 0, 255)
-			SetTextDropShadow()
-			SetTextOutline()
-			SetTextEntry("STRING")
-			AddTextComponentString("Waiting ~g~" .. minutes .. " minutes " .. seconds .. " seconds ~w~to respawn.")
-			SetTextCentre(true)
-			DrawText(0.5, 0.1)
-			Wait(0)
-		end
-		local pressed = false
-		while dead do
-			Wait(0)
-			SetTextFont(7)
-			SetTextProportional(0)
-			SetTextScale(0.0, 0.35)
-			SetTextColour(255, 255, 255, 255)
-			SetTextDropshadow(0, 0, 0, 0, 255)
-			SetTextEdge(1, 0, 0, 0, 255)
-			SetTextDropShadow()
-			SetTextOutline()
-			SetTextEntry("STRING")
-			AddTextComponentString("Press [~g~CTRL~w~ + ~g~Enter~w~] to respawn (NLR rule applies)")
-			SetTextCentre(true)
-			DrawText(0.45, 0.75)
-			if IsControlPressed( 1, CTRL_KEY ) and IsControlJustPressed(0, ENTER_KEY) then
-				if not pressed then
-					pressed = true
-					TriggerEvent('chatMessage', "Death", {200,0,0}, "Respawned")
-					allowRespawn = true
-					TriggerEvent("crim:blindfold", false, true)
-					while pressed do
-						Wait(0)
-						if(IsControlPressed(0, 176) == false) then
-							pressed = false
-							break
-						end
-					end
-				end
-			end
-		end
-	else
-		TriggerEvent('chatMessage', "", {0,0,0}, "^0You've passed out. Wait until you are released or a correctional officer helps you.")
+	if anim then
+		RequestAnimDict('combat@damage@injured_pistol@to_writhe')
+		while not HasAnimDictLoaded('combat@damage@injured_pistol@to_writhe') do
+	        Citizen.Wait(0)
+	    end
+	    TaskPlayAnim(ped, "combat@damage@injured_pistol@to_writhe", "variation_d", 8.0, 1, -1, 49, 0, 0, 0, 0)
+	    Citizen.Wait(1500)
+	    ClearPedTasksImmediately(ped)
 	end
-end)
+end
 
-AddEventHandler('RPD:allowRespawn', function(from)
-	if GetGameTimer() - died_at_time >= timer then
-		TriggerEvent('chatMessage', "Death", {200,0,0}, "Respawned")
-		allowRespawn = true
-	else
-		TriggerEvent('chatMessage', "Death", {200,0,0}, "You can't respawn yet")
-	end
-end)
-
-AddEventHandler('RPD:allowRevive', function(from, group, size)
-	if GetPlayerPed(GetPlayerFromServerId(from)) ~= GetPlayerPed(-1) then
-		if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(from))), GetEntityCoords(GetPlayerPed(-1)), true) <= size then
-			allowRevive = true
-		end
-	elseif group == "admin" or group == "superadmin" or group == "owner" or group == "mod" then
-		if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(from))), GetEntityCoords(GetPlayerPed(-1)), true) <= size then
-			allowRevive = true
-		end
-	end
-end)
+function respawnPed(ped,coords)
+	FreezeEntityPosition(ped, false)
+	DoScreenFadeOut(500)
+	Citizen.Wait(500)
+	SetEntityCoordsNoOffset(ped, coords.x, coords.y, coords.z, false, false, false, true)
+	NetworkResurrectLocalPlayer(coords.x, coords.y, coords.z, coords.heading, true, false)
+	TriggerEvent('playerSpawned', coords.x, coords.y, coords.z, coords.heading)
+	RemoveAllPedWeapons(GetPlayerPed(-1), true) -- strip weapons
+	-- remove player weapons from db
+	TriggerServerEvent("death:removeWeapons")
+	ClearPedBloodDamage(ped)
+	SetPlayerInvincible(ped, false)
+	Citizen.Wait(3000)
+	DoScreenFadeIn(500)
+	TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^1^*[RESPAWN] ^r^7You wake up at the local hospital, and can't seem to remember events leading up...")
+end
 
 Citizen.CreateThread(function()
+	local playsound = false
+	local freeze = true
+	local triggerDeadEvents = false
+
 	local respawnCount = 0
 	local spawnPoints = {
 		{x = 360.3, y = -548.9, z = 28.8},
@@ -124,190 +73,208 @@ Citizen.CreateThread(function()
 
 	math.randomseed(playerIndex)
 
-	function respawnPed(ped,coords)
-		SetEntityCoordsNoOffset(ped, coords.x, coords.y, coords.z, false, false, false, true)
-		NetworkResurrectLocalPlayer(coords.x, coords.y, coords.z, coords.heading, true, false)
-		--SetPlayerInvincible(ped, false)
-		TriggerEvent('playerSpawned', coords.x, coords.y, coords.z, coords.heading)
-		ClearPedBloodDamage(ped)
-		RemoveAllPedWeapons(GetPlayerPed(-1), true) -- strip weapons
-		-- remove player weapons from db
-		TriggerServerEvent("RPD:removeWeapons")
-	end
-
-	function ReviveNearestDeadPed()
-		local mycoords = GetEntityCoords(GetPlayerPed(-1))
-		for ped in exports.globals:EnumeratePeds() do
-			if ped ~= PlayerPedId() then
-				local pedcoords = GetEntityCoords(ped)
-				if IsPedDeadOrDying(ped) then
-					if Vdist(pedcoords.x, pedcoords.y, pedcoords.z, mycoords.x, mycoords.y, mycoords.z) < 5.0 then
-						local model = GetEntityModel(ped)
-						DeleteEntity(ped)
-						local clone = CreatePed(4, model, pedcoords.x, pedcoords.y, pedcoords.z, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
-						Wait(500)
-						ClearPedTasksImmediately(clone)
-						TaskWanderInArea(clone, pedcoords.x, pedcoords.y, pedcoords.z, 500.0, 100.0, 10.0)
-						return
-					end
-				end
-			end
-		end
-	end
-
 	while true do
 		Wait(0)
 		local ped = GetPlayerPed(-1)
-		if (RPDeathEnabled) then
-			if (IsEntityDead(ped)) then
 
-				--SetPlayerInvincible(ped, true)
+		if (IsEntityDead(ped)) then
+			if triggerDeadEvents then
+				triggerDeadEvents = false
+				TriggerEvent('death:createLog', ped)
+				if jailed then
+					TriggerEvent('chatMessage', "", {0,0,0}, "^0You've passed out. Wait until you are released or a correctional officer helps you.")
+				end
+			end
+			if not jailed then
+				if(diedTime == nil)then
+					diedTime = GetGameTimer()
+				end -- the player is down
+				if playsound then
+					TriggerServerEvent('InteractSound_SV:PlayOnSource', 'demo', 0.5)
+					playsound = false
+				end
+				DrawTxt(0.897, 1.25, 1.0, 1.0, 0.50, 'Incapacitated, call for medical attention or respawn!', 255, 255, 255, 255)
+				if GetEntitySpeed(ped) < 0.05 and freeze and not IsEntityInAir(ped) and not IsEntityInWater(ped) and not IsPedInAnyVehicle(ped) then
+					heading = GetEntityHeading(ped)
+					coords = GetEntityCoords(ped)
+					FreezeEntityPosition(ped, true)
+					SetEntityCoords(ped, coords.x, coords.y, coords.z-1, 0, 0, 0)
+					revivePed(ped, false)
+					SetEntityHealth(GetPlayerPed(-1), 0)
+					freeze = false
+					--print('Should be static now...')
+				end
+				--DisableControlAction(1, 1, true) -- LOOK UP, DOWN, LEFT, RIGHT
+				DisableControlAction(1, 2, true)
+				DisableControlAction(1, 4, true)
+				DisableControlAction(1, 6, true)
+				DisableControlAction(0, 26, true) -- LOOK BEHIND
+				--DisableControlAction(0, 0, true) -- CHANGE CAMERA VIEW
+				SetPlayerInvincible(ped, true)
+				FreezeEntityPosition(ped, true)
 				SetEntityHealth(ped, 1)
-				if not dead then
-
-					-- send death log
-					local deathLog = {
-						deadPlayerId = GetPlayerServerId(PlayerId()),
-						deadPlayerName = GetPlayerName(PlayerId()),
-						cause = GetPedCauseOfDeath(ped),
-						killer = GetPedKiller(ped),
-						--killer_source = GetPedSourceOfDeath(ped),
-						tod = GetPedTimeOfDeath(ped),
-						lastDeath = GetTimeSinceLastDeath(),
-						killerName = "",
-						killerId = 0
-					}
-
-					for id = 0, 64 do
-						if NetworkIsPlayerActive(id) then
-							if GetPlayerPed(id) == deathLog.killer then -- save killer details
-								deathLog.killerId = GetPlayerServerId(id)
-								deathLog.killerName = GetPlayerName(id)
-							end
-						end
-					end
-
-					if deathLog.killerId == 0 then
-						--print("killer ID was 0!")
-						--print("killer: " .. deathLog.killer)
-						--print("cause: " .. deathLog.cause)
-						local killer_entity_type = 0
-						local cause_entity_type = 0
-						if deathLog.killer and deathLog.cause then
-							if DoesEntityExist(deathLog.killer) then
-								killer_entity_type = GetEntityType(deathLog.killer)
-							end
-							if DoesEntityExist(deathLog.cause) then
-								cause_entity_type = GetEntityType(deathLog.cause)
-							end
-							local ped_in_veh_seat = GetPedInVehicleSeat(deathLog.killer, -1)
-							for id = 0, 64 do
-								if NetworkIsPlayerActive(id) then
-									if GetPlayerPed(id) == ped_in_veh_seat then -- save vdm'r details
-										deathLog.killerId = GetPlayerServerId(id)
-										deathLog.killerName = GetPlayerName(id)
-									end
-								end
-							end
-						else
-							--print("deathLog.killer or deathLog.cause or both were nil")
-						end
-						--print("ped in veh seat: " .. ped_in_veh_seat)
-						--print("killer entity type = " .. killer_entity_type)
-						--print("cause entity type = " .. cause_entity_type)
-					else
-						--print("killer ID was NOT 0!")
-					end
-
-					TriggerServerEvent("RPD:newDeathLog", deathLog)
-
-					dead = true
-					local playerPos = GetEntityCoords( GetPlayerPed( -1 ), true )
-					local streetA, streetB = Citizen.InvokeNative( 0x2EB41072B4C1E4C0, playerPos.x, playerPos.y, playerPos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt() )
-					local street = {}
-
-					if not ((streetA == lastStreetA or streetA == lastStreetB) and (streetB == lastStreetA or streetB == lastStreetB)) then
-						-- Ignores the switcharoo while doing circles on intersections
-						lastStreetA = streetA
-						lastStreetB = streetB
-					end
-
-					if lastStreetA ~= 0 then
-						table.insert( street, GetStreetNameFromHashKey( lastStreetA ) )
-					end
-
-					if lastStreetB ~= 0 then
-						table.insert( street, GetStreetNameFromHashKey( lastStreetB ) )
-					end
-					--TriggerServerEvent("RPD:userDead", GetPlayerName(PlayerId()), table.concat( street, " & " ))
-					TriggerEvent("RPD:startTimer")
-				end
-
-				if (allowRespawn) then
-					--local coords = spawnPoints[math.random(1,#spawnPoints)]
-					local closest = spawnPoints[1]
-					local pedcoords = GetEntityCoords(ped)
-					for i = 1, #spawnPoints do
-						if Vdist(pedcoords.x, pedcoords.y, pedcoords.z, spawnPoints[i].x, spawnPoints[i].y, spawnPoints[i].z) < Vdist(pedcoords.x, pedcoords.y, pedcoords.z, closest.x, closest.y, closest.z) then
-							closest = spawnPoints[i]
-						end
-					end
-
-					respawnPed(ped, closest)
-
-			  	allowRespawn = false
-					dead = false
-					respawnCount = respawnCount + 1
-					math.randomseed( playerIndex * respawnCount )
-
-					--TriggerServerEvent("gps:removeEMSReqLookup")
-				elseif (allowRevive) then
-					local playerPos = GetEntityCoords(ped, true)
-
-					NetworkResurrectLocalPlayer(playerPos, true, true, false)
-					--SetPlayerInvincible(ped, false)
-					ClearPedBloodDamage(ped)
-
-					allowRevive = false
-					dead = false
-					Wait(0)
-
-					--TriggerServerEvent("gps:removeEMSReqLookup")
+				local waitPeriod = diedTime + (300 * 1000) -- how long you must wait (5 mins)
+				if(GetGameTimer() < waitPeriod)then
+					local seconds = math.ceil((waitPeriod - GetGameTimer()) / 1000)
+					local minutes = math.floor((seconds / 60))
+					DrawTxt(0.93, 1.3, 1.0, 1.0, 0.50, 'You may respawn in ~g~'.. SecondsToMinuteClock(seconds) .. ' ~s~minutes', 255, 255, 255, 255)
 				else
-		  			Wait(0)
+					DrawTxt(0.948, 1.3, 1.0, 1.0, 0.50, 'Press ~g~E ~s~+ ~g~ENTER~s~ to respawn!', 255, 255, 255, 255)
+					if IsControlPressed(0, 191)  and IsControlPressed(0, 38) then -- ENTER + E
+						TriggerEvent('death:allowRespawn')
+					end
 				end
-			else
-		  	allowRespawn = false
-		  	allowRevive = false
-				Wait(0)
 			end
 
+			if (allowRespawn) then
+				local closest = spawnPoints[1]
+				local pedcoords = GetEntityCoords(ped)
+				for i = 1, #spawnPoints do
+					if Vdist(pedcoords.x, pedcoords.y, pedcoords.z, spawnPoints[i].x, spawnPoints[i].y, spawnPoints[i].z) < Vdist(pedcoords.x, pedcoords.y, pedcoords.z, closest.x, closest.y, closest.z) then
+						closest = spawnPoints[i]
+					end
+				end
 
-		else
-			if IsEntityDead(ped) then
-				Wait(3000)
+				respawnPed(ped, closest)
 
-				local coords = spawnPoints[math.random(1,#spawnPoints)]
-
-				respawnPed(ped,coords)
-
-				respawnCount = respawnCount + 1
+		  		allowRespawn = false
+		  		diedTime = nil
+		  		respawnCount = respawnCount + 1
 				math.randomseed( playerIndex * respawnCount )
 
+			elseif (allowRevive) then
+				--print('Reviving...')
+				revivePed(ped, true)
+
+				allowRevive = false
+	  			diedTime = nil
 			end
+		else
+	  		allowRespawn = false
+	  		allowRevive = false
+	  		diedTime = nil
+	  		--playsound = true
+	  		freeze = true
+	  		triggerDeadEvents = true
 		end
 
 	end
 end)
 
-function stringSplit(inputstr, sep)
-    if sep == nil then
-            sep = "%s"
+RegisterNetEvent('death:createLog')
+AddEventHandler('death::createLog', function(ped)
+	-- send death log
+	local deathLog = {
+		deadPlayerId = GetPlayerServerId(PlayerId()),
+		deadPlayerName = GetPlayerName(PlayerId()),
+		cause = GetPedCauseOfDeath(ped),
+		killer = GetPedKiller(ped),
+		--killer_source = GetPedSourceOfDeath(ped),
+		tod = GetPedTimeOfDeath(ped),
+		lastDeath = GetTimeSinceLastDeath(),
+		killerName = "",
+		killerId = 0
+	}
+
+	for id = 0, 64 do
+		if NetworkIsPlayerActive(id) then
+			if GetPlayerPed(id) == deathLog.killer then -- save killer details
+				deathLog.killerId = GetPlayerServerId(id)
+				deathLog.killerName = GetPlayerName(id)
+			end
+		end
+	end
+
+	if deathLog.killerId == 0 then
+		--print("killer ID was 0!")
+		--print("killer: " .. deathLog.killer)
+		--print("cause: " .. deathLog.cause)
+		local killer_entity_type = 0
+		local cause_entity_type = 0
+		if deathLog.killer and deathLog.cause then
+			if DoesEntityExist(deathLog.killer) then
+				killer_entity_type = GetEntityType(deathLog.killer)
+			end
+			if DoesEntityExist(deathLog.cause) then
+				cause_entity_type = GetEntityType(deathLog.cause)
+			end
+			local ped_in_veh_seat = GetPedInVehicleSeat(deathLog.killer, -1)
+			for id = 0, 64 do
+				if NetworkIsPlayerActive(id) then
+					if GetPlayerPed(id) == ped_in_veh_seat then -- save vdm'r details
+						deathLog.killerId = GetPlayerServerId(id)
+						deathLog.killerName = GetPlayerName(id)
+					end
+				end
+			end
+		else
+			--print("deathLog.killer or deathLog.cause or both were nil")
+		end
+		--print("ped in veh seat: " .. ped_in_veh_seat)
+		--print("killer entity type = " .. killer_entity_type)
+		--print("cause entity type = " .. cause_entity_type)
+	else
+		--print("killer ID was NOT 0!")
+	end
+
+	TriggerServerEvent("death:newDeathLog", deathLog)
+end)
+
+RegisterNetEvent("death:reviveNearestDeadPed")
+AddEventHandler("death:reviveNearestDeadPed", function()
+	ReviveNearestDeadPed()
+end)
+
+function DrawTxt(x,y ,width,height,scale, text, r,g,b,a)
+    SetTextFont(6)
+    SetTextProportional(0)
+    SetTextScale(scale, scale)
+    SetTextColour(r, g, b, a)
+    SetTextDropShadow(0, 0, 0, 0,255)
+    SetTextEdge(1, 0, 0, 0, 255)
+    SetTextOutline()
+    SetTextEntry("STRING")
+    AddTextComponentString(text)
+    DrawText(x - width/2, y - height/2 + 0.005)
+end
+
+function SecondsToMinuteClock(seconds)
+  local seconds = tonumber(seconds)
+
+  if seconds <= 0 then
+    return "00:00";
+  else
+    mins = string.format("%02.f", math.floor(seconds/60));
+    secs = string.format("%02.f", math.floor(seconds - mins *60));
+    return mins..":"..secs
+  end
+end
+
+function GetPlayerFromPed(ped)
+    for a = 0, 64 do
+        if GetPlayerPed(a) == ped then
+            return a
+        end
     end
-    local t={} ; i=1
-    for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
-            t[i] = str
-            i = i + 1
-    end
-    return t
+    return -1
+end
+
+function ReviveNearestDeadPed()
+	local mycoords = GetEntityCoords(GetPlayerPed(-1))
+	for ped in exports.globals:EnumeratePeds() do
+		if ped ~= PlayerPedId() then
+			local pedcoords = GetEntityCoords(ped)
+			if IsPedDeadOrDying(ped) then
+				if Vdist(pedcoords.x, pedcoords.y, pedcoords.z, mycoords.x, mycoords.y, mycoords.z) < 5.0 then
+					local model = GetEntityModel(ped)
+					DeleteEntity(ped)
+					local clone = CreatePed(4, model, pedcoords.x, pedcoords.y, pedcoords.z, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
+					Wait(500)
+					ClearPedTasksImmediately(clone)
+					TaskWanderInArea(clone, pedcoords.x, pedcoords.y, pedcoords.z, 500.0, 100.0, 10.0)
+					return
+				end
+			end
+		end
+	end
 end

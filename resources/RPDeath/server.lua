@@ -1,47 +1,7 @@
 local deathLog = {}
 
-players = {}
-
-AddEventHandler('es:playerLoaded', function(source, user)
-	print("setting players[source = true!]")
-	players[source] = true
-end)
---[[
-RegisterServerEvent('RPD:addPlayer')
-AddEventHandler('RPD:addPlayer', function()
-	players[source] = true
-	print("player added inside of RPD:addPlayer!")
-end)
---]]
-AddEventHandler('playerDropped',function(reason)
-	players[source] = nil
-end)
-
-RegisterServerEvent('RPD:userDead')
-AddEventHandler('RPD:userDead', function(userName, street)
-	--TriggerEvent('es:getPlayerFromId', source, function(user)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-		downedUser = user
-		--[[
-		TriggerEvent("es:getPlayers", function(pl)
-			local meta = {}
-			for k, v in pairs(pl) do
-				TriggerEvent("es:getPlayerFromId", k, function(user)
-					if k ~= source then
-						local user_job = user.getActiveCharacterData("job")
-						if user_job == "cop" or user_job == "sheriff" or user_job == "highwaypatrol" or user_job == "ems" or user_job == "fire" then
-							TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "Report of an injured person(s) (" .. street .. ").")
-						end
-					end
-				end)
-			end
-		end)
-		--]]
-	--end)
-end)
-
-RegisterServerEvent("RPD:removeWeapons")
-AddEventHandler("RPD:removeWeapons", function()
+RegisterServerEvent("death:removeWeapons")
+AddEventHandler("death:removeWeapons", function()
 	local DEATH_PENALTY = 2000
 	local userSource = source
 	print("inside of RPD:removeWeapons")
@@ -113,10 +73,10 @@ TriggerEvent('es:addCommand', 'revive', function(source, args, user)
 				user.getGroup() == "superadmin" or
 				user.getGroup() == "owner" then
 				if args[2] == nil then
-					TriggerClientEvent("RPD:reviveNearestDeadPed", from)
+					TriggerClientEvent("death:reviveNearestDeadPed", from)
 				else
 					targetId = tonumber(args[2])
-					TriggerClientEvent("RPD:revivePerson", targetId)
+					TriggerClientEvent("death:allowRevive", targetId)
 				end
 			else
 				TriggerClientEvent("chatMessage", from, "SYSTEM", {255, 0, 0}, "You don't have permissions to use this command.")
@@ -130,10 +90,6 @@ end, {
 		{ name = "id", help = "Player's ID (omit to revive nearest ped)" }
 	}
 })
-
-TriggerEvent('es:addCommand', 'respawn', function(source, args, user)
-	TriggerClientEvent('RPD:allowRespawn', source)
-end, { help = "Respawn while dead." })
 
 function splitString(inputstr, sep)
         if sep == nil then
@@ -226,8 +182,8 @@ end, {
 	help = "View death log"
 })
 
-RegisterServerEvent("RPD:newDeathLog")
-AddEventHandler("RPD:newDeathLog", function(log)
+RegisterServerEvent("death:newDeathLog")
+AddEventHandler("death:newDeathLog", function(log)
 	log.timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())
 	if #deathLog >= 10 then
 		--deathLog = {}

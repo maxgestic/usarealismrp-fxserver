@@ -454,6 +454,19 @@ AddEventHandler('rconCommand', function(commandName, args)
 	end
 end)
 
+
+RegisterServerEvent('usa:ConfirmSession')
+AddEventHandler('usa:ConfirmSession', function(clientPlayerTotal)
+	if source ~= nil then
+		local userSource = source
+		if #GetPlayers() - clientPlayerTotal > 4 then
+			local name = getUserInfoString(userSource)
+			--TriggerClientEvent("usa:notify", userSource, "You may be currently instanced, please reconnect now or risk rule-breaking!") -- wait on this until we are sure it works good
+			TriggerEvent("usa:notifyStaff", '^3*Detected possibly instanced player!* ID #: ^0'..userSource..'^3, Name: ^0'..name)
+		end
+	end
+end)
+
 TriggerEvent('es:addGroupCommand', 'deletenearestvehicles', 'superadmin', function(source, args, user)
   TriggerClientEvent("deletenearestvehicles", source)
 end, {

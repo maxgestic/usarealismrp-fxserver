@@ -253,8 +253,7 @@ AddEventHandler("simp:baitCarDisable", function()
 			TaskVehicleTempAction(ped_l, veh, 27, 5000)
 			PlaySoundFrontend(-1, "Event_Message_Purple", "GTAO_FM_Events_Soundset", 1)
 			isInBaitCar = true
-			SetVehicleEngineHealth(veh, 0)
-			SetVehicleEngineOn(veh, false)
+			SetVehicleEngineHealth(veh, -4000)
 			SetVehicleDoorsLocked(veh, 4)
 			SetNotificationTextEntry("STRING")
 			AddTextComponentString("~r~WARNING:~s~~n~This is the SA State Police. You are under arrest.")
@@ -267,14 +266,12 @@ AddEventHandler("simp:baitCarunlock", function()
 	local ped_l = GetPlayerPed(-1)
 	local veh = GetVehiclePedIsIn(GetPlayerPed(-1))
 	if IsPedInAnyVehicle(ped_l, false) then
-			isInBaitCar = false;
-			SetVehicleEngineHealth(veh, 150.0)
-			SetVehicleEngineOn(GetVehiclePedIsIn(GetPlayerPed(-1)), true)
-			SetVehicleDoorsLocked(GetVehiclePedIsIn(GetPlayerPed(-1)), 2)
-			SetVehicleDoorsLocked(GetVehiclePedIsIn(GetPlayerPed(-1)), 1)
-			SetNotificationTextEntry("STRING")
-			AddTextComponentString('~y~Info:~s~~n~Step out of the vehicle and follow the instructions you are given.')
-			DrawNotification(true, true)
+		isInBaitCar = false;
+		SetVehicleDoorsLocked(GetVehiclePedIsIn(GetPlayerPed(-1)), 2)
+		SetVehicleDoorsLocked(GetVehiclePedIsIn(GetPlayerPed(-1)), 1)
+		SetNotificationTextEntry("STRING")
+		AddTextComponentString('~y~Info:~s~~n~Step out of the vehicle and follow the instructions you are given.')
+		DrawNotification(true, true)
 	end
 end)
 
@@ -363,6 +360,13 @@ Citizen.CreateThread(function()
 				jacked = false
 			end
 			already_sent_msg = false
+		end
+		--------------------------
+		-- STOP BAIT CAR ENGINE --
+		--------------------------
+		if isInBaitCar then
+			veh = GetVehiclePedIsIn(PlayerPedId())
+			SetVehicleEngineOn(veh, false, true)
 		end
 	end
 end)

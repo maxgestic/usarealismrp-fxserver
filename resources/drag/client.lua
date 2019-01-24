@@ -85,7 +85,7 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(100)
-		if isDragging then
+		if isDragging and not IsEntityDead(GetPlayerPed(GetPlayerFromServerId(sourceDragged))) then
 			local dict = "weapons@projectile@"
 			local anim = "aim_m"
 			RequestAnimDict(dict)

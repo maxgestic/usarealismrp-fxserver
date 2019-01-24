@@ -353,3 +353,11 @@ AddEventHandler("deletenearestvehicles", function()
         print("** Deleted all vehicles! **")
     end)
 end)
+
+Citizen.CreateThread(function()
+	Wait(30000)
+	while true do
+		TriggerServerEvent('usa:ConfirmSession', GetNumberOfPlayers())
+		Wait(60000)
+	end
+end)
