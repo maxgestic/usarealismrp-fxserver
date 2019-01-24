@@ -78,9 +78,6 @@ Citizen.CreateThread(function()
   AddTextEntry('FE_THDR_GTAO', 'USA REALISM RP - HTTPS://USARRP.NET')
 end)
 
-SetFollowPedCamViewMode(0) -- Reset both ped camera views, for when they first join
-SetFollowVehicleCamViewMode(0)
-
  --ped/vehicle npcs
 Citizen.CreateThread(function()
 	while true do
@@ -88,17 +85,6 @@ Citizen.CreateThread(function()
 
 		--SetPedDensityMultiplierThisFrame(1.0)
 		SetVehicleDensityMultiplierThisFrame(0.8) -- npc vehicle amount
-
-    -- allows only the close-up third person camera, this sorta prevents metagaming by preventing view around corners?
-    local pedView = GetFollowPedCamViewMode() 
-    local vehView = GetFollowVehicleCamViewMode() 
-    if DoesEntityExist(playerPed) and pedView == 1 or pedView == 2 then
-      SetFollowPedCamViewMode(4)
-    elseif DoesEntityExist(playerPed) and vehView == 1 or vehView == 2 then
-      SetFollowVehicleCamViewMode(4)
-    end
-
-
 		--local playerPed = GetPlayerPed(-1)
 		--local pos = GetEntityCoords(playerPed)
 		--RemoveVehiclesFromGeneratorsInArea(pos['x'] - 1500.0, pos['y'] - 1500.0, pos['z'] - 1500.0, pos['x'] + 1500.0, pos['y'] + 1500.0, pos['z'] + 1500.0);
