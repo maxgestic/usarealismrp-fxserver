@@ -94,15 +94,18 @@ Citizen.CreateThread(function()
 					playsound = false
 				end
 				DrawTxt(0.897, 1.25, 1.0, 1.0, 0.50, 'Incapacitated, call for medical attention or respawn!', 255, 255, 255, 255)
-				if GetEntitySpeed(ped) < 0.05 and freeze and not IsEntityInAir(ped) and not IsEntityInWater(ped) and not IsPedInAnyVehicle(ped) then
-					heading = GetEntityHeading(ped)
-					coords = GetEntityCoords(ped)
+				if GetEntitySpeed(ped) < 0.05 and not IsEntityInAir(ped) and not IsEntityInWater(ped) and not IsPedInAnyVehicle(ped) then
+					if freeze then
+						heading = GetEntityHeading(ped)
+						coords = GetEntityCoords(ped)
+						FreezeEntityPosition(ped, true)
+						SetEntityCoords(ped, coords.x, coords.y, coords.z-1, 0, 0, 0)
+						revivePed(ped, false)
+						SetEntityHealth(GetPlayerPed(-1), 0)
+						freeze = false
+						--print('Should be static now...')
+					end
 					FreezeEntityPosition(ped, true)
-					SetEntityCoords(ped, coords.x, coords.y, coords.z-1, 0, 0, 0)
-					revivePed(ped, false)
-					SetEntityHealth(GetPlayerPed(-1), 0)
-					freeze = false
-					--print('Should be static now...')
 				end
 				--DisableControlAction(1, 1, true) -- LOOK UP, DOWN, LEFT, RIGHT
 				DisableControlAction(1, 2, true)
@@ -111,7 +114,6 @@ Citizen.CreateThread(function()
 				DisableControlAction(0, 26, true) -- LOOK BEHIND
 				--DisableControlAction(0, 0, true) -- CHANGE CAMERA VIEW
 				SetPlayerInvincible(ped, true)
-				FreezeEntityPosition(ped, true)
 				SetEntityHealth(ped, 1)
 				local waitPeriod = diedTime + (300 * 1000) -- how long you must wait (5 mins)
 				if(GetGameTimer() < waitPeriod)then
@@ -162,7 +164,7 @@ Citizen.CreateThread(function()
 end)
 
 RegisterNetEvent('death:createLog')
-AddEventHandler('death::createLog', function(ped)
+AddEventHandler('death:createLog', function(ped)
 	-- send death log
 	local deathLog = {
 		deadPlayerId = GetPlayerServerId(PlayerId()),
@@ -207,16 +209,11 @@ AddEventHandler('death::createLog', function(ped)
 					end
 				end
 			end
-		else
-			--print("deathLog.killer or deathLog.cause or both were nil")
 		end
 		--print("ped in veh seat: " .. ped_in_veh_seat)
 		--print("killer entity type = " .. killer_entity_type)
 		--print("cause entity type = " .. cause_entity_type)
-	else
-		--print("killer ID was NOT 0!")
 	end
-
 	TriggerServerEvent("death:newDeathLog", deathLog)
 end)
 
