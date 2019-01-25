@@ -571,6 +571,7 @@ function SpawnVehicle(model)
     SetVehicleHasBeenOwnedByPlayer(veh, true)
     SetVehicleExplodesOnHighExplosionDamage(veh, false)
     SetVehicleLivery(veh, 2) -- DOC SKIN
+		TaskWarpPedIntoVehicle(GetPlayerPed(-1), veh, -1)
 
     -- give key to owner
     local vehicle_key = {
