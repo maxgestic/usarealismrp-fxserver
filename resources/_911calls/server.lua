@@ -12,15 +12,15 @@ RegisterServerEvent('911:Narcotics')
 
 recentcalls = {}
 
-AddEventHandler('911:ShotsFired', function(x, y, z, street, isMale)
-	if recentcalls[street] ~= 'ShotsFired' then
-		recentcalls[street] = 'ShotsFired'
+AddEventHandler('911:ShotsFired', function(x, y, z, street, area, isMale)
+	if recentcalls[area] ~= 'ShotsFired' then
+		recentcalls[area] = 'ShotsFired'
 		local time = math.random(2000, 5000)
 		Citizen.Wait(time)
 		local string = 'Shots Fired: '..street..' ^*^1^*|^r^r Suspect: '..Gender(isMale) 
 		Send911Notification('sheriff', string, x, y, z, 'Shots Fired')
 		Citizen.Wait(30000)
-		recentcalls[street] = 'nil'
+		recentcalls[area] = 'nil'
 	end
 end)
 
