@@ -62,15 +62,12 @@ Citizen.CreateThread(function()
 													-- send 911 call --
 													local randomReport = math.random(1, 3)
 													if randomReport == 2 then
-														local plyPos = GetEntityCoords(GetPlayerPed(-1),  true)
-														local s1, s2 = Citizen.InvokeNative( 0x2EB41072B4C1E4C0, plyPos.x, plyPos.y, plyPos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt() )
-														local street1 = GetStreetNameFromHashKey(s1)
-														local street2 = GetStreetNameFromHashKey(s2)
-														local loc = street1
-														if street2 ~= "" and street2 ~= " " and street2 then loc = loc .. " & " .. street2 end
+														local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+														local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+														local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
 														-- dispatch to police:
-														Wait(10000) -- wait 10 seconds to make more realistic
-														TriggerServerEvent("phone:send911Message", {message = "Civilian report of a person(s) selling narcotics.", location = loc, pos = {x = pos.x, y = pos.y, z = pos.z}}, true, true, "sheriff")
+														--Wait(10000) -- (this will be done within a random range of 4 - 10 secs after event is triggered)
+														TriggerServerEvent("911:Narcotics", x, y, z, lastStreetNAME, IsPedMale(player))
 													end
 												else
 													-- sell

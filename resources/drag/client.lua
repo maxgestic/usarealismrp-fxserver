@@ -6,14 +6,20 @@ local isDragging = false
 
 RegisterNetEvent("drag:attemptToDragNearest")
 AddEventHandler('drag:attemptToDragNearest', function()
-	local myPed = PlayerPedId()
-	local pedInFront = GetPedInFront()
-	local sourceInFront = GetPlayerServerId(GetPlayerFromPed(pedInFront))
-	if not isDragging and sourceInFront and not IsEntityDead(pedInFront) and not IsPedInAnyVehicle(PlayerPedId()) then
-		TriggerServerEvent('drag:sendDragPlayer', sourceInFront)
-		sourceDragged = sourceInFront
-	elseif isDragging and sourceDragged then
-		TriggerServerEvent('drag:sendDragPlayer', sourceDragged)
+	if not isDragging and not isDragged then
+		TriggerEvent("usa:getClosestPlayer", 1.65, function(player)
+    		if player then
+    			print(GetPlayerPed(GetPlayerFromServerId(player.id)))
+    			print(player.id)
+	        	local closestPed = GetPlayerPed(GetPlayerFromServerId(player.id))
+				if player.id and not IsPedInAnyVehicle(PlayerPedId()) then
+					TriggerServerEvent('drag:sendDragPlayer', player.id)
+					sourceDragged = player.id
+				end
+			end
+        end)
+    elseif isDragging and sourceDragged then
+    	TriggerServerEvent('drag:sendDragPlayer', sourceDragged)
 		sourceDragged = nil
 	end
 end)
@@ -28,8 +34,13 @@ AddEventHandler('drag:dragPlayer', function(playerDraggedBy, forceDrag)
 		if not isDragged and not IsPedInAnyVehicle(PlayerPedId()) then
 			draggedBy = playerDraggedBy
 			TriggerServerEvent('drag:toggleDragAction', draggedBy, true)
-			AttachEntityToEntity(PlayerPedId(), GetPlayerPed(GetPlayerFromServerId(draggedBy)), 11816, 0.61, 0.24, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
 			isDragged = true
+			Citizen.CreateThread(function()
+				while isDragged do
+					AttachEntityToEntity(PlayerPedId(), GetPlayerPed(GetPlayerFromServerId(draggedBy)), 11816, 0.61, 0.24, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
+					Citizen.Wait(1000)
+				end
+			end)
 			-- dragging
 		end
 	elseif draggedBy == playerDraggedBy then
@@ -56,14 +67,19 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		if IsControlPressed(0, 19) and IsControlJustPressed(0, 47) then
-			local myPed = PlayerPedId()
-			local pedInFront = GetPedInFront()
-			local sourceInFront = GetPlayerServerId(GetPlayerFromPed(pedInFront))
-			if not isDragging and sourceInFront and IsPedAPlayer(pedInFront) then
-				TriggerServerEvent('drag:sendDragPlayer', sourceInFront)
-				sourceDragged = sourceInFront
-			elseif isDragging and sourceDragged then
-				TriggerServerEvent('drag:sendDragPlayer', sourceDragged)
+			if not isDragging and not isDragged then
+				TriggerEvent("usa:getClosestPlayer", 1.65, function(player)
+		    		if player then
+		    			print(GetPlayerPed(GetPlayerFromServerId(player.id)))
+			        	local closestPed = GetPlayerPed(GetPlayerFromServerId(player.id))
+						if player.id and not IsPedInAnyVehicle(PlayerPedId()) then
+							TriggerServerEvent('drag:sendDragPlayer', player.id)
+							sourceDragged = player.id
+						end
+					end
+		        end)
+		    elseif isDragging and sourceDragged then
+		    	TriggerServerEvent('drag:sendDragPlayer', sourceDragged)
 				sourceDragged = nil
 			end
 		end
@@ -107,14 +123,4 @@ function GetPlayerFromPed(ped)
         end
     end
     return -1
-end
-
-function GetPedInFront()
-    local player = PlayerId()
-    local plyPed = GetPlayerPed(player)
-    local plyPos = GetEntityCoords(plyPed, false)
-    local plyOffset = GetOffsetFromEntityInWorldCoords(plyPed, 0.0, 1.3, 0.0)
-    local rayHandle = StartShapeTestCapsule(plyPos.x, plyPos.y, plyPos.z, plyOffset.x, plyOffset.y, plyOffset.z, 0.5, 12, plyPed, 7)
-    local _, _, _, _, ped = GetShapeTestResult(rayHandle)
-    return ped
 end

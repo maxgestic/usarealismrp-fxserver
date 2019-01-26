@@ -69,12 +69,13 @@ end)
 -------------------
 -- RANDOM THINGS --
 -------------------
--- Pause Menu Title --
+-- Pause Menu Title & Don't Regen Health --
 function AddTextEntry(key, value)
 	Citizen.InvokeNative(GetHashKey("ADD_TEXT_ENTRY"), key, value)
 end
 
 Citizen.CreateThread(function()
+  SetPlayerHealthRechargeMultiplier(PlayerId(), 0.0)
   AddTextEntry('FE_THDR_GTAO', 'USA REALISM RP - HTTPS://USARRP.NET')
 end)
 

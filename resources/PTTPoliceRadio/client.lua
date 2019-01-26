@@ -5,6 +5,7 @@
 -- You are allowed to: Download, Use and Edit the Script.
 -- You are not allowed to: Copy, re-release, re-distribute it without our written permission.
 
+local playingAnim = false
 local IS_COP = false
 
 RegisterNetEvent("ptt:isEmergency")
@@ -129,6 +130,19 @@ Citizen.CreateThread( function()
 				end
 			end
 		end
+		if playingAnim then
+			DisablePlayerFiring(ped, true) -- shoot
+			DisableControlAction(0, 21, false) -- sprint
+			DisableControlAction(1, 323, true) -- jump
+			DisableControlAction(0, 25, true) -- aim
+			DisableControlAction(0, 263, true) -- melee attack
+			DisableControlAction(0, 264, true) -- melee attack
+			DisableControlAction(0, 24, true) -- weapon wheel
+			DisableControlAction(0, 140, true) -- melee attack
+			DisableControlAction(0, 141, true) -- melee attack
+			DisableControlAction(0, 142, true) -- melee attack
+			DisableControlAction(0, 22, true) -- jump
+		end
 	end
 end )
 
@@ -147,6 +161,7 @@ local UNHOLSTERED_WEAPON = nil
 					if holstered then
 						if not IS_COP and GetPedDrawableVariation(ped, 8) ~= 122 and GetPedDrawableVariation(ped, 8) ~= 130 then
 							local togive = GetSelectedPedWeapon(ped) -- to prevent gun from coming out too early for animation, remove the gun when it starts and only give at right time
+							playingAnim = true
 							SetCurrentPedWeapon(ped, GetHashKey("WEAPON_UNARMED"), true)
 							TaskPlayAnim(ped, "reaction@intimidation@1h", "intro", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
 							Wait(1400)
@@ -154,26 +169,33 @@ local UNHOLSTERED_WEAPON = nil
 							Wait(1500)
 							ClearPedTasks(ped)
 							SetCurrentPedWeapon(ped, togive, true)
+							playingAnim = false
 							UNHOLSTERED_WEAPON = togive
 						else
+							playingAnim = true
 							TaskPlayAnim(ped, "rcmjosh4", "josh_leadout_cop2", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
 							Citizen.Wait(600)
 							ClearPedTasks(ped)
+							playingAnim = false
 						end
 						holstered = false
 					end
 				elseif not CheckWeapon(ped) then
 					if not holstered then
 						if not IS_COP and GetPedDrawableVariation(ped, 8) ~= 122 and GetPedDrawableVariation(ped, 8) ~= 130 then
+							playingAnim = true
 							SetCurrentPedWeapon(ped, UNHOLSTERED_WEAPON, true)
 							TaskPlayAnim(ped, "reaction@intimidation@1h", "outro", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
 							Citizen.Wait(1350)
 							ClearPedTasks(ped)
 							SetCurrentPedWeapon(ped, GetHashKey("WEAPON_UNARMED"), true)
+							playingAnim = false
 						else
+							playingAnim = true
 							TaskPlayAnim(ped, "weapons@pistol@", "aim_2_holster", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
 							Citizen.Wait(500)
 							ClearPedTasks(ped)
+							playingAnim = false
 						end
 						holstered = true
 					end

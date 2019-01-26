@@ -1,23 +1,23 @@
 local policeLockerRooms = {
-	{x = -1107.5, y = -847.5, z = 19.4}, -- vespucci PD
-	{x = 370.3, y = -1608.4, z = 29.3}, -- davis PD
-	{x = 826.5, y = -1291.3, z = 28.3}, -- la mesa PD
-	{x = 638.9, y = 1.9, z = 82.8}, -- vinewood PD, elgin ave.
-	{x=451.255 , y=-992.41 , z=30.789}, --MRPD
+	{x = -1107.5, y = -847.5, z = 18.4}, -- vespucci PD
+	{x = 370.3, y = -1608.4, z = 28.3}, -- davis PD
+	{x = 826.5, y = -1291.3, z = 27.3}, -- la mesa PD
+	{x = 638.9, y = 1.9, z = 81.8}, -- vinewood PD, elgin ave.
+	{x=451.255 , y=-992.41 , z=29.689},
  	{x=1853.2, y=3687.74, z=34.367}, -- sandy
  	--{x=-447.256 , y=6000.667 , z=30.686} -- paleto
- 	{x = -449.471, y = 6010.7, z = 31.85} -- paleto
+ 	{x = -449.471, y = 6010.7, z = 31.85}
 }
 
 local policeArmourys = {
-	{x = -1109.6, y = -844.7, z = 19.4}, -- vespucci PD
-	{x = 371.8, y = -1612.1, z = 29.4}, -- davis PD
-	{x = 826.6, y = -1288.8, z = 28.3}, -- la mesa PD
-	{x = 637.5, y = -2.7, z = 82.8}, -- vinewood PD, elgine ave.
-	{x=451.564 , y=-980.095 , z=30.7896}, --MRPD
+	{x = -1109.6, y = -844.7, z = 18.4}, -- vespucci PD
+	{x = 371.8, y = -1612.1, z = 28.4}, -- davis PD
+	{x = 826.6, y = -1288.8, z = 28.2}, -- la mesa PD
+	{x = 637.5, y = -2.7, z = 81.8}, -- vinewood PD, elgine ave.
+	{x=451.564 , y=-980.095 , z=29.6896},
 	{x=1851.34 , y=3683.64 , z=34.4671}, -- sandy
 	--{x=-452.361 , y=6006.11 , z=30.8409} -- paleto
-	{x = -447.9, y = 6008.7, z = 31.85} -- paleto
+	{x = -447.9, y = 6008.7, z = 31.85}
 }
 
 local MAX_COMPONENT = 200

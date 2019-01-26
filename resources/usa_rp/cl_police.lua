@@ -320,7 +320,7 @@ Citizen.CreateThread(function()
 		if IsPedShooting(me) and GetSelectedPedWeapon(me) ~= 101631238 and GetSelectedPedWeapon(me) ~= 911657153 and GetSelectedPedWeapon(me) ~= 883325847 and GetSelectedPedWeapon(me) ~= GetHashKey("WEAPON_SNOWBALL") then
 			last_shot_time = GetGameTimer()
 			--print("IsInPopulatedArea(): " .. tostring(IsInPopulatedArea()))
-			if IsInPopulatedArea() then
+			--[[if IsInPopulatedArea() then
 				if math.random(100) < 28 then
 					if not sending_msg then
 						sending_msg = true
@@ -331,12 +331,12 @@ Citizen.CreateThread(function()
 						sending_msg = false
 					end
 				end
-			end
+			end]]
 		end
 		------------------------------
 		-- car jacking notification --
 		------------------------------
-		if IsPedJacking(me) then
+		--[[if IsPedJacking(me) then
 			if not already_sent_msg then
 				if IsInPopulatedArea() then
 					if math.random(100) < 90 then
@@ -360,7 +360,7 @@ Citizen.CreateThread(function()
 				jacked = false
 			end
 			already_sent_msg = false
-		end
+		end]]
 		--------------------------
 		-- STOP BAIT CAR ENGINE --
 		--------------------------
@@ -378,56 +378,32 @@ end)
 -- 28, 30, 33 = gray
 -- 74, 10, 10 = red
 
-function IsInPopulatedArea()
-	local AREAS = {
-		{x = 1491.839, y = 3112.53, z = 40.656, range = 330}, -- sandy shores airport area // 75 - 150 probably range
-		{x = 151.62, y = 1038.808, z = 32.735, range = 1200}, -- los santos // 600 - 900 ish?
-		{x = -3161.96, y = 790.088, z = 6.824, range = 650}, -- west coast, NW of los santos // 300 - 400 ish?
-		{x = 2356.744, y = 4776.75, z = 34.613, range = 600}, -- grape seed // 350 - 450 ish?
-		{x = 145.209, y = 6304.922, z = 40.277, range = 650}, -- paleto bay // 500 - 600
-		{x = -1070.5, y = 5323.5, z = 46.339, range = 700}, -- S of Paleto Bay // 350 - 500 ish
-		{x = -2550.21, y = 2321.747, z = 33.059, range = 350}, -- west of map, gas station // 100 - 200
-		{x = 1927.374, y = 3765.77, z = 32.309, range = 350}, -- sandy shores
-		{x = 895.649, y = 2697.049, z = 41.985, range = 200}, -- harmony
-		{x = -1093.773, y = -2970.00, z = 13.944, range = 300}, -- LS airport
-		{x = 1070.506, y = -3111.021, z = 5.9, range = 450} -- LS ship cargo area
-	}
-	local my_coords = GetEntityCoords(me, true)
-	for k = 1, #AREAS do
-		if Vdist(my_coords.x, my_coords.y, my_coords.z, AREAS[k].x, AREAS[k].y, AREAS[k].z) <= AREAS[k].range then
-			--print("within range of populated area!")
-			return true
-		end
-	end
-	return false
-end
-
 function send911Message(msg, type)
-						-- send 911 message --
-						-- get location of sender and send to server function:
-						local data = {}
-						local playerPos = GetEntityCoords( GetPlayerPed( -1 ), true )
-						local streetA, streetB = Citizen.InvokeNative( 0x2EB41072B4C1E4C0, playerPos.x, playerPos.y, playerPos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt() )
-						local street = {}
-						if not ((streetA == lastStreetA or streetA == lastStreetB) and (streetB == lastStreetA or streetB == lastStreetB)) then
-							-- Ignores the switcharoo while doing circles on intersections
-							lastStreetA = streetA
-							lastStreetB = streetB
-						end
-						if lastStreetA ~= 0 then
-							table.insert( street, GetStreetNameFromHashKey( lastStreetA ) )
-						end
-						if lastStreetB ~= 0 then
-							table.insert( street, GetStreetNameFromHashKey( lastStreetB ) )
-						end
-						data.location = table.concat( street, " & " )
-						data.pos = {
-							x = playerPos.x,
-							y = playerPos.y,
-							z = playerPos.z
-						}
-						data.message = msg
-						TriggerServerEvent("phone:send911Message", data, true, true, type)
+	-- send 911 message --
+	-- get location of sender and send to server function:
+	local data = {}
+	local playerPos = GetEntityCoords( GetPlayerPed( -1 ), true )
+	local streetA, streetB = Citizen.InvokeNative( 0x2EB41072B4C1E4C0, playerPos.x, playerPos.y, playerPos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt() )
+	local street = {}
+	if not ((streetA == lastStreetA or streetA == lastStreetB) and (streetB == lastStreetA or streetB == lastStreetB)) then
+		-- Ignores the switcharoo while doing circles on intersections
+		lastStreetA = streetA
+		lastStreetB = streetB
+	end
+	if lastStreetA ~= 0 then
+		table.insert( street, GetStreetNameFromHashKey( lastStreetA ) )
+	end
+	if lastStreetB ~= 0 then
+		table.insert( street, GetStreetNameFromHashKey( lastStreetB ) )
+	end
+	data.location = table.concat( street, " & " )
+	data.pos = {
+		x = playerPos.x,
+		y = playerPos.y,
+		z = playerPos.z
+	}
+	data.message = msg
+	TriggerServerEvent("phone:send911Message", data, true, true, type)
 end
 
 RegisterNetEvent("police:performGSR")

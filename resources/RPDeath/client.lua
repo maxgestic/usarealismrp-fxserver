@@ -164,7 +164,7 @@ Citizen.CreateThread(function()
 end)
 
 RegisterNetEvent('death:createLog')
-AddEventHandler('death:createLog', function(ped)
+AddEventHandler('death::createLog', function(ped)
 	-- send death log
 	local deathLog = {
 		deadPlayerId = GetPlayerServerId(PlayerId()),
@@ -209,11 +209,16 @@ AddEventHandler('death:createLog', function(ped)
 					end
 				end
 			end
+		else
+			--print("deathLog.killer or deathLog.cause or both were nil")
 		end
 		--print("ped in veh seat: " .. ped_in_veh_seat)
 		--print("killer entity type = " .. killer_entity_type)
 		--print("cause entity type = " .. cause_entity_type)
+	else
+		--print("killer ID was NOT 0!")
 	end
+
 	TriggerServerEvent("death:newDeathLog", deathLog)
 end)
 
