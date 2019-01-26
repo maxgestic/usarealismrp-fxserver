@@ -169,8 +169,7 @@ local ReportPersonWithAKnife = true
 local ReportRecklessDriving = true
 local ReportVehicleTheft = true
 local ReportExplosion = true
-local ReportMVA = true
-local ReportBrandishing = true
+local ReportMVA = false
 local oldBodyDamage = 0
 local oldSpeed = 0
 local onDuty = false
@@ -178,19 +177,18 @@ local onDuty = false
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(5)
+		Citizen.Wait(1)
 		local ped = GetPlayerPed(-1)
 		local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
 		local currentDamage = GetVehicleBodyHealth(vehicle)
 		if not onDuty then
-			if ReportShotsFired and IsPedShooting(ped) and IsAreaPopulated() then
+			if ReportShotsFired and IsPedShooting(ped) and GetSelectedPedWeapon(me) ~= 101631238 and GetSelectedPedWeapon(me) ~= 911657153 and GetSelectedPedWeapon(me) ~= 883325847 and GetSelectedPedWeapon(me) ~= GetHashKey("WEAPON_SNOWBALL") then
 				local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
 				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
 				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
 				TriggerServerEvent('911:ShotsFired', x, y, z, lastStreetNAME, IsPedMale(ped))
 				Citizen.Wait(500)
 			elseif ReportAttemptedVehicleTheft and IsPedTryingToEnterALockedVehicle(ped) and IsAreaPopulated() then
-				print('yes')
 				local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
 				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
 				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
@@ -229,7 +227,7 @@ Citizen.CreateThread(function()
 				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
 				TriggerServerEvent('911:AssaultInProgress', x, y, z, lastStreetNAME, IsPedMale(ped))
 				Citizen.Wait(500)
-			elseif ReportRecklessDriving and GetPedInVehicleSeat(GetVehiclePedIsIn(ped), -1) == ped and GetEntitySpeed(GetVehiclePedIsIn(ped))*2.236936 > 120 and IsAreaPopulated() then
+			elseif ReportRecklessDriving and GetPedInVehicleSeat(GetVehiclePedIsIn(ped), -1) == ped and GetEntitySpeed(GetVehiclePedIsIn(ped))*2.236936 > 120 and IsAreaPopulated() and GetVehicleClass(vehicle) ~= 14 and GetVehicleClass(vehicle) ~= 15 and GetVehicleClass(vehicle) ~= 16 and GetVehicleClass(vehicle) ~= 19 then
 				local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
 				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
 				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
@@ -248,7 +246,7 @@ Citizen.CreateThread(function()
 				secondary = colorNames[tostring(secondary)]
 				TriggerServerEvent('911:VehicleTheft', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))), GetVehicleNumberPlateText(vehicle), IsPedMale(ped), primary, secondary)
 				Citizen.Wait(500)
-			elseif ReportMVA and DoesEntityExist(vehicle) and IsAreaPopulated() then
+			elseif ReportMVA and DoesEntityExist(vehicle) and IsAreaPopulated() and GetVehicleClass(vehicle) ~= 14 and GetVehicleClass(vehicle) ~= 15 and GetVehicleClass(vehicle) ~= 16 and GetVehicleClass(vehicle) ~= 19 then
 				local currentDamage = GetVehicleBodyHealth(vehicle)
 				if currentDamage ~= oldBodyDamage then
 					if (currentDamage < oldBodyDamage) and (oldBodyDamage - currentDamage) >= 5 then

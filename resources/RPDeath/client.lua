@@ -113,7 +113,7 @@ Citizen.CreateThread(function()
 				DisableControlAction(1, 6, true)
 				DisableControlAction(0, 26, true) -- LOOK BEHIND
 				--DisableControlAction(0, 0, true) -- CHANGE CAMERA VIEW
-				SetPlayerInvincible(ped, true)
+				--SetPlayerInvincible(ped, true) causes tens of anticheese flags lol
 				SetEntityHealth(ped, 1)
 				local waitPeriod = diedTime + (300 * 1000) -- how long you must wait (5 mins)
 				if(GetGameTimer() < waitPeriod)then
@@ -164,7 +164,7 @@ Citizen.CreateThread(function()
 end)
 
 RegisterNetEvent('death:createLog')
-AddEventHandler('death::createLog', function(ped)
+AddEventHandler('death:createLog', function(ped)
 	-- send death log
 	local deathLog = {
 		deadPlayerId = GetPlayerServerId(PlayerId()),
