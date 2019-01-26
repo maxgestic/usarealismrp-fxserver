@@ -131,7 +131,7 @@ end
 --]]
 
 -- DISTRITIC'S RAGDOLL ON JUMP --
-local ragdoll_chance = 0.6 -- 80 = 80%
+local ragdoll_chance = 0.45 -- 80 = 80%
 
 Citizen.CreateThread(function()
 	while true do
