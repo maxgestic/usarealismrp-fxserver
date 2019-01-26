@@ -160,12 +160,12 @@ local colorNames = {
 }
 
 local mute911 = false
-local ReportAssault = true
+local ReportAssault = false
 local ReportShotsFired = true
 local ReportCarjacking = true
 local ReportAttemptedVehicleTheft = true
-local ReportPersonWithAGun = true
-local ReportPersonWithAKnife = true
+local ReportPersonWithAGun = false
+local ReportPersonWithAKnife = false
 local ReportRecklessDriving = true
 local ReportVehicleTheft = true
 local ReportExplosion = true
