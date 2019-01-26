@@ -64,7 +64,7 @@ AddEventHandler('911:PersonWithAGun', function(x, y, z, street, area, isMale)
 		Citizen.Wait(time)
 		local string = 'Person with Gun: '..street..' ^1^*|^r Suspect: '..Gender(isMale)
 		Send911Notification('sheriff', string, x, y, z, 'Person with a Gun')
-		recentcalls[street] = 'PersonWithAGun'
+		recentcalls[area] = 'PersonWithAGun'
 		Citizen.Wait(180000)
 		recentcalls[area] = 'nil'
 	end
