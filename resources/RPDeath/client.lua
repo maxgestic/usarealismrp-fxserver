@@ -55,7 +55,7 @@ function respawnPed(ped,coords)
 	SetPlayerInvincible(ped, false)
 	Citizen.Wait(3000)
 	DoScreenFadeIn(500)
-	TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^1^*[RESPAWN] ^r^7You wake up at the local hospital, and can't seem to remember events leading up...")
+	TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^1^*[RESPAWN] ^r^7You wake up at the local hospital, and can't seem to remember events leading up to now...")
 end
 
 Citizen.CreateThread(function()
