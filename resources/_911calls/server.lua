@@ -17,14 +17,14 @@ AddEventHandler('911:ShotsFired', function(x, y, z, street, area, isMale)
 		recentcalls[area] = 'ShotsFired'
 		local time = math.random(2000, 5000)
 		Citizen.Wait(time)
-		local string = 'Shots Fired: '..street..' ^*^1^*|^r^r Suspect: '..Gender(isMale) 
+		local string = '^*Shots Fired:^r '..street..' ^*^1^*|^r ^*Suspect:^r '..Gender(isMale) 
 		Send911Notification('sheriff', string, x, y, z, 'Shots Fired')
 		Citizen.Wait(30000)
-		recentcalls[area] = 'nil'
+		recentcalls[area] = nil
 	end
 end)
 
-AddEventHandler('911:AttemptedVehicleTheft', function(x, y, z, street, vehicle, plate, isMale, primaryColor, secondaryColor)
+AddEventHandler('911:AttemptedVehicleTheft', function(x, y, z, street, area, vehicle, plate, isMale, primaryColor, secondaryColor)
 	local userSource = tonumber(source)
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 	local inv = user.getActiveCharacterData("inventory")
@@ -35,10 +35,10 @@ AddEventHandler('911:AttemptedVehicleTheft', function(x, y, z, street, vehicle, 
 				recentcalls[street] = 'AttemptedVehicleTheft'
 				local time = math.random(3000, 7000)
 				Citizen.Wait(time)
-				local string = 'Attmpt. Vehicle Theft: '..street..' ^1^*|^r Vehicle: '..string.upper(vehicle)..' ^1^*|^r Plate: '..plate..' ^1^*|^r Color: '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r Suspect: '..Gender(isMale)
+				local string = '^*Attmpt. Vehicle Theft:^r '..street..' ^1^*|^r ^*Vehicle:^r '..string.upper(vehicle)..' ^1^*|^r ^*Plate:^r '..plate..' ^1^*|^r ^*Color:^r '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
 				Send911Notification('sheriff', string, x, y, z, 'Attmpt. Vehicle Theft')
 				Citizen.Wait(20000)
-				recentcalls[street] = 'nil'
+				recentcalls[street] = nil
 				break
 			end
 		end
@@ -50,47 +50,49 @@ AddEventHandler('911:Carjacking', function(x, y, z, street, vehicle, plate, isMa
 		recentcalls[street] = 'Carjacking'
 		local time = math.random(1000, 6000)
 		Citizen.Wait(time)
-		local string = 'Carjacking: '..street..' ^1^*|^r Vehicle: '..string.upper(vehicle)..' ^1^*|^r Plate: '..plate..' ^1^*|^r Color: '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r Suspect: '..Gender(isMale)
+		local string = '^*Carjacking^r: '..street..' ^1^*|^r ^*Vehicle^r: '..string.upper(vehicle)..' ^1^*|^r ^*Plate^r: '..plate..' ^1^*|^r ^*Color^r: '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect^r: '..Gender(isMale)
 		Send911Notification('sheriff', string, x, y, z, 'Carjacking')
 		Citizen.Wait(5000)
-		recentcalls[street] = 'nil'
+		recentcalls[street] = nil
 	end
 end)
 
 AddEventHandler('911:PersonWithAGun', function(x, y, z, street, area, isMale)
-	if recentcalls[area] ~= 'PersonWithAGun' and recentcalls[street] ~= 'ShotsFired' and recentcalls[street] ~= 'ArmedCarjacking' then
+	local sendChance = math.random()
+	if recentcalls[area] ~= 'PersonWithAGun' and recentcalls[area] ~= 'ShotsFired' and recentcalls[street] ~= 'ArmedCarjacking' and sendChance < 0.3 then
 		recentcalls[area] = 'PersonWithAGun'
 		local time = math.random(2500, 8000)
 		Citizen.Wait(time)
-		local string = 'Person with Gun: '..street..' ^1^*|^r Suspect: '..Gender(isMale)
+		local string = '^*Person with Gun^r: '..street..' ^1^*|^r ^*Suspect^r: '..Gender(isMale)
 		Send911Notification('sheriff', string, x, y, z, 'Person with a Gun')
-		recentcalls[area] = 'PersonWithAGun'
 		Citizen.Wait(180000)
-		recentcalls[area] = 'nil'
+		recentcalls[area] = nil
 	end
 end)
 
-AddEventHandler('911:PersonWithAKnife', function(x, y, z, street, isMale)
-	if recentcalls[street] ~= 'PersonWithAKnife' and recentcalls[street] ~= 'AssaultInProgress' then
-		recentcalls[street] = 'PersonWithAKnife'
+AddEventHandler('911:PersonWithAKnife', function(x, y, z, street, area, isMale)
+	local sendChance = math.random()
+	if recentcalls[area] ~= 'PersonWithAKnife' and recentcalls[area] ~= 'AssaultInProgress' and sendChance < 0.3 then
+		recentcalls[area] = 'PersonWithAKnife'
 		local time = math.random(2500, 8000)
 		Citizen.Wait(time)
-		local string = 'Person with Knife: '..street..' ^1^*|^r Suspect: '..Gender(isMale)
+		local string = '^*Person with Knife^r: '..street..' ^1^*|^r ^*Suspect^r: '..Gender(isMale)
 		Send911Notification('sheriff', string, x, y, z, 'Person with a Knife')
 		Citizen.Wait(120000)
-		recentcalls[street] = 'nil'
+		recentcalls[area] = nil
 	end
 end)
 
-AddEventHandler('911:AssaultInProgress', function(x, y, z, street, isMale)
-	if recentcalls[street] ~= 'AssaultInProgress' then
-		recentcalls[street] = 'AssaultInProgress'
+AddEventHandler('911:AssaultInProgress', function(x, y, z, street, area, isMale)
+	local sendChance = math.random()
+	if recentcalls[area] ~= 'AssaultInProgress' and sendChance < 0.3 then
+		recentcalls[area] = 'AssaultInProgress'
 		local time = math.random(4000, 9000)
 		Citizen.Wait(time)
-		local string = 'Assault: '..street..' ^1^*|^r Suspect: '..Gender(isMale)
+		local string = '^*Assault^r: '..street..' ^1^*|^r ^*Suspect^r: '..Gender(isMale)
 		Send911Notification('sheriff', string, x, y, z, 'Assault')
-		Citizen.Wait(30000)
-		recentcalls[street] = 'nil'
+		Citizen.Wait(120000)
+		recentcalls[area] = nil
 	end
 end)
 
@@ -99,10 +101,10 @@ AddEventHandler('911:RecklessDriving', function(x, y, z, street, area, vehicle, 
 		recentcalls[area] = 'RecklessDriving'
 		local time = math.random(1000, 3500)
 		Citizen.Wait(time)
-		local string = 'Reckless Driving: '..street..' ^1^*|^r Vehicle: '..string.upper(vehicle)..' ^1^*|^r Plate: '..plate..' ^1^*|^r Color: '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r Suspect: '..Gender(isMale)
+		local string = '^*Reckless Driving^r: '..street..' ^1^*|^r ^*Vehicle^r: '..string.upper(vehicle)..' ^1^*|^r ^*Plate^r: '..plate..' ^1^*|^r ^*Color^r: '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect^r: '..Gender(isMale)
 		Send911Notification('sheriff', string, x, y, z, 'Reckless Driving')
 		Citizen.Wait(45000)
-		recentcalls[area] = 'nil'
+		recentcalls[area] = nil
 	end
 end)	
 
@@ -111,10 +113,10 @@ AddEventHandler('911:VehicleTheft', function(x, y, z, street, vehicle, plate, is
 		recentcalls[street] = 'VehicleTheft'
 		local time = math.random(1000, 5000)
 		Citizen.Wait(time)
-		local string = 'Vehicle Theft: '..street..' ^1^*|^r Vehicle: '..string.upper(vehicle)..' ^1^*|^r Plate: '..plate..' ^1^*|^r Color: '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r Suspect: '..Gender(isMale)
+		local string = '^*Vehicle Theft:^r '..street..' ^1^*|^r ^*Vehicle:^r '..string.upper(vehicle)..' ^1^*|^r ^*Plate:^r '..plate..' ^1^*|^r ^*Color:^r '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
 		Send911Notification('sheriff', string, x, y, z, 'Vehicle Theft')
 		Citizen.Wait(5000)
-		recentcalls[street] = 'nil'
+		recentcalls[street] = nil
 	end
 end)
 
@@ -123,10 +125,10 @@ AddEventHandler('911:MVA', function(x, y, z, street, area, vehicle, plate, isMal
 		recentcalls[area] = 'MVA'
 		local time = math.random(2000, 5000)
 		Citizen.Wait(time)
-		local string = 'MVA: '..street..' ^1^*|^r Vehicle: '..string.upper(vehicle)..' ^1^*|^r Plate: '..plate..' ^1^*|^r Color: '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r Suspect: '..Gender(isMale)
+		local string = '^*MVA:^r '..street..' ^1^*|^r ^*Vehicle:^r '..string.upper(vehicle)..' ^1^*|^r ^*Plate:^r '..plate..' ^1^*|^r ^*Color:^r '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
 		Send911Notification(false, string, x, y, z, 'Motor Vehicle Accident')
 		Citizen.Wait(30000)
-		recentcalls[area] = 'nil'
+		recentcalls[area] = nil
 	end
 end)
 
@@ -135,10 +137,10 @@ AddEventHandler('911:ArmedCarjacking', function(x, y, z, street, vehicle, plate,
 		recentcalls[street] = 'ArmedCarjacking'
 		local time = math.random(1000, 3000)
 		Citizen.Wait(time)
-		local string = 'Armed Carjacking: '..street..' ^1^*|^r Vehicle: '..string.upper(vehicle)..' ^1^*|^r Plate: '..plate..' ^1^*|^r Color: '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r Suspect: '..Gender(isMale)
+		local string = '^*Armed Carjacking:^r '..street..' ^1^*|^r ^*Vehicle:^r '..string.upper(vehicle)..' ^1^*|^r ^*Plate:^r '..plate..' ^1^*|^r ^*Color:^r '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
 		Send911Notification('sheriff', string, x, y, z, 'Armed Carjacking')
 		Citizen.Wait(5000)
-		recentcalls[street] = 'nil'
+		recentcalls[street] = nil
 	end
 end)
 
@@ -147,7 +149,7 @@ AddEventHandler('911:Narcotics', function(x, y, z, street, isMale)
 		recentcalls[street] = 'Narcotics'
 		local time = math.random(4000, 10000)
 		Citizen.Wait(time)
-		local string = 'Sale of Narcotics: '..street..' ^1^*|^r Suspect: '..Gender(isMale)
+		local string = '^*Sale of Narcotics:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
 		Send911Notification('sheriff', string, x, y, z, 'Narcotics')
 		Citizen.Wait(50000)
 		recentcalls[street] = nil
