@@ -156,6 +156,7 @@ AddEventHandler("doormanager:toggleDoorLock", function(index, locked, x, y, z)
       if not door.cell_block then
         if locked and not door.ymap then
           while math.floor(GetEntityHeading(door_entity)) ~= door.heading do
+            --print(GetEntityHeading(door_entity))
             local mycoords = GetEntityCoords(PlayerPedId())
             Citizen.Wait(1)
             if Vdist(door.x, door.y, door.z, mycoords.x, mycoords.y, mycoords.z) < DRAW_3D_TEXT_RANGE then

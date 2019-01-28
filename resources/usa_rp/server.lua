@@ -144,6 +144,19 @@ end, {
 	}
 })
 
+TriggerEvent('es:addCommand', 'shuffle', function(source, args, user)
+	TriggerClientEvent("usa:shuffleSeats", source)
+
+end, {
+	help = "Shuffle seats in a vehicle"
+})
+
+TriggerEvent('es:addCommand', 'bl', function(source, args, user)
+	TriggerClientEvent("usa:toggleBrakelight", source)
+end, {
+	help = "Toggle your vehicle idle brakelights"
+})
+
 RegisterServerEvent("veh:checkForKey")
 AddEventHandler("veh:checkForKey", function(plate, status)
 	local userSource = tonumber(source)

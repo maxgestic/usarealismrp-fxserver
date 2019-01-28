@@ -31,5 +31,7 @@ files({
     'client/html/sounds/lock.ogg',
     'client/html/sounds/unlock.ogg',
     'client/html/sounds/demo.ogg',
-	'client/html/sounds/cuffing.ogg'
+	'client/html/sounds/cuffing.ogg',
+	'client/html/sounds/zip-open.ogg',
+	'client/html/sounds/door-shut.ogg'
 })

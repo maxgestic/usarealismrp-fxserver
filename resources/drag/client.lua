@@ -14,6 +14,7 @@ AddEventHandler('drag:attemptToDragNearest', function()
 	        	local closestPed = GetPlayerPed(GetPlayerFromServerId(player.id))
 				if player.id and not IsPedInAnyVehicle(PlayerPedId()) then
 					TriggerServerEvent('drag:sendDragPlayer', player.id)
+					print('sent??')
 					sourceDragged = player.id
 				end
 			end

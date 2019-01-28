@@ -25,7 +25,8 @@ AddEventHandler("cuff:Handcuff", function(id)
 	local usource = source
 	local user = exports["essentialmode"]:getPlayerFromId(usource)
 	--TriggerEvent("es:getPlayerFromId", usource, function(user)
-		playerJob = user.getActiveCharacterData("job")
+	local playerJob = user.getActiveCharacterData("job")
+	print(playerJob)
 		if playerJob == "sheriff" or playerJob == "cop" or playerJob == "corrections" then
 			print("cuffing player with id: " .. id)
 			TriggerClientEvent("cuff:Handcuff", tonumber(id))
@@ -68,7 +69,12 @@ TriggerEvent('es:addJobCommand', 'sc', {"police", "sheriff", "corrections"}, fun
 	end
 end, {help = 'Softcuff the player specified, player must be cuffed first.', params = {{name = "id", help = "Target player ID #"}}})
 
-RegisterServerEvent('cuff:forceHandsDown')
-AddEventHandler('cuff:forceHandsDown', function()
-	TriggerClientEvent('usa:forceHandsDown', source)
+RegisterServerEvent("cuff:checkWhitelist")
+AddEventHandler("cuff:checkWhitelist", function(clientevent)
+  local userSource = tonumber(source)
+  local user = exports["essentialmode"]:getPlayerFromId(userSource)
+  local user_job = user.getActiveCharacterData("job")
+  if user_job == "sheriff" or user_job == "cop" or user_job == "corrections" then
+    TriggerClientEvent(clientevent, userSource)
+  end
 end)

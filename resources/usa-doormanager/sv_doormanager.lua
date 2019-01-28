@@ -71,7 +71,12 @@ local DOORS = {
   {name = "SSPD / Cell 1", x = 1848.6, y = 3708.2, z = 1.06, distance = 2.0, model = -642608865, locked = false, draw_marker = false, _dist = 1.5, ymap = true, allowedJobs = {'sheriff', 'corrections'}},
   {name = "SSPD / Cell 2", x = 1847.6, y = 3709.9, z = 1.05, distance = 2.0, model = -642608865, locked = false, draw_marker = false, _dist = 1.5, ymap = true, allowedJobs = {'sheriff', 'corrections'}},
   {name = "SSPD / Cell 3", x = 1844.8, y = 3705.2, z = 1.06, distance = 2.0, model = -642608865, locked = false, draw_marker = false, _dist = 1.5, ymap = true, allowedJobs = {'sheriff', 'corrections'}},
-  {name = "SSPD / Cell 4", x = 1843.5, y = 3707.0, z = 1.06, distance = 2.0, model = -642608865, locked = false, draw_marker = false, _dist = 1.5, ymap = true, allowedJobs = {'sheriff', 'corrections'}}
+  {name = "SSPD / Cell 4", x = 1843.5, y = 3707.0, z = 1.06, distance = 2.0, model = -642608865, locked = false, draw_marker = false, _dist = 1.5, ymap = true, allowedJobs = {'sheriff', 'corrections'}},
+  {name = 'Hospital / Door 1', x = 328.3, y = -585.03, z = 43.3, distance = 2.0, model = -770740285, locked = true, draw_marker = false, cell_block = false, offsetX = 0, offsetY = 1.02, offsetZ = 0.05, heading = 160, angle = 180, _dist = 1.5, ymap = false, allowedJobs = {'ems', 'sheriff'}},
+  {name = 'Hospital / Door 2', x = 331.1, y = -586.03, z = 43.3, distance = 2.0, model = -770740285, locked = true, draw_marker = false, cell_block = false, offsetX = 0, offsetY = 1.02, offsetZ = 0.05, heading = 340, angle = 180, _dist = 1.5, ymap = false, allowedJobs = {'ems', 'sheriff'}},
+  {name = 'BCSO Paleto - Door 1', x = -443.16, y = 6015.41, z = 31.71, distance = 2.0, model = -1501157055, locked = false, draw_marker = false, cell_block = false, offsetX=0, offsetY=1.24, offsetZ=-0.1, heading = 315, angle = 180, _dist = 1.5, ymap= false, allowedJobs = {'sheriff', 'corrections'}},
+  {name = 'BCSO Paleto - Door 2', x = -444.3, y = 6016.3, z = 31.71, distance = 2.0, model = -1501157055, locked = true, draw_marker = false, cell_block = false, _dist = 1.5, ymap = false, static = true, allowedJobs = {'sheriff', 'corrections'}},
+  {name = 'Mission Row / Armory', x = 452.71, y = -982.616, z = 30.6, distance = 2.0, model = 749848321, locked = true, draw_marker = false, cell_block = false, offsetX = 0.0, offsetY = 1.05, offsetZ = 0.3, heading = 270, angle = 180, _dist = 1.5, ymap = false, allowedJobs = {'sheriff'}}
 }
 
 -- allowedJobs - table of job names allowed to use door, the player's job must match any value in the list for the door to lock/unlock

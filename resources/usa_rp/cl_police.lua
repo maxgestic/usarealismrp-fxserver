@@ -367,6 +367,7 @@ Citizen.CreateThread(function()
 		if isInBaitCar then
 			veh = GetVehiclePedIsIn(PlayerPedId())
 			SetVehicleEngineOn(veh, false, true)
+			DisableControlAction(0, 75, true)
 		end
 	end
 end)

@@ -1,15 +1,75 @@
+local hospitalBeds = {
+	{
+		occupied = nil,
+		objCoords  = {347.115, -590.426, 43.304},
+		objModel = 2117668672
+	},
+
+	{
+		occupied = nil,
+		objCoords  = {350.86, -591.58, 43.39},
+		objModel = 2117668672
+	},
+
+	{
+		occupied = nil,
+		objCoords  = {354.3, -592.75, 43.30},
+		objModel = 2117668672
+	},
+
+	{
+		occupied = nil,
+		objCoords  = {357.44, -594.3, 43.30},
+		objModel = 2117668672
+	},
+
+	{
+		occupied = nil,
+		objCoords  = {356.66, -586.01, 43.30},
+		objModel = 1631638868
+	},
+
+	{
+		occupied = nil,
+		objCoords  = {353.177, -584.93, 43.30},
+		objModel = 1631638868
+	}
+}
+
+
+RegisterServerEvent('ems:resetBed')
+AddEventHandler('ems:resetBed', function()
+	for i = 1, #hospitalBeds do
+		if hospitalBeds[i].occupied == source then
+			hospitalBeds[i].occupied = nil
+		end
+	end
+end)
+
 -- /admit [id] [time] [reason]
 TriggerEvent('es:addJobCommand', 'admit', { "ems", "fire", "police", "sheriff", "corrections" }, function(source, args, user)
 	local userSource = tonumber(source)
 	local targetPlayerId = tonumber(args[2])
 	local targetPlayerAdmissionTime = tonumber(args[3])
+	local bed = nil
 	table.remove(args, 1)
 	table.remove(args, 1)
 	table.remove(args, 1)
 	local reasonForAdmission = table.concat(args, " ")
 	if not targetPlayerAdmissionTime or not reasonForAdmission or not GetPlayerName(targetPlayerId) then return end
 	print("admitting patient to hospital!")
-	TriggerClientEvent("ems:admitPatient", targetPlayerId)
+	for i = 1, #hospitalBeds do
+		if hospitalBeds[i].occupied == nil then
+			hospitalBeds[i].occupied = targetPlayerId
+			bed = {
+				heading = hospitalBeds[i].heading,
+				coords = hospitalBeds[i].objCoords,
+				model = hospitalBeds[i].objModel
+			}
+			break
+		end
+	end
+	TriggerClientEvent("ems:admitPatient", targetPlayerId, bed)
 	TriggerClientEvent("ems:notifyHospitalized", targetPlayerId, targetPlayerAdmissionTime, reasonForAdmission)
 	TriggerClientEvent("ems:notifyHospitalized", userSource, targetPlayerAdmissionTime, reasonForAdmission)
 	SetTimeout(targetPlayerAdmissionTime*60000, function()
@@ -17,7 +77,7 @@ TriggerEvent('es:addJobCommand', 'admit', { "ems", "fire", "police", "sheriff", 
 	end)
 	-- get player's character name:
 	local target_player = exports["essentialmode"]:getPlayerFromId(targetPlayerId)
-	-- send to discord #ems-logs
+	--send to discord #ems-logs
 	local url = 'https://discordapp.com/api/webhooks/375425187014770699/i6quT1ZKnFoZgOC4rSpudTc2ucmvfXuAUQJXqDI0oeKoeqLGX0etu-GGMpIKbKuAqk70'
 	PerformHttpRequest(url, function(err, text, headers)
 		if text then

@@ -289,21 +289,63 @@ Citizen.CreateThread( function()
   end
 end)
 
-----------------------------------
--- stop seat shuffling in vehicles
-----------------------------------
-local antiShuffleEnabled = true
+---------------------------------------------------------
+-- stop seat shuffling in vehicles, vehicle brakelight --
+---------------------------------------------------------
+local disableShuffle = true
+local brakeLight = true
+
+RegisterNetEvent("usa:shuffleSeats")
+AddEventHandler("usa:shuffleSeats", function()
+  if IsPedInAnyVehicle(GetPlayerPed(-1), false) and GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), 0) == GetPlayerPed(-1) then
+      disableShuffle = false
+      Citizen.Wait(5000)
+      disableShuffle = true
+    elseif IsPedInAnyVehicle(GetPlayerPed(-1), false) and GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), -1) == GetPlayerPed(-1) then
+      SetPedIntoVehicle(GetPlayerPed(-1), GetVehiclePedIsIn(GetPlayerPed(-1), false), 0)
+    else
+      CancelEvent()
+    end
+end)
+
+RegisterNetEvent('usa:toggleBrakelight')
+AddEventHandler('usa:toggleBrakelight', function()
+    brakeLight = not brakeLight
+    if brakeLight then
+        TriggerEvent('usa:notify', 'Your idle brakelight is now ~g~on~s~.')
+    else
+        TriggerEvent('usa:notify', 'Your idle brakelight is now ~r~off~s~.')
+    end
+end)
+
 Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(10)
-		if isInVeh and antiShuffleEnabled then
-			if GetPedInVehicleSeat(GetVehiclePedIsIn(playerPed, false), 0) == playerPed then
-				if GetIsTaskActive(playerPed, 165) then
-					SetPedIntoVehicle(playerPed, GetVehiclePedIsIn(playerPed, false), 0)
-				end
-			end
-		end
-	end
+    while true do
+        Citizen.Wait(0)
+        local ped = GetPlayerPed(-1)
+        if IsPedInAnyVehicle(GetPlayerPed(-1), false) and disableShuffle then
+            if GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), 0) == GetPlayerPed(-1) then
+                if GetIsTaskActive(GetPlayerPed(-1), 165) then
+                    SetPedIntoVehicle(GetPlayerPed(-1), GetVehiclePedIsIn(GetPlayerPed(-1), false), 0)
+                end
+            end
+        end
+
+        if brakeLight then
+            if DoesEntityExist(ped) and not IsEntityDead(ped) then
+                if IsPedSittingInAnyVehicle(ped) then
+                    local vehicle = GetVehiclePedIsIn(ped, false)
+
+                    if GetVehicleClass(vehicle) ~= 14 and GetVehicleClass(vehicle) ~= 15 and GetVehicleClass(vehicle) ~= 16 and GetVehicleClass(veh) ~= 21 then
+                        if GetPedInVehicleSeat(vehicle, -1) == ped then
+                            if GetEntitySpeed(vehicle) == 0 and GetIsVehicleEngineRunning(vehicle) then
+                                SetVehicleBrakeLights(vehicle, true)
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
 end)
 
 

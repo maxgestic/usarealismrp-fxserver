@@ -1,4 +1,5 @@
 draggedPlayers = {}
+local awaitingUpdates = false
 
 TriggerEvent('es:addCommand', 'place', function(source, args, user, location)
 	local usource = source
@@ -6,15 +7,20 @@ TriggerEvent('es:addCommand', 'place', function(source, args, user, location)
 	local user_job = user.getActiveCharacterData("job")
 	if user_job == "sheriff" or user_job == "ems" or user_job == "fire" or user_job == "corrections" then
 		local tPID = tonumber(args[2])
-		TriggerEvent('drag:passTable', 'place:updateDragTable')
-		if draggedPlayers[usource] == tonumber(args[2]) then
-			TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), usource)
-			draggedPlayers[usource] = nil
-			TriggerEvent('place:returnUpdatedTable', draggedPlayers)
-		end
-		TriggerClientEvent("place", tPID)
-		local msg = "Places person in vehicle."
-		exports["globals"]:sendLocalActionMessage(usource, msg)
+		awaitingUpdates = true
+		TriggerEvent('drag:passTable', 'place:updateDragTable', function()
+			while awaitingUpdates do
+				Citizen.Wait(0)
+			end
+			if draggedPlayers[usource] == tonumber(args[2]) then
+				TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), usource)
+				draggedPlayers[usource] = nil
+				TriggerEvent('place:returnUpdatedTable', draggedPlayers)
+			end
+			TriggerClientEvent("place", tPID)
+			local msg = "Places person in vehicle."
+			exports["globals"]:sendLocalActionMessage(usource, msg)
+		end)
 	else
 		if draggedPlayers[usource] == tonumber(args[2]) then
 			TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), usource)
@@ -63,4 +69,5 @@ end, {
 RegisterServerEvent('place:updateDragTable')
 AddEventHandler('place:updateDragTable', function(table)
 	draggedPlayers = table
+	awaitingUpdates = false
 end)

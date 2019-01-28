@@ -57,14 +57,14 @@ Citizen.CreateThread(function()
     local player_coords = GetEntityCoords(player_ped)
     for job, places in pairs(JOBS) do
       if Vdist(player_coords, places.harvest.x, places.harvest.y, places.harvest.z) < 9 then
-        print("player is close to harvest job location:  " .. job)
+        --print("player is close to harvest job location:  " .. job)
         drawTxt("Press ~g~E~w~ to harvest " .. job .. "!",0,1,0.5,0.8,0.6,255,255,255,255)
         if IsControlJustPressed(1, KEY) then
           TriggerServerEvent("HPS:checkItem", job, places.harvest.time, "Harvest")
           Wait(places.harvest.time * 1000) -- prevent spamming
         end
       elseif Vdist(player_coords, places.process.x, places.process.y, places.process.z) < 3.5 then
-        print("player is close to process job location:  " .. job)
+        --print("player is close to process job location:  " .. job)
         drawTxt("Press ~g~E~w~ to process " .. job .. "!",0,1,0.5,0.8,0.6,255,255,255,255)
         if IsControlJustPressed(1, KEY) then
           TriggerServerEvent("HPS:checkItem", job, places.process.time, "Process")

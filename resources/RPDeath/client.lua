@@ -29,7 +29,6 @@ function revivePed(ped, anim)
 	NetworkResurrectLocalPlayer(playerPos, true, true, false)
 	SetPlayerInvincible(ped, false)
 	ClearPedBloodDamage(ped)
-	TriggerEvent("crim:blindfold", false, true)
 	if anim then
 		RequestAnimDict('combat@damage@injured_pistol@to_writhe')
 		while not HasAnimDictLoaded('combat@damage@injured_pistol@to_writhe') do
@@ -41,16 +40,24 @@ function revivePed(ped, anim)
 	end
 end
 
+DoScreenFadeIn(100)
+
 function respawnPed(ped,coords)
 	FreezeEntityPosition(ped, false)
 	DoScreenFadeOut(500)
 	Citizen.Wait(500)
+	RequestCollisionAtCoord(coords.x, coords.y, coords.z)
 	SetEntityCoordsNoOffset(ped, coords.x, coords.y, coords.z, false, false, false, true)
+	while not HasCollisionLoadedAroundEntity(ped) do
+        Citizen.Wait(100)
+        SetEntityCoords(ped, coords.x, coords.y, coords.z, 1, 0, 0, 1)
+    end
 	NetworkResurrectLocalPlayer(coords.x, coords.y, coords.z, coords.heading, true, false)
 	TriggerEvent('playerSpawned', coords.x, coords.y, coords.z, coords.heading)
 	RemoveAllPedWeapons(GetPlayerPed(-1), true) -- strip weapons
 	-- remove player weapons from db
 	TriggerServerEvent("death:removeWeapons")
+	TriggerEvent("crim:blindfold", false, false, true)
 	ClearPedBloodDamage(ped)
 	SetPlayerInvincible(ped, false)
 	Citizen.Wait(3000)

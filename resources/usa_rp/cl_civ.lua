@@ -8,7 +8,7 @@ local bag = nil;
 -- blindfold --
 ---------------
 RegisterNetEvent("crim:blindfold")
-AddEventHandler("crim:blindfold", function(on, dont_send_message)
+AddEventHandler("crim:blindfold", function(on, dont_send_message, dont_notify)
   --SetNuiFocus(on, false)
   SendNUIMessage({
     type = "enableui",
@@ -18,11 +18,15 @@ AddEventHandler("crim:blindfold", function(on, dont_send_message)
   blindfolded = on
   if not dont_send_message then
     if on then
-      TriggerEvent("usa:notify", "You have been blindfolded!")
+      if not dont_notify then
+        TriggerEvent("usa:notify", "You have been blindfolded!")
+      end
       bag = CreateObject(GetHashKey("prop_money_bag_01"), 0, 0, 0, true, true, true) -- Create head bag object!
       AttachEntityToEntity(bag, GetPlayerPed(-1), GetPedBoneIndex(GetPlayerPed(-1), 12844), 0.2, 0.04, 0, 0, 270.0, 60.0, true, true, false, true, 1, true) -- Attach object to head
     else
-      TriggerEvent("usa:notify", "Blindfold removed!")
+      if not dont_notify then
+        TriggerEvent("usa:notify", "Blindfold removed!")
+      end
       DeleteEntity(bag)
       SetEntityAsNoLongerNeeded(bag)
     end
@@ -188,9 +192,10 @@ Citizen.CreateThread(function()
 	end
 end)
 
-RegisterNetEvent('usa:forceHandsDown')
-AddEventHandler('usa:forceHandsDown', function()
+RegisterNetEvent('cuff:forceHandsDown')
+AddEventHandler('cuff:forceHandsDown', function(cb)
   hands_up = false
+  cb()
 end)
 -- hands up animation --
 Citizen.CreateThread(function()

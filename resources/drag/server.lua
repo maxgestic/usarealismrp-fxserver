@@ -45,11 +45,18 @@ AddEventHandler('drag:sendDragPlayer', function(sourceBeingDragged)
 end)
 
 RegisterServerEvent('drag:passTable')
-AddEventHandler('drag:passTable', function(eventName)
+AddEventHandler('drag:passTable', function(eventName, cb)
 	TriggerEvent(eventName, draggedPlayers)
+	cb()
 end)
 
 RegisterServerEvent('place:returnUpdatedTable')
 AddEventHandler('place:returnUpdatedTable', function(table)
 	draggedPlayers = table
+end)
+
+AddEventHandler('playerDropped', function(source)
+	if draggedPlayers[source] then
+		draggedPlayers[source] = nil
+	end
 end)

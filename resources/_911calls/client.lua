@@ -163,7 +163,7 @@ local mute911 = false
 local ReportAssault = true
 local ReportShotsFired = true
 local ReportCarjacking = true
-local ReportAttemptedVehicleTheft = true
+local ReportAttemptedVehicleTheft = false
 local ReportPersonWithAGun = true
 local ReportPersonWithAKnife = true
 local ReportRecklessDriving = true
@@ -182,21 +182,21 @@ Citizen.CreateThread(function()
 		local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
 		local currentDamage = GetVehicleBodyHealth(vehicle)
 		if not onDuty then
-			if ReportShotsFired and IsPedShooting(ped) and GetSelectedPedWeapon(me) ~= 101631238 and GetSelectedPedWeapon(me) ~= 911657153 and GetSelectedPedWeapon(me) ~= 883325847 and GetSelectedPedWeapon(me) ~= GetHashKey("WEAPON_SNOWBALL") then
+			if ReportShotsFired and IsPedShooting(ped) and GetSelectedPedWeapon(me) ~= 101631238 and GetSelectedPedWeapon(me) ~= 911657153 and GetSelectedPedWeapon(me) ~= 883325847 and GetSelectedPedWeapon(me) ~= GetHashKey("WEAPON_SNOWBALL") and GetSelectedPedWeapon(me) ~= GetHashKey("WEAPON_JERRYCAN") then
 				local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
 				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
 				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-        			local area = GetNameOfZone(x, y, z)
-				TriggerServerEvent('911:ShotsFired', x, y, z, lastStreetNAME, IsPedMale(ped))
+        		local area = GetNameOfZone(x, y, z)
+				TriggerServerEvent('911:ShotsFired', x, y, z, lastStreetNAME, area, IsPedMale(ped))
 				Citizen.Wait(500)
-			elseif ReportAttemptedVehicleTheft and IsPedTryingToEnterALockedVehicle(ped) and IsAreaPopulated() then
+			elseif ReportAttemptedVehicleTheft and IsPedTryingToEnterALockedVehicle(ped) and not GetIsVehicleEngineRunning(GetVehiclePedIsTryingToEnter(ped)) and IsAreaPopulated() then
 				local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
 				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
 				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
 				local primary, secondary = GetVehicleColours(GetVehiclePedIsTryingToEnter(ped))
 				local primary = colorNames[tostring(primary)]
 				local secondary = colorNames[tostring(secondary)]
-                		local area = GetNameOfZone(x, y, z)
+                local area = GetNameOfZone(x, y, z)
 				TriggerServerEvent('911:AttemptedVehicleTheft', x, y, z, lastStreetNAME, area, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsTryingToEnter(ped)))), GetVehicleNumberPlateText(GetVehiclePedIsTryingToEnter(ped)), IsPedMale(ped), primary, secondary)
 				Citizen.Wait(500)
 			elseif ReportCarjacking and IsPedJacking(ped) and IsAreaPopulated() then
@@ -221,17 +221,19 @@ Citizen.CreateThread(function()
 				local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
 				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
 				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-                		local area = GetNameOfZone(x, y, z)
+                local area = GetNameOfZone(x, y, z)
 				if (GetSelectedPedWeapon(ped) == -1716189206 or GetSelectedPedWeapon(ped) == -1834847097 or GetSelectedPedWeapon(ped) == -581044007 or GetSelectedPedWeapon(ped) == -538741184) and math.random() < 0.08 then
 					TriggerServerEvent('911:PersonWithAKnife', x, y, z, lastStreetNAME, area, IsPedMale(ped))
 				end
-                		Citizen.Wait(500)
+                Citizen.Wait(500)
 			elseif ReportAssault and IsPedInMeleeCombat(ped) and IsAreaPopulated() then
 				local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
 				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
 				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-                		local area = GetNameOfZone(x, y, z)
-				TriggerServerEvent('911:AssaultInProgress', x, y, z, lastStreetNAME, area, IsPedMale(ped))
+                local area = GetNameOfZone(x, y, z)
+                if math.random() < 0.2 then
+				    TriggerServerEvent('911:AssaultInProgress', x, y, z, lastStreetNAME, area, IsPedMale(ped))
+                end
 				Citizen.Wait(500)
 			elseif ReportRecklessDriving and GetPedInVehicleSeat(GetVehiclePedIsIn(ped), -1) == ped and GetEntitySpeed(GetVehiclePedIsIn(ped))*2.236936 > 120 and IsAreaPopulated() and GetVehicleClass(vehicle) ~= 14 and GetVehicleClass(vehicle) ~= 15 and GetVehicleClass(vehicle) ~= 16 and GetVehicleClass(vehicle) ~= 19 then
 				local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
@@ -241,9 +243,9 @@ Citizen.CreateThread(function()
 				local primary = colorNames[tostring(primary)]
 				local secondary = colorNames[tostring(secondary)]
 				local area = GetNameOfZone(x, y, z)
-                		if math.random() < 0.2 then
+                if math.random() < 0.2 then
 				    TriggerServerEvent('911:RecklessDriving', x, y, z, lastStreetNAME, area, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(ped)))), GetVehicleNumberPlateText(GetVehiclePedIsIn(ped)), primary, secondary)
-                		end
+                end
 				Citizen.Wait(5000)
 			elseif ReportVehicleTheft and IsPedInAnyVehicle(ped, false) and IsVehicleNeedsToBeHotwired(GetVehiclePedIsIn(ped)) and IsAreaPopulated() then
 				local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
