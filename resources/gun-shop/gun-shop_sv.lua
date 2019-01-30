@@ -78,7 +78,7 @@ AddEventHandler("gunShop:buyPermit", function(property)
     return
   end
   --user.removeMoney(2000)
-  local cost = 2000
+  local cost = 10000
   local user_cash = user.getActiveCharacterData("money")
   user.setActiveCharacterData("money", user_cash - cost)
   local licenses = user.getActiveCharacterData("licenses")

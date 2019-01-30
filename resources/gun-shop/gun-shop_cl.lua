@@ -82,7 +82,7 @@ function CreateWeaponShopMenu(menu)
   ----------------------------
   -- Purchase permit button --
   ----------------------------
-  local item = NativeUI.CreateItem("Purchase Firearm License", "Purchase price: $2,000")
+  local item = NativeUI.CreateItem("Purchase Firearm License", "Purchase price: $10,000")
   item:SetLeftBadge(BadgeStyle.Star)
   item.Activated = function(parentmenu, selected)
     local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
