@@ -48,9 +48,9 @@ local txt = {
 }
 
 local fish = {
-    {name = "Trout", quantity = 1, worth = 190, type = "fish", weight = 10},
-    {name = "Flounder", quantity = 1, worth = 300, type = "fish", weight = 10},
-    {name = "Halibut", quantity = 1, worth = 500, type = "fish", weight = 10}
+    {name = "Trout", quantity = 1, worth = 190, type = "fish", weight = 10, legality = "legal"},
+    {name = "Flounder", quantity = 1, worth = 300, type = "fish", weight = 10, legality = "legal"},
+    {name = "Halibut", quantity = 1, worth = 500, type = "fish", weight = 10, legality = "legal"}
 }
 
 local peds = {
