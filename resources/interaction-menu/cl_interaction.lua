@@ -1152,7 +1152,7 @@ Citizen.CreateThread(function()
 		playerServerId, playerName, distanceToClosestTargetPed = GetClosestPlayerInfo()
 
 		-- watch for open/close menu
-		if (IsControlJustPressed( 0, MENU_KEY1 ) or IsControlJustPressed( 0, MENU_KEY2 )) and GetLastInputMethod(2) then
+		if IsControlJustPressed( 0, MENU_KEY1 ) and GetLastInputMethod(2) then
 			local target_veh = getVehicleInFrontOfUser()
 			local target_veh_plate = GetVehicleNumberPlateText(target_veh)
 			EnableGui(target_veh_plate)
