@@ -3,8 +3,8 @@
 --# Phone script to make phone calls and send texts in game with GUI phone
 --# requires database(s): "phones"
 
-local scenario = "WORLD_HUMAN_STAND_MOBILE"
-local startedTask = false
+local phoneEnabled = false
+local phoneModel = GetHashKey('prop_npc_phone_02')
 local on_call = false
 local cellphone_object = nil
 local partner_call_source = nil
@@ -30,8 +30,6 @@ AddEventHandler("phone:notify", function(msg)
 end)
 
 -- start of NUI menu
-
-local phoneEnabled = false
 
 function EnableGui(enable, phone)
 	SetNuiFocus(enable, enable)
@@ -294,7 +292,6 @@ RegisterNUICallback('sendTweet', function(data, cb)
 end)
 
 RegisterNUICallback('escape', function(data, cb)
-	startedTask = false
 	ClearPedTasks(GetPlayerPed(-1))
 	EnableGui(false)
   cb('ok')
@@ -305,22 +302,10 @@ Citizen.CreateThread(function()
 	while true do
 		-- disable some controls while phone GUI active, also play scenario --
 		if phoneEnabled then
-			if not startedTask and not IsPedInAnyVehicle(GetPlayerPed(-1), true) then
-				ClearPedTasks(GetPlayerPed(-1))
-				TaskStartScenarioInPlace(GetPlayerPed(-1), scenario, 0, true);
-				startedTask = true
-			end
 			DisableControlAction(0, 1, phoneEnabled) -- LookLeftRight
 			DisableControlAction(0, 2, phoneEnabled) -- LookUpDown
 			DisableControlAction(0, 142, phoneEnabled) -- MeleeAttackAlternate
 			DisableControlAction(0, 106, phoneEnabled) -- VehicleMouseControlOverride
-			--[[
-			if IsDisabledControlJustReleased(0, 142) then -- MeleeAttackAlternate
-				SendNUIMessage({
-					type = "click"
-				})
-			end
-			--]]
 		end
 		-- play phone call anim when on call --
 		if on_call then
@@ -347,32 +332,18 @@ Citizen.CreateThread(function()
 					TriggerEvent("swayam:notification", "Whiz Wireless", "Call ~r~ended~w~.", "CHAR_MP_DETONATEPHONE")
 				end
 			end
-			-- display help message
-			--DrawSpecialText("Press ~y~CTRL~w~ + ~y~BACKSPACE~w~ to hang up!")
-		else
-			if cellphone_object then
-				DeleteObject(cellphone_object)
-				cellphone_object = nil
-			end
 		end
 
-		--[[
 		-- listen for phone hotkey press --
-		--if IsControlPressed(1, 19) and IsControlJustPressed(1, 27) then -- ALT + UP ARROW
-		if IsControlJustPressed(1, 244) then -- "M"
+		if IsControlJustPressed(1, 288) and GetLastInputMethod(2) then -- "F1"
 			if not phoneEnabled then
-				if cached_phone then
-					TriggerEvent("phone:openPhone", cached_phone)
-				else
 					TriggerServerEvent("phone:getPhone")
-				end
 			else
-				startedTask = false
 				ClearPedTasks(GetPlayerPed(-1))
 			  EnableGui(false)
 			end
+			Wait(500)
 		end
-		--]]
 
 		Wait(1)
 	end
@@ -387,6 +358,26 @@ Citizen.CreateThread(function()
 	end
 end)
 
+Citizen.CreateThread(function()
+	RequestAnimDict('cellphone@')
+	while true do
+		Wait(2)
+		if phoneEnabled and not on_call then
+			if not cellphone_object then
+				AttachPhone()
+			end
+			if not IsEntityPlayingAnim(GetPlayerPed(-1), 'cellphone@', 'cellphone_text_in', 3) then
+				TaskPlayAnim(GetPlayerPed(-1), 'cellphone@', 'cellphone_text_in', 1.0, -1, -1, 50, 0, false, false, false)
+			end
+		elseif not phoneEnabled then
+			if cellphone_object then
+				DeleteObject(cellphone_object)
+				cellphone_object = nil
+			end
+		end
+	end
+end)
+
 -- utlity functions --
 function DrawSpecialText(m_text)
   ClearPrints()
@@ -394,8 +385,6 @@ function DrawSpecialText(m_text)
 	AddTextComponentString(m_text)
 	DrawSubtitleTimed(250, 1)
 end
-
-local phoneModel = GetHashKey('prop_npc_phone_02')
 
 function AttachPhone()
   local coords = GetEntityCoords(GetPlayerPed(-1))

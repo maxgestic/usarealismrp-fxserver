@@ -89,6 +89,7 @@ AddEventHandler("phone:getPhone", function()
 			return
 		end
 	end
+	TriggerClientEvent("usa:notify", source, "You have no cell phone!")
 end)
 
 RegisterServerEvent("phone:deleteContact")
@@ -348,7 +349,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 						-- convert to name in contact if available --
 						---------------------------------------------
 						from = getNameFromContacts(target_phone, fromNumber)
-						print("from: " .. from)
+						--print("from: " .. from)
 						-----------------------
 						-- construct message --
 						-----------------------
@@ -401,7 +402,7 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 					--print("player already had a conversation with that toNumber!")
 					-- see if that number is in this phone's contact list, if so set the from sender name to the readable name
 					from = getNameFromContacts(item, toNumber)
-					print("creating text message...")
+					--print("creating text message...")
 					local message = {
 						timestamp = os.date("%c", os.time()),
 						from = "Me",
@@ -416,18 +417,19 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 				end
 			end
 			if not convoExistedForUser then
-				print("no convo found for users! creating and inserting now!")
+				--print("no convo found for users! creating and inserting now!")
 				-- no previous converstaion with that partner, create new one
 				-- see if that number is in this phone's contact list, if so set the from sender name to the readable name
 				from = getNameFromContacts(item, toNumber)
-				print("creating text message...")
+				toName = getNameFromContacts(item, fromNumber)
+				--print("creating text message...")
 				local message = {
 					timestamp = os.date("%c", os.time()),
 					from = "Me",
 					to = toName,
 					message = msg
 				}
-				print("creating conversation...")
+				--print("creating conversation...")
 				local conversation = {
 					partnerName = toName,
 					partnerId = toNumber,

@@ -1,5 +1,4 @@
 local MENU_KEY1 = 244
-local MENU_KEY2 = 288
 local TACKLE_KEY = 101
 
 local isLockpicking = false
