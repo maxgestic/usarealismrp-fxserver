@@ -148,6 +148,7 @@ AddEventHandler("character:setCharacter", function(character)
 								SetPedWeaponTintIndex(GetPlayerPed(-1), weapons[i].hash, weapons[i].tint)
 							end
 						end
+						SetCurrentPedWeapon(GetPlayerPed(-1), GetHashKey("WEAPON_UNARMED"), true)
 
 				else
 					--Citizen.Trace("Could not find saved character skin!")
@@ -166,6 +167,7 @@ AddEventHandler("character:setCharacter", function(character)
 							SetPedWeaponTintIndex(GetPlayerPed(-1), weapons[i].hash, weapons[i].tint)
 						end
 					end
+					SetCurrentPedWeapon(GetPlayerPed(-1), GetHashKey("WEAPON_UNARMED"), true)
 				end
 			end
 		else
