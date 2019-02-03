@@ -88,6 +88,7 @@ AddEventHandler("doc:checkWhitelist", function(loc)
 				TriggerClientEvent("usa:notify", usource, "You clocked in!")
 				TriggerClientEvent("doc:open", usource)
 				TriggerClientEvent("ptt:isEmergency", usource, true)
+				TriggerClientEvent("interaction:setPlayersJob", usource, "corrections")
 				TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = usource, color = 82}, true)
 			end
 			return
@@ -108,6 +109,7 @@ AddEventHandler("doc:clockOut", function()
 	user.setActiveCharacterData("job", "civ")
 	TriggerClientEvent("usa:notify", usource, "You have clocked out!")
 	TriggerEvent("eblips:remove", usource)
+	TriggerClientEvent("interaction:setPlayersJob", usource, "civ")
 	-----------------------------------
 	-- change back into civ clothing --
 	-----------------------------------
@@ -130,6 +132,7 @@ AddEventHandler("doc:forceDuty", function()
 		TriggerEvent("doc:loadUniform", usource)
 		TriggerClientEvent("usa:notify", usource, "You have clocked in!")
 		TriggerClientEvent("ptt:isEmergency", usource, true)
+		TriggerClientEvent("interaction:setPlayersJob", usource, "corrections")
 		TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = usource, color = 82}, true)
 	end
 end)

@@ -308,7 +308,7 @@ AddEventHandler('911:mark911', function()
 	ShowNotification('Latest call has been marked as waypoint.')
 end)
 
--- automatically remove all call blips you are closest too -- 
+-- automatically remove all call blips you are closest too --
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(1000)
@@ -330,7 +330,7 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(1000)
         for i = #blips, 1, -1 do
-            if GetGameTimer() - blips[i].created_at > 90000 then 
+            if GetGameTimer() - blips[i].created_at > 90000 then
                 RemoveBlip(blips[i].handle)
                 table.remove(blips, i)
             end
@@ -406,12 +406,12 @@ Citizen.CreateThread(function()
         Citizen.Wait(0)
         local aiming, targetPed = GetEntityPlayerIsFreeAimingAt(PlayerId(-1))
         if aiming then
-    
+
             local pP = GetPlayerPed(-1)
             local pCoords = GetEntityCoords(pP, true)
             local tCoords = GetEntityCoords(targetPed, true)
             local veh = GetVehiclePedIsIn(targetPed, false)
-        
+
             -- Citizen.Trace('Aiming')
             if DoesEntityExist(targetPed) and IsEntityAPed(targetPed) then
             -- Citizen.Trace('Exists')
@@ -456,7 +456,7 @@ end)
 
 RegisterNetEvent('interaction:setPlayersJob')
 AddEventHandler('interaction:setPlayersJob', function(job)
-	if job == 'sheriff' or job == 'ems' or job == 'fire' or job == 'police' then
+	if job == 'sheriff' or job == 'ems' or job == 'fire' or job == 'police' or job == 'corrections' then
 		onDuty = true
 		RespectPedRelations(true)
 	else
