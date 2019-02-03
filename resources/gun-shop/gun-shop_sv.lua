@@ -80,24 +80,28 @@ AddEventHandler("gunShop:buyPermit", function(property)
   --user.removeMoney(2000)
   local cost = 10000
   local user_cash = user.getActiveCharacterData("money")
-  user.setActiveCharacterData("money", user_cash - cost)
-  local licenses = user.getActiveCharacterData("licenses")
-  local timestamp = os.date("*t", os.time())
-  local permit = {
-    name = "Firearm Permit",
-    number = "G" .. tostring(math.random(1, 254367)),
-    quantity = 1,
-    ownerName = GetPlayerName(userSource),
-    expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
-    status = "valid",
-    type = "license"
-  }
-  table.insert(licenses, permit)
-  user.setActiveCharacterData("licenses", licenses)
-  TriggerClientEvent("usa:notify", userSource, "You already have a firearm permit!")
-  -- give money to property owner --
-  if property then
-    TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * cost))
+  if user_cash >= cost then
+    user.setActiveCharacterData("money", user_cash - cost)
+    local licenses = user.getActiveCharacterData("licenses")
+    local timestamp = os.date("*t", os.time())
+    local permit = {
+      name = "Firearm Permit",
+      number = "G" .. tostring(math.random(1, 254367)),
+      quantity = 1,
+      ownerName = GetPlayerName(userSource),
+      expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
+      status = "valid",
+      type = "license"
+    }
+    table.insert(licenses, permit)
+    user.setActiveCharacterData("licenses", licenses)
+    TriggerClientEvent("usa:notify", userSource, "You already have a firearm permit!")
+    -- give money to property owner --
+    if property then
+      TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * cost))
+    end
+  else
+    TriggerClientEvent("usa:notify", userSource, "Not enough money!")
   end
 end)
 
