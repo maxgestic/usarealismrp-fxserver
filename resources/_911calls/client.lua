@@ -243,8 +243,9 @@ Citizen.CreateThread(function()
 				local primary = colorNames[tostring(primary)]
 				local secondary = colorNames[tostring(secondary)]
 				local area = GetNameOfZone(x, y, z)
+                local plate = string.sub(GetVehicleNumberPlateText(GetVehiclePedIsIn(ped)), 1, 4)
                 if math.random() < 0.2 then
-				    TriggerServerEvent('911:RecklessDriving', x, y, z, lastStreetNAME, area, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(ped)))), GetVehicleNumberPlateText(GetVehiclePedIsIn(ped)), primary, secondary)
+				    TriggerServerEvent('911:RecklessDriving', x, y, z, lastStreetNAME, area, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(ped)))), plate, IsPedMale(ped), primary, secondary)
                 end
 				Citizen.Wait(5000)
 			elseif ReportVehicleTheft and IsPedInAnyVehicle(ped, false) and IsVehicleNeedsToBeHotwired(GetVehiclePedIsIn(ped)) and IsAreaPopulated() then

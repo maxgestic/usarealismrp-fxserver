@@ -100,7 +100,7 @@ AddEventHandler('911:AssaultInProgress', function(x, y, z, street, area, isMale)
 	end
 end)
 
-AddEventHandler('911:RecklessDriving', function(x, y, z, street, area, vehicle, plate, primaryColor, secondaryColor)
+AddEventHandler('911:RecklessDriving', function(x, y, z, street, area, vehicle, plate, isMale, primaryColor, secondaryColor)
 	if recentcalls[area] ~= 'RecklessDriving' then
 		recentcalls[area] = 'RecklessDriving'
 		local time = math.random(1000, 3500)
