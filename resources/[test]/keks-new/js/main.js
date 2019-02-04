@@ -4,7 +4,7 @@
   $(document).ready(function (){
 
     // backstretch
-    $("header").backstretch([
+    $(".carousel-bg").backstretch([
         "img/bg-1.jpg"
       , "img/bg-2.jpg"
       , "img/bg-3.jpg"
@@ -79,7 +79,7 @@
     };
 
 	var src;
-	
+
 	//if (Math.random() > 0.5)
 		src = 'http://ice1.somafm.com/beatblender-128-mp3'; // dance / house
 	//else
