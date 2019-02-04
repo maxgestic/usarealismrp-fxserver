@@ -46,7 +46,7 @@
         sound.play();
 
         //sound.volume(0.1);
-        sound.fade(0.0, 0.1, 1000);
+        sound.fade(0.0, 0.1, 5000);
 
         self.isPlaying = true;
       },
@@ -78,13 +78,17 @@
       }
     };
 
+	var src;
+	
+	//if (Math.random() > 0.5)
+		src = 'http://ice1.somafm.com/beatblender-128-mp3'; // dance / house
+	//else
+		//src = 'http://tunein4.streamguys1.com/hhbeafree5'; // hip hop
 
     // Setup our new radio and pass in the stations.
     var radio = new Radio({
-      freq: '89.9',
-      title: "Hip Hop Hits",
-      src: 'http://tunein4.streamguys1.com/hhbeafree5',
-      volume: 0.1,
+      src: src,
+      volume: 0.35,
       howl: null
     });
 
