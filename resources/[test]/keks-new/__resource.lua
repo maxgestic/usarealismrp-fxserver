@@ -1,6 +1,7 @@
+resource_manifest_version '77731fab-63ca-442c-a67b-abc70f28dfa5'
+
 files {
     'index.html',
-    'music/loadscreen.mp3',
     'img/loading.gif',
 	'img/loadscreen.jpg',
     'img/logo.png',
@@ -25,10 +26,8 @@ files {
     'js/jquery.ajaxchimp.js',
 	'js/jquery.backstretch.min.js',
     'js/jquery-1.11.0.min.js',
-	'js/lj-safety-first.js',
+	'js/main.js',
     'js/owl.carousel.min.js'
 }
 
 loadscreen 'index.html'
-
-resource_manifest_version '77731fab-63ca-442c-a67b-abc70f28dfa5'

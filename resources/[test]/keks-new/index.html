@@ -4,107 +4,32 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-
     <title>CONNECTING TO SERVER</title>
-<style type="text/css">
-body { color: #ffffff; background: #000000; }
-</style>
+    <style type="text/css">
+    body { color: #ffffff; background: #000000; }
+    </style>
 
-<!-- CSS Style for the background slider -->
-<link rel="stylesheet" href="css/style.css">
+    <!-- CSS Style for the background slider -->
+    <link rel="stylesheet" href="css/style.css">
 
-<!-- font icons -->
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
+    <!-- font icons -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
 
-</head>
-<body>
-<header>
+    <!-- howl JS for radio music -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.core.min.js"></script>
 
-<!-- website / twitter info -->
-<div id="website"><p style="position: absolute; right: 480px; bottom: 25px;"><font face="verdana" size="4"><i id="volume-btn" class="fas fa-volume-up"></i> [0] mute, [-] vol down, [+] vol up | <i class="fas fa-home"></i> HTTPS://USARRP.NET | <i class="fab fa-twitter-square"></i> @USARRP | <i class="fab fa-discord"></i> discord.gg/aAPCdva</font></p></div>
+  </head>
+  <body>
+    <header>
+      <!-- website / twitter info -->
+      <div id="website"><p style="position: absolute; right: 610px; bottom: 25px;"><font face="verdana" size="4"> <i class="fas fa-home"></i> HTTPS://USARRP.NET | <i class="fab fa-twitter-square"></i> @USARRP | <i class="fab fa-discord"></i> discord.gg/aAPCdva</font></p></div>
+    </header>
 
-<!-- Background music -->
-<div style="display:none">
-	<audio controls id="audio" autoplay="autoplay">
-	<source src="music/loadscreen.mp3" type="audio/mpeg"> <!-- INSERT MUSICA HAIRE -->
-	Music has stopped working.
-	</audio>
-<script>
-
-	var DEFAULT_VOLUME = 0.0;
-
-	var INCREMENT_VAL = 0.03;
-
-	var savedVol = DEFAULT_VOLUME;
-
-    audio.volume = DEFAULT_VOLUME;
-
-	// volume controls?
-	window.onkeyup = function(e) {
-	   var key = e.keyCode ? e.keyCode : e.which;
-
-	   if (key == 48) {
-		  // mute
-			if (audio.volume <= 0.0) {
-				// unmute
-				audio.volume = savedVol;
-				document.getElementById("volume-btn").className = "fas fa-volume-up";
-			} else {
-				// save level and mute
-				savedVol = audio.volume;
-				audio.volume = 0.0;
-				document.getElementById("volume-btn").className = "fas fa-volume-off";
-			}
-	    } else if (key == 187) {
-			// volume up
-            if (audio.volume + INCREMENT_VAL <= 1) {
-                audio.volume = audio.volume + INCREMENT_VAL;
-                savedVol = audio.volume
-            }
-		} else if (key == 189) {
-			// volume down
-            if (audio.volume + INCREMENT_VAL > 0) {
-    			audio.volume = audio.volume - INCREMENT_VAL;
-    			savedVol = audio.volume
-            }
-		}
-	}
-
-</script>
-
-</div>
-	        <!-- END BACKGROUND MUSIC -->
-
-			<!-- Infobox slider -->
-<script>
-var slideIndex = 0;
-carousel();
-
-function carousel() {
-    var i;
-    var x = document.getElementsByClassName("infoboxslide");
-    for (i = 0; i < x.length; i++) {
-      x[i].style.display = "none";
-    }
-
-    slideIndex++;
-    if (slideIndex > x.length) {slideIndex = 1}
-
-    if (typeof x[slideIndex - 1] != "undefined")
-        x[slideIndex-1].style.display = "block";
-
-    setTimeout(carousel, 10000); // Change image every 10 seconds
-}
-</script>
-<!-- END INFOBOX SLIDER -->
-
-<!-- Background Slider -->
-  <script src="js/jquery-1.11.0.min.js"></script>
-  <script src="js/jquery.backstretch.min.js"></script>
-  <script src="js/owl.carousel.min.js"></script>
-  <script src="js/jquery.ajaxchimp.js"></script>
-  <script src="js/lj-safety-first.js"></script>
-  <!-- END BACKGROUND SLIDER -->
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <script src="js/jquery.backstretch.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.ajaxchimp.js"></script>
+    <script src="js/main.js"></script>
 
   </body>
 </html>

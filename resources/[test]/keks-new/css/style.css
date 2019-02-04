@@ -79,32 +79,26 @@
     background-size: cover;
     background-attachment: hidden;
   }
-  
+
   font {
 	  font-weight: bold;
   }
-  
+
   #website p {
-	background-color: rgba(0,0,0,.3);
+	background-color: rgba(0,0,0,.6);
 	border-radius: 1em;
 	padding: .5em;
   }
 
   @media screen and (max-width: 1500px) {
-    #infobox {
-      display: none;
-    }
-    #logo {
-      display: none;
-    }
-	font {
-		font-size: 16px !important;
-		font-weight: bold;
-	}
-	#website p {
-		right: 240px !important;
-		background-color: rgba(0,0,0,.3);
-		border-radius: 1em;
-		padding: .5em;
-	}
+  	font {
+  		font-size: 16px !important;
+  		font-weight: bold;
+  	}
+  	#website p {
+  		right: 390px !important;
+  		background-color: rgba(0,0,0,.6);
+  		border-radius: 1em;
+  		padding: .5em;
+  	}
   }
