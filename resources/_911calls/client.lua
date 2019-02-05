@@ -186,7 +186,7 @@ Citizen.CreateThread(function()
 				local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
 				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
 				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-        		local area = GetNameOfZone(x, y, z)
+        local area = GetNameOfZone(x, y, z)
 				TriggerServerEvent('911:ShotsFired', x, y, z, lastStreetNAME, area, IsPedMale(ped))
 				Citizen.Wait(500)
 			elseif ReportAttemptedVehicleTheft and IsPedTryingToEnterALockedVehicle(ped) and not GetIsVehicleEngineRunning(GetVehiclePedIsTryingToEnter(ped)) and IsAreaPopulated() then
@@ -196,7 +196,7 @@ Citizen.CreateThread(function()
 				local primary, secondary = GetVehicleColours(GetVehiclePedIsTryingToEnter(ped))
 				local primary = colorNames[tostring(primary)]
 				local secondary = colorNames[tostring(secondary)]
-                local area = GetNameOfZone(x, y, z)
+        local area = GetNameOfZone(x, y, z)
 				TriggerServerEvent('911:AttemptedVehicleTheft', x, y, z, lastStreetNAME, area, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsTryingToEnter(ped)))), GetVehicleNumberPlateText(GetVehiclePedIsTryingToEnter(ped)), IsPedMale(ped), primary, secondary)
 				Citizen.Wait(500)
 			elseif ReportCarjacking and IsPedJacking(ped) and IsAreaPopulated() then
@@ -225,15 +225,15 @@ Citizen.CreateThread(function()
 				if (GetSelectedPedWeapon(ped) == -1716189206 or GetSelectedPedWeapon(ped) == -1834847097 or GetSelectedPedWeapon(ped) == -581044007 or GetSelectedPedWeapon(ped) == -538741184) and math.random() < 0.08 then
 					TriggerServerEvent('911:PersonWithAKnife', x, y, z, lastStreetNAME, area, IsPedMale(ped))
 				end
-                Citizen.Wait(500)
+        Citizen.Wait(500)
 			elseif ReportAssault and IsPedInMeleeCombat(ped) and IsAreaPopulated() then
 				local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
 				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
 				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-                local area = GetNameOfZone(x, y, z)
-                if math.random() < 0.2 then
-				    TriggerServerEvent('911:AssaultInProgress', x, y, z, lastStreetNAME, area, IsPedMale(ped))
-                end
+        local area = GetNameOfZone(x, y, z)
+        if math.random() < 0.2 then
+				  TriggerServerEvent('911:AssaultInProgress', x, y, z, lastStreetNAME, area, IsPedMale(ped))
+        end
 				Citizen.Wait(500)
 			elseif ReportRecklessDriving and GetPedInVehicleSeat(GetVehiclePedIsIn(ped), -1) == ped and GetEntitySpeed(GetVehiclePedIsIn(ped))*2.236936 > 120 and IsAreaPopulated() and GetVehicleClass(vehicle) ~= 14 and GetVehicleClass(vehicle) ~= 15 and GetVehicleClass(vehicle) ~= 16 and GetVehicleClass(vehicle) ~= 19 then
 				local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
@@ -243,10 +243,10 @@ Citizen.CreateThread(function()
 				local primary = colorNames[tostring(primary)]
 				local secondary = colorNames[tostring(secondary)]
 				local area = GetNameOfZone(x, y, z)
-                local plate = string.sub(GetVehicleNumberPlateText(GetVehiclePedIsIn(ped)), 1, 4)
-                if math.random() < 0.2 then
-				    TriggerServerEvent('911:RecklessDriving', x, y, z, lastStreetNAME, area, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(ped)))), plate, IsPedMale(ped), primary, secondary)
-                end
+        local plate = string.sub(GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(ped)))), 1, 4)
+        if math.random() < 0.2 then
+				  TriggerServerEvent('911:RecklessDriving', x, y, z, lastStreetNAME, area, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(ped)))), plate, IsPedMale(ped), primary, secondary)
+        end
 				Citizen.Wait(5000)
 			elseif ReportVehicleTheft and IsPedInAnyVehicle(ped, false) and IsVehicleNeedsToBeHotwired(GetVehiclePedIsIn(ped)) and IsAreaPopulated() then
 				local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
@@ -309,6 +309,7 @@ AddEventHandler('911:mark911', function()
 	ShowNotification('Latest call has been marked as waypoint.')
 end)
 
+-- automatically remove all call blips you are closest too -- 
 -- automatically remove all call blips you are closest too --
 Citizen.CreateThread(function()
 	while true do

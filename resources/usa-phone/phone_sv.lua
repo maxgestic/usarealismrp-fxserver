@@ -2,7 +2,6 @@
 --# for USA REALISM rp
 --# Phone script to make phone calls and send texts in game with GUI phone
 --# requires database(s): "phones"
--- TODO: instead of fetching entire phone document from DB, only fetch specific fields needed
 
 function CreateNewPhone(phone)
 	TriggerEvent('es:exposeDBFunctions', function(couchdb)
@@ -37,28 +36,16 @@ end
 
 function SavePhoneWithNumber(number, phone)
 	TriggerEvent('es:exposeDBFunctions', function(couchdb)
-		couchdb.getDocumentByRow("phones", "number", number, function(result)
-			if result then
-				couchdb.updateDocument("phones", result._id, phone, function()
-					print("* Phone updated in DB! *")
-				end)
-			else
-				print("* Error saving phone to DB. Result was nil *")
-			end
+		couchdb.updateDocument("phones", number, phone, function()
+			print("* Phone updated in DB! *")
 		end)
 	end)
 end
 
 function UpdatePhoneWithNumber(number, row, data)
 	TriggerEvent('es:exposeDBFunctions', function(couchdb)
-		couchdb.getDocumentByRow("phones", "number", number, function(result)
-			if result then
-				couchdb.updateDocument("phones", result._id, {[row] = data}, function()
-					print("* Phone updated in DB! *")
-				end)
-			else
-				print("* Error saving phone to DB. Result was nil *")
-			end
+		couchdb.updateDocument("phones", number, {[row] = data}, function()
+			print("* Phone updated in DB! *")
 		end)
 	end)
 end

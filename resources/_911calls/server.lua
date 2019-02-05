@@ -31,11 +31,18 @@ AddEventHandler('911:AttemptedVehicleTheft', function(x, y, z, street, area, veh
 	local continue = true
 	for i = 1, #inv do
 	    local item = inv[i]
-	    if item and item.plate then
-	        if string.find(plate, item.plate) then
-	        	continue = false
-	        end
-	    end
+        if item and string.find(item.name, "Key") and item.plate then
+            if not string.find(plate, item.plate) and recentcalls[street] ~= 'AttemptedVehicleTheft' then
+				recentcalls[street] = 'AttemptedVehicleTheft'
+				local time = math.random(3000, 7000)
+				Citizen.Wait(time)
+				local string = '^*Attmpt. Vehicle Theft:^r '..street..' ^1^*|^r ^*Vehicle:^r '..string.upper(vehicle)..' ^1^*|^r ^*Plate:^r '..plate..' ^1^*|^r ^*Color:^r '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
+				Send911Notification('sheriff', string, x, y, z, 'Attmpt. Vehicle Theft')
+				Citizen.Wait(20000)
+				recentcalls[street] = nil
+				break
+			end
+		end
 	end
 	if recentcalls[street] ~= 'AttemptedVehicleTheft' and continue then
 		recentcalls[street] = 'AttemptedVehicleTheft'
@@ -89,7 +96,7 @@ end)
 
 AddEventHandler('911:AssaultInProgress', function(x, y, z, street, area, isMale)
 	local sendChance = math.random()
-	if recentcalls[area] ~= 'AssaultInProgress' and sendChance < 0.1 then
+	if recentcalls[area] ~= 'AssaultInProgress' and sendChance < 0.3 then
 		recentcalls[area] = 'AssaultInProgress'
 		local time = math.random(4000, 9000)
 		Citizen.Wait(time)
