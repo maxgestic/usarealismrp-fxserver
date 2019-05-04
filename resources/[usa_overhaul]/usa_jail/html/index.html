@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+        <link href="style.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+        <img id="cursor" src="cursor.png">
+
+        <div id="chargesWrap" style="display:none;color:white;">
+          <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSkL1CE_UWvNGdL3tWUUlaUNrX19KEhrITxvmSEsd5bzgOwDKBxPu0EFgCPrF1QHqOrA7GICL4CGqhM/pubhtml?widget=true&amp;headers=false" width=990px height=990px align="middle">></iframe>
+        </div>
+
+        <div id="jail-form-wrap">
+            <div class="dialog">
+                <form id="jail-form">
+                    <h4 style="color:white;">INTAKE INFO:</h4>
+                    <input id="id" type="text" placeholder="ID #*"><br>
+                    <input id="name" type="text" placeholder="FULL NAME (ex: Vadim Kalashnikov)"><br>
+                    <input id="charges" type="text" placeholder="CHARGES* (ex: P.C. 2013)"><br>
+                    <input id="sentence" type="text" placeholder="SENTENCE* (ex: 25)"><br>
+                    <input id="fine" type="text" placeholder="FINE* (ex: 2500)"><br>
+                    <h4 style="color:white;">MEDICATION ALLERGIES:</h4>
+                    <input id="medications" type="text" placeholder="ex: Oxycotin, penicilin, etc"><br>
+                    <h4 style="color:white;">GENDER:</h4>
+                    <input type="radio" name="suicidal" value="male"><span style="color:white;">MALE</span><br>
+                    <input type="radio" name="suicidal" value="female"><span style="color:white;">FEMALE</span><br>
+                    <button id="submit" type="submit">SUBMIT</button>
+                    <button id="chargesList" type="button">LIST OF CHARGES (?)</button>
+                <form>
+            </div>
+        </div>
+
+        <script src="script.js" type="text/javascript"></script>
+    </body>
+</html>

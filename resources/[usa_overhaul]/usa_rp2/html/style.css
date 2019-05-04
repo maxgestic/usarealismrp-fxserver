@@ -1,0 +1,14 @@
+body {
+    font-family: sans-serif;
+    overflow: hidden;
+    display: none;
+}
+
+#blindfold {
+  /* background-color: rgba(0,0,0,0.975); */
+  background-image: url('https://images-ext-2.discordapp.net/external/9hSFUO5CJtYvnE_3pjmGXCgbFF-kv4M6Z_87xDs--og/https/i.imgur.com/oc8Dbxq.jpg?width=838&height=559');
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  display: none;
+}

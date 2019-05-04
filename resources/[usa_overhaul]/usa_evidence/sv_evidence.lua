@@ -1,0 +1,245 @@
+local evidenceDropped = {}
+local weaponNames = {
+	[453432689] = 'Pistol',
+	[3219281620] = 'Pistol Mk. 2',
+	[1593441988] = 'Combat Pistol',
+	[-1716589765] = 'Pistol .50',
+	[-1076751822] = 'SNS Pistol',
+	[-771403250] = 'Heavy Pistol',
+	[137902532] = 'Vintage Pistol',
+	[-598887786] = 'Marksman Pistol',
+	[-1045183535] = 'Revolver',
+	[584646201] = 'AP Pistol',
+	[911657153] = 'Stun Gun',
+	[1198879012] = 'Flare Gun',
+	[324215364] = 'Micro SMG',
+	[-619010992] = 'Machine Pistol',
+	[736523883] = 'SMG',
+	[2024373456] = 	'SMG Mk. 2',
+	[-270015777] = 'Assault SMG',
+	[171789620] = 'Combat PDW',
+	[-1660422300] = 'MG',
+	[2144741730] = 'Combat MG',
+	[3686625920] = 'Combat MG Mk. 2',
+	[1627465347] = 'Gusenberg',
+	[-1121678507] = 'Mini SMG',
+	[-1074790547] = 'Assault Rifle',
+	[961495388] = 'Assault Rifle Mk. 2',
+	[-2084633992] = 'Carbine Rifle',
+	[4208062921] = 'Carbine Rifle Mk. 2',
+	[-1357824103] = 'Advanced Rifle',
+	[-1063057011] = 'Special Carbine',
+	[2132975508] = 'Bullpup Rifle',
+	[1649403952] = 'Compact Rifle',
+	[100416529] = 'Sniper Rifle',
+	[205991906] = 'Heavy Sniper',
+	[177293209] = 'Heavy Sniper Mk. 2',
+	[-952879014] = 'Marksman Rifle',
+	[487013001] = 'Pump Shotgun',
+	[2017895192] = 'Sawn-off Shotgun',
+	[-1654528753] = 'Bullpup Shotgun',
+	[-494615257] = 'Assault Shotgun',
+	[-1466123874] = 'Musket',
+	[984333226] = 'Heavy Shotgun',
+	[-275439685] = 'Double Barrel Shotgun',
+	[2138347493] = 'Firework Launcher'
+}
+
+TriggerEvent('es:addJobCommand', 'breathalyze', { "police", "sheriff", "ems" }, function(source, args, user)
+	TriggerClientEvent("evidence:breathalyzeNearest", source)
+end, {
+	help = "breathalyze the nearest person"
+})
+
+TriggerEvent('es:addJobCommand', 'dnasample', { "police", "sheriff" }, function(source, args, user)
+	TriggerClientEvent("evidence:dnaNearest", source)
+end, {
+	help = "dna sample the nearest person"
+})
+
+RegisterServerEvent('evidence:returnDNA')
+AddEventHandler('evidence:returnDNA', function(targetSource)
+	local target = exports["essentialmode"]:getPlayerFromId(targetSource)
+	local targetName = target.getActiveCharacterData('fullName')
+	local targetEncoded = enc(target.getActiveCharacterData('dateOfBirth') .. targetName)
+	TriggerClientEvent('chatMessage', source, '^3^*[DNA SAMPLE]^r ^7Sample of ^3'..targetName..'^7 returns value: ^3'..targetEncoded..'^7.')
+end)
+
+RegisterServerEvent('evidence:breathalyzePlayer')
+AddEventHandler('evidence:breathalyzePlayer', function(playerToBreathalyze)
+	TriggerClientEvent('evidence:getBreathalyzeResult', playerToBreathalyze, source)
+end)
+
+RegisterServerEvent('evidence:returnBreathalyzeResult')
+AddEventHandler('evidence:returnBreathalyzeResult', function(levelBAC, sourceReturnedTo)
+	local target = exports["essentialmode"]:getPlayerFromId(source)
+	local targetName = target.getActiveCharacterData('fullName')
+	if levelBAC >= 0.08 then
+		TriggerClientEvent('usa:notify', sourceReturnedTo, targetName .. ' - BAC: ' .. levelBAC)
+	else
+		TriggerClientEvent('usa:notify', sourceReturnedTo, targetName .. ' - BAC: ' .. levelBAC)
+	end
+	local soundParams = {-1, "PIN_BUTTON", "ATM_SOUNDS", 1}
+	TriggerClientEvent("usa:playSound", sourceReturnedTo, soundParams)
+end)
+
+
+-- GSR test --
+TriggerEvent('es:addJobCommand', 'gsr', { "police", "sheriff" }, function(source, args, user)
+	TriggerClientEvent("evidence:gsrNearest", source)
+end, { 
+	help = "gun shot residue test the nearest person"
+})
+
+RegisterServerEvent('evidence:gsrPerson')
+AddEventHandler('evidence:gsrPerson', function(playerToTest)
+	TriggerClientEvent('evidence:getGSRResult', playerToTest, source)
+end)
+
+RegisterServerEvent('evidence:newCasing')
+AddEventHandler('evidence:newCasing', function(playerCoords, playerWeapon)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	local weapons = user.getActiveCharacterData('weapons')
+	local job = user.getActiveCharacterData('job')
+	for i = 1, #weapons do
+		local item = weapons[i]
+		if item.type == 'weapon' and item.hash == playerWeapon then
+			local evidence = {
+				type = 'casing',
+				string = 'Casing',
+				weapon = item.name,
+				coords = playerCoords
+			}
+			table.insert(evidenceDropped, evidence)
+			TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
+			return
+		end
+	end
+	local evidence = {
+		type = 'casing',
+		string = 'Casing',
+		weapon = weaponNames[playerWeapon],
+		coords = playerCoords
+	}
+	table.insert(evidenceDropped, evidence)
+	TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
+end)
+
+RegisterServerEvent('evidence:newMelee')
+AddEventHandler('evidence:newMelee', function(attackerSource, playerCoords)
+	if GetPlayerPing(tonumber(attackerSource)) then
+		local user = exports["essentialmode"]:getPlayerFromId(source) -- victim
+		local userEncoded = enc(user.getActiveCharacterData('dateOfBirth') .. user.getActiveCharacterData('fullName'))
+		local attacker = exports["essentialmode"]:getPlayerFromId(attackerSource)
+		local attackerEncoded = enc(attacker.getActiveCharacterData('dateOfBirth') .. attacker.getActiveCharacterData('fullName'))
+		local evidence = {
+			type = 'dna2',
+			string = 'DNA',
+			DNA1 = userEncoded,
+			DNA2 = attackerEncoded,
+			coords = playerCoords
+		}
+		if math.random() > 0.5 then
+			evidence = {
+				type = 'dna2',
+				string = 'DNA',
+				DNA1 = attackerEncoded,
+				DNA2 = userEncoded,
+				coords = playerCoords
+			}
+		end
+		table.insert(evidenceDropped, evidence)
+		TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
+	end
+end)
+
+RegisterServerEvent('evidence:newDNA')
+AddEventHandler('evidence:newDNA', function(playerCoords)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	local userEncoded = enc(user.getActiveCharacterData('dateOfBirth') .. user.getActiveCharacterData('fullName'))
+	local evidence = {
+		type = 'dna',
+		string = 'DNA',
+		DNA = userEncoded,
+		coords = playerCoords
+	}
+	table.insert(evidenceDropped, evidence)
+	TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
+end)
+
+RegisterServerEvent('evidence:discardEvidence')
+AddEventHandler('evidence:discardEvidence', function(index)
+	table.remove(evidenceDropped, index)
+	TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
+end)
+
+RegisterServerEvent('evidence:returnGSRResult')
+AddEventHandler('evidence:returnGSRResult', function(residue, sourceReturnedTo)
+	local target = exports["essentialmode"]:getPlayerFromId(source)
+	local targetName = target.getActiveCharacterData('fullName')
+	if residue then
+		TriggerClientEvent('usa:notify', sourceReturnedTo, targetName .. ' - residue detected!')
+	else
+		TriggerClientEvent('usa:notify', sourceReturnedTo, targetName .. ' - residue not found.')
+	end
+	local soundParams = {-1, "PIN_BUTTON", "ATM_SOUNDS", 1}
+	TriggerClientEvent("usa:playSound", sourceReturnedTo, soundParams)
+end)
+
+RegisterServerEvent('evidence:checkJobForMenu')
+AddEventHandler('evidence:checkJobForMenu', function()
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	local userJob = user.getActiveCharacterData('job')
+	if userJob == 'police' or userJob == 'sheriff' then
+		TriggerClientEvent('evidence:openEvidenceMenu', source)
+	else
+		TriggerClientEvent('usa:notify', source, '~y~You are not on-duty for POLICE.')
+	end
+end)
+
+RegisterServerEvent('evidence:makeObservations')
+AddEventHandler('evidence:makeObservations', function(targetSource)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	local userJob = user.getActiveCharacterData('job')
+	if userJob == 'police' or userJob == 'sheriff' then
+		TriggerClientEvent('evidence:getObservations', targetSource, source)
+	end
+end)
+
+RegisterServerEvent('evidence:returnObservations')
+AddEventHandler('evidence:returnObservations', function(observations, sourceReturnedTo)
+	TriggerClientEvent('evidence:displayObservations', sourceReturnedTo, observations, source)
+end)
+
+-- character table string
+local b='abcdefghijklmnopqrstuvwxyz10'
+
+-- encoding
+function enc(data)
+  return ((data:gsub('.', function(x) 
+    local r,b='',x:byte()
+    for i=8,1,-1 do r=r..(b%2^i-b%2^(i-1)>0 and '1' or '0') end
+    return r;
+  end)..'0000'):gsub('%d%d%d?%d?%d?%d?', function(x)
+    if (#x < 6) then return '' end
+    local c=0
+    for i=1,6 do c=c+(x:sub(i,i)=='1' and 2^(6-i) or 0) end
+    return b:sub(c+1,c+1)
+  end)..({ '', '==', '=' })[#data%3+1])
+end
+
+-- decoding
+function dec(data)
+  data = string.gsub(data, '[^'..b..'=]', '')
+  return (data:gsub('.', function(x)
+    if (x == '=') then return '' end
+    local r,f='',(b:find(x)-1)
+    for i=6,1,-1 do r=r..(f%2^i-f%2^(i-1)>0 and '1' or '0') end
+    return r;
+  end):gsub('%d%d%d?%d?%d?%d?%d?%d?', function(x)
+    if (#x ~= 8) then return '' end
+    local c=0
+    for i=1,8 do c=c+(x:sub(i,i)=='1' and 2^(8-i) or 0) end
+    return string.char(c)
+  end))
+end

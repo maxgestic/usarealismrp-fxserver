@@ -10,12 +10,12 @@ Citizen.CreateThread(function()
 		local ped = PlayerPedId()
 
 		if not isInVehicle and not IsPlayerDead(PlayerId()) then
-			if DoesEntityExist(GetVehiclePedIsTryingToEnter(ped)) and not isEnteringVehicle then
-				-- trying to enter a vehicle!
-				local vehicle = GetVehiclePedIsTryingToEnter(ped)
-				local seat = GetSeatPedIsTryingToEnter(ped)
+			if not isEnteringVehicle and IsPedInAnyVehicle(ped, false) and GetSeatPedIsTryingToEnter(ped) == -1 then
+				vehicle = GetVehiclePedIsIn(ped, false)
+				print('entering')
 				isEnteringVehicle = true
-				TriggerServerEvent('baseevents:enteringVehicle', vehicle, seat, GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)))
+				TriggerServerEvent('veh:checkForKey', GetVehicleNumberPlateText(vehicle), GetIsVehicleEngineRunning(veh))
+				TriggerServerEvent('fuel:returnFuelAmount', GetVehicleNumberPlateText(vehicle))
 			elseif not DoesEntityExist(GetVehiclePedIsTryingToEnter(ped)) and not IsPedInAnyVehicle(ped, true) and isEnteringVehicle then
 				-- vehicle entering aborted
 				TriggerServerEvent('baseevents:enteringAborted')

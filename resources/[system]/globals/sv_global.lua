@@ -17,13 +17,10 @@ function sendLocalActionMessageChat(message, location, range)
 	)
 end
 
-function sendLocalActionMessage(src, message, range)
-	-- set default range
-	if not range then
-		range = 30
-	end
-
-	TriggerClientEvent("globals:startActionMessage", -1, message, range, src)
+function sendLocalActionMessage(_source, text, maxDist, time)
+	if not maxDist then maxDist = 10.0 end
+	if not time then time = 3000 end
+	TriggerClientEvent("globals:startActionMessage", -1, _source, text, maxDist, time)
 end
 
 function notifyPlayersWithJobs(target_jobs, msg)

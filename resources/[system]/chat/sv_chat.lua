@@ -55,7 +55,7 @@ AddEventHandler('_chat:messageEntered', function(name, color, message, location)
 	TriggerEvent('chatMessageLocation', userSource, name, message, location)
 
 	if not WasEventCanceled() then
-		TriggerClientEvent('chatMessageLocation', -1, "[Local OOC] - " .. name .. " (" .. userSource .. ")",  { 255, 255, 255 }, message, location, 50)
+		TriggerClientEvent('chatMessage', userSource, "^*[OOC]^r Use ^3/help^7 for staff assistance or questions!")
 	end
 
 	print(name .. " (" .. GetPlayerName(userSource) .. ") " .. ': ' .. message)
@@ -81,7 +81,7 @@ end)
 RegisterServerEvent("chat:sendToLogFile")
 AddEventHandler("chat:sendToLogFile", function(source, message)
 	local player = exports["essentialmode"]:getPlayerFromId(source)
-	LOG_FILE = io.open(exports["usa_rp"]:GetLogFilePath(), "a")
+	LOG_FILE = io.open(exports["usa_rp2"]:GetLogFilePath(), "a")
 	io.output(LOG_FILE)
 	io.write("[" .. GetPlayerName(source) .. " (#" .. source .. ") / " .. GetPlayerIdentifiers(source)[1] .. "]" .. ': ' .. message .. "\r\n")
 	io.close(LOG_FILE)

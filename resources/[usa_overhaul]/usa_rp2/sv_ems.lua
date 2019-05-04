@@ -1,0 +1,122 @@
+local hospitalBeds = {
+	{
+		occupied = nil,
+		objCoords  = {347.115, -590.426, 43.304},
+		objModel = 2117668672
+	},
+
+	{
+		occupied = nil,
+		objCoords  = {350.86, -591.58, 43.39},
+		objModel = 2117668672
+	},
+
+	{
+		occupied = nil,
+		objCoords  = {354.3, -592.75, 43.30},
+		objModel = 2117668672
+	},
+
+	{
+		occupied = nil,
+		objCoords  = {357.44, -594.3, 43.30},
+		objModel = 2117668672
+	},
+
+	{
+		occupied = nil,
+		objCoords  = {356.66, -586.01, 43.30},
+		objModel = 1631638868
+	},
+
+	{
+		occupied = nil,
+		objCoords  = {353.177, -584.93, 43.30},
+		objModel = 1631638868
+	}
+}
+
+
+RegisterServerEvent('ems:resetBed')
+AddEventHandler('ems:resetBed', function()
+	for i = 1, #hospitalBeds do
+		if hospitalBeds[i].occupied == source then
+			hospitalBeds[i].occupied = nil
+		end
+	end
+end)
+
+RegisterServerEvent('injuries:getHospitalBeds')
+AddEventHandler('injuries:getHospitalBeds', function(callback)
+	callback(hospitalBeds)
+end)
+
+RegisterServerEvent('ems:occupyBed')
+AddEventHandler('ems:occupyBed', function(index)
+	hospitalBeds[index].occupied = source
+end)
+
+AddEventHandler('playerDropped', function()
+	for i = 1, #hospitalBeds do
+		if hospitalBeds[i].occupied == source then
+			print('source was hospitalized, left and now bed is being freed!')
+			hospitalBeds[i].occupied = nil
+		end
+	end
+end)
+
+-- /admit [id] [time] [reason]
+TriggerEvent('es:addJobCommand', 'admit', { "ems", "fire", "police", "sheriff", "corrections", "doctor" }, function(source, args, user)
+	local userSource = tonumber(source)
+	local targetPlayerId = tonumber(args[2])
+	local bed = nil
+	table.remove(args, 1)
+	table.remove(args, 1)
+	local reasonForAdmission = table.concat(args, " ")
+	if not reasonForAdmission or not GetPlayerName(targetPlayerId) then return end
+	print("USARP: "..GetPlayerName(userSource)..'['..GetPlayerIdentifier(userSource)..'] has admitted '..GetPlayerName(targetPlayerId)..'['..GetPlayerIdentifier(targetPlayerId)..'] to hospital with reason['..reasonForAdmission..']')
+	for i = 1, #hospitalBeds do
+		if hospitalBeds[i].occupied == nil then
+			hospitalBeds[i].occupied = targetPlayerId
+			bed = {
+				heading = hospitalBeds[i].heading,
+				coords = hospitalBeds[i].objCoords,
+				model = hospitalBeds[i].objModel
+			}
+			break
+		end
+	end
+	-- get player's character name:
+	local target_player = exports["essentialmode"]:getPlayerFromId(targetPlayerId)
+	TriggerClientEvent("ems:admitMe", targetPlayerId, bed, reasonForAdmission)
+	TriggerClientEvent('usa:notify', userSource, target_player.getActiveCharacterData("fullName") .. ' has been hospitalized.')
+	--send to discord #ems-logs
+	local url = 'https://discordapp.com/api/webhooks/375425187014770699/i6quT1ZKnFoZgOC4rSpudTc2ucmvfXuAUQJXqDI0oeKoeqLGX0etu-GGMpIKbKuAqk70'
+	PerformHttpRequest(url, function(err, text, headers)
+		if text then
+			print(text)
+		end
+	end, "POST", json.encode({
+		embeds = {
+			{
+				description = "**Patient:** " .. target_player.getActiveCharacterData("fullName") .. "\n**Details:** " .. reasonForAdmission .. "\n**Responder:** " .. user.getActiveCharacterData("fullName") .."\n**Timestamp:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
+				color = 263172,
+				author = {
+					name = "Pillbox Medical Records"
+				}
+			}
+		}
+	}), { ["Content-Type"] = 'application/json' })
+end, {
+	help = "Admit someone to the hospital",
+	params = {
+		{ name = "id", help = "Players ID" },
+		{ name = "reason", help = "Reason" }
+	}
+})
+
+TriggerEvent('es:addCommand', 'bed', function(source, args, user)
+	TriggerClientEvent('ems:getNearestBedIndex', source, hospitalBeds)
+end, {
+	help = "Enter a hospital bed",
+})

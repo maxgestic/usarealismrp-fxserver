@@ -1,0 +1,733 @@
+local properties = {}
+local firstSpawn = true
+local currentProperty = {} -- property which the player is currently in
+local myInstance = {}
+local blips = {}
+local buzzedApartment = {
+	time = 0,
+	location = nil,
+	index = nil
+}
+local doorTransition = false
+
+RegisterNetEvent('properties:updateData')
+AddEventHandler('properties:updateData', function(location, index, data)
+	if not firstSpawn then
+		properties[location].rooms[index] = data
+	end
+end)
+
+Citizen.CreateThread(function() -- manage instances
+	while true do
+		Citizen.Wait(0)
+		local playerPed = PlayerPedId()
+		if myInstance.active then
+			for i = 0, 32 do
+
+				local found = false
+				for j = 1, #myInstance.players do
+					local instancePlayer = GetPlayerFromServerId(myInstance.players[j])
+					if i == instancePlayer then
+						found = true
+					end
+				end
+
+				if not found then
+					local pedToInstance = GetPlayerPed(i)
+					SetEntityLocallyInvisible(pedToInstance)
+					SetEntityVisible(pedToInstance, false)
+					SetEntityCollision(pedToInstance, false, false)
+				end
+			end
+		end
+	end
+end)
+
+Citizen.CreateThread(function()
+	if firstSpawn then
+		TriggerServerEvent('properties:requestAllData')
+		while firstSpawn do
+			Citizen.Wait(100)
+		end
+		--TriggerServerEvent('character:loadCharacter', 1, false)
+	end
+	while true do
+		Citizen.Wait(0)
+		local playerPed = PlayerPedId()
+		if _menuPool then
+			_menuPool:MouseControlsEnabled(false)
+	        _menuPool:ControlDisablingEnabled(false)
+	        _menuPool:ProcessMenus()
+	    end
+		if currentProperty.owner then
+			local playerCoords = GetEntityCoords(playerPed)
+			local x, y, z = table.unpack(currentProperty.entryCoords)
+			local xS, yS, zS = table.unpack(currentProperty.storageCoords)
+			local xW, yW, zW = table.unpack(currentProperty.wardrobeCoords)
+			local xC, yC, zC = table.unpack(currentProperty.bathroomCoords)
+			DrawText3D(x, y, z, 2, '[E] - Exit '.. currentProperty.name)
+			DrawText3D(xS, yS, zS, 1, '[E] - Storage')
+			DrawText3D(xC, yC, zC, 1, '[E] - Clean Tools')
+			DrawText3D(xW, yW, zW, 1, 'Wardrobe')
+			if IsControlJustPressed(0, 38) then
+				if Vdist(x, y, z, playerCoords) < 0.5 then
+					TriggerServerEvent('properties:requestExit', currentProperty.location, currentProperty.index)
+					PlayDoorAnimation()
+				elseif Vdist(xS, yS, zS, playerCoords) < 1.0 then
+					TriggerServerEvent('properties:requestStorage', currentProperty.location, currentProperty.index)
+				elseif Vdist(xC, yC, zC, playerCoords) < 1.0 then
+					TriggerServerEvent('properties:cleanTools', currentProperty.location, currentProperty.index)
+				end
+			end
+			if Vdist(x, y, z, playerCoords) > 50.0 and not doorTransition then
+				SetEntityCoords(playerPed, x, y, z)
+			end
+		else
+			DrawText3D(-115.40, -603.75, 36.28, 10, '[E] - Real Estate')
+			for property, data in pairs(properties) do
+				if data.type == 'motel' then
+					DrawText3D(data.office[1], data.office[2], data.office[3], 5, '[E] - Move Properties (~g~$500~s~)')
+					for i = 1, #data.rooms do
+						local room = properties[property].rooms[i]
+						if room.owner == GetPlayerServerId(PlayerId()) then
+							if room.locked then
+								DrawText3D(room.coords[1], room.coords[2], room.coords[3], 2, '[E] - Enter | [U] - Locked (~g~'..room.name..'~s~)')
+							else
+								DrawText3D(room.coords[1], room.coords[2], room.coords[3], 2, '[E] - Enter | [U] - Unlocked (~g~'..room.name..'~s~)')
+							end
+						elseif room.owner then
+							DrawText3D(room.coords[1], room.coords[2], room.coords[3], 2, '[E] - Enter (~r~'..room.name..'~s~)')
+						end
+					end
+				else
+					DrawText3D(data.office[1], data.office[2], data.office[3], 5, '[E] - Buzz Apartments')
+				end
+			end
+			if IsControlJustPressed(0, 38) then
+				local playerCoords = GetEntityCoords(playerPed)
+				if Vdist(playerCoords, -115.40, -603.75, 36.28) < 4 then
+					TriggerServerEvent('properties:requestRealEstateMenu')
+				end
+				for property, data in pairs(properties) do
+					if Vdist(playerCoords, data.office[1], data.office[2], data.office[3]) < 3 then
+						if data.type == 'motel' then
+							TriggerServerEvent('properties:moveProperties', property)
+						else
+							TriggerEvent('properties:openBuzzMenu', property)
+						end
+					end
+					if data.type == 'motel' then
+						for i = 1, #data.rooms do
+							local room = properties[property].rooms[i]
+							if room.owner then
+								if Vdist(room.coords[1], room.coords[2], room.coords[3], playerCoords) < 0.5 then
+									TriggerServerEvent('properties:requestEntry', property, i)
+									PlayDoorAnimation()
+								end
+							end
+						end
+					end
+				end
+			elseif IsControlJustPressed(0, 303) then
+				for property, data in pairs(properties) do
+					if data.type == 'motel' then
+						for i = 1, #data.rooms do
+							local room = properties[property].rooms[i]
+							local playerCoords = GetEntityCoords(playerPed)
+							if Vdist(room.coords[1], room.coords[2], room.coords[3], playerCoords) < 0.5 then
+								if room.owner == GetPlayerServerId(PlayerId()) then
+									TriggerServerEvent('properties:toggleLock', property, i)
+									PlayDoorAnimation()
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+end)
+
+RegisterNetEvent('properties:enterProperty')
+AddEventHandler('properties:enterProperty', function(_currentProperty)
+	print('entering property')
+	currentProperty = _currentProperty
+	myInstance.players = currentProperty.instance
+	for i = 1, #myInstance.players do
+		print('source '..myInstance.players[i]..' has been placed into room '..currentProperty.index)
+	end
+	myInstance.active = true
+	local playerPed = PlayerPedId()
+	local x, y, z = table.unpack(currentProperty.entryCoords)
+	local heading = currentProperty.entryHeading
+	TriggerEvent('playerlist:playersToShow', myInstance.players)
+	NetworkSetVoiceChannel(currentProperty.voiceChannel)
+	DoorTransition(x, y, z, heading)
+end)
+
+RegisterNetEvent('properties:breachProperty')
+AddEventHandler('properties:breachProperty', function(_currentProperty)
+	print('breaching property')
+	currentProperty = _currentProperty
+	myInstance.players = currentProperty.instance
+	for i = 1, #myInstance.players do
+		print('source '..myInstance.players[i]..' has been placed into room '..currentProperty.index)
+	end
+	myInstance.active = true
+	local playerPed = PlayerPedId()
+	local x, y, z = table.unpack(currentProperty.entryCoords)
+	local heading = currentProperty.entryHeading
+	TriggerEvent('playerlist:playersToShow', myInstance.players)
+	NetworkSetVoiceChannel(currentProperty.voiceChannel)
+	DoorTransition(x, y, z, heading, true)
+end)
+
+RegisterNetEvent('properties:findRoomToBreach')
+AddEventHandler('properties:findRoomToBreach', function(apt)
+	local playerPed = PlayerPedId()
+	local playerCoords = GetEntityCoords(playerPed)
+	for property, data in pairs(properties) do
+		if data.type == 'motel' then
+			print('motel')
+			for i = 1, #data.rooms do
+				local room = data.rooms[i]
+				local x, y, z = table.unpack(room.coords)
+				if Vdist(playerCoords, x, y, z) < 1.0 and room.owner then
+					TriggerServerEvent('properties:forceEntry', property, i)
+				end
+			end
+		elseif data.type == 'apartment' then
+			if tonumber(apt) then
+				local x, y, z = table.unpack(data.office)
+				if Vdist(playerCoords, x, y, z) < 1.0 then
+					for i = 1, #data.rooms do
+						local room = data.rooms[i]
+						if string.find(room.name, apt) and room.owner then
+							TriggerServerEvent('properties:forceEntry', property, i)
+						end
+					end
+				end
+			end
+		end
+	end
+
+end)
+
+RegisterNetEvent('properties:updateInstance')
+AddEventHandler('properties:updateInstance', function(_instance)
+	if #_instance > 0 then
+		myInstance.players = _instance
+	else
+		myInstance.players = {}
+		myInstance.active = false
+	end
+	for i = 0, 32 do
+		local playerPed = GetPlayerPed(i)
+		if playerPed ~= PlayerPedId() then
+			SetEntityCollision(playerPed, true, true)
+		end
+	end
+end)
+
+RegisterNetEvent('properties:getOutfitToSave')
+AddEventHandler('properties:getOutfitToSave', function(data)
+	local _data = data
+	local playerPed = PlayerPedId()
+	local playerCoords = GetEntityCoords(playerPed)
+	if currentProperty.owner then
+		local x, y, z = table.unpack(currentProperty.wardrobeCoords)
+		if Vdist(playerCoords, x, y, z) < 1.5 then
+			local character = {
+				["components"] = {},
+				["componentstexture"] = {},
+				["props"] = {},
+				["propstexture"] = {}
+			}
+			for i = 0, 2 do
+				character.props[i] = GetPedPropIndex(playerPed, i)
+				character.propstexture[i] = GetPedPropTextureIndex(playerPed, i)
+			end
+			for i = 0, 11 do
+				character.components[i] = GetPedDrawableVariation(playerPed, i)
+				character.componentstexture[i] = GetPedTextureVariation(playerPed, i)
+			end
+			_data.outfit = character
+			TriggerServerEvent('properties:saveOutfit', _data)
+			print('continuing save!')
+		else
+			TriggerEvent('usa:notify', 'You are not at a wardrobe!')
+		end
+	else
+		TriggerEvent('usa:notify', 'You are not at a wardrobe!')
+	end
+end)
+
+RegisterNetEvent('properties:loadOutfit')
+AddEventHandler('properties:loadOutfit', function(data)
+	local playerPed = PlayerPedId()
+	local playerCoords = GetEntityCoords(playerPed)
+	if currentProperty.owner then
+		local x, y, z = table.unpack(currentProperty.wardrobeCoords)
+		if Vdist(playerCoords, x, y, z) < 1.5 then
+			if data.name and data.outfit then
+				DoScreenFadeOut(500)
+		        Citizen.Wait(500)
+				for key, value in pairs(data.outfit["components"]) do
+					SetPedComponentVariation(playerPed, tonumber(key), value, data.outfit["componentstexture"][key], 0)
+				end
+				for key, value in pairs(data.outfit["props"]) do
+					SetPedPropIndex(playerPed, tonumber(key), value, data.outfit["propstexture"][key], true)
+				end
+				TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 1, 'zip-close', 1.0)
+				Citizen.Wait(2000)
+				DoScreenFadeIn(500) 
+		        TriggerEvent("usa:playAnimation", 'clothingshirt', 'try_shirt_positive_d', -8, 1, -1, 48, 0, 0, 0, 0, 3)
+			end
+		else
+			TriggerEvent('usa:notify', 'You are not at a wardrobe!')
+		end
+	else
+		TriggerEvent('usa:notify', 'You are not at a wardrobe!')
+	end
+end)
+
+RegisterNetEvent('properties:exitProperty')
+AddEventHandler('properties:exitProperty', function()
+	local playerPed = PlayerPedId()
+	local x, y, z = table.unpack(currentProperty.exitCoords)
+	local heading = currentProperty.exitHeading
+	TriggerEvent('playerlist:playersToShow', false)
+	NetworkClearVoiceChannel()
+	DoorTransition(x, y, z, heading)
+	myInstance = {}
+	currentProperty = {}
+	for i = 0, 32 do
+		local playerPed = GetPlayerPed(i)
+		if playerPed ~= PlayerPedId() then
+			SetEntityCollision(playerPed, true, true)
+		end
+	end
+end)
+
+RegisterNetEvent('properties:buzzMe')
+AddEventHandler('properties:buzzMe', function()
+	PlaySoundFrontend(-1, "DOOR_BUZZ", "MP_PLAYER_APARTMENT", 1)
+	TriggerEvent('usa:showHelp', true, 'A person is buzzing the apartment, use /buzzaccept to accept.')
+end)
+
+RegisterNetEvent('properties:buzzEnter')
+AddEventHandler('properties:buzzEnter', function(location, index)
+	if buzzedApartment.location == location and buzzedApartment.index == index and GetGameTimer() - buzzedApartment.time < 30000 then
+		local playerPed = PlayerPedId()
+		local playerCoords = GetEntityCoords(playerPed)
+		local x, y, z = table.unpack(properties[location].office)
+		if Vdist(playerCoords, x, y, z) < 5 then
+			TriggerServerEvent('properties:requestEntry', location, index)
+		end
+	end
+end)
+
+RegisterNetEvent('properties:openStorage')
+AddEventHandler('properties:openStorage', function(menu_data)
+	LoadPropertyMenu(menu_data, currentProperty.location, currentProperty.index)
+	Citizen.CreateThread(function()
+		while mainMenu:Visible() do
+			Citizen.Wait(100)
+			local playerPed = PlayerPedId()
+			local playerCoords = GetEntityCoords(playerPed)
+			local x, y, z = table.unpack(currentProperty.storageCoords)
+			if Vdist(playerCoords, x, y, z) > 3.0 then
+				mainMenu:Visible(false)
+				RemoveMenuPool()
+			end
+		end
+	end)
+end)
+
+RegisterNetEvent('properties:openBuzzMenu')
+AddEventHandler('properties:openBuzzMenu', function(location)
+	LoadBuzzMenu(location)
+	Citizen.CreateThread(function()
+		while mainMenu:Visible() do
+			Citizen.Wait(100)
+			local playerPed = PlayerPedId()
+			local playerCoords = GetEntityCoords(playerPed)
+			local x, y, z = table.unpack(properties[location].office)
+			if Vdist(playerCoords, x, y, z) > 3.0 then
+				mainMenu:Visible(false)
+				RemoveMenuPool()
+			end
+		end
+	end)
+end)
+
+RegisterNetEvent('properties:openRealEstateMenu')
+AddEventHandler('properties:openRealEstateMenu', function(property)
+	LoadRealEstateMenu(property)
+	Citizen.CreateThread(function()
+		while mainMenu:Visible() do
+			Citizen.Wait(100)
+			local playerPed = PlayerPedId()
+			local playerCoords = GetEntityCoords(playerPed)
+			if Vdist(playerCoords, -115.40, -603.75, 36.28) > 3.0 then
+				mainMenu:Visible(false)
+				RemoveMenuPool()
+			end
+		end
+	end)
+end)
+
+RegisterNetEvent('properties:returnAllData')
+AddEventHandler('properties:returnAllData', function(data)
+	properties = data
+	if firstSpawn then
+		firstSpawn = false
+	end
+end)
+
+RegisterNetEvent('properties:updateBlip')
+AddEventHandler('properties:updateBlip', function(location, index)
+	for i = 1, #blips do
+		RemoveBlip(blips[i])
+	end
+	-- property blip
+	local x, y, z = table.unpack(properties[location].rooms[index].coords)
+	local blip = AddBlipForCoord(x, y, z)
+	SetBlipSprite(blip, 40)
+	SetBlipDisplay(blip, 4)
+	SetBlipScale(blip, 0.8)
+	SetBlipColour(blip, 61)
+	SetBlipAsShortRange(blip, true)
+	BeginTextCommandSetBlipName("STRING")
+	AddTextComponentString('Your Property')
+	EndTextCommandSetBlipName(blip)
+	table.insert(blips, blip)
+	-- real estate blip
+	local blip = AddBlipForCoord(-115.40, -603.75, 36.28)
+	SetBlipSprite(blip, 181)
+	SetBlipDisplay(blip, 4)
+	SetBlipScale(blip, 0.7)
+	SetBlipColour(blip, 61)
+	SetBlipAsShortRange(blip, true)
+	BeginTextCommandSetBlipName("STRING")
+	AddTextComponentString('Real Estate')
+	EndTextCommandSetBlipName(blip)
+	table.insert(blips, blip)
+end)
+
+function LoadRealEstateMenu(property)
+	_menuPool = NativeUI.CreatePool()
+	mainMenu = NativeUI.CreateMenu('Real Estate', 'Property Management', 0--[[X COORD]], 320 --[[Y COORD]])
+	local interior = properties[property['location']].interior
+	local motel = NativeUI.CreateItem("Motel Room", "Downgrade to a motel room.")
+	local lowend = NativeUI.CreateItem("Low-end Apartment ($"..comma_value(properties['Burton Apartments'].payment).." weekly)", "Move to a low-end apartment at Burton Apartments.")
+	local midend = NativeUI.CreateItem("Mid-end Apartment ($"..comma_value(properties['Tinsel Towers'].payment).." weekly)", "Move to a mid-end apartment at Tinsel Towers.")
+	local highend = NativeUI.CreateItem("High-end Apartment ($"..comma_value(properties['Eclipse Towers'].payment).." weekly)", "Move to a high-end apartment at Eclipse Towers.")
+	motel.Activated = function(parentmenu, selected)
+		RemoveMenuPool(_menuPool)
+		TriggerServerEvent('properties:estateChange', 'motel')
+	end
+	lowend.Activated = function(parentmenu, selected)
+		RemoveMenuPool(_menuPool)
+		TriggerServerEvent('properties:estateChange', 'lowapartment')
+	end
+	midend.Activated = function(parentmenu, selected)
+		RemoveMenuPool(_menuPool)
+		TriggerServerEvent('properties:estateChange', 'midapartment')
+	end
+	highend.Activated = function(parentmenu, selected)
+		RemoveMenuPool(_menuPool)
+		TriggerServerEvent('properties:estateChange', 'highapartment')
+	end
+
+	if interior == 'motel' then
+		mainMenu:AddItem(lowend)
+		mainMenu:AddItem(midend)
+		mainMenu:AddItem(highend)
+	elseif interior == 'lowapartment' then
+		mainMenu:AddItem(motel)
+		mainMenu:AddItem(midend)
+		mainMenu:AddItem(highend)
+	elseif interior == 'midapartment' then
+		mainMenu:AddItem(motel)
+		mainMenu:AddItem(lowend)
+		mainMenu:AddItem(highend)
+	elseif interior == 'highapartment' then
+		mainMenu:AddItem(motel)
+		mainMenu:AddItem(lowend)
+		mainMenu:AddItem(midend)
+	end
+	_menuPool:RefreshIndex()
+    _menuPool:Add(mainMenu)
+    mainMenu:Visible(true)
+    while mainMenu:Visible() do
+    	Citizen.Wait(100)
+    	if Vdist(GetEntityCoords(PlayerPedId()), -115.40, -603.75, 36.28) > 5.0 then
+    		mainMenu:Visible(false)
+    	end
+    end
+end
+
+function LoadBuzzMenu(location)
+	_menuPool = NativeUI.CreatePool()
+	mainMenu = NativeUI.CreateMenu('Buzz Apartments', location, 0--[[X COORD]], 320 --[[Y COORD]])
+	if AnyActiveRoomsAtLocation(location) then
+		for i = 1, #properties[location].rooms do
+			local room = properties[location].rooms[i]
+			if room.owner then
+				local buzzItem = NativeUI.CreateItem(room.name, 'Buzz this apartment')
+				if room.owner == GetPlayerServerId(PlayerId()) then
+					buzzItem = NativeUI.CreateItem('Enter '..room.name, 'Enter your apartment')
+				end
+				buzzItem.Activated = function(parentmenu, selected)
+					RemoveMenuPool(_menuPool)
+					TriggerServerEvent('properties:buzzApartment', location, i)
+					buzzedApartment = {
+						time = GetGameTimer(),
+						location = location,
+						index = i
+					}
+				end
+				mainMenu:AddItem(buzzItem)
+
+			end
+		end
+		_menuPool:RefreshIndex()
+	    _menuPool:Add(mainMenu)
+	    mainMenu:Visible(true)
+	else
+		TriggerEvent('usa:notify', 'No apartments to buzz!')
+	end
+end
+
+function AnyActiveRoomsAtLocation(location)
+	for i = 1, #properties[location].rooms do
+		if properties[location].rooms[i].owner then
+			return true
+		end
+	end
+	return false
+end
+
+function LoadPropertyMenu(menu_data, location, index)
+	_menuPool = NativeUI.CreatePool()
+	mainMenu = NativeUI.CreateMenu('Cupboard', 'Property Storage', 0--[[X COORD]], 320 --[[Y COORD]])
+    ------------------------------
+    -- load /display money --
+    ------------------------------
+    local item = NativeUI.CreateItem("Stashed Cash: ~g~$" .. menu_data.money, 'Stashed cash at this property.')
+    mainMenu:AddItem(item)
+    --------------------
+    -- store money --
+    --------------------
+    local item = NativeUI.CreateItem("Store Cash", "Store cash at this property.")
+    item.Activated = function(parentmenu, selected)
+        -----------------------------
+        -- get amount to store --
+        -----------------------------
+        -- 1) close menu
+        RemoveMenuPool(_menuPool)
+        -- 2) get input
+        local amount = tonumber(KeyboardInput('Enter amount:', '', 16))
+        if amount then
+        	TriggerServerEvent("properties:storeMoney", location, index, amount)
+        end
+    end
+    mainMenu:AddItem(item)
+    --------------------------
+    -- withdraw money --
+    --------------------------
+    local item = NativeUI.CreateItem("Withdraw Cash", "Withdraw cash from this property.")
+    item.Activated = function(parentmenu, selected)
+        ----------------------------------
+        -- get amount to withdraw --
+        ----------------------------------
+        -- close menu --
+        RemoveMenuPool(_menuPool)
+        -- get input to withdraw --
+        local amount = tonumber(KeyboardInput('Enter amount:', '', 16))
+        if amount then
+        	TriggerServerEvent("properties:withdrawMoney", location, index, amount)
+        end
+    end
+    mainMenu:AddItem(item)
+    ---------------------
+    -- item retrieval  --
+    ---------------------
+    local retrieval_submenu = _menuPool:AddSubMenu(mainMenu, "Storage", "Retrieve items from this property.", true --[[KEEP POSITION]])
+    if #menu_data.property_items > 0 then
+        for i = 1, #menu_data.property_items do
+            local item = menu_data.property_items[i]
+            local color = ""
+            if item.legality == "illegal" then
+                color = "~r~"
+            end
+            local itembtn = NativeUI.CreateItem(color .. "(" .. item.quantity .. "x) " .. item.name, "Withdraw this item.")
+            itembtn.Activated = function(parentmenu, selected)
+                RemoveMenuPool(_menuPool)
+                ----------------------------------------------------------------
+                -- ask for quantity to retrieve, then try to retrieve it --
+                ----------------------------------------------------------------
+                if item.quantity > 1 then
+               		local amount = tonumber(KeyboardInput('Enter amount:', '', 5))
+               		amount = math.floor(amount, 0)
+                    if amount > 0 then
+                        if item.quantity - amount >= 0 then
+                            TriggerServerEvent("properties:retrieveItem", location, index, item, amount)
+                        else
+                            TriggerEvent('usa:notify', "Quantity input too high!")
+                        end
+                    else
+                        TriggerEvent('usa:notify', "Quantity input too low!")
+                    end
+                else
+	            	TriggerServerEvent("properties:retrieveItem", location, index, item, item.quantity)
+	            end
+            end
+            retrieval_submenu:AddItem(itembtn)
+        end
+    else
+        local item = NativeUI.CreateItem("You have nothing stored here!", "Press \"Store Items\" to store something here.")
+        retrieval_submenu:AddItem(item)
+    end
+    --------------------
+    -- item storage --
+    --------------------
+    local storage_submenu = _menuPool:AddSubMenu(mainMenu, "Store Items", "Store items at this property.", true --[[KEEP POSITION]])
+    if #menu_data.user_items > 0 then
+        for i = 1, #menu_data.user_items do
+            local item = menu_data.user_items[i]
+            local color = ""
+            if item.legality == "illegal" then
+                color = "~r~"
+            end
+            local itembtn = NativeUI.CreateItem(color .. "(" .. item.quantity .. "x) " .. item.name, "Store this item.")
+            itembtn.Activated = function(parentmenu, selected)
+                RemoveMenuPool(_menuPool)
+                -- ask for quantity to store, then try to store it --
+	            if not item.quantity then item.quantity = 1 end
+	            if item.quantity > 1 then
+	           		local amount = tonumber(KeyboardInput('Enter amount:', '', 5))
+	           		amount = math.floor(amount, 0)
+	                if amount > 0 then
+	                    if item.quantity - amount >= 0 then
+	                        TriggerServerEvent("properties:storeItem", location, index, item, amount)
+	                    else
+	                        TriggerEvent('usa:notify', "Quantity input too high!")
+	                    end
+	                else
+	                    TriggerEvent('usa:notify', "Quantity input too low!")
+	                end
+	            else
+	            	TriggerServerEvent("properties:storeItem", location, index, item, item.quantity)
+	            end
+	       	end
+            storage_submenu:AddItem(itembtn)
+        end
+    else
+        local item = NativeUI.CreateItem("No items to store!", "You have nothing to store.")
+        storage_submenu:AddItem(item)
+    end
+    _menuPool:RefreshIndex()
+    _menuPool:Add(mainMenu)
+    mainMenu:Visible(true)
+end
+
+DoScreenFadeIn(0)
+
+function RemoveMenuPool()
+	_menuPool:CloseAllMenus()
+    _menuPool:Remove()
+    _menuPool = nil
+end
+
+function KeyboardInput(textEntry, inputText, maxLength) -- Thanks to Flatracer for the function.
+    AddTextEntry('FMMC_KEY_TIP1', textEntry)
+    DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP1", "", inputText, "", "", "", maxLength)
+    while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
+        Citizen.Wait(0)
+    end
+    if UpdateOnscreenKeyboard() ~= 2 then
+        local result = GetOnscreenKeyboardResult()
+        Citizen.Wait(500)
+        return result
+    else
+        Citizen.Wait(500)
+        return nil
+    end
+end
+
+function DrawText3D(x, y, z, distance, text)
+    if Vdist(GetEntityCoords(PlayerPedId()), x, y, z) < distance then
+    	local onScreen,_x,_y=World3dToScreen2d(x,y,z)
+	    SetTextScale(0.35, 0.35)
+	    SetTextFont(4)
+	    SetTextProportional(1)
+	    SetTextColour(255, 255, 255, 215)
+	    SetTextEntry("STRING")
+	    SetTextCentre(1)
+	    AddTextComponentString(text)
+	    DrawText(_x,_y)
+	    local factor = (string.len(text)) / 430
+	    DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
+	end
+end
+
+function PlayDoorAnimation()
+    while ( not HasAnimDictLoaded( 'anim@mp_player_intmenu@key_fob@' ) ) do
+        RequestAnimDict( 'anim@mp_player_intmenu@key_fob@' )
+        Citizen.Wait( 0 )
+	end
+    TaskPlayAnim(PlayerPedId(), "anim@mp_player_intmenu@key_fob@", "fob_click", 8.0, 1.0, -1, 48)
+end
+
+function DoorTransition(x, y, z, heading, breach)
+	doorTransition = true
+	if not breach then
+		PlayDoorAnimation()
+		DoScreenFadeOut(500)
+		Wait(500)
+		RequestCollisionAtCoord(x, y, z)
+		SetEntityCoordsNoOffset(PlayerPedId(), x, y, z, false, false, false, true)
+		SetEntityHeading(PlayerPedId(), heading)
+		while not HasCollisionLoadedAroundEntity(PlayerPedId()) do
+		    Citizen.Wait(100)
+		    SetEntityCoords(PlayerPedId(), x, y, z, 1, 0, 0, 1)
+		end
+		TriggerServerEvent('InteractSound_SV:PlayOnSource', 'door-shut', 0.5)
+		Wait(2000)
+		DoScreenFadeIn(500)
+	else
+		while ( not HasAnimDictLoaded( 'missprologuemcs_1' ) ) do
+	        RequestAnimDict( 'missprologuemcs_1' )
+	        Citizen.Wait( 0 )
+		end
+		TaskPlayAnim(PlayerPedId(), "missprologuemcs_1", "kick_down_player_zero", 8.0, 1.0, -1, 14)
+		Citizen.Wait(100)
+		DoScreenFadeOut(500)
+		TriggerServerEvent('InteractSound_SV:PlayOnSource', 'door-kick', 0.1)
+		Wait(500)
+		ClearPedTasks(PlayerPedId())
+		RequestCollisionAtCoord(x, y, z)
+		SetEntityCoordsNoOffset(PlayerPedId(), x, y, z, false, false, false, true)
+		SetEntityHeading(PlayerPedId(), heading)
+		while not HasCollisionLoadedAroundEntity(PlayerPedId()) do
+		    Citizen.Wait(100)
+		    SetEntityCoords(PlayerPedId(), x, y, z, 1, 0, 0, 1)
+		end
+		Wait(2000)
+		DoScreenFadeIn(500)
+	end
+	doorTransition = false
+end
+
+function comma_value(amount)
+    local formatted = amount
+    while true do
+        formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+        if (k==0) then
+            break
+        end
+    end
+    return formatted
+end

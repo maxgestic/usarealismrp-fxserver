@@ -1,0 +1,248 @@
+--# Gun store that also inserts a firearm permit.
+--# For this to work without modification, you will need the latest copy of the usa_rp resource
+--# Created for USA REALISM RP
+--# by: minipunch
+local MENU_KEY = 38 -- "E"
+local playerWeapons
+local locations = {
+	{ x=-331.17, y=6084.47, z=31.59 },
+	{ x=-3172.96, y=1088.03, z=21.00 },
+	{ x=-1118.53, y=2699.26, z=18.68 },
+	{ x=1692.75, y=3760.52, z=34.9 },
+	{ x=253.23, y=-50.22, z= 70.1 },
+	{ x=-1304.72, y=-394.31, z=36.80 },
+	{ x=-662.33, y=-934.23, z=21.95 },
+	{ x=22.34, y=-1106.102, z=29.90},
+	{ x=842.65, y=-1034.57, z=28.35 },
+	{ x=2568.14, y=293.26, z=108.92 },
+	{ x=810.37, y=-2158.36, z=29.81 }
+}
+
+local purchasedWeapons = 0 
+
+----------------------
+---- Set up blips ----
+----------------------
+
+local BLIPS = {}
+function EnumerateBlips()
+  if #BLIPS == 0 then
+    for i = 1, #locations do
+      local blip = AddBlipForCoord(locations[i].x, locations[i].y, locations[i].z)
+      SetBlipSprite(blip, 119)
+      SetBlipDisplay(blip, 4)
+      SetBlipScale(blip, 0.8)
+      SetBlipColour(blip, 50)
+      SetBlipAsShortRange(blip, true)
+      BeginTextCommandSetBlipName("STRING")
+      AddTextComponentString('Gun Store')
+      EndTextCommandSetBlipName(blip)
+      table.insert(BLIPS, blip)
+    end
+  end
+end
+
+TriggerServerEvent('blips:getBlips')
+
+RegisterNetEvent('blips:returnBlips')
+AddEventHandler('blips:returnBlips', function(blipsTable)
+  if blipsTable['gunshop'] then
+    EnumerateBlips()
+  else
+    for _, k in pairs(BLIPS) do
+      print(k)
+      RemoveBlip(k)
+    end
+    BLIPS = {}
+  end
+end)
+
+-----------------
+-----------------
+-----------------
+
+
+local created_menus = {}
+
+-------------------
+-- utility funcs --
+-------------------
+function comma_value(amount)
+  local formatted = amount
+  while true do
+    formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+    if (k==0) then
+      break
+    end
+  end
+  return formatted
+end
+
+function IsAnyMenuVisible()
+	for i = 1, #created_menus do
+		if created_menus[i]:Visible() then
+			return true
+		end
+	end
+	return false
+end
+
+function CloseAllMenus()
+	for i = 1, #created_menus do
+		if created_menus[i]:Visible() then
+			created_menus[i]:Visible(false)
+		end
+	end
+end
+
+----------------------
+-- Set up main menu --
+----------------------
+_menuPool = NativeUI.CreatePool()
+mainMenu = NativeUI.CreateMenu("Ammunation", "~b~Welcome!", 0 --[[X COORD]], 320 --[[Y COORD]])
+_menuPool:Add(mainMenu)
+
+table.insert(created_menus, mainMenu)
+
+--------------------------------
+-- Construct GUI menu buttons --
+--------------------------------
+function CreateWeaponShopMenu(menu)
+  -----------------------------------
+  -- Adds button for each category --
+  -----------------------------------
+  for category, weapons in pairs(storeWeapons) do
+    local submenu = _menuPool:AddSubMenu(menu, category, "See our selection of " .. category, true --[[KEEP POSITION]])
+		table.insert(created_menus, submenu)
+    for i = 1, #weapons do
+      ---------------------------------------------
+      -- Button for each weapon in each category --
+      ---------------------------------------------
+      local item = NativeUI.CreateItem(weapons[i].name, "Purchase price: $" .. comma_value(weapons[i].price))
+      item.Activated = function(parentmenu, selected)
+        local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
+         TriggerServerEvent("gunShop:requestPurchase", category, i)
+      end
+      ----------------------------------------
+      -- add to sub menu created previously --
+      ----------------------------------------
+      submenu:AddItem(item)
+    end
+  end
+end
+
+----------------
+-- add to GUI --
+----------------
+CreateWeaponShopMenu(mainMenu)
+_menuPool:RefreshIndex()
+
+-------------------------------------------
+-- open menu when near gun shop location --
+-------------------------------------------
+Citizen.CreateThread(function()
+	local menu_opened = false
+	local closest_location = nil
+  while true do
+    Citizen.Wait(0)
+    _menuPool:MouseControlsEnabled(false)
+    _menuPool:ControlDisablingEnabled(false)
+    _menuPool:ProcessMenus()
+    local mycoords = GetEntityCoords(GetPlayerPed(-1))
+		-- see if close to any stores --
+    for i = 1, #locations do
+    	DrawText3D(locations[i].x, locations[i].y, locations[i].z, 5, '[E] - Ammunation')
+    	if IsControlJustPressed(1, MENU_KEY) and not IsAnyMenuVisible() then
+			if Vdist(mycoords.x, mycoords.y, mycoords.z, locations[i].x, locations[i].y, locations[i].z) < 1.3 then
+    			TriggerServerEvent('gunShop:requestOpenMenu')
+				closest_location = locations[i]
+			end
+    	end
+    end
+	-- close menu when far away --
+	if closest_location then
+		if Vdist(mycoords.x, mycoords.y, mycoords.z, closest_location.x, closest_location.y, closest_location.z) > 1.3 then
+			if IsAnyMenuVisible() then
+				closest_location = nil
+				CloseAllMenus()
+			end
+		end
+	end
+  end
+end)
+
+RegisterNetEvent("mini:equipWeapon")
+AddEventHandler("mini:equipWeapon", function(source, hash, name)
+	local playerPed = GetPlayerPed(-1)
+	if hash ~= GetHashKey("GADGET_PARACHUTE") then	--Dont auto equip parachutes from gunstore
+		GiveWeaponToPed(playerPed, hash, 60, false, true)
+	end
+end)
+
+RegisterNetEvent('gunShop:openMenu')
+AddEventHandler('gunShop:openMenu', function()
+	mainMenu:Visible(not mainMenu:Visible())
+end)
+
+RegisterNetEvent('gunShop:addRecentlyPurchased')
+AddEventHandler('gunshop:addRecentlyPurchased', function()
+  purchasedWeapons = purchasedWeapons + 1
+  if purchasedWeapons > 3 then
+    local playerPed = PlayerPedId()
+    local x, y, z = table.unpack(GetEntityCoords(playerPed))
+    local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+    local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+    TriggerServerEvent('911:SuspiciousWeaponBuying', x, y, z, lastStreetNAME, IsPedMale(playerPed))
+  end
+end)
+
+Citizen.CreateThread(function()
+  while true do
+    Citizen.Wait(90000)
+    if purchasedWeapons > 0  then
+      purchasedWeapons = purchasedWeapons - 1
+    end
+  end
+end)
+
+--------------------
+-- Spawn job peds --
+--------------------
+local JOB_PEDS = {
+  {x = -331.043, y = 6086.09, z = 30.40, heading = 180.0}
+}
+Citizen.CreateThread(function()
+	for i = 1, #JOB_PEDS do
+		local hash = -1064078846
+		--local hash = GetHashKey(data.ped.model)
+		RequestModel(hash)
+		while not HasModelLoaded(hash) do
+			RequestModel(hash)
+			Citizen.Wait(0)
+		end
+		local ped = CreatePed(4, hash, JOB_PEDS[i].x, JOB_PEDS[i].y, JOB_PEDS[i].z, JOB_PEDS[i].heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
+		SetEntityCanBeDamaged(ped,false)
+		SetPedCanRagdollFromPlayerImpact(ped,false)
+		TaskSetBlockingOfNonTemporaryEvents(ped,true)
+		SetPedFleeAttributes(ped,0,0)
+		SetPedCombatAttributes(ped,17,1)
+		SetPedRandomComponentVariation(ped, true)
+    TaskStartScenarioInPlace(ped, "WORLD_HUMAN_HANG_OUT_STREET", 0, true);
+	end
+end)
+
+function DrawText3D(x, y, z, distance, text)
+  if Vdist(GetEntityCoords(PlayerPedId()), x, y, z) < distance then
+    local onScreen,_x,_y=World3dToScreen2d(x,y,z)
+    SetTextScale(0.35, 0.35)
+    SetTextFont(4)
+    SetTextProportional(1)
+    SetTextColour(255, 255, 255, 215)
+    SetTextEntry("STRING")
+    SetTextCentre(1)
+    AddTextComponentString(text)
+    DrawText(_x,_y)
+    local factor = (string.len(text)) / 370
+    DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
+  end
+end
