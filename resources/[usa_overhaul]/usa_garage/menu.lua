@@ -19,7 +19,6 @@ AddEventHandler("garage:openMenuWithVehiclesLoaded", function(userVehicles, _clo
 	while mainMenu:Visible() do
 		Citizen.Wait(0)
 		local playerCoords = GetEntityCoords(playerPed)
-		print(_closest_shop)
 		if Vdist(closest_shop['x'], closest_shop['y'], closest_shop['z'], playerCoords) > 5.0 then
 			mainMenu:Visible(false)
 			break

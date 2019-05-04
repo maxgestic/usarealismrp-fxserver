@@ -54,7 +54,7 @@ Citizen.CreateThread(function()
 		while firstSpawn do
 			Citizen.Wait(100)
 		end
-		TriggerServerEvent('character:loadCharacter', 1, false)
+		--TriggerServerEvent('character:loadCharacter', 1, false)
 	end
 	while true do
 		Citizen.Wait(0)
