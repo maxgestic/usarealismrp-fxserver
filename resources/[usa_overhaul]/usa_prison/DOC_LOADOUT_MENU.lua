@@ -353,11 +353,13 @@ Citizen.CreateThread(function()
         -- see if close to any stores --
         for i = 1, #PRISON_GUARD_SIGN_IN_LOCATIONS do
           DrawText3D(PRISON_GUARD_SIGN_IN_LOCATIONS[i].x, PRISON_GUARD_SIGN_IN_LOCATIONS[i].y, PRISON_GUARD_SIGN_IN_LOCATIONS[i].z, 5, '[E] - Locker Room')
+        end
+        if IsControlJustPressed(1, MENU_KEY) and not IsAnyMenuVisible() then
+          for i = 1, #PRISON_GUARD_SIGN_IN_LOCATIONS do
             if Vdist(mycoords, PRISON_GUARD_SIGN_IN_LOCATIONS[i].x, PRISON_GUARD_SIGN_IN_LOCATIONS[i].y, PRISON_GUARD_SIGN_IN_LOCATIONS[i].z) < 2.0 then
-              if IsControlJustPressed(1, MENU_KEY) and not IsAnyMenuVisible() then
-                  TriggerServerEvent("doc:checkWhitelist", PRISON_GUARD_SIGN_IN_LOCATIONS[i])
-              end
+              TriggerServerEvent("doc:checkWhitelist", PRISON_GUARD_SIGN_IN_LOCATIONS[i])
             end
+          end
         end
         -- close menu when far away --
         if closest_location then

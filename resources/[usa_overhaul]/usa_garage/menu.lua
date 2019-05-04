@@ -12,12 +12,14 @@ _menuPool:Add(mainMenu)
 
 -- custom events --
 RegisterNetEvent("garage:openMenuWithVehiclesLoaded")
-AddEventHandler("garage:openMenuWithVehiclesLoaded", function(userVehicles)
+AddEventHandler("garage:openMenuWithVehiclesLoaded", function(userVehicles, _closest_shop)
+	if _closest_shop then closest_shop = _closest_shop end
 	CreateGarageMenu(mainMenu, userVehicles)
 	local playerPed = PlayerPedId()
 	while mainMenu:Visible() do
 		Citizen.Wait(0)
 		local playerCoords = GetEntityCoords(playerPed)
+		print(_closest_shop)
 		if Vdist(closest_shop['x'], closest_shop['y'], closest_shop['z'], playerCoords) > 5.0 then
 			mainMenu:Visible(false)
 			break
@@ -47,14 +49,12 @@ function CreateGarageMenu(menu, vehicles)
 			if GetVehiclePedIsIn(GetPlayerPed(-1), false) ~= 0 then
 				if GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), -1) == GetPlayerPed(-1) then
 					local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
-					print('d')
 					TriggerServerEvent("garage:vehicleSelected", vehicle, property)
 				else
 					TriggerEvent("usa:notify", "You must be in the driver's seat!")
 				end
 			else
 				local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
-				print('dd')
 				TriggerServerEvent("garage:vehicleSelected", vehicle, property)
 			end
 			-- close menu --

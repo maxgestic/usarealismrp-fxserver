@@ -17,6 +17,11 @@ AddEventHandler('properties:updateData', function(location, index, data)
 	end
 end)
 
+RegisterNetEvent('properties:removeData')
+AddEventHandler('properties:removeData', function(location, index)
+	table.remove(properties[location].rooms, index)
+end)
+
 Citizen.CreateThread(function() -- manage instances
 	while true do
 		Citizen.Wait(0)
@@ -49,7 +54,7 @@ Citizen.CreateThread(function()
 		while firstSpawn do
 			Citizen.Wait(100)
 		end
-		--TriggerServerEvent('character:loadCharacter', 1, false)
+		TriggerServerEvent('character:loadCharacter', 1, false)
 	end
 	while true do
 		Citizen.Wait(0)
@@ -63,13 +68,17 @@ Citizen.CreateThread(function()
 			local playerCoords = GetEntityCoords(playerPed)
 			local x, y, z = table.unpack(currentProperty.entryCoords)
 			local xS, yS, zS = table.unpack(currentProperty.storageCoords)
-			local xW, yW, zW = table.unpack(currentProperty.wardrobeCoords)
 			local xC, yC, zC = table.unpack(currentProperty.bathroomCoords)
+			local xW, yW, zW = table.unpack(currentProperty.wardrobeCoords)
 			DrawText3D(x, y, z, 2, '[E] - Exit '.. currentProperty.name)
 			DrawText3D(xS, yS, zS, 1, '[E] - Storage')
 			DrawText3D(xC, yC, zC, 1, '[E] - Clean Tools')
-			DrawText3D(xW, yW, zW, 1, 'Wardrobe')
+			if currentProperty.owner == GetPlayerServerId(PlayerId()) then
+				DrawText3D(xW, yW, zW, 1, '[E] - Wardrobe')
+			end
 			if IsControlJustPressed(0, 38) then
+				print(currentProperty.owner)
+				print(GetPlayerServerId(PlayerId()))
 				if Vdist(x, y, z, playerCoords) < 0.5 then
 					TriggerServerEvent('properties:requestExit', currentProperty.location, currentProperty.index)
 					PlayDoorAnimation()
@@ -77,6 +86,9 @@ Citizen.CreateThread(function()
 					TriggerServerEvent('properties:requestStorage', currentProperty.location, currentProperty.index)
 				elseif Vdist(xC, yC, zC, playerCoords) < 1.0 then
 					TriggerServerEvent('properties:cleanTools', currentProperty.location, currentProperty.index)
+				elseif currentProperty.owner == GetPlayerServerId(PlayerId()) and Vdist(xW, yW, zW, playerCoords) < 1.0 then
+					print('triggering')
+					TriggerEvent('properties:openWardrobeMenu')
 				end
 			end
 			if Vdist(x, y, z, playerCoords) > 50.0 and not doorTransition then
@@ -85,11 +97,16 @@ Citizen.CreateThread(function()
 		else
 			DrawText3D(-115.40, -603.75, 36.28, 10, '[E] - Real Estate')
 			for property, data in pairs(properties) do
-				if data.type == 'motel' then
-					DrawText3D(data.office[1], data.office[2], data.office[3], 5, '[E] - Move Properties (~g~$500~s~)')
+				if data.type == 'motel' or data.type == 'house' then
+					if data.type == 'motel' then
+						DrawText3D(data.office[1], data.office[2], data.office[3], 5, '[E] - Move Properties (~g~$500~s~)')
+					end
 					for i = 1, #data.rooms do
 						local room = properties[property].rooms[i]
 						if room.owner == GetPlayerServerId(PlayerId()) then
+							if room.garage then
+								DrawText3D(room.garage[1], room.garage[2], room.garage[3], 4, '[E] - Garage')
+							end
 							if room.locked then
 								DrawText3D(room.coords[1], room.coords[2], room.coords[3], 2, '[E] - Enter | [U] - Locked (~g~'..room.name..'~s~)')
 							else
@@ -99,7 +116,7 @@ Citizen.CreateThread(function()
 							DrawText3D(room.coords[1], room.coords[2], room.coords[3], 2, '[E] - Enter (~r~'..room.name..'~s~)')
 						end
 					end
-				else
+				elseif data.type == 'apartment' then
 					DrawText3D(data.office[1], data.office[2], data.office[3], 5, '[E] - Buzz Apartments')
 				end
 			end
@@ -109,20 +126,46 @@ Citizen.CreateThread(function()
 					TriggerServerEvent('properties:requestRealEstateMenu')
 				end
 				for property, data in pairs(properties) do
-					if Vdist(playerCoords, data.office[1], data.office[2], data.office[3]) < 3 then
-						if data.type == 'motel' then
-							TriggerServerEvent('properties:moveProperties', property)
-						else
-							TriggerEvent('properties:openBuzzMenu', property)
-						end
-					end
-					if data.type == 'motel' then
+					if data.type == 'house' then
 						for i = 1, #data.rooms do
-							local room = properties[property].rooms[i]
-							if room.owner then
-								if Vdist(room.coords[1], room.coords[2], room.coords[3], playerCoords) < 0.5 then
-									TriggerServerEvent('properties:requestEntry', property, i)
-									PlayDoorAnimation()
+							local room = data.rooms[i]
+							if Vdist(playerCoords, room.coords[1], room.coords[2], room.coords[3]) < 2.0 then
+								TriggerServerEvent('properties:requestEntry', property, i)
+								PlayDoorAnimation()
+							end
+							if room.garage and room.owner == GetPlayerServerId(PlayerId()) then
+								if Vdist(playerCoords, room.garage[1], room.garage[2], room.garage[3]) < 2.0 then
+									if IsPedInAnyVehicle(playerPed, true) then
+										local handle = GetVehiclePedIsIn(playerPed, false)
+										local numberPlateText = GetVehicleNumberPlateText(handle)
+										TriggerServerEvent("garage:storeVehicle", handle, numberPlateText)
+									else
+										local garage = {
+											['x'] = room.garage[1],
+											['y'] = room.garage[2],
+											['z'] = room.garage[3]
+										}
+										TriggerServerEvent('garage:openMenu', false, garage)
+									end
+								end
+							end
+						end
+					else
+						if Vdist(playerCoords, data.office[1], data.office[2], data.office[3]) < 3 then
+							if data.type == 'motel' then
+								TriggerServerEvent('properties:moveProperties', property)
+							else
+								TriggerEvent('properties:openBuzzMenu', property)
+							end
+						end
+						if data.type == 'motel' then
+							for i = 1, #data.rooms do
+								local room = properties[property].rooms[i]
+								if room.owner then
+									if Vdist(room.coords[1], room.coords[2], room.coords[3], playerCoords) < 0.5 then
+										TriggerServerEvent('properties:requestEntry', property, i)
+										PlayDoorAnimation()
+									end
 								end
 							end
 						end
@@ -130,7 +173,7 @@ Citizen.CreateThread(function()
 				end
 			elseif IsControlJustPressed(0, 303) then
 				for property, data in pairs(properties) do
-					if data.type == 'motel' then
+					if data.type == 'motel' or data.type == 'house' then
 						for i = 1, #data.rooms do
 							local room = properties[property].rooms[i]
 							local playerCoords = GetEntityCoords(playerPed)
@@ -161,7 +204,6 @@ AddEventHandler('properties:enterProperty', function(_currentProperty)
 	local x, y, z = table.unpack(currentProperty.entryCoords)
 	local heading = currentProperty.entryHeading
 	TriggerEvent('playerlist:playersToShow', myInstance.players)
-	NetworkSetVoiceChannel(currentProperty.voiceChannel)
 	DoorTransition(x, y, z, heading)
 end)
 
@@ -178,7 +220,6 @@ AddEventHandler('properties:breachProperty', function(_currentProperty)
 	local x, y, z = table.unpack(currentProperty.entryCoords)
 	local heading = currentProperty.entryHeading
 	TriggerEvent('playerlist:playersToShow', myInstance.players)
-	NetworkSetVoiceChannel(currentProperty.voiceChannel)
 	DoorTransition(x, y, z, heading, true)
 end)
 
@@ -187,7 +228,7 @@ AddEventHandler('properties:findRoomToBreach', function(apt)
 	local playerPed = PlayerPedId()
 	local playerCoords = GetEntityCoords(playerPed)
 	for property, data in pairs(properties) do
-		if data.type == 'motel' then
+		if data.type == 'motel' or data.type == 'house' then
 			print('motel')
 			for i = 1, #data.rooms do
 				local room = data.rooms[i]
@@ -229,39 +270,6 @@ AddEventHandler('properties:updateInstance', function(_instance)
 	end
 end)
 
-RegisterNetEvent('properties:getOutfitToSave')
-AddEventHandler('properties:getOutfitToSave', function(data)
-	local _data = data
-	local playerPed = PlayerPedId()
-	local playerCoords = GetEntityCoords(playerPed)
-	if currentProperty.owner then
-		local x, y, z = table.unpack(currentProperty.wardrobeCoords)
-		if Vdist(playerCoords, x, y, z) < 1.5 then
-			local character = {
-				["components"] = {},
-				["componentstexture"] = {},
-				["props"] = {},
-				["propstexture"] = {}
-			}
-			for i = 0, 2 do
-				character.props[i] = GetPedPropIndex(playerPed, i)
-				character.propstexture[i] = GetPedPropTextureIndex(playerPed, i)
-			end
-			for i = 0, 11 do
-				character.components[i] = GetPedDrawableVariation(playerPed, i)
-				character.componentstexture[i] = GetPedTextureVariation(playerPed, i)
-			end
-			_data.outfit = character
-			TriggerServerEvent('properties:saveOutfit', _data)
-			print('continuing save!')
-		else
-			TriggerEvent('usa:notify', 'You are not at a wardrobe!')
-		end
-	else
-		TriggerEvent('usa:notify', 'You are not at a wardrobe!')
-	end
-end)
-
 RegisterNetEvent('properties:loadOutfit')
 AddEventHandler('properties:loadOutfit', function(data)
 	local playerPed = PlayerPedId()
@@ -278,6 +286,23 @@ AddEventHandler('properties:loadOutfit', function(data)
 				for key, value in pairs(data.outfit["props"]) do
 					SetPedPropIndex(playerPed, tonumber(key), value, data.outfit["propstexture"][key], true)
 				end
+
+				local character = {
+					components = {},
+					componentstexture = {},
+					props = {},
+					propstexture = {}
+				}
+				character.hash = GetEntityModel(playerPed)
+				for i = 0, 2 do
+					character.props[i] = GetPedPropIndex(playerPed, i)
+					character.propstexture[i] = GetPedPropTextureIndex(playerPed, i)
+				end
+				for i = 0, 11 do
+					character.components[i] = GetPedDrawableVariation(playerPed, i)
+					character.componentstexture[i] = GetPedTextureVariation(playerPed, i)
+				end
+				TriggerServerEvent("mini:save", character)
 				TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 1, 'zip-close', 1.0)
 				Citizen.Wait(2000)
 				DoScreenFadeIn(500) 
@@ -297,7 +322,6 @@ AddEventHandler('properties:exitProperty', function()
 	local x, y, z = table.unpack(currentProperty.exitCoords)
 	local heading = currentProperty.exitHeading
 	TriggerEvent('playerlist:playersToShow', false)
-	NetworkClearVoiceChannel()
 	DoorTransition(x, y, z, heading)
 	myInstance = {}
 	currentProperty = {}
@@ -377,6 +401,24 @@ AddEventHandler('properties:openRealEstateMenu', function(property)
 	end)
 end)
 
+RegisterNetEvent('properties:openWardrobeMenu')
+AddEventHandler('properties:openWardrobeMenu', function()
+	LoadWardrobeMenu()
+	Citizen.CreateThread(function()
+		while mainMenu:Visible() do
+			Citizen.Wait(100)
+			local playerPed = PlayerPedId()
+			local playerCoords = GetEntityCoords(playerPed)
+			local x, y, z = table.unpack(currentProperty.wardrobeCoords)
+			if Vdist(playerCoords, x, y, z) > 3.0 then
+				print('removing')
+				mainMenu:Visible(false)
+				RemoveMenuPool()
+			end
+		end
+	end)
+end)
+
 RegisterNetEvent('properties:returnAllData')
 AddEventHandler('properties:returnAllData', function(data)
 	properties = data
@@ -413,6 +455,12 @@ AddEventHandler('properties:updateBlip', function(location, index)
 	AddTextComponentString('Real Estate')
 	EndTextCommandSetBlipName(blip)
 	table.insert(blips, blip)
+end)
+
+RegisterNetEvent('properties:getHeadingForHouse')
+AddEventHandler('properties:getHeadingForHouse', function(target, location)
+	local playerPed = PlayerPedId()
+	TriggerServerEvent('properties:continueHousePurchase', target, location, GetEntityHeading(playerPed))
 end)
 
 function LoadRealEstateMenu(property)
@@ -498,6 +546,68 @@ function LoadBuzzMenu(location)
 	else
 		TriggerEvent('usa:notify', 'No apartments to buzz!')
 	end
+end
+
+local outfitAmount = {1, 2, 3, 4, 5}
+
+function LoadWardrobeMenu()
+	print('loading menu')
+	_menuPool = NativeUI.CreatePool()
+	mainMenu = NativeUI.CreateMenu('Wardrobe', '~b~Choose your outfit', 0--[[X COORD]], 320 --[[Y COORD]])
+	local selectedSaveSlot = 1
+    local selectedLoadSlot = 1
+    local saveslot = UIMenuListItem.New("Slot to Save", outfitAmount)
+    local saveconfirm = UIMenuItem.New('Confirm Save', 'Save outfit into the above number')
+    saveconfirm:SetRightBadge(BadgeStyle.Tick)
+    local loadslot = UIMenuListItem.New("Slot to Load", outfitAmount)
+    local loadconfirm = UIMenuItem.New('Load Outfit', 'Load outfit from above number')
+    loadconfirm:SetRightBadge(BadgeStyle.Clothes)
+    mainMenu:AddItem(loadslot)
+    mainMenu:AddItem(loadconfirm)
+    mainMenu:AddItem(saveslot)
+    mainMenu:AddItem(saveconfirm)
+
+    mainMenu.OnListChange = function(sender, item, index)
+        if item == saveslot then
+            selectedSaveSlot = item:IndexToItem(index)
+        elseif item == loadslot then
+            selectedLoadSlot = item:IndexToItem(index)
+        end
+    end
+    mainMenu.OnItemSelect = function(sender, item, index)
+        if item == saveconfirm then
+            local character = {
+			["components"] = {},
+			["componentstexture"] = {},
+			["props"] = {},
+			["propstexture"] = {}
+			}
+			local ply = GetPlayerPed(-1)
+			for i = 0, 2 do
+				character.props[i] = GetPedPropIndex(ply, i)
+				character.propstexture[i] = GetPedPropTextureIndex(ply, i)
+			end
+			for i = 0, 11 do
+				character.components[i] = GetPedDrawableVariation(ply, i)
+				character.componentstexture[i] = GetPedTextureVariation(ply, i)
+			end
+			TriggerServerEvent("properties:saveOutfit", character, selectedSaveSlot)
+			RemoveMenuPool(_menuPool)
+        elseif item == loadconfirm then
+            DoScreenFadeOut(500)
+            Citizen.Wait(500)
+            TriggerServerEvent('properties:loadOutfit', selectedLoadSlot)
+			TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 1, 'zip-close', 1.0)
+			Citizen.Wait(2000)
+			DoScreenFadeIn(500) 
+            TriggerEvent("usa:playAnimation", 'clothingshirt', 'try_shirt_positive_d', -8, 1, -1, 48, 0, 0, 0, 0, 3)
+            RemoveMenuPool(_menuPool)
+        end
+    end
+
+    _menuPool:RefreshIndex()
+    _menuPool:Add(mainMenu)
+    mainMenu:Visible(true)
 end
 
 function AnyActiveRoomsAtLocation(location)

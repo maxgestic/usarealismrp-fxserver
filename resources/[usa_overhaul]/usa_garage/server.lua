@@ -154,7 +154,7 @@ AddEventHandler("garage:vehicleSelected", function(vehicle, property)
 end)
 
 RegisterServerEvent("garage:openMenu")
-AddEventHandler("garage:openMenu", function(required_jobs)
+AddEventHandler("garage:openMenu", function(required_jobs, _closest_shop)
 	local usource = source
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	if required_jobs then
@@ -170,7 +170,7 @@ AddEventHandler("garage:openMenu", function(required_jobs)
 		end
 	else
 		GetVehiclesForMenu(user.getActiveCharacterData("vehicles"), function(vehs)
-			TriggerClientEvent("garage:openMenuWithVehiclesLoaded", usource, vehs)
+			TriggerClientEvent("garage:openMenuWithVehiclesLoaded", usource, vehs, _closest_shop)
 		end)
 	end
 end)

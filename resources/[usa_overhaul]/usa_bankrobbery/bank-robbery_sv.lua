@@ -50,14 +50,14 @@ AddEventHandler("bank:clerkTip", function()
 	end
 end)
 
-TriggerEvent('es:addGroupCommand', 'closebank', 'mod', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'closebank', 'admin', function(source, args, user)
 	bankClosed = true
 	TriggerClientEvent("usa:notify", source, "The bank is now closed!")
 end, {
 	help = "Close the bank from being robbed."
 })
 
-TriggerEvent('es:addGroupCommand', 'openbank', 'mod', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'openbank', 'admin', function(source, args, user)
 	bankClosed = false
 	TriggerClientEvent("usa:notify", source, "The bank is now open!")
 end, {

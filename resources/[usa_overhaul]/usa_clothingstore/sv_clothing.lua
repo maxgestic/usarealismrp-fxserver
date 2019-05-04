@@ -46,7 +46,7 @@ AddEventHandler("mini:save", function(appearance)
 				TriggerClientEvent("headprops:cacheComponent", userSource, 1, appearance.components[1], appearance.componentstexture[1])
 				TriggerClientEvent("headprops:cacheComponent", userSource, 9, appearance.components[9], appearance.componentstexture[9])
 
-				TriggerClientEvent("chatMessage", userSource, "SYSTEM", {0, 128, 255}, "Your player character has been saved.")
+				TriggerClientEvent("usa:notify", userSource, "Character has been saved!")
 
 				return
 			end

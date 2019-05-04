@@ -445,8 +445,7 @@ end
 local lastVehicle = {
   handle = 0,
   enabled = false,
-  underglow = {},
-  underglow_color = nil
+  underglow = {}
 }
 
 RegisterNetEvent("civ:toggleUnderglow")
@@ -460,8 +459,6 @@ AddEventHandler("civ:toggleUnderglow", function()
       --print('player in old vehicle!')
       if not lastVehicle.enabled then
         --print('enabling!')
-        local r, g, b = lastVehicle.underglow_color
-        SetVehicleNeonLightsColour(playerVeh, r, g, b)
         for i = 1, #lastVehicle.underglow do
           local index = lastVehicle.underglow[i]
           SetVehicleNeonLightEnabled(playerVeh, index, true)
@@ -477,7 +474,6 @@ AddEventHandler("civ:toggleUnderglow", function()
     else
       --print('player is in a new vehicle')
       if lastVehicle.handle ~= 0 then
-        local r, g, b = lastVehicle.underglow_color
         SetVehicleNeonLightsColour(lastVehicle.handle, r, g, b)
         for i = 1, #lastVehicle.underglow do
           local index = lastVehicle.underglow[i]
@@ -490,7 +486,6 @@ AddEventHandler("civ:toggleUnderglow", function()
           lastVehicle.enabled = true
         end
       end
-      lastVehicle.underglow_color = GetVehicleNeonLightsColour(playerVeh)
       lastVehicle.handle = playerVeh
       TriggerEvent('civ:toggleUnderglow')
       --print('new vehicle added!')

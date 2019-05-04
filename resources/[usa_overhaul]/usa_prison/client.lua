@@ -129,21 +129,19 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Wait(1)
-
-		for k,v in ipairs(teleports) do
-			if Vdist(GetEntityCoords(GetPlayerPed(-1), true), v.pos) < 2.0 then
-				if IsControlJustPressed(1, 51) then
+		if IsControlJustPressed(1, 51) then
+			for k,v in ipairs(teleports) do
+				if Vdist(GetEntityCoords(GetPlayerPed(-1), true), v.pos) < 2.0 then
 					TriggerServerEvent("jail:checkJobForWarp")
 				end
 			end
 		end
-
 	end
 end)
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(100)
+		Citizen.Wait(200)
 
 		-- spawn objects
 		local pos = GetEntityCoords(GetPlayerPed(-1))

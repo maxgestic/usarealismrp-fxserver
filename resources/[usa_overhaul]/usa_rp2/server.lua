@@ -550,56 +550,58 @@ end)
 RegisterServerEvent('playerDropped')
 AddEventHandler('playerDropped', function()
 	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local userJob = user.getActiveCharacterData('job')
-	local userName = user.getActiveCharacterData('fullName')
-	for i = 1, #jobsToLog do
-		if jobsToLog[i] == userJob then
-			local url = 'https://discordapp.com/api/webhooks/564121193058140160/pVOc_BO6_SGstdaVFI0DS-IMkD8Gz2Gd9ZLJpWGnXa3qdbfWWE0tG88jg7RDPq0CmGDo'
-			PerformHttpRequest(url, function(err, text, headers)
-				if text then
-					print(text)
-				end
-			end, "POST", json.encode({
-				embeds = {
-					{
-						author = {
-							name = 'User is Off-Duty'
-						},
+	if user then
+		local userJob = user.getActiveCharacterData('job')
+		local userName = user.getActiveCharacterData('fullName')
+		for i = 1, #jobsToLog do
+			if jobsToLog[i] == userJob then
+				local url = 'https://discordapp.com/api/webhooks/564121193058140160/pVOc_BO6_SGstdaVFI0DS-IMkD8Gz2Gd9ZLJpWGnXa3qdbfWWE0tG88jg7RDPq0CmGDo'
+				PerformHttpRequest(url, function(err, text, headers)
+					if text then
+						print(text)
+					end
+				end, "POST", json.encode({
+					embeds = {
+						{
+							author = {
+								name = 'User is Off-Duty'
+							},
 
-						fields = {
-					        {
-					          name = "Identifier 1",
-					          value = GetPlayerIdentifier(source),
-					          inline = true
-					        },
-					        {
-					          name = "Identifier 2",
-					          value = userName,
-					          inline = true
-					        },
-					        {
-					          name = "Identifier 3",
-					          value = GetPlayerName(source),
-					          inline = true
-					        },
-					        {
-					          name = "Job",
-					          value = userJob,
-					          inline = true
-					        },
-					        {
-					          name = "Reason",
-					          value = 'User left the server',
-					          inline = true
-					        },
-				      	},
+							fields = {
+						        {
+						          name = "Identifier 1",
+						          value = GetPlayerIdentifier(source),
+						          inline = true
+						        },
+						        {
+						          name = "Identifier 2",
+						          value = userName,
+						          inline = true
+						        },
+						        {
+						          name = "Identifier 3",
+						          value = GetPlayerName(source),
+						          inline = true
+						        },
+						        {
+						          name = "Job",
+						          value = userJob,
+						          inline = true
+						        },
+						        {
+						          name = "Reason",
+						          value = 'User left the server',
+						          inline = true
+						        },
+					      	},
 
-				      	footer = {
-					        text = os.date('%m-%d-%Y %H:%M:%S', os.time()) .. ' PDT' 
-					    }
-					}
-				},
-			}), { ["Content-Type"] = 'application/json' })
+					      	footer = {
+						        text = os.date('%m-%d-%Y %H:%M:%S', os.time()) .. ' PDT' 
+						    }
+						}
+					},
+				}), { ["Content-Type"] = 'application/json' })
+			end
 		end
 	end
 end)

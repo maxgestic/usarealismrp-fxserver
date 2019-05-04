@@ -183,6 +183,7 @@ end)
 -- start a connection (p2p voice call)
 RegisterNetEvent("phone:startCall")
 AddEventHandler("phone:startCall", function(phone_number, partner_source)
+	print(voiceChannel)
 	NetworkSetVoiceChannel(tonumber(phone_number))
 	on_call = true
 	partner_call_source = partner_source
@@ -191,6 +192,7 @@ end)
 -- other player ended a connection (p2p voice call)
 RegisterNetEvent("phone:endCall")
 AddEventHandler("phone:endCall", function()
+	print('end call voice channel: '..voiceChannel)
 	if voiceChannel == 0 then
 		NetworkClearVoiceChannel()
 	else
@@ -202,6 +204,7 @@ AddEventHandler("phone:endCall", function()
 	TriggerEvent("swayam:notification", "Whiz Wireless", "Call ~r~ended~w~.", "CHAR_MP_DETONATEPHONE")
 end)
 
+
 RegisterNetEvent('properties:enterProperty')
 AddEventHandler('properties:enterProperty', function(_currentProperty)
 	voiceChannel = _currentProperty.voiceChannel
@@ -210,6 +213,10 @@ AddEventHandler('properties:enterProperty', function(_currentProperty)
 	end
 	if voiceChannel ~= 0 then
 		NetworkSetVoiceChannel(_currentProperty.voiceChannel)
+		print('setting to property voice')
+	else
+		NetworkClearVoiceChannel()
+		print('clearing voice')
 	end
 end)
 
@@ -221,6 +228,10 @@ AddEventHandler('properties:exitProperty', function()
 	end
 	if voiceChannel == 0 then
 		NetworkClearVoiceChannel()
+		print('clearing voice')
+	else
+		NetworkSetVoiceChannel(voiceChannel)
+		print('exiting voice channel in property')
 	end
 end)
 
@@ -329,8 +340,12 @@ Citizen.CreateThread(function()
 			if IsControlJustPressed( 1, BACKSPACE_KEY ) then
 				Wait(500)
 				if IsControlPressed( 1, BACKSPACE_KEY ) then
+					if voiceChannel == 0 then
+						NetworkClearVoiceChannel()
+					else
+						NetworkSetVoiceChannel(voiceChannel)
+					end
 					on_call = false
-					NetworkClearVoiceChannel()
 					ClearPedTasks(GetPlayerPed(-1))
 					TriggerServerEvent("phone:endedCall", partner_call_source) -- notify caller of hang up
 					TriggerEvent("swayam:notification", "Whiz Wireless", "Call ~r~ended~w~.", "CHAR_MP_DETONATEPHONE")

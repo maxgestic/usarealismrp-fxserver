@@ -625,7 +625,7 @@ LSC_Config.prices = {
 
 ------------Engine----------
 	[11] = {
-		{name = "EMS Upgrade, Level 2", mod = 0, price = 80000},
+		{name = "EMS Upgrade, Level 2", mod = 0, price = 8000},
 		{name = "EMS Upgrade, Level 3", mod = 1, price = 15000},
 		{name = "EMS Upgrade, Level 4", mod = 2, price = 30000},
 	},

@@ -38,7 +38,10 @@ local blacklistedNames = {
 	'akbar',
 	'admin',
 	'owner',
-	'slave'
+	'slave',
+	'thot',
+	'weed',
+	'meth'
 }
 
 TriggerEvent('es:addCommand', 'swap', function(source, args, user)
