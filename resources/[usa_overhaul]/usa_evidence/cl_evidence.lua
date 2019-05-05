@@ -326,7 +326,6 @@ Citizen.CreateThread(function()
 							else
 								TriggerEvent('chatMessage', '^3^*[EVIDENCE]^r ^7You have picked up ^3'..item.string..'^7, tagged as ^3'..item.name..'^7!')
 								item.processed = false
-								item.made = GetGameTimer()
 								table.insert(collectedEvidence, item)
 								TriggerServerEvent('evidence:discardEvidence', i)
 								break

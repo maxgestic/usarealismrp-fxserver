@@ -108,7 +108,8 @@ AddEventHandler('evidence:newCasing', function(playerCoords, playerWeapon)
 				type = 'casing',
 				string = 'Casing',
 				weapon = item.name,
-				coords = playerCoords
+				coords = playerCoords,
+				made = os.time()
 			}
 			table.insert(evidenceDropped, evidence)
 			TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
@@ -119,7 +120,8 @@ AddEventHandler('evidence:newCasing', function(playerCoords, playerWeapon)
 		type = 'casing',
 		string = 'Casing',
 		weapon = weaponNames[playerWeapon],
-		coords = playerCoords
+		coords = playerCoords,
+		made = os.time()
 	}
 	table.insert(evidenceDropped, evidence)
 	TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
@@ -161,7 +163,8 @@ AddEventHandler('evidence:newDNA', function(playerCoords)
 		type = 'dna',
 		string = 'DNA',
 		DNA = userEncoded,
-		coords = playerCoords
+		coords = playerCoords,
+		made = os.time()
 	}
 	table.insert(evidenceDropped, evidence)
 	TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
@@ -211,6 +214,19 @@ AddEventHandler('evidence:returnObservations', function(observations, sourceRetu
 	TriggerClientEvent('evidence:displayObservations', sourceReturnedTo, observations, source)
 end)
 
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(5000)
+		for i = #evidenceDropped, 1, -1 do
+			local item = evidenceDropped[i]
+			if getMinutesFromTime(item.made) >= 45 then
+				table.remove(evidenceDropped, i)
+				TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
+			end
+		end
+	end
+end)
+
 -- character table string
 local b='abcdefghijklmnopqrstuvwxyz10'
 
@@ -242,4 +258,11 @@ function dec(data)
     for i=1,8 do c=c+(x:sub(i,i)=='1' and 2^(8-i) or 0) end
     return string.char(c)
   end))
+end
+
+function getMinutesFromTime(t)
+  local reference = t
+  local minutesfrom = os.difftime(os.time(), reference) / 60
+  local minutes = math.floor(minutesfrom)
+  return minutes
 end

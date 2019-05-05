@@ -54,7 +54,7 @@ Citizen.CreateThread(function()
 		while firstSpawn do
 			Citizen.Wait(100)
 		end
-		--TriggerServerEvent('character:loadCharacter', 1, false)
+		TriggerServerEvent('character:loadCharacter', 1, false)
 	end
 	while true do
 		Citizen.Wait(0)
@@ -77,8 +77,6 @@ Citizen.CreateThread(function()
 				DrawText3D(xW, yW, zW, 1, '[E] - Wardrobe')
 			end
 			if IsControlJustPressed(0, 38) then
-				print(currentProperty.owner)
-				print(GetPlayerServerId(PlayerId()))
 				if Vdist(x, y, z, playerCoords) < 0.5 then
 					TriggerServerEvent('properties:requestExit', currentProperty.location, currentProperty.index)
 					PlayDoorAnimation()
@@ -87,7 +85,6 @@ Citizen.CreateThread(function()
 				elseif Vdist(xC, yC, zC, playerCoords) < 1.0 then
 					TriggerServerEvent('properties:cleanTools', currentProperty.location, currentProperty.index)
 				elseif currentProperty.owner == GetPlayerServerId(PlayerId()) and Vdist(xW, yW, zW, playerCoords) < 1.0 then
-					print('triggering')
 					TriggerEvent('properties:openWardrobeMenu')
 				end
 			end
@@ -229,7 +226,6 @@ AddEventHandler('properties:findRoomToBreach', function(apt)
 	local playerCoords = GetEntityCoords(playerPed)
 	for property, data in pairs(properties) do
 		if data.type == 'motel' or data.type == 'house' then
-			print('motel')
 			for i = 1, #data.rooms do
 				local room = data.rooms[i]
 				local x, y, z = table.unpack(room.coords)
@@ -272,19 +268,20 @@ end)
 
 RegisterNetEvent('properties:loadOutfit')
 AddEventHandler('properties:loadOutfit', function(data)
+	print('loading outift...')
 	local playerPed = PlayerPedId()
 	local playerCoords = GetEntityCoords(playerPed)
 	if currentProperty.owner then
 		local x, y, z = table.unpack(currentProperty.wardrobeCoords)
 		if Vdist(playerCoords, x, y, z) < 1.5 then
-			if data.name and data.outfit then
+			if data then
 				DoScreenFadeOut(500)
 		        Citizen.Wait(500)
-				for key, value in pairs(data.outfit["components"]) do
-					SetPedComponentVariation(playerPed, tonumber(key), value, data.outfit["componentstexture"][key], 0)
+				for key, value in pairs(data["components"]) do
+					SetPedComponentVariation(playerPed, tonumber(key), value, data["componentstexture"][key], 0)
 				end
-				for key, value in pairs(data.outfit["props"]) do
-					SetPedPropIndex(playerPed, tonumber(key), value, data.outfit["propstexture"][key], true)
+				for key, value in pairs(data["props"]) do
+					SetPedPropIndex(playerPed, tonumber(key), value, data["propstexture"][key], true)
 				end
 
 				local character = {
@@ -411,7 +408,6 @@ AddEventHandler('properties:openWardrobeMenu', function()
 			local playerCoords = GetEntityCoords(playerPed)
 			local x, y, z = table.unpack(currentProperty.wardrobeCoords)
 			if Vdist(playerCoords, x, y, z) > 3.0 then
-				print('removing')
 				mainMenu:Visible(false)
 				RemoveMenuPool()
 			end
@@ -551,7 +547,6 @@ end
 local outfitAmount = {1, 2, 3, 4, 5}
 
 function LoadWardrobeMenu()
-	print('loading menu')
 	_menuPool = NativeUI.CreatePool()
 	mainMenu = NativeUI.CreateMenu('Wardrobe', '~b~Choose your outfit', 0--[[X COORD]], 320 --[[Y COORD]])
 	local selectedSaveSlot = 1
@@ -577,10 +572,10 @@ function LoadWardrobeMenu()
     mainMenu.OnItemSelect = function(sender, item, index)
         if item == saveconfirm then
             local character = {
-			["components"] = {},
-			["componentstexture"] = {},
-			["props"] = {},
-			["propstexture"] = {}
+				components = {},
+				componentstexture = {},
+				props = {},
+				propstexture = {}
 			}
 			local ply = GetPlayerPed(-1)
 			for i = 0, 2 do

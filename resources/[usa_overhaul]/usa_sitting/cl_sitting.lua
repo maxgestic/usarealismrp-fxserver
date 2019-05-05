@@ -84,9 +84,9 @@ RegisterNetEvent("sit:sitOnNearest")
 AddEventHandler("sit:sitOnNearest", function()
   if not sitting_on then
     local ped = GetPlayerPed(-1)
-    if not IsPedCuffed(ped) then
+    --if not IsPedCuffed(ped) then
       FindNearest()
-    end
+    --end
   else
     GetUp()
   end

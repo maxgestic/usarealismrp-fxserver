@@ -260,7 +260,7 @@ RegisterServerEvent('properties:saveOutfit')
 AddEventHandler('properties:saveOutfit', function(outfit, slot)
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local outfits = user.getActiveCharacterData('outfits')
-	if not outfits then outfits = {} outfits[slot] = {} else if not outfits[slot] then outfits[slot] = {} end end
+	if not outfits then print('outfits didnt exist') outfits = {} outfits[slot] = {} else if not outfits[slot] then print('outfit slot didnt exist') outfits[slot] = {} end end
 	outfits[slot] = outfit
 	user.setActiveCharacterData('outfits', outfits)
 	TriggerClientEvent('usa:notify', source, 'Outfit has been saved!')
