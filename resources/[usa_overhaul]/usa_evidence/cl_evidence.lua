@@ -44,12 +44,6 @@ Citizen.CreateThread(function()
 		if playerBAC > 0.00 then
 			playerBAC = playerBAC - 0.01
 		end
-		for i = 1, #droppedEvidence do
-			local item = droppedEvidence[i]
-			if GetGameTimer() - item.made > (45 * 60000) then
-				table.remove(droppedEvidence, i)
-			end
-		end
 		Wait(timer) -- every x seconds, decrement playerBAC
 	end
 end)
