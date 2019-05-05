@@ -37,23 +37,23 @@ parts = {
 bone_effects = { -- ORDER MATTERS - each index is subject to each stage
     [52301] = {'screenfade', 'injuredwalk', 'norun'},
     [14201] = {'screenfade', 'injuredwalk', 'norun'},
-    [57005] = {'screenfade', 'noaim'},
-    [18905] = {'screenfade', 'noaim'},
+    [57005] = {'none', 'screenfade', 'noaim'},
+    [18905] = {'none', 'screenfade', 'noaim'},
     [36864] = {'screenfade', 'injuredwalk', 'norun'},
     [63931] = {'screenfade', 'injuredwalk', 'norun'},
     [31086] = {'screenfade', 'norun', 'noaim'},
     [39317] = {'screenfade', 'norun', 'noaim'},
-    [28252] = {'screenfade', 'noaim'},
-    [61163] = {'screenfade', 'noaim'},
+    [28252] = {'none', 'screenfade', 'noaim'},
+    [61163] = {'none', 'screenfade', 'noaim'},
     [24818] = {'screenfade', 'injuredwalk', 'norun'},
     [11816] = {'screenfade', 'injuredwalk', 'norun'},
-    [40269] = {'screenfade', 'noaim'},
-    [45509] = {'screenfade', 'noaim'},
-    [28422] = {'screenfade', 'noaim'},
-    [60309] = {'screenfade', 'noaim'},
-    [47495] = {'screenfade'},
-    [20178] = {'screenfade'},
-    [17188] = {'screenfade'},
+    [40269] = {'none', 'screenfade', 'noaim'},
+    [45509] = {'none', 'screenfade', 'noaim'},
+    [28422] = {'none', 'screenfade', 'noaim'},
+    [60309] = {'none', 'screenfade', 'noaim'},
+    [47495] = {'none', 'screenfade'},
+    [20178] = {'none', 'screenfade'},
+    [17188] = {'none', 'none', 'screenfade'},
     [51826] = {'screenfade', 'injuredwalk', 'norun'},
     [58271] = {'screenfade', 'injuredwalk', 'norun'},
     [23553] = {'screenfade', 'injuredwalk', 'norun'},
@@ -63,10 +63,10 @@ bone_effects = { -- ORDER MATTERS - each index is subject to each stage
     [57597] = {'screenfade', 'injuredwalk', 'norun'},
     [2108] = {'screenfade', 'injuredwalk', 'norun'},
     [20781] = {'screenfade', 'injuredwalk', 'norun'},
-    [10706] = {'screenfade', 'noaim'},
-    [64729] = {'screenfade', 'noaim'},
-    [2992] = {'screenfade', 'noaim'},
-    [22711] = {'screenfade', 'noaim'},
+    [10706] = {'none', 'screenfade', 'noaim'},
+    [64729] = {'none', 'screenfade', 'noaim'},
+    [2992] = {'none', 'screenfade', 'noaim'},
+    [22711] = {'none', 'screenfade', 'noaim'},
     [0] = {'screenfade', 'injuredwalk', 'norun'}
 }
 
@@ -180,12 +180,13 @@ end)
 Citizen.CreateThread(function()
     local injuredWalk = false
     while true do
-        Citizen.Wait(100)
+        Citizen.Wait(10)
         for effect, enabled in pairs(effects) do
             if effect == 'screenfade' then
-                local chance = math.random()
-                if chance > 0.9998 then
-                    DoScreenFade(5000, 3000)
+                if not IsScreenFadingOut() and not IsScreenFadingIn() then
+                    DoScreenFadeOut(10000)
+                    Citizen.Wait(3000)
+                    DoScreenFadeIn(10000)
                 end
             elseif effect == 'noaim' then
                 DisableControlAction(0, 25, true)
@@ -621,11 +622,6 @@ function NotifyPlayerOfInjuries()
     end
 end
 
-function DoScreenFade(fadeDuration, fadeInTime)
-    DoScreenFadeOut(fadeDuration)
-    Citizen.Wait(fadeInTime)
-    DoScreenFadeIn(fadeDuration)
-end
 function UpdateEffects(stage, bone)
     for i = 1, #bone_effects[bone] do
         if stage >= i then

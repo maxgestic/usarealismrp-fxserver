@@ -54,7 +54,7 @@ Citizen.CreateThread(function()
 		while firstSpawn do
 			Citizen.Wait(100)
 		end
-		TriggerServerEvent('character:loadCharacter', 1, false)
+		--TriggerServerEvent('character:loadCharacter', 1, false)
 	end
 	while true do
 		Citizen.Wait(0)
@@ -200,7 +200,6 @@ AddEventHandler('properties:enterProperty', function(_currentProperty)
 	local playerPed = PlayerPedId()
 	local x, y, z = table.unpack(currentProperty.entryCoords)
 	local heading = currentProperty.entryHeading
-	TriggerEvent('playerlist:playersToShow', myInstance.players)
 	DoorTransition(x, y, z, heading)
 end)
 
@@ -216,7 +215,6 @@ AddEventHandler('properties:breachProperty', function(_currentProperty)
 	local playerPed = PlayerPedId()
 	local x, y, z = table.unpack(currentProperty.entryCoords)
 	local heading = currentProperty.entryHeading
-	TriggerEvent('playerlist:playersToShow', myInstance.players)
 	DoorTransition(x, y, z, heading, true)
 end)
 
@@ -318,7 +316,6 @@ AddEventHandler('properties:exitProperty', function()
 	local playerPed = PlayerPedId()
 	local x, y, z = table.unpack(currentProperty.exitCoords)
 	local heading = currentProperty.exitHeading
-	TriggerEvent('playerlist:playersToShow', false)
 	DoorTransition(x, y, z, heading)
 	myInstance = {}
 	currentProperty = {}
@@ -423,6 +420,11 @@ AddEventHandler('properties:returnAllData', function(data)
 	end
 end)
 
+RegisterNetEvent('properties:setWaypoint')
+AddEventHandler('properties:setWaypoint', function(coords)
+	SetNewWaypoint(coords[1], coords[2])
+end)
+
 RegisterNetEvent('properties:updateBlip')
 AddEventHandler('properties:updateBlip', function(location, index)
 	for i = 1, #blips do
@@ -456,7 +458,11 @@ end)
 RegisterNetEvent('properties:getHeadingForHouse')
 AddEventHandler('properties:getHeadingForHouse', function(target, location)
 	local playerPed = PlayerPedId()
-	TriggerServerEvent('properties:continueHousePurchase', target, location, GetEntityHeading(playerPed))
+	local x, y, z = table.unpack(GetEntityCoords(playerPed))
+	local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+	local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+	local current_zone = GetNameOfZone(x, y, z)
+	TriggerServerEvent('properties:continueHousePurchase', target, location, GetEntityHeading(playerPed), lastStreetNAME, current_zone)
 end)
 
 function LoadRealEstateMenu(property)
@@ -544,7 +550,7 @@ function LoadBuzzMenu(location)
 	end
 end
 
-local outfitAmount = {1, 2, 3, 4, 5}
+local outfitAmount = {1, 2, 3, 4, 5, 6, 7, 8}
 
 function LoadWardrobeMenu()
 	_menuPool = NativeUI.CreatePool()

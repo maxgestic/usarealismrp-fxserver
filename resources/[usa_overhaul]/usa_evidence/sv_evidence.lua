@@ -45,6 +45,13 @@ local weaponNames = {
 	[2138347493] = 'Firework Launcher'
 }
 
+local exempt_evidence = {
+	vector3(151.39, -1007.74, -99.0),
+	vector3(266.14, -1007.61, -101.00),
+	vector3(346.47, -1013.05, -99.19),
+	vector3(-781.77, 322.00, 211.99)
+}
+
 TriggerEvent('es:addJobCommand', 'breathalyze', { "police", "sheriff", "ems" }, function(source, args, user)
 	TriggerClientEvent("evidence:breathalyzeNearest", source)
 end, {
@@ -111,6 +118,11 @@ AddEventHandler('evidence:newCasing', function(playerCoords, playerWeapon)
 				coords = playerCoords,
 				made = os.time()
 			}
+			for i = 1, #exempt_evidence do
+				if find_distance(playerCoords, exempt_evidence[i]) < 50.0 then
+					return
+				end
+			end
 			table.insert(evidenceDropped, evidence)
 			TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
 			return
@@ -123,6 +135,11 @@ AddEventHandler('evidence:newCasing', function(playerCoords, playerWeapon)
 		coords = playerCoords,
 		made = os.time()
 	}
+	for i = 1, #exempt_evidence do
+		if find_distance(playerCoords, exempt_evidence[i]) < 50.0 then
+			return
+		end
+	end
 	table.insert(evidenceDropped, evidence)
 	TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
 end)
@@ -166,6 +183,11 @@ AddEventHandler('evidence:newDNA', function(playerCoords)
 		coords = playerCoords,
 		made = os.time()
 	}
+	for i = 1, #exempt_evidence do
+		if find_distance(playerCoords, exempt_evidence[i]) < 50.0 then
+			return
+		end
+	end
 	table.insert(evidenceDropped, evidence)
 	TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
 end)
@@ -265,4 +287,18 @@ function getMinutesFromTime(t)
   local minutesfrom = os.difftime(os.time(), reference) / 60
   local minutes = math.floor(minutesfrom)
   return minutes
+end
+
+function find_distance(coords1, coords2)
+  xdistance =  math.abs(coords1.x - coords2.x)
+  
+  ydistance = math.abs(coords1.y - coords2.y)
+
+  zdistance = math.abs(coords1.z - coords2.z)
+
+  return nroot(3, (xdistance ^ 3 + ydistance ^ 3 + zdistance ^ 3))
+end
+
+function nroot(root, num)
+  return num^(1/root)
 end

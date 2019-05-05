@@ -118,6 +118,14 @@ const mdtApp = new Vue({
 
             }
         },
+        PerformMarkAddress() {
+            /* request person info */
+            $.post('http://usa-mdt/PerformMarkAddress', JSON.stringify({
+                ssn: this.person_check.ssn,
+                fname: this.person_check.fname,
+                lname: this.person_check.lname
+            }));
+        },
         PerformPlateCheck() {
             /* request person info */
             $.post('http://usa-mdt/PerformPlateCheck', JSON.stringify({

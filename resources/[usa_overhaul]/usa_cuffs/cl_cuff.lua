@@ -130,12 +130,18 @@ Citizen.CreateThread(function()
 			local playerCoords = GetEntityCoords(ped)
 			if Vdist(uncuff_locations[i].x, uncuff_locations[i].y, uncuff_locations[i].z, playerCoords) < 1.0 and isCuffed then
 				TriggerEvent("usa:notify", "Cutting off your cuffs! Stay nearby!")
+				if math.random() < 0.9 then
+					local x, y, z = table.unpack(GetEntityCoords(ped))
+					local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+					local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+					TriggerServerEvent('911:CuffCutting', x, y, z, lastStreetNAME, IsPedMale(ped))
+				end
 				local start = GetGameTimer()
 				local uncuff = true
-				while GetGameTimer() - start < 120000 do
-					DrawTimer(start, 120000, 1.42, 1.475, 'CUTTING')
+				while GetGameTimer() - start < 180000 do
+					DrawTimer(start, 180000, 1.42, 1.475, 'CUTTING')
 					playerCoords = GetEntityCoords(ped)
-					if Vdist(uncuff_locations[i].x, uncuff_locations[i].y, uncuff_locations[i].z, playerCoords) > 2.0 then
+					if Vdist(uncuff_locations[i].x, uncuff_locations[i].y, uncuff_locations[i].z, playerCoords) > 1.0 then
 						TriggerEvent("usa:notify", "You went out of range!")
 						uncuff = false
 						break

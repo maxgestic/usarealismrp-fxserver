@@ -328,19 +328,17 @@ AddEventHandler("mdt:PerformPersonCheckByName", function(data)
 							local person = doc.characters[i]
 						    -- values have to be false by default to work with UI --
 						    local person_info  = {
-						        ssn = ssn,
-						        --name = firstToUpper(person.firstName) .. " " .. firstToUpper(person.lastName),
 								fname = firstToUpper(person.firstName),
 								lname = firstToUpper(person.lastName),
 								dob = person.dateOfBirth,
-						        drivers_license = false,
-						        firearm_permit = false,
+								address = false,
+						        licenses = {},
 						        insurance = false,
 						        criminal_history = {
 						            crimes = {},
 						            tickets = {}
 						        },
-								mugshot = "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg" -- generic placeholder img
+								mugshot = "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg" -- generic place holder img
 						    }
 							---------------------
 							-- get mug shot --
@@ -355,13 +353,25 @@ AddEventHandler("mdt:PerformPersonCheckByName", function(data)
 						    if #licenses > 0 then
 						        for i = 1, #licenses do
 						            local license = licenses[i]
-						                if license.name == "Driver's License" then
-						                    person_info.drivers_license = license
-						                elseif license.name == "Firearm Permit" then
-						                    person_info.firearm_permit = license
-						                end
+						            table.insert(person_info.licenses, license)
+						        end
+						        if #person_info.licenses <= 0 then
+						            person_info.licenses = false
 						        end
 						    end
+
+						    TriggerEvent('properties:getAddressByName', person.firstName .. ' ' .. person.lastName, function(address)
+						    	if address then
+									person_info.address = address
+								else
+									if person.property['house'] and person.property['houseStreet'] then
+								    	person_info.address = 'House '..person.property['house']..', '..person.property['houseStreet']
+								    else
+								    	person_info.address = person.property['location']
+								    end
+								end
+							end)
+
 						    ---------------------
 						    -- get insurance --
 						    ---------------------
@@ -376,9 +386,11 @@ AddEventHandler("mdt:PerformPersonCheckByName", function(data)
 						    if #criminal_history > 0 then
 						        for i = 1, #criminal_history do
 						            local crime = criminal_history[i]
-						                if not crime.type then -- not a ticket
+						                if (not crime.type or crime.type == "arrest") then -- not a ticket
+						                    --print("inserted crime")
 						                    table.insert(person_info.criminal_history.crimes, crime)
 						                else
+						                    --print("inserted ticket")
 						                    table.insert(person_info.criminal_history.tickets, crime)
 						                end
 						        end

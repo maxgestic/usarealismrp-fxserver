@@ -1,3 +1,4 @@
+local zones = { ['AIRP'] = "Los Santos International Airport", ['ALAMO'] = "Alamo Sea", ['ALTA'] = "Alta", ['ARMYB'] = "Fort Zancudo", ['BANHAMC'] = "Banham Canyon Dr", ['BANNING'] = "Banning", ['BEACH'] = "Vespucci Beach", ['BHAMCA'] = "Banham Canyon", ['BRADP'] = "Braddock Pass", ['BRADT'] = "Braddock Tunnel", ['BURTON'] = "Burton", ['CALAFB'] = "Calafia Bridge", ['CANNY'] = "Raton Canyon", ['CCREAK'] = "Cassidy Creek", ['CHAMH'] = "Chamberlain Hills", ['CHIL'] = "Vinewood Hills", ['CHU'] = "Chumash", ['CMSW'] = "Chiliad Mountain State Wilderness", ['CYPRE'] = "Cypress Flats", ['DAVIS'] = "Davis", ['DELBE'] = "Del Perro Beach", ['DELPE'] = "Del Perro", ['DELSOL'] = "La Puerta", ['DESRT'] = "Grand Senora Desert", ['DOWNT'] = "Downtown", ['DTVINE'] = "Downtown Vinewood", ['EAST_V'] = "East Vinewood", ['EBURO'] = "El Burro Heights", ['ELGORL'] = "El Gordo Lighthouse", ['ELYSIAN'] = "Elysian Island", ['GALFISH'] = "Galilee", ['GOLF'] = "GWC and Golfing Society", ['GRAPES'] = "Grapeseed", ['GREATC'] = "Great Chaparral", ['HARMO'] = "Harmony", ['HAWICK'] = "Hawick", ['HORS'] = "Vinewood Racetrack", ['HUMLAB'] = "Humane Labs and Research", ['JAIL'] = "Bolingbroke Penitentiary", ['KOREAT'] = "Little Seoul", ['LACT'] = "Land Act Reservoir", ['LAGO'] = "Lago Zancudo", ['LDAM'] = "Land Act Dam", ['LEGSQU'] = "Legion Square", ['LMESA'] = "La Mesa", ['LOSPUER'] = "La Puerta", ['MIRR'] = "Mirror Park", ['MORN'] = "Morningwood", ['MOVIE'] = "Richards Majestic", ['MTCHIL'] = "Mount Chiliad", ['MTGORDO'] = "Mount Gordo", ['MTJOSE'] = "Mount Josiah", ['MURRI'] = "Murrieta Heights", ['NCHU'] = "North Chumash", ['NOOSE'] = "N.O.O.S.E", ['OCEANA'] = "Pacific Ocean", ['PALCOV'] = "Paleto Cove", ['PALETO'] = "Paleto Bay", ['PALFOR'] = "Paleto Forest", ['PALHIGH'] = "Palomino Highlands", ['PALMPOW'] = "Palmer-Taylor Power Station", ['PBLUFF'] = "Pacific Bluffs", ['PBOX'] = "Pillbox Hill", ['PROCOB'] = "Procopio Beach", ['RANCHO'] = "Rancho", ['RGLEN'] = "Richman Glen", ['RICHM'] = "Richman", ['ROCKF'] = "Rockford Hills", ['RTRAK'] = "Redwood Lights Track", ['SANAND'] = "San Andreas", ['SANCHIA'] = "San Chianski Mountain Range", ['SANDY'] = "Sandy Shores", ['SKID'] = "Mission Row", ['SLAB'] = "Stab City", ['STAD'] = "Maze Bank Arena", ['STRAW'] = "Strawberry", ['TATAMO'] = "Tataviam Mountains", ['TERMINA'] = "Terminal", ['TEXTI'] = "Textile City", ['TONGVAH'] = "Tongva Hills", ['TONGVAV'] = "Tongva Valley", ['VCANA'] = "Vespucci Canals", ['VESP'] = "Vespucci", ['VINE'] = "Vinewood", ['WINDF'] = "Ron Alternates Wind Farm", ['WVINE'] = "West Vinewood", ['ZANCUDO'] = "Zancudo River", ['ZP_ORT'] = "Port of South Los Santos", ['ZQ_UAR'] = "Davis Quartz" }
 local properties = {
 	['Perrera Beach Motel'] = {
 		location = 'Bay City Avenue, Los Santos',
@@ -294,7 +295,7 @@ TriggerEvent('es:addJobCommand', 'createhouse', {'judge'}, function(source, args
 		end
 	end
 end, {
-	help = "Create a house for a player where you're standing.",
+	help = "Create a house for a player where you're standing (COSTS 80.000).",
 	params = {
 		{ name = "id", help = "player id" }
 	}
@@ -328,15 +329,23 @@ end, {
 })
 
 RegisterServerEvent('properties:continueHousePurchase')
-AddEventHandler('properties:continueHousePurchase', function(targetSource, location, heading)
+AddEventHandler('properties:continueHousePurchase', function(targetSource, location, heading, street, zone)
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	if user.getActiveCharacterData('job') == 'judge' then
+		local money = user.getActiveCharacterData('money')
+		if money >= 80000 then
+			user.setActiveCharacterData('money', money - 80000)
+		else
+			TriggerClientEvent('usa:notify', source, 'You cannot afford this!')
+			return
+		end
 		local target = exports["essentialmode"]:getPlayerFromId(targetSource)
 		local property = target.getActiveCharacterData('property')
 		property['location'] = 'Houses'
 		property['house'] = math.random(1000000, 9999999)
 		property['houseCoords'] = location
 		property['houseHeading'] = heading
+		property['houseStreet'] = street..', '..zones[zone]
 		_data = {
 			name = 'House',
 			coords = property['houseCoords'],
@@ -407,7 +416,7 @@ function RefreshProperties(source, spawnAtProperty)
 				local room = properties[property].rooms[i]
 				if room.owner == source then
 					table.remove(properties[property].rooms, i)
-					TriggerClientEvent('properties:removeData', source, property, i)
+					TriggerClientEvent('properties:removeData', -1, property, i)
 				end
 			end
 		end
@@ -567,17 +576,85 @@ end)
 RegisterServerEvent('properties:getAddress')
 AddEventHandler('properties:getAddress', function(ssn, callback)
 	for property, data in pairs(properties) do
-		if property.type ~= 'house' then
-			for i = 1, #data.rooms do
-				local room = properties[property].rooms[i]
-				if room.owner == ssn then
-					callback(property .. ', ' .. room.name .. ' ('..data.location..')')
+		for i = 1, #data.rooms do
+			local room = properties[property].rooms[i]
+			if room.owner == ssn and data.type ~= 'house' then
+				callback(room.name .. ', '..property..' ('..data.location..')')
+				return
+			end
+		end
+	end
+	local user = exports["essentialmode"]:getPlayerFromId(ssn)
+	if user then
+		local property = user.getActiveCharacterData('property')
+		if property['house'] then
+			callback('House '..property['house']..', '..property['houseStreet'])
+			return
+		end
+	end
+	callback('Address not found!')
+end)
+
+RegisterServerEvent('properties:getAddressByName')
+AddEventHandler('properties:getAddressByName', function(fullName, callback)
+	for property, data in pairs(properties) do
+		for i = 1, #data.rooms do
+			local room = properties[property].rooms[i]
+			local user = exports["essentialmode"]:getPlayerFromId(room.owner)
+			if user and user.getActiveCharacterData('fullName') == fullName then
+				if data.type ~= 'house' then
+					callback(room.name .. ', '..property..' ('..data.location..')')
 					return
+				else
+					local property = user.getActiveCharacterData('property')
+					if property['house'] then
+						callback('House '..property['house']..', '..property['houseStreet'])
+					end
 				end
 			end
 		end
 	end
-	callback('Address not found!')
+	callback(false)
+end)
+
+RegisterServerEvent('properties:markAddress')
+AddEventHandler('properties:markAddress', function(ssn, fname, lname)
+	if snn then
+		for property, data in pairs(properties) do
+			for i = 1, #data.rooms do
+				local room = properties[property].rooms[i]
+				if room.owner == ssn then
+					TriggerClientEvent('properties:setWaypoint', source, room.coords)
+					TriggerClientEvent('usa:notify', source, 'Address set as waypoint!')
+					return
+				end
+			end
+		end
+		TriggerClientEvent('usa:notify', source, 'Address not found!')
+	else
+		local fullName = fname .. ' ' .. lname
+		for property, data in pairs(properties) do
+			for i = 1, #data.rooms do
+				local room = properties[property].rooms[i]
+				local user = exports["essentialmode"]:getPlayerFromId(room.owner)
+				if user and user.getActiveCharacterData('fullName') == fullName then
+					if data.type ~= 'house' then
+						TriggerClientEvent('properties:setWaypoint', source, room.coords)
+						TriggerClientEvent('usa:notify', source, 'Address set as waypoint!')
+						return
+					else
+						local property = user.getActiveCharacterData('property')
+						if property['house'] then
+							TriggerClientEvent('properties:setWaypoint', source, property['houseCoords'])
+							TriggerClientEvent('usa:notify', source, 'Address set as waypoint!')
+							return
+						end
+					end
+				end
+			end
+		end
+	end
+	TriggerClientEvent('usa:notify', source, 'Error while finding address!')
 end)
 
 RegisterServerEvent('character:loadCharacter')

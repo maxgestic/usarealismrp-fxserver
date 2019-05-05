@@ -59,8 +59,13 @@ RegisterNUICallback("PerformPlateCheck", function(data, cb)
     cb('ok')
 end)
 
+RegisterNUICallback("PerformMarkAddress", function(data, cb)
+    if not data.ssn then data.ssn = 0 end
+    TriggerServerEvent("properties:markAddress", data.ssn, data.fname, data.lname)
+    cb('ok')
+end)
+
 RegisterNUICallback("PerformWeaponCheck", function(data, cb)
-    print('edsj')
     TriggerServerEvent("mdt:performWeaponCheck", data.serial)
     cb('ok')
 end)

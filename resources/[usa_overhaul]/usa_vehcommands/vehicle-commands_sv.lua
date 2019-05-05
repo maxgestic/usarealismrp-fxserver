@@ -3,19 +3,18 @@ local spawnableVehicles = {
 	['sheriff'] = {'chrg14a', 'chrg14b', 'chrg18', 'cvpi11a', 'cvpi11b', 'bison19', 'sheriff2', 'scorcher', 'pbus', 'policet', 'tahoe', 'riot', 'policeb', 'maverick2', 'predator', 'fbi', 'fbi2', 'fbi3'}
 }
 
-local VEH_RANKS_POLICE = {
+local VEH_RANKS = {
 	[1] = {'chrg18b', 'chrg14b', 'cvpi11b', 'bison19', 'sheriff2', 'scorcher'},
 	[2] = {'chrg18b', 'chrg14b', 'cvpi11b', 'bison19', 'sheriff2','scorcher', 'policet', 'tahoe'},
-	[3] = {'chrg14a', 'chrg14b', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'sheriff2', 'scorcher', 'pbus', 'policet', 'tahoe', 'riot', 'policeb'},
-	[4] = {'chrg14a', 'chrg14b', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'sheriff2', 'scorcher', 'pbus', 'policet', 'tahoe', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
-	[5] = {'chrg14a', 'chrg14b', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'sheriff2', 'scorcher', 'pbus', 'policet', 'tahoe', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
-	[6] = {'chrg14a', 'chrg14b', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'sheriff2', 'scorcher', 'pbus', 'policet', 'tahoe', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
-	[7] = {'chrg14a', 'chrg14b', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'sheriff2', 'scorcher', 'pbus', 'policet', 'tahoe', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
-	[8] = {'chrg14a', 'chrg14b', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'sheriff2', 'scorcher', 'pbus', 'policet', 'tahoe', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
-	[9] = {'chrg14a', 'chrg14b', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'sheriff2', 'scorcher', 'pbus', 'policet', 'tahoe', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
-	[10] = {'chrg14a', 'chrg14b', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'sheriff2', 'scorcher', 'pbus', 'policet', 'tahoe', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
-}
-
+	[3] = {'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb'},
+	[4] = {'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
+	[5] = {'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
+	[6] = {'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
+	[7] = {'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
+	[8] = {'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
+	[9] = {'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
+	[10] = {'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
+	}
 TriggerEvent('es:addJobCommand', 'spawn', { "police", "sheriff", "ems", "fire" }, function(source, args, user)
 	if args[2] then
 		local vehicleRequested = string.lower(args[2])
