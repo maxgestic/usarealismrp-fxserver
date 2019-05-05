@@ -443,7 +443,7 @@ function RefreshProperties(source, spawnAtProperty)
 				paid_time = os.time()
 				property['paid_time'] = os.time()
 				user.setActiveCharacterData('property', property)
-				print('paid_time not found, data has been updated')
+				print('PROPERTIES: Property has no paid_time, setting now!')
 			end
 			if GetWholeDaysFromTime(paid_time) >= 7 then
 				local bank = user.getActiveCharacterData('bank')
@@ -525,7 +525,7 @@ function GetWholeDaysFromTime(reference_time)
 	local timestamp = os.date("*t", os.time())
 	local daysfrom = os.difftime(os.time(), reference_time) / (24 * 60 * 60) -- seconds in a day
 	local wholedays = math.floor(daysfrom)
-	print("property owned whole days: " .. wholedays) -- today it prints "1"
+	print("PROPERTIES: Player has owned this property whole days: " .. wholedays) -- today it prints "1"
 	return wholedays
 end
 
@@ -537,11 +537,11 @@ AddEventHandler('playerDropped', function()
 			for j = 1, #room.instance do
 				if source == room.instance[j] then
 					table.remove(properties[property].rooms[i].instance, j)
-					print('removing source '.. j .. ' from room '..i..' instance')
+					print('PROPERTIES: Removing source '.. j .. ' from room '..i..' instance in '..property)
 				end
 			end
 			if room.owner == source then
-				print('removing room '.. i .. ' from '..source)
+				print('PROPERTIES: Removing room '.. i .. ' from '..source .. ' at '..property..', player has left the server!')
 				properties[property].rooms[i].owner = false
 				TriggerClientEvent('properties:updateData', -1, property, i, properties[property].rooms[i])
 			end
@@ -553,11 +553,11 @@ AddEventHandler('playerDropped', function()
 		for j = 1, #room.instance do
 			if source == room.instance[j] then
 				table.remove(properties['Houses'].rooms[i].instance, j)
-				print('removing source '.. j .. ' from room '..i..' instance')
+				print('PROPERTIES: Removing source '.. j .. ' from room '..i..' instance in Houses')
 			end
 		end
 		if room.owner == source then
-			print('removing house from '..source)
+			print('PROPERTIES: Removing house '.. i .. ' from '..source .. ' at Houses, player has left the server!')
 			table.remove(properties['Houses'].rooms, i)
 			TriggerClientEvent('properties:removeData', -1, 'Houses', i)
 		end
@@ -596,12 +596,12 @@ AddEventHandler('properties:moveProperties', function(location)
 				local room = properties[location].rooms[i]
 				if not room.owner then
 					if userMoney - 500 >= 0 then
-						print('room '..i..' was free, giving to '..source)
+						print('PROPERTIES: A free room was found, '..i..', and has been given to '..source ..' at '..location)
 						for _property, data in pairs(properties) do
 							for i = 1, #data.rooms do
 								local room = properties[_property].rooms[i]
 								if room.owner == source then
-									print('removing room '.. i .. ' from '..source..', moving properties')
+									print('PROPERTIES: Removing old room '.. i .. ' from '..source..', moving properties to '..location.. ' from '.._property)
 									properties[_property].rooms[i].owner = false
 								end
 							end
@@ -634,9 +634,10 @@ AddEventHandler('properties:requestEntry', function(location, index, _source)
 	if _source then
 		source = tonumber(_source)
 	end
-	print('entry requested for source '..source.. ' at location '..location.. ' with room '..index)
+	print('PROPERTIES: '..source.. ' has requested to enter room '..index.. ' at location '..location)
 	local room = properties[location].rooms[index]
 	if not room.locked or room.owner == source then
+		print('PROPERTIES: Entering room!')
 		table.insert(properties[location].rooms[index].instance, source)
 		TriggerClientEvent('properties:updateData', -1, location, index, properties[location].rooms[index])
 		local currentProperty = {
@@ -665,30 +666,33 @@ end)
 
 RegisterServerEvent('properties:forceEntry')
 AddEventHandler('properties:forceEntry', function(location, index)
-	print('entry forced for source '..source.. ' at location '..location.. ' with room '..index)
-	local room = properties[location].rooms[index]
-	table.insert(properties[location].rooms[index].instance, source)
-	TriggerClientEvent('properties:updateData', -1, location, index, properties[location].rooms[index])
-	local currentProperty = {
-		location = location,
-		index = index,
-		owner = room.owner,
-		name = room.name,
-		entryHeading = interiors[properties[location].interior].heading,
-		entryCoords = interiors[properties[location].interior].coords,
-		instance = room.instance,
-		exitCoords = room.coords,
-		exitHeading = room.heading,
-		storageCoords = interiors[properties[location].interior].storage,
-		wardrobeCoords = interiors[properties[location].interior].wardrobe,
-		bathroomCoords = interiors[properties[location].interior].bathroom,
-		voiceChannel = room.voiceChannel
-	}
-	TriggerClientEvent('properties:breachProperty', source, currentProperty)
-	Citizen.Wait(1000)
-	for i = 1, #room.instance do
-		local sourceInside = properties[location].rooms[index].instance[i]
-		TriggerClientEvent('properties:updateInstance', sourceInside, properties[location].rooms[index].instance)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	if user.getActiveCharacterData('job') == 'sheriff' then
+		print('PROPERTIES: '..source.. ' has forcefully BREACHED into room '..index.. ' at location '..location)
+		local room = properties[location].rooms[index]
+		table.insert(properties[location].rooms[index].instance, source)
+		TriggerClientEvent('properties:updateData', -1, location, index, properties[location].rooms[index])
+		local currentProperty = {
+			location = location,
+			index = index,
+			owner = room.owner,
+			name = room.name,
+			entryHeading = interiors[properties[location].interior].heading,
+			entryCoords = interiors[properties[location].interior].coords,
+			instance = room.instance,
+			exitCoords = room.coords,
+			exitHeading = room.heading,
+			storageCoords = interiors[properties[location].interior].storage,
+			wardrobeCoords = interiors[properties[location].interior].wardrobe,
+			bathroomCoords = interiors[properties[location].interior].bathroom,
+			voiceChannel = room.voiceChannel
+		}
+		TriggerClientEvent('properties:breachProperty', source, currentProperty)
+		Citizen.Wait(1000)
+		for i = 1, #room.instance do
+			local sourceInside = properties[location].rooms[index].instance[i]
+			TriggerClientEvent('properties:updateInstance', sourceInside, properties[location].rooms[index].instance)
+		end
 	end
 end)
 
@@ -746,84 +750,88 @@ end)
 RegisterServerEvent("properties:storeItem")
 AddEventHandler("properties:storeItem", function(location, index, item, quantity)
 	local room = properties[location].rooms[index]
-    local userSource = source
-    local user = exports["essentialmode"]:getPlayerFromId(userSource)
-    local target = exports["essentialmode"]:getPlayerFromId(room.owner)
-    local property = target.getActiveCharacterData('property')
-    TriggerEvent("usa:removeItem", item, quantity, userSource)
-    local itemCopy = item
-    local hasItem = false
-    itemCopy.quantity = quantity
-    if canPropertyHoldItem(room.owner, location, itemCopy) then
-	    for i = 1, #property['storage'] do
-	    	local _item = property['storage'][i]
-	        if _item.name == item.name then
-	            if _item.type ~= "weapon" then
-	                hasItem	= true
-	                _item.quantity = _item.quantity + quantity
-	                target.setActiveCharacterData('property', property)
-	                TriggerClientEvent('usa:notify', userSource, '~y~'..item.name..' ~s~has been stored!')
-	            end
-	            break
-	        end
-	    end
-	    if not hasItem then
-	        table.insert(property['storage'], itemCopy)
-	        target.setActiveCharacterData('property', property)
-	        TriggerClientEvent('usa:notify', userSource, '~y~'..item.name..' ~s~has been stored!')
-	    end
-	else
-		TriggerClientEvent('usa:notify', userSource, 'Property storage is full!')
+	if room.owner and not room.locked then
+	    local userSource = source
+	    local user = exports["essentialmode"]:getPlayerFromId(userSource)
+	    local target = exports["essentialmode"]:getPlayerFromId(room.owner)
+	    local property = target.getActiveCharacterData('property')
+	    TriggerEvent("usa:removeItem", item, quantity, userSource)
+	    local itemCopy = item
+	    local hasItem = false
+	    itemCopy.quantity = quantity
+	    if canPropertyHoldItem(room.owner, location, itemCopy) then
+		    for i = 1, #property['storage'] do
+		    	local _item = property['storage'][i]
+		        if _item.name == item.name then
+		            if _item.type ~= "weapon" then
+		                hasItem	= true
+		                _item.quantity = _item.quantity + quantity
+		                target.setActiveCharacterData('property', property)
+		                TriggerClientEvent('usa:notify', userSource, '~y~'..item.name..' ~s~has been stored!')
+		            end
+		            break
+		        end
+		    end
+		    if not hasItem then
+		        table.insert(property['storage'], itemCopy)
+		        target.setActiveCharacterData('property', property)
+		        TriggerClientEvent('usa:notify', userSource, '~y~'..item.name..' ~s~has been stored!')
+		    end
+		else
+			TriggerClientEvent('usa:notify', userSource, 'Property storage is full!')
+		end
 	end
 end)
 
 RegisterServerEvent("properties:retrieveItem")
 AddEventHandler("properties:retrieveItem", function(location, index, item, quantity)
 	local room = properties[location].rooms[index]
-	local userSource = source
-    local user = exports["essentialmode"]:getPlayerFromId(userSource)
-    local userInv = user.getActiveCharacterData('inventory')
-    local target = exports["essentialmode"]:getPlayerFromId(room.owner)
-    local property = target.getActiveCharacterData('property')
-	item.quantity = quantity
-	if user.getCanActiveCharacterHoldItem(item) then
-		local storage = property['storage']
-		for i = 1, #storage do
-			if (storage[i].name == item.name and item.type ~= "weapon") or (item.type == "weapon" and storage[i].type == "weapon" and item.uuid == storage[i].uuid and storage[i].name == item.name) then
-				if storage[i].quantity - quantity < 0 then
-					TriggerClientEvent("usa:notify", userSource, "Invalid amount to retrieve!")
-					return
-				else
-					if storage[i].quantity - quantity == 0 then
-						table.remove(property['storage'], i)
-						target.setActiveCharacterData('property', property)
-						TriggerClientEvent('usa:notify', userSource, '~y~'..item.name..' ~s~has been retrieved!')
+	if room.owner and not room.locked then
+		local userSource = source
+	    local user = exports["essentialmode"]:getPlayerFromId(userSource)
+	    local userInv = user.getActiveCharacterData('inventory')
+	    local target = exports["essentialmode"]:getPlayerFromId(room.owner)
+	    local property = target.getActiveCharacterData('property')
+		item.quantity = quantity
+		if user.getCanActiveCharacterHoldItem(item) then
+			local storage = property['storage']
+			for i = 1, #storage do
+				if (storage[i].name == item.name and item.type ~= "weapon") or (item.type == "weapon" and storage[i].type == "weapon" and item.uuid == storage[i].uuid and storage[i].name == item.name) then
+					if storage[i].quantity - quantity < 0 then
+						TriggerClientEvent("usa:notify", userSource, "Invalid amount to retrieve!")
+						return
 					else
-						property['storage'][i].quantity = property['storage'][i].quantity - quantity
-						target.setActiveCharacterData('property', property)
-						TriggerClientEvent('usa:notify', userSource, '~y~'..item.name..' ~s~has been retrieved!')
+						if storage[i].quantity - quantity == 0 then
+							table.remove(property['storage'], i)
+							target.setActiveCharacterData('property', property)
+							TriggerClientEvent('usa:notify', userSource, '~y~'..item.name..' ~s~has been retrieved!')
+						else
+							property['storage'][i].quantity = property['storage'][i].quantity - quantity
+							target.setActiveCharacterData('property', property)
+							TriggerClientEvent('usa:notify', userSource, '~y~'..item.name..' ~s~has been retrieved!')
+						end
+						break
 					end
-					break
-				end
-			else
-      			if (item.type == "weapon" and storage[i].type == "weapon") and (not item.uuid and not storage[i].uuid) and (item.name == storage[i].name) then
-           			table.remove(property['storage'], i)
-           			target.setActiveCharacterData('property', property)
-           			TriggerClientEvent('usa:notify', userSource, '~y~'..item.name..' ~s~has been retrieved!')
-           			break
-           		end
-          	end
-        end
-		TriggerEvent("usa:insertItem", item, quantity, userSource)
-	else
-		TriggerClientEvent("usa:notify", userSource, "Inventory full.")
+				else
+	      			if (item.type == "weapon" and storage[i].type == "weapon") and (not item.uuid and not storage[i].uuid) and (item.name == storage[i].name) then
+	           			table.remove(property['storage'], i)
+	           			target.setActiveCharacterData('property', property)
+	           			TriggerClientEvent('usa:notify', userSource, '~y~'..item.name..' ~s~has been retrieved!')
+	           			break
+	           		end
+	          	end
+	        end
+			TriggerEvent("usa:insertItem", item, quantity, userSource)
+		else
+			TriggerClientEvent("usa:notify", userSource, "Inventory full.")
+		end
 	end
 end)
 
 RegisterServerEvent("properties:withdrawMoney")
 AddEventHandler("properties:withdrawMoney", function(location, index, amount)
 	local room = properties[location].rooms[index]
-	if room.owner then
+	if room.owner and not room.locked then
 		local user = exports["essentialmode"]:getPlayerFromId(source)
 		local target = exports["essentialmode"]:getPlayerFromId(room.owner)
 		local user_money = user.getActiveCharacterData("money")
@@ -844,7 +852,7 @@ end)
 RegisterServerEvent("properties:storeMoney")
 AddEventHandler("properties:storeMoney", function(location, index, amount)
 	local room = properties[location].rooms[index]
-	if room.owner then
+	if room.owner and not room.locked then
 		local user = exports["essentialmode"]:getPlayerFromId(source)
 		local target = exports["essentialmode"]:getPlayerFromId(room.owner)
 		local user_money = user.getActiveCharacterData("money")
@@ -970,7 +978,7 @@ TriggerEvent('es:addCommand','buzzaccept', function(source, args, user)
 				if room.instance[j] == source then
 					TriggerClientEvent('properties:buzzEnter', -1, property, i)
 					properties[property].rooms[i].locked = false
-					print('unlocked for buzz')
+					print('PROPERTIES: Unlocking room '..i.. ' at location '.. property.. ', door was buzzed and accepted!')
 					SetTimeout(30000, function()
 						properties[property].rooms[i].locked = true
 					end)
