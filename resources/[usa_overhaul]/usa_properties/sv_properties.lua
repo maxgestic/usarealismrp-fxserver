@@ -882,23 +882,27 @@ AddEventHandler("properties:retrieveItem", function(location, index, item, quant
 							table.remove(property['storage'], i)
 							target.setActiveCharacterData('property', property)
 							TriggerClientEvent('usa:notify', userSource, '~y~'..item.name..' ~s~has been retrieved!')
+							TriggerEvent("usa:insertItem", item, quantity, userSource)
+							return
 						else
 							property['storage'][i].quantity = property['storage'][i].quantity - quantity
 							target.setActiveCharacterData('property', property)
 							TriggerClientEvent('usa:notify', userSource, '~y~'..item.name..' ~s~has been retrieved!')
+							TriggerEvent("usa:insertItem", item, quantity, userSource)
+							return
 						end
-						break
 					end
 				else
 	      			if (item.type == "weapon" and storage[i].type == "weapon") and (not item.uuid and not storage[i].uuid) and (item.name == storage[i].name) then
 	           			table.remove(property['storage'], i)
 	           			target.setActiveCharacterData('property', property)
 	           			TriggerClientEvent('usa:notify', userSource, '~y~'..item.name..' ~s~has been retrieved!')
-	           			break
+	           			TriggerEvent("usa:insertItem", item, quantity, userSource)
+	           			return
 	           		end
 	          	end
 	        end
-			TriggerEvent("usa:insertItem", item, quantity, userSource)
+	        TriggerClientEvent("usa:notify", userSource, "Please wait a moment...")
 		else
 			TriggerClientEvent("usa:notify", userSource, "Inventory full.")
 		end

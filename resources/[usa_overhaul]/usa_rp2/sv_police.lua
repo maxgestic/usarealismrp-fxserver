@@ -254,7 +254,7 @@ TriggerEvent('es:addCommand', 'search', function(source, args, user)
 			TriggerEvent("search:searchPlayer", tonumber(args[2]), source)
 		end
 	end
-end, {help = "Search the nearest person."})
+end, {help = "Search the nearest person or vehicle."})
 
 --------------------------------------------------------------------------------------------------------------------------------------------------
 

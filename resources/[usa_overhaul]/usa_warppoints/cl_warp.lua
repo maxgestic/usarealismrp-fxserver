@@ -155,6 +155,17 @@ local warp_locations = {
       heading = 48.0
     },
   job_access = 'emergency'
+  },
+  ['DA Office'] = {
+    entrance = {
+      coords = {-70.76, -801.21, 44.22},
+      heading = 340.0
+    },
+    exit = {
+      coords = {-80.55, -832.68, 243.38},
+      heading = 248.5
+    },
+    job_access = 'civ'
   }
 }
 

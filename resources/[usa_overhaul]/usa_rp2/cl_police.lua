@@ -61,7 +61,7 @@ AddEventHandler("search:searchNearest", function()
       Citizen.Wait(12000)
       TriggerServerEvent("search:searchPlayer", player.id)
     else
-      TriggerEvent("usa:notify", "No person found to search!")
+      TriggerEvent("veh:searchVeh")
     end
   end)
 end)

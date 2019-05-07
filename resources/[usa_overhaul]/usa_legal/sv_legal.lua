@@ -54,6 +54,17 @@ end, {
 	}
 })
 
+RegisterServerEvent('legal:openMDT')
+AddEventHandler('legal:openMDT', function()
+	local user = exports['essentialmode']:getPlayerFromId(source)
+	local da_rank = user.getActiveCharacterData('daRank')
+	if da_rank and da_rank > 0 then
+		TriggerClientEvent('mdt:toggleVisibilty', source)
+	else
+		TriggerClientEvent('usa:notify', source, 'Incorrect username or password!')
+	end
+end)
+
 RegisterServerEvent('lawyer:payLaywer')
 AddEventHandler('lawyer:paylawyer', function(targetSource, targetAmount)
 	local _source = source

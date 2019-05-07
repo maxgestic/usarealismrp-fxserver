@@ -1,5 +1,5 @@
 local DiffTrigger = 0.25
-local MinSpeed    = 17.0 --THIS IS IN m/s
+local MinSpeed    = 13.0 --THIS IS IN m/s
 local speedBuffer  = {}
 local velBuffer    = {}
 local wasInCar     = false
@@ -63,7 +63,7 @@ Citizen.CreateThread(function()
                and GetPedInVehicleSeat(car, 1) ~= GetPlayerPed(-1) 
                and GetPedInVehicleSeat(car, 2) ~= GetPlayerPed(-1)
                and IsBeltVehicle(car) then
-               local damagedEngine = GetVehicleEngineHealth(car)-speedBuffer[1]*30
+               local damagedEngine = GetVehicleEngineHealth(car)-speedBuffer[1]*40
                if damagedEngine < 0 then damagedEngine = -4000.0 end
                 SetVehicleEngineHealth(car, damagedEngine)
                 if math.random() > 0.2 then
@@ -92,7 +92,7 @@ Citizen.CreateThread(function()
             velBuffer[2] = velBuffer[1]
             velBuffer[1] = GetEntityVelocity(car)
                 
-            if IsControlJustReleased(0, 29) and GetLastInputMethod(0) and (GetPedInVehicleSeat(car, -1) == ped or GetPedInVehicleSeat(car, 0) == ped) then
+            if IsControlJustReleased(0, 311) and GetLastInputMethod(0) and (GetPedInVehicleSeat(car, -1) == ped or GetPedInVehicleSeat(car, 0) == ped) then
                 beltOn = not beltOn
                 TriggerServerEvent('hud:getBelt', beltOn)
                 TriggerServerEvent('display:shareDisplay', 'clicks seatbelt', 2, 470, 10, 3000)

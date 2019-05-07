@@ -91,6 +91,10 @@ Citizen.CreateThread(function()
     FinanceOffice2.LoadDefault()    -- -75.8466, -826.9893, 243.3859 (Maze Bank Building)
     FinanceOffice3.LoadDefault()    -- -1579.756, -565.0661, 108.523 (Lom Bank)
     FinanceOffice4.LoadDefault()    -- -1392.667, -480.4736, 72.04217 (Maze Bank West)
+    FinanceOffice4.Style.Set(FinanceOffice4.Style.Theme.warm, true)
+    FinanceOffice4.Chairs.Set(FinanceOffice4.Chairs.on, true)
+    FinanceOffice4.Painting.Enable(FinanceOffice4.Painting)
+    RefreshInterior(FinanceOffice4.interiorId)
 
     -- ====================================================================
     -- =-------------------------- [DLC: Bikers] -------------------------=
@@ -107,11 +111,11 @@ Citizen.CreateThread(function()
     -- ====================================================================
     -- =---------------------- [DLC: Import/Export] ----------------------=
     -- ====================================================================
-    ImportCEOGarage1.LoadDefault()             -- Arcadius Business Centre
+    --[[ImportCEOGarage1.LoadDefault()             -- Arcadius Business Centre
     ImportCEOGarage2.LoadDefault()             -- Maze Bank Building               /!\ Do not load parts Garage1, Garage2 and Garage3 at the same time (overlaping issues)
     ImportCEOGarage3.LoadDefault()             -- Lom Bank                         /!\ Do not load parts Garage1, Garage2 and Garage3 at the same time (overlaping issues)
     ImportCEOGarage4.LoadDefault()             -- Maze Bank West                   /!\ Do not load parts Garage1, Garage2 and Garage3 at the same time (overlaping issues)
-    ImportVehicleWarehouse.LoadDefault()       -- Vehicle warehouse: 994.5925, -3002.594, -39.64699
+    ImportVehicleWarehouse.LoadDefault()       -- Vehicle warehouse: 994.5925, -3002.594, -39.64699]]
 
     -- ====================================================================
     -- =------------------------ [DLC: Gunrunning] -----------------------=

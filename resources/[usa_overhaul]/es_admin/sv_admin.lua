@@ -83,6 +83,31 @@ end, {
 	}
 })
 
+TriggerEvent('es:addGroupCommand', 'staff', 'mod', function(source, args, user)
+	local userGroup = user.getGroup()
+	local staffId = tonumber(source)
+	table.remove(args, 1) -- remove "/staff" from what the user enters into chat box
+	local message = table.concat(args, " ") -- get all the remaining words separated by spaces the user enters into chat box
+	TriggerEvent("es:getPlayers", function(players)
+		if players then
+			for id, player in pairs(players) do
+				if id and player then
+					local playerGroup = player.getGroup()
+					if (playerGroup == "owner" or playerGroup == "superadmin" or playerGroup == "admin" or playerGroup == "mod") and NotifyStaff(source) then
+						TriggerClientEvent("chatMessage", id, "", {}, "^1^*[STAFF]^0^r ".. GetPlayerName(staffId) .." [#"..staffId.."]:^1 " .. message)
+						--TriggerClientEvent("chatMessage", id, "", {}, "^2MESSAGE:^0 " .. message)
+					end
+				end
+			end
+		end
+	end)
+end, {
+	help = "Talk to other staff members directly.",
+	params = {
+		{ name = "message", help = "Message to send" }
+	}
+})
+
 TriggerEvent('es:addCommand', 'report', function(source, args, user)
 	local reporterId = tonumber(source)
 	local reportedId = args[2]

@@ -67,6 +67,21 @@ end, {
 	}
 })
 
+TriggerEvent('es:addJobCommand', 'inspect', { "ems", "fire", "police", "sheriff", "corrections", "doctor"}, function(source, args, user)
+	local _source = source
+	local targetSource = tonumber(args[2])
+	if targetSource and GetPlayerName(targetSource) then
+		TriggerEvent('injuries:getPlayerInjuries', targetSource, _source)
+	else
+		TriggerClientEvent("injuries:inspectNearestPed", _source, _source)
+	end
+end, {
+	help = "Inspect the nearest player's injuries",
+	params = {
+		{ name = "id", help = "id of person (omit to treat nearest)" }
+	}
+})
+
 TriggerEvent('es:addJobCommand', 'treat', {"doctor"}, function(source, args, user)
 	local _source = source
 	table.remove(args,1)

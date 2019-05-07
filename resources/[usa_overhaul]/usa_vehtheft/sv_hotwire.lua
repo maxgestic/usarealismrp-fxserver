@@ -22,15 +22,13 @@ AddEventHandler("veh:checkForKey", function(plate, engineOn)
 		if item then
 			if string.find(item.name, "Key") then
 				if string.find(plate, item.plate) then
-					TriggerClientEvent('veh:toggleEngine', userSource, true, engineOn)
-					TriggerClientEvent('veh:canVehicleBeSearched', userSource, false)
+					TriggerClientEvent('veh:toggleEngine', userSource, true, engineOn, false)
 					return
 				end
 			end
 		end
 	end
-	TriggerClientEvent('veh:toggleEngine', userSource, false, engineOn)
-	TriggerClientEvent('veh:canVehicleBeSearched', userSource, true)
+	TriggerClientEvent('veh:toggleEngine', userSource, false, engineOn, true)
 end)
 
 RegisterServerEvent('veh:removeHotwiringKit')

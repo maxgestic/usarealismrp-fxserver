@@ -535,7 +535,14 @@ end)
 
 RegisterServerEvent("mdt:deleteWarrant")
 AddEventHandler("mdt:deleteWarrant", function(id, rev)
-	exports["usa-warrants"]:deleteWarrant("warrants", id, rev)
+	local usource = source
+	local user = exports["essentialmode"]:getPlayerFromId(usource)
+	local job = user.getActiveCharacterData('job')
+	if job == 'sheriff' or job == 'judge' then
+		exports["usa-warrants"]:deleteWarrant("warrants", id, rev)
+	else
+		TriggerClientEvent('usa:notify', usource, 'Insufficient permission!')
+	end
 end)
 
 RegisterServerEvent("mdt:createBOLO")
@@ -567,7 +574,14 @@ end)
 
 RegisterServerEvent("mdt:deleteBOLO")
 AddEventHandler("mdt:deleteBOLO", function(id, rev)
-	deleteBOLO("bolos", id, rev)
+	local usource = source
+	local user = exports["essentialmode"]:getPlayerFromId(usource)
+	local job = user.getActiveCharacterData('job')
+	if job == 'sheriff' or job == 'judge' then
+		deleteBOLO("bolos", id, rev)
+	else
+		TriggerClientEvent('usa:notify', usource, 'Insufficient permission!')
+	end
 end)
 
 RegisterServerEvent("mdt:fetchPoliceReports")
@@ -613,7 +627,11 @@ end)
 
 RegisterServerEvent("mdt:deletePoliceReport")
 AddEventHandler("mdt:deletePoliceReport", function(id, rev)
-	deletePoliceReport("policereports", id, rev)
+	if job == 'sheriff' or job == 'judge' then
+		deletePoliceReport("policereports", id, rev)
+	else
+		TriggerClientEvent('usa:notify', usource, 'Insufficient permission!')
+	end
 end)
 
 RegisterServerEvent("mdt:fetchEmployee")

@@ -137,6 +137,23 @@ local raycastResult = 0
 local voipLevel = 0.0
 local menuEnabled = false -- F1 menu gui
 
+local inProperty = false
+
+RegisterNetEvent('properties:enterProperty')
+AddEventHandler('properties:enterProperty', function()
+	inProperty = true
+end)
+
+RegisterNetEvent('properties:exitProperty')
+AddEventHandler('properties:exitProperty', function()
+	inProperty = false
+end)
+
+RegisterNetEvent('properties:breachProperty')
+AddEventHandler('properties:breachProperty', function()
+	inProperty = true
+end)
+
 RegisterNUICallback('escape', function(data, cb)
 	--TriggerEvent("test:escapeFromCSharp")
 	--print("inside of escape calling disable gui....")
@@ -579,18 +596,22 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 		if actionName == "use" then
 			interactionMenuUse(itemName, wholeItem)
 		elseif actionName == "drop" then
-			if not string.find(itemName, "Driver") and not string.find(itemName, "Firearm") and not string.find(itemName, 'License') and not string.find(itemName, 'Certificate') then
-				if not IsPedDeadOrDying(GetPlayerPed(-1), 1) and not IsPedCuffed(GetPlayerPed(-1)) then
-					local pos = GetEntityCoords(GetPlayerPed(-1), true)
-					TriggerServerEvent("interaction:dropItem", itemName, pos.x, pos.y, pos.z)
-					local objectHash = GetHashKey(wholeItem.objectModel)
-					if objectHash == 0 then objectHash = GetHashKey('prop_michael_backpack') end
-					local prop = CreateObject(objectHash, pos.x, pos.y + 0.5, pos.z - 0.99, true, false, true)
-					SetEntityAsMissionEntity(prop, true, true)
-					--FreezeEntityPosition(prop, true)
+			if not inProperty then
+				if not string.find(itemName, "Driver") and not string.find(itemName, "Firearm") and not string.find(itemName, 'License') and not string.find(itemName, 'Certificate') then
+					if not IsPedDeadOrDying(GetPlayerPed(-1), 1) and not IsPedCuffed(GetPlayerPed(-1)) then
+						local pos = GetEntityCoords(GetPlayerPed(-1), true)
+						TriggerServerEvent("interaction:dropItem", itemName, pos.x, pos.y, pos.z)
+						local objectHash = GetHashKey(wholeItem.objectModel)
+						if objectHash == 0 then objectHash = GetHashKey('prop_michael_backpack') end
+						local prop = CreateObject(objectHash, pos.x, pos.y + 0.5, pos.z - 0.99, true, false, true)
+						SetEntityAsMissionEntity(prop, true, true)
+						--FreezeEntityPosition(prop, true)
+					end
+				else
+					print("can't drop a license!")
 				end
 			else
-				print("can't drop a license!")
+				TriggerEvent('usa:notify', 'You cannot drop that here!')
 			end
 		elseif string.find(actionName, "give") then
 			if not string.find(itemName, "Driver") and not string.find(itemName, "Firearm") and not string.find(itemName, 'License') and not string.find(itemName, 'Certificate') then

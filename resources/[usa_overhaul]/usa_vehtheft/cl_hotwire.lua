@@ -3,6 +3,7 @@ local hasKeys = false
 local isHotwiring = false
 local timeout = GetGameTimer()
 local veh = GetVehiclePedIsIn(playerPed, true)
+local canBeSearched = false
 local playerHotwiredVehicles = {}
 local searchedVehicles = {}
 
@@ -53,8 +54,8 @@ AddEventHandler('veh:returnPlateToCheck', function()
   end
 end)
 
-RegisterNetEvent('veh:canVehicleBeSearched')
-AddEventHandler('veh:canVehicleBeSearched', function(canBeSearched)
+RegisterNetEvent('veh:searchVeh')
+AddEventHandler('veh:searchVeh', function()
   local playerPed = PlayerPedId()
   local vehicle = veh
   if canBeSearched and not IsPedCuffed(playerPed) and GetPedInVehicleSeat(vehicle, -1) == playerPed then
@@ -64,45 +65,37 @@ AddEventHandler('veh:canVehicleBeSearched', function(canBeSearched)
         return
       end
     end
-    local beginTime = GetGameTimer()
-    while veh == vehicle and canBeSearched and GetGameTimer() - beginTime < 30000 and GetPedInVehicleSeat(vehicle, -1) == playerPed do
-      Citizen.Wait(0)
-      local x, y, z = table.unpack(GetEntityCoords(vehicle))
-      DrawText3D(x, y, z, 5, '[E] - Search')
-      if IsControlJustPressed(0, 38) then
-        RequestAnimDict('veh@handler@base')
-        while not HasAnimDictLoaded('veh@handler@base') do
-          Citizen.Wait(100)
-        end
-        local searchBegin = GetGameTimer()
-        while GetGameTimer() - searchBegin < 10000 do
-          Citizen.Wait(0)
-          DisableControlAction(0, 86, true)
-          DisableControlAction(0, 244, true)
-          DisableControlAction(0, 245, true)
-          DisableControlAction(0, 288, true)
-          DisableControlAction(0, 79, true)
-          DisableControlAction(0, 73, true)
-          DisableControlAction(0, 75, true)
-          DisableControlAction(0, 37, true)
-          DisableControlAction(0, 311, true)
-          if not IsEntityPlayingAnim(playerPed, 'veh@handler@base', 'hotwire', 3) then
-            TaskPlayAnim(playerPed, 'veh@handler@base', 'hotwire', 8.0, 1.0, -1, 49, 1.0, false, false, false)
-          end
-          DrawTimer(searchBegin, 10000, 1.42, 1.475, 'SEARCHING')
-        end
-        ClearPedTasks(playerPed)
-        table.insert(searchedVehicles, GetVehicleNumberPlateText(vehicle))
-        TriggerServerEvent('veh:searchResult')
-        break
-      end
+    RequestAnimDict('veh@handler@base')
+    while not HasAnimDictLoaded('veh@handler@base') do
+      Citizen.Wait(100)
     end
+    local searchBegin = GetGameTimer()
+    while GetGameTimer() - searchBegin < 10000 do
+      Citizen.Wait(0)
+      DisableControlAction(0, 86, true)
+      DisableControlAction(0, 244, true)
+      DisableControlAction(0, 245, true)
+      DisableControlAction(0, 288, true)
+      DisableControlAction(0, 79, true)
+      DisableControlAction(0, 73, true)
+      DisableControlAction(0, 75, true)
+      DisableControlAction(0, 37, true)
+      DisableControlAction(0, 311, true)
+      if not IsEntityPlayingAnim(playerPed, 'veh@handler@base', 'hotwire', 3) then
+        TaskPlayAnim(playerPed, 'veh@handler@base', 'hotwire', 8.0, 1.0, -1, 49, 1.0, false, false, false)
+      end
+      DrawTimer(searchBegin, 10000, 1.42, 1.475, 'SEARCHING')
+    end
+    ClearPedTasks(playerPed)
+    table.insert(searchedVehicles, GetVehicleNumberPlateText(vehicle))
+    TriggerServerEvent('veh:searchResult')
   end
 end)
 
 RegisterNetEvent("veh:toggleEngine")
-AddEventHandler('veh:toggleEngine', function(_hasKey, _engineOn)
+AddEventHandler('veh:toggleEngine', function(_hasKey, _engineOn, canBeSearched_)
   -- _engineOn to turn the engine on instantly, used when checking if the player is entering a vehicle with the engine already on
+  canBeSearched = canBeSearched_
   hasKeys = _hasKey
   if not IsVehicleBlacklisted(veh) and GetPedInVehicleSeat(veh, -1) == PlayerPedId() and not IsPedCuffed(PlayerPedId()) then
     local playerPed = PlayerPedId()

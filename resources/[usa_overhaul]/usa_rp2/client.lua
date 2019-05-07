@@ -972,38 +972,21 @@ Citizen.CreateThread(function()
             once = false
         end
 
-        if not keyPressed then
-            if IsControlPressed(0, 29) and not mp_pointing and IsPedOnFoot(PlayerPedId()) then
-                Wait(200)
-                if not IsControlPressed(0, 29) then
-                    keyPressed = true
-                    startPointing()
-                    mp_pointing = true
-                else
-                    keyPressed = true
-                    while IsControlPressed(0, 29) do
-                        Wait(50)
-                    end
-                end
-            elseif (IsControlPressed(0, 29) and mp_pointing) or (not IsPedOnFoot(PlayerPedId()) and mp_pointing) then
-                keyPressed = true
-                mp_pointing = false
-                stopPointing()
+        if IsControlJustPressed(0, 29) and not mp_pointing then
+            Wait(50)
+            if IsControlPressed(0, 29) then
+                startPointing()
+                mp_pointing = true
             end
+        elseif (IsControlJustReleased(0, 29) and mp_pointing) then
+            mp_pointing = false
+            stopPointing()
         end
 
-        if keyPressed then
-            if not IsControlPressed(0, 29) then
-                keyPressed = false
-            end
-        end
         if Citizen.InvokeNative(0x921CE12C489C4C41, PlayerPedId()) and not mp_pointing then
             stopPointing()
         end
         if Citizen.InvokeNative(0x921CE12C489C4C41, PlayerPedId()) then
-            if not IsPedOnFoot(PlayerPedId()) then
-                stopPointing()
-            else
                 local ped = GetPlayerPed(-1)
                 local camPitch = GetGameplayCamRelativePitch()
                 if camPitch < -70.0 then
@@ -1035,7 +1018,6 @@ Citizen.CreateThread(function()
                 Citizen.InvokeNative(0xB0A6CFD2C69C1088, ped, "isBlocked", blocked)
                 Citizen.InvokeNative(0xB0A6CFD2C69C1088, ped, "isFirstPerson", Citizen.InvokeNative(0xEE778F8C7E1142E2, Citizen.InvokeNative(0x19CAFA3C87F7C2FF)) == 4)
 
-            end
         end
     end
 end)

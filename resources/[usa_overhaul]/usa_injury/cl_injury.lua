@@ -35,39 +35,39 @@ parts = {
 }
 
 bone_effects = { -- ORDER MATTERS - each index is subject to each stage
-    [52301] = {'screenfade', 'injuredwalk', 'norun'},
-    [14201] = {'screenfade', 'injuredwalk', 'norun'},
-    [57005] = {'none', 'screenfade', 'noaim'},
-    [18905] = {'none', 'screenfade', 'noaim'},
-    [36864] = {'screenfade', 'injuredwalk', 'norun'},
-    [63931] = {'screenfade', 'injuredwalk', 'norun'},
-    [31086] = {'screenfade', 'norun', 'noaim'},
-    [39317] = {'screenfade', 'norun', 'noaim'},
-    [28252] = {'none', 'screenfade', 'noaim'},
-    [61163] = {'none', 'screenfade', 'noaim'},
-    [24818] = {'screenfade', 'injuredwalk', 'norun'},
-    [11816] = {'screenfade', 'injuredwalk', 'norun'},
-    [40269] = {'none', 'screenfade', 'noaim'},
-    [45509] = {'none', 'screenfade', 'noaim'},
-    [28422] = {'none', 'screenfade', 'noaim'},
-    [60309] = {'none', 'screenfade', 'noaim'},
-    [47495] = {'none', 'screenfade'},
-    [20178] = {'none', 'screenfade'},
-    [17188] = {'none', 'none', 'screenfade'},
-    [51826] = {'screenfade', 'injuredwalk', 'norun'},
-    [58271] = {'screenfade', 'injuredwalk', 'norun'},
-    [23553] = {'screenfade', 'injuredwalk', 'norun'},
-    [24816] = {'screenfade', 'injuredwalk', 'norun'},
-    [24817] = {'screenfade', 'injuredwalk', 'norun'},
-    [24818] = {'screenfade', 'injuredwalk', 'norun'},
-    [57597] = {'screenfade', 'injuredwalk', 'norun'},
-    [2108] = {'screenfade', 'injuredwalk', 'norun'},
-    [20781] = {'screenfade', 'injuredwalk', 'norun'},
-    [10706] = {'none', 'screenfade', 'noaim'},
-    [64729] = {'none', 'screenfade', 'noaim'},
-    [2992] = {'none', 'screenfade', 'noaim'},
-    [22711] = {'none', 'screenfade', 'noaim'},
-    [0] = {'screenfade', 'injuredwalk', 'norun'}
+    [52301] = {'shake', 'injuredwalk', 'norun'},
+    [14201] = {'shake', 'injuredwalk', 'norun'},
+    [57005] = {'shake', 'shake', 'noaim'},
+    [18905] = {'shake', 'shake', 'noaim'},
+    [36864] = {'shake', 'injuredwalk', 'norun'},
+    [63931] = {'shake', 'injuredwalk', 'norun'},
+    [31086] = {'shake', 'norun', 'noaim'},
+    [39317] = {'shake', 'norun', 'noaim'},
+    [28252] = {'shake', 'shake', 'noaim'},
+    [61163] = {'shake', 'shake', 'noaim'},
+    [24818] = {'shake', 'injuredwalk', 'norun'},
+    [11816] = {'shake', 'injuredwalk', 'norun'},
+    [40269] = {'shake', 'shake', 'noaim'},
+    [45509] = {'shake', 'shake', 'noaim'},
+    [28422] = {'shake', 'shake', 'noaim'},
+    [60309] = {'shake', 'shake', 'noaim'},
+    [47495] = {'shake', 'shake'},
+    [20178] = {'shake', 'shake'},
+    [17188] = {'shake', 'none', 'shake'},
+    [51826] = {'shake', 'injuredwalk', 'norun'},
+    [58271] = {'shake', 'injuredwalk', 'norun'},
+    [23553] = {'shake', 'injuredwalk', 'norun'},
+    [24816] = {'shake', 'injuredwalk', 'norun'},
+    [24817] = {'shake', 'injuredwalk', 'norun'},
+    [24818] = {'shake', 'injuredwalk', 'norun'},
+    [57597] = {'shake', 'injuredwalk', 'norun'},
+    [2108] = {'shake', 'injuredwalk', 'norun'},
+    [20781] = {'shake', 'injuredwalk', 'norun'},
+    [10706] = {'shake', 'shake', 'noaim'},
+    [64729] = {'shake', 'shake', 'noaim'},
+    [2992] = {'shake', 'shake', 'noaim'},
+    [22711] = {'shake', 'shake', 'noaim'},
+    [0] = {'shake', 'injuredwalk', 'norun'}
 }
 
 injuries = { -- ensure this is the same as sv_injury.lua
@@ -83,7 +83,7 @@ injuries = { -- ensure this is the same as sv_injury.lua
     [453432689] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_PISTOL
     [1593441988] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_COMBATPISTOL 
     [2578377531] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_PISTOL50
-    [736523883] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 200}, dropEvidence = 1.0, -- WEAPON_SMG
+    [736523883] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 200, dropEvidence = 1.0}, -- WEAPON_SMG
     [2210333304] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 250, dropEvidence = 1.0}, -- WEAPON_CARBINERIFLE
     [487013001] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0}, -- WEAPON_PUMPSHOTGUN
     [2640438543] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0}, -- WEAPON_BULLPUPSHOTGUN
@@ -131,7 +131,9 @@ doctorLocations = {
 }
 
 effects = {} -- when you take damage for a specific reason, you may be put into an effect
-injuredParts = {} -- injured body parts, and their wounds as the value
+injuredParts = {
+
+} -- injured body parts, and their wounds as the value
 
 ------ NOTIFY PLAYER OF INJURIES ------
 
@@ -164,10 +166,18 @@ Citizen.CreateThread(function()
                             NotifyPlayerOfInjuries()
                         end
                     elseif not IsEntityDead(playerPed) then
+                        if not GetScreenEffectIsActive('Rampage') then
+                            StartScreenEffect('Rampage', 0, true)
+                        end
+                        if math.random() > 0.6 then
+                            ShakeGameplayCam("SMALL_EXPLOSION_SHAKE", 0.2)
+                        end
                         TriggerEvent('usa:notify', 'Your body feels cold with blood...')
                         local playerHealth = GetEntityHealth(playerPed) 
                         SetEntityHealth(playerPed, ((playerHealth) - 3))
                         SetPlayerHealthRechargeMultiplier(PlayerId(), 0.0)
+                    elseif IsEntityDead(playerPed) then
+                        StopScreenEffect('Rampage')
                     end
                 end
             end
@@ -182,11 +192,9 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(10)
         for effect, enabled in pairs(effects) do
-            if effect == 'screenfade' then
-                if not IsScreenFadingOut() and not IsScreenFadingIn() then
-                    DoScreenFadeOut(10000)
-                    Citizen.Wait(3000)
-                    DoScreenFadeIn(10000)
+            if effect == 'shake' then
+                if math.random() > 0.999 then
+                    ShakeGameplayCam("SMALL_EXPLOSION_SHAKE", 0.3)
                 end
             elseif effect == 'noaim' then
                 DisableControlAction(0, 25, true)
@@ -689,3 +697,6 @@ function DrawTimer(beginTime, duration, x, y, text)
     Set_2dLayer(3)
     DrawText(x - 0.06, y - 0.012)
 end
+
+
+StopScreenEffect('Rampage')
