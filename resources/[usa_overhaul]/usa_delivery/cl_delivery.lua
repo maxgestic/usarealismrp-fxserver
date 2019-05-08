@@ -222,6 +222,9 @@ AddEventHandler('gopostal:beginJob', function()
 				DisableControlAction(0, 22, true)
 				DisableControlAction(24, 37, true)
 	    	end
+	    	if GetVehicleEngineHealth(currentJob.vehicle) < 0 then
+	    		TriggerServerEvent('gopostal:quitJob')
+	    	end
 	    end
 
 	    if currentJob.active then
@@ -254,6 +257,9 @@ AddEventHandler('gopostal:beginJob', function()
 	    		TriggerEvent('usa:showHelp', true, 'Retrieve the package from the van.')
 	    		break
 	    	end
+	    	if GetVehicleEngineHealth(currentJob.vehicle) < 0 then
+	    		TriggerServerEvent('gopostal:quitJob')
+	    	end
 	    end
 
 	    while currentJob.active do
@@ -274,6 +280,9 @@ AddEventHandler('gopostal:beginJob', function()
 				AttachEntityToEntity(currentJob.packageObject, playerPed, GetPedBoneIndex(playerPed, 28422), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1, 1, 0, 1, 0, 1)
 				break
 			end
+			if GetVehicleEngineHealth(currentJob.vehicle) < 0 then
+	    		TriggerServerEvent('gopostal:quitJob')
+	    	end
 		end
 
 		while currentJob.active do
@@ -309,6 +318,9 @@ AddEventHandler('gopostal:beginJob', function()
 				currentJob.beginCoords = nil
 				break
 			end
+			if GetVehicleEngineHealth(currentJob.vehicle) < 0 then
+	    		TriggerServerEvent('gopostal:quitJob')
+	    	end
 		end
 	else
 		TriggerEvent('usa:notify', 'Finish your current job first!')

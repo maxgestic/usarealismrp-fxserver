@@ -58,7 +58,7 @@ RegisterNetEvent('veh:searchVeh')
 AddEventHandler('veh:searchVeh', function()
   local playerPed = PlayerPedId()
   local vehicle = veh
-  if canBeSearched and not IsPedCuffed(playerPed) and GetPedInVehicleSeat(vehicle, -1) == playerPed then
+  if canBeSearched and not IsPedCuffed(playerPed) and GetPedInVehicleSeat(vehicle, -1) == playerPed and GetVehicleDoorLockStatus(vehicle) ~= 4 then
     for k, v in pairs(searchedVehicles) do
       if GetVehicleNumberPlateText(vehicle) == v then
         -- vehicle has already been searched

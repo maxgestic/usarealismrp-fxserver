@@ -34,7 +34,7 @@ Citizen.CreateThread(function()
 end)
 
 RegisterNetEvent('lawyer:checkDistanceForPayment')
-AddEventHandler('laywer:checkDistanceForPayment', function(targetSource, targetAmount)
+AddEventHandler('lawyer:checkDistanceForPayment', function(targetSource, targetAmount)
 	local playerPed = PlayerPedId()
 	local targetPed = GetPlayerPed(GetPlayerFromServerId(targetSource))
 	if Vdist(GetEntityCoords(playerPed), GetEntityCoords(targetPed)) < 5.0 then

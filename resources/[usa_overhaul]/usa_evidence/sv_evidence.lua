@@ -123,6 +123,11 @@ AddEventHandler('evidence:newCasing', function(playerCoords, playerWeapon)
 					return
 				end
 			end
+			for i = 1, #evidenceDropped do
+				if find_distance(playerCoords, evidenceDropped[i].coords) < 1.0 then
+					return
+				end
+			end
 			table.insert(evidenceDropped, evidence)
 			TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
 			return
@@ -137,6 +142,11 @@ AddEventHandler('evidence:newCasing', function(playerCoords, playerWeapon)
 	}
 	for i = 1, #exempt_evidence do
 		if find_distance(playerCoords, exempt_evidence[i]) < 50.0 then
+			return
+		end
+	end
+	for i = 1, #evidenceDropped do
+		if find_distance(playerCoords, evidenceDropped[i].coords) < 1.0 then
 			return
 		end
 	end
@@ -185,6 +195,11 @@ AddEventHandler('evidence:newDNA', function(playerCoords)
 	}
 	for i = 1, #exempt_evidence do
 		if find_distance(playerCoords, exempt_evidence[i]) < 50.0 then
+			return
+		end
+	end
+	for i = 1, #evidenceDropped do
+		if find_distance(playerCoords, evidenceDropped[i].coords) < 1.0 then
 			return
 		end
 	end

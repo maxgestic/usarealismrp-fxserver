@@ -972,7 +972,7 @@ Citizen.CreateThread(function()
             once = false
         end
 
-        if IsControlJustPressed(0, 29) and not mp_pointing then
+        if IsControlJustPressed(0, 29) and not mp_pointing and GetLastInputMethod(0) then
             Wait(50)
             if IsControlPressed(0, 29) then
                 startPointing()

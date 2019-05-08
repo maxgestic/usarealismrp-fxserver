@@ -572,6 +572,7 @@ AddEventHandler('injuries:updateInjuries', function(_injuries)
     end
     injuredParts = __injuries
     effects = {}
+    StopScreenEffect('Rampage')
     SetEntityHealth(PlayerPedId(), 200)
     TriggerEvent('civ:resetWalkStyle')
     NotifyPlayerOfInjuries()

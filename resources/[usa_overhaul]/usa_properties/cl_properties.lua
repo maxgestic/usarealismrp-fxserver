@@ -245,7 +245,29 @@ AddEventHandler('properties:findRoomToBreach', function(apt)
 			end
 		end
 	end
+end)
 
+RegisterNetEvent('properties:findRoomToKnock')
+AddEventHandler('properties:findRoomToKnock', function()
+	local playerPed = PlayerPedId()
+	local playerCoords = GetEntityCoords(playerPed)
+	for property, data in pairs(properties) do
+		if data.type == 'motel' or data.type == 'house' then
+			for i = 1, #data.rooms do
+				local room = data.rooms[i]
+				local x, y, z = table.unpack(room.coords)
+				if Vdist(playerCoords, x, y, z) < 1.0 and room.owner then
+					RequestAnimDict('timetable@jimmy@doorknock@')
+					while not HasAnimDictLoaded('timetable@jimmy@doorknock@') do Wait(100) end
+					TaskPlayAnim(PlayerPedId(), 'timetable@jimmy@doorknock@', 'knockdoor_idle', 8.0, 8.0, -1, 48, false)
+					Citizen.Wait(300)
+					TriggerServerEvent('properties:knockOnDoor', property, i)
+					Citizen.Wait(2000)
+					ClearPedTasks(PlayerPedId())
+				end
+			end
+		end
+	end
 end)
 
 RegisterNetEvent('properties:updateInstance')
@@ -816,7 +838,7 @@ function DoorTransition(x, y, z, heading, breach)
 		TaskPlayAnim(PlayerPedId(), "missprologuemcs_1", "kick_down_player_zero", 8.0, 1.0, -1, 14)
 		Citizen.Wait(100)
 		DoScreenFadeOut(500)
-		TriggerServerEvent('InteractSound_SV:PlayOnSource', 'door-kick', 0.1)
+		TriggerServerEvent('InteractSound_SV:PlayOnSource', 'door-kick', 0.4)
 		Wait(500)
 		ClearPedTasks(PlayerPedId())
 		RequestCollisionAtCoord(x, y, z)

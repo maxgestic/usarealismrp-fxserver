@@ -283,6 +283,12 @@ end, {
 	}
 })
 
+TriggerEvent('es:addCommand', 'knock', function(source, args, user)
+	TriggerClientEvent('properties:findRoomToKnock', source)
+end, {
+	help = "Knock on the door of the nearest motel or house"
+})
+
 TriggerEvent('es:addJobCommand', 'createhouse', {'judge'}, function(source, args, user, location)
 	local targetSource = tonumber(args[2])
 	if targetSource and GetPlayerName(targetSource) then
@@ -662,6 +668,17 @@ AddEventHandler('character:loadCharacter', function(activeSlot, spawnAtProperty)
 	RefreshProperties(source, spawnAtProperty)
 end)
 
+RegisterServerEvent('properties:knockOnDoor')
+AddEventHandler('properties:knockOnDoor', function(location, index)
+	local file = 'knock1'
+	if math.random() > 0.5 then file = 'knock2' end
+	TriggerClientEvent('InteractSound_CL:PlayOnOne', source, file, 1.0)
+	for i = 1, #properties[location].rooms[index].instance do
+		local target = properties[location].rooms[index].instance[i]
+		TriggerClientEvent('InteractSound_CL:PlayOnOne', target, file, 1.0)
+	end
+end)
+
 RegisterServerEvent('properties:moveProperties')
 AddEventHandler('properties:moveProperties', function(location)
 	local user = exports["essentialmode"]:getPlayerFromId(source)
@@ -768,6 +785,7 @@ AddEventHandler('properties:forceEntry', function(location, index)
 		Citizen.Wait(1000)
 		for i = 1, #room.instance do
 			local sourceInside = properties[location].rooms[index].instance[i]
+			TriggerClientEvent('InteractSound_CL:PlayOnOne', sourceInside, 'door-kick', 0.4)
 			TriggerClientEvent('properties:updateInstance', sourceInside, properties[location].rooms[index].instance)
 		end
 	end

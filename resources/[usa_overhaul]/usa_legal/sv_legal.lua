@@ -1,4 +1,4 @@
-local policeLawyerPay = 500
+local POLICE_LAWYER_PAY = 500
 
 RegisterServerEvent('legal:checkBarCertificate')
 AddEventHandler('legal:checkBarCertificate', function()
@@ -24,33 +24,33 @@ AddEventHandler('legal:checkBarCertificate', function()
 end)
 
 TriggerEvent('es:addJobCommand', 'paylawyer', { 'sheriff', 'police' , 'judge'}, function(source, args, user)
-	local _source = source
-	local user = exports['essentialmode']:getPlayerFromId(_source)
+	local user = exports['essentialmode']:getPlayerFromId(source)
 	local targetSource = tonumber(args[2])
 	local targetAmount = tonumber(args[3])
 	local target = exports['essentialmode']:getPlayerFromId(targetSource)
 	if target.getActiveCharacterData('job') == 'lawyer' then
 		if not GetPlayerName(targetSource) then
-			TriggerClientEvent('usa:notify', _source, '~y~Player not found!')
+			TriggerClientEvent('usa:notify', source, '~y~Player not found!')
 		else
 			if user.getActiveCharacterData('job') == 'judge' then
 				if targetAmount > 0 and targetAmount < 10000 then
-					TriggerClientEvent('lawyer:checkDistanceForPayment', _source, targetSource, targetAmount)
+					TriggerClientEvent('lawyer:checkDistanceForPayment', source, targetSource, targetAmount)
 				else
-					TriggerClientEvent('usa:notify', _source, '~y~Invalid amount, please contact staff to do this.')
+					TriggerClientEvent('usa:notify', source, '~y~Invalid amount, please contact staff to do this.')
 				end
 			else
-				TriggerClientEvent('lawyer:checkDistanceForPayment', _source, targetSource, policeLawyerPay)
+				if targetAmount > 500 then targetAmount = POLICE_LAWYER_PAY end
+				TriggerClientEvent('lawyer:checkDistanceForPayment', source, targetSource, targetAmount)
 			end
 		end
 	else
-		TriggerClientEvent('usa:notify', _source, '~y~This player is not a lawyer!')
+		TriggerClientEvent('usa:notify', source, '~y~This player is not a lawyer!')
 	end
 end, {
 	help = "Pay an attorney for state services",
 	params = {
 		{ name = "id", help = "Players ID" },
-		{ name = "amount", help = "(judges only)" }
+		{ name = "amount", help = "judges only for over 500" }
 	}
 })
 
@@ -65,14 +65,13 @@ AddEventHandler('legal:openMDT', function()
 	end
 end)
 
-RegisterServerEvent('lawyer:payLaywer')
-AddEventHandler('lawyer:paylawyer', function(targetSource, targetAmount)
-	local _source = source
+RegisterServerEvent('lawyer:payLawyer')
+AddEventHandler('lawyer:payLawyer', function(targetSource, targetAmount)
 	local target = exports['essentialmode']:getPlayerFromId(targetSource)
 	local targetMoney = target.getActiveCharacterData('bank')
 	local targetName = target.getActiveCharacterData('fullName')
 	target.setActiveCharacterData('bank', math.floor(targetMoney + targetAmount))
-	TriggerClientEvent('usa:notify', _source, targetName.. ' has been paid ~y~$'..targetAmount..'~s~ by the ~y~San Andreas Court Administration~s~.')
+	TriggerClientEvent('usa:notify', source, targetName.. ' has been paid ~y~$'..targetAmount..'~s~ by the ~y~San Andreas Court Administration~s~.')
 	TriggerClientEvent('usa:notify', targetSource, 'You have been paid ~y~$'..targetAmount..'~s~ by the ~y~San Andreas Court Administration~s~.')
-	print('LEGAL: '..GetPlayerName(_source)..'['..GetPlayerIdentifier(_source)..'] has paid (for free) amount['..targetAmount..'] to '..GetPlayerName(targetSource)..'['..GetPlayerIdentifier(targetSource)..'] for legal reward.')
+	print('LEGAL: '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has paid (for free) amount['..targetAmount..'] to '..GetPlayerName(targetSource)..'['..GetPlayerIdentifier(targetSource)..'] for legal reward.')
 end)

@@ -14,7 +14,7 @@ local VEH_RANKS = {
 	[8] = {'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
 	[9] = {'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
 	[10] = {'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
-	}
+}
 TriggerEvent('es:addJobCommand', 'spawn', { "police", "sheriff", "ems", "fire" }, function(source, args, user)
 	if args[2] then
 		local vehicleRequested = string.lower(args[2])
@@ -76,7 +76,7 @@ end, {
 })
 
 function IsHighEnoughRank(model, user_rank)
-	for rank, vehicles in pairs(VEH_RANKS_POLICE) do
+	for rank, vehicles in pairs(VEH_RANKS) do
 		if user_rank >= rank then
 			for k = 1, #vehicles do
 				if model == vehicles[k] then
@@ -99,7 +99,7 @@ end
 
 function DisplaySpawnOptionsBasedOnRank(source, user_rank)
 	local string = ""
-	for rank, vehicles in pairs(VEH_RANKS_POLICE) do
+	for rank, vehicles in pairs(VEH_RANKS) do
 		if rank == user_rank then
 			for k = 1, #vehicles do
 				if k == 1 then

@@ -39,10 +39,9 @@ end)
 
 Citizen.CreateThread(function()
 	local timer = 120000 -- 2 mins
-	local playerBAC = playerData['levelBAC']
 	while true do
-		if playerBAC > 0.00 then
-			playerBAC = playerBAC - 0.01
+		if playerData['levelBAC'] > 0.00 then
+			playerData['levelBAC'] = playerData['levelBAC'] - 0.01
 		end
 		Wait(timer) -- every x seconds, decrement playerBAC
 	end
@@ -84,6 +83,7 @@ Citizen.CreateThread(function()
 				DoScreenFadeIn(5000)
 			end
 		elseif playerBAC >= 0.40 and not IsEntityDead(playerPed) then
+			Intoxicate(false, 'move_m@drunk@verydrunk', 0.5)
 			DoScreenFadeOut(5000)
 			Citizen.Wait(5000)
 			SetEntityHealth(playerPed, 0)
