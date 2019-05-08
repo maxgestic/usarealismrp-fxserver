@@ -627,6 +627,9 @@ end)
 
 RegisterServerEvent("mdt:deletePoliceReport")
 AddEventHandler("mdt:deletePoliceReport", function(id, rev)
+	local usource = source
+	local user = exports["essentialmode"]:getPlayerFromId(usource)
+	local job = user.getActiveCharacterData('job')
 	if job == 'sheriff' or job == 'judge' then
 		deletePoliceReport("policereports", id, rev)
 	else

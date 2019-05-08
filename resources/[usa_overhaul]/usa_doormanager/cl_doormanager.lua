@@ -140,7 +140,7 @@ AddEventHandler("doormanager:toggleDoorLock", function(index, locked, x, y, z)
         if locked and door.offset then
           if not door.gate then
             while math.floor(GetEntityHeading(doorObject)) ~= door.heading do
-              print(GetEntityHeading(doorObject))
+              --print(GetEntityHeading(doorObject))
               Citizen.Wait(1)
               local playerCoords = GetEntityCoords(PlayerPedId())
               local doorCoords = GetEntityCoords(doorObject)
