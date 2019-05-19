@@ -61,9 +61,11 @@ AddEventHandler('paycheck:welfare', function()
 		elseif job == "corrections" then
       		paycheckAmount = 95
       	elseif job == "lawyer" then
-      		paycheckAmount = 250
+      		paycheckAmount = 220
       	elseif job == "doctor" then
       		paycheckAmount = 200
+      	elseif job == "dai" then
+      		paycheckAmount = 175
       	else
 			paycheckAmount = 25 -- welfare amount (no job)
 			isWelfare = true
@@ -97,6 +99,8 @@ AddEventHandler('paycheck:welfare', function()
 				msg = msg .. "of $" .. paycheckAmount .. " from the ~y~San Andreas Court Administration~s~."
 			elseif job == 'doctor' then
 				msg = msg .. "of $" .. paycheckAmount .. " from the ~y~Pillbox Medical Center~s~."
+			elseif job == 'dai' then
+				msg = msg .. "of $" .. paycheckAmount .. " from the ~y~District Attorney Investigation Branch~s~."
 			else
 				msg = msg .. "of $" .. paycheckAmount .. "."
 			end

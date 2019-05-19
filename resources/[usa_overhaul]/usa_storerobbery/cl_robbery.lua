@@ -90,7 +90,7 @@ Citizen.CreateThread(function()
 					local x, y, z = table.unpack(data.position)
 					if Vdist(playerCoords, x, y, z) < 1.5 then
 						if not robbingStore then
-							TriggerServerEvent('storeRobbery:beginRobbery', name, IsPedMale(playerPed))
+							TriggerServerEvent('storeRobbery:beginRobbery', name, IsPedMale(playerPed), GetNumberOfPlayers())
 						end
 					end
 				end

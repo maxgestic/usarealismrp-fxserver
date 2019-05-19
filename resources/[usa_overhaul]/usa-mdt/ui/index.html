@@ -346,6 +346,15 @@
                         </table>
                         <span v-else style="color: red"><b>No make or model found!</b></span>
 
+                        <h3 class="mini-smaller"><b>Flags:</b></h3>
+
+                        <table v-if="plate_check.flags" class="w3-table-all w3-small">
+                            <tr>
+                                <td>{{ plate_check.flags }}</td>
+                            </tr>
+                        </table>
+                        <span v-else style="color: red"><b>No flags found!</b></span>
+
                     </div>
 
                     <!-- Weapon Check -->

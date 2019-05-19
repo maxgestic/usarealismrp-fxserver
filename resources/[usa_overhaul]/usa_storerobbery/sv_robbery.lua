@@ -146,13 +146,13 @@ local stores = {
 }
 
 RegisterServerEvent('storeRobbery:beginRobbery')
-AddEventHandler('storeRobbery:beginRobbery', function(storeName, isSuspectMale)
+AddEventHandler('storeRobbery:beginRobbery', function(storeName, isSuspectMale, players)
 	local _source = source
 	if stores[storeName] then
 		local store = stores[storeName]
 		local x, y, z = table.unpack(store.position)
 		local policeOnline = GetPoliceOnline()
-		if ((os.time() - store.lastRobbedTime) < robberyCooldown and store.lastRobbedTime ~= 0) or policeOnline < 2  or anyStoreBeingRobbed then
+		if ((os.time() - store.lastRobbedTime) < robberyCooldown and store.lastRobbedTime ~= 0) or policeOnline < 2  or anyStoreBeingRobbed or IsInstanced(players) then
 			TriggerClientEvent('usa:notify', _source, 'This store is currently closed!')
 			return
 		end
@@ -235,4 +235,11 @@ function GetPoliceOnline()
 		end
 	end)
 	return policeOnline
+end
+
+function IsInstanced(playersGiven)
+	if #GetPlayers() - playersGiven > 1 then
+		return true
+	end
+	return false
 end

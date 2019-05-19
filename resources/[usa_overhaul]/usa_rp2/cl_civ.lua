@@ -438,10 +438,6 @@ AddEventHandler("civ:resetWalkStyle", function()
   SetClipset(currentWalkstyle)
 end)
 
-for i = 0, 3 do
-  SetVehicleNeonLightEnabled(GetVehiclePedIsIn(PlayerPedId()), i, true)
-end
-
 local lastVehicle = {
   handle = 0,
   enabled = false,

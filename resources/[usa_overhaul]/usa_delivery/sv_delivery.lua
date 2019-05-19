@@ -123,12 +123,12 @@ AddEventHandler('gopostal:toggleDuty', function(location)
 end)
 
 RegisterServerEvent('gopostal:payDriver')
-AddEventHandler('gopostal:payDriver', function(distance)
+AddEventHandler('gopostal:payDriver', function(distance, playerCoords)
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local user_job = user.getActiveCharacterData("job")
 	local user_money = user.getActiveCharacterData("money")
 	local amountRewarded = math.ceil(BASE_PAY + (0.03 * distance))
-	if amountRewarded < 1000 and user_job == "gopostal" then
+	if amountRewarded < 1000 and user_job == "gopostal" and IsNearDeliveryLocation(playerCoords) then
 		user.setActiveCharacterData("money", user_money + amountRewarded)
 		TriggerClientEvent('usa:notify', source, 'Delivery completed, you have received: ~y~$'..amountRewarded..'.00')
 		print("DELIVERY: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] has received amount["..amountRewarded..'] after distance['..distance..'] for delivery!')

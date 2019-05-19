@@ -14,19 +14,17 @@ person = {
 
 -- TODO: check if person is on duty when they drop, if so remove them from the ACTIVE_EMERGENCY_PERSONNEL collection?
 
-RegisterNetEvent("eblips:add")
-AddEventHandler("eblips:add", function(person, activate)
+RegisterServerEvent("eblips:add")
+AddEventHandler("eblips:add", function(person)
 	ACTIVE_EMERGENCY_PERSONNEL[person.src] = person
 	for k, v in pairs(ACTIVE_EMERGENCY_PERSONNEL) do
 		--print("updating client: " .. k)
 		TriggerClientEvent("eblips:updateAll", k, ACTIVE_EMERGENCY_PERSONNEL)
 	end
-	if activate then
-		TriggerClientEvent("eblips:toggle", person.src, true)
-	end
+	TriggerClientEvent("eblips:toggle", person.src, true)
 end)
 
-RegisterNetEvent("eblips:remove")
+RegisterServerEvent("eblips:remove")
 AddEventHandler("eblips:remove", function(src)
 	-- remove from list --
 	ACTIVE_EMERGENCY_PERSONNEL[src] = nil

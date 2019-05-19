@@ -249,6 +249,37 @@ AddEventHandler('properties:exitProperty', function()
 	end
 end)
 
+RegisterNetEvent('properties:lockpickHouseBurglary')
+AddEventHandler('properties:lockpickHouseBurglary', function(_currentProperty)
+	Citizen.Wait(20000)
+	voiceChannel = _currentProperty.voiceChannel
+	while on_call do
+		Citizen.Wait(100)
+	end
+	if voiceChannel ~= 0 then
+		NetworkSetVoiceChannel(_currentProperty.voiceChannel)
+		print('setting to property voice: '.._currentProperty.voiceChannel)
+	else
+		NetworkClearVoiceChannel()
+		print('clearing voice')
+	end
+end)
+
+RegisterNetEvent('properties:breachHouseBurglary')
+AddEventHandler('properties:breachHouseBurglary', function(_currentProperty)
+	voiceChannel = _currentProperty.voiceChannel
+	while on_call do
+		Citizen.Wait(100)
+	end
+	if voiceChannel ~= 0 then
+		NetworkSetVoiceChannel(_currentProperty.voiceChannel)
+		print('setting to property voice: '.._currentProperty.voiceChannel)
+	else
+		NetworkClearVoiceChannel()
+		print('clearing voice')
+	end
+end)
+
 RegisterNUICallback('sendTextMessage', function(data, cb)
 	TriggerServerEvent("phone:sendTextToPlayer", data)
     cb('ok')

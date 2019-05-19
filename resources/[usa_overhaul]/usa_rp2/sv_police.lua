@@ -114,7 +114,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'runserial', { "police", "sheriff", 'judge' }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'runserial', { "police", "sheriff", 'judge', 'dai' }, function(source, args, user)
 	local userSource = tonumber(source)
 	if args[2] then
 		local serialNumber = string.upper(args[2])
@@ -246,7 +246,7 @@ TriggerEvent('es:addCommand', 'search', function(source, args, user)
 	local job = user.getActiveCharacterData("job")
 	if job == "civ" then
 		TriggerClientEvent("search:attemptToSearchNearestPerson", source, true)
-	elseif job == "sheriff" or job == "corrections" then
+	elseif job == "sheriff" or job == "corrections" or job == "dai" then
 		if not tonumber(args[2]) then
 			TriggerClientEvent("search:searchNearest", source)
 		else
@@ -283,7 +283,7 @@ end, {
 -- end bait car
 
 -- start seize contraband
-TriggerEvent('es:addJobCommand', 'seize', { "police", "sheriff", "corrections" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'seize', { "police", "sheriff", "corrections", "dai" }, function(source, args, user)
 	local arg = args[2]
 	local targetId = tonumber(args[3])
 	local name = user.getActiveCharacterData("firstName") .. user.getActiveCharacterData("lastName")

@@ -69,11 +69,20 @@ LoadInterior(MRPD_INTERIOR)
 -- REMOVE AI WEAPON DROPS --
 Citizen.CreateThread(function()
   while true do
-    Citizen.Wait(300)
+    Citizen.Wait(100)
     -- List of pickup hashes (https://pastebin.com/8EuSv2r1)
     RemoveAllPickupsOfType(0xDF711959) -- carbine rifle
     RemoveAllPickupsOfType(0xF9AFB48F) -- pistol
     RemoveAllPickupsOfType(0xA9355DCD) -- pumpshotgun
+    RemoveAllPickupsOfType(0x678B81B1) -- nightstick
+    RemoveAllPickupsOfType(0x84BD7BFD) -- crowbar
+    RemoveAllPickupsOfType(0x99B507EA) -- knife
+    RemoveAllPickupsOfType(0x958A4A8F) -- bat
+    RemoveAllPickupsOfType(0x4E875F73) -- hammer
+    RemoveAllPickupsOfType(0x1B06D571) -- pistol
+    RemoveAllPickupsOfType(0x83839C4) -- vintage pistol
+    RemoveAllPickupsOfType(0x3656C8C1) -- stun gun
+    RemoveAllPickupsOfType(0xDD5DF8D9) -- machete
   end
 end)
 

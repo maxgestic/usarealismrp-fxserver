@@ -262,29 +262,29 @@ end)
 TriggerEvent('es:addGroupCommand', 'setweather', "admin", function(source, args, user)
 	local userSource = source
 	if TIMEOUT then
-		TriggerClientEvent('chatMessage', userSource, "SmartWeather", {200,0,0}, "You are changing the weather too fast, please wait " .. CMD_TIMEOUT_IN_SECONDS .. " seconds between weather changes.")
+		TriggerClientEvent('usa:notify', userSource, "Changing weather too fast, please wait!")
 		return
 	end
 
 	local wtype = string.upper(tostring(args[2]))
 	if currentWeatherData["weatherString"] == wtype then
-		TriggerClientEvent('chatMessage', userSource, "SmartWeather", {200,0,0} , "Weather is already set to " .. wtype)
+		TriggerClientEvent('usa:notify', userSource, "Weather is already set to "..wtype.."!")
 		return
 	end
 
 	CancelEvent() -- whatever this does...
 
 	if wtype == nil then
-		TriggerClientEvent('chatMessage', userSource, "SmartWeather", {200,0,0} , "Usage: /setweather <weather name here>")
+		TriggerClientEvent('usa:notify', userSource, "USAGE: /setweather <wtype>")
 		return
 	end
 	if not isWeatherType(wtype) then
-		TriggerClientEvent('chatMessage', userSource, "SmartWeather", {200,0,0} , "Invalid weather type")
+		TriggerClientEvent('usa:notify', userSource, "Invalid weather type!")
 		return
 	end
 
 	if isWeatherChangeValid(wtype) then
-		TriggerClientEvent('chatMessage', userSource, "SmartWeather", {200,0,0}, "Changing weather to " .. wtype)
+		TriggerEvent("usa:notifyStaff", '^1^*[STAFF]^r^0 Player ^1'..GetPlayerName(source)..' ['..source..'] ^0 has set the weather to ^1'..wtype..'^0.')
 		currentWeatherData["weatherString"] = wtype
 
 		-- 50% Chance to enable wind at a random heading for the specified weathers.
@@ -300,13 +300,7 @@ TriggerEvent('es:addGroupCommand', 'setweather', "admin", function(source, args,
 			TIMEOUT = false
 		end)
 	else
-		TriggerClientEvent(
-			'chatMessage',
-			userSource,
-			"SmartWeather",
-			{200,0,0},
-			"Changing to that weather type would be too abrupt. From " .. currentWeatherData["weatherString"] .. ", you can change to: " .. table.concat(getNextWeatherPossibilities()," | ")
-		)
+		TriggerClientEvent('chatMessage', userSource, "", {200,0,0}, "^1^*[STAFF]^r^0 Too abrupt! From " .. currentWeatherData["weatherString"] .. ", you can change to: " .. table.concat(getNextWeatherPossibilities()," | "))
 	end
 end,
 	{

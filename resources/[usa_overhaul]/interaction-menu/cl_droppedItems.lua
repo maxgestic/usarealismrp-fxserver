@@ -12,6 +12,7 @@ AddEventHandler("interaction:getDroppedItems", function(items)
   for i = 1, #DROPPED_ITEMS do
     local objectHash = GetHashKey(DROPPED_ITEMS[i].objectModel)
     if objectHash == 0 then objectHash = GetHashKey('prop_michael_backpack') end
+    if string.find(DROPPED_ITEMS[i].name, 'Key') then return end
     local prop = CreateObject(objectHash, DROPPED_ITEMS[i].coords.x, DROPPED_ITEMS[i].coords.y + 0.5, DROPPED_ITEMS[i].coords.z - 0.99, true, false, true)
   end
 end)

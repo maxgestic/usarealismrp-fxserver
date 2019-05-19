@@ -137,7 +137,7 @@ local random_names = {
 
 local tempVehicles = {}
 
-TriggerEvent('es:addJobCommand', 'mdt', { "sheriff", "judge", "corrections"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'mdt', { "sheriff", "judge", "corrections", "dai"}, function(source, args, user)
 	TriggerClientEvent('mdt:toggleVisibilty', source)
 end, { help = "Open MDT" })
 
@@ -459,7 +459,6 @@ end)
 
 RegisterServerEvent("mdt:performWeaponCheck")
 AddEventHandler("mdt:performWeaponCheck", function(serialNumber)
-	print(serialNumber)
 	local usource = source
 	serialNumber = string.upper(serialNumber)
 
@@ -487,6 +486,48 @@ AddEventHandler("mdt:performWeaponCheck", function(serialNumber)
     end)
 end)
 
+RegisterServerEvent('mdt:checkFlags')
+AddEventHandler('mdt:checkFlags', function(vehPlate, vehModel)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	if user.getActiveCharacterData('job') == 'sheriff' then
+		local warrants = exports["usa-warrants"]:getWarrants()
+		local _source = source
+
+		PerformHttpRequest("http://127.0.0.1:5984/bolos/_all_docs?include_docs=true" --[[ string ]], function(err, text, headers)
+			local response = json.decode(text)
+			if response.rows then
+				-- insert all warrants from 'bolos' db into lua table
+				for i = 1, #(response.rows) do
+					if string.find(response.rows[i].doc.description, vehPlate) then
+						TriggerClientEvent('chatMessage', _source, '^1^*[ALPR HIT]^r^0 '..vehModel..' with plate '..vehPlate..' has an active bolo.')
+						TriggerClientEvent('speedcam:lockCam', _source)
+						return
+					end
+				end
+			end
+		end, "GET", "", { ["Content-Type"] = 'application/json' })
+
+		for i = 1, #warrants do
+			if string.find(warrants[i].notes, vehPlate) then
+				TriggerClientEvent('chatMessage', source, '^1^*[ALPR HIT]^r^0 '..vehModel..' with plate '..vehPlate..' has an active warrant.')
+				TriggerClientEvent('speedcam:lockCam', source)
+				return
+			end
+		end
+
+		for veh = 1, #tempVehicles do
+			if tempVehicles[veh].plate == vehPlate then
+				if tempVehicles[veh].flags then
+					TriggerClientEvent('chatMessage', source, '^1^*[ALPR HIT]^r^0 '..vehModel..' with plate '..vehPlate..' has vehicle flags: '..tempVehicles[veh].flags..', registered to '..tempVehicles[veh].registered_owner..'.')
+					TriggerClientEvent('speedcam:lockCam', source)
+					return
+				end
+			end
+		end
+	end
+
+end)
+
 RegisterServerEvent('mdt:addTempVehicle')
 AddEventHandler('mdt:addTempVehicle', function(vehName, vehOwner, vehPlate, stolen)
 	print('inserting new vehicle to temp vehicles')
@@ -501,13 +542,16 @@ AddEventHandler('mdt:addTempVehicle', function(vehName, vehOwner, vehPlate, stol
 	if stolen then
 		for veh = 1, #tempVehicles do
 			if tempVehicles[veh].plate == vehPlate then
-				tempVehicles[veh].registered_owner = tempVehicles[veh].registered_owner .. ' [FLAGGED STOLEN]'
+				if not string.find(tempVehicles[veh].flags, 'STOLEN') then
+					tempVehicles[veh].flags = tempVehicles[veh].flags .. ' FLAGGED STOLEN'
+				end
 				return
 			end
 		end
 		vehicleData = {
 			veh_name = vehName,
-			registered_owner = random_names[math.random(#random_names)] .. ' [FLAGGED STOLEN]',
+			registered_owner = random_names[math.random(#random_names)],
+			flags = 'FLAGGED STOLEN',
 			plate = vehPlate
 		}
 	end

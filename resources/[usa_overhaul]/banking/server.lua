@@ -221,9 +221,25 @@ AddEventHandler('rconCommand', function(cmd, args)
 	if cmd == "setbank" then
 		local target = tonumber(args[1])
 		local newAmount = tonumber(args[2])
-		local user = exports["essentialmode"]:getPlayerFromId(target)
-		user.setActiveCharacterData("bank", newAmount)
-		CancelEvent()
+		if GetPlayerName(target) and newAmount and newAmount > 0 then
+			local user = exports["essentialmode"]:getPlayerFromId(target)
+			user.setActiveCharacterData("bank", newAmount)
+			TriggerClientEvent('chatMessage', target, "", {255, 255, 255}, "^1^*[SERVER] ^r^0Your bank has been set to ^1^*" .. newAmount..'^r^0.')
+			TriggerEvent("usa:notifyStaff", '^1^*[STAFF]^r^0 Bank of ^1'..GetPlayerName(target)..' ['..target..'] ^0 has been set to ^1^*'..newAmount..'^r^0 by ^1^*console^r^0.')
+			print('Bank set!')
+			CancelEvent()
+		end
+	elseif cmd == "givebank" then
+		local target = tonumber(args[1])
+		local amountToGive = tonumber(args[2])
+		if GetPlayerName(target) and newAmount and newAmount > 0 then
+			local user = exports["essentialmode"]:getPlayerFromId(target)
+			user.setActiveCharacterData("bank", user.getActiveCharacterData('bank') + amountToGive)
+			TriggerClientEvent('chatMessage', target, "", {255, 255, 255}, "^1^*[SERVER] ^r^0You have received ^1^*" .. amount..'^r^0 in your bank.')
+			TriggerEvent("usa:notifyStaff", '^1^*[STAFF]^r^0 Player ^1'..GetPlayerName(target)..' ['..target..'] ^0 has received ^1^*'..amountToGive..'^r^0 bank money from ^1^*console^r^0.')
+			print('Bank set!')
+			CancelEvent()
+		end
 	end
 end)
 

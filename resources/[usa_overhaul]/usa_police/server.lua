@@ -289,7 +289,7 @@ AddEventHandler("policestation2:loadOutfit", function(slot)
       TriggerEvent('job:sendNewLog', userSource, 'sheriff', true)
     end
     TriggerClientEvent('interaction:setPlayersJob', userSource, 'sheriff')
-    TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 3}, true)
+    TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 3})
   else
     DropPlayer(userSource, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
   end
@@ -303,7 +303,7 @@ AddEventHandler("policestation2:onduty", function()
   if user_job ~= "sheriff" or user_job ~= "cop" or user_job ~= "police" and user.getActiveCharacterData("policeRank") > 0 then
     user.setActiveCharacterData("job", "sheriff")
     TriggerEvent('job:sendNewLog', source, 'sheriff', true)
-    TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 3}, true)
+    TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 3})
   end
 end)
 

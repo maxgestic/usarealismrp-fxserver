@@ -58,7 +58,7 @@ end, {
 	help = "breathalyze the nearest person"
 })
 
-TriggerEvent('es:addJobCommand', 'dnasample', { "police", "sheriff" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'dnasample', { "police", "sheriff", "dai" }, function(source, args, user)
 	TriggerClientEvent("evidence:dnaNearest", source)
 end, {
 	help = "dna sample the nearest person"
@@ -92,7 +92,7 @@ end)
 
 
 -- GSR test --
-TriggerEvent('es:addJobCommand', 'gsr', { "police", "sheriff" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'gsr', { "police", "sheriff", "dai" }, function(source, args, user)
 	TriggerClientEvent("evidence:gsrNearest", source)
 end, { 
 	help = "gun shot residue test the nearest person"

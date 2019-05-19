@@ -7,7 +7,7 @@ local markets = {
         ['pedHash'] = GetHashKey('u_m_y_pogo_01'),
         ['pedHeading'] = 0.0,
         ['items'] = {
-            {name = 'Pistol', type = 'weapon', hash = 453432689, price = 1000, legality = 'illegal', quantity = 1, weight = 10, objectModel = "w_pi_pistol"},
+            {name = 'Pistol', type = 'weapon', hash = 453432689, price = 3000, legality = 'illegal', quantity = 1, weight = 10, objectModel = "w_pi_pistol"},
             {name = 'Vintage Pistol', type = 'weapon', hash = 137902532, price = 4000, legality = 'illegal', quantity = 1, weight = 10, objectModel = "w_pi_vintage_pistol"},
             {name = 'Heavy Pistol', type = 'weapon', hash = -771403250, price = 4500, legality = 'illegal', quantity = 1, weight = 15, objectModel = "w_pi_heavypistol"},
             {name = 'Pistol .50', type = 'weapon', hash = -1716589765, price = 4500, legality = 'illegal', quantity = 1, weight = 18, objectModel = "w_pi_pistol50"},
@@ -25,7 +25,7 @@ local markets = {
             {name = 'Razor Blade', type = 'misc', price = 500, legality = 'legal', quantity = 1, residue = false, weight = 3},
             {name = 'SMG', type = 'weapon', hash = 736523883, price = 200000, legality = 'illegal', quantity = 1, weight = 55, objectModel = "w_sb_smg"},
             {name = 'Heavy Shotgun', type = 'weapon', hash = 984333226, price = 8000, legality = 'illegal', quantity = 1, weight = 35, objectModel = "w_sg_heavyshotgun"},
-            {name = 'SNS Pistol', type = 'weapon', hash = -1076751822, price = 2800, legality = 'illegal', quantity = 1, weight = 8, objectModel = "w_pi_sns_pistol"},
+            {name = 'SNS Pistol', type = 'weapon', hash = -1076751822, price = 3500, legality = 'illegal', quantity = 1, weight = 8, objectModel = "w_pi_sns_pistol"},
             {name = 'Combat Pistol', type = 'weapon', hash = 1593441988, price = 3500, legality = 'illegal', quantity = 1, weight = 10, objectModel = "w_pi_combatpistol"},
             {name = 'Switchblade', type = 'weapon', hash = -538741184, price = 1500, legality = 'illegal', quantity = 1, weight = 5},
             {name = 'Brass Knuckles', type = 'weapon', hash = -656458692, price = 1100, legality = 'illegal', quantity = 1, weight = 5},

@@ -224,6 +224,235 @@ local properties = {
 	}
 }
 
+local burglaryHouses = {
+	{ x = 893.24, y = -540.58, z = 58.51, heading = 122.0 },
+	{ x = 850.17, y = -532.65, z = 57.93, heading = 264.0 },
+	{ x = 861.49, y = -508.91, z = 57.72, heading = 225.0 },
+	{ x = 878.35, y = -497.97, z = 58.09, heading = 227.0 },
+	{ x = 906.33, y = -489.34, z = 59.44, heading = 202.0 },
+	{ x = 921.85, y = -477.81, z = 61.08, heading = 203.0 },
+	{ x = 944.53, y = -463.15, z = 61.55, heading = 126.0 },
+	{ x = 967.1, y = -451.61, z = 62.79, heading = 223.0 },
+	{ x = 987.34, y = -432.98, z = 64.05, heading = 220.0 },
+	{ x = 1010.39, y = -423.41, z = 65.35, heading = 307.0 },
+	{ x = 1028.76, y = -408.29, z = 66.34, heading = 221.0 },
+	{ x = 1060.33, y = -378.24, z = 68.23, heading = 219.0 },
+	{ x = 844.12, y = -562.53, z = 57.99, heading = 189.0 },
+	{ x = 861.72, y = -583.65, z = 58.16, heading = 359.0 },
+	{ x = 886.87, y = -608.3, z = 58.45, heading = 313.0 },
+	{ x = 902.89, y = -615.54, z = 58.45, heading = 233.0 },
+	{ x = 928.84, y = -639.86, z = 58.24, heading = 315.0 },
+	{ x = 943.24, y = -653.31, z = 58.63, heading = 222.0 },
+	{ x = 959.9, y = -669.94, z = 58.45, heading = 301.0 },
+	{ x = 970.95, y = -701.54, z = 58.48, heading = 354.0 },
+	{ x = 979.03, y = -716.22, z = 58.22, heading = 311.0 },
+	{ x = 996.85, y = -729.68, z = 57.82, heading = 307.0 },
+	{ x = 980.24, y = -627.75, z = 59.24, heading = 35.0 },
+	{ x = 964.37, y = -596.25, z = 59.9, heading = 79.0 },
+	{ x = 919.76, y = -569.5, z = 58.37, heading = 196.0 },
+	{ x = 965.15, y = -541.88, z = 59.73, heading = 210.0 },
+	{ x = 976.77, y = -580.6, z = 59.85, heading = 29.0 },
+	{ x = 987.77, y = -525.8, z = 60.69, heading = 211.0 },
+	{ x = 1006.55, y = -510.89, z = 60.99, heading = 120.0 },
+	{ x = 1009.57, y = -572.46, z = 60.59, heading = 261.0 },
+	{ x = 999.56, y = -593.79, z = 59.64, heading = 262.0 },
+	{ x = 1046.24, y = -498.14, z = 64.28, heading = 351.0 },
+	{ x = 1050.98, y = -470.38, z = 64.3, heading = 249.0 },
+	{ x = 1090.51, y = -484.31, z = 65.66, heading = 79.0 },
+	{ x = 1098.65, y = -464.46, z = 67.32, heading = 164.0 },
+	{ x = 1056.12, y = -449.0, z = 66.26, heading = 347.0 },
+	{ x = 1100.04, y = -450.78, z = 67.79, heading = 81.0 },
+	{ x = 1099.41, y = -438.73, z = 67.79, heading = 352.0 },
+	{ x = 1101.16, y = -411.38, z = 67.56, heading = 86.0 },
+	{ x = 1114.43, y = -391.3, z = 68.95, heading = 60.0 },
+	{ x = 1204.89, y = -557.76, z = 69.62, heading = 88.0 },
+	{ x = 1200.9, y = -575.47, z = 69.14, heading = 136.0 },
+	{ x = 1203.59, y = -598.37, z = 68.06, heading = 178.0 },
+	{ x = 1207.44, y = -620.18, z = 66.44, heading = 93.0 },
+	{ x = 1221.46, y = -669.3, z = 63.69, heading = 10.0 },
+	{ x = 1220.73, y = -689.38, z = 61.1, heading = 12.0 },
+	{ x = 1229.66, y = -725.42, z = 60.96, heading = 94.0 },
+	{ x = 1264.66, y = -702.78, z = 64.91, heading = 237.0 },
+	{ x = 1271.0, y = -683.63, z = 66.03, heading = 10.0 },
+	{ x = 1265.65, y = -648.65, z = 68.12, heading = 25.0 },
+	{ x = 1250.91, y = -620.82, z = 69.57, heading = 208.0 },
+	{ x = 1240.61, y = -601.64, z = 69.78, heading = 273.0 },
+	{ x = 1241.45, y = -566.44, z = 69.66, heading = 317.0 },
+	{ x = 1250.81, y = -515.43, z = 69.35, heading = 257.0 },
+	{ x = 1251.43, y = -494.1, z = 69.91, heading = 259.0 },
+	{ x = 1259.52, y = -480.25, z = 70.19, heading = 304.0 },
+	{ x = 1265.65, y = -458.13, z = 70.52, heading = 273.0 },
+	{ x = 1262.38, y = -429.94, z = 70.01, heading = 297.0 },
+	{ x = 1303.28, y = -527.41, z = 71.46, heading = 158.0 },
+	{ x = 1328.69, y = -535.93, z = 72.44, heading = 69.0 },
+	{ x = 1348.37, y = -546.69, z = 73.89, heading = 160.0 },
+	{ x = 1373.34, y = -555.71, z = 74.69, heading = 71.0 },
+	{ x = 1389.11, y = -569.5, z = 74.5, heading = 113.0 },
+	{ x = 1386.33, y = -593.44, z = 74.49, heading = 55.0 },
+	{ x = 1367.26, y = -606.66, z = 74.71, heading = 3.0 },
+	{ x = 1341.23, y = -597.36, z = 74.7, heading = 232.0 },
+	{ x = 1323.43, y = -583.18, z = 73.25, heading = 338.0 },
+	{ x = 1301.04, y = -574.34, z = 71.73, heading = 344.0 },
+	{ x = 952.83, y = -252.47, z = 67.96, heading = 55.0 },
+	{ x = 930.58, y = -245.15, z = 69.0, heading = 237.0 },
+	{ x = 921.0, y = -238.25, z = 70.39, heading = 147.0 },
+	{ x = 880.49, y = -205.13, z = 71.98, heading = 143.0 },
+	{ x = 840.81, y = -182.22, z = 74.59, heading = 55.0 },
+	{ x = 859.01, y = -144.5, z = 78.98, heading = 59.0 },
+	{ x = 808.74, y = -163.7, z = 75.88, heading = 151.0 },
+	{ x = -34.28, y = -1847.08, z = 26.19, heading = 233.0 },
+	{ x = -20.4, y = -1858.96, z = 25.41, heading = 53.0 },
+	{ x = -4.76, y = -1872.22, z = 24.15, heading = 53.0 },
+	{ x = 5.26, y = -1884.34, z = 23.7, heading = 51.0 },
+	{ x = 23.06, y = -1897.01, z = 22.97, heading = 317.0 },
+	{ x = 38.95, y = -1911.5, z = 21.95, heading = 229.0 },
+	{ x = 56.46, y = -1922.72, z = 21.91, heading = 324.0 },
+	{ x = 72.22, y = -1939.26, z = 21.37, heading = 315.0 },
+	{ x = 76.27, y = -1948.06, z = 21.17, heading = 230.0 },
+	{ x = 85.94, y = -1959.78, z = 21.12, heading = 49.0 },
+	{ x = 114.44, y = -1961.18, z = 21.33, heading = 25.0 },
+	{ x = 126.89, y = -1930.02, z = 21.38, heading = 33.0 },
+	{ x = 118.48, y = -1921.05, z = 21.32, heading = 50.0 },
+	{ x = 100.57, y = -1912.03, z = 21.41, heading = 157.0 },
+	{ x = 54.44, y = -1873.05, z = 22.81, heading = 135.0 },
+	{ x = 46.09, y = -1864.19, z = 23.28, heading = 130.0 },
+	{ x = 29.99, y = -1854.77, z = 24.07, heading = 42.0 },
+	{ x = 21.45, y = -1844.63, z = 24.6, heading = 50.0 },
+	{ x = -42.0, y = -1792.11, z = 27.83, heading = 136.0 },
+	{ x = -50.27, y = -1783.3, z = 28.3, heading = 132.0 },
+	{ x = 104.09, y = -1885.36, z = 24.32, heading = 321.0 },
+	{ x = 130.12, y = -1853.01, z = 25.23, heading = 150.0 },
+	{ x = 150.08, y = -1864.68, z = 24.59, heading = 155.0 },
+	{ x = 128.32, y = -1896.98, z = 23.67, heading = 67.0 },
+	{ x = 148.37, y = -1904.41, z = 23.53, heading = 334.0 },
+	{ x = 171.55, y = -1871.49, z = 24.4, heading = 65.0 },
+	{ x = 191.87, y = -1883.02, z = 25.06, heading = 150.0 },
+	{ x = 208.68, y = -1895.22, z = 24.81, heading = 51.0 },
+	{ x = 178.82, y = -1923.48, z = 21.37, heading = 153.0 },
+	{ x = 170.6, y = -1924.01, z = 21.19, heading = 146.0 },
+	{ x = 165.11, y = -1945.02, z = 20.24, heading = 234.0 },
+	{ x = 148.32, y = -1961.02, z = 19.46, heading = 223.0 },
+	{ x = 144.33, y = -1968.95, z = 18.86, heading = 144.0 },
+	{ x = 250.87, y = -1934.96, z = 24.7, heading = 50.0 },
+	{ x = 258.37, y = -1927.12, z = 25.44, heading = 147.0 },
+	{ x = 270.41, y = -1916.99, z = 26.18, heading = 144.0 },
+	{ x = 282.66, y = -1899.43, z = 27.27, heading = 48.0 },
+	{ x = 288.61, y = -1792.44, z = 28.09, heading = 331.0 },
+	{ x = 300.16, y = -1783.6, z = 28.44, heading = 139.0 },
+	{ x = 304.32, y = -1775.7, z = 29.1, heading = 227.0 },
+	{ x = 320.63, y = -1759.77, z = 29.64, heading = 226.0 },
+	{ x = 333.07, y = -1740.87, z = 29.73, heading = 146.0 },
+	{ x = 348.64, y = -1820.95, z = 28.89, heading = 319.0 },
+	{ x = 338.67, y = -1829.66, z = 28.34, heading = 315.0 },
+	{ x = 329.47, y = -1845.89, z = 27.75, heading = 47.0 },
+	{ x = 320.33, y = -1853.99, z = 27.51, heading = 47.0 },
+	{ x = 443.48, y = -1707.33, z = 29.71, heading = 46.0 },
+	{ x = 431.14, y = -1725.35, z = 29.6, heading = 140.0 },
+	{ x = 419.28, y = -1735.54, z = 29.61, heading = 140.0 },
+	{ x = 405.91, y = -1751.16, z = 29.71, heading = 139.0 },
+	{ x = 500.77, y = -1697.2, z = 29.79, heading = 141.0 },
+	{ x = 489.49, y = -1714.18, z = 29.71, heading = 244.0 },
+	{ x = 479.63, y = -1735.64, z = 29.15, heading = 163.0 },
+	{ x = 474.46, y = -1757.68, z = 29.09, heading = 251.0 },
+	{ x = 472.06, y = -1775.18, z = 29.07, heading = 267.0 },
+	{ x = 440.45, y = -1829.56, z = 28.36, heading = 136.0 },
+	{ x = 427.12, y = -1842.08, z = 28.46, heading = 320.0 },
+	{ x = 412.28, y = -1856.32, z = 27.32, heading = 318.0 },
+	{ x = 399.22, y = -1864.99, z = 26.72, heading = 314.0 },
+	{ x = 384.91, y = -1881.62, z = 26.03, heading = 215.0 },
+	{ x = 368.78, y = -1895.72, z = 25.18, heading = 134.0 },
+	{ x = 324.39, y = -1937.3, z = 25.02, heading = 138.0 },
+	{ x = 311.99, y = -1956.08, z = 24.62, heading = 229.0 },
+	{ x = 295.54, y = -1971.99, z = 22.9, heading = 226.0 },
+	{ x = 291.58, y = -1980.11, z = 21.6, heading = 142.0 },
+	{ x = 279.54, y = -1993.9, z = 20.8, heading = 323.0 },
+	{ x = 256.44, y = -2023.39, z = 19.27, heading = 232.0 },
+	{ x = 251.12, y = -2030.33, z = 18.71, heading = 335.0 },
+	{ x = 495.43, y = -1823.51, z = 28.87, heading = 321.0 },
+	{ x = 500.41, y = -1813.27, z = 28.89, heading = 319.0 },
+	{ x = 512.61, y = -1790.61, z = 28.92, heading = 92.0 },
+	{ x = 514.14, y = -1781.14, z = 28.91, heading = 92.0 },
+	{ x = 250.04, y = -1730.86, z = 29.67, heading = 54.0 },
+	{ x = 257.55, y = -1722.82, z = 29.65, heading = 140.0 },
+	{ x = 269.7, y = -1712.77, z = 29.67, heading = 142.0 },
+	{ x = 281.9, y = -1695.08, z = 29.65, heading = 49.0 },
+	{ x = 252.98, y = -1670.77, z = 29.66, heading = 140.0 },
+	{ x = 240.76, y = -1687.72, z = 29.7, heading = 229.0 },
+	{ x = 222.63, y = -1702.52, z = 29.7, heading = 215.0 },
+	{ x = 216.56, y = -1717.44, z = 29.68, heading = 311.0 },
+	{ x = 197.57, y = -1725.67, z = 29.66, heading = 300.0 },
+	{ x = 16.79, y = -1443.82, z = 30.95, heading = 152.0 },
+	{ x = -2.06, y = -1442.06, z = 30.96, heading = 182.0 },
+	{ x = -32.29, y = -1446.48, z = 31.89, heading = 88.0 },
+	{ x = -45.5, y = -1445.55, z = 32.43, heading = 103.0 },
+	{ x = -64.61, y = -1449.44, z = 32.52, heading = 276.0 },
+	{ x = -884.24, y = -1072.57, z = 2.53, heading = 32.0 },
+	{ x = -903.24, y = -1005.95, z = 2.15, heading = 31.0 },
+	{ x = -948.13, y = -910.62, z = 2.75, heading = 300.0 },
+	{ x = -951.47, y = -906.01, z = 2.75, heading = 297.0 },
+	{ x = -1022.48, y = -896.9, z = 5.41, heading = 30.0 },
+	{ x = -1031.22, y = -903.05, z = 3.69, heading = 23.0 },
+	{ x = -1043.65, y = -923.77, z = 3.15, heading = 211.0 },
+	{ x = -1053.96, y = -932.43, z = 3.36, heading = 209.0 },
+	{ x = -1061.87, y = -942.73, z = 2.22, heading = 212.0 },
+	{ x = -1084.34, y = -951.82, z = 2.36, heading = 123.0 },
+	{ x = -1151.51, y = -990.43, z = 2.15, heading = 213.0 },
+	{ x = -1750.57, y = -697.53, z = 10.18, heading = 319.0 },
+	{ x = -1771.17, y = -677.47, z = 10.39, heading = 306.0 },
+	{ x = -1787.87, y = -671.87, z = 10.65, heading = 52.0 },
+	{ x = -1793.44, y = -663.82, z = 10.6, heading = 143.0 },
+	{ x = -1803.72, y = -662.07, z = 10.73, heading = 227.0 },
+	{ x = -1820.05, y = -649.8, z = 10.97, heading = 237.0 },
+	{ x = -1836.48, y = -631.91, z = 10.75, heading = 52.0 },
+	{ x = -1838.95, y = -629.5, z = 11.25, heading = 232.0 },
+	{ x = -1874.58, y = -592.99, z = 11.89, heading = 224.0 },
+	{ x = -1883.41, y = -578.94, z = 11.83, heading = 322.0 },
+	{ x = -1898.51, y = -572.42, z = 11.85, heading = 232.0 },
+	{ x = -1917.79, y = -558.93, z = 11.85, heading = 48.0 },
+	{ x = -1919.07, y = -555.49, z = 11.76, heading = 136.0 },
+	{ x = -1918.76, y = -542.58, z = 11.83, heading = 313.0 },
+	{ x = -1947.05, y = -544.07, z = 11.86, heading = 235.0 },
+	{ x = -1948.1, y = -531.66, z = 11.83, heading = 228.0 },
+	{ x = -1964.3, y = -520.82, z = 12.18, heading = 56.0 },
+}
+
+Citizen.CreateThread(function()
+	for i = 1, #burglaryHouses do
+		local house = burglaryHouses[i]
+		house.voiceChannel = math.random(1000000, 9999999)
+		house.instance = {}
+		house.cooldown = {}
+	end
+end)
+
+local burglarySearchItems = {
+	{name = "Cheeseburger", price = 6, type = "food", substance = 30.0, quantity = 1, legality = "legal", weight = 4.0, objectModel = "prop_cs_burger_01"},
+	{name = "Flaming Hot Cheetos", price = 2, type = "food", substance = 6.0, quantity = 1, legality = "legal", weight = 1.0, objectModel = "ng_proc_food_chips01c"},
+	{name = "Water", price = 3, type = "drink", substance = 60.0, quantity = 1, legality = "legal", weight = 4.0, objectModel = "ba_prop_club_water_bottle"},
+	{name = "Arizona Iced Tea", price = 1, type = "drink", substance = 60.0, quantity = 1, legality = "legal", weight = 1.0, objectModel = "ba_prop_club_water_bottle"},
+	{name = "Pepsi", price = 4, type = "drink", substance = 9.0, quantity = 1, legality = "legal", weight = 1.0, objectModel = "ng_proc_sodacan_01b"},
+	{name = "Everclear Vodka (90%)", price = 35, type = "alcohol", substance = 5.0, quantity = 1, legality = "legal", weight = 4.0, strength = 0.10, objectModel = "prop_vodka_bottle"},
+    {name = "Repair Kit", price = 250, type = "vehicle", quantity = 1, legality = "legal", weight = 8.0, objectModel = "imp_prop_tool_box_01a"},
+    {name = 'Lockpick', type = 'misc', price = 400, legality = 'legal', quantity = 1, weight = 5.0},
+    {name = "First Aid Kit", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 5.0, objectModel = "v_ret_ta_firstaid"},
+    {name = "Packaged Weed", quantity = 1, weight = 2.0, type = "drug", legality = "illegal", objectModel = "bkr_prop_weed_bag_01a"},
+    {name = 'Packaged Meth', type = 'drug', legality = 'illegal', quantity = 1, weight = 4.0, objectModel = 'bkr_prop_meth_smallbag_01a'},
+    {name = 'Pistol', type = 'weapon', hash = 453432689, price = 1000, legality = 'illegal', quantity = 1, weight = 10, objectModel = "w_pi_pistol"},
+    {name = 'Razor Blade', type = 'misc', price = 500, legality = 'legal', quantity = 1, residue = false, weight = 3},
+    {name = 'Switchblade', type = 'weapon', hash = -538741184, price = 1500, legality = 'illegal', quantity = 1, weight = 5},
+    {name = "Condoms", price = 5, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "ng_proc_candy01a"},
+    {name = "KY Intense Gel", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "v_res_d_lube"},
+    {name = "Viagra", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_pills"},
+    {name = "Sturdy Rope", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 4, objectModel = "prop_devin_rope_01"},
+    {name = "Bag", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 3, objectModel = "prop_paper_bag_01"},
+    {name = "Ludde's Lube", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "v_res_d_lube"},
+    {name = "Used Condoms", type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "ng_proc_candy01a"},
+    {name = "Fluffy Handcuffs", type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "p_cs_cuffs_02_s"},
+    {name = "Vibrator", type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_marker_01"},
+    {name = "French Dip Au Jus", price = 55, type = "food", substance = 60.0, quantity = 1, legality = "legal", weight = 10},
+    {name = "Back Porch Strawberry Lemonade", price = 60, type = "alcohol", substance = 15.0, quantity = 4, legality = "legal", weight = 1, strength = 0.28}
+}
+
 local interiors = {
 	['motel'] = {
 		coords = {151.39, -1007.74, -99.0},
@@ -244,7 +473,16 @@ local interiors = {
 		heading = 356.0,
 		storage = {351.19, -999.16, -99.19},
 		wardrobe = {350.67, -993.60, -99.19},
-		bathroom = {347.23, -994.11, -99.19}
+		bathroom = {347.23, -994.11, -99.19},
+		burglaryCabinets = {
+			vector3(351.29, -999.80, -99.19),
+			vector3(350.01, -993.19, -99.19),
+			vector3(342.02, -1003.50, -99.35),
+			vector3(339.21, -1003.63, -99.49),
+			vector3(341.70, -996.18, -99.59),
+			vector3(347.08, -994.14, -99.39),
+			vector3(345.82, -1001.38, -99.19)
+		}
 	},
 	['highapartment'] = {
 		coords = {-781.77, 322.00, 211.99},
@@ -261,7 +499,7 @@ RegisterServerEvent('properties:saveOutfit')
 AddEventHandler('properties:saveOutfit', function(outfit, slot)
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local outfits = user.getActiveCharacterData('outfits')
-	if not outfits then print('outfits didnt exist') outfits = {} outfits[slot] = {} else if not outfits[slot] then print('outfit slot didnt exist') outfits[slot] = {} end end
+	if not outfits then outfits = {} outfits[slot] = {} else if not outfits[slot] then outfits[slot] = {} end end
 	outfits[slot] = outfit
 	user.setActiveCharacterData('outfits', outfits)
 	TriggerClientEvent('usa:notify', source, 'Outfit has been saved!')
@@ -271,22 +509,79 @@ RegisterServerEvent('properties:loadOutfit')
 AddEventHandler('properties:loadOutfit', function(slot)
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local outfits = user.getActiveCharacterData('outfits')
-	TriggerClientEvent('properties:loadOutfit', source, outfits[slot])
+	if outfits[slot] then
+		TriggerClientEvent('properties:loadOutfit', source, outfits[slot])
+	else
+		TriggerClientEvent('usa:notify', source, 'Outfit not found!')
+	end
 end)
 
-TriggerEvent('es:addJobCommand', 'breach', {'sheriff', 'police'}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'breach', {'sheriff', 'police', 'dai'}, function(source, args, user, location)
 	TriggerClientEvent('properties:findRoomToBreach', source, args[2])
+
 end, {
 	help = "Breach into the nearest property",
 	params = {
-		{ name = "apt", help = "apartment number (omit if motel)" }
+		{ name = "apt", help = "apartment number (omit if motel or house)" }
 	}
 })
 
-TriggerEvent('es:addCommand', 'knock', function(source, args, user)
+TriggerEvent('es:addJobCommand', 'bbreach', {'sheriff', 'police'}, function(source, args, user, location)
+	location = vector3(table.unpack(location))
+	for i = 1, #burglaryHouses do
+		if find_distance(location, burglaryHouses[i]) < 2.0 then
+			table.insert(burglaryHouses[i].instance, source)
+			local currentProperty = {
+				owner = -1,
+				index = i,
+				entryHeading = interiors['midapartment'].heading,
+				entryCoords = interiors['midapartment'].coords,
+				instance = burglaryHouses[i].instance,
+				exitCoords = {burglaryHouses[i].x, burglaryHouses[i].y, burglaryHouses[i].z},
+				exitHeading = burglaryHouses[i].heading,
+				voiceChannel = burglaryHouses[i].voiceChannel
+			}
+			TriggerClientEvent('properties:breachHouseBurglary', source, currentProperty)
+			Citizen.Wait(2000)
+			for k = 1, #burglaryHouses[i].instance do
+				local sourceInside = burglaryHouses[i].instance[k]
+				if sourceInside ~= source then
+					TriggerClientEvent('InteractSound_CL:PlayOnOne', sourceInside, 'door-kick', 0.4)
+					TriggerClientEvent('properties:updateInstance', sourceInside, burglaryHouses[i].instance)
+				end
+			end
+			return
+		end
+	end
+end, {
+	help = "Breach into the nearest burglary property"
+})
+
+TriggerEvent('es:addCommand', 'knock', function(source, args, user, location)
 	TriggerClientEvent('properties:findRoomToKnock', source)
+
 end, {
 	help = "Knock on the door of the nearest motel or house"
+})
+
+TriggerEvent('es:addCommand', 'bknock', function(source, args, user, location)
+	location = vector3(table.unpack(location))
+	for i = 1, #burglaryHouses do
+		if find_distance(location, burglaryHouses[i]) < 2.0 then
+			local file = 'knock1'
+			if math.random() > 0.5 then file = 'knock2' end
+			TriggerClientEvent('properties:playKnockAnim', source)
+			Citizen.Wait(300)
+			TriggerClientEvent('InteractSound_CL:PlayOnOne', source, file, 1.0)
+			for k = 1, #burglaryHouses[i].instance do
+				local target = burglaryHouses[i].instance[k]
+				TriggerClientEvent('InteractSound_CL:PlayOnOne', target, file, 1.0)
+			end
+			return
+		end
+	end
+end, {
+	help = "Knock on the door of the nearest burglary property"
 })
 
 TriggerEvent('es:addJobCommand', 'createhouse', {'judge'}, function(source, args, user, location)
@@ -577,6 +872,17 @@ AddEventHandler('playerDropped', function()
 			TriggerClientEvent('properties:removeData', -1, 'Houses', i)
 		end
 	end
+
+	for i = 1, #burglaryHouses do
+		local house = burglaryHouses[i]
+		for j = 1, #house.instance do
+			if source == house.instance[j] then
+				table.remove(properties['Houses'].rooms[i].instance, j)
+				print('PROPERTIES: Removing source '.. j .. ' from room '..i..' instance in Burglaries')
+			end
+		end
+	end
+
 end)
 
 RegisterServerEvent('properties:getAddress')
@@ -638,22 +944,24 @@ AddEventHandler('properties:markAddress', function(ssn, fname, lname)
 		end
 		TriggerClientEvent('usa:notify', source, 'Address not found!')
 	else
-		local fullName = fname .. ' ' .. lname
-		for property, data in pairs(properties) do
-			for i = 1, #data.rooms do
-				local room = properties[property].rooms[i]
-				local user = exports["essentialmode"]:getPlayerFromId(room.owner)
-				if user and user.getActiveCharacterData('fullName') == fullName then
-					if data.type ~= 'house' then
-						TriggerClientEvent('properties:setWaypoint', source, room.coords)
-						TriggerClientEvent('usa:notify', source, 'Address set as waypoint!')
-						return
-					else
-						local property = user.getActiveCharacterData('property')
-						if property['house'] then
-							TriggerClientEvent('properties:setWaypoint', source, property['houseCoords'])
+		if fname and lname then
+			local fullName = fname .. ' ' .. lname
+			for property, data in pairs(properties) do
+				for i = 1, #data.rooms do
+					local room = properties[property].rooms[i]
+					local user = exports["essentialmode"]:getPlayerFromId(room.owner)
+					if user and user.getActiveCharacterData('fullName') == fullName then
+						if data.type ~= 'house' then
+							TriggerClientEvent('properties:setWaypoint', source, room.coords)
 							TriggerClientEvent('usa:notify', source, 'Address set as waypoint!')
 							return
+						else
+							local property = user.getActiveCharacterData('property')
+							if property['house'] then
+								TriggerClientEvent('properties:setWaypoint', source, property['houseCoords'])
+								TriggerClientEvent('usa:notify', source, 'Address set as waypoint!')
+								return
+							end
 						end
 					end
 				end
@@ -845,7 +1153,7 @@ end)
 RegisterServerEvent("properties:storeItem")
 AddEventHandler("properties:storeItem", function(location, index, item, quantity)
 	local room = properties[location].rooms[index]
-	if room.owner and not room.locked then
+	if room.owner and isPlayerInInstance(location, index, source) then
 	    local userSource = source
 	    local user = exports["essentialmode"]:getPlayerFromId(userSource)
 	    local target = exports["essentialmode"]:getPlayerFromId(room.owner)
@@ -881,7 +1189,7 @@ end)
 RegisterServerEvent("properties:retrieveItem")
 AddEventHandler("properties:retrieveItem", function(location, index, item, quantity)
 	local room = properties[location].rooms[index]
-	if room.owner and not room.locked then
+	if room.owner and isPlayerInInstance(location, index, source) then
 		local userSource = source
 	    local user = exports["essentialmode"]:getPlayerFromId(userSource)
 	    local userInv = user.getActiveCharacterData('inventory')
@@ -930,7 +1238,7 @@ end)
 RegisterServerEvent("properties:withdrawMoney")
 AddEventHandler("properties:withdrawMoney", function(location, index, amount)
 	local room = properties[location].rooms[index]
-	if room.owner and not room.locked then
+	if room.owner and isPlayerInInstance(location, index, source) then
 		local user = exports["essentialmode"]:getPlayerFromId(source)
 		local target = exports["essentialmode"]:getPlayerFromId(room.owner)
 		local user_money = user.getActiveCharacterData("money")
@@ -951,7 +1259,7 @@ end)
 RegisterServerEvent("properties:storeMoney")
 AddEventHandler("properties:storeMoney", function(location, index, amount)
 	local room = properties[location].rooms[index]
-	if room.owner and not room.locked then
+	if room.owner and isPlayerInInstance(location, index, source) then
 		local user = exports["essentialmode"]:getPlayerFromId(source)
 		local target = exports["essentialmode"]:getPlayerFromId(room.owner)
 		local user_money = user.getActiveCharacterData("money")
@@ -975,6 +1283,7 @@ end)
 
 RegisterServerEvent('properties:cleanTools')
 AddEventHandler('properties:cleanTools', function()
+	TriggerClientEvent('evidence:updateData', source, 'gunshotResidue', false)
 	local user = exports['essentialmode']:getPlayerFromId(source)
 	local inventory = user.getActiveCharacterData('inventory')
 	local itemsFound = false
@@ -1089,3 +1398,148 @@ TriggerEvent('es:addCommand','buzzaccept', function(source, args, user)
 end, {
 	help = "Accept a buzz request when in an apartment."
 })
+
+RegisterServerEvent('properties:lockpickHouse')
+AddEventHandler('properties:lockpickHouse', function(playerCoords, lockpickItem)
+	if GetCurrentJobCount('sheriff') >= 2 then
+		for i = 1, #burglaryHouses do
+			if find_distance(playerCoords, burglaryHouses[i]) < 2.0 then
+				if (burglaryHouses[i].cooldown[source] and getMinutesFromTime(burglaryHouses[i].cooldown[source]) > 240) or not burglaryHouses[i].cooldown[source] then
+					TriggerClientEvent('properties:lockpickHouseBurglary', source, i, lockpickItem)
+					Citizen.Wait(20000)
+				else
+					TriggerClientEvent('usa:notify', source, 'This house was recently robbed!')
+				end
+			end
+		end
+	else
+		TriggerClientEvent('usa:notify', source, 'You cannot access the lock.')
+	end
+end)
+
+RegisterServerEvent('properties:lockpickSuccessful')
+AddEventHandler('properties:lockpickSuccessful', function(i)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	table.insert(burglaryHouses[i].instance, source)
+	local currentProperty = {
+		owner = -1,
+		index = i,
+		entryHeading = interiors['midapartment'].heading,
+		entryCoords = interiors['midapartment'].coords,
+		cabinets = interiors['midapartment'].burglaryCabinets,
+		instance = burglaryHouses[i].instance,
+		exitCoords = {burglaryHouses[i].x, burglaryHouses[i].y, burglaryHouses[i].z},
+		exitHeading = burglaryHouses[i].heading,
+		voiceChannel = burglaryHouses[i].voiceChannel
+	}
+	TriggerClientEvent('properties:enterBurglaryHouse', source, currentProperty)
+	for k = 1, #burglaryHouses[i].instance do
+		local sourceInside = burglaryHouses[i].instance[k]
+		TriggerClientEvent('properties:updateInstance', sourceInside, burglaryHouses[i].instance)
+	end
+end)
+
+RegisterServerEvent('properties:requestExitFromBurglary')
+AddEventHandler('properties:requestExitFromBurglary', function(index)
+	local house = burglaryHouses[index]
+	for i = 1, #house.instance do
+		if source == house.instance[i] then
+			table.remove(burglaryHouses[index].instance, i)
+		end
+	end
+	house.cooldown[source] = os.time()
+	TriggerClientEvent('properties:exitProperty', source)
+	Citizen.Wait(1000)
+	for i = 1, #house.instance do
+		local sourceInside = burglaryHouses[index].instance[i]
+		TriggerClientEvent('properties:updateInstance', sourceInside, burglaryHouses[index].instance)
+	end
+end)
+
+RegisterServerEvent('properties:searchCabinetBurglary')
+AddEventHandler('properties:searchCabinetBurglary', function(index)
+	local house = burglaryHouses[index]
+	for i = 1, #house.instance do
+		if source == house.instance[i] then
+			local user = exports['essentialmode']:getPlayerFromId(source)
+			local user_money = user.getActiveCharacterData('money')
+			if math.random() > 0.4 then
+				if math.random() > 0.2 then
+					local item_found = burglarySearchItems[math.random(1, #burglarySearchItems)]
+					if user.getCanActiveCharacterHoldItem(item_found) then
+						TriggerClientEvent('usa:notify', source, 'You have found '..item_found.name..'.')
+						local user_inventory = user.getActiveCharacterData('inventory')
+						for i = 1, #user_inventory do
+							local item = user_inventory[i]
+							if item.name == item_found.name then
+								item.quantity = item.quantity + 1
+								user.setActiveCharacterData('inventory', user_inventory)
+								return
+							end
+						end
+						table.insert(user_inventory, item_found)
+						user.setActiveCharacterData('inventory', user_inventory)
+						return
+					else
+						TriggerClientEvent('usa:notify', source, "Inventory is full!")
+						return
+					end
+				else
+					local money_found = math.random(10, 175)
+					TriggerClientEvent('usa:notify', source, 'You have found $'..money_found..'.0!')
+					user.setActiveCharacterData('money', user_money + money_found)
+					return
+				end
+			else
+				TriggerClientEvent('usa:notify', source, 'You found nothing of interest!')
+			end
+		end
+	end
+end)
+
+function find_distance(coords1, coords2)
+  xdistance =  math.abs(coords1.x - coords2.x)
+  
+  ydistance = math.abs(coords1.y - coords2.y)
+
+  zdistance = math.abs(coords1.z - coords2.z)
+
+  return nroot(3, (xdistance ^ 3 + ydistance ^ 3 + zdistance ^ 3))
+end
+
+function nroot(root, num)
+  return num^(1/root)
+end
+
+function isPlayerInInstance(location, index, source) -- extra security measures to prevent memory editing client-side
+	for i = 1, #properties[location].rooms[index].instance do
+		if properties[location].rooms[index].instance[i] == source then
+			return true
+		end
+	end
+	return false
+end
+
+function getMinutesFromTime(t)
+  local reference = t
+  local minutesfrom = os.difftime(os.time(), reference) / 60
+  local minutes = math.floor(minutesfrom)
+  return minutes
+end
+
+function GetCurrentJobCount(job)
+	local count = 0
+	TriggerEvent("es:getPlayers", function(players)
+		if players then
+			for id, player in pairs(players) do
+				if id and player then
+					local playerJob = player.getActiveCharacterData("job")
+					if playerJob == job then
+						count = count + 1
+					end
+				end
+			end
+		end
+	end)
+	return count
+end

@@ -11,7 +11,7 @@ AddEventHandler("emsstation2:loadOutfit", function(slot)
     TriggerEvent('job:sendNewLog', userSource, 'ems', true)
   end
   TriggerClientEvent('interaction:setPlayersJob', userSource, 'ems')
-  TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 1}, true)
+  TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 1})
   --end)
 end)
 
@@ -37,7 +37,7 @@ AddEventHandler("emsstation2:onduty", function()
     if user.getActiveCharacterData("job") ~= "ems" then
         user.setActiveCharacterData("job", "ems")
         TriggerEvent('job:sendNewLog', source, 'ems', true)
-        TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 1}, true)
+        TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 1})
     end
 end)
 

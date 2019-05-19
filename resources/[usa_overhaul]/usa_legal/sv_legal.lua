@@ -75,3 +75,21 @@ AddEventHandler('lawyer:payLawyer', function(targetSource, targetAmount)
 	TriggerClientEvent('usa:notify', targetSource, 'You have been paid ~y~$'..targetAmount..'~s~ by the ~y~San Andreas Court Administration~s~.')
 	print('LEGAL: '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has paid (for free) amount['..targetAmount..'] to '..GetPlayerName(targetSource)..'['..GetPlayerIdentifier(targetSource)..'] for legal reward.')
 end)
+
+RegisterServerEvent('legal:onDutyDAI')
+AddEventHandler('legal:onDutyDAI', function()
+	local user = exports['essentialmode']:getPlayerFromId(source)
+	local da_rank = user.getActiveCharacterData('daRank')
+	local user_job = user.getActiveCharacterData('job')
+	if user_job == 'dai' then
+		user.setActiveCharacterData('job', 'civ')
+		TriggerClientEvent('usa:notify', source, 'You are now off-duty as a DAI.')
+	else
+		if da_rank and da_rank == 2 then
+			user.setActiveCharacterData('job', 'dai')
+			TriggerClientEvent('usa:notify', source, 'You are now on-duty as a DAI.')
+		else
+			TriggerClientEvent('usa:notify', source, 'You are not whitelisted for DAI!')
+		end
+	end
+end)

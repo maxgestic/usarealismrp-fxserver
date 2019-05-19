@@ -17,6 +17,7 @@ Citizen.CreateThread(function()
 		DrawText3D(233.29, -410.34, 48.11, 5, '[E] - Legal Offices')
 		DrawText3D(146.75, -738.35, 242.30, 5, '[E] - Exit')
 		DrawText3D(154.40, -742.87, 242.15, 5, '[E] - On/Off Duty (~g~Lawyer~s~)')
+		DrawText3D(-82.56, -806.42, 243.38, 2, '[E] - On/Off Duty (~g~DAI~s~)')
 		DrawText3D(-79.87, -801.90, 243.41, 3, '[E] - MDT')
 		if IsControlJustPressed(0, 38, true) then -- E
 			local playerCoords = GetEntityCoords(playerPed)
@@ -28,6 +29,8 @@ Citizen.CreateThread(function()
 				TriggerServerEvent('legal:checkBarCertificate')
 			elseif Vdist(playerCoords, -79.87, -801.90, 244.21) < 1.6 then
 				TriggerServerEvent('legal:openMDT')
+			elseif Vdist(playerCoords, -82.56, -806.42, 243.38) < 2.0 then
+				TriggerServerEvent('legal:onDutyDAI')
 			end
 		end
 	end

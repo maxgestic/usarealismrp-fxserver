@@ -161,9 +161,9 @@ AddEventHandler('veh:hotwireVehicle', function()
       while not HasAnimDictLoaded('veh@handler@base') do
         Citizen.Wait(100)
       end
-      local hotwireTime = 20000
+      local hotwireTime = 40000
       if GetVehicleClass(veh) == 18 then
-        hotwireTime = 40000
+        hotwireTime = 80000
       end
       local beginTime = GetGameTimer()
       while GetGameTimer() - beginTime < hotwireTime do
@@ -185,7 +185,7 @@ AddEventHandler('veh:hotwireVehicle', function()
       end
       isHotwiring = false
       ClearPedTasks(playerPed)
-      if math.random() < 0.60 then
+      if math.random() < 0.80 then
         hasKeys = true
         playerHotwiredVehicles[GetVehicleNumberPlateText(veh)] = true
         TriggerEvent('usa:notify', 'The hotwiring kit was ~g~successful~s~!')
@@ -197,11 +197,7 @@ AddEventHandler('veh:hotwireVehicle', function()
           print('flagging as stolen!')  
         end)
       else
-        local beginTime = GetGameTimer()
-        while GetGameTimer() - beginTime < 3000 do
-          Citizen.Wait(0)
           TriggerEvent('usa:notify', 'The hotwiring kit was ~y~unsuccessful~s~!')
-        end
       end
     end
   else

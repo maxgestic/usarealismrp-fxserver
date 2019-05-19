@@ -245,9 +245,18 @@ AddEventHandler('death:createLog', function(ped)
 	TriggerServerEvent("death:newDeathLog", deathLog)
 end)
 
-RegisterNetEvent("death:reviveNearestDeadPed")
-AddEventHandler("death:reviveNearestDeadPed", function()
-	ReviveNearestDeadPed()
+RegisterNetEvent("death:reviveNearest")
+AddEventHandler("death:reviveNearest", function()
+	TriggerEvent("usa:getClosestPlayer", 1.65, function(player)
+		if player then
+        	local closestPed = GetPlayerPed(GetPlayerFromServerId(player.id))
+			if player.id ~= 0 and not IsPedInAnyVehicle(PlayerPedId()) and IsEntityVisible(closestPed) then
+				TriggerServerEvent('death:revivePerson', player.id)
+				return
+			end
+		end
+		ReviveNearestDeadPed()
+    end)
 end)
 
 RegisterNetEvent('death:reviveMeWhileCarried')
@@ -309,8 +318,11 @@ function ReviveNearestDeadPed()
 					DeleteEntity(ped)
 					local clone = CreatePed(4, model, pedcoords.x, pedcoords.y, pedcoords.z, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
 					Wait(500)
-					ClearPedTasksImmediately(clone)
-					TaskWanderInArea(clone, pedcoords.x, pedcoords.y, pedcoords.z, 500.0, 100.0, 10.0)
+					ClearPedTasks(clone)
+					SetEntityAsNoLongerNeeded(clone)
+					Citizen.Wait(100)
+					TaskWanderInArea(clone, pedcoords, 500.0, 100.0, 10.0)
+					SetPedKeepTask(clone, true)
 					return
 				end
 			end

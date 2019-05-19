@@ -426,11 +426,6 @@ AddEventHandler("usa:loadPlayerComponents", function(id)
 	end
 end)
 
-RegisterServerEvent("usa:notifyStaff")
-AddEventHandler("usa:notifyStaff", function(msg)
-	sendMessageToModsAndAdmins(msg)
-end)
-
 function sendMessageToModsAndAdmins(msg)
 	TriggerEvent("es:getPlayers", function(players)
 		if players then
@@ -446,7 +441,7 @@ function sendMessageToModsAndAdmins(msg)
 	end)
 end
 
-TriggerEvent('es:addJobCommand', 'impound', { "police", "sheriff", "ems", "corrections" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'impound', { "police", "sheriff", "ems", "corrections", "dai" }, function(source, args, user)
 	TriggerClientEvent('impoundVehicle', source)
 end, { help = "Impound a vehicle." })
 
@@ -460,6 +455,7 @@ AddEventHandler("impound:impoundVehicle", function(vehicle, plate)
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 	local playerJob = user.getActiveCharacterData("job")
 	local userGroup = user.getGroup()
+	TriggerEvent('vehicle:seizeContraband', plate)
 	if playerJob == "sheriff" or playerJob == "ems" or playerJob == "fire" or userGroup == "owner" or userGroup == "admin" or userGroup == "mod" or userGroup == "superadmin" then
 		if plate then
 			-- update impounded status of vehicle in DB --

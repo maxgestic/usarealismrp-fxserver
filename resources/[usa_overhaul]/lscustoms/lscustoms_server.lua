@@ -4,14 +4,16 @@ Credits - MythicalBro
 /////License/////
 Do not reupload/re release any part of this script without my permission
 ]]
+
 local tbl = {
-[1] = {locked = false, player = nil},
-[2] = {locked = false, player = nil},
-[3] = {locked = false, player = nil},
-[4] = {locked = false, player = nil},
-[5] = {locked = false, player = nil},
-[6] = {locked = false, player = nil},
+	[1] = {locked = false, player = nil},
+	[2] = {locked = false, player = nil},
+	[3] = {locked = false, player = nil},
+	[4] = {locked = false, player = nil},
+	[5] = {locked = false, player = nil},
+	[6] = {locked = false, player = nil},
 }
+
 RegisterServerEvent('lockGarage')
 AddEventHandler('lockGarage', function(b,garage)
 	tbl[tonumber(garage)].locked = b
@@ -47,7 +49,7 @@ AddEventHandler("LSC:buttonSelected", function(name, button)
 		local player = exports["essentialmode"]:getPlayerFromId(usource)
 		local mymoney = player.getActiveCharacterData("money")
 		local myjob = player.getActiveCharacterData("job")
-		button.price = math.abs(button.price) -- prevent mem hack to gain money
+		button.price = math.abs(button.price) -- prevent mem hack to gain money (lol what?)
 		if button.price <= mymoney or myjob == "sheriff" or myjob == "police" or myjob == "ems" or myjob == "fire" then
 			-- take money from player, apply customization --
 			TriggerClientEvent("LSC:buttonSelected", usource, name, button, true)
@@ -219,3 +221,28 @@ AddEventHandler("customs:saveCarData", function(data, plate, source)
 		end)
 	end
 end)
+
+function tprint (tbl, indent)
+  if not indent then indent = 0 end
+  local toprint = string.rep(" ", indent) .. "{\r\n"
+  indent = indent + 2 
+  for k, v in pairs(tbl) do
+    toprint = toprint .. string.rep(" ", indent)
+    if (type(k) == "number") then
+      toprint = toprint .. "[" .. k .. "] = "
+    elseif (type(k) == "string") then
+      toprint = toprint  .. k ..  "= "   
+    end
+    if (type(v) == "number") then
+      toprint = toprint .. v .. ",\r\n"
+    elseif (type(v) == "string") then
+      toprint = toprint .. "\"" .. v .. "\",\r\n"
+    elseif (type(v) == "table") then
+      toprint = toprint .. tprint(v, indent + 2) .. ",\r\n"
+    else
+      toprint = toprint .. "\"" .. tostring(v) .. "\",\r\n"
+    end
+  end
+  toprint = toprint .. string.rep(" ", indent-2) .. "}"
+  return toprint
+end

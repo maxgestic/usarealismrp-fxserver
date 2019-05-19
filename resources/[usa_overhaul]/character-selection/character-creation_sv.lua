@@ -1,4 +1,4 @@
-local WHOLE_DAYS_TO_DELETE = 0
+local WHOLE_DAYS_TO_DELETE = 3
 local blacklistedNames = {
 	'nig',
 	'fuck',
@@ -73,34 +73,34 @@ AddEventHandler("character:new", function(data)
 		local middleName = string.lower(data.middleName)
 		local lastName = string.lower(data.lastName)
 		if string.find(firstName, name) or string.find(middleName, name) or string.find(lastName, name) then
-			TriggerClientEvent('usa:showHelp', userSource, true, 'The character data provided is invalid or inappropriate! (1)')
+			TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (1)')
 			print('Character name contained forbidden words: '..data.firstName..' '..data.middleName..' '..data.lastName)
 			return
 		end
 	end
 	if not ContainsVowel(data.firstName) or (not ContainsVowel(data.middleName) and data.middleName ~= '') or not ContainsVowel(data.lastName) then
-		TriggerClientEvent('usa:showHelp', userSource, true, 'The character data provided is invalid or inappropriate! (2)')
+		TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (2)')
 		print('Character name did not contain a vowel: '..data.firstName..' '..data.middleName..' '..data.lastName)
 		return
 	end
 	if string.len(data.firstName) < 3 or (string.len(data.middleName) < 3 and data.middleName ~= '') or string.len(data.lastName) < 3 then
-		TriggerClientEvent('usa:showHelp', userSource, true, 'The character data provided is invalid or inappropriate! (3)')
+		TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (3)')
 		print('Character name was insufficient length: '..data.firstName..' '..data.middleName..' '..data.lastName)
 		return
 	end
 	if string.len(data.firstName) > 16 or (string.len(data.middleName) > 16 and data.middleName ~= '') or string.len(data.lastName) > 16 then
-		TriggerClientEvent('usa:showHelp', userSource, true, 'The character data provided is invalid or inappropriate! (4)')
+		TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (4)')
 		print('Character name was insufficient length: '..data.firstName..' '..data.middleName..' '..data.lastName)
 		return
 	end
 	local dob_year = tonumber(string.sub(data.dateOfBirth, 1, 4))
 	if dob_year > 2001 or dob_year < 1940 then
-		TriggerClientEvent('usa:showHelp', userSource, true, 'The character data provided is invalid or inappropriate! (5)')
+		TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (5)')
 		print('Character date of birth was unrealistic: '..data.dateOfBirth)
 		return
 	end
 	if ContainsSpecialCharacters(data.firstName) or (ContainsSpecialCharacters(data.middleName) and data.middleName ~= '') or ContainsSpecialCharacters(data.lastName) then
-		TriggerClientEvent('usa:showHelp', userSource, true, 'The character data provided is invalid or inappropriate! (6)')
+		TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (6)')
 		print('Character name contained special characters: '..data.firstName..' '..data.middleName..' '..data.lastName)
 		return
 	end
@@ -289,7 +289,7 @@ function ContainsVowel(word)
 end
 
 function ContainsSpecialCharacters(word)
-	local characters = {"!", "@", "#", "&", "*", "`", ":", ";", '"', "'", "|", ">", "<", "?", "/", "=", "+", "_", '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
+	local characters = {"!", "@", "#", "&", "*", "`", ":", ";", '"', "|", ">", "<", "?", "/", "=", "+", "_", '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
 	for i = 1, #characters do
 		if string.find(string.lower(word), characters[i]) then
 			return true

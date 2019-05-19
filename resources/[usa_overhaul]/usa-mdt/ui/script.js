@@ -23,6 +23,7 @@ const mdtApp = new Vue({
         plate_check: {
             search_input: null,
             registered_owner: null,
+            flags: null,
             veh_name: null,
             plate: null
         },
@@ -327,6 +328,7 @@ document.onreadystatechange = () => {
                 mdtApp.plate_check.registered_owner = event.data.plate_info.registered_owner;
                 mdtApp.plate_check.veh_name = event.data.plate_info.veh_name;
                 mdtApp.plate_check.plate = event.data.plate_info.plate;
+                mdtApp.plate_check.flags = event.data.plate_info.flags;
                 /* hide error message */
                 mdtApp.error = null;
             } else if (event.data.type == "weaponInfoLoaded") {
@@ -375,6 +377,7 @@ document.onreadystatechange = () => {
                     mdtApp.plate_check = {
                         search_input: null,
                         registered_owner: null,
+                        flags: null,
                         veh_name: null,
                         plate: null
                     }

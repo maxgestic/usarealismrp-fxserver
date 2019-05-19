@@ -56,8 +56,9 @@ TriggerEvent('es:addCommand', 'showid', function(source, args, user, location)
 	showid(source, user, location)
 end, {help = "Present your identification card / DL."})
 
-TriggerEvent('es:addJobCommand', 'fakeid', {'sheriff', 'police'}, function(source, args, user, location)
-	if user.getActiveCharacterData("policeRank") < 4 then
+TriggerEvent('es:addJobCommand', 'fakeid', {'sheriff', 'police', 'dai'}, function(source, args, user, location)
+	local job = user.getActiveCharacterData("job")
+	if user.getActiveCharacterData("policeRank") < 4 and (job == "sheriff" or job == "police") then
         TriggerClientEvent("usa:notify", source, "Not high enough rank!")
         return
     end
@@ -77,14 +78,53 @@ end, {
 	}
 })
 
+TriggerEvent('es:addJobCommand', 'faketweet', {'sheriff', 'police', 'dai'}, function(source, args, user, location)
+	local job = user.getActiveCharacterData("job")
+	if user.getActiveCharacterData("policeRank") < 4 and (job == "sheriff" or job == "police") then
+        TriggerClientEvent("usa:notify", source, "Not high enough rank!")
+        return
+    end
+	local name = "@" .. args[2] .. "_" .. args[3]
+	name = string.lower(name)
+	table.remove(args, 1)
+	table.remove(args, 1)
+	table.remove(args, 1)
+	local msg = table.concat(args, " ")
+	TriggerClientEvent('chatMessage', -1, "[TWEET] - " .. name, {29,161,242}, msg)
+	TriggerEvent("chat:sendToLogFile", source, "[TWEET] - " .. name .. ": " .. msg)
+end, {
+	help = "Send a fake tweet.",
+	params = {
+		{ name = "first name", help = "first name to show on tweet" },
+		{ name = "last name", help = "last name to show on tweet" },
+	}
+})
+
 TriggerEvent('es:addCommand', 'id', function(source, args, user, location)
 	showid(source, user, location)
 end, {help = "Present your identification card / DL."})
 
+local jobNames = {
+	['civ'] = false,
+	['taxi'] = 'Taxi',
+	['tow'] = 'Tow',
+	['sheriff'] = 'Peace Officer (SASP)',
+	['dai'] = 'Peace Officer (DAI)',
+	['da'] = 'District Attorney',
+	['ems'] = 'Medical Responder (LSFD)',
+	['doctor'] = 'Doctor',
+	['corrections'] = 'Corrections',
+	['lawyer'] = 'Attorney',
+	['judge'] = 'Judge'
+}
+
 function showid(src, u, location)
+	local job = u.getActiveCharacterData("job")
+	local employer = jobNames[job]
 	local char_name = u.getActiveCharacterData("fullName")
 	local dob = u.getActiveCharacterData("dateOfBirth")
 	exports["globals"]:sendLocalActionMessage(src, "shows ID")
 	local msg = "^4^*[STATE ID]^0 Name: ^r" .. char_name .. " ^4^*|^0 SSN: ^r" .. src .. " ^4^*| ^0DOB: ^r" .. dob
+	if employer then msg = "^4^*[STATE ID]^0 Name: ^r" .. char_name .. " ^4^*|^0 SSN: ^r" .. src .. " ^4^*| ^0DOB: ^r" .. dob .. " ^4^*| ^0Employer: ^r".. employer end
 	exports["globals"]:sendLocalActionMessageChat(msg, location)
 end

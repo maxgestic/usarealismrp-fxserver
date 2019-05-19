@@ -413,6 +413,7 @@ AddEventHandler('injuries:treatMyInjuries', function(boneToTreat, sourceTreating
         if string.lower(boneName) == string.lower(boneToTreat) then
             effects = {}
             injuredParts[bone] = nil
+            StopScreenEffect('Rampage')
             TriggerEvent('usa:notify', parts[bone]..' has been treated.')
             TriggerServerEvent('injuries:notify', sourceTreating, parts[bone] .. ' of patient has been treated.')
             TriggerEvent('civ:resetWalkStyle')
@@ -452,6 +453,7 @@ AddEventHandler('injuries:bandageMyInjuries', function()
                     injuredParts[bone] = nil
                 end
                 effects = {}
+                StopScreenEffect('Rampage')
                 TriggerEvent('usa:notify', 'Some of your injuries have been treated with a bandage.')
                 TriggerServerEvent('injuries:saveData', injuredParts)
             else -- if the wound is not treatable with just a bandage, prevent it from bleeding for a few mins
@@ -544,6 +546,7 @@ AddEventHandler('injuries:checkin', function()
     TriggerEvent('chatMessage', '', {255, 255, 255}, 'Overview: \n ' .. overview)
     injuredParts = {}
     effects = {}
+    StopScreenEffect('Rampage')
     SetEntityHealth(PlayerPedId(), 200)
     TriggerEvent('death:allowRevive')
     TriggerEvent('civ:resetWalkStyle')
@@ -559,7 +562,7 @@ end)
 
 RegisterNetEvent('death:injuryPayment')
 AddEventHandler('death:injuryPayment', function()
-    TriggerServerEvent('injuries:chargeForInjuries', injuredParts, 2.0, true)
+    TriggerServerEvent('injuries:chargeForInjuries', injuredParts, 1.5, true)
 end)
 
 RegisterNetEvent('injuries:updateInjuries')

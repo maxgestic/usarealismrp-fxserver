@@ -257,7 +257,6 @@ AddEventHandler('doormanager:lockpickDoor', function(lockpickItem)
       end
     end
   end
-  TriggerEvent('usa:notify', 'No door (or vehicle) found to lockpick!')
  end)
 
 function DrawTimer(beginTime, duration, x, y, text)

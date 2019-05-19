@@ -42,7 +42,7 @@ Citizen.CreateThread(function()
 				local primary, secondary = GetVehicleColours(GetVehiclePedIsUsing(ped))
 				TriggerServerEvent('911:Carjacking', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(ped)))), GetVehicleNumberPlateText(GetVehiclePedIsUsing(ped)), IsPedMale(ped), primary, secondary)
 				Citizen.Wait(500)
-			elseif ReportPersonWithAGun and IsPedArmed(ped, 6) and IsAreaPopulated() then
+			elseif ReportPersonWithAGun and IsPedArmed(ped, 6) and IsAreaPopulated() and not IsPedInAnyVehicle(ped) then
 				local x, y, z = table.unpack(GetEntityCoords(ped))
 				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
 				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
@@ -283,7 +283,7 @@ Citizen.CreateThread(function()
             local veh = GetVehiclePedIsIn(targetPed, false)
 
             -- Citizen.Trace('Aiming')
-            if DoesEntityExist(targetPed) and IsEntityAPed(targetPed) and not IsEntityDead(targetPed) then
+            if DoesEntityExist(targetPed) and IsEntityAPed(targetPed) and not IsEntityDead(targetPed) and not IsPedInAnyVehicle(playerPed, false) then
             -- Citizen.Trace('Exists')
                 if IsPedInAnyVehicle(targetPed, false) and not IsPedAPlayer(targetPed) and IsPedArmed(playerPed, 4) then
                     if Vdist(pCoords, tCoords) < 6 then

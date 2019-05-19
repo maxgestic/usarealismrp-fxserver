@@ -15,7 +15,7 @@ AddEventHandler("vehicle:loadedInventory", function(target_vehicle_inventory)
         TriggerEvent('chatMessage', "", {}, "["..i.."] (x"..item.quantity..") " .. item.name)
       end
     else
-      TriggerEvent('chatMessage', "", {}, "Vehicle has nothing stored in it!")
+      TriggerEvent('usa:notify', "Vehicle has nothing stored in it!")
     end
   else
     print("Error. Something went wrong when trying to load the vehicle's inventory!")
@@ -117,17 +117,30 @@ end)
 -- OPEN/CLOSE TARGET VEHICLE INVENTORY --
 -----------------------------------------
 Citizen.CreateThread(function()
-    while true do
-        Wait(0)
-        if IsControlJustPressed(1, SETTINGS.inventory_key) then
-            local target_vehicle = getVehicleInFrontOfUser()
-            if target_vehicle ~= 0 and IsEntityAVehicle(target_vehicle) then
-                local target_vehicle_plate = GetVehicleNumberPlateText(target_vehicle)
-                SetVehicleDoorOpen(target_vehicle, 5, false, false)
-                TriggerServerEvent("vehicle:getInventory", target_vehicle_plate)
+  while true do
+    Wait(0)
+    if IsControlJustPressed(1, SETTINGS.inventory_key) then
+      local target_vehicle = getVehicleInFrontOfUser()
+      print(GetVehicleDoorLockStatus(target_vehicle))
+      if target_vehicle ~= 0 and IsEntityAVehicle(target_vehicle) and GetVehicleDoorLockStatus(target_vehicle) ~= 2 then
+        if GetPedInVehicleSeat(targetVehicle, -1) ~= 0 then 
+          if IsPedAPlayer(GetPedInVehicleSeat(targetVehicle)) then
+            if IsVehicleDoorFullyOpen(target_vehicle, 5) then
+              SetVehicleDoorShut(target_vehicle, 5, false)
+            else
+              SetVehicleDoorOpen(target_vehicle, 5, false, false)
             end
+          end
+        else
+          if IsVehicleDoorFullyOpen(target_vehicle, 5) then
+            SetVehicleDoorShut(target_vehicle, 5, false)
+          else
+            SetVehicleDoorOpen(target_vehicle, 5, false, false)
+          end
         end
+      end
     end
+  end
 end)
 
 -----------------------

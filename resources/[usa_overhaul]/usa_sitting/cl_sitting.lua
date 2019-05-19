@@ -40,6 +40,8 @@ local CHAIR_MODELS = {
 }
 
 local sitting_on = nil
+local jailed = false
+
 
 local SIT_CANCEL_KEY = 71
 
@@ -82,13 +84,15 @@ end
 
 RegisterNetEvent("sit:sitOnNearest")
 AddEventHandler("sit:sitOnNearest", function()
-  if not sitting_on then
-    local ped = GetPlayerPed(-1)
-    if not IsPedCuffed(ped) then
-      FindNearest()
+  if not jailed then
+    if not sitting_on then
+      local ped = GetPlayerPed(-1)
+      if not IsPedCuffed(ped) then
+        FindNearest()
+      end
+    else
+      GetUp()
     end
-  else
-    GetUp()
   end
 end)
 
@@ -101,4 +105,10 @@ Citizen.CreateThread(function()
 		end
 		Wait(1)
 	end
+end)
+
+
+RegisterNetEvent("death:toggleJailed")
+AddEventHandler("death:toggleJailed", function(toggle)
+  jailed = toggle
 end)

@@ -144,7 +144,7 @@ AddEventHandler("jail:release", function(character)
     TriggerServerEvent("jail:clearCell", assigned_cell, false)
     TriggerEvent("cuff:unCuff", true)
     assigned_cell = nil
-    TriggerEvent("death:toggleJailed", true)
+    TriggerEvent("death:toggleJailed", false)
   end)
 end)
 
@@ -153,7 +153,7 @@ AddEventHandler("jail:escaped", function()
   imprisoned = false
   TriggerServerEvent("jail:clearCell", assigned_cell, true)
   TriggerEvent("usa:notify", "You escaped prison!")
-  TriggerEvent("death:toggleJailed", true)
+  TriggerEvent("death:toggleJailed", false)
 end)
 
 RegisterNetEvent("jail:removeWeapons")

@@ -2,6 +2,11 @@ local _menuPool = NativeUI.CreatePool()
 local evidenceMenu = NativeUI.CreateMenu("Evidence", "~b~Review collected evidence", 0 --[[X COORD]], 320 --[[Y COORD]])
 _menuPool:Add(evidenceMenu)
 
+local evidenceMenus = {
+	{x = 473.06, y = -987.64, z = 25.01},
+	{x = -65.72, y = -814.59, z = 243.31}
+}
+
 local playerData = {
 	['bodySweat'] = false,
 	['wetClothing'] = false,
@@ -345,11 +350,14 @@ Citizen.CreateThread(function()
 			end
 		end
 		if IsControlJustPressed(0, 38) and not discardingEvidence then
-			if Vdist(playerCoords, 472.86, -988.34, 24.91) < 2.0 then
-				if #collectedEvidence ~= 0 then
-					TriggerServerEvent('evidence:checkJobForMenu')
-				else
-					TriggerEvent('usa:notify', 'You have no evidence collected!')
+			for i = 1, #evidenceMenus do
+				local location = evidenceMenus[i]
+				if Vdist(playerCoords, location.x, location.y, location.z) < 2.0 then
+					if #collectedEvidence ~= 0 then
+						TriggerServerEvent('evidence:checkJobForMenu')
+					else
+						TriggerEvent('usa:notify', 'You have no evidence collected!')
+					end
 				end
 			end
 		end
@@ -371,7 +379,10 @@ Citizen.CreateThread(function()
 				DrawMarker(23, x, y, z - 0.98, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.2, 0.2, 0.2, 41, 48, 114, 150, false, false, 2, 0.0)
 			end
 		end
-		DrawText3D(473.06, -987.64, 25.01, 2, '[E] - Evidence')
+		for i = 1, #evidenceMenus do
+			local location = evidenceMenus[i]
+			DrawText3D(location.x, location.y, location.z, 2, '[E] - Evidence')
+		end
 	end
 end)
 
@@ -388,7 +399,7 @@ end)
 
 RegisterNetEvent('interaction:setPlayersJob')
 AddEventHandler('interaction:setPlayersJob', function(job)
-	if job == 'sheriff' or job == 'police' then
+	if job == 'sheriff' or job == 'police' or job == 'dai' then
 		onDuty = true
 	else
 		onDuty = false

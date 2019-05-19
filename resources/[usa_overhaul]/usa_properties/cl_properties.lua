@@ -10,6 +10,22 @@ local buzzedApartment = {
 }
 local doorTransition = false
 
+local residents = {
+	animation = { dict = "amb@lo_res_idles@", anim = "lying_face_up_lo_res_base" }, -- sleeping animation
+	weapons = {"weapon_nightstick", "weapon_crowbar", "weapon_knife", "weapon_bat", "weapon_hammer", "weapon_pistol", "weapon_vintagepistol", "weapon_machete"},
+	models = {"a_f_y_hipster_01", "a_m_m_mexlabor_01", "a_m_y_downtown_01", "a_m_y_business_01", "a_m_m_tourist_01", "u_f_y_princess", "u_m_y_paparazzi", "u_m_y_fibmugger_01", "u_m_y_justin", "u_m_m_rivalpap"},
+	{
+		coords = vec3(341.24, -994.31, -98.745),
+		rotation = 270.0,
+	},
+	{
+		coords = vec3(349.8, -996.141, -98.7399),
+		rotation = 90.0,
+	}
+}
+
+local spawnedPeds = {}
+
 RegisterNetEvent('properties:updateData')
 AddEventHandler('properties:updateData', function(location, index, data)
 	if not firstSpawn then
@@ -67,25 +83,38 @@ Citizen.CreateThread(function()
 		if currentProperty.owner then
 			local playerCoords = GetEntityCoords(playerPed)
 			local x, y, z = table.unpack(currentProperty.entryCoords)
-			local xS, yS, zS = table.unpack(currentProperty.storageCoords)
-			local xC, yC, zC = table.unpack(currentProperty.bathroomCoords)
-			local xW, yW, zW = table.unpack(currentProperty.wardrobeCoords)
-			DrawText3D(x, y, z, 2, '[E] - Exit '.. currentProperty.name)
-			DrawText3D(xS, yS, zS, 1, '[E] - Storage')
-			DrawText3D(xC, yC, zC, 1, '[E] - Clean Tools')
-			if currentProperty.owner == GetPlayerServerId(PlayerId()) then
-				DrawText3D(xW, yW, zW, 1, '[E] - Wardrobe')
-			end
-			if IsControlJustPressed(0, 38) then
-				if Vdist(x, y, z, playerCoords) < 0.5 then
-					TriggerServerEvent('properties:requestExit', currentProperty.location, currentProperty.index)
-					PlayDoorAnimation()
-				elseif Vdist(xS, yS, zS, playerCoords) < 1.0 then
-					TriggerServerEvent('properties:requestStorage', currentProperty.location, currentProperty.index)
-				elseif Vdist(xC, yC, zC, playerCoords) < 1.0 then
-					TriggerServerEvent('properties:cleanTools', currentProperty.location, currentProperty.index)
-				elseif currentProperty.owner == GetPlayerServerId(PlayerId()) and Vdist(xW, yW, zW, playerCoords) < 1.0 then
-					TriggerEvent('properties:openWardrobeMenu')
+			if currentProperty.owner ~= -1 then
+				local xS, yS, zS = table.unpack(currentProperty.storageCoords)
+				local xC, yC, zC = table.unpack(currentProperty.bathroomCoords)
+				local xW, yW, zW = table.unpack(currentProperty.wardrobeCoords)
+				DrawText3D(x, y, z, 2, '[E] - Exit '.. currentProperty.name)
+				DrawText3D(xS, yS, zS, 1, '[E] - Storage')
+				DrawText3D(xC, yC, zC, 1, '[E] - Clean')
+				if currentProperty.owner == GetPlayerServerId(PlayerId()) then
+					DrawText3D(xW, yW, zW, 1, '[E] - Wardrobe')
+				end
+				if IsControlJustPressed(0, 38) then
+					if Vdist(x, y, z, playerCoords) < 0.5 then
+						TriggerServerEvent('properties:requestExit', currentProperty.location, currentProperty.index)
+						PlayDoorAnimation()
+					elseif Vdist(xS, yS, zS, playerCoords) < 1.0 then
+						TriggerServerEvent('properties:requestStorage', currentProperty.location, currentProperty.index)
+					elseif Vdist(xC, yC, zC, playerCoords) < 1.0 then
+						TriggerServerEvent('properties:cleanTools', currentProperty.location, currentProperty.index)
+					elseif currentProperty.owner == GetPlayerServerId(PlayerId()) and Vdist(xW, yW, zW, playerCoords) < 1.0 then
+						TriggerEvent('properties:openWardrobeMenu')
+					end
+				end
+			else
+				local playerCoords = GetEntityCoords(playerPed)
+				local x, y, z = table.unpack(currentProperty.entryCoords)
+				DrawText3D(x, y, z, 2, '[E] - Exit House')
+				if IsControlJustPressed(0, 38) then
+					if Vdist(x, y, z, playerCoords) < 0.5 then
+						TriggerServerEvent('properties:requestExitFromBurglary', currentProperty.index)
+						RemoveResidents()
+						PlayDoorAnimation()
+					end
 				end
 			end
 			if Vdist(x, y, z, playerCoords) > 50.0 and not doorTransition then
@@ -270,6 +299,16 @@ AddEventHandler('properties:findRoomToKnock', function()
 	end
 end)
 
+RegisterNetEvent('properties:playKnockAnim')
+AddEventHandler('properties:playKnockAnim', function()
+	local playerPed = PlayerPedId()
+	RequestAnimDict('timetable@jimmy@doorknock@')
+	while not HasAnimDictLoaded('timetable@jimmy@doorknock@') do Wait(100) end
+	TaskPlayAnim(PlayerPedId(), 'timetable@jimmy@doorknock@', 'knockdoor_idle', 8.0, 8.0, -1, 48, false)
+	Citizen.Wait(2000)
+	ClearPedTasks(PlayerPedId())
+end)
+
 RegisterNetEvent('properties:updateInstance')
 AddEventHandler('properties:updateInstance', function(_instance)
 	if #_instance > 0 then
@@ -291,7 +330,7 @@ AddEventHandler('properties:loadOutfit', function(data)
 	print('loading outift...')
 	local playerPed = PlayerPedId()
 	local playerCoords = GetEntityCoords(playerPed)
-	if currentProperty.owner then
+	if currentProperty.owner and currentProperty.owner ~= -1 then
 		local x, y, z = table.unpack(currentProperty.wardrobeCoords)
 		if Vdist(playerCoords, x, y, z) < 1.5 then
 			if data then
@@ -485,6 +524,180 @@ AddEventHandler('properties:getHeadingForHouse', function(target, location)
 	local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
 	local current_zone = GetNameOfZone(x, y, z)
 	TriggerServerEvent('properties:continueHousePurchase', target, location, GetEntityHeading(playerPed), lastStreetNAME, current_zone)
+end)
+
+RegisterNetEvent('properties:lockpickHouseBurglary')
+AddEventHandler('properties:lockpickHouseBurglary', function(index, lockpickItem)
+	local playerPed = PlayerPedId()
+	local called911 = false
+
+	local beginTime = GetGameTimer()
+	RequestAnimDict("veh@break_in@0h@p_m_one@")
+	while not HasAnimDictLoaded("veh@break_in@0h@p_m_one@") do
+		Wait(100)
+	end
+
+	if GetClockHours() > 6 and GetClockHours() < 20 and math.random() > 0.30 then -- 90% chance of reporting when burglary is happening at day
+		called911 = true
+		local x, y, z = table.unpack(GetEntityCoords(playerPed))
+		local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+		local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+		TriggerServerEvent('911:Burglary', x, y, z, lastStreetNAME, IsPedMale(playerPed))
+	end
+
+	Citizen.CreateThread(function()
+		while GetGameTimer() - beginTime < 20000 do
+			Citizen.Wait(0)
+			local x, y, z = table.unpack(GetEntityCoords(playerPed))
+	        if not IsEntityPlayingAnim(playerPed, "veh@break_in@0h@p_m_one@", "low_force_entry_ds", 3) then
+	          TaskPlayAnim(playerPed, "veh@break_in@0h@p_m_one@", "low_force_entry_ds", 8.0, 1.0, -1, 11, 1.0, false, false, false)
+	          Citizen.Wait(2000)
+	          ClearPedTasks(playerPed)
+	          SetEntityCoords(playerPed, x, y, z - 1.0, false, false, false, false)
+	        end
+	    end
+	end)
+
+	while GetGameTimer() - beginTime < 20000 do
+		Citizen.Wait(0)
+		DisableControlAction(0, 301, true)
+		DisableControlAction(0, 86, true)
+        DisableControlAction(0, 244, true)
+        DisableControlAction(0, 245, true)
+        DisableControlAction(0, 288, true)
+        DisableControlAction(0, 79, true)
+        DisableControlAction(0, 73, true)
+        DisableControlAction(0, 37, true)
+        DisableControlAction(0, 311, true)
+		DrawTimer(beginTime, 20000, 1.42, 1.475, 'LOCKPICKING')
+	end
+	ClearPedTasks(playerPed)
+
+	if math.random() < 0.6 then
+      TriggerServerEvent('properties:lockpickSuccessful', index)
+      TriggerEvent("usa:notify", "Lockpick was successful!")
+      return
+    else
+      TriggerEvent("usa:notify", "Lockpick has broken!")
+      TriggerServerEvent("usa:removeItem", lockpickItem, 1)
+      return
+    end
+
+end)
+
+RegisterNetEvent('properties:enterBurglaryHouse')
+AddEventHandler('properties:enterBurglaryHouse', function(_currentProperty)
+	currentProperty = _currentProperty
+	myInstance.players = currentProperty.instance
+	for i = 1, #myInstance.players do
+		print('source '..myInstance.players[i]..' has been placed into room '..currentProperty.index)
+	end
+	myInstance.active = true
+	local playerPed = PlayerPedId()
+	local x, y, z = table.unpack(currentProperty.entryCoords)
+	local heading = currentProperty.entryHeading
+	SpawnResidents()
+	DoorTransition(x, y, z, heading)
+
+	local alertness = 0
+
+	Citizen.CreateThread(function()
+		while currentProperty.owner == -1 and alertness < 5000 do
+			local beginTime = GetGameTimer()
+			while GetGameTimer() - beginTime < 4000 do
+				Citizen.Wait(0)
+				DrawTimer(math.floor(GetGameTimer() - alertness), 5000, 1.42, 1.475, 'ALERTNESS')
+			end
+			Citizen.Wait(1000)
+		end
+	end)
+
+	Citizen.CreateThread(function()
+		while currentProperty.owner == -1 and alertness < 5000 do
+			Citizen.Wait(0)
+			alertness = alertness + GetPlayerCurrentStealthNoise(PlayerId())
+			local speed = GetEntitySpeed(playerPed)
+			if speed > 0.7 and speed < 1.0 then
+				alertness = alertness + 2
+			elseif speed > 1.0 and speed < 1.5 then
+				alertness = alertness + 5
+			elseif speed > 1.5 and speed < 2.0 then
+				alertness = alertness + 10
+			elseif speed > 2.0 and speed < 3.0 then
+				alertness = alertness + 18
+			elseif speed > 3.0 then
+				alertness = alertness + 24
+			elseif alertness - 1 >= 0 and speed < 0.7 then
+				alertness = alertness - 1
+			end
+			if alertness > 5000 then
+				if not called911 then
+					local x, y, z = table.unpack(_currentProperty.exitCoords)
+					local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+					local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+					TriggerServerEvent('911:Burglary', x, y, z, lastStreetNAME, IsPedMale(playerPed))
+					called911 = true
+				end
+				
+				local oneAttacking = false
+				for i = 1, #spawnedPeds do
+					if not oneAttacking then oneAttacking = true elseif math.random() > 0.8 then return end
+					local handle = spawnedPeds[i]
+					ClearPedTasksImmediately(handle)
+					FreezeEntityPosition(handle, false)
+					TaskCombatPed(handle, playerPed, 0, 16)
+				end
+				break
+			end
+		end
+	end)
+
+	while currentProperty.owner == -1 do
+		Citizen.Wait(0)
+		for i = 1, #currentProperty.cabinets do
+			local cabinet = currentProperty.cabinets[i]
+			DrawText3D(cabinet.x, cabinet.y, cabinet.z, 2, '[E] - Search')
+		end
+
+		if IsControlJustPressed(0, 38) then
+			local playerCoords = GetEntityCoords(playerPed)
+			for i = #currentProperty.cabinets, 1, -1 do
+				local cabinet = currentProperty.cabinets[i]
+				if Vdist(playerCoords, cabinet.x, cabinet.y, cabinet.z) < 1.0 then
+					FreezeEntityPosition(playerPed, true)
+					local file = 'cabinet1'
+					if math.random() > 0.5 then file = 'cabinet2' end
+					TriggerServerEvent('InteractSound_SV:PlayOnSource', file, 0.7)
+					Citizen.Wait(100)
+					alertness = alertness + 500
+					local beginTime = GetGameTimer()
+					while GetGameTimer() - beginTime < 8000 do
+						Citizen.Wait(0)
+						DrawTimer(beginTime, 8000, 1.42, 1.435, 'SEARCHING')
+					end
+					FreezeEntityPosition(playerPed, false)
+					table.remove(currentProperty.cabinets, i)
+					TriggerServerEvent('properties:searchCabinetBurglary', currentProperty.index)
+					break
+				end
+			end
+		end
+	end
+end)
+
+RegisterNetEvent('properties:breachHouseBurglary')
+AddEventHandler('properties:breachHouseBurglary', function(_currentProperty)
+	print('breaching property')
+	currentProperty = _currentProperty
+	myInstance.players = currentProperty.instance
+	for i = 1, #myInstance.players do
+		print('source '..myInstance.players[i]..' has been placed into room '..currentProperty.index)
+	end
+	myInstance.active = true
+	local playerPed = PlayerPedId()
+	local x, y, z = table.unpack(currentProperty.entryCoords)
+	local heading = currentProperty.entryHeading
+	DoorTransition(x, y, z, heading, true)
 end)
 
 function LoadRealEstateMenu(property)
@@ -864,3 +1077,81 @@ function comma_value(amount)
     end
     return formatted
 end
+
+function DrawTimer(beginTime, duration, x, y, text)
+    if not HasStreamedTextureDictLoaded('timerbars') then
+        RequestStreamedTextureDict('timerbars')
+        while not HasStreamedTextureDictLoaded('timerbars') do
+            Citizen.Wait(0)
+        end
+    end
+
+    if GetTimeDifference(GetGameTimer(), beginTime) < duration then
+        w = (GetTimeDifference(GetGameTimer(), beginTime) * (0.085 / duration))
+    end
+
+    local correction = ((1.0 - math.floor(GetSafeZoneSize(), 2)) * 100) * 0.005
+    x, y = x - correction, y - correction
+
+    Set_2dLayer(0)
+    DrawSprite('timerbars', 'all_black_bg', x, y, 0.15, 0.0325, 0.0, 255, 255, 255, 180)
+
+    Set_2dLayer(1)
+    DrawRect(x + 0.0275, y, 0.085, 0.0125, 100, 0, 0, 180)
+
+    Set_2dLayer(2)
+    DrawRect(x - 0.015 + (w / 2), y, w, 0.0125, 150, 0, 0, 180)
+
+    SetTextColour(255, 255, 255, 180)
+    SetTextFont(0)
+    SetTextScale(0.3, 0.3)
+    SetTextCentre(true)
+    SetTextEntry('STRING')
+    AddTextComponentString(text)
+    Set_2dLayer(3)
+    DrawText(x - 0.06, y - 0.012)
+end
+
+function SpawnResidents()
+	local spawnedOne = false
+
+	for i = 1, #residents do
+
+		if not spawnedOne then spawnedOne = true elseif math.random() > 0.4 then return end
+
+		local resident = residents[i]
+
+		local model = residents.models[math.random(1, #residents.models)]
+		RequestModel(model)
+
+		while not HasModelLoaded(model) do 
+			Wait(0)
+		end
+		
+		local ped = CreatePed(4, model, resident.coords, resident.rotation, false, false)
+		table.insert(spawnedPeds, ped)
+		
+		-- animation
+		RequestAnimDict(residents.animation.dict)
+
+		while not HasAnimDictLoaded(residents.animation.dict) do 
+			Wait(0) 
+		end
+		
+		local weapon = residents.weapons[math.random(1, #residents.weapons)]
+		GiveWeaponToPed(ped, GetHashKey(weapon), 255, true, false)
+		
+		TaskPlayAnimAdvanced(ped, residents.animation.dict, residents.animation.anim, resident.coords, 0.0, 0.0, resident.rotation, 8.0, 1.0, -1, 1, 1.0, true, true)
+		SetFacialIdleAnimOverride(ped, "mood_sleeping_1", 0)
+	end
+end
+
+function RemoveResidents()
+	for k, ped in pairs(spawnedPeds) do
+		SetPedAsNoLongerNeeded(ped)
+		DeletePed(ped)
+	end
+	
+	spawnedPeds = {}
+end
+

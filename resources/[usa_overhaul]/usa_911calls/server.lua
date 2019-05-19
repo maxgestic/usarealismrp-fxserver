@@ -182,6 +182,7 @@ RegisterServerEvent('911:PlayerCall')
 RegisterServerEvent('911:BankRobbery')
 RegisterServerEvent('911:LockpickingDoor')
 RegisterServerEvent('911:CuffCutting')
+RegisterServerEvent('911:Burglary')
 
 recentcalls = {}
 
@@ -464,6 +465,14 @@ AddEventHandler('911:BankRobbery', function(x, y, z, street, text)
     SendWeazelNewsAlert('Report of a ^bank robbery^r at ^3'..street..'^r, yikes! Don\'t mess this one up recruit!', x, y, z, 'Bank Robbery')
 end)
 
+AddEventHandler('911:Burglary', function(x, y, z, street, isMale)
+    local playerSource = source
+    local user = exports["essentialmode"]:getPlayerFromId(playerSource)
+    local string = '^*Burglary:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
+    Send911Notification(false, string, x, y, z, 'Burglary')
+    SendWeazelNewsAlert('Report of a ^burglary^r at ^3'..street..'^r, expose those theives! Don\'t get too much attention!', x, y, z, 'Burglary')
+end)
+
 RegisterServerEvent('carjack:playHandsUpOnAll')
 AddEventHandler('carjack:playHandsUpOnAll', function(pedToPlay)
 	TriggerClientEvent('carjack:playAnimOnPed', -1, pedToPlay)
@@ -475,10 +484,10 @@ function Send911Notification(intendedEmergencyType, string, x, y, z, blipText)
 			local playerSource = id
 			local player_job = player.getActiveCharacterData("job")
 			if intendedEmergencyType then
-				if player_job == intendedEmergencyType then
+				if player_job == intendedEmergencyType or (intendedEmergencyType == 'sheriff' and player_job == 'dai') then
 					TriggerClientEvent('911:Notification', playerSource, string, x, y, z, blipText)
 				end
-			elseif player_job == "sheriff" or player_job == "ems" or player_job == "fire" then
+			elseif player_job == "sheriff" or player_job == "ems" or player_job == "fire" or player_job == "dai" then
 				TriggerClientEvent('911:Notification', playerSource, string, x, y, z, blipText)
 			end
 		end
