@@ -93,6 +93,9 @@ Citizen.CreateThread(function()
     					  TriggerServerEvent("chopshop:reward", display_name, GetVehicleBodyDamage(handle))
                 SetEntityAsMissionEntity(handle, true, true)
                 DeleteCar(handle)
+                if #current_job.vehicles <= 0 then
+                  ResetJob()
+                end
                 break
               end
             end
@@ -103,12 +106,6 @@ Citizen.CreateThread(function()
           found = false
         end
       end
-    end
-    ---------------------------------------
-    -- watch for no more vehicles wanted --
-    ---------------------------------------
-    if #current_job.vehicles <= 0 then
-      ResetJob()
     end
   end
 end)
@@ -125,7 +122,7 @@ Citizen.CreateThread(function()
       local playerCoords = GetEntityCoords(playerPed)
       for i = 1, #peds do
         DrawText3D(peds[i].x, peds[i].y, peds[i].z + 1.0, 5, '[E] - Chop Shop')
-        if IsControlJustPressed(1,KEY) and Vdist(playerCoords, peds[i].x, peds[i].y, peds[i].z) < 3.0 then
+        if IsControlJustPressed(1, KEY) and Vdist(playerCoords, peds[i].x, peds[i].y, peds[i].z) < 3.0 then
             TriggerServerEvent("chopshop:startJob")
         end
       end

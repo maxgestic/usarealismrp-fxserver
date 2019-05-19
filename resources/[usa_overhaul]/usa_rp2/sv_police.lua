@@ -114,6 +114,12 @@ end, {
 	}
 })
 
+TriggerEvent('es:addJobCommand', 'repair', { "police", "sheriff", "dai" }, function(source, args, user)
+	TriggerClientEvent("usa:repairVeh", source)
+end, {
+	help = "Repair the vehicle you're facing."
+})
+
 TriggerEvent('es:addJobCommand', 'runserial', { "police", "sheriff", 'judge', 'dai' }, function(source, args, user)
 	local userSource = tonumber(source)
 	if args[2] then

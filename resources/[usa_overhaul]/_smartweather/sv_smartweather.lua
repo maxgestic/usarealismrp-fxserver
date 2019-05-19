@@ -284,7 +284,7 @@ TriggerEvent('es:addGroupCommand', 'setweather', "admin", function(source, args,
 	end
 
 	if isWeatherChangeValid(wtype) then
-		TriggerEvent("usa:notifyStaff", '^1^*[STAFF]^r^0 Player ^1'..GetPlayerName(source)..' ['..source..'] ^0 has set the weather to ^1'..wtype..'^0.')
+		TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(source)..' ['..source..'] ^0 has set the weather to ^2'..wtype..'^0.')
 		currentWeatherData["weatherString"] = wtype
 
 		-- 50% Chance to enable wind at a random heading for the specified weathers.
@@ -300,7 +300,7 @@ TriggerEvent('es:addGroupCommand', 'setweather', "admin", function(source, args,
 			TIMEOUT = false
 		end)
 	else
-		TriggerClientEvent('chatMessage', userSource, "", {200,0,0}, "^1^*[STAFF]^r^0 Too abrupt! From " .. currentWeatherData["weatherString"] .. ", you can change to: " .. table.concat(getNextWeatherPossibilities()," | "))
+		TriggerClientEvent('chatMessage', userSource, "", {200,0,0}, "^2^*[STAFF]^r^0 Too abrupt! From " .. currentWeatherData["weatherString"] .. ", you can change to: " .. table.concat(getNextWeatherPossibilities()," | "))
 	end
 end,
 	{

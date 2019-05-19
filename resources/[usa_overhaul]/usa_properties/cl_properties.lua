@@ -379,9 +379,9 @@ end)
 RegisterNetEvent('properties:exitProperty')
 AddEventHandler('properties:exitProperty', function(noTp)
 	local playerPed = PlayerPedId()
-	local x, y, z = table.unpack(currentProperty.exitCoords)
-	local heading = currentProperty.exitHeading
 	if not noTp then
+		local x, y, z = table.unpack(currentProperty.exitCoords)
+		local heading = currentProperty.exitHeading
 		DoorTransition(x, y, z, heading)
 	end
 	myInstance = {}

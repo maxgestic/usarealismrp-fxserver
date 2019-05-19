@@ -126,11 +126,13 @@ end)
 
 RegisterNetEvent('usa:repairVeh')
 AddEventHandler('usa:repairVeh', function(target_vehicle)
+    if not target_vehicle then target_vehicle = getVehicleInFrontOfUser() end
+    print(target_vehicle)
     local dict = "mini@repair"
     local playerPed = PlayerPedId()
-    TriggerServerEvent('usa:removeRepairKit')
-    if GetVehicleEngineHealth(target_vehicle) < 350.0 then
-        exports.globals:notify("Repairing engine!")
+    if target_vehicle ~= 0 and GetVehicleEngineHealth(target_vehicle) < 350.0 or IsAnyVehicleTireBursted(target_vehicle) then
+        TriggerServerEvent('usa:removeRepairKit')
+        SetVehicleDoorOpen(target_vehicle, 4, false, false)
         local beginTime = GetGameTimer()
         while GetGameTimer() - beginTime < 16000 do
             Citizen.Wait(1)
@@ -140,24 +142,12 @@ AddEventHandler('usa:repairVeh', function(target_vehicle)
                 TaskPlayAnim(playerPed, dict, "fixing_a_player", 8.0, 1.0, -1, 15, 1.0, 0, 0, 0)
             end
         end
-        ClearPedTasks(playerPed)
-       
         SetVehicleUndriveable(target_vehicle, false)
-        SetVehicleEngineHealth(target_vehicle, 350.0)
-        exports.globals:notify("Vehicle is hardly running, now get to a mechanic!")
-    elseif IsAnyVehicleTireBursted(target_vehicle) then
-        exports.globals:notify("Repairing tyres!")
-        local beginTime = GetGameTimer()
-        while GetGameTimer() - beginTime < 16000 do
-            Citizen.Wait(1)
-            DrawTimer(beginTime, 16000, 1.42, 1.475, 'REPAIRING')
-            if not IsEntityPlayingAnim(playerPed, dict, 'fixing_a_player', 3) then
-                RequestAnimDict(dict)
-                TaskPlayAnim(playerPed, dict, "fixing_a_player", 8.0, 1.0, -1, 15, 1.0, 0, 0, 0)
-            end
-        end
-        ClearPedTasks(playerPed)
+        SetVehicleEngineHealth(target_vehicle, 800.0)
         FixAllTires(target_vehicle)
+        ClearPedTasks(playerPed)
+        Citizen.Wait(500)
+        SetVehicleDoorShut(target_vehicle, 4, false)
     else
         exports.globals:notify("Repairs not needed!")
     end
@@ -227,4 +217,18 @@ function DrawTimer(beginTime, duration, x, y, text)
     AddTextComponentString(text)
     Set_2dLayer(3)
     DrawText(x - 0.06, y - 0.012)
+end
+
+function getVehicleInFrontOfUser()
+    local playerped = GetPlayerPed(-1)
+    local coordA = GetEntityCoords(playerped, 1)
+    local coordB = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 5.0, 0.0)
+    local targetVehicle = getVehicleInDirection(coordA, coordB)
+    return targetVehicle
+end
+
+function getVehicleInDirection(coordFrom, coordTo)
+    local rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 10, GetPlayerPed(-1), 0)
+    local a, b, c, d, vehicle = GetRaycastResult(rayHandle)
+    return vehicle
 end
