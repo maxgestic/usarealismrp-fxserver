@@ -73,7 +73,7 @@ AddEventHandler("cuff:checkWhitelist", function(clientevent)
   local userSource = tonumber(source)
   local user = exports["essentialmode"]:getPlayerFromId(userSource)
   local user_job = user.getActiveCharacterData("job")
-  if user_job == "sheriff" or user_job == "cop" or user_job == "corrections" then
+  if user_job == "sheriff" or user_job == "cop" or user_job == "corrections" or user_job == "dai" then
     TriggerClientEvent(clientevent, userSource)
   end
 end)

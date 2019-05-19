@@ -210,7 +210,8 @@ AddEventHandler('cuff:playPoliceAnim', function(animType)
 			dict = "anim@move_m@trash",
 			name = "pickup"
 		}
-		TriggerEvent("usa:playAnimation", anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 1.5)
+		TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 1, 'cuffing', 1.0)
+		--TriggerEvent("usa:playAnimation", anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 1.5)
 	end
 end)
 
