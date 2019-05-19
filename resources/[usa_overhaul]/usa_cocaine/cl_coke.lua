@@ -111,7 +111,7 @@ Citizen.CreateThread(function()
                 DoorTransition(playerPed, 1088.68, -3187.58, -38.99, 180.0)
             elseif GetDistanceBetweenCoords(playerCoords, 1088.68, -3187.58, -38.99, true) < 0.7 then -- leave coke location
                 DoorTransition(playerPed, 614.69, 2784.20, 43.48, 0.0)
-            elseif GetDistanceBetweenCoords(playerCoords, 1273.708, -1709.06, 54.77, true) < 3 and not cocaine.pedIsBusy then -- purchase supplies
+            elseif GetDistanceBetweenCoords(playerCoords, 1273.708, -1709.06, 54.77, true) < 2 and not cocaine.pedIsBusy then -- purchase supplies
                 if not cocaine.activeJob then
                     TriggerServerEvent("cocaineJob:checkUserMoney", cocaine.requiredSupplies)
                 else

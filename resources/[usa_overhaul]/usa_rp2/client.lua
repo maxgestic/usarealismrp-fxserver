@@ -73,18 +73,76 @@ Citizen.CreateThread(function()
     -- List of pickup hashes (https://pastebin.com/8EuSv2r1)
     RemoveAllPickupsOfType(0xDF711959) -- carbine rifle
     RemoveAllPickupsOfType(0xF9AFB48F) -- pistol
-    RemoveAllPickupsOfType(0xA9355DCD) -- pumpshotgun
-    RemoveAllPickupsOfType(0x678B81B1) -- nightstick
+    RemoveAllPickupsOfType(0x86500326) -- pumpshotgun
+    RemoveAllPickupsOfType(0xDF9ABCFC) -- nightstick
     RemoveAllPickupsOfType(0x84BD7BFD) -- crowbar
-    RemoveAllPickupsOfType(0x99B507EA) -- knife
+    RemoveAllPickupsOfType(0x08B8D9EA) -- knife
     RemoveAllPickupsOfType(0x958A4A8F) -- bat
     RemoveAllPickupsOfType(0x4E875F73) -- hammer
-    RemoveAllPickupsOfType(0x1B06D571) -- pistol
-    RemoveAllPickupsOfType(0x83839C4) -- vintage pistol
-    RemoveAllPickupsOfType(0x3656C8C1) -- stun gun
-    RemoveAllPickupsOfType(0xDD5DF8D9) -- machete
+    RemoveAllPickupsOfType(0xEA91B807) -- pistol
+    RemoveAllPickupsOfType(0x2BB8CC22) -- vintage pistol
+    RemoveAllPickupsOfType(0x9598EDD4) -- stun gun
+    RemoveAllPickupsOfType(0xBD0C4ED1) -- machete
+    RemoveAllPickupsOfType(0x2E4C762D) -- ammo for all weapons -- 
+    RemoveAllPickupsOfType(0x10A73D59)
+    RemoveAllPickupsOfType(0xD65BF49E)
+    RemoveAllPickupsOfType(0x60F784C2)
+    RemoveAllPickupsOfType(0x7E51DB8F)
+    RemoveAllPickupsOfType(0x7EBB7BCB)
+    RemoveAllPickupsOfType(0x16A73E3A)
+    RemoveAllPickupsOfType(0xAF272C6C)
+    RemoveAllPickupsOfType(0x5D95B557)
+    RemoveAllPickupsOfType(0xCA648B4F)
+    RemoveAllPickupsOfType(0x43AAEAE6)
+    RemoveAllPickupsOfType(0xE5EB8146)
+    RemoveAllPickupsOfType(0x6F38E9FB)
+    RemoveAllPickupsOfType(0x2D5CE030)
+    RemoveAllPickupsOfType(0xFD4AE5E5)
+    RemoveAllPickupsOfType(0x2451A293) -- ammo for all weapons ends -- 
   end
 end)
+
+Citizen.CreateThread(function()
+    -- Other stuff normally here, stripped for the sake of only scenario stuff
+    local SCENARIO_TYPES = {
+        "WORLD_VEHICLE_MILITARY_PLANES_SMALL", -- Zancudo Small Planes
+        "WORLD_VEHICLE_MILITARY_PLANES_BIG", -- Zancudo Big Planes
+    }
+    local SCENARIO_GROUPS = {
+        2017590552, -- LSIA planes
+        2141866469, -- Sandy Shores planes
+        1409640232, -- Grapeseed planes
+        "ng_planes", -- Far up in the skies jets
+    }
+    local SUPPRESSED_MODELS = {
+        "SHAMAL", -- They spawn on LSIA and try to take off
+        "LUXOR", -- They spawn on LSIA and try to take off
+        "LUXOR2", -- They spawn on LSIA and try to take off
+        "JET", -- They spawn on LSIA and try to take off and land, remove this if you still want em in the skies
+        "LAZER", -- They spawn on Zancudo and try to take off
+        "TITAN", -- They spawn on Zancudo and try to take off
+        "BARRACKS", -- Regularily driving around the Zancudo airport surface
+        "BARRACKS2", -- Regularily driving around the Zancudo airport surface
+        "CRUSADER", -- Regularily driving around the Zancudo airport surface
+        "RHINO", -- Regularily driving around the Zancudo airport surface
+        "AIRTUG", -- Regularily spawns on the LSIA airport surface
+        "RIPLEY", -- Regularily spawns on the LSIA airport surface
+    }
+
+    while true do
+        for _, sctyp in next, SCENARIO_TYPES do
+            SetScenarioTypeEnabled(sctyp, false)
+        end
+        for _, scgrp in next, SCENARIO_GROUPS do
+            SetScenarioGroupEnabled(scgrp, false)
+        end
+        for _, model in next, SUPPRESSED_MODELS do
+            SetVehicleModelIsSuppressed(GetHashKey(model), true)
+        end
+        Wait(10000)
+    end
+end)
+
 
 Citizen.CreateThread(function()
 	for i = 1, 12 do

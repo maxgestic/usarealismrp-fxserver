@@ -466,11 +466,16 @@ AddEventHandler('911:BankRobbery', function(x, y, z, street, text)
 end)
 
 AddEventHandler('911:Burglary', function(x, y, z, street, isMale)
-    local playerSource = source
-    local user = exports["essentialmode"]:getPlayerFromId(playerSource)
-    local string = '^*Burglary:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
-    Send911Notification(false, string, x, y, z, 'Burglary')
-    SendWeazelNewsAlert('Report of a ^burglary^r at ^3'..street..'^r, expose those theives! Don\'t get too much attention!', x, y, z, 'Burglary')
+    if recentcalls[street] ~= 'Burglary' then
+        recentcalls[street] = 'Burglary'
+        local playerSource = source
+        local user = exports["essentialmode"]:getPlayerFromId(playerSource)
+        local string = '^*Burglary:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
+        Send911Notification(false, string, x, y, z, 'Burglary')
+        SendWeazelNewsAlert('Report of a ^burglary^r at ^3'..street..'^r, expose those theives! Don\'t get too much attention!', x, y, z, 'Burglary')
+        Citizen.Wait(180000)
+        recentcalls[street] = nil
+    end
 end)
 
 RegisterServerEvent('carjack:playHandsUpOnAll')

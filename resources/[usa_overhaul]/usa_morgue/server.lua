@@ -94,7 +94,7 @@ end, {
 
 TriggerEvent('es:addGroupCommand', 'unmorgue', "mod", function(source, args, user)
 	local target_source = tonumber(args[2])
-	if GetPlayerName(target_source) then
+	if target_source and GetPlayerName(target_source) then
 		local target = exports['essentialmode']:getPlayerFromId(target_source)
 		local target_inventory = target.getActiveCharacterData('inventory')
 		for i = 1, #target_inventory do
@@ -119,19 +119,19 @@ end, {
 })
 
 RegisterServerEvent('morgue:checkToeTag')
-AddEventHandler('morgue:checkToeTag', function(source)
+AddEventHandler('morgue:checkToeTag', function()
   print("checking if character is morgued!")
-  _source = source
-  local user = exports["essentialmode"]:getPlayerFromId(_source)
+  local user = exports["essentialmode"]:getPlayerFromId(source)
   local user_inventory = user.getActiveCharacterData('inventory')
   for i = 1, #user_inventory do
   	local item = user_inventory[i]
   	if item.name == 'Toe Tag' then
-  		TriggerClientEvent("morgue:toeTag", _source)
+  		TriggerClientEvent("morgue:toeTag", source, true)
   		print('player\'s character is morgued!')
   		return
   	end
   end
+  TriggerClientEvent('morgue:toeTag', source, false)
 end)
 
 

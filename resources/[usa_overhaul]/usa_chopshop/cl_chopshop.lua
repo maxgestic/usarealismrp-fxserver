@@ -223,6 +223,7 @@ function GetVehicleBodyDamage(veh)
 end
 
 function ResetJob()
+  TriggerServerEvent('chopshop:resetJob')
   current_job.active = false
   current_job.vehicles = {}
   current_job.start_time = 0

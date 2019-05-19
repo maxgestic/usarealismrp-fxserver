@@ -10,26 +10,30 @@ local morgueTeleportLocations = {
 	}
 
 RegisterNetEvent('morgue:toeTag')
-AddEventHandler('morgue:toeTag', function()
-	local index = math.random(1, #morgueTeleportLocations)
-	DoScreenFadeOut(500)
-    Citizen.Wait(500)
-    -- admit
-    playerPed = PlayerPedId()
-    RequestCollisionAtCoord(morgueTeleportLocations[index].x, morgueTeleportLocations[index].y, morgueTeleportLocations[index].z)
-    Wait(1000)
-    TriggerServerEvent('InteractSound_SV:PlayOnSource', 'zip-close', 0.3)
-    SetEntityCoords(playerPed, morgueTeleportLocations[index].x, morgueTeleportLocations[index].y, morgueTeleportLocations[index].z, morgueTeleportLocations[index].heading, 0, 0, 1) -- tp to morgue
-    while not HasCollisionLoadedAroundEntity(playerPed) do
-        Citizen.Wait(100)
-        SetEntityCoords(playerPed, morgueTeleportLocations[index].x, morgueTeleportLocations[index].y, morgueTeleportLocations[index].z, morgueTeleportLocations[index].heading, 0, 0, 1) -- tp to hospital
+AddEventHandler('morgue:toeTag', function(toeTag)
+    if toeTag then
+    	local index = math.random(1, #morgueTeleportLocations)
+    	DoScreenFadeOut(500)
+        Citizen.Wait(500)
+        -- admit
+        playerPed = PlayerPedId()
+        RequestCollisionAtCoord(morgueTeleportLocations[index].x, morgueTeleportLocations[index].y, morgueTeleportLocations[index].z)
+        Wait(1000)
+        TriggerServerEvent('InteractSound_SV:PlayOnSource', 'zip-close', 0.3)
+        SetEntityCoords(playerPed, morgueTeleportLocations[index].x, morgueTeleportLocations[index].y, morgueTeleportLocations[index].z, morgueTeleportLocations[index].heading, 0, 0, 1) -- tp to morgue
+        while not HasCollisionLoadedAroundEntity(playerPed) do
+            Citizen.Wait(100)
+            SetEntityCoords(playerPed, morgueTeleportLocations[index].x, morgueTeleportLocations[index].y, morgueTeleportLocations[index].z, morgueTeleportLocations[index].heading, 0, 0, 1) -- tp to hospital
+        end
+        Citizen.Wait(3000)
+        DoScreenFadeIn(500)
+        -- remove any blindfolds/tied hands
+        TriggerEvent("crim:untieHands", GetPlayerServerId(PlayerId()))
+        TriggerEvent("crim:blindfold", false, true)
+        isMorgued = true
+    else
+        isMorgued = false
     end
-    Citizen.Wait(3000)
-    DoScreenFadeIn(500)
-    -- remove any blindfolds/tied hands
-    TriggerEvent("crim:untieHands", GetPlayerServerId(PlayerId()))
-    TriggerEvent("crim:blindfold", false, true)
-    isMorgued = true
 end)
 
 RegisterNetEvent('morgue:release')
@@ -53,9 +57,6 @@ AddEventHandler('morgue:release', function()
     TriggerEvent('usa:notify', 'You have been ~y~released~s~ from the morgue.')
 end)
 
-FreezeEntityPosition(PlayerPedId(), false)
-DoScreenFadeIn()
-
 Citizen.CreateThread(function()
 
 	while true do
@@ -64,12 +65,14 @@ Citizen.CreateThread(function()
 		local playerPed = PlayerPedId()
 		if (isMorgued) then
 			ShowHelp('You have been sent to the morgue, and can no longer play on this character.', true)
-			FreezeEntityPosition(playerPed, true) -- freeze player in place while in morgue
 			DisableControlAction(0, 288, true) -- phone
 			DisableControlAction(0, 244, true) -- interaction menu
 			DisableControlAction(0, 301, true) -- interaction menu
 			DisableControlAction(0, 249, true) -- talking
 			DisableControlAction(0, 306, true) -- talking
+            DisableControlAction(0, 30, true)
+            DisableControlAction(0, 31, true)
+            DisableControlAction(0, 44, true)
 		end
 	end
 end)

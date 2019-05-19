@@ -1,7 +1,7 @@
 local spawnableVehicles = {
 	['ems'] = {'maverick2', 'ambulance', 'firetruk'},
 	['sheriff'] = {'chrg14a', 'chrg14b', 'chrg18', 'cvpi11a', 'cvpi11b', 'bison19', 'sheriff2', 'scorcher', 'pbus', 'policet', 'tahoe', 'riot', 'policeb', 'maverick2', 'predator', 'fbi', 'fbi2', 'fbi3'},
-	['dai'] = {'schafter19', 'buffalo19', 'baller19', 'oracle19'}
+	['dai'] = {'schafter19', 'buffalo19', 'baller19', 'oracle19', 'taurus16a', 'chrg14a', 'chrg18a', 'cvpi11a'}
 }
 
 local VEH_RANKS = {
@@ -59,7 +59,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'livery', { "police", "sheriff", "ems", "fire" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'livery', { "police", "sheriff", "ems", "fire", "dai" }, function(source, args, user)
 	if args[2] then
 		TriggerClientEvent("vehicleCommands:setLivery", source, args[2])
 	else

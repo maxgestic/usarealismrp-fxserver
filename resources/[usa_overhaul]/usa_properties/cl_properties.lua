@@ -118,7 +118,7 @@ Citizen.CreateThread(function()
 				end
 			end
 			if Vdist(x, y, z, playerCoords) > 50.0 and not doorTransition then
-				SetEntityCoords(playerPed, x, y, z)
+				TriggerServerEvent('properties:requestExit', currentProperty.location, currentProperty.index, true)
 			end
 		else
 			DrawText3D(-115.40, -603.75, 36.28, 10, '[E] - Real Estate')
@@ -126,6 +126,10 @@ Citizen.CreateThread(function()
 				if data.type == 'motel' or data.type == 'house' then
 					if data.type == 'motel' then
 						DrawText3D(data.office[1], data.office[2], data.office[3], 5, '[E] - Move Properties (~g~$500~s~)')
+						local dist = Vdist(data.office[1], data.office[2], data.office[3], GetEntityCoords(playerPed))
+						if dist > 5.0 and dist < 50.0 then
+							DrawMarker(20, data.office[1], data.office[2], data.office[3], 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.5, 0.5, 0.5, 206, 47, 39, 255, false, true, 2, nil, nil, false)
+						end
 					end
 					for i = 1, #data.rooms do
 						local room = properties[property].rooms[i]
@@ -373,11 +377,13 @@ AddEventHandler('properties:loadOutfit', function(data)
 end)
 
 RegisterNetEvent('properties:exitProperty')
-AddEventHandler('properties:exitProperty', function()
+AddEventHandler('properties:exitProperty', function(noTp)
 	local playerPed = PlayerPedId()
 	local x, y, z = table.unpack(currentProperty.exitCoords)
 	local heading = currentProperty.exitHeading
-	DoorTransition(x, y, z, heading)
+	if not noTp then
+		DoorTransition(x, y, z, heading)
+	end
 	myInstance = {}
 	currentProperty = {}
 	for i = 0, 32 do
@@ -529,7 +535,6 @@ end)
 RegisterNetEvent('properties:lockpickHouseBurglary')
 AddEventHandler('properties:lockpickHouseBurglary', function(index, lockpickItem)
 	local playerPed = PlayerPedId()
-	local called911 = false
 
 	local beginTime = GetGameTimer()
 	RequestAnimDict("veh@break_in@0h@p_m_one@")
@@ -538,7 +543,6 @@ AddEventHandler('properties:lockpickHouseBurglary', function(index, lockpickItem
 	end
 
 	if GetClockHours() > 6 and GetClockHours() < 20 and math.random() > 0.30 then -- 90% chance of reporting when burglary is happening at day
-		called911 = true
 		local x, y, z = table.unpack(GetEntityCoords(playerPed))
 		local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
 		local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
@@ -596,13 +600,21 @@ AddEventHandler('properties:enterBurglaryHouse', function(_currentProperty)
 	local playerPed = PlayerPedId()
 	local x, y, z = table.unpack(currentProperty.entryCoords)
 	local heading = currentProperty.entryHeading
-	SpawnResidents()
+	local residentSpawned = false
+	if GetClockHours() > 6 and GetClockHours() < 20 and math.random() > 0.50 then
+		residentSpawned = true
+		SpawnResidents()
+	elseif GetClockHours() < 6 and GetClockHours() > 20 then
+		residentSpawned = true
+		SpawnResidents()
+	end
+
 	DoorTransition(x, y, z, heading)
 
 	local alertness = 0
 
 	Citizen.CreateThread(function()
-		while currentProperty.owner == -1 and alertness < 5000 do
+		while currentProperty.owner == -1 and alertness < 5000 and residentSpawned do
 			local beginTime = GetGameTimer()
 			while GetGameTimer() - beginTime < 4000 do
 				Citizen.Wait(0)
@@ -613,14 +625,14 @@ AddEventHandler('properties:enterBurglaryHouse', function(_currentProperty)
 	end)
 
 	Citizen.CreateThread(function()
-		while currentProperty.owner == -1 and alertness < 5000 do
+		while currentProperty.owner == -1 and alertness < 5000 and residentSpawned do
 			Citizen.Wait(0)
 			alertness = alertness + GetPlayerCurrentStealthNoise(PlayerId())
 			local speed = GetEntitySpeed(playerPed)
 			if speed > 0.7 and speed < 1.0 then
 				alertness = alertness + 2
 			elseif speed > 1.0 and speed < 1.5 then
-				alertness = alertness + 5
+				alertness = alertness + 3
 			elseif speed > 1.5 and speed < 2.0 then
 				alertness = alertness + 10
 			elseif speed > 2.0 and speed < 3.0 then
@@ -631,13 +643,10 @@ AddEventHandler('properties:enterBurglaryHouse', function(_currentProperty)
 				alertness = alertness - 1
 			end
 			if alertness > 5000 then
-				if not called911 then
-					local x, y, z = table.unpack(_currentProperty.exitCoords)
-					local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-					local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-					TriggerServerEvent('911:Burglary', x, y, z, lastStreetNAME, IsPedMale(playerPed))
-					called911 = true
-				end
+				local x, y, z = table.unpack(_currentProperty.exitCoords)
+				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+				TriggerServerEvent('911:Burglary', x, y, z, lastStreetNAME, IsPedMale(playerPed))
 				
 				local oneAttacking = false
 				for i = 1, #spawnedPeds do

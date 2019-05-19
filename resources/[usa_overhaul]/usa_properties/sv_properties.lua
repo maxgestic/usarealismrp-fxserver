@@ -680,6 +680,8 @@ TriggerEvent('es:addJobCommand', 'deletehouse', {'judge'}, function(source, args
 			TriggerClientEvent('usa:notify', targetSource, 'Your house is now foreclosure, ordered by ~y~'..user.getActiveCharacterData('fullName')..'~s~!')
 			TriggerClientEvent('usa:notify', source, 'House of ~y~'..target.getActiveCharacterData('fullName')..'~s~ is now foreclosure.')
 			RefreshProperties(targetSource, false)
+		else
+			TriggerClientEvent('usa:notify', source, 'This player does not own a house!')
 		end
 	end
 end, {
@@ -744,7 +746,6 @@ function RefreshProperties(source, spawnAtProperty)
 		}
 		user.setActiveCharacterData('property', property)
 	end
-
 	if not property['house'] then
 		-- evict owner if time has exceeded
 		if properties[property['location']].type == 'apartment' then
@@ -971,8 +972,8 @@ AddEventHandler('properties:markAddress', function(ssn, fname, lname)
 	TriggerClientEvent('usa:notify', source, 'Error while finding address!')
 end)
 
-RegisterServerEvent('character:loadCharacter')
-AddEventHandler('character:loadCharacter', function(activeSlot, spawnAtProperty)
+RegisterServerEvent('properties:loadCharacter')
+AddEventHandler('properties:loadCharacter', function(source, spawnAtProperty)
 	RefreshProperties(source, spawnAtProperty)
 end)
 
@@ -1101,7 +1102,7 @@ end)
 
 
 RegisterServerEvent('properties:requestExit')
-AddEventHandler('properties:requestExit', function(location, index)
+AddEventHandler('properties:requestExit', function(location, index, noTp)
 	local room = properties[location].rooms[index]
 	for i = 1, #room.instance do
 		if source == room.instance[i] then
@@ -1109,7 +1110,7 @@ AddEventHandler('properties:requestExit', function(location, index)
 		end
 	end
 	TriggerClientEvent('properties:updateData', -1, location, index, properties[location].rooms[index])
-	TriggerClientEvent('properties:exitProperty', source)
+	TriggerClientEvent('properties:exitProperty', source, noTp)
 	Citizen.Wait(1000)
 	for i = 1, #room.instance do
 		local sourceInside = properties[location].rooms[index].instance[i]

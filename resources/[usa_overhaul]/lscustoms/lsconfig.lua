@@ -296,7 +296,7 @@ LSC_Config.prices = {
 	offroadwheels = {
 		{name = "Stock", wtype = 4, mod = -1, price = 1000},
 		{name = "Raider", wtype = 4, mod = 0, price = 1000},
-		{name = "Mudslinger", wtype = 4, modtype = 23, wtype = 4, mod = 1, price = 1000},
+		{name = "Mudslinger", wtype = 4, modtype = 23, mod = 1, price = 1000},
 		{name = "Nevis", wtype = 4, mod = 2, price = 1000},
 		{name = "Cairngorm", wtype = 4, mod = 3, price = 1000},
 		{name = "Amazon", wtype = 4, mod = 4, price = 1000},

@@ -10,6 +10,7 @@ local tabletObject
 -- start of NUI menu
 
 local menuEnabled = false
+local gracePeriod = false
 
 function EnableGui(enable)
     SetNuiFocus(enable, enable)
@@ -80,9 +81,11 @@ Citizen.CreateThread(function()
     -- escaping jail check --
     if assigned_cell then
       local playerCoords = GetEntityCoords(PlayerPedId())
-      if Vdist(playerCoords, assigned_cell.x, assigned_cell.y, assigned_cell.z) > 350 then
+      if Vdist(playerCoords, assigned_cell.x, assigned_cell.y, assigned_cell.z) > 350 and not gracePeriod then
         TriggerEvent("jail:escaped")
         assigned_cell = nil
+      elseif Vdist(playerCoords, assigned_cell.x, assigned_cell.y, assigned_cell.z) > 350 and gracePeriod then
+        SetEntityCoords(playerPed, assigned_cell.x, assigned_cell.y, assigned_cell.z, 1, 0, 0, 1) -- tp to jail
       end
     end
     Citizen.Wait(0)
@@ -93,6 +96,7 @@ end)
 
 RegisterNetEvent("jail:jail")
 AddEventHandler("jail:jail", function(cell, gender)
+  gracePeriod = true
   local playerPed = PlayerPedId()
   TriggerServerEvent('InteractSound_SV:PlayOnSource', 'cell-door', 0.5)
   DoScreenFadeOut(1000)
@@ -120,6 +124,8 @@ AddEventHandler("jail:jail", function(cell, gender)
   TriggerEvent("jail:removeWeapons")
   TriggerEvent("death:toggleJailed", true)
   DoScreenFadeIn(1000)
+  Citizen.Wait(600000)
+  gracePeriod = false
 end)
 
 RegisterNetEvent("jail:release")

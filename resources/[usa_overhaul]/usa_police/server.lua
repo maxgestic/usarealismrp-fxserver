@@ -292,6 +292,7 @@ AddEventHandler("policestation2:loadOutfit", function(slot)
     TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 3})
   else
     DropPlayer(userSource, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+    TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for memory editing at a police station, please intervene^0!')
   end
 end)
 

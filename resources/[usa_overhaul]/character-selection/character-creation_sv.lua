@@ -158,7 +158,7 @@ AddEventHandler("character:new", function(data)
 end)
 
 RegisterServerEvent("character:setActive")
-AddEventHandler("character:setActive", function(slot)
+AddEventHandler("character:setActive", function(slot, spawnAtProperty)
 	local userSource = tonumber(source)
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		if user then
@@ -176,6 +176,9 @@ AddEventHandler("character:setActive", function(slot)
 			user.setActiveCharacterData("money", money_to_display) -- set money GUI in top right (?)
 			user.setActiveCharacterData("job", "civ")
 			TriggerEvent("eblips:remove", userSource)
+			TriggerEvent('properties:loadCharacter', source, spawnAtProperty)
+			-- check dmv / firearm permit license status --
+			TriggerEvent("police:checkSuspension", userSource)
 			--[[ check jailed status [ MOVED ]
 			print("calling checkJailedStatusOnPlayerJoin server function!")
 			TriggerEvent("usa_rp:checkJailedStatusOnPlayerJoin", userSource)
@@ -224,7 +227,7 @@ AddEventHandler("character:delete", function(slot)
 end)
 
 RegisterServerEvent("character:loadCharacter")
-AddEventHandler("character:loadCharacter", function(activeSlot)
+AddEventHandler("character:loadCharacter", function(activeSlot, spawnAtProperty)
 	print("trying to load character in active slot #" .. activeSlot)
 	local userSource = tonumber(source)
 	TriggerClientEvent('chat:removeSuggestionAll', userSource)
@@ -234,7 +237,6 @@ AddEventHandler("character:loadCharacter", function(activeSlot)
 		local character = characters[activeSlot]
 		local myGroup = user.getGroup()
 		TriggerClientEvent("character:setCharacter", userSource, character)
-		TriggerClientEvent('playerlist:playersToShow', userSource, false)
 		print("loaded character at slot #" .. activeSlot .. " with #weapons = " .. #(character.weapons))
 		-- set commands --
 		for k,v in pairs(exports['essentialmode']:getCommands()) do
@@ -242,11 +244,6 @@ AddEventHandler("character:loadCharacter", function(activeSlot)
 				TriggerClientEvent('chat:addSuggestion', userSource, '/' .. k, v.help, v.params)
 			end
 		end
-		-- check dmv / firearm permit license status --
-		TriggerEvent("police:checkSuspension", userSource)
-		TriggerEvent('morgue:checkToeTag', userSource)
-		-- Temporary event to automatically migrate existing player vehicles into new DB --
-		TriggerEvent("vehicles:migrateCheck", user, activeSlot)
 	end
 end)
 

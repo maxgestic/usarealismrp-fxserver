@@ -175,6 +175,8 @@ AddEventHandler("character:setCharacter", function(character)
 		end
 		-- check jailed status when finished loading character --
 		TriggerServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
+		TriggerServerEvent('morgue:checkToeTag')
+		FreezeEntityPosition(PlayerPedId(), false)
 	end)
 end)
 
@@ -230,9 +232,9 @@ RegisterNUICallback('select-character', function(data, cb)
 	TriggerEvent("chat:setCharName", selectedCharacter) -- for chat messages
 	TriggerServerEvent("altchat:setCharName", selectedCharacter) -- for altchat messages
 	-- loadout the player with the selected character appearance
-	TriggerServerEvent("character:loadCharacter", selectedCharacterSlot, spawnAtProperty)
+	TriggerServerEvent("character:loadCharacter", selectedCharacterSlot)
 	-- set active character slot
-	TriggerServerEvent("character:setActive", selectedCharacterSlot)
+	TriggerServerEvent("character:setActive", selectedCharacterSlot, spawnAtProperty)
 	-- update bank balance:
 	TriggerEvent("banking:updateBalance", data.character.bank)
 	cb('ok')
