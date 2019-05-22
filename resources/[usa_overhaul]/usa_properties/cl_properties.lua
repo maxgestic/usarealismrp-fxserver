@@ -159,7 +159,7 @@ Citizen.CreateThread(function()
 					if data.type == 'house' then
 						for i = 1, #data.rooms do
 							local room = data.rooms[i]
-							if Vdist(playerCoords, room.coords[1], room.coords[2], room.coords[3]) < 2.0 then
+							if Vdist(playerCoords, room.coords[1], room.coords[2], room.coords[3]) < 1.0 then
 								TriggerServerEvent('properties:requestEntry', property, i)
 								PlayDoorAnimation()
 							end

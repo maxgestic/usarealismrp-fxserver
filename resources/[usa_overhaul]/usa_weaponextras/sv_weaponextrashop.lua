@@ -136,10 +136,6 @@ AddEventHandler("weaponExtraShop:requestTintPurchase", function(tintId, wephash,
         --TriggerClientEvent("bikeShop:toggleMenu", source, false)
         user_weapons[i].tint = tintId
         user.setActiveCharacterData("weapons", user_weapons)
-        -- give money to property owner --
-        if property then
-          TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * tint.price))
-        end
       else
         TriggerClientEvent("usa:notify", source, "Not enough money!")
       end

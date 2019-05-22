@@ -3,7 +3,7 @@ AddEventHandler("pdmenu:checkWhitelist", function(clientevent)
   local userSource = tonumber(source)
   local user = exports["essentialmode"]:getPlayerFromId(userSource)
   local user_job = user.getActiveCharacterData("job")
-  if user_job == "sheriff" or user_job == "cop" then
+  if user_job == "sheriff" or user_job == "cop" or user_job == "dai" then
     TriggerClientEvent(clientevent, userSource)
   else
     TriggerClientEvent("usa:notify", userSource, "~y~You are not on-duty for POLICE.")
@@ -24,13 +24,19 @@ local VEH_RANKS = {
 	[8] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
 	[9] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
 	[10] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
+	['dai'] = {'schafter19', 'buffalo19', 'baller19', 'oracle19', 'taurus16a', 'chrg14a', 'chrg18a', 'cvpi11a'}
 }
 
 RegisterServerEvent('pdmenu:returnAllowedVehicles')
 AddEventHandler('pdmenu:returnAllowedVehicles', function()
 	local userSource = tonumber(source)
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	local user_rank = tonumber(user.getActiveCharacterData("policeRank"))
-	local allowedVehicles = VEH_RANKS[user_rank]
-	TriggerClientEvent('pdmenu:sendAllowedVehicles', userSource, allowedVehicles)
+	local user_job = user.getActiveCharacterData("job")
+	if user_job == "dai" then
+		TriggerClientEvent('pdmenu:sendAllowedVehicles', userSource, VEH_RANKS['dai'])
+	else
+		local user_rank = tonumber(user.getActiveCharacterData("policeRank"))
+		local allowedVehicles = VEH_RANKS[user_rank]
+		TriggerClientEvent('pdmenu:sendAllowedVehicles', userSource, allowedVehicles)
+	end
 end)

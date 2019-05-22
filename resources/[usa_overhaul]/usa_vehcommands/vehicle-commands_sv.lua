@@ -1,20 +1,20 @@
 local spawnableVehicles = {
 	['ems'] = {'maverick2', 'ambulance', 'firetruk'},
-	['sheriff'] = {'chrg14a', 'chrg14b', 'chrg18', 'cvpi11a', 'cvpi11b', 'bison19', 'sheriff2', 'scorcher', 'pbus', 'policet', 'tahoe', 'riot', 'policeb', 'maverick2', 'predator', 'fbi', 'fbi2', 'fbi3'},
+	['sheriff'] = {'chrg14a', 'chrg14b', 'chrg18', 'cvpi11a', 'cvpi11b', 'bison19', 'sheriff2', 'scorcher', 'pbus', 'policet', 'tahoe', 'riot', 'policeb', 'maverick2', 'predator', 'fbi', 'fbi2', 'fbi3', 'maverick2'},
 	['dai'] = {'schafter19', 'buffalo19', 'baller19', 'oracle19', 'taurus16a', 'chrg14a', 'chrg18a', 'cvpi11a'}
 }
 
 local VEH_RANKS = {
 	[1] = {'taurus16b', 'chrg18b', 'chrg14b', 'cvpi11b', 'bison19', 'sheriff2', 'scorcher'},
 	[2] = {'taurus16b', 'chrg18b', 'chrg14b', 'cvpi11b', 'bison19', 'sheriff2','scorcher', 'policet', 'tahoe'},
-	[3] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb'},
-	[4] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
-	[5] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
-	[6] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
-	[7] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
-	[8] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
-	[9] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
-	[10] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19'},
+	[3] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'maverick2'},
+	[4] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19', 'maverick2'},
+	[5] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19', 'maverick2'},
+	[6] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19', 'maverick2'},
+	[7] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19', 'maverick2'},
+	[8] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19', 'maverick2'},
+	[9] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19', 'maverick2'},
+	[10] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19', 'maverick2'},
 }
 
 TriggerEvent('es:addJobCommand', 'spawn', { "police", "sheriff", "ems", "fire", "dai" }, function(source, args, user)
@@ -49,7 +49,7 @@ TriggerEvent('es:addJobCommand', 'spawn', { "police", "sheriff", "ems", "fire", 
 					return
 				end
 			end
-			TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^3^*[SPAWN] ^r^0Options: schafter19, buffalo19, baller19", "oracle19")
+			TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^3^*[SPAWN] ^r^0Options: schafter19, buffalo19, baller19", "oracle19", "taurus16a", "chrg14a", "chrg18a", "cvpi11a")
 		end
 	end
 end, {

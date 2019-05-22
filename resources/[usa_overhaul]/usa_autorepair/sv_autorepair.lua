@@ -6,7 +6,7 @@ AddEventHandler("autoRepair:checkMoney", function()
   local user = exports["essentialmode"]:getPlayerFromId(userSource)
   local user_money = user.getActiveCharacterData("money")
   local user_job = user.getActiveCharacterData("job")
-  if user_job == "sheriff" or user_job == "ems" or user_job == "fire" then
+  if user_job == "sheriff" or user_job == "ems" or user_job == "fire" or user_job == "dai" then
     TriggerClientEvent("autoRepair:repairVehicle", userSource)
   else
     if user_money - REPAIR_COST >= 0 then

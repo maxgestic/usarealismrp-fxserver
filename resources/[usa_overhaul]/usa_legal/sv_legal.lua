@@ -83,10 +83,12 @@ AddEventHandler('legal:onDutyDAI', function()
 	local user_job = user.getActiveCharacterData('job')
 	if user_job == 'dai' then
 		user.setActiveCharacterData('job', 'civ')
+		TriggerClientEvent('interaction:setPlayersJob', source, 'civ')
 		TriggerClientEvent('usa:notify', source, 'You are now off-duty as a DAI.')
 	else
 		if da_rank and da_rank == 2 then
 			user.setActiveCharacterData('job', 'dai')
+			TriggerClientEvent('interaction:setPlayersJob', source, 'dai')
 			TriggerClientEvent('usa:notify', source, 'You are now on-duty as a DAI.')
 		else
 			TriggerClientEvent('usa:notify', source, 'You are not whitelisted for DAI!')

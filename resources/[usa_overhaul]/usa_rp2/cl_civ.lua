@@ -193,6 +193,7 @@ AddEventHandler('ping:requestPing', function()
   local playerPed = PlayerPedId()
   if not IsPedCuffed(playerPed) then
     TriggerEvent('usa:showHelp', true, 'A person has requested your location, use /pingaccept to accept this request.')
+    TriggerEvent('usa:notify', 'A person has requested your location, use /pingaccept to accept this request.')
   end
 end)
 

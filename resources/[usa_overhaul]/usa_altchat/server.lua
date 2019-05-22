@@ -100,6 +100,26 @@ end, {
 	}
 })
 
+TriggerEvent('es:addJobCommand', 'fakead', {'sheriff', 'police', 'dai'}, function(source, args, user, location)
+	local job = user.getActiveCharacterData("job")
+	if user.getActiveCharacterData("policeRank") < 4 and (job == "sheriff" or job == "police") then
+        TriggerClientEvent("usa:notify", source, "Not high enough rank!")
+        return
+    end
+	local name = args[2] .. " " .. args[3]
+	table.remove(args, 1)
+	table.remove(args, 1)
+	table.remove(args, 1)
+	local msg = table.concat(args, " ")
+	TriggerClientEvent('chatMessage', -1, "[Advertisement] - " .. name, {171, 67, 227}, msg)
+end, {
+	help = "Send a fake advertisement.",
+	params = {
+		{ name = "first name", help = "first name to show on ad" },
+		{ name = "last name", help = "last name to show on ad" },
+	}
+})
+
 TriggerEvent('es:addCommand', 'id', function(source, args, user, location)
 	showid(source, user, location)
 end, {help = "Present your identification card / DL."})

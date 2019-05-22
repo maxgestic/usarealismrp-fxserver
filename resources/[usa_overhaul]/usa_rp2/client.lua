@@ -54,7 +54,8 @@ local blacklistedVehicles = {
   1565978651,
   1043222410,
   -1700874274,
-  -1210451983
+  -1210451983,
+  GetHashKey('oppressor')
 
 }
 
@@ -69,7 +70,7 @@ LoadInterior(MRPD_INTERIOR)
 -- REMOVE AI WEAPON DROPS --
 Citizen.CreateThread(function()
   while true do
-    Citizen.Wait(100)
+    Citizen.Wait(0)
     -- List of pickup hashes (https://pastebin.com/8EuSv2r1)
     RemoveAllPickupsOfType(0xDF711959) -- carbine rifle
     RemoveAllPickupsOfType(0xF9AFB48F) -- pistol

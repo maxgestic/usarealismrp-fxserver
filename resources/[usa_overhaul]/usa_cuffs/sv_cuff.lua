@@ -26,7 +26,7 @@ AddEventHandler("cuff:Handcuff", function(id)
 	local user = exports["essentialmode"]:getPlayerFromId(usource)
 	--TriggerEvent("es:getPlayerFromId", usource, function(user)
 	local playerJob = user.getActiveCharacterData("job")
-		if playerJob == "sheriff" or playerJob == "cop" or playerJob == "corrections" then
+		if playerJob == "sheriff" or playerJob == "cop" or playerJob == "corrections" or playerJob == "dai" then
 			print("CUFFS: "..GetPlayerName(id).."["..GetPlayerIdentifier(id).."] has been cuffed/uncuffed by "..GetPlayerName(usource).."["..GetPlayerIdentifier(usource).."]")
 			TriggerClientEvent("cuff:Handcuff", tonumber(id))
 		end

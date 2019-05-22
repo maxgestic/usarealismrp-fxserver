@@ -43,15 +43,15 @@ end)
 RegisterServerEvent("chopshop:reward")
 AddEventHandler("chopshop:reward", function(veh_name, damage, property)
   local usource = source
-  local player = exports["essentialmode"]:getPlayerFromId(usource)
+  local user = exports["essentialmode"]:getPlayerFromId(usource)
   for player, vehicles in pairs(vehiclesWanted) do
     if player == source then
       for i = #vehicles, 1, -1 do
-        if string.lower(vehicles[i]) == string.lower(veh_name) then
-          local user_money = player.getActiveCharacterData("money")
+        if string.lower(vehicles[i].name) == string.lower(veh_name) then
+          local user_money = user.getActiveCharacterData("money")
           local reward = GetRewardFromName(veh_name)
           if (reward - damage) >= 0 then
-            player.setActiveCharacterData("money", user_money + (reward - damage))
+            user.setActiveCharacterData("money", user_money + (reward - damage))
             TriggerClientEvent("usa:notify", usource, "~y~Reward:~w~ $" .. (reward - damage) .. "\nThere was $" .. damage .. " in damages.")
           	if property then
           		-- give money to property owner --

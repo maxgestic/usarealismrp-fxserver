@@ -270,8 +270,8 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
 		end
 		-- remove from source player
 		removeItemFromPlayer(item, userSource)
-		TriggerClientEvent("usa:notify", userSource, "You gave " .. GetPlayerName(targetPlayerId) .. ": (x1) " .. item.name)
-		TriggerClientEvent("usa:notify", targetPlayerId, GetPlayerName(userSource) .. " has given you " .. ": (x1) " .. item.name)
+		TriggerClientEvent("usa:notify", userSource, "You gave " .. targetPlayerId .. ": (x1) " .. item.name)
+		TriggerClientEvent("usa:notify", targetPlayerId, userSource .. " has given you " .. ": (x1) " .. item.name)
 		-- play animation:
 		local anim = {
 		  dict = "anim@move_m@trash",

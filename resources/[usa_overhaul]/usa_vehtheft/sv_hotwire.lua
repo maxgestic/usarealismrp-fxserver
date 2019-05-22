@@ -89,13 +89,13 @@ AddEventHandler('veh:searchResult', function()
 	end
 end)
 
-TriggerEvent('es:addJobCommand', 'slimjim', { 'sheriff' }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'slimjim', { 'sheriff', 'dai' }, function(source, args, user)
 	TriggerClientEvent('veh:slimjimVehInFrontPolice', source)
 end, {
 	help = "Slimjim the vehicle in front"
 })
 
-TriggerEvent('es:addJobCommand', 'hotwire', { 'sheriff' }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'hotwire', { 'sheriff', 'dai' }, function(source, args, user)
 	TriggerClientEvent('veh:hotwireVehPolice', source)
 end, {
 	help = "Hotwire the vehicle you are currently in"

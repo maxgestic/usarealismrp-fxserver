@@ -8,14 +8,12 @@ local blacklistedNames = {
 	'prick',
 	'ngger',
 	'ngga',
-	'nga',
 	'nger',
-	'fck',
+	'fck', 
 	'fak',
 	'sht',
 	'sh1t',
 	'fuk',
-	'ing',
 	'fag',
 	'gay',
 	'cunt',
@@ -73,7 +71,7 @@ AddEventHandler("character:new", function(data)
 		local middleName = string.lower(data.middleName)
 		local lastName = string.lower(data.lastName)
 		if string.find(firstName, name) or string.find(middleName, name) or string.find(lastName, name) then
-			TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (1)')
+			TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (1) '..name)
 			print('Character name contained forbidden words: '..data.firstName..' '..data.middleName..' '..data.lastName)
 			return
 		end

@@ -230,7 +230,7 @@ RegisterServerEvent('evidence:checkJobForMenu')
 AddEventHandler('evidence:checkJobForMenu', function()
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local userJob = user.getActiveCharacterData('job')
-	if userJob == 'police' or userJob == 'sheriff' then
+	if userJob == 'police' or userJob == 'sheriff' or userJob == 'dai' then
 		TriggerClientEvent('evidence:openEvidenceMenu', source)
 	else
 		TriggerClientEvent('usa:notify', source, '~y~You are not on-duty for POLICE.')

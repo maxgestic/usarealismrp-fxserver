@@ -36,7 +36,10 @@ local CHAIR_MODELS = {
   {hash = 1005957871, offset = -0.3},
   {hash = -171943901, offset = 0.5},
   {hash = 475561894, offset = 0.5},
-  {hash = 2142033519, offset = 0.3}
+  {hash = 2142033519, offset = 0.3},
+  {hash = -1278649385, offset = -0.1},
+  {hash = 1339364336, offset = -0.1},
+  {hash = -109356459, offset = 0.5}
 }
 
 local sitting_on = nil

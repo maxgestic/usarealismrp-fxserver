@@ -1070,7 +1070,8 @@ end)
 RegisterServerEvent('properties:forceEntry')
 AddEventHandler('properties:forceEntry', function(location, index)
 	local user = exports["essentialmode"]:getPlayerFromId(source)
-	if user.getActiveCharacterData('job') == 'sheriff' then
+	local job = user.getActiveCharacterData('job')
+	if job == 'sheriff' or job == 'dai' then
 		print('PROPERTIES: '..source.. ' has forcefully BREACHED into room '..index.. ' at location '..location)
 		local room = properties[location].rooms[index]
 		table.insert(properties[location].rooms[index].instance, source)
