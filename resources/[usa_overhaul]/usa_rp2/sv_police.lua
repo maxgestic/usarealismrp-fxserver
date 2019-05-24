@@ -197,12 +197,12 @@ AddEventHandler("search:searchPlayer", function(playerId, src)
 	local user = exports["essentialmode"]:getPlayerFromId(playerId)
 	local user_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
 	local items = {}
-	local licenses = user.getActiveCharacterData("licenses")
+	--[[local licenses = user.getActiveCharacterData("licenses")
 	for index = 1, #licenses do
 		--if licenses[index].name == "Driver's License" then
 		table.insert(items, licenses[index])
 		--end
-	end
+	end]]
 	local playerInventory = user.getActiveCharacterData("inventory")
 	for i = 1, #playerInventory do
 		table.insert(items, playerInventory[i])

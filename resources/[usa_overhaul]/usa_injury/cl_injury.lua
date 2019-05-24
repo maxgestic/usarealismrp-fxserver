@@ -547,7 +547,6 @@ AddEventHandler('injuries:checkin', function()
     injuredParts = {}
     effects = {}
     StopScreenEffect('Rampage')
-    SetEntityHealth(PlayerPedId(), 200)
     TriggerEvent('death:allowRevive')
     TriggerEvent('civ:resetWalkStyle')
     TriggerEvent('usa:showHelp', true, 'You are currently being treated, please wait.')

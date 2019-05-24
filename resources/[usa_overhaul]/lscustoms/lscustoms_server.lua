@@ -115,17 +115,18 @@ AddEventHandler("LSC:buttonSelected", function(name, button, mname)
 		local mymoney = player.getActiveCharacterData("money")
 		local myjob = player.getActiveCharacterData("job")
 		button.price = math.abs(button.price) -- prevent mem hack to gain money (lol what?)
+		print(tprint(button))
 		if mname ~= 'main' then
 			for menuname, contents in pairs(prices) do
 				if menuname == mname then
 					if contents.startprice then
 						local actualprice = contents.startprice + (button.mod * contents.increaseby)
-						if button.price == actualprice then 
+						if button.price == actualprice or (button.name == 'Stock' and button.price == 0) then 
 							break
 						else 
 							TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for memory editing at a Los Santos Customs, please intervene^0!')
 							--TriggerClientEvent("chatMessage", -1, "^1^*[SYSTEM]^r^0 A silly goose, by the name of ^1"..player.getActiveCharacterData('fullName').."^0 just tried modifying memory. What do they think they're doin'?")
-							DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.") 
+							--DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.") 
 							return 
 						end
 					elseif contents.price then
@@ -134,7 +135,7 @@ AddEventHandler("LSC:buttonSelected", function(name, button, mname)
 						else 
 							TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for memory editing at a Los Santos Customs, please intervene^0!')
 							--TriggerClientEvent("chatMessage", -1, "^1^*[SYSTEM]^r^0 A silly goose, by the name of ^1"..player.getActiveCharacterData('fullName').."^0 just tried modifying memory. What do they think they're doin'?")
-							DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.") 
+							--DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.") 
 							return 
 						end
 					else
@@ -145,7 +146,7 @@ AddEventHandler("LSC:buttonSelected", function(name, button, mname)
 								else 
 									TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for memory editing at a Los Santos Customs, please intervene^0!')
 									--TriggerClientEvent("chatMessage", -1, "^1^*[SYSTEM]^r^0 A silly goose, by the name of ^1"..player.getActiveCharacterData('fullName').."^0 just tried modifying memory. What do they think they're doin'?")
-									DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.") 
+									--DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.") 
 									return 
 								end
 							end

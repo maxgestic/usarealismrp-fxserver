@@ -130,26 +130,30 @@ AddEventHandler('usa:repairVeh', function(target_vehicle)
     print(target_vehicle)
     local dict = "mini@repair"
     local playerPed = PlayerPedId()
-    if target_vehicle ~= 0 and GetVehicleEngineHealth(target_vehicle) < 350.0 or IsAnyVehicleTireBursted(target_vehicle) then
-        TriggerServerEvent('usa:removeRepairKit')
-        SetVehicleDoorOpen(target_vehicle, 4, false, false)
-        local beginTime = GetGameTimer()
-        while GetGameTimer() - beginTime < 16000 do
-            Citizen.Wait(1)
-            DrawTimer(beginTime, 16000, 1.42, 1.475, 'REPAIRING')
-            if not IsEntityPlayingAnim(playerPed, dict, 'fixing_a_player', 3) then
-                RequestAnimDict(dict)
-                TaskPlayAnim(playerPed, dict, "fixing_a_player", 8.0, 1.0, -1, 15, 1.0, 0, 0, 0)
+    if target_vehicle ~= 0 then
+        if GetVehicleEngineHealth(target_vehicle) < 850.0 or IsAnyVehicleTireBursted(target_vehicle) then
+            TriggerServerEvent('usa:removeRepairKit')
+            SetVehicleDoorOpen(target_vehicle, 4, false, false)
+            local beginTime = GetGameTimer()
+            while GetGameTimer() - beginTime < 16000 do
+                Citizen.Wait(1)
+                DrawTimer(beginTime, 16000, 1.42, 1.475, 'REPAIRING')
+                if not IsEntityPlayingAnim(playerPed, dict, 'fixing_a_player', 3) then
+                    RequestAnimDict(dict)
+                    TaskPlayAnim(playerPed, dict, "fixing_a_player", 8.0, 1.0, -1, 15, 1.0, 0, 0, 0)
+                end
             end
+            SetVehicleUndriveable(target_vehicle, false)
+            SetVehicleEngineHealth(target_vehicle, 800.0)
+            FixAllTires(target_vehicle)
+            ClearPedTasks(playerPed)
+            Citizen.Wait(500)
+            SetVehicleDoorShut(target_vehicle, 4, false)
+        else
+            exports.globals:notify("Repairs not needed!")
         end
-        SetVehicleUndriveable(target_vehicle, false)
-        SetVehicleEngineHealth(target_vehicle, 800.0)
-        FixAllTires(target_vehicle)
-        ClearPedTasks(playerPed)
-        Citizen.Wait(500)
-        SetVehicleDoorShut(target_vehicle, 4, false)
     else
-        exports.globals:notify("Repairs not needed!")
+        exports.globals:notify("Vehicle not found!")
     end
 end)
 
