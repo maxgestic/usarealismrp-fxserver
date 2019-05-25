@@ -40,7 +40,9 @@ end)
 AddEventHandler('usaSettings:returnUserSettings', function(_source, cb)
 	local playerSource = _source
 	GetUserSettings(playerSource, function(settings)
-		cb(settings)
+		if settings then
+			cb(settings)
+		end
 	end)
 end)
 
@@ -63,7 +65,7 @@ function GetUserSettings(source, cb)
 	TriggerEvent('es:exposeDBFunctions', function(couchdb)
         couchdb.getDocumentById("user-settings", steamName, function(settings)
             if settings then
-                cb(settings)
+              cb(settings)
             else
             	cb(false)
             end
