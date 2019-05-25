@@ -20,7 +20,7 @@ local CELLS = {
 TriggerEvent('es:addCommand', 'jail', function(source, args, user)
 	local user_job = user.getActiveCharacterData("job")
 	local user_jailtime = user.getActiveCharacterData("jailtime")
-	if user_job == "sheriff" or user_job == "cop" or user_job == "corrections" then
+	if user_job == "sheriff" or user_job == "cop" or user_job == "corrections" or user_job == "dai" then
 		TriggerClientEvent("jail:openMenu", tonumber(source))
 	elseif user_jailtime > 0 then
 		TriggerClientEvent("usa:notify", tonumber(source), "You have ~y~" .. user_jailtime .. " month(s) ~w~left in your jail sentence.")
@@ -52,6 +52,7 @@ AddEventHandler("jail:jailPlayerFromMenu", function(data)
 		jailPlayer(data, arrestingOfficerName, data.gender)
 	else
 		DropPlayer(userSource, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+		TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for LUA injection, please intervene^0!')
 	end
 end)
 
@@ -179,10 +180,10 @@ end)
 function GetFPRevoked(charges) -- firearm permit
 	local numbers = {
 		'2003', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2017', '2019', '2020',
-		'2103', '2014', '2201', 
-		'2202', '2203', '2204', '2205', '2206',
-		'2301', '2303', '2304', '2307',
-		'2401', '2403', '2409', '2410', '2411',
+		'2103', '2104', 
+		'2201', '2202', '2203', '2204', '2205', '2206',
+		'2301', '2303', '2304', '2307', '2309',
+		'2401', '2403', '2409', '2410', '2411', '2421',
 		'2502', '2503', '2504', '2505', '2506', '2508',
 		'2601', '2603', '2604', '2606', '2607', '2608', '2613',
 		'2701', '2703', '2705', '2711', '2715', '2716', '2724'

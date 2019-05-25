@@ -110,28 +110,6 @@ Citizen.CreateThread(function()
 				end
 				TaskPlayAnim(playerPed, "mp_arresting", "idle", 8.0, -8, -1, 49, 0, 0, 0, 0)
 			end
-
-			----------------------
-			-- uncuffing circle --
-			----------------------
-			for i = 1, #uncuff_locations do
-				DrawMarker(27, uncuff_locations[i].x, uncuff_locations[i].y, uncuff_locations[i].z - 0.9, 0, 0, 0, 0, 0, 0, 3.0, 3.0, 3.0, 240, 230, 140, 90, 0, 0, 2, 0, 0, 0, 0)
-				local playerCoords = GetEntityCoords(playerPed)
-				if Vdist(uncuff_locations[i].x, uncuff_locations[i].y, uncuff_locations[i].z, playerCoords) < 5.0 then
-					TriggerEvent("usa:notify", "Cutting off your cuffs! Stay nearby!")
-					local start = GetGameTimer()
-					while GetGameTimer() - start < 45000 do
-						Wait(45000)
-					end
-					if Vdist(uncuff_locations[i].x, uncuff_locations[i].y, uncuff_locations[i].z, playerCoords) > 5.0 then
-						TriggerClientEvent("usa:notify", "You went out of range!")
-					else
-						TriggerEvent("cuff:unCuff")
-					end
-					break
-				end
-			end
-
 		end
 	end
 end)
@@ -143,6 +121,38 @@ Citizen.CreateThread(function()
         if not isCuffed and IsControlPressed(0, 19) and IsControlJustPressed(0, 38) and not IsPedRagdoll(ped) and not IsEntityDead(ped) and DoesEntityExist(ped) and not IsPedSittingInAnyVehicle(ped) and not IsPedInMeleeCombat(ped) then
         	TriggerServerEvent('cuff:checkWhitelist', 'cuff:attemptToCuffNearest')
         end
+
+        ----------------------
+		-- uncuffing circle --
+		----------------------
+		for i = 1, #uncuff_locations do
+			DrawText3D(uncuff_locations[i].x, uncuff_locations[i].y, uncuff_locations[i].z, 10, 'Cuff Saw')
+			local playerCoords = GetEntityCoords(ped)
+			if Vdist(uncuff_locations[i].x, uncuff_locations[i].y, uncuff_locations[i].z, playerCoords) < 1.0 and isCuffed then
+				TriggerEvent("usa:notify", "Cutting off your cuffs! Stay nearby!")
+				if math.random() < 0.9 then
+					local x, y, z = table.unpack(GetEntityCoords(ped))
+					local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+					local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+					TriggerServerEvent('911:CuffCutting', x, y, z, lastStreetNAME, IsPedMale(ped))
+				end
+				local start = GetGameTimer()
+				local uncuff = true
+				while GetGameTimer() - start < 180000 do
+					DrawTimer(start, 180000, 1.42, 1.475, 'CUTTING')
+					playerCoords = GetEntityCoords(ped)
+					if Vdist(uncuff_locations[i].x, uncuff_locations[i].y, uncuff_locations[i].z, playerCoords) > 1.0 then
+						TriggerEvent("usa:notify", "You went out of range!")
+						uncuff = false
+						break
+					end
+					Wait(0)
+				end
+				if uncuff then
+					TriggerEvent("cuff:unCuff")
+				end
+			end
+		end
     end
 end)
 
@@ -200,7 +210,8 @@ AddEventHandler('cuff:playPoliceAnim', function(animType)
 			dict = "anim@move_m@trash",
 			name = "pickup"
 		}
-		TriggerEvent("usa:playAnimation", anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 1.5)
+		TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 1, 'cuffing', 1.0)
+		--TriggerEvent("usa:playAnimation", anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 1.5)
 	end
 end)
 
@@ -299,3 +310,54 @@ AddEventHandler('character:setCharacter', function()
 		SetPedComponentVariation(lPed, 7, 0, 0, 2)
 	end
 end)
+
+
+function DrawTimer(beginTime, duration, x, y, text)
+    if not HasStreamedTextureDictLoaded('timerbars') then
+        RequestStreamedTextureDict('timerbars')
+        while not HasStreamedTextureDictLoaded('timerbars') do
+            Citizen.Wait(0)
+        end
+    end
+
+    if GetTimeDifference(GetGameTimer(), beginTime) < duration then
+        w = (GetTimeDifference(GetGameTimer(), beginTime) * (0.085 / duration))
+    end
+
+    local correction = ((1.0 - math.floor(GetSafeZoneSize(), 2)) * 100) * 0.005
+    x, y = x - correction, y - correction
+
+    Set_2dLayer(0)
+    DrawSprite('timerbars', 'all_black_bg', x, y, 0.15, 0.0325, 0.0, 255, 255, 255, 180)
+
+    Set_2dLayer(1)
+    DrawRect(x + 0.0275, y, 0.085, 0.0125, 100, 0, 0, 180)
+
+    Set_2dLayer(2)
+    DrawRect(x - 0.015 + (w / 2), y, w, 0.0125, 150, 0, 0, 180)
+
+    SetTextColour(255, 255, 255, 180)
+    SetTextFont(0)
+    SetTextScale(0.3, 0.3)
+    SetTextCentre(true)
+    SetTextEntry('STRING')
+    AddTextComponentString(text)
+    Set_2dLayer(3)
+    DrawText(x - 0.06, y - 0.012)
+end
+
+function DrawText3D(x, y, z, distance, text)
+    if Vdist(GetEntityCoords(PlayerPedId()), x, y, z) < distance then
+        local onScreen,_x,_y=World3dToScreen2d(x,y,z)
+        SetTextScale(0.35, 0.35)
+        SetTextFont(4)
+        SetTextProportional(1)
+        SetTextColour(255, 255, 255, 215)
+        SetTextEntry("STRING")
+        SetTextCentre(1)
+        AddTextComponentString(text)
+        DrawText(_x,_y)
+        local factor = (string.len(text)) / 470
+        DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
+    end
+end

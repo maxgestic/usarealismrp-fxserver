@@ -53,6 +53,25 @@ AddEventHandler("death:respawn", function()
 	--end)
 end)
 
+RegisterServerEvent('death:revivePerson')
+AddEventHandler('death:revivePerson', function(targetSource)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	local userJob = user.getActiveCharacterData("job")
+	if userJob == "cop" or
+	userJob == "corrections" or
+	userJob == "sheriff" or
+	userJob == "highwaypatrol" or
+	userJob == "ems" or
+	userJob == "doctor" or
+	userJob == "fire" or
+	user.getGroup() == "mod" or
+	user.getGroup() == "admin" or
+	user.getGroup() == "superadmin" or
+	user.getGroup() == "owner" then
+		TriggerClientEvent('death:allowRevive', targetSource)
+	end
+end)
+
 TriggerEvent('es:addCommand', 'revive', function(source, args, user)
 	local from = source
 	local user = exports["essentialmode"]:getPlayerFromId(from)
@@ -66,12 +85,13 @@ TriggerEvent('es:addCommand', 'revive', function(source, args, user)
 				userJob == "ems" or
 				userJob == "doctor" or
 				userJob == "fire" or
+				userJob == "dai" or
 				user.getGroup() == "mod" or
 				user.getGroup() == "admin" or
 				user.getGroup() == "superadmin" or
 				user.getGroup() == "owner" then
 				if args[2] == nil then
-					TriggerClientEvent("death:reviveNearestDeadPed", from)
+					TriggerClientEvent("death:reviveNearest", from)
 				else
 					targetId = tonumber(args[2])
 					TriggerClientEvent("death:allowRevive", targetId)

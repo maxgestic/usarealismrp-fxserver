@@ -124,6 +124,7 @@ AddEventHandler("crim:foundPlayerToTie", function(id, tying_up, x, y, z, heading
 				-- bound target:
 				print("tying id #" .. id .. "'s hands!'")
 				TriggerClientEvent("crim:tieHands", id, x, y, z, heading)
+				TriggerClientEvent('crim:tyingHandsAnim', source)
 				-- notify player
 				TriggerClientEvent("usa:notify", source, "You have tied that person's hands together.")
 			else
@@ -134,7 +135,6 @@ AddEventHandler("crim:foundPlayerToTie", function(id, tying_up, x, y, z, heading
 	else
 		TriggerClientEvent("crim:untieHands", id, source, x, y, z, heading)
 	end
-	TriggerClientEvent('crim:tyingHandsAnim', source)
 end)
 
 ----------------------

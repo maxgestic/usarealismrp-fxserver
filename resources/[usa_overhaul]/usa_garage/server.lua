@@ -64,7 +64,7 @@ AddEventHandler("garage:storeVehicle", function(handle, numberPlateText, require
 	if required_jobs then
 		local userJob = user.getActiveCharacterData("job")
 		for i = 1, #required_jobs do
-			if userJob == required_jobs[i] then
+			if userJob == required_jobs[i] or (required_jobs[i] == 'sheriff' and user.getActiveCharacterData('policeRank') > 0) then
 				isAuthorized = true
 				break
 			end
@@ -160,7 +160,7 @@ AddEventHandler("garage:openMenu", function(required_jobs, _closest_shop)
 	if required_jobs then
 		local userJob = user.getActiveCharacterData("job")
 		for i = 1, #required_jobs do
-			if required_jobs[i] == userJob then
+			if required_jobs[i] == userJob or (required_jobs[i] == 'sheriff' and user.getActiveCharacterData('policeRank') > 0) then
 				GetVehiclesForMenu(user.getActiveCharacterData("vehicles"), function(vehs)
 					TriggerClientEvent("garage:openMenuWithVehiclesLoaded", usource, vehs)
 				end)

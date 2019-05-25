@@ -1,4 +1,4 @@
-TriggerEvent('es:addJobCommand', 'cuff', { "police", "sheriff", "corrections" }, function(source, args, user, location)
+TriggerEvent('es:addJobCommand', 'cuff', { "police", "sheriff", "corrections", "dai" }, function(source, args, user, location)
 	local userSource = tonumber(source)
 	if args[2] then -- id was passed as param
 		local tPID = tonumber(args[2])
@@ -26,7 +26,7 @@ AddEventHandler("cuff:Handcuff", function(id)
 	local user = exports["essentialmode"]:getPlayerFromId(usource)
 	--TriggerEvent("es:getPlayerFromId", usource, function(user)
 	local playerJob = user.getActiveCharacterData("job")
-		if playerJob == "sheriff" or playerJob == "cop" or playerJob == "corrections" then
+		if playerJob == "sheriff" or playerJob == "cop" or playerJob == "corrections" or playerJob == "dai" then
 			print("CUFFS: "..GetPlayerName(id).."["..GetPlayerIdentifier(id).."] has been cuffed/uncuffed by "..GetPlayerName(usource).."["..GetPlayerIdentifier(usource).."]")
 			TriggerClientEvent("cuff:Handcuff", tonumber(id))
 		end
@@ -38,7 +38,7 @@ AddEventHandler('cuff:triggerSuspectAnim', function(pedsource,x,y,z,heading)
     TriggerClientEvent('cuff:playSuspectAnim', pedsource,x,y,z,heading)
 end)
 
-TriggerEvent('es:addJobCommand', 'hc', {"police", "sheriff", "corrections"}, function(source, args, user, location)
+TriggerEvent('es:addJobCommand', 'hc', {"police", "sheriff", "corrections", "dai"}, function(source, args, user, location)
 	local userSource = tonumber(source)
 	if args[2] then
 		local sourceToHardcuff = tonumber(args[2])
@@ -53,7 +53,7 @@ TriggerEvent('es:addJobCommand', 'hc', {"police", "sheriff", "corrections"}, fun
 	end
 end, {help = 'Hardcuff the player specified, player must be cuffed first.', params = {{name = "id", help = "Target player ID #"}}})
 
-TriggerEvent('es:addJobCommand', 'sc', {"police", "sheriff", "corrections"}, function(source, args, user, location)
+TriggerEvent('es:addJobCommand', 'sc', {"police", "sheriff", "corrections", "dai"}, function(source, args, user, location)
 	local userSource = tonumber(source)
 	if args[2] then
 		local sourceToSoftcuff = tonumber(args[2])
@@ -73,7 +73,7 @@ AddEventHandler("cuff:checkWhitelist", function(clientevent)
   local userSource = tonumber(source)
   local user = exports["essentialmode"]:getPlayerFromId(userSource)
   local user_job = user.getActiveCharacterData("job")
-  if user_job == "sheriff" or user_job == "cop" or user_job == "corrections" then
+  if user_job == "sheriff" or user_job == "cop" or user_job == "corrections" or user_job == "dai" then
     TriggerClientEvent(clientevent, userSource)
   end
 end)

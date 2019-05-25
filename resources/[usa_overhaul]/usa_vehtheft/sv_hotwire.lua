@@ -22,15 +22,13 @@ AddEventHandler("veh:checkForKey", function(plate, engineOn)
 		if item then
 			if string.find(item.name, "Key") then
 				if string.find(plate, item.plate) then
-					TriggerClientEvent('veh:toggleEngine', userSource, true, engineOn)
-					TriggerClientEvent('veh:canVehicleBeSearched', userSource, false)
+					TriggerClientEvent('veh:toggleEngine', userSource, true, engineOn, false)
 					return
 				end
 			end
 		end
 	end
-	TriggerClientEvent('veh:toggleEngine', userSource, false, engineOn)
-	TriggerClientEvent('veh:canVehicleBeSearched', userSource, true)
+	TriggerClientEvent('veh:toggleEngine', userSource, false, engineOn, true)
 end)
 
 RegisterServerEvent('veh:removeHotwiringKit')
@@ -91,13 +89,13 @@ AddEventHandler('veh:searchResult', function()
 	end
 end)
 
-TriggerEvent('es:addJobCommand', 'slimjim', { 'sheriff' }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'slimjim', { 'sheriff', 'dai' }, function(source, args, user)
 	TriggerClientEvent('veh:slimjimVehInFrontPolice', source)
 end, {
 	help = "Slimjim the vehicle in front"
 })
 
-TriggerEvent('es:addJobCommand', 'hotwire', { 'sheriff' }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'hotwire', { 'sheriff', 'dai' }, function(source, args, user)
 	TriggerClientEvent('veh:hotwireVehPolice', source)
 end, {
 	help = "Hotwire the vehicle you are currently in"

@@ -1,3 +1,14 @@
+local legal_blips = {
+	{x = 233.29, y = -410.34, z = 48.11, sprite = 475, scale = 0.7, color = 9, label = 'Legal Offices'},
+	{x = -70.75, y = -801.20, z = 44.22, sprite = 475, scale = 0.7, color = 60, label = 'DA Office'}
+}
+
+local legal_peds = {
+	{x = -72.03, y = -814.49, z = 242.38, heading = 160.0, hash = GetHashKey('ig_bankman'), task = 'WORLD_HUMAN_CLIPBOARD'},
+	{x = -61.91, y = -818.21, z = 242.38, heading = 135.0, hash = GetHashKey('csb_reporter'), task = 'WORLD_HUMAN_DRINKING'},
+	{x = -72.43, y = -820.04, z = 242.38, heading = 64.0, hash = GetHashKey('s_m_m_security_01'), task = 'WORLD_HUMAN_LEANING'},
+}
+
 Citizen.CreateThread(function()
 	EnumerateBlips()
 	while true do
@@ -6,6 +17,8 @@ Citizen.CreateThread(function()
 		DrawText3D(233.29, -410.34, 48.11, 5, '[E] - Legal Offices')
 		DrawText3D(146.75, -738.35, 242.30, 5, '[E] - Exit')
 		DrawText3D(154.40, -742.87, 242.15, 5, '[E] - On/Off Duty (~g~Lawyer~s~)')
+		DrawText3D(-82.56, -806.42, 243.38, 2, '[E] - On/Off Duty (~g~DAI~s~)')
+		DrawText3D(-79.87, -801.90, 243.41, 3, '[E] - MDT')
 		if IsControlJustPressed(0, 38, true) then -- E
 			local playerCoords = GetEntityCoords(playerPed)
 			if Vdist(playerCoords, 233.29, -410.34, 48.11) < 2 then -- courthouse to legal offices
@@ -14,13 +27,17 @@ Citizen.CreateThread(function()
 				DoorTransition(playerPed, 233.39, -410.34, 48.11, 335.0)
 			elseif Vdist(playerCoords, 154.40, -742.87, 242.15) < 2 then
 				TriggerServerEvent('legal:checkBarCertificate')
+			elseif Vdist(playerCoords, -79.87, -801.90, 244.21) < 1.6 then
+				TriggerServerEvent('legal:openMDT')
+			elseif Vdist(playerCoords, -82.56, -806.42, 243.38) < 2.0 then
+				TriggerServerEvent('legal:onDutyDAI')
 			end
 		end
 	end
 end)
 
 RegisterNetEvent('lawyer:checkDistanceForPayment')
-AddEventHandler('laywer:checkDistanceForPayment', function(targetSource, targetAmount)
+AddEventHandler('lawyer:checkDistanceForPayment', function(targetSource, targetAmount)
 	local playerPed = PlayerPedId()
 	local targetPed = GetPlayerPed(GetPlayerFromServerId(targetSource))
 	if Vdist(GetEntityCoords(playerPed), GetEntityCoords(targetPed)) < 5.0 then
@@ -71,13 +88,34 @@ function DoorTransition(playerPed, x, y, z, heading)
 end
 
 function EnumerateBlips()
-	local blip = AddBlipForCoord(233.29, -410.34, 48.11)
-	SetBlipSprite(blip, 475)
-	SetBlipDisplay(blip, 4)
-	SetBlipScale(blip, 0.7)
-	SetBlipColour(blip, 9)
-	SetBlipAsShortRange(blip, true)
-	BeginTextCommandSetBlipName("STRING")
-	AddTextComponentString('Legal Offices')
-	EndTextCommandSetBlipName(blip)
+	for i = 1, #legal_blips do
+		local blip = legal_blips[i]
+		local handle = AddBlipForCoord(blip.x, blip.y, blip.z)
+		SetBlipSprite(handle, blip.sprite)
+		SetBlipDisplay(handle, 4)
+		SetBlipScale(handle, blip.scale)
+		SetBlipColour(handle, blip.color)
+		SetBlipAsShortRange(handle, true)
+		BeginTextCommandSetBlipName("STRING")
+		AddTextComponentString(blip.label)
+		EndTextCommandSetBlipName(handle)
+	end
 end
+
+Citizen.CreateThread(function()
+	for i = 1, #legal_peds do
+		local ped = legal_peds[i]
+		RequestModel(ped.hash)
+		while not HasModelLoaded(ped.hash) do
+			Citizen.Wait(100)
+		end
+		local handle = CreatePed(4, ped.hash, ped.x, ped.y, ped.z, ped.heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
+		SetEntityCanBeDamaged(handle, false)
+		SetPedCanRagdollFromPlayerImpact(handle, false)
+		SetBlockingOfNonTemporaryEvents(handle, true)
+		SetPedFleeAttributes(handle, 0, 0)
+		SetPedCombatAttributes(handle, 17, 1)
+		SetPedRandomComponentVariation(handle, true)
+		TaskStartScenarioInPlace(handle, ped.task, 0, true);
+	end
+end)

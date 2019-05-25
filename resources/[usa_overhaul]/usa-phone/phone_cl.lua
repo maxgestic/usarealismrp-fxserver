@@ -204,9 +204,23 @@ AddEventHandler("phone:endCall", function()
 	TriggerEvent("swayam:notification", "Whiz Wireless", "Call ~r~ended~w~.", "CHAR_MP_DETONATEPHONE")
 end)
 
-
 RegisterNetEvent('properties:enterProperty')
 AddEventHandler('properties:enterProperty', function(_currentProperty)
+	voiceChannel = _currentProperty.voiceChannel
+	while on_call do
+		Citizen.Wait(100)
+	end
+	if voiceChannel ~= 0 then
+		NetworkSetVoiceChannel(_currentProperty.voiceChannel)
+		print('setting to property voice')
+	else
+		NetworkClearVoiceChannel()
+		print('clearing voice')
+	end
+end)
+
+RegisterNetEvent('properties:breachProperty')
+AddEventHandler('properties:breachProperty', function()
 	voiceChannel = _currentProperty.voiceChannel
 	while on_call do
 		Citizen.Wait(100)
@@ -232,6 +246,37 @@ AddEventHandler('properties:exitProperty', function()
 	else
 		NetworkSetVoiceChannel(voiceChannel)
 		print('exiting voice channel in property')
+	end
+end)
+
+RegisterNetEvent('properties:lockpickHouseBurglary')
+AddEventHandler('properties:lockpickHouseBurglary', function(_currentProperty)
+	Citizen.Wait(20000)
+	voiceChannel = _currentProperty.voiceChannel
+	while on_call do
+		Citizen.Wait(100)
+	end
+	if voiceChannel ~= 0 then
+		NetworkSetVoiceChannel(_currentProperty.voiceChannel)
+		print('setting to property voice: '.._currentProperty.voiceChannel)
+	else
+		NetworkClearVoiceChannel()
+		print('clearing voice')
+	end
+end)
+
+RegisterNetEvent('properties:breachHouseBurglary')
+AddEventHandler('properties:breachHouseBurglary', function(_currentProperty)
+	voiceChannel = _currentProperty.voiceChannel
+	while on_call do
+		Citizen.Wait(100)
+	end
+	if voiceChannel ~= 0 then
+		NetworkSetVoiceChannel(_currentProperty.voiceChannel)
+		print('setting to property voice: '.._currentProperty.voiceChannel)
+	else
+		NetworkClearVoiceChannel()
+		print('clearing voice')
 	end
 end)
 

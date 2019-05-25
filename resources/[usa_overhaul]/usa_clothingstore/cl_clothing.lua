@@ -2,21 +2,22 @@
 --Global Variables --
 -------------------------
 local CLOTHING_STORE_LOCATIONS = {
-	{x = 1.27486, y = 6511.89, z = 30.8778}, -- paleto bay
-	{x = 1692.24, y = 4819.79, z = 41.0631}, -- grape seed
-	{x = 1199.09, y = 2707.86, z = 37.0226}, -- sandy shores 1
-	{x = 614.565, y = 2763.17, z = 41.0881}, -- sandy shores 2
-	{x = -1097.71, y = 2711.18, z = 18.5079}, -- route 68
-	{x = -3170.52, y = 1043.97, z = 20.0632}, -- chumash, great ocean hwy
-	{x = -1449.93, y = -236.979, z = 49.0106}, -- vinewood 1
-	{x = -710.239, y = -152.319, z = 37.0151}, -- vinewood 2
-	{x = -1192.84, y = -767.861, z = 17.0187}, -- vinewood 3
-	{x = -163.61, y = -303.987, z = 39.0333}, -- vinewood 4
-	{x = 125.403, y = -223.887, z = 54.0578}, -- vinewood 5
-	{x = 423.474, y = -809.565, z = 29.0911}, -- vinewood 6
-	{x = -818.509, y = -1074.14, z = 11.0281}, -- vinewood 7
-	{x = 77.7774, y = -1389.87, z = 29.0761}, -- vinewood
-	{x = 105.8, y = -1302.9, z = 28.7, noblip = true} -- vanilla unicorn
+	{x = 1.27486, y = 6511.89, z = 31.8778}, -- paleto bay
+	{x = 1692.24, y = 4819.79, z = 42.0631}, -- grape seed
+	{x = 1199.09, y = 2707.86, z = 38.0226}, -- sandy shores 1
+	{x = 614.565, y = 2763.17, z = 42.0881}, -- sandy shores 2
+	{x = -1097.71, y = 2711.18, z = 19.5079}, -- route 68
+	{x = -3170.52, y = 1043.97, z = 21.0632}, -- chumash, great ocean hwy
+	{x = -1449.93, y = -236.979, z = 50.0106}, -- vinewood 1
+	{x = -710.239, y = -152.319, z = 38.0151}, -- vinewood 2
+	{x = -1192.84, y = -767.861, z = 18.0187}, -- vinewood 3
+	{x = -163.61, y = -303.987, z = 40.0333}, -- vinewood 4
+	{x = 125.403, y = -223.887, z = 55.0578}, -- vinewood 5
+	{x = 423.474, y = -808.135, z = 29.4911}, -- vinewood 6
+	{x = -818.509, y = -1074.14, z = 12.0281}, -- vinewood 7
+	{x = 77.7774, y = -1389.87, z = 30.0761}, -- vinewood
+	{x = 105.8, y = -1302.9, z = 28.7, noblip = true}, -- vanilla unicorn
+	{x = -82.16, y = -809.99, z = 243.38, blacklistExempt = true, noblip = true}
 }
 local me = nil
 local mycoords = nil
@@ -35,12 +36,16 @@ local PROPS = { "Head", "Glasses", "Ear Acessories"}
 
 local BLACKLISTED_ITEMS = {
 	["components"] = {
-		[8] = {67, 97, 71, 72, 41, 43}, -- torso 1
-		[11] = {17, 18, 19, 24, 26, 29, 30, 31, 32, 35, 36,  38, 39, 40, 29, 51, 52, 64, 70, 74, 75, 80, 81, 93, 94, 97, 98, 100, 101, 102, 103, 111, 143, 149, 150, 154, 183, 123, 118}, -- torso 2
-		[9] = {4, 7, 10, 12, 15, 17, 18, 20, 21, 26, 27} -- vest
+		[8] = {16, 18, 37, 38, 39, 42, 43, 44, 51, 52, 53, 54, 55, 57, 58, 65, 66, 67, 71, 72, 92, 93, 97, 122, 130, 131}, -- torso 1
+		[11] = {16, 17, 18, 19, 22, 24, 26, 29, 30, 31, 32, 34, 35, 36, 39, 40, 41, 47, 48, 51, 52, 64, 74, 75, 77, 80, 81, 93, 94, 97, 98, 100, 101, 102, 103, 111, 118, 123, 133, 143, 149, 150, 154, 155, 156, 183}, -- torso 2
+		[7] = {1, 6, 8, 42, 119},
+		[4] = {32}, -- Legs
+		[5] = {44, 45}, -- parachute / bag
+		[9] = {4, 7, 9, 10, 12, 15, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28}, -- vest
+		[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 24, 57, 58} -- textures
 	},
 	["props"] = {
-		[0] = {8, 10, 13, 17, 33, 44, 45, 48}
+		[0] = {1, 8, 10, 13, 17, 33, 46}
 	}
 }
 
@@ -95,6 +100,8 @@ AddEventHandler('blips:returnBlips', function(blipsTable)
   end
 end)
 
+local lastShop = nil
+
 -----------------
 -----------------
 -----------------
@@ -137,7 +144,7 @@ Citizen.CreateThread(function()
 				end
 
 				for i = 1, #CLOTHING_STORE_LOCATIONS do
-					DrawText3D(CLOTHING_STORE_LOCATIONS[i].x, CLOTHING_STORE_LOCATIONS[i].y, CLOTHING_STORE_LOCATIONS[i].z, 5, '~g~E ~s~ - Clothes Store (~g~$200.00~s~)')
+					DrawText3D(CLOTHING_STORE_LOCATIONS[i].x, CLOTHING_STORE_LOCATIONS[i].y, CLOTHING_STORE_LOCATIONS[i].z, 2, '[E] - Clothes Store (~g~$200.00~s~)')
 				end
 				-- process menus --
 				_menuPool:MouseControlsEnabled(false)
@@ -190,12 +197,15 @@ function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
 end
 
 function IsNearStore()
-			for _, item in pairs(CLOTHING_STORE_LOCATIONS) do
-				local distance = GetDistanceBetweenCoords(item.x, item.y, item.z,  mycoords.x, mycoords.y, mycoords.z, true)
-				if distance <= 5 then
-					return true
-				end
-			end
+	local index = 0
+	for _, item in pairs(CLOTHING_STORE_LOCATIONS) do
+		index = index + 1
+		local distance = GetDistanceBetweenCoords(item.x, item.y, item.z,  mycoords.x, mycoords.y, mycoords.z, true)
+		if distance <= 1 then
+			lastShop = index
+			return true
+		end
+	end
 end
 
 function IsBlacklisted(type, adjusted_index, val)
@@ -264,7 +274,7 @@ function CreateMenu()
 				ComponentValuesMenu.OnListChange = function(sender, item, index)
  					if item == component_changer then
 						 local val = item:IndexToItem(index)
-						 if not IsBlacklisted("components", adjusted_index, val) then
+						 if (not IsBlacklisted("components", adjusted_index, val) or CLOTHING_STORE_LOCATIONS[lastShop].blacklistExempt) then
 							 --print("setting adjusted index " .. adjusted_index .. " to val " .. val)
 							 SetPedComponentVariation(me, adjusted_index, val, 0, 0)
 							 UpdateValueChangerMenu(me, adjusted_index, val, false)
@@ -307,7 +317,7 @@ function CreateMenu()
 						 local val = item:IndexToItem(index)
 						 ClearPedProp(me, adjusted_index)
 						 if val then
-							 if not IsBlacklisted("props", adjusted_index, val) then
+							 if (not IsBlacklisted("props", adjusted_index, val) or CLOTHING_STORE_LOCATIONS[lastShop].blacklistExempt) then
 								 --print("adjusted index: " .. adjusted_index .. ", val: " .. val)
 								 SetPedPropIndex(me, adjusted_index, val, 0, true)
 								 UpdateValueChangerMenu(me, adjusted_index, val, true)
@@ -389,7 +399,7 @@ function UpdateValueChangerMenu(me, adjusted_index, oldval, isProp)
 		ComponentValuesMenu.OnListChange = function(sender, item, index)
 			if item == component_changer then
 				 local val2 = item:IndexToItem(index)
-				 if not IsBlacklisted("components", adjusted_index, val2) then
+				 if not IsBlacklisted("components", adjusted_index, val2) or CLOTHING_STORE_LOCATIONS[lastShop].blacklistExempt then
 					 --print("setting adjusted index " .. adjusted_index .. " to val2 " .. val2)
 					 SetPedComponentVariation(me, adjusted_index, val2, 0, 0)
 					 UpdateValueChangerMenu(me, adjusted_index, val2)
@@ -418,7 +428,7 @@ function UpdateValueChangerMenu(me, adjusted_index, oldval, isProp)
 				 local val2 = item:IndexToItem(index)
 				 ClearPedProp(me, adjusted_index)
 				 if val2 then
-					 if not IsBlacklisted("props", adjusted_index, val2) then
+					 if not IsBlacklisted("props", adjusted_index, val2) or CLOTHING_STORE_LOCATIONS[lastShop].blacklistExempt then
 						 --print("adjusted index: " .. adjusted_index .. ", val2: " .. val2)
 						 SetPedPropIndex(me, adjusted_index, val2, 0, true)
 						 UpdateValueChangerMenu(me, adjusted_index, val2, true)
@@ -475,7 +485,7 @@ function DrawText3D(x, y, z, distance, text)
     SetTextCentre(1)
     AddTextComponentString(text)
     DrawText(_x,_y)
-    local factor = (string.len(text)) / 470
+    local factor = (string.len(text)) / 370
     DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
   end
 end

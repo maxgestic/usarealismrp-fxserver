@@ -52,13 +52,15 @@ end)
 
 TriggerEvent('es:addGroupCommand', 'closebank', 'admin', function(source, args, user)
 	bankClosed = true
-	TriggerClientEvent("usa:notify", source, "The bank is now closed!")
+	TriggerEvent("usa:notify", source, "The bank is now closed!")
+	TriggerEvent("usa:notifyStaff", '^1^*[STAFF]^r^0 Player ^1'..GetPlayerName(source)..' ['..source..'] ^0 has closed the bank^0.')
 end, {
 	help = "Close the bank from being robbed."
 })
 
 TriggerEvent('es:addGroupCommand', 'openbank', 'admin', function(source, args, user)
 	bankClosed = false
+	TriggerEvent("usa:notifyStaff", '^1^*[STAFF]^r^0 Player ^1'..GetPlayerName(source)..' ['..source..'] ^0 has opened the bank^0.')
 	TriggerClientEvent("usa:notify", source, "The bank is now open!")
 end, {
 	help = "Open the bank to be robbed."

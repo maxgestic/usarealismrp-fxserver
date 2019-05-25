@@ -221,9 +221,25 @@ AddEventHandler('rconCommand', function(cmd, args)
 	if cmd == "setbank" then
 		local target = tonumber(args[1])
 		local newAmount = tonumber(args[2])
-		local user = exports["essentialmode"]:getPlayerFromId(target)
-		user.setActiveCharacterData("bank", newAmount)
-		CancelEvent()
+		if GetPlayerName(target) and newAmount and newAmount > 0 then
+			local user = exports["essentialmode"]:getPlayerFromId(target)
+			user.setActiveCharacterData("bank", newAmount)
+			TriggerClientEvent('chatMessage', target, "", {255, 255, 255}, "^2^*[SERVER] ^r^0Your bank has been set to ^2^*" .. newAmount..'^r^0.')
+			TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Bank of ^2'..GetPlayerName(target)..' ['..target..'] ^0 has been set to ^2^*'..newAmount..'^r^0 by ^2^*console^r^0.')
+			print('Bank set!')
+			CancelEvent()
+		end
+	elseif cmd == "givebank" then
+		local target = tonumber(args[1])
+		local amountToGive = tonumber(args[2])
+		if GetPlayerName(target) and newAmount and newAmount > 0 then
+			local user = exports["essentialmode"]:getPlayerFromId(target)
+			user.setActiveCharacterData("bank", user.getActiveCharacterData('bank') + amountToGive)
+			TriggerClientEvent('chatMessage', target, "", {255, 255, 255}, "^2^*[SERVER] ^r^0You have received ^2^*" .. amount..'^r^0 in your bank.')
+			TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(target)..' ['..target..'] ^0 has received ^2^*'..amountToGive..'^r^0 bank money from ^2^*console^r^0.')
+			print('Bank set!')
+			CancelEvent()
+		end
 	end
 end)
 
@@ -239,10 +255,10 @@ AddEventHandler('bank:givecash', function(toPlayer, amount)
 			local recipient = exports["essentialmode"]:getPlayerFromId(toPlayer)
 			local user_money_2 = recipient.getActiveCharacterData("money")
 			recipient.setActiveCharacterData("money", user_money_2 + amount)
-			TriggerClientEvent("usa:notify", source, "You gave " .. recipient.getActiveCharacterData("fullName") .. " ~y~$".. amount)
-			TriggerClientEvent("usa:notify", toPlayer, user.getActiveCharacterData("fullName") .. " gave you ~g~$".. amount)
-			TriggerClientEvent('chatMessage', source, "^1[BANK]", {0, 0, 200}, "You gave " .. recipient.getActiveCharacterData("fullName") .. " ^3$".. amount)
-			TriggerClientEvent('chatMessage', toPlayer, "^1[BANK]", {0, 0, 200}, user.getActiveCharacterData("fullName") .. " gave you ^3$".. amount)
+			--TriggerClientEvent("usa:notify", source, "You gave " .. recipient.getActiveCharacterData("fullName") .. " $".. amount)
+			--TriggerClientEvent("usa:notify", toPlayer, user.getActiveCharacterData("fullName") .. " gave you $".. amount)
+			--TriggerClientEvent('chatMessage', source, "^1[BANK]", {0, 0, 200}, "You gave " .. recipient.getActiveCharacterData("fullName") .. " ^3$".. amount)
+			--TriggerClientEvent('chatMessage', toPlayer, "^1[BANK]", {0, 0, 200}, user.getActiveCharacterData("fullName") .. " gave you ^3$".. amount)
 			--end)
 		else
 			if (tonumber(user_money_1) < tonumber(amount)) then

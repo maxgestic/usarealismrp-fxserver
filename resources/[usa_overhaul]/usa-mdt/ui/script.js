@@ -23,6 +23,7 @@ const mdtApp = new Vue({
         plate_check: {
             search_input: null,
             registered_owner: null,
+            flags: null,
             veh_name: null,
             plate: null
         },
@@ -117,6 +118,14 @@ const mdtApp = new Vue({
                     this.error = "Please enter an SSN or a first and last name to perform a person check!";
 
             }
+        },
+        PerformMarkAddress() {
+            /* request person info */
+            $.post('http://usa-mdt/PerformMarkAddress', JSON.stringify({
+                ssn: this.person_check.ssn,
+                fname: this.person_check.fname,
+                lname: this.person_check.lname
+            }));
         },
         PerformPlateCheck() {
             /* request person info */
@@ -319,6 +328,7 @@ document.onreadystatechange = () => {
                 mdtApp.plate_check.registered_owner = event.data.plate_info.registered_owner;
                 mdtApp.plate_check.veh_name = event.data.plate_info.veh_name;
                 mdtApp.plate_check.plate = event.data.plate_info.plate;
+                mdtApp.plate_check.flags = event.data.plate_info.flags;
                 /* hide error message */
                 mdtApp.error = null;
             } else if (event.data.type == "weaponInfoLoaded") {
@@ -367,6 +377,7 @@ document.onreadystatechange = () => {
                     mdtApp.plate_check = {
                         search_input: null,
                         registered_owner: null,
+                        flags: null,
                         veh_name: null,
                         plate: null
                     }

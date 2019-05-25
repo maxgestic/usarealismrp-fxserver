@@ -175,6 +175,7 @@
                             <br>
                             <button v-on:click="PerformPersonCheck" type="button" class="w3-btn w3-padding w3-text-black" style="width:120px; background-color: lightgray;">Search &nbsp; &#10095;</button>
                             <button onclick="document.getElementById('photo-update').style.display='block'" type="button" class="w3-btn w3-padding w3-text-black" style="width:140px; background-color: lightgray;">Update Photo</button>
+                            <button v-on:click="PerformMarkAddress" type="button" class="w3-btn w3-padding w3-text-black" style="width:158px; background-color: lightgray;">Address to GPS</button>
                         </form>
 
                         <div>
@@ -344,6 +345,15 @@
                             </tr>
                         </table>
                         <span v-else style="color: red"><b>No make or model found!</b></span>
+
+                        <h3 class="mini-smaller"><b>Flags:</b></h3>
+
+                        <table v-if="plate_check.flags" class="w3-table-all w3-small">
+                            <tr>
+                                <td>{{ plate_check.flags }}</td>
+                            </tr>
+                        </table>
+                        <span v-else style="color: red"><b>No flags found!</b></span>
 
                     </div>
 

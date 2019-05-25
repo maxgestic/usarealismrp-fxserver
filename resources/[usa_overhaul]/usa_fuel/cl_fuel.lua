@@ -142,20 +142,24 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(1000)
-		if IsPedInAnyVehicle(playerPed, -1) and GetPedInVehicleSeat(playerPed == -1) and GetVehicleType(playerVeh) ~= 'Blacklisted' then
+		if IsPedInAnyVehicle(playerPed, -1) and GetPedInVehicleSeat(playerVeh, -1) == playerPed and GetVehicleType(playerVeh) ~= 'Blacklisted' then
 			local vehicleSpeed = math.ceil(GetEntitySpeed(playerVeh) * 2.236936)
 			if vehicleSpeed > 1 and vehicleSpeed < 20 then
-				fuelData.fuelUsage = 0.00250
+				fuelData.fuelUsage = 0.0025
 			elseif vehicleSpeed >= 20 and vehicleSpeed < 50 then
-				fuelData.fuelUsage = 0.00500
+				fuelData.fuelUsage = 0.0050
 			elseif vehicleSpeed >= 50 and vehicleSpeed < 80 then
-				fuelData.fuelUsage = 0.00750
+				fuelData.fuelUsage = 0.0075
 			elseif vehicleSpeed >= 80 and vehicleSpeed < 100 then
-				fuelData.fuelUsage = 0.03000
+				fuelData.fuelUsage = 0.0500
 			elseif vehicleSpeed >= 100 and vehicleSpeed < 130 then
-				fuelData.fuelUsage = 0.05000
+				fuelData.fuelUsage = 0.1000
 			elseif vehicleSpeed >= 130 then
-				fuelData.fuelUsage = 0.10000
+				fuelData.fuelUsage = 0.2500
+			elseif vehicleSpeed >= 150 then
+				fuelData.fuelUsage = 0.5000
+			elseif vehicleSpeed >= 180 then
+				fuelData.fuelUsage = 1.0000
 			else
 				fuelData.fuelUsage = 0
 			end
@@ -174,7 +178,7 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10000)
-		if IsPedInAnyVehicle(playerPed, -1) and GetPedInVehicleSeat(playerPed == -1) then
+		if IsPedInAnyVehicle(playerPed, -1) and GetPedInVehicleSeat(playerVeh, -1) == playerPed then
 			TriggerServerEvent('fuel:setFuelAmount', GetVehicleNumberPlateText(playerVeh), fuelData.fuelAmount)
 			Citizen.Wait(5000)
 		end
@@ -286,7 +290,7 @@ function GetVehicleType(vehicle)
 		end
 	end
 
-	if GetVehicleClass(vehicle) == (16 or 17) then
+	if GetVehicleClass(vehicle) == 16 or GetVehicleClass(vehicle) == 15 then
 		return 'Aircraft'
 	elseif GetVehicleClass(vehicle) == 14 then
 		return 'Watercraft'
@@ -297,7 +301,6 @@ function GetVehicleType(vehicle)
 			return 'Electric'
 		end
 	end]]
-
 
 	return 'Gasoline'
 end

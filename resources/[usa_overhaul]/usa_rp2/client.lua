@@ -54,7 +54,8 @@ local blacklistedVehicles = {
   1565978651,
   1043222410,
   -1700874274,
-  -1210451983
+  -1210451983,
+  GetHashKey('oppressor')
 
 }
 
@@ -69,13 +70,80 @@ LoadInterior(MRPD_INTERIOR)
 -- REMOVE AI WEAPON DROPS --
 Citizen.CreateThread(function()
   while true do
-    Citizen.Wait(300)
+    Citizen.Wait(0)
     -- List of pickup hashes (https://pastebin.com/8EuSv2r1)
     RemoveAllPickupsOfType(0xDF711959) -- carbine rifle
     RemoveAllPickupsOfType(0xF9AFB48F) -- pistol
-    RemoveAllPickupsOfType(0xA9355DCD) -- pumpshotgun
+    RemoveAllPickupsOfType(0x86500326) -- pumpshotgun
+    RemoveAllPickupsOfType(0xDF9ABCFC) -- nightstick
+    RemoveAllPickupsOfType(0x84BD7BFD) -- crowbar
+    RemoveAllPickupsOfType(0x08B8D9EA) -- knife
+    RemoveAllPickupsOfType(0x958A4A8F) -- bat
+    RemoveAllPickupsOfType(0x4E875F73) -- hammer
+    RemoveAllPickupsOfType(0xEA91B807) -- pistol
+    RemoveAllPickupsOfType(0x2BB8CC22) -- vintage pistol
+    RemoveAllPickupsOfType(0x9598EDD4) -- stun gun
+    RemoveAllPickupsOfType(0xBD0C4ED1) -- machete
+    RemoveAllPickupsOfType(0x2E4C762D) -- ammo for all weapons -- 
+    RemoveAllPickupsOfType(0x10A73D59)
+    RemoveAllPickupsOfType(0xD65BF49E)
+    RemoveAllPickupsOfType(0x60F784C2)
+    RemoveAllPickupsOfType(0x7E51DB8F)
+    RemoveAllPickupsOfType(0x7EBB7BCB)
+    RemoveAllPickupsOfType(0x16A73E3A)
+    RemoveAllPickupsOfType(0xAF272C6C)
+    RemoveAllPickupsOfType(0x5D95B557)
+    RemoveAllPickupsOfType(0xCA648B4F)
+    RemoveAllPickupsOfType(0x43AAEAE6)
+    RemoveAllPickupsOfType(0xE5EB8146)
+    RemoveAllPickupsOfType(0x6F38E9FB)
+    RemoveAllPickupsOfType(0x2D5CE030)
+    RemoveAllPickupsOfType(0xFD4AE5E5)
+    RemoveAllPickupsOfType(0x2451A293) -- ammo for all weapons ends -- 
   end
 end)
+
+Citizen.CreateThread(function()
+    -- Other stuff normally here, stripped for the sake of only scenario stuff
+    local SCENARIO_TYPES = {
+        "WORLD_VEHICLE_MILITARY_PLANES_SMALL", -- Zancudo Small Planes
+        "WORLD_VEHICLE_MILITARY_PLANES_BIG", -- Zancudo Big Planes
+    }
+    local SCENARIO_GROUPS = {
+        2017590552, -- LSIA planes
+        2141866469, -- Sandy Shores planes
+        1409640232, -- Grapeseed planes
+        "ng_planes", -- Far up in the skies jets
+    }
+    local SUPPRESSED_MODELS = {
+        "SHAMAL", -- They spawn on LSIA and try to take off
+        "LUXOR", -- They spawn on LSIA and try to take off
+        "LUXOR2", -- They spawn on LSIA and try to take off
+        "JET", -- They spawn on LSIA and try to take off and land, remove this if you still want em in the skies
+        "LAZER", -- They spawn on Zancudo and try to take off
+        "TITAN", -- They spawn on Zancudo and try to take off
+        "BARRACKS", -- Regularily driving around the Zancudo airport surface
+        "BARRACKS2", -- Regularily driving around the Zancudo airport surface
+        "CRUSADER", -- Regularily driving around the Zancudo airport surface
+        "RHINO", -- Regularily driving around the Zancudo airport surface
+        "AIRTUG", -- Regularily spawns on the LSIA airport surface
+        "RIPLEY", -- Regularily spawns on the LSIA airport surface
+    }
+
+    while true do
+        for _, sctyp in next, SCENARIO_TYPES do
+            SetScenarioTypeEnabled(sctyp, false)
+        end
+        for _, scgrp in next, SCENARIO_GROUPS do
+            SetScenarioGroupEnabled(scgrp, false)
+        end
+        for _, model in next, SUPPRESSED_MODELS do
+            SetVehicleModelIsSuppressed(GetHashKey(model), true)
+        end
+        Wait(10000)
+    end
+end)
+
 
 Citizen.CreateThread(function()
 	for i = 1, 12 do
@@ -972,38 +1040,21 @@ Citizen.CreateThread(function()
             once = false
         end
 
-        if not keyPressed then
-            if IsControlPressed(0, 29) and not mp_pointing and IsPedOnFoot(PlayerPedId()) then
-                Wait(200)
-                if not IsControlPressed(0, 29) then
-                    keyPressed = true
-                    startPointing()
-                    mp_pointing = true
-                else
-                    keyPressed = true
-                    while IsControlPressed(0, 29) do
-                        Wait(50)
-                    end
-                end
-            elseif (IsControlPressed(0, 29) and mp_pointing) or (not IsPedOnFoot(PlayerPedId()) and mp_pointing) then
-                keyPressed = true
-                mp_pointing = false
-                stopPointing()
+        if IsControlJustPressed(0, 29) and not mp_pointing and GetLastInputMethod(0) then
+            Wait(50)
+            if IsControlPressed(0, 29) then
+                startPointing()
+                mp_pointing = true
             end
+        elseif (IsControlJustReleased(0, 29) and mp_pointing) then
+            mp_pointing = false
+            stopPointing()
         end
 
-        if keyPressed then
-            if not IsControlPressed(0, 29) then
-                keyPressed = false
-            end
-        end
         if Citizen.InvokeNative(0x921CE12C489C4C41, PlayerPedId()) and not mp_pointing then
             stopPointing()
         end
         if Citizen.InvokeNative(0x921CE12C489C4C41, PlayerPedId()) then
-            if not IsPedOnFoot(PlayerPedId()) then
-                stopPointing()
-            else
                 local ped = GetPlayerPed(-1)
                 local camPitch = GetGameplayCamRelativePitch()
                 if camPitch < -70.0 then
@@ -1035,7 +1086,6 @@ Citizen.CreateThread(function()
                 Citizen.InvokeNative(0xB0A6CFD2C69C1088, ped, "isBlocked", blocked)
                 Citizen.InvokeNative(0xB0A6CFD2C69C1088, ped, "isFirstPerson", Citizen.InvokeNative(0xEE778F8C7E1142E2, Citizen.InvokeNative(0x19CAFA3C87F7C2FF)) == 4)
 
-            end
         end
     end
 end)

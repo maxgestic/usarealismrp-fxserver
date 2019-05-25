@@ -46,6 +46,7 @@ TriggerEvent('es:addGroupCommand', 'time', 'admin', function(source, args, user)
         m = 0
         s = 0
         TriggerClientEvent("gametime:serversync", -1, h, m, s, gta_seconds_per_real_second)
+        TriggerEvent("usa:notifyStaff", '^1^*[STAFF]^r^0 Player ^1'..GetPlayerName(source)..' ['..source..'] ^0 has set the time to ^1'..hour..':00:00^0.')
         TriggerClientEvent('usa:notify', source, 'Time has been set, updating...')
     else
         TriggerClientEvent('usa:notify', source, 'Hour to set not specified!')

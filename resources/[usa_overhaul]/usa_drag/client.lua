@@ -18,7 +18,7 @@ AddEventHandler('drag:attemptToDragNearest', function()
 	        	local closestPed = GetPlayerPed(GetPlayerFromServerId(player.id))
 				if player.id ~= 0 and not IsPedInAnyVehicle(PlayerPedId()) and IsEntityVisible(closestPed) then
 					TriggerServerEvent('drag:sendDragPlayer', player.id)
-					print('sent??')
+					--print('sent??')
 					sourceDragged = player.id
 				end
 			end
@@ -37,7 +37,7 @@ AddEventHandler('drag:attemptToCarryNearest', function()
 	        	local closestPed = GetPlayerPed(GetPlayerFromServerId(player.id))
 				if player.id ~= 0 and not IsPedInAnyVehicle(PlayerPedId()) and IsEntityVisible(closestPed) then
 					TriggerServerEvent('drag:sendCarryPlayer', player.id)
-					print('sent??')
+					--print('sent??')
 					sourceCarried = player.id
 				end
 			end
@@ -116,8 +116,8 @@ end)
 
 RegisterNetEvent('drag:toggleDragAction')
 AddEventHandler('drag:toggleDragAction', function(toggleOn, _source)
-	print('isDragging: '..tostring(toggleOn))
-	print('sourceDragged: '..tostring(_source))
+	--print('isDragging: '..tostring(toggleOn))
+	--print('sourceDragged: '..tostring(_source))
 	isDragging = toggleOn
 	sourceDragged = _source
 	ClearPedTasksImmediately(PlayerPedId())
@@ -125,8 +125,8 @@ end)
 
 RegisterNetEvent('drag:toggleCarryAction')
 AddEventHandler('drag:toggleCarryAction', function(toggleOn, _source)
-	print('isCarried: '..tostring(toggleOn))
-	print('sourceCarried: '..tostring(_source))
+	--print('isCarried: '..tostring(toggleOn))
+	--print('sourceCarried: '..tostring(_source))
 	isCarrying = toggleOn
 	sourceCarried = _source
 	ClearPedTasksImmediately(PlayerPedId())

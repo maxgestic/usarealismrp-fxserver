@@ -4,14 +4,81 @@ Credits - MythicalBro
 /////License/////
 Do not reupload/re release any part of this script without my permission
 ]]
+
 local tbl = {
-[1] = {locked = false, player = nil},
-[2] = {locked = false, player = nil},
-[3] = {locked = false, player = nil},
-[4] = {locked = false, player = nil},
-[5] = {locked = false, player = nil},
-[6] = {locked = false, player = nil},
+	[1] = {locked = false, player = nil},
+	[2] = {locked = false, player = nil},
+	[3] = {locked = false, player = nil},
+	[4] = {locked = false, player = nil},
+	[5] = {locked = false, player = nil},
+	[6] = {locked = false, player = nil},
 }
+
+prices = {
+	['metallic'] = LSC_Config.prices.metallic,
+	['classic'] = LSC_Config.prices.classic,
+	['chrome'] = LSC_Config.prices.chrome,
+	['matte'] = LSC_Config.prices.matte,
+	['metal'] = LSC_Config.prices.metal,
+	['neon layout'] = LSC_Config.prices.neonlayout,
+	['neon color'] = LSC_Config.prices.neoncolor,
+	['plates'] = LSC_Config.prices.plates,
+	['wheel accessories'] = LSC_Config.prices.wheelaccessories,
+	['wheel color'] = LSC_Config.prices.wheelcolor,
+	['sport'] = LSC_Config.prices.sportwheels,
+	['muscle'] = LSC_Config.prices.musclewheels,
+	['lowrider'] = LSC_Config.prices.lowriderwheels,
+	['highend'] = LSC_Config.prices.highendwheels,
+	['suv'] = LSC_Config.prices.suvwheels,
+	['offroad'] = LSC_Config.prices.offroadwheels,
+	['tuner'] = LSC_Config.prices.tunerwheels,
+	['front wheel'] = LSC_Config.prices.frontwheel,
+	['back wheel'] = LSC_Config.prices.backwheel,
+	['trim color'] = LSC_Config.prices.trim,
+	['windows'] = LSC_Config.prices.windowtint,
+	['liveries'] = LSC_Config.prices.mods[48],
+	['doors'] = LSC_Config.prices.mods[46],
+	['tank'] = LSC_Config.prices.mods[45],
+	['roof scoops'] = LSC_Config.prices.mods[44],
+	['aerials'] = LSC_Config.prices.mods[43],
+	['arch cover'] = LSC_Config.prices.mods[42],
+	['strut brace'] = LSC_Config.prices.mods[41],
+	['cam cover'] = LSC_Config.prices.mods[40],
+	['engine block'] = LSC_Config.prices.mods[39],
+	['hydraulics'] = LSC_Config.prices.mods[38],
+	['trunk'] = LSC_Config.prices.mods[37],
+	['speakers'] = LSC_Config.prices.mods[36],
+	['plaques'] = LSC_Config.prices.mods[35],
+	['shifter leavers'] = LSC_Config.prices.mods[34],
+	['steering wheels'] = LSC_Config.prices.mods[33],
+	['seats'] = LSC_Config.prices.mods[32],
+	['doors'] = LSC_Config.prices.mods[31],
+	['dials'] = LSC_Config.prices.mods[30],
+	['dashboard'] = LSC_Config.prices.mods[29],
+	['ornaments'] = LSC_Config.prices.mods[28],
+	['trim design'] = LSC_Config.prices.mods[27],
+	['vanity plates'] = LSC_Config.prices.mods[26],
+	['plate holder'] = LSC_Config.prices.mods[25],
+	['headlights'] = LSC_Config.prices.mods[22],
+	['turbo'] = LSC_Config.prices.mods[18],
+	['armor'] = LSC_Config.prices.mods[16],
+	['suspension'] = LSC_Config.prices.mods[15],
+	['horn'] = LSC_Config.prices.mods[14],
+	['transmission'] = LSC_Config.prices.mods[13],
+	['brakes'] = LSC_Config.prices.mods[12],
+	['engine tunes'] = LSC_Config.prices.mods[11],
+	['roof'] = LSC_Config.prices.mods[10],
+	['fenders'] = LSC_Config.prices.mods[8],
+	['hood'] = LSC_Config.prices.mods[7],
+	['grille'] = LSC_Config.prices.mods[6],
+	['roll cage'] = LSC_Config.prices.mods[5],
+	['exhausts'] = LSC_Config.prices.mods[4],
+	['skirts'] = LSC_Config.prices.mods[3],
+	['rear bumpers'] = LSC_Config.prices.mods[2],
+	['front bumpers'] = LSC_Config.prices.mods[1],
+	['spoiler'] = LSC_Config.prices.mods[0]
+}
+
 RegisterServerEvent('lockGarage')
 AddEventHandler('lockGarage', function(b,garage)
 	tbl[tonumber(garage)].locked = b
@@ -41,20 +108,58 @@ AddEventHandler('playerDropped', function()
 end)
 
 RegisterServerEvent("LSC:buttonSelected")
-AddEventHandler("LSC:buttonSelected", function(name, button)
+AddEventHandler("LSC:buttonSelected", function(name, button, mname)
 	local usource = source
 	if button.price then -- check if button have price
 		local player = exports["essentialmode"]:getPlayerFromId(usource)
 		local mymoney = player.getActiveCharacterData("money")
 		local myjob = player.getActiveCharacterData("job")
-		button.price = math.abs(button.price) -- prevent mem hack to gain money
-		if button.price <= mymoney or myjob == "sheriff" or myjob == "police" or myjob == "ems" or myjob == "fire" then
+		button.price = math.abs(button.price) -- prevent mem hack to gain money (lol what?)
+		--print(tprint(button))
+		if mname ~= 'main' then
+			for menuname, contents in pairs(prices) do
+				if menuname == mname then
+					if contents.startprice then
+						local actualprice = contents.startprice + (button.mod * contents.increaseby)
+						if button.price == actualprice or (button.name == 'Stock' and button.price == 0) then 
+							break
+						else 
+							TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for memory editing at a Los Santos Customs, please intervene^0!')
+							--TriggerClientEvent("chatMessage", -1, "^1^*[SYSTEM]^r^0 A silly goose, by the name of ^1"..player.getActiveCharacterData('fullName').."^0 just tried modifying memory. What do they think they're doin'?")
+							DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.") 
+							return 
+						end
+					elseif contents.price then
+						if button.price == contents.price then 
+							break 
+						else 
+							TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for memory editing at a Los Santos Customs, please intervene^0!')
+							--TriggerClientEvent("chatMessage", -1, "^1^*[SYSTEM]^r^0 A silly goose, by the name of ^1"..player.getActiveCharacterData('fullName').."^0 just tried modifying memory. What do they think they're doin'?")
+							DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.") 
+							return 
+						end
+					else
+						for i = 1, #contents do
+							if string.lower(contents[i].name) == name then
+								if button.price == contents[i].price then 
+									break 
+								else 
+									TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for memory editing at a Los Santos Customs, please intervene^0!')
+									--TriggerClientEvent("chatMessage", -1, "^1^*[SYSTEM]^r^0 A silly goose, by the name of ^1"..player.getActiveCharacterData('fullName').."^0 just tried modifying memory. What do they think they're doin'?")
+									DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.") 
+									return 
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+		if button.price <= mymoney then
 			-- take money from player, apply customization --
 			TriggerClientEvent("LSC:buttonSelected", usource, name, button, true)
-			if myjob ~= "sheriff" and myjob ~= "police" and myjob ~= "ems" and myjob ~= "fire" then
-				mymoney  = mymoney - button.price
-				player.setActiveCharacterData("money", mymoney)
-			end
+			mymoney  = mymoney - button.price
+			player.setActiveCharacterData("money", mymoney)
 		else
 			TriggerClientEvent("LSC:buttonSelected", usource, name, button, false)
 		end
@@ -219,3 +324,28 @@ AddEventHandler("customs:saveCarData", function(data, plate, source)
 		end)
 	end
 end)
+
+function tprint (tbl, indent)
+  if not indent then indent = 0 end
+  local toprint = string.rep(" ", indent) .. "{\r\n"
+  indent = indent + 2 
+  for k, v in pairs(tbl) do
+    toprint = toprint .. string.rep(" ", indent)
+    if (type(k) == "number") then
+      toprint = toprint .. "[" .. k .. "] = "
+    elseif (type(k) == "string") then
+      toprint = toprint  .. k ..  "= "   
+    end
+    if (type(v) == "number") then
+      toprint = toprint .. v .. ",\r\n"
+    elseif (type(v) == "string") then
+      toprint = toprint .. "\"" .. v .. "\",\r\n"
+    elseif (type(v) == "table") then
+      toprint = toprint .. tprint(v, indent + 2) .. ",\r\n"
+    else
+      toprint = toprint .. "\"" .. tostring(v) .. "\",\r\n"
+    end
+  end
+  toprint = toprint .. string.rep(" ", indent-2) .. "}"
+  return toprint
+end

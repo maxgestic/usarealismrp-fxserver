@@ -155,7 +155,29 @@ local warp_locations = {
       heading = 48.0
     },
   job_access = 'emergency'
-  }
+  },
+  ['DA Office'] = {
+    entrance = {
+      coords = {-70.76, -801.21, 44.22},
+      heading = 340.0
+    },
+    exit = {
+      coords = {-80.55, -832.68, 243.38},
+      heading = 248.5
+    },
+    job_access = 'civ'
+  },
+  ['DA Garage'] = {
+    entrance = {
+      coords = {-67.7, -812.13, 243.38},
+      heading = 250.0
+    },
+    exit = {
+      coords = {-84.83, -824.43, 36.02},
+      heading = 348.2,
+    },
+    job_access = 'da'
+  },
 }
 
 Citizen.CreateThread(function()
@@ -178,7 +200,7 @@ Citizen.CreateThread(function()
             DoorTransition(ped, _x, _y, _z, value.exit.heading)
           else
             --print("job access: " ..locationCoords.job_access)
-            TriggerServerEvent("warp:checkJob", value.exit.coords, value.exit.heading)
+            TriggerServerEvent("warp:checkJob", value.exit.coords, value.exit.heading, value.job_access)
           end
         end
       elseif dist2 < 1.6 then

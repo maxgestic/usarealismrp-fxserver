@@ -37,7 +37,7 @@ end)
 
 AddEventHandler('playerDropped', function()
 	local _source = source
-	print('adding to recent dc list!')
+	print('PLAYERLIST: Adding player to recently disconnected list!')
 	local user = exports["essentialmode"]:getPlayerFromId(_source)
 	if user then
 		recentDC[_source] = {GetFullName(user), GetPlayerIdentifier(_source)}

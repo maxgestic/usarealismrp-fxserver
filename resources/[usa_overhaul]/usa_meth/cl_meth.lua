@@ -293,7 +293,7 @@ Citizen.CreateThread(function()
 end)
 
 function DrawText3D(x, y, z, distance, text)
-    if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), x, y, z, true) < distance then
+    if Vdist(GetEntityCoords(PlayerPedId()), x, y, z) < distance then
         local onScreen,_x,_y=World3dToScreen2d(x,y,z)
         SetTextScale(0.35, 0.35)
         SetTextFont(4)

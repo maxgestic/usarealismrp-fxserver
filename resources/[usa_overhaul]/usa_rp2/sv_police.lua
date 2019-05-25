@@ -114,7 +114,13 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'runserial', { "police", "sheriff", 'judge' }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'repair', { "police", "sheriff", "dai" }, function(source, args, user)
+	TriggerClientEvent("usa:repairVeh", source)
+end, {
+	help = "Repair the vehicle you're facing."
+})
+
+TriggerEvent('es:addJobCommand', 'runserial', { "police", "sheriff", 'judge', 'dai' }, function(source, args, user)
 	local userSource = tonumber(source)
 	if args[2] then
 		local serialNumber = string.upper(args[2])
@@ -191,12 +197,12 @@ AddEventHandler("search:searchPlayer", function(playerId, src)
 	local user = exports["essentialmode"]:getPlayerFromId(playerId)
 	local user_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
 	local items = {}
-	local licenses = user.getActiveCharacterData("licenses")
+	--[[local licenses = user.getActiveCharacterData("licenses")
 	for index = 1, #licenses do
 		--if licenses[index].name == "Driver's License" then
 		table.insert(items, licenses[index])
 		--end
-	end
+	end]]
 	local playerInventory = user.getActiveCharacterData("inventory")
 	for i = 1, #playerInventory do
 		table.insert(items, playerInventory[i])
@@ -246,7 +252,7 @@ TriggerEvent('es:addCommand', 'search', function(source, args, user)
 	local job = user.getActiveCharacterData("job")
 	if job == "civ" then
 		TriggerClientEvent("search:attemptToSearchNearestPerson", source, true)
-	elseif job == "sheriff" or job == "corrections" then
+	elseif job == "sheriff" or job == "corrections" or job == "dai" then
 		if not tonumber(args[2]) then
 			TriggerClientEvent("search:searchNearest", source)
 		else
@@ -254,7 +260,7 @@ TriggerEvent('es:addCommand', 'search', function(source, args, user)
 			TriggerEvent("search:searchPlayer", tonumber(args[2]), source)
 		end
 	end
-end, {help = "Search the nearest person."})
+end, {help = "Search the nearest person or vehicle."})
 
 --------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -283,7 +289,7 @@ end, {
 -- end bait car
 
 -- start seize contraband
-TriggerEvent('es:addJobCommand', 'seize', { "police", "sheriff", "corrections" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'seize', { "police", "sheriff", "corrections", "dai" }, function(source, args, user)
 	local arg = args[2]
 	local targetId = tonumber(args[3])
 	local name = user.getActiveCharacterData("firstName") .. user.getActiveCharacterData("lastName")

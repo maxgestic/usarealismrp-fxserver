@@ -22,7 +22,7 @@ AddEventHandler("mini_admin:spectate", function(target, targetName, spectator_na
 			RequestCollisionAtCoord(targetx,targety,targetz)
 			NetworkSetInSpectatorMode(false, target)
 			spectating = {}
-			TriggerServerEvent("usa:notifyStaff", spectator_name .. " has ^3stopped^0 spectating " .. targetName .. " [#" .. target_id .. "]")
+			TriggerServerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..spectator_name..' ['..GetPlayerServerId(PlayerId())..'] ^0 has stopped spectating ^2'..targetName..' ['..target_id..']^0.')
 			return
 		end
 		enable = true
@@ -35,12 +35,12 @@ AddEventHandler("mini_admin:spectate", function(target, targetName, spectator_na
 				target = target,
 				status = true
 			}
-			TriggerServerEvent("usa:notifyStaff", spectator_name .. " has ^2began^0 spectating " .. targetName .. " [#" .. target_id .. "]")
+			TriggerServerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..spectator_name..' ['..GetPlayerServerId(PlayerId())..'] ^0 has began spectating ^2'..targetName..' ['..target_id..']^0.')
 		else
 			local targetx,targety,targetz = table.unpack(GetEntityCoords(target, false))
 			RequestCollisionAtCoord(targetx,targety,targetz)
 			NetworkSetInSpectatorMode(false, target)
-			TriggerServerEvent("usa:notifyStaff", spectator_name .. " has ^3stopped^0 spectating " .. targetName .. " [#" .. target_id .. "]")
+			TriggerServerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..spectator_name..' ['..GetPlayerServerId(PlayerId())..'] ^0 has stopped spectating ^2'..targetName..' ['..target_id..']^0.')
 		end
 
 end)
@@ -159,7 +159,8 @@ end)
 RegisterNetEvent('es_admin:givePosition')
 AddEventHandler('es_admin:givePosition', function()
 	local pos = GetEntityCoords(GetPlayerPed(-1))
-	local string = "{ ['x'] = " .. pos.x .. ", ['y'] = " .. pos.y .. ", ['z'] = " .. pos.z .. " },\n"
+	local heading = GetEntityHeading(PlayerPedId())
+	local string = "{ x = " .. round(pos.x, 2) .. ", y = " .. round(pos.y, 2) .. ", z = " .. round(pos.z, 2) .. ", h = " ..math.floor(heading).. ".0 },\n"
 	TriggerServerEvent('es_admin:givePos', string)
 	TriggerEvent('chatMessage', 'SYSTEM', {255, 0, 0}, 'Position saved to file.')
 end)
@@ -183,7 +184,7 @@ end)
 local noclip = false
 
 RegisterNetEvent("es_admin:noclip")
-AddEventHandler("es_admin:noclip", function(t)
+AddEventHandler("es_admin:noclip", function(name)
 	local msg = "disabled"
 	if(noclip == false)then
 		noclip_pos = GetEntityCoords(GetPlayerPed(-1), false)
@@ -195,7 +196,7 @@ AddEventHandler("es_admin:noclip", function(t)
 		msg = "enabled"
 	end
 
-	TriggerEvent("chatMessage", "SYSTEM", {255, 0, 0}, "Noclip has been ^2^*" .. msg)
+	TriggerServerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..name..' ['..GetPlayerServerId(PlayerId())..'] ^0'..msg..' noclip mode^0.')
 end)
 
 Citizen.CreateThread(function()
@@ -253,3 +254,8 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
+
+function round(num, numDecimalPlaces)
+  local mult = 10^(numDecimalPlaces or 0)
+  return math.floor(num * mult + 0.5) / mult
+end

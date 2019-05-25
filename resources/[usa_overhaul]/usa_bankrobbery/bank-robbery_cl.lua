@@ -1,4 +1,4 @@
-local bankCoords = {x = 254.05, y = 225.14, z = 101.87}
+local bankCoords = {x = 252.95, y = 228.60, z = 102.00}
 local clerkCoords = {x = 253.57, y = 221.05, z = 106.28}
 local peds = {
 	{x = 254.52, y = 222.29, z = 105.28, heading = 137.52, hash = GetHashKey('csb_reporter'), task = 'WORLD_HUMAN_CLIPBOARD'},

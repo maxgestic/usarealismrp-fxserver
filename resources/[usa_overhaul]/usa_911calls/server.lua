@@ -181,6 +181,8 @@ RegisterServerEvent('911:SuspiciousWeaponBuying')
 RegisterServerEvent('911:PlayerCall')
 RegisterServerEvent('911:BankRobbery')
 RegisterServerEvent('911:LockpickingDoor')
+RegisterServerEvent('911:CuffCutting')
+RegisterServerEvent('911:Burglary')
 
 recentcalls = {}
 
@@ -431,6 +433,13 @@ AddEventHandler('911:LockpickingDoor', function(x, y, z, street, isMale)
     SendWeazelNewsAlert('Report of a ^3door lockpicking^r at ^3'..street..'^r, this will make a good story!', x, y, z, 'Door Lockpicking')
 end)
 
+AddEventHandler('911:CuffCutting', function(x, y, z, street, isMale)
+    local time = math.random(4000, 6000)
+    Citizen.Wait(time)
+    local string = '^*Suspicious Person:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)..' ^1^*|^r ^*Dispatch Info:^r Caller reports an individual using a mechanic saw to break handcuffs.'
+    Send911Notification('sheriff', string, x, y, z, 'Suspicious Person')
+end)
+
 AddEventHandler('911:Robbery', function(x, y, z, name, isMale, camID)
 	local time = math.random(4000, 10000)
 	Citizen.Wait(time)
@@ -456,6 +465,19 @@ AddEventHandler('911:BankRobbery', function(x, y, z, street, text)
     SendWeazelNewsAlert('Report of a ^bank robbery^r at ^3'..street..'^r, yikes! Don\'t mess this one up recruit!', x, y, z, 'Bank Robbery')
 end)
 
+AddEventHandler('911:Burglary', function(x, y, z, street, isMale)
+    if recentcalls[street] ~= 'Burglary' then
+        recentcalls[street] = 'Burglary'
+        local playerSource = source
+        local user = exports["essentialmode"]:getPlayerFromId(playerSource)
+        local string = '^*Burglary:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
+        Send911Notification(false, string, x, y, z, 'Burglary')
+        SendWeazelNewsAlert('Report of a ^burglary^r at ^3'..street..'^r, expose those theives! Don\'t get too much attention!', x, y, z, 'Burglary')
+        Citizen.Wait(180000)
+        recentcalls[street] = nil
+    end
+end)
+
 RegisterServerEvent('carjack:playHandsUpOnAll')
 AddEventHandler('carjack:playHandsUpOnAll', function(pedToPlay)
 	TriggerClientEvent('carjack:playAnimOnPed', -1, pedToPlay)
@@ -467,10 +489,10 @@ function Send911Notification(intendedEmergencyType, string, x, y, z, blipText)
 			local playerSource = id
 			local player_job = player.getActiveCharacterData("job")
 			if intendedEmergencyType then
-				if player_job == intendedEmergencyType then
+				if player_job == intendedEmergencyType or (intendedEmergencyType == 'sheriff' and player_job == 'dai') then
 					TriggerClientEvent('911:Notification', playerSource, string, x, y, z, blipText)
 				end
-			elseif player_job == "sheriff" or player_job == "ems" or player_job == "fire" then
+			elseif player_job == "sheriff" or player_job == "ems" or player_job == "fire" or player_job == "dai" then
 				TriggerClientEvent('911:Notification', playerSource, string, x, y, z, blipText)
 			end
 		end
@@ -502,19 +524,19 @@ function Gender(isMale)
 	end
 end
 
-TriggerEvent('es:addJobCommand', 'mark911', { "police", "sheriff", "ems", "fire"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'mark911', { "police", "sheriff", "ems", "fire", "dai"}, function(source, args, user)
 	local userSource = tonumber(source)
 	TriggerClientEvent('911:mark911', userSource)
 end, {
 	help = "Mark the latest 911 call as your waypoint"})
 
-TriggerEvent('es:addJobCommand', 'clear911', { "police", "sheriff", "ems", "fire"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'clear911', { "police", "sheriff", "ems", "fire", "dai"}, function(source, args, user)
 	local userSource = tonumber(source)
 	TriggerClientEvent('911:clear911', userSource)
 end, {
 	help = "Clear all your 911 calls on the map"})
 
-TriggerEvent('es:addJobCommand', 'mute911', { "police", "sheriff", "ems", "fire"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'mute911', { "police", "sheriff", "ems", "fire", "dai"}, function(source, args, user)
 	local userSource = tonumber(source)
 	TriggerClientEvent('911:mute911', userSource)
 end, {

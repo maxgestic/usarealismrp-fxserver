@@ -38,5 +38,9 @@ files({
 	'client/html/sounds/seatbelt-alarm.ogg',
 	'client/html/sounds/tow-truck.ogg',
 	'client/html/sounds/cell-door.ogg',
-	'client/html/sounds/door-kick.ogg'
+	'client/html/sounds/door-kick.ogg',
+	'client/html/sounds/knock1.ogg',
+	'client/html/sounds/knock2.ogg',
+	'client/html/sounds/cabinet1.ogg',
+	'client/html/sounds/cabinet2.ogg'
 })

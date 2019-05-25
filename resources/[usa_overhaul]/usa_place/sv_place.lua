@@ -5,7 +5,7 @@ TriggerEvent('es:addCommand', 'place', function(source, args, user, location)
 	local usource = source
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local user_job = user.getActiveCharacterData("job")
-	if user_job == "sheriff" or user_job == "ems" or user_job == "fire" or user_job == "corrections" then
+	if user_job == "sheriff" or user_job == "ems" or user_job == "fire" or user_job == "corrections" or user_job == "dai" then
 		local tPID = tonumber(args[2])
 		awaitingUpdates = true
 		TriggerEvent('drag:passTable', 'place:updateDragTable', function()
@@ -38,7 +38,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'placef', {'sheriff', 'police', 'ems', 'fire', 'corrections'}, function(source, args, user, location)
+TriggerEvent('es:addJobCommand', 'placef', {'sheriff', 'police', 'ems', 'fire', 'corrections', 'dai'}, function(source, args, user, location)
 	local usource = source
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local tPID = tonumber(args[2])
@@ -67,22 +67,24 @@ end, {
 TriggerEvent('es:addCommand', 'placet', function(source, args, user, location)
 	local usource = source
 	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local tPID = tonumber(args[2])
-	awaitingUpdates = true
-	TriggerEvent('drag:passTable', 'place:updateDragTable', function()
-		while awaitingUpdates do
-			Citizen.Wait(100)
-		end
-		if draggedPlayers[usource] == tonumber(args[2]) then
-			TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), usource, true)
-			TriggerClientEvent('drag:carryPlayer', tonumber(args[2]), usource, true)
-			draggedPlayers[usource] = nil
-			TriggerEvent('place:returnUpdatedTable', draggedPlayers)
-		end
-		TriggerClientEvent("crim:areHandsTied", tonumber(args[2]), source, tonumber(args[2]), "placet")
-		local msg = "places person in trunk"
-		exports["globals"]:sendLocalActionMessage(usource, msg)
-	end)
+	if args[2] and tonumber(args[2]) then
+		local tPID = tonumber(args[2])
+		awaitingUpdates = true
+		TriggerEvent('drag:passTable', 'place:updateDragTable', function()
+			while awaitingUpdates do
+				Citizen.Wait(100)
+			end
+			if draggedPlayers[usource] == tPID then
+				TriggerClientEvent('drag:dragPlayer', tPID, usource, true)
+				TriggerClientEvent('drag:carryPlayer', tPID, usource, true)
+				draggedPlayers[usource] = nil
+				TriggerEvent('place:returnUpdatedTable', draggedPlayers)
+			end
+			TriggerClientEvent("crim:areHandsTied", tPID, source, tPID, "placet")
+			local msg = "places person in trunk"
+			exports["globals"]:sendLocalActionMessage(usource, msg)
+		end)
+	end
 end, {
 	help = "Place tied up player in a car trunk",
 	params = {
@@ -103,7 +105,7 @@ end)
 -- unseat
 TriggerEvent('es:addCommand', 'unseat', function(source, args, user)
 	local user_job = user.getActiveCharacterData("job")
-	if user_job == "sheriff" or user_job == "cop" or user_job == "ems" or user_job == "fire" or user_job == "corrections" then
+	if user_job == "sheriff" or user_job == "cop" or user_job == "ems" or user_job == "fire" or user_job == "corrections" or user_job == "dai" then
 		local targetPlayer = args[2]
 		TriggerClientEvent("place:unseat", targetPlayer, source)
 		local msg = "removes from vehicle"

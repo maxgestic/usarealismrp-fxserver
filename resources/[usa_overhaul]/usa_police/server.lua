@@ -119,6 +119,13 @@ TriggerEvent('es:addCommand', 'whitelist', function(source, args, user)
     user_rank = tonumber(user.getActiveCharacterData("emsRank"))
   elseif type == "police" then
     user_rank = tonumber(user.getActiveCharacterData("policeRank"))
+  elseif type == "da" then
+    user_rank = user.getActiveCharacterData("daRank")
+    if user_rank then
+      user_rank = tonumber(user_rank)
+    else
+      user_rank = 0
+    end
   end
 
   if user_group == "admin" or user_group == "superadmin" or user_group == "owner" then
@@ -126,7 +133,7 @@ TriggerEvent('es:addCommand', 'whitelist', function(source, args, user)
   end
 
   if user_rank < 5 then
-    TriggerClientEvent("usa:notify", source, "Error: must be ranked as Sergeant or above to set permissions!")
+    TriggerClientEvent("usa:notify", source, "Error: must be ranked as 5 or above to set permissions!")
     return
   elseif rank > user_rank then
     print("Error: can't set a person's rank to something higher than your own!")
@@ -137,12 +144,12 @@ TriggerEvent('es:addCommand', 'whitelist', function(source, args, user)
     TriggerClientEvent("usa:notify", source, "Error: player with id #" .. playerId .. " does not exist!")
     return
   elseif not type then
-    print("You must enter a whitelist type: police or  ems")
+    print("You must enter a whitelist type: police, ems or da")
     TriggerClientEvent("usa:notify", source, "You must enter a whitelist type: police or ems")
     return
   elseif not rank then
     print("You must enter a whitelist status for that player: true or false")
-    TriggerClientEvent("usa:notify", source, "You must enter a rank for that player: 0 to un-whitelist. 1 is probationary deputy, 7 is max.")
+    TriggerClientEvent("usa:notify", source, "You must enter a rank for that player: 0 to un-whitelist. 1 is lowest, 7 is max.")
     return
   end
   TriggerEvent('es:getPlayerFromId', playerId, function(targetUser)
@@ -152,6 +159,8 @@ TriggerEvent('es:addCommand', 'whitelist', function(source, args, user)
           targetUser.setActiveCharacterData("policeRank", rank)
         elseif type == "ems" then
           targetUser.setActiveCharacterData("emsRank", rank)
+        elseif type == "da" then
+          targetUser.setActiveCharacterData("daRank", rank)
         end
         TriggerClientEvent("usa:notify", source, "Player " .. playerName .. " has been whitelisted for " .. type .. ", rank: " .. rank)
       else
@@ -159,6 +168,8 @@ TriggerEvent('es:addCommand', 'whitelist', function(source, args, user)
           targetUser.setActiveCharacterData("policeRank", 0)
         elseif type == "ems" then
           targetUser.setActiveCharacterData("emsRank", 0)
+        elseif type == "da" then
+          targetUser.setActiveCharacterData("daRank", 0)
         end
         local user_job = targetUser.getActiveCharacterData("job")
         if user_job == "ems" or user_job == "fire" or user_job == "sheriff" then
@@ -169,11 +180,11 @@ TriggerEvent('es:addCommand', 'whitelist', function(source, args, user)
     end
   end)
 end, {
-  help = "Set a person's police or EMS rank.",
+  help = "Set a person's police, EMS or DA rank.",
   params = {
     { name = "id", help = "The player's server ID #" },
-    { name = "type", help = "'police' or 'ems'" },
-    { name = "rank", help = "0 to remove whitelist, 1 for probationary, 7 is max permissions" }
+    { name = "type", help = "'police', 'ems' or 'da'" },
+    { name = "rank", help = "0 to remove whitelist, 1 for lowest, 7 is max permissions" }
   }
 })
 
@@ -278,9 +289,10 @@ AddEventHandler("policestation2:loadOutfit", function(slot)
       TriggerEvent('job:sendNewLog', userSource, 'sheriff', true)
     end
     TriggerClientEvent('interaction:setPlayersJob', userSource, 'sheriff')
-    TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 3}, true)
+    TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 3})
   else
     DropPlayer(userSource, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+    TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for memory editing at a police station, please intervene^0!')
   end
 end)
 
@@ -292,7 +304,7 @@ AddEventHandler("policestation2:onduty", function()
   if user_job ~= "sheriff" or user_job ~= "cop" or user_job ~= "police" and user.getActiveCharacterData("policeRank") > 0 then
     user.setActiveCharacterData("job", "sheriff")
     TriggerEvent('job:sendNewLog', source, 'sheriff', true)
-    TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 3}, true)
+    TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 3})
   end
 end)
 

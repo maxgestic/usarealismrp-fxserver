@@ -1,12 +1,8 @@
-local usageStringHospital = "Usage: /morgue *id* *reason*"
-
 TriggerEvent('es:addJobCommand', 'morgue', { "ems", "fire", "police", "sheriff" }, function(source, args, user)
 	local coroner_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
 
-	local usageString = usageStringHospital
-
 	if (args[2] == nil or args[3] == nil) then
-		TriggerClientEvent('chatMessage', source, "SYSTEM", {200,0,0}, usageString)
+		TriggerClientEvent('usa:notify', source, 'USAGE: /morgue id reason')
 		return
 	end
 
@@ -14,7 +10,7 @@ TriggerEvent('es:addJobCommand', 'morgue', { "ems", "fire", "police", "sheriff" 
 
 	if(playerID == nil or GetPlayerName(playerID) == nil) then
 		-- Invalid player ID
-		TriggerClientEvent('chatMessage', source, "SYSTEM", {200,0,0} , "Invalid player ID")
+		TriggerClientEvent('usa:notify', source, 'Player not found!')
 		return
 	end
 
@@ -83,8 +79,8 @@ TriggerEvent('es:addJobCommand', 'morgue', { "ems", "fire", "police", "sheriff" 
 				}
 			}), { ["Content-Type"] = 'application/json' })
 			-- sent global chat message
-			local eventMessage = admitted_name .. " has been admitted to the morgue. (" .. tostring(hospitalReason) .. ")"
-			TriggerClientEvent('chatMessage', -1, "SYSTEM", {100,0,0}, eventMessage)
+			local eventMessage = "^8^*[MORGUE]^0^r " ..admitted_name .. " has been admitted to the morgue. (" .. tostring(hospitalReason) .. ")"
+			TriggerClientEvent('chatMessage', -1, "", {100,0,0}, eventMessage)
 			-- REMOVE WARRANTS (if any)
 			TriggerEvent("warrants:removeAnyActiveWarrants", admitted_name)
 	end
@@ -98,17 +94,22 @@ end, {
 
 TriggerEvent('es:addGroupCommand', 'unmorgue', "mod", function(source, args, user)
 	local target_source = tonumber(args[2])
-	local target = exports['essentialmode']:getPlayerFromId(target_source)
-	local target_inventory = target.getActiveCharacterData('inventory')
-	for i = 1, #target_inventory do
-		local item = target_inventory[i]
-		if item.name == 'Toe Tag' then
-			print('removing toe tag from player, is being unmorged: '..target_source..'!')
-			table.remove(target_inventory, i)
-			target.setActiveCharacterData('inventory', target_inventory)
-			TriggerClientEvent('morgue:release', target_source)
-			return
+	if target_source and GetPlayerName(target_source) then
+		local target = exports['essentialmode']:getPlayerFromId(target_source)
+		local target_inventory = target.getActiveCharacterData('inventory')
+		for i = 1, #target_inventory do
+			local item = target_inventory[i]
+			if item.name == 'Toe Tag' then
+				print('removing toe tag from player, is being unmorged: '..target_source..'!')
+				table.remove(target_inventory, i)
+				target.setActiveCharacterData('inventory', target_inventory)
+				TriggerClientEvent('morgue:release', target_source)
+				TriggerEvent("usa:notifyStaff", '^1^*[STAFF]^r^0 Player ^1'..GetPlayerName(source)..' ['..source..'] ^0 has unmorgued ^1'..GetPlayerName(target_source)..' ['..target_source..']^0.')
+				return
+			end
 		end
+	else
+		TriggerClientEvent('usa:notify', source, 'Player not found!')
 	end
 end, {
 	help = "Unmorgue a player if accidentally admitted.",
@@ -118,19 +119,19 @@ end, {
 })
 
 RegisterServerEvent('morgue:checkToeTag')
-AddEventHandler('morgue:checkToeTag', function(source)
+AddEventHandler('morgue:checkToeTag', function()
   print("checking if character is morgued!")
-  _source = source
-  local user = exports["essentialmode"]:getPlayerFromId(_source)
+  local user = exports["essentialmode"]:getPlayerFromId(source)
   local user_inventory = user.getActiveCharacterData('inventory')
   for i = 1, #user_inventory do
   	local item = user_inventory[i]
   	if item.name == 'Toe Tag' then
-  		TriggerClientEvent("morgue:toeTag", _source)
+  		TriggerClientEvent("morgue:toeTag", source, true)
   		print('player\'s character is morgued!')
   		return
   	end
   end
+  TriggerClientEvent('morgue:toeTag', source, false)
 end)
 
 

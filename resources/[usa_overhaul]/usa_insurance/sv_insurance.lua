@@ -112,10 +112,10 @@ AddEventHandler("insurance:checkPlayerInsurance", function()
 	if playerInsurance.type == "auto" then
 		print("found player auto insurance!")
 		if playerHasValidAutoInsurance(playerInsurance) then
-			TriggerClientEvent("chatMessage", userSource, "LIFEINVADER INSURANCE", {255, 78, 0}, "You are already insured!")
+			TriggerClientEvent("usa:notify", userSource, "You are already insured!")
 		else
 			print("renewing auto insurance!")
-			TriggerClientEvent("chatMessage", userSource, "LIFEINVADER INSURANCE", {255, 78, 0}, "Your auto insurance coverage was ~r~expired~w~! Renewing...")
+			TriggerClientEvent("usa:notify", userSource, "Your auto insurance coverage was ~r~expired~w~! Renewing...")
 			TriggerEvent("insurance:buyInsurance", userSource)
 		end
 	else

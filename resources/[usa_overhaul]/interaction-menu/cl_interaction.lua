@@ -92,7 +92,8 @@ local scenarios = {
 	{name = "palm", type = "emote", dict = "anim@mp_player_intupperface_palm", animname = "idle_a"},
 	{name = "fail", type = "emote", dict = "random@car_thief@agitated@idle_a", animname = "agitated_idle_a"},
 	{name = "no", type = "emote", dict = "mp_player_int_upper_nod", animname = "mp_player_int_nod_no", cancelTime = 1.3},
-	{name = "aim", type = "emote", dict = "move_weapon@pistol@cope", animname = "idle"}
+	{name = "aim", type = "emote", dict = "move_weapon@pistol@cope", animname = "idle"},
+	{name = "typing", type = "emote", dict = "anim@amb@prop_human_seat_computer@male@base", animname = "base"}
 	--{name = "hug", type = "emote", dict = "", animname = ""},
 }
 
@@ -136,6 +137,35 @@ local playerName = ""
 local raycastResult = 0
 local voipLevel = 0.0
 local menuEnabled = false -- F1 menu gui
+
+local inProperty = false
+
+RegisterNetEvent('properties:enterProperty')
+AddEventHandler('properties:enterProperty', function()
+	inProperty = true
+end)
+
+RegisterNetEvent('properties:exitProperty')
+AddEventHandler('properties:exitProperty', function()
+	inProperty = false
+end)
+
+RegisterNetEvent('properties:breachProperty')
+AddEventHandler('properties:breachProperty', function()
+	inProperty = true
+end)
+
+RegisterNetEvent('properties:lockpickHouseBurglary')
+AddEventHandler('properties:lockpickHouseBurglary', function()
+	Citizen.Wait(20000)
+	inProperty = true
+end)
+
+RegisterNetEvent('properties:breachHouseBurglary')
+AddEventHandler('properties:breachHouseBurglary', function()
+	Citizen.Wait(20000)
+	inProperty = true
+end)
 
 RegisterNUICallback('escape', function(data, cb)
 	--TriggerEvent("test:escapeFromCSharp")
@@ -579,18 +609,23 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 		if actionName == "use" then
 			interactionMenuUse(itemName, wholeItem)
 		elseif actionName == "drop" then
-			if not string.find(itemName, "Driver") and not string.find(itemName, "Firearm") and not string.find(itemName, 'License') and not string.find(itemName, 'Certificate') then
-				if not IsPedDeadOrDying(GetPlayerPed(-1), 1) and not IsPedCuffed(GetPlayerPed(-1)) then
-					local pos = GetEntityCoords(GetPlayerPed(-1), true)
-					TriggerServerEvent("interaction:dropItem", itemName, pos.x, pos.y, pos.z)
-					local objectHash = GetHashKey(wholeItem.objectModel)
-					if objectHash == 0 then objectHash = GetHashKey('prop_michael_backpack') end
-					local prop = CreateObject(objectHash, pos.x, pos.y + 0.5, pos.z - 0.99, true, false, true)
-					SetEntityAsMissionEntity(prop, true, true)
-					--FreezeEntityPosition(prop, true)
+			if not inProperty then
+				if not string.find(itemName, "Driver") and not string.find(itemName, "Firearm") and not string.find(itemName, 'License') and not string.find(itemName, 'Certificate') then
+					if not IsPedDeadOrDying(GetPlayerPed(-1), 1) and not IsPedCuffed(GetPlayerPed(-1)) then
+						local pos = GetEntityCoords(GetPlayerPed(-1), true)
+						TriggerServerEvent("interaction:dropItem", itemName, pos.x, pos.y, pos.z)
+						local objectHash = GetHashKey(wholeItem.objectModel)
+						if objectHash == 0 then objectHash = GetHashKey('prop_michael_backpack') end
+						if string.find(DROPPED_ITEMS[i].name, 'Key') then return end
+						local prop = CreateObject(objectHash, pos.x, pos.y + 0.5, pos.z - 0.99, true, false, true)
+						SetEntityAsMissionEntity(prop, true, true)
+						--FreezeEntityPosition(prop, true)
+					end
+				else
+					print("can't drop a license!")
 				end
 			else
-				print("can't drop a license!")
+				TriggerEvent('usa:notify', 'You cannot drop that here!')
 			end
 		elseif string.find(actionName, "give") then
 			if not string.find(itemName, "Driver") and not string.find(itemName, "Firearm") and not string.find(itemName, 'License') and not string.find(itemName, 'Certificate') then
@@ -768,7 +803,7 @@ function interactionMenuUse(itemName, wholeItem)
 						return
 					end
 				end
-				if math.random() < 0.6 then
+				if math.random() < 0.8 then
 					SetVehicleDoorsLocked(veh, 1)
 					SetVehicleDoorsLockedForAllPlayers(veh, 0)
 					if not GetIsVehicleEngineRunning(veh) then
@@ -786,6 +821,7 @@ function interactionMenuUse(itemName, wholeItem)
 			end
 		else
 			TriggerEvent('doormanager:lockpickDoor', wholeItem)
+			TriggerServerEvent('properties:lockpickHouse', GetEntityCoords(playerPed), wholeItem)
 		end
 		-------------------
 		-- Binoculars --

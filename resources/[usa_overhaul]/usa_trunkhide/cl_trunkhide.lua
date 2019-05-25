@@ -39,19 +39,21 @@ AddEventHandler('trunkhide:enterTrunk', function(targetVehicle)
 	local playerPed = PlayerPedId()   
 	RequestAnimDict('timetable@floyd@cryingonbed@base')
 	while not HasAnimDictLoaded('timetable@floyd@cryingonbed@base') do Citizen.Wait(10) end 	
-	if not inTrunk then
-		SetVehicleDoorOpen(targetVehicle, 5, false, false)
-    	AttachEntityToEntity(playerPed, targetVehicle, -1, 0.0, -2.2, 0.35, 0.0, 0.0, 0.0, false, false, false, false, 20, true)		       		
-   		RaiseConvertibleRoof(targetVehicle, false)
-   		if IsEntityAttached(playerPed) then
-			ClearPedTasksImmediately(playerPed)     			
-			TaskPlayAnim(playerPed, 'timetable@floyd@cryingonbed@base', 'base', 1.0, -1, -1, 1, 0, 0, 0, 0)	
-        end    
-		inTrunk = true
-		vehicle = targetVehicle
+	if not inTrunk and GetVehicleDoorLockStatus(targetVehicle) ~= 2 then
+		if (GetPedInVehicleSeat(targetVehicle, -1) ~= 0 and IsPedAPlayer(GetPedInVehicleSeat(targetVehicle, -1))) or GetPedInVehicleSeat(targetVehicle, -1) == 0 then
+			SetVehicleDoorOpen(targetVehicle, 5, false, false)
+	    	AttachEntityToEntity(playerPed, targetVehicle, -1, 0.0, -2.2, 0.35, 0.0, 0.0, 0.0, false, false, false, false, 20, true)		       		
+	   		RaiseConvertibleRoof(targetVehicle, false)
+	   		if IsEntityAttached(playerPed) then
+				ClearPedTasksImmediately(playerPed)     			
+				TaskPlayAnim(playerPed, 'timetable@floyd@cryingonbed@base', 'base', 1.0, -1, -1, 1, 0, 0, 0, 0)	
+	        end    
+			inTrunk = true
+			vehicle = targetVehicle
 
-		Citizen.Wait(2000)
-	    SetVehicleDoorShut(targetVehicle, 5, false) 
+			Citizen.Wait(2000)
+		    SetVehicleDoorShut(targetVehicle, 5, false) 
+	   	end
 	end 
 end)
 

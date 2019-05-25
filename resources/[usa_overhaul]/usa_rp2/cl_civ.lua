@@ -193,6 +193,7 @@ AddEventHandler('ping:requestPing', function()
   local playerPed = PlayerPedId()
   if not IsPedCuffed(playerPed) then
     TriggerEvent('usa:showHelp', true, 'A person has requested your location, use /pingaccept to accept this request.')
+    TriggerEvent('usa:notify', 'A person has requested your location, use /pingaccept to accept this request.')
   end
 end)
 
@@ -437,10 +438,6 @@ RegisterNetEvent("civ:resetWalkStyle")
 AddEventHandler("civ:resetWalkStyle", function()
   SetClipset(currentWalkstyle)
 end)
-
-for i = 0, 3 do
-  SetVehicleNeonLightEnabled(GetVehiclePedIsIn(PlayerPedId()), i, true)
-end
 
 local lastVehicle = {
   handle = 0,

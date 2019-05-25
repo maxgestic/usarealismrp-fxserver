@@ -140,7 +140,7 @@ AddEventHandler("doc:forceDuty", function()
 		TriggerEvent('job:sendNewLog', source, 'corrections', true)
 		TriggerClientEvent("ptt:isEmergency", usource, true)
 		TriggerClientEvent("interaction:setPlayersJob", usource, "corrections")
-		TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = usource, color = 82}, true)
+		TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = usource, color = 82})
 	end
 end)
 
@@ -182,7 +182,7 @@ AddEventHandler("doc:loadOutfit", function(slot, id)
 		TriggerClientEvent("usa:notify", usource, "You have clocked in!")
 		TriggerClientEvent("ptt:isEmergency", usource, true)
 		TriggerClientEvent("interaction:setPlayersJob", usource, "corrections")
-		TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = usource, color = 82}, true)
+		TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = usource, color = 82})
 	end
 	TriggerEvent('es:exposeDBFunctions', function(usersTable)
 		usersTable.getDocumentByRow("correctionaldepartment", "identifier" , player_identifer, function(result)

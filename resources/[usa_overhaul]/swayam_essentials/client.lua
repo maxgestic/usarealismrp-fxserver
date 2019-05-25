@@ -171,7 +171,7 @@ AddEventHandler("swayam:gotoWP", function(model)
 	end
 
 	if(not IsWaypointActive())then
-		TriggerEvent('chatMessage', "SYSTEM", {255, 0, 0}, "Waypoint not found")
+		TriggerEvent('usa:notify', "Waypoint not found!")
 		return
 	end
 
@@ -204,7 +204,6 @@ AddEventHandler("swayam:gotoWP", function(model)
 	end
 
 	SetEntityCoordsNoOffset(targetPed, x,y,z, 0, 0, 1)
-	TriggerEvent('chatMessage', "SYSTEM", {255, 0, 0}, "Teleported to waypoint")
 
 end)
 -------------------------------------------------------------------

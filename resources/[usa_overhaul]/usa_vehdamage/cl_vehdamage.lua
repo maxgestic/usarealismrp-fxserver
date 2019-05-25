@@ -1,5 +1,5 @@
 local DiffTrigger = 0.25
-local MinSpeed    = 17.0 --THIS IS IN m/s
+local MinSpeed    = 13.0 --THIS IS IN m/s
 local speedBuffer  = {}
 local velBuffer    = {}
 local wasInCar     = false
@@ -63,14 +63,16 @@ Citizen.CreateThread(function()
                and GetPedInVehicleSeat(car, 1) ~= GetPlayerPed(-1) 
                and GetPedInVehicleSeat(car, 2) ~= GetPlayerPed(-1)
                and IsBeltVehicle(car) then
-               local damagedEngine = GetVehicleEngineHealth(car)-speedBuffer[1]*30
+               local damagedEngine = GetVehicleEngineHealth(car)-speedBuffer[1]*40
                if damagedEngine < 0 then damagedEngine = -4000.0 end
+               if GetPedInVehicleSeat(car, -1) == ped then
                 SetVehicleEngineHealth(car, damagedEngine)
                 if math.random() > 0.2 then
                     local tyreBursted = math.random(1, 2)
                     SetVehicleTyreBurst(car, tyreBursted, true, 1000.0)
                     print('tyre: '..tyreBursted)
                 end
+               end 
                print('Engine: '..damagedEngine)
                if not beltOn and speedBuffer[1] > MinSpeed then
                     ShakeStrength = GetEntitySpeed(car)/15
@@ -92,7 +94,7 @@ Citizen.CreateThread(function()
             velBuffer[2] = velBuffer[1]
             velBuffer[1] = GetEntityVelocity(car)
                 
-            if IsControlJustReleased(0, 29) and GetLastInputMethod(0) and (GetPedInVehicleSeat(car, -1) == ped or GetPedInVehicleSeat(car, 0) == ped) then
+            if IsControlJustReleased(0, 311) and GetLastInputMethod(0) and (GetPedInVehicleSeat(car, -1) == ped or GetPedInVehicleSeat(car, 0) == ped) then
                 beltOn = not beltOn
                 TriggerServerEvent('hud:getBelt', beltOn)
                 TriggerServerEvent('display:shareDisplay', 'clicks seatbelt', 2, 470, 10, 3000)
@@ -124,40 +126,34 @@ end)
 
 RegisterNetEvent('usa:repairVeh')
 AddEventHandler('usa:repairVeh', function(target_vehicle)
+    if not target_vehicle then target_vehicle = getVehicleInFrontOfUser() end
+    print(target_vehicle)
     local dict = "mini@repair"
     local playerPed = PlayerPedId()
-    TriggerServerEvent('usa:removeRepairKit')
-    if GetVehicleEngineHealth(target_vehicle) < 350.0 then
-        exports.globals:notify("Repairing engine!")
-        local beginTime = GetGameTimer()
-        while GetGameTimer() - beginTime < 16000 do
-            Citizen.Wait(1)
-            DrawTimer(beginTime, 16000, 1.42, 1.475, 'REPAIRING')
-            if not IsEntityPlayingAnim(playerPed, dict, 'fixing_a_player', 3) then
-                RequestAnimDict(dict)
-                TaskPlayAnim(playerPed, dict, "fixing_a_player", 8.0, 1.0, -1, 15, 1.0, 0, 0, 0)
+    if target_vehicle ~= 0 then
+        if GetVehicleEngineHealth(target_vehicle) < 850.0 or IsAnyVehicleTireBursted(target_vehicle) then
+            TriggerServerEvent('usa:removeRepairKit')
+            SetVehicleDoorOpen(target_vehicle, 4, false, false)
+            local beginTime = GetGameTimer()
+            while GetGameTimer() - beginTime < 16000 do
+                Citizen.Wait(1)
+                DrawTimer(beginTime, 16000, 1.42, 1.475, 'REPAIRING')
+                if not IsEntityPlayingAnim(playerPed, dict, 'fixing_a_player', 3) then
+                    RequestAnimDict(dict)
+                    TaskPlayAnim(playerPed, dict, "fixing_a_player", 8.0, 1.0, -1, 15, 1.0, 0, 0, 0)
+                end
             end
+            SetVehicleUndriveable(target_vehicle, false)
+            SetVehicleEngineHealth(target_vehicle, 800.0)
+            FixAllTires(target_vehicle)
+            ClearPedTasks(playerPed)
+            Citizen.Wait(500)
+            SetVehicleDoorShut(target_vehicle, 4, false)
+        else
+            exports.globals:notify("Repairs not needed!")
         end
-        ClearPedTasks(playerPed)
-       
-        SetVehicleUndriveable(target_vehicle, false)
-        SetVehicleEngineHealth(target_vehicle, 350.0)
-        exports.globals:notify("Vehicle is hardly running, now get to a mechanic!")
-    elseif IsAnyVehicleTireBursted(target_vehicle) then
-        exports.globals:notify("Repairing tyres!")
-        local beginTime = GetGameTimer()
-        while GetGameTimer() - beginTime < 16000 do
-            Citizen.Wait(1)
-            DrawTimer(beginTime, 16000, 1.42, 1.475, 'REPAIRING')
-            if not IsEntityPlayingAnim(playerPed, dict, 'fixing_a_player', 3) then
-                RequestAnimDict(dict)
-                TaskPlayAnim(playerPed, dict, "fixing_a_player", 8.0, 1.0, -1, 15, 1.0, 0, 0, 0)
-            end
-        end
-        ClearPedTasks(playerPed)
-        FixAllTires(target_vehicle)
     else
-        exports.globals:notify("Repairs not needed!")
+        exports.globals:notify("Vehicle not found!")
     end
 end)
 
@@ -225,4 +221,18 @@ function DrawTimer(beginTime, duration, x, y, text)
     AddTextComponentString(text)
     Set_2dLayer(3)
     DrawText(x - 0.06, y - 0.012)
+end
+
+function getVehicleInFrontOfUser()
+    local playerped = GetPlayerPed(-1)
+    local coordA = GetEntityCoords(playerped, 1)
+    local coordB = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 5.0, 0.0)
+    local targetVehicle = getVehicleInDirection(coordA, coordB)
+    return targetVehicle
+end
+
+function getVehicleInDirection(coordFrom, coordTo)
+    local rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 10, GetPlayerPed(-1), 0)
+    local a, b, c, d, vehicle = GetRaycastResult(rayHandle)
+    return vehicle
 end

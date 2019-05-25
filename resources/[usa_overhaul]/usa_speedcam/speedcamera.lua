@@ -6,7 +6,7 @@ Citizen.CreateThread(function()
 		Wait(0)
 		local ped = PlayerPedId()
 		local car = GetVehiclePedIsIn(GetPlayerPed(-1), false)
-		if IsControlJustPressed(0, 182, true) and GetVehicleClass(car) == 18 and GetLastInputMethod(0)  then
+		if IsControlPressed(1, 36) and IsControlJustPressed(0, 182, true) and GetVehicleClass(car) == 18 and GetLastInputMethod(0)  then
 			PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 			locked = not locked
 		end
@@ -24,14 +24,24 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(200)
 		local car = GetVehiclePedIsIn(GetPlayerPed(-1), false)
-		if DoesEntityExist(car) and not locked then
+		if DoesEntityExist(car) and not locked and GetVehicleClass(car) == 18 then
 			lastScan.vehicle = GetCurrentTargetCar()
-			if lastScan.vehicle and GetVehicleNumberPlateText(lastScan.vehicle) then
-				lastScan.plate = GetVehicleNumberPlateText(lastScan.vehicle)
+			local tempPlate = GetVehicleNumberPlateText(lastScan.vehicle)
+			if lastScan.vehicle and tempPlate then
+				if lastScan.plate ~= tempPlate then
+					TriggerServerEvent('mdt:checkFlags', tempPlate, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(lastScan.vehicle))))
+				end
+				lastScan.plate = tempPlate
 				lastScan.speed = GetEntitySpeed(lastScan.vehicle) * 2.236936
 			end
 		end
 	end
+end)
+
+RegisterNetEvent('speedcam:lockCam')
+AddEventHandler('speedcam:lockCam', function()
+	PlaySoundFrontend( -1, "Beep_Red", "DLC_HEIST_HACKING_SNAKE_SOUNDS", 1 )
+	locked = true
 end)
 
 AddEventHandler('usa:toggleImmersion', function(toggleOn)

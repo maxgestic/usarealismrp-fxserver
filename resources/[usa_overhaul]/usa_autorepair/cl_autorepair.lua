@@ -80,7 +80,7 @@ Citizen.CreateThread(function()
 		end
 		for i = 1, #vehicleRepairStation do
 			local repairStation = vehicleRepairStation[i]
-			DrawText3D(repairStation[1], repairStation[2], (repairStation[3] + 1.0), 10, '[E] - Auto Repair (~g~$300.00~s~)')
+			DrawText3D(repairStation[1], repairStation[2], (repairStation[3] + 1.0), 5, '[E] - Auto Repair (~g~$300.00~s~)')
 		end
 	end
 end)

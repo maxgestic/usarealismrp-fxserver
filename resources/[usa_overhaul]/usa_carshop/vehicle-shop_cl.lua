@@ -189,7 +189,7 @@ Citizen.CreateThread(function()
 			-----------------------------------------------------------
 			-- watch for entering store and menu open keypress event --
 			-----------------------------------------------------------
-			DrawText3D(SHOPS[k].store_x, SHOPS[k].store_y, SHOPS[k].store_z, 10, '~g~E~s~ - Car Dealership')
+			DrawText3D(SHOPS[k].store_x, SHOPS[k].store_y, SHOPS[k].store_z, 10, '[E] - Car Dealership')
 			if getPlayerDistanceFromShop(playerPed, SHOPS[k].store_x, SHOPS[k].store_y, SHOPS[k].store_z) < 3 then
 				if not mainMenu:Visible() then
 					if IsControlJustPressed(1, MENU_KEY) then
@@ -291,7 +291,7 @@ function DrawText3D(x, y, z, distance, text)
 	    SetTextCentre(1)
 	    AddTextComponentString(text)
 	    DrawText(_x,_y)
-	    local factor = (string.len(text)) / 500
+	    local factor = (string.len(text)) / 370
 	    DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
 	end
 end

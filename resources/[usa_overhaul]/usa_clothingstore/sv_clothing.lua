@@ -11,7 +11,6 @@ AddEventHandler("clothing-store:chargeCustomer", function(property)
 	local player = exports["essentialmode"]:getPlayerFromId(user_source)
 	local user_money = player.getActiveCharacterData("money")
 	if user_money - amount >= 0 then
-		TriggerClientEvent("usa:notify", user_source, "~y~Charged:~w~ $" .. amount)
 		player.setActiveCharacterData("money", user_money - amount)
 		-- give money to store owner --
 		if property then

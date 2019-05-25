@@ -5,7 +5,7 @@ TriggerEvent('es:addCommand', 'drag', function(source, args, user)
 	if tonumber(args[2]) then
 		local userJob = user.getActiveCharacterData("job")
 		local userGroup = user.getGroup()
-		if userJob == "corrections" or userJob == "sheriff" or userJob == "cop" or userJob == "ems" or userJob == "fire" or userGroup == "mod" or userGroup == "admin" or userGroup == "superadmin" or userGroup == "owner" then
+		if userJob == "corrections" or userJob == "sheriff" or userJob == "cop" or userJob == "ems" or userJob == "fire" or userJob == "dai" or userGroup == "mod" or userGroup == "admin" or userGroup == "superadmin" or userGroup == "owner" then
 			if tonumber(args[2]) ~= usource and not draggedPlayers[usource] then
 				draggedPlayers[usource] = tonumber(args[2])
 				TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), usource)

@@ -1,4 +1,4 @@
-local WHOLE_DAYS_TO_DELETE = 0
+local WHOLE_DAYS_TO_DELETE = 3
 local blacklistedNames = {
 	'nig',
 	'fuck',
@@ -8,14 +8,12 @@ local blacklistedNames = {
 	'prick',
 	'ngger',
 	'ngga',
-	'nga',
 	'nger',
-	'fck',
+	'fck', 
 	'fak',
 	'sht',
 	'sh1t',
 	'fuk',
-	'ing',
 	'fag',
 	'gay',
 	'cunt',
@@ -73,34 +71,34 @@ AddEventHandler("character:new", function(data)
 		local middleName = string.lower(data.middleName)
 		local lastName = string.lower(data.lastName)
 		if string.find(firstName, name) or string.find(middleName, name) or string.find(lastName, name) then
-			TriggerClientEvent('usa:showHelp', userSource, true, 'The character data provided is invalid or inappropriate! (1)')
+			TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (1) '..name)
 			print('Character name contained forbidden words: '..data.firstName..' '..data.middleName..' '..data.lastName)
 			return
 		end
 	end
 	if not ContainsVowel(data.firstName) or (not ContainsVowel(data.middleName) and data.middleName ~= '') or not ContainsVowel(data.lastName) then
-		TriggerClientEvent('usa:showHelp', userSource, true, 'The character data provided is invalid or inappropriate! (2)')
+		TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (2)')
 		print('Character name did not contain a vowel: '..data.firstName..' '..data.middleName..' '..data.lastName)
 		return
 	end
 	if string.len(data.firstName) < 3 or (string.len(data.middleName) < 3 and data.middleName ~= '') or string.len(data.lastName) < 3 then
-		TriggerClientEvent('usa:showHelp', userSource, true, 'The character data provided is invalid or inappropriate! (3)')
+		TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (3)')
 		print('Character name was insufficient length: '..data.firstName..' '..data.middleName..' '..data.lastName)
 		return
 	end
 	if string.len(data.firstName) > 16 or (string.len(data.middleName) > 16 and data.middleName ~= '') or string.len(data.lastName) > 16 then
-		TriggerClientEvent('usa:showHelp', userSource, true, 'The character data provided is invalid or inappropriate! (4)')
+		TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (4)')
 		print('Character name was insufficient length: '..data.firstName..' '..data.middleName..' '..data.lastName)
 		return
 	end
 	local dob_year = tonumber(string.sub(data.dateOfBirth, 1, 4))
 	if dob_year > 2001 or dob_year < 1940 then
-		TriggerClientEvent('usa:showHelp', userSource, true, 'The character data provided is invalid or inappropriate! (5)')
+		TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (5)')
 		print('Character date of birth was unrealistic: '..data.dateOfBirth)
 		return
 	end
 	if ContainsSpecialCharacters(data.firstName) or (ContainsSpecialCharacters(data.middleName) and data.middleName ~= '') or ContainsSpecialCharacters(data.lastName) then
-		TriggerClientEvent('usa:showHelp', userSource, true, 'The character data provided is invalid or inappropriate! (6)')
+		TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (6)')
 		print('Character name contained special characters: '..data.firstName..' '..data.middleName..' '..data.lastName)
 		return
 	end
@@ -158,7 +156,7 @@ AddEventHandler("character:new", function(data)
 end)
 
 RegisterServerEvent("character:setActive")
-AddEventHandler("character:setActive", function(slot)
+AddEventHandler("character:setActive", function(slot, spawnAtProperty)
 	local userSource = tonumber(source)
 	local user = exports["essentialmode"]:getPlayerFromId(userSource)
 		if user then
@@ -176,6 +174,9 @@ AddEventHandler("character:setActive", function(slot)
 			user.setActiveCharacterData("money", money_to_display) -- set money GUI in top right (?)
 			user.setActiveCharacterData("job", "civ")
 			TriggerEvent("eblips:remove", userSource)
+			TriggerEvent('properties:loadCharacter', source, spawnAtProperty)
+			-- check dmv / firearm permit license status --
+			TriggerEvent("police:checkSuspension", userSource)
 			--[[ check jailed status [ MOVED ]
 			print("calling checkJailedStatusOnPlayerJoin server function!")
 			TriggerEvent("usa_rp:checkJailedStatusOnPlayerJoin", userSource)
@@ -224,7 +225,7 @@ AddEventHandler("character:delete", function(slot)
 end)
 
 RegisterServerEvent("character:loadCharacter")
-AddEventHandler("character:loadCharacter", function(activeSlot)
+AddEventHandler("character:loadCharacter", function(activeSlot, spawnAtProperty)
 	print("trying to load character in active slot #" .. activeSlot)
 	local userSource = tonumber(source)
 	TriggerClientEvent('chat:removeSuggestionAll', userSource)
@@ -234,7 +235,6 @@ AddEventHandler("character:loadCharacter", function(activeSlot)
 		local character = characters[activeSlot]
 		local myGroup = user.getGroup()
 		TriggerClientEvent("character:setCharacter", userSource, character)
-		TriggerClientEvent('playerlist:playersToShow', userSource, false)
 		print("loaded character at slot #" .. activeSlot .. " with #weapons = " .. #(character.weapons))
 		-- set commands --
 		for k,v in pairs(exports['essentialmode']:getCommands()) do
@@ -242,11 +242,6 @@ AddEventHandler("character:loadCharacter", function(activeSlot)
 				TriggerClientEvent('chat:addSuggestion', userSource, '/' .. k, v.help, v.params)
 			end
 		end
-		-- check dmv / firearm permit license status --
-		TriggerEvent("police:checkSuspension", userSource)
-		TriggerEvent('morgue:checkToeTag', userSource)
-		-- Temporary event to automatically migrate existing player vehicles into new DB --
-		TriggerEvent("vehicles:migrateCheck", user, activeSlot)
 	end
 end)
 
@@ -289,7 +284,7 @@ function ContainsVowel(word)
 end
 
 function ContainsSpecialCharacters(word)
-	local characters = {"!", "@", "#", "&", "*", "`", ":", ";", '"', "'", "|", ">", "<", "?", "/", "=", "+", "_", '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
+	local characters = {"!", "@", "#", "&", "*", "`", ":", ";", '"', "|", ">", "<", "?", "/", "=", "+", "_", '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
 	for i = 1, #characters do
 		if string.find(string.lower(word), characters[i]) then
 			return true

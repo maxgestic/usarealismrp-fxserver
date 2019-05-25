@@ -53,7 +53,10 @@ TriggerEvent('es:addCommand','token', function(source, args, user)
 		end
 	end
 end, {
-	help = "Verify that you are not idle when prompted"
+	help = "Verify that you are not idle when prompted",
+	params = {
+		{name = 'number', help = 'number prompted to type when warned'}
+	}
 })
 
 function randomString(length)

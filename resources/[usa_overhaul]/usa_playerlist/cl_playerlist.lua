@@ -60,16 +60,6 @@ AddEventHandler('playerlist:setUserGroup', function(group)
 	playerlist.group = group
 end)
 
-RegisterNetEvent('playerlist:playersToShow')
-AddEventHandler('playerlist:playersToShow', function(players)
-	if not players then
-		playersToShow.active = false
-	else
-		playersToShow.active = true
-		playersToShow.ids = players
-	end
-end)
-
 function RefreshMenu(players)
 	_menuPool:TotalItemsPerPage(21)
 	table.sort(players, function(a,b)
@@ -140,26 +130,11 @@ function ShowIds()
 	for id = 0, 64 do
 		local playerPed = GetPlayerPed(id)
 		local playerCoords = GetEntityCoords(playerPed)
-		if playersToShow.active then
-			for i = 1, #playersToShow.ids do
-				local player = GetPlayerFromServerId(playersToShow.ids[i])
-				if player == id then
-					if NetworkIsPlayerActive(id) and Vdist(playerCoords, myCoords) < viewDistance then
-						if NetworkIsPlayerTalking(id) then
-							DrawTracerText(tostring(GetPlayerServerId(id)), 1.2, true, playerPed)
-						else
-							DrawTracerText(tostring(GetPlayerServerId(id)), 1.2, false, playerPed)
-						end
-					end
-				end
-			end
-		else
-			if NetworkIsPlayerActive(id) and Vdist(playerCoords, myCoords) < viewDistance then
-				if NetworkIsPlayerTalking(id) then
-					DrawTracerText(tostring(GetPlayerServerId(id)), 1.2, true, playerPed)
-				else
-					DrawTracerText(tostring(GetPlayerServerId(id)), 1.2, false, playerPed)
-				end
+		if NetworkIsPlayerActive(id) and Vdist(playerCoords, myCoords) < viewDistance and IsEntityVisible(playerPed) then
+			if NetworkIsPlayerTalking(id) then
+				DrawTracerText(tostring(GetPlayerServerId(id)), 1.2, true, playerPed)
+			else
+				DrawTracerText(tostring(GetPlayerServerId(id)), 1.2, false, playerPed)
 			end
 		end
 	end

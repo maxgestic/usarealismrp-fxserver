@@ -137,7 +137,7 @@ local random_names = {
 
 local tempVehicles = {}
 
-TriggerEvent('es:addJobCommand', 'mdt', { "sheriff", "judge", "corrections"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'mdt', { "sheriff", "judge", "corrections", "dai"}, function(source, args, user)
 	TriggerClientEvent('mdt:toggleVisibilty', source)
 end, { help = "Open MDT" })
 
@@ -328,19 +328,17 @@ AddEventHandler("mdt:PerformPersonCheckByName", function(data)
 							local person = doc.characters[i]
 						    -- values have to be false by default to work with UI --
 						    local person_info  = {
-						        ssn = ssn,
-						        --name = firstToUpper(person.firstName) .. " " .. firstToUpper(person.lastName),
 								fname = firstToUpper(person.firstName),
 								lname = firstToUpper(person.lastName),
 								dob = person.dateOfBirth,
-						        drivers_license = false,
-						        firearm_permit = false,
+								address = false,
+						        licenses = {},
 						        insurance = false,
 						        criminal_history = {
 						            crimes = {},
 						            tickets = {}
 						        },
-								mugshot = "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg" -- generic placeholder img
+								mugshot = "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg" -- generic place holder img
 						    }
 							---------------------
 							-- get mug shot --
@@ -355,13 +353,25 @@ AddEventHandler("mdt:PerformPersonCheckByName", function(data)
 						    if #licenses > 0 then
 						        for i = 1, #licenses do
 						            local license = licenses[i]
-						                if license.name == "Driver's License" then
-						                    person_info.drivers_license = license
-						                elseif license.name == "Firearm Permit" then
-						                    person_info.firearm_permit = license
-						                end
+						            table.insert(person_info.licenses, license)
+						        end
+						        if #person_info.licenses <= 0 then
+						            person_info.licenses = false
 						        end
 						    end
+
+						    TriggerEvent('properties:getAddressByName', person.firstName .. ' ' .. person.lastName, function(address)
+						    	if address then
+									person_info.address = address
+								else
+									if person.property['house'] and person.property['houseStreet'] then
+								    	person_info.address = 'House '..person.property['house']..', '..person.property['houseStreet']
+								    else
+								    	person_info.address = person.property['location']
+								    end
+								end
+							end)
+
 						    ---------------------
 						    -- get insurance --
 						    ---------------------
@@ -376,9 +386,11 @@ AddEventHandler("mdt:PerformPersonCheckByName", function(data)
 						    if #criminal_history > 0 then
 						        for i = 1, #criminal_history do
 						            local crime = criminal_history[i]
-						                if not crime.type then -- not a ticket
+						                if (not crime.type or crime.type == "arrest") then -- not a ticket
+						                    --print("inserted crime")
 						                    table.insert(person_info.criminal_history.crimes, crime)
 						                else
+						                    --print("inserted ticket")
 						                    table.insert(person_info.criminal_history.tickets, crime)
 						                end
 						        end
@@ -447,7 +459,6 @@ end)
 
 RegisterServerEvent("mdt:performWeaponCheck")
 AddEventHandler("mdt:performWeaponCheck", function(serialNumber)
-	print(serialNumber)
 	local usource = source
 	serialNumber = string.upper(serialNumber)
 
@@ -475,6 +486,48 @@ AddEventHandler("mdt:performWeaponCheck", function(serialNumber)
     end)
 end)
 
+RegisterServerEvent('mdt:checkFlags')
+AddEventHandler('mdt:checkFlags', function(vehPlate, vehModel)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	if user.getActiveCharacterData('job') == 'sheriff' then
+		local warrants = exports["usa-warrants"]:getWarrants()
+		local _source = source
+
+		PerformHttpRequest("http://127.0.0.1:5984/bolos/_all_docs?include_docs=true" --[[ string ]], function(err, text, headers)
+			local response = json.decode(text)
+			if response.rows then
+				-- insert all warrants from 'bolos' db into lua table
+				for i = 1, #(response.rows) do
+					if string.find(response.rows[i].doc.description, vehPlate) then
+						TriggerClientEvent('chatMessage', _source, '^1^*[ALPR HIT]^r^0 '..vehModel..' with plate '..vehPlate..' has an active bolo.')
+						TriggerClientEvent('speedcam:lockCam', _source)
+						return
+					end
+				end
+			end
+		end, "GET", "", { ["Content-Type"] = 'application/json' })
+
+		for i = 1, #warrants do
+			if string.find(warrants[i].notes, vehPlate) then
+				TriggerClientEvent('chatMessage', source, '^1^*[ALPR HIT]^r^0 '..vehModel..' with plate '..vehPlate..' has an active warrant.')
+				TriggerClientEvent('speedcam:lockCam', source)
+				return
+			end
+		end
+
+		for veh = 1, #tempVehicles do
+			if tempVehicles[veh].plate == vehPlate then
+				if tempVehicles[veh].flags then
+					TriggerClientEvent('chatMessage', source, '^1^*[ALPR HIT]^r^0 '..vehModel..' with plate '..vehPlate..' has vehicle flags: '..tempVehicles[veh].flags..', registered to '..tempVehicles[veh].registered_owner..'.')
+					TriggerClientEvent('speedcam:lockCam', source)
+					return
+				end
+			end
+		end
+	end
+
+end)
+
 RegisterServerEvent('mdt:addTempVehicle')
 AddEventHandler('mdt:addTempVehicle', function(vehName, vehOwner, vehPlate, stolen)
 	print('inserting new vehicle to temp vehicles')
@@ -489,13 +542,16 @@ AddEventHandler('mdt:addTempVehicle', function(vehName, vehOwner, vehPlate, stol
 	if stolen then
 		for veh = 1, #tempVehicles do
 			if tempVehicles[veh].plate == vehPlate then
-				tempVehicles[veh].registered_owner = tempVehicles[veh].registered_owner .. ' [FLAGGED STOLEN]'
+				if not string.find(tempVehicles[veh].flags, 'STOLEN') then
+					tempVehicles[veh].flags = tempVehicles[veh].flags .. ' FLAGGED STOLEN'
+				end
 				return
 			end
 		end
 		vehicleData = {
 			veh_name = vehName,
-			registered_owner = random_names[math.random(#random_names)] .. ' [FLAGGED STOLEN]',
+			registered_owner = random_names[math.random(#random_names)],
+			flags = 'FLAGGED STOLEN',
 			plate = vehPlate
 		}
 	end
@@ -523,7 +579,14 @@ end)
 
 RegisterServerEvent("mdt:deleteWarrant")
 AddEventHandler("mdt:deleteWarrant", function(id, rev)
-	exports["usa-warrants"]:deleteWarrant("warrants", id, rev)
+	local usource = source
+	local user = exports["essentialmode"]:getPlayerFromId(usource)
+	local job = user.getActiveCharacterData('job')
+	if job == 'sheriff' or job == 'judge' then
+		exports["usa-warrants"]:deleteWarrant("warrants", id, rev)
+	else
+		TriggerClientEvent('usa:notify', usource, 'Insufficient permission!')
+	end
 end)
 
 RegisterServerEvent("mdt:createBOLO")
@@ -555,7 +618,14 @@ end)
 
 RegisterServerEvent("mdt:deleteBOLO")
 AddEventHandler("mdt:deleteBOLO", function(id, rev)
-	deleteBOLO("bolos", id, rev)
+	local usource = source
+	local user = exports["essentialmode"]:getPlayerFromId(usource)
+	local job = user.getActiveCharacterData('job')
+	if job == 'sheriff' or job == 'judge' then
+		deleteBOLO("bolos", id, rev)
+	else
+		TriggerClientEvent('usa:notify', usource, 'Insufficient permission!')
+	end
 end)
 
 RegisterServerEvent("mdt:fetchPoliceReports")
@@ -601,7 +671,14 @@ end)
 
 RegisterServerEvent("mdt:deletePoliceReport")
 AddEventHandler("mdt:deletePoliceReport", function(id, rev)
-	deletePoliceReport("policereports", id, rev)
+	local usource = source
+	local user = exports["essentialmode"]:getPlayerFromId(usource)
+	local job = user.getActiveCharacterData('job')
+	if job == 'sheriff' or job == 'judge' then
+		deletePoliceReport("policereports", id, rev)
+	else
+		TriggerClientEvent('usa:notify', usource, 'Insufficient permission!')
+	end
 end)
 
 RegisterServerEvent("mdt:fetchEmployee")

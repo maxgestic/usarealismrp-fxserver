@@ -381,11 +381,12 @@ local function DriveInGarage()
 		LSCMenu.categories:addSubMenu("PLATES", "Plates","Decorative identification.", true)
 		LSCMenu.categories.Plates:addSubMenu("LICENSE", "License", "",true)
 		for n, mod in pairs(LSC_Config.prices.plates) do
-			local btn = LSCMenu.categories.Plates.License:addPurchase(mod.name,mod.price)btn.plateindex = mod.plateindex
+			local btn = LSCMenu.categories.Plates.License:addPurchase(mod.name,mod.price)
+			btn.plateindex = mod.plateindex
 		end
 		--Customize license plates
-		AddMod(25, LSCMenu.categories.Plates, "Plate holder", "Plate holder", "",true) --
-		AddMod(26, LSCMenu.categories.Plates, "Vanity plates", "Vanity plates", "",true) --
+		--AddMod(25, LSCMenu.categories.Plates, "Plate holder", "Plate holder", "",true) --
+		--AddMod(26, LSCMenu.categories.Plates, "Vanity plates", "Vanity plates", "",true) --
 		--AddMod(47, LSCMenu.categories, "UNK47", "unk47", "",true)
 		--AddMod(49, LSCMenu.categories, "UNK49", "unk49", "",true)
 		AddMod(38,LSCMenu.categories,"HYDRAULICS","Hydraulics","",true)
@@ -455,7 +456,7 @@ local function DriveInGarage()
 						btn.purchased = true
 					end
 				end
-			scol = respray:addSubMenu("SECONDARY COLORS", "Secondary color", nil,true)
+				scol = respray:addSubMenu("SECONDARY COLORS", "Secondary color", nil,true)
 				scol:addSubMenu("CHROME", "Chrome", nil,true)
 				for n, c in pairs(LSC_Config.prices.chrome2.colors) do
 					local btn = scol.Chrome:addPurchase(c.name,LSC_Config.prices.chrome2.price)btn.colorindex = c.colorindex
@@ -845,7 +846,17 @@ function LSCMenu:OnMenuOpen(menu)
 end
 
 function LSCMenu:onButtonSelected(name, button)
-	TriggerServerEvent("LSC:buttonSelected", name, button)
+	name = name:lower()
+	local m = LSCMenu.currentmenu
+	local price = button.price or 0
+	local veh = myveh.vehicle
+	if m == "main" then
+		m = LSCMenu
+	end
+
+	mname = m.name:lower()
+
+	TriggerServerEvent("LSC:buttonSelected", name, button, mname)
 end
 
 --So we get the button back from server +  bool that determines if we can prchase specific item or not
@@ -1240,7 +1251,7 @@ function CheckPurchases(m)
 				else
 					b.sprite =  nil
 				end
-			elseif b.name == "Front,Back and Sides" then
+			elseif b.name == "Full Layout" then
 				if IsVehicleNeonLightEnabled(myveh.vehicle, 0)  and IsVehicleNeonLightEnabled(myveh.vehicle, 1)  and IsVehicleNeonLightEnabled(myveh.vehicle, 2)  and IsVehicleNeonLightEnabled(myveh.vehicle, 3)  then
 					b.sprite = "garage"
 				else

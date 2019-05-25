@@ -52,7 +52,22 @@ injuries = { -- ensure this is the same as sv_injury.lua
     [1432025498] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0} -- WEAPON_PUMPSHOTGUN_MK2
 }
 
-TriggerEvent('es:addJobCommand', 'injuries', { "ems", "fire", "police", "sheriff", "corrections", "doctor"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'injuries', { "ems", "fire", "police", "sheriff", "corrections", "doctor", "dai"}, function(source, args, user)
+	local _source = source
+	local targetSource = tonumber(args[2])
+	if targetSource and GetPlayerName(targetSource) then
+		TriggerEvent('injuries:getPlayerInjuries', targetSource, _source)
+	else
+		TriggerClientEvent("injuries:inspectNearestPed", _source, _source)
+	end
+end, {
+	help = "Inspect the nearest player's injuries",
+	params = {
+		{ name = "id", help = "id of person (omit to treat nearest)" }
+	}
+})
+
+TriggerEvent('es:addJobCommand', 'inspect', { "ems", "fire", "police", "sheriff", "corrections", "doctor", "dai"}, function(source, args, user)
 	local _source = source
 	local targetSource = tonumber(args[2])
 	if targetSource and GetPlayerName(targetSource) then
@@ -304,6 +319,8 @@ TriggerEvent('es:addGroupCommand', 'heal', 'mod', function(source, args, user)
 		Citizen.Wait(100)
 		TriggerClientEvent('injuries:updateInjuries', targetSource, {})
 		TriggerClientEvent('usa:notify', source, 'Player has been healed.')
+		TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(targetSource)..' ['..targetSource..'] ^0 has been healed by ^2'..GetPlayerName(source)..' ['..source..'] ^0.')
+		TriggerClientEvent('chatMessage', targetSource, '^2^*[STAFF]^r^0 You have been healed by ^2'..GetPlayerName(source)..'^0.')
 	end
 end, {
 	help = "Heal a player's injuries.",

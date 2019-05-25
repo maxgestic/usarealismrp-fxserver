@@ -78,14 +78,16 @@ end) -- TEST
 
 RegisterServerEvent("vehicle:seizeContraband")
 AddEventHandler("vehicle:seizeContraband", function(target_vehicle_plate)
-    local userSource = tonumber(source)
+  if source then userSource = tonumber(source) end
     GetVehicleInventory(target_vehicle_plate, function(inv)
         -- remove illegal items --
         for j = #inv, 1, -1 do
           if inv[j].legality then
             if inv[j].legality == "illegal" then
-              TriggerClientEvent("usa:notify", userSource, "~y~Seized:~w~ " .. "(x" .. inv[j].quantity .. ") " .. inv[j].name)
-              TriggerClientEvent("chatMessage", "", userSource, {}, "^3Seized:^0 " .. "(x" .. inv[j].quantity .. ") " .. inv[j].name)
+              if userSource then
+                TriggerClientEvent("usa:notify", userSource, "~y~Seized:~w~ " .. "(x" .. inv[j].quantity .. ") " .. inv[j].name)
+                TriggerClientEvent("chatMessage", "", userSource, {}, "^3Seized:^0 " .. "(x" .. inv[j].quantity .. ") " .. inv[j].name)
+              end
               table.remove(inv, j)
             end
           end

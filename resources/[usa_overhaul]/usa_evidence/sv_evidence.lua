@@ -45,13 +45,20 @@ local weaponNames = {
 	[2138347493] = 'Firework Launcher'
 }
 
+local exempt_evidence = {
+	vector3(151.39, -1007.74, -99.0),
+	vector3(266.14, -1007.61, -101.00),
+	vector3(346.47, -1013.05, -99.19),
+	vector3(-781.77, 322.00, 211.99)
+}
+
 TriggerEvent('es:addJobCommand', 'breathalyze', { "police", "sheriff", "ems" }, function(source, args, user)
 	TriggerClientEvent("evidence:breathalyzeNearest", source)
 end, {
 	help = "breathalyze the nearest person"
 })
 
-TriggerEvent('es:addJobCommand', 'dnasample', { "police", "sheriff" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'dnasample', { "police", "sheriff", "dai" }, function(source, args, user)
 	TriggerClientEvent("evidence:dnaNearest", source)
 end, {
 	help = "dna sample the nearest person"
@@ -85,7 +92,7 @@ end)
 
 
 -- GSR test --
-TriggerEvent('es:addJobCommand', 'gsr', { "police", "sheriff" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'gsr', { "police", "sheriff", "dai" }, function(source, args, user)
 	TriggerClientEvent("evidence:gsrNearest", source)
 end, { 
 	help = "gun shot residue test the nearest person"
@@ -108,8 +115,19 @@ AddEventHandler('evidence:newCasing', function(playerCoords, playerWeapon)
 				type = 'casing',
 				string = 'Casing',
 				weapon = item.name,
-				coords = playerCoords
+				coords = playerCoords,
+				made = os.time()
 			}
+			for i = 1, #exempt_evidence do
+				if find_distance(playerCoords, exempt_evidence[i]) < 50.0 then
+					return
+				end
+			end
+			for i = 1, #evidenceDropped do
+				if find_distance(playerCoords, evidenceDropped[i].coords) < 1.0 then
+					return
+				end
+			end
 			table.insert(evidenceDropped, evidence)
 			TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
 			return
@@ -119,8 +137,19 @@ AddEventHandler('evidence:newCasing', function(playerCoords, playerWeapon)
 		type = 'casing',
 		string = 'Casing',
 		weapon = weaponNames[playerWeapon],
-		coords = playerCoords
+		coords = playerCoords,
+		made = os.time()
 	}
+	for i = 1, #exempt_evidence do
+		if find_distance(playerCoords, exempt_evidence[i]) < 50.0 then
+			return
+		end
+	end
+	for i = 1, #evidenceDropped do
+		if find_distance(playerCoords, evidenceDropped[i].coords) < 1.0 then
+			return
+		end
+	end
 	table.insert(evidenceDropped, evidence)
 	TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
 end)
@@ -161,8 +190,19 @@ AddEventHandler('evidence:newDNA', function(playerCoords)
 		type = 'dna',
 		string = 'DNA',
 		DNA = userEncoded,
-		coords = playerCoords
+		coords = playerCoords,
+		made = os.time()
 	}
+	for i = 1, #exempt_evidence do
+		if find_distance(playerCoords, exempt_evidence[i]) < 50.0 then
+			return
+		end
+	end
+	for i = 1, #evidenceDropped do
+		if find_distance(playerCoords, evidenceDropped[i].coords) < 1.0 then
+			return
+		end
+	end
 	table.insert(evidenceDropped, evidence)
 	TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
 end)
@@ -190,7 +230,7 @@ RegisterServerEvent('evidence:checkJobForMenu')
 AddEventHandler('evidence:checkJobForMenu', function()
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local userJob = user.getActiveCharacterData('job')
-	if userJob == 'police' or userJob == 'sheriff' then
+	if userJob == 'police' or userJob == 'sheriff' or userJob == 'dai' then
 		TriggerClientEvent('evidence:openEvidenceMenu', source)
 	else
 		TriggerClientEvent('usa:notify', source, '~y~You are not on-duty for POLICE.')
@@ -209,6 +249,19 @@ end)
 RegisterServerEvent('evidence:returnObservations')
 AddEventHandler('evidence:returnObservations', function(observations, sourceReturnedTo)
 	TriggerClientEvent('evidence:displayObservations', sourceReturnedTo, observations, source)
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(5000)
+		for i = #evidenceDropped, 1, -1 do
+			local item = evidenceDropped[i]
+			if getMinutesFromTime(item.made) >= 45 then
+				table.remove(evidenceDropped, i)
+				TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
+			end
+		end
+	end
 end)
 
 -- character table string
@@ -242,4 +295,25 @@ function dec(data)
     for i=1,8 do c=c+(x:sub(i,i)=='1' and 2^(8-i) or 0) end
     return string.char(c)
   end))
+end
+
+function getMinutesFromTime(t)
+  local reference = t
+  local minutesfrom = os.difftime(os.time(), reference) / 60
+  local minutes = math.floor(minutesfrom)
+  return minutes
+end
+
+function find_distance(coords1, coords2)
+  xdistance =  math.abs(coords1.x - coords2.x)
+  
+  ydistance = math.abs(coords1.y - coords2.y)
+
+  zdistance = math.abs(coords1.z - coords2.z)
+
+  return nroot(3, (xdistance ^ 3 + ydistance ^ 3 + zdistance ^ 3))
+end
+
+function nroot(root, num)
+  return num^(1/root)
 end
