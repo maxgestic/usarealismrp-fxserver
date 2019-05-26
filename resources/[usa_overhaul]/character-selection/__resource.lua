@@ -1,4 +1,4 @@
-resource_manifest_version '77731fab-63ca-442c-a67b-abc70f28dfa5'
+resource_manifest_version '05cfa83c-a124-4cfa-a768-c24a5811d8f9'
 server_script "character-creation_sv.lua"
 client_script "character-creation_cl.lua"
 

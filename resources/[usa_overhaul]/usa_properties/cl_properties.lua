@@ -709,6 +709,19 @@ AddEventHandler('properties:breachHouseBurglary', function(_currentProperty)
 	DoorTransition(x, y, z, heading, true)
 end)
 
+RegisterNetEvent('properties:setPosition')
+AddEventHandler('properties:setPosition', function(coords, heading)
+	RequestCollisionAtCoord(coords[1], coords[2], coords[3])
+	SetEntityCoordsNoOffset(PlayerPedId(), coords[1], coords[2], coords[3], false, false, false, true)
+	if heading then
+		SetEntityHeading(PlayerPedId(), heading)
+	end
+	while not HasCollisionLoadedAroundEntity(PlayerPedId()) do
+	    Citizen.Wait(100)
+	    SetEntityCoords(PlayerPedId(), coords[1], coords[2], coords[3], 1, 0, 0, 1)
+	end
+end)
+
 function LoadRealEstateMenu(property)
 	_menuPool = NativeUI.CreatePool()
 	mainMenu = NativeUI.CreateMenu('Real Estate', 'Property Management', 0--[[X COORD]], 320 --[[Y COORD]])
@@ -1013,7 +1026,7 @@ function KeyboardInput(textEntry, inputText, maxLength) -- Thanks to Flatracer f
 end
 
 function DrawText3D(x, y, z, distance, text)
-    if Vdist(GetEntityCoords(PlayerPedId()), x, y, z) < distance then
+    if Vdist(GetEntityCoords(PlayerPedId()), x, y, z) < distance and not IsPlayerSwitchInProgress() then
     	local onScreen,_x,_y=World3dToScreen2d(x,y,z)
 	    SetTextScale(0.35, 0.35)
 	    SetTextFont(4)

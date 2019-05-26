@@ -38,7 +38,7 @@ Queue.Priority = {}
 Queue.Connecting = {}
 Queue.ThreadCount = 0
 Queue.PublicPlayerCount = 0
-Queue.MaxPublicPlayerCount = 0
+Queue.MaxPublicPlayerCount = 10
 
 local debug = false
 local displayQueue = false

@@ -215,16 +215,15 @@ local ragdoll_chance = 0.45 -- 80 = 80%
 Citizen.CreateThread(function()
 	while true do
 		Wait(100) -- check every 100 ticks, performance matters
-		local ped = PlayerPedId()
-    if DoesEntityExist(ped) and IsPedUsingActionMode(ped) then -- disable action mode/combat stance when engaged in combat (thing which makes you run around like an idiot when shooting)
-        SetPedUsingActionMode(ped, -1, -1, 1)
+    if DoesEntityExist(playerPed) and IsPedUsingActionMode(playerPed) then -- disable action mode/combat stance when engaged in combat (thing which makes you run around like an idiot when shooting)
+        SetPedUsingActionMode(playerPed, -1, -1, 1)
     end
-		if IsPedOnFoot(ped) and not IsPedSwimming(ped) and (IsPedRunning(ped) or IsPedSprinting(ped)) and not IsPedClimbing(ped) and IsPedJumping(ped) and not IsPedRagdoll(ped) then
+		if IsPedOnFoot(playerPed) and not IsPedSwimming(playerPed) and (IsPedRunning(playerPed) or IsPedSprinting(playerPed)) and not IsPedClimbing(playerPed) and IsPedJumping(playerPed) and not IsPedRagdoll(playerPed) then
       local chance_result = math.random()
 			if chance_result < ragdoll_chance then
 				Wait(600) -- roughly when the ped loses grip
         TriggerEvent('injuries:triggerGrace', function()
-				  SetPedToRagdoll(ped, 1000, 1000, 3)
+				  SetPedToRagdoll(playerPed, 1000, 1000, 3)
         end)
 			else
 				Wait(2000) -- cooldown before continuing
@@ -237,7 +236,6 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(100)
-		local playerPed = GetPlayerPed(-1)
 		local playerLocalisation = GetEntityCoords(playerPed)
 		ClearAreaOfCops(playerLocalisation.x, playerLocalisation.y, playerLocalisation.z, 400.0)
 	end
@@ -248,7 +246,7 @@ end)
 Citizen.CreateThread(function()
     while true do
         Wait(1000)
-        local playerVeh = GetVehiclePedIsIn(PlayerPedId(), false)
+        local playerVeh = GetVehiclePedIsIn(playerPed, false)
         local vehModel = GetEntityModel(playerVeh)
         if GetPlayerWantedLevel(PlayerId()) ~= 0 then
             SetPlayerWantedLevel(PlayerId(),0,false)
@@ -332,9 +330,9 @@ end)
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(5)
-        isInVeh = IsPedInAnyVehicle(PlayerPedId(), true)
+        isInVeh = IsPedInAnyVehicle(playerPed, true)
         if isInVeh then
-            veh = GetVehiclePedIsUsing(PlayerPedId())
+            veh = GetVehiclePedIsUsing(playerPed)
             angle = GetVehicleSteeringAngle(veh)
             veh2 = GetPlayersLastVehicle()
             sped = GetEntitySpeed(veh)
@@ -384,12 +382,12 @@ local brakeLight = true
 
 RegisterNetEvent("usa:shuffleSeats")
 AddEventHandler("usa:shuffleSeats", function()
-  if IsPedInAnyVehicle(GetPlayerPed(-1), false) and GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), 0) == GetPlayerPed(-1) then
+  if IsPedInAnyVehicle(playerPed, false) and GetPedInVehicleSeat(GetVehiclePedIsIn(playerPed, false), 0) == playerPed then
       disableShuffle = false
       Citizen.Wait(5000)
       disableShuffle = true
-    elseif IsPedInAnyVehicle(GetPlayerPed(-1), false) and GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), -1) == GetPlayerPed(-1) then
-      SetPedIntoVehicle(GetPlayerPed(-1), GetVehiclePedIsIn(GetPlayerPed(-1), false), 0)
+    elseif IsPedInAnyVehicle(playerPed, false) and GetPedInVehicleSeat(GetVehiclePedIsIn(playerPed, false), -1) == playerPed then
+      SetPedIntoVehicle(playerPed, GetVehiclePedIsIn(playerPed, false), 0)
     else
       CancelEvent()
     end
@@ -408,22 +406,21 @@ end)
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
-        local ped = GetPlayerPed(-1)
-        if IsPedInAnyVehicle(GetPlayerPed(-1), false) and disableShuffle then
-            if GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), 0) == GetPlayerPed(-1) then
-                if GetIsTaskActive(GetPlayerPed(-1), 165) then
-                    SetPedIntoVehicle(GetPlayerPed(-1), GetVehiclePedIsIn(GetPlayerPed(-1), false), 0)
+        if IsPedInAnyVehicle(playerPed, false) and disableShuffle then
+            if GetPedInVehicleSeat(GetVehiclePedIsIn(playerPed, false), 0) == playerPed then
+                if GetIsTaskActive(playerPed, 165) then
+                    SetPedIntoVehicle(playerPed, GetVehiclePedIsIn(playerPed, false), 0)
                 end
             end
         end
 
         if brakeLight then
-            if DoesEntityExist(ped) and not IsEntityDead(ped) then
-                if IsPedSittingInAnyVehicle(ped) then
-                    local vehicle = GetVehiclePedIsIn(ped, false)
+            if DoesEntityExist(playerPed) and not IsEntityDead(playerPed) then
+                if IsPedSittingInAnyVehicle(playerPed) then
+                    local vehicle = GetVehiclePedIsIn(playerPed, false)
 
                     if GetVehicleClass(vehicle) ~= 14 and GetVehicleClass(vehicle) ~= 15 and GetVehicleClass(vehicle) ~= 16 and GetVehicleClass(veh) ~= 21 then
-                        if GetPedInVehicleSeat(vehicle, -1) == ped then
+                        if GetPedInVehicleSeat(vehicle, -1) == playerPed then
                             if GetEntitySpeed(vehicle) == 0 and GetIsVehicleEngineRunning(vehicle) then
                                 SetVehicleBrakeLights(vehicle, true)
                             end
@@ -555,7 +552,7 @@ local tiempo = 8000 -- in miliseconds >> 1000 ms = 1s
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10)
-    playerPed = GetPlayerPed(-1) -- IMPORTANT!! DO NOT REMOVE!! THIS IS USED TO SET THE GLOBAL PLAYER PED FOR THE WHOLE FILE! --
+    playerPed = PlayerPedId() -- IMPORTANT!! DO NOT REMOVE!! THIS IS USED TO SET THE GLOBAL PLAYER PED FOR THE WHOLE FILE! --
 		if IsPedBeingStunned(playerPed) then
 		    SetPedMinGroundTimeForStungun(playerPed, tiempo)
 		end

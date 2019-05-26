@@ -782,7 +782,7 @@ function RefreshProperties(source, spawnAtProperty)
 						TriggerClientEvent('properties:updateBlip', source, _property, i)
 						TriggerClientEvent('usa:notify', source, 'Your property is at ~y~'.._property..'~s~, room '..i..'.')
 						if spawnAtProperty then
-							TriggerEvent('properties:requestEntry', _property, i, source)
+							TriggerClientEvent('properties:setPosition', source, room.coords, room.heading)
 						end
 						return
 					end
@@ -799,7 +799,7 @@ function RefreshProperties(source, spawnAtProperty)
 						TriggerClientEvent('properties:updateBlip', source, _property, i)
 						TriggerClientEvent('usa:notify', source, 'Your property is at ~y~'.._property..'~s~, room '..i..'.')
 						if spawnAtProperty then
-							TriggerEvent('properties:requestEntry', _property, i, source)
+							TriggerClientEvent('properties:setPosition', source, room.coords, room.heading)
 						end
 						return
 					end
@@ -824,7 +824,7 @@ function RefreshProperties(source, spawnAtProperty)
 				TriggerClientEvent('properties:updateData', -1, 'Houses', i, properties['Houses'].rooms[i])
 				TriggerClientEvent('properties:updateBlip', source, 'Houses', i)
 				if spawnAtProperty then
-					TriggerEvent('properties:requestEntry', 'Houses', i, source)
+					TriggerClientEvent('properties:setPosition', source, room.coords, room.heading)
 				end
 				return
 			end
@@ -843,18 +843,20 @@ end
 AddEventHandler('playerDropped', function()
 	-- remove a character's room if they already had one -- 
 	for property, data in pairs(properties) do
-		for i = 1, #data.rooms do
-			local room = properties[property].rooms[i]
-			for j = 1, #room.instance do
-				if source == room.instance[j] then
-					table.remove(properties[property].rooms[i].instance, j)
-					print('PROPERTIES: Removing source '.. j .. ' from room '..i..' instance in '..property)
+		if property.type ~= 'house' then
+			for i = 1, #data.rooms do
+				local room = properties[property].rooms[i]
+				for j = 1, #room.instance do
+					if source == room.instance[j] then
+						table.remove(properties[property].rooms[i].instance, j)
+						print('PROPERTIES: Removing source '.. j .. ' from room '..i..' instance in '..property)
+					end
 				end
-			end
-			if room.owner == source then
-				print('PROPERTIES: Removing room '.. i .. ' from '..source .. ' at '..property..', player has left the server!')
-				properties[property].rooms[i].owner = false
-				TriggerClientEvent('properties:updateData', -1, property, i, properties[property].rooms[i])
+				if room.owner == source then
+					print('PROPERTIES: Removing room '.. i .. ' from '..source .. ' at '..property..', player has left the server!')
+					properties[property].rooms[i].owner = false
+					TriggerClientEvent('properties:updateData', -1, property, i, properties[property].rooms[i])
+				end
 			end
 		end
 	end

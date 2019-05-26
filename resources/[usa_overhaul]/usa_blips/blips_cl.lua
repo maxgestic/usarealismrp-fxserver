@@ -101,13 +101,6 @@ Citizen.CreateThread(function()
     end
 end)
 
-RegisterNetEvent('blips:toggleBlips')
-AddEventHandler('blips:toggleBlips', function(blips, enabled)
-
-
-
-end)
-
 
 function GetPlayers()
     local players = {}

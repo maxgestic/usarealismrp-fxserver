@@ -13,7 +13,7 @@ local locations = {
   {x = -1107.0, y = -1693.8, z = 4.4, heading = 320.0}, -- LS beach
   {x = 1508.9, y = 3769.7, z = 34.2, heading = 180.0}, -- sandy
   {x = 217.9, y = -868.8, z = 30.5, heading = -95.0}, -- ls legion square
-  {x = 220.78, y = -901.84, z = 30.69, heading = 160.0},
+  --{x = 220.78, y = -901.84, z = 30.69, heading = 160.0},
   {x = -1484.7, y = -675.58, z= 28.94, heading = 13.5}
 }
 

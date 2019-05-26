@@ -128,9 +128,11 @@ Citizen.CreateThread(function()
 			DrawRect(0.0866+(Armour/2), 0.9755, Armour, 0.00833, 80, 150, 191, 230)
 			DrawRect(0.1214, 0.9755, 0.07, 0.00833, 80, 150, 191, 130)
 		else
-			DisplayRadar(false)
-			DrawRect(0.5, 1.0, 1.0, 0.2, 0, 0, 0, 255)
-			DrawRect(0.5, 0.0, 1.0, 0.2, 0, 0, 0, 255)
+			if hud.immersion then
+				DisplayRadar(false)
+				DrawRect(0.5, 1.0, 1.0, 0.2, 0, 0, 0, 255)
+				DrawRect(0.5, 0.0, 1.0, 0.2, 0, 0, 0, 255)
+			end
 		end
 	end
 end)
@@ -170,10 +172,17 @@ Citizen.CreateThread(function()
 			SetFlash(0, 0, 100, 100, 100)
 			Citizen.Wait(100)
 			hud.enabled = not hud.enabled
+			hud.immersion = not hud.immersion
 			TriggerEvent('usa:toggleImmersion', hud.enabled)
 			PlaySoundFrontend(-1, 'FocusIn', 'HintCamSounds', 1)
 		end
 	end
+end)
+
+RegisterNetEvent('usa:toggleHUD')
+AddEventHandler('usa:toggleHUD', function(enabled)
+	hud.enabled = enabled
+	TriggerEvent('usa:toggleImmersion', hud.enabled)
 end)
 
 function DrawTxt(x,y ,width,height,scale, text, r,g,b,a)

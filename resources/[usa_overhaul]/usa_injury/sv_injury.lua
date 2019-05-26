@@ -250,7 +250,7 @@ AddEventHandler('injuries:toggleOnDuty', function()
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local userJob = user.getActiveCharacterData('job')
 	if userJob ~= 'doctor' then
-		if user.getActiveCharacterData('emsRank') > 5 then
+		if user.getActiveCharacterData('emsRank') > 4 then
 			TriggerClientEvent('usa:notify', source, 'You are now signed ~g~on-duty~s~ as a doctor.')
 			user.setActiveCharacterData('job', 'doctor')
 			TriggerEvent('job:sendNewLog', source, 'doctor', true)

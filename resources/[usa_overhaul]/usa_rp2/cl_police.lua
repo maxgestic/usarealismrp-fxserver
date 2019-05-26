@@ -386,14 +386,13 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
-    	local playerPed = PlayerPedId()
-		if IsPedInAnyPoliceVehicle(playerPed) and IsControlPressed( 2, 75 ) and GetLastInputMethod(0) then
+	  if IsPedInAnyPoliceVehicle(playerPed) and IsControlPressed( 2, 75 ) and GetLastInputMethod(0) then
 			Citizen.Wait(150)
 			if IsPedInAnyPoliceVehicle(playerPed) and IsControlPressed( 2, 75 ) then
 				local handle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
 				TaskLeaveVehicle(playerPed, handle, 256)
 			end
-		end
+	  end
 		if isInBaitCar then
 			veh = GetVehiclePedIsIn(PlayerPedId())
 			SetVehicleEngineOn(veh, false, true)

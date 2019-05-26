@@ -225,7 +225,7 @@ AddEventHandler("character:delete", function(slot)
 end)
 
 RegisterServerEvent("character:loadCharacter")
-AddEventHandler("character:loadCharacter", function(activeSlot, spawnAtProperty)
+AddEventHandler("character:loadCharacter", function(activeSlot)
 	print("trying to load character in active slot #" .. activeSlot)
 	local userSource = tonumber(source)
 	TriggerClientEvent('chat:removeSuggestionAll', userSource)

@@ -1,6 +1,7 @@
 local menuOpen = false
 local selectedCharacter = {}
 local selectedCharacterSlot = 0
+local characterLoaded = false
 
 local open_menu_spawn_coords = {
 	x = -1236.653,
@@ -55,6 +56,9 @@ TriggerServerEvent("character:getCharactersAndOpenMenu", "home")
 
 RegisterNetEvent("character:open")
 AddEventHandler("character:open", function(menu, data)
+	DoScreenFadeOut(500)
+	Citizen.Wait(1000)
+	DoScreenFadeIn(500)
 	menuOpen = true
 	toggleMenu(menuOpen, menu, data)
 end)
@@ -177,6 +181,7 @@ AddEventHandler("character:setCharacter", function(character)
 		TriggerServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
 		TriggerServerEvent('morgue:checkToeTag')
 		FreezeEntityPosition(PlayerPedId(), false)
+		characterLoaded = true
 	end)
 end)
 
@@ -202,19 +207,22 @@ RegisterNUICallback('select-character', function(data, cb)
 			spawn_coords_closed_menu = {
 				x = 177.596,
 				y = 6636.183,
-				z = 31.638
+				z = 31.638,
+				heading = 130.0
 			}
 		elseif data.spawn:find("Sandy Shores")  then
 			spawn_coords_closed_menu = {
 				x = 1501.02,
 				y = 3776.2,
-				z = 33.5
+				z = 33.5,
+				heading = 206.0
 			}
 		elseif data.spawn:find("Los Santos")  then
 			spawn_coords_closed_menu = {
-				x = 224.1, 
-				y = -874.4, 
-				z = 30.5
+				x = 231.08, 
+				y = -874.31, 
+				z = 30.5,
+				heading = 344.0
 			}
 		elseif data.spawn:find("Property") then
 			spawn_coords_closed_menu = {
@@ -222,21 +230,11 @@ RegisterNUICallback('select-character', function(data, cb)
 				y = -675.48,
 				z = 28.94
 			}
-			spawnAtProperty = true
+			data.spawnAtProperty = true
 		end
 	end
 	toggleMenu(false)
-	--if data.character.firstName then print("selecting char: " .. data.character.firstName) end
-	selectedCharacter = data.character -- set selected character on lua side from selected js char card
-	selectedCharacterSlot = tonumber(data.slot) + 1
-	TriggerEvent("chat:setCharName", selectedCharacter) -- for chat messages
-	TriggerServerEvent("altchat:setCharName", selectedCharacter) -- for altchat messages
-	-- loadout the player with the selected character appearance
-	TriggerServerEvent("character:loadCharacter", selectedCharacterSlot)
-	-- set active character slot
-	TriggerServerEvent("character:setActive", selectedCharacterSlot, spawnAtProperty)
-	-- update bank balance:
-	TriggerEvent("banking:updateBalance", data.character.bank)
+	SpawnCharacter(data)
 	cb('ok')
 	alreadyCreated = false
 end)
@@ -265,18 +263,18 @@ end)
 local camera = nil
 local old_camera = nil
 
+SwitchInPlayer(PlayerPedId())
+
 function toggleMenu(status, menu, data)
 	-- set player position
 	local ped = GetPlayerPed(-1)
 	if status then
-
-		local ped = GetPlayerPed(-1)
-		SetEntityCoords(ped, 751.31121826172, 6454.3813476563, 31.926473617554, 0.0, 0, 0, 1)
-		FreezeEntityPosition(ped, true)
-		DisplayHud(false)
-		DisplayRadar(false)
-		SetEnableHandcuffs(ped, true)
-		RemoveAllPedWeapons(ped, true)
+		TriggerEvent('usa:toggleHUD', false)
+		SetDrawOrigin(0.0, 0.0, 0.0, 0)
+		SetEntityCoords(PlayerPedId(), 751.31121826172, 6454.3813476563, 31.926473617554, 0.0, 0, 0, 1)
+		FreezeEntityPosition(PlayerPedId(), true)
+		SetEnableHandcuffs(PlayerPedId(), true)
+		RemoveAllPedWeapons(PlayerPedId(), true)
 		TriggerEvent("modest:setMoneyDisplay", "0")
 		TriggerEvent("es:setMoneyDisplay", 0)
 		TriggerEvent("compass:display", false)
@@ -288,8 +286,6 @@ function toggleMenu(status, menu, data)
 		SetCamRot(camera, -25.0, 0.0, 80.00, true)
 		RenderScriptCams(true, false, 0, 1, 0)
 	else
-		old_camera = camera
-
 		SetNuiFocus(status, status)
 		menuOpen = status
 		SendNUIMessage({
@@ -298,50 +294,7 @@ function toggleMenu(status, menu, data)
 			menu = menu,
 			data = data
 		})
-
-		StartScreenEffect("DeathFailOut", 3500, false)
-		camera = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
-		SetCamCoord(camera, spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, 165.71755981445)
-		SetCamRot(camera, -90.0, 0.0, 80.0, true)
-		RenderScriptCams(true, false, camera, 1, 0)
-
-		SetCamActiveWithInterp(camera, old_camera, 2000, false, false)
-
-		while IsCamInterpolating(camera) do
-			Citizen.Wait(100)
-		end
-
-		zoom = 0
-		while zoom < 120 do
-			SetCamCoord(camera, spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, 165.71755981445-zoom)
-			SetCamRot(camera, -90.0, 0.0, 80.0+zoom/1, true)
-			zoom = zoom+0.8
-			Citizen.Wait(1)
-		end
-
-		RenderScriptCams(false, false, old_camera, 1, 0)
-		RenderScriptCams(false, false, camera, 1, 0)
-		DestroyCam(old_camera, false)
-		DestroyCam(camera, false)
-
-		DoScreenFadeOut(1000)
-		-- SetEntityCoords(GetPlayerPed(-1), spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z, 1, 0, 0, 1)
-
-		RequestCollisionAtCoord(spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z)
-		SetEntityCoords(ped, spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z, 0.0, 0, 0, 1)
-		while not HasCollisionLoadedAroundEntity(ped) do Citizen.Wait(100) SetEntityCoords(ped, spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z, 0.0, 0, 0, 1) end
-		FreezeEntityPosition(GetPlayerPed(-1), status)
-		SetEnableHandcuffs(GetPlayerPed(-1), status)
-		DoScreenFadeIn(1000)
-
-		-- welcome info --
-		TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0Welcome to ^1U^0S^5A ^3REALISM RP^0!")
-		TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0Type ^3'/info' ^0for more help and information!")
-		TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0Press ^3F1 ^0or ^3M ^0to open the interaction menu.")
 	end
-	-- should this be here? Seems like SendNUIMessage and SetNuiFocus will be called twice if status == false
-	DisplayHud(not status)
-	DisplayRadar(not status)
 	-- open / close menu
 	SetNuiFocus(status, status)
 	menuOpen = status
@@ -354,6 +307,8 @@ function toggleMenu(status, menu, data)
 
 end
 
+DoScreenFadeIn(500)
+
 Citizen.CreateThread(function()
 	while true do
 		Wait(1)
@@ -362,3 +317,84 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
+
+function ClearScreen()
+    SetCloudHatOpacity(0.01)
+    HideHudAndRadarThisFrame()
+    
+    -- nice hack to 'hide' HUD elements from other resources/scripts. kinda buggy though.
+    SetDrawOrigin(0.0, 0.0, 0.0, 0)
+end
+
+function SpawnCharacter(data)
+	DoScreenFadeOut(1000)
+	Citizen.Wait(1000)
+	RenderScriptCams(false, false, camera, 1, 0)
+	DestroyCam(camera, false)
+
+	if not IsPlayerSwitchInProgress() then
+    	SwitchOutPlayer(PlayerPedId(), 0, 1)
+	end
+
+	RequestCollisionAtCoord(spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z)
+	SetEntityCoords(PlayerPedId(), spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z, 0.0, 0, 0, 1)
+	if spawn_coords_closed_menu.heading then SetEntityHeading(PlayerPedId(), spawn_coords_closed_menu.heading) end
+	FreezeEntityPosition(PlayerPedId(), true)
+	while not HasCollisionLoadedAroundEntity(PlayerPedId()) do Citizen.Wait(100) end
+	FreezeEntityPosition(PlayerPedId(), false)
+
+	while GetPlayerSwitchState() ~= 5 do
+    	Citizen.Wait(0)
+    	ClearScreen()
+	end
+
+	Citizen.Wait(0)
+	DoScreenFadeIn(500)
+
+	selectedCharacter = data.character -- set selected character on lua side from selected js char card
+	selectedCharacterSlot = tonumber(data.slot) + 1
+	TriggerEvent("chat:setCharName", selectedCharacter) -- for chat messages
+	TriggerServerEvent("altchat:setCharName", selectedCharacter) -- for altchat messages
+	-- loadout the player with the selected character appearance
+	TriggerServerEvent("character:loadCharacter", selectedCharacterSlot)
+	-- set active character slot
+	TriggerServerEvent("character:setActive", selectedCharacterSlot, data.spawnAtProperty)
+	-- update bank balance:
+	TriggerEvent("banking:updateBalance", data.character.bank)
+
+	while not IsScreenFadedIn() or not characterLoaded do
+        Citizen.Wait(0)
+        ClearScreen()
+	end
+
+	local timer = GetGameTimer()
+	while true do
+        ClearScreen()
+        Citizen.Wait(0)
+        
+        -- wait 5 seconds before starting the switch to the player
+        if GetGameTimer() - timer > 5000 then
+            
+            -- Switch to the player.
+            SwitchInPlayer(PlayerPedId())
+            
+            ClearScreen()
+            
+            -- Wait for the player switch to be completed (state 12).
+            while GetPlayerSwitchState() ~= 12 do
+                Citizen.Wait(0)
+                ClearScreen()
+            end
+            -- Stop the infinite loop.
+            break
+        end
+    end
+    ClearDrawOrigin()
+    characterLoaded = false
+
+	-- welcome info --
+	TriggerEvent('usa:toggleHUD', true)
+	TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0Welcome to ^1U^0S^5A ^3REALISM RP^0!")
+	TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0Type ^3'/info' ^0for more help and information!")
+	TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0Press ^3F1 ^0or ^3M ^0to open the interaction menu.")
+end

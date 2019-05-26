@@ -332,7 +332,7 @@ function isPlayerAtTowSpot()
 	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
 
 	for name, data in pairs(locations) do
-		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,data.impound.x,data.impound.y,data.impound.z,false) < 5 then
+		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,data.impound.x,data.impound.y,data.impound.z,true) < 5 then
 			return true
 		end
 	end

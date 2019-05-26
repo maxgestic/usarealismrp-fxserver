@@ -284,7 +284,7 @@ Citizen.CreateThread(function()
 		if IsControlJustPressed(0, 38) then
 			for name, data in pairs(taxi_duty_locations) do
 		        local playerCoords = GetEntityCoords(PlayerPedId(), false)
-			    if GetDistanceBetweenCoords(playerCoords, data.duty.x, data.duty.y, data.duty.z, false) < 3 then
+			    if GetDistanceBetweenCoords(playerCoords, data.duty.x, data.duty.y, data.duty.z, true) < 3 then
 			    	if timeout > 3 then
 						TriggerEvent('usa:notify', "You have clocked in and out too much recently, ~y~please wait~s~.")
 					else

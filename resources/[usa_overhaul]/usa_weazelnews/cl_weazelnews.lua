@@ -568,7 +568,7 @@ end
 function isPlayerAtWeazelNewsGarage()
 	local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
 	for locationName, data in pairs(locations) do
-		if GetDistanceBetweenCoords(playerCoords.x, playerCoords.y, playerCoords.z, data.van_garage.x, data.van_garage.y, data.van_garage.z, false) < 3 then
+		if GetDistanceBetweenCoords(playerCoords.x, playerCoords.y, playerCoords.z, data.van_garage.x, data.van_garage.y, data.van_garage.z, true) < 3 then
 			return true
 		end
 	end
