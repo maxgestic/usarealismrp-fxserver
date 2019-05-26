@@ -153,7 +153,7 @@ AddEventHandler('storeRobbery:beginRobbery', function(storeName, isSuspectMale, 
 		local x, y, z = table.unpack(store.position)
 		local policeOnline = GetPoliceOnline()
 		if ((os.time() - store.lastRobbedTime) < robberyCooldown and store.lastRobbedTime ~= 0) or policeOnline < 2  or anyStoreBeingRobbed or IsInstanced(players) then
-			TriggerClientEvent('usa:notify', _source, 'This store is currently closed!')
+			TriggerClientEvent('usa:notify', _source, "Couldn't find any money")
 			return
 		end
 		stores[storeName].isBeingRobbed = _source

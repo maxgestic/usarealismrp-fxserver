@@ -17,11 +17,10 @@ AddEventHandler('_chat:messageEntered', function(name, color, message, location)
 		return
 	end
 
-	local userSource = source
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		if user then
-			local job = user.getActiveCharacterData("job")
-			if(job == "cop") then
+	local char = exports["usa-characters"]:GetCharacter(source)
+		if char then
+			local job = char.get("job")
+			if job == "cop" then
 				name = "LSPD | " .. name
 				color = {2, 111, 218}
 			elseif job == "sheriff" then
@@ -40,8 +39,6 @@ AddEventHandler('_chat:messageEntered', function(name, color, message, location)
 				name = "Fire Department | " .. name
 				color = {255, 0, 0}
 			end
-		else
-			print("ERROR GETTING USER BY ID")
 		end
 
 		---------------------------------
@@ -49,16 +46,16 @@ AddEventHandler('_chat:messageEntered', function(name, color, message, location)
 		---------------------------------
 		LOG_FILE = io.open("C:/wamp/www/log.txt", "a")
 		io.output(LOG_FILE)
-		io.write(name .. " [" .. GetPlayerName(userSource) .. " / " .. GetPlayerIdentifiers(userSource)[1] .. "]" .. ': ' .. message .. "\r\n")
+		io.write(name .. " [" .. GetPlayerName(source) .. " / " .. GetPlayerIdentifiers(source)[1] .. "]" .. ': ' .. message .. "\r\n")
 		io.close(LOG_FILE)
 
-	TriggerEvent('chatMessageLocation', userSource, name, message, location)
+	TriggerEvent('chatMessageLocation', source, name, message, location)
 
 	if not WasEventCanceled() then
-		TriggerClientEvent('chatMessage', userSource, "^*[OOC]^r Use ^3/help^7 for staff assistance or questions!")
+		TriggerClientEvent('chatMessage', source, "^*[OOC]^r Use ^3/help^7 for staff assistance or questions!")
 	end
 
-	print(name .. " (" .. GetPlayerName(userSource) .. ") " .. ': ' .. message)
+	print(name .. " (" .. GetPlayerName(source) .. ") " .. ': ' .. message)
 end)
 
 AddEventHandler('__cfx_internal:commandFallback', function(command)
@@ -80,7 +77,6 @@ end)
 -- test this
 RegisterServerEvent("chat:sendToLogFile")
 AddEventHandler("chat:sendToLogFile", function(source, message)
-	local player = exports["essentialmode"]:getPlayerFromId(source)
 	LOG_FILE = io.open(exports["usa_rp2"]:GetLogFilePath(), "a")
 	io.output(LOG_FILE)
 	io.write("[" .. GetPlayerName(source) .. " (#" .. source .. ") / " .. GetPlayerIdentifiers(source)[1] .. "]" .. ': ' .. message .. "\r\n")

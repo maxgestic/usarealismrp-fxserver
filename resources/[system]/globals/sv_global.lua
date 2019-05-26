@@ -24,51 +24,38 @@ function sendLocalActionMessage(_source, text, maxDist, time)
 end
 
 function notifyPlayersWithJobs(target_jobs, msg)
- 	TriggerEvent("es:getPlayers", function(players)
-		if not players then
-			return
-		end
-
-		for id, player in pairs(players) do
-			if id and player then
-				local job = player.getActiveCharacterData("job")
-				for i = 1, #target_jobs do
-					if job == target_jobs[i] then
-						TriggerClientEvent("chatMessage", id, "", {}, "^0" .. msg)
-					end
-				end
-			end
-		end
-	end)
-end
-
-function notifyPlayersWithJob(target_job, msg)
- 	TriggerEvent("es:getPlayers", function(players)
-		if not players then
-			return
-		end
-
-		for id, player in pairs(players) do
-			if id and player then
-				local job = player.getActiveCharacterData("job")
-				if job == target_job then
+	local characters = exports["usa-characters"]:GetCharacters()
+	for id, player in pairs(characters) do
+		if id and player then
+			local job = player.get("job")
+			for i = 1, #target_jobs do
+				if job == target_jobs[i] then
 					TriggerClientEvent("chatMessage", id, "", {}, "^0" .. msg)
 				end
 			end
 		end
-	end)
-end
-
-function setJob(src, job)
-	local user = exports["essentialmode"]:getPlayerFromId(src)
-	if user then
-		user.setActiveCharacterData("job", job)
-		TriggerClientEvent("usa:notify", src, "Job set to: " .. job)
-		print("job set!")
 	end
 end
 
-TriggerEvent('es:addGroupCommand', 'setjob', 'owner', function(source, args, user)
+function notifyPlayersWithJob(target_job, msg)
+	local characters = exports["usa-characters"]:GetCharacters()
+	for id, player in pairs(characters) do
+		if id and player then
+			local job = player.get("job")
+			if job == target_job then
+				TriggerClientEvent("chatMessage", id, "", {}, "^0" .. msg)
+			end
+		end
+	end
+end
+
+-- todo
+function setJob(src, job)
+	exports["usa-characters"]:SetCharacterField(src, "job", job)
+	TriggerClientEvent("usa:notify", src, "Job set to: " .. job)
+end
+
+TriggerEvent('es:addGroupCommand', 'setjob', 'owner', function(source, args, char)
 	setJob(source, args[2])
 end, {
 	help = "DEBUG: SET YOUR JOB"
