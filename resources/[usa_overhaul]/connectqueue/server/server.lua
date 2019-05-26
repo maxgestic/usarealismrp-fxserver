@@ -38,7 +38,7 @@ Queue.Priority = {}
 Queue.Connecting = {}
 Queue.ThreadCount = 0
 Queue.PublicPlayerCount = 0
-Queue.MaxPublicPlayerCount = 10
+Queue.MaxPublicPlayerCount = 1500000 -- temporary because broken
 
 local debug = false
 local displayQueue = false
