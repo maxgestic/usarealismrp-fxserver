@@ -21,14 +21,6 @@ function GetPhoneFromDatabaseByNumber(src, number, cb)
 			if result then
 				print("found in DB: " .. result.number)
 				cb(result)
-			else
-				print("Error retrieving phone. Not found in cache or DB.")
-				if src then
-					CreateNewPhoneFromExisting(src, number, function(new_phone)
-						print("* Phone created!  *")
-						cb(new_phone)
-					end)
-				end
 			end
 		end)
 	end)
@@ -50,33 +42,15 @@ function UpdatePhoneWithNumber(number, row, data)
 	end)
 end
 
-function CreateNewPhoneFromExisting(src, number, cb)
-	local user = exports["essentialmode"]:getPlayerFromId(src)
-	local inventory = user.getActiveCharacterData("inventory")
-	for i = 1, #inventory do
-		if string.find(inventory[i].name, "Cell Phone") and inventory[i].number == number then
-			print("Found matching phone to transfer data from...")
-			inventory[i].conversations = {}
-			CreateNewPhone(inventory[i])
-			inventory[i].contacts = {}
-			user.setActiveCharacterData("inventory", inventory)
-			print("Phone data transfer complete!")
-			cb(inventory[i])
-		end
-	end
-end
-
 RegisterServerEvent("phone:getPhone")
 AddEventHandler("phone:getPhone", function()
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local inv = user.getActiveCharacterData("inventory")
-	for i = 1, #inv do
-		if string.find(inv[i].name, "Cell Phone") then
-			TriggerClientEvent("phone:openPhone", source, inv[i])
-			return
-		end
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local phone = char.getItem("Cell Phone")
+	if phone then
+		TriggerClientEvent("phone:openPhone", source, phone)
+	else
+		TriggerClientEvent("usa:notify", source, "You have no cell phone!")
 	end
-	TriggerClientEvent("usa:notify", source, "You have no cell phone!")
 end)
 
 RegisterServerEvent("phone:deleteContact")
@@ -152,186 +126,104 @@ AddEventHandler("phone:addContact", function(data)
 	}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 end)
 
-RegisterServerEvent("phone:send911Message")
-AddEventHandler("phone:send911Message", function(data, dont_send_msg, no_caller_id, intended_emergency_type)
-	local help_online  = false
-	local userSource = tonumber(source)
-	local message = data.message
-	TriggerEvent('es:getPlayers', function(players)
-		for id, player in pairs(players) do
-			local playerSource = id
-			local player_job = player.getActiveCharacterData("job")
-			if intended_emergency_type then
-				if player_job == intended_emergency_type then
-					if no_caller_id then
-						TriggerClientEvent('chatMessage', playerSource, "911", {255, 20, 10}, message .. " (" .. data.location .. ")")
-						TriggerClientEvent("phone:notify", playerSource, "~r~911:\n~w~"..message)
-					else
-						TriggerClientEvent('chatMessage', playerSource, "911 (Caller: #" .. userSource .. ")", {255, 20, 10}, message .. " (" .. data.location .. ")")
-						TriggerClientEvent("phone:notify", playerSource, "~r~911 (Caller: # ".. userSource .. "):\n~w~"..message)
-					end
-					help_online = true
-					-- set temp blip
-					TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
-				end
-			else
-				if player_job == "sheriff" or player_job == "ems" or player_job == "fire" then
-					if no_caller_id then
-						TriggerClientEvent('chatMessage', playerSource, "911", {255, 20, 10}, message .. " (" .. data.location .. ")")
-						TriggerClientEvent("phone:notify", playerSource, "~r~911:\n~w~"..message)
-					else
-						TriggerClientEvent('chatMessage', playerSource, "911 (Caller: #" .. userSource .. ")", {255, 20, 10}, message .. " (" .. data.location .. ")")
-						TriggerClientEvent("phone:notify", playerSource, "~r~911 (Caller: # ".. userSource .. "):\n~w~"..message)
-					end
-					help_online = true
-					-- set temp blip
-					TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
-				end
-			end
-		end
-		if not dont_send_msg then
-			if help_online then
-				TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, "^3911^0 was notified!")
-				TriggerClientEvent("usa:notify", userSource, "~r~911~w~ was notified!")
-			else
-				TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, "Sorry, there is no one on duty to help!")
-				TriggerClientEvent("usa:notify", userSource, "Sorry, there is no one on duty to help!")
-			end
-		end
-	end)
-end)
-
 RegisterServerEvent("phone:sendTaxiMessage")
 AddEventHandler("phone:sendTaxiMessage", function(data)
-	local tow_online = false
-	local userSource = tonumber(source)
+	local taxi_online = false
 	local message = data.message
-	TriggerEvent('es:getPlayers', function(players)
-		for id, player in pairs(players) do
-			local playerSource = id
-			if player.getActiveCharacterData("job") == "taxi" then
-				TriggerClientEvent('chatMessage', playerSource, "Taxi Requested! (Caller: #" .. userSource .. ")", {251, 229, 5}, message .. " (" .. data.location .. ")")
-				TriggerClientEvent("phone:notify", playerSource, "~y~TAXI REQUEST (Caller: # ".. userSource .. "):\n~w~"..message)
-				tow_online = true
-				-- set temp blip
-				TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
-			end
+	local characters = exports["usa-characters"]:GetCharacters()
+	for id, char in pairs(characters) do
+		if char.get("job") == "taxi" then
+			TriggerClientEvent('chatMessage', id, "Taxi Requested! (Caller: #" .. source .. ")", {251, 229, 5}, message .. " (" .. data.location .. ")")
+			TriggerClientEvent("phone:notify", id, "~y~TAXI REQUEST (Caller: # ".. source .. "):\n~w~"..message)
+			taxi_online = true
+			-- set temp blip
+			TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
 		end
-		if tow_online then
-			TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, "A ^3taxi^0 has been notified!")
-			TriggerClientEvent("usa:notify", userSource, "A ~y~taxi ~w~has been notified!")
-		else
-			TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, "Sorry, there is no one on duty as taxi!")
-			TriggerClientEvent("usa:notify", userSource, "~y~Sorry, there is no one on duty as taxi!")
-		end
-	end)
+	end
+	if taxi_online then
+		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "A ^3taxi^0 has been notified!")
+		TriggerClientEvent("usa:notify", source, "A ~y~taxi ~w~has been notified!")
+	else
+		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Sorry, there is no one on duty as taxi!")
+		TriggerClientEvent("usa:notify", source, "~y~Sorry, there is no one on duty as taxi!")
+	end
 end)
 
 RegisterServerEvent("phone:sendTowMessage")
 AddEventHandler("phone:sendTowMessage", function(data)
 	local tow_online = false
-	local userSource = tonumber(source)
 	local message = data.message
-	TriggerEvent('es:getPlayers', function(players)
-		for id, player in pairs(players) do
-			local playerSource = id
-			if player.getActiveCharacterData("job") == "tow" then
-				TriggerClientEvent('chatMessage', playerSource, "Tow Requested! (Caller: #" .. userSource .. ")", {118, 120, 251}, message .. " (" .. data.location .. ")")
-				TriggerClientEvent("phone:notify", playerSource, "~y~TOW REQUEST (Caller: # ".. userSource .. "):\n~w~"..message)
-				tow_online = true
-				-- set temp blip
-				TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
-			end
+	local characters = exports["usa-characters"]:GetCharacters()
+	for id, char in pairs(characters) do
+		if char.get("job") == "tow" then
+			TriggerClientEvent('chatMessage', id, "Tow Requested! (Caller: #" .. source .. ")", {118, 120, 251}, message .. " (" .. data.location .. ")")
+			TriggerClientEvent("phone:notify", id, "~y~TOW REQUEST (Caller: # ".. source .. "):\n~w~"..message)
+			tow_online = true
+			-- set temp blip
+			TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
 		end
-		if tow_online then
-			TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, "A ^3tow truck^0 has been notified!")
-			TriggerClientEvent("usa:notify", userSource, "A ~y~tow truck~w~ has been notified!")
-		else
-			TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, "Sorry, no one is on duty as tow!")
-			TriggerClientEvent("usa:notify", userSource, "~y~Sorry, no one is on duty as tow!")
-		end
-	end)
+	end
+	if tow_online then
+		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "A ^3tow truck^0 has been notified!")
+		TriggerClientEvent("usa:notify", source, "A ~y~tow truck~w~ has been notified!")
+	else
+		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Sorry, no one is on duty as tow!")
+		TriggerClientEvent("usa:notify", source, "~y~Sorry, no one is on duty as tow!")
+	end
 end)
 
 RegisterServerEvent("phone:sendTweet")
 AddEventHandler("phone:sendTweet", function(data)
-		local user = exports["essentialmode"]:getPlayerFromId(source)
-		if user then
-			local name = "@" .. user.getActiveCharacterData("firstName") .. "_" .. user.getActiveCharacterData("lastName")
-			name = string.lower(name)
-			TriggerClientEvent('chatMessage', -1, "[TWEET] - " .. name, {29,161,242}, data.message)
-			TriggerEvent("chat:sendToLogFile", source, "[TWEET] - " .. name .. ": " .. data.message)
-		end
+	local char = exports["usa-characters"]:GetCharacter(source)
+	if char then
+		local name = "@" .. char.get("name").first .. "_" .. char.get("name").last
+		name = string.lower(name)
+		TriggerClientEvent('chatMessage', -1, "[TWEET] - " .. name, {29,161,242}, data.message)
+		TriggerEvent("chat:sendToLogFile", source, "[TWEET] - " .. name .. ": " .. data.message)
+	end
 end)
 
-TriggerEvent('es:addCommand','tweet', function(source, args, user)
-	local inventory = user.getActiveCharacterData('inventory')
-	for i = 1, #inventory do
-		local item = inventory[i]
-		if string.find(item.name, 'Phone') then
-			if user then
-				table.remove(args, 1)
-				local name = "@" .. user.getActiveCharacterData("firstName") .. "_" .. user.getActiveCharacterData("lastName")
-				name = string.lower(name)
-				TriggerClientEvent('chatMessage', -1, "[TWEET] - " .. name, {29,161,242}, table.concat(args, " "))
-				TriggerEvent("chat:sendToLogFile", source, "[TWEET] - " .. name .. ": " .. table.concat(args, " "))
-				return
-			end
-		end
+TriggerEvent('es:addCommand','tweet', function(source, args, char)
+	if char.hasItem('Cell Phone') then
+		table.remove(args, 1)
+		local name = "@" .. char.get("name").first .. "_" .. char.get("name").last
+		name = string.lower(name)
+		TriggerClientEvent('chatMessage', -1, "[TWEET] - " .. name, {29,161,242}, table.concat(args, " "))
+		TriggerEvent("chat:sendToLogFile", source, "[TWEET] - " .. name .. ": " .. table.concat(args, " "))
+	else
+		TriggerClientEvent('usa:notify', source, 'You do not have a cell phone!')
 	end
-	TriggerClientEvent('usa:notify', source, 'You do not have a cell phone!')
 end, {
 	help = "Send a tweet.", params = {{name = "message", help = "the tweet"}}
-}) 
+})
 
 -- request phone call (p2p voice)
 RegisterServerEvent("phone:requestCall")
 AddEventHandler("phone:requestCall", function(numbers)
 	local caller_source = source
-	TriggerEvent("es:getPlayers", function(players)
-		if players then
-			for id, player in pairs(players) do
-				if id and player then
-					local savedId = id
-					--print("searching inventory items of player at: " .. id .. " for a cell phone with target_phone_number")
-					local inventory = player.getActiveCharacterData("inventory")
-					if inventory then
-						--//Check entire user inventory for toNumber phone
-						for j = 1, #inventory do
-							if inventory[j] then
-								-- check for a matching phone number in player items
-								if string.find(inventory[j].name, "Cell Phone") and inventory[j].number == numbers.phone_number then
-									print("phone found with toNumber...")
-									print("requesting phone call...")
-									-- query for phone contacts --
-									local endpoint = "/phones/_design/phoneFilters/_view/getContactsByNumber"
-									local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
-									PerformHttpRequest(url, function(err, responseText, headers)
-										if responseText then
-											local data = json.decode(responseText)
-											if data.rows then
-												if data.rows[1] then
-													if data.rows[1].value then
-														local contacts = data.rows[1].value
-														local caller_name = getNameFromContacts(contacts, numbers.from_number)
-														if caller_name then print("caller_name: " .. caller_name) else print("caller with # " .. numbers.from_number .. " not found in contacts!") caller_name = numbers.from_number end
-														TriggerClientEvent("swayam:notification", savedId, "Whiz Wireless", "~y~Incoming call from:~w~ " .. caller_name, "CHAR_MP_DETONATEPHONE")
-														TriggerClientEvent("phone:requestCallPermission", savedId, numbers.phone_number, caller_source, caller_name)
-													end
-												end
-											end
-										end
-									end, "POST", json.encode({
-										keys = { numbers.phone_number }
-									}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
-								end
-							end
-						end
+	local characters = exports["usa-characters"]:GetCharacters()
+	for id, char in pairs(characters) do
+		local savedId = id
+		if char.hasItemWithField("number", numbers.phone_number) then
+			-- query for phone contacts --
+			local endpoint = "/phones/_design/phoneFilters/_view/getContactsByNumber"
+			local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+			PerformHttpRequest(url, function(err, responseText, headers)
+				if responseText then
+					local data = json.decode(responseText)
+					if data.rows and data.rows[1] and data.rows[1].value then
+						local contacts = data.rows[1].value
+						local caller_name = getNameFromContacts(contacts, numbers.from_number)
+						if caller_name then print("caller_name: " .. caller_name) else print("caller with # " .. numbers.from_number .. " not found in contacts!") caller_name = numbers.from_number end
+						TriggerClientEvent("swayam:notification", savedId, "Whiz Wireless", "~y~Incoming call from:~w~ " .. caller_name, "CHAR_MP_DETONATEPHONE")
+						TriggerClientEvent("phone:requestCallPermission", savedId, numbers.phone_number, caller_source, caller_name)
 					end
 				end
-			end
+			end, "POST", json.encode({
+				keys = { numbers.phone_number }
+			}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 		end
-	end)
+	end
 end)
 
 -- when a player responds to an inbound call:
@@ -497,29 +389,12 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 end)
 
 function SendTextReceiveNotification(toNumber, from, msg)
-	TriggerEvent("es:getPlayers", function(players)
-		local allPlayers = players
-		if allPlayers then
-			for id, player in pairs(allPlayers) do
-				if id and player then
-					-- search inventory items of player at [id] for a cell phone with toNumber --
-					local inventory = player.getActiveCharacterData("inventory")
-					if inventory then
-						-- Check entire user inventory for toNumber phone --
-						for j = 1, #inventory do
-							if inventory[j].name and inventory[j].number then
-								-- check for a matching phone number in player items
-								if string.find(inventory[j].name, "Cell Phone") and inventory[j].number == toNumber then
-									TriggerClientEvent("swayam:notification", id, from, msg, "CHAR_DEFAULT")
-									return
-								end
-							end
-						end
-					end
-				end
-			end
+	local characters = exports["usa-characters"]:GetCharacters()
+	for id, char in pairs(characters) do
+		if char.hasItemWithField("number", toNumber)
+			TriggerClientEvent("swayam:notification", id, from, msg, "CHAR_DEFAULT")
 		end
-	end)
+	end
 end
 
 RegisterServerEvent("phone:loadMessages")
@@ -531,13 +406,9 @@ AddEventHandler("phone:loadMessages", function(number)
 	PerformHttpRequest(url, function(err, responseText, headers)
 		if responseText then
 			local data = json.decode(responseText)
-			if data.rows then
-				if data.rows[1] then
-					if data.rows[1].value then
-						local conversations = data.rows[1].value
-						TriggerClientEvent("phone:loadedMessages", usource, conversations)
-					end
-				end
+			if data.rows and data.rows[1] and data.rows[1].value then
+				local conversations = data.rows[1].value
+				TriggerClientEvent("phone:loadedMessages", usource, conversations)
 			end
 		end
 	end, "POST", json.encode({
@@ -555,16 +426,12 @@ AddEventHandler("phone:getMessagesWithThisId", function(targetId, sourcePhone)
 	PerformHttpRequest(url, function(err, responseText, headers)
 		if responseText then
 			local data = json.decode(responseText)
-			if data.rows then
-				if data.rows[1] then
-					if data.rows[1].value then
-						local conversations = data.rows[1].value
-						for x = 1, #conversations do
-							if conversations[x].partnerId == targetId then
-								TriggerClientEvent("phone:loadedMessagesFromId", usource, conversations[x].messages, targetId)
-								return
-							end
-						end
+			if data.rows and data.rows[1] and data.rows[1].value then
+				local conversations = data.rows[1].value
+				for x = 1, #conversations do
+					if conversations[x].partnerId == targetId then
+						TriggerClientEvent("phone:loadedMessagesFromId", usource, conversations[x].messages, targetId)
+						return
 					end
 				end
 			end
@@ -577,11 +444,9 @@ end)
 -- P1: phone item
 -- P2: phone number
 function getNameFromContacts(phone, number)
-	local contacts
+	local contacts = phone
 	if phone.contacts then
 		contacts = phone.contacts
-	else
-		contacts = phone -- cheap way of not having to define separate function (phone = contacts)
 	end
 	-- look through contact list for matching phone number
 	print("#contacts in phone passed in = " .. #contacts)
@@ -598,17 +463,22 @@ function getNameFromContacts(phone, number)
 end
 
 -- show phone number command --
-TriggerEvent('es:addCommand', 'phonenumber', function(source, args, user, location)
-	local userSource = tonumber(source)
-		local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		local inventory = user.getActiveCharacterData("inventory")
-		for i = 1, #inventory do
-			local item = inventory[i]
+TriggerEvent('es:addCommand', 'phonenumber', function(source, args, char, location)
+	local inventory = char.get("inventory")
+	local hasPhone = false
+	for i = 0, (inventory.MAX_CAPACITY - 1) do
+		if inventory.items[tostring(i)] then
+			local item = inventory.items[tostring(i)]
 			if string.find(item.name, "Cell Phone") then
-				local msg = "^0" .. user.getActiveCharacterData("fullName") .. " writes down number: " .. item.number
+				local msg = "Person with SSN "..source.." writes down number: " .. item.number
 				exports["globals"]:sendLocalActionMessageChat(msg, location)
+				hasPhone = true
 			end
 		end
+	end
+	if not hasPhone then
+		TriggerClientEvent("usa:notify", source, "You have no cell phone!")
+	end
 end, { help = "Write down your phone number(s) for those around you."})
 
 -- PERFORM FIRST TIME DB CHECK--

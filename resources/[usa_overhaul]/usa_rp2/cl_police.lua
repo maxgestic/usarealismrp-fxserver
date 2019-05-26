@@ -410,34 +410,6 @@ end)
 -- 28, 30, 33 = gray
 -- 74, 10, 10 = red
 
-function send911Message(msg, type)
-	-- send 911 message --
-	-- get location of sender and send to server function:
-	local data = {}
-	local playerPos = GetEntityCoords( GetPlayerPed( -1 ), true )
-	local streetA, streetB = Citizen.InvokeNative( 0x2EB41072B4C1E4C0, playerPos.x, playerPos.y, playerPos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt() )
-	local street = {}
-	if not ((streetA == lastStreetA or streetA == lastStreetB) and (streetB == lastStreetA or streetB == lastStreetB)) then
-		-- Ignores the switcharoo while doing circles on intersections
-		lastStreetA = streetA
-		lastStreetB = streetB
-	end
-	if lastStreetA ~= 0 then
-		table.insert( street, GetStreetNameFromHashKey( lastStreetA ) )
-	end
-	if lastStreetB ~= 0 then
-		table.insert( street, GetStreetNameFromHashKey( lastStreetB ) )
-	end
-	data.location = table.concat( street, " & " )
-	data.pos = {
-		x = playerPos.x,
-		y = playerPos.y,
-		z = playerPos.z
-	}
-	data.message = msg
-	TriggerServerEvent("phone:send911Message", data, true, true, type)
-end
-
 function GetClosestPlayerInfo(range)
 	local closestDistance = 0
 	local closestPlayerServerId = 0
