@@ -86,75 +86,60 @@ local deliveryLocations = {
 
 RegisterServerEvent('gopostal:toggleDuty')
 AddEventHandler('gopostal:toggleDuty', function(location)
-	local userSource = tonumber(source)
-	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	local user_job = user.getActiveCharacterData("job")
-	local user_licenses = user.getActiveCharacterData("licenses")
-	local has_dl = false
-	if user_job == "gopostal" then
-		print("DELIVERY: " .. GetPlayerName(userSource) .. "["..GetPlayerIdentifier(userSource).."] is now OFF-DUTY for DELIVERY")
-		user.setActiveCharacterData("job", "civ")
-		TriggerClientEvent("gopostal:onDuty", userSource, false, location)
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local job = char.getActiveCharacterData("job")
+	local license = char.getItem("Driver's License")
+	if job == "gopostal" then
+		print("DELIVERY: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] is now OFF-DUTY for DELIVERY")
+		char.set("job", "civ")
+		TriggerClientEvent("gopostal:onDuty", source, false, location)
 	else
-		for i = 1, #user_licenses do
-		  local item = user_licenses[i]
-		  if string.find(item.name, "Driver's License") then
-			print("DELIVERY: Found item[Driver's License] on " .. GetPlayerName(userSource) .. "["..GetPlayerIdentifier(userSource).."], checking suspensions...")
-			has_dl = true
-			if item.status == "valid" then
-				print("DELIVERY: " .. GetPlayerName(userSource) .. "["..GetPlayerIdentifier(userSource).."] is now ON-DUTY for DELIVERY")
-				user.setActiveCharacterData("job", "gopostal")
-				TriggerClientEvent("gopostal:onDuty", userSource, true, location)
-				return
+		if license then
+			print("DELIVERY: Found item[Driver's License] on " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."], checking suspensions...")
+			if license.status ~= "suspended" then
+				print("DELIVERY: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] is now ON-DUTY for DELIVERY")
+				char.set("job", "gopostal")
+				TriggerClientEvent("gopostal:onDuty", source, true, location)
 			else
-				TriggerClientEvent("usa:notify", userSource, "Your driver's license is ~y~suspended~s~!")
-				print("DELIVERY: " .. GetPlayerName(userSource) .. "["..GetPlayerIdentifier(userSource).."] has a suspended license!")
-				return
+				TriggerClientEvent("usa:notify", source, "Your driver's license is ~y~suspended~s~!")
+				print("DELIVERY: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] has a suspended license!")
 			end
-		  end
-		end
-		if not has_dl then
-			TriggerClientEvent("usa:notify", userSource, "You do not have a driver's license!")
-			return
+		else
+			TriggerClientEvent("usa:notify", source, "You do not have a driver's license!")
 		end
 	end
-
 end)
 
 RegisterServerEvent('gopostal:payDriver')
 AddEventHandler('gopostal:payDriver', function(distance, playerCoords)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local user_job = user.getActiveCharacterData("job")
-	local user_money = user.getActiveCharacterData("money")
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local job = char.get("job")
 	local amountRewarded = math.ceil(BASE_PAY + (0.03 * distance))
-	if amountRewarded < 1000 and user_job == "gopostal" and IsNearDeliveryLocation(playerCoords) then
-		user.setActiveCharacterData("money", user_money + amountRewarded)
+	if amountRewarded < 1000 and job == "gopostal" and IsNearDeliveryLocation(playerCoords) then
+		char.giveMoney(amountRewarded)
 		TriggerClientEvent('usa:notify', source, 'Delivery completed, you have received: ~y~$'..amountRewarded..'.00')
 		print("DELIVERY: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] has received amount["..amountRewarded..'] after distance['..distance..'] for delivery!')
 	else
-		print('DELIVERY: **possible cheater: ' .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."], was not paid after calculating amount to pay["..amountRewarded.."], wasn't on duty or was not near a delivery location")
+		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+    	TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit gopostal:payDriver event, please intervene^0!')
 	end
 end)
 
 RegisterServerEvent('gopostal:quitJob')
 AddEventHandler('gopostal:quitJob', function()
 	TriggerClientEvent('gopostal:quitJob', source)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local user_bank = user.getActiveCharacterData("bank")
-	user.setActiveCharacterData("bank", user_bank - 200)
+	local char = exports["usa-characters"]:GetCharacter(source)
+	char.removeBank(200)
 	TriggerClientEvent('usa:notify', source, 'You have been charged ~y~$200.0~s~ in loses.')
 	print("DELIVERY: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] has quit their delivery job!")
 end)
 
-TriggerEvent('es:addJobCommand', 'quitdelivery', { "gopostal" }, function(source, args, user)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local user_bank = user.getActiveCharacterData("bank")
-	user.setActiveCharacterData("bank", user_bank - 200)
+TriggerEvent('es:addJobCommand', 'quitdelivery', { "gopostal" }, function(source, args, char)
+	char.removeBank(200)
 	TriggerClientEvent('usa:notify', source, 'You have been charged ~y~$200.0~s~ in loses.')
 	print("DELIVERY: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] has quit their delivery job!")
 end, {
-	help = "Forcefully quit the current GoPostal job."
+	help = "Forcefully quit the current GoPostal job"
 })
 
 function IsNearDeliveryLocation(coords)
@@ -166,8 +151,6 @@ function IsNearDeliveryLocation(coords)
 	end
 	return false
 end
-
-
 
 function find_distance(coords1, coords2)
   xdistance =  math.abs(coords1.x - coords2.x)

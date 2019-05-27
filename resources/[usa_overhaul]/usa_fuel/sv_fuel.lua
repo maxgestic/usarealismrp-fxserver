@@ -29,23 +29,21 @@ AddEventHandler('fuel:setFuelAmount', function(vehiclePlate, fuelAmount)
 end)
 
 AddEventHandler('fuel:purchaseFuel', function(amount, type)
-	local userSource = source
 	local price = gasPrices[type]
 
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local job = char.get("job")
 
-	local userJob = user.getActiveCharacterData("job")
-	if userJob == "sheriff" or userJob == "ems" or userJob == "fire" or userJob == "corrections" then
-		TriggerClientEvent("fuel:refuelAmount", userSource, amount)
+	if job == "sheriff" or job == "ems" or job == "fire" or job == "corrections" then
+		TriggerClientEvent("fuel:refuelAmount", source, amount)
 	else
-		local userMoney = user.getActiveCharacterData("money")
+		local money = char.get("money")
 		local toPay = amount * price
-		if toPay >= userMoney then
-			TriggerClientEvent("usa:notify", userSource, "You cannot afford this purchase! ~y~($"..toPay..')')
+		if toPay >= money then
+			TriggerClientEvent("usa:notify", source, "You cannot afford this purchase! ~y~($"..toPay..')')
 		else
-			user.setActiveCharacterData("money", userMoney - toPay)
-			print("user.getJob() was not sheriff/ems/fire: " .. userJob)
-			TriggerClientEvent("fuel:refuelAmount", userSource, amount)
+			char.removeMoney(toPay)
+			TriggerClientEvent("fuel:refuelAmount", source, amount)
 		end
 	end
 end)

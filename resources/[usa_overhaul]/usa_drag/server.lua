@@ -1,11 +1,11 @@
 draggedPlayers = {}
 
-TriggerEvent('es:addCommand', 'drag', function(source, args, user)
-	local usource = source
+TriggerEvent('es:addCommand', 'drag', function(source, args, char)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
 	if tonumber(args[2]) then
-		local userJob = user.getActiveCharacterData("job")
-		local userGroup = user.getGroup()
-		if userJob == "corrections" or userJob == "sheriff" or userJob == "cop" or userJob == "ems" or userJob == "fire" or userJob == "dai" or userGroup == "mod" or userGroup == "admin" or userGroup == "superadmin" or userGroup == "owner" then
+		local job = char.get("job")
+		local group = user.getGroup()
+		if job == "corrections" or job == "sheriff" or job == "cop" or job == "ems" or job == "fire" or job == "dai" or group == "mod" or group == "admin" or group == "superadmin" or group == "owner" then
 			if tonumber(args[2]) ~= usource and not draggedPlayers[usource] then
 				draggedPlayers[usource] = tonumber(args[2])
 				TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), usource)
@@ -23,9 +23,8 @@ TriggerEvent('es:addCommand', 'drag', function(source, args, user)
 	end
 end, {help = "Drag a tied up or handcuffed player."})
 
-TriggerEvent('es:addCommand', 'carry', function(source, args, user)
-	local usource = source
-	TriggerClientEvent('drag:attemptToCarryNearest', usource)
+TriggerEvent('es:addCommand', 'carry', function(source, args, char)
+	TriggerClientEvent('drag:attemptToCarryNearest', source)
 end, {help = "Carry a player."})
 
 RegisterServerEvent('drag:toggleDragAction')

@@ -52,13 +52,13 @@ local exempt_evidence = {
 	vector3(-781.77, 322.00, 211.99)
 }
 
-TriggerEvent('es:addJobCommand', 'breathalyze', { "police", "sheriff", "ems" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'breathalyze', { "police", "sheriff", "ems" }, function(source, args, char)
 	TriggerClientEvent("evidence:breathalyzeNearest", source)
 end, {
 	help = "breathalyze the nearest person"
 })
 
-TriggerEvent('es:addJobCommand', 'dnasample', { "police", "sheriff", "dai" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'dnasample', { "police", "sheriff", "dai" }, function(source, args, char)
 	TriggerClientEvent("evidence:dnaNearest", source)
 end, {
 	help = "dna sample the nearest person"
@@ -66,9 +66,8 @@ end, {
 
 RegisterServerEvent('evidence:returnDNA')
 AddEventHandler('evidence:returnDNA', function(targetSource)
-	local target = exports["essentialmode"]:getPlayerFromId(targetSource)
-	local targetName = target.getActiveCharacterData('fullName')
-	local targetEncoded = enc(target.getActiveCharacterData('dateOfBirth') .. targetName)
+	local target = exports["usa-characters"]:GetCharacter(targetSource)
+	local targetEncoded = enc(target.get("_id"))
 	TriggerClientEvent('chatMessage', source, '^3^*[DNA SAMPLE]^r ^7Sample of ^3'..targetName..'^7 returns value: ^3'..targetEncoded..'^7.')
 end)
 
@@ -79,20 +78,17 @@ end)
 
 RegisterServerEvent('evidence:returnBreathalyzeResult')
 AddEventHandler('evidence:returnBreathalyzeResult', function(levelBAC, sourceReturnedTo)
-	local target = exports["essentialmode"]:getPlayerFromId(source)
-	local targetName = target.getActiveCharacterData('fullName')
 	if levelBAC >= 0.08 then
-		TriggerClientEvent('usa:notify', sourceReturnedTo, targetName .. ' - BAC: ' .. levelBAC)
+		TriggerClientEvent('usa:notify', sourceReturnedTo, source .. ' - BAC: ' .. levelBAC)
 	else
-		TriggerClientEvent('usa:notify', sourceReturnedTo, targetName .. ' - BAC: ' .. levelBAC)
+		TriggerClientEvent('usa:notify', sourceReturnedTo, source .. ' - BAC: ' .. levelBAC)
 	end
 	local soundParams = {-1, "PIN_BUTTON", "ATM_SOUNDS", 1}
 	TriggerClientEvent("usa:playSound", sourceReturnedTo, soundParams)
 end)
 
-
 -- GSR test --
-TriggerEvent('es:addJobCommand', 'gsr', { "police", "sheriff", "dai" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'gsr', { "police", "sheriff", "dai" }, function(source, args, char)
 	TriggerClientEvent("evidence:gsrNearest", source)
 end, { 
 	help = "gun shot residue test the nearest person"
@@ -105,34 +101,6 @@ end)
 
 RegisterServerEvent('evidence:newCasing')
 AddEventHandler('evidence:newCasing', function(playerCoords, playerWeapon)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local weapons = user.getActiveCharacterData('weapons')
-	local job = user.getActiveCharacterData('job')
-	for i = 1, #weapons do
-		local item = weapons[i]
-		if item.type == 'weapon' and item.hash == playerWeapon then
-			local evidence = {
-				type = 'casing',
-				string = 'Casing',
-				weapon = item.name,
-				coords = playerCoords,
-				made = os.time()
-			}
-			for i = 1, #exempt_evidence do
-				if find_distance(playerCoords, exempt_evidence[i]) < 50.0 then
-					return
-				end
-			end
-			for i = 1, #evidenceDropped do
-				if find_distance(playerCoords, evidenceDropped[i].coords) < 1.0 then
-					return
-				end
-			end
-			table.insert(evidenceDropped, evidence)
-			TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
-			return
-		end
-	end
 	local evidence = {
 		type = 'casing',
 		string = 'Casing',
@@ -154,42 +122,14 @@ AddEventHandler('evidence:newCasing', function(playerCoords, playerWeapon)
 	TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
 end)
 
-RegisterServerEvent('evidence:newMelee')
-AddEventHandler('evidence:newMelee', function(attackerSource, playerCoords)
-	if GetPlayerPing(tonumber(attackerSource)) then
-		local user = exports["essentialmode"]:getPlayerFromId(source) -- victim
-		local userEncoded = enc(user.getActiveCharacterData('dateOfBirth') .. user.getActiveCharacterData('fullName'))
-		local attacker = exports["essentialmode"]:getPlayerFromId(attackerSource)
-		local attackerEncoded = enc(attacker.getActiveCharacterData('dateOfBirth') .. attacker.getActiveCharacterData('fullName'))
-		local evidence = {
-			type = 'dna2',
-			string = 'DNA',
-			DNA1 = userEncoded,
-			DNA2 = attackerEncoded,
-			coords = playerCoords
-		}
-		if math.random() > 0.5 then
-			evidence = {
-				type = 'dna2',
-				string = 'DNA',
-				DNA1 = attackerEncoded,
-				DNA2 = userEncoded,
-				coords = playerCoords
-			}
-		end
-		table.insert(evidenceDropped, evidence)
-		TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
-	end
-end)
-
 RegisterServerEvent('evidence:newDNA')
 AddEventHandler('evidence:newDNA', function(playerCoords)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local userEncoded = enc(user.getActiveCharacterData('dateOfBirth') .. user.getActiveCharacterData('fullName'))
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local charEncoded = enc(char.get("_id"))
 	local evidence = {
 		type = 'dna',
 		string = 'DNA',
-		DNA = userEncoded,
+		DNA = charEncoded,
 		coords = playerCoords,
 		made = os.time()
 	}
@@ -215,12 +155,10 @@ end)
 
 RegisterServerEvent('evidence:returnGSRResult')
 AddEventHandler('evidence:returnGSRResult', function(residue, sourceReturnedTo)
-	local target = exports["essentialmode"]:getPlayerFromId(source)
-	local targetName = target.getActiveCharacterData('fullName')
 	if residue then
-		TriggerClientEvent('usa:notify', sourceReturnedTo, targetName .. ' - residue detected!')
+		TriggerClientEvent('usa:notify', sourceReturnedTo, source .. ' - residue detected!')
 	else
-		TriggerClientEvent('usa:notify', sourceReturnedTo, targetName .. ' - residue not found.')
+		TriggerClientEvent('usa:notify', sourceReturnedTo, source .. ' - residue not found.')
 	end
 	local soundParams = {-1, "PIN_BUTTON", "ATM_SOUNDS", 1}
 	TriggerClientEvent("usa:playSound", sourceReturnedTo, soundParams)
@@ -228,9 +166,8 @@ end)
 
 RegisterServerEvent('evidence:checkJobForMenu')
 AddEventHandler('evidence:checkJobForMenu', function()
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local userJob = user.getActiveCharacterData('job')
-	if userJob == 'police' or userJob == 'sheriff' or userJob == 'dai' then
+	local job = exports["usa-characters"]:GetCharacterField(source, "job")
+	if job == 'police' or job == 'sheriff' or job == 'dai' then
 		TriggerClientEvent('evidence:openEvidenceMenu', source)
 	else
 		TriggerClientEvent('usa:notify', source, '~y~You are not on-duty for POLICE.')
@@ -239,9 +176,8 @@ end)
 
 RegisterServerEvent('evidence:makeObservations')
 AddEventHandler('evidence:makeObservations', function(targetSource)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local userJob = user.getActiveCharacterData('job')
-	if userJob == 'police' or userJob == 'sheriff' then
+	local job = exports["usa-characters"]:GetCharacterField(source, "job")
+	if job == 'police' or job == 'sheriff' then
 		TriggerClientEvent('evidence:getObservations', targetSource, source)
 	end
 end)

@@ -7,64 +7,35 @@ local IMPOUND_FEE = 150
 
 RegisterServerEvent("garage:giveKey")
 AddEventHandler("garage:giveKey", function(key)
-	local already_has_key = false
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		local inv = user.getActiveCharacterData("inventory")
-		for i = 1, #inv do
-			local item = inv[i]
-			if item then
-				if string.find(item.name, "Key") then
-					if string.find(key.plate, item.plate) then
-						already_has_key = true
-					end
-				end
-			end
-		end
-		if not already_has_key then
-			table.insert(inv, key)
-			user.setActiveCharacterData("inventory", inv)
-		end
-		-- add to server side list of plates being tracked for locking resource:
-		TriggerEvent("lock:addPlate", key.plate)
-		return
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local key = char.getItemWithField("plate", key.plate)
+	if not key then
+		char.giveItem(key)
+	end
+	-- add to server side list of plates being tracked for locking resource:
+	TriggerEvent("lock:addPlate", key.plate)
 end)
 
 RegisterServerEvent("garage:storeKey")
 AddEventHandler("garage:storeKey", function(plate)
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		local inv = user.getActiveCharacterData("inventory")
-		if inv then
-			for i = 1, #inv do
-				local item = inv[i]
-				if item then
-					if string.find(item.name, "Key") then
-						if plate then
-							if string.find(plate, item.plate) then
-								table.remove(inv, i)
-								user.setActiveCharacterData("inventory", inv)
-								-- remove key from lock resource toggle list:
-								TriggerEvent("lock:removePlate", item.plate)
-								return
-							end
-						end
-					end
-				end
-			end
-		end
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local key = char.getItemWithField("plate", plate)
+	if key then
+		char.removeItem(key, 1)
+		TriggerEvent("lock:removePlate", item.plate)
+	end
 end)
 
 RegisterServerEvent("garage:storeVehicle")
 AddEventHandler("garage:storeVehicle", function(handle, numberPlateText, required_jobs)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
+	local char = exports["usa-characters"]:GetCharacter(source)
 	local isAuthorized = false
 	local usource = source
 
 	if required_jobs then
-		local userJob = user.getActiveCharacterData("job")
+		local job = char.get("job")
 		for i = 1, #required_jobs do
-			if userJob == required_jobs[i] or (required_jobs[i] == 'sheriff' and user.getActiveCharacterData('policeRank') > 0) then
+			if job == required_jobs[i] or (required_jobs[i] == 'sheriff' and char.get('policeRank') > 0) then
 				isAuthorized = true
 				break
 			end
@@ -74,11 +45,11 @@ AddEventHandler("garage:storeVehicle", function(handle, numberPlateText, require
 	end
 
 	if isAuthorized then
-		local userVehicles = user.getActiveCharacterData("vehicles")
-		for i = 1, #userVehicles do
-			local vehicle = userVehicles[i]
+		local vehicles = char.get("vehicles")
+		for i = 1, #vehicles do
+			local vehicle = vehicles[i]
 			if numberPlateText and vehicle then
-				if string.match(numberPlateText,tostring(vehicle)) or numberPlateText == vehicle then -- player actually owns car that is being stored
+				if string.match(numberPlateText, tostring(vehicle)) or numberPlateText == vehicle then -- player actually owns car that is being stored
 					TriggerEvent('es:exposeDBFunctions', function(couchdb)
 						couchdb.updateDocument("vehicles", numberPlateText, { stored = true }, function()
 							TriggerClientEvent("garage:storeVehicle", usource)
@@ -88,7 +59,7 @@ AddEventHandler("garage:storeVehicle", function(handle, numberPlateText, require
 				end
 			end
 		end
-		TriggerClientEvent("usa:notify", usource, "~r~You do not own that vehicle!")
+		TriggerClientEvent("usa:notify", usource, "You do not own that vehicle!")
 		return
 	else
 		TriggerClientEvent("usa:notify", usource, "Garage prohibited!")
@@ -98,70 +69,60 @@ end)
 -- ask to retrieve vehicle from garage --
 RegisterServerEvent("garage:vehicleSelected")
 AddEventHandler("garage:vehicleSelected", function(vehicle, property)
-	local userSource = tonumber(source)
-	local impound_fee = 300
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	local userVehicles = user.getActiveCharacterData("vehicles")
-	local user_money = user.getActiveCharacterData("money")
+	local usource = source
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local vehicles = char.get("vehicles")
+	local money = char.get("money")
 	if vehicle.impounded == true then
-		if IsDriverLicenseValid(userSource) then
-			if user_money >= impound_fee then
-				TriggerClientEvent("usa:notify", userSource, "~y~STATE IMPOUND: ~s~Vehicle retrieved from the impound! Fee: ~y~$"..impound_fee..".00")
-				-- get customizations --	
+		if IsDriverLicenseValid(usource) then
+			if money >= IMPOUND_FEE then
+				TriggerClientEvent("usa:notify", usource, "~y~STATE IMPOUND: ~s~Vehicle retrieved from the impound! Fee: ~y~$"..IMPOUND_FEE..".00")
+
 				GetVehicleCustomizations(vehicle.plate, function(customizations)
-					-- spawn vehicle --
 					vehicle.customizations = customizations
-					TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
-					-- set stored status to false --
+					TriggerClientEvent("garage:vehicleStored", usource, vehicle)
 					TriggerEvent('es:exposeDBFunctions', function(couchdb)
 						couchdb.updateDocument("vehicles", vehicle.plate, { impounded = false, stored = false }, function()
-							-- take storage fee --
-							user.setActiveCharacterData("money", user_money - impound_fee)
-							-- give money to garage property owner --
+							char.removeMoney(IMPOUND_FEE)
 						end)
 					end)
 				end)
 			else
-				TriggerClientEvent("usa:notify", userSource, "~y~STATE IMPOUND: ~s~Your vehicle is ~impounded and can be retrieved for ~y~$"..impound_fee..".00~s~!")
+				TriggerClientEvent("usa:notify", usource, "~y~STATE IMPOUND: ~s~Your vehicle is ~impounded and can be retrieved for ~y~$"..IMPOUND_FEE..".00~s~!")
 			end
 		else
-			TriggerClientEvent("usa:notify", userSource, "Your license is ~y~suspended~s~ and cannot retrieve an impounded vehicle!")
+			TriggerClientEvent("usa:notify", usource, "Your license is ~y~suspended~s~ and cannot retrieve an impounded vehicle!")
 		end
-		return
 	elseif vehicle.stored == true then
-		if user_money >= WITHDRAW_FEE then
-			TriggerClientEvent("usa:notify", userSource, "Vehicle retrieved from garage! Fee: ~y~$" .. WITHDRAW_FEE..'.00')
-			-- get customizations --
+		if money >= WITHDRAW_FEE then
+			TriggerClientEvent("usa:notify", usource, "Vehicle retrieved from garage! Fee: ~y~$" .. WITHDRAW_FEE..'.00')
+
 			GetVehicleCustomizations(vehicle.plate, function(customizations)
-				-- spawn vehicle --
 				vehicle.customizations = customizations
-				TriggerClientEvent("garage:vehicleStored", userSource, vehicle)
-				-- set stored status to false --
+				TriggerClientEvent("garage:vehicleStored", usource, vehicle)
 				TriggerEvent('es:exposeDBFunctions', function(couchdb)
 				    couchdb.updateDocument("vehicles", vehicle.plate, { stored = false }, function()
-						-- take storage fee --
-						user.setActiveCharacterData("money", user_money - WITHDRAW_FEE)
-						-- give money to garage property owner --
+						char.removeMoney(WITHDRAW_FEE)
 					end)
 				end)
 			end)
 		else
-			TriggerClientEvent("usa:notify", userSource, "~y~Your vehicle can be retrieved for a fee of ~y~$"..WITHDRAW_FEE..".00!")
+			TriggerClientEvent("usa:notify", usource, "Your vehicle can be retrieved for a fee of ~y~$"..WITHDRAW_FEE..".00~s~!")
 		end
 	else
-		TriggerClientEvent("usa:notify", userSource, "~y~Sorry! That vehicle is not stored at any of our garages.")
+		TriggerClientEvent("usa:notify", usource, "~y~Sorry!~s~ That vehicle is not stored at any of our garages.")
 	end
 end)
 
 RegisterServerEvent("garage:openMenu")
 AddEventHandler("garage:openMenu", function(required_jobs, _closest_shop)
 	local usource = source
-	local user = exports["essentialmode"]:getPlayerFromId(source)
+	local char = exports["usa-characters"]:GetCharacter(source)
 	if required_jobs then
-		local userJob = user.getActiveCharacterData("job")
+		local job = char.get("job")
 		for i = 1, #required_jobs do
-			if required_jobs[i] == userJob or (required_jobs[i] == 'sheriff' and user.getActiveCharacterData('policeRank') > 0) then
-				GetVehiclesForMenu(user.getActiveCharacterData("vehicles"), function(vehs)
+			if required_jobs[i] == job or (required_jobs[i] == 'sheriff' and char.get('policeRank') > 0) then
+				GetVehiclesForMenu(char.get("vehicles"), function(vehs)
 					TriggerClientEvent("garage:openMenuWithVehiclesLoaded", usource, vehs)
 				end)
 				return
@@ -169,14 +130,13 @@ AddEventHandler("garage:openMenu", function(required_jobs, _closest_shop)
 			TriggerClientEvent("usa:notify", usource, "Garage prohibited!")
 		end
 	else
-		GetVehiclesForMenu(user.getActiveCharacterData("vehicles"), function(vehs)
+		GetVehiclesForMenu(char.get("vehicles"), function(vehs)
 			TriggerClientEvent("garage:openMenuWithVehiclesLoaded", usource, vehs, _closest_shop)
 		end)
 	end
 end)
 
-function GetVehiclesForMenu(plates, cb) -- test
-	-- query for the information needed from each vehicle --
+function GetVehiclesForMenu(plates, cb)
 	local endpoint = "/vehicles/_design/vehicleFilters/_view/getVehiclesForGarageMenu"
 	local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
 	PerformHttpRequest(url, function(err, responseText, headers)
@@ -197,25 +157,20 @@ function GetVehiclesForMenu(plates, cb) -- test
 					}
 					table.insert(responseVehArray, veh)
 				end
-				-- send vehicles to client for displaying --
-				--print("# of vehicles loaded for menu: " .. #responseVehArray)
 			end
 			cb(responseVehArray)
 		end
 	end, "POST", json.encode({
 		keys = plates
-		--keys = { "86CSH075" }
 	}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function GetVehicleCustomizations(plate, cb)
-	-- query for the information needed from each vehicle --
 	local endpoint = "/vehicles/_design/vehicleFilters/_view/getVehicleCustomizationsByPlate"
 	local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
 	PerformHttpRequest(url, function(err, responseText, headers)
 		if responseText then
 			local customizations = {}
-			--print(responseText)
 			local data = json.decode(responseText)
 			if data.rows and data.rows[1].value then
 				customizations = data.rows[1].value[1] -- customizations
@@ -224,28 +179,14 @@ function GetVehicleCustomizations(plate, cb)
 		end
 	end, "POST", json.encode({
 		keys = { plate }
-		--keys = { "86CSH075" }
 	}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function IsDriverLicenseValid(source)
-	local userSource = source
-	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	local user_licenses = user.getActiveCharacterData("licenses")
-	for i = 1, #user_licenses do
-      local item = user_licenses[i]
-      if string.find(item.name, "Driver") then
-        --print("DL found! checking validity")
-		--print("item.status: " .. item.status)
-        if item.status == "valid" then
-			--print("calling had DL!")
-			return true
-        else
-			return false
-		end
-      end
-    end
-	-- no license at this point
-	return true
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local license = char.getItem("Driver's License")
+	if license and license.status == "valid" then 
+		return true 
+	end
+	return false
 end

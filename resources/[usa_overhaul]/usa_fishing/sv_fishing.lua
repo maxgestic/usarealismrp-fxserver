@@ -6,59 +6,26 @@ local fishItems = {
 
 RegisterServerEvent("fish:giveFish")
 AddEventHandler("fish:giveFish", function(fish)
-  local userSource = tonumber(source)
   local fish = fishItems[fish]
-  --TriggerEvent("es:getPlayerFromId", userSource, function(user)
-  local user = exports["essentialmode"]:getPlayerFromId(userSource)
-    if user.getCanActiveCharacterHoldItem(fish) then
-      local inventory = user.getActiveCharacterData("inventory")
-      for i = 1, #inventory do
-        local item = inventory[i]
-        if item then
-          if item.name == fish.name then
-            print("found fish " .. item.name .. " in player's inventory already! incrementing..")
-            inventory[i].quantity = item.quantity + 1
-            user.setActiveCharacterData("inventory", inventory)
-            return
-          end
-        end
-      end
-      print("adding fish to player inventory!")
-      table.insert(inventory, fish)
-      user.setActiveCharacterData("inventory", inventory)
-    else
-      TriggerClientEvent("usa:notify", userSource, "Inventory is full!")
-    end
-  --end)
+  local char = exports["usa-characters"]:GetCharacter(source)
+  if char.canHoldItem(fish) then
+    char.giveItem(fish, 1)
+  else
+    TriggerClientEvent("usa:notify", source, "Inventory is full!")
+  end
 end)
 
 RegisterServerEvent("fish:sellFish")
 AddEventHandler("fish:sellFish", function(fish)
-  local userSource = tonumber(source)
   local fish = fishItems[fish]
-  --TriggerEvent("es:getPlayerFromId", userSource, function(user)
-  local user = exports["essentialmode"]:getPlayerFromId(userSource)
-    local inventory = user.getActiveCharacterData("inventory")
-    for i = 1, #inventory do
-      local item = inventory[i]
-      if item then
-        if item.name == fish.name then
-          print("found fish " .. item.name .. " in player's inventory already! selling..")
-          if item.quantity > 1 then
-            inventory[i].quantity = item.quantity - 1
-          else
-            table.remove(inventory, i)
-          end
-          user.setActiveCharacterData("inventory", inventory)
-          local user_money = user.getActiveCharacterData("money")
-          user.setActiveCharacterData("money", user_money + item.worth)
-          TriggerClientEvent("usa_rp:notify", userSource, "You have sold (1x) " .. item.name .. " for $" .. item.worth)
-          return
-        end
-      end
-    end
-    TriggerClientEvent("usa:notify", userSource, "You have no fish to sell!")
-  --end)
+  local char = exports["usa-characters"]:GetCharacter(source)
+  if char.hasItem(fish) then
+    char.removeItem(fish, 1)
+    char.giveMoney(fish.worth)
+    TriggerClientEvent("usa:notify", source, "You have sold (1x) " .. fish.name .. " for $" .. fish.worth)
+  else
+    TriggerClientEvent("usa:notify", source, "You have no fish to sell!")
+  end
 end)
 
 function round(num, numDecimalPlaces)

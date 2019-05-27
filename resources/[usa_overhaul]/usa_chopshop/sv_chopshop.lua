@@ -24,7 +24,6 @@ local vehiclesWanted = {}
 
 RegisterServerEvent("chopshop:startJob")
 AddEventHandler("chopshop:startJob", function()
-  local usource = source
   for player, vehicles in pairs(vehiclesWanted) do
     if player == source then
       return
@@ -37,30 +36,24 @@ AddEventHandler("chopshop:startJob", function()
     print("inserted: " .. random_vehicle.name)
   end
   vehiclesWanted[source] = wanted_vehicles
-  TriggerClientEvent("chopshop:startJob", usource, wanted_vehicles)
+  TriggerClientEvent("chopshop:startJob", source, wanted_vehicles)
 end)
 
 RegisterServerEvent("chopshop:reward")
 AddEventHandler("chopshop:reward", function(veh_name, damage, property)
-  local usource = source
-  local user = exports["essentialmode"]:getPlayerFromId(usource)
+  local char = exports["usa-characters"]:GetCharacter(source)
   for player, vehicles in pairs(vehiclesWanted) do
     if player == source then
       for i = #vehicles, 1, -1 do
-        if string.lower(vehicles[i].name) == string.lower(veh_name) then
-          local user_money = user.getActiveCharacterData("money")
+        if string.lower(vehicles[i].name) == string.lower(veh_name) then)
           local reward = GetRewardFromName(veh_name)
           if (reward - damage) >= 0 then
-            user.setActiveCharacterData("money", user_money + (reward - damage))
-            TriggerClientEvent("usa:notify", usource, "~y~Reward:~w~ $" .. (reward - damage) .. "\nThere was $" .. damage .. " in damages.")
-          	if property then
-          		-- give money to property owner --
-          		TriggerEvent("properties:addMoney", property.name, math.floor(0.75 * (reward - damage), 0))
-          	end
+            char.giveMoney((reward - damage))
+            print('CHOPSHOP: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has received money['..reward..'] minus damage['..damage..'] after chopping vehicle!')
+            TriggerClientEvent("usa:notify", source, "~y~Reward:~w~ $" .. (reward - damage) .. "\nThere was $" .. damage .. " in damages.")
           else
-            TriggerClientEvent("usa:notify", usource, "This vehicle is too damaged. I am not giving you any money for this!")
+            TriggerClientEvent("usa:notify", source, "This vehicle is too damaged. I am not giving you any money for this!")
           end
-          print("chop shop turn in damage: -$" .. damage)
           table.remove(vehiclesWanted[source], i)
         end
       end

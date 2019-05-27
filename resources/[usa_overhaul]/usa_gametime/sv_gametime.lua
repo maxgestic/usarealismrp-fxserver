@@ -39,7 +39,7 @@ AddEventHandler("gametime:requesttime", function()
     TriggerClientEvent("gametime:serversync", -1, h, m, s, gta_seconds_per_real_second)
 end)
 
-TriggerEvent('es:addGroupCommand', 'time', 'admin', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'time', 'admin', function(source, args, char)
     local hour = tonumber(args[2])
     if hour then
         h = hour

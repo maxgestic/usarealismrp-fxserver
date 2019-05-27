@@ -122,17 +122,9 @@ Citizen.CreateThread(function()
             end
         end
         if cocaine.processingCocaine and GetDistanceBetweenCoords(playerCoords, 1092.86, -3196.70, -38.99, true) > 6 then -- too far from being able to process
-            --Citizen.Trace("you stopped cooking meth! too far!")
             print('returning uncut cocaine')
             TriggerEvent("usa:notify", "You went ~y~out of range~w~.")
-            local uncutCocaine = {
-                name = "Uncut Cocaine",
-                legality = "illegal",
-                quantity = 1,
-                type = "chemical",
-                weight = 10
-            }
-            TriggerServerEvent("cocaineJob:giveItem", uncutCocaine)
+            TriggerServerEvent("cocaineJob:giveUncut")
             cocaine.processingCocaine = false
         elseif cocaine.activeJob then
             local location = deliveryCoords[cocaine.deliveryIndex]
@@ -341,17 +333,9 @@ Citizen.CreateThread(function()
             end
             ClearPedTasksImmediately(GetPlayerPed(-1))
             StopAnimTask(GetPlayerPed(-1), animDict,animName, false)
-            --print('Animation stopped!')
-            local cocaineProduced = {
-                name = cocaine.cocaineProduct,
-                type = "drug",
-                legality = "illegal",
-                quantity = 1,
-                weight = 6
-              }
             if cocaine.processingCocaine then
                 cocaine.processingCocaine = false
-                TriggerServerEvent("cocaineJob:giveItem", cocaineProduced)
+                TriggerServerEvent("cocaineJob:givePackaged")
                 TriggerServerEvent('cocaineJob:residueRazor')
                 Citizen.Trace("giving cocaine to player!")
             end

@@ -1,74 +1,59 @@
 RegisterServerEvent("emsstation2:loadOutfit")
 AddEventHandler("emsstation2:loadOutfit", function(slot)
-  local userSource = tonumber(source)
-  local user = exports["essentialmode"]:getPlayerFromId(userSource)
-  --TriggerEvent("es:getPlayerFromId", userSource, function(user)
-  character = user.getEmsCharacter()
-  TriggerClientEvent("emsstation2:setCharacter", userSource, character[slot])
-  --TriggerClientEvent("policestation2:giveDefaultLoadout", userSource)
-  if user.getActiveCharacterData('job') ~= 'ems' then
-    user.setActiveCharacterData("job", "ems")
-    TriggerEvent('job:sendNewLog', userSource, 'ems', true)
+  local user = exports["essentialmode"]:getPlayerFromId(source)
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local character = user.getEmsCharacter()
+  TriggerClientEvent("emsstation2:setCharacter", source, character[slot])
+  if char.get('job') ~= 'ems' then
+    char.set("job", "ems")
+    TriggerEvent('job:sendNewLog', source, 'ems', true)
   end
-  TriggerClientEvent('interaction:setPlayersJob', userSource, 'ems')
-  TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 1})
+  TriggerClientEvent('interaction:setPlayersJob', source, 'ems')
+  TriggerEvent("eblips:add", {name = char.getName(), src = source, color = 1})
   --end)
 end)
 
 RegisterServerEvent("emsstation2:saveOutfit")
 AddEventHandler("emsstation2:saveOutfit", function(character, slot)
-  local userSource = tonumber(source)
-  local user = exports["essentialmode"]:getPlayerFromId(userSource)
-  local user_job = user.getActiveCharacterData("job")
+  local user = exports["essentialmode"]:getPlayerFromId(source)
+  local job = exports["usa-characters"]:GetCharacterField(source, "job")
   local emsCharacter = user.getEmsCharacter()
   emsCharacter[slot] = character
-  if user_job == "ems" then
+  if job == "ems" then
     user.setEmsCharacter(emsCharacter)
-    TriggerClientEvent("usa:notify", userSource, "Outfit in slot "..slot.." has been saved.")
+    TriggerClientEvent("usa:notify", source, "Outfit in slot "..slot.." has been saved.")
   else
-    TriggerClientEvent("usa:notify", userSource, "You must be on-duty to save a uniform.")
+    TriggerClientEvent("usa:notify", source, "You must be on-duty to save a uniform.")
   end
 end)
 
 RegisterServerEvent("emsstation2:onduty")
 AddEventHandler("emsstation2:onduty", function()
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-    if user.getActiveCharacterData("job") ~= "ems" then
-        user.setActiveCharacterData("job", "ems")
-        TriggerEvent('job:sendNewLog', source, 'ems', true)
-        TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 1})
-    end
+	local char = exports["usa-characters"]:GetCharacter(source)
+  if char.get("job") ~= "ems" then
+    char.set("job", "ems")
+    TriggerEvent('job:sendNewLog', source, 'ems', true)
+    TriggerEvent("eblips:add", {name = char.getName(), src = source, color = 1})
+  end
 end)
 
 RegisterServerEvent("emsstation2:offduty")
 AddEventHandler("emsstation2:offduty", function()
-    local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-    local playerWeapons = user.getActiveCharacterData("weapons")
-    local chars = user.getCharacters()
-    for i = 1, #chars do
-      if chars[i].active == true then
-        TriggerClientEvent("emsstation2:setciv", userSource, chars[i].appearance, playerWeapons) -- need to test
-        break
-      end
-    end
-    if user.getActiveCharacterData('job') == 'ems' then
-        user.setActiveCharacterData("job", "civ")
-        TriggerEvent('job:sendNewLog', source, 'ems', false)
-        TriggerEvent("eblips:remove", userSource)
-    end
+	local char = exports["usa-characters"]:GetCharacter(source)
+  local playerWeapons = char.getWeapons()
+  TriggerClientEvent("emsstation2:setciv", source, char.get("appearance"), playerWeapons) -- need to test
+  if char.get('job') == 'ems' then
+      char.set("job", "civ")
+      TriggerEvent('job:sendNewLog', source, 'ems', false)
+      TriggerEvent("eblips:remove", source)
+  end
 end)
 
 RegisterServerEvent("emsstation2:checkWhitelist")
 AddEventHandler("emsstation2:checkWhitelist", function(clientevent)
-	local playerIdentifiers = GetPlayerIdentifiers(source)
-	local playerGameLicense = ""
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	if user.getActiveCharacterData("emsRank") > 0 then
-		TriggerClientEvent(clientevent, userSource)
+	if exports["usa-characters"]:GetCharacterField(source, "emsRank") > 0 then
+		TriggerClientEvent(clientevent, source)
 	else
-		TriggerClientEvent("usa:notify", userSource, "~y~You are not whitelisted for EMS. Apply at https://www.usarrp.net.")
+		TriggerClientEvent("usa:notify", source, "~y~You are not whitelisted for EMS. Apply at https://www.usarrp.net.")
 	end
 end)

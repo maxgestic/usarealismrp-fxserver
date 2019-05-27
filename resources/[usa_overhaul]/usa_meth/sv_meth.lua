@@ -91,6 +91,7 @@ end)
 
 RegisterServerEvent("methJob:startTimer")
 AddEventHandler("methJob:startTimer", function(timerType)
+	local usource = source
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local messages = {
 		"Sup! You can chill out here while I get your stuff.",
@@ -104,8 +105,8 @@ AddEventHandler("methJob:startTimer", function(timerType)
 		local seconds = 17
 		local time = seconds * 1000
 		SetTimeout(time, function()
-			TriggerClientEvent("usa:notify", source, "Here are the basic chemicals needed for cooking, red phosphorus might increase quality!")
-			TriggerClientEvent("methJob:returnPedToStartPosition", source, timerType)
+			TriggerClientEvent("usa:notify", usource, "Here are the basic chemicals needed for cooking, red phosphorus might increase quality!")
+			TriggerClientEvent("methJob:returnPedToStartPosition", usource, timerType)
 			local suspiciousChemicals = {
 				name = "Pseudoephedrine",
 				legality = "illegal",
@@ -120,8 +121,8 @@ AddEventHandler("methJob:startTimer", function(timerType)
 		local seconds = 25
 		local time = seconds * 1000
 		SetTimeout(time, function()
-			TriggerClientEvent("usa:notify", source, "Here are the extra chemicals needed for good produce!")
-			TriggerClientEvent("methJob:returnPedToStartPosition", source, timerType)
+			TriggerClientEvent("usa:notify", usource, "Here are the extra chemicals needed for good produce!")
+			TriggerClientEvent("methJob:returnPedToStartPosition", usource, timerType)
 			local suspiciousChemicals = {
 				name = "Red Phosphorus",
 				legality = "illegal",

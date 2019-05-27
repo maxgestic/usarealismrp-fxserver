@@ -4,178 +4,111 @@
 -- This same concept within the script will handle all aspects of a job from getting supplies, processing, to selling, etc.
 --
 
--- give's cocaine to person --
-RegisterServerEvent("cocaineJob:giveItem")
-AddEventHandler("cocaineJob:giveItem", function(itemToGive)
-  print("inside of cocaineJob:giveItem!")
-  local userSource = tonumber(source)
-  --TriggerEvent("es:getPlayerFromId", userSource, function(user)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	if user then
-	  print("seeing if user can carry more weight of: " .. itemToGive.weight * itemToGive.quantity)
-	  if user.getCanActiveCharacterHoldItem(itemToGive) then
-		local inventory = user.getActiveCharacterData("inventory")
-		for i = 1, #inventory do
-		  local item = inventory[i]
-		  if item.name == itemToGive.name then -- player already has one of this item in inventory, so increment
-			inventory[i].quantity = inventory[i].quantity + itemToGive.quantity -- increment item in inventory
-			user.setActiveCharacterData("inventory", inventory) -- save the inventory
-			if itemToGive.name == 'Packaged Cocaine' then
-				TriggerClientEvent("usa:notify", userSource, "You have successfully proccessed the uncut cocaine into packaged product!")
-				print("cocaine quantity added! at: " .. inventory[i].quantity)
-			return
-			end
-		  end
-		end
-		-- user does not have that item yet, so give it to them
-		table.insert(inventory, itemToGive)
-		user.setActiveCharacterData("inventory", inventory)
-		if itemToGive.name == 'Packaged Cocaine' then
-			TriggerClientEvent("usa:notify", userSource, "You have successfully proccessed the uncut cocaine into packaged product!")
-			print("gave packaged cocaine to user!")
-		end
-	  else
-		TriggerClientEvent("usa:notify", userSource, "Your inventory is full. Can't carry anymore!")
-	  end
+local uncutCocaine = {
+    name = "Uncut Cocaine",
+    legality = "illegal",
+    quantity = 1,
+    type = "chemical",
+    weight = 10
+}
+
+local cocaineProduced = {
+	name = "Packaged Cocaine",
+	type = "drug",
+	legality = "illegal",
+	quantity = 1,
+	weight = 6
+}
+
+RegisterServerEvent("cocaineJob:giveUncut")
+AddEventHandler("cocaineJob:giveUncut", function()
+	local char = exports["usa-characters"]:GetCharacter(source)
+	if char.canHoldItem(uncutCocaine) then
+	  	char.giveItem(uncutCocaine)
+	else
+		TriggerClientEvent("usa:notify", source, "Your inventory is full. Can't carry anymore!")
 	end
-  --end)
+end)
+
+RegisterServerEvent("cocaineJob:givePackaged")
+AddEventHandler("cocaineJob:givePackaged", function()
+	local char = exports["usa-characters"]:GetCharacter(source)
+	if char.canHoldItem(cocaineProduced) then
+  		char.giveItem(cocaineProduced)
+		TriggerClientEvent("usa:notify", source, "You have successfully proccessed the uncut cocaine into packaged product!")
+	else
+		TriggerClientEvent("usa:notify", source, "Your inventory is full. Can't carry anymore!")
+	end
 end)
 
 RegisterServerEvent('cocaineJob:completeDelivery')
 AddEventHandler('cocaineJob:completeDelivery', function(productToRemove)
-	print('Player ID['..source..'] has completed a cocaine delivery.')
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
+	local char = exports["usa-characters"]:GetCharacter(source)
 	local reward = math.random(850, 1100)
 	-- bonus when police are online --
-	local policeOnline = 0
-	TriggerEvent("es:getPlayers", function(players)
-		if players then
-			for id, player in pairs(players) do
-				if id and player then
-					local playerJob = player.getActiveCharacterData("job")
-					if playerJob == "sheriff" or playerJob == "police" or playerJob == "cop" then
-						policeOnline = policeOnline + 1
-					end
-				end
-			end
-		end
-	end)
+	local policeOnline = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
 	local bonus = 0
 	if policeOnline >= 2 then
 		bonus = math.floor((reward * 1.10) - reward)
 	end
-	----------------------------------
-	if user then
-		local inventory = user.getActiveCharacterData("inventory")
-		for i = 1, #inventory do
-			local item = inventory[i]
-			if item.name == productToRemove then
-				if item.quantity > 1 then
-					inventory[i].quantity = item.quantity - 1
-					user.setActiveCharacterData("inventory", inventory)
-				else
-					table.remove(inventory, i)
-					user.setActiveCharacterData("inventory", inventory)
-				end
 
-				if bonus > 0 then
-					TriggerClientEvent('usa:notify', userSource, 'You have been paid ~y~$'..reward..'.00~s~ with a bonus of $'..bonus..'.00~s~.')	
-				else
-					TriggerClientEvent('usa:notify', userSource, 'You have been paid ~y~$'..reward..'.00~s~.')
-				end
-				user.setActiveCharacterData("money", user.getActiveCharacterData("money") + (reward + bonus))
-
-				return
-			end
+	if char.hasItem("Packaged Cocaine") then
+		char.removeItem("Packaged Cocaine")
+		if bonus > 0 then
+			TriggerClientEvent('usa:notify', source, 'You have been paid $'..reward..'.00~s~ with a bonus of $'..bonus..'.00~s~.')	
+		else
+			TriggerClientEvent('usa:notify', source, 'You have been paid $'..reward..'.00~s~.')
 		end
-		-- does not have job supply at this point
-		print('player did not have cocaine yet completed delivery, possible cheater!!!! (id = '..userSource..')')
+		char.giveMoney((reward + bonus))
+		print('COCAINE: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has completed cocaine delivery and received money['..reward..'] with bonus['..bonus..']!')
+	else
+		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+    	TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit cocaineJob:completeDelivery event, please intervene^0!')
 	end
 end)
 
 RegisterServerEvent('cocaineJob:residueRazor')
 AddEventHandler('cocaineJob:residueRazor', function()
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	if user then
-		local inventory = user.getActiveCharacterData("inventory")
-		for i = 1, #inventory do
-			local item = inventory[i]
-			if item.name == 'Razor Blade' then
-				if not item.residue then item.residue = true TriggerClientEvent('usa:notify', userSource, 'Your Razor Blade has traces of cocaine.') end
-				user.setActiveCharacterData("inventory", inventory)
-				--print('residue on razor!')
-				return
-			end
-		end
-		-- does not have job supply at this point
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local razor = char.getItem("Razor Blade")
+	if razor and not razor.residue then
+		char.modifyItem("Razor Blade", "residue", true)
+		TriggerClientEvent('usa:notify', source, 'Your Razor Blade has traces of cocaine.')
 	end
 end)
 
 RegisterServerEvent("cocaineJob:checkUserJobSupplies")
 AddEventHandler("cocaineJob:checkUserJobSupplies", function(jobItem, jobSupply)
-	local userSource = tonumber(source)
 	local hasJobItem = false
 	local hasJobSupply = false
-	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	if user then
-		local inventory = user.getActiveCharacterData("inventory")
-		for i = 1, #inventory do
-			local item = inventory[i]
-			if item.name == jobItem then -- player already has one of this item in inventory
-				hasJobItem = true
-			end
-		end
-		for i = 1, #inventory do
-			local item = inventory[i]
-			if item.name == jobSupply then
-				if item.quantity > 1 then
-					hasJobSupply = true
-					if hasJobItem then
-						inventory[i].quantity = item.quantity - 1
-						user.setActiveCharacterData("inventory", inventory)
-					end
-					TriggerClientEvent('cocaineJob:doesUserHaveJobSupply', userSource, hasJobItem, hasJobSupply)
-					return
-				else
-					hasJobSupply = true
-					if hasJobItem then
-						table.remove(inventory, i)
-						user.setActiveCharacterData("inventory", inventory)
-					end
-					TriggerClientEvent('cocaineJob:doesUserHaveJobSupply', userSource, hasJobItem, hasJobSupply)
-					return
-				end
-			end
-		end
-		-- does not have job supply at this point
-		TriggerClientEvent("cocaineJob:doesUserHaveJobSupply", userSource, hasJobItem, hasJobSupply)
+	local char = exports["usa-characters"]:GetCharacter(source)
+	if char.hasItem(jobItem) then
+		hasJobItem = true
 	end
+
+	if char.hasItem(jobSupply) then
+		char.removeItem(jobSupply, 1)
+		hasJobSupply = true
+	end
+
+	TriggerClientEvent("cocaineJob:doesUserHaveJobSupply", source, hasJobItem, hasJobSupply)
 end)
 
 RegisterServerEvent('cocaineJob:doesUserHaveProductToSell')
 AddEventHandler('cocaineJob:doesUserHaveProductToSell', function()
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	if user then
-		local inventory = user.getActiveCharacterData("inventory")
-		for i = 1, #inventory do
-			local item = inventory[i]
-			if item.name == 'Packaged Cocaine' then -- player already has one of this item in inventory
-				TriggerClientEvent('cocaineJob:doesUserHaveProductToSell', userSource, true)
-				return
-			end
-		end
-		TriggerClientEvent('cocaineJob:doesUserHaveProductToSell', userSource, false)
+	local char = exports["usa-characters"]:GetCharacter(source)
+	if char.hasItem("Packaged Cocaine") then
+		TriggerClientEvent('cocaineJob:doesUserHaveProductToSell', source, true)
+	else
+		TriggerClientEvent('cocaineJob:doesUserHaveProductToSell', source, false)
 	end
 end)
 
 
 RegisterServerEvent("cocaineJob:startTimer")
 AddEventHandler("cocaineJob:startTimer", function(timerType)
-	local userSource = tonumber(source)
+	local usource = source
+	local char = exports["usa-characters"]:GetCharacter(source)
 	local messages = {
 		"Hurdle on friend, just wait up here...",
 		"In the market for this junk? Interesting, wait here.",
@@ -183,104 +116,45 @@ AddEventHandler("cocaineJob:startTimer", function(timerType)
 		"This'll kill you before your genes do, but I don't judge. Be right back.",
 		"Perfect, we're on our heads. Just wait here."
 	}
-	TriggerClientEvent("usa:notify", userSource, messages[math.random(1, tonumber(#messages))])
+	TriggerClientEvent("usa:notify", source, messages[math.random(1, tonumber(#messages))])
 	if timerType == "coke_supplies_ped" then
 		local seconds = 20
 		local time = seconds * 1000
 		SetTimeout(time, function()
-			TriggerClientEvent("usa:notify", userSource, "Alright, let me know if you need more. I'll send the delivery location now.")
-			TriggerClientEvent('cocaineJob:setDelivery', userSource)
-			-- return ped to start position
-			TriggerClientEvent("cocaineJob:returnPedToStartPosition", userSource, timerType)
-			-- give loot
-			--TriggerEvent("es:getPlayerFromId", userSource, function(user)
-			local user = exports["essentialmode"]:getPlayerFromId(userSource)
-			if user then
-				local inventory = user.getActiveCharacterData("inventory")
-				for i = 1, #inventory do
-					local item = inventory[i]
-					if item.name == "Uncut Cocaine" then
-						inventory[i].quantity = inventory[i].quantity + 1
-						user.setActiveCharacterData("inventory", inventory)
-						print("Uncut Cocaine quantity increased at: " .. inventory[i].quantity)
-						return
-					end
-				end
-				local uncutCocaine = {
-					name = "Uncut Cocaine",
-					legality = "illegal",
-					quantity = 1,
-					type = "chemical",
-					weight = 10
-				}
-				table.insert(inventory, uncutCocaine)
-				user.setActiveCharacterData("inventory", inventory)
-				print("added uncut cocaine!")
-			end
+			TriggerClientEvent("usa:notify", usource, "Alright, let me know if you need more. I'll send the delivery location now.")
+			TriggerClientEvent('cocaineJob:setDelivery', usource)
+			TriggerClientEvent("cocaineJob:returnPedToStartPosition", usource, timerType)
+			local uncutCocaine = {
+				name = "Uncut Cocaine",
+				legality = "illegal",
+				quantity = 1,
+				type = "chemical",
+				weight = 10
+			}
+			char.giveItem(uncutCocaine, 1)
 		end)
 	end
 end)
 
 RegisterServerEvent("cocaineJob:checkUserMoney")
 AddEventHandler("cocaineJob:checkUserMoney", function(supplyType)
-	if supplyType == 'Uncut Cocaine' then
-		amount = 800
-	end
-	local MAX_COCAINE = 3
-	local userSource = tonumber(source)
-	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
+	local amount = 800
+	local char = exports["usa-characters"]:GetCharacter(source)
 	local uncut_cocaine = {
 		name = "coke bruh",
 		weight = 10,
 		quantity = 1,
 		type = "drug"
 		}
-	if user.getCanActiveCharacterHoldItem(uncut_cocaine) then
-		local userMoney = user.getActiveCharacterData("money")
-		local inventory = user.getActiveCharacterData("inventory")
-		-- check for max item quantity
-		if hasItem(supplyType, inventory, MAX_COCAINE) then
-			TriggerClientEvent("usa:notify", userSource, "You can't carry more than " .. MAX_COCAINE .. " "..supplyType.."!")
-			return
+	if char.canHoldItem(uncut_cocaine) then
+		local money = char.get("money")
+		if money >= amount then
+		  TriggerClientEvent("cocaineJob:getSupplies", source)
+		  char.removeMoney(amount)
 		else
-			-- money check
-			if userMoney >= amount then
-			  -- continue with transaction
-			  TriggerClientEvent("cocaineJob:getSupplies", userSource)
-			  user.setActiveCharacterData("money", userMoney - amount)
-			elseif userMoney < amount then
-			  -- not enough funds to continue
-			  TriggerClientEvent("usa:notify", userSource, "Come back when you have ~y~$" .. amount .. "~w~ to get the cocaine!")
-			end
+		  TriggerClientEvent("usa:notify", source, "Come back when you have ~y~$" .. amount .. "~w~ to get the cocaine!")
 		end
 	else
-		TriggerClientEvent("usa:notify", userSource, "Inventory is full.")
+		TriggerClientEvent("usa:notify", source, "Inventory is full!")
 	end
-  --end)
 end)
-
-function hasItem(itemName, inventory, quantity)
-  for i = 1, #inventory do
-	local item = inventory[i]
-	if item then
-	  if item.name == itemName then
-		if quantity then
-		  if type(tonumber(quantity)) ~= nil then
-			if item.quantity >= quantity then
-			  print("inventory item found with the searched quantity!")
-			  return true
-			else
-			  print("did not find item with that quantity")
-			  return false
-			end
-		  end
-		end
-		print("FOUND: " .. itemName .. " in player's inventory")
-		return true
-	  end
-	end
-  end
-  print("did not find item")
-  return false
-end

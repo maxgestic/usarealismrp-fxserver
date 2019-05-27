@@ -115,12 +115,11 @@ local DOORS = {
 
 RegisterServerEvent("doormanager:checkDoorLock")
 AddEventHandler("doormanager:checkDoorLock", function(index, x, y, z, lockpicked)
-  local user = exports["essentialmode"]:getPlayerFromId(source)
-  local user_job = user.getActiveCharacterData("job")
-  local da_rank = user.getActiveCharacterData('daRank')
-  --print(DOORS[index].name)
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local job = char.get("job")
+  local da_rank = char.get('daRank')
   for i = 1, #DOORS[index].allowedJobs do
-    if user_job == DOORS[index].allowedJobs[i] or (lockpicked and DOORS[index].lockpickable) or (DOORS[index].allowedJobs[i] == 'da' and da_rank and da_rank > 0) then
+    if job == DOORS[index].allowedJobs[i] or (lockpicked and DOORS[index].lockpickable) or (DOORS[index].allowedJobs[i] == 'da' and da_rank and da_rank > 0) then
         if not DOORS[index].locked then
           DOORS[index].locked = true
         else
@@ -134,11 +133,10 @@ end)
 
 RegisterNetEvent("doormanager:firstJoin")
 AddEventHandler("doormanager:firstJoin", function()
-    print("** loading usa-doormanager doors **")
   TriggerClientEvent("doormanager:update", source, DOORS)
 end)
 
-TriggerEvent('es:addGroupCommand', 'lockdebug', 'owner', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'lockdebug', 'owner', function(source, args, char)
   TriggerClientEvent("doormanager:debug", source)
 end, {
 	help = "DEBUG: Debug the door lock system"

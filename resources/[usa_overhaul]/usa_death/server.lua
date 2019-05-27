@@ -2,68 +2,43 @@ local deathLog = {}
 
 RegisterServerEvent("death:respawn")
 AddEventHandler("death:respawn", function()
-	local userSource = source
-	print("inside of death:respawn")
-	--TriggerEvent("es:getPlayerFromId", source, function(user)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local user_job = user.getActiveCharacterData("job")
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local job = char.get("job")
+	if job ~= "sheriff" and job ~= "corrections" and job ~= "ems" then
+		char.removeWeapons()
+		char.set("money", 0)
+	end
 
-		if user_job ~= "sheriff" and user_job ~= "corrections" and user_job ~= "ems" then
-			-- empty out everything since person has died and NLR is in place
-			--user.removeMoney(user.getMoney())
-			user.setActiveCharacterData("money", 0)
-			user.setActiveCharacterData("weapons", {})
-			--user.setActiveCharacterData("criminalHistory", {})
-			--user.setLicenses({})
-			--user.setVehicles({})
-			--user.setInsurance({})
-			--TriggerEvent("sway:updateDB", userSource)
-		end
-
-		local user_inventory = user.getActiveCharacterData("inventory")
-		print("#inventory before death: " .. #user_inventory)
-		-- find non cell phone items to delete
-		for i = #user_inventory, 1, -1 do
-			local item = user_inventory[i]
-			if item == nil or not string.find(item.name, "Cell Phone") then
-				table.remove(user_inventory, i)
+	-- find non cell phone items to delete --
+	local user_inventory = char.get("inventory")
+	for i = 0, (user_inventory.MAX_CAPACITY - 1) do
+		local item = user_inventory.items[tostring(i)]
+		if item then
+			if not string.find(item.name, "Cell Phone") and item.type ~= "license" then
+				user_inventory.items[tostring(i)] = nil
+				user_inventory.currentWeight = user_inventory.currentWeight - ((item.weight or 0.0) * (item.quantity or 1))
 			end
 		end
-		--[[
-		for i = 1, #user_inventory do
-			local item = user_inventory[i]
-			if not string.find(item.name, "Cell Phone") then
-				print("setting to item to nil: " .. item.name)
-				user_inventory[i] = nil
-			end
-		end
-		print("after setting nils, #inventory = " .. #user_inventory)
-		-]]
-		-- save
-		user.setActiveCharacterData("inventory", user_inventory)
-		print("#inventory after death: " .. #user_inventory)
-		-- remove any rope/blindfolds person may have had on while being killed
-		-- remove blindfolds/tied hands
-		TriggerClientEvent("crim:untieHands", userSource, userSource)
-		TriggerClientEvent("crim:blindfold", userSource, false, true)
-		-- REMOVE ANY WARRANTS:
-		--TriggerEvent("warrants:removeAnyActiveWarrants", user.getActiveCharacterData("fullName"))
-		-- check jailed status --
-		TriggerEvent("usa_rp:checkJailedStatusOnPlayerJoin", userSource)
-	--end)
+	end
+	char.set("inventory", user_inventory)
+
+	-- other stuff --
+	TriggerClientEvent("crim:untieHands", source, source)
+	TriggerClientEvent("crim:blindfold", source, false, true)
+	TriggerEvent("usa_rp:checkJailedStatusOnPlayerJoin", source)
 end)
 
 RegisterServerEvent('death:revivePerson')
 AddEventHandler('death:revivePerson', function(targetSource)
 	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local userJob = user.getActiveCharacterData("job")
-	if userJob == "cop" or
-	userJob == "corrections" or
-	userJob == "sheriff" or
-	userJob == "highwaypatrol" or
-	userJob == "ems" or
-	userJob == "doctor" or
-	userJob == "fire" or
+	local job = exports["usa-characters"]:GetCharacterField(source, "job")
+	if job == "cop" or
+	job == "corrections" or
+	job == "sheriff" or
+	job == "highwaypatrol" or
+	job == "ems" or
+	job == "doctor" or
+	job == "fire" or
 	user.getGroup() == "mod" or
 	user.getGroup() == "admin" or
 	user.getGroup() == "superadmin" or
@@ -73,35 +48,29 @@ AddEventHandler('death:revivePerson', function(targetSource)
 end)
 
 TriggerEvent('es:addCommand', 'revive', function(source, args, user)
-	local from = source
-	local user = exports["essentialmode"]:getPlayerFromId(from)
-		if user then
-			local targetId = 0
-			local userJob = user.getActiveCharacterData("job")
-			if userJob == "cop" or
-				userJob == "corrections" or
-				userJob == "sheriff" or
-				userJob == "highwaypatrol" or
-				userJob == "ems" or
-				userJob == "doctor" or
-				userJob == "fire" or
-				userJob == "dai" or
-				user.getGroup() == "mod" or
-				user.getGroup() == "admin" or
-				user.getGroup() == "superadmin" or
-				user.getGroup() == "owner" then
-				if args[2] == nil then
-					TriggerClientEvent("death:reviveNearest", from)
-				else
-					targetId = tonumber(args[2])
-					TriggerClientEvent("death:allowRevive", targetId)
-				end
-			else
-				TriggerClientEvent("chatMessage", from, "SYSTEM", {255, 0, 0}, "You don't have permissions to use this command.")
-			end
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	local job = exports["usa-characters"]:GetCharacterField(source, "job")
+	local userJob = user.getActiveCharacterData("job")
+	if job == "cop" or
+		job == "corrections" or
+		job == "sheriff" or
+		job == "highwaypatrol" or
+		job == "ems" or
+		job == "doctor" or
+		job == "fire" or
+		job == "dai" or
+		user.getGroup() == "mod" or
+		user.getGroup() == "admin" or
+		user.getGroup() == "superadmin" or
+		user.getGroup() == "owner" then
+		if args[2] == nil then
+			TriggerClientEvent("death:reviveNearest", source)
 		else
-			print("ERROR GETTING USER BY ID")
+			TriggerClientEvent("death:allowRevive", tonumber(args[2]))
 		end
+	else
+		TriggerClientEvent("chatMessage", source, "SYSTEM", {255, 0, 0}, "You don't have permissions to use this command.")
+	end
 end, {
 	help = "Revive a player (EMS/Staff)",
 	params = {
@@ -173,9 +142,9 @@ TriggerEvent('es:addGroupCommand', 'log', "mod", function(source, args, user)
 	for i = 1, #deathLog do
 		TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^3DEATH #" .. i)
 		if deathLog[i].deadPlayerId ~= 0 then
-			local player = exports["essentialmode"]:getPlayerFromId(deathLog[i].deadPlayerId)
-			if player then
-				local name = player.getActiveCharacterData("fullName")
+			local char = exports["usa-characters"]:GetCharacter(deathLog[i].deadPlayerId)
+			if char then
+				local name = char.getFullName()
 				TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0Died: " .. name .. " (#" .. deathLog[i].deadPlayerId .. " / " .. deathLog[i].deadPlayerName .. ")")
 			else
 				TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0Died: " .. "<Left Server?>" .. " (#" .. deathLog[i].deadPlayerId .. " / " .. deathLog[i].deadPlayerName .. ")")
@@ -184,9 +153,9 @@ TriggerEvent('es:addGroupCommand', 'log', "mod", function(source, args, user)
 			TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0Died: Unknown")
 		end
 		if deathLog[i].killerId ~= 0 then
-			local player = exports["essentialmode"]:getPlayerFromId(deathLog[i].killerId)
-			if player then
-				local name = player.getActiveCharacterData("fullName")
+			local char = exports["usa-characters"]:GetCharacter(deathLog[i].deadPlayerId)
+			if char then
+				local name = char.getFullName()
 				TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0Killer: " .. name .. " (#" .. deathLog[i].killerId .. " / " .. deathLog[i].killerName .. ")")
 			else
 				TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0Killer: " .. "<Left Server?>" .. " (#" .. deathLog[i].killerId .. " / " .. deathLog[i].killerName .. ")")
