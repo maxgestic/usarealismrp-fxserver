@@ -135,40 +135,33 @@ AddEventHandler("tattoo:loadTattoos", function()
 end)
 
 RegisterServerEvent("tattoo:checkout")
-AddEventHandler("tattoo:checkout", function(purchased_tattoos, property)
-  print("# purchased tattos: " .. #purchased_tattoos)
-  local usource = source
-  local player = exports["essentialmode"]:getPlayerFromId(usource)
-  local player_money = player.getActiveCharacterData("money")
+AddEventHandler("tattoo:checkout", function(purchased_tattoos)
+  local char = exports["usa-characters"]:GetCharacter(source)
   local cost = CalculateCost(purchased_tattoos)
-  print("checking out with total tattoo cost(s) of : $" .. cost)
-  if player_money >= cost then
-    player.setActiveCharacterData("money", player_money - cost)
-    local appearance = player.getActiveCharacterData("appearance")
-		if appearance.tattoos then
+  print("TATTOO: Checking out with total tattoo cost[" .. cost .. "] for "..GetPlayerName(source).."["..GetPlayerIdentifier(source).."]!")
+  if char.get("money") >= cost then
+    char.removeMoney(cost)
+    local appearance = char.get("appearance")
+	if appearance.tattoos then
 	    for i = 1, #purchased_tattoos do
 	      table.insert(appearance.tattoos, purchased_tattoos[i])
 	    end
-		else
-			appearance.tattoos = purchased_tattoos
-		end
-    player.setActiveCharacterData("appearance", appearance)
-    TriggerEvent("usa:loadPlayerComponents", usource)
-	TriggerClientEvent("usa:notify", usource, "~y~You payed: ~w~$" .. comma_value(cost))
-    if property then
-      TriggerEvent("properties:addMoney", property.name, math.floor(0.75 * cost, 0))
-    end
+	else
+		appearance.tattoos = purchased_tattoos
+	end
+    char.set("appearance", appearance)
+    TriggerEvent("usa:loadPlayerComponents", source)
+	TriggerClientEvent("usa:notify", source, "You have paid ~w~$" .. comma_value(cost))
   else
-    TriggerClientEvent("usa:notify", usource, "You don't have enough money to pay the total: $" .. comma_value(cost))
+    TriggerClientEvent("usa:notify", source, "You don't have enough money to pay the total: $" .. comma_value(cost))
   end
 end)
 
 RegisterServerEvent("tattoo:removeTattoos")
 AddEventHandler("tattoo:removeTattoos", function()
-  local usource = source
-  local player = exports["essentialmode"]:getPlayerFromId(usource)
-  local appearance = player.getActiveCharacterData("appearance")
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local appearance = char.get("appearance")
   appearance.tattoos = nil
-  player.setActiveCharacterData("appearance", appearance)
-  TriggerClientEvent("tattoo:removeTattoos", usource)
+  char.set("appearance", appearance)
+  TriggerClientEvent("tattoo:removeTattoos", source)
 end)

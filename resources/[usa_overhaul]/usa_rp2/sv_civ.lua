@@ -14,8 +14,7 @@ local VEH_GARAGE_MAXIMUM_STORAGE_NUM = 12
 ------------------------
 -- Blindfold a person --
 ------------------------
-TriggerEvent('es:addCommand','removeblindfold', function(source, args, user)
-	print("inside /removeblindfold command!")
+TriggerEvent('es:addCommand','removeblindfold', function(source, args, char)
 	TriggerClientEvent("crim:attemptToBlindfoldNearestPerson", source, false)
 end, {
 	help = "Remove the blindfold off of the nearest person."
@@ -24,8 +23,7 @@ end, {
 ------------------------
 -- Blindfold a person --
 ------------------------
-TriggerEvent('es:addCommand','blindfold', function(source, args, user)
-	print("inside /blindfold command!")
+TriggerEvent('es:addCommand','blindfold', function(source, args, char)
 	TriggerClientEvent("crim:attemptToBlindfoldNearestPerson", source, true)
 end, {
 	help = "Place a bag over the nearest person's head."
@@ -51,14 +49,13 @@ end)
 ---------------------------
 -- Steal a player's cash --
 ---------------------------
-TriggerEvent('es:addCommand','rob', function(source, args, user)
-	print("inside /rob command!")
+TriggerEvent('es:addCommand','rob', function(source, args, char)
 	TriggerClientEvent("crim:attemptToRobNearestPerson", source)
 end, {
 	help = "Steal the nearest player's money."
 })
 
-TriggerEvent('es:addCommand','underglow', function(source, args, user)
+TriggerEvent('es:addCommand','underglow', function(source, args, char)
 	TriggerClientEvent("civ:toggleUnderglow", source)
 end, {
 	help = "Toggle underglow on your vehicle."
@@ -66,7 +63,7 @@ end, {
 
 local pings = {}
 
-TriggerEvent('es:addCommand','ping', function(source, args, user)
+TriggerEvent('es:addCommand','ping', function(source, args, char)
 	local targetSource = tonumber(args[2])
 	if GetPlayerName(targetSource) then
 		TriggerClientEvent('ping:requestPing', targetSource)
@@ -82,7 +79,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addCommand','pingaccept', function(source, args, user)
+TriggerEvent('es:addCommand','pingaccept', function(source, args, char)
 	if pings[source] ~= nil then
 		TriggerClientEvent('ping:sendLocation', pings[source], source)
 	end
@@ -106,8 +103,7 @@ end)
 ---------------------------------------
 -- bound a player's wrists with rope --
 ---------------------------------------
-TriggerEvent('es:addCommand','tie', function(source, args, user)
-	print("inside /tie command!")
+TriggerEvent('es:addCommand','tie', function(source, args, char)
 	TriggerClientEvent("crim:attemptToTieNearestPerson", source, true)
 end, {
 	help = "Tie the nearest person's hands together."
@@ -116,22 +112,15 @@ end, {
 RegisterServerEvent("crim:foundPlayerToTie")
 AddEventHandler("crim:foundPlayerToTie", function(id, tying_up, x, y, z, heading)
 	if tying_up then
-		TriggerEvent("usa:getPlayerItem", source, SETTINGS["tie"].required_item_name, function(item)
-			if item then
-				print("player had item to tie person up!")
-				-- remove item:
-				TriggerEvent("usa:removeItem", item, SETTINGS["tie"].quantity_to_remove_per_use, source)
-				-- bound target:
-				print("tying id #" .. id .. "'s hands!'")
-				TriggerClientEvent("crim:tieHands", id, x, y, z, heading)
-				TriggerClientEvent('crim:tyingHandsAnim', source)
-				-- notify player
-				TriggerClientEvent("usa:notify", source, "You have tied that person's hands together.")
-			else
-				print("player did not have required item for action!")
-				TriggerClientEvent("usa:notify", source, "You need rope to do that!")
-			end
-		end)
+		local char = exports["usa-characters"]:GetCharacter(source)
+		if char.hasItem(SETTINGS["tie"].required_item_name) then
+			char.removeItem(SETTINGS["tie"].required_item_name, 1)
+			print("USARP2: Tying hands of "..GetPlayerName(id).."["..GetPlayerIdentifier(id).."], tied by "..GetPlayerName(source).."["..GetPlayerIdentifier(source).."]!")
+			TriggerClientEvent("crim:tieHands", id, x, y, z, heading)
+			TriggerClientEvent('crim:tyingHandsAnim', source)
+		else
+			TriggerClientEvent("usa:notify", source, "You need rope to do that!")
+		end
 	else
 		TriggerClientEvent("crim:untieHands", id, source, x, y, z, heading)
 	end
@@ -140,7 +129,7 @@ end)
 ----------------------
 -- untie the player --
 ----------------------
-TriggerEvent('es:addCommand','untie', function(source, args, user)
+TriggerEvent('es:addCommand','untie', function(source, args, char)
 	TriggerClientEvent("crim:attemptToTieNearestPerson", source, false)
 end, {
 	help = "Untie the nearest person's hands."
@@ -149,19 +138,16 @@ end, {
 
 RegisterServerEvent("crim:continueRobbing")
 AddEventHandler("crim:continueRobbing", function(continue_robbing, from_id, target_player_id)
-	print("inside crim:continueRobbing with from id = " .. from_id .. ", target id = " .. target_player_id)
 	local source = tonumber(from_id)
 	if continue_robbing then
-		local to_steal_amount = 0
-		local victim = exports["essentialmode"]:getPlayerFromId(target_player_id)
-		to_steal_amount = victim.getActiveCharacterData("money")
-		if to_steal_amount >= 0 then
-			victim.setActiveCharacterData("money", 0)
-			-- give to person stealing:
-			print("player is stealing amount $" .. to_steal_amount .. " from a person!")
-			local person_commiting_crime = exports["essentialmode"]:getPlayerFromId(source)
-			local before_robbery_amount = person_commiting_crime.getActiveCharacterData("money")
-			person_commiting_crime.setActiveCharacterData("money", before_robbery_amount + to_steal_amount)
+		print('USARP2: Player '..GetPlayerName(from_id)..'['..GetPlayerIdentifier(from_id)..'] is robbing '..GetPlayerName(target_player_id)..'['..GetPlayerIdentifier(target_player_id)..']!')
+		local victim_char = exports["usa-characters"]:GetCharacter(target_player_id)
+		local amount_stolen = victim_char.get("money")
+		if amount_stolen >= 0 then
+			victim_char.removeMoney(amount_stolen)
+			print("USARP2: Amount of money[" .. to_steal_amount .. "] stolen from person robbed!")
+			local robber = exports["usa-characters"]:GetCharacter(source)
+			robber.giveMoney(amount_stolen)
 		else
 			TriggerClientEvent("usa:notify", source, "Person has no money on them!")
 		end
@@ -172,25 +158,17 @@ end)
 
 RegisterServerEvent("crim:continueBlindfolding")
 AddEventHandler("crim:continueBlindfolding", function(continue_blindfolding, from_id, target_player_id)
-	print("inside crim:continueBounding with from id = " .. from_id .. ", target id = " .. target_player_id)
 	local source = tonumber(from_id)
 	if continue_blindfolding then
-		print("bound was not nil or false!")
-		TriggerEvent("usa:getPlayerItem", source, SETTINGS["blindfold"].required_item_name, function(item)
-			if item then
-				print("player had item to tie person up!")
-				-- remove item:
-				TriggerEvent("usa:removeItem", item, SETTINGS["blindfold"].quantity_to_remove_per_use, source)
-				-- bound target:
-				print("blindfolding id #" .. target_player_id .. "!")
-				TriggerClientEvent("crim:blindfold", target_player_id, true)
-				-- notify player
-				TriggerClientEvent("usa:notify", source, "You have blindfolded that person.")
-			else
-				print("player did not have required item for action!")
-				TriggerClientEvent("usa:notify", source, "You need a bag to do that!")
-			end
-		end)
+		local char = exports["usa-characters"]:GetCharacter(source)
+		if char.hasItem(SETTINGS["blindfold"].required_item_name) then
+			print('USARP2: Player '..GetPlayerName(from_id)..'['..GetPlayerIdentifier(from_id)..'] is blindfolding '..GetPlayerName(target_player_id)..'['..GetPlayerIdentifier(target_player_id)..']!')
+			char.removeItem(SETTINGS["blindfold"].required_item_name, 1)
+			TriggerClientEvent("crim:blindfold", target_player_id, true)
+			TriggerClientEvent("usa:notify", source, "You have blindfolded that person.")
+		else
+			TriggerClientEvent("usa:notify", source, "You need a bag to do that!")
+		end
 	else
 		TriggerClientEvent("usa:notify", source, "Person does not have their hands tied or is too far away!")
 	end
@@ -221,7 +199,7 @@ local walkstyles = {
 ----------------------------
 -- Change your walk style --
 ----------------------------
-TriggerEvent('es:addCommand', 'walkstyle', function(source, args, user, location)
+TriggerEvent('es:addCommand', 'walkstyle', function(source, args, char, location)
 	local style_number = args[2]
 	if not style_number then
 		TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0" .. "[0] Default")
@@ -245,27 +223,27 @@ end, {
 ------------------------------------------------
 -- trade / sell vehicles to other players --
 ------------------------------------------------
-TriggerEvent('es:addCommand', 'sellvehicle', function(source, args, user, location)
+TriggerEvent('es:addCommand', 'sellvehicle', function(source, args, char, location)
 	local usource = source
 	local plate_number = args[2]
 	local target = tonumber(args[3])
 	local price = tonumber(args[4])
-	local user_vehicles = user.getActiveCharacterData("vehicles")
+	local user_vehicles = char.get("vehicles")
 	if plate_number and GetPlayerName(target) and price and target ~= tonumber(usource) then
 		for i = 1, #user_vehicles do
 			if string.lower(user_vehicles[i]) == string.lower(plate_number) then -- only let player sell vehicles they own
 				local veh_to_sell = user_vehicles[i]
 				price = math.floor(price)
-				local target_player = exports["essentialmode"]:getPlayerFromId(target)
-				local target_player_vehicles = target_player.getActiveCharacterData("vehicles")
-				local target_player_money  = target_player.getActiveCharacterData("money")
-				local target_player_bank = target_player.getActiveCharacterData("bank")
-				local seller = user.getActiveCharacterData("fullName")
+				local target_player = exports["usa-characters"]:GetCharacter(target)
+				local target_player_vehicles = target_player.get("vehicles")
+				local target_player_money  = target_player.get("money")
+				local target_player_bank = target_player.get("bank")
+				local seller = char.getFullName()
 				if target_player_money >= price or target_player_bank >= price then
 					local details = {
 						source = source,
 						target = target,
-						user = user,
+						user = char,
 						target_player = target_player,
 						user_vehicles = user_vehicles,
 						target_player_vehicles = target_player_vehicles,
@@ -321,7 +299,7 @@ AddEventHandler("vehicle:confirmSell", function(details, wants_to_buy)
 	end
 end)
 
-TriggerEvent('es:addCommand', 'selfie', function(source, args, user)
+TriggerEvent('es:addCommand', 'selfie', function(source, args, char)
 	TriggerEvent("usa:getPlayerItem", source, "Cell Phone", function(phone)
 			if phone then
 				TriggerClientEvent("camera:selfie", source)
@@ -349,48 +327,55 @@ function SendDiscordMessage(content, url, color)
 	}), { ["Content-Type"] = 'application/json' })
 end
 
-function TradeVehicle(details)
-	local buyer = exports["essentialmode"]:getPlayerFromId(details.target)
-	local seller = exports["essentialmode"]:getPlayerFromId(details.source)
+function TradeVehicle(details) -- this function could very very easily be exploited via mem editing! - made it a bit more secure now...
+	local buyer = exports["usa-characters"]:GetCharacter(details.target)
+	local seller = exports["usa-characters"]:GetCharacter(details.source)
 	-- trade money --
-	if details.target_player_money >= details.price then
-		buyer.setActiveCharacterData("money", details.target_player_money - details.price)
-		seller.setActiveCharacterData("money", seller.getActiveCharacterData("money") + details.price)
-	elseif details.target_player_bank >= details.price then
-		buyer.setActiveCharacterData("bank", details.target_player_bank - details.price)
-		seller.setActiveCharacterData("bank", seller.getActiveCharacterData("bank") + details.price)
+	if buyer.get("money") >= details.price then
+		buyer.removeMoney("money", details.price)
+		seller.giveMoney("money", details.price)
+	elseif buyer.get("bank") >= details.price then
+		buyer.removeMoney("bank", details.price)
+		seller.giveMoney("bank", details.price)
 	else
 		TriggerClientEvent("usa:notify", details.target, "Not enough money to pruchase vehicle!")
 		TriggerClientEvent("usa:notify", details.source, "Person did not have enough money to pruchase vehicle!")
 		return
 	end
 	-- remove vehicle from seller --
+	local vehicle_found = false
+	details.user_vehicles = seller.get("vehicles")
 	for i = 1, #details.user_vehicles do
 		if details.user_vehicles[i] ==  details.veh_to_sell then
 			table.remove(details.user_vehicles, i)
-			seller.setActiveCharacterData("vehicles", details.user_vehicles)
+			seller.set("vehicles", details.user_vehicles)
+			vehicle_found = true
 			break
 		end
 	end
-	-- transfer ownership details --
-	local newOwnerName = buyer.getActiveCharacterData("fullName")
-	TriggerEvent('es:exposeDBFunctions', function(couchdb)
-		couchdb.updateDocument("vehicles", details.veh_to_sell, {owner = newOwnerName}, function()
-			-- give vehicle to buyer --
-			table.insert(details.target_player_vehicles, details.veh_to_sell)
-			buyer.setActiveCharacterData("vehicles", details.target_player_vehicles)
-			-- send discord msg to log --
-				local timestamp = os.date("*t", os.time())
-				local desc = "\n**Vehicle:** " .. details.make .. " " .. details.model ..
-				"\n**Seller:** " .. details.seller ..
-				"\n**Buyer:** " .. newOwnerName ..
-				"\n**Price:** $" .. details.price ..
-				"\n**Date:** ".. timestamp.month .. "/" .. timestamp.day .."/" .. timestamp.year
-				SendDiscordMessage(desc, "https://discordapp.com/api/webhooks/436965351004307466/FY-o_sGScUYFQpo9Y18-ZP-L_HdWRXoDZ1eO2AeD7uXzmg5JwWzqlb07Bbf1Yvv0_W-k", 524288)
-			TriggerClientEvent("usa:notify", details.source, "Transaction ~g~successful~w~!")
-			TriggerClientEvent("usa:notify", details.target, "Transaction ~g~successful~w~!")
+	if vehicle_found then
+		-- transfer ownership details --
+		details.target_player_vehicles = buyer.get("vehicles")
+		local newOwnerName = buyer.getFullName()
+		TriggerEvent('es:exposeDBFunctions', function(couchdb)
+			couchdb.updateDocument("vehicles", details.veh_to_sell, {owner = newOwnerName}, function()
+				-- give vehicle to buyer --
+				table.insert(details.target_player_vehicles, details.veh_to_sell)
+				buyer.set("vehicles", details.target_player_vehicles)
+				TriggerClientEvent("usa:notify", details.source, "Transaction ~g~successful~w~!")
+				TriggerClientEvent("usa:notify", details.target, "Transaction ~g~successful~w~!")
+				-- send discord msg to log --
+				if buyer.get("job") == "dai" then return end
+					local timestamp = os.date("*t", os.time())
+					local desc = "\n**Vehicle:** " .. details.make .. " " .. details.model ..
+					"\n**Seller:** " .. details.seller ..
+					"\n**Buyer:** " .. newOwnerName ..
+					"\n**Price:** $" .. details.price ..
+					"\n**Date:** ".. timestamp.month .. "/" .. timestamp.day .."/" .. timestamp.year
+					SendDiscordMessage(desc, "https://discordapp.com/api/webhooks/436965351004307466/FY-o_sGScUYFQpo9Y18-ZP-L_HdWRXoDZ1eO2AeD7uXzmg5JwWzqlb07Bbf1Yvv0_W-k", 524288)
+			end)
 		end)
-	end)
+	end
 end
 
 function GetMakeModelPlate(plates, cb)
@@ -454,7 +439,7 @@ end
 -----------------------------
 -- Make radio loud / quiet --
 -----------------------------
-TriggerEvent('es:addCommand', 'loud', function(source, args, user, location)
+TriggerEvent('es:addCommand', 'loud', function(source, args, char, location)
 	TriggerClientEvent("civ:radioLoudToggle", source)
 end, {
 	help = "Make your radio louder!"
@@ -464,14 +449,14 @@ end, {
 --------- SURRENDER ---------
 -----------------------------
 
-TriggerEvent('es:addCommand', 'k', function(source, args, user)
+TriggerEvent('es:addCommand', 'k', function(source, args, char)
 	TriggerClientEvent('KneelHU', source, {})
 end, {help = "Get down on your knees and put your hands on your head / get off knees"})
 
-TriggerEvent('es:addCommand', 'kneel', function(source, args, user)
+TriggerEvent('es:addCommand', 'kneel', function(source, args, char)
 	TriggerClientEvent('KneelHU', source, {})
 end, {help = "Get down on your knees and put your hands on your head / get off knees"})
 
-TriggerEvent('es:addCommand', 'surrender', function(source, args, user)
+TriggerEvent('es:addCommand', 'surrender', function(source, args, char)
 	TriggerClientEvent('KneelHU', source, {})
 end, {help = "Get down on your knees and put your hands on your head / get off knees"})

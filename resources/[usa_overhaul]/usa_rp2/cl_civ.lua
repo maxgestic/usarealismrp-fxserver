@@ -493,27 +493,33 @@ AddEventHandler("civ:toggleUnderglow", function()
 end)
 
 
+local awaitingResponse = false
 -- trading/selling vehicles --
 RegisterNetEvent("vehicle:confirmSell")
 AddEventHandler("vehicle:confirmSell", function(details)
-    local responded = false
-    local message = "~y~OFFER: ~w~$" .. details.price .. " for ~w~" .. details.make .. " " .. details.model .. " [" .. details.plate .. "]" .. "\nAccept? ~g~Y~w~/~r~Backspace"
-    TriggerEvent("usa:notify", message)
-    Citizen.CreateThread(function()
-        while not responded do
-            Wait(1)
-            DrawSpecialText( "~y~OFFER: ~w~$" .. details.price .. " for ~w~" .. details.make .. " " .. details.model .. " [" .. details.plate .. "]" .. "\nAccept? ~g~Y~w~/~r~Backspace" )
-            if IsControlJustPressed(1, 246) then -- Y key
-                print("player wants to buy vehicle!")
-                responded = true
-                TriggerServerEvent("vehicle:confirmSell", details, true)
-            elseif IsControlJustPressed(1, 177) then -- Backspace key
-                print("player does not want to buy vehicle!")
-                responded = true
-                TriggerServerEvent("vehicle:confirmSell", details, false)
-            end
-        end
-    end)
+    awaitingResponse = true
+    if not awaitingResponse then
+      local responded = false
+      local message = "~y~OFFER: ~w~$" .. details.price .. " for ~w~" .. details.make .. " " .. details.model .. " [" .. details.plate .. "]" .. "\nAccept? ~g~Y~w~/~r~Backspace"
+      TriggerEvent("usa:notify", message)
+      Citizen.CreateThread(function()
+          while not responded do
+              Wait(1)
+              DrawSpecialText( "~y~OFFER: ~w~$" .. details.price .. " for ~w~" .. details.make .. " " .. details.model .. " [" .. details.plate .. "]" .. "\nAccept? ~g~Y~w~/~r~Backspace" )
+              if IsControlJustPressed(1, 246) then -- Y key
+                  print("player wants to buy vehicle!")
+                  responded = true
+                  awaitingResponse = false
+                  TriggerServerEvent("vehicle:confirmSell", details, true)
+              elseif IsControlJustPressed(1, 177) then -- Backspace key
+                  print("player does not want to buy vehicle!")
+                  responded = true
+                  awaitingResponse = false
+                  TriggerServerEvent("vehicle:confirmSell", details, false)
+              end
+          end
+      end)
+    end
 end)
 
 function closeEnoughToPlayer(from_id)

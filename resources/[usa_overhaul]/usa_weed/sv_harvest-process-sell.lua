@@ -23,16 +23,18 @@ AddEventHandler("weed:checkItem", function(stage)
   local char = exports["usa-characters"]:GetCharacter(source)
   if stage == "Harvest" then
     item_name = data.harvest_item_requirement
-    if char.hasItem(item_name) then
+    local item = char.getItem(item_name)
+    if item then
       TriggerClientEvent("weed:continueHarvesting", source)
       if not item.residue then item.residue = true TriggerClientEvent('usa:notify', source, 'Your Large Scissors have an odor of marijuana.') end
-      char.modifyItem(item_name, "residue", true)
+      char.modifyItem(item, "residue", true)
     else
       TriggerClientEvent("usa:notify", source, "You need ~y~" .. data.harvest_item_requirement .. "~s~ to harvest!")
     end
   elseif stage == "Process" then
     item_name = data.harvest_item.name
-    if char.hasItem(item_name) then
+    local item = char.getItem(item_name)
+    if item then
       TriggerClientEvent("weed:continueProcessing", source)
     else
       TriggerClientEvent("usa:notify", source, "You don't have any ~y~" .. data.harvest_item.name .. "~s~ to process!")

@@ -82,81 +82,38 @@ end
 
 RegisterServerEvent("generalStore:buyItem")
 AddEventHandler("generalStore:buyItem", function(property, item, store, inPrison)
-  local userSource = source
+  local char = exports["usa-characters"]:GetCharacter(source)
   if store == 'GENERAL' then
     item.price = GetServerPrice(item, GENERAL_STORE_ITEMS)
   elseif store == 'HARDWARE' then
     item.price = GetServerPrice(item, HARDWARE_STORE_ITEMS)
   end
-  local user = exports["essentialmode"]:getPlayerFromId(userSource)
-  if inPrison and item.blockedInPrison then
-    TriggerClientEvent('usa:notify', userSource, 'We don\'t sell that here!')
-    return
-  end
-    if user.getCanActiveCharacterHoldItem(item) then
-      local user_money = user.getActiveCharacterData("money")
-      if user_money >= item.price then
-        user.setActiveCharacterData("money", user_money - item.price)
-        if item.name ~= "Cell Phone" then
-          local inventory = user.getActiveCharacterData("inventory")
-          for i = 1, #inventory do
-            if inventory[i] then
-              if inventory[i].name == item.name then
-                inventory[i].quantity = inventory[i].quantity + 1
-                user.setActiveCharacterData("inventory", inventory)
-                TriggerClientEvent("usa:notify", userSource, "Purchased: ~y~" .. item.name)
-                if property and property ~= 0 then
-                  -- give to owner of property --
-                  TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * item.price))
-                end
-                return
-              end
-            end
-          end
-          -- not already in player inventory at this point, so add it
-          table.insert(inventory, item)
-          user.setActiveCharacterData("inventory", inventory)
-          TriggerClientEvent("usa:notify", userSource, "Purchased: ~y~" .. item.name)
-          if property and property ~= 0 then
-            -- give to owner of property
-            --print("adding money from general store to property: " .. property.name)
-            TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * item.price))
-          end
-        else
+  if inPrison and item.blockedInPrison then TriggerClientEvent('usa:notify', source, 'We don\'t sell that here!') return end
+    if char.canHoldItem(item) then
+      if char.get("money") >= item.price then
+        char.removeMoney(item.price)
+        if item.name == "Cell Phone" then
           item.number = string.sub(tostring(os.time()), -8)
-          item.owner = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
+          item.owner = char.getName()
           item.name = item.name .. " - " .. item.number
           exports["usa-phone"]:CreateNewPhone(item)
-          -- insert dummie item --
-          local inventory = user.getActiveCharacterData("inventory")
-          table.insert(inventory, item)
-          user.setActiveCharacterData("inventory", inventory)
-          print(item.number .. " ---- " .. item.owner)
-          TriggerClientEvent("usa:notify", userSource, "Purchased: ~y~" .. item.name)
-          if property and property ~= 0 then
-            -- give to owner of property
-            --print("adding money from general store to property: " .. property.name)
-            TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * item.price))
-          end
         end
+        char.giveItem(item, 1)
+        TriggerClientEvent("usa:notify", userSource, "Purchased: ~y~" .. item.name)
       else
-        -- not enough money
         TriggerClientEvent("usa:notify", userSource, "You don't have enough money!")
       end
     else
-      TriggerClientEvent("usa:notify", userSource, "Inventory full.")
+      TriggerClientEvent("usa:notify", userSource, "Your inventory is full!")
     end
-  --end)
 end)
 
 RegisterServerEvent("generalStore:loadItems")
 AddEventHandler("generalStore:loadItems", function()
-  print("**loading general store items!**")
   TriggerClientEvent("generalStore:loadItems", source, GENERAL_STORE_ITEMS)
 end)
 
 RegisterServerEvent("hardwareStore:loadItems")
 AddEventHandler("hardwareStore:loadItems", function()
-  print("**loading hardware store items!**")
   TriggerClientEvent("hardwareStore:loadItems", source, HARDWARE_STORE_ITEMS)
 end)

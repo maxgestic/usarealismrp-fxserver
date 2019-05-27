@@ -66,15 +66,14 @@ AddEventHandler('playerDropped', function()
 end)
 
 -- /admit [id] [time] [reason]
-TriggerEvent('es:addJobCommand', 'admit', { "ems", "fire", "police", "sheriff", "corrections", "doctor" }, function(source, args, user)
-	local userSource = tonumber(source)
+TriggerEvent('es:addJobCommand', 'admit', { "ems", "fire", "police", "sheriff", "corrections", "doctor" }, function(source, args, char)
 	local targetPlayerId = tonumber(args[2])
 	local bed = nil
 	table.remove(args, 1)
 	table.remove(args, 1)
 	local reasonForAdmission = table.concat(args, " ")
 	if not reasonForAdmission or not GetPlayerName(targetPlayerId) then return end
-	print("USARP: "..GetPlayerName(userSource)..'['..GetPlayerIdentifier(userSource)..'] has admitted '..GetPlayerName(targetPlayerId)..'['..GetPlayerIdentifier(targetPlayerId)..'] to hospital with reason['..reasonForAdmission..']')
+	print("USARP2: "..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has admitted '..GetPlayerName(targetPlayerId)..'['..GetPlayerIdentifier(targetPlayerId)..'] to hospital with reason['..reasonForAdmission..']')
 	for i = 1, #hospitalBeds do
 		if hospitalBeds[i].occupied == nil then
 			hospitalBeds[i].occupied = targetPlayerId
@@ -87,10 +86,11 @@ TriggerEvent('es:addJobCommand', 'admit', { "ems", "fire", "police", "sheriff", 
 		end
 	end
 	-- get player's character name:
-	local target_player = exports["essentialmode"]:getPlayerFromId(targetPlayerId)
+	local target_player = exports["usa-characters"]:GetCharacter(targetPlayerId)
 	TriggerClientEvent("ems:admitMe", targetPlayerId, bed, reasonForAdmission)
-	TriggerClientEvent('usa:notify', userSource, target_player.getActiveCharacterData("fullName") .. ' has been hospitalized.')
+	TriggerClientEvent('usa:notify', source, 'Person has been hospitalized.')
 	--send to discord #ems-logs
+	if target_player.get("job") == "dai" then return end
 	local url = 'https://discordapp.com/api/webhooks/375425187014770699/i6quT1ZKnFoZgOC4rSpudTc2ucmvfXuAUQJXqDI0oeKoeqLGX0etu-GGMpIKbKuAqk70'
 	PerformHttpRequest(url, function(err, text, headers)
 		if text then
@@ -99,7 +99,7 @@ TriggerEvent('es:addJobCommand', 'admit', { "ems", "fire", "police", "sheriff", 
 	end, "POST", json.encode({
 		embeds = {
 			{
-				description = "**Patient:** " .. target_player.getActiveCharacterData("fullName") .. "\n**Details:** " .. reasonForAdmission .. "\n**Responder:** " .. user.getActiveCharacterData("fullName") .."\n**Timestamp:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
+				description = "**Patient:** " .. target_player.getFullName() .. "\n**Details:** " .. reasonForAdmission .. "\n**Responder:** " .. char.getFullName() .."\n**Timestamp:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
 				color = 263172,
 				author = {
 					name = "Pillbox Medical Records"
@@ -115,7 +115,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addCommand', 'bed', function(source, args, user)
+TriggerEvent('es:addCommand', 'bed', function(source, args, char)
 	TriggerClientEvent('ems:getNearestBedIndex', source, hospitalBeds)
 end, {
 	help = "Enter a hospital bed",

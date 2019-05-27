@@ -147,65 +147,66 @@ local stores = {
 
 RegisterServerEvent('storeRobbery:beginRobbery')
 AddEventHandler('storeRobbery:beginRobbery', function(storeName, isSuspectMale, players)
-	local _source = source
 	if stores[storeName] then
 		local store = stores[storeName]
 		local x, y, z = table.unpack(store.position)
-		local policeOnline = GetPoliceOnline()
+		local policeOnline = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
 		if ((os.time() - store.lastRobbedTime) < robberyCooldown and store.lastRobbedTime ~= 0) or policeOnline < 2  or anyStoreBeingRobbed or IsInstanced(players) then
-			TriggerClientEvent('usa:notify', _source, "Couldn't find any money")
+			TriggerClientEvent('usa:notify', source, "Couldn't find any money!")
 			return
 		end
-		stores[storeName].isBeingRobbed = _source
+		stores[storeName].isBeingRobbed = source
 		store.lastRobbedTime = os.time()
 		anyStoreBeingRobbed = true
 		TriggerEvent('911:Robbery', x, y, z, storeName, isSuspectMale, store.cameraID)
-		TriggerClientEvent('usa:notify', _source, "~y~Robbery has begun~s~, hold the fort for the timer duration and don't leave!")
-		TriggerClientEvent('storeRobbery:robStore', _source, storeName)
-		print('ROBBERY: Robbery has begun at store['..storeName..'], triggered by '..GetPlayerName(_source)..'['..GetPlayerIdentifier(_source)..']!')
+		TriggerClientEvent('usa:notify', source, "~y~Robbery has begun~s~, hold the fort for the timer duration and don't leave!")
+		TriggerClientEvent('storeRobbery:robStore', source, storeName)
+		print('ROBBERY: Robbery has begun at store['..storeName..'], triggered by '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..']!')
 		return
+	else
+		print('ROBBERY: '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] attempted to begin a robbery at store not in table!')
+		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+	    TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit storeRobbery:beginRobbery event, please intervene^0!')
 	end
-	print('ROBBERY: '..GetPlayerName(_source)..'['..GetPlayerIdentifier(_source)..'] attempted to begin a robbery at store not in table!')
 end)
 
 RegisterServerEvent('storeRobbery:finishRobbery')
 AddEventHandler('storeRobbery:finishRobbery', function(storeName)
-	local _source = source
-	if stores[storeName] and stores[storeName].isBeingRobbed == _source then
+	local char = exports["usa-characters"]:GetCharacter(source)
+	if stores[storeName] and stores[storeName].isBeingRobbed == source then
 		local store = stores[storeName]
-		if store.isBeingRobbed == _source then
-			local user = exports["essentialmode"]:getPlayerFromId(_source)
-			if user then
-				print("ROBBERY: Robbery has ended at store["..storeName.."], triggered by "..GetPlayerName(_source)..'['..GetPlayerIdentifier(_source).."]!")
-				store.isBeingRobbed = false
-				anyStoreBeingRobbed = false
-				local policeOnline = GetPoliceOnline()
-				local reward = math.random(rewardRange[1], rewardRange[2])
-				local bonus = 0
-				if policeOnline > policeNeededForBonus then
-					bonus = math.floor((reward * 0.08) - reward)
-				end
-				local user_money = user.getActiveCharacterData('money')
-				user.setActiveCharacterData("money", user_money + (reward + bonus))
-				print("ROBBERY: "..GetPlayerName(_source)..'['..GetPlayerIdentifier(_source).."] has been rewarded reward["..reward.."] with bonus["..bonus.."]!")
-				if bonus > 0 then
-					TriggerClientEvent('usa:notify', _source, 'You have stolen ~y~$'..reward..'.00~s~ with a bonus of ~y~$'..bonus..'.00~s~!')
-				else
-					TriggerClientEvent('usa:notify', _source, 'You have stolen ~y~$'..reward..'.00~s~!')
-				end
-			end
+		print("ROBBERY: Robbery has ended at store["..storeName.."], triggered by "..GetPlayerName(source)..'['..GetPlayerIdentifier(source).."]!")
+		store.isBeingRobbed = false
+		anyStoreBeingRobbed = false
+		local policeOnline = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
+		local reward = math.random(rewardRange[1], rewardRange[2])
+		local bonus = 0
+		if policeOnline > policeNeededForBonus then
+			bonus = math.floor((reward * 0.08) - reward)
 		end
+		user.giveMoney((reward + bonus))
+		print("ROBBERY: "..GetPlayerName(source)..'['..GetPlayerIdentifier(source).."] has been rewarded reward["..reward.."] with bonus["..bonus.."]!")
+		if bonus > 0 then
+			TriggerClientEvent('usa:notify', source, 'You have stolen $'..reward..'.00 with a bonus of $'..bonus..'.00!')
+		else
+			TriggerClientEvent('usa:notify', source, 'You have stolen $'..reward..'.00!')
+		end
+	else
+		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+	    TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit storeRobbery:finishRobbery event, please intervene^0!')
 	end
 end)
 
 RegisterServerEvent('storeRobbery:cancelRobbery')
 AddEventHandler('storeRobbery:cancelRobbery', function(storeName)
-	local _source = source
 	if stores[storeName] then
 		local store = stores[storeName]
 		store.isBeingRobbed = false
 		anyStoreBeingRobbed = false
-		print("ROBBERY: Robbery at store["..storeName.."] has been cancelled! (triggered by "..GetPlayerName(_source)..'['..GetPlayerIdentifier(_source).."])")
+		print("ROBBERY: Robbery at store["..storeName.."] has been cancelled! (triggered by "..GetPlayerName(source)..'['..GetPlayerIdentifier(source).."])")
+	else
+		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+	    TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit storeRobbery:cancelRobbery event, please intervene^0!')
 	end
 end)
 
@@ -218,24 +219,6 @@ AddEventHandler('playerDropped', function(reason)
 		end
 	end
 end)
-
-
-function GetPoliceOnline()
-	local policeOnline = 0
-	TriggerEvent("es:getPlayers", function(players)
-		if players then
-			for id, player in pairs(players) do
-				if id and player then
-					local playerJob = player.getActiveCharacterData("job")
-					if playerJob == "sheriff" or playerJob == "police" or playerJob == "cop" then
-						policeOnline = policeOnline + 1
-					end
-				end
-			end
-		end
-	end)
-	return policeOnline
-end
 
 function IsInstanced(playersGiven)
 	if #GetPlayers() - playersGiven > 1 then

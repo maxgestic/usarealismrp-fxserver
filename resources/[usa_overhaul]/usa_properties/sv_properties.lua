@@ -497,18 +497,18 @@ local buzzedApartments = {}
 
 RegisterServerEvent('properties:saveOutfit')
 AddEventHandler('properties:saveOutfit', function(outfit, slot)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local outfits = user.getActiveCharacterData('outfits')
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local outfits = char.get('outfits')
 	if not outfits then outfits = {} outfits[slot] = {} else if not outfits[slot] then outfits[slot] = {} end end
 	outfits[slot] = outfit
-	user.setActiveCharacterData('outfits', outfits)
+	char.set('outfits', outfits)
 	TriggerClientEvent('usa:notify', source, 'Outfit has been saved!')
 end)
 
 RegisterServerEvent('properties:loadOutfit')
 AddEventHandler('properties:loadOutfit', function(slot)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local outfits = user.getActiveCharacterData('outfits')
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local outfits = char.get('outfits')
 	if outfits[slot] then
 		TriggerClientEvent('properties:loadOutfit', source, outfits[slot])
 	else
@@ -516,7 +516,7 @@ AddEventHandler('properties:loadOutfit', function(slot)
 	end
 end)
 
-TriggerEvent('es:addJobCommand', 'breach', {'sheriff', 'police', 'dai'}, function(source, args, user, location)
+TriggerEvent('es:addJobCommand', 'breach', {'sheriff', 'police', 'dai'}, function(source, args, char, location)
 	TriggerClientEvent('properties:findRoomToBreach', source, args[2])
 
 end, {
@@ -526,7 +526,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'bbreach', {'sheriff', 'police'}, function(source, args, user, location)
+TriggerEvent('es:addJobCommand', 'bbreach', {'sheriff', 'police'}, function(source, args, char, location)
 	location = vector3(table.unpack(location))
 	for i = 1, #burglaryHouses do
 		if find_distance(location, burglaryHouses[i]) < 2.0 then
@@ -557,14 +557,14 @@ end, {
 	help = "Breach into the nearest burglary property"
 })
 
-TriggerEvent('es:addCommand', 'knock', function(source, args, user, location)
+TriggerEvent('es:addCommand', 'knock', function(source, args, char, location)
 	TriggerClientEvent('properties:findRoomToKnock', source)
 
 end, {
 	help = "Knock on the door of the nearest motel or house"
 })
 
-TriggerEvent('es:addCommand', 'bknock', function(source, args, user, location)
+TriggerEvent('es:addCommand', 'bknock', function(source, args, char, location)
 	location = vector3(table.unpack(location))
 	for i = 1, #burglaryHouses do
 		if find_distance(location, burglaryHouses[i]) < 2.0 then
@@ -584,11 +584,11 @@ end, {
 	help = "Knock on the door of the nearest burglary property"
 })
 
-TriggerEvent('es:addJobCommand', 'createhouse', {'judge'}, function(source, args, user, location)
+TriggerEvent('es:addJobCommand', 'createhouse', {'judge'}, function(source, args, char, location)
 	local targetSource = tonumber(args[2])
 	if targetSource and GetPlayerName(targetSource) then
-		local target = exports["essentialmode"]:getPlayerFromId(targetSource)
-		local property = target.getActiveCharacterData('property')
+		local target_char = exports["usa-characters"]:GetCharacter(targetSource)
+		local property = target_char.get('property')
 		if property['house'] then
 			TriggerClientEvent('usa:notify', source, 'This person already owns a house!')
 		else
@@ -602,11 +602,11 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'setgarage', {'judge'}, function(source, args, user, location)
+TriggerEvent('es:addJobCommand', 'setgarage', {'judge'}, function(source, args, char, location)
 	local targetSource = tonumber(args[2])
 	if targetSource and GetPlayerName(targetSource) then
-		local target = exports["essentialmode"]:getPlayerFromId(targetSource)
-		local property = target.getActiveCharacterData('property')
+		local target_char = exports["usa-characters"]:GetCharacter(targetSource)
+		local property = target_char.get('property')
 		if property['house'] then
 			property['garageCoords'] = location
 			for i = 1, #properties['Houses'].rooms do
@@ -614,7 +614,7 @@ TriggerEvent('es:addJobCommand', 'setgarage', {'judge'}, function(source, args, 
 				if room.owner == targetSource then
 					room.garage = property['garageCoords']
 					TriggerClientEvent('properties:updateData', -1, 'Houses', i, properties['Houses'].rooms[i])
-					target.setActiveCharacterData('property', property)
+					target_char.set('property', property)
 					return
 				end
 			end
@@ -631,17 +631,17 @@ end, {
 
 RegisterServerEvent('properties:continueHousePurchase')
 AddEventHandler('properties:continueHousePurchase', function(targetSource, location, heading, street, zone)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	if user.getActiveCharacterData('job') == 'judge' then
-		local money = user.getActiveCharacterData('money')
+	local char = exports["usa-characters"]:GetCharacter(source)
+	if char.get('job') == 'judge' then
+		local money = char.get('money')
 		if money >= 80000 then
-			user.setActiveCharacterData('money', money - 80000)
+			char.removeMoney(80000)
 		else
 			TriggerClientEvent('usa:notify', source, 'You cannot afford this!')
 			return
 		end
-		local target = exports["essentialmode"]:getPlayerFromId(targetSource)
-		local property = target.getActiveCharacterData('property')
+		local target_char = exports["usa-characters"]:GetCharacter(targetSource)
+		local property = target_char.get('property')
 		property['location'] = 'Houses'
 		property['house'] = math.random(1000000, 9999999)
 		property['houseCoords'] = location
@@ -658,27 +658,27 @@ AddEventHandler('properties:continueHousePurchase', function(targetSource, locat
 			locked = true
 		}
 		table.insert(properties['Houses'].rooms, _data)
-		target.setActiveCharacterData('property', property)
-		TriggerClientEvent('usa:notify', source, 'House has been created for ~y~'..target.getActiveCharacterData('fullName')..'~s~. ~y~(~s~'..property['house']..'~y~)~s~')
-		TriggerClientEvent('usa:notify', targetSource, 'You now have ownership over a house, ordered by ~y~'..user.getActiveCharacterData('fullName')..'~s~. ~y~(~s~'..property['house']..'~y~)~s~')
+		target_char.set('property', property)
+		TriggerClientEvent('usa:notify', source, 'House has been created. ~y~(~s~'..property['house']..'~y~)~s~')
+		TriggerClientEvent('usa:notify', targetSource, 'You now have ownership over a house, ordered by ~y~'..char.getFullName()..'~s~. ~y~(~s~'..property['house']..'~y~)~s~')
 		RefreshProperties(targetSource, false)
 	end
 end)
 
-TriggerEvent('es:addJobCommand', 'deletehouse', {'judge'}, function(source, args, user, location)
+TriggerEvent('es:addJobCommand', 'deletehouse', {'judge'}, function(source, args, char, location)
 	local targetSource = tonumber(args[2])
 	if targetSource and GetPlayerName(targetSource) then
-		local target = exports["essentialmode"]:getPlayerFromId(targetSource)
-		local property = target.getActiveCharacterData('property')
+		local target_char = exports["usa-characters"]:GetCharacter(targetSource)
+		local property = target_char.get('property')
 		if property['house'] then
 			property['house'] = false
 			property['houseCoords'] = nil
 			property['garageCoords'] = nil
 			property['houseHeading'] = nil
 			property['location'] = 'Perrera Beach Motel'
-			target.setActiveCharacterData('property', property)
-			TriggerClientEvent('usa:notify', targetSource, 'Your house is now foreclosure, ordered by ~y~'..user.getActiveCharacterData('fullName')..'~s~!')
-			TriggerClientEvent('usa:notify', source, 'House of ~y~'..target.getActiveCharacterData('fullName')..'~s~ is now foreclosure.')
+			target_char.set('property', property)
+			TriggerClientEvent('usa:notify', targetSource, 'Your house is now foreclosure, ordered by ~y~'..char.getFullName()..'~s~!')
+			TriggerClientEvent('usa:notify', source, 'House is now foreclosure.')
 			RefreshProperties(targetSource, false)
 		else
 			TriggerClientEvent('usa:notify', source, 'This player does not own a house!')
@@ -694,8 +694,8 @@ end, {
 function canPropertyHoldItem(owner, location, itemToCheck)
 	local maxWeight = properties[location].weightLimit
 	local totalWeight = 0.0
-	local user = exports["essentialmode"]:getPlayerFromId(owner)
-	local property = user.getActiveCharacterData('property')
+	local char = exports["usa-characters"]:GetCharacter(owner)
+	local property = char.get('property')
 	for i = 1, #property['storage'] do
 		local item = property['storage'][i]
 		if item then
@@ -733,9 +733,9 @@ function RefreshProperties(source, spawnAtProperty)
 	end
 
 	-- create property for character -- 
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	if not user then return end
-	local property = user.getActiveCharacterData('property')
+	local char = exports["usa-characters"]:GetCharacter(source)
+	if not char then return end
+	local property = char.get('property')
 
 	if not property then
 		property = {
@@ -744,7 +744,7 @@ function RefreshProperties(source, spawnAtProperty)
 			['money'] = 0,
 			['house'] = false
 		}
-		user.setActiveCharacterData('property', property)
+		char.set('property', property)
 	end
 	if not property['house'] then
 		-- evict owner if time has exceeded
@@ -753,21 +753,21 @@ function RefreshProperties(source, spawnAtProperty)
 			if paid_time == nil then
 				paid_time = os.time()
 				property['paid_time'] = os.time()
-				user.setActiveCharacterData('property', property)
+				char.set('property', property)
 				print('PROPERTIES: Property has no paid_time, setting now!')
 			end
 			if GetWholeDaysFromTime(paid_time) >= 7 then
-				local bank = user.getActiveCharacterData('bank')
+				local bank = char.get('bank')
 				if bank - properties[property['location']].payment >= 0 then
-					user.setActiveCharacterData('bank', bank - properties[property['location']].payment)
+					char.removeBank(properties[property['location']].payment)
 					property['paid_time'] = os.time()
 					TriggerClientEvent('usa:notify', source, 'You have paid ~y~$'..properties[property['location']].payment..'~s~ for your apartment!')
-					user.setActiveCharacterData('property', property)
+					char.set('property', property)
 				else
 					property['location'] = 'Perrera Beach Motel'
 					property['paid_time'] = os.time
 					TriggerClientEvent('usa:notify', source, 'You have been evicted from your apartment, find your room at ~y~Perrera Beach Motel~s~!')
-					user.setActiveCharacterData('property', property)
+					char.set('property', property)
 				end
 			end
 		end
@@ -899,9 +899,9 @@ AddEventHandler('properties:getAddress', function(ssn, callback)
 			end
 		end
 	end
-	local user = exports["essentialmode"]:getPlayerFromId(ssn)
-	if user then
-		local property = user.getActiveCharacterData('property')
+	local char = exports["usa-characters"]:GetCharacter(ssn)
+	if char then
+		local property = char.get('property')
 		if property['house'] then
 			callback('House '..property['house']..', '..property['houseStreet'])
 			return
@@ -915,13 +915,13 @@ AddEventHandler('properties:getAddressByName', function(fullName, callback)
 	for property, data in pairs(properties) do
 		for i = 1, #data.rooms do
 			local room = properties[property].rooms[i]
-			local user = exports["essentialmode"]:getPlayerFromId(room.owner)
-			if user and user.getActiveCharacterData('fullName') == fullName then
+			local char = exports["usa-characters"]:GetCharacter(room.owner)
+			if char and char.getFullName() == fullName then
 				if data.type ~= 'house' then
 					callback(room.name .. ', '..property..' ('..data.location..')')
 					return
 				else
-					local property = user.getActiveCharacterData('property')
+					local property = char.get('property')
 					if property['house'] then
 						callback('House '..property['house']..', '..property['houseStreet'])
 					end
@@ -952,14 +952,14 @@ AddEventHandler('properties:markAddress', function(ssn, fname, lname)
 			for property, data in pairs(properties) do
 				for i = 1, #data.rooms do
 					local room = properties[property].rooms[i]
-					local user = exports["essentialmode"]:getPlayerFromId(room.owner)
-					if user and user.getActiveCharacterData('fullName') == fullName then
+					local char = exports["usa-characters"]:GetCharacter(room.owner)
+					if char and char.getName() == fullName then
 						if data.type ~= 'house' then
 							TriggerClientEvent('properties:setWaypoint', source, room.coords)
 							TriggerClientEvent('usa:notify', source, 'Address set as waypoint!')
 							return
 						else
-							local property = user.getActiveCharacterData('property')
+							local property = char.get('property')
 							if property['house'] then
 								TriggerClientEvent('properties:setWaypoint', source, property['houseCoords'])
 								TriggerClientEvent('usa:notify', source, 'Address set as waypoint!')
@@ -992,9 +992,9 @@ end)
 
 RegisterServerEvent('properties:moveProperties')
 AddEventHandler('properties:moveProperties', function(location)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local userMoney = user.getActiveCharacterData('money')
-	local property = user.getActiveCharacterData('property')
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local userMoney = char.get('money')
+	local property = char.get('property')
 	if properties[property['location']].type == 'motel' then
 		if location ~= property['location'] then
 			for i = 1, #properties[location].rooms do
@@ -1012,8 +1012,8 @@ AddEventHandler('properties:moveProperties', function(location)
 							end
 						end
 						property['location'] = location
-						user.setActiveCharacterData('property', property)
-						user.setActiveCharacterData('money', userMoney - 500)
+						char.set('property', property)
+						char.removeMoney(500)
 						properties[location].rooms[i].owner = source
 						TriggerClientEvent('properties:updateData', -1, location, i, properties[location].rooms[i])
 						TriggerClientEvent('usa:notify', source, 'Your room no. is '..i..', here are the keys.')
@@ -1071,8 +1071,7 @@ end)
 
 RegisterServerEvent('properties:forceEntry')
 AddEventHandler('properties:forceEntry', function(location, index)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local job = user.getActiveCharacterData('job')
+	local job = exports["usa-characters"]:GetCharacterField(source, "job")
 	if job == 'sheriff' or job == 'dai' then
 		print('PROPERTIES: '..source.. ' has forcefully BREACHED into room '..index.. ' at location '..location)
 		local room = properties[location].rooms[index]
@@ -1100,7 +1099,10 @@ AddEventHandler('properties:forceEntry', function(location, index)
 			TriggerClientEvent('InteractSound_CL:PlayOnOne', sourceInside, 'door-kick', 0.4)
 			TriggerClientEvent('properties:updateInstance', sourceInside, properties[location].rooms[index].instance)
 		end
-	end
+	else
+		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+    	TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit properties:forceEntry event, please intervene^0!')
+    end
 end)
 
 
@@ -1139,18 +1141,23 @@ RegisterServerEvent('properties:requestStorage')
 AddEventHandler('properties:requestStorage', function(location, index)
 	local room = properties[location].rooms[index]
 	local targetSource = room.owner
-	local target = exports["essentialmode"]:getPlayerFromId(targetSource)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local property = target.getActiveCharacterData("property")
+	local target_char = exports["usa-characters"]:GetCharacter(targetSource)
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local property = target_char.get("property")
 	local menu_data = {
 		property_items = property['storage'],
 		user_items = {},
 		money = property['money']
 	}
-	local inventory = user.getActiveCharacterData("inventory")
-	local weapons = user.getActiveCharacterData("weapons")
-	for i = 1, #inventory do table.insert(menu_data.user_items, inventory[i]) end
-	for i = 1, #weapons do table.insert(menu_data.user_items, weapons[i]) end
+	local inventory = char.get("inventory")
+	for i = 0, (inventory.MAX_CAPACITY - 1) do
+		if inventory.items[tostring(i)] then
+			local item = inventory.items[tostring(i)]
+			if item.type ~= "license" then
+				table.insert(menu_data.user_items, inventory.items[tostring(i)])
+			end
+		end
+	end
 	TriggerClientEvent("properties:openStorage", source, menu_data)
 end)
 
@@ -1158,11 +1165,9 @@ RegisterServerEvent("properties:storeItem")
 AddEventHandler("properties:storeItem", function(location, index, item, quantity)
 	local room = properties[location].rooms[index]
 	if room.owner and isPlayerInInstance(location, index, source) then
-	    local userSource = source
-	    local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	    local target = exports["essentialmode"]:getPlayerFromId(room.owner)
-	    local property = target.getActiveCharacterData('property')
-	    TriggerEvent("usa:removeItem", item, quantity, userSource)
+	    local char = exports["usa-characters"]:GetCharacter(source)
+	    local target_char = exports["usa-characters"]:GetCharacter(room.owner)
+	    local property = target_char.get('property')
 	    local itemCopy = item
 	    local hasItem = false
 	    itemCopy.quantity = quantity
@@ -1173,19 +1178,21 @@ AddEventHandler("properties:storeItem", function(location, index, item, quantity
 		            if _item.type ~= "weapon" then
 		                hasItem	= true
 		                _item.quantity = _item.quantity + quantity
-		                target.setActiveCharacterData('property', property)
-		                TriggerClientEvent('usa:notify', userSource, '~y~'..item.name..' ~s~has been stored!')
+		                target_char.set('property', property)
+		                TriggerClientEvent('usa:notify', source, '~y~'..item.name..' ~s~has been stored!')
+		                char.removeItem(item, quantity)
 		            end
 		            break
 		        end
 		    end
 		    if not hasItem then
 		        table.insert(property['storage'], itemCopy)
-		        target.setActiveCharacterData('property', property)
-		        TriggerClientEvent('usa:notify', userSource, '~y~'..item.name..' ~s~has been stored!')
+		        target_char.set('property', property)
+		        TriggerClientEvent('usa:notify', source, '~y~'..item.name..' ~s~has been stored!')
+		        char.removeItem(item, quantity)
 		    end
 		else
-			TriggerClientEvent('usa:notify', userSource, 'Property storage is full!')
+			TriggerClientEvent('usa:notify', source, 'Property storage is full!')
 		end
 	end
 end)
@@ -1194,47 +1201,45 @@ RegisterServerEvent("properties:retrieveItem")
 AddEventHandler("properties:retrieveItem", function(location, index, item, quantity)
 	local room = properties[location].rooms[index]
 	if room.owner and isPlayerInInstance(location, index, source) then
-		local userSource = source
-	    local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	    local userInv = user.getActiveCharacterData('inventory')
-	    local target = exports["essentialmode"]:getPlayerFromId(room.owner)
-	    local property = target.getActiveCharacterData('property')
+	    local char = exports["usa-characters"]:GetCharacter(source)
+	    local target_char = exports["usa-characters"]:GetCharacter(room.owner)
+	    local property = target_char.get('property')
 		item.quantity = quantity
-		if user.getCanActiveCharacterHoldItem(item) then
+		if char.canHoldItem(item) then
 			local storage = property['storage']
 			for i = 1, #storage do
 				if (storage[i].name == item.name and item.type ~= "weapon") or (item.type == "weapon" and storage[i].type == "weapon" and item.uuid == storage[i].uuid and storage[i].name == item.name) then
 					if storage[i].quantity - quantity < 0 then
-						TriggerClientEvent("usa:notify", userSource, "Invalid amount to retrieve!")
+						TriggerClientEvent("usa:notify", source, "Invalid amount to retrieve!")
 						return
 					else
 						if storage[i].quantity - quantity == 0 then
 							table.remove(property['storage'], i)
-							target.setActiveCharacterData('property', property)
-							TriggerClientEvent('usa:notify', userSource, '~y~'..item.name..' ~s~has been retrieved!')
-							TriggerEvent("usa:insertItem", item, quantity, userSource)
+							target_char.set('property', property)
+							TriggerClientEvent('usa:notify', source, '~y~'..item.name..' ~s~has been retrieved!')
+							char.giveItem(item, quantity)
 							return
 						else
 							property['storage'][i].quantity = property['storage'][i].quantity - quantity
-							target.setActiveCharacterData('property', property)
-							TriggerClientEvent('usa:notify', userSource, '~y~'..item.name..' ~s~has been retrieved!')
-							TriggerEvent("usa:insertItem", item, quantity, userSource)
+							target_char.set('property', property)
+							TriggerClientEvent('usa:notify', source, '~y~'..item.name..' ~s~has been retrieved!')
+							char.giveItem(item, quantity)
 							return
 						end
 					end
 				else
 	      			if (item.type == "weapon" and storage[i].type == "weapon") and (not item.uuid and not storage[i].uuid) and (item.name == storage[i].name) then
 	           			table.remove(property['storage'], i)
-	           			target.setActiveCharacterData('property', property)
-	           			TriggerClientEvent('usa:notify', userSource, '~y~'..item.name..' ~s~has been retrieved!')
-	           			TriggerEvent("usa:insertItem", item, quantity, userSource)
+	           			target_char.set('property', property)
+	           			TriggerClientEvent('usa:notify', source, '~y~'..item.name..' ~s~has been retrieved!')
+	           			char.giveItem(item, quantity)
 	           			return
 	           		end
 	          	end
 	        end
-	        TriggerClientEvent("usa:notify", userSource, "Please wait a moment...")
+	        TriggerClientEvent("usa:notify", source, "Please wait a moment...")
 		else
-			TriggerClientEvent("usa:notify", userSource, "Inventory full.")
+			TriggerClientEvent("usa:notify", source, "Inventory full.")
 		end
 	end
 end)
@@ -1243,14 +1248,13 @@ RegisterServerEvent("properties:withdrawMoney")
 AddEventHandler("properties:withdrawMoney", function(location, index, amount)
 	local room = properties[location].rooms[index]
 	if room.owner and isPlayerInInstance(location, index, source) then
-		local user = exports["essentialmode"]:getPlayerFromId(source)
-		local target = exports["essentialmode"]:getPlayerFromId(room.owner)
-		local user_money = user.getActiveCharacterData("money")
-		local property = target.getActiveCharacterData("property")
+		local char = exports["usa-characters"]:GetCharacter(source)
+		local target_char = exports["usa-characters"]:GetCharacter(room.owner)
+		local property = target_char.get("property")
 		if property["money"] - amount >= 0 then
-			user.setActiveCharacterData("money", user_money + amount)
+			char.giveMoney(amount)
 			property["money"] = property["money"] - amount
-			target.setActiveCharacterData("property", property)
+			target_char.set("property", property)
 			TriggerClientEvent("usa:notify", source, "Withdrawn: ~y~$" .. amount)
 		else
 			TriggerClientEvent("usa:notify", source, "Not enough money in property!")
@@ -1264,17 +1268,17 @@ RegisterServerEvent("properties:storeMoney")
 AddEventHandler("properties:storeMoney", function(location, index, amount)
 	local room = properties[location].rooms[index]
 	if room.owner and isPlayerInInstance(location, index, source) then
-		local user = exports["essentialmode"]:getPlayerFromId(source)
-		local target = exports["essentialmode"]:getPlayerFromId(room.owner)
-		local user_money = user.getActiveCharacterData("money")
-		local property = target.getActiveCharacterData("property")
+		local char = exports["usa-characters"]:GetCharacter(source)
+		local target_char = exports["usa-characters"]:GetCharacter(room.owner)
+		local user_money = char.get("money")
+		local property = target_char.get("property")
 		if user_money - amount >= 0 then
 			if (property["money"] + amount) > properties[location].cashLimit then
 				TriggerClientEvent("usa:notify", source, "You may only store up to ~y~$"..properties[location].cashLimit..'!')
 			else
-				user.setActiveCharacterData("money", user_money - amount)
+				char.removeMoney(amount)
 				property["money"] = property["money"] + amount
-				target.setActiveCharacterData("property", property)
+				target_char.set("property", property)
 				TriggerClientEvent("usa:notify", source, "Stored: ~y~$" .. amount)
 			end
 		else
@@ -1288,20 +1292,21 @@ end)
 RegisterServerEvent('properties:cleanTools')
 AddEventHandler('properties:cleanTools', function()
 	TriggerClientEvent('evidence:updateData', source, 'gunshotResidue', false)
-	local user = exports['essentialmode']:getPlayerFromId(source)
-	local inventory = user.getActiveCharacterData('inventory')
+	local char = exports['usa-characters']:GetCharacter(source)
+	local inventory = char.get("inventory")
 	local itemsFound = false
-	for i = 1, #inventory do
-		local item = inventory[i]
-		if item.resiude then
-			itemsFound = true
-			item.residue = false
+	for i = 0, (inventory.MAX_CAPACITY - 1) do
+		if inventory.items[tostring(i)] then
+			local item = inventory.items[tostring(i)]
+			if item['residue'] then
+				itemsFound = true
+				char.modifyItem(item, "residue", false)
+			end
 		end
 	end
 	if not itemsFound then
 		TriggerClientEvent('usa:notify', source, 'You have no tools that need cleaning!')
 	else
-		user.setActiveCharacterData('inventory', inventory)
 		local anim = {
 			dict = "anim@move_m@trash",
 			name = "pickup"
@@ -1313,30 +1318,30 @@ end)
 
 RegisterServerEvent('properties:requestRealEstateMenu')
 AddEventHandler('properties:requestRealEstateMenu', function()
-	local user = exports['essentialmode']:getPlayerFromId(source)
-	local property = user.getActiveCharacterData('property')
+	local char = exports['usa-characters']:GetCharacter(source)
+	local property = char.get('property')
 	TriggerClientEvent('properties:openRealEstateMenu', source, property)
 end)
 
 RegisterServerEvent('properties:estateChange')
 AddEventHandler('properties:estateChange', function(estate)
-	local user = exports['essentialmode']:getPlayerFromId(source)
-	local property = user.getActiveCharacterData('property')
+	local char = exports['usa-characters']:GetCharacter(source)
+	local property = char.get('property')
 	if not property['house'] then
 		local interior = properties[property['location']].interior
-		local userMoney = user.getActiveCharacterData('money')
+		local userMoney = char.get('money')
 		local today = os.date("*t", os.time())
 		if estate == 'motel' then
 			property['location'] = 'Perrera Beach Motel'
 			property['paid_time'] = os.time()
 
-			user.setActiveCharacterData('property', property)
+			char.set('property', property)
 		elseif estate == 'lowapartment' then
 			if userMoney - 1500 >= 0 then
 				property['location'] = 'Burton Apartments'
 				property['paid_time'] = os.time()
-				user.setActiveCharacterData('property', property)
-				user.setActiveCharacterData('money', userMoney - 1500)
+				char.set('property', property)
+				char.removeMoney(1500)
 			else
 				TriggerClientEvent('usa:notify', source, 'You cannot afford this purchase.')
 			end
@@ -1344,8 +1349,8 @@ AddEventHandler('properties:estateChange', function(estate)
 			if userMoney - 3000 >= 0 then
 				property['location'] = 'Tinsel Towers'
 				property['paid_time'] = os.time()
-				user.setActiveCharacterData('property', property)
-				user.setActiveCharacterData('money', userMoney - 3000)
+				char.set('property', property)
+				char.removeMoney(3000)
 			else
 				TriggerClientEvent('usa:notify', source, 'You cannot afford this purchase.')
 			end
@@ -1353,8 +1358,8 @@ AddEventHandler('properties:estateChange', function(estate)
 			if userMoney - 7500 >= 0 then
 				property['location'] = 'Eclipse Towers'
 				property['paid_time'] = os.time()
-				user.setActiveCharacterData('property', property)
-				user.setActiveCharacterData('money', userMoney - 7500)
+				char.set('property', property)
+				char.removeMoney(7500)
 			else
 				TriggerClientEvent('usa:notify', source, 'You cannot afford this purchase.')
 			end
@@ -1382,7 +1387,7 @@ AddEventHandler('properties:buzzApartment', function(location, index)
 	end
 end)
 
-TriggerEvent('es:addCommand','buzzaccept', function(source, args, user)
+TriggerEvent('es:addCommand','buzzaccept', function(source, args, char)
 	for property, data in pairs(properties) do
 		for i = 1, #data.rooms do
 			local room = properties[property].rooms[i]
@@ -1405,7 +1410,7 @@ end, {
 
 RegisterServerEvent('properties:lockpickHouse')
 AddEventHandler('properties:lockpickHouse', function(playerCoords, lockpickItem)
-	if GetCurrentJobCount('sheriff') >= 2 then
+	if exports["usa-characters"]:GetNumCharactersWithJob("sheriff") >= 2 then
 		for i = 1, #burglaryHouses do
 			if find_distance(playerCoords, burglaryHouses[i]) < 2.0 then
 				if (burglaryHouses[i].cooldown[source] and getMinutesFromTime(burglaryHouses[i].cooldown[source]) > 240) or not burglaryHouses[i].cooldown[source] then
@@ -1423,7 +1428,6 @@ end)
 
 RegisterServerEvent('properties:lockpickSuccessful')
 AddEventHandler('properties:lockpickSuccessful', function(i)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
 	table.insert(burglaryHouses[i].instance, source)
 	local currentProperty = {
 		owner = -1,
@@ -1465,24 +1469,15 @@ AddEventHandler('properties:searchCabinetBurglary', function(index)
 	local house = burglaryHouses[index]
 	for i = 1, #house.instance do
 		if source == house.instance[i] then
-			local user = exports['essentialmode']:getPlayerFromId(source)
-			local user_money = user.getActiveCharacterData('money')
+			local char = exports['usa-characters']:GetCharacter(source)
+			local char_money = char.get('money')
 			if math.random() > 0.4 then
 				if math.random() > 0.2 then
 					local item_found = burglarySearchItems[math.random(1, #burglarySearchItems)]
-					if user.getCanActiveCharacterHoldItem(item_found) then
+					if char.canHoldItem(item_found) then
 						TriggerClientEvent('usa:notify', source, 'You have found '..item_found.name..'.')
-						local user_inventory = user.getActiveCharacterData('inventory')
-						for i = 1, #user_inventory do
-							local item = user_inventory[i]
-							if item.name == item_found.name then
-								item.quantity = item.quantity + 1
-								user.setActiveCharacterData('inventory', user_inventory)
-								return
-							end
-						end
-						table.insert(user_inventory, item_found)
-						user.setActiveCharacterData('inventory', user_inventory)
+						print('PROPERTIES: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has found item['..item_found.name..'] in house burglary!')
+						char.giveItem(item_found, 1)
 						return
 					else
 						TriggerClientEvent('usa:notify', source, "Inventory is full!")
@@ -1491,7 +1486,8 @@ AddEventHandler('properties:searchCabinetBurglary', function(index)
 				else
 					local money_found = math.random(10, 175)
 					TriggerClientEvent('usa:notify', source, 'You have found $'..money_found..'.0!')
-					user.setActiveCharacterData('money', user_money + money_found)
+					print('PROPERTIES: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has found amount['..money_found..'] in house burglary!')
+					char.giveMoney(money_found)
 					return
 				end
 			else
@@ -1529,21 +1525,4 @@ function getMinutesFromTime(t)
   local minutesfrom = os.difftime(os.time(), reference) / 60
   local minutes = math.floor(minutesfrom)
   return minutes
-end
-
-function GetCurrentJobCount(job)
-	local count = 0
-	TriggerEvent("es:getPlayers", function(players)
-		if players then
-			for id, player in pairs(players) do
-				if id and player then
-					local playerJob = player.getActiveCharacterData("job")
-					if playerJob == job then
-						count = count + 1
-					end
-				end
-			end
-		end
-	end)
-	return count
 end

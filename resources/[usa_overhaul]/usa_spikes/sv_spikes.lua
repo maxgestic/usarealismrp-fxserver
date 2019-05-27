@@ -1,15 +1,12 @@
 local spikes = {}
 
-TriggerEvent('es:addJobCommand', 'setspikes', {"sheriff", "corrections"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'setspikes', {"sheriff", "corrections"}, function(source, args, char)
     local s = tonumber(source)
     local amount = tonumber(args[2])
 
     if type(amount) == "number" then
         if amount <= 3 then
-          print("triggering spawnSpikes spikestrip client command event")
             TriggerClientEvent("stinger:spawnSpikes", s, amount)
-        else
-            print("You can not spawn that many spike strips")
         end
     end
 end, {
@@ -19,7 +16,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'deletespikes', {"sheriff", "corrections"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'deletespikes', {"sheriff", "corrections"}, function(source, args, char)
     local s = tonumber(source)
     TriggerClientEvent("stinger:deleteSpikes", s)
 end, {help = "Remove spikestrips."})

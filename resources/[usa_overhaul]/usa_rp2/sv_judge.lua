@@ -11,38 +11,35 @@ licensePrices = {
 --------------------
 RegisterServerEvent("judge:duty")
 AddEventHandler("judge:duty", function()
-  local usource = source
-  local user = exports["essentialmode"]:getPlayerFromId(usource)
-  local user_job = user.getActiveCharacterData("job")
-  local user_judge_rank = user.getActiveCharacterData("judgeRank")
-  if not user_judge_rank then
-    TriggerClientEvent("usa:notify", usource, "You are not whitelisted for Judge!")
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local job = char.get("job")
+  local judge_rank = char.get("judgeRank")
+  if not judge_rank then
+    TriggerClientEvent("usa:notify", source, "You are not whitelisted for Judge!")
     return
   end
-  if user_job ~= "judge" and user_judge_rank > 0 then
-	   local user_char_name = user.getActiveCharacterData("fullName")
-     user.setActiveCharacterData("job", "judge")
-     TriggerClientEvent("usa:notify", usource, "You are now in service as a Judge.")
-	   TriggerClientEvent('chatMessage', -1, "", {0, 0, 0}, "^6^*[COURTHOUSE] ^r^7A Judge is now available for all legal affairs!")
+  if job ~= "judge" and judge_rank > 0 then
+	local user_char_name = char.getFullName()
+   	char.set("job", "judge")
+    TriggerClientEvent("usa:notify", source, "You are now in service as a Judge.")
+	TriggerClientEvent('chatMessage', -1, "", {0, 0, 0}, "^6^*[COURTHOUSE] ^r^7A Judge is now available for all legal affairs!")
   else
-    user.setActiveCharacterData("job", "civ")
-    TriggerClientEvent("usa:notify", usource, "You are now out of service as a Judge.")
+    char.set("job", "civ")
+    TriggerClientEvent("usa:notify", source, "You are now out of service as a Judge.")
   end
 end)
 
 -----------------------------
 -- LAWYER / JUDGE COMMANDS --
 -----------------------------
-TriggerEvent('es:addJobCommand', 'removesuspension', {'judge', 'sheriff'}, function(source, args, user)
-	print("removing suspension")
-	local usource = source
+TriggerEvent('es:addJobCommand', 'removesuspension', {'judge', 'sheriff'}, function(source, args, char)
 	local type = string.lower(args[2])
 	local target = tonumber(args[3])
 	local target_item_name = nil
     -- check SGT + rank for police --
-    if user.getActiveCharacterData("job") == "sheriff" then
-        if user.getActiveCharacterData("policeRank") < 4 then
-            TriggerClientEvent("usa:notify", usource, "Not high enough rank!")
+    if char.get("job") == "sheriff" then
+        if char.get("policeRank") < 4 then
+            TriggerClientEvent("usa:notify", source, "Not high enough rank!")
             return
         end
     end
@@ -54,22 +51,14 @@ TriggerEvent('es:addJobCommand', 'removesuspension', {'judge', 'sheriff'}, funct
 		elseif type == 'bl' then
 			target_item_name = "Boat License"
 		end
-		local target_player = exports["essentialmode"]:getPlayerFromId(target)
-		local licenses = target_player.getActiveCharacterData("licenses")
-        local player_name = target_player.getActiveCharacterData("fullName")
-		for i = 1, #licenses do
-			if licenses[i].name == target_item_name then
-				if licenses[i].status == "suspended" then
-					licenses[i].status = "valid"
-					target_player.setActiveCharacterData("licenses", licenses)
-					TriggerClientEvent("usa:notify", target, "Your " .. target_item_name .. " has been ~g~reinstated~s~!")
-					TriggerClientEvent("usa:notify", usource, "You reinstated " .. player_name .. "'s ~y~" .. target_item_name .. "~s~!")
-					return
-				end
-			end
+		local target_char = exports["usa-characters"]:GetCharacter(target)
+		local license = char.getItem(target_item_name)
+		if license and license.status == "suspended" then
+			char.modifyItem(target_item_name, "status", "valid")
+			TriggerClientEvent("usa:notify", target, "Your " .. target_item_name .. " has been ~g~reinstated~s~!")
+			TriggerClientEvent("usa:notify", source, "You reinstated a " .. target_item_name .. "!")
 		end
-		TriggerClientEvent('usa:notify', usource, "License not found on person, or is not suspended!")
-		return
+		TriggerClientEvent('usa:notify', source, "License not found on person, or is not suspended!")
 	end
 end, {
 	help = "Remove a license suspension.",
@@ -79,44 +68,8 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'checksuspensions', {'judge', 'sheriff'}, function(source, args, user)
-	print("checking suspension")
-	local usource = source
-	local target = tonumber(args[2])
-	local target_item_name = nil
-	local found = false
-	if GetPlayerName(target) then
-		local target_player = exports["essentialmode"]:getPlayerFromId(target)
-		local licenses = target_player.getActiveCharacterData("licenses")
-	    local user_name = target_player.getActiveCharacterData("fullName")
-	    local user_dob = target_player.getActiveCharacterData('dateOfBirth')
-	    TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^*^7---------------------------------------")
-	    TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^3^*Name: ^r^7" .. user_name)
-		for i = 1, #licenses do
-			if licenses[i].status == "suspended" then
-				TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^3^*License: ^r^7" .. licenses[i].name)
-		        TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^3^*Status: ^r^1" .. licenses[i].status)
-		        TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^3^*Duration: ^r^7" .. licenses[i].suspension_days .. ' day(s)')
-		        TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^3^*Start Date: ^r^7" .. licenses[i].suspension_start_date)
-		        TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^*^7---------------------------------------")
-		        found = true
-			end
-		end
-		if not found then
-			TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^0No licenses or suspensions found on that person.")
-			TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^*^7---------------------------------------")
-		end
-	end
-end, {
-	help = "Check the status of a person's licenses.",
-	params = {
-		{ name = "id", help = "id of player" }
-	}
-})
 
-TriggerEvent('es:addJobCommand', 'checklicense', {'judge', 'lawyer', 'sheriff'}, function(source, args, user)
-	print("checking individual license")
-	local usource = source
+TriggerEvent('es:addJobCommand', 'checklicense', {'judge', 'lawyer', 'sheriff'}, function(source, args, char)
 	local type = string.lower(args[2])
 	local target = tonumber(args[3])
 	local target_item_name = nil
@@ -132,77 +85,74 @@ TriggerEvent('es:addJobCommand', 'checklicense', {'judge', 'lawyer', 'sheriff'},
 		elseif type == 'bar' then
 			target_item_name = 'Bar Certificate'
 		end
-		local target_player = exports["essentialmode"]:getPlayerFromId(target)
-		local licenses = target_player.getActiveCharacterData("licenses")
-	    local user_name = target_player.getActiveCharacterData("fullName")
-	    local user_dob = target_player.getActiveCharacterData('dateOfBirth')
-	    for i = 1, #licenses do
-	    	if licenses[i].name == target_item_name then
-			    TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^*^7---------------------------------------")
-			    TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^3^*Name: ^r^7" .. user_name)
-			    TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^3^*Date of Birth: ^r^7" .. user_dob)
-		        TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^3^*License: ^r^7" .. licenses[i].name)
-		        if licenses[i].status == 'suspended' then
-		        	TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^3^*Status: ^r^1" .. licenses[i].status)
-			        TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^3^*Duration: ^r^7" .. licenses[i].suspension_days .. ' day(s)')
-			        TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^3^*Start Date: ^r^7" .. licenses[i].suspension_start_date)
-			    else
-			    	TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^3^*Status: ^r^2" .. licenses[i].status)
-				end
-				if licenses[i].issued_by then
-		        	TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^3^*Issuer: ^r^7" .. licenses[i].issued_by)
-		        end
-		        if licenses[i].expire then
-		        	TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^3^*Expires: ^r^7" .. licenses[i].expire)
-		        end
-				TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^*^7---------------------------------------")
-				return
+		local target_player = exports["usa-characters"]:GetCharacter(target)
+		local license = target_player.getItem(target_item_name)
+	    local user_name = target_player.getFullName()
+	    local user_dob = target_player.get('dateOfBirth')
+	    if license then
+		    TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "^*^7---------------------------------------")
+		    TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "^3^*Name: ^r^7" .. user_name)
+		    TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "^3^*Date of Birth: ^r^7" .. user_dob)
+	        TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "^3^*License: ^r^7" .. license.name)
+	        if license.status == 'suspended' then
+	        	TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "^3^*Status: ^r^1" .. license.status)
+		        TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "^3^*Duration: ^r^7" .. license.suspension_days .. ' day(s)')
+		        TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "^3^*Start Date: ^r^7" .. license.suspension_start_date)
+		    else
+		    	TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "^3^*Status: ^r^2" .. license.status)
 			end
+			if license.issued_by then
+	        	TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "^3^*Issuer: ^r^7" .. license.issued_by)
+	        end
+	        if license.expire then
+	        	TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "^3^*Expires: ^r^7" .. license.expire)
+	        end
+			TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "^*^7---------------------------------------")
+		else
+			TriggerClientEvent('chatMessage', source, "", {0, 0, 0}, "^3"..user_name..' ^7does not own a ^3'..target_item_name..'^7.')
 		end
-		TriggerClientEvent('chatMessage', usource, "", {0, 0, 0}, "^3"..user_name..' ^7does not own a ^3'..target_item_name..'^7.')
-		return
 	end
 end, {
-	help = "Check the information of a person's individual license.",
+	help = "Check the information of a person's individual license",
 	params = {
 		{ name = 'license type', help = 'either FP, AL, BL, BAR, or DL'},
 		{ name = "id", help = "id of player" }
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'citynotify', {'judge'}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'citynotify', {'judge'}, function(source, args, char)
 	table.remove(args,1)
 	local msg = table.concat(args, " ")
 	TriggerClientEvent('chatMessage', -1, "", {0, 0, 0}, "^3^*[SAN ANDREAS COURT] ^r^7"..msg)
 end, {
-	help = "Send a state-wide announcement.",
+	help = "Send a state-wide announcement",
 	params = {
 		{ name = "message", help = "message to be sent" }
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'expunge', {'sheriff', 'judge'}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'expunge', {'sheriff', 'judge'}, function(source, args, char)
 	local targetSource = tonumber(args[2])
 	local recordid = args[3]
-	if user.getActiveCharacterData("job") == "sheriff" then
-        if user.getActiveCharacterData("policeRank") < 4 then
-            TriggerClientEvent("usa:notify", usource, "Not high enough rank!")
+	if char.get("job") == "sheriff" then
+        if char.get("policeRank") < 4 then
+            TriggerClientEvent("usa:notify", source, "Not high enough rank!")
             return
         end
     end
 	if targetSource and GetPlayerName(targetSource) and recordid then
-		local target = exports["essentialmode"]:getPlayerFromId(targetSource)
-		local history = target.getActiveCharacterData("criminalHistory")
+		local target = exports["usa-characters"]:GetCharacter(targetSource)
+		local history = target.get("criminalHistory")
 		for i = 1, #history do
 			local offence = history[i]
 			if offence.number == recordid then
 				table.remove(history, i)
-				TriggerClientEvent('usa:notify', source, 'Offence ~y~'..offence.number..'~s~ has been expunged from ~y~'..target.getActiveCharacterData('fullName')..'~s~!')
-				target.setActiveCharacterData("criminalHistory", history)
+				TriggerClientEvent('usa:notify', source, 'Offense ~y~'..offence.number..'~s~ has been expunged~s~!')
+				target.set("criminalHistory", history)
 				return
 			end
 		end
-		TriggerClientEvent('usa:notify', source, 'Offence not found!')
+		TriggerClientEvent('usa:notify', source, 'Offense not found!')
 	else
 		TriggerClientEvent('usa:notify', source, 'Incorrect usage!')
 	end
@@ -214,19 +164,15 @@ end, {
 	}
 })
 
-
--- todo: finish below
-TriggerEvent('es:addJobCommand', 'changesuspension', {'judge'}, function(source, args, user)
-	print("changing suspension")
-	local usource = source
+TriggerEvent('es:addJobCommand', 'changesuspension', {'judge'}, function(source, args, char)
 	local type = string.lower(args[2])
 	local target = tonumber(args[3])
 	local days = tonumber(args[4])
 	local target_item_name = nil
     -- check SGT + rank for police --
-    if user.getActiveCharacterData("job") == "sheriff" then
-        if user.getActiveCharacterData("policeRank") < 4 then
-            TriggerClientEvent("usa:notify", usource, "Not high enough rank!")
+    if char.get("job") == "sheriff" then
+        if char.get("policeRank") < 4 then
+            TriggerClientEvent("usa:notify", source, "Not high enough rank!")
             return
         end
     end
@@ -238,25 +184,18 @@ TriggerEvent('es:addJobCommand', 'changesuspension', {'judge'}, function(source,
 		elseif type == 'bl' then
 			target_item_name = "Boat License"
 		end
-		local target_player = exports["essentialmode"]:getPlayerFromId(target)
-		local licenses = target_player.getActiveCharacterData("licenses")
-        local player_name = target_player.getActiveCharacterData("fullName")
-		for i = 1, #licenses do
-			if licenses[i].name == target_item_name then
-				if licenses[i].status == "suspended" then
-					licenses[i].suspension_days = days
-					target_player.setActiveCharacterData("licenses", licenses)
-					TriggerClientEvent("usa:notify", target, "Your ~y~" .. target_item_name .. " suspension~s~ was modified to end in ~y~" .. days .. " day(s)~s~.")
-					TriggerClientEvent("usa:notify", usource, "You changed " .. player_name .. "'s ~y~" .. target_item_name .. "~s~ suspension to end in ~y~" .. days .. " day(s)~s~.")
-					return
-				end
-			end
+		local target_player = exports["usa-characters"]:GetCharacter(target)
+		local license = target_player.getItem(target_item_name)
+		if license and license.status == "suspended" then
+			target_player.modifyItem(target_item_name, "suspension_days", days)
+			TriggerClientEvent("usa:notify", target, "Your ~y~" .. target_item_name .. " suspension~s~ was modified to end in ~y~" .. days .. " day(s)~s~.")
+			TriggerClientEvent("usa:notify", source, "You changed suspension to end in ~y~" .. days .. " day(s)~s~.")
+		else
+			TriggerClientEvent('usa:notify', source, 'License not found on person, or is not suspended!')
 		end
-		TriggerClientEvent('usa:notify', usource, 'License not found on person, or is not suspended!')
-		return
 	end
 end, {
-	help = "Alter a license suspension.",
+	help = "Alter a license suspension",
 	params = {
 		{ name = "license type", help = "either BL, AL or DL" },
 		{ name = "id", help = "id of player" },
@@ -264,25 +203,23 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff'}, function(source, args, user)
-	print("removing suspension")
-	local usource = source
+TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff'}, function(source, args, char)
 	local type = string.lower(args[2])
 	local target = tonumber(args[3])
 	local target_item_name = nil
 	local target_item = nil
-	local isPolice
-    -- check SGT + rank for police --
-    if user.getActiveCharacterData("job") == "sheriff" then
-        if user.getActiveCharacterData("policeRank") < 4 then
-            TriggerClientEvent("usa:notify", usource, "Not high enough rank!")
-            return
-        else
-        	isPolice = true
-        end
-    end
+	local isPolice = false
+  -- check SGT + rank for police --
+	  if char.get("job") == "sheriff" then
+	      if char.get("policeRank") < 4 then
+	          TriggerClientEvent("usa:notify", source, "Not high enough rank!")
+	          return
+	      else
+	      	isPolice = true
+	      end
+	  end
 	if type and GetPlayerName(target) then
-		local target_player = exports["essentialmode"]:getPlayerFromId(target)
+		local target_player = exports["usa-characters"]:GetCharacter(target)
 		local timestamp = os.date("*t", os.time())
 		if type == "dl" then
 			target_item_name = "Driver's License"
@@ -290,12 +227,11 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff'}, function(source,
 				name = "Driver\'s License",
 				number = "F" .. tostring(math.random(1, 2543678)),
 				quantity = 1,
-				ownerName = target_player.getActiveCharacterData("fullName"),
-				issued_by = user.getActiveCharacterData("fullName"),
-				ownerDob = target_player.getActiveCharacterData("dateOfBirth"),
+				ownerName = target_player.getFullName(),
+				issued_by = char.getFullName(),
+				ownerDob = char.get("dateOfBirth"),
 				expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
 				status = "valid",
-				notDroppable = false,
 				type = "license"
 			}
 		elseif type == "fp" then
@@ -304,16 +240,16 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff'}, function(source,
 				name = "Firearm Permit",
 				number = "G" .. tostring(math.random(1, 254367)),
 				quantity = 1,
-				ownerName = target_player.getActiveCharacterData("fullName"),
-				issued_by = user.getActiveCharacterData("fullName"),
-				ownerDob = target_player.getActiveCharacterData('dateOfBirth'),
+				ownerName = target_player.getFullName(),
+				issued_by = char.getFullName(),
+				ownerDob = char.get("dateOfBirth"),
 				expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
 				status = "valid",
-				notDroppable = false,
 				type = "license"
 			}
 		elseif type == 'bl' then
 			if isPolice then
+				TriggerClientEvent('usa:notify', source, 'You cannot issue this license.')
 				return
 			else
 				target_item_name = "Boat License"
@@ -321,17 +257,17 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff'}, function(source,
 					name = 'Boat License',
 					number = 'BL' .. tostring(math.random(1, 254367)),
 					quantity = 1,
-					ownerName = target_player.getActiveCharacterData('fullName'),
-					issued_by = user.getActiveCharacterData('fullName'),
-					ownerDob = target_player.getActiveCharacterData('dateOfBirth'),
-					expire = timestamp.month .. '/' .. timestamp.day .. '/' ..timestamp.year + 1,
-					status = 'valid',
-					notDroppable = false,
-					type = 'license'
+					ownerName = target_player.getFullName(),
+					issued_by = char.getFullName(),
+					ownerDob = char.get("dateOfBirth"),
+					expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
+					status = "valid",
+					type = "license"
 				}
 			end
 		elseif type == 'al' then
 			if isPolice then
+				TriggerClientEvent('usa:notify', source, 'You cannot issue this license.')
 				return
 			else
 				target_item_name = "Aircraft License"
@@ -339,17 +275,17 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff'}, function(source,
 					name = 'Aircraft License',
 					number = 'AL' .. tostring(math.random(1, 254367)),
 					quantity = 1,
-					ownerName = target_player.getActiveCharacterData('fullName'),
-					issued_by = user.getActiveCharacterData('fullName'),
-					ownerDob = target_player.getActiveCharacterData('dateOfBirth'),
-					expire = timestamp.month .. '/' .. timestamp.day .. '/' ..timestamp.year + 1,
-					status = 'valid',
-					notDroppable = false,
-					type = 'license'
+					ownerName = target_player.getFullName(),
+					issued_by = char.getFullName(),
+					ownerDob = char.get("dateOfBirth"),
+					expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
+					status = "valid",
+					type = "license"
 				}
 			end
 		elseif type == 'bar' then
 			if isPolice then
+				TriggerClientEvent('usa:notify', source, 'You cannot issue this license.')
 				return
 			else
 				target_item_name = 'Bar Certificate'
@@ -357,45 +293,43 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff'}, function(source,
 					name = 'Bar Certificate',
 					number = 'B' .. tostring(math.random(1, 254367)),
 					quantity = 1,
-					ownerName = target_player.getActiveCharacterData('fullName'),
-					issued_by = user.getActiveCharacterData('fullName'),
-					ownerDob = target_player.getActiveCharacterData('dateOfBirth'),
-					expire = timestamp.month .. '/' .. timestamp.day .. '/' ..timestamp.year + 3,
-					status = 'valid',
-					notDroppable = true,
-					type = 'license'
+					ownerName = target_player.getFullName(),
+					issued_by = char.getFullName(),
+					ownerDob = char.get("dateOfBirth"),
+					expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
+					status = "valid",
+					type = "license"
 				}
 			end
 		end
-		local licenses = target_player.getActiveCharacterData("licenses")
-        local player_name = target_player.getActiveCharacterData("fullName")
+		local licenses = target_player.getLicenses()
+    	local player_name = target_player.getFullName()
 		for i = 1, #licenses do
 			if licenses[i].name == target_item_name then
-				TriggerClientEvent("usa:notify", usource, player_name .. " already has a ~y~" .. target_item_name .. "~s~!")
+				TriggerClientEvent("usa:notify", source, player_name .. " already has a " .. target_item_name .. "!")
 				return
 			end
 		end
 		-- not found at this point, issue it to them --
-		local judgeMoney = user.getActiveCharacterData('money')
+		local judgeMoney = char.get('money')
 		local amountPaid = nil
 		for license, price in pairs(licensePrices) do
 			if license == target_item_name then
 				if judgeMoney - price >= 0  then
 					amountPaid = price
-					user.setActiveCharacterData('money', judgeMoney - price)
+					char.removeMoney(price)
 				else
-					TriggerClientEvent('usa:notify', usource, 'You require ~y~$'..price..'.00~s~ to issue this license.')
+					TriggerClientEvent('usa:notify', source, 'You require ~y~$'..price..'.00~s~ to issue this license.')
 					return
 				end
 			end
 		end
-		table.insert(licenses, target_item)
-		target_player.setActiveCharacterData("licenses", licenses)
-		TriggerClientEvent("usa:notify", usource, "You issued a ~y~" .. target_item_name .. "~s~ to " .. player_name .. " for ~y~$"..amountPaid..'.00~s~!')
+		target_player.giveItem(target_item)
+		TriggerClientEvent("usa:notify", source, "You issued a ~y~" .. target_item_name .. "~s~ for ~y~$"..amountPaid..'.00~s~!')
 		TriggerClientEvent("usa:notify", target, "You were issued a ~y~" .. target_item_name .. "~s~!")
 	end
 end, {
-	help = "Issue a license to a person (COLLECT MONEY FIRST).",
+	help = "Issue a license to a person (COLLECT MONEY FIRST)",
 	params = {
 		{ name = "license type", help = "either FP, BL, AL, BAR, or DL" },
 		{ name = "id", help = "id of player" }
@@ -403,17 +337,15 @@ end, {
 })
 
 -- TODO: check if police rank is SGT + for use of below command ...
-TriggerEvent('es:addJobCommand', 'suspend', {'judge', "sheriff"}, function(source, args, user)
-	print("adding suspension")
-	local usource = source
+TriggerEvent('es:addJobCommand', 'suspend', {'judge', "sheriff"}, function(source, args, char)
 	local type = string.lower(args[2])
 	local target = tonumber(args[3])
     local days = tonumber(args[4])
 	local target_item_name = nil
     -- check SGT + rank for police --
-    if user.getActiveCharacterData("job") == "sheriff" then
-        if user.getActiveCharacterData("policeRank") < 4 then
-            TriggerClientEvent("usa:notify", usource, "Not high enough rank!")
+    if char.get("job") == "sheriff" then
+        if char.get("policeRank") < 4 then
+            TriggerClientEvent("usa:notify", source, "Not high enough rank!")
             return
         end
     end
@@ -428,34 +360,22 @@ TriggerEvent('es:addJobCommand', 'suspend', {'judge', "sheriff"}, function(sourc
 			target_item_name = "Bar Certificate"
 		end
 		if target_item_name then
-			local target_player = exports["essentialmode"]:getPlayerFromId(target)
-			local licenses = target_player.getActiveCharacterData("licenses")
-	        local target_player_name = target_player.getActiveCharacterData("fullName")
-	        for i = 1, #licenses do
-	            local license =  licenses[i]
-	            if license.name == target_item_name then
-	            	if license.status ~= 'suspended' then
-		                licenses[i].status = "suspended"
-		                licenses[i].suspension_start = os.time()
-		                licenses[i].suspension_days = days
-		                licenses[i].suspension_start_date = os.date('%m-%d-%Y %H:%M:%S', os.time())
-		                print(target_item_name .. " suspended for " .. days)
-		                TriggerClientEvent("usa:notify", usource,  "You have suspended " .. target_player_name .. "'s ~y~" .. target_item_name .. "~s~ for ~y~" .. days .. " day(s)~s~.")
-		                TriggerClientEvent("usa:notify", target,  "Your ~y~" .. target_item_name .. "~s~ has been ~y~suspended~s~ for ~y~" .. days .. " day(s)~s~.")
-						target_player.setActiveCharacterData("licenses", licenses)
-		                return
-		            else
-		            	TriggerClientEvent('usa:notify', usource, 'This license is already suspended!')
-		            	return
-		            end
-	            end
-	        end
+			local target_player = exports["usa-characters"]:GetCharacter(target)
+			local license =  target_player.getItem(target_item_name)
+			if license then
+	        	target_player.modifyItem(target_item_name, "status", "suspended")
+		      	target_player.modifyItem(target_item_name, "suspension_start", os.time())
+		      	target_player.modifyItem(target_item_name, "suspension_days", days)
+		      	target_player.modifyItem(target_item_name, "suspension_start_date", os.date('%m-%d-%Y %H:%M:%S', os.time()))
+                TriggerClientEvent("usa:notify", source,  "You have suspended ~y~" .. target_item_name .. "~s~ for ~y~" .. days .. " day(s)~s~.")
+                TriggerClientEvent("usa:notify", target,  "Your ~y~" .. target_item_name .. "~s~ has been ~y~suspended~s~ for ~y~" .. days .. " day(s)~s~.")
+            else
+            	TriggerClientEvent('usa:notify', source, 'This license is already suspended!')
+            end
 	    end
-        TriggerClientEvent("usa:notify", usource, "License type not found!")
-        return
 	end
 end, {
-	help = "Suspend a person's license.",
+	help = "Suspend a person's license",
 	params = {
 		{ name = "license type", help = "either BL, AL or DL"},
 		{ name = "id", help = "id of player" },
@@ -463,19 +383,18 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'revoke', {'judge', 'sheriff'}, function(source, args, user)
-	print('revoking a license')
-	local usource = source
+TriggerEvent('es:addJobCommand', 'revoke', {'judge', 'sheriff'}, function(source, args, char)
 	local type = string.lower(args[2])
 	local target = tonumber(args[3])
 	local target_item_name = nil
     -- check SGT + rank for police --
-    if user.getActiveCharacterData("job") == "sheriff" then
-        if user.getActiveCharacterData("policeRank") < 4 then
+    if char.get("job") == "sheriff" then
+        if char.get("policeRank") < 4 then
             TriggerClientEvent("usa:notify", usource, "Not high enough rank!")
             return
         end
     end
+
 	if type and GetPlayerName(target) then
 		if type == "dl" then
 			target_item_name = "Driver's License"
@@ -488,57 +407,19 @@ TriggerEvent('es:addJobCommand', 'revoke', {'judge', 'sheriff'}, function(source
 		elseif type == 'bar' then
 			target_item_name = 'Bar Certificate'
 		end
-		local target_player = exports["essentialmode"]:getPlayerFromId(target)
-		local licenses = target_player.getActiveCharacterData("licenses")
-        local target_player_name = target_player.getActiveCharacterData("fullName")
-        for i = 1, #licenses do
-            local license =  licenses[i]
-            if license.name == target_item_name then
-            	table.remove(licenses, i)
-				target_player.setActiveCharacterData("licenses", licenses)
-				TriggerClientEvent("usa:notify", usource,  "You have revoked " .. target_player_name .. "~s~'s ~y~" .. target_item_name .. "~s~.")
-	            TriggerClientEvent("usa:notify", target,  "Your ~y~" .. target_item_name .. "~s~ has been revoked.")
-	            return
-            end
+		local target_player = exports["usa-characters"]:GetCharacter(target)
+		if target_player.hasItem(target_item_name) then
+			target_player.removeItem(target_item_name, 1)
+			TriggerClientEvent("usa:notify", usource,  "You have revoked ~y~" .. target_item_name .. "~s~.")
+        	TriggerClientEvent("usa:notify", target,  "Your ~y~" .. target_item_name .. "~s~ has been revoked.")
+        else
+        	TriggerClientEvent("usa:notify", usource, "No "..target_item_name.." found~s~!")
         end
-        print(target_player_name .. " had no " .. target_item_name .. "!")
-        TriggerClientEvent("usa:notify", usource, target_player_name .. " had no ~y~" .. target_item_name .. "~s~!")
-        return
 	end
 end, {
-	help = "Revoke a person's license.",
+	help = "Revoke a person's license",
 	params = {
 		{ name = "license type", help = "either FP, BL, AL, BAR or DL"},
 		{ name = "id", help = "id of player" }
 	}
 })
---[[
-TriggerClientEvent("usa:notify", usource, "You issued that person a " .. target_item_name .. "!")
-TriggerClientEvent("usa:notify", usource, "You were issued a " .. target_item_name .. "!")
-
-local licenses = user.getActiveCharacterData("licenses")
-for i = 1, #licenses do
-    local license =  licenses[i]
-    if  license.name == "Firearm Permit" then
-        licenses[i].status = status
-        if status == "suspended" then
-            licenses[i].suspension_start = os.time()
-            licenses[i].suspension_days = days
-            licenses[i].suspension_start_date = os.date('%m-%d-%Y %H:%M:%S', os.time())
-        end
-        print("gun permit set to: " .. status .. " for " .. days)
-        user.setActiveCharacterData("licenses", licenses)
-        return
-    end
-end
-print("person had no firearm permit!")
-]]
-
---[[
- /issue [type] [id]
-/changesuspension [type] [id] [days]
-/checksuspension [id]
-/removesuspension [type] [id]
-
-todo: add /suspend [type] [id] [days]
-]]

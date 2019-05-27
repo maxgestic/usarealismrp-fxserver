@@ -3,13 +3,13 @@ local SPOTLIGHTS = {}
 
 local MAX_SPOTLIGHT_RUN_TIME_MINUTES = 15
 
-TriggerEvent('es:addJobCommand', 'spotlight', {"sheriff", "ems", "corrections", "fire"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'spotlight', {"sheriff", "ems", "corrections", "fire"}, function(source, args, char)
   TriggerClientEvent("spotlight:spotlight", source)
 end, {
 	help = "Toggle spot light on / off. Use arrow keys to navigate."
 })
 
-TriggerEvent('es:addJobCommand', 's', {"sheriff", "ems", "corrections", "fire"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 's', {"sheriff", "ems", "corrections", "fire"}, function(source, args, char)
   TriggerClientEvent("spotlight:spotlight", source)
 end, {
 	help = "Toggle spot light on / off. Use arrow keys to navigate."
@@ -18,7 +18,6 @@ end, {
 RegisterServerEvent("spotlight:addSpotlight")
 AddEventHandler("spotlight:addSpotlight", function(spotlight)
     spotlight.last_used_time = os.time()
-    print("spotlight start time: " .. spotlight.last_used_time)
     table.insert(SPOTLIGHTS, spotlight)
     TriggerClientEvent("spotlight:syncSpotlights", -1, SPOTLIGHTS)
 end)
@@ -49,9 +48,8 @@ end)
 
 RegisterServerEvent("spotlight:checkJob")
 AddEventHandler("spotlight:checkJob", function()
-  local user = exports["essentialmode"]:getPlayerFromId(source)
-  local user_job = user.getActiveCharacterData("job")
-  if user_job == "sheriff" or user_job == "corrections" or user_job == "ems" or user_job == "fire" then
+  local job = exports["usa-characters"]:GetCharacterField(source, "job")
+  if job == "sheriff" or job == "corrections" or job == "ems" or job == "fire" then
     TriggerClientEvent("spotlight:spotlight", source)
   end
 end)
