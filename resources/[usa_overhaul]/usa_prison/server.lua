@@ -1,21 +1,18 @@
 -- Check inmates remaining jail time --
-TriggerEvent('es:addJobCommand', 'roster', {"corrections"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'roster', {"corrections"}, function(source, args, char)
 	local hasInmates = false
 	TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1^*[BOLINGBROKE PENITENTIARY]")
-	TriggerEvent("es:getPlayers", function(players)
-		for id, player in pairs(players) do
-			if id and player then
-				local time = player.getActiveCharacterData("jailtime")
-				if time > 0 then
-					hasInmates = true
-					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1 - ^0" .. player.getActiveCharacterData("fullName") .. " ^1^*|^r^0 " .. time .. " month(s)")
-				end
-			end
+	local characters = exports["usa-characters"]:GetCharacters()
+	for id, char in pairs(characters) do
+		local time = char.get("jailtime")
+		if time > 0 then
+			hasInmates = true
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1 - ^0" .. char.getFullName() .. " ^1^*|^r^0 " .. time .. " month(s)")
 		end
-		if not hasInmates then
-			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1 - ^0There are no inmates at this time")
-		end
-	end)
+	end
+	if not hasInmates then
+		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1 - ^0There are no inmates at this time")
+	end
 end)
 
 ----------------
@@ -23,7 +20,7 @@ end)
 ----------------
 local cellblockOpen = false
 
-TriggerEvent('es:addJobCommand', 'c', {"corrections"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'c', {"corrections"}, function(source, args, char)
 	cellblockOpen = not cellblockOpen
 	print("cellblock is now: " .. tostring(cellblockOpen))
 	TriggerClientEvent('toggleJailDoors', -1, cellblockOpen)
@@ -31,13 +28,12 @@ end)
 
 RegisterServerEvent("jail:checkJobForWarp")
 AddEventHandler("jail:checkJobForWarp", function()
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local user_job = user.getActiveCharacterData("job")
-	if user_job == "sheriff" or user_job == "ems" or user_job == "fire" or user_job == "corrections" then
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local job = char.get("job")
+	if job == "sheriff" or job == "ems" or job == "fire" or job == "corrections" then
 		TriggerClientEvent("jail:continueWarp", source)
 	else
 		TriggerClientEvent("usa:notify", source, "That area is prohibited!")
-		print("user tried to enter prohibited prison area! job was: " .. user_job)
 	end
 end)
 
@@ -75,72 +71,61 @@ end)
 
 RegisterServerEvent("doc:checkWhitelist")
 AddEventHandler("doc:checkWhitelist", function(loc)
-	local usource = source
 	for i = 1, #DOC_EMPLOYEES do
-		if DOC_EMPLOYEES[i].identifier == GetPlayerIdentifiers(usource)[1] then
+		if DOC_EMPLOYEES[i].identifier == GetPlayerIdentifiers(source)[1] then
 			if tonumber(DOC_EMPLOYEES[i].rank) <= 0 then
 				print("DOC EMPLOYEE DID NOT EXIST")
-				TriggerClientEvent("usa:notify", usource, "You don't work here!")
+				TriggerClientEvent("usa:notify", source, "You don't work here!")
 			else
 				print("DOC EMPLOYEE EXISTED")
-				local user = exports["essentialmode"]:getPlayerFromId(usource)
-				TriggerClientEvent("doc:open", usource)
+				TriggerClientEvent("doc:open", source)
 			end
 			return
 		end
 	end
-	print("DOC EMPLOYEE DID NOT EXIST")
 	TriggerClientEvent("usa:notify", source, "You don't work here!")
 end)
 
 RegisterServerEvent("doc:offduty")
 AddEventHandler("doc:offduty", function()
-	local usource = source
-	local user = exports["essentialmode"]:getPlayerFromId(usource)
-	local job = user.getActiveCharacterData("job")
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local job = char.get("job")
 	-------------------------
 	-- put back to civ job --
 	-------------------------
 	if job == "corrections" then
 		TriggerEvent('job:sendNewLog', source, 'corrections', false)
 	end
-	user.setActiveCharacterData("job", "civ")
-	TriggerClientEvent("usa:notify", usource, "You have clocked out!")
-	TriggerEvent("eblips:remove", usource)
-	TriggerClientEvent("interaction:setPlayersJob", usource, "civ")
-	local playerWeapons = user.getActiveCharacterData("weapons")
-	local chars = user.getCharacters()
-	for i = 1, #chars do
-		if chars[i].active == true then
-			TriggerClientEvent("doc:setciv", usource, chars[i].appearance, playerWeapons)
-			break
-		end
-	end
+	char.set("job", "civ")
+	TriggerClientEvent("usa:notify", source, "You have clocked out!")
+	TriggerEvent("eblips:remove", source)
+	TriggerClientEvent("interaction:setPlayersJob", source, "civ")
+	local playerWeapons = char.get("weapons")
+	local appearance = char.get("appearance")
+	TriggerClientEvent("doc:setciv", source, appearance, playerWeapons)
 	-----------------------------------
 	-- change back into civ clothing --
 	-----------------------------------
 	--print("closing DOC menu!")
-	TriggerClientEvent("doc:close", usource)
-	-- PTT --
-	TriggerClientEvent("ptt:isEmergency", usource, false)
+	TriggerClientEvent("doc:close", source)
+	TriggerClientEvent("ptt:isEmergency", source, false)
 end)
 
 RegisterServerEvent("doc:forceDuty")
 AddEventHandler("doc:forceDuty", function()
-	local usource = source
-	local user = exports["essentialmode"]:getPlayerFromId(usource)
-	local job = user.getActiveCharacterData("job")
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local job = char.get("job")
 	if job ~= "corrections" then
 		----------------------------
 		-- set to corrections job --
 		----------------------------
-		user.setActiveCharacterData("job", "corrections")
-		TriggerEvent("doc:loadUniform", 1, usource)
-		TriggerClientEvent("usa:notify", usource, "You have clocked in!")
+		char.set("job", "corrections")
+		TriggerEvent("doc:loadUniform", 1, source)
+		TriggerClientEvent("usa:notify", source, "You have clocked in!")
 		TriggerEvent('job:sendNewLog', source, 'corrections', true)
-		TriggerClientEvent("ptt:isEmergency", usource, true)
-		TriggerClientEvent("interaction:setPlayersJob", usource, "corrections")
-		TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = usource, color = 82})
+		TriggerClientEvent("ptt:isEmergency", source, true)
+		TriggerClientEvent("interaction:setPlayersJob", source, "corrections")
+		TriggerEvent("eblips:add", {name = char.getName(), src = source, color = 82})
 	end
 end)
 
@@ -173,16 +158,16 @@ RegisterServerEvent("doc:loadOutfit")
 AddEventHandler("doc:loadOutfit", function(slot, id)
 	if id then source = id end
 	local usource = source
-	local user = exports["essentialmode"]:getPlayerFromId(usource)
-	local job = user.getActiveCharacterData("job")
+	local char = exports["usa-characters"]:GetCharacter(usource)
+	local job = char.get("job")
 	local player_identifer = GetPlayerIdentifiers(usource)[1]
 	if job ~= "corrections" then
-		user.setActiveCharacterData("job", "corrections")
+		char.set("job", "corrections")
 		TriggerEvent('job:sendNewLog', source, 'corrections', true)
 		TriggerClientEvent("usa:notify", usource, "You have clocked in!")
 		TriggerClientEvent("ptt:isEmergency", usource, true)
 		TriggerClientEvent("interaction:setPlayersJob", usource, "corrections")
-		TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = usource, color = 82})
+		TriggerEvent("eblips:add", {name = char.getName(), src = usource, color = 82})
 	end
 	TriggerEvent('es:exposeDBFunctions', function(usersTable)
 		usersTable.getDocumentByRow("correctionaldepartment", "identifier" , player_identifer, function(result)
@@ -195,13 +180,12 @@ end)
 
 RegisterServerEvent("doc:spawnVehicle")
 AddEventHandler("doc:spawnVehicle", function(hash)
-	local usource = source
-	local user = exports["essentialmode"]:getPlayerFromId(usource)
-	local job = user.getActiveCharacterData("job")
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local job = char.get("job")
 	if job == "corrections" then
-		TriggerClientEvent("doc:spawnVehicle", usource, hash)
+		TriggerClientEvent("doc:spawnVehicle", source, hash)
 	else
-		TriggerClientEvent("usa:notify", usource, "You are not on-duty!")
+		TriggerClientEvent("usa:notify", source, "You are not on-duty!")
 	end
 end)
 
@@ -209,14 +193,12 @@ end)
 RegisterServerEvent("doc:checkRankForWeapon")
 AddEventHandler("doc:checkRankForWeapon", function(weapon)
 	local usource = source
-	local user = exports["essentialmode"]:getPlayerFromId(usource)
-	local job = user.getActiveCharacterData("job")
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local job = char.get("job")
 	if job == "corrections" then
 		TriggerEvent('es:exposeDBFunctions', function(GetDoc)
 			GetDoc.getDocumentByRow("correctionaldepartment", "identifier" , GetPlayerIdentifiers(usource)[1], function(result)
 				if type(result) ~= "boolean" then
-					print("result.rank: " .. result.rank)
-					print("weapon.rank: " .. weapon.rank)
 					if result.rank >= weapon.rank then
 						TriggerClientEvent("doc:equipWeapon", usource, weapon)
 						return
@@ -258,25 +240,22 @@ TriggerEvent('es:addJobCommand', 'setcorrectionsrank', {"corrections"}, function
 				return
 			end
 
-			local target = exports["essentialmode"]:getPlayerFromId(tonumber(args[2]))
+			local target = exports["usa-characters"]:GetCharacter(tonumber(args[2]))
 			local employee = {
 				identifier = GetPlayerIdentifiers(tonumber(args[2]))[1],
-				name = target.getActiveCharacterData("fullName"),
+				name = target.getFullName(),
 				rank = tonumber(args[3])
 			}
 
 			GetDoc.getDocumentByRow("correctionaldepartment", "identifier" , employee.identifier, function(result)
-				print("type: " .. type(result))
 				if type(result) ~= "boolean" then
 					GetDoc.updateDocument("correctionaldepartment", result._id, {rank = employee.rank}, function()
-						print("rank updated to: " .. employee.rank)
 						TriggerClientEvent('chatMessage', usource, "", {255, 255, 255}, "^0Employee " .. employee.name .. "updated, rank: " .. employee.rank .. "!")
 						loadDOCEmployees()
 					end)
 				else
 					-- insert into db --
 					GetDoc.createDocument("correctionaldepartment", employee, function()
-						print("employee created!")
 						-- notify:
 						TriggerClientEvent('chatMessage', usource, "", {255, 255, 255}, "^0Employee " .. employee.name .. "created, rank: " .. employee.rank .. "!")
 						-- refresh employees:

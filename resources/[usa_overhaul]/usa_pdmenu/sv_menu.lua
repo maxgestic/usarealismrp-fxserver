@@ -1,12 +1,11 @@
 RegisterServerEvent("pdmenu:checkWhitelist")
 AddEventHandler("pdmenu:checkWhitelist", function(clientevent)
-  local userSource = tonumber(source)
-  local user = exports["essentialmode"]:getPlayerFromId(userSource)
-  local user_job = user.getActiveCharacterData("job")
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local user_job = char.get("job")
   if user_job == "sheriff" or user_job == "cop" or user_job == "dai" then
-    TriggerClientEvent(clientevent, userSource)
+    TriggerClientEvent(clientevent, source)
   else
-    TriggerClientEvent("usa:notify", userSource, "~y~You are not on-duty for POLICE.")
+    TriggerClientEvent("usa:notify", source, "~y~You are not on-duty for POLICE.")
   end
 end)
 
@@ -29,14 +28,13 @@ local VEH_RANKS = {
 
 RegisterServerEvent('pdmenu:returnAllowedVehicles')
 AddEventHandler('pdmenu:returnAllowedVehicles', function()
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	local user_job = user.getActiveCharacterData("job")
+	local char = exports["essentialmode"]:GetCharacter(source)
+	local user_job = char.get("job")
 	if user_job == "dai" then
-		TriggerClientEvent('pdmenu:sendAllowedVehicles', userSource, VEH_RANKS['dai'])
+		TriggerClientEvent('pdmenu:sendAllowedVehicles', source, VEH_RANKS['dai'])
 	else
-		local user_rank = tonumber(user.getActiveCharacterData("policeRank"))
+		local user_rank = tonumber(char.get("policeRank"))
 		local allowedVehicles = VEH_RANKS[user_rank]
-		TriggerClientEvent('pdmenu:sendAllowedVehicles', userSource, allowedVehicles)
+		TriggerClientEvent('pdmenu:sendAllowedVehicles', source, allowedVehicles)
 	end
 end)

@@ -1,6 +1,6 @@
 local detectableItems = {'weed', 'cocaine', 'meth', 'pseudo', 'phosphorus'}
 
-TriggerEvent('es:addJobCommand', 'k9', {'sheriff', 'police'}, function(source, args, user, location)
+TriggerEvent('es:addJobCommand', 'k9', {'sheriff', 'police'}, function(source, args, char, location)
 	TriggerClientEvent('k9:openMenu', source)
 end, {
 	help = "Open the K9 interaction menu",
@@ -13,14 +13,15 @@ end)
 
 RegisterServerEvent('k9:smellPlayer')
 AddEventHandler('k9:smellPlayer', function(targetSource)
-	local userSource = source
-	local target = exports["essentialmode"]:getPlayerFromId(targetSource)
-	local targetInv = target.getActiveCharacterData('inventory')
-	for i = 1, #targetInv do
-		local item = targetInv[i]
-		if IsItemDetectable(item.name) or item.residue then
-			TriggerClientEvent('k9:returnSmell', userSource)
-			return
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local inventory = char.get("inventory")
+	for i = 0, (inventory.MAX_CAPACITY - 1) do
+		if inventory.items[tostring(i)] then
+			local item = inventory.items[tostring(i)]
+			if IsItemDetectable(item.name) or item.residue then
+				TriggerClientEvent('k9:returnSmell', source)
+				return
+			end
 		end
 	end
 end)

@@ -1,5 +1,5 @@
 -- hand on radio:
-TriggerEvent('es:addJobCommand', 'r', { "police", "sheriff", "ems", "corrections" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'r', { "police", "sheriff", "ems", "corrections" }, function(source, args, char)
 	local playerSource = source
 	if type(tonumber(args[2])) ~= "number" then TriggerClientEvent("usa:notify", "Invalid format!") end
 	TriggerEvent('usaSettings:returnUserSettings', playerSource, function(settings)
@@ -8,7 +8,7 @@ TriggerEvent('es:addJobCommand', 'r', { "police", "sheriff", "ems", "corrections
 	end)
 	TriggerClientEvent("ptt:returnHotkey", source, tonumber(args[2]))
 end, {
-	help = "Set your dispatch radio microphone control key." ,
+	help = "Set your dispatch radio microphone control key" ,
 	params = {
 		{ name = "control", help = "See control reference key list" }
 	}

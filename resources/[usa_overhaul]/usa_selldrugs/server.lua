@@ -27,7 +27,7 @@ AddEventHandler('sellDrugs:checkPlayerHasDrugs', function()
 		else
 			if debug then print("nothing to sell!!") end
 		end
-	end)
+	end
 end)
 
 -- player sold something, remove item + reward with money

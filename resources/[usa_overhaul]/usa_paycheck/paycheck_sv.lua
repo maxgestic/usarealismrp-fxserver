@@ -5,13 +5,12 @@ AddEventHandler('paycheck:welfare', function()
 	local isWelfare = false
   	local paycheckAmount
 
-	--TriggerEvent('es:getPlayerFromId', source, function(user)
- 	 local user = exports["essentialmode"]:getPlayerFromId(source)
-
-	local job = user.getActiveCharacterData("job")
+  	local char = exports["usa-characters"]:GetCharacter(source)
+  	if not char then return end
+	local job = exports["usa-characters"]:GetCharacterField(source, "job")
 
 		if job == "cop" or job == "sheriff" or job == "highwaypatrol" or job == "fbi" then
-			local cop_rank = user.getActiveCharacterData("policeRank")
+			local cop_rank = char.get("policeRank")
 			paycheckAmount = 60
 			  if cop_rank == 2 then
 				paycheckAmount = 75
@@ -33,7 +32,7 @@ AddEventHandler('paycheck:welfare', function()
 				paycheckAmount = 210
 			  end
 		elseif job == "ems" or job == "fire" then
-			local rank = user.getActiveCharacterData("emsRank")
+			local rank = char.get("emsRank")
 			paycheckAmount = 70
 			if rank == 2 then
 				paycheckAmount = 90
@@ -72,9 +71,8 @@ AddEventHandler('paycheck:welfare', function()
 		end
 
 		-- Give user the dough!!
-		local user_money = user.getActiveCharacterData("bank")
-		if user_money then
-			user.setActiveCharacterData("bank", user_money + paycheckAmount)
+		if char.get("money") then
+			char.giveBank(paycheckAmount)
 			msg = "You received a "
 			if isWelfare then
 				msg = msg .. "welfare check "
@@ -105,8 +103,8 @@ AddEventHandler('paycheck:welfare', function()
 				msg = msg .. "of $" .. paycheckAmount .. "."
 			end
 			-- Notify the user
-			local user_time = user.getActiveCharacterData("ingameTime")
-			user.setActiveCharacterData("ingameTime", user_time + 10)
+			local user_time = char.get("ingameTime")
+			char.set("ingameTime", user_time + 10)
 			TriggerClientEvent('usa:notify', source, msg)
 		else
 			-- no active char, don't pay
@@ -115,13 +113,13 @@ AddEventHandler('paycheck:welfare', function()
 
 end)
 
-TriggerEvent('es:addCommand', 'job', function(source, args, user)
-	local job = user.getActiveCharacterData("job")
+TriggerEvent('es:addCommand', 'job', function(source, args, char)
+	local job = char.get("job")
 	myJob(job, source)
 end, { help = "See what your active job is" })
 
-TriggerEvent('es:addCommand', 'myjob', function(source, args, user)
-	local job = user.getActiveCharacterData("job")
+TriggerEvent('es:addCommand', 'myjob', function(source, args, char)
+	local job = char.get("job")
 	myJob(job, source)
 end, { help = "See what your active job is" })
 

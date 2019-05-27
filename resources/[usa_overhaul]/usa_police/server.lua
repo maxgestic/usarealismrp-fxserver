@@ -26,47 +26,38 @@ AddEventHandler('rconCommand', function(commandName, args)
     end
 
     if wl_type == "police" then
-      TriggerEvent("es:getPlayerFromId", tonumber(playerId), function(user)
-        if(user)then
-          if rank > 0 then
-            user.setActiveCharacterData("policeRank", rank)
-            RconPrint("DEBUG: " .. playerId .. "'s police rank has been set to: " .. rank .. "!")
-            TriggerClientEvent('chatMessage', tonumber(playerId), "CONSOLE", {255, 255, 255}, "You have been whitelisted for police, rank: " .. rank)
-          else
-            user.setActiveCharacterData("policeRank", 0)
-            user.setActiveCharacterData("job", "civ")
-            RconPrint("DEBUG: " .. playerId .. " un-whitelisted as police.")
-          end
-        end
-      end)
+      local char = exports["usa-characters"]:GetCharacter(playerId)
+      if rank > 0 then
+        char.set("policeRank", rank)
+        RconPrint("DEBUG: " .. playerId .. "'s police rank has been set to: " .. rank .. "!")
+        TriggerClientEvent('chatMessage', tonumber(playerId), "CONSOLE", {255, 255, 255}, "You have been whitelisted for police, rank: " .. rank)
+      else
+        char.set("policeRank", 0)
+        char.set("job", "civ")
+        RconPrint("DEBUG: " .. playerId .. " un-whitelisted as police.")
+      end
     elseif wl_type == "ems" then
-      TriggerEvent("es:getPlayerFromId", tonumber(playerId), function(user)
-        if(user)then
-          if rank > 0 then
-            user.setActiveCharacterData("emsRank", rank)
-            RconPrint("DEBUG: " .. playerId .. "'s EMS rank has been set to: " .. rank .. "!")
-            TriggerClientEvent('chatMessage', tonumber(playerId), "CONSOLE", {255, 255, 255}, "You have been whitelisted for EMS, rank: " .. rank)
-          else
-            user.setActiveCharacterData("emsRank", 0)
-            user.setActiveCharacterData("job", "civ")
-            RconPrint("DEBUG: " .. playerId .. " un-whitelisted as EMS.")
-          end
-        end
-      end)
+      local char = exports["usa-characters"]:GetCharacter(playerId)
+      if rank > 0 then
+        char.set("emsRank", rank)
+        RconPrint("DEBUG: " .. playerId .. "'s EMS rank has been set to: " .. rank .. "!")
+        TriggerClientEvent('chatMessage', tonumber(playerId), "CONSOLE", {255, 255, 255}, "You have been whitelisted for EMS, rank: " .. rank)
+      else
+        char.set("emsRank", 0)
+        char.set("job", "civ")
+        RconPrint("DEBUG: " .. playerId .. " un-whitelisted as EMS.")
+      end
     elseif wl_type == "judge" then
-      TriggerEvent("es:getPlayerFromId", tonumber(playerId), function(user)
-        if(user)then
-          if rank > 0 then
-            user.setActiveCharacterData("judgeRank", rank)
-            RconPrint("DEBUG: " .. playerId .. "'s judge rank has been set to: " .. rank .. "!")
-            TriggerClientEvent('chatMessage', tonumber(playerId), "CONSOLE", {255, 255, 255}, "You have been whitelisted for judge, rank: " .. rank)
-          else
-            user.setActiveCharacterData("judgeRank", 0)
-            user.setActiveCharacterData("job", "civ")
-            RconPrint("DEBUG: " .. playerId .. " un-whitelisted as judge.")
-          end
-        end
-      end)
+      local char = exports["usa-characters"]:GetCharacter(playerId)
+      if rank > 0 then
+        char.set("judgeRank", rank)
+        RconPrint("DEBUG: " .. playerId .. "'s judge rank has been set to: " .. rank .. "!")
+        TriggerClientEvent('chatMessage', tonumber(playerId), "CONSOLE", {255, 255, 255}, "You have been whitelisted for judge, rank: " .. rank)
+      else
+        char.set("judgeRank", 0)
+        char.set("job", "civ")
+        RconPrint("DEBUG: " .. playerId .. " un-whitelisted as judge.")
+      end
     elseif wl_type == "corrections" then
     	if not GetPlayerName(playerId) or not tonumber(rank) then
     		RconPrint("Error: bad format!")
@@ -76,10 +67,10 @@ AddEventHandler('rconCommand', function(commandName, args)
     	TriggerEvent('es:exposeDBFunctions', function(GetDoc)
     		GetDoc.getDocumentByRow("correctionaldepartment", "identifier" , target_ident, function(result)
 
-          local target = exports["essentialmode"]:getPlayerFromId(tonumber(playerId))
+          local char = exports["usa-characters"]:GetCharacter(playerId)
           local employee = {
             identifier = target_ident,
-            name = target.getActiveCharacterData("fullName"),
+            name = char.getFullName(),
             rank = tonumber(rank)
           }
 
@@ -92,7 +83,6 @@ AddEventHandler('rconCommand', function(commandName, args)
             end)
     			else -- did not exist already, create doc
             GetDoc.createDocument("correctionaldepartment", employee, function()
-              print("employee created!")
               -- notify:
               RconPrint("Employee " .. employee.name .. "created, rank: " .. employee.rank .. "!")
               -- refresh employees:
@@ -107,20 +97,19 @@ AddEventHandler('rconCommand', function(commandName, args)
   end
 end)
 
-TriggerEvent('es:addCommand', 'whitelist', function(source, args, user)
+TriggerEvent('es:addCommand', 'whitelist', function(source, args, char)
   local user_group = user.getGroup()
   local user_rank = 0
-  --if user_group ~= "admin" and user_group ~= "superadmin" and user_group ~= "owner" then return end
   local playerId = tonumber(args[2])
   local type = string.lower(args[3])
   local rank = tonumber(args[4])
   local playerName = GetPlayerName(playerId)
   if type == "ems" then
-    user_rank = tonumber(user.getActiveCharacterData("emsRank"))
+    user_rank = tonumber(char.get("emsRank"))
   elseif type == "police" then
-    user_rank = tonumber(user.getActiveCharacterData("policeRank"))
+    user_rank = tonumber(char.get("policeRank"))
   elseif type == "da" then
-    user_rank = user.getActiveCharacterData("daRank")
+    user_rank = char.get("daRank")
     if user_rank then
       user_rank = tonumber(user_rank)
     else
@@ -152,33 +141,30 @@ TriggerEvent('es:addCommand', 'whitelist', function(source, args, user)
     TriggerClientEvent("usa:notify", source, "You must enter a rank for that player: 0 to un-whitelist. 1 is lowest, 7 is max.")
     return
   end
-  TriggerEvent('es:getPlayerFromId', playerId, function(targetUser)
-    if targetUser then
-      if rank > 0 then
-        if type == "police" then
-          targetUser.setActiveCharacterData("policeRank", rank)
-        elseif type == "ems" then
-          targetUser.setActiveCharacterData("emsRank", rank)
-        elseif type == "da" then
-          targetUser.setActiveCharacterData("daRank", rank)
-        end
-        TriggerClientEvent("usa:notify", source, "Player " .. playerName .. " has been whitelisted for " .. type .. ", rank: " .. rank)
-      else
-        if type == "police" then
-          targetUser.setActiveCharacterData("policeRank", 0)
-        elseif type == "ems" then
-          targetUser.setActiveCharacterData("emsRank", 0)
-        elseif type == "da" then
-          targetUser.setActiveCharacterData("daRank", 0)
-        end
-        local user_job = targetUser.getActiveCharacterData("job")
-        if user_job == "ems" or user_job == "fire" or user_job == "sheriff" then
-          targetUser.setActiveCharacterData("job", "civ")
-        end
-        TriggerClientEvent("usa:notify", source, "Player " .. playerName .. " has been un-whitelisted for " .. type)
-      end
+  local target = exports["usa-characters"]:GetCharacter(playerId)
+  if rank > 0 then
+    if type == "police" then
+      target.set("policeRank", rank)
+    elseif type == "ems" then
+      target.set("emsRank", rank)
+    elseif type == "da" then
+      target.set("daRank", rank)
     end
-  end)
+    TriggerClientEvent("usa:notify", source, "Player " .. playerName .. " has been whitelisted for " .. type .. ", rank: " .. rank)
+  else
+    if type == "police" then
+      target.set("policeRank", 0)
+    elseif type == "ems" then
+      target.set("emsRank", 0)
+    elseif type == "da" then
+      target.set("daRank", 0)
+    end
+    local user_job = target.get("job")
+    if user_job == "ems" or user_job == "fire" or user_job == "sheriff" then
+      target.set("job", "civ")
+    end
+    TriggerClientEvent("usa:notify", source, "Player " .. playerName .. " has been un-whitelisted for " .. type)
+  end
 end, {
   help = "Set a person's police, EMS or DA rank.",
   params = {
@@ -192,18 +178,17 @@ RegisterServerEvent("policestation2:checkWhitelist")
 AddEventHandler("policestation2:checkWhitelist", function(clientevent)
   local playerIdentifiers = GetPlayerIdentifiers(source)
   local playerGameLicense = ""
-  local userSource = tonumber(source)
-  local user = exports["essentialmode"]:getPlayerFromId(userSource)
-  if user.getActiveCharacterData("policeRank") > 0 then
+  local char = exports["usa-characters"]:GetCharacter(sourc)
+  if char.get("policeRank") > 0 then
     if clientevent == "policestation2:showArmoury" then
-      local user_job = user.getActiveCharacterData("job")
+      local user_job = char.get("job")
       if user_job == "sheriff" or user_job == "cop" then
         TriggerClientEvent(clientevent, userSource)
       else
         TriggerClientEvent("usa:notify", userSource, "You must be on-duty to access the armory.")
       end
     else
-        user.setActiveCharacterData("job", "sheriff")
+        char.set("job", "sheriff")
         TriggerClientEvent(clientevent, userSource)
     end
   else
@@ -214,126 +199,110 @@ end)
 
 RegisterServerEvent("policestation2:requestPurchase")
 AddEventHandler("policestation2:requestPurchase", function(index)
-  local usource = source
-  print("Person wants to buy: " .. armoryItems[index].name)
   local weapon = armoryItems[index]
-  local user = exports["essentialmode"]:getPlayerFromId(source)
-  local permit_status = checkPermit(user)
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local permit_status = checkPermit(char)
   if permit_status == "valid" then
-    local user_money = user.getActiveCharacterData("money")
-    if user_money - armoryItems[index].price >= 0 then
-    local user_weapons = user.getActiveCharacterData("weapons")
-    local timestamp = os.date("*t", os.time())
-      local letters = {}
-      for i = 65,  90 do table.insert(letters, string.char(i)) end -- add capital letters
-      local serialEnding = math.random(100000, 999999)
-      local serialLetter = letters[math.random(#letters)]
-      weapon.serialNumber = serialLetter .. serialEnding
-    local weaponDB = {}
-      weaponDB.name = weapon.name
-      weaponDB.serialNumber = serialLetter .. serialEnding
-      weaponDB.ownerName = user.getActiveCharacterData('fullName')
-      weaponDB.ownerDOB = user.getActiveCharacterData('dateOfBirth')
-      weaponDB.issueDate = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year
-      TriggerEvent("usa:insertItem", weapon, 1, usource, function(success)
-        if success then
-          user.setActiveCharacterData("money", user_money - armoryItems[index].price)
-          TriggerClientEvent("mini:equipWeapon", usource, usource, armoryItems[index].hash) -- equip
-          TriggerClientEvent('gunShop:addRecentlyPurchased', usource)
-          TriggerClientEvent('usa:notify', usource, 'Purchased: ~y~'..weapon.name..'\n~s~Serial Number: ~y~'..weapon.serialNumber..'\n~s~Price: ~y~$'..armoryItems[index].price)
-          TriggerEvent('es:exposeDBFunctions', function(couchdb)
-            couchdb.createDocumentWithId("legalweapons", weaponDB, weaponDB.serialNumber, function(success)
-                if success then
-                    print("* Weapon created serial["..weaponDB.serialNumber.."] name["..weaponDB.name.."] owner["..weaponDB.ownerName.."] *")
-                else
-                    print("* Error: Weapon failed to be created!! *")
-                end
-            end)
+    if char.canHoldItem(weapon) then
+      local user_money = char.get("money")
+      if user_money - armoryItems[index].price >= 0 then
+        local timestamp = os.date("*t", os.time())
+        local letters = {}
+        for i = 65,  90 do table.insert(letters, string.char(i)) end -- add capital letters
+        local serialEnding = math.random(100000, 999999)
+        local serialLetter = letters[math.random(#letters)]
+        weapon.serialNumber = serialLetter .. serialEnding
+        local weaponDB = {}
+        weaponDB.name = weapon.name
+        weaponDB.serialNumber = serialLetter .. serialEnding
+        weaponDB.ownerName = char.getFullName()
+        weaponDB.ownerDOB = char.get('dateOfBirth')
+        weaponDB.issueDate = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year
+        char.giveItem(weapon, 1)
+        char.removeMoney(armoryItems[index].price)
+        TriggerClientEvent("mini:equipWeapon", usource, usource, armoryItems[index].hash) -- equip
+        TriggerClientEvent('usa:notify', usource, 'Purchased: ~y~'..weapon.name..'\n~s~Serial Number: ~y~'..weapon.serialNumber..'\n~s~Price: ~y~$'..armoryItems[index].price)
+        TriggerEvent('es:exposeDBFunctions', function(couchdb)
+          couchdb.createDocumentWithId("legalweapons", weaponDB, weaponDB.serialNumber, function(success)
+              if success then
+                  print("* Weapon created serial["..weaponDB.serialNumber.."] name["..weaponDB.name.."] owner["..weaponDB.ownerName.."] *")
+              else
+                  print("* Error: Weapon failed to be created!! *")
+              end
           end)
-        end
-      end)
+        end)
+      else
+        TriggerClientEvent("usa:notify", source, "Not enough money!")
+      end
     else
-      TriggerClientEvent("usa:notify", source, "Not enough money!")
+      TriggerClientEvent("usa:notify", source, "Inventory is full!")
     end
   elseif permit_status == "suspended" then
     TriggerClientEvent("usa:notify", usource, "Your permit is suspended!")
   elseif permit_status == "none" then
-    TriggerClientEvent("usa:notify", usource, "You do not have a valid ~y~Firearm Permit~s~!")
+    TriggerClientEvent("usa:notify", usource, "You do not have a valid Firearm Permit!")
   end
 end)
 
 RegisterServerEvent("policestation2:saveOutfit")
 AddEventHandler("policestation2:saveOutfit", function(character, slot)
-  local userSource = tonumber(source)
-  local user = exports["essentialmode"]:getPlayerFromId(userSource)
-  local user_job = user.getActiveCharacterData("job")
+  local user = exports["essentialmode"]:getPlayerFromId(source)
+  local user_job = exports["usa-characters"]:GetCharacterField(source, "job")
   local policeCharacter = user.getPoliceCharacter()
   policeCharacter[slot] = character
   if user_job == "sheriff" or user_job == "cop" then
     user.setPoliceCharacter(policeCharacter)
-    TriggerClientEvent("usa:notify", userSource, "Outfit in slot "..slot.." has been saved.")
+    TriggerClientEvent("usa:notify", source, "Outfit in slot "..slot.." has been saved.")
   else
-    TriggerClientEvent("usa:notify", userSource, "You must be on-duty to save a uniform.")
+    TriggerClientEvent("usa:notify", source, "You must be on-duty to save a uniform.")
   end
 end)
 
 RegisterServerEvent("policestation2:loadOutfit")
 AddEventHandler("policestation2:loadOutfit", function(slot)
-  local userSource = tonumber(source)
-  local user = exports["essentialmode"]:getPlayerFromId(userSource)
-  if user.getActiveCharacterData("policeRank") > 0 then
-    character = user.getPoliceCharacter()
-    TriggerClientEvent("policestation2:setCharacter", userSource, character[slot])
-    if user.getActiveCharacterData('job') ~= 'sheriff' then
-      user.setActiveCharacterData("job", "sheriff")
-      TriggerEvent('job:sendNewLog', userSource, 'sheriff', true)
+  local user = exports["essentialmode"]:getPlayerFromId(source)
+  local char = exports["usa-characters"]:GetCharacter(source)
+  if char.get("policeRank") > 0 then
+    local character = user.getPoliceCharacter()
+    TriggerClientEvent("policestation2:setCharacter", source, character[slot])
+    if char.get('job') ~= 'sheriff' then
+      char.set("job", "sheriff")
+      TriggerEvent('job:sendNewLog', source, 'sheriff', true)
     end
-    TriggerClientEvent('interaction:setPlayersJob', userSource, 'sheriff')
-    TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 3})
+    TriggerClientEvent('interaction:setPlayersJob', source, 'sheriff')
+    TriggerEvent("eblips:add", {name = char.getName(), src = source, color = 3})
   else
-    DropPlayer(userSource, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+    DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
     TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for memory editing at a police station, please intervene^0!')
   end
 end)
 
 RegisterServerEvent("policestation2:onduty")
 AddEventHandler("policestation2:onduty", function()
-  local userSource = tonumber(source)
-  local user = exports["essentialmode"]:getPlayerFromId(userSource)
-  local user_job = user.getActiveCharacterData("job")
-  if user_job ~= "sheriff" or user_job ~= "cop" or user_job ~= "police" and user.getActiveCharacterData("policeRank") > 0 then
-    user.setActiveCharacterData("job", "sheriff")
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local user_job = char.get("job")
+  if (user_job ~= "sheriff" or user_job ~= "cop" or user_job ~= "police") and char.get("policeRank") > 0 then
+    char.set("job", "sheriff")
     TriggerEvent('job:sendNewLog', source, 'sheriff', true)
-    TriggerEvent("eblips:add", {name = user.getActiveCharacterData("fullName"), src = userSource, color = 3})
+    TriggerEvent("eblips:add", {name = char.getName(), src = source, color = 3})
   end
 end)
 
 RegisterServerEvent("policestation2:offduty")
 AddEventHandler("policestation2:offduty", function()
-  local userSource = tonumber(source)
-  local user = exports["essentialmode"]:getPlayerFromId(userSource)
-  local playerWeapons = user.getActiveCharacterData("weapons")
-  local chars = user.getCharacters()
-  for i = 1, #chars do
-    if chars[i].active == true then
-      TriggerClientEvent('interaction:setPlayersJob', source, 'civ')
-      TriggerClientEvent("policestation2:setciv", userSource, chars[i].appearance, playerWeapons)
-      break
-    end
-  end
-  user.setActiveCharacterData("job", "civ")
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local playerWeapons = char.getWeapons()
+  TriggerClientEvent('interaction:setPlayersJob', source, 'civ')
+  TriggerClientEvent("policestation2:setciv", source, char.get("appearance"), playerWeapons)
+  char.set("job", "civ")
   TriggerEvent('job:sendNewLog', source, 'sheriff', false)
-  TriggerEvent("eblips:remove", userSource)
+  TriggerEvent("eblips:remove", source)
 end)
 
-function checkPermit(player)
-  local licenses = player.getActiveCharacterData("licenses")
-  for i = 1, #licenses do
-    local item = licenses[i]
-    if item.name == "Firearm Permit" then
+function checkPermit(char)
+  local permit = char.getItem("Firearm Permit")
+  if permit then
       return item.status
-    end
   end
   return "none"
-  --TriggerClientEvent("gunShop:showNoPermitMenu", userSource)
 end

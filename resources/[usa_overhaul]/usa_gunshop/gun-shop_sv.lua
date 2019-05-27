@@ -40,46 +40,42 @@ exports["globals"]:PerformDBCheck("usa_gunshop", "legalweapons")
 RegisterServerEvent("gunShop:requestPurchase")
 AddEventHandler("gunShop:requestPurchase", function(category, index)
   local usource = source
-  print("Person wants to buy: " .. sv_storeWeapons[category][index].name)
   local weapon = sv_storeWeapons[category][index]
-  local user = exports["essentialmode"]:getPlayerFromId(source)
+  local char = exports["usa-characters"]:GetCharacter(usource)
   local permit_status = checkPermit(user)
   if permit_status == "valid" then
-    local user_money = user.getActiveCharacterData("money")
-    if user_money - sv_storeWeapons[category][index].price >= 0 then
-	  local user_weapons = user.getActiveCharacterData("weapons")
-	  if #user_weapons >= 3 and weapon.type == "weapon" then
-		TriggerClientEvent("usa:notify", source, "Cannot carry more than 3 weapons!")
-		return
-	  end
-    local timestamp = os.date("*t", os.time())
+    local money = char.get("money")
+    if money - sv_storeWeapons[category][index].price >= 0 then
+  	  local user_weapons = char.getWeapons()
+  	  if (#user_weapons >= 3 and weapon.type == "weapon") or not char.canHoldItem(weapon) then
+  		  TriggerClientEvent("usa:notify", source, "Cannot carry more than 3 weapons, or full inventory!")
+  		  return
+  	  end
+      local timestamp = os.date("*t", os.time())
       local letters = {}
       for i = 65,  90 do table.insert(letters, string.char(i)) end -- add capital letters
       local serialEnding = math.random(100000, 999999)
       local serialLetter = letters[math.random(#letters)]
       weapon.serialNumber = serialLetter .. serialEnding
-    local weaponDB = {}
+      local weaponDB = {}
       weaponDB.name = weapon.name
       weaponDB.serialNumber = serialLetter .. serialEnding
-      weaponDB.ownerName = user.getActiveCharacterData('fullName')
-      weaponDB.ownerDOB = user.getActiveCharacterData('dateOfBirth')
+      weaponDB.ownerName = char.getFullName()
+      weaponDB.ownerDOB = char.get('dateOfBirth')
       weaponDB.issueDate = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year
-      TriggerEvent("usa:insertItem", weapon, 1, usource, function(success)
-        if success then
-          user.setActiveCharacterData("money", user_money - sv_storeWeapons[category][index].price)
-          TriggerClientEvent("mini:equipWeapon", usource, usource, sv_storeWeapons[category][index].hash) -- equip
-          TriggerClientEvent('gunShop:addRecentlyPurchased', usource)
-          TriggerClientEvent('usa:notify', usource, 'Purchased: ~y~'..weapon.name..'\n~s~Serial Number: ~y~'..weapon.serialNumber..'\n~s~Price: ~y~$'..sv_storeWeapons[category][index].price)
-          TriggerEvent('es:exposeDBFunctions', function(couchdb)
-            couchdb.createDocumentWithId("legalweapons", weaponDB, weaponDB.serialNumber, function(success)
-                if success then
-                    print("* Weapon created serial["..weaponDB.serialNumber.."] name["..weaponDB.name.."] owner["..weaponDB.ownerName.."] *")
-                else
-                    print("* Error: Weapon failed to be created!! *")
-                end
-            end)
-          end)
-        end
+      char.giveItem(weapon, 1)
+      char.removeMoney(sv_storeWeapons[category][index].price)
+      TriggerClientEvent("mini:equipWeapon", usource, usource, sv_storeWeapons[category][index].hash) -- equip
+      TriggerClientEvent('gunShop:addRecentlyPurchased', usource)
+      TriggerClientEvent('usa:notify', usource, 'Purchased: ~y~'..weapon.name..'\n~s~Serial Number: ~y~'..weapon.serialNumber..'\n~s~Price: ~y~$'..sv_storeWeapons[category][index].price)
+      TriggerEvent('es:exposeDBFunctions', function(couchdb)
+        couchdb.createDocumentWithId("legalweapons", weaponDB, weaponDB.serialNumber, function(success)
+            if success then
+                print("* Weapon created serial["..weaponDB.serialNumber.."] name["..weaponDB.name.."] owner["..weaponDB.ownerName.."] *")
+            else
+                print("* Error: Weapon failed to be created!! *")
+            end
+        end)
       end)
     else
       TriggerClientEvent("usa:notify", source, "Not enough money!")
@@ -93,56 +89,19 @@ end)
 
 RegisterServerEvent('gunShop:requestOpenMenu')
 AddEventHandler('gunShop:requestOpenMenu', function()
-  local usource = source
-  local user = exports["essentialmode"]:getPlayerFromId(source)
+  local char = exports["usa-characters"]:GetCharacter(source)
   local permit_status = checkPermit(user)
   if permit_status == 'valid' then
-    TriggerClientEvent('gunShop:openMenu', usource)
+    TriggerClientEvent('gunShop:openMenu', source)
   else
-    TriggerClientEvent('usa:notify', usource, 'You do not have a valid ~y~Firearm Permit~s~!')
+    TriggerClientEvent('usa:notify', source, 'You do not have a valid ~y~Firearm Permit~s~!')
   end
 end)
 
---[[RegisterServerEvent("gunShop:buyPermit")
-AddEventHandler("gunShop:buyPermit", function()
-  local userSource = source
-  local user = exports["essentialmode"]:getPlayerFromId(userSource)
-  if checkPermit(user) ~= "none" then
-    TriggerClientEvent("usa:notify", userSource, "You already have a firearm permit!")
-    return
-  end
-  --user.removeMoney(2000)
-  local cost = 10000
-  local user_cash = user.getActiveCharacterData("money")
-  if user_cash >= cost then
-    user.setActiveCharacterData("money", user_cash - cost)
-    local licenses = user.getActiveCharacterData("licenses")
-    local timestamp = os.date("*t", os.time())
-    local permit = {
-      name = "Firearm Permit",
-      number = "G" .. tostring(math.random(1, 254367)),
-      quantity = 1,
-      ownerName = GetPlayerName(userSource),
-      expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
-      status = "valid",
-      type = "license"
-    }
-    table.insert(licenses, permit)
-    user.setActiveCharacterData("licenses", licenses)
-    TriggerClientEvent("usa:notify", userSource, "You already have a firearm permit!")
-  else
-    TriggerClientEvent("usa:notify", userSource, "Not enough money!")
-  end
-end)]]
-
-function checkPermit(player)
-  local licenses = player.getActiveCharacterData("licenses")
-  for i = 1, #licenses do
-    local item = licenses[i]
-    if item.name == "Firearm Permit" then
-      return item.status
-    end
+function checkPermit(char)
+  local license = char.getItem("Firearm Permit")
+  if license then
+    return license.status
   end
   return "none"
-  --TriggerClientEvent("gunShop:showNoPermitMenu", userSource)
 end

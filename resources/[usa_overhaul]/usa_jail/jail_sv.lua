@@ -17,41 +17,31 @@ local CELLS = {
 }
 
 -- V2
-TriggerEvent('es:addCommand', 'jail', function(source, args, user)
-	local user_job = user.getActiveCharacterData("job")
-	local user_jailtime = user.getActiveCharacterData("jailtime")
-	if user_job == "sheriff" or user_job == "cop" or user_job == "corrections" or user_job == "dai" then
+TriggerEvent('es:addCommand', 'jail', function(source, args, char)
+	local job = char.get("job")
+	local jailtime = char.get("jailtime")
+	if job == "sheriff" or job == "cop" or job == "corrections" or job == "dai" then
 		TriggerClientEvent("jail:openMenu", tonumber(source))
-	elseif user_jailtime > 0 then
-		TriggerClientEvent("usa:notify", tonumber(source), "You have ~y~" .. user_jailtime .. " month(s) ~w~left in your jail sentence.")
+	elseif jailtime > 0 then
+		TriggerClientEvent("usa:notify", tonumber(source), "You have ~y~" .. jailtime .. " month(s) ~w~left in your jail sentence.")
 	end
 end, {
-	help = "See how much time you have left in jail / jail a player (police)."
+	help = "See how much time you have left in jail / jail a player (police)"
 })
 
 RegisterServerEvent("jail:jailPlayerFromMenu")
 AddEventHandler("jail:jailPlayerFromMenu", function(data)
-	local userSource = tonumber(source)
-	if tonumber(data.id) == userSource then
-		TriggerClientEvent('usa:notify', userSource, 'You cannot jail yourself!')
+	local char = exports["usa-characters"]:GetCharacter(source)
+	if tonumber(data.id) == source then
+		TriggerClientEvent('usa:notify', source, 'You cannot jail yourself!')
 		return
 	end
-	print("jailing player... from source: " .. userSource .. " with name " .. GetPlayerName(userSource))
-	print("data.sentence: " .. data.sentence)
-	print("data.charges: " .. data.charges)
-	print("data.id: " .. data.id)
-	print("data.fine: " .. data.fine)
-	if data.gender then
-		print("data.gender: " .. data.gender)
-	end
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	local user_job = user.getActiveCharacterData('job')
-	if user_job == 'sheriff' or user_job == 'corrections' then
-		local player_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
-		local arrestingOfficerName = player_name
+	local job = char.get('job')
+	if job == 'sheriff' or job == 'corrections' then
+		local arrestingOfficerName = char.getFullName()
 		jailPlayer(data, arrestingOfficerName, data.gender)
 	else
-		DropPlayer(userSource, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
 		TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for LUA injection, please intervene^0!')
 	end
 end)
@@ -76,91 +66,84 @@ function jailPlayer(data, officerName, gender)
 		fine = round(fine, 0)
 		print("after rounding, fine: " .. fine)
 	end
-	--TriggerEvent("es:getPlayerFromId", targetPlayer, function(user)
-	local user = exports["essentialmode"]:getPlayerFromId(targetPlayer)
-		-- assign an open cell --
-		local assigned_cell = CELLS[1] -- use CELLS[1] just in case there are no open cells (lol)
-		for i = 1, #CELLS do
-			if not CELLS[i].occupant then
-				CELLS[i].occupant = {
-					name = user.getActiveCharacterData("fullName")
-				}
-				assigned_cell = CELLS[i]
-				break
-			end
+	local inmate = exports["usa-characters"]:GetCharacter(targetPlayer)
+	local inmate_job = inmate.get("job")
+	-- assign an open cell --
+	local assigned_cell = CELLS[1] -- use CELLS[1] just in case there are no open cells (lol)
+	for i = 1, #CELLS do
+		if not CELLS[i].occupant then
+			CELLS[i].occupant = {
+				name = inmate.getFullName()
+			}
+			assigned_cell = CELLS[i]
+			break
 		end
-		-- send to assigned cell --
-		local inmate_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
+	end
+	-- send to assigned cell --
+	local inmate_name = inmate.getFullName()
 
-		exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3Jail: ^0".. inmate_name .. " has been jailed for ^3" .. sentence .. "^0 month(s).")
-		exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3Charges:^0 " .. reason)
-		exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3Fine:^0 $" .. fine)
+	exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3Jail: ^0".. inmate_name .. " has been jailed for ^3" .. sentence .. "^0 month(s).")
+	exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3Charges:^0 " .. reason)
+	exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3Fine:^0 $" .. fine)
 
-		TriggerClientEvent("jail:jail", targetPlayer, assigned_cell, gender)
-		user.setActiveCharacterData("weapons", {})
-		user.setActiveCharacterData("jailtime", sentence)
-		user.setActiveCharacterData("job", "civ")
-		-- fine the player using amount supplied from the form
-		local user_bank = user.getActiveCharacterData("bank")
-		local bank_after_fine = user_bank - fine
-		--if  bank_after_fine >= 0 then
-			user.setActiveCharacterData("bank", user_bank - fine)
-		--else
-			--user.setActiveCharacterData("bank", 0)
-		--end
-		-- notify of fine:
-		TriggerClientEvent("usa:notify", targetPlayer, "You have been fined: $" .. fine)
-		-- add to criminal history --
-		local playerCriminalHistory = user.getActiveCharacterData("criminalHistory")
-		local record = {
-			sentence = sentence,
-			charges = reason,
-			arrestingOfficer = officerName,
-			timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time()),
-			type = "arrest",
-			number = 'A'..math.random(10000000, 99999999)
-		}
-		if #playerCriminalHistory > 10 then table.remove(playerCriminalHistory, 1) end -- temporary patch until criminal history is moved into separate DB
-		table.insert(playerCriminalHistory, record)
-		user.setActiveCharacterData("criminalHistory", playerCriminalHistory)
-		TriggerEvent("warrants:removeAnyActiveWarrants", inmate_name)
-		-- suspend license if necessary --
-		local suspensions = ""
-		if GetDLSuspensionDays(reason) > 0 then
-			TriggerEvent("dmv:setLicenseStatus", "suspended", targetPlayer, GetDLSuspensionDays(reason))
-			TriggerClientEvent("usa:notify", targetPlayer, "Your driver's license has been suspended for " .. GetDLSuspensionDays(reason) .. " day(s)")
-			suspensions = "\nDL suspended for " .. GetDLSuspensionDays(reason) .. " day(s)"
+	TriggerClientEvent("jail:jail", targetPlayer, assigned_cell, gender)
+	inmate.removeWeapons()
+	inmate.removeIllegalItems()
+	inmate.set("jailtime", sentence)
+	inmate.set("job", "civ")
+	inmate.removeBank(fine)
+
+	TriggerClientEvent("usa:notify", targetPlayer, "You have been fined: $" .. fine)
+	-- add to criminal history --
+	local playerCriminalHistory = inmate.get("criminalHistory")
+	local record = {
+		sentence = sentence,
+		charges = reason,
+		arrestingOfficer = officerName,
+		timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time()),
+		type = "arrest",
+		number = 'A'..math.random(10000000, 99999999)
+	}
+	
+	table.insert(playerCriminalHistory, record)
+	inmate.set("criminalHistory", playerCriminalHistory)
+	TriggerEvent("warrants:removeAnyActiveWarrants", inmate_name)
+	
+	local suspensions = ""
+	if GetDLSuspensionDays(reason) > 0 then
+		TriggerEvent("dmv:setLicenseStatus", "suspended", targetPlayer, GetDLSuspensionDays(reason))
+		TriggerClientEvent("usa:notify", targetPlayer, "Your driver's license has been suspended for " .. GetDLSuspensionDays(reason) .. " day(s)")
+		suspensions = "\nDL suspended for " .. GetDLSuspensionDays(reason) .. " day(s)"
+	end
+	-- suspend gun permit if necessary --
+	if GetFPRevoked(reason) then
+		TriggerEvent("police:revokeFirearmPermit", targetPlayer)
+		TriggerClientEvent("usa:notify", targetPlayer, "Your firearm permit has been revoked!")
+		suspensions = suspensions .. "\nFP revoked permanently"
+	end
+	-- send to discord #jail-logs --
+	if inmate_job == "dai" then return end
+	local url = 'https://discordapp.com/api/webhooks/343037167821389825/yDdmSBi-ODYPcAbTzb0DaPjWPnVOhh232N78lwrQvlhbrvN8mV5TBfNOmnxwMZfQnttl'
+	if not suspensions then suspensions = "None" end
+	PerformHttpRequest(url, function(err, text, headers)
+		if text then
+			print(text)
 		end
-		-- suspend gun permit if necessary --
-		if GetFPRevoked(reason) then
-			TriggerEvent("police:revokeFirearmPermit", targetPlayer)
-			TriggerClientEvent("usa:notify", targetPlayer, "Your firearm permit has been revoked!")
-			suspensions = suspensions .. "\nFP revoked permanently"
-		end
-		-- send to discord #jail-logs --
-		local url = 'https://discordapp.com/api/webhooks/343037167821389825/yDdmSBi-ODYPcAbTzb0DaPjWPnVOhh232N78lwrQvlhbrvN8mV5TBfNOmnxwMZfQnttl'
-		if not suspensions then suspensions = "None" end
-		PerformHttpRequest(url, function(err, text, headers)
-			if text then
-				print(text)
-			end
-		end, "POST", json.encode({
-			embeds = {
-				{
-					description = "**Name:** " .. inmate_name .. " \n**Sentence:** " .. sentence .. " months" .. " \n**Charges:** " ..reason.. "\n**Fine:** $" .. fine .. "\n**Suspensions:** " .. (suspensions or "None") .. "\n**Arresting Officer:** " ..officerName.."\n**Timestamp:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
-					color = 263172,
-					author = {
-						name = "Blaine County Correctional Facility"
-					}
+	end, "POST", json.encode({
+		embeds = {
+			{
+				description = "**Name:** " .. inmate_name .. " \n**Sentence:** " .. sentence .. " months" .. " \n**Charges:** " ..reason.. "\n**Fine:** $" .. fine .. "\n**Suspensions:** " .. (suspensions or "None") .. "\n**Arresting Officer:** " ..officerName.."\n**Timestamp:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
+				color = 263172,
+				author = {
+					name = "Blaine County Correctional Facility"
 				}
 			}
-		}), { ["Content-Type"] = 'application/json' })
-	--end)
+		}
+	}), { ["Content-Type"] = 'application/json' })
 end
 
 RegisterServerEvent("jail:clearCell")
 AddEventHandler("jail:clearCell", function(cell, clearJailTime)
-	local usource = source
 	for i = 1, #CELLS do
 		if CELLS[i].occupant and cell.occupant then
 			if CELLS[i].occupant.name == cell.occupant.name then
@@ -172,8 +155,8 @@ AddEventHandler("jail:clearCell", function(cell, clearJailTime)
 	end
 	-- clear jail time --
 	if clearJailTime then
-		local user = exports["essentialmode"]:getPlayerFromId(usource)
-		user.setActiveCharacterData("jailtime", 0)
+		local char = exports["usa-characters"]:GetCharacter(source)
+		char.set("jailtime", 0)
 	end
 end)
 
@@ -216,38 +199,19 @@ end
 
 function jailStatusLoop()
 	SetTimeout(60000, function()
-		TriggerEvent("es:getPlayers", function(players)
-			if players then
-				for id, player in pairs(players) do
-					if player then
-					local player_jailtime = player.getActiveCharacterData("jailtime")
-					if not player_jailtime then
-						player_jailtime = 0
-					end
-						if player_jailtime == 0 then
-							-- do nothing?
-						else
-							if player_jailtime > 1 then
-								player.setActiveCharacterData("jailtime", player_jailtime - 1)
-							else
-								player.setActiveCharacterData("jailtime", player_jailtime - 1)
-								print("player jail time was 0! releasing this player!")
-								local chars = player.getCharacters()
-								for i = 1, #chars do
-									if chars[i].active == true then
-										-- release person from custody --
-										TriggerClientEvent("jail:release", tonumber(id), chars[i].appearance) -- need to test
-										-- notify corrections of release --
-										exports["globals"]:notifyPlayersWithJob("corrections", "^3CORRECTIONS:^0 " .. chars[i].firstName .. " " .. chars[i].lastName .. " has been released.")
-										break
-									end
-								end
-							end
-						end
-					end
-				end
+		local characters = exports["usa-characters"]:GetCharacters()
+		for id, char in pairs(characters) do
+			local jailtime = char.get("jailtime")
+			if not jailtime then
+				jailtime = 0
 			end
-		end)
+			if jailtime > 0 then
+				char.set("jailtime", jailtime - 1)
+				TriggerClientEvent("jail:release", tonumber(id), char.get("appearance"))
+				exports["globals"]:notifyPlayersWithJob("corrections", "^3CORRECTIONS:^0 " .. chars[i].firstName .. " " .. chars[i].lastName .. " has been released.")
+				break
+			end
+		end
 		jailStatusLoop()
 	end)
 end

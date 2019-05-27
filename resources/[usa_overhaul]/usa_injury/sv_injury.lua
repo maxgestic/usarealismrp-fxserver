@@ -52,7 +52,7 @@ injuries = { -- ensure this is the same as sv_injury.lua
     [1432025498] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0} -- WEAPON_PUMPSHOTGUN_MK2
 }
 
-TriggerEvent('es:addJobCommand', 'injuries', { "ems", "fire", "police", "sheriff", "corrections", "doctor", "dai"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'injuries', { "ems", "fire", "police", "sheriff", "corrections", "doctor", "dai"}, function(source, args, char)
 	local _source = source
 	local targetSource = tonumber(args[2])
 	if targetSource and GetPlayerName(targetSource) then
@@ -67,7 +67,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'inspect', { "ems", "fire", "police", "sheriff", "corrections", "doctor", "dai"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'inspect', { "ems", "fire", "police", "sheriff", "corrections", "doctor", "dai"}, function(source, args, char)
 	local _source = source
 	local targetSource = tonumber(args[2])
 	if targetSource and GetPlayerName(targetSource) then
@@ -82,7 +82,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'treat', {"doctor"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'treat', {"doctor"}, function(source, args, char)
 	local _source = source
 	table.remove(args,1)
    	local boneToTreat = table.concat(args, " ")
@@ -94,7 +94,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'bandage', {'ems', 'doctor', 'sheriff', 'corrections'}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'bandage', {'ems', 'doctor', 'sheriff', 'corrections'}, function(source, args, char)
 	local _source = source
 	local targetSource = tonumber(args[2])
 	if targetSource and GetPlayerName(targetSource) then
@@ -110,7 +110,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'newrecord', {'ems', 'doctor'}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'newrecord', {'ems', 'doctor'}, function(source, args, char)
 	local targetSource = tonumber(args[2])
 	local payment = math.ceil(tonumber(args[3]))
 	if payment > 5000 then
@@ -122,12 +122,12 @@ TriggerEvent('es:addJobCommand', 'newrecord', {'ems', 'doctor'}, function(source
 	table.remove(args, 1)
 	local details = table.concat(args, " ")
 	if not details or not GetPlayerName(targetSource) then return end
-	local target = exports["essentialmode"]:getPlayerFromId(targetSource)
-	local targetBank = target.getActiveCharacterData('bank')
-	local targetName = target.getActiveCharacterData('fullName')
-	local targetDOB = target.getActiveCharacterData('dateOfBirth')
-	local userName = user.getActiveCharacterData('fullName')
-	target.setActiveCharacterData('bank', targetBank - payment)
+	local target = exports["usa-characters"]:GetCharacter(targetSource)
+	local targetBank = target.get('bank')
+	local targetName = target.getFullName()
+	local targetDOB = target.get('dateOfBirth')
+	local userName = char.getFullName()
+	target.removeBank(payment)
 	TriggerClientEvent('usa:notify', targetSource, 'You have been charged ~y~$' .. payment .. '~s~ in medical fees, payment processed from bank.')
 	TriggerClientEvent('usa:notify', source, 'Medical record has been created!')
 	local url = 'https://discordapp.com/api/webhooks/558718499199909891/H7FDjVPAnBSqbTbTTGB3K9BT1U738ePh5dLIgnT697g_ItX9kS__LMbiVZUG70iihuVy'
@@ -157,13 +157,13 @@ end, {
 
 RegisterServerEvent('injuries:validateCheckin')
 AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, x, y, z, isMale)
-	if isPedDead and (GetCurrentJobCount('ems') > 0 or GetCurrentJobCount('sheriff') > 0 or GetCurrentJobCount('doctor') > 0) then
+	if isPedDead and (exports["usa-characters"]:GetNumCharactersWithJob("ems") > 0 or exports["usa-characters"]:GetNumCharactersWithJob("sheriff") > 0 or exports["usa-characters"]:GetNumCharactersWithJob("doctor") > 0) then
 		TriggerClientEvent('usa:notify', source, 'See a doctor or call emergency services instead.')
 		return
 	end
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local userBank = user.getActiveCharacterData('bank')
-	local doctors = GetCurrentJobCount('doctor')
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local userBank = char.get('bank')
+	local doctors = exports["usa-characters"]:GetNumCharactersWithJob("doctor")
 	if doctors > 1 then
 		TriggerClientEvent('usa:showHelp', source, true, 'Please see any available doctor instead.')
 	else
@@ -171,7 +171,7 @@ AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, 
 		for bone, injuries in pairs(playerInjuries) do
 			for injury, data in pairs(playerInjuries[bone]) do
 				if injuries[injury].dropEvidence == 1.0 then
-					TriggerEvent('911:SuspiciousHospitalInjuries', user.getActiveCharacterData('fullName'), x, y, z)
+					TriggerEvent('911:SuspiciousHospitalInjuries', char.getFullName(), x, y, z)
 				end
 				totalPrice = totalPrice + injuries[injury].treatmentPrice
 			end
@@ -192,18 +192,18 @@ AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, 
 		end)
 		TriggerClientEvent("chatMessage", source, '^3^*[HOSPITAL] ^r^7You have been admitted to the hospital, please wait while you are treated.')
 		TriggerClientEvent('chatMessage', source, 'The payment has been deducted from your bank balance.')
-		print(PlayerName(source) .. ' has checked-in to hospital and was charged amount['..totalPrice..']')
-		if user.getActiveCharacterData('job') ~= 'sheriff' then
-			user.setActiveCharacterData('bank', userBank - totalPrice)
+		print('INJURIES: '..PlayerName(source) .. ' has checked-in to hospital and was charged amount['..totalPrice..']')
+		if char.get('job') ~= 'sheriff' then
+			char.removeBank(totalPrice)
 		end
 	end
 end)
 
 RegisterServerEvent('injuries:sendLog')
 AddEventHandler('injuries:sendLog', function(log, payment)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local userName = user.getActiveCharacterData('fullName')
-	local userDOB = user.getActiveCharacterData('dateOfBirth')
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local userName = char.getFullName()
+	local userDOB = char.get('dateOfBirth')
 	local url = 'https://discordapp.com/api/webhooks/558718499199909891/H7FDjVPAnBSqbTbTTGB3K9BT1U738ePh5dLIgnT697g_ItX9kS__LMbiVZUG70iihuVy'
 	PerformHttpRequest(url, function(err, text, headers)
 		if text then
@@ -224,8 +224,7 @@ end)
 
 RegisterServerEvent('injuries:chargeForInjuries')
 AddEventHandler('injuries:chargeForInjuries', function(playerInjuries, multiplier, respawn)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local userBank = user.getActiveCharacterData('bank')
+	local char = exports["usa-characters"]:GetCharacter(source)
 	local totalPrice = BASE_CHECKIN_PRICE
 	for bone, injuries in pairs(playerInjuries) do
 		for injury, data in pairs(playerInjuries[bone]) do
@@ -235,11 +234,11 @@ AddEventHandler('injuries:chargeForInjuries', function(playerInjuries, multiplie
 	if type(multiplier) == 'number' then
 		totalPrice = totalPrice * multiplier
 	end
-	user.setActiveCharacterData('bank', userBank - totalPrice)
-	print(PlayerName(source) .. ' has been charged amount['..totalPrice..'] in bank for hospital fees!')
+	char.removeBank(totalPrice)
+	print('INJURIES: '..PlayerName(source) .. ' has been charged amount['..totalPrice..'] in bank for hospital fees!')
 	if respawn then
 		TriggerClientEvent('chatMessage', source, '^3^*[HOSPITAL] ^r^7You have been charged ^3$'..totalPrice..'^0 in hospital fees.')
-		user.setActiveCharacterData('injuries', {})
+		char.set('injuries', {})
 		TriggerClientEvent('injuries:updateInjuries', source, {})
 	end
 	TriggerClientEvent('chatMessage', source, 'The payment has been deducted from your bank balance.')
@@ -247,19 +246,18 @@ end)
 
 RegisterServerEvent('injuries:toggleOnDuty')
 AddEventHandler('injuries:toggleOnDuty', function()
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local userJob = user.getActiveCharacterData('job')
-	if userJob ~= 'doctor' then
-		if user.getActiveCharacterData('emsRank') > 4 then
+	local char = exports["usa-characters"]:GetCharacter(source)
+	if char.get("job") ~= 'doctor' then
+		if char.get('emsRank') > 4 then
 			TriggerClientEvent('usa:notify', source, 'You are now signed ~g~on-duty~s~ as a doctor.')
-			user.setActiveCharacterData('job', 'doctor')
+			char.set('job', 'doctor')
 			TriggerEvent('job:sendNewLog', source, 'doctor', true)
 		else
 			TriggerClientEvent('usa:notify', source, '~y~You are not whitelisted for DOCTOR')
 		end
 	else
 		TriggerClientEvent('usa:notify', source, 'You are now signed ~y~off-duty~s~ as a doctor.')
-		user.setActiveCharacterData('job', 'civ')
+		char.set('job', 'civ')
 		TriggerEvent('job:sendNewLog', source, 'doctor', false)
 	end
 end)
@@ -271,8 +269,8 @@ end)
 
 RegisterServerEvent('injuries:inspectMyInjuries')
 AddEventHandler('injuries:inspectMyInjuries', function(sourceToReturnInjuries, injuries, myPed)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local fullName = user.getActiveCharacterData('fullName')
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local fullName = char.getFullName()
 	TriggerEvent('display:shareDisplayBySource', sourceToReturnInjuries, 'inspects injuries', 4, 470, 10, 4000, true)
 	TriggerClientEvent('injuries:displayInspectedInjuries', sourceToReturnInjuries, injuries, fullName, myPed)
 end)
@@ -297,24 +295,24 @@ end)
 
 RegisterServerEvent('injuries:saveData')
 AddEventHandler('injuries:saveData', function(playerInjuries)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	user.setActiveCharacterData('injuries', playerInjuries)
+	local char = exports["usa-characters"]:GetCharacter(source)
+	char.set('injuries', playerInjuries)
 end)
 
 RegisterServerEvent('injuries:requestData')
 AddEventHandler('injuries:requestData', function()
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local playerInjuries = user.getActiveCharacterData('injuries')
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local playerInjuries = char.get('injuries')
 	if playerInjuries then
 		TriggerClientEvent('injuries:updateInjuries', source, playerInjuries)
 	end
 end)
 
-TriggerEvent('es:addGroupCommand', 'heal', 'mod', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'heal', 'mod', function(source, args, char)
 	local targetSource = tonumber(args[2])
 	if tonumber(args[2]) and GetPlayerName(args[2]) then
-		local user = exports["essentialmode"]:getPlayerFromId(targetSource)
-		user.setActiveCharacterData('injuries', {})
+		local target = exports["usa-characters"]:GetCharacter(targetSource)
+		target.set('injuries', {})
 		TriggerClientEvent('death:allowRevive', targetSource)
 		Citizen.Wait(100)
 		TriggerClientEvent('injuries:updateInjuries', targetSource, {})
@@ -328,23 +326,6 @@ end, {
 		{ name = "id", help = "id of person" }
 	}
 })
-
-function GetCurrentJobCount(job)
-	local count = 0
-	TriggerEvent("es:getPlayers", function(players)
-		if players then
-			for id, player in pairs(players) do
-				if id and player then
-					local playerJob = player.getActiveCharacterData("job")
-					if playerJob == job then
-						count = count + 1
-					end
-				end
-			end
-		end
-	end)
-	return count
-end
 
 function PlayerName(source)
 	return GetPlayerName(source)..'['..GetPlayerIdentifier(source)..']'

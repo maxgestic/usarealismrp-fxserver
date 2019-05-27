@@ -38,6 +38,7 @@ AddEventHandler("weed:checkItem", function(stage)
       TriggerClientEvent("weed:continueProcessing", source)
     else
       TriggerClientEvent("usa:notify", source, "You don't have any ~y~" .. data.harvest_item.name .. "~s~ to process!")
+    end
   end
 end)
 
