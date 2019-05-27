@@ -21,7 +21,7 @@ AddEventHandler("swayam:RemoveWayPoint_s", function(playerid)
 end)
 
 --DEBUG COMMANDS
-TriggerEvent('es:addGroupCommand', 'setwp', 'admin', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'setwp', 'admin', function(source, args, char)
 	if args[2] and args[3] and args[4] and args[5] and args[6] and args[7] then
 		TriggerEvent("swayam:SetWayPoint_s", source, args[2], args[3], args[4], args[5], args[6], args[7])
 	else
@@ -29,7 +29,7 @@ TriggerEvent('es:addGroupCommand', 'setwp', 'admin', function(source, args, user
 	end
 end)
 
-TriggerEvent('es:addGroupCommand', 'setwpad', 'admin', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'setwpad', 'admin', function(source, args, char)
 	if args[2] and args[3] and args[4] and args[5] and args[6] and args[7] then
 		TriggerEvent("swayam:SetWayPointWithAutoDisable_s", source, args[2], args[3], args[4], args[5], args[6], args[7])
 	else
@@ -37,7 +37,7 @@ TriggerEvent('es:addGroupCommand', 'setwpad', 'admin', function(source, args, us
 	end
 end)
 
-TriggerEvent('es:addGroupCommand', 'setwpp', 'admin', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'setwpp', 'admin', function(source, args, char)
 	if args[2] and args[3] and args[4] and args[5] then
 		TriggerEvent("swayam:SetWayPointToPlayer_s", source, args[2], args[3], args[4], args[6])
 	else
@@ -45,16 +45,16 @@ TriggerEvent('es:addGroupCommand', 'setwpp', 'admin', function(source, args, use
 	end
 end)
 
-TriggerEvent('es:addGroupCommand', 'removewp', 'admin', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'removewp', 'admin', function(source, args, char)
 	TriggerEvent("swayam:RemoveWayPoint_s", source)
 end)
 
-TriggerEvent('es:addGroupCommand', 'mypos', 'admin', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'mypos', 'admin', function(source, args, char)
 	TriggerClientEvent("swayam:getCoords", source)
 end)
 
 ----------------------------------------------------------------
-TriggerEvent('es:addGroupCommand', 'setskin', 'superadmin', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'setskin', 'superadmin', function(source, args, char)
 		if args[2] then
 			TriggerClientEvent("swayam:SetSkin", source, args[2])
 		else
@@ -69,33 +69,10 @@ end, {
 ----------------------------------------------------------------
 
 ----------------------------------------------------------------
-TriggerEvent('es:addGroupCommand', 'gotowp', 'mod', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'gotowp', 'mod', function(source, args, char)
 	TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(source)..' ['..source..'] ^0 has teleported to waypoint.')
 	TriggerClientEvent("swayam:gotoWP", source)
 end, {help = "Teleport to a set waypoint."})
-----------------------------------------------------------------
-
-----------------------------------------------------------------
---[[local weather = "CLEAR"
-
-RegisterServerEvent("swayam:GetWeather")
-AddEventHandler("swayam:GetWeather", function()
-	TriggerClientEvent("swayam:SetWeather", source, weather)
-end)
-
-TriggerEvent('es:addCommand', 'setweather', function(source, args, user)
-	if user.getGroup() == "admin" or user.getGroup() == "superadmin" or user.getGroup() == "owner" then
-		if args[2] then
-			weather = args[2]
-			TriggerClientEvent("swayam:SetWeather", -1, args[2])
-		else
-			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "USAGE: /setweather weather")
-			TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "EXAMPLES: /setweather [CLEAR,EXTRASUNNY,OVERCAST,RAIN,CLEARING,THUNDER,SMOG,FOGGY,XMAS,SNOWLIGHT,BLIZZARD,NEUTRAL,HALLOWEEN,CLOUDS,SNOW]")
-		end
-	else
-		TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "You're not authorized to use this command!")
-	end
-end)]]--
 ----------------------------------------------------------------
 
 ----------------------------------------------------------------

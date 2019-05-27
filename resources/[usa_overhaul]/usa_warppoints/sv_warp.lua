@@ -1,22 +1,20 @@
 RegisterServerEvent("warp:checkJob")
 AddEventHandler("warp:checkJob", function(locationCoords, locationHeading, jobAccess)
-  local userSource = tonumber(source)
-  local user = exports["essentialmode"]:getPlayerFromId(userSource)
-  local user_job = user.getActiveCharacterData("job")
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local job = char.get("job")
   if jobAccess == 'emergency' then
-    if user_job == "sheriff" or user_job == "ems" or user_job == "fire" or user_job == "doctor" then
+    if job == "sheriff" or job == "ems" or job == "fire" or job == "doctor" then
     	local x, y, z = table.unpack(locationCoords)
-      TriggerClientEvent("warp:warpToPoint", userSource, x, y, z, locationHeading)
+      TriggerClientEvent("warp:warpToPoint", source, x, y, z, locationHeading)
       return
     end
   elseif jobAccess == 'da' then
-    local da_rank = user.getActiveCharacterData('daRank')
+    local da_rank = char.get('daRank')
     if da_rank and da_rank > 0 then
       local x, y, z = table.unpack(locationCoords)
-      TriggerClientEvent("warp:warpToPoint", userSource, x, y, z, locationHeading)
+      TriggerClientEvent("warp:warpToPoint", source, x, y, z, locationHeading)
       return
     end
   end
-  TriggerClientEvent("usa:notify", userSource, "That area is prohibited!")
-  print("user tried to enter prohibited area! job was: " .. user_job)
+  TriggerClientEvent("usa:notify", source, "That area is prohibited!")
 end)

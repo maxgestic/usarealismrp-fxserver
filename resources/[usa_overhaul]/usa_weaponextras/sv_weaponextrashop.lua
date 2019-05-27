@@ -117,66 +117,37 @@ local ITEMS = { -- must be kept in sync with one in sv_weaponeaxtrashop.lua --
 
 RegisterServerEvent("weaponExtraShop:requestTintPurchase")
 AddEventHandler("weaponExtraShop:requestTintPurchase", function(tintId, wephash, legal, property)
-  local user = exports["essentialmode"]:getPlayerFromId(source)
-  local tint
-  if legal then
-    tint = ITEMS["Tints"].legal[tintId]
-  else
-    tint = ITEMS["Tints"].illegal[tintId]
-  end
-  local user_weapons = user.getActiveCharacterData("weapons")
-  for i = 1, #user_weapons do
-    if user_weapons[i].hash == wephash then
-      print("found matching weapon hash! saving tint!")
-      local user_money = user.getActiveCharacterData("money")
-      if tint.price <= user_money then -- see if user has enough money
-        user.setActiveCharacterData("money", user_money - tint.price)
-        TriggerClientEvent("usa:notify", source, "You have purchased a ~y~" .. tint.name .. "~w~ weapon tint.")
-        TriggerClientEvent("weaponExtraShop:applyTint", source, tintId)
-        --TriggerClientEvent("bikeShop:toggleMenu", source, false)
-        user_weapons[i].tint = tintId
-        user.setActiveCharacterData("weapons", user_weapons)
-      else
-        TriggerClientEvent("usa:notify", source, "Not enough money!")
-      end
-      return
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local tint if not legal then tint = ITEMS["Tints"].legal[tintId] else tint = ITEMS["Tints"].illegal[tintId] end
+  local weapon = char.getItemWithField("hash", wephash)
+  if weapon then
+    if tint.price <= char.get("money") then -- see if user has enough money
+      char.removeMoney(tint.price)
+      TriggerClientEvent("usa:notify", source, "You have purchased a ~y~" .. tint.name .. "~w~ weapon tint.")
+      TriggerClientEvent("weaponExtraShop:applyTint", source, tintId)
+      char.modifyItem(weapon, "tint", tintId)
+    else
+      TriggerClientEvent("usa:notify", source, "Not enough money!")
     end
   end
 end)
 
 RegisterServerEvent("weaponExtraShop:requestComponentPurchase")
 AddEventHandler("weaponExtraShop:requestComponentPurchase", function(weapon, componentIndex, wephash, legal, property)
-  local user = exports["essentialmode"]:getPlayerFromId(source)
-  local component
-  if legal then
-    component = ITEMS["Components"].legal[weapon][componentIndex]
-  else
-    component = ITEMS["Components"].illegal[weapon][componentIndex]
-  end
-  local user_weapons = user.getActiveCharacterData("weapons")
-  for i = 1, #user_weapons do
-    if user_weapons[i].hash == wephash then
-      print("found matching weapon hash! saving component!")
-      local user_money = user.getActiveCharacterData("money")
-      if component.price <= user_money then -- see if user has enough money
-        user.setActiveCharacterData("money", user_money - component.price)
-        TriggerClientEvent("usa:notify", source, "You have purchased a ~y~" .. component.name .. "~w~ weapon component.")
-        TriggerClientEvent("weaponExtraShop:applyComponent", source, component)
-        --TriggerClientEvent("bikeShop:toggleMenu", source, false)
-        if not user_weapons[i].components then
-          user_weapons[i].components = {}
-        end
-        table.insert(user_weapons[i].components, component.value)
-        user.setActiveCharacterData("weapons", user_weapons)
-        -- give money to property owner --
-        if property then
-          TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * component.price))
-        end
-      else
-        TriggerClientEvent("usa:notify", source, "Not enough money!")
-      end
-      return
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local component if legal then component = ITEMS["Components"].legal[weapon][componentIndex] else component = ITEMS["Components"].illegal[weapon][componentIndex] end
+  local weapon = char.getItemWithField("hash", wephash)
+  if weapon then
+    if component.price <= char.get("money") then -- see if user has enough money
+      char.removeMoney(component.price)
+      TriggerClientEvent("usa:notify", source, "You have purchased a ~y~" .. component.name .. "~w~ weapon component.")
+      TriggerClientEvent("weaponExtraShop:applyComponent", source, component)
+      if not weapon.components then weapon.components = {} end
+      table.insert(weapon.components, component.value)
+      char.modifyItem(weapon, "components", weapon.components)
+      user.setActiveCharacterData("weapons", user_weapons)
+    else
+      TriggerClientEvent("usa:notify", source, "Not enough money!")
     end
   end
-  TriggerClientEvent("usa:notify", source, "You don't own that weapon!")
 end)

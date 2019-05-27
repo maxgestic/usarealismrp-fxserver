@@ -8,7 +8,7 @@ AddEventHandler('visuals:checkVisuals', function()
 	end)
 end)
 
-TriggerEvent('es:addCommand', 'visuals', function(source, args, user)
+TriggerEvent('es:addCommand', 'visuals', function(source, args, char)
 	local _source = source
 	local toggle = string.lower(args[2])
 	TriggerEvent('usaSettings:returnUserSettings', _source, function(settings)

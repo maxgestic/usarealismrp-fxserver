@@ -13,95 +13,66 @@ local vehicleSearchItems = {
 
 RegisterServerEvent("veh:checkForKey")
 AddEventHandler("veh:checkForKey", function(plate, engineOn)
-	--print('checking for key with plate: '..plate)
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	local inv = user.getActiveCharacterData("inventory")
-	for i = 1, #inv do
-		local item = inv[i]
-		if item then
-			if string.find(item.name, "Key") then
-				if string.find(plate, item.plate) then
-					TriggerClientEvent('veh:toggleEngine', userSource, true, engineOn, false)
-					return
-				end
-			end
-		end
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local item = char.getItemWithField("plate", plate)
+	if item then
+		TriggerClientEvent('veh:toggleEngine', userSource, true, engineOn, false)
+	else
+		TriggerClientEvent('veh:toggleEngine', userSource, false, engineOn, true)
 	end
-	TriggerClientEvent('veh:toggleEngine', userSource, false, engineOn, true)
 end)
 
 RegisterServerEvent('veh:removeHotwiringKit')
 AddEventHandler('veh:removeHotwiringKit', function()
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	local inv = user.getActiveCharacterData("inventory")
-	for i = 1, #inv do
-		local item = inv[i]
-		if item.name == 'Hotwiring Kit' then
-			if item.quantity > 1 then
-				item.quantity = item.quantity - 1
-				user.setActiveCharacterData('inventory', inv)
-				return
-			else
-				table.remove(inv, i)
-				user.setActiveCharacterData('inventory', inv)
-				return
-			end
-		end
-	end
-	print('hotwiring kit not found in user inventory, possible memory editing: '..userSource)
+	local char = exports["usa-characters"]:getPlayerFromId(source)
+	local hotwiring_kit = char.getItem("Hotwiring Kit")
+	if hotwiring_kit then
+		char.removeItem(hotwiring_kit, 1)
+	else
+		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+    	TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit veh:removeHotwiringKit event, please intervene^0!')
+  	end
 end)
 
 RegisterServerEvent('veh:searchResult')
 AddEventHandler('veh:searchResult', function()
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	local user_money = user.getActiveCharacterData('money')
+	local char = exports["usa-characters"]:getPlayerFromId(source)
 	if math.random() > 0.8 then
 		return
 	end
 	if math.random() > 0.6 then
 		local money_found = math.random(10, 175)
-		TriggerClientEvent('usa:notify', userSource, 'You have found $'..money_found..'.0!')
-		user.setActiveCharacterData('money', user_money + money_found)
+		TriggerClientEvent('usa:notify', source, 'You have found $'..money_found..'.0!')
+		char.giveMoney('money', money_found)
+		print('VEHTHEFT: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has received money['..money_found..'] from vehicle search!')
 		return
 	else
 		local item_found = vehicleSearchItems[math.random(#vehicleSearchItems)]
-		if user.getCanActiveCharacterHoldItem(item_found) then
-			TriggerClientEvent('usa:notify', userSource, 'You have found '..item_found.name..'.')
-			local user_inventory = user.getActiveCharacterData('inventory')
-			for i = 1, #user_inventory do
-				local item = user_inventory[i]
-				if item.name == item_found.name then
-					item.quantity = item.quantity + 1
-					user.setActiveCharacterData('inventory', user_inventory)
-					return
-				end
-			end
-			table.insert(user_inventory, item_found)
-			user.setActiveCharacterData('inventory', user_inventory)
+		if char.canHoldItem(item_found) then
+			TriggerClientEvent('usa:notify', source, 'You have found '..item_found.name..'.')
+			print('VEHTHEFT: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has found item['..item_found.name..'] from vehicle search!')
+			char.giveItem(item_found)
 			return
 		else
-			TriggerClientEvent('usa:notify', userSource, "Inventory is full!")
+			TriggerClientEvent('usa:notify', source, "Inventory is full!")
 			return
 		end
 	end
 end)
 
-TriggerEvent('es:addJobCommand', 'slimjim', { 'sheriff', 'dai' }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'slimjim', { 'sheriff', 'dai' }, function(source, args, char)
 	TriggerClientEvent('veh:slimjimVehInFrontPolice', source)
 end, {
 	help = "Slimjim the vehicle in front"
 })
 
-TriggerEvent('es:addJobCommand', 'hotwire', { 'sheriff', 'dai' }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'hotwire', { 'sheriff', 'dai' }, function(source, args, char)
 	TriggerClientEvent('veh:hotwireVehPolice', source)
 end, {
 	help = "Hotwire the vehicle you are currently in"
 })
 
-TriggerEvent('es:addCommand', 'engine', function(source, args, user)
+TriggerEvent('es:addCommand', 'engine', function(source, args, char)
 	TriggerClientEvent("veh:returnPlateToCheck", source)
 end, {
 	help = "Toggle your vehicle engine"

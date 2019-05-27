@@ -26,7 +26,6 @@ AddEventHandler("vehicle:storeItem", function(vehicle_plate, item, quantity)
           local vehicle_inventory_item = inv[j]
           if vehicle_inventory_item.name == item.name then
             inv[j].quantity = inv[j].quantity + quantity
-            -- update vehicle storage --
             TriggerEvent('es:exposeDBFunctions', function(couchdb)
     			couchdb.updateDocument("vehicles", vehicle_plate, { inventory = inv }, function()
     				--print("DEBUG: finished updating DB in vehicle:storeItem")
@@ -39,16 +38,13 @@ AddEventHandler("vehicle:storeItem", function(vehicle_plate, item, quantity)
       -- weapon type items --
       item.quantity = quantity -- set quantity to the one provided as user input, assumes quantity provided is <= to item.quantity
       table.insert(inv, item)
-      -- not already in inventory, add it:
-     -- print("adding item to vehicle: " .. item.name .. ", quantity: " .. quantity)
-      -- update vehicle storage --
       TriggerEvent('es:exposeDBFunctions', function(couchdb)
           couchdb.updateDocument("vehicles", vehicle_plate, { inventory = inv }, function()
               --print("DEBUG: finished updating DB in vehicle:storeItem")
           end)
       end)
   end)
-end) -- TEST
+end)
 
 RegisterServerEvent("vehicle:storeTempItem")
 AddEventHandler("vehicle:storeTempItem", function(vehicle_plate, item, quantity)
@@ -74,7 +70,7 @@ AddEventHandler("vehicle:storeTempItem", function(vehicle_plate, item, quantity)
       table.insert(temporary_vehicles[plate], item)
     end
   end
-end) -- TEST
+end)
 
 RegisterServerEvent("vehicle:seizeContraband")
 AddEventHandler("vehicle:seizeContraband", function(target_vehicle_plate)
@@ -86,7 +82,6 @@ AddEventHandler("vehicle:seizeContraband", function(target_vehicle_plate)
             if inv[j].legality == "illegal" then
               if userSource then
                 TriggerClientEvent("usa:notify", userSource, "~y~Seized:~w~ " .. "(x" .. inv[j].quantity .. ") " .. inv[j].name)
-                TriggerClientEvent("chatMessage", "", userSource, {}, "^3Seized:^0 " .. "(x" .. inv[j].quantity .. ") " .. inv[j].name)
               end
               table.remove(inv, j)
             end
@@ -99,7 +94,7 @@ AddEventHandler("vehicle:seizeContraband", function(target_vehicle_plate)
             end)
         end)
     end)
-end) -- TEST
+end)
 
 RegisterServerEvent("vehicle:removeItem")
 AddEventHandler("vehicle:removeItem", function(whole_item, quantity, target_vehicle_plate)
@@ -122,11 +117,10 @@ AddEventHandler("vehicle:removeItem", function(whole_item, quantity, target_vehi
                 end)
                 return
             else
-                print("*** Error: item not found!! ***")
+                --print("*** Error: item not found!! ***")
             end
         end
       else
-        print('temp vehicle! ')
         for i = 1, #inv do
           local vehicle_inventory_item = inv[i]
           if (vehicle_inventory_item.name == whole_item.name and whole_item.type ~= "weapon") or (whole_item.type == "weapon" and vehicle_inventory_item.type == "weapon" and vehicle_inventory_item.uuid == whole_item.uuid and whole_item.name == vehicle_inventory_item.name) then
@@ -147,9 +141,8 @@ AddEventHandler("vehicle:checkPlayerWeaponAmount", function(item, vehicle_plate)
     local userSource = tonumber(source)
     if not vehicles_being_checked[vehicle_plate] then
         vehicles_being_checked[vehicle_plate] = true
-        local user = exports["essentialmode"]:getPlayerFromId(userSource)
-        local user_weapons = user.getActiveCharacterData("weapons")
-        if #user_weapons < 3 then
+        local char = exports["usa-characters"]:GetCharacter(userSource)
+        if #char.getWeapons < 3 then
             GetVehicleInventory(vehicle_plate, function(inv)
                 for j = 1, #inv do
                     local vehicle_inventory_item = inv[j]
@@ -165,7 +158,6 @@ AddEventHandler("vehicle:checkPlayerWeaponAmount", function(item, vehicle_plate)
             TriggerClientEvent("usa:notify", userSource, "Can't carry more than 3 weapons!")
         end
     else
-        print("****discontinuing weapon retreival****")
         TriggerClientEvent("usa:notify", userSource, "Please wait a moment.")
     end
 end) -- TEST
@@ -175,10 +167,10 @@ AddEventHandler("vehicle:isItemStillInVehicle", function(plate, item, quantity)
     local userSource = tonumber(source)
     if not vehicles_being_checked[plate] then
         vehicles_being_checked[plate] = true
-        local user = exports["essentialmode"]:getPlayerFromId(userSource)
+        local char = exports["usa-characters"]:GetCharacter(userSource)
         if not item.weight then item.weight = 2 end
         local temp_item = { weight = item.weight, quantity = quantity}
-        if user.getCanActiveCharacterHoldItem(temp_item) then
+        if char.canHoldItem(temp_item) then
             GetVehicleInventory(plate, function(inv)
                 for j = 1, #inv do
                     local vehicle_inventory_item = inv[j]
@@ -201,7 +193,6 @@ AddEventHandler("vehicle:isItemStillInVehicle", function(plate, item, quantity)
             TriggerClientEvent("usa:notify", userSource, "Inventory is full.")
         end
     else
-        print("****discontinuing inventory item retrieval****")
         TriggerClientEvent("usa:notify", userSource, "Please wait a moment.")
         -- experimental:
         vehicles_being_checked[plate] = nil
@@ -210,7 +201,6 @@ end) -- TEST
 
 RegisterServerEvent("vehicle:canVehicleHoldItem")
 AddEventHandler("vehicle:canVehicleHoldItem", function(vehId, plate, item, quantity)
-    print("checking to see if vehicle has enough room for item: " .. item.name .. ", quantity: " .. quantity)
     local userSource = tonumber(source)
     local current_weight = 0.0
     GetVehicleInventoryAndCapacity(plate, function(inv, capacity)
@@ -240,11 +230,9 @@ AddEventHandler("vehicle:canVehicleHoldItem", function(vehId, plate, item, quant
         end
         return
       else -- vehicle not in db and is temporary
-        print('not in db!')
         capacity = 50.0
         for veh_plate, inventory in pairs(temporary_vehicles) do
           if veh_plate == plate then -- veh found in temporary table
-            print('found!')
             for i = 1, #inventory do
               local vehicle_inventory_item = inventory[i]
               if not vehicle_inventory_item.weight then
@@ -266,7 +254,6 @@ AddEventHandler("vehicle:canVehicleHoldItem", function(vehId, plate, item, quant
           end
         end
         -- veh not found in temporary table
-        print('not found!')
         temporary_vehicles[plate] = {}
         if not item.weight then item.weight = 1 end
         if current_weight + (item.weight * quantity) <= capacity then

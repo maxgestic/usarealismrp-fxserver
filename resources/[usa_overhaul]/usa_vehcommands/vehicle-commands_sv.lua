@@ -17,15 +17,15 @@ local VEH_RANKS = {
 	[10] = {'taurus16b', 'chrg14a', 'chrg14b', 'chrg18a', 'chrg18b', 'cvpi11a', 'cvpi11b', 'bison19', 'scorcher', 'policet', 'riot', 'policeb', 'fbi', 'fbi2', 'schafter19', 'buffalo19', 'baller19', 'interceptor19', 'oracle19', 'maverick2'},
 }
 
-TriggerEvent('es:addJobCommand', 'spawn', { "police", "sheriff", "ems", "fire", "dai" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'spawn', { "police", "sheriff", "ems", "fire", "dai" }, function(source, args, char)
 	if args[2] then
 		local vehicleRequested = string.lower(args[2])
-		local user_job = user.getActiveCharacterData('job')
-		if user_job == "sheriff" then
-			local user_police_rank = tonumber(user.getActiveCharacterData("policeRank"))
+		local job = char.get('job')
+		if job == "sheriff" then
+			local user_police_rank = tonumber(char.get("policeRank"))
 			if vehicleRequested ~= nil and vehicleRequested ~= '' and IsVehicleSpawnable(vehicleRequested) then
 				if IsHighEnoughRank(vehicleRequested, user_police_rank) then
-					TriggerClientEvent("vehicleCommands:spawnVehicle", source, vehicleRequested, user_job)
+					TriggerClientEvent("vehicleCommands:spawnVehicle", source, vehicleRequested, job)
 					return
 				else
 					TriggerClientEvent("usa:notify", "You are not a high enough rank for that vehicle option.")
@@ -34,18 +34,18 @@ TriggerEvent('es:addJobCommand', 'spawn', { "police", "sheriff", "ems", "fire", 
 			else
 				DisplaySpawnOptionsBasedOnRank(source, user_police_rank)
 			end
-		elseif user_job == "ems" then
-			for _, vehicle in pairs(spawnableVehicles[user_job]) do
+		elseif job == "ems" then
+			for _, vehicle in pairs(spawnableVehicles[job]) do
 				if vehicle == vehicleRequested then
-					TriggerClientEvent("vehicleCommands:spawnVehicle", source, vehicleRequested, user_job)
+					TriggerClientEvent("vehicleCommands:spawnVehicle", source, vehicleRequested, job)
 					return
 				end
 			end
 			TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^3^*[SPAWN] ^r^0Options: maverick2, ambulance, firetruk")
-		elseif user_job == "dai" then
-			for _, vehicle in pairs(spawnableVehicles[user_job]) do
+		elseif job == "dai" then
+			for _, vehicle in pairs(spawnableVehicles[job]) do
 				if vehicle == vehicleRequested then
-					TriggerClientEvent("vehicleCommands:spawnVehicle", source, vehicleRequested, user_job)
+					TriggerClientEvent("vehicleCommands:spawnVehicle", source, vehicleRequested, job)
 					return
 				end
 			end
@@ -59,7 +59,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'livery', { "police", "sheriff", "ems", "fire", "dai" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'livery', { "police", "sheriff", "ems", "fire", "dai" }, function(source, args, char)
 	if args[2] then
 		TriggerClientEvent("vehicleCommands:setLivery", source, args[2])
 	else
@@ -72,7 +72,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'extra', { "police", "sheriff", "ems", "fire", "corrections", "dai" }, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'extra', { "police", "sheriff", "ems", "fire", "corrections", "dai" }, function(source, args, char)
 	if args[2] then
 		TriggerClientEvent("vehicleCommands:setExtra", source, args[2], args[3])
 	else
