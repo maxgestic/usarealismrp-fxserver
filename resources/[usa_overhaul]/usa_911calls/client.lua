@@ -2,7 +2,6 @@ local mute911 = false
 local ReportAssault = true
 local ReportShotsFired = true
 local ReportCarjacking = true
-local ReportAttemptedVehicleTheft = false
 local ReportPersonWithAGun = true
 local ReportPersonWithAKnife = true
 local ReportRecklessDriving = true
@@ -27,15 +26,7 @@ Citizen.CreateThread(function()
 		local vehicle = GetVehiclePedIsIn(ped, false)
 		local currentDamage = GetVehicleBodyHealth(vehicle)
 		if not onDuty then
-			if ReportAttemptedVehicleTheft and IsPedTryingToEnterALockedVehicle(ped) and not GetIsVehicleEngineRunning(GetVehiclePedIsTryingToEnter(ped)) and IsAreaPopulated() then
-				local x, y, z = table.unpack(GetEntityCoords(ped))
-				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-				local primary, secondary = GetVehicleColours(GetVehiclePedIsTryingToEnter(ped))
-        		local area = GetNameOfZone(x, y, z)
-				TriggerServerEvent('911:AttemptedVehicleTheft', x, y, z, lastStreetNAME, area, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsTryingToEnter(ped)))), GetVehicleNumberPlateText(GetVehiclePedIsTryingToEnter(ped)), IsPedMale(ped), primary, secondary)
-				Citizen.Wait(500)
-			elseif ReportCarjacking and IsPedJacking(ped) and IsAreaPopulated() and GetPedInVehicleSeat(veh, -1) == playerPed then
+			if ReportCarjacking and IsPedJacking(ped) and IsAreaPopulated() and GetPedInVehicleSeat(veh, -1) == playerPed then
 				local x, y, z = table.unpack(GetEntityCoords(ped))
 				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
 				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)

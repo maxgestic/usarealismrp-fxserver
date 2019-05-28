@@ -30,61 +30,39 @@ local MAX_PLAYER_WEAPON_SLOTS = 3
 
 RegisterServerEvent("blackMarket:requestPurchase")
 AddEventHandler("blackMarket:requestPurchase", function(key, itemIndex)
-  local userSource = source
-  local user = exports["essentialmode"]:getPlayerFromId(userSource)
+  local char = exports["usa-characters"]:GetCharacter(source)
   local weapon = markets[key]['items'][itemIndex]
-  print("weapon variable type: " .. type(weapon))
   if weapon.stock > 0 then
     weapon.uuid = math.random(999999999)
-    if user.getCanActiveCharacterHoldItem(weapon) then
+    if weapon.canHoldItem(weapon) then
       if weapon.type == "weapon" then
-        local weapons = user.getActiveCharacterData("weapons")
-        if not weapons then
-          weapons = {}
-        end
+        local weapons = char.getWeapons()
         if #weapons < MAX_PLAYER_WEAPON_SLOTS then
-          local user_money = user.getActiveCharacterData("money")
-          if weapon.price <= user_money then -- see if user has enough money
-            TriggerEvent("usa:insertItem", weapon, 1, userSource)
-            user.setActiveCharacterData("money", user_money - weapon.price)
+          if weapon.price <= char.get("money") then -- see if user has enough money
+            char.giveItem(weapon, 1)
+            char.removeMoney(weapon.price)
             if weapon.type == "weapon" then
-              TriggerClientEvent("blackMarket:equipWeapon", userSource, userSource, weapon.hash, weapon.name) -- equip
+              TriggerClientEvent("blackMarket:equipWeapon", source, source, weapon.hash, weapon.name) -- equip
             end
-            TriggerClientEvent("usa:notify", userSource, "Purchased: ~y~"..weapon.name..'\n~s~Price: ~y~$'..weapon.price..'.00')
-            -- decrement weapon stock --
+            TriggerClientEvent("usa:notify", source, "Purchased: ~y~"..weapon.name..'\n~s~Price: ~y~$'..weapon.price..'.00')
             markets[key]['items'][itemIndex].stock = weapon.stock - 1
           else
-            TriggerClientEvent("usa:notify", userSource, "You cannot afford this purchase!")
+            TriggerClientEvent("usa:notify", source, "You cannot afford this purchase!")
           end
         else
-          TriggerClientEvent("usa:notify", userSource, "~r~All weapons slot are full! (" .. MAX_PLAYER_WEAPON_SLOTS .. "/" .. MAX_PLAYER_WEAPON_SLOTS .. ")")
+          TriggerClientEvent("usa:notify", source, "~r~All weapons slot are full! (" .. MAX_PLAYER_WEAPON_SLOTS .. "/" .. MAX_PLAYER_WEAPON_SLOTS .. ")")
         end
       else
-        local user_money = user.getActiveCharacterData("money")
-        if weapon.price <= user_money then -- see if user has enough money
-          TriggerEvent("usa:insertItem", weapon, 1, userSource)
-          user.setActiveCharacterData("money", user_money - weapon.price)
-          TriggerClientEvent("usa:notify", userSource, "Purchased: ~y~"..weapon.name..'\n~s~Price: ~y~$'..weapon.price..'.00')
+        if char.get("money") >= weapon.price then
+          char.giveItem(weapon, 1)
+          char.removeMoney(weapon.price)
+          TriggerClientEvent("usa:notify", source, "Purchased: ~y~"..weapon.name..'\n~s~Price: ~y~$'..weapon.price..'.00')
         end
       end
     else
-      TriggerClientEvent("usa:notify", userSource, "Inventory is full!")
+      TriggerClientEvent("usa:notify", source, "Inventory is full!")
     end
   else
-    TriggerClientEvent("usa:notify", userSource, "Out of stock! Come back tomorrow!")
+    TriggerClientEvent("usa:notify", source, "Out of stock! Come back tomorrow!")
   end
 end)
-
-
-    --[[ A simple exemple that get the document ID from a player, and add data to it.
-    -- getDocumentByRow is used to get docuemnt ID
-    --updateDocument is used to send data to it.
-    idents = GetPlayerIdentifiers(source)
-    TriggerEvent('es:exposeDBFunctions', function(usersTable)
-    usersTable.getDocumentByRow("dbnamehere", "identifier" , idents[1], function(result)
-    docid = result._id
-    usersTable.updateDocument("dbnamehere", docid ,{weapons = "WEAPON_StunGun"},function()
-end)
-end)
-end)
-]]

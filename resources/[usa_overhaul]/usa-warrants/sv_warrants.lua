@@ -16,20 +16,19 @@ local WARRANTS = {}
 -- LOAD WARRANTS FROM DB --
 ---------------------------
 function loadWarrants()
-	print("fetching all warrants...")
 	PerformHttpRequest("http://127.0.0.1:5984/warrants/_all_docs?include_docs=true" --[[ string ]], function(err, text, headers)
-		print("finished getting warrants...")
-		print("error code: " .. err)
+		--print("finished getting warrants...")
+		--print("error code: " .. err)
 		local response = json.decode(text)
 		if response.rows then
 			WARRANTS = {} -- reset table
-			print("#(response.rows) = " .. #(response.rows))
+			--print("#(response.rows) = " .. #(response.rows))
 			-- insert all warrants from 'warrants' db into lua table
 			for i = 1, #(response.rows) do
 				table.insert(WARRANTS, response.rows[i].doc)
 			end
-			print("finished loading warrants...")
-			print("# of warrants: " .. #WARRANTS)
+			--print("finished loading warrants...")
+			--print("# of warrants: " .. #WARRANTS)
 		end
 	end, "GET", "", { ["Content-Type"] = 'application/json' })
 end
@@ -67,7 +66,7 @@ function createWarrant(src, warrant, notify_with_nui)
 	TriggerEvent('es:exposeDBFunctions', function(GetDoc)
 		-- insert into db
 		GetDoc.createDocument("warrants", warrant, function()
-			print("warrant saved!")
+			--print("warrant saved!")
 			if not notify_with_nui then
 				-- notify:
 				TriggerClientEvent('chatMessage', src, "", {255, 255, 255}, "^3Warrant created for:^0 " .. first_name .. " " .. last_name .. "! ^3Notes:^0 " .. notes)

@@ -283,7 +283,6 @@ end)
 RegisterNetEvent('boatMenu:rentBoat')
 AddEventHandler('boatMenu:rentBoat', function(index)
 	local playerCoords = GetEntityCoords(PlayerPedId())
-	print(index)
 	table.insert(rentals, boats[index])
 	local numberHash = tonumber(boats[index].hash)
     Citizen.CreateThread(function()
@@ -340,8 +339,7 @@ function CreateRentMenu(menu, vehicles)
 		local boat = boats[i]
 		local item = NativeUI.CreateItem(boat.name, 'Rent price: $' ..comma_value(boat.rent))
 		item.Activated = function(parentmenu, selected)
-			print('bitch penis man')
-			TriggerEvent('usa:notify', 'You are already renting a watercraft!')
+			TriggerServerEvent("boatMenu:requestRent", boat, i)
 		end
 		rentMenu:AddItem(item)
 	end

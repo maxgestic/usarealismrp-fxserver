@@ -48,21 +48,13 @@ end)
 
 RegisterNetEvent("bars:buy")
 AddEventHandler("bars:buy", function(itemCategory, itemName, property)
-    local user = exports["essentialmode"]:getPlayerFromId(source)
+    local char = exports["usa-characters"]:GetCharacter(source)
     local item = ITEMS[itemCategory][itemName]
-    if item and user then
-        local userMoney = user.getActiveCharacterData("money")
-        if userMoney >= item.price then
-            TriggerEvent("usa:insertItem", item, 1, source, function(success)
-                if success then
-                    -- take money from player --
-                    user.setActiveCharacterData("money", userMoney - item.price)
-                    if property then
-                        -- add money to property --
-                        TriggerEvent("properties:addMoney", property.name, math.ceil(0.40 * item.price))
-                    end
-                    print("success!")
-                end
+    if item and char then
+        if char.get("money") >= item.price then
+            if char.canHoldItem(item) then
+                char.giveItem(item, 1)
+                char.removeMoney(item.price)
             end)
         else
             TriggerClientEvent("usa:notify", source, "Not enough money!")

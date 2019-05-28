@@ -8,14 +8,12 @@ local SV_ITEMS = { -- must be kept in sync with one in cl_bike-shop.lua --
 
 RegisterServerEvent("bikeShop:requestPurchase")
 AddEventHandler("bikeShop:requestPurchase", function(index, location)
-  local userSource = source
-  local user = exports["essentialmode"]:getPlayerFromId(userSource)
+  local char = exports["usa-characters"]:GetCharacter(source)
   local bike = SV_ITEMS[index]
-  local user_money = user.getActiveCharacterData("money")
-  local vehicles = user.getActiveCharacterData("vehicles")
-  if bike.price <= user_money then -- see if user has enough money
-    user.setActiveCharacterData("money", user_money - bike.price)
-    local owner_name = user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName")
+  local vehicles = char.get("vehicles")
+  if bike.price <= char.get("money") then -- see if user has enough money
+    char.removeMoney(bike.price)
+    local owner_name = char.getFullName()
     local plate = generate_random_number_plate()
     local vehicle = {
       owner = owner_name,
@@ -28,18 +26,16 @@ AddEventHandler("bikeShop:requestPurchase", function(index, location)
       inventory = {},
       storage_capacity = 5.0
     }
-    -- give player vehicle --
     table.insert(vehicles, vehicle.plate)
-    user.setActiveCharacterData("vehicles", vehicles)
-    print("vehicle purchased (" .. vehicle.model .. ")!")
+    char.set("vehicles", vehicles)
     -- add to database --
     AddVehicleToDB(vehicle)
     TriggerEvent("lock:addPlate", vehicle.plate)
-    TriggerClientEvent("usa:notify", userSource, "You have purchased a ~y~" .. bike.name .. "~s~, you may store it in a garage.")
-    TriggerClientEvent("bikeShop:spawnBike", userSource, bike, location, plate)
-    TriggerClientEvent("bikeShop:toggleMenu", userSource, false)
+    TriggerClientEvent("usa:notify", source, "You have purchased a ~y~" .. bike.name .. "~s~, you may store it in a garage.")
+    TriggerClientEvent("bikeShop:spawnBike", source, bike, location, plate)
+    TriggerClientEvent("bikeShop:toggleMenu", source, false)
   else
-    TriggerClientEvent("usa:notify", userSource, "Not enough money!")
+    TriggerClientEvent("usa:notify", source, "Not enough money!")
   end
 end)
 
@@ -61,7 +57,6 @@ function generate_random_number_plate()
   number_plate = number_plate .. charset.numbers[math.random(#charset.numbers)] -- number
   number_plate = number_plate .. charset.numbers[math.random(#charset.numbers)] -- number
   number_plate = number_plate .. charset.numbers[math.random(#charset.numbers)] -- number
-  print("created random plate: ")
   return number_plate
 end
 
@@ -70,9 +65,9 @@ function AddVehicleToDB(vehicle)
   TriggerEvent('es:exposeDBFunctions', function(couchdb)
     couchdb.createDocumentWithId("vehicles", vehicle, vehicle.plate, function(success)
       if success then
-        print("* Vehicle created in DB!! *")
+        --print("* Vehicle created in DB!! *")
       else
-        print("* Error: vehicle was not created in DB!! *")
+        --print("* Error: vehicle was not created in DB!! *")
       end
     end)
   end)

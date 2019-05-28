@@ -1,8 +1,7 @@
 local blipstotoggle = {'Clothes', 'Barber', 'Store', 'CarWash', 'Tattoo', 'GunShop', 'BoatShop', 'PlaneShop', 'Fuel', 'BoatFuel', 'PlaneFuel', 'Movies', 'AutoRepair', 'Bank'}
 
 
-TriggerEvent('es:addCommand','toggleblips', function(source, args, user)
-	print("inside /toggleblips command!")
+TriggerEvent('es:addCommand','toggleblips', function(source, args, char)
 	local foundblip = false
 	local playerSource = source
 	for _, i in pairs(blipstotoggle) do

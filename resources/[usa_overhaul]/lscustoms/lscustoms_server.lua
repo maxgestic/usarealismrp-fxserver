@@ -109,11 +109,8 @@ end)
 
 RegisterServerEvent("LSC:buttonSelected")
 AddEventHandler("LSC:buttonSelected", function(name, button, mname)
-	local usource = source
 	if button.price then -- check if button have price
-		local player = exports["essentialmode"]:getPlayerFromId(usource)
-		local mymoney = player.getActiveCharacterData("money")
-		local myjob = player.getActiveCharacterData("job")
+		local char = exports["usa-characters"]:GetCharacter(source))
 		button.price = math.abs(button.price) -- prevent mem hack to gain money (lol what?)
 		--print(tprint(button))
 		if mname ~= 'main' then
@@ -155,13 +152,12 @@ AddEventHandler("LSC:buttonSelected", function(name, button, mname)
 				end
 			end
 		end
-		if button.price <= mymoney then
+		if button.price <= char.get("money") then
 			-- take money from player, apply customization --
-			TriggerClientEvent("LSC:buttonSelected", usource, name, button, true)
-			mymoney  = mymoney - button.price
-			player.setActiveCharacterData("money", mymoney)
+			TriggerClientEvent("LSC:buttonSelected", source, name, button, true)
+			char.removeMoney(button.price)
 		else
-			TriggerClientEvent("LSC:buttonSelected", usource, name, button, false)
+			TriggerClientEvent("LSC:buttonSelected", source, name, button, false)
 		end
 	end
 end)
@@ -223,7 +219,7 @@ AddEventHandler("LSC:finished", function(veh)
 
 	--]]
 
-	print("saving car customizations...")
+	--print("saving car customizations...")
 	TriggerEvent("customs:saveCarData", veh, veh.plate, source) -- save car customization
 
 	--print("type(mods[12]): " .. type(mods[12].mod))
@@ -319,7 +315,7 @@ AddEventHandler("customs:saveCarData", function(data, plate, source)
 	if plate then
 		TriggerEvent('es:exposeDBFunctions', function(couchdb)
 			couchdb.updateDocument("vehicles", plate, { customizations = data }, function()
-				print("Customizations saved!")
+				--print("Customizations saved!")
 			end)
 		end)
 	end

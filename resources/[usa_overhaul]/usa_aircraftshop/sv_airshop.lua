@@ -50,107 +50,89 @@ local prices = {
   }
 }
 
-local DEBUG = true
+local DEBUG = false
+local rentals = {}
 
-AddEventHandler('es:playerLoaded', function(source, user)
-  print("loading player aircraft!")
+AddEventHandler('es:playerLoaded', function(source, char)
   TriggerEvent("aircraft:loadAircraft", source)
 end)
 
 RegisterServerEvent("aircraft:loadAircraft")
 AddEventHandler("aircraft:loadAircraft", function(source)
-  local usource = source
-  local user = exports["essentialmode"]:getPlayerFromId(usource)
-  local user_aircraft = user.getActiveCharacterData("aircraft") or {}
-  TriggerClientEvent("aircraft:loadedAircraft", usource, user_aircraft)
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local aircraft = char.get("aircraft") or {}
+  TriggerClientEvent("aircraft:loadedAircraft", source, aircraft)
 end)
 
 RegisterServerEvent("aircraft:requestPurchase")
 AddEventHandler("aircraft:requestPurchase", function(aircraft)
   local price = prices.purchase[aircraft.name]
-  local usource = tonumber(source)
-  local user = exports["essentialmode"]:getPlayerFromId(usource)
-  local user_aircraft = user.getActiveCharacterData("aircraft") or {}
-  if DEBUG then print("#aircraft: " .. #user_aircraft) end
-  local umoney = user.getActiveCharacterData("money")
-  if umoney - price >= 0 then
-    user.setActiveCharacterData("money", umoney - price)
-    -- create unique id --
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local aircraft = char.get("aircraft") or {}
+  if DEBUG then print("#aircraft: " .. #aircraft) end
+  if char.get("money") - price >= 0 then
+    char.removeMoney(price)
     aircraft.id = math.random(9999999999)
     aircraft.stored = true
-    -- spawn aircraft --
-    TriggerClientEvent("usa:notify", usource, "Purchased: ~y~" .. aircraft.name .. "\n~s~Price: ~y~$" .. comma_value(price)..'\n~s~ID: ~y~' .. aircraft.id)
-    TriggerClientEvent("usa:notify", usource, "Your aircraft can be found in your storage.")
-    print("Creating aircraft ID # for purchased aircraft: " .. aircraft.id)
-    print('Aircraft stored: '..tostring(aircraft.stored))
+    TriggerClientEvent("usa:notify", source, "Purchased: ~y~" .. aircraft.name .. "\n~s~Price: ~y~$" .. comma_value(price)..'\n~s~ID: ~y~' .. aircraft.id)
+    TriggerClientEvent("usa:notify", source, "Your aircraft can be found in your storage.")
     -- add to player's aircraft collection --
-    if not user_aircraft then
-      print("player had no aircrafts!")
-      user_aircraft = {aircraft}
-      user.setActiveCharacterData("aircraft", user_aircraft)
+    if not aircraft then
+      aircraft = {aircraft}
+      char.set("aircraft", aircraft)
     else
-      print("user had aircrafts! # = " .. #user_aircraft)
-      if #user_aircraft <= MAX_VEHICLES then
-        table.insert(user_aircraft, aircraft)
-        user.setActiveCharacterData("aircraft", user_aircraft)
+      if #aircraft <= MAX_VEHICLES then
+        table.insert(aircraft, aircraft)
+        char.set("aircraft", aircraft)
       else
-        TriggerClientEvent("usa:notify", usource, "Sorry, you can't own more than " .. MAX_VEHICLES .. "!")
+        TriggerClientEvent("usa:notify", source, "Sorry, you can't own more than " .. MAX_VEHICLES .. "!")
         return
       end
     end
-    user.setActiveCharacterData("aircraft", user_aircraft)
-    TriggerClientEvent("aircraft:loadedAircraft", usource, user_aircraft)
-    --TriggerClientEvent("aircraft:spawnAircraft", usource, aircraft)
+    char.set("aircraft", aircraft)
+    TriggerClientEvent("aircraft:loadedAircraft", source, aircraft)
     if DEBUG then
       print("owned aircraft: ")
-      for i = 1, #user_aircraft do
-        print("name: " .. user_aircraft[i].name)
-        print('stored: '..tostring(user_aircraft[i].stored))
-        print('id: '..user_aircraft[i].id)
+      for i = 1, #aircraft do
+        print("name: " .. aircraft[i].name)
+        print('stored: '..tostring(aircraft[i].stored))
+        print('id: '..aircraft[i].id)
       end
     end
   else
-    TriggerClientEvent('usa:notify', usource, 'You do not have enough money!')
+    TriggerClientEvent('usa:notify', source, 'You do not have enough money!')
   end
 end)
 
 RegisterServerEvent("aircraft:requestRent")
 AddEventHandler("aircraft:requestRent", function(aircraft)
+  if rentals[source] then TriggerClientEvent("usa:notify", source, "You are already renting an aircraft!") return end
+  local char = exports["usa-characters"]:GetCharacter(source)
   local price = prices.rent[aircraft.name]
-  local usource = tonumber(source)
   if price >= MIN_AIRCRAFT_PRICE then
-    --TriggerEvent("es:getPlayerFromId", usource, function(user)
-    local user = exports["essentialmode"]:getPlayerFromId(usource)
-    if user then
-      local user_money = user.getActiveCharacterData("money")
-      if user_money >= price then
-        local new_money = user_money - price
-        user.setActiveCharacterData("money", new_money)
-        TriggerClientEvent("aircraft:rentAircraft", usource, aircraft)
-      else
-        print("player did not have enough money to rent aircraft")
-      end
+    if char.get("money") >= price then
+      rentals[source] = aircraft
+      char.removeMoney(price)
+      TriggerClientEvent("aircraft:rentAircraft", source, aircraft)
+    else
+      TriggerClientEvent("usa:notify", source, "You cannot afford this purchase!")
     end
-    --end)
   end
 end)
 
 RegisterServerEvent("aircraft:requestSell")
 AddEventHandler("aircraft:requestSell", function(aircraft)
-  local usource = tonumber(source)
   local return_amount = math.ceil(prices.purchase[aircraft.name] * .50)
-  local user = exports["essentialmode"]:getPlayerFromId(usource)
-  local user_money = user.getActiveCharacterData("money")
-  local user_aircraft = user.getActiveCharacterData("aircraft") or {}
-  for i = 1, #user_aircraft do
-    if user_aircraft[i].id == aircraft.id then
-      table.remove(user_aircraft, i)
-      user.setActiveCharacterData("aircraft", user_aircraft)
-      local new_money = user_money + return_amount
-      user.setActiveCharacterData("money", new_money)
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local aircraft = char.get("aircraft") or {}
+  for i = 1, #aircraft do
+    if aircraft[i].id == aircraft.id then
+      table.remove(aircraft, i)
+      char.set("aircraft", aircraft)
+      char.giveMoney(return_amount)
       if DEBUG then print("sold aircraft!") end
-      TriggerClientEvent("usa:notify", usource, "Aircraft sold for ~y~$" .. comma_value(return_amount) .. "~s~!")
-      TriggerClientEvent("aircraft:loadedAircraft", usource, user_aircraft)
+      TriggerClientEvent("usa:notify", source, "Aircraft sold for ~y~$" .. comma_value(return_amount) .. "~s~!")
+      TriggerClientEvent("aircraft:loadedAircraft", source, aircraft)
       return
     end
   end
@@ -158,39 +140,28 @@ end)
 
 RegisterServerEvent("aircraft:returnRental")
 AddEventHandler("aircraft:returnRental", function(item)
-  local usource = tonumber(source)
-  print(item.name)
-  local price = prices.rent[item.name]
-  local user = exports["essentialmode"]:getPlayerFromId(usource)
-  local user_money = user.getActiveCharacterData("money")
-  local returnAmount = .25*price
-  local rounded = math.ceil(returnAmount)
-  if rounded <= MAX_AIRCRAFT_RETURN_AMOUNT then
-    local new_money = user_money + rounded
-    user.setActiveCharacterData("money", new_money)
-  else
-    print("*** PLAYER .. " .. GetPlayerName(usource) .. " WAS TRYING TO MEMORY CHEAT AIRCRAFT RETURN TO EXPLOIT MONEY! ***")
+  local char = exports["usa-characters"]:GetCharacter(source)
+  if rentals[source].name == item.name then
+    local price = prices.rent[item.name]
+    local returnAmount = math.ceil(.25*price)
+    if returnAmount <= MAX_AIRCRAFT_RETURN_AMOUNT then
+      char.giveMoney(returnAmount)
+    else
+      DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+      TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit aircraft:returnRental event, please intervene^0!')
+    end
   end
 end)
 
 RegisterServerEvent('aircraft:requestOpenMenu')
 AddEventHandler('aircraft:requestOpenMenu', function()
-  local usource = source
-  local user = exports["essentialmode"]:getPlayerFromId(usource)
-  local licenses = user.getActiveCharacterData("licenses")
-    for i = 1, #licenses do
-      if licenses[i].name == 'Aircraft License' then
-        if licenses[i].status == 'valid' then
-          TriggerClientEvent('aircraft:openMenu', usource)
-          return
-        else
-          TriggerClientEvent('usa:notify', usource, 'Your aircraft license is ~y~suspended~s~ by a Judge.')
-          return
-        end
-      end
-    end
-    TriggerClientEvent('usa:notify', usource, 'You do not have an aircraft license!')
-    return
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local license = char.getItem("Aircraft License")
+  if license and license.status == "valid" then
+    TriggerClientEvent('aircraft:openMenu', source)
+  else
+    TriggerClientEvent('usa:notify', source, 'You do not own a valid Aircraft License!')
+  end
 end)
 
 function comma_value(amount)

@@ -41,7 +41,7 @@ AddEventHandler('afkping:verifyIdle', function()
 	print('AFK: '..GetPlayerName(_source)..'['..GetPlayerIdentifier(_source)..'] has been added to token table!')
 end)
 
-TriggerEvent('es:addCommand','token', function(source, args, user)
+TriggerEvent('es:addCommand','token', function(source, args, char)
 	local tokenGiven = args[2]
 	local _source = source
 	for player, token in pairs(afkTokens) do

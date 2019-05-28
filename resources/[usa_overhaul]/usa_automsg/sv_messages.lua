@@ -11,7 +11,6 @@ end)
 
 AddEventHandler('playerConnecting', function(name, setReason)
   if not ABLE_TO_JOIN then
-    print("** Person tried to join too earlier, rejecting connection! **")
     setReason("Please wait " .. SECONDS_TO_DELAY .. " seconds before joining.")
     CancelEvent()
   end
@@ -27,10 +26,11 @@ Citizen.CreateThread(function()
         local date = os.date("*t", os.time())
         if date.hour == 3 and date.min == 20 then
             TriggerClientEvent('restart:notify', -1, 10)
-            print('notifying!')
+            print('SERVER: Restarting in 10 minutes!')
         elseif date.hour == 3 and date.min == 29 then
             for i = 1, 4 do
                 TriggerClientEvent('chatMessage', -1, '^8^*[SERVER] ^rServer is restarting, disconnect now or risk data loss!')
+                print("SERVER: Restarting!")
             end
         end
     end
