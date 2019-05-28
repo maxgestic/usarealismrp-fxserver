@@ -45,7 +45,7 @@ AddEventHandler("chopshop:reward", function(veh_name, damage, property)
   for player, vehicles in pairs(vehiclesWanted) do
     if player == source then
       for i = #vehicles, 1, -1 do
-        if string.lower(vehicles[i].name) == string.lower(veh_name) then)
+        if string.lower(vehicles[i].name) == string.lower(veh_name) then
           local reward = GetRewardFromName(veh_name)
           if (reward - damage) >= 0 then
             char.giveMoney((reward - damage))

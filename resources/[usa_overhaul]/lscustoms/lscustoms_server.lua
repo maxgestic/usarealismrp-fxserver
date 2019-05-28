@@ -110,7 +110,7 @@ end)
 RegisterServerEvent("LSC:buttonSelected")
 AddEventHandler("LSC:buttonSelected", function(name, button, mname)
 	if button.price then -- check if button have price
-		local char = exports["usa-characters"]:GetCharacter(source))
+		local char = exports["usa-characters"]:GetCharacter(source)
 		button.price = math.abs(button.price) -- prevent mem hack to gain money (lol what?)
 		--print(tprint(button))
 		if mname ~= 'main' then
@@ -122,7 +122,6 @@ AddEventHandler("LSC:buttonSelected", function(name, button, mname)
 							break
 						else 
 							TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for memory editing at a Los Santos Customs, please intervene^0!')
-							--TriggerClientEvent("chatMessage", -1, "^1^*[SYSTEM]^r^0 A silly goose, by the name of ^1"..player.getActiveCharacterData('fullName').."^0 just tried modifying memory. What do they think they're doin'?")
 							DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.") 
 							return 
 						end
@@ -131,7 +130,6 @@ AddEventHandler("LSC:buttonSelected", function(name, button, mname)
 							break 
 						else 
 							TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for memory editing at a Los Santos Customs, please intervene^0!')
-							--TriggerClientEvent("chatMessage", -1, "^1^*[SYSTEM]^r^0 A silly goose, by the name of ^1"..player.getActiveCharacterData('fullName').."^0 just tried modifying memory. What do they think they're doin'?")
 							DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.") 
 							return 
 						end
@@ -142,7 +140,6 @@ AddEventHandler("LSC:buttonSelected", function(name, button, mname)
 									break 
 								else 
 									TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for memory editing at a Los Santos Customs, please intervene^0!')
-									--TriggerClientEvent("chatMessage", -1, "^1^*[SYSTEM]^r^0 A silly goose, by the name of ^1"..player.getActiveCharacterData('fullName').."^0 just tried modifying memory. What do they think they're doin'?")
 									DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.") 
 									return 
 								end

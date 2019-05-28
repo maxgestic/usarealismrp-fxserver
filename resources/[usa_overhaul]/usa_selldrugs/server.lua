@@ -66,5 +66,5 @@ AddEventHandler('sellDrugs:completeSale', function()
 		else
 			if debug then print("nothing to sell!!") end
 		end
-	end)
+	end
 end)

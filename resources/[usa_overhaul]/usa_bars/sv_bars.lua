@@ -55,7 +55,7 @@ AddEventHandler("bars:buy", function(itemCategory, itemName, property)
             if char.canHoldItem(item) then
                 char.giveItem(item, 1)
                 char.removeMoney(item.price)
-            end)
+            end
         else
             TriggerClientEvent("usa:notify", source, "Not enough money!")
         end
