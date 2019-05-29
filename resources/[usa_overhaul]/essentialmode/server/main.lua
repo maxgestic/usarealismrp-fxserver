@@ -1,8 +1,3 @@
--- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
--- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
--- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
--- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
-
 _VERSION = '4.1.4'
 
 ---------------------------------------------------------------------------
@@ -117,18 +112,11 @@ AddEventHandler('playerDropped', function()
 	-- drop player --
 	if(Users[numberSource])then
 		-- log --
-		print("ESSENTIALMODE: "..GetPlayerName(numberSource)..'['..GetPlayerIdentifier(numberSource)..'] has dropped from the server!')
+		print("player " .. GetPlayerName(numberSource) .. " dropped from the server!")
 		TriggerEvent("chat:sendToLogFile", numberSource, "dropped from the server! Timestamp: " .. os.date('%m-%d-%Y %H:%M:%S', os.time()))
-		-- notify DOC of player disconnect while in jail --
-		local jailtime = Users[numberSource].getActiveCharacterData("jailtime")
-		if jailtime then
-			if jailtime > 0 then
-				exports["globals"]:notifyPlayersWithJobs({"corrections"}, "^3INFO: ^0" .. Users[numberSource].getActiveCharacterData("fullName") .. " has fallen asleep.")
-			end
-		end
 		-- Trigger event / save player data --
 		TriggerEvent("es:playerDropped", Users[numberSource])
-		db.updateUser(Users[numberSource].get('identifier'), {characters = Users[numberSource].getCharacters(), policeCharacter = Users[numberSource].getPoliceCharacter(), emsCharacter = Users[numberSource].getEmsCharacter()}, function()
+		db.updateUser(Users[numberSource].get('identifier'), {policeCharacter = Users[numberSource].getPoliceCharacter(), emsCharacter = Users[numberSource].getEmsCharacter()}, function()
 			Users[numberSource] = nil
 		end)
 	else
@@ -184,41 +172,25 @@ AddEventHandler('chatMessageLocation', function(source, n, message, location)
 			if command.perm > 0 then
 				if(Users[source].getPermissions() >= command.perm or groups[Users[source].getGroup()]:canTarget(command.group)) then
 					command.cmd(source, command_args, Users[source], location)
-					TriggerEvent("es:adminCommandRan", source, command_args, Users[source])
 				else
 					TriggerClientEvent('chatMessage', source, "", {255, 50, 50}, "That command is for " .. command.group .. " and up only!");
-					TriggerEvent("es:adminCommandFailed", source, command_args, Users[source])
-					debugMsg("Non admin (" .. GetPlayerName(source) .. ") attempted to run admin command: " .. command_args[1])
 				end
 			elseif command.job ~= "everyone" then
+				local character = exports["usa-characters"]:GetCharacter(source)
+				local charJob = character.get("job")
 				local allowed = 0;
 				for k,v in pairs(command.job) do
-					if Users[source].getActiveCharacterData("job") == v then
-						allowed = 1
+					if charJob == v then
+						command.cmd(source, command_args, character, location)
+						return
 					end
 				end
-
-				if allowed == 1 then
-					command.cmd(source, command_args, Users[source], location)
-					TriggerEvent("es:commandRan", source, command_args, Users[source])
-				else
-					TriggerClientEvent('chatMessage', source, "", {255, 50, 50}, "That command is for " .. tostring(table.concat(command.job, ", ")) .. " only!");
-				end
+				TriggerClientEvent('chatMessage', source, "", {255, 50, 50}, "That command is for " .. tostring(table.concat(command.job, ", ")) .. " only!");
 			else
-				command.cmd(source, command_args, Users[source], location)
-				TriggerEvent("es:userCommandRan", source, command_args)
-			end
-
-			TriggerEvent("es:commandRan", source, command_args, Users[source])
-		else
-			TriggerEvent('es:invalidCommandHandler', source, command_args, Users[source])
-
-			if WasEventCanceled() then
-				CancelEvent()
+				local character = exports["usa-characters"]:GetCharacter(source)
+				command.cmd(source, command_args, character, location)
 			end
 		end
-	else
-		TriggerEvent('es:chatMessage', source, message, Users[source])
 	end
 end)
 
@@ -233,55 +205,3 @@ end)
 AddEventHandler('es:addGroupCommand', function(command, perm, callback, suggestion)
 	addGroupCommand(command, perm, callback, suggestion)
 end)
-
-RegisterServerEvent('es:updatePositions')
-AddEventHandler('es:updatePositions', function(x, y, z)
-	if(Users[source])then
-		Users[source].setCoords(x, y, z)
-	end
-end)
-
----------------------------------------------------------------------------
--- Threads --
----------------------------------------------------------------------------
---[[ disabled to see if it stops the mass timeout issue
-Citizen.CreateThread(function()
-
-	function saveData()
-		print("calling saveData()...")
-		TriggerEvent("es:getPlayers", function(players)
-			print("inside of es:getPlayers")
-			if not players then
-				return
-			end
-
-			print("players existed")
-			for id, player in pairs(players) do
-				if not player then
-					return
-				end
-				print("player existed")
-
-				db.updateUser(
-					player.get('identifier'),
-					{
-						characters = player.getCharacters(),
-						policeCharacter = (player.getPoliceCharacter() or {}),
-						emsCharacter = (player.getEmsCharacter() or {})
-					},
-					function()
-						print("saved player #" .. id .. "'s data!'")
-					end
-				)
-			end
-		end)
-	end
-
-	local minutes = 30
-
-	while true do
-		Citizen.Wait(minutes * 60000)
-		saveData()
-	end
-end)
---]]

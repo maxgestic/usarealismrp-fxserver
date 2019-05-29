@@ -109,7 +109,6 @@ end)
 
 RegisterNetEvent("es:addedMoney")
 AddEventHandler("es:addedMoney", function(m, native)
-	TriggerEvent('es:setMoneyDisplay', 1)
 
 	if not native then
 		SendNUIMessage({
@@ -121,16 +120,10 @@ AddEventHandler("es:addedMoney", function(m, native)
 		--Citizen.InvokeNative(0x0772DF77852C2E30, math.floor(m), 0)
 	end
 
-	Citizen.Wait(4000)
-	TriggerEvent('es:setMoneyDisplay', 0)
-
-
 end)
 
 RegisterNetEvent("es:removedMoney")
 AddEventHandler("es:removedMoney", function(m, native, current)
-	TriggerEvent('es:setMoneyDisplay', 1)
-
 	if not native then
 		SendNUIMessage({
 			removecash = true,
@@ -140,9 +133,6 @@ AddEventHandler("es:removedMoney", function(m, native, current)
 		--Citizen.InvokeNative(0x170F541E1CADD1DE, true)
 		--Citizen.InvokeNative(0x0772DF77852C2E30, -math.floor(m), 0)
 	end
-
-	Citizen.Wait(4000)
-	TriggerEvent('es:setMoneyDisplay', 0)
 end)
 
 RegisterNetEvent('es:addedBank')

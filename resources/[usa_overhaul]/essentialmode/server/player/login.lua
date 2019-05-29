@@ -5,7 +5,7 @@
 
 function LoadUser(identifier, source, new)
 	db.retrieveUser(identifier, function(user)
-		Users[source] = CreatePlayer(source, user.permission_level, user.identifier, user.group, user.characters, user.policeCharacter, user.emsCharacter)
+		Users[source] = CreatePlayer(source, user.permission_level, user.identifier, user.group, user.policeCharacter, user.emsCharacter)
 		--print("loaded user " .. GetPlayerName(tonumber(source)) .. "from db...")
 
 		TriggerEvent('es:playerLoaded', source, Users[source])
@@ -54,33 +54,16 @@ function registerUser(identifier, source)
 end
 
 AddEventHandler("es:setPlayerData", function(user, k, v, cb)
-	if(Users[user])then
+	if Users[user] then
 		-- passed in group field to save? save it on the user, not the user's character(s)
-		if(k == "group")then
-			Users[user].set(k, v)
-			db.updateUser(Users[user].get('identifier'), {group = v}, function(d)
-				if d == true then
-					cb("Player group data edited", true)
-				else
-					cb(d, false)
-				end
-			end)
-		else -- not group field, save it on the character
-			if(Users[user].getActiveCharacterData(k))then
-				if(k ~= "money") then
-					Users[user].setActiveCharacterData(k, v)
-					db.updateUser(Users[user].get('identifier'), {characters = Users[user].getCharacters()}, function(d)
-						if d == true then
-							cb("Player data edited", true)
-						else
-							cb(d, false)
-						end
-					end)
-				end
+		Users[user].set(k, v)
+		db.updateUser(Users[user].get('identifier'), {group = v}, function(d)
+			if d == true then
+				cb("Player group data edited", true)
 			else
-				cb("Column does not exist!", false)
+				cb(d, false)
 			end
-		end
+		end)
 	else
 		cb("User could not be found!", false)
 	end
@@ -110,20 +93,3 @@ AddEventHandler("es:getPlayerFromIdentifier", function(identifier, cb)
 		cb(user)
 	end)
 end)
-
---[[
--- Function to update player money every 60 seconds.
-local function savePlayerMoney()
-	SetTimeout(60000, function()
-		for k,v in pairs(Users)do
-			if Users[k] ~= nil then
-				db.updateUser(v.get('identifier'), {characters = v.getCharacters()}, function() end)
-			end
-		end
-
-		savePlayerMoney()
-	end)
-end
-
-savePlayerMoney()
---]]
