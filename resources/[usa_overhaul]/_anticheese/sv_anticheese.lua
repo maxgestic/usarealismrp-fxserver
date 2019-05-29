@@ -70,8 +70,8 @@ Citizen.CreateThread(function()
 	function GetPlayerInfo(src)
 		local license, steam = GetPlayerNeededIdentifiers(src)
 		local steamName = GetPlayerName(src)
-		local player = exports["essentialmode"]:getPlayerFromId(src)
-		local name = player.getActiveCharacterData("fullName")
+		local char = exports["usa-characters"]:GetCharacter(src)
+		local name = char.getFullName()
 
 		if not license then
 			license = "No License Found!"
