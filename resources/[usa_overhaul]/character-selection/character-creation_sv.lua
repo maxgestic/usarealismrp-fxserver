@@ -1,262 +1,80 @@
 local WHOLE_DAYS_TO_DELETE = 3
-local blacklistedNames = {
-	'nig',
-	'fuck',
-	'shit',
-	'bitch',
-	'ass',
-	'prick',
-	'ngger',
-	'ngga',
-	'nger',
-	'fck', 
-	'fak',
-	'sht',
-	'sh1t',
-	'fuk',
-	'fag',
-	'gay',
-	'cunt',
-	'cock',
-	'dick',
-	'penis',
-	'vag',
-	'crack',
-	'jerk',
-	'piss',
-	'slut',
-	'tit',
-	'twat',
-	'wank',
-	'whore',
-	'jihad',
-	'fivem',
-	'usarrp',
-	'allahu',
-	'akbar',
-	'admin',
-	'owner',
-	'slave',
-	'thot',
-	'weed',
-	'meth'
-}
+local DEFAULT_MONEY = 0
+local DEFAULT_BANK = 5000
 
 TriggerEvent('es:addCommand', 'swap', function(source, args, user)
 	TriggerClientEvent("character:swap--check-distance", source)
 end, { help = "Swap to another character (Must be at the clothing store)." })
 
 RegisterServerEvent("character:getCharactersAndOpenMenu")
-AddEventHandler("character:getCharactersAndOpenMenu", function(menu)
-	print("loading characters to open menu...")
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	if user then
-		local characters = user.getCharacters()
-		TriggerClientEvent("character:open", userSource, menu, characters)
+AddEventHandler("character:getCharactersAndOpenMenu", function(menu, src)
+	local usource = source
+	if src then
+		usource = src -- for when triggered from a server event (has no source)
 	end
+	exports["usa-characters"]:SaveCurrentCharacter(usource, function()
+		local steamID = GetPlayerIdentifiers(usource)[1]
+		exports["usa-characters"]:LoadCharactersForSelection(steamID, function(characters)
+			TriggerClientEvent("character:open", usource, menu, characters)
+		end)
+	end)
 end)
-
-local default_money = 5000
-local default_bank = 0
 
 -- Creating a new character
 RegisterServerEvent("character:new")
 AddEventHandler("character:new", function(data)
-	local userSource = tonumber(source)
-	print("***INSIDE OF CHARACTER:NEW***")
-	for i = 1, #blacklistedNames do
-		local name = blacklistedNames[i]
-		local firstName = string.lower(data.firstName)
-		local middleName = string.lower(data.middleName)
-		local lastName = string.lower(data.lastName)
-		if string.find(firstName, name) or string.find(middleName, name) or string.find(lastName, name) then
-			TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (1) '..name)
-			print('Character name contained forbidden words: '..data.firstName..' '..data.middleName..' '..data.lastName)
-			return
-		end
+	local usource = tonumber(source)
+	if IsValidInput(usource, data) then
+		data = ValidateNameCapitlization(data)
+		exports["usa-characters"]:CreateNewCharacter(usource, data, function()
+			TriggerEvent("character:getCharactersAndOpenMenu", "home", usource)
+		end)
 	end
-	if not ContainsVowel(data.firstName) or (not ContainsVowel(data.middleName) and data.middleName ~= '') or not ContainsVowel(data.lastName) then
-		TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (2)')
-		print('Character name did not contain a vowel: '..data.firstName..' '..data.middleName..' '..data.lastName)
-		return
-	end
-	if string.len(data.firstName) < 3 or (string.len(data.middleName) < 3 and data.middleName ~= '') or string.len(data.lastName) < 3 then
-		TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (3)')
-		print('Character name was insufficient length: '..data.firstName..' '..data.middleName..' '..data.lastName)
-		return
-	end
-	if string.len(data.firstName) > 16 or (string.len(data.middleName) > 16 and data.middleName ~= '') or string.len(data.lastName) > 16 then
-		TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (4)')
-		print('Character name was insufficient length: '..data.firstName..' '..data.middleName..' '..data.lastName)
-		return
-	end
-	local dob_year = tonumber(string.sub(data.dateOfBirth, 1, 4))
-	if dob_year > 2001 or dob_year < 1940 then
-		TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (5)')
-		print('Character date of birth was unrealistic: '..data.dateOfBirth)
-		return
-	end
-	if ContainsSpecialCharacters(data.firstName) or (ContainsSpecialCharacters(data.middleName) and data.middleName ~= '') or ContainsSpecialCharacters(data.lastName) then
-		TriggerClientEvent('chatMessage', userSource, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (6)')
-		print('Character name contained special characters: '..data.firstName..' '..data.middleName..' '..data.lastName)
-		return
-	end
-
-	data.firstName = firstToUpper(data.firstName)
-	data.middleName = firstToUpper(data.middleName)
-	data.lastName = firstToUpper(data.lastName)
-
-	local slot = data.slot
-	local newCharacterTemplate = {
-		firstName = data.firstName,
-		middleName = data.middleName,
-		lastName = data.lastName,
-		dateOfBirth = data.dateOfBirth,
-		active = true,
-		appearance = {},
-		jailtime = 0,
-		money = default_money,
-		bank = default_bank,
-		inventory = {},
-		weapons = {},
-		vehicles = {},
-		watercraft = {},
-		aircraft = {},
-		insurance = {},
-		job = "civ",
-		licenses = {},
-		criminalHistory = {},
-		policeRank = 0,
-		emsRank = 0,
-		securityRank = 0,
-		ingameTime = 0,
-		spawn = nil,
-		property = {
-			['location'] = 'Perrera Beach Motel',
-			['storage'] = {},
-			['paid_time'] = os.time(),
-			['money'] = 0
-		},
-		created = {
-			date = os.date('%m-%d-%Y %H:%M:%S', os.time()),
-			time = os.time()
-		}
-	}
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		if user then
-			local characters = user.getCharacters()
-			print("trying to save character data into slot #" .. slot .. "... "..data.firstName..' '..data.middleName..' '..data.lastName)
-			characters[slot] = newCharacterTemplate
-			user.setCharacters(characters)
-			print("done saving character data into slot #" .. slot)
-
-			TriggerClientEvent("character:open", userSource, "home", characters)
-		end
-end)
-
-RegisterServerEvent("character:setActive")
-AddEventHandler("character:setActive", function(slot, spawnAtProperty)
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		if user then
-			local money_to_display = 0
-			local characters = user.getCharacters()
-			for i = 1, #characters do
-				if i == tonumber(slot) then
-					characters[i].active = true
-					money_to_display = characters[i].money
-				else
-					characters[i].active = false
-				end
-			end
-			user.setCharacters(characters)
-			user.setActiveCharacterData("money", money_to_display) -- set money GUI in top right (?)
-			user.setActiveCharacterData("job", "civ")
-			TriggerEvent("eblips:remove", userSource)
-			TriggerEvent('properties:loadCharacter', source, spawnAtProperty)
-			-- check dmv / firearm permit license status --
-			TriggerEvent("police:checkSuspension", userSource)
-			--[[ check jailed status [ MOVED ]
-			print("calling checkJailedStatusOnPlayerJoin server function!")
-			TriggerEvent("usa_rp:checkJailedStatusOnPlayerJoin", userSource)
-			--]]
-		end
-end)
-
-RegisterServerEvent("character:save")
-AddEventHandler("character:save", function(characterData, slot)
-print("***INSIDE OF CHARACTER:SAVE***")
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		if user then
-			local characters = user.getCharacters()
-			print("trying to save character data into slot #" .. slot .. "...")
-			characters[slot] = characterData
-			user.setCharacters(characters)
-			print("done saving character data into slot #" .. slot)
-		end
 end)
 
 RegisterServerEvent("character:delete")
-AddEventHandler("character:delete", function(slot)
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		if user then
-			local characters = user.getCharacters()
-			-- See if character is at least one week old
-			local characterAge
-			if not characters[slot].created then
-				characterAge = 999999999999 -- just to make it old enough to delete (for people without the .created property for some reason)
-			else
-				characterAge = getWholeDaysFromTime(characters[slot].created.time)
-			end
-			if characterAge >= WHOLE_DAYS_TO_DELETE then
-				print("debug: Deleting character at slot #" .. slot .. "...")
-				characters[slot] = {active = false}
-				user.setCharacters(characters)
-				print("debug: Done deleting character at slot #" .. slot .. ".")
-				TriggerClientEvent("character:open", userSource, "home", characters)
-			else
-				print("Error: Can't delete a character whose age is less than " .. WHOLE_DAYS_TO_DELETE .. "!")
-				TriggerClientEvent("character:send-nui-message", userSource, {type = "delete", status = "fail", slot = slot}) -- update nui menu
-			end
-		end
+AddEventHandler("character:delete", function(data)
+	local usource = source
+	local id = data.id
+	local rev = data.rev
+	local createdTime = data.createdTime
+	local characterAge = getWholeDaysFromTime(createdTime)
+	if characterAge >= 3 then
+		DeleteCharacterById(id, rev, function()
+			print("Done deleting character with id: " .. id .. ".")
+			TriggerEvent("character:getCharactersAndOpenMenu", "home", usource)
+		end)
+	else
+		print("Error: Can't delete a character whose age is less than " .. WHOLE_DAYS_TO_DELETE .. "!")
+	end
 end)
 
 RegisterServerEvent("character:loadCharacter")
-AddEventHandler("character:loadCharacter", function(activeSlot)
-	print("trying to load character in active slot #" .. activeSlot)
-	local userSource = tonumber(source)
-	TriggerClientEvent('chat:removeSuggestionAll', userSource)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
+AddEventHandler("character:loadCharacter", function(id, doSpawnAtProperty)
+	TriggerClientEvent('chat:removeSuggestionAll', source)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
 	if user then
-		local characters = user.getCharacters()
-		local character = characters[activeSlot]
-		local myGroup = user.getGroup()
-		TriggerClientEvent("character:setCharacter", userSource, character)
-		print("loaded character at slot #" .. activeSlot .. " with #weapons = " .. #(character.weapons))
 		-- set commands --
+		local myGroup = user.getGroup()
 		for k,v in pairs(exports['essentialmode']:getCommands()) do
 			if v.job == "everyone" and exports['essentialmode']:CanGroupTarget(myGroup, v.group) then
-				TriggerClientEvent('chat:addSuggestion', userSource, '/' .. k, v.help, v.params)
+				TriggerClientEvent('chat:addSuggestion', source, '/' .. k, v.help, v.params)
 			end
 		end
+		-- initialize character --
+		exports["usa-characters"]:InitializeCharacter(source, id, doSpawnAtProperty)
 	end
 end)
 
 RegisterServerEvent("character:setSpawnPoint")
 AddEventHandler("character:setSpawnPoint", function(spawn)
-	print("inside character:setSpawnPoint!")
-	local user_source = source
-	local player = exports["essentialmode"]:getPlayerFromId(user_source)
-	local player_spawn = player.getActiveCharacterData("spawn")
+	local player_spawn = exports["usa-characters"]:GetCharacterField(source, "spawn")
 	if not player_spawn then
-		player.setActiveCharacterData("spawn", spawn)
-		TriggerClientEvent("usa:notify", user_source, "Spawn set!")
+		exports["usa-characters"]:SetCharacterField(source, "spawn", spawn)
+		TriggerClientEvent("usa:notify", source, "Spawn set!")
 	else
-		player.setActiveCharacterData("spawn", nil)
-		TriggerClientEvent("usa:notify", user_source, "Spawn cleared!")
+		exports["usa-characters"]:SetCharacterField(source, "spawn", nil)
+		TriggerClientEvent("usa:notify", source, "Spawn cleared!")
 	end
 end)
 
@@ -273,6 +91,17 @@ AddEventHandler('character:disconnect', function()
 	DropPlayer(source, "Disconnected at character selection.")
 end)
 
+function DeleteCharacterById(id, rev, cb)
+	PerformHttpRequest("http://127.0.0.1:5984/characters/".. id .."?rev=".. rev, function(err, rText, headers)
+		if err == 0 then
+			RconPrint("\nrText = " .. rText)
+			RconPrint("\nerr = " .. err)
+		else
+			cb()
+		end
+	end, "DELETE", "", {["Content-Type"] = 'application/json'})
+end
+
 function ContainsVowel(word)
 	local vowels = {'a', 'e', 'i', 'o', 'u', 'y'}
 	for i = 1, #vowels do
@@ -284,9 +113,9 @@ function ContainsVowel(word)
 end
 
 function ContainsSpecialCharacters(word)
-	local characters = {"!", "@", "#", "&", "*", "`", ":", ";", '"', "|", ">", "<", "?", "/", "=", "+", "_", '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
+	local SPECIAL_CHARS = {"!", "@", "#", "&", "*", "`", ":", ";", '"', "|", ">", "<", "?", "/", "=", "+", "_", '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
 	for i = 1, #characters do
-		if string.find(string.lower(word), characters[i]) then
+		if string.find(word, SPECIAL_CHARS[i]) then
 			return true
 		end
 	end
@@ -295,4 +124,52 @@ end
 
 function firstToUpper(str)
     return (str:gsub("^%l", string.upper))
+end
+
+function IsValidInput(src, data)
+	for i = 1, #BLACKLISTED_WORDS do
+		local BLACKLISTED_WORD = BLACKLISTED_WORDS[i]
+		local firstName = string.lower(data.firstName)
+		local middleName = string.lower(data.middleName)
+		local lastName = string.lower(data.lastName)
+		if string.find(firstName, BLACKLISTED_WORD) or string.find(middleName, BLACKLISTED_WORD) or string.find(lastName, BLACKLISTED_WORD) then
+			TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (1) '..BLACKLISTED_WORD)
+			print('Character name contained forbidden words: '..data.firstName..' '..data.middleName..' '..data.lastName)
+			return false
+		end
+	end
+	if not ContainsVowel(data.firstName) or (not ContainsVowel(data.middleName) and data.middleName ~= '') or not ContainsVowel(data.lastName) then
+		TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (2)')
+		print('Character name did not contain a vowel: '..data.firstName..' '..data.middleName..' '..data.lastName)
+		return false
+	end
+	if string.len(data.firstName) < 3 or (string.len(data.middleName) < 3 and data.middleName ~= '') or string.len(data.lastName) < 3 then
+		TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (3)')
+		print('Character name was insufficient length: '..data.firstName..' '..data.middleName..' '..data.lastName)
+		return false
+	end
+	if string.len(data.firstName) > 16 or (string.len(data.middleName) > 16 and data.middleName ~= '') or string.len(data.lastName) > 16 then
+		TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (4)')
+		print('Character name was insufficient length: '..data.firstName..' '..data.middleName..' '..data.lastName)
+		return false
+	end
+	local dob_year = tonumber(string.sub(data.dateOfBirth, 1, 4))
+	if dob_year > 2001 or dob_year < 1940 then
+		TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (5)')
+		print('Character date of birth was invalid: '..data.dateOfBirth)
+		return false
+	end
+	if ContainsSpecialCharacters(data.firstName) or (ContainsSpecialCharacters(data.middleName) and data.middleName ~= '') or ContainsSpecialCharacters(data.lastName) then
+		TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (6)')
+		print('Character name contained special characters: '..data.firstName..' '..data.middleName..' '..data.lastName)
+		return false
+	end
+	return true
+end
+
+function ValidateNameCapitlization(data)
+	data.firstName = firstToUpper(data.firstName)
+	data.middleName = firstToUpper(data.middleName)
+	data.lastName = firstToUpper(data.lastName)
+	return data
 end

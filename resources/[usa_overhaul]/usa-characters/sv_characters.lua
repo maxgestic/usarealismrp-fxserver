@@ -97,6 +97,12 @@ function CreateNewCharacter(src, data, cb)
     ingameTime = 0,
     spawn = nil,
     pets = {},
+    property = {
+			['location'] = 'Perrera Beach Motel',
+			['storage'] = {},
+			['paid_time'] = os.time(),
+			['money'] = 0
+		},
     created = {
       date = os.date('%m-%d-%Y %H:%M:%S', os.time()),
       time = os.time(),
@@ -111,22 +117,16 @@ function CreateNewCharacter(src, data, cb)
   end)
 end
 
-function InitializeCharacter(src, characterID)
+function InitializeCharacter(src, characterID, doSpawnAtProperty)
   TriggerEvent('es:exposeDBFunctions', function(db)
     db.getDocument("characters", characterID, function(charData)
       local character = CreateCharacter(charData)
-      -- Create character object in memory --
-      CHARACTERS[src] = character
-      -- load character --
-			TriggerClientEvent("character:setCharacter", src, character, character.getWeapons())
-			-- check dmv / firearm permit license status --
-			TriggerEvent("police:checkSuspension", character)
-			-- see if spawn point is still valid --
-			TriggerEvent("properties:checkSpawnPoint", character)
-			-- Temporary event to automatically migrate existing player vehicles into new DB --
-			TriggerEvent("vehicles:migrateCheck", character)
-      -- intialize bank resource --
-      TriggerClientEvent("banking:updateBalance", src, character.get("bank"))
+      CHARACTERS[src] = character -- Create character object in memory
+			TriggerClientEvent("character:setCharacter", src, character, character.getWeapons()) -- load character
+			TriggerEvent("police:checkSuspension", character) -- check dmv / firearm permit license status
+      TriggerEvent("properties:loadCharacter", src, doSpawnAtProperty) -- ?
+      TriggerEvent("eblips:remove", src) -- remove any eblip
+      TriggerClientEvent("banking:updateBalance", src, character.get("bank")) -- intialize bank resource
     end)
   end)
 end
