@@ -316,8 +316,6 @@ function WaitForSwitchToComplete(ped)
 	end
 end
 
-SwitchInPlayer(PlayerPedId()) -- ?
-
 Citizen.CreateThread(function()
 	while true do
 		Wait(1)

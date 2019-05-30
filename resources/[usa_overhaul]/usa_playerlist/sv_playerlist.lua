@@ -20,7 +20,7 @@ AddEventHandler('playerlist:getPlayers', function()
 			table.insert(playersToReturn, data)
 		end
 	end
-	TriggerClientEvent("playerlist:displayPlayerlist", userSource, playersToReturn, user_group)
+	TriggerClientEvent("playerlist:displayPlayerlist", source, playersToReturn, user_group)
 end)
 
 AddEventHandler('es:playerLoaded', function(source)
