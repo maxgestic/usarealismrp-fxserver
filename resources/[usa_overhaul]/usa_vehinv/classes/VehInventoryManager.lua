@@ -1,0 +1,168 @@
+----------------------------------------------------------------
+-- HELP PREVENT ITEM DUPLICATIONS FROM MULTIPLE PERSON ACCESS --
+----------------------------------------------------------------
+local BUSY_VEHICLES = {}
+
+function setVehicleBusy(plate)
+  BUSY_VEHICLES[plate] = true
+end
+
+function getVehicleBusy(plate)
+  return BUSY_VEHICLES[plate]
+end
+
+function removeVehicleBusy(plate)
+  if BUSY_VEHICLES[plate] then
+    BUSY_VEHICLES[plate] = nil
+  end
+end
+
+-------------------------------
+-- VEHICLE INVENTORY MANAGER --
+-------------------------------
+VehInventoryManager = {}
+
+VehInventoryManager.beingAccessed = {
+  --["12ABC123"] = { 114, 22 }
+}
+
+----------------------------------
+-- Multiple User Access Helpers --
+----------------------------------
+function VehInventoryManager:AddPersonToInventory(plate, id)
+  if not self.beingAccessed[plate] then
+    self.beingAccessed[plate] = {}
+  end
+  self.beingAccessed[plate][id] = true
+end
+
+function VehInventoryManager:RemovePersonFromInventory(plate, id)
+  if self.beingAccessed[plate] and self.beingAccessed[plate][id] then
+    self.beingAccessed[plate][id] = nil
+  end
+end
+
+--------------------------
+-- Item action helpers  --
+--------------------------
+VehInventoryManager.hasRoomForAnotherItem = function(inv)
+  for i = 0, inv.MAX_ITEMS - 1 do
+    if inv.items[tostring(i)] == nil then
+      return true
+    end
+  end
+  return false
+end
+
+VehInventoryManager.hasItem = function(inv, item)
+  local targetItemName = (item.name or item)
+  for i = 0, inv.MAX_ITEMS - 1 do
+    local invItem = inv.items[tostring(i)]
+    if invItem then
+      if invItem.name:find(targetItemName) or invItem.name == targetItemName then
+        return true
+      end
+    end
+  end
+  return false
+end
+
+VehInventoryManager.canHoldItem = function(inv, item)
+  local newWeight = inv.currentWeight + ((item.weight or 1.0) * (item.quantity or 1))
+  -- first check weight --
+  if newWeight > inv.MAX_CAPACITY then
+    return false
+  end
+  -- then check inventory space --
+  if not item.notStackable then
+    if VehInventoryManager.hasItem(inv, item) then
+      return true
+    else
+      return VehInventoryManager.hasRoomForAnotherItem(inv)
+    end
+  else
+    return VehInventoryManager.hasRoomForAnotherItem(inv)
+  end
+end
+
+VehInventoryManager.putItemInSlot = function(plate, inv, item, slot, cb)
+  slot = tostring(slot)
+  if not inv.items[slot] then -- no item in slot already
+    inv.items[slot] = item
+    inv.currentWeight = inv.currentWeight + ((item.weight or 1.0) * (item.quantity or 1))
+    cb(true)
+  elseif inv.items[slot] and inv.items[slot].name == item.name and not item.notStackable then -- item in slot already, but stackable
+    inv.items[slot].quantity = inv.items[slot].quantity + item.quantity
+    inv.currentWeight = inv.currentWeight + ((item.weight or 1.0) * (item.quantity or 1))
+    cb(true)
+  else
+    cb(false, "Invalid slot")
+  end
+  -- save --
+  TriggerEvent('es:exposeDBFunctions', function(db)
+    db.updateDocument("vehicles", plate, { inventory = inv }, function()
+      removeVehicleBusy(plate)
+    end)
+  end)
+end
+
+VehInventoryManager.removeItemInSlot = function(plate, inv, slot, quantity)
+  slot = tostring(slot)
+  if inv.items[slot].quantity - quantity < 0 then
+    quantity = inv.items[slot].quantity
+  end
+  if inv.items[slot] then
+    inv.items[slot].quantity = inv.items[slot].quantity - quantity
+    inv.currentWeight = inv.currentWeight - ((inv.items[slot].weight or 1.0) * quantity)
+    if inv.items[slot].quantity <= 0 then
+      inv.items[slot] = nil
+    end
+    -- save --
+    TriggerEvent('es:exposeDBFunctions', function(db)
+      db.updateDocument("vehicles", plate, { inventory = inv }, function()
+        removeVehicleBusy(plate)
+      end)
+    end)
+  end
+end
+
+VehInventoryManager.moveItemSlots = function(plate, inv, from, to)
+  from = tostring(from)
+  to = tostring(to)
+  if inv.items[from] then
+    if inv.items[to] then
+      if not inv.items[to].notStackable and inv.items[to].name == inv.items[from].name then
+        inv.items[to].quantity = inv.items[to].quantity + inv.items[from].quantity
+        inv.items[from] = nil
+      end
+    else
+      inv.items[to] = inv.items[from]
+      inv.items[from] = nil
+    end
+  end
+  -- save --
+  TriggerEvent('es:exposeDBFunctions', function(db)
+    db.updateDocument("vehicles", plate, { inventory = inv }, function()
+      removeVehicleBusy(plate)
+    end)
+  end)
+end
+
+VehInventoryManager.removeAllIllegalItems = function(src, plate, inv, notify) -- TO TEST
+  -- remove --
+  for i = 0, (inv.MAX_CAPACITY - 1) do
+    local invItem = inv.items[tostring(i)]
+    if invItem then
+      if invItem.legality and invItem.legality == "illegal" then
+        inv.items[tostring(i)] = nil
+        if src and notify then
+          TriggerClientEvent("usa:notify", src, "~y~Seized: ~w~(" .. (invItem.quantity or 1) .. "x) " .. invItem.name)
+        end
+      end
+    end
+  end
+  -- save --
+  TriggerEvent('es:exposeDBFunctions', function(db)
+    db.updateDocument("vehicles", plate, { inventory = inv }, function() end)
+  end)
+end

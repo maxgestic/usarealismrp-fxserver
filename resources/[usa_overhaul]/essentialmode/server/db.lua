@@ -85,7 +85,7 @@ local function getUUID(amount, cb)
 	end)
 end
 
-local function getDocument(uuid, callback)
+function getDocument(uuid, callback)
 	requestDB('GET', 'essentialmode/' .. uuid, nil, nil, function(err, rText, headers)
 		local doc =  json.decode(rText)
 
@@ -256,23 +256,6 @@ function exposedDB.createDocumentWithId(db, rows, docid, cb)
 	end, "GET", "", {Authorization = "Basic " .. auth})
 end
 
-function exposedDB.getDocumentById(db, id, callback)
-  PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. id, function(err, rText, headers)
-		 -- nil check --
-		if not rText or err == 404 then
-			callback(false)
-			return
-		end
-		-- decode json --
-    local data = json.decode(rText)
-    if data and err == 200 then
-        callback(data)
-    else
-        callback(false)
-    end
-  end, "GET", "", {["Content-Type"] = 'application/json'})
-end
-
 --[[
 function exposedDB.getAllDocumentsFromDb(db, callback)
 	local qu = {keys = {'true'}}
@@ -290,6 +273,31 @@ function exposedDB.getAllDocumentsFromDb(db, callback)
 	end, "GET", "", {["Content-Type"] = 'application/json'})
 end
 --]]
+
+function exposedDB.getDocumentById(db, id, callback)
+  PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. id, function(err, rText, headers)
+		 -- nil check --
+		if not rText or err == 404 then
+			callback(false)
+			return
+		end
+		-- decode json --
+    local data = json.decode(rText)
+    if data and err == 200 then
+        callback(data)
+    else
+        callback(false)
+    end
+  end, "GET", "", {["Content-Type"] = 'application/json'})
+end
+
+function exposedDB.getDocument(db, docID, callback)
+	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. docID, function(err, rText, headers)
+		--print("getDocument() rtext: " .. rText)
+		local doc = json.decode(rText)
+		callback(doc)
+	end, "GET", "", {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
+end
 
 function exposedDB.getSpecificFieldFromDocumentByRows(db, rowsAndValues, fields, callback)
 	local qu = {selector = rowsAndValues, fields = fields}
@@ -356,10 +364,9 @@ function exposedDB.updateDocument(db, documentID, updates, callback)
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. documentID, function(err, rText, headers)
 		local doc = json.decode(rText)
 
-		if(doc and doc._id)then
+		if(doc)then
 			for i in pairs(updates)do
 				doc[i] = updates[i]
-				print(updates[i])
 			end
 
 			PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. doc._id, function(err, rText, headers)
