@@ -47,7 +47,7 @@ AddEventHandler("boatMenu:requestPurchase", function(boat)
       end
       TriggerClientEvent("usa:notify", source, "Purchased: ~y~" .. boat.name .. "\n~s~Price: ~y~$" .. comma_value(boat.price)..'\n~s~ID: ~y~' ..boat.id)
       TriggerClientEvent("usa:notify", source, "Your boat can be found in your storage.")
-      TriggerClientEvent("boatMenu:loadedBoats", source, user_boats)
+      TriggerClientEvent("boatMenu:loadedBoats", source, boats)
   else
     TriggerClientEvent("usa:notify", source, "You cannot afford this purchase!")
   end
@@ -57,10 +57,12 @@ RegisterNetEvent("boatMenu:loadBoats")
 AddEventHandler("boatMenu:loadBoats", function(source2)
   if source2 then source = source2 end
   local char = exports["usa-characters"]:GetCharacter(source)
-  local boats = user.getActiveCharacterData("watercraft")
-  if boats then
-    if #boats > 0 then
-      TriggerClientEvent("boatMenu:loadedBoats", source, boats)
+  if char then
+    local boats = char.get("watercraft")
+    if boats then
+      if #boats > 0 then
+        TriggerClientEvent("boatMenu:loadedBoats", source, boats)
+      end
     end
   end
 end)
@@ -70,9 +72,9 @@ AddEventHandler('boatMenu:requestOpenMenu', function()
   local char = exports["usa-characters"]:GetCharacter(source)
   local license = char.getItem("Boat License")
   if license and license.status == "valid" then
-    TriggerClientEvent('boatMenu:openMenu', userSource)
+    TriggerClientEvent('boatMenu:openMenu', source)
   else
-    TriggerClientEvent('usa:notify', userSource, 'You do not have a valid Boat License!')
+    TriggerClientEvent('usa:notify', source, 'You do not have a valid Boat License!')
   end
 end)
 

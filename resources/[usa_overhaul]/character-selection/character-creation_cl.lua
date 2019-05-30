@@ -47,7 +47,6 @@ AddEventHandler("character:swap--check-distance", function()
   for i = 1, #swap_locations do
 	local location = swap_locations[i]
 	if GetDistanceBetweenCoords(location.x, location.y, location.z,GetEntityCoords(GetPlayerPed(-1))) < 7 then
-	  --print("Player is at a swap location!")
 	  TriggerServerEvent("character:getCharactersAndOpenMenu", "home")
 		SendNUIMessage({
 			type = "displayGUI"
@@ -187,8 +186,6 @@ RegisterNUICallback('select-character', function(data, cb)
 	end
 	toggleMenu(false)
 	SpawnCharacter(data)
-	--TriggerEvent("chat:setCharName", data.name) -- for chat messages
-	--TriggerServerEvent("character:loadCharacter", data.id)
 	cb('ok')
 end)
 
@@ -224,6 +221,9 @@ end)
 function toggleMenu(status, menu, characters)
 	local ped = GetPlayerPed(-1)
 	if status then -- open
+		SendNUIMessage({
+			type = "displayGUI"
+		})
 		TriggerEvent('usa:toggleHUD', false)
 		SetDrawOrigin(0.0, 0.0, 0.0, 0)
 		SetEntityCoords(ped, 751.31121826172, 6454.3813476563, 31.926473617554, 0.0, 0, 0, 1)

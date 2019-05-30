@@ -60,8 +60,10 @@ end)
 RegisterServerEvent("aircraft:loadAircraft")
 AddEventHandler("aircraft:loadAircraft", function(source)
   local char = exports["usa-characters"]:GetCharacter(source)
-  local aircraft = char.get("aircraft") or {}
-  TriggerClientEvent("aircraft:loadedAircraft", source, aircraft)
+  if char then
+    local aircraft = char.get("aircraft") or {}
+    TriggerClientEvent("aircraft:loadedAircraft", source, aircraft)
+  end
 end)
 
 RegisterServerEvent("aircraft:requestPurchase")

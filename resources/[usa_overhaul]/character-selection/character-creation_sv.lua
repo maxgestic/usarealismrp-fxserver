@@ -114,7 +114,7 @@ end
 
 function ContainsSpecialCharacters(word)
 	local SPECIAL_CHARS = {"!", "@", "#", "&", "*", "`", ":", ";", '"', "|", ">", "<", "?", "/", "=", "+", "_", '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
-	for i = 1, #characters do
+	for i = 1, #SPECIAL_CHARS do
 		if string.find(word, SPECIAL_CHARS[i]) then
 			return true
 		end
@@ -127,30 +127,30 @@ function firstToUpper(str)
 end
 
 function IsValidInput(src, data)
+	local firstName = string.lower(data.name.first)
+	local middleName = string.lower(data.name.middle)
+	local lastName = string.lower(data.name.last)
 	for i = 1, #BLACKLISTED_WORDS do
 		local BLACKLISTED_WORD = BLACKLISTED_WORDS[i]
-		local firstName = string.lower(data.firstName)
-		local middleName = string.lower(data.middleName)
-		local lastName = string.lower(data.lastName)
 		if string.find(firstName, BLACKLISTED_WORD) or string.find(middleName, BLACKLISTED_WORD) or string.find(lastName, BLACKLISTED_WORD) then
 			TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (1) '..BLACKLISTED_WORD)
-			print('Character name contained forbidden words: '..data.firstName..' '..data.middleName..' '..data.lastName)
+			print('Character name contained forbidden words: '..firstName..' '..middleName..' '..lastName)
 			return false
 		end
 	end
-	if not ContainsVowel(data.firstName) or (not ContainsVowel(data.middleName) and data.middleName ~= '') or not ContainsVowel(data.lastName) then
+	if not ContainsVowel(firstName) or (not ContainsVowel(middleName) and middleName ~= '') or not ContainsVowel(lastName) then
 		TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (2)')
-		print('Character name did not contain a vowel: '..data.firstName..' '..data.middleName..' '..data.lastName)
+		print('Character name did not contain a vowel: '..firstName..' '..middleName..' '..lastName)
 		return false
 	end
-	if string.len(data.firstName) < 3 or (string.len(data.middleName) < 3 and data.middleName ~= '') or string.len(data.lastName) < 3 then
+	if string.len(firstName) < 3 or (string.len(middleName) < 3 and middleName ~= '') or string.len(lastName) < 3 then
 		TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (3)')
-		print('Character name was insufficient length: '..data.firstName..' '..data.middleName..' '..data.lastName)
+		print('Character name was insufficient length: '..firstName..' '..middleName..' '..lastName)
 		return false
 	end
-	if string.len(data.firstName) > 16 or (string.len(data.middleName) > 16 and data.middleName ~= '') or string.len(data.lastName) > 16 then
+	if string.len(firstName) > 16 or (string.len(middleName) > 16 and middleName ~= '') or string.len(lastName) > 16 then
 		TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (4)')
-		print('Character name was insufficient length: '..data.firstName..' '..data.middleName..' '..data.lastName)
+		print('Character name was insufficient length: '..firstName..' '..middleName..' '..lastName)
 		return false
 	end
 	local dob_year = tonumber(string.sub(data.dateOfBirth, 1, 4))
@@ -159,17 +159,17 @@ function IsValidInput(src, data)
 		print('Character date of birth was invalid: '..data.dateOfBirth)
 		return false
 	end
-	if ContainsSpecialCharacters(data.firstName) or (ContainsSpecialCharacters(data.middleName) and data.middleName ~= '') or ContainsSpecialCharacters(data.lastName) then
+	if ContainsSpecialCharacters(firstName) or (ContainsSpecialCharacters(middleName) and middleName ~= '') or ContainsSpecialCharacters(lastName) then
 		TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (6)')
-		print('Character name contained special characters: '..data.firstName..' '..data.middleName..' '..data.lastName)
+		print('Character name contained special characters: '..firstName..' '..middleName..' '..lastName)
 		return false
 	end
 	return true
 end
 
 function ValidateNameCapitlization(data)
-	data.firstName = firstToUpper(data.firstName)
-	data.middleName = firstToUpper(data.middleName)
-	data.lastName = firstToUpper(data.lastName)
+	data.name.first = firstToUpper(data.name.first)
+	data.name.middle = firstToUpper(data.name.middle)
+	data.name.last = firstToUpper(data.name.last)
 	return data
 end

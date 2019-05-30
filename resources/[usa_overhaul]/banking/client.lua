@@ -294,7 +294,7 @@ end)
 -- Process give cash if conditions met
 RegisterNetEvent('bank:givecash')
 AddEventHandler('bank:givecash', function(toPlayer, amount, fromName, src)
-  if(IsNearPlayer(toPlayer) == true or giveCashAnywhere == true) then
+  if (IsNearPlayer(toPlayer) == true or giveCashAnywhere == true) then
       local name = GetPlayerName(toPlayer)
     local player2 = GetPlayerFromServerId(toPlayer)
     local playing = IsPlayerPlaying(player2)
@@ -304,9 +304,11 @@ AddEventHandler('bank:givecash', function(toPlayer, amount, fromName, src)
       --TriggerServerEvent('altchat:localChatMessage', src, "^6* " .. fromName .. " hands over money.")
     else
       TriggerEvent('usa:notify', '~y~Player not found!')
+      TriggerServerEvent("bank:cancelGiveCash", source)
     end
   else
     TriggerEvent('usa:notify', '~y~You are not near this player!')
+    TriggerServerEvent("bank:cancelGiveCash", source)
   end
 end)
 

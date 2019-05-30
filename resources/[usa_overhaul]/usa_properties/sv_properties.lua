@@ -634,10 +634,10 @@ AddEventHandler('properties:continueHousePurchase', function(targetSource, locat
 	local char = exports["usa-characters"]:GetCharacter(source)
 	if char.get('job') == 'judge' then
 		local money = char.get('money')
-		if money >= 80000 then
-			char.removeMoney(80000)
+		if money >= 60000 then
+			char.removeMoney(60000)
 		else
-			TriggerClientEvent('usa:notify', source, 'You cannot afford this!')
+			TriggerClientEvent('usa:notify', source, 'You cannot afford this, you need $60,000.0!')
 			return
 		end
 		local target_char = exports["usa-characters"]:GetCharacter(targetSource)
