@@ -274,6 +274,23 @@ function exposedDB.getAllDocumentsFromDb(db, callback)
 end
 --]]
 
+function exposedDB.getDocumentById(db, id, callback)
+  PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. id, function(err, rText, headers)
+		 -- nil check --
+		if not rText or err == 404 then
+			callback(false)
+			return
+		end
+		-- decode json --
+    local data = json.decode(rText)
+    if data and err == 200 then
+        callback(data)
+    else
+        callback(false)
+    end
+  end, "GET", "", {["Content-Type"] = 'application/json'})
+end
+
 function exposedDB.getDocument(db, docID, callback)
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. docID, function(err, rText, headers)
 		--print("getDocument() rtext: " .. rText)
