@@ -16,15 +16,15 @@ AddEventHandler("veh:checkForKey", function(plate, engineOn)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local item = char.getItemWithField("plate", plate)
 	if item then
-		TriggerClientEvent('veh:toggleEngine', userSource, true, engineOn, false)
+		TriggerClientEvent('veh:toggleEngine', source, true, engineOn, false)
 	else
-		TriggerClientEvent('veh:toggleEngine', userSource, false, engineOn, true)
+		TriggerClientEvent('veh:toggleEngine', source, false, engineOn, true)
 	end
 end)
 
 RegisterServerEvent('veh:removeHotwiringKit')
 AddEventHandler('veh:removeHotwiringKit', function()
-	local char = exports["usa-characters"]:getPlayerFromId(source)
+	local char = exports["usa-characters"]:GetCharacter(source)
 	local hotwiring_kit = char.getItem("Hotwiring Kit")
 	if hotwiring_kit then
 		char.removeItem(hotwiring_kit, 1)
@@ -36,7 +36,7 @@ end)
 
 RegisterServerEvent('veh:searchResult')
 AddEventHandler('veh:searchResult', function()
-	local char = exports["usa-characters"]:getPlayerFromId(source)
+	local char = exports["usa-characters"]:GetCharacter(source)
 	if math.random() > 0.8 then
 		return
 	end

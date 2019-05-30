@@ -145,7 +145,6 @@ AddEventHandler("weaponExtraShop:requestComponentPurchase", function(weapon, com
       if not weapon.components then weapon.components = {} end
       table.insert(weapon.components, component.value)
       char.modifyItem(weapon, "components", weapon.components)
-      user.setActiveCharacterData("weapons", user_weapons)
     else
       TriggerClientEvent("usa:notify", source, "Not enough money!")
     end

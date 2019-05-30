@@ -3,6 +3,10 @@
 
 RegisterServerEvent('heli:spotlight')
 AddEventHandler('heli:spotlight', function(state)
-	local serverID = source
-	TriggerClientEvent('heli:spotlight', -1, serverID, state)
+	TriggerClientEvent('heli:spotlight', -1, source, state)
+end)
+
+RegisterServerEvent("heli:syncSpotlight")
+AddEventHandler("heli:syncSpotlight", function(coords, dir)
+	TriggerClientEvent("heli:updateSpotlight", -1, coords, dir)
 end)

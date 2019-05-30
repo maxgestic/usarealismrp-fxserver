@@ -52,7 +52,7 @@ AddEventHandler("spotlight:spotlight", function()
       }
       TriggerServerEvent("spotlight:addSpotlight", spotlight)
       MY_SPOTLIGHT = spotlight
-      exports.globals:notify("Spotlight ~g~on")
+      exports.globals:notify("Spotlight has been enabled!")
     else
       exports.globals:notify("Not in vehicle!")
     end
@@ -60,7 +60,7 @@ AddEventHandler("spotlight:spotlight", function()
     SetVehicleFullbeam(myveh, false)
     TriggerServerEvent("spotlight:removeSpotlight", MY_SPOTLIGHT)
     MY_SPOTLIGHT = nil
-    exports.globals:notify("Spotlight ~r~off")
+    exports.globals:notify("Spotlight has been disabled!")
   end
 end)
 

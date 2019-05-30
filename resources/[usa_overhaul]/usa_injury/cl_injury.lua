@@ -31,7 +31,7 @@ parts = {
     [64729] = 'Left Clavicle',
     [2992] = 'Right Elbow',
     [22711] = 'Left Elbow',
-    [0] = 'Body' -- body center mass
+    [0] = 'Neck' -- body center mass
 }
 
 bone_effects = { -- ORDER MATTERS - each index is subject to each stage

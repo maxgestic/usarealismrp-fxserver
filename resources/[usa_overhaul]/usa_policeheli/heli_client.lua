@@ -1,9 +1,9 @@
 -- config
 local fov_max = 80.0
 local fov_min = 10.0 -- max zoom level (smaller fov is more zoom)
-local zoomspeed = 2.0 -- camera zoom speed
-local speed_lr = 3.0 -- speed by which the camera pans left-right 
-local speed_ud = 3.0 -- speed by which the camera pans up-down
+local zoomspeed = 5.0 -- camera zoom speed
+local speed_lr = 5.0 -- speed by which the camera pans left-right 
+local speed_ud = 5.0 -- speed by which the camera pans up-down
 local toggle_helicam = 51 -- control id of the button by which to toggle the helicam mode. Default: INPUT_CONTEXT (E)
 local toggle_vision = 25 -- control id to toggle vision mode. Default: INPUT_AIM (Right mouse btn)
 local toggle_rappel = 154 -- control id to rappel out of the heli. Default: INPUT_DUCK (X)
@@ -77,6 +77,10 @@ Citizen.CreateThread(function()
 					PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false)
 					ChangeVision()
 				end
+				if IsControlJustPressed(0, 24) then
+					PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false)
+					spotlight_on = not spotlight_on
+				end
 
 				if locked_on_vehicle then
 					if DoesEntityExist(locked_on_vehicle) then
@@ -110,6 +114,16 @@ Citizen.CreateThread(function()
 						end
 					end
 				end
+
+				if spotlight_on then
+					local heli_coords = GetEntityCoords(heli)
+					local coords = GetCamCoord(cam)
+					local forward_vector = RotAnglesToVec(GetCamRot(cam, 2))
+					local dir = GetOffsetFromEntityGivenWorldCoords(heli, coords)
+					--DrawSpotLight(heli_coords, dir+(forward_vector*200.0), 255, 255, 255, 400.0, 10.0, 0.0, 7.0, 10.0)
+					TriggerServerEvent("heli:syncSpotlight", heli_coords, dir+(forward_vector*200.0))
+				end
+
 				HandleZoom(cam)
 				HideHUDThisFrame()
 				PushScaleformMovieFunction(scaleform, "SET_ALT_FOV_HEADING")
@@ -129,6 +143,15 @@ Citizen.CreateThread(function()
 			SetNightvision(false)
 			SetSeethrough(false)
 		end
+	end
+end)
+
+RegisterNetEvent("heli:updateSpotlight")
+AddEventHandler("heli:updateSpotlight", function(coords, dir)
+	local beginTime = GetGameTimer()
+	while GetGameTimer() - beginTime < 40 do
+		Citizen.Wait(0)
+		DrawSpotLight(coords, dir, 255, 255, 255, 400.0, 10.0, 0.0, 7.0, 10.0)
 	end
 end)
 

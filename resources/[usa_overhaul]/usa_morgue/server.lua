@@ -21,7 +21,7 @@ TriggerEvent('es:addJobCommand', 'morgue', { "ems", "fire", "police", "sheriff" 
 		TriggerClientEvent("death:allowRevive", playerID)
 		TriggerClientEvent("crim:untieHands", playerID, playerID)
 		TriggerClientEvent("crim:blindfold", playerID, false, true)
-		TriggerClientEvent('morgue:toeTag', playerID)
+		TriggerClientEvent('morgue:toeTag', playerID, true)
 		local target = exports["usa-characters"]:GetCharacter(playerID)
 		target.removeAllItems()
 		local toeTag = {
@@ -54,7 +54,7 @@ TriggerEvent('es:addJobCommand', 'morgue', { "ems", "fire", "police", "sheriff" 
 		TriggerEvent("warrants:removeAnyActiveWarrants", admitted_name)
 	end
 end, {
-	help = "Send someone to the mourge",
+	help = "Send someone to the morgue",
 	params = {
 		{ name = "id", help = "the player id" },
 		{ name = "reason", help = "reason" }
