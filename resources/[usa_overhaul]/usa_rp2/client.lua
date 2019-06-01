@@ -84,7 +84,7 @@ Citizen.CreateThread(function()
     RemoveAllPickupsOfType(0x2BB8CC22) -- vintage pistol
     RemoveAllPickupsOfType(0x9598EDD4) -- stun gun
     RemoveAllPickupsOfType(0xBD0C4ED1) -- machete
-    RemoveAllPickupsOfType(0x2E4C762D) -- ammo for all weapons -- 
+    RemoveAllPickupsOfType(0x2E4C762D) -- ammo for all weapons --
     RemoveAllPickupsOfType(0x10A73D59)
     RemoveAllPickupsOfType(0xD65BF49E)
     RemoveAllPickupsOfType(0x60F784C2)
@@ -99,7 +99,7 @@ Citizen.CreateThread(function()
     RemoveAllPickupsOfType(0x6F38E9FB)
     RemoveAllPickupsOfType(0x2D5CE030)
     RemoveAllPickupsOfType(0xFD4AE5E5)
-    RemoveAllPickupsOfType(0x2451A293) -- ammo for all weapons ends -- 
+    RemoveAllPickupsOfType(0x2451A293) -- ammo for all weapons ends --
   end
 end)
 
@@ -178,19 +178,11 @@ AddEventHandler('usa_rp:playerLoaded', function()
 end)
 
 RegisterNetEvent('usa_rp:spawn')
-AddEventHandler('usa_rp:spawn', function(defaultModel, job, weapons, characters)
+AddEventHandler('usa_rp:spawn', function(defaultModel)
   local spawn = {x = 0.0, y = 0.0, z = 0.0}
   spawn = civilianSpawns[math.random(1, #civilianSpawns)]
   exports.spawnmanager:spawnPlayer({x = spawn.x, y = spawn.y, z = spawn.z, model = defaultModel, heading = 0.0}, function()
-    if not characters then
-      --print("player did not have a first character...")
-      TriggerEvent("character:open", "new-character")
-    else
-      --print("player did have a first character!")
-      TriggerEvent("character:open", "home", characters)
-    end
-    -- CHECK BAN STATUS
-    TriggerServerEvent('mini:checkPlayerBannedOnSpawn')
+  TriggerServerEvent('mini:checkPlayerBannedOnSpawn') -- CHECK BAN STATUS
   end)
 end)
 

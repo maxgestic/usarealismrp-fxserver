@@ -137,8 +137,11 @@ document.onreadystatechange = () => {
       window.addEventListener('message', function(event) {
 				var eventType = event.data.type;
           if (eventType == "toggleMenu") {
-            characterSelectionApp.characters = event.data.characters;
-            if (event.data.open == false)
+            if (event.data.open == true){
+              characterSelectionApp.characters = event.data.characters;
+              document.body.style.display = "flex";
+            }
+            else
 						  document.body.style.display = "none";
 					} else if (eventType == "displayGUI") {
             document.body.style.display = event.data.open = "flex";

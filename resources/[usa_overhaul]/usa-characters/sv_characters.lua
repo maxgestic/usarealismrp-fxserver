@@ -111,7 +111,7 @@ function CreateNewCharacter(src, data, cb)
   }
   -- create character in DB --
   TriggerEvent('es:exposeDBFunctions', function(db)
-    db.createDocument("characters", newCharacter, function()
+    db.createDocument("characters", newCharacter, function(success)
       cb()
     end)
   end)
