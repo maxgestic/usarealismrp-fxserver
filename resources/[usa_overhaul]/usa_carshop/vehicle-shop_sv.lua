@@ -312,7 +312,12 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle, property)
 					plate = plate,
 					stored = false,
 					price = price,
-					inventory = {},
+					inventory = {
+						MAX_ITEMS = 25,
+						MAX_CAPACITY = vehicle.storage_capacity,
+						currentWeight = 0.0,
+						items = {}
+					},
 					storage_capacity = vehicle.storage_capacity
 				}
 

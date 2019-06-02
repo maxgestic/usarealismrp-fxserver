@@ -905,7 +905,7 @@ function interactionMenuUse(itemName, wholeItem)
 			-------------------
 		elseif string.find(itemName, "Lockpick") then
 			local playerPed = GetPlayerPed(-1)
-			local veh = getVehicleInFrontOfUser()
+			local veh = getVehicleInsideOrInFrontOfUser()
 			if veh ~= 0 and GetEntityType(veh) == 2 then
 				if GetVehicleDoorLockStatus(veh) ~= 1 then
 					-- prevent using /e to hide animation --
@@ -969,6 +969,7 @@ function interactionMenuUse(itemName, wholeItem)
 							SetVehicleNeedsToBeHotwired(veh, true)
 						end
 						TriggerEvent("usa:notify", "Lockpick was ~y~successful~s~!")
+						TriggerServerEvent("usa:removeItem", wholeItem, 1)
 					else
 						TriggerEvent("usa:notify", "Lockpick has ~y~broken~s~!")
 						TriggerServerEvent("usa:removeItem", wholeItem, 1)
@@ -1214,8 +1215,6 @@ function getVehicleInDirection(coordFrom, coordTo)
 	local a, b, c, d, vehicle = GetRaycastResult(rayHandle)
 	return vehicle
 end
-
--- rewrite from C#: --
 
 -- implement somehow
 local draggingHelper = {

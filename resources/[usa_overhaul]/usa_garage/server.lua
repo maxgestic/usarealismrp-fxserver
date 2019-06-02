@@ -7,7 +7,6 @@ local IMPOUND_FEE = 150
 
 RegisterServerEvent("garage:giveKey")
 AddEventHandler("garage:giveKey", function(key)
-	print("key: " .. type(key))
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local invKey = char.getItemWithField("plate", key.plate)
 	if not invKey then
@@ -23,7 +22,7 @@ AddEventHandler("garage:storeKey", function(plate)
 	local key = char.getItemWithField("plate", plate)
 	if key then
 		char.removeItem(key, 1)
-		TriggerEvent("lock:removePlate", item.plate)
+		TriggerEvent("lock:removePlate", key.plate)
 	end
 end)
 

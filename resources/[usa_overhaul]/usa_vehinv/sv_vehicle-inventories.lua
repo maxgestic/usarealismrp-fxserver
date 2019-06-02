@@ -68,13 +68,13 @@ AddEventHandler("vehicle:moveItemToPlayerInv", function(src, plate, fromSlot, to
       local item = inv.items[tostring(fromSlot)]
       -- validate item move --
       if item and quantity > item.quantity or quantity <= 0 then
-        exports["vehicle-inventories"]:removeVehicleBusy(plate)
+        exports["usa_vehinv"]:removeVehicleBusy(plate)
         return
       end
       if item and item.type and item.type == "license" then
         TriggerClientEvent("usa:notify", src, "Can't move licenses!")
         -- todo: send msg to NUI to give some UI feedback for failed move
-        exports["vehicle-inventories"]:removeVehicleBusy(plate)
+        exports["usa_vehinv"]:removeVehicleBusy(plate)
         return
       end
       -- move item --
@@ -89,7 +89,7 @@ AddEventHandler("vehicle:moveItemToPlayerInv", function(src, plate, fromSlot, to
               VehInventoryManager.removeItemInSlot(plate, inv, fromSlot, quantity)
               cb(inv)
             else
-              exports["vehicle-inventories"]:removeVehicleBusy(plate)
+              exports["usa_vehinv"]:removeVehicleBusy(plate)
             end
           end)
         else

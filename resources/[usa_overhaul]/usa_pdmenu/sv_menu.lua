@@ -28,7 +28,7 @@ local VEH_RANKS = {
 
 RegisterServerEvent('pdmenu:returnAllowedVehicles')
 AddEventHandler('pdmenu:returnAllowedVehicles', function()
-	local char = exports["essentialmode"]:GetCharacter(source)
+	local char = exports["usa-characters"]:GetCharacter(source)
 	local user_job = char.get("job")
 	if user_job == "dai" then
 		TriggerClientEvent('pdmenu:sendAllowedVehicles', source, VEH_RANKS['dai'])

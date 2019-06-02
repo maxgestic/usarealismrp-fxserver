@@ -32,7 +32,7 @@ RegisterServerEvent("interaction:loadVehicleInventory")
 AddEventHandler("interaction:loadVehicleInventory", function(plate)
 	local userSource = tonumber(source)
 	GetVehicleInventory(plate, function(inv)
-		local isLocked = exports["LockSystem"]:isLocked(plate)
+		local isLocked = exports["_locksystem"]:isLocked(plate)
 		TriggerClientEvent("interaction:vehicleInventoryLoaded", userSource, inv, isLocked)
 	end)
 end)
@@ -170,8 +170,8 @@ AddEventHandler("inventory:moveItem", function(data)
 			end)
 		end
 	elseif data.fromType == "secondary" and data.toType == "primary" then
-		if not exports["vehicle-inventories"]:getVehicleBusy(data.plate) then
-			exports["vehicle-inventories"]:setVehicleBusy(data.plate)
+		if not exports["usa_vehinv"]:getVehicleBusy(data.plate) then
+			exports["usa_vehinv"]:setVehicleBusy(data.plate)
 			-- perform move --
 			TriggerEvent("vehicle:moveItemToPlayerInv", usource, data.plate, data.fromSlot, data.toSlot, quantity, char, function(inv)
 				if inv then
@@ -184,10 +184,10 @@ AddEventHandler("inventory:moveItem", function(data)
 			TriggerClientEvent("usa:notify", usource, "Please wait a moment!")
 		end
 	elseif data.fromType == "secondary" and data.toType == "secondary" then
-		if not exports["vehicle-inventories"]:getVehicleBusy(data.plate) then
-			exports["vehicle-inventories"]:setVehicleBusy(data.plate)
+		if not exports["usa_vehinv"]:getVehicleBusy(data.plate) then
+			exports["usa_vehinv"]:setVehicleBusy(data.plate)
 			TriggerEvent("vehicle:moveInventorySlots", data.plate, data.fromSlot, data.toSlot, function(inv)
-				local isLocked = exports["LockSystem"]:isLocked(data.plate)
+				local isLocked = exports["_locksystem"]:isLocked(data.plate)
 				--TriggerClientEvent("interaction:sendNUIMessage", usource, { type = "vehicleInventoryLoaded", inventory = inv, locked = isLocked})
 				TriggerEvent("vehicle:updateForOthers", data.plate, inv, isLocked)
 			end)

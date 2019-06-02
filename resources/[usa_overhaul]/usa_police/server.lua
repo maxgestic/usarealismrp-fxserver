@@ -26,7 +26,7 @@ AddEventHandler('rconCommand', function(commandName, args)
     end
 
     if wl_type == "police" then
-      local char = exports["usa-characters"]:GetCharacter(playerId)
+      local char = exports["usa-characters"]:GetCharacter(tonumber(playerId))
       if rank > 0 then
         char.set("policeRank", rank)
         RconPrint("DEBUG: " .. playerId .. "'s police rank has been set to: " .. rank .. "!")
@@ -178,21 +178,21 @@ RegisterServerEvent("policestation2:checkWhitelist")
 AddEventHandler("policestation2:checkWhitelist", function(clientevent)
   local playerIdentifiers = GetPlayerIdentifiers(source)
   local playerGameLicense = ""
-  local char = exports["usa-characters"]:GetCharacter(sourc)
+  local char = exports["usa-characters"]:GetCharacter(source)
   if char.get("policeRank") > 0 then
     if clientevent == "policestation2:showArmoury" then
       local user_job = char.get("job")
       if user_job == "sheriff" or user_job == "cop" then
-        TriggerClientEvent(clientevent, userSource)
+        TriggerClientEvent(clientevent, source)
       else
-        TriggerClientEvent("usa:notify", userSource, "You must be on-duty to access the armory.")
+        TriggerClientEvent("usa:notify", source, "You must be on-duty to access the armory.")
       end
     else
         char.set("job", "sheriff")
-        TriggerClientEvent(clientevent, userSource)
+        TriggerClientEvent(clientevent, source)
     end
   else
-    TriggerClientEvent("usa:notify", userSource, "~y~You are not whitelisted for POLICE. Apply at https://www.usarrp.net.")
+    TriggerClientEvent("usa:notify", source, "~y~You are not whitelisted for POLICE. Apply at https://www.usarrp.net.")
   end
 
 end)

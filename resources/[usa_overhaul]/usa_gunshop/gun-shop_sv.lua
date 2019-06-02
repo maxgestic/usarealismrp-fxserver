@@ -90,7 +90,7 @@ end)
 RegisterServerEvent('gunShop:requestOpenMenu')
 AddEventHandler('gunShop:requestOpenMenu', function()
   local char = exports["usa-characters"]:GetCharacter(source)
-  local permit_status = checkPermit(user)
+  local permit_status = checkPermit(char)
   if permit_status == 'valid' then
     TriggerClientEvent('gunShop:openMenu', source)
   else

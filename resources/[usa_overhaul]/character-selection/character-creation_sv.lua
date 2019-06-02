@@ -68,18 +68,6 @@ AddEventHandler("character:loadCharacter", function(id, doSpawnAtProperty)
 	end
 end)
 
-RegisterServerEvent("character:setSpawnPoint")
-AddEventHandler("character:setSpawnPoint", function(spawn)
-	local player_spawn = exports["usa-characters"]:GetCharacterField(source, "spawn")
-	if not player_spawn then
-		exports["usa-characters"]:SetCharacterField(source, "spawn", spawn)
-		TriggerClientEvent("usa:notify", source, "Spawn set!")
-	else
-		exports["usa-characters"]:SetCharacterField(source, "spawn", nil)
-		TriggerClientEvent("usa:notify", source, "Spawn cleared!")
-	end
-end)
-
 function getWholeDaysFromTime(time)
 	local reference = time
 	local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
