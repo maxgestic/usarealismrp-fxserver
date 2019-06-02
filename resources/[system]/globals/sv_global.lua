@@ -24,8 +24,11 @@ function sendLocalActionMessage(_source, text, maxDist, time)
 end
 
 function notifyPlayersWithJobs(target_jobs, msg)
-	local characters = exports["usa-characters"]:GetCharacters()
-	for id, player in pairs(characters) do
+	local players = exports["usa-characters"]:GetCharacters()
+	if not players then
+		return
+	end
+	for id, player in pairs(players) do
 		if id and player then
 			local job = player.get("job")
 			for i = 1, #target_jobs do
@@ -38,8 +41,11 @@ function notifyPlayersWithJobs(target_jobs, msg)
 end
 
 function notifyPlayersWithJob(target_job, msg)
-	local characters = exports["usa-characters"]:GetCharacters()
-	for id, player in pairs(characters) do
+ 	local players = exports["usa-characters"]:GetCharacters()
+	if not players then
+		return
+	end
+	for id, player in pairs(players) do
 		if id and player then
 			local job = player.get("job")
 			if job == target_job then
@@ -49,7 +55,6 @@ function notifyPlayersWithJob(target_job, msg)
 	end
 end
 
--- todo
 function setJob(src, job)
 	exports["usa-characters"]:SetCharacterField(src, "job", job)
 	TriggerClientEvent("usa:notify", src, "Job set to: " .. job)

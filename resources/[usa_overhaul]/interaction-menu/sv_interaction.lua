@@ -1,7 +1,7 @@
 RegisterServerEvent("interaction:checkJailedStatusBeforeEmote")
 AddEventHandler("interaction:checkJailedStatusBeforeEmote", function(scenario)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	if user.getActiveCharacterData("jailtime") > 0 then
+	local jailTime = exports["usa-characters"]:GetCharacterField(source, "jailTime")
+	if jailTime > 0 then
 		TriggerClientEvent("usa:notify", source, "Can't use that while imprisoned!")
 	else
 		local scenario_name = ""
@@ -22,190 +22,71 @@ end)
 
 RegisterServerEvent("test:cuff")
 AddEventHandler("test:cuff", function(playerId, playerName)
-	--print("going to cuff " .. playerName .. " with id of " .. playerId)
-	--TriggerClientEvent("cuff:Handcuff", tonumber(1), GetPlayerName(source))
-	--TriggerEvent("es:getPlayerFromId", source, function(user)
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-		if user then
-			playerJob = user.getActiveCharacterData("job")
-			if playerJob == "sheriff" or playerJob == "cop" then
-				--print("cuffing player " .. GetPlayerName(source) .. "...")
-				TriggerClientEvent("cuff:Handcuff", tonumber(playerId), GetPlayerName(source))
-			else
-				--print("player was not on duty to cuff")
-			end
-		else
-			--print("player with that ID # did not exist...")
-		end
-	--end)
+	local playerJob = exports["usa-characters"]:GetCharacterField(source, "job")
+	if playerJob == "sheriff" or playerJob == "cop" then
+		TriggerClientEvent("cuff:Handcuff", tonumber(playerId), GetPlayerName(source))
+	end
 end)
+
+RegisterServerEvent("interaction:loadVehicleInventory")
+AddEventHandler("interaction:loadVehicleInventory", function(plate)
+	local userSource = tonumber(source)
+	GetVehicleInventory(plate, function(inv)
+		local isLocked = exports["LockSystem"]:isLocked(plate)
+		TriggerClientEvent("interaction:vehicleInventoryLoaded", userSource, inv, isLocked)
+	end)
+end)
+
+function GetVehicleInventory(plate, cb)
+	-- query for the information needed from each vehicle --
+	local endpoint = "/vehicles/_design/vehicleFilters/_view/getVehicleInventoryByPlate"
+	local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+	PerformHttpRequest(url, function(err, responseText, headers)
+		if responseText then
+			local inventory = {}
+			local data = json.decode(responseText)
+			if data.rows[1] then
+				inventory = data.rows[1].value[1] -- inventory
+			end
+			cb(inventory)
+		end
+	end, "POST", json.encode({
+		keys = { plate }
+		--keys = { "86CSH075" }
+	}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+end
 
 RegisterServerEvent("interaction:loadInventoryForInteraction")
 AddEventHandler("interaction:loadInventoryForInteraction", function()
-	--print("loading inventory for interaction menu...")
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	if user then
-		local inventory = user.getActiveCharacterData("inventory")
-		local weapons = user.getActiveCharacterData("weapons")
-		local licenses = user.getActiveCharacterData("licenses")
-		TriggerClientEvent("interaction:inventoryLoaded", userSource, inventory, weapons, licenses)
-	else
-		--print("interaction: user did not exist")
-	end
+	local inventory = exports["usa-characters"]:GetCharacterField(source, "inventory")
+	TriggerClientEvent("interaction:inventoryLoaded", source, inventory)
 end)
 
 RegisterServerEvent("interaction:checkForPhone")
 AddEventHandler("interaction:checkForPhone", function()
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	local inventory = user.getActiveCharacterData("inventory")
-	for i = 1, #inventory do
-		local item = inventory[i]
-		if item.name == "Cell Phone" then
-			TriggerClientEvent("interaction:playerHadPhone", userSource)
-			return
-		end
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local item = char.getItem("Cell Phone")
+	if item then
+		TriggerClientEvent("interaction:playerHadPhone", userSource)
+	else
+		TriggerClientEvent("interaction:notify", userSource, "You have no cell phone to open!")
 	end
-	TriggerClientEvent("interaction:notify", userSource, "You have no cell phone to open!")
 end)
 
 RegisterServerEvent("interaction:removeItemFromPlayer")
 AddEventHandler("interaction:removeItemFromPlayer", function(itemName)
 	itemName = removeQuantityFromItemName(itemName)
-	local userSource = tonumber(source)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	local inventory = user.getActiveCharacterData("inventory")
-	for i = 1, #inventory do
-		local item = inventory[i]
-		if item.name == itemName then
-			if item.quantity > 1 then
-				inventory[i].quantity = item.quantity - 1
-				user.setActiveCharacterData("inventory", inventory)
-				return
-			else
-				table.remove(inventory, i)
-				user.setActiveCharacterData("inventory", inventory)
-				return
-			end
-		end
-	end
+	local char = exports["usa-characters"]:GetCharacter(source)
+	char.removeItem(itemName, 1)
 end)
 
 RegisterServerEvent("interaction:bodyArmor")
 AddEventHandler("interaction:bodyArmor", function()
-	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local inventory = user.getActiveCharacterData("inventory")
-	for i = 1, #inventory do
-		local item = inventory[i]
-		if item.name == "Body Armor" then
-			if item.quantity > 1 then
-				inventory[i].quantity = item.quantity - 1
-				user.setActiveCharacterData("inventory", inventory)
-				TriggerClientEvent("interaction:equipArmor", source)
-				return
-			else
-				table.remove(inventory, i)
-				user.setActiveCharacterData("inventory", inventory)
-				TriggerClientEvent("interaction:equipArmor", source)
-				return
-			end
-		end
-	end
-end)
-
-RegisterServerEvent("interaction:dropItem")
-AddEventHandler("interaction:dropItem", function(itemName, posX, posY, posZ)
-	local userSource = tonumber(source)
-	itemName = removeQuantityFromItemName(itemName)
-	--------------------
-	-- play animation --
-	--------------------
-	local anim = {
-		dict = "anim@move_m@trash",
-		name = "pickup"
-	}
-	--TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 1)
-	TriggerClientEvent("usa:playAnimation", userSource, anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 1.5)
-	----------------
-	-- drop item  --
-	----------------
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-	local location = {
-		x = posX,
-		y = posY + 0.5,
-		z = posZ - 0.095
-	}
-
-	local grammar = "a "
-	local iName = itemName
-	if string.sub(iName, 1, 3) == "Key" then  -- check if the item is a key
-		iName = "key"
-	elseif string.sub(iName, 1, 10) == "Cell Phone" then  -- check if the item is a phone
-		iName = "phone"
-	elseif string.sub(iName, -1) == ")" then  -- check if the item is alcohol or has info at the end
-		local i = string.find(iName, "(", 1, true)
-		iName = string.sub(iName, 1, i - 2)
-	elseif IsVowel(string.sub(iName, 1, 1)) then
-		grammar = "an "
-	end
-	if string.sub(iName, -1) == "s" then  -- check if the item name is plural
-		grammar = ""
-	end
-	local msg = "drops " .. grammar .. iName
-	exports["globals"]:sendLocalActionMessage(userSource, msg)
-
-	-- TODO: just use usa:removeItem and check for chicken first instead of below code
-
-	-- inventory
-	local inventory = user.getActiveCharacterData("inventory")
-	for i = 1, #inventory do
-		local item = inventory[i]
-		if item.name == itemName then
-			if item.quantity > 1 then
-				inventory[i].quantity = item.quantity - 1
-				user.setActiveCharacterData("inventory", inventory)
-				item.coords = location
-				TriggerEvent("interaction:addDroppedItem", item)
-				return
-			else
-				if inventory[i].name == "Chicken" then
-					TriggerClientEvent("chickenJob:spawnChicken", userSource)
-				end
-				table.remove(inventory, i)
-				user.setActiveCharacterData("inventory", inventory)
-				item.coords = location
-				TriggerEvent("interaction:addDroppedItem", item)
-				return
-			end
-		end
-	end
-	-- weapons
-	local weapons = user.getActiveCharacterData("weapons")
-	for i = 1, #weapons do
-		local item = weapons[i]
-		if item.name == itemName then
-			--print("found matching item to drop!")
-			table.remove(weapons, i)
-			user.setActiveCharacterData("weapons", weapons)
-			TriggerClientEvent("interaction:equipWeapon", userSource, item, false)
-			item.coords = location
-			TriggerEvent("interaction:addDroppedItem", item)
-			return
-		end
-	end
-	-- licenses
-	local licenses = user.getActiveCharacterData("licenses")
-	for i = 1, #licenses do
-		local item = licenses[i]
-		if item.name == itemName then
-			--print("found matching item to drop!")
-			table.remove(licenses, i)
-			user.setActiveCharacterData("licenses", licenses)
-			item.coords = location
-			TriggerEvent("interaction:addDroppedItem", item)
-			return
-		end
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local armor = char.getItem("Body Armor")
+	if armor then
+		char.removeItem("Body Armor", 1)
+		TriggerClientEvent("interaction:equipArmor", source)
 	end
 end)
 
@@ -214,139 +95,133 @@ function removeQuantityFromItemName(itemName)
 		local i = string.find(itemName, "%)")
 		i = i + 2
 		itemName = string.sub(itemName, i)
-		--print("new item name = " .. itemName)
 	end
 	return itemName
 end
 
 RegisterServerEvent("interaction:giveItemToPlayer")
 AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
-  local userSource = tonumber(source)
-  --print("inside of interaction:giveItemToPlayer with target id = " .. targetPlayerId .. ", item: " .. item.name)
   -- give item to nearest player
-	local user = exports["essentialmode"]:getPlayerFromId(targetPlayerId)
-	if user then
-	  if user.getCanActiveCharacterHoldItem(item) then
+	local char = exports["usa-characters"]:GetCharacter(targetPlayerId)
+  if char.canHoldItem(item) then
 		if not item.type or item.type == "license" then
-		  -- must be a license (no item.type)
-			--print("tried to give a license!")
 			TriggerClientEvent("usa:notify", targetPlayerId, "Can't trade licenses. Sorry!")
 			return
-			--[[ prevent trading licenses for now
-		  local licenses = user.getActiveCharacterData("licenses")
-		  table.insert(licenses, item)
-			user.setActiveCharacterData("licenses", licenses)
-			--]]
-		else
-		  if item.type == "weapon" then
-			--print("giving a weapon!")
-			local weapons = user.getActiveCharacterData("weapons")
-			if #weapons < 3 then
-			  table.insert(weapons, item)
-			  user.setActiveCharacterData("weapons", weapons)
-			  TriggerClientEvent("interaction:equipWeapon", targetPlayerId, item, true)
-			  TriggerClientEvent("interaction:equipWeapon", userSource, item, false)
-			else
-			  TriggerClientEvent("interaction:notify", userSource, GetPlayerName(targetPlayerId) .. " can't hold anymore weapons!")
-			  return
-			end
-		  else
-			local found = false
-			--print("giving an inventory item!")
-			local inventory = user.getActiveCharacterData("inventory")
-			for i = 1, #inventory do
-			  if inventory[i].name == item.name then
-				found = true
-				inventory[i].quantity = inventory[i].quantity + 1
-				user.setActiveCharacterData("inventory", inventory)
-			  end
-			end
-			if not found then
-			  item.quantity = 1
-			  table.insert(inventory, item)
-			  user.setActiveCharacterData("inventory", inventory)
-			end
-		  end
 		end
-		-- remove from source player
-		removeItemFromPlayer(item, userSource)
-		TriggerClientEvent("usa:notify", userSource, "You gave " .. targetPlayerId .. ": (x1) " .. item.name)
-		TriggerClientEvent("usa:notify", targetPlayerId, userSource .. " has given you " .. ": (x1) " .. item.name)
-		-- play animation:
-		local anim = {
-		  dict = "anim@move_m@trash",
-		  name = "pickup"
-		}
-		--TriggerClientEvent("usa:playAnimation", userSource, anim.name, anim.dict, 2)
-		--TriggerClientEvent("usa:playAnimation", userSource, anim.dict, anim.name, 5, 1, 2000, 31, 0, 0, 0, 0)
-		TriggerClientEvent("usa:playAnimation", userSource, anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 2)
-
+	  if item.type == "weapon" then
+			local weapons = char.getWeapons()
+			if #weapons < 3 then
+			  char.giveItem(item)
+			  TriggerClientEvent("interaction:equipWeapon", targetPlayerId, item, true)
+			  TriggerClientEvent("interaction:equipWeapon", source, item, false)
+			else
+			  TriggerClientEvent("interaction:notify", source, GetPlayerName(targetPlayerId) .. " can't hold anymore weapons!")
+			end
 	  else
-		TriggerClientEvent("usa:notify", userSource, "Player can't hold anymore items! Inventory full.")
-		TriggerClientEvent("usa:notify", targetPlayerId, "You can't hold that item! Inventory full.")
+		item.quantity = 1
+		char.giveItem(item)
+		-- remove from source player
+		removeItemFromPlayer(item, source)
+		TriggerClientEvent("usa:notify", source, "You gave " .. GetPlayerName(targetPlayerId) .. ": (x1) " .. item.name)
+		TriggerClientEvent("usa:notify", targetPlayerId, GetPlayerName(source) .. " has given you " .. ": (x1) " .. item.name)
+		-- play animation:
+		TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 2)
 	  end
 	else
-	  --print("player with id #" .. targetPlayerId .. " is not in game!")
-	  return
+		TriggerClientEvent("usa:notify", source, "Player can't hold anymore items! Inventory full.")
+		TriggerClientEvent("usa:notify", targetPlayerId, "You can't hold that item! Inventory full.")
 	end
 end)
 
 function removeItemFromPlayer(item, userSource)
-	-- remove item from player
-	--TriggerEvent("es:getPlayerFromId", userSource, function(user)
-	local user = exports["essentialmode"]:getPlayerFromId(userSource)
-		if user then
-			if not item.type then
-				-- must be a license (no item.type)
-				--print("removing a license!")
-				local licenses = user.getActiveCharacterData("licenses")
-				for i = 1, #licenses do
-					if licenses[i].name == item.name and licenses[i].ownerName == item.ownerName then
-						--print("found a matching licenses to remove!!")
-						table.remove(licenses, i)
-						user.setActiveCharacterData("licenses", licenses)
-						return
-					end
-				end
-			else
-				if item.type == "weapon" then
-					--print("removing a weapon!")
-					local weapons = user.getActiveCharacterData("weapons")
-					for i = 1, #weapons do
-						if weapons[i].name == item.name then
-							--print("found a matching weapon to remove!")
-							table.remove(weapons,i)
-							user.setActiveCharacterData("weapons", weapons)
-							return
-						end
-					end
-				else
-					--print("removing an inventory item!")
-					local inventory = user.getActiveCharacterData("inventory")
-					for i = 1, #inventory do
-						if inventory[i].name == item.name then
-							--print("found matching item to remove!")
-							if inventory[i].quantity > 1 then
-								inventory[i].quantity = inventory[i].quantity - 1
-								user.setActiveCharacterData("inventory", inventory)
-								return
-							else
-								table.remove(inventory,i)
-								user.setActiveCharacterData("inventory", inventory)
-								return
-							end
-						end
-					end
-				end
-			end
-		else
-			--print("player with id #" .. targetPlayerId .. " is not in game!")
-		end
-	--end)
+	local char = exports["usa-characters"]:GetCharacter(userSource)
+	char.removeItem(item, 1)
 end
 
+RegisterServerEvent("inventory:moveItem")
+AddEventHandler("inventory:moveItem", function(data)
+	local usource = source
+	local char = exports["usa-characters"]:GetCharacter(usource)
+	local quantity = tonumber(data.quantity) or 1
+	if data.fromType == "primary" and data.toType == "primary" then
+		char.moveItemSlots(data.fromSlot, data.toSlot)
+		TriggerClientEvent("interaction:sendNUIMessage", usource, { type = "inventoryLoaded", inventory = char.get("inventory")})
+	elseif data.fromType == "primary" and data.toType == "secondary" then
+		-- get item being moved --
+		local item = char.getItemByIndex(data.fromSlot)
+		-- validate item move --
+		if quantity <= 0 or quantity > item.quantity then
+			return
+		end
+		if item.type and item.type == "license" then
+			TriggerClientEvent("usa:notify", usource, "Can't move licenses!")
+			-- todo: send msg to NUI to give some UI feedback for failed move
+			return
+		end
+			-- perform move --
+		if item then
+			TriggerEvent("vehicle:storeItem", usource, data.plate, item, quantity, data.toSlot, function(success, inv) -- make export?
+				if success then
+					char.removeItemByIndex(data.fromSlot, quantity)
+					--TriggerClientEvent("interaction:sendNUIMessage", usource, { type = "updateBothInventories", inventory = { primary = char.get("inventory"), secondary = inv}})
+					TriggerClientEvent("interaction:sendNUIMessage", usource, { type = "inventoryLoaded", inventory = char.get("inventory")})
+					TriggerEvent("vehicle:updateForOthers", data.plate, inv)
+				end
+			end)
+		end
+	elseif data.fromType == "secondary" and data.toType == "primary" then
+		if not exports["vehicle-inventories"]:getVehicleBusy(data.plate) then
+			exports["vehicle-inventories"]:setVehicleBusy(data.plate)
+			-- perform move --
+			TriggerEvent("vehicle:moveItemToPlayerInv", usource, data.plate, data.fromSlot, data.toSlot, quantity, char, function(inv)
+				if inv then
+					--TriggerClientEvent("interaction:sendNUIMessage", usource, { type = "updateBothInventories", inventory = { primary = char.get("inventory"), secondary = inv}})
+					TriggerClientEvent("interaction:sendNUIMessage", usource, { type = "inventoryLoaded", inventory = char.get("inventory")})
+					TriggerEvent("vehicle:updateForOthers", data.plate, inv)
+				end
+			end)
+		else
+			TriggerClientEvent("usa:notify", usource, "Please wait a moment!")
+		end
+	elseif data.fromType == "secondary" and data.toType == "secondary" then
+		if not exports["vehicle-inventories"]:getVehicleBusy(data.plate) then
+			exports["vehicle-inventories"]:setVehicleBusy(data.plate)
+			TriggerEvent("vehicle:moveInventorySlots", data.plate, data.fromSlot, data.toSlot, function(inv)
+				local isLocked = exports["LockSystem"]:isLocked(data.plate)
+				--TriggerClientEvent("interaction:sendNUIMessage", usource, { type = "vehicleInventoryLoaded", inventory = inv, locked = isLocked})
+				TriggerEvent("vehicle:updateForOthers", data.plate, inv, isLocked)
+			end)
+		else
+			TriggerClientEvent("usa:notify", usource, "Please wait a moment!")
+		end
+	end
+end)
+
+RegisterServerEvent("inventory:dropItem")
+AddEventHandler("inventory:dropItem", function(name, index, posX, posY, posZ)
+	--------------------
+	-- play animation --
+	--------------------
+	TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 1.5)
+	DroppedActionMessage(source, name)
+	local coords = {
+		x = posX,
+		y = posY + 0.5,
+		z = posZ
+	}
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local item = char.getItemByIndex(index)
+	item.quantity = 1 -- only drop 1
+	item.coords = coords
+	if item.type == "weapon" then
+		TriggerClientEvent("interaction:equipWeapon", source, item, false)
+	end
+	TriggerEvent("interaction:addDroppedItem", item)
+	char.removeItemByIndex(index, 1)
+end)
+
 -- /e [emoteName]
-TriggerEvent('es:addCommand', 'e', function(source, args, user)
+TriggerEvent('es:addCommand', 'e', function(source, args, char)
 	if args[2] then
 		table.remove(args, 1)
 		TriggerClientEvent('emotes:playEmote', source, table.concat(args, ' '))
@@ -360,10 +235,24 @@ end, {
 	}
 })
 
-function IsVowel(letter)
-	local vowels = 'aeiou'
-	if string.find(vowels, string.lower(letter)) then
-		return true
+function DroppedActionMessage(source, name)
+	-- 1/3 chance to print notification message to all players in the area
+	math.randomseed(GetGameTimer())
+	if math.random(1, 3) == 1 then
+		local grammar = "a "
+		local iName = name
+		if string.sub(iName, 1, 3) == "Key" then  -- check if the item is a key
+			iName = "key"
+		elseif string.sub(iName, 1, 10) == "Cell Phone" then  -- check if the item is a phone
+			iName = "phone"
+		elseif string.sub(iName, -1) == ")" then  -- check if the item is alcohol or has info at the end
+			local i = string.find(iName, "(", 1, true)
+			iName = string.sub(iName, 1, i - 2)
+		end
+		if string.sub(iName, -1) == "s" then  -- check if the item name is plural
+			grammar = ""
+		end
+		local msg = "Discards " .. grammar .. iName .. " on the ground."
+		exports["globals"]:sendLocalActionMessage(source, msg)
 	end
-	return false
 end

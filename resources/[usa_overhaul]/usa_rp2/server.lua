@@ -116,12 +116,23 @@ end, {
 })
 
 -- R O L L  D I C E
+RegisterServerEvent("usa:rollDice")
+AddEventHandler("usa:rollDice", function(location, max)
+	if max then
+		local roll = math.random(1, max)
+		local chatMsg = "Person with SSN " .. source .. " rolls a " .. roll .. " out of " .. max
+		local msg3D = "Rolls a " .. roll .. " out of " .. max
+		exports["globals"]:sendLocalActionMessageChat(chatMsg, location)
+		exports["globals"]:sendLocalActionMessage(source, msg3D)
+	end
+end)
+
 TriggerEvent('es:addCommand', 'roll', function(source, args, char, location)
 	local max = tonumber(args[2])
 	if max then
 		print("rolling " .. max)
 		local roll = math.random(1, max)
-		local msg = "rolls a " .. roll .. " out of " .. max 
+		local msg = "rolls a " .. roll .. " out of " .. max
 		exports["globals"]:sendLocalActionMessageChat(msg, location)
 		exports["globals"]:sendLocalActionMessage(source, msg)
 	end
@@ -345,7 +356,7 @@ AddEventHandler('job:sendNewLog', function(source, job, isOnDuty)
 		      	},
 
 		      	footer = {
-			        text = os.date('%m-%d-%Y %H:%M:%S', os.time()) .. ' PDT' 
+			        text = os.date('%m-%d-%Y %H:%M:%S', os.time()) .. ' PDT'
 			    }
 			}
 		},
@@ -401,7 +412,7 @@ AddEventHandler('playerDropped', function()
 					      	},
 
 					      	footer = {
-						        text = os.date('%m-%d-%Y %H:%M:%S', os.time()) .. ' PDT' 
+						        text = os.date('%m-%d-%Y %H:%M:%S', os.time()) .. ' PDT'
 						    }
 						}
 					},

@@ -1,0 +1,153 @@
+<html>
+	<head>
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+		<link href="css/style.css" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+
+		<main id="app">
+			<!-- User input box -->
+			<div id="inputBox" class="w3-modal" v-if="inputBox.show">
+				<div class="w3-modal-content" style="background: transparent;">
+					<div class="w3-container" style="width: 100%; text-align: center; padding: 0 auto;">
+						<form v-on:submit.prevent="continueInventoryMove(true)">
+							<input type="number" name="quantity" placeholder="Enter quantity to move..." v-model="inputBox.value" min="1">
+							<button type="button" name="submit" @click="continueInventoryMove(true)">Move</button>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<!-- Main menu -->
+			<div class="container center" v-if="currentPage === 'Home'">
+			  <ul class="menu limit-width top-margin-no-sides">
+					<li v-if="targetVehiclePlate !== null" @click="showVehicleActions()" class="menu-item">
+						<label>Vehicle Actions</label>
+					</li>
+			    <li v-for="(item, index) in menuItems" @click="onClick(item)" class="menu-item">
+						<label>{{ item.name }}</label>
+					</li>
+					<li @click="closeMenu()" class="menu-item">
+						<label>Close</label>
+					</li>
+			  </ul>
+			</div>
+
+			<!-- Submenus -->
+			<div class="container center" v-if="currentPage !== 'Home' && currentPage !== 'Inventory'">
+				<ul class="menu submenu">
+					<li class="menu-item" v-for="(item, index) in currentSubmenuItems" @click="onSubmenuItemClick(item)">
+						<label>{{ item.name }}</label>
+					</li>
+					<li class="menu-item" @click="back()">
+						<label>Back</label>
+					</li>
+				</ul>
+			</div>
+
+			<!-- Inventory Context Menu -->
+			<ul id="contextMenu" v-show="contextMenu.showContextMenu" :style="{top: contextMenu.top + 'px', left: contextMenu.left + 'px'}">
+				<li @click="contextMenuClicked(event, 'Use')">Use</li>
+				<li @click="contextMenuClicked(event, 'Give')">Give to <span v-if="nearestPlayer">{{ nearestPlayer.name }}</span><span v-else>no one</span></li>
+				<li @click="contextMenuClicked(event, 'Drop')">Drop</li>
+			</ul>
+
+			<!-- Inventory -->
+			<div class="container center" v-if="currentPage === 'Inventory'">
+				<div style="position: relative;">
+					<!-- Pimary inventory weight display -->
+					<div style="padding: 0.5em; position: absolute; top: -35px; left: 0; color: lightgray; font-size: 13px;">
+						Weight: {{ this.inventory.currentWeight }}/100
+					</div>
+					<!-- Secondary inventory weight display -->
+					<div v-if="showSecondaryInventory" style="padding: 0.5em; position: absolute; top: -35px; right: 0; color: lightgray; font-size: 13px;">
+						Weight: {{ this.vehicleInventory.currentWeight }}/{{ this.vehicleInventory.MAX_CAPACITY }}
+					</div>
+					<!-- Player Inventory -->
+					<div class="inventory-wrap">
+						<table>
+							<tr class="inventory-row" v-for="i in 5">
+								<td class="inventory-item droppable" v-droppable v-for="j in 5" v-bind:id="((5*(i-1)) + (j-1))" data-inventory-type="primary">
+									<div v-if="inventory.items[(5*(i-1)) + (j-1)]" @mousedown.right="contextMenu.openMenu(((5*(i-1)) + (j-1)))" @mousedown.left="contextMenu.showContextMenu = false">
+										<div class="draggable" v-draggable v-bind:id="((5*(i-1)) + (j-1))" data-inventory-type="primary">
+											<header>
+												<span class="inventory-item-quantity">{{ inventory.items[(5*(i-1)) + (j-1)].quantity }}</span>
+												<span class="inventory-item-weight">W: {{ inventory.items[(5*(i-1)) + (j-1)].weight }}</span>
+											</header>
+											<section>
+												<img v-if="inventory.items[(5*(i-1)) + (j-1)].image" v-bind:src="inventory.items[(5*(i-1)) + (j-1)].image" v-bind:alt="inventory.items[(5*(i-1)) + (j-1)].name">
+											</section>
+											<footer>
+												<div>
+													<span :class="{ 'w3-text-red' : isItemIllegal(inventory.items[(5*(i-1)) + (j-1)]) }">{{ inventory.items[(5*(i-1)) + (j-1)].name }}</span>
+												</div>
+											</footer>
+										</div>
+									</div>
+									<div v-else @mousedown.left="contextMenu.showContextMenu = false">
+										<header>
+											<span class="inventory-item-quantity" style="background-color: rgba(0,0,0,0)"></span>
+											<span class="inventory-item-weight"></span>
+										</header>
+										<section>
+											<div style="height: 70px;"></div>
+										</section>
+										<footer style="height: 30px !important; padding: 0;">
+										</footer>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<!-- Secondary Inventory -->
+					<div class="inventory-wrap" v-if="showSecondaryInventory">
+						<table>
+							<tr class="inventory-row" v-for="i in 5">
+								<td class="inventory-item secondary-inv-slot" v-for="j in 5" v-bind:id="((5*(i-1)) + (j-1))" data-inventory-type="secondary">
+									<div v-if="vehicleInventory.items[(5*(i-1)) + (j-1)]">
+										<div class="secondary-inv-item" v-bind:id="((5*(i-1)) + (j-1))" data-inventory-type="secondary">
+											<header>
+												<span class="inventory-item-quantity">{{ vehicleInventory.items[(5*(i-1)) + (j-1)].quantity }}</span>
+												<span class="inventory-item-weight">W: {{ vehicleInventory.items[(5*(i-1)) + (j-1)].weight }}</span>
+											</header>
+											<section>
+												<img v-if="vehicleInventory.items[(5*(i-1)) + (j-1)].image" v-bind:src="vehicleInventory.items[(5*(i-1)) + (j-1)].image" v-bind:alt="vehicleInventory.items[(5*(i-1)) + (j-1)].name">
+											</section>
+											<footer>
+												<div>
+													<span :class="{ 'w3-text-red' : isItemIllegal(vehicleInventory.items[(5*(i-1)) + (j-1)]) }">{{ vehicleInventory.items[(5*(i-1)) + (j-1)].name }}</span>
+												</div>
+											</footer>
+										</div>
+									</div>
+									<div v-else>
+										<header>
+											<span class="inventory-item-quantity" style="background-color: rgba(0,0,0,0)"></span>
+											<span class="inventory-item-weight"></span>
+										</header>
+										<section>
+											<div style="height: 70px;"></div>
+										</section>
+										<footer style="height: 30 !important; padding: 0;">
+											<div>
+												<span></span>
+											</div>
+										</footer>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+		</main>
+
+		<!-- JS -->
+		<script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+		<script src="js/jquery-ui.min.js" type="text/javascript"></script>
+		<script src="js/FitText.min.js" type="text/javascript"></script>
+		<script src="js/vue.min.js" type="text/javascript"></script>
+		<script src="js/script.js" type="text/javascript"></script>
+
+	</body>
+</html>

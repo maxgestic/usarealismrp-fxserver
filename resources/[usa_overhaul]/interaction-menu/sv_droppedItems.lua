@@ -1,11 +1,11 @@
 local DROPPED_ITEMS = {}
 
-local ITEM_EXPIRE_CHECK_INTERVAL = 5000 -- miliseconds
+local ITEM_EXPIRE_CHECK_INTERVAL = 30000 -- ms
 local ITEM_EXPIRE_TIME = 45 -- minutes
 
 RegisterServerEvent("interaction:getDroppedItems")
 AddEventHandler("interaction:getDroppedItems", function()
-  TriggerClientEvent("interaction:getDroppedItems", source, DROPPED_ITEMS)
+	TriggerClientEvent("interaction:getDroppedItems", source, DROPPED_ITEMS)
 end)
 
 RegisterServerEvent("interaction:addDroppedItem")
@@ -32,70 +32,50 @@ AddEventHandler("interaction:attemptPickup", function(item)
 end)
 
 function attemptPickup(src, item, cb)
-	local user = exports["essentialmode"]:getPlayerFromId(src)
-	if user then
-	  if user.getCanActiveCharacterHoldItem(item) then
-		  if item.type == "weapon" then
-  			local weapons = user.getActiveCharacterData("weapons")
-  			if #weapons < 3 then
-  			  table.insert(weapons, item)
-  			  user.setActiveCharacterData("weapons", weapons)
-  			  TriggerClientEvent("interaction:equipWeapon", src, item, true)
-          local anim = { dict = "anim@move_m@trash", name = "pickup" }
-          TriggerClientEvent("usa:playAnimation", src, anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 2)
-          cb(true)
-  			else
-  			  TriggerClientEvent("usa:notify", src, "Can't hold anymore weapons!")
-          cb(false)
-  			end
-		  else
-  			local found = false
-  			local inventory = user.getActiveCharacterData("inventory")
-  			for i = 1, #inventory do
-  			  if inventory[i].name == item.name then
-    				found = true
-    				inventory[i].quantity = inventory[i].quantity + 1
-    				user.setActiveCharacterData("inventory", inventory)
-            break
-  			  end
-  			end
-  			if not found then
-  			  item.quantity = 1
-  			  table.insert(inventory, item)
-  			  user.setActiveCharacterData("inventory", inventory)
-  			end
-    		TriggerClientEvent("usa:notify", src, "You picked up (x1) " .. item.name)
-    		local anim = { dict = "anim@move_m@trash", name = "pickup" }
-    		TriggerClientEvent("usa:playAnimation", src, anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 2)
-
+	local char = exports["usa-characters"]:GetCharacter(src)
+  if char.canHoldItem(item) then
+	  if item.type == "weapon" then
+			local weapons = char.getWeapons()
+			if #weapons < 3 then
+				char.giveItem(item)
+			  TriggerClientEvent("interaction:equipWeapon", src, item, true)
+        TriggerClientEvent("usa:playAnimation", "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 2)
         cb(true)
-      end
+			else
+			  TriggerClientEvent("usa:notify", src, "Can't hold anymore weapons!")
+        cb(false)
+			end
 	  else
-		   TriggerClientEvent("usa:notify", src, "You can't hold that item! Inventory full.")
-       cb(false)
-	  end
-	end
+			char.giveItem(item)
+  		TriggerClientEvent("usa:notify", src, "You picked up (x1) " .. item.name)
+  		TriggerClientEvent("usa:playAnimation", src, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 2)
+      cb(true)
+    end
+  else
+	   TriggerClientEvent("usa:notify", src, "You can't hold that item! Inventory full.")
+     cb(false)
+  end
 end
 
 function getMinutesFromTime(t)
-  local reference = t
-  local minutesfrom = os.difftime(os.time(), reference) / 60
-  local minutes = math.floor(minutesfrom)
-  return minutes
+	local reference = t
+	local minutesfrom = os.difftime(os.time(), reference) / 60
+	local minutes = math.floor(minutesfrom)
+	return minutes
 end
 
 -- remove dropped items after ITEM_EXPIRE_TIME minutes --
 Citizen.CreateThread(function()
-  while true do
-    if #DROPPED_ITEMS > 0 then
-      for i = #DROPPED_ITEMS, 1, -1 do 
-        if (getMinutesFromTime(DROPPED_ITEMS[i].dropTime) > ITEM_EXPIRE_TIME) or (string.find(DROPPED_ITEMS[i].name, 'Key') and getMinutesFromTime(DROPPED_ITEMS[i].dropTime) > 1) then
-          table.remove(DROPPED_ITEMS, i)
-          TriggerClientEvent("interaction:removeDroppedItem", -1, i)
-          break
-        end
-      end
-    end
-    Wait(ITEM_EXPIRE_CHECK_INTERVAL)
-  end
-end) 
+	while true do
+		if #DROPPED_ITEMS > 0 then
+			for i = #DROPPED_ITEMS, 1, -1 do
+				if (getMinutesFromTime(DROPPED_ITEMS[i].dropTime) > ITEM_EXPIRE_TIME) or (string.find(DROPPED_ITEMS[i].name, 'Key') and getMinutesFromTime(DROPPED_ITEMS[i].dropTime) > 1) then
+					table.remove(DROPPED_ITEMS, i)
+					TriggerClientEvent("interaction:removeDroppedItem", -1, i)
+					break
+				end
+			end
+		end
+		Wait(ITEM_EXPIRE_CHECK_INTERVAL)
+	end
+end)

@@ -99,12 +99,12 @@ AddEventHandler("generalStore:buyItem", function(property, item, store, inPrison
           exports["usa-phone"]:CreateNewPhone(item)
         end
         char.giveItem(item, 1)
-        TriggerClientEvent("usa:notify", userSource, "Purchased: ~y~" .. item.name)
+        TriggerClientEvent("usa:notify", source, "Purchased: ~y~" .. item.name)
       else
-        TriggerClientEvent("usa:notify", userSource, "You don't have enough money!")
+        TriggerClientEvent("usa:notify", source, "You don't have enough money!")
       end
     else
-      TriggerClientEvent("usa:notify", userSource, "Your inventory is full!")
+      TriggerClientEvent("usa:notify", source, "Your inventory is full!")
     end
 end)
 

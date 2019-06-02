@@ -1,3 +1,17 @@
+local jobNames = {
+	['civ'] = false,
+	['taxi'] = 'Taxi',
+	['tow'] = 'Tow',
+	['sheriff'] = 'Peace Officer (SASP)',
+	['dai'] = 'Peace Officer (DAI)',
+	['da'] = 'District Attorney',
+	['ems'] = 'Medical Responder (LSFD)',
+	['doctor'] = 'Doctor',
+	['corrections'] = 'Corrections',
+	['lawyer'] = 'Attorney',
+	['judge'] = 'Judge'
+}
+
 TriggerEvent('es:addCommand', 'ad', function(source, args, char)
 	local sender = char.getName()
 	if char.hasItem("Cell Phone") then
@@ -131,26 +145,18 @@ TriggerEvent('es:addCommand', 'id', function(source, args, char, location)
 	showid(source, char, location)
 end, {help = "Present your identification card / DL."})
 
-local jobNames = {
-	['civ'] = false,
-	['taxi'] = 'Taxi',
-	['tow'] = 'Tow',
-	['sheriff'] = 'Peace Officer (SASP)',
-	['dai'] = 'Peace Officer (DAI)',
-	['da'] = 'District Attorney',
-	['ems'] = 'Medical Responder (LSFD)',
-	['doctor'] = 'Doctor',
-	['corrections'] = 'Corrections',
-	['lawyer'] = 'Attorney',
-	['judge'] = 'Judge'
-}
+RegisterServerEvent("altchat:showID")
+AddEventHandler("altchat:showID", function(location)
+	local char = exports["usa-characters"]:GetCharacter(source)
+	showid(source, char, location)
+end)
 
 function showid(src, u, location)
 	local job = u.get("job")
 	local employer = jobNames[job]
 	local char_name = u.getFullName()
 	local dob = u.get("dateOfBirth")
-	exports["globals"]:sendLocalActionMessage(src, "shows ID")
+	exports["globals"]:sendLocalActionMessage(src, char_name .. " shows ID")
 	local msg = "^4^*[STATE ID]^0 Name: ^r" .. char_name .. " ^4^*|^0 SSN: ^r" .. src .. " ^4^*| ^0DOB: ^r" .. dob
 	if employer then msg = "^4^*[STATE ID]^0 Name: ^r" .. char_name .. " ^4^*|^0 SSN: ^r" .. src .. " ^4^*| ^0DOB: ^r" .. dob .. " ^4^*| ^0Employer: ^r".. employer end
 	exports["globals"]:sendLocalActionMessageChat(msg, location)

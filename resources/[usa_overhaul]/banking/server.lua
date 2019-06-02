@@ -177,6 +177,12 @@ AddEventHandler("bank:cancelGiveCash", function()
 	awaitingGiveCash[source] = nil
 end)
 
+RegisterServerEvent("bank:showBankBalance")
+AddEventHandler("bank:showBankBalance", function()
+	local bank = exports["usa-characters"]:GetCharacterField(source, "bank")
+	TriggerClientEvent("usa:notify", source, "Bank Balance: ~s~$" .. comma_value(bank))
+end)
+
 TriggerEvent('es:addCommand', 'bank', function(source, args, char)
 	local bank = char.get("bank")
 	TriggerClientEvent("usa:notify", source, "Bank Balance: ~s~$" .. comma_value(bank))

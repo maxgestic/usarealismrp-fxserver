@@ -8,6 +8,9 @@ exports {
   'EnumeratePeds',
   'EnumerateVehicles',
   'EnumeratePickups',
+  'GetUserInput',
+  "MaxItemTradeDistance",
+  "MaxTackleDistance"
 }
 
 -- global server functions/tables

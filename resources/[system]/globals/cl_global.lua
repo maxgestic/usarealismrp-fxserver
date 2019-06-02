@@ -1,3 +1,15 @@
+local MAX_ITEM_TRADE_DISTANCE = 1.5
+local MAX_TACKLE_DISTANCE = 1.5
+local ACTION_MESSAGE_TIME_SECONDS = 6.5
+
+function MaxItemTradeDistance()
+	return MAX_ITEM_TRADE_DISTANCE
+end
+
+function MaxTackleDistance()
+	return MAX_TACKLE_DISTANCE
+end
+
 --------------------------------------------------------------
 -- Send GTA style notification above minimap on bottom left --
 --------------------------------------------------------------
@@ -66,6 +78,13 @@ end
 -- Start action (me) message --
 -------------------------------------
 local nbrDisplaying = 0
+RegisterNetEvent('globals:startActionMessage')
+AddEventHandler('globals:startActionMessage', function(source, text, maxDist, time)
+  offset = 0 + (nbrDisplaying*0.06)
+  if nbrDisplaying < 5 then
+    Display(GetPlayerFromServerId(source), text, offset, maxDist, time)
+  end
+end)
 
 function Display(ped, text, offset, maxDist, time)
   local displaying = true
@@ -84,10 +103,10 @@ function Display(ped, text, offset, maxDist, time)
   end)
 end
 
-function DrawText3Ds(x,y,z, text, maxDist)
+function DrawText3Ds(x, y, z, text, maxDist)
     local onScreen,_x,_y=World3dToScreen2d(x,y,z)
     local px,py,pz=table.unpack(GetGameplayCamCoords())
-    local dist = GetDistanceBetweenCoords(px,py,pz, x,y,z, 1)
+		local dist = GetDistanceBetweenCoords(px,py,pz, x,y,z, 1)
     if dist <= maxDist then
       SetTextScale(0.35, 0.35)
       SetTextFont(4)
@@ -102,10 +121,21 @@ function DrawText3Ds(x,y,z, text, maxDist)
   end
 end
 
-RegisterNetEvent('globals:startActionMessage')
-AddEventHandler('globals:startActionMessage', function(source, text, maxDist, time)
-  offset = 0 + (nbrDisplaying*0.06)
-  if nbrDisplaying < 5 then
-    Display(GetPlayerFromServerId(source), text, offset, maxDist, time)
-  end
-end)
+function GetUserInput()
+    -- get withdraw amount from user input --
+    DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 15 )
+    while true do
+        if ( UpdateOnscreenKeyboard() == 1 ) then
+            local input = GetOnscreenKeyboardResult()
+            if ( string.len( input ) > 0 ) then
+                -- do something with the input var
+                return input
+            else
+                DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 15 )
+            end
+        elseif ( UpdateOnscreenKeyboard() == 2 ) then
+            break
+        end
+        Wait( 0 )
+    end
+end

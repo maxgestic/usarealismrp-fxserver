@@ -462,6 +462,25 @@ function getNameFromContacts(phone, number)
 	return number
 end
 
+RegisterServerEvent("phone:showPhoneNumber")
+AddEventHandler("phone:showPhoneNumber", function(location)
+	local inventory = exports["usa-characters"]:GetCharacterField(source, "inventory")
+	local hasPhone = false
+	for i = 0, (inventory.MAX_CAPACITY - 1) do
+		if inventory.items[tostring(i)] then
+			local item = inventory.items[tostring(i)]
+			if string.find(item.name, "Cell Phone") then
+				local msg = "Person with SSN "..source.." writes down number: " .. item.number
+				exports["globals"]:sendLocalActionMessageChat(msg, location)
+				hasPhone = true
+			end
+		end
+	end
+	if not hasPhone then
+		TriggerClientEvent("usa:notify", source, "You have no cell phone!")
+	end
+end)
+
 -- show phone number command --
 TriggerEvent('es:addCommand', 'phonenumber', function(source, args, char, location)
 	local inventory = char.get("inventory")

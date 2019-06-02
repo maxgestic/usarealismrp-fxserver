@@ -3,6 +3,33 @@ local TACKLE_KEY = 101
 
 local isLockpicking = false
 
+local spawned_object = nil
+local playing_scenario = false
+local playing_anim = nil
+local left_hand = 60309
+local right_hand = 58868
+
+local player = {
+	BAC = 0.00
+}
+
+local playerPed, targetPed
+local playerPedCoords, targetPedCoords, offsetCoords
+local closestPed = nil
+local distanceToTargetPed = 0.0
+local distanceToClosestTargetPed = 0.0
+local didHit
+local hitCoords, hitSurfaceCoords
+local hitHandleVehicle = 0
+local playerServerId = 0
+local playerName = ""
+local raycastResult = 0
+local voipLevel = 0.0
+
+local menuEnabled = false
+
+local inProperty = false
+
 local scenarios = {
 	{name = "cancel", type = "cancel", dict = "", animname = ""},
 	{name = "stop", type = "cancel", dict = "", animname = ""},
@@ -58,6 +85,11 @@ local scenarios = {
 	{name = "dance 1", type = "emote", dict = "mini@strip_club@private_dance@part1", animname = "priv_dance_p1"},
 	{name = "dance 2", type = "emote", dict = "mini@strip_club@private_dance@part2", animname = "priv_dance_p2"},
 	{name = "dance 3", type = "emote", dict = "mini@strip_club@private_dance@part3", animname = "priv_dance_p3"},
+	{name = "whatup", type = "emote", dict = "friends@laf@ig_5", animname = "whatupnigga"},
+	{name = "kiss", type = "emote", dict = "mp_ped_interaction", animname = "kisses_guy_a"},
+	{name = "handshake", type = "emote", dict = "mp_ped_interaction", animname = "handshake_guy_a"},
+	{name = "cpr", type = "emote", dict = "mini@cpr@char_a@cpr_str", animname = "cpr_pumpchest"},
+	{name = "cross arms", type = "emote", dict = "amb@world_human_hang_out_street@female_arms_crossed@base", animname = "base"},
 	{name = "dance 4", type = "emote", dict = "rcmnigel1bnmt_1b", animname = "dance_loop_tyler"},
 	{name = "dance 5", type = "emote", dict = "missfbi3_sniping", animname =  "dance_m_default"},
 	{name = 'dance 6', type = 'emote', dict = 'anim@amb@nightclub@dancers@black_madonna_entourage@', animname = 'hi_dance_facedj_09_v2_male^5'},
@@ -78,11 +110,6 @@ local scenarios = {
 	{name = 'celebration 6', type = 'emote', dict = 'anim@mp_player_intcelebrationmale@oh_snap', animname = 'oh_snap'},
 	{name = 'celebration 7', type = 'emote', dict = 'anim@mp_player_intcelebrationmale@salsa_roll', animname = 'salsa_roll'},
 	{name = 'celebration 8', type = 'emote', dict = 'anim@mp_player_intcelebrationmale@raise_the_roof', animname = 'raise_the_roof'},
-	{name = "whatup", type = "emote", dict = "friends@laf@ig_5", animname = "whatupnigga"},
-	{name = "kiss", type = "emote", dict = "mp_ped_interaction", animname = "kisses_guy_a"},
-	{name = "handshake", type = "emote", dict = "mp_ped_interaction", animname = "handshake_guy_a"},
-	{name = "cpr", type = "emote", dict = "mini@cpr@char_a@cpr_str", animname = "cpr_pumpchest"},
-	{name = "cross arms", type = "emote", dict = "amb@world_human_hang_out_street@female_arms_crossed@base", animname = "base"},
 	{name = "peace", type = "emote", dict = "mp_player_int_upperpeace_sign", animname = "mp_player_int_peace_sign"},
 	{name = "gang 1", type = "emote", dict = "mp_player_int_uppergang_sign_a", animname =  "mp_player_int_gang_sign_a"},
 	{name = "gang 2", type = "emote", dict = "mp_player_int_uppergang_sign_b", animname =  "mp_player_int_gang_sign_b"},
@@ -97,110 +124,220 @@ local scenarios = {
 	--{name = "hug", type = "emote", dict = "", animname = ""},
 }
 
---amb@prop_human_seat_chair@female@arms_folded@idle_a
---idle_a
+local walkstyles = {
+    {display_name = "Tough (Male)", clipset_name ="MOVE_M@TOUGH_GUY@"},
+    {display_name = "Tough (Female)", clipset_name ="MOVE_F@TOUGH_GUY@"},
+    {display_name = "Posh (Male)", clipset_name ="MOVE_M@POSH@"},
+    {display_name = "Posh (Female)", clipset_name ="MOVE_F@POSH@"},
+    {display_name = "Gangster 1 (Male)", clipset_name ="MOVE_M@GANGSTER@NG"},
+    {display_name = "Gangster 1 (Female)", clipset_name ="MOVE_F@GANGSTER@NG"},
+    {display_name = "Femme (Male)", clipset_name ="MOVE_M@FEMME@"},
+    {display_name = "Femme (Female)", clipset_name ="MOVE_F@FEMME@"},
+    {display_name = "Slow", clipset_name ="move_p_m_zero_slow"},
+    {display_name = "Gangster 2", clipset_name ="move_m@gangster@var_i"},
+    {display_name = "Casual", clipset_name ="move_m@casual@d"},
+		{display_name = "Injured", clipset_name ="move_injured_generic"},
+		{display_name = "Flee", clipset_name ="move_f@flee@a"},
+		{display_name = "Scared", clipset_name ="move_f@scared"},
+		{display_name = "Sexy", clipset_name ="move_f@sexy@a"},
+		{display_name = "Slightly Drunk", clipset_name ="MOVE_M@DRUNK@SLIGHTLYDRUNK"},
+		{display_name = "Moderately Drunk", clipset_name ="MOVE_M@DRUNK@MODERATEDRUNK_HEAD_UP"},
+    {display_name = "Very Drunk", clipset_name ="MOVE_M@DRUNK@VERYDRUNK"},
+    {display_name = "Grooving", clipset_name="ANIM@MOVE_M@GROOVING@SLOW@"}
+}
 
---mp_safehousevagos@boss
---vagos_boss_keyboard_a
+local ACTIONS = {
+	["Show ID"] = function()
+		local ped = GetPlayerPed(-1)
+		local location = GetEntityCoords(ped)
+		local locationTemp = {location.x, location.y, location.z}
+		TriggerServerEvent("altchat:showID", locationTemp)
+	end,
+	["Give cash"] = function()
+		Citizen.CreateThread(function()
+			if playerServerId ~= 0 then
+				-- had to save closest player ID for some reason --
+				local playerServerIdTemp = playerServerId
+				-- Get desired amount to give from user --
+				local amount = tonumber(exports.globals:GetUserInput())
+				if amount then
+					-- Give cash to nearest player --
+					TriggerServerEvent("bank:givecash", playerServerIdTemp, amount)
+				end
+			else
+				exports.globals:notify("Nobody nearby")
+			end
+		end)
+	end,
+	["Bank"] = function()
+		TriggerServerEvent("bank:showBankBalance")
+	end,
+	["Phone number"] = function()
+		local ped = GetPlayerPed(-1)
+		local location = GetEntityCoords(ped)
+		local locationTemp = {location.x, location.y, location.z}
+		TriggerServerEvent("phone:showPhoneNumber", locationTemp)
+	end,
+	["Roll dice"] = function()
+		Citizen.CreateThread(function()
+			local maxRoll = tonumber(exports.globals:GetUserInput())
+			if maxRoll then
+				local ped = GetPlayerPed(-1)
+				local location = GetEntityCoords(ped)
+				local locationTemp = {location.x, location.y, location.z}
+				TriggerServerEvent("usa:rollDice", locationTemp, maxRoll)
+			end
+		end)
+	end,
+	["Glasses"] = function()
+		TriggerEvent("headprops:toggleProp", 1)
+	end,
+	["Mask"] = function()
+		TriggerEvent("headprops:toggleComponent", 1)
+	end,
+	["Hat"] = function()
+		TriggerEvent("headprops:toggleProp", 0)
+	end,
+	["Tie"] = function()
+		TriggerEvent("crim:attemptToTieNearestPerson", true)
+	end,
+	["Untie"] = function()
+		TriggerEvent("crim:attemptToTieNearestPerson", false)
+	end,
+	["Rob"] = function()
+		TriggerEvent("crim:attemptToRobNearestPerson")
+	end,
+	["Blindfold"] = function()
+		TriggerEvent("crim:attemptToBlindfoldNearestPerson", true)
+	end,
+	["Remove blindfold"] = function()
+		TriggerEvent("crim:attemptToBlindfoldNearestPerson", false)
+	end,
+	["Drag"] = function()
+		TriggerEvent("drag:attemptToDragNearest")
+	end,
+	["Search"] = function()
+		TriggerEvent("search:attemptToSearchNearestPerson", true)
+	end,
+	-- TO TEST --
+	["Place"] = function()
+		Citizen.CreateThread(function()
+			local ssn = tonumber(exports.globals:GetUserInput())
+			if ssn then
+				TriggerServerEvent("place:placeFromInteractionMenu", ssn) -- need to test chat message response
+			end
+		end)
+	end,
+	-- TO TEST --
+	["Unseat"] = function()
+		-- manually type target player id in since not sure how good it is with people in vehicles --
+		Citizen.CreateThread(function()
+			local ssn = tonumber(exports.globals:GetUserInput())
+			if ssn then
+				TriggerServerEvent("place:unseatFromInteractionMenu", ssn)
+			end
+		end)
+	end,
+	["Walkstyle"] = function()
+		Citizen.CreateThread(function()
+			TriggerServerEvent("usa:showWalkstyleHelp")
+			local style_number = tonumber(exports.globals:GetUserInput())
+			if style_number then
+				if style_number ~= 0 then
+					TriggerEvent("civ:changeWalkStyle", walkstyles[tonumber(style_number)].clipset_name)
+				else
+					TriggerEvent("civ:changeWalkStyle", tonumber(style_number))
+				end
+			end
+		end)
+	end
+}
 
---amb@prop_human_seat_computer@male@base
---base
-
---
---this._pumpAndIdleMedic.get_AddTask().PlayAnimation("mini@cpr@char_a@cpr_str", "cpr_pumpchest", 8f, 1000, true, 8f);
---this._pumpAndIdleMedic.get_AddTask().PlayAnimation("mini@cpr@char_a@cpr_def", "cpr_pumpchest_idle", 8f, 100000, true, 8f);
---
-
---[[
-	Game.get_Player().get_Character().TaskPlayAnim("mp_ped_interaction", "handshake_guy_a", 8, -1);
-
-	Game.get_Player().get_Character().PlayAmbientSpeech("DRAW_GUN", true);
---]]
-
-local spawned_object = nil
-local playing_scenario = false
-local playing_anim = nil
-local left_hand = 60309
-local right_hand = 58868
-
-local playerPed, targetPed
-local playerPedCoords, targetPedCoords, offsetCoords
-local distanceToTargetPed = 0.0
-local distanceToClosestTargetPed = 0.0
-local rayHandle
-local didHit
-local hitCoords, hitSurfaceCoords
-local hitHandlePed
-local hitHandleVehicle = 0
-local playerServerId = 0
-local playerName = ""
-local raycastResult = 0
-local voipLevel = 0.0
-local menuEnabled = false -- F1 menu gui
-
-local inProperty = false
-
-RegisterNetEvent('properties:enterProperty')
-AddEventHandler('properties:enterProperty', function()
-	inProperty = true
-end)
-
-RegisterNetEvent('properties:exitProperty')
-AddEventHandler('properties:exitProperty', function()
-	inProperty = false
-end)
-
-RegisterNetEvent('properties:breachProperty')
-AddEventHandler('properties:breachProperty', function()
-	inProperty = true
-end)
-
-RegisterNetEvent('properties:lockpickHouseBurglary')
-AddEventHandler('properties:lockpickHouseBurglary', function()
-	Citizen.Wait(20000)
-	inProperty = true
-end)
-
-RegisterNetEvent('properties:breachHouseBurglary')
-AddEventHandler('properties:breachHouseBurglary', function()
-	Citizen.Wait(20000)
-	inProperty = true
-end)
+local VEH_ACTIONS = {
+	["Engine"] = {
+		["On"] = function()
+			TriggerEvent("veh:toggleEngine", "on")
+		end,
+		["Off"] = function()
+			TriggerEvent("veh:toggleEngine", "off")
+		end
+	},
+	["Open"] = {
+		["Hood"] = function()
+			TriggerEvent("veh:openDoor", "hood")
+		end,
+		["Front Left"] = function()
+			TriggerEvent("veh:openDoor", "fl")
+		end,
+		["Front Right"] = function()
+			TriggerEvent("veh:openDoor", "fr")
+		end,
+		["Back Left"] = function()
+			TriggerEvent("veh:openDoor", "bl")
+		end,
+		["Back Right"] = function()
+			TriggerEvent("veh:openDoor", "br")
+		end,
+		["Trunk"] = function()
+			TriggerEvent("veh:openDoor", "trunk")
+		end
+	},
+	["Close"] = {
+		["Hood"] = function()
+			TriggerEvent("veh:shutDoor", "hood")
+		end,
+		["Front Left"] = function()
+			TriggerEvent("veh:shutDoor", "fl")
+		end,
+		["Front Right"] = function()
+			TriggerEvent("veh:shutDoor", "fr")
+		end,
+		["Back Left"] = function()
+			TriggerEvent("veh:shutDoor", "bl")
+		end,
+		["Back Right"] = function()
+			TriggerEvent("veh:shutDoor", "br")
+		end,
+		["Trunk"] = function()
+			TriggerEvent("veh:shutDoor", "trunk")
+		end
+	},
+	["Shuffle"] = function()
+		TriggerEvent("usa:shuffleSeats")
+	end,
+	["Brakelights"] = function()
+		TriggerEvent("usa:toggleBrakelight")
+	end
+}
 
 RegisterNUICallback('escape', function(data, cb)
-	--TriggerEvent("test:escapeFromCSharp")
-	--print("inside of escape calling disable gui....")
 	DisableGui()
+	if data.vehicle.plate then
+		TriggerServerEvent("vehicle:RemovePersonFromInventory", data.vehicle.plate)
+	end
 end)
 
 RegisterNUICallback('showPhone', function(data, cb)
-	--TriggerEvent("test:escapeFromCSharp")
-	--print("inside of SHOW PHONE calling disable gui....")
 	DisableGui()
 	TriggerServerEvent("interaction:checkForPhone")
 end)
 
 RegisterNUICallback('loadInventory', function(data, cb)
-	--Citizen.Trace("inventory loading...")
+	TransitionToBlurred(1000)
 	TriggerServerEvent("interaction:loadInventoryForInteraction")
 end)
 
-RegisterNUICallback('getVehicleInventory', function(data, cb)
-	--Citizen.Trace("vehicle inventory loading...")
-		print("plate #: " .. data.target_vehicle_plate)
-	TriggerServerEvent("interaction:loadVehicleInventoryForInteraction", data.target_vehicle_plate)
-		--SetVehicleDoorOpen(data.target_vehicle.id, 5, false, false) -- experimental
+RegisterNUICallback('loadVehicleInventory', function(data, cb)
+	TriggerServerEvent("interaction:loadVehicleInventory", data.plate)
 end)
 
 -- this is called when the player clicks "retrieve" in the interaction menu on a vehicle inventory item
 RegisterNUICallback('retrieveVehicleItem', function(data, cb)
-	--TriggerEvent("test:escapeFromCSharp")
 	DisableGui()
 	local target_vehicle_plate = data.target_vehicle_plate
 	local target_item = data.wholeItem
 	local current_job = data.current_job
-	--print("current_job: " .. current_job)
-	local facing_vehicle = getVehicleInFrontOfUser()
+	local facing_vehicle = getVehicleInsideOrInFrontOfUser()
 	if (facing_vehicle ~= 0 and GetVehicleDoorLockStatus(facing_vehicle) ~= 2) or current_job == "police" then
 		-- If item.type == "weapon" then check if player has < 3 weapons:
 		if target_item.type == "weapon" then
@@ -256,7 +393,7 @@ RegisterNUICallback('playEmote', function(data, cb)
 	-- shut GUI --
 	-----------------
 	DisableGui()
-	if not isLockpicking and not IsPedRagdoll(PlayerPedId()) then
+	if not isLockpicking then
 		local ped = GetPlayerPed(-1)
 		ClearPedTasksImmediately(ped)
 		playing_anim = false
@@ -271,7 +408,7 @@ RegisterNUICallback('playEmote', function(data, cb)
 		-------------------------------
 		-- play anim / scenario  --
 		-------------------------------
-		local scenarioName = data.emoteName
+		local scenarioName = data.emoteName:lower()
 			if scenarioName == "cancel" or scenarioName == "stop" then
 				playing_scenario = false
 				playing_anim = nil
@@ -371,12 +508,38 @@ RegisterNUICallback('playEmote', function(data, cb)
 		end
 end)
 
+RegisterNetEvent('properties:enterProperty')
+AddEventHandler('properties:enterProperty', function()
+	inProperty = true
+end)
+
+RegisterNetEvent('properties:exitProperty')
+AddEventHandler('properties:exitProperty', function()
+	inProperty = false
+end)
+
+RegisterNetEvent('properties:breachProperty')
+AddEventHandler('properties:breachProperty', function()
+	inProperty = true
+end)
+
+RegisterNetEvent('properties:lockpickHouseBurglary')
+AddEventHandler('properties:lockpickHouseBurglary', function()
+	Wait(20000)
+	inProperty = true
+end)
+
+RegisterNetEvent('properties:breachHouseBurglary')
+AddEventHandler('properties:breachHouseBurglary', function()
+	Wait(20000)
+	inProperty = true
+end)
+
 RegisterNetEvent("emotes:playEmote")
 AddEventHandler("emotes:playEmote", function(scenarioName)
 	local ped = GetPlayerPed(-1)
-	if not isLockpicking and not IsPedRagdoll(GetPlayerPed(-1)) and not IsEntityDead(ped)  then
+	if not isLockpicking and not IsPedRagdoll(ped) and not IsEntityDead(ped) then
 		scenarioName = string.lower(scenarioName)
-		local ped = GetPlayerPed(-1)
 		ClearPedTasksImmediately(ped)
 		playing_anim = false
 		playing_scenario = false
@@ -406,7 +569,6 @@ AddEventHandler("emotes:playEmote", function(scenarioName)
 			for i = 1, #scenarios do
 				--if string.find(scenarios[i].name, scenarioName) then
 				if scenarioName == string.lower(scenarios[i].name) then
-					print('d')
 					if ped then
 						if scenarios[i].type ~= "emote" then
 							TaskStartScenarioInPlace(ped, scenarios[i].scenarioName, 0, true)
@@ -465,7 +627,7 @@ AddEventHandler("emotes:playEmote", function(scenarioName)
 							else
 								--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5)
 								--TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, 5, 1, 1000, 31, 0, 0, 0, 0)
-								TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 49, 0, 0, 0, 0, false)
+								TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 53, 0, 0, 0, 0, 4)
 								if scenarios[i].cancelTime then
 									Wait(scenarios[i].cancelTime * 1000)
 									ClearPedTasksImmediately(GetPlayerPed(-1))
@@ -524,15 +686,11 @@ end
 
 RegisterNUICallback('setVoipLevel', function(data, cb)
 	DisableGui()
-	local YELL, NORMAL, WHISPER = 0,1,2
-	local selected = data.level
-	if selected == YELL then
-		TriggerEvent("voip", "yell")
-	elseif selected == NORMAL then
-		TriggerEvent("voip","default")
-	elseif selected == WHISPER then
-		TriggerEvent("voip","whisper")
+	local selected = data.level:lower()
+	if selected == "normal" then
+		selected = "default"
 	end
+	TriggerEvent("voip", selected)
 end)
 
 RegisterNUICallback('openVehicleDoor', function(data, cb)
@@ -608,30 +766,13 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 	if actionName and itemName and wholeItem and targetPlayerId then
 		if actionName == "use" then
 			interactionMenuUse(itemName, wholeItem)
-		elseif actionName == "drop" then
-			if not inProperty then
+		elseif string.find(actionName, "give") then
+			if targetPlayerId ~= 0 and distanceToClosestTargetPed <= exports["globals"]:MaxItemTradeDistance() then
 				if not string.find(itemName, "Driver") and not string.find(itemName, "Firearm") and not string.find(itemName, 'License') and not string.find(itemName, 'Certificate') then
-					if not IsPedDeadOrDying(GetPlayerPed(-1), 1) and not IsPedCuffed(GetPlayerPed(-1)) then
-						local pos = GetEntityCoords(GetPlayerPed(-1), true)
-						TriggerServerEvent("interaction:dropItem", itemName, pos.x, pos.y, pos.z)
-						local objectHash = GetHashKey(wholeItem.objectModel)
-						if objectHash == 0 then objectHash = GetHashKey('prop_michael_backpack') end
-						if string.find(DROPPED_ITEMS[i].name, 'Key') then return end
-						local prop = CreateObject(objectHash, pos.x, pos.y + 0.5, pos.z - 0.99, true, false, true)
-						SetEntityAsMissionEntity(prop, true, true)
-						--FreezeEntityPosition(prop, true)
-					end
-				else
-					print("can't drop a license!")
+					TriggerServerEvent("interaction:giveItemToPlayer", wholeItem, targetPlayerId)
 				end
 			else
-				TriggerEvent('usa:notify', 'You cannot drop that here!')
-			end
-		elseif string.find(actionName, "give") then
-			if not string.find(itemName, "Driver") and not string.find(itemName, "Firearm") and not string.find(itemName, 'License') and not string.find(itemName, 'Certificate') then
-				TriggerServerEvent("interaction:giveItemToPlayer", wholeItem, targetPlayerId)
-			else
-				print("can't give a license!")
+				exports.globals:notify("Can't find player to give to!")
 			end
 		elseif actionName == "store" then
 			if not string.find(itemName, "Driver") and not string.find(itemName, "Firearm") and not string.find(itemName, 'License') and not string.find(itemName, 'Certificate') then
@@ -662,10 +803,29 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 					end
 				end )
 			else
-				print("can't store a license!")
+				print("can't store DL!!")
 			end
 		end
 	end
+end)
+
+RegisterNUICallback("dropItem", function(data, cb)
+	if not string.find(data.itemName, "Driver") and not string.find(data.itemName, "Firearm") and not string.find(data.itemName, "License") then
+		-- remove from inventory --
+		local pos = GetEntityCoords(GetPlayerPed(-1), true)
+		TriggerServerEvent("inventory:dropItem", data.itemName, data.index, pos.x, pos.y, pos.z)
+		-- spawn object on ground --
+		if data.objectModel then
+			local prop = CreateObject(GetHashKey(data.objectModel), pos.x, pos.y + 0.5, pos.z - 0.9, true, false, true)
+			SetEntityAsMissionEntity(prop, true, true)
+		end
+	else
+		exports.globals:notify("Can't drop that item, sorry!")
+	end
+end)
+
+RegisterNUICallback('moveItem', function(data, cb)
+	TriggerServerEvent("inventory:moveItem", data)
 end)
 
 function interactionMenuUse(itemName, wholeItem)
@@ -679,182 +839,175 @@ function interactionMenuUse(itemName, wholeItem)
 			TriggerEvent("interaction:notify", "You have used: (x1) " .. itemName:sub(6))
 			intoxicate(true, nil)
 			reality(5)
-		-------------------
-		-- Hash --
-		-------------------
+			-------------------
+			-- Hash --
+			-------------------
 		elseif string.find(itemName, "Hash") then
 			--Citizen.Trace("meth found to use!!")
 			TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
 			TriggerEvent("interaction:notify", "You have used: (x1) Hash")
 			intoxicate(true, nil)
 			reality(3)
-		-------------------
-		-- Repair Kit --
-		-------------------
+			-------------------
+			-- Repair Kit --
+			-------------------
 		elseif string.find(itemName, "Repair Kit") then
 			TriggerEvent("interaction:repairVehicle")
-
 		elseif string.find(itemName, "Hotwiring Kit") then
-			TriggerEvent("veh:hotwireVehicle")
+		TriggerEvent("veh:hotwireVehicle")
 		elseif string.find(itemName, "Body Armor") then
 			TriggerServerEvent("interaction:bodyArmor")
-		---------------
-		-- Jerry Can --
-		---------------
+			---------------
+			-- Jerry Can --
+			---------------
 		elseif string.find(itemName, "Jerry Can") then
 			local JERRY_CAN_ANIMATION = {
 				dict = "weapon@w_sp_jerrycan",
 				name = "fire"
 			}
 
-		RequestAnimDict(JERRY_CAN_ANIMATION.dict)
-		while not HasAnimDictLoaded(JERRY_CAN_ANIMATION.dict) do
-			Wait(100)
-		end
+			RequestAnimDict(JERRY_CAN_ANIMATION.dict)
+			while not HasAnimDictLoaded(JERRY_CAN_ANIMATION.dict) do
+				Wait(100)
+			end
 
-		if tonumber(hitHandleVehicle) ~= 0 then
-			local jcan = 883325847
-			GiveWeaponToPed(GetPlayerPed(-1), jcan, 20, false, true) -- easiest way to remove jerry can object off back when using it (from weapons-on-back resource)
-			Wait(1000)
-			-- put jerry can object in hand --
-			--local can_prop = AttachEntityToPed('prop_ld_jerrycan_01', 36029, 0, 0, 0, 90.0, 90.0, 85.0)
-			--local can_prop_net_id = AttachEntityToPed('prop_ld_jerrycan_01', 36029, 0, 0, 0, 3.0, 173.0, 0.0)
-			-- play anim --
-			--TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.name, JERRY_CAN_ANIMATION.dict, false, 6.5, true)
-			--TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.dict, JERRY_CAN_ANIMATION.name, 5, 1, 25000, 31, 0, 0, 0, 0)
-			TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.dict, JERRY_CAN_ANIMATION.name, -8, 1, -1, 53, 0, 0, 0, 0, 24.5)
-			Wait(25000)
-			ClearPedTasksImmediately(GetPlayerPed(-1))
-			-- refuel --
-			TriggerServerEvent("essence:refuelWithJerryCan", exports.es_AdvancedFuel:getEssence(), GetVehicleNumberPlateText(hitHandleVehicle), GetDisplayNameFromVehicleModel(GetEntityModel(hitHandleVehicle)))
-			-- remove jerry can object from hand --
-			--DeleteEntity(NetToObj(can_prop_net_id))
-			-- remove jerry can weapon from inventory --
-			TriggerServerEvent("usa:removeItem", wholeItem, 1)
-		else
-			TriggerEvent("usa:notify", "No vehicle found!")
-		end
-		-------------------
-		-- First Aid Kit --
-		-------------------
+			if tonumber(hitHandleVehicle) ~= 0 then
+				local jcan = 883325847
+				GiveWeaponToPed(GetPlayerPed(-1), jcan, 20, false, true) -- easiest way to remove jerry can object off back when using it (from weapons-on-back resource)
+				Wait(1000)
+				-- put jerry can object in hand --
+				--local can_prop = AttachEntityToPed('prop_ld_jerrycan_01', 36029, 0, 0, 0, 90.0, 90.0, 85.0)
+				--local can_prop_net_id = AttachEntityToPed('prop_ld_jerrycan_01', 36029, 0, 0, 0, 3.0, 173.0, 0.0)
+				-- play anim --
+				--TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.name, JERRY_CAN_ANIMATION.dict, false, 6.5, true)
+				--TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.dict, JERRY_CAN_ANIMATION.name, 5, 1, 25000, 31, 0, 0, 0, 0)
+				TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.dict, JERRY_CAN_ANIMATION.name, -8, 1, -1, 53, 0, 0, 0, 0, 24.5)
+				Wait(25000)
+				ClearPedTasksImmediately(GetPlayerPed(-1))
+				-- refuel --
+				TriggerServerEvent("essence:refuelWithJerryCan", exports.es_AdvancedFuel:getEssence(), GetVehicleNumberPlateText(hitHandleVehicle), GetDisplayNameFromVehicleModel(GetEntityModel(hitHandleVehicle)))
+				-- remove jerry can object from hand --
+				--DeleteEntity(NetToObj(can_prop_net_id))
+				-- remove jerry can weapon from inventory --
+				TriggerServerEvent("usa:removeItem", wholeItem, 1)
+			else
+				TriggerEvent("usa:notify", "No vehicle found!")
+			end
+			-------------------
+			-- First Aid Kit --
+			-------------------
 		elseif string.find(itemName, "First Aid Kit") then
 			TriggerEvent("usa:heal", 35)
-			TriggerEvent('injuries:bandageMyInjuries')
 			TriggerServerEvent("usa:removeItem", wholeItem, 1)
-		-------------------
-		-- Lockpick  --
-		-------------------
-	elseif string.find(itemName, "Lockpick") then
-		local playerPed = GetPlayerPed(-1)
-		local veh = getVehicleInFrontOfUser()
-		if veh ~= 0 and GetEntityType(veh) == 2 then
-			if GetVehicleDoorLockStatus(veh) ~= 1 then
-				-- prevent using /e to hide animation --
-				isLockpicking = true
-				-- start picking --
-				local start_time = GetGameTimer()
-				local duration = 30000
-				-- play animation:
-				local anim = {
-					dict = "veh@break_in@0h@p_m_one@",
-					name = "low_force_entry_ds"
-				}
-				RequestAnimDict(anim.dict)
-				while not HasAnimDictLoaded(anim.dict) do
-					Wait(100)
-				end
-				if math.random() > 0.80 and IsAreaPopulated() then
-					local x, y, z = table.unpack(GetEntityCoords(playerPed))
-					local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-					local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-					local primary, secondary = GetVehicleColours(veh)
-					TriggerServerEvent('911:LockpickingVehicle', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(veh))), GetVehicleNumberPlateText(veh), IsPedMale(playerPed), primary, secondary)
-				end
-				Citizen.CreateThread(function()
+			TriggerEvent('injuries:bandageMyInjuries')
+			-------------------
+			-- Lockpick  --
+			-------------------
+		elseif string.find(itemName, "Lockpick") then
+			local playerPed = GetPlayerPed(-1)
+			local veh = getVehicleInFrontOfUser()
+			if veh ~= 0 and GetEntityType(veh) == 2 then
+				if GetVehicleDoorLockStatus(veh) ~= 1 then
+					-- prevent using /e to hide animation --
+					isLockpicking = true
+					-- start picking --
+					local start_time = GetGameTimer()
+					local duration = 30000
+					-- play animation:
+					local anim = {
+						dict = "veh@break_in@0h@p_m_one@",
+						name = "low_force_entry_ds"
+					}
+					RequestAnimDict(anim.dict)
+					while not HasAnimDictLoaded(anim.dict) do
+						Wait(100)
+					end
+					if math.random() > 0.80 and IsAreaPopulated() then
+						local x, y, z = table.unpack(GetEntityCoords(playerPed))
+						local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+						local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+						local primary, secondary = GetVehicleColours(veh)
+						TriggerServerEvent('911:LockpickingVehicle', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(veh))), GetVehicleNumberPlateText(veh), IsPedMale(playerPed), primary, secondary)
+					end
+					Citizen.CreateThread(function()
+						while GetGameTimer() - start_time < duration and isLockpicking do
+							Citizen.Wait(0)
+							DisableControlAction(0, 301, true)
+							DisableControlAction(0, 86, true)
+									DisableControlAction(0, 244, true)
+									DisableControlAction(0, 245, true)
+									DisableControlAction(0, 288, true)
+									DisableControlAction(0, 79, true)
+									DisableControlAction(0, 73, true)
+									DisableControlAction(0, 37, true)
+									DisableControlAction(0, 311, true)
+										DrawTimer(start_time, duration, 1.42, 1.475, 'LOCKPICKING')
+						end
+					end)
 					while GetGameTimer() - start_time < duration and isLockpicking do
-						Citizen.Wait(0)
-						DisableControlAction(0, 301, true)
-						DisableControlAction(0, 86, true)
-				        DisableControlAction(0, 244, true)
-				        DisableControlAction(0, 245, true)
-				        DisableControlAction(0, 288, true)
-				        DisableControlAction(0, 79, true)
-				        DisableControlAction(0, 73, true)
-				        DisableControlAction(0, 37, true)
-				        DisableControlAction(0, 311, true)
-          				DrawTimer(start_time, duration, 1.42, 1.475, 'LOCKPICKING')
+						Wait(0)
+						local x, y, z = table.unpack(GetEntityCoords(playerPed))
+						local car_coords = GetEntityCoords(veh, 1)
+						--print("IsEntityPlayingAnim(me, anim.dict, anim.name, 3): " .. tostring(IsEntityPlayingAnim(me, anim.dict, anim.name, 3)))
+						if not IsEntityPlayingAnim(playerPed, anim.dict, anim.name, 3) then
+									TaskPlayAnim(playerPed, anim.dict, anim.name, 8.0, 1.0, -1, 11, 1.0, false, false, false)
+									Citizen.Wait(2000)
+									ClearPedTasks(playerPed)
+									SetEntityCoords(playerPed, x, y, z - 1.0, false, false, false, false)
+								end
+						if Vdist(car_coords, x, y, z) > 3.0 then
+							TriggerEvent("usa:notify", "Lockpick ~y~failed~s~, out of range!")
+							ClearPedTasksImmediately(playerPed)
+							isLockpicking = false
+							return
+						end
 					end
-				end)
-				while GetGameTimer() - start_time < duration and isLockpicking do
-					Wait(0)
-					local x, y, z = table.unpack(GetEntityCoords(playerPed))
-					local car_coords = GetEntityCoords(veh, 1)
-					--print("IsEntityPlayingAnim(me, anim.dict, anim.name, 3): " .. tostring(IsEntityPlayingAnim(me, anim.dict, anim.name, 3)))
-					if not IsEntityPlayingAnim(playerPed, anim.dict, anim.name, 3) then
-			          TaskPlayAnim(playerPed, anim.dict, anim.name, 8.0, 1.0, -1, 11, 1.0, false, false, false)
-			          Citizen.Wait(2000)
-			          ClearPedTasks(playerPed)
-			          SetEntityCoords(playerPed, x, y, z - 1.0, false, false, false, false)
-			        end
-					if Vdist(car_coords, x, y, z) > 3.0 then
-						TriggerEvent("usa:notify", "Lockpick ~y~failed~s~, out of range!")
-						ClearPedTasksImmediately(playerPed)
-						isLockpicking = false
-						return
+					if math.random() < 0.8 then
+						SetVehicleDoorsLocked(veh, 1)
+						SetVehicleDoorsLockedForAllPlayers(veh, 0)
+						if not GetIsVehicleEngineRunning(veh) then
+							SetVehicleNeedsToBeHotwired(veh, true)
+						end
+						TriggerEvent("usa:notify", "Lockpick was ~y~successful~s~!")
+					else
+						TriggerEvent("usa:notify", "Lockpick has ~y~broken~s~!")
+						TriggerServerEvent("usa:removeItem", wholeItem, 1)
 					end
-				end
-				if math.random() < 0.8 then
-					SetVehicleDoorsLocked(veh, 1)
-					SetVehicleDoorsLockedForAllPlayers(veh, 0)
-					if not GetIsVehicleEngineRunning(veh) then
-						SetVehicleNeedsToBeHotwired(veh, true)
-					end
-					TriggerEvent("usa:notify", "Lockpick was ~y~successful~s~!")
+					isLockpicking = false
+					ClearPedTasksImmediately(me)
 				else
-					TriggerEvent("usa:notify", "Lockpick has ~y~broken~s~!")
-					TriggerServerEvent("usa:removeItem", wholeItem, 1)
+					TriggerEvent("usa:notify", "Door is already unlocked!")
 				end
-				isLockpicking = false
-				ClearPedTasksImmediately(me)
 			else
-				TriggerEvent("usa:notify", "Door is already unlocked!")
+				TriggerEvent('doormanager:lockpickDoor', wholeItem)
+				TriggerServerEvent('properties:lockpickHouse', GetEntityCoords(playerPed), wholeItem)
 			end
-		else
-			TriggerEvent('doormanager:lockpickDoor', wholeItem)
-			TriggerServerEvent('properties:lockpickHouse', GetEntityCoords(playerPed), wholeItem)
-		end
-		-------------------
-		-- Binoculars --
-		-------------------
 		elseif string.find(itemName, "Binoculars") then
 			TriggerEvent("binoculars:Activate")
-		-------------------
-		-- Cell Phone --
-		-------------------
+			-------------------
+			-- Cell Phone --
+			-------------------
 		elseif string.find(itemName, "Cell Phone") then
 			TriggerEvent("phone:openPhone", wholeItem)
-		-------------------
-		-- Food Item  --
-		-------------------
+			-------------------
+			-- Food Item  --
+			-------------------
 		elseif wholeItem.type and wholeItem.type == "food" then
 			--print("Player used inventory item of type: food!")
 			--print("item name: " .. wholeItem.name)
 			TriggerEvent("hungerAndThirst:replenish", "hunger", wholeItem)
-		-------------------
-		-- Drink Item  --
-		-------------------
+			-------------------
+			-- Drink Item  --
+			-------------------
 		elseif wholeItem.type and wholeItem.type == "drink" then
 			--print("Player used inventory item of type: drink!")
 			--print("item name: " .. wholeItem.name)
 			TriggerEvent("hungerAndThirst:replenish", "drink", wholeItem)
-		---------------------------
-		-- Alcoholic Drink Item  --
-		---------------------------
+			---------------------------
+			-- Alcoholic Drink Item  --
+			---------------------------
 		elseif wholeItem.type and wholeItem.type == "alcohol" then
-			--print("Player used inventory item of type: alcohol!")
-			--print("item name: " .. wholeItem.name)
 			TriggerEvent("hungerAndThirst:replenish", "drink", wholeItem)
-			--print("old player BAC: " .. player.BAC)
 			TriggerEvent('evidence:returnData', function(data)
 				TriggerEvent('evidence:updateData', 'levelBAC', data['levelBAC'] + wholeItem.strength)
 			end)
@@ -862,11 +1015,41 @@ function interactionMenuUse(itemName, wholeItem)
 			GiveWeaponToPed(GetPlayerPed(-1), GetHashKey("GADGET_PARACHUTE"), 150, true, true)
 			SetPedComponentVariation(GetPlayerPed(-1), 5, 1, 0, 0)
 			TriggerServerEvent("parachute:usedParachute")
+		elseif itemName == "Tent" or itemName == "Chair" or itemName == "Wood" then
+			TriggerServerEvent("camping:useItem", wholeItem)
 		else
 			TriggerEvent("interaction:notify", "There is no use action for that item!")
 		end
 	end)
 end
+
+
+--[[ not used ?
+Citizen.CreateThread(function()
+	local timer = 600000
+	local decrement_amount = 0.03
+	while true do
+		if player.BAC > 0.00 then
+			local new_BAC = player.BAC - decrement_amount
+			if new_BAC >= 0.00 then
+				--print("decrementing BAC! now at: " .. new_BAC)
+				player.BAC = new_BAC
+			else
+				player.BAC = 0.00
+			end
+		else
+			--print("player BAC was not >= 0.00")
+		end
+		Wait(timer) -- every x seconds, decrement player.BAC
+	end
+end)
+--]]
+
+RegisterNetEvent("interaction:equipArmor")
+AddEventHandler("interaction:equipArmor", function()
+	SetPedArmour(PlayerPedId(), 40)
+	TriggerEvent('usa:notify', "You have equipped body armor!")
+end)
 
 RegisterNetEvent("interaction:ragdoll")
 AddEventHandler("interaction:ragdoll", function()
@@ -883,6 +1066,11 @@ AddEventHandler("interaction:setPlayersJob", function(playerJob)
 	})
 end)
 
+RegisterNetEvent("interaction:sendNUIMessage")
+AddEventHandler("interaction:sendNUIMessage", function(messageTable)
+    SendNUIMessage(messageTable)
+end)
+
 RegisterNetEvent("interaction:notify")
 AddEventHandler("interaction:notify", function(msg)
 	SetNotificationTextEntry("STRING")
@@ -896,28 +1084,19 @@ AddEventHandler("interaction:playerHadPhone", function()
 end)
 
 RegisterNetEvent("interaction:inventoryLoaded")
-AddEventHandler("interaction:inventoryLoaded", function(inventory, weapons, licenses)
+AddEventHandler("interaction:inventoryLoaded", function(inventory)
 	SendNUIMessage({
 		type = "inventoryLoaded",
-		inventory = inventory,
-		weapons = weapons,
-		licenses = licenses
+		inventory = inventory
 	})
 end)
 
-RegisterNetEvent("interaction:equipArmor")
-AddEventHandler("interaction:equipArmor", function()
-	SetPedArmour(PlayerPedId(), 40)
-	TriggerEvent('usa:notify', "You have equipped body armor!")
-end)
-
 RegisterNetEvent("interaction:vehicleInventoryLoaded")
-AddEventHandler("interaction:vehicleInventoryLoaded", function(inventory)
-	--print("client received vehicle inventory... sending NUI message")
-	--if inventory then print("#inventory: " .. #inventory) end
+AddEventHandler("interaction:vehicleInventoryLoaded", function(inventory, isLocked)
 	SendNUIMessage({
 		type = "vehicleInventoryLoaded",
-		vehicle_inventory = inventory
+		inventory = inventory,
+		locked = (isLocked or false)
 	})
 end)
 
@@ -941,6 +1120,52 @@ Citizen.CreateThread(function()
 		Citizen.Wait(100)
 	end
 end)
+
+-- getting drunk / high effect
+function intoxicate(playScenario, clipset, intensity)
+	local ped = GetPlayerPed(-1)
+	if playScenario and not IsPedInAnyVehicle(ped, true) then
+		TaskStartScenarioInPlace(ped, "WORLD_HUMAN_DRUG_DEALER", 0, 1)
+	end
+	Citizen.Wait(5000)
+	DoScreenFadeOut(1000)
+	Citizen.Wait(1000)
+	if not IsPedInAnyVehicle(ped, true) then
+		ClearPedTasksImmediately(ped)
+	end
+	SetTimecycleModifier("spectator5")
+	SetPedMotionBlur(ped, true)
+		if clipset then
+		--print("setting movement clipset to: " .. clipset)
+		ResetPedMovementClipset(ped, 0)
+		RequestAnimSet( clipset )
+		while ( not HasAnimSetLoaded( clipset ) ) do
+			Citizen.Wait( 1 )
+		end
+		SetPedMovementClipset(ped, clipset, 0.25)
+	end
+	SetPedIsDrunk(ped, true)
+	DoScreenFadeIn(1000)
+	if intensity then
+		ShakeGameplayCam("DRUNK_SHAKE", intensity)
+	end
+ end
+
+ function reality(minutes)
+	minutes = minutes * 60 * 1000
+	Citizen.Wait(minutes)
+	DoScreenFadeOut(1000)
+	Citizen.Wait(1000)
+	DoScreenFadeIn(1000)
+	ClearTimecycleModifier()
+	ResetScenarioTypesEnabled()
+	ResetPedMovementClipset(GetPlayerPed(-1), 0)
+	SetPedIsDrunk(GetPlayerPed(-1), false)
+	SetPedMotionBlur(GetPlayerPed(-1), false)
+	StopGameplayCamShaking(true)
+	-- Stop the mini mission
+	--Citizen.Trace("Going back to reality\n")
+ end
 
  -- end drunk / high effect
 
@@ -973,15 +1198,14 @@ AddEventHandler("interaction:equipWeapon", function(item, equip)
 	end
 end)
 
-function round(num, numDecimalPlaces)
-  return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
-end
-
-function getVehicleInFrontOfUser()
-	local playerped = GetPlayerPed(-1)
-	local coordA = GetEntityCoords(playerped, 1)
-	local coordB = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 5.0, 0.0)
+function getVehicleInsideOrInFrontOfUser()
+	local ped = GetPlayerPed(-1)
+	local coordA = GetEntityCoords(ped, 1)
+	local coordB = GetOffsetFromEntityInWorldCoords(ped, 0.0, 2.0, 0.0)
 	local targetVehicle = getVehicleInDirection(coordA, coordB)
+	if targetVehicle == 0 and IsPedInAnyVehicle(ped, true) then
+		targetVehicle = GetVehiclePedIsIn(ped, true)
+	end
 	return targetVehicle
 end
 
@@ -1003,39 +1227,40 @@ function EnableGui(target_vehicle_plate)
 	SetNuiFocus(true, true)
 	menuEnabled = true
 	SetPedCanSwitchWeapon(GetPlayerPed(-1), not menuEnabled)
+	local nearestPlayer = nil
+	if playerName ~= "" then
+		nearestPlayer = {
+			name = playerName,
+			id = playerServerId
+		}
+	end
 	SendNUIMessage({
 		type = "enableui",
 		enable = true,
-		playerName = playerName,
-		playerId = playerServerId,
+		nearestPlayer = nearestPlayer,
 		voip = voipLevel,
 		target_vehicle_plate = target_vehicle_plate,
 		isInVehicle = IsPedInAnyVehicle(GetPlayerPed(-1), true)
 	})
+	if target_vehicle_plate then
+		TriggerServerEvent("vehicle:AddPersonToInventory", target_vehicle_plate)
+	end
 end
 
 function DisableGui()
+	TransitionFromBlurred(1000)
 	SetNuiFocus(false, false)
 	menuEnabled = false
 	SetPedCanSwitchWeapon(GetPlayerPed(-1), not menuEnabled)
-	SendNUIMessage({
-		type = "enableui",
-		enable = false
-	})
 end
 
 -- event handlers
 RegisterNetEvent("interaction:setF1VoipLevel")
 AddEventHandler("interaction:setF1VoipLevel", function(level)
-	print("set voip level to: " .. level)
 	voipLevel = level
 end)
 
-RegisterNetEvent("interaction:doVehicleAction")
-AddEventHandler("interaction:doVehicleAction", function(action, unseatIndex)
-
-end)
-
+--[[ Not Used Yet
 RegisterNetEvent("interaction:performPoliceAction")
 AddEventHandler("interaction:performPoliceAction", function(action, unseatIndex)
 	if action == "cuff" then
@@ -1045,13 +1270,11 @@ AddEventHandler("interaction:performPoliceAction", function(action, unseatIndex)
 			TriggerEvent("usa:notify", "No player found to cuff!")
 		end
 	elseif action == "drag" then
-		--if not draggingHelper.dragging then
-			if playerServerId ~= 0 then
-				TriggerServerEvent("dr:dragPlayer", playerServerId)
-				draggingHelper.dragging = not draggingHelper.dragging
-				draggingHelper.targetId = playerServerId
-			end
-		--end
+		if playerServerId ~= 0 then
+			TriggerServerEvent("dr:dragPlayer", playerServerId)
+			draggingHelper.dragging = not draggingHelper.dragging
+			draggingHelper.targetId = playerServerId
+		end
 	elseif action == "search" then
 		if playerServerId ~= 0 then
 			local source = GetPlayerServerId(PlayerId())
@@ -1123,16 +1346,19 @@ AddEventHandler("interaction:performPoliceAction", function(action, unseatIndex)
 			TriggerEvent("usa:notify", "No vehicle detected!")
 		end
 	elseif action == "seize veh" then
-		local veh = getVehicleInFrontOfUser()
+		local veh = getVehicleInsideOrInFrontOfUser()
 		local plate = GetVehicleNumberPlateText(veh)
-		TriggerServerEvent("vehicle:seizeContraband", plate)
+		TriggerServerEvent("vehicle:removeAllIllegalItems", plate)
 	end
 end)
+--]]
 
 RegisterNetEvent("interaction:repairVehicle")
 AddEventHandler("interaction:repairVehicle", function()
 	if hitHandleVehicle ~= 0 then
-		TriggerEvent('usa:repairVeh', hitHandleVehicle)
+		if (GetVehicleEngineHealth(hitHandleVehicle) < 1000 or not IsVehicleDriveable(hitHandleVehicle, false) and not IsPedInAnyVehicle(GetPlayerPed(-1), true)) then
+			TriggerEvent('usa:repairVeh', hitHandleVehicle)
+		end
 	else
 		TriggerEvent("usa:notify", "No vehicle detected!")
 	end
@@ -1140,41 +1366,54 @@ end)
 
 local last_tackle_time = 0
 local tackle_delay = 10000 -- 10 second delay
+local lastClosest = nil
+
 Citizen.CreateThread(function()
 	while true do
-		playerName = "no one"
-		playerServerId = 0
-		hitHandlePed = 0
-		hitHandleVehicle = 0
+		Wait(500)
+		-- get closest player server id --
+		playerServerId, playerName, distanceToClosestTargetPed = GetClosestPlayerInfo(1.5)
+		-- update the GUI's nearest player info --
+		if not lastClosest or lastClosest.name ~= playerName then
+			lastClosest = {
+				id = playerServerId,
+				name = playerName
+			}
+			SendNUIMessage({
+				type = "updateNearestPlayer",
+				nearest = lastClosest
+			})
+		end
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
 		playerPed = GetPlayerPed(-1)
 		playerPedCoords = GetEntityCoords(playerPed, false)
-		--offsetCoords = GetOffsetFromEntityGivenWorldCoords(playerPed, playerPedCoords.x, playerPedCoords.y, playerPedCoords.z)
-		-- get nearest ped:
-		--rayHandle = CastRayPointToPoint(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, offsetCoords.x, offsetCoords.y, offsetCoords.z, 12, GetPlayerPed(-1), 0)
-		--rayHandle = StartShapeTestCapsule(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, offsetCoords.x, offsetCoords.y, offsetCoords.z, 1.0, 12, playerPed)
-		--a, b, c, d, hitHandlePed = GetRaycastResult(rayHandle)
-		-- get nearest veh (temp only get vehicle in front, todo: get closest vehicle regardless of where ped is facing):
-		hitHandleVehicle = getVehicleInFrontOfUser()
-		--print("veh: " .. hitHandleVehicle)
-		-- get closest player server id:
-		playerServerId, playerName, distanceToClosestTargetPed = GetClosestPlayerInfo()
 
-		-- watch for open/close menu
-		if IsControlJustPressed( 0, MENU_KEY1 ) and GetLastInputMethod(0) then
-			local target_veh = getVehicleInFrontOfUser()
-			local target_veh_plate = GetVehicleNumberPlateText(target_veh)
-			if GetVehicleDoorLockStatus(target_veh) ~= 1 then
-				target_veh_plate = nil
+		-- highlight closest person when menu open --
+		if menuEnabled then
+			if closestPed ~= nil then
+				local coords = GetEntityCoords(closestPed, true)
+				DrawMarker(27, coords.x, coords.y, coords.z - 0.96, 0, 0, 0, 0, 0, 0, 0.71, 0.71, 0.71, 255 --[[r]], 105 --[[g]], 180 --[[b]], 90 --[[alpha]], 0, 0, 2, 0, 0, 0, 0)
 			end
+		end
+
+		-- watch for open/close menu --
+		if IsControlJustPressed( 0, MENU_KEY1 ) and GetLastInputMethod(2) then
+			hitHandleVehicle, distance = getVehicleInsideOrInFrontOfUser()
+			local target_veh_plate = GetVehicleNumberPlateText(hitHandleVehicle)
 			EnableGui(target_veh_plate)
 			GiveWeaponToPed(GetPlayerPed(-1), 0xA2719263, 0, false, true)
 		end
 
-		-- tackling:
-		if IsControlJustPressed( 0, TACKLE_KEY ) and GetLastInputMethod(0) and GetEntitySpeed(playerPed) > 3.0 then
+		-- tackling --
+		if IsControlJustPressed( 0, TACKLE_KEY ) and GetLastInputMethod(2) and GetEntitySpeed(playerPed) > 3.0 then
 			if not IsEntityDead(GetPlayerPed(-1)) and not IsPedInAnyVehicle(GetPlayerPed(-1), true) then
+				playerServerId, playerName, distanceToClosestTargetPed = GetClosestPlayerInfo(1.5)
 				if playerServerId ~= 0 then
-					if distanceToClosestTargetPed < 1.5 then
+					if distanceToClosestTargetPed < exports["globals"]:MaxTackleDistance() then
 						if not IsPedRagdoll(GetPlayerPed(-1)) and not IsPedCuffed(GetPlayerPed(-1)) then
 							if GetGameTimer() > last_tackle_time + tackle_delay then
 								local fwdvector = GetEntityForwardVector(PlayerPedId())
@@ -1223,32 +1462,55 @@ AddEventHandler('interaction:tackleMe', function(fwdVectorX, fwdVectorY, fwdVect
 	SetPedToRagdollWithFall(PlayerPedId(), 5500, 5500, 0, fwdVectorX, fwdVectorY, fwdVectorZ, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 end)
 
-function GetClosestPlayerInfo()
+RegisterNUICallback('performAction', function(data, cb)
+	local action = data.action
+	if not data.isVehicleAction then
+		if ACTIONS[action] then
+			ACTIONS[action]()
+		else
+			print("interaction-menu: ERROR - Trying to use undefined action! Tell the server owner or a developer.")
+		end
+	elseif data.isVehicleAction then
+		local parent = data.parentMenu
+		if parent and parent ~= "Vehicle Actions" then
+			if VEH_ACTIONS[parent][action] then
+				VEH_ACTIONS[parent][action]()
+			else
+				print("interaction-menu: ERROR - Trying to use undefined vehicle action! Tell the server owner or a developer. Parent.")
+			end
+		else
+			if VEH_ACTIONS[action] then
+				VEH_ACTIONS[action]()
+			else
+				print("interaction-menu: ERROR - Trying to use undefined vehicle action! Tell the server owner or a developer. No parent.")
+			end
+		end
+	end
+end)
+
+function GetClosestPlayerInfo(distance)
 	local closestDistance = 0
 	local closestPlayerServerId = 0
 	local closestName = ""
+	closestPed = nil
 	for x = 0, 64 do
 		if NetworkIsPlayerActive(x) then
 			targetPed = GetPlayerPed(x)
 			targetPedCoords = GetEntityCoords(targetPed, false)
 			distanceToTargetPed = Vdist(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, targetPedCoords.x, targetPedCoords.y, targetPedCoords.z)
-			if targetPed ~= GetPlayerPed(-1) and IsEntityVisible(targetPed) then
-				if distanceToTargetPed < 10 then
+			if targetPed ~= GetPlayerPed(-1) then
+				if distanceToTargetPed < distance then
 					if closestDistance == 0 then
 						closestDistance = distanceToTargetPed
 						closestPlayerServerId = GetPlayerServerId(x)
 						closestName = GetPlayerName(x)
-						hitHandlePed = GetPlayerPed(x)
-						--rayHandle = CastRayPointToPoint(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, targetPedCoords.x, targetPedCoords.y, targetPedCoords.z, 12, GetPlayerPed(-1), 0)
-						--a, b, c, d, hitHandlePed = GetRaycastResult(rayHandle)
+						closestPed = GetPlayerPed(x)
 					else
 						if distanceToTargetPed <= closestDistance then
 							closestDistance = distanceToTargetPed
 							closestPlayerServerId = GetPlayerServerId(x)
 							closestName = GetPlayerName(x)
-							hitHandlePed = GetPlayerPed(x)
-							--rayHandle = CastRayPointToPoint(playerPedCoords.x, playerPedCoords.y, playerPedCoords.z, targetPedCoords.x, targetPedCoords.y, targetPedCoords.z, 12, GetPlayerPed(-1), 0)
-							--a, b, c, d, hitHandlePed = GetRaycastResult(rayHandle)
+							closestPed = GetPlayerPed(x)
 						end
 					end
 				end
@@ -1259,7 +1521,7 @@ function GetClosestPlayerInfo()
 end
 
 function DrawSpecialText(m_text)
-    ClearPrints()
+  ClearPrints()
 	SetTextEntry_2("STRING")
 	AddTextComponentString(m_text)
 	DrawSubtitleTimed(250, 1)
