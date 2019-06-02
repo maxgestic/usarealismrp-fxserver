@@ -47,10 +47,9 @@ AddEventHandler('death:revivePerson', function(targetSource)
 	end
 end)
 
-TriggerEvent('es:addCommand', 'revive', function(source, args, user)
+TriggerEvent('es:addCommand', 'revive', function(source, args, char)
 	local user = exports["essentialmode"]:getPlayerFromId(source)
-	local job = exports["usa-characters"]:GetCharacterField(source, "job")
-	local userJob = user.getActiveCharacterData("job")
+	local job = char.get("job")
 	if job == "cop" or
 		job == "corrections" or
 		job == "sheriff" or

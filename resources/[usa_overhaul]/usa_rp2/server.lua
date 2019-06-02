@@ -243,26 +243,6 @@ AddEventHandler("usa:loadPlayerComponents", function(id)
 	TriggerClientEvent("usa:setPlayerComponents", usource, appearance)
 end)
 
-RegisterServerEvent("usa:notifyStaff")
-AddEventHandler("usa:notifyStaff", function(msg)
-	sendMessageToModsAndAdmins(msg)
-end)
-
-function sendMessageToModsAndAdmins(msg)
-	TriggerEvent("es:getPlayers", function(players)
-		if players then
-			for id, player in pairs(players) do
-				if id and player then
-					local playerGroup = player.getGroup()
-					if playerGroup == "owner" or playerGroup == "superadmin" or playerGroup == "admin" or playerGroup == "mod" then
-						TriggerClientEvent("chatMessage", id, "", {}, msg)
-					end
-				end
-			end
-		end
-	end)
-end
-
 TriggerEvent('es:addJobCommand', 'impound', { "police", "sheriff", "ems", "corrections", "dai" }, function(source, args, char)
 	TriggerClientEvent('impoundVehicle', source)
 end, { help = "Impound a vehicle." })

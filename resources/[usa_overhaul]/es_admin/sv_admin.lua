@@ -12,7 +12,7 @@ TriggerEvent("es:addGroup", "admin", "mod", function(group) end)
 TriggerEvent("es:addGroup", "mod", "user", function(group) end)
 
 -- staff pvt msg someone
-TriggerEvent('es:addGroupCommand', 'whisper', 'mod', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'whisper', 'mod', function(source, args, char)
 	local target = tonumber(args[2])
 	table.remove(args, 1)
 	table.remove(args, 1)
@@ -41,7 +41,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addGroupCommand', 'togglestaff', 'mod', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'togglestaff', 'mod', function(source, args, char)
 	if NotifyStaff(source) then
 		table.insert(noNotifications, source)
 		TriggerClientEvent('usa:notify', source, 'Staff actions and chat muted.')
@@ -76,7 +76,8 @@ end, {
 })]]
 
 -- staff chat
-TriggerEvent('es:addGroupCommand', 'a', 'mod', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'a', 'mod', function(source, args, char)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local userGroup = user.getGroup()
 	local staffId = tonumber(source)
 	table.remove(args, 1) -- remove "/staff" from what the user enters into chat box
@@ -101,7 +102,8 @@ end, {
 	}
 })
 
-TriggerEvent('es:addGroupCommand', 'staff', 'mod', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'staff', 'mod', function(source, args, char)
+	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local userGroup = user.getGroup()
 	local staffId = tonumber(source)
 	table.remove(args, 1) -- remove "/staff" from what the user enters into chat box
@@ -126,7 +128,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addCommand', 'report', function(source, args, user)
+TriggerEvent('es:addCommand', 'report', function(source, args, char)
 	local reporterId = tonumber(source)
 	local reportedId = args[2]
 	table.remove(args, 1)
@@ -158,7 +160,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addCommand', 'help', function(source, args, user)
+TriggerEvent('es:addCommand', 'help', function(source, args, char)
 	table.remove(args, 1)
 	if #args > 0 then
 		local message = table.concat(args, " ")
@@ -214,61 +216,57 @@ AddEventHandler('es_admin:givePos', function(str)
 end)
 
 -- Noclip
-TriggerEvent('es:addGroupCommand', 'noclip', "mod", function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'noclip', "mod", function(source, args, char)
 	TriggerClientEvent("es_admin:noclip", source, GetPlayerName(source))
 end, {
 	help = "Move freely around the map."
 })
 
 -- Kicking
-TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, char)
 	local userSource = source
 	if(GetPlayerName(tonumber(args[2])))then
 		local player = tonumber(args[2])
+		local target = exports["usa-characters"]:GetCharacter(userSource)
+		local reason = args
+		table.remove(reason, 1)
+		table.remove(reason, 1)
+		if(#reason == 0)then
+			reason = "kicked"
+		else
+			reason = table.concat(reason, " ")
+		end
+		-- send discord message
+		local targetPlayerName = target.getFullName()
+		local allPlayerIdentifiers = GetPlayerIdentifiers(player)
+		-- send discord message
+		local desc = "**Character Name:** " .. targetPlayerName
+		desc = desc .. "\n**Steam Name:** " .. GetPlayerName(player)
+		for i = 1, #allPlayerIdentifiers do
+			desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
+		end
+		desc = desc .. " \n**Reason:** " ..reason:gsub("Kicked: ", "").. " \n**Kicked By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
 
-		-- User permission check
-		TriggerEvent("es:getPlayerFromId", player, function(target)
-
-			local reason = args
-			table.remove(reason, 1)
-			table.remove(reason, 1)
-			if(#reason == 0)then
-				reason = "kicked"
-			else
-				reason = table.concat(reason, " ")
+		local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
+		PerformHttpRequest(url, function(err, text, headers)
+			if text then
+				print(text)
 			end
-			-- send discord message
-			local targetPlayerName = target.getActiveCharacterData("firstName") .. " " .. target.getActiveCharacterData("middleName") .. " " ..  target.getActiveCharacterData("lastName")
-			local allPlayerIdentifiers = GetPlayerIdentifiers(player)
-			-- send discord message
-			local desc = "**Character Name:** " .. targetPlayerName
-			desc = desc .. "\n**Steam Name:** " .. GetPlayerName(player)
-			for i = 1, #allPlayerIdentifiers do
-				desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
-			end
-			desc = desc .. " \n**Reason:** " ..reason:gsub("Kicked: ", "").. " \n**Kicked By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
+		end, "POST", json.encode({
+			embeds = {
+				{
+					description = desc,
+					color = 16777062,
+					author = {
+						name = "User Kicked From The Server"
+					}
+				}
+			}
+		}), { ["Content-Type"] = 'application/json' })
 
-			local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
-					PerformHttpRequest(url, function(err, text, headers)
-						if text then
-							print(text)
-						end
-					end, "POST", json.encode({
-						embeds = {
-							{
-								description = desc,
-								color = 16777062,
-								author = {
-									name = "User Kicked From The Server"
-								}
-							}
-						}
-					}), { ["Content-Type"] = 'application/json' })
-
-			sendMessageToModsAndAdmins(GetPlayerName(player) .. " has been kicked (" .. reason .. ")")
-			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^3kicked^0 (" .. reason .. ")")
-			DropPlayer(player, reason)
-		end)
+		sendMessageToModsAndAdmins(userSource, GetPlayerName(player) .. " has been kicked (" .. reason .. ")")
+		--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^3kicked^0 (" .. reason .. ")")
+		DropPlayer(player, reason)
 	else
 		TriggerClientEvent('usa:notify', source, 'Player not found!')
 	end
@@ -292,7 +290,7 @@ function stringsplit(self, delimiter)
 end
 
 -- Announcing
-TriggerEvent('es:addGroupCommand', 'announce', "mod", function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'announce', "mod", function(source, args, char)
 	table.remove(args, 1)
 	TriggerClientEvent('chatMessage', -1, "", {255, 0, 0}, "^2^*[STAFF ANNOUNCEMENT] ^r^0" .. table.concat(args, " "))
 end, {
@@ -304,30 +302,21 @@ end, {
 
 -- Freezing
 local frozen = {}
-TriggerEvent('es:addGroupCommand', 'freeze', "mod", function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'freeze', "mod", function(source, args, char)
 	if(GetPlayerName(tonumber(args[2])))then
 		local player = tonumber(args[2])
-
-		-- User permission check
-		TriggerEvent("es:getPlayerFromId", player, function(target)
-
-			if(frozen[player])then
-				frozen[player] = false
-			else
-				frozen[player] = true
-			end
-
-			TriggerClientEvent('es_admin:freezePlayer', player, frozen[player])
-
-			local state = "unfrozen"
-			if(frozen[player])then
-				state = "frozen"
-			end
-
-
-			TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(player)..' ['..player..'] ^0 has been '..state..' by ^2'..GetPlayerName(source)..' ['..source..']^0.')
-			TriggerClientEvent('chatMessage', player, '^2^*[STAFF]^r^0 You have been '..state..'.')
-		end)
+		if(frozen[player])then
+			frozen[player] = false
+		else
+			frozen[player] = true
+		end
+		TriggerClientEvent('es_admin:freezePlayer', player, frozen[player])
+		local state = "unfrozen"
+		if(frozen[player])then
+			state = "frozen"
+		end
+		TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(player)..' ['..player..'] ^0 has been '..state..' by ^2'..GetPlayerName(source)..' ['..source..']^0.')
+		TriggerClientEvent('chatMessage', player, '^2^*[STAFF]^r^0 You have been '..state..'.')
 	else
 		TriggerClientEvent('usa:notify', source, 'Player not found!')
 	end
@@ -339,20 +328,12 @@ end, {
 })
 
 -- Bring
-local frozen = {}
-TriggerEvent('es:addGroupCommand', 'bring', "mod", function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'bring', "mod", function(source, args, char)
 	if(GetPlayerName(tonumber(args[2])))then
 		local player = tonumber(args[2])
-
-		-- User permission check
-		--TriggerEvent("es:getPlayerFromId", player, function(target)
-			local target = exports["essentialmode"]:getPlayerFromId(player)
-
-			TriggerClientEvent('es_admin:teleportUser', target.get('source'), source)
-
-			TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(player)..' ['..player..'] ^0 has been brought to ^2'..GetPlayerName(source)..' ['..source..']^0.')
-			TriggerClientEvent('chatMessage', player, '^2^*[STAFF]^r^0 You have been teleported.')
-		--end)
+		TriggerClientEvent('es_admin:teleportUser', player, source)
+		TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(player)..' ['..player..'] ^0 has been brought to ^2'..GetPlayerName(source)..' ['..source..']^0.')
+		TriggerClientEvent('chatMessage', player, '^2^*[STAFF]^r^0 You have been teleported.')
 	else
 		TriggerClientEvent('usa:notify', source, 'Player not found!')
 	end
@@ -363,20 +344,12 @@ end, {
 	}
 })
 
--- Bring
-local frozen = {}
-TriggerEvent('es:addGroupCommand', 'slap', "admin", function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'slap', "admin", function(source, args, char)
 	if(GetPlayerName(tonumber(args[2])))then
 		local player = tonumber(args[2])
-
-		-- User permission check
-		TriggerEvent("es:getPlayerFromId", player, function(target)
-
-			TriggerClientEvent('es_admin:slap', player)
-
-			TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(player)..' ['..player..'] ^0 has been slapped by ^2'..GetPlayerName(source)..' ['..source..']^0.')
-			TriggerClientEvent('chatMessage', player, '^2^*[STAFF]^r^0 You have been slapped.')
-		end)
+		TriggerClientEvent('es_admin:slap', player)
+		TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(player)..' ['..player..'] ^0 has been slapped by ^2'..GetPlayerName(source)..' ['..source..']^0.')
+		TriggerClientEvent('chatMessage', player, '^2^*[STAFF]^r^0 You have been slapped.')
 	else
 		TriggerClientEvent('usa:notify', source, 'Player not found!')
 	end
@@ -390,7 +363,7 @@ end, {
 ------------------------------
 -- go to any coordinate --
 ------------------------------
-TriggerEvent('es:addGroupCommand', 'gotoc', "mod", function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'gotoc', "mod", function(source, args, char)
 	TriggerClientEvent('es_admin:teleportUserByCoords', source, tonumber(args[2]), tonumber(args[3]), tonumber(args[4]))
 	TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(source)..' ['..source..'] ^0 has teleported to co-ordinates: '..args[2]..', '..args[3]..', '..args[3]..'.')
 end, {
@@ -402,9 +375,7 @@ end, {
 	}
 })
 
--- Freezing
-local frozen = {}
-TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, char)
 	if args[2] == "pd" then
 		local pdCoords = {x=-447.256 , y=6000.667 , z=30.686}
 		TriggerClientEvent('es_admin:teleportUserByCoords', source, pdCoords.x, pdCoords.y, pdCoords.z)
@@ -452,28 +423,22 @@ end, {
 })
 
 -- Kill yourself
-TriggerEvent('es:addGroupCommand', 'die', "admin", function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'die', "admin", function(source, args, char)
 	TriggerClientEvent('es_admin:kill', source)
 end, {
 	help = "Commit suicide."
 })
 
 -- Killing
-TriggerEvent('es:addGroupCommand', 'slay', "admin", function(source, args, user)
-		if(GetPlayerName(tonumber(args[2])))then
-			local player = tonumber(args[2])
-
-			-- User permission check
-			TriggerEvent("es:getPlayerFromId", player, function(target)
-
-				TriggerClientEvent('es_admin:kill', player)
-
-				TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(player)..' ['..player..'] ^0 has been killed by ^2'..GetPlayerName(source)..' ['..source..']^0.')
-				TriggerClientEvent('chatMessage', player, '^2^*[STAFF]^r^0 You have been killed.')
-			end)
-		else
-			TriggerClientEvent('usa:notify', source, 'Player not found!')
-		end
+TriggerEvent('es:addGroupCommand', 'slay', "admin", function(source, args, char)
+	if(GetPlayerName(tonumber(args[2])))then
+		local player = tonumber(args[2])
+		TriggerClientEvent('es_admin:kill', player)
+		TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(player)..' ['..player..'] ^0 has been killed by ^2'..GetPlayerName(source)..' ['..source..']^0.')
+		TriggerClientEvent('chatMessage', player, '^2^*[STAFF]^r^0 You have been killed.')
+	else
+		TriggerClientEvent('usa:notify', source, 'Player not found!')
+	end
 end, {
 	help = "Kill a player.",
 	params = {
@@ -482,15 +447,11 @@ end, {
 })
 
 -- Crashing
-TriggerEvent('es:addGroupCommand', 'crash', "superadmin", function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'crash', "superadmin", function(source, args, char)
 	if(GetPlayerName(tonumber(args[2])))then
 		local player = tonumber(args[2])
-
-		TriggerEvent("es:getPlayerFromId", player, function(target)
-			TriggerClientEvent('es_admin:crash', player)
-
-			TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(player)..' ['..player..'] ^0 has been crashed by ^2'..GetPlayerName(source)..' ['..source..']^0.')
-		end)
+		TriggerClientEvent('es_admin:crash', player)
+		TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(player)..' ['..player..'] ^0 has been crashed by ^2'..GetPlayerName(source)..' ['..source..']^0.')
 	else
 		TriggerClientEvent('usa:notify', source, 'Player not found!')
 	end
@@ -502,13 +463,13 @@ end, {
 })
 
 -- Position
-TriggerEvent('es:addGroupCommand', 'pos', "owner", function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'pos', "owner", function(source, args, char)
 	TriggerClientEvent('es_admin:givePosition', source)
 end, {
 	help = "Save pos to txt"
 })
 
-TriggerEvent('es:addGroupCommand', 'car', 'superadmin', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'car', 'superadmin', function(source, args, char)
 	TriggerClientEvent('es_admin:spawnVehicle', source, args[2])
 	TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(source)..' ['..source..'] ^0 has requested to spawn vehicle: ^2'..args[2]..'^0.')
 end, {
@@ -517,8 +478,8 @@ end, {
 		{ name = "model", help = "Model of the car" }
 	}
 })
-	
-TriggerEvent('es:addGroupCommand', 'spectate', 'mod', function(source, args, user)
+
+TriggerEvent('es:addGroupCommand', 'spectate', 'mod', function(source, args, char)
 	local userSource = tonumber(source)
 	local targetPlayer = tonumber(args[2])
 	if not targetPlayer then return end
@@ -622,10 +583,10 @@ AddEventHandler('rconCommand', function(commandName, args)
 			-- show message
 			RconPrint(targetPlayerName .. " has been banned (" .. reason .. ")")
 			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^2banned^0 (" .. reason .. ")")
-			sendMessageToModsAndAdmins(targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
+			sendMessageToModsAndAdmins(0, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
 			-- character name:
-			local player = exports["essentialmode"]:getPlayerFromId(targetPlayer)
-			local char_name = player.getActiveCharacterData("firstName") .. " " .. player.getActiveCharacterData("middleName") .. " " ..  player.getActiveCharacterData("lastName")
+			local player = exports["usa-characters"]:GetCharacter(targetPlayer)
+			local char_name = player.getFullName()
 			-- send discord message
 			local desc = "**Character Name:** " .. char_name
 			desc = desc .. "\n**Steam Name:** " .. targetPlayerName
@@ -681,7 +642,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 			-- show message
 			RconPrint(targetPlayerName .. " has been banned (" .. reason .. ")")
 			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
-			sendMessageToModsAndAdmins(targetPlayerName .. " has been ^1banned^0 (" .. reason .. ").")
+			sendMessageToModsAndAdmins(0, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ").")
 			-- update db --
 			GetDoc.createDocument("bans",  {char_name = "?", name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
 				RconPrint("player banned!")
@@ -734,7 +695,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 			-- show message
 			RconPrint(targetPlayerName .. " has been banned (" .. reason .. ")")
 			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
-			sendMessageToModsAndAdmins(targetPlayerName .. " has been ^1banned^0 (" .. reason .. ").")
+			sendMessageToModsAndAdmins(0, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ").")
 			-- update db --
 			GetDoc.createDocument("bans",  {time = os.time(), duration = time, char_name = "?", name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
 				RconPrint("player banned!")
@@ -853,8 +814,8 @@ AddEventHandler('rconCommand', function(commandName, args)
 		end
 
 		-- give and save money --
-		local user = exports["essentialmode"]:getPlayerFromId(targetId)
-		user.setActiveCharacterData("money", user.getActiveCharacterData("money") + amount)
+		local user = exports["usa-characters"]:GetCharacter(targetId)
+		user.giveMoney(amount)
 		TriggerClientEvent('chatMessage', targetId, "", {255, 255, 255}, "^2^*[SERVER] ^r^0You have received ^2^*" .. amount..'^r^0.')
 		TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(targetId)..' ['..targetId..'] ^0 has received ^2^*'..amount..'^r^0 money from ^2^*console^r^0.')
 		RconPrint("Money given")
@@ -1030,17 +991,12 @@ AddEventHandler('rconCommand', function(commandName, args)
 	CancelEvent()
 end)
 
--- Logging
-AddEventHandler("es:adminCommandRan", function(source, command)
-
-end)
-
 --------------- BAN MANAGEMENT: -------------------
 -- PERFORM FIRST TIME DB CHECK --
 exports["globals"]:PerformDBCheck("BANS", "bans", fetchAllBans)
 
 	-- ban command --
-	TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, user)
+	TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, char)
 		local userSource = tonumber(source)
 		-- add player to ban list
 		TriggerEvent('es:exposeDBFunctions', function(GetDoc)
@@ -1059,10 +1015,10 @@ exports["globals"]:PerformDBCheck("BANS", "bans", fetchAllBans)
 			end
 			-- show message
 			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
-			sendMessageToModsAndAdmins(GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
+			sendMessageToModsAndAdmins(userSource, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
 			-- get char name:
-			local player = exports["essentialmode"]:getPlayerFromId(targetPlayer)
-			local char_name = player.getActiveCharacterData("firstName") .. " " .. player.getActiveCharacterData("middleName") .. " " ..  player.getActiveCharacterData("lastName")
+			local player = exports["usa-characters"]:GetCharacter(targetPlayer)
+			local char_name = player.getFullName()
 			local desc = "**Character Name:** " .. char_name
 			-- send discord message
 			desc = desc .. "\n**Display Name:** " .. targetPlayerName
@@ -1104,7 +1060,7 @@ exports["globals"]:PerformDBCheck("BANS", "bans", fetchAllBans)
 	})
 
 	-- temp ban command // Usage: /tempban id time (in hours) reason
-	TriggerEvent('es:addGroupCommand', 'tempban', "mod", function(source, args, user)
+	TriggerEvent('es:addGroupCommand', 'tempban', "mod", function(source, args, char)
 		local userSource = tonumber(source)
 		-- add player to ban list
 		TriggerEvent('es:exposeDBFunctions', function(GetDoc)
@@ -1126,10 +1082,10 @@ exports["globals"]:PerformDBCheck("BANS", "bans", fetchAllBans)
 			end
 			-- show message
 			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
-			sendMessageToModsAndAdmins(GetPlayerName(targetPlayer) .. " has been ^1temp banned^0 for " .. time .. " hour(s) (" .. reason .. ").")
+			sendMessageToModsAndAdmins(userSource, GetPlayerName(targetPlayer) .. " has been ^1temp banned^0 for " .. time .. " hour(s) (" .. reason .. ").")
 			-- get char name:
-			local player = exports["essentialmode"]:getPlayerFromId(targetPlayer)
-			local char_name = player.getActiveCharacterData("firstName") .. " " .. player.getActiveCharacterData("middleName") .. " " ..  player.getActiveCharacterData("lastName")
+			local player = exports["usa-characters"]:GetCharacter(targetPlayer)
+			local char_name = player.getFullName()
 			local desc = "**Character Name:** " .. char_name
 			-- send discord message
 			desc = desc .. "\n**Display Name:** " .. targetPlayerName
@@ -1172,8 +1128,12 @@ exports["globals"]:PerformDBCheck("BANS", "bans", fetchAllBans)
 	})
 
 RegisterServerEvent("usa:notifyStaff")
-AddEventHandler("usa:notifyStaff", function(msg)
-	sendMessageToModsAndAdmins(msg)
+AddEventHandler("usa:notifyStaff", function(msg, src)
+	if src then
+		source = src
+	end
+	print("notifying staff")
+	sendMessageToModsAndAdmins(source, msg)
 end)
 
 RegisterServerEvent('mini:checkPlayerBannedOnSpawn')
@@ -1228,14 +1188,15 @@ AddEventHandler('mini:checkPlayerBannedOnSpawn', function()
 	end)
 end)
 
-TriggerEvent('es:addCommand', 'stats', function(source, args, user)
+TriggerEvent('es:addCommand', 'stats', function(source, args, char)
 	if args[2] then
 		--admins only
-		local group = user.getGroup()
+		local group = exports["essentialmode"]:getPlayerFromId(source).getGroup()
 		if group == "mod" or group == "admin" or group == "superadmin" or group == "owner" then
 			local user = exports["essentialmode"]:getPlayerFromId(tonumber(args[2]))
-			if user then
-				local ownedVehicles = user.getActiveCharacterData("vehicles")
+			local targetchar = exports["usa-characters"]:GetCharacter(tonumber(args[2]))
+			if targetchar then
+				local ownedVehicles = targetchar.get("vehicles")
 				GetMakeModelPlate(ownedVehicles, function(vehs)
 					local vehiclenames = ""
 					local userVehicles = vehs
@@ -1247,7 +1208,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 						end
 					end
 					local weaponnames = ""
-					local userWeapons = user.getActiveCharacterData("weapons")
+					local userWeapons = targetchar.getWeapons()
 					for i = 1, #userWeapons do
 						local weapon = userWeapons[i]
 						weaponnames = weaponnames .. userWeapons[i].name
@@ -1256,12 +1217,12 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 						end
 					end
 					local inventorynames = ""
-					local userInventory = user.getActiveCharacterData("inventory")
-					for i = 1, #userInventory do
+					local userInventory = targetchar.get("inventory").items
+					for i = 0, char.get("inventory").MAX_CAPACITY - 1 do
 						--local inventory = userInventory[i]
 						--local quantity = inventory.quantity
-						inventorynames = inventorynames .. userInventory[i].name .. "(" .. userInventory[i].quantity .. ")"
-						if i ~= #userInventory then
+						if userInventory[tostring(i)] then
+							inventorynames = inventorynames .. userInventory[tostring(i)].name .. "(" .. userInventory[tostring(i)].quantity .. ")"
 							inventorynames = inventorynames .. ", "
 						end
 					end
@@ -1270,7 +1231,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 					local boat_license = "Invalid"
 					local bar_license = 'Invalid'
 					local plane_license = "Invalid"
-					local userLicenses = user.getActiveCharacterData("licenses")
+					local userLicenses = targetchar.getLicenses()
 					for i = 1, #userLicenses do
 						local license = userLicenses[i]
 						if license.name == "Driver's License"  then
@@ -1286,7 +1247,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 						end
 					end
 
-					local insurance = user.getActiveCharacterData("insurance")
+					local insurance = targetchar.get("insurance")
 					local insurance_month = insurance.expireMonth
 					local insurance_year = insurance.expireYear
 					local displayInsurance = "Invalid"
@@ -1296,15 +1257,14 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 					if insurance.planName then
 						displayInsurance = "Valid"
 					end
-
 					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
-					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Name: " .. user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName") .. " | Identifier: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
-					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Police Rank: " .. user.getActiveCharacterData("policeRank") .. " | EMS Rank: " .. user.getActiveCharacterData("emsRank") .. " | Job: " .. user.getActiveCharacterData("job") .. " | Steam Name: ".. GetPlayerName(args[2]))
-					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Cash: " .. comma_value(user.getActiveCharacterData("money")) .. " | Bank: " .. comma_value(user.getActiveCharacterData("bank")) .. " |  Ingame Time: " .. FormatSeconds(user.getActiveCharacterData("ingameTime")) .. " |" )
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Name: " .. targetchar.getFullName() .. " | Identifier: " .. targetchar.get("created").ownerIdentifier .. " | Group: " .. user.getGroup() .. " |")
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Police Rank: " .. targetchar.get("policeRank") .. " | EMS Rank: " .. targetchar.get("emsRank") .. " | Job: " .. targetchar.get("job") .. " | Steam Name: ".. GetPlayerName(args[2]))
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Cash: " .. comma_value(targetchar.get("money")) .. " | Bank: " .. comma_value(targetchar.get("bank")) .. " |  Ingame Time: " .. FormatSeconds(targetchar.get("ingameTime")) .. " |" )
 					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
 					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
 					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Inventory: " .. inventorynames .. " |")
-					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weight: " .. user.getActiveCharacterCurrentInventoryWeight())
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weight: " .. targetchar.get("inventory").currentWeight)
 					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
 				end)
 			else
@@ -1312,7 +1272,8 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 			end
 		end
 	else
-		local ownedVehicles = user.getActiveCharacterData("vehicles")
+		local user = exports["essentialmode"]:getPlayerFromId(source)
+		local ownedVehicles = char.get("vehicles")
 		GetMakeModelPlate(ownedVehicles, function(vehs)
 			--show player stats
 			local vehiclenames = ""
@@ -1325,7 +1286,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 				end
 			end
 			local weaponnames = ""
-			local userWeapons = user.getActiveCharacterData("weapons")
+			local userWeapons = char.getWeapons()
 			for i = 1, #userWeapons do
 				local weapon = userWeapons[i]
 				weaponnames = weaponnames .. userWeapons[i].name
@@ -1334,20 +1295,18 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 				end
 			end
 			local inventorynames = ""
-			local userInventory = user.getActiveCharacterData("inventory")
-			for i = 1, #userInventory do
+			local userInventory = char.get("inventory").items
+			for i = 0, char.get("inventory").MAX_CAPACITY - 1 do
 				--local inventory = userInventory[i]
 				--local quantity = inventory.quantity
-				if userInventory[i] then
-					inventorynames = inventorynames .. userInventory[i].name .. "(" .. userInventory[i].quantity .. ")"
-					if i ~= #userInventory then
-						inventorynames = inventorynames .. ", "
-					end
+				if userInventory[tostring(i)] then
+					inventorynames = inventorynames .. userInventory[tostring(i)].name .. "(" .. userInventory[tostring(i)].quantity .. ")"
+					inventorynames = inventorynames .. ", "
 				end
 			end
 			local firearms_permit = "Invalid"
 			local driving_license = "Invalid"
-			local userLicenses = user.getActiveCharacterData("licenses")
+			local userLicenses = char.getLicenses()
 			for i = 1, #userLicenses do
 				local license = userLicenses[i]
 				if license.name == "Driver's License"  then
@@ -1357,7 +1316,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 				end
 			end
 
-			local insurance = user.getActiveCharacterData("insurance")
+			local insurance = char.get("insurance")
 			local insurance_month = insurance.expireMonth
 			local insurance_year = insurance.expireYear
 			local displayInsurance = "Invalid"
@@ -1366,13 +1325,13 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, user)
 			end
 
 			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
-			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Name: " .. user.getActiveCharacterData("firstName") .. " " .. user.getActiveCharacterData("lastName") .. " | Identifer: " .. user.getIdentifier() .. " | Group: " .. user.getGroup() .. " |")
-			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Police Rank: " .. user.getActiveCharacterData("policeRank") .. " | EMS Rank: " .. user.getActiveCharacterData("emsRank") .. " |  Job: " .. user.getActiveCharacterData("job") .. " |" )
-			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Cash: " .. comma_value(user.getActiveCharacterData("money")) .. " | Bank: " .. comma_value(user.getActiveCharacterData("bank")) .. " |  Ingame Time: " .. FormatSeconds(user.getActiveCharacterData("ingameTime")) .. " |" )
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Name: " .. char.getFullName() .. " | Identifer: " .. char.get("created").ownerIdentifier .. " | Group: " .. user.getGroup() .. " |")
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Police Rank: " .. char.get("policeRank") .. " | EMS Rank: " .. char.get("emsRank") .. " |  Job: " .. char.get("job") .. " |" )
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Cash: " .. comma_value(char.get("money")) .. " | Bank: " .. comma_value(char.get("bank")) .. " |  Ingame Time: " .. FormatSeconds(char.get("ingameTime")) .. " |" )
 			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
 			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
 			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Inventory: " .. inventorynames .. " |")
-			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weight: " .. user.getActiveCharacterCurrentInventoryWeight())
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weight: " .. char.get("inventory").currentWeight)
 			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
 		end)
 	end
@@ -1413,13 +1372,13 @@ function FormatSeconds(mins)
 	return output
 end
 
-function sendMessageToModsAndAdmins(msg)
+function sendMessageToModsAndAdmins(src, msg)
 	TriggerEvent("es:getPlayers", function(players)
 		if players then
 			for id, player in pairs(players) do
 				if id and player then
 					local playerGroup = player.getGroup()
-					if playerGroup == "owner" or playerGroup == "superadmin" or playerGroup == "admin" or playerGroup == "mod" and NotifyStaff(id) then
+					if playerGroup == "owner" or playerGroup == "superadmin" or playerGroup == "admin" or playerGroup == "mod" and NotifyStaff(id) and id ~= src then
 						TriggerClientEvent("chatMessage", id, "", {}, msg)
 					end
 				end
@@ -1466,7 +1425,7 @@ function GetMakeModelPlate(plates, cb)
 end
 
 -- TESTING COMMAND --
-TriggerEvent('es:addGroupCommand', 'test', "owner", function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'test', "owner", function(source, args, char)
 	TriggerClientEvent("testing:spawnObject", source, "bkr_prop_meth_acetone")
 end, {
 	help = "Test something"

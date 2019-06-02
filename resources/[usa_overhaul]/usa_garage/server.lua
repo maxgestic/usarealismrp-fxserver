@@ -7,9 +7,10 @@ local IMPOUND_FEE = 150
 
 RegisterServerEvent("garage:giveKey")
 AddEventHandler("garage:giveKey", function(key)
+	print("key: " .. type(key))
 	local char = exports["usa-characters"]:GetCharacter(source)
-	local key = char.getItemWithField("plate", key.plate)
-	if not key then
+	local invKey = char.getItemWithField("plate", key.plate)
+	if not invKey then
 		char.giveItem(key)
 	end
 	-- add to server side list of plates being tracked for locking resource:
@@ -185,8 +186,8 @@ end
 function IsDriverLicenseValid(source)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local license = char.getItem("Driver's License")
-	if license and license.status == "valid" then 
-		return true 
+	if license and license.status == "valid" then
+		return true
 	end
 	return false
 end
