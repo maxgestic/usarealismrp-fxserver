@@ -534,26 +534,21 @@ AddEventHandler('rconCommand', function(commandName, args)
 	elseif commandName == "freeze" then
 		if(GetPlayerName(tonumber(args[1])))then
 			local player = tonumber(args[1])
+			if(frozen[player])then
+				frozen[player] = false
+			else
+				frozen[player] = true
+			end
 
-			-- User permission check
-			TriggerEvent("es:getPlayerFromId", player, function(target)
+			TriggerClientEvent('es_admin:freezePlayer', player, frozen[player])
 
-				if(frozen[player])then
-					frozen[player] = false
-				else
-					frozen[player] = true
-				end
-
-				TriggerClientEvent('es_admin:freezePlayer', player, frozen[player])
-
-				local state = "unfrozen"
-				if(frozen[player])then
-					state = "frozen"
-				end
-				RconPrint("You froze player " .. GetPlayerName(player) .. ".")
-				TriggerClientEvent('chatMessage', player, '^2^*[STAFF]^r^0 You have been '..state..' by ^2^*console^r^0.')
-				TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(player)..' ['..player..'] ^0 has been '..state..' by ^2^*console^r^0.')
-			end)
+			local state = "unfrozen"
+			if(frozen[player])then
+				state = "frozen"
+			end
+			RconPrint("You froze player " .. GetPlayerName(player) .. ".")
+			TriggerClientEvent('chatMessage', player, '^2^*[STAFF]^r^0 You have been '..state..' by ^2^*console^r^0.')
+			TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(player)..' ['..player..'] ^0 has been '..state..' by ^2^*console^r^0.')
 		else
 			RconPrint("INVALID PLAYER ID!")
 		end
@@ -788,14 +783,13 @@ AddEventHandler('rconCommand', function(commandName, args)
 			return
 		end
 
-		local user = exports["essentialmode"]:getPlayerFromId(tonumber(args[1]))
-			if user then
-				user.setActiveCharacterData("money", tonumber(args[2]))
-
-				RconPrint("Money set")
-				TriggerClientEvent('chatMessage', args[1], "", {255, 255, 255}, "^2^*[SERVER] ^r^0Your money has been set to ^2^*" .. args[2]..'^r^0.')
-				TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Money of ^2'..GetPlayerName(args[1])..' ['..args[1]..'] ^0 has been set to ^2^*'..args[2]..'^r^0 by ^2^*console^r^0.')
-			end
+		local char = exports["usa-characters"]:GetCharacter(tonumber(args[1]))
+		if char then
+			char.set("money", tonumber(args[2]))
+			RconPrint("Money set")
+			TriggerClientEvent('chatMessage', args[1], "", {255, 255, 255}, "^2^*[SERVER] ^r^0Your money has been set to ^2^*" .. args[2]..'^r^0.')
+			TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Money of ^2'..GetPlayerName(args[1])..' ['..args[1]..'] ^0 has been set to ^2^*'..args[2]..'^r^0 by ^2^*console^r^0.')
+		end
 	elseif commandName == "addmoney" or commandName == "givemoney" then
 		-- TODO
 		if #args ~= 2 then
@@ -819,7 +813,6 @@ AddEventHandler('rconCommand', function(commandName, args)
 		TriggerClientEvent('chatMessage', targetId, "", {255, 255, 255}, "^2^*[SERVER] ^r^0You have received ^2^*" .. amount..'^r^0.')
 		TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(targetId)..' ['..targetId..'] ^0 has received ^2^*'..amount..'^r^0 money from ^2^*console^r^0.')
 		RconPrint("Money given")
-
 	elseif commandName == "changename" then
 
 			if #args ~= 6 and #args ~= 5 then
@@ -987,7 +980,6 @@ AddEventHandler('rconCommand', function(commandName, args)
 				end)
 			end)
 		end
-
 	CancelEvent()
 end)
 

@@ -15,7 +15,7 @@ AddEventHandler("dmv:buyLicense", function()
 			name = "Driver\'s License",
 			number = "F" .. tostring(math.random(1, 2543678)),
 			quantity = 1,
-			ownerName = char.GetFullName(),
+			ownerName = char.getFullName(),
 			ownerDob = char.get("dateOfBirth"),
 			issued_by = 'Department of Motor Vehicles',
 			expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
@@ -24,9 +24,9 @@ AddEventHandler("dmv:buyLicense", function()
 			type = "license"
 		}
 		char.giveItem(license, 1)
-		TriggerClientEvent("usa:notify", userSource, "You have ~g~successfully~w~ purchased a Driver's License.")
+		TriggerClientEvent("usa:notify", source, "You have ~g~successfully~w~ purchased a Driver's License.")
 	else
-		TriggerClientEvent("usa:notify", userSource, "You don't have enough money to purchase a Driver's License!")
+		TriggerClientEvent("usa:notify", source, "You don't have enough money to purchase a Driver's License!")
 	end
 end)
 

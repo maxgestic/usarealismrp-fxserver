@@ -176,7 +176,7 @@ input[type=date] {
 	background-position: center;
 }
 
-#spawn-point--saved section {
+#spawn-point--property {
 	background-image: url('../img/alleyway.jpg');
 	background-size: cover;
 }
