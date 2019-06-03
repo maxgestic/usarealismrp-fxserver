@@ -127,6 +127,7 @@ function InitializeCharacter(src, characterID, doSpawnAtProperty)
       TriggerEvent("properties:loadCharacter", src, doSpawnAtProperty) -- ?
       TriggerEvent("eblips:remove", src) -- remove any eblip
       TriggerClientEvent("banking:updateBalance", src, character.get("bank")) -- intialize bank resource
+      TriggerClientEvent("es:activateMoney", src, character.get("money")) -- make /cash work
     end)
   end)
 end
