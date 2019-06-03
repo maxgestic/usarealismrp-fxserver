@@ -18,8 +18,7 @@ local VEH_RANKS = {
 }
 
 TriggerEvent('es:addJobCommand', 'spawn', { "police", "sheriff", "ems", "fire", "dai" }, function(source, args, char)
-	if args[2] then
-		local vehicleRequested = string.lower(args[2])
+		local vehicleRequested = args[2]
 		local job = char.get('job')
 		if job == "sheriff" then
 			local user_police_rank = tonumber(char.get("policeRank"))
@@ -51,7 +50,6 @@ TriggerEvent('es:addJobCommand', 'spawn', { "police", "sheriff", "ems", "fire", 
 			end
 			TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^3^*[SPAWN] ^r^0Options: schafter19, buffalo19, baller19", "oracle19", "taurus16a", "chrg14a", "chrg18a", "cvpi11a")
 		end
-	end
 end, {
 	help = "Spawn an exclusive emergency vehicle.",
 	params = {
