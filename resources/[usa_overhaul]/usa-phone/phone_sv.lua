@@ -184,15 +184,7 @@ AddEventHandler("phone:sendTweet", function(data)
 end)
 
 TriggerEvent('es:addCommand','tweet', function(source, args, char)
-	if char.hasItem('Cell Phone') then
-		table.remove(args, 1)
-		local name = "@" .. char.get("name").first .. "_" .. char.get("name").last
-		name = string.lower(name)
-		TriggerClientEvent('chatMessage', -1, "[TWEET] - " .. name, {29,161,242}, table.concat(args, " "))
-		TriggerEvent("chat:sendToLogFile", source, "[TWEET] - " .. name .. ": " .. table.concat(args, " "))
-	else
-		TriggerClientEvent('usa:notify', source, 'You do not have a cell phone!')
-	end
+	TriggerClientEvent('usa:notify', source, 'Use a cell phone to tweet!')
 end, {
 	help = "Send a tweet.", params = {{name = "message", help = "the tweet"}}
 })
