@@ -46,14 +46,19 @@ function CreateCharacter(data)
 
   rTable.set = function(field, data)
     self[field] = data
+    if field == "money" then
+      TriggerClientEvent("es:setMoneyDisplay", self.source, 1, data)
+    end
   end
 
   rTable.giveMoney = function(amount)
     self.money = self.money + amount
+    TriggerClientEvent("es:setMoneyDisplay", self.source, 1, self.money)
   end
 
   rTable.removeMoney = function(amount)
     self.money = self.money - amount
+    TriggerClientEvent("es:setMoneyDisplay", self.source, 1, self.money)
   end
 
   rTable.giveBank = function(amount)

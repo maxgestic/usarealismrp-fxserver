@@ -87,7 +87,7 @@ local deliveryLocations = {
 RegisterServerEvent('gopostal:toggleDuty')
 AddEventHandler('gopostal:toggleDuty', function(location)
 	local char = exports["usa-characters"]:GetCharacter(source)
-	local job = char.getActiveCharacterData("job")
+	local job = char.get("job")
 	local license = char.getItem("Driver's License")
 	if job == "gopostal" then
 		print("DELIVERY: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] is now OFF-DUTY for DELIVERY")
@@ -154,7 +154,7 @@ end
 
 function find_distance(coords1, coords2)
   xdistance =  math.abs(coords1.x - coords2.x)
-  
+
   ydistance = math.abs(coords1.y - coords2.y)
 
   zdistance = math.abs(coords1.z - coords2.z)

@@ -120,6 +120,7 @@ end
 function InitializeCharacter(src, characterID, doSpawnAtProperty)
   TriggerEvent('es:exposeDBFunctions', function(db)
     db.getDocument("characters", characterID, function(charData)
+      charData.source = src
       local character = CreateCharacter(charData)
       CHARACTERS[src] = character -- Create character object in memory
 			TriggerClientEvent("character:setCharacter", src, character, character.getWeapons()) -- load character

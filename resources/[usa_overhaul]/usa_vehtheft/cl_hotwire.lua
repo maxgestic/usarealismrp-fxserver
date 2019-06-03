@@ -14,7 +14,7 @@ Citizen.CreateThread(function()
         local playerPed = PlayerPedId()
         veh = GetVehiclePedIsIn(playerPed, true)
         engineOn = GetIsVehicleEngineRunning(veh)
-        if IsPedInAnyVehicle(playerPed, false) and GetPedInVehicleSeat(playerPed == -1) then 
+        if IsPedInAnyVehicle(playerPed, false) and GetPedInVehicleSeat(playerPed == -1) then
           if not wasInVeh then
             TriggerServerEvent('veh:checkForKey', GetVehicleNumberPlateText(veh), GetIsVehicleEngineRunning(veh))
             wasInVeh = true
@@ -43,7 +43,7 @@ Citizen.CreateThread(function()
             timeout = GetGameTimer()
             local veh = GetVehiclePedIsIn(playerPed, true)
             TriggerServerEvent('veh:checkForKey', GetVehicleNumberPlateText(veh))
-        end 
+        end
     end
 end)
 
@@ -100,7 +100,6 @@ AddEventHandler('veh:toggleEngine', function(_hasKey, _engineOn, canBeSearched_)
   if not IsVehicleBlacklisted(veh) and GetPedInVehicleSeat(veh, -1) == PlayerPedId() and not IsPedCuffed(PlayerPedId()) then
     local playerPed = PlayerPedId()
     if _hasKey and veh then
-      print('has keys')
       if DoesEntityExist(playerPed) and not IsEntityDead(playerPed) then
         if _engineOn then
           engineOn = _engineOn
@@ -131,12 +130,12 @@ AddEventHandler('veh:toggleEngine', function(_hasKey, _engineOn, canBeSearched_)
           end
         end
       end
-      print("doesn't have keys")
       if not isHotwiring then
         local beginTime = GetGameTimer()
         while GetGameTimer() - beginTime < 3000 do
           Citizen.Wait(0)
           ShowHelp('You do not have the keys to this vehicle!', 0)
+          exports.globals:notify('You do not have the keys to this vehicle!')
         end
       end
     end
@@ -194,7 +193,7 @@ AddEventHandler('veh:hotwireVehicle', function()
           local timeToWait = math.random((5 * 60000), (20 * 60000))
           Citizen.Wait(timeToWait)
           TriggerServerEvent('mdt:addTempVehicle', GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(veh))), 'Unknown', GetVehicleNumberPlateText(veh), true)
-          print('flagging as stolen!')  
+          print('flagging as stolen!')
         end)
       else
           TriggerEvent('usa:notify', 'The hotwiring kit was ~y~unsuccessful~s~!')

@@ -117,8 +117,10 @@ AddEventHandler("taxi:toggleNPCRequests", function()
 	NPC_REQUESTS_ENABLED = not NPC_REQUESTS_ENABLED
 	if NPC_REQUESTS_ENABLED then
 		TriggerEvent('taxiJob:showHelpText', 'You are now ~g~accepting~s~ taxi requests from locals!')
+		exports.globals:notify('You are now ~g~accepting~s~ taxi requests from locals!')
 	else
 		TriggerEvent('taxiJob:showHelpText', 'Taxi requests from locals have been temporarily ~y~muted~s~!')
+		exports.globals:notify('Taxi requests from locals have been temporarily ~y~muted~s~!')
 	end
 end)
 
@@ -246,9 +248,9 @@ Citizen.CreateThread(function()
 		------------------
 		if JOB.isOnJob then
 			if not JOB.start.arrived then
-				DrawText3D(JOB.start.x, JOB.start.y, JOB.start.z, 30, 'Customer') 
+				DrawText3D(JOB.start.x, JOB.start.y, JOB.start.z, 30, 'Customer')
 			elseif not JOB.destination.arrived and JOB.start.arrived then
-				DrawText3D(JOB.destination.x, JOB.destination.y, JOB.destination.z, 30, 'Destination') 
+				DrawText3D(JOB.destination.x, JOB.destination.y, JOB.destination.z, 30, 'Destination')
 			end
 		end
 	end

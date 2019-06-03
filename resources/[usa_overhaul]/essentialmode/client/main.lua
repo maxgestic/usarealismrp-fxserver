@@ -147,11 +147,24 @@ AddEventHandler('es:removedBank', function(m)
 	--Citizen.InvokeNative(0x0772DF77852C2E30, 0, -math.floor(m))
 end)
 
-RegisterNetEvent("es:setMoneyDisplay")
-AddEventHandler("es:setMoneyDisplay", function(val)
+RegisterNetEvent("es:setMoneyDisplay") -- briefly display money
+AddEventHandler("es:setMoneyDisplay", function(val, amount)
+	if not amount then
+		SendNUIMessage({
+			setDisplay = true,
+			display = val
+		})
+	else
+		SendNUIMessage({
+			setDisplay = true,
+			display = val,
+			amount = amount
+		})
+	end
+	Wait(5000)
 	SendNUIMessage({
 		setDisplay = true,
-		display = val
+		display = 0
 	})
 end)
 

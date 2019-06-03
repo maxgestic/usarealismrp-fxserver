@@ -1,5 +1,5 @@
 local jobCoords = {
-	{ 	
+	{
 		duty = {x = 61.35, y = 123.83, z = 79.20},
 		vehicle = {x = 66.25, y = 120.65, z = 79.10, heading = 160.0},
 		job = {x = 69.06, y = 127.72, z = 79.21}

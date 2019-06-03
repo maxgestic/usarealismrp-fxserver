@@ -6,7 +6,7 @@ end)
 TriggerEvent('es:addCommand','wallet', function(source, args, char)
 	TriggerEvent('display:shareDisplayBySource', source, 'counts cash', 2, 370, 10, 3000, true)
 	Citizen.Wait(200)
-	TriggerClientEvent("es:setMoneyDisplay", source, 1)
+	TriggerClientEvent("es:setMoneyDisplay", source, 1, char.get("money"))
 	Citizen.Wait(3000)
 	TriggerClientEvent("es:setMoneyDisplay", source, 0)
 end, {
@@ -16,7 +16,7 @@ end, {
 TriggerEvent('es:addCommand','cash', function(source, args, char)
 	TriggerEvent('display:shareDisplayBySource', source, 'counts cash', 2, 370, 10, 3000, true)
 	Citizen.Wait(200)
-	TriggerClientEvent("es:setMoneyDisplay", source, 1)
+	TriggerClientEvent("es:setMoneyDisplay", source, 1, char.get("money"))
 	Citizen.Wait(3000)
 	TriggerClientEvent("es:setMoneyDisplay", source, 0)
 end, {

@@ -7,7 +7,7 @@ local armoryItems = { -- must match client.lua
 
 AddEventHandler('rconCommand', function(commandName, args)
   if commandName:lower() == 'whitelist' then
-    local playerId = table.remove(args, 1)
+    local playerId = tonumber(table.remove(args, 1))
     local wl_type = table.remove(args, 1)
     local rank = tonumber(table.remove(args, 1)) -- 0 for unwhitelist, remove whitelist
     --RconPrint(type)
@@ -26,7 +26,7 @@ AddEventHandler('rconCommand', function(commandName, args)
     end
 
     if wl_type == "police" then
-      local char = exports["usa-characters"]:GetCharacter(tonumber(playerId))
+      local char = exports["usa-characters"]:GetCharacter(playerId)
       if rank > 0 then
         char.set("policeRank", rank)
         RconPrint("DEBUG: " .. playerId .. "'s police rank has been set to: " .. rank .. "!")

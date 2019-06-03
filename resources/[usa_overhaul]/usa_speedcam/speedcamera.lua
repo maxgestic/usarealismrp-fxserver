@@ -10,7 +10,7 @@ Citizen.CreateThread(function()
 			PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 			locked = not locked
 		end
-		if GetVehicleClass(car) == 18 and (GetPedInVehicleSeat(car, -1) == ped or GetPedInVehicleSeat(car, 0) == ped) and showText then
+		if not IsVehicleBlacklisted(car) and (GetPedInVehicleSeat(car, -1) == ped or GetPedInVehicleSeat(car, 0) == ped) and showText then
 			if locked then
 				DrawTxt(0.515, 1.270, 1.0, 1.0, 0.40, '~r~[LOCKED] ~w~Plate: '..lastScan.plate..' | MPH: '..math.ceil(lastScan.speed), 255, 255, 255, 255)
 			else
@@ -72,4 +72,17 @@ function DrawTxt(x,y ,width,height,scale, text, r,g,b,a)
     SetTextEntry("STRING")
     AddTextComponentString(text)
     DrawText(x - width/2, y - height/2 + 0.005)
+end
+
+function IsVehicleBlacklisted(veh)
+	local model = GetEntityModel(veh)
+	if GetVehicleClass(veh) ~= 18 then
+		return true
+	elseif model == GetHashKey("ambulance") then
+		return true
+	elseif model == GetHashKey("firetruk") then
+		return true
+	else
+		return false
+	end
 end

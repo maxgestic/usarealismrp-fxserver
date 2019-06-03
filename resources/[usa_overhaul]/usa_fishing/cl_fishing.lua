@@ -20,7 +20,7 @@ local fishingZoneSpots = {
   {x = -3409.19, y = 973.33, z = 8.34, heading = 271.0},
   {x = -3408.98, y = 978.53, z = 8.34, heading = 271.0},
   {x = -3410.87, y = 982.69, z = 8.34, heading = 0.0}
-} 
+}
 
 local fishingZoneBlips = {
   {x = -1614.893, y = 5260.193, z = 3.974},
@@ -265,7 +265,7 @@ function EnumerateBlips()
 		SetBlipColour(handle, 52)
 		SetBlipAsShortRange(handle, true)
 		BeginTextCommandSetBlipName("STRING")
-		AddTextComponentString('Fishing Zone')
+		AddTextComponentString('Fish Store')
 		EndTextCommandSetBlipName(handle)
 	end
 end

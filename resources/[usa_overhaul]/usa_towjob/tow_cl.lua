@@ -133,7 +133,7 @@ Citizen.CreateThread(function()
 						TriggerServerEvent("towJob:setJob", data.truck_spawn)
 					end
 				elseif
-					Vdist(playerCoords, data.impound.x, data.impound.y, data.impound.z) < 15.0 then
+				Vdist(playerCoords, data.impound.x, data.impound.y, data.impound.z) < 15.0 then
 					if onDuty == "yes" then
 						ImpoundVehicle()
 					end
@@ -175,9 +175,9 @@ AddEventHandler('towJob:towVehicleInFront', function()
 
 					if lastTowTruck ~= targetVehicle and IsVehicleSeatFree(targetVehicle, -1) then
 						local dict = "mini@repair"
-            			RequestAnimDict(dict)
-            			while not HasAnimDictLoaded(dict) do Citizen.Wait(100) end
-            			TriggerServerEvent('InteractSound_SV:PlayOnSource', 'tow-truck', 0.5)
+						RequestAnimDict(dict)
+						while not HasAnimDictLoaded(dict) do Citizen.Wait(100) end
+						TriggerServerEvent('InteractSound_SV:PlayOnSource', 'tow-truck', 0.5)
 						local beginTime = GetGameTimer()
 						while GetGameTimer() - beginTime < 8000 do
 							Citizen.Wait(1)
@@ -208,7 +208,7 @@ AddEventHandler('towJob:towVehicleInFront', function()
 			while GetGameTimer() - beginTime < 8000 do
 				Citizen.Wait(1)
 				DrawTimer(beginTime, 8000, 1.42, 1.475, 'DETACHING')
-				if not IsEntityPlayingAnim(playerPed, dict, 'fixing_a_player', 3) then
+				if not IsEntityPlayingAnim(playerPed, dict, 'fixing_a_player', 3) and not IsPedInAnyVehicle(playerPed, true) then
 					TaskPlayAnim(playerPed, dict, "fixing_a_player", 8.0, 1.0, -1, 15, 1.0, 0, 0, 0)
 				end
 			end
@@ -235,7 +235,7 @@ end)
 
 function EnumerateBlips()
 	for name, data in pairs(locations) do
-      	local blip = AddBlipForCoord(data.duty.x, data.duty.y, data.duty.z)
+		local blip = AddBlipForCoord(data.duty.x, data.duty.y, data.duty.z)
 		SetBlipSprite(blip, 68)
 		SetBlipDisplay(blip, 4)
 		SetBlipScale(blip, 0.75)
@@ -243,25 +243,25 @@ function EnumerateBlips()
 		BeginTextCommandSetBlipName("STRING")
 		AddTextComponentString('Tow Company')
 		EndTextCommandSetBlipName(blip)
-    end
+	end
 end
 
 function DisplayHelpText(str)
-  SetTextComponentFormat("STRING")
-  AddTextComponentString(str)
-  DisplayHelpTextFromStringLabel(0, 0, 1, -1)
+	SetTextComponentFormat("STRING")
+	AddTextComponentString(str)
+	DisplayHelpTextFromStringLabel(0, 0, 1, -1)
 end
 
 function ImpoundVehicle()
 	local targetVehicle = getVehicleInFront()
 	if targetVehicle == vehicleToImpound then
 		local playerPed = PlayerPedId()
-        local playerCoords = GetEntityCoords(playerPed)
-        if DoesEntityExist(targetVehicle) then
-        	local targetPlate = GetVehicleNumberPlateText(targetVehicle, false)
-            TriggerServerEvent("impound:impoundVehicle", targetVehicle, targetPlate)
-            SetEntityAsMissionEntity(targetVehicle, true, true)
-            DelVehicle(targetVehicle)
+		local playerCoords = GetEntityCoords(playerPed)
+		if DoesEntityExist(targetVehicle) then
+			local targetPlate = GetVehicleNumberPlateText(targetVehicle, false)
+			TriggerServerEvent("impound:impoundVehicle", targetVehicle, targetPlate)
+			SetEntityAsMissionEntity(targetVehicle, true, true)
+			DelVehicle(targetVehicle)
 			vehicleToImpound = nil
 			TriggerServerEvent("towJob:giveReward")
 		end
@@ -269,12 +269,12 @@ function ImpoundVehicle()
 end
 
 function SpawnTowFlatbed(coords)
-    local numberHash = 1353720154 -- tow truck
-    Citizen.CreateThread(function()
+	local numberHash = 1353720154 -- tow truck
+	Citizen.CreateThread(function()
 		RequestModel(numberHash)
 		while not HasModelLoaded(numberHash) do
-		    RequestModel(numberHash)
-		    Citizen.Wait(0)
+			RequestModel(numberHash)
+			Citizen.Wait(0)
 		end
 		local vehicle = CreateVehicle(numberHash, coords.x, coords.y, coords.z, coords.heading, true, false)
 		SetVehicleOnGroundProperly(vehicle)
@@ -296,14 +296,14 @@ function SpawnTowFlatbed(coords)
 		-- give key to owner
 		TriggerServerEvent("garage:giveKey", vehicle_key)
 		TriggerServerEvent('mdt:addTempVehicle', 'MTL Flatbed', "Bubba's Tow Co.", GetVehicleNumberPlateText(vehicle))
-    end)
+	end)
 end
 
 function IsVehicleWhitelisted(entity)
-	if GetVehicleClass(entity) == 14 or GetVehicleClass(entity) == 15 or 
-		GetVehicleClass(entity) == 16 or GetVehicleClass(entity) == 21 or 
-		GetVehicleClass(entity) == 19 then
-			return false
+	if GetVehicleClass(entity) == 14 or GetVehicleClass(entity) == 15 or
+	GetVehicleClass(entity) == 16 or GetVehicleClass(entity) == 21 or
+	GetVehicleClass(entity) == 19 then
+		return false
 	else
 		return true
 	end
@@ -311,7 +311,7 @@ end
 
 -- Delete car function borrowed frtom Mr.Scammer's model blacklist, thanks to him!
 function DelVehicle(entity)
-    Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( entity ) )
+	Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( entity ) )
 end
 
 function getVehicleInDirection(coordFrom, coordTo)
@@ -342,51 +342,51 @@ function isPlayerAtTowSpot()
 end
 
 function DrawText3D(x, y, z, distance, text)
-  if Vdist(GetEntityCoords(PlayerPedId()), x, y, z) < distance then
-    local onScreen,_x,_y=World3dToScreen2d(x,y,z)
-    SetTextScale(0.35, 0.35)
-    SetTextFont(4)
-    SetTextProportional(1)
-    SetTextColour(255, 255, 255, 215)
-    SetTextEntry("STRING")
-    SetTextCentre(1)
-    AddTextComponentString(text)
-    DrawText(_x,_y)
-    local factor = (string.len(text)) / 470
-    DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
-  end
+	if Vdist(GetEntityCoords(PlayerPedId()), x, y, z) < distance then
+		local onScreen,_x,_y=World3dToScreen2d(x,y,z)
+		SetTextScale(0.35, 0.35)
+		SetTextFont(4)
+		SetTextProportional(1)
+		SetTextColour(255, 255, 255, 215)
+		SetTextEntry("STRING")
+		SetTextCentre(1)
+		AddTextComponentString(text)
+		DrawText(_x,_y)
+		local factor = (string.len(text)) / 470
+		DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
+	end
 end
 
 function DrawTimer(beginTime, duration, x, y, text)
-    if not HasStreamedTextureDictLoaded('timerbars') then
-        RequestStreamedTextureDict('timerbars')
-        while not HasStreamedTextureDictLoaded('timerbars') do
-            Citizen.Wait(0)
-        end
-    end
+	if not HasStreamedTextureDictLoaded('timerbars') then
+		RequestStreamedTextureDict('timerbars')
+		while not HasStreamedTextureDictLoaded('timerbars') do
+			Citizen.Wait(0)
+		end
+	end
 
-    if GetTimeDifference(GetGameTimer(), beginTime) < duration then
-        w = (GetTimeDifference(GetGameTimer(), beginTime) * (0.085 / duration))
-    end
+	if GetTimeDifference(GetGameTimer(), beginTime) < duration then
+		w = (GetTimeDifference(GetGameTimer(), beginTime) * (0.085 / duration))
+	end
 
-    local correction = ((1.0 - math.floor(GetSafeZoneSize(), 2)) * 100) * 0.005
-    x, y = x - correction, y - correction
+	local correction = ((1.0 - math.floor(GetSafeZoneSize(), 2)) * 100) * 0.005
+	x, y = x - correction, y - correction
 
-    Set_2dLayer(0)
-    DrawSprite('timerbars', 'all_black_bg', x, y, 0.15, 0.0325, 0.0, 255, 255, 255, 180)
+	Set_2dLayer(0)
+	DrawSprite('timerbars', 'all_black_bg', x, y, 0.15, 0.0325, 0.0, 255, 255, 255, 180)
 
-    Set_2dLayer(1)
-    DrawRect(x + 0.0275, y, 0.085, 0.0125, 100, 0, 0, 180)
+	Set_2dLayer(1)
+	DrawRect(x + 0.0275, y, 0.085, 0.0125, 100, 0, 0, 180)
 
-    Set_2dLayer(2)
-    DrawRect(x - 0.015 + (w / 2), y, w, 0.0125, 150, 0, 0, 180)
+	Set_2dLayer(2)
+	DrawRect(x - 0.015 + (w / 2), y, w, 0.0125, 150, 0, 0, 180)
 
-    SetTextColour(255, 255, 255, 180)
-    SetTextFont(0)
-    SetTextScale(0.3, 0.3)
-    SetTextCentre(true)
-    SetTextEntry('STRING')
-    AddTextComponentString(text)
-    Set_2dLayer(3)
-    DrawText(x - 0.06, y - 0.012)
+	SetTextColour(255, 255, 255, 180)
+	SetTextFont(0)
+	SetTextScale(0.3, 0.3)
+	SetTextCentre(true)
+	SetTextEntry('STRING')
+	AddTextComponentString(text)
+	Set_2dLayer(3)
+	DrawText(x - 0.06, y - 0.012)
 end

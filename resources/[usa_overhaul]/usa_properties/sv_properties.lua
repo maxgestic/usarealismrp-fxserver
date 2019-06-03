@@ -84,7 +84,7 @@ local properties = {
 			{name = 'Room 10', coords = {397.98, 2637.14, 44.67}, heading = 31.0, voiceChannel = 710, owner = false, instance = {}, locked = true}
 		}
 	},
-	['Burton Apartments'] = { 
+	['Burton Apartments'] = {
 		location = 'Occupation Avenue, Los Santos',
 		interior = 'lowapartment',
 		type = 'apartment',
@@ -168,7 +168,7 @@ local properties = {
 			{name = 'Apartment 30', coords = {-617.00, 37.94, 43.59}, heading = 170.0, voiceChannel = 930, owner = false, instance = {}, locked = true},
 			{name = 'Apartment 31', coords = {-617.00, 37.94, 43.59}, heading = 170.0, voiceChannel = 931, owner = false, instance = {}, locked = true},
 			{name = 'Apartment 32', coords = {-617.00, 37.94, 43.59}, heading = 170.0, voiceChannel = 932, owner = false, instance = {}, locked = true}
-		}	
+		}
 	},
 	['Eclipse Towers'] = {
 		location = 'South Mo Milton Drive, Los Santos',
@@ -732,7 +732,7 @@ function RefreshProperties(source, spawnAtProperty)
 		end
 	end
 
-	-- create property for character -- 
+	-- create property for character --
 	local char = exports["usa-characters"]:GetCharacter(source)
 	if not char then return end
 	local property = char.get('property')
@@ -841,7 +841,7 @@ function GetWholeDaysFromTime(reference_time)
 end
 
 AddEventHandler('playerDropped', function()
-	-- remove a character's room if they already had one -- 
+	-- remove a character's room if they already had one --
 	for property, data in pairs(properties) do
 		if property.type ~= 'house' then
 			for i = 1, #data.rooms do
@@ -1252,7 +1252,7 @@ AddEventHandler("properties:withdrawMoney", function(location, index, amount)
 		local target_char = exports["usa-characters"]:GetCharacter(room.owner)
 		local property = target_char.get("property")
 		if property["money"] - amount >= 0 then
-			char.giveMoney(amount)
+			target_char.giveMoney(amount)
 			property["money"] = property["money"] - amount
 			target_char.set("property", property)
 			TriggerClientEvent("usa:notify", source, "Withdrawn: ~y~$" .. amount)
@@ -1499,7 +1499,7 @@ end)
 
 function find_distance(coords1, coords2)
   xdistance =  math.abs(coords1.x - coords2.x)
-  
+
   ydistance = math.abs(coords1.y - coords2.y)
 
   zdistance = math.abs(coords1.z - coords2.z)
