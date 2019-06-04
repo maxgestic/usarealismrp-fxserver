@@ -33,6 +33,28 @@ function CreateCharacter(data)
     self.inventory.currentWeight = self.inventory.currentWeight - weight
   end
 
+  self.adjustChatSuggestions = function(data)
+    TriggerClientEvent('chat:removeSuggestionAll', self.source)
+    for k,v in pairs(exports['essentialmode']:getCommands()) do
+      if v.job == "everyone" then
+        local group = exports["essentialmode"]:getPlayerFromId(self.source).getGroup()
+        if exports['essentialmode']:CanGroupTarget(group, v.group) then
+          TriggerClientEvent('chat:addSuggestion', self.source, '/' .. k, v.help, v.params)
+        end
+      else
+        local allowed = 0;
+        for k,vc in pairs(v.job) do
+          if data == vc then
+            allowed = 1
+          end
+        end
+        if allowed == 1 then
+          TriggerClientEvent('chat:addSuggestion', self.source, '/' .. k, v.help, v.params)
+        end
+      end
+    end
+  end
+
   -- public:
   local rTable = {}
 
@@ -48,6 +70,8 @@ function CreateCharacter(data)
     self[field] = data
     if field == "money" then
       TriggerClientEvent("es:setMoneyDisplay", self.source, 1, data)
+    elseif field == "job" then
+      self.adjustChatSuggestions(data)
     end
   end
 

@@ -360,7 +360,7 @@ AddEventHandler("mdt:PerformPersonCheckByName", function(data)
 			    if #criminal_history > 0 then
 			        for i = 1, #criminal_history do
 			            local crime = criminal_history[i]
-		                if (not crime.type or crime.type == "arrest") then 
+		                if (not crime.type or crime.type == "arrest") then
 		                    table.insert(person_info.criminal_history.crimes, crime)
 		                else
 		                    table.insert(person_info.criminal_history.tickets, crime)
@@ -651,7 +651,7 @@ AddEventHandler("mdt:fetchEmployee", function()
 		   type = "employeeLoaded",
 		   employee = employee
 	   }
-	TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
+	TriggerClientEvent("mdt:sendNUIMessage", source, msg)
 end)
 
 function GetRankDisplayName(rank)
