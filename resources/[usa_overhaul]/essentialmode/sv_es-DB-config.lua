@@ -5,7 +5,7 @@
 
 ip = '127.0.0.1'
 port = '5984'
-auth = "YWRtaW46YWRtaW4="
+auth = "bWluaXB1bmNoOnVzYXJycA=="
 
 -- for my test server at home
 -- auth = 'bWluaXB1bmNoOnVzYXJycA=='

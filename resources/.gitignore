@@ -1,0 +1,15 @@
+cache/
+resources/essentialmode/sv_es-DB-config.lua
+resources/ymaps
+resources/assets
+resources/sandyairfield
+resources/unmarked-police-pack
+resources/peds
+resources/guns
+resources/eventscenter
+resources/lguard2
+resources/courthouse
+resources/nw_bahamaMama
+resources/nw_comedyClub
+
+server_internal.cfg

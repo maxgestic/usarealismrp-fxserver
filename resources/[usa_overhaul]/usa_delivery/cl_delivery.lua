@@ -142,9 +142,7 @@ RegisterNetEvent('gopostal:quitJob')
 AddEventHandler('gopostal:quitJob', function()
 	if currentJob.active then
 		DeleteObject(currentJob.packageObject)
-		RemoveBlip(currentJob.blip)
 		currentJob.active = false
-		currentJob.blip = nil
 		currentJob.dropOff = nil
 		currentJob.beginCoords = nil
 		Citizen.Wait(100)
@@ -195,7 +193,7 @@ AddEventHandler('gopostal:beginJob', function()
 		RequestAnimDict('anim@heists@box_carry@')
 		while not HasAnimDictLoaded('anim@heists@box_carry@') do Citizen.Wait(100) end
 		AttachEntityToEntity(currentJob.packageObject, playerPed, GetPedBoneIndex(playerPed, 28422), 0.0, 0.0, -0.01, 0.0, 0.0, 0.0, 1, 1, 0, 1, 0, 1)
-		TriggerEvent('usa:showHelp', true, 'Place the package in the van.')
+		exports.globals:notify('Place the package in the van.')
 		while currentJob.active do
 			Citizen.Wait(0)
 			playerCoords = GetEntityCoords(playerPed)
@@ -236,25 +234,16 @@ AddEventHandler('gopostal:beginJob', function()
 		    DeleteObject(currentJob.packageObject)
 		    ClearPedTasks(playerPed)
 		    TriggerServerEvent('display:shareDisplay', 'places package in van', 2, 370, 10, 3000)
-		    TriggerEvent('usa:showHelp', true, 'Take the package to the location marked on your GPS.')
+		    exports.globals:notify('Take the package to the location marked on your GPS.')
 		    currentJob.dropOff = deliveryLocations[math.random(1, #deliveryLocations)]
-		    SetNewWaypoint(currentJob.dropOff.x, currentJob.dropOff.y)
-		    currentJob.blip = AddBlipForCoord(currentJob.dropOff.x, currentJob.dropOff.y, currentJob.dropOff.z)
-			SetBlipSprite(currentJob.blip, 478)
-			SetBlipDisplay(currentJob.blip, 2)
-			SetBlipScale(currentJob.blip, 1.2)
-			SetBlipColour(currentJob.blip, 31)
-			SetBlipAsShortRange(currentJob.blip, true)
-			BeginTextCommandSetBlipName("STRING")
-			AddTextComponentString('Delivery Location')
-			EndTextCommandSetBlipName(currentJob.blip)
+				TriggerEvent("swayam:SetWayPointWithAutoDisable", currentJob.dropOff.x, currentJob.dropOff.y, currentJob.dropOff.z, 280, 60, "GoPostal Drop Off")
 		end
 
 	    while currentJob.active do
 	    	Citizen.Wait(100)
 	    	playerCoords = GetEntityCoords(playerPed)
 	    	if Vdist(playerCoords, currentJob.dropOff.x, currentJob.dropOff.y, currentJob.dropOff.z) < 50.0 and GetVehiclePedIsIn(playerPed) == 0 then
-	    		TriggerEvent('usa:showHelp', true, 'Retrieve the package from the van.')
+	    		exports.globals:notify('Retrieve the package from the van.')
 	    		break
 	    	end
 	    	if GetVehicleEngineHealth(currentJob.vehicle) < 0 then
@@ -309,13 +298,8 @@ AddEventHandler('gopostal:beginJob', function()
 			if Vdist(playerCoords, currentJob.dropOff.x, currentJob.dropOff.y, currentJob.dropOff.z) < 0.5 then
 				DeleteObject(currentJob.packageObject)
 				ClearPedTasks(playerPed)
-				TriggerEvent('usa:showHelp', true, 'Package delivered, return to the depot for another!')
+				exports.globals:notify('Package delivered, return to the depot for another!')
 				TriggerServerEvent('gopostal:payDriver', Vdist(currentJob.beginCoords, currentJob.dropOff.x, currentJob.dropOff.y, currentJob.dropOff.z), playerCoords)
-				RemoveBlip(currentJob.blip)
-				currentJob.active = false
-				currentJob.blip = nil
-				currentJob.dropOff = nil
-				currentJob.beginCoords = nil
 				break
 			end
 			if GetVehicleEngineHealth(currentJob.vehicle) < 0 then
