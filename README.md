@@ -27,6 +27,8 @@ To get started with your own testing environment:
 6. "taxi"
 7. "tow"
 8. "reporter" (weazel news)
+9. "DAI"
+10. "gopostal"
 
 **DB Notes**
 1) ``vehicles`` database requires an index to be created on the "stored_location" field for usa-properties
@@ -49,9 +51,9 @@ To get started with your own testing environment:
 		- ``emit(doc._id, [doc.plate, doc.make, doc.model, doc.price, doc._rev]);``
 3) Must create following couch db views in a ``phoneFilters`` design doc in a ``phones`` db:
 	* **getConversationsByNumber**
-		- emit(doc._id, doc.conversations);
+		- ``emit(doc._id, doc.conversations);``
 	* **getContactsByNumber**
-		- emit(doc._id, doc.contacts);
+		- ``emit(doc._id, doc.contacts);``
 4) Must create following couch db views in a ``characterFilters`` design doc in a ``characters``:
 	* **getCharactersForSelectionBySteamID**
-		- emit(doc.created.ownerIdentifier, [doc._id, doc._rev, doc.name, doc.dateOfBirth, doc.money, doc.bank, doc.spawn, doc.created.time]);
+		- ``emit(doc.created.ownerIdentifier, [doc._id, doc._rev, doc.name, doc.dateOfBirth, doc.money, doc.bank, doc.spawn, doc.created.time]);``
