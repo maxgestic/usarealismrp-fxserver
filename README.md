@@ -29,21 +29,29 @@ To get started with your own testing environment:
 8. "reporter" (weazel news)
 
 **DB Notes**
-1. ``vehicles`` database requires an index to be created on the "stored_location" field for usa-properties
-2.  Must create following couch db views in a ``vehicleFilters`` design doc:  
-	**getMakeModelOwner**  
-	``emit(doc._id, [doc.owner, doc.make, doc.model]);``  
-	**getMakeModelPlate**  
-	``emit(doc._id, [doc.plate, doc.make, doc.model]);``  
-	**getVehicleCustomizationsByPlate**  
-	``emit(doc._id, [doc.customizations]);``  
-	**getVehicleInventoryAndCapacityByPlate** 
-	``emit(doc._id, [doc.inventory, doc.storage_capacity]);``  
-	**getVehicleInventoryByPlate**  
-	``emit(doc._id, [doc.inventory]);``  
-	**getVehiclesForGarageMenu**  
-	``emit(doc._id, [doc.plate, doc.make, doc.model, doc.impounded, doc.stored, doc.hash, doc.owner]);``  
-	**getVehiclesForMenuWithPlates**  
-	``emit(doc._id, [doc.make, doc.model, doc.price, doc.stored, doc.stored_location, doc._id]);``  
-	**getVehiclesToSellWithPlates**  
-	``emit(doc._id, [doc.plate, doc.make, doc.model, doc.price, doc._rev]);``  
+1) ``vehicles`` database requires an index to be created on the "stored_location" field for usa-properties
+2)  Must create following couch db views in a ``vehicleFilters`` design doc in a ``vehicles`` db:  
+	* **getMakeModelOwner**  
+		- ``emit(doc._id, [doc.owner, doc.make, doc.model]);``  
+	* **getMakeModelPlate**  
+		- ``emit(doc._id, [doc.plate, doc.make, doc.model]);``  
+	* **getVehicleCustomizationsByPlate**  
+		- ``emit(doc._id, [doc.customizations]);``  
+	* **getVehicleInventoryAndCapacityByPlate** 
+		- ``emit(doc._id, [doc.inventory, doc.storage_capacity]);``  
+	* **getVehicleInventoryByPlate**  
+		- ``emit(doc._id, [doc.inventory]);``  
+	* **getVehiclesForGarageMenu**  
+		- ``emit(doc._id, [doc.plate, doc.make, doc.model, doc.impounded, doc.stored, doc.hash, doc.owner]);``  
+	* **getVehiclesForMenuWithPlates**  
+		- ``emit(doc._id, [doc.make, doc.model, doc.price, doc.stored, doc.stored_location, doc._id]);``  
+	* **getVehiclesToSellWithPlates**  
+		- ``emit(doc._id, [doc.plate, doc.make, doc.model, doc.price, doc._rev]);``
+3) Must create following couch db views in a ``phoneFilters`` design doc in a ``phones`` db:
+	* **getConversationsByNumber**
+		- emit(doc._id, doc.conversations);
+	* **getContactsByNumber**
+		- emit(doc._id, doc.contacts);
+4) Must create following couch db views in a ``characterFilters`` design doc in a ``characters``:
+	* **getCharactersForSelectionBySteamID**
+		- emit(doc.created.ownerIdentifier, [doc._id, doc._rev, doc.name, doc.dateOfBirth, doc.money, doc.bank, doc.spawn, doc.created.time]);
