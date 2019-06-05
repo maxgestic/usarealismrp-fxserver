@@ -71,7 +71,10 @@ Citizen.CreateThread(function()
 		local license, steam = GetPlayerNeededIdentifiers(src)
 		local steamName = GetPlayerName(src)
 		local char = exports["usa-characters"]:GetCharacter(src)
-		local name = char.getFullName()
+		local name = "UNDEFINED"
+		if char then
+			name = char.getFullName()
+		end
 
 		if not license then
 			license = "No License Found!"

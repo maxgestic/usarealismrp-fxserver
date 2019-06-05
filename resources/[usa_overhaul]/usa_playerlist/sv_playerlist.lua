@@ -11,7 +11,7 @@ AddEventHandler('playerlist:getPlayers', function()
 		local ping = GetPlayerPing(id)
 		data = {
 			steam = GetPlayerIdentifier(id),
-			ping = GetPlayerPing(id), 
+			ping = GetPlayerPing(id),
 			id = id,
 			fullname = char.getFullName(char),
 			job = char.get('job')
@@ -31,11 +31,12 @@ end)
 
 AddEventHandler('playerDropped', function()
 	print('PLAYERLIST: Adding player to recently disconnected list!')
-	local char = exports["usa-characters"]:GetCharacter(source)
+	local usource = source
+	local char = exports["usa-characters"]:GetCharacter(usource)
 	if char then
-		recentDC[source] = {char.getFullName(), GetPlayerIdentifier(source)}
+		recentDC[usource] = {char.getFullName(), GetPlayerIdentifier(usource)}
 		Citizen.Wait(600000)
-		recentDC[source] = nil
+		recentDC[usource] = nil
 	end
 end)
 
