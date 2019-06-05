@@ -128,12 +128,12 @@ function IsValidInput(src, data)
 			return false
 		end
 	end
-	if not ContainsVowel(firstName) or (not ContainsVowel(middleName) and middleName ~= '') or not ContainsVowel(lastName) then
+	if not ContainsVowel(firstName) or not ContainsVowel(lastName) then
 		TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (2)')
 		print('Character name did not contain a vowel: '..firstName..' '..middleName..' '..lastName)
 		return false
 	end
-	if string.len(firstName) < 3 or (string.len(middleName) < 3 and middleName ~= '') or string.len(lastName) < 3 then
+	if string.len(firstName) < 3 or string.len(lastName) < 3 then
 		TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (3)')
 		print('Character name was insufficient length: '..firstName..' '..middleName..' '..lastName)
 		return false
