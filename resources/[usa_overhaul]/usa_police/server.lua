@@ -98,6 +98,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 end)
 
 TriggerEvent('es:addCommand', 'whitelist', function(source, args, char)
+  local user = exports["essentialmode"]:getPlayerFromId(source)
   local user_group = user.getGroup()
   local user_rank = 0
   local playerId = tonumber(args[2])
