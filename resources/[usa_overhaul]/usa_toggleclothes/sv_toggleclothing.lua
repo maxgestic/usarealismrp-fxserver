@@ -28,11 +28,11 @@ AddEventHandler("headprops:loadPropOrComponent", function(isProp, id)
 	local appearance = char.get("appearance")
 	if isProp then
 		if appearance.props then
-			TriggerClientEvent("headprops:cacheProp", source, id, characters[i].appearance.props[id], characters[i].appearance.propstexture[id])
+			TriggerClientEvent("headprops:cacheProp", source, id, appearance.props[id], appearance.propstexture[id])
 		end
 	else
 		if appearance.components then
-			TriggerClientEvent("headprops:cacheComponent", source, id, characters[i].appearance.components[id], characters[i].appearance.componentstexture[id])
+			TriggerClientEvent("headprops:cacheComponent", source, id, appearance.components[id], appearance.componentstexture[id])
 		end
 	end
 	return
