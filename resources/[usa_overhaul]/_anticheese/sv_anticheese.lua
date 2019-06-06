@@ -471,7 +471,7 @@ AddEventHandler('usa:ConfirmSession', function(clientPlayerTotal)
 				DropPlayer(userSource, 'You have been kicked: The server has detected you as instanced, please join back.')
 			end
 			TriggerClientEvent("usa:notify", userSource, "You may be currently instanced, please reconnect now or risk rule-breaking!")
-			TriggerEvent("usa:notifyStaff", '^3*Detected possibly instanced player!* ID #: ^0'..userSource..'^3, Name: ^0'..name '^3 -- The player has been notified!')
+			TriggerEvent("usa:notifyStaff", '^3*Detected possibly instanced player!* ID #: ^0'..userSource..'^3, Name: ^0'..name..'^3 -- The player has been notified!')
 
 		end
 	end

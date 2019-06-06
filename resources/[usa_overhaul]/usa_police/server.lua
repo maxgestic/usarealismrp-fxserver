@@ -303,7 +303,7 @@ end)
 function checkPermit(char)
   local permit = char.getItem("Firearm Permit")
   if permit then
-      return item.status
+      return permit.status
   end
   return "none"
 end
