@@ -200,8 +200,9 @@ end)
 
 RegisterServerEvent("policestation2:requestPurchase")
 AddEventHandler("policestation2:requestPurchase", function(index)
+  local usource = source
   local weapon = armoryItems[index]
-  local char = exports["usa-characters"]:GetCharacter(source)
+  local char = exports["usa-characters"]:GetCharacter(usource)
   local permit_status = checkPermit(char)
   if permit_status == "valid" then
     if char.canHoldItem(weapon) then
@@ -221,7 +222,7 @@ AddEventHandler("policestation2:requestPurchase", function(index)
         weaponDB.issueDate = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year
         char.giveItem(weapon, 1)
         char.removeMoney(armoryItems[index].price)
-        TriggerClientEvent("mini:equipWeapon", usource, usource, armoryItems[index].hash) -- equip
+        TriggerClientEvent("mini:equipWeapon", usource, armoryItems[index].hash) -- equip
         TriggerClientEvent('usa:notify', usource, 'Purchased: ~y~'..weapon.name..'\n~s~Serial Number: ~y~'..weapon.serialNumber..'\n~s~Price: ~y~$'..armoryItems[index].price)
         TriggerEvent('es:exposeDBFunctions', function(couchdb)
           couchdb.createDocumentWithId("legalweapons", weaponDB, weaponDB.serialNumber, function(success)
@@ -233,10 +234,10 @@ AddEventHandler("policestation2:requestPurchase", function(index)
           end)
         end)
       else
-        TriggerClientEvent("usa:notify", source, "Not enough money!")
+        TriggerClientEvent("usa:notify", usource, "Not enough money!")
       end
     else
-      TriggerClientEvent("usa:notify", source, "Inventory is full!")
+      TriggerClientEvent("usa:notify", usource, "Inventory is full!")
     end
   elseif permit_status == "suspended" then
     TriggerClientEvent("usa:notify", usource, "Your permit is suspended!")

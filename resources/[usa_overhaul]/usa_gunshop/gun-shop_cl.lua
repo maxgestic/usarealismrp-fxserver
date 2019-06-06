@@ -18,7 +18,7 @@ local locations = {
 	{ x=810.37, y=-2158.36, z=29.81 }
 }
 
-local purchasedWeapons = 0 
+local purchasedWeapons = 0
 
 ----------------------
 ---- Set up blips ----
@@ -172,7 +172,7 @@ Citizen.CreateThread(function()
 end)
 
 RegisterNetEvent("mini:equipWeapon")
-AddEventHandler("mini:equipWeapon", function(source, hash, name)
+AddEventHandler("mini:equipWeapon", function(hash, name)
 	local playerPed = GetPlayerPed(-1)
 	if hash ~= GetHashKey("GADGET_PARACHUTE") then	--Dont auto equip parachutes from gunstore
 		GiveWeaponToPed(playerPed, hash, 60, false, true)
