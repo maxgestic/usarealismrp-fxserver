@@ -51,7 +51,7 @@ mainMenu = NativeUI.CreateMenu("Black Market", "~b~What are you looking for?", 0
 _menuPool:Add(mainMenu)
 
 RegisterNetEvent("blackMarket:equipWeapon")
-AddEventHandler("blackMarket:equipWeapon", function(source, hash, name)
+AddEventHandler("blackMarket:equipWeapon", function(hash, name)
 	local playerPed = GetPlayerPed(-1)
 	GiveWeaponToPed(playerPed, hash, 60, false, true)
 end)
