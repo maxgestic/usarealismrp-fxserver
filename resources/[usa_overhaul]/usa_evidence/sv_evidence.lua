@@ -68,7 +68,7 @@ RegisterServerEvent('evidence:returnDNA')
 AddEventHandler('evidence:returnDNA', function(targetSource)
 	local target = exports["usa-characters"]:GetCharacter(targetSource)
 	local targetEncoded = enc(target.get("_id"))
-	TriggerClientEvent('chatMessage', source, '^3^*[DNA SAMPLE]^r ^7Sample of ^3'..targetName..'^7 returns value: ^3'..targetEncoded..'^7.')
+	TriggerClientEvent('chatMessage', source, '^3^*[DNA SAMPLE]^r ^7Sample of ^3'..target.getName()..'^7 returns value: ^3'..targetEncoded..'^7.')
 end)
 
 RegisterServerEvent('evidence:breathalyzePlayer')
@@ -90,7 +90,7 @@ end)
 -- GSR test --
 TriggerEvent('es:addJobCommand', 'gsr', { "police", "sheriff", "dai" }, function(source, args, char)
 	TriggerClientEvent("evidence:gsrNearest", source)
-end, { 
+end, {
 	help = "gun shot residue test the nearest person"
 })
 
@@ -205,7 +205,7 @@ local b='abcdefghijklmnopqrstuvwxyz10'
 
 -- encoding
 function enc(data)
-  return ((data:gsub('.', function(x) 
+  return ((data:gsub('.', function(x)
     local r,b='',x:byte()
     for i=8,1,-1 do r=r..(b%2^i-b%2^(i-1)>0 and '1' or '0') end
     return r;
@@ -242,7 +242,7 @@ end
 
 function find_distance(coords1, coords2)
   xdistance =  math.abs(coords1.x - coords2.x)
-  
+
   ydistance = math.abs(coords1.y - coords2.y)
 
   zdistance = math.abs(coords1.z - coords2.z)
