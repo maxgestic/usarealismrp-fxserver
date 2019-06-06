@@ -76,21 +76,21 @@ function CreateCharacter(data)
   end
 
   rTable.giveMoney = function(amount)
-    self.money = self.money + amount
+    self.money = self.money + tonumber(amount)
     TriggerClientEvent("es:setMoneyDisplay", self.source, 1, self.money)
   end
 
   rTable.removeMoney = function(amount)
-    self.money = self.money - amount
+    self.money = self.money - tonumber(amount)
     TriggerClientEvent("es:setMoneyDisplay", self.source, 1, self.money)
   end
 
   rTable.giveBank = function(amount)
-    self.bank = self.bank + amount
+    self.bank = self.bank + tonumber(amount)
   end
 
   rTable.removeBank = function(amount)
-    self.bank = self.bank - amount
+    self.bank = self.bank - tonumber(amount)
   end
 
   rTable.getName = function()
