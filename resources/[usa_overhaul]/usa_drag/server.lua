@@ -6,20 +6,20 @@ TriggerEvent('es:addCommand', 'drag', function(source, args, char)
 		local job = char.get("job")
 		local group = user.getGroup()
 		if job == "corrections" or job == "sheriff" or job == "cop" or job == "ems" or job == "fire" or job == "dai" or group == "mod" or group == "admin" or group == "superadmin" or group == "owner" then
-			if tonumber(args[2]) ~= usource and not draggedPlayers[usource] then
-				draggedPlayers[usource] = tonumber(args[2])
-				TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), usource)
-			elseif draggedPlayers[usource] == tonumber(args[2]) then
-				draggedPlayers[usource] = nil
-				TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), usource)
+			if tonumber(args[2]) ~= usource and not draggedPlayers[source] then
+				draggedPlayers[source] = tonumber(args[2])
+				TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), source)
+			elseif draggedPlayers[source] == tonumber(args[2]) then
+				draggedPlayers[source] = nil
+				TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), source)
 			else
-				TriggerClientEvent('usa:notify', usource, 'You cannot drag yourself, or are already dragging a person!')
+				TriggerClientEvent('usa:notify', source, 'You cannot drag yourself, or are already dragging a person!')
 			end
 		else
 			TriggerClientEvent('usa:showHelp', source, true, 'You may use /carry to carry another person.')
 		end
 	else
-		TriggerClientEvent("drag:attemptToDragNearest", usource)
+		TriggerClientEvent("drag:attemptToDragNearest", source)
 	end
 end, {help = "Drag a tied up or handcuffed player."})
 
@@ -29,13 +29,13 @@ end, {help = "Carry a player."})
 
 RegisterServerEvent('drag:toggleDragAction')
 AddEventHandler('drag:toggleDragAction', function(_source, toggleOn)
-	local sourceToToggle = _source	
+	local sourceToToggle = _source
 	TriggerClientEvent('drag:toggleDragAction', sourceToToggle, toggleOn, source)
 end)
 
 RegisterServerEvent('drag:toggleCarryAction')
 AddEventHandler('drag:toggleCarryAction', function(_source, toggleOn)
-	local sourceToToggle = _source	
+	local sourceToToggle = _source
 	TriggerClientEvent('drag:toggleCarryAction', sourceToToggle, toggleOn, source)
 end)
 
@@ -79,4 +79,3 @@ AddEventHandler('playerDropped', function()
 		draggedPlayers[source] = nil
 	end
 end)
-
