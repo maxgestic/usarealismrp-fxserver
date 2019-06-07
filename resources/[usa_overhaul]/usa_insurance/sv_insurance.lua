@@ -4,7 +4,7 @@ local PERCENTAGE = 0.02
 
 RegisterServerEvent("insurance:buyInsurance")
 AddEventHandler("insurance:buyInsurance", function(userSource)
-	if source then return end -- prevent malicious LUA injuection
+	-- if source then return end -- prevent malicious LUA injuection
 	local char = exports["usa-characters"]:GetCharacter(userSource)
 	local insurance = char.get("insurance")
 	local money = char.get("money")
@@ -54,7 +54,7 @@ AddEventHandler("insurance:loadVehicles", function(check_insurance)
 	local char = exports["usa-characters"]:GetCharacter(_source)
 	if check_insurance then
 		local insurance = char.get("insurance")
-		if user_insurance.type == "auto" then
+		if insurance.type == "auto" then
 			local vehicles = char.get("vehicles")
 			local endpoint = "/vehicles/_design/vehicleFilters/_view/getVehiclesForMenuWithPlates"
 			local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint

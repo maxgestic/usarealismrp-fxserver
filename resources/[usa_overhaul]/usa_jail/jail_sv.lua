@@ -104,11 +104,11 @@ function jailPlayer(data, officerName, gender)
 		type = "arrest",
 		number = 'A'..math.random(10000000, 99999999)
 	}
-	
+
 	table.insert(playerCriminalHistory, record)
 	inmate.set("criminalHistory", playerCriminalHistory)
 	TriggerEvent("warrants:removeAnyActiveWarrants", inmate_name)
-	
+
 	local suspensions = ""
 	if GetDLSuspensionDays(reason) > 0 then
 		TriggerEvent("dmv:setLicenseStatus", "suspended", targetPlayer, GetDLSuspensionDays(reason))
@@ -163,7 +163,7 @@ end)
 function GetFPRevoked(charges) -- firearm permit
 	local numbers = {
 		'2003', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2017', '2019', '2020',
-		'2103', '2104', 
+		'2103', '2104',
 		'2201', '2202', '2203', '2204', '2205', '2206',
 		'2301', '2303', '2304', '2307', '2309',
 		'2401', '2403', '2409', '2410', '2411', '2421',
@@ -208,7 +208,7 @@ function jailStatusLoop()
 			if jailtime > 0 then
 				char.set("jailtime", jailtime - 1)
 				TriggerClientEvent("jail:release", tonumber(id), char.get("appearance"))
-				exports["globals"]:notifyPlayersWithJob("corrections", "^3CORRECTIONS:^0 " .. chars[i].firstName .. " " .. chars[i].lastName .. " has been released.")
+				exports["globals"]:notifyPlayersWithJob("corrections", "^3CORRECTIONS:^0 " .. char.getName() .. " has been released.")
 				break
 			end
 		end
