@@ -100,8 +100,6 @@ AddEventHandler('bank:withdraw', function(amount)
    	end
 end)
 
-local awaitingGiveCash = {}
-
 -- Give Cash
 TriggerEvent('es:addCommand', 'givecash', function(source, args, user)
 	local fromPlayer
@@ -111,11 +109,10 @@ TriggerEvent('es:addCommand', 'givecash', function(source, args, user)
 		fromPlayer = tonumber(source)
 		toPlayer = tonumber(args[2])
 		local char = exports["usa-characters"]:GetCharacter(toPlayer)
-		if toUser then
-			local to_user_name = toUser.getActiveCharacterData("fullName")
-			amount = round(tonumber(args[3]), 0)
-			awaitingGiveCash[source] = toPlayer
-			TriggerClientEvent('bank:givecash', source, toPlayer, amount, from_user_name, source)
+		if char then
+			local to_user_name = char.getFullName()
+			amount = math.ceil(tonumber(args[3]))
+			TriggerClientEvent('bank:givecash', source, toPlayer, amount, "test", source)
 		end
 	else
 		TriggerClientEvent('usa:notify', fromPlayer, "~y~Usage: ~s~givecash <id> <amount>")
@@ -155,13 +152,17 @@ end)
 
 RegisterServerEvent('bank:givecash')
 AddEventHandler('bank:givecash', function(toPlayer, amount)
-	local char = exports["usa-characters"]:GetCharacter(target)
-	local recipient = exports["essentialmode"]:getPlayerFromId(toPlayer)
-	if source ~= toPlayer and GetPlayerName(toPlayer) and awaitingGiveCash[source] == toPlayer then
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local recipient = exports["usa-characters"]:GetCharacter(toPlayer)
+	if GetPlayerName(toPlayer) then
 		local from_money = char.get("money")
 		if (tonumber(from_money) >= tonumber(amount)) then
 			char.removeMoney(amount)
 			recipient.giveMoney(amount)
+			TriggerClientEvent('usa:notify', source, "You've given " .. recipient.getName() .. " $" .. comma_value(amount))
+			TriggerClientEvent('chatMessage', source, "", {}, "You've given " .. recipient.getName() .. " $" .. comma_value(amount))
+			TriggerClientEvent('usa:notify', toPlayer, recipient.getName() .. " has given you $" .. comma_value(amount))
+			TriggerClientEvent('chatMessage', toPlayer, "", {}, recipient.getName() .. " has given you $" .. comma_value(amount))
 		else
 			if (tonumber(from_money) < tonumber(amount)) then
 				TriggerClientEvent('usa:notify', toPlayer, "You do not have enough cash!")
@@ -170,11 +171,6 @@ AddEventHandler('bank:givecash', function(toPlayer, amount)
 	else
 		TriggerClientEvent('usa:notify', toPlayer, "Player not found!")
 	end
-end)
-
-RegisterServerEvent("bank:cancelGiveCash")
-AddEventHandler("bank:cancelGiveCash", function()
-	awaitingGiveCash[source] = nil
 end)
 
 RegisterServerEvent("bank:showBankBalance")
