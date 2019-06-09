@@ -35,12 +35,13 @@ AddEventHandler("business:lease", function(name)
       TriggerClientEvent("usa:notify", usource, "~y~Owner:~w~ " .. business.owner.name.full)
     else
       local char = exports["usa-characters"]:GetCharacter(usource)
-      if char.get("money") >= BUSINESSES[name].price then
-        char.removeMoney(BUSINESSES[name].price)
-        -- create new doc --
-        CreateNewBusiness(usource, name, function()
+      if char.get("money") >= BUSINESSES[name].price then -- if has enough cash
+        char.removeMoney(BUSINESSES[name].price) -- take money
+        CreateNewBusiness(usource, name, function() -- create doc
           TriggerClientEvent("usa:notify", usource, "You now own: " .. name .. "!")
         end)
+      else
+        TriggerClientEvent("usa:notify", usource, "You need $" .. comma_value(BUSINESSES[name].price) .. " to lease this business.")
       end
     end
   end)
