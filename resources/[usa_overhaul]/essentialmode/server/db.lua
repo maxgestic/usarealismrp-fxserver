@@ -238,22 +238,14 @@ function exposedDB.createDocument(db, rows, cb)
 end
 
 function exposedDB.createDocumentWithId(db, rows, docid, cb)
-	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/_uuids", function(err, rText, headers)
-		local id
-		if not docid then
-			id = json.decode(rText).uuids[1]
+	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. docid, function(err, rText, headers)
+		rText = json.decode(rText)
+		if rText.ok then
+			cb(true)
 		else
-			id = docid
+			cb(false)
 		end
-		PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. id, function(err, rText, headers)
-			rText = json.decode(rText)
-			if rText.ok then
-				cb(true)
-			else
-				cb(false)
-			end
-		end, "PUT", json.encode(rows), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
-	end, "GET", "", {Authorization = "Basic " .. auth})
+	end, "PUT", json.encode(rows), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end
 
 --[[

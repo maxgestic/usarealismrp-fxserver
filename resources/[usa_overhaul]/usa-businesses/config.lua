@@ -67,7 +67,8 @@ BUSINESSES = {
 		position = {1699.34, 4921.74, 42.06},
 		cameraID = 'store10',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2000
 	},
 	["247 Supermarket (Ineseno Rd.)"] = {
 		position = {-3041.47, 583.62, 7.90},
@@ -145,6 +146,7 @@ BUSINESSES = {
 		position = {1984.26, 3049.39, 47.21},
 		cameraID = 'store23',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 1500
 	}
 }

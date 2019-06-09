@@ -20,10 +20,15 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		if IsControlJustPressed(0, KEYS.E) then
-      local closestStore = GetClosestStore(1.5)
-      if closestStore then
-        TriggerServerEvent("business:tryOpenMenu", closestStore)
-      end
+			local closestStore = GetClosestStore(1.5)
+			if closestStore then
+				Wait(500)
+				if IsControlPressed(0, KEYS.E) then
+					TriggerServerEvent("business:lease", closestStore)
+	      else
+	        TriggerServerEvent("business:tryOpenMenuByName", closestStore)
+				end
+			end
 		end
     Wait(0)
 	end
@@ -52,3 +57,8 @@ function GetClosestStore(range)
   end
   return nil
 end
+
+RegisterNetEvent("business:showMenu")
+AddEventHandler("business:showMenu", function(business)
+
+end)
