@@ -1,5 +1,16 @@
 exports["globals"]:PerformDBCheck("usa-businesses", "businesses", nil)
 
+RegisterServerEvent("business:storeMoney")
+AddEventHandler("business:storeMoney", function(name, amount)
+  amount = math.abs(amount)
+  local char = exports["usa-characters"]:GetCharacter(source)
+  if char.get("money") >= amount then
+    GivePropertyMoney(name, amount, function(success)
+      TriggerClientEvent("usa:notify", usource, "Deposited: $" .. comma_value(amount))
+    end)
+  end
+end)
+
 RegisterServerEvent("business:tryOpenMenuByName")
 AddEventHandler("business:tryOpenMenuByName", function(name)
   local usource = source
@@ -9,7 +20,8 @@ AddEventHandler("business:tryOpenMenuByName", function(name)
     if business then
       if business.owner.identifiers.id == id then
         -- this player was the owner of this business --
-        TriggerClientEvent("business:showMenu", usource, business)
+        local inv = FormatInventory(char.get("inventory"))
+        TriggerClientEvent("business:showMenu", usource, business, inv)
       else
         -- this player is not the owner of this business --
         TriggerClientEvent("business:notOwner", usource, business)
@@ -47,6 +59,44 @@ AddEventHandler("business:lease", function(name)
   end)
 end)
 
+function FormatInventory(charInv)
+  local inv = {}
+  for i = 0, charInv.MAX_CAPACITY - 1 do
+    if charInv.items[tostring(i)] then
+      table.insert(inv, charInv.items[tostring(i)])
+    end
+  end
+  return inv
+end
+
+function GivePropertyMoney(name, amount, cb)
+  -- get money --
+  local endpoint = "/businesses/_design/businessFilters/_view/getBusinessStorage"
+  local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+  PerformHttpRequest(url, function(err, responseText, headers)
+    if err == 404 then
+      return
+    end
+    local data = json.decode(responseText)
+    if data.total_rows > 0 then
+      if data.rows then
+        for i = 1, #data.rows do
+          local storage = data.rows[i].value
+          storage.cash = storage.cash + amount
+          -- set money --
+          TriggerEvent("es:exposeDBFunctions", function(db)
+            db.updateDocument("businesses", RemoveSpaces(name),  { storage = storage}, function(err)
+              cb(true)
+            end)
+          end)
+        end
+      end
+    end
+  end, "POST", json.encode({
+    keys = { RemoveSpaces(name) }
+  }), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+end
+
 function CreateNewBusiness(src, name, cb)
   local owner = exports["usa-characters"]:GetCharacter(src)
   TriggerEvent('es:exposeDBFunctions', function(db)
@@ -67,6 +117,16 @@ function CreateNewBusiness(src, name, cb)
     }
     business.purchase = {
       time = os.time()
+    }
+    local today = os.date("*t", os.time())
+    local leaseEndTime = os.time({day = today.day + LEASE_PERIOD_DAYS, month = today.month, year = today.year}) -- todo: need to make sure 2 week date is calculated correctly,,
+    business.fee = {
+      price = BUSINESSES[name].price,
+      paidAt = os.time(),
+      due = {
+        time = leaseEndTime,
+        date = os.date("%x", leaseEndTime)
+      }
     }
     db.createDocumentWithId("businesses", business, RemoveSpaces(name), function(success)
       if success then

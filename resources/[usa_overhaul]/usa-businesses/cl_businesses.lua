@@ -38,8 +38,8 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		for name, data in pairs(BUSINESSES) do
-			local x, y, z = table.unpack(data.position)
-			DrawText3D(x, y, z, 4, '[E] - Open | [HOLD K] - Rob')
+			local pos = data.position
+			DrawText3D(pos[1], pos[2], pos[3], 4, '[E] - Open | [HOLD K] - Rob')
 		end
     Wait(0)
   end
@@ -50,15 +50,10 @@ function GetClosestStore(range)
   local playerPed = PlayerPedId()
   local playerCoords = GetEntityCoords(playerPed)
   for name, data in pairs(BUSINESSES)do
-    local x, y, z = table.unpack(data.position)
-    if Vdist(playerCoords, x, y, z) < range then
+    local pos = data.position
+    if Vdist(playerCoords, pos[1], pos[2], pos[3]) < range then
       return name
     end
   end
   return nil
 end
-
-RegisterNetEvent("business:showMenu")
-AddEventHandler("business:showMenu", function(business)
-
-end)

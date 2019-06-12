@@ -3,6 +3,8 @@ policeNeededForBonus = 4
 robberyCooldown = 2100
 rewardRange = {350, 450}
 
+LEASE_PERIOD_DAYS = 14
+
 KEYS ={
 	K = 311,
 	E = 38
