@@ -64,6 +64,8 @@ AddEventHandler("business:showMenu", function(business, charInv)
             amount = math.floor(amount, 0)
             if ( amount > 0 ) then
               TriggerServerEvent("business:storeMoney", business.name, amount)
+            else
+              exports.globals:notify("Please enter an amount greater than 0")
             end
             break
           else
@@ -98,6 +100,8 @@ AddEventHandler("business:showMenu", function(business, charInv)
             amount = math.floor(amount, 0)
             if ( amount > 0 ) then
               TriggerServerEvent("business:withdraw", business.name, amount, nil, true)
+            else
+              exports.globals:notify("Please enter an amount greater than 0")
             end
             break
           else

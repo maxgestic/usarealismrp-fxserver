@@ -311,7 +311,7 @@ Citizen.CreateThread(function()
     local isCloseToAny = false
     for i = 1, #locations do
       local dist = GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,true)
-      if dist < 5.0 then
+      if dist < 2.0 then
         DrawText3D(locations[i].x,locations[i].y,locations[i].z, '[E] - Weapon Extras')
         closest_shop = locations[i]
         isCloseToAny = true
