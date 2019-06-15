@@ -42,7 +42,7 @@ AddEventHandler("gunShop:requestPurchase", function(category, index)
   local usource = source
   local weapon = sv_storeWeapons[category][index]
   local char = exports["usa-characters"]:GetCharacter(usource)
-  local permit_status = checkPermit(user)
+  local permit_status = checkPermit(char)
   if permit_status == "valid" then
     local money = char.get("money")
     if money - sv_storeWeapons[category][index].price >= 0 then
