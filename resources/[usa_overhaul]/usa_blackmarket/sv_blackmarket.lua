@@ -34,7 +34,7 @@ AddEventHandler("blackMarket:requestPurchase", function(key, itemIndex)
   local weapon = markets[key]['items'][itemIndex]
   if weapon.stock > 0 then
     weapon.uuid = math.random(999999999)
-    if weapon.canHoldItem(weapon) then
+    if char.canHoldItem(weapon) then
       if weapon.type == "weapon" then
         local weapons = char.getWeapons()
         if #weapons < MAX_PLAYER_WEAPON_SLOTS then
@@ -42,7 +42,7 @@ AddEventHandler("blackMarket:requestPurchase", function(key, itemIndex)
             char.giveItem(weapon, 1)
             char.removeMoney(weapon.price)
             if weapon.type == "weapon" then
-              TriggerClientEvent("blackMarket:equipWeapon", source, source, weapon.hash, weapon.name) -- equip
+              TriggerClientEvent("blackMarket:equipWeapon", source, weapon.hash, weapon.name) -- equip
             end
             TriggerClientEvent("usa:notify", source, "Purchased: ~y~"..weapon.name..'\n~s~Price: ~y~$'..weapon.price..'.00')
             markets[key]['items'][itemIndex].stock = weapon.stock - 1

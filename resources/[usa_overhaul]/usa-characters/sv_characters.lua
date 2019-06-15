@@ -121,8 +121,9 @@ function InitializeCharacter(src, characterID, doSpawnAtProperty)
   TriggerEvent('es:exposeDBFunctions', function(db)
     db.getDocument("characters", characterID, function(charData)
       charData.source = src
-      local character = CreateCharacter(charData)
-      CHARACTERS[src] = character -- Create character object in memory
+      local character = CreateCharacter(charData) -- Create character object in memory
+      character.set("job", "civ")
+      CHARACTERS[src] = character
 			TriggerClientEvent("character:setCharacter", src, character, character.getWeapons()) -- load character
 			TriggerEvent("police:checkSuspension", character) -- check dmv / firearm permit license status
       TriggerEvent("properties:loadCharacter", src, doSpawnAtProperty) -- ?

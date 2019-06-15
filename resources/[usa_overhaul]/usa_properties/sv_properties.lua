@@ -1108,6 +1108,14 @@ end)
 
 RegisterServerEvent('properties:requestExit')
 AddEventHandler('properties:requestExit', function(location, index, noTp)
+	if not properties[location] then
+		print("PROPERTIES: error getting property in properties:requestExit")
+		return
+	end
+	if not properties[location].rooms then
+		print("PROPERTIES: error getting property in properties:requestExit")
+		return
+	end
 	local room = properties[location].rooms[index]
 	for i = 1, #room.instance do
 		if source == room.instance[i] then

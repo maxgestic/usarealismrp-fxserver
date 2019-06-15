@@ -190,7 +190,7 @@ AddEventHandler('911:ShotsFired', function(x, y, z, street, area, isMale)
 		recentcalls[area] = 'ShotsFired'
 		local time = math.random(2000, 5000)
 		Citizen.Wait(time)
-		local string = '^*Shots Fired:^r '..street..' ^*^1^*|^r ^*Suspect:^r '..Gender(isMale) 
+		local string = '^*Shots Fired:^r '..street..' ^*^1^*|^r ^*Suspect:^r '..Gender(isMale)
 		Send911Notification('sheriff', string, x, y, z, 'Shots Fired')
         SendWeazelNewsAlert('Report of ^3shots fired^r at ^3'..street..'^r, see what\'s going on!', x, y, z, 'Shots Fired')
 		Citizen.Wait(30000)
@@ -264,7 +264,7 @@ AddEventHandler('911:RecklessDriving', function(x, y, z, street, area, vehicle, 
 		Citizen.Wait(45000)
 		recentcalls[area] = nil
 	end
-end)	
+end)
 
 AddEventHandler('911:VehicleTheft', function(x, y, z, street, vehicle, plate, isMale, primaryColor, secondaryColor)
 	if recentcalls[street] ~= 'VehicleTheft' then
@@ -414,11 +414,12 @@ AddEventHandler('911:Robbery', function(x, y, z, name, isMale, camID)
 end)
 
 AddEventHandler('911:PlayerCall', function(x, y, z, street, text)
-    local char = exports["usa-characters"]:GetCharacter(source)
-    local time = math.random(1000, 3000)
-    Citizen.Wait(time)
-    local string = '^*Caller:^r '..char.getFullName()..' ['..source..'] ^1^*|^r ^*Location:^r '..street..' ^1^*|^r ^*Call Info:^r '..text
-    Send911Notification(false, string, x, y, z, 'Player Call')
+  local usource = source
+  local char = exports["usa-characters"]:GetCharacter(usource)
+  local time = math.random(1000, 3000)
+  Citizen.Wait(time)
+  local string = '^*Caller:^r '..char.getFullName()..' ['..usource..'] ^1^*|^r ^*Location:^r '..street..' ^1^*|^r ^*Call Info:^r '..text
+  Send911Notification(false, string, x, y, z, 'Player Call')
 end)
 
 AddEventHandler('911:BankRobbery', function(x, y, z, street, text)

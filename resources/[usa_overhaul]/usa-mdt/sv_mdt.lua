@@ -146,17 +146,17 @@ AddEventHandler("mdt:updatePhoto", function(url, fname, lname, dob)
 	print("Saving mugshot photo for " .. fname ..  " " .. lname .. "(" .. dob .. ") with url: " .. url)
 	TriggerEvent('es:exposeDBFunctions', function(couchdb)
 		local query = {
-			["$elemMatch"] = {
-				--["firstName"] = data.fname,
-				--["lastName"] = data.lname
-				["firstName"] = {
+			--["firstName"] = data.fname,
+			--["lastName"] = data.lname
+			["name"] = {
+				["first"] = {
 					["$regex"] = "(?i)" .. fname
 				},
-				["lastName"] = {
+				["last"] = {
 					["$regex"] = "(?i)" .. lname
-				},
-				["dateOfBirth"] = dob
-			}
+				}
+			},
+			["dateOfBirth"] = dob
 		}
 		local fields = {
 			"_id",
@@ -164,14 +164,14 @@ AddEventHandler("mdt:updatePhoto", function(url, fname, lname, dob)
 		couchdb.getSpecificFieldFromDocumentByRows("characters", query, fields, function(doc)
 			if doc then
 				print(fname .. " " .. lname .. " found in DB search!")
-				db.updateDocument("characters", doc._id, {mugshot = url}, function()
+				couchdb.updateDocument("characters", doc._id, {mugshot = url}, function()
 					print("Mugshot updated in DB! Attempting to update player obj if online...")
 					--------------------------------------------------
 					-- update any online players user object --
 					--------------------------------------------------
 					local players = exports["usa-characters"]:GetCharacters()
 					for id, user in pairs(players) do
-						if user.getName() == (doc.characters[i].firstName .. " " .. doc.characters[i].lastName) and user.get("dateOfBirth") == dob then
+						if user.getName() == (fname .. " " .. lname) and user.get("dateOfBirth") == dob then
 							user.set("mugshot", url)
 							print("Online player's mugshot updated!")
 							break
@@ -193,7 +193,7 @@ end)
 RegisterServerEvent("mdt:PerformPersonCheckBySSN")
 AddEventHandler("mdt:PerformPersonCheckBySSN", function(ssn)
     local char = exports["usa-characters"]:GetCharacter(ssn)
-    if not person then
+    if not char then
         local msg = {
             type = "error",
             message  = "No person found with that SSN!"
@@ -202,21 +202,21 @@ AddEventHandler("mdt:PerformPersonCheckBySSN", function(ssn)
         return
     end
     -- values have to be false by default to work with UI --
-    local n = person.get("name")
+    local n = char.get("name")
     local person_info  = {
-        ssn = ssn,
-        --name = person.getActiveCharacterData("fullName"),
-		fname = firstToUpper(n.first),
-		lname = firstToUpper(n.last),
-		dob = char.get("dateOfBirth"),
-		address = false,
-        licenses = {},
-        insurance = false,
-        criminal_history = {
-            crimes = {},
-            tickets = {}
-        },
-		mugshot = "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg" -- generic place holder img
+      ssn = ssn,
+      --name = person.getActiveCharacterData("fullName"),
+			fname = firstToUpper(n.first),
+			lname = firstToUpper(n.last),
+			dob = char.get("dateOfBirth"),
+			address = false,
+      licenses = {},
+      insurance = false,
+      criminal_history = {
+        crimes = {},
+        tickets = {}
+    	},
+			mugshot = "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg" -- generic place holder img
     }
 	--------------------
 	-- get mugshot --
@@ -232,149 +232,142 @@ AddEventHandler("mdt:PerformPersonCheckBySSN", function(ssn)
 		person_info.address = address
 	end)
 
-    --------------------
-    -- get licenses --
-    --------------------
-    local licenses = char.getLicenses()
-    if #licenses > 0 then
-        for i = 1, #licenses do
-            local license = licenses[i]
-            table.insert(person_info.licenses, license)
-        end
-        if #person_info.licenses <= 0 then
-            person_info.licenses = false
-        end
-    else
-    	licenses = false
-    end
+  --------------------
+  -- get licenses --
+  --------------------
+  local licenses = char.getLicenses()
+  if #licenses > 0 then
+    person_info.licenses = licenses
+  else
+  	person_info.licenses = false
+  end
 
-    ---------------------
-    -- get insurance --
-    ---------------------
-    local insurance = char.get("insurance")
-    if insurance.planName then
-        person_info.insurance = insurance
-    end
+  ---------------------
+  -- get insurance --
+  ---------------------
+  local insurance = char.get("insurance")
+  if insurance.planName then
+      person_info.insurance = insurance
+  end
 
-    -----------------------------
-    -- get criminal history --
-    -----------------------------
-    local criminal_history = person.get("criminalHistory")
-    if #criminal_history > 0 then
-        for i = 1, #criminal_history do
-            local crime = criminal_history[i]
-            if (not crime.type or crime.type == "arrest") then
-                table.insert(person_info.criminal_history.crimes, crime)
-            else
-                table.insert(person_info.criminal_history.tickets, crime)
-            end
-        end
-        if #person_info.criminal_history.crimes <= 0 then
-            person_info.criminal_history.crimes = false
-        end
-        if #person_info.criminal_history.tickets <= 0 then
-            person_info.criminal_history.tickets = false
-        end
-    end
-    TriggerClientEvent("mdt:performPersonCheck", source, person_info)
+  -----------------------------
+  -- get criminal history --
+  -----------------------------
+  local criminal_history = char.get("criminalHistory")
+  if #criminal_history > 0 then
+      for i = 1, #criminal_history do
+          local crime = criminal_history[i]
+          if (not crime.type or crime.type == "arrest") then
+              table.insert(person_info.criminal_history.crimes, crime)
+          else
+              table.insert(person_info.criminal_history.tickets, crime)
+          end
+      end
+      if #person_info.criminal_history.crimes <= 0 then
+          person_info.criminal_history.crimes = false
+      end
+      if #person_info.criminal_history.tickets <= 0 then
+          person_info.criminal_history.tickets = false
+      end
+  end
+  TriggerClientEvent("mdt:performPersonCheck", source, person_info)
 
 end)
+
+function GetLicensesFromInventory(inv)
+	local licenses = {}
+	for i = 0, inv.MAX_CAPACITY - 1 do
+		local item = inv.items[tostring(i)]
+		if item then
+			if item.type == "license" then
+				table.insert(licenses, item)
+			end
+		end
+	end
+	return licenses
+end
 
 RegisterServerEvent("mdt:PerformPersonCheckByName")
 AddEventHandler("mdt:PerformPersonCheckByName", function(data)
 	local usource = source
 	TriggerEvent('es:exposeDBFunctions', function(db)
 		local query = {
-			["firstName"] = {
-				["$regex"] = "(?i)" .. data.fname
-			},
-			["lastName"] = {
-				["$regex"] = "(?i)" .. data.lname
-			},
-			["dateOfBirth"] = {
-				["$regex"] = "(?i)" .. data.dob
+			["name"] = {
+				["first"] = {
+					["$regex"] = "(?i)" .. data.fname
+				},
+				["last"] = {
+					["$regex"] = "(?i)" .. data.lname
+				}
 			}
 		}
 		db.getDocumentByRows("characters", query, function(doc)
 			if doc then
-				print(data.fname .. " " .. data.lname .. " (" .. data.dob .. ") found in DB search!")
+				print(data.fname .. " " .. data.lname .. " found in DB search!")
 				local person = doc
-			    -- values have to be false by default to work with UI --
-			    local person_info  = {
-			      	ssn = ssn,
+				-- values have to be false by default to work with UI --
+				local person_info  = {
+					ssn = ssn,
 					fname = firstToUpper(person.name.first),
 					lname = firstToUpper(person.name.last),
 					dob = person.dateOfBirth,
-			        drivers_license = false,
-			        firearm_permit = false,
-			        insurance = false,
-			        criminal_history = {
-		            crimes = {},
-		            tickets = {}
-			    },
+					drivers_license = false,
+					firearm_permit = false,
+					insurance = false,
+					criminal_history = {
+						crimes = {},
+						tickets = {}
+					},
 					mugshot = "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg" -- generic placeholder img
-			    }
+				}
 				---------------------
 				-- get mug shot --
 				---------------------
 				if person.mugshot then
 					person_info.mugshot = person.mugshot
 				end
-				--------------------
-			    -- get licenses --
-			    --------------------
-			    local licenses = person.licenses
-			    if #licenses > 0 then
-			        for i = 1, #licenses do
-			            local license = licenses[i]
-			            table.insert(person_info.licenses, license)
-			        end
-			        if #person_info.licenses <= 0 then
-			            person_info.licenses = false
-			        end
-			    end
 
-			    TriggerEvent('properties:getAddressByName', person.firstName .. ' ' .. person.lastName, function(address)
-			    	if address then
+				TriggerEvent('properties:getAddressByName', person.name.first .. ' ' .. person.name.last, function(address)
+					if address then
 						person_info.address = address
 					else
 						if person.property['house'] and person.property['houseStreet'] then
-					    	person_info.address = 'House '..person.property['house']..', '..person.property['houseStreet']
-					    else
-					    	person_info.address = person.property['location']
-					    end
+							person_info.address = 'House '..person.property['house']..', '..person.property['houseStreet']
+						else
+							person_info.address = person.property['location']
+						end
 					end
 				end)
+				-----------------------------
+				-- get criminal history --
+				-----------------------------
+				local criminal_history = person.criminalHistory
+				if #criminal_history > 0 then
+					for i = 1, #criminal_history do
+						local crime = criminal_history[i]
+						if (not crime.type or crime.type == "arrest") then
+							table.insert(person_info.criminal_history.crimes, crime)
+						else
+							table.insert(person_info.criminal_history.tickets, crime)
+						end
+					end
+					if #person_info.criminal_history.crimes <= 0 then
+						person_info.criminal_history.crimes = false
+					end
+					if #person_info.criminal_history.tickets <= 0 then
+						person_info.criminal_history.tickets = false
+					end
+				end
 
-			    ---------------------
-			    -- get insurance --
-			    ---------------------
-			    local insurance = person.insurance
-			    if insurance.planName then
-			        person_info.insurance = insurance
-			    end
-			    -----------------------------
-			    -- get criminal history --
-			    -----------------------------
-			    local criminal_history = person.criminalHistory
-			    if #criminal_history > 0 then
-			        for i = 1, #criminal_history do
-			            local crime = criminal_history[i]
-		                if (not crime.type or crime.type == "arrest") then
-		                    table.insert(person_info.criminal_history.crimes, crime)
-		                else
-		                    table.insert(person_info.criminal_history.tickets, crime)
-		                end
-			        end
-			        if #person_info.criminal_history.crimes <= 0 then
-			            person_info.criminal_history.crimes = false
-			        end
-			        if #person_info.criminal_history.tickets <= 0 then
-			            person_info.criminal_history.tickets = false
-			        end
-			    end
+				-- get licenses --
+				person_info.licenses = GetLicensesFromInventory(person.inventory)
+				-- get insurance --
+				local insurance = person.insurance
+				if insurance.planName then
+					person_info.insurance = insurance
+				end
 
-			    TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
+				TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
 			else
 				print("person NOT found!")
 				local msg = {
@@ -456,6 +449,7 @@ end)
 
 RegisterServerEvent('mdt:checkFlags')
 AddEventHandler('mdt:checkFlags', function(vehPlate, vehModel)
+	print("vehplate: " .. vehPlate)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	if char.get('job') == 'sheriff' then
 		local warrants = exports["usa-warrants"]:getWarrants()
@@ -466,7 +460,7 @@ AddEventHandler('mdt:checkFlags', function(vehPlate, vehModel)
 			if response.rows then
 				-- insert all warrants from 'bolos' db into lua table
 				for i = 1, #(response.rows) do
-					if string.find(response.rows[i].doc.description, vehPlate) then
+					if string.find(response.rows[i].doc.description:lower(), vehPlate:lower()) then
 						TriggerClientEvent('chatMessage', _source, '^1^*[ALPR HIT]^r^0 '..vehModel..' with plate '..vehPlate..' has an active bolo.')
 						TriggerClientEvent('speedcam:lockCam', _source)
 						return
@@ -476,7 +470,7 @@ AddEventHandler('mdt:checkFlags', function(vehPlate, vehModel)
 		end, "GET", "", { ["Content-Type"] = 'application/json' })
 
 		for i = 1, #warrants do
-			if string.find(warrants[i].notes, vehPlate) then
+			if string.find(warrants[i].notes:lower(), vehPlate:lower()) then
 				TriggerClientEvent('chatMessage', source, '^1^*[ALPR HIT]^r^0 '..vehModel..' with plate '..vehPlate..' has an active warrant.')
 				TriggerClientEvent('speedcam:lockCam', source)
 				return
@@ -484,7 +478,7 @@ AddEventHandler('mdt:checkFlags', function(vehPlate, vehModel)
 		end
 
 		for veh = 1, #tempVehicles do
-			if tempVehicles[veh].plate == vehPlate then
+			if tempVehicles[veh].plate:lower() == vehPlate:lower() then
 				if tempVehicles[veh].flags then
 					TriggerClientEvent('chatMessage', source, '^1^*[ALPR HIT]^r^0 '..vehModel..' with plate '..vehPlate..' has vehicle flags: '..tempVehicles[veh].flags..', registered to '..tempVehicles[veh].registered_owner..'.')
 					TriggerClientEvent('speedcam:lockCam', source)
@@ -534,7 +528,7 @@ end)
 RegisterServerEvent("mdt:createWarrant")
 AddEventHandler("mdt:createWarrant", function(warrant)
 	local author = exports["usa-characters"]:GetCharacter(source)
-	warrant.created_by = char.getFullName()
+	warrant.created_by = author.getFullName()
 	warrant.notes = warrant.charges .. " | " .. warrant.suspect_description
 	warrant.timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())
 	exports["usa-warrants"]:createWarrant(source, warrant, true)

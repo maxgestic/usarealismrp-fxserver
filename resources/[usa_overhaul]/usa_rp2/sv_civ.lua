@@ -145,7 +145,7 @@ AddEventHandler("crim:continueRobbing", function(continue_robbing, from_id, targ
 		local amount_stolen = victim_char.get("money")
 		if amount_stolen >= 0 then
 			victim_char.removeMoney(amount_stolen)
-			print("USARP2: Amount of money[" .. to_steal_amount .. "] stolen from person robbed!")
+			print("USARP2: Amount of money[" .. amount_stolen .. "] stolen from person robbed!")
 			local robber = exports["usa-characters"]:GetCharacter(source)
 			robber.giveMoney(amount_stolen)
 		else

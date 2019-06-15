@@ -298,17 +298,15 @@ AddEventHandler('bank:givecash', function(toPlayer, amount, fromName, src)
       local name = GetPlayerName(toPlayer)
     local player2 = GetPlayerFromServerId(toPlayer)
     local playing = IsPlayerPlaying(player2)
-    if (playing ~= false) then
+    if playing then
       TriggerServerEvent("bank:givecash", toPlayer, tonumber(amount))
       --TriggerEvent('chatMessage', "", {255, 255, 255}, fromName .. " has given you ^2$" .. amount .. "^0.");
       --TriggerServerEvent('altchat:localChatMessage', src, "^6* " .. fromName .. " hands over money.")
     else
       TriggerEvent('usa:notify', '~y~Player not found!')
-      TriggerServerEvent("bank:cancelGiveCash", source)
     end
   else
     TriggerEvent('usa:notify', '~y~You are not near this player!')
-    TriggerServerEvent("bank:cancelGiveCash", source)
   end
 end)
 

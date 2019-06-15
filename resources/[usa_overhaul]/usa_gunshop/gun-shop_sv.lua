@@ -65,7 +65,7 @@ AddEventHandler("gunShop:requestPurchase", function(category, index)
       weaponDB.issueDate = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year
       char.giveItem(weapon, 1)
       char.removeMoney(sv_storeWeapons[category][index].price)
-      TriggerClientEvent("mini:equipWeapon", usource, usource, sv_storeWeapons[category][index].hash) -- equip
+      TriggerClientEvent("mini:equipWeapon", usource, sv_storeWeapons[category][index].hash) -- equip
       TriggerClientEvent('gunShop:addRecentlyPurchased', usource)
       TriggerClientEvent('usa:notify', usource, 'Purchased: ~y~'..weapon.name..'\n~s~Serial Number: ~y~'..weapon.serialNumber..'\n~s~Price: ~y~$'..sv_storeWeapons[category][index].price)
       TriggerEvent('es:exposeDBFunctions', function(couchdb)

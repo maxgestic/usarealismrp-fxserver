@@ -76,21 +76,21 @@ function CreateCharacter(data)
   end
 
   rTable.giveMoney = function(amount)
-    self.money = self.money + amount
+    self.money = self.money + tonumber(amount)
     TriggerClientEvent("es:setMoneyDisplay", self.source, 1, self.money)
   end
 
   rTable.removeMoney = function(amount)
-    self.money = self.money - amount
+    self.money = self.money - tonumber(amount)
     TriggerClientEvent("es:setMoneyDisplay", self.source, 1, self.money)
   end
 
   rTable.giveBank = function(amount)
-    self.bank = self.bank + amount
+    self.bank = self.bank + tonumber(amount)
   end
 
   rTable.removeBank = function(amount)
-    self.bank = self.bank - amount
+    self.bank = self.bank - tonumber(amount)
   end
 
   rTable.getName = function()
@@ -290,7 +290,7 @@ function CreateCharacter(data)
   rTable.removeIllegalItems = function()
     local seized = {}
     local inv = self.inventory
-    for i = 0, #inv.MAX_CAPACITY - 1 do
+    for i = 0, inv.MAX_CAPACITY - 1 do
       local item = inv.items[tostring(i)]
       if item then
         if item.legality == "illegal" then
