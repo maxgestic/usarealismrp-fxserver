@@ -19,7 +19,7 @@ local CELLS = {
 -- V2
 TriggerEvent('es:addCommand', 'jail', function(source, args, char)
 	local job = char.get("job")
-	local jailtime = char.get("jailtime")
+	local jailtime = char.get("jailTime")
 	if job == "sheriff" or job == "cop" or job == "corrections" or job == "dai" then
 		TriggerClientEvent("jail:openMenu", tonumber(source))
 	elseif jailtime > 0 then
@@ -32,10 +32,6 @@ end, {
 RegisterServerEvent("jail:jailPlayerFromMenu")
 AddEventHandler("jail:jailPlayerFromMenu", function(data)
 	local char = exports["usa-characters"]:GetCharacter(source)
-	if tonumber(data.id) == source then
-		TriggerClientEvent('usa:notify', source, 'You cannot jail yourself!')
-		return
-	end
 	local job = char.get('job')
 	if job == 'sheriff' or job == 'corrections' then
 		local arrestingOfficerName = char.getFullName()
@@ -89,7 +85,7 @@ function jailPlayer(data, officerName, gender)
 	TriggerClientEvent("jail:jail", targetPlayer, assigned_cell, gender)
 	inmate.removeWeapons()
 	inmate.removeIllegalItems()
-	inmate.set("jailtime", sentence)
+	inmate.set("jailTime", sentence)
 	inmate.set("job", "civ")
 	inmate.removeBank(fine)
 
@@ -156,7 +152,7 @@ AddEventHandler("jail:clearCell", function(cell, clearJailTime)
 	-- clear jail time --
 	if clearJailTime then
 		local char = exports["usa-characters"]:GetCharacter(source)
-		char.set("jailtime", 0)
+		char.set("jailTime", 0)
 	end
 end)
 
@@ -201,12 +197,12 @@ function jailStatusLoop()
 	SetTimeout(60000, function()
 		local characters = exports["usa-characters"]:GetCharacters()
 		for id, char in pairs(characters) do
-			local jailtime = char.get("jailtime")
+			local jailtime = char.get("jailTime")
 			if not jailtime then
 				jailtime = 0
 			end
 			if jailtime > 0 then
-				char.set("jailtime", jailtime - 1)
+				char.set("jailTime", jailtime - 1)
 				TriggerClientEvent("jail:release", tonumber(id), char.get("appearance"))
 				exports["globals"]:notifyPlayersWithJob("corrections", "^3CORRECTIONS:^0 " .. char.getName() .. " has been released.")
 				break

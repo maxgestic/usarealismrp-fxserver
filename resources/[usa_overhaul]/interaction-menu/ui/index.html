@@ -75,7 +75,7 @@
 												<span class="inventory-item-weight">W: {{ inventory.items[(5*(i-1)) + (j-1)].weight }}</span>
 											</header>
 											<section>
-												<img v-if="inventory.items[(5*(i-1)) + (j-1)].image" v-bind:src="inventory.items[(5*(i-1)) + (j-1)].image" v-bind:alt="inventory.items[(5*(i-1)) + (j-1)].name">
+												<img v-if="itemImages[inventory.items[(5*(i-1)) + (j-1)].name]" v-bind:src="itemImages[inventory.items[(5*(i-1)) + (j-1)].name]" v-bind:alt="inventory.items[(5*(i-1)) + (j-1)].name">
 											</section>
 											<footer>
 												<div>
@@ -111,7 +111,7 @@
 												<span class="inventory-item-weight">W: {{ vehicleInventory.items[(5*(i-1)) + (j-1)].weight }}</span>
 											</header>
 											<section>
-												<img v-if="vehicleInventory.items[(5*(i-1)) + (j-1)].image" v-bind:src="vehicleInventory.items[(5*(i-1)) + (j-1)].image" v-bind:alt="vehicleInventory.items[(5*(i-1)) + (j-1)].name">
+												<img v-if="itemImages[vehicleInventory.items[(5*(i-1)) + (j-1)].name]" v-bind:src="itemImages[vehicleInventory.items[(5*(i-1)) + (j-1)].name]" v-bind:alt="vehicleInventory.items[(5*(i-1)) + (j-1)].name">
 											</section>
 											<footer>
 												<div>

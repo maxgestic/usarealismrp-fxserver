@@ -2,21 +2,21 @@
 --Global Variables --
 -------------------------
 local CLOTHING_STORE_LOCATIONS = {
-	{x = 1.27486, y = 6511.89, z = 31.8778}, -- paleto bay
-	{x = 1692.24, y = 4819.79, z = 42.0631}, -- grape seed
-	{x = 1199.09, y = 2707.86, z = 38.0226}, -- sandy shores 1
-	{x = 614.565, y = 2763.17, z = 42.0881}, -- sandy shores 2
-	{x = -1097.71, y = 2711.18, z = 19.5079}, -- route 68
-	{x = -3170.52, y = 1043.97, z = 21.0632}, -- chumash, great ocean hwy
-	{x = -1449.93, y = -236.979, z = 50.0106}, -- vinewood 1
-	{x = -710.239, y = -152.319, z = 38.0151}, -- vinewood 2
-	{x = -1192.84, y = -767.861, z = 18.0187}, -- vinewood 3
-	{x = -163.61, y = -303.987, z = 40.0333}, -- vinewood 4
-	{x = 125.403, y = -223.887, z = 55.0578}, -- vinewood 5
-	{x = 423.474, y = -808.135, z = 29.4911}, -- vinewood 6
-	{x = -818.509, y = -1074.14, z = 12.0281}, -- vinewood 7
-	{x = 77.7774, y = -1389.87, z = 30.0761}, -- vinewood
-	{x = 105.8, y = -1302.9, z = 28.7, noblip = true}, -- vanilla unicorn
+	{x = 1.27486, y = 6511.89, z = 30.8778}, -- paleto bay
+	{x = 1692.24, y = 4819.79, z = 41.0631}, -- grape seed
+	{x = 1199.09, y = 2707.86, z = 37.0226}, -- sandy shores 1
+	{x = 614.565, y = 2763.17, z = 41.0881}, -- sandy shores 2
+	{x = -1097.71, y = 2711.18, z = 18.5079}, -- route 68
+	{x = -3170.52, y = 1043.97, z = 20.0632}, -- chumash, great ocean hwy
+	{x = -1449.93, y = -236.979, z = 49.0106}, -- vinewood 1
+	{x = -710.239, y = -152.319, z = 37.0151}, -- vinewood 2
+	{x = -1192.84, y = -767.861, z = 19.0187}, -- vinewood 3
+	{x = -163.61, y = -303.987, z = 39.0333}, -- vinewood 4
+	{x = 125.403, y = -223.887, z = 54.0578}, -- vinewood 5
+	{x = 423.474, y = -808.135, z = 28.4911}, -- vinewood 6
+	{x = -818.509, y = -1074.14, z = 11.0281}, -- vinewood 7
+	{x = 77.7774, y = -1389.87, z = 29.0761}, -- vinewood
+	{x = 105.8, y = -1302.9, z = 27.7, noblip = true}, -- vanilla unicorn
 	{x = -82.16, y = -809.99, z = 243.38, blacklistExempt = true, noblip = true}
 }
 local me = nil

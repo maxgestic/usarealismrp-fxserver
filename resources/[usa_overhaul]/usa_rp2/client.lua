@@ -611,6 +611,11 @@ AddEventHandler("usa:playAnimation", function(animDict, animName, speed, speedMu
                     ClearPedTasksImmediately(playerPed)
                 end
                 StopAnimTask(playerPed, animDict, animName, 1.0)
+            else
+              while IsEntityPlayingAnim(playerPed, animDict, animName, 3) do
+                Citizen.Wait(10)
+              end
+              ClearPedTasks(playerPed)
             end
         end
     end
