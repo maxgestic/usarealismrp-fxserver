@@ -63,7 +63,8 @@ BUSINESSES = {
 		position = {1168.00, 2711.08, 38.15},
 		cameraID = 'store9',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2000
 	},
 	["LTD Gasoline (Grapeseed Main St.)"] = {
 		position = {1699.34, 4921.74, 42.06},

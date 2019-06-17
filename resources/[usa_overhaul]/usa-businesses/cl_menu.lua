@@ -27,7 +27,6 @@ end)
 
 RegisterNetEvent("business:showMenu")
 AddEventHandler("business:showMenu", function(business, charInv)
-  print("showing menu")
   _menuPool = NativeUI.CreatePool()
   ----------------------------
   -- create main menu  --

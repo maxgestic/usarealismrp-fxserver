@@ -365,7 +365,7 @@ end, {
 ------------------------------
 TriggerEvent('es:addGroupCommand', 'gotoc', "mod", function(source, args, char)
 	TriggerClientEvent('es_admin:teleportUserByCoords', source, tonumber(args[2]), tonumber(args[3]), tonumber(args[4]))
-	TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(source)..' ['..source..'] ^0 has teleported to co-ordinates: '..args[2]..', '..args[3]..', '..args[3]..'.')
+	TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(source)..' ['..source..'] ^0 has teleported to coordinates: '..args[2]..', '..args[3]..', '..args[3]..'.')
 end, {
 	help = "Go to specified coordinate",
 	params = {

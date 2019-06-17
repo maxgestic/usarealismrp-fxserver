@@ -1,5 +1,3 @@
-exports["globals"]:PerformDBCheck("usa-businesses", "businesses", nil)
-
 RegisterServerEvent("business:storeMoney")
 AddEventHandler("business:storeMoney", function(name, amount)
   local usource = source
@@ -16,9 +14,6 @@ end)
 RegisterServerEvent("business:withdraw")
 AddEventHandler("business:withdraw", function(name, amount)
   local usource = source
-  -- todo:
-  -- 1) make sure player is owner
-  -- 2) withdraw money from property, give to player
   GetBusinessOwner(name, function(owner)
     local char = exports["usa-characters"]:GetCharacter(usource)
     if owner.name.full == char.getFullName() then -- make sure player is owner
@@ -46,7 +41,12 @@ AddEventHandler("business:store", function(name, item, amount)
   local usource = source
   local char = exports["usa-characters"]:GetCharacter(usource)
   if char.hasItem(item.name) then -- make sure player actually has item
-    local i = char.getItem(item.name)
+    local i
+    if item.number then -- cell phones
+      i = char.getItemWithField("number", item.number)
+    else
+      i = char.getItem(item.name)
+    end
     if i.type ~= "license" then
       if i.quantity >= amount then
         char.removeItem(i, amount) -- remove item from player
@@ -72,17 +72,13 @@ RegisterServerEvent("business:retrieve")
 AddEventHandler("business:retrieve", function(name, item, amount)
   local usource = source
   local char = exports["usa-characters"]:GetCharacter(usource)
-  -- make sure item is in business
-  -- make sure player can hold amount of item
-  -- remove amount of item from property
-  -- give amount of item to player
   GetBusinessStorage(name, function(storage)
     local items = storage.items
     if item.serialNumber then -- only weapon's have serialNumber's (because they could have same name w/ different components etc)
       for i = 1, #items do
         if items[i].serialNumber == item.serialNumber then
           local toGiveCopy = items[i]
-          if char.canHoldItem(items[i]) then
+          if char.canHoldItem(items[i]) then -- make sure player can hold amount of item
             table.remove(storage.items, i)
             -- update storage and give item to player
             SetBusinessStorage(name, storage, function(success)
@@ -103,7 +99,7 @@ AddEventHandler("business:retrieve", function(name, item, amount)
       for i = 1, #items do
         if items[i].name == item.name then
           local toGiveCopy = items[i]
-          if char.canHoldItem(items[i]) then
+          if char.canHoldItem(items[i]) then -- make sure player can hold amount of item
             if items[i].quantity >= amount then
               if items[i].quantity > 1 then
                 storage.items[i].quantity = storage.items[i].quantity - amount
@@ -134,11 +130,12 @@ end)
 
 RegisterServerEvent("business:tryOpenMenuByName")
 AddEventHandler("business:tryOpenMenuByName", function(name)
+  print("trying to open business: " .. name)
   local usource = source
-  local char = exports["usa-characters"]:GetCharacter(source)
+  local char = exports["usa-characters"]:GetCharacter(usource)
   local id = char.get("_id")
   GetBusinessByName(name, function(business)
-    if business then
+    if business and business.owner.identifiers then
       if business.owner.identifiers.id == id then
         -- this player was the owner of this business --
         local inv = FormatInventory(char.get("inventory"))
@@ -164,7 +161,7 @@ AddEventHandler("business:lease", function(name)
   print("player wants to purchase business with name: " .. name)
   local usource = source
   GetBusinessByName(name, function(business)
-    if business then
+    if business and business.owner.name then
       TriggerClientEvent("usa:notify", usource, "~y~Owner:~w~ " .. business.owner.name.full)
     else
       local char = exports["usa-characters"]:GetCharacter(usource)
@@ -179,6 +176,23 @@ AddEventHandler("business:lease", function(name)
     end
   end)
 end)
+
+function CheckBusinessLeases()
+  -- get each business' paid time & _id
+  -- if any are due, remove their owners
+  for name, info in pairs(BUSINESSES) do
+    GetBusinessFeeInfo(RemoveSpaces(name), function(fee)
+      if GetWholeDaysFromTime(fee.paidAt) > LEASE_PERIOD_DAYS then
+        print("Lease expired for business: " .. fee._id)
+        TriggerEvent("es:exposeDBFunctions", function(db)
+          db.updateDocument("businesses", fee._id, { owner = {} }, function(err)
+            print("Owner evicted from " .. fee._id .. "!")
+          end)
+        end)
+      end
+    end)
+  end
+end
 
 function FormatInventory(charInv)
   local inv = {}
@@ -225,10 +239,12 @@ function GetBusinessStorage(name, cb)
     if data.total_rows > 0 then
       if data.rows then
         for i = 1, #data.rows do
-          local cash = data.rows[i].value
-          cb(cash)
+          local storage = data.rows[i].value
+          cb(storage)
         end
       end
+    else
+      cb(nil)
     end
   end, "POST", json.encode({
     keys = { RemoveSpaces(name) }
@@ -258,6 +274,42 @@ end
 function CreateNewBusiness(src, name, cb)
   local owner = exports["usa-characters"]:GetCharacter(src)
   TriggerEvent('es:exposeDBFunctions', function(db)
+    GetBusinessByName(name, function(business)
+      if business then
+        UpdateOwnerOfExistingBusinessDoc(src, name, owner, cb, db)
+      else
+        CreateEntirelyNewBusinessDoc(src, name, owner, cb, db)
+      end
+    end)
+  end)
+end
+
+function UpdateOwnerOfExistingBusinessDoc(src, name, owner, cb, db)
+  local newOwner = {
+    identifiers = {
+      id = owner.get("_id"),
+      steam = GetPlayerIdentifiers(src)[1]
+    },
+    name = {
+      full = owner.getFullName()
+    }
+  }
+  local today = os.date("*t", os.time())
+  local leaseEndTime = os.time({day = today.day + LEASE_PERIOD_DAYS, month = today.month, year = today.year}) -- todo: need to make sure 2 week date is calculated correctly,,
+  local newFeeDeets = {
+    price = BUSINESSES[name].price,
+    paidAt = os.time(),
+    due = {
+      time = leaseEndTime,
+      date = os.date("%x", leaseEndTime)
+    }
+  }
+  db.updateDocument("businesses", RemoveSpaces(name), { owner = newOwner, fee = newFeeDeets}, function()
+    cb()
+  end)
+end
+
+function CreateEntirelyNewBusinessDoc(src, name, owner, cb, db)
     local business = {}
     business.name = name
     business.owner = {
@@ -266,15 +318,12 @@ function CreateNewBusiness(src, name, cb)
         steam = GetPlayerIdentifiers(src)[1]
       },
       name = {
-        full = owner.getFullName(),
+        full = owner.getFullName()
       }
     }
     business.storage = {
       cash = 0,
       items = {}
-    }
-    business.purchase = {
-      time = os.time()
     }
     local today = os.date("*t", os.time())
     local leaseEndTime = os.time({day = today.day + LEASE_PERIOD_DAYS, month = today.month, year = today.year}) -- todo: need to make sure 2 week date is calculated correctly,,
@@ -293,7 +342,6 @@ function CreateNewBusiness(src, name, cb)
         TriggerClientEvent("usa:notify", src, "There was a problem signing the lease!")
       end
     end)
-  end)
 end
 
 function GetBusinessOwner(name, cb)
@@ -326,7 +374,7 @@ function GetBusinessByName(name, cb)
       return
     end
     local data = json.decode(responseText)
-    if data.total_rows > 0 then
+    if #data.rows > 0 then
       if data.rows then
         for i = 1, #data.rows do
           local business = data.rows[i].value
@@ -341,8 +389,39 @@ function GetBusinessByName(name, cb)
   }), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
+function GetBusinessFeeInfo(name, cb)
+  local endpoint = "/businesses/_design/businessFilters/_view/getBusinessFeeInfo"
+  local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+  PerformHttpRequest(url, function(err, responseText, headers)
+    if err == 404 then
+      return
+    end
+    local data = json.decode(responseText)
+    if data.total_rows > 0 then
+      if data.rows then
+        for i = 1, #data.rows do
+          local info = {
+            _id = data.rows[i].value[1],
+            paidAt = data.rows[i].value[2]
+          }
+          cb(info)
+        end
+      end
+    end
+  end, "POST", json.encode({
+    keys = { RemoveSpaces(name) }
+  }), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+end
+
 function RemoveSpaces(s)
   return s:gsub("%s+", "")
+end
+
+function GetWholeDaysFromTime(time)
+	local reference = time
+	local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
+	local wholedays = math.floor(daysfrom)
+	return wholedays
 end
 
 function comma_value(amount)
@@ -355,3 +434,5 @@ function comma_value(amount)
   end
   return formatted
 end
+
+exports["globals"]:PerformDBCheck("usa-businesses", "businesses", CheckBusinessLeases)

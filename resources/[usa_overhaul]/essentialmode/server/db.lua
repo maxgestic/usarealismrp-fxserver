@@ -239,6 +239,7 @@ end
 
 function exposedDB.createDocumentWithId(db, rows, docid, cb)
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. docid, function(err, rText, headers)
+		print("inside http request callback with rtext: " .. rText)
 		rText = json.decode(rText)
 		if rText.ok then
 			cb(true)
