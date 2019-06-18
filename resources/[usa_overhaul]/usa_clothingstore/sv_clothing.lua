@@ -5,13 +5,16 @@ end
 
 -- charge customer --
 RegisterServerEvent("clothing-store:chargeCustomer")
-AddEventHandler("clothing-store:chargeCustomer", function(property)
+AddEventHandler("clothing-store:chargeCustomer", function(business)
 	local amount = 200
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local money = char.get("money")
 	if money - amount >= 0 then
 		char.removeMoney(amount)
 		TriggerClientEvent("clothing-store:openMenu", source)
+		if business then
+			exports["usa-businesses"]:GiveBusinessCashPercent(business, amount)
+		end
 	else
 		TriggerClientEvent("usa:notify", source, "You don't have enough money!")
 	end

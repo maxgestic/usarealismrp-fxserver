@@ -4,6 +4,7 @@ robberyCooldown = 2100
 rewardRange = {350, 450}
 
 LEASE_PERIOD_DAYS = 14
+DEFAULT_PURCHASE_PERCENT_REWARD = 0.30
 
 KEYS ={
 	K = 311,
@@ -15,49 +16,57 @@ BUSINESSES = {
 		position = {1134.21, -979.33, 46.41},
 		cameraID = 'store1',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2000
 	},
 	["LTD Gasoline (Ginger St.)"] = {
 		position = {-705.89, -911.89, 19.21},
 		cameraID = 'store2',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2000
 	},
 	["247 Supermarket (Paleto Bay)"] = {
 		position = {1729.37, 6418.29, 35.03},
 		cameraID = 'store3',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2000
 	},
 	["247 Supermarket - (Innocence Blvd.)"] = {
 		position = {24.44, -1343.922, 29.49},
 		cameraID = 'store4',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2500
 	},
 	["Rob's Liquor - (San Andreas Ave.)"] = {
 		position = {-1224.64, -909.504, 12.32},
 		cameraID = 'store5',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2000
 	},
 	["247 Supermarket (Alhambra Dr.)"] = {
 		position = {1958.38, 3743.11, 32.34},
 		cameraID = 'store6',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2500
 	},
 	['247 Supermarket (Clinton Ave.)'] = {
 		position = {373.25, 329.68, 103.56},
 		cameraID = 'store7',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2000
 	},
 	["LTD Gasoline (Grove St.)"] = {
 		position = {-45.50, -1756.71, 29.42},
 		cameraID = 'store8',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2000
 	},
 	["Rob's Liquor (Route 68)"] = {
 		position = {1168.00, 2711.08, 38.15},
@@ -77,25 +86,29 @@ BUSINESSES = {
 		position = {-3041.47, 583.62, 7.90},
 		cameraID = 'store11',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2000
 	},
 	["247 Supermarket (Palomino Fwy.)"] = {
 		position = {2554.50, 380.78, 108.62},
 		cameraID = 'store12',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2000
 	},
 	["247 Supermarket (Senora Fwy.)"] = {
 		position = {2675.65, 3280.58, 55.24},
 		cameraID = 'store13',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2000
 	},
 	["247 Supermarket (Harmony, Route 68)"] = {
 		position = {549.51, 2668.76, 42.15},
 		cameraID = 'store14',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2000
 	},
 	["LTD Gasoline (Banham Canyon Dr.)"] = {
 		position = {-1821.10, 795.60, 138.09},
@@ -107,43 +120,66 @@ BUSINESSES = {
 		position = {-3244.92, 1000.0, 12.83},
 		cameraID = 'store16',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2000
 	},
 	["Rob's Liquor (Great Ocean Hwy.)"] = {
 		position = {-2966.24, 388.91, 15.04},
 		cameraID = 'store17',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2000
 	},
 	["Clothing Store (Sinner St.)"] = {
 		position = {427.34, -807.00, 29.49},
 		cameraID = 'store18',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2000,
+		purchasePercentage = 0.08
 	},
 	["LS Customs (La Mesa)"] = {
 		position = {725.80, -1070.75, 28.31},
 		cameraID = 'store19',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 6000,
+		purchasePercentage = 0.08
+	},
+	["Benny's Auto Garage (Strawberry)"] = {
+		position = {-207.4, -1341.2, 34.9},
+		cameraID = 'store24',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 6000
+	},
+	["LS Customs (Route 68)"] = {
+		position = {1187.4, 2636.7, 38.4},
+		cameraID = 'store25',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 6000
 	},
 	["Herr Kutz Barbers (Carson Ave.)"] = {
 		position = {134.45, -1707.75, 29.29},
 		cameraID = 'store20',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2000
 	},
 	["Clothing Store (Innocence Blvd.)"] = {
 		position = {73.98, -1392.14, 29.37},
 		cameraID = 'store21',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2000
 	},
 	["Herr Kutz Barbers (Niland Ave.)"] = {
 		position = {1930.57, 3728.08, 32.84},
 		cameraID = 'store22',
 		isBeingRobbed = false,
-		lastRobbedTime = 0
+		lastRobbedTime = 0,
+		price = 2000
 	},
 	["Yellow Jack Inn (Panorama Dr.)"] = {
 		position = {1984.26, 3049.39, 47.21},

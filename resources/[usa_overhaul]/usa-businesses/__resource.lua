@@ -15,3 +15,11 @@ server_scripts {
   "robberies/sv_robbery.lua",
   "sv_businesses.lua"
 }
+
+exports {
+  "GetClosestStore"
+}
+
+server_exports {
+  "GiveBusinessCashPercent"
+}

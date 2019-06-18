@@ -269,7 +269,8 @@ function CreateBarberShopMenu(menu)
       _menuPool:CloseAllMenus()
       -- Finish Checkout  / Save --
       local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
-      TriggerServerEvent("barber:checkout", old_head)
+      local business = exports["usa-businesses"]:GetClosestStore(15)
+      TriggerServerEvent("barber:checkout", old_head, business)
     end
     menu:AddItem(checkout_item)
 

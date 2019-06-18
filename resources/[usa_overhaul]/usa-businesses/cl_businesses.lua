@@ -21,7 +21,7 @@ Citizen.CreateThread(function()
 	while true do
 		if IsControlJustPressed(0, KEYS.E) then
 			local closestStore = GetClosestStore(1.5)
-			if closestStore then
+			if closestStore and BUSINESSES[closestStore].price then
 				Wait(500)
 				if IsControlPressed(0, KEYS.E) then
 					TriggerServerEvent("business:lease", closestStore)
@@ -39,7 +39,11 @@ Citizen.CreateThread(function()
 	while true do
 		for name, data in pairs(BUSINESSES) do
 			local pos = data.position
-			DrawText3D(pos[1], pos[2], pos[3], 4, '[E] - Open | [HOLD K] - Rob')
+			if data.price then
+				DrawText3D(pos[1], pos[2], pos[3], 4, '[E] - Open | [HOLD K] - Rob')
+			else
+				DrawText3D(pos[1], pos[2], pos[3], 4, '[HOLD K] - Rob')
+			end
 		end
     Wait(0)
   end
@@ -49,11 +53,11 @@ end)
 function GetClosestStore(range)
   local playerPed = PlayerPedId()
   local playerCoords = GetEntityCoords(playerPed)
-  for name, data in pairs(BUSINESSES)do
+  for name, data in pairs(BUSINESSES) do
     local pos = data.position
-    if Vdist(playerCoords, pos[1], pos[2], pos[3]) < range then
+    if Vdist(playerCoords.x, playerCoords.y, playerCoords.z, pos[1], pos[2], pos[3]) < range then
       return name
     end
   end
-  return nil
+	return nil
 end

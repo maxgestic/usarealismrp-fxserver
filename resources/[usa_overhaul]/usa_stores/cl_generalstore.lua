@@ -202,9 +202,8 @@ function CreateGeneralStoreMenu(menu)
       item.Activated = function(parentmenu, selected)
         if not TIMEOUT then
           TIMEOUT = GetGameTimer()
-          local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
-          TriggerServerEvent("generalStore:buyItem", 0, items[i], 'GENERAL', closest_location.prison)
-
+          local business = exports["usa-businesses"]:GetClosestStore(15)
+          TriggerServerEvent("generalStore:buyItem", business, items[i], 'GENERAL', closest_location.prison)
           Citizen.CreateThread(function()
             while GetGameTimer() - TIMEOUT < 200 do
               Wait(100)

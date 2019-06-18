@@ -167,8 +167,9 @@ AddEventHandler("business:lease", function(name)
       local char = exports["usa-characters"]:GetCharacter(usource)
       if char.get("money") >= BUSINESSES[name].price then -- if has enough cash
         char.removeMoney(BUSINESSES[name].price) -- take money
-        CreateNewBusiness(usource, name, function() -- create doc
+        CreateNewBusiness(usource, name, function(newBusinessDoc) -- create doc
           TriggerClientEvent("usa:notify", usource, "You now own: " .. name .. "!")
+          SendToDiscordLog(newBusinessDoc)
         end)
       else
         TriggerClientEvent("usa:notify", usource, "You need $" .. comma_value(BUSINESSES[name].price) .. " to lease this business.")
@@ -271,6 +272,18 @@ function GiveBusinessCash(name, amount, cb)
   end)
 end
 
+function GiveBusinessCashPercent(name, amount)
+  if name then
+    GetBusinessStorage(name, function(storage)
+      storage.cash = storage.cash + math.floor((BUSINESSES[name].purchasePercentage or DEFAULT_PURCHASE_PERCENT_REWARD) * amount)
+      -- set money --
+      TriggerEvent("es:exposeDBFunctions", function(db)
+        db.updateDocument("businesses", RemoveSpaces(name), { storage = storage }, function(newDoc) end)
+      end)
+    end)
+  end
+end
+
 function CreateNewBusiness(src, name, cb)
   local owner = exports["usa-characters"]:GetCharacter(src)
   TriggerEvent('es:exposeDBFunctions', function(db)
@@ -304,8 +317,8 @@ function UpdateOwnerOfExistingBusinessDoc(src, name, owner, cb, db)
       date = os.date("%x", leaseEndTime)
     }
   }
-  db.updateDocument("businesses", RemoveSpaces(name), { owner = newOwner, fee = newFeeDeets}, function()
-    cb()
+  db.updateDocument("businesses", RemoveSpaces(name), { owner = newOwner, fee = newFeeDeets}, function(newDoc)
+    cb(newDoc)
   end)
 end
 
@@ -337,7 +350,7 @@ function CreateEntirelyNewBusinessDoc(src, name, owner, cb, db)
     }
     db.createDocumentWithId("businesses", business, RemoveSpaces(name), function(success)
       if success then
-        cb()
+        cb(business)
       else
         TriggerClientEvent("usa:notify", src, "There was a problem signing the lease!")
       end
@@ -422,6 +435,26 @@ function GetWholeDaysFromTime(time)
 	local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
 	local wholedays = math.floor(daysfrom)
 	return wholedays
+end
+
+function SendToDiscordLog(business)
+  local desc = "\n**Property:** " .. business.name .. "\n**Purchase Price:** $" .. comma_value(business.fee.price) ..  "\n**Purchased By:** " .. business.owner.name.full .. "\n**End Date:** " .. business.fee.due.date
+  local url = 'https://discordapp.com/api/webhooks/419573361170055169/6v2NLnxzF8lSHgT8pSDccB_XN1R6miVuZDrEYtvNfPny6kSqddSN_9iJ9PPkbAbM01pW'
+  PerformHttpRequest(url, function(err, text, headers)
+    if text then
+      print(text)
+    end
+  end, "POST", json.encode({
+    embeds = {
+      {
+        description = desc,
+        color = 524288,
+        author = {
+          name = "SAN ANDREAS BUSINESS MGMT"
+        }
+      }
+    }
+  }), { ["Content-Type"] = 'application/json' })
 end
 
 function comma_value(amount)

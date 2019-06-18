@@ -354,15 +354,13 @@ end
 
 function exposedDB.updateDocument(db, documentID, updates, callback)
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. documentID, function(err, rText, headers)
-		local doc = json.decode(rText)
-
-		if(doc)then
-			for i in pairs(updates)do
+		if err ~= 404 then
+			local doc = json.decode(rText)
+			for i in pairs(updates) do
 				doc[i] = updates[i]
 			end
-
-			PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. doc._id, function(err, rText, headers)
-				callback((err or true))
+			PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. documentID, function(err, rText, headers)
+				callback(doc)
 			end, "PUT", json.encode(doc), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 		end
 	end, "GET", "", {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})

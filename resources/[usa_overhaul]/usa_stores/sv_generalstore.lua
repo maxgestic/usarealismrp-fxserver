@@ -82,31 +82,37 @@ function GetServerPrice(item, store)
 end
 
 RegisterServerEvent("generalStore:buyItem")
-AddEventHandler("generalStore:buyItem", function(property, item, store, inPrison)
+AddEventHandler("generalStore:buyItem", function(business, item, store, inPrison)
   local char = exports["usa-characters"]:GetCharacter(source)
   if store == 'GENERAL' then
     item.price = GetServerPrice(item, GENERAL_STORE_ITEMS)
   elseif store == 'HARDWARE' then
     item.price = GetServerPrice(item, HARDWARE_STORE_ITEMS)
   end
-  if inPrison and item.blockedInPrison then TriggerClientEvent('usa:notify', source, 'We don\'t sell that here!') return end
-    if char.canHoldItem(item) then
-      if char.get("money") >= item.price then
-        char.removeMoney(item.price)
-        if item.name == "Cell Phone" then
-          item.number = string.sub(tostring(os.time()), -8)
-          item.owner = char.getName()
-          item.name = item.name .. " - " .. item.number
-          exports["usa-phone"]:CreateNewPhone(item)
-        end
-        char.giveItem(item, 1)
-        TriggerClientEvent("usa:notify", source, "Purchased: ~y~" .. item.name)
-      else
-        TriggerClientEvent("usa:notify", source, "You don't have enough money!")
+  if inPrison and item.blockedInPrison then
+    TriggerClientEvent('usa:notify', source, 'We don\'t sell that here!')
+    return
+  end
+  if char.canHoldItem(item) then
+    if char.get("money") >= item.price then
+      char.removeMoney(item.price)
+      if item.name == "Cell Phone" then
+        item.number = string.sub(tostring(os.time()), -8)
+        item.owner = char.getName()
+        item.name = item.name .. " - " .. item.number
+        exports["usa-phone"]:CreateNewPhone(item)
+      end
+      char.giveItem(item, 1)
+      TriggerClientEvent("usa:notify", source, "Purchased: ~y~" .. item.name)
+      if business then
+        exports["usa-businesses"]:GiveBusinessCashPercent(business, item.price)
       end
     else
-      TriggerClientEvent("usa:notify", source, "Your inventory is full!")
+      TriggerClientEvent("usa:notify", source, "You don't have enough money!")
     end
+  else
+    TriggerClientEvent("usa:notify", source, "Your inventory is full!")
+  end
 end)
 
 RegisterServerEvent("generalStore:loadItems")
