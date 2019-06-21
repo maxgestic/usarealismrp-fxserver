@@ -275,11 +275,15 @@ end
 function GiveBusinessCashPercent(name, amount)
   if name then
     GetBusinessStorage(name, function(storage)
-      storage.cash = storage.cash + math.floor((BUSINESSES[name].purchasePercentage or DEFAULT_PURCHASE_PERCENT_REWARD) * amount)
-      -- set money --
-      TriggerEvent("es:exposeDBFunctions", function(db)
-        db.updateDocument("businesses", RemoveSpaces(name), { storage = storage }, function(newDoc) end)
-      end)
+      if storage then
+        storage.cash = storage.cash + math.floor((BUSINESSES[name].purchasePercentage or DEFAULT_PURCHASE_PERCENT_REWARD) * amount)
+        -- set money --
+        TriggerEvent("es:exposeDBFunctions", function(db)
+          db.updateDocument("businesses", RemoveSpaces(name), { storage = storage }, function(newDoc) end)
+        end)
+      else
+        print("usa-businesses: Error getting storage inside of GiveBusinessCashPercent")
+      end
     end)
   end
 end
