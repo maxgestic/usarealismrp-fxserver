@@ -113,7 +113,7 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
 			if #weapons < 3 then
 			  char.giveItem(item)
 				local targetChar = exports["usa-characters"]:GetCharacter(targetPlayerId)
-				targetChar.removeItemWithField("serialNumber", item.serialNumber)
+				targetChar.removeItemWithField("uuid", item.uuid)
 			  TriggerClientEvent("interaction:equipWeapon", targetPlayerId, item, true)
 			  TriggerClientEvent("interaction:equipWeapon", source, item, false)
 			else
