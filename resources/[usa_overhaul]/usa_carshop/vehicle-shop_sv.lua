@@ -290,7 +290,7 @@ AddEventHandler("vehicle-shop:loadItems", function()
 end)
 
 RegisterServerEvent("mini:checkVehicleMoney")
-AddEventHandler("mini:checkVehicleMoney", function(vehicle, property)
+AddEventHandler("mini:checkVehicleMoney", function(vehicle, business)
 	local playerIdentifier = GetPlayerIdentifiers(source)[1]
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local license = char.getItem("Driver's License")
@@ -299,11 +299,11 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle, property)
 	local owner_name = char.getFullName()
 	if license and license.status == "valid" then
 		local hash = vehicle.hash
-		local price = GetVehiclePrice(vehicle)
+		local price = tonumber(GetVehiclePrice(vehicle))
 		if tonumber(price) <= money then
 			local plate = generate_random_number_plate()
 			if vehicles then
-				char.removeMoney(tonumber(price))
+				char.removeMoney(price)
 				local vehicle = {
 					owner = owner_name,
 					make = vehicle.make,
@@ -339,6 +339,10 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle, property)
 				TriggerEvent("lock:addPlate", vehicle.plate)
 				TriggerClientEvent("usa:notify", source, "Here are the keys! Thanks for your business!")
 				TriggerClientEvent("vehShop:spawnPlayersVehicle", source, hash, plate)
+
+				if business then
+					exports["usa-businesses"]:GiveBusinessCashPercent(business, price)
+				end
 			end
 		else
 			TriggerClientEvent("usa:notify", source, "Not enough money for that vehicle!")

@@ -32,7 +32,7 @@ previewMenu = NativeUI.CreateMenu("Vehicle Preview", "~b~Welcome!", 0, 320)
 
 mainMenu.OnItemSelect = function(menu, item, index)
 	local selected = item.Text._Text
-	if selected == "Get a Quote" then
+	if selected == "Sell" then
 		menu_data.vehicles_to_sell = nil
 		sell_submenu:Clear()
 		TriggerServerEvent("vehShop:loadVehiclesToSell")
@@ -70,7 +70,7 @@ function CreateMenu(menu)
 		----------
 		-- buy --
 		----------
-		buy_submenu = _menuPool:AddSubMenu(menu, "Showroom & Purchases", "Shop for a vehicle!", true)
+		buy_submenu = _menuPool:AddSubMenu(menu, "Buy", "Shop for a vehicle!", true)
 
 		for category, items in pairs(vehicleShopItems["vehicles"]) do
 		  local category_submenu = _menuPool:AddSubMenu(buy_submenu, category, "See our selection of " .. category, true)
@@ -89,7 +89,7 @@ function CreateMenu(menu)
 		----------
 		-- sell --
 		----------
-		sell_submenu = _menuPool:AddSubMenu(menu, "Get a Quote", "Sell a vehicle!", true)
+		sell_submenu = _menuPool:AddSubMenu(menu, "Sell", "Sell a vehicle!", true)
 	end)
 end
 
@@ -116,9 +116,9 @@ function UpdatePreviewMenu()
 	-----------------
 	local item = NativeUI.CreateItem("Purchase", "Purchase this vehicle for $" .. comma_value(menu_data.preview.vehicle.price))
 	item.Activated = function(parentmenu, selected)
-			local playerCoords = GetEntityCoords(me, false)
 			EndPreview()
-			TriggerServerEvent("mini:checkVehicleMoney", menu_data.preview.vehicle, property)
+			local business = exports["usa-businesses"]:GetClosestStore(15)
+			TriggerServerEvent("mini:checkVehicleMoney", menu_data.preview.vehicle, business)
 			previewMenu:Visible(false)
 	end
 	previewMenu:AddItem(item)
@@ -251,8 +251,9 @@ function addBlips()
 		local blip = AddBlipForCoord(SHOPS[i].store_x, SHOPS[i].store_y, SHOPS[i].store_z)
 		SetBlipSprite(blip, 225)
 		SetBlipAsShortRange(blip, true)
-		SetBlipScale(blip, 0.7)
+		SetBlipScale(blip, 0.85)
 		SetBlipDisplay(blip, 4)
+		SetBlipColour(blip, 1)
 		BeginTextCommandSetBlipName("STRING")
 		AddTextComponentString("Car Dealership")
 		EndTextCommandSetBlipName(blip)

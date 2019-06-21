@@ -12,6 +12,64 @@ KEYS ={
 }
 
 BUSINESSES = {
+	["Car Dealership (Los Santos)"] = {
+		position = {-28.2, -1104.1, 26.4},
+		cameraID = 'store34',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 2000,
+		purchasePercentage = 0.07
+	},
+	["Car Dealership (Harmony)"] = {
+		position = {1234.0, 2737.2, 38.0},
+		cameraID = 'store33',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 2000,
+		purchasePercentage = 0.07
+	},
+	["LS Tattoos (El Burro Heights)"] = {
+		position = {1325.2, -1650.7, 52.3},
+		cameraID = 'store27',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 2000
+	},
+	["The Pit (Vespucci Beach)"] = {
+		position = {-1151.9, -1423.9,  4.9},
+		cameraID = 'store28',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 2000
+	},
+	["Blazing Tattoo (Vinewood)"] = {
+		position = {319.8, 181.2, 103.6},
+		cameraID = 'store29',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 2000
+	},
+	["Sick Tats (Chumash)"] = {
+		position = {-3171.2, 1073.4, 20.8},
+		cameraID = 'store30',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 2000
+	},
+	["Sick Tats (Sandy Shores)"] = {
+		position = {1863.5, 3751.3, 33.0},
+		cameraID = 'store31',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 2000
+	},
+	["Sick Tats (Paleto Bay)"] = {
+		position = {-292.2, 6196.8, 31.5},
+		cameraID = 'store32',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 2000
+	},
 	["Rob's Liquor (El Rancho Blvd.)"] = {
 		position = {1134.21, -979.33, 46.41},
 		cameraID = 'store1',
