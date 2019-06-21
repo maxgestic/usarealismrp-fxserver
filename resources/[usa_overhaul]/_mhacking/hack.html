@@ -65,7 +65,7 @@
 			setTimeout(function(){
 				fadeBigMsg(true);
 				playSound('audiofinish',1);
-				setTimeout(function(){$.post('http://mhacking/callback', JSON.stringify({'success': true, 'remainingtime': endTime-now}));}, 2000);
+				setTimeout(function(){$.post('http://_mhacking/callback', JSON.stringify({'success': true, 'remainingtime': endTime-now}));}, 2000);
 			}, 2000);
 			resetGameState();
 		}
@@ -99,7 +99,7 @@
 			setTimeout(function(){
 				fadeBigMsg(true);
 				playSound('audiofail',1);
-				$.post('http://mhacking/callback', JSON.stringify({'success': false, 'remainingtime': 0}));
+				$.post('http://_mhacking/callback', JSON.stringify({'success': false, 'remainingtime': 0}));
 			}, 2000);
 			resetGameState();
 		} else {
@@ -266,11 +266,11 @@
 					setTimeout(function(){fadeBigMsg(false); startGame(item.s,item.d);}, 3000);
 				}
 			}
-			
+
 			if ('displayMsg' in item) {
 				setBigMsg('<span class="flash">'+item.displayMsg+'</span>');
 			}
-			
+
 			if ('fail' in item) {
 				if (item.fail) {
 					endTime = now;
@@ -290,7 +290,7 @@
 			}
 
 		});
-		
+
 	});
 </script>
 <style type="text/css">

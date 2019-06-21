@@ -45,7 +45,7 @@ AddEventHandler('mhacking:hide', function()
 end)
 
 AddEventHandler('mhacking:start', function(solutionlength, duration, callback)
-    mhackingCallback = callback
+  mhackingCallback = callback
 	nuiMsg = {}
 	nuiMsg.s = solutionlength
 	nuiMsg.d = duration
@@ -62,5 +62,5 @@ end)
 
 RegisterNUICallback('callback', function(data, cb)
 	mhackingCallback(data.success, data.remainingtime)
-    cb('ok')
+  cb('ok')
 end)
