@@ -16,7 +16,6 @@ AddEventHandler("playerDropped", function(reason)
       print("updating char with ID: " .. CHARACTERS[usource].get("_id"))
       db.updateDocument("characters", CHARACTERS[usource].get("_id"), CHARACTERS[usource].getSelf(), function(err)
   			print("* Character updated in DB! *")
-        print("err: " .. err)
         -- notify DOC of player disconnect while in jail --
     		local jailtime = CHARACTERS[usource].get("jailTime")
     		if jailtime then
