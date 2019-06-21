@@ -40,6 +40,9 @@ AddEventHandler("insurance:fileClaim", function(vehicle_to_claim)
 					TriggerClientEvent("usa:notify", _source, "Filed an insurance claim for your " .. vehicle_to_claim.model .. ".\n~y~Fee:~w~ $" .. CLAIM_PROCESSING_FEE)
 				end
 				TriggerClientEvent("garage:removeDamages", _source, vehicle_to_claim.plate)
+				if business then
+					exports["usa-businesses"]:GiveBusinessCashPercent(business, CLAIM_PROCESSING_FEE)
+				end
 			end)
 		end)
 	else

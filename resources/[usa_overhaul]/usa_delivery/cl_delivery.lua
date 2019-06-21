@@ -178,7 +178,7 @@ function SpawnDeliveryVan(x, y, z, heading)
 
 		-- give key to owner
 		TriggerServerEvent("garage:giveKey", vehicle_key)
-		TriggerServerEvent('mdt:addTempVehicle', 'Brute Boxville', "GoPostal Inc.", GetVehicleNumberPlateText(vehicle))
+		--TriggerServerEvent('mdt:addTempVehicle', 'Brute Boxville', "GoPostal Inc.", GetVehicleNumberPlateText(vehicle))
     end)
 end
 

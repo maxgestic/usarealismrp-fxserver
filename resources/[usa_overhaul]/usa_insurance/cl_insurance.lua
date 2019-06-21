@@ -21,7 +21,7 @@ end)
 function CreateMenu(menu)
 	Citizen.CreateThread(function()
 		local playerPed = PlayerPedId()
-		
+
 		-- Info --
 		local infoItem = NativeUI.CreateItem("Info", "See more information about auto insurance...")
 		infoItem.Activated = function(parentmenu, selected)
@@ -65,7 +65,8 @@ function CreateMenu(menu)
 								if vehicle.stored == false then
 									local item = NativeUI.CreateItem(vehicle.make .. " " .. vehicle.model, "Claim this vehicle for $" .. comma_value(.10 * vehicle.price))
 									item.Activated = function(parentmenu, selected)
-										TriggerServerEvent("insurance:fileClaim", vehicle)
+										local business = exports["usa-businesses"]:GetClosestStore(15)
+										TriggerServerEvent("insurance:fileClaim", vehicle, business)
 										_menuPool:CloseAllMenus()
 									end
 									claim_submenu:AddItem(item)
