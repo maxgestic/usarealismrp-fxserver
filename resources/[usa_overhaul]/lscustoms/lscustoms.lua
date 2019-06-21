@@ -857,7 +857,6 @@ function LSCMenu:onButtonSelected(name, button)
 	mname = m.name:lower()
 
 	local business = exports["usa-businesses"]:GetClosestStore(40)
-	print("found closest: " .. business)
 	TriggerServerEvent("LSC:buttonSelected", name, button, mname, business)
 end
 

@@ -58,9 +58,9 @@ AddEventHandler('sellDrugs:completeSale', function()
 			print('SELLDRUGS: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has sold item['..drug_item.name..'] with quantity['..quantity..'] with reward['..reward..'] with bonus['..bonus..']!')
 			-- notify:
 			if bonus > 0 then
-				TriggerClientEvent("usa:notify", source, "You sold ~y~(x"..quantity..") " .. random.name .. " ~s~for $" .. reward..'.00~s~ with a bonus of $'..bonus..'.00~s~.')
+				TriggerClientEvent("usa:notify", source, "You sold ~y~(x"..quantity..") " .. drug_item .. " ~s~for $" .. reward..'.00~s~ with a bonus of $'..bonus..'.00~s~.')
 			else
-				TriggerClientEvent("usa:notify", source, "You sold ~y~(x"..quantity..") " .. random.name .. " ~s~for $" .. reward..'.00~s~.')
+				TriggerClientEvent("usa:notify", source, "You sold ~y~(x"..quantity..") " .. drug_item .. " ~s~for $" .. reward..'.00~s~.')
 			end
 			return
 		else
