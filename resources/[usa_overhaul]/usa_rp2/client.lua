@@ -59,6 +59,35 @@ local blacklistedVehicles = {
 
 }
 
+local HOSPITALS = {
+  {name = "paleto", x = -247.2, y = 6330.8, z = 32.4},
+  {name = "pillbox", x = 316.6, y = -588.7, z = 43.3},
+  {name = "mt. zenoah", x = -497.9, y = -335.9, z = 34.5},
+  {name = "davis", x = 307.4, y = -1433.8, z = 29.9}
+}
+
+local KEYS = {
+  E = 38
+}
+
+Citizen.CreateThread(function()
+  while true do
+    local me = GetPlayerPed(-1)
+    local mycoords = GetEntityCoords(me)
+    for i = 1, #HOSPITALS do
+      local h = HOSPITALS[i]
+      DrawText3D(h.x, h.y, h.z, 4, '[E] - First Aid Kit ($150)')
+      if IsControlJustPressed(0, KEYS.E) then
+        if Vdist(h.x, h.y, h.z, mycoords.x, mycoords.y, mycoords.z) < 3 then
+          print("buying FAK")
+          TriggerServerEvent("hospital:buyFirstAidKit")
+        end
+      end
+    end
+    Wait(2)
+  end
+end)
+
 -- DISCORD RICH PRESENCE --
 SetDiscordAppId("517228692834091033")
 SetDiscordRichPresenceAsset("5a158f46d2aefd14d3c7a16f3f4bc72b")
@@ -1122,3 +1151,19 @@ end
 ------------------------------
 ------------------------------
 ------------------------------
+
+function DrawText3D(x, y, z, distance, text)
+  if Vdist(GetEntityCoords(PlayerPedId()), x, y, z) < distance then
+    local onScreen,_x,_y=World3dToScreen2d(x,y,z)
+    SetTextScale(0.35, 0.35)
+    SetTextFont(4)
+    SetTextProportional(1)
+    SetTextColour(255, 255, 255, 215)
+    SetTextEntry("STRING")
+    SetTextCentre(1)
+    AddTextComponentString(text)
+    DrawText(_x,_y)
+    local factor = (string.len(text)) / 370
+    DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
+  end
+end

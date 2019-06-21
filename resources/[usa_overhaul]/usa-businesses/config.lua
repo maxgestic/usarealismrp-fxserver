@@ -26,6 +26,13 @@ BUSINESSES = {
 		lastRobbedTime = 0,
 		price = 2000
 	},
+	["Herr Kutz Barber (Paleto Bay)"] = {
+		position = {-277.6, 6230.2, 31.7},
+		cameraID = 'store26',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 2000
+	},
 	["247 Supermarket (Paleto Bay)"] = {
 		position = {1729.37, 6418.29, 35.03},
 		cameraID = 'store3',

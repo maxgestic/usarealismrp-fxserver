@@ -47,9 +47,9 @@ local blips = {
 	{ title="Police Department", colour = 38 , id = 60, scale = 0.7, x = -1107.5, y = -847.5, z = 19.3 }, -- LOS SANTOS, vespucci PD
 	{ title="Sheriff's Office", colour = 38 , id = 60, scale = 0.7, x=1853.2, y=3687.74, z=34.267 }, -- SANDY
 	{ title="Sheriff's Office", colour = 38 , id = 60, scale = 0.7, x=-447.041, y=6012.97, z=31.7164 }, -- PALETO
-	{ title="Fire Department", colour = 1, id = 436, scale = 0.7, x=207.106, y=-1641.45, z=28.5 }, -- LOS SANTOS
-	{ title="Fire Department", colour = 1, id = 436, scale = 0.7, x=-375.435, y=6114.61, z=35.4397 }, -- PALETO
-	{ title="Fire Department", colour = 1, id = 436, scale = 0.7, x=1694.01, y=3589.87, z=40.3212 }, -- SANDY
+	{ title="Fire Department", colour = 1, id = 60, scale = 0.7, x=207.106, y=-1641.45, z=28.5 }, -- LOS SANTOS
+	{ title="Fire Department", colour = 1, id = 60, scale = 0.7, x=-375.435, y=6114.61, z=35.4397 }, -- PALETO
+	{ title="Fire Department", colour = 1, id = 60, scale = 0.7, x=1694.01, y=3589.87, z=40.3212 }, -- SANDY
 	{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = -240.10, y = 6324.22, z = 32.43 }, -- paleto
 	--{ title="Hospital", colour = 48, id = 61, x = 360.3, y = -548.9, z = 28.8 }, -- LS, pillbox hill
 	{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = 308.1, y = -1434.7,  z = 29.9 },
@@ -63,7 +63,7 @@ local blips = {
 	{ title="Bahama Mamas", colour = 15, id = 93, scale = 0.7, x=-1388.94, y=-585.919, z=29.2195 },
 	{ title="Comedy Club", colour = 4, id = 362, scale = 0.7, x = -429.9, y = 261.6, z = 83.0 },
 	{ title="Yellow Jack", colour = 15, id = 93, scale = 0.7, x = 1986.1, y = 3050.57, z = 47.2151 },
-	{ title="Studio Los Santos", colour = 83, id = 136, x = -337.23, y = 207.189, z = 88.57},
+	{ title="Studio Los Santos", colour = 83, id = 136, x = -337.23, y = 207.189, z = 88.57, scale = 0.95},
 	--{ title="Downtown Taxi", colour = 60, id = 198, x=895.563, y=-179.536, z=74.7003 },
 	--{ title="Downtown Taxi", colour = 60, id = 198, x = -41.306, y = 6436.432, z = 30.490 },
 	--{ title="Downtown Taxi", colour = 60, id = 198, x = 895.2, y = -179.5, z = 74.7 },

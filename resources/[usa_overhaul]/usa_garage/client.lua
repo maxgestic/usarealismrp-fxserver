@@ -26,7 +26,8 @@ locations = {
 	{ ["x"] = 326.4, ["y"] = -1475.6, ["z"] = 29.8, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- one of the hospitals in LS, forgot exaclty the name
 	{ ["x"] = 1834.5, ["y"] = 2542.2, ["z"] = 45.9, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} },
 	{ ['x'] = 911.6, ['y'] = -163.6, ['z'] = 74.4, ["jobs"] = {"taxi"}},
-	{ ['x'] = -77.19, ['y'] = -808.706, ['z'] = 36.48, ['jobs'] = {"dai"}}
+	{ ['x'] = -77.19, ['y'] = -808.706, ['z'] = 36.48, ['jobs'] = {"dai"}},
+	{ ['x'] = -311.8, ['y'] = 228.2, ['z'] = 87.8, ['noBlip'] = true} -- studio los santos
 }
 
 local VEHICLE_DAMAGES = {}
@@ -34,18 +35,20 @@ closest_shop = nil
 
 Citizen.CreateThread(function()
     for _, info in pairs(locations) do
-		if type(info["jobs"]) == "nil" then
-			info.blip = AddBlipForCoord(info['x'], info['y'], info['z'])
-			SetBlipSprite(info.blip, 357)
-			SetBlipDisplay(info.blip, 4)
-			SetBlipScale(info.blip, 0.7)
-			SetBlipColour(info.blip, 4)
-			SetBlipAsShortRange(info.blip, true)
-			SetBlipColour(info.blip, 18)
-			BeginTextCommandSetBlipName("STRING")
-			AddTextComponentString("Garage")
-			EndTextCommandSetBlipName(info.blip)
-		end
+			if type(info["jobs"]) == "nil" then
+				if not info['noBlip'] then
+					info.blip = AddBlipForCoord(info['x'], info['y'], info['z'])
+					SetBlipSprite(info.blip, 357)
+					SetBlipDisplay(info.blip, 4)
+					SetBlipScale(info.blip, info['blipScale'] or 0.7)
+					SetBlipColour(info.blip, 4)
+					SetBlipAsShortRange(info.blip, true)
+					SetBlipColour(info.blip, 18)
+					BeginTextCommandSetBlipName("STRING")
+					AddTextComponentString("Garage")
+					EndTextCommandSetBlipName(info.blip)
+				end
+			end
     end
 end)
 
