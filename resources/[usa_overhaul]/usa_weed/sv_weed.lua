@@ -55,7 +55,7 @@ AddEventHandler("weed:rewardItem", function(stage)
     if char.hasItem(data.harvest_item) then
       if char.canHoldItem(data.processed_item) then
         char.giveItem(data.processed_item)
-        char.removeItem(data.harvest_item)
+        char.removeItem(data.harvest_item, 1)
       else
         TriggerClientEvent('usa:notify', source, 'Your inventory is full!')
       end
