@@ -201,8 +201,13 @@ Citizen.CreateThread(function()
 						TriggerEvent('usa:notify', "You must be in the driver's seat.")
 					end
 				elseif GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), data.rent.x, data.rent.y, data.rent.z, true) < 5 then
-					TriggerServerEvent('boatMenu:requestOpenMenu')
-					closestShop = name
+          Wait(500)
+          if not IsControlPressed(0, MENU_OPEN_KEY) then -- E pressed
+  					TriggerServerEvent('boatMenu:requestOpenMenu')
+  					closestShop = name
+          else -- E held
+            TriggerServerEvent("boats:purchaseLicense")
+          end
 				end
 			end
 		end

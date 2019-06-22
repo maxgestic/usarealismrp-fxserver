@@ -18,6 +18,8 @@ local boats = {
 
 local rentals = {}
 
+local LICENSE_PURCHASE_PRICE = 5000
+
 AddEventHandler('es:playerLoaded', function(source, user)
   TriggerEvent("boatMenu:loadBoats", source)
 end)
@@ -74,7 +76,33 @@ AddEventHandler('boatMenu:requestOpenMenu', function()
   if license and license.status == "valid" then
     TriggerClientEvent('boatMenu:openMenu', source)
   else
-    TriggerClientEvent('usa:notify', source, 'You do not have a valid Boat License!')
+    TriggerClientEvent('usa:notify', source, 'No license! Hold E to purchase one for $' .. comma_value(LICENSE_PURCHASE_PRICE))
+  end
+end)
+
+RegisterServerEvent("boats:purchaseLicense")
+AddEventHandler("boats:purchaseLicense", function()
+  local timestamp = os.date("*t", os.time())
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local NEW_BOAT_LICENSE = {
+    name = 'Boat License',
+    number = 'BL' .. tostring(math.random(1, 254367)),
+    quantity = 1,
+    ownerName = char.getFullName(),
+    issued_by = "Boat Shop",
+    ownerDob = char.get("dateOfBirth"),
+    status = "valid",
+    type = "license",
+    notDroppable = true,
+    expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
+    weight = 2.0
+  }
+  if char.canHoldItem(NEW_BOAT_LICENSE) then
+    char.giveItem(NEW_BOAT_LICENSE)
+    char.removeMoney(LICENSE_PURCHASE_PRICE)
+    TriggerClientEvent("usa:notify", source, "You have been issued a boating license!")
+  else
+    TriggerClientEvent("usa:notify", source, "Inventory full!")
   end
 end)
 
