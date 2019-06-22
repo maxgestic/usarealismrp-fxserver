@@ -13,7 +13,7 @@ local CLOTHING_STORE_LOCATIONS = {
 	{x = -1192.84, y = -767.861, z = 19.0187}, -- vinewood 3
 	{x = -163.61, y = -303.987, z = 39.0333}, -- vinewood 4
 	{x = 125.403, y = -223.887, z = 54.0578}, -- vinewood 5
-	{x = 423.474, y = -808.135, z = 28.4911}, -- vinewood 6
+	{x = 423.474, y = -808.135, z = 29.4911}, -- vinewood 6
 	{x = -818.509, y = -1074.14, z = 11.0281}, -- vinewood 7
 	{x = 77.7774, y = -1389.87, z = 29.0761}, -- vinewood
 	{x = 105.8, y = -1302.9, z = 27.7, noblip = true}, -- vanilla unicorn
@@ -201,7 +201,7 @@ function IsNearStore()
 	for _, item in pairs(CLOTHING_STORE_LOCATIONS) do
 		index = index + 1
 		local distance = GetDistanceBetweenCoords(item.x, item.y, item.z,  mycoords.x, mycoords.y, mycoords.z, true)
-		if distance <= 1 then
+		if distance <= 2.0 then
 			lastShop = index
 			return true
 		end

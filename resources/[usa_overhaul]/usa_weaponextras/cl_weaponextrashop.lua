@@ -145,7 +145,7 @@ end
 function isPlayerAtWeaponExtraShop()
 	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
 	for i = 1, #locations do
-		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,true) < 1.3 then
+		if Vdist(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z) < 1.0 then
 			return locations[i]
 		end
 	end

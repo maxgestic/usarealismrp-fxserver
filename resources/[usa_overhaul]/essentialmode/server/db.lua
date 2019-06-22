@@ -364,7 +364,7 @@ function exposedDB.updateDocument(db, documentID, updates, callback)
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. documentID, function(err, rText, headers)
 		local doc = json.decode(rText)
 
-		if(doc)then
+		if(doc and _id)then
 			for i in pairs(updates)do
 				doc[i] = updates[i]
 			end

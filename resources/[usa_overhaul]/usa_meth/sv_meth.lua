@@ -48,17 +48,17 @@ AddEventHandler("methJob:checkUserJobSupplies", function(supply, supply2)
 	local found_supply = char.getItem(supply)
 	if found_supply then
 		char.removeItem(found_supply, 1)
-		TriggerClientEvent('methJob:doesUserHaveJobSupply', userSource, true, supply)
+		TriggerClientEvent('methJob:doesUserHaveJobSupply', source, true, supply)
 		return
 	end
 
 	if supply2 and char.hasItem(supply2) then
 		char.removeItem(supply2, 1)
-		TriggerClientEvent('methJob:doesUserHaveJobSupply', userSource, true, supply2)
+		TriggerClientEvent('methJob:doesUserHaveJobSupply', source, true, supply2)
 		return
 	end
 
-	TriggerClientEvent("usa_rp:doesUserHaveJobSupply", userSource, false, supply, supply2)
+	TriggerClientEvent("usa_rp:doesUserHaveJobSupply", source, false, supply, supply2)
 end)
 
 RegisterServerEvent("methJob:giveChemicals")
