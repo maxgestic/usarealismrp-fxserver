@@ -6,7 +6,7 @@ end
 -- charge customer --
 RegisterServerEvent("clothing-store:chargeCustomer")
 AddEventHandler("clothing-store:chargeCustomer", function(business)
-	local amount = 200
+	local amount = 60
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local money = char.get("money")
 	if money - amount >= 0 then

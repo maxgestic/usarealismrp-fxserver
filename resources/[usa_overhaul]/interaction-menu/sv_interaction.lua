@@ -101,44 +101,36 @@ end
 
 RegisterServerEvent("interaction:giveItemToPlayer")
 AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
-  -- give item to nearest player
-	local char = exports["usa-characters"]:GetCharacter(targetPlayerId)
-  if char.canHoldItem(item) then
+	local toChar = exports["usa-characters"]:GetCharacter(targetPlayerId)
+	local fromChar = exports["usa-characters"]:GetCharacter(source)
+  if toChar.canHoldItem(item) then
 		if not item.type or item.type == "license" then
 			TriggerClientEvent("usa:notify", targetPlayerId, "Can't trade licenses. Sorry!")
 			return
 		end
 	  if item.type == "weapon" then
-			local weapons = char.getWeapons()
+			local weapons = toChar.getWeapons()
 			if #weapons < 3 then
-			  char.giveItem(item)
-				local targetChar = exports["usa-characters"]:GetCharacter(targetPlayerId)
-				targetChar.removeItemWithField("uuid", item.uuid)
+			  toChar.giveItem(item)
+				fromChar.removeItemWithField("uuid", item.uuid)
 			  TriggerClientEvent("interaction:equipWeapon", targetPlayerId, item, true)
 			  TriggerClientEvent("interaction:equipWeapon", source, item, false)
 			else
 			  TriggerClientEvent("interaction:notify", source, GetPlayerName(targetPlayerId) .. " can't hold anymore weapons!")
 			end
 	  else
-		item.quantity = 1
-		char.giveItem(item)
-		-- remove from source player
-		removeItemFromPlayer(item, source)
-		TriggerClientEvent("usa:notify", source, "You gave " .. GetPlayerName(targetPlayerId) .. ": (x1) " .. item.name)
-		TriggerClientEvent("usa:notify", targetPlayerId, GetPlayerName(source) .. " has given you " .. ": (x1) " .. item.name)
-		-- play animation:
-		TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 2)
+			item.quantity = 1
+			toChar.giveItem(item)
+			fromChar.removeItem(item, 1)
+			TriggerClientEvent("usa:notify", source, "You gave " .. GetPlayerName(targetPlayerId) .. ": (x1) " .. item.name)
+			TriggerClientEvent("usa:notify", targetPlayerId, GetPlayerName(source) .. " has given you " .. ": (x1) " .. item.name)
+			TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 2)
 	  end
 	else
 		TriggerClientEvent("usa:notify", source, "Player can't hold anymore items! Inventory full.")
 		TriggerClientEvent("usa:notify", targetPlayerId, "You can't hold that item! Inventory full.")
 	end
 end)
-
-function removeItemFromPlayer(item, userSource)
-	local char = exports["usa-characters"]:GetCharacter(userSource)
-	char.removeItem(item, 1)
-end
 
 RegisterServerEvent("inventory:moveItem")
 AddEventHandler("inventory:moveItem", function(data)
