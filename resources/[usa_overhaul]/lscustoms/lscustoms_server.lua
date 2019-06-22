@@ -108,7 +108,7 @@ AddEventHandler('playerDropped', function()
 end)
 
 RegisterServerEvent("LSC:buttonSelected")
-AddEventHandler("LSC:buttonSelected", function(name, button, mname)
+AddEventHandler("LSC:buttonSelected", function(name, button, mname, business)
 	if button.price then -- check if button have price
 		local char = exports["usa-characters"]:GetCharacter(source)
 		button.price = math.abs(button.price) -- prevent mem hack to gain money (lol what?)
@@ -118,30 +118,30 @@ AddEventHandler("LSC:buttonSelected", function(name, button, mname)
 				if menuname == mname then
 					if contents.startprice then
 						local actualprice = contents.startprice + (button.mod * contents.increaseby)
-						if button.price == actualprice or (button.name == 'Stock' and button.price == 0) then 
+						if button.price == actualprice or (button.name == 'Stock' and button.price == 0) then
 							break
-						else 
+						else
 							TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for memory editing at a Los Santos Customs, please intervene^0!')
-							DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.") 
-							return 
+							DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+							return
 						end
 					elseif contents.price then
-						if button.price == contents.price then 
-							break 
-						else 
+						if button.price == contents.price then
+							break
+						else
 							TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for memory editing at a Los Santos Customs, please intervene^0!')
-							DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.") 
-							return 
+							DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+							return
 						end
 					else
 						for i = 1, #contents do
 							if string.lower(contents[i].name) == name then
-								if button.price == contents[i].price then 
-									break 
-								else 
+								if button.price == contents[i].price then
+									break
+								else
 									TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for memory editing at a Los Santos Customs, please intervene^0!')
-									DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.") 
-									return 
+									DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+									return
 								end
 							end
 						end
@@ -153,6 +153,9 @@ AddEventHandler("LSC:buttonSelected", function(name, button, mname)
 			-- take money from player, apply customization --
 			TriggerClientEvent("LSC:buttonSelected", source, name, button, true)
 			char.removeMoney(button.price)
+			if business then
+				exports["usa-businesses"]:GiveBusinessCashPercent(business, button.price)
+			end
 		else
 			TriggerClientEvent("LSC:buttonSelected", source, name, button, false)
 		end
@@ -321,13 +324,13 @@ end)
 function tprint (tbl, indent)
   if not indent then indent = 0 end
   local toprint = string.rep(" ", indent) .. "{\r\n"
-  indent = indent + 2 
+  indent = indent + 2
   for k, v in pairs(tbl) do
     toprint = toprint .. string.rep(" ", indent)
     if (type(k) == "number") then
       toprint = toprint .. "[" .. k .. "] = "
     elseif (type(k) == "string") then
-      toprint = toprint  .. k ..  "= "   
+      toprint = toprint  .. k ..  "= "
     end
     if (type(v) == "number") then
       toprint = toprint .. v .. ",\r\n"

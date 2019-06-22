@@ -238,22 +238,14 @@ function exposedDB.createDocument(db, rows, cb)
 end
 
 function exposedDB.createDocumentWithId(db, rows, docid, cb)
-	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/_uuids", function(err, rText, headers)
-		local id
-		if not docid then
-			id = json.decode(rText).uuids[1]
+	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. docid, function(err, rText, headers)
+		rText = json.decode(rText)
+		if rText.ok then
+			cb(true)
 		else
-			id = docid
+			cb(false)
 		end
-		PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. id, function(err, rText, headers)
-			rText = json.decode(rText)
-			if rText.ok then
-				cb(true)
-			else
-				cb(false)
-			end
-		end, "PUT", json.encode(rows), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
-	end, "GET", "", {Authorization = "Basic " .. auth})
+	end, "PUT", json.encode(rows), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end
 
 --[[
@@ -362,15 +354,13 @@ end
 
 function exposedDB.updateDocument(db, documentID, updates, callback)
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. documentID, function(err, rText, headers)
-		local doc = json.decode(rText)
-
-		if(doc and _id)then
-			for i in pairs(updates)do
+		if err ~= 404 then
+			local doc = json.decode(rText)
+			for i in pairs(updates) do
 				doc[i] = updates[i]
 			end
-
-			PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. doc._id, function(err, rText, headers)
-				callback((err or true))
+			PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. documentID, function(err, rText, headers)
+				callback(doc)
 			end, "PUT", json.encode(doc), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 		end
 	end, "GET", "", {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})

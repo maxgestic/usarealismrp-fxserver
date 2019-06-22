@@ -1,9 +1,9 @@
 licensePrices = {
 	["Driver's License"] = 500,
-	["Firearm Permit"] = 2000,
-	["Bar Certificate"] = 15000,
-	["Boat License"] = 5000,
-	["Aircraft License"] = 7500
+	["Firearm Permit"] = 1000,
+	["Bar Certificate"] = 10000,
+	["Boat License"] = 1000,
+	["Aircraft License"] = 1500
 }
 
 --------------------
@@ -232,7 +232,9 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff'}, function(source,
 				ownerDob = char.get("dateOfBirth"),
 				expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
 				status = "valid",
-				type = "license"
+				type = "license",
+				notDroppable = true,
+				weight = 2.0
 			}
 		elseif type == "fp" then
 			target_item_name = "Firearm Permit"
@@ -245,7 +247,9 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff'}, function(source,
 				ownerDob = char.get("dateOfBirth"),
 				expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
 				status = "valid",
-				type = "license"
+				type = "license",
+				notDroppable = true,
+				weight = 2.0
 			}
 		elseif type == 'bl' then
 			if isPolice then
@@ -260,9 +264,10 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff'}, function(source,
 					ownerName = target_player.getFullName(),
 					issued_by = char.getFullName(),
 					ownerDob = char.get("dateOfBirth"),
-					expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
 					status = "valid",
-					type = "license"
+					type = "license",
+					notDroppable = true,
+					weight = 2.0
 				}
 			end
 		elseif type == 'al' then
@@ -280,7 +285,9 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff'}, function(source,
 					ownerDob = char.get("dateOfBirth"),
 					expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
 					status = "valid",
-					type = "license"
+					type = "license",
+					notDroppable = true,
+					weight = 2.0
 				}
 			end
 		elseif type == 'bar' then
@@ -298,7 +305,9 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff'}, function(source,
 					ownerDob = char.get("dateOfBirth"),
 					expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
 					status = "valid",
-					type = "license"
+					type = "license",
+					notDroppable = true,
+					weight = 2.0
 				}
 			end
 		end

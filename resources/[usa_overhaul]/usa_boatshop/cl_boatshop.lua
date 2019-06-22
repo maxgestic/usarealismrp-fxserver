@@ -201,8 +201,13 @@ Citizen.CreateThread(function()
 						TriggerEvent('usa:notify', "You must be in the driver's seat.")
 					end
 				elseif GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), data.rent.x, data.rent.y, data.rent.z, true) < 5 then
-					TriggerServerEvent('boatMenu:requestOpenMenu')
-					closestShop = name
+          Wait(500)
+          if not IsControlPressed(0, MENU_OPEN_KEY) then -- E pressed
+  					TriggerServerEvent('boatMenu:requestOpenMenu')
+  					closestShop = name
+          else -- E held
+            TriggerServerEvent("boats:purchaseLicense")
+          end
 				end
 			end
 		end
@@ -248,17 +253,16 @@ AddEventHandler("boatMenu:spawnSeacraft", function(boat)
 		        SetVehicleHasBeenOwnedByPlayer(vehicle, true)
 		        SetEntityAsMissionEntity(vehicle)
 		        local vehicle_key = {
-					name = "Key -- " .. GetVehicleNumberPlateText(vehicle),
-					quantity = 1,
-					type = "key",
-					owner = "GOVT",
-					make = "GOVT",
-					model = "GOVT",
-					plate = GetVehicleNumberPlateText(vehicle)
-				}
-
-				-- give key to owner
-				TriggerServerEvent("garage:giveKey", vehicle_key)
+    					name = "Key -- " .. GetVehicleNumberPlateText(vehicle),
+    					quantity = 1,
+    					type = "key",
+    					owner = "GOVT",
+    					make = "GOVT",
+    					model = "GOVT",
+    					plate = GetVehicleNumberPlateText(vehicle)
+    				}
+    				-- give key to owner
+    				TriggerServerEvent("garage:giveKey", vehicle_key)
 		        return
 		    end
 	    end
@@ -295,6 +299,17 @@ AddEventHandler('boatMenu:rentBoat', function(index)
         	if Vdist(info.rent.x, info.rent.y, info.rent.z, playerCoords) < 5 then
 		        local vehicle = CreateVehicle(numberHash, info.spawn.x, info.spawn.y, info.spawn.z, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
 		        SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
+            local vehicle_key = {
+    					name = "Key -- " .. GetVehicleNumberPlateText(vehicle),
+    					quantity = 1,
+    					type = "key",
+    					owner = "GOVT",
+    					make = "GOVT",
+    					model = "GOVT",
+    					plate = GetVehicleNumberPlateText(vehicle)
+    				}
+    				-- give key to owner
+    				TriggerServerEvent("garage:giveKey", vehicle_key)
 		        return
 		    end
 	     end
@@ -479,4 +494,3 @@ end)
 -----------------
 -----------------
 -----------------
-

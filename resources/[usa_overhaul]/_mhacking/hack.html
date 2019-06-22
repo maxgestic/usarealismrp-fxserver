@@ -266,11 +266,11 @@
 					setTimeout(function(){fadeBigMsg(false); startGame(item.s,item.d);}, 3000);
 				}
 			}
-			
+
 			if ('displayMsg' in item) {
 				setBigMsg('<span class="flash">'+item.displayMsg+'</span>');
 			}
-			
+
 			if ('fail' in item) {
 				if (item.fail) {
 					endTime = now;
@@ -290,7 +290,7 @@
 			}
 
 		});
-		
+
 	});
 </script>
 <style type="text/css">

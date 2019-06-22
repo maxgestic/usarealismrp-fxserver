@@ -269,7 +269,8 @@ function CreateBarberShopMenu(menu)
       _menuPool:CloseAllMenus()
       -- Finish Checkout  / Save --
       local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
-      TriggerServerEvent("barber:checkout", old_head)
+      local business = exports["usa-businesses"]:GetClosestStore(15)
+      TriggerServerEvent("barber:checkout", old_head, business)
     end
     menu:AddItem(checkout_item)
 
@@ -315,7 +316,7 @@ Citizen.CreateThread(function()
         _menuPool:ProcessMenus()
 
     	for i = 1, #BARBER_SHOPS do
-          if Vdist(playerCoords.x,playerCoords.y,playerCoords.z,BARBER_SHOPS[i].x,BARBER_SHOPS[i].y,BARBER_SHOPS[i].z)  <  5 then
+          if Vdist(playerCoords.x,playerCoords.y,playerCoords.z,BARBER_SHOPS[i].x,BARBER_SHOPS[i].y,BARBER_SHOPS[i].z)  <  3 then
               DrawText3D(BARBER_SHOPS[i].x,BARBER_SHOPS[i].y,BARBER_SHOPS[i].z, '[E] - Barber Shop (~g~$200.00~s~)')
               if IsControlJustPressed(1, MENU_OPEN_KEY) then
                   closest_shop = BARBER_SHOPS[i] --// set shop player is at

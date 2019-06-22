@@ -56,6 +56,7 @@ AddEventHandler("gunShop:requestPurchase", function(category, index)
       for i = 65,  90 do table.insert(letters, string.char(i)) end -- add capital letters
       local serialEnding = math.random(100000, 999999)
       local serialLetter = letters[math.random(#letters)]
+      weapon.uuid = math.random(999999999)
       weapon.serialNumber = serialLetter .. serialEnding
       local weaponDB = {}
       weaponDB.name = weapon.name

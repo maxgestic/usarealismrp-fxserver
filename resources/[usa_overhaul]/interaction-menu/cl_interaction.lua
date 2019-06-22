@@ -875,19 +875,11 @@ function interactionMenuUse(itemName, wholeItem)
 				local jcan = 883325847
 				GiveWeaponToPed(GetPlayerPed(-1), jcan, 20, false, true) -- easiest way to remove jerry can object off back when using it (from weapons-on-back resource)
 				Wait(1000)
-				-- put jerry can object in hand --
-				--local can_prop = AttachEntityToPed('prop_ld_jerrycan_01', 36029, 0, 0, 0, 90.0, 90.0, 85.0)
-				--local can_prop_net_id = AttachEntityToPed('prop_ld_jerrycan_01', 36029, 0, 0, 0, 3.0, 173.0, 0.0)
-				-- play anim --
-				--TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.name, JERRY_CAN_ANIMATION.dict, false, 6.5, true)
-				--TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.dict, JERRY_CAN_ANIMATION.name, 5, 1, 25000, 31, 0, 0, 0, 0)
 				TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.dict, JERRY_CAN_ANIMATION.name, -8, 1, -1, 53, 0, 0, 0, 0, 24.5)
 				Wait(25000)
 				ClearPedTasksImmediately(GetPlayerPed(-1))
 				-- refuel --
 				TriggerServerEvent("essence:refuelWithJerryCan", exports.es_AdvancedFuel:getEssence(), GetVehicleNumberPlateText(hitHandleVehicle), GetDisplayNameFromVehicleModel(GetEntityModel(hitHandleVehicle)))
-				-- remove jerry can object from hand --
-				--DeleteEntity(NetToObj(can_prop_net_id))
 				-- remove jerry can weapon from inventory --
 				TriggerServerEvent("usa:removeItem", wholeItem, 1)
 			else

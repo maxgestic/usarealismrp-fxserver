@@ -196,7 +196,8 @@ AddEventHandler("phone:requestCall", function(numbers)
 	local characters = exports["usa-characters"]:GetCharacters()
 	for id, char in pairs(characters) do
 		local savedId = id
-		if char.hasItemWithField("number", numbers.phone_number) then
+		local p = char.getItemWithField("number", numbers.phone_number)
+		if p then
 			-- query for phone contacts --
 			local endpoint = "/phones/_design/phoneFilters/_view/getContactsByNumber"
 			local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint

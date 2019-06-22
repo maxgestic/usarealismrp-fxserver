@@ -129,7 +129,8 @@ Citizen.CreateThread(function()
 								if not IsEntityDead(me) then
 									------------------------------------------------------------
 									-- give money to owner, subtract from customer --
-									TriggerServerEvent("clothing-store:chargeCustomer")
+									local business = exports["usa-businesses"]:GetClosestStore(15)
+									TriggerServerEvent("clothing-store:chargeCustomer", business)
 								else
 									TriggerEvent("usa:notify", "Can't use the clothing store when dead!")
 								end

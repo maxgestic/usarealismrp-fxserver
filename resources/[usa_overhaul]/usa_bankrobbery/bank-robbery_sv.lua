@@ -11,7 +11,6 @@ AddEventHandler("bank:beginRobbery", function()
 			bankRobbable = false
 			sourceRobbing = source
 			TriggerClientEvent('usa:notify', source, 'You are now robbing the bank, hack into the system to get the money!')
-			TriggerClientEvent("usa:playScenario", source, "WORLD_HUMAN_STAND_MOBILE")
 			TriggerClientEvent("bank:startHacking", source)
 			SetTimeout(10800000, function()
 				bankRobbable = true
@@ -31,7 +30,7 @@ AddEventHandler("bank:hackComplete", function()
 		local rewardMoney = math.random(5000, 10000)
 		char.giveMoney(rewardMoney)
 		TriggerClientEvent("usa:notify", source, "You have received ~g~$" .. comma_value(rewardMoney) .. "~w~!")
-		print("BANKROBBERY: Player " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] successfully robbed the bank and now has money[" .. new_money .. "] with reward[".. rewardMoney .. "]!")
+		print("BANKROBBERY: Player " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] successfully robbed the bank and was given a reward of [$".. rewardMoney .. "]!")
 		sourceRobbing = -1
 	end
 end)

@@ -3,7 +3,7 @@ local debug = false
 -- todo: randomize price based on each purchase instead of once
 local SELLABLE_ITEMS = {
 	["Packaged Meth"] = {150, 200},
-	["Packaged Blue Meth"] = {400, 600},
+	["Packaged Blue Meth"] = {500, 600},
 	["Packaged Weed"] = {50, 125}
 }
 
@@ -15,7 +15,7 @@ AddEventHandler('sellDrugs:checkPlayerHasDrugs', function()
 		if char.hasItem(item_name) then
 			local policeOnline = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
 			if policeOnline == 0 then
-				TriggerClientEvent('sellDrugs:showHelpText', source, 0.9)
+				TriggerClientEvent('sellDrugs:showHelpText', source, 0.75)
 			elseif policeOnline == 1 then
 			 	TriggerClientEvent('sellDrugs:showHelpText', source, 0.6)
 			elseif policeOnline == 2 then
@@ -58,9 +58,9 @@ AddEventHandler('sellDrugs:completeSale', function()
 			print('SELLDRUGS: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has sold item['..drug_item.name..'] with quantity['..quantity..'] with reward['..reward..'] with bonus['..bonus..']!')
 			-- notify:
 			if bonus > 0 then
-				TriggerClientEvent("usa:notify", source, "You sold ~y~(x"..quantity..") " .. random.name .. " ~s~for $" .. reward..'.00~s~ with a bonus of $'..bonus..'.00~s~.')
+				TriggerClientEvent("usa:notify", source, "You sold ~y~(x"..quantity..") " .. drug_item.name .. " ~s~for $" .. reward..'.00~s~ with a bonus of $'..bonus..'.00~s~.')
 			else
-				TriggerClientEvent("usa:notify", source, "You sold ~y~(x"..quantity..") " .. random.name .. " ~s~for $" .. reward..'.00~s~.')
+				TriggerClientEvent("usa:notify", source, "You sold ~y~(x"..quantity..") " .. drug_item.name .. " ~s~for $" .. reward..'.00~s~.')
 			end
 			return
 		else

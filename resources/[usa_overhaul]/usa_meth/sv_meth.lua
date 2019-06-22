@@ -14,7 +14,7 @@ AddEventHandler("methJob:methProduced", function(itemName)
 		weight = 4,
 		objectModel = 'bkr_prop_meth_scoop_01a'
 	}
-	if char.canHoldItem(itemToGive) then
+	if char.canHoldItem(methProduced) then
 		char.giveItem(methProduced)
 		TriggerClientEvent("usa:notify", source, "You have successfully proccessed the materials into a meth rock!")
     else
@@ -31,9 +31,9 @@ AddEventHandler("methJob:methProcessed", function(itemName)
         legality = 'illegal',
         quantity = 1,
         weight = 4,
-        objectModel = 'bkr_prop_meth_smallbag_01a' 
+        objectModel = 'bkr_prop_meth_smallbag_01a'
     }
-	if char.canHoldItem(itemToGive) then
+	if char.canHoldItem(methProduced) then
 		char.giveItem(methProduced)
 		TriggerClientEvent("usa:notify", source, "You have successfully processed meth rock into packaged product!")
     else
@@ -139,9 +139,9 @@ end)
 RegisterServerEvent("methJob:checkUserMoney")
 AddEventHandler("methJob:checkUserMoney", function(supplyType)
 	local char = exports["usa-characters"]:GetCharacter(source)
-	local amount = 300
+	local amount = 100
 	if supplyType == 'Red Phosphorus' then
-		amount = 500
+		amount = 150
 	end
 
 	local suspicious_chems = {

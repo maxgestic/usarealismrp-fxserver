@@ -56,12 +56,14 @@ local largeWeapons = {
 	'WEAPON_CARBINERIFLE_MK2',
 	'WEAPON_SMG',
 	'WEAPON_PUMPSHOTGUN',
+	'WEAPON_HEAVYSHOTGUN',
 	'WEAPON_PUMPSHOTGUN_MK2',
 	'WEAPON_BULLPUPSHOTGUN',
 	'WEAPON_SNIPERRIFLE',
 	'WEAPON_REMOTESNIPER',
 	'WEAPON_MARKSMANRIFLE',
-	'WEAPON_BAT'
+	'WEAPON_BAT',
+	'WEAPON_MUSKET'
 }
 
 -- HOLD WEAPON HOLSTER ANIMATION --
@@ -71,7 +73,7 @@ Citizen.CreateThread( function()
 		Citizen.Wait(0)
 		local playerPed = PlayerPedId()
 		if GetPedParachuteState(playerPed) == -1 then
-			if DoesEntityExist(playerPed) and not IsEntityDead(playerPed) and not IsPedInAnyVehicle(playerPed, true) 
+			if DoesEntityExist(playerPed) and not IsEntityDead(playerPed) and not IsPedInAnyVehicle(playerPed, true)
 				and onDuty or GetPedDrawableVariation(playerPed, 7) == 8 or GetPedDrawableVariation(playerPed, 7) == 6 then
 				DisableControlAction( 0, 20, true ) -- INPUT_MULTIPLAYER_INFO (Z)
 				if not IsPauseMenuActive() then

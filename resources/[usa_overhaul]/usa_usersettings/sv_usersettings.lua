@@ -6,19 +6,19 @@ local defaultSettings = {
 	radioHotkey = 27,
 	serverVisuals = true,
 	blips = {
-		['clothes'] = true,
+		['clothes'] = true, -- true = on by default
 		['barber'] = true,
-		['tattoo'] = false,
+		['tattoo'] = true,
 		['store'] = true,
-		['carwash'] = false,
+		['carwash'] = true,
 		['gunshop'] = true,
-		['boatshop'] = false,
-		['planeshop'] = false,
+		['boatshop'] = true,
+		['planeshop'] = true,
 		['fuel'] = true,
-		['boatfuel'] = false,
-		['planefuel'] = false,
-		['movies'] = false,
-		['autorepair'] = false,
+		['boatfuel'] = true,
+		['planefuel'] = true,
+		['movies'] = true,
+		['autorepair'] = true,
 		['bank'] = true
 	}
 }

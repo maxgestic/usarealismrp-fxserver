@@ -47,7 +47,7 @@ AddEventHandler("bars:loadItems", function()
 end)
 
 RegisterNetEvent("bars:buy")
-AddEventHandler("bars:buy", function(itemCategory, itemName, property)
+AddEventHandler("bars:buy", function(itemCategory, itemName, business)
     local char = exports["usa-characters"]:GetCharacter(source)
     local item = ITEMS[itemCategory][itemName]
     if item and char then
@@ -55,6 +55,9 @@ AddEventHandler("bars:buy", function(itemCategory, itemName, property)
             if char.canHoldItem(item) then
                 char.giveItem(item, 1)
                 char.removeMoney(item.price)
+                if business then
+                  exports["usa-businesses"]:GiveBusinessCashPercent(business, item.price)
+                end
             end
         else
             TriggerClientEvent("usa:notify", source, "Not enough money!")

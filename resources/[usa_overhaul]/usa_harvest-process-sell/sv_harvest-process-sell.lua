@@ -4,7 +4,7 @@ local REWARDS = {
     harvest_item = {
       name = "Raw Sand",
       quantity = 1,
-      weight = 4.0,
+      weight = 8.0,
       type = "misc",
       legality = "legal",
       objectModel = "prop_cs_box_step"
@@ -12,12 +12,12 @@ local REWARDS = {
     processed_item = {
       name = "Processed Sand",
       quantity = 1,
-      weight = 2.0,
+      weight = 8.0,
       type = "misc",
       legality = "legal",
       objectModel = "prop_cs_box_step"
     },
-    reward_amount = 90
+    reward_amount = 75
   }
 }
 

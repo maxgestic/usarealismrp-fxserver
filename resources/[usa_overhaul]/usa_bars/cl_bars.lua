@@ -33,11 +33,8 @@ function CreateBarMenu(menu)
         for name, info in pairs(items) do
             local item = NativeUI.CreateItem(name, "($" .. comma_value(info.price) .. ") " .. (info.caption or ""))
             item.Activated = function(parentmenu, selected)
-                TriggerServerEvent("bars:buy", category, name)
-                local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
-                TriggerEvent("properties:getPropertyGivenCoords", playerCoords.x, playerCoords.y, playerCoords.z, function(property)
-                    TriggerServerEvent("bars:buy", category, name, property)
-                end)
+              local business = exports["usa-businesses"]:GetClosestStore(15)
+              TriggerServerEvent("bars:buy", category, name, business)
             end
             submenu:AddItem(item)
         end

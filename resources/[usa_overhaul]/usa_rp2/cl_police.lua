@@ -52,7 +52,7 @@ AddEventHandler("search:attemptToSearchNearestPerson", function()
 end)
 
 RegisterNetEvent("search:searchNearest")
-AddEventHandler("search:searchNearest", function()
+AddEventHandler("search:searchNearest", function(src)
   TriggerEvent("usa:getClosestPlayer", 1.6, function(player)
     if player.id ~= 0 and IsEntityVisible(GetPlayerPed(GetPlayerFromServerId(player.id))) then
       local playerPed = PlayerPedId()
@@ -61,7 +61,7 @@ AddEventHandler("search:searchNearest", function()
       TriggerEvent('search:playAnim')
       TriggerServerEvent('search:playSuspectAnim', player.id, x, y, z, playerHeading)
       Citizen.Wait(12000)
-      TriggerServerEvent("search:searchPlayer", player.id)
+      TriggerServerEvent("search:searchPlayer", player.id, src)
     elseif IsPedInAnyVehicle(PlayerPedId(), false) then
       TriggerEvent("veh:searchVeh")
     end

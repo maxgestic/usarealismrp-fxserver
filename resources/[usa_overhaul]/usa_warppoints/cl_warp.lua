@@ -24,7 +24,7 @@ local warp_locations = {
     },
   job_access = "civ"
   },
-  ["Back Door"] = { -- 24/7 paleto
+  ["24/7 - Paleto Back Door"] = { -- 24/7 paleto
   	entrance = {
       coords = {1741.41, 6419.52, 35.04},
       heading = 340.0
@@ -35,7 +35,7 @@ local warp_locations = {
     },
   job_access = "civ"
   },
-  ["Back Door"] = { -- 24/7 sandy
+  ["24/7 - Sandy Back Door"] = { -- 24/7 sandy
   	entrance = {
       coords = {1963.75, 3749.59, 32.26},
       heading = 300.0
@@ -46,7 +46,7 @@ local warp_locations = {
     },
   job_access = "civ"
   },
-  ['Back Door'] = { -- 24/7 harmony
+  ['24/7 - Harmony Back Door'] = { -- 24/7 harmony
     entrance = {
       coords = {542.01, 2663.68, 42.17},
       heading = 100.0
@@ -57,7 +57,7 @@ local warp_locations = {
     },
   job_access = 'civ'
   },
-  ['Back Door'] = { -- 24/7 banham canyon
+  ['24/7 - Canyon Back Door'] = { -- 24/7 banham canyon
     entrance = {
       coords = {-3047.55, 589.93, 7.78},
       heading = 20.0
@@ -68,7 +68,7 @@ local warp_locations = {
     },
   job_access = 'civ'
   },
-  ['Back Door'] = { -- 24/7 little soul
+  ['24/7 - Seoul Back Door'] = { -- 24/7 little soul
     entrance = {
       coords = {-702.88, -916.83, 19.21},
       heading = 180.0
@@ -79,7 +79,7 @@ local warp_locations = {
     },
   job_access = 'civ'
   },
-  ['Back Door'] = { -- LTD grove st.
+  ['24/7 - Grove Back Door'] = { -- LTD grove st.
     entrance = {
       coords = {-40.98, -1747.79, 29.32},
       heading = 325.0
@@ -90,7 +90,7 @@ local warp_locations = {
     },
   job_access = 'civ'
   },
-  ['Back Door'] = { -- LTD mirror park
+  ['24/7 - LTD Back Door'] = { -- LTD mirror park
     entrance = {
       coords = {1160.71, -312.03, 69.277},
       heading = 8.0
@@ -101,7 +101,7 @@ local warp_locations = {
     },
   job_access = 'civ'
   },
-  ['Back Door'] = { -- 24/7 ls freeway
+  ['24/7 - LS Back Door'] = { -- 24/7 ls freeway
     entrance = {
       coords = {2546.47, 385.69, 108.61},
       heading = 80.0

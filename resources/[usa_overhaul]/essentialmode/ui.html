@@ -49,7 +49,7 @@
 					$("#starter").remove();
 				}
 				if(item.setDisplay == true){
-					if (item.amount) {
+					if (typeof item.amount != "undefined" && item.amount != null) {
 						document.getElementById("cash").innerHTML = "<div><span style='color: rgb(0, 125, 0); font-weight: 700; margin-right: 6px;'>" + moneyIcon + "</span>" + addCommas(item.amount) + "</div>";
 					}
 					$("#money").css('opacity', item.display)

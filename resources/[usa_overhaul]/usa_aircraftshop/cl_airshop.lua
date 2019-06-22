@@ -32,6 +32,7 @@ local playerAircraft = {}
 local closestShop = nil
 local created_menus = {}
 local MENU_OPEN_KEY = 38
+local MAP_BLIP_SPRITE = 251
 
 ---------------------------
 -- Set up main menu --
@@ -60,7 +61,7 @@ local locations = {
 			x = -961.35,
 			y = -3005.83,
 			z = 13.94,
-			heading = 60.0	
+			heading = 60.0
 		},
 		ped = {
 			x = -934.21,
@@ -294,6 +295,17 @@ AddEventHandler('aircraft:rentAircraft', function(aircraft)
         	if Vdist(info.menu.x, info.menu.y, info.menu.z, playerCoords) < 5 then
 		        local vehicle = CreateVehicle(numberHash, info.spawn.x, info.spawn.y, info.spawn.z, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
 		        SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
+            local vehicle_key = {
+    					name = "Key -- " .. GetVehicleNumberPlateText(vehicle),
+    					quantity = 1,
+    					type = "key",
+    					owner = "GOVT",
+    					make = "GOVT",
+    					model = "GOVT",
+    					plate = GetVehicleNumberPlateText(vehicle)
+    				}
+    				-- give key to owner
+    				TriggerServerEvent("garage:giveKey", vehicle_key)
 		        return
 		    end
 	     end
@@ -468,11 +480,11 @@ end
 ----------------------
 
 local BLIPS = {}
-function EnumerateBlips()
+function CreateMapBlips()
   if #BLIPS == 0 then
   	for k, v in pairs(locations) do
       local blip = AddBlipForCoord(locations[k].menu.x, locations[k].menu.y, locations[k].menu.z)
-      SetBlipSprite(blip, 401)
+      SetBlipSprite(blip, MAP_BLIP_SPRITE)
       SetBlipDisplay(blip, 4)
       SetBlipScale(blip, 0.8)
       SetBlipAsShortRange(blip, true)
@@ -489,7 +501,7 @@ TriggerServerEvent('blips:getBlips')
 RegisterNetEvent('blips:returnBlips')
 AddEventHandler('blips:returnBlips', function(blipsTable)
   if blipsTable['planeshop'] then
-    EnumerateBlips()
+    CreateMapBlips()
   else
     for _, k in pairs(BLIPS) do
       print(k)

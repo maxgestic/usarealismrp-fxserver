@@ -1,3 +1,5 @@
+local FIRST_AID_KIT_FEE = 150
+
 local civSkins = {
 		"a_m_m_beach_01",
 		"a_m_m_bevhills_01",
@@ -57,6 +59,33 @@ AddEventHandler("usa_rp:checkJailedStatusOnPlayerJoin", function(id)
 	if time > 0 then
 		TriggerClientEvent("jail:jail", source)
 		exports["globals"]:notifyPlayersWithJobs({"corrections"}, "^3INFO: ^0" .. fullName .. " has woken up from a nap.")
+	end
+end)
+
+RegisterServerEvent("hospital:buyFirstAidKit")
+AddEventHandler("hospital:buyFirstAidKit", function()
+	print("buying FAK")
+	local kit = {
+		name = "First Aid Kit",
+		price = 80,
+		type = "misc",
+		quantity = 1,
+		legality = "legal",
+		weight = 15,
+		objectModel = "v_ret_ta_firstaid",
+		blockedInPrison = true
+	}
+	local char = exports["usa-characters"]:GetCharacter(source)
+	if char.get("money") >= FIRST_AID_KIT_FEE then
+		if not char.canHoldItem(kit) then
+			TriggerClientEvent("usa:notify", source, "Inventory full!")
+			return
+		end
+		char.giveItem(kit)
+		char.removeMoney(FIRST_AID_KIT_FEE)
+		TriggerClientEvent("usa:notify", source, "Here is your first aid kit!")
+	else
+		TriggerClientEvent("usa:notify", source, "Not enough money! Need $150")
 	end
 end)
 

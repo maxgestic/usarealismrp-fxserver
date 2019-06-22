@@ -53,9 +53,9 @@ AddEventHandler('cocaineJob:completeDelivery', function(productToRemove)
 	end
 
 	if char.hasItem("Packaged Cocaine") then
-		char.removeItem("Packaged Cocaine")
+		char.removeItem("Packaged Cocaine", 1)
 		if bonus > 0 then
-			TriggerClientEvent('usa:notify', source, 'You have been paid $'..reward..'.00~s~ with a bonus of $'..bonus..'.00~s~.')	
+			TriggerClientEvent('usa:notify', source, 'You have been paid $'..reward..'.00~s~ with a bonus of $'..bonus..'.00~s~.')
 		else
 			TriggerClientEvent('usa:notify', source, 'You have been paid $'..reward..'.00~s~.')
 		end

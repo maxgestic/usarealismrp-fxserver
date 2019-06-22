@@ -21,7 +21,8 @@ AddEventHandler("dmv:buyLicense", function()
 			expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
 			status = "valid",
 			notDroppable = true,
-			type = "license"
+			type = "license",
+			weight = 2.0
 		}
 		char.giveItem(license, 1)
 		TriggerClientEvent("usa:notify", source, "You have ~g~successfully~w~ purchased a Driver's License.")

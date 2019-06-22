@@ -856,7 +856,8 @@ function LSCMenu:onButtonSelected(name, button)
 
 	mname = m.name:lower()
 
-	TriggerServerEvent("LSC:buttonSelected", name, button, mname)
+	local business = exports["usa-businesses"]:GetClosestStore(40)
+	TriggerServerEvent("LSC:buttonSelected", name, button, mname, business)
 end
 
 --So we get the button back from server +  bool that determines if we can prchase specific item or not
