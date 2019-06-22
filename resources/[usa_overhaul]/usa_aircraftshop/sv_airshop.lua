@@ -76,7 +76,7 @@ AddEventHandler("aircraft:requestPurchase", function(aircraft)
     char.removeMoney(price)
     aircraft.id = math.random(9999999999)
     aircraft.stored = true
-    TriggerClientEvent("usa:notify", source, "Purchased: ~y~" .. aircraft.name .. "\n~s~Price: ~y~$" .. comma_value(price)..'\n~s~ID: ~y~' .. aircraft.id)
+    TriggerClientEvent("usa:notify", source, "Purchased: ~y~" .. (aircraft.name or "Undefined") .. "\n~s~Price: ~y~$" .. comma_value(price)..'\n~s~ID: ~y~' .. aircraft.id)
     TriggerClientEvent("usa:notify", source, "Your aircraft can be found in your storage.")
     -- add to player's aircraft collection --
     if not aircraft then

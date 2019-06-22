@@ -7,14 +7,14 @@ local MENU_KEY = 38 -- "E"
 local ITEMS = { -- must be kept in sync with one in sv_weaponeaxtrashop.lua --
   ["Tints"] = {
     legal = {
-      [0] = {name = "Normal", price = 200},
-      [1] = {name = "Green", price = 200},
-      [2] = {name = "Gold", price = 200},
-      [3] = {name = "Pink", price = 200},
-      [4] = {name = "Army", price = 200},
-      [5] = {name = "LSPD", price = 200},
-      [6] = {name = "Orange", price = 200},
-      [7] = {name = "Platinum", price = 200}
+      [0] = {name = "Normal", price = 500},
+      [1] = {name = "Green", price = 500},
+      [2] = {name = "Gold", price = 500},
+      [3] = {name = "Pink", price = 500},
+      [4] = {name = "Army", price = 500},
+      [5] = {name = "LSPD", price = 500},
+      [6] = {name = "Orange", price = 500},
+      [7] = {name = "Platinum", price = 500}
     },
     illegal = {
       [0] = {name = "Normal", price = 600},
@@ -32,10 +32,10 @@ local ITEMS = { -- must be kept in sync with one in sv_weaponeaxtrashop.lua --
       -- pistols --
       ["Pistol"] = {
         {name = "Flashlight", value = "COMPONENT_AT_PI_FLSH", price = 200, weapon_hash = 453432689},
-        {name = "Yusuf Amir Luxury Finish", value = "COMPONENT_PISTOL_VARMOD_LUXE", price = 400, weapon_hash = 453432689}
+        {name = "Yusuf Amir Luxury Finish", value = "COMPONENT_PISTOL_VARMOD_LUXE", price = 500, weapon_hash = 453432689}
       },
       ["SNS Pistol"] = {
-        {name = "Etched Wood Grip Finish", value = "COMPONENT_SNSPISTOL_VARMOD_LOWRIDER", price = 400, weapon_hash = -1076751822}
+        {name = "Etched Wood Grip Finish", value = "COMPONENT_SNSPISTOL_VARMOD_LOWRIDER", price = 500, weapon_hash = -1076751822}
       },
       ["Heavy Pistol"] = {
         {name = "Flashlight", value = "COMPONENT_AT_PI_FLSH", price = 200, weapon_hash = -771403250},
@@ -47,16 +47,16 @@ local ITEMS = { -- must be kept in sync with one in sv_weaponeaxtrashop.lua --
       },
       [".50 Cal Pistol"] = {
         {name = "Flashlight", value = "COMPONENT_AT_PI_FLSH", price = 200, weapon_hash = -1716589765},
-        {name = "Platinum Pearl Deluxe Finish", value = "COMPONENT_PISTOL50_VARMOD_LUXE", price = 400, weapon_hash = -1716589765}
+        {name = "Platinum Pearl Deluxe Finish", value = "COMPONENT_PISTOL50_VARMOD_LUXE", price = 500, weapon_hash = -1716589765}
       },
       ["Revolver"] = {
-        {name = "Variation 1", value = "COMPONENT_REVOLVER_VARMOD_BOSS", price = 400, weapon_hash = -1045183535},
-        {name = "Variation 2", value = "COMPONENT_REVOLVER_VARMOD_GOON", price = 400, weapon_hash = -1045183535}
+        {name = "Variation 1", value = "COMPONENT_REVOLVER_VARMOD_BOSS", price = 500, weapon_hash = -1045183535},
+        {name = "Variation 2", value = "COMPONENT_REVOLVER_VARMOD_GOON", price = 500, weapon_hash = -1045183535}
       },
       -- Shotguns --
       ["Pump Shotgun"] = {
         {name = "Flashlight", value = "COMPONENT_AT_AR_FLSH", price = 200, weapon_hash = 487013001},
-        {name = "Yusuf Amir Luxury Finish", value = "COMPONENT_PUMPSHOTGUN_VARMOD_LOWRIDER", price = 400, weapon_hash = 487013001}
+        {name = "Yusuf Amir Luxury Finish", value = "COMPONENT_PUMPSHOTGUN_VARMOD_LOWRIDER", price = 500, weapon_hash = 487013001}
       },
       ["Bullpup Shotgun"] = {
         {name = "Grip", value = "COMPONENT_AT_AR_AFGRIP", price = 250, weapon_hash = -1654528753}
@@ -66,30 +66,30 @@ local ITEMS = { -- must be kept in sync with one in sv_weaponeaxtrashop.lua --
       -- pistols --
       ["Pistol"] = {
         {name = "Extended Magazine", value = "COMPONENT_PISTOL_CLIP_02", price = 1500, weapon_hash = 453432689},
-        {name = "Suppressor", value = "COMPONENT_AT_PI_SUPP_02", price = 1000, weapon_hash = 453432689}
+        {name = "Suppressor", value = "COMPONENT_AT_PI_SUPP_02", price = 1500, weapon_hash = 453432689}
       },
       ["SNS Pistol"] = {
         {name = "Extended Magazine", value = "COMPONENT_SNSPISTOL_CLIP_02", price = 1500, weapon_hash = -1076751822}
       },
       ["Heavy Pistol"] = {
         {name = "Extended Magazine", value = "COMPONENT_HEAVYPISTOL_CLIP_02", price = 1500, weapon_hash = -771403250},
-        {name = "Suppressor", value = "COMPONENT_AT_PI_SUPP", price = 1000, weapon_hash = -771403250}
+        {name = "Suppressor", value = "COMPONENT_AT_PI_SUPP", price = 1500, weapon_hash = -771403250}
       },
       ["Combat Pistol"] = {
         {name = "Extended Magazine", value = "COMPONENT_COMBATPISTOL_CLIP_02", price = 1500, weapon_hash = 1593441988},
-        {name = "Suppressor", value = "COMPONENT_AT_PI_SUPP", price = 1000, weapon_hash = 1593441988}
+        {name = "Suppressor", value = "COMPONENT_AT_PI_SUPP", price = 1500, weapon_hash = 1593441988}
       },
       [".50 Cal Pistol"] = {
         {name = "Extended Magazine", value = "COMPONENT_PISTOL50_CLIP_02", price = 1500, weapon_hash = -1716589765},
-        {name = "Suppressor", value = "COMPONENT_AT_AR_SUPP_02", price = 1000, weapon_hash = -1716589765}
+        {name = "Suppressor", value = "COMPONENT_AT_AR_SUPP_02", price = 1500, weapon_hash = -1716589765}
       },
       ["Vintage Pistol"] = {
         {name = "Extended Magazine", value = "COMPONENT_VINTAGEPISTOL_CLIP_02", price = 1500, weapon_hash = 137902532},
-        {name = "Suppressor", value = "COMPONENT_AT_PI_SUPP", price = 1000, weapon_hash = 137902532}
+        {name = "Suppressor", value = "COMPONENT_AT_PI_SUPP", price = 1500, weapon_hash = 137902532}
       },
       -- other --
       ["Switchblade"] = {
-        {name = "Variation 1", value = "COMPONENT_SWITCHBLADE_VARMOD_VAR1", price = 900, weapon_hash = -538741184}
+        {name = "Variation 1", value = "COMPONENT_SWITCHBLADE_VARMOD_VAR1", price = 400, weapon_hash = -538741184}
       },
       ["Brass Knuckles"] = {
         {name = "Stock", value = "COMPONENT_KNUCKLE_VARMOD_BASE", price = 500, weapon_hash = -656458692},
@@ -104,12 +104,12 @@ local ITEMS = { -- must be kept in sync with one in sv_weaponeaxtrashop.lua --
         {name = "Vagos", value = "COMPONENT_KNUCKLE_VARMOD_VAGOS", price = 500, weapon_hash = -656458692}
       },
       ["Pump Shotgun"] = {
-        {name = "Suppressor", value = "COMPONENT_AT_SR_SUPP", price = 1500, weapon_hash = 487013001}
+        {name = "Suppressor", value = "COMPONENT_AT_SR_SUPP", price = 2000, weapon_hash = 487013001}
       },
       ["SMG"] = {
         {name = "Extended Magazine", value = "COMPONENT_SMG_CLIP_02", price = 1500, weapon_hash = 736523883},
         {name = "Scope", value = "COMPONENT_AT_SCOPE_MACRO_02", price = 750, weapon_hash = 736523883},
-        {name = "Suppressor", value = "COMPONENT_AT_PI_SUPP", price = 2000, weapon_hash = 736523883},
+        {name = "Suppressor", value = "COMPONENT_AT_PI_SUPP", price = 1500, weapon_hash = 736523883},
         {name = "Flashlight", value = "COMPONENT_AT_AR_FLSH", price = 500, weapon_hash = 736523883},
         {name = "Yusuf Amir Luxury Finish", value = "COMPONENT_SMG_VARMOD_LUXE", price = 900, weapon_hash = 736523883}
       }

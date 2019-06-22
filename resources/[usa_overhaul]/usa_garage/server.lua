@@ -2,7 +2,7 @@
 --# For: USA Realism RP
 --# By: minipunch
 
-local WITHDRAW_FEE = 0
+local WITHDRAW_FEE = 50
 local IMPOUND_FEE = 150
 
 RegisterServerEvent("garage:giveKey")

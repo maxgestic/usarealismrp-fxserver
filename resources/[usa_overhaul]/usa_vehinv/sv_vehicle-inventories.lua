@@ -132,7 +132,6 @@ function GetVehicleInventory(plate, cb)
 	PerformHttpRequest(url, function(err, responseText, headers)
 		if responseText then
       local inventory = {}
-			--print("veh inventory: " .. responseText)
 			local data = json.decode(responseText)
       if data and data.rows and data.rows[1] and data.rows[1].value then
 			  inventory = data.rows[1].value[1] -- inventory

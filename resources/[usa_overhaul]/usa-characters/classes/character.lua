@@ -245,15 +245,15 @@ function CreateCharacter(data)
     for i = 0, self.inventory.MAX_CAPACITY - 1 do
       if self.inventory.items[tostring(i)] then
         if self.inventory.items[tostring(i)].name:find(item) or self.inventory.items[tostring(i)].name == item then
-          local newQuantity = self.inventory.items[tostring(i)].quantity - quantity
-          if (quantity == -1) then
+          local newQuantity = self.inventory.items[tostring(i)].quantity - (quantity or 1)
+          if ((quantity or 1) == -1) then
             newQuantity = 0
           end
           if newQuantity <= 0 then
             self.removeInventoryWeight((self.inventory.items[tostring(i)].weight or 1.0) * self.inventory.items[tostring(i)].quantity)
             self.inventory.items[tostring(i)] = nil
           else
-            self.removeInventoryWeight((self.inventory.items[tostring(i)].weight or 1.0) * quantity)
+            self.removeInventoryWeight((self.inventory.items[tostring(i)].weight or 1.0) * (quantity or 1))
             self.inventory.items[tostring(i)].quantity = newQuantity
           end
           return

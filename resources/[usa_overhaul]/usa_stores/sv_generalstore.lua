@@ -82,7 +82,7 @@ function GetServerPrice(item, store)
 end
 
 RegisterServerEvent("generalStore:buyItem")
-AddEventHandler("generalStore:buyItem", function(business, item, store, inPrison)
+AddEventHandler("generalStore:buyItem", function(item, store, inPrison, business)
   local char = exports["usa-characters"]:GetCharacter(source)
   if store == 'GENERAL' then
     item.price = GetServerPrice(item, GENERAL_STORE_ITEMS)

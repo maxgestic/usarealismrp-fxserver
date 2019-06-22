@@ -14,7 +14,7 @@ local markets = {
     ['marketB'] = {
         ['coords'] = {1380.87, 2172.51, 97.81},
         ['items'] = {
-          {name = 'Lockpick', type = 'misc', price = 400, legality = 'illegal', quantity = 1, weight = 5},
+          {name = 'Lockpick', type = 'misc', price = 75, legality = 'illegal', quantity = 1, weight = 5},
           {name = 'Hotwiring Kit', type = 'misc', price = 250, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(10, 20)},
           {name = 'SMG', type = 'weapon', hash = 736523883, price = 40000, legality = 'illegal', quantity = 1, weight = 55, stock = math.random(0, 1), objectModel = "w_sb_smg"},
           {name = 'Heavy Shotgun', type = 'weapon', hash = 984333226, price = 8000, legality = 'illegal', quantity = 1, weight = 35, stock = math.random(1, 2), objectModel = "w_sg_heavyshotgun"},

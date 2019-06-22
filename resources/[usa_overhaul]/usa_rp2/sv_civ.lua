@@ -138,21 +138,21 @@ end, {
 
 RegisterServerEvent("crim:continueRobbing")
 AddEventHandler("crim:continueRobbing", function(continue_robbing, from_id, target_player_id)
-	local source = tonumber(from_id)
+	from_id = tonumber(from_id)
 	if continue_robbing then
 		print('USARP2: Player '..GetPlayerName(from_id)..'['..GetPlayerIdentifier(from_id)..'] is robbing '..GetPlayerName(target_player_id)..'['..GetPlayerIdentifier(target_player_id)..']!')
 		local victim_char = exports["usa-characters"]:GetCharacter(target_player_id)
 		local amount_stolen = victim_char.get("money")
 		if amount_stolen >= 0 then
 			victim_char.removeMoney(amount_stolen)
-			print("USARP2: Amount of money[" .. amount_stolen .. "] stolen from person robbed!")
-			local robber = exports["usa-characters"]:GetCharacter(source)
+			print("USARP2: Amount of money [" .. amount_stolen .. "] stolen from person robbed!")
+			local robber = exports["usa-characters"]:GetCharacter(from_id)
 			robber.giveMoney(amount_stolen)
 		else
-			TriggerClientEvent("usa:notify", source, "Person has no money on them!")
+			TriggerClientEvent("usa:notify", from_id, "Person has no money on them!")
 		end
 	else
-		TriggerClientEvent("usa:notify", source, "Person does not have their hands tied or is too far away!")
+		TriggerClientEvent("usa:notify", from_id, "Person does not have their hands tied or is too far away!")
 	end
 end)
 

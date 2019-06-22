@@ -32,7 +32,10 @@ AddEventHandler("insurance:fileClaim", function(vehicle_to_claim)
 	local CLAIM_PROCESSING_FEE = math.floor(BASE_FEE + (PERCENTAGE * vehicle_to_claim.price))
 	if CLAIM_PROCESSING_FEE <= bank then
 		TriggerEvent('es:exposeDBFunctions', function(couchdb)
-		    couchdb.updateDocument("vehicles", vehicle_to_claim.plate, {inventory = {}, stored = true, impounded = false}, function()
+			exports["usa_vehinv"]:GetVehicleInventory(vehicle_to_claim.plate, function(inv)
+				inv.currentWeight = 0.0
+				inv.items = {}
+		    couchdb.updateDocument("vehicles", vehicle_to_claim.plate, {{inventory = inv}, stored = true, impounded = false}, function() end)
 				char.removeBank(CLAIM_PROCESSING_FEE)
 				if vehicle_to_claim.make and vehicle_to_claim.model then
 					TriggerClientEvent("usa:notify", _source, "Filed an insurance claim for your " .. vehicle_to_claim.make .. " " .. vehicle_to_claim.model .. ".\n~y~Fee:~w~ $" .. CLAIM_PROCESSING_FEE)

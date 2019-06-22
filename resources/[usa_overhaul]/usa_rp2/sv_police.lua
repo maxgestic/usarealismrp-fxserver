@@ -159,27 +159,27 @@ AddEventHandler("search:searchPlayer", function(playerId, src)
 			end
 		end
 	end
-	TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^3^*[SEARCH] ^r^0Cash Found:^0 $" .. comma_value(char.get("money")))
+	TriggerClientEvent("chatMessage", src, "", {0,0,0}, "^3^*[SEARCH] ^r^0Cash Found:^0 $" .. comma_value(char.get("money")))
 	for i = 1, #items do
 		local name = items[i].name
 		local quantity = items[i].quantity
 		local legality = items[i].legality
 		if legality == "illegal" then
-			TriggerClientEvent("chatMessage", source, "", {}, "^1(x" .. quantity .. ") " .. name) -- print item red
+			TriggerClientEvent("chatMessage", src, "", {}, "^1(x" .. quantity .. ") " .. name) -- print item red
 		else
 			if items[i].serialNumber then
-				TriggerClientEvent("chatMessage", source, "", {}, "^0(x" .. quantity .. ") " .. name .. ' - '..items[i].serialNumber) -- print item
+				TriggerClientEvent("chatMessage", src, "", {}, "^0(x" .. quantity .. ") " .. name .. ' - '..items[i].serialNumber) -- print item
 			elseif items[i].residue and items[i].name == 'Razor Blade' then
-				TriggerClientEvent("chatMessage", source, "", {}, "^0(x" .. quantity .. ") " .. name .. ' (Powdery Residue)') -- print item
+				TriggerClientEvent("chatMessage", src, "", {}, "^0(x" .. quantity .. ") " .. name .. ' (Powdery Residue)') -- print item
 			elseif items[i].residue and items[i].name == 'Large Scissors' then
-				TriggerClientEvent("chatMessage", source, "", {}, "^0(x" .. quantity .. ") " .. name .. ' (Odor of Marijuana)') -- print item
+				TriggerClientEvent("chatMessage", src, "", {}, "^0(x" .. quantity .. ") " .. name .. ' (Odor of Marijuana)') -- print item
 			else
-				TriggerClientEvent("chatMessage", source, "", {}, "^0(x" .. quantity .. ") " .. name)
+				TriggerClientEvent("chatMessage", src, "", {}, "^0(x" .. quantity .. ") " .. name)
 			end
 		end
 		if items[i].components then
 			for k = 1, #items[i].components do
-				TriggerClientEvent("chatMessage", source, "", {0, 50, 0}, "^0		+ " .. items[i].components[k])
+				TriggerClientEvent("chatMessage", src, "", {0, 50, 0}, "^0		+ " .. items[i].components[k])
 			end
 		end
 	end
@@ -201,7 +201,7 @@ TriggerEvent('es:addCommand', 'search', function(source, args, char)
 		TriggerClientEvent("search:attemptToSearchNearestPerson", source, true)
 	elseif job == "sheriff" or job == "corrections" or job == "dai" then
 		if not tonumber(args[2]) then
-			TriggerClientEvent("search:searchNearest", source)
+			TriggerClientEvent("search:searchNearest", source, source)
 		else
 			TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 4)
 			TriggerEvent("search:searchPlayer", tonumber(args[2]), source)

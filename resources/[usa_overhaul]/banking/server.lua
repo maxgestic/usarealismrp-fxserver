@@ -161,8 +161,8 @@ AddEventHandler('bank:givecash', function(toPlayer, amount)
 			recipient.giveMoney(amount)
 			TriggerClientEvent('usa:notify', source, "You've given " .. recipient.getName() .. " $" .. comma_value(amount))
 			TriggerClientEvent('chatMessage', source, "", {}, "You've given " .. recipient.getName() .. " $" .. comma_value(amount))
-			TriggerClientEvent('usa:notify', toPlayer, recipient.getName() .. " has given you $" .. comma_value(amount))
-			TriggerClientEvent('chatMessage', toPlayer, "", {}, recipient.getName() .. " has given you $" .. comma_value(amount))
+			TriggerClientEvent('usa:notify', toPlayer, char.getName() .. " has given you $" .. comma_value(amount))
+			TriggerClientEvent('chatMessage', toPlayer, "", {}, char.getName() .. " has given you $" .. comma_value(amount))
 		else
 			if (tonumber(from_money) < tonumber(amount)) then
 				TriggerClientEvent('usa:notify', toPlayer, "You do not have enough cash!")
