@@ -57,7 +57,7 @@ local HARDWARE_STORE_ITEMS = {
     { name = "Cell Phone", price = 500, type = "misc", quantity = 1, legality = "legal", contacts = {}, conversations = {}, weight = 10, objectModel = "prop_npc_phone_02"}
   },
   ["Misc"] = {
-    {name = 'Lockpick', type = 'misc', price = 400, legality = 'legal', quantity = 1, weight = 5},
+    {name = 'Razor Blade', type = 'misc', price = 60, legality = 'legal', quantity = 1, residue = false, weight = 3},
     { name = "First Aid Kit", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 15, objectModel = "v_ret_ta_firstaid"},
     { name = "Large Scissors", price = 15, type = "misc", quantity = 1, legality = "legal", weight = 5, objectModel = "prop_cs_scissors"},
     { name = "Sturdy Rope", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 15, objectModel = "prop_devin_rope_01  "},

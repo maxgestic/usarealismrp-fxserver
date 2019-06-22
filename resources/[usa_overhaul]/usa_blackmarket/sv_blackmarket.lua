@@ -14,14 +14,14 @@ local markets = {
     ['marketB'] = {
         ['coords'] = {1380.87, 2172.51, 97.81},
         ['items'] = {
-            {name = 'Hotwiring Kit', type = 'misc', price = 250, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(10, 20)},
-            {name = 'Razor Blade', type = 'misc', price = 500, legality = 'legal', quantity = 1, residue = false, weight = 3, stock = math.random(10, 20)},
-            {name = 'SMG', type = 'weapon', hash = 736523883, price = 200000, legality = 'illegal', quantity = 1, weight = 55, stock = math.random(0, 1), objectModel = "w_sb_smg"},
-            {name = 'Heavy Shotgun', type = 'weapon', hash = 984333226, price = 8000, legality = 'illegal', quantity = 1, weight = 35, stock = math.random(1, 2), objectModel = "w_sg_heavyshotgun"},
-            {name = 'SNS Pistol', type = 'weapon', hash = -1076751822, price = 3500, legality = 'illegal', quantity = 1, weight = 8, stock = math.random(1, 3), objectModel = "w_pi_sns_pistol"},
-            {name = 'Combat Pistol', type = 'weapon', hash = 1593441988, price = 5000, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(1, 3), objectModel = "w_pi_combatpistol"},
-            {name = 'Switchblade', type = 'weapon', hash = -538741184, price = 1500, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(5, 15)},
-            {name = 'Brass Knuckles', type = 'weapon', hash = -656458692, price = 1100, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(3, 5)},
+          {name = 'Lockpick', type = 'misc', price = 400, legality = 'illegal', quantity = 1, weight = 5},
+          {name = 'Hotwiring Kit', type = 'misc', price = 250, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(10, 20)},
+          {name = 'SMG', type = 'weapon', hash = 736523883, price = 40000, legality = 'illegal', quantity = 1, weight = 55, stock = math.random(0, 1), objectModel = "w_sb_smg"},
+          {name = 'Heavy Shotgun', type = 'weapon', hash = 984333226, price = 8000, legality = 'illegal', quantity = 1, weight = 35, stock = math.random(1, 2), objectModel = "w_sg_heavyshotgun"},
+          {name = 'SNS Pistol', type = 'weapon', hash = -1076751822, price = 3500, legality = 'illegal', quantity = 1, weight = 8, stock = math.random(1, 3), objectModel = "w_pi_sns_pistol"},
+          {name = 'Combat Pistol', type = 'weapon', hash = 1593441988, price = 5000, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(1, 3), objectModel = "w_pi_combatpistol"},
+          {name = 'Switchblade', type = 'weapon', hash = -538741184, price = 1500, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(5, 15)},
+          {name = 'Brass Knuckles', type = 'weapon', hash = -656458692, price = 1100, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(3, 5)},
         }
     }
 }
