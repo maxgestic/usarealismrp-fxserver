@@ -227,7 +227,7 @@ TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, char)
 	local userSource = source
 	if(GetPlayerName(tonumber(args[2])))then
 		local player = tonumber(args[2])
-		local target = exports["usa-characters"]:GetCharacter(userSource)
+		local target = exports["usa-characters"]:GetCharacter(player)
 		local reason = args
 		table.remove(reason, 1)
 		table.remove(reason, 1)
@@ -398,8 +398,6 @@ TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, char)
 	if tonumber(args[2]) ~= nil then
 		if GetPlayerName(tonumber(args[2])) then
 			local player = tonumber(args[2])
-
-			--TriggerEvent("es:getPlayerFromId", player, function(target)
 				local target = exports["essentialmode"]:getPlayerFromId(player)
 
 				if (target) then
@@ -410,7 +408,6 @@ TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, char)
 					TriggerClientEvent('chatMessage', player, '^2^*[STAFF]^r^0 You have been teleported to.')
 
 				end
-			--end)
 		else
 			TriggerClientEvent('usa:notify', source, 'Player not found!')
 		end
@@ -608,8 +605,6 @@ AddEventHandler('rconCommand', function(commandName, args)
 			-- update db
 			GetDoc.createDocument("bans",  {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
 				RconPrint("player banned!")
-				-- drop player from session
-				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
 				DropPlayer(targetPlayer, "Banned: " .. reason)
 			end)
 		end)
@@ -791,7 +786,6 @@ AddEventHandler('rconCommand', function(commandName, args)
 			TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Money of ^2'..GetPlayerName(args[1])..' ['..args[1]..'] ^0 has been set to ^2^*'..args[2]..'^r^0 by ^2^*console^r^0.')
 		end
 	elseif commandName == "addmoney" or commandName == "givemoney" then
-		-- TODO
 		if #args ~= 2 then
 			RconPrint("Usage: setmoney [user-id] [money]\n")
 			CancelEvent()
@@ -814,7 +808,6 @@ AddEventHandler('rconCommand', function(commandName, args)
 		TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(targetId)..' ['..targetId..'] ^0 has received ^2^*'..amount..'^r^0 money from ^2^*console^r^0.')
 		RconPrint("Money given")
 	elseif commandName == "changename" then
-
 			if #args ~= 6 and #args ~= 5 then
 				RconPrint("\nUsage: changename [prevFirst] [prevLast] [DOB] [newFirst] [newMiddle] [newLast] -> Full Name Change")
 				RconPrint("\nOR")
@@ -847,76 +840,30 @@ AddEventHandler('rconCommand', function(commandName, args)
 			end
 
 			local query = {
-				["characters"] = {
-					["$elemMatch"] = {
-						--["firstName"] = data.fname,
-						--["lastName"] = data.lname
-						["firstName"] = {
-							["$regex"] = "(?i)" .. prevFirst
-						},
-						["lastName"] = {
-							["$regex"] = "(?i)" .. prevLast
-						},
-						["dateOfBirth"] = dob
-					}
-				}
+				["firstName"] = {
+					["$regex"] = "(?i)" .. prevFirst
+				},
+				["lastName"] = {
+					["$regex"] = "(?i)" .. prevLast
+				},
+				["dateOfBirth"] = dob
 			}
 
 			-- search for player's document in DB --
 			TriggerEvent('es:exposeDBFunctions', function(couchdb)
 				local fields = {
 					"_id",
-					"_rev",
-					"characters"
+					"_rev"
 				}
-				couchdb.getSpecificFieldFromDocumentByRows("essentialmode", query, fields, function(doc)
+				couchdb.getSpecificFieldFromDocumentByRows("characters", query, fields, function(doc)
 					if doc then
-						-- modify and update player's document in DB --
-						--print(prevFirst .. " " .. prevLast .. " found in DB search!")
-						for i = 1, #doc.characters do
-							if doc.characters[i].firstName and doc.characters[i].lastName and prevFirst and prevLast then
-								if string.lower(doc.characters[i].firstName) == string.lower(prevFirst) and string.lower(doc.characters[i].lastName) == string.lower(prevLast) then
-									-- modify --
-									doc.characters[i].firstName = newFirst
-									if newMiddle then
-										doc.characters[i].middleName = newMiddle
-									end
-									doc.characters[i].lastName = newLast
-									-- inventory items --
-									for j = 1, #doc.characters[i].inventory do
-										if doc.characters[i].inventory[j].owner then
-											doc.characters[i].inventory[j].owner = newFirst .. " " .. newLast
-										end
-									end
-									-- vehicles --
-									for j = 1, #doc.characters[i].vehicles do
-										if doc.characters[i].vehicles[j].owner then
-											doc.characters[i].vehicles[j].owner = newFirst .. " " .. newLast
-										end
-										-- vehicle inventory items --
-										if doc.characters[i].vehicles[j].inventory then
-											for k = 1, #doc.characters[i].vehicles[j].inventory do
-												if doc.characters[i].vehicles[j].inventory[k].owner then
-													doc.characters[i].vehicles[j].inventory[k].owner = newFirst .. " " .. newLast
-												end
-											end
-										end
-									end
-									-- licenses --
-									for j = 1, #doc.characters[i].licenses do
-										if doc.characters[i].licenses[j].ownerName then
-											doc.characters[i].licenses[j].ownerName = newFirst .. " " .. newLast
-										end
-									end
-									-- update --
-									couchdb.updateDocument("essentialmode", doc._id, {characters = doc.characters}, function()
-										RconPrint("Name updated in DB!")
-									end)
-									CancelEvent()
-									return
-								end
-							end
-						end
+						doc.name.first = newFirst
+						doc.name.middle = newMiddle
+						doc.name.last = newLast
+						-- update --
+						couchdb.updateDocument("characters", doc._id, {name = doc.name}, function()
+							RconPrint("Name updated in DB!")
+						end)
 					else
 						RconPrint("\nError: unable to find person ".. prevFirst .. " " .. (prevMiddle or "") .. " " .. prevLast .. " in database!")
 					end
@@ -936,44 +883,26 @@ AddEventHandler('rconCommand', function(commandName, args)
 			local newDob = args[4]
 
 			local query = {
-				["characters"] = {
-					["$elemMatch"] = {
-						["firstName"] = {
-							["$regex"] = "(?i)" .. prevFirst
-						},
-						["lastName"] = {
-							["$regex"] = "(?i)" .. prevLast
-						},
-						["dateOfBirth"] = prevDob
-					}
-				}
+				["firstName"] = {
+					["$regex"] = "(?i)" .. prevFirst
+				},
+				["lastName"] = {
+					["$regex"] = "(?i)" .. prevLast
+				},
+				["dateOfBirth"] = prevDob
 			}
 
 			-- search for player's document in DB --
 			TriggerEvent('es:exposeDBFunctions', function(couchdb)
 				local fields = {
 					"_id",
-					"_rev",
-					"characters"
+					"_rev"
 				}
-				couchdb.getSpecificFieldFromDocumentByRows("essentialmode", query, fields, function(doc)
+				couchdb.getSpecificFieldFromDocumentByRows("characters", query, fields, function(doc)
 					if doc then
-						-- modify and update player's document in DB --
-						--RconPrint(prevFirst .. " " .. prevLast .. " found in DB search!")
-						for i = 1, #doc.characters do
-							if doc.characters[i].firstName and doc.characters[i].lastName and prevFirst and prevLast then
-								if string.lower(doc.characters[i].firstName) == string.lower(prevFirst) and string.lower(doc.characters[i].lastName) == string.lower(prevLast) then
-									-- modify --
-									doc.characters[i].dateOfBirth = newDOB
-									-- update --
-									couchdb.updateDocument("essentialmode", doc._id, {characters = doc.characters}, function()
-										RconPrint("DOB updated in DB!")
-									end)
-									CancelEvent()
-									return
-								end
-							end
-						end
+						couchdb.updateDocument("characters", doc._id, {dateOfBirth = newDOB}, function()
+							RconPrint("DOB updated in DB!")
+						end)
 					else
 						RconPrint("\nError: unable to find person ".. prevFirst .. " " .. (prevMiddle or "") .. " " .. prevLast .. " in database!")
 					end
@@ -987,137 +916,137 @@ end)
 -- PERFORM FIRST TIME DB CHECK --
 exports["globals"]:PerformDBCheck("BANS", "bans", fetchAllBans)
 
-	-- ban command --
-	TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, char)
-		local userSource = tonumber(source)
-		-- add player to ban list
-		TriggerEvent('es:exposeDBFunctions', function(GetDoc)
-			-- get info from command
-			local banner = GetPlayerName(userSource)
-			local bannerId = GetPlayerIdentifiers(userSource)[1]
-			local targetPlayer = tonumber(args[2])
-			local targetPlayerName = GetPlayerName(targetPlayer)
-			table.remove(args,1) -- remove /test
-			table.remove(args, 1) -- remove id
-			local reason = table.concat(args, " ")
-			local allPlayerIdentifiers = GetPlayerIdentifiers(targetPlayer)
-			print("#allPlayerIdentifiers = " .. #allPlayerIdentifiers)
-			for i = 1, #allPlayerIdentifiers do
-				print("allPlayerIdentifiers[i] = " .. allPlayerIdentifiers[i])
-			end
-			-- show message
-			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
-			sendMessageToModsAndAdmins(userSource, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
-			-- get char name:
-			local player = exports["usa-characters"]:GetCharacter(targetPlayer)
-			local char_name = player.getFullName()
-			local desc = "**Character Name:** " .. char_name
-			-- send discord message
-			desc = desc .. "\n**Display Name:** " .. targetPlayerName
-			for i = 1, #allPlayerIdentifiers do
-				desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
-			end
-			desc = desc .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
+-- ban command --
+TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, char)
+	local userSource = tonumber(source)
+	-- add player to ban list
+	TriggerEvent('es:exposeDBFunctions', function(GetDoc)
+		-- get info from command
+		local banner = GetPlayerName(userSource)
+		local bannerId = GetPlayerIdentifiers(userSource)[1]
+		local targetPlayer = tonumber(args[2])
+		local targetPlayerName = GetPlayerName(targetPlayer)
+		table.remove(args,1) -- remove /test
+		table.remove(args, 1) -- remove id
+		local reason = table.concat(args, " ")
+		local allPlayerIdentifiers = GetPlayerIdentifiers(targetPlayer)
+		print("#allPlayerIdentifiers = " .. #allPlayerIdentifiers)
+		for i = 1, #allPlayerIdentifiers do
+			print("allPlayerIdentifiers[i] = " .. allPlayerIdentifiers[i])
+		end
+		-- show message
+		--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
+		sendMessageToModsAndAdmins(userSource, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
+		-- get char name:
+		local player = exports["usa-characters"]:GetCharacter(targetPlayer)
+		local char_name = player.getFullName()
+		local desc = "**Character Name:** " .. char_name
+		-- send discord message
+		desc = desc .. "\n**Display Name:** " .. targetPlayerName
+		for i = 1, #allPlayerIdentifiers do
+			desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
+		end
+		desc = desc .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
 
-			local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
-				PerformHttpRequest(url, function(err, text, headers)
-					if text then
-						print(text)
-					end
-				end, "POST", json.encode({
-					embeds = {
-						{
-							description = desc,
-							color = 14750740,
-							author = {
-								name = "User Banned From The Server"
-							}
+		local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
+			PerformHttpRequest(url, function(err, text, headers)
+				if text then
+					print(text)
+				end
+			end, "POST", json.encode({
+				embeds = {
+					{
+						description = desc,
+						color = 14750740,
+						author = {
+							name = "User Banned From The Server"
 						}
 					}
-				}), { ["Content-Type"] = 'application/json' })
-			-- update db
-			GetDoc.createDocument("bans",  {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
-				print("player banned!")
-				-- drop player from session
-				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
-				DropPlayer(targetPlayer, "Banned: " .. reason .. " -- You can file an appeal at https://usarrp.net")
-			end)
+				}
+			}), { ["Content-Type"] = 'application/json' })
+		-- update db
+		GetDoc.createDocument("bans",  {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+			print("player banned!")
+			-- drop player from session
+			--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
+			DropPlayer(targetPlayer, "Banned: " .. reason .. " -- You can file an appeal at https://usarrp.net")
 		end)
-	end, {
-		help = "CAUTION: ONLY USE FOR SERIOUS OFFENSES. Please consider using /tempban instead.",
-		params = {
-			{ name = "id", help = "Player's ID" },
-			{ name = "reason", help = "The reason of the ban. Please include as much detail as possible."  }
-		}
-	})
+	end)
+end, {
+	help = "CAUTION: ONLY USE FOR SERIOUS OFFENSES. Please consider using /tempban instead.",
+	params = {
+		{ name = "id", help = "Player's ID" },
+		{ name = "reason", help = "The reason of the ban. Please include as much detail as possible."  }
+	}
+})
 
-	-- temp ban command // Usage: /tempban id time (in hours) reason
-	TriggerEvent('es:addGroupCommand', 'tempban', "mod", function(source, args, char)
-		local userSource = tonumber(source)
-		-- add player to ban list
-		TriggerEvent('es:exposeDBFunctions', function(GetDoc)
-			-- get info from command
-			local banner = GetPlayerName(userSource)
-			local bannerId = GetPlayerIdentifiers(userSource)[1]
-			local targetPlayer = tonumber(args[2])
-			local targetPlayerName = GetPlayerName(targetPlayer)
-			local time = tonumber(args[3])
-			local allPlayerIdentifiers = GetPlayerIdentifiers(targetPlayer)
-			table.remove(args,1) -- remove /tempban
-			table.remove(args, 1) -- remove id
-			table.remove(args, 1) -- remove time
-			local reason = table.concat(args, " ")
-			local allPlayerIdentifiers = GetPlayerIdentifiers(targetPlayer)
-			print("#allPlayerIdentifiers = " .. #allPlayerIdentifiers)
-			for i = 1, #allPlayerIdentifiers do
-				print("allPlayerIdentifiers[i] = " .. allPlayerIdentifiers[i])
-			end
-			-- show message
-			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
-			sendMessageToModsAndAdmins(userSource, GetPlayerName(targetPlayer) .. " has been ^1temp banned^0 for " .. time .. " hour(s) (" .. reason .. ").")
-			-- get char name:
-			local player = exports["usa-characters"]:GetCharacter(targetPlayer)
-			local char_name = player.getFullName()
-			local desc = "**Character Name:** " .. char_name
-			-- send discord message
-			desc = desc .. "\n**Display Name:** " .. targetPlayerName
-			for i = 1, #allPlayerIdentifiers do
-				desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
-			end
-			desc = desc .. " \n**Time:** " .. time .. " hour(s)"
-			desc = desc .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
-			local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
-				PerformHttpRequest(url, function(err, text, headers)
-					if text then
-						print(text)
-					end
-				end, "POST", json.encode({
-					embeds = {
-						{
-							description = desc,
-							color = 14750740,
-							author = {
-								name = "User Temp Banned From The Server"
-							}
+-- temp ban command // Usage: /tempban id time (in hours) reason
+TriggerEvent('es:addGroupCommand', 'tempban', "mod", function(source, args, char)
+	local userSource = tonumber(source)
+	-- add player to ban list
+	TriggerEvent('es:exposeDBFunctions', function(GetDoc)
+		-- get info from command
+		local banner = GetPlayerName(userSource)
+		local bannerId = GetPlayerIdentifiers(userSource)[1]
+		local targetPlayer = tonumber(args[2])
+		local targetPlayerName = GetPlayerName(targetPlayer)
+		local time = tonumber(args[3])
+		local allPlayerIdentifiers = GetPlayerIdentifiers(targetPlayer)
+		table.remove(args,1) -- remove /tempban
+		table.remove(args, 1) -- remove id
+		table.remove(args, 1) -- remove time
+		local reason = table.concat(args, " ")
+		local allPlayerIdentifiers = GetPlayerIdentifiers(targetPlayer)
+		print("#allPlayerIdentifiers = " .. #allPlayerIdentifiers)
+		for i = 1, #allPlayerIdentifiers do
+			print("allPlayerIdentifiers[i] = " .. allPlayerIdentifiers[i])
+		end
+		-- show message
+		--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, GetPlayerName(targetPlayer) .. " has been ^1banned^0 (" .. reason .. ")")
+		sendMessageToModsAndAdmins(userSource, GetPlayerName(targetPlayer) .. " has been ^1temp banned^0 for " .. time .. " hour(s) (" .. reason .. ").")
+		-- get char name:
+		local player = exports["usa-characters"]:GetCharacter(targetPlayer)
+		local char_name = player.getFullName()
+		local desc = "**Character Name:** " .. char_name
+		-- send discord message
+		desc = desc .. "\n**Display Name:** " .. targetPlayerName
+		for i = 1, #allPlayerIdentifiers do
+			desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
+		end
+		desc = desc .. " \n**Time:** " .. time .. " hour(s)"
+		desc = desc .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
+		local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
+			PerformHttpRequest(url, function(err, text, headers)
+				if text then
+					print(text)
+				end
+			end, "POST", json.encode({
+				embeds = {
+					{
+						description = desc,
+						color = 14750740,
+						author = {
+							name = "User Temp Banned From The Server"
 						}
 					}
-				}), { ["Content-Type"] = 'application/json' })
-			-- update db
-			GetDoc.createDocument("bans", {time = os.time(), duration = time, char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
-				print("player banned!")
-				-- drop player from session
-				--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
-				DropPlayer(targetPlayer, "Temp Banned: " .. reason .. " This ban is in place for " .. time .. " hour(s).")
-			end)
+				}
+			}), { ["Content-Type"] = 'application/json' })
+		-- update db
+		GetDoc.createDocument("bans", {time = os.time(), duration = time, char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+			print("player banned!")
+			-- drop player from session
+			--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
+			DropPlayer(targetPlayer, "Temp Banned: " .. reason .. " This ban is in place for " .. time .. " hour(s).")
 		end)
-	end, {
-		help = "Tempban a player from the server.",
-		params = {
-			{ name = "id", help = "Player's ID" },
-			{ name = "duration", help = "Duration of ban (in hours)" },
-			{ name = "reason", help = "The reason of the temp ban. Please include as much detail as possible." }
-		}
-	})
+	end)
+end, {
+	help = "Tempban a player from the server.",
+	params = {
+		{ name = "id", help = "Player's ID" },
+		{ name = "duration", help = "Duration of ban (in hours)" },
+		{ name = "reason", help = "The reason of the temp ban. Please include as much detail as possible." }
+	}
+})
 
 RegisterServerEvent("usa:notifyStaff")
 AddEventHandler("usa:notifyStaff", function(msg, src)

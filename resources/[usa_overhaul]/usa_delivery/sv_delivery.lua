@@ -84,6 +84,8 @@ local DELIVERY_LOCATIONS = {
 	{x = 440.10, y = -981.14, z = 30.68}
 }
 
+local QUIT_JOB_FEE = 200
+
 RegisterServerEvent('gopostal:toggleDuty')
 AddEventHandler('gopostal:toggleDuty', function(location)
 	local char = exports["usa-characters"]:GetCharacter(source)
@@ -126,11 +128,14 @@ AddEventHandler('gopostal:payDriver', function(destination, playerCoords, lastDe
 end)
 
 RegisterServerEvent('gopostal:quitJob')
-AddEventHandler('gopostal:quitJob', function()
-	TriggerClientEvent('gopostal:quitJob', source)
+AddEventHandler('gopostal:quitJob', function(src, fee)
+	if src then
+		source = src
+	end
+	TriggerClientEvent('gopostal:quitJob', source, fee)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	char.removeBank(200)
-	TriggerClientEvent('usa:notify', source, 'You have been charged ~y~$200.0~s~ in loses.')
+	TriggerEvent("swayam:RemoveWayPoint_s", source)
 end)
 
 RegisterServerEvent('gopostal:getDeliveryLocations')
@@ -139,8 +144,8 @@ AddEventHandler('gopostal:getDeliveryLocations', function()
 end)
 
 TriggerEvent('es:addJobCommand', 'quitdelivery', { "gopostal" }, function(source, args, char)
-	char.removeBank(200)
-	TriggerClientEvent('usa:notify', source, 'You have been charged ~y~$200.0~s~ in loses.')
+	char.removeBank(QUIT_JOB_FEE)
+	TriggerEvent('gopostal:quitJob', source, QUIT_JOB_FEE)
 end, {
 	help = "Forcefully quit the current GoPostal job"
 })

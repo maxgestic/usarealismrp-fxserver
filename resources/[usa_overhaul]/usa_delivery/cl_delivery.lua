@@ -152,7 +152,7 @@ AddEventHandler('gopostal:onDuty', function(doGoOnDuty, i, destinations)
 end)
 
 RegisterNetEvent('gopostal:quitJob')
-AddEventHandler('gopostal:quitJob', function()
+AddEventHandler('gopostal:quitJob', function(fee)
 	if currentJob.onDuty then
 		if currentJob.vehicle then
 			DelVehicle(currentJob.vehicle)
@@ -163,7 +163,11 @@ AddEventHandler('gopostal:quitJob', function()
 		currentJob.onDuty = false
 		Citizen.Wait(100)
 		ClearPedTasks(me)
-		exports.globals:notify("Job ended!")
+		if fee then
+			exports.globals:notify('You have been fined ~y~$' .. fee .. '~s~ for quitting.')
+		else
+			exports.globals:notify("Job ended!")
+		end
 	end
 end)
 
@@ -280,124 +284,3 @@ function CreateMapBlips()
 	  EndTextCommandSetBlipName(blip)
 	end
 end
-
-
---[[
-currentJob.packageObject = CreateObject(GetHashKey('hei_prop_heist_box'), playerCoords, true, true, false)
-RequestAnimDict('anim@heists@box_carry@')
-while not HasAnimDictLoaded('anim@heists@box_carry@') do Citizen.Wait(100) end
-AttachEntityToEntity(currentJob.packageObject, playerPed, GetPedBoneIndex(playerPed, 28422), 0.0, 0.0, -0.01, 0.0, 0.0, 0.0, 1, 1, 0, 1, 0, 1)
-exports.globals:notify('Place the package in the van.')
-while currentJob.active do
-	Citizen.Wait(0)
-	playerCoords = GetEntityCoords(playerPed)
-	local x, y, z = table.unpack(GetOffsetFromEntityInWorldCoords(currentJob.vehicle, 0.0, -4.0, 0.0))
-	DrawText3D(x, y, z, 8, 'place package here')
-	if Vdist(playerCoords, x, y, z) < 0.5 then
-		break
-	else
-		if not IsEntityPlayingAnim(playerPed, 'anim@heists@box_carry@', 'idle', 3) then
-				TaskPlayAnim(playerPed, 'anim@heists@box_carry@', "idle", 8.0, 1.0, -1, 49, 1.0, 0, 0, 0)
-		end
-		DisablePlayerFiring(playerPed, true)
-		DisableControlAction(0, 21, true)
-		DisableControlAction(0, 23, true)
-		DisableControlAction(1, 323, true)
-		DisableControlAction(0, 25, true)
-		DisableControlAction(0, 263, true)
-		DisableControlAction(0, 264, true)
-		DisableControlAction(0, 24, true)
-		DisableControlAction(0, 25, true)
-		DisableControlAction(0, 140, true)
-		DisableControlAction(0, 141, true)
-		DisableControlAction(0, 142, true)
-		DisableControlAction(0, 22, true)
-		DisableControlAction(24, 37, true)
-		end
-		if GetVehicleEngineHealth(currentJob.vehicle) < 0 then
-			TriggerServerEvent('gopostal:quitJob')
-		end
-	end
-
-	if currentJob.active then
-		for i = 2, 3 do
-			SetVehicleDoorOpen(currentJob.vehicle, i, true, true)
-			Citizen.Wait(500)
-		end
-		Citizen.Wait(2000)
-		DeleteObject(currentJob.packageObject)
-		ClearPedTasks(playerPed)
-		TriggerServerEvent('display:shareDisplay', 'places package in van', 2, 370, 10, 3000)
-		exports.globals:notify('Take the package to the location marked on your GPS.')
-		currentJob.dropOff = DELIVERY_LOCATIONS[math.random(1, #DELIVERY_LOCATIONS)]
-		TriggerEvent("swayam:SetWayPointWithAutoDisable", currentJob.dropOff.x, currentJob.dropOff.y, currentJob.dropOff.z, 280, 60, "GoPostal Drop Off")
-	end
-
-	while currentJob.active do
-		Citizen.Wait(100)
-		playerCoords = GetEntityCoords(playerPed)
-		if Vdist(playerCoords, currentJob.dropOff.x, currentJob.dropOff.y, currentJob.dropOff.z) < 50.0 and GetVehiclePedIsIn(playerPed) == 0 then
-			exports.globals:notify('Retrieve the package from the van.')
-			break
-		end
-		if GetVehicleEngineHealth(currentJob.vehicle) < 0 then
-			TriggerServerEvent('gopostal:quitJob')
-		end
-	end
-
-	while currentJob.active do
-		Citizen.Wait(0)
-		playerCoords = GetEntityCoords(playerPed)
-		local x, y, z = table.unpack(GetOffsetFromEntityInWorldCoords(currentJob.vehicle, 0.0, -4.0, 0.0))
-		DrawText3D(x, y, z, 8, '[E] - Grab Package')
-		if IsControlJustPressed(0, 38) and Vdist(playerCoords, x, y, z) < 0.5 then
-			for i = 2, 3 do
-					SetVehicleDoorOpen(currentJob.vehicle, i, true, true)
-					Citizen.Wait(500)
-				end
-				Citizen.Wait(2000)
-			TriggerServerEvent('display:shareDisplay', 'grabs package', 2, 370, 10, 3000)
-			currentJob.packageObject = CreateObject(GetHashKey('hei_prop_heist_box'), playerCoords, true, true, false)
-			RequestAnimDict('anim@heists@box_carry@')
-			while not HasAnimDictLoaded('anim@heists@box_carry@') do Citizen.Wait(100) end
-			AttachEntityToEntity(currentJob.packageObject, playerPed, GetPedBoneIndex(playerPed, 28422), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1, 1, 0, 1, 0, 1)
-			break
-		end
-		if GetVehicleEngineHealth(currentJob.vehicle) < 0 then
-			TriggerServerEvent('gopostal:quitJob')
-		end
-	end
-
-while currentJob.active do
-	Citizen.Wait(0)
-	playerCoords = GetEntityCoords(playerPed)
-	DrawText3D(currentJob.dropOff.x, currentJob.dropOff.y, currentJob.dropOff.z, 10, 'drop package here')
-	if not IsEntityPlayingAnim(playerPed, 'anim@heists@box_carry@', 'idle', 3) then
-		TaskPlayAnim(playerPed, 'anim@heists@box_carry@', "idle", 8.0, 1.0, -1, 49, 1.0, 0, 0, 0)
-	end
-	DisablePlayerFiring(playerPed, true)
-	DisableControlAction(0, 21, true)
-	DisableControlAction(0, 23, true)
-	DisableControlAction(1, 323, true)
-	DisableControlAction(0, 25, true)
-	DisableControlAction(0, 263, true)
-	DisableControlAction(0, 264, true)
-	DisableControlAction(0, 24, true)
-	DisableControlAction(0, 25, true)
-	DisableControlAction(0, 140, true)
-	DisableControlAction(0, 141, true)
-	DisableControlAction(0, 142, true)
-	DisableControlAction(0, 22, true)
-	DisableControlAction(24, 37, true)
-	if Vdist(playerCoords, currentJob.dropOff.x, currentJob.dropOff.y, currentJob.dropOff.z) < 0.5 then
-		DeleteObject(currentJob.packageObject)
-		ClearPedTasks(playerPed)
-		exports.globals:notify('Package delivered, return to the depot for another!')
-		TriggerServerEvent('gopostal:payDriver', Vdist(currentJob.beginCoords, currentJob.dropOff.x, currentJob.dropOff.y, currentJob.dropOff.z), playerCoords)
-		break
-	end
-	if GetVehicleEngineHealth(currentJob.vehicle) < 0 then
-			TriggerServerEvent('gopostal:quitJob')
-		end
-end
---]]
