@@ -6,761 +6,761 @@ exports["globals"]:PerformDBCheck("usa-pilotjob", "pilotjob")
 
 -- MISSIONS --
 local MISSIONS = {
-    ["Trainee"] = {
-        {
-            name = "Training Flight",
-            description = "Fly to and land the mammatus at the airport in Sandy Shores and then come back and land at LSA then park it in the hangar.",
-            checkpoints = {
-                {
-                    name = "Mammatus",
-                    coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                    requirement = "Get into the Mammatus and prepare yourself and Instructor Blackfoot for flight."
-                },
-                {
-                    name = "Runway 1",
-                    coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                    requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                    sound = "atc3"
-                },
-                {
-                    name = "Sandy Shores Airport",
-                    coords = { x = 1673.0, y = 3243.9, z = 40.9 },
-                    requirement = "Fly safely and properly to the Sandy Shores Airport with Instructor Blackfoot."
-                },
-                {
-                    name = "LSA",
-                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-                    requirement = "You did it! Now let's take the Mammatus back to Los Santos Airport."
-                },
-                {
-                    name = "LSA Hangar",
-                    coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                    requirement = "Nice! Now park it in the hangar, and check in with staff, and that will be all for your training flight! Congratulations!"
-                }
-            },
-            pay = 3000,
-            plane_spawn = {
-                model = "mammatus",
-                location = { x = -962.2, y = -2991.7, z = 13.9 },
-                passengers = 0
-            }
+  ["Trainee"] = {
+    {
+      name = "Training Flight",
+      description = "Fly to and land the mammatus at the airport in Sandy Shores and then come back and land at LSA then park it in the hangar.",
+        checkpoints = {
+          {
+            name = "Mammatus",
+            coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+            requirement = "Get into the Mammatus and prepare yourself and Instructor Blackfoot for flight."
+          },
+          {
+            name = "Runway 1",
+            coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+            requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+            sound = "atc3"
+          },
+          {
+            name = "Sandy Shores Airport",
+            coords = { x = 1673.0, y = 3243.9, z = 40.9 },
+            requirement = "Fly safely and properly to the Sandy Shores Airport with Instructor Blackfoot."
+          },
+          {
+            name = "LSA",
+            coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+            requirement = "You did it! Now let's take the Mammatus back to Los Santos Airport."
+          },
+          {
+            name = "LSA Hangar",
+            coords = { x = -943.7, y = -2964.3, z = 13.9 },
+            requirement = "Nice! Now park it in the hangar, and check in with staff, and that will be all for your training flight! Congratulations!"
+          }
+        },
+        pay = 250,
+        plane_spawn = {
+          model = "mammatus",
+          location = { x = -962.2, y = -2991.7, z = 13.9 },
+          passengers = 0
         }
     },
-    ["Junior Flight Officer"] = {
+  },
+  ["Junior Flight Officer"] = {
+    {
+      name = "Flight to Grapeseed with the Instructor",
+      description = "We are going to see how you can handle dirt runways. Take the Cuban 800 and instructor to the Grapeseed airfield and make a clean landing.",
+      checkpoints = {
         {
-                name = "Flight to Grapeseed with the Instructor",
-                description = "We are going to see how you can handle dirt runways. Take the Cuban 800 and instructor to the Grapeseed airfield and make a clean landing.",
-                checkpoints = {
-                    {
-                        name = "Cuban 800",
-                        coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                        requirement = "Get into the Cuban 800 and prepare yourself and Instructor Mark for flight."
-                    },
-                    {
-                        name = "Runway 1",
-                        coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                        requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                        sound = "atc3"
-                    },
-                    {
-                        name = "Grapeseed Airport",
-                        coords = { x = 2124.5, y = 4806.1, z = 41.2 },
-                        requirement = "Fly safely and properly to the Grapeseed Airport and make a clean landing."
-                    },
-                    {
-                        name = "LSA",
-                        coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-                        requirement = "Nice job! You did it! Now take the Cuban 800 back to Los Santos Airport."
-                    },
-                    {
-                        name = "LSA Hangar",
-                        coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                        requirement = "Nice! Now park it in the hangar, and check in with staff, and that will be all for this task!"
-                    }
-                },
-                pay = 5000,
-                plane_spawn = {
-                    model = "cuban800",
-                    location = { x = -962.2, y = -2991.7, z = 13.9 },
-                    passengers = 0
-                }
+          name = "Cuban 800",
+          coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Get into the Cuban 800 and prepare yourself and Instructor Mark for flight."
         },
         {
-                name = "Sea plane flight with the Instructor",
-                description = "Now we are going to see how you can handle water runways. Take the Dodo and the instructor to the coast on the North side of Paleto Bay and make a clean landing.",
-                checkpoints = {
-                    {
-                        name = "Dodo",
-                        coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                        requirement = "Get into the Dodo and prepare yourself and Instructor Mark for flight."
-                    },
-                    {
-                        name = "Runway 1",
-                        coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                        requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                        sound = "atc3"
-                    },
-                    {
-                        name = "Paleto Bay",
-                        coords = { x = -930.2, y = 6985.8, z = 1.9 },
-                        requirement = "Make a smooth landing in the water just North of Paleto Bay."
-                    },
-                    {
-                        name = "LSA",
-                        coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-                        requirement = "Nice! Now take this thing back to LSA for another nice, smooth landing!"
-                    },
-                    {
-                        name = "LSA Hangar",
-                        coords = { x = -962.2, y = -2991.7, z = 13.9 },
-                        requirement = "Nice job! Let's park the Dodo back in the hangar and you'll be finished for this task!"
-                    }
-                },
-                pay = 5500,
-                plane_spawn = {
-                    model = "dodo",
-                    location = { x = -962.2, y = -2991.7, z = 13.9 },
-                    passengers = 0
-                }
+          name = "Runway 1",
+          coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+          requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+          sound = "atc3"
         },
         {
-                name = "Helicopter Flight",
-                description = "Our pilots need to know how to also fly helicopters! Take the frogger out for a quick spin for some practice.",
-                checkpoints = {
-                    {
-                        name = "Frogger",
-                        coords = { x = -1112.2, y = -2883.9, z = 13.3 },
-                        requirement = "Get into the Frogger and prepare yourself and your instructor for flight.",
-                        sound = "atc3"
-                    },
-                    {
-                        name = "Sandy Shores Airport",
-                        coords = { x = 1770.3, y = 3239.7, z = 41.5 },
-                        requirement = "Take the frogger to the Sandy Shores airport and land on the helipad."
-                    },
-                    {
-                        name = "LSA",
-                        coords = { x = -1112.2, y = -2883.9, z = 13.3 },
-                        requirement = "Good job! Let's take it back to LSA now and land back where we took off from."
-                    },
-                    {
-                        name = "Staff",
-                        coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                        requirement = "Nice! Go check in with staff and let them know you finished."
-                    }
-                },
-                pay = 5000,
-                plane_spawn = {
-                    model = "frogger",
-                    location = { x = -1112.2, y = -2883.9, z = 13.3 },
-                    passengers = 0
-                }
+          name = "Grapeseed Airport",
+          coords = { x = 2124.5, y = 4806.1, z = 41.2 },
+          requirement = "Fly safely and properly to the Grapeseed Airport and make a clean landing."
         },
         {
-                name = "Small Jet Flight to Grapeseed with the Instructor",
-                description = "We are going to see how you can handle a small jet aircraft on a dirt runway. Take the Vestra and the instructor to the Grapeseed airfield and make a clean landing.",
-                checkpoints = {
-                    {
-                        name = "Vestra",
-                        coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                        requirement = "Get into the Vestra and prepare yourself and the instructor for flight."
-                    },
-                    {
-                        name = "Runway 1",
-                        coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                        requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                        sound = "atc3"
-                    },
-                    {
-                        name = "Grapeseed Airport",
-                        coords = { x = 2124.5, y = 4806.1, z = 41.2 },
-                        requirement = "Fly safely and properly to the Grapeseed Airport and make a clean landing."
-                    },
-                    {
-                        name = "LSA",
-                        coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-                        requirement = "Nice job! You did it! Now take the Vestra back to Los Santos Airport."
-                    },
-                    {
-                        name = "LSA Hangar",
-                        coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                        requirement = "Nice! Now park it in the hangar, and check in with staff, and that will be all for this task!"
-                    }
-                },
-                pay = 5000,
-                plane_spawn = {
-                    model = "vestra",
-                    location = { x = -962.2, y = -2991.7, z = 13.9 },
-					passengers = 0
-                }
+          name = "LSA",
+          coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+          requirement = "Nice job! You did it! Now take the Cuban 800 back to Los Santos Airport."
+        },
+        {
+          name = "LSA Hangar",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Nice! Now park it in the hangar, and check in with staff, and that will be all for this task!"
         }
+      },
+      pay = 400,
+      plane_spawn = {
+        model = "cuban800",
+        location = { x = -962.2, y = -2991.7, z = 13.9 },
+        passengers = 0
+      }
     },
-    ["Flight Officer"] = {
+    {
+      name = "Sea plane flight with the Instructor",
+      description = "Now we are going to see how you can handle water runways. Take the Dodo and the instructor to the coast on the North side of Paleto Bay and make a clean landing.",
+      checkpoints = {
         {
-            name = "Shamal Passenger Flight",
-            description = "Take the Shamal and its passengers to the Sandy Shores Airport safely and let your passengers out there. ",
-            checkpoints = {
-                {
-                    name = "Shamal",
-                    coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                    requirement = "Get into the Shamal and prepare yourself and your passengers for flight."
-                },
-                {
-                    name = "Runway 1",
-                    coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                    requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                    sound = "atc3"
-                },
-                {
-                    name = "Sandy Shores Airport",
-                    coords = { x = 1673.0, y = 3243.9, z = 40.9 },
-                    requirement = "Fly safely and properly to the Sandy Shores Airport to drop your passengers off there.",
-                    passengers_exit = true
-                },
-                {
-                    name = "LSA",
-                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-                    requirement = "Take the Shamal back to Los Santos Airport."
-                },
-                {
-                    name = "LSA Hangar",
-                    coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                    requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
-                }
-            },
-            pay = 5000,
-            plane_spawn = {
-                model = "shamal",
-                location = { x = -962.2, y = -2991.7, z = 13.9 },
-                passengers = 5
-            }
+          name = "Dodo",
+          coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Get into the Dodo and prepare yourself and Instructor Mark for flight."
         },
         {
-            name = "Nimbus Passenger Flight",
-            description = "Take the Nimbus and its passengers to Grapeseed Airport safely and let your passengers out there. ",
-            checkpoints = {
-                {
-                    name = "Nimbus",
-                    coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                    requirement = "Get into the Nimbus and prepare yourself and your passengers for flight."
-                },
-                {
-                    name = "Runway 1",
-                    coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                    requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                    sound = "atc3"
-                },
-                {
-                    name = "Grapeseed Airport",
-                    coords = { x = 2124.5, y = 4806.1, z = 41.2 },
-                    requirement = "Fly safely and properly to the Grapeseed Airport to drop your passengers off there.",
-                    passengers_exit = true
-                },
-                {
-                    name = "LSA",
-                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-                    requirement = "Take the Nimbus back to Los Santos Airport."
-                },
-                {
-                    name = "LSA Hangar",
-                    coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                    requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
-                }
-            },
-            pay = 5000,
-            plane_spawn = {
-                model = "nimbus",
-                location = { x = -962.2, y = -2991.7, z = 13.9 },
-                passengers = 5
-            }
+          name = "Runway 1",
+          coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+          requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+          sound = "atc3"
         },
         {
-            name = "Luxor Passenger Flight",
-            description = "Take the Luxor and its passengers to the Sandy Shores Airport safely and let them out there. You will be carrying a famous rap artist and his crew.",
-            checkpoints = {
-                {
-                    name = "Luxor",
-                    coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                    requirement = "Get into the Luxor and prepare yourself and your passengers for flight."
-                },
-                {
-                    name = "Runway 1",
-                    coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                    requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                    sound = "atc3"
-                },
-                {
-                    name = "Sandy Shores Airport",
-                    coords = { x = 1673.0, y = 3243.9, z = 40.9 },
-                    requirement = "Fly safely and properly to the Sandy Shores Airport to drop your passengers off there.",
-                    passengers_exit = true
-                },
-                {
-                    name = "LSA",
-                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-                    requirement = "Take the Luxor back to Los Santos Airport."
-                },
-                {
-                    name = "LSA Hangar",
-                    coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                    requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
-                }
-            },
-            pay = 6500,
-            plane_spawn = {
-                model = "luxor2",
-                location = { x = -962.2, y = -2991.7, z = 13.9 },
-                passengers = {
-                    {
-                        model = -413447396
-                    },
-                    {
-                        model = 1459905209
-                    },
-                    {
-                        model = 51789996
-                    },
-                    {
-                        model = -2078561997
-                    },
-                    {
-                        model = 1198698306
-                    },
-                    {
-                        model = -1249041111
-                    }
-                }
-            }
+          name = "Paleto Bay",
+          coords = { x = -930.2, y = 6985.8, z = 1.9 },
+          requirement = "Make a smooth landing in the water just North of Paleto Bay."
         },
         {
-            name = "Nimbus Passenger Flight",
-            description = "Take the Nimbus and its passengers to the Sandy Shores Airport safely and let your passengers out there. ",
-            checkpoints = {
-                {
-                    name = "Nimbus",
-                    coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                    requirement = "Get into the Nimbus and prepare yourself and your passengers for flight."
-                },
-                {
-                    name = "Runway 1",
-                    coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                    requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                    sound = "atc3"
-                },
-                {
-                    name = "Sandy Shores Airport",
-                    coords = { x = 1673.0, y = 3243.9, z = 40.9 },
-                    requirement = "Fly safely and properly to the Sandy Shores Airport to drop your passengers off there.",
-                    passengers_exit = true
-                },
-                {
-                    name = "LSA",
-                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-                    requirement = "Take the Nimbus back to Los Santos Airport."
-                },
-                {
-                    name = "LSA Hangar",
-                    coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                    requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
-                }
-            },
-            pay = 5000,
-            plane_spawn = {
-                model = "nimbus",
-                location = { x = -962.2, y = -2991.7, z = 13.9 },
-                passengers = 6
-            }
+          name = "LSA",
+          coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+          requirement = "Nice! Now take this thing back to LSA for another nice, smooth landing!"
         },
         {
-            name = "Shamal Passenger Flight 2",
-            description = "Take the Shamal and its passengers to Grapeseed Airport safely and let your passengers out there. ",
-            checkpoints = {
-                {
-                    name = "Shamal",
-                    coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                    requirement = "Get into the Shamal and prepare yourself and your passengers for flight."
-                },
-                {
-                    name = "Runway 1",
-                    coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                    requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                    sound = "atc3"
-                },
-                {
-                    name = "Grapeseed Airport",
-                    coords = { x = 2124.5, y = 4806.1, z = 41.2 },
-                    requirement = "Fly safely and properly to the Grapeseed Airport to drop your passengers off there.",
-                    passengers_exit = true
-                },
-                {
-                    name = "LSA",
-                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-                    requirement = "Take the Shamal back to Los Santos Airport."
-                },
-                {
-                    name = "LSA Hangar",
-                    coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                    requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
-                }
-            },
-            pay = 5000,
-            plane_spawn = {
-                model = "shamal",
-                location = { x = -962.2, y = -2991.7, z = 13.9 },
-                passengers = 5
-            }
-        },
-        {
-            name = "Luxor Passenger Flight 2",
-            description = "Take the Luxor and its passengers to the Sandy Shores Airport safely and let your passengers out there. ",
-            checkpoints = {
-                {
-                    name = "Luxor",
-                    coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                    requirement = "Get into the Luxor and prepare yourself and your passengers for flight."
-                },
-                {
-                    name = "Runway 1",
-                    coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                    requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                    sound = "atc3"
-                },
-                {
-                    name = "Sandy Shores Airport",
-                    coords = { x = 1673.0, y = 3243.9, z = 40.9 },
-                    requirement = "Fly safely and properly to the Sandy Shores Airport to drop your passengers off there.",
-                    passengers_exit = true
-                },
-                {
-                    name = "LSA",
-                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-                    requirement = "Take the Luxor back to Los Santos Airport."
-                },
-                {
-                    name = "LSA Hangar",
-                    coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                    requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
-                }
-            },
-            pay = 5000,
-            plane_spawn = {
-                model = "luxor",
-                location = { x = -962.2, y = -2991.7, z = 13.9 },
-                passengers = 7
-            }
+          name = "LSA Hangar",
+          coords = { x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Nice job! Let's park the Dodo back in the hangar and you'll be finished for this task!"
         }
+      },
+      pay = 475,
+      plane_spawn = {
+        model = "dodo",
+        location = { x = -962.2, y = -2991.7, z = 13.9 },
+        passengers = 0
+      }
     },
-    ["First Officer"] = {
+    {
+      name = "Helicopter Flight",
+      description = "Our pilots need to know how to also fly helicopters! Take the frogger out for a quick spin for some practice.",
+      checkpoints = {
         {
-            name = "Titan Cargo Flight",
-            description = "Take the Titan and its cargo to the Sandy Shores Airport safely.",
-            checkpoints = {
-                {
-                    name = "Titan",
-                    coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                    requirement = "Get into the Titan and prepare yourself for flight."
-                },
-                {
-                    name = "Runway 1",
-                    coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                    requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                    sound = "atc3"
-                },
-                {
-                    name = "Sandy Shores Airport",
-                    coords = { x = 1673.0, y = 3243.9, z = 40.9 },
-                    requirement = "Fly safely and properly to the Sandy Shores Airport to drop your cargo off there.",
-                    cargo_drop = true
-                },
-                {
-                    name = "LSA",
-                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-                    requirement = "Take the Titan back to Los Santos Airport."
-                },
-                {
-                    name = "LSA Hangar",
-                    coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                    requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
-                }
-            },
-            pay = 8000,
-            plane_spawn = {
-                model = "titan",
-                location = { x = -962.2, y = -2991.7, z = 13.9 }
-            }
+          name = "Frogger",
+          coords = { x = -1112.2, y = -2883.9, z = 13.3 },
+          requirement = "Get into the Frogger and prepare yourself and your instructor for flight.",
+          sound = "atc3"
         },
         {
-            name = "Titan Cargo Flight 2",
-            description = "Take the Titan and its cargo to the Fort Zancudo Airbase safely.",
-            checkpoints = {
-                {
-                    name = "Titan",
-                    coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                    requirement = "Get into the Titan and prepare yourself for flight."
-                },
-                {
-                    name = "Runway 1",
-                    coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                    requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                    sound = "atc3"
-                },
-                {
-                    name = "Fort Zancudo Airbase",
-                    coords = { x = -2480.2, y = 3262.6, z = 32.2 },
-                    requirement = "Fly safely and properly to the Fort Zancudo Airbase to drop your cargo off there.",
-                    cargo_drop = true
-                },
-                {
-                    name = "LSA",
-                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-                    requirement = "Take the Titan back to Los Santos Airport."
-                },
-                {
-                    name = "LSA Hangar",
-                    coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                    requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
-                }
-            },
-            pay = 8000,
-            plane_spawn = {
-                model = "titan",
-                location = { x = -962.2, y = -2991.7, z = 13.9 }
-            }
+          name = "Sandy Shores Airport",
+          coords = { x = 1770.3, y = 3239.7, z = 41.5 },
+          requirement = "Take the frogger to the Sandy Shores airport and land on the helipad."
         },
         {
-            name = "Nimbus Passenger Flight",
-            description = "Take the Nimbus and its passengers to the Sandy Shores Airport safely and let your passengers out there. ",
-            checkpoints = {
-                {
-                    name = "Nimbus",
-                    coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                    requirement = "Get into the Nimbus and prepare yourself and your passengers for flight."
-                },
-                {
-                    name = "Runway 1",
-                    coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                    requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                    sound = "atc3"
-                },
-                {
-                    name = "Sandy Shores Airport",
-                    coords = { x = 1673.0, y = 3243.9, z = 40.9 },
-                    requirement = "Fly safely and properly to the Sandy Shores Airport to drop your passengers off there.",
-                    passengers_exit = true
-                },
-                {
-                    name = "LSA",
-                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-                    requirement = "Take the Nimbus back to Los Santos Airport."
-                },
-                {
-                    name = "LSA Hangar",
-                    coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                    requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
-                }
-            },
-            pay = 5000,
-            plane_spawn = {
-                model = "nimbus",
-                location = { x = -962.2, y = -2991.7, z = 13.9 },
-                passengers = 6
-            }
+          name = "LSA",
+          coords = { x = -1112.2, y = -2883.9, z = 13.3 },
+          requirement = "Good job! Let's take it back to LSA now and land back where we took off from."
         },
         {
-            name = "Shamal Passenger Flight 2",
-            description = "Take the Shamal and its passengers to Grapeseed Airport safely and let your passengers out there. ",
-            checkpoints = {
-                {
-                    name = "Shamal",
-                    coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                    requirement = "Get into the Shamal and prepare yourself and your passengers for flight."
-                },
-                {
-                    name = "Runway 1",
-                    coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                    requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                    sound = "atc3"
-                },
-                {
-                    name = "Grapeseed Airport",
-                    coords = { x = 2124.5, y = 4806.1, z = 41.2 },
-                    requirement = "Fly safely and properly to the Grapeseed Airport to drop your passengers off there.",
-                    passengers_exit = true
-                },
-                {
-                    name = "LSA",
-                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-                    requirement = "Take the Shamal back to Los Santos Airport."
-                },
-                {
-                    name = "LSA Hangar",
-                    coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                    requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
-                }
-            },
-            pay = 5000,
-            plane_spawn = {
-                model = "shamal",
-                location = { x = -962.2, y = -2991.7, z = 13.9 },
-                passengers = 5
-            }
-        },
-        {
-            name = "Luxor Passenger Flight 2",
-            description = "Take the Luxor and its passengers to the Sandy Shores Airport safely and let your passengers out there. ",
-            checkpoints = {
-                {
-                    name = "Luxor",
-                    coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                    requirement = "Get into the Luxor and prepare yourself and your passengers for flight."
-                },
-                {
-                    name = "Runway 1",
-                    coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                    requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                    sound = "atc3"
-                },
-                {
-                    name = "Sandy Shores Airport",
-                    coords = { x = 1673.0, y = 3243.9, z = 40.9 },
-                    requirement = "Fly safely and properly to the Sandy Shores Airport to drop your passengers off there.",
-                    passengers_exit = true
-                },
-                {
-                    name = "LSA",
-                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-                    requirement = "Take the Luxor back to Los Santos Airport."
-                },
-                {
-                    name = "LSA Hangar",
-                    coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                    requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
-                }
-            },
-            pay = 5000,
-            plane_spawn = {
-                model = "luxor",
-                location = { x = -962.2, y = -2991.7, z = 13.9 },
-                passengers = 7
-            }
-        },
-        {
-                name = "Velum Flight to Grapeseed",
-                description = "Take the Velum and its passengers to the Grapeseed airfield and make a clean landing.",
-                checkpoints = {
-                    {
-                        name = "Velum",
-                        coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                        requirement = "Get into the Velum and prepare yourself and your passengers for flight."
-                    },
-                    {
-                        name = "Runway 1",
-                        coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                        requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                        sound = "atc3"
-                    },
-                    {
-                        name = "Grapeseed Airport",
-                        coords = { x = 2124.5, y = 4806.1, z = 41.2 },
-                        requirement = "Fly safely and properly to the Grapeseed Airport and make a clean landing."
-                    },
-                    {
-                        name = "LSA",
-                        coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-                        requirement = "Take the Velum back to Los Santos Airport."
-                    },
-                    {
-                        name = "LSA Hangar",
-                        coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                        requirement = "Park the Velum in the hangar, and check in with staff, and that will be all for this flight!"
-                    }
-                },
-                pay = 6000,
-                plane_spawn = {
-                    model = "velum",
-                    location = { x = -962.2, y = -2991.7, z = 13.9 },
-                    passengers = 2
-                }
-        },
-        {
-            name = "Shamal Passenger Flight",
-            description = "Take the Shamal and its passengers to the Sandy Shores Airport safely and let your passengers out there. ",
-            checkpoints = {
-                {
-                    name = "Shamal",
-                    coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                    requirement = "Get into the Shamal and prepare yourself and your passengers for flight."
-                },
-                {
-                    name = "Runway 1",
-                    coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                    requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                    sound = "atc3"
-                },
-                {
-                    name = "Sandy Shores Airport",
-                    coords = { x = 1673.0, y = 3243.9, z = 40.9 },
-                    requirement = "Fly safely and properly to the Sandy Shores Airport to drop your passengers off there.",
-                    passengers_exit = true
-                },
-                {
-                    name = "LSA",
-                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-                    requirement = "Take the Shamal back to Los Santos Airport."
-                },
-                {
-                    name = "LSA Hangar",
-                    coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                    requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
-                }
-            },
-            pay = 6000,
-            plane_spawn = {
-                model = "shamal",
-                location = { x = -962.2, y = -2991.7, z = 13.9 },
-                passengers = 5
-            }
-        },
-        {
-            name = "Nimbus Passenger Flight",
-            description = "Take the Nimbus and its passengers to Grapeseed Airport safely and let your passengers out there. ",
-            checkpoints = {
-                {
-                    name = "Nimbus",
-                    coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-                    requirement = "Get into the Nimbus and prepare yourself and your passengers for flight."
-                },
-                {
-                    name = "Runway 1",
-                    coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-                    requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-                    sound = "atc3"
-                },
-                {
-                    name = "Grapeseed Airport",
-                    coords = { x = 2124.5, y = 4806.1, z = 41.2 },
-                    requirement = "Fly safely and properly to the Grapeseed Airport to drop your passengers off there.",
-                    passengers_exit = true
-                },
-                {
-                    name = "LSA",
-                    coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-                    requirement = "Take the Nimbus back to Los Santos Airport."
-                },
-                {
-                    name = "LSA Hangar",
-                    coords = { x = -943.7, y = -2964.3, z = 13.9 },
-                    requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
-                }
-            },
-            pay = 6000,
-            plane_spawn = {
-                model = "nimbus",
-                location = { x = -962.2, y = -2991.7, z = 13.9 },
-                passengers = 5
-            }
+          name = "Staff",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Nice! Go check in with staff and let them know you finished."
         }
+      },
+      pay = 425,
+      plane_spawn = {
+        model = "frogger",
+        location = { x = -1112.2, y = -2883.9, z = 13.3 },
+        passengers = 0
+      }
+    },
+    {
+      name = "Small Jet Flight to Grapeseed with the Instructor",
+      description = "We are going to see how you can handle a small jet aircraft on a dirt runway. Take the Vestra and the instructor to the Grapeseed airfield and make a clean landing.",
+      checkpoints = {
+        {
+          name = "Vestra",
+          coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Get into the Vestra and prepare yourself and the instructor for flight."
+        },
+        {
+          name = "Runway 1",
+          coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+          requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+          sound = "atc3"
+        },
+        {
+          name = "Grapeseed Airport",
+          coords = { x = 2124.5, y = 4806.1, z = 41.2 },
+          requirement = "Fly safely and properly to the Grapeseed Airport and make a clean landing."
+        },
+        {
+          name = "LSA",
+          coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+          requirement = "Nice job! You did it! Now take the Vestra back to Los Santos Airport."
+        },
+        {
+          name = "LSA Hangar",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Nice! Now park it in the hangar, and check in with staff, and that will be all for this task!"
+        }
+      },
+      pay = 500,
+      plane_spawn = {
+        model = "vestra",
+        location = { x = -962.2, y = -2991.7, z = 13.9 },
+        passengers = 0
+      }
     }
+  },
+  ["Flight Officer"] = {
+    {
+      name = "Shamal Passenger Flight",
+      description = "Take the Shamal and its passengers to the Sandy Shores Airport safely and let your passengers out there. ",
+      checkpoints = {
+        {
+          name = "Shamal",
+          coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Get into the Shamal and prepare yourself and your passengers for flight."
+        },
+        {
+          name = "Runway 1",
+          coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+          requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+          sound = "atc3"
+        },
+        {
+          name = "Sandy Shores Airport",
+          coords = { x = 1673.0, y = 3243.9, z = 40.9 },
+          requirement = "Fly safely and properly to the Sandy Shores Airport to drop your passengers off there.",
+          passengers_exit = true
+        },
+        {
+          name = "LSA",
+          coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+          requirement = "Take the Shamal back to Los Santos Airport."
+        },
+        {
+          name = "LSA Hangar",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
+        }
+      },
+      pay = 500,
+      plane_spawn = {
+        model = "shamal",
+        location = { x = -962.2, y = -2991.7, z = 13.9 },
+        passengers = 5
+      }
+    },
+    {
+      name = "Nimbus Passenger Flight",
+      description = "Take the Nimbus and its passengers to Grapeseed Airport safely and let your passengers out there. ",
+      checkpoints = {
+        {
+          name = "Nimbus",
+          coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Get into the Nimbus and prepare yourself and your passengers for flight."
+        },
+        {
+          name = "Runway 1",
+          coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+          requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+          sound = "atc3"
+        },
+        {
+          name = "Grapeseed Airport",
+          coords = { x = 2124.5, y = 4806.1, z = 41.2 },
+          requirement = "Fly safely and properly to the Grapeseed Airport to drop your passengers off there.",
+          passengers_exit = true
+        },
+        {
+          name = "LSA",
+          coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+          requirement = "Take the Nimbus back to Los Santos Airport."
+        },
+        {
+          name = "LSA Hangar",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
+        }
+      },
+      pay = 550,
+      plane_spawn = {
+        model = "nimbus",
+        location = { x = -962.2, y = -2991.7, z = 13.9 },
+        passengers = 5
+      }
+    },
+    {
+      name = "Luxor Passenger Flight",
+      description = "Take the Luxor and its passengers to the Sandy Shores Airport safely and let them out there. You will be carrying a famous rap artist and his crew.",
+      checkpoints = {
+        {
+          name = "Luxor",
+          coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Get into the Luxor and prepare yourself and your passengers for flight."
+        },
+        {
+          name = "Runway 1",
+          coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+          requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+          sound = "atc3"
+        },
+        {
+          name = "Sandy Shores Airport",
+          coords = { x = 1673.0, y = 3243.9, z = 40.9 },
+          requirement = "Fly safely and properly to the Sandy Shores Airport to drop your passengers off there.",
+          passengers_exit = true
+        },
+        {
+          name = "LSA",
+          coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+          requirement = "Take the Luxor back to Los Santos Airport."
+        },
+        {
+          name = "LSA Hangar",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
+        }
+      },
+      pay = 500,
+      plane_spawn = {
+        model = "luxor2",
+        location = { x = -962.2, y = -2991.7, z = 13.9 },
+        passengers = {
+          {
+            model = -413447396
+          },
+          {
+            model = 1459905209
+          },
+          {
+            model = 51789996
+          },
+          {
+            model = -2078561997
+          },
+          {
+            model = 1198698306
+          },
+          {
+            model = -1249041111
+          }
+        }
+      }
+    },
+    {
+      name = "Nimbus Passenger Flight",
+      description = "Take the Nimbus and its passengers to the Sandy Shores Airport safely and let your passengers out there. ",
+      checkpoints = {
+        {
+          name = "Nimbus",
+          coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Get into the Nimbus and prepare yourself and your passengers for flight."
+        },
+        {
+          name = "Runway 1",
+          coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+          requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+          sound = "atc3"
+        },
+        {
+          name = "Sandy Shores Airport",
+          coords = { x = 1673.0, y = 3243.9, z = 40.9 },
+          requirement = "Fly safely and properly to the Sandy Shores Airport to drop your passengers off there.",
+          passengers_exit = true
+        },
+        {
+          name = "LSA",
+          coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+          requirement = "Take the Nimbus back to Los Santos Airport."
+        },
+        {
+          name = "LSA Hangar",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
+        }
+      },
+      pay = 500,
+      plane_spawn = {
+        model = "nimbus",
+        location = { x = -962.2, y = -2991.7, z = 13.9 },
+        passengers = 6
+      }
+    },
+    {
+      name = "Shamal Passenger Flight 2",
+      description = "Take the Shamal and its passengers to Grapeseed Airport safely and let your passengers out there. ",
+      checkpoints = {
+        {
+          name = "Shamal",
+          coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Get into the Shamal and prepare yourself and your passengers for flight."
+        },
+        {
+          name = "Runway 1",
+          coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+          requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+          sound = "atc3"
+        },
+        {
+          name = "Grapeseed Airport",
+          coords = { x = 2124.5, y = 4806.1, z = 41.2 },
+          requirement = "Fly safely and properly to the Grapeseed Airport to drop your passengers off there.",
+          passengers_exit = true
+        },
+        {
+          name = "LSA",
+          coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+          requirement = "Take the Shamal back to Los Santos Airport."
+        },
+        {
+          name = "LSA Hangar",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
+        }
+      },
+      pay = 550,
+      plane_spawn = {
+        model = "shamal",
+        location = { x = -962.2, y = -2991.7, z = 13.9 },
+        passengers = 5
+      }
+    },
+    {
+      name = "Luxor Passenger Flight 2",
+      description = "Take the Luxor and its passengers to the Sandy Shores Airport safely and let your passengers out there. ",
+      checkpoints = {
+        {
+          name = "Luxor",
+          coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Get into the Luxor and prepare yourself and your passengers for flight."
+        },
+        {
+          name = "Runway 1",
+          coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+          requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+          sound = "atc3"
+        },
+        {
+          name = "Sandy Shores Airport",
+          coords = { x = 1673.0, y = 3243.9, z = 40.9 },
+          requirement = "Fly safely and properly to the Sandy Shores Airport to drop your passengers off there.",
+          passengers_exit = true
+        },
+        {
+          name = "LSA",
+          coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+          requirement = "Take the Luxor back to Los Santos Airport."
+        },
+        {
+          name = "LSA Hangar",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
+        }
+      },
+      pay = 500,
+      plane_spawn = {
+        model = "luxor",
+        location = { x = -962.2, y = -2991.7, z = 13.9 },
+        passengers = 7
+      }
+    }
+  },
+  ["First Officer"] = {
+    {
+      name = "Titan Cargo Flight",
+      description = "Take the Titan and its cargo to the Sandy Shores Airport safely.",
+      checkpoints = {
+        {
+          name = "Titan",
+          coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Get into the Titan and prepare yourself for flight."
+        },
+        {
+          name = "Runway 1",
+          coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+          requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+          sound = "atc3"
+        },
+        {
+          name = "Sandy Shores Airport",
+          coords = { x = 1673.0, y = 3243.9, z = 40.9 },
+          requirement = "Fly safely and properly to the Sandy Shores Airport to drop your cargo off there.",
+          cargo_drop = true
+        },
+        {
+          name = "LSA",
+          coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+          requirement = "Take the Titan back to Los Santos Airport."
+        },
+        {
+          name = "LSA Hangar",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
+        }
+      },
+      pay = 600,
+      plane_spawn = {
+        model = "titan",
+        location = { x = -962.2, y = -2991.7, z = 13.9 }
+      }
+    },
+    {
+      name = "Titan Cargo Flight 2",
+      description = "Take the Titan and its cargo to the Fort Zancudo Airbase safely.",
+      checkpoints = {
+        {
+          name = "Titan",
+          coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Get into the Titan and prepare yourself for flight."
+        },
+        {
+          name = "Runway 1",
+          coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+          requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+          sound = "atc3"
+        },
+        {
+          name = "Fort Zancudo Airbase",
+          coords = { x = -2480.2, y = 3262.6, z = 32.2 },
+          requirement = "Fly safely and properly to the Fort Zancudo Airbase to drop your cargo off there.",
+          cargo_drop = true
+        },
+        {
+          name = "LSA",
+          coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+          requirement = "Take the Titan back to Los Santos Airport."
+        },
+        {
+          name = "LSA Hangar",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
+        }
+      },
+      pay = 620,
+      plane_spawn = {
+        model = "titan",
+        location = { x = -962.2, y = -2991.7, z = 13.9 }
+      }
+    },
+    {
+      name = "Nimbus Passenger Flight",
+      description = "Take the Nimbus and its passengers to the Sandy Shores Airport safely and let your passengers out there. ",
+      checkpoints = {
+        {
+          name = "Nimbus",
+          coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Get into the Nimbus and prepare yourself and your passengers for flight."
+        },
+        {
+          name = "Runway 1",
+          coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+          requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+          sound = "atc3"
+        },
+        {
+          name = "Sandy Shores Airport",
+          coords = { x = 1673.0, y = 3243.9, z = 40.9 },
+          requirement = "Fly safely and properly to the Sandy Shores Airport to drop your passengers off there.",
+          passengers_exit = true
+        },
+        {
+          name = "LSA",
+          coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+          requirement = "Take the Nimbus back to Los Santos Airport."
+        },
+        {
+          name = "LSA Hangar",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
+        }
+      },
+      pay = 500,
+      plane_spawn = {
+        model = "nimbus",
+        location = { x = -962.2, y = -2991.7, z = 13.9 },
+        passengers = 6
+      }
+    },
+    {
+      name = "Shamal Passenger Flight 2",
+      description = "Take the Shamal and its passengers to Grapeseed Airport safely and let your passengers out there. ",
+      checkpoints = {
+        {
+          name = "Shamal",
+          coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Get into the Shamal and prepare yourself and your passengers for flight."
+        },
+        {
+          name = "Runway 1",
+          coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+          requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+          sound = "atc3"
+        },
+        {
+          name = "Grapeseed Airport",
+          coords = { x = 2124.5, y = 4806.1, z = 41.2 },
+          requirement = "Fly safely and properly to the Grapeseed Airport to drop your passengers off there.",
+          passengers_exit = true
+        },
+        {
+          name = "LSA",
+          coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+          requirement = "Take the Shamal back to Los Santos Airport."
+        },
+        {
+          name = "LSA Hangar",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
+        }
+      },
+      pay = 500,
+      plane_spawn = {
+        model = "shamal",
+        location = { x = -962.2, y = -2991.7, z = 13.9 },
+        passengers = 5
+      }
+    },
+    {
+      name = "Luxor Passenger Flight 2",
+      description = "Take the Luxor and its passengers to the Sandy Shores Airport safely and let your passengers out there. ",
+      checkpoints = {
+        {
+          name = "Luxor",
+          coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Get into the Luxor and prepare yourself and your passengers for flight."
+        },
+        {
+          name = "Runway 1",
+          coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+          requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+          sound = "atc3"
+        },
+        {
+          name = "Sandy Shores Airport",
+          coords = { x = 1673.0, y = 3243.9, z = 40.9 },
+          requirement = "Fly safely and properly to the Sandy Shores Airport to drop your passengers off there.",
+          passengers_exit = true
+        },
+        {
+          name = "LSA",
+          coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+          requirement = "Take the Luxor back to Los Santos Airport."
+        },
+        {
+          name = "LSA Hangar",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
+        }
+      },
+      pay = 500,
+      plane_spawn = {
+        model = "luxor",
+        location = { x = -962.2, y = -2991.7, z = 13.9 },
+        passengers = 7
+      }
+    },
+    {
+      name = "Velum Flight to Grapeseed",
+      description = "Take the Velum and its passengers to the Grapeseed airfield and make a clean landing.",
+      checkpoints = {
+        {
+          name = "Velum",
+          coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Get into the Velum and prepare yourself and your passengers for flight."
+        },
+        {
+          name = "Runway 1",
+          coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+          requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+          sound = "atc3"
+        },
+        {
+          name = "Grapeseed Airport",
+          coords = { x = 2124.5, y = 4806.1, z = 41.2 },
+          requirement = "Fly safely and properly to the Grapeseed Airport and make a clean landing."
+        },
+        {
+          name = "LSA",
+          coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+          requirement = "Take the Velum back to Los Santos Airport."
+        },
+        {
+          name = "LSA Hangar",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Park the Velum in the hangar, and check in with staff, and that will be all for this flight!"
+        }
+      },
+      pay = 600,
+      plane_spawn = {
+        model = "velum",
+        location = { x = -962.2, y = -2991.7, z = 13.9 },
+        passengers = 2
+      }
+    },
+    {
+      name = "Shamal Passenger Flight",
+      description = "Take the Shamal and its passengers to the Sandy Shores Airport safely and let your passengers out there. ",
+      checkpoints = {
+        {
+          name = "Shamal",
+          coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Get into the Shamal and prepare yourself and your passengers for flight."
+        },
+        {
+          name = "Runway 1",
+          coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+          requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+          sound = "atc3"
+        },
+        {
+          name = "Sandy Shores Airport",
+          coords = { x = 1673.0, y = 3243.9, z = 40.9 },
+          requirement = "Fly safely and properly to the Sandy Shores Airport to drop your passengers off there.",
+          passengers_exit = true
+        },
+        {
+          name = "LSA",
+          coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+          requirement = "Take the Shamal back to Los Santos Airport."
+        },
+        {
+          name = "LSA Hangar",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
+        }
+      },
+      pay = 560,
+      plane_spawn = {
+        model = "shamal",
+        location = { x = -962.2, y = -2991.7, z = 13.9 },
+        passengers = 5
+      }
+    },
+    {
+      name = "Nimbus Passenger Flight",
+      description = "Take the Nimbus and its passengers to Grapeseed Airport safely and let your passengers out there. ",
+      checkpoints = {
+        {
+          name = "Nimbus",
+          coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Get into the Nimbus and prepare yourself and your passengers for flight."
+        },
+        {
+          name = "Runway 1",
+          coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+          requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+          sound = "atc3"
+        },
+        {
+          name = "Grapeseed Airport",
+          coords = { x = 2124.5, y = 4806.1, z = 41.2 },
+          requirement = "Fly safely and properly to the Grapeseed Airport to drop your passengers off there.",
+          passengers_exit = true
+        },
+        {
+          name = "LSA",
+          coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+          requirement = "Take the Nimbus back to Los Santos Airport."
+        },
+        {
+          name = "LSA Hangar",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
+        }
+      },
+      pay = 575,
+      plane_spawn = {
+        model = "nimbus",
+        location = { x = -962.2, y = -2991.7, z = 13.9 },
+        passengers = 5
+      }
+    }
+  }
 }
 
 RegisterServerEvent("pilotjob:newJob")

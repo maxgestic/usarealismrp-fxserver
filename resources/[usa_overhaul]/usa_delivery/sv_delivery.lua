@@ -94,6 +94,7 @@ AddEventHandler('gopostal:toggleDuty', function(location)
 	if job == "gopostal" then -- sign out
 		char.set("job", "civ")
 		TriggerClientEvent("gopostal:onDuty", source, false, location)
+		TriggerEvent("swayam:RemoveWayPoint_s", source)
 	else -- sign in
 		if license then
 			if license.status ~= "suspended" then

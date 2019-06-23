@@ -53,9 +53,9 @@ local locations = {
 			z = 13.94
 		},
 		returns = {
-			x = -978.25,
-			y = -2996.68,
-			z = 13.94
+			x = -969.7,
+      y = -3035.3,
+      z = 13.9
 		},
 		spawn = {
 			x = -961.35,
@@ -145,13 +145,16 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
 		-- for accessing shops
 		for name, data in pairs(locations) do
+      local dist = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), data.returns.x, data.returns.y, data.returns.z, true)
 			DrawText3D(data.menu.x, data.menu.y, data.menu.z, 8, '[E] - Aircraft Management')
-			DrawText3D(data.returns.x, data.returns.y, data.returns.z, 30, '[E] - Return Aircraft')
+			DrawText3D(data.returns.x, data.returns.y, data.returns.z, 30, '[E] - Return personal / rented aircraft')
+      if dist < 70 then
+        DrawMarker(1, data.returns.x, data.returns.y, data.returns.z-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 76, 144, 114, 200, 0, 0, 0, 0)
+      end
 			if IsControlJustPressed(0, MENU_OPEN_KEY) then
-				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), data.returns.x, data.returns.y, data.returns.z, true) < 5 then
+				if dist < 5 then
 					Citizen.Wait(500)
 					local vehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
 					local hash = GetEntityModel(vehicle)
@@ -203,6 +206,7 @@ Citizen.CreateThread(function()
 				end
 			end
 		end
+    Wait(1)
 	end
 end)
 

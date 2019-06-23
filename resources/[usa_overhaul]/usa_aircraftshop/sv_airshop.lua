@@ -126,15 +126,15 @@ RegisterServerEvent("aircraft:requestSell")
 AddEventHandler("aircraft:requestSell", function(aircraft)
   local return_amount = math.ceil(prices.purchase[aircraft.name] * .50)
   local char = exports["usa-characters"]:GetCharacter(source)
-  local aircraft = char.get("aircraft") or {}
-  for i = 1, #aircraft do
-    if aircraft[i].id == aircraft.id then
-      table.remove(aircraft, i)
-      char.set("aircraft", aircraft)
+  local ownedAircraft = char.get("aircraft") or {}
+  for i = 1, #ownedAircraft do
+    if ownedAircraft[i].id == aircraft.id then
+      table.remove(ownedAircraft, i)
+      char.set("aircraft", ownedAircraft)
       char.giveMoney(return_amount)
       if DEBUG then print("sold aircraft!") end
       TriggerClientEvent("usa:notify", source, "Aircraft sold for ~y~$" .. comma_value(return_amount) .. "~s~!")
-      TriggerClientEvent("aircraft:loadedAircraft", source, aircraft)
+      TriggerClientEvent("aircraft:loadedAircraft", source, ownedAircraft)
       return
     end
   end
