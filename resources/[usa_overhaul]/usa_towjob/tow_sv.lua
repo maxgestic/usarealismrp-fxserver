@@ -26,33 +26,25 @@ RegisterServerEvent("towJob:setJob")
 AddEventHandler("towJob:setJob", function(truckSpawnCoords)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	if char.get("job") == "tow" then
-		print("TOW: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] is now OFF-DUTY for TOW")
 		TriggerClientEvent("towJob:offDuty", source)
 		char.set("job", "civ")
 	else
 		local drivers_license = char.getItem("Driver's License")
 		if drivers_license then
-			print("TOW: Found item[Driver's License] on " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."], checking suspensions...")
 			if drivers_license.status == "valid" then
 				local usource = source
-				print("TOW: " .. GetPlayerName(usource) .. "["..GetPlayerIdentifier(usource).."] is now ON-DUTY for TOW")
-				TriggerClientEvent("towJob:showHelpText", usource, "Use ~y~/dispatch [id] [msg]~s~ to respond to a tow request!")
 				TriggerClientEvent("chatMessage", usource, "", {}, "Use ^3/dispatch [id] [msg]^0 to respond to a tow request!")
-				Citizen.Wait(6000)
-				TriggerClientEvent("towJob:showHelpText", usource, "Use ~y~/tow~s~ when facing a vehicle to load/unload it from the flatbed.")
+				Citizen.Wait(3000)
 				TriggerClientEvent("chatMessage", usource, "", {}, "Use ^3/tow^0 when facing a vehicle to load/unload it from the flatbed.")
-				Citizen.Wait(6000)
-				TriggerClientEvent("towJob:showHelpText", usource, "Use ~y~/ping [id]~s~ to request a person\'s location.")
+				Citizen.Wait(3000)
 				TriggerClientEvent("chatMessage", usource, "", {}, "Use ^3/ping [id]^0 to request a person\'s location.")
-				Citizen.Wait(6000)
-				TriggerClientEvent("towJob:showHelpText", usource, "A tow truck has been equipped for you just there, use this to tow vehicles.")
+				Citizen.Wait(3000)
 				TriggerClientEvent("chatMessage", usource, "", {}, "A tow truck has been equipped for you just there, use this to tow vehicles.")
 				char.set("job", "tow")
 				TriggerClientEvent("towJob:onDuty", usource, truckSpawnCoords)
 				return
 			else
 				TriggerClientEvent("usa:notify", source, "Your driver's license is ~y~suspended~s~!")
-				print("TOW: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] has a suspended license!")
 				return
 			end
 		end

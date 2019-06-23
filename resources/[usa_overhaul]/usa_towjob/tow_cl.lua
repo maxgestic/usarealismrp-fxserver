@@ -108,7 +108,11 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		for name, data in pairs(locations) do
-			DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 5, '[E] - On/Off Duty (~g~Tow~s~)')
+			if onDuty == "no" then
+				DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 5, '[E] - Sign in (~g~Tow~s~)')
+			else
+				DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 5, '[E] - Sign out (~g~Tow~s~)')
+			end
 			DrawText3D(data.impound.x, data.impound.y, (data.impound.z + 1.5), 15, '[E] - Impound Vehicle')
 		end
 		if IsControlJustPressed(0, 38) then
@@ -145,14 +149,14 @@ end)
 
 RegisterNetEvent("towJob:onDuty")
 AddEventHandler("towJob:onDuty", function(coords)
-	TriggerEvent('usa:notify', 'You are now ~g~on-duty~s~ for tow.')
+	exports.globals:notify('You are now ~g~on-duty~s~ for tow.')
 	SpawnTowFlatbed(coords)
 	onDuty = "yes"
 end)
 
 RegisterNetEvent("towJob:offDuty")
 AddEventHandler("towJob:offDuty", function()
-	TriggerEvent('usa:notify', 'You are now ~y~off-duty~s~ for tow.')
+	exports.globals:notify('You are now ~y~off-duty~s~ for tow.')
 	DelVehicle(lastTowTruck)
 	onDuty = "no"
 end)
@@ -220,11 +224,6 @@ AddEventHandler('towJob:towVehicleInFront', function()
 	end
 end)
 
-RegisterNetEvent('towJob:showHelpText')
-AddEventHandler('towJob:showHelpText', function(string)
-	DisplayHelpText(string)
-end)
-
 RegisterNetEvent('character:setCharacter')
 AddEventHandler('character:setCharacter', function()
 	onDuty = "no"
@@ -244,12 +243,6 @@ function EnumerateBlips()
 		AddTextComponentString('Tow Company')
 		EndTextCommandSetBlipName(blip)
 	end
-end
-
-function DisplayHelpText(str)
-	SetTextComponentFormat("STRING")
-	AddTextComponentString(str)
-	DisplayHelpTextFromStringLabel(0, 0, 1, -1)
 end
 
 function ImpoundVehicle()

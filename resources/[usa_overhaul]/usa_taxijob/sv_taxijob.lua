@@ -19,42 +19,31 @@ RegisterServerEvent("taxiJob:setJob")
 AddEventHandler("taxiJob:setJob", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	if char.get("job") == "taxi" then
-		print("TAXI: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] is now OFF-DUTY for TAXI")
 		TriggerClientEvent("taxiJob:offDuty", source)
 		char.set("job", "civ")
 	else
 		local money = char.get("money")
 		if money <= DUTY_FEE then
-			print("TAXI: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] could not afford to go ON-DUTY for TAXI")
 			TriggerClientEvent("usa:notify", source, "You don't have enough money to pay the security fee!")
 			return
 		else
 			local drivers_license = char.getItem("Driver's License")
 			if drivers_license then
-				print("TAXI: Found item[Driver's License] on " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."], checking suspensions...")
 				if drivers_license.status == "valid" then
-					print("TAXI: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] is now ON-DUTY for TOW")
 					local usource = source
-					--Citizen.CreateThread(function()
-						TriggerClientEvent("taxiJob:showHelpText", usource, "Use ~y~/dispatch [id] [msg]~s~ to respond to a player taxi request!")
-						TriggerClientEvent("chatMessage", usource, "", {}, "Use ^3/dispatch [id] [msg]^0 to respond to a player taxi request!")
-						Citizen.Wait(6000)
-						TriggerClientEvent("taxiJob:showHelpText", usource, "Use ^3/togglerequests^0 to allow or deny local taxi requests.")
-						TriggerClientEvent("chatMessage", usource, "", {}, "Use ^3/togglerequests^0 to allow or deny local taxi requests.")
-						Citizen.Wait(6000)
-						TriggerClientEvent("towJob:showHelpText", usource, "Use ^3/ping [id]^0 to request a person\'s location.")
-						TriggerClientEvent("chatMessage", usource, "", {}, "Use ^3/ping [id]^0 to request a person\'s location.")
-						Citizen.Wait(6000)
-						TriggerClientEvent("taxiJob:showHelpText", usource, "A taxi is waiting for you, use this vehicle while working.")
-						TriggerClientEvent("chatMessage", usource, "", {}, "A taxi is waiting for you, use this vehicle while working.")
-					--end)
+					TriggerClientEvent("chatMessage", usource, "", {}, "Use ^3/dispatch [id] [msg]^0 to respond to a player taxi request!")
+					Citizen.Wait(3000)
+					TriggerClientEvent("chatMessage", usource, "", {}, "Use ^3/togglerequests^0 to allow or deny local taxi requests.")
+					Citizen.Wait(3000)
+					TriggerClientEvent("chatMessage", usource, "", {}, "Use ^3/ping [id]^0 to request a person\'s location.")
+					Citizen.Wait(3000)
+					TriggerClientEvent("chatMessage", usource, "", {}, "A taxi is waiting for you, use this vehicle while working.")
 					char.removeMoney(DUTY_FEE)
 					char.set("job", "taxi")
 					TriggerClientEvent("taxiJob:onDuty", usource)
 					return
 				else
 					TriggerClientEvent("usa:notify", source, "Your driver's license is ~y~suspended~s~!")
-					print("TAXI: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] has a suspended license!")
 					return
 				end
 			else
@@ -66,7 +55,6 @@ AddEventHandler("taxiJob:setJob", function()
 end)
 
 TriggerEvent('es:addJobCommand', 'togglerequests', {'taxi'}, function(source, args, char)
-	print("TAXI: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] is toggling AI taxi requests!")
 	TriggerClientEvent("taxi:toggleNPCRequests", source)
 end, {
 	help = "Toggle receiving local taxi requests"

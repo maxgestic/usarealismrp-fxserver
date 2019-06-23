@@ -116,10 +116,8 @@ AddEventHandler("taxi:toggleNPCRequests", function()
 	end
 	NPC_REQUESTS_ENABLED = not NPC_REQUESTS_ENABLED
 	if NPC_REQUESTS_ENABLED then
-		TriggerEvent('taxiJob:showHelpText', 'You are now ~g~accepting~s~ taxi requests from locals!')
 		exports.globals:notify('You are now ~g~accepting~s~ taxi requests from locals!')
 	else
-		TriggerEvent('taxiJob:showHelpText', 'Taxi requests from locals have been temporarily ~y~muted~s~!')
 		exports.globals:notify('Taxi requests from locals have been temporarily ~y~muted~s~!')
 	end
 end)
@@ -345,11 +343,6 @@ function SpawnTaxi()
 	end)
 end
 
-RegisterNetEvent('taxiJob:showHelpText')
-AddEventHandler('taxiJob:showHelpText', function(string)
-	DisplayHelpText(string)
-end)
-
 RegisterNetEvent('character:setCharacter')
 AddEventHandler('character:setCharacter', function()
 	JOB.isOnJob = false
@@ -362,12 +355,6 @@ function DrawCoolLookingNotificationWithTaxiPic(name, msg)
 	AddTextComponentString(msg)
 	SetNotificationMessage("CHAR_TAXI", "CHAR_TAXI", true, 1, name, "", msg)
 	DrawNotification(0,1)
-end
-
-function DisplayHelpText(str)
-  SetTextComponentFormat("STRING")
-  AddTextComponentString(str)
-  DisplayHelpTextFromStringLabel(0, 0, 1, -1)
 end
 
 function DrawText3D(x, y, z, distance, text)
