@@ -63,7 +63,7 @@ function CreateMenu(menu)
 									vehName = vehicle.model
 								end
 								if vehicle.stored == false then
-									local item = NativeUI.CreateItem(vehicle.make .. " " .. vehicle.model, "Claim this vehicle for $" .. comma_value(.10 * vehicle.price))
+									local item = NativeUI.CreateItem(vehicle.make .. " " .. vehicle.model, "Claim this vehicle for a small base fee + $" .. comma_value(.05 * vehicle.price))
 									item.Activated = function(parentmenu, selected)
 										local business = exports["usa-businesses"]:GetClosestStore(15)
 										TriggerServerEvent("insurance:fileClaim", vehicle, business)

@@ -546,7 +546,7 @@ TriggerEvent('es:addJobCommand', 'bbreach', {'sheriff', 'police'}, function(sour
 			for k = 1, #burglaryHouses[i].instance do
 				local sourceInside = burglaryHouses[i].instance[k]
 				if sourceInside ~= source then
-					TriggerClientEvent('InteractSound_CL:PlayOnOne', sourceInside, 'door-kick', 0.2)
+					TriggerClientEvent('InteractSound_CL:PlayOnOne', sourceInside, 'door-kick', 0.1)
 					TriggerClientEvent('properties:updateInstance', sourceInside, burglaryHouses[i].instance)
 				end
 			end

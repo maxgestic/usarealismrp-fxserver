@@ -46,7 +46,7 @@
         sound.play();
 
         //sound.volume(0.1);
-        sound.fade(0.0, 0.1, 5000);
+        sound.fade(0.0, 0.35, 5000);
 
         self.isPlaying = true;
       },

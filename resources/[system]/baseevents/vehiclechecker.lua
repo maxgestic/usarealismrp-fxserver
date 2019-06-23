@@ -12,7 +12,6 @@ Citizen.CreateThread(function()
 		if not isInVehicle and not IsPlayerDead(PlayerId()) then
 			if not isEnteringVehicle and IsPedInAnyVehicle(ped, false) and GetSeatPedIsTryingToEnter(ped) == -1 then
 				vehicle = GetVehiclePedIsIn(ped, false)
-				print('entering')
 				isEnteringVehicle = true
 				TriggerServerEvent('veh:checkForKey', GetVehicleNumberPlateText(vehicle), GetIsVehicleEngineRunning(veh))
 				TriggerServerEvent('fuel:returnFuelAmount', GetVehicleNumberPlateText(vehicle))

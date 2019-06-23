@@ -1,6 +1,6 @@
-local BASE_PAY = 30
+local BASE_PAY = 60
 
-local deliveryLocations = {
+local DELIVERY_LOCATIONS = {
 	{x = 92.51, y = 187.70, z = 105.26},
 	{x = -969.79, y = -266.51, z = 38.54},
 	{x = -992.74, y = -281.59, z = 38.18},
@@ -89,20 +89,17 @@ AddEventHandler('gopostal:toggleDuty', function(location)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get("job")
 	local license = char.getItem("Driver's License")
-	if job == "gopostal" then
-		print("DELIVERY: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] is now OFF-DUTY for DELIVERY")
+	if job == "gopostal" then -- sign out
 		char.set("job", "civ")
 		TriggerClientEvent("gopostal:onDuty", source, false, location)
-	else
+	else -- sign in
 		if license then
-			print("DELIVERY: Found item[Driver's License] on " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."], checking suspensions...")
 			if license.status ~= "suspended" then
-				print("DELIVERY: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] is now ON-DUTY for DELIVERY")
 				char.set("job", "gopostal")
-				TriggerClientEvent("gopostal:onDuty", source, true, location)
+				local destinations = GetRandomDestinations(3)
+				TriggerClientEvent("gopostal:onDuty", source, true, location, destinations)
 			else
 				TriggerClientEvent("usa:notify", source, "Your driver's license is ~y~suspended~s~!")
-				print("DELIVERY: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] has a suspended license!")
 			end
 		else
 			TriggerClientEvent("usa:notify", source, "You do not have a driver's license!")
@@ -111,14 +108,17 @@ AddEventHandler('gopostal:toggleDuty', function(location)
 end)
 
 RegisterServerEvent('gopostal:payDriver')
-AddEventHandler('gopostal:payDriver', function(distance, playerCoords)
+AddEventHandler('gopostal:payDriver', function(destination, playerCoords, lastDestination)
+	local distance = find_distance(destination.beginAt, destination.endAt)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get("job")
-	local amountRewarded = math.ceil(BASE_PAY + (0.03 * distance))
+	local amountRewarded = math.ceil(BASE_PAY + (0.04 * distance))
 	if amountRewarded < 1000 and job == "gopostal" and IsNearDeliveryLocation(playerCoords) then
 		char.giveMoney(amountRewarded)
 		TriggerClientEvent('usa:notify', source, 'Delivery completed, you have received: ~y~$'..amountRewarded..'.00')
-		print("DELIVERY: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] has received amount["..amountRewarded..'] after distance['..distance..'] for delivery!')
+		if lastDestination then
+			char.set("job", "civ")
+		end
 	else
 		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
     	TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit gopostal:payDriver event, please intervene^0!')
@@ -131,20 +131,35 @@ AddEventHandler('gopostal:quitJob', function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	char.removeBank(200)
 	TriggerClientEvent('usa:notify', source, 'You have been charged ~y~$200.0~s~ in loses.')
-	print("DELIVERY: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] has quit their delivery job!")
+end)
+
+RegisterServerEvent('gopostal:getDeliveryLocations')
+AddEventHandler('gopostal:getDeliveryLocations', function()
+	TriggerClientEvent("gopostal:getDeliveryLocations", source, DELIVERY_LOCATIONS)
 end)
 
 TriggerEvent('es:addJobCommand', 'quitdelivery', { "gopostal" }, function(source, args, char)
 	char.removeBank(200)
 	TriggerClientEvent('usa:notify', source, 'You have been charged ~y~$200.0~s~ in loses.')
-	print("DELIVERY: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] has quit their delivery job!")
 end, {
 	help = "Forcefully quit the current GoPostal job"
 })
 
+function GetRandomDestinations(count)
+	local d = {}
+	for i = 1, count do
+		local r = DELIVERY_LOCATIONS[math.random(#DELIVERY_LOCATIONS)]
+		if i == count then
+			r.last = true
+		end
+		table.insert(d, r)
+	end
+	return d
+end
+
 function IsNearDeliveryLocation(coords)
-	for i = 1, #deliveryLocations do
-		local location  = deliveryLocations[i]
+	for i = 1, #DELIVERY_LOCATIONS do
+		local location = DELIVERY_LOCATIONS[i]
 		if find_distance(coords, location) < 5.0 then
 			return true
 		end
