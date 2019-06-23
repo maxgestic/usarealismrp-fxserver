@@ -73,11 +73,13 @@ TriggerEvent('es:addJobCommand', 'fakeid', {'sheriff', 'police', 'dai'}, functio
         TriggerClientEvent("usa:notify", source, "Not high enough rank!")
         return
     end
-	local fullName = args[2] ..' '.. args[3]
-	local dob = args[4] ..'-'.. args[5] ..'-'.. args[6]
-	exports["globals"]:sendLocalActionMessage(source, "shows ID")
-	local msg = "^4^*[STATE ID]^0 Name: ^r" .. fullName .. " ^4^*|^0 SSN: ^r" .. source .. " ^4^*| ^0DOB: ^r" .. dob
-	exports["globals"]:sendLocalActionMessageChat(msg, location)
+    if args[2] and args[3] and args[4] and args[5] and args[6] then
+		local fullName = args[2] ..' '.. args[3]
+		local dob = args[4] ..'-'.. args[5] ..'-'.. args[6]
+		exports["globals"]:sendLocalActionMessage(source, "shows ID")
+		local msg = "^4^*[STATE ID]^0 Name: ^r" .. fullName .. " ^4^*|^0 SSN: ^r" .. source .. " ^4^*| ^0DOB: ^r" .. dob
+		exports["globals"]:sendLocalActionMessageChat(msg, location)
+	end
 end, {
 	help = "Present a fake identification card",
 	params = {
@@ -156,7 +158,7 @@ function showid(src, u, location)
 	local employer = jobNames[job]
 	local char_name = u.getFullName()
 	local dob = u.get("dateOfBirth")
-	exports["globals"]:sendLocalActionMessage(src, char_name .. " shows ID")
+	exports["globals"]:sendLocalActionMessage(src, "shows ID")
 	local msg = "^4^*[STATE ID]^0 Name: ^r" .. char_name .. " ^4^*|^0 SSN: ^r" .. src .. " ^4^*| ^0DOB: ^r" .. dob
 	if employer then msg = "^4^*[STATE ID]^0 Name: ^r" .. char_name .. " ^4^*|^0 SSN: ^r" .. src .. " ^4^*| ^0DOB: ^r" .. dob .. " ^4^*| ^0Employer: ^r".. employer end
 	exports["globals"]:sendLocalActionMessageChat(msg, location)

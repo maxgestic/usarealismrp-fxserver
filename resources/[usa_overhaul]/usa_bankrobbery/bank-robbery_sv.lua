@@ -1,6 +1,6 @@
 local bankRobbable = true
 local bankClosed = false
-local COPS_NEEDED_TO_ROB = 4
+local COPS_NEEDED_TO_ROB = 2
 local sourceRobbing = -1
 
 RegisterServerEvent("bank:beginRobbery")

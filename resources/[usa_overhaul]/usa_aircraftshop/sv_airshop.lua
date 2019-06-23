@@ -70,7 +70,7 @@ RegisterServerEvent("aircraft:requestPurchase")
 AddEventHandler("aircraft:requestPurchase", function(aircraft)
   local price = prices.purchase[aircraft.name]
   local char = exports["usa-characters"]:GetCharacter(source)
-  local aircraft = char.get("aircraft") or {}
+  local player_aircraft = char.get("aircraft") or {}
   if DEBUG then print("#aircraft: " .. #aircraft) end
   if char.get("money") - price >= 0 then
     char.removeMoney(price)
@@ -79,23 +79,23 @@ AddEventHandler("aircraft:requestPurchase", function(aircraft)
     TriggerClientEvent("usa:notify", source, "Purchased: ~y~" .. (aircraft.name or "Undefined") .. "\n~s~Price: ~y~$" .. comma_value(price)..'\n~s~ID: ~y~' .. aircraft.id)
     TriggerClientEvent("usa:notify", source, "Your aircraft can be found in your storage.")
     -- add to player's aircraft collection --
-    if not aircraft then
-      aircraft = {aircraft}
-      char.set("aircraft", aircraft)
+    if not player_aircraft then
+      player_aircraft = {aircraft}
+      char.set("aircraft", player_aircraft)
     else
-      if #aircraft <= MAX_VEHICLES then
-        table.insert(aircraft, aircraft)
-        char.set("aircraft", aircraft)
+      if #player_aircraft <= MAX_VEHICLES then
+        table.insert(player_aircraft, aircraft)
+        char.set("aircraft", player_aircraft)
       else
         TriggerClientEvent("usa:notify", source, "Sorry, you can't own more than " .. MAX_VEHICLES .. "!")
         return
       end
     end
-    char.set("aircraft", aircraft)
-    TriggerClientEvent("aircraft:loadedAircraft", source, aircraft)
+    char.set("aircraft", player_aircraft)
+    TriggerClientEvent("aircraft:loadedAircraft", source, player_aircraft)
     if DEBUG then
       print("owned aircraft: ")
-      for i = 1, #aircraft do
+      for i = 1, #player_aircraft do
         print("name: " .. aircraft[i].name)
         print('stored: '..tostring(aircraft[i].stored))
         print('id: '..aircraft[i].id)

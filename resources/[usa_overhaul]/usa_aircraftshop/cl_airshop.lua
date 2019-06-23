@@ -317,6 +317,8 @@ AddEventHandler('aircraft:openMenu', function()
 	ShowMainMenu()
 end)
 
+TriggerServerEvent("aircraft:loadAircraft", GetPlayerServerId(PlayerId()))
+
 function deleteCar( entity )
     Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( entity ) )
 end

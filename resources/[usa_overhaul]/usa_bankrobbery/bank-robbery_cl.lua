@@ -71,7 +71,7 @@ AddEventHandler("bank:startHacking", function()
 	while GetGameTimer() - beginTime < 60000 do
 		Citizen.Wait(0)
 		x, y, z = table.unpack(GetEntityCoords(playerPed))
-		DrawTimer(beginTime, 30000, 1.42, 1.475, 'TAPPING')
+		DrawTimer(beginTime, 60000, 1.42, 1.475, 'TAPPING')
 		if Vdist(x, y, z, bankCoords.x, bankCoords.y, bankCoords.z) > 5.0 then
 			TriggerEvent('usa:notify', 'You went too far away, signal lost!')
 			return
