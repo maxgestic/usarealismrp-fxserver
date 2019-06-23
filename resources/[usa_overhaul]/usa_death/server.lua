@@ -152,7 +152,7 @@ TriggerEvent('es:addGroupCommand', 'log', "mod", function(source, args, user)
 			TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0Died: Unknown")
 		end
 		if deathLog[i].killerId ~= 0 then
-			local char = exports["usa-characters"]:GetCharacter(deathLog[i].deadPlayerId)
+			local char = exports["usa-characters"]:GetCharacter(deathLog[i].killerId)
 			if char then
 				local name = char.getFullName()
 				TriggerClientEvent("chatMessage", source, "", {0,0,0}, "^0Killer: " .. name .. " (#" .. deathLog[i].killerId .. " / " .. deathLog[i].killerName .. ")")

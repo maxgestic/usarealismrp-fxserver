@@ -32,15 +32,15 @@ AddEventHandler("boatMenu:requestPurchase", function(boat)
   if money >= price then
       boat.id = math.random(9999999999)
       boat.stored = true
-      local boats = char.get("watercraft")
-      if not boats then
-        boats = {boat}
-        char.set("watercraft", boats)
+      local charBoats = char.get("watercraft")
+      if not charBoats then
+        charBoats = {boat}
+        char.set("watercraft", charBoats)
         char.removeMoney(price)
       else
-        if #boats <= MAX_VEHICLES then
-          table.insert(boats, boat)
-          char.set("watercraft", boats)
+        if #charBoats <= MAX_VEHICLES then
+          table.insert(charBoats, boat)
+          char.set("watercraft", charBoats  )
           char.removeMoney(price)
         else
           TriggerClientEvent("usa:notify", source, "Sorry, you can't own more than " .. MAX_VEHICLES .. "!")
@@ -49,7 +49,7 @@ AddEventHandler("boatMenu:requestPurchase", function(boat)
       end
       TriggerClientEvent("usa:notify", source, "Purchased: ~y~" .. boat.name .. "\n~s~Price: ~y~$" .. comma_value(boat.price)..'\n~s~ID: ~y~' ..boat.id)
       TriggerClientEvent("usa:notify", source, "Your boat can be found in your storage.")
-      TriggerClientEvent("boatMenu:loadedBoats", source, boats)
+      TriggerClientEvent("boatMenu:loadedBoats", source, charBoats)
   else
     TriggerClientEvent("usa:notify", source, "You cannot afford this purchase!")
   end
@@ -60,10 +60,11 @@ AddEventHandler("boatMenu:loadBoats", function(source2)
   if source2 then source = source2 end
   local char = exports["usa-characters"]:GetCharacter(source)
   if char then
-    local boats = char.get("watercraft")
-    if boats then
-      if #boats > 0 then
-        TriggerClientEvent("boatMenu:loadedBoats", source, boats)
+    local charBoats = char.get("watercraft")
+    print("#charBoats: " .. #charBoats)
+    if charBoats then
+      if #charBoats > 0 then
+        TriggerClientEvent("boatMenu:loadedBoats", source, charBoats)
       end
     end
   end
@@ -73,8 +74,9 @@ RegisterServerEvent('boatMenu:requestOpenMenu')
 AddEventHandler('boatMenu:requestOpenMenu', function()
   local char = exports["usa-characters"]:GetCharacter(source)
   local license = char.getItem("Boat License")
+  local watercraft = char.get("watercraft")
   if license and license.status == "valid" then
-    TriggerClientEvent('boatMenu:openMenu', source)
+    TriggerClientEvent('boatMenu:openMenu', source, watercraft)
   else
     TriggerClientEvent('usa:notify', source, 'No license! Hold E to purchase one for $' .. comma_value(LICENSE_PURCHASE_PRICE))
   end
@@ -125,15 +127,15 @@ end)
 RegisterServerEvent("boatMenu:requestSell")
 AddEventHandler("boatMenu:requestSell", function(item)
   local char = exports["usa-characters"]:GetCharacter(source)
-  local boats = char.get("watercraft")
-  if #boats > 0 then
-    for i = 1, #boats do
-      if boats[i].id == item.id then
+  local charBoats = char.get("watercraft")
+  if #charBoats > 0 then
+    for i = 1, #charBoats do
+      if charBoats[i].id == item.id then
         local return_amount = 0.5 * boats[item.name].buy
-        table.remove(boats, i)
-        char.set("watercraft", boats)
+        table.remove(charBoats, i)
+        char.set("watercraft", charBoats)
         char.giveMoney(return_amount)
-        TriggerClientEvent("boatMenu:loadedBoats", source, boats)
+        TriggerClientEvent("boatMenu:loadedBoats", source, charBoats)
         TriggerClientEvent("usa:notify", source, "Boat sold for ~y~$" .. comma_value(return_amount) .. "~s~!")
         return
       end

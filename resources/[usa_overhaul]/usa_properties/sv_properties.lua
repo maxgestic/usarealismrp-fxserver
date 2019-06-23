@@ -1198,6 +1198,9 @@ AddEventHandler("properties:storeItem", function(location, index, item, quantity
 		        target_char.set('property', property)
 		        TriggerClientEvent('usa:notify', source, '~y~'..item.name..' ~s~has been stored!')
 		        char.removeItem(item, quantity)
+						if item.type == "weapon" then
+							TriggerClientEvent("interaction:equipWeapon", source, item, false)
+						end
 		    end
 		else
 			TriggerClientEvent('usa:notify', source, 'Property storage is full!')
@@ -1226,12 +1229,18 @@ AddEventHandler("properties:retrieveItem", function(location, index, item, quant
 							target_char.set('property', property)
 							TriggerClientEvent('usa:notify', source, '~y~'..item.name..' ~s~has been retrieved!')
 							char.giveItem(item, quantity)
+							if item.type == "weapon" then
+								TriggerClientEvent("interaction:equipWeapon", source, item, true)
+							end
 							return
 						else
 							property['storage'][i].quantity = property['storage'][i].quantity - quantity
 							target_char.set('property', property)
 							TriggerClientEvent('usa:notify', source, '~y~'..item.name..' ~s~has been retrieved!')
 							char.giveItem(item, quantity)
+							if item.type == "weapon" then
+								TriggerClientEvent("interaction:equipWeapon", source, item, true)
+							end
 							return
 						end
 					end
@@ -1241,6 +1250,9 @@ AddEventHandler("properties:retrieveItem", function(location, index, item, quant
 	           			target_char.set('property', property)
 	           			TriggerClientEvent('usa:notify', source, '~y~'..item.name..' ~s~has been retrieved!')
 	           			char.giveItem(item, quantity)
+									if item.type == "weapon" then
+										TriggerClientEvent("interaction:equipWeapon", source, item, true)
+									end
 	           			return
 	           		end
 	          	end

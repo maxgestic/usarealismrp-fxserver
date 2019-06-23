@@ -144,7 +144,6 @@ Citizen.CreateThread(function()
 	end
 end)
 
-
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -271,10 +270,8 @@ end)
 
 RegisterNetEvent('boatMenu:loadedBoats')
 AddEventHandler('boatMenu:loadedBoats', function(userBoats)
-	print('loading boats dawgg')
 	playerBoats = userBoats
 	if first_load then
-		print("was first load for boats!")
 		if playerBoats then
 			for index = 1, #playerBoats do
 				playerBoats[index].stored = true
@@ -317,7 +314,8 @@ AddEventHandler('boatMenu:rentBoat', function(index)
 end)
 
 RegisterNetEvent('boatMenu:openMenu')
-AddEventHandler('boatMenu:openMenu', function()
+AddEventHandler('boatMenu:openMenu', function(watercraft)
+  playerBoats = watercraft
 	ShowMainMenu()
 end)
 

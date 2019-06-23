@@ -301,17 +301,16 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(0)
     if isInVeh then
-  		car = GetVehiclePedIsIn(playerPed, false)
-  		if car then
-  			if GetPedInVehicleSeat(car, -1) == playerPed and (IsControlPressed(0, 76) or IsControlPressed(0, 79) or IsControlPressed(0, 71) or IsControlPressed(0, 72) or IsControlPressed(0, 63) or IsControlPressed(0, 64)) then
-          DisableControlAction(0, 68, true)
-          DisableControlAction(0, 69, true)
-          DisableControlAction(0, 70, true)
-  				SetPlayerCanDoDriveBy(PlayerId(), false)
-  			else
-  				SetPlayerCanDoDriveBy(PlayerId(), true)
-  			end
-  		end
+      local veh = GetVehiclePedIsIn(PlayerPedId())
+      local mph = GetEntitySpeed(veh) * 2.236936
+			if (IsControlPressed(0, 76) or IsControlPressed(0, 79) or IsControlPressed(0, 71) or IsControlPressed(0, 72) or IsControlPressed(0, 63) or IsControlPressed(0, 64)) or mph > 30 then
+        DisableControlAction(0, 68, true)
+        DisableControlAction(0, 69, true)
+        DisableControlAction(0, 70, true)
+				SetPlayerCanDoDriveBy(PlayerId(), false)
+			else
+				SetPlayerCanDoDriveBy(PlayerId(), true)
+			end
     end
 	end
 end)
