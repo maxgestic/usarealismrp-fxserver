@@ -62,66 +62,64 @@ AddEventHandler("character:open", function(menu, data)
 end)
 
 RegisterNetEvent("character:setCharacter")
-AddEventHandler("character:setCharacter", function(character, weapons)
+AddEventHandler("character:setCharacter", function(appearance, weapons)
 	Citizen.CreateThread(function()
 		RemoveAllPedWeapons(GetPlayerPed(-1), true) -- remove weapons for the case where a different character is selected after choosing one with weapons initially
-		if character then
-			if character.appearance then
-				if character.appearance.hash then
-					local name, model
-					model = tonumber(character.appearance.hash)
-					RequestModel(model)
-					while not HasModelLoaded(model) do -- Wait for model to load
-						Citizen.Wait(100)
+		if appearance then
+			if appearance.hash then
+				local name, model
+				model = tonumber(appearance.hash)
+				RequestModel(model)
+				while not HasModelLoaded(model) do -- Wait for model to load
+					Citizen.Wait(100)
+				end
+				SetPlayerModel(PlayerId(), model)
+				SetModelAsNoLongerNeeded(model)
+				-- ADD CUSTOMIZATIONS FROM CLOTHING STORE
+				for key, value in pairs(appearance["components"]) do
+					SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, appearance["componentstexture"][key], 2)
+				end
+				for key, value in pairs(appearance["props"]) do
+					SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, appearance["propstexture"][key], true)
+				end
+				-- add any tattoos if they have any --
+				if appearance.tattoos then
+					for i = 1, #appearance.tattoos do
+						ApplyPedOverlay(GetPlayerPed(-1), GetHashKey(appearance.tattoos[i].category), GetHashKey(appearance.tattoos[i].hash_name))
 					end
-					SetPlayerModel(PlayerId(), model)
-					SetModelAsNoLongerNeeded(model)
-					-- ADD CUSTOMIZATIONS FROM CLOTHING STORE
-					for key, value in pairs(character.appearance["components"]) do
-						SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character.appearance["componentstexture"][key], 2)
-					end
-					for key, value in pairs(character.appearance["props"]) do
-						SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character.appearance["propstexture"][key], true)
-					end
-					-- add any tattoos if they have any --
-					if character.appearance.tattoos then
-						for i = 1, #character.appearance.tattoos do
-							ApplyPedOverlay(GetPlayerPed(-1), GetHashKey(character.appearance.tattoos[i].category), GetHashKey(character.appearance.tattoos[i].hash_name))
-						end
-					end
-					-- add any barber shop customizations if any --
-					if character.appearance.head_customizations then
-						local head = character.appearance.head_customizations
-						local ped = GetPlayerPed(-1)
-				    SetPedHeadBlendData(ped, head.parent1, head.parent2, head.parent3, head.skin1, head.skin2, head.skin3, head.mix1, head.mix2, head.mix3, false)
-				    --[[ customize face features --
-				    if face then
-				      local i = 0
-				      for name, value in pairs(face) do
-				        print("name: " .. name)
-				        print("setting index " .. i .. " to value: " .. value / 100.0)
-				        SetPedFaceFeature(ped, i, value / 100.0)
-				        i = i + 1
-				      end
-				    end
-				    --]] -- on hold cause it wouldn't work
-				    -- facial stuff like beards and ageing and what not --
-						for i = 1, #head.other do
-				      SetPedHeadOverlay(ped, i - 1, head.other[i][2], 1.0)
-				      if head.other[i][2] ~= 255 then
-				        if i == 2 or i == 3 or i == 11 then -- chest hair, facial hair, eyebrows
-				          SetPedHeadOverlayColor(ped, i - 1, 1, head.other[i][4])
-				        elseif i == 6 or i == 9 then -- blush, lipstick
-				          SetPedHeadOverlayColor(ped, i - 1, 2, head.other[i][4])
-				        elseif i == 14 then -- hair
-									--print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
-				          SetPedComponentVariation(ped, 2, head.other[i][2], 0, 1)
-				          SetPedHairColor(ped, head.other[i][4], head.other[i][5] or 0)
-				        end
-				      end
-				    end
-						TriggerEvent("barber:loadCustomizations", character.appearance.head_customizations) --// used in 'usa-barbershop' resource
-					end
+				end
+				-- add any barber shop customizations if any --
+				if appearance.head_customizations then
+					local head = appearance.head_customizations
+					local ped = GetPlayerPed(-1)
+			    SetPedHeadBlendData(ped, head.parent1, head.parent2, head.parent3, head.skin1, head.skin2, head.skin3, head.mix1, head.mix2, head.mix3, false)
+			    --[[ customize face features --
+			    if face then
+			      local i = 0
+			      for name, value in pairs(face) do
+			        print("name: " .. name)
+			        print("setting index " .. i .. " to value: " .. value / 100.0)
+			        SetPedFaceFeature(ped, i, value / 100.0)
+			        i = i + 1
+			      end
+			    end
+			    --]] -- on hold cause it wouldn't work
+			    -- facial stuff like beards and ageing and what not --
+					for i = 1, #head.other do
+			      SetPedHeadOverlay(ped, i - 1, head.other[i][2], 1.0)
+			      if head.other[i][2] ~= 255 then
+			        if i == 2 or i == 3 or i == 11 then -- chest hair, facial hair, eyebrows
+			          SetPedHeadOverlayColor(ped, i - 1, 1, head.other[i][4])
+			        elseif i == 6 or i == 9 then -- blush, lipstick
+			          SetPedHeadOverlayColor(ped, i - 1, 2, head.other[i][4])
+			        elseif i == 14 then -- hair
+								--print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
+			          SetPedComponentVariation(ped, 2, head.other[i][2], 0, 1)
+			          SetPedHairColor(ped, head.other[i][4], head.other[i][5] or 0)
+			        end
+			      end
+			    end
+					TriggerEvent("barber:loadCustomizations", appearance.head_customizations) --// used in 'usa-barbershop' resource
 				end
 			end
 		end
@@ -143,6 +141,11 @@ AddEventHandler("character:setCharacter", function(character, weapons)
 		-- player state checks  --
 		TriggerServerEvent("usa_rp:checkJailedStatusOnPlayerJoin")
 		TriggerServerEvent('morgue:checkToeTag')
+		if IsScreenFadedOut() then
+			DoScreenFadeIn(3000)
+		end
+		-- spawn --
+		SpawnCharacter(data)
 	end)
 end)
 
@@ -180,7 +183,9 @@ RegisterNUICallback('select-character', function(data, cb)
 		end
 	end
 	toggleMenu(false)
-	SpawnCharacter(data)
+	DoScreenFadeIn(3000)
+	TriggerServerEvent("character:loadCharacter", data.id, data.doSpawnAtProperty) -- loadout the player with the selected character appearance
+	TriggerEvent("chat:setCharName", data.name) -- for chat messages
 	cb('ok')
 end)
 
@@ -239,7 +244,7 @@ function ClearScreen()
   SetDrawOrigin(0.0, 0.0, 0.0, 0) -- nice hack to 'hide' HUD elements from other resources/scripts. kinda buggy though.
 end
 
-function SpawnCharacter(data)
+function SpawnCharacter()
 	local ped = PlayerPedId()
 	DoScreenFadeOut(1000)
 	Wait(1000)
@@ -263,13 +268,11 @@ function SpawnCharacter(data)
   	ClearScreen()
 	end
 	DoScreenFadeIn(500)
-	TriggerEvent("chat:setCharName", data.name) -- for chat messages
-	TriggerServerEvent("character:loadCharacter", data.id, data.doSpawnAtProperty) -- loadout the player with the selected character appearance
 	while not IsScreenFadedIn() do
     Wait(0)
     ClearScreen()
 	end
-	WaitForSwitchToComplete(ped)
+	WaitForSwitchToComplete(GetPlayerPed(-1))
   ClearDrawOrigin()
 	-- welcome info --
 	TriggerEvent('usa:toggleHUD', true)
@@ -286,23 +289,19 @@ function MakeCamera()
 end
 
 function WaitForSwitchToComplete(ped)
-	local timer = GetGameTimer()
 	while true do
 		ClearScreen()
 		Wait(0)
-		-- wait 5 seconds before starting the switch to the player
-		if GetGameTimer() - timer > 5000 then
-			-- Switch to the player.
-			SwitchInPlayer(ped)
-			ClearScreen()
-			-- Wait for the player switch to be completed (state 12).
-			while GetPlayerSwitchState() ~= 12 do
-					Wait(0)
-					ClearScreen()
-			end
-			-- Stop the infinite loop.
-			break
+		-- Switch to the player.
+		SwitchInPlayer(ped)
+		ClearScreen()
+		-- Wait for the player switch to be completed (state 12).
+		while GetPlayerSwitchState() ~= 12 do
+				Wait(0)
+				ClearScreen()
 		end
+		-- Stop the infinite loop.
+		break
 	end
 end
 

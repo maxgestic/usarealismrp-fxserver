@@ -123,7 +123,7 @@ function InitializeCharacter(src, characterID, doSpawnAtProperty)
       local character = CreateCharacter(charData) -- Create character object in memory
       character.set("job", "civ")
       CHARACTERS[src] = character
-			TriggerClientEvent("character:setCharacter", src, character, character.getWeapons()) -- load character
+			TriggerClientEvent("character:setCharacter", src, character.get("appearance"), character.getWeapons()) -- load character
 			TriggerEvent("police:checkSuspension", character) -- check dmv / firearm permit license status
       TriggerEvent("properties:loadCharacter", src, doSpawnAtProperty) -- ?
       TriggerEvent("eblips:remove", src) -- remove any eblip
@@ -138,7 +138,6 @@ function SaveCurrentCharacter(src, cb)
     TriggerEvent('es:exposeDBFunctions', function(db)
       db.updateDocument("characters", CHARACTERS[src].get("_id"), CHARACTERS[src].getSelf(), function(err)
   			print("* Character updated in DB! *")
-        print("err: " .. err)
         cb()
   		end)
     end)
