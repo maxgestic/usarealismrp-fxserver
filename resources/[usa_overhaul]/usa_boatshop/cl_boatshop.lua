@@ -156,7 +156,6 @@ Citizen.CreateThread(function()
 					Citizen.Wait(500)
 					local vehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
 					local hash = GetEntityModel(vehicle)
-					print("driving boat with hash: " .. hash)
 					if GetPedInVehicleSeat(vehicle, -1) == GetPlayerPed(-1) then
 						local wasRental = false
 						for i = 1, #rentals do
@@ -174,7 +173,6 @@ Citizen.CreateThread(function()
 								break
 							end
 						end
-						print("player had a withdrawn boat!")
 						if not wasRental then
 							local wasOwned = false
 							for j = 1, #playerBoats do

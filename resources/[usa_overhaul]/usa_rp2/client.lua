@@ -303,7 +303,7 @@ Citizen.CreateThread(function()
     if isInVeh then
       local veh = GetVehiclePedIsIn(PlayerPedId())
       local mph = GetEntitySpeed(veh) * 2.236936
-			if (IsControlPressed(0, 76) or IsControlPressed(0, 79) or IsControlPressed(0, 71) or IsControlPressed(0, 72) or IsControlPressed(0, 63) or IsControlPressed(0, 64)) or mph > 30 then
+			if (IsControlPressed(0, 76) or IsControlPressed(0, 79) or IsControlPressed(0, 71) or IsControlPressed(0, 72) or IsControlPressed(0, 63) or IsControlPressed(0, 64)) or (mph > 30 and GetPedInVehicleSeat(veh, -1) == PlayerPedId()) then
         DisableControlAction(0, 68, true)
         DisableControlAction(0, 69, true)
         DisableControlAction(0, 70, true)

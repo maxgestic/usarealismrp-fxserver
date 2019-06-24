@@ -11,7 +11,7 @@ injuries = { -- ensure this is the same as sv_injury.lua
     [1141786504] = {type = 'blunt', bleed = 1200, string = 'Large Blunt Object', treatableWithBandage = false, treatmentPrice = 10, dropEvidence = 0.6}, -- WEAPON_GOLFCLUB
     [2227010557] = {type = 'blunt', bleed = 900, string = 'Blunt Object', treatableWithBandage = false, treatmentPrice = 45, dropEvidence = 0.8}, -- WEAPON_CROWBAR
     [453432689] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_PISTOL
-    [1593441988] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_COMBATPISTOL 
+    [1593441988] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_COMBATPISTOL
     [2578377531] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_PISTOL50
     [736523883] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 200}, dropEvidence = 1.0, -- WEAPON_SMG
     [2210333304] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 250, dropEvidence = 1.0}, -- WEAPON_CARBINERIFLE
@@ -183,7 +183,7 @@ AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, 
 					bed = {
 						heading = hospitalBeds[i].heading,
 						coords = hospitalBeds[i].objCoords,
-						model = hospitalBeds[i].objModel	
+						model = hospitalBeds[i].objModel
 					}
 					TriggerClientEvent('ems:hospitalize', source, bed, i)
 					break
@@ -305,7 +305,9 @@ AddEventHandler('injuries:requestData', function()
 	local playerInjuries = char.get('injuries')
 	if playerInjuries then
 		TriggerClientEvent('injuries:updateInjuries', source, playerInjuries)
-	end
+	else
+    TriggerClientEvent("injuries:removeInjuries", source)
+  end
 end)
 
 TriggerEvent('es:addGroupCommand', 'heal', 'mod', function(source, args, char)

@@ -81,7 +81,7 @@ injuries = { -- ensure this is the same as sv_injury.lua
     [1141786504] = {type = 'blunt', bleed = 1200, string = 'Large Blunt Object', treatableWithBandage = false, treatmentPrice = 10, dropEvidence = 0.6}, -- WEAPON_GOLFCLUB
     [2227010557] = {type = 'blunt', bleed = 900, string = 'Blunt Object', treatableWithBandage = false, treatmentPrice = 45, dropEvidence = 0.8}, -- WEAPON_CROWBAR
     [453432689] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_PISTOL
-    [1593441988] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_COMBATPISTOL 
+    [1593441988] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_COMBATPISTOL
     [2578377531] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_PISTOL50
     [736523883] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 200, dropEvidence = 1.0}, -- WEAPON_SMG
     [2210333304] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 250, dropEvidence = 1.0}, -- WEAPON_CARBINERIFLE
@@ -131,9 +131,7 @@ doctorLocations = {
 }
 
 effects = {} -- when you take damage for a specific reason, you may be put into an effect
-injuredParts = {
-
-} -- injured body parts, and their wounds as the value
+injuredParts = {} -- injured body parts, and their wounds as the value
 
 ------ NOTIFY PLAYER OF INJURIES ------
 
@@ -145,7 +143,6 @@ Citizen.CreateThread(function()
 end)
 
 ------ DEVELOP INJURY SEVERITY & ADD EFFECTS ------
-
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(1000)
@@ -170,10 +167,10 @@ Citizen.CreateThread(function()
                             StartScreenEffect('Rampage', 0, true)
                         end
                         if math.random() > 0.6 then
-                            ShakeGameplayCam("SMALL_EXPLOSION_SHAKE", 0.2)
+                            ShakeGameplayCam("SMALL_EXPLOSION_SHAKE", 0.1)
                         end
                         TriggerEvent('usa:notify', 'Your body feels cold with blood...')
-                        local playerHealth = GetEntityHealth(playerPed) 
+                        local playerHealth = GetEntityHealth(playerPed)
                         SetEntityHealth(playerPed, ((playerHealth) - 3))
                         SetPlayerHealthRechargeMultiplier(PlayerId(), 0.0)
                     elseif IsEntityDead(playerPed) then
@@ -186,15 +183,14 @@ Citizen.CreateThread(function()
 end)
 
 ------ PLAYER EFFECTS ------
-
 Citizen.CreateThread(function()
     local injuredWalk = false
     while true do
         Citizen.Wait(10)
         for effect, enabled in pairs(effects) do
             if effect == 'shake' then
-                if math.random() > 0.999 then
-                    ShakeGameplayCam("SMALL_EXPLOSION_SHAKE", 0.3)
+                if math.random() > 0.999 and not IsEntityDead(PlayerPedId()) then
+                    ShakeGameplayCam("SMALL_EXPLOSION_SHAKE", 0.1)
                 end
             elseif effect == 'noaim' then
                 DisableControlAction(0, 25, true)
@@ -532,7 +528,7 @@ end)
 RegisterNetEvent('injuries:checkin')
 AddEventHandler('injuries:checkin', function()
     local overview = '0. Base Fee: $'..BASE_CHECKIN_PRICE..'\n'
-    local payment = BASE_CHECKIN_PRICE 
+    local payment = BASE_CHECKIN_PRICE
     local log = '\n⠀• Base Fee **-** $50'
     local index = 0
     for bone, _injuries in pairs(injuredParts) do
@@ -578,6 +574,15 @@ AddEventHandler('injuries:updateInjuries', function(_injuries)
     SetEntityHealth(PlayerPedId(), 200)
     TriggerEvent('civ:resetWalkStyle')
     NotifyPlayerOfInjuries()
+end)
+
+RegisterNetEvent('injuries:removeInjuries')
+AddEventHandler('injuries:removeInjuries', function()
+  injuredParts = {}
+  effects = {}
+  StopScreenEffect('Rampage')
+  SetEntityHealth(PlayerPedId(), 200)
+  TriggerEvent('civ:resetWalkStyle')
 end)
 
 RegisterNetEvent('character:setCharacter')
@@ -700,6 +705,3 @@ function DrawTimer(beginTime, duration, x, y, text)
     Set_2dLayer(3)
     DrawText(x - 0.06, y - 0.012)
 end
-
-
-StopScreenEffect('Rampage')

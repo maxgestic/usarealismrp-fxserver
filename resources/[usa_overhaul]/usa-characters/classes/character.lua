@@ -146,6 +146,20 @@ function CreateCharacter(data)
     return self.hasItem(item)
   end
 
+  rTable.hasItemWithExactName = function(item)
+    local targetItemName = (item.name or item)
+    local inv = self.inventory
+    for i = 0, inv.MAX_CAPACITY - 1 do
+      local invItem = inv.items[tostring(i)]
+      if invItem then
+        if invItem.name == targetItemName then
+          return true
+        end
+      end
+    end
+    return false
+  end
+
   rTable.canHoldItem = function(item, quantity)
     if quantity then
       item.quantity = quantity
@@ -173,6 +187,19 @@ function CreateCharacter(data)
       local item = inv.items[tostring(i)]
       if item then
         if item.name:find(itemName) then
+          return item
+        end
+      end
+    end
+    return nil
+  end
+
+  rTable.getItemWithExactName = function(itemName)
+    local inv = self.inventory
+    for i = 0, inv.MAX_CAPACITY - 1 do
+      local item = inv.items[tostring(i)]
+      if item then
+        if item.name == itemName then
           return item
         end
       end

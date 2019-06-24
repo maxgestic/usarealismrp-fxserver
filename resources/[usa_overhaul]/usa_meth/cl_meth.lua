@@ -36,8 +36,8 @@ Citizen.CreateThread(function()
         local playerCoords = GetEntityCoords(playerPed)
         DrawText3D(996.50, -3200.201, -36.19, 5, '[E] - Exit')
         DrawText3D(-121.95, 1918.01, 197.43, 5, '[E] - Enter')
-        DrawText3D(704.62, 4185.3, 40.70, 5, '[E] - Buy Pseudoephedrine (~g~$50.00~w~)')
-        DrawText3D(2724.06, 4143.56, 43.99, 5, '[E] - Buy Red Phosphorus (~g~$150.00~w~)')
+        DrawText3D(704.62, 4185.3, 40.70, 5, '[E] - Buy Pseudoephedrine (~g~$150.00~w~)')
+        DrawText3D(2724.06, 4143.56, 43.99, 5, '[E] - Buy Red Phosphorus (~g~$300.00~w~)')
         DrawText3D(1012.29, -3194.89, -38.99, 5, '[E] - Cook Meth')
         DrawText3D(2434.78, 4964.29, 42.34, 5, '[E] - Package Meth')
         if IsControlJustPressed(0, INPUT_KEY) then
@@ -49,11 +49,10 @@ Citizen.CreateThread(function()
                 TriggerServerEvent("methJob:checkUserMoney", meth.suppliesProduce)
                 cooldown = GetGameTimer()
             elseif GetDistanceBetweenCoords(playerCoords, 1012.29, -3194.89, -38.99, true) < 3 and not meth.producingMeth and GetGameTimer() - cooldown > 2000 then -- produce meth rocks
-                TriggerServerEvent("methJob:checkUserJobSupplies", meth.suppliesProduce)
-                TriggerServerEvent('methJob:checkUserJobSupplies', meth.suppliesProduceQuality)
+                TriggerServerEvent("methJob:checkUserJobSupplies", meth.suppliesProduce, meth.suppliesProduceQuality)
                 cooldown = GetGameTimer()
             elseif GetDistanceBetweenCoords(playerCoords, 2434.78, 4964.29, 42.34, true) < 3 and not meth.processingMeth and GetGameTimer() - cooldown > 2000 then -- process/package meth rocks
-                TriggerServerEvent("methJob:checkUserJobSupplies", meth.suppliesProcess, meth.suppliesProcessQuality)
+                  TriggerServerEvent("methJob:checkUserJobSupplies", meth.suppliesProcess, meth.suppliesProcessQuality)
                 cooldown = GetGameTimer()
             elseif GetDistanceBetweenCoords(playerCoords, 2724.06, 4143.56, 43.99, true) < 3 and not meth.pedIsBusy and GetGameTimer() - cooldown > 2000 then -- purchase quality supplies
                 TriggerServerEvent('methJob:checkUserMoney', meth.suppliesProduceQuality)
@@ -61,8 +60,6 @@ Citizen.CreateThread(function()
             end
         end
         if meth.producingMeth and GetDistanceBetweenCoords(playerCoords, 1012.29, -3194.89, -38.99, true) > 6 then -- too far from being able to process
-            --Citizen.Trace("you stopped cooking meth! too far!")
-            print('returning chemicals')
             TriggerEvent("usa:notify", "You went ~y~out of range~w~.")
             if meth.producingMeth then
                 for k = 1, #meth.methIngredients do
@@ -73,10 +70,8 @@ Citizen.CreateThread(function()
             meth.producingMeth = false
         elseif meth.processingMeth and GetDistanceBetweenCoords(playerCoords, 2434.78, 4964.29, 42.34, true) > 6 then
             TriggerEvent("usa:notify", "You went ~y~out of range~w~.")
-            if meth.processingMeth then
-                TriggerServerEvent("methJob:giveRock", meth.methToProcess)
-                meth.methToProcess = nil
-            end
+            TriggerServerEvent("methJob:giveRock", meth.methToProcess)
+            meth.methToProcess = nil
             meth.processingMeth = false
         end
     end
@@ -226,7 +221,6 @@ Citizen.CreateThread(function()
                 end
                 meth.methIngredients = {}
                 TriggerServerEvent("methJob:methProduced", methProduced)
-                Citizen.Trace("giving meth to player!")
             end
         elseif meth.processingMeth then
             beginTime = GetGameTimer()
@@ -251,16 +245,13 @@ Citizen.CreateThread(function()
             end
             ClearPedTasksImmediately(GetPlayerPed(-1))
             StopAnimTask(GetPlayerPed(-1), animDict, animName, false)
-            processedMeth = 'Packaged Meth'
-            if meth.processingMeth then
-                meth.processingMeth = false
-                if meth.methToProcess == 'Blue Meth Rock' then
-                    processedMeth.name = 'Packaged Blue Meth'
-                    meth.methToProcess = nil
-                end
-                TriggerServerEvent("methJob:methProcessed", processedMeth)
-                Citizen.Trace("giving meth to player!")
+            local processedMeth = 'Packaged Meth'
+            if meth.methToProcess == 'Blue Meth Rock' then
+                processedMeth = 'Packaged Blue Meth'
+                meth.methToProcess = nil
             end
+            meth.processingMeth = false
+            TriggerServerEvent("methJob:methProcessed", processedMeth)
         end
     Citizen.Wait(0)
     end

@@ -53,6 +53,8 @@ local prices = {
 local DEBUG = false
 local rentals = {}
 
+local LICENSE_PURCHASE_PRICE = 5000
+
 AddEventHandler('es:playerLoaded', function(source, char)
   TriggerEvent("aircraft:loadAircraft", source)
 end)
@@ -103,6 +105,32 @@ AddEventHandler("aircraft:requestPurchase", function(aircraft)
     end
   else
     TriggerClientEvent('usa:notify', source, 'You do not have enough money!')
+  end
+end)
+
+RegisterServerEvent("aircraft:purchaseLicense")
+AddEventHandler("aircraft:purchaseLicense", function()
+  local timestamp = os.date("*t", os.time())
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local NEW_PILOT_LICENSE = {
+    name = 'Aircraft License',
+    number = 'PL' .. tostring(math.random(1, 254367)),
+    quantity = 1,
+    ownerName = char.getFullName(),
+    issued_by = "Seaview Aircrafts",
+    ownerDob = char.get("dateOfBirth"),
+    expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
+    status = "valid",
+    type = "license",
+    notDroppable = true,
+    weight = 2.0
+  }
+  if char.canHoldItem(NEW_PILOT_LICENSE) then
+    char.giveItem(NEW_PILOT_LICENSE)
+    char.removeMoney(LICENSE_PURCHASE_PRICE)
+    TriggerClientEvent("usa:notify", source, "You have been issued a pilot's license!")
+  else
+    TriggerClientEvent("usa:notify", source, "Inventory full!")
   end
 end)
 
@@ -162,7 +190,7 @@ AddEventHandler('aircraft:requestOpenMenu', function()
   if license and license.status == "valid" then
     TriggerClientEvent('aircraft:openMenu', source)
   else
-    TriggerClientEvent('usa:notify', source, 'You do not own a valid Aircraft License!')
+    TriggerClientEvent('usa:notify', source, 'No license! Hold E to purchase one for $' .. comma_value(LICENSE_PURCHASE_PRICE))
   end
 end)
 

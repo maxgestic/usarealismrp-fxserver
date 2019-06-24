@@ -3,7 +3,7 @@ local debug = false
 -- todo: randomize price based on each purchase instead of once
 local SELLABLE_ITEMS = {
 	["Packaged Meth"] = {150, 200},
-	["Packaged Blue Meth"] = {500, 600},
+	["Packaged Blue Meth"] = {350, 550},
 	["Packaged Weed"] = {50, 125}
 }
 

@@ -2,7 +2,7 @@ licensePrices = {
 	["Driver's License"] = 500,
 	["Firearm Permit"] = 1000,
 	["Bar Certificate"] = 10000,
-	["Boat License"] = 1000,
+	["Boat License"] = 750,
 	["Aircraft License"] = 1500
 }
 
@@ -278,7 +278,7 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff'}, function(source,
 				target_item_name = "Aircraft License"
 				target_item = {
 					name = 'Aircraft License',
-					number = 'AL' .. tostring(math.random(1, 254367)),
+					number = 'PL' .. tostring(math.random(1, 254367)),
 					quantity = 1,
 					ownerName = target_player.getFullName(),
 					issued_by = char.getFullName(),

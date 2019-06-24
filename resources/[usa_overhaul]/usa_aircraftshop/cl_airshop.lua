@@ -158,7 +158,6 @@ Citizen.CreateThread(function()
 					Citizen.Wait(500)
 					local vehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
 					local hash = GetEntityModel(vehicle)
-					print("driving plane with hash: " .. hash)
 					if GetPedInVehicleSeat(vehicle, -1) == GetPlayerPed(-1) then
 						local wasRental = false
 						for i = 1, #rentals do
@@ -201,8 +200,13 @@ Citizen.CreateThread(function()
 						TriggerEvent('usa:notify', "You must be in the driver's seat.")
 					end
 				elseif GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), data.menu.x, data.menu.y, data.menu.z, true) < 5 then
-					TriggerServerEvent('aircraft:requestOpenMenu')
-					closestShop = name
+          Wait(500)
+          if not IsControlPressed(0, MENU_OPEN_KEY) then -- E not pressed
+  					TriggerServerEvent('aircraft:requestOpenMenu')
+  					closestShop = name
+          else -- E held
+            TriggerServerEvent("aircraft:purchaseLicense")
+          end
 				end
 			end
 		end

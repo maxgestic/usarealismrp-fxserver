@@ -28,37 +28,35 @@ AddEventHandler("methJob:methProcessed", function(itemName)
 	local methProduced = {
 		name = itemName,
 		type = 'drug',
-        legality = 'illegal',
-        quantity = 1,
-        weight = 4,
-        objectModel = 'bkr_prop_meth_smallbag_01a'
-    }
+    legality = 'illegal',
+    quantity = 1,
+    weight = 4,
+    objectModel = 'bkr_prop_meth_smallbag_01a'
+  }
 	if char.canHoldItem(methProduced) then
 		char.giveItem(methProduced)
 		TriggerClientEvent("usa:notify", source, "You have successfully processed meth rock into packaged product!")
-    else
+  else
 		TriggerClientEvent("usa:notify", source, "Your inventory is full. Can't carry anymore!")
-    end
+  end
 end)
 
 RegisterServerEvent("methJob:checkUserJobSupplies")
 AddEventHandler("methJob:checkUserJobSupplies", function(supply, supply2)
 	local hasBasicSupply = false
 	local char = exports["usa-characters"]:GetCharacter(source)
-	local found_supply = char.getItem(supply)
+	local found_supply = char.getItemWithExactName(supply)
 	if found_supply then
 		char.removeItem(found_supply, 1)
 		TriggerClientEvent('methJob:doesUserHaveJobSupply', source, true, supply)
 		return
 	end
 
-	if supply2 and char.hasItem(supply2) then
+	if supply2 and char.hasItemWithExactName(supply2) then
 		char.removeItem(supply2, 1)
 		TriggerClientEvent('methJob:doesUserHaveJobSupply', source, true, supply2)
 		return
 	end
-
-	TriggerClientEvent("usa_rp:doesUserHaveJobSupply", source, false, supply, supply2)
 end)
 
 RegisterServerEvent("methJob:giveChemicals")
