@@ -35,6 +35,8 @@ local sv_storeWeapons = {
   }
 }
 
+local LICENSE_PURCHASE_PRICE = 7000
+
 exports["globals"]:PerformDBCheck("usa_gunshop", "legalweapons")
 
 RegisterServerEvent("gunShop:requestPurchase")
@@ -95,14 +97,55 @@ AddEventHandler('gunShop:requestOpenMenu', function()
   if permit_status == 'valid' then
     TriggerClientEvent('gunShop:openMenu', source)
   else
-    TriggerClientEvent('usa:notify', source, 'You do not have a valid ~y~Firearm Permit~s~!')
+    TriggerClientEvent('usa:notify', source, 'No license! Hold E to purchase one for $' .. comma_value(LICENSE_PURCHASE_PRICE))
+  end
+end)
+
+RegisterServerEvent("gunShop:purchaseLicense")
+AddEventHandler("gunShop:purchaseLicense", function()
+  local timestamp = os.date("*t", os.time())
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local NEW_GUN_LICENSE = {
+    name = 'Gun License',
+    number = 'GL' .. tostring(math.random(1, 254367)),
+    quantity = 1,
+    ownerName = char.getFullName(),
+    issued_by = "Ammunation",
+    ownerDob = char.get("dateOfBirth"),
+    expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
+    status = "valid",
+    type = "license",
+    notDroppable = true,
+    weight = 2.0
+  }
+  if char.hasItem(NEW_GUN_LICENSE) then
+    TriggerClientEvent("usa:notify", source, "You already have a gun license!")
+    return
+  end
+  if char.canHoldItem(NEW_GUN_LICENSE) then
+    char.giveItem(NEW_GUN_LICENSE)
+    char.removeMoney(LICENSE_PURCHASE_PRICE)
+    TriggerClientEvent("usa:notify", source, "You have been issued a pilot's license!")
+  else
+    TriggerClientEvent("usa:notify", source, "Inventory full!")
   end
 end)
 
 function checkPermit(char)
-  local license = char.getItem("Firearm Permit")
+  local license = char.getItem("Gun License")
   if license then
     return license.status
   end
   return "none"
+end
+
+function comma_value(amount)
+	local formatted = amount
+	while true do
+		formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+		if (k==0) then
+			break
+		end
+	end
+	return formatted
 end

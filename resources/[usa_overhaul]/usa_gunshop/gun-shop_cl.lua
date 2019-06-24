@@ -153,21 +153,26 @@ Citizen.CreateThread(function()
     for i = 1, #locations do
     	DrawText3D(locations[i].x, locations[i].y, locations[i].z, 5, '[E] - Ammunation')
     	if IsControlJustPressed(1, MENU_KEY) and not IsAnyMenuVisible() then
-			if Vdist(mycoords.x, mycoords.y, mycoords.z, locations[i].x, locations[i].y, locations[i].z) < 1.3 then
-    			TriggerServerEvent('gunShop:requestOpenMenu')
-				closest_location = locations[i]
-			end
+				if Vdist(mycoords.x, mycoords.y, mycoords.z, locations[i].x, locations[i].y, locations[i].z) < 1.3 then
+					Wait(500)
+					if not IsControlPressed(1, MENU_KEY) then -- not held
+	    			TriggerServerEvent('gunShop:requestOpenMenu')
+						closest_location = locations[i]
+					else -- held
+						TriggerServerEvent("gunShop:purchaseLicense")
+					end
+				end
     	end
     end
-	-- close menu when far away --
-	if closest_location then
-		if Vdist(mycoords.x, mycoords.y, mycoords.z, closest_location.x, closest_location.y, closest_location.z) > 1.3 then
-			if IsAnyMenuVisible() then
-				closest_location = nil
-				CloseAllMenus()
+		-- close menu when far away --
+		if closest_location then
+			if Vdist(mycoords.x, mycoords.y, mycoords.z, closest_location.x, closest_location.y, closest_location.z) > 1.3 then
+				if IsAnyMenuVisible() then
+					closest_location = nil
+					CloseAllMenus()
+				end
 			end
 		end
-	end
   end
 end)
 
@@ -211,10 +216,10 @@ end)
 local JOB_PEDS = {
   {x = -331.043, y = 6086.09, z = 30.40, heading = 180.0}
 }
+
 Citizen.CreateThread(function()
 	for i = 1, #JOB_PEDS do
 		local hash = -1064078846
-		--local hash = GetHashKey(data.ped.model)
 		RequestModel(hash)
 		while not HasModelLoaded(hash) do
 			RequestModel(hash)
