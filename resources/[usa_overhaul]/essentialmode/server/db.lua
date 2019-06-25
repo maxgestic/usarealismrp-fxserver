@@ -162,9 +162,8 @@ function db.updateUser(identifier, new, callback)
 end
 
 function db.createUser(identifier, callback)
-	print("creating user!")
 	if type(identifier) == "string" and identifier ~= nil then
-		createDocument({ identifier = identifier, group = "user", permission_level = 0, characters = {{},{},{}}, policeCharacter = {}, emsCharacter = {}}, function(returned, document)
+		createDocument({ identifier = identifier, group = "user", permission_level = 0, policeCharacter = {}, emsCharacter = {}}, function(returned, document)
 			if callback then
 				callback(returned, document)
 			end

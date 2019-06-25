@@ -219,7 +219,7 @@ function CreateUniformMenu(menu)
             TriggerServerEvent('policestation2:loadOutfit', selectedLoadSlot)
 			TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 1, 'zip-close', 1.0)
 			Citizen.Wait(2000)
-			DoScreenFadeIn(500) 
+			DoScreenFadeIn(500)
             TriggerEvent("usa:playAnimation", 'clothingshirt', 'try_shirt_positive_d', -8, 1, -1, 48, 0, 0, 0, 0, 3)
         end
     end

@@ -251,7 +251,7 @@ AddEventHandler("policestation2:saveOutfit", function(character, slot)
   local user = exports["essentialmode"]:getPlayerFromId(source)
   local user_job = exports["usa-characters"]:GetCharacterField(source, "job")
   local policeCharacter = user.getPoliceCharacter()
-  policeCharacter[slot] = character
+  policeCharacter[tostring(slot)] = character
   if user_job == "sheriff" or user_job == "cop" then
     user.setPoliceCharacter(policeCharacter)
     TriggerClientEvent("usa:notify", source, "Outfit in slot "..slot.." has been saved.")
@@ -266,7 +266,7 @@ AddEventHandler("policestation2:loadOutfit", function(slot)
   local char = exports["usa-characters"]:GetCharacter(source)
   if char.get("policeRank") > 0 then
     local character = user.getPoliceCharacter()
-    TriggerClientEvent("policestation2:setCharacter", source, character[slot])
+    TriggerClientEvent("policestation2:setCharacter", source, character[tostring(slot)])
     if char.get('job') ~= 'sheriff' then
       char.set("job", "sheriff")
       TriggerEvent('job:sendNewLog', source, 'sheriff', true)
