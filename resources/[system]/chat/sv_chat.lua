@@ -52,7 +52,7 @@ AddEventHandler('_chat:messageEntered', function(name, color, message, location)
 	TriggerEvent('chatMessageLocation', source, name, message, location)
 
 	if not WasEventCanceled() then
-		TriggerClientEvent('chatMessage', source, "^*[OOC]^r Use ^3/help^7 for staff assistance or questions!")
+		TriggerClientEvent('chatMessageLocation', -1, "[Local OOC] - " .. name .. " (" .. source .. ")",  { 255, 255, 255 }, message, location, 50)
 	end
 
 	print(name .. " (" .. GetPlayerName(source) .. ") " .. ': ' .. message)

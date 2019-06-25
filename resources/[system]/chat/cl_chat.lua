@@ -14,17 +14,11 @@ RegisterNetEvent('__cfx_internal:serverPrint')
 RegisterNetEvent('_chat:messageEntered')
 
 -- Character Name
-characterName = {
-	first = "",
-	middle = "",
-	last = ""
-}
+characterName = nil
 
 RegisterNetEvent("chat:setCharName")
-AddEventHandler("chat:setCharName", function(character)
-	characterName.first = character.firstName
-	characterName.middle = character.middleName
-	characterName.last = character.lastName
+AddEventHandler("chat:setCharName", function(name)
+	characterName = name
 end)
 
 --deprecated, use chat:addMessage
