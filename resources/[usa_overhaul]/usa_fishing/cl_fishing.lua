@@ -48,11 +48,11 @@ Citizen.CreateThread(function()
 		local playerPed = PlayerPedId()
 		for i = 1, #fishingZoneSpots do
 			local spot = fishingZoneSpots[i]
-			DrawText3D(spot.x, spot.y, spot.z, 3, '[K] - Fish')
+			DrawText3D(spot.x, spot.y, spot.z, 15, '[K] - Fish')
 		end
 		for i = 1, #fishStoreLocations do
 			local spot = fishStoreLocations[i]
-			DrawText3D(spot.x, spot.y, spot.z, 3, '[E] - Sell Fish')
+			DrawText3D(spot.x, spot.y, spot.z, 10, '[E] - Sell Fish')
 		end
 		if IsControlJustPressed(0, 311) then
 			for i = 1, #fishingZoneSpots do
@@ -60,7 +60,7 @@ Citizen.CreateThread(function()
 				local playerCoords = GetEntityCoords(playerPed)
 				if Vdist(playerCoords, spot.x, spot.y, spot.z) < 1.0 then
 					if not IsPedInAnyVehicle(playerPed) and not IsPedSwimming(playerPed) then
-						TriggerEvent('usa:showHelp', true, 'Wait for a fish to bite!')
+            exports.globals:notify('Wait for a fish to bite!')
 						SetEntityHeading(playerPed, spot.heading)
 						FreezeEntityPosition(playerPed, true)
 						fishing = true
@@ -72,9 +72,10 @@ Citizen.CreateThread(function()
 						Citizen.Wait(wait)
 						ClearPedTasks(playerPed)
 						TriggerEvent('usa:showHelp', true, 'Tap ~INPUT_PICKUP~ to reel the fish in!')
+            exports.globals:notify('Tap ~y~E~w~ to reel the fish in!')
 						local resistance = 0
 						local maxResistance = math.random(7200, 9000)
-						local timeToResist = math.random(5000, 6000)
+						local timeToResist = math.random(6000, 10000)
 						RequestAnimDict('amb@world_human_stand_fishing@idle_a')
 						while not HasAnimDictLoaded('amb@world_human_stand_fishing@idle_a') do Citizen.Wait(100) end
 						TaskPlayAnim(playerPed,'amb@world_human_stand_fishing@idle_a', 'idle_c', 8.0, -8, -1, 49, 0, 0, 0, 0) -- 10sec

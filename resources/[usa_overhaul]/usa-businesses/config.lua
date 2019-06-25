@@ -201,7 +201,7 @@ BUSINESSES = {
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
 		price = 2000,
-		purchasePercentage = 0.08
+		purchasePercentage = 0.25
 	},
 	["LS Customs (La Mesa)"] = {
 		position = {725.80, -1070.75, 28.31},
@@ -237,7 +237,8 @@ BUSINESSES = {
 		cameraID = 'store21',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 2000
+		price = 2000,
+		purchasePercentage = 0.25
 	},
 	["Herr Kutz Barbers (Niland Ave.)"] = {
 		position = {1930.57, 3728.08, 32.84},

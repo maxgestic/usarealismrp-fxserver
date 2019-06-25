@@ -10,10 +10,8 @@ TriggerServerEvent('ptt:getHotkey')
 
 RegisterNetEvent("interaction:setPlayersJob")
 AddEventHandler("interaction:setPlayersJob", function(job)
-	print('called')
 	if job == 'sheriff' or job == 'police' or job == 'corrections' then
 		onDuty = true
-		print('on duty')
 	else
 		onDuty = false
 	end
@@ -21,7 +19,6 @@ end)
 
 RegisterNetEvent("ptt:returnHotkey")
 AddEventHandler("ptt:returnHotkey", function(key)
-	print("radio key set!")
 	control = key
 end)
 
@@ -48,7 +45,8 @@ local smallWeapons = {
 	"WEAPON_MACHETE",
 	"WEAPON_WRENCH",
 	"WEAPON_POOLCUE",
-	"WEAPON_BATTLEAXE"
+	"WEAPON_BATTLEAXE",
+	"WEAPON_SWITCHBLADE"
 }
 
 local largeWeapons = {

@@ -261,6 +261,7 @@ end)
 RegisterNetEvent('DamageEvents:PedKilledByPlayer')
 AddEventHandler('DamageEvents:PedKilledByPlayer', function(entity, attacker, weaponHash, isMeleeDamage)
     if entity == PlayerPedId() then
+      if injuries[weaponHash] then
         if injuries[weaponHash].dropEvidence then
             if injuries[weaponHash].dropEvidence > 0.0 and entity == PlayerPedId() then
                 TriggerServerEvent('evidence:newDNA', GetEntityCoords(PlayerPedId()))
@@ -269,6 +270,7 @@ AddEventHandler('DamageEvents:PedKilledByPlayer', function(entity, attacker, wea
         else
             TriggerServerEvent('evidence:newDNA', GetEntityCoords(PlayerPedId()))
         end
+      end
     end
 end)
 

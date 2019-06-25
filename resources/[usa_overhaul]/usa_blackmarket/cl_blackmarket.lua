@@ -8,7 +8,28 @@ TriggerServerEvent("blackMarket:loadItems")
 RegisterNetEvent("blackMarket:loadItems")
 AddEventHandler("blackMarket:loadItems", function(items)
   markets = items
+  CreateMapBlips()
 end)
+
+function CreateMapBlips()
+  Citizen.CreateThread(function()
+      for k, v in pairs(markets) do
+          local mkt = markets[k]
+          RequestModel(mkt['pedHash'])
+          while not HasModelLoaded(mkt['pedHash']) do
+              Citizen.Wait(100)
+          end
+          local ped = CreatePed(4, mkt['pedHash'], mkt['coords'][1], mkt['coords'][2], mkt['coords'][3] - 1.0, mkt['pedHeading'] or 100, false, true)
+          SetEntityCanBeDamaged(ped,false)
+          SetPedCanRagdollFromPlayerImpact(ped,false)
+          SetBlockingOfNonTemporaryEvents(ped,true)
+          SetPedFleeAttributes(ped,0,0)
+          SetPedCombatAttributes(ped,17,1)
+          SetPedRandomComponentVariation(ped, true)
+          TaskStartScenarioInPlace(ped, "WORLD_HUMAN_STAND_MOBILE", 0, true);
+      end
+  end)
+end
 
 function comma_value(amount)
   local formatted = amount
@@ -75,8 +96,8 @@ Citizen.CreateThread(function()
         -- Draw Markers --
         ------------------
     	for k, v in pairs(markets) do
-            local x, y, z = table.unpack(markets[k]['coords'])
-    		DrawText3D(x, y, z, 8, '[E] - Black Market')
+        local x, y, z = table.unpack(markets[k]['coords'])
+    		DrawText3D(x, y, z, 25, '[E] - Black Market')
     	end
         --------------------------
         -- Listen for menu open --
@@ -98,24 +119,6 @@ Citizen.CreateThread(function()
             end
         end
 	end
-end)
-
-Citizen.CreateThread(function()
-    for k, v in pairs(markets) do
-        local mkt = markets[k]
-        RequestModel(mkt['pedHash'])
-        while not HasModelLoaded(mkt['pedHash']) do
-            Citizen.Wait(100)
-        end
-        local ped = CreatePed(4, mkt['pedHash'], mkt['coords'][1], mkt['coords'][2], mkt['coords'][3] - 1.0, mkt['pedHeading'], false, true)
-        SetEntityCanBeDamaged(ped,false)
-        SetPedCanRagdollFromPlayerImpact(ped,false)
-        SetBlockingOfNonTemporaryEvents(ped,true)
-        SetPedFleeAttributes(ped,0,0)
-        SetPedCombatAttributes(ped,17,1)
-        SetPedRandomComponentVariation(ped, true)
-        TaskStartScenarioInPlace(ped, "WORLD_HUMAN_STAND_MOBILE", 0, true);
-    end
 end)
 
 function DrawText3D(x, y, z, distance, text)

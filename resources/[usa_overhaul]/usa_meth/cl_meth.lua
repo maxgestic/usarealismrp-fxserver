@@ -37,7 +37,7 @@ Citizen.CreateThread(function()
         DrawText3D(996.50, -3200.201, -36.19, 5, '[E] - Exit')
         DrawText3D(-121.95, 1918.01, 197.43, 5, '[E] - Enter')
         DrawText3D(704.62, 4185.3, 40.70, 5, '[E] - Buy Pseudoephedrine (~g~$150.00~w~)')
-        DrawText3D(2724.06, 4143.56, 43.99, 5, '[E] - Buy Red Phosphorus (~g~$300.00~w~)')
+        DrawText3D(2724.06, 4143.56, 43.99, 5, '[E] - Buy Red Phosphorus (~g~$500.00~w~)')
         DrawText3D(1012.29, -3194.89, -38.99, 5, '[E] - Cook Meth')
         DrawText3D(2434.78, 4964.29, 42.34, 5, '[E] - Package Meth')
         if IsControlJustPressed(0, INPUT_KEY) then

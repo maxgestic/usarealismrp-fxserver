@@ -106,8 +106,8 @@ AddEventHandler("gunShop:purchaseLicense", function()
   local timestamp = os.date("*t", os.time())
   local char = exports["usa-characters"]:GetCharacter(source)
   local NEW_GUN_LICENSE = {
-    name = 'Gun License',
-    number = 'GL' .. tostring(math.random(1, 254367)),
+    name = 'Firearm Permit',
+    number = 'FP' .. tostring(math.random(1, 254367)),
     quantity = 1,
     ownerName = char.getFullName(),
     issued_by = "Ammunation",
@@ -119,20 +119,20 @@ AddEventHandler("gunShop:purchaseLicense", function()
     weight = 2.0
   }
   if char.hasItem(NEW_GUN_LICENSE) then
-    TriggerClientEvent("usa:notify", source, "You already have a gun license!")
+    TriggerClientEvent("usa:notify", source, "You already have a firearm permit!")
     return
   end
   if char.canHoldItem(NEW_GUN_LICENSE) then
     char.giveItem(NEW_GUN_LICENSE)
     char.removeMoney(LICENSE_PURCHASE_PRICE)
-    TriggerClientEvent("usa:notify", source, "You have been issued a pilot's license!")
+    TriggerClientEvent("usa:notify", source, "You have been issued a firearm permit!")
   else
     TriggerClientEvent("usa:notify", source, "Inventory full!")
   end
 end)
 
 function checkPermit(char)
-  local license = char.getItem("Gun License")
+  local license = char.getItem("Firearm Permit")
   if license then
     return license.status
   end

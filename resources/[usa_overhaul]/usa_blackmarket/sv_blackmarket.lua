@@ -1,6 +1,6 @@
 local markets = {
   ['marketA'] = {
-    ['coords'] = {363.83, -1830.4, 28.5},
+    ['coords'] = {140.8, -1920.5, 21.0},
     ['items'] = {
       {name = 'Lockpick', type = 'misc', price = 75, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(3, 5)},
       {name = 'Pistol', type = 'weapon', hash = 453432689, price = 3000, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(1, 3), objectModel = "w_pi_pistol"},
@@ -8,9 +8,9 @@ local markets = {
       {name = 'Heavy Pistol', type = 'weapon', hash = -771403250, price = 4500, legality = 'illegal', quantity = 1, weight = 15, stock = math.random(1, 3), objectModel = "w_pi_heavypistol"},
       {name = 'Pistol .50', type = 'weapon', hash = -1716589765, price = 4500, legality = 'illegal', quantity = 1, weight = 18, stock = math.random(1, 2), objectModel = "w_pi_pistol50"},
       {name = 'Pump Shotgun', type = 'weapon', hash = 487013001, price = 9000, legality = 'illegal', quantity = 1, weight = 30, stock = math.random(1, 2), objectModel = "w_sg_pumpshotgun"},
-      {name = 'Razor Blade', type = 'misc', price = 500, legality = 'legal', quantity = 1, residue = false, weight = 3, stock = math.random(10, 20)},
       {name = 'Hotwiring Kit', type = 'misc', price = 250, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(10, 20)}
-    }
+    },
+    ["pedHash"] = -48477765
   },
   ['marketB'] = {
     ['coords'] = {1380.87, 2172.51, 97.81},
@@ -22,8 +22,9 @@ local markets = {
       {name = 'SNS Pistol', type = 'weapon', hash = -1076751822, price = 3500, legality = 'illegal', quantity = 1, weight = 8, stock = math.random(1, 3), objectModel = "w_pi_sns_pistol"},
       {name = 'Combat Pistol', type = 'weapon', hash = 1593441988, price = 5000, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(1, 3), objectModel = "w_pi_combatpistol"},
       {name = 'Switchblade', type = 'weapon', hash = -538741184, price = 1500, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(5, 15)},
-      {name = 'Brass Knuckles', type = 'weapon', hash = -656458692, price = 1100, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(3, 5)},
-    }
+      {name = 'Brass Knuckles', type = 'weapon', hash = -656458692, price = 1100, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(3, 5)}
+    },
+    ["pedHash"] = -1773333796
   }
 }
 
