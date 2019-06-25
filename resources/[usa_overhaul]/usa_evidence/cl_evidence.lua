@@ -16,7 +16,7 @@ local playerData = {
 	['levelBAC'] = 0.00,
 	['dilatedPupils'] = false,
 	['gunshotResidue'] = false,
-	['impared'] = false,
+	['impaired'] = false,
 	['seatBelt'] = false
 }
 
@@ -46,7 +46,7 @@ Citizen.CreateThread(function()
 	local timer = 120000 -- 2 mins
 	while true do
 		if playerData['levelBAC'] > 0.00 then
-			playerData['levelBAC'] = playerData['levelBAC'] - 0.01
+			playerData['levelBAC'] = playerData['levelBAC'] - 0.02
 		end
 		Wait(timer) -- every x seconds, decrement playerBAC
 	end
@@ -63,36 +63,30 @@ Citizen.CreateThread(function()
 		elseif playerBAC <= 0.03 and playerData['odorAlcohol'] then
 			playerData['odorAlcohol'] = false
 		end
-		if playerBAC >= 0.10 and not playerData['impared'] then
+		if playerBAC >= 0.10 and not playerData['impaired'] then
 			if math.random() > 0.8 then
 				playerData['bloodshotEyes'] = true
 			end
-		elseif playerBAC < 0.10 and playerData['impared'] then
+		elseif playerBAC < 0.10 and playerData['impaired'] then
 			StopEffects()
-			print('stopping effects')
-			playerData['impared'] = false
 			playerData['bloodshotEyes'] = false
 		end
 		if playerBAC >= 0.20 and playerBAC < 0.30 then
 			Intoxicate(false, 'move_m@drunk@moderatedrunk', 0.5)
-			if math.random() < 0.1 then
+		elseif playerBAC >= 0.30 and playerBAC < 0.40 then
+			Intoxicate(false, 'move_m@drunk@verydrunk', 0.5)
+			if math.random() < 0.2 then
 				DoScreenFadeOut(2000)
 				Citizen.Wait(1000)
 				DoScreenFadeIn(2000)
 			end
-		elseif playerBAC >= 0.30 and playerBAC < 0.40 then
-			Intoxicate(false, 'move_m@drunk@verydrunk', 0.5)
-			if math.random() < 0.3 then
-				DoScreenFadeOut(5000)
-				Citizen.Wait(3000)
-				DoScreenFadeIn(5000)
-			end
 		elseif playerBAC >= 0.40 and not IsEntityDead(playerPed) then
 			Intoxicate(false, 'move_m@drunk@verydrunk', 0.5)
-			DoScreenFadeOut(5000)
-			Citizen.Wait(5000)
+			DoScreenFadeOut(4000)
+			Citizen.Wait(4000)
 			SetEntityHealth(playerPed, 0)
-			DoScreenFadeIn(5000)
+			DoScreenFadeIn(4000)
+			exports.globals:notify("You have passed out!")
 		end
 		if GetEntitySpeed(playerPed) > 3.0 and (IsPedSprinting(playerPed) or IsPedRunning(playerPed)) then
 			timeRunning = timeRunning + 1
@@ -101,7 +95,7 @@ Citizen.CreateThread(function()
 				timeRunning = timeRunning - 1
 			end
 		end
-		if timeRunning > 10 and not playerData['bodySweat'] then
+		if timeRunning > 20 and not playerData['bodySweat'] then
 			playerData['bodySweat'] = true
 			TriggerEvent('usa:notify', 'Laboured breathing, body sweat.')
 			Citizen.CreateThread(function()
@@ -109,7 +103,6 @@ Citizen.CreateThread(function()
 				playerData['bodySweat'] = false
 			end)
 		end
-
 		if IsEntityInWater(playerPed) and not playerData['wetClothing'] then
 			playerData['wetClothing'] = true
 			TriggerEvent('usa:notify', 'Clothes are soaked and wet.')
@@ -408,7 +401,7 @@ end)
 
 RegisterNetEvent('character:setCharacter')
 AddEventHandler('character:setCharacter', function()
-	if playerData['impared'] then
+	if playerData['impaired'] then
 		StopEffects()
 	end
 	playerData = {
@@ -420,7 +413,7 @@ AddEventHandler('character:setCharacter', function()
 		['levelBAC'] = 0.00,
 		['dilatedPupils'] = false,
 		['gunshotResidue'] = false,
-		['impared'] = false,
+		['impaired'] = false,
 		['seatBelt'] = false
 	}
 	onDuty = false
@@ -469,25 +462,26 @@ end
 -- getting drunk / high effect
 function Intoxicate(playScenario, clipset, shakeCam)
 	Citizen.CreateThread(function()
-		local playerPed = PlayerPedId()
-		if playScenario then
+		if not playerData["impaired"] then
+			local playerPed = PlayerPedId()
+			if playScenario then
 			TaskStartScenarioInPlace(playerPed, "WORLD_HUMAN_DRUG_DEALER", 0, 1)
-		end
-		Citizen.Wait(5000)
-		if not playerData["impared"] then
+			end
+			Citizen.Wait(5000)
 			DoScreenFadeOut(500)
 			Citizen.Wait(500)
 			ClearPedTasksImmediately(playerPed)
 			SetTimecycleModifier("spectator5")
 			SetPedMotionBlur(playerPed, true)
-		end
-		if clipset then
-			TriggerEvent('civ:forceWalkStyle', clipset)
-		end
-		SetPedIsDrunk(playerPed, true)
-		DoScreenFadeIn(500)
-		if shakeCam then
-			ShakeGameplayCam("DRUNK_SHAKE", shakeCam)
+			if clipset then
+				TriggerEvent('civ:forceWalkStyle', clipset)
+			end
+			SetPedIsDrunk(playerPed, true)
+			DoScreenFadeIn(500)
+			if shakeCam then
+				ShakeGameplayCam("DRUNK_SHAKE", shakeCam)
+			end
+			playerData["impaired"] = true
 		end
 	end)
  end
@@ -503,6 +497,7 @@ function Intoxicate(playScenario, clipset, shakeCam)
 		SetPedIsDrunk(PlayerPedId(), false)
 		SetPedMotionBlur(PlayerPedId(), false)
 		StopGameplayCamShaking(true)
+		playerData["impaired"] = false
  	end)
  end
 

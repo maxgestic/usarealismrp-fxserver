@@ -30,6 +30,8 @@ local menuEnabled = false
 
 local inProperty = false
 
+local JERRY_CAN_REFUEL_TIME = 25000
+
 local scenarios = {
 	{name = "cancel", type = "cancel", dict = "", animname = ""},
 	{name = "stop", type = "cancel", dict = "", animname = ""},
@@ -872,16 +874,28 @@ function interactionMenuUse(itemName, wholeItem)
 			end
 
 			if tonumber(hitHandleVehicle) ~= 0 then
+				local ped = GetPlayerPed(-1)
 				local jcan = 883325847
-				GiveWeaponToPed(GetPlayerPed(-1), jcan, 20, false, true) -- easiest way to remove jerry can object off back when using it (from weapons-on-back resource)
+				GiveWeaponToPed(ped, jcan, 20, false, true) -- easiest way to remove jerry can object off back when using it (from weapons-on-back resource)
 				Wait(1000)
 				TriggerEvent("usa:playAnimation", JERRY_CAN_ANIMATION.dict, JERRY_CAN_ANIMATION.name, -8, 1, -1, 53, 0, 0, 0, 0, 24.5)
-				Wait(25000)
-				ClearPedTasksImmediately(GetPlayerPed(-1))
+				local start = GetGameTimer()
+				while GetGameTimer() - start < JERRY_CAN_REFUEL_TIME do
+					if not IsEntityPlayingAnim(playerPed, JERRY_CAN_ANIMATION.dict, JERRY_CAN_ANIMATION.name, 3) then
+						TaskPlayAnim(playerPed, JERRY_CAN_ANIMATION.dict, JERRY_CAN_ANIMATION.name, 8.0, -8, -1, 49, 0, 0, 0, 0)
+					end
+					if GetSelectedPedWeapon(ped) ~= jcan then
+						GiveWeaponToPed(ped, jcan, 20, false, true)
+					end
+					DrawTimer(start, JERRY_CAN_REFUEL_TIME, 1.42, 1.475, "Refueling")
+					Wait(0)
+				end
+				ClearPedTasksImmediately(ped)
 				-- refuel --
-				TriggerServerEvent("essence:refuelWithJerryCan", exports.es_AdvancedFuel:getEssence(), GetVehicleNumberPlateText(hitHandleVehicle), GetDisplayNameFromVehicleModel(GetEntityModel(hitHandleVehicle)))
+				TriggerServerEvent("fuel:refuelWithJerryCan", GetVehicleNumberPlateText(hitHandleVehicle))
 				-- remove jerry can weapon from inventory --
 				TriggerServerEvent("usa:removeItem", wholeItem, 1)
+				TriggerEvent("interaction:equipWeapon", wholeItem, false)
 			else
 				TriggerEvent("usa:notify", "No vehicle found!")
 			end
@@ -1010,6 +1024,8 @@ function interactionMenuUse(itemName, wholeItem)
 			TriggerServerEvent("parachute:usedParachute")
 		elseif itemName == "Tent" or itemName == "Chair" or itemName == "Wood" then
 			TriggerServerEvent("camping:useItem", wholeItem)
+		elseif itemName:find("Firearm Permit") then
+			exports["usa_gunshop"]:ShowCCWTerms()
 		else
 			TriggerEvent("interaction:notify", "There is no use action for that item!")
 		end
@@ -1594,4 +1610,38 @@ function IsAreaPopulated()
 		end
 	end
 	return false
+end
+
+function DrawTimer(beginTime, duration, x, y, text)
+    if not HasStreamedTextureDictLoaded('timerbars') then
+        RequestStreamedTextureDict('timerbars')
+        while not HasStreamedTextureDictLoaded('timerbars') do
+            Citizen.Wait(0)
+        end
+    end
+
+    if GetTimeDifference(GetGameTimer(), beginTime) < duration then
+        w = (GetTimeDifference(GetGameTimer(), beginTime) * (0.085 / duration))
+    end
+
+    local correction = ((1.0 - math.floor(GetSafeZoneSize(), 2)) * 100) * 0.005
+    x, y = x - correction, y - correction
+
+    Set_2dLayer(0)
+    DrawSprite('timerbars', 'all_black_bg', x, y, 0.15, 0.0325, 0.0, 255, 255, 255, 180)
+
+    Set_2dLayer(1)
+    DrawRect(x + 0.0275, y, 0.085, 0.0125, 100, 0, 0, 180)
+
+    Set_2dLayer(2)
+    DrawRect(x - 0.015 + (w / 2), y, w, 0.0125, 150, 0, 0, 180)
+
+    SetTextColour(255, 255, 255, 180)
+    SetTextFont(0)
+    SetTextScale(0.3, 0.3)
+    SetTextCentre(true)
+    SetTextEntry('STRING')
+    AddTextComponentString(text)
+    Set_2dLayer(3)
+    DrawText(x - 0.06, y - 0.012)
 end

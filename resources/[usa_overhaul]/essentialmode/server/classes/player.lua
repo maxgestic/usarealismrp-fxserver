@@ -35,7 +35,6 @@ function CreatePlayer(source, permission_level, identifier, group, policeCharact
 	rTable.setEmsCharacter = function(character)
 		if not self.emsCharacter then self.emsCharacter = {} end
 		self.emsCharacter = character
-		print("ems character set! hash: " .. character.hash)
 	end
 
 	rTable.getEmsCharacter = function()

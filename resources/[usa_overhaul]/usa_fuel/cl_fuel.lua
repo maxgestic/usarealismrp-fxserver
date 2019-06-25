@@ -12,7 +12,7 @@ local fuelStations = {
 			{1699.52, 3271.27, 42.13},
 			{1769.85, 3239.59, 43.12},
 			{449.48, -981.07, 44.69}, -- MISSION ROW
-			{351.42, -588.21, 75.16} -- PILLBOX MEDICAL 
+			{351.42, -588.21, 75.16} -- PILLBOX MEDICAL
 		}
 	},
 	['Watercraft'] = {
@@ -65,7 +65,7 @@ mainMenu = NativeUI.CreateMenu("Fuel Station", "~b~Welcome!", 0 --[[X COORD]], 3
 _menuPool:Add(mainMenu)
 
 function createGasolineMenu(vehicleType)
-	local amountToRefuel 
+	local amountToRefuel
 	local litersToRefuel = {}
 	for i = 1, 100 - (math.floor(fuelData.fuelAmount)) do
 		table.insert(litersToRefuel, i)
@@ -320,14 +320,8 @@ function IsNearFuelStation(stationType)
 	return false
 end
 
-
-
-----------------------
----- Set up blips ----
-----------------------
-
 local BLIPS = {}
-function EnumerateBlips(type)
+function CreateMapBlips(type)
 	if type == 'Gasoline' then
 		for i = 1, #fuelStations['Gasoline'].locations do
 			local x, y, z = table.unpack(fuelStations['Gasoline'].locations[i])
@@ -391,7 +385,7 @@ TriggerServerEvent('blips:getBlips')
 RegisterNetEvent('blips:returnBlips')
 AddEventHandler('blips:returnBlips', function(blipsTable)
   if blipsTable['fuel'] then
-    EnumerateBlips('Gasoline')
+    CreateMapBlips('Gasoline')
   else
   	for i = 1, #BLIPS do
   		if BLIPS[i].type == 'Gasoline' then
@@ -402,7 +396,7 @@ AddEventHandler('blips:returnBlips', function(blipsTable)
   end
   -----------------------------------------------
   if blipsTable['planefuel'] then
-  	EnumerateBlips('Aircraft')
+  	CreateMapBlips('Aircraft')
   else
   	for i = 1, #BLIPS do
   		if BLIPS[i].type == 'Aircraft' then
@@ -413,7 +407,7 @@ AddEventHandler('blips:returnBlips', function(blipsTable)
   end
   -----------------------------------------------
   if blipsTable['boatfuel'] then
-  	EnumerateBlips('Watercraft')
+  	CreateMapBlips('Watercraft')
   else
   	for i = 1, #BLIPS do
   		if BLIPS[i].type == 'Watercraft' then
@@ -424,6 +418,67 @@ AddEventHandler('blips:returnBlips', function(blipsTable)
   end
 end)
 
------------------
------------------
------------------
+local JERRY_CAN_LOCATIONS = {
+	{x = 173.0, y = 6601.7, z = 31.8 }, -- paleto ron station
+	{x = 1695.5, y = 6419.4, z = 32.6 }, -- paleto 24/7
+	{x = 459.7, y = -990.9, z = 30.6}, -- mission row locker room
+	{x = -359.7, y = 6109.2, z = 31.4}, -- paleto FD
+	{x = -2554.6, y = 2327.1, z = 33.1}, -- route 1 / route 68 gas station
+	{x = 1691.6, y = 4930.3, z = 42.1}, -- grapeseed gas tation
+	{x = 2005.9, y = 3781.4, z = 32.2}, -- sandy shores gas station
+	{x = 180.1, y = 6602.9, z = 31.8}, -- paleto ron station 2
+	{x = 187.0, y = 6604.3, z = 31.8}, -- paleto ron station 3
+	{x = 1204.6, y = 2663.4, z = 37.8}, -- route 68
+	{x = 1039.3, y = 2668.0, z = 39.5}, -- route 68
+	{x = 2681.6, y = 3267.5, z = 55.4}, -- senora fwy 1
+	{x = 261.8, y = 2598.4, z = 44.7}, -- route 68
+	{x = 45.7, y = 2781.7, z = 57.8}, -- route 68
+	{x = 1182.9, y = -329.7, z = 69.2}, -- LS 1
+	{x = 620.8, y = 269.2, z = 103.1} -- LS 2
+}
+
+local JERRY_CAN_HASH = -962731009
+
+local JERRY_CAN_KEY = 38 -- "E"
+
+Citizen.CreateThread(function()
+	while true do
+		local me = GetPlayerPed(-1)
+		local mycoords = GetEntityCoords(me)
+		-- picking up jerry can --
+		for i = 1, #JERRY_CAN_LOCATIONS do
+			if Vdist(mycoords.x, mycoords.y, mycoords.z, JERRY_CAN_LOCATIONS[i].x, JERRY_CAN_LOCATIONS[i].y, JERRY_CAN_LOCATIONS[i].z) < 4.0 then
+				if IsControlJustPressed(1, JERRY_CAN_KEY) then
+					if IsPickupWithinRadius(JERRY_CAN_HASH, JERRY_CAN_LOCATIONS[i].x, JERRY_CAN_LOCATIONS[i].y, JERRY_CAN_LOCATIONS[i].z, 4.0) and not IsPedInAnyVehicle(me, true) then
+						-- give jerry can item in inventory for use --
+						--print("giving jerry can to id: " .. GetPlayerServerId(PlayerId()))
+						local jerry_can = {
+							name = "Jerry Can",
+							quantity = 1,
+							legality = "legal",
+							type = "weapon",
+							hash = 883325847,
+							weight = 10.0,
+							image = "https://i.dlpng.com/static/png/85649_thumb.png"
+						}
+						TriggerServerEvent("usa:insertItem", jerry_can, jerry_can.quantity, GetPlayerServerId(PlayerId()))
+						SetPedAmmo(me, 883325847, 1000)
+					end
+				end
+			end
+		end
+		Wait(0)
+	end
+end)
+
+function CreateJerryCanPickups()
+	for i = 1, #JERRY_CAN_LOCATIONS do
+		local can = JERRY_CAN_LOCATIONS[i]
+		local pickup = CreatePickupRotate(JERRY_CAN_HASH, can.x, can.y, can.z - 0.5, 0, 0, 0, 512, 1, 1, 1, JERRY_CAN_HASH)
+    SetPickupRegenerationTime(pickup, 180)
+	end
+end
+
+Citizen.CreateThread(function()
+	CreateJerryCanPickups()
+end)

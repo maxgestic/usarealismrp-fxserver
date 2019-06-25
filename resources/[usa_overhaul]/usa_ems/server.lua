@@ -3,14 +3,13 @@ AddEventHandler("emsstation2:loadOutfit", function(slot)
   local user = exports["essentialmode"]:getPlayerFromId(source)
   local char = exports["usa-characters"]:GetCharacter(source)
   local character = user.getEmsCharacter()
-  TriggerClientEvent("emsstation2:setCharacter", source, character[slot])
+  TriggerClientEvent("emsstation2:setCharacter", source, character[tostring(slot)])
   if char.get('job') ~= 'ems' then
     char.set("job", "ems")
     TriggerEvent('job:sendNewLog', source, 'ems', true)
   end
   TriggerClientEvent('interaction:setPlayersJob', source, 'ems')
   TriggerEvent("eblips:add", {name = char.getName(), src = source, color = 1})
-  --end)
 end)
 
 RegisterServerEvent("emsstation2:saveOutfit")
@@ -18,7 +17,7 @@ AddEventHandler("emsstation2:saveOutfit", function(character, slot)
   local user = exports["essentialmode"]:getPlayerFromId(source)
   local job = exports["usa-characters"]:GetCharacterField(source, "job")
   local emsCharacter = user.getEmsCharacter()
-  emsCharacter[slot] = character
+  emsCharacter[tostring(slot)] = character
   if job == "ems" then
     user.setEmsCharacter(emsCharacter)
     TriggerClientEvent("usa:notify", source, "Outfit in slot "..slot.." has been saved.")

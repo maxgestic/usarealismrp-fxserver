@@ -71,7 +71,7 @@ bone_effects = { -- ORDER MATTERS - each index is subject to each stage
 }
 
 injuries = { -- ensure this is the same as sv_injury.lua
-    [2725352035] = {type = 'blunt', bleed = 7200, string = 'Fists', treatableWithBandage = true, treatmentPrice = 50, dropEvidence = 0.5}, -- WEAPON_UNARMED
+    --[2725352035] = {type = 'blunt', bleed = 7200, string = 'Fists', treatableWithBandage = true, treatmentPrice = 50, dropEvidence = 0.5}, -- WEAPON_UNARMED
     [4194021054] = {type = 'laceration', bleed = 1500, string = 'Animal Attack', treatableWithBandage = true, treatmentPrice = 80, dropEvidence = 0.9}, -- WEAPON_ANIMAL
     [148160082] = {type = 'laceration', bleed = 900, string = 'Animal Attack', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 0.9}, -- WEAPON_COUGAR
     [2578778090] = {type = 'laceration', bleed = 480, string = 'Knife Puncture', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 1.0}, -- WEAPON_KNIFE

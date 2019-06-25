@@ -7,6 +7,8 @@ AddEventHandler('onClientMapStart', function()
 	exports.spawnmanager:setAutoSpawn(false)
 end)
 
+local RESPAWN_WAIT_TIME = 600 * 1000
+
 local diedTime = nil
 
 local isCarried = false
@@ -138,7 +140,7 @@ Citizen.CreateThread(function()
 			--SetPlayerInvincible(ped, true) causes tens of anticheese flags lol
 			SetEntityHealth(ped, 1)
 			if not jailed then
-				local waitPeriod = diedTime + (300 * 1000) -- how long you must wait (5 mins)
+				local waitPeriod = diedTime + (RESPAWN_WAIT_TIME) -- how long you must wait (5 mins)
 				if(GetGameTimer() < waitPeriod)then
 					local seconds = math.ceil((waitPeriod - GetGameTimer()) / 1000)
 					local minutes = math.floor((seconds / 60))

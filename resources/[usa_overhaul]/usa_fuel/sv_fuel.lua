@@ -19,7 +19,7 @@ AddEventHandler('fuel:returnFuelAmount', function(vehiclePlate)
 			generatedAmount = generatedAmount + 10
 		end
 		vehicleGas[vehiclePlate] = generatedAmount
-		print('FUEL: Generating a random fuel amount for vehicle: '..generatedAmount)
+		--print('FUEL: Generating a random fuel amount for vehicle: '..generatedAmount)
 		TriggerClientEvent('fuel:updateFuelAmount', source, vehicleGas[vehiclePlate])
 	end
 end)
@@ -44,6 +44,25 @@ AddEventHandler('fuel:purchaseFuel', function(amount, type)
 		else
 			char.removeMoney(toPay)
 			TriggerClientEvent("fuel:refuelAmount", source, amount)
+		end
+	end
+end)
+
+RegisterServerEvent("fuel:refuelWithJerryCan")
+AddEventHandler("fuel:refuelWithJerryCan", function(plate)
+	local new_amount = 75
+	local _source = source
+	if plate then
+		if vehicleGas[plate] then
+			if vehicleGas[plate] < new_amount then
+				vehicleGas[plate] = new_amount -- set to 75% of a full tank
+				TriggerClientEvent("usa:notify", _source, "Refuel complete!")
+			else
+				TriggerClientEvent("usa:notify", _source, "Tank already filled!")
+			end
+		else
+			vehicleGas[plate] = new_amount
+			TriggerClientEvent("usa:notify", _source, "Refuel complete!")
 		end
 	end
 end)

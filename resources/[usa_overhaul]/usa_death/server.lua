@@ -1,12 +1,17 @@
 local deathLog = {}
 
+local RESPAWN_FEE = 1500
+
 RegisterServerEvent("death:respawn")
 AddEventHandler("death:respawn", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get("job")
 	if job ~= "sheriff" and job ~= "corrections" and job ~= "ems" then
 		char.removeWeapons()
-		char.set("money", 0)
+		local m = char.get("money")
+		if m >= RESPAWN_FEE then
+			char.removeMoney(RESPAWN_FEE)
+		end
 	end
 
 	-- find non cell phone items to delete --
@@ -26,6 +31,7 @@ AddEventHandler("death:respawn", function()
 	TriggerClientEvent("crim:untieHands", source, source)
 	TriggerClientEvent("crim:blindfold", source, false, true)
 	TriggerEvent("usa_rp:checkJailedStatusOnPlayerJoin", source)
+	TriggerClientEvent("evidence:updateData", source, "levelBAC", 0.0)
 end)
 
 RegisterServerEvent('death:revivePerson')
