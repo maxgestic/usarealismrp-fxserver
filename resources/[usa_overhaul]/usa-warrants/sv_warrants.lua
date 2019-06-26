@@ -1,52 +1,21 @@
-local WARRANTS = {}
-
---[[
-	first_name,
-	last_name,
-	dob,
-	description,
-	reason,
-	isFelony,
-	notes,
-	timestamp,
-	author
-]]
-
----------------------------
--- LOAD WARRANTS FROM DB --
----------------------------
-function loadWarrants()
+function getWarrants(cb)
+	local warrants = {}
 	PerformHttpRequest("http://127.0.0.1:5984/warrants/_all_docs?include_docs=true" --[[ string ]], function(err, text, headers)
-		--print("finished getting warrants...")
-		--print("error code: " .. err)
 		local response = json.decode(text)
 		if response.rows then
-			WARRANTS = {} -- reset table
-			--print("#(response.rows) = " .. #(response.rows))
-			-- insert all warrants from 'warrants' db into lua table
 			for i = 1, #(response.rows) do
-				table.insert(WARRANTS, response.rows[i].doc)
+				table.insert(warrants, response.rows[i].doc)
 			end
-			--print("finished loading warrants...")
-			--print("# of warrants: " .. #WARRANTS)
+			cb(warrants)
 		end
 	end, "GET", "", { ["Content-Type"] = 'application/json' })
 end
 
--- PERFORM FIRST TIME DB CHECK --
-exports["globals"]:PerformDBCheck("usa-warrants", "warrants", loadWarrants)
-
-function getWarrants()
-	return WARRANTS
-end
-
 function createWarrant(src, warrant, notify_with_nui)
-	--- save warrant
-	table.insert(WARRANTS, warrant)
 	-- send warrant to discord:
 		-- send discord message
-		local desc = "\n**Name:** " .. warrant.first_name .. " " .. warrant.last_name .. "\n**Notes:** " .. warrant.notes ..  "\n**Officer:** " .. warrant.created_by .. "\n**Timestamp:** ".. warrant.timestamp
-		local url = 'https://discordapp.com/api/webhooks/409961124780310528/mjiYli8X1jr9Uhwtf_QdbrkvWLcwRtuiphmCGfdVUoqAtZghi2FNOMe6dfNbaYZnr0yu'
+	local desc = "\n**Name:** " .. warrant.first_name .. " " .. warrant.last_name .. "\n**Notes:** " .. warrant.notes ..  "\n**Officer:** " .. warrant.created_by .. "\n**Timestamp:** ".. warrant.timestamp
+	local url = 'https://discordapp.com/api/webhooks/409961124780310528/mjiYli8X1jr9Uhwtf_QdbrkvWLcwRtuiphmCGfdVUoqAtZghi2FNOMe6dfNbaYZnr0yu'
 			PerformHttpRequest(url, function(err, text, headers)
 				if text then
 					print(text)
@@ -77,30 +46,9 @@ function createWarrant(src, warrant, notify_with_nui)
 		        }
 				TriggerClientEvent("mdt:sendNUIMessage", src, msg)
 			end
-			-- refresh warrants:
-			loadWarrants()
 		end)
 	end)
 end
-
---------------------------------------------------------------------
--- REMOVE ALL OUTSTANDING WARRANTS (when being booked into prison) --
----------------------------------------------------------------------
-RegisterServerEvent("warrants:removeAnyActiveWarrants")
-AddEventHandler("warrants:removeAnyActiveWarrants", function(name)
-	name = string.lower(name)
-	for i = #WARRANTS, 1, -1 do
-		local warrant = WARRANTS[i]
-		local warrant_name = string.lower(warrant.first_name .. " " .. warrant.last_name)
-		if string.find(warrant_name, name) then
-			-- match found, remove warrant
-			-- remove from DB:
-			deleteWarrant("warrants", warrant._id, warrant._rev)
-			table.remove(WARRANTS, i)
-		end
-	end
-end)
-
 
 function deleteWarrant(db, id, rev)
 	-- send DELETE http request
@@ -108,8 +56,26 @@ function deleteWarrant(db, id, rev)
 		if err == 0 then
 			RconPrint("\nrText = " .. rText)
 			RconPrint("\nerr = " .. err)
-		else
-			loadWarrants() -- refresh warrants
 		end
 	end, "DELETE", "", {["Content-Type"] = 'application/json'})
 end
+
+RegisterServerEvent("warrants:removeAnyActiveWarrants")
+AddEventHandler("warrants:removeAnyActiveWarrants", function(name)
+	TriggerEvent("es:exposeDBFunctions", function(db)
+		local query = {
+			["first_name"] = name.first,
+			["last_name"] = name.last
+		}
+		db.getDocumentsByRow("warrants", query, function(docs)
+			if docs then
+				for i = 1, #docs do
+					deleteWarrant("warrants", docs[i]._id, docs[i]._rev)
+				end
+			end
+		end)
+	end)
+end)
+
+-- PERFORM FIRST TIME DB CHECK --
+exports["globals"]:PerformDBCheck("usa-warrants", "warrants")

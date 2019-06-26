@@ -521,8 +521,10 @@ end)
 
 RegisterServerEvent("mdt:fetchWarrants")
 AddEventHandler("mdt:fetchWarrants", function()
-	local warrants = exports["usa-warrants"]:getWarrants()
-	TriggerClientEvent("mdt:fetchWarrants", source, warrants)
+	local usource = source
+	exports["usa-warrants"]:getWarrants(function(warrants)
+		TriggerClientEvent("mdt:fetchWarrants", usource, warrants)
+	end)
 end)
 
 RegisterServerEvent("mdt:createWarrant")

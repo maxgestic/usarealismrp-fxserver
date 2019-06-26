@@ -46,7 +46,6 @@ const mdtApp = new Vue({
         new_warrant: {
             first_name: "",
             last_name: "",
-            last_name: "",
             charges: "",
             suspect_description:  "",
             police_report_number: ""
@@ -58,7 +57,6 @@ const mdtApp = new Vue({
         },
         current_warrant: {
             first_name: "",
-            last_name: "",
             last_name: "",
             charges: "",
             suspect_description:  "",

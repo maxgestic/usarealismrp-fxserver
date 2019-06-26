@@ -12,6 +12,10 @@ local isCarrying = false
 
 RegisterNetEvent("drag:attemptToDragNearest")
 AddEventHandler('drag:attemptToDragNearest', function()
+	if exports["usa_rp2"]:areHandsTied() then
+		exports.globals:notify("Hands are tied! Can't drag!")
+		return
+	end
 	if not isDragging and not isDragged and not isCarrying and not isCarried then
 		TriggerEvent("usa:getClosestPlayer", 1.65, function(player)
     		if player then
@@ -31,19 +35,22 @@ end)
 
 RegisterNetEvent('drag:attemptToCarryNearest')
 AddEventHandler('drag:attemptToCarryNearest', function()
+	if exports["usa_rp2"]:areHandsTied() then
+		exports.globals:notify("Hands are tied! Can't drag!")
+		return
+	end
 	if not isDragging and not isDragged and not isCarrying and not isCarried then
 		TriggerEvent("usa:getClosestPlayer", 1.65, function(player)
-    		if player then
-	        	local closestPed = GetPlayerPed(GetPlayerFromServerId(player.id))
+			if player then
+				local closestPed = GetPlayerPed(GetPlayerFromServerId(player.id))
 				if player.id ~= 0 and not IsPedInAnyVehicle(PlayerPedId()) and IsEntityVisible(closestPed) then
 					TriggerServerEvent('drag:sendCarryPlayer', player.id)
-					--print('sent??')
 					sourceCarried = player.id
 				end
 			end
-        end)
-    elseif isCarrying and sourceCarried then
-    	TriggerServerEvent('drag:sendCarryPlayer', sourceCarried)
+		end)
+	elseif isCarrying and sourceCarried then
+		TriggerServerEvent('drag:sendCarryPlayer', sourceCarried)
 		sourceCarried = nil
 	end
 end)
