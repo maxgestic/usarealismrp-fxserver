@@ -9,10 +9,6 @@ local playing_anim = nil
 local left_hand = 60309
 local right_hand = 58868
 
-local player = {
-	BAC = 0.00
-}
-
 local playerPed, targetPed
 local playerPedCoords, targetPedCoords, offsetCoords
 local closestPed = nil
@@ -440,7 +436,7 @@ RegisterNUICallback('playEmote', function(data, cb)
 									name = scenarios[i].animname,
 									flag = 7
 								}
-							elseif string.find(scenarioName, "cpr") or string.find(scenarioName, "cross arms") then
+							elseif string.find(scenarioName, "cpr") or string.find(scenarioName, "cross arms") or string.find(scenarioName, "typing") or string.find(scenarioName, "gang 1") or string.find(scenarioName, "gang 2") then
 								--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
 								--TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, 5, 1, 1000, 31, 0, 0, 0, 0)
 								TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 53, 0, 0, 0, 0)
@@ -569,7 +565,6 @@ AddEventHandler("emotes:playEmote", function(scenarioName)
 				return
 			end
 			for i = 1, #scenarios do
-				--if string.find(scenarios[i].name, scenarioName) then
 				if scenarioName == string.lower(scenarios[i].name) then
 					if ped then
 						if scenarios[i].type ~= "emote" then
@@ -577,15 +572,13 @@ AddEventHandler("emotes:playEmote", function(scenarioName)
 							playing_scenario = true
 						else
 							if string.find(scenarioName, "shag") or string.find(scenarioName, "dance") then
-								--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true, flag)
-								--TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, 5, 1, 1000, 7, 0, 0, 0, 0)
 								TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 7, 0, 0, 0, 0)
 								playing_anim = {
 									dict = scenarios[i].dict,
 									name = scenarios[i].animname,
 									flag = 7
 								}
-							elseif string.find(scenarioName, "cpr") or string.find(scenarioName, "cross arms") then
+							elseif string.find(scenarioName, "cpr") or string.find(scenarioName, "cross arms") or string.find(scenarioName, "typing") or string.find(scenarioName, "gang 1") or string.find(scenarioName, "gang 2") then
 								--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
 								--TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, 5, 1, 1000, 31, 0, 0, 0, 0)
 								TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 53, 0, 0, 0, 0)
@@ -1031,28 +1024,6 @@ function interactionMenuUse(itemName, wholeItem)
 		end
 	end)
 end
-
-
---[[ not used ?
-Citizen.CreateThread(function()
-	local timer = 600000
-	local decrement_amount = 0.03
-	while true do
-		if player.BAC > 0.00 then
-			local new_BAC = player.BAC - decrement_amount
-			if new_BAC >= 0.00 then
-				--print("decrementing BAC! now at: " .. new_BAC)
-				player.BAC = new_BAC
-			else
-				player.BAC = 0.00
-			end
-		else
-			--print("player BAC was not >= 0.00")
-		end
-		Wait(timer) -- every x seconds, decrement player.BAC
-	end
-end)
---]]
 
 RegisterNetEvent("interaction:equipArmor")
 AddEventHandler("interaction:equipArmor", function()
