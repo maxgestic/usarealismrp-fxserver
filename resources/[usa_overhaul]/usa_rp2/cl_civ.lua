@@ -4,6 +4,10 @@ local blindfolded = false
 
 local bag = nil;
 
+function areHandsTied()
+  return hands_tied
+end
+
 ---------------
 -- blindfold --
 ---------------
@@ -586,15 +590,15 @@ function loadAnimDict( dict )
         RequestAnimDict( dict )
         Citizen.Wait( 5 )
     end
-end 
+end
 
 RegisterNetEvent( 'KneelHU' )
 AddEventHandler( 'KneelHU', function()
     local player = GetPlayerPed( -1 )
-	if ( DoesEntityExist( player ) and not IsEntityDead( player )) then 
+	if ( DoesEntityExist( player ) and not IsEntityDead( player )) then
         loadAnimDict( "random@arrests" )
 		loadAnimDict( "random@arrests@busted" )
-		if ( IsEntityPlayingAnim( player, "random@arrests@busted", "idle_a", 3 ) ) then 
+		if ( IsEntityPlayingAnim( player, "random@arrests@busted", "idle_a", 3 ) ) then
 			TaskPlayAnim( player, "random@arrests@busted", "exit", 8.0, 1.0, -1, 2, 0, 0, 0, 0 )
 			Wait (3000)
             TaskPlayAnim( player, "random@arrests", "kneeling_arrest_get_up", 8.0, 1.0, -1, 128, 0, 0, 0, 0 )
@@ -606,7 +610,7 @@ AddEventHandler( 'KneelHU', function()
 			TaskPlayAnim( player, "random@arrests@busted", "enter", 8.0, 1.0, -1, 2, 0, 0, 0, 0 )
 			Wait (1000)
 			TaskPlayAnim( player, "random@arrests@busted", "idle_a", 8.0, 1.0, -1, 9, 0, 0, 0, 0 )
-        end     
+        end
     end
 end )
 
@@ -710,8 +714,8 @@ AddEventHandler("camera:selfie", function()
     DestroyMobilePhone()
     phone = false
     CellCamActivate(false, false)
-    if firstTime == true then 
-      firstTime = false 
+    if firstTime == true then
+      firstTime = false
       Citizen.Wait(2500)
       displayDoneMission = true
     end
@@ -724,7 +728,7 @@ Citizen.CreateThread(function()
 DestroyMobilePhone()
   while true do
     Citizen.Wait(0)
-      
+
     if phone == true then
       HideHudComponentThisFrame(7)
       HideHudComponentThisFrame(8)
@@ -733,7 +737,7 @@ DestroyMobilePhone()
       HideHudComponentThisFrame(19)
       HideHudAndRadarThisFrame()
     end
-      
+
   end
 end)
 
