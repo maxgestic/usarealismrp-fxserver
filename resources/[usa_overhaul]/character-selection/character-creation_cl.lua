@@ -179,7 +179,7 @@ RegisterNUICallback('select-character', function(data, cb)
 			}
 		elseif data.spawn:find("Property") then
 			data.doSpawnAtProperty = true
-			spawn_coords_closed_menu = data.spawn -- need to change  to data.spawn.coords?
+			spawn_coords_closed_menu = nil -- need to change  to data.spawn.coords?
 		end
 	end
 	toggleMenu(false)
@@ -253,10 +253,12 @@ function SpawnCharacter()
 	if not IsPlayerSwitchInProgress() then
   	SwitchOutPlayer(ped, 0, 1)
 	end
-	RequestCollisionAtCoord(spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z)
-	SetEntityCoords(ped, spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z, 0.0, 0, 0, 1)
-	if spawn_coords_closed_menu.heading then
-		SetEntityHeading(ped, spawn_coords_closed_menu.heading)
+	if spawn_coords_closed_menu then
+		RequestCollisionAtCoord(spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z)
+		SetEntityCoords(ped, spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z, 0.0, 0, 0, 1)
+		if spawn_coords_closed_menu.heading then
+			SetEntityHeading(ped, spawn_coords_closed_menu.heading)
+		end
 	end
 	FreezeEntityPosition(ped, true)
 	while not HasCollisionLoadedAroundEntity(ped) do
