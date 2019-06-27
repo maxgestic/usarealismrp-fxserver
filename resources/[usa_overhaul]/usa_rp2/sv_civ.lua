@@ -112,17 +112,27 @@ end, {
 RegisterServerEvent("crim:foundPlayerToTie")
 AddEventHandler("crim:foundPlayerToTie", function(id, tying_up, x, y, z, heading)
 	if tying_up then
-		local char = exports["usa-characters"]:GetCharacter(source)
-		if char.hasItem(SETTINGS["tie"].required_item_name) then
-			char.removeItem(SETTINGS["tie"].required_item_name, 1)
-			print("USARP2: Tying hands of "..GetPlayerName(id).."["..GetPlayerIdentifier(id).."], tied by "..GetPlayerName(source).."["..GetPlayerIdentifier(source).."]!")
-			TriggerClientEvent("crim:tieHands", id, x, y, z, heading)
-			TriggerClientEvent('crim:tyingHandsAnim', source)
-		else
-			TriggerClientEvent("usa:notify", source, "You need rope to do that!")
-		end
+		TriggerClientEvent("crim:areHandsUp", id, source, id, "tie", x, y, z, heading)
 	else
 		TriggerClientEvent("crim:untieHands", id, source, x, y, z, heading)
+		TriggerClientEvent('crim:tyingHandsAnim', source)
+	end
+end)
+
+RegisterServerEvent("crim:continueTyingHands")
+AddEventHandler("crim:continueTyingHands", function(fromSource, target, areHandsUp, x, y, z, heading)
+	if areHandsUp then
+		local char = exports["usa-characters"]:GetCharacter(fromSource)
+		if char.hasItem(SETTINGS["tie"].required_item_name) then
+			char.removeItem(SETTINGS["tie"].required_item_name, 1)
+			print("USARP2: Tying hands of "..GetPlayerName(target).."["..GetPlayerIdentifier(target).."], tied by "..GetPlayerName(fromSource).."["..GetPlayerIdentifier(fromSource).."]!")
+			TriggerClientEvent("crim:tieHands", target, x, y, z, heading)
+			TriggerClientEvent('crim:tyingHandsAnim', fromSource)
+		else
+			TriggerClientEvent("usa:notify", fromSource, "You need rope to do that!")
+		end
+	else
+		TriggerClientEvent("usa:notify", fromSource, "Person's hands are not up!")
 	end
 end)
 
@@ -145,9 +155,9 @@ AddEventHandler("crim:continueRobbing", function(continue_robbing, from_id, targ
 		local amount_stolen = victim_char.get("money")
 		if amount_stolen >= 0 then
 			victim_char.removeMoney(amount_stolen)
-			print("USARP2: Amount of money [" .. amount_stolen .. "] stolen from person robbed!")
 			local robber = exports["usa-characters"]:GetCharacter(from_id)
 			robber.giveMoney(amount_stolen)
+			TriggerClientEvent("usa:notify", from_id, "You've taken $" .. comma_value(amount_stolen) .. "!")
 		else
 			TriggerClientEvent("usa:notify", from_id, "Person has no money on them!")
 		end
@@ -460,3 +470,14 @@ end, {help = "Get down on your knees and put your hands on your head / get off k
 TriggerEvent('es:addCommand', 'surrender', function(source, args, char)
 	TriggerClientEvent('KneelHU', source, {})
 end, {help = "Get down on your knees and put your hands on your head / get off knees"})
+
+function comma_value(amount)
+	local formatted = amount
+	while true do
+		formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+		if (k==0) then
+			break
+		end
+	end
+	return formatted
+end

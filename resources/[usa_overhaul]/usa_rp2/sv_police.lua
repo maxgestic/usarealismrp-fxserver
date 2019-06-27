@@ -69,7 +69,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'repair', { "police", "sheriff", "dai" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'repair', { "police", "sheriff", "ems", "dai" }, function(source, args, char)
 	TriggerClientEvent("usa:repairVeh", source)
 end, {
 	help = "Repair the vehicle you're facing."

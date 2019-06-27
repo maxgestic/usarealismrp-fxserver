@@ -239,7 +239,7 @@ function IsNearBank()
   local plyCoords = GetEntityCoords(ply, 0)
   for _, item in pairs(banks) do
     local distance = Vdist(item.x, item.y, item.z,  plyCoords["x"], plyCoords["y"], plyCoords["z"])
-    if(distance <= 1) then
+    if distance <= 4 then
       return true
     end
   end

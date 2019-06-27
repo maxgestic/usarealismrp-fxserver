@@ -143,7 +143,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		if IsControlPressed(0, 19) and IsControlJustPressed(0, 47) then
-			if not isDragging and not isDragged and not isCarrying and not isCarried then
+			if not isDragging and not isDragged and not isCarrying and not isCarried and not exports["usa_rp2"]:areHandsTied() then
 				TriggerEvent("usa:getClosestPlayer", 1.65, function(player)
 		    		if player then
 			        	local closestPed = GetPlayerPed(GetPlayerFromServerId(player.id))

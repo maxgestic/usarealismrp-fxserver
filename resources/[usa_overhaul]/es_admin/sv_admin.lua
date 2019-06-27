@@ -115,7 +115,6 @@ TriggerEvent('es:addGroupCommand', 'staff', 'mod', function(source, args, char)
 					local playerGroup = player.getGroup()
 					if (playerGroup == "owner" or playerGroup == "superadmin" or playerGroup == "admin" or playerGroup == "mod") and NotifyStaff(source) then
 						TriggerClientEvent("chatMessage", id, "", {}, "^2^*[STAFF]^0^r ".. GetPlayerName(staffId) .." [#"..staffId.."] ^r^2 MESSAGE:^0 " .. message)
-						--TriggerClientEvent("chatMessage", id, "", {}, "^2MESSAGE:^0 " .. message)
 					end
 				end
 			end

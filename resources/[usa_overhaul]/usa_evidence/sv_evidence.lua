@@ -177,7 +177,7 @@ end)
 RegisterServerEvent('evidence:makeObservations')
 AddEventHandler('evidence:makeObservations', function(targetSource)
 	local job = exports["usa-characters"]:GetCharacterField(source, "job")
-	if job == 'police' or job == 'sheriff' then
+	if job == 'police' or job == 'sheriff' or job == "ems" then
 		TriggerClientEvent('evidence:getObservations', targetSource, source)
 	end
 end)

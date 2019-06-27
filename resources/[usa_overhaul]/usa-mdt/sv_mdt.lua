@@ -449,45 +449,41 @@ end)
 
 RegisterServerEvent('mdt:checkFlags')
 AddEventHandler('mdt:checkFlags', function(vehPlate, vehModel)
-	print("vehplate: " .. vehPlate)
-	local char = exports["usa-characters"]:GetCharacter(source)
+	local _source = source
+	local char = exports["usa-characters"]:GetCharacter(_source)
 	if char.get('job') == 'sheriff' then
-		local warrants = exports["usa-warrants"]:getWarrants()
-		local _source = source
-
-		PerformHttpRequest("http://127.0.0.1:5984/bolos/_all_docs?include_docs=true" --[[ string ]], function(err, text, headers)
-			local response = json.decode(text)
-			if response.rows then
-				-- insert all warrants from 'bolos' db into lua table
-				for i = 1, #(response.rows) do
-					if string.find(response.rows[i].doc.description:lower(), vehPlate:lower()) then
-						TriggerClientEvent('chatMessage', _source, '^1^*[ALPR HIT]^r^0 '..vehModel..' with plate '..vehPlate..' has an active bolo.')
+		exports["usa-warrants"]:getWarrants(function(warrants)
+			PerformHttpRequest("http://127.0.0.1:5984/bolos/_all_docs?include_docs=true" --[[ string ]], function(err, text, headers)
+				local response = json.decode(text)
+				if response.rows then
+					-- insert all warrants from 'bolos' db into lua table
+					for i = 1, #(response.rows) do
+						if string.find(response.rows[i].doc.description:lower(), vehPlate:lower()) then
+							TriggerClientEvent('chatMessage', _source, '^1^*[ALPR HIT]^r^0 '..vehModel..' with plate '..vehPlate..' has an active bolo.')
+							TriggerClientEvent('speedcam:lockCam', _source)
+							return
+						end
+					end
+				end
+			end, "GET", "", { ["Content-Type"] = 'application/json' })
+			for i = 1, #warrants do
+				if string.find(warrants[i].notes:lower(), vehPlate:lower()) then
+					TriggerClientEvent('chatMessage', _source, '^1^*[ALPR HIT]^r^0 '..vehModel..' with plate '..vehPlate..' has an active warrant.')
+					TriggerClientEvent('speedcam:lockCam', _source)
+					return
+				end
+			end
+			for veh = 1, #tempVehicles do
+				if tempVehicles[veh].plate:lower() == vehPlate:lower() then
+					if tempVehicles[veh].flags then
+						TriggerClientEvent('chatMessage', _source, '^1^*[ALPR HIT]^r^0 '..vehModel..' with plate '..vehPlate..' has vehicle flags: '..tempVehicles[veh].flags..', registered to '..tempVehicles[veh].registered_owner..'.')
 						TriggerClientEvent('speedcam:lockCam', _source)
 						return
 					end
 				end
 			end
-		end, "GET", "", { ["Content-Type"] = 'application/json' })
-
-		for i = 1, #warrants do
-			if string.find(warrants[i].notes:lower(), vehPlate:lower()) then
-				TriggerClientEvent('chatMessage', source, '^1^*[ALPR HIT]^r^0 '..vehModel..' with plate '..vehPlate..' has an active warrant.')
-				TriggerClientEvent('speedcam:lockCam', source)
-				return
-			end
-		end
-
-		for veh = 1, #tempVehicles do
-			if tempVehicles[veh].plate:lower() == vehPlate:lower() then
-				if tempVehicles[veh].flags then
-					TriggerClientEvent('chatMessage', source, '^1^*[ALPR HIT]^r^0 '..vehModel..' with plate '..vehPlate..' has vehicle flags: '..tempVehicles[veh].flags..', registered to '..tempVehicles[veh].registered_owner..'.')
-					TriggerClientEvent('speedcam:lockCam', source)
-					return
-				end
-			end
-		end
+		end)
 	end
-
 end)
 
 RegisterServerEvent('mdt:addTempVehicle')

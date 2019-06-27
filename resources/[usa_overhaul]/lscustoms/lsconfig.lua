@@ -410,139 +410,139 @@ LSC_Config.prices = {
 
 ----------Liveries--------
 	[48] = {
-		startprice = 15000,
-		increaseby = 2500
+		startprice = 6000,
+		increaseby = 1000
 	},
 
 ----------Windows--------
 	[46] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 3000,
+		increaseby = 750
 	},
 
 ----------Tank--------
 	[45] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 3000,
+		increaseby = 750
 	},
 
 ----------Trim--------
 	[44] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 3000,
+		increaseby = 750
 	},
 
 ----------Aerials--------
 	[43] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 3000,
+		increaseby = 750
 	},
 
 ----------Arch cover--------
 	[42] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 3000,
+		increaseby = 750
 	},
 
 ----------Struts--------
 	[41] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 3000,
+		increaseby = 750
 	},
 
 ----------Air filter--------
 	[40] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 3000,
+		increaseby = 750
 	},
 
 ----------Engine block--------
 	[39] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 3000,
+		increaseby = 750
 	},
 
 ----------Hydraulics--------
 	[38] = {
-		startprice = 15000,
-		increaseby = 2500
+		startprice = 8000,
+		increaseby = 1500
 	},
 
 ----------Trunk--------
 	[37] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 3000,
+		increaseby = 750
 	},
 
 ----------Speakers--------
 	[36] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 3000,
+		increaseby = 750
 	},
 
 ----------Plaques--------
 	[35] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 3000,
+		increaseby = 750
 	},
 
 ----------Shift leavers--------
 	[34] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 1000,
+		increaseby = 250
 	},
 
 ----------Steeringwheel--------
 	[33] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 1500,
+		increaseby = 450
 	},
 
 ----------Seats--------
 	[32] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 2000,
+		increaseby = 550
 	},
 
 ----------Door speaker--------
 	[31] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 2000,
+		increaseby = 550
 	},
 
 ----------Dial--------
 	[30] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 3000,
+		increaseby = 750
 	},
 ----------Dashboard--------
 	[29] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 3000,
+		increaseby = 750
 	},
 
 ----------Ornaments--------
 	[28] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 1000,
+		increaseby = 350
 	},
 
 ----------Trim--------
 	[27] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 3000,
+		increaseby = 750
 	},
 
 ----------Vanity plates--------
 	[26] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 3000,
+		increaseby = 750
 	},
 
 ----------Plate holder--------
 	[25] = {
-		startprice = 5000,
-		increaseby = 1250
+		startprice = 1000,
+		increaseby = 250
 	},
 
 ---------Headlights---------
@@ -554,7 +554,7 @@ LSC_Config.prices = {
 ----------Turbo---------
 	[18] = {
 		{ name = "None", mod = 0, price = 0},
-		{ name = "Turbo Tuning", mod = 1, price = 15000},
+		{ name = "Turbo Tuning", mod = 1, price = 10000},
 	},
 
 -----------Armor-------------
@@ -570,67 +570,67 @@ LSC_Config.prices = {
 	[15] = {
 		{name = "Lowered Suspension",mod = 0, price = 1000},
 		{name = "Street Suspension",mod = 1, price = 2000},
-		{name = "Sport Suspension",mod = 2, price = 3500},
+		{name = "Sport Suspension",mod = 2, price = 3000},
 		{name = "Competition Suspension",mod = 3, price = 4000},
 	},
 
 -----------Horn----------
 	[14] = {
-		{name = "Truck Horn", mod = 0, price = 1625},
-		{name = "Clown Horn", mod = 2, price = 6500},
-		{name = "Musical Horn 1", mod = 3, price = 11375},
-		{name = "Musical Horn 2", mod = 4, price = 11375},
-		{name = "Musical Horn 3", mod = 5, price = 11375},
-		{name = "Musical Horn 4", mod = 6, price = 11375},
-		{name = "Musical Horn 5", mod = 7, price = 11375},
-		{name = "Sadtrombone Horn", mod = 8, price = 11375},
-		{name = "Calssical Horn 1", mod = 9, price = 11375},
-		{name = "Calssical Horn 2", mod = 10, price = 11375},
-		{name = "Calssical Horn 3", mod = 11, price = 11375},
-		{name = "Calssical Horn 4", mod = 12, price = 11375},
-		{name = "Calssical Horn 5", mod = 13, price = 11375},
-		{name = "Calssical Horn 6", mod = 14, price = 11375},
-		{name = "Calssical Horn 7", mod = 15, price = 11375},
-		{name = "Scaledo Horn", mod = 16, price = 11375},
-		{name = "Scalere Horn", mod = 17, price = 11375},
-		{name = "Scalemi Horn", mod = 18, price = 11375},
-		{name = "Scalefa Horn", mod = 19, price = 11375},
-		{name = "Scalesol Horn", mod = 20, price = 11375},
-		{name = "Scalela Horn", mod = 21, price = 11375},
-		{name = "Scaleti Horn", mod = 22, price = 11375},
-		{name = "Scaledo Horn High", mod = 23, price = 11375},
-		{name = "Jazz Horn 1", mod = 25, price = 11375},
-		{name = "Jazz Horn 2", mod = 26, price = 11375},
-		{name = "Jazz Horn 3", mod = 27, price = 11375},
-		{name = "Jazzloop Horn", mod = 28, price = 11375},
-		{name = "Starspangban Horn 1", mod = 29, price = 11375},
-		{name = "Starspangban Horn 2", mod = 30, price = 11375},
-		{name = "Starspangban Horn 3", mod = 31, price = 11375},
-		{name = "Starspangban Horn 4", mod = 32, price = 11375},
-		{name = "Classicalloop Horn 1", mod = 33, price = 11375},
-		{name = "Classicalloop Horn 2", mod = 34, price = 11375},
-		{name = "Classicalloop Horn 3", mod = 35, price = 11375},
+		{name = "Truck Horn", mod = 0, price = 925},
+		{name = "Clown Horn", mod = 2, price = 3500},
+		{name = "Musical Horn 1", mod = 3, price = 1375},
+		{name = "Musical Horn 2", mod = 4, price = 1375},
+		{name = "Musical Horn 3", mod = 5, price = 1375},
+		{name = "Musical Horn 4", mod = 6, price = 1375},
+		{name = "Musical Horn 5", mod = 7, price = 1375},
+		{name = "Sadtrombone Horn", mod = 8, price = 1375},
+		{name = "Calssical Horn 1", mod = 9, price = 1375},
+		{name = "Calssical Horn 2", mod = 10, price = 1375},
+		{name = "Calssical Horn 3", mod = 11, price = 1375},
+		{name = "Calssical Horn 4", mod = 12, price = 1375},
+		{name = "Calssical Horn 5", mod = 13, price = 1375},
+		{name = "Calssical Horn 6", mod = 14, price = 1375},
+		{name = "Calssical Horn 7", mod = 15, price = 1375},
+		{name = "Scaledo Horn", mod = 16, price = 1375},
+		{name = "Scalere Horn", mod = 17, price = 1375},
+		{name = "Scalemi Horn", mod = 18, price = 1375},
+		{name = "Scalefa Horn", mod = 19, price = 1375},
+		{name = "Scalesol Horn", mod = 20, price = 1375},
+		{name = "Scalela Horn", mod = 21, price = 1375},
+		{name = "Scaleti Horn", mod = 22, price = 1375},
+		{name = "Scaledo Horn High", mod = 23, price = 1375},
+		{name = "Jazz Horn 1", mod = 25, price = 1375},
+		{name = "Jazz Horn 2", mod = 26, price = 1375},
+		{name = "Jazz Horn 3", mod = 27, price = 1375},
+		{name = "Jazzloop Horn", mod = 28, price = 1375},
+		{name = "Starspangban Horn 1", mod = 29, price = 1375},
+		{name = "Starspangban Horn 2", mod = 30, price = 1375},
+		{name = "Starspangban Horn 3", mod = 31, price = 1375},
+		{name = "Starspangban Horn 4", mod = 32, price = 1375},
+		{name = "Classicalloop Horn 1", mod = 33, price = 1375},
+		{name = "Classicalloop Horn 2", mod = 34, price = 1375},
+		{name = "Classicalloop Horn 3", mod = 35, price = 1375},
 	},
 
 ----------Transmission---------
 	[13] = {
-		{name = "Street Transmission", mod = 0, price = 5000},
-		{name = "Sports Transmission", mod = 1, price = 10500},
-		{name = "Race Transmission", mod = 2, price = 15000},
+		{name = "Street Transmission", mod = 0, price = 3500},
+		{name = "Sports Transmission", mod = 1, price = 6500},
+		{name = "Race Transmission", mod = 2, price = 10000},
 	},
 
 -----------Brakes-------------
 	[12] = {
-		{name = "Street Brakes", mod = 0, price = 2000},
-		{name = "Sport Brakes", mod = 1, price = 4000},
-		{name = "Race Brakes", mod = 2, price = 6000},
+		{name = "Street Brakes", mod = 0, price = 1500},
+		{name = "Sport Brakes", mod = 1, price = 3500},
+		{name = "Race Brakes", mod = 2, price = 5500},
 	},
 
 ------------Engine----------
 	[11] = {
-		{name = "EMS Upgrade, Level 2", mod = 0, price = 8000},
-		{name = "EMS Upgrade, Level 3", mod = 1, price = 15000},
-		{name = "EMS Upgrade, Level 4", mod = 2, price = 30000},
+		{name = "EMS Upgrade, Level 2", mod = 0, price = 6000},
+		{name = "EMS Upgrade, Level 3", mod = 1, price = 9000},
+		{name = "EMS Upgrade, Level 4", mod = 2, price = 12000},
 	},
 
 -------------Roof----------

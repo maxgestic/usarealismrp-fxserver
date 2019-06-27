@@ -89,7 +89,8 @@ AddEventHandler("crim:tieHands", function(x, y, z, heading)
       while not HasAnimDictLoaded('mp_arrest_paired') do
           Citizen.Wait(0)
       end
-      local tying_hands = true
+      --local tying_hands = true
+      --[[
       local resisted = false
       Citizen.CreateThread(function()
         TriggerEvent('usa:showHelp', true, 'Tap ~INPUT_PICKUP~ to resist being tied up!')
@@ -112,6 +113,7 @@ AddEventHandler("crim:tieHands", function(x, y, z, heading)
           end
         end
       end)
+      --]]
       DisablePlayerFiring(playerPed, true)
       SetEntityCoords(playerPed, x, y, z)
       SetEntityHeading(playerPed, heading)
@@ -123,18 +125,16 @@ AddEventHandler("crim:tieHands", function(x, y, z, heading)
       ClearPedTasks(playerPed)
       FreezeEntityPosition(playerPed, false)
       DisablePlayerFiring(playerPed, false)
-      print("ENTITY WAS NOT PLAYING TIED UP ANIM, RETRYING..")
       ClearPedSecondaryTask(playerPed)
-      tying_hands = false
-
-      if not resisted then
-        TaskPlayAnim(playerPed, "mp_arresting", "idle", 8.0, -8, -1, 49, 0, 0, 0, 0)
-        SetEnableHandcuffs(playerPed, true)
-        -- FreezeEntityPosition(lPed, true)
-        TriggerEvent("usa:showHelp", true, "Your hands have been ~r~tied together~w~.")
-        hands_tied = true
-        hands_up = false
-      end
+      --tying_hands = false
+      --if not resisted then
+      TaskPlayAnim(playerPed, "mp_arresting", "idle", 8.0, -8, -1, 49, 0, 0, 0, 0)
+      SetEnableHandcuffs(playerPed, true)
+      -- FreezeEntityPosition(lPed, true)
+      TriggerEvent("usa:showHelp", true, "Your hands have been ~r~tied together~w~.")
+      hands_tied = true
+      hands_up = false
+      --end
     end)
   end
 end)
@@ -150,7 +150,7 @@ AddEventHandler("crim:untieHands", function(from_id, x, y, z, heading)
         SetEnableHandcuffs(playerPed, false)
         RequestAnimDict('mp_arrest_paired')
         while not HasAnimDictLoaded('mp_arrest_paired') do
-            Citizen.Wait(0)
+          Citizen.Wait(0)
         end
         DisablePlayerFiring(playerPed, true)
         SetEntityCoords(playerPed, x, y, z)
@@ -163,7 +163,6 @@ AddEventHandler("crim:untieHands", function(from_id, x, y, z, heading)
         ClearPedTasks(playerPed)
         FreezeEntityPosition(playerPed, false)
         DisablePlayerFiring(playerPed, false)
-        print("ENTITY WAS ALREADY PLAYING TIED UP ANIM, RELEASING HANDS..")
         ClearPedSecondaryTask(playerPed)
         SetEnableHandcuffs(playerPed, false)
         --FreezeEntityPosition(lPed, false)
@@ -383,10 +382,19 @@ Citizen.CreateThread(function()
   end
 end)
 
+RegisterNetEvent("crim:areHandsUp")
+AddEventHandler("crim:areHandsUp", function(from_source, to_source, action, x, y, z, heading)
+  if hands_up then
+    if action == "tie" then
+      TriggerServerEvent("crim:continueTyingHands", from_source, to_source, true, x, y, z, heading)
+    end
+  else
+    TriggerServerEvent("crim:continueTyingHands", from_source, to_source, false)
+  end
+end)
 
 RegisterNetEvent("crim:areHandsTied")
 AddEventHandler("crim:areHandsTied", function(from_source, to_source, action)
-  print("inside crim:areHandsTied with hands_tied= " .. tostring(hands_tied))
   -- don't need to check distance (or can't cause ped is in vehicle):
   if action == "unseat" then
     if hands_tied == true then
@@ -397,7 +405,6 @@ AddEventHandler("crim:areHandsTied", function(from_source, to_source, action)
   -- need to check distance
   if hands_tied == true and closeEnoughToPlayer(from_source) then
     if action == "rob" then
-      print("hands were tied, removing money..")
       -- hands were up, continue stealing cash
       TriggerServerEvent("crim:continueRobbing", true, from_source, to_source)
     elseif action == "blindfold" then

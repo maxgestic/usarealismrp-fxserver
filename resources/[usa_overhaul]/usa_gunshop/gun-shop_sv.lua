@@ -106,6 +106,7 @@ AddEventHandler("gunShop:purchaseLicense", function()
   local usource = source
   local timestamp = os.date("*t", os.time())
   local char = exports["usa-characters"]:GetCharacter(usource)
+  local m = char.get("money")
   local NEW_GUN_LICENSE = {
     name = 'Firearm Permit',
     number = 'FP' .. tostring(math.random(1, 254367)),
@@ -123,19 +124,11 @@ AddEventHandler("gunShop:purchaseLicense", function()
     TriggerClientEvent("usa:notify", usource, "You already have a firearm permit!")
     return
   end
-  if char.canHoldItem(NEW_GUN_LICENSE) then
+  if char.canHoldItem(NEW_GUN_LICENSE) and m >= LICENSE_PURCHASE_PRICE then
     char.giveItem(NEW_GUN_LICENSE)
     char.removeMoney(LICENSE_PURCHASE_PRICE)
     TriggerClientEvent("usa:notify", usource, "You have accepted the terms and conditions and have been issued a CCW")
-    TriggerClientEvent('chatMessage', usource, '', { 0, 0, 0 }, "^1TERMS & CONDITIONS OF CCW:")
-    Wait(3000)
-    TriggerClientEvent('chatMessage', usource, '', { 0, 0, 0 }, "^01) The license holder is legally allowed to carry a weapon so long as it remains ^1CONCEALED^0 at all times.")
-    Wait(3000)
-    TriggerClientEvent('chatMessage', usource, '', { 0, 0, 0 }, "^02) If contacted by a law enforcement officer for any reason, and the license holder is armed, the license holder shall immediately inform the officer they are a CCW licensee and when the officer requests the license holder’s CCW license, the license holder will provide their CCW license as proof they are legally carrying a concealed weapon.")
-    Wait(3000)
-    TriggerClientEvent('chatMessage', usource, '', { 0, 0, 0 }, "^03) License holder shall surrender the CCW license and/or concealed weapon to any sworn peace officer upon demand.")
-    Wait(3000)
-    TriggerClientEvent('chatMessage', usource, '', { 0, 0, 0 }, "^04) License holder shall not unnecessarily display or expose the concealed weapon or license")
+    TriggerClientEvent("gunShop:showCCWTerms", usource)
   else
     TriggerClientEvent("usa:notify", usource, "Inventory full!")
   end

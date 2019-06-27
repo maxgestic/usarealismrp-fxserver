@@ -26,6 +26,11 @@ local onDuty = false
 local observing = false
 local discardingEvidence = false
 
+local KEYS = {
+	ALT = 19,
+	Y = 246
+}
+
 RegisterNetEvent('evidence:updateData')
 AddEventHandler('evidence:updateData', function(key, value)
 	playerData[key] = value
@@ -131,7 +136,7 @@ Citizen.CreateThread(function()
 		if GetGameTimer() - lastShotTime > duration or lastShotTime == 0 then
 			playerData['gunshotResidue'] = false
 		end
-		if IsControlPressed(0, 19) and IsControlJustPressed(0, 246) and not observing then
+		if IsControlPressed(0, KEYS.ALT) and IsControlJustPressed(0, KEYS.Y) and not observing then
 			TriggerEvent("usa:getClosestPlayer", 1.65, function(player)
 	    		if player then
 		        	local closestPed = GetPlayerPed(GetPlayerFromServerId(player.id))
@@ -199,7 +204,7 @@ RegisterNetEvent('evidence:weedScent')
 AddEventHandler('evidence:weedScent', function()
 	if not playerData['weedScent'] then
 		playerData['weedScent'] = true
-		local timeToWait = math.random((30 * 60000), (120 * 60000))
+		local timeToWait = math.random((15 * 60000), (45 * 60000))
 		Citizen.Wait(timeToWait)
 		playerData['weedScent'] = false
 	end
@@ -241,6 +246,7 @@ end)
 RegisterNetEvent('evidence:displayObservations')
 AddEventHandler('evidence:displayObservations', function(observations, targetSource)
 	observing = true
+	local hasSomethingToObserve = false
 	local beginTime = GetGameTimer()
 	local targetPed = GetPlayerPed(GetPlayerFromServerId(targetSource))
 	--TriggerServerEvent('display:shareDisplay', 'observes person', 2, 370, 10, 3000)
@@ -253,23 +259,29 @@ AddEventHandler('evidence:displayObservations', function(observations, targetSou
 		Citizen.Wait(0)
 		for key, value in pairs(observations) do
 			if key == 'bodySweat' and value then
-	            local x, y, z = table.unpack(GetPedBoneCoords(targetPed, 24818, 0.0, 0.0, 0.0))
+	      local x, y, z = table.unpack(GetPedBoneCoords(targetPed, 24818, 0.0, 0.0, 0.0))
 				DrawText3D(x, y, z, 3, 'Body Sweat')
+				hasSomethingToObserve = true
 			elseif key == 'wetClothing' and value then
 				local x, y, z = table.unpack(GetPedBoneCoords(targetPed, 0, 0.0, 0.0, 0.0))
 				DrawText3D(x, y, z, 3, 'Wet Clothing')
+				hasSomethingToObserve = true
 			elseif key == 'weedScent' and value then
 				local x, y, z = table.unpack(GetPedBoneCoords(targetPed, 57005, 0.0, 0.0, 0.0))
 				DrawText3D(x, y, z, 3, 'Marijuana Odor')
+				hasSomethingToObserve = true
 			elseif key == 'bloodshotEyes' and value then
 				local x, y, z = table.unpack(GetPedBoneCoords(targetPed, 20178, 0.0, 0.0, 0.0))
 				DrawText3D(x, y, z, 3, 'Bloodshot Eyes')
+				hasSomethingToObserve = true
 			elseif key == 'dilatedPupils' and value then
 				local x, y, z = table.unpack(GetPedBoneCoords(targetPed, 31086, 0.0, 0.0, 0.0))
 				DrawText3D(x, y, z, 3, 'Dilated Pupils')
+				hasSomethingToObserve = true
 			elseif key == 'odorAlcohol' and value then
 				local x, y, z = table.unpack(GetPedBoneCoords(targetPed, 39317, 0.0, 0.0, 0.0))
 				DrawText3D(x, y, z, 3, 'Alcohol Odor')
+				hasSomethingToObserve = true
 			elseif key == 'seatBelt' and IsPedInAnyVehicle(targetPed, false) then
 				local x, y, z = table.unpack(GetPedBoneCoords(targetPed, 11816, 0.0, 0.0, 0.0))
 				if value then
@@ -277,7 +289,12 @@ AddEventHandler('evidence:displayObservations', function(observations, targetSou
 				else
 					DrawText3D(x, y, z, 3, 'Seatbelt Off')
 				end
+				hasSomethingToObserve = true
 			end
+		end
+		if not hasSomethingToObserve then
+			local x, y, z = table.unpack(GetPedBoneCoords(targetPed, 24818, 0.0, 0.0, 0.0))
+			DrawText3D(x, y, z, 3, 'Looks normal')
 		end
 	end
 	observing = false

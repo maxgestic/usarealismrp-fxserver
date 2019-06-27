@@ -201,6 +201,17 @@ AddEventHandler('gunshop:addRecentlyPurchased', function()
   end
 end)
 
+RegisterNetEvent("gunShop:showCCWTerms")
+AddEventHandler("gunShop:showCCWTerms", function()
+	TriggerEvent('chatMessage', '', { 0, 0, 0 }, "^01) The license holder is legally allowed to carry a weapon so long as it remains ^3CONCEALED^0 at all times.")
+	Wait(4000)
+	TriggerEvent('chatMessage', '', { 0, 0, 0 }, "^02) If contacted by a law enforcement officer for any reason, and the license holder is armed, the license holder shall immediately inform the officer they are a CCW licensee and when the officer requests the license holder’s CCW license, the license holder will provide their CCW license as proof they are legally carrying a concealed weapon.")
+	Wait(9000)
+	TriggerEvent('chatMessage', '', { 0, 0, 0 }, "^03) License holder shall surrender the CCW license and/or concealed weapon to any sworn peace officer upon demand.")
+	Wait(5000)
+	TriggerEvent('chatMessage', '', { 0, 0, 0 }, "^04) License holder shall not unnecessarily display or expose the concealed weapon or license.")
+end)
+
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(90000)
