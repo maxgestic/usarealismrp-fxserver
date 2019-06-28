@@ -499,8 +499,10 @@ RegisterServerEvent('properties:saveOutfit')
 AddEventHandler('properties:saveOutfit', function(outfit, slot)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local outfits = char.get('outfits')
-	if not outfits then outfits = {} outfits[slot] = {} else if not outfits[slot] then outfits[slot] = {} end end
-	outfits[slot] = outfit
+	if not outfits then
+		outfits = {}
+	end
+	outfits[tostring(slot)] = outfit
 	char.set('outfits', outfits)
 	TriggerClientEvent('usa:notify', source, 'Outfit has been saved!')
 end)
@@ -509,10 +511,12 @@ RegisterServerEvent('properties:loadOutfit')
 AddEventHandler('properties:loadOutfit', function(slot)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local outfits = char.get('outfits')
-	if outfits[slot] then
-		TriggerClientEvent('properties:loadOutfit', source, outfits[slot])
-	else
-		TriggerClientEvent('usa:notify', source, 'Outfit not found!')
+	if outfits then
+		if outfits[tostring(slot)] then
+			TriggerClientEvent('properties:loadOutfit', source, outfits[slot])
+		else
+			TriggerClientEvent('usa:notify', source, 'Outfit not found!')
+		end
 	end
 end)
 

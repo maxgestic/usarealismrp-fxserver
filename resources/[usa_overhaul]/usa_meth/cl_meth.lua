@@ -1,10 +1,8 @@
 --
--- MADE BY MINIPUNCH
+-- MADE BY DISTRITIC / MINIPUNCH
 -- A player will get close to a designated blip on the map within this script, press "E", and begin gathering.
 -- This same concept within the script will handle all aspects of a job from getting supplies, processing, to selling, etc.
 --
-
---TODO: chance for big boom when making meth
 
 local INPUT_KEY = 38 -- E
 
@@ -35,10 +33,10 @@ Citizen.CreateThread(function()
         local playerPed = PlayerPedId()
         local playerCoords = GetEntityCoords(playerPed)
         DrawText3D(996.50, -3200.201, -36.19, 5, '[E] - Exit')
-        DrawText3D(-121.95, 1918.01, 197.43, 5, '[E] - Enter')
-        DrawText3D(704.62, 4185.3, 40.70, 5, '[E] - Buy Pseudoephedrine (~g~$150.00~w~)')
-        DrawText3D(3801.7, 4475.1, 5.9, 5, '[E] - Buy Red Phosphorus (~g~$500.00~w~)')
-        DrawText3D(1012.29, -3194.89, -38.99, 5, '[E] - Cook Meth')
+        DrawText3D(-121.95, 1918.01, 197.43, 8, '[E] - Enter')
+        DrawText3D(704.62, 4185.3, 40.70, 5, '[E] - Buy Pseudoephedrine (~g~$150.00~w~) | [Hold E] - Hint')
+        DrawText3D(3801.7, 4475.1, 5.9, 5, '[E] - Buy Red Phosphorus (~g~$500.00~w~) | [Hold E] - Hint')
+        DrawText3D(1012.29, -3194.89, -38.99, 5, '[E] - Cook Meth | [Hold E] - Hint')
         DrawText3D(2434.78, 4964.29, 42.34, 5, '[E] - Package Meth')
         if IsControlJustPressed(0, INPUT_KEY) then
             if GetDistanceBetweenCoords(playerCoords, 996.90, -3200.701, -36.39, true) < 0.7 then
@@ -46,17 +44,32 @@ Citizen.CreateThread(function()
             elseif GetDistanceBetweenCoords(playerCoords, -121.23, 1918.45, 197.33, true) < 0.7 then
                 DoorTransition(playerPed, 996.90, -3200.701, -36.39, 270.0)
             elseif GetDistanceBetweenCoords(playerCoords, 704.62, 4185.3, 40.70, true) < 3 and not meth.pedIsBusy and GetGameTimer() - cooldown > 2000 then -- purchase supplies
-                TriggerServerEvent("methJob:checkUserMoney", meth.suppliesProduce)
-                cooldown = GetGameTimer()
+                Wait(500)
+                if not IsControlPressed(0, INPUT_KEY) then
+                  TriggerServerEvent("methJob:checkUserMoney", meth.suppliesProduce)
+                  cooldown = GetGameTimer()
+                else
+                  TriggerEvent("chatMessage", "", {}, "^3Chemical Dealer:^0 You can take these chemicals to my bud's farm to process them. He lives on Baytree Canyon Rd. in the Grand Senora Desert. It is a few miles south west of the dirt track in the Harmony area. Look for the big plot of land with a few barns. If you look you should see a door to get into the barn to process the chemicals. It is south of this location and south of Route 68 in Harmony, but north of Vinewood in LS.")
+                end
             elseif GetDistanceBetweenCoords(playerCoords, 1012.29, -3194.89, -38.99, true) < 3 and not meth.producingMeth and GetGameTimer() - cooldown > 2000 then -- produce meth rocks
-                TriggerServerEvent("methJob:checkUserJobSupplies", meth.suppliesProduce, meth.suppliesProduceQuality)
-                cooldown = GetGameTimer()
+                Wait(500)
+                if not IsControlPressed(0, INPUT_KEY) then
+                  TriggerServerEvent("methJob:checkUserJobSupplies", meth.suppliesProduce, meth.suppliesProduceQuality)
+                  cooldown = GetGameTimer()
+                else
+                  TriggerEvent("chatMessage", "", {}, "^3HINT: ^0You can take cooked meth to get packaged at the O'Neill's Ranch in Grapeseed.")
+                end
             elseif GetDistanceBetweenCoords(playerCoords, 2434.78, 4964.29, 42.34, true) < 3 and not meth.processingMeth and GetGameTimer() - cooldown > 2000 then -- process/package meth rocks
                   TriggerServerEvent("methJob:checkUserJobSupplies", meth.suppliesProcess, meth.suppliesProcessQuality)
                 cooldown = GetGameTimer()
             elseif GetDistanceBetweenCoords(playerCoords, 3801.7, 4475.1, 5.9, true) < 3 and not meth.pedIsBusy and GetGameTimer() - cooldown > 2000 then -- purchase quality supplies
-                TriggerServerEvent('methJob:checkUserMoney', meth.suppliesProduceQuality)
+              Wait(500)
+              if not IsControlPressed(0, INPUT_KEY) then
+                TriggerServerEvent("methJob:checkUserMoney", meth.suppliesProduceQuality)
                 cooldown = GetGameTimer()
+              else
+                TriggerEvent("chatMessage", "", {}, "^3Chemical Dealer:^0 You can take these chemicals to my bud's farm to process them. He lives on Baytree Canyon Rd. in the Grand Senora Desert. It is a few miles south west of the dirt track in the Harmony area. Look for the big plot of land with a few barns. If you look you should see a door to get into the barn to process the chemicals. It is south of this location and south of Route 68 in Harmony, but north of Vinewood in LS.")
+              end
             end
         end
         if meth.producingMeth and GetDistanceBetweenCoords(playerCoords, 1012.29, -3194.89, -38.99, true) > 6 then -- too far from being able to process

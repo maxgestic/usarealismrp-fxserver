@@ -808,6 +808,7 @@ RegisterNUICallback("dropItem", function(data, cb)
 	if not string.find(data.itemName, "Driver") and not string.find(data.itemName, "Firearm") and not string.find(data.itemName, "License") then
 		-- remove from inventory --
 		local pos = GetEntityCoords(GetPlayerPed(-1), true)
+		TriggerEvent("usa:playAnimation", "anim@move_m@trash", "pickup", -8, 1, -1, 48, 0, 0, 0, 0)
 		TriggerServerEvent("inventory:dropItem", data.itemName, data.index, pos.x, pos.y, pos.z)
 		-- spawn object on ground --
 		if data.objectModel then
@@ -1028,7 +1029,7 @@ end
 RegisterNetEvent("interaction:equipArmor")
 AddEventHandler("interaction:equipArmor", function()
 	SetPedArmour(PlayerPedId(), 40)
-	TriggerEvent('usa:notify', "You have equipped body armor!")
+	TriggerEvent('usa:notify', "You have equipped light body armor!")
 end)
 
 RegisterNetEvent("interaction:ragdoll")

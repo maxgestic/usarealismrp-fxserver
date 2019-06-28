@@ -17,7 +17,7 @@ BUSINESSES = {
 		cameraID = 'store34',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 2000,
+		price = 20000,
 		purchasePercentage = 0.07
 	},
 	["Car Dealership (Harmony)"] = {
@@ -25,7 +25,7 @@ BUSINESSES = {
 		cameraID = 'store33',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 2000,
+		price = 20000,
 		purchasePercentage = 0.07
 	},
 	["LS Tattoos (El Burro Heights)"] = {
@@ -216,7 +216,7 @@ BUSINESSES = {
 		cameraID = 'store24',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 6000
+		price = 8000
 	},
 	["LS Customs (Route 68)"] = {
 		position = {1187.4, 2636.7, 38.4},

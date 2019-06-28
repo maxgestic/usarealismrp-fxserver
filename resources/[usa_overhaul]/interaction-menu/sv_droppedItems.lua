@@ -20,11 +20,12 @@ AddEventHandler("interaction:attemptPickup", function(item)
   local usource = source
   for i = 1, #DROPPED_ITEMS do
     if item.x == DROPPED_ITEMS[i].x and item.y == DROPPED_ITEMS[i].y and item.z == DROPPED_ITEMS[i].z and item.name == DROPPED_ITEMS[i].name then
-      attemptPickup(usource, DROPPED_ITEMS[i], function(success)
+			attemptPickup(usource, DROPPED_ITEMS[i], function(success)
         if success then
           table.remove(DROPPED_ITEMS, i)
           TriggerClientEvent("interaction:removeDroppedItem", -1, i)
         end
+				TriggerClientEvent("interaction:finishedPickupAttempt", usource)
       end)
       break
     end
@@ -39,7 +40,7 @@ function attemptPickup(src, item, cb)
 			if #weapons < 3 then
 				char.giveItem(item)
 			  TriggerClientEvent("interaction:equipWeapon", src, item, true)
-        TriggerClientEvent("usa:playAnimation", "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 2)
+        TriggerClientEvent("usa:playAnimation", src, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 2)
         cb(true)
 			else
 			  TriggerClientEvent("usa:notify", src, "Can't hold anymore weapons!")

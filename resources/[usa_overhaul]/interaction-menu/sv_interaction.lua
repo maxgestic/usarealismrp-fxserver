@@ -196,7 +196,7 @@ AddEventHandler("inventory:dropItem", function(name, index, posX, posY, posZ)
 	--------------------
 	-- play animation --
 	--------------------
-	TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 48, 0, 0, 0, 0)
+	TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 2)
 	DroppedActionMessage(source, name)
 	local coords = {
 		x = posX,

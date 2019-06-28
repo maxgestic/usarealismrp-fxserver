@@ -4,8 +4,6 @@
 -- This same concept within the script will handle all aspects of a job from getting supplies, processing, to selling, etc.
 --
 
---TODO: a distance you must meet or out of range for gathering, ANIMATION
-
 --[[TriggerEvent('cocaineJob:setDelivery') DEBUGGING
 
  local cocaineProduced = {
@@ -38,7 +36,7 @@ local peds = {}
 local deliveryCoords = {
     {x = 387.1991, y = 0.4811, z = 90.414, heading = 35.64, model = 'IG_JIMMYBOSTON', message = 'Alright, cheers pal. Here\'s the money.'},
     {x = -386.68, y = 504.38, z = 119.41, heading = 320.0, model = 'IG_BANKMAN', message = 'Woah, Ricky G. gonna have a good time today!'},
-    {x = -80.573, y = 906.252, z = 234.72, heading = 145.0, model = 'IG_NATALIA', message = 'Fuck yeah! Just don\'t tell my dad. Have this.'},
+    {x = -80.573, y = 906.252, z = 234.72, heading = 145.0, model = 'IG_NATALIA', message = 'Heck yeah! Just don\'t tell my dad. Have this.'},
     {x = -1570.94, y = 250.01, z = 58.01, heading = 331.0, model = 'IG_NIGEL', message = 'Thanks, better get back to teaching these idiots!'},
     {x = -1595.512, y = 168.4717, z = 58.18, heading = 172.0, model = 'U_M_M_ALDINAPOLI', message = 'Ohh, I\'m gonna get so fucking tight. Cheers dawg.'},
     {x = 221.94, y = 674.11, z = 188.25, heading = 60.0, model = 'U_M_M_BANKMAN', message = 'You sir, are a very reckless delinquent. There you go.'},
@@ -68,15 +66,15 @@ local deliveryCoords = {
     {x = -1129.23, y = 1605.27, z = 3.39, heading = 216.0, model = 'CSB_CAR3GUY2', message = 'Ya yeet! That\'s lit my man! You ever thought about vaping my bro?'},
     {x = 50.57, y = -108.04, z = 55.01, heading = 336.0, model = 'CSB_JANITOR', message = 'Call an ambulance if I don\'t make it after this HIIIGHHH!'},
     {x = -59.04, y = -921.85, z = 28.32, heading = 140.0, model = 'G_M_Y_POLOGOON_01', message = 'Ever thought about running? You need to lose some weight.'},
-    {x = -664.11, y = -1217.79, z = 10.81, heading = 30.0, model = 'CSB_BRIDE', message = 'Spoiled fucking wedding, just give me the coke and leave.'},
-    {x = 793.64, y = -905.96, z = 24.22, heading = 90.0, model = 'CSB_PORNDUDES', message = 'Ever thought about getting a real job? I\'m fucking addicted cause of YOU!'},
-    {x = 892.85, y = -540.72, z = 57.50, heading = 90.0, model = 'IG_CHENGSR', message = 'I\'m a fucking mess, have the damn money.'},
+    {x = -664.11, y = -1217.79, z = 10.81, heading = 30.0, model = 'CSB_BRIDE', message = "Don't ask, thanks!"},
+    {x = 793.64, y = -905.96, z = 24.22, heading = 90.0, model = 'CSB_PORNDUDES', message = 'Ever thought about getting a real job? I\'m addicted cause of YOU!'},
+    {x = 892.85, y = -540.72, z = 57.50, heading = 90.0, model = 'IG_CHENGSR', message = 'I\'m a mess, have the damn money.'},
     {x = 1011.23, y = -567.26, z = 59.19, heading = 300.0, model = 'IG_MAGENTA', message = 'I appreciate it, here\'s what you deserve.'},
     {x = 26.40, y = -1409.84, z = 28.33, heading = 185.0, model = 'S_M_Y_WINCLEAN_01', message ='I should probably stop taking this, it\'s eating a hole in my pocket.'},
     {x = -262.33, y = -1413.34, z = 30.22, heading = 140.0, model = 'S_M_Y_XMECH_02', message = 'Heard of that annoying cop? Len-, Lennos? I think...'},
     {x = 485.89, y = -1477.54, z = 28.28, heading = 180.0, model = 'U_M_Y_SBIKE', message = 'Dope, just make sure not to get caught. It\'s tough out there.'},
     {x = 602.56, y = 142.05, z = 97.04, heading = 60.0, model = 'U_M_Y_MILITARYBUM', message = 'Living on these streets ain\'t nothin\' easy. This is all I got.'},
-    {x = -583.88, y = 195.30, z = 70.44, heading = 100.0, model = 'U_M_Y_PAPARAZZI', message = 'Have you seen that new porno mag? Ludde\'s Lubbe bruhhh!'}
+    {x = -583.88, y = 195.30, z = 70.44, heading = 100.0, model = 'U_M_Y_PAPARAZZI', message = "Have you seen that new biker mag? It's dope bruhhh!"}
 }
 
 RegisterNetEvent('character:setCharacter')
@@ -91,7 +89,6 @@ AddEventHandler('character:setCharacter', function()
         if peds[i].name == 'delivery_ped' then
             SetEntityAsNoLongerNeeded(peds[i].handle)
             table.remove(peds, i)
-            --print('removing:'.. i)
         end
     end
 end)
@@ -103,7 +100,7 @@ Citizen.CreateThread(function()
         local playerPed = PlayerPedId()
         local playerCoords = GetEntityCoords(playerPed)
         DrawText3D(1088.18, -3187.18, -38.85, 5, '[E] - Exit')
-        DrawText3D(614.19, 2783.85, 43.60, 5, '[E] - Enter')
+        DrawText3D(614.19, 2783.85, 43.60, 8, '[E] - Enter')
         DrawText3D(1273.708, -1709.06, 54.77, 5, '[E] - Buy Uncut Cocaine (~g~$800.00~w~)')
         DrawText3D(1092.86, -3195.80, -38.99, 5, '[E] - Process Cocaine')
         if IsControlJustPressed(0, INPUT_KEY) then
@@ -122,17 +119,19 @@ Citizen.CreateThread(function()
             end
         end
         if cocaine.processingCocaine and GetDistanceBetweenCoords(playerCoords, 1092.86, -3196.70, -38.99, true) > 6 then -- too far from being able to process
-            print('returning uncut cocaine')
             TriggerEvent("usa:notify", "You went ~y~out of range~w~.")
             TriggerServerEvent("cocaineJob:giveUncut")
             cocaine.processingCocaine = false
         elseif cocaine.activeJob then
             local location = deliveryCoords[cocaine.deliveryIndex]
-            if GetDistanceBetweenCoords(playerCoords, location.x, location.y, location.z, true) < 2.0 then
-                ShowHelp('Press ~INPUT_PICKUP~ to sell packaged cocaine', 1)
-                if IsControlJustPressed(0, INPUT_KEY) then
-                    TriggerServerEvent('cocaineJob:doesUserHaveProductToSell')
-                end
+            local distToLocation = GetDistanceBetweenCoords(playerCoords, location.x, location.y, location.z, true)
+            if distToLocation < 10.0 then
+              DrawText3D(location.x, location.y, location.z + 0.5, 10, 'Press [E] to sell packaged cocaine')
+              if distToLocation < 2.0 then
+                  if IsControlJustPressed(0, INPUT_KEY) then
+                      TriggerServerEvent('cocaineJob:doesUserHaveProductToSell')
+                  end
+              end
             end
         end
     end
@@ -215,15 +214,6 @@ AddEventHandler("cocaineJob:setDelivery", function()
             local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
             TriggerServerEvent('911:CocaineSting', location.x, location.y, location.z, lastStreetNAME, IsPedMale(GetPlayerPed(-1)))
         end
-        while GetGameTimer() - time < 5000 do
-            Citizen.Wait(0)
-            ShowHelp('You must process the cocaine before delivering.', 1)
-        end
-        time = GetGameTimer()
-        while GetGameTimer() - time < 5000 do
-            Citizen.Wait(0)
-            ShowHelp('A location to deliver has been set on your GPS.', 1)
-        end
     end
 end)
 
@@ -252,6 +242,7 @@ AddEventHandler('cocaineJob:doesUserHaveProductToSell', function(hasProduct) -- 
             while GetGameTimer() - beginTime < 5000 do
                 Citizen.Wait(0)
                 DrawTimer(beginTime, 5000, 1.42, 1.475, 'SELLING')
+                DisableControlAction(0, 244, true) -- 244 = M key (interaction menu / inventory)
             end
         end)
         RequestAnimDict("amb@prop_human_bum_bin@idle_b")
@@ -275,7 +266,6 @@ AddEventHandler('cocaineJob:doesUserHaveProductToSell', function(hasProduct) -- 
             if peds[i].name == 'delivery_ped' then
                 SetEntityAsNoLongerNeeded(peds[i].handle)
                 table.remove(peds, i)
-                --print('removing:'.. i)
             end
         end
         cocaine.activeJob = false
@@ -304,6 +294,7 @@ AddEventHandler("cocaineJob:getSupplies", function(supplyType)
                 Citizen.Wait(0)
                 DrawTimer(beginTime, 20000, 1.42, 1.475, 'WAITING')
             end
+            TriggerServerEvent("cocaineJob:giveUncut")
         end
     end
 end)
@@ -326,8 +317,8 @@ Citizen.CreateThread(function()
                     if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) then
                         TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
                     end
+                    DisableControlAction(0, 244, true) -- 244 = M key (interaction menu / inventory)
                 else
-                    print("player stopped processing! breaking from for loop!")
                     break
                 end
             end
@@ -337,7 +328,7 @@ Citizen.CreateThread(function()
                 cocaine.processingCocaine = false
                 TriggerServerEvent("cocaineJob:givePackaged")
                 TriggerServerEvent('cocaineJob:residueRazor')
-                Citizen.Trace("giving cocaine to player!")
+                exports.globals:notify("Now take this to get delivered! Check your map for the red pill.")
             end
         end
     Citizen.Wait(0)

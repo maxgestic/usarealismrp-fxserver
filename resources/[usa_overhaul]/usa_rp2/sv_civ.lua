@@ -239,10 +239,11 @@ TriggerEvent('es:addCommand', 'sellvehicle', function(source, args, char, locati
 	local target = tonumber(args[3])
 	local price = tonumber(args[4])
 	local user_vehicles = char.get("vehicles")
-	if plate_number and GetPlayerName(target) and price and target ~= tonumber(usource) then
+	if plate_number and GetPlayerName(target) and price and usource ~= target then
 		for i = 1, #user_vehicles do
 			if string.lower(user_vehicles[i]) == string.lower(plate_number) then -- only let player sell vehicles they own
 				local veh_to_sell = user_vehicles[i]
+				price = math.abs(price)
 				price = math.floor(price)
 				local target_player = exports["usa-characters"]:GetCharacter(target)
 				local target_player_vehicles = target_player.get("vehicles")
@@ -281,12 +282,17 @@ TriggerEvent('es:addCommand', 'sellvehicle', function(source, args, char, locati
 	else
 		-- print list of vehs --
 		GetMakeModelPlate(user_vehicles, function(vehs)
-			for i = 1, #vehs do
-				local vehicle = vehs[i]
-				TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0---------------------- #" .. i .. " -------------------------")
-				TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0VEH: " .. vehicle.make .. " " .. vehicle.model)
-				TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0PLATE: " .. vehicle.plate)
-				TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0----------------------------------------------------")
+			if #vehs < 1 then
+				TriggerClientEvent("chatMessage", usource, "", {0, 0, 0}, "^0PLATE: " .. vehicle.plate)
+				return
+			else
+				for i = 1, #vehs do
+					local vehicle = vehs[i]
+					TriggerClientEvent("chatMessage", usource, "", {0, 0, 0}, "^0---------------------- #" .. i .. " -------------------------")
+					TriggerClientEvent("chatMessage", usource, "", {0, 0, 0}, "^0VEH: " .. vehicle.make .. " " .. vehicle.model)
+					TriggerClientEvent("chatMessage", usource, "", {0, 0, 0}, "^0PLATE: " .. vehicle.plate)
+					TriggerClientEvent("chatMessage", usource, "", {0, 0, 0}, "^0----------------------------------------------------")
+				end
 			end
 		end)
 	end
@@ -337,16 +343,16 @@ function SendDiscordMessage(content, url, color)
 	}), { ["Content-Type"] = 'application/json' })
 end
 
-function TradeVehicle(details) -- this function could very very easily be exploited via mem editing! - made it a bit more secure now...
+function TradeVehicle(details)
 	local buyer = exports["usa-characters"]:GetCharacter(details.target)
 	local seller = exports["usa-characters"]:GetCharacter(details.source)
 	-- trade money --
 	if buyer.get("money") >= details.price then
-		buyer.removeMoney("money", details.price)
-		seller.giveMoney("money", details.price)
+		buyer.removeMoney(details.price)
+		seller.giveMoney(details.price)
 	elseif buyer.get("bank") >= details.price then
-		buyer.removeMoney("bank", details.price)
-		seller.giveMoney("bank", details.price)
+		buyer.removeBank(details.price)
+		seller.giveBank(details.price)
 	else
 		TriggerClientEvent("usa:notify", details.target, "Not enough money to pruchase vehicle!")
 		TriggerClientEvent("usa:notify", details.source, "Person did not have enough money to pruchase vehicle!")
@@ -375,16 +381,17 @@ function TradeVehicle(details) -- this function could very very easily be exploi
 				TriggerClientEvent("usa:notify", details.source, "Transaction ~g~successful~w~!")
 				TriggerClientEvent("usa:notify", details.target, "Transaction ~g~successful~w~!")
 				-- send discord msg to log --
-				if buyer.get("job") == "dai" then return end
-					local timestamp = os.date("*t", os.time())
-					local desc = "\n**Vehicle:** " .. details.make .. " " .. details.model ..
-					"\n**Seller:** " .. details.seller ..
-					"\n**Buyer:** " .. newOwnerName ..
-					"\n**Price:** $" .. details.price ..
-					"\n**Date:** ".. timestamp.month .. "/" .. timestamp.day .."/" .. timestamp.year
-					SendDiscordMessage(desc, "https://discordapp.com/api/webhooks/436965351004307466/FY-o_sGScUYFQpo9Y18-ZP-L_HdWRXoDZ1eO2AeD7uXzmg5JwWzqlb07Bbf1Yvv0_W-k", 524288)
+				local timestamp = os.date("*t", os.time())
+				local desc = "\n**Vehicle:** " .. details.make .. " " .. details.model ..
+				"\n**Seller:** " .. details.seller ..
+				"\n**Buyer:** " .. newOwnerName ..
+				"\n**Price:** $" .. details.price ..
+				"\n**Date:** ".. timestamp.month .. "/" .. timestamp.day .."/" .. timestamp.year
+				SendDiscordMessage(desc, "https://discordapp.com/api/webhooks/436965351004307466/FY-o_sGScUYFQpo9Y18-ZP-L_HdWRXoDZ1eO2AeD7uXzmg5JwWzqlb07Bbf1Yvv0_W-k", 524288)
 			end)
 		end)
+	else
+		print("usa_rp2:sv_civ: Error selling vehicle. Does seller own the vehicle?")
 	end
 end
 

@@ -1,6 +1,3 @@
--- TODO: 1) Load dropped items from server on player join // to test
--- TODO: 2) Add server timer to auto remove items after x minutes
-
 local DROPPED_ITEMS = {}
 local E_KEY = 246
 
@@ -10,10 +7,10 @@ RegisterNetEvent("interaction:getDroppedItems")
 AddEventHandler("interaction:getDroppedItems", function(items)
   DROPPED_ITEMS = items
   for i = 1, #DROPPED_ITEMS do
-    local objectHash = GetHashKey(DROPPED_ITEMS[i].objectModel)
-    if objectHash == 0 then objectHash = GetHashKey('prop_michael_backpack') end
-    if string.find(DROPPED_ITEMS[i].name, 'Key') then return end
-    local prop = CreateObject(objectHash, DROPPED_ITEMS[i].coords.x, DROPPED_ITEMS[i].coords.y + 0.5, DROPPED_ITEMS[i].coords.z - 0.99, true, false, true)
+    if DROPPED_ITEMS[i].objectModel then
+      local objectHash = GetHashKey(DROPPED_ITEMS[i].objectModel)
+      local prop = CreateObject(objectHash, DROPPED_ITEMS[i].coords.x, DROPPED_ITEMS[i].coords.y + 0.5, DROPPED_ITEMS[i].coords.z - 0.99, true, false, true)
+    end
   end
 end)
 
@@ -25,10 +22,14 @@ end)
 RegisterNetEvent("interaction:removeDroppedItem")
 AddEventHandler("interaction:removeDroppedItem", function(index)
   local objectModel = DROPPED_ITEMS[index].objectModel
-  if not objectModel then objectModel = 'prop_michael_backpack' end
   local itemObject = GetClosestObjectOfType(DROPPED_ITEMS[index].coords.x, DROPPED_ITEMS[index].coords.y, DROPPED_ITEMS[index].coords.z, 1.0, objectModel, false, false, false)
   DeleteObject(itemObject)
   table.remove(DROPPED_ITEMS, index)
+end)
+
+RegisterNetEvent("interaction:finishedPickupAttempt")
+AddEventHandler("interaction:finishedPickupAttempt", function()
+  attemptingPickup = false
 end)
 
 Citizen.CreateThread(function()
@@ -41,9 +42,10 @@ Citizen.CreateThread(function()
         if not item.objectModel then
           DrawMarker(27, item.coords.x, item.coords.y, item.coords.z - 0.89, 0, 0, 0, 0, 0, 0, 0.3, 0.3, 1.0, 240, 30, 140, 100, 0, 0, 2, 0, 0, 0, 0)
         end
-        if Vdist(coords.x, coords.y, coords.z, item.coords.x, item.coords.y, item.coords.z) < 2 then
+        if Vdist(coords.x, coords.y, coords.z, item.coords.x, item.coords.y, item.coords.z) < 3.5 then
           DrawText3Ds(item.coords.x, item.coords.y, item.coords.z - 0.3, 370, 16, '[Y] - ' .. item.name)
-          if IsControlJustPressed(1, E_KEY) then
+          if IsControlJustPressed(1, E_KEY) and not attemptingPickup then
+            attemptingPickup = true
             TriggerServerEvent("interaction:attemptPickup", item)
             break
           end

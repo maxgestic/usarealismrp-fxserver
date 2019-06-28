@@ -125,6 +125,11 @@ RegisterNUICallback('chatResult', function(data, cb)
 
 		--deprecated
 		local r, g, b = 0, 0x99, 255
+
+		if not characterName then
+			characterName = ""
+		end
+
 		local author = (characterName.first or "" ) .. " " .. (characterName.last or "" )
 
 		-- if data.message:sub(1, 1) == '/' then

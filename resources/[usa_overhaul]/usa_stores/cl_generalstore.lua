@@ -277,7 +277,7 @@ Citizen.CreateThread(function()
     _menuPool:ProcessMenus()
     local mycoords = GetEntityCoords(GetPlayerPed(-1))
     for i = 1, #GENERAL_STORE_LOCATIONS do
-      DrawText3D(GENERAL_STORE_LOCATIONS[i].x, GENERAL_STORE_LOCATIONS[i].y, GENERAL_STORE_LOCATIONS[i].z, 1.7, '[E] - General Store')
+      DrawText3D(GENERAL_STORE_LOCATIONS[i].x, GENERAL_STORE_LOCATIONS[i].y, GENERAL_STORE_LOCATIONS[i].z, 5, '[E] - General Store')
     end
     for i = 1, #HARDWARE_STORE_LOCATIONS do
       DrawText3D(HARDWARE_STORE_LOCATIONS[i].x, HARDWARE_STORE_LOCATIONS[i].y, HARDWARE_STORE_LOCATIONS[i].z, 7, '[E] - Hardware Store')

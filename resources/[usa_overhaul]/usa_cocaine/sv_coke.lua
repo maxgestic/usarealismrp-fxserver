@@ -34,7 +34,8 @@ RegisterServerEvent("cocaineJob:givePackaged")
 AddEventHandler("cocaineJob:givePackaged", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	if char.canHoldItem(cocaineProduced) then
-  		char.giveItem(cocaineProduced)
+    char.removeItem("Uncut Cocaine")
+  	char.giveItem(cocaineProduced)
 		TriggerClientEvent("usa:notify", source, "You have successfully proccessed the uncut cocaine into packaged product!")
 	else
 		TriggerClientEvent("usa:notify", source, "Your inventory is full. Can't carry anymore!")
@@ -104,7 +105,6 @@ AddEventHandler('cocaineJob:doesUserHaveProductToSell', function()
 	end
 end)
 
-
 RegisterServerEvent("cocaineJob:startTimer")
 AddEventHandler("cocaineJob:startTimer", function(timerType)
 	local usource = source
@@ -121,7 +121,7 @@ AddEventHandler("cocaineJob:startTimer", function(timerType)
 		local seconds = 20
 		local time = seconds * 1000
 		SetTimeout(time, function()
-			TriggerClientEvent("usa:notify", usource, "Alright, let me know if you need more. I'll send the delivery location now.")
+      TriggerClientEvent("chatMessage", usource, "", {}, "^3Lester:^0 Alright, let me know if you need more. Take this to get processed first at the spot behind that store in Harmony (make sure you have a Razor Blade) and then look for the red pill on your map to deliver the final product.")
 			TriggerClientEvent('cocaineJob:setDelivery', usource)
 			TriggerClientEvent("cocaineJob:returnPedToStartPosition", usource, timerType)
 			local uncutCocaine = {

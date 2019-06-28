@@ -19,7 +19,6 @@ var itemImages = {
   "Cheetos": "https://www.fritolay.com/images/default-source/blue-bag-image/cheetos-crunchy-cheese.png?sfvrsn=5951573a_2",
   "Flaming Hot Cheetos": "https://toppng.com/public/uploads/preview/hot-cheetos-115507187343xb8swu1oy.png",
   "Doritos": "https://ui-ex.com/images/doritos-transparent-3.png",
-  "Curly Fries": "http://www.hardeesarabia.com/sites/default/files/styles/product_large/public/curly-fries-400-x-400-px.png?itok=UhwGq6rC",
   "Water": "https://www.freepngimg.com/thumb/water_bottle/5-2-water-bottle-transparent.png",
   "Arizona Iced Tea": "https://coconutbreezecuisine.com/wr/img-wmedia/img-Bvg_AWatermelon.png",
   "Gatorade": "https://www.pngkit.com/png/full/115-1153791_gatorade-transparent-32-ounce-clip-transparent-library-32.png",
@@ -57,7 +56,7 @@ var itemImages = {
   "Machete": "https://www.bellota.com/var/site/storage/images/_aliases/large/7/7/3/5/35377-1-esl-EU/31B20.png",
   "Pistol": "https://steamuserimages-a.akamaihd.net/ugc/29613457985625199/0D5453A0ADC32EDBADEACF8D5CBE1EF129FCA5DC/",
   "Heavy Pistol": "https://vignette.wikia.nocookie.net/saintsrow/images/9/9c/SRIV_Pistols_-_Heavy_Pistol_-_.45_Fletcher_-_Default.png/revision/latest/scale-to-width-down/350?cb=20131028193410",
-  ".50 Caliber": "https://img.gta5-mods.com/q75/images/pistol-50-faster-rof/dea7b7-deagle.png", 
+  ".50 Caliber": "https://img.gta5-mods.com/q75/images/pistol-50-faster-rof/dea7b7-deagle.png",
   "SNS Pistol": "https://vignette.wikia.nocookie.net/gtawiki/images/f/f5/SNSPistol-GTAV-SocialClub.png/revision/latest/scale-to-width-down/185?cb=20180202170333",
   "Combat Pistol": "https://vignette.wikia.nocookie.net/the-gta-online/images/4/4e/CombatPistol-GTA5-ingame.png/revision/latest?cb=20150519181654",
   "Revolver": "https://upload.wikimedia.org/wikipedia/commons/7/77/Taurus_Raging_Bull.png",
@@ -107,9 +106,40 @@ var itemImages = {
   "2 Topping Pizza": "https://www.happyspizza.com/wp-content/uploads/hp_plate_sm_2toppizza.png",
   "Pesto Chicken Sandwich": "https://brownbagonline.com/wp-content/uploads/2016/03/ChipotleChicken.png",
   "Ahi Tuna Sandwich": "https://russoscafe.com/wp-content/uploads/California-Tuna-Salad-Roll.png",
-  "French Dip Au Jus": "http://wafflesatnoon.com/wp-content/uploads/2013/01/FrnchDip.png"
+  "French Dip Au Jus": "http://wafflesatnoon.com/wp-content/uploads/2013/01/FrnchDip.png",
+  "Razor Blade": "https://www.pngfind.com/pngs/m/138-1387284_free-png-download-razor-blade-png-images-background.png",
+  "Boat License": "https://www.scientific.net/KEM.773.56/preview.gif",
+  "Aircraft License": "https://www.scientific.net/KEM.773.56/preview.gif",
+  "Bar Certificate": "https://www.scientific.net/KEM.773.56/preview.gif",
+  "Key": "https://www.kwikset.com/Images/Kevo2/fob/fob.png",
+  "Champagne (12.5%)": "https://www.wineconnection.com.sg//media/catalog/product/c/h/ch31_3.png",
+  "Lock Pick": "https://lansky.com/files/2015/4593/1583/LMT100B.png",
+  "Molotov": "https://vignette.wikia.nocookie.net/left4dead/images/e/ea/Molotov-1.png/revision/latest?cb=20140322002700",
+  "Brass Knuckles": "https://i.pinimg.com/originals/5b/b6/84/5bb684cd2beb5e318fe3933262121c32.png",
+  "Dagger": "http://www.pngmart.com/files/8/Dagger-PNG-Free-Download.png",
+  "Switchblade": "https://vignette.wikia.nocookie.net/gtawiki/images/f/fc/Switchblade-GTAV.png/revision/latest?cb=20161021210105",
+  "AP Pistol": "https://i.pinimg.com/originals/3e/5b/09/3e5b09796cb124639c5f2232e5f32d9b.png",
+  "Sawn-off": "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpopbuyLgNv1fX3cDx96t2ykb-GkuP1P7fYlVRd4cJ5ntbN9J7yjRq1qkRoYmHxJICcdwVrNVyC_Va-xrq718W0uZSbm3M26Cdws3mOlkTln1gSOcynOW1P/360fx360f",
+  "Micro SMG": "https://www.gtagaming.com/images/10490/1317045779_micro_uzi_t_lad.png",
+  "SMG": "https://img.gta5-mods.com/q75/images/assault-smg-new-sound-effects/b5ff68-AssaultSMG-GTAV.png",
+  "Machine Pistol": "https://i.pinimg.com/originals/19/38/54/193854f15e38f4e13174e815c92de4e4.png",
+  "Tommy Gun": "https://www.gtabase.com/images/gta-5/weapons/machine-guns/gusenberg-sweeper.png",
+  "AK47": "http://www.transparentpng.com/thumb/ak-47/icon-clipart-ak-47-12.png",
+  "Carbine": "http://www.gaksharpshooters.com/images/ar15.gif",
+  "Bullpup Rifle": "https://gaming.newbcomputerbuild.com/wp-content/uploads/2015/09/Bullpup-Rifle-GTA-V-300x111.png"
+  //"Curly Fries": "https://www.pngfind.com/pngs/m/197-1977678_curly-fry-arbys-curly-fries-png-transparent-png.png",
+  //"Nightstick": ...
+  //meth
+  //Uncut Cocaine
+  // Packaged Coke
+  // pseudofedrine
+  // red phosphorus
+  // meth rocks
+  // blue meth rocks
+  // packaged meth
+  // packaged blue meth
+  // razor blade (bad image)
 }
-
 
 var menuItems = [
   {
@@ -387,6 +417,15 @@ var interactionMenu = new Vue({
           return false;
       } else {
         return false;
+      }
+    },
+    GetItemImage: function(name) {
+      if (name.includes("Cell Phone")) {
+        return itemImages["Cell Phone"];
+      } else if (name.includes("Key")) {
+        return itemImages["Key"];
+      } else {
+        return itemImages[name];
       }
     }
   },
