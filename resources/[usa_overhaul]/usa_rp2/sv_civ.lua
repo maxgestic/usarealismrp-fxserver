@@ -283,7 +283,7 @@ TriggerEvent('es:addCommand', 'sellvehicle', function(source, args, char, locati
 		-- print list of vehs --
 		GetMakeModelPlate(user_vehicles, function(vehs)
 			if #vehs < 1 then
-				TriggerClientEvent("chatMessage", usource, "", {0, 0, 0}, "^0PLATE: " .. vehicle.plate)
+				TriggerClientEvent("chatMessage", usource, "", {0, 0, 0}, "^3You have no vehicles to sell!")
 				return
 			else
 				for i = 1, #vehs do

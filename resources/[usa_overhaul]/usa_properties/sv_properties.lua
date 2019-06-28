@@ -513,7 +513,7 @@ AddEventHandler('properties:loadOutfit', function(slot)
 	local outfits = char.get('outfits')
 	if outfits then
 		if outfits[tostring(slot)] then
-			TriggerClientEvent('properties:loadOutfit', source, outfits[slot])
+			TriggerClientEvent('properties:loadOutfit', source, outfits[tostring(slot)])
 		else
 			TriggerClientEvent('usa:notify', source, 'Outfit not found!')
 		end
