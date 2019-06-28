@@ -2,6 +2,8 @@ var emoteOptions = ["Cancel", "Cop", "Sit", "Cross Arms", "Kneel", "CPR", "Notep
 "Flex", "Sit up", "Push up", "Peace", "Mechanic", "Smoke 1", "Smoke 2", "Drink", "Gang 1", "Gang 2", "Prone", "Weld", "Bum 1", "Bum 2", "Bum 3", "Drill", "Blower", "Chillin'", "Mobile Film", "Planting", "Golf", "Hammer", "Clean", "Musician", "Party", "Prostitute", "High Five", "Wave", "Hug", "Fist bump", "Salute", "Dance 1", "Dance 2", "Dance 3", "Dance 4", "Dance 5", "Shag 1", "Shag 2", "Shag 3",
 "Whatup", "Kiss", "Handshake", "Surrender", "Aim", "Fail", "No", "Palm", "Finger"];
 
+const DEFAULT_ITEM_IMAGE = "https://banner2.kisspng.com/20180131/fvw/kisspng-question-mark-icon-question-mark-5a7214f2980a92.2259030715174259066228.jpg";
+
 var itemImages = {
   "Driver's License": "https://i.imgur.com/dy0SpFh.png",
   "Firearm Permit": "https://www.scientific.net/KEM.773.56/preview.gif",
@@ -17,7 +19,6 @@ var itemImages = {
   "Nachos": "https://newvitruvian.com/images/nachos-transparent-big-1.png",
   "Sea Salt & Vinegar Chips": "https://www.fritolay.com/images/default-source/blue-bag-image/lays-salt-vinegar.png?sfvrsn=411e563a_2",
   "Cheetos": "https://www.fritolay.com/images/default-source/blue-bag-image/cheetos-crunchy-cheese.png?sfvrsn=5951573a_2",
-  "Flaming Hot Cheetos": "https://toppng.com/public/uploads/preview/hot-cheetos-115507187343xb8swu1oy.png",
   "Doritos": "https://ui-ex.com/images/doritos-transparent-3.png",
   "Water": "https://www.freepngimg.com/thumb/water_bottle/5-2-water-bottle-transparent.png",
   "Arizona Iced Tea": "https://coconutbreezecuisine.com/wr/img-wmedia/img-Bvg_AWatermelon.png",
@@ -74,7 +75,6 @@ var itemImages = {
   "Halibut": "https://i.dlpng.com/static/png/332762_thumb.png",
   "Weed Bud": "https://66.media.tumblr.com/30ff99a59894fdd9abd04712189708af/tumblr_mvyvwdxNVi1t04rb2o1_r1_400.png",
   "Packaged Weed": "https://www.sccpre.cat/mypng/full/19-192283_bag-of-weed-png.png",
-  "Shovel": "http://www.stickpng.com/assets/images/585983924f6ae202fedf28b3.png",
   "Processed Sand": "http://www.cliparthut.com/clip-arts/97/sand-bags-woven-polypropylene-bags-plastic-sand-bags-clipart-BEO6vR.png",
   "Lagunitas IPA": "https://www.totalwine.com/media/sys_master/twmmedia/h0a/h36/8804310974494.png",
   "Budweiser": "http://dbertolineandsons.com/wp-content/uploads/2016/08/budweiser-8-200x390.png",
@@ -107,7 +107,6 @@ var itemImages = {
   "Pesto Chicken Sandwich": "https://brownbagonline.com/wp-content/uploads/2016/03/ChipotleChicken.png",
   "Ahi Tuna Sandwich": "https://russoscafe.com/wp-content/uploads/California-Tuna-Salad-Roll.png",
   "French Dip Au Jus": "http://wafflesatnoon.com/wp-content/uploads/2013/01/FrnchDip.png",
-  "Razor Blade": "https://www.pngfind.com/pngs/m/138-1387284_free-png-download-razor-blade-png-images-background.png",
   "Boat License": "https://www.scientific.net/KEM.773.56/preview.gif",
   "Aircraft License": "https://www.scientific.net/KEM.773.56/preview.gif",
   "Bar Certificate": "https://www.scientific.net/KEM.773.56/preview.gif",
@@ -126,19 +125,25 @@ var itemImages = {
   "Tommy Gun": "https://www.gtabase.com/images/gta-5/weapons/machine-guns/gusenberg-sweeper.png",
   "AK47": "http://www.transparentpng.com/thumb/ak-47/icon-clipart-ak-47-12.png",
   "Carbine": "http://www.gaksharpshooters.com/images/ar15.gif",
-  "Bullpup Rifle": "https://gaming.newbcomputerbuild.com/wp-content/uploads/2015/09/Bullpup-Rifle-GTA-V-300x111.png"
-  //"Curly Fries": "https://www.pngfind.com/pngs/m/197-1977678_curly-fry-arbys-curly-fries-png-transparent-png.png",
-  //"Nightstick": ...
-  //meth
-  //Uncut Cocaine
-  // Packaged Coke
-  // pseudofedrine
-  // red phosphorus
-  // meth rocks
-  // blue meth rocks
-  // packaged meth
-  // packaged blue meth
-  // razor blade (bad image)
+  "Bullpup Rifle": "https://gaming.newbcomputerbuild.com/wp-content/uploads/2015/09/Bullpup-Rifle-GTA-V-300x111.png",
+  "Curly Fries": "https://herfybd.com/assets/image/curly_fries.png",
+  "Nightstick": "https://officialpsds.com/imageview/rq/9m/rq9m5w_large.png?1521316473",
+  "Stun Gun": "https://www.gtabase.com/images/gta-5/weapons/handguns/stun-gun.png",
+  "Uncut Cocaine": "https://banner2.kisspng.com/20180410/ite/kisspng-crack-cocaine-drug-guardia-di-finanza-comando-prov-snoring-5acc845254d4b5.9322786315233526583475.jpg",
+  "Packaged Cocaine": "https://pngimage.net/wp-content/uploads/2018/05/drug-bag-png-4.png",
+  "Pseudoephedrine": "http://38.media.tumblr.com/25a96472f57c74e6a91afa6c56e9aa2b/tumblr_n1oqykqHpr1sp5w7co1_500.png",
+  "Red Phosphorus": "http://www.krushiindia.com/images/ProductDetail/3.png",
+  "Fluffy Handcuffs": "https://i.imgur.com/O5KqMZV.png",
+  "Razor Blade": "https://i.imgur.com/QAaLE3J.png",
+  "Flaming Hot Cheetos": "https://i.imgur.com/EYQAFrx.png",
+  "Packaged Blue Meth": "https://i.imgur.com/eAtLdlS.png",
+  "Blue Meth Rock": "https://i.imgur.com/pyAj35G.png",
+  "Packaged Meth": "https://i.imgur.com/31nlzQE.png",
+  "Meth Rock": "https://i.imgur.com/AOveEbU.png"
+  // vibrator
+  // used condoms
+  // ludde's lube
+  // daily weazel
 }
 
 var menuItems = [
@@ -419,13 +424,15 @@ var interactionMenu = new Vue({
         return false;
       }
     },
-    GetItemImage: function(name) {
+    getItemImage: function(name) {
       if (name.includes("Cell Phone")) {
         return itemImages["Cell Phone"];
       } else if (name.includes("Key")) {
         return itemImages["Key"];
-      } else {
+      } else if (itemImages[name]) {
         return itemImages[name];
+      } else {
+        return DEFAULT_ITEM_IMAGE;
       }
     }
   },

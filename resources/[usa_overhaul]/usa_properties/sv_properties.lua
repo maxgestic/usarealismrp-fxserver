@@ -426,18 +426,18 @@ Citizen.CreateThread(function()
 end)
 
 local burglarySearchItems = {
-	{name = "Cheeseburger", price = 6, type = "food", substance = 30.0, quantity = 1, legality = "legal", weight = 4.0, objectModel = "prop_cs_burger_01"},
-	{name = "Flaming Hot Cheetos", price = 2, type = "food", substance = 6.0, quantity = 1, legality = "legal", weight = 1.0, objectModel = "ng_proc_food_chips01c"},
-	{name = "Water", price = 3, type = "drink", substance = 60.0, quantity = 1, legality = "legal", weight = 4.0, objectModel = "ba_prop_club_water_bottle"},
-	{name = "Arizona Iced Tea", price = 1, type = "drink", substance = 60.0, quantity = 1, legality = "legal", weight = 1.0, objectModel = "ba_prop_club_water_bottle"},
-	{name = "Pepsi", price = 4, type = "drink", substance = 9.0, quantity = 1, legality = "legal", weight = 1.0, objectModel = "ng_proc_sodacan_01b"},
-	{name = "Everclear Vodka (90%)", price = 35, type = "alcohol", substance = 5.0, quantity = 1, legality = "legal", weight = 4.0, strength = 0.10, objectModel = "prop_vodka_bottle"},
-    {name = "Repair Kit", price = 250, type = "vehicle", quantity = 1, legality = "legal", weight = 8.0, objectModel = "imp_prop_tool_box_01a"},
+	{name = "Cheeseburger", price = 6, type = "food", substance = 30.0, quantity = 1, legality = "legal", weight = 10.0, objectModel = "prop_cs_burger_01"},
+	{name = "Flaming Hot Cheetos", price = 2, type = "food", substance = 6.0, quantity = 1, legality = "legal", weight = 9.0, objectModel = "ng_proc_food_chips01c"},
+	{name = "Water", price = 3, type = "drink", substance = 60.0, quantity = 1, legality = "legal", weight = 9.0, objectModel = "ba_prop_club_water_bottle"},
+	{name = "Arizona Iced Tea", price = 1, type = "drink", substance = 60.0, quantity = 1, legality = "legal", weight = 9.0, objectModel = "ba_prop_club_water_bottle"},
+	{name = "Pepsi", price = 4, type = "drink", substance = 9.0, quantity = 1, legality = "legal", weight = 9.0, objectModel = "ng_proc_sodacan_01b"},
+	{name = "Everclear Vodka (90%)", price = 35, type = "alcohol", substance = 5.0, quantity = 1, legality = "legal", weight = 10.0, strength = 0.10, objectModel = "prop_vodka_bottle"},
+    {name = "Repair Kit", price = 250, type = "vehicle", quantity = 1, legality = "legal", weight = 15.0, objectModel = "imp_prop_tool_box_01a"},
     {name = 'Lockpick', type = 'misc', price = 400, legality = 'legal', quantity = 1, weight = 5.0},
-    {name = "First Aid Kit", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 5.0, objectModel = "v_ret_ta_firstaid"},
-    {name = "Packaged Weed", quantity = 1, weight = 2.0, type = "drug", legality = "illegal", objectModel = "bkr_prop_weed_bag_01a"},
-    {name = 'Packaged Meth', type = 'drug', legality = 'illegal', quantity = 1, weight = 4.0, objectModel = 'bkr_prop_meth_smallbag_01a'},
-    {name = 'Pistol', type = 'weapon', hash = 453432689, price = 1000, legality = 'illegal', quantity = 1, weight = 10, objectModel = "w_pi_pistol"},
+    {name = "First Aid Kit", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 10.0, objectModel = "v_ret_ta_firstaid"},
+    {name = "Packaged Weed", quantity = 1, weight = 5.0, type = "drug", legality = "illegal", objectModel = "bkr_prop_weed_bag_01a"},
+    {name = 'Packaged Meth', type = 'drug', legality = 'illegal', quantity = 1, weight = 7.0, objectModel = 'bkr_prop_meth_smallbag_01a'},
+    {name = 'Pistol', type = 'weapon', hash = 453432689, price = 1000, legality = 'illegal', quantity = 1, weight = 15, objectModel = "w_pi_pistol"},
     {name = 'Razor Blade', type = 'misc', price = 500, legality = 'legal', quantity = 1, residue = false, weight = 3},
     {name = 'Switchblade', type = 'weapon', hash = -538741184, price = 1500, legality = 'illegal', quantity = 1, weight = 5},
     {name = "Condoms", price = 5, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "ng_proc_candy01a"},
@@ -1501,7 +1501,16 @@ AddEventHandler('properties:searchCabinetBurglary', function(index)
 					if char.canHoldItem(item_found) then
 						TriggerClientEvent('usa:notify', source, 'You have found '..item_found.name..'.')
 						print('PROPERTIES: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has found item['..item_found.name..'] in house burglary!')
-						char.giveItem(item_found, 1)
+						if item_found.type == "weapon" then
+							if #char.getWeapons() < 3 then
+								char.giveItem(item_found, 1)
+								TriggerClientEvent("interaction:equipWeapon", source, item_found, true)
+							else
+								TriggerClientEvent("usa:notify", source, "Found a " .. item_found.name .. " but you don't have enough room to hold it!")
+							end
+						else
+							char.giveItem(item_found, 1)
+						end
 						return
 					else
 						TriggerClientEvent('usa:notify', source, "Inventory is full!")

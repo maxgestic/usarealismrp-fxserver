@@ -53,6 +53,9 @@ RegisterNetEvent("blackMarket:equipWeapon")
 AddEventHandler("blackMarket:equipWeapon", function(hash, name)
 	local playerPed = GetPlayerPed(-1)
 	GiveWeaponToPed(playerPed, hash, 60, false, true)
+  if name == "Molotov" then
+    SetPedAmmo(playerPed, hash, 1)
+  end
 end)
 
 function CreateItemList(menu)
