@@ -880,11 +880,12 @@ AddEventHandler('playerDropped', function()
 		end
 	end
 
-	for i = 1, #burglaryHouses do
+	for i = #burglaryHouses, 1, -1 do
 		local house = burglaryHouses[i]
-		for j = 1, #house.instance do
+		for j = #house.instance, 1, -1 do
 			if source == house.instance[j] then
-				table.remove(properties['Houses'].rooms[i].instance, j)
+				--table.remove(properties['Houses'].rooms[i].instance, j)
+				table.remove(burglaryHouses[i].instance, j) -- to test
 				print('PROPERTIES: Removing source '.. j .. ' from room '..i..' instance in Burglaries')
 			end
 		end
