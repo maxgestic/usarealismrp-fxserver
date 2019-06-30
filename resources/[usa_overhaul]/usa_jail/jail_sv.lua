@@ -20,7 +20,7 @@ local CELLS = {
 TriggerEvent('es:addCommand', 'jail', function(source, args, char)
 	local job = char.get("job")
 	local jailtime = char.get("jailTime")
-	if job == "sheriff" or job == "cop" or job == "corrections" or job == "dai" then
+	if job == "sheriff" or job == "cop" or job == "corrections" or job == "dai" or job == "judge" then
 		TriggerClientEvent("jail:openMenu", tonumber(source))
 	elseif jailtime > 0 then
 		TriggerClientEvent("usa:notify", tonumber(source), "You have ~y~" .. jailtime .. " month(s) ~w~left in your jail sentence.")

@@ -766,8 +766,14 @@ local MISSIONS = {
 RegisterServerEvent("pilotjob:newJob")
 AddEventHandler("pilotjob:newJob", function()
   local usource = source
-  local name = exports["usa-characters"]:GetCharacterField(usource, "name")
-  local dob = exports["usa-characters"]:GetCharacterField(usource, "dateOfBirth")
+  local char = exports["usa-characters"]:GetCharacter(usource)
+  local name = char.get("name")
+  local dob = char.get("dateOfBirth")
+  local airLicense = char.getItem("Aircraft License")
+  if not airLicense or airLicense.status ~= "valid" then
+    TriggerClientEvent("usa:notify", usource, "You need a valid aircraft license!")
+    return
+  end
   TriggerEvent('es:exposeDBFunctions', function(db)
     local query = {
       ["name"] = {
