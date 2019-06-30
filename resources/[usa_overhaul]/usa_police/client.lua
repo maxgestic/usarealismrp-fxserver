@@ -20,12 +20,7 @@ local policeArmourys = {
 	{x = -447.9, y = 6008.7, z = 31.85}
 }
 
-local weapons = { -- must match server.lua
-  { name = "Flashlight", type = "weapon", hash = -1951375401, price = 50, legality = "legal", quantity = 1, weight = 2, objectModel = "p_cs_police_torch_s" },
-  { name = "Nightstick", type = "weapon", hash = 1737195953, price = 250, legality = "legal", quantity = 1, weight = 3, objectModel = "w_me_nightstick" },
-  { name = "Combat Pistol", type = "weapon", hash = 1593441988, price = 400, legality = "legal", quantity = 1, weight = 4, objectModel = "w_pi_combatpistol" },
-  { name = "Stun Gun", type = "weapon", hash = 911657153, price = 700, legality = "legal", quantity = 1, weight = 4, objectModel = "w_pi_stungun" }
-}
+local weapons = {}
 
 local policeoutfitamount = {1, 2, 3, 4, 5}
 
@@ -43,6 +38,9 @@ local components = {"Face","Head","Hair","Arms/Hands","Legs","Back","Feet","Ties
 local props = { "Head", "Glasses", "Ear Acessories", "Watch"}
 local MENU_OPEN_KEY = 38
 local closest_shop = nil
+
+-- load armory items --
+TriggerServerEvent("police:loadArmoryItems")
 
 -- Events --
 RegisterNetEvent("policestation2:setciv")
@@ -145,6 +143,11 @@ AddEventHandler("policestation2:setCharacter", function(character)
 		end
 		SetPedArmour(ped, 100)
 	end
+end)
+
+RegisterNetEvent("police:loadArmoryItems")
+AddEventHandler("police:loadArmoryItems", function(items)
+	weapons = items
 end)
 
 -- Menu --
@@ -321,6 +324,7 @@ function CreateArmoryMenu(menu)
       end
       menu:AddItem(item)
     end
+	--[[
     local item = NativeUI.CreateItem('Pump Shotgun (MK2)', 'Equip this weapon')
     item:SetRightBadge(BadgeStyle.Gun)
     item.Activated = function(parentmenu, selected)
@@ -352,6 +356,7 @@ function CreateArmoryMenu(menu)
     	TriggerEvent('usa:notify', 'You have equipped a Carbine Rifle.')
     end
     menu:AddItem(item)
+	--]]
     local item = NativeUI.CreateItem('Body Armor', 'Equip heavy-duty body armor')
     item:SetRightBadge(BadgeStyle.Armour)
     item.Activated = function(parentmenu, selected)
@@ -431,7 +436,6 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
-
 
 function comma_value(amount)
   local formatted = amount

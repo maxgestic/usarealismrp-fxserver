@@ -1,9 +1,16 @@
 local armoryItems = { -- must match client.lua
-  { name = "Flashlight", type = "weapon", hash = -1951375401, price = 50, legality = "legal", quantity = 1, weight = 2 },
-  { name = "Nightstick", type = "weapon", hash = 1737195953, price = 250, legality = "legal", quantity = 1, weight = 3 },
-  { name = "Combat Pistol", type = "weapon", hash = 1593441988, price = 400, legality = "legal", quantity = 1, weight = 4 },
-  { name = "Stun Gun", type = "weapon", hash = 911657153, price = 700, legality = "legal", quantity = 1, weight = 4 }
+  { name = "Flashlight", type = "weapon", hash = -1951375401, price = 50, legality = "legal", quantity = 1, weight = 4 },
+  { name = "Nightstick", type = "weapon", hash = 1737195953, price = 75, legality = "legal", quantity = 1, weight = 4 },
+  { name = "Combat Pistol", type = "weapon", hash = 1593441988, price = 200, legality = "legal", quantity = 1, weight = 8 },
+  { name = "Stun Gun", type = "weapon", hash = 911657153, price = 400, legality = "legal", quantity = 1, weight = 5 },
+  { name = "MK2 Pump Shotgun", type = "weapon", hash = 1432025498, price = 700, legality = "legal", quantity = 1, weight = 30 },
+  { name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 700, legality = "legal", quantity = 1, weight = 30 }
 }
+
+RegisterServerEvent("police:loadArmoryItems")
+AddEventHandler("police:loadArmoryItems", function()
+    TriggerClientEvent("police:loadArmoryItems", source, armoryItems)
+end)
 
 AddEventHandler('rconCommand', function(commandName, args)
   if commandName:lower() == 'whitelist' then
