@@ -771,6 +771,7 @@ function RefreshProperties(source, spawnAtProperty)
 					property['location'] = 'Perrera Beach Motel'
 					property['paid_time'] = os.time
 					TriggerClientEvent('usa:notify', source, 'You have been evicted from your apartment, find your room at ~y~Perrera Beach Motel~s~!')
+					TriggerClientEvent("chatMessage", source, "", {}, "^3SA Real Estate:^0 You have been evicted from your apartment, find your room at ^3Perrera Beach Motel^0!")
 					char.set('property', property)
 				end
 			end
@@ -785,6 +786,7 @@ function RefreshProperties(source, spawnAtProperty)
 						TriggerClientEvent('properties:updateData', -1, _property, i, properties[_property].rooms[i])
 						TriggerClientEvent('properties:updateBlip', source, _property, i)
 						TriggerClientEvent('usa:notify', source, 'Your property is at ~y~'.._property..'~s~, room '..i..'.')
+						TriggerClientEvent("chatMessage", source, "", {}, "^3SA Real Estate:^0 Your property is at ^3".._property.."^0, room "..i..".")
 						if spawnAtProperty then
 							TriggerClientEvent('properties:setPosition', source, room.coords, room.heading)
 						end
@@ -802,6 +804,7 @@ function RefreshProperties(source, spawnAtProperty)
 						TriggerClientEvent('properties:updateData', -1, _property, i, properties[_property].rooms[i])
 						TriggerClientEvent('properties:updateBlip', source, _property, i)
 						TriggerClientEvent('usa:notify', source, 'Your property is at ~y~'.._property..'~s~, room '..i..'.')
+						TriggerClientEvent("chatMessage", source, "", {}, "^3SA Real Estate:^0 Your property is at ^3".._property.."^0, room "..i..".")
 						if spawnAtProperty then
 							TriggerClientEvent('properties:setPosition', source, room.coords, room.heading)
 						end
@@ -1369,6 +1372,7 @@ AddEventHandler('properties:estateChange', function(estate)
 				char.removeMoney(1500)
 			else
 				TriggerClientEvent('usa:notify', source, 'You cannot afford this purchase.')
+				return
 			end
 		elseif estate == 'midapartment' then
 			if userMoney - 3000 >= 0 then
@@ -1378,6 +1382,7 @@ AddEventHandler('properties:estateChange', function(estate)
 				char.removeMoney(3000)
 			else
 				TriggerClientEvent('usa:notify', source, 'You cannot afford this purchase.')
+				return
 			end
 		elseif estate == 'highapartment' then
 			if userMoney - 7500 >= 0 then
@@ -1387,6 +1392,7 @@ AddEventHandler('properties:estateChange', function(estate)
 				char.removeMoney(7500)
 			else
 				TriggerClientEvent('usa:notify', source, 'You cannot afford this purchase.')
+				return
 			end
 		end
 		TriggerClientEvent('usa:notify', source, 'You have relocated to ~y~'..property['location']..'~s~.')

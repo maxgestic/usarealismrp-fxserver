@@ -232,19 +232,21 @@ AddEventHandler('DamageEvents:EntityDamaged', function(entity, attacker, weaponH
                 end
                 if type(injuredParts[damagedBone][weaponHash]) ~= 'table' then
                     --print(weaponHash .. ' has damaged '.. damagedBone)
-                    injuredParts[damagedBone][weaponHash] = {
-                        type = injuries[weaponHash].type,
-                        bleed = injuries[weaponHash].bleed,
-                        string = injuries[weaponHash].string,
-                        treatableWithBandage = injuries[weaponHash].treatableWithBandage,
-                        treatmentPrice = injuries[weaponHash].treatmentPrice,
-                        stage = 1, -- add the stage to the injury
-                        bandagedTime = 0 -- add when the injury was last bandaged
-                    }
-                    --print('added injuredParts['.. damagedBone..']['..weaponHash..']')
-                    TriggerServerEvent('injuries:saveData', injuredParts)
-                    Citizen.Wait(2000)
-                    NotifyPlayerOfInjuries()
+					if injuries[weaponHash] then
+						injuredParts[damagedBone][weaponHash] = {
+							type = injuries[weaponHash].type,
+							bleed = injuries[weaponHash].bleed,
+							string = injuries[weaponHash].string,
+							treatableWithBandage = injuries[weaponHash].treatableWithBandage,
+							treatmentPrice = injuries[weaponHash].treatmentPrice,
+							stage = 1, -- add the stage to the injury
+							bandagedTime = 0 -- add when the injury was last bandaged
+						}
+						--print('added injuredParts['.. damagedBone..']['..weaponHash..']')
+						TriggerServerEvent('injuries:saveData', injuredParts)
+						Citizen.Wait(2000)
+						NotifyPlayerOfInjuries()
+					end
                 end
                 return
             end

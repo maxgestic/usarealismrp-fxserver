@@ -121,7 +121,7 @@ Citizen.CreateThread(function()
 				TriggerServerEvent('properties:requestExit', currentProperty.location, currentProperty.index, true)
 			end
 		else
-			DrawText3D(-115.40, -603.75, 36.28, 10, '[E] - Real Estate')
+			DrawText3D(-115.40, -603.75, 36.28, 15, '[E] - Real Estate')
 			for property, data in pairs(properties) do
 				if data.type == 'motel' or data.type == 'house' then
 					if data.type == 'motel' then
@@ -147,7 +147,7 @@ Citizen.CreateThread(function()
 						end
 					end
 				elseif data.type == 'apartment' then
-					DrawText3D(data.office[1], data.office[2], data.office[3], 5, '[E] - Buzz Apartments')
+					DrawText3D(data.office[1], data.office[2], data.office[3], 10, '[E] - Buzz Apartments')
 				end
 			end
 			if IsControlJustPressed(0, 38) then

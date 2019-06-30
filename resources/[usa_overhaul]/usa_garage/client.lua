@@ -27,7 +27,8 @@ locations = {
 	{ ["x"] = 1834.5, ["y"] = 2542.2, ["z"] = 45.9, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} },
 	{ ['x'] = 911.6, ['y'] = -163.6, ['z'] = 74.4, ["jobs"] = {"taxi"}},
 	{ ['x'] = -77.19, ['y'] = -808.706, ['z'] = 36.48, ['jobs'] = {"dai"}},
-	{ ['x'] = -311.8, ['y'] = 228.2, ['z'] = 87.8, ['noBlip'] = true} -- studio los santos
+	{ ['x'] = -311.8, ['y'] = 228.2, ['z'] = 87.8, ['noBlip'] = true}, -- studio los santos
+	{ ['x'] = -620.3, ['y'] = 52.7, ['z'] = 43.7, ['noBlip'] = true} -- Tinsel Towers Apartments
 }
 
 local VEHICLE_DAMAGES = {}
