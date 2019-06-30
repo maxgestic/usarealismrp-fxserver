@@ -112,7 +112,7 @@ var itemImages = {
   "Bar Certificate": "https://www.scientific.net/KEM.773.56/preview.gif",
   "Key": "https://www.kwikset.com/Images/Kevo2/fob/fob.png",
   "Champagne (12.5%)": "https://www.wineconnection.com.sg//media/catalog/product/c/h/ch31_3.png",
-  "Lock Pick": "https://lansky.com/files/2015/4593/1583/LMT100B.png",
+  "Lockpick": "https://lansky.com/files/2015/4593/1583/LMT100B.png",
   "Molotov": "https://vignette.wikia.nocookie.net/left4dead/images/e/ea/Molotov-1.png/revision/latest?cb=20140322002700",
   "Brass Knuckles": "https://i.pinimg.com/originals/5b/b6/84/5bb684cd2beb5e318fe3933262121c32.png",
   "Dagger": "http://www.pngmart.com/files/8/Dagger-PNG-Free-Download.png",
@@ -139,11 +139,16 @@ var itemImages = {
   "Packaged Blue Meth": "https://i.imgur.com/eAtLdlS.png",
   "Blue Meth Rock": "https://i.imgur.com/pyAj35G.png",
   "Packaged Meth": "https://i.imgur.com/31nlzQE.png",
-  "Meth Rock": "https://i.imgur.com/AOveEbU.png"
-  // vibrator
-  // used condoms
-  // ludde's lube
-  // daily weazel
+  "Meth Rock": "https://i.imgur.com/AOveEbU.png",
+  "Hotwiring Kit": "https://assets.fellowes.com/images/products/zoom/49106.png",
+  "Vibrator": "http://images.hktvmall.com/h0966011/100638/h0966011_svakomadonis001_170606015542_01_1200.png",
+  "Used Condom": "https://officialpsds.com/imageview/r8/26/r826yr_large.png?1521316450",
+  "Ludde's Lube": "https://www.pngfind.com/pngs/m/204-2045538_rated-squirt-lube-png-transparent-png.png",
+  "The Daily Weazel": "https://banner2.kisspng.com/20180329/jjq/kisspng-newspaper-clip-art-newspaper-5abc7c1c12ae02.1287775415223019800765.jpg",
+  "Chicken": "https://i1.wp.com/freepngimages.com/wp-content/uploads/2016/11/chicken-transparent-background.png?fit=457%2C750",
+  "Chicken carcass": "https://img.pngio.com/dead-chicken-tyranachupng-dead-chicken-png-939_939.png",
+  "Featherless chicken carcass": "https://cdn.shopify.com/s/files/1/2554/4616/t/5/assets/Image-47_299x.png?16156401367434920007",
+  "Raw chicken meat": "https://www.pattonsbargainbutcher.com.au/uploads/3/0/1/3/30136237/4385440.png?376"
 }
 
 var menuItems = [

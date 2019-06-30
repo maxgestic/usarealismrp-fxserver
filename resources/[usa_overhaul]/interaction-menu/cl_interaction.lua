@@ -1020,6 +1020,8 @@ function interactionMenuUse(itemName, wholeItem)
 			TriggerServerEvent("camping:useItem", wholeItem)
 		elseif itemName:find("Firearm Permit") then
 			exports["usa_gunshop"]:ShowCCWTerms()
+		elseif itemName:find("Chicken") then
+			TriggerEvent("chickenJob:spawnChicken", source)
 		else
 			TriggerEvent("interaction:notify", "There is no use action for that item!")
 		end
