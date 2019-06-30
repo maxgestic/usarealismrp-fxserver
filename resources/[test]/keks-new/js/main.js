@@ -46,7 +46,7 @@
         sound.play();
 
         //sound.volume(0.1);
-        sound.fade(0.0, 0.25, 5000);
+        sound.fade(0.0, 0.20, 5000);
 
         self.isPlaying = true;
       },
@@ -88,7 +88,7 @@
     // Setup our new radio and pass in the stations.
     var radio = new Radio({
       src: src,
-      volume: 0.25,
+      volume: 0.20,
       howl: null
     });
 

@@ -16,7 +16,7 @@ local hud = {
 	}
 
 local zones = { ['AIRP'] = "Los Santos International Airport", ['ALAMO'] = "Alamo Sea", ['ALTA'] = "Alta", ['ARMYB'] = "Fort Zancudo", ['BANHAMC'] = "Banham Canyon Dr", ['BANNING'] = "Banning", ['BEACH'] = "Vespucci Beach", ['BHAMCA'] = "Banham Canyon", ['BRADP'] = "Braddock Pass", ['BRADT'] = "Braddock Tunnel", ['BURTON'] = "Burton", ['CALAFB'] = "Calafia Bridge", ['CANNY'] = "Raton Canyon", ['CCREAK'] = "Cassidy Creek", ['CHAMH'] = "Chamberlain Hills", ['CHIL'] = "Vinewood Hills", ['CHU'] = "Chumash", ['CMSW'] = "Chiliad Mountain State Wilderness", ['CYPRE'] = "Cypress Flats", ['DAVIS'] = "Davis", ['DELBE'] = "Del Perro Beach", ['DELPE'] = "Del Perro", ['DELSOL'] = "La Puerta", ['DESRT'] = "Grand Senora Desert", ['DOWNT'] = "Downtown", ['DTVINE'] = "Downtown Vinewood", ['EAST_V'] = "East Vinewood", ['EBURO'] = "El Burro Heights", ['ELGORL'] = "El Gordo Lighthouse", ['ELYSIAN'] = "Elysian Island", ['GALFISH'] = "Galilee", ['GOLF'] = "GWC and Golfing Society", ['GRAPES'] = "Grapeseed", ['GREATC'] = "Great Chaparral", ['HARMO'] = "Harmony", ['HAWICK'] = "Hawick", ['HORS'] = "Vinewood Racetrack", ['HUMLAB'] = "Humane Labs and Research", ['JAIL'] = "Bolingbroke Penitentiary", ['KOREAT'] = "Little Seoul", ['LACT'] = "Land Act Reservoir", ['LAGO'] = "Lago Zancudo", ['LDAM'] = "Land Act Dam", ['LEGSQU'] = "Legion Square", ['LMESA'] = "La Mesa", ['LOSPUER'] = "La Puerta", ['MIRR'] = "Mirror Park", ['MORN'] = "Morningwood", ['MOVIE'] = "Richards Majestic", ['MTCHIL'] = "Mount Chiliad", ['MTGORDO'] = "Mount Gordo", ['MTJOSE'] = "Mount Josiah", ['MURRI'] = "Murrieta Heights", ['NCHU'] = "North Chumash", ['NOOSE'] = "N.O.O.S.E", ['OCEANA'] = "Pacific Ocean", ['PALCOV'] = "Paleto Cove", ['PALETO'] = "Paleto Bay", ['PALFOR'] = "Paleto Forest", ['PALHIGH'] = "Palomino Highlands", ['PALMPOW'] = "Palmer-Taylor Power Station", ['PBLUFF'] = "Pacific Bluffs", ['PBOX'] = "Pillbox Hill", ['PROCOB'] = "Procopio Beach", ['RANCHO'] = "Rancho", ['RGLEN'] = "Richman Glen", ['RICHM'] = "Richman", ['ROCKF'] = "Rockford Hills", ['RTRAK'] = "Redwood Lights Track", ['SANAND'] = "San Andreas", ['SANCHIA'] = "San Chianski Mountain Range", ['SANDY'] = "Sandy Shores", ['SKID'] = "Mission Row", ['SLAB'] = "Stab City", ['STAD'] = "Maze Bank Arena", ['STRAW'] = "Strawberry", ['TATAMO'] = "Tataviam Mountains", ['TERMINA'] = "Terminal", ['TEXTI'] = "Textile City", ['TONGVAH'] = "Tongva Hills", ['TONGVAV'] = "Tongva Valley", ['VCANA'] = "Vespucci Canals", ['VESP'] = "Vespucci", ['VINE'] = "Vinewood", ['WINDF'] = "Ron Alternates Wind Farm", ['WVINE'] = "West Vinewood", ['ZANCUDO'] = "Zancudo River", ['ZP_ORT'] = "Port of South Los Santos", ['ZQ_UAR'] = "Davis Quartz" }
-local directions = { [0] = 'North', [45] = 'North West', [90] = 'West', [135] = 'South West', [180] = 'South', [225] = 'South East', [270] = 'East', [315] = 'North East', [360] = 'North', } 
+local directions = { [0] = 'N', [45] = 'NW', [90] = 'W', [135] = 'SW', [180] = 'S', [225] = 'SE', [270] = 'E', [315] = 'NE', [360] = 'N', }
 
 RegisterNetEvent('hud:setBelt')
 AddEventHandler('hud:setBelt', function(bool)
@@ -29,21 +29,23 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(1000)
+		Citizen.Wait(500)
 		local playerPed = PlayerPedId()
 		local playerVeh = GetVehiclePedIsIn(playerPed, false)
 		local pos = GetEntityCoords(GetPlayerPed(-1))
+		-- direction --
+		for k,v in pairs(directions) do
+			direction = GetEntityHeading(playerPed)
+			if math.abs(direction - k) < 22.5 then
+				hud.direction = v
+				break;
+			end
+		end
+		-- engine/belt status --
 		if playerVeh and (GetPedInVehicleSeat(playerVeh, -1) == playerPed or GetPedInVehicleSeat(playerVeh, 0) == playerPed) then
 			-- DrawRect(0.179, 0.970, 0.035, 0.030, 0, 0, 0, 70) no need (more lag)
 			current_zone = zones[GetNameOfZone(pos.x, pos.y, pos.z)]
 			var1, var2 = GetStreetNameAtCoord(pos.x, pos.y, pos.z, Citizen.ResultAsInteger(), Citizen.ResultAsInteger())
-			for k,v in pairs(directions) do
-				direction = GetEntityHeading(GetPlayerPed(-1))
-				if(math.abs(direction - k) < 22.5)then
-					hud.direction = v
-					break;
-				end
-			end
 			if GetIsVehicleEngineRunning(playerVeh) then
 				if GetVehicleEngineHealth(playerVeh) < 600 then
 					hud.engineColor = '~o~'
@@ -69,9 +71,7 @@ Citizen.CreateThread(function()
 			hud.zone = 'San Andreas'
 		end
 	end
-
 end)
-
 
 Citizen.CreateThread(function()
 	while true do
@@ -89,7 +89,7 @@ Citizen.CreateThread(function()
 					DrawTxt(0.780, 1.424, 1.0, 1.0, 0.38, hud.beltColor..hud.belt, 255, 255, 255, 255)
 				elseif GetPedInVehicleSeat(playerVeh, 0) == playerPed then
 					DrawTxt(0.663, 1.450, 1.0, 1.0, 0.40, hud.direction .. " Bound | " .. hud.street1 .. " | " .. hud.zone , 255, 255, 255, 255)
-					DrawTxt(0.663, 1.395, 1.0, 1.0, 0.40, hud.time, 255, 255, 255, 255)	
+					DrawTxt(0.663, 1.395, 1.0, 1.0, 0.40, hud.time, 255, 255, 255, 255)
 					DrawTxt(0.663, 1.418, 1.0, 1.0, 0.55, math.floor(GetEntitySpeed(playerVeh)*2.236936, 0) .. '', 255, 255, 255, 255)
 					DrawTxt(0.684, 1.425, 1.0, 1.0, 0.35, 'mph', 255, 255, 255, 255)
 					DrawTxt(0.708, 1.424, 1.0, 1.0, 0.38, hud.engineColor..'ENGINE', 255, 255, 255, 255)
@@ -98,10 +98,11 @@ Citizen.CreateThread(function()
 					DrawTxt(0.663, 1.455, 1.0, 1.0, 0.40, hud.time, 255, 255, 255, 255)
 				end
 				DisplayRadar(true)
-			else
+			else -- on foot
 				DisplayRadar(false)
 				DrawRect(0.08555, 0.976, 0.14, 0.0149999999999998, 0, 0, 0, 140)
-				DrawTxt(0.663, 1.455, 1.0, 1.0, 0.40, hud.time, 255, 255, 255, 255)
+				DrawTxt(0.664, 1.455, 1.0, 1.0, 0.40, hud.time, 255, 255, 255, 255)
+				DrawTxt(0.750, 1.455, 1.0, 1.0, 0.40, hud.direction , 255, 255, 255, 255)
 			end
 			-- HEALTH
 			local Health = GetEntityHealth(playerPed)
@@ -119,10 +120,10 @@ Citizen.CreateThread(function()
 
 			DrawRect(0.0155 + (Health / 2), 0.9755, Health, 0.00833, r, b, g, 230)
 			DrawRect(0.0504, 0.9755, 0.07, 0.00833, r, b, g, 130)
-			
+
 			-- ARMOR
 			local Armour = GetPedArmour(playerPed)
-			
+
 			Armour = (Armour / 100) * 0.069
 
 			DrawRect(0.0866+(Armour/2), 0.9755, Armour, 0.00833, 80, 150, 191, 230)
@@ -168,7 +169,6 @@ Citizen.CreateThread(function()
 			end
 		end
 		if IsDisabledControlJustPressed(1, 166) then
-			print('toggling HUD')
 			SetFlash(0, 0, 100, 100, 100)
 			Citizen.Wait(100)
 			hud.enabled = not hud.enabled

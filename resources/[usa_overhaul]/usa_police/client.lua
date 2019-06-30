@@ -364,14 +364,6 @@ function CreateArmoryMenu(menu)
     	TriggerEvent('usa:notify', 'Armor has been re-equipped.')
     end
     menu:AddItem(item)
-    local item = NativeUI.CreateItem('Return Weapons', 'Return all non-purchased weapons')
-    item:SetRightBadge(BadgeStyle.Tick)
-    item.Activated = function(parentmenu, selected)
-    	RemoveWeaponFromPed(playerPed, 1432025498)
-    	RemoveWeaponFromPed(playerPed, 4208062921)
-    	TriggerEvent('usa:notify', 'You have returned your weapons.')
-    end
-    menu:AddItem(item)
 end
 
 _menuPool:RefreshIndex()

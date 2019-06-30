@@ -36,7 +36,7 @@ var itemImages = {
   "Everclear Vodka (90%)": "https://www.totalwine.com/media/sys_master/twmmedia/h6b/h8b/10675689127966.png",
   "Repair Kit": "http://www.pngpix.com/wp-content/uploads/2016/10/PNGPIX-COM-Toolbox-PNG-Transparent-Image-1-500x535.png",
   "First Aid Kit": "https://i.imgur.com/q3GjQKH.png",
-  "Large Scissors": "https://s3.amazonaws.com/peoplepng/wp-content/uploads/2018/03/06062924/Scissors-Transparent-PNG.png",
+  "Large Scissors": "http://www.fiskars.ca/var/fiskars_amer/storage/images/frontpage/products/sewing-and-quilting/sewing-scissors/fabric-scissors/softgrip-r-razor-edge-scissors-8/14794-3-eng-US/Softgrip-R-Razor-edge-Scissors-8_product_main_large.png",
   "Shovel": "http://www.transparentpng.com/thumb/shovel/CTaQzl-shovel-transparent-picture.png",
   "Sturdy Rope": "https://www.rpgstash.com/4597-product_page/sturdy-twine-x-100-fortnite.jpg?timestamp=1548931403",
   "Bag": "https://www.fastprinting.com.au/wp-content/uploads/Shopping-Bag.png",
@@ -129,7 +129,7 @@ var itemImages = {
   "Curly Fries": "https://herfybd.com/assets/image/curly_fries.png",
   "Nightstick": "https://officialpsds.com/imageview/rq/9m/rq9m5w_large.png?1521316473",
   "Stun Gun": "https://www.gtabase.com/images/gta-5/weapons/handguns/stun-gun.png",
-  "Uncut Cocaine": "https://banner2.kisspng.com/20180410/ite/kisspng-crack-cocaine-drug-guardia-di-finanza-comando-prov-snoring-5acc845254d4b5.9322786315233526583475.jpg",
+  "Uncut Cocaine": "https://i.imgur.com/hbQzCgC.png",
   "Packaged Cocaine": "https://pngimage.net/wp-content/uploads/2018/05/drug-bag-png-4.png",
   "Pseudoephedrine": "http://38.media.tumblr.com/25a96472f57c74e6a91afa6c56e9aa2b/tumblr_n1oqykqHpr1sp5w7co1_500.png",
   "Red Phosphorus": "http://www.krushiindia.com/images/ProductDetail/3.png",
@@ -148,7 +148,9 @@ var itemImages = {
   "Chicken": "https://i1.wp.com/freepngimages.com/wp-content/uploads/2016/11/chicken-transparent-background.png?fit=457%2C750",
   "Chicken carcass": "https://img.pngio.com/dead-chicken-tyranachupng-dead-chicken-png-939_939.png",
   "Featherless chicken carcass": "https://cdn.shopify.com/s/files/1/2554/4616/t/5/assets/Image-47_299x.png?16156401367434920007",
-  "Raw chicken meat": "https://www.pattonsbargainbutcher.com.au/uploads/3/0/1/3/30136237/4385440.png?376"
+  "Raw chicken meat": "https://www.pattonsbargainbutcher.com.au/uploads/3/0/1/3/30136237/4385440.png?376",
+  "MK2 Carbine Rifle": "https://www.gtabase.com/images/gta-5/weapons/assault-rifles/carbine-rifle-mk2.png",
+  "MK2 Pump Shotgun": "https://www.gtabase.com/images/gta-5/weapons/shotguns/pump-shotgun-mk2.png"
 }
 
 var menuItems = [

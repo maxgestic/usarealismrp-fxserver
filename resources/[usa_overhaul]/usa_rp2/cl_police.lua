@@ -1,5 +1,3 @@
-local me = nil
-
 local spawnedCones = {}
 
 RegisterNetEvent("dispatch:setWaypoint")
@@ -384,21 +382,22 @@ end)
 
 -- KEEP DOOR OPEN ON EXIT (HOLD F) --
 Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(0)
-	  if IsPedInAnyPoliceVehicle(playerPed) and IsControlPressed( 2, 75 ) and GetLastInputMethod(0) then
-			Citizen.Wait(150)
-			if IsPedInAnyPoliceVehicle(playerPed) and IsControlPressed( 2, 75 ) then
-				local handle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
-				TaskLeaveVehicle(playerPed, handle, 256)
-			end
-	  end
-		if isInBaitCar then
-			veh = GetVehiclePedIsIn(PlayerPedId())
-			SetVehicleEngineOn(veh, false, true)
-			DisableControlAction(0, 75, true)
-		end
-	end
+    while true do
+        local me = GetPlayerPed(-1)
+        if IsPedInAnyPoliceVehicle(me) and IsControlPressed( 2, 75 ) and GetLastInputMethod(0) then
+            Wait(150)
+            if IsPedInAnyPoliceVehicle(me) and IsControlPressed( 2, 75 ) then
+                local handle = GetVehiclePedIsIn(me, false)
+                TaskLeaveVehicle(me, handle, 256)
+            end
+        end
+        if isInBaitCar then
+            veh = GetVehiclePedIsIn(me)
+            SetVehicleEngineOn(veh, false, true)
+            DisableControlAction(0, 75, true)
+        end
+        Wait(0)
+    end
 end)
 
 ------------------end baitcar--------------------------
