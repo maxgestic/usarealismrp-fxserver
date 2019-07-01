@@ -1,6 +1,6 @@
 local deathLog = {}
 
-local RESPAWN_FEE = 1500
+local RESPAWN_FEE = 1000
 
 RegisterServerEvent("death:respawn")
 AddEventHandler("death:respawn", function()

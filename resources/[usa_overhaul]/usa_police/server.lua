@@ -9,6 +9,10 @@ local armoryItems = {
     { name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 300, legality = "legal", quantity = 1, weight = 30 }
 }
 
+for i = 1, #armoryItems do
+    armoryItems[i].serviceWeapon = true
+end
+
 RegisterServerEvent("police:loadArmoryItems")
 AddEventHandler("police:loadArmoryItems", function()
     TriggerClientEvent("police:loadArmoryItems", source, armoryItems)
@@ -208,11 +212,9 @@ end)
 
 RegisterServerEvent("policestation2:requestPurchase")
 AddEventHandler("policestation2:requestPurchase", function(index)
-  local usource = source
-  local weapon = armoryItems[index]
-  local char = exports["usa-characters"]:GetCharacter(usource)
-  local permit_status = checkPermit(char)
-  if permit_status == "valid" then
+    local usource = source
+    local weapon = armoryItems[index]
+    local char = exports["usa-characters"]:GetCharacter(usource)
     if char.canHoldItem(weapon) then
       local user_money = char.get("money")
       if user_money - armoryItems[index].price >= 0 then
@@ -250,11 +252,6 @@ AddEventHandler("policestation2:requestPurchase", function(index)
     else
       TriggerClientEvent("usa:notify", usource, "Inventory is full!")
     end
-  elseif permit_status == "suspended" then
-    TriggerClientEvent("usa:notify", usource, "Your permit is suspended!")
-  elseif permit_status == "none" then
-    TriggerClientEvent("usa:notify", usource, "You do not have a valid Firearm Permit!")
-  end
 end)
 
 RegisterServerEvent("policestation2:saveOutfit")
@@ -284,7 +281,7 @@ AddEventHandler("policestation2:loadOutfit", function(slot)
     end
     TriggerClientEvent('interaction:setPlayersJob', source, 'sheriff')
     TriggerEvent("eblips:add", {name = char.getName(), src = source, color = 3})
-    char.removeWeapons() -- remove civ weapons
+    RemovePoliceWeapons(char)
   else
     DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
   end
@@ -306,14 +303,6 @@ AddEventHandler("policestation2:offduty", function()
   TriggerEvent("eblips:remove", source)
 end)
 
-function checkPermit(char)
-  local permit = char.getItem("Firearm Permit")
-  if permit then
-      return permit.status
-  end
-  return "none"
-end
-
 function GetWeaponAttachments(name)
     local attachments = {}
     if name == "MK2 Carbine Rifle" then
@@ -331,4 +320,26 @@ function GetWeaponAttachments(name)
         table.insert(attachments, 0x359B7AAE)
     end
     return attachments
+end
+
+AddEventHandler("playerDropped", function(reason)
+    local char = exports["usa-characters"]:GetCharacter(source)
+    local job = char.get("job")
+    if job == "sheriff" then
+        RemovePoliceWeapons(char)
+    end
+end)
+
+function RemovePoliceWeapons(char)
+    local inv = char.get("inventory")
+    for i = 0, inv.MAX_CAPACITY - 1 do
+        local item = inv.items[tostring(i)]
+        if item then
+            if item.serviceWeapon then
+                inv.items[tostring(i)] = nil
+                inv.currentWeight = inv.currentWeight - ((item.weight or 0.0) * (item.quantity or 1))
+            end
+        end
+    end
+    char.set("inventory", inv)
 end
