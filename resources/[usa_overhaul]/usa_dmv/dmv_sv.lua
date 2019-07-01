@@ -1,4 +1,4 @@
-local DL_PRICE = 500
+local DL_PRICE = 250
 
 RegisterServerEvent("dmv:buyLicense")
 AddEventHandler("dmv:buyLicense", function()

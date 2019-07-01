@@ -11,41 +11,41 @@ AddEventHandler('paycheck:welfare', function()
 
 		if job == "cop" or job == "sheriff" or job == "highwaypatrol" or job == "fbi" then
 			local cop_rank = char.get("policeRank")
-			paycheckAmount = 60
+			paycheckAmount = 150
 			  if cop_rank == 2 then
-				paycheckAmount = 75
+				paycheckAmount = 225
 			  elseif cop_rank == 3 then
-				paycheckAmount = 80
+				paycheckAmount = 275
 			  elseif cop_rank == 4 then
-				paycheckAmount = 100
+				paycheckAmount = 335
 			  elseif cop_rank == 5 then
-				paycheckAmount = 120
+				paycheckAmount = 360
 			  elseif cop_rank == 6 then
-				paycheckAmount = 150
+				paycheckAmount = 390
 			  elseif cop_rank == 7 then
-				paycheckAmount = 160
+				paycheckAmount = 415
 			  elseif cop_rank == 8 then
-				paycheckAmount = 180
+				paycheckAmount = 460
 			  elseif cop_rank == 9 then
-				paycheckAmount = 200
+				paycheckAmount = 490
 			  elseif cop_rank == 10 then
-				paycheckAmount = 210
+				paycheckAmount = 515
 			  end
 		elseif job == "ems" or job == "fire" then
 			local rank = char.get("emsRank")
-			paycheckAmount = 70
+			paycheckAmount = 120
 			if rank == 2 then
-				paycheckAmount = 90
+				paycheckAmount = 215
 			  elseif rank == 3 then
-				paycheckAmount = 100
+				paycheckAmount = 275
 			  elseif rank == 4 then
-				paycheckAmount = 120
+				paycheckAmount = 320
 			  elseif rank == 5 then
-				paycheckAmount = 140
+				paycheckAmount = 390
 			  elseif rank == 6 then
-				paycheckAmount = 165
+				paycheckAmount = 430
 			  elseif rank == 7 then
-				paycheckAmount = 180
+				paycheckAmount = 475
 			  end
 		elseif job == "security" then
 			paycheckAmount = 500
@@ -58,7 +58,7 @@ AddEventHandler('paycheck:welfare', function()
 		elseif job == "judge" then
 			paycheckAmount = 300
 		elseif job == "corrections" then
-      		paycheckAmount = 95
+      		paycheckAmount = 150
       	elseif job == "lawyer" then
       		paycheckAmount = 220
       	elseif job == "doctor" then
