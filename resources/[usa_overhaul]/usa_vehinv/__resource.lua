@@ -9,5 +9,6 @@ server_exports {
   'GetVehicleInventory',
   'setVehicleBusy',
   'getVehicleBusy',
-  'removeVehicleBusy'
+  'removeVehicleBusy',
+  'NewInventory'
 }

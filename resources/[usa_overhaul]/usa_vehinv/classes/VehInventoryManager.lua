@@ -26,6 +26,19 @@ VehInventoryManager.beingAccessed = {
   --["12ABC123"] = { 114, 22 }
 }
 
+VehInventoryManager.tempVehicles = {
+    -- ["12ABC123"] = { inventory }
+}
+
+function VehInventoryManager:NewInventory(capacity)
+    return {
+        MAX_ITEMS = 25,
+        MAX_CAPACITY = capacity,
+        currentWeight = 0.0,
+        items = {}
+    }
+end
+
 ----------------------------------
 -- Multiple User Access Helpers --
 ----------------------------------
@@ -40,6 +53,19 @@ function VehInventoryManager:RemovePersonFromInventory(plate, id)
   if self.beingAccessed[plate] and self.beingAccessed[plate][id] then
     self.beingAccessed[plate][id] = nil
   end
+end
+
+----------------------------------
+-- tempVehicles Helpers (for NPC vehicles without player owner) --
+----------------------------------
+function VehInventoryManager:newTempVehInv(plate)
+    local capacity = math.random(75, 125)
+    self.tempVehicles[plate] = self:NewInventory(capacity)
+    return self.tempVehicles[plate]
+end
+
+function VehInventoryManager:getTempVehInv(plate)
+    return self.tempVehicles[plate]
 end
 
 --------------------------
@@ -99,11 +125,15 @@ VehInventoryManager.putItemInSlot = function(plate, inv, item, slot, cb)
     cb(false, "Invalid slot")
   end
   -- save --
-  TriggerEvent('es:exposeDBFunctions', function(db)
-    db.updateDocument("vehicles", plate, { inventory = inv }, function()
+  if not VehInventoryManager:getTempVehInv(plate) then
+      TriggerEvent('es:exposeDBFunctions', function(db)
+        db.updateDocument("vehicles", plate, { inventory = inv }, function()
+          removeVehicleBusy(plate)
+        end)
+      end)
+  else
       removeVehicleBusy(plate)
-    end)
-  end)
+  end
 end
 
 VehInventoryManager.removeItemInSlot = function(plate, inv, slot, quantity)
@@ -118,11 +148,15 @@ VehInventoryManager.removeItemInSlot = function(plate, inv, slot, quantity)
       inv.items[slot] = nil
     end
     -- save --
-    TriggerEvent('es:exposeDBFunctions', function(db)
-      db.updateDocument("vehicles", plate, { inventory = inv }, function()
+    if not VehInventoryManager:getTempVehInv(plate) then
+        TriggerEvent('es:exposeDBFunctions', function(db)
+          db.updateDocument("vehicles", plate, { inventory = inv }, function()
+            removeVehicleBusy(plate)
+          end)
+        end)
+    else
         removeVehicleBusy(plate)
-      end)
-    end)
+    end
   end
 end
 
@@ -141,11 +175,15 @@ VehInventoryManager.moveItemSlots = function(plate, inv, from, to)
     end
   end
   -- save --
-  TriggerEvent('es:exposeDBFunctions', function(db)
-    db.updateDocument("vehicles", plate, { inventory = inv }, function()
+  if not VehInventoryManager:getTempVehInv(plate) then
+      TriggerEvent('es:exposeDBFunctions', function(db)
+        db.updateDocument("vehicles", plate, { inventory = inv }, function()
+          removeVehicleBusy(plate)
+        end)
+      end)
+  else
       removeVehicleBusy(plate)
-    end)
-  end)
+  end
 end
 
 VehInventoryManager.removeAllIllegalItems = function(src, plate, inv, notify) -- TO TEST

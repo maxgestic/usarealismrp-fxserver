@@ -35,7 +35,11 @@ AddEventHandler("lock:removePlate", function(plate)
 end)
 
 function isLocked(plate)
-    return vehicles[plate]
+    if type(vehicles[plate]) == "nil" then
+        return true
+    else
+        return vehicles[plate]
+    end
 end
 
 function setLocked(plate, locked)

@@ -10,13 +10,13 @@ end)
 
 RegisterServerEvent("vehicle:updateForOthers")
 AddEventHandler("vehicle:updateForOthers", function(plate, inv, isLocked) -- todo: this could be exploited/abused by lua injection, remove inv parameter and fetch inventory by plate again?
-  if VehInventoryManager.beingAccessed[plate] then
-    for id, val in pairs(VehInventoryManager.beingAccessed[plate]) do
-      if IsPlayerActive(id) then
-        TriggerClientEvent("interaction:sendNUIMessage", id, { type = "vehicleInventoryLoaded", inventory = inv, locked = (isLocked or nil)})
-      end
+    if VehInventoryManager.beingAccessed[plate] then
+        for id, val in pairs(VehInventoryManager.beingAccessed[plate]) do
+            if IsPlayerActive(id) then
+                TriggerClientEvent("interaction:sendNUIMessage", id, { type = "vehicleInventoryLoaded", inventory = inv, locked = (isLocked or nil)})
+            end
+        end
     end
-  end
 end)
 
 RegisterServerEvent("vehicle:getInventory")
@@ -32,93 +32,82 @@ end)
 -- TODO: remove item parameter and just pass in slot of item to retrieve it here (to prevent malicious lua injectors from calling this arbitrarily)
 RegisterServerEvent("vehicle:storeItem")
 AddEventHandler("vehicle:storeItem", function(src, vehicle_plate, item, quantity, slot, cb) -- TODO: get item instead of passing as param to avoid lua injecting items
-  local usource = tonumber(src)
-  GetVehicleInventory(vehicle_plate, function(inv)
-    if inv.currentWeight then
-      item.quantity = quantity
-      if VehInventoryManager.canHoldItem(inv, item) then
-        VehInventoryManager.putItemInSlot(vehicle_plate, inv, item, slot, function(success, msg)
-          if success == true then
-            if item.type == "weapon" then
-              TriggerClientEvent("interaction:equipWeapon", usource, item, false) -- remove weapon
-            end
-            TriggerClientEvent("usa:playAnimation", usource, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 3)
-          end
-          if msg then
-            TriggerClientEvent("usa:notify", usource, msg)
-          end
-          cb(success, inv)
-        end)
-      else
-        TriggerClientEvent("usa:notify", usource, "Vehicle inventory full!")
-        cb(false, inv)
-      end
-    else
-      TriggerClientEvent("usa:notify", usource, "Must be owned by a player!")
-      cb(false, inv)
-    end
-  end)
+    local usource = tonumber(src)
+    GetVehicleInventory(vehicle_plate, function(inv)
+        item.quantity = quantity
+        if VehInventoryManager.canHoldItem(inv, item) then
+            VehInventoryManager.putItemInSlot(vehicle_plate, inv, item, slot, function(success, msg)
+                if success == true then
+                    if item.type == "weapon" then
+                        TriggerClientEvent("interaction:equipWeapon", usource, item, false) -- remove weapon
+                    end
+                    TriggerClientEvent("usa:playAnimation", usource, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 3)
+                end
+                if msg then
+                    TriggerClientEvent("usa:notify", usource, msg)
+                end
+                cb(success, inv)
+            end)
+        else
+            TriggerClientEvent("usa:notify", usource, "Vehicle inventory full!")
+            cb(false, inv)
+        end
+    end)
 end)
 
 RegisterServerEvent("vehicle:moveItemToPlayerInv")
 AddEventHandler("vehicle:moveItemToPlayerInv", function(src, plate, fromSlot, toSlot, quantity, char, cb)
-  local usource = tonumber(src)
-  GetVehicleInventory(plate, function(inv)
-    if inv then
-      local item = inv.items[tostring(fromSlot)]
-      -- validate item move --
-      if item and quantity > item.quantity or quantity <= 0 then
-        exports["usa_vehinv"]:removeVehicleBusy(plate)
-        return
-      end
-      if item and item.type and item.type == "license" then
-        TriggerClientEvent("usa:notify", src, "Can't move licenses!")
-        -- todo: send msg to NUI to give some UI feedback for failed move
-        exports["usa_vehinv"]:removeVehicleBusy(plate)
-        return
-      end
-      -- move item --
-      if item then
-        if char.canHoldItem(item, quantity) then
-          char.putItemInSlot(item, toSlot, quantity, function(success)
-            if success == true then
-              if item.type == "weapon" then
-                TriggerClientEvent("interaction:equipWeapon", usource, item, true)
-              end
-              TriggerClientEvent("usa:playAnimation", usource, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 3)
-              VehInventoryManager.removeItemInSlot(plate, inv, fromSlot, quantity)
-              cb(inv)
-            else
-              exports["usa_vehinv"]:removeVehicleBusy(plate)
-            end
-          end)
-        else
-          TriggerClientEvent("usa:notify", usource, "Inventory full!")
+    local usource = tonumber(src)
+    GetVehicleInventory(plate, function(inv)
+        local item = inv.items[tostring(fromSlot)]
+        -- validate item move --
+        if item and quantity > item.quantity or quantity <= 0 then
+            exports["usa_vehinv"]:removeVehicleBusy(plate)
+            return
         end
-      end
-    end
-  end)
+        if item and item.type and item.type == "license" then
+            TriggerClientEvent("usa:notify", src, "Can't move licenses!")
+            -- todo: send msg to NUI to give some UI feedback for failed move
+            exports["usa_vehinv"]:removeVehicleBusy(plate)
+            return
+        end
+        -- move item --
+        if item then
+            if char.canHoldItem(item, quantity) then
+                char.putItemInSlot(item, toSlot, quantity, function(success)
+                    if success == true then
+                        if item.type == "weapon" then
+                            TriggerClientEvent("interaction:equipWeapon", usource, item, true)
+                        end
+                        TriggerClientEvent("usa:playAnimation", usource, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 3)
+                        VehInventoryManager.removeItemInSlot(plate, inv, fromSlot, quantity)
+                        cb(inv)
+                    else
+                        exports["usa_vehinv"]:removeVehicleBusy(plate)
+                    end
+                end)
+            else
+                TriggerClientEvent("usa:notify", usource, "Inventory full!")
+            end
+        end
+    end)
 end)
 
 RegisterServerEvent("vehicle:moveInventorySlots")
 AddEventHandler("vehicle:moveInventorySlots", function(plate, fromSlot, toSlot, cb)
-  GetVehicleInventory(plate, function(inv)
-    if inv then
-      VehInventoryManager.moveItemSlots(plate, inv, fromSlot, toSlot)
-      cb(inv)
-    end
-  end)
+    GetVehicleInventory(plate, function(inv)
+        VehInventoryManager.moveItemSlots(plate, inv, fromSlot, toSlot)
+        cb(inv)
+    end)
 end)
 
-RegisterServerEvent("vehicle:removeAllIllegalItems") -- TO TEST
+RegisterServerEvent("vehicle:removeAllIllegalItems")
 AddEventHandler("vehicle:removeAllIllegalItems", function(plate)
   local usource = tonumber(source)
   local charJob = exports["usa-characters"]:GetCharacterField(usource, "job")
   if charJob == "sheriff" or charJob == "corrections" then
     GetVehicleInventory(plate, function(inv)
-      if inv then
         VehInventoryManager.removeAllIllegalItems(usource, plate, inv, true)
-      end
     end)
   else
     DropPlayer(usource, "Exploiting. If you feel this was wrongfully done, please contact staff.")
@@ -126,45 +115,64 @@ AddEventHandler("vehicle:removeAllIllegalItems", function(plate)
 end)
 
 function GetVehicleInventory(plate, cb)
-	-- query for the information needed from each vehicle --
-	local endpoint = "/vehicles/_design/vehicleFilters/_view/getVehicleInventoryByPlate"
-	local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
-	PerformHttpRequest(url, function(err, responseText, headers)
-		if responseText then
-      local inventory = {}
-			local data = json.decode(responseText)
-      if data and data.rows and data.rows[1] and data.rows[1].value then
-			  inventory = data.rows[1].value[1] -- inventory
-      end
-			cb(inventory)
-		end
-	end, "POST", json.encode({
-		keys = { plate }
-		--keys = { "86CSH075" }
-	}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+    -- query for the information needed from each vehicle --
+    local endpoint = "/vehicles/_design/vehicleFilters/_view/getVehicleInventoryByPlate"
+    local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+    PerformHttpRequest(url, function(err, responseText, headers)
+        if responseText then
+            local inventory = nil
+            local data = json.decode(responseText)
+            if data and data.rows and data.rows[1] and data.rows[1].value then
+                inventory = data.rows[1].value[1] -- inventory
+            else
+                local tempVehInv = VehInventoryManager:getTempVehInv(plate)
+                if tempVehInv  then
+                    inventory = tempVehInv
+                elseif not inventory and not tempVehInv then
+                    inventory = VehInventoryManager:newTempVehInv(plate)
+                end
+            end
+            cb(inventory)
+        end
+    end, "POST", json.encode({
+        keys = { plate }
+        --keys = { "86CSH075" }
+    }), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function GetVehicleInventoryAndCapacity(plate, cb)
-	-- query for the information needed from each vehicle --
-	local endpoint = "/vehicles/_design/vehicleFilters/_view/getVehicleInventoryAndCapacityByPlate"
-	local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
-	PerformHttpRequest(url, function(err, responseText, headers)
-		if responseText then
-      local inventory = {}
-      local capacity = 0.0
-			local data = json.decode(responseText)
-      if data.rows[1] then
-  			inventory = data.rows[1].value[1] -- inventory
-        capacity = data.rows[1].value[2] -- capacity
-      end
-			cb(inventory, capacity)
-		end
-	end, "POST", json.encode({
-		keys = { plate }
-		--keys = { "86CSH075" }
-	}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+    -- query for the information needed from each vehicle --
+    local endpoint = "/vehicles/_design/vehicleFilters/_view/getVehicleInventoryAndCapacityByPlate"
+    local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+    PerformHttpRequest(url, function(err, responseText, headers)
+        if responseText then
+            local inventory = nil
+            local capacity = 0.0
+            local data = json.decode(responseText)
+            if data.rows[1] and data.rows[1].value[1] then
+                inventory = data.rows[1].value[1] -- inventory
+                capacity = data.rows[1].value[2] -- capacity
+            else -- check for non player owned "temporary" vehicles
+                local tempVehInv = VehInventoryManager:getTempVehInv(plate)
+                if tempVehInv  then
+                    inventory = tempVehInv
+                elseif not inventory and not tempVehInv then
+                    inventory = VehInventoryManager:newTempVehInv(plate)
+                end
+                capacity = inventory.MAX_CAPACITY
+            end
+            cb(inventory, capacity)
+        end
+    end, "POST", json.encode({
+        keys = { plate }
+        --keys = { "86CSH075" }
+    }), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function IsPlayerActive(id)
   return GetPlayerName(id)
+end
+
+function NewInventory(capacity)
+    return VehInventoryManager:NewInventory(capacity)
 end

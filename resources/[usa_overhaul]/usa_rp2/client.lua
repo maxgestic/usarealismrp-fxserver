@@ -358,21 +358,24 @@ Citizen.CreateThread(function()
   end
 end)
 
--- save player vehicle wheel position on exit?
+-- save player vehicle wheel position on exit --
 Citizen.CreateThread(function()
+    local angle = 0.0
+    local speed = 0.0
     while true do
-        Citizen.Wait(5)
-        isInVeh = IsPedInAnyVehicle(playerPed, true)
-        if isInVeh then
-            veh = GetVehiclePedIsUsing(playerPed)
-            angle = GetVehicleSteeringAngle(veh)
-            veh2 = GetPlayersLastVehicle()
-            sped = GetEntitySpeed(veh)
-            Citizen.Wait(20)
-            if sped < 10 then
-                SetVehicleSteeringAngle(veh2, angle)
+        local veh = GetVehiclePedIsUsing(playerPed)
+        if DoesEntityExist(veh) then
+            local tangle = GetVehicleSteeringAngle(veh)
+            if tangle > 10.0 or tangle < -10.0 then
+                angle = tangle
+            end
+            speed = GetEntitySpeed(veh)
+            local vehicle = GetVehiclePedIsIn(playerPed, true)
+            if speed < 0.1 and DoesEntityExist(vehicle) and not GetIsTaskActive(playerPed, 151) and not GetIsVehicleEngineRunning(vehicle) then
+                SetVehicleSteeringAngle(GetVehiclePedIsIn(playerPed, true), angle)
             end
         end
+        Wait(0)
     end
 end)
 
@@ -583,11 +586,11 @@ local tiempo = 8000 -- in miliseconds >> 1000 ms = 1s
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(10)
     playerPed = PlayerPedId() -- IMPORTANT!! DO NOT REMOVE!! THIS IS USED TO SET THE GLOBAL PLAYER PED FOR THE WHOLE FILE! --
 		if IsPedBeingStunned(playerPed) then
 		    SetPedMinGroundTimeForStungun(playerPed, tiempo)
 		end
+        Wait(10)
 	end
 end)
 
@@ -621,14 +624,16 @@ end)
 local playing_anim = nil
 RegisterNetEvent("usa:playAnimation")
 AddEventHandler("usa:playAnimation", function(animDict, animName, speed, speedMult, duration, flag, playbackRate, lockX, lockY, lockZ, actualDuration)
+    local me = PlayerPedId()
+    local isInVeh = IsPedInAnyVehicle(me, true)
     if not isInVeh then
-        if not IsPedDeadOrDying(GetPlayerPed(-1)) then
+        if not IsPedDeadOrDying(me) then
             -- load animation
             RequestAnimDict(animDict)
             while not HasAnimDictLoaded(animDict) do
                 Citizen.Wait(100)
             end
-            TaskPlayAnim(playerPed, animDict, animName, speed, speedMult, duration, flag, playbackRate, lockX, lockY, lockZ)
+            TaskPlayAnim(me, animDict, animName, speed, speedMult, duration, flag, playbackRate, lockX, lockY, lockZ)
             playing_anim = {
                 dict = animDict,
                 name = animName
@@ -636,14 +641,14 @@ AddEventHandler("usa:playAnimation", function(animDict, animName, speed, speedMu
             if actualDuration then
                 Wait(actualDuration * 1000)
                 if not isInVeh then
-                    ClearPedTasksImmediately(playerPed)
+                    ClearPedTasksImmediately(me)
                 end
-                StopAnimTask(playerPed, animDict, animName, 1.0)
+                StopAnimTask(me, animDict, animName, 1.0)
             else
-              while IsEntityPlayingAnim(playerPed, animDict, animName, 3) do
-                Citizen.Wait(10)
+              while IsEntityPlayingAnim(me, animDict, animName, 3) do
+                Wait(10)
               end
-              ClearPedTasks(playerPed)
+              ClearPedTasks(me)
             end
         end
     end

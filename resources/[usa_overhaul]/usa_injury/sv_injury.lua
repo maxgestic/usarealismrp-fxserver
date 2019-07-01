@@ -1,4 +1,4 @@
-BASE_CHECKIN_PRICE = 50 -- must be kept the same with one in cl_injury under check-in section
+BASE_CHECKIN_PRICE = 25 -- must be kept the same with one in cl_injury under check-in section
 
 injuries = { -- ensure this is the same as sv_injury.lua
     [2725352035] = {type = 'blunt', bleed = 3600, string = 'Fists', treatableWithBandage = true, treatmentPrice = 50, dropEvidence = 0.5}, -- WEAPON_UNARMED

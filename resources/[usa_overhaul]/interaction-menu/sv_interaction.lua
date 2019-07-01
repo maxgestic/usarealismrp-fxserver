@@ -31,30 +31,11 @@ end)
 RegisterServerEvent("interaction:loadVehicleInventory")
 AddEventHandler("interaction:loadVehicleInventory", function(plate)
 	local userSource = tonumber(source)
-	GetVehicleInventory(plate, function(inv)
+	exports["usa_vehinv"]:GetVehicleInventory(plate, function(inv)
 		local isLocked = exports["_locksystem"]:isLocked(plate)
 		TriggerClientEvent("interaction:vehicleInventoryLoaded", userSource, inv, isLocked)
 	end)
 end)
-
-function GetVehicleInventory(plate, cb)
-	-- query for the information needed from each vehicle --
-	local endpoint = "/vehicles/_design/vehicleFilters/_view/getVehicleInventoryByPlate"
-	local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
-	PerformHttpRequest(url, function(err, responseText, headers)
-		if responseText then
-			local inventory = {}
-			local data = json.decode(responseText)
-			if data.rows[1] then
-				inventory = data.rows[1].value[1] -- inventory
-			end
-			cb(inventory)
-		end
-	end, "POST", json.encode({
-		keys = { plate }
-		--keys = { "86CSH075" }
-	}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
-end
 
 RegisterServerEvent("interaction:loadInventoryForInteraction")
 AddEventHandler("interaction:loadInventoryForInteraction", function()

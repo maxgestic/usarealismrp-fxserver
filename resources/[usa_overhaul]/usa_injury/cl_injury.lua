@@ -482,7 +482,7 @@ end)
 
 ------ CHECK-IN HOSPITAL AND DOCTOR JOB ------
 
-local BASE_CHECKIN_PRICE = 50
+local BASE_CHECKIN_PRICE = 25
 
 Citizen.CreateThread(function()
     local checkingIn = false
