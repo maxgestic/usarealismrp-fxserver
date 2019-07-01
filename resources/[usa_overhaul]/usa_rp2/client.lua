@@ -17,7 +17,6 @@ local civilianSpawns = {
 }
 
 local playerPed = GetPlayerPed(-1)
-local isInVeh = IsPedInAnyVehicle(playerPed)
 
 local blacklistedVehicles = {
   -1649536104,
@@ -298,21 +297,20 @@ end)
 
 -- NO DRIVE BY'S
 Citizen.CreateThread(function()
-	while true do
-		Wait(0)
-    if isInVeh then
-      local veh = GetVehiclePedIsIn(PlayerPedId())
-      local mph = GetEntitySpeed(veh) * 2.236936
-			if (IsControlPressed(0, 76) or IsControlPressed(0, 79) or IsControlPressed(0, 71) or IsControlPressed(0, 72) or IsControlPressed(0, 63) or IsControlPressed(0, 64)) or (mph > 30 and GetPedInVehicleSeat(veh, -1) == PlayerPedId()) then
-        DisableControlAction(0, 68, true)
-        DisableControlAction(0, 69, true)
-        DisableControlAction(0, 70, true)
-				SetPlayerCanDoDriveBy(PlayerId(), false)
-			else
-				SetPlayerCanDoDriveBy(PlayerId(), true)
-			end
+    while true do
+        Wait(0)
+        local me = PlayerPedId()
+        local veh = GetVehiclePedIsIn(me)
+        local mph = GetEntitySpeed(veh) * 2.236936
+        if veh and (IsControlPressed(0, 76) or IsControlPressed(0, 79) or IsControlPressed(0, 71) or IsControlPressed(0, 72) or IsControlPressed(0, 63) or IsControlPressed(0, 64)) or (mph > 30 and GetPedInVehicleSeat(veh, -1) == me) then
+            DisableControlAction(0, 68, true)
+            DisableControlAction(0, 69, true)
+            DisableControlAction(0, 70, true)
+            SetPlayerCanDoDriveBy(me, false)
+        else
+            SetPlayerCanDoDriveBy(me, true)
+        end
     end
-	end
 end)
 
 -- spawn peds
@@ -391,7 +389,7 @@ Citizen.CreateThread( function()
     Citizen.Wait( 10 )
     if ( DoesEntityExist( playerPed ) and not IsEntityDead( playerPed ) ) then
       if ( not IsPauseMenuActive() ) then
-        if ( IsControlPressed( 1, KEY_1 ) and IsControlJustPressed( 1, KEY_2 ) and not isInVeh ) then
+        if ( IsControlPressed( 1, KEY_1 ) and IsControlJustPressed( 1, KEY_2 ) and not IsPedInAnyVehicle(playerPed, true) ) then
           RequestAnimSet( clipset )
           while ( not HasAnimSetLoaded( clipset ) ) do
             Citizen.Wait( 100 )
@@ -475,23 +473,23 @@ end)
 local windowup = true
 RegisterNetEvent("RollWindow")
 AddEventHandler('RollWindow', function()
-  if isInVeh then
     local playerCar = GetVehiclePedIsIn(playerPed, false)
-    if ( GetPedInVehicleSeat( playerCar, -1 ) == playerPed ) then
-      --SetEntityAsMissionEntity( playerCar, true, true )
-      if ( windowup ) then
-        RollDownWindow(playerCar, 0)
-        RollDownWindow(playerCar, 1)
-        --TriggerEvent('chatMessage', '', {255,0,0}, 'Windows down')
-        windowup = false
-      else
-        RollUpWindow(playerCar, 0)
-        RollUpWindow(playerCar, 1)
-        --TriggerEvent('chatMessage', '', {255,0,0}, 'Windows up')
-        windowup = true
-      end
+    if DoesEntityExist(playerCar) then
+        if ( GetPedInVehicleSeat( playerCar, -1 ) == playerPed ) then
+          --SetEntityAsMissionEntity( playerCar, true, true )
+          if ( windowup ) then
+            RollDownWindow(playerCar, 0)
+            RollDownWindow(playerCar, 1)
+            --TriggerEvent('chatMessage', '', {255,0,0}, 'Windows down')
+            windowup = false
+          else
+            RollUpWindow(playerCar, 0)
+            RollUpWindow(playerCar, 1)
+            --TriggerEvent('chatMessage', '', {255,0,0}, 'Windows up')
+            windowup = true
+          end
+        end
     end
-  end
 end )
 
 local last_car = 0
