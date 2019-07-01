@@ -4,7 +4,7 @@ local ReportShotsFired = true
 local ReportCarjacking = true
 local ReportPersonWithAGun = true
 local ReportPersonWithAKnife = true
-local ReportRecklessDriving = true
+local ReportRecklessDriving = false
 local ReportVehicleTheft = false
 local ReportExplosion = true
 local ReportMVA = false
@@ -169,7 +169,7 @@ AddEventHandler('911:mark911', function()
 	ShowNotification('Latest call has been marked as waypoint.')
 end)
 
--- automatically remove all call blips you are closest too -- 
+-- automatically remove all call blips you are closest too --
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(1000)
@@ -285,7 +285,7 @@ Citizen.CreateThread(function()
                             lastStreetHASH = GetStreetNameAtCoord(pCoords.x, pCoords.y, pCoords.z)
                             lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
                             TriggerServerEvent('911:ArmedCarjacking', pCoords.x, pCoords.y, pCoords.z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(veh))), GetVehicleNumberPlateText(veh), IsPedMale(playerPed), primary, secondary)
-                            
+
                         	local intimidated = true
                         	local beginTime = GetGameTimer()
                         	while GetGameTimer() - beginTime < 10000 do

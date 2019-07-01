@@ -520,7 +520,7 @@ AddEventHandler('properties:loadOutfit', function(slot)
 	end
 end)
 
-TriggerEvent('es:addJobCommand', 'breach', {'sheriff', 'police', 'dai'}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'breach', {'sheriff', 'ems', 'police', 'dai'}, function(source, args, char, location)
 	TriggerClientEvent('properties:findRoomToBreach', source, args[2])
 
 end, {
@@ -530,7 +530,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'bbreach', {'sheriff', 'police'}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'bbreach', {'sheriff', 'police', 'ems'}, function(source, args, char, location)
 	location = vector3(table.unpack(location))
 	for i = 1, #burglaryHouses do
 		if find_distance(location, burglaryHouses[i]) < 2.0 then
