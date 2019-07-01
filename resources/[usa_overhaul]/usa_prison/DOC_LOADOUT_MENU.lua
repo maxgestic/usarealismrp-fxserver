@@ -7,9 +7,7 @@ local weapons = {
 }
 
 local vehicles = {
-  { name = "CVPI (Lightbar)", hash = GetHashKey("cvpi11b") },
-  { name = "CVPI (Slicktop)", hash = GetHashKey("cvpi11a") },
-  { name = "Bravado Bison", hash = GetHashKey("bison19") },
+  { name = "CVPI", hash = GetHashKey("pdcvpi") },
   { name = "Golf Cart", hash = GetHashKey("caddy") },
   { name = "Prison Bus", hash = GetHashKey("pbus") },
   { name = "Transport Van", hash = GetHashKey("policet") }
@@ -214,7 +212,7 @@ function CreateUniformMenu(menu)
             TriggerServerEvent('doc:loadOutfit', selectedLoadSlot)
       TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 1, 'zip-close', 1.0)
       Citizen.Wait(2000)
-      DoScreenFadeIn(500) 
+      DoScreenFadeIn(500)
             TriggerEvent("usa:playAnimation", 'clothingshirt', 'try_shirt_positive_d', -8, 1, -1, 48, 0, 0, 0, 0, 3)
         end
     end
@@ -376,7 +374,7 @@ end)
 RegisterNetEvent("doc:spawnVehicle")
 AddEventHandler("doc:spawnVehicle", function(hash)
   SpawnVehicle(hash)
-end)  
+end)
 
 RegisterNetEvent("doc:open")
 AddEventHandler("doc:open", function(loc)
@@ -450,7 +448,7 @@ function SpawnVehicle(model)
     SetEntityAsMissionEntity(veh, true, true)
     SetVehicleHasBeenOwnedByPlayer(veh, true)
     SetVehicleExplodesOnHighExplosionDamage(veh, false)
-    SetVehicleLivery(veh, 2) -- DOC SKIN
+    SetVehicleLivery(veh, 1) -- DOC SKIN
 		TaskWarpPedIntoVehicle(GetPlayerPed(-1), veh, -1)
 
     -- give key to owner

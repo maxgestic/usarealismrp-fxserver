@@ -141,7 +141,7 @@ AddEventHandler("doc:saveOutfit", function(uniform, slot)
 	TriggerEvent('es:exposeDBFunctions', function(usersTable)
 		usersTable.getDocumentByRow("correctionaldepartment", "identifier" , player_identifer, function(result)
 			local uniforms = result.uniform or {}
-			uniforms[slot] = uniform
+			uniforms[tostring(slot)] = uniform
 			TriggerEvent('es:exposeDBFunctions', function(usersTable)
 				usersTable.getDocumentByRow("correctionaldepartment", "identifier" , player_identifer, function(result)
 					docid = result._id
@@ -172,7 +172,7 @@ AddEventHandler("doc:loadOutfit", function(slot, id)
 	TriggerEvent('es:exposeDBFunctions', function(usersTable)
 		usersTable.getDocumentByRow("correctionaldepartment", "identifier" , player_identifer, function(result)
 			if result and result.uniform then
-				TriggerClientEvent("doc:uniformLoaded", usource, result.uniform[slot] or nil)
+				TriggerClientEvent("doc:uniformLoaded", usource, result.uniform[tostring(slot)] or nil)
 			end
 		end)
 	end)
