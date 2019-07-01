@@ -138,12 +138,12 @@ Citizen.CreateThread(function()
 								DrawText3D(room.garage[1], room.garage[2], room.garage[3], 4, '[E] - Garage')
 							end
 							if room.locked then
-								DrawText3D(room.coords[1], room.coords[2], room.coords[3], 2, '[E] - Enter | [U] - Locked (~g~'..room.name..'~s~)')
+								DrawText3D(room.coords[1], room.coords[2], room.coords[3], 2, '[E] - Enter | [U] - Locked (~y~'..room.name..'~s~)')
 							else
 								DrawText3D(room.coords[1], room.coords[2], room.coords[3], 2, '[E] - Enter | [U] - Unlocked (~g~'..room.name..'~s~)')
 							end
 						elseif room.owner then
-							DrawText3D(room.coords[1], room.coords[2], room.coords[3], 2, '[E] - Enter (~r~'..room.name..'~s~)')
+							DrawText3D(room.coords[1], room.coords[2], room.coords[3], 2, '[E] - Enter (~g~'..room.name..'~s~)')
 						end
 					end
 				elseif data.type == 'apartment' then
@@ -365,7 +365,7 @@ AddEventHandler('properties:loadOutfit', function(data)
 				TriggerServerEvent("mini:save", character)
 				TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 1, 'zip-close', 1.0)
 				Citizen.Wait(2000)
-				DoScreenFadeIn(500) 
+				DoScreenFadeIn(500)
 		        TriggerEvent("usa:playAnimation", 'clothingshirt', 'try_shirt_positive_d', -8, 1, -1, 48, 0, 0, 0, 0, 3)
 			end
 		else
@@ -647,7 +647,7 @@ AddEventHandler('properties:enterBurglaryHouse', function(_currentProperty)
 				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
 				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
 				TriggerServerEvent('911:Burglary', x, y, z, lastStreetNAME, IsPedMale(playerPed))
-				
+
 				local oneAttacking = false
 				for i = 1, #spawnedPeds do
 					if not oneAttacking then oneAttacking = true elseif math.random() > 0.8 then return end
@@ -857,7 +857,7 @@ function LoadWardrobeMenu()
             TriggerServerEvent('properties:loadOutfit', selectedLoadSlot)
 			TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 1, 'zip-close', 1.0)
 			Citizen.Wait(2000)
-			DoScreenFadeIn(500) 
+			DoScreenFadeIn(500)
             TriggerEvent("usa:playAnimation", 'clothingshirt', 'try_shirt_positive_d', -8, 1, -1, 48, 0, 0, 0, 0, 3)
             RemoveMenuPool(_menuPool)
         end
@@ -1146,23 +1146,23 @@ function SpawnResidents()
 		local model = residents.models[math.random(1, #residents.models)]
 		RequestModel(model)
 
-		while not HasModelLoaded(model) do 
+		while not HasModelLoaded(model) do
 			Wait(0)
 		end
-		
+
 		local ped = CreatePed(4, model, resident.coords, resident.rotation, false, false)
 		table.insert(spawnedPeds, ped)
-		
+
 		-- animation
 		RequestAnimDict(residents.animation.dict)
 
-		while not HasAnimDictLoaded(residents.animation.dict) do 
-			Wait(0) 
+		while not HasAnimDictLoaded(residents.animation.dict) do
+			Wait(0)
 		end
-		
+
 		local weapon = residents.weapons[math.random(1, #residents.weapons)]
 		GiveWeaponToPed(ped, GetHashKey(weapon), 255, true, false)
-		
+
 		TaskPlayAnimAdvanced(ped, residents.animation.dict, residents.animation.anim, resident.coords, 0.0, 0.0, resident.rotation, 8.0, 1.0, -1, 1, 1.0, true, true)
 		SetFacialIdleAnimOverride(ped, "mood_sleeping_1", 0)
 	end
@@ -1173,7 +1173,6 @@ function RemoveResidents()
 		SetPedAsNoLongerNeeded(ped)
 		DeletePed(ped)
 	end
-	
+
 	spawnedPeds = {}
 end
-
