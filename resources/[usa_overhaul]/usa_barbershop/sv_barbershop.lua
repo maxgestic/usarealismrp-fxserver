@@ -1,7 +1,7 @@
 --# made by: minipunch
 --# for: USA REALISM RP
 
-local BARBER_FEE = 200
+local BARBER_FEE = 70
 
 RegisterServerEvent("barber:checkout")
 AddEventHandler("barber:checkout", function(customizations, business)

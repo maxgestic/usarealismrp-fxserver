@@ -125,7 +125,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10)
 		local playerPed = PlayerPedId()
-		if IsPedShooting(playerPed) and GetSelectedPedWeapon(playerPed) ~= 101631238 and GetSelectedPedWeapon(playerPed) ~= 911657153 and GetSelectedPedWeapon(playerPed) ~= 883325847 and GetSelectedPedWeapon(playerPed) ~= GetHashKey("WEAPON_SNOWBALL") then
+		if IsPedShooting(playerPed) and WeaponDropsEvidence(GetSelectedPedWeapon(playerPed))  then
 			local playerCoords = GetEntityCoords(playerPed)
 			local playerWeapon = GetSelectedPedWeapon(playerPed)
 			TriggerServerEvent('evidence:newCasing', playerCoords, playerWeapon)
@@ -592,4 +592,20 @@ function HasEvidenceNamed(name)
 		end
 	end
 	return false
+end
+
+function WeaponDropsEvidence(wep)
+	if wep == 101631238 then
+		return false
+	elseif wep == 911657153 then
+		return false
+	elseif wep == 883325847 then
+		return false
+	elseif wep == GetHashKey("WEAPON_SNOWBALL") then
+		return false
+	elseif wep == -1600701090 then
+		return false
+	else
+		return true
+	end
 end

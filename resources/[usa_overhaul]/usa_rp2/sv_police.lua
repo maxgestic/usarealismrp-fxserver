@@ -185,6 +185,8 @@ AddEventHandler("search:searchPlayer", function(playerId, src)
 	end
 end)
 
+
+
 RegisterServerEvent("search:playSuspectAnim")
 AddEventHandler("search:playSuspectAnim", function(sourceToSearch, x, y, z, heading)
 	TriggerClientEvent("search:playSuspectAnim", sourceToSearch, x, y, z, heading)
@@ -206,6 +208,15 @@ TriggerEvent('es:addCommand', 'search', function(source, args, char)
 			TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 4)
 			TriggerEvent("search:searchPlayer", tonumber(args[2]), source)
 		end
+	end
+end, {help = "Search the nearest person or vehicle"})
+
+TriggerEvent('es:addJobCommand', 'frisk', {"sheriff", "ems", "doc", "dai"}, function(source, args, char)
+	if not tonumber(args[2]) then
+		TriggerClientEvent("police:friskNearest", source, source)
+	else
+		TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 4)
+		TriggerEvent("police:frisk", tonumber(args[2]), source)
 	end
 end, {help = "Search the nearest person or vehicle"})
 
@@ -286,34 +297,6 @@ end, { help = "Present your official police or EMS identification." })
 function GetRankName(rank)
 	return POLICE_RANKS[rank]
 end
-
--- store AR/pump shotgun
-TriggerEvent('es:addJobCommand', 'store', { "police", "sheriff" }, function(source, args, user)
-	if args[2] then
-		TriggerClientEvent("police:storeWeapon", source, args[2])
-	else
-		TriggerClientEvent("usa:notify", source, "Invalid format!")
-	end
-end, {
-	help = "store a weapon",
-	params = {
-		{ name = "weapon", help = "ar, shotgun, flaregun, extinguisher" }
-	}
-})
-
--- retrieve AR/pump shotgun
-TriggerEvent('es:addJobCommand', 'grab', { "police", "sheriff" }, function(source, args, user)
-	if args[2] then
-		TriggerClientEvent("police:grabWeapon", source, args[2])
-	else
-		TriggerClientEvent("usa:notify", source, "Invalid format!")
-	end
-end, {
-	help = "grab a weapon",
-	params = {
-		{ name = "weapon", help = "ar, shotgun, flaregun, extinguisher" }
-	}
-})
 
 TriggerEvent('es:addJobCommand', 'p', { "police", "sheriff", "ems", "corrections" }, function(source, args, char, location)
 	local source_user_job = char.get("job")

@@ -135,14 +135,21 @@ end)
 RegisterServerEvent("weaponExtraShop:requestComponentPurchase")
 AddEventHandler("weaponExtraShop:requestComponentPurchase", function(weapon, componentIndex, wephash, legal, property)
   local char = exports["usa-characters"]:GetCharacter(source)
-  local component if legal then component = ITEMS["Components"].legal[weapon][componentIndex] else component = ITEMS["Components"].illegal[weapon][componentIndex] end
+  local component
+  if legal then
+      component = ITEMS["Components"].legal[weapon][componentIndex]
+  else
+      component = ITEMS["Components"].illegal[weapon][componentIndex]
+  end
   local weapon = char.getItemWithField("hash", wephash)
   if weapon then
     if component.price <= char.get("money") then -- see if user has enough money
       char.removeMoney(component.price)
       TriggerClientEvent("usa:notify", source, "You have purchased a ~y~" .. component.name .. "~w~ weapon component.")
       TriggerClientEvent("weaponExtraShop:applyComponent", source, component)
-      if not weapon.components then weapon.components = {} end
+      if not weapon.components then
+          weapon.components = {}
+      end
       table.insert(weapon.components, component.value)
       char.modifyItem(weapon, "components", weapon.components)
     else

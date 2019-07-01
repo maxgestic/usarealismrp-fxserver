@@ -1,10 +1,12 @@
-local armoryItems = { -- must match client.lua
-  { name = "Flashlight", type = "weapon", hash = -1951375401, price = 50, legality = "legal", quantity = 1, weight = 4 },
-  { name = "Nightstick", type = "weapon", hash = 1737195953, price = 75, legality = "legal", quantity = 1, weight = 4 },
-  { name = "Combat Pistol", type = "weapon", hash = 1593441988, price = 200, legality = "legal", quantity = 1, weight = 8 },
-  { name = "Stun Gun", type = "weapon", hash = 911657153, price = 400, legality = "legal", quantity = 1, weight = 5 },
-  { name = "MK2 Pump Shotgun", type = "weapon", hash = 1432025498, price = 700, legality = "legal", quantity = 1, weight = 30 },
-  { name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 700, legality = "legal", quantity = 1, weight = 30 }
+local armoryItems = {
+    { name = "Flare", type = "weapon", hash = 1233104067, price = 25, legality = "legal", quantity = 1, weight = 9 },
+    { name = "Tear Gas", type = "weapon", hash = -1600701090, price = 25, legality = "legal", quantity = 1, weight = 9 },
+    { name = "Flashlight", type = "weapon", hash = -1951375401, price = 25, legality = "legal", quantity = 1, weight = 4 },
+    { name = "Nightstick", type = "weapon", hash = 1737195953, price = 25, legality = "legal", quantity = 1, weight = 4 },
+    { name = "Combat Pistol", type = "weapon", hash = 1593441988, price = 100, legality = "legal", quantity = 1, weight = 8 },
+    { name = "Stun Gun", type = "weapon", hash = 911657153, price = 150, legality = "legal", quantity = 1, weight = 5 },
+    { name = "MK2 Pump Shotgun", type = "weapon", hash = 1432025498, price = 300, legality = "legal", quantity = 1, weight = 30 },
+    { name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 300, legality = "legal", quantity = 1, weight = 30 }
 }
 
 RegisterServerEvent("police:loadArmoryItems")
@@ -226,9 +228,11 @@ AddEventHandler("policestation2:requestPurchase", function(index)
         weaponDB.ownerName = char.getFullName()
         weaponDB.ownerDOB = char.get('dateOfBirth')
         weaponDB.issueDate = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year
+        weaponDB.components = attachments
+        local attachments = GetWeaponAttachments(weapon.name)
+        weapon.components = attachments
         char.giveItem(weapon, 1)
         char.removeMoney(armoryItems[index].price)
-        local attachments = GetWeaponAttachments(weapon.name)
         TriggerClientEvent("mini:equipWeapon", usource, armoryItems[index].hash, attachments) -- equip
         TriggerClientEvent('usa:notify', usource, 'Purchased: ~y~'..weapon.name..'\n~s~Serial Number: ~y~'..weapon.serialNumber..'\n~s~Price: ~y~$'..armoryItems[index].price)
         TriggerEvent('es:exposeDBFunctions', function(couchdb)
@@ -300,7 +304,12 @@ end)
 RegisterServerEvent("policestation2:offduty")
 AddEventHandler("policestation2:offduty", function()
   local char = exports["usa-characters"]:GetCharacter(source)
-  local playerWeapons = char.getWeapons()
+  for i = 1, #armoryItems do -- remove any police weapons they got from armory when clocking out
+      if char.hasItem(armoryItems[i].name) then
+          char.removeItem(armoryItems[i].name, 1)
+      end
+  end
+  local playerWeapons = char.getWeapons() -- give back their civ weapons
   TriggerClientEvent('interaction:setPlayersJob', source, 'civ')
   TriggerClientEvent("policestation2:setciv", source, char.get("appearance"), playerWeapons)
   char.set("job", "civ")

@@ -129,7 +129,11 @@ AddEventHandler("character:setCharacter", function(appearance, weapons)
 			if weapons[i].components then
 				if #weapons[i].components > 0 then
 					for x = 1, #weapons[i].components do
-						GiveWeaponComponentToPed(GetPlayerPed(-1), weapons[i].hash, GetHashKey(weapons[i].components[x]))
+						if type(weapons[i].components[x]) ~= "number" then
+							GiveWeaponComponentToPed(GetPlayerPed(-1), weapons[i].hash, GetHashKey(weapons[i].components[x]))
+						else
+							GiveWeaponComponentToPed(GetPlayerPed(-1), weapons[i].hash, weapons[i].components[x])
+						end
 					end
 				end
 			end
