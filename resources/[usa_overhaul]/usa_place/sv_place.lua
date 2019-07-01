@@ -88,7 +88,19 @@ end, {
 
 RegisterServerEvent("place:placePerson")
 AddEventHandler("place:placePerson", function(targetId)
-	TriggerClientEvent("place", targetId)
+	awaitingUpdates = true
+	TriggerEvent('drag:passTable', 'place:updateDragTable', function()
+		while awaitingUpdates do
+			Wait(100)
+		end
+		if draggedPlayers[source] == targetId then
+			TriggerClientEvent('drag:dragPlayer', targetId, source, true)
+			TriggerClientEvent('drag:carryPlayer', targetId, source, true)
+			draggedPlayers[source] = nil
+			TriggerEvent('place:returnUpdatedTable', draggedPlayers)
+		end
+		TriggerClientEvent("place", targetId)
+	end)
 end)
 
 RegisterServerEvent("place:unseatPerson")
