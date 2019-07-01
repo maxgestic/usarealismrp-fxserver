@@ -276,28 +276,17 @@ AddEventHandler("policestation2:loadOutfit", function(slot)
   local user = exports["essentialmode"]:getPlayerFromId(source)
   local char = exports["usa-characters"]:GetCharacter(source)
   if char.get("policeRank") > 0 then
-    local character = user.getPoliceCharacter()
-    TriggerClientEvent("policestation2:setCharacter", source, character[tostring(slot)])
+    local policeChar = user.getPoliceCharacter()
+    TriggerClientEvent("policestation2:setCharacter", source, policeChar[tostring(slot)])
     if char.get('job') ~= 'sheriff' then
       char.set("job", "sheriff")
       TriggerEvent('job:sendNewLog', source, 'sheriff', true)
     end
     TriggerClientEvent('interaction:setPlayersJob', source, 'sheriff')
     TriggerEvent("eblips:add", {name = char.getName(), src = source, color = 3})
+    char.removeWeapons() -- remove civ weapons
   else
     DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
-    TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for memory editing at a police station, please intervene^0!')
-  end
-end)
-
-RegisterServerEvent("policestation2:onduty")
-AddEventHandler("policestation2:onduty", function()
-  local char = exports["usa-characters"]:GetCharacter(source)
-  local user_job = char.get("job")
-  if (user_job ~= "sheriff" or user_job ~= "cop" or user_job ~= "police") and char.get("policeRank") > 0 then
-    char.set("job", "sheriff")
-    TriggerEvent('job:sendNewLog', source, 'sheriff', true)
-    TriggerEvent("eblips:add", {name = char.getName(), src = source, color = 3})
   end
 end)
 

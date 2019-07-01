@@ -222,7 +222,7 @@ local ACTIONS = {
 		Citizen.CreateThread(function()
 			local ssn = tonumber(exports.globals:GetUserInput())
 			if ssn then
-				TriggerServerEvent("place:placeFromInteractionMenu", ssn) -- need to test chat message response
+				TriggerServerEvent("place:placePerson", ssn) -- need to test chat message response
 			end
 		end)
 	end,
@@ -232,7 +232,7 @@ local ACTIONS = {
 		Citizen.CreateThread(function()
 			local ssn = tonumber(exports.globals:GetUserInput())
 			if ssn then
-				TriggerServerEvent("place:unseatFromInteractionMenu", ssn)
+				TriggerServerEvent("place:unseatPerson", ssn)
 			end
 		end)
 	end,
