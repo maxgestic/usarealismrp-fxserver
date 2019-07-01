@@ -177,10 +177,19 @@ Citizen.CreateThread(function()
 end)
 
 RegisterNetEvent("mini:equipWeapon")
-AddEventHandler("mini:equipWeapon", function(hash, name)
+AddEventHandler("mini:equipWeapon", function(hash, attachments)
 	local playerPed = GetPlayerPed(-1)
 	if hash ~= GetHashKey("GADGET_PARACHUTE") then	--Dont auto equip parachutes from gunstore
 		GiveWeaponToPed(playerPed, hash, 60, false, true)
+		if attachments then
+			for i = 1, #attachments do
+				if type(attachments[i]) ~= "number" then
+					GiveWeaponComponentToPed(playerPed, hash, GetHashKey(attachments[i]))
+				else
+					GiveWeaponComponentToPed(playerPed, hash, attachments[i])
+				end
+			end
+		end
 	end
 end)
 

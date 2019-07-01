@@ -202,7 +202,6 @@ AddEventHandler("policestation2:checkWhitelist", function(clientevent)
   else
     TriggerClientEvent("usa:notify", source, "~y~You are not whitelisted for POLICE. Apply at https://www.usarrp.net.")
   end
-
 end)
 
 RegisterServerEvent("policestation2:requestPurchase")
@@ -229,7 +228,8 @@ AddEventHandler("policestation2:requestPurchase", function(index)
         weaponDB.issueDate = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year
         char.giveItem(weapon, 1)
         char.removeMoney(armoryItems[index].price)
-        TriggerClientEvent("mini:equipWeapon", usource, armoryItems[index].hash) -- equip
+        local attachments = GetWeaponAttachments(weapon.name)
+        TriggerClientEvent("mini:equipWeapon", usource, armoryItems[index].hash, attachments) -- equip
         TriggerClientEvent('usa:notify', usource, 'Purchased: ~y~'..weapon.name..'\n~s~Serial Number: ~y~'..weapon.serialNumber..'\n~s~Price: ~y~$'..armoryItems[index].price)
         TriggerEvent('es:exposeDBFunctions', function(couchdb)
           couchdb.createDocumentWithId("legalweapons", weaponDB, weaponDB.serialNumber, function(success)
@@ -314,4 +314,23 @@ function checkPermit(char)
       return permit.status
   end
   return "none"
+end
+
+function GetWeaponAttachments(name)
+    local attachments = {}
+    if name == "MK2 Carbine Rifle" then
+        table.insert(attachments, 'COMPONENT_AT_SIGHTS')
+        table.insert(attachments, 'COMPONENT_AT_AR_FLSH')
+        table.insert(attachments, 'COMPONENT_AT_AR_AFGRIP_02')
+        --table.insert(attachments, 'COMPONENT_CARBINERIFLE_MK2_CLIP_FMJ')
+        table.insert(attachments, 'COMPONENT_AT_CR_BARREL_02')
+        table.insert(attachments, 'COMPONENT_AT_MUZZLE_06')
+    elseif name == "MK2 Pump Shotgun" then
+        table.insert(attachments, 'COMPONENT_AT_SIGHTS')
+        table.insert(attachments, 'COMPONENT_AT_AR_FLSH')
+        --table.insert(attachments, 'COMPONENT_PUMPSHOTGUN_MK2_CLIP_HOLLOWPOINT')
+    elseif name == "Combat Pistol" then
+        table.insert(attachments, 0x359B7AAE)
+    end
+    return attachments
 end
