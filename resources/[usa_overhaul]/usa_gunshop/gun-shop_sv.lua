@@ -49,8 +49,8 @@ AddEventHandler("gunShop:requestPurchase", function(category, index)
     local money = char.get("money")
     if money - sv_storeWeapons[category][index].price >= 0 then
   	  local user_weapons = char.getWeapons()
-  	  if (#user_weapons >= 3 and weapon.type == "weapon") or not char.canHoldItem(weapon) then
-  		  TriggerClientEvent("usa:notify", source, "Cannot carry more than 3 weapons, or full inventory!")
+  	  if  not char.canHoldItem(weapon) then
+  		  TriggerClientEvent("usa:notify", source, "Inventory full!")
   		  return
   	  end
       local timestamp = os.date("*t", os.time())
