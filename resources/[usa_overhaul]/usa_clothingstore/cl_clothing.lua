@@ -10,7 +10,7 @@ local CLOTHING_STORE_LOCATIONS = {
 	{x = -3170.52, y = 1043.97, z = 20.0632}, -- chumash, great ocean hwy
 	{x = -1449.93, y = -236.979, z = 49.0106}, -- vinewood 1
 	{x = -710.239, y = -152.319, z = 37.0151}, -- vinewood 2
-	{x = -1192.84, y = -767.861, z = 19.0187}, -- vinewood 3
+	{x = -1192.84, y = -767.861, z = 17.0187}, -- vinewood 3
 	{x = -163.61, y = -303.987, z = 39.0333}, -- vinewood 4
 	{x = 125.403, y = -223.887, z = 54.0578}, -- vinewood 5
 	{x = 423.474, y = -808.135, z = 29.4911}, -- vinewood 6
