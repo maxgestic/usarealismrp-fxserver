@@ -13,7 +13,7 @@ end)
 
 RegisterServerEvent('k9:smellPlayer')
 AddEventHandler('k9:smellPlayer', function(targetSource)
-	local char = exports["usa-characters"]:GetCharacter(source)
+	local char = exports["usa-characters"]:GetCharacter(targetSource)
 	local inventory = char.get("inventory")
 	for i = 0, (inventory.MAX_CAPACITY - 1) do
 		if inventory.items[tostring(i)] then
@@ -24,19 +24,23 @@ AddEventHandler('k9:smellPlayer', function(targetSource)
 			end
 		end
 	end
+	TriggerClientEvent("usa:notify", source, "Dog does not smell anything abnormal")
 end)
 
 RegisterServerEvent('k9:smellVehicle')
 AddEventHandler('k9:smellVehicle', function(targetPlate)
 	local userSource = source
-	GetVehicleInventory(targetPlate, function(inv)
-		for i = 1, #inv do
-			local item = inv[i]
-			if IsItemDetectable(item.name) or item.residue then
-				TriggerClientEvent('k9:returnSmell', userSource)
-				return
+	exports["usa_vehinv"]:GetVehicleInventory(targetPlate, function(inv)
+		for i = 0, inv.MAX_ITEMS - 1 do
+			local item = inv.items[tostring(i)]
+			if item then
+				if IsItemDetectable(item.name) or item.residue then
+					TriggerClientEvent('k9:returnSmell', userSource)
+					return
+				end
 			end
 		end
+		TriggerClientEvent("usa:notify", userSource, "Dog does not smell anything abnormal")
 	end)
 end)
 
@@ -48,24 +52,4 @@ function IsItemDetectable(itemName)
 		end
 	end
 	return false
-end
-
-function GetVehicleInventory(plate, cb)
-	-- query for the information needed from each vehicle --
-	local endpoint = "/vehicles/_design/vehicleFilters/_view/getVehicleInventoryByPlate"
-	local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
-	PerformHttpRequest(url, function(err, responseText, headers)
-		if responseText then
-			local inventory = {}
-			--print("veh inventory: " .. responseText)
-			local data = json.decode(responseText)
-			if data.rows[1] then
-				inventory = data.rows[1].value[1] -- inventory
-			end
-			cb(inventory)
-		end
-	end, "POST", json.encode({
-		keys = { plate }
-		--keys = { "86CSH075" }
-	}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 end

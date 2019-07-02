@@ -222,7 +222,12 @@ function smellNearestPlayer()
 					TriggerEvent('usa:notify', 'K9 is now smelling...')
 					k9.staying = true
 					TaskGoToCoordAnyMeans(k9.handle, x, y, z, 2.0, 0, 0, 0, 0)
-					while Vdist(GetEntityCoords(k9.handle), GetEntityCoords(targetPed)) > 1.0 do Citizen.Wait(100) if not k9.handle or not k9.staying then return end end
+					while Vdist(GetEntityCoords(k9.handle), GetEntityCoords(targetPed)) > 1.0 do
+						Wait(100)
+						if not k9.handle or not k9.staying then
+							return
+						end
+					end
 					TriggerServerEvent('k9:smellPlayer', tonumber(GetPlayerServerId(a)))
 					k9.staying = false
 					k9.busy = false
@@ -325,6 +330,7 @@ end)
 
 RegisterNetEvent('k9:returnSmell')
 AddEventHandler('k9:returnSmell', function()
-	TriggerServerEvent('k9:playAnimOnAll', PedToNet(k9.handle), 'creatures@rottweiler@amb@world_dog_sitting@idle_a', 'idle_c' , 8.0, -8, -1, 1, 0)
+	TriggerEvent('usa:notify', 'K9 has ~y~signaled~w~!')
+	TriggerServerEvent('k9:playAnimOnAll', PedToNet(k9.handle), 'creatures@rottweiler@amb@world_dog_sitting@idle_a', 'idle_c' , 8.0, -8, -1, 1, 0) -- have dog alert by sitting
 	k9.staying = true
 end)
