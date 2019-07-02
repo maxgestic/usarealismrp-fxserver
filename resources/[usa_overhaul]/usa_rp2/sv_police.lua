@@ -185,8 +185,6 @@ AddEventHandler("search:searchPlayer", function(playerId, src)
 	end
 end)
 
-
-
 RegisterServerEvent("search:playSuspectAnim")
 AddEventHandler("search:playSuspectAnim", function(sourceToSearch, x, y, z, heading)
 	TriggerClientEvent("search:playSuspectAnim", sourceToSearch, x, y, z, heading)
@@ -320,10 +318,11 @@ end, { help = "Press your panic button. CAUTION: ONLY FOR EXTREME EMERGENCIES."}
 -- revoke gun license / firearm permit --
 RegisterServerEvent("police:revokeFirearmPermit")
 AddEventHandler("police:revokeFirearmPermit", function(source)
-	--TriggerEvent('es:getPlayerFromId', id, function(user)
 	local char = exports["usa-characters"]:GetCharacter(source)
-	if char.hasItem('Firearm Permit') then char.removeItem('Firearm Permit') end
-	--end)
+	local permit = char.getItem("Firearm Permit")
+	if permit then
+		char.modifyItem(permit, "status", "suspended")
+	end
 end)
 
 -- check suspension dates --

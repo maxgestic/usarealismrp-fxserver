@@ -522,7 +522,6 @@ end)
 
 TriggerEvent('es:addJobCommand', 'breach', {'sheriff', 'ems', 'police', 'dai'}, function(source, args, char, location)
 	TriggerClientEvent('properties:findRoomToBreach', source, args[2])
-
 end, {
 	help = "Breach into the nearest property",
 	params = {
@@ -1104,7 +1103,7 @@ AddEventHandler('properties:forceEntry', function(location, index)
 		Citizen.Wait(1000)
 		for i = 1, #room.instance do
 			local sourceInside = properties[location].rooms[index].instance[i]
-			TriggerClientEvent('InteractSound_CL:PlayOnOne', sourceInside, 'door-kick', 0.4)
+			TriggerClientEvent('InteractSound_CL:PlayOnOne', sourceInside, 'door-kick', 0.2)
 			TriggerClientEvent('properties:updateInstance', sourceInside, properties[location].rooms[index].instance)
 		end
 	else
