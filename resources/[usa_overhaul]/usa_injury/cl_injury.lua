@@ -210,12 +210,14 @@ RegisterNetEvent('DamageEvents:EntityDamaged')
 AddEventHandler('DamageEvents:EntityDamaged', function(entity, attacker, weaponHash, isMeleeDamage, boneOverride)
     if GetGameTimer() - lastDamage > 2000 and entity == PlayerPedId() then
         if GetGameTimer() - lastDamage > 8000 then
-            if injuries[weaponHash].dropEvidence then
-                if math.random() < injuries[weaponHash].dropEvidence then
+            if injuries[weaponHash] then
+                if injuries[weaponHash].dropEvidence then
+                    if math.random() < injuries[weaponHash].dropEvidence then
+                        TriggerServerEvent('evidence:newDNA', GetEntityCoords(PlayerPedId()))
+                    end
+                else
                     TriggerServerEvent('evidence:newDNA', GetEntityCoords(PlayerPedId()))
                 end
-            else
-                TriggerServerEvent('evidence:newDNA', GetEntityCoords(PlayerPedId()))
             end
         end
         lastDamage = GetGameTimer()

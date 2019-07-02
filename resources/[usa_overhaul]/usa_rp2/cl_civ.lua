@@ -203,6 +203,7 @@ end)
 RegisterNetEvent('ping:sendLocation')
 AddEventHandler('ping:sendLocation', function(target)
   TriggerEvent('usa:showHelp', true, 'Your ping accept was requested, check your GPS!')
+  TriggerEvent('usa:notify', 'Your ping request was accepted, check your GPS!')
   local targetPed = GetPlayerPed(GetPlayerFromServerId(target))
   local x, y, z = table.unpack(GetEntityCoords(targetPed))
   local newBlip = {
