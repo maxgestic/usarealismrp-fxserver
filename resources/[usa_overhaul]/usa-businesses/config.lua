@@ -4,7 +4,7 @@ robberyCooldown = 2100
 rewardRange = {350, 450}
 
 LEASE_PERIOD_DAYS = 14
-DEFAULT_PURCHASE_PERCENT_REWARD = 0.30
+DEFAULT_PURCHASE_PERCENT_REWARD = 0.20
 
 KEYS ={
 	K = 311,
@@ -201,7 +201,7 @@ BUSINESSES = {
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
 		price = 2000,
-		purchasePercentage = 0.25
+		purchasePercentage = 0.35
 	},
 	["LS Customs (La Mesa)"] = {
 		position = {725.80, -1070.75, 28.31},
@@ -209,21 +209,23 @@ BUSINESSES = {
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
 		price = 6000,
-		purchasePercentage = 0.08
+		purchasePercentage = 0.09
 	},
 	["Benny's Auto Garage (Strawberry)"] = {
 		position = {-207.4, -1341.2, 34.9},
 		cameraID = 'store24',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 8000
+		price = 8000,
+		purchasePercentage = 0.09
 	},
 	["LS Customs (Route 68)"] = {
 		position = {1187.4, 2636.7, 38.4},
 		cameraID = 'store25',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 6000
+		price = 6000,
+		purchasePercentage = 0.09
 	},
 	["Herr Kutz Barbers (Carson Ave.)"] = {
 		position = {134.45, -1707.75, 29.29},
@@ -238,7 +240,7 @@ BUSINESSES = {
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
 		price = 2000,
-		purchasePercentage = 0.25
+		purchasePercentage = 0.35
 	},
 	["Herr Kutz Barbers (Niland Ave.)"] = {
 		position = {1930.57, 3728.08, 32.84},

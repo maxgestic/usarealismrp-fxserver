@@ -1,4 +1,4 @@
-local minutesUntilKick = 20
+local minutesUntilKick = 35
 local minutesUntilWarning = 3
 local warningGiven = false
 local timer
