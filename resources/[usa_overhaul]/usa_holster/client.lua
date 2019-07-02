@@ -23,6 +23,7 @@ AddEventHandler("ptt:returnHotkey", function(key)
 end)
 
 local smallWeapons = {
+	"WEAPON_MACHINEPISTOL",
 	"WEAPON_PISTOL",
 	"WEAPON_PISTOL_MK2",
 	"WEAPON_COMBATPISTOL",
@@ -50,6 +51,8 @@ local smallWeapons = {
 }
 
 local largeWeapons = {
+	"WEAPON_GUSENBERG",
+	'WEAPON_ASSAULTRIFLE',
 	'WEAPON_CARBINERIFLE',
 	'WEAPON_CARBINERIFLE_MK2',
 	'WEAPON_SMG',
@@ -66,7 +69,6 @@ local largeWeapons = {
 }
 
 -- HOLD WEAPON HOLSTER ANIMATION --
-
 Citizen.CreateThread( function()
 	while true do
 		Citizen.Wait(0)
