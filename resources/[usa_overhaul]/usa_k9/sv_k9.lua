@@ -1,7 +1,9 @@
 local detectableItems = {'weed', 'cocaine', 'meth', 'pseudo', 'phosphorus'}
 
 TriggerEvent('es:addJobCommand', 'k9', {'sheriff', 'police'}, function(source, args, char, location)
-	TriggerClientEvent('k9:openMenu', source)
+	if char.get("policeRank") >= 3 then
+		TriggerClientEvent('k9:openMenu', source)
+	end
 end, {
 	help = "Open the K9 interaction menu",
 })

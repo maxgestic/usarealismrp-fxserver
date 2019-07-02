@@ -169,16 +169,20 @@ function GetFPRevoked(charges) -- firearm permit
 end
 
 function GetDLSuspensionDays(charges) -- driver license
-	local words = {
-		['2701'] = 5,
-		['2703'] = 4,
-		['2705'] = 8,
-		['2704'] = 2,
-		['2711'] = 4,
-		['2715'] = 1
+	local charges = {
+		['2800.1'] = 14,
+		['2800.2'] = 30,
+		['2800.3'] = 60,
+		['2800.4'] = 60,
+		["20001"] = 45,
+		["20002"] = 30,
+		["23103(b)"] = 7,
+		["23153"] = 30,
+		["14601"] = 14,
+		["10851"] = 7
 	}
 	local daysTotal = 0
-	for code, days in pairs(words) do
+	for code, days in pairs(charges) do
 		if string.find(charges, code) then
 			daysTotal = daysTotal + days
 		end
