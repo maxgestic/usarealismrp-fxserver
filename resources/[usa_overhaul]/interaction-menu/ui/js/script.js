@@ -142,7 +142,7 @@ var itemImages = {
   "Meth Rock": "https://i.imgur.com/AOveEbU.png",
   "Hotwiring Kit": "https://assets.fellowes.com/images/products/zoom/49106.png",
   "Vibrator": "http://images.hktvmall.com/h0966011/100638/h0966011_svakomadonis001_170606015542_01_1200.png",
-  "Used Condom": "https://officialpsds.com/imageview/r8/26/r826yr_large.png?1521316450",
+  "Used Condoms": "https://officialpsds.com/imageview/r8/26/r826yr_large.png?1521316450",
   "Ludde's Lube": "https://www.pngfind.com/pngs/m/204-2045538_rated-squirt-lube-png-transparent-png.png",
   "The Daily Weazel": "https://banner2.kisspng.com/20180329/jjq/kisspng-newspaper-clip-art-newspaper-5abc7c1c12ae02.1287775415223019800765.jpg",
   "Chicken": "https://i1.wp.com/freepngimages.com/wp-content/uploads/2016/11/chicken-transparent-background.png?fit=457%2C750",
@@ -150,7 +150,8 @@ var itemImages = {
   "Featherless chicken carcass": "https://cdn.shopify.com/s/files/1/2554/4616/t/5/assets/Image-47_299x.png?16156401367434920007",
   "Raw chicken meat": "https://www.pattonsbargainbutcher.com.au/uploads/3/0/1/3/30136237/4385440.png?376",
   "MK2 Carbine Rifle": "https://www.gtabase.com/images/gta-5/weapons/assault-rifles/carbine-rifle-mk2.png",
-  "MK2 Pump Shotgun": "https://www.gtabase.com/images/gta-5/weapons/shotguns/pump-shotgun-mk2.png"
+  "MK2 Pump Shotgun": "https://www.gtabase.com/images/gta-5/weapons/shotguns/pump-shotgun-mk2.png",
+  "Body Armor": "https://i.imgur.com/oHsLkWD.png"
 }
 
 var menuItems = [
