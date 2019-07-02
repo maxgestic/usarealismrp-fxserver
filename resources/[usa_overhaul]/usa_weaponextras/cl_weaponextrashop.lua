@@ -9,6 +9,11 @@ local ITEMS = {}
 RegisterNetEvent("weaponExtraShop:getItems")
 AddEventHandler("weaponExtraShop:getItems", function(items)
     ITEMS = items
+    CreateTintMenu(legalShopMenu, true)
+    CreateTintMenu(illegalShopMenu, false)
+    CreateLegalExtrasMenu(legalShopMenu)
+    CreateIllegalExtrasMenu(illegalShopMenu)
+    _menuPool:RefreshIndex()
 end)
 
 TriggerServerEvent("weaponExtraShop:getItems")
@@ -22,7 +27,8 @@ local locations = {
   { x = 17.701, y = -1110.00, z = 29.95, legal = true }, -- Adam's Apple Blvd.
   { x = 845.46, y = -1029.78, z = 28.4, legal = true }, -- Vespucci
   --{ x = 129.6, y = -1920.3, z = 21.3, legal = false } -- grove st
-  { x = 752.996, y = -3192.206, z = 6.07, legal = false } -- terminal, industrial LS
+  --{ x = 752.996, y = -3192.206, z = 6.07, legal = false } -- terminal, industrial LS
+  {x = 180.8, y = 2793.2, z = 45.7, legal = false, ped = { heading = 260.0, hash = -907676309 }} -- sandy shores, harmony area
 }
 
 local created_menus = {}
@@ -182,15 +188,6 @@ function CreateIllegalExtrasMenu(menu)
   end
 end
 
-----------------
--- add to GUI --
-----------------
-CreateTintMenu(legalShopMenu, true)
-CreateTintMenu(illegalShopMenu, false)
-CreateLegalExtrasMenu(legalShopMenu)
-CreateIllegalExtrasMenu(illegalShopMenu)
-_menuPool:RefreshIndex()
-
 local closest_shop = nil
 
 Citizen.CreateThread(function()
@@ -207,10 +204,12 @@ Citizen.CreateThread(function()
     local isCloseToAny = false
     for i = 1, #locations do
       local dist = GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,locations[i].x,locations[i].y,locations[i].z,true)
-      if dist < 2.0 then
-        DrawText3D(locations[i].x,locations[i].y,locations[i].z, '[E] - Weapon Extras')
-        closest_shop = locations[i]
-        isCloseToAny = true
+      if dist < 10 then
+          DrawText3D(locations[i].x,locations[i].y,locations[i].z, '[E] - Weapon Extras')
+          if dist < 2.0 then
+            closest_shop = locations[i]
+            isCloseToAny = true
+          end
       end
     end
     if not isCloseToAny then
@@ -255,4 +254,24 @@ end)
 RegisterNetEvent("weaponExtraShop:toggleMenu")
 AddEventHandler("weaponExtraShop:toggleMenu", function(toggle)
   legalShopMenu:Visible(toggle)
+end)
+
+Citizen.CreateThread(function() -- spawn shop peds
+	for i = 1, #locations do
+        local loc = locations[i]
+        if loc.ped then
+            RequestModel(loc.ped.hash)
+            while not HasModelLoaded(loc.ped.hash) do
+                Wait(100)
+            end
+    		local ped = CreatePed(4, loc.ped.hash, loc.x, loc.y, loc.z, loc.ped.heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
+    		SetEntityCanBeDamaged(ped,false)
+    		SetPedCanRagdollFromPlayerImpact(ped,false)
+    		TaskSetBlockingOfNonTemporaryEvents(ped,true)
+    		SetPedFleeAttributes(ped,0,0)
+    		SetPedCombatAttributes(ped,17,1)
+    		SetPedRandomComponentVariation(ped, true)
+    		TaskStartScenarioInPlace(ped, "WORLD_HUMAN_HANG_OUT_STREET", 0, true)
+        end
+	end
 end)
