@@ -195,11 +195,13 @@ function jailStatusLoop()
 				jailtime = 0
 			end
 			if jailtime > 0 then
-				char.set("jailTime", jailtime - 1)
+				local newJailTime = jailtime - 1
+				char.set("jailTime", newJailTime)
+				if newJailTime == 0 then
+					TriggerClientEvent("jail:release", tonumber(id), char.get("appearance"))
+					exports["globals"]:notifyPlayersWithJob("corrections", "^3CORRECTIONS:^0 " .. char.getName() .. " has been released.")
+				end
 				break
-			else
-				TriggerClientEvent("jail:release", tonumber(id), char.get("appearance"))
-				exports["globals"]:notifyPlayersWithJob("corrections", "^3CORRECTIONS:^0 " .. char.getName() .. " has been released.")
 			end
 		end
 		jailStatusLoop()

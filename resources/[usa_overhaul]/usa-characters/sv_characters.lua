@@ -1,12 +1,16 @@
 -- need to check for existance of DB
 exports["globals"]:PerformDBCheck("usa-characters", "characters", nil)
 
+local UPDATE_TIME_INTERVAL_MINUTES = 30
+
 local CHARACTERS = {} -- table of all playing characters for fast look up
 
 local SETTINGS = {
   DEFAULT_BANK = 0,
   DEFAULT_MONEY = 5000
 }
+
+local lastUpdated = {}
 
 AddEventHandler("playerDropped", function(reason)
   local usource = source
@@ -28,6 +32,9 @@ AddEventHandler("playerDropped", function(reason)
         CHARACTERS[usource] = nil
   		end)
     end)
+  end
+  if lastUpdated[tostring(usource)] then
+      lastUpdated[tostring(usource)] = nil
   end
 end)
 
@@ -117,20 +124,21 @@ function CreateNewCharacter(src, data, cb)
 end
 
 function InitializeCharacter(src, characterID, doSpawnAtProperty)
-  TriggerEvent('es:exposeDBFunctions', function(db)
-    db.getDocument("characters", characterID, function(charData)
-      charData.source = src
-      local character = CreateCharacter(charData) -- Create character object in memory
-      character.set("job", "civ")
-      CHARACTERS[src] = character
-			TriggerClientEvent("character:setCharacter", src, character.get("appearance"), character.getWeapons()) -- load character
-			TriggerEvent("police:checkSuspension", character) -- check dmv / firearm permit license status
-      TriggerEvent("properties:loadCharacter", src, doSpawnAtProperty) -- ?
-      TriggerEvent("eblips:remove", src) -- remove any eblip
-      TriggerClientEvent("banking:updateBalance", src, character.get("bank")) -- intialize bank resource
-      TriggerClientEvent("es:activateMoney", src, character.get("money")) -- make /cash work
+    TriggerEvent('es:exposeDBFunctions', function(db)
+        db.getDocument("characters", characterID, function(charData)
+            charData.source = src
+            local character = CreateCharacter(charData) -- Create character object in memory
+            character.set("job", "civ")
+            lastUpdated[tostring(src)] = os.time()
+            CHARACTERS[src] = character
+            TriggerClientEvent("character:setCharacter", src, character.get("appearance"), character.getWeapons()) -- load character
+            TriggerEvent("police:checkSuspension", character) -- check dmv / firearm permit license status
+            TriggerEvent("properties:loadCharacter", src, doSpawnAtProperty) -- ?
+            TriggerEvent("eblips:remove", src) -- remove any eblip
+            TriggerClientEvent("banking:updateBalance", src, character.get("bank")) -- intialize bank resource
+            TriggerClientEvent("es:activateMoney", src, character.get("money")) -- make /cash work
+        end)
     end)
-  end)
 end
 
 function SaveCurrentCharacter(src, cb)
@@ -181,4 +189,28 @@ function SetCharacterField(src, field, val)
     return
   end
   CHARACTERS[src].set(field, val)
+end
+
+Citizen.CreateThread(function()
+    while true do
+        for id, time in pairs(lastUpdated) do
+            if GetMinutesFromTime(time) >= UPDATE_TIME_INTERVAL_MINUTES then
+                TriggerEvent("es:exposeDBFunctions", function(db)
+                    local char = GetCharacter(tonumber(id))
+                    db.updateDocument("characters", char.get("_id"), { money = char.get("money"), bank = char.get("bank") }, function()
+                        lastUpdated[id] = os.time()
+                    end)
+                end)
+            end
+        end
+        Wait(UPDATE_TIME_INTERVAL_MINUTES * 60 * 1000)
+    end
+end)
+
+function GetMinutesFromTime(time)
+	local timestamp = os.date("*t", os.time())
+	local minutesfrom = os.difftime(os.time(), time) / 60
+	local wholemins = math.floor(minutesfrom)
+	print("CHARACTERS:  wholemins: " .. wholemins) -- today it prints "1"
+	return wholemins
 end
