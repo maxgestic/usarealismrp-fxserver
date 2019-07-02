@@ -59,7 +59,7 @@ function jailPlayer(data, officerName, gender)
 	end
 	if tonumber(fine) then
 		fine = tonumber(fine)
-		fine = round(fine, 0)
+		fine = math.ceil(fine)
 		print("after rounding, fine: " .. fine)
 	end
 	local inmate = exports["usa-characters"]:GetCharacter(targetPlayer)
@@ -196,9 +196,10 @@ function jailStatusLoop()
 			end
 			if jailtime > 0 then
 				char.set("jailTime", jailtime - 1)
+				break
+			else
 				TriggerClientEvent("jail:release", tonumber(id), char.get("appearance"))
 				exports["globals"]:notifyPlayersWithJob("corrections", "^3CORRECTIONS:^0 " .. char.getName() .. " has been released.")
-				break
 			end
 		end
 		jailStatusLoop()
@@ -206,7 +207,3 @@ function jailStatusLoop()
 end
 
 jailStatusLoop()
-
-function round(num, numDecimalPlaces)
-  return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
-end

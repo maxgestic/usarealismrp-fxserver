@@ -100,7 +100,7 @@ LSC_Config.prices = {
 		colors = {
 			{name = "Chrome", colorindex = 120}
 		},
-		price = 1000
+		price = 3000
 	},
 	--Classic
 	classic = {
@@ -416,8 +416,8 @@ LSC_Config.prices = {
 
 ----------Windows--------
 	[46] = {
-		startprice = 3000,
-		increaseby = 750
+ 		startprice = 2000,
+		increaseby = 550
 	},
 
 ----------Tank--------

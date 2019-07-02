@@ -423,21 +423,24 @@ local function DriveInGarage()
 			pcol = respray:addSubMenu("PRIMARY COLORS", "Primary color",  nil,true)
 				pcol:addSubMenu("CHROME", "Chrome", nil,true)
 				for n, c in pairs(LSC_Config.prices.chrome.colors) do
-					local btn = pcol.Chrome:addPurchase(c.name,LSC_Config.prices.chrome.price)btn.colorindex = c.colorindex
+					local btn = pcol.Chrome:addPurchase(c.name,LSC_Config.prices.chrome.price)
+					btn.colorindex = c.colorindex
 					if btn.colorindex == myveh.color[1] then
 						btn.purchased = true
 					end
 				end
 				pcol:addSubMenu("CLASSIC", "Classic", nil,true)
 				for n, c in pairs(LSC_Config.prices.classic.colors) do
-					local btn = pcol.Classic:addPurchase(c.name,LSC_Config.prices.classic.price)btn.colorindex = c.colorindex
+					local btn = pcol.Classic:addPurchase(c.name,LSC_Config.prices.classic.price)
+					btn.colorindex = c.colorindex
 					if btn.colorindex == myveh.color[1] then
 						btn.purchased = true
 					end
 				end
 				pcol:addSubMenu("MATTE", "Matte", nil,true)
 				for n, c in pairs(LSC_Config.prices.matte.colors) do
-					local btn = pcol.Matte:addPurchase(c.name,LSC_Config.prices.matte.price)btn.colorindex = c.colorindex
+					local btn = pcol.Matte:addPurchase(c.name,LSC_Config.prices.matte.price)
+					btn.colorindex = c.colorindex
 					if btn.colorindex == myveh.color[1] then
 						btn.purchased = true
 					end
@@ -459,7 +462,8 @@ local function DriveInGarage()
 				scol = respray:addSubMenu("SECONDARY COLORS", "Secondary color", nil,true)
 				scol:addSubMenu("CHROME", "Chrome", nil,true)
 				for n, c in pairs(LSC_Config.prices.chrome2.colors) do
-					local btn = scol.Chrome:addPurchase(c.name,LSC_Config.prices.chrome2.price)btn.colorindex = c.colorindex
+					local btn = scol.Chrome:addPurchase(c.name,LSC_Config.prices.chrome2.price)
+					btn.colorindex = c.colorindex
 					if btn.colorindex == myveh.color[2] then
 						btn.purchased = true
 					end
@@ -472,7 +476,7 @@ local function DriveInGarage()
 					end
 				end
 				scol:addSubMenu("MATTE", "Matte", nil,true)
-				for n, c in pairs(LSC_Config.prices.chrome2.colors) do
+				for n, c in pairs(LSC_Config.prices.matte2.colors) do
 					local btn = scol.Matte:addPurchase(c.name,LSC_Config.prices.matte2.price)btn.colorindex = c.colorindex
 					if btn.colorindex == myveh.color[2] then
 						btn.purchased = true

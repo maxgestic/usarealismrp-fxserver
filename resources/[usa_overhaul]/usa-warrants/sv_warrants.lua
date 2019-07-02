@@ -67,7 +67,7 @@ AddEventHandler("warrants:removeAnyActiveWarrants", function(name)
 			["first_name"] = name.first,
 			["last_name"] = name.last
 		}
-		db.getDocumentsByRow("warrants", query, function(docs)
+		db.getDocumentsByRows("warrants", query, function(docs)
 			if docs then
 				for i = 1, #docs do
 					deleteWarrant("warrants", docs[i]._id, docs[i]._rev)
