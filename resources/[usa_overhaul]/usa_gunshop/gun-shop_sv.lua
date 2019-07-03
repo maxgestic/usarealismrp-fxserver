@@ -97,7 +97,11 @@ AddEventHandler('gunShop:requestOpenMenu', function()
   if permit_status == 'valid' then
     TriggerClientEvent('gunShop:openMenu', source)
   else
-    TriggerClientEvent('usa:notify', source, 'No license! Hold E to purchase one for $' .. comma_value(LICENSE_PURCHASE_PRICE))
+      if permit_status == "none" then
+          TriggerClientEvent('usa:notify', source, 'No license! Hold E to purchase one for $' .. comma_value(LICENSE_PURCHASE_PRICE))
+      elseif permit_status == "suspended" then
+          TriggerClientEvent("usa:notify", source, "Your firearm permit is suspended!")
+      end
   end
 end)
 

@@ -33,7 +33,7 @@ end)
 
 RegisterServerEvent("dmv:setLicenseStatus")
 AddEventHandler("dmv:setLicenseStatus", function(status, target_id, days)
-	local char = exports["usa-characters"]:GetCharacter(source)
+	local char = exports["usa-characters"]:GetCharacter(target_id)
 	local license = char.getItem("Driver's License")
 	if license then
 		char.modifyItem("Driver's License", "status", status)

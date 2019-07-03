@@ -1022,6 +1022,11 @@ function interactionMenuUse(itemName, wholeItem)
 			exports["usa_gunshop"]:ShowCCWTerms()
 		elseif itemName:find("Chicken") then
 			TriggerEvent("chickenJob:spawnChicken", source)
+		elseif itemName:find("Driver's License") then
+			local ped = GetPlayerPed(-1)
+			local location = GetEntityCoords(ped)
+			local locationTemp = {location.x, location.y, location.z}
+			TriggerServerEvent("altchat:showID", locationTemp)
 		else
 			TriggerEvent("interaction:notify", "There is no use action for that item!")
 		end
@@ -1390,7 +1395,7 @@ Citizen.CreateThread(function()
 		end
 
 		-- tackling --
-		if IsControlJustPressed( 0, TACKLE_KEY ) and GetLastInputMethod(2) and GetEntitySpeed(playerPed) > 3.0 then
+		if IsControlJustPressed( 0, TACKLE_KEY ) and GetLastInputMethod(2) and GetEntitySpeed(playerPed) >= 1.0 then
 			if not IsEntityDead(GetPlayerPed(-1)) and not IsPedInAnyVehicle(GetPlayerPed(-1), true) then
 				playerServerId, playerName, distanceToClosestTargetPed = GetClosestPlayerInfo(1.5)
 				if playerServerId ~= 0 then
