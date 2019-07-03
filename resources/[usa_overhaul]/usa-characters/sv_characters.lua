@@ -211,6 +211,6 @@ function GetMinutesFromTime(time)
 	local timestamp = os.date("*t", os.time())
 	local minutesfrom = os.difftime(os.time(), time) / 60
 	local wholemins = math.floor(minutesfrom)
-	print("CHARACTERS:  wholemins: " .. wholemins) -- today it prints "1"
+	--print("CHARACTERS:  wholemins: " .. wholemins)
 	return wholemins
 end
