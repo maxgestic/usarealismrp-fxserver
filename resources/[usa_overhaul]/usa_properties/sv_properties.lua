@@ -599,7 +599,7 @@ TriggerEvent('es:addJobCommand', 'createhouse', {'judge'}, function(source, args
 		end
 	end
 end, {
-	help = "Create a house for a player where you're standing (COSTS 80.000).",
+	help = "Create a house for a player where you're standing (COSTS $65,000).",
 	params = {
 		{ name = "id", help = "player id" }
 	}

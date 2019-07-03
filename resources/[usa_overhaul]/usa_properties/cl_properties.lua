@@ -938,7 +938,7 @@ function LoadPropertyMenu(menu_data, location, index)
                 ----------------------------------------------------------------
                 if item.quantity > 1 then
                		local amount = tonumber(KeyboardInput('Enter amount:', '', 5))
-               		amount = math.floor(amount, 0)
+               		amount = math.floor(amount)
                     if amount > 0 then
                         if item.quantity - amount >= 0 then
                             TriggerServerEvent("properties:retrieveItem", location, index, item, amount)
@@ -976,7 +976,7 @@ function LoadPropertyMenu(menu_data, location, index)
 	            if not item.quantity then item.quantity = 1 end
 	            if item.quantity > 1 then
 	           		local amount = tonumber(KeyboardInput('Enter amount:', '', 5))
-	           		amount = math.floor(amount, 0)
+	           		amount = math.floor(amount)
 	                if amount > 0 then
 	                    if item.quantity - amount >= 0 then
 	                        TriggerServerEvent("properties:storeItem", location, index, item, amount)
@@ -1112,7 +1112,7 @@ function DrawTimer(beginTime, duration, x, y, text)
         w = (GetTimeDifference(GetGameTimer(), beginTime) * (0.085 / duration))
     end
 
-    local correction = ((1.0 - math.floor(GetSafeZoneSize(), 2)) * 100) * 0.005
+    local correction = ((1.0 - math.floor(GetSafeZoneSize())) * 100) * 0.005
     x, y = x - correction, y - correction
 
     Set_2dLayer(0)
