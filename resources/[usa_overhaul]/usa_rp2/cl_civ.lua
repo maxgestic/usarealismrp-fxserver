@@ -409,7 +409,6 @@ AddEventHandler("crim:areHandsTied", function(from_source, to_source, action)
       -- hands were up, continue stealing cash
       TriggerServerEvent("crim:continueRobbing", true, from_source, to_source)
     elseif action == "blindfold" then
-      print("hands were tied, blindfolding..")
       TriggerServerEvent("crim:continueBlindfolding", true, from_source, to_source)
     elseif action == "place" then
       TriggerEvent("place")

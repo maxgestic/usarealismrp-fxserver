@@ -60,7 +60,7 @@ AddEventHandler('place:unseat', function(targetSource)
 	local targetPed = GetPlayerPed(GetPlayerFromServerId(targetSource))
 	local targetCoords = GetEntityCoords(targetPed)
 	local offset = GetOffsetFromEntityInWorldCoords(targetPed, 1.0, 0.0, 0.5)
-	TriggerEvent('trunkhide:exitTrunk')
+	TriggerEvent('trunkhide:exitTrunk', true)
 	if Vdist(playerCoords, targetCoords) < 5.0 and IsPedInAnyVehicle(playerPed) then
 		RequestCollisionAtCoord(targetCoords)
 		while not HasCollisionLoadedAroundEntity(playerPed) do
