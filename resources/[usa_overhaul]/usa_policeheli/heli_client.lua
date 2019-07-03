@@ -2,7 +2,7 @@
 local fov_max = 80.0
 local fov_min = 10.0 -- max zoom level (smaller fov is more zoom)
 local zoomspeed = 5.0 -- camera zoom speed
-local speed_lr = 5.0 -- speed by which the camera pans left-right 
+local speed_lr = 5.0 -- speed by which the camera pans left-right
 local speed_ud = 5.0 -- speed by which the camera pans up-down
 local toggle_helicam = 51 -- control id of the button by which to toggle the helicam mode. Default: INPUT_CONTEXT (E)
 local toggle_vision = 25 -- control id to toggle vision mode. Default: INPUT_AIM (Right mouse btn)
@@ -12,7 +12,7 @@ local toggle_lock_on = 22 -- control id to lock onto a vehicle with the camera. 
 
 -- Script starts here
 local helicam = false
-local polmav_hash = GetHashKey("maverick2")
+local polmav_hash = GetHashKey("polmav")
 local fov = (fov_max+fov_min)*0.5
 local vision_state = 0 -- 0 is normal, 1 is nightmode, 2 is thermal vision
 Citizen.CreateThread(function()
@@ -21,13 +21,13 @@ Citizen.CreateThread(function()
 		if IsPlayerInPolmav() then
 			local lPed = GetPlayerPed(-1)
 			local heli = GetVehiclePedIsIn(lPed)
-			
+
 			if IsHeliHighEnough(heli) then
 				if IsControlJustPressed(0, toggle_helicam) then -- Toggle Helicam
 					PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false)
 					helicam = true
 				end
-				
+
 				if IsControlJustPressed(0, toggle_rappel) then -- Initiate rappel
 					Citizen.Trace("try to rappel")
 					if GetPedInVehicleSeat(heli, 1) == lPed or GetPedInVehicleSeat(heli, 2) == lPed then
@@ -37,19 +37,19 @@ Citizen.CreateThread(function()
 						SetNotificationTextEntry( "STRING" )
 						AddTextComponentString("~r~Can't rappel from this seat")
 						DrawNotification(false, false )
-						PlaySoundFrontend(-1, "5_Second_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", false) 
+						PlaySoundFrontend(-1, "5_Second_Timer", "DLC_HEISTS_GENERAL_FRONTEND_SOUNDS", false)
 					end
 				end
 			end
-			
+
 			if IsControlJustPressed(0, toggle_spotlight)  and GetPedInVehicleSeat(heli, -1) == lPed then
 				spotlight_state = not spotlight_state
 				TriggerServerEvent("heli:spotlight", spotlight_state)
 				PlaySoundFrontend(-1, "SELECT", "HUD_FRONTEND_DEFAULT_SOUNDSET", false)
 			end
-			
+
 		end
-		
+
 		if helicam then
 			SetTimecycleModifier("heliGunCam")
 			SetTimecycleModifierStrength(0.3)
@@ -217,7 +217,7 @@ function HandleZoom(cam)
 		fov = math.max(fov - zoomspeed, fov_min)
 	end
 	if IsControlJustPressed(0,242) then
-		fov = math.min(fov + zoomspeed, fov_max) -- ScrollDown		
+		fov = math.min(fov + zoomspeed, fov_max) -- ScrollDown
 	end
 	local current_fov = GetCamFov(cam)
 	if math.abs(fov-current_fov) < 0.1 then -- the difference is too small, just set the value directly to avoid unneeded updates to FOV of order 10^-5
