@@ -295,6 +295,7 @@ function CreateCharacter(data)
         local item = self.inventory.items[tostring(i)]
         if item[field] then
           if item[field] == val then
+            self.removeInventoryWeight((self.inventory.items[tostring(i)].weight or 1.0) * self.inventory.items[tostring(i)].quantity)
             self.inventory.items[tostring(i)] = nil
             return
           end
