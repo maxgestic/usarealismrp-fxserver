@@ -1,4 +1,4 @@
---[[    Citizen.CreateThread(function() 
+--[[    Citizen.CreateThread(function()
     while true do
         Wait(0)
 
@@ -80,7 +80,7 @@ AddEventHandler('InteractSound_CL:PlayWithinDistance', function(playerNetId, max
     local lCoords = GetEntityCoords(GetPlayerPed(-1))
     local eCoords = GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(playerNetId)))
     local distIs  = Vdist(lCoords.x, lCoords.y, lCoords.z, eCoords.x, eCoords.y, eCoords.z)
-    if(distIs <= maxDistance) then
+    if distIs <= maxDistance and distIs > 0 then
         SendNUIMessage({
             transactionType     = 'playSound',
             transactionFile     = soundFile,
