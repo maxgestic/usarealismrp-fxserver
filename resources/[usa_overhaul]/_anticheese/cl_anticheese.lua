@@ -51,7 +51,7 @@ local COORDS_TO_ALLOW_TELEPORTATION_FROM = {
 	{ x = 1508.97, y = 3769.1, z = 34.14}, -- spawn in sandy
 	{ x = 307.48, y = -1435.36, z = 29.81}, -- respawn in Davis
 	{ x = 354.03, y = -589.41, z = 43.42}, -- hospital
-
+	{ x = 614.69, y = 2784.20, z = 43.48} -- cocaine processing exit
 }
 
 local PROPERTY_COORDS = {
