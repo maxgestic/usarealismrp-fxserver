@@ -145,7 +145,7 @@ Citizen.CreateThread(function()
 				end
 
 				for i = 1, #CLOTHING_STORE_LOCATIONS do
-					DrawText3D(CLOTHING_STORE_LOCATIONS[i].x, CLOTHING_STORE_LOCATIONS[i].y, CLOTHING_STORE_LOCATIONS[i].z, 2, '[E] - Clothes Store (~g~$200.00~s~)')
+					DrawText3D(CLOTHING_STORE_LOCATIONS[i].x, CLOTHING_STORE_LOCATIONS[i].y, CLOTHING_STORE_LOCATIONS[i].z, 2, '[E] - Clothes Store (~g~$60.00~s~)')
 				end
 				-- process menus --
 				_menuPool:MouseControlsEnabled(false)
