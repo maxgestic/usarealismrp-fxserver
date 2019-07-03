@@ -230,8 +230,8 @@ AddEventHandler("policestation2:requestPurchase", function(index)
         weaponDB.ownerName = char.getFullName()
         weaponDB.ownerDOB = char.get('dateOfBirth')
         weaponDB.issueDate = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year
-        weaponDB.components = attachments
         local attachments = GetWeaponAttachments(weapon.name)
+        weaponDB.components = attachments
         weapon.components = attachments
         char.giveItem(weapon, 1)
         char.removeMoney(armoryItems[index].price)

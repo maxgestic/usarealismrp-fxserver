@@ -151,7 +151,9 @@ var itemImages = {
   "Raw chicken meat": "https://www.pattonsbargainbutcher.com.au/uploads/3/0/1/3/30136237/4385440.png?376",
   "MK2 Carbine Rifle": "https://www.gtabase.com/images/gta-5/weapons/assault-rifles/carbine-rifle-mk2.png",
   "MK2 Pump Shotgun": "https://www.gtabase.com/images/gta-5/weapons/shotguns/pump-shotgun-mk2.png",
-  "Body Armor": "https://i.imgur.com/oHsLkWD.png"
+  "Body Armor": "https://i.imgur.com/oHsLkWD.png",
+  "Tear Gas": "https://i.imgur.com/v9b6bNm.png",
+  "Flare": "https://i.imgur.com/gMOnw6x.png"
 }
 
 var menuItems = [
