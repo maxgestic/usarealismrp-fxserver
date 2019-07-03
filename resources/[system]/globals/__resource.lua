@@ -19,5 +19,6 @@ server_exports {
   "sendLocalActionMessageChat",
   "notifyPlayersWithJob",
   "notifyPlayersWithJobs",
-  "setJob"
+  "setJob",
+  "comma_value"
 }

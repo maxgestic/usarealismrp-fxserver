@@ -36,8 +36,6 @@ local markets = {
   }
 }
 
-local MAX_PLAYER_WEAPON_SLOTS = 3
-
 RegisterServerEvent("blackMarket:loadItems")
 AddEventHandler("blackMarket:loadItems", function()
   TriggerClientEvent("blackMarket:loadItems", source, markets)
@@ -45,39 +43,26 @@ end)
 
 RegisterServerEvent("blackMarket:requestPurchase")
 AddEventHandler("blackMarket:requestPurchase", function(key, itemIndex)
-  local char = exports["usa-characters"]:GetCharacter(source)
-  local weapon = markets[key]['items'][itemIndex]
-  if weapon.stock > 0 then
-    weapon.uuid = math.random(999999999)
-    if char.canHoldItem(weapon) then
-      if weapon.type == "weapon" then
-        local weapons = char.getWeapons()
-        if #weapons < MAX_PLAYER_WEAPON_SLOTS then
-          if weapon.price <= char.get("money") then -- see if user has enough money
-            char.giveItem(weapon, 1)
-            char.removeMoney(weapon.price)
-            if weapon.type == "weapon" then
-              TriggerClientEvent("blackMarket:equipWeapon", source, weapon.hash, weapon.name) -- equip
+    local char = exports["usa-characters"]:GetCharacter(source)
+    local weapon = markets[key]['items'][itemIndex]
+    if weapon.stock > 0 then
+        weapon.uuid = math.random(999999999)
+        if char.canHoldItem(weapon) then
+            if weapon.price <= char.get("money") then -- see if user has enough money
+                char.giveItem(weapon, 1)
+                char.removeMoney(weapon.price)
+                if weapon.type == "weapon" then
+                    TriggerClientEvent("blackMarket:equipWeapon", source, weapon.hash, weapon.name) -- equip
+                end
+                markets[key]['items'][itemIndex].stock = weapon.stock - 1
+                TriggerClientEvent("usa:notify", source, "Purchased: ~y~"..weapon.name..'\n~s~Price: ~y~$'..exports["globals"]:comma_value(weapon.price)..'.00')
+            else
+                TriggerClientEvent("usa:notify", source, "You cannot afford this purchase!")
             end
-            TriggerClientEvent("usa:notify", source, "Purchased: ~y~"..weapon.name..'\n~s~Price: ~y~$'..weapon.price..'.00')
-            markets[key]['items'][itemIndex].stock = weapon.stock - 1
-          else
-            TriggerClientEvent("usa:notify", source, "You cannot afford this purchase!")
-          end
         else
-          TriggerClientEvent("usa:notify", source, "~r~All weapons slot are full! (" .. MAX_PLAYER_WEAPON_SLOTS .. "/" .. MAX_PLAYER_WEAPON_SLOTS .. ")")
+            TriggerClientEvent("usa:notify", source, "Inventory is full!")
         end
-      else
-        if char.get("money") >= weapon.price then
-          char.giveItem(weapon, 1)
-          char.removeMoney(weapon.price)
-          TriggerClientEvent("usa:notify", source, "Purchased: ~y~"..weapon.name..'\n~s~Price: ~y~$'..weapon.price..'.00')
-        end
-      end
     else
-      TriggerClientEvent("usa:notify", source, "Inventory is full!")
+        TriggerClientEvent("usa:notify", source, "Out of stock! Come back tomorrow!")
     end
-  else
-    TriggerClientEvent("usa:notify", source, "Out of stock! Come back tomorrow!")
-  end
 end)

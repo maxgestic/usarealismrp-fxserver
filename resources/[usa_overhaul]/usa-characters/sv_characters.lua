@@ -10,11 +10,14 @@ local SETTINGS = {
   DEFAULT_MONEY = 5000
 }
 
-local lastUpdated = {}
+local lastUpdated = {} -- keep track of in game times to save every 30 min of play time
 
 AddEventHandler("playerDropped", function(reason)
   local usource = source
   if CHARACTERS[usource] then
+      if CHARACTERS[usource].get("job") == "sheriff" then
+          exports["usa_police"]:RemovePoliceWeapons(CHARACTERS[usource])
+      end
     -- save player data --
     TriggerEvent('es:exposeDBFunctions', function(db)
       print("updating char with ID: " .. CHARACTERS[usource].get("_id"))
@@ -24,8 +27,8 @@ AddEventHandler("playerDropped", function(reason)
     		local jailtime = CHARACTERS[usource].get("jailTime")
     		if jailtime then
     			if jailtime > 0 then
-            local n = CHARACTERS[usource].get("name")
-    				exports["globals"]:notifyPlayersWithJobs({"corrections"}, "^3INFO: ^0" .. n.first .." " .. n.last .. " has fallen asleep.")
+                    local n = CHARACTERS[usource].getName()
+    				exports["globals"]:notifyPlayersWithJobs({"corrections"}, "^3INFO: ^0" .. n .. " has fallen asleep.")
     			end
     		end
         -- destroy player object --

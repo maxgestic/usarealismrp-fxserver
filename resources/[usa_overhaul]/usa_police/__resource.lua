@@ -8,3 +8,7 @@ client_script {
 server_script {
 	"server.lua"
 }
+
+server_exports {
+	"RemovePoliceWeapons"
+}

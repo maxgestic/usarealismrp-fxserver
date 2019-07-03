@@ -5,8 +5,8 @@ local armoryItems = {
     { name = "Nightstick", type = "weapon", hash = 1737195953, price = 25, legality = "legal", quantity = 1, weight = 4 },
     { name = "Combat Pistol", type = "weapon", hash = 1593441988, price = 100, legality = "legal", quantity = 1, weight = 8 },
     { name = "Stun Gun", type = "weapon", hash = 911657153, price = 150, legality = "legal", quantity = 1, weight = 5 },
-    { name = "MK2 Pump Shotgun", type = "weapon", hash = 1432025498, price = 300, legality = "legal", quantity = 1, weight = 30 },
-    { name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 300, legality = "legal", quantity = 1, weight = 30 }
+    { name = "MK2 Pump Shotgun", type = "weapon", hash = 1432025498, price = 300, legality = "legal", quantity = 1, weight = 30, minRank = 2 },
+    { name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 300, legality = "legal", quantity = 1, weight = 30, minRank = 2 }
 }
 
 for i = 1, #armoryItems do
@@ -215,6 +215,13 @@ AddEventHandler("policestation2:requestPurchase", function(index)
     local usource = source
     local weapon = armoryItems[index]
     local char = exports["usa-characters"]:GetCharacter(usource)
+    local rank = char.get("policeRank")
+    if weapon.minRank then
+        if rank < weapon.minRank then
+            TriggerClientEvent("usa:notify", usource, "Not high enough rank, need to be: " .. weapon.minRank)
+            return
+        end
+    end
     if char.canHoldItem(weapon) then
       local user_money = char.get("money")
       if user_money - armoryItems[index].price >= 0 then
@@ -238,6 +245,9 @@ AddEventHandler("policestation2:requestPurchase", function(index)
         TriggerClientEvent("mini:equipWeapon", usource, armoryItems[index].hash, attachments) -- equip
         TriggerClientEvent('usa:notify', usource, 'Purchased: ~y~'..weapon.name..'\n~s~Serial Number: ~y~'..weapon.serialNumber..'\n~s~Price: ~y~$'..armoryItems[index].price)
         TriggerEvent('es:exposeDBFunctions', function(couchdb)
+            print("weaponDB: " .. type(weaponDB))
+            print("serial #: " .. weaponDB.serialNumber)
+            print("name: " .. weaponDB.name)
           couchdb.createDocumentWithId("legalweapons", weaponDB, weaponDB.serialNumber, function(success)
               if success then
                   print("* Weapon created serial["..weaponDB.serialNumber.."] name["..weaponDB.name.."] owner["..weaponDB.ownerName.."] *")
@@ -290,11 +300,7 @@ end)
 RegisterServerEvent("policestation2:offduty")
 AddEventHandler("policestation2:offduty", function()
   local char = exports["usa-characters"]:GetCharacter(source)
-  for i = 1, #armoryItems do -- remove any police weapons they got from armory when clocking out
-      if char.hasItem(armoryItems[i].name) then
-          char.removeItem(armoryItems[i].name, 1)
-      end
-  end
+  RemovePoliceWeapons(char)
   local playerWeapons = char.getWeapons() -- give back their civ weapons
   TriggerClientEvent('interaction:setPlayersJob', source, 'civ')
   TriggerClientEvent("policestation2:setciv", source, char.get("appearance"), playerWeapons)
@@ -322,24 +328,11 @@ function GetWeaponAttachments(name)
     return attachments
 end
 
-AddEventHandler("playerDropped", function(reason)
-    local char = exports["usa-characters"]:GetCharacter(source)
-    local job = char.get("job")
-    if job == "sheriff" then
-        RemovePoliceWeapons(char)
-    end
-end)
-
 function RemovePoliceWeapons(char)
-    local inv = char.get("inventory")
-    for i = 0, inv.MAX_CAPACITY - 1 do
-        local item = inv.items[tostring(i)]
-        if item then
-            if item.serviceWeapon then
-                inv.items[tostring(i)] = nil
-                inv.currentWeight = inv.currentWeight - ((item.weight or 0.0) * (item.quantity or 1))
-            end
-        end
-    end
-    char.set("inventory", inv)
+      local weps = char.getWeapons()
+      for i = #weps, 1, -1 do
+          if weps[i].serviceWeapon then
+              char.removeItemWithField("serialNumber", weps[i].serialNumber)
+          end
+      end
 end

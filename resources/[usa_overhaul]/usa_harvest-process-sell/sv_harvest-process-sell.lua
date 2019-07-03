@@ -73,7 +73,7 @@ AddEventHandler("HPS:rewardItem", function(job_name, stage)
           data.processed_item.quantity = 1
           char.giveItem(data.processed_item)
         else
-          TriggerClientEvent("usa:notify", source, "You don't have enough " .. data.harvest_item.name .. " to process!")
+          TriggerClientEvent("usa:notify", source, "Inventory full!")
         end
       end
     end
