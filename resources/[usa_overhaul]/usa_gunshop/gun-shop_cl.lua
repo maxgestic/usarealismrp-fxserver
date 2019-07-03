@@ -20,12 +20,19 @@ local locations = {
 
 local purchasedWeapons = 0
 
-----------------------
----- Set up blips ----
-----------------------
+local STORE_ITEMS = {}
+
+TriggerServerEvent("gunShop:getItems")
+
+RegisterNetEvent("gunShop:getItems")
+AddEventHandler("gunShop:getItems", function(items)
+	STORE_ITEMS = items
+	CreateWeaponShopMenu(mainMenu)
+	_menuPool:RefreshIndex()
+end)
 
 local BLIPS = {}
-function EnumerateBlips()
+function CreateMapBlips()
   if #BLIPS == 0 then
     for i = 1, #locations do
       local blip = AddBlipForCoord(locations[i].x, locations[i].y, locations[i].z)
@@ -47,7 +54,7 @@ TriggerServerEvent('blips:getBlips')
 RegisterNetEvent('blips:returnBlips')
 AddEventHandler('blips:returnBlips', function(blipsTable)
   if blipsTable['gunshop'] then
-    EnumerateBlips()
+    CreateMapBlips()
   else
     for _, k in pairs(BLIPS) do
       print(k)
@@ -56,10 +63,6 @@ AddEventHandler('blips:returnBlips', function(blipsTable)
     BLIPS = {}
   end
 end)
-
------------------
------------------
------------------
 
 
 local created_menus = {}
@@ -111,7 +114,7 @@ function CreateWeaponShopMenu(menu)
   -----------------------------------
   -- Adds button for each category --
   -----------------------------------
-  for category, weapons in pairs(storeWeapons) do
+  for category, weapons in pairs(STORE_ITEMS) do
     local submenu = _menuPool:AddSubMenu(menu, category, "See our selection of " .. category, true --[[KEEP POSITION]])
 		table.insert(created_menus, submenu)
     for i = 1, #weapons do
@@ -130,12 +133,6 @@ function CreateWeaponShopMenu(menu)
     end
   end
 end
-
-----------------
--- add to GUI --
-----------------
-CreateWeaponShopMenu(mainMenu)
-_menuPool:RefreshIndex()
 
 -------------------------------------------
 -- open menu when near gun shop location --

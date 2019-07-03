@@ -1,4 +1,4 @@
-local sv_storeWeapons = {
+local STORE_ITEMS = {
   ["Melee"] = {
     { name = "Flashlight", type = "weapon", hash = -1951375401, price = 200, legality = "legal", quantity = 1, weight = 5, objectModel = "p_cs_police_torch_s" },
     { name = "Hammer", type = "weapon", hash = 1317494643, price = 50, legality = "legal", quantity = 1, weight = 5, objectModel = "prop_tool_hammer" },
@@ -35,19 +35,30 @@ local sv_storeWeapons = {
   }
 }
 
+for category, items in pairs(STORE_ITEMS) do
+    for i = 1, #items do
+        items[i].notStackable = true
+    end
+end
+
 local LICENSE_PURCHASE_PRICE = 7000
 
 exports["globals"]:PerformDBCheck("usa_gunshop", "legalweapons")
 
+RegisterServerEvent("gunShop:getItems")
+AddEventHandler("gunShop:getItems", function()
+    TriggerClientEvent("gunShop:getItems", source, STORE_ITEMS)
+end)
+
 RegisterServerEvent("gunShop:requestPurchase")
 AddEventHandler("gunShop:requestPurchase", function(category, index)
   local usource = source
-  local weapon = sv_storeWeapons[category][index]
+  local weapon = STORE_ITEMS[category][index]
   local char = exports["usa-characters"]:GetCharacter(usource)
   local permit_status = checkPermit(char)
   if permit_status == "valid" then
     local money = char.get("money")
-    if money - sv_storeWeapons[category][index].price >= 0 then
+    if money - STORE_ITEMS[category][index].price >= 0 then
   	  local user_weapons = char.getWeapons()
   	  if  not char.canHoldItem(weapon) then
   		  TriggerClientEvent("usa:notify", source, "Inventory full!")
@@ -56,7 +67,7 @@ AddEventHandler("gunShop:requestPurchase", function(category, index)
       local timestamp = os.date("*t", os.time())
       local letters = {}
       for i = 65,  90 do table.insert(letters, string.char(i)) end -- add capital letters
-      local serialEnding = math.random(100000, 999999)
+      local serialEnding = math.random(100000000, 999999999)
       local serialLetter = letters[math.random(#letters)]
       weapon.uuid = math.random(999999999)
       weapon.serialNumber = serialLetter .. serialEnding
@@ -67,10 +78,10 @@ AddEventHandler("gunShop:requestPurchase", function(category, index)
       weaponDB.ownerDOB = char.get('dateOfBirth')
       weaponDB.issueDate = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year
       char.giveItem(weapon, 1)
-      char.removeMoney(sv_storeWeapons[category][index].price)
-      TriggerClientEvent("mini:equipWeapon", usource, sv_storeWeapons[category][index].hash) -- equip
+      char.removeMoney(STORE_ITEMS[category][index].price)
+      TriggerClientEvent("mini:equipWeapon", usource, STORE_ITEMS[category][index].hash) -- equip
       TriggerClientEvent('gunShop:addRecentlyPurchased', usource)
-      TriggerClientEvent('usa:notify', usource, 'Purchased: ~y~'..weapon.name..'\n~s~Serial Number: ~y~'..weapon.serialNumber..'\n~s~Price: ~y~$'..sv_storeWeapons[category][index].price)
+      TriggerClientEvent('usa:notify', usource, 'Purchased: ~y~'..weapon.name..'\n~s~Serial Number: ~y~'..weapon.serialNumber..'\n~s~Price: ~y~$'..STORE_ITEMS[category][index].price)
       TriggerEvent('es:exposeDBFunctions', function(couchdb)
         couchdb.createDocumentWithId("legalweapons", weaponDB, weaponDB.serialNumber, function(success)
             if success then

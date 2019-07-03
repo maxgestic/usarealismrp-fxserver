@@ -4,7 +4,6 @@ server_script 'gun-shop_sv.lua'
 
 client_scripts {
 	'@NativeUI/NativeUI.lua',
-	'storeWeapons.lua',
 	'gun-shop_cl.lua'
 }
 
