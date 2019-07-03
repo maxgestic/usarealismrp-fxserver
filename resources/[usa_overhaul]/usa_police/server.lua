@@ -1,16 +1,20 @@
 local armoryItems = {
-    { name = "Flare", type = "weapon", hash = 1233104067, price = 25, legality = "legal", quantity = 1, weight = 9 },
-    { name = "Tear Gas", type = "weapon", hash = -1600701090, price = 25, legality = "legal", quantity = 1, weight = 9 },
-    { name = "Flashlight", type = "weapon", hash = -1951375401, price = 25, legality = "legal", quantity = 1, weight = 4 },
-    { name = "Nightstick", type = "weapon", hash = 1737195953, price = 25, legality = "legal", quantity = 1, weight = 4 },
-    { name = "Combat Pistol", type = "weapon", hash = 1593441988, price = 100, legality = "legal", quantity = 1, weight = 8 },
-    { name = "Stun Gun", type = "weapon", hash = 911657153, price = 150, legality = "legal", quantity = 1, weight = 5 },
-    { name = "MK2 Pump Shotgun", type = "weapon", hash = 1432025498, price = 300, legality = "legal", quantity = 1, weight = 30, minRank = 2 },
-    { name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 300, legality = "legal", quantity = 1, weight = 30, minRank = 2 }
+    { name = "Flare", hash = 1233104067, price = 25, weight = 9 },
+    { name = "Tear Gas", hash = -1600701090, price = 25, weight = 9 },
+    { name = "Flashlight", hash = -1951375401, price = 25, weight = 4 },
+    { name = "Nightstick", hash = 1737195953, price = 25, weight = 4 },
+    { name = "Combat Pistol", hash = 1593441988, price = 100, weight = 8 },
+    { name = "Stun Gun", hash = 911657153, price = 150, weight = 5 },
+    { name = "MK2 Pump Shotgun", hash = 1432025498, price = 300, weight = 30, minRank = 2 },
+    { name = "MK2 Carbine Rifle", hash = 4208062921, price = 300, weight = 30, minRank = 2 }
 }
 
 for i = 1, #armoryItems do
     armoryItems[i].serviceWeapon = true
+    armoryItems[i].notStackable = true
+    armoryItems[i].quantity = 1
+    armoryItems[i].legality = "legal"
+    armoryItems[i].type = "weapon"
 end
 
 RegisterServerEvent("police:loadArmoryItems")
@@ -228,7 +232,7 @@ AddEventHandler("policestation2:requestPurchase", function(index)
         local timestamp = os.date("*t", os.time())
         local letters = {}
         for i = 65,  90 do table.insert(letters, string.char(i)) end -- add capital letters
-        local serialEnding = math.random(100000, 999999)
+        local serialEnding = math.random(100000000, 999999999)
         local serialLetter = letters[math.random(#letters)]
         weapon.serialNumber = serialLetter .. serialEnding
         local weaponDB = {}
@@ -245,9 +249,6 @@ AddEventHandler("policestation2:requestPurchase", function(index)
         TriggerClientEvent("mini:equipWeapon", usource, armoryItems[index].hash, attachments) -- equip
         TriggerClientEvent('usa:notify', usource, 'Purchased: ~y~'..weapon.name..'\n~s~Serial Number: ~y~'..weapon.serialNumber..'\n~s~Price: ~y~$'..armoryItems[index].price)
         TriggerEvent('es:exposeDBFunctions', function(couchdb)
-            print("weaponDB: " .. type(weaponDB))
-            print("serial #: " .. weaponDB.serialNumber)
-            print("name: " .. weaponDB.name)
           couchdb.createDocumentWithId("legalweapons", weaponDB, weaponDB.serialNumber, function(success)
               if success then
                   print("* Weapon created serial["..weaponDB.serialNumber.."] name["..weaponDB.name.."] owner["..weaponDB.ownerName.."] *")

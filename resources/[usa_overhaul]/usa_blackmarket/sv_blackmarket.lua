@@ -36,6 +36,12 @@ local markets = {
   }
 }
 
+for store, info in pairs(markets) do
+    for i = 1, #info["items"] do
+        info["items"][i].notStackable = true
+    end
+end
+
 RegisterServerEvent("blackMarket:loadItems")
 AddEventHandler("blackMarket:loadItems", function()
   TriggerClientEvent("blackMarket:loadItems", source, markets)
