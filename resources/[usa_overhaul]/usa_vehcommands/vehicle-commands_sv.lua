@@ -13,7 +13,7 @@ local VEHICLE_RANKS = {
 		["paraexp"] = 2,
 		["sheriff2"] = 2,
 		["firetruk"] = 1,
-		["polmav"] = 1.
+		["polmav"] = 1,
 		["lguard2"] = 1,
 		["blazer"] = 1
 	},
