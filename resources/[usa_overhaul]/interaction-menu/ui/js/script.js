@@ -144,7 +144,6 @@ var itemImages = {
   "Vibrator": "http://images.hktvmall.com/h0966011/100638/h0966011_svakomadonis001_170606015542_01_1200.png",
   "Used Condoms": "https://officialpsds.com/imageview/r8/26/r826yr_large.png?1521316450",
   "Ludde's Lube": "https://www.pngfind.com/pngs/m/204-2045538_rated-squirt-lube-png-transparent-png.png",
-  "The Daily Weazel": "https://banner2.kisspng.com/20180329/jjq/kisspng-newspaper-clip-art-newspaper-5abc7c1c12ae02.1287775415223019800765.jpg",
   "Chicken": "https://i1.wp.com/freepngimages.com/wp-content/uploads/2016/11/chicken-transparent-background.png?fit=457%2C750",
   "Chicken carcass": "https://img.pngio.com/dead-chicken-tyranachupng-dead-chicken-png-939_939.png",
   "Featherless chicken carcass": "https://cdn.shopify.com/s/files/1/2554/4616/t/5/assets/Image-47_299x.png?16156401367434920007",
@@ -153,7 +152,8 @@ var itemImages = {
   "MK2 Pump Shotgun": "https://www.gtabase.com/images/gta-5/weapons/shotguns/pump-shotgun-mk2.png",
   "Body Armor": "https://i.imgur.com/oHsLkWD.png",
   "Tear Gas": "https://i.imgur.com/v9b6bNm.png",
-  "Flare": "https://i.imgur.com/gMOnw6x.png"
+  "Flare": "https://i.imgur.com/gMOnw6x.png",
+  "The Daily Weazel": "https://i.imgur.com/Pg6TODN.png"
 }
 
 var menuItems = [
