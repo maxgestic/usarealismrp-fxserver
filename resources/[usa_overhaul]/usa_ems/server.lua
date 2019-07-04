@@ -1,3 +1,35 @@
+local LOADOUT_ITEMS = {
+    { name = "Flare", hash = 1233104067, price = 25, weight = 9 },
+    { name = "Fire Extinguisher", hash = 101631238, price = 25, weight = 20 }
+}
+
+for i = 1, #LOADOUT_ITEMS do
+    LOADOUT_ITEMS[i].serviceWeapon = true
+    LOADOUT_ITEMS[i].notStackable = true
+    LOADOUT_ITEMS[i].quantity = 1
+    LOADOUT_ITEMS[i].legality = "legal"
+    LOADOUT_ITEMS[i].type = "weapon"
+end
+
+RegisterServerEvent("ems:getLoadout")
+AddEventHandler("ems:getLoadout", function()
+    local char = exports["usa-characters"]:GetCharacter(source)
+    for i = 1, #LOADOUT_ITEMS do
+        local item = LOADOUT_ITEMS[i]
+        item.serialNumber = math.random(10000000, 999999999)
+        if char.get("money") >= item.price then
+            if char.canHoldItem(item) then
+                char.removeMoney(item.price)
+                char.giveItem(item)
+                TriggerClientEvent("mini:equipWeapon", source, item.hash)
+                TriggerClientEvent("usa:notify", source, "Retrieved a " .. item.name)
+            else
+                TriggerClientEvent("usa:notify", source, "Unable to get " .. item.name ..". Inventory full.")
+            end
+        end
+    end
+end)
+
 RegisterServerEvent("emsstation2:loadOutfit")
 AddEventHandler("emsstation2:loadOutfit", function(slot)
   local user = exports["essentialmode"]:getPlayerFromId(source)
@@ -56,3 +88,12 @@ AddEventHandler("emsstation2:checkWhitelist", function(clientevent)
 		TriggerClientEvent("usa:notify", source, "~y~You are not whitelisted for EMS. Apply at https://www.usarrp.net.")
 	end
 end)
+
+function RemoveServiceWeapons(char)
+      local weps = char.getWeapons()
+      for i = #weps, 1, -1 do
+          if weps[i].serviceWeapon then
+              char.removeItemWithField("serialNumber", weps[i].serialNumber)
+          end
+      end
+end

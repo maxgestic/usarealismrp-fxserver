@@ -15,8 +15,11 @@ local lastUpdated = {} -- keep track of in game times to save every 30 min of pl
 AddEventHandler("playerDropped", function(reason)
   local usource = source
   if CHARACTERS[usource] then
-      if CHARACTERS[usource].get("job") == "sheriff" then
-          exports["usa_police"]:RemovePoliceWeapons(CHARACTERS[usource])
+      local job = CHARACTERS[usource].get("job")
+      if job == "sheriff"  or job == "corrections" then
+        exports["usa_police"]:RemovePoliceWeapons(CHARACTERS[usource])
+      elseif job == "ems" then
+        exports["usa_ems"]:RemoveServiceWeapons(CHARACTERS[usource])
       end
     -- save player data --
     TriggerEvent('es:exposeDBFunctions', function(db)

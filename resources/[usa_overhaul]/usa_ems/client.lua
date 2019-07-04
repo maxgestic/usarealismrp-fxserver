@@ -216,7 +216,7 @@ function CreateMenu(menu)
             TriggerServerEvent('emsstation2:loadOutfit', selectedLoadSlot)
 			TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 1, 'zip-close', 1.0)
 			Citizen.Wait(2000)
-			DoScreenFadeIn(500) 
+			DoScreenFadeIn(500)
             TriggerEvent("usa:playAnimation", 'clothingshirt', 'try_shirt_positive_d', -8, 1, -1, 48, 0, 0, 0, 0, 3)
         end
     end
@@ -297,6 +297,11 @@ function CreateMenu(menu)
 		ClearPedProp(ped, 2)
 	end
 	submenu:AddItem(item)
+	local loadoutBtn = NativeUI.CreateItem("Get Loadout", "Retrieve flares and a fire extinguisher")
+	loadoutBtn.Activated = function(parentmenu, selected)
+		TriggerServerEvent("ems:getLoadout")
+	end
+	menu:AddItem(loadoutBtn)
 	local item = NativeUI.CreateItem("Clock Out", "Sign off duty")
 	item.Activated = function(parentmenu, selected)
 		TriggerServerEvent("emsstation2:offduty")
@@ -358,4 +363,3 @@ Citizen.CreateThread(function()
 		Wait(0)
 	end
 end)
-
