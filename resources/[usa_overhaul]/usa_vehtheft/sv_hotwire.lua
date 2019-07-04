@@ -14,8 +14,8 @@ local vehicleSearchItems = {
 RegisterServerEvent("veh:checkForKey")
 AddEventHandler("veh:checkForKey", function(plate, engineOn)
 	local char = exports["usa-characters"]:GetCharacter(source)
-	local item = char.getItemWithField("plate", plate)
-	if item then
+	local key = char.getItemWithField("plate", plate)
+	if key then
 		TriggerClientEvent('veh:toggleEngine', source, true, engineOn, false)
 	else
 		TriggerClientEvent('veh:toggleEngine', source, false, engineOn, true)
