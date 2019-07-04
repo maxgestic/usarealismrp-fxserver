@@ -88,6 +88,7 @@ AddEventHandler("vehicle:moveItemToPlayerInv", function(src, plate, fromSlot, to
                 end)
             else
                 TriggerClientEvent("usa:notify", usource, "Inventory full!")
+                exports["usa_vehinv"]:removeVehicleBusy(plate)
             end
         end
     end)
