@@ -65,7 +65,7 @@ var itemImages = {
   "Vintage Pistol": "https://i.pinimg.com/originals/3e/5b/09/3e5b09796cb124639c5f2232e5f32d9b.png",
   "Marksman Pistol": "http://img3.wikia.nocookie.net/__cb20100502124008/gtawiki/images/d/de/Pistol.44-TBOGT.png",
   "Pump Shotgun": "https://steamuserimages-a.akamaihd.net/ugc/29613457985659003/1B48193086C05B7FB56FA9770E2507492F47B6DF/",
-  "Bullpup": "https://steamuserimages-a.akamaihd.net/ugc/29613457985658075/DE3DC076CD63090D340BC133DDA9460E388E8A73/",
+  "Bullpup Shotgun": "https://steamuserimages-a.akamaihd.net/ugc/29613457985658075/DE3DC076CD63090D340BC133DDA9460E388E8A73/",
   "Musket": "https://www.gtabase.com/images/gta-5/weapons/shotguns/musket.png",
   "Firework Gun": "https://www.gtabase.com/images/gta-5/weapons/heavy/firework-launcher.png",
   "Parachute": "https://vignette.wikia.nocookie.net/gtawiki/images/f/f5/Parachute-GTAV.png/revision/latest?cb=20140515064734",
