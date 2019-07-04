@@ -423,7 +423,7 @@ AddEventHandler("mdt:performWeaponCheck", function(serialNumber)
 	local usource = source
 	serialNumber = string.upper(serialNumber)
 
-	if not serialNumber or string.len(serialNumber) < 7 or string.len(serialNumber) > 8 then
+if not serialNumber or string.len(serialNumber) ~= 9 then
 		local msg = {
 			type = "error",
 			message  = "Invalid serial number format!"

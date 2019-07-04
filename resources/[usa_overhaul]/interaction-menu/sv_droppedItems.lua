@@ -17,19 +17,19 @@ end)
 
 RegisterServerEvent("interaction:attemptPickup")
 AddEventHandler("interaction:attemptPickup", function(item)
-  local usource = source
-  for i = 1, #DROPPED_ITEMS do
-    if item.x == DROPPED_ITEMS[i].x and item.y == DROPPED_ITEMS[i].y and item.z == DROPPED_ITEMS[i].z and item.name == DROPPED_ITEMS[i].name then
+	local usource = source
+	for i = #DROPPED_ITEMS, 1, -1 do
+		if item.x == DROPPED_ITEMS[i].x and item.y == DROPPED_ITEMS[i].y and item.z == DROPPED_ITEMS[i].z and item.name == DROPPED_ITEMS[i].name then
 			attemptPickup(usource, DROPPED_ITEMS[i], function(success)
-        if success then
-          table.remove(DROPPED_ITEMS, i)
-          TriggerClientEvent("interaction:removeDroppedItem", -1, i)
-        end
+				if success then
+					table.remove(DROPPED_ITEMS, i)
+					TriggerClientEvent("interaction:removeDroppedItem", -1, i)
+				end
 				TriggerClientEvent("interaction:finishedPickupAttempt", usource)
-      end)
-      break
-    end
-  end
+			end)
+			break
+		end
+	end
 end)
 
 function attemptPickup(src, item, cb)

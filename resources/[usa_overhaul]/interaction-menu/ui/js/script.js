@@ -154,6 +154,7 @@ var itemImages = {
   "Tear Gas": "https://i.imgur.com/v9b6bNm.png",
   "Flare": "https://i.imgur.com/gMOnw6x.png",
   "The Daily Weazel": "https://i.imgur.com/Pg6TODN.png"
+  //"Fire Extinguisher": ""
 }
 
 var menuItems = [
