@@ -158,7 +158,7 @@ end)
 
 function GetFPRevoked(charges) -- firearm permit
 	local numbers = {
-		'118', '135', '187', '192', '207', '215', '16590', '29800', '33410', '2800.1', '2800.2', '2800.3', '2800.4', '20001'
+		'118', '135', '187', '192', '207', '215', '16590', '29800', '33410', '2800.2', '2800.3', '2800.4'
 	}
 	for _, code in pairs(numbers) do
 		if string.find(charges, code) then
