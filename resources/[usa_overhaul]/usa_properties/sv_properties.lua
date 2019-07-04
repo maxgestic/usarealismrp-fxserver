@@ -1124,17 +1124,19 @@ AddEventHandler('properties:requestExit', function(location, index, noTp)
 		return
 	end
 	local room = properties[location].rooms[index]
-	for i = 1, #room.instance do
-		if source == room.instance[i] then
-			table.remove(properties[location].rooms[index].instance, i)
+	if room then
+		for i = 1, #room.instance do
+			if source == room.instance[i] then
+				table.remove(properties[location].rooms[index].instance, i)
+			end
 		end
-	end
-	TriggerClientEvent('properties:updateData', -1, location, index, properties[location].rooms[index])
-	TriggerClientEvent('properties:exitProperty', source, noTp)
-	Citizen.Wait(1000)
-	for i = 1, #room.instance do
-		local sourceInside = properties[location].rooms[index].instance[i]
-		TriggerClientEvent('properties:updateInstance', sourceInside, properties[location].rooms[index].instance)
+		TriggerClientEvent('properties:updateData', -1, location, index, properties[location].rooms[index])
+		TriggerClientEvent('properties:exitProperty', source, noTp)
+		Citizen.Wait(1000)
+		for i = 1, #room.instance do
+			local sourceInside = properties[location].rooms[index].instance[i]
+			TriggerClientEvent('properties:updateInstance', sourceInside, properties[location].rooms[index].instance)
+		end
 	end
 end)
 

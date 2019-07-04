@@ -186,6 +186,18 @@ Citizen.CreateThread(function()
 		return true
 	end
 
+	function ExitingProperty(char, newx, newy, newz)
+		local property = char.get("property")
+		if property then
+			if property["houseCoords"] then
+				if find_distance({ x = property["houseCoords"][1], y = property["houseCoords"][2], z = property["houseCoords"][3]}, {x = newx, y = newy, z = newz}) < 10 then
+					return true
+				end
+			end
+		end
+		return false
+	end
+
 	RegisterServerEvent('AntiCheese:SpeedFlag')
 	AddEventHandler('AntiCheese:SpeedFlag', function(state, distance, oldx,oldy,oldz, newx,newy,newz)
 		local userSource = source
@@ -230,35 +242,38 @@ Citizen.CreateThread(function()
 		local userSource = source
 		if Components.Speedhack then
 			print("*****noclip flag trigged (source: #" .. userSource .. ")!!****")
-			if not isStaffMember(userSource) then
-				local name, userInfoStr = getUserInfoString(userSource)
+			local char = exports["usa-characters"]:GetCharacter(userSource)
+			if not ExitingProperty(char, newx, newy, newz) then
+				if not isStaffMember(userSource) then
+					local name, userInfoStr = getUserInfoString(userSource)
 
-				local isKnown, flagStr = WarnPlayer(userSource)
-				if not isKnown then  -- don't warn on first offense
-					print("**First offense, no alert**")
-					return
+					local isKnown, flagStr = WarnPlayer(userSource)
+					if not isKnown then  -- don't warn on first offense
+						print("**First offense, no alert**")
+						return
+					end
+
+					if not shouldSendAlert(userSource) then
+						return  -- Don't send an alert
+					end
+
+					oldx, oldy, oldz = roundCoords(oldx, oldy, oldz)
+					newx, newy, newz = roundCoords(newx, newy, newz)
+
+					local msg = "```" .. getTimeString() ..
+						"Noclip hacker detected!\n" ..
+						userInfoStr ..
+						"Player was " .. math.ceil(distance) .. " units from their last checked location\n" ..
+						"Previous coordinates: (" .. oldx .. ", " .. oldy .. ", " .. oldz .. ")\n" ..
+						"Current coordinates: (" .. newx .. ", " .. newy .. ", " .. newz .. ")\n" ..
+						flagStr .. "```"
+					local staff_msg = "^3*Noclip hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
+
+					TriggerEvent("usa:notifyStaff", staff_msg)
+					SendWebhookMessage(webhook, msg)
+				else
+					print("**not sending message, was a staff member**")
 				end
-
-				if not shouldSendAlert(userSource) then
-					return  -- Don't send an alert
-				end
-
-				oldx, oldy, oldz = roundCoords(oldx, oldy, oldz)
-				newx, newy, newz = roundCoords(newx, newy, newz)
-
-				local msg = "```" .. getTimeString() ..
-					"Noclip hacker detected!\n" ..
-					userInfoStr ..
-					"Player was " .. math.ceil(distance) .. " units from their last checked location\n" ..
-					"Previous coordinates: (" .. oldx .. ", " .. oldy .. ", " .. oldz .. ")\n" ..
-					"Current coordinates: (" .. newx .. ", " .. newy .. ", " .. newz .. ")\n" ..
-					flagStr .. "```"
-				local staff_msg = "^3*Noclip hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
-
-				TriggerEvent("usa:notifyStaff", staff_msg)
-				SendWebhookMessage(webhook, msg)
-			else
-				print("**not sending message, was a staff member**")
 			end
 		end
 	end)
@@ -494,3 +509,17 @@ TriggerEvent('es:addGroupCommand', 'makepedskillable', 'admin', function(source,
 end, {
 	help = "Make all peds killable. Useful for getting rid of invulnerable peds modders like to sometimes spawn in."
 })
+
+function find_distance(coords1, coords2)
+  xdistance =  math.abs(coords1.x - coords2.x)
+
+  ydistance = math.abs(coords1.y - coords2.y)
+
+  zdistance = math.abs(coords1.z - coords2.z)
+
+  return nroot(3, (xdistance ^ 3 + ydistance ^ 3 + zdistance ^ 3))
+end
+
+function nroot(root, num)
+  return num^(1/root)
+end

@@ -147,6 +147,7 @@ BlacklistedWeapons = { -- weapons that will get people banned
 	 GetHashKey("WEAPON_BALL"),
 }
 
+local houseCoordinates = {}
 
 --[[ CURR. DISABLED BELOW
 CageObjs = {

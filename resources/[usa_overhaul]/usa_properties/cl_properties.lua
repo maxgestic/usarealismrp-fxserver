@@ -223,7 +223,6 @@ end)
 
 RegisterNetEvent('properties:enterProperty')
 AddEventHandler('properties:enterProperty', function(_currentProperty)
-	print('entering property')
 	currentProperty = _currentProperty
 	myInstance.players = currentProperty.instance
 	for i = 1, #myInstance.players do
