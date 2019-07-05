@@ -88,3 +88,7 @@ function VehicleInFront()
     local _, _, _, _, result = GetRaycastResult(rayHandle)
     return result
 end
+
+function IsInTrunk()
+    return inTrunk
+end

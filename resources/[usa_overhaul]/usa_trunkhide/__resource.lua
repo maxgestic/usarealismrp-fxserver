@@ -5,3 +5,7 @@ client_scripts {
 }
 
 server_script 'sv_trunkhide.lua'
+
+exports {
+    "IsInTrunk"
+}

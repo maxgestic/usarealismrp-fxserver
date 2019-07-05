@@ -147,8 +147,6 @@ BlacklistedWeapons = { -- weapons that will get people banned
 	 GetHashKey("WEAPON_BALL"),
 }
 
-local houseCoordinates = {}
-
 --[[ CURR. DISABLED BELOW
 CageObjs = {
 	"prop_gold_cont_01",
@@ -197,7 +195,9 @@ Citizen.CreateThread(function()
 			if not isAtAWarpPoint(newx, newy, newz) then
 				if GetEntitySpeed(GetPlayerPed(-1)) == 0 then
 					if dist > (MaxRunSpeed * Seconds) and dist > MinTriggerDistance then
-						TriggerServerEvent("AntiCheese:NoclipFlag", dist, posx,posy,posz, newx,newy,newz)
+						if not exports["usa_hidetrunk"]:IsInTrunk() then
+							TriggerServerEvent("AntiCheese:NoclipFlag", dist, posx,posy,posz, newx,newy,newz)
+						end
 					end
 				else
 					if flyveh then
@@ -216,7 +216,9 @@ Citizen.CreateThread(function()
 					end
 
 					if speedhack and dist > MinTriggerDistance then
-						TriggerServerEvent("AntiCheese:SpeedFlag", state, dist, posx,posy,posz, newx,newy,newz)
+						if not exports["usa_hidetrunk"]:IsInTrunk() then
+							TriggerServerEvent("AntiCheese:SpeedFlag", state, dist, posx,posy,posz, newx,newy,newz)
+						end
 					end
 				end
 			end
