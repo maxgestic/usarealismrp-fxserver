@@ -1078,11 +1078,12 @@ end)
 
 RegisterServerEvent('properties:forceEntry')
 AddEventHandler('properties:forceEntry', function(location, index)
-	local job = exports["usa-characters"]:GetCharacterField(source, "job")
+	local usource = source
+	local job = exports["usa-characters"]:GetCharacterField(usource, "job")
 	if job == 'sheriff' or job == 'dai' then
-		print('PROPERTIES: '..source.. ' has forcefully BREACHED into room '..index.. ' at location '..location)
+		print('PROPERTIES: '..usource.. ' has forcefully BREACHED into room '..index.. ' at location '..location)
 		local room = properties[location].rooms[index]
-		table.insert(properties[location].rooms[index].instance, source)
+		table.insert(properties[location].rooms[index].instance, usource)
 		TriggerClientEvent('properties:updateData', -1, location, index, properties[location].rooms[index])
 		local currentProperty = {
 			location = location,
@@ -1099,7 +1100,7 @@ AddEventHandler('properties:forceEntry', function(location, index)
 			bathroomCoords = interiors[properties[location].interior].bathroom,
 			voiceChannel = room.voiceChannel
 		}
-		TriggerClientEvent('properties:breachProperty', source, currentProperty)
+		TriggerClientEvent('properties:breachProperty', usource, currentProperty)
 		Citizen.Wait(1000)
 		for i = 1, #room.instance do
 			local sourceInside = properties[location].rooms[index].instance[i]
@@ -1107,8 +1108,7 @@ AddEventHandler('properties:forceEntry', function(location, index)
 			TriggerClientEvent('properties:updateInstance', sourceInside, properties[location].rooms[index].instance)
 		end
 	else
-		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
-    	TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit properties:forceEntry event, please intervene^0!')
+		DropPlayer(usource, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
     end
 end)
 
