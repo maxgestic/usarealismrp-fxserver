@@ -193,6 +193,7 @@ AddEventHandler("police:frisk", function(playerId, src)
 	end
 	if #items > 0 then
 		for i = 1, #items do
+			Wait(2000)
 			local name = items[i].name
 			local quantity = items[i].quantity
 			local legality = items[i].legality
