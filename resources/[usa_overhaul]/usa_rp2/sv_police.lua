@@ -149,7 +149,6 @@ RegisterServerEvent("search:searchPlayer")
 AddEventHandler("search:searchPlayer", function(playerId, src)
 	local char = exports["usa-characters"]:GetCharacter(playerId)
 	local items = {}
-	local playerInventory = char.get("inventory")
 	local inventory = char.get("inventory")
 	for i = 0, (inventory.MAX_CAPACITY - 1) do
 		if inventory.items[tostring(i)] then
@@ -160,6 +159,47 @@ AddEventHandler("search:searchPlayer", function(playerId, src)
 		end
 	end
 	TriggerClientEvent("chatMessage", src, "", {0,0,0}, "^3^*[SEARCH] ^r^0Cash Found:^0 $" .. comma_value(char.get("money")))
+	for i = 1, #items do
+		local name = items[i].name
+		local quantity = items[i].quantity
+		local legality = items[i].legality
+		if legality == "illegal" then
+			TriggerClientEvent("chatMessage", src, "", {}, "^1(x" .. quantity .. ") " .. name) -- print item red
+		else
+			if items[i].serialNumber then
+				TriggerClientEvent("chatMessage", src, "", {}, "^0(x" .. quantity .. ") " .. name .. ' - '..items[i].serialNumber) -- print item
+			elseif items[i].residue and items[i].name == 'Razor Blade' then
+				TriggerClientEvent("chatMessage", src, "", {}, "^0(x" .. quantity .. ") " .. name .. ' (Powdery Residue)') -- print item
+			elseif items[i].residue and items[i].name == 'Large Scissors' then
+				TriggerClientEvent("chatMessage", src, "", {}, "^0(x" .. quantity .. ") " .. name .. ' (Odor of Marijuana)') -- print item
+			else
+				TriggerClientEvent("chatMessage", src, "", {}, "^0(x" .. quantity .. ") " .. name)
+			end
+		end
+		if items[i].components then
+			for k = 1, #items[i].components do
+				TriggerClientEvent("chatMessage", src, "", {0, 50, 0}, "^0		+ " .. items[i].components[k])
+			end
+		end
+	end
+end)
+
+RegisterServerEvent("police:frisk")
+AddEventHandler("police:frisk", function(playerId, src)
+	local char = exports["usa-characters"]:GetCharacter(playerId)
+	local items = {}
+	local inventory = char.get("inventory")
+	for i = 0, (inventory.MAX_CAPACITY - 1) do
+		if inventory.items[tostring(i)] then
+			local item = inventory.items[tostring(i)]
+			if item.type == "weapon" then
+				table.insert(items, item)
+			end
+		end
+	end
+	if char.get("money") > 8000 then -- a large sum of money
+		TriggerClientEvent("chatMessage", src, "", {0,0,0}, "^3^*[SEARCH] ^r^0Cash Found:^0 $" .. comma_value(char.get("money")))
+	end
 	for i = 1, #items do
 		local name = items[i].name
 		local quantity = items[i].quantity
@@ -209,7 +249,7 @@ TriggerEvent('es:addCommand', 'search', function(source, args, char)
 	end
 end, {help = "Search the nearest person or vehicle"})
 
-TriggerEvent('es:addJobCommand', 'frisk', {"sheriff", "ems", "doc", "dai"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'frisk', {"sheriff", "ems", "corrections", "dai"}, function(source, args, char)
 	if not tonumber(args[2]) then
 		TriggerClientEvent("police:friskNearest", source, source)
 	else

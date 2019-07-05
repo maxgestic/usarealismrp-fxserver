@@ -1,5 +1,11 @@
 local POLICE_LAWYER_PAY = 500
 
+local onTimeout = {}
+
+local WAIT_DELAY = 30 * 60 * 1000
+
+local PAY_LAWYER_DELAY_MINUTES = 30
+
 RegisterServerEvent('legal:checkBarCertificate')
 AddEventHandler('legal:checkBarCertificate', function()
 	local char = exports["usa-characters"]:GetCharacter(source)
@@ -27,15 +33,21 @@ TriggerEvent('es:addJobCommand', 'paylawyer', { 'sheriff', 'police' , 'judge'}, 
 		if not GetPlayerName(targetSource) then
 			TriggerClientEvent('usa:notify', source, '~y~Player not found!')
 		else
-			if char.get('job') == 'judge' then
-				if targetAmount > 0 and targetAmount < 10000 then
-					TriggerClientEvent('lawyer:checkDistanceForPayment', source, targetSource, targetAmount)
+			if not onTimeout[char.get("_id")] then
+				if char.get('job') == 'judge' then
+					if targetAmount > 0 and targetAmount < 10000 then
+						TriggerClientEvent('lawyer:checkDistanceForPayment', source, targetSource, targetAmount)
+						onTimeout[char.get("_id")] = os.time()
+					else
+						TriggerClientEvent('usa:notify', source, '~y~Invalid amount, please contact staff to do this.')
+					end
 				else
-					TriggerClientEvent('usa:notify', source, '~y~Invalid amount, please contact staff to do this.')
+					if targetAmount > 500 then targetAmount = POLICE_LAWYER_PAY end
+					TriggerClientEvent('lawyer:checkDistanceForPayment', source, targetSource, targetAmount)
+					onTimeout[char.get("_id")] = os.time()
 				end
 			else
-				if targetAmount > 500 then targetAmount = POLICE_LAWYER_PAY end
-				TriggerClientEvent('lawyer:checkDistanceForPayment', source, targetSource, targetAmount)
+				TriggerClientEvent('usa:notify', source, "You've used that command too recently!")
 			end
 		end
 	else
@@ -90,3 +102,22 @@ AddEventHandler('legal:onDutyDAI', function()
 		end
 	end
 end)
+
+Citizen.CreateThread(function()
+	while true do
+		for id, time in pairs(onTimeout) do
+			if GetMinutesFromTime(time) >= PAY_LAWYER_DELAY_MINUTES then
+				onTimeout[id] = nil
+			end
+		end
+		Wait(WAIT_DELAY)
+	end
+end)
+
+
+function GetMinutesFromTime(t)
+	local reference = t
+	local minutesfrom = os.difftime(os.time(), reference) / 60
+	local minutes = math.floor(minutesfrom)
+	return minutes
+end
