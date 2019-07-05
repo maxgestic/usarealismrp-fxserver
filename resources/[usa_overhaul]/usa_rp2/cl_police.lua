@@ -66,6 +66,21 @@ AddEventHandler("search:searchNearest", function(src)
   end)
 end)
 
+RegisterNetEvent("police:friskNearest")
+AddEventHandler("police:friskNearest", function(src)
+  TriggerEvent("usa:getClosestPlayer", 1.6, function(player)
+    if player.id ~= 0 and IsEntityVisible(GetPlayerPed(GetPlayerFromServerId(player.id))) then
+      local playerPed = PlayerPedId()
+      local playerHeading = GetEntityHeading(playerPed)
+      local x, y, z = table.unpack(GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 0.70, -1.0))
+      TriggerEvent('search:playAnim')
+      TriggerServerEvent('search:playSuspectAnim', player.id, x, y, z, playerHeading)
+      Citizen.Wait(12000)
+      TriggerServerEvent("police:frisk", player.id, src)
+    end
+  end)
+end)
+
 RegisterNetEvent("search:playAnim")
 AddEventHandler("search:playAnim", function()
   local playerPed = PlayerPedId()
