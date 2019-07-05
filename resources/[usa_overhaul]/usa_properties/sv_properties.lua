@@ -1080,7 +1080,7 @@ RegisterServerEvent('properties:forceEntry')
 AddEventHandler('properties:forceEntry', function(location, index)
 	local usource = source
 	local job = exports["usa-characters"]:GetCharacterField(usource, "job")
-	if job == 'sheriff' or job == 'dai' then
+	if job == 'sheriff' or job == 'dai' or job == "ems" then
 		print('PROPERTIES: '..usource.. ' has forcefully BREACHED into room '..index.. ' at location '..location)
 		local room = properties[location].rooms[index]
 		table.insert(properties[location].rooms[index].instance, usource)
