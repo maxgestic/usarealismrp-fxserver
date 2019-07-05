@@ -21,34 +21,40 @@ AddEventHandler('business:beginRobbery', function(storeName, isSuspectMale, play
 	else
 		print('ROBBERY: '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] attempted to begin a robbery at store not in table!')
 		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
-	    TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit business:beginRobbery event, please intervene^0!')
 	end
 end)
 
 RegisterServerEvent('business:finishRobbery')
 AddEventHandler('business:finishRobbery', function(storeName)
-	local char = exports["usa-characters"]:GetCharacter(source)
+	local usource = source
+	local char = exports["usa-characters"]:GetCharacter(usource)
 	if BUSINESSES[storeName] and BUSINESSES[storeName].isBeingRobbed == source then
 		local store = BUSINESSES[storeName]
-		print("ROBBERY: Robbery has ended at store["..storeName.."], triggered by "..GetPlayerName(source)..'['..GetPlayerIdentifier(source).."]!")
+		print("ROBBERY: Robbery has ended at store["..storeName.."], triggered by "..GetPlayerName(usource)..'['..GetPlayerIdentifier(usource).."]!")
 		store.isBeingRobbed = false
 		anyStoreBeingRobbed = false
-		local policeOnline = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
-		local reward = math.random(rewardRange[1], rewardRange[2])
-		local bonus = 0
-		if policeOnline > policeNeededForBonus then
-			bonus = math.floor((reward * 0.08) - reward)
+		local randomPercentage = math.random()
+		while randomPercentage > MAX_ROB_PERCENT or randomPercentage < MIN_ROB_PERCENT do
+			randomPercentage = math.random()
 		end
-		char.giveMoney((reward + bonus))
-		print("ROBBERY: "..GetPlayerName(source)..'['..GetPlayerIdentifier(source).."] has been rewarded reward["..reward.."] with bonus["..bonus.."]!")
-		if bonus > 0 then
-			TriggerClientEvent('usa:notify', source, 'You have stolen $'..reward..'.00 with a bonus of $'..bonus..'.00!')
-		else
-			TriggerClientEvent('usa:notify', source, 'You have stolen $'..reward..'.00!')
-		end
+		RobPercentageOfCashFromBusiness(storeName, randomPercentage, function(reward)
+			if reward then
+				local policeOnline = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
+				local bonus = 0
+				if policeOnline >= policeNeededForBonus then
+					bonus = math.floor(reward * 0.35)
+				end
+				char.giveMoney(reward + bonus)
+				print("ROBBERY: "..GetPlayerName(usource)..'['..GetPlayerIdentifier(usource).."] has been rewarded reward["..reward.."] with bonus["..bonus.."]!")
+				if bonus > 0 then
+					TriggerClientEvent('usa:notify', usource, 'You have stolen $'..exports["globals"]:comma_value(reward)..'.00 with a bonus of $'..bonus..'.00!')
+				else
+					TriggerClientEvent('usa:notify', usource, 'You have stolen $'..exports["globals"]:comma_value(reward)..'.00!')
+				end
+			end
+		end)
 	else
-		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
-	    TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit business:finishRobbery event, please intervene^0!')
+		DropPlayer(usource, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
 	end
 end)
 
@@ -61,7 +67,6 @@ AddEventHandler('business:cancelRobbery', function(storeName)
 		print("ROBBERY: Robbery at store["..storeName.."] has been cancelled! (triggered by "..GetPlayerName(source)..'['..GetPlayerIdentifier(source).."])")
 	else
 		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
-	    TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit business:cancelRobbery event, please intervene^0!')
 	end
 end)
 

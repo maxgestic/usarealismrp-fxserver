@@ -178,6 +178,17 @@ AddEventHandler("business:lease", function(name)
   end)
 end)
 
+-- remove percentage from cash and return amount taken --
+function RobPercentageOfCashFromBusiness(name, percentage, cb)
+    GetBusinessStorage(name, function(storage)
+        local reward = math.floor(storage.cash * percentage)
+        storage.cash = storage.cash - reward
+        SetBusinessStorage(name, storage, function(success)
+            cb(reward)
+        end)
+    end)
+end
+
 function CheckBusinessLeases()
   -- get each business' paid time & _id
   -- if any are due, remove their owners

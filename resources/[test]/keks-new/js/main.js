@@ -80,7 +80,7 @@
 
 	var src;
 
-	if (Math.random() > 0.5)
+	if (Math.random() >= 0.7)
 		src = 'http://ice1.somafm.com/beatblender-128-mp3'; // dance / house
 	else
 		src = 'http://tunein4.streamguys1.com/hhbeafree5'; // hip hop

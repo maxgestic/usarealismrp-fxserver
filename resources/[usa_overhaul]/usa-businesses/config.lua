@@ -1,7 +1,6 @@
-POLICE_NEEDED = 2
+POLICE_NEEDED = 0
 policeNeededForBonus = 4
 robberyCooldown = 2100
-rewardRange = {350, 450}
 
 LEASE_PERIOD_DAYS = 14
 DEFAULT_PURCHASE_PERCENT_REWARD = 0.20
@@ -10,6 +9,11 @@ KEYS ={
 	K = 311,
 	E = 38
 }
+
+MAX_ROB_PERCENT = 0.5
+MIN_ROB_PERCENT = 0.2
+
+ROB_DURATION = 140000
 
 BUSINESSES = {
 	["Car Dealership (Los Santos)"] = {
