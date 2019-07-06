@@ -195,7 +195,7 @@ Citizen.CreateThread(function()
 			if not isAtAWarpPoint(newx, newy, newz) then
 				if GetEntitySpeed(GetPlayerPed(-1)) == 0 then
 					if dist > (MaxRunSpeed * Seconds) and dist > MinTriggerDistance then
-						if not exports["usa_hidetrunk"]:IsInTrunk() then
+						if not exports["usa_trunkhide"]:IsInTrunk() then
 							TriggerServerEvent("AntiCheese:NoclipFlag", dist, posx,posy,posz, newx,newy,newz)
 						end
 					end
@@ -216,7 +216,7 @@ Citizen.CreateThread(function()
 					end
 
 					if speedhack and dist > MinTriggerDistance then
-						if not exports["usa_hidetrunk"]:IsInTrunk() then
+						if not exports["usa_trunkhide"]:IsInTrunk() then
 							TriggerServerEvent("AntiCheese:SpeedFlag", state, dist, posx,posy,posz, newx,newy,newz)
 						end
 					end

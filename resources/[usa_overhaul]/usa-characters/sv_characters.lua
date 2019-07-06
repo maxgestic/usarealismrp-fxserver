@@ -16,9 +16,9 @@ AddEventHandler("playerDropped", function(reason)
   local usource = source
   if CHARACTERS[usource] then
       local job = CHARACTERS[usource].get("job")
-      if job == "sheriff"  or job == "corrections" then
+      if job == "sheriff"  then
         exports["usa_police"]:RemovePoliceWeapons(CHARACTERS[usource])
-      elseif job == "ems" then
+    elseif job == "ems" or job ==  "corrections" then
         exports["usa_ems"]:RemoveServiceWeapons(CHARACTERS[usource])
       end
     -- save player data --

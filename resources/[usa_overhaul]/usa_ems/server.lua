@@ -16,7 +16,11 @@ AddEventHandler("ems:getLoadout", function()
     local char = exports["usa-characters"]:GetCharacter(source)
     for i = 1, #LOADOUT_ITEMS do
         local item = LOADOUT_ITEMS[i]
-        item.serialNumber = math.random(10000000, 999999999)
+        local letters = {}
+        for i = 65,  90 do table.insert(letters, string.char(i)) end -- add capital letters
+        local serialEnding = math.random(100000000, 999999999)
+        local serialLetter = letters[math.random(#letters)]
+        item.serialNumber = serialLetter .. serialEnding
         if char.get("money") >= item.price then
             if char.canHoldItem(item) then
                 char.removeMoney(item.price)

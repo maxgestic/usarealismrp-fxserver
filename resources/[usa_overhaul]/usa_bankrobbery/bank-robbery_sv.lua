@@ -3,6 +3,8 @@ local bankClosed = false
 local COPS_NEEDED_TO_ROB = 4
 local sourceRobbing = -1
 
+local BANK_ROBBERY_TIMEOUT = 10800000
+
 RegisterServerEvent("bank:beginRobbery")
 AddEventHandler("bank:beginRobbery", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
@@ -12,7 +14,7 @@ AddEventHandler("bank:beginRobbery", function()
 			sourceRobbing = source
 			TriggerClientEvent('usa:notify', source, 'You are now robbing the bank, hack into the system to get the money!')
 			TriggerClientEvent("bank:startHacking", source)
-			SetTimeout(10800000, function()
+			SetTimeout(BANK_ROBBERY_TIMEOUT, function()
 				bankRobbable = true
 			end)
 		else
@@ -27,7 +29,7 @@ RegisterServerEvent("bank:hackComplete")
 AddEventHandler("bank:hackComplete", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	if sourceRobbing == source then
-		local rewardMoney = math.random(5000, 10000)
+		local rewardMoney = math.random(15000, 40000)
 		char.giveMoney(rewardMoney)
 		TriggerClientEvent("usa:notify", source, "You have received ~g~$" .. comma_value(rewardMoney) .. "~w~!")
 		print("BANKROBBERY: Player " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] successfully robbed the bank and was given a reward of [$".. rewardMoney .. "]!")

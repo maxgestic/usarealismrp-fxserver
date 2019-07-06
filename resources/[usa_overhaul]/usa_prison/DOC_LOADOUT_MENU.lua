@@ -1,10 +1,14 @@
 local MENU_KEY = 38 -- "E"
 
-local weapons = {
-  { name = -1600701090, display_name = "BZ Gas", rank = 2},
-  { name = -2084633992, display_name = "Carbine Rifle", rank = 3},
-  { name = 100416529, display_name = "Marksman Rifle", rank = 3}
-}
+local weapons = {}
+
+TriggerServerEvent("doc:getWeapons")
+
+RegisterNetEvent("doc:getWeapons")
+AddEventHandler("doc:getWeapons", function(weps)
+    weapons = weps
+    CreateWeaponsMenu(mainMenu)
+end)
 
 local vehicles = {
   { name = "CVPI", hash = GetHashKey("pdcvpi") },
@@ -39,77 +43,75 @@ local created_menus = {}
 
 RegisterNetEvent("doc:setciv")
 AddEventHandler("doc:setciv", function(character, playerWeapons)
-  Citizen.CreateThread(function()
-    local model
-    if not character.hash then -- does not have any customizations saved
-      model = -408329255 -- some random black dude with no shirt on, lawl
-    else
-      model = character.hash
-    end
+    Citizen.CreateThread(function()
+        local model
+        if not character.hash then -- does not have any customizations saved
+            model = -408329255 -- some random black dude with no shirt on, lawl
+        else
+            model = character.hash
+        end
         RequestModel(model)
         while not HasModelLoaded(model) do -- Wait for model to load
             Wait(100)
         end
         SetPlayerModel(PlayerId(), model)
         SetModelAsNoLongerNeeded(model)
-    -- give model customizations if available
-    if character.hash then
-      for key, value in pairs(character["components"]) do
-        --if tonumber(key) ~= 0 or tonumber(key) ~= 1 or tonumber(key) ~= 2 then -- emit barber shop features
-          SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
-        --end
-      end
-      for key, value in pairs(character["props"]) do
-        SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
-      end
-    end
-    -- add any tattoos if they have any --
-    if character.tattoos then
-      --print("applying tattoos!")
-      for i = 1, #character.tattoos do
-        ApplyPedOverlay(GetPlayerPed(-1), GetHashKey(character.tattoos[i].category), GetHashKey(character.tattoos[i].hash_name))
-      end
-    else
-      --print("no tattoos!!!")
-    end
-    -- add any barber shop customizations if any --
-    if character.head_customizations then
-      --print("barber shop customizations existed!")
-      local head = character.head_customizations
-      local ped = GetPlayerPed(-1)
-      SetPedHeadBlendData(ped, head.parent1, head.parent2, head.parent3, head.skin1, head.skin2, head.skin3, head.mix1, head.mix2, head.mix3, false)
-      -- facial stuff like beards and ageing and what not --
-      for i = 1, #head.other do
-        SetPedHeadOverlay(ped, i - 1, head.other[i][2], 1.0)
-        if head.other[i][2] ~= 255 then
-          if i == 2 or i == 3 or i == 11 then -- chest hair, facial hair, eyebrows
-            SetPedHeadOverlayColor(ped, i - 1, 1, head.other[i][4])
-          elseif i == 6 or i == 9 then -- blush, lipstick
-            SetPedHeadOverlayColor(ped, i - 1, 2, head.other[i][4])
-          elseif i == 14 then -- hair
-            --print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
-            SetPedComponentVariation(ped, 2, head.other[i][2], 0, 1)
-            SetPedHairColor(ped, head.other[i][4], head.other[i][5] or 0)
-          end
-        end
-      end
-    end
-    -- give weapons
-    if playerWeapons then
-      for i = 1, #playerWeapons do
-        GiveWeaponToPed(GetPlayerPed(-1), playerWeapons[i].hash, 1000, false, false)
-        if playerWeapons[i].components then
-          if #playerWeapons[i].components > 0 then
-            for x = 1, #playerWeapons[i].components do
-              GiveWeaponComponentToPed(GetPlayerPed(-1), playerWeapons[i].hash, GetHashKey(playerWeapons[i].components[x]))
+        -- give model customizations if available
+        if character.hash then
+            for key, value in pairs(character["components"]) do
+                --if tonumber(key) ~= 0 or tonumber(key) ~= 1 or tonumber(key) ~= 2 then -- emit barber shop features
+                SetPedComponentVariation(GetPlayerPed(-1), tonumber(key), value, character["componentstexture"][key], 0)
+                --end
             end
-          end
+            for key, value in pairs(character["props"]) do
+                SetPedPropIndex(GetPlayerPed(-1), tonumber(key), value, character["propstexture"][key], true)
+            end
         end
-        if playerWeapons[i].tint then
-          SetPedWeaponTintIndex(GetPlayerPed(-1), playerWeapons[i].hash, playerWeapons[i].tint)
+        -- add any tattoos if they have any --
+        if character.tattoos then
+            --print("applying tattoos!")
+            for i = 1, #character.tattoos do
+                ApplyPedOverlay(GetPlayerPed(-1), GetHashKey(character.tattoos[i].category), GetHashKey(character.tattoos[i].hash_name))
+            end
         end
-      end
-    end
+        -- add any barber shop customizations if any --
+        if character.head_customizations then
+            --print("barber shop customizations existed!")
+            local head = character.head_customizations
+            local ped = GetPlayerPed(-1)
+            SetPedHeadBlendData(ped, head.parent1, head.parent2, head.parent3, head.skin1, head.skin2, head.skin3, head.mix1, head.mix2, head.mix3, false)
+            -- facial stuff like beards and ageing and what not --
+            for i = 1, #head.other do
+                SetPedHeadOverlay(ped, i - 1, head.other[i][2], 1.0)
+                if head.other[i][2] ~= 255 then
+                    if i == 2 or i == 3 or i == 11 then -- chest hair, facial hair, eyebrows
+                        SetPedHeadOverlayColor(ped, i - 1, 1, head.other[i][4])
+                    elseif i == 6 or i == 9 then -- blush, lipstick
+                        SetPedHeadOverlayColor(ped, i - 1, 2, head.other[i][4])
+                    elseif i == 14 then -- hair
+                        --print("setting head to: " .. head.other[i][2] .. ", color: " .. head.other[i][4])
+                        SetPedComponentVariation(ped, 2, head.other[i][2], 0, 1)
+                        SetPedHairColor(ped, head.other[i][4], head.other[i][5] or 0)
+                    end
+                end
+            end
+        end
+        -- give weapons
+        if playerWeapons then
+            for i = 1, #playerWeapons do
+                GiveWeaponToPed(GetPlayerPed(-1), playerWeapons[i].hash, 1000, false, false)
+                if playerWeapons[i].components then
+                    if #playerWeapons[i].components > 0 then
+                        for x = 1, #playerWeapons[i].components do
+                            GiveWeaponComponentToPed(GetPlayerPed(-1), playerWeapons[i].hash, GetHashKey(playerWeapons[i].components[x]))
+                        end
+                    end
+                end
+                if playerWeapons[i].tint then
+                    SetPedWeaponTintIndex(GetPlayerPed(-1), playerWeapons[i].hash, playerWeapons[i].tint)
+                end
+            end
+        end
     end)
 end)
 
@@ -157,7 +159,6 @@ _menuPool:Add(mainMenu)
 table.insert(created_menus, mainMenu)
 
 function CreateUniformMenu(menu)
-  local ped = GetPlayerPed(-1)
   menu:Clear()
 
   local submenu2 = _menuPool:AddSubMenu(menu, "Outfits", "Save and load outfits", true)
@@ -190,21 +191,14 @@ function CreateUniformMenu(menu)
       ["propstexture"] = {}
       }
       local ply = GetPlayerPed(-1)
-      --local debugstr = "| Props: "
-      for i=0,2 -- instead of 3?
-        do
+      for i=0,2 do -- instead of 3?
         character.props[i] = GetPedPropIndex(ply, i)
         character.propstexture[i] = GetPedPropTextureIndex(ply, i)
-        --debugstr = debugstr .. character.props[i] .. "->" .. character.propstexture[i] .. ","
       end
-      --debugstr = debugstr .. "| Components: "
-      for i=0,11
-        do
+      for i=0,11 do
         character.components[i] = GetPedDrawableVariation(ply, i)
         character.componentstexture[i] = GetPedTextureVariation(ply, i)
-        --debugstr = debugstr .. character.components[i] .. "->" .. character.componentstexture[i] .. ","
       end
-      --print(debugstr)
       TriggerServerEvent("doc:saveOutfit", character, selectedSaveSlot)
         elseif item == loadconfirm then
             DoScreenFadeOut(500)
@@ -219,8 +213,8 @@ function CreateUniformMenu(menu)
   -- Components --
   local submenu = _menuPool:AddSubMenu(menu, "Components", "Modify components", true --[[KEEP POSITION]])
   for i = 1, #components do
-    local selectedComponent = GetPedDrawableVariation(ped, i - 1)
-    local selectedTexture = GetPedTextureVariation(ped, i - 1)
+    local selectedComponent = GetPedDrawableVariation(PlayerPedId(), i - 1)
+    local selectedTexture = GetPedTextureVariation(PlayerPedId(), i - 1)
     --local maxComponent = GetNumberOfPedDrawableVariations(ped, i - 1)
     --local maxTexture = GetNumberOfPedTextureVariations(ped, i - 1, selectedComponent)
     local arr = {}
@@ -230,7 +224,7 @@ function CreateUniformMenu(menu)
       if item == listitem then
         --print("Selected ~b~" .. index .. "~w~...")
         selectedComponent = index - 1
-        SetPedComponentVariation(ped, i - 1, selectedComponent, 0, 0)
+        SetPedComponentVariation(PlayerPedId(), i - 1, selectedComponent, 0, 0)
         selectedTexture = 0
       end
     end
@@ -242,7 +236,7 @@ function CreateUniformMenu(menu)
       listitem.OnListChanged = function(sender, item, index)
         if item == listitem then
           selectedTexture = index - 1
-          SetPedComponentVariation(ped, i - 1, selectedComponent, selectedTexture, 0)
+          SetPedComponentVariation(PlayerPedId(), i - 1, selectedComponent, selectedTexture, 0)
         end
       end
       submenu:AddItem(listitem)
@@ -251,8 +245,8 @@ function CreateUniformMenu(menu)
   -- Props --
   local submenu = _menuPool:AddSubMenu(menu, "Props", "Modify props", true --[[KEEP POSITION]])
   for i = 1, 3 do
-    local selectedProp = GetPedPropIndex(ped, i - 1)
-    local selectedPropTexture = GetPedPropTextureIndex(ped, i - 1)
+    local selectedProp = GetPedPropIndex(PlayerPedId(), i - 1)
+    local selectedPropTexture = GetPedPropTextureIndex(PlayerPedId(), i - 1)
     --local maxProp = GetNumberOfPedPropDrawableVariations(ped, i - 1)
     --local maxPropTexture = GetNumberOfPedPropTextureVariations(ped, i - 1, selectedProp)
     local arr = {}
@@ -263,7 +257,7 @@ function CreateUniformMenu(menu)
         --print("Selected ~b~" .. index .. "~w~...")
         selectedProp = index - 1
         if selectedProp > -1 then
-          SetPedPropIndex(ped, i - 1, selectedProp, 0, true)
+          SetPedPropIndex(PlayerPedId(), i - 1, selectedProp, 0, true)
         else
           ClearPedProp(ped, i - 1)
         end
@@ -279,7 +273,7 @@ function CreateUniformMenu(menu)
         if item == listitem then
           --print("Selected ~b~" .. index .. "~w~...")
           selectedPropTexture = index - 1
-          SetPedPropIndex(ped, i - 1, selectedProp, selectedPropTexture, true)
+          SetPedPropIndex(PlayerPedId(), i - 1, selectedProp, selectedPropTexture, true)
         end
       end
       submenu:AddItem(listitem)
@@ -287,9 +281,9 @@ function CreateUniformMenu(menu)
   end
   local item = NativeUI.CreateItem("Clear Props", "Reset props.")
   item.Activated = function(parentmenu, selected)
-    ClearPedProp(ped, 0)
-    ClearPedProp(ped, 1)
-    ClearPedProp(ped, 2)
+    ClearPedProp(PlayerPedId(), 0)
+    ClearPedProp(PlayerPedId(), 1)
+    ClearPedProp(PlayerPedId(), 2)
   end
   submenu:AddItem(item)
   -- Clock Out --
@@ -297,7 +291,7 @@ function CreateUniformMenu(menu)
   item:SetRightBadge(BadgeStyle.Lock)
   item.Activated = function(parentmenu, selected)
     TriggerServerEvent("doc:offduty")
-    RemoveAllPedWeapons(ped)
+    RemoveAllPedWeapons(PlayerPedId())
     TriggerEvent("interaction:setPlayersJob", "civ") -- set interaction menu javascript job variable to "civ"
     TriggerEvent("ptt:isEmergency", false)
   end
@@ -308,7 +302,7 @@ function CreateWeaponsMenu(menu)
     local submenu = _menuPool:AddSubMenu(menu, "Weapons", "Select speciality weapons", true --[[KEEP POSITION]])
     table.insert(created_menus, submenu)
      for i = 1, #weapons do
-         local item = NativeUI.CreateItem(weapons[i].display_name, "")
+         local item = NativeUI.CreateItem(weapons[i].name, "")
          item.Activated = function(parentmenu, selected)
             TriggerServerEvent("doc:checkRankForWeapon", weapons[i])
          end
@@ -332,7 +326,6 @@ end
 -- add to GUI --
 ----------------
 CreateUniformMenu(mainMenu)
-CreateWeaponsMenu(mainMenu)
 CreateVehiclesMenu(mainMenu)
 _menuPool:RefreshIndex()
 
@@ -389,23 +382,12 @@ AddEventHandler("doc:uniformLoaded", function(uniform)
   if uniform then
 
     Citizen.CreateThread(function()
-      ----------------
-      -- components --
-      ----------------
-      for k, v in pairs(uniform.components) do
-        SetPedComponentVariation(GetPlayerPed(-1), tonumber(k), v[1], v[2], 2) -- v[1] is component value, v[2] is texture value
-      end
-      ----------
-      -- prop --
-      ----------
-      for k, v in pairs(uniform.props) do
-        ClearPedProp(GetPlayerPed(-1), tonumber(k))
-        if v[1] == -1 then
-          ClearPedProp(GetPlayerPed(-1), tonumber(k))
-          return
+        for key, value in pairs(uniform["components"]) do
+            SetPedComponentVariation(PlayerPedId(), tonumber(key), value, uniform["componentstexture"][key], 0)
         end
-        SetPedPropIndex(GetPlayerPed(-1), tonumber(k), v[1], v[2], true)
-      end
+        for key, value in pairs(uniform["props"]) do
+            SetPedPropIndex(PlayerPedId(), tonumber(key), value, uniform["propstexture"][key], true)
+        end
       -------------------------
       -- give health / armor --
       -------------------------
@@ -470,5 +452,9 @@ end
 ---------------------
 RegisterNetEvent("doc:equipWeapon")
 AddEventHandler("doc:equipWeapon", function(weapon)
-  GiveWeaponToPed(GetPlayerPed(-1), weapon.name, 1000, 0, false)
+    if type(weapon.hash) ~= "number" then
+        weapon.hash = GetHashKey(weapon.hash)
+    end
+    GiveWeaponToPed(GetPlayerPed(-1), weapon.hash, 1000, 0, false)
+    exports.globals:notify("Equipped: " .. weapon.name)
 end)

@@ -1,3 +1,26 @@
+local WEAPONS = {
+	{ hash = "WEAPON_NIGHTSTICK", name = "Nightstick", rank = 1, weight = "10"},
+    { hash = "WEAPON_FLASHLIGHT", name = "Flashlight", rank = 1, weight = "10"},
+    { hash = "WEAPON_STUNGUN", name = "Stun Gun", rank = 1, weight = "9"},
+    { hash = 1593441988, name = "Combat Pistol", rank = 2, weight = "15"},
+    { hash = -1600701090, name = "BZ Gas", rank = 2, weight = "10"},
+    { hash = -2084633992, name = "Carbine", rank = 3, weight = "30"},
+    { hash = 100416529, name = "Marksman Rifle", rank = 3, weight = "40"}
+}
+
+for i = 1, #WEAPONS do
+    WEAPONS[i].serviceWeapon = true
+    WEAPONS[i].notStackable = true
+    WEAPONS[i].quantity = 1
+    WEAPONS[i].legality = "legal"
+    WEAPONS[i].type = "weapon"
+end
+
+RegisterServerEvent("doc:getWeapons")
+AddEventHandler("doc:getWeapons", function()
+	TriggerClientEvent("doc:getWeapons", source, WEAPONS)
+end)
+
 -- Check inmates remaining jail time --
 TriggerEvent('es:addJobCommand', 'roster', {"corrections"}, function(source, args, char)
 	local hasInmates = false
@@ -96,11 +119,12 @@ AddEventHandler("doc:offduty", function()
 	if job == "corrections" then
 		TriggerEvent('job:sendNewLog', source, 'corrections', false)
 	end
+	exports["usa_ems"]:RemoveServiceWeapons(char)
 	char.set("job", "civ")
 	TriggerClientEvent("usa:notify", source, "You have clocked out!")
 	TriggerEvent("eblips:remove", source)
 	TriggerClientEvent("interaction:setPlayersJob", source, "civ")
-	local playerWeapons = char.get("weapons")
+	local playerWeapons = char.getWeapons()
 	local appearance = char.get("appearance")
 	TriggerClientEvent("doc:setciv", source, appearance, playerWeapons)
 	-----------------------------------
@@ -138,17 +162,12 @@ RegisterServerEvent("doc:saveOutfit")
 AddEventHandler("doc:saveOutfit", function(uniform, slot)
 	local usource = source
 	local player_identifer = GetPlayerIdentifiers(usource)[1]
-	TriggerEvent('es:exposeDBFunctions', function(usersTable)
-		usersTable.getDocumentByRow("correctionaldepartment", "identifier" , player_identifer, function(result)
+	TriggerEvent('es:exposeDBFunctions', function(db)
+		db.getDocumentByRow("correctionaldepartment", "identifier" , player_identifer, function(result)
 			local uniforms = result.uniform or {}
 			uniforms[tostring(slot)] = uniform
-			TriggerEvent('es:exposeDBFunctions', function(usersTable)
-				usersTable.getDocumentByRow("correctionaldepartment", "identifier" , player_identifer, function(result)
-					docid = result._id
-					usersTable.updateDocument("correctionaldepartment", docid, {uniform = uniforms}, function()
-						TriggerClientEvent("usa:notify", usource, "Uniform saved!")
-					end)
-				end)
+			db.updateDocument("correctionaldepartment", result._id, {uniform = uniforms}, function()
+				TriggerClientEvent("usa:notify", usource, "Uniform saved!")
 			end)
 		end)
 	end)
@@ -200,8 +219,33 @@ AddEventHandler("doc:checkRankForWeapon", function(weapon)
 			GetDoc.getDocumentByRow("correctionaldepartment", "identifier" , GetPlayerIdentifiers(usource)[1], function(result)
 				if type(result) ~= "boolean" then
 					if result.rank >= weapon.rank then
-						TriggerClientEvent("doc:equipWeapon", usource, weapon)
-						return
+						if char.canHoldItem(weapon) then
+							local letters = {}
+							for i = 65,  90 do table.insert(letters, string.char(i)) end -- add capital letters
+					        local serialEnding = math.random(100000000, 999999999)
+					        local serialLetter = letters[math.random(#letters)]
+					        weapon.serialNumber = serialLetter .. serialEnding
+							TriggerClientEvent("doc:equipWeapon", usource, weapon)
+							char.giveItem(weapon)
+							local weaponDB = {}
+					        weaponDB.name = weapon.name
+					        weaponDB.serialNumber = serialLetter .. serialEnding
+					        weaponDB.ownerName = char.getFullName()
+					        weaponDB.ownerDOB = char.get('dateOfBirth')
+							local timestamp = os.date("*t", os.time())
+					        weaponDB.issueDate = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year
+							TriggerEvent('es:exposeDBFunctions', function(db)
+					          db.createDocumentWithId("legalweapons", weaponDB, weaponDB.serialNumber, function(success)
+					              if success then
+					                  print("* Weapon created serial["..weaponDB.serialNumber.."] name["..weaponDB.name.."] owner["..weaponDB.ownerName.."] *")
+					              else
+					                  print("* Error: Weapon failed to be created!! *")
+					              end
+					          end)
+					        end)
+						else
+							TriggerClientEvent("usa:notify", usource, "Inventory full!")
+						end
 					else
 						TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
 					end
