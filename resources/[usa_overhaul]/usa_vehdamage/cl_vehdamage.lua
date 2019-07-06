@@ -5,11 +5,11 @@ local velBuffer    = {}
 local wasInCar     = false
 beltOn = false
 
-Citizen.CreateThread(function() 
-    while true do 
-        Citizen.Wait(30000) 
-        collectgarbage() 
-    end 
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(30000)
+        collectgarbage()
+    end
 end) -- Fix RAM leaks by collecting garbage
 
 
@@ -31,7 +31,7 @@ end)
 IsCar = function(veh)
             local vc = GetVehicleClass(veh)
             return (vc >= 0 and vc <= 7) or (vc >= 9 and vc <= 12) or (vc >= 17 and vc <= 20)
-        end 
+        end
 
 Fwv = function (entity)
             local hr = GetEntityHeading(entity) + 90.0
@@ -43,24 +43,24 @@ Fwv = function (entity)
 Citizen.CreateThread(function()
     Citizen.Wait(500)
     while true do
-        
+
         local ped = PlayerPedId()
         local car = GetVehiclePedIsIn(ped)
-        
+
         if car ~= 0 and (wasInCar or IsCar(car)) then
-        
+
             wasInCar = true
-            
+
             if beltOn then DisableControlAction(0, 75, true) end
 
             speedBuffer[2] = speedBuffer[1]
             speedBuffer[1] = GetEntitySpeed(car)
-            
-            if speedBuffer[2] ~= nil 
-               and GetEntitySpeedVector(car, true).y > 1.0  
-               and speedBuffer[1] > 5.0 
-               and (speedBuffer[2] - speedBuffer[1]) > (speedBuffer[1] * DiffTrigger) 
-               and GetPedInVehicleSeat(car, 1) ~= GetPlayerPed(-1) 
+
+            if speedBuffer[2] ~= nil
+               and GetEntitySpeedVector(car, true).y > 1.0
+               and speedBuffer[1] > 5.0
+               and (speedBuffer[2] - speedBuffer[1]) > (speedBuffer[1] * DiffTrigger)
+               and GetPedInVehicleSeat(car, 1) ~= GetPlayerPed(-1)
                and GetPedInVehicleSeat(car, 2) ~= GetPlayerPed(-1)
                and IsBeltVehicle(car) then
                local damagedEngine = GetVehicleEngineHealth(car)-speedBuffer[1]*40
@@ -72,11 +72,11 @@ Citizen.CreateThread(function()
                     SetVehicleTyreBurst(car, tyreBursted, true, 1000.0)
                     print('tyre: '..tyreBursted)
                 end
-               end 
+               end
                print('Engine: '..damagedEngine)
                if not beltOn and speedBuffer[1] > MinSpeed then
                     ShakeStrength = GetEntitySpeed(car)/15
-                   
+
                     local co = GetEntityCoords(ped)
                     local fw = Fwv(ped)
                     SetEntityCoords(ped, co.x + fw.x, co.y + fw.y, co.z - 0.47, true, true, true)
@@ -86,14 +86,13 @@ Citizen.CreateThread(function()
                     SetEntityHealth(ped, (GetEntityHealth(ped)-50))
                     ShakeGameplayCam('SMALL_EXPLOSION_SHAKE', ShakeStrength)
                     SetPedToRagdoll(ped, 100000, 1000, 000, 0, 0, 0)
-                    print('Dicks in the sky')
                 end
 
             end
-                
+
             velBuffer[2] = velBuffer[1]
             velBuffer[1] = GetEntityVelocity(car)
-                
+
             if IsControlJustReleased(0, 311) and GetLastInputMethod(0) and (GetPedInVehicleSeat(car, -1) == ped or GetPedInVehicleSeat(car, 0) == ped) then
                 beltOn = not beltOn
                 TriggerServerEvent('hud:getBelt', beltOn)
@@ -101,7 +100,7 @@ Citizen.CreateThread(function()
                 TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 0.5, 'seatbelt-click', 0.2)
                 print('Belt toggle: '..tostring(beltOn))
             end
-            
+
         elseif wasInCar then
             wasInCar = false
             beltOn = false

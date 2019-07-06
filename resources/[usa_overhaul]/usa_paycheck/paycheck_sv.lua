@@ -149,6 +149,6 @@ function myJob(job, source)
 	elseif job == 'doctor' then
 		TriggerClientEvent('usa:notify', source, 'You are currently working for the ~y~Pillbox Medical Center~s~.')
 	elseif job == "gopostal" then
-		TriggerClientEvent("usa:notify", source, 'You are currently working for the ~y~GoPostal~s~.')
+		TriggerClientEvent("usa:notify", source, 'You are currently working for ~y~GoPostal~s~.')
 	end
 end
