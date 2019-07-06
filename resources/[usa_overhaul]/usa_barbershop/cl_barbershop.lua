@@ -263,7 +263,7 @@ function CreateBarberShopMenu(menu)
     --------------------------
     -- Checkout Button --
     --------------------------
-    local checkout_item = NativeUI.CreateItem("Checkout", "Purchase price: $200.00")
+    local checkout_item = NativeUI.CreateItem("Checkout", "Purchase price: $70.00")
     checkout_item.Activated = function(parentmenu, selected)
       -- Close Menu --
       _menuPool:CloseAllMenus()

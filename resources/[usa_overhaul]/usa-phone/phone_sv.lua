@@ -384,7 +384,7 @@ end)
 function SendTextReceiveNotification(toNumber, from, msg)
 	local characters = exports["usa-characters"]:GetCharacters()
 	for id, char in pairs(characters) do
-		if char.hasItemWithField("number", toNumber) then
+		if char.getItemWithField("number", toNumber) then
 			TriggerClientEvent("swayam:notification", id, from, msg, "CHAR_DEFAULT")
 		end
 	end

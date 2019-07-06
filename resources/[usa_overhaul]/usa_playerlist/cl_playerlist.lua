@@ -65,8 +65,6 @@ function RefreshMenu(players)
 	table.sort(players, function(a,b)
 		return a.id > b.id
 	end)
-	local totalPlayers = NativeUI.CreateItem('Total Players: '..#players, 'Total number of players')
-	mainMenu:AddItem(totalPlayers)
 	for i = 1, #players do
 		local player = players[i]
 		local playerItem = NativeUI.CreateItem(player.id .. ' | ' .. HexIdToSteamId(player.steam), 'Ping: '..player.ping..'ms')
