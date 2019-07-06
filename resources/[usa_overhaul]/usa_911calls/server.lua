@@ -445,7 +445,7 @@ AddEventHandler('carjack:playHandsUpOnAll', function(pedToPlay)
 end)
 
 function Send911Notification(intendedEmergencyType, string, x, y, z, blipText)
-    exports["usa-characters"]:GetCharacters2(function(characters)
+    exports["usa-characters"]:GetCharacters(function(characters)
     	for id, char in pairs(characters) do
     		local job = char.get("job")
     		if intendedEmergencyType then

@@ -4,7 +4,7 @@ RegisterServerEvent('playerlist:getPlayers')
 AddEventHandler('playerlist:getPlayers', function()
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local user_group = user.getGroup()
-	exports["usa-characters"]:GetCharacters2(function(characters)
+	exports["usa-characters"]:GetCharacters(function(characters)
 		local playersToReturn = {}
 		for id, char in pairs(characters) do
 			local steamName = GetPlayerIdentifier(id)
