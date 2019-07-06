@@ -16,12 +16,13 @@ TriggerEvent('es:addCommand', 'ad', function(source, args, char)
 	local sender = char.getName()
 	if char.hasItem("Cell Phone") then
 		table.remove(args, 1)
-		local characters = exports["usa-characters"]:GetCharacters()
-		for id, char in pairs(characters) do
-			if char.hasItem("Cell Phone") then
-				TriggerClientEvent('chatMessage', id, "[Advertisement] - " .. sender, {171, 67, 227}, table.concat(args, " "))
+		exports["usa-characters"]:GetCharacters(function(characters)
+			for id, char in pairs(characters) do
+				if char.hasItem("Cell Phone") then
+					TriggerClientEvent('chatMessage', id, "[Advertisement] - " .. sender, {171, 67, 227}, table.concat(args, " "))
+				end
 			end
-		end
+		end)
 	else
 		TriggerClientEvent('usa:notify', source, 'You do not have a cell phone!')
 	end
@@ -33,12 +34,13 @@ TriggerEvent('es:addCommand', 'anonad', function(source, args, char)
 		if char.hasItem("Cell Phone") then
 			char.removeMoney(200)
 			lastAnonAdAuthor = "(#" .. source .. ") " .. char.getFullName()
-			local characters = exports["usa-characters"]:GetCharacters()
-			for id, char in pairs(characters) do
-				if char.hasItem("Cell Phone") then
-					TriggerClientEvent('chatMessage', id, "[Advertisement]", {171, 67, 227}, table.concat(args, " "))
+			exports["usa-characters"]:GetCharacters(function(characters)
+				for id, char in pairs(characters) do
+					if char.hasItem("Cell Phone") then
+						TriggerClientEvent('chatMessage', id, "[Advertisement]", {171, 67, 227}, table.concat(args, " "))
+					end
 				end
-			end
+			end)
 		else
 			TriggerClientEvent('usa:notify', source, 'You do not have a cell phone!')
 		end
@@ -104,12 +106,13 @@ TriggerEvent('es:addJobCommand', 'faketweet', {'sheriff', 'police', 'dai'}, func
 	table.remove(args, 1)
 	table.remove(args, 1)
 	local msg = table.concat(args, " ")
-	local characters = exports["usa-characters"]:GetCharacters()
-	for id, char in pairs(characters) do
-		if char.hasItem("Cell Phone") then
-			TriggerClientEvent('chatMessage', id, "[TWEET] - " .. name, {29,161,242}, msg)
+	exports["usa-characters"]:GetCharacters(function(characters)
+		for id, char in pairs(characters) do
+			if char.hasItem("Cell Phone") then
+				TriggerClientEvent('chatMessage', id, "[TWEET] - " .. name, {29,161,242}, msg)
+			end
 		end
-	end
+	end)
 	TriggerEvent("chat:sendToLogFile", source, "[TWEET] - " .. name .. ": " .. msg)
 end, {
 	help = "Send a fake tweet",
@@ -130,12 +133,13 @@ TriggerEvent('es:addJobCommand', 'fakead', {'sheriff', 'police', 'dai'}, functio
 	table.remove(args, 1)
 	table.remove(args, 1)
 	local msg = table.concat(args, " ")
-	local characters = exports["usa-characters"]:GetCharacters()
-	for id, char in pairs(characters) do
-		if char.hasItem("Cell Phone") then
-			TriggerClientEvent('chatMessage', id, "[Advertisement] - " .. name, {171, 67, 227}, msg)
+	exports["usa-characters"]:GetCharacters(function(characters)
+		for id, char in pairs(characters) do
+			if char.hasItem("Cell Phone") then
+				TriggerClientEvent('chatMessage', id, "[Advertisement] - " .. name, {171, 67, 227}, msg)
+			end
 		end
-	end
+	end)
 end, {
 	help = "Send a fake advertisement",
 	params = {

@@ -169,14 +169,15 @@ AddEventHandler("mdt:updatePhoto", function(url, fname, lname, dob)
 					--------------------------------------------------
 					-- update any online players user object --
 					--------------------------------------------------
-					local players = exports["usa-characters"]:GetCharacters()
-					for id, user in pairs(players) do
-						if user.getName() == (fname .. " " .. lname) and user.get("dateOfBirth") == dob then
-							user.set("mugshot", url)
-							print("Online player's mugshot updated!")
-							break
+					exports["usa-characters"]:GetCharacters(function(players)
+						for id, user in pairs(players) do
+							if user.getName() == (fname .. " " .. lname) and user.get("dateOfBirth") == dob then
+								user.set("mugshot", url)
+								print("Online player's mugshot updated!")
+								break
+							end
 						end
-					end
+					end)
 				end)
 			else
 				print("person NOT found!")

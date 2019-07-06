@@ -192,23 +192,24 @@ end
 
 function jailStatusLoop()
 	SetTimeout(60000, function()
-		local characters = exports["usa-characters"]:GetCharacters()
-		for id, char in pairs(characters) do
-			local jailtime = char.get("jailTime")
-			if not jailtime then
-				jailtime = 0
-			end
-			if jailtime > 0 then
-				local newJailTime = jailtime - 1
-				char.set("jailTime", newJailTime)
-				if newJailTime == 0 then
-					TriggerClientEvent("jail:release", tonumber(id), char.get("appearance"))
-					exports["globals"]:notifyPlayersWithJob("corrections", "^3CORRECTIONS:^0 " .. char.getName() .. " has been released.")
+		exports["usa-characters"]:GetCharacters(function(characters)
+			for id, char in pairs(characters) do
+				local jailtime = char.get("jailTime")
+				if not jailtime then
+					jailtime = 0
 				end
-				break
+				if jailtime > 0 then
+					local newJailTime = jailtime - 1
+					char.set("jailTime", newJailTime)
+					if newJailTime == 0 then
+						TriggerClientEvent("jail:release", tonumber(id), char.get("appearance"))
+						exports["globals"]:notifyPlayersWithJob("corrections", "^3CORRECTIONS:^0 " .. char.getName() .. " has been released.")
+					end
+					break
+				end
 			end
-		end
-		jailStatusLoop()
+			jailStatusLoop()
+		end)
 	end)
 end
 

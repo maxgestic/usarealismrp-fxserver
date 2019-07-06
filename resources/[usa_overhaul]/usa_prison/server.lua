@@ -25,17 +25,18 @@ end)
 TriggerEvent('es:addJobCommand', 'roster', {"corrections"}, function(source, args, char)
 	local hasInmates = false
 	TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1^*[BOLINGBROKE PENITENTIARY]")
-	local characters = exports["usa-characters"]:GetCharacters()
-	for id, char in pairs(characters) do
-		local time = char.get("jailtime")
-		if time > 0 then
-			hasInmates = true
-			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1 - ^0" .. char.getFullName() .. " ^1^*|^r^0 " .. time .. " month(s)")
+	exports["usa-characters"]:GetCharacters(function(characters)
+		for id, char in pairs(characters) do
+			local time = char.get("jailtime")
+			if time > 0 then
+				hasInmates = true
+				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1 - ^0" .. char.getFullName() .. " ^1^*|^r^0 " .. time .. " month(s)")
+			end
 		end
-	end
-	if not hasInmates then
-		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1 - ^0There are no inmates at this time")
-	end
+		if not hasInmates then
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1 - ^0There are no inmates at this time")
+		end
+	end)
 end)
 
 ----------------

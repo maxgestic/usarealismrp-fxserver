@@ -334,21 +334,22 @@ end
 
 TriggerEvent('es:addJobCommand', 'p', { "police", "sheriff", "ems", "corrections" }, function(source, args, char, location)
 	local source_user_job = char.get("job")
-	local pl = exports["usa-characters"]:GetCharacters()
-	for k, v in pairs(pl) do
-		local user_job = v.get("job")
-		if user_job == "cop" or user_job == "sheriff" or user_job == "highwaypatrol" or user_job == "ems" or user_job == "fire" or user_job == "corrections" then
-			if source_user_job ~= "corrections" then
-				TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "(10-99) Panic button pressed by " .. char.getFullName()) -- need to implement automatic street name locations here
-				local params = {-1, "Event_Message_Purple", "GTAO_FM_Events_Soundset", 1}
-				TriggerClientEvent("usa:playSound", k, params)
-			else
-				TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "(10-99) Panic button pressed by " .. char.getFullName() .. " (Department of Corrections, Senora Fwy)") -- need to implement automatic street name locations here
-				local params = {-1, "Event_Message_Purple", "GTAO_FM_Events_Soundset", 1}
-				TriggerClientEvent("usa:playSound", k, params)
+	exports["usa-characters"]:GetCharacters(function(pl)
+		for k, v in pairs(pl) do
+			local user_job = v.get("job")
+			if user_job == "cop" or user_job == "sheriff" or user_job == "highwaypatrol" or user_job == "ems" or user_job == "fire" or user_job == "corrections" then
+				if source_user_job ~= "corrections" then
+					TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "(10-99) Panic button pressed by " .. char.getFullName()) -- need to implement automatic street name locations here
+					local params = {-1, "Event_Message_Purple", "GTAO_FM_Events_Soundset", 1}
+					TriggerClientEvent("usa:playSound", k, params)
+				else
+					TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "(10-99) Panic button pressed by " .. char.getFullName() .. " (Department of Corrections, Senora Fwy)") -- need to implement automatic street name locations here
+					local params = {-1, "Event_Message_Purple", "GTAO_FM_Events_Soundset", 1}
+					TriggerClientEvent("usa:playSound", k, params)
+				end
 			end
 		end
-	end
+	end)
 end, { help = "Press your panic button. CAUTION: ONLY FOR EXTREME EMERGENCIES."})
 
 -- revoke gun license / firearm permit --

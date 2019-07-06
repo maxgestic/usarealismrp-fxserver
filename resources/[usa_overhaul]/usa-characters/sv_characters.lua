@@ -168,8 +168,8 @@ function GetCharacter(src)
   end
 end
 
-function GetCharacters()
-  return CHARACTERS
+function GetCharacters(cb)
+    cb(CHARACTERS)
 end
 
 function GetNumCharactersWithJob(job)
@@ -203,7 +203,7 @@ Citizen.CreateThread(function()
             if GetMinutesFromTime(time) >= UPDATE_TIME_INTERVAL_MINUTES then
                 TriggerEvent("es:exposeDBFunctions", function(db)
                     local char = GetCharacter(tonumber(id))
-                    db.updateDocument("characters", char.get("_id"), { money = char.get("money"), bank = char.get("bank") }, function()
+                    db.updateDocument("characters", char.get("_id"), { money = char.get("money"), bank = char.get("bank"), inventory = char.get("inventory"), vehicles = char.get("vehicles") }, function()
                         lastUpdated[id] = os.time()
                     end)
                 end)
@@ -220,3 +220,20 @@ function GetMinutesFromTime(time)
 	--print("CHARACTERS:  wholemins: " .. wholemins)
 	return wholemins
 end
+
+AddEventHandler('rconCommand', function(commandName, args)
+    if commandName:lower() == 'showcharacterstable' then
+        for id, char in pairs(CHARACTERS) do
+            print("id: " .. id .. ", name: " .. char.getFullName())
+        end
+    elseif commandName:lower() == 'countcharacterstable' then
+        print("# characters loaded: "  .. #CHARACTERS)
+    elseif commandName:lower() == 'typeofcharacterstable' then
+        print("type: " .. type(CHARACTERS))
+    elseif commandName:lower() == 'showcharacter' then
+        local id = tonumber(args[1])
+        for k, v in pairs(CHARACTERS[id]) do
+            print("key: " .. k)
+        end
+    end
+end)

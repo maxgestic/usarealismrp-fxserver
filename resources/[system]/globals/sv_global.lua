@@ -24,35 +24,37 @@ function sendLocalActionMessage(_source, text, maxDist, time)
 end
 
 function notifyPlayersWithJobs(target_jobs, msg)
-	local players = exports["usa-characters"]:GetCharacters()
-	if not players then
-		return
-	end
-	for id, player in pairs(players) do
-		if id and player then
-			local job = player.get("job")
-			for i = 1, #target_jobs do
-				if job == target_jobs[i] then
+	exports["usa-characters"]:GetCharacters(function(players)
+		if not players then
+			return
+		end
+		for id, player in pairs(players) do
+			if id and player then
+				local job = player.get("job")
+				for i = 1, #target_jobs do
+					if job == target_jobs[i] then
+						TriggerClientEvent("chatMessage", id, "", {}, "^0" .. msg)
+					end
+				end
+			end
+		end
+	end)
+end
+
+function notifyPlayersWithJob(target_job, msg)
+ 	exports["usa-characters"]:GetCharacters(function(players)
+		if not players then
+			return
+		end
+		for id, player in pairs(players) do
+			if id and player then
+				local job = player.get("job")
+				if job == target_job then
 					TriggerClientEvent("chatMessage", id, "", {}, "^0" .. msg)
 				end
 			end
 		end
-	end
-end
-
-function notifyPlayersWithJob(target_job, msg)
- 	local players = exports["usa-characters"]:GetCharacters()
-	if not players then
-		return
-	end
-	for id, player in pairs(players) do
-		if id and player then
-			local job = player.get("job")
-			if job == target_job then
-				TriggerClientEvent("chatMessage", id, "", {}, "^0" .. msg)
-			end
-		end
-	end
+	end)
 end
 
 function setJob(src, job)

@@ -445,27 +445,29 @@ AddEventHandler('carjack:playHandsUpOnAll', function(pedToPlay)
 end)
 
 function Send911Notification(intendedEmergencyType, string, x, y, z, blipText)
-    local characters = exports["usa-characters"]:GetCharacters()
-	for id, char in pairs(characters) do
-		local job = char.get("job")
-		if intendedEmergencyType then
-			if job == intendedEmergencyType or (intendedEmergencyType == 'sheriff' and job == 'dai') then
-				TriggerClientEvent('911:Notification', id, string, x, y, z, blipText)
-			end
-		elseif job == "sheriff" or job == "ems" or job == "fire" or job == "dai" then
-			TriggerClientEvent('911:Notification', id, string, x, y, z, blipText)
-		end
-	end
+    exports["usa-characters"]:GetCharacters2(function(characters)
+    	for id, char in pairs(characters) do
+    		local job = char.get("job")
+    		if intendedEmergencyType then
+    			if job == intendedEmergencyType or (intendedEmergencyType == 'sheriff' and job == 'dai') then
+    				TriggerClientEvent('911:Notification', id, string, x, y, z, blipText)
+    			end
+    		elseif job == "sheriff" or job == "ems" or job == "fire" or job == "dai" then
+    			TriggerClientEvent('911:Notification', id, string, x, y, z, blipText)
+    		end
+    	end
+    end)
 end
 
 function SendWeazelNewsAlert(string, x, y, z, blipText)
-    local characters = exports["usa-characters"]:GetCharacters()
-    for id, char in pairs(characters) do
-        local job = char.get("job")
-        if job == "reporter" then
-            TriggerClientEvent('weazelnews:911call', id, string, x, y, z, blipText)
+    exports["usa-characters"]:GetCharacters(function(characters)
+        for id, char in pairs(characters) do
+            local job = char.get("job")
+            if job == "reporter" then
+                TriggerClientEvent('weazelnews:911call', id, string, x, y, z, blipText)
+            end
         end
-    end
+    end)
 end
 
 function Gender(isMale)

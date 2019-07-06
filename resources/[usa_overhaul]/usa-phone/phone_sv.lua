@@ -130,46 +130,48 @@ RegisterServerEvent("phone:sendTaxiMessage")
 AddEventHandler("phone:sendTaxiMessage", function(data)
 	local taxi_online = false
 	local message = data.message
-	local characters = exports["usa-characters"]:GetCharacters()
-	for id, char in pairs(characters) do
-		if char.get("job") == "taxi" then
-			TriggerClientEvent('chatMessage', id, "Taxi Requested! (Caller: #" .. source .. ")", {251, 229, 5}, message .. " (" .. data.location .. ")")
-			TriggerClientEvent("phone:notify", id, "~y~TAXI REQUEST (Caller: # ".. source .. "):\n~w~"..message)
-			taxi_online = true
-			-- set temp blip
-			TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
+	exports["usa-characters"]:GetCharacters(function(characters)
+		for id, char in pairs(characters) do
+			if char.get("job") == "taxi" then
+				TriggerClientEvent('chatMessage', id, "Taxi Requested! (Caller: #" .. source .. ")", {251, 229, 5}, message .. " (" .. data.location .. ")")
+				TriggerClientEvent("phone:notify", id, "~y~TAXI REQUEST (Caller: # ".. source .. "):\n~w~"..message)
+				taxi_online = true
+				-- set temp blip
+				TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
+			end
 		end
-	end
-	if taxi_online then
-		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "A ^3taxi^0 has been notified!")
-		TriggerClientEvent("usa:notify", source, "A ~y~taxi ~w~has been notified!")
-	else
-		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Sorry, there is no one on duty as taxi!")
-		TriggerClientEvent("usa:notify", source, "~y~Sorry, there is no one on duty as taxi!")
-	end
+		if taxi_online then
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "A ^3taxi^0 has been notified!")
+			TriggerClientEvent("usa:notify", source, "A ~y~taxi ~w~has been notified!")
+		else
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Sorry, there is no one on duty as taxi!")
+			TriggerClientEvent("usa:notify", source, "~y~Sorry, there is no one on duty as taxi!")
+		end
+	end)
 end)
 
 RegisterServerEvent("phone:sendTowMessage")
 AddEventHandler("phone:sendTowMessage", function(data)
 	local tow_online = false
 	local message = data.message
-	local characters = exports["usa-characters"]:GetCharacters()
-	for id, char in pairs(characters) do
-		if char.get("job") == "tow" then
-			TriggerClientEvent('chatMessage', id, "Tow Requested! (Caller: #" .. source .. ")", {118, 120, 251}, message .. " (" .. data.location .. ")")
-			TriggerClientEvent("phone:notify", id, "~y~TOW REQUEST (Caller: # ".. source .. "):\n~w~"..message)
-			tow_online = true
-			-- set temp blip
-			TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
+	exports["usa-characters"]:GetCharacters(function(characters)
+		for id, char in pairs(characters) do
+			if char.get("job") == "tow" then
+				TriggerClientEvent('chatMessage', id, "Tow Requested! (Caller: #" .. source .. ")", {118, 120, 251}, message .. " (" .. data.location .. ")")
+				TriggerClientEvent("phone:notify", id, "~y~TOW REQUEST (Caller: # ".. source .. "):\n~w~"..message)
+				tow_online = true
+				-- set temp blip
+				TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
+			end
 		end
-	end
-	if tow_online then
-		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "A ^3tow truck^0 has been notified!")
-		TriggerClientEvent("usa:notify", source, "A ~y~tow truck~w~ has been notified!")
-	else
-		TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Sorry, no one is on duty as tow!")
-		TriggerClientEvent("usa:notify", source, "~y~Sorry, no one is on duty as tow!")
-	end
+		if tow_online then
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "A ^3tow truck^0 has been notified!")
+			TriggerClientEvent("usa:notify", source, "A ~y~tow truck~w~ has been notified!")
+		else
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Sorry, no one is on duty as tow!")
+			TriggerClientEvent("usa:notify", source, "~y~Sorry, no one is on duty as tow!")
+		end
+	end)
 end)
 
 RegisterServerEvent("phone:sendTweet")
@@ -193,30 +195,31 @@ end, {
 RegisterServerEvent("phone:requestCall")
 AddEventHandler("phone:requestCall", function(numbers)
 	local caller_source = source
-	local characters = exports["usa-characters"]:GetCharacters()
-	for id, char in pairs(characters) do
-		local savedId = id
-		local p = char.getItemWithField("number", numbers.phone_number)
-		if p then
-			-- query for phone contacts --
-			local endpoint = "/phones/_design/phoneFilters/_view/getContactsByNumber"
-			local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
-			PerformHttpRequest(url, function(err, responseText, headers)
-				if responseText then
-					local data = json.decode(responseText)
-					if data.rows and data.rows[1] and data.rows[1].value then
-						local contacts = data.rows[1].value
-						local caller_name = getNameFromContacts(contacts, numbers.from_number)
-						if caller_name then print("caller_name: " .. caller_name) else print("caller with # " .. numbers.from_number .. " not found in contacts!") caller_name = numbers.from_number end
-						TriggerClientEvent("swayam:notification", savedId, "Whiz Wireless", "~y~Incoming call from:~w~ " .. caller_name, "CHAR_MP_DETONATEPHONE")
-						TriggerClientEvent("phone:requestCallPermission", savedId, numbers.phone_number, caller_source, caller_name)
+	exports["usa-characters"]:GetCharacters(function(characters)
+		for id, char in pairs(characters) do
+			local savedId = id
+			local p = char.getItemWithField("number", numbers.phone_number)
+			if p then
+				-- query for phone contacts --
+				local endpoint = "/phones/_design/phoneFilters/_view/getContactsByNumber"
+				local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+				PerformHttpRequest(url, function(err, responseText, headers)
+					if responseText then
+						local data = json.decode(responseText)
+						if data.rows and data.rows[1] and data.rows[1].value then
+							local contacts = data.rows[1].value
+							local caller_name = getNameFromContacts(contacts, numbers.from_number)
+							if caller_name then print("caller_name: " .. caller_name) else print("caller with # " .. numbers.from_number .. " not found in contacts!") caller_name = numbers.from_number end
+							TriggerClientEvent("swayam:notification", savedId, "Whiz Wireless", "~y~Incoming call from:~w~ " .. caller_name, "CHAR_MP_DETONATEPHONE")
+							TriggerClientEvent("phone:requestCallPermission", savedId, numbers.phone_number, caller_source, caller_name)
+						end
 					end
-				end
-			end, "POST", json.encode({
-				keys = { numbers.phone_number }
-			}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+				end, "POST", json.encode({
+					keys = { numbers.phone_number }
+				}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+			end
 		end
-	end
+	end)
 end)
 
 -- when a player responds to an inbound call:
@@ -382,12 +385,13 @@ AddEventHandler("phone:sendTextToPlayer", function(data)
 end)
 
 function SendTextReceiveNotification(toNumber, from, msg)
-	local characters = exports["usa-characters"]:GetCharacters()
-	for id, char in pairs(characters) do
-		if char.getItemWithField("number", toNumber) then
-			TriggerClientEvent("swayam:notification", id, from, msg, "CHAR_DEFAULT")
+	exports["usa-characters"]:GetCharacters(function(characters)
+		for id, char in pairs(characters) do
+			if char.getItemWithField("number", toNumber) then
+				TriggerClientEvent("swayam:notification", id, from, msg, "CHAR_DEFAULT")
+			end
 		end
-	end
+	end)
 end
 
 RegisterServerEvent("phone:loadMessages")
