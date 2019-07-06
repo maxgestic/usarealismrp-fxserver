@@ -40,6 +40,7 @@ AddEventHandler('ems:admitMe', function(bed, reasonForAdmission)
     local playerPed = PlayerPedId()
     local playerCoords = GetEntityCoords(playerPed)
     if Vdist(playerCoords, hospitalCoords) < 50 then
+        SetEntityHealth(playerPed, 200)
         TriggerEvent('ems:hospitalize', bed)
         TriggerEvent("chatMessage", '^3^*[HOSPITAL] ^r^7You have been admitted to the hospital. (' .. reasonForAdmission .. ')')
     end
