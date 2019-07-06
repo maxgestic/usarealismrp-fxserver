@@ -1,11 +1,11 @@
 local WEAPONS = {
-	{ hash = "WEAPON_NIGHTSTICK", name = "Nightstick", rank = 1, weight = "10"},
-    { hash = "WEAPON_FLASHLIGHT", name = "Flashlight", rank = 1, weight = "10"},
-    { hash = "WEAPON_STUNGUN", name = "Stun Gun", rank = 1, weight = "9"},
-    { hash = 1593441988, name = "Combat Pistol", rank = 2, weight = "15"},
-    { hash = -1600701090, name = "BZ Gas", rank = 2, weight = "10"},
-    { hash = -2084633992, name = "Carbine", rank = 3, weight = "30"},
-    { hash = 100416529, name = "Marksman Rifle", rank = 3, weight = "40"}
+	{ hash = "WEAPON_NIGHTSTICK", name = "Nightstick", rank = 1, weight = "10", price = 50},
+    { hash = "WEAPON_FLASHLIGHT", name = "Flashlight", rank = 1, weight = "10", price = 50},
+    { hash = "WEAPON_STUNGUN", name = "Stun Gun", rank = 1, weight = "9", price = 200},
+    { hash = 1593441988, name = "Combat Pistol", rank = 2, weight = "15", price = 200},
+    { hash = -1600701090, name = "Tear Gas", rank = 2, weight = "10", price = 150},
+    { hash = -2084633992, name = "Carbine", rank = 3, weight = "30", price = 500},
+    { hash = 100416529, name = "Marksman Rifle", rank = 3, weight = "40", price = 1000}
 }
 
 for i = 1, #WEAPONS do
@@ -212,7 +212,7 @@ end)
 RegisterServerEvent("doc:checkRankForWeapon")
 AddEventHandler("doc:checkRankForWeapon", function(weapon)
 	local usource = source
-	local char = exports["usa-characters"]:GetCharacter(source)
+	local char = exports["usa-characters"]:GetCharacter(usource)
 	local job = char.get("job")
 	if job == "corrections" then
 		TriggerEvent('es:exposeDBFunctions', function(GetDoc)
@@ -220,11 +220,17 @@ AddEventHandler("doc:checkRankForWeapon", function(weapon)
 				if type(result) ~= "boolean" then
 					if result.rank >= weapon.rank then
 						if char.canHoldItem(weapon) then
+							if char.get("money") < weapon.price then
+								TriggerClientEvent("usa:notify", usource, "Not enough money!")
+								return
+							end
+							char.removeMoney(weapon.price)
 							local letters = {}
 							for i = 65,  90 do table.insert(letters, string.char(i)) end -- add capital letters
 					        local serialEnding = math.random(100000000, 999999999)
 					        local serialLetter = letters[math.random(#letters)]
 					        weapon.serialNumber = serialLetter .. serialEnding
+							weapon.uuid = weapon.serialNumber
 							TriggerClientEvent("doc:equipWeapon", usource, weapon)
 							char.giveItem(weapon)
 							local weaponDB = {}
@@ -307,7 +313,6 @@ TriggerEvent('es:addJobCommand', 'setcorrectionsrank', {"corrections"}, function
 					end)
 				end
 			end)
-
 		end)
 	end)
 end)

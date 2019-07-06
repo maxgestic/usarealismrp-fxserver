@@ -21,6 +21,7 @@ AddEventHandler("ems:getLoadout", function()
         local serialEnding = math.random(100000000, 999999999)
         local serialLetter = letters[math.random(#letters)]
         item.serialNumber = serialLetter .. serialEnding
+        item.uuid = item.serialNumber
         if char.get("money") >= item.price then
             if char.canHoldItem(item) then
                 char.removeMoney(item.price)

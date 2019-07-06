@@ -236,6 +236,7 @@ AddEventHandler("policestation2:requestPurchase", function(index)
         local serialEnding = math.random(100000000, 999999999)
         local serialLetter = letters[math.random(#letters)]
         weapon.serialNumber = serialLetter .. serialEnding
+        weapon.uuid = weapon.serialNumber
         local weaponDB = {}
         weaponDB.name = weapon.name
         weaponDB.serialNumber = serialLetter .. serialEnding
