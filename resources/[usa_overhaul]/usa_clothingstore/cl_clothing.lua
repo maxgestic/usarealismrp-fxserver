@@ -349,6 +349,7 @@ function CreateMenu()
 
 		-- save button --
 		local item = NativeUI.CreateItem("Save", "Save your selections.")
+		item:SetRightBadge(BadgeStyle.Star)
 		item.Activated = function(parentmenu, selected)
 			--Citizen.Trace("true")
 			local character = {

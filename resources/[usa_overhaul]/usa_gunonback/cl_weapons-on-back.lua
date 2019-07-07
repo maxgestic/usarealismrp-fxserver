@@ -36,6 +36,7 @@ local SETTINGS = {
       ["w_sg_pumpshotgun"] = 487013001,
       ["w_ar_musket"] = -1466123874,
       ["w_sg_heavyshotgun"] = GetHashKey("WEAPON_HEAVYSHOTGUN"),
+	  ["w_sg_pumpshotgunmk2"] = GetHashKey("WEAPON_PUMPSHOTGUN_MK2"),
       -- ["w_sg_sawnoff"] = 2017895192 don't show, maybe too small?
       -- launchers:
       ["w_lr_firework"] = 2138347493
