@@ -39,7 +39,9 @@ local civSkins = {
 }
 
 AddEventHandler('es:playerLoaded', function(source, user)
-	print("Player " .. GetPlayerName(source) .. " has loaded.")
+	if GetPlayerName(source) then
+		print("Player " .. GetPlayerName(source) .. " has loaded.")
+	end
 	TriggerClientEvent('usa_rp:playerLoaded', source)
 end)
 

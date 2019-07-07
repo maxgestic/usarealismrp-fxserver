@@ -21,10 +21,14 @@ end)
 
 RegisterNetEvent("interaction:removeDroppedItem")
 AddEventHandler("interaction:removeDroppedItem", function(index)
-  local objectModel = DROPPED_ITEMS[index].objectModel
-  local itemObject = GetClosestObjectOfType(DROPPED_ITEMS[index].coords.x, DROPPED_ITEMS[index].coords.y, DROPPED_ITEMS[index].coords.z, 1.0, objectModel, false, false, false)
-  DeleteObject(itemObject)
-  table.remove(DROPPED_ITEMS, index)
+  if DROPPED_ITEMS[index] then
+    if DROPPED_ITEMS[index].objectModel then
+	  local objectModel = DROPPED_ITEMS[index].objectModel
+	  local itemObject = GetClosestObjectOfType(DROPPED_ITEMS[index].coords.x, DROPPED_ITEMS[index].coords.y, DROPPED_ITEMS[index].coords.z, 1.0, objectModel, false, false, false)
+	  DeleteObject(itemObject)
+	  table.remove(DROPPED_ITEMS, index)
+	end
+  end
 end)
 
 RegisterNetEvent("interaction:finishedPickupAttempt")

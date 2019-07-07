@@ -1,7 +1,7 @@
 licensePrices = {
 	["Driver's License"] = 500,
 	["Firearm Permit"] = 1000,
-	["Bar Certificate"] = 10000,
+	["Bar Certificate"] = 3000,
 	["Boat License"] = 750,
 	["Aircraft License"] = 1500
 }

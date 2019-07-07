@@ -257,7 +257,7 @@ local VEH_ACTIONS = {
 			TriggerEvent("veh:checkForKey", GetVehicleNumberPlateText(hitHandleVehicle), true)
 		end,
 		["Off"] = function()
-			TriggerEvent("veh:toggleEngine", "off")
+			TriggerEvent("veh:checkForKey", GetVehicleNumberPlateText(hitHandleVehicle), false)
 		end
 	},
 	["Open"] = {
