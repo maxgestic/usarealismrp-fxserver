@@ -32,7 +32,7 @@ TriggerEvent('es:addJobCommand', 'morgue', { "ems", "fire", "police", "sheriff",
 			type = 'misc'
 		}
 		target.giveItem(toeTag, 1)
-		local admitted_name = target.get("name")
+		local admitted_name = target.getFullName()
 		local url = 'https://discordapp.com/api/webhooks/392414345826664451/XW4zn4dM99OiD7JuyeCvYG0gIgjpOIhfnv8uDZEQpl4xjzdjv-J2_NQayhrSyXm1f1eT'
 		PerformHttpRequest(url, function(err, text, headers)
 			if text then
