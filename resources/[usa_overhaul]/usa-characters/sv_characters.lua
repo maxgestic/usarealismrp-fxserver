@@ -203,7 +203,7 @@ Citizen.CreateThread(function()
             if GetMinutesFromTime(time) >= UPDATE_TIME_INTERVAL_MINUTES then
                 TriggerEvent("es:exposeDBFunctions", function(db)
                     local char = GetCharacter(tonumber(id))
-                    db.updateDocument("characters", char.get("_id"), { money = char.get("money"), bank = char.get("bank"), inventory = char.get("inventory"), vehicles = char.get("vehicles") }, function()
+                    db.updateDocument("characters", char.get("_id"), char.getSelf(), function()
                         lastUpdated[id] = os.time()
                     end)
                 end)
