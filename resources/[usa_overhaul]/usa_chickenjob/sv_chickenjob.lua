@@ -1,4 +1,4 @@
-local PAY_PER_CHICKEN_MEAT = 25
+local PAY_PER_CHICKEN_MEAT = 12
 local KILL = {}
 
 local chickenItems = {
@@ -130,7 +130,7 @@ AddEventHandler("chickenJob:chopChicken", function()
 	if character.hasItem(chickenItems[3].name) then
 		TriggerClientEvent("usa:notify", source, "You begin to gut and cut raw meat from the chicken")
 		TriggerClientEvent("chickenJob:startProcessingAnimation", source)
-		SetTimeout(30000, endItemRetrieval(character, source, chickenItems[4], 10, chickenItems[3], 1, "You finish harvesting the chicken meat"))
+		SetTimeout(30000, endItemRetrieval(character, source, chickenItems[4], 5, chickenItems[3], 1, "You finish harvesting the chicken meat"))
 	else
 		TriggerClientEvent("usa:notify", source, "You dont have a plucked chicken!")
 	end
