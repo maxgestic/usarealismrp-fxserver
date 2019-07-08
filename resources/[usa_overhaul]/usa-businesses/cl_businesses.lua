@@ -3,18 +3,18 @@ Citizen.CreateThread(function()
 	while true do
 		if IsControlJustPressed(0, KEYS.K) then
 			local me = PlayerPedId()
-			if IsPedArmed(me, 7) then
-				Wait(500)
-				if IsControlPressed(0, KEYS.K) then
-					local closestStore = GetClosestStore(1.5)
-					if closestStore then
+			Wait(500)
+			if IsControlPressed(0, KEYS.K) then
+				local closestStore = GetClosestStore(1.5)
+				if closestStore then
+					if IsPedArmed(me, 7) then
 						if not isRobbingStore then
 							TriggerServerEvent('business:beginRobbery', closestStore, IsPedMale(me), GetNumberOfPlayers())
 						end
+					else
+						exports.globals:notify("I am not intimidated!")
 					end
 				end
-			else
-				exports.globals:notify("I am not intimidated!")
 			end
 		end
 		Wait(0)
