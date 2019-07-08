@@ -14,9 +14,6 @@ local VEHICLE_RANKS = {
 		["pranger"] = 2,
 		["firetruk"] = 1,
 		["polmav"] = 1
-	},
-	["dai"] = {
-		["pdchrgum"] = 1
 	}
 }
 
@@ -24,7 +21,7 @@ RegisterServerEvent("pdmenu:checkWhitelist")
 AddEventHandler("pdmenu:checkWhitelist", function(clientevent)
   local char = exports["usa-characters"]:GetCharacter(source)
   local user_job = char.get("job")
-  if user_job == "sheriff" or user_job == "cop" or user_job == "dai" then
+  if user_job == "sheriff" or user_job == "cop" then
       TriggerClientEvent(clientevent, source)
   else
     TriggerClientEvent("usa:notify", source, "~y~You are not on-duty for POLICE.")
