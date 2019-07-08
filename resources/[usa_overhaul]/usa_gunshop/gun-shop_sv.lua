@@ -138,11 +138,15 @@ AddEventHandler("gunShop:purchaseLicense", function()
     TriggerClientEvent("usa:notify", usource, "You already have a firearm permit!")
     return
   end
-  if char.canHoldItem(NEW_GUN_LICENSE) and m >= LICENSE_PURCHASE_PRICE then
-    char.giveItem(NEW_GUN_LICENSE)
-    char.removeMoney(LICENSE_PURCHASE_PRICE)
-    TriggerClientEvent("usa:notify", usource, "You have accepted the terms and conditions and have been issued a CCW")
-    TriggerClientEvent("gunShop:showCCWTerms", usource)
+  if char.canHoldItem(NEW_GUN_LICENSE) then
+    if m >= LICENSE_PURCHASE_PRICE then
+        char.giveItem(NEW_GUN_LICENSE)
+        char.removeMoney(LICENSE_PURCHASE_PRICE)
+        TriggerClientEvent("usa:notify", usource, "You have accepted the terms and conditions and have been issued a CCW")
+        TriggerClientEvent("gunShop:showCCWTerms", usource)
+    else
+        TriggerClientEvent("usa:notify", usource, "Not enough money!")
+    end
   else
     TriggerClientEvent("usa:notify", usource, "Inventory full!")
   end
