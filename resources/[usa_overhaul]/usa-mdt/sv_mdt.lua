@@ -321,9 +321,7 @@ AddEventHandler("mdt:PerformPersonCheckByName", function(data)
 					},
 					mugshot = "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg" -- generic placeholder img
 				}
-				---------------------
 				-- get mug shot --
-				---------------------
 				if person.mugshot then
 					person_info.mugshot = person.mugshot
 				end
@@ -338,37 +336,33 @@ AddEventHandler("mdt:PerformPersonCheckByName", function(data)
 							person_info.address = person.property['location']
 						end
 					end
-				end)
-				-----------------------------
-				-- get criminal history --
-				-----------------------------
-				local criminal_history = person.criminalHistory
-				if #criminal_history > 0 then
-					for i = 1, #criminal_history do
-						local crime = criminal_history[i]
-						if (not crime.type or crime.type == "arrest") then
-							table.insert(person_info.criminal_history.crimes, crime)
-						else
-							table.insert(person_info.criminal_history.tickets, crime)
+					-- get criminal history --
+					local criminal_history = person.criminalHistory
+					if #criminal_history > 0 then
+						for i = 1, #criminal_history do
+							local crime = criminal_history[i]
+							if (not crime.type or crime.type == "arrest") then
+								table.insert(person_info.criminal_history.crimes, crime)
+							else
+								table.insert(person_info.criminal_history.tickets, crime)
+							end
+						end
+						if #person_info.criminal_history.crimes <= 0 then
+							person_info.criminal_history.crimes = false
+						end
+						if #person_info.criminal_history.tickets <= 0 then
+							person_info.criminal_history.tickets = false
 						end
 					end
-					if #person_info.criminal_history.crimes <= 0 then
-						person_info.criminal_history.crimes = false
+					-- get licenses --
+					person_info.licenses = GetLicensesFromInventory(person.inventory)
+					-- get insurance --
+					local insurance = person.insurance
+					if insurance.planName then
+						person_info.insurance = insurance
 					end
-					if #person_info.criminal_history.tickets <= 0 then
-						person_info.criminal_history.tickets = false
-					end
-				end
-
-				-- get licenses --
-				person_info.licenses = GetLicensesFromInventory(person.inventory)
-				-- get insurance --
-				local insurance = person.insurance
-				if insurance.planName then
-					person_info.insurance = insurance
-				end
-
-				TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
+					TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
+				end)
 			else
 				print("person NOT found!")
 				local msg = {
