@@ -1175,7 +1175,7 @@ function disableAirControl(ped, veh)
 	--if not IsThisModelBlacklisted(veh) then
 		if IsPedSittingInAnyVehicle(ped) then
 			if GetPedInVehicleSeat(veh, -1) == ped then
-				if IsEntityInAir(veh) then
+				if IsEntityInAir(veh) and GetVehicleClass(veh) ~= 8 then
 					DisableControlAction(0, 59)
 					DisableControlAction(0, 60)
 				end

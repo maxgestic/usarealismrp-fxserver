@@ -27,17 +27,21 @@ TriggerEvent('es:addJobCommand', 'roster', {"corrections"}, function(source, arg
 	TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1^*[BOLINGBROKE PENITENTIARY]")
 	exports["usa-characters"]:GetCharacters(function(characters)
 		for id, char in pairs(characters) do
-			local time = char.get("jailtime")
-			if time > 0 then
-				hasInmates = true
-				TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1 - ^0" .. char.getFullName() .. " ^1^*|^r^0 " .. time .. " month(s)")
+			local time = char.get("jailTime")
+			if time then
+				if time > 0 then
+					hasInmates = true
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1 - ^0" .. char.getFullName() .. " ^1^*|^r^0 " .. time .. " month(s)")
+				end
 			end
 		end
 		if not hasInmates then
 			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1 - ^0There are no inmates at this time")
 		end
 	end)
-end)
+end, {
+	help = "See who is booked into the prison."
+})
 
 ----------------
 -- the prison --
