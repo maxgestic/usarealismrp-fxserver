@@ -1169,3 +1169,28 @@ function DrawText3D(x, y, z, distance, text)
     DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
   end
 end
+
+-- disable controlling when in air --
+function disableAirControl(ped, veh)
+	--if not IsThisModelBlacklisted(veh) then
+		if IsPedSittingInAnyVehicle(ped) then
+			if GetPedInVehicleSeat(veh, -1) == ped then
+				if IsEntityInAir(veh) then
+					DisableControlAction(0, 59)
+					DisableControlAction(0, 60)
+				end
+			end
+		end
+	--end
+end
+
+Citizen.CreateThread(function()
+    while true do
+		local ped = GetPlayerPed(-1)
+		local veh = GetVehiclePedIsIn(ped)
+		if DoesEntityExist(veh) then
+			disableAirControl(ped, veh)
+		end
+		Wait(1)
+	end
+end)
