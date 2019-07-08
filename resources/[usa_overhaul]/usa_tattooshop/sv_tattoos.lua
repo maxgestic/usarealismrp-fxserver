@@ -134,13 +134,16 @@ AddEventHandler("tattoo:loadTattoos", function()
 	TriggerClientEvent("tattoo:loadTattoos", source, TATTOOS)
 end)
 
-RegisterServerEvent("tattoo:checkout")
-AddEventHandler("tattoo:checkout", function(purchased_tattoos)
+RegisterServerEvent("tattoo:checkout") -- TODO: give businesses money from purchases
+AddEventHandler("tattoo:checkout", function(purchased_tattoos, business)
   local char = exports["usa-characters"]:GetCharacter(source)
   local cost = CalculateCost(purchased_tattoos)
   print("TATTOO: Checking out with total tattoo cost[" .. cost .. "] for "..GetPlayerName(source).."["..GetPlayerIdentifier(source).."]!")
   if char.get("money") >= cost then
     char.removeMoney(cost)
+	if business then
+		exports["usa-businesses"]:GiveBusinessCashPercent(business, cost)
+	end
     local appearance = char.get("appearance")
 	if appearance.tattoos then
 	    for i = 1, #purchased_tattoos do

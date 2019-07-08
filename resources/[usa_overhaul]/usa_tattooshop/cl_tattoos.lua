@@ -133,8 +133,8 @@ Citizen.CreateThread(function()
     item.Activated = function(parentmenu, selected)
         MainMenu:Visible(false)
         if #purchased_tattoos > 0 then
-          local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
-          TriggerServerEvent("tattoo:checkout", purchased_tattoos, property)
+          local business = exports["usa-businesses"]:GetClosestStore(15)
+          TriggerServerEvent("tattoo:checkout", purchased_tattoos, business)
         else
             exports.globals:notify("No tattoos selected!")
             TriggerServerEvent("usa:loadPlayerComponents")
@@ -213,7 +213,7 @@ end)
 ----------------------
 
 local BLIPS = {}
-function EnumerateBlips()
+function CreateMapBlips()
   if #BLIPS == 0 then
     for i = 1, #SHOPS do
       local blip = AddBlipForCoord(SHOPS[i].x, SHOPS[i].y, SHOPS[i].z)
@@ -235,7 +235,7 @@ TriggerServerEvent('blips:getBlips')
 RegisterNetEvent('blips:returnBlips')
 AddEventHandler('blips:returnBlips', function(blipsTable)
   if blipsTable['tattoo'] then
-    EnumerateBlips()
+    CreateMapBlips()
   else
     for _, k in pairs(BLIPS) do
       print(k)
@@ -248,4 +248,3 @@ end)
 -----------------
 -----------------
 -----------------
-

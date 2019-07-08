@@ -205,7 +205,8 @@ Citizen.CreateThread(function()
   					TriggerServerEvent('aircraft:requestOpenMenu')
   					closestShop = name
           else -- E held
-            TriggerServerEvent("aircraft:purchaseLicense")
+             local business = exports["usa-businesses"]:GetClosestStore(15)
+            TriggerServerEvent("aircraft:purchaseLicense", business)
           end
 				end
 			end
@@ -363,12 +364,13 @@ function CreatePlaneMenu(menu, vehicles)
 		local rent = NativeUI.CreateItem('Rent '..aircraft.name, 'Rent price: $' ..comma_value(aircraft.price))
 		local buy = NativeUI.CreateItem('Buy '..aircraft.name, 'Buy price: $'..comma_value(aircraft.buy_price))
 		rent.Activated = function(parentmenu, selected)
-			print('bitch penis man')
-			TriggerServerEvent('aircraft:requestRent', aircraft)
+			local business = exports["usa-businesses"]:GetClosestStore(15)
+			TriggerServerEvent('aircraft:requestRent', aircraft, business)
 			planeMenu:Visible(false)
 		end
 		buy.Activated = function(parentmenu, selected)
-			TriggerServerEvent('aircraft:requestPurchase', aircraft)
+            local business = exports["usa-businesses"]:GetClosestStore(15)
+			TriggerServerEvent('aircraft:requestPurchase', aircraft, business)
 			planeMenu:Visible(false)
 		end
 		planeMenu:AddItem(rent)
@@ -387,12 +389,13 @@ function CreateHelicopterMenu(menu, vehicles)
 		local rent = NativeUI.CreateItem('Rent '..aircraft.name, 'Rent price: $' ..comma_value(aircraft.price))
 		local buy = NativeUI.CreateItem('Buy '..aircraft.name, 'Buy price: $'..comma_value(aircraft.buy_price))
 		rent.Activated = function(parentmenu, selected)
-			print('bitch penis man')
-			TriggerServerEvent('aircraft:requestRent', aircraft)
+            local business = exports["usa-businesses"]:GetClosestStore(15)
+			TriggerServerEvent('aircraft:requestRent', aircraft, business)
 			heliMenu:Visible(false)
 		end
 		buy.Activated = function(parentmenu, selected)
-			TriggerServerEvent('aircraft:requestPurchase', aircraft)
+            local business = exports["usa-businesses"]:GetClosestStore(15)
+			TriggerServerEvent('aircraft:requestPurchase', aircraft, business)
 			heliMenu:Visible(false)
 		end
 		heliMenu:AddItem(rent)

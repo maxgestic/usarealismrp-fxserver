@@ -12,9 +12,7 @@ AddEventHandler("barber:checkout", function(customizations, business)
 		appearance.head_customizations = customizations
 		char.set("appearance", appearance)
 		TriggerClientEvent("usa:notify", source, "~y~You paid: ~w~$" .. BARBER_FEE)
-		print("one")
 		if business then
-			print("two")
 			exports["usa-businesses"]:GiveBusinessCashPercent(business, BARBER_FEE)
 		end
 	else

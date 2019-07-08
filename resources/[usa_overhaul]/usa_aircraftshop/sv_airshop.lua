@@ -69,7 +69,7 @@ AddEventHandler("aircraft:loadAircraft", function(source)
 end)
 
 RegisterServerEvent("aircraft:requestPurchase")
-AddEventHandler("aircraft:requestPurchase", function(aircraft)
+AddEventHandler("aircraft:requestPurchase", function(aircraft, business)
   local price = prices.purchase[aircraft.name]
   local char = exports["usa-characters"]:GetCharacter(source)
   local player_aircraft = char.get("aircraft") or {}
@@ -95,6 +95,9 @@ AddEventHandler("aircraft:requestPurchase", function(aircraft)
     end
     char.set("aircraft", player_aircraft)
     TriggerClientEvent("aircraft:loadedAircraft", source, player_aircraft)
+    if business then
+        exports["usa-businesses"]:GiveBusinessCashPercent(business, price)
+    end
     if DEBUG then
       print("owned aircraft: ")
       for i = 1, #player_aircraft do
@@ -109,7 +112,7 @@ AddEventHandler("aircraft:requestPurchase", function(aircraft)
 end)
 
 RegisterServerEvent("aircraft:purchaseLicense")
-AddEventHandler("aircraft:purchaseLicense", function()
+AddEventHandler("aircraft:purchaseLicense", function(business)
   local timestamp = os.date("*t", os.time())
   local char = exports["usa-characters"]:GetCharacter(source)
   local NEW_PILOT_LICENSE = {
@@ -132,6 +135,9 @@ AddEventHandler("aircraft:purchaseLicense", function()
   if char.canHoldItem(NEW_PILOT_LICENSE) then
     char.giveItem(NEW_PILOT_LICENSE)
     char.removeMoney(LICENSE_PURCHASE_PRICE)
+    if business then
+        exports["usa-businesses"]:GiveBusinessCashPercent(business, LICENSE_PURCHASE_PRICE)
+    end
     TriggerClientEvent("usa:notify", source, "You have been issued a pilot's license!")
   else
     TriggerClientEvent("usa:notify", source, "Inventory full!")
@@ -139,7 +145,7 @@ AddEventHandler("aircraft:purchaseLicense", function()
 end)
 
 RegisterServerEvent("aircraft:requestRent")
-AddEventHandler("aircraft:requestRent", function(aircraft)
+AddEventHandler("aircraft:requestRent", function(aircraft, business)
   if rentals[source] then TriggerClientEvent("usa:notify", source, "You are already renting an aircraft!") return end
   local char = exports["usa-characters"]:GetCharacter(source)
   local price = prices.rent[aircraft.name]
@@ -147,6 +153,9 @@ AddEventHandler("aircraft:requestRent", function(aircraft)
     if char.get("money") >= price then
       rentals[source] = aircraft
       char.removeMoney(price)
+      if business then
+          exports["usa-businesses"]:GiveBusinessCashPercent(business, price)
+      end
       TriggerClientEvent("aircraft:rentAircraft", source, aircraft)
     else
       TriggerClientEvent("usa:notify", source, "You cannot afford this purchase!")
