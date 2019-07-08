@@ -26,8 +26,8 @@ AddEventHandler("interaction:removeDroppedItem", function(index)
 	  local objectModel = DROPPED_ITEMS[index].objectModel
 	  local itemObject = GetClosestObjectOfType(DROPPED_ITEMS[index].coords.x, DROPPED_ITEMS[index].coords.y, DROPPED_ITEMS[index].coords.z, 1.0, objectModel, false, false, false)
 	  DeleteObject(itemObject)
-	  table.remove(DROPPED_ITEMS, index)
 	end
+    table.remove(DROPPED_ITEMS, index)
   end
 end)
 
