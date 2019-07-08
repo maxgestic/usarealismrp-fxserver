@@ -9,9 +9,9 @@ local markets = {
       {name = 'Pistol .50', type = 'weapon', hash = -1716589765, price = 4500, legality = 'illegal', quantity = 1, weight = 18, stock = math.random(0, 2), objectModel = "w_pi_pistol50"},
       {name = 'Pump Shotgun', type = 'weapon', hash = 487013001, price = 9000, legality = 'illegal', quantity = 1, weight = 30, stock = math.random(0, 2), objectModel = "w_sg_pumpshotgun"},
       {name = 'Hotwiring Kit', type = 'misc', price = 250, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(0, 6)},
-      { name = "AP Pistol", type = "weapon", hash = 0x22D8FE39, price = 50000, legality = "illegal", quantity = 1, weight = 15, stock = math.random(0, 3), objectModel = "w_pi_appistol" },
+      { name = "AP Pistol", type = "weapon", hash = 0x22D8FE39, price = 50000, legality = "illegal", quantity = 1, weight = 15, stock = math.random(0, 2), objectModel = "w_pi_appistol" },
       { name = "Sawn-off", type = "weapon", hash = 0x7846A318, price = 30000, legality = "illegal", quantity = 1, weight = 30, stock = math.random(0, 3), objectModel = "w_sg_sawnoff", },
-      { name = "Micro SMG", type = "weapon", hash = 324215364, price = 40000, legality = "illegal", quantity = 1, weight = 30, stock = math.random(0, 3), objectModel = "w_sb_microsmg"},
+      { name = "Micro SMG", type = "weapon", hash = 324215364, price = 40000, legality = "illegal", quantity = 1, weight = 30, stock = math.random(0, 2), objectModel = "w_sb_microsmg"},
       {name = 'SMG', type = 'weapon', hash = 736523883, price = 75000, legality = 'illegal', quantity = 1, weight = 55, stock = math.random(0, 1), objectModel = "w_sb_smg"}
     },
     ["pedHash"] = -48477765
@@ -27,10 +27,10 @@ local markets = {
       {name = 'Switchblade', type = 'weapon', hash = -538741184, price = 1500, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(0, 3)},
       {name = 'Brass Knuckles', type = 'weapon', hash = -656458692, price = 1100, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(0, 5)},
       { name = "Molotov", type = "weapon", hash = 615608432, price = 150, legality = "illegal", quantity = 1, weight = 20, stock = math.random(0, 3), objectModel = "w_ex_molotov"},
-      { name = "Machine Pistol", type = "weapon", hash = -619010992, price = 45000, legality = "illegal", quantity = 1, weight = 20, stock = math.random(0, 3) },
-      { name = "Tommy Gun", type = "weapon", hash = 1627465347, price = 110000, legality = "illegal", quantity = 1, weight = 45, stock = math.random(0, 3), objectModel = "w_sb_gusenberg" },
-      { name = "AK47", type = "weapon", hash = -1074790547, price = 100000, legality = "illegal", quantity = 1, weight = 45, stock = math.random(0, 3), objectModel = "w_ar_assaultrifle" },
-      { name = "Carbine", type = "weapon", hash = -2084633992, price = 100000, legality = "illegal", quantity = 1, weight = 45, stock = math.random(0, 3), objectModel = "w_ar_carbinerifle" }
+      { name = "Machine Pistol", type = "weapon", hash = -619010992, price = 45000, legality = "illegal", quantity = 1, weight = 20, stock = math.random(0, 2) },
+      { name = "Tommy Gun", type = "weapon", hash = 1627465347, price = 110000, legality = "illegal", quantity = 1, weight = 45, stock = math.random(0, 2), objectModel = "w_sb_gusenberg" },
+      { name = "AK47", type = "weapon", hash = -1074790547, price = 100000, legality = "illegal", quantity = 1, weight = 45, stock = math.random(0, 2), objectModel = "w_ar_assaultrifle" },
+      { name = "Carbine", type = "weapon", hash = -2084633992, price = 100000, legality = "illegal", quantity = 1, weight = 45, stock = math.random(0, 2), objectModel = "w_ar_carbinerifle" }
     },
     ["pedHash"] = -1773333796
   }
