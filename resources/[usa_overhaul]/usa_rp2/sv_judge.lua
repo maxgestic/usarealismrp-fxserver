@@ -253,64 +253,49 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff'}, function(source,
 				weight = 2.0
 			}
 		elseif type == 'bl' then
-			if isPolice then
-				TriggerClientEvent('usa:notify', source, 'You cannot issue this license.')
-				return
-			else
-				target_item_name = "Boat License"
-				target_item = {
-					name = 'Boat License',
-					number = 'BL' .. tostring(math.random(1, 254367)),
-					quantity = 1,
-					ownerName = target_player.getFullName(),
-					issued_by = char.getFullName(),
-					ownerDob = char.get("dateOfBirth"),
-					status = "valid",
-					type = "license",
-					notDroppable = true,
-					weight = 2.0
-				}
-			end
+			target_item_name = "Boat License"
+			target_item = {
+				name = 'Boat License',
+				number = 'BL' .. tostring(math.random(1, 254367)),
+				quantity = 1,
+				ownerName = target_player.getFullName(),
+				issued_by = char.getFullName(),
+				ownerDob = char.get("dateOfBirth"),
+				status = "valid",
+				type = "license",
+				notDroppable = true,
+				weight = 2.0
+			}
 		elseif type == 'al' then
-			if isPolice then
-				TriggerClientEvent('usa:notify', source, 'You cannot issue this license.')
-				return
-			else
-				target_item_name = "Aircraft License"
-				target_item = {
-					name = 'Aircraft License',
-					number = 'PL' .. tostring(math.random(1, 254367)),
-					quantity = 1,
-					ownerName = target_player.getFullName(),
-					issued_by = char.getFullName(),
-					ownerDob = char.get("dateOfBirth"),
-					expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
-					status = "valid",
-					type = "license",
-					notDroppable = true,
-					weight = 2.0
-				}
-			end
+			target_item_name = "Aircraft License"
+			target_item = {
+				name = 'Aircraft License',
+				number = 'PL' .. tostring(math.random(1, 254367)),
+				quantity = 1,
+				ownerName = target_player.getFullName(),
+				issued_by = char.getFullName(),
+				ownerDob = char.get("dateOfBirth"),
+				expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
+				status = "valid",
+				type = "license",
+				notDroppable = true,
+				weight = 2.0
+			}
 		elseif type == 'bar' then
-			if isPolice then
-				TriggerClientEvent('usa:notify', source, 'You cannot issue this license.')
-				return
-			else
-				target_item_name = 'Bar Certificate'
-				target_item = {
-					name = 'Bar Certificate',
-					number = 'B' .. tostring(math.random(1, 254367)),
-					quantity = 1,
-					ownerName = target_player.getFullName(),
-					issued_by = char.getFullName(),
-					ownerDob = char.get("dateOfBirth"),
-					expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
-					status = "valid",
-					type = "license",
-					notDroppable = true,
-					weight = 2.0
-				}
-			end
+			target_item_name = 'Bar Certificate'
+			target_item = {
+				name = 'Bar Certificate',
+				number = 'B' .. tostring(math.random(1, 254367)),
+				quantity = 1,
+				ownerName = target_player.getFullName(),
+				issued_by = char.getFullName(),
+				ownerDob = char.get("dateOfBirth"),
+				expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
+				status = "valid",
+				type = "license",
+				notDroppable = true,
+				weight = 2.0
+			}
 		end
 		local licenses = target_player.getLicenses()
     	local player_name = target_player.getFullName()
