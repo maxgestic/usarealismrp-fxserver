@@ -437,9 +437,9 @@ local burglarySearchItems = {
   {name = "First Aid Kit", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 10.0, objectModel = "v_ret_ta_firstaid"},
   {name = "Packaged Weed", quantity = 1, weight = 5.0, type = "drug", legality = "illegal", objectModel = "bkr_prop_weed_bag_01a"},
   {name = 'Packaged Meth', type = 'drug', legality = 'illegal', quantity = 1, weight = 7.0, objectModel = 'bkr_prop_meth_smallbag_01a'},
-  {name = 'Pistol', type = 'weapon', hash = 453432689, price = 1000, legality = 'illegal', quantity = 1, weight = 15, objectModel = "w_pi_pistol"},
+  {name = 'Pistol', type = 'weapon', hash = 453432689, price = 1000, legality = 'illegal', quantity = 1, weight = 15, objectModel = "w_pi_pistol", notStackable = true},
   {name = 'Razor Blade', type = 'misc', price = 500, legality = 'legal', quantity = 1, residue = false, weight = 3},
-  {name = 'Switchblade', type = 'weapon', hash = -538741184, price = 1500, legality = 'illegal', quantity = 1, weight = 5},
+  {name = 'Switchblade', type = 'weapon', hash = -538741184, price = 1500, legality = 'illegal', quantity = 1, weight = 5, notStackable = true},
   {name = "Condoms", price = 5, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "ng_proc_candy01a"},
   {name = "KY Intense Gel", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "v_res_d_lube"},
   {name = "Viagra", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_pills"},
@@ -1504,18 +1504,20 @@ AddEventHandler('properties:searchCabinetBurglary', function(index)
 			local char = exports['usa-characters']:GetCharacter(source)
 			local char_money = char.get('money')
 			if math.random() > 0.4 then
-				if math.random() > 0.2 then
+				if math.random() > 0.3 then
 					local item_found = burglarySearchItems[math.random(1, #burglarySearchItems)]
 					if char.canHoldItem(item_found) then
 						TriggerClientEvent('usa:notify', source, 'You have found '..item_found.name..'.')
 						print('PROPERTIES: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has found item['..item_found.name..'] in house burglary!')
 						if item_found.type == "weapon" then
-							if #char.getWeapons() < 3 then
-								char.giveItem(item_found, 1)
-								TriggerClientEvent("interaction:equipWeapon", source, item_found, true)
-							else
-								TriggerClientEvent("usa:notify", source, "Found a " .. item_found.name .. " but you don't have enough room to hold it!")
-							end
+							local letters = {}
+					        for i = 65,  90 do table.insert(letters, string.char(i)) end -- add capital letters
+					        local serialEnding = math.random(100000000, 999999999)
+					        local serialLetter = letters[math.random(#letters)]
+					        item_found.uuid = math.random(999999999)
+					        item_found.serialNumber = serialLetter .. serialEnding
+							char.giveItem(item_found, 1)
+							TriggerClientEvent("interaction:equipWeapon", source, item_found, true)
 						else
 							char.giveItem(item_found, 1)
 						end
@@ -1525,7 +1527,7 @@ AddEventHandler('properties:searchCabinetBurglary', function(index)
 						return
 					end
 				else
-					local money_found = math.random(10, 175)
+					local money_found = math.random(10, 350)
 					TriggerClientEvent('usa:notify', source, 'You have found $'..money_found..'.0!')
 					print('PROPERTIES: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has found amount['..money_found..'] in house burglary!')
 					char.giveMoney(money_found)
