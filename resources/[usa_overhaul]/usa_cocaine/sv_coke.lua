@@ -62,9 +62,6 @@ AddEventHandler('cocaineJob:completeDelivery', function(productToRemove)
 		end
 		char.giveMoney((reward + bonus))
 		print('COCAINE: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has completed cocaine delivery and received money['..reward..'] with bonus['..bonus..']!')
-	else
-		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
-    	TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit cocaineJob:completeDelivery event, please intervene^0!')
 	end
 end)
 
