@@ -9,6 +9,8 @@ local notRejectedChance = 0.0
 
 local interacted_with_peds = {}
 
+local TRANSACTION_TIME = 15000
+
 Citizen.CreateThread(function()
 	while true do
 		Wait(0)
@@ -22,8 +24,8 @@ Citizen.CreateThread(function()
 				local pedCoords = GetEntityCoords(localPed)
 				local distFromPlayerToPed = Vdist(pedCoords, playerCoords)
 
-				if DoesEntityExist(localPed) and not IsPedDeadOrDying(localPed) 
-				and not IsPedInAnyVehicle(localPed) and GetPedType(localPed) ~= (28 and 27 and 6 and 29 and 21 and 20) 
+				if DoesEntityExist(localPed) and not IsPedDeadOrDying(localPed)
+				and not IsPedInAnyVehicle(localPed) and GetPedType(localPed) ~= (28 and 27 and 6 and 29 and 21 and 20)
 				and not IsPedAPlayer(localPed) and not HasInteractedWithPedRecently(localPed) then
 
 					if distFromPlayerToPed <= 1.8 and localPed ~= playerPed then
@@ -65,7 +67,7 @@ function SellDrugsToPed(buyerPed)
 	local beginTime = GetGameTimer()
 	local playerPed = PlayerPedId()
 	Citizen.CreateThread(function()
-		while GetGameTimer() - beginTime < 10000 and isSelling do
+		while GetGameTimer() - beginTime < TRANSACTION_TIME and isSelling do
 			Citizen.Wait(0)
 			local playerCoords = GetEntityCoords(playerPed)
 			local buyerCoords = GetEntityCoords(buyerPed)
@@ -74,7 +76,7 @@ function SellDrugsToPed(buyerPed)
 				SetEntityAsNoLongerNeeded(buyerPed)
 				TriggerEvent('usa:notify', 'You walked away too far!')
 			end
-			DrawTimer(beginTime, 10000, 1.42, 1.475, 'SELLING')
+			DrawTimer(beginTime, TRANSACTION_TIME, 1.42, 1.475, 'SELLING')
 		end
 		if isSelling then
 			isSelling = false
