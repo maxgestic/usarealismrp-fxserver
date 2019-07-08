@@ -19,13 +19,10 @@ local VEHICLE_RANKS = {
 	},
 	["doctor"] = {
 		["paraexp"] = 1
-	},
-	["dai"] = {
-		"pdchrgum"
 	}
 }
 
-TriggerEvent('es:addJobCommand', 'spawn', { "police", "sheriff", "ems", "fire", "dai", "doctor" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'spawn', { "police", "sheriff", "ems", "fire", "doctor" }, function(source, args, char)
 	local job = char.get('job')
 	if not args[2] then
 		local rank = 0
