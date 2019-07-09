@@ -201,6 +201,42 @@ SecurityCamConfig.Locations = {
             {label = "Camera 3", x = 1991.20, y = 3052.56, z = 48.21, r = {x = -40.0, y = 0.0, z = 99.0}},
         }
     },
+    {
+        camBox = {label = "Benny's Auto Garage (Strawberry)", id = 'store24'},
+        cameras = {
+            {label = "Upper Deck", x = -216.2, y = -1333.3 , z = 35.9, r = {x = -10.0, y = 0.0, z = 240.0}}
+        }
+    },
+    {
+        camBox = {label = "LS Customs (Route 68)", id = 'store25'},
+        cameras = {
+            {label = "Office", x = 1188.6, y = 2644.5, z = 39.4, r = {x = -20.0, y = 0.0, z = 200.0}}
+        }
+    },
+    {
+        camBox = {label = "Herr Kutz Barber (Paleto Bay)", id = 'store26'},
+        cameras = {
+            {label = "Main", x = -276.7, y = 6223.3, z = 32.7, r = {x = -20.0, y = 0.0, z = 30.0}}
+        }
+    },
+    {
+        camBox = {label = "LS Tattoos (El Burro Heights)", id = 'store27'},
+        cameras = {
+            {label = "Main", x = 1321.4, y = -1656.3, z = 53.6, r = {x = -10.0, y = 0.0, z = 00.0}}
+        }
+    },
+    {
+        camBox = {label = "The Pit (Vespucci Beach)", id = 'store28'},
+        cameras = {
+            {label = "Main", x = -1156.4, y = -1427.1, z = 6.0, r = {x = -10.0, y = 00.0, z = -30.0}}
+        }
+    },
+    {
+        camBox = {label = "Blazing Tattoo (Vinewood)", id = 'store29'},
+        cameras = {
+            {label = "Main", x = 325.8, y = 179.2, z = 104.6, r = {x = -10.0, y = 00.0, z = 40.0}}
+        }
+    }
 }
 
 -- prison cam 1 [x = 1732.7, y = 2649.6, z = 45.6]
