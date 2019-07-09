@@ -41,7 +41,7 @@ AddEventHandler('veh:searchResult', function()
 		return
 	end
 	if math.random() > 0.6 then
-		local money_found = math.random(10, 175)
+		local money_found = math.random(10, 120)
 		TriggerClientEvent('usa:notify', source, 'You have found $'..money_found..'.0!')
 		char.giveMoney(money_found)
 		print('VEHTHEFT: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has received money['..money_found..'] from vehicle search!')

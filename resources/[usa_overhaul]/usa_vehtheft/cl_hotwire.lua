@@ -7,6 +7,8 @@ local canBeSearched = false
 local playerHotwiredVehicles = {}
 local searchedVehicles = {}
 
+local VEHICLE_ITEM_SEARCH_TIME = 15000
+
 Citizen.CreateThread(function()
   local wasInVeh = false
     while true do
@@ -74,7 +76,7 @@ AddEventHandler('veh:searchVeh', function()
       Citizen.Wait(100)
     end
     local searchBegin = GetGameTimer()
-    while GetGameTimer() - searchBegin < 10000 do
+    while GetGameTimer() - searchBegin < VEHICLE_ITEM_SEARCH_TIME do
       Citizen.Wait(0)
       DisableControlAction(0, 86, true)
       DisableControlAction(0, 244, true)
@@ -88,7 +90,7 @@ AddEventHandler('veh:searchVeh', function()
       if not IsEntityPlayingAnim(playerPed, 'veh@handler@base', 'hotwire', 3) then
         TaskPlayAnim(playerPed, 'veh@handler@base', 'hotwire', 8.0, 1.0, -1, 49, 1.0, false, false, false)
       end
-      DrawTimer(searchBegin, 10000, 1.42, 1.475, 'SEARCHING')
+      DrawTimer(searchBegin, VEHICLE_ITEM_SEARCH_TIME, 1.42, 1.475, 'SEARCHING')
     end
     ClearPedTasks(playerPed)
     table.insert(searchedVehicles, GetVehicleNumberPlateText(vehicle))

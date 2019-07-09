@@ -63,7 +63,7 @@ local blips = {
 	{ title="Bahama Mamas", colour = 15, id = 93, scale = 0.7, x=-1388.94, y=-585.919, z=29.2195 },
 	{ title="Comedy Club", colour = 4, id = 362, scale = 0.7, x = -429.9, y = 261.6, z = 83.0 },
 	{ title="Yellow Jack", colour = 15, id = 93, scale = 0.7, x = 1986.1, y = 3050.57, z = 47.2151 },
-	{ title="Studio Los Santos", colour = 83, id = 136, x = -337.23, y = 207.189, z = 88.57, scale = 0.95},
+	{ title="Nightclub", colour = 83, id = 136, x = -337.23, y = 207.189, z = 88.57, scale = 0.95},
 	--{ title="Downtown Taxi", colour = 60, id = 198, x=895.563, y=-179.536, z=74.7003 },
 	--{ title="Downtown Taxi", colour = 60, id = 198, x = -41.306, y = 6436.432, z = 30.490 },
 	--{ title="Downtown Taxi", colour = 60, id = 198, x = 895.2, y = -179.5, z = 74.7 },
