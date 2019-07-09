@@ -1,7 +1,7 @@
 -- need to check for existance of DB
 exports["globals"]:PerformDBCheck("usa-characters", "characters", nil)
 
-local UPDATE_TIME_INTERVAL_MINUTES = 1
+local UPDATE_TIME_INTERVAL_MINUTES = 30
 
 local CHARACTERS = {} -- table of all playing characters for fast look up
 
