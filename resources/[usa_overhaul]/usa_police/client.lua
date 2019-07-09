@@ -20,7 +20,7 @@ local policeArmourys = {
 	{x = -447.9, y = 6008.7, z = 31.85}
 }
 
-local weapons = {}
+local weapons = {} -- armory items
 
 local policeoutfitamount = {1, 2, 3, 4, 5}
 

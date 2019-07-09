@@ -294,7 +294,6 @@ AddEventHandler("policestation2:loadOutfit", function(slot)
     end
     TriggerClientEvent('interaction:setPlayersJob', source, 'sheriff')
     TriggerEvent("eblips:add", {name = char.getName(), src = source, color = 3})
-    RemovePoliceWeapons(char)
   else
     DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
   end
@@ -336,6 +335,10 @@ function RemovePoliceWeapons(char)
       for i = #weps, 1, -1 do
           if weps[i].serviceWeapon then
               char.removeItemWithField("serialNumber", weps[i].serialNumber)
+              local src = char.get("source")
+              if src then
+                  TriggerClientEvent("interaction:equipWeapon", src, weps[i], false) -- to test
+              end
           end
       end
 end

@@ -310,7 +310,6 @@ AddEventHandler('injuries:requestData', function()
   end
 end)
 
---[[
 TriggerEvent('es:addGroupCommand', 'heal', 'mod', function(source, args, char)
 	local targetSource = tonumber(args[2])
 	if tonumber(args[2]) and GetPlayerName(args[2]) then
@@ -329,7 +328,6 @@ end, {
 		{ name = "id", help = "id of person" }
 	}
 })
---]]
 
 function PlayerName(source)
 	return GetPlayerName(source)..'['..GetPlayerIdentifier(source)..']'

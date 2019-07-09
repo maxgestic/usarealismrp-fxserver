@@ -63,7 +63,7 @@ local deliveryCoords = {
     {x = -599.44, y = 399.96, z = 100.68, heading = 51.7, model = 'A_F_M_BODYBUILD_01', message = 'Privyet! Ahh yes, these are my steroids. Here wise man, have this.'},
     {x = -917.29, y = 374.57, z = 78.66, heading = 285.13, model = 'A_M_M_BEVHILLS_02', message = 'Be careful, Mr. Crews might be lurking around here somewhere...'},
     {x = -1704.36, y = -440.94, z = 40.67, heading = 272.0, model = 'A_M_M_HASJEW_01', message = 'These damn cops, feels like we\'re in Nazi Germany. Get outta here quick.'},
-    {x = -1129.23, y = 1605.27, z = 3.39, heading = 216.0, model = 'CSB_CAR3GUY2', message = 'Ya yeet! That\'s lit my man! You ever thought about vaping my bro?'},
+    --{x = -1129.23, y = 1605.27, z = 3.39, heading = 216.0, model = 'CSB_CAR3GUY2', message = 'Ya yeet! That\'s lit my man! You ever thought about vaping my bro?'},
     {x = 50.57, y = -108.04, z = 55.01, heading = 336.0, model = 'CSB_JANITOR', message = 'Call an ambulance if I don\'t make it after this HIIIGHHH!'},
     {x = -59.04, y = -921.85, z = 28.32, heading = 140.0, model = 'G_M_Y_POLOGOON_01', message = 'Ever thought about running? You need to lose some weight.'},
     {x = -664.11, y = -1217.79, z = 10.81, heading = 30.0, model = 'CSB_BRIDE', message = "Don't ask, thanks!"},
