@@ -1,7 +1,7 @@
 -- need to check for existance of DB
 exports["globals"]:PerformDBCheck("usa-characters", "characters", nil)
 
-local UPDATE_TIME_INTERVAL_MINUTES = 30
+local UPDATE_TIME_INTERVAL_MINUTES = 1
 
 local CHARACTERS = {} -- table of all playing characters for fast look up
 
@@ -24,8 +24,9 @@ AddEventHandler("playerDropped", function(reason)
     -- save player data --
     TriggerEvent('es:exposeDBFunctions', function(db)
       print("updating char with ID: " .. CHARACTERS[usource].get("_id"))
-      db.updateDocument("characters", CHARACTERS[usource].get("_id"), CHARACTERS[usource].getSelf(), function(err)
-  			print("* Character updated in DB! *")
+      CHARACTERS[usource].set("_rev", nil)
+      db.updateDocument("characters", CHARACTERS[usource].get("_id"), CHARACTERS[usource].getSelf(), function(doc, err, rText)
+  			print("* Character updated in DB! err " .. err .. " *")
         -- notify DOC of player disconnect while in jail --
     		local jailtime = CHARACTERS[usource].get("jailTime")
     		if jailtime then
@@ -203,7 +204,9 @@ Citizen.CreateThread(function()
             if GetMinutesFromTime(time) >= UPDATE_TIME_INTERVAL_MINUTES then
                 TriggerEvent("es:exposeDBFunctions", function(db)
                     local char = GetCharacter(tonumber(id))
-                    db.updateDocument("characters", char.get("_id"), char.getSelf(), function()
+                    char.set("_rev", nil)
+                    db.updateDocument("characters", char.get("_id"), char.getSelf(), function(doc, err, rText)
+                        print("updated char with id: " .. char.get("_id") .. ", err " .. err)
                         lastUpdated[id] = os.time()
                     end)
                 end)

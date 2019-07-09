@@ -384,7 +384,7 @@ function exposedDB.updateDocument(db, documentID, updates, callback)
 				doc[i] = updates[i]
 			end
 			PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. documentID, function(err, rText, headers)
-				callback(doc)
+				callback(doc, err, rText)
 			end, "PUT", json.encode(doc), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 		end
 	end, "GET", "", {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
