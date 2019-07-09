@@ -261,6 +261,7 @@ function CreateMenu()
 			local adjusted_index = i - 1
 			local item = NativeUI.CreateItem(COMPONENTS[i], "Change your " .. COMPONENTS[i])
 			item.Activated = function(parentmenu, selected)
+				print("selected")
 				previous_menu = parentmenu
 				_menuPool:CloseAllMenus()
 				ComponentValuesMenu:Clear()
@@ -386,6 +387,7 @@ end
 CreateMenu()
 
 function UpdateValueChangerMenu(me, adjusted_index, oldval, isProp)
+	print("inside update value changer menu")
 	me = GetPlayerPed(-1)
 	ComponentValuesMenu:Clear()
 	if not isProp then

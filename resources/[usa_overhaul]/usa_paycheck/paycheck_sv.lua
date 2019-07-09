@@ -25,11 +25,11 @@ AddEventHandler('paycheck:welfare', function()
 			  elseif cop_rank == 7 then
 				paycheckAmount = 415
 			  elseif cop_rank == 8 then
-				paycheckAmount = 460
+				paycheckAmount = 430
 			  elseif cop_rank == 9 then
-				paycheckAmount = 490
+				paycheckAmount = 470
 			  elseif cop_rank == 10 then
-				paycheckAmount = 515
+				paycheckAmount = 480
 			  end
 		elseif job == "ems" or job == "fire" then
 			local rank = char.get("emsRank")
@@ -41,11 +41,11 @@ AddEventHandler('paycheck:welfare', function()
 			  elseif rank == 4 then
 				paycheckAmount = 320
 			  elseif rank == 5 then
-				paycheckAmount = 390
+				paycheckAmount = 350
 			  elseif rank == 6 then
-				paycheckAmount = 430
+				paycheckAmount = 370
 			  elseif rank == 7 then
-				paycheckAmount = 475
+				paycheckAmount = 395
 			  end
 		elseif job == "security" then
 			paycheckAmount = 500
@@ -54,7 +54,7 @@ AddEventHandler('paycheck:welfare', function()
 		elseif job == "tow" then
 			paycheckAmount = 30
 		elseif job == "reporter" then
-			paycheckAmount = 30
+			paycheckAmount = 35
 		elseif job == "judge" then
 			paycheckAmount = 300
 		elseif job == "corrections" then
@@ -62,7 +62,7 @@ AddEventHandler('paycheck:welfare', function()
       	elseif job == "lawyer" then
       		paycheckAmount = 220
       	elseif job == "doctor" then
-      		paycheckAmount = 200
+      		paycheckAmount = 330
       	elseif job == "dai" then
       		paycheckAmount = 95
       	else

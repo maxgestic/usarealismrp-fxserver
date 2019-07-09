@@ -1,4 +1,4 @@
-POLICE_NEEDED = 0
+POLICE_NEEDED = 2
 policeNeededForBonus = 4
 robberyCooldown = 2100
 
