@@ -648,7 +648,7 @@ function GetRankDisplayName(rank)
 	elseif rank == 3 then
 		return "Sr. Trooper"
 	elseif rank == 4 then
-		return "Pr. Sgt."
+		return "Cpl."
 	elseif rank == 5 then
 		return "Sgt."
 	elseif rank == 6 then
