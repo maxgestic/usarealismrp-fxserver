@@ -317,6 +317,9 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff'}, function(source,
 			end
 		end
 		target_player.giveItem(target_item)
+		if type == "fp" then
+			exports["usa_gunshop"]:ShowCCWTerms(target)
+		end
 		TriggerClientEvent("usa:notify", source, "You issued a ~y~" .. target_item_name .. "~s~ for ~y~$"..amountPaid..'.00~s~!')
 		TriggerClientEvent("usa:notify", target, "You were issued a ~y~" .. target_item_name .. "~s~!")
 	end

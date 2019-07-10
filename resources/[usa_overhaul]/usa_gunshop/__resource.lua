@@ -7,6 +7,10 @@ client_scripts {
 	'gun-shop_cl.lua'
 }
 
+server_exports {
+	"ShowCCWTerms"
+}
+
 exports {
 	"ShowCCWTerms"
 }
