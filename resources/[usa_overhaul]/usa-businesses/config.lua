@@ -220,16 +220,16 @@ BUSINESSES = {
 		cameraID = 'store24',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 8000,
-		purchasePercentage = 0.09
+		price = 20000,
+		purchasePercentage = 0.05
 	},
 	["LS Customs (Route 68)"] = {
 		position = {1187.4, 2636.7, 38.4},
 		cameraID = 'store25',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 6000,
-		purchasePercentage = 0.09
+		price = 20000,
+		purchasePercentage = 0.05
 	},
 	["Herr Kutz Barbers (Carson Ave.)"] = {
 		position = {134.45, -1707.75, 29.29},

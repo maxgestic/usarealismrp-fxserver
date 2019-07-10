@@ -2,7 +2,7 @@ local markets = {
   ['marketA'] = {
     ['coords'] = {140.8, -1920.5, 21.0}, -- los santos
     ['items'] = {
-      {name = 'Lockpick', type = 'misc', price = 75, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(0, 5)},
+      {name = 'Lockpick', type = 'misc', price = 135, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(0, 7)},
       {name = 'Pistol', type = 'weapon', hash = 453432689, price = 3000, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(0, 3), objectModel = "w_pi_pistol"},
       {name = 'Vintage Pistol', type = 'weapon', hash = 137902532, price = 4000, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(0, 3), objectModel = "w_pi_vintage_pistol"},
       {name = 'Heavy Pistol', type = 'weapon', hash = -771403250, price = 4500, legality = 'illegal', quantity = 1, weight = 15, stock = math.random(0, 3), objectModel = "w_pi_heavypistol"},
@@ -19,7 +19,7 @@ local markets = {
   ['marketB'] = {
     ['coords'] = {1380.87, 2172.51, 97.81}, -- sandy shores
     ['items'] = {
-      {name = 'Lockpick', type = 'misc', price = 75, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(1, 5)},
+      {name = 'Lockpick', type = 'misc', price = 135, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(1, 5)},
       {name = 'Hotwiring Kit', type = 'misc', price = 250, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(0, 6)},
       {name = 'Heavy Shotgun', type = 'weapon', hash = 984333226, price = 20000, legality = 'illegal', quantity = 1, weight = 35, stock = math.random(0, 2), objectModel = "w_sg_heavyshotgun"},
       {name = 'SNS Pistol', type = 'weapon', hash = -1076751822, price = 3500, legality = 'illegal', quantity = 1, weight = 8, stock = math.random(0, 3), objectModel = "w_pi_sns_pistol"},
