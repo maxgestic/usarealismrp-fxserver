@@ -67,7 +67,7 @@ AddEventHandler("methJob:giveChemicals", function(chemicalToGive)
 		legality = "illegal",
 		quantity = 1,
 		type = "chemical",
-		weight = 10,
+		weight = 6,
 		objectModel = "bkr_prop_meth_acetone"
 	}
 	char.giveItem(chemical, 1)

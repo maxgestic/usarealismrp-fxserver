@@ -38,7 +38,7 @@ local GENERAL_STORE_ITEMS = {
     {name = "Everclear Vodka (90%)", price = 35, type = "alcohol", substance = 5.0, quantity = 1, legality = "legal", weight = 10, strength = 0.10, objectModel = "prop_vodka_bottle", blockedInPrison = true}
   },
   ["Electronics"] = {
-    { name = "Cell Phone", price = 650, type = "misc", quantity = 1, legality = "legal", contacts = {}, conversations = {}, weight = 10, objectModel = "prop_npc_phone_02", blockedInPrison = true}
+    { name = "Cell Phone", price = 650, type = "misc", quantity = 1, legality = "legal", contacts = {}, conversations = {}, weight = 5, objectModel = "prop_npc_phone_02", blockedInPrison = true}
   },
   ["Misc"] = {
     { name = "First Aid Kit", price = 80, type = "misc", quantity = 1, legality = "legal", weight = 15, objectModel = "v_ret_ta_firstaid", blockedInPrison = true},
