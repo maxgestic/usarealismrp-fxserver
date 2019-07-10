@@ -388,6 +388,7 @@ function SendTextReceiveNotification(toNumber, from, msg)
 	exports["usa-characters"]:GetCharacters(function(characters)
 		for id, char in pairs(characters) do
 			if char.getItemWithField("number", toNumber) then
+				TriggerClientEvent("chatMessage", id, "", {}, "^3Text <" .. from .. ">:^0 " .. msg)
 				TriggerClientEvent("swayam:notification", id, from, msg, "CHAR_DEFAULT")
 			end
 		end
