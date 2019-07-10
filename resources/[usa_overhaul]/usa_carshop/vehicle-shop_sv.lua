@@ -379,7 +379,8 @@ end)
 
 RegisterServerEvent("vehShop:sellVehicle")
 AddEventHandler("vehShop:sellVehicle", function(toSellVehicle)
-	local char = exports["usa-characters"]:GetCharacter(source)
+	local usource = source
+	local char = exports["usa-characters"]:GetCharacter(usource)
 	local vehicles = char.get("vehicles")
 	for i = 1, #vehicles do
 		if vehicles[i] == toSellVehicle.plate then
@@ -390,8 +391,14 @@ AddEventHandler("vehShop:sellVehicle", function(toSellVehicle)
 	end
 	-- remove from DB / take money --
 	RemoveVehicleFromDB(toSellVehicle, function(err, resp)
+		print("toSellVehicle: " .. toSellVehicle.model)
 		local vehiclePrice = GetVehiclePrice(toSellVehicle)
-		char.giveMoney((vehiclePrice * .50))
+		if not vehiclePrice then
+			print("vehicle price nil with toSellVehicle: " .. toSellVehicle.make .. " " .. toSellVehicle.model)
+			TriggerClientEvent("chatMessage", usource, "", {}, "^0" .. "Please notify staff in the #bugs discord channel if you see this message and did not get money for selling a vehicle at the car dealership. Thank you.")
+			return
+		end
+		char.giveMoney(math.ceil(vehiclePrice * .50))
 	end)
 end)
 
@@ -400,7 +407,7 @@ function GetVehiclePrice(vehicle)
 		for i = 1, #v do
 			local name1 = vehicle.make .. " " .. vehicle.model
 			local name2 = v[i].make .. " " .. v[i].model
-			if name1 == name2 then
+			if name2:find(name1) then
 				return v[i].price
 			end
 		end
