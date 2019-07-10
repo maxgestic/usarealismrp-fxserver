@@ -209,14 +209,11 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff'}, function(source,
 	local target = tonumber(args[3])
 	local target_item_name = nil
 	local target_item = nil
-	local isPolice = false
   -- check SGT + rank for police --
 	  if char.get("job") == "sheriff" then
 	      if char.get("policeRank") < 4 then
 	          TriggerClientEvent("usa:notify", source, "Not high enough rank!")
 	          return
-	      else
-	      	isPolice = true
 	      end
 	  end
 	if type and GetPlayerName(target) then
