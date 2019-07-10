@@ -230,6 +230,7 @@ function SpawnPlane(plane)
         active_job.current_vehicle = CreateVehicle(numberHash, plane.location.x, plane.location.y, plane.location.z, 56.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
         SetVehicleExplodesOnHighExplosionDamage(active_job.current_vehicle, false)
         SetEntityAsMissionEntity(active_job.current_vehicle, true, true)
+        TriggerServerEvent("fuel:setFuelAmount", GetVehicleNumberPlateText(active_job.current_vehicle), 100)
         local key = {
     			name = "Key -- " .. GetVehicleNumberPlateText(active_job.current_vehicle),
     			quantity = 1,
