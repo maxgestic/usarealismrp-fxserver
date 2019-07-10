@@ -47,14 +47,14 @@ function CreateGarageMenu(menu, vehicles)
 		item.Activated = function(parentmenu, selected)
 			if GetVehiclePedIsIn(GetPlayerPed(-1), false) ~= 0 then
 				if GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), -1) == GetPlayerPed(-1) then
-					local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
-					TriggerServerEvent("garage:vehicleSelected", vehicle, property)
+					local business = exports["usa-businesses"]:GetClosestStore(15)
+					TriggerServerEvent("garage:vehicleSelected", vehicle, business)
 				else
 					TriggerEvent("usa:notify", "You must be in the driver's seat!")
 				end
 			else
-				local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
-				TriggerServerEvent("garage:vehicleSelected", vehicle, property)
+				local business = exports["usa-businesses"]:GetClosestStore(15)
+				TriggerServerEvent("garage:vehicleSelected", vehicle, business)
 			end
 			-- close menu --
 			mainMenu:Visible(not mainMenu:Visible())

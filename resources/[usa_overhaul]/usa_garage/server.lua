@@ -68,7 +68,7 @@ end)
 
 -- ask to retrieve vehicle from garage --
 RegisterServerEvent("garage:vehicleSelected")
-AddEventHandler("garage:vehicleSelected", function(vehicle, property)
+AddEventHandler("garage:vehicleSelected", function(vehicle, business)
 	local usource = source
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local vehicles = char.get("vehicles")
@@ -77,13 +77,15 @@ AddEventHandler("garage:vehicleSelected", function(vehicle, property)
 		if IsDriverLicenseValid(usource) then
 			if money >= IMPOUND_FEE then
 				TriggerClientEvent("usa:notify", usource, "~y~STATE IMPOUND: ~s~Vehicle retrieved from the impound! Fee: ~y~$"..IMPOUND_FEE..".00")
-
 				GetVehicleCustomizations(vehicle.plate, function(customizations)
 					vehicle.customizations = customizations
 					TriggerClientEvent("garage:vehicleStored", usource, vehicle)
 					TriggerEvent('es:exposeDBFunctions', function(couchdb)
 						couchdb.updateDocument("vehicles", vehicle.plate, { impounded = false, stored = false }, function()
 							char.removeMoney(IMPOUND_FEE)
+							if business then
+								exports["usa-businesses"]:GiveBusinessCashPercent(business, IMPOUND_FEE)
+							end
 						end)
 					end)
 				end)
