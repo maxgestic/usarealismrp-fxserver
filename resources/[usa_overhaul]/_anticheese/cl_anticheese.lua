@@ -46,11 +46,13 @@ local COORDS_TO_ALLOW_TELEPORTATION_FROM = {
 	{ x = 602.27032470704, y = 5546.9267578125, z = 716.38928222656},
 	{ x = -355.9, y = 4823.3, z = 142.9 },
 	{ x = 1259.5418701172, y = 4812.1196289062, z = -39.77448272705},
+	-- end tunnels --
 	{ x = 0.0, y = 0.0, z = 0.8}, -- hospital
 	{ x = 360.3, y = -548.89, z = 28.74}, -- respawn in Pillbox
 	{ x = 1508.97, y = 3769.1, z = 34.14}, -- spawn in sandy
 	{ x = 307.48, y = -1435.36, z = 29.81}, -- respawn in Davis
 	{ x = 354.03, y = -589.41, z = 43.42}, -- hospital
+	{ x = 1088.68, y = -3187.58, z = -38.99 }, -- cocaine enter
 	{ x = 614.69, y = 2784.20, z = 43.48}, -- cocaine processing exit
 	{ x = 1546.81, y = 2166.45, z = 78.72}, -- weed exit
 	{ x = 1066.40, y = -3183.47, z = -39.16 }, -- weed enter
