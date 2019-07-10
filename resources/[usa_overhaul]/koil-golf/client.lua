@@ -6,7 +6,7 @@
 --# You can modify, do what you wish with it just dont claim it as your own. (not that its worthy)
 --# modifications by: minipunch
 
-local amount = 400
+local amount = 200
 
 local golfhole = 0
 local golfstrokes = 0
@@ -75,7 +75,7 @@ Citizen.CreateThread(function()
 
 					-- check player's money to play
 					print("calling usa:checkPlayerMoney for golf!!")
-					TriggerServerEvent("usa:checkPlayerMoney", "golf", amount, "beginGolf", false, true)
+					TriggerServerEvent("usa:checkPlayerMoney", "golf", math.ans(amount), "beginGolf", false, true)
 					--[[
 					spawnCart()
 					startGolf() -- If you plan to have it cost money, you need to remove this and only call it when they paid
