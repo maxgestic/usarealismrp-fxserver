@@ -37,7 +37,7 @@ AddEventHandler("dmv:setLicenseStatus", function(status, target_id, days)
 	local license = char.getItem("Driver's License")
 	if license then
 		char.modifyItem("Driver's License", "status", status)
-		if license.status == "suspended" then
+		if status == "suspended" then
 			char.modifyItem("Driver's License", "suspension_start", os.time())
 			char.modifyItem("Driver's License", "suspension_days", days)
 			char.modifyItem("Driver's License", "suspension_start_date", os.date('%m-%d-%Y %H:%M:%S', os.time()))
