@@ -232,9 +232,34 @@ SecurityCamConfig.Locations = {
         }
     },
     {
-        camBox = {label = "Blazing Tattoo (Vinewood)", id = 'store29'},
+        camBox = {label = "Sick Tats (Chumash)", id = 'store30'},
         cameras = {
-            {label = "Main", x = 325.8, y = 179.2, z = 104.6, r = {x = -10.0, y = 00.0, z = 40.0}}
+            {label = "Main", x = -3168.2, y = 1078.8, z = 21.8, r = {x = -5.0, y = 0.0, z = 150.0}}
+        }
+    },
+    {
+        camBox = {label = "Sick Tats (Sandy Shores)", id = 'store31'},
+        cameras = {
+            {label = "Main", x = 1866.8, y = 3746.2, z = 34.0, r = {x = -25.0, y = 0.0, z = 80.0}}
+        }
+    },
+    {
+        camBox = {label = "Sick Tats (Paleto Bay)", id = 'store32'},
+        cameras = {
+            {label = "Main", x = -296.6, y = 6200.7, z = 32.5, r = {x = 0.0, y = 0.0, z = -100.0}}
+        }
+    },
+    {
+        camBox = {label = "Car Dealership (Harmony)", id = 'store33'},
+        cameras = {
+            {label = "Front", x = 1202.1, y = 2722.7, z = 42.0, r = {x = 0.0, y = 0.0, z = -100.0}}
+        }
+    },
+    {
+        camBox = {label = "Car Dealership (Los Santos)", id = 'store34'},
+        cameras = {
+            {label = "Office", x = -32.5, y = -1106.7, z = 27.4, r = {x = 0.0, y = 0.0, z = -100.0}},
+            {label = "Outside Front", x = -39.8, y = -1120.8, z = 28.7, r = {x = 0.0, y = 0.0, z = -5.0}}
         }
     }
 }
