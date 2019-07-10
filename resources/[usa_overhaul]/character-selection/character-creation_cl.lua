@@ -37,7 +37,8 @@ local swap_locations = {
 	{name="Clothes Store", x = 423.474, y = -809.565, z = 29.0911}, -- vinewood 6
 	{name="Clothes Store", x = -818.509, y = -1074.14, z = 11.0281}, -- vinewood 7
 	{name="Clothes Store", x = 77.7774, y = -1389.87, z = 29.0761}, -- vinewood 8
-	{name="Morgue", x = 260.16, y = -1347.09, z = 24.00} -- morgue
+	{name="Morgue", x = 260.16, y = -1347.09, z = 24.00},
+	{name = "Morgue 2", x = 249.3, y = -1355.5, z = 24.5}
 }
 
 local camera = nil
@@ -46,7 +47,7 @@ RegisterNetEvent("character:swap--check-distance")
 AddEventHandler("character:swap--check-distance", function()
   for i = 1, #swap_locations do
 	local location = swap_locations[i]
-	if GetDistanceBetweenCoords(location.x, location.y, location.z,GetEntityCoords(GetPlayerPed(-1))) < 7 then
+	if GetDistanceBetweenCoords(location.x, location.y, location.z,GetEntityCoords(GetPlayerPed(-1))) < 8 then
 	  TriggerServerEvent("character:getCharactersAndOpenMenu", "home")
 		SendNUIMessage({
 			type = "displayGUI"
