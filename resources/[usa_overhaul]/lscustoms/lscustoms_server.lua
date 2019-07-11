@@ -151,9 +151,9 @@ AddEventHandler("LSC:buttonSelected", function(name, button, mname, business)
 			TriggerClientEvent("LSC:buttonSelected", source, name, button, true)
 			if not JobGetsFreeUpgrades(job) then
 				char.removeMoney(button.price)
-			end
-			if business then
-				exports["usa-businesses"]:GiveBusinessCashPercent(business, button.price)
+				if business then
+					exports["usa-businesses"]:GiveBusinessCashPercent(business, button.price)
+				end
 			end
 		else
 			TriggerClientEvent("LSC:buttonSelected", source, name, button, false)
