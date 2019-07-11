@@ -33,7 +33,7 @@ var itemImages = {
   "Four Loko (12%)": "https://az.crescentcrown.com/wp-content/uploads/sites/2/brands/Four-Loko-Watermelon-Brand_714.png",
   "Corona Light Beer (4%)": "https://www.mcquades.com/Images/Upload/Corona_Lt_Btl.png",
   "Jack Daniels Whiskey (40%)": "https://www.totalwine.com/media/sys_master/twmmedia/he0/hcb/10679197270046.png",
-  "Everclear Vodka (90%)": "https://www.totalwine.com/media/sys_master/twmmedia/h6b/h8b/10675689127966.png",
+  "Everclear Vodka (90%)": "https://imgur.com/eCptoIY.png",
   "Repair Kit": "http://www.pngpix.com/wp-content/uploads/2016/10/PNGPIX-COM-Toolbox-PNG-Transparent-Image-1-500x535.png",
   "First Aid Kit": "https://i.imgur.com/q3GjQKH.png",
   "Large Scissors": "http://www.fiskars.ca/var/fiskars_amer/storage/images/frontpage/products/sewing-and-quilting/sewing-scissors/fabric-scissors/softgrip-r-razor-edge-scissors-8/14794-3-eng-US/Softgrip-R-Razor-edge-Scissors-8_product_main_large.png",
@@ -48,7 +48,7 @@ var itemImages = {
   "Chair": "http://www.stickpng.com/assets/thumbs/580b57fcd9996e24bc43c26b.png",
   "Vortex Optics Binoculars": "https://cdn.shopify.com/s/files/1/0785/3853/products/bup291.png?v=1510698821",
   "Flashlight": "https://i.dlpng.com/static/png/86976_thumb.png",
-  "Hammer": "https://s3.amazonaws.com/peoplepng/wp-content/uploads/2018/12/22031027/Hammer-Transparent.png",
+  "Hammer": "https://i.imgur.com/Eov8V1h.png",
   "Knife": "https://www.pngarts.com/files/3/Kitchen-Knife-Transparent-Background-PNG.png",
   "Bat": "https://www.pngarts.com/files/3/Baseball-Bat-Download-Transparent-PNG-Image.png",
   "Crowbar": "http://assets.stickpng.com/thumbs/58b8364015d8273a5cab2f7b.png",
@@ -158,6 +158,7 @@ var itemImages = {
   "Marksman Rifle": "https://i.imgur.com/aFlRlSb.png",
   "Raw Sand": "https://i.imgur.com/Z19qckK.png",
   "Jerry Can": "https://i.imgur.com/Izo2ego.png"
+
 }
 
 var menuItems = [

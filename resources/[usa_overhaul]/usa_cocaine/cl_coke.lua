@@ -15,6 +15,8 @@
   }
 TriggerServerEvent("cocaineJob:giveItem", cocaineProduced)]]
 
+local COKE_SUPPLY_WAIT_TIME = 45000
+
 local INPUT_KEY = 38 -- E
 
 local cocaine = {
@@ -290,9 +292,9 @@ AddEventHandler("cocaineJob:getSupplies", function(supplyType)
             }
             local random_sound = sounds[math.random(1, tonumber(#sounds))]
             PlayAmbientSpeech1(peds[i].handle, random_sound.sound, random_sound.param)
-            while GetGameTimer() - beginTime < 20000 do
+            while GetGameTimer() - beginTime < COKE_SUPPLY_WAIT_TIME do
                 Citizen.Wait(0)
-                DrawTimer(beginTime, 20000, 1.42, 1.475, 'WAITING')
+                DrawTimer(beginTime, COKE_SUPPLY_WAIT_TIME, 1.42, 1.475, 'WAITING')
             end
             TriggerServerEvent("cocaineJob:giveUncut")
         end
