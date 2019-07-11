@@ -7,7 +7,7 @@ local canBeSearched = false
 local playerHotwiredVehicles = {}
 local searchedVehicles = {}
 
-local VEHICLE_ITEM_SEARCH_TIME = 15000
+local VEHICLE_ITEM_SEARCH_TIME = 20000
 
 Citizen.CreateThread(function()
   local wasInVeh = false
