@@ -17,6 +17,8 @@
     ],{duration: 4400, fade: 1500});
 
     /* BEGIN HOWL RADIO PLAYER */
+    var stations = ["http://ice1.somafm.com/beatblender-128-mp3", "http://hot108jamz.hot108.com:4040/;stream.nsv", "http://listen.radionomy.com/urbanradio-oldschoolrap"]
+
     var Radio = function(station) {
       var self = this;
       self.station = station;
@@ -78,12 +80,7 @@
       }
     };
 
-	var src;
-
-	if (Math.random() >= 0.7)
-		src = 'http://ice1.somafm.com/beatblender-128-mp3'; // dance / house
-	else
-		src = 'http://tunein4.streamguys1.com/hhbeafree5'; // hip hop
+	var src = stations[Math.floor(Math.random() * stations.length)]; // choose a random station
 
     // Setup our new radio and pass in the stations.
     var radio = new Radio({
