@@ -79,12 +79,11 @@ AddEventHandler('trunkhide:exitTrunk', function(allowExitWhenTied)
 	end
 end)
 
-
 function VehicleInFront()
 	local playerPed = PlayerPedId()
     local playerCoords = GetEntityCoords(playerPed)
     local entityWorld = GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 6.0, 0.0)
-    local rayHandle = CastRayPointToPoint(playerCoords, entityWorld, 10, playerPed, 0)
+    local rayHandle = CastRayPointToPoint(playerCoords, entityWorld, 2, playerPed, 0)
     local _, _, _, _, result = GetRaycastResult(rayHandle)
     return result
 end
