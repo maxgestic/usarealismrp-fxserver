@@ -16,6 +16,13 @@ MIN_ROB_PERCENT = 0.2
 ROB_DURATION = 140000
 
 BUSINESSES = {
+	["Vangelico Jewelry Store (Rockford Hills)"] = {
+		position = {-631.0, -229.4, 38.1},
+		cameraID = 'store35',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 6000
+	},
 	["Car Dealership (Los Santos)"] = {
 		position = {-28.2, -1104.1, 26.4},
 		cameraID = 'store34',
