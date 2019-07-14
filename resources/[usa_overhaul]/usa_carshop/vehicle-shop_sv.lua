@@ -284,6 +284,14 @@ local vehicleShopItems = {
 	}
 }
 
+local BIKES = {
+	["BMX"] = { price = 250, hash = 1131912276},
+	["Cruiser"] = { price = 300, hash = 448402357},
+	["Fixster"] = { price = 350, hash = -836512833},
+	["Scorcher"] = { price = 500, hash = -186537451},
+	["TriBike"] = { price = 550, hash = 1127861609}
+}
+
 RegisterServerEvent("vehicle-shop:loadItems")
 AddEventHandler("vehicle-shop:loadItems", function()
 	TriggerClientEvent("vehicle-shop:loadItems", source, vehicleShopItems)
@@ -403,14 +411,18 @@ AddEventHandler("vehShop:sellVehicle", function(toSellVehicle)
 end)
 
 function GetVehiclePrice(vehicle)
-	for k, v in pairs(vehicleShopItems["vehicles"]) do
-		for i = 1, #v do
-			local name1 = vehicle.make .. " " .. vehicle.model
-			local name2 = v[i].make .. " " .. v[i].model
-			if name2:find(name1) then
-				return v[i].price
+	if vehicle.model ~= "Bicycle" then
+		for k, v in pairs(vehicleShopItems["vehicles"]) do
+			for i = 1, #v do
+				local name1 = vehicle.make .. " " .. vehicle.model
+				local name2 = v[i].make .. " " .. v[i].model
+				if name2:find(name1) then
+					return v[i].price
+				end
 			end
 		end
+	else -- bike
+		return BIKES[vehicle.make].price
 	end
 end
 
