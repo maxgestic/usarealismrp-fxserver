@@ -324,14 +324,20 @@ local locations = {
         {x = 129.442, y = -1283.407, z = 28.272, animDict = "missfbi3_party_d", animName = "stand_talk_loop_a_female", model = "S_F_Y_Bartender_01", heading = 122.471}
     },
     illegal_weapon_extra_shop = {
-      {x = 752.996, y = -3192.206, z = 5.07, animDict = "", animName = "", model = "G_M_Y_SALVABOSS_01", heading = 302.471, scenario = "WORLD_HUMAN_SMOKING"}
+        {x = 752.996, y = -3192.206, z = 5.07, animDict = "", animName = "", model = "G_M_Y_SALVABOSS_01", heading = 302.471, scenario = "WORLD_HUMAN_SMOKING"}
+    },
+    nightclub = {
+        {x = -1572.2, y = -3013.3, z = -74.4, animDict = "", animName = "" , model = 793439294, heading = -60.0},
     }
 }
 local spawnedPeds = {}
 Citizen.CreateThread(function()
   for _, location in pairs(locations) do
     for i = 1, #location do
-      local hash = GetHashKey(location[i].model)
+      local hash = location[i].model
+      if type(hash) ~= "number" then
+          hash = GetHashKey(location[i].model)
+      end
       RequestModel(hash)
       while not HasModelLoaded(hash) do
         Citizen.Wait(100)

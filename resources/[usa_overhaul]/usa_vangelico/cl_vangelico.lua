@@ -57,6 +57,7 @@ function CreateMenu(menu, gender, type)
         if cart["left"] or cart["right"] then
             local business = exports["usa-businesses"]:GetClosestStore(15)
             TriggerServerEvent("vangelico:purchase", cart, business)
+            cart = {}
         end
     end
     menu:AddItem(checkout)

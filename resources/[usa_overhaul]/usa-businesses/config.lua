@@ -219,8 +219,8 @@ BUSINESSES = {
 		cameraID = 'store19',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 6000,
-		purchasePercentage = 0.09
+		price = 8000,
+		purchasePercentage = 0.05
 	},
 	["Benny's Auto Garage (Strawberry)"] = {
 		position = {-207.4, -1341.2, 34.9},
