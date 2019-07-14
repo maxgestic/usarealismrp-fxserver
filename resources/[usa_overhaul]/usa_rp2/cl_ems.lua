@@ -31,6 +31,7 @@ AddEventHandler("ems:hospitalize", function(bed, index)
         DoScreenFadeIn(1000)
     end
     Citizen.Wait(20000)
+    SetEntityHealth(playerPed, 200)
     currentlyAdmitted = false
     TriggerEvent('usa:showHelp', 'You have been treated.')
 end)
