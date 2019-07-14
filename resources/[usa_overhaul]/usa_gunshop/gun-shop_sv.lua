@@ -50,7 +50,7 @@ AddEventHandler("gunShop:getItems", function()
 end)
 
 RegisterServerEvent("gunShop:requestPurchase")
-AddEventHandler("gunShop:requestPurchase", function(category, index)
+AddEventHandler("gunShop:requestPurchase", function(category, index, business)
   local usource = source
   local weapon = STORE_ITEMS[category][index]
   local char = exports["usa-characters"]:GetCharacter(usource)
@@ -78,6 +78,9 @@ AddEventHandler("gunShop:requestPurchase", function(category, index)
       weaponDB.issueDate = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year
       char.giveItem(weapon, 1)
       char.removeMoney(STORE_ITEMS[category][index].price)
+      if business then
+          exports["usa-businesses"]:GiveBusinessCashPercent(business, STORE_ITEMS[category][index].price)
+      end
       TriggerClientEvent("mini:equipWeapon", usource, STORE_ITEMS[category][index].hash) -- equip
       TriggerClientEvent('gunShop:addRecentlyPurchased', usource)
       TriggerClientEvent('usa:notify', usource, 'Purchased: ~y~'..weapon.name..'\n~s~Serial Number: ~y~'..weapon.serialNumber..'\n~s~Price: ~y~$'..STORE_ITEMS[category][index].price)
@@ -116,7 +119,7 @@ AddEventHandler('gunShop:requestOpenMenu', function()
 end)
 
 RegisterServerEvent("gunShop:purchaseLicense")
-AddEventHandler("gunShop:purchaseLicense", function()
+AddEventHandler("gunShop:purchaseLicense", function(business)
   local usource = source
   local timestamp = os.date("*t", os.time())
   local char = exports["usa-characters"]:GetCharacter(usource)
@@ -144,6 +147,9 @@ AddEventHandler("gunShop:purchaseLicense", function()
         char.removeMoney(LICENSE_PURCHASE_PRICE)
         TriggerClientEvent("usa:notify", usource, "You have accepted the terms and conditions and have been issued a CCW")
         TriggerClientEvent("gunShop:showCCWTerms", usource)
+        if business then
+            exports["usa-businesses"]:GiveBusinessCashPercent(business, LICENSE_PURCHASE_PRICE)
+        end
     else
         TriggerClientEvent("usa:notify", usource, "Not enough money!")
     end

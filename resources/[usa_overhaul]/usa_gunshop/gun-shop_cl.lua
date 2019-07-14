@@ -123,8 +123,8 @@ function CreateWeaponShopMenu(menu)
       ---------------------------------------------
       local item = NativeUI.CreateItem(weapons[i].name, "Purchase price: $" .. comma_value(weapons[i].price))
       item.Activated = function(parentmenu, selected)
-        local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
-         TriggerServerEvent("gunShop:requestPurchase", category, i)
+        local business = exports["usa-businesses"]:GetClosestStore(15)
+         TriggerServerEvent("gunShop:requestPurchase", category, i, business)
       end
       ----------------------------------------
       -- add to sub menu created previously --
@@ -156,7 +156,8 @@ Citizen.CreateThread(function()
 	    			TriggerServerEvent('gunShop:requestOpenMenu')
 						closest_location = locations[i]
 					else -- held
-						TriggerServerEvent("gunShop:purchaseLicense")
+						local business = exports["usa-businesses"]:GetClosestStore(15)
+						TriggerServerEvent("gunShop:purchaseLicense", business)
 					end
 				end
     	end

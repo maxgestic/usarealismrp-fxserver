@@ -3,7 +3,7 @@ policeNeededForBonus = 4
 robberyCooldown = 2100
 
 LEASE_PERIOD_DAYS = 14
-DEFAULT_PURCHASE_PERCENT_REWARD = 0.20
+DEFAULT_PURCHASE_PERCENT_REWARD = 0.15
 
 KEYS ={
 	K = 311,
@@ -266,5 +266,40 @@ BUSINESSES = {
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
 		price = 1500
+	},
+	["Ammunation (Adam's Apple Blvd.)"] = {
+		position = {14.1, -1105.9, 29.8},
+		cameraID = 'store35',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 10000
+	},
+	["Ammunation (Popular St.)"] = {
+		position = {818.0, -2155.7, 29.6},
+		cameraID = 'store36',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 6000
+	},
+	["Clothing Store 3 (Route 68)"] = {
+		position = {1198.3, 2713.9, 38.2},
+		cameraID = 'store37',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 8000
+	},
+	["Ammunation (Paleto Bay)"] = {
+		position = {-334.4, 6082.1, 31.5},
+		cameraID = 'store38',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 6500
+	},
+	["Clothing Store (Paleto Bay)"] = {
+		position = {6.2, 6508.7, 31.9},
+		cameraID = 'store39',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 5000
 	}
 }
