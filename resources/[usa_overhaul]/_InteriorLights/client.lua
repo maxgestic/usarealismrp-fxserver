@@ -30,7 +30,7 @@ Citizen.CreateThread(function()
         local ped = GetPlayerPed(PlayerId())
         local veh = GetVehiclePedIsUsing(ped)
         if activateWay == 1 or activateWay == 2 then
-            if IsControlJustPressed(1, keybindKey) then
+            if IsControlJustPressed(1, keybindKey) and GetLastInputMethod(0) then
                 toggleInteriorLights(ped, veh)
             end
         end
