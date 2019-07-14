@@ -644,7 +644,7 @@ AddEventHandler("usa:playAnimation", function(animDict, animName, speed, speedMu
             }
             if actualDuration then
                 Wait(actualDuration * 1000)
-                if not isInVeh then
+                if not IsPedInAnyVehicle(me, true) then
                     ClearPedTasksImmediately(me)
                 end
                 StopAnimTask(me, animDict, animName, 1.0)
@@ -652,7 +652,9 @@ AddEventHandler("usa:playAnimation", function(animDict, animName, speed, speedMu
               while IsEntityPlayingAnim(me, animDict, animName, 3) do
                 Wait(10)
               end
-              ClearPedTasks(me)
+              if not IsPedInAnyVehicle(me, true) then
+                  ClearPedTasks(me)
+              end
             end
         end
     end
