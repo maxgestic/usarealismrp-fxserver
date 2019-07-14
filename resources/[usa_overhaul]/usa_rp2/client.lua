@@ -788,7 +788,10 @@ AddEventHandler("usa:setPlayerComponents", function(character)
         SetPedComponentVariation(playerPed, tonumber(key), value, character["componentstexture"][key], 0)
       end
       -- set props --
+      ClearPedProp(playerPed, 6) -- left wrist (needed for usa_vangelico)
+      ClearPedProp(playerPed, 7) -- right wrist (needed for usa_vangelico)
       for key, value in pairs(character["props"]) do
+        ClearPedProp(playerPed, tonumber(key))
         SetPedPropIndex(playerPed, tonumber(key), value, character["propstexture"][key], true)
       end
       -- set tattoos --
