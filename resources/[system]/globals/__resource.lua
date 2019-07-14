@@ -10,7 +10,8 @@ exports {
   'EnumeratePickups',
   'GetUserInput',
   "MaxItemTradeDistance",
-  "MaxTackleDistance"
+  "MaxTackleDistance",
+  "comma_value"
 }
 
 -- global server functions/tables
