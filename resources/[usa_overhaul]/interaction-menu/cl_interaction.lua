@@ -254,10 +254,10 @@ local ACTIONS = {
 local VEH_ACTIONS = {
 	["Engine"] = {
 		["On"] = function()
-			TriggerEvent("veh:checkForKey", GetVehicleNumberPlateText(hitHandleVehicle), true)
+			TriggerServerEvent("veh:checkForKey", GetVehicleNumberPlateText(hitHandleVehicle), true)
 		end,
 		["Off"] = function()
-			TriggerEvent("veh:checkForKey", GetVehicleNumberPlateText(hitHandleVehicle), false)
+			TriggerServerEvent("veh:checkForKey", GetVehicleNumberPlateText(hitHandleVehicle), false)
 		end
 	},
 	["Open"] = {
