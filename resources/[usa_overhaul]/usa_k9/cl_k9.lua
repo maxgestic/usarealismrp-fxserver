@@ -86,14 +86,14 @@ Citizen.CreateThread(function()
 
 			local old = k9.handle
 			while dist > 1.0 do
-				Wait(70)
+				Wait(30)
 				if k9.handle == nil or k9.handle ~= old or k9.staying then break end
 				k9Coords = GetEntityCoords(k9.handle)
 				dist = Vdist(x, y, z, k9Coords)
 			end
 		end
 
-		Wait(70)
+		Wait(30)
 	end
 end)
 
