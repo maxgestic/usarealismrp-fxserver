@@ -18,7 +18,8 @@ local VEHICLE_RANKS = {
 		["blazer"] = 1
 	},
 	["doctor"] = {
-		["paraexp"] = 1
+		["paraexp"] = 1,
+		["sheriff2"] = 1
 	}
 }
 
@@ -51,7 +52,7 @@ TriggerEvent('es:addJobCommand', 'spawn', { "police", "sheriff", "ems", "fire", 
 		else
 			DisplaySpawnOptionsBasedOnRank(source, job, rank)
 		end
-	elseif job == "ems" then
+	elseif job == "ems" or job == "doctor" then
 		local rank = char.get("emsRank")
 		local neededRank = VEHICLE_RANKS[job][vehicleRequested]
 		if neededRank then
