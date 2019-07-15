@@ -495,6 +495,10 @@ local interiors = {
 
 local buzzedApartments = {}
 
+local setHousePrices = {
+	--["123"] = 60000
+}
+
 RegisterServerEvent('properties:saveOutfit')
 AddEventHandler('properties:saveOutfit', function(outfit, slot)
 	local char = exports["usa-characters"]:GetCharacter(source)
@@ -589,13 +593,20 @@ end, {
 
 TriggerEvent('es:addJobCommand', 'createhouse', {'judge'}, function(source, args, char, location)
 	local targetSource = tonumber(args[2])
-	if targetSource and GetPlayerName(targetSource) then
+	local price = tonumber(args[3])
+	if price and targetSource and GetPlayerName(targetSource) then
+		price = math.abs(price)
+		if price < 10000 then
+			TriggerClientEvent('usa:notify', source, 'There is a $10k minimum fee for any new property.')
+			return
+		end
+		setHousePrices[tostring(source)] = price
 		local target_char = exports["usa-characters"]:GetCharacter(targetSource)
 		local property = target_char.get('property')
 		if property['house'] then
 			TriggerClientEvent('usa:notify', source, 'This person already owns a house!')
 		else
-			TriggerClientEvent('properties:getHeadingForHouse', source, targetSource, location)
+			TriggerClientEvent('properties:getHeadingForHouse', source, targetSource, location, price)
 		end
 	end
 end, {
@@ -637,10 +648,11 @@ AddEventHandler('properties:continueHousePurchase', function(targetSource, locat
 	local char = exports["usa-characters"]:GetCharacter(source)
 	if char.get('job') == 'judge' then
 		local money = char.get('money')
-		if money >= 60000 then
-			char.removeMoney(60000)
+		local cost = setHousePrices[tostring(source)]
+		if money >= cost then
+			char.removeMoney(cost)
 		else
-			TriggerClientEvent('usa:notify', source, 'You cannot afford this, you need $60,000.0!')
+			TriggerClientEvent('usa:notify', source, 'You cannot afford this, you need $' .. exports["globals"]:comma_value(cost) .. '!')
 			return
 		end
 		local target_char = exports["usa-characters"]:GetCharacter(targetSource)

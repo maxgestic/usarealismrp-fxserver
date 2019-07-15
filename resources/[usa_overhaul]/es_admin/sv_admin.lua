@@ -419,7 +419,7 @@ end, {
 })
 
 -- Kill yourself
-TriggerEvent('es:addGroupCommand', 'die', "admin", function(source, args, char)
+TriggerEvent('es:addCommand', 'die', function(source, args, char)
 	TriggerClientEvent('es_admin:kill', source)
 end, {
 	help = "Commit suicide."
