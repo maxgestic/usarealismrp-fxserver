@@ -1,4 +1,4 @@
-local FIRST_AID_KIT_FEE = 150
+local FIRST_AID_KIT_FEE = 80
 
 local civSkins = {
 		"a_m_m_beach_01",
@@ -66,10 +66,9 @@ end)
 
 RegisterServerEvent("hospital:buyFirstAidKit")
 AddEventHandler("hospital:buyFirstAidKit", function()
-	print("buying FAK")
 	local kit = {
 		name = "First Aid Kit",
-		price = 80,
+		price = FIRST_AID_KIT_FEE,
 		type = "misc",
 		quantity = 1,
 		legality = "legal",
@@ -87,7 +86,7 @@ AddEventHandler("hospital:buyFirstAidKit", function()
 		char.removeMoney(FIRST_AID_KIT_FEE)
 		TriggerClientEvent("usa:notify", source, "Here is your first aid kit!")
 	else
-		TriggerClientEvent("usa:notify", source, "Not enough money! Need $150")
+		TriggerClientEvent("usa:notify", source, "Not enough money! Need $" .. FIRST_AID_KIT_FEE .. "")
 	end
 end)
 

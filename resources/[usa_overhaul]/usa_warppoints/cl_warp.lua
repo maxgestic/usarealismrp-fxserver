@@ -165,7 +165,7 @@ local warp_locations = {
       coords = {-80.55, -832.68, 243.38},
       heading = 248.5
     },
-    job_access = 'civ'
+    job_access = 'da'
   },
   ['DA Garage'] = {
     entrance = {

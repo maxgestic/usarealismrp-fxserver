@@ -16,6 +16,8 @@ local civilianSpawns = {
     -- Meth Delivery -402.63 y 6316.12 z 28.95 heading 222.26 DONE
 }
 
+local FIRST_AID_KIT_FEE = 80
+
 local playerPed = GetPlayerPed(-1)
 
 local blacklistedVehicles = {
@@ -75,10 +77,9 @@ Citizen.CreateThread(function()
     local mycoords = GetEntityCoords(me)
     for i = 1, #HOSPITALS do
       local h = HOSPITALS[i]
-      DrawText3D(h.x, h.y, h.z, 4, '[E] - First Aid Kit ($150)')
+      DrawText3D(h.x, h.y, h.z, 4, '[E] - First Aid Kit ($' .. FIRST_AID_KIT_FEE .. ')')
       if IsControlJustPressed(0, KEYS.E) then
         if Vdist(h.x, h.y, h.z, mycoords.x, mycoords.y, mycoords.z) < 3 then
-          print("buying FAK")
           TriggerServerEvent("hospital:buyFirstAidKit")
         end
       end
