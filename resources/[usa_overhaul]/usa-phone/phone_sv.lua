@@ -228,9 +228,11 @@ AddEventHandler("phone:respondedToCall", function(accepted, phone_number, caller
 	local user_source = source
 	if accepted then
 		TriggerClientEvent("phone:startCall", user_source, phone_number, caller_source)
-		TriggerClientEvent("phone:startCall", caller_source, phone_number, user_source)
-		TriggerClientEvent("swayam:notification", user_source, "Whiz Wireless", "Call ~g~started~w~!", "CHAR_MP_DETONATEPHONE")
-		TriggerClientEvent("swayam:notification", caller_source, "Whiz Wireless", "Call ~g~started~w~!", "CHAR_MP_DETONATEPHONE")
+		SetTimeout(1500, function()
+			TriggerClientEvent("phone:startCall", caller_source, phone_number, user_source)
+			TriggerClientEvent("swayam:notification", user_source, "Whiz Wireless", "Call ~g~started~w~!", "CHAR_MP_DETONATEPHONE")
+			TriggerClientEvent("swayam:notification", caller_source, "Whiz Wireless", "Call ~g~started~w~!", "CHAR_MP_DETONATEPHONE")
+		end)
 	else
 		if not isBusy then
 			TriggerClientEvent("swayam:notification", user_source, "Whiz Wireless", "You ~y~rejected~w~ the phone call!", "CHAR_MP_DETONATEPHONE")
