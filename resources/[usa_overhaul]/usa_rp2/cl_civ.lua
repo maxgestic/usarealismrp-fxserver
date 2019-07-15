@@ -529,7 +529,7 @@ end)
 function closeEnoughToPlayer(from_id)
   local lPed = GetPlayerPed(-1)
   -- see if close enough to target
-  for id = 0, 64 do
+  for id = 0, 255 do
     if NetworkIsPlayerActive(id) then
       if GetPlayerServerId(id) == tonumber(from_id) then
         local target_ped = GetPlayerPed(id)

@@ -84,7 +84,7 @@ AddEventHandler("swayam:SetWayPointToPlayer", function(sprite, route_color, serv
 			Citizen.Trace("DEBUG: Blip exists, removing" )
 			RemoveBlip(myblip)
 		end
-		for id = 0, 64 do
+		for id = 0, 255 do
 		if NetworkIsPlayerActive(id) and GetPlayerServerId(id) == tonumber(serverid) then
 				clientid = id
 			end
@@ -108,7 +108,7 @@ AddEventHandler("swayam:SetWayPointToPlayer", function(sprite, route_color, serv
 	else
 		clientid = -1
 	end]]--
-	for id = 0, 64 do
+	for id = 0, 255 do
 		if NetworkIsPlayerActive(id) and GetPlayerServerId(id) == tonumber(serverid) then
 			clientid = id
 		end

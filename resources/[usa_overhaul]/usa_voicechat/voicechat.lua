@@ -77,7 +77,7 @@ Citizen.CreateThread(function()
 			end
 		end
 		-- voip range HUD display color --
-		for id = 0, 64 do
+		for id = 0, 255 do
 			if NetworkIsPlayerActive(id) then
 				----------------------------
 				-- talking cirlce at feet --

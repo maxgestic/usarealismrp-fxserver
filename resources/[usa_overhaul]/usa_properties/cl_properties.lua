@@ -43,7 +43,7 @@ Citizen.CreateThread(function() -- manage instances
 		Citizen.Wait(0)
 		local playerPed = PlayerPedId()
 		if myInstance.active then
-			for i = 0, 32 do
+			for i = 0, 255 do
 
 				local found = false
 				for j = 1, #myInstance.players do
@@ -320,7 +320,7 @@ AddEventHandler('properties:updateInstance', function(_instance)
 		myInstance.players = {}
 		myInstance.active = false
 	end
-	for i = 0, 32 do
+	for i = 0, 255 do
 		local playerPed = GetPlayerPed(i)
 		if playerPed ~= PlayerPedId() then
 			SetEntityCollision(playerPed, true, true)
@@ -385,7 +385,7 @@ AddEventHandler('properties:exitProperty', function(noTp)
 	end
 	myInstance = {}
 	currentProperty = {}
-	for i = 0, 32 do
+	for i = 0, 255 do
 		local playerPed = GetPlayerPed(i)
 		if playerPed ~= PlayerPedId() then
 			SetEntityCollision(playerPed, true, true)

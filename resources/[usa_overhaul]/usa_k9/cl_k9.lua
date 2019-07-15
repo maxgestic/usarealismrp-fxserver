@@ -189,7 +189,7 @@ function attackNearestPlayer()
 		k9.busy = true
 		local playerPed = PlayerPedId()
 		local playerCoords = GetEntityCoords(playerPed, false)
-		for x = 0, 64 do
+		for x = 0, 255 do
 			if NetworkIsPlayerActive(x) then
 				local targetPed = GetPlayerPed(x)
 				local targetCoords = GetEntityCoords(targetPed)
@@ -214,7 +214,7 @@ function smellNearestPlayer()
 		k9.busy = true
 		local playerPed = PlayerPedId()
 		local playerCoords = GetEntityCoords(playerPed, false)
-		for a = 0, 64 do
+		for a = 0, 255 do
 			if NetworkIsPlayerActive(a) then
 				local targetPed = GetPlayerPed(a)
 				local x, y, z = table.unpack(GetEntityCoords(targetPed))
@@ -259,7 +259,7 @@ function findNearestPerson()
 		k9.busy = true
 		local playerPed = PlayerPedId()
 		local playerCoords = GetEntityCoords(playerPed, false)
-		for x = 0, 64 do
+		for x = 0, 255 do
 			if NetworkIsPlayerActive(x) then
 				local targetPed = GetPlayerPed(x)
 				local targetCoords = GetEntityCoords(targetPed)

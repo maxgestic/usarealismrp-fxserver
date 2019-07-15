@@ -951,7 +951,7 @@ function GetClosestPlayerInfo(range)
 	local closestDistance = 0
 	local closestPlayerServerId = 0
 	local closestName = ""
-	for x = 0, 64 do
+	for x = 0, 255 do
 		if NetworkIsPlayerActive(x) then
 			targetPed = GetPlayerPed(x)
 			targetPedCoords = GetEntityCoords(targetPed, false)
