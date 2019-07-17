@@ -248,7 +248,7 @@ RegisterServerEvent('injuries:toggleOnDuty')
 AddEventHandler('injuries:toggleOnDuty', function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	if char.get("job") ~= 'doctor' then
-		if char.get('emsRank') > 4 then
+		if char.get('emsRank') >= 4 then
 			TriggerClientEvent('usa:notify', source, 'You are now signed ~g~on-duty~s~ as a doctor.')
 			char.set('job', 'doctor')
 			TriggerEvent('job:sendNewLog', source, 'doctor', true)
