@@ -1197,32 +1197,43 @@ AddEventHandler("properties:storeItem", function(location, index, item, quantity
 	    local char = exports["usa-characters"]:GetCharacter(source)
 	    local target_char = exports["usa-characters"]:GetCharacter(room.owner)
 	    local property = target_char.get('property')
-	    local itemCopy = item
-	    local hasItem = false
-	    itemCopy.quantity = quantity
-	    if canPropertyHoldItem(room.owner, location, itemCopy) then
-		    for i = 1, #property['storage'] do
-		    	local _item = property['storage'][i]
-		        if _item.name == item.name then
-		            if _item.type ~= "weapon" then
+	    item.quantity = quantity
+	    if canPropertyHoldItem(room.owner, location, item) then
+			print("storing item " .. item.name .. ", legality: " .. item.legality)
+			if item.notStackable then
+				if item.type == "weapon" then
+					TriggerClientEvent("interaction:equipWeapon", source, item, false)
+					char.removeItemWithField("uuid", item.uuid)
+					table.insert(property['storage'], item)
+					target_char.set('property', property)
+					TriggerClientEvent('usa:notify', source, '~y~'..item.name..' ~s~has been stored!')
+				else
+					table.insert(property['storage'], item)
+					target_char.set('property', property)
+					TriggerClientEvent('usa:notify', source, '~y~'..item.name..' ~s~has been stored!')
+					char.removeItem(item, quantity)
+				end
+			else
+				local hasitem = false
+				for i = 1, #property['storage'] do
+			    	local _item = property['storage'][i]
+			        if _item.name == item.name then
 		                hasItem	= true
 		                _item.quantity = _item.quantity + quantity
 		                target_char.set('property', property)
 		                TriggerClientEvent('usa:notify', source, '~y~'..item.name..' ~s~has been stored!')
 		                char.removeItem(item, quantity)
-		            end
-		            break
-		        end
-		    end
-		    if not hasItem then
-		        table.insert(property['storage'], itemCopy)
-		        target_char.set('property', property)
-		        TriggerClientEvent('usa:notify', source, '~y~'..item.name..' ~s~has been stored!')
-		        char.removeItem(item, quantity)
-						if item.type == "weapon" then
-							TriggerClientEvent("interaction:equipWeapon", source, item, false)
-						end
-		    end
+			            break
+			        end
+			    end
+			    if not hasItem then
+			        table.insert(property['storage'], item)
+			        target_char.set('property', property)
+			        TriggerClientEvent('usa:notify', source, '~y~'..item.name..' ~s~has been stored!')
+			        char.removeItem(item, quantity)
+			    end
+				TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 3)
+			end
 		else
 			TriggerClientEvent('usa:notify', source, 'Property storage is full!')
 		end
@@ -1233,9 +1244,9 @@ RegisterServerEvent("properties:retrieveItem")
 AddEventHandler("properties:retrieveItem", function(location, index, item, quantity)
 	local room = properties[location].rooms[index]
 	if room.owner and isPlayerInInstance(location, index, source) then
-	    local char = exports["usa-characters"]:GetCharacter(source)
-	    local target_char = exports["usa-characters"]:GetCharacter(room.owner)
-	    local property = target_char.get('property')
+		local char = exports["usa-characters"]:GetCharacter(source)
+		local target_char = exports["usa-characters"]:GetCharacter(room.owner)
+		local property = target_char.get('property')
 		item.quantity = quantity
 		if char.canHoldItem(item) then
 			local storage = property['storage']
@@ -1253,6 +1264,7 @@ AddEventHandler("properties:retrieveItem", function(location, index, item, quant
 							if item.type == "weapon" then
 								TriggerClientEvent("interaction:equipWeapon", source, item, true)
 							end
+							TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 3)
 							return
 						else
 							property['storage'][i].quantity = property['storage'][i].quantity - quantity
@@ -1262,23 +1274,13 @@ AddEventHandler("properties:retrieveItem", function(location, index, item, quant
 							if item.type == "weapon" then
 								TriggerClientEvent("interaction:equipWeapon", source, item, true)
 							end
+							TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 3)
 							return
 						end
 					end
-				else
-	      			if (item.type == "weapon" and storage[i].type == "weapon") and (not item.uuid and not storage[i].uuid) and (item.name == storage[i].name) then
-	           			table.remove(property['storage'], i)
-	           			target_char.set('property', property)
-	           			TriggerClientEvent('usa:notify', source, '~y~'..item.name..' ~s~has been retrieved!')
-	           			char.giveItem(item, quantity)
-									if item.type == "weapon" then
-										TriggerClientEvent("interaction:equipWeapon", source, item, true)
-									end
-	           			return
-	           		end
-	          	end
-	        end
-	        TriggerClientEvent("usa:notify", source, "Please wait a moment...")
+				end
+			end
+			TriggerClientEvent("usa:notify", source, "Please wait a moment...")
 		else
 			TriggerClientEvent("usa:notify", source, "Inventory full.")
 		end

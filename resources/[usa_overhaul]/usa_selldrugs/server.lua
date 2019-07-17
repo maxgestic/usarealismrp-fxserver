@@ -4,7 +4,8 @@ local debug = false
 local SELLABLE_ITEMS = {
 	["Packaged Meth"] = {150, 200},
 	["Packaged Blue Meth"] = {350, 550},
-	["Packaged Weed"] = {50, 125}
+	["Packaged Weed"] = {50, 125},
+	["Packaged Cocaine"] = {700, 1200}
 }
 
 -- see if player has any items to sell to NPC
