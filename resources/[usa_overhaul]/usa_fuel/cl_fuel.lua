@@ -65,26 +65,34 @@ mainMenu = NativeUI.CreateMenu("Fuel Station", "~b~Welcome!", 0 --[[X COORD]], 3
 _menuPool:Add(mainMenu)
 
 function createGasolineMenu(vehicleType)
-	local amountToRefuel
-	local litersToRefuel = {}
-	for i = 1, 100 - (math.floor(fuelData.fuelAmount)) do
-		table.insert(litersToRefuel, i)
+	mainMenu:Clear()
+	local jerryCanBtn = NativeUI.CreateItem('Purchase Jerry Can', 'Portable fuel that fills up the tank!')
+	mainMenu:AddItem(jerryCanBtn)
+	jerryCanBtn.Activated = function(parentmenu, selected)
+		TriggerServerEvent('fuel:purchaseJerryCan')
 	end
-	local amountItem = UIMenuListItem.New('Gallons', litersToRefuel, 'Amount of fuel to purchase')
-	mainMenu:AddItem(amountItem)
-	mainMenu.OnListChange = function(sender, item, index)
-		if item == amountItem then
-			amountToRefuel = item:IndexToItem(index)
+	if vehicleType then
+		local amountToRefuel
+		local litersToRefuel = {}
+		for i = 1, 100 - (math.floor(fuelData.fuelAmount)) do
+			table.insert(litersToRefuel, i)
 		end
-	end
-	local purchaseItem = NativeUI.CreateItem('Purchase Fuel', '')
-	mainMenu:AddItem(purchaseItem)
-	purchaseItem.Activated = function(parentmenu, selected)
-		if not GetIsVehicleEngineRunning(playerVeh) then
-			TriggerServerEvent('fuel:purchaseFuel', amountToRefuel, vehicleType)
-			mainMenu:Visible(false)
-		else
-			TriggerEvent('usa:notify', '~y~Vehicle engine must be off!')
+		local amountItem = UIMenuListItem.New('Gallons', litersToRefuel, 'Amount of fuel to purchase')
+		mainMenu:AddItem(amountItem)
+		mainMenu.OnListChange = function(sender, item, index)
+			if item == amountItem then
+				amountToRefuel = item:IndexToItem(index)
+			end
+		end
+		local purchaseItem = NativeUI.CreateItem('Purchase Fuel', '')
+		mainMenu:AddItem(purchaseItem)
+		purchaseItem.Activated = function(parentmenu, selected)
+			if not GetIsVehicleEngineRunning(playerVeh) then
+				TriggerServerEvent('fuel:purchaseFuel', amountToRefuel, vehicleType)
+				mainMenu:Visible(false)
+			else
+				TriggerEvent('usa:notify', '~y~Vehicle engine must be off!')
+			end
 		end
 	end
 end
@@ -111,13 +119,17 @@ Citizen.CreateThread(function()
 			mainMenu:Visible(false)
 		end
 		if IsControlJustPressed(0, interactionKey) then
-			if IsNearFuelStation(GetVehicleType(playerVeh)) and GetPedInVehicleSeat(playerVeh, -1) == playerPed then
-				if fuelData.fuelAmount < 100 and GetVehicleType(playerVeh) ~= 'Blacklisted' and not fuelData.isRefuelling then
-					mainMenu:Clear()
-					createGasolineMenu(GetVehicleType(playerVeh))
+			if IsNearFuelStation(GetVehicleType(playerVeh)) then
+				if GetPedInVehicleSeat(playerVeh, -1) == playerPed then -- in veh
+					if fuelData.fuelAmount < 100 and GetVehicleType(playerVeh) ~= 'Blacklisted' and not fuelData.isRefuelling then
+						createGasolineMenu(GetVehicleType(playerVeh))
+						mainMenu:Visible(not mainMenu:Visible())
+					else
+						TriggerEvent('usa:notify', '~y~This vehicle cannot be refuelled!')
+					end
+				else -- on foot
+					createGasolineMenu()
 					mainMenu:Visible(not mainMenu:Visible())
-				else
-					TriggerEvent('usa:notify', '~y~This vehicle cannot be refuelled!')
 				end
 			end
 		end
@@ -418,6 +430,7 @@ AddEventHandler('blips:returnBlips', function(blipsTable)
   end
 end)
 
+--[[
 local JERRY_CAN_LOCATIONS = {
 	{x = 173.0, y = 6601.7, z = 31.8 }, -- paleto ron station
 	{x = 1695.5, y = 6419.4, z = 32.6 }, -- paleto 24/7
@@ -482,3 +495,4 @@ end
 Citizen.CreateThread(function()
 	CreateJerryCanPickups()
 end)
+--]]

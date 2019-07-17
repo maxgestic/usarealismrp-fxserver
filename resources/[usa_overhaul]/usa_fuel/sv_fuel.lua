@@ -66,3 +66,29 @@ AddEventHandler("fuel:refuelWithJerryCan", function(plate)
 		end
 	end
 end)
+
+RegisterServerEvent('fuel:purchaseJerryCan')
+AddEventHandler('fuel:purchaseJerryCan', function()
+	local cost = gasPrices["Gasoline"] * 75
+	local char = exports["usa-characters"]:GetCharacter(source)
+	if char.get("money") >= cost then
+		local jerryCan = {
+			name = "Jerry Can",
+			quantity = 1,
+			legality = "legal",
+			type = "weapon",
+			hash = 883325847,
+			weight = 10.0
+		}
+		if char.canHoldItem(jerryCan) then
+			char.removeMoney(cost)
+			char.giveItem(jerryCan)
+			TriggerClientEvent("interaction:equipWeapon", source, jerryCan, true, 1000)
+			TriggerClientEvent("usa:notify", source, "You have purchased a jerry can for $" .. cost)
+		else
+			TriggerClientEvent("usa:notify", source, "Inventory full!")
+		end
+	else
+		TriggerClientEvent("usa:notify", source, "Not enough money! Need $" .. cost)
+	end
+end)

@@ -1172,21 +1172,25 @@ function intoxicate(playScenario, clipset, intensity)
  end
 
 RegisterNetEvent("interaction:equipWeapon")
-AddEventHandler("interaction:equipWeapon", function(item, equip)
+AddEventHandler("interaction:equipWeapon", function(item, equip, ammoAmount)
+	local ped = GetPlayerPed(-1)
 	if equip then
-		GiveWeaponToPed(GetPlayerPed(-1), item.hash, 1000, false, false)
+		GiveWeaponToPed(ped, item.hash, 1000, false, false)
 		if item.components then
 			if #item.components > 0 then
 				for x = 1, #item.components do
-					GiveWeaponComponentToPed(GetPlayerPed(-1), item.hash, GetHashKey(item.components[x]))
+					GiveWeaponComponentToPed(ped, item.hash, GetHashKey(item.components[x]))
 				end
 			end
 		end
 		if item.tint then
-			SetPedWeaponTintIndex(GetPlayerPed(-1), item.hash, item.tint)
+			SetPedWeaponTintIndex(ped, item.hash, item.tint)
+		end
+		if ammoAmount then
+			SetPedAmmo(ped, item.hash, ammoAmount)
 		end
 	else
-		RemoveWeaponFromPed(GetPlayerPed(-1), item.hash)
+		RemoveWeaponFromPed(ped, item.hash)
 	end
 end)
 
