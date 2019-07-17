@@ -821,7 +821,11 @@ RegisterNUICallback("dropItem", function(data, cb)
 end)
 
 RegisterNUICallback('moveItem', function(data, cb)
-	TriggerServerEvent("inventory:moveItem", data)
+	if not IsPedCuffed(PlayerPedId()) then
+		TriggerServerEvent("inventory:moveItem", data)
+	else
+		exports.globals:notify("Your hands are cuffed, can't move!")
+	end
 end)
 
 function interactionMenuUse(itemName, wholeItem)
