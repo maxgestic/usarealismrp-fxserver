@@ -296,7 +296,6 @@ AddEventHandler("cocaineJob:getSupplies", function(supplyType)
                 Citizen.Wait(0)
                 DrawTimer(beginTime, COKE_SUPPLY_WAIT_TIME, 1.42, 1.475, 'WAITING')
             end
-            TriggerServerEvent("cocaineJob:giveUncut")
         end
     end
 end)
