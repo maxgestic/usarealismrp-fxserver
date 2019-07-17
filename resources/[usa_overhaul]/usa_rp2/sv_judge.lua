@@ -51,20 +51,27 @@ TriggerEvent('es:addJobCommand', 'removesuspension', {'judge', 'sheriff'}, funct
 			target_item_name = "Aircraft License"
 		elseif type == 'bl' then
 			target_item_name = "Boat License"
+		elseif type == "fp" then
+			target_item_name = "Firearm Permit"
 		end
 		local target_char = exports["usa-characters"]:GetCharacter(target)
 		local license = char.getItem(target_item_name)
-		if license and license.status == "suspended" then
-			char.modifyItem(target_item_name, "status", "valid")
-			TriggerClientEvent("usa:notify", target, "Your " .. target_item_name .. " has been ~g~reinstated~s~!")
-			TriggerClientEvent("usa:notify", source, "You reinstated a " .. target_item_name .. "!")
+		if license then
+			if license.status == "suspended" then
+				char.modifyItem(target_item_name, "status", "valid")
+				TriggerClientEvent("usa:notify", target, "Your " .. target_item_name .. " has been ~g~reinstated~s~!")
+				TriggerClientEvent("usa:notify", source, "You reinstated a " .. target_item_name .. "!")
+			else
+				TriggerClientEvent('usa:notify', source, "License not suspended!")
+			end
+		else
+			TriggerClientEvent('usa:notify', source, "License not found on person!")
 		end
-		TriggerClientEvent('usa:notify', source, "License not found on person, or is not suspended!")
 	end
 end, {
 	help = "Remove a license suspension.",
 	params = {
-		{ name = "license type", help = "either BL, AL or DL" },
+		{ name = "license type", help = "either BL, AL, DL, or FP" },
 		{ name = "id", help = "id of player" }
 	}
 })
@@ -184,6 +191,8 @@ TriggerEvent('es:addJobCommand', 'changesuspension', {'judge'}, function(source,
 			target_item_name = "Aircraft License"
 		elseif type == 'bl' then
 			target_item_name = "Boat License"
+		elseif type == "fp" then
+			target_item_name = "Firearm Permit"
 		end
 		local target_player = exports["usa-characters"]:GetCharacter(target)
 		local license = target_player.getItem(target_item_name)
@@ -198,7 +207,7 @@ TriggerEvent('es:addJobCommand', 'changesuspension', {'judge'}, function(source,
 end, {
 	help = "Alter a license suspension",
 	params = {
-		{ name = "license type", help = "either BL, AL or DL" },
+		{ name = "license type", help = "either BL, AL, DL, or FP" },
 		{ name = "id", help = "id of player" },
 		{ name = "days", help = "days to set license suspension to" },
 	}
@@ -331,7 +340,6 @@ end, {
 	}
 })
 
--- TODO: check if police rank is SGT + for use of below command ...
 TriggerEvent('es:addJobCommand', 'suspend', {'judge', "sheriff"}, function(source, args, char)
 	local type = string.lower(args[2])
 	local target = tonumber(args[3])
@@ -353,6 +361,8 @@ TriggerEvent('es:addJobCommand', 'suspend', {'judge', "sheriff"}, function(sourc
 			target_item_name = "Boat License"
 		elseif type == 'bar' then
 			target_item_name = "Bar Certificate"
+		elseif type == "fp" then
+			target_item_name = "Firearm Permit"
 		end
 		if target_item_name then
 			local target_player = exports["usa-characters"]:GetCharacter(target)
@@ -372,7 +382,7 @@ TriggerEvent('es:addJobCommand', 'suspend', {'judge', "sheriff"}, function(sourc
 end, {
 	help = "Suspend a person's license",
 	params = {
-		{ name = "license type", help = "either BL, AL or DL"},
+		{ name = "license type", help = "either BAR, BL, AL, DL, or FP"},
 		{ name = "id", help = "id of player" },
         { name  = "days", help = "# of days to suspend license for"}
 	}
