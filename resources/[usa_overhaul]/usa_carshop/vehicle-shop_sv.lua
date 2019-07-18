@@ -257,8 +257,8 @@ local vehicleShopItems = {
 			{make = "Cheval", model = "Fugitive", price = 15746, hash = "fugitive", storage_capacity = 155.0},
 			{make = "Benefactor", model = "Schafter", price = 42846, hash = "schafter2", storage_capacity = 155.0},
 			{make = "Dundreary", model = "Regina", price = 8937, hash = "regina", storage_capacity = 155.0},
-			{make = "Pegassi", model = "Toros", price = 57632, hash = "toros", storage_capacity = 155.0},
-			{make = "Ubermacht", model = "Revolter", price = 49634, hash = "revolter", storage_capacity = 155.0} -- has miniguns in LSC
+			{make = "Pegassi", model = "Toros", price = 57632, hash = "toros", storage_capacity = 155.0}
+			--{make = "Ubermacht", model = "Revolter", price = 49634, hash = "revolter", storage_capacity = 155.0} -- has miniguns in LSC
 		},
 		["Specials"] = {
 			{make = "Dundreary", model = "Stretch", price = 25575, hash = -1961627517, storage_capacity = 300.0},
