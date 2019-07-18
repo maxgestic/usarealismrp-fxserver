@@ -169,59 +169,48 @@ end)
 
 RegisterNetEvent("jail:changeClothes")
 AddEventHandler("jail:changeClothes", function(gender)
-  local playerPed = PlayerPedId()
-
-	-- only change clothes if male, since there is no female prisoner ped --
-	if gender == "male" or gender == "undefined" or not gender then
-
-    if not IsPedModel(playerPed, GetHashKey("mp_m_freemode_01")) then
-
-  		Citizen.CreateThread(function()
-  			local model = GetHashKey("S_M_Y_Prisoner_01")
-
-  			RequestModel(model)
-  			while not HasModelLoaded(model) do -- Wait for model to load
-  				Citizen.Wait(100)
-  			end
-
-  			SetPlayerModel(PlayerId(), model)
-  			SetModelAsNoLongerNeeded(model)
-  			SetPedRandomComponentVariation(GetPlayerPed(-1), false)
-
-  		end)
-
+    local playerPed = PlayerPedId()
+    -- only change clothes if male, since there is no female prisoner ped --
+    if gender == "male" or gender == "undefined" or not gender then
+        if not IsPedModel(playerPed, GetHashKey("mp_m_freemode_01")) then
+            Citizen.CreateThread(function()
+                local model = GetHashKey("S_M_Y_Prisoner_01")
+                RequestModel(model)
+                while not HasModelLoaded(model) do -- Wait for model to load
+                    Citizen.Wait(100)
+                end
+                SetPlayerModel(PlayerId(), model)
+                SetModelAsNoLongerNeeded(model)
+                SetPedRandomComponentVariation(GetPlayerPed(-1), false)
+            end)
+        else
+            --SetPedComponentVariation(me, 4, 7, 15, 0)
+            SetPedComponentVariation(GetPlayerPed(-1), 4, 7, 15, 2)
+            SetPedComponentVariation(GetPlayerPed(-1), 6, 42, 2, 2)
+            SetPedComponentVariation(GetPlayerPed(-1), 11, 1, 0, 2)
+            SetPedComponentVariation(GetPlayerPed(-1), 8, 1, 0, 2)
+            SetPedComponentVariation(GetPlayerPed(-1), 7, 0, 0, 2)
+            SetPedComponentVariation(GetPlayerPed(-1), 9, 0, 0, 2)
+            SetPedComponentVariation(GetPlayerPed(-1), 10, 0, 0, 2)
+            SetPedComponentVariation(GetPlayerPed(-1), 3, 0, 0, 2)
+            SetPedComponentVariation(GetPlayerPed(-1), 5, 0, 0, 2)
+            ClearPedProp(playerPed, 0)
+            ClearPedProp(playerPed, 1)
+        end
     else
-
-      --SetPedComponentVariation(me, 4, 7, 15, 0)
-      SetPedComponentVariation(GetPlayerPed(-1), 4, 7, 15, 2)
-      SetPedComponentVariation(GetPlayerPed(-1), 6, 42, 2, 2)
-      SetPedComponentVariation(GetPlayerPed(-1), 11, 1, 0, 2)
-      SetPedComponentVariation(GetPlayerPed(-1), 8, 1, 0, 2)
-      SetPedComponentVariation(GetPlayerPed(-1), 7, 0, 0, 2)
-      SetPedComponentVariation(GetPlayerPed(-1), 9, 0, 0, 2)
-      SetPedComponentVariation(GetPlayerPed(-1), 10, 0, 0, 2)
-      SetPedComponentVariation(GetPlayerPed(-1), 3, 0, 0, 2)
-      SetPedComponentVariation(GetPlayerPed(-1), 5, 0, 0, 2)
-
+        if IsPedModel(playerPed, GetHashKey("mp_f_freemode_01")) then
+            SetPedComponentVariation(GetPlayerPed(-1), 4, 3, 15, 2)
+            SetPedComponentVariation(GetPlayerPed(-1), 5, 0, 0, 2)
+            SetPedComponentVariation(GetPlayerPed(-1), 4, 3, 15, 2)
+            SetPedComponentVariation(GetPlayerPed(-1), 6, 1, 0, 2)
+            SetPedComponentVariation(GetPlayerPed(-1), 7, 0, 0, 2)
+            SetPedComponentVariation(GetPlayerPed(-1), 11, 9, 1, 2)
+            SetPedComponentVariation(GetPlayerPed(-1), 8, 2, 15, 2)
+            SetPedComponentVariation(GetPlayerPed(-1), 3, 0, 0, 2)
+            SetPedComponentVariation(GetPlayerPed(-1), 10, 0, 0, 2)
+            SetPedComponentVariation(GetPlayerPed(-1), 9, 0, 0, 2)
+            ClearPedProp(playerPed, 0)
+            ClearPedProp(playerPed, 1)
+        end
     end
-
-	else
-
-    if IsPedModel(playerPed, GetHashKey("mp_f_freemode_01")) then
-
-      SetPedComponentVariation(GetPlayerPed(-1), 4, 3, 15, 2)
-      SetPedComponentVariation(GetPlayerPed(-1), 5, 0, 0, 2)
-      SetPedComponentVariation(GetPlayerPed(-1), 4, 3, 15, 2)
-      SetPedComponentVariation(GetPlayerPed(-1), 6, 1, 0, 2)
-      SetPedComponentVariation(GetPlayerPed(-1), 7, 0, 0, 2)
-      SetPedComponentVariation(GetPlayerPed(-1), 11, 9, 1, 2)
-      SetPedComponentVariation(GetPlayerPed(-1), 8, 2, 15, 2)
-      SetPedComponentVariation(GetPlayerPed(-1), 3, 0, 0, 2)
-      SetPedComponentVariation(GetPlayerPed(-1), 10, 0, 0, 2)
-      SetPedComponentVariation(GetPlayerPed(-1), 9, 0, 0, 2)
-
-    end
-
-  end
-
 end)

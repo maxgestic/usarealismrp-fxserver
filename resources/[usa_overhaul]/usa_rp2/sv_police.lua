@@ -292,6 +292,8 @@ TriggerEvent('es:addJobCommand', 'seize', { "police", "sheriff", "corrections" }
 				TriggerClientEvent("usa:notify", source, "~y~Seized: ~w~(x".. (seized[i].quantity or 1) ..") " .. seized[i].name)
 				TriggerClientEvent("usa:notify", targetId, "~y~Seized: ~w~(x".. (seized[i].quantity or 1) ..") " .. seized[i].name)
 			end
+			exports["globals"]:sendLocalActionMessage(source, "Removes contraband")
+			TriggerClientEvent("chatMessage", targetId, "", {0, 0, 0}, "^0" .. char.getName() .. " seized your illegal contraband.")
 		elseif arg == "cash" then
 			target_player_id = targetId
 			TriggerClientEvent("police:getMoneyInput", source)
@@ -310,10 +312,14 @@ end, {
 RegisterServerEvent("police:seizeCash")
 AddEventHandler("police:seizeCash", function(amount)
 	local target_money = exports["usa-characters"]:GetCharacterField(target_player_id, "money")
+	local char = exports["usa-characters"]:GetCharacter(source)
 	if target_money - amount >= 0 then
 		exports["usa-characters"]:SetCharacterField(target_player_id, "money", target_money - amount)
 		TriggerClientEvent("usa:notify", source, "~y~Seized: ~w~$" .. amount)
 		TriggerClientEvent("usa:notify", target_player_id, "~y~Seized: ~w~$" .. amount)
+		exports["globals"]:sendLocalActionMessage(source, "Removes cash")
+		TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0Seized: $" .. amount)
+		TriggerClientEvent("chatMessage", target_player_id, "", {0, 0, 0}, "^0" .. char.getName() .. " seized $" .. amount .. " from you.")
 	end
 end)
 
