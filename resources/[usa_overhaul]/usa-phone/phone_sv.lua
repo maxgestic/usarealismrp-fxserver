@@ -42,6 +42,13 @@ function UpdatePhoneWithNumber(number, row, data)
 	end)
 end
 
+RegisterServerEvent("phone:getPeerIdentifier")
+AddEventHandler("phone:getPeerIdentifier", function()
+	print("PHONE: getting peer identifier")
+	local identifier = GetPlayerIdentifiers(source)[1]
+	TriggerClientEvent("phone:getPeerIdentifier", source, identifier)
+end)
+
 RegisterServerEvent("phone:getPhone")
 AddEventHandler("phone:getPhone", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
@@ -193,29 +200,29 @@ end, {
 
 -- request phone call (p2p voice)
 RegisterServerEvent("phone:requestCall")
-AddEventHandler("phone:requestCall", function(numbers)
+AddEventHandler("phone:requestCall", function(data)
 	local caller_source = source
 	exports["usa-characters"]:GetCharacters(function(characters)
 		for id, char in pairs(characters) do
 			local savedId = id
-			local p = char.getItemWithField("number", numbers.phone_number)
+			local p = char.getItemWithField("number", data.phone_number)
 			if p then
 				-- query for phone contacts --
 				local endpoint = "/phones/_design/phoneFilters/_view/getContactsByNumber"
 				local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
 				PerformHttpRequest(url, function(err, responseText, headers)
 					if responseText then
-						local data = json.decode(responseText)
-						if data.rows and data.rows[1] and data.rows[1].value then
-							local contacts = data.rows[1].value
-							local caller_name = getNameFromContacts(contacts, numbers.from_number)
-							if caller_name then print("caller_name: " .. caller_name) else print("caller with # " .. numbers.from_number .. " not found in contacts!") caller_name = numbers.from_number end
+						local dbResponse = json.decode(responseText)
+						if dbResponse.rows and dbResponse.rows[1] and dbResponse.rows[1].value then
+							local contacts = dbResponse.rows[1].value
+							local caller_name = getNameFromContacts(contacts, data.from_number)
+							if caller_name then print("caller_name: " .. caller_name) else print("caller with # " .. data.from_number .. " not found in contacts!") caller_name = data.from_number end
 							TriggerClientEvent("swayam:notification", savedId, "Whiz Wireless", "~y~Incoming call from:~w~ " .. caller_name, "CHAR_MP_DETONATEPHONE")
-							TriggerClientEvent("phone:requestCallPermission", savedId, numbers.phone_number, caller_source, caller_name)
+							TriggerClientEvent("phone:requestCallPermission", savedId, data.phone_number, caller_source, caller_name, data.peerIdentifier)
 						end
 					end
 				end, "POST", json.encode({
-					keys = { numbers.phone_number }
+					keys = { data.phone_number }
 				}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 			end
 		end
@@ -224,10 +231,11 @@ end)
 
 -- when a player responds to an inbound call:
 RegisterServerEvent("phone:respondedToCall")
-AddEventHandler("phone:respondedToCall", function(accepted, phone_number, caller_source, caller_name, isBusy)
+AddEventHandler("phone:respondedToCall", function(callerPeerIdentifier, accepted, phone_number, caller_source, caller_name, isBusy)
+	print("responded to call from caller: " .. callerPeerIdentifier)
 	local user_source = source
 	if accepted then
-		TriggerClientEvent("phone:startCall", user_source, phone_number, caller_source)
+		TriggerClientEvent("phone:startCall", user_source, phone_number, caller_source, callerPeerIdentifier)
 		TriggerClientEvent("phone:startCall", caller_source, phone_number, user_source)
 		TriggerClientEvent("swayam:notification", user_source, "Whiz Wireless", "Call ~g~started~w~!", "CHAR_MP_DETONATEPHONE")
 		TriggerClientEvent("swayam:notification", caller_source, "Whiz Wireless", "Call ~g~started~w~!", "CHAR_MP_DETONATEPHONE")

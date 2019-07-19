@@ -19,7 +19,7 @@ body {
     padding-top: 20em;
     height: 900px;
     width: 700px;
-    background-image: url('samsung-phone.png');
+    background-image: url('../img/samsung-phone.png');
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;

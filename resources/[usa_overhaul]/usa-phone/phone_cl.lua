@@ -48,6 +48,17 @@ function EnableGui(enable, phone)
 	end
 end
 
+TriggerServerEvent("phone:getPeerIdentifier")
+
+RegisterNetEvent("phone:getPeerIdentifier")
+AddEventHandler("phone:getPeerIdentifier", function(identifier)
+	print("PHONE: peer ID loaded")
+	SendNUIMessage({
+		type = "peerIdentifierLoaded",
+		identifier = identifier,
+	})
+end)
+
 RegisterNetEvent("phone:loadedMessagesFromId")
 AddEventHandler("phone:loadedMessagesFromId", function(messages, replyIdent)
 	--print("loaded msgs with # = " .. #messages)
@@ -112,6 +123,7 @@ end)
 RegisterNUICallback('requestCall', function(data, cb)
 	--print(data.from_number .. " is requesting a phone call with #: " .. data.phone_number)
 	if tonumber(data.phone_number) then
+		print("requesting call, my number " .. data.from_number ..", identifier: " .. data.peerIdentifier)
 		TriggerServerEvent("phone:requestCall", data)
 	else
 		--print("invalid phone number format to call")
@@ -123,7 +135,8 @@ local timer = false
 local responded = false
 -- accept/deny inbound phone call:
 RegisterNetEvent("phone:requestCallPermission")
-AddEventHandler("phone:requestCallPermission", function(phone_number, caller_source, caller_name)
+AddEventHandler("phone:requestCallPermission", function(phone_number, caller_source, caller_name, peerIdentifier)
+	print("requesting permission for call from : " .. peerIdentifier)
 	if not on_call then
 		responded = false
 		timer = true
@@ -135,13 +148,13 @@ AddEventHandler("phone:requestCallPermission", function(phone_number, caller_sou
 					--print("player accepted phone call from: " .. caller_name)
 					TriggerEvent("chatMessage", "", {}, "Started call with: " .. caller_name)
 					responded = true
-					TriggerServerEvent("phone:respondedToCall", true, phone_number, caller_source, caller_name)
+					TriggerServerEvent("phone:respondedToCall", peerIdentifier, true, phone_number, caller_source, caller_name)
 					return
 				elseif IsControlJustPressed(1, 177) then -- BACKSPACE key
 					--print("player rejected phone call from: " .. caller_name)
 					TriggerEvent("chatMessage", "", {}, "Rejected call from: " .. caller_name)
 					responded = true
-					TriggerServerEvent("phone:respondedToCall", false, phone_number, caller_source, caller_name)
+					TriggerServerEvent("phone:respondedToCall", peerIdentifier, false, phone_number, caller_source, caller_name)
 					return
 				end
 				Wait(0)
@@ -153,7 +166,7 @@ AddEventHandler("phone:requestCallPermission", function(phone_number, caller_sou
 		end)
 	else
 		--print("Player was already on a call! Putting on busy!")
-		TriggerServerEvent("phone:respondedToCall", false, phone_number, caller_source, caller_name, true)
+		TriggerServerEvent("phone:respondedToCall", peerIdentifier, false, phone_number, caller_source, caller_name, true)
 		PlaySoundFrontend(-1, "Beep_Red", "DLC_HEIST_HACKING_SNAKE_SOUNDS", 1)
 	end
 end)
@@ -182,17 +195,24 @@ end)
 
 -- start a connection (p2p voice call)
 RegisterNetEvent("phone:startCall")
-AddEventHandler("phone:startCall", function(phone_number, partner_source)
-	print(voiceChannel)
-	NetworkSetVoiceChannel(tonumber(phone_number))
+AddEventHandler("phone:startCall", function(phone_number, partner_source, callerPeerIdentifier)
+	--print("typeof callerPeerIdentifier: " .. type(callerPeerIdentifier))
+	--NetworkSetVoiceChannel(tonumber(phone_number))
 	on_call = true
 	partner_call_source = partner_source
+	if callerPeerIdentifier then -- target calls the source
+		print("starting call from lua from number: " .. callerPeerIdentifier)
+		SendNUIMessage({
+			type = "startCall",
+			targetPeerIdentifier = callerPeerIdentifier
+		})
+	end
 end)
 
 -- other player ended a connection (p2p voice call)
 RegisterNetEvent("phone:endCall")
 AddEventHandler("phone:endCall", function()
-	print('end call voice channel: '..voiceChannel)
+	--print('end call voice channel: '..voiceChannel)
 	if voiceChannel == 0 then
 		NetworkClearVoiceChannel()
 	else
@@ -202,6 +222,9 @@ AddEventHandler("phone:endCall", function()
 	on_call = false
 	ClearPedTasks(GetPlayerPed(-1))
 	TriggerEvent("swayam:notification", "Whiz Wireless", "Call ~r~ended~w~.", "CHAR_MP_DETONATEPHONE")
+	SendNUIMessage({
+		type = "endCall"
+	})
 end)
 
 RegisterNetEvent('properties:enterProperty')
@@ -394,6 +417,9 @@ Citizen.CreateThread(function()
 					ClearPedTasks(GetPlayerPed(-1))
 					TriggerServerEvent("phone:endedCall", partner_call_source) -- notify caller of hang up
 					TriggerEvent("swayam:notification", "Whiz Wireless", "Call ~r~ended~w~.", "CHAR_MP_DETONATEPHONE")
+					SendNUIMessage({
+						type = "endCall"
+					})
 				end
 			end
 		end
