@@ -157,8 +157,23 @@ var itemImages = {
   "Fire Extinguisher": "https://i.imgur.com/7avLEgk.png",
   "Marksman Rifle": "https://i.imgur.com/aFlRlSb.png",
   "Raw Sand": "https://i.imgur.com/Z19qckK.png",
-  "Jerry Can": "https://i.imgur.com/Izo2ego.png"
-
+  "Jerry Can": "https://i.imgur.com/Izo2ego.png",
+  "Root Beer": "https://imgur.com/EynrcEX.png",
+  "Coca Cola": "https://imgur.com/n7ciMKF.png",
+  "Diet Cola": "https://imgur.com/RM0xZpN.png",
+  "Peach Fanta": "https://imgur.com/gQc2DGm.png",
+  "Pineapple Fanta": "https://imgur.com/EwUNSgR.png",
+  "Fiji Water": "https://imgur.com/taRRZd1.png",
+  "Value Water": "https://imgur.com/gVAYNfG.png",
+  "Verana Blend Hot Coffee": "https://imgur.com/WVkbOa4.png",
+  "Vanilla Iced Coffee": "https://imgur.com/115QUbe.png",
+  "Original Iced Coffee": "https://imgur.com/115QUbe.png",
+  "Redbull Energy Drink": "https://imgur.com/ydttLBB.png",
+  "Rockstar Energy Drink": "https://imgur.com/mb2EFV8.png",
+  "Funyuns": "https://imgur.com/a/l2uA5MU.png",
+  "Cool Ranch Doritos": "https://i.imgur.com/7zwiCP5.png",
+  "Gummy Worms": "https://i.imgur.com/CjOhIJF.png",
+  "Sour Gummy Worms": "https://i.imgur.com/AiSyyCw.png"
 }
 
 var menuItems = [
