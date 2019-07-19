@@ -6,6 +6,7 @@ local VEHICLE_RANKS = {
 		["pdexp"] = 2,
 		["pdtahoe"] = 2,
 		["pdchrgum"] = 5,
+		["riot"] = 5,
 		["polmav"] = 1
 	},
 	["ems"] = {

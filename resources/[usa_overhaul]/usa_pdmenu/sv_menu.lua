@@ -3,17 +3,24 @@ local VEHICLE_RANKS = {
 		["pdcvpi"] = 1,
 		["pdtau"] = 2,
 		["pdchrg"] = 2,
-		["pdchgr"] = 2,
 		["pdexp"] = 2,
 		["pdtahoe"] = 2,
-		["pdchrgum"] = 5
+		["pdchrgum"] = 5,
+		["riot"] = 5,
+		["polmav"] = 1
 	},
 	["ems"] = {
 		["ambulance"] = 1,
-		["pdexp"] = 2,
-		["pranger"] = 2,
+		["paraexp"] = 2,
+		["sheriff2"] = 2,
 		["firetruk"] = 1,
-		["polmav"] = 1
+		["polmav"] = 1,
+		["lguard2"] = 1,
+		["blazer"] = 1
+	},
+	["doctor"] = {
+		["paraexp"] = 1,
+		["sheriff2"] = 1
 	}
 }
 
