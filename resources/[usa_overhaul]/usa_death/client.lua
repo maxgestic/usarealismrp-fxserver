@@ -203,7 +203,7 @@ AddEventHandler('death:createLog', function(ped)
 		killerId = 0
 	}
 
-	for id = 0, 64 do
+	for id = 0, 255 do
 		if NetworkIsPlayerActive(id) then
 			if GetPlayerPed(id) == deathLog.killer then -- save killer details
 				deathLog.killerId = GetPlayerServerId(id)
@@ -226,7 +226,7 @@ AddEventHandler('death:createLog', function(ped)
 				cause_entity_type = GetEntityType(deathLog.cause)
 			end
 			local ped_in_veh_seat = GetPedInVehicleSeat(deathLog.killer, -1)
-			for id = 0, 64 do
+			for id = 0, 255 do
 				if NetworkIsPlayerActive(id) then
 					if GetPlayerPed(id) == ped_in_veh_seat then -- save vdm'r details
 						deathLog.killerId = GetPlayerServerId(id)
@@ -301,7 +301,7 @@ function SecondsToMinuteClock(seconds)
 end
 
 function GetPlayerFromPed(ped)
-    for a = 0, 64 do
+    for a = 0, 255 do
         if GetPlayerPed(a) == ped then
             return a
         end

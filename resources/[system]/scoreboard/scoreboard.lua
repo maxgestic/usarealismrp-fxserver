@@ -2,7 +2,7 @@ local listOn = false
 local key = 168 -- F7 = 168, LALT = 19
 
 Citizen.CreateThread(function()
-    
+
     while true do
         if IsControlPressed(0, key) then
 			if listOn == false then
@@ -30,7 +30,7 @@ end)
 function GetPlayers()
     local players = {}
 
-    for i = 0, 31 do
+    for i = 0, 255 do
         if NetworkIsPlayerActive(i) then
             table.insert(players, GetPlayerServerId(i))
         end

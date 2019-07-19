@@ -1293,7 +1293,7 @@ AddEventHandler("interaction:performPoliceAction", function(action, unseatIndex)
 		local backRightPlayerId = 0
 		local playerIdToUnseat = 0
 		-- compare against all active players
-		for x = 0, 64 do
+		for x = 0, 255 do
 			if NetworkIsPlayerActive(x) then
 				playerName = GetPlayerName(x)
 				playerServerId = GetPlayerServerId(x)
@@ -1487,7 +1487,7 @@ function GetClosestPlayerInfo(distance)
 	local closestPlayerServerId = 0
 	local closestName = ""
 	closestPed = nil
-	for x = 0, 64 do
+	for x = 0, 255 do
 		if NetworkIsPlayerActive(x) then
 			targetPed = GetPlayerPed(x)
 			targetPedCoords = GetEntityCoords(targetPed, false)

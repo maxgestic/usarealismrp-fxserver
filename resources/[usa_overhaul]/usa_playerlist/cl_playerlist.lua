@@ -128,7 +128,7 @@ function ShowIds()
 	if playerlist.group ~= 'user' then
 		viewDistance = 40
 	end
-	for id = 0, 64 do
+	for id = 0, 255 do
 		local playerPed = GetPlayerPed(id)
 		local playerCoords = GetEntityCoords(playerPed)
 		if NetworkIsPlayerActive(id) and Vdist(playerCoords, myCoords) < viewDistance and IsEntityVisible(playerPed) then

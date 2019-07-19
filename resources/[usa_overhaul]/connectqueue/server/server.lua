@@ -327,7 +327,7 @@ end
 
 Citizen.CreateThread(function()
     local function playerConnect(name, setKickReason, deferrals)
-        maxPlayers = GetConvarInt("sv_maxclients", 32)
+        maxPlayers = GetConvarInt("sv_maxclients", 64)
         debug = GetConvar("sv_debugqueue", "true") == "true" and true or false
         displayQueue = GetConvar("sv_displayqueue", "true") == "true" and true or false
         initHostName = not initHostName and GetConvar("sv_hostname") or initHostName

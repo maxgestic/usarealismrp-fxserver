@@ -210,7 +210,7 @@ Citizen.CreateThread(function()
 end)
 
 function GetPlayerFromPed(ped)
-    for a = 0, 64 do
+    for a = 0, 255 do
         if GetPlayerPed(a) == ped then
             return a
         end
