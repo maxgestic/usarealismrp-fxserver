@@ -37,6 +37,7 @@ TriggerEvent('es:addCommand', 'anonad', function(source, args, char)
 			exports["usa-characters"]:GetCharacters(function(characters)
 				for id, char in pairs(characters) do
 					if char.hasItem("Cell Phone") then
+						table.remove(args, 1)
 						TriggerClientEvent('chatMessage', id, "[Advertisement]", {171, 67, 227}, table.concat(args, " "))
 					end
 				end
