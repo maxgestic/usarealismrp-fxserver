@@ -116,8 +116,8 @@ local vehicleShopItems = {
 		},
 		["Motorcycles"] = {
 			{make = "Pegassi", model = "Faggio", price = 2069, hash = -1842748181, storage_capacity = 30.0},
-			{make = "Dinka", model = "Enduro", price = 8750, hash = 1753414259, storage_capacity = 30.0},
-			{make = "Dinka", model = "Akuma", price = 9760, hash = 1672195559, storage_capacity = 30.0},
+			{make = "Dinka", model = "Enduro", price = 9750, hash = 1753414259, storage_capacity = 30.0},
+			{make = "Dinka", model = "Akuma", price = 13760, hash = 1672195559, storage_capacity = 30.0},
 			{make = "Maibatsu", model = "Sanchez", price = 14880, hash = -1453280962, storage_capacity = 30.0},
 			{make = "Shitzu", model = "Vader", price = 19402, hash = -140902153, storage_capacity = 30.0},
 			{make = "Western", model = "Bagger", price = 17000, hash = -2140431165, storage_capacity = 30.0},
