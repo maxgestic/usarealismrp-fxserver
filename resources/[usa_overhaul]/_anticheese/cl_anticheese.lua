@@ -443,6 +443,7 @@ AddEventHandler("deletenearestvehicles", function()
     end)
 end)
 
+--[[
 Citizen.CreateThread(function()
 	Wait(30000)
 	while true do
@@ -450,3 +451,4 @@ Citizen.CreateThread(function()
 		Wait(60000)
 	end
 end)
+--]]

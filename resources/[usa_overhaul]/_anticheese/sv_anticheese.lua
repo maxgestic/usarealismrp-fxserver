@@ -474,6 +474,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 	end
 end)
 
+--[[
 RegisterServerEvent('usa:ConfirmSession')
 AddEventHandler('usa:ConfirmSession', function(clientPlayerTotal)
 	if source ~= nil then
@@ -491,6 +492,7 @@ AddEventHandler('usa:ConfirmSession', function(clientPlayerTotal)
 		end
 	end
 end)
+--]]
 
 TriggerEvent('es:addGroupCommand', 'deletenearestvehicles', 'superadmin', function(source, args, user)
   TriggerClientEvent("deletenearestvehicles", source)
