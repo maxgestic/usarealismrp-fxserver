@@ -1,4 +1,5 @@
 local armoryItems = {
+    { name = "First Aid Kit", hash = 101631238, price = 25, weight = 20 },
     { name = "Fire Extinguisher", hash = 101631238, price = 25, weight = 20 },
     { name = "Flare", hash = 1233104067, price = 25, weight = 9 },
     { name = "Tear Gas", hash = -1600701090, price = 25, weight = 9 },
@@ -309,6 +310,31 @@ AddEventHandler("policestation2:offduty", function()
   char.set("job", "civ")
   TriggerEvent('job:sendNewLog', source, 'sheriff', false)
   TriggerEvent("eblips:remove", source)
+end)
+
+RegisterServerEvent("police:buyFAK")
+AddEventHandler("police:buyFAK", function()
+    local char = exports["usa-characters"]:GetCharacter(source)
+    local FAK = {
+        name = "First Aid Kit",
+        price = 50,
+        type = "misc",
+        quantity = 1,
+        legality = "legal",
+        weight = 15,
+        objectModel = "v_ret_ta_firstaid",
+        blockedInPrison = true
+    }
+    if char.canHoldItem(FAK) then
+        if char.get("money") >= FAK.price then
+            char.removeMoney(FAK.price)
+            char.giveItem(FAK)
+        else
+            TriggerClientEvent("usa:notify", source, "Not enough money! Need $" .. FAK.price)
+        end
+    else
+        TriggerClientEvent("usa:notify", source, "Inventory full!")
+    end
 end)
 
 function GetWeaponAttachments(name)

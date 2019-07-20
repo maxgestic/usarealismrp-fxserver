@@ -28,16 +28,16 @@ BUSINESSES = {
 		cameraID = 'store34',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 20000,
-		purchasePercentage = 0.07
+		price = 25000,
+		purchasePercentage = 0.06
 	},
 	["Car Dealership (Harmony)"] = {
 		position = {1234.0, 2737.2, 38.0},
 		cameraID = 'store33',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
-		price = 20000,
-		purchasePercentage = 0.07
+		price = 25000,
+		purchasePercentage = 0.06
 	},
 	["LS Tattoos (El Burro Heights)"] = {
 		position = {1325.2, -1650.7, 52.3},

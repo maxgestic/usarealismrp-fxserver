@@ -358,10 +358,15 @@ function CreateArmoryMenu(menu)
     menu:AddItem(item)
 	--]]
     local item = NativeUI.CreateItem('Body Armor', 'Equip heavy-duty body armor')
-    item:SetRightBadge(BadgeStyle.Armour)
+    --item:SetRightBadge(BadgeStyle.Armour)
     item.Activated = function(parentmenu, selected)
     	SetPedArmour(playerPed, 100)
     	TriggerEvent('usa:notify', 'Armor has been re-equipped.')
+    end
+    menu:AddItem(item)
+	local item = NativeUI.CreateItem('First Aid Kit', "A first aid kit that can help temporarily stop bleeding.")
+    item.Activated = function(parentmenu, selected)
+    	TriggerServerEvent("police:buyFAK")
     end
     menu:AddItem(item)
 end
