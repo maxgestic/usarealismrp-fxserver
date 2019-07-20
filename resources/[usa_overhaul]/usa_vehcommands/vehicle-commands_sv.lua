@@ -3,6 +3,7 @@ local VEHICLE_RANKS = {
 		["pdcvpi"] = 1,
 		["pdtau"] = 2,
 		["pdchrg"] = 2,
+		["pdchgr"] = 2,
 		["pdexp"] = 2,
 		["pdtahoe"] = 2,
 		["pdchrgum"] = 5,
