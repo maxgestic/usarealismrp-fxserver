@@ -478,6 +478,7 @@ AddEventHandler("phone:showPhoneNumber", function(location)
 			if string.find(item.name, "Cell Phone") then
 				local msg = "Person with SSN "..source.." writes down number: " .. item.number
 				exports["globals"]:sendLocalActionMessageChat(msg, location)
+				exports["globals"]:sendLocalActionMessage(source, "writes down number: " .. item.number)
 				hasPhone = true
 			end
 		end
@@ -497,6 +498,7 @@ TriggerEvent('es:addCommand', 'phonenumber', function(source, args, char, locati
 			if string.find(item.name, "Cell Phone") then
 				local msg = "Person with SSN "..source.." writes down number: " .. item.number
 				exports["globals"]:sendLocalActionMessageChat(msg, location)
+				exports["globals"]:sendLocalActionMessage(source, "writes down number: " .. item.number)
 				hasPhone = true
 			end
 		end

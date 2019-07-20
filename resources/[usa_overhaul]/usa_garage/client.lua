@@ -29,7 +29,9 @@ locations = {
 	{ ['x'] = -77.19, ['y'] = -808.706, ['z'] = 36.48, ['jobs'] = {"dai"}},
 	{ ['x'] = -311.8, ['y'] = 228.2, ['z'] = 87.8, ['noBlip'] = true}, -- studio los santos
 	{ ['x'] = -620.3, ['y'] = 52.7, ['z'] = 43.7, ['noBlip'] = true}, -- Tinsel Towers Apartments
-	{ ['x'] = 364.4, ['y'] = -1700.6, ['z'] = 32.5, ['noBlip'] = true} -- court house (davis, LS)
+	{ ['x'] = 364.4, ['y'] = -1700.6, ['z'] = 32.5, ['noBlip'] = true}, -- court house (davis, LS)
+	{ ["x"] = -1073.4, ["y"] = -879.7, ["z"] = 4.8, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"}, ["noBlip"] = true }, -- Vespucci PD
+	{ ['x'] = 1127.5, ['y'] = 2670.8, ['z'] = 38.1, ['noBlip'] = true} -- Sandy Shores Motel
 }
 
 local VEHICLE_DAMAGES = {}

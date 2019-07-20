@@ -95,6 +95,13 @@ BUSINESSES = {
 		lastRobbedTime = 0,
 		price = 2000
 	},
+	["Herr Kutz Barber (Bay City Ave.)"] = {
+		position = {-1283.7, -1115.3, 6.9},
+		cameraID = 'store40',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 3000
+	},
 	["Herr Kutz Barber (Paleto Bay)"] = {
 		position = {-277.6, 6230.2, 31.7},
 		cameraID = 'store26',
