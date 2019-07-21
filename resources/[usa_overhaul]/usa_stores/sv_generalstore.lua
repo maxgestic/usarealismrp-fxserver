@@ -42,6 +42,7 @@ local GENERAL_STORE_ITEMS = {
   },
   ["Misc"] = {
     { name = "First Aid Kit", price = 80, type = "misc", quantity = 1, legality = "legal", weight = 15, objectModel = "v_ret_ta_firstaid", blockedInPrison = true},
+    { name = "Notepad", price = 15, type = "misc", quantity = 1, legality = "legal", weight = 9, objectModel = "prop_notepad_01"},
     { name = "The Daily Weazel", price = 2, type = "misc", quantity = 1, legality = "legal", weight = 9, objectModel = "prop_cs_newspaper"},
     { name = "Condoms", price = 5, type = "misc", quantity = 3, legality = "legal", weight = 8, objectModel = "ng_proc_candy01a", blockedInPrison = true},
     { name = "KY Intense Gel", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 6, objectModel = "v_res_d_lube", blockedInPrison = true},
