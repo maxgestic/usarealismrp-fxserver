@@ -71,6 +71,11 @@ local KEYS = {
   E = 38
 }
 
+local VEH_CLASS = {
+    Bicycle = 13,
+    Motorcycle = 8
+}
+
 Citizen.CreateThread(function()
   while true do
     local me = GetPlayerPed(-1)
@@ -1187,7 +1192,7 @@ function disableAirControl(ped, veh)
 	--if not IsThisModelBlacklisted(veh) then
 		if IsPedSittingInAnyVehicle(ped) then
 			if GetPedInVehicleSeat(veh, -1) == ped then
-				if IsEntityInAir(veh) and GetVehicleClass(veh) ~= 8 then
+				if IsEntityInAir(veh) and GetVehicleClass(veh) ~= VEH_CLASS.Motorcycle and GetVehicleClass(veh) ~= VEH_CLASS.Bicycle then
 					DisableControlAction(0, 59)
 					DisableControlAction(0, 60)
 				end
