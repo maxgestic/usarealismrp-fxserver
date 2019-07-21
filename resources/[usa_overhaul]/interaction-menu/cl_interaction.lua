@@ -830,27 +830,29 @@ end)
 
 function interactionMenuUse(itemName, wholeItem)
 	Citizen.CreateThread(function()
-		-------------------
-		-- Meth --
-		-------------------
 		if string.find(itemName, "Meth") or string.find(itemName, "Uncut Cocaine") then
-			--Citizen.Trace("meth found to use!!")
 			TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
 			TriggerEvent("interaction:notify", "You have used: (x1) " .. itemName:sub(6))
 			intoxicate(true, nil)
 			reality(5)
-			-------------------
-			-- Hash --
-			-------------------
+		elseif string.find(itemName, "LSD Vile") then
+			local drug_duration = 7 * 60 * 1000 -- 7 minutes
+			TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
+			TriggerEvent("interaction:notify", "You have used: (x1) LSD Vile")
+			Wait(8000)
+			DoScreenFadeOut(1500)
+			Wait(1500)
+			DoScreenFadeIn(1500)
+			StartScreenEffect("DrugsMichaelAliensFight", 0, false)
+			Wait(drug_duration)
+			DoScreenFadeOut(1000)
+			DoScreenFadeIn(1000)
+			StopScreenEffect("DrugsMichaelAliensFight")
 		elseif string.find(itemName, "Hash") then
-			--Citizen.Trace("meth found to use!!")
 			TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
 			TriggerEvent("interaction:notify", "You have used: (x1) Hash")
 			intoxicate(true, nil)
 			reality(3)
-			-------------------
-			-- Repair Kit --
-			-------------------
 		elseif string.find(itemName, "Repair Kit") then
 			TriggerEvent("interaction:repairVehicle")
 		elseif string.find(itemName, "Hotwiring Kit") then
@@ -987,6 +989,8 @@ function interactionMenuUse(itemName, wholeItem)
 				TriggerEvent('doormanager:lockpickDoor', wholeItem)
 				TriggerServerEvent('properties:lockpickHouse', GetEntityCoords(playerPed), wholeItem)
 			end
+		elseif string.find(itemName, "Notepad") then
+
 		elseif string.find(itemName, "Binoculars") then
 			TriggerEvent("binoculars:Activate")
 			-------------------

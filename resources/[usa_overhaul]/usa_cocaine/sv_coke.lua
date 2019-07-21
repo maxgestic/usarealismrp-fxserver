@@ -85,7 +85,9 @@ AddEventHandler("cocaineJob:checkUserJobSupplies", function(jobItem, jobSupply)
 	end
 
 	if char.hasItem(jobSupply) then
-		char.removeItem(jobSupply, 1)
+        if hasJobItem then
+            char.removeItem(jobSupply, 1)
+        end
 		hasJobSupply = true
 	end
 

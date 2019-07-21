@@ -16,6 +16,7 @@
 TriggerServerEvent("cocaineJob:giveItem", cocaineProduced)]]
 
 local COKE_SUPPLY_WAIT_TIME = 45000
+local COCAINE_PROCESS_WAIT_TIME = 55000
 
 local INPUT_KEY = 38 -- E
 
@@ -311,10 +312,10 @@ Citizen.CreateThread(function()
                 Citizen.Wait(100)
             end
             TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
-            while GetGameTimer() - beginTime < 30000 do
+            while GetGameTimer() - beginTime < COCAINE_PROCESS_WAIT_TIME do
                 Citizen.Wait(0)
                 if cocaine.processingCocaine then
-                    DrawTimer(beginTime, 30000, 1.42, 1.475, 'PROCESSING')
+                    DrawTimer(beginTime, COCAINE_PROCESS_WAIT_TIME, 1.42, 1.475, 'PROCESSING')
                     if not IsEntityPlayingAnim(GetPlayerPed(-1), animDict, animName, 3) then
                         TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
                     end
