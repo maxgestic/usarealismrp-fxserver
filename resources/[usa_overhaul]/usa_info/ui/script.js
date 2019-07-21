@@ -1,10 +1,8 @@
 $(function(){
 	window.onload = function(e){
 		window.addEventListener('message', function(event){
-
 			var item = event.data;
 			if (item !== undefined && item.type === "info") {
-
 				if (item.display === true) {
 					$('#info').fadeIn("slow");
 				} else if (item.display === false) {
@@ -19,9 +17,27 @@ $(function(){
 			}
 		});
 
-		$("button").click(function(){
-			$.get('http://usa_info/accept', function(data) {});
+		$("button#accept").click(function(){
+			$.get('http://usa_info/accept', function(data) {})
 		});
+
+		$("button#commands").click(function() {
+			ShowCommandListPage()
+		})
+
+		$("button#homeBtn").click(function() {
+			ShowHomePage()
+		})
+
+		function ShowCommandListPage() {
+			$("#help-and-rules").hide()
+			$("#command-doc").show()
+		}
+
+		function ShowHomePage() {
+			$("#command-doc").hide()
+			$("#help-and-rules").show()
+		}
 
 	};
 });
