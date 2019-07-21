@@ -78,7 +78,7 @@ local MISSIONS = {
           requirement = "Nice! Now park it in the hangar, and check in with staff, and that will be all for this task!"
         }
       },
-      pay = 400,
+      pay = 300,
       plane_spawn = {
         model = "cuban800",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -116,7 +116,7 @@ local MISSIONS = {
           requirement = "Nice job! Let's park the Dodo back in the hangar and you'll be finished for this task!"
         }
       },
-      pay = 475,
+      pay = 375,
       plane_spawn = {
         model = "dodo",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -149,7 +149,7 @@ local MISSIONS = {
           requirement = "Nice! Go check in with staff and let them know you finished."
         }
       },
-      pay = 425,
+      pay = 325,
       plane_spawn = {
         model = "frogger",
         location = { x = -1112.2, y = -2883.9, z = 13.3 },
@@ -187,7 +187,7 @@ local MISSIONS = {
           requirement = "Nice! Now park it in the hangar, and check in with staff, and that will be all for this task!"
         }
       },
-      pay = 500,
+      pay = 400,
       plane_spawn = {
         model = "vestra",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -228,7 +228,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 400,
       plane_spawn = {
         model = "shamal",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -267,7 +267,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 550,
+      pay = 450,
       plane_spawn = {
         model = "nimbus",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -306,7 +306,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 400,
       plane_spawn = {
         model = "luxor2",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -364,7 +364,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 400,
       plane_spawn = {
         model = "nimbus",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -403,7 +403,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 550,
+      pay = 450,
       plane_spawn = {
         model = "shamal",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -442,7 +442,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 400,
       plane_spawn = {
         model = "luxor",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -483,7 +483,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 600,
+      pay = 500,
       plane_spawn = {
         model = "titan",
         location = { x = -962.2, y = -2991.7, z = 13.9 }
@@ -521,7 +521,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 620,
+      pay = 520,
       plane_spawn = {
         model = "titan",
         location = { x = -962.2, y = -2991.7, z = 13.9 }
@@ -559,7 +559,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 400,
       plane_spawn = {
         model = "nimbus",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -598,7 +598,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 400,
       plane_spawn = {
         model = "shamal",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -637,7 +637,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 400,
       plane_spawn = {
         model = "luxor",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -675,7 +675,7 @@ local MISSIONS = {
           requirement = "Park the Velum in the hangar, and check in with staff, and that will be all for this flight!"
         }
       },
-      pay = 600,
+      pay = 500,
       plane_spawn = {
         model = "velum",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -714,7 +714,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 560,
+      pay = 460,
       plane_spawn = {
         model = "shamal",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -753,7 +753,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 575,
+      pay = 475,
       plane_spawn = {
         model = "nimbus",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
