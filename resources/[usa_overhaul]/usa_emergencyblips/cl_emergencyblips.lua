@@ -15,6 +15,11 @@ AddEventHandler("eblips:toggle", function(on)
 	-- remove all blips if turned off --
 	if not ACTIVE then
 		RemoveAnyExistingEmergencyBlips()
+		exports.tokovoip_script:removePlayerFromRadio(1)
+	end
+
+	if ACTIVE then -- for TokoVOIP
+		exports.tokovoip_script:addPlayerToRadio(1)
 	end
 end)
 
