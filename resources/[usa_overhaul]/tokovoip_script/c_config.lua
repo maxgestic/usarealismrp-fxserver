@@ -37,8 +37,7 @@ TokoVoipConfig = {
 		TSChannelSupport = "SUPPORT", -- TeamSpeak support channel name displayed on blocking screen
 		TSDownload = "http://usarrp.net/voip", -- Download link displayed on blocking screen
 		TSChannelWhitelist = { -- Black screen will not be displayed when users are in those TS channels
-			"Support 1",
-			"Support 2",
+			"SUPPORT"
 		},
 
 		-- The following is purely TS client settings, to match tastes
