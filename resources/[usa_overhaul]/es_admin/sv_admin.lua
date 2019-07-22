@@ -1346,7 +1346,12 @@ end
 
 -- TESTING COMMAND --
 TriggerEvent('es:addGroupCommand', 'test', "owner", function(source, args, char)
-	TriggerClientEvent("testing:spawnObject", source, "bkr_prop_meth_acetone")
+	local char = exports["usa-characters"]:GetCharacter(source)
+	--TriggerClientEvent("testing:spawnObject", source, "bkr_prop_meth_acetone")
+	local lsd = {name = "LSD Vile", price = 6, type = "drug", quantity = 1, legality = "illegal", weight = 5.0, objectModel = "prop_cs_pour_tube"}
+	if char.canHoldItem(lsd) then
+		char.giveItem(lsd)
+	end
 end, {
 	help = "Test something"
 })

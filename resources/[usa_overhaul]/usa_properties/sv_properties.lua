@@ -426,31 +426,31 @@ Citizen.CreateThread(function()
 end)
 
 local burglarySearchItems = {
+	{name = "LSD Vile", price = 6, type = "drug", quantity = 1, legality = "illegal", weight = 5.0, objectModel = "prop_cs_pour_tube"},
 	{name = "Cheeseburger", price = 6, type = "food", substance = 30.0, quantity = 1, legality = "legal", weight = 10.0, objectModel = "prop_cs_burger_01"},
 	{name = "Flaming Hot Cheetos", price = 2, type = "food", substance = 6.0, quantity = 1, legality = "legal", weight = 9.0, objectModel = "ng_proc_food_chips01c"},
 	{name = "Water", price = 3, type = "drink", substance = 60.0, quantity = 1, legality = "legal", weight = 9.0, objectModel = "ba_prop_club_water_bottle"},
 	{name = "Arizona Iced Tea", price = 1, type = "drink", substance = 60.0, quantity = 1, legality = "legal", weight = 9.0, objectModel = "ba_prop_club_water_bottle"},
 	{name = "Pepsi", price = 4, type = "drink", substance = 9.0, quantity = 1, legality = "legal", weight = 9.0, objectModel = "ng_proc_sodacan_01b"},
 	{name = "Everclear Vodka (90%)", price = 35, type = "alcohol", substance = 5.0, quantity = 1, legality = "legal", weight = 10.0, strength = 0.10, objectModel = "prop_vodka_bottle"},
-  {name = "Repair Kit", price = 250, type = "vehicle", quantity = 1, legality = "legal", weight = 15.0, objectModel = "imp_prop_tool_box_01a"},
-  {name = 'Lockpick', type = 'misc', price = 400, legality = 'legal', quantity = 1, weight = 5.0},
-  {name = "First Aid Kit", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 10.0, objectModel = "v_ret_ta_firstaid"},
-  {name = "Packaged Weed", quantity = 1, weight = 5.0, type = "drug", legality = "illegal", objectModel = "bkr_prop_weed_bag_01a"},
-  {name = 'Packaged Meth', type = 'drug', legality = 'illegal', quantity = 1, weight = 7.0, objectModel = 'bkr_prop_meth_smallbag_01a'},
-  {name = 'Pistol', type = 'weapon', hash = 453432689, price = 1000, legality = 'illegal', quantity = 1, weight = 15, objectModel = "w_pi_pistol", notStackable = true},
-  {name = 'Razor Blade', type = 'misc', price = 500, legality = 'legal', quantity = 1, residue = false, weight = 3},
-  {name = 'Switchblade', type = 'weapon', hash = -538741184, price = 1500, legality = 'illegal', quantity = 1, weight = 5, notStackable = true},
-  {name = "Condoms", price = 5, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "ng_proc_candy01a"},
-  {name = "KY Intense Gel", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "v_res_d_lube"},
-  {name = "Viagra", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_pills"},
-  {name = "Sturdy Rope", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 4, objectModel = "prop_devin_rope_01"},
-  {name = "Bag", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 3, objectModel = "prop_paper_bag_01"},
-  {name = "Ludde's Lube", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "v_res_d_lube"},
-  {name = "Used Condom", type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "ng_proc_candy01a"},
-  {name = "Fluffy Handcuffs", type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "p_cs_cuffs_02_s"},
-  {name = "Vibrator", type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_marker_01"},
-  {name = "French Dip Au Jus", price = 55, type = "food", substance = 60.0, quantity = 1, legality = "legal", weight = 10},
-  {name = "Back Porch Strawberry Lemonade", price = 60, type = "alcohol", substance = 15.0, quantity = 4, legality = "legal", weight = 1, strength = 0.28}
+	{name = "Repair Kit", price = 250, type = "vehicle", quantity = 1, legality = "legal", weight = 15.0, objectModel = "imp_prop_tool_box_01a"},
+	{name = 'Lockpick', type = 'misc', price = 400, legality = 'legal', quantity = 1, weight = 5.0},
+	{name = "First Aid Kit", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 10.0, objectModel = "v_ret_ta_firstaid"},
+	{name = "Packaged Weed", quantity = 1, weight = 5.0, type = "drug", legality = "illegal", objectModel = "bkr_prop_weed_bag_01a"},
+	{name = 'Packaged Meth', type = 'drug', legality = 'illegal', quantity = 1, weight = 7.0, objectModel = 'bkr_prop_meth_smallbag_01a'},
+	{name = 'Pistol', type = 'weapon', hash = 453432689, price = 1000, legality = 'illegal', quantity = 1, weight = 15, objectModel = "w_pi_pistol", notStackable = true},
+	{name = 'Razor Blade', type = 'misc', price = 500, legality = 'legal', quantity = 1, residue = false, weight = 3},
+	{name = 'Switchblade', type = 'weapon', hash = -538741184, price = 1500, legality = 'illegal', quantity = 1, weight = 5, notStackable = true},
+	{name = "Condoms", price = 5, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "ng_proc_candy01a"},
+	{name = "KY Intense Gel", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "v_res_d_lube"},
+	{name = "Viagra", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_pills"},
+	{name = "Sturdy Rope", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 4, objectModel = "prop_devin_rope_01"},
+	{name = "Bag", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 3, objectModel = "prop_paper_bag_01"},
+	{name = "Ludde's Lube", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "v_res_d_lube"},
+	{name = "Fluffy Handcuffs", type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "p_cs_cuffs_02_s"},
+	{name = "Vibrator", type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_marker_01"},
+	{name = "French Dip Au Jus", price = 55, type = "food", substance = 60.0, quantity = 1, legality = "legal", weight = 10},
+	{name = "Back Porch Strawberry Lemonade", price = 60, type = "alcohol", substance = 15.0, quantity = 4, legality = "legal", weight = 1, strength = 0.28}
 }
 
 local interiors = {
@@ -610,9 +610,10 @@ TriggerEvent('es:addJobCommand', 'createhouse', {'judge'}, function(source, args
 		end
 	end
 end, {
-	help = "Create a house for a player where you're standing (COSTS $65,000).",
+	help = "Create a house for a player where you're standing.",
 	params = {
-		{ name = "id", help = "player id" }
+		{ name = "id", help = "player id" },
+		{ name = "price", help = "price ($10k minimum)" },
 	}
 })
 
@@ -728,6 +729,7 @@ function canPropertyHoldItem(owner, location, itemToCheck)
 end
 
 function RefreshProperties(source, spawnAtProperty)
+	-- reset owner if player owns any properties --
 	for property, data in pairs(properties) do
 		if data.type == 'house' then
 			for i = #data.rooms, 1, -1 do
@@ -751,16 +753,18 @@ function RefreshProperties(source, spawnAtProperty)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	if not char then return end
 	local property = char.get('property')
-
 	if not property then
 		property = {
 			['location'] = 'Perrera Beach Motel',
 			['storage'] = {},
 			['money'] = 0,
-			['house'] = false
+			['house'] = false,
+			['type'] = "motel"
 		}
 		char.set('property', property)
 	end
+
+	-- check fees / find open room or applicable house  to spawn at --
 	if not property['house'] then
 		-- evict owner if time has exceeded
 		if properties[property['location']].type == 'apartment' then
@@ -788,38 +792,55 @@ function RefreshProperties(source, spawnAtProperty)
 			end
 		end
 
-		for _property, data in pairs(properties) do
-			if _property == property['location'] then
-				for i = 1, #data.rooms do
-					local room = properties[_property].rooms[i]
-					if not room.owner then
-						properties[_property].rooms[i].owner = source
-						TriggerClientEvent('properties:updateData', -1, _property, i, properties[_property].rooms[i])
-						TriggerClientEvent('properties:updateBlip', source, _property, i)
-						TriggerClientEvent('usa:notify', source, 'Your property is at ~y~'.._property..'~s~, room '..i..'.')
-						TriggerClientEvent("chatMessage", source, "", {}, "^3SA Real Estate:^0 Your property is at ^3".._property.."^0, room "..i..".")
-						if spawnAtProperty then
-							TriggerClientEvent('properties:setPosition', source, room.coords, room.heading)
-						end
-						return
-					end
+		local currentPropertyType = properties[property['location']].type
+		local currentPropertyName = property['location']
+
+		--[[ set an empty room
+		for name, info in pairs(properties) do -- test
+			for i = 1, #info.rooms do
+				if info.type == "motel" and name == "The Motor Hotel" and i == #info.rooms then
+					break
+				else
+					info.rooms[i].owner = true
 				end
 			end
 		end
-		for _property, data in pairs(properties) do
-			if properties[property['location']].type == 'motel' then
-				for i = 1, #data.rooms do
-					local room = properties[_property].rooms[i]
-					if not room.owner then
-						properties[_property].rooms[i].owner = source
-						TriggerClientEvent('properties:updateData', -1, _property, i, properties[_property].rooms[i])
-						TriggerClientEvent('properties:updateBlip', source, _property, i)
-						TriggerClientEvent('usa:notify', source, 'Your property is at ~y~'.._property..'~s~, room '..i..'.')
-						TriggerClientEvent("chatMessage", source, "", {}, "^3SA Real Estate:^0 Your property is at ^3".._property.."^0, room "..i..".")
-						if spawnAtProperty then
-							TriggerClientEvent('properties:setPosition', source, room.coords, room.heading)
+		--]]
+
+		-- look for an empty room at a property with type == property['type'] and place them there
+		if currentPropertyType == "motel" then
+			for name, info in pairs(properties) do
+					if info.type == currentPropertyType then
+						for i = 1, #info.rooms do
+							if not info.rooms[i].owner then
+								properties[name].rooms[i].owner = source
+								TriggerClientEvent('properties:updateData', -1, name, i, properties[name].rooms[i])
+								TriggerClientEvent('properties:updateBlip', source, name, i)
+								TriggerClientEvent('usa:notify', source, 'Your property is at ~y~'..name..'~s~, room '..i..'.')
+								TriggerClientEvent("chatMessage", source, "", {}, "^3SA Real Estate:^0 Your property is at ^3"..name.."^0, room "..i..".")
+								if spawnAtProperty then
+									TriggerClientEvent('properties:setPosition', source, properties[name].rooms[i].coords, properties[name].rooms[i].heading)
+								end
+								return
+							end
 						end
-						return
+					end
+			end
+		else -- apartments (todo: account for overflow of apartment)
+			for name, info in pairs(properties) do
+				if name == currentPropertyName then
+					for i = 1, #info.rooms do
+						if not info.rooms[i].owner then
+							properties[name].rooms[i].owner = source
+							TriggerClientEvent('properties:updateData', -1, name, i, properties[name].rooms[i])
+							TriggerClientEvent('properties:updateBlip', source, name, i)
+							TriggerClientEvent('usa:notify', source, 'Your property is at ~y~'..name..'~s~, room '..i..'.')
+							TriggerClientEvent("chatMessage", source, "", {}, "^3SA Real Estate:^0 Your property is at ^3"..name.."^0, room "..i..".")
+							if spawnAtProperty then
+								TriggerClientEvent('properties:setPosition', source, properties[name].rooms[i].coords, properties[name].rooms[i].heading)
+							end
+							return
+						end
 					end
 				end
 			end
@@ -1410,7 +1431,7 @@ AddEventHandler('properties:estateChange', function(estate)
 				return
 			end
 		end
-		TriggerClientEvent('usa:notify', source, 'You have relocated to ~y~'..property['location']..'~s~.')
+		--TriggerClientEvent('usa:notify', source, 'You have relocated to ~y~'..property['location']..'~s~.')
 		TriggerClientEvent('usa:showHelp', source, 'Weekly payments are covered from your bank balance, ensure you have enough each week.')
 		RefreshProperties(source, false)
 	end

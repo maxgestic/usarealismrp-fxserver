@@ -2,10 +2,10 @@ local debug = false
 
 -- todo: randomize price based on each purchase instead of once
 local SELLABLE_ITEMS = {
-	["Packaged Meth"] = {150, 200},
+	["Packaged Meth"] = {150, 250},
 	["Packaged Blue Meth"] = {350, 550},
 	["Packaged Weed"] = {50, 125},
-	["Packaged Cocaine"] = {700, 1200}
+	["Packaged Cocaine"] = {500, 1000}
 }
 
 -- see if player has any items to sell to NPC
