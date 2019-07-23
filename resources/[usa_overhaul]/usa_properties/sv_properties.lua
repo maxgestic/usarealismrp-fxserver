@@ -5,7 +5,7 @@ local properties = {
 		interior = 'motel',
 		type = 'motel',
 		weightLimit = 100,
-		cashLimit = 5000,
+		cashLimit = 10000,
 		office = {-1477.11, -674.48, 29.04},
 		rooms = {
 			{name = 'Room 1', coords = {-1493.75, -668.33, 29.02}, heading = 317.0, voiceChannel = 501, owner = false, instance = {}, locked = true},
@@ -47,7 +47,7 @@ local properties = {
 		interior = 'motel',
 		type = 'motel',
 		weightLimit = 100,
-		cashLimit = 5000,
+		cashLimit = 10000,
 		office = {1142.32, 2663.89, 38.16},
 		rooms = {
 			{name = 'Room 1', coords = {1142.40, 2654.65, 38.15}, heading = 93.0, voiceChannel = 601, owner = false, instance = {}, locked = true},
@@ -69,7 +69,7 @@ local properties = {
 		interior = 'motel',
 		type = 'motel',
 		weightLimit = 100,
-		cashLimit = 5000,
+		cashLimit = 10000,
 		office = {316.98, 2622.9, 44.45},
 		rooms = {
 			{name = 'Room 1', coords = {341.70, 2614.93, 44.67}, heading = 31.0, voiceChannel = 701, owner = false, instance = {}, locked = true},
@@ -90,7 +90,7 @@ local properties = {
 		type = 'apartment',
 		payment = 1500,
 		weightLimit = 250,
-		cashLimit = 10000,
+		cashLimit = 30000,
 		office = {-83.31, -282.18, 45.5},
 		rooms = {
 			{name = 'Apartment 1', coords = {-85.95, -281.97, 45.55}, heading = 350.0, voiceChannel = 801, owner = false, instance = {}, locked = true},
@@ -133,7 +133,7 @@ local properties = {
 		type = 'apartment',
 		payment = 3000,
 		weightLimit = 500,
-		cashLimit = 20000,
+		cashLimit = 50000,
 		office = {-621.49, 37.19, 43.58},
 		rooms = {
 			{name = 'Apartment 1', coords = {-617.00, 37.94, 43.59}, heading = 170.0, voiceChannel = 901, owner = false, instance = {}, locked = true},
@@ -176,7 +176,7 @@ local properties = {
 		type = 'apartment',
 		payment = 7500,
 		weightLimit = 1000,
-		cashLimit = 50000,
+		cashLimit = 60000,
 		office = {-778.88, 313.14, 85.69},
 		rooms = {
 			{name = 'Apartment 1', coords = {-775.05, 313.14, 85.69}, heading = 170.0, voiceChannel = 1001, owner = false, instance = {}, locked = true},
@@ -217,7 +217,7 @@ local properties = {
 		interior = 'midapartment',
 		type = 'house',
 		weightLimit = 2000,
-		cashLimit = 65000,
+		cashLimit = 300000,
 		rooms = {
 
 		}
