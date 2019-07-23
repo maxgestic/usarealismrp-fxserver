@@ -13,8 +13,8 @@ local VEHICLE_RANKS = {
 	},
 	["ems"] = {
 		["ambulance"] = 1,
-		["paraexp"] = 2,
-		["sheriff2"] = 2,
+		["paraexp"] = 4,
+		["sheriff2"] = 4,
 		["firetruk"] = 1,
 		["polmav"] = 1,
 		["lguard2"] = 1,
