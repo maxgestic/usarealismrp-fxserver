@@ -975,16 +975,18 @@ function LoadPropertyMenu(menu_data, location, index)
 	            if not item.quantity then item.quantity = 1 end
 	            if item.quantity > 1 then
 	           		local amount = tonumber(KeyboardInput('Enter amount:', '', 5))
-	           		amount = math.floor(amount)
-	                if amount > 0 then
-	                    if item.quantity - amount >= 0 then
-	                        TriggerServerEvent("properties:storeItem", location, index, item, amount)
-	                    else
-	                        TriggerEvent('usa:notify', "Quantity input too high!")
-	                    end
-	                else
-	                    TriggerEvent('usa:notify', "Quantity input too low!")
-	                end
+					if amount then
+		           		amount = math.floor(amount)
+		                if amount > 0 then
+		                    if item.quantity - amount >= 0 then
+		                        TriggerServerEvent("properties:storeItem", location, index, item, amount)
+		                    else
+		                        TriggerEvent('usa:notify', "Quantity input too high!")
+		                    end
+		                else
+		                    TriggerEvent('usa:notify', "Quantity input too low!")
+		                end
+					end
 	            else
 	            	TriggerServerEvent("properties:storeItem", location, index, item, item.quantity)
 	            end
