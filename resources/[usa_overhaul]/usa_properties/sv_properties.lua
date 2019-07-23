@@ -1235,7 +1235,7 @@ AddEventHandler("properties:storeItem", function(location, index, item, quantity
 					char.removeItem(item, quantity)
 				end
 			else
-				local hasitem = false
+				local hasItem = false
 				for i = 1, #property['storage'] do
 			    	local _item = property['storage'][i]
 			        if _item.name == item.name then

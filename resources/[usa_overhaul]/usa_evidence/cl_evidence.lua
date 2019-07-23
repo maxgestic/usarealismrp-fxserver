@@ -31,6 +31,8 @@ local KEYS = {
 	Y = 246
 }
 
+local EVIDENCE_DESTROY_TIME = 15000
+
 RegisterNetEvent('evidence:updateData')
 AddEventHandler('evidence:updateData', function(key, value)
 	playerData[key] = value
@@ -346,8 +348,8 @@ Citizen.CreateThread(function()
 						TaskPlayAnim(playerPed,"amb@prop_human_bum_bin@idle_b","idle_d", 100.0, 200.0, 0.3, 120, 0.2, 0, 0, 0)
 						local beginTime = GetGameTimer()
 						discardingEvidence = true
-						while GetGameTimer() - beginTime < 5000 do
-							DrawTimer(beginTime, 5000, 1.42, 1.475, 'DESTROYING')
+						while GetGameTimer() - beginTime < EVIDENCE_DESTROY_TIME do
+							DrawTimer(beginTime, EVIDENCE_DESTROY_TIME, 1.42, 1.475, 'DESTROYING')
 							Citizen.Wait(0)
 						end
 						ClearPedTasks(playerPed)
