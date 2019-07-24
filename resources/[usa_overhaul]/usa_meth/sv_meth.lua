@@ -110,7 +110,7 @@ AddEventHandler("methJob:startTimer", function(timerType)
 				legality = "illegal",
 				quantity = 1,
 				type = "chemical",
-				weight = 10,
+				weight = 5,
 				objectModel = "bkr_prop_meth_acetone"
 			}
 			char.giveItem(suspiciousChemicals, 1)
@@ -126,7 +126,7 @@ AddEventHandler("methJob:startTimer", function(timerType)
 				legality = "illegal",
 				quantity = 1,
 				type = "chemical",
-				weight = 10,
+				weight = 5,
 				objectModel = "bkr_prop_meth_ammonia"
 			}
 			char.giveItem(suspiciousChemicals, 1)
@@ -143,7 +143,7 @@ AddEventHandler("methJob:checkUserMoney", function(supplyType)
 	end
 	local suspicious_chems = {
 		name = "chems bruh",
-		weight = 10,
+		weight = 5,
 		quantity = 1,
 		type = "chemicals"
 	}

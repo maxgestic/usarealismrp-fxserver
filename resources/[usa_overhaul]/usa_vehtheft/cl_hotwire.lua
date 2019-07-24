@@ -153,8 +153,7 @@ AddEventHandler('veh:hotwireVehicle', function()
   local playerPed = PlayerPedId()
   if veh and GetPedInVehicleSeat(veh, -1) == playerPed and not IsPedCuffed(PlayerPedId()) then
     if not hasKeys and DoesEntityExist(playerPed) and not IsEntityDead(playerPed) then
-      if math.random() < 0.90 and IsAreaPopulated() then
-        --print('big penis')
+      if math.random() < 0.40 and IsAreaPopulated() then
         local x, y, z = table.unpack(GetEntityCoords(playerPed, true))
         local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
         local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
