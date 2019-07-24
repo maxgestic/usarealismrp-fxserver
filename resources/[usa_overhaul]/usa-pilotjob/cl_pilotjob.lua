@@ -346,7 +346,10 @@ function MarkCurrentCheckpointComplete()
                 if active_job.current_passengers then
                     for i = #active_job.current_passengers, 1, -1 do
                         TaskLeaveVehicle(active_job.current_passengers[i], active_job.current_vehicle, 1)
+                        Wait(1000)
                         TaskWanderStandard(active_job.current_passengers[i], 10.0, 10)
+                        Wait(1000)
+                        SetPedAsNoLongerNeeded(active_job.current_passengers[i])
                         table.remove(active_job.current_passengers, i)
                     end
                 end
