@@ -27,11 +27,10 @@ $(document).ready(function(){
   function closeMain() {
     $(".home").css("display", "none");
   }
-  function openMain() {
+  function openMain(bal) {
     $(".home").css("display", "block");
-  }
-  function openMain() {
-    $(".home").css("display", "block");
+    if (bal)
+        $('.currentBalance').html('$'+addCommas(bal));
   }
   function closeAll() {
     $(".body").css("display", "none");
@@ -82,7 +81,7 @@ $(document).ready(function(){
     // Open & Close main bank window
     if(item.openBank == true) {
       openContainer();
-      openMain();
+      openMain(item.bal);
     }
     if(item.openBank == false) {
       closeContainer();

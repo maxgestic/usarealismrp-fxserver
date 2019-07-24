@@ -1,9 +1,3 @@
-local balances = {}
-
-AddEventHandler('playerDropped', function()
-	balances[source] = nil
-end)
-
 -- HELPER FUNCTIONS
 function bankBalance(player)
 	return exports["usa-characters"]:GetCharacterField(player, "bank")
@@ -13,7 +7,6 @@ function deposit(player, amount)
 	if amount <= 0 then
 		local bankbalance = bankBalance(player)
 		local new_balance = bankbalance + math.abs(amount)
-		balances[player] = new_balance
 
 		local char = exports["usa-characters"]:GetCharacter(player)
 		char.giveBank(math.abs(amount))
@@ -25,7 +18,6 @@ end
 function withdraw(player, amount)
 	local bankbalance = bankBalance(player)
 	local new_balance = bankbalance - math.abs(amount)
-	balances[player] = new_balance
 
 	local char = exports["usa-characters"]:GetCharacter(player)
 	char.removeBank(math.abs(amount))
@@ -177,6 +169,11 @@ RegisterServerEvent("bank:showBankBalance")
 AddEventHandler("bank:showBankBalance", function()
 	local bank = exports["usa-characters"]:GetCharacterField(source, "bank")
 	TriggerClientEvent("usa:notify", source, "Bank Balance: ~s~$" .. comma_value(bank))
+end)
+
+RegisterServerEvent("bank:getBalanceForGUI")
+AddEventHandler("bank:getBalanceForGUI", function()
+	TriggerClientEvent("bank:getBalanceForGUI", source, exports["usa-characters"]:GetCharacterField(source, "bank"))
 end)
 
 TriggerEvent('es:addCommand', 'bank', function(source, args, char)

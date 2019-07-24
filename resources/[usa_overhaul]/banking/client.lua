@@ -102,9 +102,9 @@ local bankOpen = false
 local atmOpen = false
 
 -- Open Gui and Focus NUI
-function openGui()
+function openGui(bal)
   SetNuiFocus(true, true)
-  SendNUIMessage({openBank = true})
+  SendNUIMessage({openBank = true, bal = bal})
 end
 
 -- Close Gui and disable NUI
@@ -131,8 +131,8 @@ if enableBankingGui then
             closeGui()
             bankOpen = false
           else
-            openGui()
-            bankOpen = true
+            TriggerServerEvent("bank:getBalanceForGUI")
+            Wait(500)
           end
         end
     	else
@@ -256,6 +256,12 @@ function IsNearPlayer(player)
     return true
   end
 end
+
+RegisterNetEvent('bank:getBalanceForGUI')
+AddEventHandler('bank:getBalanceForGUI', function(bal)
+    openGui(bal)
+    bankOpen = true
+end)
 
 -- Process deposit if conditions met
 RegisterNetEvent('bank:deposit')
