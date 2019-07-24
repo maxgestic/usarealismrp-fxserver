@@ -43,7 +43,7 @@ Queue.MaxPublicPlayerCount = 1500000 -- temporary because broken
 local debug = false
 local displayQueue = false
 local initHostName = false
-local maxPlayers = 32 -- possibly better to keep at 30?
+local maxPlayers = 60 -- possibly better to keep at 30?
 
 local tostring = tostring
 local tonumber = tonumber
@@ -327,7 +327,7 @@ end
 
 Citizen.CreateThread(function()
     local function playerConnect(name, setKickReason, deferrals)
-        maxPlayers = GetConvarInt("sv_maxclients", 64)
+        maxPlayers = GetConvarInt("sv_maxclients", 60)
         debug = GetConvar("sv_debugqueue", "true") == "true" and true or false
         displayQueue = GetConvar("sv_displayqueue", "true") == "true" and true or false
         initHostName = not initHostName and GetConvar("sv_hostname") or initHostName
