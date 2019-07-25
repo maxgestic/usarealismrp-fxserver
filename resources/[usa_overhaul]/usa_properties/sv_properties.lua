@@ -1477,7 +1477,7 @@ end, {
 
 RegisterServerEvent('properties:lockpickHouse')
 AddEventHandler('properties:lockpickHouse', function(playerCoords, lockpickItem)
-	if exports["usa-characters"]:GetNumCharactersWithJob("sheriff") >= 2 then
+	if exports["usa-characters"]:GetNumCharactersWithJob("sheriff") >= 1 then
 		for i = 1, #burglaryHouses do
 			if find_distance(playerCoords, burglaryHouses[i]) < 2.0 then
 				if (burglaryHouses[i].cooldown[source] and getMinutesFromTime(burglaryHouses[i].cooldown[source]) > 240) or not burglaryHouses[i].cooldown[source] then
