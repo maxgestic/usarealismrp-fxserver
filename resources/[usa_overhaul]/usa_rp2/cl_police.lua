@@ -1,4 +1,40 @@
 local spawnedCones = {}
+local radioMuted = false
+
+RegisterNetEvent("police:muteRadio")
+AddEventHandler("police:muteRadio", function()
+    radioMuted = not radioMuted
+    if radioMuted then
+        exports.tokovoip_script:removePlayerFromRadio(1)
+    else
+        exports.tokovoip_script:addPlayerToRadio(1)
+        exports.globals:notify("Radio ~g~enabled~w~!")
+    end
+end)
+
+Citizen.CreateThread(function()
+    while true do
+        local me = GetPlayerPed(-1)
+        if IsControlJustPressed(0, 172) and GetLastInputMethod(0) then
+            Wait(1000)
+            if IsControlPressed(0, 172) then
+                TriggerEvent("police:muteRadio")
+                Wait(100)
+            end
+        end
+        Wait(2)
+    end
+end)
+
+Citizen.CreateThread(function()
+    while true do
+        if radioMuted then
+            exports.globals:notify("Radio ~r~muted~w~!")
+            Wait(1000)
+        end
+        Wait(2)
+    end
+end)
 
 RegisterNetEvent("dispatch:setWaypoint")
 AddEventHandler("dispatch:setWaypoint", function(targetServerId)

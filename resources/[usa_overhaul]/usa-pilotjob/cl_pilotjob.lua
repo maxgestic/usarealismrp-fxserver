@@ -115,6 +115,7 @@ Citizen.CreateThread(function()
                     MarkCurrentCheckpointComplete()
                     active_job = nil
                     exports.globals:notify("Job ended! You damaged the aircraft!")
+                    TriggerServerEvent("usa:loadPlayerComponents")
                 end
             end
             -- time --
@@ -123,6 +124,7 @@ Citizen.CreateThread(function()
                     MarkCurrentCheckpointComplete()
                     active_job = nil
                     exports.globals:notify("Job ended! Time expired!")
+                    TriggerServerEvent("usa:loadPlayerComponents")
                 end
             end
             -- player injury --
@@ -130,6 +132,7 @@ Citizen.CreateThread(function()
                 MarkCurrentCheckpointComplete()
                 active_job = nil
                 exports.globals:notify("Job ended!")
+                TriggerServerEvent("usa:loadPlayerComponents")
             end
             -- ped injury --
             if active_job and active_job.current_passengers then
@@ -137,6 +140,7 @@ Citizen.CreateThread(function()
                     if IsPedDeadOrDying(active_job.current_passengers[i]) then
                         MarkCurrentCheckpointComplete()
                         active_job = nil
+                        TriggerServerEvent("usa:loadPlayerComponents")
                         exports.globals:notify("Job ended! A passenger was injured!")
                         break
                     end
