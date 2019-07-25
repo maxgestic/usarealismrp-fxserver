@@ -173,7 +173,8 @@ var itemImages = {
   "Funyuns": "https://imgur.com/a/l2uA5MU.png",
   "Cool Ranch Doritos": "https://i.imgur.com/7zwiCP5.png",
   "Gummy Worms": "https://i.imgur.com/CjOhIJF.png",
-  "Sour Gummy Worms": "https://i.imgur.com/AiSyyCw.png"
+  "Sour Gummy Worms": "https://i.imgur.com/AiSyyCw.png",
+  "LSD Vile": "https://imgur.com/4zNSw5c.png"
 }
 
 var menuItems = [
