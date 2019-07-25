@@ -423,7 +423,7 @@ AddEventHandler("police:checkSuspension", function(character)
 end)
 
 -- mute radio (TokoVOIP) --
-TriggerEvent('es:addJobCommand', 'muter',  {"sheriff", "ems", "doc", "doctor"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'muter',  {"sheriff", "ems", "corrections", "doctor"}, function(source, args, user)
 	TriggerClientEvent("police:muteRadio", source)
 end, {
 	help = "Mute your dispatch radio."
@@ -434,6 +434,6 @@ AddEventHandler("police:checkRadioMutePerms", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get("job")
 	if job == "sheriff" or job == "ems" or job == "corrections" or job == "doctor" then
-		TriggerClientEvent("police:muteRadio", sssource)
+		TriggerClientEvent("police:muteRadio", source)
 	end
 end)
