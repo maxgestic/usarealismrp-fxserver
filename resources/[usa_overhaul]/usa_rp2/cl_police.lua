@@ -15,10 +15,10 @@ end)
 Citizen.CreateThread(function()
     while true do
         local me = GetPlayerPed(-1)
-        if IsControlJustPressed(0, 172) and GetLastInputMethod(0) then
+        if IsControlJustPressed(0, 172) and IsControlPressed(0, 210) and GetLastInputMethod(0) then
             Wait(1000)
-            if IsControlPressed(0, 172) then
-                TriggerEvent("police:muteRadio")
+            if IsControlPressed(0, 172) and IsControlPressed(0, 210 ) then
+                TriggerServerEvent("police:checkRadioMutePerms")
                 Wait(100)
             end
         end

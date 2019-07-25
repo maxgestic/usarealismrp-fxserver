@@ -428,3 +428,12 @@ TriggerEvent('es:addJobCommand', 'muter',  {"sheriff", "ems", "doc", "doctor"}, 
 end, {
 	help = "Mute your dispatch radio."
 })
+
+RegisterServerEvent("police:checkRadioMutePerms")
+AddEventHandler("police:checkRadioMutePerms", function()
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local job = char.get("job")
+	if job == "sheriff" or job == "ems" or job == "corrections" or job == "doctor" then
+		TriggerClientEvent("police:muteRadio", sssource)
+	end
+end)
