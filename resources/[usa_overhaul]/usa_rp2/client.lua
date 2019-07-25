@@ -618,10 +618,13 @@ end)
 -- UTILITY FUNCTIONS --
 -----------------------
 RegisterNetEvent("usa:notify")
-AddEventHandler("usa:notify", function(msg)
+AddEventHandler("usa:notify", function(msg, chatMsg)
     SetNotificationTextEntry("STRING")
 	AddTextComponentString(msg)
 	DrawNotification(0,1)
+    if chatMsg then
+        TriggerEvent('chatMessage', '', {0,0,0}, '^0' .. chatMsg)
+    end
 end)
 
 RegisterNetEvent('usa:showHelp')

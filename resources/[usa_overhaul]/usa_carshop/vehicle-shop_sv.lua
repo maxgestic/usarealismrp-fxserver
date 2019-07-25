@@ -340,7 +340,7 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle, business)
 				AddVehicleToDB(vehicle)
 
 				TriggerEvent("lock:addPlate", vehicle.plate)
-				TriggerClientEvent("usa:notify", source, "Here are the keys! Thanks for your business!")
+				TriggerClientEvent("usa:notify", source, "Here are the keys! Thanks for your business!", "Purchased a " .. vehicle.make .. " " .. vehicle.model .. " for $" .. exports.globals:comma_value(vehicle.price))
 				TriggerClientEvent("vehShop:spawnPlayersVehicle", source, hash, plate)
 
 				if business then
@@ -416,7 +416,7 @@ function GetVehiclePrice(vehicle)
 			for i = 1, #v do
 				local name1 = vehicle.make .. " " .. vehicle.model
 				local name2 = v[i].make .. " " .. v[i].model
-				if name2:find(name1) then
+				if name1 == name2 then
 					return v[i].price
 				end
 			end
