@@ -74,7 +74,7 @@ Citizen.CreateThread( function()
 		Citizen.Wait(0)
 		local playerPed = PlayerPedId()
 		if GetPedParachuteState(playerPed) == -1 then
-			if DoesEntityExist(playerPed) and not IsEntityDead(playerPed) and not IsPedInAnyVehicle(playerPed, true) or GetPedDrawableVariation(playerPed, 7) == 8 or GetPedDrawableVariation(playerPed, 7) == 6 then
+			if DoesEntityExist(playerPed) and not IsEntityDead(playerPed) and not IsPedInAnyVehicle(playerPed, true) and not playingAnim then
 				DisableControlAction( 0, 20, true ) -- INPUT_MULTIPLAYER_INFO (Z)
 				if not IsPauseMenuActive() then
 					loadAnimDict( "reaction@intimidation@cop@unarmed" )
