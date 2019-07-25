@@ -150,3 +150,7 @@ function comma_value(amount)
 	end
 	return formatted
 end
+
+function Draw3DTextForOthers(msg)
+	TriggerServerEvent("globals:send3DText", msg)
+end

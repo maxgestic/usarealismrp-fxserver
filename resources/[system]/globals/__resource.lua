@@ -11,7 +11,8 @@ exports {
   'GetUserInput',
   "MaxItemTradeDistance",
   "MaxTackleDistance",
-  "comma_value"
+  "comma_value",
+  "Draw3DTextForOthers"
 }
 
 -- global server functions/tables

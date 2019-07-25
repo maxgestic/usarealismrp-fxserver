@@ -165,6 +165,7 @@ Citizen.CreateThread(function()
                     elseif not IsEntityDead(playerPed) then
                         if not GetScreenEffectIsActive('Rampage') then
                             StartScreenEffect('Rampage', 0, true)
+                            exports.globals:Draw3DTextForOthers("is losing a severe amount of blood")
                         end
                         if math.random() > 0.6 then
                             ShakeGameplayCam("SMALL_EXPLOSION_SHAKE", 0.1)

@@ -112,3 +112,8 @@ function comma_value(amount)
 	end
 	return formatted
 end
+
+RegisterServerEvent("globals:send3DText")
+AddEventHandler("globals:send3DText", function(msg)
+	sendLocalActionMessage(source, msg)
+end)
