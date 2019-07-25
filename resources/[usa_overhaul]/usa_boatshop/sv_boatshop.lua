@@ -1,19 +1,19 @@
 local MAX_VEHICLES = 6
 
 local boats = {
-  ["Nagasaki Dinghy"] = {name = "Nagasaki Dinghy", buy = 15000, rent = 5000},
-  ["Nagasaki Dinghy 2"] = {name = "Nagasaki Dinghy 2", buy = 15000, rent = 5000},
-  ["Dinka Marquis"] = {name = "Dinka Marquis", buy = 30000, rent = 9000},
-  ["Speedophile Seashark"] = {name = "Speedophile Seashark", buy = 5000, rent = 3500},
+  ["Nagasaki Dinghy"] = {name = "Nagasaki Dinghy", buy = 15000, rent = 2000},
+  ["Nagasaki Dinghy 2"] = {name = "Nagasaki Dinghy 2", buy = 15000, rent =2000},
+  ["Dinka Marquis"] = {name = "Dinka Marquis", buy = 30000, rent = 5000},
+  ["Speedophile Seashark"] = {name = "Speedophile Seashark", buy = 5000, rent = 900},
   ["Cuban Jetmax"] = {name = "Cuban Jetmax", buy = 35000, rent = 7500},
-  ["Lampadati Toro"] = {name = "Lampadati Toro", buy = 60000, rent = 15000},
-  ["Lampadati Toro 2"] = {name = "Lampadati Toro 2", buy = 60000, rent = 15000},
-  ["Tug"] = {name = "Tug", buy = 200000, rent = 50000},
+  ["Lampadati Toro"] = {name = "Lampadati Toro", buy = 60000, rent = 9000},
+  ["Lampadati Toro 2"] = {name = "Lampadati Toro 2", buy = 60000, rent = 9000},
+  ["Tug"] = {name = "Tug", buy = 200000, rent = 10000},
   ["Shitzu Squalo"] = {name = "Shitzu Squalo", buy = 40000, rent = 7500},
   ["Shitzu Tropic"] = {name = "Shitzu Tropic", buy = 40000, rent = 7500},
   ["Shitzu Suntrap"] = {name = "Shitzu Suntrap", buy = 30000, rent = 5500},
-  ["Submersible"] = {name = "Submersible", buy = 750000, rent = 70000},
-  ["Submersible 2"] = {name = "Submersible 2", buy = 750000, rent = 70000}
+  ["Submersible"] = {name = "Submersible", buy = 750000, rent = 20000},
+  ["Submersible 2"] = {name = "Submersible 2", buy = 750000, rent = 20000}
 }
 
 local rentals = {}
