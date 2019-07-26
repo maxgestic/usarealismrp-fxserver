@@ -13,7 +13,7 @@ KEYS ={
 MAX_ROB_PERCENT = 0.5
 MIN_ROB_PERCENT = 0.2
 
-ROB_DURATION = 140000
+ROB_DURATION = 120000
 
 BUSINESSES = {
 	["Vangelico Jewelry Store (Rockford Hills)"] = {
