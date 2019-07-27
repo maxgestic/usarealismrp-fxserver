@@ -12,6 +12,7 @@ AddEventHandler("police:muteRadio", function()
     end
 end)
 
+--[[
 Citizen.CreateThread(function()
     while true do
         local me = GetPlayerPed(-1)
@@ -25,6 +26,7 @@ Citizen.CreateThread(function()
         Wait(2)
     end
 end)
+--]]
 
 Citizen.CreateThread(function()
     while true do
