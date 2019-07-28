@@ -6,7 +6,7 @@ AddEventHandler('business:beginRobbery', function(storeName, isSuspectMale, play
 		local store = BUSINESSES[storeName]
 		local x, y, z = table.unpack(store.position)
 		local policeOnline = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
-		if ((os.time() - store.lastRobbedTime) < robberyCooldown and store.lastRobbedTime ~= 0) or policeOnline < POLICE_NEEDED  or anyStoreBeingRobbed or IsInstanced(players) then
+		if ((os.time() - store.lastRobbedTime) < robberyCooldown and store.lastRobbedTime ~= 0) or policeOnline < POLICE_NEEDED  or anyStoreBeingRobbed then
 			TriggerClientEvent('usa:notify', source, "Couldn't find any money!")
 			return
 		end
@@ -79,10 +79,3 @@ AddEventHandler('playerDropped', function(reason)
 		end
 	end
 end)
-
-function IsInstanced(playersGiven)
-	if #GetPlayers() - playersGiven > 1 then
-		return true
-	end
-	return false
-end

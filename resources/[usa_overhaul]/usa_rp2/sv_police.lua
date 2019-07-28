@@ -429,6 +429,7 @@ end, {
 	help = "Mute your dispatch radio."
 })
 
+--[[
 RegisterServerEvent("police:checkRadioMutePerms")
 AddEventHandler("police:checkRadioMutePerms", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
@@ -437,3 +438,4 @@ AddEventHandler("police:checkRadioMutePerms", function()
 		TriggerClientEvent("police:muteRadio", source)
 	end
 end)
+--]]
