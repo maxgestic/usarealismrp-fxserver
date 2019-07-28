@@ -52,6 +52,7 @@
         padding-bottom: 0;
         margin-bottom: 0;
         background-color: lightgray;
+        overflow-y: scroll;
     }
     #tabTitle {
         padding: 1em 0;
@@ -73,9 +74,27 @@
     #right-badge {
         position: absolute; right: 150; top: 15;
     }
-
+    /* Scrollbar */
+    ::-webkit-scrollbar-track
+    {
+        /* border: 1px solid black; */
+        /* background-color: rgba(100,100,100,0.7); */
+        background-color: rgba(0, 0, 0, 0.0);
+        display: none;
+    }
+    ::-webkit-scrollbar
+    {
+        width: 10px;
+        background-color: rgba(0, 0, 0, 0.0);
+        display: none;
+    }
+    ::-webkit-scrollbar-thumb
+    {
+        background-color: rgba(0, 0, 0, 0.4);
+        display: none;
+    }
     /* Adjust for Laptops / Small displays*/
-      @media screen and (max-width: 1500px) {
+    @media screen and (max-width: 1500px) {
         #content_container {
             margin-top: 0;
             height: 770px !important;
@@ -101,7 +120,6 @@
           font-size: 20px !important;
         }
       }
-
     </style>
 </head>
 <body>
@@ -132,6 +150,10 @@
             <div v-on:click="changePage('Police Reports')" id="reports" class="w3-bar-item w3-button w3-padding-large">
                 <i class="fa fa-sticky-note w3-xxlarge"></i>
                 <p>Police Reports</p>
+            </div>
+            <div v-on:click="changePage('Help')" id="help" class="w3-bar-item w3-button w3-padding-large">
+                <i class="fa fa-question w3-xxlarge"></i>
+                <p>Help</p>
             </div>
         </nav>
 
@@ -571,6 +593,17 @@
                         <div class="w3-margin-bottom">
                             <button v-on:click="changePage('Police Reports')" class="w3-margin-top">Back</button>
                             <button v-on:click="DeletePoliceReport(current_report._id)" class="w3-margin-top">Delete</button>
+                        </div>
+                    </div>
+
+                    <!-- Help -->
+                    <div v-if="current_tab == 'Help'">
+                        <div style="text-align: center;">
+                            <iframe style="height: 100%; width: 100%;" src="https://docs.google.com/document/d/e/2PACX-1vTv-UisvLS7fsQXhxnLdfTHZ2CmyQxsngDoVVXXMGhocxl3NcQNRtAfLX9wwvxazRPCpoi330jkzQS1/pub?embedded=true"></iframe>
+                            <br>
+                            <h3><b>Law Handbook</b></h3>
+                            <br>
+                            <iframe style="height: 100%; width: 100%;" src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTJeEEk9Oyx-qsoH-nw0URS6fVE0TErdm6ID7xJy0NsUlv1LRAcRqbcd3BmzZDL0Noo_V0RbMO1f6wm/pubhtml?gid=0&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
                         </div>
                     </div>
 

@@ -39,14 +39,17 @@ RegisterServerEvent('pdmenu:returnAllowedVehicles')
 AddEventHandler('pdmenu:returnAllowedVehicles', function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local user_job = char.get("job")
-    local vehs = GetAllowedVehicles(user_job)
+	local myRank = char.get("policeRank")
+    local vehs = GetAllowedVehicles(user_job, myRank)
 	TriggerClientEvent('pdmenu:sendAllowedVehicles', source, vehs)
 end)
 
-function GetAllowedVehicles(job)
+function GetAllowedVehicles(job, myRank)
     local vehs = {}
-    for veh, rank in pairs(VEHICLE_RANKS[job]) do
-        table.insert(vehs, veh)
+	for veh, rank in pairs(VEHICLE_RANKS[job]) do
+		if myRank >= rank then
+			table.insert(vehs, veh)
+		end
     end
     return vehs
 end

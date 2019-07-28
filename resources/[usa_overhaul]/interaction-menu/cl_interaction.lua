@@ -844,7 +844,10 @@ function interactionMenuUse(itemName, wholeItem)
 			Wait(1500)
 			DoScreenFadeIn(1500)
 			StartScreenEffect("DrugsMichaelAliensFight", 0, false)
-			Wait(drug_duration)
+			local useTime = GetGameTimer()
+			while (GetGameTimer() - useTime < drug_duration) do 
+				Wait(10)
+			end
 			DoScreenFadeOut(1000)
 			DoScreenFadeIn(1000)
 			StopScreenEffect("DrugsMichaelAliensFight")
