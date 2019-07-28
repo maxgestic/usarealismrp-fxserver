@@ -101,7 +101,7 @@ function TokoVoip.initialize(self)
 			Citizen.Wait(5);
 
 			if ((self.keySwitchChannelsSecondary and IsControlPressed(0, self.keySwitchChannelsSecondary)) or not self.keySwitchChannelsSecondary) then -- Switch radio channels
-				if (IsControlJustPressed(0, self.keySwitchChannels) and tablelength(self.myChannels) > 0) then
+				if (IsControlJustPressed(0, self.keySwitchChannels) and GetLastInputMethod(0) and tablelength(self.myChannels) > 0) then
 					local myChannels = {};
 					local currentChannel = 0;
 					local currentChannelID = 0;
@@ -122,7 +122,7 @@ function TokoVoip.initialize(self)
 					setPlayerData(self.serverId, "radio:channel", currentChannelID, true);
 					self:updateTokoVoipInfo();
 				end
-			elseif (IsControlJustPressed(0, self.keyProximity)) then -- Switch proximity modes (normal / whisper / shout)
+			elseif (IsControlJustPressed(0, self.keyProximity) and GetLastInputMethod(0)) then -- Switch proximity modes (normal / whisper / shout)
 				if (not self.mode) then
 					self.mode = 1;
 				end
@@ -135,7 +135,7 @@ function TokoVoip.initialize(self)
 			end
 
 
-			if (IsControlPressed(0, self.radioKey) and self.plugin_data.radioChannel ~= -1) then -- Talk on radio
+			if (IsControlPressed(0, self.radioKey) and GetLastInputMethod(0) and self.plugin_data.radioChannel ~= -1) then -- Talk on radio
 				self.plugin_data.radioTalking = true;
 				self.plugin_data.localRadioClicks = true;
 				if (self.plugin_data.radioChannel > 100) then
