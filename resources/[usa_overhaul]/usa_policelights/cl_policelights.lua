@@ -93,8 +93,6 @@ Citizen.CreateThread(function()
 	end
 end)
 
-NetworkOverrideClockTime(22, 00, 0)
-
 Citizen.CreateThread(function()
 	local red = true
 	while true do
