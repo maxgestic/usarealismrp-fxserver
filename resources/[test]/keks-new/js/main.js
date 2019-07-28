@@ -1,32 +1,34 @@
-(function($) {
+(function ($) {
   "use strict";
 
-  $(document).ready(function (){
+  $(document).ready(function () {
 
     // backstretch
     $(".carousel-bg").backstretch([
-        "img/bg-1.jpg"
+      "img/bg-1.jpg"
       , "img/bg-2.jpg"
       , "img/bg-3.jpg"
-  	  , "img/bg-4.jpg"
-  	  , "img/bg-5.jpg"
-  	  , "img/bg-6.jpg"
-  	  , "img/bg-7.jpg"
-  	  , "img/bg-8.jpg"
-  	  , "img/bg-9.jpg"
-    ],{duration: 4400, fade: 1500});
+      , "img/bg-4.jpg"
+      , "img/bg-5.jpg"
+      , "img/bg-6.jpg"
+      , "img/bg-7.jpg"
+      , "img/bg-8.jpg"
+      , "img/bg-9.jpg"
+    ], { duration: 4400, fade: 1500 });
 
     /* BEGIN HOWL RADIO PLAYER */
     var stations = ["http://ice1.somafm.com/beatblender-128-mp3", "http://hot108jamz.hot108.com:4040/;stream.nsv", "http://listen.radionomy.com/urbanradio-oldschoolrap"]
 
-    var Radio = function(station) {
+    var MAX_VOL = 0.12
+
+    var Radio = function (station) {
       var self = this;
       self.station = station;
       self.isPlaying = false;
     };
 
     Radio.prototype = {
-      play: function() {
+      play: function () {
         var self = this;
         var sound;
 
@@ -48,11 +50,11 @@
         sound.play();
 
         //sound.volume(0.1);
-        sound.fade(0.0, 0.20, 5000);
+        sound.fade(0.0, MAX_VOL, 5000);
 
         self.isPlaying = true;
       },
-      stop: function() {
+      stop: function () {
         var self = this;
 
         // Get the Howl we want to manipulate.
@@ -63,7 +65,7 @@
           sound.stop();
         }
       },
-      toggle: function() {
+      toggle: function () {
         var self = this;
 
         // Get the Howl we want to manipulate.
@@ -74,24 +76,24 @@
           if (self.isPlaying)
             sound.volume(0.0);
           else
-            sound.volume(0.1);
+            sound.volume(MAX_VOL);
           self.isPlaying = !self.isPlaying;
         }
       }
     };
 
-	var src = stations[Math.floor(Math.random() * stations.length)]; // choose a random station
+    var src = stations[Math.floor(Math.random() * stations.length)]; // choose a random station
 
     // Setup our new radio and pass in the stations.
     var radio = new Radio({
       src: src,
-      volume: 0.20,
+      volume: MAX_VOL,
       howl: null
     });
 
     radio.play();
 
-    $("body").on("click", function() {
+    $("body").on("click", function () {
       radio.toggle();
     });
 
