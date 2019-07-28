@@ -21,7 +21,8 @@ AddEventHandler('paycheck:welfare', function()
     local lastPaidTime = lastPaidTimes[source]
     if lastPaidTime then
 		if GetMinutesFromTime(lastPaidTime) < WAIT_DURATION_MINUTES then
-			TriggerClientEvent("usa:notify", source, "Something went wrong when trying to deposit your paycheck!")
+            --TriggerClientEvent("usa:notify", source, "Something went wrong when trying to deposit your paycheck!")
+            print("Something went wrong when trying to deposit player with source id " .. source .. "'s paycheck!")
 			return
 		end
 	end
