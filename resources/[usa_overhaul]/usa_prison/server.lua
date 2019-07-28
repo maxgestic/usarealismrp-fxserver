@@ -58,7 +58,7 @@ RegisterServerEvent("jail:checkJobForWarp")
 AddEventHandler("jail:checkJobForWarp", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get("job")
-	if job == "sheriff" or job == "ems" or job == "fire" or job == "corrections" then
+	if job == "sheriff" or job == "ems" or job == "fire" or job == "corrections" or job == "doctor" then
 		TriggerClientEvent("jail:continueWarp", source)
 	else
 		TriggerClientEvent("usa:notify", source, "That area is prohibited!")
