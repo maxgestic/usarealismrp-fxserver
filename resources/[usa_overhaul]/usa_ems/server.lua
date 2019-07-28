@@ -1,6 +1,7 @@
 local LOADOUT_ITEMS = {
-    { name = "Flare", hash = 1233104067, price = 25, weight = 9 },
-    { name = "Fire Extinguisher", hash = 101631238, price = 25, weight = 20 }
+  { name = "Flashlight", hash = -1951375401, price = 15, weight = 4 },
+  { name = "Flare", hash = 1233104067, price = 25, weight = 9 },
+  { name = "Fire Extinguisher", hash = 101631238, price = 25, weight = 20 }
 }
 
 for i = 1, #LOADOUT_ITEMS do

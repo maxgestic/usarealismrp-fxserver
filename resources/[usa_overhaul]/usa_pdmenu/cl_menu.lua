@@ -239,22 +239,32 @@ function AddCustomization(menu)
 		ShowNotification('Applied: '..x)
 	end
 	engines.OnListSelected = function(sender, item, index)
-		local vehicle = GetVehiclePedIsUsing(GetPlayerPed(-1))
+		--local vehicle = GetVehiclePedIsUsing(GetPlayerPed(-1))
 		local engine = item:IndexToItem(index)
 		if engine == "EMS Upgrade, Level 1" then
-			SetVehicleMod(vehicle, 11, 0)
+			TriggerServerEvent("pdmenu:checkRankForVehMod", 11, 0, engine)
+			--SetVehicleMod(vehicle, 11, 0)
 		elseif engine == "EMS Upgrade, Level 2" then
-			SetVehicleMod(vehicle, 11, 1)
+			TriggerServerEvent("pdmenu:checkRankForVehMod", 11, 1, engine)
+			--SetVehicleMod(vehicle, 11, 1)
 		elseif engine == "EMS Upgrade, Level 3" then
-			SetVehicleMod(vehicle, 11, 2)
+			TriggerServerEvent("pdmenu:checkRankForVehMod", 11, 2, engine)
+			--SetVehicleMod(vehicle, 11, 2)
 		elseif engine == "EMS Upgrade, Level 4" then
-			SetVehicleMod(vehicle, 11, 3)
+			TriggerServerEvent("pdmenu:checkRankForVehMod", 11, 3, engine)
+			--SetVehicleMod(vehicle, 11, 3)
 		else
 			SetVehicleMod(vehicle, 11, -1)
 		end
-		ShowNotification('Applied: '..engine)
 	end
 end
+
+RegisterNetEvent("pdmenu:checkRankForVehMod")
+AddEventHandler("pdmenu:checkRankForVehMod", function(index, val, name)
+	local vehicle = GetVehiclePedIsUsing(GetPlayerPed(-1))
+	SetVehicleMod(vehicle, index, val)
+	ShowNotification('Applied: '.. name)
+end)
 
 AddGarageMenuItems(garageMenu)
 garageMenu:RefreshIndex()
