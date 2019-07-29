@@ -323,6 +323,12 @@ AddEventHandler("updateVoipTargetPed", function(newTargetPed, useLocal)
 	useLocalPed = useLocal
 end)
 
+AddEventHandler("usa:toggleImmersion", function(blackBarsEnabled)
+	SendNUIMessage({
+		type = "toggleHUD"
+	})
+end)
+
 -- Adjust HUD text when in / out of a vehicle --
 local wasInVehicle = false
 local numberAsBool = { [1] = true, [0] = false }

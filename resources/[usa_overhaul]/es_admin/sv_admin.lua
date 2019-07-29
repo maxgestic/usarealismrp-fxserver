@@ -376,7 +376,7 @@ end, {
 
 TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, char)
 	if args[2] == "pd" then
-		local pdCoords = {x=-447.256 , y=6000.667 , z=30.686}
+		local pdCoords = {x = -444.5, y = 6013.9, z = 31.7}
 		TriggerClientEvent('es_admin:teleportUserByCoords', source, pdCoords.x, pdCoords.y, pdCoords.z)
 		TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(source)..' ['..source..'] ^0 has teleported to a police department.')
 		return

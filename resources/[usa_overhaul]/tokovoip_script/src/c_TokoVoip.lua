@@ -57,17 +57,18 @@ function TokoVoip.updateTokoVoipInfo(self, forceUpdate) -- Update the top-left i
 	if (self.mode == 1) then
 		info = "Normal";
 	elseif (self.mode == 2) then
-		info = "Whispering";
+		info = "Whisper";
 	elseif (self.mode == 3) then
-		info = "Shouting";
+		info = "Yell";
 	end
 
 	if (self.plugin_data.radioTalking) then
-		info = info .. " on radio ";
+		info = "<font class='talking-radio'>" .. info .. "</font>";
 	end
 	if (self.talking == 1 or self.plugin_data.radioTalking) then
 		info = "<font class='talking'>" .. info .. "</font>";
 	end
+	--[[
 	if (self.plugin_data.radioChannel ~= -1 and self.myChannels[self.plugin_data.radioChannel]) then
 		if (string.match(self.myChannels[self.plugin_data.radioChannel].name, "Call")) then
 			info = info  .. "<br> [Phone] " .. self.myChannels[self.plugin_data.radioChannel].name;
@@ -75,6 +76,7 @@ function TokoVoip.updateTokoVoipInfo(self, forceUpdate) -- Update the top-left i
 			info = info  .. "<br> [Radio] " .. self.myChannels[self.plugin_data.radioChannel].name;
 		end
 	end
+	--]]
 	if (info == self.screenInfo and not forceUpdate) then return end
 	self.screenInfo = info;
 	self:updatePlugin("updateTokovoipInfo", "" .. info);

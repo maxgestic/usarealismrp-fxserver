@@ -160,6 +160,9 @@ function receivedClientCall(event) {
 			} else {
 				el.css("bottom", "1%");
 			}
+		} else if (eventName == 'toggleHUD') {
+			let el = $(".tokovoipInfo")
+			el.toggle();
 		}
 	}
 
