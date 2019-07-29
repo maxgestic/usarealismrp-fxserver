@@ -105,6 +105,17 @@ AddEventHandler('usa:toggleImmersion', function(toggleOn)
 	showText = toggleOn
 end)
 
+RegisterNetEvent("foodwater:save")
+AddEventHandler("foodwater:save", function()
+	TriggerServerEvent("foodwater:save", person)
+end)
+
+RegisterNetEvent("foodwater:loaded")
+AddEventHandler("foodwater:loaded", function(h, t)
+	person.hunger_level = h
+	person.thirst_level = t
+end)
+
 ---------------
 -- MAIN LOOP --
 ---------------
