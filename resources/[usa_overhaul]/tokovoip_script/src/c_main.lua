@@ -330,8 +330,6 @@ Citizen.CreateThread(function()
 	while true do
 		local me = PlayerPedId()
 		local nowIsInVeh = IsPedInAnyVehicle(me)
-		--print("nowIsInVeh: " .. type(nowIsInVeh) .. ", " .. tostring(nowIsInVeh))
-		--print("wasInVehicle: " .. type(wasInVehicle) .. ", " .. tostring(wasInVehicle))
 		if type(nowIsInVeh) == "number" then
 			nowIsInVeh = numberAsBool[nowIsInVeh]
 		end
@@ -341,7 +339,6 @@ Citizen.CreateThread(function()
 				type = "updateHUD",
 				isInVeh = wasInVehicle
 			})
-			print("TOKOVOIP: updating NUI for veh")
 		end
 		Wait(10)
 	end
