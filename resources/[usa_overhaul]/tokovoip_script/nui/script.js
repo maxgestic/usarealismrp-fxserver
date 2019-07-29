@@ -156,9 +156,9 @@ function receivedClientCall(event) {
 			let isInVeh = event.data.isInVeh
 			let el = $(".tokovoipInfo")
 			if (isInVeh) {
-				el.css("bottom", "5em");
+				el.css("bottom", "7%");
 			} else {
-				el.css("bottom", "0.9em");
+				el.css("bottom", "1%");
 			}
 		}
 	}
