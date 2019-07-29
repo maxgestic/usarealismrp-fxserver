@@ -322,3 +322,27 @@ AddEventHandler("updateVoipTargetPed", function(newTargetPed, useLocal)
 	targetPed = newTargetPed
 	useLocalPed = useLocal
 end)
+
+-- Adjust HUD text when in / out of a vehicle --
+local wasInVehicle = false
+local numberAsBool = { [1] = true, [0] = false }
+Citizen.CreateThread(function()
+	while true do
+		local me = PlayerPedId()
+		local nowIsInVeh = IsPedInAnyVehicle(me)
+		--print("nowIsInVeh: " .. type(nowIsInVeh) .. ", " .. tostring(nowIsInVeh))
+		--print("wasInVehicle: " .. type(wasInVehicle) .. ", " .. tostring(wasInVehicle))
+		if type(nowIsInVeh) == "number" then
+			nowIsInVeh = numberAsBool[nowIsInVeh]
+		end
+		if wasInVehicle ~= nowIsInVeh then 
+			wasInVehicle = not wasInVehicle
+			SendNUIMessage({
+				type = "updateHUD",
+				isInVeh = wasInVehicle
+			})
+			print("TOKOVOIP: updating NUI for veh")
+		end
+		Wait(10)
+	end
+end)
