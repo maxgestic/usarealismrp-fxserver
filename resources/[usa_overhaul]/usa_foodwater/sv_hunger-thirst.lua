@@ -22,6 +22,7 @@ AddEventHandler("playerDropped", function(reason)
 end)
 
 Citizen.CreateThread(function()
+    Wait(15000)
     while true do
         exports["usa-characters"]:GetCharacters(function(characters)
             for src, char in pairs(characters) do

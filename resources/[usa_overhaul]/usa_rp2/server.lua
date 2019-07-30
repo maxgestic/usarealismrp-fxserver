@@ -459,6 +459,6 @@ TriggerEvent('es:addCommand', 'commands', function(source, args, char)
 end, {help = "Show some server commands. (Full list on website)"})
 
 TriggerEvent('es:addCommand', 'discord', function(source, args, char)
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "Discord: https://discord.me/usarrp")
+	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "Discord: https://discord.gg/aAPCdva")
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "^3Join the discord channel to keep up with the community! If that link doesn't work, visit the website.")
 end, {help = "View the server's discord link."})

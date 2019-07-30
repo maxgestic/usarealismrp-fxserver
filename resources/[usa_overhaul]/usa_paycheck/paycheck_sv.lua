@@ -1,4 +1,5 @@
-local WAIT_DURATION_MINUTES = 20
+local CHECK_RECEIVE_INTERVAL_MINUTES = 20
+local TIME_CHECK_INTERVAL_MINUTES = 5
 
 local lastPaidTimes = {}
 
@@ -8,26 +9,17 @@ AddEventHandler("playerDropped", function(reason)
 	end
 end)
 
-RegisterServerEvent('paycheck:welfare')
-AddEventHandler('paycheck:welfare', function()
-	local char = exports["usa-characters"]:GetCharacter(source)
+AddEventHandler("character:loaded", function(char)
+    lastPaidTimes[char.get("source")] = os.time()
+end)
+
+function DepositPayCheck(char)
 	if not char then
 		return
-	end
+    end
+    local source = char.get("source")
     local isWelfare = false
     local paycheckAmount = 0
-
-	-- don't trust the clients wait duration --
-    local lastPaidTime = lastPaidTimes[source]
-    if lastPaidTime then
-		if GetMinutesFromTime(lastPaidTime) < WAIT_DURATION_MINUTES then
-            --TriggerClientEvent("usa:notify", source, "Something went wrong when trying to deposit your paycheck!")
-            print("Something went wrong when trying to deposit player with source id " .. source .. "'s paycheck!")
-			return
-		end
-	end
-
-    lastPaidTimes[source] = os.time()
 
     local job = char.get("job")
 
@@ -123,15 +115,10 @@ AddEventHandler('paycheck:welfare', function()
         msg = msg .. "of $" .. paycheckAmount .. " from the ~y~District Attorney Investigation Branch~s~."
     else
         msg = msg .. "of $" .. paycheckAmount .. "."
-	end
-	
-    -- sort of a bad place for this but also keep track of in game time.
-    local user_time = char.get("ingameTime")
-	char.set("ingameTime", user_time + WAIT_DURATION_MINUTES)
-	
-	-- notify user
+    end
+    
     TriggerClientEvent('usa:notify', source, msg)
-end)
+end
 
 TriggerEvent('es:addCommand', 'job', function(source, args, char)
     local job = char.get("job")
@@ -181,8 +168,9 @@ function myJob(job, source)
         TriggerClientEvent('usa:notify', source,
                            'You are currently working for the ~y~Pillbox Medical Center~s~.')
     elseif job == "gopostal" then
-        TriggerClientEvent("usa:notify", source,
-                           'You are currently working for ~y~GoPostal~s~.')
+        TriggerClientEvent("usa:notify", source,'You are currently working for ~y~GoPostal~s~.')
+    else 
+        TriggerClientEvent("usa:notify", source,'You are currently working as ~y~'.. job .. '~s~.')
     end
 end
 
@@ -191,3 +179,26 @@ function GetMinutesFromTime(time)
 	local wholemins = math.floor(minutesfrom)
 	return wholemins
 end
+
+Citizen.CreateThread(function()
+    Wait(15000)
+    while true do
+        print("checking characters for paychecks")
+        exports["usa-characters"]:GetCharacters(function(chars)
+            for id, char in pairs(chars) do 
+                local lastPaidTime = lastPaidTimes[id] or os.time()
+                if lastPaidTime then
+                    if GetMinutesFromTime(lastPaidTime) < CHECK_RECEIVE_INTERVAL_MINUTES then
+                        break
+                    end
+                end
+                DepositPayCheck(char)
+                lastPaidTimes[id] = os.time()
+                --* not a good place for this but, for now: --
+                char.set("ingameTime", char.get("ingameTime") + TIME_CHECK_INTERVAL_MINUTES)
+            end
+        end)
+        -- wait --
+        Wait(TIME_CHECK_INTERVAL_MINUTES * 60 * 1000)
+    end
+end)
