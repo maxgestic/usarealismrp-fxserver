@@ -10,7 +10,7 @@ Vue.component('suggestions', {
 				return [];
 			}
 			const currentSuggestions = this.suggestions.filter((s) => {
-				if (!s.name.startsWith(this.message)) {
+				if (!s.name.startsWith(this.message.toLowerCase())) {
 					const suggestionSplitted = s.name.split(' ');
 					const messageSplitted = this.message.split(' ');
 					for (let i = 0; i < messageSplitted.length; i += 1) {

@@ -165,6 +165,7 @@ AddEventHandler('chatMessageLocation', function(source, n, message, location)
 		local command_args = stringsplit(message, " ")
 
 		command_args[1] = string.gsub(command_args[1], settings.defaultSettings.commandDelimeter, "")
+		command_args[1] = command_args[1]:lower()
 
 		local command = commands[command_args[1]]
 		if command then
