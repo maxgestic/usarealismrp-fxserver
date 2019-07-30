@@ -183,7 +183,6 @@ end
 Citizen.CreateThread(function()
     Wait(15000)
     while true do
-        print("checking characters for paychecks")
         exports["usa-characters"]:GetCharacters(function(chars)
             for id, char in pairs(chars) do 
                 local lastPaidTime = lastPaidTimes[id] or os.time()
