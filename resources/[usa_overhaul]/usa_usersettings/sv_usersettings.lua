@@ -3,7 +3,7 @@ RegisterServerEvent('usaSettings:updateUserSettings')
 RegisterServerEvent('usaSettings:returnUserSettings')
 
 local defaultSettings = {
-	radioHotkey = 27,
+	radioHotkey = 161,
 	serverVisuals = true,
 	blips = {
 		['clothes'] = true, -- true = on by default
