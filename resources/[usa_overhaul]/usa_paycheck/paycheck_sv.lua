@@ -73,7 +73,7 @@ function DepositPayCheck(char)
     elseif job == "judge" then
         paycheckAmount = 300
     elseif job == "corrections" then
-        paycheckAmount = 150
+        paycheckAmount = 210
     elseif job == "lawyer" then
         paycheckAmount = 220
     elseif job == "doctor" then
