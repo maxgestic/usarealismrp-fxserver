@@ -59,7 +59,7 @@ end
 -- tempVehicles Helpers (for NPC vehicles without player owner) --
 ----------------------------------
 function VehInventoryManager:newTempVehInv(plate)
-    local capacity = math.random(75, 125)
+    local capacity = math.random(100, 200)
     self.tempVehicles[plate] = self:NewInventory(capacity)
     return self.tempVehicles[plate]
 end
