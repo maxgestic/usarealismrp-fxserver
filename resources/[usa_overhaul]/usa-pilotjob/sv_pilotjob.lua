@@ -849,7 +849,7 @@ AddEventHandler("pilotjob:jobComplete", function(job, givemoney)
           for i = 1, #MISSIONS[employee.rank.name] do
             local m = MISSIONS[employee.rank.name][i]
             if m.name == job.name then
-              reward = m.pay + math.random(50, 250)
+              reward = m.pay + math.random(50, 200)
               print("reward set to: $" .. reward)
               break
             end

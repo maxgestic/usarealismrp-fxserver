@@ -74,26 +74,22 @@ AddEventHandler("garage:vehicleSelected", function(vehicle, business)
 	local vehicles = char.get("vehicles")
 	local money = char.get("money")
 	if vehicle.impounded == true then
-		if IsDriverLicenseValid(usource) then
-			if money >= IMPOUND_FEE then
-				TriggerClientEvent("usa:notify", usource, "~y~STATE IMPOUND: ~s~Vehicle retrieved from the impound! Fee: ~y~$"..IMPOUND_FEE..".00")
-				GetVehicleCustomizations(vehicle.plate, function(customizations)
-					vehicle.customizations = customizations
-					TriggerClientEvent("garage:vehicleStored", usource, vehicle)
-					TriggerEvent('es:exposeDBFunctions', function(couchdb)
-						couchdb.updateDocument("vehicles", vehicle.plate, { impounded = false, stored = false }, function()
-							char.removeMoney(IMPOUND_FEE)
-							if business then
-								exports["usa-businesses"]:GiveBusinessCashPercent(business, IMPOUND_FEE)
-							end
-						end)
+		if money >= IMPOUND_FEE then
+			TriggerClientEvent("usa:notify", usource, "~y~STATE IMPOUND: ~s~Vehicle retrieved from the impound! Fee: ~y~$"..IMPOUND_FEE..".00")
+			GetVehicleCustomizations(vehicle.plate, function(customizations)
+				vehicle.customizations = customizations
+				TriggerClientEvent("garage:vehicleStored", usource, vehicle)
+				TriggerEvent('es:exposeDBFunctions', function(couchdb)
+					couchdb.updateDocument("vehicles", vehicle.plate, { impounded = false, stored = false }, function()
+						char.removeMoney(IMPOUND_FEE)
+						if business then
+							exports["usa-businesses"]:GiveBusinessCashPercent(business, IMPOUND_FEE)
+						end
 					end)
 				end)
-			else
-				TriggerClientEvent("usa:notify", usource, "~y~STATE IMPOUND: ~s~Your vehicle is ~impounded and can be retrieved for ~y~$"..IMPOUND_FEE..".00~s~!")
-			end
+			end)
 		else
-			TriggerClientEvent("usa:notify", usource, "Your license is ~y~suspended~s~ and cannot retrieve an impounded vehicle!")
+			TriggerClientEvent("usa:notify", usource, "~y~STATE IMPOUND: ~s~Your vehicle is ~impounded and can be retrieved for ~y~$"..IMPOUND_FEE..".00~s~!")
 		end
 	elseif vehicle.stored == true then
 		if money >= WITHDRAW_FEE then
