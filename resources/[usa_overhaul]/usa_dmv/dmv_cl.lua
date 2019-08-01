@@ -10,7 +10,7 @@ local locations = {
 	{x = 442.09, y = -980.23, z = 31.05}
 }
 
-local DL_PRICE = 500
+local DL_PRICE = 250
 
 function isPlayerAtDMV()
 	local playerCoords = GetEntityCoords(PlayerPedId() --[[Ped]], false)
