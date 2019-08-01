@@ -36,11 +36,13 @@ function KnockFromVehicle(ped, currVeh, force, wasFall)
     SetEntityCoords(prevCoords.x, prevCoords.y, prevCoords.z + 1.5)
     SetEntityVelocity(ped, GetEntityVelocity(currVeh))
     local ragdollTime = 2000
+    local healthToRemove = 15
     if wasFall and force > 200 then -- ragdoll longer if it was a big fall, collisions all ragdoll the same amount of time atm
         ragdollTime = 4200
+        healthToRemove = 35
     end
     SetPedToRagdoll(ped, ragdollTime, ragdollTime, 0, 0, 0, 0)
-    SetEntityHealth(ped, GetEntityHealth(ped) - 8)
+    SetEntityHealth(ped, GetEntityHealth(ped) - healthToRemove)
     lastKnownAcceleration = 0
 end
 
