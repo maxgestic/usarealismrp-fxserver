@@ -1,5 +1,5 @@
 local CHECK_RECEIVE_INTERVAL_MINUTES = 20
-local TIME_CHECK_INTERVAL_MINUTES = 5
+local TIME_CHECK_INTERVAL_MINUTES = 1
 
 local lastPaidTimes = {}
 
@@ -184,17 +184,18 @@ Citizen.CreateThread(function()
     Wait(15000)
     while true do
         exports["usa-characters"]:GetCharacters(function(chars)
-            for id, char in pairs(chars) do 
-                local lastPaidTime = lastPaidTimes[id] or os.time()
-                if lastPaidTime then
-                    if GetMinutesFromTime(lastPaidTime) < CHECK_RECEIVE_INTERVAL_MINUTES then
-                        break
-                    end
+            for id, char in pairs(chars) do
+                -- not a good place for this but, for now: --
+                char.set("ingameTime", char.get("ingameTime") + TIME_CHECK_INTERVAL_MINUTES)
+                -- paycheck --
+                if not lastPaidTimes[id] then
+                    lastPaidTimes[id] = os.time()
+                end
+                if GetMinutesFromTime(lastPaidTimes[id]) < CHECK_RECEIVE_INTERVAL_MINUTES then
+                    break
                 end
                 DepositPayCheck(char)
                 lastPaidTimes[id] = os.time()
-                --* not a good place for this but, for now: --
-                char.set("ingameTime", char.get("ingameTime") + TIME_CHECK_INTERVAL_MINUTES)
             end
         end)
         -- wait --
