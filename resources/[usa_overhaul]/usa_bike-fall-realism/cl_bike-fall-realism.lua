@@ -40,6 +40,9 @@ function KnockFromVehicle(ped, currVeh, force, wasFall)
     if wasFall and force > 200 then -- ragdoll longer if it was a big fall, collisions all ragdoll the same amount of time atm
         ragdollTime = 4200
         healthToRemove = 35
+        if force > 270 then 
+            healthToRemove = 45
+        end
     end
     SetPedToRagdoll(ped, ragdollTime, ragdollTime, 0, 0, 0, 0)
     SetEntityHealth(ped, GetEntityHealth(ped) - healthToRemove)
