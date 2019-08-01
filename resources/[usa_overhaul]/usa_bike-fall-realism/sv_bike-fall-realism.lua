@@ -1,4 +1,4 @@
 RegisterServerEvent("bike:knockOff")
-AddEventHandler("bike:knockOff", function(player, force, wasFall)
-    TriggerClientEvent("bike:knockOff", player.id, force, wasFall)
+AddEventHandler("bike:knockOff", function(id, force, wasFall)
+    TriggerClientEvent("bike:knockOff", id, force, wasFall)
 end)

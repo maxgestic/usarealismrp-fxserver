@@ -39,8 +39,6 @@ end
 
 function KnockFromVehicle(ped, currVeh, force, wasFall)
     local prevCoords = GetEntityCoords(ped)
-    SetEntityCoords(prevCoords.x, prevCoords.y, prevCoords.z + 1.5)
-    SetEntityVelocity(ped, GetEntityVelocity(currVeh))
     local ragdollTime = 2000
     local healthToRemove = 15
     if wasFall and force > 200 then -- ragdoll longer if it was a big fall, collisions all ragdoll the same amount of time atm
@@ -51,6 +49,7 @@ function KnockFromVehicle(ped, currVeh, force, wasFall)
         end
     end
     SetPedToRagdoll(ped, ragdollTime, ragdollTime, 0, 0, 0, 0)
+    SetEntityVelocity(ped, GetEntityVelocity(currVeh))
     SetEntityHealth(ped, GetEntityHealth(ped) - healthToRemove)
     lastKnownAcceleration = 0
 end
@@ -102,11 +101,10 @@ function PlayerFallOffBikeVelocityVectorAccelerationsCheck()
             if doCheck and doForceOff then 
                 --print("knocking off from collision, force: " .. num)
                 KnockFromVehicle(character, currVeh, num, false)
-                TriggerEvent("usa:getClosestPlayer", 1.0, function(player)
-                    if player.id ~= 0 then 
-                        TriggerServerEvent("bike:knockOff", player, num, false)
-                    end
-                end)
+                local id = GetClosestPlayerID(character)
+                if id then
+                    TriggerServerEvent("bike:knockOff", id, num, false)
+                end
             end
             -- falling from a height --
             doCheck = (maxAllowedUpDownAccelerationBeforeFallof ~= 0)
@@ -116,11 +114,10 @@ function PlayerFallOffBikeVelocityVectorAccelerationsCheck()
                 if not isLucky then
                     --print("knocking off from height! force: " .. single2)
                     KnockFromVehicle(character, currVeh, single2, true)
-                    TriggerEvent("usa:getClosestPlayer", 1.0, function(player)
-                        if player.id ~= 0 then 
-                            TriggerServerEvent("bike:knockOff", player, single2, true)
-                        end
-                    end)
+                    local id = GetClosestPlayerID(character)
+                    if id then
+                        TriggerServerEvent("bike:knockOff", id, single2, true)
+                    end
                 end
             end
         end
@@ -133,3 +130,20 @@ Citizen.CreateThread(function()
         Wait(1)
     end
 end)
+
+function GetClosestPlayerID(myPed)
+    local returnID = nil
+    local players = GetActivePlayers()
+    for i = 1, #players do 
+        local otherPed = GetPlayerPed(players[i])
+        if otherPed ~= myPed then 
+            local myCoords = GetEntityCoords(myPed)
+            local otherCoords = GetEntityCoords(otherPed)
+            if Vdist(myCoords.x, myCoords.y, myCoords.z, otherCoords.x, otherCoords.y, otherCoords.z) <= 2.0 then 
+                returnID = GetPlayerServerId(players[i])
+                break
+            end
+        end
+    end
+    return returnID
+end
