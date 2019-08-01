@@ -188,14 +188,17 @@ Citizen.CreateThread(function()
                 -- not a good place for this but, for now: --
                 char.set("ingameTime", char.get("ingameTime") + TIME_CHECK_INTERVAL_MINUTES)
                 -- paycheck --
+                local doPay = true
                 if not lastPaidTimes[id] then
                     lastPaidTimes[id] = os.time()
                 end
                 if GetMinutesFromTime(lastPaidTimes[id]) < CHECK_RECEIVE_INTERVAL_MINUTES then
-                    break
+                    doPay = false
                 end
-                DepositPayCheck(char)
-                lastPaidTimes[id] = os.time()
+                if doPay then
+                    DepositPayCheck(char)
+                    lastPaidTimes[id] = os.time()
+                end
             end
         end)
         -- wait --
