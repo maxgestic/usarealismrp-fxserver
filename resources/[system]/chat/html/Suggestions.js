@@ -17,7 +17,7 @@ Vue.component('suggestions', {
 						if (i >= suggestionSplitted.length) {
 							return i < suggestionSplitted.length + s.params.length;
 						}
-						if (suggestionSplitted[i] !== messageSplitted[i]) {
+						if (suggestionSplitted[i] !== messageSplitted[i].toLowerCase()) {
 							return false;
 						}
 					}
@@ -27,7 +27,7 @@ Vue.component('suggestions', {
 
 			currentSuggestions.forEach((s) => {
 				// eslint-disable-next-line no-param-reassign
-				s.disabled = !s.name.startsWith(this.message);
+				s.disabled = !s.name.startsWith(this.message.toLowerCase());
 
 				s.params.forEach((p, index) => {
 					const wType = (index === s.params.length - 1) ? '.' : '\\S';
