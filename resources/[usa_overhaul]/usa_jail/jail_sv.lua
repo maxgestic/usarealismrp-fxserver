@@ -205,7 +205,6 @@ function jailStatusLoop()
 						TriggerClientEvent("jail:release", tonumber(id), char.get("appearance"))
 						exports["globals"]:notifyPlayersWithJob("corrections", "^3CORRECTIONS:^0 " .. char.getName() .. " has been released.")
 					end
-					break
 				end
 			end
 			jailStatusLoop()
