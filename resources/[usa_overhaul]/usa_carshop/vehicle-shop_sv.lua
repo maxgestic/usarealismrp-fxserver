@@ -47,8 +47,8 @@ local vehicleShopItems = {
 			{make = "Ocelot", model = "Pariah", price = 77912, hash = "pariah", storage_capacity = 145.0},
 			{make = "Lampadati", model = "Michelli GT", price = 53540, hash = "michelli", storage_capacity = 110.0},
 			{make = "Ocelot", model = "F620", price = 43458, hash = "f620", storage_capacity = 145.0},
-			{make = "Benefactor", model = "Schwartzer", price = 48977, hash = "schwarzer", storage_capacity = 135.0},
-			{make = "Annis", model = "Savestra", price = 27560, hash = "savestra", storage_capacity = 125.0}
+			{make = "Benefactor", model = "Schwartzer", price = 48977, hash = "schwarzer", storage_capacity = 135.0}
+			--{make = "Annis", model = "Savestra", price = 27560, hash = "savestra", storage_capacity = 125.0} -- has machine guns
 		},
 		["Muscles"] = {
 			{make = "Willard", model = "Faction", price = 13750, hash = -2119578145, storage_capacity = 160.0},

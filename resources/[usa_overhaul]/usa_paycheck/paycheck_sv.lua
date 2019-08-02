@@ -3,6 +3,8 @@ local TIME_CHECK_INTERVAL_MINUTES = 1
 
 local lastPaidTimes = {}
 
+local lastCheckTime = 0
+
 AddEventHandler("playerDropped", function(reason)
 	if lastPaidTimes[source] then 
 		lastPaidTimes[source] = nil
@@ -120,16 +122,6 @@ function DepositPayCheck(char)
     TriggerClientEvent('usa:notify', source, msg)
 end
 
-TriggerEvent('es:addCommand', 'job', function(source, args, char)
-    local job = char.get("job")
-    myJob(job, source)
-end, {help = "See what your active job is"})
-
-TriggerEvent('es:addCommand', 'myjob', function(source, args, char)
-    local job = char.get("job")
-    myJob(job, source)
-end, {help = "See what your active job is"})
-
 function myJob(job, source)
     if job == "civ" then
         TriggerClientEvent('usa:notify', source,
@@ -183,25 +175,41 @@ end
 Citizen.CreateThread(function()
     Wait(15000)
     while true do
-        exports["usa-characters"]:GetCharacters(function(chars)
-            for id, char in pairs(chars) do
-                -- not a good place for this but, for now: --
-                char.set("ingameTime", char.get("ingameTime") + TIME_CHECK_INTERVAL_MINUTES)
-                -- paycheck --
-                local doPay = true
-                if not lastPaidTimes[id] then
-                    lastPaidTimes[id] = os.time()
+        --print("checking time")
+        if GetMinutesFromTime(lastCheckTime) >= TIME_CHECK_INTERVAL_MINUTES then
+            --print("giving checks!!")
+            lastCheckTime = os.time()
+            exports["usa-characters"]:GetCharacters(function(chars)
+                for id, char in pairs(chars) do
+                    -- not a good place for this but, for now: --
+                    char.set("ingameTime", char.get("ingameTime") + TIME_CHECK_INTERVAL_MINUTES)
+                    -- paycheck --
+                    local doPay = true
+                    if not lastPaidTimes[id] then
+                        lastPaidTimes[id] = os.time()
+                    end
+                    if GetMinutesFromTime(lastPaidTimes[id]) < CHECK_RECEIVE_INTERVAL_MINUTES then
+                        doPay = false
+                        --print("too early to pay " .. id .. ", it's been " .. GetMinutesFromTime(lastPaidTimes[id]) .. " since last check")
+                    end
+                    if doPay then
+                        DepositPayCheck(char)
+                        lastPaidTimes[id] = os.time()
+                        --print("giving " .. id .. " their paycheck!")
+                    end
                 end
-                if GetMinutesFromTime(lastPaidTimes[id]) < CHECK_RECEIVE_INTERVAL_MINUTES then
-                    doPay = false
-                end
-                if doPay then
-                    DepositPayCheck(char)
-                    lastPaidTimes[id] = os.time()
-                end
-            end
-        end)
-        -- wait --
-        Wait(TIME_CHECK_INTERVAL_MINUTES * 60 * 1000)
+            end)
+        end
+        Wait(1000)
     end
 end)
+
+TriggerEvent('es:addCommand', 'job', function(source, args, char)
+    local job = char.get("job")
+    myJob(job, source)
+end, {help = "See what your active job is"})
+
+TriggerEvent('es:addCommand', 'myjob', function(source, args, char)
+    local job = char.get("job")
+    myJob(job, source)
+end, {help = "See what your active job is"})
