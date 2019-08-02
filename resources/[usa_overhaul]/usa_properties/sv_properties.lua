@@ -809,24 +809,42 @@ function RefreshProperties(source, spawnAtProperty)
 
 		-- look for an empty room at a property with type == property['type'] and place them there
 		if currentPropertyType == "motel" then
+			-- first look for motel player chose to live at
+			local prop = properties[currentPropertyName]
+			for i = 1, #prop.rooms do
+				if not prop.rooms[i].owner then
+					properties[currentPropertyName].rooms[i].owner = source
+					TriggerClientEvent('properties:updateData', -1, currentPropertyName, i, properties[currentPropertyName].rooms[i])
+					TriggerClientEvent('properties:updateBlip', source, currentPropertyName, i)
+					TriggerClientEvent('usa:notify', source, 'Your property is at ~y~'..currentPropertyName..'~s~, room '..i..'.')
+					TriggerClientEvent("chatMessage", source, "", {}, "^3SA Real Estate:^0 Your property is at ^3"..currentPropertyName.."^0, room "..i..".")
+					if spawnAtProperty then
+						TriggerClientEvent('properties:setPosition', source, properties[currentPropertyName].rooms[i].coords, properties[currentPropertyName].rooms[i].heading)
+					end
+					return
+				end
+			end
+			-- look for any open motel property
 			for name, info in pairs(properties) do
-					if info.type == currentPropertyType then
-						for i = 1, #info.rooms do
-							if not info.rooms[i].owner then
-								properties[name].rooms[i].owner = source
-								TriggerClientEvent('properties:updateData', -1, name, i, properties[name].rooms[i])
-								TriggerClientEvent('properties:updateBlip', source, name, i)
-								TriggerClientEvent('usa:notify', source, 'Your property is at ~y~'..name..'~s~, room '..i..'.')
-								TriggerClientEvent("chatMessage", source, "", {}, "^3SA Real Estate:^0 Your property is at ^3"..name.."^0, room "..i..".")
-								if spawnAtProperty then
-									TriggerClientEvent('properties:setPosition', source, properties[name].rooms[i].coords, properties[name].rooms[i].heading)
-								end
-								return
+				if name ~= currentPropertyName and info.type == currentPropertyType then
+					for i = 1, #info.rooms do
+						if not info.rooms[i].owner then
+							properties[name].rooms[i].owner = source
+							TriggerClientEvent('properties:updateData', -1, name, i, properties[name].rooms[i])
+							TriggerClientEvent('properties:updateBlip', source, name, i)
+							TriggerClientEvent('usa:notify', source, 'Your property is at ~y~'..name..'~s~, room '..i..'.')
+							TriggerClientEvent("chatMessage", source, "", {}, "^3SA Real Estate:^0 Your property is at ^3"..name.."^0, room "..i..".")
+							if spawnAtProperty then
+								TriggerClientEvent('properties:setPosition', source, properties[name].rooms[i].coords, properties[name].rooms[i].heading)
 							end
+							return
 						end
 					end
+				end
 			end
-		else -- apartments (todo: account for overflow of apartment)
+			-- todo: add a fall back property here if all motels are full
+		else
+			-- look for empty room at player's chosen apartment
 			for name, info in pairs(properties) do
 				if name == currentPropertyName then
 					for i = 1, #info.rooms do
@@ -844,6 +862,7 @@ function RefreshProperties(source, spawnAtProperty)
 					end
 				end
 			end
+			-- todo: add a fall back property here if no available apartment room is found
 		end
 	else
 		_data = {
