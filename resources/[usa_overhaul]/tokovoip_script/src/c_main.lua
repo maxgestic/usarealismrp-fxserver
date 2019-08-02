@@ -339,6 +339,9 @@ Citizen.CreateThread(function()
 		if type(nowIsInVeh) == "number" then
 			nowIsInVeh = numberAsBool[nowIsInVeh]
 		end
+		if nowIsInVeh and GetVehicleClass(GetVehiclePedIsIn(me)) == 13 then
+			goto continue
+		end
 		if wasInVehicle ~= nowIsInVeh then 
 			wasInVehicle = not wasInVehicle
 			SendNUIMessage({
@@ -346,6 +349,7 @@ Citizen.CreateThread(function()
 				isInVeh = wasInVehicle
 			})
 		end
+		::continue::
 		Wait(10)
 	end
 end)

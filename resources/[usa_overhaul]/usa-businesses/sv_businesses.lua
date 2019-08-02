@@ -74,9 +74,9 @@ AddEventHandler("business:retrieve", function(name, item, amount)
   local char = exports["usa-characters"]:GetCharacter(usource)
   GetBusinessStorage(name, function(storage)
     local items = storage.items
-    if item.serialNumber then -- only weapon's have serialNumber's (because they could have same name w/ different components etc)
+    if item.type == "weapon" and (item.uuid or item.serialNumber) then -- only weapon's have serialNumber's (because they could have same name w/ different components etc)
       for i = 1, #items do
-        if items[i].serialNumber == item.serialNumber then
+        if (items[i].serialNumber and items[i].serialNumber == item.serialNumber) or (items[i].uuid and items[i].uuid == item.uuid) then
           local toGiveCopy = items[i]
           if char.canHoldItem(items[i]) then -- make sure player can hold amount of item
             table.remove(storage.items, i)
@@ -101,7 +101,7 @@ AddEventHandler("business:retrieve", function(name, item, amount)
           local toGiveCopy = items[i]
           if char.canHoldItem(items[i]) then -- make sure player can hold amount of item
             if items[i].quantity >= amount then
-              if items[i].quantity > 1 then
+              if items[i].quantity - amount >= 1 then
                 storage.items[i].quantity = storage.items[i].quantity - amount
               else
                 table.remove(storage.items, i)
