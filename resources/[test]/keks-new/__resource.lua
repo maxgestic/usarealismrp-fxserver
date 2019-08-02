@@ -23,10 +23,10 @@ files {
 	'infobox/2.png',
 	'infobox/3.png',
 	'infobox/4.png',
-    'js/jquery.ajaxchimp.js',
 	'js/jquery.backstretch.min.js',
     'js/jquery-1.11.0.min.js',
 	'js/main.js',
+	'js/progessBar.js',
     'js/owl.carousel.min.js'
 }
 

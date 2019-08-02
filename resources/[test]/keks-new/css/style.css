@@ -42,9 +42,14 @@
   }
 
   #website p {
-	background-color: rgba(0,0,0,.6);
-	border-radius: 3px;
-	padding: .5em;
+    background-color: rgba(0,0,0,.6);
+    border-radius: 3px;
+    padding: .5em;
+    position: absolute;
+    left: 50%;
+    margin-left: -332px;
+    width: 665px;
+    bottom: 30px;
   }
 
   #logo-container {
@@ -58,10 +63,8 @@
   		font-weight: bold;
   	}
   	#website p {
-  		right: 400px !important;
-  		background-color: rgba(0,0,0,.6);
-  		border-radius: 3px;
-  		padding: .5em;
+      width: 600px;
+      margin-left: -300px;
   	}
     #logo-container {
       text-align: center;
