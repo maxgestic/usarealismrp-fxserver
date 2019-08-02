@@ -48,13 +48,39 @@
     position: absolute;
     left: 50%;
     margin-left: -332px;
-    width: 665px;
+    width: 664px;
     bottom: 30px;
   }
 
   #logo-container {
     text-align: center;
     margin-top: 25em;
+  }
+
+  .progress-bar-wrap {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    margin-left: -331px;
+    width: 662px;
+    border-radius: 3px;
+  }
+
+  .progress-bar-outer {
+    width: 662px;
+    height: 10px;
+    background-color: #FFFFFF;
+  }
+
+  .progress-bar {
+    background-color: #B31C31;
+    height: 10px;
+    width: 10%;
+    border-radius: 1px;
+  }
+
+  .progress-info {
+    margin-bottom: 2.5em;
   }
 
   @media screen and (max-width: 1500px) {

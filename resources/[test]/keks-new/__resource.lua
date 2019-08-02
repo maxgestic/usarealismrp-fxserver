@@ -26,7 +26,6 @@ files {
 	'js/jquery.backstretch.min.js',
     'js/jquery-1.11.0.min.js',
 	'js/main.js',
-	'js/progessBar.js',
     'js/owl.carousel.min.js'
 }
 

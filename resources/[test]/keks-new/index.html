@@ -28,16 +28,66 @@
             or https://fontmeme.com/permalink/190204/6aeea7ce96d0facc97ee33886b4fb10a.png -->
         <img src="https://fontmeme.com/permalink/190204/49bb075d378719bbd20b0040eef07af3.png" border=0>
       </section>
+      <!-- progress bar -->
+      <div class="progress-bar-wrap">
+        <h3 class="progress-info">Loading...</h3>
+        <div class="progress-bar-outer"><div class="progress-bar"></div></div>
+      </div>
       <!-- website / twitter info -->
       <div id="website"><p style="position: absolute; right: 600px; bottom: 25px;"><font face="verdana" size="4"> <i class="fas fa-home"></i> HTTPS://USARRP.NET | <i class="fab fa-twitter-square"></i> @USARRP | <i class="fab fa-discord"></i> discord.gg/aAPCdva</font></p></div>
     </main>
+
+    <script type="text/javascript">
+      var count = 0;
+      var thisCount = 0;
+
+      const emoji = {
+        INIT_BEFORE_MAP_LOADED: [ '🍉' ],
+        INIT_AFTER_MAP_LOADED: [ '🍋', '🍊' ],
+        INIT_SESSION: [ '🍐', '🍅', '🍆' ]
+      };
+
+      // define load screen event handlers
+      const handlers = {
+        startInitFunctionOrder(data)
+        {
+          count = data.count;
+          $('.progress-info').append(emoji[data.type][data.order - 1] || '');
+        },
+        initFunctionInvoking(data)
+        {
+          //$('.progress-bar').style.width = '0%';
+          $('.progress-bar').css("width", ((data.idx / count) * 100) + '%')
+        },
+        startDataFileEntries(data)
+        {
+          count = data.count;
+          $('.progress-info').html("\u{1f358}")
+        },
+        performMapLoadFunction(data)
+        {
+          ++thisCount;
+          //**$('.progress-bar').style.left = '0%';
+          $('.progress-bar').css("width", ((thisCount / count) * 100) + '%');
+        },
+        onLogLine(data)
+        {
+          $('.progress-info').html(data.message + "..!");
+        }
+      };
+
+      // listen for load screen events
+      window.addEventListener('message', function(e)
+      {
+        (handlers[e.data.eventName] || function() {})(e.data);
+      });
+    </script>
 
     <script src="js/jquery-1.11.0.min.js"></script>
     <script src="js/jquery.backstretch.min.js"></script>
     <script src="js/owl.carousel.min.js"></script>
     <script src="js/jquery.ajaxchimp.js"></script>
     <script src="js/main.js"></script>
-    <script src="js/progressBar.js"></script>
 
   </body>
 </html>
