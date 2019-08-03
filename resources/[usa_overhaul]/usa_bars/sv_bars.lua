@@ -26,15 +26,15 @@ local ITEMS = {
   ["Food"] = {
       ["Fried Dill Pickles"] = { name = "Fried Dill Pickles", price = 25, type = "food", substance = 35.0, quantity = 1, legality = "legal", weight = 10, caption = "Dill pickle slices are breaded, then deep fried in peanut oil." },
       ["Onion Straws"] = { name = "Onion Straws", price = 25, type = "food", substance = 35.0, quantity = 1, legality = "legal", weight = 10, caption = "Flavorful, crispy, and addicting!" },
-      ["Bacon Mac N Cheese"] = { name = "Bacon Mac N Cheese", price = 20, type = "food", substance = 40.0, quantity = 1, legality = "legal", weight = 10, caption = "The ultimate classic comfort food, is a house favorite. " },
-      ["Pulled Pork Queso Dip"] = { name = "Pulled Pork Queso Dip", price = 25, type = "food", substance = 25.0, quantity = 1, legality = "legal", weight = 10, caption = "Pulled Pork Queso Dip made with all natural ingredients." },
-      ["Artichoke Spinach Dip"] = { name = "Artichoke Spinach Dip", price = 25, type = "food", substance = 25.0, quantity = 1, legality = "legal", weight = 10, caption = "Artichokes and spinach blended with cheeses." },
+      ["Bacon Mac N Cheese"] = { name = "Bacon Mac N Cheese", price = 20, type = "food", substance = 60.0, quantity = 1, legality = "legal", weight = 10, caption = "The ultimate classic comfort food, is a house favorite. " },
+      ["Pulled Pork Queso Dip"] = { name = "Pulled Pork Queso Dip", price = 25, type = "food", substance = 35.0, quantity = 1, legality = "legal", weight = 10, caption = "Pulled Pork Queso Dip made with all natural ingredients." },
+      ["Artichoke Spinach Dip"] = { name = "Artichoke Spinach Dip", price = 25, type = "food", substance = 35.0, quantity = 1, legality = "legal", weight = 10, caption = "Artichokes and spinach blended with cheeses." },
       ["Chicken Wings"] = { name = "Chicken Wings", price = 25, type = "food", substance = 25.0, quantity = 1, legality = "legal", weight = 10, caption = "Coated in a sauce consisting of a vinegar-based cayenne pepper hot sauce and melted butter" },
-      ["All American Hamburger"] = { name = "All American Hamburger", price = 30, type = "food", substance = 25.0, quantity = 1, legality = "legal", weight = 10, caption = "A delicious classic with 100% Angus Beef, lettuce, Tomato, Onion, and Cheddar Cheese" },
+      ["All American Hamburger"] = { name = "All American Hamburger", price = 30, type = "food", substance = 60.0, quantity = 1, legality = "legal", weight = 10, caption = "A delicious classic with 100% Angus Beef, lettuce, Tomato, Onion, and Cheddar Cheese" },
       ["Chopped Salad"] = { name = "Salad", price = 35, type = "food", substance = 25.0, quantity = 1, legality = "legal", weight = 10, caption = "Romaine lettuce, finely chopped Radicchio, Celery, Cherry Tomatoes, with a delicious Vinaigrette dressing." },
       ["2 Topping Pizza"] = { name = "Pizza", price = 45, type = "food", substance = 25.0, quantity = 1, legality = "legal", weight = 10, caption = "Personal pizzas, your choice of 2 toppings." },
-      ["Pesto Chicken Sandwich"] = { name = "Chicken Sandwich", price = 45, type = "food", substance = 30.0, quantity = 1, legality = "legal", weight = 10, caption = "A pesto chicken sandwhich between Focaccia bread." },
-      ["Ahi Tuna Sandwich"] = { name = "Ahi Tuna Sandwich", price = 50, type = "food", substance = 40.0, quantity = 1, legality = "legal", weight = 10, caption = "An Ahi Tuna Sandwich with  your  choice of bread." },
+      ["Pesto Chicken Sandwich"] = { name = "Chicken Sandwich", price = 45, type = "food", substance = 60.0, quantity = 1, legality = "legal", weight = 10, caption = "A pesto chicken sandwhich between Focaccia bread." },
+      ["Ahi Tuna Sandwich"] = { name = "Ahi Tuna Sandwich", price = 50, type = "food", substance = 60.0, quantity = 1, legality = "legal", weight = 10, caption = "An Ahi Tuna Sandwich with  your  choice of bread." },
       ["French Dip Au Jus"] = { name = "French Dip Au Jus", price = 55, type = "food", substance = 60.0, quantity = 1, legality = "legal", weight = 10, caption = "Warm Roast beef on a baguette topped with Swiss Cheese, and onions and a side of beef juice." }
   }
 }
