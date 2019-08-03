@@ -1,6 +1,7 @@
-local CHECK_TIME = 2
-local SAVE_TIME = 5
+local CHECK_TIME_MINUTES = 1
 local lastSaved = {}
+
+local lastCheckedtime = 0
 
 RegisterServerEvent("foodwater:save")
 AddEventHandler("foodwater:save", function(person)
@@ -24,16 +25,21 @@ end)
 Citizen.CreateThread(function()
     Wait(15000)
     while true do
-        exports["usa-characters"]:GetCharacters(function(characters)
-            for src, char in pairs(characters) do
-                if lastSaved[src] then
-                    if GetMinutesFromTime(lastSaved[src]) >= SAVE_TIME then
-                        TriggerClientEvent("foodwater:save", -1)
+        --print("time since last check: " .. GetMinutesFromTime(lastCheckedtime))
+        if GetMinutesFromTime(lastCheckedtime) >= CHECK_TIME_MINUTES then
+            --print("saving all players' hunger/thirst!")
+            lastCheckedtime = os.time()
+            exports["usa-characters"]:GetCharacters(function(characters)
+                for src, char in pairs(characters) do
+                    if not lastSaved[src] then
+                        lastSaved[src] = os.time()
                     end
+                    TriggerClientEvent("foodwater:save", -1)
+                    --print("saving for player " .. src)
                 end
-            end
-        end)
-		Wait(CHECK_TIME * 60 * 1000)
+            end)
+        end
+		Wait(2000)
 	end
 end)
 
