@@ -56,7 +56,6 @@
         },
         initFunctionInvoking(data)
         {
-          //$('.progress-bar').style.width = '0%';
           $('.progress-bar').css("width", ((data.idx / count) * 100) + '%')
         },
         startDataFileEntries(data)
@@ -67,7 +66,6 @@
         performMapLoadFunction(data)
         {
           ++thisCount;
-          //**$('.progress-bar').style.left = '0%';
           $('.progress-bar').css("width", ((thisCount / count) * 100) + '%');
         },
         onLogLine(data)
