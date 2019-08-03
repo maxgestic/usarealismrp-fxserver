@@ -1,5 +1,5 @@
 local display = false
-local t = {"This is a note."}
+local t = {}
 local notepad = {
     hash = GetHashKey("prop_notepad_01"),
     handle = nil,
