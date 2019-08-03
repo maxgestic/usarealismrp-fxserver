@@ -89,7 +89,7 @@ AddEventHandler("garage:vehicleSelected", function(vehicle, business)
 				end)
 			end)
 		else
-			TriggerClientEvent("usa:notify", usource, "~y~STATE IMPOUND: ~s~Your vehicle is ~impounded and can be retrieved for ~y~$"..IMPOUND_FEE..".00~s~!")
+			TriggerClientEvent("usa:notify", usource, "~y~STATE IMPOUND: ~s~Your vehicle is impounded and can be retrieved for ~y~$"..IMPOUND_FEE..".00~s~!")
 		end
 	elseif vehicle.stored == true then
 		if money >= WITHDRAW_FEE then
