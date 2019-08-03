@@ -15,12 +15,10 @@ local lastUpdated = {} -- keep track of in game times to save every 30 min of pl
 AddEventHandler("playerDropped", function(reason)
   local usource = source
   if CHARACTERS[usource] then
-      local job = CHARACTERS[usource].get("job")
-      if job == "sheriff"  then
-        exports["usa_police"]:RemovePoliceWeapons(CHARACTERS[usource])
-    elseif job == "ems" or job ==  "corrections" then
-        exports["usa_ems"]:RemoveServiceWeapons(CHARACTERS[usource])
-      end
+    local job = CHARACTERS[usource].get("job")
+    if job == "ems" or job ==  "corrections" then
+      exports["usa_ems"]:RemoveServiceWeapons(CHARACTERS[usource])
+    end
     -- save player data --
     TriggerEvent('es:exposeDBFunctions', function(db)
       print("updating char with ID: " .. CHARACTERS[usource].get("_id"))
@@ -31,7 +29,7 @@ AddEventHandler("playerDropped", function(reason)
     		local jailtime = CHARACTERS[usource].get("jailTime")
     		if jailtime then
     			if jailtime > 0 then
-                    local n = CHARACTERS[usource].getName()
+            local n = CHARACTERS[usource].getName()
     				exports["globals"]:notifyPlayersWithJobs({"corrections"}, "^3INFO: ^0" .. n .. " has fallen asleep.")
     			end
     		end

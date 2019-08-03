@@ -303,7 +303,7 @@ end)
 RegisterServerEvent("policestation2:offduty")
 AddEventHandler("policestation2:offduty", function()
   local char = exports["usa-characters"]:GetCharacter(source)
-  RemovePoliceWeapons(char)
+  --RemovePoliceWeapons(char)
   local playerWeapons = char.getWeapons() -- give back their civ weapons
   TriggerClientEvent('interaction:setPlayersJob', source, 'civ')
   TriggerClientEvent("policestation2:setciv", source, char.get("appearance"), playerWeapons)

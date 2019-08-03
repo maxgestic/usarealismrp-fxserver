@@ -339,7 +339,8 @@ Citizen.CreateThread(function()
 		if type(nowIsInVeh) == "number" then
 			nowIsInVeh = numberAsBool[nowIsInVeh]
 		end
-		if nowIsInVeh and GetVehicleClass(GetVehiclePedIsIn(me)) == 13 then
+		local vehPedIsIn = GetVehiclePedIsIn(me)
+		if nowIsInVeh and (GetVehicleClass(vehPedIsIn) == 13 or GetPedInVehicleSeat(vehPedIsIn, -1) ~= me) then -- don't update HUD for cycles and passengers
 			goto continue
 		end
 		if wasInVehicle ~= nowIsInVeh then 
