@@ -99,4 +99,23 @@
     img {
       width: 50em;
     }
+    .progress-bar-wrap {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      width: 600px;
+      border-radius: 3px;
+      margin-left: -300px;
+    }
+    .progress-bar-outer {
+      width: 600px;
+      height: 10px;
+      background-color: #FFFFFF;
+    }
+    .progress-bar {
+      background-color: #B31C31;
+      height: 10px;
+      width: 10%;
+      border-radius: 1px;
+    }
   }
