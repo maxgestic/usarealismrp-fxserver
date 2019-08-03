@@ -25,14 +25,6 @@ function CreateCharacter(data)
     return false
   end
 
-  self.addInventoryWeight = function(weight)
-    self.inventory.currentWeight = self.inventory.currentWeight + weight
-  end
-
-  self.removeInventoryWeight = function(weight)
-    self.inventory.currentWeight = self.inventory.currentWeight - weight
-  end
-
   self.adjustChatSuggestions = function(data)
     TriggerClientEvent('chat:removeSuggestionAll', self.source)
     for k,v in pairs(exports['essentialmode']:getCommands()) do
@@ -101,6 +93,18 @@ function CreateCharacter(data)
     return self.name.first .. " " .. self.name.middle .. " " .. self.name.last
   end
 
+  rTable.getInventoryWeight = function()
+    local weight = 0
+    local inv = self.inventory
+    for i = 0, inv.MAX_CAPACITY - 1 do
+      local invItem = inv.items[tostring(i)]
+      if invItem then
+        weight = weight + (invItem.weight or 1.0)
+      end
+    end
+    return weight
+  end
+
   rTable.getWeapons = function()
     local weps = {}
     local inv = self.inventory
@@ -122,7 +126,6 @@ function CreateCharacter(data)
       if item then
         if item.type == "weapon" then
           self.inventory.items[tostring(i)] = nil
-          self.removeInventoryWeight((item.weight or 1.0) * (item.quantity or 1))
         end
       end
     end
@@ -164,7 +167,7 @@ function CreateCharacter(data)
     if quantity then
       item.quantity = quantity
     end
-    local newWeight = self.inventory.currentWeight + ((item.weight or 1.0) * (item.quantity or 1))
+    local newWeight = rTable.getInventoryWeight() + ((item.weight or 1.0) * (item.quantity or 1))
     -- first check weight --
     if newWeight > self.inventory.MAX_WEIGHT then
       return false
@@ -238,13 +241,11 @@ function CreateCharacter(data)
          firstFreeSlot = tostring(i)
        elseif self.inventory.items[tostring(i)] and self.inventory.items[tostring(i)].name == item.name and not item.notStackable then
          self.inventory.items[tostring(i)].quantity = self.inventory.items[tostring(i)].quantity + item.quantity
-         self.addInventoryWeight((item.weight or 1.0) * item.quantity)
          return
        end
      end
      if firstFreeSlot then
        self.inventory.items[firstFreeSlot] = item
-       self.addInventoryWeight((item.weight or 1.0) * (item.quantity or 1))
      end
   end
 
@@ -256,10 +257,8 @@ function CreateCharacter(data)
     if not self.inventory.items[slot] then -- move to empty slot
       self.inventory.items[slot] = item
       cb(true)
-      self.addInventoryWeight((item.weight or 1.0) * (item.quantity or 1))
     elseif self.inventory.items[slot] and self.inventory.items[slot].name == item.name and not item.notStackable then -- not empty, but stackable
       self.inventory.items[slot].quantity = self.inventory.items[slot].quantity + item.quantity
-      self.addInventoryWeight((item.weight or 1.0) * (item.quantity or 1))
       cb(true)
     else
       cb(false)
@@ -277,10 +276,8 @@ function CreateCharacter(data)
             newQuantity = 0
           end
           if newQuantity <= 0 then
-            self.removeInventoryWeight((self.inventory.items[tostring(i)].weight or 1.0) * self.inventory.items[tostring(i)].quantity)
             self.inventory.items[tostring(i)] = nil
           else
-            self.removeInventoryWeight((self.inventory.items[tostring(i)].weight or 1.0) * (quantity or 1))
             self.inventory.items[tostring(i)].quantity = newQuantity
           end
           return
@@ -295,7 +292,6 @@ function CreateCharacter(data)
         local item = self.inventory.items[tostring(i)]
         if item[field] then
           if item[field] == val then
-            self.removeInventoryWeight((self.inventory.items[tostring(i)].weight or 1.0) * self.inventory.items[tostring(i)].quantity)
             self.inventory.items[tostring(i)] = nil
             return
           end
@@ -307,7 +303,6 @@ function CreateCharacter(data)
   rTable.removeAllItems = function()
     for i = 0, self.inventory.MAX_CAPACITY - 1 do
       if self.inventory.items[tostring(i)] then
-        self.removeInventoryWeight((self.inventory.items[tostring(i)].weight or 1.0) * self.inventory.items[tostring(i)].quantity)
         self.inventory.items[tostring(i)] = nil
       end
     end
@@ -320,10 +315,8 @@ function CreateCharacter(data)
         newQuantity = 0
       end
       if newQuantity <= 0 then
-        self.removeInventoryWeight((self.inventory.items[tostring(index)].weight or 1.0) * self.inventory.items[tostring(index)].quantity)
         self.inventory.items[tostring(index)] = nil
       else
-        self.removeInventoryWeight((self.inventory.items[tostring(index)].weight or 1.0) * quantity)
         self.inventory.items[tostring(index)].quantity = newQuantity
       end
     end
@@ -338,7 +331,6 @@ function CreateCharacter(data)
         if item.legality == "illegal" then
           table.insert(seized, item)
           self.inventory.items[tostring(i)] = nil
-          self.removeInventoryWeight((item.weight or 1.0) * (item.quantity or 1))
         end
       end
     end

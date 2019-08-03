@@ -271,14 +271,12 @@ var interactionMenu = new Vue({
       value: null
     },
     inventory: {
-      currentWeight: 0,
       MAX_CAPACITY: 25,
       items: {}
     },
     vehicleInventory: {
       MAX_ITEMS: 25,
       MAX_CAPACITY: 0.0,
-      currentWeight: 0.0,
       items: {}
     },
     isInsideVehicle: false,
@@ -467,7 +465,24 @@ var interactionMenu = new Vue({
       }
     }
   },
-  computed: {},
+  computed: {
+    inventoryWeight: function() {
+      let weight = 0
+      for (var index in this.inventory.items) {
+        let item = this.inventory.items[index]
+        weight += (item.weight * (item.quantity || 1) || 1.0)
+      }
+      return weight
+    },
+    vehicleInventoryWeight: function() {
+      let weight = 0
+      for (var index in this.vehicleInventory.items) {
+        let item = this.vehicleInventory.items[index]
+        weight += (item.weight * (item.quantity || 1) || 1.0)
+      }
+      return weight
+    }
+  },
   directives: { /* used for primary inventory items (see 'updated' for secondary inventory items)*/
     draggable: {
       bind: function(el, binding, vnode) {

@@ -21,7 +21,6 @@ AddEventHandler("death:respawn", function()
 		if item then
 			if not string.find(item.name, "Cell Phone") and item.type ~= "license" then
 				user_inventory.items[tostring(i)] = nil
-				user_inventory.currentWeight = user_inventory.currentWeight - ((item.weight or 0.0) * (item.quantity or 1))
 			end
 		end
 	end

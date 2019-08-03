@@ -94,7 +94,7 @@ VehInventoryManager.hasItem = function(inv, item)
 end
 
 VehInventoryManager.canHoldItem = function(inv, item)
-  local newWeight = inv.currentWeight + ((item.weight or 1.0) * (item.quantity or 1))
+  local newWeight = VehInventoryManager.calcWeight(inv) + ((item.weight or 1.0) * (item.quantity or 1))
   -- first check weight --
   if newWeight > inv.MAX_CAPACITY then
     return false
@@ -115,11 +115,9 @@ VehInventoryManager.putItemInSlot = function(plate, inv, item, slot, cb)
   slot = tostring(slot)
   if not inv.items[slot] then -- no item in slot already
     inv.items[slot] = item
-    inv.currentWeight = inv.currentWeight + ((item.weight or 1.0) * (item.quantity or 1))
     cb(true)
   elseif inv.items[slot] and inv.items[slot].name == item.name and not item.notStackable then -- item in slot already, but stackable
     inv.items[slot].quantity = inv.items[slot].quantity + item.quantity
-    inv.currentWeight = inv.currentWeight + ((item.weight or 1.0) * (item.quantity or 1))
     cb(true)
   else
     cb(false, "Invalid slot")
@@ -136,6 +134,17 @@ VehInventoryManager.putItemInSlot = function(plate, inv, item, slot, cb)
   end
 end
 
+VehInventoryManager.calcWeight = function(inv)
+  local weight = 0
+  for i = 0, inv.MAX_ITEMS - 1 do
+    local invItem = inv.items[tostring(i)]
+    if invItem then
+      weight = weight + (invItem.weight or 1.0)
+    end
+  end
+  return weight
+end
+
 VehInventoryManager.removeItemInSlot = function(plate, inv, slot, quantity)
   slot = tostring(slot)
   if inv.items[slot].quantity - quantity < 0 then
@@ -143,7 +152,6 @@ VehInventoryManager.removeItemInSlot = function(plate, inv, slot, quantity)
   end
   if inv.items[slot] then
     inv.items[slot].quantity = inv.items[slot].quantity - quantity
-    inv.currentWeight = inv.currentWeight - ((inv.items[slot].weight or 1.0) * quantity)
     if inv.items[slot].quantity <= 0 then
       inv.items[slot] = nil
     end

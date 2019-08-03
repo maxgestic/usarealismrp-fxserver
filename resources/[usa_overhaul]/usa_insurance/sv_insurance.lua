@@ -33,7 +33,6 @@ AddEventHandler("insurance:fileClaim", function(vehicle_to_claim)
 	if CLAIM_PROCESSING_FEE <= bank then
 		TriggerEvent('es:exposeDBFunctions', function(couchdb)
 			exports["usa_vehinv"]:GetVehicleInventory(vehicle_to_claim.plate, function(inv)
-				inv.currentWeight = 0.0
 				inv.items = {}
 		    couchdb.updateDocument("vehicles", vehicle_to_claim.plate, {{inventory = inv}, stored = true, impounded = false}, function() end)
 				char.removeBank(CLAIM_PROCESSING_FEE)
