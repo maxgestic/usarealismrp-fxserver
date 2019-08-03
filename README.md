@@ -27,8 +27,9 @@ To get started with your own testing environment:
 6. "taxi"
 7. "tow"
 8. "reporter" (weazel news)
-9. "DAI"
+9. "chickenFactory"
 10. "gopostal"
+11. ... could be more ...
 
 **DB Notes**
 1) ``vehicles`` database requires an index to be created on the "stored_location" field for usa-properties
