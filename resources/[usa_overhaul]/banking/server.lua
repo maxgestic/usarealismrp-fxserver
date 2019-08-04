@@ -43,7 +43,24 @@ AddEventHandler('bank:addNotAllowed', function(pl)
 	end)
 end)
 
--- Bank Deposit
+RegisterServerEvent('bank:transfer')
+AddEventHandler('bank:transfer', function(targetID, amount)
+	if amount <= 0 then 
+		TriggerClientEvent("usa:notify", source, "Enter an amount greater than 0!")
+		return
+	end
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local bank = char.get("bank")
+	if bank >= amount then 
+		local target = exports["usa-characters"]:GetCharacter(targetID)
+		char.removeBank(amount)
+		target.giveBank(amount)
+		TriggerClientEvent("usa:notify", source, "Transfer of ~g~$" .. exports["globals"]:comma_value(amount) .. "~w~ complete!")
+	else 
+		TriggerClientEvent("usa:notify", source, "Not enough money to transfer!")
+	end
+end)
+
 RegisterServerEvent('bank:deposit')
 AddEventHandler('bank:deposit', function(amount)
 	local char = exports["usa-characters"]:GetCharacter(source)

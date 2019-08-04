@@ -206,8 +206,7 @@ RegisterNUICallback('depositSubmit', function(data, cb)
 end)
 
 RegisterNUICallback('transferSubmit', function(data, cb)
-  local fromPlayer = GetPlayerServerId();
-  TriggerEvent('bank:transfer', tonumber(fromPlayer), tonumber(data.toPlayer), tonumber(data.amount))
+  TriggerEvent('bank:transfer', tonumber(data.toPlayer), tonumber(data.amount))
   cb('ok')
 end)
 
@@ -318,11 +317,11 @@ end)
 
 -- Process bank transfer if player is online
 RegisterNetEvent('bank:transfer')
-AddEventHandler('bank:transfer', function(fromPlayer, toPlayer, amount)
+AddEventHandler('bank:transfer', function(toPlayer, amount)
   local player2 = GetPlayerFromServerId(toPlayer)
   local playing = IsPlayerPlaying(player2)
   if (playing ~= false) then
-    TriggerServerEvent("bank:transfer", fromPlayer, toPlayer, tonumber(amount))
+    TriggerServerEvent("bank:transfer", toPlayer, tonumber(amount))
   else
     TriggerEvent('usa:notify', '~y~Player not found!')
   end
