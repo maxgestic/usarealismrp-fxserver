@@ -7,24 +7,6 @@ var phone = {};
 var current_activity = "";
 var loadedConversations = {};
 
-var peerIdentifier = null;
-var peer = null;
-var call = null;
-
- function playStream(stream) {
-     var audio = document.createElement("audio")
-     audio.id = "stream"
-     audio.srcObject = stream
-     $('#call-phone-app-form').append(audio)
-     audio.play()
- }
-
-function stopStream() {
-    var audio = $("#stream")
-    audio.stop()
-    $("#stream").remove()
-}
-
 function DeleteContact(number_to_delete) {
     var size = Object.keys(phone.contacts).length;
     for (x = 0; x < size - 1; ++x) {
@@ -100,74 +82,7 @@ $(function() {
             }
             html += "</table>";
             $("#contacts-table-wrap").html(html);
-        } else if (event.data.type == "peerIdentifierLoaded") {
-            //rand = Math.ceil((Math.random() * 999999)).toString()
-            //rand += "g"
-            //id = event.data.identifier
-            peer  = new Peer()
-
-            peer.on("open", function(myID) {
-                console.log("connection to server established, my id: " + myID)
-                peerIdentifier = myID
-            })
-
-            peer.on('error', function (err) {
-                console.log(err);
-                console.log("type: " + err.type)
-            })
-
-            peer.on('call', (call) => {
-                navigator.mediaDevices.getUserMedia({video: false, audio: true}).then(function(stream) {
-                    call.answer(stream); // Answer the call with an A/V stream.
-                    call.on('stream', (remoteStream) => {
-                        console.log("call started 2")
-                        playStream(remoteStream)
-                    })
-                    call.on("close", () => {
-                        console.log("call ended!")
-                    })
-                    call.on("error", (err) => {
-                        console.log("call error: " + err)
-                    })
-                }).catch(function(err) {
-                    console.log("error: " + err)
-                })
-            })
-
-            /*
-            peer.on('connection', function (c) {
-                conn = c;
-                conn.on("data", function(data) {
-                    console.log("data: " + data)
-                })
-                console.log("Connected to: " + conn.peer);
-            });
-            */
-            //console.log("peer with id " + id + " created!")
-        } else if (event.data.type == "startCall") {
-            //console.log("starting call!")
-            navigator.mediaDevices.getUserMedia({video: false, audio: true}).then(function(stream) {
-                console.log("trying to start a call with target: " + event.data.targetPeerIdentifier)
-                call = peer.call(event.data.targetPeerIdentifier, stream)
-                call.on('stream', (remoteStream) => {
-                    console.log("call started 1")
-                    playStream(remoteStream)
-                })
-                call.on("close", () => {
-                    console.log("call ended!")
-                })
-                call.on("error", (err) => {
-                    console.log("call error: " + err)
-                })
-            }).catch(function(err){
-                console.log("error: " + err)
-            })
-        } else if (event.data.type == "endCall") {
-            if (call) {
-                console.log("call ended!")
-                call.close()
-            }
-        }
+        } 
     })
 
     // handle's closing the phone gui
@@ -410,61 +325,12 @@ $(function() {
     // p2p voice (phone call)
     $("#call-phone-app-form").submit(function(event) {
         event.preventDefault()
-        /*
-        $.post('http://usa-phone/requestCall', JSON.stringify({
-            phone_number: $("#phone-call").val(),
-            from_number: phone.number
-        }));
-        $.post('http://usa-phone/escape', JSON.stringify({}));
-        */
-
-        console.log("my identifier: " + peerIdentifier)
-
         $.post('http://usa-phone/requestCall', JSON.stringify({
             phone_number: $("#phone-call").val(),
             from_number: phone.number,
-            peerIdentifier: peerIdentifier
+            channel: Math.random(500, 2000)
         }));
         $.post('http://usa-phone/escape', JSON.stringify({}));
-
-        /* FOR VOICE CALL (MediaStream)
-        var targetPeerID = $("#phone-call").val().toString()
-
-        console.log("attempting call with peer: " + targetPeerID)
-
-        navigator.mediaDevices.getUserMedia({video: false, audio: true}).then(function(stream) {
-            const call = peer.call(targetPeerID, stream)
-            call.on('stream', (remoteStream) => {
-                playStream(remoteStream)
-            })
-        }).catch(function(err){
-            console.log("error: " + err)
-        })
-
-        */
-
-        /* FOR SENDING DATA (DataConnection)
-        conn = peer.connect(targetPeerID)
-
-        conn.on("open", function() {
-            console.log("connection opened!")
-            conn.send("Kanye West")
-        })
-
-        conn.on('close', function () {
-            conn = null;
-            console.log("connection closed!")
-        });
-
-        conn.on("error", function(err) {
-            console.log("connection error: " + err + ", type " + err.type)
-        })
-
-        //conn.on("open", function() {
-            //console.log("connected!!")
-            //console.log("peer: " + conn.peer)
-        //})
-        */
     });
 
     $("#911-phone-app-form").submit(function() {
@@ -502,42 +368,5 @@ $(function() {
         // close phone
         $.post('http://usa-phone/escape', JSON.stringify({}));
     });
-
-    /*
-    function setUpCallListener(num) {
-        var phone = window.phone = PHONE({
-            number        : num || "Anonymous", // listen on username line else Anonymous
-            publish_key   : 'pub-c-901bc92d-fbd5-4da9-a442-79ff833b3bbd',
-            subscribe_key : 'sub-c-250af2dc-a796-11e9-9764-faf49bb54dbb',
-            media: { audio : true, video : false },
-            ssl: true
-        });
-        phone.ready(function(){
-            console.log("call listener ready!");
-        });
-        phone.receive(function(session){
-            console.log("received! session: " + console.log(session))
-            session.connected(function(session) { console.log("session received!") });
-            session.ended(function(session) { console.log("session ended!") });
-        });
-        return false;   // So the form does not submit.
-    }
-
-    function makeCall(num){
-        console.log("making call!")
-        if (!window.phone) {
-            alert("Not ready to make calls!");
-        } else {
-            var sessionNotNull = window.phone.dial("666");
-        }
-        return false;
-    }
-
-    setUpCallListener("666")
-
-    setTimeout(function(){
-        makeCall("666")
-    }, 2000)
-    */
 
 });

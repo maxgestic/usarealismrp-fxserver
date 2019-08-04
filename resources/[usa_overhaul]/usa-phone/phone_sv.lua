@@ -218,7 +218,7 @@ AddEventHandler("phone:requestCall", function(data)
 							local caller_name = getNameFromContacts(contacts, data.from_number)
 							if caller_name then print("caller_name: " .. caller_name) else print("caller with # " .. data.from_number .. " not found in contacts!") caller_name = data.from_number end
 							TriggerClientEvent("swayam:notification", savedId, "Whiz Wireless", "~y~Incoming call from:~w~ " .. caller_name, "CHAR_MP_DETONATEPHONE")
-							TriggerClientEvent("phone:requestCallPermission", savedId, data.phone_number, caller_source, caller_name, data.peerIdentifier)
+							TriggerClientEvent("phone:requestCallPermission", savedId, data.phone_number, caller_source, caller_name, data.channel)
 						end
 					end
 				end, "POST", json.encode({
@@ -231,12 +231,12 @@ end)
 
 -- when a player responds to an inbound call:
 RegisterServerEvent("phone:respondedToCall")
-AddEventHandler("phone:respondedToCall", function(callerPeerIdentifier, accepted, phone_number, caller_source, caller_name, isBusy)
-	print("responded to call from caller: " .. callerPeerIdentifier)
+AddEventHandler("phone:respondedToCall", function(channel, accepted, phone_number, caller_source, caller_name, isBusy)
+	print("responded to call, requested on channel: " .. channel)
 	local user_source = source
 	if accepted then
-		TriggerClientEvent("phone:startCall", user_source, phone_number, caller_source, callerPeerIdentifier)
-		TriggerClientEvent("phone:startCall", caller_source, phone_number, user_source)
+		TriggerClientEvent("phone:startCall", user_source, phone_number, caller_source, channel)
+		TriggerClientEvent("phone:startCall", caller_source, phone_number, user_source, channel)
 		TriggerClientEvent("swayam:notification", user_source, "Whiz Wireless", "Call ~g~started~w~!", "CHAR_MP_DETONATEPHONE")
 		TriggerClientEvent("swayam:notification", caller_source, "Whiz Wireless", "Call ~g~started~w~!", "CHAR_MP_DETONATEPHONE")
 	else
@@ -252,10 +252,11 @@ end)
 
 -- notify on phone call hang up
 RegisterServerEvent("phone:endedCall")
-AddEventHandler("phone:endedCall", function(partner_source)
+AddEventHandler("phone:endedCall", function(partner_source, channel)
 	print("caller_source: " .. partner_source)
 	if partner_source ~= source then
-		TriggerClientEvent("phone:endCall", tonumber(partner_source))
+		TriggerClientEvent("phone:endCall", tonumber(partner_source), channel)
+		TriggerClientEvent("phone:endCall", source, channel)
 	else
 		print("partner_source was == source!")
 	end

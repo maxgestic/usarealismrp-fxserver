@@ -7,7 +7,6 @@ ui_page 'ui/index.html'
 
 files {
     'ui/index.html',
-    'ui/js/peerjs.min.js',
     'ui/js/script.js',
     'ui/css/style.css',
     'ui/img/samsung-phone.png'
