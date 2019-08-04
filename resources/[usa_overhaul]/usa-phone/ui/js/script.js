@@ -325,10 +325,11 @@ $(function() {
     // p2p voice (phone call)
     $("#call-phone-app-form").submit(function(event) {
         event.preventDefault()
+        let randomChannel = Math.floor((Math.random() * 2000) + 500)
         $.post('http://usa-phone/requestCall', JSON.stringify({
             phone_number: $("#phone-call").val(),
             from_number: phone.number,
-            channel: Math.random(500, 2000)
+            channel: randomChannel
         }));
         $.post('http://usa-phone/escape', JSON.stringify({}));
     });

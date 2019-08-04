@@ -49,17 +49,6 @@ function EnableGui(enable, phone)
 	end
 end
 
-TriggerServerEvent("phone:getPeerIdentifier")
-
-RegisterNetEvent("phone:getPeerIdentifier")
-AddEventHandler("phone:getPeerIdentifier", function(identifier)
-	print("PHONE: peer ID loaded")
-	SendNUIMessage({
-		type = "peerIdentifierLoaded",
-		identifier = identifier,
-	})
-end)
-
 RegisterNetEvent("phone:loadedMessagesFromId")
 AddEventHandler("phone:loadedMessagesFromId", function(messages, replyIdent)
 	--print("loaded msgs with # = " .. #messages)

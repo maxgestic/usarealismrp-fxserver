@@ -42,13 +42,6 @@ function UpdatePhoneWithNumber(number, row, data)
 	end)
 end
 
-RegisterServerEvent("phone:getPeerIdentifier")
-AddEventHandler("phone:getPeerIdentifier", function()
-	print("PHONE: getting peer identifier")
-	local identifier = GetPlayerIdentifiers(source)[1]
-	TriggerClientEvent("phone:getPeerIdentifier", source, identifier)
-end)
-
 RegisterServerEvent("phone:getPhone")
 AddEventHandler("phone:getPhone", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
