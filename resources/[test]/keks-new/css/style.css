@@ -68,13 +68,13 @@
 
   .progress-bar-outer {
     width: 662px;
-    height: 10px;
+    height: 6px;
     background-color: #FFFFFF;
   }
 
   .progress-bar {
     background-color: #B31C31;
-    height: 10px;
+    height: 6px;
     width: 10%;
     border-radius: 1px;
   }
@@ -109,12 +109,10 @@
     }
     .progress-bar-outer {
       width: 600px;
-      height: 10px;
       background-color: #FFFFFF;
     }
     .progress-bar {
       background-color: #B31C31;
-      height: 10px;
       width: 10%;
       border-radius: 1px;
     }
