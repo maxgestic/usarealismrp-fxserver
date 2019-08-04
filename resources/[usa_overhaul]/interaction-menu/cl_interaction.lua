@@ -836,7 +836,7 @@ function interactionMenuUse(itemName, wholeItem)
 			intoxicate(true, nil)
 			reality(5)
 		elseif string.find(itemName, "LSD Vile") then
-			local drug_duration = 7 * 60 * 1000 -- 7 minutes
+			local drug_duration = 15 * 60 * 1000 -- 7 minutes
 			TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
 			TriggerEvent("interaction:notify", "You have used: (x1) LSD Vile")
 			Wait(8000)
