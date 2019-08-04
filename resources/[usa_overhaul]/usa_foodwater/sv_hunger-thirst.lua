@@ -6,8 +6,10 @@ local lastCheckedtime = 0
 RegisterServerEvent("foodwater:save")
 AddEventHandler("foodwater:save", function(person)
     local char = exports["usa-characters"]:GetCharacter(source)
-    char.set("hunger", person.hunger_level)
-    char.set("thirst", person.thirst_level)
+    if char then
+        char.set("hunger", person.hunger_level)
+        char.set("thirst", person.thirst_level)
+    end
 end)
 
 AddEventHandler("character:loaded", function(char)
