@@ -157,13 +157,13 @@ end, {
 
 RegisterServerEvent('injuries:validateCheckin')
 AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, x, y, z, isMale)
-	if isPedDead and (exports["usa-characters"]:GetNumCharactersWithJob("ems") > 0 or exports["usa-characters"]:GetNumCharactersWithJob("sheriff") > 0 or exports["usa-characters"]:GetNumCharactersWithJob("doctor") > 0) then
+	local doctors = exports["usa-characters"]:GetNumCharactersWithJob("doctor")
+	if isPedDead and (exports["usa-characters"]:GetNumCharactersWithJob("ems") > 0 or exports["usa-characters"]:GetNumCharactersWithJob("sheriff") > 3 or doctors > 0) then
 		TriggerClientEvent('usa:notify', source, 'See a doctor or call emergency services instead.')
 		return
 	end
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local userBank = char.get('bank')
-	local doctors = exports["usa-characters"]:GetNumCharactersWithJob("doctor")
 	if doctors > 1 then
 		TriggerClientEvent('usa:showHelp', source, true, 'Please see any available doctor instead.')
 	else

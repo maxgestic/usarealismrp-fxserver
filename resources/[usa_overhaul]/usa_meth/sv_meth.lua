@@ -100,7 +100,7 @@ AddEventHandler("methJob:startTimer", function(timerType)
 	}
 	TriggerClientEvent("usa:notify", source, messages[math.random(1, tonumber(#messages))])
 	if timerType == "meth_supplies_ped" then
-		local seconds = 17
+		local seconds = 40
 		local time = seconds * 1000
 		SetTimeout(time, function()
 			TriggerClientEvent("usa:notify", usource, "Here are the basic chemicals needed for cooking, red phosphorus might increase quality!")
@@ -116,7 +116,7 @@ AddEventHandler("methJob:startTimer", function(timerType)
 			char.giveItem(suspiciousChemicals, 1)
 		end)
 	elseif timerType == "meth_supplies_ped_quality" then
-		local seconds = 25
+		local seconds = 60
 		local time = seconds * 1000
 		SetTimeout(time, function()
 			TriggerClientEvent("usa:notify", usource, "Here are the extra chemicals needed for good produce!")

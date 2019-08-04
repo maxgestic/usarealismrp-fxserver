@@ -63,7 +63,6 @@ function jailPlayer(data, officerName, gender)
 		print("after rounding, fine: " .. fine)
 	end
 	local inmate = exports["usa-characters"]:GetCharacter(targetPlayer)
-	local inmate_job = inmate.get("job")
 	-- assign an open cell --
 	local assigned_cell = CELLS[1] -- use CELLS[1] just in case there are no open cells (lol)
 	for i = 1, #CELLS do
@@ -118,7 +117,6 @@ function jailPlayer(data, officerName, gender)
 		suspensions = suspensions .. "\nFP revoked permanently"
 	end
 	-- send to discord #jail-logs --
-	if inmate_job == "dai" then return end
 	local url = 'https://discordapp.com/api/webhooks/343037167821389825/yDdmSBi-ODYPcAbTzb0DaPjWPnVOhh232N78lwrQvlhbrvN8mV5TBfNOmnxwMZfQnttl'
 	if not suspensions then suspensions = "None" end
 	PerformHttpRequest(url, function(err, text, headers)
@@ -158,7 +156,7 @@ end)
 
 function GetFPRevoked(charges) -- firearm permit
 	local numbers = {
-		'118', '135', '187', '192', '207', '215', '245', '16590', '29800', '33410', '2800.2', '2800.3', '2800.4'
+		'118', '135', '187', '192', '207', '215', '245', '16590', '29800', '33410', '2800.2', '2800.3', '2800.4', '51-50', '5150'
 	}
 	for _, code in pairs(numbers) do
 		if string.find(charges, code) then
