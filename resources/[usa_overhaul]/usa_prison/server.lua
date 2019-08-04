@@ -124,7 +124,7 @@ AddEventHandler("doc:offduty", function()
 	if job == "corrections" then
 		TriggerEvent('job:sendNewLog', source, 'corrections', false)
 	end
-	exports["usa_ems"]:RemoveServiceWeapons(char)
+	--exports["usa_ems"]:RemoveServiceWeapons(char)
 	char.set("job", "civ")
 	TriggerClientEvent("usa:notify", source, "You have clocked out!")
 	TriggerEvent("eblips:remove", source)

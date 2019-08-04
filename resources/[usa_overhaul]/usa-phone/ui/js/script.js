@@ -117,10 +117,11 @@ $(function() {
     $("#contacts-app-wrap").on("click", "#contact-action--call", function() {
         var attr = $(this).attr("id");
         var number = $(this).attr("data-number"); // number to call (from contact)
+        let randomChannel = Math.floor((Math.random() * 2000) + 500)
         $.post('http://usa-phone/requestCall', JSON.stringify({
           phone_number: number,
           from_number: phone.number,
-          peerIdentifier: peerIdentifier
+          channel: randomChannel
         }));
         $.post('http://usa-phone/escape', JSON.stringify({})); // shut the phone
     });

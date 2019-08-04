@@ -16,9 +16,6 @@ AddEventHandler("playerDropped", function(reason)
   local usource = source
   if CHARACTERS[usource] then
     local job = CHARACTERS[usource].get("job")
-    if job == "ems" or job ==  "corrections" then
-      exports["usa_ems"]:RemoveServiceWeapons(CHARACTERS[usource])
-    end
     -- save player data --
     TriggerEvent('es:exposeDBFunctions', function(db)
       print("updating char with ID: " .. CHARACTERS[usource].get("_id"))
