@@ -71,6 +71,7 @@ AddEventHandler('veh:searchVeh', function()
         return
       end
     end
+    table.insert(searchedVehicles, GetVehicleNumberPlateText(vehicle))
     RequestAnimDict('veh@handler@base')
     while not HasAnimDictLoaded('veh@handler@base') do
       Citizen.Wait(100)
@@ -93,7 +94,6 @@ AddEventHandler('veh:searchVeh', function()
       DrawTimer(searchBegin, VEHICLE_ITEM_SEARCH_TIME, 1.42, 1.475, 'SEARCHING')
     end
     ClearPedTasks(playerPed)
-    table.insert(searchedVehicles, GetVehicleNumberPlateText(vehicle))
     TriggerServerEvent('veh:searchResult')
   end
 end)
