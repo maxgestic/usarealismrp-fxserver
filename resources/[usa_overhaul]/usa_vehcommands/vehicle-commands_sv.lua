@@ -9,7 +9,9 @@ local VEHICLE_RANKS = {
 		["pdchrgum"] = 5,
 		["riot"] = 5,
 		["polmav"] = 2,
-		["policeb"] = 3
+		["policeb"] = 3,
+		["fbi"] = 4,
+		["predator"] = 1
 	},
 	["ems"] = {
 		["ambulance"] = 1,
@@ -18,7 +20,8 @@ local VEHICLE_RANKS = {
 		["firetruk"] = 1,
 		["polmav"] = 1,
 		["lguard2"] = 1,
-		["blazer"] = 1
+		["blazer"] = 1,
+		["predator"] = 1
 	},
 	["doctor"] = {
 		["paraexp"] = 1,

@@ -9,6 +9,8 @@ local searchedVehicles = {}
 
 local VEHICLE_ITEM_SEARCH_TIME = 20000
 
+local HOTWIRE_BREAK_CHANCE = 0.70
+
 Citizen.CreateThread(function()
   local wasInVeh = false
     while true do
@@ -160,7 +162,9 @@ AddEventHandler('veh:hotwireVehicle', function()
         local primary, secondary = GetVehicleColours(veh)
         TriggerServerEvent('911:HotwiringVehicle', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(veh))), GetVehicleNumberPlateText(veh), IsPedMale(playerPed), primary, secondary)
       end
-      TriggerServerEvent('veh:removeHotwiringKit')
+      if math.random() < HOTWIRE_BREAK_CHANCE then
+        TriggerServerEvent('veh:removeHotwiringKit')
+      end
       RequestAnimDict('veh@handler@base')
       while not HasAnimDictLoaded('veh@handler@base') do
         Citizen.Wait(100)
