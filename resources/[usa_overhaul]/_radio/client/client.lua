@@ -2,7 +2,8 @@ local Channels = {}
 
 local KEYS = {
   SHIFT = 21,
-  F6 = 167
+  F7 = 168,
+  F2 = 289
 }
 
 local isRadioShowing = false
@@ -79,7 +80,7 @@ end)
 Citizen.CreateThread(function()
     while true do
       Wait(5)
-      if IsControlJustPressed(0, KEYS.F6) and GetLastInputMethod(0) then
+      if IsControlPressed(0, KEYS.SHIFT) and IsControlJustPressed(0, KEYS.F2) and GetLastInputMethod(0) then
           TriggerServerEvent("radio:accessCheck")
       end
     end
