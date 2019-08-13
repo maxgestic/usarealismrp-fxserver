@@ -42,5 +42,6 @@ files({
 	'client/html/sounds/knock1.ogg',
 	'client/html/sounds/knock2.ogg',
 	'client/html/sounds/cabinet1.ogg',
-	'client/html/sounds/cabinet2.ogg'
+	'client/html/sounds/cabinet2.ogg',
+	'client/html/sounds/radio-beep.ogg'
 })

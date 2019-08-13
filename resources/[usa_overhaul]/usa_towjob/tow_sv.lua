@@ -40,6 +40,8 @@ AddEventHandler("towJob:setJob", function(truckSpawnCoords)
 				TriggerClientEvent("chatMessage", usource, "", {}, "Use ^3/ping [id]^0 to request a person\'s location.")
 				Citizen.Wait(3000)
 				TriggerClientEvent("chatMessage", usource, "", {}, "A tow truck has been equipped for you just there, use this to tow vehicles.")
+				Citizen.Wait(3000)
+				TriggerClientEvent("chatMessage", usource, "", {}, "Press ^3F6^0, left/right arrows keys, and CAPS LOCK to use the radio")
 				char.set("job", "tow")
 				TriggerClientEvent("towJob:onDuty", usource, truckSpawnCoords)
 				return
