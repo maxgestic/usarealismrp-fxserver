@@ -229,11 +229,11 @@ function CreateGeneralStoreMenu(menu, generalStoreItems)
   menu:Visible(true)
 end
 
-function CreateHardwareStoreMenu(menu, hardworeStoreItems)
+function CreateHardwareStoreMenu(menu, hardwareStoreItems)
   -----------------------------------
   -- Adds button for each category --
   -----------------------------------
-  for category, items in pairs(hardworeStoreItems) do
+  for category, items in pairs(hardwareStoreItems) do
     local submenu = _menuPool:AddSubMenu(menu, category, "See our selection of " .. category .. " items", true --[[KEEP POSITION]])
     table.insert(created_menus, submenu)
     for i = 1, #items do
@@ -268,6 +268,7 @@ function CreateHardwareStoreMenu(menu, hardworeStoreItems)
     CloseAllMenus()
   end
   menu:AddItem(item)
+  menu:Visible(true)
 end
 
 Citizen.CreateThread(function()
@@ -288,12 +289,14 @@ Citizen.CreateThread(function()
       for i = 1, #GENERAL_STORE_LOCATIONS do
         if IsNearStore(GENERAL_STORE_LOCATIONS[i]) then
           --mainMenu:Visible(not mainMenu:Visible())
+          mainMenu:Clear()
           TriggerServerEvent("generalStore:loadItems")
           closest_location = GENERAL_STORE_LOCATIONS[i]
         end
       end
       for i = 1, #HARDWARE_STORE_LOCATIONS do
         if IsNearStore(HARDWARE_STORE_LOCATIONS[i]) then
+          mainMenuHardware:Clear()
           TriggerServerEvent("hardwareStore:loadItems")
           closest_location = HARDWARE_STORE_LOCATIONS[i]
         end

@@ -7,6 +7,7 @@ local enableBankingGui = true -- Enables the banking GUI (Default: true) // MAY 
 
 -- ATMS
 local atms = {
+  {name = "ATM", x = 2682.9, y = 3286.7, z = 55.2},
   {name="ATM", x=-386.733, y=6045.953, z=31.501},
   {name="ATM", x=-284.037, y=6224.385, z=31.187},
   {name="ATM", x=-284.037, y=6224.385, z=31.187},
