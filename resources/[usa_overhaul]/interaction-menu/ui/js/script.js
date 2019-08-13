@@ -75,7 +75,7 @@ var itemImages = {
   "Halibut": "https://i.dlpng.com/static/png/332762_thumb.png",
   "Weed Bud": "https://66.media.tumblr.com/30ff99a59894fdd9abd04712189708af/tumblr_mvyvwdxNVi1t04rb2o1_r1_400.png",
   "Packaged Weed": "https://www.sccpre.cat/mypng/full/19-192283_bag-of-weed-png.png",
-  "Processed Sand": "http://www.cliparthut.com/clip-arts/97/sand-bags-woven-polypropylene-bags-plastic-sand-bags-clipart-BEO6vR.png",
+  "Processed Sand": "https://imgur.com/GQ8TPYU.png",
   "Lagunitas IPA": "https://www.totalwine.com/media/sys_master/twmmedia/h0a/h36/8804310974494.png",
   "Budweiser": "http://dbertolineandsons.com/wp-content/uploads/2016/08/budweiser-8-200x390.png",
   "Miller Lite": "https://www.liquormarts.ca/sites/mlcc_public_website/files/styles/product_fullsize/public/product/24367_383cd34522f3613dc452921121a3d00c.png?itok=txEs6zi-",
