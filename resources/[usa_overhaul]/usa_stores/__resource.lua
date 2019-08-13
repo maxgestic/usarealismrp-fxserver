@@ -8,3 +8,7 @@ client_scripts {
   '@NativeUI/NativeUI.lua',
   'cl_generalstore.lua'
 }
+
+server_exports {
+  "AddGeneralStoreItem"
+}

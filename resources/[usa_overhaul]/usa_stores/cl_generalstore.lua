@@ -187,11 +187,11 @@ table.insert(created_menus, mainMenuHardware)
 --------------------------------
 -- Construct GUI menu buttons --
 --------------------------------
-function CreateGeneralStoreMenu(menu)
+function CreateGeneralStoreMenu(menu, generalStoreItems)
   -----------------------------------
   -- Adds button for each category --
   -----------------------------------
-  for category, items in pairs(GENERAL_STORE_ITEMS) do
+  for category, items in pairs(generalStoreItems) do
     local submenu = _menuPool:AddSubMenu(menu, category, "See our selection of " .. category .. " items", true --[[KEEP POSITION]])
     table.insert(created_menus, submenu)
     for i = 1, #items do
@@ -226,13 +226,14 @@ function CreateGeneralStoreMenu(menu)
     CloseAllMenus()
   end
   menu:AddItem(item)
+  menu:Visible(true)
 end
 
-function CreateHardwareStoreMenu(menu)
+function CreateHardwareStoreMenu(menu, hardworeStoreItems)
   -----------------------------------
   -- Adds button for each category --
   -----------------------------------
-  for category, items in pairs(HARDWARE_STORE_ITEMS) do
+  for category, items in pairs(hardworeStoreItems) do
     local submenu = _menuPool:AddSubMenu(menu, category, "See our selection of " .. category .. " items", true --[[KEEP POSITION]])
     table.insert(created_menus, submenu)
     for i = 1, #items do
@@ -286,13 +287,14 @@ Citizen.CreateThread(function()
       -- see if close to any stores --
       for i = 1, #GENERAL_STORE_LOCATIONS do
         if IsNearStore(GENERAL_STORE_LOCATIONS[i]) then
-          mainMenu:Visible(not mainMenu:Visible())
+          --mainMenu:Visible(not mainMenu:Visible())
+          TriggerServerEvent("generalStore:loadItems")
           closest_location = GENERAL_STORE_LOCATIONS[i]
         end
       end
       for i = 1, #HARDWARE_STORE_LOCATIONS do
         if IsNearStore(HARDWARE_STORE_LOCATIONS[i]) then
-          mainMenuHardware:Visible(not mainMenuHardware:Visible())
+          TriggerServerEvent("hardwareStore:loadItems")
           closest_location = HARDWARE_STORE_LOCATIONS[i]
         end
       end
@@ -336,23 +338,18 @@ end)
 
 RegisterNetEvent("generalStore:loadItems")
 AddEventHandler("generalStore:loadItems", function(items)
-  GENERAL_STORE_ITEMS = items
   -----------------
   -- Create Menu --
   -----------------
-  CreateGeneralStoreMenu(mainMenu)
+  CreateGeneralStoreMenu(mainMenu, items)
   _menuPool:RefreshIndex()
 end)
 
 RegisterNetEvent("hardwareStore:loadItems")
 AddEventHandler("hardwareStore:loadItems", function(items)
-  HARDWARE_STORE_ITEMS = items
   -----------------
   -- Create Menu --
   -----------------
-  CreateHardwareStoreMenu(mainMenuHardware)
+  CreateHardwareStoreMenu(mainMenuHardware, items)
   _menuPool:RefreshIndex()
 end)
-
-TriggerServerEvent("generalStore:loadItems")
-TriggerServerEvent("hardwareStore:loadItems")

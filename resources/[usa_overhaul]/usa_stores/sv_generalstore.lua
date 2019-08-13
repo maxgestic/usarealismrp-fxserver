@@ -81,6 +81,10 @@ function GetServerPrice(item, store)
   end
 end
 
+function AddGeneralStoreItem(category, item)
+  table.insert(GENERAL_STORE_ITEMS[category], item)
+end
+
 RegisterServerEvent("generalStore:buyItem")
 AddEventHandler("generalStore:buyItem", function(item, store, inPrison, business)
   local char = exports["usa-characters"]:GetCharacter(source)
