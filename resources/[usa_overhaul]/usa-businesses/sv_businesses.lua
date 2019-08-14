@@ -109,6 +109,7 @@ AddEventHandler("business:retrieve", function(name, item, amount)
               -- update storage and give amount of item to player
               SetBusinessStorage(name, storage, function(success)
                 if success then
+                  toGiveCopy.quantity = amount
                   char.giveItem(toGiveCopy)
                   TriggerClientEvent("usa:notify", usource, "Retrieved: (x" .. amount .. ") " .. item.name)
                 end
