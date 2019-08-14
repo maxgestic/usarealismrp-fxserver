@@ -91,7 +91,11 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
 		end
 		if item.type == "weapon" then
 			toChar.giveItem(item)
-			fromChar.removeItemWithField("uuid", item.uuid)
+			if item.uuid then
+				fromChar.removeItemWithField("uuid", item.uuid)
+			else 
+				fromChar.removeItem(item, 1)
+			end
 			TriggerClientEvent("interaction:equipWeapon", targetPlayerId, item, true)
 			TriggerClientEvent("interaction:equipWeapon", source, item, false)
 		else

@@ -78,7 +78,8 @@ AddEventHandler('fuel:purchaseJerryCan', function()
 			legality = "legal",
 			type = "weapon",
 			hash = 883325847,
-			weight = 10.0
+			weight = 10.0,
+			uuid = math.random(1000000, 9999999)
 		}
 		if char.canHoldItem(jerryCan) then
 			char.removeMoney(cost)
