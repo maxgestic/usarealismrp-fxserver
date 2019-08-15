@@ -3,7 +3,7 @@ AddEventHandler("warp:checkJob", function(locationCoords, locationHeading, jobAc
   local char = exports["usa-characters"]:GetCharacter(source)
   local job = char.get("job")
   if jobAccess == 'emergency' then
-    if job == "sheriff" or job == "ems" or job == "fire" or job == "doctor" then
+    if job == "sheriff" or job == "ems" or job == "fire" or job == "doctor" or job == "corrections" then
     	local x, y, z = table.unpack(locationCoords)
       TriggerClientEvent("warp:warpToPoint", source, x, y, z, locationHeading)
       return
