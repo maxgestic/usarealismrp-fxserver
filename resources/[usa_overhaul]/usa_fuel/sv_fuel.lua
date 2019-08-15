@@ -93,3 +93,12 @@ AddEventHandler('fuel:purchaseJerryCan', function()
 		TriggerClientEvent("usa:notify", source, "Not enough money! Need $" .. cost)
 	end
 end)
+
+RegisterServerEvent("fuel:save")
+AddEventHandler("fuel:save", function(plate)
+	TriggerEvent('es:exposeDBFunctions', function(db)
+		db.updateDocument("vehicles", plate, {stats = { fuel = vehicleGas[plate] }}, function(doc, err, rText)
+			--print("finished saving fuel, plate " .. plate .. " with fuel amount of " .. vehicleGas[plate] .. ", status is " .. err)
+		end)
+	end)
+end)

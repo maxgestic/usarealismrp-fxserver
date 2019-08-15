@@ -109,6 +109,8 @@ AddEventHandler("garage:storeVehicle", function()
 	Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(veh))
 	-- store vehicle key with vehicle
 	TriggerServerEvent("garage:storeKey", plate)
+	-- save fuel
+	TriggerServerEvent("fuel:save", plate)
 end)
 
 RegisterNetEvent("garage:vehicleStored")
@@ -163,6 +165,13 @@ AddEventHandler("garage:spawn", function(vehicle)
 		-- car customizations
 		if playerVehicle.customizations then
 			TriggerEvent("customs:applyCustomizations", playerVehicle.customizations)
+		end
+
+		-- veh fuel level
+		if playerVehicle.stats then
+			if playerVehicle.stats.fuel then
+				TriggerServerEvent("fuel:setFuelAmount", playerVehicle.plate, playerVehicle.stats.fuel)
+			end
 		end
 
 		-- apply any stored engine / body damage --

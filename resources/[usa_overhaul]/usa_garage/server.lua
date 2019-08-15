@@ -151,7 +151,8 @@ function GetVehiclesForMenu(plates, cb)
 						impounded = data.rows[i].value[4], -- impounded
 						stored = data.rows[i].value[5], -- stored
 						hash = data.rows[i].value[6], -- hash
-						owner = data.rows[i].value[7] -- owner
+						owner = data.rows[i].value[7], -- owner
+						stats = data.rows[i].value[8] -- vehicle stats
 					}
 					table.insert(responseVehArray, veh)
 				end
