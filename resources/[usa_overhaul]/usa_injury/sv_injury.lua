@@ -157,6 +157,7 @@ end, {
 
 RegisterServerEvent('injuries:validateCheckin')
 AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, x, y, z, isMale)
+	local treatmentTimeMinutes = 2
 	local doctors = exports["usa-characters"]:GetNumCharactersWithJob("doctor")
 	if isPedDead and (exports["usa-characters"]:GetNumCharactersWithJob("ems") > 0 or exports["usa-characters"]:GetNumCharactersWithJob("sheriff") > 3 or doctors > 0) then
 		TriggerClientEvent('usa:notify', source, 'See a doctor or call emergency services instead.')
@@ -174,6 +175,15 @@ AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, 
 					TriggerEvent('911:SuspiciousHospitalInjuries', char.getFullName(), x, y, z)
 				end
 				totalPrice = totalPrice + injuries[injury].treatmentPrice
+				if injuries[injury].string == "High-speed Projectile" then 
+					treatmentTimeMinutes = treatmentTimeMinutes + 4
+				elseif injuries[injury].string == "Knife Puncture" then 
+					treatmentTimeMinutes = treatmentTimeMinutes + 2
+				elseif injuries[injury].string == "Explosion" then 
+					treatmentTimeMinutes = treatmentTimeMinutes + 4
+				elseif injuries[injury].string == "Large Sharp Object" then 
+					treatmentTimeMinutes = treatmentTimeMinutes + 2
+				end
 			end
 		end
 		TriggerEvent('injuries:getHospitalBeds', function(hospitalBeds)
@@ -185,7 +195,7 @@ AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, 
 						coords = hospitalBeds[i].objCoords,
 						model = hospitalBeds[i].objModel
 					}
-					TriggerClientEvent('ems:hospitalize', source, bed, i)
+					TriggerClientEvent('ems:hospitalize', source, treatmentTimeMinutes, bed, i)
 					break
 				end
 			end

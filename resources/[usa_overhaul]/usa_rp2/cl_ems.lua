@@ -3,37 +3,42 @@ local currentBed = nil
 local hospitalCoords = vector3(354.032, -589.411, 42.415)
 
 RegisterNetEvent("ems:hospitalize")
-AddEventHandler("ems:hospitalize", function(bed, index)
-    local playerPed = PlayerPedId()
-    if index then
-        TriggerServerEvent('ems:occupyBed', index)
-    end
-    DoScreenFadeOut(500)
-    Citizen.Wait(500)
-    RequestCollisionAtCoord(hospitalCoords)
-    Citizen.Wait(1000)
-    TriggerServerEvent('InteractSound_SV:PlayOnSource', 'door-shut', 0.3)
-    SetEntityCoords(playerPed, hospitalCoords) -- tp to hospital
-    while not HasCollisionLoadedAroundEntity(playerPed) do
-        Citizen.Wait(100)
+AddEventHandler("ems:hospitalize", function(treatmentTimeMinutes, bed, index)
+    CreateThread(function()
+        local playerPed = PlayerPedId()
+        if index then
+            TriggerServerEvent('ems:occupyBed', index)
+        end
+        DoScreenFadeOut(500)
+        Citizen.Wait(500)
+        RequestCollisionAtCoord(hospitalCoords)
+        Citizen.Wait(1000)
+        TriggerServerEvent('InteractSound_SV:PlayOnSource', 'door-shut', 0.3)
         SetEntityCoords(playerPed, hospitalCoords) -- tp to hospital
-    end
-    Citizen.Wait(2000)
-    TriggerEvent("crim:untieHands", GetPlayerServerId(PlayerId()))
-    TriggerEvent("crim:blindfold", false, true)
-    TriggerEvent('injuries:checkin')
-    currentlyAdmitted = true
-    if bed then
-        currentBed = bed
-        bx, by, bz = table.unpack(currentBed.coords)
-        ActivateBed(bx, by, bz, currentBed.model)
-    else
-        DoScreenFadeIn(1000)
-    end
-    Citizen.Wait(20000)
-    SetEntityHealth(playerPed, 200)
-    currentlyAdmitted = false
-    TriggerEvent('usa:showHelp', 'You have been treated.')
+        while not HasCollisionLoadedAroundEntity(playerPed) do
+            Citizen.Wait(100)
+            SetEntityCoords(playerPed, hospitalCoords) -- tp to hospital
+        end
+        Citizen.Wait(2000)
+        TriggerEvent("crim:untieHands", GetPlayerServerId(PlayerId()))
+        TriggerEvent("crim:blindfold", false, true)
+        TriggerEvent('injuries:checkin')
+        currentlyAdmitted = true
+        if bed then
+            currentBed = bed
+            bx, by, bz = table.unpack(currentBed.coords)
+            ActivateBed(bx, by, bz, currentBed.model)
+        else
+            DoScreenFadeIn(1000)
+        end
+        local admitTime = GetGameTimer()
+        while GetGameTimer() - admitTime < (treatmentTimeMinutes * 60 * 1000) do
+            Wait(1)
+        end
+        SetEntityHealth(playerPed, 200)
+        currentlyAdmitted = false
+        TriggerEvent('usa:showHelp', 'You have been treated.')
+    end)
 end)
 
 RegisterNetEvent('ems:admitMe')
@@ -42,7 +47,22 @@ AddEventHandler('ems:admitMe', function(bed, reasonForAdmission)
     local playerCoords = GetEntityCoords(playerPed)
     if Vdist(playerCoords, hospitalCoords) < 50 then
         SetEntityHealth(playerPed, 200)
-        TriggerEvent('ems:hospitalize', bed)
+        local treatmentTimeMinutes = 2
+        local playerInjuries = exports.usa_injury:getPlayerInjuries()
+        for bone, injuries in pairs(playerInjuries) do
+            for injury, data in pairs(playerInjuries[bone]) do
+                if injuries[injury].string == "High-speed Projectile" then 
+                    treatmentTimeMinutes = treatmentTimeMinutes + 4
+                elseif injuries[injury].string == "Knife Puncture" then 
+                    treatmentTimeMinutes = treatmentTimeMinutes + 2
+                elseif injuries[injury].string == "Explosion" then 
+                    treatmentTimeMinutes = treatmentTimeMinutes + 4
+                elseif injuries[injury].string == "Large Sharp Object" then 
+                    treatmentTimeMinutes = treatmentTimeMinutes + 2
+                end
+            end
+        end
+        TriggerEvent('ems:hospitalize', treatmentTimeMinutes, bed)
         TriggerEvent("chatMessage", '^3^*[HOSPITAL] ^r^7You have been admitted to the hospital. (' .. reasonForAdmission .. ')')
     end
 end)

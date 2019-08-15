@@ -712,3 +712,7 @@ function DrawTimer(beginTime, duration, x, y, text)
     Set_2dLayer(3)
     DrawText(x - 0.06, y - 0.012)
 end
+
+function getPlayerInjuries()
+    return injuredParts
+end
