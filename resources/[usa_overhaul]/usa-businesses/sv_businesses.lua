@@ -99,8 +99,7 @@ AddEventHandler("business:retrieve", function(name, item, amount)
       for i = 1, #items do
         if items[i].name == item.name then
           local toGiveCopy = items[i]
-          toGiveCopy.quantity = amount
-          if char.canHoldItem(toGiveCopy) then -- make sure player can hold amount of item
+          if char.canHoldItem(toGiveCopy, amount) then -- make sure player can hold amount of item
             if items[i].quantity >= amount then -- player requesting less than or equal to amount in storage
               if items[i].quantity - amount >= 1 then
                 storage.items[i].quantity = storage.items[i].quantity - amount -- decrement in storage
@@ -110,6 +109,7 @@ AddEventHandler("business:retrieve", function(name, item, amount)
               -- update storage and give amount of item to player
               SetBusinessStorage(name, storage, function(success)
                 if success then
+                  toGiveCopy.quantity = amount
                   char.giveItem(toGiveCopy)
                   TriggerClientEvent("usa:notify", usource, "Retrieved: (x" .. amount .. ") " .. item.name)
                 end
