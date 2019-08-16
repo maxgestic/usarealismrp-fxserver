@@ -64,7 +64,7 @@ Citizen.CreateThread(function()
 	while true do
 		if #DROPPED_ITEMS > 0 then
 			for i = #DROPPED_ITEMS, 1, -1 do
-				if (getMinutesFromTime(DROPPED_ITEMS[i].dropTime) > ITEM_EXPIRE_TIME) or (string.find(DROPPED_ITEMS[i].name, 'Key') and getMinutesFromTime(DROPPED_ITEMS[i].dropTime) > 1) then
+				if (getMinutesFromTime(DROPPED_ITEMS[i].dropTime) > ITEM_EXPIRE_TIME) or (string.find(DROPPED_ITEMS[i].name, 'Key') and getMinutesFromTime(DROPPED_ITEMS[i].dropTime) > 5) then
 					table.remove(DROPPED_ITEMS, i)
 					TriggerClientEvent("interaction:removeDroppedItem", -1, i)
 					break
