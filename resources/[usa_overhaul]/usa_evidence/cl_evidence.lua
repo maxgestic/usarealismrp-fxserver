@@ -20,6 +20,8 @@ local playerData = {
 	['seatBelt'] = false
 }
 
+local GSR_DURATION = 50 * 60000
+
 local droppedEvidence = {}
 local collectedEvidence = {}
 local onDuty = false
@@ -123,7 +125,6 @@ end)
 
 Citizen.CreateThread(function()
 	local lastShotTime = 0
-	local duration = 25 * 60000
 	while true do
 		Citizen.Wait(10)
 		local playerPed = PlayerPedId()
@@ -135,7 +136,7 @@ Citizen.CreateThread(function()
 			lastShotTime = GetGameTimer()
 			Citizen.Wait(3000)
 		end
-		if GetGameTimer() - lastShotTime > duration or lastShotTime == 0 then
+		if GetGameTimer() - lastShotTime > GSR_DURATION or lastShotTime == 0 then
 			playerData['gunshotResidue'] = false
 		end
 		if IsControlPressed(0, KEYS.ALT) and IsControlJustPressed(0, KEYS.Y) and not observing then
