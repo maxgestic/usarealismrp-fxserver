@@ -118,7 +118,8 @@ local scenarios = {
 	{name = "fail", type = "emote", dict = "random@car_thief@agitated@idle_a", animname = "agitated_idle_a"},
 	{name = "no", type = "emote", dict = "mp_player_int_upper_nod", animname = "mp_player_int_nod_no", cancelTime = 1.3},
 	{name = "aim", type = "emote", dict = "move_weapon@pistol@cope", animname = "idle"},
-	{name = "typing", type = "emote", dict = "anim@amb@prop_human_seat_computer@male@base", animname = "base"}
+	{name = "typing", type = "emote", dict = "anim@amb@prop_human_seat_computer@male@base", animname = "base"},
+	{name = "leanwindow", type = "emote", dict = "amb@prop_human_bum_shopping_cart@male@idle_a", animname = "idle_a"}
 	--{name = "hug", type = "emote", dict = "", animname = ""},
 }
 
@@ -578,7 +579,7 @@ AddEventHandler("emotes:playEmote", function(scenarioName)
 									name = scenarios[i].animname,
 									flag = 7
 								}
-							elseif string.find(scenarioName, "cpr") or string.find(scenarioName, "cross arms") or string.find(scenarioName, "typing") or string.find(scenarioName, "gang 1") or string.find(scenarioName, "gang 2") then
+							elseif string.find(scenarioName, "cpr") or string.find(scenarioName, "cross arms") or string.find(scenarioName, "leanwindow") or string.find(scenarioName, "typing") or string.find(scenarioName, "gang 1") or string.find(scenarioName, "gang 2") then
 								--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
 								--TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, 5, 1, 1000, 31, 0, 0, 0, 0)
 								TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 53, 0, 0, 0, 0)
