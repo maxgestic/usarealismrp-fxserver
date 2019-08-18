@@ -56,6 +56,19 @@ AddEventHandler("vehicleCommands:setLivery", function(livery)
 	end
 end)
 
+RegisterNetEvent("vehCommands:getVehModel")
+AddEventHandler("vehCommands:getVehModel", function(eventName, requestedSelection)
+	local me = PlayerPedId()
+	local model = nil
+	if IsPedInAnyVehicle(me, true) then
+		local veh = GetVehiclePedIsIn(me, false)
+		if veh then 
+			model = GetEntityModel(veh)
+		end
+	end
+	TriggerServerEvent(eventName, model, "livery", requestedSelection)
+end)
+
 RegisterNetEvent("vehicleCommands:setExtra")
 AddEventHandler("vehicleCommands:setExtra", function(extra, toggle)
 	if IsPedInAnyVehicle(GetPlayerPed(-1), true) then

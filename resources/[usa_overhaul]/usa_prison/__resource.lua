@@ -4,7 +4,7 @@ client_scripts {
     '@NativeUI/NativeUI.lua',
     'map.lua',
     'client.lua',
-    'DOC_LOADOUT_MENU.lua'
+    'menu.lua'
 }
 
 server_script 'server.lua'

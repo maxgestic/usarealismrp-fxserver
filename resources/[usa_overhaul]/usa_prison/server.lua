@@ -122,7 +122,7 @@ AddEventHandler("doc:offduty", function()
 	-- put back to civ job --
 	-------------------------
 	if job == "corrections" then
-		TriggerEvent('job:sendNewLog', source, 'corrections', false)
+		TriggerEvent('job:sendNewLog', source, 'BCSO', false)
 	end
 	--exports["usa_ems"]:RemoveServiceWeapons(char)
 	char.set("job", "civ")

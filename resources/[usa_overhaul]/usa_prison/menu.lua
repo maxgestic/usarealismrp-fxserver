@@ -153,7 +153,7 @@ end
 -- Set up main menu --
 ---------------------------
 _menuPool = NativeUI.CreatePool()
-mainMenu = NativeUI.CreateMenu("SADOC", "~b~San Andreas Department of Corrections", 0 --[[X COORD]], 320 --[[Y COORD]])
+mainMenu = NativeUI.CreateMenu("BCSO", "~b~Blaine County Sheriff's Office", 0 --[[X COORD]], 320 --[[Y COORD]])
 _menuPool:Add(mainMenu)
 
 table.insert(created_menus, mainMenu)
