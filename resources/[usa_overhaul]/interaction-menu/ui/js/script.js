@@ -170,7 +170,7 @@ var itemImages = {
   "Original Iced Coffee": "https://imgur.com/115QUbe.png",
   "Redbull Energy Drink": "https://imgur.com/ydttLBB.png",
   "Rockstar Energy Drink": "https://imgur.com/mb2EFV8.png",
-  "Funyuns": "https://imgur.com/a/l2uA5MU.png",
+  "Funyuns": "https://i.imgur.com/0DVO49N.png",
   "Cool Ranch Doritos": "https://i.imgur.com/7zwiCP5.png",
   "Gummy Worms": "https://i.imgur.com/CjOhIJF.png",
   "Sour Gummy Worms": "https://i.imgur.com/AiSyyCw.png",
