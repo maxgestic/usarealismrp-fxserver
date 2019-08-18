@@ -449,11 +449,25 @@ function Send911Notification(intendedEmergencyType, string, x, y, z, blipText)
     	for id, char in pairs(characters) do
     		local job = char.get("job")
     		if intendedEmergencyType then
-    			if job == intendedEmergencyType or (intendedEmergencyType == 'sheriff' and job == 'dai') then
+    			if job == intendedEmergencyType then
     				TriggerClientEvent('911:Notification', id, string, x, y, z, blipText)
     			end
-    		elseif job == "sheriff" or job == "ems" or job == "fire" or job == "dai" then
-    			TriggerClientEvent('911:Notification', id, string, x, y, z, blipText)
+            elseif job == "sheriff" or job == "ems" or job == "fire" or job == "corrections" then
+                if job ~= "corrections" then
+                    TriggerClientEvent('911:Notification', id, string, x, y, z, blipText) 
+                else 
+                    -- only show 911 calls for non correctional officers (i.e. deputy sheriffs, i.e. rank 3+)
+                    TriggerEvent('es:exposeDBFunctions', function(db)
+                        local ident = GetPlayerIdentifiers(char.get("source"))[1]
+                        db.getDocumentByRow("correctionaldepartment", "identifier", ident, function(doc)
+                            if doc then
+                                if doc.rank >= 3 then 
+                                    TriggerClientEvent('911:Notification', id, string, x, y, z, blipText)
+                                end
+                            end
+                        end)
+                    end)
+                end
     		end
     	end
     end)

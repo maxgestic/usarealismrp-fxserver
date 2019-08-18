@@ -445,7 +445,8 @@ RegisterServerEvent('mdt:checkFlags')
 AddEventHandler('mdt:checkFlags', function(vehPlate, vehModel)
 	local _source = source
 	local char = exports["usa-characters"]:GetCharacter(_source)
-	if char.get('job') == 'sheriff' then
+	local job = char.get("job")
+	if job == 'sheriff' or job == "corrections" then
 		exports["usa-warrants"]:getWarrants(function(warrants)
 			PerformHttpRequest("http://127.0.0.1:5984/bolos/_all_docs?include_docs=true" --[[ string ]], function(err, text, headers)
 				local response = json.decode(text)
@@ -566,7 +567,7 @@ end)
 RegisterServerEvent("mdt:deleteBOLO")
 AddEventHandler("mdt:deleteBOLO", function(id, rev)
 	local job = exports["usa-characters"]:GetCharacterField(source, "job")
-	if job == 'sheriff' or job == 'judge' then
+	if job == 'sheriff' or job == 'judge' or job == "corrections" then
 		deleteBOLO("bolos", id, rev)
 	else
 		TriggerClientEvent('usa:notify', source, 'Insufficient permission!')

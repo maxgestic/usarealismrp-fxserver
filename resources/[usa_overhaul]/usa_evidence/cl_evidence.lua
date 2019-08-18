@@ -412,7 +412,7 @@ end)
 
 RegisterNetEvent('interaction:setPlayersJob')
 AddEventHandler('interaction:setPlayersJob', function(job)
-	if job == 'sheriff' or job == 'police' or job == 'dai' then
+	if job == 'sheriff' or job == 'police' then
 		onDuty = true
 	else
 		onDuty = false

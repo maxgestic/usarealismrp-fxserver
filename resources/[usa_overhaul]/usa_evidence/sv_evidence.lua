@@ -52,13 +52,13 @@ local exempt_evidence = {
 	vector3(-781.77, 322.00, 211.99)
 }
 
-TriggerEvent('es:addJobCommand', 'breathalyze', { "police", "sheriff", "ems" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'breathalyze', { "police", "sheriff", "ems", "corrections" }, function(source, args, char)
 	TriggerClientEvent("evidence:breathalyzeNearest", source)
 end, {
 	help = "breathalyze the nearest person"
 })
 
-TriggerEvent('es:addJobCommand', 'dnasample', { "police", "sheriff", "dai" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'dnasample', { "police", "sheriff", "corrections" }, function(source, args, char)
 	TriggerClientEvent("evidence:dnaNearest", source)
 end, {
 	help = "dna sample the nearest person"
@@ -88,7 +88,7 @@ AddEventHandler('evidence:returnBreathalyzeResult', function(levelBAC, sourceRet
 end)
 
 -- GSR test --
-TriggerEvent('es:addJobCommand', 'gsr', { "police", "sheriff", "dai" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'gsr', { "police", "sheriff", "corrections" }, function(source, args, char)
 	TriggerClientEvent("evidence:gsrNearest", source)
 end, {
 	help = "gun shot residue test the nearest person"
@@ -167,7 +167,7 @@ end)
 RegisterServerEvent('evidence:checkJobForMenu')
 AddEventHandler('evidence:checkJobForMenu', function()
 	local job = exports["usa-characters"]:GetCharacterField(source, "job")
-	if job == 'police' or job == 'sheriff' or job == 'dai' then
+	if job == 'police' or job == 'sheriff' or job == 'corrections' then
 		TriggerClientEvent('evidence:openEvidenceMenu', source)
 	else
 		TriggerClientEvent('usa:notify', source, '~y~You are not on-duty for POLICE.')

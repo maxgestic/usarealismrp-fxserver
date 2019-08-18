@@ -113,8 +113,6 @@ function DepositPayCheck(char)
         msg = msg .. "of $" .. paycheckAmount .. " from the ~y~San Andreas Court Administration~s~."
     elseif job == 'doctor' then
         msg = msg .. "of $" .. paycheckAmount .. " from the ~y~Pillbox Medical Center~s~."
-    elseif job == 'dai' then
-        msg = msg .. "of $" .. paycheckAmount .. " from the ~y~District Attorney Investigation Branch~s~."
     else
         msg = msg .. "of $" .. paycheckAmount .. "."
     end
@@ -149,7 +147,7 @@ function myJob(job, source)
                            "You currently work for ~y~Cluckin' Bell~s~.")
     elseif job == 'corrections' then
         TriggerClientEvent('usa:notify', source,
-                           "You currently work for the ~y~San Andreas Department of Corrections~s~.")
+                           "You currently work for the ~y~Blaine County Sheriff's Office~s~.")
     elseif job == 'lawyer' then
         TriggerClientEvent('usa:notify', source,
                            "You currently work for the ~y~San Andreas Legal Association~s~.")

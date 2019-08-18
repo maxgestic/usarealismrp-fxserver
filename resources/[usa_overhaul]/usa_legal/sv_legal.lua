@@ -25,7 +25,7 @@ AddEventHandler('legal:checkBarCertificate', function()
 	end
 end)
 
-TriggerEvent('es:addJobCommand', 'paylawyer', { 'sheriff', 'police' , 'judge'}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'paylawyer', { 'sheriff', 'corrections' , 'judge'}, function(source, args, char)
 	local targetSource = tonumber(args[2])
 	local targetAmount = tonumber(args[3])
 	local target = exports["usa-characters"]:GetCharacter(targetSource)
@@ -83,6 +83,7 @@ AddEventHandler('lawyer:payLawyer', function(targetSource, targetAmount)
 	print('LEGAL: '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has paid (for free) amount['..targetAmount..'] to '..GetPlayerName(targetSource)..'['..GetPlayerIdentifier(targetSource)..'] for legal reward.')
 end)
 
+--[[
 RegisterServerEvent('legal:onDutyDAI')
 AddEventHandler('legal:onDutyDAI', function()
 	local char = exports["usa-characters"]:GetCharacter(source)
@@ -102,6 +103,7 @@ AddEventHandler('legal:onDutyDAI', function()
 		end
 	end
 end)
+--]]
 
 Citizen.CreateThread(function()
 	while true do

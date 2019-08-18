@@ -26,7 +26,7 @@ AddEventHandler('cuff:triggerSuspectAnim', function(pedsource,x,y,z,heading)
     TriggerClientEvent('cuff:playSuspectAnim', pedsource,x,y,z,heading)
 end)
 
-TriggerEvent('es:addJobCommand', 'hc', {"police", "sheriff", "corrections", "dai"}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'hc', {"police", "sheriff", "corrections"}, function(source, args, char, location)
 	if args[2] then
 		local sourceToHardcuff = tonumber(args[2])
 		if GetPlayerName(sourceToHardcuff) then
@@ -40,7 +40,7 @@ TriggerEvent('es:addJobCommand', 'hc', {"police", "sheriff", "corrections", "dai
 	end
 end, {help = 'Hardcuff the player specified, player must be cuffed first.', params = {{name = "id", help = "Target player ID #"}}})
 
-TriggerEvent('es:addJobCommand', 'sc', {"police", "sheriff", "corrections", "dai"}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'sc', {"police", "sheriff", "corrections"}, function(source, args, char, location)
 	if args[2] then
 		local sourceToSoftcuff = tonumber(args[2])
 		if GetPlayerName(sourceToSoftcuff) then

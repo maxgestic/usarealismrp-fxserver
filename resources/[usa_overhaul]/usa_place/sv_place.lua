@@ -36,7 +36,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'placef', {'sheriff', 'police', 'ems', 'fire', 'corrections', 'dai'}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'placef', {'sheriff', 'ems', 'fire', 'corrections'}, function(source, args, char, location)
 	local tPID = tonumber(args[2])
 	awaitingUpdates = true
 	TriggerEvent('drag:passTable', 'place:updateDragTable', function()

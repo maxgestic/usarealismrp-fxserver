@@ -75,7 +75,8 @@ end, {
 	help = "Repair the vehicle you're facing."
 })
 
-TriggerEvent('es:addJobCommand', 'runserial', { "police", "sheriff", 'judge', 'dai' }, function(source, args, char)
+--[[
+TriggerEvent('es:addJobCommand', 'runserial', { "sheriff", 'judge', 'corrections' }, function(source, args, char)
 	local userSource = tonumber(source)
 	if args[2] then
 		local serialNumber = string.upper(args[2])
@@ -97,6 +98,7 @@ end, {
 		{ name = "serial", help = "weapon serial number" }
 	}
 })
+--]]
 
 -- /cone barrier
 TriggerEvent('es:addJobCommand', 'barrier', { "police", "sheriff", "ems", "fire"}, function(source, args, char)

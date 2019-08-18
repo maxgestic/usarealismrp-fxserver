@@ -3,7 +3,6 @@ local jobNames = {
 	['taxi'] = 'Taxi',
 	['tow'] = 'Tow',
 	['sheriff'] = 'Peace Officer (SASP)',
-	['dai'] = 'Peace Officer (DAI)',
 	['da'] = 'District Attorney',
 	['ems'] = 'Medical Responder (LSFD)',
 	['doctor'] = 'Doctor',
@@ -71,7 +70,8 @@ TriggerEvent('es:addCommand', 'showid', function(source, args, char, location)
 	showid(source, char, location)
 end, {help = "Present your identification card / DL."})
 
-TriggerEvent('es:addJobCommand', 'fakeid', {'sheriff', 'police', 'dai'}, function(source, args, char, location)
+--[[
+TriggerEvent('es:addJobCommand', 'fakeid', {'sheriff', 'police', 'corrections'}, function(source, args, char, location)
 	local job = char.get("job")
 	if char.get("policeRank") < 4 and (job == "sheriff" or job == "police") then
         TriggerClientEvent("usa:notify", source, "Not high enough rank!")
@@ -94,8 +94,10 @@ end, {
 		{ name = "dob day", help = "date of birth day to show on ID" }
 	}
 })
+--]]
 
-TriggerEvent('es:addJobCommand', 'faketweet', {'sheriff', 'police', 'dai'}, function(source, args, char, location)
+--[[
+TriggerEvent('es:addJobCommand', 'faketweet', {'sheriff', 'police', 'corrections'}, function(source, args, char, location)
 	local job = char.get("job")
 	if char.get("policeRank") < 4 and (job == "sheriff" or job == "police") then
         TriggerClientEvent("usa:notify", source, "Not high enough rank!")
@@ -122,8 +124,10 @@ end, {
 		{ name = "last name", help = "last name to show on tweet" },
 	}
 })
+--]]
 
-TriggerEvent('es:addJobCommand', 'fakead', {'sheriff', 'police', 'dai'}, function(source, args, char, location)
+--[[
+TriggerEvent('es:addJobCommand', 'fakead', {'sheriff', 'police', 'corrections'}, function(source, args, char, location)
 	local job = char.get("job")
 	if char.get("policeRank") < 4 and (job == "sheriff" or job == "police") then
         TriggerClientEvent("usa:notify", source, "Not high enough rank!")
@@ -148,6 +152,7 @@ end, {
 		{ name = "last name", help = "last name to show on ad" },
 	}
 })
+--]]
 
 TriggerEvent('es:addCommand', 'id', function(source, args, char, location)
 	showid(source, char, location)
