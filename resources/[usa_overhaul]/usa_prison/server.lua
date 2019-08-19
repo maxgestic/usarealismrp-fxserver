@@ -138,6 +138,7 @@ AddEventHandler("doc:offduty", function()
 	--print("closing DOC menu!")
 	TriggerClientEvent("doc:close", source)
 	TriggerClientEvent("ptt:isEmergency", source, false)
+	TriggerClientEvent("radio:unsubscribe", source)
 end)
 
 RegisterServerEvent("doc:forceDuty")
