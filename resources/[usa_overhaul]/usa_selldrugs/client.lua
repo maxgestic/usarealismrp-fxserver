@@ -26,7 +26,7 @@ Citizen.CreateThread(function()
 
 				if DoesEntityExist(localPed) and not IsPedDeadOrDying(localPed)
 				and not IsPedInAnyVehicle(localPed) and GetPedType(localPed) ~= (28 and 27 and 6 and 29 and 21 and 20)
-				and not IsPedAPlayer(localPed) and not HasInteractedWithPedRecently(localPed) then
+				and not IsPedAPlayer(localPed) and not HasInteractedWithPedRecently(localPed) and isValidPedModel(localPed) then
 
 					if distFromPlayerToPed <= 1.8 and localPed ~= playerPed then
 						--print("have not interacted with ped: " .. ped)
@@ -61,6 +61,10 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
+
+function isValidPedModel(ped)
+	return GetPedType(ped) ~= 28
+end
 
 function SellDrugsToPed(buyerPed)
 	isSelling = true
