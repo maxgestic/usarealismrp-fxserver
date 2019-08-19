@@ -56,6 +56,11 @@ local VEHICLE_RANKS = {
 			rank = 4,
 			allowedLiveries = { 2 },
 			hash = 353883353
+		},
+		["predator"] = {
+			rank = 1,
+			allowedLiveries = { 1 },
+			hash = -488123221
 		}
 	},
 	["ems"] = {
@@ -86,7 +91,11 @@ local VEHICLE_RANKS = {
 			allowedLiveries = { 1 },
 			hash = -48031959
 		},
-		["predator"] = 1
+		["predator"] = {
+			rank = 1,
+			allowedLiveries = { 1 },
+			hash = -488123221
+		}
 	},
 	["doctor"] = {
 		--["paraexp"] = 1,
@@ -176,9 +185,9 @@ AddEventHandler("vehCommands:gotVehModel", function(model, srcAction, selected)
 	end
 end)
 
-TriggerEvent('es:addJobCommand', 'livery', { "police", "sheriff", "ems", "corrections" }, function(source, args, char)
-	if args[2] then
-		local selected = tonumber(args[2])
+TriggerEvent('es:addJobCommand', 'livery', { "sheriff", "ems", "corrections" }, function(source, args, char)
+	local selected = tonumber(args[2])
+	if selected then
 		TriggerClientEvent("vehCommands:getVehModel", source, "vehCommands:gotVehModel", selected)
 	else
 		TriggerClientEvent("usa:notify", source, "Invalid livery!")
