@@ -167,7 +167,6 @@ function CreateCharacter(data)
     if quantity then
       item.quantity = quantity
     end
-    print("prev weight: " .. rTable.getInventoryWeight())
     local newWeight = rTable.getInventoryWeight() + ((item.weight or 1.0) * (item.quantity or 1))
     -- first check weight --
     if newWeight > self.inventory.MAX_WEIGHT then
