@@ -29,7 +29,7 @@ RegisterServerEvent("bank:hackComplete")
 AddEventHandler("bank:hackComplete", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	if sourceRobbing == source then
-		local rewardMoney = math.random(15000, 40000)
+		local rewardMoney = math.random(15000, 120000)
 		char.giveMoney(rewardMoney)
 		TriggerClientEvent("usa:notify", source, "You have received ~g~$" .. comma_value(rewardMoney) .. "~w~!")
 		print("BANKROBBERY: Player " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] successfully robbed the bank and was given a reward of [$".. rewardMoney .. "]!")
