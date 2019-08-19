@@ -244,7 +244,12 @@ AddEventHandler('injuries:chargeForInjuries', function(playerInjuries, multiplie
 	if type(multiplier) == 'number' then
 		totalPrice = totalPrice * multiplier
 	end
-	char.removeBank(totalPrice)
+	local job = char.get("job")
+	if job == "sheriff" or job == "corrections" or job == "ems" then
+		char.removeBank(math.floor(totalPrice * 0.50))
+	else 
+		char.removeBank(totalPrice)
+	end
 	print('INJURIES: '..PlayerName(source) .. ' has been charged amount['..totalPrice..'] in bank for hospital fees!')
 	if respawn then
 		TriggerClientEvent('chatMessage', source, '^3^*[HOSPITAL] ^r^7You have been charged ^3$'..totalPrice..'^0 in hospital fees.')
