@@ -28,6 +28,7 @@ AddEventHandler("towJob:setJob", function(truckSpawnCoords)
 	if char.get("job") == "tow" then
 		TriggerClientEvent("towJob:offDuty", source)
 		char.set("job", "civ")
+		TriggerClientEvent("radio:unsubscribe", source)
 	else
 		local drivers_license = char.getItem("Driver's License")
 		if drivers_license then
@@ -41,7 +42,7 @@ AddEventHandler("towJob:setJob", function(truckSpawnCoords)
 				Citizen.Wait(3000)
 				TriggerClientEvent("chatMessage", usource, "", {}, "A tow truck has been equipped for you just there, use this to tow vehicles.")
 				Citizen.Wait(3000)
-				TriggerClientEvent("chatMessage", usource, "", {}, "Press ^3SHIFT + F2 to open the radio^0, left/right arrows keys to change channels, and CAPS LOCK to speak on it")
+				TriggerClientEvent("chatMessage", usource, "", {}, "Press ^3SHIFT + F2^0 to open the radio, left/right arrows keys to change channels, and CAPS LOCK to speak on it")
 				char.set("job", "tow")
 				TriggerClientEvent("towJob:onDuty", usource, truckSpawnCoords)
 				return

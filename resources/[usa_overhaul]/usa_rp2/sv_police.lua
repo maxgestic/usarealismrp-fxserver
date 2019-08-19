@@ -50,7 +50,7 @@ end, {
 })
 
 -- /dispatch
-TriggerEvent('es:addJobCommand', 'dispatch', { "police", "sheriff", "ems", "fire", "taxi", "tow" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'dispatch', { "corrections", "sheriff", "ems", "fire", "taxi", "tow" }, function(source, args, char)
 	local target = tonumber(args[2])
 	if GetPlayerName(target) then
 		table.remove(args,1)
@@ -69,7 +69,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'repair', { "police", "sheriff", "ems", "dai" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'repair', { "corrections", "sheriff", "ems", "dai" }, function(source, args, char)
 	TriggerClientEvent("usa:repairVeh", source)
 end, {
 	help = "Repair the vehicle you're facing."
@@ -101,7 +101,7 @@ end, {
 --]]
 
 -- /cone barrier
-TriggerEvent('es:addJobCommand', 'barrier', { "police", "sheriff", "ems", "fire"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'barrier', { "corrections", "sheriff", "ems", "fire"}, function(source, args, char)
 	local obj = nil
 	if args[2] == "1" then
 		obj = "prop_mp_cone_01"
@@ -117,19 +117,19 @@ end, {
 })
 
 -- /cone barrier
-TriggerEvent('es:addJobCommand', 'cone', { "police", "sheriff", "ems", "fire", "tow" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'cone', { "corrections", "sheriff", "ems", "fire", "tow" }, function(source, args, char)
 	TriggerClientEvent('c_setCone', source)
 end, {
 	help = "Drop a cone down"
 })
 
-TriggerEvent('es:addJobCommand', 'pickup', { "police", "sheriff", "ems", "fire", "tow" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'pickup', { "corrections", "sheriff", "ems", "fire", "tow" }, function(source, args, char)
 	TriggerClientEvent('c_removeCones', source)
 end, {
 	help = "Pick up cones or barriers"
 })
 
-TriggerEvent('es:addJobCommand', 'removecones', { "police", "sheriff", "ems", "fire", "tow" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'removecones', { "corrections", "sheriff", "ems", "fire", "tow" }, function(source, args, char)
 	TriggerClientEvent('c_removeCones', source)
 end, {
 	help = "Pick up cones or barriers"
@@ -247,7 +247,7 @@ TriggerEvent('es:addCommand', 'search', function(source, args, char)
 	end
 end, {help = "Search the nearest person or vehicle"})
 
-TriggerEvent('es:addJobCommand', 'frisk', {"sheriff", "ems", "corrections", "dai"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'frisk', {"sheriff", "ems", "corrections"}, function(source, args, char)
 	if not tonumber(args[2]) then
 		TriggerClientEvent("police:friskNearest", source, source)
 	else
@@ -259,7 +259,7 @@ end, {help = "Search the nearest person or vehicle"})
 --------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- start bait car
-TriggerEvent('es:addJobCommand', 'lockbc',  {"sheriff"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'lockbc',  {"sheriff", "corrections"}, function(source, args, user)
 	local ServerID = args[2]
 	if not tonumber(ServerID) then return end
 	TriggerClientEvent("simp:baitCarDisable", tonumber(ServerID))
@@ -270,7 +270,7 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'unlockbc',  {"sheriff"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'unlockbc',  {"sheriff", "corrections"}, function(source, args, user)
 	local ServerID = args[2]
 	if not tonumber(ServerID) then return end
 	TriggerClientEvent("simp:baitCarunlock", tonumber(ServerID))
@@ -283,7 +283,7 @@ end, {
 -- end bait car
 
 -- start seize contraband
-TriggerEvent('es:addJobCommand', 'seize', { "police", "sheriff", "corrections" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'seize', { "sheriff", "corrections" }, function(source, args, char)
 	local targetId = tonumber(args[2])
 	local arg = args[3]
 	if arg and targetId then
@@ -326,7 +326,7 @@ AddEventHandler("police:seizeCash", function(amount)
 end)
 
 -- retrieve AR/pump shotgun
-TriggerEvent('es:addJobCommand', 'showbadge', { "police", "sheriff" }, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'showbadge', { "corrections", "sheriff" }, function(source, args, char, location)
 	local police_rank = tonumber(char.get("policeRank"))
 	local char_name = char.getFullName()
 	if police_rank > 0 then
@@ -340,7 +340,7 @@ function GetRankName(rank)
 	return POLICE_RANKS[rank]
 end
 
-TriggerEvent('es:addJobCommand', 'p', { "police", "sheriff", "ems", "corrections" }, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'p', { "sheriff", "ems", "corrections" }, function(source, args, char, location)
 	local source_user_job = char.get("job")
 	exports["usa-characters"]:GetCharacters(function(pl)
 		for k, v in pairs(pl) do
@@ -424,12 +424,14 @@ AddEventHandler("police:checkSuspension", function(character)
 	end
 end)
 
+--[[
 -- mute radio (TokoVOIP) --
 TriggerEvent('es:addJobCommand', 'muter',  {"sheriff", "ems", "corrections", "doctor"}, function(source, args, user)
 	TriggerClientEvent("police:muteRadio", source)
 end, {
 	help = "Mute your dispatch radio."
 })
+--]]
 
 --[[
 RegisterServerEvent("police:checkRadioMutePerms")
