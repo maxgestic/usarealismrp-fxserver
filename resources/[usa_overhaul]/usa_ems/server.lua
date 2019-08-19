@@ -83,6 +83,7 @@ AddEventHandler("emsstation2:offduty", function()
       char.set("job", "civ")
       TriggerEvent('job:sendNewLog', source, 'ems', false)
       TriggerEvent("eblips:remove", source)
+      TriggerClientEvent("radio:unsubscribe", source)
   end
 end)
 

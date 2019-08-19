@@ -41,7 +41,7 @@ AddEventHandler("towJob:setJob", function(truckSpawnCoords)
 				Citizen.Wait(3000)
 				TriggerClientEvent("chatMessage", usource, "", {}, "A tow truck has been equipped for you just there, use this to tow vehicles.")
 				Citizen.Wait(3000)
-				TriggerClientEvent("chatMessage", usource, "", {}, "Press ^3F6^0, left/right arrows keys, and CAPS LOCK to use the radio")
+				TriggerClientEvent("chatMessage", usource, "", {}, "Press ^3SHIFT + F2 to open the radio^0, left/right arrows keys to change channels, and CAPS LOCK to speak on it")
 				char.set("job", "tow")
 				TriggerClientEvent("towJob:onDuty", usource, truckSpawnCoords)
 				return
@@ -55,4 +55,12 @@ AddEventHandler("towJob:setJob", function(truckSpawnCoords)
 			return
 		end
 	end
+end)
+
+RegisterServerEvent("tow:forceRemoveJob")
+AddEventHandler("tow:forceRemoveJob", function()
+	local char = exports["usa-characters"]:GetCharacter(source)
+	char.set("job", "civ")
+	TriggerClientEvent("towJob:offDuty", source)
+	TriggerClientEvent("radio:unsubscribe", source)
 end)

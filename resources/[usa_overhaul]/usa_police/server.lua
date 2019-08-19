@@ -310,6 +310,7 @@ AddEventHandler("policestation2:offduty", function()
   char.set("job", "civ")
   TriggerEvent('job:sendNewLog', source, 'sheriff', false)
   TriggerEvent("eblips:remove", source)
+  TriggerClientEvent("radio:unsubscribe", source)
 end)
 
 RegisterServerEvent("police:buyFAK")

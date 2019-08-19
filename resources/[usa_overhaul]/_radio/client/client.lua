@@ -16,6 +16,14 @@ AddEventHandler("radio:toggle", function(permittedChannels)
   ToggleRadio()
 end)
 
+RegisterNetEvent("radio:unsubscribe")
+AddEventHandler("radio:unsubscribe", function()
+  if isRadioShowing then
+    ToggleRadio()
+  end
+  Unsubscribe()
+end)
+
 function GetNextChannel()
   local newIdx = currentChannelIndex + 1
   if newIdx > #Channels then return nil end

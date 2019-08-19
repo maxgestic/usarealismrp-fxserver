@@ -4,6 +4,11 @@ local lastTowTruck = nil
 local interactKey = 38
 onDuty = "no"
 
+local TIME_WARN_MINUTES = 15
+local TIME_KICK_MINUTES = 20
+
+local lastRecordedTimeInTruck = 0
+
 local locations = {
 	["Paleto"] = {
 		duty = {
@@ -147,6 +152,37 @@ Citizen.CreateThread(function()
 	end
 end)
 
+-- Kick player from job if player has not used tow truck recently enough --
+Citizen.CreateThread(function()
+	local warnedKick = false
+	while true do
+		local me = PlayerPedId()
+		if onDuty == "yes" and lastTowTruck then
+			if IsPedInAnyVehicle(me) then 
+				local veh = GetVehiclePedIsIn(me, false)
+				local vehModel = GetEntityModel(veh)
+				if vehModel == GetHashKey("flatbed") then
+					lastRecordedTimeInTruck = GetGameTimer()
+				end
+			end
+			local timeSinceLastInTowTruck = GetGameTimer() - lastRecordedTimeInTruck
+			if timeSinceLastInTowTruck > TIME_WARN_MINUTES * 60000 and timeSinceLastInTowTruck < TIME_KICK_MINUTES * 60000 then
+				if not warnedKick then
+					exports.globals:notify("You are about to be kicked from the tow job! Get back to work!")
+					warnedKick = true
+				end
+			elseif timeSinceLastInTowTruck >= TIME_KICK_MINUTES * 60000 then 
+				exports.globals:notify("You have been removed from the tow job!")
+				TriggerServerEvent("tow:forceRemoveJob")
+			end
+		end
+		if onDuty == "no" and warnedKick then
+			warnedKick = false
+		end
+		Wait(10)
+	end
+end)
+
 RegisterNetEvent("towJob:onDuty")
 AddEventHandler("towJob:onDuty", function(coords)
 	exports.globals:notify('You are now ~g~on-duty~s~ for tow.')
@@ -159,6 +195,7 @@ AddEventHandler("towJob:offDuty", function()
 	exports.globals:notify('You are now ~y~off-duty~s~ for tow.')
 	DelVehicle(lastTowTruck)
 	onDuty = "no"
+	lastTowTruck = nil
 end)
 
 RegisterNetEvent('towJob:towVehicleInFront')
@@ -275,7 +312,7 @@ function SpawnTowFlatbed(coords)
 		SetEntityAsMissionEntity(vehicle, true, true)
 		SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
 		lastTowTruck = vehicle
-
+		lastRecordedTimeInTruck = GetGameTimer()
 		local vehicle_key = {
 			name = "Key -- " .. GetVehicleNumberPlateText(vehicle),
 			quantity = 1,
