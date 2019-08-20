@@ -62,8 +62,8 @@ RegisterNetEvent('veh:searchVeh')
 AddEventHandler('veh:searchVeh', function()
   local playerPed = PlayerPedId()
   local vehicle = veh
-  if GetVehicleClass(vehicle) == 18 then
-      exports.globals:notify("Can't search this vehicle")
+  if GetVehicleClass(vehicle) == 18 or GetVehicleClass(vehicle) == 13 then -- emergency = 18, cycles = 13
+      exports.globals:notify("Can't search this vehicle") 
       return
   end
   if canBeSearched and not IsPedCuffed(playerPed) and GetPedInVehicleSeat(vehicle, -1) == playerPed and GetVehicleDoorLockStatus(vehicle) ~= 4 then
