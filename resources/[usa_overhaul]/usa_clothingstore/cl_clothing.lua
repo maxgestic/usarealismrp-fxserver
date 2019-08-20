@@ -387,7 +387,6 @@ end
 CreateMenu()
 
 function UpdateValueChangerMenu(me, adjusted_index, oldval, isProp)
-	print("inside update value changer menu")
 	me = GetPlayerPed(-1)
 	ComponentValuesMenu:Clear()
 	if not isProp then

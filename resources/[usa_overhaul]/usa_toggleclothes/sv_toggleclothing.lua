@@ -23,16 +23,17 @@ TriggerEvent('es:addCommand', 'vest', function(source, args, char, location)
 end, { help = "Take your vest on / off." })
 
 RegisterNetEvent("headprops:loadPropOrComponent")
-AddEventHandler("headprops:loadPropOrComponent", function(isProp, id)
+AddEventHandler("headprops:loadPropOrComponent", function(isProp, id, doEquip)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local appearance = char.get("appearance")
 	if isProp then
 		if appearance.props then
-			TriggerClientEvent("headprops:cacheProp", source, id, appearance.props[id], appearance.propstexture[id])
+			TriggerClientEvent("headprops:cacheProp", source, id, appearance.props[id], appearance.propstexture[id], doEquip)
 		end
 	else
 		if appearance.components then
-			TriggerClientEvent("headprops:cacheComponent", source, id, appearance.components[id], appearance.componentstexture[id])
+			print("getting component with id " .. id .. ", type is " .. type(id))
+			TriggerClientEvent("headprops:cacheComponent", source, id, appearance.components[id], appearance.componentstexture[id], doEquip)
 		end
 	end
 	return
