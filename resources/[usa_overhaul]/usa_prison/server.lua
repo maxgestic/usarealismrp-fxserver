@@ -2,10 +2,10 @@ local WEAPONS = {
 	{ hash = "WEAPON_NIGHTSTICK", name = "Nightstick", rank = 1, weight = "10", price = 50},
     { hash = "WEAPON_FLASHLIGHT", name = "Flashlight", rank = 1, weight = "10", price = 50},
     { hash = "WEAPON_STUNGUN", name = "Stun Gun", rank = 1, weight = "9", price = 200},
-    { hash = 1593441988, name = "Combat Pistol", rank = 2, weight = "15", price = 200},
+    { hash = 1593441988, name = "Combat Pistol", rank = 1, weight = "15", price = 200},
     { hash = -1600701090, name = "Tear Gas", rank = 2, weight = "10", price = 150},
-    { hash = -2084633992, name = "Carbine", rank = 3, weight = "30", price = 500},
-    { hash = 100416529, name = "Marksman Rifle", rank = 3, weight = "40", price = 1000}
+    { hash = -2084633992, name = "Carbine", rank = 2, weight = "30", price = 500},
+    { hash = 100416529, name = "Marksman Rifle", rank = 2, weight = "40", price = 1000}
 }
 
 for i = 1, #WEAPONS do
