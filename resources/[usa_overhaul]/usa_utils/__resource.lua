@@ -5,5 +5,6 @@ server_scripts {
 }
 
 server_exports {
-    "SendServerMonitorDiscordMsg"
+    "SendServerMonitorDiscordMsg",
+    "SendPreRestartServerMonitorDiscordMsg"
 }

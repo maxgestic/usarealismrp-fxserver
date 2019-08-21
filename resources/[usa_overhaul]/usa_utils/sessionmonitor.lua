@@ -76,6 +76,11 @@ function SendServerMonitorDiscordMsg(msg, stat)
     SendDiscordLog(WEBHOOK_URL, msg, stat)
 end
 
+function SendPreRestartServerMonitorDiscordMsg()
+    local msg = "\nAt server restart:\nRegular player drops: " .. statistics["playerDrops"] .. "\nAbnormal player drops: " .. statistics["abnormalDrops"] .. "\n# of unique players: " .. statistics["players"].uniqueCount
+    SendDiscordLog(WEBHOOK_URL, msg)
+end
+
 AddEventHandler('rconCommand', function(commandName, args)
     commandName = commandName:lower()
     if commandName == 'showstats' then

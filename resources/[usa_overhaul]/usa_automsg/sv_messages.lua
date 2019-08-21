@@ -14,7 +14,7 @@ Citizen.CreateThread(function()
             for i = 1, 4 do
                 TriggerClientEvent('chatMessage', -1, '^8^*[SERVER] ^rServer is restarting, disconnect now or risk data loss!')
             end
-            exports["usa_utils"]:SendServerMonitorDiscordMsg("At server restart, # of player drops is", "playerDrops")
+            exports["usa_utils"]:SendPreRestartServerMonitorDiscordMsg()
         end
     end
 end)
