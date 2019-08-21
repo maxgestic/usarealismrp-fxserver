@@ -63,7 +63,6 @@ function SendServerMonitorDiscordMsg(msg, stat)
 end
 
 AddEventHandler('rconCommand', function(commandName, args)
-    print("rcon command name:  " .. commandName)
     if commandName:lower() == 'numdrops' then
         RconPrint("Recorded # of drops since last restart: " ..  statistics["playerDrops"])
         RconPrint("\nRecorded # of abnormal drops since last restart: " ..  statistics["abnormalDrops"])

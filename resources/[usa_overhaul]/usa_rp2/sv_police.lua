@@ -189,30 +189,26 @@ end)
 RegisterServerEvent("police:frisk")
 AddEventHandler("police:frisk", function(playerId, src)
 	local char = exports["usa-characters"]:GetCharacter(playerId)
-	local items = char.getWeapons()
+	local weapons = char.getWeapons()
 	if char.get("money") > 8000 then -- a large sum of money
 		TriggerClientEvent("chatMessage", src, "", {0,0,0}, "^3^*[SEARCH] ^r^0Cash Found:^0 $" .. comma_value(char.get("money")))
 	end
-	if #items > 0 then
-		for i = 1, #items do
+	if #weapons > 0 then
+		for i = 1, #weapons do
 			Wait(2000)
-			local name = items[i].name
-			local quantity = items[i].quantity
-			local legality = items[i].legality
+			local name = weapons[i].name
+			local quantity = weapons[i].quantity
+			local legality = weapons[i].legality
 			if legality == "illegal" then
 				TriggerClientEvent("chatMessage", src, "", {}, "^1(x" .. quantity .. ") " .. name) -- print item red
 			else
-				if items[i].serialNumber then
-					TriggerClientEvent("chatMessage", src, "", {}, "^0(x" .. quantity .. ") " .. name .. ' - '..items[i].serialNumber) -- print item
-				elseif items[i].residue and items[i].name == 'Razor Blade' then
-					TriggerClientEvent("chatMessage", src, "", {}, "^0(x" .. quantity .. ") " .. name .. ' (Powdery Residue)') -- print item
-				elseif items[i].residue and items[i].name == 'Large Scissors' then
-					TriggerClientEvent("chatMessage", src, "", {}, "^0(x" .. quantity .. ") " .. name .. ' (Odor of Marijuana)') -- print item
+				if weapons[i].serialNumber then
+					TriggerClientEvent("chatMessage", src, "", {}, "^0(x" .. quantity .. ") " .. name .. ' - '..weapons[i].serialNumber)
 				else
 					TriggerClientEvent("chatMessage", src, "", {}, "^0(x" .. quantity .. ") " .. name)
 				end
 			end
-			if items[i].components then
+			if weapons[i].components then
 				for k = 1, #items[i].components do
 					TriggerClientEvent("chatMessage", src, "", {0, 50, 0}, "^0		+ " .. items[i].components[k])
 				end
@@ -220,6 +216,15 @@ AddEventHandler("police:frisk", function(playerId, src)
 		end
 	else
 		TriggerClientEvent("chatMessage", src, "", {0,0,0}, "^3INFO: ^0Nothing found on player!")
+	end
+	local items = char.getInventoryItems()
+	for i = 1, #items do 
+		local item = items[i]
+		if item.legality == "illegal" then 
+			if item.quantity > 8 then 
+				TriggerClientEvent("chatMessage", src, "", {}, "^0You feel a ^3large amount^0 of what feels like " .. item.name .. "(s)") -- print item red
+			end
+		end
 	end
 end)
 
