@@ -879,8 +879,7 @@ AddEventHandler("rconCommand", function(command, args)
     end
     -- prints the current player count
   elseif command == "printcount" then
-    print("Total Player Count: " .. Queue.PlayerCount)
-    print("Public Player Count: " .. Queue.PublicPlayerCount)
+    print("Total Player Count: " .. Queue.PlayerCount .. " ")
     CancelEvent()
 
   elseif command == "printt" then
