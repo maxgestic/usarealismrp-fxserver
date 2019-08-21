@@ -117,3 +117,7 @@ RegisterServerEvent("globals:send3DText")
 AddEventHandler("globals:send3DText", function(msg)
 	sendLocalActionMessage(source, msg)
 end)
+
+function GetHoursFromTime(time)
+	return math.floor(os.difftime(os.time(), time) / (60 * 60))
+end

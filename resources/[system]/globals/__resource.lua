@@ -22,5 +22,6 @@ server_exports {
   "notifyPlayersWithJob",
   "notifyPlayersWithJobs",
   "setJob",
-  "comma_value"
+  "comma_value",
+  "GetHoursFromTime"
 }
