@@ -135,6 +135,23 @@ injuredParts = {} -- injured body parts, and their wounds as the value
 
 ------ NOTIFY PLAYER OF INJURIES ------
 
+RegisterNetEvent('injuries:showMyInjuries')
+AddEventHandler('injuries:showMyInjuries', function()
+    local hadInjury = false
+    for bone, injuries in pairs(injuredParts) do
+        local boneName = parts[bone]
+        for injury, data in pairs(injuredParts[bone]) do
+            local stage = injuredParts[bone][injury].stage
+            local cause = injuredParts[bone][injury].string
+            exports.globals:notify("Your " .. boneName .. " has a stage " .. stage .. " injury from a " .. cause .. ".")
+            hadInjury = true
+        end
+    end
+    if not hadInjury then 
+        exports.globals:notify("You have no injuries.")
+    end
+end)
+
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(120000)
