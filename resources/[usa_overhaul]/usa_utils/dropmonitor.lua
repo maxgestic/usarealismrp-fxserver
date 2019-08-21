@@ -9,7 +9,11 @@ local WEBHOOK_URL = "https://discordapp.com/api/webhooks/613598358568828938/YVkk
 
 local statistics = {
     ["playerDrops"] = 0,
-    ["abnormalDrops"] = 0
+    ["abnormalDrops"] = 0,
+    ["players"] = {
+        uniqueCount = 0,
+        recorded = {}
+    }
 }
 
 Citizen.CreateThread(function()
@@ -24,6 +28,15 @@ Citizen.CreateThread(function()
         end
         lastRecordedAmount = #GetPlayers()
         Wait(CHECK_INTVERAL_SECONDS * 1000)
+    end
+end)
+
+AddEventHandler('es:playerLoaded', function(source, user)
+    local ident = GetPlayerIdentifiers(source)[1]
+    local entry = statistics["players"].recorded[ident]
+    if not entry then
+        statistics["players"].recorded[ident] = true
+        statistics["players"].uniqueCount = statistics["players"].uniqueCount + 1
     end
 end)
 
@@ -63,9 +76,11 @@ function SendServerMonitorDiscordMsg(msg, stat)
 end
 
 AddEventHandler('rconCommand', function(commandName, args)
-    if commandName:lower() == 'numdrops' then
+    commandName = commandName:lower()
+    if commandName == 'showstats' then
         RconPrint("Recorded # of drops since last restart: " ..  statistics["playerDrops"] .. ".")
         RconPrint("\nRecorded # of abnormal drops since last restart: " ..  statistics["abnormalDrops"] .. ".")
+        RconPrint("\nRecorded # of unique player joins since last restart: " ..  statistics["players"].uniqueCount .. ".")
         CancelEvent()
     end
   end)
