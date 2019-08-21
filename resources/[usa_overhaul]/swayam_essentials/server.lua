@@ -49,7 +49,7 @@ TriggerEvent('es:addGroupCommand', 'removewp', 'admin', function(source, args, c
 	TriggerEvent("swayam:RemoveWayPoint_s", source)
 end)
 
-TriggerEvent('es:addGroupCommand', 'mypos', 'admin', function(source, args, char)
+TriggerEvent('es:addGroupCommand', 'mypos', 'mod', function(source, args, char)
 	TriggerClientEvent("swayam:getCoords", source)
 end)
 
