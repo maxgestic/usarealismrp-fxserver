@@ -4,7 +4,8 @@ local m = {
     delay = 90,
     prefix = '^5^*[USARRP] ^r^0',
     messages = {
-        "Aspiring to become a police officer? The SASP is hiring! Apply today at https://www.usarrp.net ^*>^r Applications",
+        --"Aspiring to become a police officer? The SASP is hiring! Apply today at https://www.usarrp.net ^*>^r Applications",
+        "Aspiring to become a law enforcement officer? The BCSO is hiring! Apply today at https://www.usarrp.net ^*>^r Applications",
         "The San Andreas Department of Corrections is hiring, apply at https://www.usarrp.net ^*>^r Applications",
         "Interested in working a paramedic? Join the Los Santos Fire Department now at https://www.usarrp.net ^*>^r Applications",
         "Get unlimited access to reserved slots and skip ahead of public players in queue when you're whitelisted at https://www.usarrp.net ^*>^r Applications",
