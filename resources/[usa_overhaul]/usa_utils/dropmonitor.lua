@@ -28,7 +28,7 @@ Citizen.CreateThread(function()
 end)
 
 AddEventHandler("playerDropped", function(reason)
-    if (not reason:find("Exiting") and not reason:find("character selection") and not reason:find("Idling too long")) then
+    if not reason:find("Exiting") and not reason:find("character selection") and not reason:find("Idling too long") and not reason:find("Disconnected.") then
         local timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())
         local msg = "\nPlayer dropped with reason: " .. reason .. " at " .. timestamp
         SendDiscordLog(WEBHOOK_URL, msg)
@@ -64,8 +64,8 @@ end
 
 AddEventHandler('rconCommand', function(commandName, args)
     if commandName:lower() == 'numdrops' then
-        RconPrint("Recorded # of drops since last restart: " ..  statistics["playerDrops"])
-        RconPrint("\nRecorded # of abnormal drops since last restart: " ..  statistics["abnormalDrops"])
+        RconPrint("Recorded # of drops since last restart: " ..  statistics["playerDrops"] .. ".")
+        RconPrint("\nRecorded # of abnormal drops since last restart: " ..  statistics["abnormalDrops"] .. ".")
         CancelEvent()
     end
   end)
