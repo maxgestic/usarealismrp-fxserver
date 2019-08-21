@@ -23,7 +23,7 @@ Citizen.CreateThread(function()
         if curCount < lastRecordedAmount then
             local numDropped = lastRecordedAmount - curCount
             if numDropped >= DROPPED_AMOUNT_MD then
-                local msg = "\nMedium player drop event detected!\nAt least " .. numDropped .. " player(s) dropped in no more than " .. DROPPED_AMOUNT_MD .. " seconds!"
+                local msg = "\nSignificant player drop event detected!\nAt least " .. numDropped .. " player(s) dropped in no more than " .. DROPPED_AMOUNT_MD .. " seconds! <@178016707292561409>"
                 SendDiscordLog(WEBHOOK_URL, msg)
             end
         end
