@@ -177,7 +177,8 @@ local warp_locations = {
       heading = 348.2,
     },
     job_access = 'da'
-  },
+  }
+  --[[,
   ["Sandy Shores PD"] = {
   	entrance = {
       coords = {1848.7, 3689.8, 34.3},
@@ -189,6 +190,7 @@ local warp_locations = {
     },
   job_access = "emergency"
   }
+  --]]
 }
 
 Citizen.CreateThread(function()
