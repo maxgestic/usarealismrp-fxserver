@@ -6,8 +6,9 @@ AddEventHandler('business:robStore', function(storeName)
 	local playerPed = PlayerPedId()
 	local beginTime = GetGameTimer()
 	isRobbingStore = true
-	Citizen.CreateThread(function()
-		while GetGameTimer() - beginTime < ROB_DURATION and isRobbingStore do
+  Citizen.CreateThread(function()
+    local randomizedRobDuration = BASE_ROB_DURATION + math.random(10000, 50000) -- base duration + (10 or 50 seconds)
+		while GetGameTimer() - beginTime < randomizedRobDuration and isRobbingStore do
 			Citizen.Wait(0)
 			local playerCoords = GetEntityCoords(playerPed)
 			if Vdist(playerCoords, x, y, z) > 10 then
@@ -15,7 +16,7 @@ AddEventHandler('business:robStore', function(storeName)
 				TriggerServerEvent('business:cancelRobbery', storeName)
 				isRobbingStore = false
 			end
-			DrawTimer(beginTime, ROB_DURATION, 1.42, 1.475, 'ROBBING')
+			DrawTimer(beginTime, randomizedRobDuration, 1.42, 1.475, 'ROBBING')
 		end
 		if isRobbingStore then
 			isRobbingStore = false
