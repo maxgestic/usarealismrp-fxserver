@@ -28,7 +28,7 @@ Citizen.CreateThread(function()
 end)
 
 AddEventHandler("playerDropped", function(reason)
-    if (not reason:find("Exited")) then
+    if (not reason:find("Exiting")) then
         local timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())
         local msg = "\nPlayer dropped with reason: " .. reason .. " at " .. timestamp
         SendDiscordLog(WEBHOOK_URL, msg)
