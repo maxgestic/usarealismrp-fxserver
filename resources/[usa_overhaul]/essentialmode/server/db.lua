@@ -271,12 +271,12 @@ end
 
 function exposedDB.getDocumentById(db, id, callback)
   PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. id, function(err, rText, headers)
-		 -- nil check --
-		if not rText or err == 404 then
-			callback(false)
-			return
-		end
-		-- decode json --
+	-- nil check --
+	if not rText or err == 404 then
+		callback(false)
+		return
+	end
+	-- decode json --
     local data = json.decode(rText)
     if data and err == 200 then
         callback(data)
@@ -386,6 +386,8 @@ function exposedDB.updateDocument(db, documentID, updates, callback)
 			PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. documentID, function(err, rText, headers)
 				callback(doc, err, rText)
 			end, "PUT", json.encode(doc), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
+		else 
+			callback(nil)
 		end
 	end, "GET", "", {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end

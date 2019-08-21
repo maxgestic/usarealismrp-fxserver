@@ -18,25 +18,3 @@
 	border: 2px solid rgb(47, 47, 47); 
 	background-image: url(http://api.thumbr.it/whitenoise-361x370.png?background=e6d69c&noise=5c5c5c&density=2&opacity=75)
 }
-
-li {
-	list-style-type: circle;
-}
-  
-::-webkit-scrollbar {
-	width: 11px;
-  }
-  
-  ::-webkit-scrollbar-track {
-	background: none; 
-  }
-  
-  ::-webkit-scrollbar-thumb {
-	border-radius: 7px;
-	background: #ac9c64; 
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-	border-radius: 10px;
-	background: #75693b; 
-  }

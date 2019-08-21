@@ -1,5 +1,4 @@
 local display = false
-local t = {}
 local notepad = {
     hash = GetHashKey("prop_notepad_01"),
     handle = nil,
@@ -7,6 +6,17 @@ local notepad = {
     animDict = 'amb@medic@standing@timeofdeath@base',
     animName = 'base'
 }
+
+RegisterNetEvent("notepad:gotSaved")
+AddEventHandler("notepad:gotSaved", function(content)
+    SetNuiFocus(true, true)
+    display = true
+    SendNUIMessage({
+        type = "ui",
+        enable = true,
+        content = content
+    })
+end)
 
 RegisterNetEvent("notepad:toggle")
 AddEventHandler("notepad:toggle", function(src)
@@ -16,28 +26,18 @@ AddEventHandler("notepad:toggle", function(src)
 end)
 
 RegisterNUICallback('exit', function(data)
-    updateNotes(t)
     SetGui(false)
 end)
 
 RegisterNUICallback('error', function(data)
-    updateNotes(t)
     SetGui(false)
-    notify("~r~Error:~s~\n"..data.error)
+    exports.globals:notify("Error")
 end)
 
 RegisterNUICallback('save', function(data)
     SetGui(false)
-    table.insert(t, data.main)
-    notify("Saved Note ~h~#"..table.length(t))
-    updateNotes(t)
-end)
-
-RegisterNUICallback('clear', function(data)
-    SetGui(false)
-    notify("Cleared ~h~"..table.length(t).."~s~ notes")
-    t = {}
-    updateNotes(t)
+    exports.globals:notify("Saved")
+    TriggerServerEvent("notepad:save", data.main)
 end)
 
 Citizen.CreateThread(function()
@@ -65,60 +65,23 @@ Citizen.CreateThread(function()
     end
 end)
 
--- for debugging idk
-function dump(o)
-    if type(o) == 'table' then
-       local s = '{ '
-       for k,v in pairs(o) do
-          if type(k) ~= 'number' then k = '"'..k..'"' end
-          s = s .. '['..k..'] = ' .. dump(v) .. ','
-       end
-       return s .. '} '
-    else
-       return tostring(o)
-    end
- end
-
-
-
 function SetGui(enable)
-    SetNuiFocus(enable, enable)
-    display = enable
-
-    SendNUIMessage({
-        type = "ui",
-        enable = enable,
-        data = t
-    })
-
     if not enable then
+        SetNuiFocus(enable, enable)
+        display = enable
+        SendNUIMessage({
+            type = "ui",
+            enable = false
+        })
         if not IsPedInAnyVehicle(PlayerPedId()) then
             ClearPedTasksImmediately(PlayerPedId())
         end
         if notepad.handle then
             RemovePedNotepad()
         end
+    else 
+        TriggerServerEvent("notepad:getSaved", "notepad:gotSaved")
     end
-end
-
-function table.length(tbl)
-    local cnt = 0
-    for _ in pairs(tbl) do cnt = cnt + 1 end
-    return cnt
-  end
-
-function notify(string)
-    SetNotificationTextEntry("STRING")
-    AddTextComponentString("~y~~h~"..GetCurrentResourceName()..":~s~~n~"..string)
-    DrawNotification(true, false)
-    DrawNotificationWithIcon(1,1,"asd")
-end
-
-function updateNotes(tbl)
-    SendNUIMessage({
-        type = "ui",
-        data = json.encode(tbl)
-    })
 end
 
 function GivePedNotepad()
