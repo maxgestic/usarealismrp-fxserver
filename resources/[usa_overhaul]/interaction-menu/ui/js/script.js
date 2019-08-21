@@ -280,6 +280,7 @@ var interactionMenu = new Vue({
       items: {}
     },
     isInsideVehicle: false,
+    isCuffed: false,
     contextMenu: {
       showContextMenu: false,
       top: 0,
@@ -347,9 +348,15 @@ var interactionMenu = new Vue({
           break;
         }
         case "Emotes": {
-          $.post('http://interaction-menu/playEmote', JSON.stringify({
-            emoteName: item.name
-          }));
+          if (!this.isInVehicle) {
+            $.post('http://interaction-menu/playEmote', JSON.stringify({
+              emoteName: item.name
+            }));
+          } else {
+            $.post('http://interaction-menu/notification', JSON.stringify({
+              msg: "Can't use emotes when in a vehicle!"
+            }));
+          }
           break;
         }
         case "VOIP": {
@@ -689,8 +696,9 @@ $(function() {
           name: "no one"
         }
       }
-      /* Set whether in vehicle or not */
+      /* Set misc variables from client */
       interactionMenu.isInVehicle = event.data.isInVehicle;
+      interactionMenu.isCuffed = event.data.isCuffed;
 		} else if (event.data.type == "inventoryLoaded") {
       interactionMenu.inventory = event.data.inventory;
       for (var i = 0; i < interactionMenu.inventory.MAX_CAPACITY; i++)

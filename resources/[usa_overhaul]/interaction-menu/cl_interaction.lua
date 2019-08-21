@@ -680,6 +680,10 @@ function RemovePedObject()
 	spawned_object = nil
 end
 
+RegisterNUICallback('notification', function(data, cb)
+	exports.globals:notify(data.msg)
+end)
+
 RegisterNUICallback('setVoipLevel', function(data, cb)
 	DisableGui()
 	local selected = data.level:lower()
@@ -1226,9 +1230,10 @@ local draggingHelper = {
 }
 
 function EnableGui(target_vehicle_plate)
+	local me = PlayerPedId()
 	SetNuiFocus(true, true)
 	menuEnabled = true
-	SetPedCanSwitchWeapon(GetPlayerPed(-1), not menuEnabled)
+	SetPedCanSwitchWeapon(me, not menuEnabled)
 	local nearestPlayer = nil
 	if playerName ~= "" then
 		nearestPlayer = {
@@ -1242,7 +1247,8 @@ function EnableGui(target_vehicle_plate)
 		nearestPlayer = nearestPlayer,
 		voip = voipLevel,
 		target_vehicle_plate = target_vehicle_plate,
-		isInVehicle = IsPedInAnyVehicle(GetPlayerPed(-1), true)
+		isInVehicle = IsPedInAnyVehicle(me, true),
+		isCuffed = IsPedCuffed(me)
 	})
 	if target_vehicle_plate then
 		TriggerServerEvent("vehicle:AddPersonToInventory", target_vehicle_plate)
