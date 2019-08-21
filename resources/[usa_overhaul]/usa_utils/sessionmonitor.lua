@@ -13,7 +13,8 @@ local statistics = {
     ["players"] = {
         uniqueCount = 0,
         recorded = {}
-    }
+    },
+    ["startTime"] = os.time()
 }
 
 Citizen.CreateThread(function()
@@ -81,6 +82,7 @@ AddEventHandler('rconCommand', function(commandName, args)
         RconPrint("Recorded # of drops since last restart: " ..  statistics["playerDrops"] .. ".")
         RconPrint("\nRecorded # of abnormal drops since last restart: " ..  statistics["abnormalDrops"] .. ".")
         RconPrint("\nRecorded # of unique player joins since last restart: " ..  statistics["players"].uniqueCount .. ".")
+        RconPrint("\nServer Uptime: " .. exports["globals"]:GetHoursFromTime(statistics["startTime"]) .. " hour(s).")
         CancelEvent()
     end
   end)
