@@ -137,6 +137,7 @@ TriggerEvent('es:addCommand', 'report', function(source, args, char)
 		TriggerClientEvent("chatMessage", tonumber(source), "", {}, "^3^*[REPORT]^r Usage: ^0/report [message]")
 		return
 	end
+	TriggerClientEvent("chatMessage", source, "", {}, "^3Your report:^0 ".. reportedId .. " " .. message)
 	TriggerEvent("es:getPlayers", function(players)
 		if players then
 			for id, player in pairs(players) do
