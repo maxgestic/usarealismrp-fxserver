@@ -44,7 +44,11 @@ end
 function GetSavedNote(ident, cb)
     TriggerEvent('es:exposeDBFunctions', function(db)
         db.getDocumentById("notes", ident, function(doc)
-            cb(doc.content)
+            if doc then
+                cb(doc.content)
+            else
+                cb("")
+            end
         end)
     end)
 end
