@@ -44,7 +44,7 @@ weatherTree = {
 		{"FOGGY", 10},
 		{"CLEARING", 2},
 		{"OVERCAST", 10},
-		{"SNOWLIGHT", 3},
+		{"SNOWLIGHT", 0},
 	},
 	["FOGGY"] = {
 		{"CLEAR", 15},
@@ -55,7 +55,7 @@ weatherTree = {
 	["OVERCAST"] = {
 		{"CLEAR", 10},
 		{"CLOUDS", 15},
-		{"SNOWLIGHT", 5},
+		{"SNOWLIGHT", 0},
 		{"FOGGY", 10},
 		{"RAIN", 0},
 		{"CLEARING", 3},
@@ -76,7 +76,7 @@ weatherTree = {
 		{"FOGGY", 12},
 		{"SMOG", 10},
 		{"RAIN", 0},
-		{"SNOWLIGHT", 1},
+		{"SNOWLIGHT", 0},
 	},
 	["SNOWLIGHT"] = {
 		{"CLOUDS", 40},
