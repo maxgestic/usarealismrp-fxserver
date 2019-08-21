@@ -231,6 +231,18 @@ function CreateCharacter(data)
     return nil
   end
 
+  rTable.getInventoryItems = function()
+    local items = {}
+    local inv = self.inventory
+    for i = 0, inv.MAX_CAPACITY - 1 do
+      local item = inv.items[tostring(i)]
+      if item then
+        table.insert(items, item)
+      end
+    end
+    return items
+  end
+
   rTable.giveItem = function(item, quantity)
     if quantity then
       item.quantity = quantity
