@@ -44,7 +44,7 @@ end)
 AddEventHandler("playerDropped", function(reason)
     if not reason:find("Exiting") and not reason:find("character selection") and not reason:find("Idling too long") and not reason:find("Disconnected.") then
         local timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())
-        local msg = "\nPlayer " .. source .. " dropped with reason: " .. reason .. " at " .. timestamp
+        local msg = "\nPlayer " .. GetPlayerName(source) .. " (#" .. source .. " / " .. GetPlayerIdentifiers(source)[1] .. ") dropped with reason: " .. reason .. " at " .. timestamp
         SendDiscordLog(WEBHOOK_URL, msg)
         statistics["abnormalDrops"] = statistics["abnormalDrops"] + 1
     end
