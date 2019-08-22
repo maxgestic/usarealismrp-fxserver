@@ -59,12 +59,7 @@ AddEventHandler('sellDrugs:completeSale', function()
 			char.removeItem(drug_item, quantity)
 			char.giveMoney((reward + bonus))
 			print('SELLDRUGS: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has sold item['..drug_item.name..'] with quantity['..quantity..'] with reward['..reward..'] with bonus['..bonus..']!')
-			-- notify:
-			if bonus > 0 then
-				TriggerClientEvent("usa:notify", source, "You sold ~y~(x"..quantity..") " .. drug_item.name .. " ~s~for $" .. reward..'.00~s~ with a bonus of $'..bonus..'.00~s~.')
-			else
-				TriggerClientEvent("usa:notify", source, "You sold ~y~(x"..quantity..") " .. drug_item.name .. " ~s~for $" .. reward..'.00~s~.')
-			end
+			TriggerClientEvent("usa:notify", source, "You sold ~y~(x"..quantity..") " .. drug_item.name .. " ~s~for $" .. reward + bonus..'.00~s~.')
 			return
 		else
 			if debug then print("nothing to sell!!") end
