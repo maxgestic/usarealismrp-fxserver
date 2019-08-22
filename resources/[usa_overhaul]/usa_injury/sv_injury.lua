@@ -302,7 +302,9 @@ end)
 RegisterServerEvent('injuries:saveData')
 AddEventHandler('injuries:saveData', function(playerInjuries)
 	local char = exports["usa-characters"]:GetCharacter(source)
-	char.set('injuries', playerInjuries)
+	if char then
+		char.set('injuries', playerInjuries)
+	end
 end)
 
 RegisterServerEvent('injuries:requestData')
