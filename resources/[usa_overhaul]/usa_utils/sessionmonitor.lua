@@ -35,7 +35,7 @@ end)
 AddEventHandler('es:playerLoaded', function(source, user)
     local ident = GetPlayerIdentifiers(source)[1]
     local entry = statistics["players"].recorded[ident]
-    if not entry then
+    if not entry and ident then
         statistics["players"].recorded[ident] = true
         statistics["players"].uniqueCount = statistics["players"].uniqueCount + 1
     end
