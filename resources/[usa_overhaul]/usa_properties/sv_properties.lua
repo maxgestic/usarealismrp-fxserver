@@ -1239,7 +1239,7 @@ AddEventHandler("properties:storeItem", function(location, index, item, quantity
 	    local property = target_char.get('property')
 	    item.quantity = quantity
 	    if canPropertyHoldItem(room.owner, location, item) then
-			print("storing item " .. item.name .. ", legality: " .. item.legality)
+			print("storing item " .. item.name .. ", legality: " .. (item.legality or "legal"))
 			if item.notStackable then
 				if item.type == "weapon" then
 					TriggerClientEvent("interaction:equipWeapon", source, item, false)
