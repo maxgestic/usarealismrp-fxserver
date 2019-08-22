@@ -4,6 +4,7 @@ local TIMEOUT = false
 local CMD_TIMEOUT_IN_SECONDS = 20  -- /setweather command timeout in seconds
 local currentWeatherString = "CLEAR"   -- Starting Weather Type.
 local updateWeatherFlag = false
+local RAIN_PREVENT_CHANCE = 0.60
 
 -- weather types that must be invoked manually by an admin
 manualWeathers = {
@@ -158,11 +159,19 @@ function updateWeather()
 			return
 		end
 
+		-- select new weather --
 		for _, wTable in pairs(currentOptions) do
 			local weight = wTable[2]
 			if runningTotal < target and target <= weight + runningTotal then
 				targetHit = true
 				newWeatherString = wTable[1]
+				if newWeatherString == "RAIN" then 
+					if math.random() <= RAIN_PREVENT_CHANCE then -- 60% chance to stop rain when selected
+						while newWeatherString == "RAIN" do 
+							newWeatherString = wTable[math.random(#wTable)] -- choose random weather that's not RAIN
+						end
+					end
+				end
 				break
 			else
 				runningTotal = runningTotal + weight
