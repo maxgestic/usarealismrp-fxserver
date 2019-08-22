@@ -496,17 +496,17 @@ function Gender(isMale)
 	end
 end
 
-TriggerEvent('es:addJobCommand', 'mark911', { "police", "sheriff", "ems", "fire", "dai"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'mark911', { "sheriff", "ems", "fire", "corrections" }, function(source, args, char)
 	TriggerClientEvent('911:mark911', source)
 end, {
 	help = "Mark the latest 911 call as your waypoint"})
 
-TriggerEvent('es:addJobCommand', 'clear911', { "police", "sheriff", "ems", "fire", "dai"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'clear911', { "sheriff", "ems", "fire", "corrections" }, function(source, args, char)
 	TriggerClientEvent('911:clear911', source)
 end, {
 	help = "Clear all your 911 calls on the map"})
 
-TriggerEvent('es:addJobCommand', 'mute911', { "police", "sheriff", "ems", "fire", "dai"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'mute911', { "sheriff", "ems", "fire", "corrections"}, function(source, args, char)
 	TriggerClientEvent('911:mute911', source)
 end, {
 	help = "Temporarily toggle receiving 911 calls"})
