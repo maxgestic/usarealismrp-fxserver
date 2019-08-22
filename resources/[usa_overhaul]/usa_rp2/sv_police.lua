@@ -209,8 +209,8 @@ AddEventHandler("police:frisk", function(playerId, src)
 				end
 			end
 			if weapons[i].components then
-				for k = 1, #items[i].components do
-					TriggerClientEvent("chatMessage", src, "", {0, 50, 0}, "^0		+ " .. items[i].components[k])
+				for k = 1, #weapons[i].components do
+					TriggerClientEvent("chatMessage", src, "", {0, 50, 0}, "^0		+ " .. weapons[i].components[k])
 				end
 			end
 		end
