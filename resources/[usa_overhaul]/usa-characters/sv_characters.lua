@@ -10,8 +10,6 @@ local SETTINGS = {
   DEFAULT_MONEY = 5000
 }
 
-local lastUpdated = {} -- keep track of in game times to save every 30 min of play time
-
 AddEventHandler("playerDropped", function(reason)
   local usource = source
   if CHARACTERS[usource] then
@@ -34,9 +32,6 @@ AddEventHandler("playerDropped", function(reason)
         CHARACTERS[usource] = nil
   		end)
     end)
-  end
-  if lastUpdated[tostring(usource)] then
-      lastUpdated[tostring(usource)] = nil
   end
 end)
 
@@ -131,7 +126,6 @@ function InitializeCharacter(src, characterID, doSpawnAtProperty)
             charData.source = src
             local character = CreateCharacter(charData) -- Create character object in memory
             character.set("job", "civ")
-            lastUpdated[tostring(src)] = os.time()
             CHARACTERS[src] = character
             TriggerClientEvent("character:setCharacter", src, character.get("appearance"), character.getWeapons()) -- load character
             TriggerEvent("police:checkSuspension", character) -- check dmv / firearm permit license status
@@ -195,21 +189,20 @@ function SetCharacterField(src, field, val)
 end
 
 Citizen.CreateThread(function()
-    while true do
-        for id, time in pairs(lastUpdated) do
-            if GetMinutesFromTime(time) >= UPDATE_TIME_INTERVAL_MINUTES then
-                TriggerEvent("es:exposeDBFunctions", function(db)
-                    local char = GetCharacter(tonumber(id))
-                    char.set("_rev", nil)
-                    db.updateDocument("characters", char.get("_id"), char.getSelf(), function(doc, err, rText)
-                        print("updated char with id: " .. char.get("_id") .. ", err " .. err)
-                        lastUpdated[id] = os.time()
-                    end)
-                end)
-            end
+  while true do
+    TriggerEvent("es:exposeDBFunctions", function(db)
+      for id, char in pairs(CHARACTERS) do 
+        if CHARACTERS[id] then
+          char.set("_rev", nil)
+          db.updateDocument("characters", char.get("_id"), char.getSelf(), function(doc, err, rText)
+              print("updated char with id: " .. char.get("_id") .. ", err " .. err)
+          end)
+          Wait(600)
         end
-        Wait(UPDATE_TIME_INTERVAL_MINUTES * 60 * 1000)
-    end
+      end
+    end)
+    Wait(UPDATE_TIME_INTERVAL_MINUTES * 60 * 1000)
+  end
 end)
 
 function GetMinutesFromTime(time)
