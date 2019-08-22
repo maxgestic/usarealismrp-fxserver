@@ -18,13 +18,13 @@ AddEventHandler('sellDrugs:checkPlayerHasDrugs', function()
 		if char.hasItem(item_name) then
 			local policeOnline = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
 			if policeOnline == 0 then
-				TriggerClientEvent('sellDrugs:showHelpText', source, 0.75)
+				TriggerClientEvent('sellDrugs:showHelpText', source, 0.60)
 			elseif policeOnline == 1 then
-			 	TriggerClientEvent('sellDrugs:showHelpText', source, 0.6)
+			 	TriggerClientEvent('sellDrugs:showHelpText', source, 0.55)
 			elseif policeOnline == 2 then
-				TriggerClientEvent('sellDrugs:showHelpText', source, 0.4)
+				TriggerClientEvent('sellDrugs:showHelpText', source, 0.45)
 			elseif policeOnline > 2 then
-				TriggerClientEvent('sellDrugs:showHelpText', source, 0.3)
+				TriggerClientEvent('sellDrugs:showHelpText', source, 0.40)
 			end
 			if debug then print("had items to sell to NPC!") end
 		else

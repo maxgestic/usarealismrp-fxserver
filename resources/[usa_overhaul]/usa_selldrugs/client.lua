@@ -5,7 +5,7 @@
 local isSelling = false -- whether the player is currently selling
 local secondsRemaining = 0 -- amount of seconds remaining during selling
 local hasDrugsToSell = false
-local notRejectedChance = 0.0
+local getRejectedChance = 0.0
 
 local interacted_with_peds = {}
 
@@ -35,8 +35,7 @@ Citizen.CreateThread(function()
 							interacted_with_peds[localPed] = true
 							SetEntityAsMissionEntity(localPed)
 							local rejectProbability = math.random()
-							if rejectProbability < notRejectedChance then
-								print(notRejectedChance)
+							if rejectProbability < getRejectedChance then
 								TriggerEvent("usa:notify", "Person has rejected your offer!")
 								isSelling = false
 								SetPedAsNoLongerNeeded(localPed)
@@ -100,9 +99,9 @@ function SellDrugsToPed(buyerPed)
 end
 
 RegisterNetEvent('sellDrugs:showHelpText')
-AddEventHandler('sellDrugs:showHelpText', function(_notRejectedChance)
+AddEventHandler('sellDrugs:showHelpText', function(_getRejectedChance)
 	DisplayHelpText("Press ~INPUT_REPLAY_SHOWHOTKEY~ to sell drugs")
-	notRejectedChance = _notRejectedChance
+	getRejectedChance = _getRejectedChance
 	hasDrugsToSell = true
 end)
 
