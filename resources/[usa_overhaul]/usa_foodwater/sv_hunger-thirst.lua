@@ -36,7 +36,7 @@ Citizen.CreateThread(function()
                     if not lastSaved[src] then
                         lastSaved[src] = os.time()
                     end
-                    TriggerClientEvent("foodwater:save", -1)
+                    TriggerClientEvent("foodwater:save", src)
                     --print("saving for player " .. src)
                 end
             end)
