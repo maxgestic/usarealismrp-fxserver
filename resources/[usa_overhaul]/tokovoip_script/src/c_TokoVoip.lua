@@ -95,10 +95,13 @@ function TokoVoip.updateConfig(self)
 	self:updatePlugin("updateConfig", data);
 end
 
+local ghettoStop = false
+
 function TokoVoip.initialize(self)
 	self:updateConfig();
 	self:updatePlugin("initializeSocket", nil);
 	Citizen.CreateThread(function()
+
 		while (true) do
 			Citizen.Wait(5);
 
@@ -125,15 +128,23 @@ function TokoVoip.initialize(self)
 					self:updateTokoVoipInfo();
 				end
 			elseif (IsControlJustPressed(0, self.keyProximity) and GetLastInputMethod(0)) then -- Switch proximity modes (normal / whisper / shout)
-				if (not self.mode) then
-					self.mode = 1;
+				if not ghettoStop then
+					ghettoStop = true
+					if (not self.mode) then
+						self.mode = 1;
+					end
+					self.mode = self.mode + 1;
+					if (self.mode > 3) then
+						self.mode = 1;
+					end
+					setPlayerData(self.serverId, "voip:mode", self.mode, true);
+					self:updateTokoVoipInfo();
+					Citizen.CreateThread(function()
+						SetTimeout(500, function()
+							ghettoStop = false
+						end)
+					end)
 				end
-				self.mode = self.mode + 1;
-				if (self.mode > 3) then
-					self.mode = 1;
-				end
-				setPlayerData(self.serverId, "voip:mode", self.mode, true);
-				self:updateTokoVoipInfo();
 			end
 
 
