@@ -56,10 +56,9 @@ function SendDiscordLog(url, msg, stat)
         msg = msg .. "\n**Requested Stat:** " .. statistics[stat]
     end
     PerformHttpRequest(url, function(err, text, headers)
-        if text then
-            print(text)
-        end
     end, "POST", json.encode({
+        content = msg
+        --[[
         embeds = {
             {
                 description = msg,
@@ -69,6 +68,7 @@ function SendDiscordLog(url, msg, stat)
                 }
             }
         }
+        --]]
     }), { ["Content-Type"] = 'application/json' })
 end
 
