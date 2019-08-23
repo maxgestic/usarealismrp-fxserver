@@ -14,7 +14,8 @@ local Permissions = {
     ["corrections"] = { 1, 2, 3, 4, 5, 6, 7, 8 },
     ["ems"] = { 1, 2, 3, 4, 5, 6, 7, 8 },
     ["tow"] = { 1, 5, 6, 7, 8 },
-    ["civ"] = { 1, 6, 7, 8 }
+    ["civ"] = { 1, 6, 7, 8 },
+    ["doctor"] = { 1, 2 }
 }
 
 local CAN_CIVS_USE = false
