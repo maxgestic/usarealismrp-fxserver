@@ -23,5 +23,6 @@ server_exports {
   "notifyPlayersWithJobs",
   "setJob",
   "comma_value",
-  "GetHoursFromTime"
+  "GetHoursFromTime",
+  "SendDiscordLog"
 }

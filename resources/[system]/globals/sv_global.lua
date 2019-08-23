@@ -121,3 +121,21 @@ end)
 function GetHoursFromTime(time)
 	return math.floor(os.difftime(os.time(), time) / (60 * 60))
 end
+
+function SendDiscordLog(webhookUrl, msg)
+    PerformHttpRequest(webhookUrl, function(err, text, headers)
+    end, "POST", json.encode({
+		content = msg
+		--[[
+        embeds = {
+            {
+                description = (msg or "No Message"),
+                color = (color or 524288),
+                author = {
+                    name = (title or "No Title")
+                }
+            }
+		}
+		--]]
+    }), { ["Content-Type"] = 'application/json' })
+end
