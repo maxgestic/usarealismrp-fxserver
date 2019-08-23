@@ -7,11 +7,11 @@ AddEventHandler('playerlist:getPlayers', function()
 	exports["usa-characters"]:GetCharacters(function(characters)
 		local playersToReturn = {}
 		for id, char in pairs(characters) do
-			local steamName = GetPlayerIdentifier(id)
+			local steamName = GetPlayerIdentifiers(id)[1]
 			local ping = GetPlayerPing(id)
 			data = {
-				steam = GetPlayerIdentifier(id),
-				ping = GetPlayerPing(id),
+				steam = steamName,
+				ping = ping,
 				id = id,
 				fullname = char.getFullName(char),
 				job = char.get('job')
