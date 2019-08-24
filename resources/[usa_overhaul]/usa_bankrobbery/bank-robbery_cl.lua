@@ -38,13 +38,14 @@ Citizen.CreateThread(function()
 	end
 end)
 
+--[[
 Citizen.CreateThread(function()
 	for i = 1, #peds do
 		RequestModel(peds[i].hash)
 		while not HasModelLoaded(peds[i].hash) do
 			Citizen.Wait(100)
 		end
-		local ped = CreatePed(4, peds[i].hash, peds[i].x, peds[i].y, peds[i].z, peds[i].heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
+		local ped = CreatePed(4, peds[i].hash, peds[i].x, peds[i].y, peds[i].z, peds[i].heading, false, true)
 		SetEntityCanBeDamaged(ped,false)
 		SetPedCanRagdollFromPlayerImpact(ped,false)
 		SetBlockingOfNonTemporaryEvents(ped,true)
@@ -54,6 +55,7 @@ Citizen.CreateThread(function()
 		TaskStartScenarioInPlace(ped, peds[i].task, 0, true);
 	end
 end)
+--]]
 
 ---------------
 -- mini game --
