@@ -14,7 +14,8 @@ local statistics = {
         uniqueCount = 0,
         recorded = {}
     },
-    ["startTime"] = os.time()
+    ["startTime"] = os.time(),
+    ["crashes"] = {}
 }
 
 Citizen.CreateThread(function()
@@ -47,6 +48,11 @@ AddEventHandler("playerDropped", function(reason)
         local msg = "\nPlayer " .. GetPlayerName(source) .. " (#" .. source .. " / " .. GetPlayerIdentifiers(source)[1] .. ") dropped with reason: " .. reason .. " at " .. timestamp
         SendDiscordLog(WEBHOOK_URL, msg)
         statistics["abnormalDrops"] = statistics["abnormalDrops"] + 1
+        if not statistics["crashes"][reason] then 
+            statistics["crashes"][reason] = 1
+        else 
+            statistics["crashes"][reason] = statistics["crashes"][reason] + 1
+        end
     end
     statistics["playerDrops"] = statistics["playerDrops"] + 1
 end)
@@ -58,17 +64,6 @@ function SendDiscordLog(url, msg, stat)
     PerformHttpRequest(url, function(err, text, headers)
     end, "POST", json.encode({
         content = msg
-        --[[
-        embeds = {
-            {
-                description = msg,
-                color = 524288,
-                author = {
-                    name = "Server Monitor"
-                }
-            }
-        }
-        --]]
     }), { ["Content-Type"] = 'application/json' })
 end
 
@@ -87,7 +82,22 @@ AddEventHandler('rconCommand', function(commandName, args)
         RconPrint("Recorded # of drops since last restart: " ..  statistics["playerDrops"] .. ".")
         RconPrint("\nRecorded # of abnormal drops since last restart: " ..  statistics["abnormalDrops"] .. ".")
         RconPrint("\nRecorded # of unique player joins since last restart: " ..  statistics["players"].uniqueCount .. ".")
+        RconPrint("\nThe most frequent player drop reason so far is: " .. GetMostFrequentPlayerDropReason())
         RconPrint("\nServer Uptime: " .. exports["globals"]:GetHoursFromTime(statistics["startTime"]) .. " hour(s).")
         CancelEvent()
     end
   end)
+
+  function GetMostFrequentPlayerDropReason()
+    local mostFreq = {
+        count = -1,
+        str = "N/A"
+    }
+    for reason, count in pairs(statistics["crashes"]) do
+        if count > mostFreq.count then 
+            mostFreq.count = count
+            mostFreq.str = reason
+        end
+    end
+    return mostFreq.name
+  end
