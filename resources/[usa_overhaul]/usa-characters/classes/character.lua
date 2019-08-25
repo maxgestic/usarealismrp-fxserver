@@ -342,6 +342,9 @@ function CreateCharacter(data)
       if item then
         if item.legality == "illegal" then
           table.insert(seized, item)
+          if item.type == "weapon" then
+            TriggerClientEvent("interaction:equipWeapon", self.source, item, false)
+          end
           self.inventory.items[tostring(i)] = nil
         end
       end
