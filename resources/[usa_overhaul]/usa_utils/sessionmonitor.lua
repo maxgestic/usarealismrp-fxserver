@@ -72,7 +72,7 @@ function SendServerMonitorDiscordMsg(msg, stat)
 end
 
 function SendPreRestartServerMonitorDiscordMsg()
-    local msg = "\nAt server restart:\nRegular player drops: " .. statistics["playerDrops"] .. "\nAbnormal player drops: " .. statistics["abnormalDrops"] .. "\n# of unique players: " .. statistics["players"].uniqueCount
+    local msg = "\nAt server restart:\nRegular player drops: " .. statistics["playerDrops"] .. "\nAbnormal player drops: " .. statistics["abnormalDrops"] .. "\n# of unique players: " .. statistics["players"].uniqueCount .. "\nMost frequent crash: " .. GetMostFrequentPlayerDropReason()
     SendDiscordLog(WEBHOOK_URL, msg)
 end
 
