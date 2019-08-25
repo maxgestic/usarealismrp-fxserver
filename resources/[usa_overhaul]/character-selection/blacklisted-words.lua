@@ -1,5 +1,4 @@
 BLACKLISTED_WORDS = {
-	'nig',
 	'fuck',
 	'shit',
 	'bitch',
@@ -19,7 +18,6 @@ BLACKLISTED_WORDS = {
 	'cock',
 	'dick',
 	'penis',
-	'vag',
 	'crack',
 	'jerk',
 	'piss',
