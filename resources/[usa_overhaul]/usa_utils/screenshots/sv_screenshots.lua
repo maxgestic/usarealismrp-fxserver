@@ -6,8 +6,8 @@ local MAX_FREE_TIER_SCREENSHOTS = 3
 TriggerEvent('es:addCommand', 'screenshot', function(source, args, char)
     local ident = GetPlayerIdentifiers(source)[1]
     if record[ident] then 
-        if record[ident] > MAX_FREE_TIER_SCREENSHOTS then
-            TriggerClientEvent("usa:notify", source, "You have reached the max number of screenshots for the FREE TIER.", "^0You have reached the max number of screenshots for the FREE TIER.")
+        if record[ident] >= MAX_FREE_TIER_SCREENSHOTS then
+            TriggerClientEvent("usa:notify", source, "You have reached the max number of screenshots for the FREE TIER.", "^0You have reached the max number of screenshots for the FREE TIER. Please upgrade to the PRO TIER for unlimited screenshots.")
             return
         end
     else 
