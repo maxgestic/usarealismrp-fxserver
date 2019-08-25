@@ -1,4 +1,4 @@
-TriggerEvent('es:addJobCommand', 'morgue', { "ems", "fire", "police", "sheriff", "doctor" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'morgue', { "ems", "corrections", "sheriff", "doctor" }, function(source, args, char)
 	local coroner_name = char.getFullName()
 
 	if (args[2] == nil or args[3] == nil) then
