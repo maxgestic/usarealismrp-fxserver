@@ -232,7 +232,7 @@ end)
 -- Spawn job peds --
 --------------------
 local JOB_PEDS = {
-  {x = -331.043, y = 6086.09, z = 30.40, heading = 180.0}
+  --{x = -331.043, y = 6086.09, z = 30.40, heading = 180.0}
 }
 
 Citizen.CreateThread(function()
@@ -250,7 +250,7 @@ Citizen.CreateThread(function()
 		SetPedFleeAttributes(ped,0,0)
 		SetPedCombatAttributes(ped,17,1)
 		SetPedRandomComponentVariation(ped, true)
-    TaskStartScenarioInPlace(ped, "WORLD_HUMAN_HANG_OUT_STREET", 0, true);
+    	TaskStartScenarioInPlace(ped, "WORLD_HUMAN_HANG_OUT_STREET", 0, true);
 	end
 end)
 

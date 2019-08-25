@@ -99,5 +99,5 @@ AddEventHandler('rconCommand', function(commandName, args)
             mostFreq.str = reason
         end
     end
-    return mostFreq.name
+    return mostFreq.str
   end

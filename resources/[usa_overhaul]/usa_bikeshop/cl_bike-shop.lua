@@ -141,6 +141,7 @@ AddEventHandler("bikeShop:spawnBike", function(bike, location, plate)
 end)
 
 -- S P A W N  P E D S --
+--[[
 Citizen.CreateThread(function()
 	for i = 1, #locations do
     if locations[i].heading then
@@ -149,7 +150,7 @@ Citizen.CreateThread(function()
   		while not HasModelLoaded(hash) do
   			Wait(100)
   		end
-  		local ped = CreatePed(4, hash, locations[i].x, locations[i].y, locations[i].z-1, locations[i].heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
+  		local ped = CreatePed(4, hash, locations[i].x, locations[i].y, locations[i].z-1, locations[i].heading, false, true)
   		SetEntityCanBeDamaged(ped,false)
   		SetPedCanRagdollFromPlayerImpact(ped,false)
   		TaskSetBlockingOfNonTemporaryEvents(ped,true)
@@ -160,3 +161,4 @@ Citizen.CreateThread(function()
     end
 	end
 end)
+--]]
