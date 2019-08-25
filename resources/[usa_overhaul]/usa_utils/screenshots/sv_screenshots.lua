@@ -26,11 +26,26 @@ end, {
 
 RegisterServerEvent("screenshots:sendToDiscord")
 AddEventHandler("screenshots:sendToDiscord", function(url, caption)
+    local discordIdent = GetDiscordIdentifier(source)
     local char = exports["usa-characters"]:GetCharacter(source)
     local msg = url .. " "
     if caption ~= "" then 
         msg = msg .. caption .. " "
     end
-    msg = msg .. "(Photo by ``" .. char.getName() .. "``)"
+    msg = msg .. "(Photo by " .. char.getName()
+    if discordIdent then 
+        msg = msg .. " AKA <@" .. discordIdent .. ">"
+    end
+    msg = msg .. ")"
     exports["globals"]:SendDiscordLog(WEBHOOK_URL, msg)
 end)
+
+function GetDiscordIdentifier(src)
+    local idents = GetPlayerIdentifiers(src)
+    for i = 1, #idents do 
+        if idents[i]:find("discord") then 
+            return idents[i]:sub(9)
+        end
+    end
+    return nil
+end
