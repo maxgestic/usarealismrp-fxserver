@@ -402,7 +402,7 @@ AddEventHandler('911:CuffCutting', function(x, y, z, street, isMale)
     local time = math.random(4000, 6000)
     Citizen.Wait(time)
     local string = '^*Suspicious Person:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)..' ^1^*|^r ^*Dispatch Info:^r Caller reports an individual using a mechanic saw to break handcuffs.'
-    Send911Notification({{'sheriff', 'corrections'}, 'corrections'}, string, x, y, z, 'Suspicious Person')
+    Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Suspicious Person')
 end)
 
 AddEventHandler('911:Robbery', function(x, y, z, name, isMale, camID)
