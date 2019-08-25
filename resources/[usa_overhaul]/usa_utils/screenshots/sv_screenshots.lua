@@ -1,9 +1,22 @@
 local WEBHOOK_URL = "https://discordapp.com/api/webhooks/614221706164174851/XDdCHqiWBQyGwBQNpmtQvUkZjXn26fiP5w06lHv6p6bB9yq1fSyZCcUFKe538pmFJ4EE"
 
+local record = {}
+local MAX_FREE_TIER_SCREENSHOTS = 3
+
 TriggerEvent('es:addCommand', 'screenshot', function(source, args, char)
+    local ident = GetPlayerIdentifiers(source)[1]
+    if record[ident] then 
+        if record[ident] > MAX_FREE_TIER_SCREENSHOTS then
+            TriggerClientEvent("usa:notify", source, "You have reached the max number of screenshots for the FREE TIER.", "^0You have reached the max number of screenshots for the FREE TIER.")
+            return
+        end
+    else 
+        record[ident] = 0
+    end    
+    record[ident] = record[ident] + 1 -- TODO: test max free tier screenshots limit
     table.remove(args, 1)
     local caption = table.concat(args, " ")
-	TriggerClientEvent("screenshots:takeForDiscord", source, caption)
+    TriggerClientEvent("screenshots:takeForDiscord", source, caption)
 end, {
     help = "Take a screen shot and automatically post it to #screenshots",
     params = {
