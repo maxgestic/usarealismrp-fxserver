@@ -1,13 +1,28 @@
 local POLICE_RANKS = {
-	[1] = "Cadet",
-	[2] = "Trooper",
-	[3] = "Senior Trooper",
-	[4] = "Corporal",
-	[5] = "Sergeant",
-	[6] = "Lieutenant",
-	[7] = "Captain",
-	[8] = "Deputy Commissioner",
-	[9] = "Commissioner"
+	["SASP"] = {
+		[1] = "Cadet",
+		[2] = "Trooper",
+		[3] = "Senior Trooper",
+		[4] = "Corporal",
+		[5] = "Sergeant",
+		[6] = "Lieutenant",
+		[7] = "Captain",
+		[8] = "Deputy Commissioner",
+		[9] = "Commissioner",
+		[10] = "Director of Emergency Services"
+	},
+	["BCSO"] = {
+		[1] = "Correctional Officer",
+		[2] = "Sr. Correctional Officer",
+		[3] = "Deputy Sheriff",
+		[4] = "Sr. Deputy Sheriff",
+		[5] = "Corporal",
+		[6] = "Sergeant",
+		[7] = "Lieutenant",
+		[8] = "Captain",
+		[9] = "Undersheriff",
+		[10] = "Sheriff"
+	}
 }
 
 local target_player_id = 0
@@ -332,17 +347,30 @@ end)
 
 -- retrieve AR/pump shotgun
 TriggerEvent('es:addJobCommand', 'showbadge', { "corrections", "sheriff" }, function(source, args, char, location)
-	local police_rank = tonumber(char.get("policeRank"))
+	local cjob = char.get("job")
 	local char_name = char.getFullName()
-	if police_rank > 0 then
-		exports["globals"]:sendLocalActionMessage(source, char_name .. " shows official police badge.")
-		local msg = "^*[ID]^r ^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2Police Rank: ^0" .. GetRankName(police_rank)
-		exports["globals"]:sendLocalActionMessageChat(msg, location)
+	exports["globals"]:sendLocalActionMessage(source, char_name .. " shows official police badge.")
+	if cjob == "sheriff" then
+		local police_rank = char.get("policeRank")
+		if police_rank > 0 then
+			local msg = "^*[ID]^r ^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2SASP Rank: ^0" .. GetRankName(police_rank, "SASP")
+			exports["globals"]:sendLocalActionMessageChat(msg, location)
+		end
+	elseif cjob == "corrections" then
+		local ident = GetPlayerIdentifiers(source)[1]
+		TriggerEvent("es:exposeDBFunctions", function(db)
+			db.getDocumentByRow("correctionaldepartment", "identifier", ident, function(doc)
+				if doc then
+					local msg = "^*[ID]^r ^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2BCSO Rank: ^0" .. GetRankName(doc.rank, "BCSO")
+					exports["globals"]:sendLocalActionMessageChat(msg, location)
+				end
+			end)
+		end)
 	end
 end, { help = "Present your official police or EMS identification." })
 
-function GetRankName(rank)
-	return POLICE_RANKS[rank]
+function GetRankName(rank, dept)
+	return POLICE_RANKS[dept][rank]
 end
 
 TriggerEvent('es:addJobCommand', 'p', { "sheriff", "ems", "corrections" }, function(source, args, char, location)
