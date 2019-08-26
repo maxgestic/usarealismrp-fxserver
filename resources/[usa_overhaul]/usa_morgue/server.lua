@@ -17,6 +17,11 @@ TriggerEvent('es:addJobCommand', 'morgue', { "ems", "corrections", "sheriff", "d
 	local userName = GetPlayerName(playerID)
 	local hospitalReason = table.concat(args, " ", 3)
 
+	if hospitalReason:len() >= 2000 then 
+		TriggerClientEvent("usa:notify", source, "Please enter a morgue message less than 2,000 characters in length.", "^0Please enter a morgue message less than 2,000 characters in length. You can press ^3T^0 and then ^3UP ARROW^0 to retrieve your last message.")
+		return
+	end
+
 	if playerID then
 		TriggerClientEvent("death:allowRevive", playerID)
 		TriggerClientEvent("crim:untieHands", playerID, playerID)
