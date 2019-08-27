@@ -11,8 +11,8 @@ TokoVoipConfig = {
 	minVersion = "1.2.4", -- Version of the TS plugin required to play on the server
 
 	distance = {
-		25, -- Normal speech distance in gta distance units
-		6, -- Whisper speech distance in gta distance units
+		35, -- Normal speech distance in gta distance units
+		9, -- Whisper speech distance in gta distance units
 		150, -- Shout speech distance in gta distance units
 	},
 	headingType = 0, -- headingType 0 uses GetGameplayCamRot, basing heading on the camera's heading, to match how other GTA sounds work. headingType 1 uses GetEntityHeading which is based on the character's direction
