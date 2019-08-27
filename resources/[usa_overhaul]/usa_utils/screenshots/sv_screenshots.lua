@@ -1,7 +1,7 @@
 local WEBHOOK_URL = "https://discordapp.com/api/webhooks/614221706164174851/XDdCHqiWBQyGwBQNpmtQvUkZjXn26fiP5w06lHv6p6bB9yq1fSyZCcUFKe538pmFJ4EE"
 
 local record = {}
-local MAX_FREE_TIER_SCREENSHOTS = 3
+local MAX_FREE_TIER_SCREENSHOTS = 5
 
 TriggerEvent('es:addCommand', 'screenshot', function(source, args, char)
     local ident = GetPlayerIdentifiers(source)[1]
