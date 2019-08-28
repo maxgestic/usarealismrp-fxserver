@@ -320,7 +320,7 @@ TriggerEvent('es:addJobCommand', 'seize', { "sheriff", "corrections" }, function
 			target_player_id = targetId
 			TriggerClientEvent("police:getMoneyInput", source)
 		elseif arg == "vehcontraband" then
-			TriggerClientEvent("police:removeAllIllegalItems", source)
+			TriggerClientEvent("interaction:seizeVehContraband", source)
 		end
 	end
 end, {

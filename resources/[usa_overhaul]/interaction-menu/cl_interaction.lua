@@ -1361,6 +1361,13 @@ AddEventHandler("interaction:performPoliceAction", function(action, unseatIndex)
 end)
 --]]
 
+RegisterNetEvent("interaction:seizeVehContraband")
+AddEventHandler("interaction:seizeVehContraband", function()
+	local veh = getVehicleInsideOrInFrontOfUser()
+	local plate = GetVehicleNumberPlateText(veh)
+	TriggerServerEvent("vehicle:removeAllIllegalItems", plate)
+end)
+
 RegisterNetEvent("interaction:repairVehicle")
 AddEventHandler("interaction:repairVehicle", function()
 	if hitHandleVehicle ~= 0 then
