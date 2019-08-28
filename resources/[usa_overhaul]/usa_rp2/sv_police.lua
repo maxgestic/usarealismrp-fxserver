@@ -384,7 +384,7 @@ TriggerEvent('es:addJobCommand', 'p', { "sheriff", "ems", "corrections" }, funct
 					local params = {-1, "Event_Message_Purple", "GTAO_FM_Events_Soundset", 1}
 					TriggerClientEvent("usa:playSound", k, params)
 				else
-					TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "(10-99) Panic button pressed by " .. char.getFullName() .. " (Department of Corrections, Senora Fwy)") -- need to implement automatic street name locations here
+					TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "(10-99) Panic button pressed by " .. char.getFullName() .. " (Blaine County Sheriff's Office)") -- need to implement automatic street name locations here
 					local params = {-1, "Event_Message_Purple", "GTAO_FM_Events_Soundset", 1}
 					TriggerClientEvent("usa:playSound", k, params)
 				end
