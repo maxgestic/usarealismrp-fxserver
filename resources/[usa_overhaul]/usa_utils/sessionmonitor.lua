@@ -85,6 +85,28 @@ AddEventHandler('rconCommand', function(commandName, args)
         RconPrint("\nThe most frequent player drop reason so far is: " .. GetMostFrequentPlayerDropReason())
         RconPrint("\nServer Uptime: " .. exports["globals"]:GetHoursFromTime(statistics["startTime"]) .. " hour(s).")
         CancelEvent()
+    elseif commandName == "crashstats" then
+        RconPrint("Today's Crash Statistics (reason / count):")
+        -- fill an array to sort --
+        local crashes = {}
+        for reason, count in pairs(statistics["crashes"]) do 
+            table.insert(crashes, {reason = reason, count = count})
+        end
+        -- sort by count --
+        table.sort(crashes, function(a, b) 
+            if a.count > b.count then
+                return true
+            else 
+                return false
+            end
+        end)
+        -- print --
+        for i = 1, #crashes do 
+            local reason = crashes[i].reason
+            local count = crashes[i].count
+            RconPrint("\n" .. reason .. " happened " .. count .. " time(s).")
+        end
+        CancelEvent()
     end
   end)
 
