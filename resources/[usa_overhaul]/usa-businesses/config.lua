@@ -3,9 +3,9 @@ policeNeededForBonus = 3
 robberyCooldown = 2100
 
 LEASE_PERIOD_DAYS = 14
-DEFAULT_PURCHASE_PERCENT_REWARD = 0.15
+DEFAULT_PURCHASE_PERCENT_REWARD = 0.20
 
-KEYS ={
+KEYS = {
 	K = 311,
 	E = 38
 }
@@ -16,6 +16,13 @@ MIN_ROB_PERCENT = 0.3
 BASE_ROB_DURATION = 60000
 
 BUSINESSES = {
+	["Auto Repair (Elgin Ave.)"] = {
+		position = {548.21875, -172.63174438477, 54.481338500977},
+		cameraID = 'store41',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 5000
+	},
 	["Vangelico Jewelry Store (Rockford Hills)"] = {
 		position = {-631.0, -229.4, 38.1},
 		cameraID = 'store35',
