@@ -1,4 +1,3 @@
-local lPed
 local isCuffed = false
 local isHardcuffed = false
 local cuffanimplaying = false
@@ -239,22 +238,23 @@ end)
 
 RegisterNetEvent("cuff:unCuff")
 AddEventHandler("cuff:unCuff", function(silent)
-	ClearPedSecondaryTask(lPed)
-	SetEnableHandcuffs(lPed, false)
+	local ped = GetPlayerPed(-1)
+	ClearPedSecondaryTask(ped)
+	SetEnableHandcuffs(ped, false)
 	--FreezeEntityPosition(lPed, false)
 	if not silent then
 		TriggerEvent('usa:showHelp', false, 'You have been ~g~released~s~.')
 	end
 	isCuffed = false
-	if IsPedModel(lPed,"mp_m_freemode_01") or IsPedModel(lPed,"mp_f_freemode_01") then
-		SetPedComponentVariation(lPed, 7, 0, 0, 2)
+	if IsPedModel(ped,"mp_m_freemode_01") or IsPedModel(ped,"mp_f_freemode_01") then
+		SetPedComponentVariation(ped, 7, 0, 0, 2)
 	end
 end)
 
 RegisterNetEvent("cuff:Handcuff")
 AddEventHandler("cuff:Handcuff", function()
 	TriggerEvent('cuff:forceHandsDown', function()
-		lPed = GetPlayerPed(-1)
+		local lPed = GetPlayerPed(-1)
 		if DoesEntityExist(lPed) then
 			Citizen.CreateThread(function()
 				RequestAnimDict("mp_arresting")
