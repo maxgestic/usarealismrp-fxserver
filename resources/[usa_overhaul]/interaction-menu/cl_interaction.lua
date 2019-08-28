@@ -537,7 +537,7 @@ end)
 RegisterNetEvent("emotes:playEmote")
 AddEventHandler("emotes:playEmote", function(scenarioName)
 	local ped = GetPlayerPed(-1)
-	if not isLockpicking and not IsPedRagdoll(ped) and not IsEntityDead(ped) then
+	if not isLockpicking and not IsPedRagdoll(ped) and not IsEntityDead(ped) and not IsPedInAnyVehicle(ped, true) then
 		scenarioName = string.lower(scenarioName)
 		ClearPedTasksImmediately(ped)
 		playing_anim = false
