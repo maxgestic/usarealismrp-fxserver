@@ -4,6 +4,7 @@ ui_page "commerce/ui/index.html"
 
 files {
     "commerce/ui/index.html",
+    "commerce/ui/css/CHome.css",
     "commerce/ui/js/vue.min.js",
     "commerce/ui/js/components/CHome.js",
     "commerce/ui/js/App.js",
