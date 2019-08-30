@@ -19,7 +19,7 @@
     /* BEGIN HOWL RADIO PLAYER */
     var stations = ["http://ice1.somafm.com/beatblender-128-mp3", "http://hot108jamz.hot108.com:4040/;stream.nsv", "http://listen.radionomy.com/urbanradio-oldschoolrap"]
 
-    var MAX_VOL = 0.12
+    var MAX_VOL = 0.10
 
     var Radio = function (station) {
       var self = this;

@@ -1,0 +1,43 @@
+#background {
+    max-width:85vw;
+    height: 80vh;
+    margin-top:100px;
+    background: linear-gradient(to bottom left, #ffffff -44%, #0099ff 141%);
+}
+
+#logo-container {
+    text-align: center;
+    padding: 2em;
+    margin-bottom: 3em;
+}
+
+#logo-container > img {
+    max-width: 498px;
+    max-height: 147px;
+}
+
+.grid-container {
+    display: inline-grid;
+    grid-template-columns: 49% 49%;
+    width: 100%;
+    justify-content: center;
+    grid-column-gap: 10px;
+}
+
+.item {
+    text-align: center;
+    display: inline-block;
+    padding: 2em;
+    background-color: #ffffff;
+}
+
+.item-price {
+    font-size: 24px;
+}
+
+footer {
+    padding-top: 1em;
+    margin-top: 2em;
+    text-align: center;
+    font-size: 12px;
+}

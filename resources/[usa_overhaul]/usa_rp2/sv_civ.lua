@@ -185,42 +185,70 @@ AddEventHandler("crim:continueBlindfolding", function(continue_blindfolding, fro
 end)
 
 local walkstyles = {
-    {display_name = "Tough (Male)", clipset_name ="MOVE_M@TOUGH_GUY@"},
-    {display_name = "Tough (Female)", clipset_name ="MOVE_F@TOUGH_GUY@"},
-    {display_name = "Posh (Male)", clipset_name ="MOVE_M@POSH@"},
-    {display_name = "Posh (Female)", clipset_name ="MOVE_F@POSH@"},
-    {display_name = "Gangster 1 (Male)", clipset_name ="MOVE_M@GANGSTER@NG"},
-    {display_name = "Gangster 1 (Female)", clipset_name ="MOVE_F@GANGSTER@NG"},
-    {display_name = "Femme (Male)", clipset_name ="MOVE_M@FEMME@"},
-    {display_name = "Femme (Female)", clipset_name ="MOVE_F@FEMME@"},
+    {display_name = "Tough Masculine", clipset_name ="MOVE_M@TOUGH_GUY@"},
+    {display_name = "Tough Feminine", clipset_name ="MOVE_F@TOUGH_GUY@"},
+    {display_name = "Posh Masculine", clipset_name ="MOVE_M@POSH@"},
+    {display_name = "Posh Feminine", clipset_name ="MOVE_F@POSH@"},
+    {display_name = "Gangster 1 Masculine", clipset_name ="MOVE_M@GANGSTER@NG"},
+    {display_name = "Gangster 1 Feminine", clipset_name ="MOVE_F@GANGSTER@NG"},
+    {display_name = "Femme Masculine", clipset_name ="MOVE_M@FEMME@"},
+    {display_name = "Femme Feminine", clipset_name ="MOVE_F@FEMME@"},
     {display_name = "Slow", clipset_name ="move_p_m_zero_slow"},
-    {display_name = "Gangster 2", clipset_name ="move_m@gangster@var_i"},
+    {display_name = "Speed Walk", clipset_name ="move_m@gangster@var_i"},
     {display_name = "Casual", clipset_name ="move_m@casual@d"},
 	{display_name = "Injured", clipset_name ="move_injured_generic"},
-	{display_name = "Flee", clipset_name ="move_f@flee@a"},
 	{display_name = "Scared", clipset_name ="move_f@scared"},
 	{display_name = "Sexy", clipset_name ="move_f@sexy@a"},
 	{display_name = "Slightly Drunk", clipset_name ="MOVE_M@DRUNK@SLIGHTLYDRUNK"},
 	{display_name = "Moderately Drunk", clipset_name ="MOVE_M@DRUNK@MODERATEDRUNK_HEAD_UP"},
     {display_name = "Very Drunk", clipset_name ="MOVE_M@DRUNK@VERYDRUNK"},
-    {display_name = "Grooving", clipset_name="ANIM@MOVE_M@GROOVING@SLOW@"}
+	{display_name = "Grooving", clipset_name="ANIM@MOVE_M@GROOVING@SLOW@"},
+	{display_name = "Wide Stance", clipset_name="ANIM_GROUP_MOVE_BALLISTIC", premium = true},
+	{display_name = "Brisk Walk", clipset_name="ANIM_GROUP_MOVE_LEMAR_ALLEY", premium = true},
+	{display_name = "Lean Forward", clipset_name="move_characters@franklin@fire", premium = true},
+	{display_name = "Slow Lean Forward", clipset_name="move_characters@Jimmy@slow@"},
+	{display_name = "Michael", clipset_name="move_characters@michael@fire", premium = true},
+	{display_name = "Lester", clipset_name="move_heist_lester", premium = true},
+	{display_name = "Lester Cane", clipset_name="move_lester_CaneUp", premium = true},
+	{display_name = "Fast Wide Arms", clipset_name="move_m@bag", premium = true},
+	{display_name = "Brave", clipset_name="move_m@brave", premium = true},
+	{display_name = "Upright", clipset_name="move_m@gangster@var_e", premium = true},
+	{display_name = "Head Down", clipset_name="move_m@gangster@var_f", premium = true},
+	{display_name = "Jog (when jogging)", clipset_name="move_m@JOG@", premium = true},
+	{display_name = "Regular Alternate", clipset_name="MOVE_P_M_ONE", premium = true}
+	
 }
 
 ----------------------------
 -- Change your walk style --
 ----------------------------
 TriggerEvent('es:addCommand', 'walkstyle', function(source, args, char, location)
-	local style_number = args[2]
+	if not IsPlayerCommerceInfoLoaded(source) then
+		LoadPlayerCommerceData(source)
+	end
+	while not IsPlayerCommerceInfoLoaded(source) do 
+		Wait(100)
+	end
+	local style_number = tonumber(args[2])
 	if not style_number then
 		TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0" .. "[0] Default")
-		for i = 1, #walkstyles do
-			TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0" .. "[" .. i .. "] " .. walkstyles[i].display_name)
+		local str = "[1] " .. walkstyles[1].display_name .. " "
+		for i = 2, #walkstyles do
+			str = str .. "[" .. i .. "] " .. walkstyles[i].display_name
+			if i ~= #walkstyles then
+				str = str .. ", "
+			end
 		end
+		TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0" .. str)
 	else
-		if tonumber(style_number) ~= 0 then
-			TriggerClientEvent("civ:changeWalkStyle", source, walkstyles[tonumber(style_number)].clipset_name)
+		if style_number ~= 0 then
+			if walkstyles[style_number].premium and not DoesPlayerOwnSku(source, 16) then 
+				TriggerClientEvent("usa:notify", source, "You've discovered a premium walkstyle!", "^0You've discovered a premium feature! Type ^3/store^0 to purchase that walkstyle!")
+				return
+			end
+			TriggerClientEvent("civ:changeWalkStyle", source, walkstyles[style_number].clipset_name)
 		else
-			TriggerClientEvent("civ:changeWalkStyle", source, tonumber(style_number))
+			TriggerClientEvent("civ:changeWalkStyle", source, style_number)
 		end
 	end
 end, {
@@ -229,6 +257,37 @@ end, {
 		{ name = "style name", help = "Options: 1 - " .. #walkstyles .. ", do /walkstyle for list" }
 	}
 })
+
+RegisterNetEvent("usa:requestWalkstyleChange")
+AddEventHandler("usa:requestWalkstyleChange", function(style_number)
+	if not IsPlayerCommerceInfoLoaded(source) then
+		LoadPlayerCommerceData(source)
+	end
+	while not IsPlayerCommerceInfoLoaded(source) do 
+		Wait(100)
+	end
+	if style_number ~= 0 then
+		if walkstyles[style_number].premium and not DoesPlayerOwnSku(source, 16) then 
+			TriggerClientEvent("usa:notify", source, "You've discovered a premium walkstyle!", "^0You've discovered a premium feature! Type ^3/store^0 to purchase that walkstyle!")
+			return
+		end
+		TriggerClientEvent("civ:changeWalkStyle", source, walkstyles[style_number].clipset_name)
+	else
+		TriggerClientEvent("civ:changeWalkStyle", source, style_number)
+	end
+end)
+
+RegisterNetEvent("usa:showWalkstyleHelp")
+AddEventHandler("usa:showWalkstyleHelp", function()
+	local str = "[1] " .. walkstyles[1].display_name .. " "
+	for i = 2, #walkstyles do
+		str = str .. "[" .. i .. "] " .. walkstyles[i].display_name
+		if i ~= #walkstyles then
+			str = str .. ", "
+		end
+	end
+	TriggerClientEvent("chatMessage", source, "", {0, 0, 0}, "^0" .. str)
+end)
 
 ------------------------------------------------
 -- trade / sell vehicles to other players --
