@@ -1,8 +1,11 @@
 const CHome = Vue.component("CHome", {
     template: 
     `
-    <div id="background" class="w3-main w3-content w3-padding">
-        <div id="logo-container"><img src="https://fontmeme.com/permalink/190204/49bb075d378719bbd20b0040eef07af3.png" alt="USARRP"></div>
+    <div id="background" class="w3-main w3-content w3-padding w3-display-container">
+        <span id="close-btn" class="w3-button w3-display-topright" @click="close()">&times;</span>
+        <div id="logo-container">
+            <img src="https://fontmeme.com/permalink/190204/49bb075d378719bbd20b0040eef07af3.png" alt="USARRP">
+        </div>
         <section class="grid-container">
             <div v-for="item in items" class="item w3-card">
                 <p>{{item.name}}</p>
@@ -46,6 +49,9 @@ const CHome = Vue.component("CHome", {
             $.post("http://usa_utils/purchase", JSON.stringify({
                 id: id
             }))
+        },
+        close: function() {
+            $.post("http://usa_utils/closeStore", JSON.stringify({}))
         }
     }
 })

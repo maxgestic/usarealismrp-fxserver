@@ -41,3 +41,11 @@ footer {
     text-align: center;
     font-size: 12px;
 }
+
+#close-btn {
+    font-size: 20px;
+}
+
+#close-btn:hover {
+    background-color: #B31C31 !important;
+}
