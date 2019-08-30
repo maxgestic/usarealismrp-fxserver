@@ -14,6 +14,9 @@ const CHome = Vue.component("CHome", {
                 <button class="w3-btn w3-green" @click="purchase(item.sku)">Buy Now</button>
             </div>
         </section>
+        <footer>
+            <p>Note: You must reconnect to the server for your purchase to take affect.</p>
+        </footer>
     </div>
     `,
     data: function() {
@@ -27,10 +30,10 @@ const CHome = Vue.component("CHome", {
                     sku: 15
                 },
                 {
-                    name: "LS Customs Coupons (25% off)",
-                    img: "http://vaultguides.com/wp-content/uploads/2015/10/gta-5-online-original-motorworks.jpg",
-                    description: "Want to upgrade your cars? Get a coupon for 25% off your entire purchase at ANY LS Customs or Benny's Garage in San Andreas!",
-                    price: 15,
+                    name: "Premium Walkstyle Pack",
+                    img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIJ1oLZJ0bs2dx90UKs-57kTBc51qXYFi8ZfR5K9q14arMF90-Ew",
+                    description: "Want to upgrade your swagger? Get 10+ premium walk styles with this one time purchase.",
+                    price: 5,
                     sku: 16
                 }
                 

@@ -218,7 +218,6 @@ local ACTIONS = {
 	["Search"] = function()
 		TriggerEvent("search:attemptToSearchNearestPerson", true)
 	end,
-	-- TO TEST --
 	["Place"] = function()
 		Citizen.CreateThread(function()
 			local ssn = tonumber(exports.globals:GetUserInput())
@@ -227,7 +226,6 @@ local ACTIONS = {
 			end
 		end)
 	end,
-	-- TO TEST --
 	["Unseat"] = function()
 		-- manually type target player id in since not sure how good it is with people in vehicles --
 		Citizen.CreateThread(function()
@@ -241,13 +239,7 @@ local ACTIONS = {
 		Citizen.CreateThread(function()
 			TriggerServerEvent("usa:showWalkstyleHelp")
 			local style_number = tonumber(exports.globals:GetUserInput())
-			if style_number then
-				if style_number ~= 0 then
-					TriggerEvent("civ:changeWalkStyle", walkstyles[tonumber(style_number)].clipset_name)
-				else
-					TriggerEvent("civ:changeWalkStyle", tonumber(style_number))
-				end
-			end
+			TriggerServerEvent("usa:requestWalkstyleChange", style_number)
 		end)
 	end
 }
