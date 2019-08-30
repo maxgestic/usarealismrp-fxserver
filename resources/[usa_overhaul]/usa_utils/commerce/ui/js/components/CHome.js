@@ -45,7 +45,6 @@ const CHome = Vue.component("CHome", {
     },
     methods: {
         purchase: function(id) {
-            console.log("attempting purchase of item: " + id);
             $.post("http://usa_utils/purchase", JSON.stringify({
                 id: id
             }))
