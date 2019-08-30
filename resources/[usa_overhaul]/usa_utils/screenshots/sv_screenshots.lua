@@ -3,20 +3,29 @@ local WEBHOOK_URL = "https://discordapp.com/api/webhooks/614221706164174851/XDdC
 local record = {}
 local MAX_FREE_TIER_SCREENSHOTS = 2
 
+local UNLIMITED_SCREENSHOTS_SKU = 15
+
 TriggerEvent('es:addCommand', 'screenshot', function(source, args, char)
-    local ident = GetPlayerIdentifiers(source)[1]
-    if record[ident] then 
-        if record[ident] >= MAX_FREE_TIER_SCREENSHOTS then
-            TriggerClientEvent("usa:notify", source, "You have reached the max number of screenshots for the FREE TIER.", "^0You have reached the max number of screenshots for the FREE TIER. Please upgrade to the PRO TIER for unlimited screenshots.")
-            return
+    Citizen.CreateThread(function()
+        if not IsPlayerCommerceInfoLoaded(source) then
+            LoadPlayerCommerceData(source)
         end
-    else 
-        record[ident] = 0
-    end    
-    record[ident] = record[ident] + 1 -- TODO: test max free tier screenshots limit
-    table.remove(args, 1)
-    local caption = table.concat(args, " ")
-    TriggerClientEvent("screenshots:takeForDiscord", source, caption)
+        while not IsPlayerCommerceInfoLoaded(source) do 
+            Wait(100)
+        end
+        local ident = GetPlayerIdentifiers(source)[1]
+        if not record[ident] then 
+            record[ident] = 1
+        end
+        if record[ident] >= MAX_FREE_TIER_SCREENSHOTS and not DoesPlayerOwnSku(source, UNLIMITED_SCREENSHOTS_SKU) then
+            TriggerClientEvent("usa:notify", source, "You have reached the max number of screenshots for the FREE TIER.", "^0You have reached the max number of screenshots for the FREE TIER. Type ^3/store^0 to upgrade for unlimited screenshots!")
+            return
+        end   
+        record[ident] = record[ident] + 1 -- TODO: test max free tier screenshots limit
+        table.remove(args, 1)
+        local caption = table.concat(args, " ")
+        TriggerClientEvent("screenshots:takeForDiscord", source, caption)
+    end)
 end, {
     help = "Take a screen shot and automatically post it to #screenshots",
     params = {
