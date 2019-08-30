@@ -6,6 +6,7 @@
 #logo-container {
     text-align: center;
     padding: 2em;
+    margin-bottom: 3em;
 }
 
 #logo-container > img {
@@ -13,16 +14,14 @@
     height: 147px;
 }
 
-.grid-container {
-    display: grid;
-    grid-template-columns: auto auto auto auto;
-    grid-gap: 10px;
-    padding: 10px;
+.item {
+    height: 250px;
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
 }
 
-.grid-container > div {
-    background-color: rgba(255, 255, 255, 0.8);
-    text-align: center;
-    padding: 20px 0;
-    font-size: 30px;
+.item-content {
+    background-color: gray;
+    padding: 1em;
 }
