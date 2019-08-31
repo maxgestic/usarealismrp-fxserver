@@ -426,6 +426,7 @@ Citizen.CreateThread(function()
 end)
 
 local burglarySearchItems = {
+	{name = 'Hotwiring Kit', type = 'misc', price = 250, legality = 'illegal', quantity = 1, weight = 10},
 	{name = "LSD Vile", price = 6, type = "drug", quantity = 1, legality = "illegal", weight = 5.0, objectModel = "prop_cs_pour_tube"},
 	{name = "Cheeseburger", price = 6, type = "food", substance = 30.0, quantity = 1, legality = "legal", weight = 10.0, objectModel = "prop_cs_burger_01"},
 	{name = "Flaming Hot Cheetos", price = 2, type = "food", substance = 6.0, quantity = 1, legality = "legal", weight = 9.0, objectModel = "ng_proc_food_chips01c"},
