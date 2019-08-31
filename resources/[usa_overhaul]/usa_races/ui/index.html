@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/CHome.css">
+        <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+        <style>
+        body {
+            display: none;
+        }
+        body, h1,h2,h3,h4,h4,h6 {
+            font-family: 'Roboto Mono', monospace;
+        }
+        ul {
+            list-style-type: none;
+        }
+        #app {
+            padding: 3em;
+        }
+        </style>
+    </head>
+    <body>
+
+        <div id="app">
+            <component v-bind:is="currentTabComponent" class="w3-container" :races="races"></component>
+        </div>
+
+        <script src="js/vue.min.js"></script>
+        <script src="js/components/CHome.js"></script>
+        <script src="js/App.js"></script>
+        <script src="js/eventListener.js"></script>
+    </body>
+</html>

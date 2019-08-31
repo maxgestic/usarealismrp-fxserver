@@ -1,0 +1,51 @@
+#background {
+    max-width:85vw;
+    height: 80vh;
+    margin-top:100px;
+    background: linear-gradient(to bottom left, #ffffff -44%, #817e7f 141%);
+}
+
+header {
+    text-align: center;
+    padding: 2em;
+    margin-bottom: 3em;
+}
+
+header > img {
+    max-width: 498px;
+    max-height: 147px;
+}
+
+.grid-container {
+    display: inline-grid;
+    grid-template-columns: 49% 49%;
+    width: 100%;
+    justify-content: center;
+    grid-column-gap: 10px;
+}
+
+.race {
+    text-align: center;
+    display: inline-block;
+    padding: 2em;
+    background-color: #ffffff;
+}
+
+.race-bet {
+    font-size: 24px;
+}
+
+footer {
+    padding-top: 1em;
+    margin-top: 2em;
+    text-align: center;
+    font-size: 12px;
+}
+
+#close-btn {
+    font-size: 20px;
+}
+
+#close-btn:hover {
+    background-color: #B31C31 !important;
+}
