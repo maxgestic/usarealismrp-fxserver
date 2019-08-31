@@ -11,8 +11,12 @@ TriggerEvent('es:addCommand', 'hostrace', function(source, args, char)
         TriggerClientEvent("usa:notify", source, "You are already hosting a race!")
         return
     end
+    local char = exports["usa-characters"]:GetCharacter(source)
     local newRace = {
-        host = source,
+        host = {
+            source = source,
+            name = char.getName()
+        },
         title = "Default Race Title",
         participants = {},
         bet = bet
@@ -38,10 +42,10 @@ end, {
 
 RegisterNetEvent("races:joinRace")
 AddEventHandler("races:joinRace", function(host)
-    if not hostedRaces[host] then 
+    if not hostedRaces[host] or host == source then 
         TriggerClientEvent("usa:notify", source, "Invalid race!")
         return
     end
     local char = exports["usa-characters"]:GetCharacter(source)
-    table.insert(hostedRaces[host].participants, {name = char.getName(), id = char.get("source")})
+    table.insert(hostedRaces[host].participants, {name = char.getName(), source = char.get("source")})
 end)

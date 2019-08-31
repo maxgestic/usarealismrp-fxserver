@@ -3,7 +3,84 @@ const App = new Vue({
     data: {
         currentTab: 'Home',
         tabs: ['Home'],
-        races: []
+        races: [
+            {
+                host: {
+                    source: 1,
+                    name: "test"
+                },
+                title: "Default Race Title",
+                participants: [],
+                bet: 420
+            },
+            {
+                host: {
+                    source: 1,
+                    name: "test"
+                },
+                title: "Default Race Title",
+                participants: [],
+                bet: 420
+            },
+            {
+                host: {
+                    source: 1,
+                    name: "test"
+                },
+                title: "Default Race Title",
+                participants: [],
+                bet: 420
+            },
+            {
+                host: {
+                    source: 1,
+                    name: "test"
+                },
+                title: "Default Race Title",
+                participants: [],
+                bet: 420
+            }
+            ,
+            {
+                host: {
+                    source: 1,
+                    name: "test"
+                },
+                title: "Default Race Title",
+                participants: [],
+                bet: 420
+            }
+            ,
+            {
+                host: {
+                    source: 1,
+                    name: "test"
+                },
+                title: "Default Race Title",
+                participants: [],
+                bet: 420
+            }
+            ,
+            {
+                host: {
+                    source: 1,
+                    name: "test"
+                },
+                title: "Default Race Title",
+                participants: [],
+                bet: 420
+            }
+            ,
+            {
+                host: {
+                    source: 1,
+                    name: "test"
+                },
+                title: "Default Race Title",
+                participants: [],
+                bet: 420
+            }
+        ]
     },
     computed: {
         currentTabComponent: function () {

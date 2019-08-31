@@ -3,12 +3,13 @@
     height: 80vh;
     margin-top:100px;
     background: linear-gradient(to bottom left, #ffffff -44%, #817e7f 141%);
+    overflow-y: scroll;
 }
 
 header {
     text-align: center;
     padding: 2em;
-    margin-bottom: 3em;
+    margin-bottom: 1em;
 }
 
 header > img {
@@ -18,10 +19,12 @@ header > img {
 
 .grid-container {
     display: inline-grid;
-    grid-template-columns: 49% 49%;
+    grid-template-columns: 24% 24% 24% 24%;
     width: 100%;
     justify-content: center;
-    grid-column-gap: 10px;
+    grid-column-gap: 5px;
+    grid-row-gap: 5px;
+    padding-bottom: 2em;
 }
 
 .race {

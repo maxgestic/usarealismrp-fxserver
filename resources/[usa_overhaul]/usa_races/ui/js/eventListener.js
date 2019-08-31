@@ -6,7 +6,7 @@ document.onreadystatechange = () => {
                 this.console.log("toggling menu in JS")
                 document.body.style.display = msg.doOpen ? "block" : "none";
                 if (msg.doOpen) {
-                    App.races = msg.races 
+                    //App.races = msg.races 
                     this.console.log("races loaded! num is " + App.races.length)
                 }
             }
