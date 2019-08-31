@@ -1,13 +1,37 @@
 local isMenuOpen = false
 
+local currentRace = nil
+
+RegisterNetEvent("races:confirmJoin")
+AddEventHandler("races:confirmJoin", function(race)
+    currentRace = {
+        info = race,
+        stage = "joined"
+    }
+    TriggerEvent("usa:notify", "You have been enrolled in " .. currentRace.info.title .. "! Head to the waypoint!", "^0You have been enrolled in " .. currentRace.info.title .. "! Head to the waypoint!")
+    SetNewWaypoint(race.start.coords.x, race.start.coords.y)
+end)
+
+RegisterNetEvent("races:getNewRaceCoords")
+AddEventHandler("races:getNewRaceCoords", function(bet, minutes, title)
+    if not IsWaypointActive() then 
+        exports.globals:notify("You must set a waypoint to start a race!")
+        return
+    end
+    local me = PlayerPedId()
+    local mycoords = GetEntityCoords(me)
+    local waypointBlip = GetFirstBlipInfoId(8) -- 8 = Waypoint ID
+    local endCoord = Citizen.InvokeNative(0xFA7C7F0AADF25D09, waypointBlip, Citizen.ResultAsVector())
+    TriggerServerEvent("races:gotNewRaceCoords", {x = mycoords.x, y = mycoords.y, z = mycoords.z}, {x = endCoord.x, y = endCoord.y, z = endCoord.z}, bet, minutes, title)
+end)
+
 RegisterNetEvent("races:toggleMenu")
 AddEventHandler("races:toggleMenu", function(doOpen, races)
-    print("toggling menu!")
     isMenuOpen = doOpen
     SendNUIMessage({
         type = "toggle",
         doOpen = isMenuOpen,
-        races = races
+        races = races or {}
     })
     SetNuiFocus(isMenuOpen, isMenuOpen)
 end)
@@ -17,5 +41,29 @@ RegisterNUICallback("closeMenu", function(data, cb)
 end)
 
 RegisterNUICallback("joinRace", function(data, cb)
-    TriggerServerEvent("races:joinRace", data.host)
+    if not currentRace then
+        TriggerServerEvent("races:joinRace", data.host)
+    else 
+        exports.globals:notify("You are already enrolled in a race!")
+    end
+    TriggerEvent("races:toggleMenu", false)
+end)
+
+Citizen.CreateThread(function()
+    while true do
+        if currentRace then
+            local me = PlayerPedId()
+            local mycoords = GetEntityCoords(me)
+            if currentRace.stage == "joined" then
+                local startCoords = currentRace.info.start.coords
+                local isAtStartCoords = Vdist(mycoords.x, mycoords.y, mycoords.z, startCoords.x, startCoords.y, startCoords.z) < 8
+                if isAtStartCoords then 
+                    local timeUntilStart = "TEST" -- TODO: replace with minutes until start time
+                    exports.globals:notify("The race will start here in " .. timeUntilStart .. " minute(s)!")
+                    currentRace.stage = "waiting"
+                end
+            end
+        end
+        Wait(5)
+    end
 end)

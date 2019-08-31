@@ -3,11 +3,9 @@ document.onreadystatechange = () => {
         window.addEventListener('message', function(event) {
             let msg = event.data
             if (msg.type == "toggle") { // show / hide
-                this.console.log("toggling menu in JS")
                 document.body.style.display = msg.doOpen ? "block" : "none";
                 if (msg.doOpen) {
-                    //App.races = msg.races 
-                    this.console.log("races loaded! num is " + App.races.length)
+                    App.races = msg.races
                 }
             }
         })

@@ -4,33 +4,7 @@ const App = new Vue({
         currentTab: 'Home',
         tabs: ['Home'],
         races: [
-            {
-                host: {
-                    source: 1,
-                    name: "test"
-                },
-                title: "Default Race Title",
-                participants: [],
-                bet: 420
-            },
-            {
-                host: {
-                    source: 1,
-                    name: "test"
-                },
-                title: "Default Race Title",
-                participants: [],
-                bet: 420
-            },
-            {
-                host: {
-                    source: 1,
-                    name: "test"
-                },
-                title: "Default Race Title",
-                participants: [],
-                bet: 420
-            },
+            /*
             {
                 host: {
                     source: 1,
@@ -40,46 +14,7 @@ const App = new Vue({
                 participants: [],
                 bet: 420
             }
-            ,
-            {
-                host: {
-                    source: 1,
-                    name: "test"
-                },
-                title: "Default Race Title",
-                participants: [],
-                bet: 420
-            }
-            ,
-            {
-                host: {
-                    source: 1,
-                    name: "test"
-                },
-                title: "Default Race Title",
-                participants: [],
-                bet: 420
-            }
-            ,
-            {
-                host: {
-                    source: 1,
-                    name: "test"
-                },
-                title: "Default Race Title",
-                participants: [],
-                bet: 420
-            }
-            ,
-            {
-                host: {
-                    source: 1,
-                    name: "test"
-                },
-                title: "Default Race Title",
-                participants: [],
-                bet: 420
-            }
+            */
         ]
     },
     computed: {

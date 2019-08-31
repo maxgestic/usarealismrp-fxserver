@@ -34,8 +34,16 @@ header > img {
     background-color: #ffffff;
 }
 
+.race-title { 
+    margin-bottom: 1em;
+}
+
 .race-bet {
     font-size: 24px;
+}
+
+.race-participants {
+    font-size: small;
 }
 
 footer {
