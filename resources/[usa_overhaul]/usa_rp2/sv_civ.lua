@@ -224,10 +224,11 @@ local walkstyles = {
 ----------------------------
 TriggerEvent('es:addCommand', 'walkstyle', function(source, args, char, location)
 	local usource = source
-	if not IsPlayerCommerceInfoLoaded(usource) then
+	local isSignedInWithFiveM = CanPlayerStartCommerceSession(usource)
+	if isSignedInWithFiveM and not IsPlayerCommerceInfoLoaded(usource) then
 		LoadPlayerCommerceData(usource)
 	end
-	while not IsPlayerCommerceInfoLoaded(usource) do 
+	while isSignedInWithFiveM and not IsPlayerCommerceInfoLoaded(usource) do 
 		Wait(100)
 	end
 	local style_number = tonumber(args[2])
@@ -243,9 +244,16 @@ TriggerEvent('es:addCommand', 'walkstyle', function(source, args, char, location
 		TriggerClientEvent("chatMessage", usource, "", {0, 0, 0}, "^0" .. str)
 	else
 		if style_number ~= 0 then
-			if walkstyles[style_number].premium and not DoesPlayerOwnSku(usource, 16) then 
-				TriggerClientEvent("usa:notify", usource, "You've discovered a premium walkstyle!", "^0You've discovered a premium feature! Type ^3/store^0 to purchase that walkstyle!")
-				return
+			if isSignedInWithFiveM then
+				if walkstyles[style_number].premium and not DoesPlayerOwnSku(usource, 16) then 
+					TriggerClientEvent("usa:notify", usource, "You've discovered a premium walkstyle!", "^0You've discovered a premium feature! Type ^3/store^0 to purchase that walkstyle!")
+					return
+				end
+			else 
+				if walkstyles[style_number].premium then 
+					TriggerClientEvent("usa:notify", usource, "You've discovered a premium walkstyle!", "^0You've discovered a premium feature! Type ^3/store^0 to purchase that walkstyle!")
+					return
+				end
 			end
 			TriggerClientEvent("civ:changeWalkStyle", usource, walkstyles[style_number].clipset_name)
 		else
@@ -262,16 +270,24 @@ end, {
 RegisterNetEvent("usa:requestWalkstyleChange")
 AddEventHandler("usa:requestWalkstyleChange", function(style_number)
 	local usource = source
-	if not IsPlayerCommerceInfoLoaded(usource) then
+	local isSignedInWithFiveM = CanPlayerStartCommerceSession(usource)
+	if isSignedInWithFiveM and not IsPlayerCommerceInfoLoaded(usource) then
 		LoadPlayerCommerceData(usource)
 	end
-	while not IsPlayerCommerceInfoLoaded(usource) do 
+	while isSignedInWithFiveM and not IsPlayerCommerceInfoLoaded(usource) do 
 		Wait(100)
 	end
 	if style_number ~= 0 then
-		if walkstyles[style_number].premium and not DoesPlayerOwnSku(usource, 16) then 
-			TriggerClientEvent("usa:notify", usource, "You've discovered a premium walkstyle!", "^0You've discovered a premium feature! Type ^3/store^0 to purchase that walkstyle!")
-			return
+		if isSignedInWithFiveM then
+			if walkstyles[style_number].premium and not DoesPlayerOwnSku(usource, 16) then 
+				TriggerClientEvent("usa:notify", usource, "You've discovered a premium walkstyle!", "^0You've discovered a premium feature! Type ^3/store^0 to purchase that walkstyle!")
+				return
+			end
+		else 
+			if walkstyles[style_number].premium then 
+				TriggerClientEvent("usa:notify", usource, "You've discovered a premium walkstyle!", "^0You've discovered a premium feature! Type ^3/store^0 to purchase that walkstyle!")
+				return
+			end
 		end
 		TriggerClientEvent("civ:changeWalkStyle", usource, walkstyles[style_number].clipset_name)
 	else
