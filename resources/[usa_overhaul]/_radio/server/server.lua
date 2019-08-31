@@ -27,7 +27,7 @@ RegisterServerEvent("radio:accessCheck")
 AddEventHandler("radio:accessCheck", function()
     local char = exports["usa-characters"]:GetCharacter(source)
     local cjob = char.get("job")
-    local hasNotAllowedJob = (cjob ~= "sheriff" and cjob ~= "corrections" and cjob ~= "ems" and cjob ~= "tow")
+    local hasNotAllowedJob = (cjob ~= "sheriff" and cjob ~= "corrections" and cjob ~= "ems" and cjob ~= "tow" and cjob ~= "doctor")
     if not CAN_CIVS_USE and hasNotAllowedJob then
         TriggerClientEvent("usa:notify", source, "Only for public servants")
         return
