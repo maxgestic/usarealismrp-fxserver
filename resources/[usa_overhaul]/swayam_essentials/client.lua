@@ -61,7 +61,7 @@ AddEventHandler("swayam:SetWayPointWithAutoDisable", function(x, y, z, sprite, r
 			--DrawMarker(1, tonumber(x),  tonumber(y), tonumber(z), 0, 0, 0, 0, 0, 0, 10.0, 10.0, 1.0, 0, 0, 255, 90, 0, 0, 2, 0, 0, 0, 0)
 			local ply = GetPlayerPed(-1)
 			local plyCoords = GetEntityCoords(ply, 0)
-			local distance = GetDistanceBetweenCoords(tonumber(x),  tonumber(y), tonumber(z),  plyCoords["x"], plyCoords["y"], plyCoords["z"], true)
+			local distance = GetDistanceBetweenCoords(tonumber(x),  tonumber(y), tonumber(z),  plyCoords["x"], plyCoords["y"], plyCoords["z"], false)
 			--Citizen.Trace("Current Distance: " .. distance)
 			if(distance <= 10) then
 				playerReachedWayPoint = false

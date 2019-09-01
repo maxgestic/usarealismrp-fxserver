@@ -2,6 +2,8 @@ local isMenuOpen = false
 
 local currentRace = nil
 
+-- TODO: mark race starting location as blip on map
+
 RegisterNetEvent("races:confirmJoin")
 AddEventHandler("races:confirmJoin", function(race)
     currentRace = {
@@ -37,6 +39,25 @@ AddEventHandler("races:toggleMenu", function(doOpen, races)
     SetNuiFocus(isMenuOpen, isMenuOpen)
 end)
 
+RegisterNetEvent("races:startRace")
+AddEventHandler("races:startRace", function()
+    if currentRace then 
+        currentRace.stage = "racing"
+        exports.globals:notify("Race ~g~started~w~! Go, go, go!")
+    end
+end)
+
+RegisterNetEvent("races:endRace")
+AddEventHandler("races:endRace", function()
+    currentRace = nil
+    exports.globals:notify("Race ended!")
+end)
+
+RegisterNetEvent("races:setWaypoint")
+AddEventHandler("races:setWaypoint", function(coords, label)
+    TriggerEvent("swayam:SetWayPointWithAutoDisable", coords.x, coords.y, coords.z, 280, 60, label)
+end)
+
 RegisterNUICallback("closeMenu", function(data, cb)
     TriggerEvent("races:toggleMenu", false)
 end)
@@ -55,47 +76,19 @@ Citizen.CreateThread(function()
         if currentRace then
             local me = PlayerPedId()
             local mycoords = GetEntityCoords(me)
-            print("curr stage: " .. currentRace.stage)
             if currentRace.stage == "joined" then -- driving towards start
                 local startCoords = currentRace.info.start.coords
-                local isAtStartCoords = Vdist(mycoords.x, mycoords.y, mycoords.z, startCoords.x, startCoords.y, startCoords.z) < 25
+                local isAtStartCoords = GetDistanceBetweenCoords(mycoords.x, mycoords.y, mycoords.z, startCoords.x, startCoords.y, startCoords.z, false) < 25
                 if isAtStartCoords then 
                     exports.globals:notify("The race will start here in " .. GetMinutesUntilStartStr(currentRace))
                     currentRace.stage = "waiting"
                 end
-            elseif currentRace.stage == "waiting" then -- waiting for start of race
-                local minutesUntilStart = GetMinutesUntilStart(currentRace, true)
-                local secondsTillStart = minutesUntilStart * 60
-                if secondsTillStart <= 10 then -- 10 seconds before start
-                    local startCoords = currentRace.info.start.coords
-                    local isAtStartCoords = Vdist(mycoords.x, mycoords.y, mycoords.z, startCoords.x, startCoords.y, startCoords.z) < 25
-                    if not isAtStartCoords then 
-                        exports.globals:notify("You have been disqualified from the race!", "^0You went too far from the start of the race and got DQ'd.")
-                        TriggerServerEvent("races:removeParticipant", currentRace.host)
-                        TriggerEvent("swayam:RemoveWayPoint")
-                        currentRace = nil
-                    else
-                        -- set waypoint to finish
-                        TriggerEvent("swayam:SetWayPointWithAutoDisable", currentRace.info.finish.coords.x, currentRace.info.finish.coords.y, currentRace.info.finish.coords.z, 280, 60, "Race Finish")
-                        -- 10 seconds count down
-                        TriggerEvent("chatMessage", "", {}, "Race starting in:")
-                        local lastRecorded = math.floor(secondsTillStart)
-                        while secondsTillStart <= 10 do
-                            secondsTillStart = GetMinutesUntilStart(currentRace, true) * 60
-                            -- display text
-                            print(secondsTillStart .. " seconds until start!")
-                            if math.floor(secondsTillStart) ~= lastRecorded then 
-                                lastRecorded = math.floor(secondsTillStart)
-                                TriggerEvent("chatMessage", "", {}, "^3" .. lastRecorded)
-                            end
-                            -- start race 
-                            if minutesUntilStart <= 0 then 
-                                currentRace.stage = "racing"
-                                exports.globals:notify("Race ~g~started~w~!")
-                            end
-                            Wait(10)
-                        end
-                    end
+            elseif currentRace.stage == "racing" then -- racing
+                local endcoords = currentRace.info.finish.coords
+                local isAtFinish = GetDistanceBetweenCoords(mycoords.x, mycoords.y, mycoords.z, endcoords.x, endcoords.y, endcoords.z, false) < 15
+                if isAtFinish then
+                    TriggerServerEvent("races:raceWon", currentRace.info.host.source)
+                    currentRace = nil
                 end
             end
         end
@@ -110,20 +103,5 @@ function GetMinutesUntilStartStr(race)
         return "less than one minute!"
     else
         return minsUntilStart .. " minute(s)!"
-    end
-end
-
-function GetMinutesUntilStart(race, float)
-    local minsRegistered = (GetGameTimer() - race.info.registerTime) / 1000 / 60
-    local minsUntilStart = -1
-    if float then 
-        minsUntilStart = race.info.minutesUntilStart - minsRegistered
-    else
-        minsUntilStart = math.floor(race.info.minutesUntilStart - minsRegistered)
-    end
-    if minsUntilStart <= 0 then
-        return 0
-    else
-        return minsUntilStart
     end
 end
