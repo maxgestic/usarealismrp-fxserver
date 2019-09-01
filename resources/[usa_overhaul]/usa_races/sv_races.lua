@@ -26,7 +26,9 @@ TriggerEvent('es:addCommand', 'hostrace', function(source, args, char, location)
 end, {
     help = "Host a race to bet on.",
     params = {
-        { name = "bet", help = "The betting amount for the race." }
+        { name = "bet", help = "The betting amount for the race." },
+        { name = "minutes", help = "The minutes until the race starts." },
+        { name = "title", help = "The title of the race." }
     }
 })
 
@@ -40,26 +42,45 @@ end, {
     help = "See available races to join."
 })
 
+RegisterNetEvent("races:askStartUntilTime")
+AddEventHandler("races:askStartUntilTime", function(host)
+    print("host: " .. host)
+    local raceInfo = hostedRaces[host]
+    local timeUntilStartStr = "The race is going to begin in "
+    local secondsUntilStart = raceInfo.minutesUntilStart * 60 - GetSecondsFromStart(raceInfo.registerTimeServer)
+    local minsTillStart = math.floor(secondsUntilStart / 60)
+    if minsTillStart > 0 then 
+        timeUntilStartStr = timeUntilStartStr .. "less than a minute! Get ready to start!"
+    else 
+        timeUntilStartStr = timeUntilStartStr .. minsTillStart .. " minute(s)!"
+    end
+    TriggerClientEvent("usa:notify", source, timeUntilStartStr)
+end)
+
+
 RegisterNetEvent("races:raceWon")
 AddEventHandler("races:raceWon", function(host)
     print("hosted of won race is: " .. host)
     print("race won! winner: " .. source)
     print("# of hosted races: " .. #hostedRaces)
     if hostedRaces[host] then 
-        print("race existed")
         hostedRaces[host].winner = source
         -- end race --
         local pot = 0
         for i = 1, #hostedRaces[host].participants do 
             local participant = hostedRaces[host].participants[i]
-            TriggerClientEvent("races:endRace", participant.source)
+            TriggerClientEvent("races:endRace", participant.get("source"))
             pot = pot + hostedRaces[host].bet
+            local isWinner = participant.get("source") == source
+            if not isWinner then 
+                participant.removeMoney(hostedRaces[host].bet)
+            end
         end
         -- TODO: update GUI here
         -- reward winner --
         local char = exports["usa-characters"]:GetCharacter(source)
         char.giveMoney(pot)
-        TriggerClientEvent("usa:notify", hostedRaces[host].winner, "You ~g~won~w~! You earned: $" .. pot, "^0You ~g~won~w~! You earned: $" .. pot)
+        TriggerClientEvent("usa:notify", hostedRaces[host].winner, "You ~g~won~w~! You earned: $" .. pot, "^0You ^2won^0! You earned: $" .. pot)
         print("player won $" .. pot .. " for winning a race!")
         hostedRaces[host] = nil
     end
@@ -70,7 +91,7 @@ AddEventHandler("races:removeParticipant", function(host)
     if hostedRaces[host] then 
         for i = 1, #hostedRaces[host].participants do 
             local participant = hostedRaces[host].participants[i]
-            if participant.source == source then 
+            if participant.get("source") == source then 
                 table.remove(hostedRaces[host].participants, i)
                 --- TODO: update GUI here for all clients with GUI open
                 return
@@ -86,14 +107,33 @@ AddEventHandler("races:joinRace", function(host)
         return
     end
     local char = exports["usa-characters"]:GetCharacter(source)
-    table.insert(hostedRaces[host].participants, {name = char.getName(), source = char.get("source")})
+    if char.get("job") ~= "civ" then
+        TriggerClientEvent("usa:notify", source, "Can't race while on the job!")
+        return
+    end
+    if char.get("money") < hostedRaces[host].bet then
+        TriggerClientEvent("usa:notify", source, "Not enough cash to enter race!")
+        return
+    end
+    if hostedRaces[host].started then 
+        TriggerClientEvent("usa:notify", source, "That race already started!")
+        return
+    end
+    table.insert(hostedRaces[host].participants, char)
     -- TODO: update GUI here for all clients with GUI open
-    --riggerClientEvent("usa:notify", source, "You have been enrolled in " .. hostedRaces[host].title .. "! Head to the waypoint!", "^0You have been enrolled in " .. hostedRaces[host].title .. "! Head to the waypoint!")
-    TriggerClientEvent("races:confirmJoin", source, hostedRaces[host])
+    local timeUntilStartStr = "The race is going to begin in "
+    local secondsUntilStart = hostedRaces[host].minutesUntilStart * 60 - GetSecondsFromStart(hostedRaces[host].registerTimeServer)
+    local minsTillStart = math.floor(secondsUntilStart / 60)
+    if minsTillStart > 0 then 
+        timeUntilStartStr = timeUntilStartStr .. "less than a minute! Hurry up and get to the waypoint!"
+    else 
+        timeUntilStartStr = timeUntilStartStr .. minsTillStart .. " minute(s)! Get to the waypoint!"
+    end
+    TriggerClientEvent("races:confirmJoin", source, hostedRaces[host], timeUntilStartStr)
 end)
 
 RegisterNetEvent("races:gotNewRaceCoords")
-AddEventHandler("races:gotNewRaceCoords", function(start, finish, bet, minutes, title, registerTime)
+AddEventHandler("races:gotNewRaceCoords", function(start, finish, bet, minutes, title)
     local char = exports["usa-characters"]:GetCharacter(source)
     local newRace = {
         host = {
@@ -105,7 +145,6 @@ AddEventHandler("races:gotNewRaceCoords", function(start, finish, bet, minutes, 
         bet = bet,
         started = false,
         registerTimeServer = os.time(),
-        registerTime = registerTime,
         minutesUntilStart = minutes,
         start = {
             coords = start
@@ -118,6 +157,7 @@ AddEventHandler("races:gotNewRaceCoords", function(start, finish, bet, minutes, 
     TriggerClientEvent("usa:notify", source, "You have registered a race with bet amount of $" .. newRace.bet, "^0You have registered a race with bet amount of $" .. newRace.bet ..". It will begin in " .. minutes .. " minute(s)!")
 end)
 
+-- TODO: make sure people who are out of range get DQ'd from the race
 --* race start event here, send start event to all participating clients
 Citizen.CreateThread(function()
     local lastRecordedSecond = -1
@@ -126,18 +166,18 @@ Citizen.CreateThread(function()
             local secondsUntilStart = raceInfo.minutesUntilStart * 60 - GetSecondsFromStart(raceInfo.registerTimeServer)
             if not raceInfo.started and secondsUntilStart <= 10 then
                 local participants = raceInfo.participants
-                if #participants > 0 then
+                if #participants > 1 then
                     if secondsUntilStart <= 10 and secondsUntilStart >= 1 then -- 10 second count down
                         if lastRecordedSecond ~= secondsUntilStart then
                             lastRecordedSecond = secondsUntilStart 
                             for i = 1, #participants do
                                 if secondsUntilStart >= 5 then
-                                    TriggerClientEvent("chatMessage", participants[i].source, "", {}, "^1" .. secondsUntilStart)
+                                    TriggerClientEvent("chatMessage", participants[i].get("source"), "", {}, "^1" .. secondsUntilStart)
                                 else 
-                                    TriggerClientEvent("chatMessage", participants[i].source, "", {}, "^3" .. secondsUntilStart)
+                                    TriggerClientEvent("chatMessage", participants[i].get("source"), "", {}, "^3" .. secondsUntilStart)
                                 end
                                 if not participants[i].waypointSet then 
-                                    TriggerClientEvent("races:setWaypoint", participants[i].source, raceInfo.finish.coords, "Race Finish")
+                                    TriggerClientEvent("races:setWaypoint", participants[i].get("source"), raceInfo.finish.coords, "Race Finish")
                                     participants[i].waypointSet = true
                                 end
                             end
@@ -145,8 +185,8 @@ Citizen.CreateThread(function()
                     elseif secondsUntilStart == 0 then -- start race
                         print("starting race with host " .. hostId .. ", num participants is " .. #participants)
                         for i = 1, #participants do 
-                            print("starting race for participant " .. participants[i].source .. ", source type is " .. type(participants[i].source))
-                            TriggerClientEvent("races:startRace", participants[i].source)
+                            print("starting race for participant " .. participants[i].get("source") .. ", source type is " .. type(participants[i].get("source")))
+                            TriggerClientEvent("races:startRace", participants[i].get("source"))
                         end
                         raceInfo.started = true
                     end

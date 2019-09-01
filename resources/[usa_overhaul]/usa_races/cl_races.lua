@@ -2,15 +2,13 @@ local isMenuOpen = false
 
 local currentRace = nil
 
--- TODO: mark race starting location as blip on map
-
 RegisterNetEvent("races:confirmJoin")
-AddEventHandler("races:confirmJoin", function(race)
+AddEventHandler("races:confirmJoin", function(race, timeUntilString)
     currentRace = {
         info = race,
         stage = "joined"
     }
-    TriggerEvent("usa:notify", "You have been enrolled in " .. currentRace.info.title .. "! Head to the waypoint!", "^0You have been enrolled in " .. currentRace.info.title .. "! Head to the waypoint! It starts in " .. GetMinutesUntilStartStr(currentRace))
+    TriggerEvent("usa:notify", "You have been enrolled in " .. currentRace.info.title .. "! Head to the waypoint!", "^0You have been enrolled in " .. currentRace.info.title .. "! Head to the waypoint! " .. timeUntilString)
     SetNewWaypoint(race.start.coords.x, race.start.coords.y)
 end)
 
@@ -24,8 +22,7 @@ AddEventHandler("races:getNewRaceCoords", function(bet, minutes, title)
     local mycoords = GetEntityCoords(me)
     local waypointBlip = GetFirstBlipInfoId(8) -- 8 = Waypoint ID
     local endCoord = Citizen.InvokeNative(0xFA7C7F0AADF25D09, waypointBlip, Citizen.ResultAsVector())
-    local registerTime = GetGameTimer()
-    TriggerServerEvent("races:gotNewRaceCoords", {x = mycoords.x, y = mycoords.y, z = mycoords.z}, {x = endCoord.x, y = endCoord.y, z = endCoord.z}, bet, minutes, title, registerTime)
+    TriggerServerEvent("races:gotNewRaceCoords", {x = mycoords.x, y = mycoords.y, z = mycoords.z}, {x = endCoord.x, y = endCoord.y, z = endCoord.z}, bet, minutes, title)
 end)
 
 RegisterNetEvent("races:toggleMenu")
@@ -41,16 +38,27 @@ end)
 
 RegisterNetEvent("races:startRace")
 AddEventHandler("races:startRace", function()
-    if currentRace then 
-        currentRace.stage = "racing"
-        exports.globals:notify("Race ~g~started~w~! Go, go, go!")
+    if currentRace then
+        local me = PlayerPedId()
+        local mycoords = GetEntityCoords(me)
+        local startCoords = currentRace.info.start.coords
+        local isAtStartCoords = GetDistanceBetweenCoords(mycoords.x, mycoords.y, mycoords.z, startCoords.x, startCoords.y, startCoords.z, false) < 25
+        if isAtStartCoords then
+            currentRace.stage = "racing"
+            exports.globals:notify("Race ~g~started~w~! Go, go, go!", "^0Race ^2started^0! Go, go, go!")
+        else 
+            exports.globals:notify("Out of range! Disqualified!")
+            currentRace = nil
+            TriggerEvent("swayam:RemoveWayPoint")
+        end
     end
 end)
 
 RegisterNetEvent("races:endRace")
 AddEventHandler("races:endRace", function()
     currentRace = nil
-    exports.globals:notify("Race ended!")
+    TriggerEvent("swayam:RemoveWayPoint")
+    exports.globals:notify("Race ended!", "^0Race ended!")
 end)
 
 RegisterNetEvent("races:setWaypoint")
@@ -66,7 +74,7 @@ RegisterNUICallback("joinRace", function(data, cb)
     if not currentRace then
         TriggerServerEvent("races:joinRace", data.host)
     else 
-        exports.globals:notify("You are already enrolled in a race!")
+        exports.globals:notify("You are already enrolled in a race!", "^0You are already enrolled in a race!")
     end
     TriggerEvent("races:toggleMenu", false)
 end)
@@ -80,7 +88,7 @@ Citizen.CreateThread(function()
                 local startCoords = currentRace.info.start.coords
                 local isAtStartCoords = GetDistanceBetweenCoords(mycoords.x, mycoords.y, mycoords.z, startCoords.x, startCoords.y, startCoords.z, false) < 25
                 if isAtStartCoords then 
-                    exports.globals:notify("The race will start here in " .. GetMinutesUntilStartStr(currentRace))
+                    TriggerServerEvent("races:askStartUntilTime", currentRace.info.host.source)
                     currentRace.stage = "waiting"
                 end
             elseif currentRace.stage == "racing" then -- racing
@@ -95,13 +103,3 @@ Citizen.CreateThread(function()
         Wait(5)
     end
 end)
-
-function GetMinutesUntilStartStr(race)
-    local minsRegistered = (GetGameTimer() - race.info.registerTime) / 1000 / 60
-    local minsUntilStart = math.floor(race.info.minutesUntilStart - minsRegistered)
-    if minsUntilStart <= 0 then
-        return "less than one minute!"
-    else
-        return minsUntilStart .. " minute(s)!"
-    end
-end
