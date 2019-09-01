@@ -40,6 +40,19 @@ end, {
     help = "See available races to join."
 })
 
+RegisterNetEvent("races:removeParticipant")
+AddEventHandler("races:removeParticipant", function(host)
+    if hostedRaces[host] then 
+        for i = 1, #hostedRaces[host].participants do 
+            local participant = hostedRaces[host].participants[i]
+            if participant.source == source then 
+                table.remove(hostedRaces[host].participants, i)
+                return
+            end
+        end
+    end
+end)
+
 RegisterNetEvent("races:joinRace")
 AddEventHandler("races:joinRace", function(host)
     if not hostedRaces[host] then 
@@ -60,7 +73,7 @@ AddEventHandler("races:joinRace", function(host)
 end)
 
 RegisterNetEvent("races:gotNewRaceCoords")
-AddEventHandler("races:gotNewRaceCoords", function(start, finish, bet, minutes, title)
+AddEventHandler("races:gotNewRaceCoords", function(start, finish, bet, minutes, title, registerTime)
     local char = exports["usa-characters"]:GetCharacter(source)
     local newRace = {
         host = {
@@ -70,6 +83,7 @@ AddEventHandler("races:gotNewRaceCoords", function(start, finish, bet, minutes, 
         title = title,
         participants = {},
         bet = bet,
+        registerTime = registerTime,
         minutesUntilStart = minutes,
         start = {
             coords = start
