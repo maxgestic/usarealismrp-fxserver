@@ -2,6 +2,14 @@ local isMenuOpen = false
 
 local currentRace = nil
 
+RegisterNetEvent("races:updateRaces")
+AddEventHandler("races:updateRaces", function(races)
+    SendNUIMessage({
+        type = "updateRaces",
+        races = races
+    })
+end)
+
 RegisterNetEvent("races:confirmJoin")
 AddEventHandler("races:confirmJoin", function(race, timeUntilString)
     currentRace = {
@@ -39,6 +47,11 @@ AddEventHandler("races:toggleMenu", function(doOpen, options)
         myId = options.myId or -1
     })
     SetNuiFocus(isMenuOpen, isMenuOpen)
+    if isMenuOpen then 
+        TriggerServerEvent("races:openedRaceList")
+    else 
+        TriggerServerEvent("races:closedRaceList")
+    end
 end)
 
 RegisterNetEvent("races:startRace")

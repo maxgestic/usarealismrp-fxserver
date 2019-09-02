@@ -12,6 +12,8 @@ document.onreadystatechange = () => {
                 App.isEnrolledInRace = true
             } else if (msg.type == "confirmLeave") {
                 App.isEnrolledInRace = false
+            } else if (msg.type == "updateRaces") {
+                App.races = msg.races
             }
         })
     }
