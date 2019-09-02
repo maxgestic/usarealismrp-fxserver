@@ -24,5 +24,6 @@ server_exports {
   "setJob",
   "comma_value",
   "GetHoursFromTime",
+  "GetSecondsFromTime",
   "SendDiscordLog"
 }

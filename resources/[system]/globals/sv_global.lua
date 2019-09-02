@@ -122,6 +122,10 @@ function GetHoursFromTime(time)
 	return math.floor(os.difftime(os.time(), time) / (60 * 60))
 end
 
+function GetSecondsFromTime(time)
+	return math.floor(os.difftime(os.time(), time))
+end
+
 function SendDiscordLog(webhookUrl, msg)
     PerformHttpRequest(webhookUrl, function(err, text, headers)
     end, "POST", json.encode({
