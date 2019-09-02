@@ -323,7 +323,7 @@ AddEventHandler('job:sendNewLog', function(source, job, isOnDuty)
 		author = 'User is Off-Duty'
 	end
 
-	local url = 'https://discordapp.com/api/webhooks/564121193058140160/pVOc_BO6_SGstdaVFI0DS-IMkD8Gz2Gd9ZLJpWGnXa3qdbfWWE0tG88jg7RDPq0CmGDo'
+	local url = 'https://discordapp.com/api/webhooks/618096197156208660/KmZtxRfaZmtuWW3BwIxWrxq5Meq0uXZzPJxBrDOridMh-NSX1OFHVbnGnX9Gpd9l1Ctw'
 	PerformHttpRequest(url, function(err, text, headers)
 		if text then
 			print(text)
@@ -381,7 +381,7 @@ AddEventHandler('playerDropped', function()
 		local userName = char.getFullName()
 		for i = 1, #jobsToLog do
 			if jobsToLog[i] == userJob then
-				local url = 'https://discordapp.com/api/webhooks/564121193058140160/pVOc_BO6_SGstdaVFI0DS-IMkD8Gz2Gd9ZLJpWGnXa3qdbfWWE0tG88jg7RDPq0CmGDo'
+				local url = "https://discordapp.com/api/webhooks/618096197156208660/KmZtxRfaZmtuWW3BwIxWrxq5Meq0uXZzPJxBrDOridMh-NSX1OFHVbnGnX9Gpd9l1Ctw"
 				PerformHttpRequest(url, function(err, text, headers)
 					if text then
 						print(text)

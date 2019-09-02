@@ -52,6 +52,8 @@ injuries = { -- ensure this is the same as sv_injury.lua
     [1432025498] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0} -- WEAPON_PUMPSHOTGUN_MK2
 }
 
+local WEBHOOK_URL = "https://discordapp.com/api/webhooks/618096654842593281/tz9hG-cD-2EqzMLr-4Z3KdRG1XHQyS8OhVLMWQLCIT6ebz6SGI6-iM0qgj-wXf8FBXBx"
+
 TriggerEvent('es:addCommand', 'injuries' , function(source, args, char)
 	TriggerClientEvent("injuries:showMyInjuries", source)
 end, {
@@ -121,8 +123,7 @@ TriggerEvent('es:addJobCommand', 'newrecord', {'ems', 'doctor'}, function(source
 	target.removeBank(payment)
 	TriggerClientEvent('usa:notify', targetSource, 'You have been charged ~y~$' .. payment .. '~s~ in medical fees, payment processed from bank.')
 	TriggerClientEvent('usa:notify', source, 'Medical record has been created!')
-	local url = 'https://discordapp.com/api/webhooks/558718499199909891/H7FDjVPAnBSqbTbTTGB3K9BT1U738ePh5dLIgnT697g_ItX9kS__LMbiVZUG70iihuVy'
-	PerformHttpRequest(url, function(err, text, headers)
+	PerformHttpRequest(WEBHOOK_URL, function(err, text, headers)
 		if text then
 			print(text)
 		end
@@ -205,8 +206,7 @@ AddEventHandler('injuries:sendLog', function(log, payment)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local userName = char.getFullName()
 	local userDOB = char.get('dateOfBirth')
-	local url = 'https://discordapp.com/api/webhooks/558718499199909891/H7FDjVPAnBSqbTbTTGB3K9BT1U738ePh5dLIgnT697g_ItX9kS__LMbiVZUG70iihuVy'
-	PerformHttpRequest(url, function(err, text, headers)
+	PerformHttpRequest(WEBHOOK_URL, function(err, text, headers)
 		if text then
 			print(text)
 		end

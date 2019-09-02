@@ -5,6 +5,8 @@ local permission = {
 
 local noNotifications = {}
 
+local WEBHOOK_URL = 'https://discordapp.com/api/webhooks/618094684849438730/ZN0KzS3EZfRU3Tyt4jn09ehK82BqXK_dtrTLkF2wRqq0b9lj-c4IafZtSiBK5BqlEJ5L'
+
 -- Adding custom groups called owner, inhereting from superadmin. (It's higher then superadmin). And moderator, higher then user but lower then admin
 TriggerEvent("es:addGroup", "owner", "superadmin", function(group) end)
 TriggerEvent("es:addGroup", "superadmin", "admin", function(group) end)
@@ -246,9 +248,7 @@ TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, char)
 			desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
 		end
 		desc = desc .. " \n**Reason:** " ..reason:gsub("Kicked: ", "").. " \n**Kicked By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
-
-		local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
-		PerformHttpRequest(url, function(err, text, headers)
+		PerformHttpRequest(WEBHOOK_URL, function(err, text, headers)
 			if text then
 				print(text)
 			end
@@ -586,8 +586,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 				desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
 			end
 			desc = desc .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** Console\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
-			local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
-				PerformHttpRequest(url, function(err, text, headers)
+				PerformHttpRequest(WEBHOOK_URL, function(err, text, headers)
 					if text then
 						print(text)
 					end
@@ -640,8 +639,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 				local desc = "\n**Name:** " .. targetPlayerName
 				desc = desc .. "\n**Identifier:** " .. targetPlayer
 				desc = desc .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** Console\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
-				local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
-				PerformHttpRequest(url, function(err, text, headers)
+				PerformHttpRequest(WEBHOOK_URL, function(err, text, headers)
 					if text then
 						print(text)
 					end
@@ -694,8 +692,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 				desc = desc .. "\n**Identifier:** " .. targetPlayer
 				desc = desc .. " \n**Time:** " .. time .. " hour(s)"
 				desc = desc .. " \n**Reason:** " ..reason:gsub("Temp Banned: ", "").. " \n**Banned By:** Console\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
-				local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
-				PerformHttpRequest(url, function(err, text, headers)
+				PerformHttpRequest(WEBHOOK_URL, function(err, text, headers)
 					if text then
 						print(text)
 					end
@@ -947,9 +944,7 @@ TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, char)
 			desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
 		end
 		desc = desc .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
-
-		local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
-			PerformHttpRequest(url, function(err, text, headers)
+			PerformHttpRequest(WEBHOOK_URL, function(err, text, headers)
 				if text then
 					print(text)
 				end
@@ -1015,8 +1010,7 @@ TriggerEvent('es:addGroupCommand', 'tempban', "mod", function(source, args, char
 		end
 		desc = desc .. " \n**Time:** " .. time .. " hour(s)"
 		desc = desc .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
-		local url = 'https://discordapp.com/api/webhooks/319634825264758784/V2ZWCUWsRG309AU-UeoEMFrAaDG74hhPtDaYL7i8H2U3C5TL_-xVjN43RNTBgG88h-J9'
-			PerformHttpRequest(url, function(err, text, headers)
+			PerformHttpRequest(WEBHOOK_URL, function(err, text, headers)
 				if text then
 					print(text)
 				end

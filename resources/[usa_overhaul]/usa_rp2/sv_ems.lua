@@ -90,7 +90,7 @@ TriggerEvent('es:addJobCommand', 'admit', { "ems", "fire", "police", "sheriff", 
 	TriggerClientEvent("ems:admitMe", targetPlayerId, bed, reasonForAdmission)
 	TriggerClientEvent('usa:notify', source, 'Person has been hospitalized.')
 	--send to discord #ems-logs
-	local url = 'https://discordapp.com/api/webhooks/375425187014770699/i6quT1ZKnFoZgOC4rSpudTc2ucmvfXuAUQJXqDI0oeKoeqLGX0etu-GGMpIKbKuAqk70'
+	local url = 'https://discordapp.com/api/webhooks/618095236211802113/IaUzzsbJWD97IHModohSjbruGjOz6eBQ-xRrRTwcYhbdbG9MqEiL4SRuiCHPH_R6OXrH'
 	PerformHttpRequest(url, function(err, text, headers)
 		if text then
 			print(text)

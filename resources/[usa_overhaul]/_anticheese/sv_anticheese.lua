@@ -14,10 +14,7 @@ violations = {}
 local instancedWarnings = {}
 --userLifeChecks = {}
 
-webhook = "https://discordapp.com/api/webhooks/459801084316352519/aYvDyiMOIt1OZJiyOZ3jg73qYsMUYLAP8iBv-EOovSqsDa1QTzwbPi3G3z4kKPwvHraQ"
-
-
-
+webhook = "https://discordapp.com/api/webhooks/618094411003199509/IeXSWsln5hPo83l5wles9m62kEAKAJQUry6cZvV0MQzCLa6mYgBZOEVdtwwjpC1MUwoh"
 
 AddEventHandler('anticheese:playerDropped', function(userSource)
 	local key = tostring(userSource)

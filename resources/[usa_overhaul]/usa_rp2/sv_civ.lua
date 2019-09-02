@@ -465,7 +465,7 @@ function TradeVehicle(details)
 				"\n**Buyer:** " .. newOwnerName ..
 				"\n**Price:** $" .. details.price ..
 				"\n**Date:** ".. timestamp.month .. "/" .. timestamp.day .."/" .. timestamp.year
-				SendDiscordMessage(desc, "https://discordapp.com/api/webhooks/436965351004307466/FY-o_sGScUYFQpo9Y18-ZP-L_HdWRXoDZ1eO2AeD7uXzmg5JwWzqlb07Bbf1Yvv0_W-k", 524288)
+				SendDiscordMessage(desc, "https://discordapp.com/api/webhooks/618096418388705291/32_PzUcyLTAxDunODw8nf3E57nhjVAoaVZt1LrSOiwLC5EdXkQnyvtLBj_0bdLLSyd04", 524288)
 			end)
 		end)
 	else
