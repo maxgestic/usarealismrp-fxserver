@@ -18,6 +18,7 @@ const CHome = Vue.component("CHome", {
                     <p class="race-participants" v-else><small>Be the first to join!</small></p>
                 </div>
                 <button class="w3-btn w3-green w3-margin-top" @click="joinRace(race.host.source)">Join Race</button>
+                <button v-if="isEnrolledInRace == true" class="w3-btn w3-gray w3-margin-top" @click="leaveRace(race.host.source)">Leave Race</button>
             </div>
         </section>
         <!--
@@ -27,10 +28,15 @@ const CHome = Vue.component("CHome", {
         -->
     </div>
     `,
-    props: ["races", "myId"],
+    props: ["races", "myId", "isEnrolledInRace"],
     methods: {
         joinRace: function(host) {
             $.post("http://usa_races/joinRace", JSON.stringify({
+                host: host
+            }))
+        },
+        leaveRace: function(host) {
+            $.post("http://usa_races/leaveRace", JSON.stringify({
                 host: host
             }))
         },

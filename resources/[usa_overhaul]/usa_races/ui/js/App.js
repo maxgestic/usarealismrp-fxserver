@@ -16,7 +16,8 @@ const App = new Vue({
             }
             */
         ],
-        myId: -1
+        myId: -1,
+        isEnrolledInRace: false
     },
     computed: {
         currentTabComponent: function () {

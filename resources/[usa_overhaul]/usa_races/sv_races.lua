@@ -84,17 +84,20 @@ AddEventHandler("races:raceWon", function(host)
     end
 end)
 
-RegisterNetEvent("races:removeParticipant")
-AddEventHandler("races:removeParticipant", function(host)
-    if hostedRaces[host] then 
+RegisterNetEvent("races:leaveRace")
+AddEventHandler("races:leaveRace", function(host)
+    if hostedRaces[host] and not hostedRaces[host].started then 
         for i = 1, #hostedRaces[host].participants do 
             local participant = hostedRaces[host].participants[i]
             if participant.source == source then 
+                TriggerClientEvent("races:endRace", participant.source, "You left the race!")
                 table.remove(hostedRaces[host].participants, i)
-                --- TODO: update GUI here for all clients with GUI open
+                -- TODO: update GUI here for all clients with GUI open
                 return
             end
         end
+    else 
+        TriggerClientEvent("usa:notify", source, "Can't leave now! Race in progress!")
     end
 end)
 

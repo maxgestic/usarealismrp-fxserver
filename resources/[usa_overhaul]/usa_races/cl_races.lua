@@ -10,6 +10,9 @@ AddEventHandler("races:confirmJoin", function(race, timeUntilString)
     }
     TriggerEvent("usa:notify", "You have been enrolled in " .. currentRace.info.title .. "! Head to the waypoint!", "^0You have been enrolled in " .. currentRace.info.title .. "! Head to the waypoint! " .. timeUntilString)
     SetNewWaypoint(race.start.coords.x, race.start.coords.y)
+    SendNUIMessage({
+        type = "confirmJoin"
+    })
 end)
 
 RegisterNetEvent("races:getNewRaceCoords")
@@ -65,11 +68,18 @@ AddEventHandler("races:endRace", function(reason)
         msg = msg .. " " .. reason
     end
     exports.globals:notify(msg, "^0" .. msg)
+    SendNUIMessage({
+        type = "confirmLeave"
+    })
 end)
 
 RegisterNetEvent("races:setWaypoint")
 AddEventHandler("races:setWaypoint", function(coords, label)
     TriggerEvent("swayam:SetWayPointWithAutoDisable", coords.x, coords.y, coords.z, 280, 60, label)
+end)
+
+RegisterNUICallback("leaveRace", function(data, cb)
+    TriggerServerEvent("races:leaveRace", data.host)
 end)
 
 RegisterNUICallback("deleteRace", function(data, cb)

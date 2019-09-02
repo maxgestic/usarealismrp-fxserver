@@ -8,6 +8,10 @@ document.onreadystatechange = () => {
                     App.races = msg.races
                     App.myId = msg.myId
                 }
+            } else if (msg.type == "confirmJoin") {
+                App.isEnrolledInRace = true
+            } else if (msg.type == "confirmLeave") {
+                App.isEnrolledInRace = false
             }
         })
     }
