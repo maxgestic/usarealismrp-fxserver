@@ -55,10 +55,14 @@ AddEventHandler("races:startRace", function()
 end)
 
 RegisterNetEvent("races:endRace")
-AddEventHandler("races:endRace", function()
+AddEventHandler("races:endRace", function(reason)
     currentRace = nil
     TriggerEvent("swayam:RemoveWayPoint")
-    exports.globals:notify("Race ended!", "^0Race ended!")
+    local msg = "Race ended!"
+    if reason then 
+        msg = msg .. " " .. reason
+    end
+    exports.globals:notify(msg, "^0" .. msg)
 end)
 
 RegisterNetEvent("races:setWaypoint")

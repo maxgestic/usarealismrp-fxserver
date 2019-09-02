@@ -190,8 +190,8 @@ Citizen.CreateThread(function()
                         end
                         raceInfo.started = true
                     end
-                else
-                    EndRace(hostId)
+                else              
+                    EndRace(hostId, "Not enough participants!")
                 end
             end
         end
@@ -199,10 +199,10 @@ Citizen.CreateThread(function()
     end
 end)
 
-function EndRace(host)
+function EndRace(host, reason)
     for i = 1, #hostedRaces[host].participants do 
         local participant = hostedRaces[host].participants[i]
-        TriggerClientEvent("races:endRace", participant.source)
+        TriggerClientEvent("races:endRace", participant.source, reason)
     end
     hostedRaces[host] = nil
 end
