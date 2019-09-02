@@ -86,7 +86,7 @@ Citizen.CreateThread(function()
             local mycoords = GetEntityCoords(me)
             if currentRace.stage == "joined" then -- driving towards start
                 local startCoords = currentRace.info.start.coords
-                local isAtStartCoords = GetDistanceBetweenCoords(mycoords.x, mycoords.y, mycoords.z, startCoords.x, startCoords.y, startCoords.z, false) < 25
+                local isAtStartCoords = GetDistanceBetweenCoords(mycoords.x, mycoords.y, mycoords.z, startCoords.x, startCoords.y, startCoords.z, false) < 30
                 if isAtStartCoords then 
                     TriggerServerEvent("races:askStartUntilTime", currentRace.info.host.source)
                     currentRace.stage = "waiting"

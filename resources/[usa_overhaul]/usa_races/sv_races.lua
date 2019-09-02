@@ -44,7 +44,6 @@ end, {
 
 RegisterNetEvent("races:askStartUntilTime")
 AddEventHandler("races:askStartUntilTime", function(host)
-    print("host: " .. host)
     local raceInfo = hostedRaces[host]
     local timeUntilStartStr = "The race is going to begin in "
     local secondsUntilStart = raceInfo.minutesUntilStart * 60 - GetSecondsFromStart(raceInfo.registerTimeServer)
@@ -60,20 +59,19 @@ end)
 
 RegisterNetEvent("races:raceWon")
 AddEventHandler("races:raceWon", function(host)
-    print("hosted of won race is: " .. host)
-    print("race won! winner: " .. source)
-    print("# of hosted races: " .. #hostedRaces)
     if hostedRaces[host] then 
         hostedRaces[host].winner = source
         -- end race --
         local pot = 0
         for i = 1, #hostedRaces[host].participants do 
             local participant = hostedRaces[host].participants[i]
-            TriggerClientEvent("races:endRace", participant.get("source"))
-            pot = pot + hostedRaces[host].bet
-            local isWinner = participant.get("source") == source
+            TriggerClientEvent("races:endRace", participant.source)
+            local isWinner = participant.source == source
             if not isWinner then 
-                participant.removeMoney(hostedRaces[host].bet)
+                pot = pot + hostedRaces[host].bet
+                local participantChar = exports["usa-characters"]:GetCharacter(participant.source)
+                participantChar.removeMoney(hostedRaces[host].bet)
+                print("removing $" .. hostedRaces[host].bet .. " from source " .. participant.source)
             end
         end
         -- TODO: update GUI here
@@ -91,7 +89,7 @@ AddEventHandler("races:removeParticipant", function(host)
     if hostedRaces[host] then 
         for i = 1, #hostedRaces[host].participants do 
             local participant = hostedRaces[host].participants[i]
-            if participant.get("source") == source then 
+            if participant.source == source then 
                 table.remove(hostedRaces[host].participants, i)
                 --- TODO: update GUI here for all clients with GUI open
                 return
@@ -119,12 +117,12 @@ AddEventHandler("races:joinRace", function(host)
         TriggerClientEvent("usa:notify", source, "That race already started!")
         return
     end
-    table.insert(hostedRaces[host].participants, char)
+    table.insert(hostedRaces[host].participants, {name = char.getName(), source = char.get("source")})
     -- TODO: update GUI here for all clients with GUI open
     local timeUntilStartStr = "The race is going to begin in "
     local secondsUntilStart = hostedRaces[host].minutesUntilStart * 60 - GetSecondsFromStart(hostedRaces[host].registerTimeServer)
     local minsTillStart = math.floor(secondsUntilStart / 60)
-    if minsTillStart > 0 then 
+    if minsTillStart <= 0 then 
         timeUntilStartStr = timeUntilStartStr .. "less than a minute! Hurry up and get to the waypoint!"
     else 
         timeUntilStartStr = timeUntilStartStr .. minsTillStart .. " minute(s)! Get to the waypoint!"
@@ -157,7 +155,6 @@ AddEventHandler("races:gotNewRaceCoords", function(start, finish, bet, minutes, 
     TriggerClientEvent("usa:notify", source, "You have registered a race with bet amount of $" .. newRace.bet, "^0You have registered a race with bet amount of $" .. newRace.bet ..". It will begin in " .. minutes .. " minute(s)!")
 end)
 
--- TODO: make sure people who are out of range get DQ'd from the race
 --* race start event here, send start event to all participating clients
 Citizen.CreateThread(function()
     local lastRecordedSecond = -1
@@ -172,26 +169,23 @@ Citizen.CreateThread(function()
                             lastRecordedSecond = secondsUntilStart 
                             for i = 1, #participants do
                                 if secondsUntilStart >= 5 then
-                                    TriggerClientEvent("chatMessage", participants[i].get("source"), "", {}, "^1" .. secondsUntilStart)
+                                    TriggerClientEvent("chatMessage", participants[i].source, "", {}, "^1" .. secondsUntilStart)
                                 else 
-                                    TriggerClientEvent("chatMessage", participants[i].get("source"), "", {}, "^3" .. secondsUntilStart)
+                                    TriggerClientEvent("chatMessage", participants[i].source, "", {}, "^3" .. secondsUntilStart)
                                 end
                                 if not participants[i].waypointSet then 
-                                    TriggerClientEvent("races:setWaypoint", participants[i].get("source"), raceInfo.finish.coords, "Race Finish")
+                                    TriggerClientEvent("races:setWaypoint", participants[i].source, raceInfo.finish.coords, "Race Finish")
                                     participants[i].waypointSet = true
                                 end
                             end
                         end
                     elseif secondsUntilStart == 0 then -- start race
-                        print("starting race with host " .. hostId .. ", num participants is " .. #participants)
-                        for i = 1, #participants do 
-                            print("starting race for participant " .. participants[i].get("source") .. ", source type is " .. type(participants[i].get("source")))
-                            TriggerClientEvent("races:startRace", participants[i].get("source"))
+                        for i = 1, #participants do
+                            TriggerClientEvent("races:startRace", participants[i].source)
                         end
                         raceInfo.started = true
                     end
-                else 
-                    print("calling EndRace()")
+                else
                     EndRace(hostId)
                 end
             end
@@ -201,6 +195,10 @@ Citizen.CreateThread(function()
 end)
 
 function EndRace(host)
+    for i = 1, #hostedRaces[host].participants do 
+        local participant = hostedRaces[host].participants[i]
+        TriggerClientEvent("races:endRace", participant.source)
+    end
     hostedRaces[host] = nil
 end
 
