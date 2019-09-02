@@ -37,7 +37,7 @@ TriggerEvent('es:addCommand', 'joinrace', function(source, args, char)
     for hostId, raceInfo in pairs(hostedRaces) do 
         table.insert(races, raceInfo)
     end
-    TriggerClientEvent("races:toggleMenu", source, true, races)
+    TriggerClientEvent("races:toggleMenu", source, true, {races = races, myId = source})
 end, {
     help = "See available races to join."
 })
@@ -133,6 +133,16 @@ AddEventHandler("races:joinRace", function(host)
         timeUntilStartStr = timeUntilStartStr .. minsTillStart .. " minute(s)! Get to the waypoint!"
     end
     TriggerClientEvent("races:confirmJoin", source, hostedRaces[host], timeUntilStartStr)
+end)
+
+RegisterNetEvent("races:deleteRace")
+AddEventHandler("races:deleteRace", function(host)
+    local raceInfo = hostedRaces[host]
+    for i = 1, #raceInfo.participants do 
+        TriggerClientEvent("races:endRace", raceInfo.participants[i].source)
+    end
+    hostedRaces[host] = nil
+    -- TODO: update GUI here for clients with it open
 end)
 
 RegisterNetEvent("races:gotNewRaceCoords")

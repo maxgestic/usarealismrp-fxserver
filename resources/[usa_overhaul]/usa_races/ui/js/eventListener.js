@@ -6,6 +6,7 @@ document.onreadystatechange = () => {
                 document.body.style.display = msg.doOpen ? "block" : "none";
                 if (msg.doOpen) {
                     App.races = msg.races
+                    App.myId = msg.myId
                 }
             }
         })

@@ -15,7 +15,8 @@ const App = new Vue({
                 bet: 420
             }
             */
-        ]
+        ],
+        myId: -1
     },
     computed: {
         currentTabComponent: function () {

@@ -26,12 +26,14 @@ AddEventHandler("races:getNewRaceCoords", function(bet, minutes, title)
 end)
 
 RegisterNetEvent("races:toggleMenu")
-AddEventHandler("races:toggleMenu", function(doOpen, races)
+AddEventHandler("races:toggleMenu", function(doOpen, options)
+    if not options then options = {} end
     isMenuOpen = doOpen
     SendNUIMessage({
         type = "toggle",
         doOpen = isMenuOpen,
-        races = races or {}
+        races = options.races or {},
+        myId = options.myId or -1
     })
     SetNuiFocus(isMenuOpen, isMenuOpen)
 end)
@@ -68,6 +70,10 @@ end)
 RegisterNetEvent("races:setWaypoint")
 AddEventHandler("races:setWaypoint", function(coords, label)
     TriggerEvent("swayam:SetWayPointWithAutoDisable", coords.x, coords.y, coords.z, 280, 60, label)
+end)
+
+RegisterNUICallback("deleteRace", function(data, cb)
+    TriggerServerEvent("races:deleteRace", data.host)
 end)
 
 RegisterNUICallback("closeMenu", function(data, cb)

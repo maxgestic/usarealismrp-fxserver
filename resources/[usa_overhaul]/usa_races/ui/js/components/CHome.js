@@ -7,7 +7,8 @@ const CHome = Vue.component("CHome", {
             <h2>Browse all races</h2>
         </header>
         <section class="grid-container">
-            <div v-for="(race, index) in races" class="race w3-card">
+            <div v-for="(race, index) in races" class="race w3-card w3-display-container">
+                <span v-if="race.host.source == myId" id="delete-race-btn" class="w3-button w3-display-topright" @click="deleteRace(race.host.source)">&times;</span>
                 <p class="race-title">{{race.title}}</p>
                 <img src="https://fazewp-fazemediainc.netdna-ssl.com/cms/wp-content/uploads/2014/12/streetracing_2.jpg" height="160px">
                 <p class="race-bet"><span>Bet Amount: $</span>{{race.bet}}</p>
@@ -26,7 +27,7 @@ const CHome = Vue.component("CHome", {
         -->
     </div>
     `,
-    props: ["races"],
+    props: ["races", "myId"],
     methods: {
         joinRace: function(host) {
             $.post("http://usa_races/joinRace", JSON.stringify({
@@ -35,6 +36,11 @@ const CHome = Vue.component("CHome", {
         },
         close: function() {
             $.post("http://usa_races/closeMenu", JSON.stringify({}))
+        },
+        deleteRace: function(host) {
+            $.post("http://usa_races/deleteRace", JSON.stringify({
+                host: host
+            }))
         }
     }
 })
