@@ -245,7 +245,8 @@ TriggerEvent('es:addCommand', 'walkstyle', function(source, args, char, location
 	else
 		if style_number ~= 0 then
 			if isSignedInWithFiveM then
-				if walkstyles[style_number].premium and not DoesPlayerOwnSku(usource, 16) then 
+				local user = exports["essentialmode"]:getPlayerFromId(usource)
+				if walkstyles[style_number].premium and not DoesPlayerOwnSku(usource, 16) and user.getGroup() == "user" then 
 					TriggerClientEvent("usa:notify", usource, "You've discovered a premium walkstyle!", "^0You've discovered a premium feature! Type ^3/store^0 to purchase that walkstyle!")
 					return
 				end
