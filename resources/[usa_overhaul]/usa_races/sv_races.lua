@@ -117,7 +117,12 @@ AddEventHandler("races:joinRace", function(host)
         TriggerClientEvent("usa:notify", source, "That race already started!")
         return
     end
-    table.insert(hostedRaces[host].participants, {name = char.getName(), source = char.get("source")})
+    local newRacer = {name = char.getName(), source = char.get("source")}
+    for i = 1, #hostedRaces[host].participants do -- notify racers that a new racer joined
+        local r = hostedRaces[host].participants[i]
+        TriggerClientEvent("usa:notify", r.get("source"), newRacer.name .. " has joined the race!", "^0" .. newRacer.name .. " has joined the race!")
+    end
+    table.insert(hostedRaces[host].participants, newRacer)
     -- TODO: update GUI here for all clients with GUI open
     local timeUntilStartStr = "The race is going to begin in "
     local secondsUntilStart = hostedRaces[host].minutesUntilStart * 60 - GetSecondsFromStart(hostedRaces[host].registerTimeServer)
