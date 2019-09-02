@@ -1,23 +1,23 @@
 local VEHICLES = {
   --{name = "ORACLE", reward = 5000},
-  {name = "ORACLE2", reward = 300},
-  {name = "FLATBED", reward = 400},
-  {name = "SADLER", reward = 400}, -- ford 150
-  {name = "EMPEROR", reward = 100},
-  {name = "BFINJECT", reward = 150},
-  {name = "SANCHEZ02", reward = 200},
-  {name = "REBEL02", reward = 300},
-  {name = "SEMINOLE", reward = 250},
-  {name = "BOBCATXL", reward = 300},
-  {name = "BUFFALO", reward = 400}, -- chrystler 300
-  {name = "RUINER", reward = 250},
-  {name = "BLISTA2", reward = 300},
-  {name = "TORNADO3", reward = 150},
-  {name = "SABREGT", reward = 400}, -- ford mustang boss
-  {name = "FUGITIVE", reward = 400}, -- masseratti quattroporte
-  {name = "DUBSTA", reward = 300},
-  {name = "PEYOTE", reward = 250},
-  {name = "SANDKING", reward = 300}
+  {name = "ORACLE2", reward = 400},
+  {name = "FLATBED", reward = 500},
+  {name = "SADLER", reward = 500},
+  {name = "EMPEROR", reward = 200},
+  {name = "BFINJECT", reward = 250},
+  {name = "SANCHEZ02", reward = 300},
+  {name = "REBEL02", reward = 400},
+  {name = "SEMINOLE", reward = 350},
+  {name = "BOBCATXL", reward = 400},
+  {name = "BUFFALO", reward = 500},
+  {name = "RUINER", reward = 350},
+  {name = "BLISTA2", reward = 400},
+  {name = "TORNADO3", reward = 250},
+  {name = "SABREGT", reward = 500},
+  {name = "FUGITIVE", reward = 500},
+  {name = "DUBSTA", reward = 400},
+  {name = "PEYOTE", reward = 350},
+  {name = "SANDKING", reward = 400}
 }
 
 local vehiclesWanted = {}
