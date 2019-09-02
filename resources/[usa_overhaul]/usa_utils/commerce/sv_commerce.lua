@@ -1,4 +1,4 @@
-TriggerEvent("es:addCommand", "store", function(source, char, args, location)
+TriggerEvent("es:addCommand", "store", function(source, args, char, location)
     if CanPlayerStartCommerceSession(source) then 
         TriggerClientEvent("commerce:openStore", source)
     else 
@@ -8,7 +8,7 @@ end, {
 	help = "Open the in-game market place!"
 })
 
-TriggerEvent("es:addCommand", "commerce", function(source, char, args, location)
+TriggerEvent("es:addCommand", "commerce", function(source, args, char, location)
     if CanPlayerStartCommerceSession(source) then 
         TriggerClientEvent("commerce:openStore", source)
     else 
