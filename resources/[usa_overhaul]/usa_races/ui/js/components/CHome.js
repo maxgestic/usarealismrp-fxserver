@@ -6,8 +6,9 @@ const CHome = Vue.component("CHome", {
         <header>
             <h2>Browse all races</h2>
         </header>
+        <h3 class="w3-margin-left" v-if="races.length <= 0 ">There are no races being hosted! Do /hostrace to start one!</h3>
         <section class="grid-container">
-            <div v-for="(race, index) in races" class="race w3-card w3-display-container">
+            <div v-for="(race, index) in races" v-if="race" class="race w3-card w3-display-container">
                 <span v-if="race.host.source == myId" id="delete-race-btn" class="w3-button w3-display-topright" @click="deleteRace(race.host.source)">&times;</span>
                 <p class="race-title">{{race.title}}</p>
                 <img src="https://fazewp-fazemediainc.netdna-ssl.com/cms/wp-content/uploads/2014/12/streetracing_2.jpg" height="160px">
@@ -18,7 +19,7 @@ const CHome = Vue.component("CHome", {
                     <p class="race-participants" v-else><small>Be the first to join!</small></p>
                 </div>
                 <button class="w3-btn w3-green w3-margin-top" @click="joinRace(race.host.source)">Join Race</button>
-                <button v-if="isEnrolledInRace == true" class="w3-btn w3-gray w3-margin-top" @click="leaveRace(race.host.source)">Leave Race</button>
+                <button v-if="isEnrolledInRace == true && race" class="w3-btn w3-gray w3-margin-top" @click="leaveRace(race.host.source)">Leave Race</button>
             </div>
         </section>
         <!--

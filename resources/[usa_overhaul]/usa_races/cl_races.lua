@@ -26,7 +26,7 @@ end)
 RegisterNetEvent("races:getNewRaceCoords")
 AddEventHandler("races:getNewRaceCoords", function(bet, minutes, title)
     if not IsWaypointActive() then 
-        exports.globals:notify("You must set a waypoint to start a race!")
+        exports.globals:notify("You must set a waypoint to start a race!", "^0You must set a waypoint to start a race!")
         return
     end
     local me = PlayerPedId()

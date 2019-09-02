@@ -2,6 +2,8 @@ local hostedRaces = {}
 
 local hasMenuOpen = {} -- help update clients in real time
 
+local MINIMUM_PARTICIPANTS = 1
+
 TriggerEvent('es:addCommand', 'hostrace', function(source, args, char, location)
     local bet = tonumber(args[2])
     local minutes = tonumber(args[3])
@@ -138,7 +140,7 @@ AddEventHandler("races:joinRace", function(host)
     local newRacer = {name = char.getName(), source = char.get("source")}
     for i = 1, #hostedRaces[host].participants do -- notify racers that a new racer joined
         local r = hostedRaces[host].participants[i]
-        TriggerClientEvent("usa:notify", r.get("source"), newRacer.name .. " has joined the race!", "^0" .. newRacer.name .. " has joined the race!")
+        TriggerClientEvent("usa:notify", r.source, newRacer.name .. " has joined the race!", "^0" .. newRacer.name .. " has joined the race!")
     end
     table.insert(hostedRaces[host].participants, newRacer)
     local timeUntilStartStr = "The race is going to begin in "
@@ -186,6 +188,7 @@ AddEventHandler("races:gotNewRaceCoords", function(start, finish, bet, minutes, 
     }
     hostedRaces[source] = newRace
     TriggerClientEvent("usa:notify", source, "You have registered a race with bet amount of $" .. newRace.bet, "^0You have registered a race with bet amount of $" .. newRace.bet ..". It will begin in " .. minutes .. " minute(s)!")
+    UpdateClientsRealtime()
 end)
 
 --* race start event here, send start event to all participating clients
@@ -201,10 +204,14 @@ Citizen.CreateThread(function()
                         lastRecordedSecond = secondsUntilStart 
                         for i = 1, #participants do
                             TriggerClientEvent("usa:notify", participants[i].source, "Race starts in ~y~30 seconds~w~!", "^0Race starts in ^330 seconds^0! Stay near the starting point!")
+                            if not participants[i].waypointSet then 
+                                TriggerClientEvent("races:setWaypoint", participants[i].source, raceInfo.finish.coords, "Race Finish")
+                                participants[i].waypointSet = true
+                            end
                         end
                     end
                 elseif secondsUntilStart <= 10 then
-                    if #participants > 1 then
+                    if #participants > MINIMUM_PARTICIPANTS then
                         if secondsUntilStart <= 10 and secondsUntilStart >= 1 then -- 10 second count down
                             if lastRecordedSecond ~= secondsUntilStart then
                                 lastRecordedSecond = secondsUntilStart 
@@ -213,10 +220,6 @@ Citizen.CreateThread(function()
                                         TriggerClientEvent("chatMessage", participants[i].source, "", {}, "^1" .. secondsUntilStart)
                                     else 
                                         TriggerClientEvent("chatMessage", participants[i].source, "", {}, "^3" .. secondsUntilStart)
-                                    end
-                                    if not participants[i].waypointSet then 
-                                        TriggerClientEvent("races:setWaypoint", participants[i].source, raceInfo.finish.coords, "Race Finish")
-                                        participants[i].waypointSet = true
                                     end
                                 end
                             end
@@ -251,7 +254,6 @@ end
 
 function UpdateClientsRealtime()
     for id, open in pairs(hasMenuOpen) do 
-        print("updating " .. id)
         TriggerClientEvent("races:updateRaces", id, hostedRaces)
     end
 end
