@@ -8,7 +8,7 @@ files {
     "commerce/ui/js/vue.min.js",
     "commerce/ui/js/components/CHome.js",
     "commerce/ui/js/App.js",
-    "commerce/ui/js/script.js"
+    "commerce/ui/js/eventListener.js"
 }
 
 client_scripts { 
