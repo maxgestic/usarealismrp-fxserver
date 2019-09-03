@@ -2,10 +2,10 @@ local hostedRaces = {}
 
 local hasMenuOpen = {} -- help update clients in real time
 
-local MINIMUM_PARTICIPANTS = 1
+local MINIMUM_PARTICIPANTS = 0
 
 TriggerEvent('es:addCommand', 'hostrace', function(source, args, char, location)
-    local bet = tonumber(args[2])
+    local bet = math.abs(tonumber(args[2]))
     local minutes = tonumber(args[3])
     table.remove(args, 1)
     table.remove(args, 1)
@@ -208,6 +208,7 @@ Citizen.CreateThread(function()
                                 TriggerClientEvent("races:setWaypoint", participants[i].source, raceInfo.finish.coords, "Race Finish")
                                 participants[i].waypointSet = true
                             end
+                            TriggerEvent("InteractSound_SV:PlayOnOne", participants[i].source, "1beep", 0.7)
                         end
                     end
                 elseif secondsUntilStart <= 10 then
@@ -221,11 +222,13 @@ Citizen.CreateThread(function()
                                     else 
                                         TriggerClientEvent("chatMessage", participants[i].source, "", {}, "^3" .. secondsUntilStart)
                                     end
+                                    --TriggerEvent("InteractSound_SV:PlayOnOne", participants[i].source, "1beep", 0.7)
                                 end
                             end
                         elseif secondsUntilStart == 0 then -- start race
                             for i = 1, #participants do
                                 TriggerClientEvent("races:startRace", participants[i].source)
+                                --TriggerEvent("InteractSound_SV:PlayOnOne", participants[i].source, "race-start-beep", 0.7)
                             end
                             raceInfo.started = true
                         end

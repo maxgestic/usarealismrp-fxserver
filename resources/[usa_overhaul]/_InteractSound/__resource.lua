@@ -21,7 +21,7 @@ ui_page('client/html/index.html')
 files({
     'client/html/index.html',
     -- Begin Sound Files Here...
-	  'client/html/sounds/atc3.ogg',
+	'client/html/sounds/atc3.ogg',
     'client/html/sounds/cell-lock.ogg',
     'client/html/sounds/handcuff.ogg',
     'client/html/sounds/weed-process.ogg',
@@ -43,5 +43,7 @@ files({
 	'client/html/sounds/knock2.ogg',
 	'client/html/sounds/cabinet1.ogg',
 	'client/html/sounds/cabinet2.ogg',
-	'client/html/sounds/radio-beep.ogg'
+	'client/html/sounds/radio-beep.ogg',
+	'client/html/sounds/1beep.ogg',
+	'client/html/sounds/race-start-beep.ogg'
 })
