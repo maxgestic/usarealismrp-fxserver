@@ -70,7 +70,8 @@ Citizen.CreateThread(function()
 						if GetIsVehicleEngineRunning(playerVeh) then
 							TriggerEvent('usa:notify', '~y~Vehicle engine must be off!')
 						else
-							TriggerServerEvent('autoRepair:checkMoney')
+							local business = exports["usa-businesses"]:GetClosestStore(15)
+							TriggerServerEvent('autoRepair:checkMoney', business)
 						end
 					else
 						TriggerEvent('usa:notify', '~y~Your vehicle does not require any repairs!')

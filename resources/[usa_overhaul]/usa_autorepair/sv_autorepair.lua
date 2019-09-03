@@ -1,7 +1,7 @@
 local REPAIR_COST = 300
 
 RegisterServerEvent("autoRepair:checkMoney")
-AddEventHandler("autoRepair:checkMoney", function()
+AddEventHandler("autoRepair:checkMoney", function(business)
   local char = exports["usa-characters"]:GetCharacter(source)
   local job = char.get("job")
   if job == "sheriff" or job == "ems" or job == "fire" or job == "dai" then
@@ -14,4 +14,9 @@ AddEventHandler("autoRepair:checkMoney", function()
       TriggerClientEvent("usa:notify", source, 'You cannot afford this purchase!')
     end
   end
+  if business then
+    exports["usa-businesses"]:GiveBusinessCashPercent(business, REPAIR_COST)
+  end
 end)
+
+-- TODO: dynamic-afy the repair cost to use engine and body health from client
