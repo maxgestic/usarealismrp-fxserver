@@ -46,6 +46,12 @@ end, {
     help = "See available races to join."
 })
 
+AddEventHandler("playerDropped", function(reason) -- cleaning up
+    if hasMenuOpen[source] then 
+        hasMenuOpen = nil
+    end
+end)
+
 RegisterNetEvent("races:openedRaceList")
 AddEventHandler("races:openedRaceList", function()
     if not hasMenuOpen[source] then 
