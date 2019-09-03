@@ -117,7 +117,7 @@ function jailPlayer(data, officerName, gender)
 		suspensions = suspensions .. "\nFP revoked permanently"
 	end
 	-- send to discord #jail-logs --
-	local url = 'https://discordapp.com/api/webhooks/618095236211802113/IaUzzsbJWD97IHModohSjbruGjOz6eBQ-xRrRTwcYhbdbG9MqEiL4SRuiCHPH_R6OXrH'
+	local url = 'https://discordapp.com/api/webhooks/617497481466478603/j-6d89PaZNtZYohmBVgHMATb5WvjfHogZBX9CtRscJQY91ybNWDi1hyZ7uSVV0la50MR'
 	if not suspensions then suspensions = "None" end
 	PerformHttpRequest(url, function(err, text, headers)
 		if text then
