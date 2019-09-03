@@ -115,8 +115,8 @@ AddEventHandler('gopostal:payDriver', function(destination, playerCoords, lastDe
 	local distance = find_distance(destination.beginAt, destination.endAt)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get("job")
-	local amountRewarded = math.ceil(BASE_PAY + (0.04 * distance))
-	local isReasonableReward = amountRewarded < 2000
+	local amountRewarded = math.ceil(BASE_PAY + (0.055 * distance))
+	local isReasonableReward = amountRewarded < 10000
 	local randomBonus = math.random(0, 200)
 	if isReasonableReward and job == "gopostal" and IsNearDeliveryLocation(playerCoords) then
 		char.giveMoney(amountRewarded + randomBonus)
