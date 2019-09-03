@@ -222,13 +222,13 @@ Citizen.CreateThread(function()
                                     else 
                                         TriggerClientEvent("chatMessage", participants[i].source, "", {}, "^3" .. secondsUntilStart)
                                     end
-                                    --TriggerEvent("InteractSound_SV:PlayOnOne", participants[i].source, "1beep", 0.7)
+                                    TriggerEvent("InteractSound_SV:PlayOnOne", participants[i].source, "1beep", 0.7)
                                 end
                             end
                         elseif secondsUntilStart == 0 then -- start race
                             for i = 1, #participants do
                                 TriggerClientEvent("races:startRace", participants[i].source)
-                                --TriggerEvent("InteractSound_SV:PlayOnOne", participants[i].source, "race-start-beep", 0.7)
+                                TriggerEvent("InteractSound_SV:PlayOnOne", participants[i].source, "race-start-beep", 0.45)
                             end
                             raceInfo.started = true
                         end
