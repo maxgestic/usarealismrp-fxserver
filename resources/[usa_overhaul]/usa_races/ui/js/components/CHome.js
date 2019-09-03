@@ -19,7 +19,7 @@ const CHome = Vue.component("CHome", {
                     <p class="race-participants" v-else><small>Be the first to join!</small></p>
                 </div>
                 <button class="w3-btn w3-green w3-margin-top" @click="joinRace(race.host.source)">Join Race</button>
-                <button v-if="isEnrolledInRace == true && race" class="w3-btn w3-gray w3-margin-top" @click="leaveRace(race.host.source)">Leave Race</button>
+                <button v-if="isEnrolledInRace == race.host.source" class="w3-btn w3-gray w3-margin-top" @click="leaveRace(race.host.source)">Leave Race</button>
             </div>
         </section>
         <!--

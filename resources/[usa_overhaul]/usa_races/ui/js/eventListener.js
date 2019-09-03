@@ -9,9 +9,9 @@ document.onreadystatechange = () => {
                     App.myId = msg.myId
                 }
             } else if (msg.type == "confirmJoin") {
-                App.isEnrolledInRace = true
+                App.isEnrolledInRace = msg.host.source
             } else if (msg.type == "confirmLeave") {
-                App.isEnrolledInRace = false
+                App.isEnrolledInRace = null
             } else if (msg.type == "updateRaces") {
                 App.races = msg.races
             }

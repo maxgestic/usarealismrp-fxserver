@@ -19,7 +19,8 @@ AddEventHandler("races:confirmJoin", function(race, timeUntilString)
     TriggerEvent("usa:notify", "You have been enrolled in " .. currentRace.info.title .. "! Head to the waypoint!", "^0You have been enrolled in " .. currentRace.info.title .. "! Head to the waypoint! " .. timeUntilString)
     SetNewWaypoint(race.start.coords.x, race.start.coords.y)
     SendNUIMessage({
-        type = "confirmJoin"
+        type = "confirmJoin",
+        host = race.host
     })
 end)
 
