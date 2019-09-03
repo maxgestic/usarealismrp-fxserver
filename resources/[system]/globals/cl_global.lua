@@ -13,10 +13,13 @@ end
 --------------------------------------------------------------
 -- Send GTA style notification above minimap on bottom left --
 --------------------------------------------------------------
-function notify(msg)
+function notify(msg, chatMsg)
   SetNotificationTextEntry("STRING")
   AddTextComponentString(msg)
   DrawNotification(0,1)
+  if chatMsg then 
+    TriggerEvent("chatMessage", "", {}, chatMsg)
+  end
 end
 
 -----------------------------------------------------------------------------------------
