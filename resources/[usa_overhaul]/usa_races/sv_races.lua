@@ -108,13 +108,39 @@ AddEventHandler("races:raceWon", function(host)
 end)
 
 RegisterNetEvent("races:leaveRace")
-AddEventHandler("races:leaveRace", function(host)
+AddEventHandler("races:leaveRace", function(host, noNotify)
     if hostedRaces[host] and not hostedRaces[host].started then 
         for i = 1, #hostedRaces[host].participants do 
             local participant = hostedRaces[host].participants[i]
             if participant.source == source then 
-                TriggerClientEvent("races:endRace", participant.source, "You left the race!")
+                if not noNotify then
+                    TriggerClientEvent("races:endRace", participant.source, "You left the race!")
+                end
                 table.remove(hostedRaces[host].participants, i)
+                local count = GetHostedRaceParticipantCount(host)
+                if count < 0 then 
+                    hostedRaces[host] = nil
+                end
+                UpdateClientsRealtime()
+                return
+            end
+        end
+    else 
+        TriggerClientEvent("usa:notify", source, "Can't leave now! Race in progress!")
+    end
+end)
+
+RegisterNetEvent("races:removeParticipant")
+AddEventHandler("races:removeParticipant", function(host)
+    if hostedRaces[host] then 
+        for i = 1, #hostedRaces[host].participants do 
+            local participant = hostedRaces[host].participants[i]
+            if participant.source == source then 
+                table.remove(hostedRaces[host].participants, i)
+                local count = GetHostedRaceParticipantCount(host)
+                if count <= 0 then 
+                    hostedRaces[host] = nil
+                end
                 UpdateClientsRealtime()
                 return
             end
@@ -265,4 +291,12 @@ function UpdateClientsRealtime()
     for id, open in pairs(hasMenuOpen) do 
         TriggerClientEvent("races:updateRaces", id, hostedRaces)
     end
+end
+
+function GetHostedRaceParticipantCount(host)
+    local count = 0
+    for i = 1, #hostedRaces[host].participants do 
+        count = count + 1
+    end
+    return count
 end

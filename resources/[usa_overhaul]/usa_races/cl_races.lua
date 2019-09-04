@@ -67,6 +67,7 @@ AddEventHandler("races:startRace", function()
             exports.globals:notify("Race ~g~started~w~! Go, go, go!", "^0Race ^2started^0! Go, go, go!")
         else 
             exports.globals:notify("Out of range! Disqualified!")
+            TriggerServerEvent("races:removeParticipant", currentRace.info.host.source)
             currentRace = nil
             TriggerEvent("swayam:RemoveWayPoint")
         end
