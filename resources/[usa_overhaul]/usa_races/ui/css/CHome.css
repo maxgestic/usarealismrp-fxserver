@@ -56,6 +56,14 @@ header > h2 {
     background-color: c70d3a;
 }
 
+#new-race-btn {
+    background-color: #4ecca3;
+    position: fixed;
+    bottom: 6%;
+    left: 2%;
+    z-index: 2;
+}
+
 footer {
     padding-top: 1em;
     margin-top: 2em;
@@ -83,6 +91,7 @@ footer {
 }
 
 .dt-normal-text {
+    color: white;
     opacity: 0.87;
 }
 
