@@ -1,20 +1,24 @@
 const CNewRace = Vue.component("CNewRace", {
     template: 
     `
-    <div class="race w3-card">
-        <p class="race-title">HOST NEW RACE</p>
-        <img src="https://fazewp-fazemediainc.netdna-ssl.com/cms/wp-content/uploads/2014/12/streetracing_2.jpg" height="160px">
-        <p class="race-bet"><span></span></p>
-        <div style="height: 70px; align-content: center;">
-            <p class="race-participants" v-else><small>Host a race that will start where you are now!</small></p>
+    <div id="new-race-wrap" class="background w3-display-container">
+        <div class="w3-display-middle">
+            <h3 class="dt-normal-text w3-margin">Host a new race</h3>
+            <form>
+                <div class="w3-group">
+                    <input class="w3-input w3-margin new-race-input" type="text" name="title" placeholder="Race title">
+                </div>
+                <div class="w3-group">
+                    <input class="w3-input w3-margin new-race-input" type="number" name="bet" placeholder="Betting amount">
+                </div>
+                <div class="w3-group">
+                    <input class="w3-input w3-margin new-race-input" type="number" name="time" placeholder="Minutes from now race should start">
+                </div>
+                <button class="w3-btn w3-margin" id="new-race-submit-btn" type="submit"><span>HOST RACE</span></button>
+            </form>
         </div>
-        <button class="w3-btn w3-green w3-margin-top" @click="joinRace(race.host.source)">HOST RACE</button>
     </div>
     `,
-    props: ["races"],
-    methods: {
-        createRace: function() {
-            
-        }
-    }
+    props: [],
+    methods: {}
 })

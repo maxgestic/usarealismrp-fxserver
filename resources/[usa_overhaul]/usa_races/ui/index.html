@@ -3,7 +3,9 @@
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="css/common.css">
         <link rel="stylesheet" href="css/CHome.css">
+        <link rel="stylesheet" href="css/CNewRace.css">
         <script
         src="https://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -21,12 +23,46 @@
         #app {
             padding: 3em;
         }
+        .background {
+            max-width:85vw;
+            height: 80vh;
+            margin-top:100px;
+            background-color: #232931;
+            overflow-y: scroll;  
+        }
+        /* dark theme stuff */
+        .dt-btn {
+            background-color: #eeeeee;
+            color: black;
+        }
+
+        .dt-normal-text {
+            color: white;
+            opacity: 0.87;
+        }
+
+        /* scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888; 
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+        }
         </style>
     </head>
     <body>
 
         <div id="app">
-            <component v-bind:is="currentTabComponent" class="w3-container" :my-id="myId" :races="races" :is-enrolled-in-race="isEnrolledInRace"></component>
+            <component v-bind:is="currentTabComponent" class="w3-container w3-content" :my-id="myId" :races="races" :is-enrolled-in-race="isEnrolledInRace"></component>
         </div>
 
         <script src="js/vue.min.js"></script>

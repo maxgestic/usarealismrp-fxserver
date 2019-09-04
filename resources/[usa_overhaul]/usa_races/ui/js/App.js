@@ -2,7 +2,7 @@ const App = new Vue({
     el: "#app",
     data: {
         currentTab: 'Home',
-        tabs: ['Home'],
+        tabs: ['Home', 'NewRace'],
         races: [
             /*
             {

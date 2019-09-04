@@ -5,6 +5,7 @@ ui_page "ui/index.html"
 files {
     "ui/index.html",
     "ui/css/CHome.css",
+    "ui/css/CNewRace.css",
     "ui/js/vue.min.js",
     "ui/js/components/CNewRace.js",
     "ui/js/components/CHome.js",

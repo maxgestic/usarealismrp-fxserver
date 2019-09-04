@@ -1,7 +1,7 @@
 const CHome = Vue.component("CHome", {
     template: 
     `
-    <div id="background" class="w3-padding w3-display-container">
+    <div class="w3-padding w3-display-container background">
         <span id="close-btn" class="w3-button w3-display-topright dt-normal-text" @click="close()">&times;</span>
         <section id="content" class="w3-display-container">
             <header>
@@ -24,19 +24,22 @@ const CHome = Vue.component("CHome", {
                     <button class="w3-btn w3-margin-top dt-btn" @click="joinRace(race.host.source)">Join Race</button>
                     <button v-if="isEnrolledInRace == race.host.source" class="w3-btn w3-margin-top race-leave" @click="leaveRace(race.host.source)">Leave Race</button>
                 </div>
-                <!-- <CNewRace :races="races"></CNewRace> -->
             </section>
             <!--
             <footer>
                 <p>Note: You must reconnect to the server for your purchase to take affect.</p>
             </footer>
             -->
-            <button id="new-race-btn" class="w3-button w3-circle w3-display-bottomleft w3-margin-left w3-margin-bottom">+</button>
+            <button id="new-race-btn" class="w3-button w3-circle w3-display-bottomleft w3-margin-left w3-margin-bottom" @click="createRace()">+</button>
         </section>
     </div>
     `,
     props: ["races", "myId", "isEnrolledInRace"],
     methods: {
+        createRace: function() {
+            // switch components to CNewRace
+            App.currentTab = "NewRace"
+        },
         joinRace: function(host) {
             $.post("http://usa_races/joinRace", JSON.stringify({
                 host: host

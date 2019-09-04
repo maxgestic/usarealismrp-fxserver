@@ -1,11 +1,3 @@
-#background {
-    max-width:85vw;
-    height: 80vh;
-    margin-top:100px;
-    background-color: #232931;
-    overflow-y: scroll;  
-}
-
 header {
     text-align: center;
     padding: 2em;
@@ -59,8 +51,8 @@ header > h2 {
 #new-race-btn {
     background-color: #4ecca3;
     position: fixed;
-    bottom: 6%;
-    left: 2%;
+    bottom: 7%;
+    left: 8%;
     z-index: 2;
 }
 
@@ -74,40 +66,14 @@ footer {
 #close-btn {
     font-size: 20px;
     color: white;
+    z-index: 4;
 }
 
 #close-btn:hover {
+    color: red;
     background-color: #B31C31 !important;
 }
 
 #new-race-plus-sign {
     font-size: 24px;
-}
-
-/* dark theme stuff */
-.dt-btn {
-    background-color: #eeeeee;
-    color: black;
-}
-
-.dt-normal-text {
-    color: white;
-    opacity: 0.87;
-}
-
-/* scrollbar */
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1; 
-}
-
-::-webkit-scrollbar-thumb {
-    background: #888; 
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #555; 
 }
