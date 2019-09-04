@@ -93,6 +93,10 @@ AddEventHandler("races:setWaypoint", function(coords, label)
     TriggerEvent("swayam:SetWayPointWithAutoDisable", coords.x, coords.y, coords.z, 280, 60, label)
 end)
 
+RegisterNUICallback("createRace", function(data, cb)
+    TriggerServerEvent("races:createRace", data.newRace)
+end)
+
 RegisterNUICallback("leaveRace", function(data, cb)
     TriggerServerEvent("races:leaveRace", data.host)
 end)

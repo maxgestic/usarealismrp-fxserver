@@ -1,6 +1,6 @@
-#new-race-submit-btn {
-    background-color: #4ecca3;
-    color: white;
+.dt-btn {
+    background-color: #4ecca3 !important;
+    color: white !important;
 }
 
 #new-race-submit-btn > span {

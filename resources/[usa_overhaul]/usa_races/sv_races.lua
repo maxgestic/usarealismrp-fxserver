@@ -4,7 +4,7 @@ local hasMenuOpen = {} -- help update clients in real time
 
 local MINIMUM_PARTICIPANTS = 0
 
-TriggerEvent('es:addCommand', 'hostrace', function(source, args, char, location)
+TriggerEvent('es:addCommand', 'hostrace', function(source, args, char, location) -- deprecated
     local bet = math.abs(tonumber(args[2]))
     local minutes = tonumber(args[3])
     table.remove(args, 1)
@@ -36,7 +36,17 @@ end, {
     }
 })
 
-TriggerEvent('es:addCommand', 'joinrace', function(source, args, char)
+TriggerEvent('es:addCommand', 'joinrace', function(source, args, char) -- deprecated
+    local races = {}
+    for hostId, raceInfo in pairs(hostedRaces) do 
+        table.insert(races, raceInfo)
+    end
+    TriggerClientEvent("races:toggleMenu", source, true, {races = races, myId = source})
+end, {
+    help = "See available races to join."
+})
+
+TriggerEvent('es:addCommand', 'race', function(source, args, char)
     local races = {}
     for hostId, raceInfo in pairs(hostedRaces) do 
         table.insert(races, raceInfo)
@@ -105,6 +115,28 @@ AddEventHandler("races:raceWon", function(host)
         hostedRaces[host] = nil
         UpdateClientsRealtime()
     end
+end)
+
+RegisterNetEvent("races:createRace")
+AddEventHandler("races:createRace", function(newRace)
+    newRace.bet = tonumber(newRace.bet)
+    newRace.time = tonumber(newRace.time)
+    if not newRace.bet then 
+        TriggerClientEvent("usa:notify", source, "You must enter a bet amount for this race!")
+        return
+    end
+    if not newRace.time then 
+        TriggerClientEvent("usa:notify", source, "You must enter how many minutes from now the race should start!")
+        return
+    end
+    if hostedRaces[source] then
+        TriggerClientEvent("usa:notify", source, "You are already hosting a race!")
+        return
+    end
+    if title == "" or not title then 
+        title = "My Race"
+    end
+    TriggerClientEvent("races:getNewRaceCoords", source, newRace.bet, newRace.time, newRace.title)
 end)
 
 RegisterNetEvent("races:leaveRace")
