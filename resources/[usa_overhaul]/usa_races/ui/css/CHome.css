@@ -2,19 +2,19 @@
     max-width:85vw;
     height: 80vh;
     margin-top:100px;
-    background: linear-gradient(to bottom left, #ffffff -44%, #817e7f 141%);
-    overflow-y: scroll;
+    background-color: #232931;
+    overflow-y: scroll;  
 }
 
 header {
     text-align: center;
     padding: 2em;
     margin-bottom: 1em;
+    color: white;
 }
 
-header > img {
-    max-width: 498px;
-    max-height: 147px;
+header > h2 {
+    opacity: 0.87;
 }
 
 .grid-container {
@@ -31,19 +31,29 @@ header > img {
     text-align: center;
     display: inline-block;
     padding: 2em;
-    background-color: #ffffff;
+    background-color: #393e46;
+    color: white;
 }
 
 .race-title { 
     margin-bottom: 1em;
+    font-size: 24px;
 }
 
 .race-bet {
-    font-size: 24px;
+    font-size: 18px;
 }
 
 .race-participants {
     font-size: small;
+}
+
+#delete-race-btn:hover {
+    background-color: #eeeeee !important;
+}
+
+.race-leave {
+    background-color: c70d3a;
 }
 
 footer {
@@ -55,8 +65,40 @@ footer {
 
 #close-btn {
     font-size: 20px;
+    color: white;
 }
 
 #close-btn:hover {
     background-color: #B31C31 !important;
+}
+
+#new-race-plus-sign {
+    font-size: 24px;
+}
+
+/* dark theme stuff */
+.dt-btn {
+    background-color: #eeeeee;
+    color: black;
+}
+
+.dt-normal-text {
+    opacity: 0.87;
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
 }

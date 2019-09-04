@@ -2,11 +2,10 @@ const CHome = Vue.component("CHome", {
     template: 
     `
     <div id="background" class="w3-main w3-content w3-padding w3-display-container">
-        <span id="close-btn" class="w3-button w3-display-topright" @click="close()">&times;</span>
+        <span id="close-btn" class="w3-button w3-display-topright dt-normal-text" @click="close()">&times;</span>
         <header>
             <h2>Browse all races</h2>
         </header>
-        <h3 class="w3-margin-left" v-if="races.length <= 0 ">There are no races being hosted! Do /hostrace to start one!</h3>
         <section class="grid-container">
             <div v-for="(race, index) in races" v-if="race" class="race w3-card w3-display-container">
                 <span v-if="race.host.source == myId" id="delete-race-btn" class="w3-button w3-display-topright" @click="deleteRace(race.host.source)">&times;</span>
@@ -18,9 +17,10 @@ const CHome = Vue.component("CHome", {
                     <p class="race-participants" v-if="race.participants.length > 0">Participants: <span v-for="participant in race.participants">({{participant.source}}) {{participant.name}}<span v-if="index != race.participants.length-1">, </span></span></p>
                     <p class="race-participants" v-else><small>Be the first to join!</small></p>
                 </div>
-                <button class="w3-btn w3-green w3-margin-top" @click="joinRace(race.host.source)">Join Race</button>
-                <button v-if="isEnrolledInRace == race.host.source" class="w3-btn w3-gray w3-margin-top" @click="leaveRace(race.host.source)">Leave Race</button>
+                <button class="w3-btn w3-margin-top dt-btn" @click="joinRace(race.host.source)">Join Race</button>
+                <button v-if="isEnrolledInRace == race.host.source" class="w3-btn w3-margin-top race-leave" @click="leaveRace(race.host.source)">Leave Race</button>
             </div>
+            <!-- <CNewRace :races="races"></CNewRace> -->
         </section>
         <!--
         <footer>

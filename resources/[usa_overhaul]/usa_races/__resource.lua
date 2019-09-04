@@ -6,6 +6,7 @@ files {
     "ui/index.html",
     "ui/css/CHome.css",
     "ui/js/vue.min.js",
+    "ui/js/components/CNewRace.js",
     "ui/js/components/CHome.js",
     "ui/js/App.js",
     "ui/js/eventListener.js"
