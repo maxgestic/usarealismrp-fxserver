@@ -9,10 +9,10 @@ const CNewRace = Vue.component("CNewRace", {
                     <input class="w3-input w3-margin new-race-input" type="text" name="title" placeholder="Race title" v-model="newRace.title">
                 </div>
                 <div class="w3-group">
-                    <input class="w3-input w3-margin new-race-input" type="number" name="bet" placeholder="Betting amount" v-model="newRace.bet">
+                    <input class="w3-input w3-margin new-race-input" type="text" name="bet" placeholder="Betting amount" v-model="newRace.bet">
                 </div>
                 <div class="w3-group">
-                    <input class="w3-input w3-margin new-race-input" type="number" name="time" placeholder="Minutes from now race should start" v-model="newRace.time">
+                    <input class="w3-input w3-margin new-race-input" type="text" name="time" placeholder="Minutes from now race should start" v-model="newRace.time">
                 </div>
                 <div class="w3-btn w3-margin dt-btn" @click="createRace()"><span>HOST RACE</span></div>
                 <div class="w3-btn w3-margin dt-btn" @click="back()" style="background-color: red"><span>BACK</span></div>
@@ -25,8 +25,8 @@ const CNewRace = Vue.component("CNewRace", {
         return {
             newRace: {
                 title: "",
-                bet: 0,
-                time: 0
+                bet: "",
+                time: ""
             }
         }
     },
