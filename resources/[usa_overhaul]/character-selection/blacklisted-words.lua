@@ -35,6 +35,5 @@ BLACKLISTED_WORDS = {
 	'owner',
 	'slave',
 	'thot',
-	'weed',
 	'meth'
 }
