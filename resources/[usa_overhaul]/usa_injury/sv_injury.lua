@@ -168,11 +168,11 @@ AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, 
 				end
 				totalPrice = totalPrice + injuries[injury].treatmentPrice
 				if injuries[injury].string == "High-speed Projectile" then 
-					treatmentTimeMinutes = treatmentTimeMinutes + 4
+					treatmentTimeMinutes = treatmentTimeMinutes + 3
 				elseif injuries[injury].string == "Knife Puncture" then 
 					treatmentTimeMinutes = treatmentTimeMinutes + 2
 				elseif injuries[injury].string == "Explosion" then 
-					treatmentTimeMinutes = treatmentTimeMinutes + 4
+					treatmentTimeMinutes = treatmentTimeMinutes + 3
 				elseif injuries[injury].string == "Large Sharp Object" then 
 					treatmentTimeMinutes = treatmentTimeMinutes + 2
 				end
