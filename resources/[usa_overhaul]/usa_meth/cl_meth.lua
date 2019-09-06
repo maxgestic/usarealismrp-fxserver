@@ -216,7 +216,7 @@ Citizen.CreateThread(function()
                 end
             end
             if math.random() > 0.985 then
-                if math.random() > 0.35 then
+                if math.random() > 0.45 then
                     AddExplosion(GetEntityCoords(PlayerPedId()), 9, 1.0, true, false, 1.0)
                     local lastStreetHASH = GetStreetNameAtCoord(-121.95, 1918.01, 197.43)
                     local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
