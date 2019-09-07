@@ -123,10 +123,9 @@ end)
 RegisterNetEvent('usa:repairVeh')
 AddEventHandler('usa:repairVeh', function(target_vehicle)
     if not target_vehicle then target_vehicle = getVehicleInFrontOfUser() end
-    print(target_vehicle)
     local dict = "mini@repair"
     local playerPed = PlayerPedId()
-    if target_vehicle ~= 0 then
+    if target_vehicle ~= 0 and not IsPedInAnyVehicle(playerPed) then
         if GetVehicleEngineHealth(target_vehicle) < 850.0 or IsAnyVehicleTireBursted(target_vehicle) then
             TriggerServerEvent('usa:removeRepairKit')
             SetVehicleDoorOpen(target_vehicle, 4, false, false)
