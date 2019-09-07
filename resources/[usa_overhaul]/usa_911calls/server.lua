@@ -240,7 +240,7 @@ end)
 
 AddEventHandler('911:AssaultInProgress', function(x, y, z, street, area, isMale)
 	local sendChance = math.random()
-	if recentcalls[area] ~= 'AssaultInProgress' and sendChance < 0.3 then
+	if recentcalls[area] ~= 'AssaultInProgress' and sendChance < 0.2 then
 		recentcalls[area] = 'AssaultInProgress'
 		local time = math.random(4000, 9000)
 		Citizen.Wait(time)
