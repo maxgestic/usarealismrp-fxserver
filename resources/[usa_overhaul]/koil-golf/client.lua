@@ -75,7 +75,7 @@ Citizen.CreateThread(function()
 
 					-- check player's money to play
 					print("calling usa:checkPlayerMoney for golf!!")
-					TriggerServerEvent("usa:checkPlayerMoney", "golf", math.ans(amount), "beginGolf", false, true)
+					TriggerServerEvent("usa:checkPlayerMoney", "golf", math.abs(amount), "beginGolf", false, true)
 					--[[
 					spawnCart()
 					startGolf() -- If you plan to have it cost money, you need to remove this and only call it when they paid
@@ -103,6 +103,16 @@ function spawnCart()
 	SetPedIntoVehicle(GetPlayerPed(-1), spawned_car, - 1)
 	SetModelAsNoLongerNeeded(vehicle)
 	plate = GetVehicleNumberPlateText(spawned_car)
+	local key = {
+		name = "Key -- " .. plate,
+		quantity = 1,
+		type = "key",
+		owner = "Golfing Co.",
+		make = "Golfing Co.",
+		model = "Golfing Co.",
+		plate = plate
+	}
+	TriggerServerEvent("garage:giveKey", key)
 end
 
 function DisplayHelpText(str)
