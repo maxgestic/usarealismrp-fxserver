@@ -4,35 +4,55 @@ local hospitalBeds = {
 		objCoords  = {347.115, -590.426, 43.304},
 		objModel = 2117668672
 	},
-
 	{
 		occupied = nil,
 		objCoords  = {350.86, -591.58, 43.39},
 		objModel = 2117668672
 	},
-
 	{
 		occupied = nil,
 		objCoords  = {354.3, -592.75, 43.30},
 		objModel = 2117668672
 	},
-
 	{
 		occupied = nil,
 		objCoords  = {357.44, -594.3, 43.30},
 		objModel = 2117668672
 	},
-
+	{
+		occupied = nil,
+		objCoords  = {360.42636108398, -587.05645751953, 44.016368865967},
+		objModel = -1091386327
+	},
 	{
 		occupied = nil,
 		objCoords  = {356.66, -586.01, 43.30},
 		objModel = 1631638868
 	},
-
 	{
 		occupied = nil,
 		objCoords  = {353.177, -584.93, 43.30},
 		objModel = 1631638868
+	},
+	{
+		occupied = nil,
+		objCoords  = {344.83355712891, -580.99639892578, 44.01636505127},
+		objModel = -1091386327
+	},
+	{
+		occupied = nil,
+		objCoords  = {334.05288696289, -578.28857421875, 44.0090675354},
+		objModel = -1091386327
+	},
+	{
+		occupied = nil,
+		objCoords  = {327.04379272461, -576.23944091797, 44.021656036377},
+		objModel = -1091386327
+	},
+	{
+		occupied = nil,
+		objCoords  = {323.80679321289,y = -575.15704345703, z = 44.021686553955},
+		objModel = -1091386327
 	}
 }
 
