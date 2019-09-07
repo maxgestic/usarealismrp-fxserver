@@ -56,6 +56,8 @@ AddEventHandler("bars:buy", function(itemCategory, itemName, business)
               if business then
                 exports["usa-businesses"]:GiveBusinessCashPercent(business, item.price)
               end
+          else 
+            TriggerClientEvent("usa:notify", source, "Inventory full.")
           end
       else
           TriggerClientEvent("usa:notify", source, "Not enough money!")
