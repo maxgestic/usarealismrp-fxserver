@@ -161,11 +161,13 @@ end)
 
 RegisterServerEvent('bank:givecash')
 AddEventHandler('bank:givecash', function(toPlayer, amount)
+	amount = (tonumber(amount) or 0)
+	amount = math.floor(amount)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local recipient = exports["usa-characters"]:GetCharacter(toPlayer)
 	if GetPlayerName(toPlayer) then
 		local from_money = char.get("money")
-		if (tonumber(from_money) >= tonumber(amount)) then
+		if (from_money >= amount) then
 			char.removeMoney(amount)
 			recipient.giveMoney(amount)
 			TriggerClientEvent('usa:notify', source, "You've given " .. toPlayer .. " $" .. comma_value(amount))
