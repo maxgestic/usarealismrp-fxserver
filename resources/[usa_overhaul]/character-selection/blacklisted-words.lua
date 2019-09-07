@@ -2,7 +2,6 @@ BLACKLISTED_WORDS = {
 	'fuck',
 	'shit',
 	'bitch',
-	'ass',
 	'prick',
 	'ngger',
 	'ngga',
