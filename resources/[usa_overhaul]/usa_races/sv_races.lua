@@ -252,6 +252,7 @@ AddEventHandler("races:gotNewRaceCoords", function(start, finish, bet, minutes, 
     }
     hostedRaces[source] = newRace
     TriggerClientEvent("usa:notify", source, "You have registered a race with bet amount of $" .. newRace.bet, "^0You have registered a race with bet amount of $" .. newRace.bet ..". It will begin in " .. minutes .. " minute(s)!")
+    TriggerClientEvent("chatMessage", -1, "", {}, "^0A new race (" .. newRace.title .. ") has been registered! It starts in " .. newRace.minutesUntilStart .. " minute(s)!")
     UpdateClientsRealtime()
 end)
 
