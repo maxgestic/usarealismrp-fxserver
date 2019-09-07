@@ -4,7 +4,7 @@ local TIMEOUT = false
 local CMD_TIMEOUT_IN_SECONDS = 20  -- /setweather command timeout in seconds
 local currentWeatherString = "CLEAR"   -- Starting Weather Type.
 local updateWeatherFlag = false
-local RAIN_PREVENT_CHANCE = 0.60
+local RAIN_PREVENT_CHANCE = 0.85
 
 -- weather types that must be invoked manually by an admin
 manualWeathers = {
