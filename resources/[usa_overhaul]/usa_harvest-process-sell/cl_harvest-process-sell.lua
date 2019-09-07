@@ -83,56 +83,58 @@ Citizen.CreateThread(function()
     local player_ped = GetPlayerPed(-1)
     local player_coords = GetEntityCoords(player_ped)
     for job, places in pairs(JOBS) do
-      if Vdist(player_coords, places.harvest.x, places.harvest.y, places.harvest.z) < places.harvest.radius then
-        --print("player is close to harvest job location:  " .. job)
-        drawTxt("Press ~g~E~w~ to harvest " .. job .. "!",0,1,0.5,0.8,0.6,255,255,255,255)
-        if IsControlJustPressed(1, KEY) then
-          TriggerServerEvent("HPS:checkItem", job, places.harvest.time, "Harvest")
-          Wait(places.harvest.time * 1000) -- prevent spamming
+      if not IsPedInAnyVehicle(player_ped) then
+        if Vdist(player_coords, places.harvest.x, places.harvest.y, places.harvest.z) < places.harvest.radius then
+          --print("player is close to harvest job location:  " .. job)
+          drawTxt("Press ~g~E~w~ to harvest " .. job .. "!",0,1,0.5,0.8,0.6,255,255,255,255)
+          if IsControlJustPressed(1, KEY) then
+            TriggerServerEvent("HPS:checkItem", job, places.harvest.time, "Harvest")
+            Wait(places.harvest.time * 1000) -- prevent spamming
+          end
+        elseif Vdist(player_coords, places.process.x, places.process.y, places.process.z) < places.process.radius then
+          --print("player is close to process job location:  " .. job)
+          drawTxt("Press ~g~E~w~ to process " .. job .. "!",0,1,0.5,0.8,0.6,255,255,255,255)
+          if IsControlJustPressed(1, KEY) then
+            TriggerServerEvent("HPS:checkItem", job, places.process.time, "Process")
+            Wait(places.process.time * 1000) -- prevent spamming
+          end
+        elseif places.sell and Vdist(player_coords, places.sell.x, places.sell.y, places.sell.z) < 3.0 then
+          drawTxt("Press ~g~E~w~ to sell " .. job .. "!",0,1,0.5,0.8,0.6,255,255,255,255)
+          if IsControlJustPressed(1, KEY) and not IsPedInAnyVehicle(player_ped) then
+            TriggerServerEvent("HPS:checkItem", job, 0, "Sale")
+            --Sell(job, places.harvest_time)
+          end
         end
-      elseif Vdist(player_coords, places.process.x, places.process.y, places.process.z) < places.process.radius then
-        --print("player is close to process job location:  " .. job)
-        drawTxt("Press ~g~E~w~ to process " .. job .. "!",0,1,0.5,0.8,0.6,255,255,255,255)
-        if IsControlJustPressed(1, KEY) then
-          TriggerServerEvent("HPS:checkItem", job, places.process.time, "Process")
-          Wait(places.process.time * 1000) -- prevent spamming
-        end
-      elseif places.sell and Vdist(player_coords, places.sell.x, places.sell.y, places.sell.z) < 3.0 then
-        drawTxt("Press ~g~E~w~ to sell " .. job .. "!",0,1,0.5,0.8,0.6,255,255,255,255)
-        if IsControlJustPressed(1, KEY) then
-          TriggerServerEvent("HPS:checkItem", job, 0, "Sale")
-          --Sell(job, places.harvest_time)
-        end
-      end
-      if places.peds then
-        -- check for info peds:
-        for i = 1, #places.peds do
-          if Vdist(player_coords, places.peds[i].x, places.peds[i].y, places.peds[i].z) < 2.5 then
-            if places.peds[i].type == "info" then
-              drawTxt("Press ~g~E~w~ to speak with " .. places.peds[i].name .. "!",0,1,0.5,0.8,0.6,255,255,255,255)
-              if IsControlJustPressed(1, KEY) then
-                ClearGpsPlayerWaypoint()
-                if places.peds[i].gives_directions_to == "process" then
-                  if job == "Sand" then
-                    TriggerEvent("usa:notify", "You can harvest sand here")
+        if places.peds then
+          -- check for info peds:
+          for i = 1, #places.peds do
+            if Vdist(player_coords, places.peds[i].x, places.peds[i].y, places.peds[i].z) < 2.5 then
+              if places.peds[i].type == "info" then
+                drawTxt("Press ~g~E~w~ to speak with " .. places.peds[i].name .. "!",0,1,0.5,0.8,0.6,255,255,255,255)
+                if IsControlJustPressed(1, KEY) then
+                  ClearGpsPlayerWaypoint()
+                  if places.peds[i].gives_directions_to == "process" then
+                    if job == "Sand" then
+                      TriggerEvent("usa:notify", "You can harvest sand here")
+                    end
+                    TriggerEvent("usa:notify", "Here are directions to the place where you can process " .. places.harvest.reward_item_name .. "s")
+                    SetNewWaypoint(places.process.x, places.process.y)
+                  elseif places.peds[i].gives_directions_to == "sale" then
+                    if job == "Sand" then
+                      TriggerEvent("usa:notify", "You can process sand here")
+                    end
+                    TriggerEvent("usa:notify", "Here are directions to a place where you can sell " .. places.process.reward_item_name)
+                    SetNewWaypoint(places.sell.x, places.sell.y)
                   end
-                  TriggerEvent("usa:notify", "Here are directions to the place where you can process " .. places.harvest.reward_item_name .. "s")
-                  SetNewWaypoint(places.process.x, places.process.y)
-                elseif places.peds[i].gives_directions_to == "sale" then
-                  if job == "Sand" then
-                    TriggerEvent("usa:notify", "You can process sand here")
-                  end
-                  TriggerEvent("usa:notify", "Here are directions to a place where you can sell " .. places.process.reward_item_name)
-                  SetNewWaypoint(places.sell.x, places.sell.y)
+                  -- play ped sound:
+                  local sounds = {
+                    {sound = "Shout_Threaten_Ped", param = "Speech_Params_Force_Shouted_Critical"},
+                    {sound = "Shout_Threaten_Gang", param = "Speech_Params_Force_Shouted_Critical"},
+                    {sound = "Generic_Hi", param = "Speech_Params_Force"}
+                  }
+                  local random_sound = sounds[math.random(1, tonumber(#sounds))]
+                  PlayAmbientSpeech1(places.peds[i].handle, random_sound.sound, random_sound.param)
                 end
-                -- play ped sound:
-                local sounds = {
-                  {sound = "Shout_Threaten_Ped", param = "Speech_Params_Force_Shouted_Critical"},
-                  {sound = "Shout_Threaten_Gang", param = "Speech_Params_Force_Shouted_Critical"},
-                  {sound = "Generic_Hi", param = "Speech_Params_Force"}
-                }
-                local random_sound = sounds[math.random(1, tonumber(#sounds))]
-                PlayAmbientSpeech1(places.peds[i].handle, random_sound.sound, random_sound.param)
               end
             end
           end
