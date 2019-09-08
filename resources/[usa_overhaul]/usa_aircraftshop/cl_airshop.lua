@@ -359,23 +359,23 @@ function CreatePlaneMenu(menu, vehicles)
 	table.insert(created_menus, planes)
 	for i = 1, #vehicles do
 		local aircraft = vehicles[i]
-		local planeMenu = _menuPool:AddSubMenu(planes, aircraft.name, 'View prices of the '..aircraft.name, true)
+		local planeMenu = _menuPool:AddSubMenu(planes.SubMenu, aircraft.name, 'View prices of the '..aircraft.name, true)
 		table.insert(created_menus, planeMenu)
 		local rent = NativeUI.CreateItem('Rent '..aircraft.name, 'Rent price: $' ..comma_value(aircraft.price))
 		local buy = NativeUI.CreateItem('Buy '..aircraft.name, 'Buy price: $'..comma_value(aircraft.buy_price))
 		rent.Activated = function(parentmenu, selected)
 			local business = exports["usa-businesses"]:GetClosestStore(15)
 			TriggerServerEvent('aircraft:requestRent', aircraft, business)
-			planeMenu:Visible(false)
+			planeMenu.SubMenu:Visible(false)
 		end
 		buy.Activated = function(parentmenu, selected)
             local business = exports["usa-businesses"]:GetClosestStore(15)
 			TriggerServerEvent('aircraft:requestPurchase', aircraft, business)
-			planeMenu:Visible(false)
+			planeMenu.SubMenu:Visible(false)
 		end
-		planeMenu:AddItem(rent)
-		planeMenu:AddItem(buy)
-		planes:AddItem(planeMenu)
+		planeMenu.SubMenu:AddItem(rent)
+		planeMenu.SubMenu:AddItem(buy)
+		planes.SubMenu:AddItem(planeMenu.SubMenu)
 	end
 end
 
@@ -384,23 +384,23 @@ function CreateHelicopterMenu(menu, vehicles)
 	table.insert(created_menus, helicopters)
 	for i = 1, #vehicles do
 		local aircraft = vehicles[i]
-		local heliMenu = _menuPool:AddSubMenu(helicopters, aircraft.name, 'View prices of the '..aircraft.name, true)
+		local heliMenu = _menuPool:AddSubMenu(helicopters.SubMenu, aircraft.name, 'View prices of the '..aircraft.name, true)
 		table.insert(created_menus, heliMenu)
 		local rent = NativeUI.CreateItem('Rent '..aircraft.name, 'Rent price: $' ..comma_value(aircraft.price))
 		local buy = NativeUI.CreateItem('Buy '..aircraft.name, 'Buy price: $'..comma_value(aircraft.buy_price))
 		rent.Activated = function(parentmenu, selected)
             local business = exports["usa-businesses"]:GetClosestStore(15)
 			TriggerServerEvent('aircraft:requestRent', aircraft, business)
-			heliMenu:Visible(false)
+			heliMenu.SubMenu:Visible(false)
 		end
 		buy.Activated = function(parentmenu, selected)
             local business = exports["usa-businesses"]:GetClosestStore(15)
 			TriggerServerEvent('aircraft:requestPurchase', aircraft, business)
-			heliMenu:Visible(false)
+			heliMenu.SubMenu:Visible(false)
 		end
-		heliMenu:AddItem(rent)
-		heliMenu:AddItem(buy)
-		helicopters:AddItem(heliMenu)
+		heliMenu.SubMenu:AddItem(rent)
+		heliMenu.SubMenu:AddItem(buy)
+		helicopters.SubMenu:AddItem(heliMenu.SubMenu)
 	end
 end
 
@@ -415,12 +415,12 @@ function CreateSellMenu(menu, vehicles)
 			item.Activated = function(parentmenu, selected)
 				if aircraft.stored then
 					TriggerServerEvent('aircraft:requestSell', aircraft)
-					sellMenu:Visible(false)
+					sellMenu.SubMenu:Visible(false)
 				else
 					TriggerEvent('usa:notify', 'This aircraft is ~y~not stored~s~, cannot be sold!')
 				end
 			end
-			sellMenu:AddItem(item)
+			sellMenu.SubMenu:AddItem(item)
 		end
 	end
 end
@@ -439,14 +439,14 @@ function CreateGarageMenu(menu, vehicles)
 				store_status = '(~r~Not Stored~s~)'
 			end
 			local item = NativeUI.CreateItem('Retrieve ' .. aircraft.name .. ' ' .. store_status, 'Aircraft ID: '..aircraft.id)
-			retrieveMenu:AddItem(item)
+			retrieveMenu.SubMenu:AddItem(item)
 			item.Activated = function(parentmenu, selected)
 				if aircraft.stored then
 					TriggerEvent("aircraft:spawnAircraft", aircraft)
 					print("setting aircraft at " .. i .. " stored status to false!")
 					TriggerEvent('usa:notify', 'Alright, aircraft has been deployed.')
 					aircraft.stored = false
-					retrieveMenu:Visible(false)
+					retrieveMenu.SubMenu:Visible(false)
 				else
 					TriggerEvent('usa:notify', 'This aircraft is not stored!')
 				end
@@ -471,7 +471,7 @@ end
 
 function IsAnyMenuVisible()
   for i = 1, #created_menus do
-    if created_menus[i]:Visible() then
+    if created_menus[i].SubMenu:Visible() then
       return true
     end
   end
@@ -480,8 +480,8 @@ end
 
 function CloseAllMenus()
   for i = 1, #created_menus do
-    if created_menus[i]:Visible() then
-      created_menus[i]:Visible(false)
+    if created_menus[i].SubMenu:Visible() then
+      created_menus[i].SubMenu:Visible(false)
     end
   end
 end
