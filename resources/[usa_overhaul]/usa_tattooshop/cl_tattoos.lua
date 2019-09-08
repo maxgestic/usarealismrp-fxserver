@@ -104,7 +104,7 @@ Citizen.CreateThread(function()
     -- Category Submenus--
     -----------------------------
     for category, items in pairs(TATTOOS) do
-        local category_submenu = _menuPool:AddSubMenu(tattoos_submenu, category, "See our selection of " .. category .. " tattoos.", true --[[KEEP POSITION]])
+        local category_submenu = _menuPool:AddSubMenu(tattoos_submenu.SubMenu, category, "See our selection of " .. category .. " tattoos.", true --[[KEEP POSITION]])
         for i = 1, #items.tattoos do
             local tat = items.tattoos[i]
             local tattoo = NativeUI.CreateItem(tat.LocalizedName, "Zone: " .. tat.Zone .. ", Price: $" .. comma_value(tat.Price))
@@ -120,15 +120,17 @@ Citizen.CreateThread(function()
                 ApplyPedOverlay(GetPlayerPed(-1), GetHashKey(items.category), GetHashKey(hashname))
                 table.insert(purchased_tattoos, {category = items.category, human_readable_name = tat.LocalizedName, hash_name = hashname})
             end
-            category_submenu:AddItem(tattoo)
+            print("added tattoo " .. i)
+            category_submenu.SubMenu:AddItem(tattoo)
         end
     end
 
-    MainMenu:AddItem(tattoos_submenu)
+    MainMenu:AddItem(tattoos_submenu.SubMenu)
 
     ----------------------------------
     -- Checkout Tattoos Button --
     ----------------------------------
+    print("adding checkout button")
     local item = NativeUI.CreateItem("Checkout", "Purchase all selected tattoos")
     item.Activated = function(parentmenu, selected)
         MainMenu:Visible(false)
@@ -141,6 +143,7 @@ Citizen.CreateThread(function()
         end
     end
     MainMenu:AddItem(item)
+    print("added checkout button")
     ----------------------------------
     -- Remove Tattoos Button --
     ----------------------------------
@@ -192,7 +195,7 @@ Citizen.CreateThread(function()
                 purchased_tattoos = {}
             end
           end
-      end
+        end
       if closest_shop then
         if Vdist(player_coords.x, player_coords.y, player_coords.z, closest_shop.x, closest_shop.y, closest_shop.z) >= 3.0 then
           closest_shop = nil
@@ -244,7 +247,3 @@ AddEventHandler('blips:returnBlips', function(blipsTable)
     BLIPS = {}
   end
 end)
-
------------------
------------------
------------------
