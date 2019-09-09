@@ -42,7 +42,7 @@ function CreateMenu(menu)
 			local selected = item.Text._Text
 			if selected == "Make a Claim" then
 				vehiclesToClaim = nil
-				claim_submenu:Clear()
+				claim_submenu.SubMenu:Clear()
 				--print("loading vehs to claim")
 				TriggerServerEvent("insurance:loadVehicles", true)
 
@@ -69,17 +69,17 @@ function CreateMenu(menu)
 										TriggerServerEvent("insurance:fileClaim", vehicle, business)
 										_menuPool:CloseAllMenus()
 									end
-									claim_submenu:AddItem(item)
+									claim_submenu.SubMenu:AddItem(item)
 								end
 							end
 						end
 					else
 						local item = NativeUI.CreateItem("No vehicles to claim or no insurance!", "You have no vehicles to claim or no auto insurance.")
-						claim_submenu:AddItem(item)
+						claim_submenu.SubMenu:AddItem(item)
 					end
 				else
 					local item = NativeUI.CreateItem("No vehicles to claim or no insurance!", "You have no vehicles to claim or no auto insurance.")
-					claim_submenu:AddItem(item)
+					claim_submenu.SubMenu:AddItem(item)
 				end
 			end
 		end

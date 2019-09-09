@@ -39,8 +39,6 @@ local props = { "Head", "Glasses", "Ear Acessories", "Watch"}
 local MENU_OPEN_KEY = 38
 local closest_shop = nil
 
-local created_menus = {}
-
 RegisterNetEvent("doc:setciv")
 AddEventHandler("doc:setciv", function(character, playerWeapons)
     Citizen.CreateThread(function()
@@ -115,23 +113,6 @@ AddEventHandler("doc:setciv", function(character, playerWeapons)
     end)
 end)
 
-function IsAnyMenuVisible()
-	for i = 1, #created_menus do
-		if created_menus[i]:Visible() then
-			return true
-		end
-	end
-	return false
-end
-
-function CloseAllMenus()
-	for i = 1, #created_menus do
-		if created_menus[i]:Visible() then
-			created_menus[i]:Visible(false)
-		end
-	end
-end
-
 -- Functions --
 function DrawText3D(x, y, z, distance, text)
     if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), x, y, z, true) < distance then
@@ -156,8 +137,6 @@ _menuPool = NativeUI.CreatePool()
 mainMenu = NativeUI.CreateMenu("BCSO", "~b~Blaine County Sheriff's Office", 0 --[[X COORD]], 320 --[[Y COORD]])
 _menuPool:Add(mainMenu)
 
-table.insert(created_menus, mainMenu)
-
 function CreateUniformMenu(menu)
   menu:Clear()
 
@@ -170,19 +149,19 @@ function CreateUniformMenu(menu)
     local loadslot = UIMenuListItem.New("Slot to Load", policeoutfitamount)
     local loadconfirm = UIMenuItem.New('Load Outfit', 'Load outfit from above number')
     loadconfirm:SetRightBadge(BadgeStyle.Clothes)
-    submenu2:AddItem(loadslot)
-    submenu2:AddItem(loadconfirm)
-    submenu2:AddItem(saveslot)
-    submenu2:AddItem(saveconfirm)
+    submenu2.SubMenu:AddItem(loadslot)
+    submenu2.SubMenu:AddItem(loadconfirm)
+    submenu2.SubMenu:AddItem(saveslot)
+    submenu2.SubMenu:AddItem(saveconfirm)
 
-    submenu2.OnListChange = function(sender, item, index)
+    submenu2.SubMenu.OnListChange = function(sender, item, index)
         if item == saveslot then
             selectedSaveSlot = item:IndexToItem(index)
         elseif item == loadslot then
             selectedLoadSlot = item:IndexToItem(index)
         end
     end
-    submenu2.OnItemSelect = function(sender, item, index)
+    submenu2.SubMenu.OnItemSelect = function(sender, item, index)
         if item == saveconfirm then
             local character = {
       ["components"] = {},
@@ -228,7 +207,7 @@ function CreateUniformMenu(menu)
         selectedTexture = 0
       end
     end
-    submenu:AddItem(listitem)
+    submenu.SubMenu:AddItem(listitem)
     --if maxTexture > 1 then
       arr = {}
       for j = 0, MAX_COMPONENT_TEXTURE + 1 do arr[j] = j - 1 end
@@ -239,7 +218,7 @@ function CreateUniformMenu(menu)
           SetPedComponentVariation(PlayerPedId(), i - 1, selectedComponent, selectedTexture, 0)
         end
       end
-      submenu:AddItem(listitem)
+      submenu.SubMenu:AddItem(listitem)
     --end
   end
   -- Props --
@@ -263,7 +242,7 @@ function CreateUniformMenu(menu)
         end
       end
     end
-    submenu:AddItem(listitem)
+    submenu.SubMenu:AddItem(listitem)
     -- add texture variation --
     --if maxPropTexture > 1 and selectedProp > -1 then
       arr = {}
@@ -276,7 +255,7 @@ function CreateUniformMenu(menu)
           SetPedPropIndex(PlayerPedId(), i - 1, selectedProp, selectedPropTexture, true)
         end
       end
-      submenu:AddItem(listitem)
+      submenu.SubMenu:AddItem(listitem)
     --end
   end
   local item = NativeUI.CreateItem("Clear Props", "Reset props.")
@@ -285,7 +264,7 @@ function CreateUniformMenu(menu)
     ClearPedProp(PlayerPedId(), 1)
     ClearPedProp(PlayerPedId(), 2)
   end
-  submenu:AddItem(item)
+  submenu.SubMenu:AddItem(item)
   -- Clock Out --
   local item = NativeUI.CreateItem("Clock Out", "Sign off duty")
   item:SetRightBadge(BadgeStyle.Lock)
@@ -300,25 +279,23 @@ end
 
 function CreateWeaponsMenu(menu)
     local submenu = _menuPool:AddSubMenu(menu, "Weapons", "Select speciality weapons", true --[[KEEP POSITION]])
-    table.insert(created_menus, submenu)
      for i = 1, #weapons do
          local item = NativeUI.CreateItem(weapons[i].name, "")
          item.Activated = function(parentmenu, selected)
             TriggerServerEvent("doc:checkRankForWeapon", weapons[i])
          end
-         submenu:AddItem(item)
+         submenu.SubMenu:AddItem(item)
      end
 end
 
 function CreateVehiclesMenu(menu)
     local submenu = _menuPool:AddSubMenu(menu, "Vehicles", "Deploy a vehicle", true --[[KEEP POSITION]])
-    table.insert(created_menus, submenu)
     for i = 1, #vehicles do
         local item = NativeUI.CreateItem(vehicles[i].name, "")
         item.Activated = function(parentmenu, selected)
           TriggerServerEvent("doc:spawnVehicle", vehicles[i].hash)
         end
-        submenu:AddItem(item)
+        submenu.SubMenu:AddItem(item)
     end
 end
 
@@ -345,7 +322,7 @@ Citizen.CreateThread(function()
         for i = 1, #PRISON_GUARD_SIGN_IN_LOCATIONS do
           DrawText3D(PRISON_GUARD_SIGN_IN_LOCATIONS[i].x, PRISON_GUARD_SIGN_IN_LOCATIONS[i].y, PRISON_GUARD_SIGN_IN_LOCATIONS[i].z, 5, '[E] - Locker Room')
         end
-        if IsControlJustPressed(1, MENU_KEY) and not IsAnyMenuVisible() then
+        if IsControlJustPressed(1, MENU_KEY) and not _menuPool:IsAnyMenuOpen() then
           for i = 1, #PRISON_GUARD_SIGN_IN_LOCATIONS do
             if Vdist(mycoords, PRISON_GUARD_SIGN_IN_LOCATIONS[i].x, PRISON_GUARD_SIGN_IN_LOCATIONS[i].y, PRISON_GUARD_SIGN_IN_LOCATIONS[i].z) < 2.0 then
               TriggerServerEvent("doc:checkWhitelist", PRISON_GUARD_SIGN_IN_LOCATIONS[i])
@@ -355,9 +332,9 @@ Citizen.CreateThread(function()
         -- close menu when far away --
         if closest_location then
             if Vdist(mycoords.x, mycoords.y, mycoords.z, closest_location.x, closest_location.y, closest_location.z) > 1.3 then
-                if IsAnyMenuVisible() then
+                if _menuPool:IsAnyMenuOpen() then
                     closest_location = nil
-                    CloseAllMenus()
+                    _menuPool:CloseAllMenus()
                 end
             end
         end
@@ -402,9 +379,7 @@ end)
 
 RegisterNetEvent("doc:close")
 AddEventHandler("doc:close", function()
-    print("closing menu!")
-    mainMenu:Visible(false)
-    CloseAllMenus()
+    _menuPool:CloseAllMenus()
 end)
 
 ----------------------

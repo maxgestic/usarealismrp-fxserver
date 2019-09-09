@@ -179,19 +179,19 @@ function CreateUniformMenu(menu)
     local loadslot = UIMenuListItem.New("Slot to Load", policeoutfitamount)
     local loadconfirm = UIMenuItem.New('Load Outfit', 'Load outfit from above number')
     loadconfirm:SetRightBadge(BadgeStyle.Clothes)
-    submenu2:AddItem(loadslot)
-    submenu2:AddItem(loadconfirm)
-    submenu2:AddItem(saveslot)
-    submenu2:AddItem(saveconfirm)
+    submenu2.SubMenu:AddItem(loadslot)
+    submenu2.SubMenu:AddItem(loadconfirm)
+    submenu2.SubMenu:AddItem(saveslot)
+    submenu2.SubMenu:AddItem(saveconfirm)
 
-    submenu2.OnListChange = function(sender, item, index)
+    submenu2.SubMenu.OnListChange = function(sender, item, index)
         if item == saveslot then
             selectedSaveSlot = item:IndexToItem(index)
         elseif item == loadslot then
             selectedLoadSlot = item:IndexToItem(index)
         end
     end
-    submenu2.OnItemSelect = function(sender, item, index)
+    submenu2.SubMenu.OnItemSelect = function(sender, item, index)
         if item == saveconfirm then
             local character = {
 			["components"] = {},
@@ -244,7 +244,7 @@ function CreateUniformMenu(menu)
 				selectedTexture = 0
 			end
 		end
-		submenu:AddItem(listitem)
+		submenu.SubMenu:AddItem(listitem)
 		--if maxTexture > 1 then
 			arr = {}
 			for j = 0, MAX_COMPONENT_TEXTURE + 1 do arr[j] = j - 1 end
@@ -255,7 +255,7 @@ function CreateUniformMenu(menu)
 					SetPedComponentVariation(ped, i - 1, selectedComponent, selectedTexture, 0)
 				end
 			end
-			submenu:AddItem(listitem)
+			submenu.SubMenu:AddItem(listitem)
 		--end
 	end
 	-- Props --
@@ -279,7 +279,7 @@ function CreateUniformMenu(menu)
 				end
 			end
 		end
-		submenu:AddItem(listitem)
+		submenu.SubMenu:AddItem(listitem)
 		-- add texture variation --
 		--if maxPropTexture > 1 and selectedProp > -1 then
 			arr = {}
@@ -292,7 +292,7 @@ function CreateUniformMenu(menu)
 					SetPedPropIndex(ped, i - 1, selectedProp, selectedPropTexture, true)
 				end
 			end
-			submenu:AddItem(listitem)
+			submenu.SubMenu:AddItem(listitem)
 		--end
 	end
 	local item = NativeUI.CreateItem("Clear Props", "Reset props.")
@@ -301,7 +301,7 @@ function CreateUniformMenu(menu)
 		ClearPedProp(ped, 1)
 		ClearPedProp(ped, 2)
 	end
-	submenu:AddItem(item)
+	submenu.SubMenu:AddItem(item)
 	-- Clock Out --
 	local item = NativeUI.CreateItem("Clock Out", "Sign off duty")
 	item:SetRightBadge(BadgeStyle.Lock)

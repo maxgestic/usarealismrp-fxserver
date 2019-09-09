@@ -64,9 +64,6 @@ AddEventHandler('blips:returnBlips', function(blipsTable)
   end
 end)
 
-
-local created_menus = {}
-
 -------------------
 -- utility funcs --
 -------------------
@@ -81,31 +78,12 @@ function comma_value(amount)
   return formatted
 end
 
-function IsAnyMenuVisible()
-	for i = 1, #created_menus do
-		if created_menus[i]:Visible() then
-			return true
-		end
-	end
-	return false
-end
-
-function CloseAllMenus()
-	for i = 1, #created_menus do
-		if created_menus[i]:Visible() then
-			created_menus[i]:Visible(false)
-		end
-	end
-end
-
 ----------------------
 -- Set up main menu --
 ----------------------
 _menuPool = NativeUI.CreatePool()
 mainMenu = NativeUI.CreateMenu("Ammunation", "~b~Welcome!", 0 --[[X COORD]], 320 --[[Y COORD]])
 _menuPool:Add(mainMenu)
-
-table.insert(created_menus, mainMenu)
 
 --------------------------------
 -- Construct GUI menu buttons --
@@ -116,7 +94,6 @@ function CreateWeaponShopMenu(menu)
   -----------------------------------
   for category, weapons in pairs(STORE_ITEMS) do
     local submenu = _menuPool:AddSubMenu(menu, category, "See our selection of " .. category, true --[[KEEP POSITION]])
-		table.insert(created_menus, submenu)
     for i = 1, #weapons do
       ---------------------------------------------
       -- Button for each weapon in each category --
@@ -129,7 +106,7 @@ function CreateWeaponShopMenu(menu)
       ----------------------------------------
       -- add to sub menu created previously --
       ----------------------------------------
-      submenu:AddItem(item)
+      submenu.SubMenu:AddItem(item)
     end
   end
 end
@@ -149,7 +126,7 @@ Citizen.CreateThread(function()
 		-- see if close to any stores --
     for i = 1, #locations do
     	DrawText3D(locations[i].x, locations[i].y, locations[i].z, 5, '[E] - Ammunation')
-    	if IsControlJustPressed(1, MENU_KEY) and not IsAnyMenuVisible() then
+    	if IsControlJustPressed(1, MENU_KEY) and not _menuPool:IsAnyMenuOpen() then
 				if Vdist(mycoords.x, mycoords.y, mycoords.z, locations[i].x, locations[i].y, locations[i].z) < 1.3 then
 					Wait(500)
 					if not IsControlPressed(1, MENU_KEY) then -- not held
@@ -164,11 +141,13 @@ Citizen.CreateThread(function()
     end
 		-- close menu when far away --
 		if closest_location then
-			if Vdist(mycoords.x, mycoords.y, mycoords.z, closest_location.x, closest_location.y, closest_location.z) > 1.3 then
-				if IsAnyMenuVisible() then
-					closest_location = nil
-					CloseAllMenus()
-				end
+      if Vdist(mycoords.x, mycoords.y, mycoords.z, closest_location.x, closest_location.y, closest_location.z) > 1.3 then
+        if _menuPool then
+          if _menuPool:IsAnyMenuOpen() then
+            closest_location = nil
+            _menuPool:CloseAllMenus()
+          end
+        end
 			end
 		end
   end

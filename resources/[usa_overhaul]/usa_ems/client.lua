@@ -174,19 +174,19 @@ function CreateMenu(menu)
     local loadslot = UIMenuListItem.New("Slot to Load", emsoutfitamount)
     local loadconfirm = UIMenuItem.New('Load Outfit', 'Load outfit from above number')
     loadconfirm:SetRightBadge(BadgeStyle.Clothes)
-    submenu2:AddItem(loadslot)
-    submenu2:AddItem(loadconfirm)
-    submenu2:AddItem(saveslot)
-    submenu2:AddItem(saveconfirm)
+    submenu2.SubMenu:AddItem(loadslot)
+    submenu2.SubMenu:AddItem(loadconfirm)
+    submenu2.SubMenu:AddItem(saveslot)
+    submenu2.SubMenu:AddItem(saveconfirm)
 
-	submenu2.OnListChange = function(sender, item, index)
+	submenu2.SubMenu.OnListChange = function(sender, item, index)
         if item == saveslot then
             selectedSaveSlot = item:IndexToItem(index)
         elseif item == loadslot then
             selectedLoadSlot = item:IndexToItem(index)
         end
     end
-    submenu2.OnItemSelect = function(sender, item, index)
+    submenu2.SubMenu.OnItemSelect = function(sender, item, index)
         if item == saveconfirm then
             local character = {
 			["components"] = {},
@@ -240,7 +240,7 @@ function CreateMenu(menu)
 				selectedTexture = 0
 			end
 		end
-		submenu:AddItem(listitem)
+		submenu.SubMenu:AddItem(listitem)
 		--if maxTexture > 1 then
 				arr = {}
 				for j = 0, MAX_COMPONENT_TEXTURE do arr[j] = j - 1 end
@@ -251,7 +251,7 @@ function CreateMenu(menu)
 						SetPedComponentVariation(ped, i - 1, selectedComponent, selectedTexture, 0)
 					end
 				end
-				submenu:AddItem(listitem)
+				submenu.SubMenu:AddItem(listitem)
 		--end
 	end
 	-- Props --
@@ -275,7 +275,7 @@ function CreateMenu(menu)
 				end
 			end
 		end
-		submenu:AddItem(listitem)
+		submenu.SubMenu:AddItem(listitem)
 		--if maxPropTexture > 1 and selectedProp > -1 then
 			arr = {}
 			for j = 0, MAX_PROP_TEXTURE do arr[j] = j - 1 end
@@ -287,7 +287,7 @@ function CreateMenu(menu)
 					SetPedPropIndex(ped, i - 1, selectedProp, selectedPropTexture, true)
 				end
 			end
-			submenu:AddItem(listitem)
+			submenu.SubMenu:AddItem(listitem)
 		--end
 	end
 	-- clear props button --
@@ -297,7 +297,7 @@ function CreateMenu(menu)
 		ClearPedProp(ped, 1)
 		ClearPedProp(ped, 2)
 	end
-	submenu:AddItem(item)
+	submenu.SubMenu:AddItem(item)
 	local loadoutBtn = NativeUI.CreateItem("Get Loadout", "Retrieve flares and a fire extinguisher")
 	loadoutBtn.Activated = function(parentmenu, selected)
 		TriggerServerEvent("ems:getLoadout")

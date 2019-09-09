@@ -953,11 +953,11 @@ function LoadPropertyMenu(menu_data, location, index)
 	            	TriggerServerEvent("properties:retrieveItem", location, index, item, item.quantity)
 	            end
             end
-            retrieval_submenu:AddItem(itembtn)
+            retrieval_submenu.SubMenu:AddItem(itembtn)
         end
     else
         local item = NativeUI.CreateItem("You have nothing stored here!", "Press \"Store Items\" to store something here.")
-        retrieval_submenu:AddItem(item)
+        retrieval_submenu.SubMenu:AddItem(item)
     end
     --------------------
     -- item storage --
@@ -993,11 +993,11 @@ function LoadPropertyMenu(menu_data, location, index)
 	            	TriggerServerEvent("properties:storeItem", location, index, item, item.quantity)
 	            end
 	       	end
-            storage_submenu:AddItem(itembtn)
+            storage_submenu.SubMenu:AddItem(itembtn)
         end
     else
         local item = NativeUI.CreateItem("No items to store!", "You have nothing to store.")
-        storage_submenu:AddItem(item)
+        storage_submenu.SubMenu:AddItem(item)
     end
     _menuPool:RefreshIndex()
     _menuPool:Add(mainMenu)
@@ -1008,7 +1008,6 @@ DoScreenFadeIn(0)
 
 function RemoveMenuPool()
 	_menuPool:CloseAllMenus()
-    _menuPool:Remove()
     _menuPool = nil
 end
 
