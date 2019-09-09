@@ -37,7 +37,7 @@ function CreateBarMenu(menu)
               local business = exports["usa-businesses"]:GetClosestStore(15)
               TriggerServerEvent("bars:buy", category, name, business)
             end
-            submenu:AddItem(item)
+            submenu.SubMenu:AddItem(item)
         end
     end
 end

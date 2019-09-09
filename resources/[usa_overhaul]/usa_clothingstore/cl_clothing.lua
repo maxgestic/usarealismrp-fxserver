@@ -293,7 +293,7 @@ function CreateMenu()
 				ComponentValuesMenu:AddItem(clearbtn)
 				ComponentValuesMenu:Visible(true)
 			end
-			components_submenu:AddItem(item)
+			components_submenu.SubMenu:AddItem(item)
 		end
 
 		-- props --
@@ -337,7 +337,7 @@ function CreateMenu()
 				end
 				ComponentValuesMenu:Visible(true)
 			end
-			props_submenu:AddItem(item)
+			props_submenu.SubMenu:AddItem(item)
 		end
 
 		local item = NativeUI.CreateItem("Clear Props", "Remove all props")
@@ -346,7 +346,7 @@ function CreateMenu()
 			ClearPedProp(me, 1)
 			ClearPedProp(me, 2)
 		end
-		props_submenu:AddItem(item)
+		props_submenu.SubMenu:AddItem(item)
 
 		-- save button --
 		local item = NativeUI.CreateItem("Save", "Save your selections.")

@@ -17,7 +17,6 @@ local boats = {
 local playerBoats = {}
 local closestShop = nil
 local MENU_OPEN_KEY = 38
-local created_menus = {}
 
 ---------------------------
 -- Set up main menu --
@@ -223,9 +222,9 @@ Citizen.CreateThread(function()
 		if closestShop then
 			local mycoords = GetEntityCoords(GetPlayerPed(-1))
 		    if Vdist(locations[closestShop].rent.x, locations[closestShop].rent.y, locations[closestShop].rent.z, mycoords.x, mycoords.y, mycoords.z) > 5.0 then
-		  		if IsAnyMenuVisible() then
+		  		if _menuPool:IsAnyMenuOpen() then
 		  			closestShop = nil
-		  			CloseAllMenus()
+		  			_menuPool:CloseAllMenus()
 		  		end
 			end
 		end
@@ -334,8 +333,6 @@ end
 
 function ShowMainMenu()
 	mainMenu:Clear()
-	created_menus = {}
-	table.insert(created_menus, mainMenu)
 	CreateRentMenu(mainMenu, boats)
 	CreateBuyMenu(mainMenu, boats)
 	CreateSellMenu(mainMenu, playerBoats)
@@ -345,35 +342,32 @@ end
 
 function CreateRentMenu(menu, vehicles)
 	local rentMenu = _menuPool:AddSubMenu(menu, "Rent a Boat", '', true)
-	table.insert(created_menus, rentMenu)
 	for i = 1, #boats do
 		local boat = boats[i]
 		local item = NativeUI.CreateItem(boat.name, 'Rent price: $' ..comma_value(boat.rent))
 		item.Activated = function(parentmenu, selected)
 			TriggerServerEvent("boatMenu:requestRent", boat, i)
 		end
-		rentMenu:AddItem(item)
+		rentMenu.SubMenu:AddItem(item)
 	end
 end
 
 function CreateBuyMenu(menu, vehicles)
 	local buyMenu = _menuPool:AddSubMenu(menu, 'Buy a Boat', '', true)
-	table.insert(created_menus, buyMenu)
 	for i = 1, #boats do
 		local boat = boats[i]
 		local item = NativeUI.CreateItem(boat.name, 'Purchase price: $' ..comma_value(boat.price))
 		item.Activated = function(parentmenu, selected)
 			TriggerServerEvent('boatMenu:requestPurchase', boat)
-			buyMenu:Visible(false)
+			buyMenu.SubMenu:Visible(false)
 		end
-		buyMenu:AddItem(item)
+		buyMenu.SubMenu:AddItem(item)
 	end
 end
 
 function CreateSellMenu(menu, vehicles)
 	if #playerBoats > 0 then
 		local sellMenu = _menuPool:AddSubMenu(menu, 'Sell a Boat', '', true)
-		table.insert(created_menus, sellMenu)
 		for i = 1, #playerBoats do
 			local boat = playerBoats[i]
 			local boatid = '('..boat.id..')'
@@ -386,7 +380,7 @@ function CreateSellMenu(menu, vehicles)
 					TriggerEvent('usa:notify', 'This boat is ~y~not stored~s~, cannot be sold!')
 				end
 			end
-			sellMenu:AddItem(item)
+			sellMenu.SubMenu:AddItem(item)
 		end
 	end
 end
@@ -395,7 +389,6 @@ function CreateGarageMenu(menu, vehicles)
 	-- Add vehicles to menu --
 	if #playerBoats > 0 then
 		local retrieveMenu = _menuPool:AddSubMenu(menu, 'Retrieve a Boat', '', true)
-		table.insert(created_menus, retrieveMenu)
 		for i = 1, #playerBoats do
 			local boat = playerBoats[i]
 			local store_status = ''
@@ -405,7 +398,7 @@ function CreateGarageMenu(menu, vehicles)
 				store_status = '(~r~Not Stored~s~)'
 			end
 			local item = NativeUI.CreateItem('Retrieve ' .. boat.name .. ' ' .. store_status, 'Boat ID: '..boat.id)
-			retrieveMenu:AddItem(item)
+			retrieveMenu.SubMenu:AddItem(item)
 			item.Activated = function(parentmenu, selected)
 				if boat.stored then
 					TriggerEvent("boatMenu:spawnSeacraft", boat)
@@ -433,23 +426,6 @@ function DrawText3D(x, y, z, distance, text)
         local factor = (string.len(text)) / 370
         DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
     end
-end
-
-function IsAnyMenuVisible()
-  for i = 1, #created_menus do
-    if created_menus[i]:Visible() then
-      return true
-    end
-  end
-  return false
-end
-
-function CloseAllMenus()
-  for i = 1, #created_menus do
-    if created_menus[i]:Visible() then
-      created_menus[i]:Visible(false)
-    end
-  end
 end
 
 ----------------------

@@ -34,7 +34,7 @@ mainMenu.OnItemSelect = function(menu, item, index)
 	local selected = item.Text._Text
 	if selected == "Sell" then
 		menu_data.vehicles_to_sell = nil
-		sell_submenu:Clear()
+		sell_submenu.SubMenu:Clear()
 		TriggerServerEvent("vehShop:loadVehiclesToSell")
 		while not menu_data.vehicles_to_sell do
 			Wait(50)
@@ -49,11 +49,11 @@ mainMenu.OnItemSelect = function(menu, item, index)
 					TriggerServerEvent("vehShop:sellVehicle", veh)
 					_menuPool:CloseAllMenus()
 				end
-				sell_submenu:AddItem(item)
+				sell_submenu.SubMenu:AddItem(item)
 			end
 		else
 			local item = NativeUI.CreateItem("No vehicles to sell!", "You don't own any vehicles!")
-			sell_submenu:AddItem(item)
+			sell_submenu.SubMenu:AddItem(item)
 		end
 	end
 end
@@ -73,7 +73,7 @@ function CreateMenu(menu)
 		buy_submenu = _menuPool:AddSubMenu(menu, "Buy", "Shop for a vehicle!", true)
 
 		for category, items in pairs(vehicleShopItems["vehicles"]) do
-		  local category_submenu = _menuPool:AddSubMenu(buy_submenu, category, "See our selection of " .. category, true)
+		  local category_submenu = _menuPool:AddSubMenu(buy_submenu.SubMenu, category, "See our selection of " .. category, true)
 		  for i = 1, #items do
 			  local item = NativeUI.CreateItem("($" .. comma_value(items[i].price) .. ") " .. items[i].make .. " " .. items[i].model, "Browse options for the " .. items[i].make .. " " .. items[i].model .. " (Storage Capacity: " .. items[i].storage_capacity .. ")")
 			  item.Activated = function(parentmenu, selected)
@@ -83,7 +83,7 @@ function CreateMenu(menu)
 				menu_data.preview.prev_menu = parentmenu
 				UpdatePreviewMenu()
 			  end
-			  category_submenu:AddItem(item)
+			  category_submenu.SubMenu:AddItem(item)
 		  end
 		end
 		----------
