@@ -31,8 +31,6 @@ local locations = {
   {x = 180.8, y = 2793.2, z = 45.7, legal = false, ped = { heading = 260.0, hash = -907676309 }} -- sandy shores, harmony area
 }
 
-local created_menus = {}
-
 function comma_value(amount)
   local formatted = amount
   while true do
@@ -68,23 +66,6 @@ function DrawText3D(x, y, z, text)
   DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
 end
 
-function IsAnyMenuVisible()
-	for i = 1, #created_menus do
-		if created_menus[i]:Visible() then
-			return true
-		end
-	end
-	return false
-end
-
-function CloseAllMenus()
-	for i = 1, #created_menus do
-		if created_menus[i]:Visible() then
-			created_menus[i]:Visible(false)
-		end
-	end
-end
-
 ----------------------
 -- Set up main menu --
 ----------------------
@@ -94,12 +75,8 @@ illegalShopMenu = NativeUI.CreateMenu("Weapon Extras", "~b~What are you looking 
 _menuPool:Add(legalShopMenu)
 _menuPool:Add(illegalShopMenu)
 
-table.insert(created_menus, legalShopMenu)
-table.insert(created_menus, illegalShopMenu)
-
 function CreateTintMenu(menu, legal)
   local submenu = _menuPool:AddSubMenu(menu, "Tints", "See our selection of Tints", true --[[KEEP POSITION]])
-  table.insert(created_menus, submenu)
   local tint
   if legal then
     tint = ITEMS["Tints"].legal
@@ -116,18 +93,16 @@ function CreateTintMenu(menu, legal)
       local equipped_weapon = GetSelectedPedWeapon(GetPlayerPed(-1))
       TriggerServerEvent("weaponExtraShop:requestTintPurchase", id, equipped_weapon, legal, 0)
     end
-    submenu:AddItem(item)
+    submenu.SubMenu:AddItem(item)
   end
 end
 
 function CreateLegalExtrasMenu(menu)
   -- submenu for components
   local componentsubmenu = _menuPool:AddSubMenu(menu, "Components", "See our selection of weapon components & extras.", true --[[KEEP POSITION]])
-  table.insert(created_menus, componentsubmenu)
   -- each weapon --
   for weapon, components in pairs(ITEMS["Components"].legal) do
-    local submenu = _menuPool:AddSubMenu(componentsubmenu, weapon, "See our selection of " .. weapon .. " components.", true --[[KEEP POSITION]])
-    table.insert(created_menus, submenu)
+    local submenu = _menuPool:AddSubMenu(componentsubmenu.SubMenu, weapon, "See our selection of " .. weapon .. " components.", true --[[KEEP POSITION]])
     for i = 1, #components do
       ---------------------------------------------
       -- Button for each weapon in each category --
@@ -149,7 +124,7 @@ function CreateLegalExtrasMenu(menu)
       ----------------------------------------
       -- add to sub menu created previously --
       ----------------------------------------
-      submenu:AddItem(item)
+      submenu.SubMenu:AddItem(item)
     end
   end
 end
@@ -157,11 +132,9 @@ end
 function CreateIllegalExtrasMenu(menu)
   -- submenu for components
   local componentsubmenu = _menuPool:AddSubMenu(menu, "Components", "See our selection of weapon components & extras.", true --[[KEEP POSITION]])
-  table.insert(created_menus, componentsubmenu)
   -- each weapon --
   for weapon, components in pairs(ITEMS["Components"].illegal) do
-    local submenu = _menuPool:AddSubMenu(componentsubmenu, weapon, "See our selection of " .. weapon .. " components.", true --[[KEEP POSITION]])
-    table.insert(created_menus, submenu)
+    local submenu = _menuPool:AddSubMenu(componentsubmenu.SubMenu, weapon, "See our selection of " .. weapon .. " components.", true --[[KEEP POSITION]])
     for i = 1, #components do
       ---------------------------------------------
       -- Button for each weapon in each category --
@@ -183,7 +156,7 @@ function CreateIllegalExtrasMenu(menu)
       ----------------------------------------
       -- add to sub menu created previously --
       ----------------------------------------
-      submenu:AddItem(item)
+      submenu.SubMenu:AddItem(item)
     end
   end
 end
@@ -216,9 +189,9 @@ Citizen.CreateThread(function()
       closest_shop = nil
     end
     if not closest_shop then
-      if IsAnyMenuVisible() then
+      if _menuPool:IsAnyMenuOpen() then
         closest_shop = nil
-        CloseAllMenus()
+        _menuPool:CloseAllMenus()
       end
     end
     --------------------------

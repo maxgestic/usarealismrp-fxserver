@@ -36,7 +36,7 @@ function CreateMenu(menu, gender, type)
             SetPedPropIndex(me, info.wrist, info.propVal, 0, true)
             AddToCart(name, info, 0)
         end
-        submenu:AddItem(tryOnBtn)
+        submenu.SubMenu:AddItem(tryOnBtn)
         local prop_texture_variations_total = GetTextureVariations(info.wrist, info.propVal)
         local textureSlider = NativeUI.CreateListItem("Variation:", prop_texture_variations_total, 1)
 		textureSlider.OnListSelected = function(sender, item, index)
@@ -47,8 +47,8 @@ function CreateMenu(menu, gender, type)
                 AddToCart(name, info, val)
 			end
 		end
-        submenu:AddItem(textureSlider)
-        menu:AddItem(submenu)
+        submenu.SubMenu:AddItem(textureSlider)
+        menu:AddItem(submenu.SubMenu)
     end
 
     local checkout = NativeUI.CreateItem("Checkout", "Check out the items you are wearing.")
@@ -121,7 +121,6 @@ Citizen.CreateThread(function()
                 cart = {}
                 closest_section = nil
                 menu:Visible(false)
-                _menuPool:Clear()
             end
         end
 

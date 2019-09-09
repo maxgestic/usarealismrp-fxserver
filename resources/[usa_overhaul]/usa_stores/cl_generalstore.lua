@@ -60,8 +60,6 @@ local GENERAL_STORE_ITEMS = {} -- loaded from server
 local HARDWARE_STORE_ITEMS = {}
 local closest_location = nil
 
-local created_menus = {}
-
 local MENU_KEY = 38
 
 local TIMEOUT = nil
@@ -78,23 +76,6 @@ function comma_value(amount)
     end
   end
   return formatted
-end
-
-function IsAnyMenuVisible()
-  for i = 1, #created_menus do
-    if created_menus[i]:Visible() then
-      return true
-    end
-  end
-  return false
-end
-
-function CloseAllMenus()
-  for i = 1, #created_menus do
-    if created_menus[i]:Visible() then
-      created_menus[i]:Visible(false)
-    end
-  end
 end
 
 function IsNearStore(store)
@@ -181,9 +162,6 @@ mainMenuHardware = NativeUI.CreateMenu("Hardware Store", "~b~Welcome!", 0, 320)
 _menuPool:Add(mainMenu)
 _menuPool:Add(mainMenuHardware)
 
-table.insert(created_menus, mainMenu)
-table.insert(created_menus, mainMenuHardware)
-
 --------------------------------
 -- Construct GUI menu buttons --
 --------------------------------
@@ -193,7 +171,6 @@ function CreateGeneralStoreMenu(menu, generalStoreItems)
   -----------------------------------
   for category, items in pairs(generalStoreItems) do
     local submenu = _menuPool:AddSubMenu(menu, category, "See our selection of " .. category .. " items", true --[[KEEP POSITION]])
-    table.insert(created_menus, submenu)
     for i = 1, #items do
       ---------------------------------------------
       -- Button for each item in each category --
@@ -215,7 +192,7 @@ function CreateGeneralStoreMenu(menu, generalStoreItems)
       ----------------------------------------
       -- add to sub menu created previously --
       ----------------------------------------
-      submenu:AddItem(item)
+      submenu.SubMenu:AddItem(item)
     end
   end
   ----------------------------
@@ -223,7 +200,7 @@ function CreateGeneralStoreMenu(menu, generalStoreItems)
   ----------------------------
   local item = NativeUI.CreateItem("Close", "Close the menu.")
   item.Activated = function(parentmenu, selected)
-    CloseAllMenus()
+    _menuPool:CloseAllMenus()
   end
   menu:AddItem(item)
   menu:Visible(true)
@@ -235,11 +212,10 @@ function CreateHardwareStoreMenu(menu, hardwareStoreItems)
   -----------------------------------
   for category, items in pairs(hardwareStoreItems) do
     local submenu = _menuPool:AddSubMenu(menu, category, "See our selection of " .. category .. " items", true --[[KEEP POSITION]])
-    table.insert(created_menus, submenu)
     for i = 1, #items do
-      ---------------------------------------------
+      -------------------------------------------
       -- Button for each item in each category --
-      ---------------------------------------------
+      -------------------------------------------
       local item = NativeUI.CreateItem(items[i].name, "Purchase price: $" .. comma_value(items[i].price))
       item.Activated = function(parentmenu, selected)
         if not TIMEOUT then
@@ -257,7 +233,7 @@ function CreateHardwareStoreMenu(menu, hardwareStoreItems)
       ----------------------------------------
       -- add to sub menu created previously --
       ----------------------------------------
-      submenu:AddItem(item)
+      submenu.SubMenu:AddItem(item)
     end
   end
   ----------------------------
@@ -265,7 +241,7 @@ function CreateHardwareStoreMenu(menu, hardwareStoreItems)
   ----------------------------
   local item = NativeUI.CreateItem("Close", "Close the menu.")
   item.Activated = function(parentmenu, selected)
-    CloseAllMenus()
+    _menuPool:CloseAllMenus()
   end
   menu:AddItem(item)
   menu:Visible(true)
@@ -284,7 +260,7 @@ Citizen.CreateThread(function()
     for i = 1, #HARDWARE_STORE_LOCATIONS do
       DrawText3D(HARDWARE_STORE_LOCATIONS[i].x, HARDWARE_STORE_LOCATIONS[i].y, HARDWARE_STORE_LOCATIONS[i].z, 7, '[E] - Hardware Store')
     end
-    if IsControlJustPressed(1, MENU_KEY) and not IsAnyMenuVisible() then
+    if IsControlJustPressed(1, MENU_KEY) and not _menuPool:IsAnyMenuOpen() then
       -- see if close to any stores --
       for i = 1, #GENERAL_STORE_LOCATIONS do
         if IsNearStore(GENERAL_STORE_LOCATIONS[i]) then
@@ -305,9 +281,9 @@ Citizen.CreateThread(function()
     -- close menu when far away --
     if closest_location then
       if not IsNearStore(closest_location) then
-        if IsAnyMenuVisible() then
+        if _menuPool:IsAnyMenuOpen() then
           closest_location = nil
-          CloseAllMenus()
+          _menuPool:CloseAllMenus()
         end
       end
     end
