@@ -3,6 +3,11 @@ local spectating = {}
 states.frozen = false
 states.frozenPos = nil
 
+local KEYS = {
+	SHIFT = 21,
+	N = 249
+}
+
 RegisterNetEvent("mini_admin:spectate")
 AddEventHandler("mini_admin:spectate", function(target, targetName, spectator_name)
 
@@ -259,3 +264,13 @@ function round(num, numDecimalPlaces)
   local mult = 10^(numDecimalPlaces or 0)
   return math.floor(num * mult + 0.5) / mult
 end
+
+-- noclip hot key --
+Citizen.CreateThread(function()
+	while true do
+		if IsControlPressed(1,  KEYS.SHIFT) and IsControlJustPressed(1, KEYS.N) then 
+			TriggerServerEvent("admin:checkGroupForNoClipHotkey")
+		end
+		Wait(10)
+	end
+end)

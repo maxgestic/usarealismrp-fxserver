@@ -224,6 +224,14 @@ end, {
 	help = "Move freely around the map."
 })
 
+RegisterServerEvent('admin:checkGroupForNoClipHotkey')
+AddEventHandler('admin:checkGroupForNoClipHotkey', function()
+	local user = exports["essentialmode"]:getPlayerFromId(source)
+	if user.getGroup() ~= "user" then
+		TriggerClientEvent("es_admin:noclip", source, GetPlayerName(source))
+	end
+end)
+
 -- Kicking
 TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, char)
 	local userSource = source
