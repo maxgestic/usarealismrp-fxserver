@@ -1,5 +1,3 @@
-local timer = nil
-
 local m = {
     delay = 90,
     prefix = '^5^*[USARRP] ^r^0',
@@ -28,40 +26,6 @@ Citizen.CreateThread(function()
         Citizen.Wait(0)
     end
 end)
-
-
-TriggerServerEvent('restart:updateStatus')
-RegisterNetEvent('restart:notify')
-AddEventHandler('restart:notify', function(time)
-	if not timer then
-		timer = time
-		Citizen.CreateThread(function()
-			while timer > 0 do
-				Citizen.Wait(0)
-				DrawTxt(1.2, 1.444, 1.0, 1.0, 0.50, 'Server restarting in '..timer..' minutes, disconnect soon or risk data loss!', 255, 255, 255, 255)
-			end
-		end)
-		Citizen.CreateThread(function()
-			while timer > 0 do
-				Citizen.Wait(60000)
-				timer = timer - 1
-			end
-		end)
-	end
-end)
-
-function DrawTxt(x,y ,width,height,scale, text, r,g,b,a)
-    SetTextFont(6)
-    SetTextProportional(0)
-    SetTextScale(scale, scale)
-    SetTextColour(r, g, b, a)
-    SetTextDropShadow(0, 0, 0, 0,255)
-    SetTextEdge(1, 0, 0, 0, 255)
-    SetTextOutline()
-    SetTextEntry("STRING")
-    AddTextComponentString(text)
-    DrawText(x - width/2, y - height/2 + 0.005)
-end
 
 function chat(i)
     TriggerEvent('chatMessage', '', {255,255,255}, m.prefix .. m.messages[i])
