@@ -9,7 +9,7 @@ local vendingModels = {
     "prop_vend_water_01"
 }
 
-local CHECK_RADIUS = 1.0
+local CHECK_RADIUS = 0.6
 
 local MENU_OPEN_KEY = 38
 
@@ -83,7 +83,7 @@ Citizen.CreateThread(function()
         end
 
         if _menuPool:IsAnyMenuOpen() then -- close when far away
-            if Vdist(playerCoords, closest.x, closest.y, closest.z) > 3.0 then
+            if Vdist(playerCoords, closest.x, closest.y, closest.z) > CHECK_RADIUS then
                 closest = nil
                 _menuPool:CloseAllMenus()
             end
