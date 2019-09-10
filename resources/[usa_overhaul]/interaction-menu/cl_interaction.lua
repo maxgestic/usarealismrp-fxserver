@@ -833,26 +833,23 @@ function interactionMenuUse(itemName, wholeItem)
 			intoxicate(true, nil)
 			reality(5)
 		elseif string.find(itemName, "LSD Vile") then
-			local drug_duration = 15 * 60 * 1000 -- 7 minutes
 			TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
 			TriggerEvent("interaction:notify", "You have used: (x1) LSD Vile")
-			Wait(8000)
-			DoScreenFadeOut(1500)
-			Wait(1500)
-			DoScreenFadeIn(1500)
-			StartScreenEffect("DrugsMichaelAliensFight", 0, false)
-			local useTime = GetGameTimer()
-			while (GetGameTimer() - useTime < drug_duration) do 
-				Wait(10)
-			end
-			DoScreenFadeOut(1000)
-			DoScreenFadeIn(1000)
-			StopScreenEffect("DrugsMichaelAliensFight")
-		elseif string.find(itemName, "Hash") then
-			TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
-			TriggerEvent("interaction:notify", "You have used: (x1) Hash")
-			intoxicate(true, nil)
-			reality(3)
+			Citizen.CreateThread(function()
+				local drug_duration = 15 * 60 * 1000 -- 15 minutes in ms?
+				Wait(8000)
+				DoScreenFadeOut(1500)
+				Wait(1500)
+				DoScreenFadeIn(1500)
+				StartScreenEffect("DrugsMichaelAliensFight", 0, false)
+				local useTime = GetGameTimer()
+				while GetGameTimer() - useTime <= drug_duration do 
+					Wait(1)
+				end
+				DoScreenFadeOut(1000)
+				DoScreenFadeIn(1000)
+				StopScreenEffect("DrugsMichaelAliensFight")
+			end)
 		elseif string.find(itemName, "Repair Kit") then
 			TriggerEvent("interaction:repairVehicle")
 		elseif string.find(itemName, "Hotwiring Kit") then
