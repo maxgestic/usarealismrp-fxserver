@@ -9,7 +9,7 @@
 			<h1>Welcome to <b>USA Realism RP!</b> -- <span style="font-size: 16px;">https://www.usarrp.net</span></h1>
 		</div>
 		<div class="notification" v-if="showNotification">{{ notification.msg }}</div>
-		<div class="body">
+		<div class="body dragscroll">
 			<div class="section characters" v-if="page == 'list'">
 				<div class="character" v-for="(character, index) in characters" @click="selectCharacter(index)" v-bind:data-id="character.id">
 					<h3><b>First Name:</b> {{ character.name.first }}</h3>
@@ -18,7 +18,7 @@
 					<h3><b>Bank:</b> <span>$</span>{{ character.bank | displayMoney }}</h3>
 					<h3 style="padding-top: 25px;"><b>DOB:</b> {{ character.dateOfBirth }}</h3>
 				</div>
-				<div class="character" id="new" v-if="characters.length < 3" @click="page = 'create'">
+				<div class="character" id="new" @click="page = 'create'">
 					<div class="new">+</div>
 					<h4>Create New</h4>
 				</div>
@@ -84,8 +84,8 @@
 			<button id="confirm_delete" type="button" onclick="confirmDelete()">I'm sure. Delete it!</button>
 		</footer>
 	</dialog>
-
 	<!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> vue.js -->
+	<script src="js/dragscroll.min.js" type="text/javascript"></script>
 	<script src="js/vue.min.js" type="text/javascript"></script>
 	<script src="js/script.js" type="text/javascript"></script>
 </body>

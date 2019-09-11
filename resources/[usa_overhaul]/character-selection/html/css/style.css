@@ -39,6 +39,9 @@ body {
 .body {
 	padding: 10px;
 	color: #fff;
+	width: 50vw;
+	overflow-x: scroll;
+	overflow-y: hidden;
 }
 
 .notification {
@@ -50,7 +53,10 @@ body {
 
 .section {
 	display: flex;
-	flex-wrap: wrap;
+}
+
+.section.characters {
+	padding: 0.5em 0;
 }
 
 .section.characters .character:first-child {
@@ -58,12 +64,15 @@ body {
 }
 
 .section.characters .character {
-	width: 31.9%;
-	height: 175px;
+	min-width: 200px;
+	height: 195px;
 	border: 2px solid #2b2e39;
 	border-radius: 5px;
 	text-align: center;
+	padding-top: 8px;
 	margin-left: 8px;
+	display: inline-block;
+	overflow-y: hidden;
 }
 
 .section.characters .character.selected {
@@ -309,4 +318,22 @@ dialog[open] {
 		-webkit-transform: translate(0, 0);
 		transform: translate(0, 0);
 	}
+}
+
+/* scrollbar */
+::-webkit-scrollbar {
+	width: 5px;
+	height: 5px;
+}
+
+::-webkit-scrollbar-track {
+	background: #2b2e39;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #308bcd; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #2772a8; 
 }

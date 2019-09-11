@@ -13,6 +13,7 @@ files {
   'html/img/los-santos.jpg',
   'html/img/alleyway.jpg',
   'html/index.html',
+  'html/js/dragscroll.min.js',
   'html/js/vue.min.js',
   'html/js/script.js',
   'html/css/style.css'
