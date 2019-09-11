@@ -3,8 +3,8 @@ local evidenceMenu = NativeUI.CreateMenu("Evidence", "~b~Review collected eviden
 _menuPool:Add(evidenceMenu)
 
 local evidenceMenus = {
-	{x = 473.06, y = -987.64, z = 25.01},
-	{x = -65.72, y = -814.59, z = 243.31}
+	{x = -65.72, y = -814.59, z = 243.31},
+	{x = 475.14663696289,y = -984.77886962891, z = 24.914937973022}
 }
 
 local playerData = {
