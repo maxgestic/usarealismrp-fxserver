@@ -13,6 +13,7 @@ local warp_locations = {
     },
     job_access = "civ"
   },
+  --[[
   ["Courthouse"] = {
     entrance = {
       coords = {318.162, -1631.92, 32.53},
@@ -24,6 +25,7 @@ local warp_locations = {
     },
   job_access = "civ"
   },
+  --]]
   ["24/7 - Paleto Back Door"] = { -- 24/7 paleto
   	entrance = {
       coords = {1741.41, 6419.52, 35.04},

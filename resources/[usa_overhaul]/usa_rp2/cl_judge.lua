@@ -1,13 +1,12 @@
 local DUTY_LOCATIONS = {
   ["Courthouse"] = {
-    x = 226.92,
-    y = -422.51,
-    z = -118.41
+    x = 242.0934753418,
+    y = -1104.5447998047,
+    z = 29.314226150513
   }
 }
 
 local KEY = 38
-
 
 Citizen.CreateThread(function()
 	while true do

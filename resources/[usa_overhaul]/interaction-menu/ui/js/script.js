@@ -42,7 +42,7 @@ var itemImages = {
   "Bag": "https://www.fastprinting.com.au/wp-content/uploads/Shopping-Bag.png",
   "Condoms": "https://i.dlpng.com/static/png/319596_thumb.png",
   "KY Intense Gel": "http://www.trojanbrands.com/-/media/Trojan/Products/Lubricants/Arouses_Intensifies-Box_Frnt.png?h=540&la=en&w=349&hash=3897CCA59E69F2FB5A1FD60F93FFAB810E72A7FD",
-  "Viagra": "https://i1.wp.com/www.usa-viagra.com/wp-content/uploads/2017/02/viagra.png?resize=300%2C300",
+  "Viagra": "https://imgur.com/XmpRKyX.png",
   "Tent": "http://www.stickpng.com/assets/thumbs/5a62107deace967f8e026a25.png",
   "Wood": "https://ya-webdesign.com/images/logs-clipart-chopped-wood-19.png",
   "Chair": "http://www.stickpng.com/assets/thumbs/580b57fcd9996e24bc43c26b.png",
