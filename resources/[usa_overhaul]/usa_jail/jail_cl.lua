@@ -116,7 +116,8 @@ AddEventHandler("jail:jail", function(cell, gender)
   TriggerEvent("cuff:unCuff", true)
   if not gender then
     gender = 'male'
-    if not IsPedMale(playerPed) then
+    local isFemale = IsPedModel(playerPed, GetHashKey("mp_f_freemode_01"))
+    if isFemale then 
       gender = 'female'
     end
   end
