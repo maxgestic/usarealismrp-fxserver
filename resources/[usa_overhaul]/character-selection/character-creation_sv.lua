@@ -1,6 +1,9 @@
 local WHOLE_DAYS_TO_DELETE = 3
 local DEFAULT_MONEY = 0
 local DEFAULT_BANK = 5000
+local MAX_DAILY_NEW_CHARS = 1
+
+local createdCharCounts = {}
 
 TriggerEvent('es:addCommand', 'swap', function(source, args, user)
 	TriggerClientEvent("character:swap--check-distance", source)
@@ -24,9 +27,19 @@ end)
 RegisterServerEvent("character:new")
 AddEventHandler("character:new", function(data)
 	local usource = tonumber(source)
+	local ident = GetPlayerIdentifiers(usource)[1]
+	if createdCharCounts[ident] then 
+		if createdCharCounts[ident] >= MAX_DAILY_NEW_CHARS then
+			TriggerClientEvent("usa:notify", usource, "You've reached the daily new char. limit!", "^0You've reached the daily new char. limit!")
+			return
+		end
+	else 
+		createdCharCounts[ident] = 0
+	end
 	if IsValidInput(usource, data) then
 		data = ValidateNameCapitlization(data)
 		exports["usa-characters"]:CreateNewCharacter(usource, data, function()
+			createdCharCounts[ident] = createdCharCounts[ident] + 1
 			TriggerEvent("character:getCharactersAndOpenMenu", "home", usource)
 		end)
 	end

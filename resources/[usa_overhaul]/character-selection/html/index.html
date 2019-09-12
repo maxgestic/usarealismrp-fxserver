@@ -9,8 +9,8 @@
 			<h1>Welcome to <b>USA Realism RP!</b> -- <span style="font-size: 16px;">https://www.usarrp.net</span></h1>
 		</div>
 		<div class="notification" v-if="showNotification">{{ notification.msg }}</div>
-		<div class="body dragscroll">
-			<div class="section characters" v-if="page == 'list'">
+		<div class="body">
+			<div class="section characters dragscroll" v-show="page == 'list'">
 				<div class="character" v-for="(character, index) in characters" @click="selectCharacter(index)" v-bind:data-id="character.id">
 					<h3><b>First Name:</b> {{ character.name.first }}</h3>
 					<h3><b>Last Name:</b> {{ character.name.last }}</h3>

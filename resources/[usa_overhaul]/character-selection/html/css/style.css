@@ -7,13 +7,15 @@
 }
 
 body {
-	margin: 0;
-	padding: 0;
+	margin: 0 auto;
+	padding: 10px;
 	font-family: 'Roboto', sans-serif;
 	display: none;
 	align-items: center;
 	justify-content: center;
-	overflow: hidden;
+	overflow-y: hidden;
+	color: #fff;
+	width: 50vw;
 }
 
 .container {
@@ -36,14 +38,6 @@ body {
 	font-weight: normal;
 }
 
-.body {
-	padding: 10px;
-	color: #fff;
-	width: 50vw;
-	overflow-x: scroll;
-	overflow-y: hidden;
-}
-
 .notification {
 	color: #fff;
 	background: #903838;
@@ -57,6 +51,7 @@ body {
 
 .section.characters {
 	padding: 0.5em 0;
+	overflow-x: scroll;
 }
 
 .section.characters .character:first-child {
