@@ -432,31 +432,7 @@ AddEventHandler('playerDropped', function()
 	end
 end)
 
-function commandsText(source)
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "1) ^3/myjob <msg>^0 - see who you are currently employed with")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "5) ^3/id^0 - Show your ID")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "6) ^3/report <msg>^0 - report someone (include id)")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "6) ^3/help <msg>^0 - request help from a staff member (or respond to whisper)")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "7) ^3/me <msg>^0 - talks as yourself doing an action")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "8) ^3/givecash [id] [amount]^0 - to give cash")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "9) ^3/ad <msg>^0 - create an advertisement")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "10) ^3To send a tweet, buy a cell phone from the general store")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "11) ^3M^0 - open interaction menu")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "12) ^Hold ^2F3^0 to open the players list, see ID #'s'")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "13) ^3Press ^2F2^0 to toggle your voip range")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "14) ^3Press ^2U^0 to lock/unlock vehicles")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "15) ^3/open [option]^0 options: hood, trunk, fr, fl, br, bl, ambulance")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "16) ^3/close [option]^0 options: hood, trunk, fr, fl, br, bl, ambulance")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "17) ^3/engine - toggle your engine on and off")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "17) ^3K^0 to toggle your seat belt")
-	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "18) Open chat with '^3T^0' then use ^3Page Up^0 to scroll up")
-end
-
 -- end util functions / start commands
-
-TriggerEvent('es:addCommand', 'commands', function(source, args, char)
-	commandsText(source)
-end, {help = "Show some server commands. (Full list on website)"})
 
 TriggerEvent('es:addCommand', 'discord', function(source, args, char)
 	TriggerClientEvent("chatMessage", source, "", {255, 255, 255}, "Discord: https://discord.gg/aAPCdva")
