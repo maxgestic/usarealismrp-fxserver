@@ -350,7 +350,7 @@ function JobGetsFreeUpgrades(job)
 		return true
 	elseif job == "ems" then
 		return true
-	elseif job == "doc" then
+	elseif job == "corrections" then
 		return true
 	else
 		return false
