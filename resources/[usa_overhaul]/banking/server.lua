@@ -110,21 +110,22 @@ AddEventHandler('bank:withdraw', function(amount)
 end)
 
 -- Give Cash
-TriggerEvent('es:addCommand', 'givecash', function(source, args, user)
-	local fromPlayer
-	local toPlayer
-	local amount
-	if (args[2] ~= nil and tonumber(args[3]) > 0) then
-		fromPlayer = tonumber(source)
-		toPlayer = tonumber(args[2])
-		local char = exports["usa-characters"]:GetCharacter(toPlayer)
-		if char then
-			local to_user_name = char.getFullName()
-			amount = math.ceil(tonumber(args[3]))
-			TriggerClientEvent('bank:givecash', source, toPlayer, amount, "test", source)
+TriggerEvent('es:addCommand', 'givecash', function(source, args, char)
+	print("giving cash")
+	if #args == 3 then
+		local toPlayer = tonumber(args[2])
+		local toChar = exports["usa-characters"]:GetCharacter(toPlayer)
+		if toChar then
+			local to_user_name = toChar.getFullName()
+			local amount = math.ceil(tonumber(args[3]))
+			if char.get("money") >= amount then
+				TriggerClientEvent('bank:givecash', source, toPlayer, amount, "test", source)
+			else 
+				TriggerClientEvent('usa:notify', source, "You don't have that much!")
+			end
 		end
 	else
-		TriggerClientEvent('usa:notify', fromPlayer, "~y~Usage: ~s~givecash <id> <amount>")
+		TriggerClientEvent('usa:notify', source, "~y~Usage: ~w~/givecash <id> <amount>")
 	end
 end, {
 	help = "give cash to another player",
@@ -176,11 +177,11 @@ AddEventHandler('bank:givecash', function(toPlayer, amount)
 			TriggerClientEvent('chatMessage', toPlayer, "", {}, source .. " has given you $" .. comma_value(amount))
 		else
 			if (tonumber(from_money) < tonumber(amount)) then
-				TriggerClientEvent('usa:notify', toPlayer, "You do not have enough cash!")
+				TriggerClientEvent('usa:notify', source, "You do not have enough cash!")
 			end
 		end
 	else
-		TriggerClientEvent('usa:notify', toPlayer, "Player not found!")
+		TriggerClientEvent('usa:notify', source, "Player not found!")
 	end
 end)
 
