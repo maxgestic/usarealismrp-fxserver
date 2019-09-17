@@ -49,9 +49,9 @@ function DepositPayCheck(char)
         end
     elseif job == "ems" or job == "fire" then
         local rank = char.get("emsRank")
-        paycheckAmount = 120
+        paycheckAmount = 220
         if rank == 2 then
-            paycheckAmount = 215
+            paycheckAmount = 245
         elseif rank == 3 then
             paycheckAmount = 275
         elseif rank == 4 then
