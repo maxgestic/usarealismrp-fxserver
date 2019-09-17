@@ -80,7 +80,7 @@ local blips = {
 	--{ title="Watercraft Course", colour = 63, id = 38, x=2272.15, y=4321.29, z=39.8 },
 	--{ title="Barber Shop", colour = 4, id = 71, x=-278.174, y=6226.93, z=51.6 },
 	--{ title="Weed", colour = 2, id = 140, x = 2224.04, y = 5577.28, z = 52.7 },
-	{ title="Courthouse", colour = 84, id = 475, scale = 0.7, x = 317.283, y = -1631.1505, z = 31.59 },
+	{ title="Courthouse", colour = 84, id = 475, scale = 0.7, x = 243.34686279297,y = -1073.7106933594, z = 29.285400390625 },
 	--{ title="Burns Events Center", colour = 4, id = 354, x = 1228.009, y = 3642.315, z = 32.79 },
 	{ title="Weazel News", colour = 4, id = 184, x = -249.6443, y = 6235.7524, z = 30.4893 },
 	{ title="Weazel News", colour = 4, id = 184, x = -599.5, y = -931.9, z = 23.9 },
