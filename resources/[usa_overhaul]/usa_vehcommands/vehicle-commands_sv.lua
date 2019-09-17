@@ -66,6 +66,11 @@ local VEHICLE_RANKS = {
 			rank = 6,
 			allowedLiveries = { 1 },
 			hash = 1127131465
+		},
+		["policeb"] = {
+			rank = 4,
+			allowedLiveries = { 1 },
+			hash = -34623805
 		}
 	},
 	["ems"] = {
