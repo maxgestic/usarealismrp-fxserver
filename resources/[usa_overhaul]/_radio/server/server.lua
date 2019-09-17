@@ -4,18 +4,19 @@ local Channels = {
     {id = 3, name = "TAC 1"},
     {id = 4, name = "TAC 2"},
     {id = 5, name = "Tow Freq."},
-    {id = 6, name = "CB CH. 1"}
+    {id = 6, name = "CB CH. 1"},
+    {id = 7, name = "CORRECTIONS"},
     --{id = 7, name = "CB CH. 2"},
     --{id = 8, name = "CB CH. 3"}
 }
 
 local Permissions = {
-    ["sheriff"] = { 1, 2, 3, 4, 5, 6, 7, 8 },
-    ["corrections"] = { 1, 2, 3, 4, 5, 6, 7, 8 },
-    ["ems"] = { 1, 2, 3, 4, 5, 6, 7, 8 },
-    ["tow"] = { 1, 5, 6, 7, 8 },
-    ["civ"] = { 1, 6, 7, 8 },
-    ["doctor"] = { 1, 2 }
+    ["sheriff"] = { 1, 2, 3, 4, 5, 6, 7 },
+    ["corrections"] = { 1, 2, 3, 4, 5, 6, 7},
+    ["ems"] = { 1, 2, 3, 4, 5, 6, 7 },
+    ["tow"] = { 1, 5, 6 },
+    ["civ"] = { 1, 6 },
+    ["doctor"] = { 1, 2, 6, 7 }
 }
 
 local CAN_CIVS_USE = false
@@ -40,7 +41,7 @@ function GetPermittedChannelsForJob(job)
     local chans = {}
     local allowedFreqs = {}
     if not Permissions[job] then 
-        allowedFreqs = { 1, 6, 7, 8 } -- default civ freqs
+        allowedFreqs = { 1, 6} -- default civ freqs
     else
         allowedFreqs = Permissions[job]
     end
