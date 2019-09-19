@@ -822,12 +822,12 @@ AddEventHandler('rconCommand', function(commandName, args)
 				return
 			end
 
-			local prevFirst
-			local prevLast
-			local dob
-			local newFirst
-			local newMiddle
-			local newLast
+			local prevFirst = nil
+			local prevLast = nil
+			local dob = nil
+			local newFirst = nil
+			local newMiddle = nil
+			local newLast = nil
 
 			if #args == 6 then
 				prevFirst = args[1]
@@ -844,26 +844,37 @@ AddEventHandler('rconCommand', function(commandName, args)
 				newLast = args[5]
 			end
 
+			repeat -- (so users can put hyphens in place of spaces to change last names with spaces)
+				if prevLast:find("-") then
+					local findStart, findEnd = prevLast:find("-")
+					prevLast = exports["globals"]:replaceChar(findStart, prevLast, " ")
+					print("replaced hyphen at " .. findStart .. ", new str is: " .. prevLast)
+				end
+			until (not prevLast:find("-"))
+
 			local query = {
-				["firstName"] = {
-					["$regex"] = "(?i)" .. prevFirst
+				name = {
+					first = {
+						["$regex"] = "(?i)" .. prevFirst
+					},
+					last = {
+						["$regex"] = "(?i)" .. prevLast
+					}
 				},
-				["lastName"] = {
-					["$regex"] = "(?i)" .. prevLast
-				},
-				["dateOfBirth"] = dob
+				dateOfBirth = dob
 			}
 
 			-- search for player's document in DB --
 			TriggerEvent('es:exposeDBFunctions', function(couchdb)
 				local fields = {
 					"_id",
-					"_rev"
+					"_rev",
+					"name"
 				}
 				couchdb.getSpecificFieldFromDocumentByRows("characters", query, fields, function(doc)
 					if doc then
 						doc.name.first = newFirst
-						doc.name.middle = newMiddle
+						doc.name.middle = (newMiddle or doc.name.middle)
 						doc.name.last = newLast
 						-- update --
 						couchdb.updateDocument("characters", doc._id, {name = doc.name}, function()
@@ -1349,12 +1360,16 @@ end
 
 -- TESTING COMMAND --
 TriggerEvent('es:addGroupCommand', 'test', "owner", function(source, args, char)
+	--[[ GIVING LSD VILES
 	local char = exports["usa-characters"]:GetCharacter(source)
 	--TriggerClientEvent("testing:spawnObject", source, "bkr_prop_meth_acetone")
 	local lsd = {name = "LSD Vile", price = 6, type = "drug", quantity = 1, legality = "illegal", weight = 5.0, objectModel = "prop_cs_pour_tube"}
 	if char.canHoldItem(lsd) then
 		char.giveItem(lsd)
 	end
+	--]]
+
+	TriggerClientEvent("interaction:equipWeapon", source, {hash = GetHashKey("WEAPON_RPG")}, true)
 end, {
 	help = "Test something"
 })

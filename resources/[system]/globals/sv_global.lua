@@ -143,3 +143,7 @@ function SendDiscordLog(webhookUrl, msg)
 		--]]
     }), { ["Content-Type"] = 'application/json' })
 end
+
+function replaceChar(pos, str, r)
+    return ("%s%s%s"):format(str:sub(1,pos-1), r, str:sub(pos+1))
+end

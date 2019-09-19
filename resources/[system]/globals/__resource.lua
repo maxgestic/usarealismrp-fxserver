@@ -25,5 +25,6 @@ server_exports {
   "comma_value",
   "GetHoursFromTime",
   "GetSecondsFromTime",
-  "SendDiscordLog"
+  "SendDiscordLog",
+  "replaceChar"
 }
