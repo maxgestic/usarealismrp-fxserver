@@ -324,15 +324,14 @@ var interactionMenu = new Vue({
           case "Inventory": {
             /* load inventory items */
             $.post('http://interaction-menu/loadInventory', JSON.stringify({}));
-            /* Set page */
-            this.currentPage = "Inventory";
             /* Toggle veh inv */
             if (this.targetVehiclePlate) {
               $.post("http://interaction-menu/loadVehicleInventory", JSON.stringify({
                 plate: this.targetVehiclePlate
               }));
-              this.showSecondaryInventory = true;
             }
+            /* Set page */
+            this.currentPage = "Inventory";
             break;
           }
         }
@@ -714,6 +713,8 @@ $(function() {
       if (event.data.locked) {
         interactionMenu.locked = event.data.locked;
       }
+      /* Show secondary inventory (only show after locked status is set to prevent premature access to items when locked) */
+      interactionMenu.showSecondaryInventory = true;
 		} else if (event.data.type == "updateBothInventories") {
       interactionMenu.inventory = event.data.inventory.primary;
       interactionMenu.vehicleInventory = event.data.inventory.secondary;
