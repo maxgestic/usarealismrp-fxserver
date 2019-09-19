@@ -47,6 +47,9 @@ function EnableGui(enable, phone)
 			enable = enable
 		})
 	end
+	if enable and IsEntityDead(PlayerPedId()) then 
+		TriggerServerEvent('display:shareDisplay', 'starts using cell phone', 2, 370, 10, 7500)
+	end
 end
 
 RegisterNetEvent("phone:loadedMessagesFromId")
