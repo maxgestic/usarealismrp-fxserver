@@ -15,13 +15,13 @@ local DOORS = {
   {name = "Mission Row / Cell 4", x = 467.16943359375,y = -998.13598632813, z = 24.914945602417, model = 871712474, locked = true, offset={0.0, 1.12, 0.025}, heading=0, _dist = 1.0, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Mission Row / Cell 5", x = 469.29229736328,y = -999.87762451172, z = 24.914936065674, model = 871712474, locked = true, offset={0.0, 1.12, 0.025}, heading=270, _dist = 1.0, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Mission Row / Cell 6", x = 468.23550415039,y = -1003.1491088867, z = 24.914926528931, model = 871712474, locked = true, offset={0.0, 1.12, 0.025}, heading=180, _dist = 1.0, allowedJobs = {'sheriff', 'corrections', 'judge'}},
-
+  {name = "Mission Row / Evidence", x = 473.89660644531,y = -988.15203857422, z = 24.914939880371, model = -1033001619, locked = false, offset={0.0, -1.0, 0.0}, heading=180, _dist = 1.0, allowedJobs = {'sheriff', 'corrections', "ems", "judge"}},
   {name = "Mission Row / Lower Entry 1", x = 463.57867431641,y = -1004.1882324219, z = 24.914945602417, model = 185711165, locked = true, static = true, _dist = 1.0, allowedJobs = {'sheriff', "corrections", "ems", "judge"}},
   {name = "Mission Row / Lower Entry 2", x = 464.4914855957,y = -1004.1607055664, z = 24.914945602417, model = 185711165, locked = false, offset={0.0, 1.24, 0.0}, heading=0, _dist = 1.5, allowedJobs = {'sheriff', "corrections", "ems", "judge"}},
-
-  
   {name = "Mission Row / Office", x = 447.3,  y = -980.4, z = 30.7, model = -1320876379, locked = true, offset={0.0, 1.15, -0.1}, heading=180, _dist = 1.0, allowedJobs = {'sheriff'}},
-  {name = "Mission Row / Lower Aux 1", x = 466.30242919922,y = -989.45874023438, z = 24.914945602417, model = 185711165, locked = true, offset={0.0, 1.15, -0.1}, heading=90, _dist = 1.5, allowedJobs = {'sheriff', "corrections", "ems"}},
+  --{name = "Mission Row / Lower Aux 1", x = 466.30242919922,y = -989.45874023438, z = 24.914945602417, model = 185711165, locked = true, offset={0.0, 1.15, -0.1}, heading=90, _dist = 1.5, allowedJobs = {'sheriff', "corrections", "ems"}},
+  {name = "Mission Row / Aux 1", x = 466.12319946289,y = -990.48913574219, z = 24.914930343628, model = 185711165, locked = true, static = true, _dist = 1.0, allowedJobs = {'sheriff', "corrections", "ems", "judge"}},
+  {name = "Mission Row / Aux 2", x = 466.26898193359,y = -989.31799316406, z = 24.914930343628, model = 185711165, locked = false, offset={0.0, 1.24, 0.0}, heading=90, _dist = 1.5, allowedJobs = {'sheriff', "corrections", "ems", "judge"}},
   {name = "EMS Station - Paleto", x = -361.8, y = 6129.8, z = 31.4, model = -250842784, locked = false, _dist = 1.5, allowedJobs = {'ems'}},
   {name = "Mission Row / Roof", x = 461.2, y = -986.0, z = 30.7, model = 749848321, locked = true, offset={0.0, 1.05, 0.10}, heading=89, _dist = 1.0, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   --{name = "BCSO Station Gate - Paleto", model = -1483471451, locked = false, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
@@ -88,11 +88,6 @@ local DOORS = {
   {name = 'BCSO Paleto - Door 1', x = -443.16, y = 6015.41, z = 31.71, model = -1501157055, locked = false, offset={0.0, 1.24, -0.1}, heading = 315, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = 'BCSO Paleto - Door 2', x = -444.3, y = 6016.3, z = 31.71, model = -1501157055, locked = true, _dist = 1.5, static = true, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = 'Mission Row / Armory', x = 452.71, y = -982.616, z = 30.6, model = 749848321, locked = true, offset={0.0, 1.05, 0.3}, heading = 270, _dist = 1.5, allowedJobs = {'sheriff', "corrections"}},
-  {name = 'Courthouse / Office', x = 226.89, y = -415.70, z = -118.46, model = 34120519, locked = true, offset={0.0, 1.1, 0.0}, heading = 250, _dist = 1.0, allowedJobs = {'sheriff', 'judge', "corrections"}},
-  {name = 'Courthouse / Door 1', x = 238.94, y = -420.29, z = -118.46, model = 110411286, locked = true, offset={0.0, -1.2, 0.0}, heading = 250, _dist = 1.0, allowedJobs = {'judge', "corrections"}},
-  {name = 'Courthouse / Door 2', x = 238.33, y = -421.69, z = -118.46, model = 110411286, locked = true, static = true, _dist = 1.0, allowedJobs = {'judge', "corrections"}},
-  {name = 'Courthouse / Entrance 1', x = 234.42, y = -416.00, z = -118.46, model = 110411286, locked = false, offset={0.0, -1.2, 0.0}, heading = 160, _dist = 1.0, allowedJobs = {'judge', "corrections"}},
-  {name = 'Courthouse / Entrance 2', x = 232.99, y = -415.870, z = -118.46, model = 110411286, locked = true, static = true, _dist = 1.0, allowedJobs = {'judge', "corrections"}},
   {name = 'Nightclub / Door 1', x = -1621.88, y = -3016.0, z = -75.20, model = -1119680854, locked = true, static = true, _dist = 1.0},
   {name = 'Nightclub / Door 2', x = -1621.15, y = -3019.06, z = -75.20, model = 1695461688, locked = true, static = true, _dist = 1.0},
   {name = 'Nightclub / Door 3', x = -1610.8, y = -3004.98, z = -79.0, model = 1743859485, locked = true, static = true, _dist = 1.0},
@@ -110,6 +105,8 @@ local DOORS = {
   {name = "DA Office / Door 2", x = -75.15, y = -821.65, z = 243.38, model = 220394186, locked = true, static = true, _dist = 1.0},
   {name = "DA Office / Door 3", x = -77.35, y = -808.07, z = 243.38, model = -88942360, locked = true, offset = {0.0, 1.12, -0.02}, heading = 340.0, _dist = 1.0, allowedJobs = {'da', 'judge'}},
   {name = "DA Office / Door 4", x = -77.79, y = -814.25, z = 243.38, model = -88942360, locked = true, offset = {0.0, 1.12, -0.02}, heading = 250.0, _dist = 1.0, allowedJobs = {'da', 'judge'}},
+  {name = "Court House / Front 1", x = 242.60382080078,y = -1074.208984375, z = 29.287979125977, model = 110411286, locked = true, static = true, _dist = 1.0, allowedJobs = {'sheriff', "corrections", "ems", "judge"}},
+  {name = "Court House / Front 2", x = 243.99006652832,y = -1074.3812255859, z = 29.286693572998, model = 110411286, locked = false, offset={0.0, -1.24, 0.0}, heading=180, _dist = 1.5, allowedJobs = {'sheriff', "corrections", "ems", "judge"}},
 }
 
 -- allowedJobs - table of job names allowed to use door, the player's job must match any value in the list for the door to lock/unlock
