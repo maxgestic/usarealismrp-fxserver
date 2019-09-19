@@ -4,7 +4,7 @@ local TIMEOUT = false
 local CMD_TIMEOUT_IN_SECONDS = 20  -- /setweather command timeout in seconds
 local currentWeatherString = "CLEAR"   -- Starting Weather Type.
 local updateWeatherFlag = false
-local RAIN_PREVENT_CHANCE = 0.90
+local RAIN_PREVENT_CHANCE = 0.60
 
 -- weather types that must be invoked manually by an admin
 manualWeathers = {
@@ -58,18 +58,16 @@ weatherTree = {
 		{"CLOUDS", 15},
 		{"SNOWLIGHT", 0},
 		{"FOGGY", 10},
-		--{"RAIN", 0},
+		{"RAIN", 0},
 		{"CLEARING", 3},
 	},
-	--[[
 	["RAIN"] = {
 		{"THUNDER", 15},
 		{"CLEARING", 20},
 		{"OVERCAST", 40},
 	},
-	--]]
 	["THUNDER"] = {
-		--{"RAIN", 20},
+		{"RAIN", 20},
 		{"CLEARING", 70},
 	},
 	["CLEARING"] = {
@@ -78,7 +76,7 @@ weatherTree = {
 		{"OVERCAST", 10},
 		{"FOGGY", 12},
 		{"SMOG", 10},
-		--{"RAIN", 0},
+		{"RAIN", 0},
 		{"SNOWLIGHT", 0},
 	},
 	["SNOWLIGHT"] = {
@@ -169,7 +167,7 @@ function updateWeather()
 				newWeatherString = wTable[1]
 				if newWeatherString == "RAIN" then 
 					if math.random() <= RAIN_PREVENT_CHANCE then -- chance to stop rain when selected
-						while newWeatherString == "RAIN" do 
+						while newWeatherString == "RAIN" or newWeatherString == "CLEARING" do 
 							newWeatherString = wTable[math.random(#wTable)] -- choose random weather that's not RAIN
 						end
 					end
