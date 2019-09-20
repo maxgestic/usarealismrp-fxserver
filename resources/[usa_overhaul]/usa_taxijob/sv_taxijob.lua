@@ -10,9 +10,10 @@ AddEventHandler("taxiJob:payDriver", function(distance)
 		TriggerClientEvent('usa:notify', source, 'Request completed, you have received: ~g~$'..amountRewarded..'.00')
 		print("TAXI: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] has received amount["..amountRewarded..'] after distance['..distance..'] for taxi request!')
 	else
-		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
-    	TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit taxiJob:payDriver event, please intervene^0!')
-    end
+		--DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
+		--TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit taxiJob:payDriver event, please intervene^0!')
+		print("TAXI: SKETCHY TAXI payDriver event trigged by source " .. source .. "!!")
+	end
 end)
 
 RegisterServerEvent("taxiJob:setJob")
