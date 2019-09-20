@@ -26,13 +26,24 @@ local warp_locations = {
   job_access = "civ"
   },
   --]]
+  ['24/7 - Innocence Blvd.'] = { -- 24/7 little soul
+    entrance = {
+      coords = {26.365692138672, -1315.4512939453, 29.622989654541},
+      heading = 180.0
+    },
+    exit = {
+      coords = {31.172891616821,-1340.5278320313,29.497024536133},
+      heading = 180.0
+    },
+    job_access = 'civ'
+  },
   ["24/7 - Paleto Back Door"] = { -- 24/7 paleto
   	entrance = {
       coords = {1741.41, 6419.52, 35.04},
       heading = 340.0
     },
     exit = {
-      coords = {1737.03, 6147.98, 35.03},
+      coords = {1736.7709960938, 6418.537109375, 35.037254333496},
       heading = 62.0
     },
   job_access = "civ"
@@ -43,7 +54,7 @@ local warp_locations = {
       heading = 300.0
     },
     exit = {
-      coords = {1962.82, 3749.18, 32.34},
+      coords = {1962.3913574219, 3749.0971679688, 32.343746185303},
       heading = 125.0
     },
   job_access = "civ"
@@ -67,17 +78,6 @@ local warp_locations = {
     exit = {
       coords = {-3047.39, 589.11, 7.90},
       heading = 200.0
-    },
-  job_access = 'civ'
-  },
-  ['24/7 - Seoul Back Door'] = { -- 24/7 little soul
-    entrance = {
-      coords = {-702.88, -916.83, 19.21},
-      heading = 180.0
-    },
-    exit = {
-      coords = {-708.10, -903.43, 19.21},
-      heading = 180.0
     },
   job_access = 'civ'
   },
@@ -206,7 +206,7 @@ Citizen.CreateThread(function()
       local dist1 = GetDistanceBetweenCoords(x, y, z, entitycoords, true)
       local dist2 = GetDistanceBetweenCoords(_x, _y, _z, entitycoords, true)
       -- enter/exit
-      if dist1 < 1.6 then
+      if dist1 < 1.0 then
         DrawText3D(x, y, z, 4, '[E] - Enter '..key)
         if IsControlPressed(0, INTERACTION_KEY) then
           -- is location access restricted to certain jobs?
@@ -218,7 +218,7 @@ Citizen.CreateThread(function()
             TriggerServerEvent("warp:checkJob", value.exit.coords, value.exit.heading, value.job_access)
           end
         end
-      elseif dist2 < 1.6 then
+      elseif dist2 < 1.0 then
         DrawText3D(_x, _y, _z, 4, '[E] - Exit '..key)
         if IsControlPressed(0, INTERACTION_KEY) then
           DoorTransition(ped, x, y, z, value.entrance.heading)
