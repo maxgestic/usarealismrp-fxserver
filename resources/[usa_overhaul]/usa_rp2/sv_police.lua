@@ -175,7 +175,10 @@ AddEventHandler("search:searchPlayer", function(playerId, src)
 			end
 		end
 	end
-	TriggerClientEvent("chatMessage", src, "", {0,0,0}, "^3^*[SEARCH] ^r^0Cash Found:^0 $" .. comma_value(char.get("money")))
+	TriggerClientEvent("chatMessage", src, "", {0,0,0}, "^3^*[SEARCH]")
+	local idString = exports["usa_altchat"]:GetIdString(playerId, char)
+	TriggerClientEvent("chatMessage", src, "", {0,0,0}, idString)
+	TriggerClientEvent("chatMessage", src, "", {0,0,0}, "^3Cash Found:^0 $" .. comma_value(char.get("money")))
 	for i = 1, #items do
 		local name = items[i].name
 		local quantity = items[i].quantity
