@@ -13,7 +13,7 @@ var itemImages = {
   "Cheeseburger": "https://ya-webdesign.com/images/cheese-burger-png-8.png",
   "Kosher Hot Dog": "http://clipart-library.com/image_gallery2/Hot-Dog-PNG-Clipart.png",
   "Microwave Burrito": "http://pluspng.com/img-png/bean-burrito-png-i-ordered-a-beef-and-bean-burrito-for-my-daughter-it-felt-pretty-light-610.png",
-  "Peanut Butter Cups": "https://cdn.shopify.com/s/files/1/0972/7116/products/giant-peanut-butter-cups.png?v=1459348985",
+  "Peanut Butter Cups": "https://i.imgur.com/wuMmBIL.png",
   "Donut": "http://25.media.tumblr.com/92c54f13df54b2440f7f5782c4504e99/tumblr_mg3rni4xx81qhy9dqo1_400.png",
   "Taco": "http://www.stickpng.com/assets/thumbs/58727fb4f3a71010b5e8ef08.png",
   "Nachos": "https://newvitruvian.com/images/nachos-transparent-big-1.png",
