@@ -174,7 +174,7 @@ function GetIdString(src, u)
 	local employer = jobNames[job]
 	local char_name = u.getFullName()
 	local dob = u.get("dateOfBirth")
-	local msg = "^4^*[STATE ID]^0 Name: ^r" .. char_name .. " ^4^*|^0 SSN: ^r" .. src .. " ^4^*| ^0DOB: ^r" .. dob
+	local msg = "^4^*[ID]^0 Name: ^r" .. char_name .. " ^4^*|^0 SSN: ^r" .. src .. " ^4^*| ^0DOB: ^r" .. dob
 	if employer then msg = "^4^*[ID]^0 Name: ^r" .. char_name .. " ^4^*|^0 SSN: ^r" .. src .. " ^4^*| ^0DOB: ^r" .. dob .. " ^4^*| ^0Employer: ^r".. employer end
 	return msg
 end
