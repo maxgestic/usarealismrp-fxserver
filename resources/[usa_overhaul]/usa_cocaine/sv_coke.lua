@@ -45,7 +45,7 @@ end)
 RegisterServerEvent('cocaineJob:completeDelivery')
 AddEventHandler('cocaineJob:completeDelivery', function(productToRemove)
 	local char = exports["usa-characters"]:GetCharacter(source)
-	local reward = math.random(1200, 1700)
+	local reward = math.random(1300, 1800)
 	-- bonus when police are online --
 	local policeOnline = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
 	local bonus = 0
