@@ -469,11 +469,13 @@ AddEventHandler('mdt:checkFlags', function(vehPlate, vehModel)
 				end
 			end
 			for veh = 1, #tempVehicles do
-				if tempVehicles[veh].plate:lower() == vehPlate:lower() then
-					if tempVehicles[veh].flags then
-						TriggerClientEvent('chatMessage', _source, '^1^*[ALPR HIT]^r^0 '..vehModel..' with plate '..vehPlate..' has vehicle flags: '..tempVehicles[veh].flags..', registered to '..tempVehicles[veh].registered_owner..'.')
-						TriggerClientEvent('speedcam:lockCam', _source)
-						return
+				if tempVehicles[veh] then
+					if tempVehicles[veh].plate:lower() == vehPlate:lower() then
+						if tempVehicles[veh].flags then
+							TriggerClientEvent('chatMessage', _source, '^1^*[ALPR HIT]^r^0 '..vehModel..' with plate '..vehPlate..' has vehicle flags: '..tempVehicles[veh].flags..', registered to '..tempVehicles[veh].registered_owner..'.')
+							TriggerClientEvent('speedcam:lockCam', _source)
+							return
+						end
 					end
 				end
 			end
