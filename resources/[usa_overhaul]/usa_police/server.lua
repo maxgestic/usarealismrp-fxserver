@@ -199,10 +199,11 @@ AddEventHandler("policestation2:checkWhitelist", function(clientevent)
   local playerIdentifiers = GetPlayerIdentifiers(source)
   local playerGameLicense = ""
   local char = exports["usa-characters"]:GetCharacter(source)
-  if char.get("policeRank") > 0 then
+  local job = char.get("job")
+  if char.get("policeRank") > 0 or (job == "corrections" and clientevent == "policestation2:showArmoury") then
     if clientevent == "policestation2:showArmoury" then
       local user_job = char.get("job")
-      if user_job == "sheriff" or user_job == "cop" then
+      if user_job == "sheriff" or user_job == "corrections" then
         TriggerClientEvent(clientevent, source)
       else
         TriggerClientEvent("usa:notify", source, "You must be on-duty to access the armory.")
@@ -274,7 +275,7 @@ AddEventHandler("policestation2:saveOutfit", function(character, slot)
   local user_job = exports["usa-characters"]:GetCharacterField(source, "job")
   local policeCharacter = user.getPoliceCharacter()
   policeCharacter[tostring(slot)] = character
-  if user_job == "sheriff" or user_job == "cop" then
+  if user_job == "sheriff" then
     user.setPoliceCharacter(policeCharacter)
     TriggerClientEvent("usa:notify", source, "Outfit in slot "..slot.." has been saved.")
   else
@@ -286,10 +287,11 @@ RegisterServerEvent("policestation2:loadOutfit")
 AddEventHandler("policestation2:loadOutfit", function(slot)
   local user = exports["essentialmode"]:getPlayerFromId(source)
   local char = exports["usa-characters"]:GetCharacter(source)
+  local job = char.get("job")
   if char.get("policeRank") > 0 then
     local policeChar = user.getPoliceCharacter()
     TriggerClientEvent("policestation2:setCharacter", source, policeChar[tostring(slot)])
-    if char.get('job') ~= 'sheriff' then
+    if job ~= 'sheriff' then
       char.set("job", "sheriff")
       TriggerEvent('job:sendNewLog', source, 'sheriff', true)
     end
