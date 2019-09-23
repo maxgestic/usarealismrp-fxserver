@@ -994,6 +994,49 @@ end, {
 	}
 })
 
+function BanPlayer(targetSrc, reason)
+	-- add player to ban list
+	TriggerEvent('es:exposeDBFunctions', function(GetDoc)
+		-- get info from command
+		local targetPlayer = targetSrc
+		local targetPlayerName = GetPlayerName(targetPlayer)
+		local allPlayerIdentifiers = GetPlayerIdentifiers(targetPlayer)
+		for i = 1, #allPlayerIdentifiers do
+			print("allPlayerIdentifiers[i] = " .. allPlayerIdentifiers[i])
+		end
+		-- get char name:
+		local player = exports["usa-characters"]:GetCharacter(targetPlayer)
+		local char_name = player.getFullName()
+		local desc = "**Character Name:** " .. char_name
+		-- send discord message
+		desc = desc .. "\n**Display Name:** " .. targetPlayerName
+		for i = 1, #allPlayerIdentifiers do
+			desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
+		end
+		desc = desc .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** Console\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
+			PerformHttpRequest(WEBHOOK_URL, function(err, text, headers)
+				if text then
+					print(text)
+				end
+			end, "POST", json.encode({
+				embeds = {
+					{
+						description = desc,
+						color = 14750740,
+						author = {
+							name = "User Banned From The Server"
+						}
+					}
+				}
+			}), { ["Content-Type"] = 'application/json' })
+		-- update db
+		GetDoc.createDocument("bans",  {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = "anticheese", bannerId = -1, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+			print("player banned!")
+			DropPlayer(targetPlayer, "Banned: " .. reason .. " -- You can file an appeal at https://usarrp.net")
+		end)
+	end)
+end
+
 -- temp ban command // Usage: /tempban id time (in hours) reason
 TriggerEvent('es:addGroupCommand', 'tempban', "mod", function(source, args, char)
 	local userSource = tonumber(source)

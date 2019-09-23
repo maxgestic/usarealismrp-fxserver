@@ -42,6 +42,9 @@ Citizen.CreateThread(function()
 				isKnownExtraText = " | PROBABLE CHEATER"
 			end
 			vInfo.count = vInfo.count + 1
+			if vInfo.count >= 20 then
+				exports["es_admin"]:BanPlayer(src, "Modding. If you feel this was a mistake please let a staff member know.")
+			end
 			isKnownCount = vInfo.count
 		else
 			violations[tostring(src)] = { count = 1 }
@@ -89,24 +92,6 @@ Citizen.CreateThread(function()
 		return license, steam, steamName, name
 	end
 
-	--[[ DISABLED FOR NOW, UNTIL SPEED BECOMES A NOTICABLE ISSUE
-	RegisterServerEvent("anticheese:timer")
-	AddEventHandler("anticheese:timer", function()
-		if Users[source] then
-			if (os.time() - Users[source]) < 15 and Components.Speedhack then -- prevent the player from doing a good old cheat engine speedhack
-				license, steam = GetPlayerNeededIdentifiers(source)
-				name = GetPlayerName(source)
-				isKnown, isKnownCount, isKnownExtraText = WarnPlayer(name,"Speed Hacking")
-				SendWebhookMessage(webhook, "**Speed Hacker!** \n```\nUser:"..name.."\n"..license.."\n"..steam.."\nWas travelling "..rounds.. " units. That's "..roundm.." more than normal! \nAnticheat Flags:"..isKnownCount..""..isKnownExtraText.." ```")
-			else
-				Users[source] = os.time()
-			end
-		else
-			Users[source] = os.time()
-		end
-	end)
-	--]]
-
 	-- log formating functions --
 	function getTimeString()
 		return "** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()) .. " **\n"
@@ -119,8 +104,8 @@ Citizen.CreateThread(function()
 	-- end log formating functions --
 
 	function roundToNthDecimal(num, n)
-	  local mult = 10^(n or 0)
-	  return math.floor(num * mult + 0.5) / mult
+		local mult = 10^(n or 0)
+		return math.floor(num * mult + 0.5) / mult
 	end
 
 	function roundCoords(x, y, z)
@@ -375,63 +360,6 @@ Citizen.CreateThread(function()
 	end)
 end)
 
---[[
-RegisterServerEvent('AntiCheese:LifeCheck')
-AddEventHandler('AntiCheese:LifeCheck', function()
-	local key = tostring(source)
-	userLifeChecks[key] = os.time()
-end)
---]]
-
---[[
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(10000)
-		players = GetPlayers()
-		for _, id in pairs(players) do
-			-- if the last check in from a client was over a minute ago, anticheese resource must not be running
-			if userLifeChecks[tostring(id)] and os.time() - userLifeChecks[tostring(id)] > 60 then
-				print("*****Player disabled Anticheese (source: #" .. id .. ")!!****")
-				local name, userInfoStr = getUserInfoString(tonumber(id))
-
-				local isKnown, flagStr = WarnPlayer(tonumber(id))
-
-				local msg = "```" .. getTimeString() ..
-					"Hacker disabled Anticheese!\n" ..
-					userInfoStr ..
-					"!!!!! THIS SHOULD NOT HAPPEN BY ACCIDENT !!!!!\n" ..
-					flagStr .. "```"
-				local staff_msg = "^3*Hacker disabled Anticheese!* ID #: ^0" .. id .. "^3, Name: ^0" .. name
-
-				TriggerEvent("usa:notifyStaff", staff_msg)
-				SendWebhookMessage(webhook, msg)
-			end
-		end
-	end
-end)
---]]
-
---[[
-Citizen.CreateThread(function()
-	while true do
-		--Citizen.Wait(1000)
-		Citizen.Wait(60000)
-		TriggerEvent("es:getPlayers", function(players)
-			if players then
-				for id, player in pairs(players) do
-					userMemChecks[id] = true
-					TriggerClientEvent("AntiCheese:memoryHackCheck", id)
-				end
-			end
-		end)
-	end
-end)
-
-RegisterServerEvent('AntiCheese:memoryHackCheckResponse')
-AddEventHandler('AntiCheese:memoryHackCheckResponse', function(weapon)
-
-end)
-]]
 function isStaffMember(src)
 	local player = exports["essentialmode"]:getPlayerFromId(src)
 	if player.getGroup() ~= "user" then
@@ -470,26 +398,6 @@ AddEventHandler('rconCommand', function(commandName, args)
 		end)
 	end
 end)
-
---[[
-RegisterServerEvent('usa:ConfirmSession')
-AddEventHandler('usa:ConfirmSession', function(clientPlayerTotal)
-	if source ~= nil then
-		local userSource = source
-		local key = tostring(userSource)
-		if #GetPlayers() - clientPlayerTotal > 4 then
-			local name = getUserInfoString(userSource)
-			if instancedWarnings[key] then instancedWarnings[key] = instancedWarnings[key] + 1 else instancedWarnings[key] = 1 end
-			if instancedWarnings[key] > 3 then
-				DropPlayer(userSource, 'You have been kicked: The server has detected you as instanced, please join back.')
-			end
-			TriggerClientEvent("usa:notify", userSource, "You may be currently instanced, please reconnect now or risk rule-breaking!")
-			TriggerEvent("usa:notifyStaff", '^3*Detected possibly instanced player!* ID #: ^0'..userSource..'^3, Name: ^0'..name..'^3 -- The player has been notified!')
-
-		end
-	end
-end)
---]]
 
 TriggerEvent('es:addGroupCommand', 'deletenearestvehicles', 'superadmin', function(source, args, user)
   TriggerClientEvent("deletenearestvehicles", source)
