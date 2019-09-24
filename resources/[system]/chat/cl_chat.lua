@@ -156,7 +156,7 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(0)
 
-		if not chatInputActive then
+		if not chatInputActive and not chatImmersionModeActive then
 			if IsControlPressed(0, 245) --[[ INPUT_MP_TEXT_CHAT_ALL ]] then
 				chatInputActive = true
 				chatInputActivating = true
@@ -167,12 +167,27 @@ Citizen.CreateThread(function()
 			end
 		end
 
-		if chatInputActivating then
+		if chatInputActivating and not chatImmersionModeActive then
 			if not IsControlPressed(0, 245) then
 				SetNuiFocus(true)
 
 				chatInputActivating = false
 			end
 		end
+	end
+end)
+
+-- hide on HUD black bars (immersion) bars --
+AddEventHandler("usa:toggleImmersion", function(disabled)
+	SendNUIMessage({
+		type = 'ON_IMMERSION'
+	})
+	if not disabled then
+		chatImmersionModeActive = true
+		chatInputActive = false
+		chatInputActivating = false
+		SetNuiFocus(false)
+	else 
+		chatImmersionModeActive = false
 	end
 end)
