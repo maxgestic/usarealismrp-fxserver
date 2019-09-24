@@ -27,35 +27,35 @@ function DepositPayCheck(char)
 
     if job == "cop" or job == "sheriff" or job == "highwaypatrol" or job == "fbi" then
         local cop_rank = char.get("policeRank")
-        paycheckAmount = 150
+        paycheckAmount = 225
         if cop_rank == 2 then
-            paycheckAmount = 225
-        elseif cop_rank == 3 then
             paycheckAmount = 275
+        elseif cop_rank == 3 then
+            paycheckAmount = 325
         elseif cop_rank == 4 then
-            paycheckAmount = 335
+            paycheckAmount = 365
         elseif cop_rank == 5 then
-            paycheckAmount = 360
+            paycheckAmount = 385
         elseif cop_rank == 6 then
-            paycheckAmount = 390
+            paycheckAmount = 400
         elseif cop_rank == 7 then
-            paycheckAmount = 415
+            paycheckAmount = 410
         elseif cop_rank == 8 then
-            paycheckAmount = 430
+            paycheckAmount = 420
         elseif cop_rank == 9 then
-            paycheckAmount = 470
+            paycheckAmount = 430
         elseif cop_rank == 10 then
-            paycheckAmount = 480
+            paycheckAmount = 440
         end
     elseif job == "ems" or job == "fire" then
         local rank = char.get("emsRank")
-        paycheckAmount = 220
+        paycheckAmount = 300
         if rank == 2 then
-            paycheckAmount = 245
+            paycheckAmount = 315
         elseif rank == 3 then
-            paycheckAmount = 275
+            paycheckAmount = 325
         elseif rank == 4 then
-            paycheckAmount = 320
+            paycheckAmount = 335
         elseif rank == 5 then
             paycheckAmount = 350
         elseif rank == 6 then
@@ -76,7 +76,7 @@ function DepositPayCheck(char)
     elseif job == "lawyer" then
         paycheckAmount = 300
     elseif job == "doctor" then
-        paycheckAmount = 400
+        paycheckAmount = 300
     else
         paycheckAmount = 25 -- welfare amount (no job)
         isWelfare = true
@@ -168,9 +168,7 @@ end
 Citizen.CreateThread(function()
     Wait(15000)
     while true do
-        --print("checking time")
         if GetMinutesFromTime(lastCheckTime) >= TIME_CHECK_INTERVAL_MINUTES then
-            --print("giving checks!!")
             lastCheckTime = os.time()
             exports["usa-characters"]:GetCharacters(function(chars)
                 for id, char in pairs(chars) do
@@ -183,12 +181,10 @@ Citizen.CreateThread(function()
                     end
                     if GetMinutesFromTime(lastPaidTimes[id]) < CHECK_RECEIVE_INTERVAL_MINUTES then
                         doPay = false
-                        --print("too early to pay " .. id .. ", it's been " .. GetMinutesFromTime(lastPaidTimes[id]) .. " since last check")
                     end
                     if doPay then
                         DepositPayCheck(char)
                         lastPaidTimes[id] = os.time()
-                        --print("giving " .. id .. " their paycheck!")
                     end
                 end
             end)
