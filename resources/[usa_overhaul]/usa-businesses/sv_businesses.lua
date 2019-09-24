@@ -16,7 +16,7 @@ AddEventHandler("business:withdraw", function(name, amount)
   local usource = source
   GetBusinessOwner(name, function(owner)
     local char = exports["usa-characters"]:GetCharacter(usource)
-    if owner.name.full == char.getFullName() then -- make sure player is owner
+    if owner.identifiers.id == char.get("_id") then -- make sure player is owner
       GetBusinessStorage(name, function(storage)
         amount = math.abs(amount)
         if storage.cash >= amount then
