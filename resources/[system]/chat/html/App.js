@@ -47,17 +47,14 @@ window.APP = {
 			this.showInput = true;
 			this.showWindow = true;
 			if (this.showWindowTimer) {
-				console.log("showing window title")
 				clearTimeout(this.showWindowTimer);
 			}
 			this.focusTimer = setInterval(() => {
 				if (this.$refs.input) {
-					console.log("chat window active/focused")
 					this.$refs.input.focus();
 					document.getElementsByClassName('chat-window')[0].classList.add('chat-window-active');
 				} else {
 					clearInterval(this.focusTimer);
-					console.log("clearing interval")
 				}
 			}, 50);
 		},
