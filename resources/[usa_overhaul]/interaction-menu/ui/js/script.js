@@ -9,7 +9,7 @@ var itemImages = {
   "Firearm Permit": "https://www.scientific.net/KEM.773.56/preview.gif",
   "Cell Phone": "https://i.dlpng.com/static/png/1350388_thumb.png",
   "Tuna Sandwich": "http://www.nunnbettercatering.com/wp-content/uploads/2016/05/tunasandwich3-300x300.png",
-  "Chocolate Pizza": "https://www.baskinrobbins.com/content/dam/baskinrobbins/LandingPage/Polar-Pizza/BR_2017_PolarPizza_2x.png",
+  "Chocolate Pizza": "https://imgur.com/jbx6mcI.png",
   "Cheeseburger": "https://ya-webdesign.com/images/cheese-burger-png-8.png",
   "Kosher Hot Dog": "http://clipart-library.com/image_gallery2/Hot-Dog-PNG-Clipart.png",
   "Microwave Burrito": "http://pluspng.com/img-png/bean-burrito-png-i-ordered-a-beef-and-bean-burrito-for-my-daughter-it-felt-pretty-light-610.png",
