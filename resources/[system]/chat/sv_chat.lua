@@ -27,7 +27,7 @@ AddEventHandler('_chat:messageEntered', function(name, color, message, location)
 				name = "SASP | " .. name
 				color = {2, 111, 218}
 			elseif job == "corrections" then
-				name = "DOC | " .. name
+				name = "BCSO | " .. name
 				color = {2, 111, 218}
 			elseif job == "highwaypatrol" then
 				name = "Highway Patrol | " .. name
