@@ -286,7 +286,7 @@ AddEventHandler("impound:impoundVehicle", function(vehicle, plate)
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	local userGroup = user.getGroup()
 	local playerJob = exports["usa-characters"]:GetCharacterField(source, "job")
-	if playerJob == "sheriff" or playerJob == "ems" or playerJob == "corrections" or userGroup == "owner" or userGroup == "admin" or userGroup == "mod" or userGroup == "superadmin" then
+	if playerJob == "tow" or playerJob == "sheriff" or playerJob == "ems" or playerJob == "corrections" or userGroup == "owner" or userGroup == "admin" or userGroup == "mod" or userGroup == "superadmin" then
 		if plate then
 			-- update impounded status of vehicle in DB --
 			TriggerEvent('es:exposeDBFunctions', function(couchdb)
