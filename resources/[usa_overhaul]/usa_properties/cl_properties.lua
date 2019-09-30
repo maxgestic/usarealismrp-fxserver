@@ -541,7 +541,7 @@ AddEventHandler('properties:lockpickHouseBurglary', function(index, lockpickItem
 		Wait(100)
 	end
 
-	if GetClockHours() > 6 and GetClockHours() < 20 and math.random() > 0.30 then -- 90% chance of reporting when burglary is happening at day
+	if GetClockHours() > 6 and GetClockHours() < 20 and math.random() < 0.40 then -- chance of reporting when burglary is happening at day
 		local x, y, z = table.unpack(GetEntityCoords(playerPed))
 		local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
 		local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
@@ -608,7 +608,9 @@ AddEventHandler('properties:enterBurglaryHouse', function(_currentProperty)
 		SpawnResidents()
 	end
 
+	exports["_anticheese"]:Disable("speedOrTP")
 	DoorTransition(x, y, z, heading)
+	exports["_anticheese"]:Enable("speedOrTP")
 
 	local alertness = 0
 

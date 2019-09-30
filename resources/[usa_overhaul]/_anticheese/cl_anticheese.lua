@@ -153,6 +153,10 @@ BlacklistedWeapons = { -- weapons that will get people banned
 	 GetHashKey("WEAPON_BALL"),
 }
 
+local enableStatus = {
+	speedOrTPHack = true
+}
+
 --[[ CURR. DISABLED BELOW
 CageObjs = {
 	"prop_gold_cont_01",
@@ -171,6 +175,7 @@ Citizen.CreateThread(function()
 end)
 --]]
 
+-- speed / TP hack detection
 Citizen.CreateThread(function()
 	local Seconds = 7
 	local MaxRunSpeed = 10
@@ -199,13 +204,13 @@ Citizen.CreateThread(function()
 			local dist = GetDistanceBetweenCoords(posx,posy,posz, newx,newy,newz, true)
 
 			if not isAtAWarpPoint(newx, newy, newz) then
-				if GetEntitySpeed(GetPlayerPed(-1)) == 0 then
+				if GetEntitySpeed(GetPlayerPed(-1)) == 0 then -- noclipping
 					if dist > (MaxRunSpeed * Seconds) and dist > MinTriggerDistance then
-						if not exports["usa_trunkhide"]:IsInTrunk() then
+						if not exports["usa_trunkhide"]:IsInTrunk() and enableStatus.speedOrTPHack == true then
 							TriggerServerEvent("AntiCheese:NoclipFlag", dist, posx,posy,posz, newx,newy,newz)
 						end
 					end
-				else
+				else -- doing something other than no clipping
 					if flyveh then
 						if dist > MaxFlySpeed * Seconds then
 							state = "in an aircraft"
@@ -222,7 +227,7 @@ Citizen.CreateThread(function()
 					end
 
 					if speedhack and dist > MinTriggerDistance then
-						if not exports["usa_trunkhide"]:IsInTrunk() then
+						if not exports["usa_trunkhide"]:IsInTrunk() and enableStatus.speedOrTPHack == true then
 							TriggerServerEvent("AntiCheese:SpeedFlag", state, dist, posx,posy,posz, newx,newy,newz)
 						end
 					end
@@ -260,6 +265,7 @@ function isAtAnLSC()
 	return false
 end
 
+-- health hack / invincibility detection
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(40000)
@@ -308,6 +314,7 @@ Citizen.CreateThread(function()
 	end
 end)
 
+-- invincibility detection
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(5000)
@@ -320,6 +327,7 @@ Citizen.CreateThread(function()
 	end
 end)
 
+-- black listed weapons check
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(8000)
@@ -376,6 +384,7 @@ Citizen.CreateThread(function()
 end)
 --]]
 
+-- super jump detection
 Citizen.CreateThread(function()
 	while true do
 		Wait(1)
@@ -442,6 +451,14 @@ AddEventHandler("deletenearestvehicles", function()
         print("** Deleted all vehicles! **")
     end)
 end)
+
+function Enable(type)
+	enableStatus[type] = true
+end
+
+function Disable(type)
+	enableStatus[type] = false
+end
 
 --[[
 Citizen.CreateThread(function()

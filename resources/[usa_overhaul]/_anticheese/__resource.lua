@@ -5,5 +5,10 @@ server_scripts {
 }
 
 client_scripts {
-	"cl_anticheese.lua",
+	"cl_anticheese.lua"
+}
+
+exports {
+	"Enable",
+	"Disable"
 }
