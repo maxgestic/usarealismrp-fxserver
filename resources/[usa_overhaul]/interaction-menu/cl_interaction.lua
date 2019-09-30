@@ -853,7 +853,7 @@ function interactionMenuUse(itemName, wholeItem)
 		elseif string.find(itemName, "Repair Kit") then
 			TriggerEvent("interaction:repairVehicle")
 		elseif string.find(itemName, "Hotwiring Kit") then
-		TriggerEvent("veh:hotwireVehicle")
+			TriggerEvent("veh:hotwireVehicle")
 		elseif string.find(itemName, "Body Armor") then
 			TriggerServerEvent("interaction:bodyArmor")
 			---------------
@@ -986,8 +986,6 @@ function interactionMenuUse(itemName, wholeItem)
 				TriggerEvent('doormanager:lockpickDoor', wholeItem)
 				TriggerServerEvent('properties:lockpickHouse', GetEntityCoords(playerPed), wholeItem)
 			end
-		elseif string.find(itemName, "Notepad") then
-
 		elseif string.find(itemName, "Binoculars") then
 			TriggerEvent("binoculars:Activate")
 			-------------------
@@ -1032,6 +1030,8 @@ function interactionMenuUse(itemName, wholeItem)
 			local location = GetEntityCoords(ped)
 			local locationTemp = {location.x, location.y, location.z}
 			TriggerServerEvent("altchat:showID", locationTemp)
+		elseif itemName:find("Sturdy Rope") then
+			TriggerEvent("crim:attemptToTieNearestPerson", true)
 		else
 			TriggerEvent("interaction:notify", "There is no use action for that item!")
 		end
