@@ -12,6 +12,11 @@ local VEHICLE_RANKS = {
 			allowedLiveries = { 2 },
 			hash = -685283761
 		},
+		["pdtau"] = {
+			rank = 1,
+			allowedLiveries = { 1 },
+			hash = GetHashKey("pdtau")
+		},
 		--["pdexp"] = 2,
 		--["pdtahoe"] = 2,
 		--["pdchrgum"] = 5,
@@ -51,6 +56,11 @@ local VEHICLE_RANKS = {
 			rank = 3,
 			allowedLiveries = { 1 },
 			hash = -685283761
+		},
+		["pdtau"] = {
+			rank = 3,
+			allowedLiveries = { 2 },
+			hash = GetHashKey("pdtau")
 		},
 		["polmav"] = {
 			rank = 4,
