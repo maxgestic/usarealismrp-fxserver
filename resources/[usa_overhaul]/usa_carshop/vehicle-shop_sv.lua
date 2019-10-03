@@ -295,7 +295,7 @@ local vehicleShopItems = {
 		},
 		["Specials"] = {
 			{make = "Dundreary", model = "Stretch", price = 25575, hash = -1961627517, storage_capacity = 300.0},
-			{make = "Maibatsu", model = "Mule 3", price = 55432, hash = -2052737935, storage_capacity = 475.0},
+			{make = "Maibatsu", model = "Mule 3", price = 55432, hash = -2052737935, storage_capacity = 575.0},
 			{make = "MTL", model = "Pounder", price = 97452, hash = 2112052861, storage_capacity = 900.0},
 			{make = "Declasse", model = "Burrito Lost", price = 27342, hash = -1745203402, storage_capacity = 260.0},
 			{make = "Vapid", model = "Slam Van Lost", price = 29545, hash = 833469436, storage_capacity = 260.0},
