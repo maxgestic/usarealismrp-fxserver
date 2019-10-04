@@ -43,6 +43,7 @@ Citizen.CreateThread(function()
           SetVehicleDoorsLockedForAllPlayers(handle, true)
           SetVehicleDoorsLocked(handle, true)
           TriggerEvent('usa:notify', 'Wait here while the vehicle is being chopped up.')
+          PlayChoppingSounds()
           local chopped = true
           local beginTime = GetGameTimer()
           while GetGameTimer() - beginTime < chop_time do
@@ -236,4 +237,13 @@ function DrawTimer(beginTime, duration, x, y, text)
     AddTextComponentString(text)
     Set_2dLayer(3)
     DrawText(x - 0.06, y - 0.012)
+end
+
+function PlayChoppingSounds()
+  Citizen.CreateThread(function()
+    for i = 1, 5 do
+      TriggerServerEvent("InteractSound_SV:PlayWithinDistance", 10, "chopshop", 0.3)
+      Wait(10000)
+    end
+  end)
 end
