@@ -65,14 +65,14 @@ end, {
 })
 
 -- /dispatch
-TriggerEvent('es:addJobCommand', 'dispatch', { "corrections", "sheriff", "ems", "fire", "taxi", "tow" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'dispatch', { "corrections", "sheriff", "ems", "taxi", "tow" }, function(source, args, char)
 	local target = tonumber(args[2])
 	if GetPlayerName(target) then
 		table.remove(args,1)
 		table.remove(args,1)
 		local msg = table.concat(args, " ")
 		TriggerClientEvent('dispatch:notify', target, char.get("name").last, source, msg)
-		exports["globals"]:notifyPlayersWithJob(char.get("job"), '^5^*[DISPATCH] ^r^0'..char.get("name").last..' ['..source..'] to #'..target..': '..msg) -- send to all others players with same job as dispatcher
+		exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections", "ems"}, '^5^*[DISPATCH] ^r^0'..char.get("name").last..' ['..source..'] to #'..target..': '..msg, "onlyDeputiesNoCOs") -- send to all others players with same job as dispatcher
 	else
 		TriggerClientEvent("usa:notify", source, "Error: caller id # not entered")
 	end

@@ -23,7 +23,7 @@ function sendLocalActionMessage(_source, text, maxDist, time)
 	TriggerClientEvent("globals:startActionMessage", -1, _source, text, maxDist, time)
 end
 
-function notifyPlayersWithJobs(target_jobs, msg)
+function notifyPlayersWithJobs(target_jobs, msg, specialRequest)
 	exports["usa-characters"]:GetCharacters(function(players)
 		if not players then
 			return
@@ -33,7 +33,20 @@ function notifyPlayersWithJobs(target_jobs, msg)
 				local job = player.get("job")
 				for i = 1, #target_jobs do
 					if job == target_jobs[i] then
-						TriggerClientEvent("chatMessage", id, "", {}, "^0" .. msg)
+						if specialRequest == "onlyDeputiesNoCOs" and job == "corrections" then
+							TriggerEvent("es:exposeDBFunctions", function(db)
+								local ident = GetPlayerIdentifiers(player.get("source"))[1]
+								db.getDocumentByRow("correctionaldepartment", "identifier", ident, function(doc)
+									if doc then
+										if doc.rank >= 3 then 
+											TriggerClientEvent("chatMessage", id, "", {}, "^0" .. msg)
+										end
+									end
+								end)
+							end)
+						else 
+							TriggerClientEvent("chatMessage", id, "", {}, "^0" .. msg)
+						end
 					end
 				end
 			end
