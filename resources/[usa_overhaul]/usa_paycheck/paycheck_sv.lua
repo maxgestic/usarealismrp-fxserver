@@ -80,7 +80,6 @@ function DepositPayCheck(char)
                 if doc then
                     paycheckAmount = GetBCSOPayFromRank(doc.rank)
                     char.giveBank(paycheckAmount)
-                    print("gave BCSO paycheck of $" .. paycheckAmount)
                 end
             end)
         end)
