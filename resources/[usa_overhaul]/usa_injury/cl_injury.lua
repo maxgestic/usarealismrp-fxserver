@@ -92,7 +92,7 @@ injuries = { -- ensure this is the same as sv_injury.lua
     [856002082] = {type = 'penetrating', bleed = 120, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 250, dropEvidence = 1.0}, -- WEAPON_REMOTESNIPER
     [2481070269] = {type = 'penetrating', bleed = 120, string = 'Shrapnel Wound', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0}, -- WEAPON_GRENADE
     [615608432] = {type = 'burn', bleed = 600, string = 'Molotov Residue', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0}, -- WEAPON_MOLOTOV
-    [883325847] = {type = 'burn', beed = 600, string = 'Gasoline Residue', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 1.0}, -- WEAPON_PETROLCAN
+    [883325847] = {type = 'burn', bleed = 600, string = 'Gasoline Residue', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 1.0}, -- WEAPON_PETROLCAN
     [1233104067] = {type = 'burn', bleed = 1800, string = 'Concentrated Heat', treatableWithBandage = true, treatmentPrice = 65, dropEvidence = 0.7}, -- WEAPON_FLARE
     [539292904] = {type = 'burn', bleed = 120, string = 'Explosion', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 1.0}, -- WEAPON_EXPLOSION
     [3452007600] = {type = 'blunt', bleed = 2700, string = 'Fall', treatableWithBandage = true, treatmentPrice = 30, dropEvidence = 0.2}, -- WEAPON_FALL
