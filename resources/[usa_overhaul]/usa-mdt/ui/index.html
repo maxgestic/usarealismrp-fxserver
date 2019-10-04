@@ -19,10 +19,12 @@
             width: 120px;
             overflow-y: hidden;
             background: #222;
-            /* border-right: 4px solid #FFC41B; */
-            border-right: 4px solid #4A9EC3;
             border-top-left-radius: 5px;
             border-bottom-left-radius: 5px;
+            border-right: 4px solid black;
+        }
+        .text-black {
+            color: black;
         }
         /* Add a left margin to the "page content" that matches the width of the sidebar (120px) */
         #content {
@@ -64,6 +66,7 @@
         main {
             position: relative;
             height: 75%;
+            border-top: 4px solid black;
         }
         header {
             height: 20% !important;
@@ -126,7 +129,7 @@
         <div id="content_container">
 
                 <!-- Icon Bar Nav-->
-                <nav id="icon_navbar" class="w3-sidebar w3-bar-block w3-center">
+                <nav id="icon_navbar" class="w3-sidebar w3-bar-block w3-center" v-bind:class="{ 'border-right-blue': employee.job.rawName == 'sheriff', 'border-right-gold': employee.job.rawName == 'corrections' }">
                     <div v-on:click="changePage('Person(s) Check')" id="person_check" class="w3-bar-item w3-button w3-padding-large">
                         <i class="fa fa-user w3-xxlarge"></i>
                         <p>Person Check</p>
@@ -163,17 +166,17 @@
 
                         <!-- Header -->
                         <header class="w3-cell-row">
-                            <img id="left-badge" src="sasp-badge.png" alt="SASP" width="170px">
+                            <img id="left-badge" v-bind:src="GetProperBadge" alt="SASP" width="170px">
                             <div class="w3-container w3-center w3-padding-24 sm-no-bottom-padding" style="width: 100%;">
-                                <div class="w3-container w3-center w3-padding-16 theme-color" style="display: inline-block;">
-                                    <h1 style="font-size: 36px;"><b><i>San Andreas State Police</i></b></h1>
+                                <div class="w3-container w3-center w3-padding-16" style="display: inline-block;">
+                                    <h1 style="font-size: 36px;"><b><i>{{ employee.job.displayName }}</i></b></h1>
                                     <p><i>Welcome, {{ employee.rank }} {{ employee.lname  }}!</i></p>
                                 </div>
                             </div>
-                            <img id="right-badge" src="sasp-badge.png" alt="SASP" width="170px">
+                            <img id="right-badge" v-bind:src="GetProperBadge" alt="SASP" width="170px">
                         </header>
 
-                        <main style="border-top: 4px solid #4A9EC3; overflow-y: scroll; padding-left: 2em; padding-right: 2em;">
+                        <main style="overflow-y: scroll; padding-left: 2em; padding-right: 2em;">
 
                             <!-- Title -->
                             <h3 id="tabTitle" class="w3-center">{{ current_tab }}</h3>

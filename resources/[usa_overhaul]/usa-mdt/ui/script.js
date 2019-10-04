@@ -4,7 +4,11 @@ const mdtApp = new Vue({
         employee: {
             fname: "",
             lname: "",
-            rank: ""
+            rank: "",
+            job: {
+                rawName: "",
+                displayName: ""
+            }
         },
         person_check: {
             ssn: null,
@@ -302,6 +306,15 @@ const mdtApp = new Vue({
                     )
                     return report;
             })
+        },
+        GetProperBadge: function() {
+            if (this.employee.job) {
+                if (this.employee.job.rawName == "sheriff") {
+                    return "sasp-badge.png"
+                } else if (this.employee.job.rawName == "corrections") {
+                    return "https://imgur.com/slnSzJQ.png"
+                }
+            }
         }
     }
 });
@@ -313,7 +326,7 @@ document.onreadystatechange = () => {
                 /* show / hide mdt */
                 document.body.style.display = event.data.isVisible ? "block" : "none";
                 /* get rank */
-                if (mdtApp.employee.lname == "" && event.data.isVisible) {
+                if (event.data.isVisible) {
                     $.post('http://usa-mdt/fetchEmployee', JSON.stringify({}));
                 }
             } else if (event.data.type == "personInfoLoaded") {

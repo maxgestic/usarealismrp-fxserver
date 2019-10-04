@@ -631,10 +631,15 @@ RegisterServerEvent("mdt:fetchEmployee")
 AddEventHandler("mdt:fetchEmployee", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local n = char.get("name")
+	local job = char.get("job")
 	local employee = {
 		fname = n.first,
 		lname = n.last,
-		rank = GetRankDisplayName(char.get("policeRank"))
+		rank = GetRankDisplayName(char.get("policeRank")),
+		job = {
+			rawName = job,
+			displayName = GetDisplayNameFromJob(job)
+		}
 	}
 	local msg = {
 		   type = "employeeLoaded",
@@ -642,6 +647,14 @@ AddEventHandler("mdt:fetchEmployee", function()
 	   }
 	TriggerClientEvent("mdt:sendNUIMessage", source, msg)
 end)
+
+function GetDisplayNameFromJob(job)
+	if job == "sheriff" then 
+		return "San Andreas State Police"
+	elseif job == "corrections" then 
+		return "Sheriff Department"
+	end
+end
 
 function GetRankDisplayName(rank)
 	if rank == 1 then
