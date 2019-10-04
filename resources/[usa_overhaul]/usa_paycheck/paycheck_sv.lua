@@ -22,6 +22,7 @@ function DepositPayCheck(char)
     local source = char.get("source")
     local isWelfare = false
     local paycheckAmount = 0
+    local asyncGiveBank = false
 
     local job = char.get("job")
 
@@ -72,7 +73,18 @@ function DepositPayCheck(char)
     elseif job == "judge" then
         paycheckAmount = 350
     elseif job == "corrections" then
-        paycheckAmount = 210
+        asyncGiveBank = true
+        local ident = GetPlayerIdentifiers(source)[1]
+        TriggerEvent("es:exposeDBFunctions", function(db)
+            db.getDocumentByRow("correctionaldepartment", "identifier", ident, function(doc)
+                if doc then
+                    paycheckAmount = GetBCSOPayFromRank(doc.rank)
+                    char.giveBank(paycheckAmount)
+                    print("gave BCSO paycheck of $" .. paycheckAmount)
+                end
+            end)
+        end)
+        --paycheckAmount = 210
     elseif job == "lawyer" then
         paycheckAmount = 300
     elseif job == "doctor" then
@@ -82,7 +94,9 @@ function DepositPayCheck(char)
         isWelfare = true
     end
 
-    char.giveBank(paycheckAmount)
+    if not asyncGiveBank then
+        char.giveBank(paycheckAmount)
+    end
 
     local msg = "You received a "
     if isWelfare then
@@ -163,6 +177,28 @@ function GetMinutesFromTime(time)
 	local minutesfrom = os.difftime(os.time(), time) / 60
 	local wholemins = math.floor(minutesfrom)
 	return wholemins
+end
+
+function GetBCSOPayFromRank(rank)
+    if rank == 1 then 
+        return 210
+    elseif rank == 2 then 
+        return 255
+    elseif rank == 3 then 
+        return 270
+    elseif rank == 4 then 
+        return 290
+    elseif rank == 5 then 
+        return 320
+    elseif rank == 6 then 
+        return 350
+    elseif rank == 7 then 
+        return 360
+    elseif rank == 8 then 
+        return 370
+    else
+        return 375
+    end
 end
 
 Citizen.CreateThread(function()
