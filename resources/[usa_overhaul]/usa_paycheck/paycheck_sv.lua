@@ -80,10 +80,11 @@ function DepositPayCheck(char)
                 if doc then
                     paycheckAmount = GetBCSOPayFromRank(doc.rank)
                     char.giveBank(paycheckAmount)
+                    local msg = "You received a check of $" .. paycheckAmount .. " from the ~y~Blaine County Sheriff's Office~s~."
+                    TriggerClientEvent('usa:notify', source, msg)
                 end
             end)
         end)
-        --paycheckAmount = 210
     elseif job == "lawyer" then
         paycheckAmount = 300
     elseif job == "doctor" then
@@ -111,8 +112,6 @@ function DepositPayCheck(char)
         msg = msg .. "of $" .. paycheckAmount .. " from ~y~Weazel News~s~."
     elseif job == "sheriff" then
         msg = msg .. "of $" .. paycheckAmount .. " from the ~y~San Andreas State Police~s~."
-    elseif job == "corrections" then
-        msg = msg .. "of $" .. paycheckAmount .. " from the ~y~San Andreas Department of Corrections~s~."
     elseif job == "ems" then
         msg = msg .. "of $" .. paycheckAmount .. " from ~y~Los Santos Fire Department~s~."
     elseif job == "lawyer" then
@@ -125,7 +124,9 @@ function DepositPayCheck(char)
         msg = msg .. "of $" .. paycheckAmount .. "."
     end
     
-    TriggerClientEvent('usa:notify', source, msg)
+    if not asyncGiveBank then
+        TriggerClientEvent('usa:notify', source, msg)
+    end
 end
 
 function myJob(job, source)
