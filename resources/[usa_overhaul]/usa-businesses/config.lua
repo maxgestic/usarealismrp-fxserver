@@ -16,6 +16,13 @@ MIN_ROB_PERCENT = 0.3
 BASE_ROB_DURATION = 60000
 
 BUSINESSES = {
+	["Auto Repair (Little Bighorn Ave.)"] = {
+		position = {472.45822143555, -1310.5356445313, 29.223064422607},
+		cameraID = 'store42',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 5000
+	},
 	["Auto Repair (Elgin Ave.)"] = {
 		position = {548.21875, -172.63174438477, 54.481338500977},
 		cameraID = 'store41',
