@@ -4,7 +4,8 @@ local LOCATIONS = {
     {x = -1393.6, y = -606.6, z = 30.4}, -- bahama mamas
     {x = 127.4, y = -1284.6, z = 29.3}, -- vanilla unicorn
     {x = -451.7, y = 285.4, z = 78.5}, -- comedy club
-    {x = -1577.9, y = -3014.9, z = -79.0} -- night club
+    {x = -1577.9, y = -3014.9, z = -79.0}, -- night club
+    {x = -1435.8010253906,y = 205.99688720703, z = 57.82116317749} -- hank alabaster's requested location (playboy mansion)
 }
 
 local ITEMS = {} -- loaded from server
