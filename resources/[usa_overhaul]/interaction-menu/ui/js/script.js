@@ -231,6 +231,7 @@ for (var i = 0; i < menuItems.length; i++) {
 }
 
 var vehicleActions = [
+  { name: "Roll Windows"},
   { name: "Engine", children: [
     { name: "On" },
     { name: "Off" }

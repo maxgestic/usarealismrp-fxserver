@@ -245,6 +245,9 @@ local ACTIONS = {
 }
 
 local VEH_ACTIONS = {
+	["Roll Windows"] = function()
+		TriggerEvent("RollWindow")
+	end,
 	["Engine"] = {
 		["On"] = function()
 			TriggerServerEvent("veh:checkForKey", GetVehicleNumberPlateText(hitHandleVehicle), true)

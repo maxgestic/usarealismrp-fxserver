@@ -5,7 +5,7 @@ AddEventHandler("chopshop:reward", function(veh_name, damage, property)
   local numTroopers = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
   if numTroopers == 0 then
     damage = math.ceil(0.10 * damage)
-    reward = math.ceil(0.05 * reward) -- only give 20% of regular reward if no cops
+    reward = math.ceil(0.20 * reward) -- only give 20% of regular reward if no cops
   end
   char.giveMoney(reward - damage)
   print("damage was: " .. damage)
