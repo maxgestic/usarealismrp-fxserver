@@ -227,9 +227,9 @@ Citizen.CreateThread(function()
 		if closestShop then
 			local mycoords = GetEntityCoords(GetPlayerPed(-1))
 		    if Vdist(locations[closestShop].menu.x, locations[closestShop].menu.y, locations[closestShop].menu.z, mycoords.x, mycoords.y, mycoords.z) > 5.0 then
-		  		if IsAnyMenuVisible() then
-		  			closestShop = nil
-		  			CloseAllMenus()
+		  		if _menuPool:IsAnyMenuOpen() then
+					  closestShop = nil
+					  _menuPool:CloseAllMenus()
 		  		end
 			end
 		end
@@ -345,8 +345,6 @@ end
 
 function ShowMainMenu()
 	mainMenu:Clear()
-	created_menus = {}
-	table.insert(created_menus, mainMenu)
 	CreateHelicopterMenu(mainMenu, ITEMS.helicopters)
 	CreatePlaneMenu(mainMenu, ITEMS.planes)
 	CreateSellMenu(mainMenu, playerAircraft)
@@ -356,11 +354,9 @@ end
 
 function CreatePlaneMenu(menu, vehicles)
 	local planes = _menuPool:AddSubMenu(menu, "Airplanes", 'See our selection of airplanes', true)
-	table.insert(created_menus, planes)
 	for i = 1, #vehicles do
 		local aircraft = vehicles[i]
 		local planeMenu = _menuPool:AddSubMenu(planes.SubMenu, aircraft.name, 'View prices of the '..aircraft.name, true)
-		table.insert(created_menus, planeMenu)
 		local rent = NativeUI.CreateItem('Rent '..aircraft.name, 'Rent price: $' ..comma_value(aircraft.price))
 		local buy = NativeUI.CreateItem('Buy '..aircraft.name, 'Buy price: $'..comma_value(aircraft.buy_price))
 		rent.Activated = function(parentmenu, selected)
@@ -381,11 +377,9 @@ end
 
 function CreateHelicopterMenu(menu, vehicles)
 	local helicopters = _menuPool:AddSubMenu(menu, "Helicopters", 'See our selection of helicopters', true)
-	table.insert(created_menus, helicopters)
 	for i = 1, #vehicles do
 		local aircraft = vehicles[i]
 		local heliMenu = _menuPool:AddSubMenu(helicopters.SubMenu, aircraft.name, 'View prices of the '..aircraft.name, true)
-		table.insert(created_menus, heliMenu)
 		local rent = NativeUI.CreateItem('Rent '..aircraft.name, 'Rent price: $' ..comma_value(aircraft.price))
 		local buy = NativeUI.CreateItem('Buy '..aircraft.name, 'Buy price: $'..comma_value(aircraft.buy_price))
 		rent.Activated = function(parentmenu, selected)
@@ -405,53 +399,54 @@ function CreateHelicopterMenu(menu, vehicles)
 end
 
 function CreateSellMenu(menu, vehicles)
-	if #playerAircraft > 0 then
-		local sellMenu = _menuPool:AddSubMenu(menu, 'Sell an Aircraft', '', true)
-		table.insert(created_menus, sellMenu)
-		for i = 1, #playerAircraft do
-			local aircraft = playerAircraft[i]
-			local aircraftid = '('..aircraft.id..')'
-			local item = NativeUI.CreateItem(aircraft.name.. ' ' ..aircraftid, 'Sell value: $' ..comma_value(0.5*aircraft.buy_price))
-			item.Activated = function(parentmenu, selected)
-				if aircraft.stored then
-					TriggerServerEvent('aircraft:requestSell', aircraft)
-					sellMenu.SubMenu:Visible(false)
-				else
-					TriggerEvent('usa:notify', 'This aircraft is ~y~not stored~s~, cannot be sold!')
-				end
+	local sellMenu = _menuPool:AddSubMenu(menu, 'Sell an Aircraft', '', true)
+	for i = 1, #playerAircraft do
+		local aircraft = playerAircraft[i]
+		local aircraftid = '('..aircraft.id..')'
+		local item = NativeUI.CreateItem(aircraft.name.. ' ' ..aircraftid, 'Sell value: $' ..comma_value(0.5*aircraft.buy_price))
+		item.Activated = function(parentmenu, selected)
+			if aircraft.stored then
+				TriggerServerEvent('aircraft:requestSell', aircraft)
+				sellMenu.SubMenu:Visible(false)
+			else
+				TriggerEvent('usa:notify', 'This aircraft is ~y~not stored~s~, cannot be sold!')
 			end
-			sellMenu.SubMenu:AddItem(item)
 		end
+		sellMenu.SubMenu:AddItem(item)
+	end
+	if #playerAircraft <= 0 then
+		local item = NativeUI.CreateItem("Nothing to sell!", "You don't own any aircraft to sell!")
+		sellMenu.SubMenu:AddItem(item)
 	end
 end
 
 function CreateGarageMenu(menu, vehicles)
-	-- Add vehicles to menu --
-	if #playerAircraft > 0 then
-		local retrieveMenu = _menuPool:AddSubMenu(menu, 'Retrieve an Aircraft', '', true)
-		table.insert(created_menus, retrieveMenu)
-		for i = 1, #playerAircraft do
-			local aircraft = playerAircraft[i]
-			local store_status = ''
+	local retrieveMenu = _menuPool:AddSubMenu(menu, 'Retrieve an Aircraft', '', true)
+	for i = 1, #playerAircraft do
+		local aircraft = playerAircraft[i]
+		local store_status = ''
+		if aircraft.stored then
+			store_status = '(~g~Stored~s~)'
+		else
+			store_status = '(~r~Not Stored~s~)'
+		end
+		local item = NativeUI.CreateItem('Retrieve ' .. aircraft.name .. ' ' .. store_status, 'Aircraft ID: '..aircraft.id)
+		retrieveMenu.SubMenu:AddItem(item)
+		item.Activated = function(parentmenu, selected)
 			if aircraft.stored then
-				store_status = '(~g~Stored~s~)'
+				TriggerEvent("aircraft:spawnAircraft", aircraft)
+				print("setting aircraft at " .. i .. " stored status to false!")
+				TriggerEvent('usa:notify', 'Alright, aircraft has been deployed.')
+				aircraft.stored = false
+				retrieveMenu.SubMenu:Visible(false)
 			else
-				store_status = '(~r~Not Stored~s~)'
-			end
-			local item = NativeUI.CreateItem('Retrieve ' .. aircraft.name .. ' ' .. store_status, 'Aircraft ID: '..aircraft.id)
-			retrieveMenu.SubMenu:AddItem(item)
-			item.Activated = function(parentmenu, selected)
-				if aircraft.stored then
-					TriggerEvent("aircraft:spawnAircraft", aircraft)
-					print("setting aircraft at " .. i .. " stored status to false!")
-					TriggerEvent('usa:notify', 'Alright, aircraft has been deployed.')
-					aircraft.stored = false
-					retrieveMenu.SubMenu:Visible(false)
-				else
-					TriggerEvent('usa:notify', 'This aircraft is not stored!')
-				end
+				TriggerEvent('usa:notify', 'This aircraft is not stored!')
 			end
 		end
+	end
+	if #playerAircraft <= 0 then
+		local item = NativeUI.CreateItem("Nothing to retrieve!", "You don't own any aircraft to retrieve!")
+		retrieveMenu.SubMenu:AddItem(item)
 	end
 end
 
@@ -467,23 +462,6 @@ function DrawText3D(x, y, z, distance, text)
         local factor = (string.len(text)) / 370
         DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
     end
-end
-
-function IsAnyMenuVisible()
-  for i = 1, #created_menus do
-    if created_menus[i].SubMenu:Visible() then
-      return true
-    end
-  end
-  return false
-end
-
-function CloseAllMenus()
-  for i = 1, #created_menus do
-    if created_menus[i].SubMenu:Visible() then
-      created_menus[i].SubMenu:Visible(false)
-    end
-  end
 end
 
 ----------------------

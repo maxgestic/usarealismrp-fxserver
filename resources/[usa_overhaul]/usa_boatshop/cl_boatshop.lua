@@ -366,51 +366,54 @@ function CreateBuyMenu(menu, vehicles)
 end
 
 function CreateSellMenu(menu, vehicles)
-	if #playerBoats > 0 then
-		local sellMenu = _menuPool:AddSubMenu(menu, 'Sell a Boat', '', true)
-		for i = 1, #playerBoats do
-			local boat = playerBoats[i]
-			local boatid = '('..boat.id..')'
-			local item = NativeUI.CreateItem(boat.name.. ' ' ..boatid, 'Sell value: $' ..comma_value(0.5*boat.price))
-			item.Activated = function(parentmenu, selected)
-				if boat.stored then
-					TriggerServerEvent('boatMenu:requestSell', boat)
-					sellMenu:Visible(false)
-				else
-					TriggerEvent('usa:notify', 'This boat is ~y~not stored~s~, cannot be sold!')
-				end
+	local sellMenu = _menuPool:AddSubMenu(menu, 'Sell a Boat', '', true)
+	for i = 1, #playerBoats do
+		local boat = playerBoats[i]
+		local boatid = '('..boat.id..')'
+		local item = NativeUI.CreateItem(boat.name.. ' ' ..boatid, 'Sell value: $' ..comma_value(0.5*boat.price))
+		item.Activated = function(parentmenu, selected)
+			if boat.stored then
+				TriggerServerEvent('boatMenu:requestSell', boat)
+				sellMenu.SubMenu:Visible(false)
+			else
+				TriggerEvent('usa:notify', 'This boat is ~y~not stored~s~, cannot be sold!')
 			end
-			sellMenu.SubMenu:AddItem(item)
 		end
+		sellMenu.SubMenu:AddItem(item)
+	end
+	if #playerBoats <= 0 then
+		local item = NativeUI.CreateItem("Nothing to sell!", "You don't own any watercraft to sell!")
+		sellMenu.SubMenu:AddItem(item)
 	end
 end
 
 function CreateGarageMenu(menu, vehicles)
-	-- Add vehicles to menu --
-	if #playerBoats > 0 then
-		local retrieveMenu = _menuPool:AddSubMenu(menu, 'Retrieve a Boat', '', true)
-		for i = 1, #playerBoats do
-			local boat = playerBoats[i]
-			local store_status = ''
+	local retrieveMenu = _menuPool:AddSubMenu(menu, 'Retrieve a Boat', '', true)
+	for i = 1, #playerBoats do
+		local boat = playerBoats[i]
+		local store_status = ''
+		if boat.stored then
+			store_status = '(~g~Stored~s~)'
+		else
+			store_status = '(~r~Not Stored~s~)'
+		end
+		local item = NativeUI.CreateItem('Retrieve ' .. boat.name .. ' ' .. store_status, 'Boat ID: '..boat.id)
+		retrieveMenu.SubMenu:AddItem(item)
+		item.Activated = function(parentmenu, selected)
 			if boat.stored then
-				store_status = '(~g~Stored~s~)'
+				TriggerEvent("boatMenu:spawnSeacraft", boat)
+				print("setting watercraft at " .. i .. " stored status to false!")
+				TriggerEvent('usa:notify', 'Alright, boat is waiting in the water.')
+				boat.stored = false
+				retrieveMenu:Visible(false)
 			else
-				store_status = '(~r~Not Stored~s~)'
-			end
-			local item = NativeUI.CreateItem('Retrieve ' .. boat.name .. ' ' .. store_status, 'Boat ID: '..boat.id)
-			retrieveMenu.SubMenu:AddItem(item)
-			item.Activated = function(parentmenu, selected)
-				if boat.stored then
-					TriggerEvent("boatMenu:spawnSeacraft", boat)
-					print("setting watercraft at " .. i .. " stored status to false!")
-					TriggerEvent('usa:notify', 'Alright, boat is waiting in the water.')
-					boat.stored = false
-					retrieveMenu:Visible(false)
-				else
-					TriggerEvent('usa:notify', 'This watercraft is ~y~not stored~s~!')
-				end
+				TriggerEvent('usa:notify', 'This watercraft is ~y~not stored~s~!')
 			end
 		end
+	end
+	if #playerBoats <= 0 then
+		local item = NativeUI.CreateItem("Nothing to retrieve!", "You don't own any watercraft to retrieve!")
+		retrieveMenu.SubMenu:AddItem(item)
 	end
 end
 
