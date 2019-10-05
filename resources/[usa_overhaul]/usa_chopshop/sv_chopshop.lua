@@ -1,7 +1,7 @@
 RegisterServerEvent("chopshop:reward")
 AddEventHandler("chopshop:reward", function(veh_name, damage, property)
   local char = exports["usa-characters"]:GetCharacter(source)
-  local reward = math.random(200, 1500)
+  local reward = math.random(200, 900)
   local numTroopers = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
   if numTroopers == 0 then
     damage = math.ceil(0.10 * damage)
