@@ -52,7 +52,8 @@ window.APP = {
 			this.focusTimer = setInterval(() => {
 				if (this.$refs.input) {
 					this.$refs.input.focus();
-					document.getElementsByClassName('chat-window')[0].classList.add('chat-window-active');
+					if (!this.immersionMode)
+						document.getElementsByClassName('chat-window')[0].classList.add('chat-window-active');
 				} else {
 					clearInterval(this.focusTimer);
 				}
@@ -61,7 +62,6 @@ window.APP = {
 		ON_IMMERSION() {
 			this.immersionMode = !this.immersionMode
 			if (this.immersionMode) {
-				this.showInput = false
 				this.showWindow = false
 			}
 		},
@@ -158,7 +158,8 @@ window.APP = {
 			if (canceled) {
 				post('http://chat/chatResult', JSON.stringify({ canceled }));
 			}
-			document.getElementsByClassName('chat-window')[0].classList.remove('chat-window-active');
+			if (!this.immersionMode)
+				document.getElementsByClassName('chat-window')[0].classList.remove('chat-window-active');
 			this.message = '';
 			this.showInput = false;
 			clearInterval(this.focusTimer);

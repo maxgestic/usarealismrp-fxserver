@@ -149,6 +149,7 @@ RegisterNUICallback('loaded', function(data, cb)
 	cb('ok')
 end)
 
+-- opening / closing input bar
 Citizen.CreateThread(function()
 	SetTextChatEnabled(false)
 	SetNuiFocus(false)
@@ -156,7 +157,7 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(0)
 
-		if not chatInputActive and not chatImmersionModeActive then
+		if not chatInputActive then
 			if IsControlPressed(0, 245) --[[ INPUT_MP_TEXT_CHAT_ALL ]] then
 				chatInputActive = true
 				chatInputActivating = true
@@ -167,7 +168,7 @@ Citizen.CreateThread(function()
 			end
 		end
 
-		if chatInputActivating and not chatImmersionModeActive then
+		if chatInputActivating then
 			if not IsControlPressed(0, 245) then
 				SetNuiFocus(true)
 
@@ -183,11 +184,8 @@ AddEventHandler("usa:toggleImmersion", function(disabled)
 		type = 'ON_IMMERSION'
 	})
 	if not disabled then
-		chatImmersionModeActive = true
 		chatInputActive = false
 		chatInputActivating = false
 		SetNuiFocus(false)
-	else 
-		chatImmersionModeActive = false
 	end
 end)
