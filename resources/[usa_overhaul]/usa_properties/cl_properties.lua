@@ -26,6 +26,8 @@ local residents = {
 
 local spawnedPeds = {}
 
+local outfitAmount = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+
 RegisterNetEvent('properties:updateData')
 AddEventHandler('properties:updateData', function(location, index, data)
 	if not firstSpawn then
@@ -807,8 +809,6 @@ function LoadBuzzMenu(location)
 		TriggerEvent('usa:notify', 'No apartments to buzz!')
 	end
 end
-
-local outfitAmount = {1, 2, 3, 4, 5, 6, 7, 8}
 
 function LoadWardrobeMenu()
 	_menuPool = NativeUI.CreatePool()

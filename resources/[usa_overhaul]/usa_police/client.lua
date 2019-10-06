@@ -22,7 +22,7 @@ local policeArmourys = {
 
 local weapons = {} -- armory items
 
-local policeoutfitamount = {1, 2, 3, 4, 5}
+local policeoutfitamount = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
 local MAX_COMPONENT = 200
 local MAX_COMPONENT_TEXTURE = 100

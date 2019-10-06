@@ -11,7 +11,7 @@ local EMSLockerRooms = {
 {x = 338.24346923828,y = -586.91796875, z = 74.165657043457} -- pillbox helipad
 }
 
-local emsoutfitamount = {1, 2, 3, 4, 5}
+local emsoutfitamount = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
 local arrSkinGeneralCaptions = {"MP Male", "MP Female", "Fireman", "Paramedic - Male", "Paramedic - Female", "Doctor"}
 local arrSkinGeneralValues = {"mp_m_freemode_01", "mp_f_freemode_01", "s_m_y_fireman_01","s_m_m_paramedic_01","s_f_y_scrubs_01", "s_m_m_doctor_01"}
