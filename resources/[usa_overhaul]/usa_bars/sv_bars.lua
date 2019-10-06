@@ -2,6 +2,7 @@
 
 local ITEMS = {
   ["Drinks"] = {
+      ["Water"] = {name = "Water", price = 9, type = "drink", substance = 50.0, quantity = 1, legality = "legal", weight = 10, objectModel = "ba_prop_club_water_bottle", caption = "A simple yet hydrating glass of filtered water."},
       ["Corona Light Beer (4%)"] = {name = "Corona Light Beer (4%)", price = 10, type = "alcohol", substance = 15.0, quantity = 4, legality = "legal", weight = 10, strength = 0.01, caption = "A pale lager produced by Cervecería Modelo in Mexico"},
       ["Lagunitas IPA"] = {name = "Lagunitas IPA", price = 10, type = "alcohol", substance = 15.0, quantity = 4, legality = "legal", weight = 10, strength = 0.02, caption = "Big on the aroma with a hoppy-sweet finish that'll leave you wantin' another sip"},
       ["Budweiser"] = {name = "Budweiser", price = 10, type = "alcohol", substance = 15.0, quantity = 4, legality = "legal", weight = 10, strength = 0.02, caption = "An American-style pale lager produced by Anheuser-Busch"},
