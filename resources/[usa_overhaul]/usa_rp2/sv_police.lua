@@ -72,7 +72,14 @@ TriggerEvent('es:addJobCommand', 'dispatch', { "corrections", "sheriff", "ems", 
 		table.remove(args,1)
 		local msg = table.concat(args, " ")
 		TriggerClientEvent('dispatch:notify', target, char.get("name").last, source, msg)
-		exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections", "ems"}, '^5^*[DISPATCH] ^r^0'..char.get("name").last..' ['..source..'] to #'..target..': '..msg, "onlyDeputiesNoCOs") -- send to all others players with same job as dispatcher
+		local cjob = char.get("job")
+		local targetJobs = {}
+		if cjob == "sheriff" or cjob == "corrections" or cjob == "ems" then
+			targetJobs = {"sheriff", "corrections", "ems"}
+		else
+			targetJobs = {cjob}
+		end
+		exports["globals"]:notifyPlayersWithJobs(targetJobs, '^5^*[DISPATCH] ^r^0'..char.get("name").last..' ['..source..'] to #'..target..': '..msg, "onlyDeputiesNoCOs") -- send to all others players with same job as dispatcher
 	else
 		TriggerClientEvent("usa:notify", source, "Error: caller id # not entered")
 	end
