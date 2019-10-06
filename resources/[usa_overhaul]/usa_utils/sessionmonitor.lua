@@ -24,8 +24,14 @@ Citizen.CreateThread(function()
         if curCount < lastRecordedAmount then
             local numDropped = lastRecordedAmount - curCount
             if numDropped >= DROPPED_AMOUNT_MD then
-                local msg = "\nSignificant player drop event detected!\nAt least " .. numDropped .. " player(s) dropped in no more than " .. CHECK_INTVERAL_SECONDS .. " seconds! <@178016707292561409>"
-                SendDiscordLog(WEBHOOK_URL, msg)
+                local date = os.date("*t", os.time())
+                if (date.hour == 3 and date.min >= 20 and date.min <= 35) or (date.hour == 15 and date.min >= 20 and date.min <= 35) then
+                    -- ignore player drops during server restarts
+                    print("SKIPPING PLAYER DROP ALERT, SERVER RESTARTING!!! hour is " .. date.hour .. " and min is " .. date.min)
+                else
+                    local msg = "\nSignificant player drop event detected!\nAt least " .. numDropped .. " player(s) dropped in no more than " .. CHECK_INTVERAL_SECONDS .. " seconds! <@178016707292561409>"
+                    SendDiscordLog(WEBHOOK_URL, msg)
+                end
             end
         end
         lastRecordedAmount = #GetPlayers()
