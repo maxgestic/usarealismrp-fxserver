@@ -1,6 +1,8 @@
 local KEY = 38
 local repairingVehicle = false
 
+local REPAIR_TIME = 45000
+
 -----------------------------------------------------------------------
 ----------------------------GARAGE-LOCATION----------------------------
 -----------------------------------------------------------------------
@@ -35,26 +37,27 @@ repairBlips = {
 }
 
 RegisterNetEvent("autoRepair:repairVehicle")
-AddEventHandler("autoRepair:repairVehicle", function()
+AddEventHandler("autoRepair:repairVehicle", function(cost)
 	repairingVehicle = true
 	local playerPed = PlayerPedId()
 	local playerVeh = GetVehiclePedIsIn(playerPed, false)
 	local beginTime = GetGameTimer()
 	Citizen.CreateThread(function()
-		while GetGameTimer() - beginTime < 10000 do
-			Citizen.Wait(0)
+		while GetGameTimer() - beginTime < REPAIR_TIME do
+			Wait(0)
 			SetVehicleEngineOn(playerVeh, false, true, false)
 		end
 	end)
-	while GetGameTimer() - beginTime < 10000 do
+	while GetGameTimer() - beginTime < REPAIR_TIME do
 		Citizen.Wait(0)
-		DrawTimer(beginTime, 10000, 1.42, 1.475, 'REPAIRING')
+		DrawTimer(beginTime, REPAIR_TIME, 1.42, 1.475, 'REPAIRING')
 	end
 	SetVehicleDirtLevel(playerVeh, 0.0)
 	SetVehicleFixed(playerVeh)
 	SetVehicleDeformationFixed(playerVeh)
 	SetVehicleUndriveable(playerVeh, false)
 	repairingVehicle = false
+	exports.globals:notify("Vehicle repaired for: $" .. cost)
 end)
 
 Citizen.CreateThread(function()
@@ -66,12 +69,15 @@ Citizen.CreateThread(function()
 			for i = 1, #vehicleRepairStation do
 				local repairStation = vehicleRepairStation[i]
 				if Vdist(GetEntityCoords(playerPed), repairStation[1], repairStation[2], repairStation[3]) < 3 and GetPedInVehicleSeat(playerVeh, -1) == playerPed and not IsEntityDead(playerPed) then
-					if GetVehicleEngineHealth(playerVeh) < 1000.0 and GetVehicleBodyHealth(playerVeh) < 1000.0 then
+					local engineHp = GetVehicleEngineHealth(playerVeh)
+					local bodyHp = GetVehicleBodyHealth(playerVeh)
+					local canBeRepaired = engineHp < 1000.0 or bodyHp < 1000.0
+					if canBeRepaired then
 						if GetIsVehicleEngineRunning(playerVeh) then
 							TriggerEvent('usa:notify', '~y~Vehicle engine must be off!')
 						else
-							local business = exports["usa-businesses"]:GetClosestStore(15)
-							TriggerServerEvent('autoRepair:checkMoney', business)
+							local business = exports["usa-businesses"]:GetClosestStore(15) or ""
+							TriggerServerEvent('autoRepair:checkMoney', business, engineHp, bodyHp)
 						end
 					else
 						TriggerEvent('usa:notify', '~y~Your vehicle does not require any repairs!')
@@ -81,7 +87,7 @@ Citizen.CreateThread(function()
 		end
 		for i = 1, #vehicleRepairStation do
 			local repairStation = vehicleRepairStation[i]
-			DrawText3D(repairStation[1], repairStation[2], (repairStation[3] + 1.0), 5, '[E] - Auto Repair (~g~$300.00~s~)')
+			DrawText3D(repairStation[1], repairStation[2], (repairStation[3] + 1.0), 5, '[E] - Auto Repair')
 		end
 	end
 end)
@@ -92,7 +98,7 @@ end)
 ----------------------
 
 local BLIPS = {}
-function EnumerateBlips()
+function PlaceMapBlips()
   if #BLIPS == 0 then
     for i = 1, #repairBlips do
       local blip = AddBlipForCoord(repairBlips[i][1], repairBlips[i][2], repairBlips[i][3])
@@ -114,7 +120,7 @@ TriggerServerEvent('blips:getBlips')
 RegisterNetEvent('blips:returnBlips')
 AddEventHandler('blips:returnBlips', function(blipsTable)
   if blipsTable['autorepair'] then
-    EnumerateBlips()
+    PlaceMapBlips()
   else
     for _, k in pairs(BLIPS) do
       print(k)
