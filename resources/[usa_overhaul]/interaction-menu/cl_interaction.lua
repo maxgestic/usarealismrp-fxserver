@@ -806,8 +806,13 @@ end)
 
 RegisterNUICallback("dropItem", function(data, cb)
 	if not string.find(data.itemName, "Driver") and not string.find(data.itemName, "Firearm") and not string.find(data.itemName, "License") then
+		local me = PlayerPedId()
+		if IsPedInAnyVehicle(me) and IsPedCuffed(me) then 
+			exports.globals:notify("Can't drop items while cuffed inside a vehicle!")
+			return
+		end
 		-- remove from inventory --
-		local pos = GetEntityCoords(GetPlayerPed(-1), true)
+		local pos = GetEntityCoords(me, true)
 		TriggerEvent("usa:playAnimation", "anim@move_m@trash", "pickup", -8, 1, -1, 48, 0, 0, 0, 0)
 		TriggerServerEvent("inventory:dropItem", data.itemName, data.index, pos.x, pos.y, pos.z)
 		-- spawn object on ground --
@@ -824,7 +829,7 @@ RegisterNUICallback('moveItem', function(data, cb)
 	if not IsPedCuffed(PlayerPedId()) then
 		TriggerServerEvent("inventory:moveItem", data)
 	else
-		exports.globals:notify("Your hands are cuffed, can't move!")
+		exports.globals:notify("You are cuffed! Can't move item!")
 	end
 end)
 
