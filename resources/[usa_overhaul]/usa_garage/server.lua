@@ -68,7 +68,7 @@ end)
 
 -- ask to retrieve vehicle from garage --
 RegisterServerEvent("garage:vehicleSelected")
-AddEventHandler("garage:vehicleSelected", function(vehicle, business)
+AddEventHandler("garage:vehicleSelected", function(vehicle, business, playerCoords)
 	local usource = source
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local vehicles = char.get("vehicles")
@@ -92,21 +92,28 @@ AddEventHandler("garage:vehicleSelected", function(vehicle, business)
 			TriggerClientEvent("usa:notify", usource, "~y~STATE IMPOUND: ~s~Your vehicle is impounded and can be retrieved for ~y~$"..IMPOUND_FEE..".00~s~!")
 		end
 	elseif vehicle.stored == true then
-		if money >= WITHDRAW_FEE then
-			TriggerClientEvent("usa:notify", usource, "Vehicle retrieved from garage! Fee: ~y~$" .. WITHDRAW_FEE..'.00')
-
-			GetVehicleCustomizations(vehicle.plate, function(customizations)
-				vehicle.customizations = customizations
-				TriggerClientEvent("garage:vehicleStored", usource, vehicle)
-				TriggerEvent('es:exposeDBFunctions', function(couchdb)
-				    couchdb.updateDocument("vehicles", vehicle.plate, { stored = false }, function()
+		local doPay = true
+		if isAtProperty(char, playerCoords) then
+			doPay = false
+		end
+		if doPay and money < WITHDRAW_FEE then
+			TriggerClientEvent("usa:notify", usource, "Your vehicle can be retrieved for a fee of ~y~$".. WITHDRAW_FEE ..".00~s~!")
+			return
+		end
+		GetVehicleCustomizations(vehicle.plate, function(customizations)
+			vehicle.customizations = customizations
+			TriggerClientEvent("garage:vehicleStored", usource, vehicle)
+			TriggerEvent('es:exposeDBFunctions', function(couchdb)
+				couchdb.updateDocument("vehicles", vehicle.plate, { stored = false }, function()
+					if doPay then
 						char.removeMoney(WITHDRAW_FEE)
-					end)
+						TriggerClientEvent("usa:notify", usource, "Vehicle retrieved from garage! Fee: ~y~$" .. WITHDRAW_FEE ..'.00')
+					else 
+						TriggerClientEvent("usa:notify", usource, "Vehicle retrieved from garage!")
+					end
 				end)
 			end)
-		else
-			TriggerClientEvent("usa:notify", usource, "Your vehicle can be retrieved for a fee of ~y~$"..WITHDRAW_FEE..".00~s~!")
-		end
+		end)
 	else
 		TriggerClientEvent("usa:notify", usource, "~y~Sorry!~s~ That vehicle is not stored at any of our garages.")
 	end
@@ -188,4 +195,12 @@ function IsDriverLicenseValid(source)
 		return true
 	end
 	return false
+end
+
+function isAtProperty(char, coords)
+	local gcoords = char.get("property")["garageCoords"]
+	if not gcoords then
+		return false
+	end
+	return exports.globals:getCoordDistance({x = gcoords[1], y = gcoords[2], z = gcoords[3]}, coords) < 10.0
 end

@@ -26,5 +26,6 @@ server_exports {
   "GetHoursFromTime",
   "GetSecondsFromTime",
   "SendDiscordLog",
-  "replaceChar"
+  "replaceChar",
+  "getCoordDistance"
 }

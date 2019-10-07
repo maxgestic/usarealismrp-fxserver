@@ -160,3 +160,14 @@ end
 function replaceChar(pos, str, r)
     return ("%s%s%s"):format(str:sub(1,pos-1), r, str:sub(pos+1))
 end
+
+function getCoordDistance(coords1, coords2)
+	xdistance =  math.abs(coords1.x - coords2.x)
+	ydistance = math.abs(coords1.y - coords2.y)
+	zdistance = math.abs(coords1.z - coords2.z)
+	return nroot(3, (xdistance ^ 3 + ydistance ^ 3 + zdistance ^ 3))
+end
+
+function nroot(root, num)
+	return num^(1/root)
+end

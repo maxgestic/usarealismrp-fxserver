@@ -45,16 +45,15 @@ function CreateGarageMenu(menu, vehicles)
 		-- make button --
 		local item = NativeUI.CreateItem(buttonText, "")
 		item.Activated = function(parentmenu, selected)
+			local business = (exports["usa-businesses"]:GetClosestStore(15) or "")
 			if GetVehiclePedIsIn(GetPlayerPed(-1), false) ~= 0 then
 				if GetPedInVehicleSeat(GetVehiclePedIsIn(GetPlayerPed(-1), false), -1) == GetPlayerPed(-1) then
-					local business = exports["usa-businesses"]:GetClosestStore(15)
-					TriggerServerEvent("garage:vehicleSelected", vehicle, business)
+					TriggerServerEvent("garage:vehicleSelected", vehicle, business, GetEntityCoords(PlayerPedId()))
 				else
 					TriggerEvent("usa:notify", "You must be in the driver's seat!")
 				end
 			else
-				local business = exports["usa-businesses"]:GetClosestStore(15)
-				TriggerServerEvent("garage:vehicleSelected", vehicle, business)
+				TriggerServerEvent("garage:vehicleSelected", vehicle, business, GetEntityCoords(PlayerPedId()))
 			end
 			-- close menu --
 			mainMenu:Visible(not mainMenu:Visible())
