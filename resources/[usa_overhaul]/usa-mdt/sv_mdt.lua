@@ -652,7 +652,7 @@ function GetDisplayNameFromJob(job)
 	if job == "sheriff" then 
 		return "San Andreas State Police"
 	elseif job == "corrections" then 
-		return "Sheriff Department"
+		return "Sheriff's Department"
 	end
 end
 
