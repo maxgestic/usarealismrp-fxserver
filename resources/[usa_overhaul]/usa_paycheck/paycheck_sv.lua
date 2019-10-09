@@ -32,17 +32,17 @@ function DepositPayCheck(char)
         if cop_rank == 2 then
             paycheckAmount = 275
         elseif cop_rank == 3 then
-            paycheckAmount = 325
+            paycheckAmount = 350
         elseif cop_rank == 4 then
-            paycheckAmount = 365
+            paycheckAmount = 395
         elseif cop_rank == 5 then
-            paycheckAmount = 385
-        elseif cop_rank == 6 then
             paycheckAmount = 400
-        elseif cop_rank == 7 then
+        elseif cop_rank == 6 then
             paycheckAmount = 410
-        elseif cop_rank == 8 then
+        elseif cop_rank == 7 then
             paycheckAmount = 420
+        elseif cop_rank == 8 then
+            paycheckAmount = 425
         elseif cop_rank == 9 then
             paycheckAmount = 430
         elseif cop_rank == 10 then
