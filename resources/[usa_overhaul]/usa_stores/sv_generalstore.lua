@@ -46,6 +46,8 @@ local GENERAL_STORE_ITEMS = {
     { name = "Condoms", price = 5, type = "misc", quantity = 3, legality = "legal", weight = 8, objectModel = "ng_proc_candy01a", blockedInPrison = true},
     { name = "KY Intense Gel", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 6, objectModel = "v_res_d_lube", blockedInPrison = true},
     { name = "Viagra", price = 10, type = "misc", quantity = 10, legality = "legal", weight = 5, objectModel = "prop_cs_pills", blockedInPrison = true},
+    { name = "Zig-Zag Papers", price = 10, type = "misc", quantity = 5, legality = "legal", weight = 1, objectModel = "prop_cs_pills", blockedInPrison = true},
+    { name = "Bic Lighter", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_pills", blockedInPrison = true}
   }
 }
 
@@ -106,7 +108,7 @@ AddEventHandler("generalStore:buyItem", function(item, store, inPrison, business
         item.name = item.name .. " - " .. item.number
         exports["usa-phone"]:CreateNewPhone(item)
       end
-      char.giveItem(item, 1)
+      char.giveItem(item, item.quantity or 1)
       TriggerClientEvent("usa:notify", source, "Purchased: ~y~" .. item.name)
       if business then
         exports["usa-businesses"]:GiveBusinessCashPercent(business, item.price)

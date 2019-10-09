@@ -403,9 +403,10 @@ RegisterNUICallback('playEmote', function(data, cb)
 		-- play anim / scenario  --
 		-------------------------------
 		local scenarioName = data.emoteName:lower()
-			if scenarioName == "cancel" or scenarioName == "stop" then
+			if scenarioName == "cancel" or scenarioName == "stop" or scenarioName == "c" then
 				playing_scenario = false
 				playing_anim = nil
+				TriggerEvent("drugs:cancel")
 				return
 			elseif scenarioName == "surrender" then
 				TriggerEvent("KneelHU")
@@ -502,6 +503,8 @@ RegisterNUICallback('playEmote', function(data, cb)
 		end
 end)
 
+RegisterNetEvent("drugs:use") -- see usa_drugEffects
+
 RegisterNetEvent('properties:enterProperty')
 AddEventHandler('properties:enterProperty', function()
 	inProperty = true
@@ -547,9 +550,10 @@ AddEventHandler("emotes:playEmote", function(scenarioName)
 		-------------------------------
 		-- play anim / scenario  --
 		-------------------------------
-			if scenarioName == "cancel" then
+			if scenarioName == "cancel" or scenarioName == "c" then
 				playing_scenario = false
 				playing_anim = nil
+				TriggerEvent("drugs:cancel")
 				return
 			elseif scenarioName == "surrender" then
 				TriggerEvent("KneelHU")
@@ -858,6 +862,10 @@ function interactionMenuUse(itemName, wholeItem)
 				DoScreenFadeIn(1000)
 				StopScreenEffect("DrugsMichaelAliensFight")
 			end)
+		elseif string.find(itemName, "Packaged Weed") then
+			TriggerServerEvent("drugs:use", "Packaged Weed")
+		elseif itemName:find("Joint") then
+			TriggerServerEvent("drugs:use", "Joint")
 		elseif string.find(itemName, "Repair Kit") then
 			TriggerEvent("interaction:repairVehicle")
 		elseif string.find(itemName, "Hotwiring Kit") then
@@ -1150,9 +1158,9 @@ function intoxicate(playScenario, clipset, intensity)
 	if intensity then
 		ShakeGameplayCam("DRUNK_SHAKE", intensity)
 	end
- end
+end
 
- function reality(minutes)
+function reality(minutes)
 	minutes = minutes * 60 * 1000
 	Citizen.Wait(minutes)
 	DoScreenFadeOut(1000)
@@ -1166,21 +1174,23 @@ function intoxicate(playScenario, clipset, intensity)
 	StopGameplayCamShaking(true)
 	-- Stop the mini mission
 	--Citizen.Trace("Going back to reality\n")
- end
+end
 
- -- end drunk / high effect
+-- end drunk / high effect
+function removeQuantityFromItemName(itemName)
+if string.find(itemName,"%)") then
+	local i = string.find(itemName, "%)")
+	i = i + 2
+	itemName = string.sub(itemName, i)
+	--print("new item name = " .. itemName)
+end
+return itemName
+end
 
- function removeQuantityFromItemName(itemName)
-	if string.find(itemName,"%)") then
-		local i = string.find(itemName, "%)")
-		i = i + 2
-		itemName = string.sub(itemName, i)
-		--print("new item name = " .. itemName)
-	end
-	return itemName
- end
 
 RegisterNetEvent("interaction:equipWeapon")
+
+
 AddEventHandler("interaction:equipWeapon", function(item, equip, ammoAmount)
 	local ped = GetPlayerPed(-1)
 	if equip then

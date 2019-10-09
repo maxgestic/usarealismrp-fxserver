@@ -174,7 +174,10 @@ var itemImages = {
   "Cool Ranch Doritos": "https://i.imgur.com/7zwiCP5.png",
   "Gummy Worms": "https://i.imgur.com/CjOhIJF.png",
   "Sour Gummy Worms": "https://i.imgur.com/AiSyyCw.png",
-  "LSD Vile": "https://imgur.com/4zNSw5c.png"
+  "LSD Vile": "https://imgur.com/4zNSw5c.png",
+  "Zig-Zag Papers": "https://imgur.com/iN7IaDE.png",
+  "Bic Lighter": "https://imgur.com/sVSnmCy.png",
+  "Joint": "https://imgur.com/NBVdIqF.png"
 }
 
 var menuItems = [
