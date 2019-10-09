@@ -10,8 +10,9 @@ RegisterNetEvent("drugs:rolledCannabis")
 local JOINT_ITEM = {
     name = "Joint",
     type = "drug",
-    weight = "2.0",
-    quantity = 1
+    weight = 2.0,
+    quantity = 1,
+    objectModel = "prop_sh_joint_01"
 }
 
 AddEventHandler("drugs:use", function(name)
@@ -25,8 +26,8 @@ AddEventHandler("drugs:use", function(name)
             end
         end
         --# remove items
-        --char.removeItem("Zig-Zag Papers", 1) --#TODO: remove comments!!
-        --char.removeItem("Packaged Weed", 1)
+        char.removeItem("Zig-Zag Papers", 1) --#TODO: remove comments!!
+        char.removeItem("Packaged Weed", 1)
     elseif name == CONFIG.joint.itemName then
         for i = 1, #(CONFIG.joint.requiredItems) do
             if not char.hasItem(CONFIG.joint.requiredItems[i]) then
@@ -34,7 +35,7 @@ AddEventHandler("drugs:use", function(name)
                 return
             end
         end
-        --char.removeItem("Joint", 1)
+        char.removeItem("Joint", 1)
     end
     --# if so, use item
     TriggerClientEvent("drugs:use", source, name)
