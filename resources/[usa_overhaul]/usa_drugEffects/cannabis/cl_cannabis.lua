@@ -8,6 +8,7 @@ RegisterNetEvent("drugs:use")
 RegisterNetEvent("drugs:cancel")
 
 local wasCanceled = false
+local isBusy = false
 
 local anim = {
     rolling = {
@@ -25,6 +26,11 @@ local anim = {
 AddEventHandler("drugs:use", function(name)
     local me = PlayerPedId()
     if name == CONFIG.cannabis.itemName then
+        if isBusy then 
+            exports.globals:notify("You are already rolling!")
+            return
+        end
+        isBusy = true
         -- # playing emote / rolling joint
         local startTime = GetGameTimer()
         while GetGameTimer() - startTime < (CONFIG.cannabis.jointRollTimeSeconds) * 1000 and not wasCanceled do 
@@ -33,19 +39,27 @@ AddEventHandler("drugs:use", function(name)
                 TriggerEvent("usa:playAnimation", anim.rolling.dict, anim.rolling.name, -8, 1, -1, 16, 0, 0, 0, 0)
                 Wait(10)
             end
-            Wait(1)
+            Wait(0)
         end
 
         if wasCanceled then
             wasCanceled = false
+            isBusy = false
             return
         end
 
-        ClearPedTasksImmediately(me)
+        StopAnimTask(me, anim.rolling.dict, anim.rolling.name, 1.0)
 
         exports.globals:notify("You rolled a joint!")
         TriggerServerEvent("drugs:rolledCannabis")
+
+        isBusy = false
     elseif name == CONFIG.joint.itemName then
+        if isBusy then 
+            exports.globals:notify("You are already smoking!")
+            return
+        end
+        isBusy = true
         local startTime = GetGameTimer()
         while GetGameTimer() - startTime < CONFIG.joint.smokeTimeSeconds * 1000 and not wasCanceled do 
             exports.globals:DrawTimerBar(startTime, CONFIG.joint.smokeTimeSeconds * 1000, 1.42, 1.475, 'Consuming')
@@ -53,13 +67,15 @@ AddEventHandler("drugs:use", function(name)
                 TriggerEvent("usa:playAnimation", anim.smoking.dict, anim.smoking.name, -8, 1, -1, 16, 0, 0, 0, 0)
                 Wait(10)
             end
-            Wait(1)
+            Wait(0)
         end
-        ClearPedTasksImmediately(me)
+        StopAnimTask(me, anim.smoking.dict, anim.smoking.name, 1.0)
         if wasCanceled then
             wasCanceled = false
+            isBusy = false
             return
         end
+        isBusy = false
         ApplyEffects(me)
     end
 end)
@@ -87,10 +103,11 @@ end
 
 function ApplyVisualEffect(me)
     DoScreenFadeOut(1000)
+    DoScreenFadeIn(1000)
+    
     local visualEffectStr = "HeistCelebPass"
     StartScreenEffect(visualEffectStr, 1000, true)
     SetPedMotionBlur(me, true)
-    DoScreenFadeIn(1000)
 
     startTime = GetGameTimer()
     while GetGameTimer() - startTime < CONFIG.joint.effectTimeMinutes * 60 * 1000 do 
@@ -100,3 +117,6 @@ function ApplyVisualEffect(me)
     SetPedMotionBlur(me, false)
     StopScreenEffect(visualEffectStr)
 end
+
+--TODO: create joint object and place in hand when doing joint smoking animation
+--TODO: prevent rolling multiple joints simultaneously (to test)

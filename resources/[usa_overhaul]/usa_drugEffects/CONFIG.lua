@@ -12,6 +12,6 @@ CONFIG = {
             "Bic"
         },
         effectTimeMinutes = 5,
-        smokeTimeSeconds = 15
+        smokeTimeSeconds = 25
     }
 }

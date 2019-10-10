@@ -26,8 +26,10 @@ AddEventHandler("drugs:use", function(name)
             end
         end
         --# remove items
-        char.removeItem("Zig-Zag Papers", 1) --#TODO: remove comments!!
+        char.removeItem("Zig-Zag Papers", 1)
         char.removeItem("Packaged Weed", 1)
+        --# if so, remove items
+        TriggerClientEvent("drugs:use", source, name)
     elseif name == CONFIG.joint.itemName then
         for i = 1, #(CONFIG.joint.requiredItems) do
             if not char.hasItem(CONFIG.joint.requiredItems[i]) then
@@ -36,13 +38,11 @@ AddEventHandler("drugs:use", function(name)
             end
         end
         char.removeItem("Joint", 1)
+        TriggerClientEvent("drugs:use", source, name)
     end
-    --# if so, use item
-    TriggerClientEvent("drugs:use", source, name)
 end)
 
 AddEventHandler("drugs:rolledCannabis", function()
     local char = exports["usa-characters"]:GetCharacter(source)
     char.giveItem(JOINT_ITEM)
 end)
---# TODO: create joint item that can go into inventory for use

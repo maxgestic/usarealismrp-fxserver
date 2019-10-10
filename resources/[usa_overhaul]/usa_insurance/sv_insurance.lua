@@ -1,6 +1,6 @@
 local INSURANCE_COVERAGE_MONTHLY_COST = 500
 local BASE_FEE = 100
-local PERCENTAGE = 0.05
+local PERCENTAGE = 0.03
 
 RegisterServerEvent("insurance:buyInsurance")
 AddEventHandler("insurance:buyInsurance", function(userSource)

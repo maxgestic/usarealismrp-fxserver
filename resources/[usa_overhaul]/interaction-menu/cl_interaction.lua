@@ -620,20 +620,11 @@ AddEventHandler("emotes:playEmote", function(scenarioName)
 									flag = 53
 								}
 							else
-								--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5)
-								--TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, 5, 1, 1000, 31, 0, 0, 0, 0)
 								TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 53, 0, 0, 0, 0, 4)
 								if scenarios[i].cancelTime then
 									Wait(scenarios[i].cancelTime * 1000)
 									ClearPedTasksImmediately(GetPlayerPed(-1))
 								end
-								--[[
-								playing_anim = {
-									dict = scenarios[i].dict,
-									name = scenarios[i].animname,
-									flag = 53
-								}
-								--]]
 							end
 						end
 					end
