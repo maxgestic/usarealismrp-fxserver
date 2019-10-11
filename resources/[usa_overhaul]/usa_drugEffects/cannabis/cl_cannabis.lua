@@ -17,7 +17,8 @@ local anim = {
     },
     smoking = {
         dict = "amb@world_human_smoking_pot@male@idle_a",
-        name = "idle_c"
+        name = "idle_c",
+        object = "p_cs_joint_02"
     }
 }
 
@@ -60,6 +61,7 @@ AddEventHandler("drugs:use", function(name)
             return
         end
         isBusy = true
+        local jointObj = GivePedObject(60309, anim.smoking.object, 0.00, 0.0, 0.0, -270.0, 0.0, -0.06)
         local startTime = GetGameTimer()
         while GetGameTimer() - startTime < CONFIG.joint.smokeTimeSeconds * 1000 and not wasCanceled do 
             exports.globals:DrawTimerBar(startTime, CONFIG.joint.smokeTimeSeconds * 1000, 1.42, 1.475, 'Consuming')
@@ -75,6 +77,7 @@ AddEventHandler("drugs:use", function(name)
             isBusy = false
             return
         end
+        DeleteObject(jointObj)
         isBusy = false
         ApplyEffects(me)
     end
@@ -118,5 +121,20 @@ function ApplyVisualEffect(me)
     StopScreenEffect(visualEffectStr)
 end
 
---TODO: create joint object and place in hand when doing joint smoking animation
---TODO: prevent rolling multiple joints simultaneously (to test)
+function GivePedObject(target_bone, object, x, y, z, rotX, rotY, rotZ)
+	object = GetHashKey(object)
+	local ped = GetPlayerPed(-1)
+	local coords = GetEntityCoords(ped)
+    local bone = GetPedBoneIndex(ped, target_bone)
+  	RequestModel(object)
+  	while not HasModelLoaded(object) do
+  		Citizen.Wait(100)
+  	end
+  	spawned_object = CreateObject(object, coords.x, coords.y, coords.z, 1, 1, 0)
+	if rotX and rotY and rotZ and x and y and z then
+  		AttachEntityToEntity(spawned_object, ped, bone, x, y, z, rotX, rotY, rotZ, 1, 1, 0, 0, 2, 1)
+	else
+		AttachEntityToEntity(spawned_object, ped, bone, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1, 1, 0, 0, 2, 1)
+    end
+    return spawned_object
+end

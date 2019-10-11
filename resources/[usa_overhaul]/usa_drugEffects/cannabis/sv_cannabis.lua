@@ -37,7 +37,7 @@ AddEventHandler("drugs:use", function(name)
                 return
             end
         end
-        char.removeItem("Joint", 1)
+        --char.removeItem("Joint", 1)
         TriggerClientEvent("drugs:use", source, name)
     end
 end)
