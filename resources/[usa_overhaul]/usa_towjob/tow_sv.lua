@@ -1,4 +1,4 @@
-local TOW_REWARD = {70, 120}
+local TOW_REWARD = {300, 920}
 
 RegisterServerEvent("towJob:giveReward")
 AddEventHandler("towJob:giveReward", function()
@@ -13,8 +13,6 @@ AddEventHandler("towJob:giveReward", function()
     	TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit towJob:giveReward event, please intervene^0!')
     end
 end)
-
--- pv-tow :
 
 TriggerEvent('es:addJobCommand', 'tow', { "tow" }, function(source, args, char)
 	TriggerClientEvent('towJob:towVehicleInFront', source)
@@ -37,6 +35,8 @@ AddEventHandler("towJob:setJob", function(truckSpawnCoords)
 				TriggerClientEvent("chatMessage", usource, "", {}, "Use ^3/dispatch [id] [msg]^0 to respond to a tow request!")
 				Citizen.Wait(3000)
 				TriggerClientEvent("chatMessage", usource, "", {}, "Use ^3/tow^0 when facing a vehicle to load/unload it from the flatbed.")
+				Citizen.Wait(3000)
+				TriggerClientEvent("chatMessage", usource, "", {}, "Use ^3/repair^0 when facing a vehicle to repair it.")
 				Citizen.Wait(3000)
 				TriggerClientEvent("chatMessage", usource, "", {}, "Use ^3/ping [id]^0 to request a person\'s location.")
 				Citizen.Wait(3000)
