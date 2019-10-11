@@ -204,7 +204,8 @@ AddEventHandler("phone:endCall", function(channel)
 	print('ended call on channel: '.. channel)
 	exports.tokovoip_script:removePlayerFromRadio(channel)
 	on_call = false
-	ClearPedTasks(GetPlayerPed(-1))
+	--ClearPedTasks(GetPlayerPed(-1))
+	StopAnimTask(PlayerPedId(), "cellphone@", "cellphone_text_in", 1.0)
 	TriggerEvent("swayam:notification", "Whiz Wireless", "Call ~r~ended~w~.", "CHAR_MP_DETONATEPHONE")
 end)
 
@@ -280,9 +281,10 @@ RegisterNUICallback('sendTweet', function(data, cb)
 end)
 
 RegisterNUICallback('escape', function(data, cb)
-	ClearPedTasks(GetPlayerPed(-1))
+	--ClearPedTasks(GetPlayerPed(-1))
+	StopAnimTask(PlayerPedId(), "cellphone@", "cellphone_text_in", 1.0)
 	EnableGui(false)
-  cb('ok')
+  	cb('ok')
 end)
 
 -- various things to help handle player phone call --
@@ -314,7 +316,8 @@ Citizen.CreateThread(function()
 				Wait(500)
 				if IsControlPressed( 1, BACKSPACE_KEY ) then
 					on_call = false
-					ClearPedTasks(GetPlayerPed(-1))
+					--ClearPedTasks(GetPlayerPed(-1))
+					StopAnimTask(PlayerPedId(), "cellphone@", "cellphone_text_in", 1.0)
 					TriggerServerEvent("phone:endedCall", partner_call_source, currChannel) -- notify caller of hang up
 					TriggerEvent("swayam:notification", "Whiz Wireless", "Call ~r~ended~w~.", "CHAR_MP_DETONATEPHONE")
 				end
@@ -326,8 +329,9 @@ Citizen.CreateThread(function()
 			if not phoneEnabled then
 					TriggerServerEvent("phone:getPhone")
 			else
-				ClearPedTasks(GetPlayerPed(-1))
-			  EnableGui(false)
+				--ClearPedTasks(GetPlayerPed(-1))
+				StopAnimTask(PlayerPedId(), "cellphone@", "cellphone_text_in", 1.0)
+			  	EnableGui(false)
 			end
 			Wait(500)
 		end
