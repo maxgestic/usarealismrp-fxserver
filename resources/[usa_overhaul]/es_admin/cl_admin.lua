@@ -269,7 +269,7 @@ end
 -- noclip hot key --
 Citizen.CreateThread(function()
 	while true do
-		if IsControlPressed(1,  KEYS.ALT) and IsControlJustPressed(1, KEYS.N) then 
+		if IsControlPressed(1,  KEYS.ALT) and IsControlPressed(1, KEYS.SHIFT) and IsControlJustPressed(1, KEYS.N) then 
 			TriggerServerEvent("admin:checkGroupForNoClipHotkey")
 		end
 		Wait(10)
