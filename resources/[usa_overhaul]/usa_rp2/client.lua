@@ -640,7 +640,7 @@ AddEventHandler("usa:playAnimation", function(animDict, animName, speed, speedMu
     local me = PlayerPedId()
     local isInVeh = IsPedInAnyVehicle(me, true)
     if isInVeh and flag == 53 then
-
+      return -- avoids falling through ground when doing animation in car
     end
     if not IsPedDeadOrDying(me) then
       -- load animation

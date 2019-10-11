@@ -130,7 +130,7 @@ function GivePedObject(target_bone, object, x, y, z, rotX, rotY, rotZ)
   	while not HasModelLoaded(object) do
   		Citizen.Wait(100)
   	end
-  	spawned_object = CreateObject(object, coords.x, coords.y, coords.z, 1, 1, 0)
+  	spawned_object = CreateObject(object, coords.x, coords.y, coords.z, 1, 1, 1)
 	if rotX and rotY and rotZ and x and y and z then
   		AttachEntityToEntity(spawned_object, ped, bone, x, y, z, rotX, rotY, rotZ, 1, 1, 0, 0, 2, 1)
 	else
