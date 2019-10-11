@@ -639,33 +639,29 @@ RegisterNetEvent("usa:playAnimation")
 AddEventHandler("usa:playAnimation", function(animDict, animName, speed, speedMult, duration, flag, playbackRate, lockX, lockY, lockZ, actualDuration)
     local me = PlayerPedId()
     local isInVeh = IsPedInAnyVehicle(me, true)
-    if not isInVeh then
-        if not IsPedDeadOrDying(me) then
-            -- load animation
-            RequestAnimDict(animDict)
-            while not HasAnimDictLoaded(animDict) do
-                Citizen.Wait(100)
-            end
-            TaskPlayAnim(me, animDict, animName, speed, speedMult, duration, flag, playbackRate, lockX, lockY, lockZ)
-            playing_anim = {
-                dict = animDict,
-                name = animName
-            }
-            if actualDuration then
-                Wait(actualDuration * 1000)
-                if not IsPedInAnyVehicle(me, true) then
-                    ClearPedTasksImmediately(me)
-                end
-                StopAnimTask(me, animDict, animName, 1.0)
-            else
-              while IsEntityPlayingAnim(me, animDict, animName, 3) do
-                Wait(10)
-              end
-              if not IsPedInAnyVehicle(me, true) then
-                  ClearPedTasks(me)
-              end
-            end
+    if isInVeh and flag == 53 then
+
+    end
+    if not IsPedDeadOrDying(me) then
+      -- load animation
+      RequestAnimDict(animDict)
+      while not HasAnimDictLoaded(animDict) do
+          Citizen.Wait(100)
+      end
+      TaskPlayAnim(me, animDict, animName, speed, speedMult, duration, flag, playbackRate, lockX, lockY, lockZ)
+      playing_anim = {
+          dict = animDict,
+          name = animName
+      }
+      if actualDuration then
+          Wait(actualDuration * 1000)
+          StopAnimTask(me, animDict, animName, 1.0)
+      else
+        while IsEntityPlayingAnim(me, animDict, animName, 3) do
+          Wait(10)
         end
+        StopAnimTask(me, animDict, animName, 1.0)
+      end
     end
 end)
 
