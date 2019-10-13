@@ -1,4 +1,4 @@
-local TOW_REWARD = {300, 920}
+local TOW_REWARD = {300, 520}
 
 RegisterServerEvent("towJob:giveReward")
 AddEventHandler("towJob:giveReward", function()
