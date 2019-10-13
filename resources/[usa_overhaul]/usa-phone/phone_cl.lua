@@ -317,7 +317,7 @@ Citizen.CreateThread(function()
 				if IsControlPressed( 1, BACKSPACE_KEY ) then
 					on_call = false
 					--ClearPedTasks(GetPlayerPed(-1))
-					StopAnimTask(PlayerPedId(), "cellphone@", "cellphone_text_in", 1.0)
+					StopAnimTask(PlayerPedId(), "cellphone@", "cellphone_call_listen_base", 1.0)
 					TriggerServerEvent("phone:endedCall", partner_call_source, currChannel) -- notify caller of hang up
 					TriggerEvent("swayam:notification", "Whiz Wireless", "Call ~r~ended~w~.", "CHAR_MP_DETONATEPHONE")
 				end
