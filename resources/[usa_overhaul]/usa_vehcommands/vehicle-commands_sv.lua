@@ -69,7 +69,7 @@ local VEHICLE_RANKS = {
 		},
 		["polmav"] = {
 			rank = 4,
-			allowedLiveries = { 2 },
+			allowedLiveries = { 1 },
 			hash = 353883353
 		},
 		["predator"] = {
@@ -114,7 +114,7 @@ local VEHICLE_RANKS = {
 		},
 		["polmav"] = {
 			rank = 1,
-			allowedLiveries = { 3 },
+			allowedLiveries = { 2 },
 			hash = 353883353
 		},
 		--["lguard2"] = 1,
