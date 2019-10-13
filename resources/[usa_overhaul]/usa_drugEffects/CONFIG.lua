@@ -4,14 +4,14 @@ CONFIG = {
         requiredItems = {
             "Zig-Zag Papers"
         },
-        jointRollTimeSeconds = 20
+        jointRollTimeSeconds = 25
     },
     joint = {
         itemName = "Joint",
         requiredItems = {
             "Bic"
         },
-        effectTimeMinutes = 5,
-        smokeTimeSeconds = 25
+        effectTimeMinutes = 10,
+        smokeTimeSeconds = 30
     }
 }
