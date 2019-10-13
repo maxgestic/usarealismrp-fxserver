@@ -38,17 +38,14 @@ function CreateMenu(menu)
 		menu:AddItem(purchaseItem)
 		-- Listeners --
 		menu.OnItemSelect = function(menu, item, index)
-			--print("item selected!")
 			local selected = item.Text._Text
 			if selected == "Make a Claim" then
 				vehiclesToClaim = nil
 				claim_submenu.SubMenu:Clear()
-				--print("loading vehs to claim")
 				TriggerServerEvent("insurance:loadVehicles", true)
 
 				while not vehiclesToClaim do
 					Wait(100)
-					--print("waiting for vehicles to claim")
 				end
 
 				if vehiclesToClaim then
@@ -63,7 +60,7 @@ function CreateMenu(menu)
 									vehName = vehicle.model
 								end
 								if vehicle.stored == false then
-									local item = NativeUI.CreateItem(vehicle.make .. " " .. vehicle.model, "Claim this vehicle for a small base fee + $" .. comma_value(.05 * vehicle.price))
+									local item = NativeUI.CreateItem(vehicle.make .. " " .. vehicle.model, "Claim this vehicle for a small base fee + $" .. comma_value(.03 * vehicle.price))
 									item.Activated = function(parentmenu, selected)
 										local business = exports["usa-businesses"]:GetClosestStore(15)
 										TriggerServerEvent("insurance:fileClaim", vehicle, business)
