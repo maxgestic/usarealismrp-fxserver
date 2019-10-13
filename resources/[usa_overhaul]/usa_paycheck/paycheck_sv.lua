@@ -28,46 +28,46 @@ function DepositPayCheck(char)
 
     if job == "cop" or job == "sheriff" or job == "highwaypatrol" or job == "fbi" then
         local cop_rank = char.get("policeRank")
-        paycheckAmount = 225
+        paycheckAmount = 325
         if cop_rank == 2 then
-            paycheckAmount = 275
+            paycheckAmount = 375
         elseif cop_rank == 3 then
-            paycheckAmount = 350
-        elseif cop_rank == 4 then
-            paycheckAmount = 395
-        elseif cop_rank == 5 then
-            paycheckAmount = 400
-        elseif cop_rank == 6 then
-            paycheckAmount = 410
-        elseif cop_rank == 7 then
             paycheckAmount = 420
-        elseif cop_rank == 8 then
-            paycheckAmount = 425
-        elseif cop_rank == 9 then
+        elseif cop_rank == 4 then
             paycheckAmount = 430
-        elseif cop_rank == 10 then
+        elseif cop_rank == 5 then
             paycheckAmount = 440
+        elseif cop_rank == 6 then
+            paycheckAmount = 450
+        elseif cop_rank == 7 then
+            paycheckAmount = 460
+        elseif cop_rank == 8 then
+            paycheckAmount = 470
+        elseif cop_rank == 9 then
+            paycheckAmount = 480
+        elseif cop_rank == 10 then
+            paycheckAmount = 490
         end
-    elseif job == "ems" or job == "fire" then
+    elseif job == "ems" then
         local rank = char.get("emsRank")
-        paycheckAmount = 300
+        paycheckAmount = 400
         if rank == 2 then
-            paycheckAmount = 315
+            paycheckAmount = 450
         elseif rank == 3 then
-            paycheckAmount = 325
+            paycheckAmount = 460
         elseif rank == 4 then
-            paycheckAmount = 335
+            paycheckAmount = 465
         elseif rank == 5 then
-            paycheckAmount = 350
+            paycheckAmount = 460
         elseif rank == 6 then
-            paycheckAmount = 370
+            paycheckAmount = 470
         elseif rank == 7 then
-            paycheckAmount = 395
+            paycheckAmount = 480
         end
     elseif job == "taxi" then
-        paycheckAmount = 40
+        paycheckAmount = 50
     elseif job == "tow" then
-        paycheckAmount = 40
+        paycheckAmount = 50
     elseif job == "reporter" then
         paycheckAmount = 35
     elseif job == "judge" then
