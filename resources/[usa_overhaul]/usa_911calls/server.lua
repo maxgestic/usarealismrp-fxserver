@@ -182,6 +182,7 @@ RegisterServerEvent('911:BankRobbery')
 RegisterServerEvent('911:LockpickingDoor')
 RegisterServerEvent('911:CuffCutting')
 RegisterServerEvent('911:Burglary')
+RegisterServerEvent('911:MuggingNPC')
 
 recentcalls = {}
 
@@ -222,6 +223,19 @@ AddEventHandler('911:PersonWithAGun', function(x, y, z, street, area, isMale)
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Person with a Gun')
 		Citizen.Wait(180000)
 		recentcalls[area] = nil
+	end
+end)
+
+AddEventHandler('911:MuggingNPC', function(x, y, z, street)
+    local sendChance = math.random()
+    if recentcalls[street] ~= 'MuggingNPC' and sendChance <= 0.37 then
+		recentcalls[street] = 'MuggingNPC'
+		local time = math.random(5000, 10000)
+		Citizen.Wait(time)
+		local string = '^*Mugging^r: '..street
+		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Mugging in progress')
+		Citizen.Wait(180000)
+		recentcalls[street] = nil
 	end
 end)
 
