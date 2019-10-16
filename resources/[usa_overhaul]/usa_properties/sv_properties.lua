@@ -592,6 +592,11 @@ end, {
 	help = "Knock on the door of the nearest burglary property"
 })
 
+
+local createdBy = nil
+local purchaserName = nil
+local testPrice = nil
+
 TriggerEvent('es:addJobCommand', 'createhouse', {'judge'}, function(source, args, char, location)
 	local targetSource = tonumber(args[2])
 	local price = tonumber(args[3])
@@ -603,11 +608,17 @@ TriggerEvent('es:addJobCommand', 'createhouse', {'judge'}, function(source, args
 		end
 		setHousePrices[tostring(source)] = price
 		local target_char = exports["usa-characters"]:GetCharacter(targetSource)
+		local seller = exports["usa-characters"]:GetCharacter(source)
+		local buyer = exports["usa-characters"]:GetCharacter(targetSource)
 		local property = target_char.get('property')
 		if property['house'] then
 			TriggerClientEvent('usa:notify', source, 'This person already owns a house!')
 		else
 			TriggerClientEvent('properties:getHeadingForHouse', source, targetSource, location, price)
+			createdBy = seller.getFullName()
+			purchaserName = buyer.getFullName()
+			testPrice = price
+			SendToDiscordLog()
 		end
 	end
 end, {
@@ -617,6 +628,38 @@ end, {
 		{ name = "price", help = "price ($10k minimum)" },
 	}
 })
+-- .. "\n**Location:** " .. location
+function SendToDiscordLog()
+	local desc = "\n**Created By:** " .. createdBy .. "\n**Purchase Price:** $" .. comma_value(testPrice) ..  "\n**Purchased By:** " .. purchaserName
+	local url = 'https://discordapp.com/api/webhooks/618097005750648837/qjGutLzwwboVNFbgjeRdiR3rtaPEmtOgRlF5GDJEZxP0mBR3wb-_bh1XwRMM2xdzkOpP'
+	PerformHttpRequest(url, function(err, text, headers)
+	  if text then
+		print(text)
+	  end
+	end, "POST", json.encode({
+	  embeds = {
+		{
+		  description = desc,
+		  color = 524288,
+		  author = {
+			name = "SAN ANDREAS HOUSE MGMT"
+		  }
+		}
+	  }
+	}), { ["Content-Type"] = 'application/json' })
+  end
+
+  function comma_value(amount)
+	local formatted = amount
+	while true do
+		formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
+		if (k==0) then
+			break
+		end
+	end
+	return formatted
+end
+
 
 TriggerEvent('es:addJobCommand', 'setgarage', {'judge'}, function(source, args, char, location)
 	local targetSource = tonumber(args[2])
