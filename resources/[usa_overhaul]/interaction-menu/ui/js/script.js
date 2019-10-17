@@ -175,7 +175,8 @@ var itemImages = {
   "Gummy Worms": "https://i.imgur.com/CjOhIJF.png",
   "Sour Gummy Worms": "https://i.imgur.com/AiSyyCw.png",
   "LSD Vile": "https://imgur.com/4zNSw5c.png",
-  "Zig-Zag Papers": "https://imgur.com/iN7IaDE.png",
+  "RAW Papers": "https://rawthentic.com/wp-content/uploads/2018/08/RAW-CLASSIC_114.png",
+  //"Zig-Zag Papers": "https://imgur.com/iN7IaDE.png",
   "Bic Lighter": "https://imgur.com/sVSnmCy.png",
   "Joint": "https://imgur.com/NBVdIqF.png"
 }

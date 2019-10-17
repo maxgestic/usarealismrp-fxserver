@@ -2,7 +2,7 @@ CONFIG = {
     cannabis = {
         itemName = "Packaged Weed",
         requiredItems = {
-            "Zig-Zag Papers"
+            "RAW Papers",
         },
         jointRollTimeSeconds = 25
     },

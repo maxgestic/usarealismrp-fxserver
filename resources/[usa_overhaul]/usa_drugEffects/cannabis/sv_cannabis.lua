@@ -26,7 +26,7 @@ AddEventHandler("drugs:use", function(name)
             end
         end
         --# remove items
-        char.removeItem("Zig-Zag Papers", 1)
+        char.removeItem("RAW Papers", 1)
         char.removeItem("Packaged Weed", 1)
         --# if so, remove items
         TriggerClientEvent("drugs:use", source, name)
@@ -37,7 +37,7 @@ AddEventHandler("drugs:use", function(name)
                 return
             end
         end
-        char.removeItem("Joint", 1)
+        --char.removeItem("Joint", 1)
         TriggerClientEvent("drugs:use", source, name)
     end
 end)

@@ -94,9 +94,9 @@ end
 
 function ApplyHPandArmorBuff(me)
     local maxHealth = GetEntityMaxHealth(me)
-    SetEntityHealth(me, GetEntityHealth(me) + math.random(0.10*maxHealth, 0.15*maxHealth))
+    SetEntityHealth(me, GetEntityHealth(me) + math.random(math.floor(0.10*maxHealth), math.floor(0.15*maxHealth)))
     local maxArmor = GetPlayerMaxArmour(PlayerId())
-    local newArmor = GetPedArmour(me) + math.random(0.05*maxArmor, 0.08*maxArmor)
+    local newArmor = GetPedArmour(me) + math.random(math.floor(0.05*maxArmor), math.floor(0.08*maxArmor))
     if newArmor > 0.25 * maxArmor then
         newArmor = 0.25 * maxArmor
         newArmor = math.floor(newArmor)
@@ -107,7 +107,6 @@ end
 function ApplyVisualEffect(me)
     DoScreenFadeOut(1000)
     DoScreenFadeIn(1000)
-    
     local visualEffectStr = "HeistCelebPass"
     StartScreenEffect(visualEffectStr, 1000, true)
     SetPedMotionBlur(me, true)

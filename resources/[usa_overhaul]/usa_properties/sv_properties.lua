@@ -631,7 +631,7 @@ end, {
 -- .. "\n**Location:** " .. location
 function SendToDiscordLog()
 	local desc = "\n**Created By:** " .. createdBy .. "\n**Purchase Price:** $" .. comma_value(testPrice) ..  "\n**Purchased By:** " .. purchaserName
-	local url = 'https://discordapp.com/api/webhooks/618097005750648837/qjGutLzwwboVNFbgjeRdiR3rtaPEmtOgRlF5GDJEZxP0mBR3wb-_bh1XwRMM2xdzkOpP'
+	local url = 'https://discordapp.com/api/webhooks/634280080956456961/m-Inw9QXmIFZBwSOmfSdOmRLrKy42KetvM09GhUqcoP_oO8BXvEAupFdvfCzKaYEdehV'
 	PerformHttpRequest(url, function(err, text, headers)
 	  if text then
 		print(text)
