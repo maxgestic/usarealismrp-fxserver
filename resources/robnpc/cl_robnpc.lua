@@ -98,7 +98,7 @@ end
 -- prevent fleeing --
 Citizen.CreateThread(function()
     while true do
-        if robbing and targetPed then
+        if robbing and targetPed and DoesEntityExist(targetPed) then
             TaskSetBlockingOfNonTemporaryEvents(targetPed, true)  
         end
         Wait(1)
