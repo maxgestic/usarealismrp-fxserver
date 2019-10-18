@@ -209,7 +209,6 @@ AddEventHandler("policestation2:checkWhitelist", function(clientevent)
         TriggerClientEvent("usa:notify", source, "You must be on-duty to access the armory.")
       end
     else
-        char.set("job", "sheriff")
         TriggerClientEvent(clientevent, source)
     end
   else
