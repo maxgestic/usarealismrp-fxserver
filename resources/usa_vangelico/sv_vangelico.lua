@@ -357,12 +357,12 @@ local ITEMS = {
     }
 }
 
-RegisterNetEvent("vangelico:loadItems")
+RegisterServerEvent("vangelico:loadItems")
 AddEventHandler("vangelico:loadItems", function()
   TriggerClientEvent("vangelico:loadItems", source, ITEMS)
 end)
 
-RegisterNetEvent("vangelico:purchase")
+RegisterServerEvent("vangelico:purchase")
 AddEventHandler("vangelico:purchase", function(items, business)
     local left = items["left"]
     local right = items["right"]
@@ -389,7 +389,7 @@ AddEventHandler("vangelico:purchase", function(items, business)
     end
 end)
 
-RegisterNetEvent("vangelico:clear")
+RegisterServerEvent("vangelico:clear")
 AddEventHandler("vangelico:clear", function(index)
     local char = exports["usa-characters"]:GetCharacter(source)
     local appearance = char.get("appearance")

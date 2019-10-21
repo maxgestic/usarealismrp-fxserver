@@ -40,12 +40,12 @@ local ITEMS = {
   }
 }
 
-RegisterNetEvent("bars:loadItems")
+RegisterServerEvent("bars:loadItems")
 AddEventHandler("bars:loadItems", function()
   TriggerClientEvent("bars:loadItems", source, ITEMS)
 end)
 
-RegisterNetEvent("bars:buy")
+RegisterServerEvent("bars:buy")
 AddEventHandler("bars:buy", function(itemCategory, itemName, business)
   local char = exports["usa-characters"]:GetCharacter(source)
   local item = ITEMS[itemCategory][itemName]

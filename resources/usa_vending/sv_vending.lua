@@ -34,12 +34,12 @@ local ITEMS = {
     }
 }
 
-RegisterNetEvent("vending:loadItems")
+RegisterServerEvent("vending:loadItems")
 AddEventHandler("vending:loadItems", function()
   TriggerClientEvent("vending:loadItems", source, ITEMS)
 end)
 
-RegisterNetEvent("vending:purchase")
+RegisterServerEvent("vending:purchase")
 AddEventHandler("vending:purchase", function(category, index)
   local item = ITEMS[category][index]
   local char = exports["usa-characters"]:GetCharacter(source)

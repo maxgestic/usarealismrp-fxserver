@@ -134,7 +134,7 @@ AddEventHandler("doormanager:checkDoorLock", function(index, x, y, z, lockpicked
   end
 end)
 
-RegisterNetEvent("doormanager:firstJoin")
+RegisterServerEvent("doormanager:firstJoin")
 AddEventHandler("doormanager:firstJoin", function()
   TriggerClientEvent("doormanager:update", source, DOORS)
 end)
