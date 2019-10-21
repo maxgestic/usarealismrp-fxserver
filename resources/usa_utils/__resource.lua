@@ -12,14 +12,16 @@ files {
 }
 
 client_scripts { 
-    "screenshots/cl_screenshots.lua",
-    'commerce/cl_commerce.lua'
+    --"screenshots/cl_screenshots.lua",
+    --'commerce/cl_commerce.lua'
+    "**/cl_*.lua"
 }
 
 server_scripts {
     'sessionmonitor.lua',
-    'screenshots/sv_screenshots.lua',
-    'commerce/sv_commerce.lua'
+    --'screenshots/sv_screenshots.lua',
+    --'commerce/sv_commerce.lua'
+    "**/sv_*.lua"
 }
 
 server_exports {
