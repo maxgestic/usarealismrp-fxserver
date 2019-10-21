@@ -1227,8 +1227,9 @@ AddEventHandler('properties:requestExit', function(location, index, noTp)
 			end
 		end
 		TriggerClientEvent('properties:updateData', -1, location, index, properties[location].rooms[index])
-		TriggerClientEvent('properties:exitProperty', source, noTp)
-		Citizen.Wait(1000)
+		TriggerEvent("anticheese:runAfterDisabling", source, "client", "properties:exitProperty", {noTp})
+		--TriggerClientEvent('properties:exitProperty', source, noTp)
+		Wait(1000)
 		for i = 1, #room.instance do
 			local sourceInside = properties[location].rooms[index].instance[i]
 			TriggerClientEvent('properties:updateInstance', sourceInside, properties[location].rooms[index].instance)
@@ -1586,7 +1587,8 @@ AddEventHandler('properties:requestExitFromBurglary', function(index)
 		end
 	end
 	house.cooldown[source] = os.time()
-	TriggerClientEvent('properties:exitProperty', source)
+	TriggerEvent("anticheese:runAfterDisabling", source, "client", "properties:exitProperty")
+	--TriggerClientEvent('properties:exitProperty', source)
 	Citizen.Wait(1000)
 	for i = 1, #house.instance do
 		local sourceInside = burglaryHouses[index].instance[i]

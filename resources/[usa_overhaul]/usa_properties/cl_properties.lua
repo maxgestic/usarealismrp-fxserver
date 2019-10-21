@@ -665,7 +665,12 @@ AddEventHandler('properties:enterBurglaryHouse', function(_currentProperty)
 	end)
 
 	while currentProperty.owner == -1 do
-		Citizen.Wait(0)
+		Wait(0)
+
+		if not currentProperty.cabinets then
+			break
+		end
+		
 		for i = 1, #currentProperty.cabinets do
 			local cabinet = currentProperty.cabinets[i]
 			DrawText3D(cabinet.x, cabinet.y, cabinet.z, 2, '[E] - Search')

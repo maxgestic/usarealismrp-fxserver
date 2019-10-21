@@ -452,12 +452,39 @@ AddEventHandler("deletenearestvehicles", function()
     end)
 end)
 
+RegisterNetEvent("anticheese:runAfterDisabling")
+AddEventHandler("anticheese:runAfterDisabling", function(type, event, args)
+	-- Disable
+	Disable()
+	-- Continue action
+	if type == "client" then
+		TriggerEvent(event, table.unpack((args or {})))
+	else
+		TriggerServerEvent(event, table.unpack((args or {})))
+	end
+	-- Enable after small delay (hopefully action completes by then)
+	Wait(15000)
+	Enable()
+end)
+
 function Enable(type)
-	enableStatus[type] = true
+	if type then
+		enableStatus[type] = true
+	else 
+		for k, v in pairs(enableStatus) do 
+			enableStatus[k] = true
+		end
+	end
 end
 
 function Disable(type)
-	enableStatus[type] = false
+	if type then
+		enableStatus[type] = false
+	else 
+		for k, v in pairs(enableStatus) do 
+			enableStatus[k] = false
+		end
+	end
 end
 
 --[[
