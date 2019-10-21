@@ -55,7 +55,7 @@ AddEventHandler("boatMenu:requestPurchase", function(boat)
   end
 end)
 
-RegisterNetEvent("boatMenu:loadBoats")
+RegisterServerEvent("boatMenu:loadBoats")
 AddEventHandler("boatMenu:loadBoats", function(source2)
   if source2 then source = source2 end
   local char = exports["usa-characters"]:GetCharacter(source)

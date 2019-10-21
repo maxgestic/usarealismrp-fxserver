@@ -431,7 +431,7 @@ function nroot(root, num)
   return num^(1/root)
 end
 
-RegisterNetEvent("anticheese:runAfterDisabling")
+RegisterServerEvent("anticheese:runAfterDisabling")
 AddEventHandler("anticheese:runAfterDisabling", function(src, type, event, args)
 	TriggerClientEvent("anticheese:runAfterDisabling", src, type, event, args)
 end)

@@ -268,7 +268,7 @@ end, {
 	}
 })
 
-RegisterNetEvent("usa:requestWalkstyleChange")
+RegisterServerEvent("usa:requestWalkstyleChange")
 AddEventHandler("usa:requestWalkstyleChange", function(style_number)
 	local usource = source
 	local isSignedInWithFiveM = CanPlayerStartCommerceSession(usource)
@@ -296,7 +296,7 @@ AddEventHandler("usa:requestWalkstyleChange", function(style_number)
 	end
 end)
 
-RegisterNetEvent("usa:showWalkstyleHelp")
+RegisterServerEvent("usa:showWalkstyleHelp")
 AddEventHandler("usa:showWalkstyleHelp", function()
 	local str = "[1] " .. walkstyles[1].display_name .. " "
 	for i = 2, #walkstyles do

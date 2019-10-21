@@ -4,8 +4,8 @@
 --# by: minipunch
 --# OG for: USA REALISM RP (https://usarrp.net)
 
-RegisterNetEvent("drugs:use")
-RegisterNetEvent("drugs:rolledCannabis")
+RegisterServerEvent("drugs:use")
+RegisterServerEvent("drugs:rolledCannabis")
 
 local JOINT_ITEM = {
     name = "Joint",

@@ -22,7 +22,7 @@ TriggerEvent('es:addCommand', 'vest', function(source, args, char, location)
 	TriggerClientEvent("headprops:toggleComponent", source, 9)
 end, { help = "Take your vest on / off." })
 
-RegisterNetEvent("headprops:loadPropOrComponent")
+RegisterServerEvent("headprops:loadPropOrComponent")
 AddEventHandler("headprops:loadPropOrComponent", function(isProp, id, doEquip)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local appearance = char.get("appearance")

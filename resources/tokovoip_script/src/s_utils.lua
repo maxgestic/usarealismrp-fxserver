@@ -27,7 +27,8 @@ function setPlayerData(playerServerId, key, data, shared)
 		TriggerClientEvent("Tokovoip:setPlayerData", playerServerId, playerServerId, key, data);
 	end
 end
-RegisterNetEvent("Tokovoip:setPlayerData");
+
+RegisterServerEvent("Tokovoip:setPlayerData");
 AddEventHandler("Tokovoip:setPlayerData", setPlayerData);
 
 function refreshAllPlayerData(toEveryone)
@@ -37,7 +38,8 @@ function refreshAllPlayerData(toEveryone)
 		TriggerClientEvent("Tokovoip:doRefreshAllPlayerData", source, playersData);
 	end
 end
-RegisterNetEvent("Tokovoip:refreshAllPlayerData");
+
+RegisterServerEvent("Tokovoip:refreshAllPlayerData");
 AddEventHandler("Tokovoip:refreshAllPlayerData", refreshAllPlayerData);
 
 AddEventHandler("playerDropped", function()

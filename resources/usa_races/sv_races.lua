@@ -62,21 +62,21 @@ AddEventHandler("playerDropped", function(reason) -- cleaning up
     end
 end)
 
-RegisterNetEvent("races:openedRaceList")
+RegisterServerEvent("races:openedRaceList")
 AddEventHandler("races:openedRaceList", function()
     if not hasMenuOpen[source] then 
         hasMenuOpen[source] = true
     end
 end)
 
-RegisterNetEvent("races:closedRaceList")
+RegisterServerEvent("races:closedRaceList")
 AddEventHandler("races:closedRaceList", function()
     if hasMenuOpen[source] then
         hasMenuOpen[source] = nil
     end
 end)
 
-RegisterNetEvent("races:askStartUntilTime")
+RegisterServerEvent("races:askStartUntilTime")
 AddEventHandler("races:askStartUntilTime", function(host)
     local raceInfo = hostedRaces[host]
     local timeUntilStartStr = "The race is going to begin in "
@@ -90,7 +90,7 @@ AddEventHandler("races:askStartUntilTime", function(host)
     TriggerClientEvent("usa:notify", source, timeUntilStartStr)
 end)
 
-RegisterNetEvent("races:raceWon")
+RegisterServerEvent("races:raceWon")
 AddEventHandler("races:raceWon", function(host)
     if hostedRaces[host] then 
         hostedRaces[host].winner = source
@@ -117,7 +117,7 @@ AddEventHandler("races:raceWon", function(host)
     end
 end)
 
-RegisterNetEvent("races:createRace")
+RegisterServerEvent("races:createRace")
 AddEventHandler("races:createRace", function(newRace)
     newRace.bet = tonumber(newRace.bet)
     newRace.time = tonumber(newRace.time)
@@ -139,7 +139,7 @@ AddEventHandler("races:createRace", function(newRace)
     TriggerClientEvent("races:getNewRaceCoords", source, newRace.bet, newRace.time, newRace.title)
 end)
 
-RegisterNetEvent("races:leaveRace")
+RegisterServerEvent("races:leaveRace")
 AddEventHandler("races:leaveRace", function(host, noNotify)
     if hostedRaces[host] and not hostedRaces[host].started then 
         for i = 1, #hostedRaces[host].participants do 
@@ -162,7 +162,7 @@ AddEventHandler("races:leaveRace", function(host, noNotify)
     end
 end)
 
-RegisterNetEvent("races:removeParticipant")
+RegisterServerEvent("races:removeParticipant")
 AddEventHandler("races:removeParticipant", function(host)
     if hostedRaces[host] then 
         for i = 1, #hostedRaces[host].participants do 
@@ -182,7 +182,7 @@ AddEventHandler("races:removeParticipant", function(host)
     end
 end)
 
-RegisterNetEvent("races:joinRace")
+RegisterServerEvent("races:joinRace")
 AddEventHandler("races:joinRace", function(host)
     if not hostedRaces[host] then 
         TriggerClientEvent("usa:notify", source, "Invalid race!")
@@ -219,7 +219,7 @@ AddEventHandler("races:joinRace", function(host)
     UpdateClientsRealtime()
 end)
 
-RegisterNetEvent("races:deleteRace")
+RegisterServerEvent("races:deleteRace")
 AddEventHandler("races:deleteRace", function(host)
     local raceInfo = hostedRaces[host]
     for i = 1, #raceInfo.participants do 
@@ -229,7 +229,7 @@ AddEventHandler("races:deleteRace", function(host)
     UpdateClientsRealtime()
 end)
 
-RegisterNetEvent("races:gotNewRaceCoords")
+RegisterServerEvent("races:gotNewRaceCoords")
 AddEventHandler("races:gotNewRaceCoords", function(start, finish, bet, minutes, title)
     local char = exports["usa-characters"]:GetCharacter(source)
     local newRace = {
