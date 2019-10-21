@@ -331,11 +331,6 @@ end)
 -- Send NUI message to update bank balance
 RegisterNetEvent('banking:updateBalance')
 AddEventHandler('banking:updateBalance', function(balance)
-    if balance then
-	       Citizen.Trace("updating balance to = " .. balance)
-       else
-           print("tried to update balance but balance was nil")
-       end
   local id = PlayerId()
   local playerName = GetPlayerName(id)
 	SendNUIMessage({
