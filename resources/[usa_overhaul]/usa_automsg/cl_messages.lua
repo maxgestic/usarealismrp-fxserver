@@ -2,7 +2,7 @@ local m = {
     delay = 90,
     prefix = '^5^*[USARRP] ^r^0',
     messages = {
-        --"Aspiring to become a police officer? The SASP is hiring! Apply today at https://www.usarrp.net ^*>^r Applications",
+        "Aspiring to become a police officer? The SASP is hiring! Apply today at https://www.usarrp.net ^*>^r Applications",
         "Check out the new market place for some cool things you can get to support the server! Type ^3/store^0 to check it out!",
         "Aspiring to become a law enforcement officer? The BCSO is hiring! Apply today at https://www.usarrp.net ^*>^r Applications",
         "The San Andreas Department of Corrections is hiring, apply at https://www.usarrp.net ^*>^r Applications",
@@ -12,7 +12,7 @@ local m = {
         "Don't know where to start? Find our brief guide with commands here: https://www.usarrp.net/server-commands/",
         "Looking to become apart of a our legal initiative? Find how to become a lawyer, or a judge at https://www.usarrp.net ^*>^r Applications",
         "Ever wanted to run a successful business, implemented just for you? Find how at https://www.usarrp.net ^*>^r Forums ^*>^r Department of Justice",
-        "You may contribute to running the community by visiting https://www.usarrp.net ^*>^r Donations or finding us on Patreon - you get a shiny tag too!"
+        "You can contribute to the community by visiting https://www.usarrp.net ^*>^r Donations or finding us on Patreon - you get a shiny tag too!"
     }
 }
 local timeout = m.delay * 1000 * 60 -- from ms, to sec, to min
