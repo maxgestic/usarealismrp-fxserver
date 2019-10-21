@@ -30,9 +30,10 @@ Citizen.CreateThread(function()
 				Wait(500)
 				if IsControlPressed(0, KEYS.E) then
 					TriggerServerEvent("business:lease", closestStore)
-	      else
-	        TriggerServerEvent("business:tryOpenMenuByName", closestStore)
+	      		else
+	        		TriggerServerEvent("business:tryOpenMenuByName", closestStore)
 				end
+				Wait(1000)
 			end
 		end
     Wait(0)
