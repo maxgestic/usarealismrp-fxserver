@@ -57,7 +57,7 @@ var itemImages = {
   "Machete": "https://www.bellota.com/var/site/storage/images/_aliases/large/7/7/3/5/35377-1-esl-EU/31B20.png",
   "Pistol": "https://steamuserimages-a.akamaihd.net/ugc/29613457985625199/0D5453A0ADC32EDBADEACF8D5CBE1EF129FCA5DC/",
   "Heavy Pistol": "https://vignette.wikia.nocookie.net/saintsrow/images/9/9c/SRIV_Pistols_-_Heavy_Pistol_-_.45_Fletcher_-_Default.png/revision/latest/scale-to-width-down/350?cb=20131028193410",
-  "Pistol .50": "https://imgur.com/W9sFoxi.png",
+  ".50 Caliber": "https://imgur.com/W9sFoxi.png",
   "SNS Pistol": "https://vignette.wikia.nocookie.net/gtawiki/images/f/f5/SNSPistol-GTAV-SocialClub.png/revision/latest/scale-to-width-down/185?cb=20180202170333",
   "Combat Pistol": "https://vignette.wikia.nocookie.net/the-gta-online/images/4/4e/CombatPistol-GTA5-ingame.png/revision/latest?cb=20150519181654",
   "Revolver": "https://upload.wikimedia.org/wikipedia/commons/7/77/Taurus_Raging_Bull.png",
@@ -175,7 +175,7 @@ var itemImages = {
   "Gummy Worms": "https://i.imgur.com/CjOhIJF.png",
   "Sour Gummy Worms": "https://i.imgur.com/AiSyyCw.png",
   "LSD Vile": "https://imgur.com/4zNSw5c.png",
-  "Zig-Zag Papers": "https://imgur.com/iN7IaDE.png",
+  "RAW Papers": "https://imgur.com/BHm4hHf.png",
   "Bic Lighter": "https://imgur.com/sVSnmCy.png",
   "Joint": "https://imgur.com/NBVdIqF.png"
 }
