@@ -25,4 +25,7 @@ gitpull.bat
 CitizenFX.log
 CitizenFX2.log
 
+node_modules
+scrambled_resources
+
 server_internal.cfg

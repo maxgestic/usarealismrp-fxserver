@@ -910,37 +910,6 @@ AddEventHandler("usa:setPlayerComponents", function(character)
   end
 end)
 
-RegisterNetEvent("usa:getNumberInput")
-AddEventHandler("usa:getNumberInput", function(isCallbackServerEvent, eventName)
-    Citizen.CreateThread( function()
-            DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
-            while true do
-                if ( UpdateOnscreenKeyboard() == 1 ) then
-                    local input_amount = GetOnscreenKeyboardResult()
-                    if ( string.len( input_amount ) > 0 ) then
-                        local amount = tonumber( input_amount )
-                        if ( amount > 0 ) then
-                            -- todo: prevent decimals
-                            -- trigger server event to remove money
-                            amount = math.floor(amount)
-                            if not isCallbackServerEvent then
-                                TriggerEvent(eventName)
-                            else
-                                TriggerServerEvent(eventName, amount)
-                            end
-                        end
-                        break
-                    else
-                        DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
-                    end
-                elseif ( UpdateOnscreenKeyboard() == 2 ) then
-                    break
-                end
-            Citizen.Wait( 0 )
-        end
-    end )
-end)
-
 RegisterNetEvent("usa:getClosestPlayer")
 AddEventHandler("usa:getClosestPlayer", function(range, cb)
 	local id, name, dist = GetClosestPlayerInfo(range)

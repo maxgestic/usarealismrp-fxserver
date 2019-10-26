@@ -452,6 +452,7 @@ AddEventHandler("deletenearestvehicles", function()
     end)
 end)
 
+--[[ disabled because it breaks with event name scrambler (since an event name is a parameter)
 RegisterNetEvent("anticheese:runAfterDisabling")
 AddEventHandler("anticheese:runAfterDisabling", function(type, event, args)
 	-- Disable
@@ -463,6 +464,15 @@ AddEventHandler("anticheese:runAfterDisabling", function(type, event, args)
 		TriggerServerEvent(event, table.unpack((args or {})))
 	end
 	-- Enable after small delay (hopefully action completes by then)
+	Wait(15000)
+	Enable()
+end)
+--]]
+
+RegisterNetEvent("anticheese:exitPropertyAfterDisabling")
+AddEventHandler("anticheese:exitPropertyAfterDisabling", function(args)
+	Disable()
+	TriggerEvent("properties:exitProperty", table.unpack((args or {})))
 	Wait(15000)
 	Enable()
 end)

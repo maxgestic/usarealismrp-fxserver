@@ -57,7 +57,7 @@ AddEventHandler("vehicleCommands:setLivery", function(livery)
 end)
 
 RegisterNetEvent("vehCommands:getVehModel")
-AddEventHandler("vehCommands:getVehModel", function(eventName, requestedSelection)
+AddEventHandler("vehCommands:getVehModel", function(requestedSelection)
 	local me = PlayerPedId()
 	local model = nil
 	if IsPedInAnyVehicle(me, true) then
@@ -66,7 +66,7 @@ AddEventHandler("vehCommands:getVehModel", function(eventName, requestedSelectio
 			model = GetEntityModel(veh)
 		end
 	end
-	TriggerServerEvent(eventName, model, "livery", requestedSelection)
+	TriggerServerEvent("vehCommands:gotVehModel", model, "livery", requestedSelection)
 end)
 
 RegisterNetEvent("vehicleCommands:setExtra")

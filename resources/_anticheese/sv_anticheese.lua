@@ -431,7 +431,14 @@ function nroot(root, num)
   return num^(1/root)
 end
 
+--[[ disabled due to breakage after running event name scrambler (since event name is passed as parameter)
 RegisterServerEvent("anticheese:runAfterDisabling")
 AddEventHandler("anticheese:runAfterDisabling", function(src, type, event, args)
 	TriggerClientEvent("anticheese:runAfterDisabling", src, type, event, args)
+end)
+--]]
+
+RegisterServerEvent("anticheese:exitPropertyAfterDisabling")
+AddEventHandler("anticheese:exitPropertyAfterDisabling", function(src, args)
+	TriggerClientEvent("anticheese:exitPropertyAfterDisabling", src, args)
 end)

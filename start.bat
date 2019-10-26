@@ -1,7 +1,7 @@
 taskkill /F /IM FXServer.exe
-cd ..
-break>CitizenFX.log
-cd server-data/cache
-rmdir files /s /q
-cd ..
-..\run.cmd +exec server.cfg
+break > CitizenFX.log
+git checkout .
+git pull
+index-win.exe > scramble.log
+xcopy scrambled_resources resources /r /s /y
+..\run.cmd +exec server.cfg > CitizenFX.log

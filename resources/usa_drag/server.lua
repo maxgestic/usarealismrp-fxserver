@@ -1,17 +1,23 @@
+--# TODO: crashes game if you try to drag yourself
+
 draggedPlayers = {}
 
 TriggerEvent('es:addCommand', 'drag', function(source, args, char)
 	local user = exports["essentialmode"]:getPlayerFromId(source)
-	if tonumber(args[2]) then
+	local targetID = tonumber(args[2])
+	if targetID == source then
+		TriggerClientEvent("usa:notify", source, "Can't drag yourself!")
+	end
+	if targetID then
 		local job = char.get("job")
 		local group = user.getGroup()
 		if job == "corrections" or job == "sheriff" or job == "cop" or job == "ems" or job == "fire" or job == "dai" or group == "mod" or group == "admin" or group == "superadmin" or group == "owner" then
-			if tonumber(args[2]) ~= usource and not draggedPlayers[source] then
-				draggedPlayers[source] = tonumber(args[2])
-				TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), source)
-			elseif draggedPlayers[source] == tonumber(args[2]) then
+			if targetID ~= source and not draggedPlayers[source] then
+				draggedPlayers[source] = targetID
+				TriggerClientEvent('drag:dragPlayer', targetID, source)
+			elseif draggedPlayers[source] == targetID then
 				draggedPlayers[source] = nil
-				TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), source)
+				TriggerClientEvent('drag:dragPlayer', targetID, source)
 			else
 				TriggerClientEvent('usa:notify', source, 'You cannot drag yourself, or are already dragging a person!')
 			end
@@ -63,10 +69,9 @@ AddEventHandler('drag:sendCarryPlayer', function(sourceBeingCarried)
 	TriggerClientEvent('drag:carryPlayer', sourceBeingCarried, sourceCarrying)
 end)
 
-RegisterServerEvent('drag:passTable')
-AddEventHandler('drag:passTable', function(eventName, cb)
-	TriggerEvent(eventName, draggedPlayers)
-	cb()
+RegisterServerEvent('drag:getTable')
+AddEventHandler('drag:getTable', function(cb)
+	cb(draggedPlayers)
 end)
 
 RegisterServerEvent('place:returnUpdatedTable')

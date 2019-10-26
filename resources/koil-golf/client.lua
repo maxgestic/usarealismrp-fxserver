@@ -71,16 +71,9 @@ Citizen.CreateThread(function()
 				if (golfplaying) then
 					endgame()
 				else
-					Citizen.Trace("a1")
-
 					-- check player's money to play
-					print("calling usa:checkPlayerMoney for golf!!")
-					TriggerServerEvent("usa:checkPlayerMoney", "golf", math.abs(amount), "beginGolf", false, true)
-					--[[
-					spawnCart()
-					startGolf() -- If you plan to have it cost money, you need to remove this and only call it when they paid
-					TriggerEvent("customNotification","Press E to swing, A-D to rotate, Y to swap club.")
-					--]]
+					print("checking money!")
+					TriggerServerEvent("golf:checkMoney")
 				end
 			end
 			--if (IsControlJustPressed(1, 38) and golfplaying) then

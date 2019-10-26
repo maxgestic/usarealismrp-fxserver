@@ -222,7 +222,7 @@ end)
 TriggerEvent('es:addJobCommand', 'livery', { "sheriff", "ems", "corrections" }, function(source, args, char)
 	local selected = tonumber(args[2])
 	if selected then
-		TriggerClientEvent("vehCommands:getVehModel", source, "vehCommands:gotVehModel", selected)
+		TriggerClientEvent("vehCommands:getVehModel", source, selected)
 	else
 		TriggerClientEvent("usa:notify", source, "Invalid livery!")
 	end

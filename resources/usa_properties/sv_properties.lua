@@ -1227,8 +1227,7 @@ AddEventHandler('properties:requestExit', function(location, index, noTp)
 			end
 		end
 		TriggerClientEvent('properties:updateData', -1, location, index, properties[location].rooms[index])
-		TriggerEvent("anticheese:runAfterDisabling", source, "client", "properties:exitProperty", {noTp})
-		--TriggerClientEvent('properties:exitProperty', source, noTp)
+		TriggerEvent("anticheese:exitPropertyAfterDisabling", source, {noTp})
 		Wait(1000)
 		for i = 1, #room.instance do
 			local sourceInside = properties[location].rooms[index].instance[i]

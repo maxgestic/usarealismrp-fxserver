@@ -1,18 +1,14 @@
 draggedPlayers = {}
-local awaitingUpdates = false
 
 TriggerEvent('es:addCommand', 'place', function(source, args, char, location)
 	local user_job = char.get("job")
+	local tPID = tonumber(args[2])
 	if user_job == "sheriff" or user_job == "ems" or user_job == "fire" or user_job == "corrections" or user_job == "dai" then
-		local tPID = tonumber(args[2])
-		awaitingUpdates = true
-		TriggerEvent('drag:passTable', 'place:updateDragTable', function()
-			while awaitingUpdates do
-				Citizen.Wait(100)
-			end
-			if draggedPlayers[source] == tonumber(args[2]) then
-				TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), source, true)
-				TriggerClientEvent('drag:carryPlayer', tonumber(args[2]), source, true)
+		TriggerEvent('drag:getTable', function(table)
+			draggedPlayers = table
+			if draggedPlayers[source] == tPID then
+				TriggerClientEvent('drag:dragPlayer', tPID, source, true)
+				TriggerClientEvent('drag:carryPlayer', tPID, source, true)
 				draggedPlayers[source] = nil
 				TriggerEvent('place:returnUpdatedTable', draggedPlayers)
 			end
@@ -21,13 +17,13 @@ TriggerEvent('es:addCommand', 'place', function(source, args, char, location)
 			exports["globals"]:sendLocalActionMessage(source, msg)
 		end)
 	else
-		if draggedPlayers[source] == tonumber(args[2]) then
-			TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), source, true)
-			TriggerClientEvent('drag:carryPlayer', tonumber(args[2]), source, true)
+		if draggedPlayers[source] == tPID then
+			TriggerClientEvent('drag:dragPlayer', tPID, source, true)
+			TriggerClientEvent('drag:carryPlayer', tPID, source, true)
 			draggedPlayers[source] = nil
 			TriggerEvent('place:returnUpdatedTable', draggedPlayers)
 		end
-		TriggerClientEvent("crim:areHandsTied", tonumber(args[2]), source, tonumber(args[2]), "place")
+		TriggerClientEvent("crim:areHandsTied", tPID, source, tPID, "place")
 	end
 end, {
 	help = "Place tied or handcuffed player in a car",
@@ -38,11 +34,8 @@ end, {
 
 TriggerEvent('es:addJobCommand', 'placef', {'sheriff', 'ems', 'fire', 'corrections'}, function(source, args, char, location)
 	local tPID = tonumber(args[2])
-	awaitingUpdates = true
-	TriggerEvent('drag:passTable', 'place:updateDragTable', function()
-		while awaitingUpdates do
-			Citizen.Wait(100)
-		end
+	TriggerEvent('drag:getTable', function(table)
+		draggedPlayers = table
 		if draggedPlayers[source] == tonumber(args[2]) then
 			TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), source, true)
 			TriggerClientEvent('drag:carryPlayer', tonumber(args[2]), source, true)
@@ -63,11 +56,8 @@ end, {
 TriggerEvent('es:addCommand', 'placet', function(source, args, char, location)
 	if args[2] and tonumber(args[2]) then
 		local tPID = tonumber(args[2])
-		awaitingUpdates = true
-		TriggerEvent('drag:passTable', 'place:updateDragTable', function()
-			while awaitingUpdates do
-				Citizen.Wait(100)
-			end
+		TriggerEvent('drag:getTable', function(table)
+			draggedPlayers = table
 			if draggedPlayers[source] == tPID then
 				TriggerClientEvent('drag:dragPlayer', tPID, source, true)
 				TriggerClientEvent('drag:carryPlayer', tPID, source, true)
@@ -88,11 +78,8 @@ end, {
 
 RegisterServerEvent("place:placePerson")
 AddEventHandler("place:placePerson", function(targetId)
-	awaitingUpdates = true
-	TriggerEvent('drag:passTable', 'place:updateDragTable', function()
-		while awaitingUpdates do
-			Wait(100)
-		end
+	TriggerEvent('drag:getTable', function(table)
+		draggedPlayers = table
 		if draggedPlayers[source] == targetId then
 			TriggerClientEvent('drag:dragPlayer', targetId, source, true)
 			TriggerClientEvent('drag:carryPlayer', targetId, source, true)
@@ -127,9 +114,3 @@ end, {
 		{ name = "id", help = "Players ID" }
 	}
 })
-
-RegisterServerEvent('place:updateDragTable')
-AddEventHandler('place:updateDragTable', function(table)
-	draggedPlayers = table
-	awaitingUpdates = false
-end)

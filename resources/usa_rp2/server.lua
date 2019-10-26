@@ -174,22 +174,6 @@ end, {
 })
 
 -- U T I L I T Y  F U N C T I O N S
-RegisterServerEvent("usa:checkPlayerMoney")
-AddEventHandler("usa:checkPlayerMoney", function(activity, amount, callbackEventName, isServerEvent, takeMoney)
-	local user_money = exports["usa-characters"]:GetCharacterField(source, "money")
-	if user_money >= amount then
-		if takeMoney then
-			exports["usa-characters"]:SetCharacterField(source, "money", user_money - amount)
-		end
-		if isServerEvent then
-			TriggerEvent(callbackEventName)
-		else
-			TriggerClientEvent(callbackEventName, source)
-		end
-	else
-		TriggerClientEvent("usa:notify", source, "Sorry, you don't have enough money to " .. activity .. "!")
-	end
-end)
 
 -- see if user has item in Inventory:
 -- if player has it, return it

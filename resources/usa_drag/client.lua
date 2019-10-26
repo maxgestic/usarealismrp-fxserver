@@ -55,10 +55,6 @@ AddEventHandler('drag:attemptToCarryNearest', function()
 	end
 end)
 
-DetachEntity(PlayerPedId(), true, false)
-
------------------------------------------------------------------------------------------------------------------------------
-
 RegisterNetEvent('drag:dragPlayer')
 AddEventHandler('drag:dragPlayer', function(playerDraggedBy, check)
 	if draggedBy ~= playerDraggedBy and not check then
