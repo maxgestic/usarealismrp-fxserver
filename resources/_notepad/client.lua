@@ -80,7 +80,7 @@ function SetGui(enable)
             RemovePedNotepad()
         end
     else 
-        TriggerServerEvent("notepad:getSaved", "notepad:gotSaved")
+        TriggerServerEvent("notepad:getSaved")
     end
 end
 
