@@ -1,10 +1,7 @@
 resource_manifest_version '05cfa83c-a124-4cfa-a768-c24a5811d8f9'
 
-shared_scripts {
-  "config.lua"
-}
-
 client_scripts {
+  "cl_config.lua",
   "@NativeUI/Wrapper/Utility.lua",
   "@NativeUI/UIElements/UIVisual.lua",
   "@NativeUI/UIElements/UIResRectangle.lua",
@@ -38,6 +35,7 @@ client_scripts {
 }
 
 server_scripts {
+  "sv_config.lua",
   "robberies/sv_robbery.lua",
   "sv_businesses.lua"
 }

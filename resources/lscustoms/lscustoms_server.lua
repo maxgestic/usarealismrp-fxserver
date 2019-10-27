@@ -1,10 +1,3 @@
---[[
-Los Santos Customs V1.1
-Credits - MythicalBro
-/////License/////
-Do not reupload/re release any part of this script without my permission
-]]
-
 local tbl = {
 	[1] = {locked = false, player = nil},
 	[2] = {locked = false, player = nil},
@@ -90,11 +83,13 @@ AddEventHandler('lockGarage', function(b,garage)
 	TriggerClientEvent('lockGarage',-1,tbl)
 	--print(json.encode(tbl))
 end)
+
 RegisterServerEvent('getGarageInfo')
 AddEventHandler('getGarageInfo', function()
 	TriggerClientEvent('lockGarage',-1,tbl)
 	--print(json.encode(tbl))
 end)
+
 AddEventHandler('playerDropped', function()
 	for i,g in pairs(tbl) do
 		if g.player then
