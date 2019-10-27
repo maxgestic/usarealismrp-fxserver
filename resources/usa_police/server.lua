@@ -213,10 +213,10 @@ AddEventHandler("policestation2:checkWhitelistForArmory", function()
   local playerGameLicense = ""
   local char = exports["usa-characters"]:GetCharacter(source)
   local job = char.get("job")
-  if char.get("policeRank") > 0 or job == "corrections" then
+  if (char.get("policeRank") > 0 and job == "sheriff") or job == "corrections" then
     TriggerClientEvent("policestation2:showArmoury", source)
   else
-    TriggerClientEvent("usa:notify", source, "~y~You are not whitelisted for POLICE. Apply at https://www.usarrp.net.")
+    TriggerClientEvent("usa:notify", source, "~y~You are not on duty for POLICE. Apply at https://www.usarrp.net.")
   end
 end)
 
