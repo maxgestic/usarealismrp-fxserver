@@ -40,12 +40,23 @@ AddEventHandler("pdmenu:checkRankForVehMod", function(index, val, name)
 	end
 end)
 
-RegisterServerEvent("pdmenu:checkWhitelist")
-AddEventHandler("pdmenu:checkWhitelist", function(clientevent)
+RegisterServerEvent("pdmenu:checkWhitelistForGarage")
+AddEventHandler("pdmenu:checkWhitelistForGarage", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local user_job = char.get("job")
 	if user_job == "sheriff" or user_job == "corrections" then
-		TriggerClientEvent(clientevent, source)
+		TriggerClientEvent('pdmenu:openGarageMenu', source)
+	else
+		TriggerClientEvent("usa:notify", source, "~y~You are not on-duty for POLICE.")
+	end
+end)
+
+RegisterServerEvent("pdmenu:checkWhitelistForCustomization")
+AddEventHandler("pdmenu:checkWhitelistForCustomization", function()
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local user_job = char.get("job")
+	if user_job == "sheriff" or user_job == "corrections" then
+		TriggerClientEvent('pdmenu:openCustomizationMenu', source)
 	else
 		TriggerClientEvent("usa:notify", source, "~y~You are not on-duty for POLICE.")
 	end

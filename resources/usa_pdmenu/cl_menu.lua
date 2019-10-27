@@ -282,14 +282,14 @@ Citizen.CreateThread(function()
         if IsControlJustPressed(0, 38) then
         	for i = 1, #policeGarages do
         		if Vdist(px,py,pz,policeGarages[i].x,policeGarages[i].y,policeGarages[i].z)  <  5 then
-					TriggerServerEvent('pdmenu:checkWhitelist', 'pdmenu:openGarageMenu')
+					TriggerServerEvent('pdmenu:checkWhitelistForGarage')
 				end
 			end
 		end
        	if IsControlJustPressed(0, 303) then
        		for i = 1, #policeGarages do
         		if Vdist(px,py,pz,policeGarages[i].x,policeGarages[i].y,policeGarages[i].z)  <  5 then
-					TriggerServerEvent('pdmenu:checkWhitelist', 'pdmenu:openCustomizationMenu')
+					TriggerServerEvent('pdmenu:checkWhitelistForCustomization')
 				end
 			end
        	end
