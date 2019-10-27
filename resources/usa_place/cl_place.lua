@@ -38,9 +38,9 @@ Citizen.CreateThread(function()
         Citizen.Wait(0)
         local ped = PlayerPedId()
         if IsControlPressed(0, 19) and IsControlJustPressed(0, 74) and not IsPedRagdoll(ped) and not IsEntityDead(ped) and DoesEntityExist(ped) and not IsPedSittingInAnyVehicle(ped) and not IsPedInMeleeCombat(ped) then
-        	TriggerServerEvent('cuff:checkWhitelist', 'place:attemptToPlaceNearest')
+			TriggerServerEvent('cuff:checkWhitelistForPlace')
         elseif IsControlPressed(0, 19) and IsControlJustPressed(0, 182) and not IsPedRagdoll(ped) and not IsEntityDead(ped) and DoesEntityExist(ped) and not IsPedSittingInAnyVehicle(ped) and not IsPedInMeleeCombat(ped) then
-        	TriggerServerEvent('cuff:checkWhitelist', 'place:attemptToUnseatNearest')
+			TriggerServerEvent('cuff:checkWhitelistForUnseat')
         end
     end
 end)

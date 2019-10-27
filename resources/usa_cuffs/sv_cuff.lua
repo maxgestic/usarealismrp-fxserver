@@ -54,10 +54,18 @@ TriggerEvent('es:addJobCommand', 'sc', {"police", "sheriff", "corrections"}, fun
 	end
 end, {help = 'Softcuff the player specified, player must be cuffed first.', params = {{name = "id", help = "Target player ID #"}}})
 
-RegisterServerEvent("cuff:checkWhitelist")
-AddEventHandler("cuff:checkWhitelist", function(clientevent)
+RegisterServerEvent("cuff:checkWhitelistForPlace")
+AddEventHandler("cuff:checkWhitelistForPlace", function()
   local job = exports["usa-characters"]:GetCharacterField(source, "job")
   if job == "sheriff" or job == "cop" or job == "corrections" or job == "dai" then
-    TriggerClientEvent(clientevent, source)
+    TriggerClientEvent("place:attemptToPlaceNearest", source)
+  end
+end)
+
+RegisterServerEvent("cuff:checkWhitelistForUnseat")
+AddEventHandler("cuff:checkWhitelistForUnseat", function()
+  local job = exports["usa-characters"]:GetCharacterField(source, "job")
+  if job == "sheriff" or job == "cop" or job == "corrections" or job == "dai" then
+    TriggerClientEvent('place:attemptToUnseatNearest', source)
   end
 end)
