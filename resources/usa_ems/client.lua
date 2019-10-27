@@ -345,7 +345,7 @@ Citizen.CreateThread(function()
 				if IsControlJustPressed(1, MENU_OPEN_KEY) then
 					closest_shop = EMSLockerRooms[i] --// set shop player is at
 					if not mainMenu:Visible() then
-						TriggerServerEvent("emsstation2:checkWhitelist", "emsstation2:isWhitelisted")
+						TriggerServerEvent("emsstation2:checkWhitelist")
 					else
 						mainMenu:Visible(false)
 						mainMenu:Clear()
