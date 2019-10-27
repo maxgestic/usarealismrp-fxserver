@@ -1586,8 +1586,7 @@ AddEventHandler('properties:requestExitFromBurglary', function(index)
 		end
 	end
 	house.cooldown[source] = os.time()
-	TriggerEvent("anticheese:runAfterDisabling", source, "client", "properties:exitProperty")
-	--TriggerClientEvent('properties:exitProperty', source)
+	TriggerEvent("anticheese:exitPropertyAfterDisabling", source, {})
 	Citizen.Wait(1000)
 	for i = 1, #house.instance do
 		local sourceInside = burglaryHouses[index].instance[i]
