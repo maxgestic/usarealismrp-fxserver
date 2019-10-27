@@ -194,23 +194,27 @@ end, {
   }
 })
 
-RegisterServerEvent("policestation2:checkWhitelist")
-AddEventHandler("policestation2:checkWhitelist", function(clientevent)
+RegisterServerEvent("policestation2:checkWhitelistForLockerRoom")
+AddEventHandler("policestation2:checkWhitelistForLockerRoom", function()
   local playerIdentifiers = GetPlayerIdentifiers(source)
   local playerGameLicense = ""
   local char = exports["usa-characters"]:GetCharacter(source)
   local job = char.get("job")
-  if char.get("policeRank") > 0 or (job == "corrections" and clientevent == "policestation2:showArmoury") then
-    if clientevent == "policestation2:showArmoury" then
-      local user_job = char.get("job")
-      if user_job == "sheriff" or user_job == "corrections" then
-        TriggerClientEvent(clientevent, source)
-      else
-        TriggerClientEvent("usa:notify", source, "You must be on-duty to access the armory.")
-      end
-    else
-        TriggerClientEvent(clientevent, source)
-    end
+  if char.get("policeRank") > 0 then
+    TriggerClientEvent("policestation2:isWhitelisted", source)
+  else
+    TriggerClientEvent("usa:notify", source, "~y~You are not whitelisted for POLICE. Apply at https://www.usarrp.net.")
+  end
+end)
+
+RegisterServerEvent("policestation2:checkWhitelistForArmory")
+AddEventHandler("policestation2:checkWhitelistForArmory", function()
+  local playerIdentifiers = GetPlayerIdentifiers(source)
+  local playerGameLicense = ""
+  local char = exports["usa-characters"]:GetCharacter(source)
+  local job = char.get("job")
+  if char.get("policeRank") > 0 or job == "corrections" then
+    TriggerClientEvent("policestation2:showArmoury", source)
   else
     TriggerClientEvent("usa:notify", source, "~y~You are not whitelisted for POLICE. Apply at https://www.usarrp.net.")
   end
