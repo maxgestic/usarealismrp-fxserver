@@ -415,7 +415,7 @@ Citizen.CreateThread(function()
 				if IsControlJustPressed(1, MENU_OPEN_KEY) then
 					closest_shop = policeArmourys[i] --// set shop player is at
 					if not mainMenu:Visible() then
-						TriggerServerEvent("policestation2:checkWhitelist")
+						TriggerServerEvent("policestation2:checkWhitelistForArmory")
 					else
 						mainMenu:Visible(false)
 						mainMenu:Clear()
