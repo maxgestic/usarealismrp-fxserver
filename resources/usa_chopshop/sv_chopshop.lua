@@ -7,6 +7,7 @@ AddEventHandler("chopshop:reward", function(veh_name, damage, property)
     damage = math.ceil(0.10 * damage)
     reward = math.ceil(0.20 * reward) -- only give 20% of regular reward if no cops
   end
-  char.giveMoney(math.max(reward - damage, 0))
-  TriggerClientEvent("usa:notify", source, "Thanks! Here is $" .. reward - damage .. "!", "^0Thanks! Here is $" .. reward - damage .. "!")
+  local finalReward = math.max(reward - damage, 0)
+  char.giveMoney(finalReward)
+  TriggerClientEvent("usa:notify", source, "Thanks! Here is $" .. finalReward .. "!", "^0Thanks! Here is $" .. finalReward .. "!")
 end)

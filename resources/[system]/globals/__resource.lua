@@ -15,7 +15,8 @@ exports {
   "MaxTackleDistance",
   "comma_value",
   "Draw3DTextForOthers",
-  "DrawTimerBar"
+  "DrawTimerBar",
+  "dump"
 }
 
 -- global server functions/tables
@@ -30,5 +31,6 @@ server_exports {
   "GetSecondsFromTime",
   "SendDiscordLog",
   "replaceChar",
-  "getCoordDistance"
+  "getCoordDistance",
+  "dump"
 }

@@ -72,55 +72,54 @@ bone_effects = { -- ORDER MATTERS - each index is subject to each stage
 
 injuries = { -- ensure this is the same as sv_injury.lua
     --[2725352035] = {type = 'blunt', bleed = 7200, string = 'Fists', treatableWithBandage = true, treatmentPrice = 50, dropEvidence = 0.5}, -- WEAPON_UNARMED
-    [4194021054] = {type = 'laceration', bleed = 1500, string = 'Animal Attack', treatableWithBandage = true, treatmentPrice = 80, dropEvidence = 0.9}, -- WEAPON_ANIMAL
-    [148160082] = {type = 'laceration', bleed = 900, string = 'Animal Attack', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 0.9}, -- WEAPON_COUGAR
-    [2578778090] = {type = 'laceration', bleed = 480, string = 'Knife Puncture', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 1.0}, -- WEAPON_KNIFE
-    [1737195953] = {type = 'blunt', bleed = 2400, string = 'Blunt Object', treatableWithBandage = true, treatmentPrice = 30, dropEvidence = 0.8}, -- WEAPON_NIGHTSTICK
-    [1317494643] = {type = 'blunt', bleed = 1200, string = 'Concentrated Blunt Object', treatableWithBandage = true, treatmentPrice = 30, dropEvidence = 0.9}, -- WEAPON_HAMMER
-    [2508868239] = {type = 'blunt', bleed = 900, string = 'Large Blunt Object', treatableWithBandage = false, treatmentPrice = 70, dropEvidence = 0.9}, -- WEAPON_BAT
-    [1141786504] = {type = 'blunt', bleed = 1200, string = 'Large Blunt Object', treatableWithBandage = false, treatmentPrice = 10, dropEvidence = 0.6}, -- WEAPON_GOLFCLUB
-    [2227010557] = {type = 'blunt', bleed = 900, string = 'Blunt Object', treatableWithBandage = false, treatmentPrice = 45, dropEvidence = 0.8}, -- WEAPON_CROWBAR
-    [453432689] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_PISTOL
-    [1593441988] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_COMBATPISTOL
-    [2578377531] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_PISTOL50
-    [736523883] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 200, dropEvidence = 1.0}, -- WEAPON_SMG
-    [2210333304] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 250, dropEvidence = 1.0}, -- WEAPON_CARBINERIFLE
-    [487013001] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0}, -- WEAPON_PUMPSHOTGUN
-    [2640438543] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0}, -- WEAPON_BULLPUPSHOTGUN
-    [911657153] = {type = 'penetrating', bleed = 3600, string = 'Prongs', treatableWithBandage = true, treatmentPrice = 25, dropEvidence = 0.0}, -- WEAPON_STUNGUN
-    [100416529] = {type = 'penetrating', bleed = 120, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 250, dropEvidence = 1.0}, -- WEAPON_SNIPERRIFLE
-    [856002082] = {type = 'penetrating', bleed = 120, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 250, dropEvidence = 1.0}, -- WEAPON_REMOTESNIPER
-    [2481070269] = {type = 'penetrating', bleed = 120, string = 'Shrapnel Wound', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0}, -- WEAPON_GRENADE
-    [615608432] = {type = 'burn', bleed = 600, string = 'Molotov Residue', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0}, -- WEAPON_MOLOTOV
-    [883325847] = {type = 'burn', bleed = 600, string = 'Gasoline Residue', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 1.0}, -- WEAPON_PETROLCAN
-    [1233104067] = {type = 'burn', bleed = 1800, string = 'Concentrated Heat', treatableWithBandage = true, treatmentPrice = 65, dropEvidence = 0.7}, -- WEAPON_FLARE
-    [539292904] = {type = 'burn', bleed = 120, string = 'Explosion', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 1.0}, -- WEAPON_EXPLOSION
-    [3452007600] = {type = 'blunt', bleed = 2700, string = 'Fall', treatableWithBandage = true, treatmentPrice = 30, dropEvidence = 0.2}, -- WEAPON_FALL
-    [133987706] = {type = 'blunt', bleed = 1800, string = 'Vehicle Accident', treatableWithBandage = true, treatmentPrice = 50, dropEvidence = 0.0}, -- WEAPON_RAMMED_BY_CAR
-    [2741846334] = {type = 'blunt', bleed = 1500, string = 'Vehicle Accident', treatableWithBandage = true, treatmentPrice = 50, dropEvidence = 0.4}, -- WEAPON_RUN_OVER_BY_CAR
-    [3750660587] = {type = 'burn', bleed = 600, string = 'Fire', treatableWithBandage = false, treatmentPrice = 50, dropEvidence = 1.0}, -- WEAPON_FIRE
-    [3218215474] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_SNSPISTOL
-    [4192643659] = {type = 'laceration', bleed = 600, string = 'Sharp Glass', treatableWithBandage = false, treatmentPrice = 40, dropEvidence = 1.0}, -- WEAPON_BOTTLE
-    [3523564046] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_HEAVYPISTOL
-    [2460120199] = {type = 'laceration', bleed = 480, string = 'Knife Puncture', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 1.0}, -- WEAPON_DAGGER
-    [137902532] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_VINTAGEPISTOL
-    [2828843422] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_MUSKET
-    [3342088282] = {type = 'penetrating', bleed = 240, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 250, dropEvidence = 1.0}, -- WEAPON_MARKSMANRIFLE
-    [1198879012] = {type = 'burn', bleed = 1200, string = 'Concentrated Heat', treatableWithBandage = true, treatmentPrice = 80, dropEvidence = 1.0}, -- WEAPON_FLAREGUN
-    [3696079510] = {type = 'penetrating', bleed = 120, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 250, dropEvidence = 1.0}, -- WEAPON_MARKSMANPISTOL
-    [3638508604] = {type = 'blunt', bleed = 1200, string = 'Blunt Object', treatableWithBandage = true, treatmentPrice = 70, dropEvidence = 1.0}, -- WEAPON_KNUCKLE
-    [4191993645] = {type = 'laceration', bleed = 360, string = 'Large Sharp Object', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_HATCHET
-    [3713923289] = {type = 'laceration', bleed = 360, string = 'Large Sharp Object', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_MACHETE
-    [3756226112] = {type = 'laceration', bleed = 480, string = 'Knife Puncture', treatableWithBandage = false, treatmentPrice = 70, dropEvidence = 1.0}, -- WEAPON_SWITCHBLADE
-    [3249783761] = {type = 'penetrating', bleed = 120, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0}, -- WEAPON_REVOLVER
-    [3441901897] = {type = 'laceration', bleed = 240, string = 'Large Sharp Object', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_BATTLEAXE
-    [2484171525] = {type = 'blunt', bleed = 1800, string = 'Large Blunt Object', treatableWithBandage = false, treatmentPrice = 65, dropEvidence = 1.0}, -- WEAPON_POOLCUE
-    [419712736] = {type = 'blunt', bleed = 900, string = 'Concentrated Blunt Object', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0}, -- WEAPON_WRENCH
-    [2343591895] = {type = 'blunt', bleed = 2700, string = 'Blunt Object', treatableWithBandage = true, treatmentPrice = 40, dropEvidence = 0.6}, -- WEAPON_FLASHLIGHT
-    [3219281620] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0}, -- WEAPON_PISTOL_MK2
-    [4208062921] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0}, -- WEAPON_CARBINERIFLE_MK2
-    [1432025498] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0} -- WEAPON_PUMPSHOTGUN_MK2
-
+    [GetHashKey("WEAPON_ANIMAL")] = {type = 'laceration', bleed = 1500, string = 'Animal Attack', treatableWithBandage = true, treatmentPrice = 80, dropEvidence = 0.9}, -- WEAPON_ANIMAL
+    [GetHashKey("WEAPON_COUGAR")] = {type = 'laceration', bleed = 900, string = 'Animal Attack', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 0.9}, -- WEAPON_COUGAR
+    [GetHashKey("WEAPON_KNIFE")] = {type = 'laceration', bleed = 480, string = 'Knife Puncture', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 1.0}, -- WEAPON_KNIFE
+    [GetHashKey("WEAPON_NIGHTSTICK")] = {type = 'blunt', bleed = 2400, string = 'Blunt Object', treatableWithBandage = true, treatmentPrice = 30, dropEvidence = 0.8}, -- WEAPON_NIGHTSTICK
+    [GetHashKey("WEAPON_HAMMER")] = {type = 'blunt', bleed = 1200, string = 'Concentrated Blunt Object', treatableWithBandage = true, treatmentPrice = 30, dropEvidence = 0.9}, -- WEAPON_HAMMER
+    [GetHashKey("WEAPON_BAT")] = {type = 'blunt', bleed = 900, string = 'Large Blunt Object', treatableWithBandage = false, treatmentPrice = 70, dropEvidence = 0.9}, -- WEAPON_BAT
+    [GetHashKey("WEAPON_GOLFCLUB")] = {type = 'blunt', bleed = 1200, string = 'Large Blunt Object', treatableWithBandage = false, treatmentPrice = 10, dropEvidence = 0.6}, -- WEAPON_GOLFCLUB
+    [GetHashKey("WEAPON_CROWBAR")] = {type = 'blunt', bleed = 900, string = 'Blunt Object', treatableWithBandage = false, treatmentPrice = 45, dropEvidence = 0.8}, -- WEAPON_CROWBAR
+    [GetHashKey("WEAPON_PISTOL")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_PISTOL
+    [GetHashKey("WEAPON_COMBATPISTOL")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_COMBATPISTOL
+    [GetHashKey("WEAPON_PISTOL50")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_PISTOL50
+    [GetHashKey("WEAPON_SMG")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 200, dropEvidence = 1.0}, -- WEAPON_SMG
+    [GetHashKey("WEAPON_CARBINERIFLE")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 250, dropEvidence = 1.0}, -- WEAPON_CARBINERIFLE
+    [GetHashKey("WEAPON_PUMPSHOTGUN")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0}, -- WEAPON_PUMPSHOTGUN
+    [GetHashKey("WEAPON_BULLPUPSHOTGUN")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0}, -- WEAPON_BULLPUPSHOTGUN
+    [GetHashKey("WEAPON_STUNGUN")] = {type = 'penetrating', bleed = 3600, string = 'Prongs', treatableWithBandage = true, treatmentPrice = 25, dropEvidence = 0.0}, -- WEAPON_STUNGUN
+    [GetHashKey("WEAPON_SNIPERRIFLE")] = {type = 'penetrating', bleed = 120, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 250, dropEvidence = 1.0}, -- WEAPON_SNIPERRIFLE
+    [GetHashKey("WEAPON_REMOTESNIPER")] = {type = 'penetrating', bleed = 120, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 250, dropEvidence = 1.0}, -- WEAPON_REMOTESNIPER
+    [GetHashKey("WEAPON_GRENADE")] = {type = 'penetrating', bleed = 120, string = 'Shrapnel Wound', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0}, -- WEAPON_GRENADE
+    [GetHashKey("WEAPON_MOLOTOV")] = {type = 'burn', bleed = 600, string = 'Molotov Residue', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0}, -- WEAPON_MOLOTOV
+    [GetHashKey("WEAPON_PETROLCAN")] = {type = 'burn', bleed = 600, string = 'Gasoline Residue', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 1.0}, -- WEAPON_PETROLCAN
+    [GetHashKey("WEAPON_FLARE")] = {type = 'burn', bleed = 1800, string = 'Concentrated Heat', treatableWithBandage = true, treatmentPrice = 65, dropEvidence = 0.7}, -- WEAPON_FLARE
+    [GetHashKey("WEAPON_EXPLOSION")] = {type = 'burn', bleed = 120, string = 'Explosion', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 1.0}, -- WEAPON_EXPLOSION
+    [GetHashKey("WEAPON_FALL")] = {type = 'blunt', bleed = 2700, string = 'Fall', treatableWithBandage = true, treatmentPrice = 30, dropEvidence = 0.2}, -- WEAPON_FALL
+    [GetHashKey("WEAPON_RAMMED_BY_CAR")] = {type = 'blunt', bleed = 1800, string = 'Vehicle Accident', treatableWithBandage = true, treatmentPrice = 50, dropEvidence = 0.0}, -- WEAPON_RAMMED_BY_CAR
+    [GetHashKey("WEAPON_RUN_OVER_BY_CAR")] = {type = 'blunt', bleed = 1500, string = 'Vehicle Accident', treatableWithBandage = true, treatmentPrice = 50, dropEvidence = 0.4}, -- WEAPON_RUN_OVER_BY_CAR
+    [GetHashKey("WEAPON_FIRE")] = {type = 'burn', bleed = 600, string = 'Fire', treatableWithBandage = false, treatmentPrice = 50, dropEvidence = 1.0}, -- WEAPON_FIRE
+    [GetHashKey("WEAPON_SNSPISTOL")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_SNSPISTOL
+    [GetHashKey("WEAPON_BOTTLE")] = {type = 'laceration', bleed = 600, string = 'Sharp Glass', treatableWithBandage = false, treatmentPrice = 40, dropEvidence = 1.0}, -- WEAPON_BOTTLE
+    [GetHashKey("WEAPON_HEAVYPISTOL")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_HEAVYPISTOL
+    [GetHashKey("WEAPON_DAGGER")] = {type = 'laceration', bleed = 480, string = 'Knife Puncture', treatableWithBandage = false, treatmentPrice = 90, dropEvidence = 1.0}, -- WEAPON_DAGGER
+    [GetHashKey("WEAPON_VINTAGEPISTOL")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_VINTAGEPISTOL
+    [GetHashKey("WEAPON_MUSKET")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_MUSKET
+    [GetHashKey("WEAPON_MARKSMANRIFLE")] = {type = 'penetrating', bleed = 240, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 250, dropEvidence = 1.0}, -- WEAPON_MARKSMANRIFLE
+    [GetHashKey("WEAPON_FLAREGUN")] = {type = 'burn', bleed = 1200, string = 'Concentrated Heat', treatableWithBandage = true, treatmentPrice = 80, dropEvidence = 1.0}, -- WEAPON_FLAREGUN
+    [GetHashKey("WEAPON_MARKSMANPISTOL")] = {type = 'penetrating', bleed = 120, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 250, dropEvidence = 1.0}, -- WEAPON_MARKSMANPISTOL
+    [GetHashKey("WEAPON_KNUCKLE")] = {type = 'blunt', bleed = 1200, string = 'Blunt Object', treatableWithBandage = true, treatmentPrice = 70, dropEvidence = 1.0}, -- WEAPON_KNUCKLE
+    [GetHashKey("WEAPON_HATCHET")] = {type = 'laceration', bleed = 360, string = 'Large Sharp Object', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_HATCHET
+    [GetHashKey("WEAPON_MACHETE")] = {type = 'laceration', bleed = 360, string = 'Large Sharp Object', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_MACHETE
+    [GetHashKey("WEAPON_SWITCHBLADE")] = {type = 'laceration', bleed = 480, string = 'Knife Puncture', treatableWithBandage = false, treatmentPrice = 70, dropEvidence = 1.0}, -- WEAPON_SWITCHBLADE
+    [GetHashKey("WEAPON_REVOLVER")] = {type = 'penetrating', bleed = 120, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0}, -- WEAPON_REVOLVER
+    [GetHashKey("WEAPON_BATTLEAXE")] = {type = 'laceration', bleed = 240, string = 'Large Sharp Object', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_BATTLEAXE
+    [GetHashKey("WEAPON_POOLCUE")] = {type = 'blunt', bleed = 1800, string = 'Large Blunt Object', treatableWithBandage = false, treatmentPrice = 65, dropEvidence = 1.0}, -- WEAPON_POOLCUE
+    [GetHashKey("WEAPON_WRENCH")] = {type = 'blunt', bleed = 900, string = 'Concentrated Blunt Object', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0}, -- WEAPON_WRENCH
+    [GetHashKey("WEAPON_FLASHLIGHT")] = {type = 'blunt', bleed = 2700, string = 'Blunt Object', treatableWithBandage = true, treatmentPrice = 40, dropEvidence = 0.6}, -- WEAPON_FLASHLIGHT
+    [GetHashKey("WEAPON_PISTOL_MK2")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0}, -- WEAPON_PISTOL_MK2
+    [GetHashKey("WEAPON_CARBINERIFLE_MK2")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0}, -- WEAPON_CARBINERIFLE_MK2
+    [GetHashKey("WEAPON_PUMPSHOTGUN_MK2")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0} -- WEAPON_PUMPSHOTGUN_MK2
 }
 
 hospitalLocations = {
