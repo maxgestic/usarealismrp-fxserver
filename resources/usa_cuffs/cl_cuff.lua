@@ -118,7 +118,7 @@ Citizen.CreateThread(function()
         Citizen.Wait(0)
         local ped = PlayerPedId()
         if not isCuffed and IsControlPressed(0, 19) and IsControlJustPressed(0, 38) and not IsPedRagdoll(ped) and not IsEntityDead(ped) and DoesEntityExist(ped) and not IsPedSittingInAnyVehicle(ped) and not IsPedInMeleeCombat(ped) then
-        	TriggerServerEvent('cuff:checkWhitelist', 'cuff:attemptToCuffNearest')
+        	TriggerServerEvent('cuff:checkWhitelistForCuff')
         end
 
         ----------------------

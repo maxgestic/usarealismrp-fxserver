@@ -19,7 +19,7 @@ AddEventHandler("notepad:gotSaved", function(content)
 end)
 
 RegisterNetEvent("notepad:toggle")
-AddEventHandler("notepad:toggle", function(src)
+AddEventHandler("notepad:toggle", function()
     if not IsPedCuffed(PlayerPedId()) and not IsEntityDead(PlayerPedId()) then
         SetGui(not display)
     end
@@ -79,7 +79,7 @@ function SetGui(enable)
         if notepad.handle then
             RemovePedNotepad()
         end
-    else 
+    else
         TriggerServerEvent("notepad:getSaved")
     end
 end

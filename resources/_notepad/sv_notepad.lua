@@ -1,5 +1,5 @@
 TriggerEvent('es:addCommand', 'notepad', function(source, args, char, location)
-    TriggerClientEvent("notepad:toggle", source, source)
+    TriggerClientEvent("notepad:toggle", source)
 end, { help = "Open your notepad to write things in"})
 
 RegisterServerEvent("notepad:getSaved")
@@ -7,9 +7,7 @@ AddEventHandler("notepad:getSaved", function()
     local usource = source
     local ident = GetPlayerIdentifiers(usource)[1]
     GetSavedNote(ident, function(notes)
-        if clientEvent then
-            TriggerClientEvent("notepad:gotSaved", usource, notes)
-        end
+        TriggerClientEvent("notepad:gotSaved", usource, notes)
     end)
 end)
 
