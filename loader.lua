@@ -45,10 +45,12 @@ client_script = function(data)
   if type(data) == 'table' then
 
     for i=1, #data, 1 do
+      print("1 inserted: " .. dump(data[i]))
       table.insert(__SCRIPTS.client, data[i])
     end
 
   else
+    print("2 inserted: " .. dump(data[i]))
     table.insert(__SCRIPTS.client, data)
   end
 
