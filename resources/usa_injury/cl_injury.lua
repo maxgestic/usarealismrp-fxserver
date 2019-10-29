@@ -80,12 +80,20 @@ injuries = { -- ensure this is the same as sv_injury.lua
     [GetHashKey("WEAPON_BAT")] = {type = 'blunt', bleed = 900, string = 'Large Blunt Object', treatableWithBandage = false, treatmentPrice = 70, dropEvidence = 0.9}, -- WEAPON_BAT
     [GetHashKey("WEAPON_GOLFCLUB")] = {type = 'blunt', bleed = 1200, string = 'Large Blunt Object', treatableWithBandage = false, treatmentPrice = 10, dropEvidence = 0.6}, -- WEAPON_GOLFCLUB
     [GetHashKey("WEAPON_CROWBAR")] = {type = 'blunt', bleed = 900, string = 'Blunt Object', treatableWithBandage = false, treatmentPrice = 45, dropEvidence = 0.8}, -- WEAPON_CROWBAR
+    [GetHashKey("WEAPON_MACHINEPISTOL")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0},
+    [GetHashKey("WEAPON_APPISTOL")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0},
     [GetHashKey("WEAPON_PISTOL")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_PISTOL
     [GetHashKey("WEAPON_COMBATPISTOL")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_COMBATPISTOL
     [GetHashKey("WEAPON_PISTOL50")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 110, dropEvidence = 1.0}, -- WEAPON_PISTOL50
+    [GetHashKey("WEAPON_GUSENBERG")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 200, dropEvidence = 1.0},
     [GetHashKey("WEAPON_SMG")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 200, dropEvidence = 1.0}, -- WEAPON_SMG
+    [GetHashKey("WEAPON_ASSAULTSMG")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 200, dropEvidence = 1.0},
+    [GetHashKey("WEAPON_SMG_MK2")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 200, dropEvidence = 1.0},
+    [GetHashKey("WEAPON_MICROSMG")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 200, dropEvidence = 1.0},
+    [GetHashKey("WEAPON_ASSAULTRIFLE")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 250, dropEvidence = 1.0},
     [GetHashKey("WEAPON_CARBINERIFLE")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 250, dropEvidence = 1.0}, -- WEAPON_CARBINERIFLE
     [GetHashKey("WEAPON_PUMPSHOTGUN")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0}, -- WEAPON_PUMPSHOTGUN
+    [GetHashKey("WEAPON_SAWNOFFSHOTGUN")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0},
     [GetHashKey("WEAPON_BULLPUPSHOTGUN")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0}, -- WEAPON_BULLPUPSHOTGUN
     [GetHashKey("WEAPON_STUNGUN")] = {type = 'penetrating', bleed = 3600, string = 'Prongs', treatableWithBandage = true, treatmentPrice = 25, dropEvidence = 0.0}, -- WEAPON_STUNGUN
     [GetHashKey("WEAPON_SNIPERRIFLE")] = {type = 'penetrating', bleed = 120, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 250, dropEvidence = 1.0}, -- WEAPON_SNIPERRIFLE
@@ -119,7 +127,8 @@ injuries = { -- ensure this is the same as sv_injury.lua
     [GetHashKey("WEAPON_FLASHLIGHT")] = {type = 'blunt', bleed = 2700, string = 'Blunt Object', treatableWithBandage = true, treatmentPrice = 40, dropEvidence = 0.6}, -- WEAPON_FLASHLIGHT
     [GetHashKey("WEAPON_PISTOL_MK2")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0}, -- WEAPON_PISTOL_MK2
     [GetHashKey("WEAPON_CARBINERIFLE_MK2")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0}, -- WEAPON_CARBINERIFLE_MK2
-    [GetHashKey("WEAPON_PUMPSHOTGUN_MK2")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0} -- WEAPON_PUMPSHOTGUN_MK2
+    [GetHashKey("WEAPON_PUMPSHOTGUN_MK2")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0}, -- WEAPON_PUMPSHOTGUN_MK2
+    [GetHashKey("WEAPON_ASSAULTRIFLE_MK2")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0}
 }
 
 hospitalLocations = {
