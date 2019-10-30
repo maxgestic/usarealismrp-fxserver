@@ -12,16 +12,16 @@ files {
 }
 
 client_scripts { 
-    --"screenshots/cl_screenshots.lua",
-    --'commerce/cl_commerce.lua'
-    "**/cl_*.lua"
+    "screenshots/cl_screenshots.lua",
+    'commerce/cl_commerce.lua',
+    'antimodder/cl_commerce.lua'
 }
 
 server_scripts {
     'sessionmonitor.lua',
-    --'screenshots/sv_screenshots.lua',
-    --'commerce/sv_commerce.lua'
-    "**/sv_*.lua"
+    'screenshots/sv_screenshots.lua',
+    'commerce/sv_commerce.lua',
+    'antimodder/sv_antimodder.lua'
 }
 
 server_exports {
