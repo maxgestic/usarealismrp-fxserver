@@ -28,25 +28,25 @@ function DepositPayCheck(char)
 
     if job == "cop" or job == "sheriff" or job == "highwaypatrol" or job == "fbi" then
         local cop_rank = char.get("policeRank")
-        paycheckAmount = 425
+        paycheckAmount = 525
         if cop_rank == 2 then
-            paycheckAmount = 475
+            paycheckAmount = 575
         elseif cop_rank == 3 then
-            paycheckAmount = 520
+            paycheckAmount = 620
         elseif cop_rank == 4 then
-            paycheckAmount = 530
+            paycheckAmount = 630
         elseif cop_rank == 5 then
-            paycheckAmount = 540
+            paycheckAmount = 640
         elseif cop_rank == 6 then
-            paycheckAmount = 550
+            paycheckAmount = 650
         elseif cop_rank == 7 then
-            paycheckAmount = 560
+            paycheckAmount = 660
         elseif cop_rank == 8 then
-            paycheckAmount = 570
+            paycheckAmount = 670
         elseif cop_rank == 9 then
-            paycheckAmount = 580
+            paycheckAmount = 680
         elseif cop_rank == 10 then
-            paycheckAmount = 590
+            paycheckAmount = 690
         end
     elseif job == "ems" then
         local rank = char.get("emsRank")
