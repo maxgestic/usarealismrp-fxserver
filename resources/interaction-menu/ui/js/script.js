@@ -110,7 +110,7 @@ var itemImages = {
   "Boat License": "https://www.scientific.net/KEM.773.56/preview.gif",
   "Aircraft License": "https://www.scientific.net/KEM.773.56/preview.gif",
   "Bar Certificate": "https://www.scientific.net/KEM.773.56/preview.gif",
-  "Key": "https://imgur.com/X9ztqzd.png",
+  "Key": "https://imgur.com/hpPdkrs.png",
   "Champagne (12.5%)": "https://www.wineconnection.com.sg//media/catalog/product/c/h/ch31_3.png",
   "Lockpick": "https://lansky.com/files/2015/4593/1583/LMT100B.png",
   "Molotov": "https://vignette.wikia.nocookie.net/left4dead/images/e/ea/Molotov-1.png/revision/latest?cb=20140322002700",
