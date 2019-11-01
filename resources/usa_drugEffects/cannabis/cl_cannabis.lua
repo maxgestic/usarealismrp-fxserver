@@ -98,9 +98,10 @@ function ApplyHPandArmorBuff(me)
     local maxArmor = GetPlayerMaxArmour(PlayerId())
     local currentArmor = GetPedArmour(me)
     local newArmor = currentArmor + math.random(math.floor(0.05*maxArmor), math.floor(0.08*maxArmor))
-    if newArmor > 0.25 * maxArmor and newArmor > currentArmor then
-        newArmor = 0.25 * maxArmor
-        newArmor = math.floor(newArmor)
+    if newArmor > 0.25 * maxArmor then
+        newArmor = math.floor(0.25 * maxArmor)
+    end
+    if newArmor > currentArmor then
         SetPedArmour(me, newArmor)
     end
 end
