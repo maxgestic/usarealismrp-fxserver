@@ -65,6 +65,7 @@ Citizen.CreateThread(function()
 		end
 		hud.time = CalculateTimeToDisplay()
 		hud.street1 = GetStreetNameFromHashKey(var1)
+		hud.street2 = GetStreetNameFromHashKey(var2)
 		current_zone = GetNameOfZone(pos.x, pos.y, pos.z)
 		hud.zone = zones[current_zone]
 		if hud.zone == nil then
@@ -80,15 +81,19 @@ Citizen.CreateThread(function()
 		local playerVeh = GetVehiclePedIsIn(playerPed, false)
 		if hud.enabled then
 			if playerVeh ~= 0 and GetVehicleClass(playerVeh) ~= 13 and GetVehicleClass(playerVeh) ~= 21 then
+				local streets = hud.street1
+				if hud.street2 and hud.street2 ~= "" then
+					streets = streets .. " & " .. hud.street2
+				end
 				if GetPedInVehicleSeat(playerVeh, -1) == playerPed then
-					DrawTxt(0.663, 1.450, 1.0, 1.0, 0.40, hud.direction .. " Bound | " .. hud.street1 .. " | " .. hud.zone , 255, 255, 255, 255)
+					DrawTxt(0.663, 1.450, 1.0, 1.0, 0.40, hud.direction .. " Bound | " .. streets .. " | " .. hud.zone , 255, 255, 255, 255)
 					DrawTxt(0.663, 1.395, 1.0, 1.0, 0.40, hud.time, 255, 255, 255, 255)
 					DrawTxt(0.663, 1.418, 1.0, 1.0, 0.55, math.floor(GetEntitySpeed(playerVeh)*2.236936, 0) .. '', 255, 255, 255, 255)
 					DrawTxt(0.684, 1.425, 1.0, 1.0, 0.35, 'mph', 255, 255, 255, 255)
 					DrawTxt(0.750, 1.424, 1.0, 1.0, 0.38, hud.engineColor..'ENGINE', 255, 255, 255, 255)
 					DrawTxt(0.780, 1.424, 1.0, 1.0, 0.38, hud.beltColor..hud.belt, 255, 255, 255, 255)
 				elseif GetPedInVehicleSeat(playerVeh, 0) == playerPed then
-					DrawTxt(0.663, 1.450, 1.0, 1.0, 0.40, hud.direction .. " Bound | " .. hud.street1 .. " | " .. hud.zone , 255, 255, 255, 255)
+					DrawTxt(0.663, 1.450, 1.0, 1.0, 0.40, hud.direction .. " Bound | " .. streets .. " | " .. hud.zone , 255, 255, 255, 255)
 					DrawTxt(0.663, 1.395, 1.0, 1.0, 0.40, hud.time, 255, 255, 255, 255)
 					DrawTxt(0.663, 1.418, 1.0, 1.0, 0.55, math.floor(GetEntitySpeed(playerVeh)*2.236936, 0) .. '', 255, 255, 255, 255)
 					DrawTxt(0.684, 1.425, 1.0, 1.0, 0.35, 'mph', 255, 255, 255, 255)
