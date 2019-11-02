@@ -689,7 +689,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 			local reason = table.concat(args, " ")
 			RconPrint("\nPlayer Identifier: " .. targetPlayer .. "\n")
 			-- show message
-			RconPrint(targetPlayerName .. " has been banned (" .. reason .. ")")
+			RconPrint(targetPlayerName .. " has been temp banned (" .. reason .. ")")
 			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
 			sendMessageToModsAndAdmins(0, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ").")
 			-- update db --
@@ -699,7 +699,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 				local desc = "\n**Name:** " .. targetPlayerName
 				desc = desc .. "\n**Identifier:** " .. targetPlayer
 				desc = desc .. " \n**Time:** " .. time .. " hour(s)"
-				desc = desc .. " \n**Reason:** " ..reason:gsub("Temp Banned: ", "").. " \n**Banned By:** Console\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
+				desc = desc .. " \n**Reason:** " ..reason:gsub("Temp Banned: ", "").. " \n**Temp Banned By:** Console\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
 				PerformHttpRequest(WEBHOOK_URL, function(err, text, headers)
 					if text then
 						print(text)
@@ -1071,7 +1071,7 @@ TriggerEvent('es:addGroupCommand', 'tempban', "mod", function(source, args, char
 			desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
 		end
 		desc = desc .. " \n**Time:** " .. time .. " hour(s)"
-		desc = desc .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Banned By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
+		desc = desc .. " \n**Reason:** " ..reason:gsub("Banned: ", "").. " \n**Temp Banned By:** "..GetPlayerName(userSource).."\n**Timestamp:** "..os.date('%m-%d-%Y %H:%M:%S', os.time())
 			PerformHttpRequest(WEBHOOK_URL, function(err, text, headers)
 				if text then
 					print(text)
