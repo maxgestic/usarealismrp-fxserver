@@ -2,11 +2,7 @@ local hands_up = false
 local hands_tied = false
 local blindfolded = false
 
-local bag = nil;
-
-function areHandsTied()
-  return hands_tied
-end
+local bag = nil
 
 ---------------
 -- blindfold --
@@ -773,4 +769,16 @@ function DrawTimer(beginTime, duration, x, y, text)
     AddTextComponentString(text)
     Set_2dLayer(3)
     DrawText(x - 0.06, y - 0.012)
+end
+
+function areHandsUp()
+  return hands_up
+end
+
+function areHandsTied()
+  return hands_tied
+end
+
+function isBlindfolded()
+  return isBlindfolded
 end

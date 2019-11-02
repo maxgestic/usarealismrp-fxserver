@@ -148,7 +148,8 @@ Citizen.CreateThread(function()
 					DrawTxt(0.93, 1.3, 1.0, 1.0, 0.50, 'You may respawn in ~g~'.. SecondsToMinuteClock(seconds) .. ' ~s~minutes', 255, 255, 255, 255)
 				else
 					DrawTxt(0.948, 1.3, 1.0, 1.0, 0.50, 'Press ~g~E ~s~+ ~g~ENTER~s~ to respawn', 255, 255, 255, 255)
-					if IsControlPressed(0, 191)  and IsControlPressed(0, 38) and not IsPedCuffed(ped) then -- ENTER + E
+					local isInPoliceCustody = IsPedCuffed(ped) and not exports.usa_rp2:areHandsTied()
+					if IsControlPressed(0, 191)  and IsControlPressed(0, 38) and not isInPoliceCustody then -- ENTER + E
 						TriggerEvent('death:allowRespawn')
 					end
 				end
