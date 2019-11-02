@@ -32,6 +32,7 @@ end)
 -- start of NUI menu
 
 function EnableGui(enable, phone)
+	local me = PlayerPedId()
 	SetNuiFocus(enable, enable)
 	phoneEnabled = enable
 	if phone then
@@ -47,7 +48,7 @@ function EnableGui(enable, phone)
 			enable = enable
 		})
 	end
-	if enable and IsEntityDead(PlayerPedId()) then 
+	if enable and IsEntityDead(me) or IsPedCuffed(me) then 
 		TriggerServerEvent('display:shareDisplay', 'starts using cell phone', 2, 370, 10, 7500)
 	end
 end
