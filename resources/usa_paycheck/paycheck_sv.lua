@@ -54,15 +54,15 @@ function DepositPayCheck(char)
         if rank == 2 then
             paycheckAmount = 450
         elseif rank == 3 then
-            paycheckAmount = 460
+            paycheckAmount = 490
         elseif rank == 4 then
-            paycheckAmount = 465
+            paycheckAmount = 565
         elseif rank == 5 then
-            paycheckAmount = 460
+            paycheckAmount = 600
         elseif rank == 6 then
-            paycheckAmount = 470
+            paycheckAmount = 670
         elseif rank == 7 then
-            paycheckAmount = 480
+            paycheckAmount = 690
         end
     elseif job == "taxi" then
         paycheckAmount = 50
