@@ -384,6 +384,6 @@ function AttachPhone()
 	while not HasModelLoaded(phoneModel) do
 		Citizen.Wait(100)
 	end
-	cellphone_object = CreateObject(phoneModel, coords.x, coords.y, coords.z, 1, 1, 0)
+	cellphone_object = CreateObject(phoneModel, coords.x, coords.y, coords.z, 1, 1, 1)
 	AttachEntityToEntity(cellphone_object, GetPlayerPed(-1), bone, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1, 1, 0, 0, 2, 1)
 end
