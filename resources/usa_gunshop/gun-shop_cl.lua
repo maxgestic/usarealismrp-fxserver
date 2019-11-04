@@ -49,8 +49,6 @@ function CreateMapBlips()
   end
 end
 
-TriggerServerEvent('blips:getBlips')
-
 RegisterNetEvent('blips:returnBlips')
 AddEventHandler('blips:returnBlips', function(blipsTable)
   if blipsTable['gunshop'] then
@@ -63,6 +61,8 @@ AddEventHandler('blips:returnBlips', function(blipsTable)
     BLIPS = {}
   end
 end)
+
+TriggerServerEvent('blips:getBlips')
 
 -------------------
 -- utility funcs --

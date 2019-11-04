@@ -392,5 +392,44 @@ function DrawText3D(x, y, z, distance, text)
       local factor = (string.len(text)) / 470
       DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
     end
-  end
+end
 
+----------------------
+---- Set up blips ----
+----------------------
+
+local BLIPS = {}
+function CreateMapBlips()
+  if #BLIPS == 0 then
+  	for k, v in pairs(locations) do
+      local blip = AddBlipForCoord(locations[k].menu.x, locations[k].menu.y, locations[k].menu.z)
+      SetBlipSprite(blip, MAP_BLIP_SPRITE)
+      SetBlipDisplay(blip, 4)
+      SetBlipScale(blip, 0.8)
+      SetBlipAsShortRange(blip, true)
+      BeginTextCommandSetBlipName("STRING")
+      AddTextComponentString('Aircraft Shop')
+      EndTextCommandSetBlipName(blip)
+      table.insert(BLIPS, blip)
+	end
+  end
+end
+
+RegisterNetEvent('blips:returnBlips')
+AddEventHandler('blips:returnBlips', function(blipsTable)
+  if blipsTable['planeshop'] then
+    CreateMapBlips()
+  else
+    for _, k in pairs(BLIPS) do
+      print(k)
+      RemoveBlip(k)
+    end
+    BLIPS = {}
+  end
+end)
+
+TriggerServerEvent('blips:getBlips')
+
+-----------------
+-----------------
+-----------------
