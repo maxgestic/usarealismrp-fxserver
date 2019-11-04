@@ -1,0 +1,13 @@
+local minipunchDiscordID = "<@178016707292561409>"
+local WEBHOOK_URL = "https://discordapp.com/api/webhooks/618094411003199509/IeXSWsln5hPo83l5wles9m62kEAKAJQUry6cZvV0MQzCLa6mYgBZOEVdtwwjpC1MUwoh"
+
+AddEventHandler('scrambler:injectionDetected', function(name, source, isServerEvent)
+    local eventType = 'client'
+    if isServerEvent then
+      eventType = 'server'
+    end
+    local msg = 'Player id [' .. source .. ' / ' .. (GetPlayerIdentifiers(source)[1] or 'N/A') .. '] attempted to use ' .. eventType .. ' event [' .. name .. ']'
+    print(msg)
+    exports.globals:SendDiscordLog(WEBHOOK_URL, msg .. " " .. minipunchDiscordID)
+    exports["es_admin"]:BanPlayer(source, "Modding (code injection). If you feel this was a mistake please let a staff member know.")
+  end)
