@@ -57,11 +57,11 @@ Citizen.CreateThread(function()
                         FreezeEntityPosition(targetPed, true)
                         robbing = true
                         local beginTime = GetGameTimer()
-                        TaskPlayAnim(targetPed, emote.dict, emote.name, -8, 1, -1, 16, 0, 0, 0, 0)
+                        TaskPlayAnim(targetPed, emote.dict, emote.name, -8, 1, -1, 13, 0, 0, 0, 0)
                         while GetGameTimer() - beginTime < ROB_TIME and not canceled do
                             if not IsEntityPlayingAnim(targetPed, emote.dict, emote.name, 3) then
                                 LoadAnimation()
-                                TaskPlayAnim(targetPed, emote.dict, emote.name, -8, 1, -1, 16, 0, 0, 0, 0)
+                                TaskPlayAnim(targetPed, emote.dict, emote.name, -8, 1, -1, 13, 0, 0, 0, 0)
                             end
                             DrawTimer(beginTime, ROB_TIME, 1.42, 1.475, 'ROBBING')
                             Wait(0)
@@ -94,16 +94,6 @@ end)
 function isValidPedModel(ped)
 	return GetPedType(ped) ~= 28
 end
-
--- prevent fleeing --
-Citizen.CreateThread(function()
-    while true do
-        if robbing and targetPed and DoesEntityExist(targetPed) then
-            TaskSetBlockingOfNonTemporaryEvents(targetPed, true)  
-        end
-        Wait(1)
-    end
-end)
 
 -- make sure player holds E while robbing --
 Citizen.CreateThread(function()
@@ -158,48 +148,3 @@ function LoadAnimation()
         Wait(1)
     end
 end
-
---[[ timer snippet by mini:
-
-local WAIT_TIME_SECONDS = 10
-local beginTime = GetGameTimer()
-while GetGameTimer() - beginTime < WAIT_TIME_SECONDS * 1000 do
-    -- something for 10 seconds
-    Wait(0)
-end
-
---[[
-
--- new stuff for snippets.
-
--- Check for this variable in other parts of your code
--- to determine if the button has been held down for +/- 1 second.
---[[local pressed = false
-
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0)
--- Create a timer variable
-        local timer = 0
--- Loop as long as the control is held down.
-        while IsControlPressed(0, 38) do
-            Citizen.Wait(0)
--- Add 1 to the timer
-            timer = timer + 1
--- If the timer is 60 or more, stop the loop (60 ticks/frames = +/- 1second)
-            if timer = 600 then
-                pressed = true -- or just call a function to be executed here
-                break -- Stop the loop
-            end
-        end
--- Now wait until the button is released (to avoid running the timer above
--- again and again if the player keeps holding down the button)
--- Remove this while not loop if you don't want to wait for the user to
--- let go of the button before re-running the task again.
-        while not IsControlJustReleased(0, 38) do
-            Citizen.Wait(0)
-        end
--- Reset the pressed variable (remove this if you call a function instead)
-        pressed = false
-    end
-end)--]]
