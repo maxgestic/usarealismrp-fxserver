@@ -2,6 +2,17 @@ local INTERACTION_KEY = 86 -- "E"
 --GiveWeaponToPed(PlayerPedId(), 171789620, 1000, false, false)
 
 local warp_locations = {
+  ["Upper Yacht"] = {
+    entrance = {
+        coords = {-2036.3878173828,-1033.9129638672, 5.8823575973511},
+        heading = 180.0
+    },
+    exit = {
+      coords = {-2045.3041992188,-1030.9090576172, 8.9714965820313},
+      heading = 265.0
+    },
+    job_access = "civ"
+  },
   ["Comedy Club"] = {
     entrance = {
         coords = {-430.06, 261.86, 83.00},
