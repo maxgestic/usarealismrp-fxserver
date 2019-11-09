@@ -862,7 +862,7 @@ Citizen.CreateThread(function()
 	end
 end)
 
--- black listed objects check --
+--[[ black listed objects check --
 function ReqAndDelete(object, detach)
 	if DoesEntityExist(object) then
 		NetworkRequestControlOfEntity(object)
@@ -894,6 +894,7 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
+--]]
 
 -- super jump detection --
 Citizen.CreateThread(function()
