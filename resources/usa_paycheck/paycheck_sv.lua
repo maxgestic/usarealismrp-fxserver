@@ -62,16 +62,16 @@ function DepositPayCheck(char)
         elseif rank == 6 then
             paycheckAmount = 670
         elseif rank == 7 then
-            paycheckAmount = 690
+            paycheckAmount = 680
         end
     elseif job == "taxi" then
-        paycheckAmount = 50
+        paycheckAmount = 200
     elseif job == "tow" then
-        paycheckAmount = 50
+        paycheckAmount = 100
     elseif job == "reporter" then
-        paycheckAmount = 35
+        paycheckAmount = 250
     elseif job == "judge" then
-        paycheckAmount = 350
+        paycheckAmount = 680
     elseif job == "corrections" then
         asyncGiveBank = true
         local ident = GetPlayerIdentifiers(source)[1]
@@ -86,9 +86,9 @@ function DepositPayCheck(char)
             end)
         end)
     elseif job == "lawyer" then
-        paycheckAmount = 300
+        paycheckAmount = 500
     elseif job == "doctor" then
-        paycheckAmount = 300
+        paycheckAmount = 600
     else
         paycheckAmount = 25 -- welfare amount (no job)
         isWelfare = true
