@@ -178,6 +178,9 @@ AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, 
 				end
 			end
 		end
+		if treatmentTimeMinutes > 10 then
+			treatmentTimeMinutes = 10
+		end
 		TriggerEvent('injuries:getHospitalBeds', function(hospitalBeds)
 			for i = 1, #hospitalBeds do
 				if hospitalBeds[i].occupied == nil then
