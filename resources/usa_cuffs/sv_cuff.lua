@@ -1,4 +1,4 @@
-TriggerEvent('es:addJobCommand', 'cuff', { "police", "sheriff", "corrections", "dai" }, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'cuff', { "police", "sheriff", "corrections" }, function(source, args, char, location)
 	if args[2] then -- id was passed as param
 		local tPID = tonumber(args[2])
 		if GetPlayerName(tPID) then
@@ -15,7 +15,7 @@ end, {help = "Cuff the nearest player.", id = "ID # (Optional)"})
 RegisterServerEvent("cuff:Handcuff")
 AddEventHandler("cuff:Handcuff", function(id)
 	local job = exports["usa-characters"]:GetCharacterField(source, "job")
-	if job == "sheriff" or job == "cop" or job == "corrections" or job == "dai" then
+	if job == "sheriff" or job == "corrections" then
 		print("CUFFS: "..GetPlayerName(id).."["..GetPlayerIdentifier(id).."] has been cuffed/uncuffed by "..GetPlayerName(source).."["..GetPlayerIdentifier(source).."]")
 		TriggerClientEvent("cuff:Handcuff", tonumber(id))
 	end

@@ -26,7 +26,7 @@ function DepositPayCheck(char)
 
     local job = char.get("job")
 
-    if job == "cop" or job == "sheriff" or job == "highwaypatrol" or job == "fbi" then
+    if job == "sheriff" or job == "highwaypatrol" or job == "fbi" then
         local cop_rank = char.get("policeRank")
         paycheckAmount = 525
         if cop_rank == 2 then
@@ -89,6 +89,8 @@ function DepositPayCheck(char)
         paycheckAmount = 500
     elseif job == "doctor" then
         paycheckAmount = 600
+    elseif job == "da" then
+        paycheckAmount = 550
     else
         paycheckAmount = 25 -- welfare amount (no job)
         isWelfare = true

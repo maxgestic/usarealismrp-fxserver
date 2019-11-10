@@ -61,8 +61,6 @@ TriggerEvent('es:addCommand', 'revive', function(source, args, char)
 		job == "highwaypatrol" or
 		job == "ems" or
 		job == "doctor" or
-		job == "fire" or
-		job == "dai" or
 		user.getGroup() == "mod" or
 		user.getGroup() == "admin" or
 		user.getGroup() == "superadmin" or

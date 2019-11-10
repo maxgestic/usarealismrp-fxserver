@@ -267,7 +267,7 @@ TriggerEvent('es:addCommand', 'search', function(source, args, char)
 	local job = char.get("job")
 	if job == "civ" then
 		TriggerClientEvent("search:attemptToSearchNearestPerson", source, true)
-	elseif job == "sheriff" or job == "corrections" or job == "dai" then
+	elseif job == "sheriff" or job == "corrections" then
 		if not tonumber(args[2]) then
 			TriggerClientEvent("search:searchNearest", source, source)
 		else

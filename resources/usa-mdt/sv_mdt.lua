@@ -137,7 +137,7 @@ local random_names = {
 
 local tempVehicles = {}
 
-TriggerEvent('es:addJobCommand', 'mdt', { "sheriff", "judge", "corrections", "dai"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'mdt', { "sheriff", "judge", "corrections", "da"}, function(source, args, char)
 	TriggerClientEvent('mdt:toggleVisibilty', source)
 end, { help = "Open MDT" })
 

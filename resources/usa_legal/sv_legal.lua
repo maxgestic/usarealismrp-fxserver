@@ -83,27 +83,25 @@ AddEventHandler('lawyer:payLawyer', function(targetSource, targetAmount)
 	print('LEGAL: '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has paid (for free) amount['..targetAmount..'] to '..GetPlayerName(targetSource)..'['..GetPlayerIdentifier(targetSource)..'] for legal reward.')
 end)
 
---[[
-RegisterServerEvent('legal:onDutyDAI')
-AddEventHandler('legal:onDutyDAI', function()
+RegisterServerEvent('legal:onDutyDA')
+AddEventHandler('legal:onDutyDA', function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local da_rank = char.get('daRank')
 	local user_job = char.get('job')
-	if user_job == 'dai' then
+	if user_job == 'da' then
 		char.set('job', 'civ')
 		TriggerClientEvent('interaction:setPlayersJob', source, 'civ')
-		TriggerClientEvent('usa:notify', source, 'You are now off-duty as a DAI.')
+		TriggerClientEvent('usa:notify', source, 'You are now off-duty.')
 	else
-		if da_rank and da_rank == 2 then
-			char.set('job', 'dai')
-			TriggerClientEvent('interaction:setPlayersJob', source, 'dai')
-			TriggerClientEvent('usa:notify', source, 'You are now on-duty as a DAI.')
+		if da_rank and da_rank > 0 then
+			char.set('job', 'da')
+			TriggerClientEvent('interaction:setPlayersJob', source, 'da')
+			TriggerClientEvent('usa:notify', source, 'You are now on-duty as a DA.')
 		else
-			TriggerClientEvent('usa:notify', source, 'You are not whitelisted for DAI!')
+			TriggerClientEvent('usa:notify', source, 'You are not whitelisted for DA!')
 		end
 	end
 end)
---]]
 
 Citizen.CreateThread(function()
 	while true do

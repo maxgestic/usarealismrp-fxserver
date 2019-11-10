@@ -11,7 +11,7 @@ TriggerEvent('es:addCommand', 'drag', function(source, args, char)
 	if targetID then
 		local job = char.get("job")
 		local group = user.getGroup()
-		if job == "corrections" or job == "sheriff" or job == "cop" or job == "ems" or job == "fire" or job == "dai" or group == "mod" or group == "admin" or group == "superadmin" or group == "owner" then
+		if job == "corrections" or job == "sheriff" or job == "cop" or job == "ems" or group == "mod" or group == "admin" or group == "superadmin" or group == "owner" then
 			if targetID ~= source and not draggedPlayers[source] then
 				draggedPlayers[source] = targetID
 				TriggerClientEvent('drag:dragPlayer', targetID, source)

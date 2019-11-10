@@ -3,7 +3,7 @@ draggedPlayers = {}
 TriggerEvent('es:addCommand', 'place', function(source, args, char, location)
 	local user_job = char.get("job")
 	local tPID = tonumber(args[2])
-	if user_job == "sheriff" or user_job == "ems" or user_job == "fire" or user_job == "corrections" or user_job == "dai" then
+	if user_job == "sheriff" or user_job == "ems" or user_job == "corrections" then
 		TriggerEvent('drag:getTable', function(table)
 			draggedPlayers = table
 			if draggedPlayers[source] == tPID then
@@ -98,7 +98,7 @@ end)
 -- unseat
 TriggerEvent('es:addCommand', 'unseat', function(source, args, char)
 	local user_job = char.get("job")
-	if user_job == "sheriff" or user_job == "cop" or user_job == "ems" or user_job == "fire" or user_job == "corrections" or user_job == "dai" then
+	if user_job == "sheriff" or user_job == "ems" or user_job == "corrections" then
 		local targetPlayer = args[2]
 		TriggerClientEvent("place:unseat", targetPlayer, source)
 		local msg = "removes from vehicle"

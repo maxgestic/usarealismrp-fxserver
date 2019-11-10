@@ -66,6 +66,16 @@ AddEventHandler('rconCommand', function(commandName, args)
         char.set("job", "civ")
         RconPrint("DEBUG: " .. playerId .. " un-whitelisted as EMS.")
       end
+    elseif wl_type == "da" then
+      if rank > 0 then
+        char.set("daRank", rank)
+        RconPrint("DEBUG: " .. playerId .. "'s DA rank has been set to: " .. rank .. "!")
+        TriggerClientEvent('chatMessage', tonumber(playerId), "CONSOLE", {255, 255, 255}, "You have been whitelisted for EMS, rank: " .. rank)
+      else
+        char.set("daRank", 0)
+        char.set("job", "civ")
+        RconPrint("DEBUG: " .. playerId .. " un-whitelisted as DA.")
+      end
     elseif wl_type == "judge" then
       local char = exports["usa-characters"]:GetCharacter(playerId)
       if rank > 0 then
