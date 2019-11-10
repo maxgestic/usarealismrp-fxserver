@@ -82,7 +82,7 @@ TriggerEvent('es:addJobCommand', 'govdeposit', {"sheriff", "corrections", "judge
         end
 end, { help = "Deposit to your departments funds"})
 
-TriggerEvent('es:addJobCommand', 'govwithdraw', {"sheriff", "corrections", "ems"}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'govwithdraw', {"sheriff", "corrections", "judge", "ems"}, function(source, args, char, location)
     local usource = source
     local amount = tonumber(args[2])
     local job = exports["usa-characters"]:GetCharacterField(source, "job")
@@ -174,6 +174,8 @@ AddEventHandler("govfunding:save", function(depositAmount, src, fundAccount)
                 agencyName = "LSFD"
             elseif job == "sheriff" then
                 agencyName = "SASP"
+            elseif job == "judge" then
+                agencyName = "State"
             end
             amountChanged = depositAmount
             typeChanged = "Deposited"
@@ -215,6 +217,8 @@ AddEventHandler("govfunding:delete", function(withdrawAmount, src, fundAccount)
                 agencyName = "LSFD"
             elseif job == "sheriff" then
                 agencyName = "SASP"
+            elseif job == "judge" then
+                agencyName = "State"
             end
             amountChanged = withdrawAmount
             typeChanged = "Withdrew"
