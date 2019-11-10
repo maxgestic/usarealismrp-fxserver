@@ -531,11 +531,45 @@ end)
 
 RegisterServerEvent("mdt:deleteWarrant")
 AddEventHandler("mdt:deleteWarrant", function(id, rev)
-	local job = exports["usa-characters"]:GetCharacterField(source, "job")
-	if job == 'sheriff' or job == 'judge' then
+	local usource = source
+	local char = exports["usa-characters"]:GetCharacter(usource)
+	local job = char.get("job")
+	if job == "corrections" then
+		TriggerEvent("es:exposeDBFunctions", function(db)
+			db.getDocumentByRow("correctionaldepartment", "identifier", GetPlayerIdentifiers(usource)[1], function(doc)
+				if doc then
+					local msg = {}
+					if doc.rank >= 5 then
+						exports["usa-warrants"]:deleteWarrant("warrants", id, rev)
+						msg = {
+							type = "warrantDeleteFinish",
+							message = "Warrant deleted!",
+							uuid = id,
+							success = true
+						}
+					else 
+						msg = {
+							type = "warrantDeleteFinish",
+							message = "Insufficient permissions to delete!",
+							uuid = id,
+							success = false
+						}
+					end
+					TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
+				end
+			end)
+		end)
+	elseif (job == 'sheriff' and char.get("policeRank") >= 4) or job == 'judge' then
 		exports["usa-warrants"]:deleteWarrant("warrants", id, rev)
+		local msg = {
+			type = "warrantDeleteFinish",
+			message = "Warrant deleted!",
+			uuid = id,
+			success = true
+		}
+		TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
 	else
-		TriggerClientEvent('usa:notify', source, 'Insufficient permission!')
+		TriggerClientEvent('usa:notify', usource, 'Insufficient permission!')
 	end
 end)
 

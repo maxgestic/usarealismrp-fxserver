@@ -240,9 +240,6 @@ const mdtApp = new Vue({
                         warrant_id: this.warrants[index]._id,
                         warrant_rev: this.warrants[index]._rev
                     }));
-                    this.warrants.splice(index, 1);
-                    this.error = "Warrant deleted!";
-                    this.current_tab = "Warrants";
                     return;
                 }
             }
@@ -366,7 +363,7 @@ document.onreadystatechange = () => {
                 $.post('http://usa-mdt/fetchBOLOs', JSON.stringify({}));
             } else if (event.data.type == "police_report_created") {
                 $.post('http://usa-mdt/fetchPoliceReports', JSON.stringify({}));
-            }else if (event.data.type == "error") {
+            } else if (event.data.type == "error") {
                 /* display error message */
                 mdtApp.error = event.data.message;
                 /* clear fields */
@@ -398,6 +395,25 @@ document.onreadystatechange = () => {
                         weapon: null
                     }
                 }
+            } else if (event.data.type == "warrantDeleteFinish") {
+                let uuid = event.data.uuid
+                let msg = event.data.message
+                let deleted = event.data.success
+                if (deleted) {
+                    let found = false
+                    for (var index in mdtApp.warrants) {
+                        if (uuid == mdtApp.warrants[index]._id) {
+                            mdtApp.warrants.splice(index, 1)
+                            mdtApp.notification = "Warrant deleted!"
+                            found = true
+                        }
+                    }
+                    if (!found)
+                        mdtApp.error = "Error: did not find a matching warrant for that uuid!";
+                } else {
+                    mdtApp.error = "Insufficient permissions to delete warrants"
+                }
+                mdtApp.current_tab = "Warrants"
             }
         });
     };
