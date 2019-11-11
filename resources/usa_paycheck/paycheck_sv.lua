@@ -183,11 +183,11 @@ end
 
 function GetBCSOPayFromRank(rank)
     if rank == 1 then 
-        return 410
+        return 470
     elseif rank == 2 then 
-        return 475
+        return 490
     elseif rank == 3 then 
-        return 500
+        return 510
     elseif rank == 4 then 
         return 550
     elseif rank == 5 then 
@@ -198,8 +198,12 @@ function GetBCSOPayFromRank(rank)
         return 640
     elseif rank == 8 then 
         return 670
+    elseif rank == 9 then
+        return 675
+    elseif rank == 10 then
+        return 680
     else
-        return 575
+        return 470
     end
 end
 
