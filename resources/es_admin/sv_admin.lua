@@ -474,7 +474,7 @@ end, {
 	help = "Save pos to txt"
 })
 
-TriggerEvent('es:addGroupCommand', 'car', 'superadmin', function(source, args, char)
+TriggerEvent('es:addGroupCommand', 'car', 'admin', function(source, args, char)
 	TriggerClientEvent('es_admin:spawnVehicle', source, args[2])
 	TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(source)..' ['..source..'] ^0 has requested to spawn vehicle: ^2'..args[2]..'^0.')
 end, {
@@ -1412,7 +1412,9 @@ TriggerEvent('es:addGroupCommand', 'test', "owner", function(source, args, char)
 	end
 	--]]
 
-	TriggerClientEvent("interaction:equipWeapon", source, {hash = GetHashKey("WEAPON_RPG")}, true)
+	--TriggerClientEvent("interaction:equipWeapon", source, {hash = GetHashKey("WEAPON_RPG")}, true)
+
+	TriggerClientEvent("testtest", source)
 end, {
 	help = "Test something"
 })

@@ -275,3 +275,21 @@ Citizen.CreateThread(function()
 		Wait(10)
 	end
 end)
+
+RegisterNetEvent("testtest")
+AddEventHandler("testtest", function()
+	local coords = GetEntityCoords(PlayerPedId())
+	CreateObject(GetHashKey("hei_p_pre_heist_weed"), coords.x + 1.0, coords.y, coords.z + 0.5, 1, 1, 0)
+end)
+
+--[[
+	bkr_prop_weed_01_small_01a
+	bkr_prop_weed_01_small_01b
+	bkr_prop_weed_01_small_01c
+
+	bkr_prop_weed_med_01a
+	bkr_prop_weed_med_01b
+
+	bkr_prop_weed_lrg_01a
+	bkr_prop_weed_lrg_01b
+]]

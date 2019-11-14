@@ -1,8 +1,6 @@
 local DROPPED_ITEMS = {}
 local E_KEY = 246
 
-TriggerServerEvent("interaction:getDroppedItems")
-
 RegisterNetEvent("interaction:getDroppedItems")
 AddEventHandler("interaction:getDroppedItems", function(items)
   DROPPED_ITEMS = items
@@ -13,6 +11,8 @@ AddEventHandler("interaction:getDroppedItems", function(items)
     end
   end
 end)
+
+TriggerServerEvent("interaction:getDroppedItems")
 
 RegisterNetEvent("interaction:addDroppedItem")
 AddEventHandler("interaction:addDroppedItem", function(item)
