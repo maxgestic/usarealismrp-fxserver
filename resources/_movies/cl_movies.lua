@@ -222,8 +222,6 @@ function EnumerateBlips()
   end
 end
 
-TriggerServerEvent('blips:getBlips')
-
 RegisterNetEvent('blips:returnBlips')
 AddEventHandler('blips:returnBlips', function(blipsTable)
   if blipsTable['movies'] then
@@ -236,6 +234,8 @@ AddEventHandler('blips:returnBlips', function(blipsTable)
     BLIPS = {}
   end
 end)
+
+TriggerServerEvent('blips:getBlips')
 
 -----------------
 -----------------

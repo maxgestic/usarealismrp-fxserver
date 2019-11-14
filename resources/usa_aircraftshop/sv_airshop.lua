@@ -147,3 +147,36 @@ AddEventHandler('aircraft:claim', function(id)
         end
     end
 end)
+
+RegisterServerEvent("aircraft:purchaseLicense")
+AddEventHandler("aircraft:purchaseLicense", function(business)
+    local timestamp = os.date("*t", os.time())
+    local char = exports["usa-characters"]:GetCharacter(source)
+    local NEW_PILOT_LICENSE = {
+        name = 'Aircraft License',
+        number = 'PL' .. tostring(math.random(1, 254367)),
+        quantity = 1,
+        ownerName = char.getFullName(),
+        issued_by = "Seaview Aircrafts",
+        ownerDob = char.get("dateOfBirth"),
+        expire = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year + 1,
+        status = "valid",
+        type = "license",
+        notDroppable = true,
+        weight = 2.0
+    }
+    if char.get("money") < LICENSE_PURCHASE_PRICE then
+        TriggerClientEvent("usa:notify", source, "Not enough money!")
+        return
+    end
+    if not char.canHoldItem(NEW_PILOT_LICENSE) then 
+        TriggerClientEvent("usa:notify", source, "Inventory full!")
+        return
+    end
+    char.giveItem(NEW_PILOT_LICENSE)
+    char.removeMoney(LICENSE_PURCHASE_PRICE)
+    if business then
+        exports["usa-businesses"]:GiveBusinessCashPercent(business, LICENSE_PURCHASE_PRICE)
+    end
+    TriggerClientEvent("usa:notify", source, "You have been issued a pilot's license!")
+end)
