@@ -267,8 +267,6 @@ const mdtApp = new Vue({
                         police_report_id: this.police_reports[index]._id,
                         police_report_rev: this.police_reports[index]._rev
                     }));
-                    this.police_reports.splice(index, 1);
-                    this.error = "Police report deleted!";
                     this.current_tab = "Police Reports";
                     return;
                 }
@@ -414,6 +412,25 @@ document.onreadystatechange = () => {
                     mdtApp.error = "Insufficient permissions to delete warrants"
                 }
                 mdtApp.current_tab = "Warrants"
+            } else if (event.data.type == "reportDeleteFinish") {
+                let uuid = event.data.uuid
+                let msg = event.data.message
+                let deleted = event.data.success
+                if (deleted) {
+                    let found = false
+                    for (var index in mdtApp.police_reports) {
+                        if (uuid == mdtApp.police_reports[index]._id) {
+                            mdtApp.police_reports.splice(index, 1)
+                            mdtApp.notification = "Report deleted!"
+                            found = true
+                        }
+                    }
+                    if (!found)
+                        mdtApp.error = "Error: did not find a matching warrant for that uuid!";
+                } else {
+                    mdtApp.error = "Insufficient permission to delete report."
+                }
+                mdtApp.current_tab = "Police Reports"
             }
         });
     };
