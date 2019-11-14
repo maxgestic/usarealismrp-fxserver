@@ -132,7 +132,7 @@ var itemImages = {
   "Uncut Cocaine": "https://i.imgur.com/hbQzCgC.png",
   "Packaged Cocaine": "https://pngimage.net/wp-content/uploads/2018/05/drug-bag-png-4.png",
   "Pseudoephedrine": "http://38.media.tumblr.com/25a96472f57c74e6a91afa6c56e9aa2b/tumblr_n1oqykqHpr1sp5w7co1_500.png",
-  "Red Phosphorus": "http://www.krushiindia.com/images/ProductDetail/3.png",
+  "Red Phosphorus": "https://imgur.com/J3uFUB7.png",
   "Fluffy Handcuffs": "https://i.imgur.com/O5KqMZV.png",
   "Razor Blade": "https://i.imgur.com/QAaLE3J.png",
   "Flaming Hot Cheetos": "https://i.imgur.com/EYQAFrx.png",
