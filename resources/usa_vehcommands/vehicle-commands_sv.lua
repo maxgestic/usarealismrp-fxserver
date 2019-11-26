@@ -99,7 +99,11 @@ local VEHICLE_RANKS = {
 			allowedLiveries = { 1, 2, 3, 4 },
 			hash = 1171614426
 		},
-		--["paraexp"] = 4,
+		["paraexp"] = {
+			rank = 3,
+			allowedLiveries = { 1, 2, 3 },
+			hash = 296562921
+		},
 		--[[
 		["sheriff2"] = {
 			rank = 4,
@@ -114,7 +118,7 @@ local VEHICLE_RANKS = {
 		},
 		["polmav"] = {
 			rank = 1,
-			allowedLiveries = { 2 },
+			allowedLiveries = { 1 },
 			hash = 353883353
 		},
 		--["lguard2"] = 1,

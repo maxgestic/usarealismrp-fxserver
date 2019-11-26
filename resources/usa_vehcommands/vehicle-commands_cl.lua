@@ -64,6 +64,7 @@ AddEventHandler("vehCommands:getVehModel", function(requestedSelection)
 		local veh = GetVehiclePedIsIn(me, false)
 		if veh then 
 			model = GetEntityModel(veh)
+			print("model: " .. model)
 		end
 	end
 	TriggerServerEvent("vehCommands:gotVehModel", model, "livery", requestedSelection)
