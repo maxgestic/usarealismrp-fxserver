@@ -12,14 +12,14 @@ local POLICE_RANKS = {
 		[10] = "Director of Emergency Services"
 	},
 	["BCSO"] = {
-		[1] = "Correctional Officer",
-		[2] = "Sr. Correctional Officer",
+		[1] = "Correctional Deputy",
+		[2] = "Sr. Correctional Deputy",
 		[3] = "Deputy Sheriff",
 		[4] = "Sr. Deputy Sheriff",
-		[5] = "Corporal",
-		[6] = "Sergeant",
-		[7] = "Lieutenant",
-		[8] = "Captain",
+		[5] = "Sergeant",
+		[6] = "Captain",
+		[7] = "Commander",
+		[8] = "Assistant Sheriff",
 		[9] = "Undersheriff",
 		[10] = "Sheriff"
 	}
