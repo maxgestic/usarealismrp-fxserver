@@ -1026,6 +1026,16 @@ function interactionMenuUse(itemName, wholeItem)
 			TriggerServerEvent("altchat:showID", locationTemp)
 		elseif itemName:find("Sturdy Rope") then
 			TriggerEvent("crim:attemptToTieNearestPerson", true)
+		elseif itemName:find("Small Weed Plant") then
+			TriggerEvent("cultivation:plant", "cannabis", wholeItem.name)
+		elseif itemName:find("Watering Can") then
+			TriggerEvent("cultivation:water")
+		elseif itemName:find("Fertilizer") then
+			TriggerEvent("cultivation:feed")
+		elseif itemName:find("Scissors") then
+			TriggerEvent("cultivation:harvest")
+		elseif itemName:find("Shovel") then
+			TriggerEvent("cultivation:shovel")
 		else
 			TriggerEvent("interaction:notify", "There is no use action for that item!")
 		end

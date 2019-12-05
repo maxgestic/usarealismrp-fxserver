@@ -225,13 +225,9 @@ end
 
 function exposedDB.createDocument(db, rows, cb)
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/_uuids", function(err, rText, headers)
-		PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. json.decode(rText).uuids[1], function(err, rText, headers)
-			rText = json.decode(rText)
-			if rText.ok then
-				cb(true)
-			else
-				cb(false)
-			end
+		local data = json.decode(rText)
+		PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. data.uuids[1], function(err, rText, headers)
+			cb(data.uuids[1])
 		end, "PUT", json.encode(rows), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 	end, "GET", "", {Authorization = "Basic " .. auth})
 end
@@ -390,6 +386,19 @@ function exposedDB.updateDocument(db, documentID, updates, callback)
 			callback(nil)
 		end
 	end, "GET", "", {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
+end
+
+function exposedDB.deleteDocument(db, docID, callback)
+	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. docID, function(err, rText, headers)
+		if rText then
+			local doc = json.decode(rText)
+			PerformHttpRequest("http://127.0.0.1:5984/"..db.."/"..docID.."?rev="..doc._rev, function(err, rText, headers)
+				callback(true)
+			end, "DELETE", "", {["Content-Type"] = 'application/json'})
+		else
+			callback(false)
+		end
+	end, "GET", "", {["Content-Type"] = 'application/json'})
 end
 
 AddEventHandler('es:exposeDBFunctions', function(cb)

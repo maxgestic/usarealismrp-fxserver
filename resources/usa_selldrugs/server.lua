@@ -4,7 +4,7 @@ local debug = false
 local SELLABLE_ITEMS = {
 	["Packaged Meth"] = {150, 250},
 	["Packaged Blue Meth"] = {350, 550},
-	["Packaged Weed"] = {50, 125},
+	["Packaged Weed"] = {50, 160},
 	["Packaged Cocaine"] = {500, 1000},
 	["LSD Vile"] = {50, 400}
 }
@@ -19,7 +19,7 @@ AddEventHandler('sellDrugs:checkPlayerHasDrugs', function()
 			if policeOnline == 0 then
 				TriggerClientEvent('sellDrugs:showHelpText', source, 0.60)
 			elseif policeOnline == 1 then
-			 	TriggerClientEvent('sellDrugs:showHelpText', source, 0.55)
+				TriggerClientEvent('sellDrugs:showHelpText', source, 0.55)
 			elseif policeOnline == 2 then
 				TriggerClientEvent('sellDrugs:showHelpText', source, 0.45)
 			elseif policeOnline > 2 then

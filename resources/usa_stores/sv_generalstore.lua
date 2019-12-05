@@ -70,6 +70,8 @@ local HARDWARE_STORE_ITEMS = {
     { name = "Chair", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 60, objectModel = "prop_cs_box_step"},
     { name = "Vortex Optics Binoculars", price = 150, type = "misc", quantity = 1, legality = "legal", weight = 10, objectModel = "prop_binoc_01"},
     { name = "Shovel", price = 75, type = "misc", quantity = 1, legality = "legal", weight = 30, objectModel = "prop_tool_shovel"},
+    { name = "Watering Can", price = 75, type = "misc", quantity = 1, legality = "legal", weight = 20, objectModel = "prop_wateringcan"},
+    { name = "Fertilizer", price = 75, type = "misc", quantity = 1, legality = "legal", weight = 25}
   }
 }
 

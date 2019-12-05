@@ -177,7 +177,10 @@ var itemImages = {
   "LSD Vile": "https://imgur.com/4zNSw5c.png",
   "RAW Papers": "https://imgur.com/BHm4hHf.png",
   "Bic Lighter": "https://imgur.com/sVSnmCy.png",
-  "Joint": "https://imgur.com/NBVdIqF.png"
+  "Joint": "https://imgur.com/NBVdIqF.png",
+  "Watering Can": "https://imgur.com/GC5yvkj.png",
+  "Fertilizer": "https://imgur.com/uyRhO93.png",
+  "Small Weed Plant": "https://imgur.com/5dRRvsl.png"
 }
 
 var menuItems = [

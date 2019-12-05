@@ -36,6 +36,14 @@ AddEventHandler("interaction:finishedPickupAttempt", function()
   attemptingPickup = false
 end)
 
+RegisterNetEvent("interaction:dropMultiple")
+AddEventHandler("interaction:dropMultiple", function(items)
+  for i = 1, #items do
+    table.insert(DROPPED_ITEMS, items[i])
+    SpawnObjectModel(items[i])
+  end
+end)
+
 Citizen.CreateThread(function()
   while true do
     local ped = GetPlayerPed(-1)
@@ -77,4 +85,11 @@ function DrawText3Ds(x,y,z,q,a, text)
 	    local factor = (string.len(text)) / q
 	    DrawRect(_x,_y+0.0125, 0.015+ factor, 0.03, 41, 11, 41, 68)
 	end
+end
+
+function SpawnObjectModel(item)
+  if item.objectModel then
+    local prop = CreateObject(GetHashKey(item.objectModel), item.coords.x, item.coords.y, item.coords.z, true, false, true)
+    SetEntityAsMissionEntity(prop, true, true)
+  end
 end

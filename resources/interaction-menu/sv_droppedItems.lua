@@ -32,6 +32,19 @@ AddEventHandler("interaction:attemptPickup", function(item)
 	end
 end)
 
+RegisterServerEvent("interaction:dropMultipleOfItem")
+AddEventHandler("interaction:dropMultipleOfItem", function(item, coords)
+	local toSend = {}
+	for i = 1, item.quantity do
+		local copy = item
+		copy.quantity = 1
+		copy.dropTime = os.time()
+		table.insert(DROPPED_ITEMS, copy)
+		table.insert(toSend, copy)
+	end
+	TriggerClientEvent("interaction:dropMultiple", -1, toSend)
+end)
+
 function attemptPickup(src, item, cb)
 	local char = exports["usa-characters"]:GetCharacter(src)
 	if char.canHoldItem(item) then
