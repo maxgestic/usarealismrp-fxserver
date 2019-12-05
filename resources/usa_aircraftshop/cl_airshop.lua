@@ -111,7 +111,8 @@ AddEventHandler('aircraft:spawn', function(hash, id)
         Wait(0)
     end
     local location = GetClosestLocation()
-    local aircraft = CreateVehicle(hash, location.spawn.x, location.spawn.y, location.spawn.z, (location.spawn.heading or 0.0), true, false)
+	local aircraft = CreateVehicle(hash, location.spawn.x, location.spawn.y, location.spawn.z, (location.spawn.heading or 0.0), true, false)
+	SetEntityAsMissionEntity(aircraft, 1, 1)
     if id then
         SetVehicleNumberPlateText(aircraft, tostring(id):sub(1, 8))
     end
