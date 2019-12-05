@@ -53,26 +53,6 @@ local function round(num, idp)
   return math.floor(num + 0.5)
 end
 
-local function StartFade()
-	Citizen.CreateThread(function()
-		DoScreenFadeOut(0)
-		while IsScreenFadingOut() do
-			Citizen.Wait(0)
-		end
-	end)
-end
-local function EndFade()
-	Citizen.CreateThread(function()
-		ShutdownLoadingScreen()
-
-        DoScreenFadeIn(500)
-
-        while IsScreenFadingIn() do
-            Citizen.Wait(0)
-        end
-	end)
-end
-
 -- mini's added function to save customizations
 RegisterNetEvent("customs:applyCustomizations")
 AddEventHandler("customs:applyCustomizations", function(veh)
@@ -200,7 +180,7 @@ local function DriveInGarage()
 	--Lock the garage
 	TriggerServerEvent('lockGarage',true,currentgarage)
 	SetPlayerControl(PlayerId(),false,256)
-	StartFade()
+	--StartFade()
 
 	local pos = currentpos
 	local ped = LocalPed()
@@ -551,11 +531,12 @@ local function DriveInGarage()
 			end
 
 		m = LSCMenu.categories:addSubMenu("WINDOWS", "Windows", "A selection of tinted windows.",true)
-			btn = m:addPurchase("None")btn.tint = false
-			for n, tint in pairs(LSC_Config.prices.windowtint) do
-				btn = m:addPurchase(tint.name,tint.price)btn.tint = tint.tint
-			end
+		btn = m:addPurchase("None")btn.tint = false
+		for n, tint in pairs(LSC_Config.prices.windowtint) do
+			btn = m:addPurchase(tint.name,tint.price)btn.tint = tint.tint
+		end
 
+				
 		Citizen.CreateThread(function()
 			--NetworkFadeOutEntity(veh, 1,1)
 			--FadeOutLocalPlayer(1)
@@ -574,7 +555,7 @@ local function DriveInGarage()
 			Citizen.Wait(50)
 
 			TaskVehicleDriveToCoord(ped, veh, pos.inside.x, pos.inside.y, pos.inside.z, f(3), f(1), GetEntityModel(veh), 16777216, f(0.1), true)
-			EndFade()Citizen.Wait(3000)
+			Wait(3000)
 
 			local c = 0
 			while not IsVehicleStopped(veh) do
@@ -625,8 +606,6 @@ local function DriveOutOfGarage(pos)
 		--The vehicle customization is finished, so we send to server our vehicle data
 		TriggerServerEvent("LSC:finished", myveh)
 
-		StartFade()
-		Citizen.Wait(500)
 		SetEntityCollision(veh,true,true)
 		FreezeEntityPosition(ped, false)
 		FreezeEntityPosition(veh, false)
@@ -638,7 +617,6 @@ local function DriveOutOfGarage(pos)
 		SetEntityInvincible(veh,false)
 		SetVehicleLights(veh, 0)
 		NetworkLeaveTransition()
-		EndFade()
 
 		--NetworkFadeInEntity(veh, 1)
 		Citizen.Wait(3000)
