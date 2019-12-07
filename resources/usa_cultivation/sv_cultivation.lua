@@ -58,9 +58,14 @@ end)
 RegisterServerEvent("cultivation:feed")
 AddEventHandler("cultivation:feed", function(i)
     if PLANTED[i].stage.name ~= "dead" then
-        PlantManager.feedPlant(i)
-        TriggerClientEvent("cultivation:update", -1, i, "foodLevel", PLANTED[i].foodLevel)
-        TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 2)
+        local char = exports["usa-characters"]:GetCharacter(source)
+        local fertilizer = char.getItem("Fertilizer")
+        if fertilizer then
+            PlantManager.feedPlant(i)
+            TriggerClientEvent("cultivation:update", -1, i, "foodLevel", PLANTED[i].foodLevel)
+            TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 2)
+            char.removeItem("Fertilizer", 1)
+        end
     else 
         TriggerClientEvent("usa:notify", source, "Plant is dead")
     end

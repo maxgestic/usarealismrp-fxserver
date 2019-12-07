@@ -102,7 +102,7 @@ var itemImages = {
   "Artichoke Spinach Dip": "https://natureshealthygourmet.com/wp-content/plugins/dopts/uploads/thumbs/SH1dTyFGedH5nWdTSp23ZyMhLrESwLbKWeGXrzfaanxtSA3ahewBbtC3dbSR9r3h8.png",
   "Chicken Wings": "https://www.woodyswinghouse.com/wp-content/uploads/2017/07/chicken-wings-edit.png",
   "All American Hamburger": "https://ya-webdesign.com/images/cheese-burger-png-8.png",
-  "Chopped Salad": "https://imgur.com/uS96COe.png",
+  "Chopped Salad": "https://imgur.com/DywE0Z1.png",
   "Pizza": "https://www.happyspizza.com/wp-content/uploads/hp_plate_sm_2toppizza.png",
   "Chicken Sandwich": "https://brownbagonline.com/wp-content/uploads/2016/03/ChipotleChicken.png",
   "Ahi Tuna Sandwich": "https://russoscafe.com/wp-content/uploads/California-Tuna-Salad-Roll.png",
