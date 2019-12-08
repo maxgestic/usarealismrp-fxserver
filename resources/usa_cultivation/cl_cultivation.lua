@@ -27,6 +27,8 @@ local MENU_RADIUS = 1.5
 local MENU_TEXT_RADIUS = 40
 local PLANT_TEXT_RADIUS = 5.0
 
+local ANIMATION_TIME_SECONDS = 10
+
 local KEYS = {
     E = 38
 }
@@ -90,6 +92,18 @@ function GetClosestPlant()
     return closest
 end
 
+function DisablePlayerControls()
+    DisableControlAction(0, 86, true)
+    DisableControlAction(0, 244, true)
+    DisableControlAction(0, 245, true)
+    DisableControlAction(0, 288, true)
+    DisableControlAction(0, 79, true)
+    DisableControlAction(0, 73, true)
+    DisableControlAction(0, 75, true)
+    DisableControlAction(0, 37, true)
+    DisableControlAction(0, 311, true)
+end
+
 RegisterNetEvent("cultivation:plant")
 AddEventHandler("cultivation:plant", function(type, itemName)
     if not IsPedInAnyVehicle(me.ped, true) then
@@ -143,16 +157,42 @@ RegisterNetEvent("cultivation:water")
 AddEventHandler("cultivation:water", function()
     -- find nearest plant
     local closest = GetClosestPlant()
-    -- update water level
-    TriggerServerEvent("cultivation:water", closest.index)
+    if closest.index ~= -1 then
+        local start = GetGameTimer()
+        while GetGameTimer() - start < ANIMATION_TIME_SECONDS * 1000 do
+            exports.globals:DrawTimerBar(start, ANIMATION_TIME_SECONDS * 1000, 1.42, 1.475, 'WATERING')
+            DisablePlayerControls()
+            if not IsEntityPlayingAnim(me.ped, "anim@move_m@trash", "pickup", 3) then
+                TaskPlayAnim(me.ped, "anim@move_m@trash", "pickup", 8.0, 1.0, -1, 11, 1.0, false, false, false)
+            end
+            Wait(1)
+        end
+        ClearPedTasks(me.ped)
+        TriggerServerEvent("cultivation:water", closest.index)
+    else
+        exports.globals:notify("No plant found!")
+    end
 end)
 
 RegisterNetEvent("cultivation:feed")
 AddEventHandler("cultivation:feed", function()
     -- find nearest plant
     local closest = GetClosestPlant()
-    -- update food level
-    TriggerServerEvent("cultivation:feed", closest.index)
+    if closest.index ~= -1 then
+        local start = GetGameTimer()
+        while GetGameTimer() - start < ANIMATION_TIME_SECONDS * 1000 do
+            exports.globals:DrawTimerBar(start, ANIMATION_TIME_SECONDS * 1000, 1.42, 1.475, 'FEEDING')
+            DisablePlayerControls()
+            if not IsEntityPlayingAnim(me.ped, "anim@move_m@trash", "pickup", 3) then
+                TaskPlayAnim(me.ped, "anim@move_m@trash", "pickup", 8.0, 1.0, -1, 11, 1.0, false, false, false)
+            end
+            Wait(1)
+        end
+        ClearPedTasks(me.ped)
+        TriggerServerEvent("cultivation:feed", closest.index)
+    else
+        exports.globals:notify("No plant found!")
+    end
 end)
 
 RegisterNetEvent("cultivation:update")
@@ -164,8 +204,21 @@ RegisterNetEvent("cultivation:harvest")
 AddEventHandler("cultivation:harvest", function()
     -- find nearest plant
     local closest = GetClosestPlant()
-    -- attempt to harvest
-    TriggerServerEvent("cultivation:harvest", closest.index)
+    if closest.index ~= -1 then
+        local start = GetGameTimer()
+        while GetGameTimer() - start < ANIMATION_TIME_SECONDS * 1000 do
+            exports.globals:DrawTimerBar(start, ANIMATION_TIME_SECONDS * 1000, 1.42, 1.475, 'HARVESTING')
+            DisablePlayerControls()
+            if not IsEntityPlayingAnim(me.ped, "anim@move_m@trash", "pickup", 3) then
+                TaskPlayAnim(me.ped, "anim@move_m@trash", "pickup", 8.0, 1.0, -1, 11, 1.0, false, false, false)
+            end
+            Wait(1)
+        end
+        ClearPedTasks(me.ped)
+        TriggerServerEvent("cultivation:harvest", closest.index)
+    else
+        exports.globals:notify("No plant found!")
+    end
 end)
 
 RegisterNetEvent("cultivation:remove")
@@ -179,8 +232,23 @@ end)
 
 RegisterNetEvent("cultivation:shovel")
 AddEventHandler("cultivation:shovel", function()
+    -- find nearest plant
     local closest = GetClosestPlant()
-    TriggerServerEvent("cultivation:shovel", closest.index)
+    if closest.index ~= -1 then
+        local start = GetGameTimer()
+        while GetGameTimer() - start < ANIMATION_TIME_SECONDS * 1000 do
+            exports.globals:DrawTimerBar(start, ANIMATION_TIME_SECONDS * 1000, 1.42, 1.475, 'SHOVELING')
+            DisablePlayerControls()
+            if not IsEntityPlayingAnim(me.ped, "anim@move_m@trash", "pickup", 3) then
+                TaskPlayAnim(me.ped, "anim@move_m@trash", "pickup", 8.0, 1.0, -1, 11, 1.0, false, false, false)
+            end
+            Wait(1)
+        end
+        ClearPedTasks(me.ped)
+        TriggerServerEvent("cultivation:shovel", closest.index)
+    else
+        exports.globals:notify("No plant found!")
+    end
 end)
 
 RegisterNetEvent("cultivation:attemptToRemoveNearest")
