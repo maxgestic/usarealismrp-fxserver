@@ -1,5 +1,6 @@
 local PRODUCTS = {}
 local PLANTED = {}
+local CLOSEST_PLANTED = {}
 
 RegisterNetEvent("cultivation:load")
 AddEventHandler("cultivation:load", function(products, planted)
@@ -28,6 +29,9 @@ local MENU_TEXT_RADIUS = 40
 local PLANT_TEXT_RADIUS = 5.0
 
 local ANIMATION_TIME_SECONDS = 10
+
+local CLOSEST_PLANTS_BUFFER_INTERVAL_SECONDS = 5
+local CLOSEST_PLANTS_BUFFER_DIST = 20.0
 
 local KEYS = {
     E = 38
@@ -257,12 +261,32 @@ AddEventHandler("cultivation:attemptToRemoveNearest", function()
     TriggerServerEvent("cultivation:remove", closest.index)
 end)
 
--- Draw 3D text for all plants within distance --
+-- Used to optimize drawing of 3D text (only look for nearby plants every x seconds instead of every frame)
+local lastCheckTime = GetGameTimer()
 Citizen.CreateThread(function()
     while true do
-        if PLANTED and me.coords then
+        local isTimeForNextCheck = GetGameTimer() - lastCheckTime >= CLOSEST_PLANTS_BUFFER_INTERVAL_SECONDS * 1000
+        if PLANTED and me.coords and isTimeForNextCheck then
+            lastCheckTime = GetGameTimer()
             for i = 1, #PLANTED do
                 local plant = PLANTED[i]
+                local dist = Vdist(me.coords.x, me.coords.y, me.coords.z, plant.coords.x, plant.coords.y, plant.coords.z)
+                if dist <= CLOSEST_PLANTS_BUFFER_DIST then
+                    CLOSEST_PLANTED[i] = plant
+                else
+                    CLOSEST_PLANTED[i] = nil
+                end
+            end
+        end
+        Wait(1)
+    end
+end)
+
+-- Draw 3D text for all plants within CLOSEST_PLANTS_BUFFER_DIST distance --
+Citizen.CreateThread(function()
+    while true do
+        if CLOSEST_PLANTED and me.coords then
+            for index, plant in pairs(CLOSEST_PLANTED) do
                 local dist = Vdist(me.coords.x, me.coords.y, me.coords.z, plant.coords.x, plant.coords.y, plant.coords.z)
                 if dist < PLANT_TEXT_RADIUS then
                     local water = plant.waterLevel.asString
