@@ -108,14 +108,13 @@ AddEventHandler("cultivation:remove", function(i)
     TriggerClientEvent("usa:notify", source, "Plant removed!")
 end)
 
-TriggerEvent('es:addJobCommand', 'removeplant', {"sheriff", "corrections", "ems"}, function(source, args, char)
-    TriggerClientEvent("cultivation:attemptToRemoveNearest", source)
-end, {
-    help = "Remove nearest plant"
-})
-
-TriggerEvent('es:addGroupCommand', 'removeplant', "mod", function(source, args, char)
-    TriggerClientEvent("cultivation:attemptToRemoveNearest", source)
+TriggerEvent('es:addCommand', 'removeplant', function(source, args, char)
+    local user = exports["essentialmode"]:GetPlayerFromId(source)
+    local job = char.get("job")
+    local group = user.getGroup()
+    if job == "sheriff" or job == "corrections" or job == "ems" or group == "mod" or group == "admin" or group == "superadmin" or group == "owner" then
+        TriggerClientEvent("cultivation:attemptToRemoveNearest", source)
+    end
 end, {
     help = "Remove nearest plant"
 })
