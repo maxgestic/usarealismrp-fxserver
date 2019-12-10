@@ -204,3 +204,10 @@ function dump(o)
      return tostring(o)
   end
 end
+
+function loadAnimDict(dict)
+  RequestAnimDict(dict)
+  while not HasAnimDictLoaded(dict) do
+      Wait(1)
+  end
+end

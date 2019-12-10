@@ -16,7 +16,8 @@ exports {
   "comma_value",
   "Draw3DTextForOthers",
   "DrawTimerBar",
-  "dump"
+  "dump",
+  "loadAnimDict"
 }
 
 -- global server functions/tables
