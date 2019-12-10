@@ -4,7 +4,7 @@ local CLOSEST_PLANTED = {}
 
 -- todo: load animation if not already loaded
 
-
+--[[
 local testobj = {}
 testobj["_id"] = "1994a81632cf65f5d39e4c3c5727031a"
 testobj["_rev"] = "1-2f6e02937023cd858f7ed387eccdf317"
@@ -39,13 +39,13 @@ testobj["owner"] = {
 }
 testobj["steam"] = "steam:1100001177bdebd"
 testobj["id"] = "64bb494a96ba8b98ad0e5ee23d13f835"
-
+--]]
 
 RegisterNetEvent("cultivation:load")
 AddEventHandler("cultivation:load", function(products, planted)
     PRODUCTS = products
     PLANTED = planted
-    table.insert(PLANTED, testobj) -- todo: delete when done testing
+    --table.insert(PLANTED, testobj) -- todo: delete when done testing
     if PLANTED then
         for i = 1, #PLANTED do
             local plant = PLANTED[i]
