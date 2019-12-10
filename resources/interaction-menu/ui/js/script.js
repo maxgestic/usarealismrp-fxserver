@@ -74,7 +74,7 @@ var itemImages = {
   "Flounder": "https://www.freshfromflorida.com/var/ezdemo_site/storage/images/media/images/marketing-development-images/flounder-transparent/2389314-1-eng-US/flounder-transparent_large.png",
   "Halibut": "https://i.dlpng.com/static/png/332762_thumb.png",
   "Weed Bud": "https://66.media.tumblr.com/30ff99a59894fdd9abd04712189708af/tumblr_mvyvwdxNVi1t04rb2o1_r1_400.png",
-  "Packaged Weed": "https://www.sccpre.cat/mypng/full/19-192283_bag-of-weed-png.png",
+  "Packaged Weed": "https://imgur.com/QnjBptr.png",
   "Processed Sand": "https://imgur.com/GQ8TPYU.png",
   "Lagunitas IPA": "https://www.totalwine.com/media/sys_master/twmmedia/h0a/h36/8804310974494.png",
   "Budweiser": "http://dbertolineandsons.com/wp-content/uploads/2016/08/budweiser-8-200x390.png",
