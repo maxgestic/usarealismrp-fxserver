@@ -6,9 +6,10 @@ local armoryItems = {
     { name = "Flashlight", hash = -1951375401, price = 25, weight = 4 },
     { name = "Nightstick", hash = 1737195953, price = 25, weight = 4 },
     { name = "Combat Pistol", hash = 1593441988, price = 100, weight = 8 },
-    { name = "Stun Gun", hash = 911657153, price = 150, weight = 5 },
-    { name = "MK2 Pump Shotgun", hash = 1432025498, price = 300, weight = 30 },
-    { name = "MK2 Carbine Rifle", hash = 4208062921, price = 300, weight = 30, minRank = 2 }
+    { name = "Stun Gun", hash = 911657153, price = 250, weight = 5 },
+    { name = "SMG", hash = 736523883, price = 500, weight = 25 },
+    { name = "MK2 Pump Shotgun", hash = 1432025498, price = 500, weight = 30 },
+    { name = "MK2 Carbine Rifle", hash = 4208062921, price = 500, weight = 30, minRank = 2 }
 }
 
 for i = 1, #armoryItems do
