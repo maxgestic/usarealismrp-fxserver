@@ -2,8 +2,6 @@ local PRODUCTS = {}
 local PLANTED = {}
 local CLOSEST_PLANTED = {}
 
--- todo: load animation if not already loaded
-
 --[[
 local testobj = {}
 testobj["_id"] = "1994a81632cf65f5d39e4c3c5727031a"
@@ -233,6 +231,9 @@ AddEventHandler("cultivation:water", function()
     -- find nearest plant
     local closest = GetClosestPlant()
     if closest.index ~= -1 then
+        if not HasAnimDictLoaded("anim@move_m@trash") then
+            exports.globals:loadAnimDict("anim@move_m@trash")
+        end
         local start = GetGameTimer()
         while GetGameTimer() - start < ANIMATION_TIME_SECONDS * 1000 do
             exports.globals:DrawTimerBar(start, ANIMATION_TIME_SECONDS * 1000, 1.42, 1.475, 'WATERING')
@@ -254,6 +255,9 @@ AddEventHandler("cultivation:feed", function()
     -- find nearest plant
     local closest = GetClosestPlant()
     if closest.index ~= -1 then
+        if not HasAnimDictLoaded("anim@move_m@trash") then
+            exports.globals:loadAnimDict("anim@move_m@trash")
+        end
         local start = GetGameTimer()
         while GetGameTimer() - start < ANIMATION_TIME_SECONDS * 1000 do
             exports.globals:DrawTimerBar(start, ANIMATION_TIME_SECONDS * 1000, 1.42, 1.475, 'FEEDING')
@@ -280,6 +284,9 @@ AddEventHandler("cultivation:harvest", function()
     -- find nearest plant
     local closest = GetClosestPlant()
     if closest.index ~= -1 then
+        if not HasAnimDictLoaded("anim@move_m@trash") then
+            exports.globals:loadAnimDict("anim@move_m@trash")
+        end
         local start = GetGameTimer()
         while GetGameTimer() - start < ANIMATION_TIME_SECONDS * 1000 do
             exports.globals:DrawTimerBar(start, ANIMATION_TIME_SECONDS * 1000, 1.42, 1.475, 'HARVESTING')
@@ -310,6 +317,9 @@ AddEventHandler("cultivation:shovel", function()
     -- find nearest plant
     local closest = GetClosestPlant()
     if closest.index ~= -1 then
+        if not HasAnimDictLoaded("anim@move_m@trash") then
+            exports.globals:loadAnimDict("anim@move_m@trash")
+        end
         local start = GetGameTimer()
         while GetGameTimer() - start < ANIMATION_TIME_SECONDS * 1000 do
             exports.globals:DrawTimerBar(start, ANIMATION_TIME_SECONDS * 1000, 1.42, 1.475, 'SHOVELING')
