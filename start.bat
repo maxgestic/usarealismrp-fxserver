@@ -1,4 +1,5 @@
-taskkill /F /IM FXServer.exe
+taskkill /F /IM FXServer.exe /T
+timeout /t 10 /nobreak
 break > CitizenFX.log
 git checkout .
 git pull
