@@ -129,7 +129,6 @@ Citizen.CreateThread(function()
                 TriggerClientEvent("cultivation:updatePlantStage", -1, i, PLANTED[i].stage) -- advance to next stage (if there is a next stage)
             end
             if didSustenanceUpdate then
-                print("updating sustenance!")
                 if PLANTED[i].stage.name == "dead" then
                     TriggerClientEvent("cultivation:updateSustenance", -1, i, PLANTED[i].foodLevel, PLANTED[i].waterLevel, PLANTED[i].stage)
                 else
