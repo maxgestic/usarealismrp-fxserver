@@ -164,9 +164,9 @@ RegisterNUICallback('select-character', function(data, cb)
 	if data.spawn then -- default is set in JS file (currently paleto bay)
 		if data.spawn:find("Paleto Bay") then
 			spawn_coords_closed_menu = {
-				x = 177.596,
-				y = 6636.183,
-				z = 31.638,
+				x = -290.17190551758,
+				y = 6137.1547851563,
+				z = 31.494512557983,
 				heading = 130.0
 			}
 		elseif data.spawn:find("Sandy Shores")  then
