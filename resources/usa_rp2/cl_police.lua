@@ -3,7 +3,7 @@ local radioMuted = false
 
 RegisterNetEvent("police:panicBlip")
 AddEventHandler("police:panicBlip", function(targetID, name)
-  local PANIC_BLIP_DURATION_SECONDS = 5
+  local PANIC_BLIP_DURATION_SECONDS = 30
   local blipID = 161
   local blipHandle = AddBlipForEntity(GetPlayerPed(GetPlayerFromServerId(targetID)))
   SetBlipSprite(blipHandle, blipID)
