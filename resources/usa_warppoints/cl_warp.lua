@@ -127,7 +127,7 @@ local warp_locations = {
   },
   ["Pillbox Helipad"] = {
   	entrance = {
-      coords = {309.95, -602.98, 43.29},
+      coords = {327.24771118164, -603.35797119141, 43.284008026123},
       heading = 80.0
     },
     exit = {
@@ -142,7 +142,7 @@ local warp_locations = {
       heading = 260.0
     },
     exit = {
-      coords = {298.67, -599.72, 43.29},
+      coords = {332.22552490234, -595.58044433594, 43.284019470215},
       heading = 340.0
     },
   job_access = 'civ'

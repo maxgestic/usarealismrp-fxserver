@@ -11,6 +11,7 @@ rd /S /Q map_dealership
 rd /S /Q map_hospital
 rd /S /Q map_pdextended
 rd /S /Q map_sandypdinterior
+rd /S /Q gabz_pillbox_hospital
 rd /S /Q nw_comedyClub
 rd /S /Q policeveh
 rd /S /Q unmarked-police-pack

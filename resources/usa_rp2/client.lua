@@ -62,7 +62,7 @@ local blacklistedVehicles = {
 
 local HOSPITALS = {
   {name = "paleto", x = -247.2, y = 6330.8, z = 32.4},
-  {name = "pillbox", x = 316.6, y = -588.7, z = 43.3},
+  {name = "pillbox", x = 312.41775512695,y = -592.96716308594, z = 43.283985137939}, 
   {name = "mt. zenoah", x = -497.9, y = -335.9, z = 34.5},
   {name = "davis", x = 307.4, y = -1433.8, z = 29.9}
 }

@@ -132,8 +132,9 @@ injuries = { -- ensure this is the same as sv_injury.lua
 }
 
 hospitalLocations = {
-    {308.45, -595.91, 43.45}
+    {307.10046386719, -595.07073974609, 43.284019470215}
 }
+
 doctorLocations = {
     {311.01, -599.24, 43.29}
 }
@@ -527,7 +528,7 @@ Citizen.CreateThread(function()
                         totalPrice = totalPrice + data.treatmentPrice
                     end
                 end
-                DrawText3Ds(x, y, z, '[E] - Check-in (~g~$'..totalPrice..'~s~)')
+                DrawText3Ds(x, y, z, '[E] - Check In (~g~$'..totalPrice..'~s~)')
                 if IsControlJustPressed(0, 38) and Vdist(playerCoords, x, y, z) < 3 and not checkingIn then
                     PlayDoorAnimation()
                     checkingIn = true
