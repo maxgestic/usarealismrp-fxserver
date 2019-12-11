@@ -160,9 +160,11 @@ PlantManager.updateWaterAndFoodStrings = function(i)
 end
 
 PlantManager.removePlant = function(i)
-    TriggerEvent("es:exposeDBFunctions", function(db)
-        db.deleteDocument("cultivation", PLANTED[i]._id, function(ok)
-            table.remove(PLANTED, i)
+    if PLANTED[i] then
+        TriggerEvent("es:exposeDBFunctions", function(db)
+            db.deleteDocument("cultivation", PLANTED[i]._id, function(ok)
+                table.remove(PLANTED, i)
+            end)
         end)
-    end)
+    end
 end
