@@ -46,5 +46,6 @@ files({
 	'client/html/sounds/radio-beep.ogg',
 	'client/html/sounds/1beep.ogg',
 	'client/html/sounds/race-start-beep.ogg',
-	'client/html/sounds/chopshop.ogg'
+	'client/html/sounds/chopshop.ogg',
+	'client/html/sounds/panicButton.ogg'
 })
