@@ -103,6 +103,12 @@ AddEventHandler("garage:storeVehicle", function()
 			[1] = IsVehicleWindowIntact(veh, 1),
 			[2] = IsVehicleWindowIntact(veh, 2),
 			[3] = IsVehicleWindowIntact(veh, 3)
+		},
+		tires = {
+			[0] = IsVehicleTyreBurst(veh, 0, false),
+			[1] = IsVehicleTyreBurst(veh, 1, false),
+			[4] = IsVehicleTyreBurst(veh, 4, false),
+			[5] = IsVehicleTyreBurst(veh, 5, false)
 		}
 	}
 	-- delete veh --
@@ -175,7 +181,7 @@ AddEventHandler("garage:spawn", function(vehicle)
 			end
 		end
 
-		-- apply any stored engine / body damage --
+		-- apply any damage --
 		if VEHICLE_DAMAGES[playerVehicle.plate] then
 			SetVehicleBodyHealth(vehicle, VEHICLE_DAMAGES[playerVehicle.plate].body_health)
 			SetVehicleEngineHealth(vehicle, VEHICLE_DAMAGES[playerVehicle.plate].engine_health)
@@ -183,6 +189,11 @@ AddEventHandler("garage:spawn", function(vehicle)
 			for index, intact in pairs(VEHICLE_DAMAGES[playerVehicle.plate].windows) do
 				if not intact then
 					SmashVehicleWindow(vehicle, index)
+				end
+			end
+			for index, isBursted in pairs(VEHICLE_DAMAGES[playerVehicle.plate].tires) do
+				if isBursted then
+					SetVehicleTyreBurst(vehicle, index, true, 1000.0)
 				end
 			end
 		end
