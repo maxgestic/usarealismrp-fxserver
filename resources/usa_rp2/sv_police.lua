@@ -383,24 +383,42 @@ function GetRankName(rank, dept)
 	return POLICE_RANKS[dept][rank]
 end
 
+function GetPublicServantIds()
+	local sasp = exports["usa-characters"]:GetPlayerIdsWithJob("sheriff")
+	local bcso = exports["usa-characters"]:GetPlayerIdsWithJob("corrections")
+	local ems = exports["usa-characters"]:GetPlayerIdsWithJob("ems")
+	local all = {}
+	for i = 1, #sasp do table.insert(all, sasp[i]) end
+	for i = 1, #bcso do table.insert(all, bcso[i]) end
+	for i = 1, #ems do table.insert(all, ems[i]) end
+	return all
+end
+
+function PutPanicBlipOnMap(id, targetID, name)
+	TriggerClientEvent("police:panicBlip", id, targetID, name)
+end
+
+function SendPanicTextAlert(id, msg)
+	TriggerClientEvent("chatMessage", id, "DISPATCH", {255, 0, 0}, "^0" .. msg)
+end
+
+function PlayPanicButtonSound(id)
+	TriggerClientEvent('InteractSound_CL:PlayOnOne', id, "panicButton", 0.7)
+end
+
 TriggerEvent('es:addJobCommand', 'p', { "sheriff", "ems", "corrections" }, function(source, args, char, location)
-	local source_user_job = char.get("job")
-	exports["usa-characters"]:GetCharacters(function(pl)
-		for k, v in pairs(pl) do
-			local user_job = v.get("job")
-			if user_job == "cop" or user_job == "sheriff" or user_job == "highwaypatrol" or user_job == "ems" or user_job == "fire" or user_job == "corrections" then
-				if source_user_job ~= "corrections" then
-					TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "(10-99) Panic button pressed by " .. char.getFullName()) -- need to implement automatic street name locations here
-					local params = {-1, "Event_Message_Purple", "GTAO_FM_Events_Soundset", 1}
-					TriggerClientEvent("usa:playSound", k, params)
-				else
-					TriggerClientEvent("chatMessage", k, "DISPATCH", {255, 0, 0}, "(10-99) Panic button pressed by " .. char.getFullName() .. " (Blaine County Sheriff's Office)") -- need to implement automatic street name locations here
-					local params = {-1, "Event_Message_Purple", "GTAO_FM_Events_Soundset", 1}
-					TriggerClientEvent("usa:playSound", k, params)
-				end
-			end
-		end
-	end)
+	-- for all public servants:
+		-- put blip on map for x seconds
+		-- send text message alert
+		-- play panic button sound
+	local publicServants = GetPublicServantIds()
+	for i = 1, #publicServants do 
+		local id = publicServants[i]
+		PutPanicBlipOnMap(id, source, char.get("name").first)
+		local msg = "(10-99) Panic button pressed by " .. char.getFullName()
+		SendPanicTextAlert(id, msg)
+		PlayPanicButtonSound(id)
+	end
 end, { help = "Press your panic button. CAUTION: ONLY FOR EXTREME EMERGENCIES."})
 
 -- revoke gun license / firearm permit --
@@ -466,23 +484,3 @@ AddEventHandler("police:checkSuspension", function(character)
 		end
 	end
 end)
-
---[[
--- mute radio (TokoVOIP) --
-TriggerEvent('es:addJobCommand', 'muter',  {"sheriff", "ems", "corrections", "doctor"}, function(source, args, user)
-	TriggerClientEvent("police:muteRadio", source)
-end, {
-	help = "Mute your dispatch radio."
-})
---]]
-
---[[
-RegisterServerEvent("police:checkRadioMutePerms")
-AddEventHandler("police:checkRadioMutePerms", function()
-	local char = exports["usa-characters"]:GetCharacter(source)
-	local job = char.get("job")
-	if job == "sheriff" or job == "ems" or job == "corrections" or job == "doctor" then
-		TriggerClientEvent("police:muteRadio", source)
-	end
-end)
---]]

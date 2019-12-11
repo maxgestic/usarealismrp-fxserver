@@ -173,6 +173,16 @@ function GetNumCharactersWithJob(job)
   return count
 end
 
+function GetPlayerIdsWithJob(job)
+  local ret = {}
+  for src, char in pairs(CHARACTERS) do
+    if char.get("job") == job then
+      table.insert(ret, src)
+    end
+  end
+  return ret
+end
+
 function DoesCharacterHaveItem(src, itemName)
   return CHARACTERS[src].hasItem(itemName)
 end

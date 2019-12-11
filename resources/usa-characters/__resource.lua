@@ -15,5 +15,6 @@ server_exports {
   'GetCharacterField',
   'SetCharacterField',
   'GetNumCharactersWithJob',
-  'DoesCharacterHaveItem'
+  'DoesCharacterHaveItem',
+  "GetPlayerIdsWithJob"
 }

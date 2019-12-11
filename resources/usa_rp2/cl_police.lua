@@ -1,6 +1,28 @@
 local spawnedCones = {}
 local radioMuted = false
 
+RegisterNetEvent("police:panicBlip")
+AddEventHandler("police:panicBlip", function(targetID, name)
+  print("adding blip")
+  local PANIC_BLIP_DURATION_SECONDS = 5
+  local blipID = 55
+  local blipHandle = AddBlipForEntity(GetPlayerPed(GetPlayerFromServerId(targetID)))
+  SetBlipSprite(blipHandle, blipID)
+  SetBlipSprite(blipHandle, 267)
+  SetBlipDisplay(blipHandle, 4)
+  SetBlipScale(blipHandle, 0.9)
+  SetBlipColour(blipHandle, 4)
+  BeginTextCommandSetBlipName("STRING")
+  AddTextComponentString("Panic (" .. name .. ")")
+  EndTextCommandSetBlipName(blipHandle)
+  local start = GetGameTimer()
+  while GetGameTimer() - start < PANIC_BLIP_DURATION_SECONDS * 1000 do
+    Wait(1)
+  end
+  RemoveBlip(blipHandle)
+  print("blip removed")
+end)
+
 RegisterNetEvent("police:muteRadio")
 AddEventHandler("police:muteRadio", function()
     radioMuted = not radioMuted
@@ -11,22 +33,6 @@ AddEventHandler("police:muteRadio", function()
         exports.globals:notify("Radio ~g~enabled~w~!")
     end
 end)
-
---[[
-Citizen.CreateThread(function()
-    while true do
-        local me = GetPlayerPed(-1)
-        if IsControlJustPressed(0, 172) and IsControlPressed(0, 210) and GetLastInputMethod(0) then
-            Wait(1000)
-            if IsControlPressed(0, 172) and IsControlPressed(0, 210 ) then
-                TriggerServerEvent("police:checkRadioMutePerms")
-                Wait(100)
-            end
-        end
-        Wait(2)
-    end
-end)
---]]
 
 Citizen.CreateThread(function()
     while true do
