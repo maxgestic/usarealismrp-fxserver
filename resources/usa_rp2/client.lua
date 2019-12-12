@@ -84,7 +84,7 @@ Citizen.CreateThread(function()
       local h = HOSPITALS[i]
       DrawText3D(h.x, h.y, h.z, 4, '[E] - First Aid Kit ($' .. FIRST_AID_KIT_FEE .. ')')
       if IsControlJustPressed(0, KEYS.E) then
-        if Vdist(h.x, h.y, h.z, mycoords.x, mycoords.y, mycoords.z) < 3 then
+        if Vdist(h.x, h.y, h.z, mycoords.x, mycoords.y, mycoords.z) < 1.5 then
           TriggerServerEvent("hospital:buyFirstAidKit")
         end
       end

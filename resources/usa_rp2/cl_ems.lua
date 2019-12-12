@@ -73,11 +73,10 @@ AddEventHandler('ems:getNearestBedIndex', function(hospitalBeds)
     local playerCoords = GetEntityCoords(playerPed)
     for i = 1, #hospitalBeds do
         local x, y, z = table.unpack(hospitalBeds[i].objCoords)
-        if Vdist(playerCoords, x, y, z) < 1.2 and not currentBed and not hospitalBeds[i].occupied then
+        if Vdist(playerCoords, x, y, z) < 2.0 and not currentBed and not hospitalBeds[i].occupied then
             TriggerServerEvent('ems:occupyBed', i)
             currentBed = hospitalBeds[i]
             ActivateBed(x, y, z, hospitalBeds[i].objModel)
-            -- enter bed
         end
     end
 end)
