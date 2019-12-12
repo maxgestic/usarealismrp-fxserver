@@ -52,13 +52,15 @@ end
 PlantManager.stageTick = function(plant)
     if plant.stage.name ~= "dead" then
         local hoursSincePlanted = PlantManager.getNumberOfHoursSincePlanted(plant)
-        for j = 1, #PRODUCTS[plant.type].stages do
+        for j = #PRODUCTS[plant.type].stages, 1, -1 do
             local stage = PRODUCTS[plant.type].stages[j]
             if hoursSincePlanted >= stage.lengthInHours then
-                local isAtThisStageAlready = plant.stage.name == PRODUCTS[plant.type].stages[j+1].name
-                if j + 1 <= #(PRODUCTS[plant.type].stages) and not isAtThisStageAlready then
-                    plant.stage = PRODUCTS[plant.type].stages[j+1]
+                local isAtThisStageAlready = plant.stage.name == PRODUCTS[plant.type].stages[j].name
+                if not isAtThisStageAlready then
+                    plant.stage = PRODUCTS[plant.type].stages[j]
                     return plant, true
+                else
+                    return plant, false
                 end
             end
         end
