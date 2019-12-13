@@ -94,8 +94,9 @@ RegisterServerEvent("cultivation:shovel")
 AddEventHandler("cultivation:shovel", function(i)
     local plant = PLANTED[i]
     if plant.stage.name == "dead" then
-        TriggerClientEvent("cultivation:remove", -1, i, "Plant removed!")
+        TriggerClientEvent("cultivation:remove", -1, i)
         PlantManager.removePlant(i)
+        TriggerClientEvent("usa:notify", source, "Plant removed!")
     else
         TriggerClientEvent("usa:notify", source, "Plant not dead!")
     end
