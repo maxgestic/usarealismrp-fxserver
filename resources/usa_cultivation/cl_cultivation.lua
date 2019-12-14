@@ -180,11 +180,11 @@ AddEventHandler("cultivation:updatePlantStage", function(i, stage)
 end)
 
 RegisterNetEvent("cultivation:updateSustenance")
-AddEventHandler("cultivation:updateSustenance", function(i, foodLevel, waterLevel, deathStage)
+AddEventHandler("cultivation:updateSustenance", function(i, foodLevel, waterLevel, isDead)
     PLANTED[i].foodLevel = foodLevel
     PLANTED[i].waterLevel = waterLevel
-    if deathStage then
-        PLANTED[i].stage = deathStage
+    if isDead then
+        PLANTED[i].isDead = isDead
     end
 end)
 
@@ -330,15 +330,19 @@ Citizen.CreateThread(function()
     while true do
         if CLOSEST_PLANTED and me.coords then
             for index, plant in pairs(CLOSEST_PLANTED) do
-                local dist = Vdist(me.coords.x, me.coords.y, me.coords.z, plant.coords.x, plant.coords.y, plant.coords.z)
-                if dist < PLANT_TEXT_RADIUS then
-                    local water = plant.waterLevel.asString
-                    local food = plant.foodLevel.asString
-                    if plant.stage.name ~= "dead" then
-                        DrawText3D(plant.coords.x, plant.coords.y, plant.coords.z, plant.type .. " Plant | " .. water .. " | " .. food)
-                    else
-                        DrawText3D(plant.coords.x, plant.coords.y, plant.coords.z, plant.type .. " Plant | ~r~Dead~w~")
+                if PLANTED[index] then
+                    local dist = Vdist(me.coords.x, me.coords.y, me.coords.z, plant.coords.x, plant.coords.y, plant.coords.z)
+                    if dist < PLANT_TEXT_RADIUS then
+                        local water = plant.waterLevel.asString
+                        local food = plant.foodLevel.asString
+                        if not plant.isDead then
+                            DrawText3D(plant.coords.x, plant.coords.y, plant.coords.z, plant.type .. " Plant | " .. water .. " | " .. food)
+                        else
+                            DrawText3D(plant.coords.x, plant.coords.y, plant.coords.z, plant.type .. " Plant | ~r~Dead~w~")
+                        end
                     end
+                else 
+                    CLOSEST_PLANTED[index] = nil
                 end
             end
         end

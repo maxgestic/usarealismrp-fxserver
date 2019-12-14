@@ -46,7 +46,7 @@ end)
 
 RegisterServerEvent("cultivation:water")
 AddEventHandler("cultivation:water", function(i)
-    if PLANTED[i].stage.name ~= "dead" then
+    if not PLANTED[i].isDead then
         PlantManager.waterPlant(i)
         TriggerClientEvent("cultivation:update", -1, i, "waterLevel", PLANTED[i].waterLevel)
         TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 2)
@@ -57,7 +57,7 @@ end)
 
 RegisterServerEvent("cultivation:feed")
 AddEventHandler("cultivation:feed", function(i)
-    if PLANTED[i].stage.name ~= "dead" then
+    if not PLANTED[i].isDead then
         local char = exports["usa-characters"]:GetCharacter(source)
         local fertilizer = char.getItem("Fertilizer")
         if fertilizer then
@@ -93,7 +93,7 @@ end)
 RegisterServerEvent("cultivation:shovel")
 AddEventHandler("cultivation:shovel", function(i)
     local plant = PLANTED[i]
-    if plant.stage.name == "dead" then
+    if plant.isDead then
         TriggerClientEvent("cultivation:remove", -1, i)
         PlantManager.removePlant(i)
         TriggerClientEvent("usa:notify", source, "Plant removed!")
@@ -124,19 +124,17 @@ end, {
 Citizen.CreateThread(function()
     while true do
         for i = 1, #PLANTED do
-            PLANTED[i], didStageUpdate, didSustenanceUpdate = PlantManager.tick(PLANTED[i])
-            if didStageUpdate then
-                print("did stage update! new stage: " .. PLANTED[i].stage.name)
-                TriggerClientEvent("cultivation:updatePlantStage", -1, i, PLANTED[i].stage) -- advance to next stage (if there is a next stage)
-            end
-            if didSustenanceUpdate then
-                if PLANTED[i].stage.name == "dead" then
-                    TriggerClientEvent("cultivation:updateSustenance", -1, i, PLANTED[i].foodLevel, PLANTED[i].waterLevel, PLANTED[i].stage)
-                else
-                    TriggerClientEvent("cultivation:updateSustenance", -1, i, PLANTED[i].foodLevel, PLANTED[i].waterLevel)
+            if PLANTED[i] then
+                PLANTED[i], didStageUpdate, didSustenanceUpdate = PlantManager.tick(PLANTED[i])
+                if didStageUpdate then
+                    print("did stage update! new stage: " .. PLANTED[i].stage.name)
+                    TriggerClientEvent("cultivation:updatePlantStage", -1, i, PLANTED[i].stage) -- advance to next stage (if there is a next stage)
                 end
+                if didSustenanceUpdate then
+                    TriggerClientEvent("cultivation:updateSustenance", -1, i, PLANTED[i].foodLevel, PLANTED[i].waterLevel, (PLANTED[i].isDead or false))
+                end
+                Wait(1000)
             end
-            Wait(1000)
         end
         Wait(STAGE_CHECK_INTERVAL_MINUTES * 60 * 1000)
     end

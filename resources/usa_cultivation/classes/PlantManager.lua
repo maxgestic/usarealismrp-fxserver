@@ -50,7 +50,7 @@ PlantManager.tick = function(plant)
 end
 
 PlantManager.stageTick = function(plant)
-    if plant.stage.name ~= "dead" then
+    if not plant.isDead then
         local hoursSincePlanted = PlantManager.getNumberOfHoursSincePlanted(plant)
         for j = #PRODUCTS[plant.type].stages, 1, -1 do
             local stage = PRODUCTS[plant.type].stages[j]
@@ -70,7 +70,7 @@ end
 
 PlantManager.sustanenceTick = function(plant)
     local didUpdate = false
-    if plant.stage.name ~= "dead" then
+    if not plant.isDead then
         -- water / food values --
         plant.waterLevel.val = plant.waterLevel.val - WATER_DECREMENT_VAL
         plant.foodLevel.val = plant.foodLevel.val - FOOD_DECREMENT_VAL
@@ -97,8 +97,8 @@ PlantManager.sustanenceTick = function(plant)
             didUpdate = true
         end
         -- check for death --
-        if plant.foodLevel.val < DIE_THRESHOLD or plant.waterLevel.val < DIE_THRESHOLD and plant.stage.name ~= "dead" then
-            plant.stage = { name = "dead", objectModels = {} }
+        if plant.foodLevel.val < DIE_THRESHOLD or plant.waterLevel.val < DIE_THRESHOLD and not plant.isDead then
+            plant.isDead = true
             didUpdate = true
         end
     end
@@ -156,8 +156,8 @@ PlantManager.updateWaterAndFoodStrings = function(i)
         PLANTED[i].foodLevel.asString = "~g~Not Hungry~w~"
     end
     -- check for death --
-    if PLANTED[i].foodLevel.val < DIE_THRESHOLD or PLANTED[i].waterLevel.val < DIE_THRESHOLD and PLANTED[i].stage.name ~= "dead" then
-        PLANTED[i].stage = { name = "dead", objectModels = {} }
+    if PLANTED[i].foodLevel.val < DIE_THRESHOLD or PLANTED[i].waterLevel.val < DIE_THRESHOLD and not PLANTED[i].isDead then
+        PLANTED[i].isDead = true
     end
 end
 
