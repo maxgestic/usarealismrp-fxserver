@@ -1,68 +1,45 @@
-local bankCoords = {x = 252.95, y = 228.60, z = 102.00}
-local clerkCoords = {x = 253.57, y = 221.05, z = 106.28}
-local peds = {
-	{x = 254.52, y = 222.29, z = 105.28, heading = 137.52, hash = GetHashKey('csb_reporter'), task = 'WORLD_HUMAN_CLIPBOARD'},
-	{x = 248.37, y = 224.55, z = 105.28, heading = 186.0, hash = GetHashKey('g_m_y_korlieut_01'), task = 'WORLD_HUMAN_BUM_STANDING'},
-	{x = 244.21, y = 226.05, z = 105.28, heading = 134.90, hash = GetHashKey('ig_bankman'), task = 'WORLD_HUMAN_GUARD_STAND'},
-	{x = 239.53, y = 213.99, z = 105.28, heading = 159.0, hash = GetHashKey('ig_joeminuteman'), task = 'WORLD_HUMAN_LEANING'},
-	{x = 238.31, y = 227.03, z = 105.28, heading = 135.0, hash = GetHashKey('ig_paper'), task = 'WORLD_HUMAN_DRINKING'},
-	{x = 243.13, y = 224.60, z = 105.28, heading = 341.0, hash = GetHashKey('ig_ramp_hipster'), task = 'WORLD_HUMAN_STAND_IMPATIENT_UPRIGHT'},
-	{x = 246.54, y = 214.21, z = 105.28, heading = 22.81, hash = GetHashKey('ig_screen_writer'), task = 'WORLD_HUMAN_STAND_MOBILE'},
-	{x = 248.40, y = 222.67, z = 105.28, heading = 338.0, hash = GetHashKey('s_m_m_cntrybar_01'), task = 'WORLD_HUMAN_STAND_IMPATIENT'},
-	{x = 247.99, y = 221.42, z = 105.28, heading = 339.0, hash = GetHashKey('s_m_m_hairdress_01'), task = 'WORLD_HUMAN_GUARD_STAND﻿'},
-	{x = 233.35, y = 220.29, z = 109.28, heading = 18.16, hash = GetHashKey('ig_barry'), task = 'WORLD_HUMAN_CLIPBOARD'},
-	{x = 243.74, y = 210.34, z = 109.28, heading = 153.16, hash = GetHashKey('u_m_m_bankman'), task = 'WORLD_HUMAN_DRINKING'},
-	{x = 236.92, y = 218.87, z = 105.28, heading = 294.0, hash = GetHashKey('u_f_y_mistress'), task = 'PROP_HUMAN_ATM'}
-
+local bankCoords = {
+	{x = 252.95, y = 228.60, z = 102.00}, -- pacific standard
+	{x = -105.36250305176,y = 6471.91796875, z = 31.626722335815}, -- paleto
+	{x = 1176.3208007813,y = 2712.5603027344, z = 38.088005065918}, -- harmony fleeca
+	{x = 146.84455871582,y = -1045.71875, z = 29.368036270142} -- legion fleeca
 }
+local clerkCoords = {x = 253.57, y = 221.05, z = 106.28}
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
 		local playerPed = PlayerPedId()
 		local playerCoords = GetEntityCoords(playerPed)
-		if Vdist(playerCoords, bankCoords.x, bankCoords.y, bankCoords.z) < 5.0 then
-			DrawText3D(bankCoords.x, bankCoords.y, bankCoords.z, '[HOLD K] - Rob Bank')
-		elseif Vdist(playerCoords, clerkCoords.x, clerkCoords.y, clerkCoords.z) < 5.0 then
+		-- draw 3d text --
+		for i = 1, #bankCoords do
+			if Vdist(playerCoords, bankCoords[i].x, bankCoords[i].y, bankCoords[i].z) < 5.0 then
+				DrawText3D(bankCoords[i].x, bankCoords[i].y, bankCoords[i].z, '[HOLD K] - Rob Bank')
+			end
+		end
+		if Vdist(playerCoords, clerkCoords.x, clerkCoords.y, clerkCoords.z) < 5.0 then
 			DrawText3D(clerkCoords.x, clerkCoords.y, clerkCoords.z, '[E] - Bank Clerk')
 		end
-		if IsControlJustPressed(0, 311) and Vdist(playerCoords, bankCoords.x, bankCoords.y, bankCoords.z) < 2.0 then
-			Citizen.Wait(500)
-			if IsControlPressed(0, 311) then
-				TriggerServerEvent('bank:beginRobbery')
+		-- rob / clerk tip --
+		for i = 1, #bankCoords do
+			if IsControlJustPressed(0, 311) and Vdist(playerCoords, bankCoords[i].x, bankCoords[i].y, bankCoords[i].z) < 2.0 then
+				Wait(500)
+				if IsControlPressed(0, 311) then
+					TriggerServerEvent('bank:beginRobbery')
+				end
 			end
 		end
 		if IsControlJustPressed(0, 38) and Vdist(playerCoords, clerkCoords.x, clerkCoords.y, clerkCoords.z) < 2.0 then
 			TriggerServerEvent('bank:clerkTip')
 		end
+		Wait(0)
 	end
 end)
-
---[[
-Citizen.CreateThread(function()
-	for i = 1, #peds do
-		RequestModel(peds[i].hash)
-		while not HasModelLoaded(peds[i].hash) do
-			Citizen.Wait(100)
-		end
-		local ped = CreatePed(4, peds[i].hash, peds[i].x, peds[i].y, peds[i].z, peds[i].heading, false, true)
-		SetEntityCanBeDamaged(ped,false)
-		SetPedCanRagdollFromPlayerImpact(ped,false)
-		SetBlockingOfNonTemporaryEvents(ped,true)
-		SetPedFleeAttributes(ped,0,0)
-		SetPedCombatAttributes(ped,17,1)
-		SetPedRandomComponentVariation(ped, true)
-		TaskStartScenarioInPlace(ped, peds[i].task, 0, true);
-	end
-end)
---]]
 
 ---------------
 -- mini game --
 ---------------
 RegisterNetEvent("bank:startHacking")
 AddEventHandler("bank:startHacking", function()
-	print("inside startHacking event handler!")
 	local playerPed = PlayerPedId()
 	local x, y, z = table.unpack(GetEntityCoords(playerPed))
 	local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
