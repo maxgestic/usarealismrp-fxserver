@@ -1,10 +1,11 @@
 local bankCoords = {
-	{x = 252.95, y = 228.60, z = 102.00}, -- pacific standard
-	{x = -105.36250305176,y = 6471.91796875, z = 31.626722335815}, -- paleto
-	{x = 1176.3208007813,y = 2712.5603027344, z = 38.088005065918}, -- harmony fleeca
-	{x = 146.84455871582,y = -1045.71875, z = 29.368036270142} -- legion fleeca
+	{coords = {x = 252.95, y = 228.60, z = 102.00}, name = "Pacific Standard", camID = "bank1", timeToTapSeconds = 60}, -- pacific standard
+	{coords = {x = -105.36250305176,y = 6471.91796875, z = 31.626722335815}, name = "Paleto", camID = "N/A", timeToTapSeconds = 30},
+	{coords = {x = 1176.3208007813,y = 2712.5603027344, z = 38.088005065918}, name = "Harmony Fleeca", camID = "N/A", timeToTapSeconds = 30},
+	{coords = {x = 146.84455871582,y = -1045.71875, z = 29.368036270142}, name = "Legion Fleeca", camID = "N/A", timeToTapSeconds = 30}
 }
 local clerkCoords = {x = 253.57, y = 221.05, z = 106.28}
+local currentlyHacking = nil
 
 Citizen.CreateThread(function()
 	while true do
@@ -12,8 +13,8 @@ Citizen.CreateThread(function()
 		local playerCoords = GetEntityCoords(playerPed)
 		-- draw 3d text --
 		for i = 1, #bankCoords do
-			if Vdist(playerCoords, bankCoords[i].x, bankCoords[i].y, bankCoords[i].z) < 5.0 then
-				DrawText3D(bankCoords[i].x, bankCoords[i].y, bankCoords[i].z, '[HOLD K] - Rob Bank')
+			if Vdist(playerCoords, bankCoords[i].coords.x, bankCoords[i].coords.y, bankCoords[i].coords.z) < 5.0 then
+				DrawText3D(bankCoords[i].coords.x, bankCoords[i].coords.y, bankCoords[i].coords.z, '[HOLD K] - Rob Bank')
 			end
 		end
 		if Vdist(playerCoords, clerkCoords.x, clerkCoords.y, clerkCoords.z) < 5.0 then
@@ -21,10 +22,10 @@ Citizen.CreateThread(function()
 		end
 		-- rob / clerk tip --
 		for i = 1, #bankCoords do
-			if IsControlJustPressed(0, 311) and Vdist(playerCoords, bankCoords[i].x, bankCoords[i].y, bankCoords[i].z) < 2.0 then
+			if IsControlJustPressed(0, 311) and Vdist(playerCoords, bankCoords[i].coords.x, bankCoords[i].coords.y, bankCoords[i].coords.z) < 2.0 then
 				Wait(500)
 				if IsControlPressed(0, 311) then
-					TriggerServerEvent('bank:beginRobbery')
+					TriggerServerEvent('bank:beginRobbery', bankCoords[i])
 				end
 			end
 		end
@@ -39,24 +40,25 @@ end)
 -- mini game --
 ---------------
 RegisterNetEvent("bank:startHacking")
-AddEventHandler("bank:startHacking", function()
+AddEventHandler("bank:startHacking", function(bank)
 	local playerPed = PlayerPedId()
 	local x, y, z = table.unpack(GetEntityCoords(playerPed))
 	local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
 	local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-	TriggerServerEvent("911:BankRobbery", x, y, z, lastStreetNAME, IsPedMale(playerPed))
+	TriggerServerEvent("911:BankRobbery", x, y, z, lastStreetNAME, IsPedMale(playerPed), bank.name, bank.camID)
 	TriggerEvent("usa:playScenario", "WORLD_HUMAN_STAND_MOBILE")
 	local beginTime = GetGameTimer()
-	while GetGameTimer() - beginTime < 60000 do
+	while GetGameTimer() - beginTime < bank.timeToTapSeconds * 1000 do
 		Citizen.Wait(0)
 		x, y, z = table.unpack(GetEntityCoords(playerPed))
-		DrawTimer(beginTime, 60000, 1.42, 1.475, 'TAPPING')
-		if Vdist(x, y, z, bankCoords.x, bankCoords.y, bankCoords.z) > 5.0 then
+		DrawTimer(beginTime, bank.timeToTapSeconds * 1000, 1.42, 1.475, 'TAPPING')
+		if Vdist(x, y, z, bank.coords.x, bank.coords.y, bank.coords.z) > 5.0 then
 			TriggerEvent('usa:notify', 'You went too far away, signal lost!')
 			return
 		end
 	end
 	TriggerEvent("mhacking:seqstart", {4, 3, 2, 1}, 70, mycb)
+	currentlyHacking = bank
 end)
 
 local failed  = false
@@ -67,7 +69,7 @@ function mycb(success, timeremaining, finish)
 		if finish then
 			if not failed then
 				local playerPed = PlayerPedId()
-				if Vdist(GetEntityCoords(playerPed), bankCoords.x, bankCoords.y, bankCoords.z) < 3.0 then
+				if Vdist(GetEntityCoords(playerPed), currentlyHacking.coords.x, currentlyHacking.coords.y, currentlyHacking.coords.z) < 3.0 then
 					TriggerServerEvent('bank:hackComplete')
 					TriggerEvent("usa:notify", "You successfully hacked the firewall!")
 				else
@@ -76,6 +78,7 @@ function mycb(success, timeremaining, finish)
 			else
 				TriggerEvent("usa:notify", "You failed to hacked the firewall!")
 			end
+			currentlyHacking = nil
 		end
 	else
 		failed = true

@@ -6,7 +6,7 @@ local sourceRobbing = -1
 local BANK_ROBBERY_TIMEOUT = 10800000
 
 RegisterServerEvent("bank:beginRobbery")
-AddEventHandler("bank:beginRobbery", function()
+AddEventHandler("bank:beginRobbery", function(bank)
 	local usource = source
 	exports.globals:getNumCops(function(numCops)
 		if numCops >= COPS_NEEDED_TO_ROB and bankRobbable and not bankClosed then
@@ -15,7 +15,7 @@ AddEventHandler("bank:beginRobbery", function()
 				bankRobbable = false
 				sourceRobbing = usource
 				TriggerClientEvent('usa:notify', usource, 'You are now robbing the bank, hack into the system to get the money!')
-				TriggerClientEvent("bank:startHacking", usource)
+				TriggerClientEvent("bank:startHacking", usource, bank)
 				SetTimeout(BANK_ROBBERY_TIMEOUT, function()
 					bankRobbable = true
 				end)
