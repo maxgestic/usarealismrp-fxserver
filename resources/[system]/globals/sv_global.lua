@@ -211,3 +211,30 @@ function getNumCops(cb)
 		cb(count)
 	end)
 end
+
+function getCopIds(cb)
+	Citizen.CreateThread(function()
+		local done = false
+		local ids = exports["usa-characters"]:GetPlayerIdsWithJob("sheriff")
+		local bcso = exports["usa-characters"]:GetPlayerIdsWithJob("corrections")
+		if #bcso > 0 then
+			for i = 1, #bcso do
+				local id = bcso[i]
+				exports.usa_prison:getBCSORank(id, function(rank)
+					if rank >= 3 then
+						table.insert(ids, id)
+					end
+					if i == #bcso then
+						done = true
+					end
+				end)
+			end
+		else
+			done = true
+		end
+		while not done do
+			Wait(10)
+		end
+		cb(ids)
+	end)
+end

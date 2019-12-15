@@ -34,5 +34,6 @@ server_exports {
   "replaceChar",
   "getCoordDistance",
   "dump",
-  "getNumCops"
+  "getNumCops",
+  "getCopIds"
 }
