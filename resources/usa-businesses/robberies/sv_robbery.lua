@@ -2,22 +2,24 @@ local anyStoreBeingRobbed = false
 
 RegisterServerEvent('business:beginRobbery')
 AddEventHandler('business:beginRobbery', function(storeName, isSuspectMale, players)
+	local usource = source
 	if BUSINESSES[storeName] then
 		local store = BUSINESSES[storeName]
 		local x, y, z = table.unpack(store.position)
 		local policeOnline = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
-		if ((os.time() - store.lastRobbedTime) < robberyCooldown and store.lastRobbedTime ~= 0) or policeOnline < POLICE_NEEDED  or anyStoreBeingRobbed then
-			TriggerClientEvent('usa:notify', source, "Couldn't find any money!")
-			return
-		end
-		BUSINESSES[storeName].isBeingRobbed = source
-		store.lastRobbedTime = os.time()
-		anyStoreBeingRobbed = true
-		TriggerEvent('911:Robbery', x, y, z, storeName, isSuspectMale, store.cameraID)
-		TriggerClientEvent('usa:notify', source, "~y~Robbery has begun~s~, hold the fort for the timer duration and don't leave!")
-		TriggerClientEvent('business:robStore', source, storeName)
-		print('ROBBERY: Robbery has begun at store['..storeName..'], triggered by '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..']!')
-		return
+		exports.globals:getNumCops(function(policeOnline)
+			if ((os.time() - store.lastRobbedTime) < robberyCooldown and store.lastRobbedTime ~= 0) or policeOnline < POLICE_NEEDED  or anyStoreBeingRobbed then
+				TriggerClientEvent('usa:notify', usource, "Couldn't find any money!")
+				return
+			end
+			BUSINESSES[storeName].isBeingRobbed = usource
+			store.lastRobbedTime = os.time()
+			anyStoreBeingRobbed = true
+			TriggerEvent('911:Robbery', x, y, z, storeName, isSuspectMale, store.cameraID)
+			TriggerClientEvent('usa:notify', usource, "~y~Robbery has begun~s~, hold the fort for the timer duration and don't leave!")
+			TriggerClientEvent('business:robStore', usource, storeName)
+			print('ROBBERY: Robbery has begun at store['..storeName..'], triggered by '..GetPlayerName(usource)..'['..GetPlayerIdentifier(usource)..']!')
+		end)
 	else
 		print('ROBBERY: '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] attempted to begin a robbery at store not in table!')
 		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")

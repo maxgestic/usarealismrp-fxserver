@@ -33,5 +33,6 @@ server_exports {
   "SendDiscordLog",
   "replaceChar",
   "getCoordDistance",
-  "dump"
+  "dump",
+  "getNumCops"
 }

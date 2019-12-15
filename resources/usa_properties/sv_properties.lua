@@ -1540,20 +1540,23 @@ end, {
 
 RegisterServerEvent('properties:lockpickHouse')
 AddEventHandler('properties:lockpickHouse', function(playerCoords, lockpickItem)
-	if exports["usa-characters"]:GetNumCharactersWithJob("sheriff") >= 1 then
-		for i = 1, #burglaryHouses do
-			if find_distance(playerCoords, burglaryHouses[i]) < 2.0 then
-				if (burglaryHouses[i].cooldown[source] and getMinutesFromTime(burglaryHouses[i].cooldown[source]) > 240) or not burglaryHouses[i].cooldown[source] then
-					TriggerClientEvent('properties:lockpickHouseBurglary', source, i, lockpickItem)
-					Citizen.Wait(20000)
-				else
-					TriggerClientEvent('usa:notify', source, 'This house was recently robbed!')
+	local usource = source
+	exports.globals:getNumCops(function(numCops)
+		if numCops >= 1 then
+			for i = 1, #burglaryHouses do
+				if find_distance(playerCoords, burglaryHouses[i]) < 2.0 then
+					if (burglaryHouses[i].cooldown[usource] and getMinutesFromTime(burglaryHouses[i].cooldown[usource]) > 240) or not burglaryHouses[i].cooldown[usource] then
+						TriggerClientEvent('properties:lockpickHouseBurglary', usource, i, lockpickItem)
+						Wait(20000)
+					else
+						TriggerClientEvent('usa:notify', usource, 'This house was recently robbed!')
+					end
 				end
 			end
+		else
+			TriggerClientEvent('usa:notify', usource, 'You cannot access the lock.')
 		end
-	else
-		TriggerClientEvent('usa:notify', source, 'You cannot access the lock.')
-	end
+	end)
 end)
 
 RegisterServerEvent('properties:lockpickSuccessful')

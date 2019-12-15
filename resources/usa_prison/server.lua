@@ -324,3 +324,15 @@ TriggerEvent('es:addJobCommand', 'setcorrectionsrank', {"corrections"}, function
 		end)
 	end)
 end)
+
+function getBCSORank(id, cb)
+	TriggerEvent('es:exposeDBFunctions', function(db)
+		db.getDocumentByRow("correctionaldepartment", "identifier" , GetPlayerIdentifiers(id)[1], function(doc)
+			if doc and doc.rank then
+				cb(doc.rank)
+			else
+				cb(nil)
+			end
+		end)
+	end)
+end

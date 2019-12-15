@@ -183,4 +183,31 @@ function dump(o)
     else
        return tostring(o)
     end
- end
+end
+
+function getNumCops(cb)
+	Citizen.CreateThread(function()
+		local doneCounting = false
+		local count = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
+		local bcso = exports["usa-characters"]:GetPlayerIdsWithJob("corrections")
+		if #bcso > 0 then
+			for i = 1, #bcso do
+				local id = bcso[i]
+				exports.usa_prison:getBCSORank(id, function(rank)
+					if rank >= 3 then
+						count = count + 1
+					end
+					if i == #bcso then
+						doneCounting = true
+					end
+				end)
+			end
+		else
+			doneCounting = true
+		end
+		while not doneCounting do
+			Wait(10)
+		end
+		cb(count)
+	end)
+end
