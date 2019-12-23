@@ -1373,6 +1373,7 @@ end)
 
 RegisterServerEvent("properties:withdrawMoney")
 AddEventHandler("properties:withdrawMoney", function(location, index, amount)
+	amount = math.abs(amount)
 	local room = properties[location].rooms[index]
 	if room.owner and isPlayerInInstance(location, index, source) then
 		local char = exports["usa-characters"]:GetCharacter(source)
@@ -1393,6 +1394,7 @@ end)
 
 RegisterServerEvent("properties:storeMoney")
 AddEventHandler("properties:storeMoney", function(location, index, amount)
+	amount = math.abs(amount)
 	local room = properties[location].rooms[index]
 	if room.owner and isPlayerInInstance(location, index, source) then
 		local char = exports["usa-characters"]:GetCharacter(source)
