@@ -33,13 +33,13 @@ PLANTED = {} -- global table of all currently planted plants (sort of an in-memo
 STAGE_CHECK_INTERVAL_MINUTES = 30
 SAVE_INTERVAL_MINUTES = 35
 
-WATER_DECREMENT_VAL = 1.2
-FOOD_DECREMENT_VAL = 0.85
+WATER_DECREMENT_VAL = 0.65
+FOOD_DECREMENT_VAL = 0.50
 
 LOW_THRESHOLD = 70.0
 MED_THRESHOLD = 45.0
 HIGH_THRESHOLD = 30.0
-DIE_THRESHOLD = 15.0 -- no longer harvestable if below this threshold
+DIE_THRESHOLD = 10.0 -- no longer harvestable if below this threshold
 
 RegisterServerEvent("cultivation:load")
 AddEventHandler("cultivation:load", function()
