@@ -402,10 +402,9 @@ function CreateGarageMenu(menu, vehicles)
 		item.Activated = function(parentmenu, selected)
 			if boat.stored then
 				TriggerEvent("boatMenu:spawnSeacraft", boat)
-				print("setting watercraft at " .. i .. " stored status to false!")
 				TriggerEvent('usa:notify', 'Alright, boat is waiting in the water.')
 				boat.stored = false
-				retrieveMenu:Visible(false)
+				retrieveMenu.SubMenu:Visible(false)
 			else
 				TriggerEvent('usa:notify', 'This watercraft is ~y~not stored~s~!')
 			end
