@@ -1,6 +1,6 @@
 local bankCoords = {
 	{coords = {x = 252.95, y = 228.60, z = 102.00}, name = "Pacific Standard", camID = "bank1", timeToTapSeconds = 60}, -- pacific standard
-	{coords = {x = -105.36250305176,y = 6471.91796875, z = 31.626722335815}, name = "Paleto", camID = "N/A", timeToTapSeconds = 30},
+	{coords = {x = -105.36250305176,y = 6471.91796875, z = 31.626722335815}, name = "Paleto", camID = "N/A", timeToTapSeconds = 60},
 	{coords = {x = 1176.3208007813,y = 2712.5603027344, z = 38.088005065918}, name = "Harmony Fleeca", camID = "N/A", timeToTapSeconds = 30},
 	{coords = {x = 146.84455871582,y = -1045.71875, z = 29.368036270142}, name = "Legion Fleeca", camID = "N/A", timeToTapSeconds = 30}
 }
