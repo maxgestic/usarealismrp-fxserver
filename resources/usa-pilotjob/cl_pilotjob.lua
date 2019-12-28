@@ -111,11 +111,18 @@ Citizen.CreateThread(function()
             ---------------------------------------
             -- vehicle problems --
             if active_job and active_job.current_vehicle then
+                local vehCoords = GetEntityCoords(active_job.current_vehicle)
+                local dist = Vdist(mycoords.x, mycoords.y, mycoords.z, vehCoords.x, vehCoords.y, vehCoords.z)
                 if not DoesEntityExist(active_job.current_vehicle) or GetVehicleEngineHealth(active_job.current_vehicle) <= 0 then
-                    MarkCurrentCheckpointComplete()
+                    MarkCurrentCheckpointComplete() -- should mark all checkpoints completed?
                     active_job = nil
                     exports.globals:notify("Job ended! You damaged the aircraft!")
                     TriggerServerEvent("usa:loadPlayerComponents")
+                elseif dist >= 50.0 then
+                    MarkCurrentCheckpointComplete() -- should mark all checkpoints completed?
+                    active_job = nil
+                    TriggerServerEvent("pilotjob:endJob")
+                    exports.globals:notify("Job ended! You went too far!")
                 end
             end
             -- time --
@@ -192,6 +199,8 @@ AddEventHandler("pilotjob:beginJob", function(job)
     GetNextCheckpoint()
     -- Set Job Clothing --
     SetJobClothing()
+    -- Notify of radio access --
+    TriggerEvent("chatMessage", "", {}, "^0You can press ^3Shift + F2^0 to access the Air Traffic Control (ATC) radio frequency.")
 end)
 
 function SetJobClothing()

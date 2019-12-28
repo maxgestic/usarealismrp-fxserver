@@ -814,6 +814,7 @@ AddEventHandler("pilotjob:newJob", function()
           BeginNewJob(usource, employee)
         end)
       end
+      char.set("job", "pilot")
     end)
   end)
 end)
@@ -826,6 +827,12 @@ function BeginNewJob(src, employee)
     NotifyPerson(src, "You've been assigned a " .. newjob.name .. ". " .. newjob.description)
     TriggerClientEvent("pilotjob:beginJob", src, newjob)
 end
+
+RegisterServerEvent("pilotjob:endJob")
+AddEventHandler("pilotjob:endJob", function()
+  local char = exports["usa-characters"]:GetCharacter(source)
+  char.set("job", "civ")
+end)
 
 RegisterServerEvent("pilotjob:jobComplete")
 AddEventHandler("pilotjob:jobComplete", function(job, givemoney)
