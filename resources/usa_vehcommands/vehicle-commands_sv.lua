@@ -128,7 +128,7 @@ local VEHICLE_RANKS = {
 		},
 		["polmav"] = {
 			rank = 1,
-			allowedLiveries = { 1 },
+			allowedLiveries = { 3 },
 			hash = 353883353
 		},
 		--["lguard2"] = 1,
