@@ -2,6 +2,8 @@ cache/
 resources/essentialmode/sv_es-DB-config.lua
 resources/assets
 resources/unmarked-police-pack
+resources/police-bmw-bike
+resources/policeveh
 resources/nw_bahamaMama
 resources/nw_comedyClub
 resources/eup-stream
@@ -12,6 +14,8 @@ resources/paletopd
 server2.cfg
 gitpull.bat
 CitizenFX.log
+scramble.log
+start2.bat
 
 node_modules
 scrambled_resources

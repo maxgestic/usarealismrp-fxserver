@@ -10,7 +10,8 @@ local VEHICLE_RANKS = {
 		["riot"] = 5,
 		["policeb"] = 3,
 		["fbi"] = 4,
-		["sheriff2"] = 4
+		["sheriff2"] = 4,
+		["1200RT"] = 3
 	},
 	["ems"] = {
 		["ambulance"] = 1,

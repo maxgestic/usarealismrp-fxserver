@@ -43,7 +43,17 @@ AddEventHandler("cocaineJob:givePackaged", function()
 end)
 
 RegisterServerEvent('cocaineJob:completeDelivery')
-AddEventHandler('cocaineJob:completeDelivery', function(productToRemove)
+AddEventHandler('cocaineJob:completeDelivery', function()
+	TriggerClientEvent("cocaine:validateDelivery", source)
+end)
+
+RegisterServerEvent("cocaine:exploitDetected")
+AddEventHandler("cocaine:exploitDetected", function()
+	exports["es_admin"]:BanPlayer(source, "Modding (code injection). If you feel this was a mistake please let a staff member know.")
+end)
+
+RegisterServerEvent("cocaine:locationValidated")
+AddEventHandler("cocaine:locationValidated", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local reward = math.random(1300, 1800)
 	-- bonus when police are online --
@@ -52,15 +62,10 @@ AddEventHandler('cocaineJob:completeDelivery', function(productToRemove)
 	if policeOnline >= 2 then
 		bonus = math.floor((reward * 1.10) - reward)
 	end
-
 	if char.hasItem("Packaged Cocaine") then
 		char.removeItem("Packaged Cocaine", 1)
-		if bonus > 0 then
-			TriggerClientEvent('usa:notify', source, 'You have been paid $'..reward..'.00~s~ with a bonus of $'..bonus..'.00~s~.')
-		else
-			TriggerClientEvent('usa:notify', source, 'You have been paid $'..reward..'.00~s~.')
-		end
-		char.giveMoney((reward + bonus))
+		TriggerClientEvent('usa:notify', source, 'You have been paid $'.. exports.globals:comma_value(reward + bonus) ..'~s~.')
+		char.giveMoney(reward + bonus)
 		print('COCAINE: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has completed cocaine delivery and received money['..reward..'] with bonus['..bonus..']!')
 	end
 end)

@@ -837,8 +837,10 @@ end)
 RegisterServerEvent("pilotjob:jobComplete")
 AddEventHandler("pilotjob:jobComplete", function(job, givemoney)
   local usource = source
-  local name = exports["usa-characters"]:GetCharacterField(usource, "name")
-  local dob = exports["usa-characters"]:GetCharacterField(usource, "dateOfBirth")
+  local char = exports["usa-characters"]:GetCharacter(usource)
+  char.set("job", "civ")
+  local name = char.getName()
+  local dob = char.get("dateOfBirth")
   if givemoney then
     TriggerEvent('es:exposeDBFunctions', function(couchdb)
       local query = {

@@ -15,7 +15,8 @@ local vehicles = {
   { name = "Charger", hash = GetHashKey("pdchgr") },
   { name = "Taurus", hash = GetHashKey("pdtau") },
   { name = "Truck", hash = GetHashKey("sheriff2") },
-  { name = "Motorcycle", hash = GetHashKey("policeb") },
+  { name = "Motorcycle 1", hash = GetHashKey("policeb") },
+  { name = "Motorcycle 2", hash = GetHashKey("1200RT") },
   { name = "Golf Cart", hash = GetHashKey("caddy") },
   { name = "Prison Bus", hash = GetHashKey("pbus") },
   { name = "Transport Van", hash = GetHashKey("policet") }

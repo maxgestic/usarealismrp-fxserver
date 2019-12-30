@@ -26,7 +26,6 @@ local cocaine = {
     },
     requiredItem = "Razor Blade",
     requiredSupplies = 'Uncut Cocaine',
-    cocaineProduct = 'Packaged Cocaine',
     pedIsBusy = false,
     processingCocaine = false,
     activeJob = false,
@@ -263,7 +262,7 @@ AddEventHandler('cocaineJob:doesUserHaveProductToSell', function(hasProduct) -- 
         TriggerEvent('usa:notify', location.message)
         if location.waypoint then SetNewWaypoint(table.unpack(location.waypoint)) end
         RemoveBlip(cocaine.blip)
-        TriggerServerEvent('cocaineJob:completeDelivery', cocaine.cocaineProduct)
+        TriggerServerEvent('cocaineJob:completeDelivery')
         SetEntityAsNoLongerNeeded(cocaine.buyerHandle)
         for i = 1, #peds do
             if peds[i].name == 'delivery_ped' then
@@ -271,7 +270,6 @@ AddEventHandler('cocaineJob:doesUserHaveProductToSell', function(hasProduct) -- 
                 table.remove(peds, i)
             end
         end
-        cocaine.activeJob = false
     else
         TriggerEvent('usa:notify', 'You do not have any ~y~Packaged Cocaine~s~!')
     end
@@ -297,6 +295,21 @@ AddEventHandler("cocaineJob:getSupplies", function(supplyType)
                 Citizen.Wait(0)
                 DrawTimer(beginTime, COKE_SUPPLY_WAIT_TIME, 1.42, 1.475, 'WAITING')
             end
+        end
+    end
+end)
+
+RegisterNetEvent('cocaine:validateDelivery') -- make sure client is at delivery location (combatting injection money hack)
+AddEventHandler('cocaine:validateDelivery', function()
+    if cocaine.deliveryIndex then
+        local me = PlayerPedId()
+        local mycoords = GetEntityCoords(me)
+        local location = deliveryCoords[cocaine.deliveryIndex]
+        local dist = Vdist(mycoords.x, mycoords.y, mycoords.z, location.x, location.y, location.z)
+        if dist < 20.0 then
+            TriggerServerEvent("cocaine:locationValidated")
+        else
+            TriggerServerEvent("cocaine:exploitDetected")
         end
     end
 end)

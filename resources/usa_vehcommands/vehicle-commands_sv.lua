@@ -35,6 +35,11 @@ local VEHICLE_RANKS = {
 			allowedLiveries = { 1 },
 			hash = -34623805
 		},
+		["1200RT"] = {
+			rank = 3,
+			allowedLiveries = { 1 },
+			hash = 1230579450
+		},
 		["fbi"] = {
 			rank = 4,
 			allowedLiveries = { 1 },
@@ -47,7 +52,7 @@ local VEHICLE_RANKS = {
 		},
 		["sheriff2"] = {
 			rank = 5,
-			allowedLiveries = { 1 },
+			allowedLiveries = { 1, 2 },
 			hash = GetHashKey("sheriff2")
 		}
 	},
@@ -69,7 +74,7 @@ local VEHICLE_RANKS = {
 		},
 		["polmav"] = {
 			rank = 4,
-			allowedLiveries = { 1 },
+			allowedLiveries = { 2 },
 			hash = 353883353
 		},
 		["predator"] = {
@@ -89,8 +94,13 @@ local VEHICLE_RANKS = {
 		},
 		["sheriff2"] = {
 			rank = 5,
-			allowedLiveries = { 2 },
+			allowedLiveries = { 3 },
 			hash = GetHashKey("sheriff2")
+		},
+		["1200RT"] = {
+			rank = 4,
+			allowedLiveries = { 1 },
+			hash = 1230579450
 		}
 	},
 	["ems"] = {
