@@ -5,7 +5,6 @@ local VEHICLE_RANKS = {
 			allowedLiveries = { 3 },
 			hash = 938090162
 		},
-		--["pdtau"] = 2,
 		--["pdchrg"] = 1,
 		["pdchgr"] = {
 			rank = 1,
@@ -54,6 +53,16 @@ local VEHICLE_RANKS = {
 			rank = 5,
 			allowedLiveries = { 1, 2 },
 			hash = GetHashKey("sheriff2")
+		},
+		["fbi2"] = {
+			rank = 4,
+			allowedLiveries = { 1 },
+			hash = -1647941228	
+		},
+		["police4"] = {
+			rank = 4,
+			allowedLiveries = { 1 },
+			hash = -1973172295	
 		}
 	},
 	["corrections"] = {
@@ -83,7 +92,7 @@ local VEHICLE_RANKS = {
 			hash = -488123221
 		},
 		["fbi"] = {
-			rank = 6,
+			rank = 4,
 			allowedLiveries = { 1 },
 			hash = 1127131465
 		},
@@ -101,6 +110,16 @@ local VEHICLE_RANKS = {
 			rank = 4,
 			allowedLiveries = { 1 },
 			hash = 1230579450
+		},
+		["fbi2"] = {
+			rank = 4,
+			allowedLiveries = { 1 },
+			hash = -1647941228	
+		},
+		["police4"] = {
+			rank = 4,
+			allowedLiveries = { 1 },
+			hash = -1973172295	
 		}
 	},
 	["ems"] = {
