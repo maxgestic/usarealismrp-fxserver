@@ -56,7 +56,7 @@ TriggerEvent('es:addJobCommand', 'morgue', { "ems", "corrections", "sheriff", "d
 		}), { ["Content-Type"] = 'application/json' })
 		local eventMessage = "^8^*[MORGUE]^0^r " ..admitted_name .. " has been admitted to the morgue. (" .. tostring(hospitalReason) .. ")"
 		TriggerClientEvent('chatMessage', -1, "", {100,0,0}, eventMessage)
-		TriggerEvent("warrants:removeAnyActiveWarrants", target.get("name"))
+		TriggerEvent("warrants:removeAnyActiveWarrants", target.get("name"), target.get("dateOfBirth"))
 	end
 end, {
 	help = "Send someone to the morgue",

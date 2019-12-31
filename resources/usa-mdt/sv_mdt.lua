@@ -193,6 +193,7 @@ end)
 
 RegisterServerEvent("mdt:PerformPersonCheckBySSN")
 AddEventHandler("mdt:PerformPersonCheckBySSN", function(ssn)
+	local usource = source
     local char = exports["usa-characters"]:GetCharacter(ssn)
     if not char then
         local msg = {
@@ -233,46 +234,63 @@ AddEventHandler("mdt:PerformPersonCheckBySSN", function(ssn)
 		person_info.address = address
 	end)
 
-  --------------------
-  -- get licenses --
-  --------------------
-  local licenses = char.getLicenses()
-  if #licenses > 0 then
-    person_info.licenses = licenses
-  else
-  	person_info.licenses = false
-  end
+	--------------------
+	-- get licenses --
+	--------------------
+	local licenses = char.getLicenses()
+	if #licenses > 0 then
+		person_info.licenses = licenses
+	else
+		person_info.licenses = false
+	end
 
-  ---------------------
-  -- get insurance --
-  ---------------------
-  local insurance = char.get("insurance")
-  if insurance.planName then
-      person_info.insurance = insurance
-  end
+	---------------------
+	-- get insurance --
+	---------------------
+	local insurance = char.get("insurance")
+	if insurance.planName then
+		person_info.insurance = insurance
+	end
 
-  -----------------------------
-  -- get criminal history --
-  -----------------------------
-  local criminal_history = char.get("criminalHistory")
-  if #criminal_history > 0 then
-      for i = 1, #criminal_history do
-          local crime = criminal_history[i]
-          if (not crime.type or crime.type == "arrest") then
-              table.insert(person_info.criminal_history.crimes, crime)
-          else
-              table.insert(person_info.criminal_history.tickets, crime)
-          end
-      end
-      if #person_info.criminal_history.crimes <= 0 then
-          person_info.criminal_history.crimes = false
-      end
-      if #person_info.criminal_history.tickets <= 0 then
-          person_info.criminal_history.tickets = false
-      end
-  end
-  TriggerClientEvent("mdt:performPersonCheck", source, person_info)
+	-----------------------------
+	-- get criminal history --
+	-----------------------------
+	local criminal_history = char.get("criminalHistory")
+	if #criminal_history > 0 then
+		for i = 1, #criminal_history do
+			local crime = criminal_history[i]
+			if (not crime.type or crime.type == "arrest") then
+				table.insert(person_info.criminal_history.crimes, crime)
+			else
+				table.insert(person_info.criminal_history.tickets, crime)
+			end
+		end
+		if #person_info.criminal_history.crimes <= 0 then
+			person_info.criminal_history.crimes = false
+		end
+		if #person_info.criminal_history.tickets <= 0 then
+			person_info.criminal_history.tickets = false
+		end
+	end
 
+	------------------------
+	-- auto warrant check --
+	------------------------
+	exports["usa-warrants"]:GetWarrantsForPerson(char.get("name"), char.get("dateOfBirth"), function(warrants)
+		if type(warrants) ~= "boolean" then
+			if #warrants > 0 then
+				print("person has active warrants!")
+				local msg = {
+					type = "personCheckNotification",
+					message  = "Person has " .. #warrants .. " active warrant(s)!"
+				}
+				TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
+				TriggerClientEvent('InteractSound_CL:PlayOnOne', usource, "warrantfound", 0.4)
+			end
+		end
+	end)
+	
+	TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
 end)
 
 function GetLicensesFromInventory(inv)
@@ -361,6 +379,22 @@ AddEventHandler("mdt:PerformPersonCheckByName", function(data)
 					if insurance.planName then
 						person_info.insurance = insurance
 					end
+					------------------------
+					-- auto warrant check --
+					------------------------
+					exports["usa-warrants"]:GetWarrantsForPerson(person.name, person.dateOfBirth, function(warrants)
+						if type(warrants) ~= "boolean" then
+							if #warrants > 0 then
+								print("person has active warrants!")
+								local msg = {
+									type = "personCheckNotification",
+									message  = "Person has " .. #warrants .. " active warrant(s)!"
+								}
+								TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
+								TriggerClientEvent('InteractSound_CL:PlayOnOne', usource, "warrantfound", 0.4)
+							end
+						end
+					end)
 					TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
 				end)
 			else

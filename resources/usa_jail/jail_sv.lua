@@ -102,7 +102,7 @@ function jailPlayer(data, officerName, gender)
 
 	table.insert(playerCriminalHistory, record)
 	inmate.set("criminalHistory", playerCriminalHistory)
-	TriggerEvent("warrants:removeAnyActiveWarrants", inmate.get("name"))
+	TriggerEvent("warrants:removeAnyActiveWarrants", inmate.get("name"), inmate.get("dateOfBirth"))
 
 	local suspensions = ""
 	if GetDLSuspensionDays(reason) > 0 then

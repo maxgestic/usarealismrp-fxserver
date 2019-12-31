@@ -223,6 +223,8 @@
                                     </div>
 
                                     <div style="display: inline-block; width: 60%; margin-right: 3em;">
+                                        <div class="w3-text-red">{{ personCheckNotification }}</div>
+
                                         <h4><b>Name:</b></h4>
 
                                         <table v-if="person_check.fname" class="w3-table-all w3-small">
@@ -464,15 +466,17 @@
                                     <form class="w3-container" style="padding-left: 0 !important;">
                                         <br>
                                         <div>
-                                            <label >First Name: *</label>
+                                            <label>First Name: *</label>
                                             <input  v-model="new_warrant.first_name" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: Vadim" required>
-                                            <label >Last Name: *</label>
+                                            <label>Last Name: *</label>
                                             <input v-model="new_warrant.last_name" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: Kalashnikov" required>
-                                            <label >Charge(s): *</label>
+                                            <label>DOB: *</label>
+                                            <input v-model="new_warrant.dob" class="w3-input w3-border margin-bottom-1" type="date" required>
+                                            <label>Charge(s): *</label>
                                             <input v-model="new_warrant.charges" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Ex: P.C. 2103, P.C. 2704" required>
-                                            <label >Notes:</label>
+                                            <label>Notes:</label>
                                             <input v-model="new_warrant.suspect_description" class="w3-input w3-border margin-bottom-1" type="text"  placeholder="Include suspect description, any vehicles (including plate numbers), other notes">
-                                            <label >Police Report #:</label>
+                                            <label>Police Report #:</label>
                                             <input v-model="new_warrant.police_report_number" class="w3-input w3-border" type="text"  placeholder="Ex: 7fefe9181f42a6e128b2dec4a001ae6f">
                                         </div>
                                         <br>
@@ -488,6 +492,8 @@
                                 {{ current_warrant.first_name }}
                                 <div class="w3-padding-16 gold"><b>Last Name:</b></div>
                                 {{ current_warrant.last_name }}
+                                <div class="w3-padding-16 gold"><b>DOB:</b></div>
+                                {{ current_warrant.dob }}
                                 <div class="w3-padding-16 gold"><b>Suspect Description:</b></div>
                                 {{ current_warrant.suspect_description }}
                                 <div class="w3-padding-16 gold"><b>Charge(s):</b></div>
