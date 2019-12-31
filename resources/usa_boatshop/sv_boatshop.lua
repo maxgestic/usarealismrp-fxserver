@@ -18,7 +18,7 @@ local boats = {
 
 local rentals = {}
 
-local LICENSE_PURCHASE_PRICE = 5000
+local LICENSE_PURCHASE_PRICE = 1000
 
 AddEventHandler('es:playerLoaded', function(source, user)
   TriggerEvent("boatMenu:loadBoats", source)
