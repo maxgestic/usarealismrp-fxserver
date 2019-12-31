@@ -820,10 +820,8 @@ AddEventHandler("pilotjob:newJob", function()
 end)
 
 function BeginNewJob(src, employee)
-    print("employee rank: " .. employee.rank.name)
-    print("# missions for that rank: " .. #MISSIONS[employee.rank.name])
     local newjob = MISSIONS[employee.rank.name][math.random(#MISSIONS[employee.rank.name])]
-    print("starting job: " .. newjob.name)
+    print("starting new pilot job: " .. newjob.name)
     NotifyPerson(src, "You've been assigned a " .. newjob.name .. ". " .. newjob.description)
     TriggerClientEvent("pilotjob:beginJob", src, newjob)
 end
@@ -832,6 +830,7 @@ RegisterServerEvent("pilotjob:endJob")
 AddEventHandler("pilotjob:endJob", function()
   local char = exports["usa-characters"]:GetCharacter(source)
   char.set("job", "civ")
+  print("job ended because 2 far from aircraft or smth")
 end)
 
 RegisterServerEvent("pilotjob:jobComplete")
@@ -839,7 +838,7 @@ AddEventHandler("pilotjob:jobComplete", function(job, givemoney)
   local usource = source
   local char = exports["usa-characters"]:GetCharacter(usource)
   char.set("job", "civ")
-  local name = char.getName()
+  local name = char.get("name")
   local dob = char.get("dateOfBirth")
   if givemoney then
     TriggerEvent('es:exposeDBFunctions', function(couchdb)
@@ -851,20 +850,22 @@ AddEventHandler("pilotjob:jobComplete", function(job, givemoney)
         ["dateOfBirth"] = dob
       }
       couchdb.getDocumentByRows("pilotjob", query, function(employee)
+        print(exports.globals:dump(employee))
         if type(employee) ~= "boolean" then
-          print("Pilot job employee existed!")
           -- pay money reward --
           local reward
           for i = 1, #MISSIONS[employee.rank.name] do
             local m = MISSIONS[employee.rank.name][i]
+            print("m.name: " .. m.name)
+            print("job.name: " .. job.name)
             if m.name == job.name then
               reward = m.pay + math.random(50, 200)
               print("reward set to: $" .. reward)
               break
             end
           end
-          local bank = exports["usa-characters"]:GetCharacterField(usource, "bank")
-          exports["usa-characters"]:SetCharacterField(usource, "bank", bank + reward)
+          local bank = char.get("bank")
+          char.set("bank", bank + reward)
           -- log flight completion --
           local new_total = employee.flights.total + 1
           local new_successes = employee.flights.successes + 1
@@ -907,7 +908,6 @@ AddEventHandler("pilotjob:jobComplete", function(job, givemoney)
             }
           end
           couchdb.updateDocument("pilotjob", employee._id, update, function()
-            print("Flight successes and total updated!")
             NotifyPerson(usource, "Mission complete! You have been direct deposited: ^2$" .. comma_value(reward) .. "^0.", true)
           end)
         end
