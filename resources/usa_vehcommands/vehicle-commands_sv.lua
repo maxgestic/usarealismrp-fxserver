@@ -201,7 +201,7 @@ TriggerEvent('es:addJobCommand', 'spawn', { "police", "sheriff", "ems", "fire", 
 			DisplaySpawnOptionsBasedOnRank(usource, job, rank)
 			return
 		end
-		local vehicleRequested = string.lower(selected)
+		local vehicleRequested = selected
 		if job == "sheriff" or job == "corrections" or job == "ems" then
 			local neededRank = VEHICLE_RANKS[job][vehicleRequested]
 			if neededRank then
@@ -280,6 +280,7 @@ end, {
 })
 
 function DisplaySpawnOptionsBasedOnRank(src, job, rank)
+	print("rank: " .. rank)
 	local msg = ""
 	for veh, neededRank in pairs(VEHICLE_RANKS[job]) do
 		if type(neededRank) == "table" then
