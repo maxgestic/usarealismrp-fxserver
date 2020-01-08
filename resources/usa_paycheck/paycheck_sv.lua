@@ -66,7 +66,7 @@ function DepositPayCheck(char)
         end
     elseif job == "taxi" then
         paycheckAmount = 200
-    elseif job == "tow" then
+    elseif job == "mechanic" then
         paycheckAmount = 100
     elseif job == "reporter" then
         paycheckAmount = 250
@@ -108,8 +108,8 @@ function DepositPayCheck(char)
     end
     if job == "taxi" then
         msg = msg .. "of $" .. paycheckAmount .. " from ~y~Downtown Cab Co.~s~."
-    elseif job == "tow" then
-        msg = msg .. "of $" .. paycheckAmount .. " from ~y~Bubba's Tow Co.~s~."
+    elseif job == "mechanic" then
+        msg = msg .. "of $" .. paycheckAmount .. " from ~y~Bubba's Mechanic Co.~s~."
     elseif job == "reporter" then
         msg = msg .. "of $" .. paycheckAmount .. " from ~y~Weazel News~s~."
     elseif job == "sheriff" then
@@ -136,11 +136,9 @@ function myJob(job, source)
         TriggerClientEvent('usa:notify', source,
                            "You do not currently work for any companies.")
     elseif job == "taxi" then
-        TriggerClientEvent('usa:notify', source,
-                           "You currently work for ~y~Downtown Cab Co~s~.")
-    elseif job == "tow" then
-        TriggerClientEvent('usa:notify', source,
-                           "You currently work for ~y~Bubba's Tow Co.~s~.")
+        TriggerClientEvent('usa:notify', source, "You currently work for ~y~Downtown Cab Co~s~.")
+    elseif job == "mechanic" then
+        TriggerClientEvent('usa:notify', source, "You currently work for ~y~Bubba's Mechanic Co.~s~.")
     elseif job == "sheriff" then
         TriggerClientEvent('usa:notify', source,
                            "You currently work for the ~y~San Andreas State Police~s~.")

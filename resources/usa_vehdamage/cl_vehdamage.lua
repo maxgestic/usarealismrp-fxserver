@@ -121,38 +121,6 @@ Citizen.CreateThread(function()
     end
 end)
 
-RegisterNetEvent('usa:repairVeh')
-AddEventHandler('usa:repairVeh', function(target_vehicle)
-    if not target_vehicle then target_vehicle = getVehicleInFrontOfUser() end
-    local dict = "mini@repair"
-    local playerPed = PlayerPedId()
-    if target_vehicle ~= 0 and not IsPedInAnyVehicle(playerPed) then
-        if GetVehicleEngineHealth(target_vehicle) < 850.0 or IsAnyVehicleTireBursted(target_vehicle) then
-            TriggerServerEvent('usa:removeRepairKit')
-            SetVehicleDoorOpen(target_vehicle, 4, false, false)
-            local beginTime = GetGameTimer()
-            while GetGameTimer() - beginTime < 16000 do
-                Citizen.Wait(1)
-                DrawTimer(beginTime, 16000, 1.42, 1.475, 'REPAIRING')
-                if not IsEntityPlayingAnim(playerPed, dict, 'fixing_a_player', 3) then
-                    RequestAnimDict(dict)
-                    TaskPlayAnim(playerPed, dict, "fixing_a_player", 8.0, 1.0, -1, 15, 1.0, 0, 0, 0)
-                end
-            end
-            SetVehicleUndriveable(target_vehicle, false)
-            SetVehicleEngineHealth(target_vehicle, 800.0)
-            FixAllTires(target_vehicle)
-            ClearPedTasks(playerPed)
-            Citizen.Wait(500)
-            SetVehicleDoorShut(target_vehicle, 4, false)
-        else
-            exports.globals:notify("Repairs not needed!")
-        end
-    else
-        exports.globals:notify("Vehicle not found!")
-    end
-end)
-
 function IsBeltVehicle(vehicle)
     if GetVehicleClass(vehicle) ~= 8
     and GetVehicleClass(vehicle) ~= 13
@@ -166,69 +134,4 @@ function IsBeltVehicle(vehicle)
     else
         return false
     end
-end
-
-function IsAnyVehicleTireBursted(veh)
-    if IsVehicleTyreBurst(veh, 0, false) then return true end
-    if IsVehicleTyreBurst(veh, 1, false) then return true end
-    if IsVehicleTyreBurst(veh, 2, false) then return true end
-    if IsVehicleTyreBurst(veh, 3, false) then return true end
-    if IsVehicleTyreBurst(veh, 4, false) then return true end
-    return false
-end
-
-function FixAllTires(veh)
-    SetVehicleTyreFixed(veh, 0)
-    SetVehicleTyreFixed(veh, 1)
-    SetVehicleTyreFixed(veh, 2)
-    SetVehicleTyreFixed(veh, 3)
-    SetVehicleTyreFixed(veh, 4)
-end
-
-function DrawTimer(beginTime, duration, x, y, text)
-    if not HasStreamedTextureDictLoaded('timerbars') then
-        RequestStreamedTextureDict('timerbars')
-        while not HasStreamedTextureDictLoaded('timerbars') do
-            Citizen.Wait(0)
-        end
-    end
-
-    if GetTimeDifference(GetGameTimer(), beginTime) < duration then
-        w = (GetTimeDifference(GetGameTimer(), beginTime) * (0.085 / duration))
-    end
-
-    local correction = ((1.0 - math.floor(GetSafeZoneSize(), 2)) * 100) * 0.005
-    x, y = x - correction, y - correction
-
-    Set_2dLayer(0)
-    DrawSprite('timerbars', 'all_black_bg', x, y, 0.15, 0.0325, 0.0, 255, 255, 255, 180)
-
-    Set_2dLayer(1)
-    DrawRect(x + 0.0275, y, 0.085, 0.0125, 100, 0, 0, 180)
-
-    Set_2dLayer(2)
-    DrawRect(x - 0.015 + (w / 2), y, w, 0.0125, 150, 0, 0, 180)
-
-    SetTextColour(255, 255, 255, 180)
-    SetTextFont(0)
-    SetTextScale(0.3, 0.3)
-    SetTextCentre(true)
-    SetTextEntry('STRING')
-    AddTextComponentString(text)
-    Set_2dLayer(3)
-    DrawText(x - 0.06, y - 0.012)
-end
-
-function getVehicleInFrontOfUser()
-    local playerped = GetPlayerPed(-1)
-    local coordA = GetEntityCoords(playerped, 1)
-    local coordB = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 5.0, 0.0)
-    local targetVehicle = getVehicleInDirection(coordA, coordB)
-    return targetVehicle
-end
-
-function getVehicleInDirection(coordFrom, coordTo)
-    local rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 10, GetPlayerPed(-1), 0)
-    local a, b, c, d, vehicle = GetRaycastResult(rayHandle)
-    return vehicle
 end

@@ -181,7 +181,12 @@ AddEventHandler("garage:spawn", function(vehicle)
 			end
 		end
 
-		-- apply any damage --
+		-- any mechanic-installed upgrades
+		if playerVehicle.upgrades then
+			exports["usa_mechanicjob"]:ApplyUpgrades(vehicle, playerVehicle.upgrades)
+		end
+
+		-- apply any damage
 		if VEHICLE_DAMAGES[playerVehicle.plate] then
 			SetVehicleBodyHealth(vehicle, VEHICLE_DAMAGES[playerVehicle.plate].body_health)
 			SetVehicleEngineHealth(vehicle, VEHICLE_DAMAGES[playerVehicle.plate].engine_health)

@@ -294,10 +294,10 @@ $(function() {
         $("#taxi-phone-app-form").show();
     });
 
-    // 'calling' tow
-    $("#tow-btn").click(function() {
+    // 'calling' mechanic
+    $("#mechanic-btn").click(function() {
         $("#phone-btns").hide();
-        $("#tow-phone-app-form").show();
+        $("#mechanic-phone-app-form").show();
     });
 
     // Send a tweet inot the twittersphere
@@ -312,7 +312,7 @@ $(function() {
         // shut all forms
         $("#call-phone-app-form").hide();
         $("#911-phone-app-form").hide();
-        $("#tow-phone-app-form").hide();
+        $("#mechanic-phone-app-form").hide();
         $("#taxi-phone-app-form").hide();
         $("#tweet-phone-app-form").hide();
     });
@@ -353,10 +353,11 @@ $(function() {
         $.post('http://usa-phone/escape', JSON.stringify({}));
     });
 
-    $("#tow-phone-app-form").submit(function() {
+    $("#mechanic-phone-app-form").submit(function() {
+        console.log("heyyyy")
         // send the message to ems
-        $.post('http://usa-phone/sendTowMessage', JSON.stringify({
-            message: $("#tow-message").val()
+        $.post('http://usa-phone/sendMechanicMessage', JSON.stringify({
+            message: $("#mechanic-message").val()
         }));
         // close phone
         $.post('http://usa-phone/escape', JSON.stringify({}));
