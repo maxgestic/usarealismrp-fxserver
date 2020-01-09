@@ -191,6 +191,7 @@ AddEventHandler("towJob:onDuty", function(coords)
 	exports.globals:notify('You are now ~g~on-duty~s~ as a mechanic.')
 	SpawnTowFlatbed(coords)
 	onDuty = "yes"
+	ShowHelp()
 end)
 
 RegisterNetEvent("towJob:offDuty")
@@ -201,22 +202,16 @@ AddEventHandler("towJob:offDuty", function()
 	lastTowTruck = nil
 end)
 
-RegisterNetEvent('towJob:towVehicleInFront')
-AddEventHandler('towJob:towVehicleInFront', function()
+RegisterNetEvent('towJob:towVehicle')
+AddEventHandler('towJob:towVehicle', function()
 	local playerPed = PlayerPedId()
 	if lastTowTruck then
-
-		local coordA = GetEntityCoords(playerPed)
-		local coordB = GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 5.0, 0.0)
-		local targetVehicle = getVehicleInDirection(coordA, coordB)
-
+		local targetVehicle = MechanicHelper.getClosestVehicle(5)
 		if currentlyTowedVehicle == nil and not IsPedInAnyVehicle(playerPed, true) then
 			if targetVehicle ~= 0 then
 				local targetVehicleCoords = GetEntityCoords(targetVehicle, true)
 				local towTruckCoords = GetEntityCoords(lastTowTruck, true)
-
 				if Vdist(targetVehicleCoords, towTruckCoords) < 12.0 and IsVehicleWhitelisted(targetVehicle) then
-
 					if lastTowTruck ~= targetVehicle and IsVehicleSeatFree(targetVehicle, -1) then
 						local dict = "mini@repair"
 						RequestAnimDict(dict)
@@ -236,7 +231,6 @@ AddEventHandler('towJob:towVehicleInFront', function()
 						vehicleToImpound = currentlyTowedVehicle
 					end
 				else
-					print(IsVehicleWhitelisted(targetVehicle))
 					TriggerEvent('usa:notify', 'Towable vehicle not found. (1)')
 				end
 			else
@@ -294,10 +288,10 @@ AddEventHandler("mechanic:repairJobCheck", function()
 end)
 
 RegisterNetEvent("mechanic:repair")
-AddEventHandler("mechanic:repair", function()
+AddEventHandler("mechanic:repair", function(repairCount)
 	local veh = MechanicHelper.getClosestVehicle(5)
 	if veh then
-		MechanicHelper.repairVehicle(veh, function(success)
+		MechanicHelper.repairVehicle(veh, repairCount, function(success)
 			if success then
 				print("repair succeeded!")
 				TriggerServerEvent("mechanic:vehicleRepaired")
@@ -381,7 +375,7 @@ function EnumerateBlips()
 end
 
 function ImpoundVehicle()
-	local targetVehicle = getVehicleInFront()
+	local targetVehicle = MechanicHelper.getClosestVehicle(5)
 	if targetVehicle == vehicleToImpound then
 		local playerPed = PlayerPedId()
 		local playerCoords = GetEntityCoords(playerPed)
@@ -440,20 +434,6 @@ end
 -- Delete car function borrowed frtom Mr.Scammer's model blacklist, thanks to him!
 function DelVehicle(entity)
 	Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( entity ) )
-end
-
-function getVehicleInDirection(coordFrom, coordTo)
-	local rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 10, GetPlayerPed(-1), 0)
-	local a, b, c, d, vehicle = GetRaycastResult(rayHandle)
-	return vehicle
-end
-
-function getVehicleInFront()
-	local playerped = GetPlayerPed(-1)
-	local coordA = GetEntityCoords(playerped, 1)
-	local coordB = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 5.0, 0.0)
-	local targetVehicle = getVehicleInDirection(coordA, coordB)
-	return targetVehicle
 end
 
 function isPlayerAtTowSpot()
@@ -534,4 +514,20 @@ function ApplyUpgrades(veh, upgrades)
 		local upgrade = upgrades[i]
 		MechanicHelper.UPGRADE_FUNC_MAP[upgrade.id](veh, upgrade.increaseAmount)
 	end
+end
+
+function ShowHelp()
+	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Use ^3/dispatch [id] [msg]^0 to respond to a tow request!")
+	Wait(3000)
+	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Use ^3/tow^0 when facing a vehicle to load/unload it from the flatbed.")
+	Wait(3000)
+	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Use ^3/ping [id]^0 to request a person\'s location.")
+	Wait(3000)
+	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Use ^3/install [upgrade]^0 to install custom vehicle upgrades (must be lvl 2 mechanic).")
+	Wait(3000)
+	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0You can get a repair kit from the hardware store and use that to repair vehicles.")
+	Wait(3000)
+	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0You can use the company tow truck that is right over there.")
+	Wait(3000)
+	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Press ^3SHIFT + F2^0 to open the radio, left/right arrows keys to change channels, and CAPS LOCK to speak on it.")
 end

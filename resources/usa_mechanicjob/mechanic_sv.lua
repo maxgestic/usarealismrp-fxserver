@@ -19,7 +19,7 @@ AddEventHandler("towJob:giveReward", function()
 end)
 
 TriggerEvent('es:addJobCommand', 'tow', { "mechanic" }, function(source, args, char)
-	TriggerClientEvent('towJob:towVehicleInFront', source)
+	TriggerClientEvent('towJob:towVehicle', source)
 end, {
 	help = "Load or unload the car in front of you onto a flatbed."
 })
@@ -68,17 +68,6 @@ AddEventHandler("towJob:setJob", function(truckSpawnCoords)
 		if drivers_license then
 			if drivers_license.status == "valid" then
 				local usource = source
-				TriggerClientEvent("chatMessage", usource, "", {}, "Use ^3/dispatch [id] [msg]^0 to respond to a tow request!")
-				Citizen.Wait(3000)
-				TriggerClientEvent("chatMessage", usource, "", {}, "Use ^3/tow^0 when facing a vehicle to load/unload it from the flatbed.")
-				Citizen.Wait(3000)
-				TriggerClientEvent("chatMessage", usource, "", {}, "Use ^3/repair^0 when facing a vehicle to repair it.")
-				Citizen.Wait(3000)
-				TriggerClientEvent("chatMessage", usource, "", {}, "Use ^3/ping [id]^0 to request a person\'s location.")
-				Citizen.Wait(3000)
-				TriggerClientEvent("chatMessage", usource, "", {}, "A tow truck has been equipped for you just there, use this to tow vehicles.")
-				Citizen.Wait(3000)
-				TriggerClientEvent("chatMessage", usource, "", {}, "Press ^3SHIFT + F2^0 to open the radio, left/right arrows keys to change channels, and CAPS LOCK to speak on it")
 				char.set("job", "mechanic")
 				TriggerClientEvent("towJob:onDuty", usource, truckSpawnCoords)
 				return
@@ -104,11 +93,15 @@ end)
 
 RegisterServerEvent("mechanic:repairJobCheck")
 AddEventHandler("mechanic:repairJobCheck", function()
-	local char = exports["usa-characters"]:GetCharacter(source)
+	local usource = source
+	local char = exports["usa-characters"]:GetCharacter(usource)
 	if char.get("job") == "mechanic" then
 		local kit = char.getItem("Repair Kit")
 		if kit then
-			TriggerClientEvent("mechanic:repair", source)
+			local ident = char.get("_id")
+			MechanicHelper.getMechanicRepairCount(ident, function(repairCount)
+				TriggerClientEvent("mechanic:repair", usource, repairCount)
+			end)
 		else 
 			TriggerClientEvent("usa:notify", source, "You need a repair kit!")
 		end

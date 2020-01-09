@@ -6,7 +6,7 @@ MechanicHelper.animations.repair.dict = "mini@repair"
 MechanicHelper.animations.repair.name = "fixing_a_player"
 
 MechanicHelper.REPAIR_TIME = 60000
-MechanicHelper.UPGRADE_INSTALL_TIME = 180000
+MechanicHelper.UPGRADE_INSTALL_TIME = 300000
 
 MechanicHelper.UPGRADE_FUNC_MAP = {
     ["topspeed1"] = function(veh, amountIncrease)
@@ -44,7 +44,7 @@ MechanicHelper.getClosestVehicle = function(maxRange)
     return closest.veh
 end
 
-MechanicHelper.repairVehicle = function(veh, cb)
+MechanicHelper.repairVehicle = function(veh, repairCount, cb)
     local success = false
     SetVehicleDoorOpen(veh, 4, false, false)
     local me = PlayerPedId()
@@ -57,8 +57,8 @@ MechanicHelper.repairVehicle = function(veh, cb)
         end
         Wait(1)
     end
-    local fixedChance = math.random()
-    if fixedChance <= 0.55 then
+    local failChance = 0.5 - (0.005 * repairCount) -- larger successful repair count = smaller fail chance
+    if math.random() > failChance then
         SetVehicleUndriveable(veh, false)
         SetVehicleEngineHealth(veh, 800.0)
         FixAllTires(veh)

@@ -13,16 +13,20 @@ MechanicHelper.incrementStat = function(ident, stat, cb)
                 cb(doc[stat])
             end)
         else
-            MechanicHelper.createMechanicDoc(ident)
+            if stat == "repairCount" then
+                MechanicHelper.createMechanicDoc(ident, 1)
+            else
+                MechanicHelper.createMechanicDoc(ident)
+            end
             cb(0)
         end
     end)
 end
 
-MechanicHelper.createMechanicDoc = function(ident)
+MechanicHelper.createMechanicDoc = function(ident, repairCount)
     local newMechanic = {}
     newMechanic.owner_identifier = ident
-    newMechanic.repairCount = 0
+    newMechanic.repairCount = (repairCount or 0)
     MechanicHelper.db.createDocument("mechanicjob", newMechanic, function(docId) end)
 end
 
@@ -48,6 +52,16 @@ MechanicHelper.getMechanicRank = function(ident, cb)
             else 
                 cb(1)
             end
+        else    
+            cb(0)
+        end
+    end)
+end
+
+MechanicHelper.getMechanicRepairCount = function(ident, cb)
+    MechanicHelper.db.getDocumentByRow("mechanicjob", "owner_identifier", ident, function(doc)
+        if doc then 
+            cb(doc.repairCount)
         else    
             cb(0)
         end

@@ -106,19 +106,19 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'cone', { "corrections", "sheriff", "ems", "fire", "tow" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'cone', { "corrections", "sheriff", "ems", "fire", "mechanic" }, function(source, args, char)
 	TriggerClientEvent('c_setCone', source)
 end, {
 	help = "Drop a cone down"
 })
 
-TriggerEvent('es:addJobCommand', 'pickup', { "corrections", "sheriff", "ems", "fire", "tow" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'pickup', { "corrections", "sheriff", "ems", "fire", "mechanic" }, function(source, args, char)
 	TriggerClientEvent('c_removeCones', source)
 end, {
 	help = "Pick up cones or barriers"
 })
 
-TriggerEvent('es:addJobCommand', 'removecones', { "corrections", "sheriff", "ems", "fire", "tow" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'removecones', { "corrections", "sheriff", "ems", "fire", "mechanic" }, function(source, args, char)
 	TriggerClientEvent('c_removeCones', source)
 end, {
 	help = "Pick up cones or barriers"
