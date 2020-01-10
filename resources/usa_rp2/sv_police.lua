@@ -65,7 +65,7 @@ end, {
 })
 
 -- /dispatch
-TriggerEvent('es:addJobCommand', 'dispatch', { "corrections", "sheriff", "ems", "taxi", "tow" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'dispatch', { "corrections", "sheriff", "ems", "taxi", "mechanic" }, function(source, args, char)
 	local target = tonumber(args[2])
 	if GetPlayerName(target) then
 		table.remove(args,1)
@@ -91,38 +91,6 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'repair', { "corrections", "sheriff", "ems", "tow" }, function(source, args, char)
-	TriggerClientEvent("usa:repairVeh", source)
-end, {
-	help = "Repair the vehicle you're facing."
-})
-
---[[
-TriggerEvent('es:addJobCommand', 'runserial', { "sheriff", 'judge', 'corrections' }, function(source, args, char)
-	local userSource = tonumber(source)
-	if args[2] then
-		local serialNumber = string.upper(args[2])
-		TriggerEvent('es:exposeDBFunctions', function(couchdb)
-	        couchdb.getDocumentById("legalweapons", serialNumber, function(weapon)
-	            if weapon then
-	                TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, '^1^*[ATF QUERY] ^7Registered Owner: ^r'..weapon.ownerName..' ^1^*| ^7Date of Birth: ^r'..weapon.ownerDOB..' ^1^*| ^7Registered Weapon: ^r'..weapon.name..' ^1^*| ^7Date of Issue: ^r'..weapon.issueDate..' ^1^*| ^7Serial Number: ^r'..weapon.serialNumber)
-	            else
-	                TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, '^1^*[ATF QUERY] ^7^rThis serial number is not registered.')
-	            end
-	        end)
-	    end)
-	else
-		TriggerClientEvent('chatMessage', userSource, "", {255, 255, 255}, '^1^*[ATF QUERY] ^7^rPlease enter a valid serial number!')
-	end
-end, {
-	help = "Run the serial number of a weapon",
-	params = {
-		{ name = "serial", help = "weapon serial number" }
-	}
-})
---]]
-
--- /cone barrier
 TriggerEvent('es:addJobCommand', 'barrier', { "corrections", "sheriff", "ems", "fire"}, function(source, args, char)
 	local obj = nil
 	if args[2] == "1" then
@@ -138,20 +106,19 @@ end, {
 	}
 })
 
--- /cone barrier
-TriggerEvent('es:addJobCommand', 'cone', { "corrections", "sheriff", "ems", "fire", "tow" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'cone', { "corrections", "sheriff", "ems", "fire", "mechanic" }, function(source, args, char)
 	TriggerClientEvent('c_setCone', source)
 end, {
 	help = "Drop a cone down"
 })
 
-TriggerEvent('es:addJobCommand', 'pickup', { "corrections", "sheriff", "ems", "fire", "tow" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'pickup', { "corrections", "sheriff", "ems", "fire", "mechanic" }, function(source, args, char)
 	TriggerClientEvent('c_removeCones', source)
 end, {
 	help = "Pick up cones or barriers"
 })
 
-TriggerEvent('es:addJobCommand', 'removecones', { "corrections", "sheriff", "ems", "fire", "tow" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'removecones', { "corrections", "sheriff", "ems", "fire", "mechanic" }, function(source, args, char)
 	TriggerClientEvent('c_removeCones', source)
 end, {
 	help = "Pick up cones or barriers"

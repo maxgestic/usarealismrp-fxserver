@@ -73,6 +73,7 @@ AddEventHandler("garage:vehicleSelected", function(vehicle, business, playerCoor
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local vehicles = char.get("vehicles")
 	local money = char.get("money")
+	vehicle.upgrades = exports["usa_mechanicjob"]:GetUpgradeObjectsFromIds(vehicle.upgrades)
 	if vehicle.impounded == true then
 		if money >= IMPOUND_FEE then
 			TriggerClientEvent("usa:notify", usource, "~y~STATE IMPOUND: ~s~Vehicle retrieved from the impound! Fee: ~y~$"..IMPOUND_FEE..".00")
@@ -159,7 +160,8 @@ function GetVehiclesForMenu(plates, cb)
 						stored = data.rows[i].value[5], -- stored
 						hash = data.rows[i].value[6], -- hash
 						owner = data.rows[i].value[7], -- owner
-						stats = data.rows[i].value[8] -- vehicle stats
+						stats = data.rows[i].value[8], -- vehicle stats
+						upgrades = data.rows[i].value[9] -- vehicle upgrades
 					}
 					table.insert(responseVehArray, veh)
 				end

@@ -250,7 +250,7 @@ RegisterNUICallback('sendTaxiMessage', function(data, cb)
     cb('ok')
 end)
 
-RegisterNUICallback('sendTowMessage', function(data, cb)
+RegisterNUICallback('sendMechanicMessage', function(data, cb)
 	-- get location of sender and send to server function:
 	local playerPos = GetEntityCoords( GetPlayerPed( -1 ), true )
 	local streetA, streetB = Citizen.InvokeNative( 0x2EB41072B4C1E4C0, playerPos.x, playerPos.y, playerPos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt() )
@@ -272,7 +272,7 @@ RegisterNUICallback('sendTowMessage', function(data, cb)
 		y = playerPos.y,
 		z = playerPos.z
 	}
-	TriggerServerEvent("phone:sendTowMessage", data)
+	TriggerServerEvent("phone:sendMechanicMessage", data)
     cb('ok')
 end)
 

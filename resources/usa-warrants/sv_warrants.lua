@@ -60,12 +60,30 @@ function deleteWarrant(db, id, rev)
 	end, "DELETE", "", {["Content-Type"] = 'application/json'})
 end
 
+function GetWarrantsForPerson(name, dob, cb)
+	local query = {
+		["first_name"] = name.first,
+		["last_name"] = name.last,
+		["dob"] = dob
+	}
+	TriggerEvent("es:exposeDBFunctions", function(db)
+		db.getDocumentsByRows("warrants", query, function(docs)
+			cb(docs)
+		end)
+	end)
+end
+
 RegisterServerEvent("warrants:removeAnyActiveWarrants")
-AddEventHandler("warrants:removeAnyActiveWarrants", function(name)
+AddEventHandler("warrants:removeAnyActiveWarrants", function(name, dob)
 	TriggerEvent("es:exposeDBFunctions", function(db)
 		local query = {
-			["first_name"] = name.first,
-			["last_name"] = name.last
+			["first_name"] = {
+				["$regex"] = "(?i)" .. name.first	
+			},
+			["last_name"] = {
+				["$regex"] = "(?i)" .. name.last
+			},
+			["dob"] = dob
 		}
 		db.getDocumentsByRows("warrants", query, function(docs)
 			if docs then

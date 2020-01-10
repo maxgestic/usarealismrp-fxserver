@@ -150,26 +150,23 @@ AddEventHandler("phone:sendTaxiMessage", function(data)
 	end)
 end)
 
-RegisterServerEvent("phone:sendTowMessage")
-AddEventHandler("phone:sendTowMessage", function(data)
-	local tow_online = false
+RegisterServerEvent("phone:sendMechanicMessage")
+AddEventHandler("phone:sendMechanicMessage", function(data)
+	local mechanic_online = false
 	local message = data.message
 	exports["usa-characters"]:GetCharacters(function(characters)
 		for id, char in pairs(characters) do
-			if char.get("job") == "tow" then
-				TriggerClientEvent('chatMessage', id, "Tow Requested! (Caller: #" .. source .. ")", {118, 120, 251}, message .. " (" .. data.location .. ")")
-				TriggerClientEvent("phone:notify", id, "~y~TOW REQUEST (Caller: # ".. source .. "):\n~w~"..message)
+			if char.get("job") == "mechanic" then
+				TriggerClientEvent('chatMessage', id, "Mechanic Requested! (Caller: #" .. source .. ")", {118, 120, 251}, message .. " (" .. data.location .. ")")
+				TriggerClientEvent("phone:notify", id, "~y~MECHANIC REQUEST (Caller: # ".. source .. "):\n~w~"..message)
 				tow_online = true
-				-- set temp blip
-				TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
+				TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z) -- hacky blip
 			end
 		end
 		if tow_online then
-			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "A ^3tow truck^0 has been notified!")
-			TriggerClientEvent("usa:notify", source, "A ~y~tow truck~w~ has been notified!")
+			TriggerClientEvent("usa:notify", source, "A ~y~mechanic~w~ has been notified!", "^0A ^3mechanic^0 has been notified!")
 		else
-			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Sorry, no one is on duty as tow!")
-			TriggerClientEvent("usa:notify", source, "~y~Sorry, no one is on duty as tow!")
+			TriggerClientEvent("usa:notify", source, "~y~No one is on duty as mechanic!", "^0No one is on duty as mechanic!")
 		end
 	end)
 end)

@@ -4,5 +4,6 @@ client_script "cl_warrants.lua"
 server_exports {
     "getWarrants",
     "createWarrant",
-    "deleteWarrant"
+    "deleteWarrant",
+    "GetWarrantsForPerson"
 }

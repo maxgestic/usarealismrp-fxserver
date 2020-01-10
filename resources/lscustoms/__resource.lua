@@ -10,3 +10,7 @@ server_scripts {
   "sv_config.lua",
 	'lscustoms_server.lua'
 }
+
+exports {
+  "getLocations"
+}

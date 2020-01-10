@@ -50,6 +50,7 @@ const mdtApp = new Vue({
         new_warrant: {
             first_name: "",
             last_name: "",
+            dob: "",
             charges: "",
             suspect_description:  "",
             police_report_number: ""
@@ -73,6 +74,7 @@ const mdtApp = new Vue({
         },
         mugshot_url: null,
         error: null,
+        personCheckNotification: null,
         notification: null,
         current_tab: "Person(s) Check" // default tab
     },
@@ -144,6 +146,7 @@ const mdtApp = new Vue({
         changePage(new_page) {
             this.error = null;
             this.notification = null;
+            this.personCheckNotification = null;
             this.current_tab = new_page;
             /* Clear active nav tab */
             ClearActiveNavItem(new_page);
@@ -179,13 +182,14 @@ const mdtApp = new Vue({
             }
         },
         CreateWarrant() {
-            if (this.new_warrant.first_name != "" && this.new_warrant.last_name != "" && this.new_warrant.charges != "") {
+            if (this.new_warrant.first_name != "" && this.new_warrant.last_name != "" && this.new_warrant.charges != "" && this.new_warrant.dob) {
                 $.post('http://usa-mdt/createWarrant', JSON.stringify({
                     warrant: this.new_warrant
                 }));
                 this.notification = "Warrant created successfully for: " + this.new_warrant.first_name + " " + this.new_warrant.last_name;
                 this.new_warrant.first_name = "";
                 this.new_warrant.last_name = "";
+                this.new_warrant.dob = "";
                 this.new_warrant.charges = "";
                 this.new_warrant.suspect_description = "";
                 this.new_warrant.police_report_number = "";
@@ -431,6 +435,8 @@ document.onreadystatechange = () => {
                     mdtApp.error = "Insufficient permission to delete report."
                 }
                 mdtApp.current_tab = "Police Reports"
+            } else if (event.data.type == "personCheckNotification") {
+                mdtApp.personCheckNotification = event.data.message
             }
         });
     };

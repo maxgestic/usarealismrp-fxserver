@@ -1,7 +1,7 @@
 local jobNames = {
 	['civ'] = false,
 	['taxi'] = 'Taxi',
-	['tow'] = 'Tow',
+	['mechanic'] = 'Mechanic',
 	['sheriff'] = 'Peace Officer (SASP)',
 	['da'] = 'District Attorney',
 	['ems'] = 'Medical Responder (LSFD)',

@@ -7,7 +7,7 @@ onDuty = "no"
 local TIME_WARN_MINUTES = 15
 local TIME_KICK_MINUTES = 20
 
-local lastRecordedTimeInTruck = 0
+local lastRecordedTimeDoingJob = 0
 
 local locations = {
 	["Paleto"] = {
@@ -114,9 +114,9 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 		for name, data in pairs(locations) do
 			if onDuty == "no" then
-				DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 5, '[E] - Sign in (~g~Tow~s~)')
+				DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 5, '[E] - Sign in (~g~Mechanic~s~)')
 			else
-				DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 5, '[E] - Sign out (~g~Tow~s~)')
+				DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 5, '[E] - Sign out (~g~Mechanic~s~)')
 			end
 			DrawText3D(data.impound.x, data.impound.y, (data.impound.z + 1.5), 15, '[E] - Impound Vehicle')
 		end
@@ -152,7 +152,7 @@ Citizen.CreateThread(function()
 	end
 end)
 
--- Kick player from job if player has not used tow truck recently enough --
+-- Kick player from job if player has not used tow truck recently enough or been at any mechanic shops --
 Citizen.CreateThread(function()
 	local warnedKick = false
 	while true do
@@ -162,16 +162,19 @@ Citizen.CreateThread(function()
 				local veh = GetVehiclePedIsIn(me, false)
 				local vehModel = GetEntityModel(veh)
 				if vehModel == GetHashKey("flatbed") then
-					lastRecordedTimeInTruck = GetGameTimer()
+					lastRecordedTimeDoingJob = GetGameTimer()
 				end
 			end
-			local timeSinceLastInTowTruck = GetGameTimer() - lastRecordedTimeInTruck
-			if timeSinceLastInTowTruck > TIME_WARN_MINUTES * 60000 and timeSinceLastInTowTruck < TIME_KICK_MINUTES * 60000 then
+			if isNearAnyRepairShop() then
+				lastRecordedTimeDoingJob = GetGameTimer()
+			end
+			local timeSinceLastDoingJob = GetGameTimer() - lastRecordedTimeDoingJob
+			if timeSinceLastDoingJob > TIME_WARN_MINUTES * 60000 and timeSinceLastDoingJob < TIME_KICK_MINUTES * 60000 then
 				if not warnedKick then
-					exports.globals:notify("You are about to be kicked from the tow job! Get back to work!")
+					exports.globals:notify("You are about to be kicked from the mechanic job! Get back to work!")
 					warnedKick = true
 				end
-			elseif timeSinceLastInTowTruck >= TIME_KICK_MINUTES * 60000 then 
+			elseif timeSinceLastDoingJob >= TIME_KICK_MINUTES * 60000 then 
 				exports.globals:notify("You have been removed from the tow job!")
 				TriggerServerEvent("tow:forceRemoveJob")
 			end
@@ -185,35 +188,30 @@ end)
 
 RegisterNetEvent("towJob:onDuty")
 AddEventHandler("towJob:onDuty", function(coords)
-	exports.globals:notify('You are now ~g~on-duty~s~ for tow.')
+	exports.globals:notify('You are now ~g~on-duty~s~ as a mechanic.')
 	SpawnTowFlatbed(coords)
 	onDuty = "yes"
+	ShowHelp()
 end)
 
 RegisterNetEvent("towJob:offDuty")
 AddEventHandler("towJob:offDuty", function()
-	exports.globals:notify('You are now ~y~off-duty~s~ for tow.')
+	exports.globals:notify('You are now ~y~off-duty~s~ as a mechanic.')
 	DelVehicle(lastTowTruck)
 	onDuty = "no"
 	lastTowTruck = nil
 end)
 
-RegisterNetEvent('towJob:towVehicleInFront')
-AddEventHandler('towJob:towVehicleInFront', function()
+RegisterNetEvent('towJob:towVehicle')
+AddEventHandler('towJob:towVehicle', function()
 	local playerPed = PlayerPedId()
 	if lastTowTruck then
-
-		local coordA = GetEntityCoords(playerPed)
-		local coordB = GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 5.0, 0.0)
-		local targetVehicle = getVehicleInDirection(coordA, coordB)
-
+		local targetVehicle = MechanicHelper.getClosestVehicle(5)
 		if currentlyTowedVehicle == nil and not IsPedInAnyVehicle(playerPed, true) then
 			if targetVehicle ~= 0 then
 				local targetVehicleCoords = GetEntityCoords(targetVehicle, true)
 				local towTruckCoords = GetEntityCoords(lastTowTruck, true)
-
 				if Vdist(targetVehicleCoords, towTruckCoords) < 12.0 and IsVehicleWhitelisted(targetVehicle) then
-
 					if lastTowTruck ~= targetVehicle and IsVehicleSeatFree(targetVehicle, -1) then
 						local dict = "mini@repair"
 						RequestAnimDict(dict)
@@ -233,7 +231,6 @@ AddEventHandler('towJob:towVehicleInFront', function()
 						vehicleToImpound = currentlyTowedVehicle
 					end
 				else
-					print(IsVehicleWhitelisted(targetVehicle))
 					TriggerEvent('usa:notify', 'Towable vehicle not found. (1)')
 				end
 			else
@@ -269,6 +266,101 @@ AddEventHandler('character:setCharacter', function()
 	currentlyTowedVehicle = nil
 end)
 
+RegisterNetEvent("mechanic:repairJobCheck")
+AddEventHandler("mechanic:repairJobCheck", function()
+	local me = PlayerPedId()
+	local veh = MechanicHelper.getClosestVehicle()
+	if not IsPedInAnyVehicle(me) then
+		if veh then
+			local engineHP = GetVehicleEngineHealth(veh)
+			local driveable = IsVehicleDriveable(veh, true)
+			local isAnyTireBurst = IsAnyVehicleTireBursted(veh)
+			if engineHP < 600 or not driveable or isAnyTireBurst then
+				print("gonna check palyer's job")
+				TriggerServerEvent("mechanic:repairJobCheck")
+			else
+				exports.globals:notify("Vehicle does not need repairs!")
+			end
+		end
+	else 
+		exports.globals:notify("Must be outside vehicle!")
+	end
+end)
+
+RegisterNetEvent("mechanic:repair")
+AddEventHandler("mechanic:repair", function(repairCount)
+	local veh = MechanicHelper.getClosestVehicle(5)
+	if veh then
+		MechanicHelper.repairVehicle(veh, repairCount, function(success)
+			if success then
+				print("repair succeeded!")
+				TriggerServerEvent("mechanic:vehicleRepaired")
+				exports.globals:notify("Vehicle repaired!")
+			else 
+				print("repair failed")
+				exports.globals:notify("Vehicle repair failed!")
+			end
+		end)
+	else 
+		exports.globals:notify("No vehicle found!")
+	end
+end)
+
+RegisterNetEvent("mechanic:tryInstall")
+AddEventHandler("mechanic:tryInstall", function(upgrade)
+	if isNearAnyRepairShop() then
+		local veh = MechanicHelper.getClosestVehicle(5)
+		if not isVehMotorcycle(veh) then
+			if veh then
+				exports.globals:notify("Installing " .. upgrade.displayName .. " upgrade!")
+				MechanicHelper.installUpgrade(veh, upgrade, function()
+					local plate = GetVehicleNumberPlateText(veh)
+					TriggerServerEvent("mechanic:installedUpgrade", plate)
+				end)
+			else 
+				exports.globals:notify("No vehicle found!")
+			end
+		else 
+			exports.globals:notify("Incompatible vehicle!")
+		end
+	else 
+		exports.globals:notify("You must be at a mechanic shop!")
+	end
+end)
+
+function isNearAnyRepairShop()
+	local me = PlayerPedId()
+	local mycoords = GetEntityCoords(me)
+	local coordList = exports["usa_autorepair"]:GetAllRepairShopCoords()
+	for num, info in pairs(exports["lscustoms"]:getLocations()) do 
+		table.insert(coordList, {info.inside.x, info.inside.y, info.inside.z})
+	end
+	for i = 1, #coordList do 
+		local dist = Vdist(mycoords.x, mycoords.y, mycoords.z, coordList[i][1], coordList[i][2], coordList[i][3])
+		if dist < 45.0 then
+			return true
+		end
+	end
+	return false
+end
+
+function isVehMotorcycle(veh)
+	local model = GetEntityModel(veh)
+	if GetVehicleClass(veh) == 8 then
+		return true
+	elseif model == GetHashKey("blazer") then
+		return true
+	elseif model == GetHashKey("blazer2") then
+		return true
+	elseif model == GetHashKey("blazer3") then
+		return true
+	elseif model == GetHashKey("blazer4") then
+		return true
+	else
+		return false
+	end
+end
+
 function EnumerateBlips()
 	for name, data in pairs(locations) do
 		local blip = AddBlipForCoord(data.duty.x, data.duty.y, data.duty.z)
@@ -283,7 +375,7 @@ function EnumerateBlips()
 end
 
 function ImpoundVehicle()
-	local targetVehicle = getVehicleInFront()
+	local targetVehicle = MechanicHelper.getClosestVehicle(5)
 	if targetVehicle == vehicleToImpound then
 		local playerPed = PlayerPedId()
 		local playerCoords = GetEntityCoords(playerPed)
@@ -312,12 +404,12 @@ function SpawnTowFlatbed(coords)
 		SetEntityAsMissionEntity(vehicle, true, true)
 		SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
 		lastTowTruck = vehicle
-		lastRecordedTimeInTruck = GetGameTimer()
+		lastRecordedTimeDoingJob = GetGameTimer()
 		local vehicle_key = {
 			name = "Key -- " .. GetVehicleNumberPlateText(vehicle),
 			quantity = 1,
 			type = "key",
-			owner = "Bubba's Tow",
+			owner = "Bubba's Mechanic",
 			make = "MTL",
 			model = "Flatbed",
 			plate = GetVehicleNumberPlateText(vehicle)
@@ -325,7 +417,7 @@ function SpawnTowFlatbed(coords)
 
 		-- give key to owner
 		TriggerServerEvent("garage:giveKey", vehicle_key)
-		TriggerServerEvent('mdt:addTempVehicle', 'MTL Flatbed', "Bubba's Tow Co.", GetVehicleNumberPlateText(vehicle))
+		TriggerServerEvent('mdt:addTempVehicle', 'MTL Flatbed', "Bubba's Mechanic Co.", GetVehicleNumberPlateText(vehicle))
 	end)
 end
 
@@ -342,20 +434,6 @@ end
 -- Delete car function borrowed frtom Mr.Scammer's model blacklist, thanks to him!
 function DelVehicle(entity)
 	Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( entity ) )
-end
-
-function getVehicleInDirection(coordFrom, coordTo)
-	local rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 10, GetPlayerPed(-1), 0)
-	local a, b, c, d, vehicle = GetRaycastResult(rayHandle)
-	return vehicle
-end
-
-function getVehicleInFront()
-	local playerped = GetPlayerPed(-1)
-	local coordA = GetEntityCoords(playerped, 1)
-	local coordB = GetOffsetFromEntityInWorldCoords(playerped, 0.0, 5.0, 0.0)
-	local targetVehicle = getVehicleInDirection(coordA, coordB)
-	return targetVehicle
 end
 
 function isPlayerAtTowSpot()
@@ -419,4 +497,37 @@ function DrawTimer(beginTime, duration, x, y, text)
 	AddTextComponentString(text)
 	Set_2dLayer(3)
 	DrawText(x - 0.06, y - 0.012)
+end
+
+function IsAnyVehicleTireBursted(veh)
+    if IsVehicleTyreBurst(veh, 0, false) then return true end
+    if IsVehicleTyreBurst(veh, 1, false) then return true end
+    if IsVehicleTyreBurst(veh, 2, false) then return true end
+    if IsVehicleTyreBurst(veh, 3, false) then return true end
+    if IsVehicleTyreBurst(veh, 4, false) then return true end
+    return false
+end
+
+function ApplyUpgrades(veh, upgrades)
+	for i = 1, #upgrades do
+		print("applying upgrade: " .. upgrades[i].id)
+		local upgrade = upgrades[i]
+		MechanicHelper.UPGRADE_FUNC_MAP[upgrade.id](veh, upgrade.increaseAmount)
+	end
+end
+
+function ShowHelp()
+	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Use ^3/dispatch [id] [msg]^0 to respond to a tow request!")
+	Wait(3000)
+	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Use ^3/tow^0 when facing a vehicle to load/unload it from the flatbed.")
+	Wait(3000)
+	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Use ^3/ping [id]^0 to request a person\'s location.")
+	Wait(3000)
+	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Use ^3/install [upgrade]^0 to install custom vehicle upgrades (must be lvl 2 mechanic).")
+	Wait(3000)
+	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0You can get a repair kit from the hardware store and use that to repair vehicles.")
+	Wait(3000)
+	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0You can use the company tow truck that is right over there.")
+	Wait(3000)
+	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Press ^3SHIFT + F2^0 to open the radio, left/right arrows keys to change channels, and CAPS LOCK to speak on it.")
 end

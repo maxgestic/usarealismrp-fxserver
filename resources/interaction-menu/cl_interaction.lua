@@ -845,7 +845,7 @@ function interactionMenuUse(itemName, wholeItem)
 		elseif itemName:find("Joint") then
 			TriggerServerEvent("drugs:use", "Joint")
 		elseif string.find(itemName, "Repair Kit") then
-			TriggerEvent("interaction:repairVehicle")
+			TriggerEvent("mechanic:repairJobCheck")
 		elseif string.find(itemName, "Hotwiring Kit") then
 			TriggerEvent("veh:hotwireVehicle")
 		elseif string.find(itemName, "Body Armor") then
@@ -1361,17 +1361,6 @@ AddEventHandler("interaction:seizeVehContraband", function()
 	local veh = getVehicleInsideOrInFrontOfUser()
 	local plate = GetVehicleNumberPlateText(veh)
 	TriggerServerEvent("vehicle:removeAllIllegalItems", plate)
-end)
-
-RegisterNetEvent("interaction:repairVehicle")
-AddEventHandler("interaction:repairVehicle", function()
-	if hitHandleVehicle ~= 0 then
-		if (GetVehicleEngineHealth(hitHandleVehicle) < 1000 or not IsVehicleDriveable(hitHandleVehicle, false) and not IsPedInAnyVehicle(GetPlayerPed(-1), true)) then
-			TriggerEvent('usa:repairVeh', hitHandleVehicle)
-		end
-	else
-		TriggerEvent("usa:notify", "No vehicle detected!")
-	end
 end)
 
 local last_tackle_time = 0
