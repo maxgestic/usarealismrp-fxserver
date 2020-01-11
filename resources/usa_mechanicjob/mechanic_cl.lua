@@ -399,6 +399,7 @@ function SpawnTowFlatbed(coords)
 			Citizen.Wait(0)
 		end
 		local vehicle = CreateVehicle(numberHash, coords.x, coords.y, coords.z, coords.heading, true, false)
+		local vehPlate = GetVehicleNumberPlateText(vehicle)
 		SetVehicleOnGroundProperly(vehicle)
 		SetVehRadioStation(vehicle, "OFF")
 		SetEntityAsMissionEntity(vehicle, true, true)
@@ -406,18 +407,21 @@ function SpawnTowFlatbed(coords)
 		lastTowTruck = vehicle
 		lastRecordedTimeDoingJob = GetGameTimer()
 		local vehicle_key = {
-			name = "Key -- " .. GetVehicleNumberPlateText(vehicle),
+			name = "Key -- " .. vehPlate,
 			quantity = 1,
 			type = "key",
 			owner = "Bubba's Mechanic",
 			make = "MTL",
 			model = "Flatbed",
-			plate = GetVehicleNumberPlateText(vehicle)
+			plate = vehPlate
 		}
 
 		-- give key to owner
 		TriggerServerEvent("garage:giveKey", vehicle_key)
-		TriggerServerEvent('mdt:addTempVehicle', 'MTL Flatbed', "Bubba's Mechanic Co.", GetVehicleNumberPlateText(vehicle))
+		TriggerServerEvent('mdt:addTempVehicle', 'MTL Flatbed', "Bubba's Mechanic Co.", vehPlate)
+
+		-- give repair kit to start with --
+		TriggerServerEvent("mechanic:giveRepairKit", vehPlate)
 	end)
 end
 
@@ -527,7 +531,7 @@ function ShowHelp()
 	Wait(3000)
 	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0You can get a repair kit from the hardware store and use that to repair vehicles.")
 	Wait(3000)
-	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0You can use the company tow truck that is right over there.")
+	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0You can use the company tow truck that is right over there. It has a repair kit inside.")
 	Wait(3000)
 	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Press ^3SHIFT + F2^0 to open the radio, left/right arrows keys to change channels, and CAPS LOCK to speak on it.")
 end

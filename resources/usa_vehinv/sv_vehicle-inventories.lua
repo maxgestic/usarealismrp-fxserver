@@ -29,7 +29,6 @@ end)
 
 -- store an item in a vehicle
 -- note: assumes that the quantity provided is <= item.quantiy
--- TODO: remove item parameter and just pass in slot of item to retrieve it here (to prevent malicious lua injectors from calling this arbitrarily)
 RegisterServerEvent("vehicle:storeItem")
 AddEventHandler("vehicle:storeItem", function(src, vehicle_plate, item, quantity, slot, cb) -- TODO: get item instead of passing as param to avoid lua injecting items
     local usource = tonumber(src)
