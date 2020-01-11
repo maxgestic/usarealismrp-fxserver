@@ -830,7 +830,7 @@ RegisterServerEvent("pilotjob:endJob")
 AddEventHandler("pilotjob:endJob", function()
   local char = exports["usa-characters"]:GetCharacter(source)
   char.set("job", "civ")
-  print("job ended because 2 far from aircraft or smth")
+  TriggerClientEvent("radio:unsubscribe", source)
 end)
 
 RegisterServerEvent("pilotjob:jobComplete")
