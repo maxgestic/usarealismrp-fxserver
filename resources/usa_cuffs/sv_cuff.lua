@@ -57,7 +57,7 @@ end, {help = 'Softcuff the player specified, player must be cuffed first.', para
 RegisterServerEvent("cuff:checkWhitelistForPlace")
 AddEventHandler("cuff:checkWhitelistForPlace", function()
   local job = exports["usa-characters"]:GetCharacterField(source, "job")
-  if job == "sheriff" or job == "corrections" then
+  if job == "sheriff" or job == "corrections" or job == "ems" then
     TriggerClientEvent("place:attemptToPlaceNearest", source)
   end
 end)
@@ -65,7 +65,7 @@ end)
 RegisterServerEvent("cuff:checkWhitelistForUnseat")
 AddEventHandler("cuff:checkWhitelistForUnseat", function()
   local job = exports["usa-characters"]:GetCharacterField(source, "job")
-  if job == "sheriff" or job == "corrections" then
+  if job == "sheriff" or job == "corrections" or job == "ems" then
     TriggerClientEvent('place:attemptToUnseatNearest', source)
   end
 end)
