@@ -340,15 +340,15 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle, business)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local license = char.getItem("Driver's License")
 	local vehicles = char.get("vehicles")
-	local money = char.get("money")
+	local money = char.get("bank")
 	local owner_name = char.getFullName()
 	if license and license.status == "valid" then
 		local hash = vehicle.hash
 		local price = tonumber(GetVehiclePrice(vehicle))
-		if tonumber(price) <= money then
+		if price <= money then
 			local plate = generate_random_number_plate()
 			if vehicles then
-				char.removeMoney(price)
+				char.removeBank(price)
 				local vehicle = {
 					owner = owner_name,
 					make = vehicle.make,
