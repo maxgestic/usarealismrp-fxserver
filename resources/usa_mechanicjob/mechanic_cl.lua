@@ -315,7 +315,7 @@ AddEventHandler("mechanic:tryInstall", function(upgrade)
 				exports.globals:notify("Installing " .. upgrade.displayName .. " upgrade!")
 				MechanicHelper.installUpgrade(veh, upgrade, function()
 					local plate = GetVehicleNumberPlateText(veh)
-					TriggerServerEvent("mechanic:installedUpgrade", plate)
+					TriggerServerEvent("mechanic:installedUpgrade", plate, VehToNet(veh))
 				end)
 			else 
 				exports.globals:notify("No vehicle found!")
@@ -325,6 +325,14 @@ AddEventHandler("mechanic:tryInstall", function(upgrade)
 		end
 	else 
 		exports.globals:notify("You must be at a mechanic shop!")
+	end
+end)
+
+RegisterNetEvent('mechanic:syncUpgrade')
+AddEventHandler('mechanic:syncUpgrade', function(vehNetId, upgrade)
+	local veh = NetToVeh(vehNetId)
+	if veh then
+		MechanicHelper.installUpgradeNoAnim(veh, upgrade)
 	end
 end)
 

@@ -28,14 +28,18 @@ TriggerEvent('es:addJobCommand', 'install', { "mechanic" }, function(source, arg
 	local upgrade = UPGRADES[args[2]]
 	if upgrade then
 		local char = exports["usa-characters"]:GetCharacter(source)
-		MechanicHelper.getMechanicRank(char.get("_id"), function(rank)
-			if rank >= 2 then
-				TriggerClientEvent('mechanic:tryInstall', source, upgrade)
-				installQueue[source] = args[2]
-			else 
-				TriggerClientEvent("usa:notify", source, "Must be lvl 2 to install upgrades!", "^3INFO: ^0Must be a level 2 mechanic to install upgrades! Respond to more player calls and repair vehicles to rank up!")		
-			end
-		end)
+		if char.get("money") >= upgrade.cost then
+			MechanicHelper.getMechanicRank(char.get("_id"), function(rank)
+				if rank >= 2 then
+					TriggerClientEvent('mechanic:tryInstall', source, upgrade)
+					installQueue[source] = args[2]
+				else 
+					TriggerClientEvent("usa:notify", source, "Must be lvl 2 to install upgrades!", "^3INFO: ^0Must be a level 2 mechanic to install upgrades! Respond to more player calls and repair vehicles to rank up!")		
+				end
+			end)
+		else 
+			TriggerClientEvent("usa:notify", source, "Not enough money! Need $" .. exports.globals:comma_value(upgrade.cost))
+		end
 	else 
 		local optionsStr = ""
 		local count = 0
@@ -124,8 +128,8 @@ AddEventHandler("mechanic:vehicleRepaired", function()
 end)
 
 RegisterServerEvent("mechanic:installedUpgrade")
-AddEventHandler("mechanic:installedUpgrade", function(plate)
-	print("installing upgrade!")
+AddEventHandler("mechanic:installedUpgrade", function(plate, vehNetId)
+	print("installing upgrade! veh net id: " .. vehNetId)
 	local usource = source
 	local upgrade = UPGRADES[installQueue[usource]]
 	local char = exports["usa-characters"]:GetCharacter(usource)
@@ -135,6 +139,7 @@ AddEventHandler("mechanic:installedUpgrade", function(plate)
 			MechanicHelper.upgradeInstalled(plate, upgrade, function()
 				installQueue[usource] = nil
 				print("upgrade install complete!")
+				TriggerClientEvent("mechanic:syncUpgrade", -1, vehNetId, upgrade)
 			end)
 		else
 			TriggerClientEvent("usa:notify", usource, "Not enough money! Need $" .. exports.globals:comma_value(upgrade.cost))

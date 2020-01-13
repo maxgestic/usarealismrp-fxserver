@@ -84,11 +84,14 @@ MechanicHelper.installUpgrade = function(veh, upgrade, cb)
     end
     local plate = GetVehicleNumberPlateText(veh)
     MechanicHelper.UPGRADE_FUNC_MAP[upgrade.id](veh, upgrade.increaseAmount) -- call appropriate native
-    TriggerServerEvent("mechanic:upgradeInstalled", plate)
     ClearPedTasks(me)
     cb()
     Wait(500)
     SetVehicleDoorShut(veh, 4, false)
+end
+
+MechanicHelper.installUpgradeNoAnim = function(veh, upgrade)
+    MechanicHelper.UPGRADE_FUNC_MAP[upgrade.id](veh, upgrade.increaseAmount) -- call appropriate native
 end
 
 function FixAllTires(veh)
