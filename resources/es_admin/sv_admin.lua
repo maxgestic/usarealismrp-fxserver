@@ -916,7 +916,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 				}
 				couchdb.getSpecificFieldFromDocumentByRows("characters", query, fields, function(doc)
 					if doc then
-						couchdb.updateDocument("characters", doc._id, {dateOfBirth = newDOB}, function()
+						couchdb.updateDocument("characters", doc._id, {dateOfBirth = newDob}, function()
 							RconPrint("DOB updated in DB!")
 						end)
 					else
