@@ -132,10 +132,14 @@ RegisterNetEvent("cultivation:plant")
 AddEventHandler("cultivation:plant", function(type, itemName)
     if not IsPedInAnyVehicle(me.ped, true) then
         local plantCoords = { x = me.coords.x + 0.5, y = me.coords.y + 0.5, z = me.coords.z + 1.0 }
-        local unkBool, groundZ = GetGroundZCoordWithOffsets(plantCoords.x, plantCoords.y, plantCoords.z)
-        plantCoords.z = groundZ
-        -- trigger server event to keep track of new plant
-        TriggerServerEvent("cultivation:plant", type, itemName, plantCoords)
+        if not IsPointOnRoad(plantCoords.x, plantCoords.y, plantCoords.z, vehicle) then
+            local unkBool, groundZ = GetGroundZCoordWithOffsets(plantCoords.x, plantCoords.y, plantCoords.z)
+            plantCoords.z = groundZ
+            -- trigger server event to keep track of new plant
+            TriggerServerEvent("cultivation:plant", type, itemName, plantCoords)
+        else 
+            exports.globals:notify("Can't place on road!")
+        end
     end
 end)
 

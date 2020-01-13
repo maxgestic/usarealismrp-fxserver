@@ -149,7 +149,7 @@ Citizen.CreateThread(function()
         while true do
             for i = 1, #PLANTED do
                 local plant = PLANTED[i]
-                db.updateDocument("cultivation", plant._id, { foodLevel = plant.foodLevel, waterLevel = plant.waterLevel, stage = plant.stage }, saveCallback)
+                db.updateDocument("cultivation", plant._id, { foodLevel = plant.foodLevel, waterLevel = plant.waterLevel, stage = plant.stage, isDead = plant.isDead }, saveCallback)
                 Wait(2000)
             end
             Wait(SAVE_INTERVAL_MINUTES * 60 * 1000)

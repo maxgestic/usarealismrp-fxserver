@@ -55,9 +55,9 @@ PlantManager.stageTick = function(plant)
         for j = #PRODUCTS[plant.type].stages, 1, -1 do
             local stage = PRODUCTS[plant.type].stages[j]
             if hoursSincePlanted >= stage.lengthInHours then
-                local isAtThisStageAlready = plant.stage.name == PRODUCTS[plant.type].stages[j].name
+                local isAtThisStageAlready = plant.stage.name == stage.name
                 if not isAtThisStageAlready then
-                    plant.stage = PRODUCTS[plant.type].stages[j]
+                    plant.stage = stage
                     return plant, true
                 else
                     return plant, false
