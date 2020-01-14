@@ -317,11 +317,15 @@ Citizen.CreateThread(function()
             lastCheckTime = GetGameTimer()
             for i = 1, #PLANTED do
                 local plant = PLANTED[i]
-                local dist = Vdist(me.coords.x, me.coords.y, me.coords.z, plant.coords.x, plant.coords.y, plant.coords.z)
-                if dist <= CLOSEST_PLANTS_BUFFER_DIST then
-                    CLOSEST_PLANTED[i] = plant
+                if plant and plant.coords then
+                    local dist = Vdist(me.coords.x, me.coords.y, me.coords.z, plant.coords.x, plant.coords.y, plant.coords.z)
+                    if dist <= CLOSEST_PLANTS_BUFFER_DIST then
+                        CLOSEST_PLANTED[i] = plant
+                    else
+                        CLOSEST_PLANTED[i] = nil
+                    end
                 else
-                    CLOSEST_PLANTED[i] = nil
+                    print("cultivation: found bad plant, id: " .. (plant._id or "NO ID"))
                 end
             end
         end
