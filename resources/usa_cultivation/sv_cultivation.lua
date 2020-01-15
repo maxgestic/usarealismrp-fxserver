@@ -3,8 +3,10 @@ function loadPlants()
 		local response = json.decode(text)
         if response.rows then
             print("loaded " .. #(response.rows) .. " plants")
-			for i = 1, #(response.rows) do
-				table.insert(PLANTED, response.rows[i].doc)
+            for i = 1, #(response.rows) do
+                if not response.rows[i].doc._id:find("design") then
+                    table.insert(PLANTED, response.rows[i].doc)
+                end
 			end
 		end
 	end, "GET", "", { ["Content-Type"] = 'application/json' })

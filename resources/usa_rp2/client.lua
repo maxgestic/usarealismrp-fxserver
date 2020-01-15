@@ -1181,4 +1181,4 @@ Citizen.CreateThread(function()
 end)
 
 -- add XMAS tree --
-local xmasTree = CreateObject(118627012, 226.48237609863, -895.41094970703, 28.692138671875, 0, 0, 0)
+--local xmasTree = CreateObject(118627012, 226.48237609863, -895.41094970703, 28.692138671875, 0, 0, 0)
