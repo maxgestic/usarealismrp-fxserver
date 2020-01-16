@@ -102,7 +102,7 @@ end
 Citizen.CreateThread(function()
     while true do
         if robbing then
-            if not IsControlPressed(0, KEYS.E) then 
+            if not IsControlPressed(0, KEYS.E) or not IsAimCamActive() then 
                 canceled = true
             end
         end
