@@ -1,24 +1,25 @@
 local Channels = {
-    {id = 1, name = "Off"},
+    {id = 1, name = "OFF"},
     {id = 2, name = "DISPATCH"},
-    {id = 3, name = "TAC 1"},
-    {id = 4, name = "TAC 2"},
-    {id = 5, name = "Tow Freq."},
-    {id = 6, name = "CB CH. 1"},
-    {id = 7, name = "CORRECTIONS"},
-    {id = 8, name = "ATC"},
+    {id = 3, name = "EMS"},
+    {id = 4, name = "TAC 1"},
+    {id = 5, name = "TAC 2"},
+    {id = 6, name = "Tow Freq."},
+    {id = 7, name = "CB CH. 1"},
+    {id = 8, name = "CORRECTIONS"},
+    {id = 9, name = "ATC"}
     --{id = 7, name = "CB CH. 2"},
     --{id = 8, name = "CB CH. 3"}
 }
 
 local Permissions = {
-    ["sheriff"] = { 1, 2, 3, 4, 5, 6, 7 },
-    ["corrections"] = { 1, 2, 3, 4, 5, 6, 7},
-    ["ems"] = { 1, 2, 3, 4, 5, 6, 7 },
-    ["mechanic"] = { 1, 5, 6 },
-    ["civ"] = { 1, 6 },
-    ["doctor"] = { 1, 2, 6, 7 },
-    ["pilot"] = { 1, 8 }
+    ["sheriff"] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+    ["corrections"] = { 1, 2, 3, 4, 5, 6, 7, 8, 9},
+    ["ems"] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 },
+    ["mechanic"] = { 1, 6, 7 },
+    ["civ"] = { 1, 7 },
+    ["doctor"] = { 1, 2, 3, 7 },
+    ["pilot"] = { 1, 9 }
 }
 
 local CAN_CIVS_USE = false
