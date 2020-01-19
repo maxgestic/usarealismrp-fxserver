@@ -82,13 +82,16 @@ local KEYS = {
 
 local ITEMS = {}
 
+local RENTAL_PERCENTAGE = nil
+
 _menuPool = NativeUI.CreatePool()
 mainMenu = NativeUI.CreateMenu("Aircraft Shop", "~b~Welcome!", 0 --[[X COORD]], 320 --[[Y COORD]])
 _menuPool:Add(mainMenu)
 
-RegisterNetEvent("aircraft:loadItems")
-AddEventHandler("aircraft:loadItems", function(items)
-    ITEMS = items
+RegisterNetEvent("aircraft:loadItems") -- items + rental % amount setting
+AddEventHandler("aircraft:loadItems", function(items, rentalPercentage)
+	ITEMS = items
+	RENTAL_PERCENTAGE = rentalPercentage
 end)
 
 TriggerServerEvent("aircraft:loadItems")
@@ -249,7 +252,7 @@ function CreateHelicopterMenu(menu, vehicles)
 	for name, info in pairs(vehicles) do
 		local aircraft = info
 		local heliMenu = _menuPool:AddSubMenu(helicopters.SubMenu, aircraft.name, 'View prices of the '..aircraft.name, true)
-		local rent = NativeUI.CreateItem('Rent '..aircraft.name, 'Rent price: $' .. exports.globals:comma_value(0.30*aircraft.price))
+		local rent = NativeUI.CreateItem('Rent '..aircraft.name, 'Rent price: $' .. exports.globals:comma_value(RENTAL_PERCENTAGE*aircraft.price))
 		local buy = NativeUI.CreateItem('Buy '..aircraft.name, 'Buy price: $'.. exports.globals:comma_value(aircraft.price))
 		rent.Activated = function(parentmenu, selected)
             local business = exports["usa-businesses"]:GetClosestStore(15)

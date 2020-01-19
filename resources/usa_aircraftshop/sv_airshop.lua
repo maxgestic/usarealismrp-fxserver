@@ -27,7 +27,7 @@ local ITEMS = {
 local LICENSE_PURCHASE_PRICE = 1000
 
 local RENTAL_PERCENTAGE = 0.40
-local CLAIM_PERCENTAGE = 0.30
+local CLAIM_PERCENTAGE = 0.16
 
 RegisterServerEvent('aircraft:requestOpenMenu')
 AddEventHandler('aircraft:requestOpenMenu', function()
@@ -42,7 +42,7 @@ end)
 
 RegisterServerEvent('aircraft:loadItems')
 AddEventHandler('aircraft:loadItems', function()
-    TriggerClientEvent("aircraft:loadItems", source, ITEMS)
+    TriggerClientEvent("aircraft:loadItems", source, ITEMS, RENTAL_PERCENTAGE)
 end)
 
 -- # note: plate == first 8 digits of aircraft.id
@@ -64,10 +64,11 @@ RegisterServerEvent('aircraft:requestRent')
 AddEventHandler('aircraft:requestRent', function(category, name, business)
     local char = exports["usa-characters"]:GetCharacter(source)
     local aircraft = ITEMS[category][name]
-    if char.get("money") >= aircraft.price then 
-        char.removeMoney(RENTAL_PERCENTAGE * aircraft.price)
+    local rentalPrice = RENTAL_PERCENTAGE * aircraft.price
+    if char.get("money") >= rentalPrice then 
+        char.removeMoney(rentalPrice)
         if business then
-            exports["usa-businesses"]:GiveBusinessCashPercent(business, RENTAL_PERCENTAGE * aircraft.price)
+            exports["usa-businesses"]:GiveBusinessCashPercent(business, rentalPrice)
         end
         TriggerClientEvent("aircraft:spawn", source, aircraft.hash)
     else 
