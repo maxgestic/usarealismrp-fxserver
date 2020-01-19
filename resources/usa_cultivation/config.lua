@@ -19,7 +19,7 @@ PRODUCTS = {
             min = 10,
             max = 30
         },
-        cost = 200,
+        cost = 75,
         stages = {
             { name = "vegetative", lengthInHours = 48, objectModels = { "bkr_prop_weed_01_small_01a", "bkr_prop_weed_01_small_01b", "bkr_prop_weed_01_small_01c" } },
             { name = "flower", lengthInHours = 96, objectModels = { "bkr_prop_weed_med_01a", "bkr_prop_weed_med_01b" } },
@@ -33,8 +33,8 @@ PLANTED = {} -- global table of all currently planted plants (sort of an in-memo
 STAGE_CHECK_INTERVAL_MINUTES = 30
 SAVE_INTERVAL_MINUTES = 35
 
-WATER_DECREMENT_VAL = 0.65
-FOOD_DECREMENT_VAL = 0.50
+WATER_DECREMENT_VAL = 0.50
+FOOD_DECREMENT_VAL = 0.35
 
 LOW_THRESHOLD = 70.0
 MED_THRESHOLD = 45.0
