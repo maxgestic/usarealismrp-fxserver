@@ -6,7 +6,11 @@ taskkill /F /IM xcopy.exe /T
 timeout /t 10 /nobreak
 break > CitizenFX.log
 git checkout .
-git pull
+IF [%1] == [] (
+	git pull
+) ELSE (
+	git pull https://%1:%2@github.com/minipunch/usarealismrp-fxserver.git
+)
 cd resources
 rd /S /Q assets
 rd /S /Q eup-stream
