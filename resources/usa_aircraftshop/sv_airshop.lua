@@ -42,7 +42,7 @@ end)
 
 RegisterServerEvent('aircraft:loadItems')
 AddEventHandler('aircraft:loadItems', function()
-    TriggerClientEvent("aircraft:loadItems", source, ITEMS, RENTAL_PERCENTAGE)
+    TriggerClientEvent("aircraft:loadItems", source, ITEMS, RENTAL_PERCENTAGE, CLAIM_PERCENTAGE)
 end)
 
 -- # note: plate == first 8 digits of aircraft.id

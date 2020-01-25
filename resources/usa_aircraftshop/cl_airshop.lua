@@ -83,15 +83,17 @@ local KEYS = {
 local ITEMS = {}
 
 local RENTAL_PERCENTAGE = nil
+local CLAIM_PERCENTAGE = nil
 
 _menuPool = NativeUI.CreatePool()
 mainMenu = NativeUI.CreateMenu("Aircraft Shop", "~b~Welcome!", 0 --[[X COORD]], 320 --[[Y COORD]])
 _menuPool:Add(mainMenu)
 
 RegisterNetEvent("aircraft:loadItems") -- items + rental % amount setting
-AddEventHandler("aircraft:loadItems", function(items, rentalPercentage)
+AddEventHandler("aircraft:loadItems", function(items, rentalPercentage, claimPercentage)
 	ITEMS = items
 	RENTAL_PERCENTAGE = rentalPercentage
+	CLAIM_PERCENTAGE = claimPercentage
 end)
 
 TriggerServerEvent("aircraft:loadItems")
@@ -351,7 +353,7 @@ function CreateClaimMenu(menu, playerAircraft)
         local aircraft = playerAircraft[i]
         if not aircraft.stored then
             hadAircraftToClaim = true
-            local claimPrice = math.floor(0.30*aircraft.price)
+            local claimPrice = math.floor(CLAIM_PERCENTAGE*aircraft.price)
             local item = NativeUI.CreateItem(aircraft.name, "Claim for: $" .. exports.globals:comma_value(claimPrice))
             item.Activated = function(pmenu, selected)
                 TriggerServerEvent("aircraft:claim", aircraft.id)
