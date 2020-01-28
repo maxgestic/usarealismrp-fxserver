@@ -261,6 +261,13 @@ SecurityCamConfig.Locations = {
             {label = "Office", x = -32.5, y = -1106.7, z = 27.4, r = {x = 0.0, y = 0.0, z = -100.0}},
             {label = "Outside Front", x = -39.8, y = -1120.8, z = 28.7, r = {x = 0.0, y = 0.0, z = -5.0}}
         }
+    },
+    {
+        camBox = {label = "Bank (Paleto Bay)", id = 'store35'},
+        cameras = {
+            {label = "Front Door", x = -107.50, y = 6468.60, z = 33.826, r = {x = -15.0, y = 0.0, z = 160.0}},
+            {label = "Vault", x = -108.31112670898, y = 6462.7919921875, z = 34.046794891357, r = {x = -15.0, y = 0.0, z = 0.0}},
+        }
     }
 }
 
