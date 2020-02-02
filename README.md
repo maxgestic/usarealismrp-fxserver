@@ -17,6 +17,8 @@ To get started with your own testing environment:
     * write `sv_licenseKey <license key>`, replacing `<license key>` with a [FiveM license key](https://keymaster.fivem.net/)
 4) Create the path `C:/wamp/www/` to house the auto generated chat log file
     * Temporary step, path should be auto generated
+5) Create your database views
+6) You can start the server with ``..\run.cmd +exec server.cfg`` from the ``server-data`` folder instead of using the start.bat file to avoid scrambling
 
 **Job Types**
 1. "civ"
@@ -32,8 +34,7 @@ To get started with your own testing environment:
 11. ... could be more ...
 
 **DB Notes**
-1) ``vehicles`` database requires an index to be created on the "stored_location" field for usa-properties
-2)  Must create following couch db views in a ``vehicleFilters`` design doc in a ``vehicles`` db:  
+1)  Must create following couch db views in a ``vehicleFilters`` design doc in a ``vehicles`` db:  
 	* **getMakeModelOwner**  
 		- ``emit(doc._id, [doc.owner, doc.make, doc.model]);``  
 	* **getMakeModelPlate**  
@@ -50,11 +51,11 @@ To get started with your own testing environment:
 		- ``emit(doc._id, [doc.make, doc.model, doc.price, doc.stored, doc.stored_location, doc._id]);``  
 	* **getVehiclesToSellWithPlates**  
 		- ``emit(doc._id, [doc.plate, doc.make, doc.model, doc.price, doc._rev]);``
-3) Must create following couch db views in a ``phoneFilters`` design doc in a ``phones`` db:
+2) Must create following couch db views in a ``phoneFilters`` design doc in a ``phones`` db:
 	* **getConversationsByNumber**
 		- ``emit(doc._id, doc.conversations);``
 	* **getContactsByNumber**
 		- ``emit(doc._id, doc.contacts);``
-4) Must create following couch db views in a ``characterFilters`` design doc in a ``characters``:
+3) Must create following couch db views in a ``characterFilters`` design doc in a ``characters``:
 	* **getCharactersForSelectionBySteamID**
 		- ``emit(doc.created.ownerIdentifier, [doc._id, doc._rev, doc.name, doc.dateOfBirth, doc.money, doc.bank, doc.spawn, doc.created.time]);``
