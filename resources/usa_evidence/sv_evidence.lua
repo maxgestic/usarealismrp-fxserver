@@ -58,7 +58,7 @@ end, {
 	help = "breathalyze the nearest person"
 })
 
-TriggerEvent('es:addJobCommand', 'dnasample', { "police", "sheriff", "corrections" }, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'dnasample', { "police", "sheriff", "corrections", "ems" }, function(source, args, char)
 	TriggerClientEvent("evidence:dnaNearest", source)
 end, {
 	help = "dna sample the nearest person"

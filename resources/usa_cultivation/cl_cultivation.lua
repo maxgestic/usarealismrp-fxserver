@@ -53,11 +53,16 @@ Citizen.CreateThread(function()
                 local seedBuyLocation = info.buyLocation
                 local distance = Vdist(me.coords.x, me.coords.y, me.coords.z, seedBuyLocation.x, seedBuyLocation.y, seedBuyLocation.z)
                 if distance < MENU_TEXT_RADIUS then
-                    DrawText3D(seedBuyLocation.x, seedBuyLocation.y, seedBuyLocation.z, "[E] - Buy Cannabis Plant")
+                    DrawText3D(seedBuyLocation.x, seedBuyLocation.y, seedBuyLocation.z, "[E] - Buy Cannabis Plant | [Hold E] - Help")
                 end
                 if distance < MENU_RADIUS then
                     if IsControlJustPressed(0, KEYS.E) then
-                        TriggerServerEvent("cultivation:buy", name)
+                        Wait(500)
+                        if IsControlPressed(0, KEYS.E) then
+                            ShowHelp()
+                        else
+                            TriggerServerEvent("cultivation:buy", name)
+                        end
                         Wait(500)
                     end
                 end
@@ -126,6 +131,11 @@ function doAdjustZCoord(objName)
     else
         return nil
     end
+end
+
+function ShowHelp()
+    local msg = "'Use' the plant in your inventory to plant it. It will take about 7 whole days to enter its final stage at which point it becomes harvestable by 'using' large scisossors near it. Make sure you buy a watering can from the 24/7 and fertilizer from the hardware store and 'use' them near your plants to keep them alive! After harvesting, you can take the buds to that big blue barn off the dirt road just south of the car dealership in Harmony to process them for sale."
+    TriggerEvent("chatMessage", "", {}, "^3INFO: ^0" .. msg)
 end
 
 RegisterNetEvent("cultivation:plant")

@@ -262,7 +262,7 @@ AddEventHandler('evidence:displayObservations', function(observations, targetSou
 		Citizen.Wait(0)
 		for key, value in pairs(observations) do
 			if key == 'bodySweat' and value then
-	      local x, y, z = table.unpack(GetPedBoneCoords(targetPed, 24818, 0.0, 0.0, 0.0))
+	      		local x, y, z = table.unpack(GetPedBoneCoords(targetPed, 24818, 0.0, 0.0, 0.0))
 				DrawText3D(x, y, z, 3, 'Body Sweat')
 				hasSomethingToObserve = true
 			elseif key == 'wetClothing' and value then
