@@ -268,6 +268,29 @@ SecurityCamConfig.Locations = {
             {label = "Front Door", x = -107.50, y = 6468.60, z = 33.826, r = {x = -15.0, y = 0.0, z = 160.0}},
             {label = "Vault", x = -108.31112670898, y = 6462.7919921875, z = 34.046794891357, r = {x = -15.0, y = 0.0, z = 0.0}},
         }
+    },
+    {
+        camBox = {label = "Ammunation (Algonquin Boulevard)", id = 'store40'},
+        cameras = {
+            {label = "Front Door", x = 1697.74, y = 3750.5, z = 36.38, r = {x = -20.0, y = 0.0, z = 240.0}},
+            {label = "Main", x = 1688.87, y = 3758.35, z = 36.38, r = {x = -15.0, y = 0.0, z = 270.0}},
+        }
+    },
+    {
+        camBox = {label = "Ammunation (Adams Apple Boulevard)", id = 'store41'},
+        cameras = {
+            {label = "Front Door", x = 15.67, y = -1115.48, z = 30.79, r = {x = -20.0, y = 0.0, z = 180.0}},
+            {label = "Side Building", x = 21.39, y = -1116.04, z = 33.17, r = {x = -20.0, y = 0.0, z = 320.0}},
+            {label = "Main", x = 19.12, y = -1103.44, z = 31.8, r = {x = -20.0, y = 0.0, z = 210.0}},
+            {label = "Shooting Range", x = 6.45, y = -1098.48, z = 31.8, r = {x = -20.0, y = 0.0, z = 210.0}},
+        }
+    },
+    {
+        camBox = {label = "Ammunation (Paleto Bay)", id = 'store42'},
+        cameras = {
+            {label = "Front Door", x = -320.71, y = 6079.22, z = 34.26, r = {x = -20.0, y = 0.0, z = 200.0}},
+            {label = "Main", x = -334.92, y = 6082.7, z = 33.45, r = {x = -20.0, y = 0.0, z = 270.0}},
+        }
     }
 }
 
