@@ -1,5 +1,6 @@
 -- STAGE 1 - Thermite the electronic locks to gain access to the doors.
 local thermite_loc = {-607.29, -245.78, 50.24}
+local thermite_success = false
 local doorList = {
     [1] = { ["objName"] = "p_jewel_door_l", ["x"]= -631.91, ["y"]= -237.19,["z"]= 38.06,["locked"]= true},
     [2] = { ["objName"] = "p_jewel_door_r1", ["x"]= -631.15, ["y"]= -238.21,["z"]= 38.09,["locked"]= true},
@@ -39,23 +40,22 @@ Citizen.CreateThread(function()
 end)
 
 function promptThermite(location)
-    --local hasThermite  = TriggerServerEvent("jewellery_heist:checkinventory", thermite)
-    --if hasThermite then
+    if not thermite_success  then
         drawText('Press ~g~E ~w~to begin thermiting')
-        if IsControlJustPressed(0, 38) then
-            --pleaseHold('Placing thermite')
-            local success_thermite = math.random()
-            if success_thermite < 0.6 then
-                StartEntityFire(GetPlayerPed(-1))
-            else
-                notify('success!')
-                for i = 1, #doorList do
-                    doorList[i]['locked'] = false
-                    FreezeEntityPosition(unlockDoor, doorList[i]['locked'])
-                end
+    end
+    if IsControlJustPressed(0, 38) and not IsEntityDead(GetPlayerPed(-1)) and not thermite_success then
+        local success_thermite = math.random()
+        if success_thermite < 0.6 then
+            StartEntityFire(GetPlayerPed(-1))
+        else
+            notify('success!')
+            for i = 1, #doorList do
+                doorList[i]['locked'] = false
+                FreezeEntityPosition(unlockDoor, doorList[i]['locked'])
+                thermite_success = true
             end
         end
-    --end
+    end
 end
 
 

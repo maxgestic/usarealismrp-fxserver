@@ -1036,6 +1036,8 @@ function interactionMenuUse(itemName, wholeItem)
 			TriggerEvent("cultivation:harvest")
 		elseif itemName:find("Shovel") then
 			TriggerEvent("cultivation:shovel")
+		elseif itemName:find("Thermite") then
+			TriggerServerEvent("jewelleryheist:thermite", wholeItem.name)
 		else
 			TriggerEvent("interaction:notify", "There is no use action for that item!")
 		end

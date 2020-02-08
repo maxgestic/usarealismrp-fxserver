@@ -27,6 +27,7 @@ local markets = {
       {name = 'Switchblade', type = 'weapon', hash = -538741184, price = 1500, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(0, 3)},
       {name = 'Brass Knuckles', type = 'weapon', hash = -656458692, price = 1100, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(0, 5)},
       { name = "Molotov", type = "weapon", hash = 615608432, price = 150, legality = "illegal", quantity = 1, weight = 20, stock = math.random(0, 3), objectModel = "w_ex_molotov"},
+      { name = "Thermite", type = "misc", hash = 865563579, price = 5, legality = "illegal", quantity = 1, weight = 20, stock = math.random(0, 3), objectModel = "hei_prop_heist_thermite"},
       { name = "Machine Pistol", type = "weapon", hash = -619010992, price = 25000, legality = "illegal", quantity = 1, weight = 20, stock = math.random(0, 2) },
       { name = "Tommy Gun", type = "weapon", hash = 1627465347, price = 110000, legality = "illegal", quantity = 1, weight = 45, stock = math.random(0, 2), objectModel = "w_sb_gusenberg" },
       { name = "AK47", type = "weapon", hash = -1074790547, price = 100000, legality = "illegal", quantity = 1, weight = 45, stock = math.random(0, 2), objectModel = "w_ar_assaultrifle" },
@@ -38,7 +39,7 @@ local markets = {
 
 for store, info in pairs(markets) do
     for i = 1, #info["items"] do
-        if info["items"][i].name ~= "Lockpick" and info["items"][i].name ~= "Hotwiring Kit" then
+        if info["items"][i].name ~= "Lockpick" and info["items"][i].name ~= "Hotwiring Kit" and info['items'][i].name ~= 'Thermite' then
             info["items"][i].notStackable = true
         end
     end
