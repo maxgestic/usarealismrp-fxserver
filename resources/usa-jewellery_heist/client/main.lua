@@ -8,16 +8,6 @@ local doorList = {
 
 Citizen.CreateThread(function()
     while true do
-        local x,y,z = table.unpack(thermite_loc)
-        if nearMarker(x,y,z) then
-            promptThermite(x,y,z)
-        end
-        Wait(0)
-    end
-end)
-
-Citizen.CreateThread(function()
-    while true do
         Wait(0)
         for i = 1, #doorList do
             local playerCoords = GetEntityCoords( GetPlayerPed(-1) )
@@ -39,11 +29,22 @@ Citizen.CreateThread(function()
     end
 end)
 
-function promptThermite(location)
-    if not thermite_success  then
-        drawText('Press ~g~E ~w~to begin thermiting')
+Citizen.CreateThread(function()
+    while true do
+        local x,y,z = table.unpack(thermite_loc)
+        if nearMarker(x,y,z) and not IsEntityDead(GetPlayerPed(-1)) and  not thermite_success then
+            DrawText3D(x,y,z,  5, '[E] - Rig Thermite')
+            if IsControlJustPressed(0, 38) and not IsEntityDead(GetPlayerPed(-1)) then
+                TriggerServerEvent('jewelleryheist:doesUserHaveThermiteToUse')
+            end
+        end
+        Wait(0)
     end
-    if IsControlJustPressed(0, 38) and not IsEntityDead(GetPlayerPed(-1)) and not thermite_success then
+end)
+
+RegisterNetEvent('jewelleryheist:doesUserHaveThermiteToUse')
+AddEventHandler('jewelleryheist:doesUserHaveThermiteToUse', function(hasProduct) -- action of selling to the ped spawned
+    if hasProduct then
         local success_thermite = math.random()
         if success_thermite < 0.6 then
             StartEntityFire(GetPlayerPed(-1))
@@ -53,11 +54,15 @@ function promptThermite(location)
                 doorList[i]['locked'] = false
                 FreezeEntityPosition(unlockDoor, doorList[i]['locked'])
                 thermite_success = true
+                Wait(3000)
+                TriggerEvent('usa:notify', 'Once you have collected the goods head to Jamestown and locate the buyer!')
             end
         end
+        TriggerServerEvent("jewelleryheist:thermite", source)
+    else
+        TriggerEvent('usa:notify', 'You do not have any ~y~Thermite~s~!')
     end
-end
-
+end)
 
 -- STAGE 2 - ROB THIS MOFUGGA
 
@@ -77,7 +82,8 @@ Citizen.CreateThread(function()
             local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, smash_n_grab[k].x, smash_n_grab[k].y, smash_n_grab[k].z)
             if dist < 0.5 and not smash_n_grab[k].robbed then
                 if IsControlJustPressed(1,51) then
-                    pleaseHold('Stealing Jewellery', 3000, 'missheist_jewel@first_person', 'smash_case_e')
+                    pleaseHold('Stealing Jewellery', 6000, 'missheist_jewel@first_person', 'smash_case_e')
+                    TriggerServerEvent('jewelleryheist:stolengoods', source)
                     smash_n_grab[k].robbed = true
                 end
             end
@@ -98,6 +104,7 @@ Citizen.CreateThread(function()
     while true do
         local x,y,z = table.unpack(purchase_location)
         if nearMarker(x,y,z) then
+            DrawText3D(x,y,z,  5, '[E] - Sell Stolen Goods')
             promptSale(location)
         end
         Wait(0)
@@ -115,11 +122,21 @@ function spawnPed(ped, location)
     SetEntityAsMissionEntity(purchasee, true, true)
 end
 
-function promptSale(location)
+function promptSale()
     if IsControlJustPressed(0, 38) then
-        pleaseHold('Selling Stolen Goods', 10000, 'missheist_agency2aig_13', 'pickup_briefcase_upperbody')
+        TriggerServerEvent('jewelleryheist:doesUserHaveGoodsToSell')
     end
 end
+
+RegisterNetEvent('jewelleryheist:doesUserHaveGoodsToSell')
+AddEventHandler('jewelleryheist:doesUserHaveGoodsToSell', function(hasProduct) -- action of selling to the ped spawned
+    if hasProduct then
+        pleaseHold('Selling Stolen Goods', 10000, 'missheist_agency2aig_13', 'pickup_briefcase_upperbody')
+        TriggerServerEvent("jewelleryheist:sellstolengoods", source)
+    else
+        TriggerEvent('usa:notify', 'You do not have any ~y~Stolen Goods~s~!')
+    end
+end)
 
 -- EXTRA HELPERS
 function drawText(text)
@@ -166,4 +183,20 @@ function pleaseHold(label, time, animation, anim)
             -- Do Something If Event Wasn't Cancelled
         end
     end)
+end
+
+function DrawText3D(x, y, z, distance, text)
+    if Vdist(GetEntityCoords(PlayerPedId()), x, y, z) < distance then
+        local onScreen,_x,_y=World3dToScreen2d(x,y,z)
+        SetTextScale(0.35, 0.35)
+        SetTextFont(4)
+        SetTextProportional(1)
+        SetTextColour(255, 255, 255, 215)
+        SetTextEntry("STRING")
+        SetTextCentre(1)
+        AddTextComponentString(text)
+        DrawText(_x,_y)
+        local factor = (string.len(text)) / 470
+        DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
+    end
 end
