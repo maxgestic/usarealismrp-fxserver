@@ -1,22 +1,3 @@
-RegisterServerEvent("doormanager:s_openDoor")
-AddEventHandler("doormanager:s_openDoor", function(doorId)
-    -- Source
-    local src = source
-    -- Get the status of the door
-    local isDoorLocked = GetDoorStatus(doorId)
-
-    if (isDoorLocked == 1) then
-        if (playerJob == "cop" ) then
-            -- Client Event to open door
-            TriggerClientEvent("doormanager:c_openDoor", -1, doorId)
-            -- Update door status in DB
-            SetDoorStatus(doorId, 0)
-        else
-
-        end
-    end
-end)
-
 -- Check if player has thermite to use
 RegisterServerEvent('jewelleryheist:doesUserHaveThermiteToUse')
 AddEventHandler('jewelleryheist:doesUserHaveThermiteToUse', function()

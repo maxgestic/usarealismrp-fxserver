@@ -112,6 +112,8 @@ local DOORS = {
   {name = "DA Office / Door 4", x = -77.79, y = -814.25, z = 243.38, model = -88942360, locked = true, offset = {0.0, 1.12, -0.02}, heading = 250.0, _dist = 1.0, allowedJobs = {'da', 'judge'}},
   {name = "Court House / Front 1", x = 242.60382080078,y = -1074.208984375, z = 29.287979125977, model = 110411286, locked = true, static = true, _dist = 1.0, allowedJobs = {'sheriff', "corrections", "ems", "judge"}},
   {name = "Court House / Front 2", x = 243.99006652832,y = -1074.3812255859, z = 29.286693572998, model = 110411286, locked = false, offset={0.0, -1.24, 0.0}, heading=180, _dist = 1.5, allowedJobs = {'sheriff', "corrections", "ems", "judge"}},
+  {name = "Jewellery Store Door 1", x = -631.91,y = -237.19, z = 38.06, model = 1425919976, locked = true, offset={0.0, -0.8, 0.0}, heading=307.0, _dist = 1.0, allowedJobs = {'sheriff', "corrections", "ems", "judge"}},
+  {name = "Jewellery Store Door 2", x = -631.15,y = -238.21, z = 38.09, model = 9467943, locked = true, offset={0.0, 0.8, 0.0}, heading=307.0, _dist = 1.0, allowedJobs = {'sheriff', "corrections", "ems", "judge"}},
 }
 
 -- allowedJobs - table of job names allowed to use door, the player's job must match any value in the list for the door to lock/unlock

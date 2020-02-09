@@ -50,6 +50,11 @@ AddEventHandler('jewelleryheist:doesUserHaveThermiteToUse', function(hasProduct)
             StartEntityFire(GetPlayerPed(-1))
         else
             notify('success!')
+            local mycoords = GetEntityCoords(GetPlayerPed(-1), false)
+            local x, y, z = table.unpack(mycoords)
+            local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+            local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+            TriggerServerEvent("911:JewelleryRobbery", x, y, z, lastStreetNAME)
             for i = 1, #doorList do
                 doorList[i]['locked'] = false
                 FreezeEntityPosition(unlockDoor, doorList[i]['locked'])
