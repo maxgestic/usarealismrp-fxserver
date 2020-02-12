@@ -17,8 +17,8 @@ To get started with your own testing environment:
     * write `sv_licenseKey <license key>`, replacing `<license key>` with a [FiveM license key](https://keymaster.fivem.net/)
 4) Create the path `C:/wamp/www/` to house the auto generated chat log file
     * Temporary step, path should be auto generated
-5) Create your database views
-6) You can start the server with ``..\run.cmd +exec server.cfg`` from the ``server-data`` folder instead of using the start.bat file to avoid scrambling
+5) Create your database views (see below view definitions)
+6) You can start the server with ``..\run.cmd +exec server.cfg`` from the ``server-data`` folder instead of using the start.bat file to avoid scrambling. Add ``stop usa_utils`` to your ``server_internal.cfg`` as well (so you don't get banned for code injection).
 
 **Job Types**
 1. "civ"

@@ -322,5 +322,12 @@ BUSINESSES = {
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
 		price = 5000
+	},
+	["Ammunation (Algonquin Boulevard)"] = {
+		position = {1690.34, 3759.41, 34.71},
+		cameraID = 'store40',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 6500
 	}
 }

@@ -33,7 +33,11 @@ locations = {
 	{ ["x"] = -1073.4, ["y"] = -879.7, ["z"] = 4.8, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"}, ["noBlip"] = true }, -- Vespucci PD
 	{ ['x'] = 1127.5, ['y'] = 2670.8, ['z'] = 38.1, ['noBlip'] = true}, -- Sandy Shores Motel
 	{ ['x'] = 388.5, ['y'] = 2647.6, ['z'] = 44.5, ['noBlip'] = true}, -- Eastern Motel (sandy)
-	{ ['x'] = 967.45831298828, ['y'] = -128.59553527832, ['z'] = 74.387634277344, ['noBlip'] = true} -- LS biker compound
+	{ ['x'] = 967.45831298828, ['y'] = -128.59553527832, ['z'] = 74.387634277344, ['noBlip'] = true}, -- LS biker compound
+	-- Additionals added
+	{ ['x'] = 2362.2, ['y'] = 3113.97, ['z'] = 48.26, ['noBlip'] = true}, -- Sandy tow
+	{ ['x'] = 1754.54, ['y'] = 3293.54, ['z'] = 41.13, ['noBlip'] = true}, -- Sandy airport
+	{ ['x'] = 2148.8, ['y'] = 4798.39, ['z'] = 41.1, ['noBlip'] = true} -- Grapeseed airport
 }
 
 local VEHICLE_DAMAGES = {}
