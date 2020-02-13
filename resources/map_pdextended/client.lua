@@ -16,8 +16,3 @@ Citizen.CreateThread(function()
   end
 end)
 
--- This samll code loads the entire interior, and makes it possible to spawn inside the pd now
-
-Citizen.CreateThread(function()
-    LoadInterior(GetInteriorAtCoords(440.84, -983.14, 30.69))
-end)
