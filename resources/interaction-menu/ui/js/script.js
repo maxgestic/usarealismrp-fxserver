@@ -176,7 +176,7 @@ var itemImages = {
   "Cool Ranch Doritos": "https://i.imgur.com/7zwiCP5.png",
   "Gummy Worms": "https://i.imgur.com/CjOhIJF.png",
   "Sour Gummy Worms": "https://i.imgur.com/AiSyyCw.png",
-  "LSD Vile": "https://imgur.com/4zNSw5c.png",
+  "LSD Vial": "https://imgur.com/4zNSw5c.png",
   "RAW Papers": "https://imgur.com/BHm4hHf.png",
   "Bic Lighter": "https://imgur.com/sVSnmCy.png",
   "Joint": "https://imgur.com/NBVdIqF.png",

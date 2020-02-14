@@ -1,3 +1,7 @@
+local robbable = true
+local COPS_NEEDED_TO_ROB = 4
+local STORE_ROBBERY_TIMEOUT = 10800000
+
 -- Check if player has thermite to use
 RegisterServerEvent('jewelleryheist:doesUserHaveThermiteToUse')
 AddEventHandler('jewelleryheist:doesUserHaveThermiteToUse', function()
@@ -11,10 +15,18 @@ AddEventHandler('jewelleryheist:doesUserHaveThermiteToUse', function()
     }
 
     char.giveItem(thermite)
-    if char.hasItem("Thermite") then
-        TriggerClientEvent('jewelleryheist:doesUserHaveThermiteToUse', source, true)
+    if robbable then
+        if char.hasItem("Thermite") then
+            TriggerClientEvent('jewelleryheist:doesUserHaveThermiteToUse', source, true)
+            robbable = false;
+            SetTimeout(STORE_ROBBERY_TIMEOUT, function()
+                robbable = true
+            end)
+        else
+            TriggerClientEvent('jewelleryheist:doesUserHaveThermiteToUse', source, false)
+        end
     else
-        TriggerClientEvent('jewelleryheist:doesUserHaveThermiteToUse', source, false)
+        TriggerServerEvent('usa:notify', 'You cannot commit a jewellery heist yet')
     end
 end)
 

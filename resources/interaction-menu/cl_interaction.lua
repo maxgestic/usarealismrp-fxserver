@@ -822,9 +822,9 @@ function interactionMenuUse(itemName, wholeItem)
 			TriggerEvent("interaction:notify", "You have used: (x1) " .. itemName:sub(6))
 			intoxicate(true, nil)
 			reality(5)
-		elseif string.find(itemName, "LSD Vile") then
+		elseif string.find(itemName, "LSD Vial") then
 			TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
-			TriggerEvent("interaction:notify", "You have used: (x1) LSD Vile")
+			TriggerEvent("interaction:notify", "You have used: (x1) LSD Vial")
 			Citizen.CreateThread(function()
 				local drug_duration = 15 * 60 * 1000 -- 15 minutes in ms?
 				Wait(8000)

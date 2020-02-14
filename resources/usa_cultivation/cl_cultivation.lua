@@ -252,7 +252,11 @@ end)
 
 RegisterNetEvent("cultivation:update")
 AddEventHandler("cultivation:update", function(i, field, val)
-    PLANTED[i][field] = val
+    if PLANTED[i] then
+        PLANTED[i][field] = val
+    else 
+        print("cultivation:update failed. Plant at index " .. i .. " not valid!")
+    end
 end)
 
 RegisterNetEvent("cultivation:harvest")

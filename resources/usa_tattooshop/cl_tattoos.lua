@@ -120,7 +120,6 @@ Citizen.CreateThread(function()
                 ApplyPedOverlay(GetPlayerPed(-1), GetHashKey(items.category), GetHashKey(hashname))
                 table.insert(purchased_tattoos, {category = items.category, human_readable_name = tat.LocalizedName, hash_name = hashname})
             end
-            print("added tattoo " .. i)
             category_submenu.SubMenu:AddItem(tattoo)
         end
     end
@@ -130,7 +129,6 @@ Citizen.CreateThread(function()
     ----------------------------------
     -- Checkout Tattoos Button --
     ----------------------------------
-    print("adding checkout button")
     local item = NativeUI.CreateItem("Checkout", "Purchase all selected tattoos")
     item.Activated = function(parentmenu, selected)
         MainMenu:Visible(false)
@@ -143,7 +141,6 @@ Citizen.CreateThread(function()
         end
     end
     MainMenu:AddItem(item)
-    print("added checkout button")
     ----------------------------------
     -- Remove Tattoos Button --
     ----------------------------------
@@ -241,7 +238,6 @@ AddEventHandler('blips:returnBlips', function(blipsTable)
     CreateMapBlips()
   else
     for _, k in pairs(BLIPS) do
-      print(k)
       RemoveBlip(k)
     end
     BLIPS = {}

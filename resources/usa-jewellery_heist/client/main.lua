@@ -3,7 +3,6 @@ local thermite_loc = {-607.29, -245.78, 50.24}
 local thermite_success = false
 local doorList = {
     [1] = { ["objName"] = "p_jewel_door_l", ["x"]= -631.91, ["y"]= -237.19,["z"]= 38.06,["locked"]= true},
-    [2] = { ["objName"] = "p_jewel_door_r1", ["x"]= -631.15, ["y"]= -238.21,["z"]= 38.09,["locked"]= true},
 }
 
 Citizen.CreateThread(function()
@@ -35,6 +34,7 @@ Citizen.CreateThread(function()
         if nearMarker(x,y,z) and not IsEntityDead(GetPlayerPed(-1)) and  not thermite_success then
             DrawText3D(x,y,z,  5, '[E] - Rig Thermite')
             if IsControlJustPressed(0, 38) and not IsEntityDead(GetPlayerPed(-1)) then
+                TriggerServerEvent("jewelleryheist::beginRobbery");
                 TriggerServerEvent('jewelleryheist:doesUserHaveThermiteToUse')
             end
         end

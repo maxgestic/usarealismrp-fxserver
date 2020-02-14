@@ -17,8 +17,8 @@ AddEventHandler("bank:beginRobbery", function(bank)
 				TriggerClientEvent('usa:notify', usource, 'You are now robbing the bank, hack into the system to get the money!')
 				TriggerClientEvent("bank:startHacking", usource, bank)
 				SetTimeout(BANK_ROBBERY_TIMEOUT, function()
-					bankRobbable = true
-				end)
+				bankRobbable = true
+			end)
 			else
 				TriggerClientEvent("usa:notify", usource, "You need a cell phone to hack into the vault!")
 			end
