@@ -35,8 +35,8 @@ RegisterServerEvent("radio:accessCheck")
 AddEventHandler("radio:accessCheck", function()
     local char = exports["usa-characters"]:GetCharacter(source)
     local cjob = char.get("job")
-    if not CAN_CIVS_USE and not Permissions[cjob] then
-        TriggerClientEvent("usa:notify", source, "Only for public servants")
+    if (not CAN_CIVS_USE and cjob == "civ") or not Permissions[cjob] then
+        TriggerClientEvent("usa:notify", source, "Job does not have radio access")
         return
     end
     local permittedChannels = GetPermittedChannelsForJob(cjob)
