@@ -245,6 +245,8 @@ AddEventHandler('cocaineJob:doesUserHaveProductToSell', function(hasProduct) -- 
                 Citizen.Wait(0)
                 DrawTimer(beginTime, 5000, 1.42, 1.475, 'SELLING')
                 DisableControlAction(0, 244, true) -- 244 = M key (interaction menu / inventory)
+                DisableControlAction(0, INPUT_KEY, true) -- prevent spam clicking
+                cocaine.activeJob = false
             end
         end)
         RequestAnimDict("amb@prop_human_bum_bin@idle_b")
@@ -341,6 +343,7 @@ Citizen.CreateThread(function()
             StopAnimTask(GetPlayerPed(-1), animDict,animName, false)
             if cocaine.processingCocaine then
                 cocaine.processingCocaine = false
+                cocaine.activeJob = true
                 TriggerServerEvent("cocaineJob:givePackaged")
                 TriggerServerEvent('cocaineJob:residueRazor')
                 exports.globals:notify("Now take this to get delivered! Check your map for the red pill.")
