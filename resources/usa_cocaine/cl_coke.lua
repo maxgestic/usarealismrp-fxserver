@@ -240,13 +240,13 @@ AddEventHandler('cocaineJob:doesUserHaveProductToSell', function(hasProduct) -- 
     if hasProduct then
         local beginTime = GetGameTimer()
         local playerPed = PlayerPedId()
+        cocaine.activeJob = false
         Citizen.CreateThread(function()
             while GetGameTimer() - beginTime < 5000 do
                 Citizen.Wait(0)
                 DrawTimer(beginTime, 5000, 1.42, 1.475, 'SELLING')
                 DisableControlAction(0, 244, true) -- 244 = M key (interaction menu / inventory)
                 DisableControlAction(0, INPUT_KEY, true) -- prevent spam clicking
-                cocaine.activeJob = false
             end
         end)
         RequestAnimDict("amb@prop_human_bum_bin@idle_b")
@@ -260,7 +260,6 @@ AddEventHandler('cocaineJob:doesUserHaveProductToSell', function(hasProduct) -- 
         DeleteEntity(cokeBag)
         Citizen.Wait(1000)
         local location = deliveryCoords[cocaine.deliveryIndex]
-        cocaine.activeJob = false
         TriggerEvent('usa:notify', location.message)
         if location.waypoint then SetNewWaypoint(table.unpack(location.waypoint)) end
         RemoveBlip(cocaine.blip)
