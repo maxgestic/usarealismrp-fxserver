@@ -64,7 +64,7 @@ end)
 local failed  = false
 function mycb(success, timeremaining, finish)
 	ClearPedTasks(playerPed)
-	if success then
+	if success and timeremaining >= 0.5 then
 		print('Success with '..timeremaining..'s remaining.')
 		if finish then
 			if not failed then
