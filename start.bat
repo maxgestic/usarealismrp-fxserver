@@ -17,7 +17,7 @@ rd /S /Q eup-stream
 rd /S /Q map_courthouse
 rd /S /Q map_dealership
 rd /S /Q map_hospital
-rd /S /Q map_pdextended
+rd /S /Q map_mrpd
 rd /S /Q map_sandypdinterior
 rd /S /Q gabz_pillbox_hospital
 rd /S /Q paletopd
