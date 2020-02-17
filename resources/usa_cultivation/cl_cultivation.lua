@@ -285,10 +285,12 @@ end)
 
 RegisterNetEvent("cultivation:remove")
 AddEventHandler("cultivation:remove", function(i, msg)
-    DeleteObject(PLANTED[i].objectHandle)
-    table.remove(PLANTED, i)
-    if msg then 
-        exports.globals:notify(msg)
+    if PLANTED[i] then
+        DeleteObject(PLANTED[i].objectHandle)
+        table.remove(PLANTED, i)
+        if msg then 
+            exports.globals:notify(msg)
+        end
     end
 end)
 
