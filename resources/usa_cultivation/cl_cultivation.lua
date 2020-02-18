@@ -195,10 +195,12 @@ end)
 
 RegisterNetEvent("cultivation:updateSustenance")
 AddEventHandler("cultivation:updateSustenance", function(i, foodLevel, waterLevel, isDead)
-    PLANTED[i].foodLevel = foodLevel
-    PLANTED[i].waterLevel = waterLevel
-    if isDead then
-        PLANTED[i].isDead = isDead
+    if PLANTED[i] then
+        PLANTED[i].foodLevel = foodLevel
+        PLANTED[i].waterLevel = waterLevel
+        if isDead then
+            PLANTED[i].isDead = isDead
+        end
     end
 end)
 
