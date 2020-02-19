@@ -25,6 +25,8 @@ Citizen.CreateThread(function()
             end
             exports["usa_utils"]:SendPreRestartServerMonitorDiscordMsg()
             sentWarnings.twoMinute = true
+        elseif date.hour == 3 and date.min == 29 then
+            KickAllPlayers()
         elseif date.hour == 15 and date.min == 20 and not sentWarnings.tenMinute then 
             for i = 1, 3 do
                 TriggerClientEvent('chatMessage', -1, '^8^*[SERVER] ^3Server restarting in 10 minutes!')
@@ -38,6 +40,15 @@ Citizen.CreateThread(function()
             end
             exports["usa_utils"]:SendPreRestartServerMonitorDiscordMsg()
             sentWarnings.twoMinute = true
+        elseif date.hour == 15 and date.min == 29 then
+            KickAllPlayers()
         end
     end
 end)
+
+function KickAllPlayers()
+    local playerIDs = GetPlayers()
+    for i = 1, #playerIDs do 
+        DropPlayer(playerIDs[i], "Server restarting.")
+    end
+end
