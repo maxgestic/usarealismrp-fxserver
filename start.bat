@@ -1,7 +1,6 @@
 taskkill /F /IM FXServer.exe /T
 taskkill /F /IM git.exe /T
 taskkill /F /IM git-credential-manager.exe /T
-taskkill /F /IM node.exe /T
 taskkill /F /IM xcopy.exe /T
 timeout /t 10 /nobreak
 break > CitizenFX.log
