@@ -2,30 +2,6 @@ local PRODUCTS = {}
 local PLANTED = {}
 local CLOSEST_PLANTED = {}
 
-RegisterNetEvent("cultivation:load")
-AddEventHandler("cultivation:load", function(products, planted)
-    PRODUCTS = products
-    PLANTED = planted
-    if PLANTED then
-        for i = 1, #PLANTED do
-            local plant = PLANTED[i]
-            local objectModel = plant.stage.objectModels[1]
-            if objectModel then
-                local zCoordAdjustment = doAdjustZCoord(objectModel)
-                if zCoordAdjustment then
-                    PLANTED[i].objectHandle = CreateObject(GetHashKey(objectModel), plant.coords.x, plant.coords.y, plant.coords.z + zCoordAdjustment, 0, 0, 0)
-                else
-                    PLANTED[i].objectHandle = CreateObject(GetHashKey(objectModel), plant.coords.x, plant.coords.y, plant.coords.z, 0, 0, 0)
-                end
-                --PlaceObjectOnGroundProperly(prop)
-                SetEntityAsMissionEntity(PLANTED[i].objectHandle, 1, 1)
-            end
-        end
-    end
-end)
-
-TriggerServerEvent("cultivation:load")
-
 local me = {
     ped = nil,
     coords = nil
@@ -38,11 +14,37 @@ local PLANT_TEXT_RADIUS = 5.0
 local ANIMATION_TIME_SECONDS = 10
 
 local CLOSEST_PLANTS_BUFFER_INTERVAL_SECONDS = 3
-local CLOSEST_PLANTS_BUFFER_DIST = 20.0
+local OBJECT_CULLNIG_DIST = 300.0
 
 local KEYS = {
     E = 38
 }
+
+RegisterNetEvent("cultivation:load")
+AddEventHandler("cultivation:load", function(products, planted)
+    PRODUCTS = products
+    PLANTED = planted
+    if PLANTED then
+        local mycoords = me.coords
+        for i = 1, #PLANTED do
+            local plant = PLANTED[i]
+            if Vdist(mycoords.x, mycoords.y, mycoords.z, plant.coords.x, plant.coords.y, plant.coords.z) < OBJECT_CULLNIG_DIST then
+                local objectModel = plant.stage.objectModels[1]
+                if objectModel then
+                    local zCoordAdjustment = doAdjustZCoord(objectModel)
+                    if zCoordAdjustment then
+                        PLANTED[i].objectHandle = CreateObject(GetHashKey(objectModel), plant.coords.x, plant.coords.y, plant.coords.z + zCoordAdjustment, 0, 0, 0)
+                    else
+                        PLANTED[i].objectHandle = CreateObject(GetHashKey(objectModel), plant.coords.x, plant.coords.y, plant.coords.z, 0, 0, 0)
+                    end
+                    SetEntityAsMissionEntity(PLANTED[i].objectHandle, 1, 1)
+                end
+            end
+        end
+    end
+end)
+
+TriggerServerEvent("cultivation:load")
 
 Citizen.CreateThread(function()
     while true do
@@ -138,6 +140,38 @@ function ShowHelp()
     TriggerEvent("chatMessage", "", {}, "^3INFO: ^0" .. msg)
 end
 
+function LoadPlantModel(model)
+    if not HasModelLoaded(model) then
+        RequestModel(model)
+    end
+    while not HasModelLoaded(model) do
+        Wait(10)
+    end
+end
+
+function CreatePlantObject(i)
+    if PLANTED[i] and not PLANTED[i].objectHandle then
+        local plant = PLANTED[i]
+        local objectModel = plant.stage.objectModels[1]
+        LoadPlantModel(plant.stage.objectModels[1])
+        local zCoordAdjustment = doAdjustZCoord(objectModel)
+        if zCoordAdjustment then
+            plant.objectHandle = CreateObject(GetHashKey(objectModel), plant.coords.x, plant.coords.y, plant.coords.z + zCoordAdjustment, 0, 0, 0)
+        else
+            plant.objectHandle = CreateObject(GetHashKey(objectModel), plant.coords.x, plant.coords.y, plant.coords.z, 0, 0, 0)
+        end
+        SetEntityAsMissionEntity(plant.objectHandle, 1, 1)
+        PLANTED[i].objectHandle = plant.objectHandle
+    end
+end
+
+function DeletePlantObject(i)
+    if PLANTED[i] and PLANTED[i].objectHandle then
+        DeleteObject(PLANTED[i].objectHandle)
+        PLANTED[i].objectHandle = nil
+    end
+end
+
 RegisterNetEvent("cultivation:plant")
 AddEventHandler("cultivation:plant", function(type, itemName)
     if not IsPedInAnyVehicle(me.ped, true) then
@@ -155,42 +189,40 @@ end)
 
 RegisterNetEvent("cultivation:clientNewPlant")
 AddEventHandler("cultivation:clientNewPlant", function(newPlant)
-    -- create plant object
-    if not HasModelLoaded(newPlant.stage.objectModels[1]) then
-        RequestModel(newPlant.stage.objectModels[1])
+    if Vdist(me.coords.x, me.coords.y, me.coords.z, newPlant.coords.x, newPlant.coords.y, newPlant.coords.z) < OBJECT_CULLNIG_DIST then -- create plant object
+        local objectModel = newPlant.stage.objectModels[1]
+        LoadPlantModel(objectModel)
+        local zCoordAdjustment = doAdjustZCoord(objectModel)
+        if zCoordAdjustment then
+            newPlant.objectHandle = CreateObject(GetHashKey(objectModel), newPlant.coords.x, newPlant.coords.y, newPlant.coords.z + zCoordAdjustment, 0, 0, 0)
+        else
+            newPlant.objectHandle = CreateObject(GetHashKey(objectModel), newPlant.coords.x, newPlant.coords.y, newPlant.coords.z, 0, 0, 0)
+        end
+        SetEntityAsMissionEntity(newPlant.objectHandle, 1, 1)
     end
-	while not HasModelLoaded(newPlant.stage.objectModels[1]) do
-		Wait(10)
-    end
-    local objectModel = newPlant.stage.objectModels[1]
-    local zCoordAdjustment = doAdjustZCoord(objectModel)
-    if zCoordAdjustment then
-        newPlant.objectHandle = CreateObject(GetHashKey(objectModel), newPlant.coords.x, newPlant.coords.y, newPlant.coords.z + zCoordAdjustment, 0, 0, 0)
-    else
-        newPlant.objectHandle = CreateObject(GetHashKey(objectModel), newPlant.coords.x, newPlant.coords.y, newPlant.coords.z, 0, 0, 0)
-    end
-    --PlaceObjectOnGroundProperly(newPlant.objectHandle)
-    SetEntityAsMissionEntity(newPlant.objectHandle, 1, 1)
     table.insert(PLANTED, newPlant)
 end)
 
 -- update's plant object model on stage update --
 RegisterNetEvent("cultivation:updatePlantStage")
 AddEventHandler("cultivation:updatePlantStage", function(i, stage)
-    local obj = PLANTED[i].objectHandle
-    DeleteObject(obj)
-    PLANTED[i].stage = stage
-    local plant = PLANTED[i]
-    nextStageObj = plant.stage.objectModels[math.random(#(plant.stage.objectModels))]
-    local zCoordAdjustment = doAdjustZCoord(nextStageObj)
-    if zCoordAdjustment then
-        obj = CreateObject(GetHashKey(nextStageObj), plant.coords.x, plant.coords.y, plant.coords.z + zCoordAdjustment, 0, 0, 0)
-    else 
-        obj = CreateObject(GetHashKey(nextStageObj), plant.coords.x, plant.coords.y, plant.coords.z, 0, 0, 0)
+    if PLANTED[i] then
+        PLANTED[i].stage = stage
+        if PLANTED[i].objectHandle then -- plant object exists for client
+            local obj = PLANTED[i].objectHandle
+            DeleteObject(obj)
+            local plant = PLANTED[i]
+            local nextStageObj = plant.stage.objectModels[math.random(#(plant.stage.objectModels))]
+            local zCoordAdjustment = doAdjustZCoord(nextStageObj)
+            if zCoordAdjustment then
+                obj = CreateObject(GetHashKey(nextStageObj), plant.coords.x, plant.coords.y, plant.coords.z + zCoordAdjustment, 0, 0, 0)
+            else 
+                obj = CreateObject(GetHashKey(nextStageObj), plant.coords.x, plant.coords.y, plant.coords.z, 0, 0, 0)
+            end
+            SetEntityAsMissionEntity(obj, 1, 1)
+            PLANTED[i].objectHandle = obj
+        end
     end
-    --PlaceObjectOnGroundProperly(obj)
-    SetEntityAsMissionEntity(obj, 1, 1)
-    PLANTED[i].objectHandle = obj
 end)
 
 RegisterNetEvent("cultivation:updateSustenance")
@@ -288,7 +320,9 @@ end)
 RegisterNetEvent("cultivation:remove")
 AddEventHandler("cultivation:remove", function(i, msg)
     if PLANTED[i] then
-        DeleteObject(PLANTED[i].objectHandle)
+        if PLANTED[i].objectHandle then
+            DeleteObject(PLANTED[i].objectHandle)
+        end
         table.remove(PLANTED, i)
         if msg then 
             exports.globals:notify(msg)
@@ -337,10 +371,12 @@ Citizen.CreateThread(function()
                 local plant = PLANTED[i]
                 if plant and plant.coords then
                     local dist = Vdist(me.coords.x, me.coords.y, me.coords.z, plant.coords.x, plant.coords.y, plant.coords.z)
-                    if dist <= CLOSEST_PLANTS_BUFFER_DIST then
+                    if dist <= OBJECT_CULLNIG_DIST then
                         CLOSEST_PLANTED[i] = plant
+                        CreatePlantObject(i)
                     else
                         CLOSEST_PLANTED[i] = nil
+                        DeletePlantObject(i)
                     end
                 else
                     print("cultivation: found bad plant, id: " .. (plant._id or "NO ID"))
@@ -351,7 +387,7 @@ Citizen.CreateThread(function()
     end
 end)
 
--- Draw 3D text for all plants within CLOSEST_PLANTS_BUFFER_DIST distance --
+-- Draw 3D text for all plants within PLANT_TEXT_RADIUS distance --
 Citizen.CreateThread(function()
     while true do
         if CLOSEST_PLANTED and me.coords then
