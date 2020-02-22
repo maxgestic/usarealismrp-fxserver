@@ -25,7 +25,7 @@ AddEventHandler("cultivation:load", function(products, planted)
     PRODUCTS = products
     PLANTED = planted
     if PLANTED then
-        local mycoords = me.coords
+        local mycoords = GetEntityCoords(PlayerPedId())
         for i = 1, #PLANTED do
             local plant = PLANTED[i]
             if Vdist(mycoords.x, mycoords.y, mycoords.z, plant.coords.x, plant.coords.y, plant.coords.z) < OBJECT_CULLNIG_DIST then
