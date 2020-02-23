@@ -14,7 +14,7 @@ local PLANT_TEXT_RADIUS = 5.0
 local ANIMATION_TIME_SECONDS = 10
 
 local CLOSEST_PLANTS_BUFFER_INTERVAL_SECONDS = 3
-local OBJECT_CULLNIG_DIST = 300.0
+local OBJECT_CULLING_DIST = 300.0
 
 local KEYS = {
     E = 38
@@ -28,7 +28,7 @@ AddEventHandler("cultivation:load", function(products, planted)
         local mycoords = GetEntityCoords(PlayerPedId())
         for i = 1, #PLANTED do
             local plant = PLANTED[i]
-            if Vdist(mycoords.x, mycoords.y, mycoords.z, plant.coords.x, plant.coords.y, plant.coords.z) < OBJECT_CULLNIG_DIST then
+            if Vdist(mycoords.x, mycoords.y, mycoords.z, plant.coords.x, plant.coords.y, plant.coords.z) < OBJECT_CULLING_DIST then
                 local objectModel = plant.stage.objectModels[1]
                 if objectModel then
                     local zCoordAdjustment = doAdjustZCoord(objectModel)
@@ -44,7 +44,10 @@ AddEventHandler("cultivation:load", function(products, planted)
     end
 end)
 
-TriggerServerEvent("cultivation:load")
+Citizen.CreateThread(function()
+    Wait(2000)
+    TriggerServerEvent("cultivation:load")
+end)
 
 Citizen.CreateThread(function()
     while true do
@@ -189,7 +192,7 @@ end)
 
 RegisterNetEvent("cultivation:clientNewPlant")
 AddEventHandler("cultivation:clientNewPlant", function(newPlant)
-    if Vdist(me.coords.x, me.coords.y, me.coords.z, newPlant.coords.x, newPlant.coords.y, newPlant.coords.z) < OBJECT_CULLNIG_DIST then -- create plant object
+    if Vdist(me.coords.x, me.coords.y, me.coords.z, newPlant.coords.x, newPlant.coords.y, newPlant.coords.z) < OBJECT_CULLING_DIST then -- create plant object
         local objectModel = newPlant.stage.objectModels[1]
         LoadPlantModel(objectModel)
         local zCoordAdjustment = doAdjustZCoord(objectModel)
@@ -371,7 +374,7 @@ Citizen.CreateThread(function()
                 local plant = PLANTED[i]
                 if plant and plant.coords then
                     local dist = Vdist(me.coords.x, me.coords.y, me.coords.z, plant.coords.x, plant.coords.y, plant.coords.z)
-                    if dist <= OBJECT_CULLNIG_DIST then
+                    if dist <= OBJECT_CULLING_DIST then
                         CLOSEST_PLANTED[i] = plant
                         CreatePlantObject(i)
                     else
@@ -411,3 +414,13 @@ Citizen.CreateThread(function()
         Wait(1)
     end
 end)
+
+--[[
+RegisterCommand("cultdebug", function()
+    print("# PLANTED: " .. #PLANTED)
+    for i, plant in pairs(CLOSEST_PLANTED) do
+        local dist = Vdist(me.coords.x, me.coords.y, me.coords.z, plant.coords.x, plant.coords.y, plant.coords.z)
+        print("closest plant at " .. i .. ", dist: " .. dist)
+    end
+end, false) 
+--]]
