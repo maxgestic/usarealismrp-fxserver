@@ -28,7 +28,7 @@ AddEventHandler("cultivation:load", function(products, planted)
         local mycoords = GetEntityCoords(PlayerPedId())
         for i = 1, #PLANTED do
             local plant = PLANTED[i]
-            if Vdist(mycoords.x, mycoords.y, mycoords.z, plant.coords.x, plant.coords.y, plant.coords.z) < OBJECT_CULLING_DIST then
+            if Vdist(mycoords.x, mycoords.y, mycoords.z, plant.coords.x, plant.coords.y, plant.coords.z) <= OBJECT_CULLING_DIST then
                 local objectModel = plant.stage.objectModels[1]
                 if objectModel then
                     local zCoordAdjustment = doAdjustZCoord(objectModel)
@@ -156,15 +156,17 @@ function CreatePlantObject(i)
     if PLANTED[i] and not PLANTED[i].objectHandle then
         local plant = PLANTED[i]
         local objectModel = plant.stage.objectModels[1]
-        LoadPlantModel(plant.stage.objectModels[1])
-        local zCoordAdjustment = doAdjustZCoord(objectModel)
-        if zCoordAdjustment then
-            plant.objectHandle = CreateObject(GetHashKey(objectModel), plant.coords.x, plant.coords.y, plant.coords.z + zCoordAdjustment, 0, 0, 0)
-        else
-            plant.objectHandle = CreateObject(GetHashKey(objectModel), plant.coords.x, plant.coords.y, plant.coords.z, 0, 0, 0)
+        if plant.stage.objectModels[1] then
+            LoadPlantModel(plant.stage.objectModels[1])
+            local zCoordAdjustment = doAdjustZCoord(objectModel)
+            if zCoordAdjustment then
+                plant.objectHandle = CreateObject(GetHashKey(objectModel), plant.coords.x, plant.coords.y, plant.coords.z + zCoordAdjustment, 0, 0, 0)
+            else
+                plant.objectHandle = CreateObject(GetHashKey(objectModel), plant.coords.x, plant.coords.y, plant.coords.z, 0, 0, 0)
+            end
+            SetEntityAsMissionEntity(plant.objectHandle, 1, 1)
+            PLANTED[i].objectHandle = plant.objectHandle
         end
-        SetEntityAsMissionEntity(plant.objectHandle, 1, 1)
-        PLANTED[i].objectHandle = plant.objectHandle
     end
 end
 
@@ -375,11 +377,15 @@ Citizen.CreateThread(function()
                 if plant and plant.coords then
                     local dist = Vdist(me.coords.x, me.coords.y, me.coords.z, plant.coords.x, plant.coords.y, plant.coords.z)
                     if dist <= OBJECT_CULLING_DIST then
-                        CLOSEST_PLANTED[i] = plant
-                        CreatePlantObject(i)
+                        if not CLOSEST_PLANTED[i] then
+                            CLOSEST_PLANTED[i] = plant
+                            CreatePlantObject(i)
+                        end
                     else
-                        CLOSEST_PLANTED[i] = nil
-                        DeletePlantObject(i)
+                        if CLOSEST_PLANTED[i] then
+                            CLOSEST_PLANTED[i] = nil
+                            DeletePlantObject(i)
+                        end
                     end
                 else
                     print("cultivation: found bad plant, id: " .. (plant._id or "NO ID"))
@@ -394,8 +400,8 @@ end)
 Citizen.CreateThread(function()
     while true do
         if CLOSEST_PLANTED and me.coords then
-            for index, plant in pairs(CLOSEST_PLANTED) do
-                if PLANTED[index] then
+            for i, plant in pairs(CLOSEST_PLANTED) do
+                if PLANTED[i] then
                     local dist = Vdist(me.coords.x, me.coords.y, me.coords.z, plant.coords.x, plant.coords.y, plant.coords.z)
                     if dist < PLANT_TEXT_RADIUS then
                         local water = plant.waterLevel.asString
@@ -407,7 +413,7 @@ Citizen.CreateThread(function()
                         end
                     end
                 else 
-                    CLOSEST_PLANTED[index] = nil
+                    CLOSEST_PLANTED[i] = nil
                 end
             end
         end
