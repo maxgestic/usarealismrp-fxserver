@@ -179,6 +179,47 @@ AddEventHandler("cocaineJob:returnPedToStartPosition", function(pedType)
     end
 end)
 
+RegisterNetEvent('cocaineJob:doesUserHaveProductToSell')
+AddEventHandler('cocaineJob:doesUserHaveProductToSell', function(hasProduct) -- action of selling to the ped spawned
+    if hasProduct then
+        local beginTime = GetGameTimer()
+        local playerPed = PlayerPedId()
+        cocaine.activeJob = false
+        Citizen.CreateThread(function()
+            while GetGameTimer() - beginTime < 5000 do
+                Citizen.Wait(0)
+                DrawTimer(beginTime, 5000, 1.42, 1.475, 'SELLING')
+                DisableControlAction(0, 244, true) -- 244 = M key (interaction menu / inventory)
+                DisableControlAction(0, INPUT_KEY, true) -- prevent spam clicking
+            end
+        end)
+        RequestAnimDict("amb@prop_human_bum_bin@idle_b")
+        while (not HasAnimDictLoaded("amb@prop_human_bum_bin@idle_b")) do Citizen.Wait(0) end
+        local cokeBag = CreateObject(GetHashKey('prop_coke_block_01'), 0.0, 0.0, 0.0, true, false, true)
+        AttachEntityToEntity(cokeBag, playerPed, GetPedBoneIndex(playerPed, 57005), 0.0, 0.0, -0.1, 0, 90.0, 60.0, true, true, false, true, 1, true)
+        ClearPedTasksImmediately(cocaine.buyerHandle)
+        TaskPlayAnim(playerPed,"amb@prop_human_bum_bin@idle_b","idle_d",100.0, 200.0, 0.3, 120, 0.2, 0, 0, 0)
+        Wait(4000)
+        StopAnimTask(playerPed, "amb@prop_human_bum_bin@idle_b","idle_d", 1.0)
+        DeleteEntity(cokeBag)
+        Citizen.Wait(1000)
+        local location = deliveryCoords[cocaine.deliveryIndex]
+        TriggerEvent('usa:notify', location.message)
+        if location.waypoint then SetNewWaypoint(table.unpack(location.waypoint)) end
+        RemoveBlip(cocaine.blip)
+        TriggerServerEvent('cocaineJob:completeDelivery')
+        SetEntityAsNoLongerNeeded(cocaine.buyerHandle)
+        for i = 1, #peds do
+            if peds[i].name == 'delivery_ped' then
+                SetEntityAsNoLongerNeeded(peds[i].handle)
+                table.remove(peds, i)
+            end
+        end
+    else
+        TriggerEvent('usa:notify', 'You do not have any ~y~Packaged Cocaine~s~!')
+    end
+end)
+
 RegisterNetEvent("cocaineJob:setDelivery") --begins the delivery job, however the player must process the cocaine first still
 AddEventHandler("cocaineJob:setDelivery", function()
     if not cocaine.activeJob then
@@ -235,47 +276,6 @@ AddEventHandler("cocaineJob:doesUserHaveJobSupply", function(hasJobItem, hasJobS
     end
 end)
 
-RegisterNetEvent('cocaineJob:doesUserHaveProductToSell')
-AddEventHandler('cocaineJob:doesUserHaveProductToSell', function(hasProduct) -- action of selling to the ped spawned
-    if hasProduct then
-        local beginTime = GetGameTimer()
-        local playerPed = PlayerPedId()
-        cocaine.activeJob = false
-        Citizen.CreateThread(function()
-            while GetGameTimer() - beginTime < 5000 do
-                Citizen.Wait(0)
-                DrawTimer(beginTime, 5000, 1.42, 1.475, 'SELLING')
-                DisableControlAction(0, 244, true) -- 244 = M key (interaction menu / inventory)
-                DisableControlAction(0, INPUT_KEY, true) -- prevent spam clicking
-            end
-        end)
-        RequestAnimDict("amb@prop_human_bum_bin@idle_b")
-        while (not HasAnimDictLoaded("amb@prop_human_bum_bin@idle_b")) do Citizen.Wait(0) end
-        local cokeBag = CreateObject(GetHashKey('prop_coke_block_01'), 0.0, 0.0, 0.0, true, false, true)
-        AttachEntityToEntity(cokeBag, playerPed, GetPedBoneIndex(playerPed, 57005), 0.0, 0.0, -0.1, 0, 90.0, 60.0, true, true, false, true, 1, true)
-        ClearPedTasksImmediately(cocaine.buyerHandle)
-        TaskPlayAnim(playerPed,"amb@prop_human_bum_bin@idle_b","idle_d",100.0, 200.0, 0.3, 120, 0.2, 0, 0, 0)
-        Wait(4000)
-        StopAnimTask(playerPed, "amb@prop_human_bum_bin@idle_b","idle_d", 1.0)
-        DeleteEntity(cokeBag)
-        Citizen.Wait(1000)
-        local location = deliveryCoords[cocaine.deliveryIndex]
-        TriggerEvent('usa:notify', location.message)
-        if location.waypoint then SetNewWaypoint(table.unpack(location.waypoint)) end
-        RemoveBlip(cocaine.blip)
-        TriggerServerEvent('cocaineJob:completeDelivery')
-        SetEntityAsNoLongerNeeded(cocaine.buyerHandle)
-        for i = 1, #peds do
-            if peds[i].name == 'delivery_ped' then
-                SetEntityAsNoLongerNeeded(peds[i].handle)
-                table.remove(peds, i)
-            end
-        end
-    else
-        TriggerEvent('usa:notify', 'You do not have any ~y~Packaged Cocaine~s~!')
-    end
-end)
-
 RegisterNetEvent("cocaineJob:getSupplies")
 AddEventHandler("cocaineJob:getSupplies", function(supplyType)
     for i = 1, #peds do
@@ -300,20 +300,6 @@ AddEventHandler("cocaineJob:getSupplies", function(supplyType)
     end
 end)
 
-RegisterNetEvent('cocaine:validateDelivery') -- make sure client is at delivery location (combatting injection money hack)
-AddEventHandler('cocaine:validateDelivery', function()
-    if cocaine.deliveryIndex then
-        local me = PlayerPedId()
-        local mycoords = GetEntityCoords(me)
-        local location = deliveryCoords[cocaine.deliveryIndex]
-        local dist = Vdist(mycoords.x, mycoords.y, mycoords.z, location.x, location.y, location.z)
-        if dist < 20.0 then
-            TriggerServerEvent("cocaine:locationValidated")
-        else
-            TriggerServerEvent("cocaine:exploitDetected")
-        end
-    end
-end)
 
 Citizen.CreateThread(function()
     while true do
@@ -375,6 +361,26 @@ function PlayDoorAnimation()
   end
     TaskPlayAnim(PlayerPedId(), "anim@mp_player_intmenu@key_fob@", "fob_click", 8.0, 1.0, -1, 48)
 end
+
+RegisterNetEvent('cocaine:validateDelivery')
+AddEventHandler('cocaine:validateDelivery', function()
+    if cocaine.deliveryIndex then
+        local me = PlayerPedId()
+        local mycoords = GetEntityCoords(me)
+        local location = deliveryCoords[cocaine.deliveryIndex]
+        local dist = Vdist(mycoords.x, mycoords.y, mycoords.z, location.x, location.y, location.z)
+        if dist < 2 then
+            TriggerServerEvent("cocaine:locationValidated")
+        else
+            TriggerServerEvent("cocaine:exploitDetected")
+        end
+    end
+end)
+
+RegisterNetEvent('cocaine:exploitDetected')
+AddEventHandler('cocaine:exploitDetected', function()
+    TriggerServerEvent("cocaine:exploitDetected")
+end)
 
 function DoorTransition(playerPed, x, y, z, heading)
   PlayDoorAnimation()
