@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<CPackFileMetaData>
+<MapDataGroups/>
+<HDTxdBindingArray/>
+<imapDependencies/>
+<imapDependencies_2>
+<Item>
+<imapName>galaxy_fightclub</imapName>
+<manifestFlags/>
+<itypDepArray>
+<Item>int_lev_des</Item>
+<Item>des_fibstairs</Item>
+<Item>v_utility</Item>
+<Item>v_sports</Item>
+<Item>v_fences</Item>
+<Item>v_airport</Item>
+<Item>port_xr</Item>
+<Item>v_minigame</Item>
+<Item>cutsobjects</Item>
+<Item>v_bathroom</Item>
+</itypDepArray>
+</Item>
+</imapDependencies_2>
+<itypDependencies_2/>
+<Interiors/>
+</CPackFileMetaData>
