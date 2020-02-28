@@ -98,9 +98,6 @@ SetDiscordAppId("517228692834091033")
 SetDiscordRichPresenceAsset("5a158f46d2aefd14d3c7a16f3f4bc72b")
 SetDiscordRichPresenceAssetText("USARRP")
 
-local MRPD_INTERIOR = GetInteriorAtCoords(440.84, -983.14, 30.69)
-LoadInterior(MRPD_INTERIOR)
-
 -- REMOVE AI WEAPON DROPS --
 Citizen.CreateThread(function()
   while true do
