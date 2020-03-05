@@ -12,6 +12,7 @@ local MENU_TEXT_RADIUS = 40
 local PLANT_TEXT_RADIUS = 5.0
 
 local ANIMATION_TIME_SECONDS = 10
+local HARVEST_TIME_SECONDS = 60
 
 local CLOSEST_PLANTS_BUFFER_INTERVAL_SECONDS = 3
 local OBJECT_CULLING_DIST = 300.0
@@ -307,8 +308,8 @@ AddEventHandler("cultivation:harvest", function()
             exports.globals:loadAnimDict("anim@move_m@trash")
         end
         local start = GetGameTimer()
-        while GetGameTimer() - start < ANIMATION_TIME_SECONDS * 1000 do
-            exports.globals:DrawTimerBar(start, ANIMATION_TIME_SECONDS * 1000, 1.42, 1.475, 'HARVESTING')
+        while GetGameTimer() - start < HARVEST_TIME_SECONDS * 1000 do
+            exports.globals:DrawTimerBar(start, HARVEST_TIME_SECONDS * 1000, 1.42, 1.475, 'HARVESTING')
             DisablePlayerControls()
             if not IsEntityPlayingAnim(me.ped, "anim@move_m@trash", "pickup", 3) then
                 TaskPlayAnim(me.ped, "anim@move_m@trash", "pickup", 8.0, 1.0, -1, 11, 1.0, false, false, false)
