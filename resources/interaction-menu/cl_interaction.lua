@@ -797,11 +797,6 @@ RegisterNUICallback("dropItem", function(data, cb)
 		local pos = GetEntityCoords(me, true)
 		TriggerEvent("usa:playAnimation", "anim@move_m@trash", "pickup", -8, 1, -1, 48, 0, 0, 0, 0)
 		TriggerServerEvent("inventory:dropItem", data.itemName, data.index, pos.x, pos.y, pos.z)
-		-- spawn object on ground --
-		if data.objectModel then
-			local prop = CreateObject(GetHashKey(data.objectModel), pos.x, pos.y + 0.5, pos.z - 0.9, true, false, true)
-			SetEntityAsMissionEntity(prop, true, true)
-		end
 	else
 		exports.globals:notify("Can't drop that item, sorry!")
 	end

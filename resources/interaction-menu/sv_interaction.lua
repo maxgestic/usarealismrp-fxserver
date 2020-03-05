@@ -181,7 +181,7 @@ AddEventHandler("inventory:dropItem", function(name, index, posX, posY, posZ)
 	local coords = {
 		x = posX,
 		y = posY + 0.5,
-		z = posZ
+		z = posZ - 0.9
 	}
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local item = char.getItemByIndex(index)

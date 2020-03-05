@@ -16,17 +16,20 @@ TriggerServerEvent("interaction:getDroppedItems")
 
 RegisterNetEvent("interaction:addDroppedItem")
 AddEventHandler("interaction:addDroppedItem", function(item)
+  if item.objectModel then
+    local handle = CreateObject(GetHashKey(item.objectModel), item.coords.x, item.coords.y, item.coords.z, true, false, true)
+    SetEntityAsMissionEntity(handle, true, true)
+    item.objectHandle = handle
+  end
   table.insert(DROPPED_ITEMS, item)
 end)
 
 RegisterNetEvent("interaction:removeDroppedItem")
 AddEventHandler("interaction:removeDroppedItem", function(index)
   if DROPPED_ITEMS[index] then
-    if DROPPED_ITEMS[index].objectModel then
-	  local objectModel = DROPPED_ITEMS[index].objectModel
-	  local itemObject = GetClosestObjectOfType(DROPPED_ITEMS[index].coords.x, DROPPED_ITEMS[index].coords.y, DROPPED_ITEMS[index].coords.z, 1.0, objectModel, false, false, false)
-	  DeleteObject(itemObject)
-	end
+    if DROPPED_ITEMS[index].objectModel and DROPPED_ITEMS[index].objectHandle then
+      DeleteObject(DROPPED_ITEMS[index].objectHandle)
+    end
     table.remove(DROPPED_ITEMS, index)
   end
 end)
@@ -52,10 +55,10 @@ Citizen.CreateThread(function()
       local item = DROPPED_ITEMS[i]
       if Vdist(coords.x, coords.y, coords.z, item.coords.x, item.coords.y, item.coords.z) < 50 then
         if not item.objectModel then
-          DrawMarker(27, item.coords.x, item.coords.y, item.coords.z - 0.89, 0, 0, 0, 0, 0, 0, 0.3, 0.3, 1.0, 240, 30, 140, 100, 0, 0, 2, 0, 0, 0, 0)
+          DrawMarker(27, item.coords.x, item.coords.y, item.coords.z, 0, 0, 0, 0, 0, 0, 0.3, 0.3, 1.0, 240, 30, 140, 100, 0, 0, 2, 0, 0, 0, 0)
         end
         if Vdist(coords.x, coords.y, coords.z, item.coords.x, item.coords.y, item.coords.z) < 3.5 then
-          DrawText3Ds(item.coords.x, item.coords.y, item.coords.z - 0.3, 370, 16, '[Y] - ' .. item.name)
+          DrawText3Ds(item.coords.x, item.coords.y, item.coords.z + 0.2, 370, 16, '[Y] - ' .. item.name)
           if IsControlJustPressed(1, E_KEY) and not attemptingPickup then
             attemptingPickup = true
             TriggerServerEvent("interaction:attemptPickup", item)
