@@ -7,7 +7,8 @@ AddEventHandler("interaction:getDroppedItems", function(items)
   for i = 1, #DROPPED_ITEMS do
     if DROPPED_ITEMS[i].objectModel then
       local objectHash = GetHashKey(DROPPED_ITEMS[i].objectModel)
-      local prop = CreateObject(objectHash, DROPPED_ITEMS[i].coords.x, DROPPED_ITEMS[i].coords.y + 0.5, DROPPED_ITEMS[i].coords.z - 0.99, true, false, true)
+      local handle = CreateObject(objectHash, DROPPED_ITEMS[i].coords.x, DROPPED_ITEMS[i].coords.y, DROPPED_ITEMS[i].coords.z, false, false, false)
+      DROPPED_ITEMS[i].objectHandle = handle
     end
   end
 end)
@@ -17,7 +18,7 @@ TriggerServerEvent("interaction:getDroppedItems")
 RegisterNetEvent("interaction:addDroppedItem")
 AddEventHandler("interaction:addDroppedItem", function(item)
   if item.objectModel then
-    local handle = CreateObject(GetHashKey(item.objectModel), item.coords.x, item.coords.y, item.coords.z, true, false, true)
+    local handle = CreateObject(GetHashKey(item.objectModel), item.coords.x, item.coords.y, item.coords.z, false, false, false)
     SetEntityAsMissionEntity(handle, true, true)
     item.objectHandle = handle
   end
@@ -42,8 +43,8 @@ end)
 RegisterNetEvent("interaction:dropMultiple")
 AddEventHandler("interaction:dropMultiple", function(items)
   for i = 1, #items do
+    items[i].objectHandle = SpawnObjectModel(items[i])
     table.insert(DROPPED_ITEMS, items[i])
-    SpawnObjectModel(items[i])
   end
 end)
 
@@ -91,8 +92,10 @@ function DrawText3Ds(x,y,z,q,a, text)
 end
 
 function SpawnObjectModel(item)
+  local handle = nil
   if item.objectModel then
-    local prop = CreateObject(GetHashKey(item.objectModel), item.coords.x, item.coords.y, item.coords.z, true, false, true)
-    SetEntityAsMissionEntity(prop, true, true)
+    handle = CreateObject(GetHashKey(item.objectModel), item.coords.x, item.coords.y, item.coords.z, false, false, false)
+    SetEntityAsMissionEntity(handle, true, true)
   end
+  return handle
 end

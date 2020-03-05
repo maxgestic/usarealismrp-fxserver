@@ -33,7 +33,7 @@ AddEventHandler("interaction:attemptPickup", function(item)
 end)
 
 RegisterServerEvent("interaction:dropMultipleOfItem")
-AddEventHandler("interaction:dropMultipleOfItem", function(item, coords)
+AddEventHandler("interaction:dropMultipleOfItem", function(item)
 	local toSend = {}
 	for i = 1, item.quantity do
 		local copy = item
