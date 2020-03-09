@@ -255,32 +255,15 @@ Citizen.CreateThread(function()
 
 end)
 
--- S P A W N  J O B  P E D S
-Citizen.CreateThread(function()
-	for name, data in pairs(taxi_duty_locations) do
-		local hash = 1397974313
-		--local hash = GetHashKey(data.ped.model)
-		RequestModel(hash)
-		while not HasModelLoaded(hash) do
-			Citizen.Wait(100)
-		end
-		local ped = CreatePed(4, hash, data.duty.x, data.duty.y, data.duty.z, data.duty.heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
-		SetEntityCanBeDamaged(ped,false)
-		SetPedCanRagdollFromPlayerImpact(ped,false)
-		TaskSetBlockingOfNonTemporaryEvents(ped,true)
-		SetPedFleeAttributes(ped,0,0)
-		SetPedCombatAttributes(ped,17,1)
-		SetPedRandomComponentVariation(ped, true)
-		TaskStartScenarioInPlace(ped, "WORLD_HUMAN_DRUG_DEALER_HARD", 0, true);
-	end
-end)
-
 local closest_location = {}
 
 Citizen.CreateThread(function()
 	EnumerateBlips()
 	local timeout = 0
 	while true do
+		for name, data in pairs(taxi_duty_locations) do
+			DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 20, '[E] - On/Off Duty (~y~Taxi~s~)')
+		end
 		if IsControlJustPressed(0, 38) then
 			for name, data in pairs(taxi_duty_locations) do
 		        local playerCoords = GetEntityCoords(PlayerPedId(), false)
@@ -306,9 +289,6 @@ Citizen.CreateThread(function()
 					end
 				end
 			end
-		end
-		for name, data in pairs(taxi_duty_locations) do
-			DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 5, '[E] - On/Off Duty (~y~Taxi~s~)')
 		end
 		Wait(1)
 	end

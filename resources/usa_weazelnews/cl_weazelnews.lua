@@ -240,26 +240,37 @@ Citizen.CreateThread(function()
 end)
 
 -- S P A W N  J O B  P E D S
+local createdJobPeds = {}
 Citizen.CreateThread(function()
-	for name, data in pairs(locations) do
-		local hash = GetHashKey(data.duty_ped.model)
-		print("requesting hash...")
-		RequestModel(hash)
-		while not HasModelLoaded(hash) do
-			RequestModel(hash)
-			Citizen.Wait(0)
+	while true do
+		local playerCoords = GetEntityCoords(PlayerPedId(), false)
+		for name, data in pairs(locations) do
+			if Vdist(data.duty_ped.x, data.duty_ped.y, data.duty_ped.z, playerCoords.x, playerCoords.y, playerCoords.z) < 60 then
+				if not createdJobPeds[name] then
+					local hash = GetHashKey(data.duty_ped.model)
+					RequestModel(hash)
+					while not HasModelLoaded(hash) do
+						RequestModel(hash)
+						Citizen.Wait(0)
+					end
+					local ped = CreatePed(4, hash, data.duty_ped.x, data.duty_ped.y, data.duty_ped.z, data.duty_ped.heading, false, true)
+					SetEntityCanBeDamaged(ped,false)
+					SetPedCanRagdollFromPlayerImpact(ped,false)
+					TaskSetBlockingOfNonTemporaryEvents(ped,true)
+					SetPedFleeAttributes(ped,0,0)
+					SetPedCombatAttributes(ped,17,1)
+					SetPedRandomComponentVariation(ped, true)
+					TaskStartScenarioInPlace(ped, "WORLD_HUMAN_AA_SMOKE", 0, true)
+					createdJobPeds[name] = ped
+				end
+			else 
+				if createdJobPeds[name] then
+					DeletePed(createdJobPeds[name])
+					createdJobPeds[name] = nil
+				end
+			end
 		end
-		print("spawning ped, heading: " .. data.duty_ped.heading)
-		print("hash: " .. hash)
-		local ped = CreatePed(4, hash, data.duty_ped.x, data.duty_ped.y, data.duty_ped.z, data.duty_ped.heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
-
-		SetEntityCanBeDamaged(ped,false)
-		SetPedCanRagdollFromPlayerImpact(ped,false)
-		TaskSetBlockingOfNonTemporaryEvents(ped,true)
-		SetPedFleeAttributes(ped,0,0)
-		SetPedCombatAttributes(ped,17,1)
-		SetPedRandomComponentVariation(ped, true)
-		TaskStartScenarioInPlace(ped, "WORLD_HUMAN_AA_SMOKE", 0, true)
+		Wait(1)
 	end
 end)
 

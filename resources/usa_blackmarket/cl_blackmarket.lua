@@ -8,16 +8,19 @@ TriggerServerEvent("blackMarket:loadItems")
 RegisterNetEvent("blackMarket:loadItems")
 AddEventHandler("blackMarket:loadItems", function(items)
   markets = items
-  CreateMapBlips()
 end)
 
-function CreateMapBlips()
-  Citizen.CreateThread(function()
-      for k, v in pairs(markets) do
-          local mkt = markets[k]
+local createdJobPeds = {}
+Citizen.CreateThread(function()
+  while true do
+    local playerCoords = GetEntityCoords(PlayerPedId(), false)
+    for k, v in pairs(markets) do
+      local mkt = markets[k]
+      if Vdist(mkt['coords'][1], mkt['coords'][2], mkt['coords'][3], playerCoords.x, playerCoords.y, playerCoords.z) < 50 then
+        if not createdJobPeds[k] then
           RequestModel(mkt['pedHash'])
           while not HasModelLoaded(mkt['pedHash']) do
-              Citizen.Wait(100)
+            Wait(100)
           end
           local ped = CreatePed(4, mkt['pedHash'], mkt['coords'][1], mkt['coords'][2], mkt['coords'][3] - 1.0, mkt['pedHeading'] or 100, false, true)
           SetEntityCanBeDamaged(ped,false)
@@ -26,10 +29,19 @@ function CreateMapBlips()
           SetPedFleeAttributes(ped,0,0)
           SetPedCombatAttributes(ped,17,1)
           SetPedRandomComponentVariation(ped, true)
-          TaskStartScenarioInPlace(ped, "WORLD_HUMAN_STAND_MOBILE", 0, true);
+          TaskStartScenarioInPlace(ped, "WORLD_HUMAN_STAND_MOBILE", 0, true)
+          createdJobPeds[k] = ped
+        end
+      else 
+        if createdJobPeds[k] then
+          DeletePed(createdJobPeds[k])
+          createdJobPeds[k] = nil
+        end
       end
-  end)
-end
+    end
+    Wait(1)
+  end
+end)
 
 function comma_value(amount)
   local formatted = amount
