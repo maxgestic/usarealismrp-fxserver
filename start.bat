@@ -27,4 +27,4 @@ cd ..
 index-win.exe > scramble.log
 xcopy scrambled_resources resources /r /s /y
 xcopy C:\Users\Administrator\Desktop\toTransfer resources /r /s /y
-..\run.cmd +set onesync_enabled 1 +set onesync_enableInfinity 1 +exec server.cfg > CitizenFX.log
+..\run.cmd +exec server.cfg +set onesync_enabled 1 +set onesync_enableInfinity 1 > CitizenFX.log
