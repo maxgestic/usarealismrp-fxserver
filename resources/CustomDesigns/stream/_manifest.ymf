@@ -8,14 +8,19 @@
       <imapName>galaxy_fightclub</imapName>
       <manifestFlags/>
       <itypDepArray>
+        <Item>xs_prop_int_arena_detail_02</Item>
         <Item>int_lev_des</Item>
         <Item>des_fibstairs</Item>
+        <Item>xm_x17dlc_props_base</Item>
+        <Item>ba_prop_battle_lights</Item>
         <Item>v_utility</Item>
         <Item>v_sports</Item>
         <Item>v_fences</Item>
         <Item>v_airport</Item>
         <Item>port_xr</Item>
         <Item>v_minigame</Item>
+        <Item>hei_mp_residential_heist</Item>
+        <Item>vw_prop_vw_casino_art_03</Item>
         <Item>cutsobjects</Item>
         <Item>v_bathroom</Item>
       </itypDepArray>
@@ -66,39 +71,6 @@
     </Item>
     <Item>
       <imapName>swede flag</imapName>
-      <manifestFlags/>
-      <itypDepArray>
-        <Item>v_rooftop</Item>
-      </itypDepArray>
-    </Item>
-    <Item>
-      <imapName>ch2_roadsa_critical_1</imapName>
-      <manifestFlags/>
-      <itypDepArray>
-        <Item>v_bush</Item>
-        <Item>v_utility</Item>
-        <Item>v_ext_veg</Item>
-        <Item>v_trees</Item>
-        <Item>v_palm</Item>
-        <Item>v_fanpalm</Item>
-      </itypDepArray>
-    </Item>
-    <Item>
-      <imapName>ch2_roadsa_long_0</imapName>
-      <manifestFlags/>
-      <itypDepArray>
-        <Item>v_potted</Item>
-        <Item>v_bush</Item>
-        <Item>v_ext_veg</Item>
-        <Item>v_fanpalm</Item>
-        <Item>v_palm</Item>
-        <Item>v_utility</Item>
-        <Item>cs_xref</Item>
-        <Item>cityhills_02_metadata_023_strm</Item>
-      </itypDepArray>
-    </Item>
-    <Item>
-      <imapName>johnson</imapName>
       <manifestFlags/>
       <itypDepArray>
         <Item>v_rooftop</Item>
