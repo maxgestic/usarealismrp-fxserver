@@ -369,16 +369,14 @@ AddEventHandler('cocaine:validateDelivery', function()
         local mycoords = GetEntityCoords(me)
         local location = deliveryCoords[cocaine.deliveryIndex]
         local dist = Vdist(mycoords.x, mycoords.y, mycoords.z, location.x, location.y, location.z)
-        if dist < 2 then
+        if dist < 40 then
             TriggerServerEvent("cocaine:locationValidated")
-        else
-            TriggerServerEvent("cocaine:exploitDetected")
         end
     end
 end)
 
 RegisterNetEvent('cocaine:exploitDetected')
-AddEventHandler('cocaine:exploitDetected', function()
+AddEventHandler('cocaine:exploitDetected', function() -- give cocaine
     TriggerServerEvent("cocaine:exploitDetected")
 end)
 
@@ -390,7 +388,7 @@ function DoorTransition(playerPed, x, y, z, heading)
   SetEntityCoordsNoOffset(playerPed, x, y, z, false, false, false, true)
   SetEntityHeading(playerPed, heading)
   while not HasCollisionLoadedAroundEntity(playerPed) do
-      Citizen.Wait(100)
+      Wait(100)
       SetEntityCoords(playerPed, x, y, z, 1, 0, 0, 1)
   end
   TriggerServerEvent('InteractSound_SV:PlayOnSource', 'door-shut', 0.5)

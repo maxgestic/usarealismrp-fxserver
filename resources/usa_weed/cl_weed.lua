@@ -1,42 +1,7 @@
-local data = {
-  peds = {
-    {x = 2197.88, y = 5577.93, z = 52.88, heading = 270.0, hash = -264140789, scenario = "WORLD_HUMAN_SMOKING_POT"},
-    {x = 1441.86, y = 6338.78, z = 24.7478, heading = 10.0, hash = 1191548746, scenario = "WORLD_HUMAN_HANG_OUT_STREET"}
-  }
-}
-
--------------------------------------------------------------------
--- todo: make it so the info peds give directions to the next point
--------------------------------------------------------------------
-
 local KEY = 38 -- "E"
 local SOUND_ENABLE = true
 local processed = false
 local harvested = false
-
---------------------
--- Spawn job peds --
---------------------
--- S P A W N  J O B  P E D S
-Citizen.CreateThread(function()
-	for i = 1, #data.peds do
-    local hash = data.peds[i].hash
-		RequestModel(hash)
-		while not HasModelLoaded(hash) do
-			RequestModel(hash)
-			Citizen.Wait(0)
-		end
-		local ped = CreatePed(4, hash, data.peds[i].x, data.peds[i].y, data.peds[i].z, data.peds[i].heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
-    data.peds[i].handle = ped
-    SetEntityCanBeDamaged(ped,false)
-		SetPedCanRagdollFromPlayerImpact(ped,false)
-		TaskSetBlockingOfNonTemporaryEvents(ped,true)
-		SetPedFleeAttributes(ped,0,0)
-		SetPedCombatAttributes(ped,17,1)
-		SetPedRandomComponentVariation(ped, true)
-    TaskStartScenarioInPlace(ped, data.peds[i].scenario, 0, true);
-  end
-end)
 
 ------------------------------------------------
 -- See if player is close to any job location --

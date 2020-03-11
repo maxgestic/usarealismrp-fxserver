@@ -88,23 +88,38 @@ local locations = {
 }
 
 -- S P A W N  J O B  P E D S
+local createdJobPeds = {}
 Citizen.CreateThread(function()
 	EnumerateBlips()
-	for name, data in pairs(locations) do
-		local hash = -1806291497
-		RequestModel(hash)
-		while not HasModelLoaded(hash) do
-			RequestModel(hash)
-			Citizen.Wait(0)
+	while true do
+		local playerCoords = GetEntityCoords(PlayerPedId(), false)
+		for name, data in pairs(locations) do
+			if Vdist(data.ped.x, data.ped.y, data.ped.z, playerCoords.x, playerCoords.y, playerCoords.z) < 50 then
+				if not createdJobPeds[name] then
+					local hash = -1806291497
+					RequestModel(hash)
+					while not HasModelLoaded(hash) do
+						RequestModel(hash)
+						Wait(0)
+					end
+					local ped = CreatePed(4, hash, data.ped.x, data.ped.y, data.ped.z, data.ped.heading, false, true)
+					SetEntityCanBeDamaged(ped,false)
+					SetPedCanRagdollFromPlayerImpact(ped,false)
+					TaskSetBlockingOfNonTemporaryEvents(ped,true)
+					SetPedFleeAttributes(ped,0,0)
+					SetPedCombatAttributes(ped,17,1)
+					SetPedRandomComponentVariation(ped, true)
+					TaskStartScenarioInPlace(ped, "WORLD_HUMAN_CLIPBOARD", 0, true)
+					createdJobPeds[name] = ped
+				end
+			else 
+				if createdJobPeds[name] then 
+					DeletePed(createdJobPeds[name])
+					createdJobPeds[name] = nil
+				end
+			end
 		end
-		local ped = CreatePed(4, hash, data.ped.x, data.ped.y, data.ped.z, data.ped.heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
-		SetEntityCanBeDamaged(ped,false)
-		SetPedCanRagdollFromPlayerImpact(ped,false)
-		TaskSetBlockingOfNonTemporaryEvents(ped,true)
-		SetPedFleeAttributes(ped,0,0)
-		SetPedCombatAttributes(ped,17,1)
-		SetPedRandomComponentVariation(ped, true)
-		TaskStartScenarioInPlace(ped, "WORLD_HUMAN_CLIPBOARD", 0, true);
+		Wait(1)
 	end
 end)
 

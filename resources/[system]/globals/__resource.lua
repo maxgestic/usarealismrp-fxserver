@@ -35,5 +35,6 @@ server_exports {
   "getCoordDistance",
   "dump",
   "getNumCops",
-  "getCopIds"
+  "getCopIds",
+  "round"
 }

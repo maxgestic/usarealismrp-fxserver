@@ -85,9 +85,11 @@ end
 AddEventHandler('rconCommand', function(commandName, args)
     commandName = commandName:lower()
     if commandName == 'showstats' then
+        local abnormalDropPercentage = math.floor(exports.globals:round(statistics["abnormalDrops"] / statistics["playerDrops"], 2) * 100)
         RconPrint("Recorded # of drops since last restart: " ..  statistics["playerDrops"] .. ".")
         RconPrint("\nRecorded # of abnormal drops since last restart: " ..  statistics["abnormalDrops"] .. ".")
         RconPrint("\nRecorded # of unique player joins since last restart: " ..  statistics["players"].uniqueCount .. ".")
+        RconPrint("\nAbnormal drop percentage since last restart: " ..  abnormalDropPercentage .. "%")
         RconPrint("\nThe most frequent player drop reason so far is: " .. GetMostFrequentPlayerDropReason())
         RconPrint("\nServer Uptime: " .. exports["globals"]:GetHoursFromTime(statistics["startTime"]) .. " hour(s).")
         CancelEvent()
