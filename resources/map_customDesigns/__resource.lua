@@ -1,3 +1,7 @@
+resource_manifest_version '44febabe-d386-4d18-afbe-5e627f4af937'
+
+this_is_a_map 'yes'
+
 --ch6_03_radio.ytd - Aces Rebel Radio
 --ch6_03_radio_sta_dec+hidr.ytd - Aces Rebel Radio
 -- ACES COORDS: 737.46, 2535.06, 73.16
