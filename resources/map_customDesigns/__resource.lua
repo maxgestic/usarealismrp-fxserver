@@ -22,3 +22,6 @@ this_is_a_map 'yes'
 
 -- Galaxy_FightClub.ymap - Fight Club
 -- Fight Club COORDS: 260.17, -269.47, 60.55
+
+-- sc1_17_cloth.ytd - Bloods banners
+-- BLOOD BANNER COORDS: -164.24, -1697.29, 31.77
