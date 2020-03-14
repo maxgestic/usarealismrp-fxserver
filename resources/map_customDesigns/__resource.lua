@@ -25,3 +25,7 @@ this_is_a_map 'yes'
 
 -- sc1_17_cloth.ytd - Bloods banners
 -- BLOOD BANNER COORDS: -164.24, -1697.29, 31.77
+
+
+--jet_ski.ymap - JET SKI EVENT
+-- JET SKI COORDS - 

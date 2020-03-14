@@ -8,19 +8,14 @@
       <imapName>galaxy_fightclub</imapName>
       <manifestFlags/>
       <itypDepArray>
-        <Item>xs_prop_int_arena_detail_02</Item>
         <Item>int_lev_des</Item>
         <Item>des_fibstairs</Item>
-        <Item>xm_x17dlc_props_base</Item>
-        <Item>ba_prop_battle_lights</Item>
         <Item>v_utility</Item>
         <Item>v_sports</Item>
         <Item>v_fences</Item>
         <Item>v_airport</Item>
         <Item>port_xr</Item>
         <Item>v_minigame</Item>
-        <Item>hei_mp_residential_heist</Item>
-        <Item>vw_prop_vw_casino_art_03</Item>
         <Item>cutsobjects</Item>
         <Item>v_bathroom</Item>
       </itypDepArray>
@@ -74,6 +69,14 @@
       <manifestFlags/>
       <itypDepArray>
         <Item>v_rooftop</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
+      <imapName>jet_ski</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>v_sports</Item>
+        <Item>v_industrial_2</Item>
       </itypDepArray>
     </Item>
   </imapDependencies_2>
