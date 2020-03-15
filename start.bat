@@ -19,6 +19,7 @@ rd /S /Q map_hospital
 rd /S /Q map_mrpd
 rd /S /Q map_sandypdinterior
 rd /S /Q gabz_pillbox_hospital
+rd /S /Q map_burgershot
 rd /S /Q paletopd
 rd /S /Q nw_comedyClub
 rd /S /Q policeveh
