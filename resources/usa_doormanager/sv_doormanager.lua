@@ -16,7 +16,7 @@ local DOORS = {
   {name = "Boilingbroke Leading Yard Gate 2", x = 1797.39, y = 2592.49, z = 45.8, model = -1156020871, locked = true, offset={0.0, -1.13, 0.05}, heading=180.0, _dist = 3.0, allowedJobs = {'sheriff', 'corrections', 'judge'}},
 
   {name = "Boilingbroke Pantry Door", x = 1784.59, y = 2598.43, z = 45.8, model = 1028191914, locked = true, offset={0.0, 1.13, 0.05}, heading=90.0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
-  {name = "Boilingbroke Side Entrance", x = 1786.384, y = 2600.229, z = 46.089, model = 262839150, locked = true, offset={0.0, 1.13, 0.05}, heading=80.0, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "Boilingbroke Side Entrance", x = 1786.384, y = 2600.229, z = 46.089, model = 262839150, locked = true, offset={0.0, 1.13, 0.05}, heading=0, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
 
   {name = "Boilingbroke Main Cell Block Area", x = 1784.608, y = 2590.46, z = 45.8, model = 430324891, locked = true, _dist = 3, gate = true, offset={0.65, -1.13, 1.05}, lockedCoords={1785.995, 2590.022, 44.793},  allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Boilingbroke Lower Cell 1", x = 1786.35, y = 2586.55, z = 45.8, model = 430324891, locked = true, _dist = 3, gate = true, offset={0.65, 1.13, 1.05}, lockedCoords={1787.576, 2585.885, 44.794},  allowedJobs = {'sheriff', 'corrections', 'judge'}},
@@ -50,8 +50,23 @@ local DOORS = {
   {name = "Boilingbroke Upper Cell 20", x = 1771.724, y = 2593.782, z = 50.55, model = 430324891, locked = true, _dist = 3, gate = true, offset={-0.00, -1.13, 1.05}, lockedCoords={1771.525, 2593.782, 50.55},  allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Boilingbroke Upper Cell 21", x = 1771.725, y = 2597.737, z = 50.55, model = 430324891, locked = true, _dist = 3, gate = true, offset={-0.00, -1.13, 1.05}, lockedCoords={1771.526, 2597.737, 50.55},  allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Boilingbroke Upper Cell 22", x = 1773.654, y = 2599.994, z = 50.55, model = 430324891, locked = true, _dist = 2, static = true, offset={-1.13, 0.00, 1.05}, lockedCoords={1773.654, 2599.994, 50.55},  allowedJobs = {'sheriff', 'corrections', 'judge'}},
-  {name = "CO Bird Cage", x = 1780.352, y = 2596.023, z = 50.55, model = 1652015642, locked = true, _dist = 2, offset={1.13, 0.00, 1.05}, heading=180.0,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "CO Bird Cage", x = 1780.352, y = 2596.023, z = 50.55, model = 1028191914, locked = true, _dist = 2, offset={1.13, 2.20, 0.05}, heading=0,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "Solitary Double Doors", x = 1780.15, y = 2600.77, z = 50.55, model = 1028191914, static= true, locked = true, _dist = 2, offset={1.13, 2.20, 0.05}, heading=0,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "Solitary Double Doors", x = 1778.74, y = 2601.03, z = 50.55, model = 1028191914, locked = true, _dist = 2, offset={1.13, 0.00, 0.05}, heading=180,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
 
+  {name = "Lower Visitation Left", x = 1785.18, y = 2609.17, z = 45.92, model = 262839150, static= true, locked = true, _dist = 2, offset={1.13, 2.20, 0.05}, heading=0,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "Lower Visitation Right", x = 1786.5, y = 2609.21, z = 45.92, model = 1645000677, locked = true, _dist = 2, offset={0.00, 1.20, 0.05}, heading=0,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "Door 332 #1 EXT", x = 1786.27, y = 2621.52, z = 45.92, model = 262839150, locked = true, _dist = 2, offset={0.00, 1.20, 0.05}, heading=0,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
+
+  {name = "Upper Visitation door", x = 1787.21, y = 2606.77, z = 50.55, model = 1028191914, locked = true, _dist = 2, offset={0.00, 1.20, 0.05}, heading=270,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "Visitation Lower Left", x = 1782.43, y = 2614.14, z = 45.14, model = 1028191914, locked = true, _dist = 2, offset={0.00, 1.20, 0.05}, heading=270,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "Visitation Lower Right", x = 1782.34, y = 2618.58, z = 45.14, model = 1028191914, locked = true, _dist = 2, offset={0.00, 1.20, 0.05}, heading=90,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "Visitation Bedroom", x = 1768.61, y = 2614.28, z = 45.97, model = 1028191914, locked = true, _dist = 2, offset={0.00, 1.20, 0.05}, heading=270,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "Visitation Bedroom Door 2", x = 1766.42, y = 2614.9, z = 46.0, model = 1028191914, locked = true, _dist = 2, offset={0.00, 1.20, 0.05}, heading=0,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "Visitation Door to bedroom", x = 1768.69, y = 2618.57, z = 45.97, model = 1028191914, locked = true, _dist = 2, offset={0.00, 1.20, 0.05}, heading=90,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "Door 332 EXT", x = 1753.3, y = 2615.56, z = 45.56, model = 1645000677, static = true, locked = true, _dist = 2, offset={0.00, 1.20, 0.05}, heading=0,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
+
+  {name = "Yard Door", x = 1763.97, y = 2616.71, z = 45.97, model = 1028191914, locked = true, _dist = 2, offset={0.00, 1.20, 0.05}, heading=90,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
 
 
   {name = "Mission Row / Door 1", x = 464.192, y = -1003.638, z = 24.9, model = -1033001619, locked = true, offset={0.0, -1.13, 0.05}, heading=0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
