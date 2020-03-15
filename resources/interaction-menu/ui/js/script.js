@@ -180,7 +180,17 @@ var itemImages = {
   "Joint": "https://imgur.com/NBVdIqF.png",
   "Watering Can": "https://imgur.com/GC5yvkj.png",
   "Fertilizer": "https://imgur.com/uyRhO93.png",
-  "Small Weed Plant": "https://imgur.com/5dRRvsl.png"
+  "Small Weed Plant": "https://imgur.com/5dRRvsl.png",
+  "Big Whopper": "https://imgur.com/kbekBig.png",
+  "Foot Long Dog": "https://imgur.com/f6gTkeW.png",
+  "Doughnuts": "https://imgur.com/iyQg2J4.png",
+  "Fries": "https://imgur.com/VepJLUO.png",
+  "Chicken Nuggets": "https://imgur.com/GT5V0pq.png",
+  "Fried Chicken Burger": "https://imgur.com/rDtXz3S.png",
+  "Smoothie Special": "https://imgur.com/YJnRI47.png",
+  "Orange Fanta": "https://imgur.com/Fr3Px9r.png",
+  "Pepsi": "https://imgur.com/fHUPIqp.png",
+  "Dr Pepper": "https://imgur.com/JNCWDcR.png",
 }
 
 var menuItems = [

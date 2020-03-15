@@ -10,6 +10,9 @@ auth = "bWluaXB1bmNoOnVzYXJycA=="
 -- for my test server at home
 -- auth = 'bWluaXB1bmNoOnVzYXJycA=='
 
+-- Gorys home test server
+-- auth = 'R29yeWhvbGVzOmQ2RzRYNVM1NA=='
+
 exports("getIP", function()
 	return ip
 end)
