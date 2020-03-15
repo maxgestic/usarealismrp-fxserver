@@ -17,7 +17,7 @@ PRODUCTS = {
         },
         rewardQuantity = {
             min = 10,
-            max = 30
+            max = 25
         },
         cost = 75,
         stages = {
