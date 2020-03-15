@@ -85,7 +85,8 @@ local blips = {
 	{ title="Weazel News", colour = 4, id = 184, x = -249.6443, y = 6235.7524, z = 30.4893 },
 	{ title="Weazel News", colour = 4, id = 184, x = -599.5, y = -931.9, z = 23.9 },
 	{ title="Cluckin' Bell", colour = 4, id = 89, x = -69.9295, y = 6251.2900, z = 30.4893, scale = 0.7 },
-	{ title="Vangelico", colour = 81, id = 478, x = -623.4, y = -233.1, z = 38.1, scale = 0.5 }
+	{ title="Vangelico", colour = 81, id = 478, x = -623.4, y = -233.1, z = 38.1, scale = 0.5 },
+	{ title = "Burger Shot", x = -1189.22, y = -888.43, id = 106, colour = 1, scale = 0.7},
 }
 
 Citizen.CreateThread(function()
