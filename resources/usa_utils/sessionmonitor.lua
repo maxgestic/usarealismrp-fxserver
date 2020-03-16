@@ -78,7 +78,8 @@ function SendServerMonitorDiscordMsg(msg, stat)
 end
 
 function SendPreRestartServerMonitorDiscordMsg()
-    local msg = "\nAt server restart:\nRegular player drops: " .. statistics["playerDrops"] .. "\nAbnormal player drops: " .. statistics["abnormalDrops"] .. "\n# of unique players: " .. statistics["players"].uniqueCount .. "\nMost frequent crash: " .. GetMostFrequentPlayerDropReason()
+    local abnormalDropPercentage = math.floor(exports.globals:round(statistics["abnormalDrops"] / statistics["playerDrops"], 2) * 100)
+    local msg = "\nAt server restart:\nRegular player drops: " .. statistics["playerDrops"] .. "\nAbnormal player drops: " .. statistics["abnormalDrops"] .. "\n# of unique players: " .. statistics["players"].uniqueCount .. "\nAbnormal drop percentage since last restart: " ..  abnormalDropPercentage .. "%" .. "\nMost frequent crash: " .. GetMostFrequentPlayerDropReason()
     SendDiscordLog(WEBHOOK_URL, msg)
 end
 

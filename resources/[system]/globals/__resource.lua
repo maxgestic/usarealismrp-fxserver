@@ -17,7 +17,8 @@ exports {
   "Draw3DTextForOthers",
   "DrawTimerBar",
   "dump",
-  "loadAnimDict"
+  "loadAnimDict",
+  'DrawText3D'
 }
 
 -- global server functions/tables
