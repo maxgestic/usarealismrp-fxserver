@@ -181,6 +181,8 @@ var itemImages = {
   "Watering Can": "https://imgur.com/GC5yvkj.png",
   "Fertilizer": "https://imgur.com/uyRhO93.png",
   "Small Weed Plant": "https://imgur.com/5dRRvsl.png",
+  "Animal Fur": "https://imgur.com/SURTdtd.png",
+  "Butchered Meat": "https://imgur.com/hkb5zK4.png",
   "Big Whopper": "https://imgur.com/kbekBig.png",
   "Foot Long Dog": "https://imgur.com/f6gTkeW.png",
   "Doughnuts": "https://imgur.com/iyQg2J4.png",
