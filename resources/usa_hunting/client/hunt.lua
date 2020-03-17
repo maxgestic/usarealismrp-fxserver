@@ -63,7 +63,7 @@ Citizen.CreateThread(function()
     end
 end)
 
-function isBlacklistedModel()
+function isBlacklistedModel(model)
     local BLACK_LISTED_MODELS = {}
     BLACK_LISTED_MODELS[-1788665315] = true -- rottweiler
     BLACK_LISTED_MODELS[882848737] = true -- retriever
@@ -73,4 +73,7 @@ function isBlacklistedModel()
     BLACK_LISTED_MODELS[-1384627013] = true -- westy
     BLACK_LISTED_MODELS[1318032802] = true -- husky
     BLACK_LISTED_MODELS[1462895032] = true -- cat
+    BLACK_LISTED_MODELS[GetHashKey("a_c_rat")] = true -- rat
+
+    return BLACK_LISTED_MODELS[model]
 end
