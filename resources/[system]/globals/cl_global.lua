@@ -99,8 +99,11 @@ function Display(ped, text, offset, maxDist, time)
     nbrDisplaying = nbrDisplaying + 1
     while displaying do
       Wait(0)
-      local coords = GetEntityCoords(GetPlayerPed(ped), false)
-      DrawText3Ds(coords['x'], coords['y'], coords['z']+offset+0.3, text, maxDist)
+      local targetPedCoords = GetEntityCoords(GetPlayerPed(ped), false)
+      local myCoords = GetEntityCoords(PlayerPedId())
+      if Vdist(targetPedCoords, myCoords) < maxDist then
+        DrawText3D(targetPedCoords['x'], targetPedCoords['y'], targetPedCoords['z']+offset+0.3, text)
+      end
     end
     nbrDisplaying = nbrDisplaying - 1
   end)
