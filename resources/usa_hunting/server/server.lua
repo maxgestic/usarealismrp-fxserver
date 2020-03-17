@@ -1,11 +1,11 @@
 local REWARD_RANGES = {
     fur = {
-        low = 150,
-        high = 300
+        low = 100,
+        high = 175
     },
     meat = {
-        low = 150,
-        high = 400
+        low = 85,
+        high = 175
     }
 }
 
@@ -23,7 +23,7 @@ AddEventHandler("hunting:skinforfurandmeat", function(ped)
     local meat = {
         name = "Butchered Meat",
         legality = "legal",
-        quantity = math.random(1, 10),
+        quantity = math.random(1, 5),
         type = 'misc',
         weight = 5
     }
