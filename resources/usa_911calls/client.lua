@@ -12,6 +12,8 @@ local oldBodyDamage = 0
 local oldSpeed = 0
 local onDuty = false
 
+local DISTANCE_BEFORE_GUNSHOT_REPORT = 100
+
 local exempt_locations = {
 	vector3(151.39, -1007.74, -99.0),
 	vector3(266.14, -1007.61, -101.00),
@@ -131,21 +133,30 @@ Citizen.CreateThread(function()
 		local ped = PlayerPedId()
 		if not onDuty then
 			local selectedPedWeapon = GetSelectedPedWeapon(ped)
-			if ReportShotsFired and IsPedShooting(ped) and not prohibitedWeapons["shotsFired"][selectedPedWeapon] then
-				local x, y, z = table.unpack(GetEntityCoords(ped))
-				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-				local area = GetNameOfZone(x, y, z)
-				local report = true
-				for i = 1, #exempt_locations do
-					if Vdist(x, y, z, exempt_locations[i]) < 40.0 then
-						report = false
+			local playerCoords = GetEntityCoords(ped)
+			for otherPed in exports.globals:EnumeratePeds() do
+				local pedCoords = GetEntityCoords(otherPed)
+				local distanceBetweenNpcAndPed = Vdist(pedCoords, playerCoords)
+				if distanceBetweenNpcAndPed < DISTANCE_BEFORE_GUNSHOT_REPORT and otherPed ~= ped and IsPedHuman(otherPed) then
+					if ReportShotsFired and IsPedShooting(ped) and not prohibitedWeapons["shotsFired"][selectedPedWeapon] then
+						local x, y, z = table.unpack(GetEntityCoords(ped))
+						local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+						local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+						local area = GetNameOfZone(x, y, z)
+						local report = true
+
+						for i = 1, #exempt_locations do
+							if Vdist(x, y, z, exempt_locations[i]) < 40.0 then
+							report = false
+							end
+						end
+
+						if report then
+						TriggerServerEvent('911:ShotsFired', x, y, z, lastStreetNAME, area, IsPedMale(ped))
+						end
+					Citizen.Wait(500)
 					end
 				end
-				if report then
-					TriggerServerEvent('911:ShotsFired', x, y, z, lastStreetNAME, area, IsPedMale(ped))
-				end
-				Citizen.Wait(500)
 			end
 		end
 	end
