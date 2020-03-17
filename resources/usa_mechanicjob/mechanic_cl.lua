@@ -33,6 +33,9 @@ local locations = {
 			z = 30.489,
 			heading = 0.0,
 			model = "amy_downtown_01"
+		},
+		show_blip = {
+			disable_blip = false
 		}
 	},
 	["Sandy"] = {
@@ -58,6 +61,9 @@ local locations = {
 			z = 47.211,
 			heading = 0.0,
 			model = "amm_farmer_01"
+		},
+		show_blip = {
+			disable_blip = false
 		}
 	},
 	["Los Santos - Davis"] = {
@@ -83,6 +89,35 @@ local locations = {
 			z = 28.29,
 			heading = -90.0,
 			model = "amy_downtown_01"
+		},
+		show_blip = {
+			disable_blip = false
+		}
+	},
+	["Luxury Autos - Max W"] = {
+		duty = {
+			x = -794.27,
+			y = -219.09,
+			z = 36.08,
+		},
+		truck_spawn = {
+			x = -762.97,
+			y = -228.29,
+			z = 37.28,
+			heading = 216.46
+		},
+		impound = {
+			x = 0,
+			y = 0,
+			z = 0,
+		},
+		ped = {
+			x = 0,
+			y = 0,
+			z = 0,
+		},
+		show_blip = {
+			disable_blip = true
 		}
 	}
 }
@@ -386,14 +421,16 @@ end
 
 function EnumerateBlips()
 	for name, data in pairs(locations) do
-		local blip = AddBlipForCoord(data.duty.x, data.duty.y, data.duty.z)
-		SetBlipSprite(blip, 68)
-		SetBlipDisplay(blip, 4)
-		SetBlipScale(blip, 0.75)
-		SetBlipAsShortRange(blip, true)
-		BeginTextCommandSetBlipName("STRING")
-		AddTextComponentString('Tow Company')
-		EndTextCommandSetBlipName(blip)
+		if not data.show_blip.disable_blip then
+			local blip = AddBlipForCoord(data.duty.x, data.duty.y, data.duty.z)
+			SetBlipSprite(blip, 68)
+			SetBlipDisplay(blip, 4)
+			SetBlipScale(blip, 0.75)
+			SetBlipAsShortRange(blip, true)
+			BeginTextCommandSetBlipName("STRING")
+			AddTextComponentString('Tow Company')
+			EndTextCommandSetBlipName(blip)
+		end
 	end
 end
 

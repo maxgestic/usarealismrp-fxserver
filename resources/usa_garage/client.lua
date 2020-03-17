@@ -31,13 +31,15 @@ locations = {
 	{ ['x'] = -620.3, ['y'] = 52.7, ['z'] = 43.7, ['noBlip'] = true}, -- Tinsel Towers Apartments
 	{ ['x'] = 364.4, ['y'] = -1700.6, ['z'] = 32.5, ['noBlip'] = true}, -- court house (davis, LS)
 	{ ["x"] = -1073.4, ["y"] = -879.7, ["z"] = 4.8, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"}, ["noBlip"] = true }, -- Vespucci PD
-	{ ['x'] = 1127.5, ['y'] = 2670.8, ['z'] = 38.1, ['noBlip'] = true}, -- Sandy Shores Motel
+	{ ['x'] = 1127.5, ['y'] = 267	0.8, ['z'] = 38.1, ['noBlip'] = true}, -- Sandy Shores Motel
 	{ ['x'] = 388.5, ['y'] = 2647.6, ['z'] = 44.5, ['noBlip'] = true}, -- Eastern Motel (sandy)
 	{ ['x'] = 967.45831298828, ['y'] = -128.59553527832, ['z'] = 74.387634277344, ['noBlip'] = true}, -- LS biker compound
 	-- Additionals added
 	{ ['x'] = 2362.2, ['y'] = 3113.97, ['z'] = 48.26, ['noBlip'] = true}, -- Sandy tow
 	{ ['x'] = 1754.54, ['y'] = 3293.54, ['z'] = 41.13, ['noBlip'] = true}, -- Sandy airport
-	{ ['x'] = 2148.8, ['y'] = 4798.39, ['z'] = 41.1, ['noBlip'] = true} -- Grapeseed airport
+	{ ['x'] = 2148.8, ['y'] = 4798.39, ['z'] = 41.1, ['noBlip'] = true}, -- Grapeseed airport
+	-- Luxury autos
+	{ ['x'] = -781.39, ['y'] = -235.93, ['z'] = 37.08, ['noBlip'] = true}
 }
 
 local VEHICLE_DAMAGES = {}
