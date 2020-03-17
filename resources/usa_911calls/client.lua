@@ -39,7 +39,7 @@ Citizen.CreateThread(function()
 		local isPopulatedArea = IsAreaPopulated()
 		local vehClass = GetVehicleClass(vehicle)
 		if not onDuty then
-			local CanBeReported = DistanceBeforeReport()
+			local CanBeReported = isNearAnyPeds()
 			if CanBeReported then
 				if ReportCarjacking and IsPedJacking(ped) and isPopulatedArea and GetPedInVehicleSeat(veh, -1) == playerPed then
 					local x, y, z = table.unpack(GetEntityCoords(ped))
@@ -135,7 +135,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(1)
 		local ped = PlayerPedId()
 		if not onDuty then
-			local CanBeReported = DistanceBeforeReport()
+			local CanBeReported = isNearAnyPeds()
 			if CanBeReported then
 				local selectedPedWeapon = GetSelectedPedWeapon(ped)
 				if ReportShotsFired and IsPedShooting(ped) and not prohibitedWeapons["shotsFired"][selectedPedWeapon] then
@@ -385,7 +385,7 @@ function ShowHelp(text, bleep)
     EndTextCommandDisplayHelp(0, false, bleep, -1)
 end
 
-function DistanceBeforeReport()
+function isNearAnyPeds()
 	local ped = PlayerPedId()
 	local playerCoords = GetEntityCoords(ped)
 
