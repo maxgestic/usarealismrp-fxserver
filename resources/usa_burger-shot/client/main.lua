@@ -14,6 +14,8 @@ local JOB_START_TEXT_DIST = 3
 local STATIONARY_TIME_KICK_MINS = 10
 local MAX_TIME_BEFORE_STRIKE_ISSUED = 600 * 1000
 
+local ANIMATION_TIME_SECONDS = 50
+
 local signedIn = nil
 
 local utils = {
@@ -234,11 +236,11 @@ function CreateMenu(menu, category)
             local pid = PlayerPedId()
             RequestAnimDict("friends@")
             while (not HasAnimDictLoaded("friends@")) do Citizen.Wait(0) end
-            while GetGameTimer() - beginTime < 30000 do
+            while GetGameTimer() - beginTime < ANIMATION_TIME_SECONDS * 1000 do
                 if not IsEntityPlayingAnim(pid, "friends@", "pickupwait", 3) then
                     TaskPlayAnim(pid, "friends@", "pickupwait", 8.0, 1.0, -1, 11, 1.0, false, false, false)
                 end
-                DrawTimer(beginTime, 30000, 1.42, 1.475, 'Preparing')
+                DrawTimer(beginTime, ANIMATION_TIME_SECONDS * 1000, 1.42, 1.475, 'Preparing')
                 Citizen.Wait(1)
             end
             ClearPedTasks(pid)
