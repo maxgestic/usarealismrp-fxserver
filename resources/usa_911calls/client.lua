@@ -12,7 +12,7 @@ local oldBodyDamage = 0
 local oldSpeed = 0
 local onDuty = false
 
-local DISTANCE_BEFORE_GUNSHOT_REPORT = 100
+local DISTANCE_BEFORE_REPORT = 100
 
 local exempt_locations = {
 	vector3(151.39, -1007.74, -99.0),
@@ -39,88 +39,91 @@ Citizen.CreateThread(function()
 		local isPopulatedArea = IsAreaPopulated()
 		local vehClass = GetVehicleClass(vehicle)
 		if not onDuty then
-			if ReportCarjacking and IsPedJacking(ped) and isPopulatedArea and GetPedInVehicleSeat(veh, -1) == playerPed then
-				local x, y, z = table.unpack(GetEntityCoords(ped))
-				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-				local primary, secondary = GetVehicleColours(vehicle)
-				TriggerServerEvent('911:Carjacking', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))), GetVehicleNumberPlateText(vehicle), IsPedMale(ped), primary, secondary)
-				Citizen.Wait(500)
-			elseif ReportPersonWithAGun and IsPedArmed(ped, 6) and isPopulatedArea and not IsPedInAnyVehicle(ped) then
-				local x, y, z = table.unpack(GetEntityCoords(ped))
-				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-				local area = GetNameOfZone(x, y, z)
-				if math.random() < 0.05 then
-					local report = true
-					for i = 1, #exempt_locations do
-						if Vdist(x, y, z, exempt_locations[i]) < 40.0 then
-							report = false
+			local CanBeReported = DistanceBeforeReport()
+			if CanBeReported then
+				if ReportCarjacking and IsPedJacking(ped) and isPopulatedArea and GetPedInVehicleSeat(veh, -1) == playerPed then
+					local x, y, z = table.unpack(GetEntityCoords(ped))
+					local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+					local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+					local primary, secondary = GetVehicleColours(vehicle)
+					TriggerServerEvent('911:Carjacking', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))), GetVehicleNumberPlateText(vehicle), IsPedMale(ped), primary, secondary)
+					Citizen.Wait(500)
+				elseif ReportPersonWithAGun and IsPedArmed(ped, 6) and isPopulatedArea and not IsPedInAnyVehicle(ped) then
+					local x, y, z = table.unpack(GetEntityCoords(ped))
+					local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+					local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+					local area = GetNameOfZone(x, y, z)
+					if math.random() < 0.05 then
+						local report = true
+						for i = 1, #exempt_locations do
+							if Vdist(x, y, z, exempt_locations[i]) < 40.0 then
+								report = false
+							end
+						end
+						if report then
+							TriggerServerEvent('911:PersonWithAGun', x, y, z, lastStreetNAME, area, IsPedMale(ped))
 						end
 					end
-					if report then
-						TriggerServerEvent('911:PersonWithAGun', x, y, z, lastStreetNAME, area, IsPedMale(ped))
-					end
-				end
-				Citizen.Wait(500)
-			elseif ReportPersonWithAKnife and IsPedArmed(ped, 1) and isPopulatedArea then
-				local x, y, z = table.unpack(GetEntityCoords(ped))
-				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-				local area = GetNameOfZone(x, y, z)
-				local selectedPedWep = GetSelectedPedWeapon(ped)
-				if (selectedPedWep == -1716189206 or selectedPedWep == -1834847097 or selectedPedWep == -581044007 or selectedPedWep == -538741184) and math.random() < 0.08 then
-					local report = true
-					for i = 1, #exempt_locations do
-						if Vdist(x, y, z, exempt_locations[i]) < 40.0 then
-							report = false
+					Citizen.Wait(500)
+				elseif ReportPersonWithAKnife and IsPedArmed(ped, 1) and isPopulatedArea then
+					local x, y, z = table.unpack(GetEntityCoords(ped))
+					local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+					local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+					local area = GetNameOfZone(x, y, z)
+					local selectedPedWep = GetSelectedPedWeapon(ped)
+					if (selectedPedWep == -1716189206 or selectedPedWep == -1834847097 or selectedPedWep == -581044007 or selectedPedWep == -538741184) and math.random() < 0.08 then
+						local report = true
+						for i = 1, #exempt_locations do
+							if Vdist(x, y, z, exempt_locations[i]) < 40.0 then
+								report = false
+							end
+						end
+						if report then
+							TriggerServerEvent('911:PersonWithAKnife', x, y, z, lastStreetNAME, area, IsPedMale(ped))
 						end
 					end
-					if report then
-						TriggerServerEvent('911:PersonWithAKnife', x, y, z, lastStreetNAME, area, IsPedMale(ped))
+					Citizen.Wait(500)
+				elseif ReportAssault and IsPedInMeleeCombat(ped) and isPopulatedArea then
+					local x, y, z = table.unpack(GetEntityCoords(ped))
+					local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+					local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+					local area = GetNameOfZone(x, y, z)
+					if math.random() < 0.2 then
+						TriggerServerEvent('911:AssaultInProgress', x, y, z, lastStreetNAME, area, IsPedMale(ped))
 					end
-				end
-        		Citizen.Wait(500)
-			elseif ReportAssault and IsPedInMeleeCombat(ped) and isPopulatedArea then
-				local x, y, z = table.unpack(GetEntityCoords(ped))
-				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-		        local area = GetNameOfZone(x, y, z)
-		        if math.random() < 0.2 then
-					TriggerServerEvent('911:AssaultInProgress', x, y, z, lastStreetNAME, area, IsPedMale(ped))
-		        end
-				Citizen.Wait(500)
-			elseif ReportRecklessDriving and GetPedInVehicleSeat(GetVehiclePedIsIn(ped), -1) == ped and GetEntitySpeed(vehicle)*2.236936 > 120 and isPopulatedArea and vehClass ~= 14 and vehClass ~= 15 and vehClass ~= 16 and vehClass ~= 19 then
-				local x, y, z = table.unpack(GetEntityCoords(ped))
-				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-				local primary, secondary = GetVehicleColours(GetVehiclePedIsUsing(ped))
-				local area = GetNameOfZone(x, y, z)
-		        local plate = string.sub(GetVehicleNumberPlateText(vehicle), 1, 4)
-		        if math.random() < 0.2 then
-					TriggerServerEvent('911:RecklessDriving', x, y, z, lastStreetNAME, area, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(ped)))), plate, IsPedMale(ped), primary, secondary)
-		        end
-				Citizen.Wait(5000)
-			elseif ReportVehicleTheft and IsPedInAnyVehicle(ped, false) and IsVehicleNeedsToBeHotwired(vehicle) and isPopulatedArea and GetPedInVehicleSeat(veh, -1) == playerPed then
-				local x, y, z = table.unpack(GetEntityCoords(ped))
-				local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-				local primary, secondary = GetVehicleColours(vehicle)
-				TriggerServerEvent('911:VehicleTheft', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))), GetVehicleNumberPlateText(vehicle), IsPedMale(ped), primary, secondary)
-				Citizen.Wait(500)
-			elseif ReportMVA and DoesEntityExist(vehicle) and isPopulatedArea and vehClass ~= 14 and vehClass ~= 15 and vehClass ~= 16 and vehClass ~= 19 then
-				local currentDamage = GetVehicleBodyHealth(vehicle)
-				if currentDamage ~= oldBodyDamage then
-					if (currentDamage < oldBodyDamage) and (oldBodyDamage - currentDamage) >= 5 then
-						local x, y, z = table.unpack(GetEntityCoords(ped))
-						local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-						local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-						local primary, secondary = GetVehicleColours(vehicle)
-						local area = GetNameOfZone(x, y, z)
-		               	TriggerServerEvent('911:MVA', x, y, z, lastStreetNAME, area, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))), GetVehicleNumberPlateText(vehicle), IsPedMale(ped), primary, secondary)
-		               	Citizen.Wait(500)
+					Citizen.Wait(500)
+				elseif ReportRecklessDriving and GetPedInVehicleSeat(GetVehiclePedIsIn(ped), -1) == ped and GetEntitySpeed(vehicle)*2.236936 > 120 and isPopulatedArea and vehClass ~= 14 and vehClass ~= 15 and vehClass ~= 16 and vehClass ~= 19 then
+					local x, y, z = table.unpack(GetEntityCoords(ped))
+					local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+					local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+					local primary, secondary = GetVehicleColours(GetVehiclePedIsUsing(ped))
+					local area = GetNameOfZone(x, y, z)
+					local plate = string.sub(GetVehicleNumberPlateText(vehicle), 1, 4)
+					if math.random() < 0.2 then
+						TriggerServerEvent('911:RecklessDriving', x, y, z, lastStreetNAME, area, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(ped)))), plate, IsPedMale(ped), primary, secondary)
 					end
-					oldBodyDamage = currentDamage
+					Citizen.Wait(5000)
+				elseif ReportVehicleTheft and IsPedInAnyVehicle(ped, false) and IsVehicleNeedsToBeHotwired(vehicle) and isPopulatedArea and GetPedInVehicleSeat(veh, -1) == playerPed then
+					local x, y, z = table.unpack(GetEntityCoords(ped))
+					local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+					local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+					local primary, secondary = GetVehicleColours(vehicle)
+					TriggerServerEvent('911:VehicleTheft', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))), GetVehicleNumberPlateText(vehicle), IsPedMale(ped), primary, secondary)
+					Citizen.Wait(500)
+				elseif ReportMVA and DoesEntityExist(vehicle) and isPopulatedArea and vehClass ~= 14 and vehClass ~= 15 and vehClass ~= 16 and vehClass ~= 19 then
+					local currentDamage = GetVehicleBodyHealth(vehicle)
+					if currentDamage ~= oldBodyDamage then
+						if (currentDamage < oldBodyDamage) and (oldBodyDamage - currentDamage) >= 5 then
+							local x, y, z = table.unpack(GetEntityCoords(ped))
+							local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+							local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+							local primary, secondary = GetVehicleColours(vehicle)
+							local area = GetNameOfZone(x, y, z)
+							TriggerServerEvent('911:MVA', x, y, z, lastStreetNAME, area, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))), GetVehicleNumberPlateText(vehicle), IsPedMale(ped), primary, secondary)
+							Citizen.Wait(500)
+						end
+						oldBodyDamage = currentDamage
+					end
 				end
 			end
 		end
@@ -132,30 +135,25 @@ Citizen.CreateThread(function()
 		Citizen.Wait(1)
 		local ped = PlayerPedId()
 		if not onDuty then
-			local selectedPedWeapon = GetSelectedPedWeapon(ped)
-			local playerCoords = GetEntityCoords(ped)
-			for otherPed in exports.globals:EnumeratePeds() do
-				local pedCoords = GetEntityCoords(otherPed)
-				local distanceBetweenNpcAndPed = Vdist(pedCoords, playerCoords)
-				if distanceBetweenNpcAndPed < DISTANCE_BEFORE_GUNSHOT_REPORT and otherPed ~= ped and IsPedHuman(otherPed) then
-					if ReportShotsFired and IsPedShooting(ped) and not prohibitedWeapons["shotsFired"][selectedPedWeapon] then
-						local x, y, z = table.unpack(GetEntityCoords(ped))
-						local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-						local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-						local area = GetNameOfZone(x, y, z)
-						local report = true
+			local CanBeReported = DistanceBeforeReport()
+			if CanBeReported then
+				local selectedPedWeapon = GetSelectedPedWeapon(ped)
+				if ReportShotsFired and IsPedShooting(ped) and not prohibitedWeapons["shotsFired"][selectedPedWeapon] then
+					local x, y, z = table.unpack(GetEntityCoords(ped))
+					local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+					local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+					local area = GetNameOfZone(x, y, z)
+					local report = true
 
-						for i = 1, #exempt_locations do
-							if Vdist(x, y, z, exempt_locations[i]) < 40.0 then
-							report = false
-							end
-						end
-
-						if report then
-						TriggerServerEvent('911:ShotsFired', x, y, z, lastStreetNAME, area, IsPedMale(ped))
-						end
-					Citizen.Wait(500)
+					for i = 1, #exempt_locations do
+					if Vdist(x, y, z, exempt_locations[i]) < 40.0 then
+					report = false
 					end
+				end
+				if report then
+				TriggerServerEvent('911:ShotsFired', x, y, z, lastStreetNAME, area, IsPedMale(ped))
+				end
+				Citizen.Wait(500)
 				end
 			end
 		end
@@ -385,6 +383,19 @@ function ShowHelp(text, bleep)
     BeginTextCommandDisplayHelp("STRING")
     AddTextComponentSubstringPlayerName(text)
     EndTextCommandDisplayHelp(0, false, bleep, -1)
+end
+
+function DistanceBeforeReport()
+	local ped = PlayerPedId()
+	local playerCoords = GetEntityCoords(ped)
+
+	for otherPed in exports.globals:EnumeratePeds() do
+		local pedCoords = GetEntityCoords(otherPed)
+		local distanceBetweenNpcAndPed = Vdist(pedCoords, playerCoords)
+		if distanceBetweenNpcAndPed < 100 and otherPed ~= ped and IsPedHuman(otherPed) then
+			return true
+		end
+	end
 end
 
 function RespectPedRelations(boolean)
