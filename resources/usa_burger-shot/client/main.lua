@@ -6,17 +6,15 @@ local standardPress = "[E] - "
 local startWork = standardPress .. "Start work"
 local quitWork = standardPress .. "Quit work"
 
-local timer
-local minutesuntilFired = 8
-
-local employer_ped = "csb_burgerdrug"
-local employer_location = {-1190.24, -897.37, 14.0}
-
--- Strike system
-local timeBeforeStrikes = 600 * 1000
-local signedIn = nil
+local NPC_PED_MODEL = "csb_burgerdrug"
+local NPC_COORDS = {-1190.24, -897.37, 14.0}
 
 local JOB_START_TEXT_DIST = 3
+
+local STATIONARY_TIME_KICK_MINS = 10
+local MAX_TIME_BEFORE_STRIKE_ISSUED = 600 * 1000
+
+local signedIn = nil
 
 local utils = {
     {x = -1198.91, y = -895.17, z = 14.0, model = "smoothie"},
@@ -75,9 +73,9 @@ end)
 -- handle clocking in / out
 Citizen.CreateThread(function()
     while true do
-        local x,y,z = table.unpack(employer_location)
+        local x,y,z = table.unpack(NPC_COORDS)
         if nearMarker(x,y,z) then
-            promptJob(employer_location)
+            promptJob(NPC_COORDS)
         end
         Wait(0)
     end
@@ -122,15 +120,15 @@ local employerNPCHandle = nil
 Citizen.CreateThread(function()
     while true do
         local playerCoords = GetEntityCoords(PlayerPedId(), false)
-        local x,y,z = table.unpack(employer_location)
+        local x,y,z = table.unpack(NPC_COORDS)
         if Vdist(playerCoords, x, y, z) < 40 then
             if not employerNPCHandle then
-                RequestModel(GetHashKey(employer_ped))
-                while not HasModelLoaded(employer_ped) do
-                    RequestModel(employer_ped)
+                RequestModel(GetHashKey(NPC_PED_MODEL))
+                while not HasModelLoaded(NPC_PED_MODEL) do
+                    RequestModel(NPC_PED_MODEL)
                     Wait(1)
                 end
-                employerNPCHandle = CreatePed(0, employer_ped, x, y, z, 0.1, false, false) -- need to add distance culling
+                employerNPCHandle = CreatePed(0, NPC_PED_MODEL, x, y, z, 0.1, false, false) -- need to add distance culling
                 SetEntityCanBeDamaged(employerNPCHandle,false)
                 SetPedCanRagdollFromPlayerImpact(employerNPCHandle,false)
                 SetBlockingOfNonTemporaryEvents(employerNPCHandle,true)
@@ -157,16 +155,7 @@ Citizen.CreateThread(function ()
                 TriggerServerEvent("burgerjob:quitJob")
                 exports.globals:notify("You have been removed from working at BurgerShot!")
                 working = "no"
-                if signedIn then
-                    local strikeCounter = signedIn + (timeBeforeStrikes)
-                    if GetGameTimer() < strikeCounter then
-                        local seconds = math.ceil((strikeCounter - GetGameTimer()) / 1000)
-                        TriggerServerEvent("burgerjob:addStrike")
-                        exports.globals:notify('You haven\'t long started work! You have gained 1 strike against your name.')
-                        Wait(8000)
-                        exports.globals:notify('If you gain 3 strikes you will not be welcome back here as an employee.')
-                    end
-                end
+                addStrikeCheck()
             end
         end
         Wait(1)
@@ -175,39 +164,44 @@ end)
 
 -- Kick the player after X mins if they're just standing still
 Citizen.CreateThread(function()
-    timer = minutesuntilFired
+    local startTimeBeingStationary = nil
+    local startCoordsBeingStationary = nil
     while true do
+        local myped = PlayerPedId()
+        local mycoords = GetEntityCoords(myped)
         if working == 'yes' then
-            local playerPed = PlayerPedId()
-            local playerCoords = GetEntityCoords(playerPed, true)
-            if Vdist(playerCoords, prevPos) < 2 then
-                if timer > 0 then
-                    TriggerServerEvent("burgerjob:quitJob")
-                    exports.globals:notify("You have been removed from working at BurgerShot!")
-                    working = "no"
-                    if signedIn then
-                        local strikeCounter = signedIn + (timeBeforeStrikes)
-                        if GetGameTimer() < strikeCounter then
-                            local seconds = math.ceil((strikeCounter - GetGameTimer()) / 1000)
-                            TriggerServerEvent("burgerjob:addStrike")
-                            exports.globals:notify('You haven\'t long started work! You have gained 1 strike against your name.')
-                            Wait(8000)
-                            exports.globals:notify('If you gain 3 strikes you will not be welcome back here as an employee.')
-                        end
+            if startTimeBeingStationary and startCoordsBeingStationary then
+                if Vdist(mycoords, startCoordsBeingStationary) < 1.5 then
+                    local hasBeenStationaryTooLong = GetGameTimer() - startTimeBeingStationary > (STATIONARY_TIME_KICK_MINS * 60 * 1000)
+                    if hasBeenStationaryTooLong then
+                        TriggerServerEvent("burgerjob:quitJob")
+                        addStrikeCheck()
                     end
+                else
+                    startTimeBeingStationary = GetGameTimer()
+                    startCoordsBeingStationary = mycoords
                 end
-            else
-                timer = minutesuntilFired
+            else 
+                startTimeBeingStationary = GetGameTimer()
+                startCoordsBeingStationary = mycoords
             end
-            prevPos = playerCoords
-            Wait(60000)
         end
-        Wait(1)
+        Wait(100)
     end
 end)
 
+function addStrikeCheck()
+    if signedIn then
+        local strikeCounter = signedIn + MAX_TIME_BEFORE_STRIKE_ISSUED
+        if GetGameTimer() < strikeCounter then
+            TriggerServerEvent("burgerjob:addStrike")
+            exports.globals:notify('Clocking out already? You have gained 1 strike against your name.')
+            Wait(8000)
+            exports.globals:notify('If you get 3 strikes you will have to pay a fine to work again.')
+        end
+    end
+end
 
--- Functions
 function nearMarker(x, y, z)
     local mycoords = GetEntityCoords(GetPlayerPed(-1))
     return GetDistanceBetweenCoords(x, y, z, mycoords.x, mycoords.y, mycoords.z, true) < JOB_START_TEXT_DIST
@@ -226,15 +220,7 @@ function promptJob(location)
             TriggerServerEvent("burgerjob:quitJob", location)
             exports.globals:notify('You are no longer working for Burger Shot.')
             working = "no"
-            if signedIn then
-                local strikeCounter = signedIn + (timeBeforeStrikes)
-                if GetGameTimer() < strikeCounter then
-                    TriggerServerEvent("burgerjob:addStrike")
-                    exports.globals:notify('You haven\'t long started work! You have gained 1 strike against your name.')
-                    Wait(8000)
-                    exports.globals:notify('If you gain 3 strikes you will not be welcome back here as an employee.')
-                end
-            end
+            addStrikeCheck()
         end
     end
 end
