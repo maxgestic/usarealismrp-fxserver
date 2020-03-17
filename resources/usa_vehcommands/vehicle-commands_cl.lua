@@ -69,26 +69,3 @@ AddEventHandler("vehCommands:getVehModel", function(requestedSelection)
 	end
 	TriggerServerEvent("vehCommands:gotVehModel", model, "livery", requestedSelection)
 end)
-
-RegisterNetEvent("vehicleCommands:setExtra")
-AddEventHandler("vehicleCommands:setExtra", function(extra, toggle)
-	if IsPedInAnyVehicle(GetPlayerPed(-1), true) then
-		vehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
-		extra = tonumber(extra)
-		if DoesExtraExist(vehicle, extra) then
-			local prevEngineDamage = GetVehicleEngineHealth(vehicle)
-			local prevBodyDamage = GetVehicleBodyHealth(vehicle)
-			if IsVehicleExtraTurnedOn(vehicle, extra) then
-				SetVehicleExtra(vehicle, extra, true)
-			else
-				SetVehicleExtra(vehicle, extra, false)
-			end
-			SetVehicleEngineHealth(vehicle, prevEngineDamage)
-			SetVehicleBodyHealth(vehicle, prevBodyDamage)
-		else
-			TriggerEvent('usa:notify', extra..' is not a valid extra!')
-		end
-	else
-		TriggerEvent('usa:notify', 'You must be in a vehicle!')
-	end
-end)
