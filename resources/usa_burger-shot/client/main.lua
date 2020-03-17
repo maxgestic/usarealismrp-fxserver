@@ -117,7 +117,7 @@ Citizen.CreateThread(function()
     end
 end)
 
--- Set the map marker // spawn NPC to clock in
+-- Spawn NPC to clock in
 local employerNPCHandle = nil
 Citizen.CreateThread(function()
     while true do
@@ -131,11 +131,11 @@ Citizen.CreateThread(function()
                     Wait(1)
                 end
                 employerNPCHandle = CreatePed(0, employer_ped, x, y, z, 0.1, false, false) -- need to add distance culling
-                SetEntityCanBeDamaged(employer_ped,false)
-                SetPedCanRagdollFromPlayerImpact(employer_ped,false)
-                SetBlockingOfNonTemporaryEvents(employer_ped,true)
-                SetPedFleeAttributes(employer_ped,0,0)
-                SetPedCombatAttributes(employer_ped,17,1)
+                SetEntityCanBeDamaged(employerNPCHandle,false)
+                SetPedCanRagdollFromPlayerImpact(employerNPCHandle,false)
+                SetBlockingOfNonTemporaryEvents(employerNPCHandle,true)
+                SetPedFleeAttributes(employerNPCHandle,0,0)
+                SetPedCombatAttributes(employerNPCHandle,17,1)
             end
         else 
             if employerNPCHandle then
