@@ -29,3 +29,15 @@ this_is_a_map 'yes'
 
 --jet_ski.ymap - JET SKI EVENT
 -- JET SKI COORDS - -265.92, 783.41, 200.62
+
+
+-- REAPERS / OUTLAWS STUFF
+-- outlaws.ymap - flags / fountains / helipad and ladders
+-- hw1_13_strm_0.ymap
+-- hei_hw1_13_strm_0.ymap
+-- hei_bh1_31_strm_0
+-- prop_flag_ls.yft
+-- hw1_13_clth_13_.yft
+-- prop_flag_japan.yft
+-- COORDS: -1456.75, -29.53, 54.65
+-- END OF REAPERS STUFF

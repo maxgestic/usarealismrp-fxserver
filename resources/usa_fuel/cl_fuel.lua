@@ -14,7 +14,8 @@ local fuelStations = {
 			{-475.08, 5988.36, 31.34}, -- Paleto Sheriff Department
 			{1834.73, 2501.94, 47.61}, -- Prison
 			{449.48, -981.07, 44.69}, -- MISSION ROW
-			{351.42, -588.21, 75.16} -- PILLBOX MEDICAL
+			{351.42, -588.21, 75.16}, -- PILLBOX MEDICAL
+			{-1513.0, -67.61, 56.57} -- Reapers House
 		}
 	},
 	['Watercraft'] = {

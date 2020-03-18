@@ -5,6 +5,27 @@
   <imapDependencies/>
   <imapDependencies_2>
     <Item>
+      <imapName>bh1_31_strm_0</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>beverly_metadata_017_strm</Item>
+        <Item>v_garden</Item>
+        <Item>v_potted</Item>
+        <Item>v_traffic_lights</Item>
+        <Item>v_bush</Item>
+        <Item>v_garage</Item>
+        <Item>v_utility</Item>
+        <Item>v_seating_tables</Item>
+        <Item>v_fences_2</Item>
+        <Item>v_ext_veg</Item>
+        <Item>v_bar</Item>
+        <Item>v_rooftop</Item>
+        <Item>v_fences</Item>
+        <Item>v_seating</Item>
+        <Item>v_construction</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
       <imapName>galaxy_fightclub</imapName>
       <manifestFlags/>
       <itypDepArray>
@@ -23,6 +44,54 @@
         <Item>vw_prop_vw_casino_art_03</Item>
         <Item>cutsobjects</Item>
         <Item>v_bathroom</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
+      <imapName>hei_bh1_31_strm_0</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>beverly_metadata_017_strm</Item>
+        <Item>v_garden</Item>
+        <Item>v_potted</Item>
+        <Item>v_traffic_lights</Item>
+        <Item>v_bush</Item>
+        <Item>v_garage</Item>
+        <Item>v_utility</Item>
+        <Item>v_seating_tables</Item>
+        <Item>v_fences_2</Item>
+        <Item>v_ext_veg</Item>
+        <Item>v_bar</Item>
+        <Item>v_rooftop</Item>
+        <Item>v_fences</Item>
+        <Item>v_seating</Item>
+        <Item>v_construction</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
+      <imapName>hei_hw1_13_strm_0</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>hollywood_metadata_015_strm</Item>
+        <Item>hei_hollywood_metadata_001_strm</Item>
+        <Item>v_lev_doors</Item>
+        <Item>v_bush</Item>
+        <Item>v_ext_veg</Item>
+        <Item>v_cacti</Item>
+        <Item>v_fences</Item>
+        <Item>v_rooftop</Item>
+        <Item>v_fences_2</Item>
+        <Item>v_rubbish</Item>
+        <Item>v_storage</Item>
+        <Item>v_traffic_lights</Item>
+        <Item>v_utility</Item>
+        <Item>v_garden</Item>
+        <Item>v_potted</Item>
+        <Item>v_bins</Item>
+        <Item>v_seating_tables</Item>
+        <Item>int_industrial</Item>
+        <Item>v_signs</Item>
+        <Item>v_garage</Item>
+        <Item>v_construction</Item>
       </itypDepArray>
     </Item>
     <Item>
@@ -45,6 +114,32 @@
         <Item>lev_des</Item>
         <Item>v_fences_2</Item>
         <Item>v_lev_doors</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
+      <imapName>hw1_13_strm_0</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>hollywood_metadata_015_strm</Item>
+        <Item>v_lev_doors</Item>
+        <Item>v_bush</Item>
+        <Item>v_ext_veg</Item>
+        <Item>v_cacti</Item>
+        <Item>v_fences</Item>
+        <Item>v_rooftop</Item>
+        <Item>v_fences_2</Item>
+        <Item>v_rubbish</Item>
+        <Item>v_storage</Item>
+        <Item>v_traffic_lights</Item>
+        <Item>v_utility</Item>
+        <Item>v_garden</Item>
+        <Item>v_potted</Item>
+        <Item>v_bins</Item>
+        <Item>v_seating_tables</Item>
+        <Item>int_industrial</Item>
+        <Item>v_signs</Item>
+        <Item>v_garage</Item>
+        <Item>v_construction</Item>
       </itypDepArray>
     </Item>
     <Item>
@@ -78,10 +173,12 @@
       </itypDepArray>
     </Item>
     <Item>
-      <imapName>swede flag</imapName>
+      <imapName>outlaws</imapName>
       <manifestFlags/>
       <itypDepArray>
         <Item>v_rooftop</Item>
+        <Item>downtown_01_metadata_015_strm</Item>
+        <Item>v_garden</Item>
       </itypDepArray>
     </Item>
     <Item>
@@ -89,6 +186,13 @@
       <manifestFlags/>
       <itypDepArray>
         <Item>v_utility</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
+      <imapName>swede flag</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>v_rooftop</Item>
       </itypDepArray>
     </Item>
   </imapDependencies_2>
