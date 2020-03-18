@@ -119,6 +119,32 @@ local locations = {
 		show_blip = {
 			disable_blip = true
 		}
+	},
+	["Moseleys Autos"] = {
+		duty = {
+			x = -0.05,
+			y = -1659.87,
+			z = 28.48,
+		},
+		truck_spawn = {
+			x = -21.83,
+			y = -1679.88,
+			z = 49.45,
+			heading = 107.23
+		},
+		impound = {
+			x = 0,
+			y = 0,
+			z = 0,
+		},
+		ped = {
+			x = 0,
+			y = 0,
+			z = 0,
+		},
+		show_blip = {
+			disable_blip = true
+		}
 	}
 }
 
