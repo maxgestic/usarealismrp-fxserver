@@ -15,16 +15,6 @@ Citizen.CreateThread(function()
     DrawText3D(1546.81, 2166.45, 78.72, 8, '[E] - Enter')
     DrawText3D(1066.40, -3183.47, -39.16, 5, '[E] - Exit')
     if IsControlJustPressed(1, KEY) then
-      --[[
-      if Vdist(playerCoords, 2224.04, 5577.28, 52.7) < 9 and not harvested then
-        Wait(500)
-        if not IsControlPressed(1, KEY) then
-          TriggerServerEvent("weed:checkItem", "Harvest")
-          Wait(5000) -- prevent spamming
-        else
-          TriggerEvent("chatMessage", "", {}, "^3HINT:^0 Go to the big blue barn off the dirt road just south of the car dealership in Harmony when you finish harvesting. You can process this stuff there.")
-        end
-      --]]
       if Vdist(playerCoords, 1036.35, -3203.71, -38.17) < 3.5 and not processed then
         Wait(500)
         if not IsControlPressed(1, KEY) then
