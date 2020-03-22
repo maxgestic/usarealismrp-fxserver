@@ -3,7 +3,15 @@
 -- #Version 2.0
 --====================================================================================
 
-math.randomseed(os.time()) 
+math.randomseed(os.time())
+
+db = nil
+
+TriggerEvent("es:exposeDBFunctions", function(api)
+    db = api
+end)
+
+-- todo: exports.globals:PerformFirstTimeDBCheck()...
 
 --- Pour les numero du style XXX-XXXX
 function getPhoneRandomNumber()
@@ -18,54 +26,29 @@ end
 --     return '0' .. math.random(600000000,699999999)
 -- end
 
-
---[[
-  Ouverture du téphone lié a un item
-  Un solution ESC basé sur la solution donnée par HalCroves
-  https://forum.fivem.net/t/tutorial-for-gcphone-with-call-and-job-message-other/177904
---]]
---[[
-local ESX = nil
-TriggerEvent('esx:getSharedObject', function(obj) 
-    ESX = obj 
-    ESX.RegisterServerCallback('gcphone:getItemAmount', function(source, cb, item)
-        print('gcphone:getItemAmount call item : ' .. item)
-        local xPlayer = ESX.GetPlayerFromId(source)
-        local items = xPlayer.getInventoryItem(item)
-        if items == nil then
-            cb(0)
-        else
-            cb(items.count)
-        end
-    end)
-end)
---]]
-
-
-
 --====================================================================================
 --  Utils
 --====================================================================================
 function getSourceFromIdentifier(identifier, cb)
-    TriggerEvent("es:getPlayers", function(users)
-        for k , user in pairs(users) do
-            if (user.getIdentifier ~= nil and user.getIdentifier() == identifier) or (user.identifier == identifier) then
-                cb(k)
-                return
-            end
+    for id, char in pairs(character) do
+        if char._id == identifier then
+            cb(id)
+            return
         end
-    end)
+    end
     cb(nil)
 end
-function getNumberPhone(identifier)
-    local result = MySQL.Sync.fetchAll("SELECT users.phone_number FROM users WHERE users.identifier = @identifier", {
-        ['@identifier'] = identifier
-    })
-    if result[1] ~= nil then
-        return result[1].phone_number
-    end
-    return nil
+
+function getNumberPhone(identifier, cb)
+    db.getDocumentById("phoneUsers", identifier, function(doc)
+        if doc then
+            cb(doc.number)
+        else 
+            cb(nil)
+        end
+    end)
 end
+
 function getIdentifierByPhoneNumber(phone_number) 
     local result = MySQL.Sync.fetchAll("SELECT users.identifier FROM users WHERE users.phone_number = @phone_number", {
         ['@phone_number'] = phone_number
@@ -92,21 +75,22 @@ end
 function getOrGeneratePhoneNumber (sourcePlayer, identifier, cb)
     local sourcePlayer = sourcePlayer
     local identifier = identifier
-    local myPhoneNumber = getNumberPhone(identifier)
-    if myPhoneNumber == '0' or myPhoneNumber == nil then
-        repeat
-            myPhoneNumber = getPhoneRandomNumber()
-            local id = getIdentifierByPhoneNumber(myPhoneNumber)
-        until id == nil
-        MySQL.Async.insert("UPDATE users SET phone_number = @myPhoneNumber WHERE identifier = @identifier", { 
-            ['@myPhoneNumber'] = myPhoneNumber,
-            ['@identifier'] = identifier
-        }, function ()
+    getNumberPhone(identifier, function(myPhoneNumber)
+        if myPhoneNumber == '0' or myPhoneNumber == nil then
+            repeat
+                myPhoneNumber = getPhoneRandomNumber()
+                local id = getIdentifierByPhoneNumber(myPhoneNumber)
+            until id == nil
+            MySQL.Async.insert("UPDATE users SET phone_number = @myPhoneNumber WHERE identifier = @identifier", { 
+                ['@myPhoneNumber'] = myPhoneNumber,
+                ['@identifier'] = identifier
+            }, function ()
+                cb(myPhoneNumber)
+            end)
+        else
             cb(myPhoneNumber)
-        end)
-    else
-        cb(myPhoneNumber)
-    end
+        end
+    end)
 end
 --====================================================================================
 --  Contacts
@@ -410,7 +394,7 @@ AddEventHandler('gcPhone:internal_startCall', function(source, phone_number, rtc
 
     if is_valid == true then
         getSourceFromIdentifier(destPlayer, function (srcTo)
-            if srcTo ~= nill then
+            if srcTo ~= nil then
                 AppelsEnCours[indexCall].receiver_src = srcTo
                 TriggerEvent('gcPhone:addCall', AppelsEnCours[indexCall])
                 TriggerClientEvent('gcPhone:waitingCall', sourcePlayer, AppelsEnCours[indexCall], true)
@@ -518,47 +502,6 @@ AddEventHandler('gcPhone:appelsDeleteAllHistorique', function ()
     local srcIdentifier = getPlayerID(source)
     appelsDeleteAllHistorique(srcIdentifier)
 end)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 --====================================================================================
 --  OnLoad
