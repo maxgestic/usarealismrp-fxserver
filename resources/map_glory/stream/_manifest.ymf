@@ -16,6 +16,22 @@
       </itypDepArray>
     </Item>
     <Item>
+      <imapName>apa_ch2_10_long_1</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>cityhills_02_metadata_002_strm</Item>
+        <Item>v_bush</Item>
+        <Item>v_palm</Item>
+        <Item>v_seating_tables</Item>
+        <Item>v_potted</Item>
+        <Item>v_ext_veg</Item>
+        <Item>v_crops</Item>
+        <Item>v_rocks</Item>
+        <Item>v_sports</Item>
+        <Item>port_xr</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
       <imapName>apa_ch2_10_strm_1</imapName>
       <manifestFlags/>
       <itypDepArray>
@@ -49,7 +65,6 @@
         <Item>v_seating_tables</Item>
         <Item>v_rooftop</Item>
         <Item>v_fences_2</Item>
-        <Item>v_construction</Item>
         <Item>lev_des</Item>
         <Item>int_residential</Item>
         <Item>v_sports</Item>
@@ -59,27 +74,17 @@
       </itypDepArray>
     </Item>
     <Item>
-      <imapName>glory</imapName>
+      <imapName>helipad</imapName>
       <manifestFlags/>
       <itypDepArray>
-        <Item>v_seating_tables</Item>
         <Item>v_rooftop</Item>
       </itypDepArray>
     </Item>
     <Item>
-      <imapName>apa_ch2_10_long_1</imapName>
+      <imapName>glory</imapName>
       <manifestFlags/>
       <itypDepArray>
-        <Item>cityhills_02_metadata_002_strm</Item>
-        <Item>v_bush</Item>
-        <Item>v_palm</Item>
         <Item>v_seating_tables</Item>
-        <Item>v_potted</Item>
-        <Item>v_ext_veg</Item>
-        <Item>v_crops</Item>
-        <Item>v_rocks</Item>
-        <Item>v_sports</Item>
-        <Item>port_xr</Item>
       </itypDepArray>
     </Item>
   </imapDependencies_2>
