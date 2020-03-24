@@ -15,7 +15,9 @@ local fuelStations = {
 			{1834.73, 2501.94, 47.61}, -- Prison
 			{449.48, -981.07, 44.69}, -- MISSION ROW
 			{351.42, -588.21, 75.16}, -- PILLBOX MEDICAL
-			{-1513.0, -67.61, 56.57} -- Reapers House
+			{-1513.0, -67.61, 56.57}, -- Reapers House
+			{-1596.46, 829.27, 187.82}, -- Gloryholes Corp
+			{-1589.48, 813.51, 187.82} -- Gloryholes Corp
 		}
 	},
 	['Watercraft'] = {
