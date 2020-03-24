@@ -74,17 +74,19 @@
       </itypDepArray>
     </Item>
     <Item>
-      <imapName>helipad</imapName>
-      <manifestFlags/>
-      <itypDepArray>
-        <Item>v_rooftop</Item>
-      </itypDepArray>
-    </Item>
-    <Item>
-      <imapName>glory</imapName>
+      <imapName>bench</imapName>
       <manifestFlags/>
       <itypDepArray>
         <Item>v_seating_tables</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
+      <imapName>tenniscourt</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>v_rooftop</Item>
+        <Item>v_trees</Item>
+        <Item>v_sports</Item>
       </itypDepArray>
     </Item>
   </imapDependencies_2>
