@@ -68,6 +68,16 @@
       </itypDepArray>
     </Item>
     <Item>
+      <imapName>hei_bh1_rd_critical_1</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>v_trees</Item>
+        <Item>v_bush</Item>
+        <Item>v_fanpalm</Item>
+        <Item>v_traffic_lights</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
       <imapName>hei_hw1_13_strm_0</imapName>
       <manifestFlags/>
       <itypDepArray>
@@ -193,6 +203,38 @@
       <manifestFlags/>
       <itypDepArray>
         <Item>v_rooftop</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
+      <imapName>hei_ap1_01_a_strm_5</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>v_rooftop</Item>
+        <Item>int_industrial</Item>
+        <Item>v_storage</Item>
+        <Item>v_utility</Item>
+        <Item>v_airport</Item>
+        <Item>v_construction</Item>
+        <Item>v_bush</Item>
+        <Item>v_fences</Item>
+        <Item>v_bins</Item>
+        <Item>v_traffic_lights</Item>
+        <Item>v_industrial</Item>
+        <Item>v_rubbish</Item>
+        <Item>v_industrial_2</Item>
+        <Item>v_fences_2</Item>
+        <Item>airport_metadata_005_strm</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
+      <imapName>paintballhanger</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>v_airport</Item>
+        <Item>v_storage</Item>
+        <Item>v_construction</Item>
+        <Item>v_fences</Item>
+        <Item>airport_metadata_007_strm</Item>
       </itypDepArray>
     </Item>
   </imapDependencies_2>

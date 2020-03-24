@@ -24,6 +24,8 @@ this_is_a_map 'yes'
 -- Fight Club COORDS: 260.17, -269.47, 60.55
 
 -- sc1_17_cloth.ytd - Bloods banners
+-- sc1_10_cloth.ytd - banners
+-- sc1_10_ground02 - planter
 -- BLOOD BANNER COORDS: -164.24, -1697.29, 31.77
 
 
