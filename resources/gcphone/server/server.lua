@@ -15,9 +15,7 @@ end)
 
 --- Pour les numero du style XXX-XXXX
 function getPhoneRandomNumber()
-    local numBase0 = math.random(100,999)
-    local numBase1 = math.random(0,9999)
-    local num = string.format("%03d-%04d", numBase0, numBase1 )
+    local num = string.format("%d%d%d-%d%d%d%d", math.random(0, 9), math.random(0, 9), math.random(0, 9), math.random(0, 9), math.random(0, 9), math.random(0, 9), math.random(0, 9))
 	return num
 end
 
@@ -49,14 +47,20 @@ function getNumberPhone(identifier, cb)
     end)
 end
 
-function getIdentifierByPhoneNumber(phone_number) 
-    local result = MySQL.Sync.fetchAll("SELECT users.identifier FROM users WHERE users.phone_number = @phone_number", {
-        ['@phone_number'] = phone_number
-    })
-    if result[1] ~= nil then
-        return result[1].identifier
-    end
-    return nil
+function getIdentifierByPhoneNumber(phone_number, cb) 
+    local query = {
+        ["number"] = phone_number
+    }
+    local fields = {
+        "_id",
+    }
+    couchdb.getSpecificFieldFromDocumentByRows("phoneUsers", query, fields, function(doc)
+        if doc then
+            cb(doc._id)
+        else
+            cb(nil)
+        end
+    end)
 end
 
 
@@ -76,16 +80,15 @@ function getOrGeneratePhoneNumber (sourcePlayer, identifier, cb)
     local sourcePlayer = sourcePlayer
     local identifier = identifier
     getNumberPhone(identifier, function(myPhoneNumber)
-        if myPhoneNumber == '0' or myPhoneNumber == nil then
-            repeat
-                myPhoneNumber = getPhoneRandomNumber()
-                local id = getIdentifierByPhoneNumber(myPhoneNumber)
-            until id == nil
-            MySQL.Async.insert("UPDATE users SET phone_number = @myPhoneNumber WHERE identifier = @identifier", { 
-                ['@myPhoneNumber'] = myPhoneNumber,
-                ['@identifier'] = identifier
-            }, function ()
-                cb(myPhoneNumber)
+        if myPhoneNumber == nil then
+            local char = exports["usa-characters"]:GetCharacter(sourcePlayer)
+            local newNum = getPhoneRandomNumber()
+            db.createDocumentWithId("phoneUsers", { ["number"] = newNum }, char.get("_id"), function(ok)
+                if ok then
+                    cb(newNum)
+                else
+                    print("PHONE: Error trying to create doc with num:" .. newNum)
+                end
             end)
         else
             cb(myPhoneNumber)
@@ -95,50 +98,57 @@ end
 --====================================================================================
 --  Contacts
 --====================================================================================
-function getContacts(identifier)
-    local result = MySQL.Sync.fetchAll("SELECT * FROM phone_users_contacts WHERE phone_users_contacts.identifier = @identifier", {
-        ['@identifier'] = identifier
-    })
-    return result
+function getContacts(identifier, cb)
+    local endpoint = "/phoneContacts/_design/contactFilters/_view/getContacts"
+    local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+    PerformHttpRequest(url, function(err, responseText, headers)
+        if responseText then
+            local data = json.decode(responseText)
+            local contacts = {}
+            if data.rows then
+                for i = 1, #data.rows do
+                    local contact = {
+                        id = data.rows[i].value[1], -- _id
+                        number = data.rows[i].value[2]
+                        display = data.rows[i].value[3]
+                    }
+                    table.insert(contacts)
+                end
+            end
+            cb(contacts)
+        end
+    end, "POST", json.encode({
+        keys = { identifier }
+    }), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 end
-function addContact(source, identifier, number, display)
-    local sourcePlayer = tonumber(source)
-    MySQL.Async.insert("INSERT INTO phone_users_contacts (`identifier`, `number`,`display`) VALUES(@identifier, @number, @display)", {
-        ['@identifier'] = identifier,
-        ['@number'] = number,
-        ['@display'] = display,
-    },function()
-        notifyContactChange(sourcePlayer, identifier)
+function addContact(src, identifier, number, display)
+    local char = exports["usa-characters"]:GetCharacter(src)
+    db.createDocument("phoneContacts", { number = number, display = display, ownerID = char.get("_id")}, function()
+        notifyContactChange(src, identifier)
     end)
 end
-function updateContact(source, identifier, id, number, display)
-    local sourcePlayer = tonumber(source)
-    MySQL.Async.insert("UPDATE phone_users_contacts SET number = @number, display = @display WHERE id = @id", { 
-        ['@number'] = number,
-        ['@display'] = display,
-        ['@id'] = id,
-    },function()
+function updateContact(src, identifier, id, number, display)
+    db.updateDocument("phoneContacts", id, { number = number, display = display }, function(doc, err, rText)
         notifyContactChange(sourcePlayer, identifier)
     end)
 end
 function deleteContact(source, identifier, id)
-    local sourcePlayer = tonumber(source)
-    MySQL.Sync.execute("DELETE FROM phone_users_contacts WHERE `identifier` = @identifier AND `id` = @id", {
-        ['@identifier'] = identifier,
-        ['@id'] = id,
-    })
-    notifyContactChange(sourcePlayer, identifier)
+    db.deleteDocument("phoneContacts", id, function(ok)
+        notifyContactChange(sourcePlayer, identifier)
+    end)
 end
 function deleteAllContact(identifier)
-    MySQL.Sync.execute("DELETE FROM phone_users_contacts WHERE `identifier` = @identifier", {
-        ['@identifier'] = identifier
-    })
+    getContacts(identifier, function(contacts)
+        for i = 1, #contacts do 
+            db.deleteDocument("phoneContacts", contacts[i].id, function(ok) end)
+        end
+    end)
 end
-function notifyContactChange(source, identifier)
-    local sourcePlayer = tonumber(source)
-    local identifier = identifier
-    if sourcePlayer ~= nil then 
-        TriggerClientEvent("gcPhone:contactList", sourcePlayer, getContacts(identifier))
+function notifyContactChange(src, identifier)
+    if src then 
+        getContacts(identifier, function(contacts)
+            TriggerClientEvent("gcPhone:contactList", src, contacts)
+        end)
     end
 end
 
@@ -166,20 +176,43 @@ end)
 --====================================================================================
 --  Messages
 --====================================================================================
-function getMessages(identifier)
-    local result = MySQL.Sync.fetchAll("SELECT phone_messages.* FROM phone_messages LEFT JOIN users ON users.identifier = @identifier WHERE phone_messages.receiver = users.phone_number", {
-         ['@identifier'] = identifier
-    })
-    return result
-    --return MySQLQueryTimeStamp("SELECT phone_messages.* FROM phone_messages LEFT JOIN users ON users.identifier = @identifier WHERE phone_messages.receiver = users.phone_number", {['@identifier'] = identifier})
+function getMessages(identifier, cb)
+    local endpoint = "/phoneMessages/_design/messageFilters/_view/getMessages"
+    local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+    PerformHttpRequest(url, function(err, responseText, headers)
+        if responseText then
+            local data = json.decode(responseText)
+            local messages = {}
+            if data.rows then
+                for i = 1, #data.rows do
+                    local message = {
+                        id = data.rows[i].value[1], -- _id
+                        number = data.rows[i].value[2]
+                        display = data.rows[i].value[3]
+                    }
+                    table.insert(messages)
+                end
+            end
+            cb(messages)
+        end
+    end, "POST", json.encode({
+        keys = { identifier }
+    }), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
+--[[
 RegisterServerEvent('gcPhone:_internalAddMessage')
 AddEventHandler('gcPhone:_internalAddMessage', function(transmitter, receiver, message, owner, cb)
     cb(_internalAddMessage(transmitter, receiver, message, owner))
 end)
+--]]
 
-function _internalAddMessage(transmitter, receiver, message, owner)
+function _internalAddMessage(transmitter, receiver, message, cb)
+    local newMessage = { transmitter = transmitter, receiver = receiver, message = message, isRead = false }
+    db.createDocument("phoneMessages", newMessage, function()
+        cb(newMessage)
+    end)
+    --[[
     local Query = "INSERT INTO phone_messages (`transmitter`, `receiver`,`message`, `isRead`,`owner`) VALUES(@transmitter, @receiver, @message, @isRead, @owner);"
     local Query2 = 'SELECT * from phone_messages WHERE `id` = @id;'
 	local Parameters = {
@@ -193,9 +226,25 @@ function _internalAddMessage(transmitter, receiver, message, owner)
     return MySQL.Sync.fetchAll(Query2, {
         ['@id'] = id
     })[1]
+    --]]
 end
 
-function addMessage(source, identifier, phone_number, message)
+function addMessage(src, identifier, phone_number, message)
+    local otherIdentifier = getIdentifierByPhoneNumber(phone_number)
+    local myPhone = getNumberPhone(identifier)
+    if otherIdentifier then -- if valid receiver phone number
+        _internalAddMessage(myPhone, phone_number, message, function(message) -- create message in db
+            TriggerClientEvent("gcPhone:receiveMessage", src, message, true) -- send to transmitter client
+            getSourceFromIdentifier(otherIdentifier, function (otherSrc)
+                if otherSrc then 
+                    TriggerClientEvent("gcPhone:receiveMessage", otherSrc, message, false) -- send to receiver client
+                end
+            end) 
+        end)
+    else 
+        TriggerClientEvent("usa:notify", src, "Invalid phone number!")
+    end
+    --[[
     local sourcePlayer = tonumber(source)
     local otherIdentifier = getIdentifierByPhoneNumber(phone_number)
     local myPhone = getNumberPhone(identifier)
@@ -210,14 +259,27 @@ function addMessage(source, identifier, phone_number, message)
     end
     local memess = _internalAddMessage(phone_number, myPhone, message, 1)
     TriggerClientEvent("gcPhone:receiveMessage", sourcePlayer, memess)
+    --]]
 end
 
 function setReadMessageNumber(identifier, num)
+    local mePhoneNumber = getNumberPhone(identifier)
+    local query = {
+        ["receiver"] = mePhoneNumber,
+        ["transmitter"] = num
+    }
+    db.getDocumentByRows("phoneMessages", query, function(doc)
+        db.updateDocument("phoneMessages", doc._id, { isRead = true }, function(doc, err, rText)
+            print("message with id " .. doc_.id .. " set to read!")
+        end)
+    end)
+    --[[
     local mePhoneNumber = getNumberPhone(identifier)
     MySQL.Sync.execute("UPDATE phone_messages SET phone_messages.isRead = 1 WHERE phone_messages.receiver = @receiver AND phone_messages.transmitter = @transmitter", { 
         ['@receiver'] = mePhoneNumber,
         ['@transmitter'] = num
     })
+    --]]
 end
 
 function deleteMessage(msgId)
@@ -511,12 +573,17 @@ AddEventHandler('es:playerLoaded',function(source)
     local identifier = getPlayerID(source)
     getOrGeneratePhoneNumber(sourcePlayer, identifier, function (myPhoneNumber)
         TriggerClientEvent("gcPhone:myPhoneNumber", sourcePlayer, myPhoneNumber)
-        TriggerClientEvent("gcPhone:contactList", sourcePlayer, getContacts(identifier))
-        TriggerClientEvent("gcPhone:allMessage", sourcePlayer, getMessages(identifier))
+        getContacts(identifier, function(contacts)
+            TriggerClientEvent("gcPhone:contactList", sourcePlayer, contacts)
+            getMessages(identifier, function(messages)
+                TriggerClientEvent("gcPhone:allMessage", sourcePlayer, messages)
+            end)
+        end)
     end)
 end)
 
 -- Just For reload
+--[[
 RegisterServerEvent('gcPhone:allUpdate')
 AddEventHandler('gcPhone:allUpdate', function()
     local sourcePlayer = tonumber(source)
@@ -528,15 +595,19 @@ AddEventHandler('gcPhone:allUpdate', function()
     TriggerClientEvent('gcPhone:getBourse', sourcePlayer, getBourse())
     sendHistoriqueCall(sourcePlayer, num)
 end)
+--]]
 
 
+--[[
 AddEventHandler('onMySQLReady', function ()
     -- MySQL.Async.fetchAll("DELETE FROM phone_messages WHERE (DATEDIFF(CURRENT_DATE,time) > 10)")
 end)
+--]]
 
 --====================================================================================
 --  App bourse
 --====================================================================================
+--[[
 function getBourse()
     --  Format
     --  Array 
@@ -565,6 +636,7 @@ function getBourse()
     }
     return result
 end
+--]]
 
 --====================================================================================
 --  App ... WIP

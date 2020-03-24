@@ -278,11 +278,11 @@ AddEventHandler("gcPhone:getBourse", function(bourse)
 end)
 
 RegisterNetEvent("gcPhone:receiveMessage")
-AddEventHandler("gcPhone:receiveMessage", function(message)
+AddEventHandler("gcPhone:receiveMessage", function(message, owner)
   -- SendNUIMessage({event = 'updateMessages', messages = messages})
   SendNUIMessage({event = 'newMessage', message = message})
   table.insert(messages, message)
-  if message.owner == 0 then
+  if not owner then
     local text = '~o~Nouveau message'
     if ShowNumberNotification == true then
       text = '~o~Nouveau message du ~y~'.. message.transmitter
