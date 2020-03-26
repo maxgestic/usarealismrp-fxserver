@@ -283,23 +283,45 @@ function setReadMessageNumber(identifier, num)
 end
 
 function deleteMessage(msgId)
+    db.deleteDocument("phoneMessages", msgId, function(ok) end)
+    --[[
     MySQL.Sync.execute("DELETE FROM phone_messages WHERE `id` = @id", {
         ['@id'] = msgId
     })
+    --]]
 end
 
-function deleteAllMessageFromPhoneNumber(source, identifier, phone_number)
-    local source = source
-    local identifier = identifier
+function deleteAllMessageFromPhoneNumber(src, identifier, phone_number)
     local mePhoneNumber = getNumberPhone(identifier)
+    local query = {
+        ["receiver"] = mePhoneNumber,
+        ["transmitter"] = phone_number
+    }
+    db.getDocumentsByRows("phoneMessages", query, function(docs)
+        for i = 1, #docs do
+            db.deleteDocument("phoneMessages", docs[i]._id,  function(ok) end)
+        end
+    end)
+    --[[
     MySQL.Sync.execute("DELETE FROM phone_messages WHERE `receiver` = @mePhoneNumber and `transmitter` = @phone_number", {['@mePhoneNumber'] = mePhoneNumber,['@phone_number'] = phone_number})
+    --]]
 end
 
 function deleteAllMessage(identifier)
     local mePhoneNumber = getNumberPhone(identifier)
+    local query = {
+        ["receiver"] = mePhoneNumber
+    }
+    db.getDocumentsByRows("phoneMessages", query, function(docs)
+        for i = 1, #docs do
+            db.deleteDocument("phoneMessages", docs[i]._id,  function(ok) end)
+        end
+    end)
+    --[[
     MySQL.Sync.execute("DELETE FROM phone_messages WHERE `receiver` = @mePhoneNumber", {
         ['@mePhoneNumber'] = mePhoneNumber
     })
+    --]]
 end
 
 RegisterServerEvent('gcPhone:sendMessage')
