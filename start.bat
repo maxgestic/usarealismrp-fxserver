@@ -21,6 +21,7 @@ rd /S /Q map_sandypdinterior
 rd /S /Q gabz_pillbox_hospital
 rd /S /Q map_burgershot
 rd /S /Q map_customDesigns
+rd /S /Q map_glory
 rd /S /Q map_mosleys
 rd /S /Q map_luxury-autos
 rd /S /Q paletopd
