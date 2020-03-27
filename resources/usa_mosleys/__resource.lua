@@ -7,4 +7,4 @@ files {
     'ui/index.html',
     'ui/script.js',
     'ui/style.css',
-}a
+}

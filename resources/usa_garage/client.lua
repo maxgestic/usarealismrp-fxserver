@@ -41,7 +41,7 @@ locations = {
 	-- Luxury Autos
 	{ ['x'] = -781.39, ['y'] = -235.93, ['z'] = 37.08, ['noBlip'] = true},
 	-- Mosleys Autos
-	{ ['x'] = -13.74, ['y'] = -1668.75, ['z'] = 29.48, ['noBlip'] = true},
+	{ ['x'] = -52.32, ['y'] = -1692.79, ['z'] = 29.49, ['noBlip'] = true}
 }
 
 local VEHICLE_DAMAGES = {}

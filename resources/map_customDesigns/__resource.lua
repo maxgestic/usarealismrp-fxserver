@@ -6,13 +6,19 @@ this_is_a_map 'yes'
 --ch6_03_radio_sta_dec+hidr.ytd - Aces Rebel Radio
 -- ACES COORDS: 737.46, 2535.06, 73.16
 
---sc1_24_res.ytd - Swedes House paint change
+-- ################################################
+
+-- sc1_24_res.ytd - Swedes House paint change
 -- prop_flag_uk.yft - Swedes Flag (changed to sweden)
 -- Swede Flag.ymap - Swede Custom map changes via codewalker
 -- SWEDES COORDS: 326.7, -1763.97, 29.01
 
+-- ################################################
+
 -- vb_33_detail.ytd - Crew (VA graffiti) 
---CREW COORDS: -1069.16, -1670.62, 4.45
+-- CREW COORDS: -1069.16, -1670.62, 4.45
+
+-- ################################################
 
 -- hei_hw1_16_stm_0.ymap - Jose Guzman more doors
 -- hw1_16_build02.ydr - Jose Guzman more doors
@@ -20,20 +26,26 @@ this_is_a_map 'yes'
 -- hw1_16_strm_0.ymap - Jose Guzman more doors (codewalker)
 -- JOSE COORDS: 306.68, -177.08, 57.42
 
+-- ################################################
+
 -- Galaxy_FightClub.ymap - Fight Club
 -- Fight Club COORDS: 260.17, -269.47, 60.55
+
+-- ################################################
 
 -- sc1_17_cloth.ytd - Bloods banners
 -- sc1_10_cloth.ytd - banners
 -- sc1_10_ground02 - planter
 -- BLOOD BANNER COORDS: -164.24, -1697.29, 31.77
 
+-- ################################################
 
---jet_ski.ymap - JET SKI EVENT
+-- jet_ski.ymap - JET SKI EVENT
 -- JET SKI COORDS - -265.92, 783.41, 200.62
 
-
 -- REAPERS / OUTLAWS STUFF
+-- ################################################
+
 -- outlaws.ymap - flags / fountains / helipad and ladders
 -- hw1_13_strm_0.ymap
 -- hei_hw1_13_strm_0.ymap
@@ -43,3 +55,10 @@ this_is_a_map 'yes'
 -- prop_flag_japan.yft
 -- COORDS: -1456.75, -29.53, 54.65
 -- END OF REAPERS STUFF
+-- REAPER / OUTLAW STUFF COORDS: -1456.75, -29.53, 54.65
+
+-- ################################################
+
+-- PaintBallHangar.ymap
+-- hei_ap1_01_a_strm_5.ymap
+-- paintball course coords: x = -1271.2042236328,y = -3393.2739257813, z = 13.940023422241

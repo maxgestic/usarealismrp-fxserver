@@ -6,3 +6,4 @@ files { "stream/interiorproxies.meta" }
 
 this_is_a_map "yes"
 
+-- coords: -794.27 -219.09 36.08
