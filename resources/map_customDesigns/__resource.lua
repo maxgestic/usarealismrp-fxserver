@@ -54,7 +54,6 @@ this_is_a_map 'yes'
 -- hw1_13_clth_13_.yft
 -- prop_flag_japan.yft
 -- COORDS: -1456.75, -29.53, 54.65
--- END OF REAPERS STUFF
 -- REAPER / OUTLAW STUFF COORDS: -1456.75, -29.53, 54.65
 
 -- ################################################
