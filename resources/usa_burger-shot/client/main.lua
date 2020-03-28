@@ -61,15 +61,15 @@ AddEventHandler('burgerjob:checkStrikes', function(strikes)
         TriggerServerEvent("burgerjob:startJob")
         working = 'yes'
         exports.globals:notify('You are now working for Burger Shot.')
-        if not signedIn then
-            signedIn = GetGameTimer()
-        end
+        signedIn = GetGameTimer()
         ShowHelp()
     end
 end)
 
-RegisterCommand("paybsfine", function()
-    TriggerServerEvent('burgerjob:payFine')
+RegisterNetEvent('burgerjob:quitJob')
+AddEventHandler('burgerjob:quitJob', function()
+    working = 'no'
+    exports.globals:notify('You are no longer working for Burger Shot.')
 end)
 
 -- handle clocking in / out
@@ -219,7 +219,7 @@ function promptJob(location)
     else
         DrawText3D(x,y,z,  5, quitWork)
         if IsControlJustPressed(0, 38) then
-            TriggerServerEvent("burgerjob:quitJob", location)
+            TriggerServerEvent("burgerjob:quitJob")
             exports.globals:notify('You are no longer working for Burger Shot.')
             working = "no"
             addStrikeCheck()
