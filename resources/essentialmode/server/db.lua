@@ -352,6 +352,26 @@ function exposedDB.getDocumentByRows(db, rowsAndValues, callback)
 	end, "POST", json.encode(qu), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end
 
+function exposedDB.getDocumentByRowsLimitAndSort(db, rowsAndValues, limitVal, sortArray, callback) -- for sort array syntax see couch db
+	local qu = { selector = rowsAndValues, limit = limitVal, sort = sortArray )
+	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/_find", function(err, rText, headers)
+		local t = json.decode(rText)
+		if(t)then
+			if t.docs then
+				if(t.docs[1])then
+					callback(t.docs[1])
+				else
+					callback(false)
+				end
+			else
+				callback(false)
+			end
+		else
+			callback(false, rText)
+		end
+	end, "POST", json.encode(qu), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
+end
+
 function exposedDB.getDocumentByRow(db, row, value, callback)
 	local qu = {selector = {[row] = value}}
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/_find", function(err, rText, headers)

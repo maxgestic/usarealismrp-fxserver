@@ -376,20 +376,39 @@ local AppelsEnCours = {}
 local PhoneFixeInfo = {}
 local lastIndexCall = 10
 
-function getHistoriqueCall (num)
+function getHistoriqueCall (num, cb)
+    local query = {
+        ["owner"] = num
+    }
+    db.getDocumentByRowsLimitAndSort("phoneCalls", query, 100, {{time = "desc"}}, function(docs)
+        cb(docs)
+    end)
+    --[[
     local result = MySQL.Sync.fetchAll("SELECT * FROM phone_calls WHERE phone_calls.owner = @num ORDER BY time DESC LIMIT 120", {
         ['@num'] = num
     })
     return result
+    --]]
 end
 
 function sendHistoriqueCall (src, num) 
-    local histo = getHistoriqueCall(num)
-    TriggerClientEvent('gcPhone:historiqueCall', src, histo)
+    getHistoriqueCall(num, function(histo)
+        TriggerClientEvent('gcPhone:historiqueCall', src, histo)
+    end)
 end
 
 function saveAppels (appelInfo)
     if appelInfo.extraData == nil or appelInfo.extraData.useNumber == nil then
+        local callDoc = {
+            ["owner"] = appelInfo.transmitter_num,
+            ["num"] = appelInfo.receiver_num,
+            ["incoming"] = 1,
+            ["accepts"] = appelInfo.is_accepts
+        }
+        db.createDocument("phoneCalls", callDoc, function(docId)
+            notifyNewAppelsHisto(appelInfo.transmitter_src, appelInfo.transmitter_num)
+        end)
+        --[[
         MySQL.Async.insert("INSERT INTO phone_calls (`owner`, `num`,`incoming`, `accepts`) VALUES(@owner, @num, @incoming, @accepts)", {
             ['@owner'] = appelInfo.transmitter_num,
             ['@num'] = appelInfo.receiver_num,
@@ -398,12 +417,21 @@ function saveAppels (appelInfo)
         }, function()
             notifyNewAppelsHisto(appelInfo.transmitter_src, appelInfo.transmitter_num)
         end)
+        --]]
     end
     if appelInfo.is_valid == true then
         local num = appelInfo.transmitter_num
         if appelInfo.hidden == true then
-            mun = "###-####"
+            num = "###-####"
         end
+        callDoc["owner"] = appelInfo.receiver_num
+        callDoc["num"] = num
+        callDoc["incoming"] = 0
+        callDoc["accepts"] = appelInfo.is_accepts
+        db.createDocument("phoneCalls", callDoc, function(docId)
+            notifyNewAppelsHisto(appelInfo.receiver_src, appelInfo.receiver_num)
+        end)
+        --[[
         MySQL.Async.insert("INSERT INTO phone_calls (`owner`, `num`,`incoming`, `accepts`) VALUES(@owner, @num, @incoming, @accepts)", {
             ['@owner'] = appelInfo.receiver_num,
             ['@num'] = num,
@@ -414,6 +442,7 @@ function saveAppels (appelInfo)
                 notifyNewAppelsHisto(appelInfo.receiver_src, appelInfo.receiver_num)
             end
         end)
+        --]]
     end
 end
 
@@ -528,9 +557,9 @@ AddEventHandler('gcPhone:acceptCall', function(infoCall, rtcAnswer)
             AppelsEnCours[id].is_accepts = true
             AppelsEnCours[id].rtcAnswer = rtcAnswer
             TriggerClientEvent('gcPhone:acceptCall', AppelsEnCours[id].transmitter_src, AppelsEnCours[id], true)
-	    SetTimeout(1000, function() -- change to +1000, if necessary.
-       		TriggerClientEvent('gcPhone:acceptCall', AppelsEnCours[id].receiver_src, AppelsEnCours[id], false)
-	    end)
+            SetTimeout(1000, function() -- change to +1000, if necessary.
+                TriggerClientEvent('gcPhone:acceptCall', AppelsEnCours[id].receiver_src, AppelsEnCours[id], false)
+            end)
             saveAppels(AppelsEnCours[id])
         end
     end
@@ -567,17 +596,31 @@ AddEventHandler('gcPhone:appelsDeleteHistorique', function (numero)
     local sourcePlayer = tonumber(source)
     local srcIdentifier = getPlayerID(source)
     local srcPhone = getNumberPhone(srcIdentifier)
+    db.getDocumentsByRows("phoneCalls", {owner = srcPhone, num = numero}, function(docs)
+        for i = 1, #docs do
+            db.deleteDocument("phoneCalls", docs[i]._id, function() end)
+        end
+    end)
+    --[[
     MySQL.Sync.execute("DELETE FROM phone_calls WHERE `owner` = @owner AND `num` = @num", {
         ['@owner'] = srcPhone,
         ['@num'] = numero
     })
+    --]]
 end)
 
 function appelsDeleteAllHistorique(srcIdentifier)
     local srcPhone = getNumberPhone(srcIdentifier)
+    db.getDocumentsByRows("phoneCalls", {owner = srcPhone}, function(docs)
+        for i = 1, #docs do
+            db.deleteDocument("phoneCalls", docs[i]._id, function() end)
+        end
+    end)
+    --[[
     MySQL.Sync.execute("DELETE FROM phone_calls WHERE `owner` = @owner", {
         ['@owner'] = srcPhone
     })
+    --]]
 end
 
 RegisterServerEvent('gcPhone:appelsDeleteAllHistorique')
@@ -732,9 +775,9 @@ function onAcceptFixePhone(source, infoCall, rtcAnswer)
         PhoneFixeInfo[id] = nil
         TriggerClientEvent('gcPhone:notifyFixePhoneChange', -1, PhoneFixeInfo)
         TriggerClientEvent('gcPhone:acceptCall', AppelsEnCours[id].transmitter_src, AppelsEnCours[id], true)
-	SetTimeout(1000, function() -- change to +1000, if necessary.
-       		TriggerClientEvent('gcPhone:acceptCall', AppelsEnCours[id].receiver_src, AppelsEnCours[id], false)
-	end)
+        SetTimeout(1000, function() -- change to +1000, if necessary.
+                TriggerClientEvent('gcPhone:acceptCall', AppelsEnCours[id].receiver_src, AppelsEnCours[id], false)
+        end)
         saveAppels(AppelsEnCours[id])
     end
 end
