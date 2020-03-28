@@ -387,7 +387,7 @@ end
 
 function isNearAnyPeds()
 	local myPed = PlayerPedId()
-	local playerCoords = GetEntityCoords(ped)
+	local playerCoords = GetEntityCoords(myPed)
 
 	for otherPed in exports.globals:EnumeratePeds() do
 		local pedCoords = GetEntityCoords(otherPed)
