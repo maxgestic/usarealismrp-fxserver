@@ -3,6 +3,8 @@ local hunt_shack_location = {x = -1493.3, y = 4972.0, z = 63.93}
 local SHOW_HINT_TEXT_DIST = 15
 local MAX_HINT_TEXT_DIST = 5
 
+local BUTCHER_ANIMATION_TIME_SECONDS = 45
+
 local KEYS = {
     E = 38
 }
@@ -44,16 +46,18 @@ Citizen.CreateThread(function()
                             SetEntityAsMissionEntity(otherPed)
                             local beginTime = GetGameTimer()
                             exports.globals:loadAnimDict("amb@medic@standing@kneel@idle_a")
-                            while GetGameTimer() - beginTime < 5000 do
+                            while GetGameTimer() - beginTime < BUTCHER_ANIMATION_TIME_SECONDS * 1000 do
                                 if not IsEntityPlayingAnim(myped, "amb@medic@standing@kneel@idle_a", "idle_a", 3) then
                                     TaskPlayAnim(myped, "amb@medic@standing@kneel@idle_a", "idle_a", 8.0, 1.0, -1, 11, 1.0, false, false, false)
                                 end
-                                exports.globals:DrawTimerBar(beginTime, 5000, 1.42, 1.475, 'Skinning & Butchering')
+                                exports.globals:DrawTimerBar(beginTime, BUTCHER_ANIMATION_TIME_SECONDS * 1000, 1.42, 1.475, 'Skinning & Butchering')
                                 Wait(1)
                             end
                             ClearPedTasks(myped)
-                            TriggerServerEvent('hunting:skinforfurandmeat', givefur)
-                            DeleteEntity(otherPed)
+                            if DoesEntityExist(otherPed) then
+                                TriggerServerEvent('hunting:skinforfurandmeat', givefur)
+                                DeleteEntity(otherPed)
+                            end
                         end
                     end
                 end

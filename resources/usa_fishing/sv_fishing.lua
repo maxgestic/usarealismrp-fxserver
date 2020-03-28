@@ -1,7 +1,7 @@
 local fishItems = {
-  {name = "Trout", quantity = 1, worth = 25, type = "fish", weight = 10, legality = "legal"},
-  {name = "Flounder", quantity = 1, worth = 30, type = "fish", weight = 10, legality = "legal"},
-  {name = "Halibut", quantity = 1, worth = 50, type = "fish", weight = 10, legality = "legal"}
+  {name = "Trout", quantity = 1, worth = 70, type = "fish", weight = 10, legality = "legal"},
+  {name = "Flounder", quantity = 1, worth = 80, type = "fish", weight = 10, legality = "legal"},
+  {name = "Halibut", quantity = 1, worth = 100, type = "fish", weight = 10, legality = "legal"}
 }
 
 RegisterServerEvent("fish:giveFish")
