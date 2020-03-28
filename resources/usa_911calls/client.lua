@@ -386,14 +386,18 @@ function ShowHelp(text, bleep)
 end
 
 function isNearAnyPeds()
-	local ped = PlayerPedId()
+	local myPed = PlayerPedId()
 	local playerCoords = GetEntityCoords(ped)
 
 	for otherPed in exports.globals:EnumeratePeds() do
 		local pedCoords = GetEntityCoords(otherPed)
 		local distanceBetweenNpcAndPed = Vdist(pedCoords, playerCoords)
-		if distanceBetweenNpcAndPed < 100 and otherPed ~= ped and IsPedHuman(otherPed) then
-			return true
+
+		if DoesEntityExist(otherPed) then
+			SetEntityAsMissionEntity(otherPed)
+			if distanceBetweenNpcAndPed < 100 and otherPed ~= myPed and IsPedHuman(otherPed) then
+				return true
+			end
 		end
 	end
 end
