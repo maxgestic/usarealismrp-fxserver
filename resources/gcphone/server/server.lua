@@ -11,7 +11,11 @@ TriggerEvent("es:exposeDBFunctions", function(api)
     db = api
 end)
 
--- todo: exports.globals:PerformFirstTimeDBCheck()...
+-- make sure DBs exist --
+exports["globals"]:PerformDBCheck("gcphone", "phone-users", nil)
+exports["globals"]:PerformDBCheck("gcphone", "phone-calls", nil)
+exports["globals"]:PerformDBCheck("gcphone", "phone-messages", nil)
+exports["globals"]:PerformDBCheck("gcphone", "phone-contacts", nil)
 
 --- Pour les numero du style XXX-XXXX
 function getPhoneRandomNumber()
@@ -38,7 +42,7 @@ function getSourceFromIdentifier(identifier, cb)
 end
 
 function getNumberPhone(identifier, cb)
-    db.getDocumentById("phoneUsers", identifier, function(doc)
+    db.getDocumentById("phone-users", identifier, function(doc)
         if doc then
             cb(doc.number)
         else 
@@ -54,7 +58,7 @@ function getIdentifierByPhoneNumber(phone_number, cb)
     local fields = {
         "_id",
     }
-    couchdb.getSpecificFieldFromDocumentByRows("phoneUsers", query, fields, function(doc)
+    db.getSpecificFieldFromDocumentByRows("phone-users", query, fields, function(doc)
         if doc then
             cb(doc._id)
         else
@@ -64,26 +68,17 @@ function getIdentifierByPhoneNumber(phone_number, cb)
 end
 
 
-function getPlayerID(source)
-    local identifiers = GetPlayerIdentifiers(source)
-    local player = getIdentifiant(identifiers)
-    return player
-end
-function getIdentifiant(id)
-    for _, v in ipairs(id) do
-        return v
-    end
+function getPlayerID(source) -- character's ID
+    return exports["usa-characters"]:GetCharacterField(source, "_id")
 end
 
 
-function getOrGeneratePhoneNumber (sourcePlayer, identifier, cb)
-    local sourcePlayer = sourcePlayer
-    local identifier = identifier
+function getOrGeneratePhoneNumber (src, identifier, cb)
     getNumberPhone(identifier, function(myPhoneNumber)
         if myPhoneNumber == nil then
-            local char = exports["usa-characters"]:GetCharacter(sourcePlayer)
+            local char = exports["usa-characters"]:GetCharacter(src)
             local newNum = getPhoneRandomNumber()
-            db.createDocumentWithId("phoneUsers", { ["number"] = newNum }, char.get("_id"), function(ok)
+            db.createDocumentWithId("phone-users", { ["number"] = newNum }, char.get("_id"), function(ok)
                 if ok then
                     cb(newNum)
                 else
@@ -98,24 +93,25 @@ end
 --====================================================================================
 --  Contacts
 --====================================================================================
+function arrayifyDBDocsResponse(queryResponse)
+    local arr = {}
+    for k, v in ipairs(queryResponse) do
+        table.insert(arr, v.value)
+    end
+    return arr
+end
+
 function getContacts(identifier, cb)
-    local endpoint = "/phoneContacts/_design/contactFilters/_view/getContacts"
+    local endpoint = "/phone-contacts/_design/contactFilters/_view/getContactsByIdentifier"
     local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
     PerformHttpRequest(url, function(err, responseText, headers)
         if responseText then
             local data = json.decode(responseText)
-            local contacts = {}
             if data.rows then
-                for i = 1, #data.rows do
-                    local contact = {
-                        id = data.rows[i].value[1], -- _id
-                        number = data.rows[i].value[2]
-                        display = data.rows[i].value[3]
-                    }
-                    table.insert(contacts)
-                end
+                cb(arrayifyDBDocsResponse(data.rows))
+            else
+                cb(nil)
             end
-            cb(contacts)
         end
     end, "POST", json.encode({
         keys = { identifier }
@@ -123,24 +119,24 @@ function getContacts(identifier, cb)
 end
 function addContact(src, identifier, number, display)
     local char = exports["usa-characters"]:GetCharacter(src)
-    db.createDocument("phoneContacts", { number = number, display = display, ownerID = char.get("_id")}, function()
+    db.createDocument("phone-contacts", { number = number, display = display, ownerIdentifier = char.get("_id")}, function()
         notifyContactChange(src, identifier)
     end)
 end
 function updateContact(src, identifier, id, number, display)
-    db.updateDocument("phoneContacts", id, { number = number, display = display }, function(doc, err, rText)
+    db.updateDocument("phone-contacts", id, { number = number, display = display }, function(doc, err, rText)
         notifyContactChange(sourcePlayer, identifier)
     end)
 end
 function deleteContact(source, identifier, id)
-    db.deleteDocument("phoneContacts", id, function(ok)
+    db.deleteDocument("phone-contacts", id, function(ok)
         notifyContactChange(sourcePlayer, identifier)
     end)
 end
 function deleteAllContact(identifier)
     getContacts(identifier, function(contacts)
         for i = 1, #contacts do 
-            db.deleteDocument("phoneContacts", contacts[i].id, function(ok) end)
+            db.deleteDocument("phone-contacts", contacts[i].id, function(ok) end)
         end
     end)
 end
@@ -177,27 +173,30 @@ end)
 --  Messages
 --====================================================================================
 function getMessages(identifier, cb)
-    local endpoint = "/phoneMessages/_design/messageFilters/_view/getMessages"
-    local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
-    PerformHttpRequest(url, function(err, responseText, headers)
-        if responseText then
-            local data = json.decode(responseText)
-            local messages = {}
-            if data.rows then
-                for i = 1, #data.rows do
-                    local message = {
-                        id = data.rows[i].value[1], -- _id
-                        number = data.rows[i].value[2]
-                        display = data.rows[i].value[3]
-                    }
-                    table.insert(messages)
+    --[[
+    getNumberPhone(identifer, function(num)
+        db.getDocumentsByRows("phone-messages", { receiver = num }, function(docs)
+            cb(messages)
+        end)
+    end)
+    --]]
+    getNumberPhone(identifier, function(number)
+        local endpoint = "/phone-messages/_design/messageFilters/_view/getReceivedMessagesByNum"
+        local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+        PerformHttpRequest(url, function(err, responseText, headers)
+            if responseText then
+                local data = json.decode(responseText)
+                local messages = {}
+                if data.rows then
+                    cb(arrayifyDBDocsResponse(data.rows))
+                else
+                    cb(messages)
                 end
             end
-            cb(messages)
-        end
-    end, "POST", json.encode({
-        keys = { identifier }
-    }), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+        end, "POST", json.encode({
+            keys = { number }
+        }), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+    end)
 end
 
 --[[
@@ -207,9 +206,9 @@ AddEventHandler('gcPhone:_internalAddMessage', function(transmitter, receiver, m
 end)
 --]]
 
-function _internalAddMessage(transmitter, receiver, message, cb)
-    local newMessage = { transmitter = transmitter, receiver = receiver, message = message, isRead = false }
-    db.createDocument("phoneMessages", newMessage, function()
+function _internalAddMessage(transmitter, receiver, message, owner, cb)
+    local newMessage = { transmitter = transmitter, receiver = receiver, message = message, isRead = owner, owner = owner }
+    db.createDocument("phone-messages", newMessage, function(docId)
         cb(newMessage)
     end)
     --[[
@@ -230,6 +229,23 @@ function _internalAddMessage(transmitter, receiver, message, cb)
 end
 
 function addMessage(src, identifier, phone_number, message)
+    getIdentifierByPhoneNumber(phone_number, function(otherIdentifier)
+        getNumberPhone(identifier, function(myPhone)
+            if otherIdentifier then
+                _internalAddMessage(myPhone, phone_number, message, 0, function(msg)
+                    getSourceFromIdentifier(otherIdentifier, function (otherSrc)
+                        if otherSrc then
+                            TriggerClientEvent("gcPhone:receiveMessage", otherSrc, msg)
+                        end
+                    end)
+                end)
+            end
+            _internalAddMessage(phone_number, myPhone, message, 1, function(msg)
+                TriggerClientEvent("gcPhone:receiveMessage", src, msg)
+            end)
+        end)
+    end)
+    --[[
     local otherIdentifier = getIdentifierByPhoneNumber(phone_number)
     local myPhone = getNumberPhone(identifier)
     if otherIdentifier then -- if valid receiver phone number
@@ -244,6 +260,8 @@ function addMessage(src, identifier, phone_number, message)
     else 
         TriggerClientEvent("usa:notify", src, "Invalid phone number!")
     end
+    --]]
+
     --[[
     local sourcePlayer = tonumber(source)
     local otherIdentifier = getIdentifierByPhoneNumber(phone_number)
@@ -263,14 +281,17 @@ function addMessage(src, identifier, phone_number, message)
 end
 
 function setReadMessageNumber(identifier, num)
-    local mePhoneNumber = getNumberPhone(identifier)
-    local query = {
-        ["receiver"] = mePhoneNumber,
-        ["transmitter"] = num
-    }
-    db.getDocumentByRows("phoneMessages", query, function(doc)
-        db.updateDocument("phoneMessages", doc._id, { isRead = true }, function(doc, err, rText)
-            print("message with id " .. doc_.id .. " set to read!")
+    getNumberPhone(identifier, function(mePhoneNumber)
+        local query = {
+            ["receiver"] = mePhoneNumber,
+            ["transmitter"] = num
+        }
+        db.getDocumentByRows("phone-messages", query, function(doc)
+            if doc then
+                db.updateDocument("phone-messages", doc._id, { isRead = true }, function(doc, err, rText)
+                    print("message with id " .. doc._id .. " set to read!")
+                end)
+            end
         end)
     end)
     --[[
@@ -283,7 +304,7 @@ function setReadMessageNumber(identifier, num)
 end
 
 function deleteMessage(msgId)
-    db.deleteDocument("phoneMessages", msgId, function(ok) end)
+    db.deleteDocument("phone-messages", msgId, function(ok) end)
     --[[
     MySQL.Sync.execute("DELETE FROM phone_messages WHERE `id` = @id", {
         ['@id'] = msgId
@@ -292,15 +313,16 @@ function deleteMessage(msgId)
 end
 
 function deleteAllMessageFromPhoneNumber(src, identifier, phone_number)
-    local mePhoneNumber = getNumberPhone(identifier)
-    local query = {
-        ["receiver"] = mePhoneNumber,
-        ["transmitter"] = phone_number
-    }
-    db.getDocumentsByRows("phoneMessages", query, function(docs)
-        for i = 1, #docs do
-            db.deleteDocument("phoneMessages", docs[i]._id,  function(ok) end)
-        end
+    getNumberPhone(identifier, function(mePhoneNumber)
+        local query = {
+            ["receiver"] = mePhoneNumber,
+            ["transmitter"] = phone_number
+        }
+        db.getDocumentsByRows("phone-messages", query, function(docs)
+            for i = 1, #docs do
+                db.deleteDocument("phone-messages", docs[i]._id,  function(ok) end)
+            end
+        end)
     end)
     --[[
     MySQL.Sync.execute("DELETE FROM phone_messages WHERE `receiver` = @mePhoneNumber and `transmitter` = @phone_number", {['@mePhoneNumber'] = mePhoneNumber,['@phone_number'] = phone_number})
@@ -308,14 +330,15 @@ function deleteAllMessageFromPhoneNumber(src, identifier, phone_number)
 end
 
 function deleteAllMessage(identifier)
-    local mePhoneNumber = getNumberPhone(identifier)
-    local query = {
-        ["receiver"] = mePhoneNumber
-    }
-    db.getDocumentsByRows("phoneMessages", query, function(docs)
-        for i = 1, #docs do
-            db.deleteDocument("phoneMessages", docs[i]._id,  function(ok) end)
-        end
+    getNumberPhone(identifier, function(mePhoneNumber)
+        local query = {
+            ["receiver"] = mePhoneNumber
+        }
+        db.getDocumentsByRows("phone-messages", query, function(docs)
+            for i = 1, #docs do
+                db.deleteDocument("phone-messages", docs[i]._id,  function(ok) end)
+            end
+        end)
     end)
     --[[
     MySQL.Sync.execute("DELETE FROM phone_messages WHERE `receiver` = @mePhoneNumber", {
@@ -380,7 +403,7 @@ function getHistoriqueCall (num, cb)
     local query = {
         ["owner"] = num
     }
-    db.getDocumentByRowsLimitAndSort("phoneCalls", query, 100, {{time = "desc"}}, function(docs)
+    db.getDocumentByRowsLimitAndSort("phone-calls", query, 100, {{time = "desc"}}, function(docs)
         cb(docs)
     end)
     --[[
@@ -405,7 +428,7 @@ function saveAppels (appelInfo)
             ["incoming"] = 1,
             ["accepts"] = appelInfo.is_accepts
         }
-        db.createDocument("phoneCalls", callDoc, function(docId)
+        db.createDocument("phone-calls", callDoc, function(docId)
             notifyNewAppelsHisto(appelInfo.transmitter_src, appelInfo.transmitter_num)
         end)
         --[[
@@ -428,7 +451,7 @@ function saveAppels (appelInfo)
         callDoc["num"] = num
         callDoc["incoming"] = 0
         callDoc["accepts"] = appelInfo.is_accepts
-        db.createDocument("phoneCalls", callDoc, function(docId)
+        db.createDocument("phone-calls", callDoc, function(docId)
             notifyNewAppelsHisto(appelInfo.receiver_src, appelInfo.receiver_num)
         end)
         --[[
@@ -454,8 +477,9 @@ RegisterServerEvent('gcPhone:getHistoriqueCall')
 AddEventHandler('gcPhone:getHistoriqueCall', function()
     local sourcePlayer = tonumber(source)
     local srcIdentifier = getPlayerID(source)
-    local srcPhone = getNumberPhone(srcIdentifier)
-    sendHistoriqueCall(sourcePlayer, num)
+    getNumberPhone(srcIdentifier, function(num)
+        sendHistoriqueCall(sourcePlayer, num)
+    end)
 end)
 
 
@@ -487,40 +511,48 @@ AddEventHandler('gcPhone:internal_startCall', function(source, phone_number, rtc
     if extraData ~= nil and extraData.useNumber ~= nil then
         srcPhone = extraData.useNumber
     else
-        srcPhone = getNumberPhone(srcIdentifier)
-    end
-    local destPlayer = getIdentifierByPhoneNumber(phone_number)
-    local is_valid = destPlayer ~= nil and destPlayer ~= srcIdentifier
-    AppelsEnCours[indexCall] = {
-        id = indexCall,
-        transmitter_src = sourcePlayer,
-        transmitter_num = srcPhone,
-        receiver_src = nil,
-        receiver_num = phone_number,
-        is_valid = destPlayer ~= nil,
-        is_accepts = false,
-        hidden = hidden,
-        rtcOffer = rtcOffer,
-        extraData = extraData
-    }
-    
-
-    if is_valid == true then
-        getSourceFromIdentifier(destPlayer, function (srcTo)
-            if srcTo ~= nil then
-                AppelsEnCours[indexCall].receiver_src = srcTo
-                TriggerEvent('gcPhone:addCall', AppelsEnCours[indexCall])
-                TriggerClientEvent('gcPhone:waitingCall', sourcePlayer, AppelsEnCours[indexCall], true)
-                TriggerClientEvent('gcPhone:waitingCall', srcTo, AppelsEnCours[indexCall], false)
-            else
-                TriggerEvent('gcPhone:addCall', AppelsEnCours[indexCall])
-                TriggerClientEvent('gcPhone:waitingCall', sourcePlayer, AppelsEnCours[indexCall], true)
-            end
+        getNumberPhone(srcIdentifier, function(num)
+            srcPhone = num
         end)
-    else
-        TriggerEvent('gcPhone:addCall', AppelsEnCours[indexCall])
-        TriggerClientEvent('gcPhone:waitingCall', sourcePlayer, AppelsEnCours[indexCall], true)
     end
+
+    while srcPhone == '' do -- wait for callback to finish if needed
+        Wait(1)
+    end
+
+    getIdentifierByPhoneNumber(phone_number, function(destPlayer)
+        local is_valid = destPlayer ~= nil and destPlayer ~= srcIdentifier
+        AppelsEnCours[indexCall] = {
+            id = indexCall,
+            transmitter_src = sourcePlayer,
+            transmitter_num = srcPhone,
+            receiver_src = nil,
+            receiver_num = phone_number,
+            is_valid = destPlayer ~= nil,
+            is_accepts = false,
+            hidden = hidden,
+            rtcOffer = rtcOffer,
+            extraData = extraData
+        }
+        
+    
+        if is_valid == true then
+            getSourceFromIdentifier(destPlayer, function (srcTo)
+                if srcTo ~= nil then
+                    AppelsEnCours[indexCall].receiver_src = srcTo
+                    TriggerEvent('gcPhone:addCall', AppelsEnCours[indexCall])
+                    TriggerClientEvent('gcPhone:waitingCall', sourcePlayer, AppelsEnCours[indexCall], true)
+                    TriggerClientEvent('gcPhone:waitingCall', srcTo, AppelsEnCours[indexCall], false)
+                else
+                    TriggerEvent('gcPhone:addCall', AppelsEnCours[indexCall])
+                    TriggerClientEvent('gcPhone:waitingCall', sourcePlayer, AppelsEnCours[indexCall], true)
+                end
+            end)
+        else
+            TriggerEvent('gcPhone:addCall', AppelsEnCours[indexCall])
+            TriggerClientEvent('gcPhone:waitingCall', sourcePlayer, AppelsEnCours[indexCall], true)
+        end
+    end)
 
 end)
 
@@ -595,11 +627,12 @@ RegisterServerEvent('gcPhone:appelsDeleteHistorique')
 AddEventHandler('gcPhone:appelsDeleteHistorique', function (numero)
     local sourcePlayer = tonumber(source)
     local srcIdentifier = getPlayerID(source)
-    local srcPhone = getNumberPhone(srcIdentifier)
-    db.getDocumentsByRows("phoneCalls", {owner = srcPhone, num = numero}, function(docs)
-        for i = 1, #docs do
-            db.deleteDocument("phoneCalls", docs[i]._id, function() end)
-        end
+    getNumberPhone(srcIdentifier, function(srcPhone)
+        db.getDocumentsByRows("phone-calls", {owner = srcPhone, num = numero}, function(docs)
+            for i = 1, #docs do
+                db.deleteDocument("phone-calls", docs[i]._id, function() end)
+            end
+        end)
     end)
     --[[
     MySQL.Sync.execute("DELETE FROM phone_calls WHERE `owner` = @owner AND `num` = @num", {
@@ -610,11 +643,12 @@ AddEventHandler('gcPhone:appelsDeleteHistorique', function (numero)
 end)
 
 function appelsDeleteAllHistorique(srcIdentifier)
-    local srcPhone = getNumberPhone(srcIdentifier)
-    db.getDocumentsByRows("phoneCalls", {owner = srcPhone}, function(docs)
-        for i = 1, #docs do
-            db.deleteDocument("phoneCalls", docs[i]._id, function() end)
-        end
+    getNumberPhone(srcIdentifier, function(srcPhone)
+        db.getDocumentsByRows("phone-calls", {owner = srcPhone}, function(docs)
+            for i = 1, #docs do
+                db.deleteDocument("phone-calls", docs[i]._id, function() end)
+            end
+        end)
     end)
     --[[
     MySQL.Sync.execute("DELETE FROM phone_calls WHERE `owner` = @owner", {
@@ -633,9 +667,9 @@ end)
 --====================================================================================
 --  OnLoad
 --====================================================================================
-AddEventHandler('es:playerLoaded',function(source)
-    local sourcePlayer = tonumber(source)
-    local identifier = getPlayerID(source)
+AddEventHandler('character:loaded',function(char)
+    local sourcePlayer = char.get("source")
+    local identifier = char.get("_id")
     getOrGeneratePhoneNumber(sourcePlayer, identifier, function (myPhoneNumber)
         TriggerClientEvent("gcPhone:myPhoneNumber", sourcePlayer, myPhoneNumber)
         getContacts(identifier, function(contacts)
@@ -739,7 +773,13 @@ function onCallFixePhone (source, phone_number, rtcOffer, extraData)
     if extraData ~= nil and extraData.useNumber ~= nil then
         srcPhone = extraData.useNumber
     else
-        srcPhone = getNumberPhone(srcIdentifier)
+        getNumberPhone(srcIdentifier, function(num)
+            srcPhone = num
+        end)
+    end
+
+    while srcPhone == '' do -- wait for callback if needed
+        Wait(1)
     end
 
     AppelsEnCours[indexCall] = {
