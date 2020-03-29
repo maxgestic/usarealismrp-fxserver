@@ -353,7 +353,7 @@ function exposedDB.getDocumentByRows(db, rowsAndValues, callback)
 end
 
 function exposedDB.getDocumentByRowsLimitAndSort(db, rowsAndValues, limitVal, sortArray, callback) -- for sort array syntax see couch db
-	local qu = { selector = rowsAndValues, limit = limitVal, sort = sortArray )
+	local qu = { selector = rowsAndValues, limit = limitVal, sort = sortArray }
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/_find", function(err, rText, headers)
 		local t = json.decode(rText)
 		if(t)then

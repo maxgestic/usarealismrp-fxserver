@@ -85,7 +85,7 @@ end, {
 exports("PerformDBCheck", function(scriptName, db, doneFunc)
 	PerformHttpRequest("http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. "/" .. db .. "/_compact", function(err, rText, headers)
 	end, "POST", "", {["Content-Type"] = "application/json", Authorization = "Basic " .. exports["essentialmode"]:getAuth()})
-
+	
 	PerformHttpRequest("http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. "/" .. db, function(err, rText, headers)
 		if err == 0 then
 			print("-------------------------------------------------------------")
@@ -105,7 +105,7 @@ exports("PerformDBCheck", function(scriptName, db, doneFunc)
 			print("-------------------------------------------------------------")
 		else
 			print("------------------------------------------------------------------------------------------------")
-			print("--- Unknown error detected ( " .. err .. " ): " .. rText)
+			print("--- Unknown error detected ( " .. err .. " ): " .. (rText or "could not get rText"))
 			print("------------------------------------------------------------------------------------------------")
 		end
 		-- Function to execute when finished checking DB --
