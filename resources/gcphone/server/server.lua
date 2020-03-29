@@ -400,11 +400,12 @@ local PhoneFixeInfo = {}
 local lastIndexCall = 10
 
 function getHistoriqueCall (num, cb)
+    print("num: " .. num)
     local query = {
         ["owner"] = num
     }
-    db.getDocumentByRowsLimitAndSort("phone-calls", query, 100, {{time = "desc"}}, function(docs)
-        cb(docs)
+    db.getDocumentsByRowsLimitAndSort("phone-calls", query, 100, {{time = "desc"}}, function(docs)
+        cb(docs) -- TODO: check the response of 'docs' to see why it isn't loading into UI
     end)
     --[[
     local result = MySQL.Sync.fetchAll("SELECT * FROM phone_calls WHERE phone_calls.owner = @num ORDER BY time DESC LIMIT 120", {
@@ -426,7 +427,8 @@ function saveAppels (appelInfo)
             ["owner"] = appelInfo.transmitter_num,
             ["num"] = appelInfo.receiver_num,
             ["incoming"] = 1,
-            ["accepts"] = appelInfo.is_accepts
+            ["accepts"] = appelInfo.is_accepts,
+            ["time"] = os.time()
         }
         db.createDocument("phone-calls", callDoc, function(docId)
             notifyNewAppelsHisto(appelInfo.transmitter_src, appelInfo.transmitter_num)
@@ -475,6 +477,7 @@ end
 
 RegisterServerEvent('gcPhone:getHistoriqueCall')
 AddEventHandler('gcPhone:getHistoriqueCall', function()
+    print("getting call history")
     local sourcePlayer = tonumber(source)
     local srcIdentifier = getPlayerID(source)
     getNumberPhone(srcIdentifier, function(num)
@@ -676,6 +679,7 @@ AddEventHandler('character:loaded',function(char)
             TriggerClientEvent("gcPhone:contactList", sourcePlayer, contacts)
             getMessages(identifier, function(messages)
                 TriggerClientEvent("gcPhone:allMessage", sourcePlayer, messages)
+                sendHistoriqueCall(sourcePlayer, myPhoneNumber)
             end)
         end)
     end)
