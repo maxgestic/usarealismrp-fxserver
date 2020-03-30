@@ -23,6 +23,13 @@ function getPhoneRandomNumber()
 	return num
 end
 
+-- to mimic MySql's current_timestamp()
+function currentTimestamp()
+    local date = os.date("*t", os.time())
+    local timestamp = string.format("%02d-%02d-%02d %02d-%02d-%02d", date.year, date.month, date.day, date.hour, date.min, date.sec)
+    return timestamp
+end
+
 --- Exemple pour les numero du style 06XXXXXXXX
 -- function getPhoneRandomNumber()
 --     return '0' .. math.random(600000000,699999999)
@@ -207,7 +214,7 @@ end)
 --]]
 
 function _internalAddMessage(transmitter, receiver, message, owner, cb)
-    local newMessage = { transmitter = transmitter, receiver = receiver, message = message, isRead = owner, owner = owner }
+    local newMessage = { transmitter = transmitter, receiver = receiver, message = message, isRead = owner, owner = owner, time = currentTimestamp() }
     db.createDocument("phone-messages", newMessage, function(docId)
         cb(newMessage)
     end)
@@ -400,12 +407,11 @@ local PhoneFixeInfo = {}
 local lastIndexCall = 10
 
 function getHistoriqueCall (num, cb)
-    print("num: " .. num)
     local query = {
         ["owner"] = num
     }
     db.getDocumentsByRowsLimitAndSort("phone-calls", query, 100, {{time = "desc"}}, function(docs)
-        cb(docs) -- TODO: check the response of 'docs' to see why it isn't loading into UI
+        cb(docs)
     end)
     --[[
     local result = MySQL.Sync.fetchAll("SELECT * FROM phone_calls WHERE phone_calls.owner = @num ORDER BY time DESC LIMIT 120", {
@@ -428,7 +434,7 @@ function saveAppels (appelInfo)
             ["num"] = appelInfo.receiver_num,
             ["incoming"] = 1,
             ["accepts"] = appelInfo.is_accepts,
-            ["time"] = os.time()
+            ["time"] = currentTimestamp()
         }
         db.createDocument("phone-calls", callDoc, function(docId)
             notifyNewAppelsHisto(appelInfo.transmitter_src, appelInfo.transmitter_num)

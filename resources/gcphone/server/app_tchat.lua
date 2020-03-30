@@ -1,10 +1,35 @@
+exports.globals:PerformDBCheck("gcphone", "phone-app-chat", nil)
+
+function currentTimestamp()
+  local date = os.date("*t", os.time())
+  local timestamp = string.format("%02d-%02d-%02d %02d-%02d-%02d", date.year, date.month, date.day, date.hour, date.min, date.sec)
+  return timestamp
+end
+
 function TchatGetMessageChannel (channel, cb)
+  local query = {
+    ["channel"] = channel
+  }
+  db.getDocumentsByRowsLimitAndSort("phone-app-chat", query, 100, {{time = "desc"}}, function(docs)
+      cb(docs)
+  end)
+  --[[
     MySQL.Async.fetchAll("SELECT * FROM phone_app_chat WHERE channel = @channel ORDER BY time DESC LIMIT 100", { 
         ['@channel'] = channel
     }, cb)
+    --]]
 end
 
 function TchatAddMessage (channel, message)
+  local newMessage = {
+    ["channel"] = channel,
+    ["message"] = message,
+    ["time"] = currentTimestamp()
+  }
+  db.createDocument("phone-app-chat", newMessage, function(docId)
+    TriggerClientEvent('gcPhone:tchat_receive', -1, newMessage)
+  end)
+  --[[
   local Query = "INSERT INTO phone_app_chat (`channel`, `message`) VALUES(@channel, @message);"
   local Query2 = 'SELECT * from phone_app_chat WHERE `id` = @id;'
   local Parameters = {
@@ -16,6 +41,7 @@ function TchatAddMessage (channel, message)
       TriggerClientEvent('gcPhone:tchat_receive', -1, reponse[1])
     end)
   end)
+  --]]
 end
 
 
