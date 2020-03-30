@@ -600,9 +600,6 @@ AddEventHandler('gcPhone:acceptCall', function(infoCall, rtcAnswer)
     end
 end)
 
-
-
-
 RegisterServerEvent('gcPhone:rejectCall')
 AddEventHandler('gcPhone:rejectCall', function (infoCall)
     local id = infoCall.id
