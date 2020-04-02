@@ -39,13 +39,15 @@ end
 --  Utils
 --====================================================================================
 function getSourceFromIdentifier(identifier, cb)
-    for id, char in pairs(character) do
-        if char._id == identifier then
-            cb(id)
-            return
+    exports["usa-characters"]:GetCharacters(function(characters)
+        for id, char in pairs(characters) do
+            if char.get("_id") == identifier then
+                cb(id)
+                return
+            end
         end
-    end
-    cb(nil)
+        cb(nil)
+    end)
 end
 
 function getNumberPhone(identifier, cb)
@@ -63,7 +65,7 @@ function getIdentifierByPhoneNumber(phone_number, cb)
         ["number"] = phone_number
     }
     local fields = {
-        "_id",
+        "_id"
     }
     db.getSpecificFieldFromDocumentByRows("phone-users", query, fields, function(doc)
         if doc then
@@ -73,7 +75,6 @@ function getIdentifierByPhoneNumber(phone_number, cb)
         end
     end)
 end
-
 
 function getPlayerID(source) -- character's ID
     return exports["usa-characters"]:GetCharacterField(source, "_id")
@@ -428,14 +429,14 @@ function sendHistoriqueCall (src, num)
 end
 
 function saveAppels (appelInfo)
+    local callDoc = {
+        ["owner"] = appelInfo.transmitter_num,
+        ["num"] = appelInfo.receiver_num,
+        ["incoming"] = 1,
+        ["accepts"] = appelInfo.is_accepts,
+        ["time"] = currentTimestamp()
+    }
     if appelInfo.extraData == nil or appelInfo.extraData.useNumber == nil then
-        local callDoc = {
-            ["owner"] = appelInfo.transmitter_num,
-            ["num"] = appelInfo.receiver_num,
-            ["incoming"] = 1,
-            ["accepts"] = appelInfo.is_accepts,
-            ["time"] = currentTimestamp()
-        }
         db.createDocument("phone-calls", callDoc, function(docId)
             notifyNewAppelsHisto(appelInfo.transmitter_src, appelInfo.transmitter_num)
         end)
@@ -615,10 +616,10 @@ AddEventHandler('gcPhone:rejectCall', function (infoCall)
             return
         end
         if AppelsEnCours[id].transmitter_src ~= nil then
-            TriggerClientEvent('gcPhone:rejectCall', AppelsEnCours[id].transmitter_src)
+            TriggerClientEvent('gcPhone:rejectCall', AppelsEnCours[id].transmitter_src, infoCall)
         end
         if AppelsEnCours[id].receiver_src ~= nil then
-            TriggerClientEvent('gcPhone:rejectCall', AppelsEnCours[id].receiver_src)
+            TriggerClientEvent('gcPhone:rejectCall', AppelsEnCours[id].receiver_src, infoCall)
         end
 
         if AppelsEnCours[id].is_accepts == false then 
