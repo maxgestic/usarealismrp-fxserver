@@ -69,7 +69,7 @@ function RefreshMenu(players)
 		local player = players[i]
 		local playerItem = NativeUI.CreateItem(player.id .. ' | ' .. HexIdToSteamId(player.steam), 'Ping: '..player.ping..'ms')
 		if playerlist.group ~= 'user' then
-			playerItem = NativeUI.CreateItem(player.id .. ' | ' .. HexIdToSteamId(player.steam), 'Ping: '..player.ping..'ms | Name: '..tostring(player.fullname) .. ' | Job: '  ..tostring(player.job))
+			playerItem = NativeUI.CreateItem(player.id .. ' | ' .. HexIdToSteamId(player.steam), 'Ping: '..player.ping..'ms \nName: '..tostring(player.fullname)..' \nJob: '  ..tostring(player.job))
 			if player.job ~= "civ" and player.job ~= "sheriff" and player.job ~= "corrections" then
 				playerItem:SetRightBadge(18) -- star
 			end
