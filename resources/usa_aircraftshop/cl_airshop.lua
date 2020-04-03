@@ -76,9 +76,9 @@ local locations = {
 	},
 	["Johnson"] = {
 		menu = {
-			x = -30.38,
-			y = 759.65,
-			z = 223.57
+			x = -55.28,
+			y = 782.23,
+			z = 222.48
 		},
 		returns = {
 			x = -28.34,
@@ -96,9 +96,9 @@ local locations = {
 	},
 	["GloryCorp"] = {
 		menu = {
-			x = -1606.27,
-			y = 834.51,
-			z = 187.87
+			x = -1607.23,
+			y = 840.97,
+			z = 186.0
 		},
 		returns = {
 			x = -1598.37,
@@ -219,21 +219,15 @@ Citizen.CreateThread(function()
         for name, data in pairs(locations) do
             local shopDist = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), data.menu.x, data.menu.y, data.menu.z, true)
 			if data.private and shopDist < 70 then
-				DrawText3D(data.menu.x, data.menu.y, data.menu.z, 8, '[E] - Private Hanger')
-				if IsControlJustPressed(0, KEYS.E) then
-					Wait(500)
-					if IsControlPressed(0, KEYS.E) then -- holding E
-						local business = exports["usa-businesses"]:GetClosestStore(15)
-						TriggerServerEvent("aircraft:purchaseLicense", business)
-					else
-						TriggerServerEvent('aircraft:requestOpenPrivateMenu')
-					end
+				DrawText3D(data.menu.x, data.menu.y, data.menu.z, 2, '[E] - Private Hanger')
+				if IsControlPressed(0, KEYS.E) then -- holding E
+					TriggerServerEvent('aircraft:requestOpenPrivateMenu')
 				end
 			elseif shopDist < 70 then
 				DrawText3D(data.menu.x, data.menu.y, data.menu.z, 8, '[E] - Aircraft Management')
 			end
 
-            if shopDist < 5 then 
+            if shopDist < 5 and not data.private then
                 if IsControlJustPressed(0, KEYS.E) then
                     Wait(500)
                     if IsControlPressed(0, KEYS.E) then -- holding E
