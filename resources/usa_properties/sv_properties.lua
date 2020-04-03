@@ -706,7 +706,9 @@ AddEventHandler('properties:continueHousePurchase', function(targetSource, locat
 		property['house'] = math.random(1000000, 9999999)
 		property['houseCoords'] = location
 		property['houseHeading'] = heading
-		property['houseStreet'] = street..', '..zones[zone]
+		if zones[zone] then
+			property['houseStreet'] = street..', '..zones[zone]
+		end
 		_data = {
 			name = 'House',
 			coords = property['houseCoords'],
