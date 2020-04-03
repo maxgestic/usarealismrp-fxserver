@@ -243,13 +243,13 @@ function addMessage(src, identifier, phone_number, message)
                 _internalAddMessage(myPhone, phone_number, message, 0, function(msg)
                     getSourceFromIdentifier(otherIdentifier, function (otherSrc)
                         if otherSrc then
-                            TriggerClientEvent("gcPhone:receiveMessage", otherSrc, msg)
+                            TriggerClientEvent("gcPhone:receiveMessage", otherSrc, msg, false)
                         end
                     end)
                 end)
             end
             _internalAddMessage(phone_number, myPhone, message, 1, function(msg)
-                TriggerClientEvent("gcPhone:receiveMessage", src, msg)
+                TriggerClientEvent("gcPhone:receiveMessage", src, msg, true)
             end)
         end)
     end)
@@ -289,16 +289,21 @@ function addMessage(src, identifier, phone_number, message)
 end
 
 function setReadMessageNumber(identifier, num)
+    print("num: " .. num)
     getNumberPhone(identifier, function(mePhoneNumber)
+        print("mePhoneNumber: " .. mePhoneNumber)
         local query = {
             ["receiver"] = mePhoneNumber,
             ["transmitter"] = num
         }
-        db.getDocumentByRows("phone-messages", query, function(doc)
-            if doc then
-                db.updateDocument("phone-messages", doc._id, { isRead = true }, function(doc, err, rText)
-                    print("message with id " .. doc._id .. " set to read!")
-                end)
+        db.getDocumentsByRows("phone-messages", query, function(docs)
+            if docs then
+                for i = 1, #docs do
+                    db.updateDocument("phone-messages", docs[i]._id, { isRead = true }, function(doc, err, rText)
+                        --print("message with id " .. docs[i]._id .. " set to read!")
+                        print("err: " .. err)
+                    end)
+                end
             end
         end)
     end)
@@ -343,8 +348,10 @@ function deleteAllMessage(identifier)
             ["receiver"] = mePhoneNumber
         }
         db.getDocumentsByRows("phone-messages", query, function(docs)
-            for i = 1, #docs do
-                db.deleteDocument("phone-messages", docs[i]._id,  function(ok) end)
+            if docs then
+                for i = 1, #docs do
+                    db.deleteDocument("phone-messages", docs[i]._id,  function(ok) end)
+                end
             end
         end)
     end)
