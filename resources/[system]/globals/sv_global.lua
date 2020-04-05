@@ -243,3 +243,10 @@ function round(num, numDecimalPlaces)
 	local mult = 10^(numDecimalPlaces or 0)
 	return math.floor(num * mult + 0.5) / mult
 end
+
+-- to mimic MySql's current_timestamp()
+function currentTimestamp()
+    local date = os.date("*t", os.time())
+    local timestamp = string.format("%02d-%02d-%02d %02d-%02d-%02d", date.year, date.month, date.day, date.hour, date.min, date.sec)
+    return timestamp
+end
