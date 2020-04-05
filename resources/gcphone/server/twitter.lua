@@ -10,8 +10,8 @@ function TwitterGetTweets (accountId, cb)
   if accountId == nil then
     db.getAllDocumentsFromDbLimit("twitter-tweets", 130, function(docs)
       if docs then
-        local sortedByTimeDocs = table.sort(docs, function(a, b) return a.time > b.time end)
-        cb(sortedByTimeDocs)
+        table.sort(docs, function(a, b) return a.time > b.time end)
+        cb(docs)
       else 
         cb({})
       end
@@ -30,17 +30,17 @@ function TwitterGetTweets (accountId, cb)
   else
     db.getAllDocumentsFromDbLimit("twitter-tweets", 130, function(docs)
       if docs then
-        local sortedByTimeDocs = table.sort(docs, function(a, b) return a.time > b.time end)
-        for i = 1, #sortedByTimeDocs do -- see if this account liked this tweet
-          sortedByTimeDocs[i].isLikes = false
-          for j = 1, #sortedByTimeDocs[i].likes do
-            if sortedByTimeDocs[i].likes[j] == accountId then
-              sortedByTimeDocs[i].isLikes = true
+        table.sort(docs, function(a, b) return a.time > b.time end)
+        for i = 1, #docs do -- see if this account liked this tweet
+          docs[i].isLikes = false
+          for j = 1, #docs[i].likes do
+            if docs[i].likes[j] == accountId then
+              docs[i].isLikes = true
               break
             end
           end
         end
-        cb(sortedByTimeDocs)
+        cb(docs)
       else 
         cb({})
       end
@@ -67,8 +67,8 @@ function TwitterGetFavotireTweets (accountId, cb)
   if accountId == nil then
     db.getAllDocumentsFromDbLimit("twitter-tweets", 130, function(docs)
       if docs then
-        local sortedByTimeDocs = table.sort(docs, function(a, b) return a.time > b.time end)
-        cb(sortedByTimeDocs)
+        table.sort(docs, function(a, b) return a.time > b.time end)
+        cb(docs)
       else 
         cb({})
       end
@@ -88,17 +88,17 @@ function TwitterGetFavotireTweets (accountId, cb)
   else
     db.getAllDocumentsFromDbLimit("twitter-tweets", 130, function(docs)
       if docs then
-        local sortedByTimeDocs = table.sort(docs, function(a, b) return a.time > b.time end)
-        for i = 1, #sortedByTimeDocs do -- see if this account liked this tweet
-          sortedByTimeDocs[i].isLikes = false
-          for j = 1, #sortedByTimeDocs[i].likes do
-            if sortedByTimeDocs[i].likes[j] == accountId then
-              sortedByTimeDocs[i].isLikes = true
+        table.sort(docs, function(a, b) return a.time > b.time end)
+        for i = 1, #docs do -- see if this account liked this tweet
+          docs[i].isLikes = false
+          for j = 1, #docs[i].likes do
+            if docs[i].likes[j] == accountId then
+              docs[i].isLikes = true
               break
             end
           end
         end
-        cb(sortedByTimeDocs)
+        cb(docs)
       else 
         cb({})
       end
@@ -151,16 +151,15 @@ function TwitterPostTweet (username, password, message, sourcePlayer, realUser, 
       return
     end
     local newTweet = {
-      authorId = user._id,
+      author = user._id,
+      authorIcon = user.avatar_url,
       message = message,
       realUser = realUser,
       time = exports.globals:currentTimestamp(),
       likes = {}
     }
     db.createDocument("twitter-tweets", newTweet, function(docID)
-      if docID then 
-        newTweet['author'] = user.author
-        newTweet['authorIcon'] = user.authorIcon
+      if docID then
         TriggerClientEvent('gcPhone:twitter_newTweets', -1, newTweet)
       end
     end)
@@ -204,6 +203,7 @@ function unlikeTweet(tweet, userId)
 end
 
 function TwitterToogleLike (username, password, tweetId, sourcePlayer)
+  print("tweet id: " .. tweetId)
   getUser(username, password, function (user)
     if user == nil then
       if sourcePlayer ~= nil then

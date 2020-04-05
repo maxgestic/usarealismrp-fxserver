@@ -265,6 +265,25 @@ function exposedDB.getAllDocumentsFromDb(db, callback)
 end
 --]]
 
+function exposedDB.getAllDocumentsFromDbLimit(db, limit, callback)
+	local qParams = {
+		["include_docs"] = true,
+		["limit"] = limit
+	}
+	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/_all_docs?include_docs=true&limit=" .. limit, function(err, rText, headers)
+		local docs = {}
+		if rText then
+			local data = json.decode(rText)
+			if data.rows then
+				for i = 1, #data.rows do
+					table.insert(docs, data.rows[i].doc)
+				end
+			end
+		end
+		callback(docs)
+	end, "POST", json.encode(qParams), {["Content-Type"] = 'application/json'})
+end
+
 function exposedDB.getDocumentById(db, id, callback)
   PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. id, function(err, rText, headers)
 	-- nil check --
