@@ -1,5 +1,5 @@
 {
-  "reseau": "Gannon",
+  "reseau": "USARRP",
   "warningMessageCount": 250,
   "themeColor": "#303f9f",
   "colors": [
@@ -63,18 +63,11 @@
 
 
   "serviceCall": [{
-      "display": "Police",
+      "display": "911",
       "icon": "/html/static/img/icons_app/police.png",
       "subMenu": [{
           "title": "Envoyer un message",
-          "eventName": "esx_addons_gcphone:call",
-          "type": {
-            "number": "police"
-          }
-        },
-        {
-          "title": "Appeler le standard",
-          "eventName": "gcphone:autoCallNumber",
+          "eventName": "gcphone:send911Message",
           "type": {
             "number": "911"
           }
@@ -82,28 +75,34 @@
       ]
     },
     {
-      "display": "Ambulance",
+      "display": "Mechanic",
       "backgroundColor": "red",
       "subMenu": [{
         "title": "Envoyer un message",
-        "eventName": "esx_addons_gcphone:call",
+        "eventName": "gcphone:sendMechanicMessage",
         "type": {
-          "number": "ambulance"
+          "number": "mechanic"
+        }
+      }]
+    },
+    {
+      "display": "Taxi",
+      "backgroundColor": "yellow",
+      "subMenu": [{
+        "title": "Envoyer un message",
+        "eventName": "gcphone:sendTaxiMessage",
+        "type": {
+          "number": "taxi"
         }
       }]
     }
   ],
 
-  "defaultContacts": [{
-      "number": "ambulance",
-      "display": "Ambulance",
-      "icon": "/html/static/img/icons_app/bank.png"
-    },
+  "defaultContacts": [
     {
-      "number": "police",
-      "display": "Police",
-      "backgroundColor": "blue",
-      "letter": "P"
+      "number": "911",
+      "display": "911",
+      "backgroundColor": "blue"
     }
   ],
 
