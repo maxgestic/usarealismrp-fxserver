@@ -10,6 +10,9 @@ function TwitterGetTweets (accountId, cb)
   if accountId == nil then
     db.getAllDocumentsFromDbLimit("twitter-tweets", 130, function(docs)
       if docs then
+        for i = 1, #docs do
+          docs[i].id = docs[i]._id -- for front end to read correctly, just renaming id field for now
+        end
         table.sort(docs, function(a, b) return a.time > b.time end)
         cb(docs)
       else 
@@ -32,12 +35,9 @@ function TwitterGetTweets (accountId, cb)
       if docs then
         table.sort(docs, function(a, b) return a.time > b.time end)
         for i = 1, #docs do -- see if this account liked this tweet
-          docs[i].isLikes = false
-          for j = 1, #docs[i].likes do
-            if docs[i].likes[j] == accountId then
-              docs[i].isLikes = true
-              break
-            end
+          docs[i].id = docs[i]._id -- for front end to read correctly, just renaming id field for now
+          for i = 1, #docs do
+            docs[i].isLikes = hasLikedTweet(docs[i], accountId)
           end
         end
         cb(docs)
@@ -89,14 +89,8 @@ function TwitterGetFavotireTweets (accountId, cb)
     db.getAllDocumentsFromDbLimit("twitter-tweets", 130, function(docs)
       if docs then
         table.sort(docs, function(a, b) return a.time > b.time end)
-        for i = 1, #docs do -- see if this account liked this tweet
-          docs[i].isLikes = false
-          for j = 1, #docs[i].likes do
-            if docs[i].likes[j] == accountId then
-              docs[i].isLikes = true
-              break
-            end
-          end
+        for i = 1, #docs do
+          docs[i].isLikes = hasLikedTweet(docs[i], accountId)
         end
         cb(docs)
       else 
@@ -127,6 +121,8 @@ function getUser(username, password, cb)
     if doc then
       if doc.password == exports.globals:hash256(password) then
         cb(doc)
+      else
+        cb(nil)
       end
     else 
       cb(nil)
@@ -156,10 +152,12 @@ function TwitterPostTweet (username, password, message, sourcePlayer, realUser, 
       message = message,
       realUser = realUser,
       time = exports.globals:currentTimestamp(),
-      likes = {}
+      likes = 0,
+      likers = {}
     }
     db.createDocument("twitter-tweets", newTweet, function(docID)
       if docID then
+        newTweet["id"] = docID
         TriggerClientEvent('gcPhone:twitter_newTweets', -1, newTweet)
       end
     end)
@@ -184,8 +182,8 @@ function TwitterPostTweet (username, password, message, sourcePlayer, realUser, 
 end
 
 function hasLikedTweet(tweet, userId)
-  for i = 1, #tweet.likes do
-    if tweet.likes[i] == userId then
+  for i = 1, #tweet.likers do
+    if tweet.likers[i] == userId then
       return true
     end
   end
@@ -193,17 +191,16 @@ function hasLikedTweet(tweet, userId)
 end
 
 function unlikeTweet(tweet, userId)
-  for i = 1, #tweet.likes do
-    if tweet.likes[i] == userId then
-      table.remove(tweet.likes, i)
-      return tweet.likes
+  for i = 1, #tweet.likers do
+    if tweet.likers[i] == userId then
+      table.remove(tweet.likers, i)
+      return tweet.likers
     end
   end
-  return tweet.likes
+  return tweet.likers
 end
 
 function TwitterToogleLike (username, password, tweetId, sourcePlayer)
-  print("tweet id: " .. tweetId)
   getUser(username, password, function (user)
     if user == nil then
       if sourcePlayer ~= nil then
@@ -214,11 +211,16 @@ function TwitterToogleLike (username, password, tweetId, sourcePlayer)
     db.getDocumentById("twitter-tweets", tweetId, function(doc)
       if doc then 
         if hasLikedTweet(doc, user._id) then
-          doc.likes = unlikeTweet(tweet, userId)
+          doc.likers = unlikeTweet(doc, user._id)
+          doc.likes = doc.likes - 1
+          TriggerClientEvent('gcPhone:twitter_setTweetLikes', sourcePlayer, doc._id, false)
         else 
-          table.insert(doc.likes, user._id)
+          table.insert(doc.likers, user._id)
+          doc.likes= doc.likes + 1
+          TriggerClientEvent('gcPhone:twitter_setTweetLikes', sourcePlayer, doc._id, true)
         end
-        db.updateDocument("twitter-tweets", tweetId, { likes = doc.likes }, function(doc, err, rText) end)
+        db.updateDocument("twitter-tweets", tweetId, { likes = doc.likes, likers = doc.likers }, function(doc, err, rText) end)
+        TriggerClientEvent('gcPhone:twitter_updateTweetLikes', -1, doc._id, doc.likes)
       else 
         print("invalid tweet id: " .. tweetId)
       end
@@ -307,7 +309,7 @@ AddEventHandler('gcPhone:twitter_login', function(username, password)
       TwitterShowError(sourcePlayer, 'Twitter Info', 'APP_TWITTER_NOTIF_LOGIN_ERROR')
     else
       TwitterShowSuccess(sourcePlayer, 'Twitter Info', 'APP_TWITTER_NOTIF_LOGIN_SUCCESS')
-      TriggerClientEvent('gcPhone:twitter_setAccount', sourcePlayer, username, password, user.authorIcon)
+      TriggerClientEvent('gcPhone:twitter_setAccount', sourcePlayer, username, password, user.avatar_url)
     end
   end)
 end)
@@ -358,7 +360,7 @@ AddEventHandler('gcPhone:twitter_getTweets', function(username, password)
   local sourcePlayer = tonumber(source)
   if username ~= nil and username ~= "" and password ~= nil and password ~= "" then
     getUser(username, password, function (user)
-      local accountId = user and user.id
+      local accountId = user._id
       TwitterGetTweets(accountId, function (tweets)
         TriggerClientEvent('gcPhone:twitter_getTweets', sourcePlayer, tweets)
       end)
@@ -375,7 +377,7 @@ AddEventHandler('gcPhone:twitter_getFavoriteTweets', function(username, password
   local sourcePlayer = tonumber(source)
   if username ~= nil and username ~= "" and password ~= nil and password ~= "" then
     getUser(username, password, function (user)
-      local accountId = user and user.id
+      local accountId = user._id
       TwitterGetFavotireTweets(accountId, function (tweets)
         TriggerClientEvent('gcPhone:twitter_getFavoriteTweets', sourcePlayer, tweets)
       end)
