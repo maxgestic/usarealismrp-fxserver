@@ -109,7 +109,9 @@ function getContacts(identifier, cb)
         if responseText then
             local data = json.decode(responseText)
             if data.rows then
-                cb(arrayifyDBDocsResponse(data.rows))
+                local contacts = arrayifyDBDocsResponse(data.rows)
+                table.sort(contacts, function(a, b) return a.display < b.display end)
+                cb(contacts)
             else
                 cb(nil)
             end
@@ -189,7 +191,9 @@ function getMessages(identifier, cb)
                 local data = json.decode(responseText)
                 local messages = {}
                 if data.rows then
-                    cb(arrayifyDBDocsResponse(data.rows))
+                    local msgs = arrayifyDBDocsResponse(data.rows)
+                    table.sort(msgs, function(a, b) return a.timeMs > b.timeMs end)
+                    cb(msgs)
                 else
                     cb(messages)
                 end
@@ -208,7 +212,15 @@ end)
 --]]
 
 function _internalAddMessage(transmitter, receiver, message, owner, cb)
-    local newMessage = { transmitter = transmitter, receiver = receiver, message = message, isRead = owner, owner = owner, time = exports.globals:currentTimestamp() }
+    local newMessage = { 
+        transmitter = transmitter,
+        receiver = receiver,
+        message = message,
+        isRead = owner,
+        owner = owner,
+        time = exports.globals:getJavaScriptDateString(exports.globals:currentTimestamp()),
+        timeMs = os.time()
+     }
     db.createDocument("phone-messages", newMessage, function(docId)
         cb(newMessage)
     end)
@@ -282,9 +294,7 @@ function addMessage(src, identifier, phone_number, message)
 end
 
 function setReadMessageNumber(identifier, num)
-    print("num: " .. num)
     getNumberPhone(identifier, function(mePhoneNumber)
-        print("mePhoneNumber: " .. mePhoneNumber)
         local query = {
             ["receiver"] = mePhoneNumber,
             ["transmitter"] = num
@@ -294,7 +304,6 @@ function setReadMessageNumber(identifier, num)
                 for i = 1, #docs do
                     db.updateDocument("phone-messages", docs[i]._id, { isRead = true }, function(doc, err, rText)
                         --print("message with id " .. docs[i]._id .. " set to read!")
-                        print("err: " .. err)
                     end)
                 end
             end
@@ -411,7 +420,8 @@ function getHistoriqueCall (num, cb)
     local query = {
         ["owner"] = num
     }
-    db.getDocumentsByRowsLimitAndSort("phone-calls", query, 100, {{time = "desc"}}, function(docs)
+    db.getDocumentsByRowsLimit("phone-calls", query, 100, function(docs)
+        table.sort(docs, function(a, b) return a.timeMs > b.timeMs end)
         cb(docs)
     end)
     --[[
@@ -434,7 +444,8 @@ function saveAppels (appelInfo)
         ["num"] = appelInfo.receiver_num,
         ["incoming"] = 1,
         ["accepts"] = appelInfo.is_accepts,
-        ["time"] = exports.globals:currentTimestamp()
+        ["time"] = exports.globals:getJavaScriptDateString(exports.globals:currentTimestamp()),
+        ["timeMs"] = os.time()
     }
     if appelInfo.extraData == nil or appelInfo.extraData.useNumber == nil then
         db.createDocument("phone-calls", callDoc, function(docId)

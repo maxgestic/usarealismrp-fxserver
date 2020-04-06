@@ -42,5 +42,6 @@ server_exports {
   "getCopIds",
   "round",
   "hash256",
-  "currentTimestamp"
+  "currentTimestamp",
+  "getJavaScriptDateString"
 }

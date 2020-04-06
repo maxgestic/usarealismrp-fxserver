@@ -13,7 +13,7 @@ function TwitterGetTweets (accountId, cb)
         for i = 1, #docs do
           docs[i].id = docs[i]._id -- for front end to read correctly, just renaming id field for now
         end
-        table.sort(docs, function(a, b) return a.time > b.time end)
+        table.sort(docs, function(a, b) return a.timeMs > b.timeMs end)
         cb(docs)
       else 
         cb({})
@@ -33,7 +33,7 @@ function TwitterGetTweets (accountId, cb)
   else
     db.getAllDocumentsFromDbLimit("twitter-tweets", 130, function(docs)
       if docs then
-        table.sort(docs, function(a, b) return a.time > b.time end)
+        table.sort(docs, function(a, b) return a.timeMs > b.timeMs end)
         for i = 1, #docs do -- see if this account liked this tweet
           docs[i].id = docs[i]._id -- for front end to read correctly, just renaming id field for now
           for i = 1, #docs do
@@ -67,7 +67,7 @@ function TwitterGetFavotireTweets (accountId, cb)
   if accountId == nil then
     db.getAllDocumentsFromDbLimit("twitter-tweets", 130, function(docs)
       if docs then
-        table.sort(docs, function(a, b) return a.time > b.time end)
+        table.sort(docs, function(a, b) return a.timeMs > b.timeMs end)
         cb(docs)
       else 
         cb({})
@@ -88,7 +88,7 @@ function TwitterGetFavotireTweets (accountId, cb)
   else
     db.getAllDocumentsFromDbLimit("twitter-tweets", 130, function(docs)
       if docs then
-        table.sort(docs, function(a, b) return a.time > b.time end)
+        table.sort(docs, function(a, b) return a.timeMs > b.timeMs end)
         for i = 1, #docs do
           docs[i].isLikes = hasLikedTweet(docs[i], accountId)
         end
@@ -151,7 +151,8 @@ function TwitterPostTweet (username, password, message, sourcePlayer, realUser, 
       authorIcon = user.avatar_url,
       message = message,
       realUser = realUser,
-      time = exports.globals:currentTimestamp(),
+      time = exports.globals:getJavaScriptDateString(exports.globals:currentTimestamp()),
+      timeMs = os.time(),
       likes = 0,
       likers = {}
     }

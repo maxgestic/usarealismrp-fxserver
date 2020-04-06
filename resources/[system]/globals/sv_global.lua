@@ -247,6 +247,25 @@ end
 -- to mimic MySql's current_timestamp()
 function currentTimestamp()
     local date = os.date("*t", os.time())
-    local timestamp = string.format("%02d-%02d-%02d %02d-%02d-%02d", date.year, date.month, date.day, date.hour, date.min, date.sec)
+	local timestamp = string.format("%02d-%02d-%02d %02d-%02d-%02d", date.year, date.month, date.day, date.hour, date.min, date.sec)
     return timestamp
 end
+
+function getJavaScriptDateString(timestamp)
+	local MONTHS = {
+	  ["01"] = "January",
+	  ["02"] = "Februray",
+	  ["03"] = "March",
+	  ["04"] = "April",
+	  ["05"] = "May",
+	  ["06"] = "June",
+	  ["07"] = "July",
+	  ["08"] = "August",
+	  ["09"] = "September",
+	  ["10"] = "October",
+	  ["11"] = "November",
+	  ["12"] = "December"
+	}
+	local dateString = MONTHS[timestamp:sub(6,7)] .. " " .. timestamp:sub(9,10) .. ", " .. timestamp:sub(1, 4) .. " " .. timestamp:sub(12, 13) .. ":" .. timestamp:sub(15,16) .. ":" .. timestamp:sub(18)
+	return dateString
+  end
