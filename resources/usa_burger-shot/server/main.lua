@@ -40,11 +40,11 @@ AddEventHandler("burgerjob:startJob", function(location)
 end)
 
 RegisterServerEvent("burgerjob:quitJob")
-AddEventHandler("burgerjob:quitJob", function(location)
+AddEventHandler("burgerjob:quitJob", function()
     local char = exports["usa-characters"]:GetCharacter(source)
     if char.get("job") == 'BurgerShotEmployee' then
         char.set("job", "civ")
-        TriggerClientEvent("burgerjob:quitJob", source, location)
+        TriggerClientEvent("burgerjob:quitJob", source)
     end
 end)
 

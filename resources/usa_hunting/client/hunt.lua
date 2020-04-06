@@ -54,8 +54,10 @@ Citizen.CreateThread(function()
                                 Wait(1)
                             end
                             ClearPedTasks(myped)
-                            TriggerServerEvent('hunting:skinforfurandmeat', givefur)
-                            DeleteEntity(otherPed)
+                            if DoesEntityExist(otherPed) then
+                                TriggerServerEvent('hunting:skinforfurandmeat', givefur)
+                                DeleteEntity(otherPed)
+                            end
                         end
                     end
                 end
