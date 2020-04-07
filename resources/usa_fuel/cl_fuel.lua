@@ -16,7 +16,8 @@ local fuelStations = {
 			{449.48, -981.07, 44.69}, -- MISSION ROW
 			{351.42, -588.21, 75.16}, -- PILLBOX MEDICAL
 			{-1513.0, -67.61, 56.57}, -- Reapers House
-			{-1596.46, 829.27, 187.82}, -- Gloryholes Corp
+			{-1597.16, 825.24, 187.74}, -- Gloryholes Corp
+			{-33.22, 768.99, 223.42}, -- Scott Johnson
 		}
 	},
 	['Watercraft'] = {
@@ -114,7 +115,7 @@ Citizen.CreateThread(function()
 		for k, v in pairs(fuelStations) do
 			for i = 1, #fuelStations[k].locations do
 				local x, y, z = table.unpack(fuelStations[k].locations[i])
-				if Vdist(GetEntityCoords(playerPed), x, y, z) < 12.0 then
+				if Vdist(GetEntityCoords(playerPed), x, y, z) < 5.0 then
 					DrawText3D(x, y, z, '[E] - Fuel Station')
 				end
 			end
@@ -327,7 +328,7 @@ function IsNearFuelStation(stationType)
 		if k == stationType then
 			for i = 1, #fuelStations[k].locations do
 				local x, y, z = table.unpack(fuelStations[k].locations[i])
-				if Vdist(GetEntityCoords(playerPed), x, y, z) < 8.0 then
+				if Vdist(GetEntityCoords(playerPed), x, y, z) < 5.0 then
 					return true
 				end
 			end
