@@ -499,65 +499,25 @@ AddEventHandler('gcphone:autoAcceptCall', function(infoCall)
   SendNUIMessage({ event = "autoAcceptCall", infoCall = infoCall})
 end)
 
+RegisterNetEvent("gcphone:send911Message")
+AddEventHandler("gcphone:send911Message", function(data)
+  local msg = exports.globals:GetUserInput("", 255)
+  local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
+	local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+	local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+	TriggerServerEvent('911:PlayerCall', x, y, z, lastStreetNAME, msg)
+	TriggerEvent('usa:showHelp', true, 'Emergency services have been notified!')
+end)
 
+RegisterNetEvent("gcphone:sendMechanicMessage")
+AddEventHandler("gcphone:sendMechanicMessage", function(data)
+	print("sending mechanic message: " .. data.message)
+end)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+RegisterNetEvent("gcphone:sendTaxiMessage")
+AddEventHandler("gcphone:sendTaxiMessage", function(data)
+	print("sending taxi message: " .. data.message)
+end)
 
 --====================================================================================
 --  Gestion des evenements NUI

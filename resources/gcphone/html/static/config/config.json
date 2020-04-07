@@ -64,9 +64,9 @@
 
   "serviceCall": [{
       "display": "911",
-      "icon": "/html/static/img/icons_app/police.png",
+      "backgroundColor": "red",
       "subMenu": [{
-          "title": "Envoyer un message",
+          "title": "Send message",
           "eventName": "gcphone:send911Message",
           "type": {
             "number": "911"
@@ -76,9 +76,9 @@
     },
     {
       "display": "Mechanic",
-      "backgroundColor": "red",
+      "backgroundColor": "green",
       "subMenu": [{
-        "title": "Envoyer un message",
+        "title": "Send message",
         "eventName": "gcphone:sendMechanicMessage",
         "type": {
           "number": "mechanic"
@@ -87,9 +87,9 @@
     },
     {
       "display": "Taxi",
-      "backgroundColor": "yellow",
+      "backgroundColor": "gray",
       "subMenu": [{
-        "title": "Envoyer un message",
+        "title": "Send message",
         "eventName": "gcphone:sendTaxiMessage",
         "type": {
           "number": "taxi"
@@ -98,13 +98,7 @@
     }
   ],
 
-  "defaultContacts": [
-    {
-      "number": "911",
-      "display": "911",
-      "backgroundColor": "blue"
-    }
-  ],
+  "defaultContacts": [],
 
   "apps": [{
       "name": "Twitter",
