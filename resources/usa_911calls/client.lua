@@ -380,7 +380,6 @@ function ShowHelp(text, bleep)
 end
 
 function isNearAnyPeds()
-	print('called ped check')
 	local myPed = PlayerPedId()
 	local playerCoords = GetEntityCoords(myPed)
 
