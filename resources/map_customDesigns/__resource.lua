@@ -43,7 +43,6 @@ this_is_a_map 'yes'
 -- jet_ski.ymap - JET SKI EVENT
 -- JET SKI COORDS - -265.92, 783.41, 200.62
 
-
 -- ################################################
 -- REAPERS / OUTLAWS STUFF
 
