@@ -31,8 +31,13 @@ end)
 -- note: assumes that the quantity provided is <= item.quantiy
 RegisterServerEvent("vehicle:storeItem")
 AddEventHandler("vehicle:storeItem", function(src, vehicle_plate, item, quantity, slot, cb) -- TODO: get item instead of passing as param to avoid lua injecting items
+    quantity = math.floor(quantity)
     local usource = tonumber(src)
     GetVehicleInventory(vehicle_plate, function(inv)
+        if quantity <= 0 then
+            cb(false, inv)
+            return
+        end
         item.quantity = quantity
         if VehInventoryManager.canHoldItem(inv, item) then
             VehInventoryManager.putItemInSlot(vehicle_plate, inv, item, slot, function(success, msg)
@@ -56,6 +61,7 @@ end)
 
 RegisterServerEvent("vehicle:moveItemToPlayerInv")
 AddEventHandler("vehicle:moveItemToPlayerInv", function(src, plate, fromSlot, toSlot, quantity, char, cb)
+    quantity = math.floor(quantity)
     local usource = tonumber(src)
     GetVehicleInventory(plate, function(inv)
         local item = inv.items[tostring(fromSlot)]
