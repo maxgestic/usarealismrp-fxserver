@@ -34,7 +34,7 @@
   },
 
   "//": "REQUIRE https://github.com/citizenfx/screenshot-basic or set false",
-  "enableTakePhoto": true,
+  "enableTakePhoto": false,
   "fileUploadService_Url": "https://wew.wtf/upload.php",
   "fileUploadService_Field": "files[]",
 

@@ -11,7 +11,7 @@ local KeyToucheCloseEvent = {
   { code = 176, event = 'Enter' },
   { code = 177, event = 'Backspace' },
 }
-local KeyOpenClose = 289 -- F2
+local KeyOpenClose = 288 -- F2
 local KeyTakeCall = 38 -- E
 local menuIsOpen = false
 local contacts = {}
@@ -511,12 +511,59 @@ end)
 
 RegisterNetEvent("gcphone:sendMechanicMessage")
 AddEventHandler("gcphone:sendMechanicMessage", function(data)
-	print("sending mechanic message: " .. data.message)
+  data = {}
+  data.message = exports.globals:GetUserInput("", 255)
+	-- get location of sender and send to server function:
+	local playerPos = GetEntityCoords( GetPlayerPed( -1 ), true )
+	local streetA, streetB = Citizen.InvokeNative( 0x2EB41072B4C1E4C0, playerPos.x, playerPos.y, playerPos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt() )
+	local street = {}
+	if not ((streetA == lastStreetA or streetA == lastStreetB) and (streetB == lastStreetA or streetB == lastStreetB)) then
+		-- Ignores the switcharoo while doing circles on intersections
+		lastStreetA = streetA
+		lastStreetB = streetB
+	end
+	if lastStreetA ~= 0 then
+		table.insert( street, GetStreetNameFromHashKey( lastStreetA ) )
+	end
+	if lastStreetB ~= 0 then
+		table.insert( street, GetStreetNameFromHashKey( lastStreetB ) )
+	end
+	data.location = table.concat( street, " & " )
+	data.pos = {
+		x = playerPos.x,
+		y = playerPos.y,
+		z = playerPos.z
+	}
+	TriggerServerEvent("phone:sendMechanicMessage", data)
 end)
 
 RegisterNetEvent("gcphone:sendTaxiMessage")
 AddEventHandler("gcphone:sendTaxiMessage", function(data)
-	print("sending taxi message: " .. data.message)
+  data = {}
+  data.message = exports.globals:GetUserInput("", 255)
+	-- get location of sender and send to server function:
+	local playerPos = GetEntityCoords( GetPlayerPed( -1 ), true )
+	local streetA, streetB = Citizen.InvokeNative( 0x2EB41072B4C1E4C0, playerPos.x, playerPos.y, playerPos.z, Citizen.PointerValueInt(), Citizen.PointerValueInt() )
+	local street = {}
+	if not ((streetA == lastStreetA or streetA == lastStreetB) and (streetB == lastStreetA or streetB == lastStreetB)) then
+		-- Ignores the switcharoo while doing circles on intersections
+		lastStreetA = streetA
+		lastStreetB = streetB
+	end
+	if lastStreetA ~= 0 then
+		table.insert( street, GetStreetNameFromHashKey( lastStreetA ) )
+	end
+	if lastStreetB ~= 0 then
+		table.insert( street, GetStreetNameFromHashKey( lastStreetB ) )
+	end
+	data.location = table.concat( street, " & " )
+	data.pos = {
+		x = playerPos.x,
+		y = playerPos.y,
+		z = playerPos.z
+	}
+	-- call server function, check if any is online:
+  TriggerServerEvent("phone:sendTaxiMessage", data)
 end)
 
 --====================================================================================

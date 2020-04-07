@@ -700,6 +700,56 @@ AddEventHandler('character:loaded',function(char)
     end)
 end)
 
+--====================================================================================
+--  Miscellaneous
+--====================================================================================
+RegisterServerEvent("phone:sendTaxiMessage")
+AddEventHandler("phone:sendTaxiMessage", function(data)
+	local taxi_online = false
+    local message = data.message
+    local src = source
+	exports["usa-characters"]:GetCharacters(function(characters)
+		for id, char in pairs(characters) do
+			if char.get("job") == "taxi" then
+				TriggerClientEvent('chatMessage', id, "Taxi Requested! (Caller: #" .. src .. ")", {251, 229, 5}, message .. " (" .. data.location .. ")")
+				TriggerClientEvent("phone:notify", id, "~y~TAXI REQUEST (Caller: # ".. src .. "):\n~w~"..message)
+				taxi_online = true
+				-- set temp blip
+				TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
+			end
+		end
+		if taxi_online then
+			TriggerClientEvent('chatMessage', src, "", {255, 255, 255}, "A ^3taxi^0 has been notified!")
+			TriggerClientEvent("usa:notify", src, "A ~y~taxi ~w~has been notified!")
+		else
+			TriggerClientEvent('chatMessage', src, "", {255, 255, 255}, "Sorry, there is no one on duty as taxi!")
+			TriggerClientEvent("usa:notify", src, "~y~Sorry, there is no one on duty as taxi!")
+		end
+	end)
+end)
+
+RegisterServerEvent("phone:sendMechanicMessage")
+AddEventHandler("phone:sendMechanicMessage", function(data)
+	local mechanic_online = false
+    local message = data.message
+    local src = source
+	exports["usa-characters"]:GetCharacters(function(characters)
+		for id, char in pairs(characters) do
+			if char.get("job") == "mechanic" then
+				TriggerClientEvent('chatMessage', id, "Mechanic Requested! (Caller: #" .. src .. ")", {118, 120, 251}, message .. " (" .. data.location .. ")")
+				TriggerClientEvent("phone:notify", id, "~y~MECHANIC REQUEST (Caller: # ".. src .. "):\n~w~"..message)
+				tow_online = true
+				TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z) -- hacky blip
+			end
+		end
+		if tow_online then
+			TriggerClientEvent("usa:notify", src, "A ~y~mechanic~w~ has been notified!", "^0A ^3mechanic^0 has been notified!")
+		else
+			TriggerClientEvent("usa:notify", src, "~y~No one is on duty as mechanic!", "^0No one is on duty as mechanic!")
+		end
+	end)
+end)
+
 -- Just For reload
 --[[
 RegisterServerEvent('gcPhone:allUpdate')
