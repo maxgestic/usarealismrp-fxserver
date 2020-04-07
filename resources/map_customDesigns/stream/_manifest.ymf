@@ -108,6 +108,14 @@
       </itypDepArray>
     </Item>
     <Item>
+      <imapName>family</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>downtown_01_metadata_012_strm</Item>
+        <Item>cityhills_02_metadata_010_strm</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
       <imapName>galaxy_fightclub</imapName>
       <manifestFlags/>
       <itypDepArray>
@@ -325,6 +333,32 @@
       <manifestFlags/>
       <itypDepArray>
         <Item>v_rooftop</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
+      <imapName>apa_ch2_06_strm_2</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>cityhills_02_metadata_010_strm</Item>
+        <Item>v_ext_veg</Item>
+        <Item>v_bush</Item>
+        <Item>v_fences</Item>
+        <Item>v_seating_tables</Item>
+        <Item>v_garden</Item>
+        <Item>v_potted</Item>
+        <Item>v_traffic_lights</Item>
+        <Item>v_rooftop</Item>
+        <Item>v_bar</Item>
+        <Item>v_electrical</Item>
+        <Item>v_crops</Item>
+        <Item>v_utility</Item>
+        <Item>v_rubbish</Item>
+        <Item>v_bins</Item>
+        <Item>v_fences_2</Item>
+        <Item>v_construction</Item>
+        <Item>v_signs</Item>
+        <Item>v_sports</Item>
+        <Item>lev_des</Item>
       </itypDepArray>
     </Item>
   </imapDependencies_2>
