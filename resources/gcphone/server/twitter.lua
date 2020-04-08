@@ -36,9 +36,7 @@ function TwitterGetTweets (accountId, cb)
         table.sort(docs, function(a, b) return a.timeMs > b.timeMs end)
         for i = 1, #docs do -- see if this account liked this tweet
           docs[i].id = docs[i]._id -- for front end to read correctly, just renaming id field for now
-          for i = 1, #docs do
-            docs[i].isLikes = hasLikedTweet(docs[i], accountId)
-          end
+          docs[i].isLikes = hasLikedTweet(docs[i], accountId)
         end
         cb(docs)
       else 
@@ -67,7 +65,10 @@ function TwitterGetFavotireTweets (accountId, cb)
   if accountId == nil then
     db.getAllDocumentsFromDbLimit("twitter-tweets", 130, function(docs)
       if docs then
-        table.sort(docs, function(a, b) return a.timeMs > b.timeMs end)
+        table.sort(docs, function(a, b) return a.likes > b.likes end)
+        for i = 1, #docs do -- see if this account liked this tweet
+          docs[i].id = docs[i]._id -- for front end to read correctly, just renaming id field for now
+        end
         cb(docs)
       else 
         cb({})
@@ -88,8 +89,9 @@ function TwitterGetFavotireTweets (accountId, cb)
   else
     db.getAllDocumentsFromDbLimit("twitter-tweets", 130, function(docs)
       if docs then
-        table.sort(docs, function(a, b) return a.timeMs > b.timeMs end)
-        for i = 1, #docs do
+        table.sort(docs, function(a, b) return a.likes > b.likes end)
+        for i = 1, #docs do -- see if this account liked this tweet
+          docs[i].id = docs[i]._id -- for front end to read correctly, just renaming id field for now
           docs[i].isLikes = hasLikedTweet(docs[i], accountId)
         end
         cb(docs)
@@ -407,7 +409,13 @@ end)
 RegisterServerEvent('gcPhone:twitter_setAvatarUrl')
 AddEventHandler('gcPhone:twitter_setAvatarUrl', function(username, password, avatarUrl)
   local sourcePlayer = tonumber(source)
-  db.updateDocument("twitter-accounts", username, { avatar_url = avatarUrl }, function(ok) end)
+  db.updateDocument("twitter-accounts", username, { avatar_url = avatarUrl }, function(ok)
+    if ok then
+      TwitterShowSuccess(sourcePlayer, 'Twitter Info', 'APP_TWITTER_NOTIF_AVATAR_SUCCESS')
+    else
+      TwitterShowError(sourcePlayer, 'Twitter Info', 'APP_TWITTER_NOTIF_LOGIN_ERROR')
+    end
+  end)
   --[[
   MySQL.Async.execute("UPDATE `twitter_accounts` SET `avatar_url`= @avatarUrl WHERE twitter_accounts.username = @username AND twitter_accounts.password = @password", {
     ['@username'] = username,

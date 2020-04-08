@@ -192,7 +192,7 @@ function getMessages(identifier, cb)
                 local messages = {}
                 if data.rows then
                     local msgs = arrayifyDBDocsResponse(data.rows)
-                    table.sort(msgs, function(a, b) return a.timeMs > b.timeMs end)
+                    table.sort(msgs, function(a, b) return a.timeMs < b.timeMs end)
                     cb(msgs)
                 else
                     cb(messages)
@@ -302,7 +302,7 @@ function setReadMessageNumber(identifier, num)
         db.getDocumentsByRows("phone-messages", query, function(docs)
             if docs then
                 for i = 1, #docs do
-                    db.updateDocument("phone-messages", docs[i]._id, { isRead = true }, function(doc, err, rText)
+                    db.updateDocument("phone-messages", docs[i]._id, { isRead = 1 }, function(doc, err, rText)
                         --print("message with id " .. docs[i]._id .. " set to read!")
                     end)
                 end
@@ -421,7 +421,7 @@ function getHistoriqueCall (num, cb)
         ["owner"] = num
     }
     db.getDocumentsByRowsLimit("phone-calls", query, 100, function(docs)
-        table.sort(docs, function(a, b) return a.timeMs > b.timeMs end)
+        table.sort(docs, function(a, b) return a.timeMs < b.timeMs end)
         cb(docs)
     end)
     --[[
@@ -495,7 +495,6 @@ end
 
 RegisterServerEvent('gcPhone:getHistoriqueCall')
 AddEventHandler('gcPhone:getHistoriqueCall', function()
-    print("getting call history")
     local sourcePlayer = tonumber(source)
     local srcIdentifier = getPlayerID(source)
     getNumberPhone(srcIdentifier, function(num)
