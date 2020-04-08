@@ -597,7 +597,7 @@ local createdBy = nil
 local purchaserName = nil
 local testPrice = nil
 
-TriggerEvent('es:addJobCommand', 'createhouse', {'judge'}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'createhouse', {'realtor'}, function(source, args, char, location)
 	local targetSource = tonumber(args[2])
 	local price = tonumber(args[3])
 	if price and targetSource and GetPlayerName(targetSource) then
@@ -661,7 +661,7 @@ function SendToDiscordLog()
 end
 
 
-TriggerEvent('es:addJobCommand', 'setgarage', {'judge'}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'setgarage', {'realtor'}, function(source, args, char, location)
 	local targetSource = tonumber(args[2])
 	if targetSource and GetPlayerName(targetSource) then
 		local target_char = exports["usa-characters"]:GetCharacter(targetSource)
@@ -691,7 +691,7 @@ end, {
 RegisterServerEvent('properties:continueHousePurchase')
 AddEventHandler('properties:continueHousePurchase', function(targetSource, location, heading, street, zone)
 	local char = exports["usa-characters"]:GetCharacter(source)
-	if char.get('job') == 'judge' then
+	if char.get('job') == 'realtor' then
 		local money = char.get('money')
 		local cost = setHousePrices[tostring(source)]
 		if money >= cost then
@@ -725,7 +725,7 @@ AddEventHandler('properties:continueHousePurchase', function(targetSource, locat
 	end
 end)
 
-TriggerEvent('es:addJobCommand', 'deletehouse', {'judge'}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'deletehouse', {'realtor'}, function(source, args, char, location)
 	local targetSource = tonumber(args[2])
 	if targetSource and GetPlayerName(targetSource) then
 		local target_char = exports["usa-characters"]:GetCharacter(targetSource)
