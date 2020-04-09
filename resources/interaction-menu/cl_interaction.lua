@@ -1430,6 +1430,7 @@ Citizen.CreateThread(function()
 
 		if IsPedRagdoll(playerPed) then
 			DisableControlAction(0, 19, true)
+			DisableControlAction(0, 244, true)
 		end
 
 		-- menu

@@ -37,12 +37,13 @@ Citizen.CreateThread(function()
         if IsControlJustPressed(0, KEYS.E) then
             local myped = PlayerPedId()
             local playerCoords = GetEntityCoords(myped)
+            local isInVeh = IsPedInAnyVehicle(myped, true)
             for otherPed in exports.globals:EnumeratePeds() do
                 if not isBlacklistedModel(GetEntityModel(otherPed)) then
                     local pedCoords = GetEntityCoords(otherPed)
                     local distBetweenPedAndAnimal = Vdist(pedCoords, playerCoords)
                     if DoesEntityExist(otherPed) and IsPedDeadOrDying(ped) then
-                        if distBetweenPedAndAnimal <= 1.5 and otherPed ~= myped and not IsPedHuman(otherPed) then
+                        if distBetweenPedAndAnimal <= 1.5 and otherPed ~= myped and not IsPedHuman(otherPed) and not isInVeh then
                             SetEntityAsMissionEntity(otherPed)
                             local beginTime = GetGameTimer()
                             exports.globals:loadAnimDict("amb@medic@standing@kneel@idle_a")
