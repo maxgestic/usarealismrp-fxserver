@@ -1,6 +1,6 @@
 local _menuPool = NativeUI.CreatePool()
-local mainMenu = NativeUI.CreateMenu("Players", "~b~View online players", 1490 --[[X COORD]], -10 --[[Y COORD]])
-local dcMenu = NativeUI.CreateMenu("Players", "~b~View disconnected players", 1490 --[[X COORD]], -10 --[[Y COORD]])
+local mainMenu = NativeUI.CreateMenu("Players", "~b~View online players", 1400 --[[X COORD]], -10 --[[Y COORD]])
+local dcMenu = NativeUI.CreateMenu("Players", "~b~View disconnected players", 1400 --[[X COORD]], -10 --[[Y COORD]])
 _menuPool:Add(mainMenu)
 _menuPool:Add(dcMenu)
 

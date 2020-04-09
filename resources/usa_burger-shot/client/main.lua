@@ -187,6 +187,11 @@ Citizen.CreateThread(function()
                 startTimeBeingStationary = GetGameTimer()
                 startCoordsBeingStationary = mycoords
             end
+        else 
+            if startCoordsBeingStationary and startTimeBeingStationary then
+                startTimeBeingStationary = nil
+                startCoordsBeingStationary = nil
+            end
         end
         Wait(100)
     end
