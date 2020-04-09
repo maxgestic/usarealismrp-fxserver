@@ -12,7 +12,7 @@ local oldBodyDamage = 0
 local oldSpeed = 0
 local onDuty = false
 
-local DISTANCE_BEFORE_REPORT = 100
+local MAX_REPORT_DISTANCE = 250
 
 local exempt_locations = {
 	vector3(151.39, -1007.74, -99.0),
@@ -389,7 +389,7 @@ function isNearAnyPeds()
 
 		if DoesEntityExist(otherPed) then
 			SetEntityAsMissionEntity(otherPed)
-			if distanceBetweenNpcAndPed < 100 and otherPed ~= myPed and IsPedHuman(otherPed) then
+			if distanceBetweenNpcAndPed < MAX_REPORT_DISTANCE and otherPed ~= myPed and IsPedHuman(otherPed) then
 				return true
 			end
 		end
