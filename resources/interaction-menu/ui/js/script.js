@@ -193,6 +193,9 @@ var itemImages = {
   "Orange Fanta": "https://imgur.com/Fr3Px9r.png",
   "Pepsi": "https://imgur.com/fHUPIqp.png",
   "Dr Pepper": "https://imgur.com/JNCWDcR.png",
+  "Veggie Gasm Burger" : "https://imgur.com/pzwQmmQ.png",
+  "Torpedo Sandwich" : "https://imgur.com/fqnd3wJ.png"
+
 }
 
 var menuItems = [
