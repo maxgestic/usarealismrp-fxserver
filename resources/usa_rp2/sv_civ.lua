@@ -63,7 +63,7 @@ end, {
 
 local pings = {}
 
-TriggerEvent('es:addJobCommand','ping', {"sheriff", "ems", "corrections", "mechanic", "taxi"}, function(source, args, char)
+TriggerEvent('es:addCommand','ping', function(source, args, char)
 	local targetSource = tonumber(args[2])
 	if GetPlayerName(targetSource) then
 		TriggerClientEvent('ping:requestPing', targetSource)
