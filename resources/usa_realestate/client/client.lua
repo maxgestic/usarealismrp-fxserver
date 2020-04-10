@@ -1,7 +1,5 @@
-local SignIn = "[E] - Sign In"
-local SignOut = "[E] - Sign Out"
+local SignIn = "[E] - Sign In / Out"
 local SigninCoords = {-148.55, -579.82, 48.24}
-local working = "no"
 
 Citizen.CreateThread(function()
     while true do
@@ -20,18 +18,9 @@ end
 
 function promptJob(location)
     local x,y,z = table.unpack(location)
-    if working == 'no' then
-        DrawText3D(x,y,z, 8, SignIn)
-        if IsControlJustPressed(0, 38) then
-            TriggerServerEvent('realty:duty')
-            working = 'yes'
-        end
-    else
-        DrawText3D(x,y,z, 8, SignOut)
-        if IsControlJustPressed(0, 38) then
-            TriggerServerEvent('realty:duty')
-            working = 'no'
-        end
+    DrawText3D(x,y,z, 8, SignIn)
+    if IsControlJustPressed(0, 38) then
+        TriggerServerEvent('realty:duty')
     end
 end
 
