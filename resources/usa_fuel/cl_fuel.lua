@@ -144,8 +144,13 @@ Citizen.CreateThread(function()
 					TriggerServerEvent('fuel:returnFuelAmount', GetVehicleNumberPlateText(playerVeh))
 					wasInVeh = true
 				end
-				DrawTxt(0.708, 1.418, 1.0, 1.0, 0.55, math.floor(fuelData.fuelAmount) .. '', 255, 255, 255, 255)
-				DrawTxt(0.729, 1.425, 1.0, 1.0, 0.35, 'Fuel', 255, 255, 255, 255)
+				if math.floor(fuelData.fuelAmount) <= 10 then
+					DrawTxt(0.708, 1.418, 1.0, 1.0, 0.55, math.floor(fuelData.fuelAmount) .. '', 255, 0, 0, 255)
+					DrawTxt(0.729, 1.425, 1.0, 1.0, 0.35, 'Fuel', 255, 0, 0, 255)
+				else
+					DrawTxt(0.708, 1.418, 1.0, 1.0, 0.55, math.floor(fuelData.fuelAmount) .. '', 255, 255, 255, 255)
+					DrawTxt(0.729, 1.425, 1.0, 1.0, 0.35, 'Fuel', 255, 255, 255, 255)
+				end
 			else
 				if wasInVeh then
 					wasInVeh = false
