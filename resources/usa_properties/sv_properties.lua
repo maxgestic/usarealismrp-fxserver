@@ -216,8 +216,8 @@ local properties = {
 	['Houses'] = {
 		interior = 'midapartment',
 		type = 'house',
-		weightLimit = 2000,
-		cashLimit = 300000,
+		weightLimit = 3000,
+		cashLimit = 500000,
 		rooms = {
 
 		}
