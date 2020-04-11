@@ -4,16 +4,32 @@
 
 -- Each cell block floor starts from the leftmost cell and wraps around until finished (cell numbers)
 local CELLS = {
-	{x = 1746.0, y = 2632.1, z = 45.6, occupant = nil},
-	{x = 1727.3, y = 2624.0, z = 45.6, occupant = nil},
-	{x = 1727.5, y = 2632.1, z = 45.6, occupant = nil},
-	{x = 1746.4, y = 2636.1, z = 45.6, occupant = nil},
-	{x = 1727.1, y = 2636.2, z = 45.6, occupant = nil},
-	{x = 1746.7, y = 2640.0, z = 45.6, occupant = nil},
-	{x = 1726.0, y = 2640.3, z = 45.6, occupant = nil},
-	{x = 1746.5, y = 2644.5, z = 45.6, occupant = nil},
-	{x = 1727.4, y = 2644.4, z = 45.6, occupant = nil},
-	{x = 1746.4, y = 2648.3, z = 45.6, occupant = nil} -- last cell on first floor
+	{x = 1789.84, y = 2586.21, z = 45.8, occupant = nil},
+	{x = 1789.79, y = 2582.03, z = 45.8, occupant = nil},
+	{x = 1789.47, y = 2578.59, z = 45.8, occupant = nil},
+	{x = 1789.92, y = 2574.67, z = 45.8, occupant = nil},
+	{x = 1768.73, y = 2573.49, z = 45.8, occupant = nil},
+	{x = 1769.41, y = 2577.74, z = 45.8, occupant = nil},
+	{x = 1769.22, y = 2581.41, z = 45.8, occupant = nil},
+	{x = 1769.21, y = 2585.43, z = 45.8, occupant = nil}, -- last lower cell
+	{x = 1769.26, y = 2573.5, z = 50.55, occupant = nil}, -- first upper cell
+	{x = 1769.73, y = 2577.66, z = 50.55, occupant = nil},
+	{x = 1769.27, y = 2581.5, z = 50.55, occupant = nil},
+	{x = 1769.8, y = 2585.53, z = 50.55, occupant = nil},
+	{x = 1769.6, y = 2589.24, z = 50.55, occupant = nil},
+	{x = 1769.66, y = 2593.24, z = 50.55, occupant = nil},
+	{x = 1769.71, y = 2597.22, z = 50.55, occupant = nil},
+	{x = 1785.16, y = 2602.04, z = 50.55, occupant = nil},
+	{x = 1789.52, y = 2598.19, z = 50.55, occupant = nil},
+	{x = 1789.54, y = 2594.22, z = 50.55, occupant = nil},
+	{x = 1789.44, y = 2590.13, z = 50.55, occupant = nil},
+	{x = 1789.72, y = 2586.0, z = 50.55, occupant = nil},
+	{x = 1789.45, y = 2582.4, z = 50.55, occupant = nil},
+	{x = 1789.73, y = 2577.97, z = 50.55, occupant = nil},
+	{x = 1785.85, y = 2568.26, z = 50.55, occupant = nil},
+	{x = 1781.75, y = 2568.45, z = 50.55, occupant = nil},
+	{x = 1778.07, y = 2568.4, z = 50.55, occupant = nil},
+	{x = 1774.32, y = 2568.13, z = 50.55, occupant = nil},
 }
 
 -- V2
