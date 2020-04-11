@@ -17,7 +17,7 @@ PRODUCTS = {
         },
         rewardQuantity = {
             min = 10,
-            max = 30
+            max = 18
         },
         cost = 75,
         stages = {
@@ -33,8 +33,8 @@ PLANTED = {} -- global table of all currently planted plants (sort of an in-memo
 STAGE_CHECK_INTERVAL_MINUTES = 30
 SAVE_INTERVAL_MINUTES = 35
 
-WATER_DECREMENT_VAL = 0.50
-FOOD_DECREMENT_VAL = 0.35
+WATER_DECREMENT_VAL = 0.75
+FOOD_DECREMENT_VAL = 0.60
 
 LOW_THRESHOLD = 70.0
 MED_THRESHOLD = 45.0

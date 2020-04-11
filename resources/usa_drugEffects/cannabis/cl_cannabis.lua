@@ -97,9 +97,9 @@ function ApplyHPandArmorBuff(me)
     SetEntityHealth(me, GetEntityHealth(me) + math.random(math.floor(0.10*maxHealth), math.floor(0.15*maxHealth)))
     local maxArmor = GetPlayerMaxArmour(PlayerId())
     local currentArmor = GetPedArmour(me)
-    local newArmor = currentArmor + math.random(math.floor(0.05*maxArmor), math.floor(0.08*maxArmor))
-    if newArmor > 0.25 * maxArmor then
-        newArmor = math.floor(0.25 * maxArmor)
+    local newArmor = currentArmor + math.random(math.floor(0.10*maxArmor), math.floor(0.18*maxArmor))
+    if newArmor > 0.30 * maxArmor then
+        newArmor = math.floor(0.30 * maxArmor)
     end
     if newArmor > currentArmor then
         SetPedArmour(me, newArmor)

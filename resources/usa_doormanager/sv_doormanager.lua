@@ -3,10 +3,6 @@
 --# This script keeps a server sided track of frozen states on objects like doors or gates that can be toggled by being in the activation area and pressing "E"
 
 local DOORS = {
-  {name = "Bolingbroke Prison", x = 1818.662, y = 2606.8, z = 45.59, model = 741314661, locked = true, _dist = 8.0, gate = true, offset={0.0, 3.65, 2.8}, lockedCoords={1818.54, 2604.811, 44.607}, allowedJobs = {'sheriff', 'corrections', 'judge'}},
-  {name = "Bolingbroke Prison", x = 1845.05, y = 2607.21, z = 45.57, model = 741314661, locked = true, _dist = 8.0, gate = true, offset={0.0, 3.65, 2.8}, lockedCoords={1844.99, 2604.811, 44.636}, allowedJobs = {'sheriff', 'corrections', 'judge'}},
-  {name = "Boilingbroke Visitors Main Door", x = 1845.78, y = 2585.88, z = 45.67, model = -1033001619, locked = false, offset={0.0, -1.13, 0.05}, heading=90.0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
-
   {name = "Boilingbroke Visitors Reception", x = 1838.26, y = 2594.52, z = 45.95, model = -1033001619, locked = true, offset={0.0, -1.13, 0.05}, heading=270.0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Boilingbroke Inmate Processing", x = 1838.3, y = 2586.02, z = 45.95, model = -1033001619, locked = true, offset={0.0, -1.13, 0.05}, heading=90.0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Boilingbroke Inmate CO Door", x = 1828.57, y = 2585.2, z = 45.95, model = -1033001619, locked = true, offset={0.0, -1.13, 0.05}, heading=0.0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
@@ -69,6 +65,7 @@ local DOORS = {
   {name = "Yard Door", x = 1763.97, y = 2616.71, z = 45.97, model = 1028191914, locked = true, _dist = 2, offset={0.00, 1.20, 0.05}, heading=90,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
 
 
+
   {name = "Mission Row / Door 1", x = 464.192, y = -1003.638, z = 24.9, model = -1033001619, locked = true, offset={0.0, -1.13, 0.05}, heading=0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Mission Row / Door 2", x = 463.72, y = -992.7, z = 24.9, model = 631614199, locked = true, offset={0.0, 1.12, 0.025}, heading=0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Mission Row / Cell 1", x = 461.7, y = -993.6, z = 24.9, model = 631614199, locked = false, offset={0.0, 1.12, 0.025}, heading=270, _dist = 1.5, allowedJobs = {'sheriff','corrections'}},
@@ -81,6 +78,8 @@ local DOORS = {
   {name = "Mission Row / Aux 2", x = 466.26898193359,y = -989.31799316406, z = 24.914930343628, model = 185711165, locked = false, offset={0.0, 1.24, 0.0}, heading=90, _dist = 1.5, allowedJobs = {'sheriff', "corrections", "ems", "judge"}},
   {name = "EMS Station - Paleto", x = -361.8, y = 6129.8, z = 31.4, model = -250842784, locked = false, _dist = 1.5, allowedJobs = {'ems'}},
   {name = "Mission Row / Roof", x = 463.58, y = -983.94, z =43.69, model = -340230128, locked = true, offset={0.0, -1.05, 0.10}, heading=89, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "Mission Row / Roof", x = 463.58, y = -983.94, z =43.69, model = -340230128, locked = true, offset={0.0, -1.05, 0.10}, heading=89, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
+
   {name = "Mission Row / Holding Cells Entrance 1", x = 468.1, y = -1014.3299, z = 26.4, model = -2023754432, locked = true, offset={0.0, -1.12, 0.0}, heading=0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Mission Row / Holding Cells Entrance 2", x = 469.3, y = -1014.4, z = 26.4, model = -2023754432, locked = true, static = true, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Mission Row / Back Gate", x = 488.90, y = -1019.88, z = 28.21, model = -1603817716, locked = true, _dist = 8.0, gate = true, offset={0.0, -3.0, 1.5}, lockedCoords={488.89, -1017.35, 27.14}, allowedJobs = {'sheriff', 'corrections', 'judge'}},

@@ -230,21 +230,35 @@ AddEventHandler("weaponExtraShop:toggleMenu", function(toggle)
 end)
 
 Citizen.CreateThread(function() -- spawn shop peds
-	for i = 1, #locations do
-        local loc = locations[i]
-        if loc.ped then
+  while true do
+    local playerCoords = GetEntityCoords(PlayerPedId(), false)
+    for i = 1, #locations do
+      local loc = locations[i]
+      if loc.ped then
+        if Vdist(loc.x, loc.y, loc.z, playerCoords.x, playerCoords.y, playerCoords.z) < 60 then
+          if not locations[i].pedHandle then
             RequestModel(loc.ped.hash)
             while not HasModelLoaded(loc.ped.hash) do
-                Wait(100)
+              Wait(100)
             end
-    		local ped = CreatePed(4, loc.ped.hash, loc.x, loc.y, loc.z, loc.ped.heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
-    		SetEntityCanBeDamaged(ped,false)
-    		SetPedCanRagdollFromPlayerImpact(ped,false)
-    		TaskSetBlockingOfNonTemporaryEvents(ped,true)
-    		SetPedFleeAttributes(ped,0,0)
-    		SetPedCombatAttributes(ped,17,1)
-    		SetPedRandomComponentVariation(ped, true)
-    		TaskStartScenarioInPlace(ped, "WORLD_HUMAN_HANG_OUT_STREET", 0, true)
+            local ped = CreatePed(4, loc.ped.hash, loc.x, loc.y, loc.z, loc.ped.heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
+            SetEntityCanBeDamaged(ped,false)
+            SetPedCanRagdollFromPlayerImpact(ped,false)
+            TaskSetBlockingOfNonTemporaryEvents(ped,true)
+            SetPedFleeAttributes(ped,0,0)
+            SetPedCombatAttributes(ped,17,1)
+            SetPedRandomComponentVariation(ped, true)
+            TaskStartScenarioInPlace(ped, "WORLD_HUMAN_HANG_OUT_STREET", 0, true)
+            locations[i].pedHandle = ped
+          end
+        else
+          if locations[i].pedHandle then
+            DeletePed(locations[i].pedHandle)
+            locations[i].pedHandle = nil
+          end
         end
-	end
+      end
+    end
+    Wait(1)
+  end
 end)

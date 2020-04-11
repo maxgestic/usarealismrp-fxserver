@@ -291,27 +291,38 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-  for i = 1, #JOB_PEDS do
-    local hash = -840346158
-
-        if JOB_PEDS[i].hash then
+  while true do
+    local playerCoords = GetEntityCoords(PlayerPedId(), false)
+    for i = 1, #JOB_PEDS do
+      if Vdist(JOB_PEDS[i].x, JOB_PEDS[i].y, JOB_PEDS[i].z, playerCoords.x, playerCoords.y, playerCoords.z) < 60 then
+        if not JOB_PEDS[i].pedHandle then
+          local hash = -840346158
+          if JOB_PEDS[i].hash then
             hash = JOB_PEDS[i].hash
+          end
+          RequestModel(hash)
+          while not HasModelLoaded(hash) do
+            RequestModel(hash)
+            Wait(0)
+          end
+          local ped = CreatePed(4, hash, JOB_PEDS[i].x, JOB_PEDS[i].y, JOB_PEDS[i].z, JOB_PEDS[i].heading, false, true)
+          SetEntityCanBeDamaged(ped,false)
+          SetPedCanRagdollFromPlayerImpact(ped,false)
+          TaskSetBlockingOfNonTemporaryEvents(ped,true)
+          SetPedFleeAttributes(ped,0,0)
+          SetPedCombatAttributes(ped,17,1)
+          SetPedRandomComponentVariation(ped, true)
+          TaskStartScenarioInPlace(ped, "WORLD_HUMAN_HANG_OUT_STREET", 0, true)
+          JOB_PEDS[i].pedHandle = ped
         end
-
-    --local hash = GetHashKey(data.ped.model)
-    RequestModel(hash)
-    while not HasModelLoaded(hash) do
-      RequestModel(hash)
-      Citizen.Wait(0)
+      else 
+        if JOB_PEDS[i].pedHandle then
+          DeletePed(JOB_PEDS[i].pedHandle)
+          JOB_PEDS[i].pedHandle = nil
+        end
+      end
     end
-    local ped = CreatePed(4, hash, JOB_PEDS[i].x, JOB_PEDS[i].y, JOB_PEDS[i].z, JOB_PEDS[i].heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
-    SetEntityCanBeDamaged(ped,false)
-    SetPedCanRagdollFromPlayerImpact(ped,false)
-    TaskSetBlockingOfNonTemporaryEvents(ped,true)
-    SetPedFleeAttributes(ped,0,0)
-    SetPedCombatAttributes(ped,17,1)
-    SetPedRandomComponentVariation(ped, true)
-    TaskStartScenarioInPlace(ped, "WORLD_HUMAN_HANG_OUT_STREET", 0, true);
+    Wait(1)
   end
 end)
 

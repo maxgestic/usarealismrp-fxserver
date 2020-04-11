@@ -1,6 +1,6 @@
 local _menuPool = NativeUI.CreatePool()
-local mainMenu = NativeUI.CreateMenu("Players", "~b~View online players", 1490 --[[X COORD]], -10 --[[Y COORD]])
-local dcMenu = NativeUI.CreateMenu("Players", "~b~View disconnected players", 1490 --[[X COORD]], -10 --[[Y COORD]])
+local mainMenu = NativeUI.CreateMenu("Players", "~b~View online players", 1400 --[[X COORD]], -10 --[[Y COORD]])
+local dcMenu = NativeUI.CreateMenu("Players", "~b~View disconnected players", 1400 --[[X COORD]], -10 --[[Y COORD]])
 _menuPool:Add(mainMenu)
 _menuPool:Add(dcMenu)
 
@@ -69,7 +69,7 @@ function RefreshMenu(players)
 		local player = players[i]
 		local playerItem = NativeUI.CreateItem(player.id .. ' | ' .. HexIdToSteamId(player.steam), 'Ping: '..player.ping..'ms')
 		if playerlist.group ~= 'user' then
-			playerItem = NativeUI.CreateItem(player.id .. ' | ' .. HexIdToSteamId(player.steam), 'Ping: '..player.ping..'ms | Name: '..tostring(player.fullname) .. ' | Job: '  ..tostring(player.job))
+			playerItem = NativeUI.CreateItem(player.id .. ' | ' .. HexIdToSteamId(player.steam), 'Name: '..tostring(player.fullname)..' \nJob: '  ..tostring(player.job))
 			if player.job ~= "civ" and player.job ~= "sheriff" and player.job ~= "corrections" then
 				playerItem:SetRightBadge(18) -- star
 			end

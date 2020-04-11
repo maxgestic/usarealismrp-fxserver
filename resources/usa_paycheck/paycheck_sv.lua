@@ -91,6 +91,8 @@ function DepositPayCheck(char)
         paycheckAmount = 600
     elseif job == "da" then
         paycheckAmount = 550
+    elseif job == 'BurgerShotEmployee' then
+        paycheckAmount = 700
     else
         paycheckAmount = 25 -- welfare amount (no job)
         isWelfare = true
@@ -122,6 +124,8 @@ function DepositPayCheck(char)
         msg = msg .. "of $" .. paycheckAmount .. " from the ~y~San Andreas Court Administration~s~."
     elseif job == 'doctor' then
         msg = msg .. "of $" .. paycheckAmount .. " from the ~y~Pillbox Medical Center~s~."
+    elseif job == 'BurgerShotEmployee' then
+        msg = msg .. "of $" .. paycheckAmount .. " from ~y~Burger Shot~s~."
     else
         msg = msg .. "of $" .. paycheckAmount .. "."
     end

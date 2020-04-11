@@ -37,7 +37,11 @@ locations = {
 	-- Additionals added
 	{ ['x'] = 2362.2, ['y'] = 3113.97, ['z'] = 48.26, ['noBlip'] = true}, -- Sandy tow
 	{ ['x'] = 1754.54, ['y'] = 3293.54, ['z'] = 41.13, ['noBlip'] = true}, -- Sandy airport
-	{ ['x'] = 2148.8, ['y'] = 4798.39, ['z'] = 41.1, ['noBlip'] = true} -- Grapeseed airport
+	{ ['x'] = 2148.8, ['y'] = 4798.39, ['z'] = 41.1, ['noBlip'] = true}, -- Grapeseed airport
+	-- Luxury Autos
+	{ ['x'] = -781.39, ['y'] = -235.93, ['z'] = 37.08, ['noBlip'] = true},
+	-- Mosleys Autos
+	{ ['x'] = -52.32, ['y'] = -1692.79, ['z'] = 29.49, ['noBlip'] = true}
 }
 
 local VEHICLE_DAMAGES = {}

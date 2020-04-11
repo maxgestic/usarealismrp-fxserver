@@ -33,6 +33,9 @@ local locations = {
 			z = 30.489,
 			heading = 0.0,
 			model = "amy_downtown_01"
+		},
+		show_blip = {
+			disable_blip = false
 		}
 	},
 	["Sandy"] = {
@@ -58,6 +61,9 @@ local locations = {
 			z = 47.211,
 			heading = 0.0,
 			model = "amm_farmer_01"
+		},
+		show_blip = {
+			disable_blip = false
 		}
 	},
 	["Los Santos - Davis"] = {
@@ -83,28 +89,98 @@ local locations = {
 			z = 28.29,
 			heading = -90.0,
 			model = "amy_downtown_01"
+		},
+		show_blip = {
+			disable_blip = false
+		}
+	},
+	["Luxury Autos - Max W"] = {
+		duty = {
+			x = -794.27,
+			y = -219.09,
+			z = 36.08,
+		},
+		truck_spawn = {
+			x = -762.97,
+			y = -228.29,
+			z = 37.28,
+			heading = 216.46
+		},
+		impound = {
+			x = 0,
+			y = 0,
+			z = 0,
+		},
+		ped = {
+			x = 0,
+			y = 0,
+			z = 0,
+		},
+		show_blip = {
+			disable_blip = true
+		}
+	},
+	["Moseleys Autos"] = {
+		duty = {
+			x = -0.05,
+			y = -1659.87,
+			z = 28.48,
+		},
+		truck_spawn = {
+			x = -21.83,
+			y = -1679.88,
+			z = 49.45,
+			heading = 107.23
+		},
+		impound = {
+			x = 0,
+			y = 0,
+			z = 0,
+		},
+		ped = {
+			x = 0,
+			y = 0,
+			z = 0,
+		},
+		show_blip = {
+			disable_blip = true
 		}
 	}
 }
 
 -- S P A W N  J O B  P E D S
+local createdJobPeds = {}
 Citizen.CreateThread(function()
 	EnumerateBlips()
-	for name, data in pairs(locations) do
-		local hash = -1806291497
-		RequestModel(hash)
-		while not HasModelLoaded(hash) do
-			RequestModel(hash)
-			Citizen.Wait(0)
+	while true do
+		local playerCoords = GetEntityCoords(PlayerPedId(), false)
+		for name, data in pairs(locations) do
+			if Vdist(data.ped.x, data.ped.y, data.ped.z, playerCoords.x, playerCoords.y, playerCoords.z) < 50 then
+				if not createdJobPeds[name] then
+					local hash = -1806291497
+					RequestModel(hash)
+					while not HasModelLoaded(hash) do
+						RequestModel(hash)
+						Wait(0)
+					end
+					local ped = CreatePed(4, hash, data.ped.x, data.ped.y, data.ped.z, data.ped.heading, false, true)
+					SetEntityCanBeDamaged(ped,false)
+					SetPedCanRagdollFromPlayerImpact(ped,false)
+					TaskSetBlockingOfNonTemporaryEvents(ped,true)
+					SetPedFleeAttributes(ped,0,0)
+					SetPedCombatAttributes(ped,17,1)
+					SetPedRandomComponentVariation(ped, true)
+					TaskStartScenarioInPlace(ped, "WORLD_HUMAN_CLIPBOARD", 0, true)
+					createdJobPeds[name] = ped
+				end
+			else 
+				if createdJobPeds[name] then 
+					DeletePed(createdJobPeds[name])
+					createdJobPeds[name] = nil
+				end
+			end
 		end
-		local ped = CreatePed(4, hash, data.ped.x, data.ped.y, data.ped.z, data.ped.heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
-		SetEntityCanBeDamaged(ped,false)
-		SetPedCanRagdollFromPlayerImpact(ped,false)
-		TaskSetBlockingOfNonTemporaryEvents(ped,true)
-		SetPedFleeAttributes(ped,0,0)
-		SetPedCombatAttributes(ped,17,1)
-		SetPedRandomComponentVariation(ped, true)
-		TaskStartScenarioInPlace(ped, "WORLD_HUMAN_CLIPBOARD", 0, true);
+		Wait(1)
 	end
 end)
 
@@ -371,14 +447,16 @@ end
 
 function EnumerateBlips()
 	for name, data in pairs(locations) do
-		local blip = AddBlipForCoord(data.duty.x, data.duty.y, data.duty.z)
-		SetBlipSprite(blip, 68)
-		SetBlipDisplay(blip, 4)
-		SetBlipScale(blip, 0.75)
-		SetBlipAsShortRange(blip, true)
-		BeginTextCommandSetBlipName("STRING")
-		AddTextComponentString('Tow Company')
-		EndTextCommandSetBlipName(blip)
+		if not data.show_blip.disable_blip then
+			local blip = AddBlipForCoord(data.duty.x, data.duty.y, data.duty.z)
+			SetBlipSprite(blip, 68)
+			SetBlipDisplay(blip, 4)
+			SetBlipScale(blip, 0.75)
+			SetBlipAsShortRange(blip, true)
+			BeginTextCommandSetBlipName("STRING")
+			AddTextComponentString('Tow Company')
+			EndTextCommandSetBlipName(blip)
+		end
 	end
 end
 

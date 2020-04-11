@@ -76,11 +76,15 @@ AddEventHandler("vehicleCommands:setExtra", function(extra, toggle)
 		vehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
 		extra = tonumber(extra)
 		if DoesExtraExist(vehicle, extra) then
+			local prevEngineDamage = GetVehicleEngineHealth(vehicle)
+			local prevBodyDamage = GetVehicleBodyHealth(vehicle)
 			if IsVehicleExtraTurnedOn(vehicle, extra) then
 				SetVehicleExtra(vehicle, extra, true)
 			else
 				SetVehicleExtra(vehicle, extra, false)
 			end
+			SetVehicleEngineHealth(vehicle, prevEngineDamage)
+			SetVehicleBodyHealth(vehicle, prevBodyDamage)
 		else
 			TriggerEvent('usa:notify', extra..' is not a valid extra!')
 		end

@@ -1,0 +1,41 @@
+Arguments: 
+  C:\Users\minipunch1\Desktop\FXServer2\FXServer.exe C:\Users\minipunch1\Desktop\FXServer2\server-data\resources\[system]\[builders]\yarn\yarn_cli.js install
+
+PATH: 
+  C:\Python27\;C:\Python27\Scripts;C:\Perl64\site\bin;C:\Perl64\bin;C:\ProgramData\Oracle\Java\javapath;C:\MinGW\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Windows Live\Shared;C:\Program Files (x86)\Heroku\bin;C:\Program Files (x86)\git\cmd;C:\Program Files\Microsoft\Web Platform Installer\;C:\MASM615\Bin;C:\Program Files (x86)\Skype\Phone\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\wamp64\bin\php\php5.6.16;C:\ProgramData\ComposerSetup\bin;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Git\cmd;C:\Program Files\dotnet\;C:\Program Files\Microsoft DNX\Dnvm\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Microsoft SQL Server\130\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn\;C:\Program Files (x86)\Microsoft SQL Server\130\DTS\Binn\;C:\Program Files (x86)\Microsoft SQL Server\130\Tools\Binn\ManagementStudio\;C:\Program Files\MySQL\MySQL Utilities 1.6\;C:\Users\minipunch1\AppData\Local\Programs\Python\Python36-32;C:\Users\minipunch1\AppData\Local\Programs\Python\Python36-32\Scripts;;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\Microsoft VS Code\bin;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\RailsInstaller\Git\cmd;C:\RailsInstaller\Ruby2.1.0\bin;C:\MinGW\bin;C:\Program Files (x86)\Microsoft VS Code\bin;C:\Users\minipunch1\AppData\Local\atom\bin;C:\Users\minipunch1\AppData\Roaming\Composer\vendor\bin;C:\exercism;C:\Users\minipunch1\AppData\Local\Microsoft\WindowsApps;C:\Users\minipunch1\AppData\Local\Programs\Python\Python36-32;C:\Users\minipunch1\AppData\Local\GitHubDesktop\bin;C:\Users\minipunch1\AppData\Local\Microsoft\WindowsApps;C:\Users\minipunch1\AppData\Roaming\npm
+
+Yarn version: 
+  1.13.0
+
+Node version: 
+  8.12.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: EBUSY: resource busy or locked, copyfile 'C:\Users\minipunch1\AppData\Local\Yarn\Cache\v4\npm-lodash-4.17.15-b447f6670a0455bbfeedd11392eff330ea097548\node_modules\lodash\_createFlow.js' -> 'C:\Users\minipunch1\Desktop\FXServer2\server-data\resources\[system]\[builders]\webpack\node_modules\lodash\_createFlow.js'
+
+npm manifest: 
+  {
+    "name": "webpack-builder",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "async": "^2.6.1",
+      "webpack": "^4.12.0",
+      "worker-farm": "^1.6.0"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
