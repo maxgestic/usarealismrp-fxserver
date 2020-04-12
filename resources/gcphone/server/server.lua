@@ -28,6 +28,17 @@ end
 --     return '0' .. math.random(600000000,699999999)
 -- end
 
+RegisterServerEvent("gcPhone:getPhone")
+AddEventHandler("gcPhone:getPhone", function()
+    local char = exports["usa-characters"]:GetCharacter(source)
+    local phone = char.getItem("Cell Phone")
+	if phone then
+		TriggerClientEvent("gcPhone:togglePhone", source)
+	else
+		TriggerClientEvent("usa:notify", source, "You have no cell phone!")
+	end
+end)
+
 --====================================================================================
 --  Utils
 --====================================================================================
@@ -421,7 +432,7 @@ function getHistoriqueCall (num, cb)
         ["owner"] = num
     }
     db.getDocumentsByRowsLimit("phone-calls", query, 100, function(docs)
-        table.sort(docs, function(a, b) return a.timeMs < b.timeMs end)
+        table.sort(docs, function(a, b) return a.timeMs > b.timeMs end)
         cb(docs)
     end)
     --[[

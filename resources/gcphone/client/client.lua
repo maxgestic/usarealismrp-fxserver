@@ -68,6 +68,11 @@ function ShowNoPhoneWarning ()
 end
 --]]
 
+RegisterNetEvent('gcPhone:togglePhone')
+AddEventHandler('gcPhone:togglePhone', function()
+  TooglePhone()
+end)
+
 
 --====================================================================================
 --  
@@ -77,6 +82,12 @@ Citizen.CreateThread(function()
     Citizen.Wait(0)
     if takePhoto ~= true then
       if IsControlJustPressed(1, KeyOpenClose) then
+        if not menuIsOpen then
+          TriggerServerEvent("gcPhone:getPhone")
+        else
+          TooglePhone()
+        end
+        --[[
         hasPhone(function (hasPhone)
           if hasPhone == true then
             TooglePhone()
@@ -84,6 +95,7 @@ Citizen.CreateThread(function()
             ShowNoPhoneWarning()
           end
         end)
+        --]]
       end
       if menuIsOpen == true then
         for _, value in ipairs(KeyToucheCloseEvent) do
@@ -408,7 +420,16 @@ AddEventHandler("gcPhone:historiqueCall", function(historique)
   SendNUIMessage({event = 'historiqueCall', historique = historique})
 end)
 
+function ensureCorrectNumberFormat(num)
+  if not num:find("-") then
+    return num:sub(1,1) .. num:sub(2,2) .. num:sub(3,3) .. "-" .. num:sub(4,4) .. num:sub(5,5) .. num:sub(6,6) .. num:sub(7,7) 
+  else 
+    return num
+  end
+end
+
 function startCall (phone_number, rtcOffer, extraData)
+  phone_number = ensureCorrectNumberFormat(phone_number)
   TriggerServerEvent('gcPhone:startCall', phone_number, rtcOffer, extraData)
 end
 
@@ -604,6 +625,7 @@ RegisterNUICallback('sendMessage', function(data, cb)
     local myPos = GetEntityCoords(PlayerPedId())
     data.message = 'GPS: ' .. myPos.x .. ', ' .. myPos.y
   end
+  data.phoneNumber = ensureCorrectNumberFormat(data.phoneNumber)
   TriggerServerEvent('gcPhone:sendMessage', data.phoneNumber, data.message)
 end)
 RegisterNUICallback('deleteMessage', function(data, cb)
