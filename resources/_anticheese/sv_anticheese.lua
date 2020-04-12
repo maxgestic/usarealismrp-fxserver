@@ -399,19 +399,19 @@ AddEventHandler('rconCommand', function(commandName, args)
 	end
 end)
 
-TriggerEvent('es:addGroupCommand', 'deletenearestvehicles', 'superadmin', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'dnv', 'mod', function(source, args, user)
   TriggerClientEvent("deletenearestvehicles", source)
 end, {
 	help = "CAUTION: Deletes all the nearest vehicles in a small radius around you. ONLY USE SPARINGLY FOR MODDERS."
 })
 
-TriggerEvent('es:addGroupCommand', 'deletenearestobjects', 'admin', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'dno', 'mod', function(source, args, user)
   TriggerClientEvent("deletenearestobjects", source)
 end, {
 	help = "Delete the nearest spawned objects. Useful for getting rid of UFOs and other things modders spawn in."
 })
 
-TriggerEvent('es:addGroupCommand', 'makepedskillable', 'admin', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'mpk', 'admin', function(source, args, user)
   TriggerClientEvent("makepedskillable", source)
 end, {
 	help = "Make all peds killable. Useful for getting rid of invulnerable peds modders like to sometimes spawn in."

@@ -1,0 +1,248 @@
+Version 165 32
+{
+	Shaders
+	{
+		decal.sps
+		{
+			DiffuseSampler RSN_AM_Wood_Trellis_TileRSN_AM_Wood_Trellis_Tile_A
+			SpecularFalloffMult 100.0000000
+			SpecularFresnel 0.9700000
+			SpecularIntensityMult 0.0000000
+			UseTessellation 0.0000000
+		}
+		normal_spec.sps
+		{
+			BumpSampler DH_CH2_RehabDoors01_N
+			DiffuseSampler DH_CH2_RehabDoors01
+			SpecSampler DH_CH2_RehabDoors01_S
+			Bumpiness 1.0000000
+			HardAlphaBlend 1.0000000
+			SpecMapIntMask 1.0000000 0.0000000 0.0000000
+			SpecularFalloffMult 100.0000000
+			SpecularFresnel 0.9700000
+			SpecularIntensityMult 0.1250000
+			UseTessellation 0.0000000
+		}
+		normal_spec.sps
+		{
+			BumpSampler DH_CH2_Roof_01_N
+			DiffuseSampler DH_CH2_Roof_01
+			SpecSampler DH_CH2_Roof_01_S
+			Bumpiness 1.4500000
+			HardAlphaBlend 1.0000000
+			SpecMapIntMask 1.0000000 0.0000000 0.0000000
+			SpecularFalloffMult 30.0000000
+			SpecularFresnel 0.3450000
+			SpecularIntensityMult 1.0000000
+			UseTessellation 0.0000000
+		}
+		normal_spec.sps
+		{
+			BumpSampler RSN_AM_Wall_Concrete_Painted_N
+			DiffuseSampler RSN_AM_Wall_Concrete_Painted_White
+			SpecSampler RSN_AM_Wall_Concrete_Painted_s
+			Bumpiness 0.2000000
+			HardAlphaBlend 1.0000000
+			SpecMapIntMask 1.0000000 0.0000000 0.0000000
+			SpecularFalloffMult 35.0000000
+			SpecularFresnel 0.9300000
+			SpecularIntensityMult 0.8300000
+			UseTessellation 0.0000000
+		}
+		normal_spec.sps
+		{
+			BumpSampler DH_CH2_RehabFloor_02_N
+			DiffuseSampler DH_CH2_RehabFloor_02
+			SpecSampler DH_CH2_RehabFloor_02_S
+			Bumpiness 1.0000000
+			HardAlphaBlend 1.0000000
+			SpecMapIntMask 1.0000000 0.0000000 0.0000000
+			SpecularFalloffMult 100.0000000
+			SpecularFresnel 0.9700000
+			SpecularIntensityMult 0.1250000
+			UseTessellation 0.0000000
+		}
+		normal.sps
+		{
+			BumpSampler RSN_AM_Stone_Tile_01_N
+			DiffuseSampler RSN_AM_Stone_Tile_01
+			Bumpiness 1.0000000
+			HardAlphaBlend 1.0000000
+			SpecularFalloffMult 100.0000000
+			SpecularFresnel 0.9700000
+			SpecularIntensityMult 0.1250000
+			UseTessellation 0.0000000
+		}
+		default.sps
+		{
+			DiffuseSampler dh_ch2_Signs
+			HardAlphaBlend 1.0000000
+			UseTessellation 0.0000000
+		}
+		normal_spec.sps
+		{
+			BumpSampler RSN_AM_Hedge_03_N
+			DiffuseSampler RSN_AM_Hedge_03
+			SpecSampler RSN_AM_Hedge_03_S
+			Bumpiness 0.5500000
+			HardAlphaBlend 0.0100000
+			SpecMapIntMask 1.0000000 0.0000000 0.0000000
+			SpecularFalloffMult 32.0000000
+			SpecularFresnel 0.9000000
+			SpecularIntensityMult 0.3500000
+			UseTessellation 0.0000000
+		}
+		normal_spec_cutout.sps
+		{
+			BumpSampler RSN_AM_Hedge_03_N
+			DiffuseSampler RSN_AM_Hedge_03RSN_AM_Hedge_03_A
+			SpecSampler RSN_AM_Hedge_03_S
+			Bumpiness 0.5500000
+			HardAlphaBlend 0.0100000
+			SpecMapIntMask 1.0000000 0.0000000 0.0000000
+			SpecularFalloffMult 32.0000000
+			SpecularFresnel 0.9000000
+			SpecularIntensityMult 0.5500000
+			UseTessellation 0.0000000
+		}
+		normal_spec.sps
+		{
+			BumpSampler DH_CH2_RehabWindows_01_N
+			DiffuseSampler DH_CH2_RehabWindows_01
+			SpecSampler DH_CH2_RehabWindows_01_S
+			Bumpiness 1.4500000
+			HardAlphaBlend 1.0000000
+			SpecMapIntMask 1.0000000 0.0000000 0.0000000
+			SpecularFalloffMult 435.0000000
+			SpecularFresnel 0.9700000
+			SpecularIntensityMult 1.0000000
+			UseTessellation 0.0000000
+		}
+		default.sps
+		{
+			DiffuseSampler dh_ch2_Tiles
+			HardAlphaBlend 1.0000000
+			UseTessellation 0.0000000
+		}
+		decal.sps
+		{
+			DiffuseSampler RSN_AM_Ground_Park_Edging
+			SpecularFalloffMult 100.0000000
+			SpecularFresnel 0.9700000
+			SpecularIntensityMult 0.0500000
+			UseTessellation 0.0000000
+		}
+		default.sps
+		{
+			DiffuseSampler DH_CH02_Leaves_03
+			HardAlphaBlend 1.0000000
+			UseTessellation 0.0000000
+		}
+		normal.sps
+		{
+			BumpSampler RSN_AM_IM_FloorTiles05_N
+			DiffuseSampler RSN_AM_IM_FloorTiles05
+			Bumpiness 1.0000000
+			HardAlphaBlend 1.0000000
+			SpecularFalloffMult 100.0000000
+			SpecularFresnel 0.9700000
+			SpecularIntensityMult 0.1250000
+			UseTessellation 0.0000000
+		}
+		normal_spec.sps
+		{
+			BumpSampler ch2_10_rehabpool\dh_ch2_rehabfloor_01_n.otx
+			DiffuseSampler ch2_10_rehabpool\dh_ch2_rehabfloor_01.otx
+			SpecSampler ch2_10_rehabpool\dh_ch2_rehabfloor_01_s.otx
+			Bumpiness 1.0000000
+			HardAlphaBlend 1.0000000
+			SpecMapIntMask 1.0000000 0.0000000 0.0000000
+			SpecularFalloffMult 100.0000000
+			SpecularFresnel 0.9700000
+			SpecularIntensityMult 0.1250000
+			UseTessellation 0.0000000
+		}
+		default.sps
+		{
+			DiffuseSampler im_grass07B
+			HardAlphaBlend 1.0000000
+			UseTessellation 0.0000000
+		}
+		decal.sps
+		{
+			DiffuseSampler AM_Tennis_net
+			SpecularFalloffMult 100.0000000
+			SpecularFresnel 0.9700000
+			SpecularIntensityMult 0.0000000
+			UseTessellation 0.0000000
+		}
+		normal_spec.sps
+		{
+			BumpSampler ch2_10_rehabpool\dh_crossbirck_n.otx
+			DiffuseSampler ch2_10_rehabpool\dh_crossbirck.otx
+			SpecSampler ch2_10_rehabpool\dh_crossbirck_s.otx
+			Bumpiness 1.5000000
+			HardAlphaBlend 1.0000000
+			SpecMapIntMask 1.0000000 0.0000000 0.0000000
+			SpecularFalloffMult 30.0000000
+			SpecularFresnel 0.7500000
+			SpecularIntensityMult 0.7000000
+			UseTessellation 0.0000000
+		}
+		normal_spec_pxm.sps
+		{
+			BumpSampler DH_CH2_Roof_01_N
+			DiffuseSampler DH_CH2_Roof_01
+			HeightSampler dh_ch2_roof_01_Hi
+			SpecSampler DH_CH2_Roof_01_S
+			Bumpiness 1.4500000
+			HardAlphaBlend 1.0000000
+			HeightBias 0.0120000
+			HeightScale 0.0200000
+			ParallaxSelfShadowAmount 0.9500000
+			SpecMapIntMask 1.0000000 0.0000000 0.0000000
+			SpecularFalloffMult 10.0000000
+			SpecularFresnel 0.9600000
+			SpecularIntensityMult 0.5000000
+			UseTessellation 0.0000000
+		}
+		normal_spec.sps
+		{
+			BumpSampler DH_CH2_RehabDoors01_N
+			DiffuseSampler DH_CH2_RehabDoors01
+			SpecSampler DH_CH2_RehabDoors01_S
+			Bumpiness 1.0000000
+			HardAlphaBlend 1.0000000
+			SpecMapIntMask 1.0000000 0.0000000 0.0000000
+			SpecularFalloffMult 435.0000000
+			SpecularFresnel 0.9700000
+			SpecularIntensityMult 1.0000000
+			UseTessellation 0.0000000
+		}
+		default.sps
+		{
+			DiffuseSampler ch2_10_rehabpool\sc1_rsn_ns_ground_0010.otx
+			HardAlphaBlend 1.0000000
+			UseTessellation 0.0000000
+		}
+	}
+	Skeleton null
+	LodGroup
+	{
+		High 9998.0
+		{
+			ch2_10_rehabpool\ch2_10_rehabpool_high.mesh 0
+			ch2_10_rehabpool\Hardfloor.mesh 0
+		}
+		Med 9998.0
+		Low 9998.0
+		Vlow 9998.0
+		AABBMin -32.3706093 -46.5961914 -5.5068359
+		AABBMax 32.3710899 46.5961914 5.5068359
+		Radius 57.0035
+		Center 0.0002403 0.0000000 0.0000000
+	}
+	Light null
+	Bound null
+	Joints null
+}

@@ -98,9 +98,6 @@ SetDiscordAppId("517228692834091033")
 SetDiscordRichPresenceAsset("5a158f46d2aefd14d3c7a16f3f4bc72b")
 SetDiscordRichPresenceAssetText("USARRP")
 
-local MRPD_INTERIOR = GetInteriorAtCoords(440.84, -983.14, 30.69)
-LoadInterior(MRPD_INTERIOR)
-
 -- REMOVE AI WEAPON DROPS --
 Citizen.CreateThread(function()
   while true do
@@ -336,35 +333,47 @@ local locations = {
         {x = -1572.2, y = -3013.3, z = -74.4, animDict = "", animName = "" , model = 793439294, heading = -60.0},
     }
 }
-local spawnedPeds = {}
 Citizen.CreateThread(function()
-  for _, location in pairs(locations) do
-    for i = 1, #location do
-      local hash = location[i].model
-      if type(hash) ~= "number" then
-          hash = GetHashKey(location[i].model)
-      end
-      RequestModel(hash)
-      while not HasModelLoaded(hash) do
-        Citizen.Wait(100)
-      end
-      local ped = CreatePed(4, hash, location[i].x, location[i].y, location[i].z, location[i].heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
-      table.insert(spawnedPeds, ped)
-      SetEntityCanBeDamaged(ped,false)
-      SetPedCanRagdollFromPlayerImpact(ped,false)
-      TaskSetBlockingOfNonTemporaryEvents(ped,true)
-      SetPedFleeAttributes(ped,0,0)
-      SetPedCombatAttributes(ped,17,1)
-      if not location[i].scenario then
-        RequestAnimDict(location[i].animDict)
-        while not HasAnimDictLoaded(location[i].animDict) do
-          Citizen.Wait(100)
+  while true do
+    local playerCoords = GetEntityCoords(PlayerPedId(), false)
+    for _, location in pairs(locations) do
+      for i = 1, #location do
+        if Vdist(location[i].x, location[i].y, location[i].z, playerCoords.x, playerCoords.y, playerCoords.z) < 50 then
+          if not location[i].pedHandle then
+            local hash = location[i].model
+            if type(hash) ~= "number" then
+                hash = GetHashKey(location[i].model)
+            end
+            RequestModel(hash)
+            while not HasModelLoaded(hash) do
+              Wait(100)
+            end
+            local ped = CreatePed(4, hash, location[i].x, location[i].y, location[i].z, location[i].heading, false, true)
+            SetEntityCanBeDamaged(ped,false)
+            SetPedCanRagdollFromPlayerImpact(ped,false)
+            TaskSetBlockingOfNonTemporaryEvents(ped,true)
+            SetPedFleeAttributes(ped,0,0)
+            SetPedCombatAttributes(ped,17,1)
+            if not location[i].scenario then
+              RequestAnimDict(location[i].animDict)
+              while not HasAnimDictLoaded(location[i].animDict) do
+                Citizen.Wait(100)
+              end
+              TaskPlayAnim(ped, location[i].animDict, location[i].animName, 8.0, -8, -1, 7, 0, 0, 0, 0)
+            else
+              TaskStartScenarioInPlace(ped, location[i].scenario, 0, 1)
+            end
+            location[i].pedHandle = ped
+          end
+        else 
+          if location[i].pedHandle then
+            DeletePed(location[i].pedHandle)
+            location[i].pedHandle = nil
+          end
         end
-        TaskPlayAnim(ped, location[i].animDict, location[i].animName, 8.0, -8, -1, 7, 0, 0, 0, 0)
-      else
-        TaskStartScenarioInPlace(ped, location[i].scenario, 0, 1)
       end
     end
+    Wait(1)
   end
 end)
 

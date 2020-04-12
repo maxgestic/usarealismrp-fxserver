@@ -139,7 +139,7 @@ AddEventHandler("methJob:checkUserMoney", function(supplyType)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local amount = 175
 	if supplyType == 'Red Phosphorus' then
-		amount = 500
+		amount = 150
 	end
 	local suspicious_chems = {
 		name = "chems bruh",

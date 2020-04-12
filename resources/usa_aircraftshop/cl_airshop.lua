@@ -73,6 +73,46 @@ local locations = {
 			heading = 230.0,
 			model = 'A_M_M_MALIBU_01'
 		}
+	},
+	["Johnson"] = {
+		menu = {
+			x = -55.28,
+			y = 782.23,
+			z = 222.48
+		},
+		returns = {
+			x = -28.34,
+			y = 773.89,
+			z = 223.42
+		},
+		spawn = {
+			x = -29.8,
+			y = 769.32,
+			z = 223.42,
+			heading = 42.68
+		},
+		ped = {},
+		private = true
+	},
+	["GloryCorp"] = {
+		menu = {
+			x = -1607.23,
+			y = 840.97,
+			z = 186.0
+		},
+		returns = {
+			x = -1598.37,
+			y = 833.64,
+			z = 187.74
+		},
+		spawn = {
+			x = -1596.33,
+			y = 829.51,
+			z = 187.74,
+			heading = 291.91
+		},
+		ped = {},
+		private = true
 	}
 }
 
@@ -86,7 +126,7 @@ local RENTAL_PERCENTAGE = nil
 local CLAIM_PERCENTAGE = nil
 
 _menuPool = NativeUI.CreatePool()
-mainMenu = NativeUI.CreateMenu("Aircraft Shop", "~b~Welcome!", 0 --[[X COORD]], 320 --[[Y COORD]])
+mainMenu = NativeUI.CreateMenu("Aircrafts", "~b~Welcome!", 0 --[[X COORD]], 320 --[[Y COORD]])
 _menuPool:Add(mainMenu)
 
 RegisterNetEvent("aircraft:loadItems") -- items + rental % amount setting
@@ -101,6 +141,11 @@ TriggerServerEvent("aircraft:loadItems")
 RegisterNetEvent('aircraft:openMenu')
 AddEventHandler('aircraft:openMenu', function(aircraft)
 	ShowMainMenu(aircraft)
+end)
+
+RegisterNetEvent('aircraft:openPrivateMenu')
+AddEventHandler('aircraft:openPrivateMenu', function(aircraft)
+	ShowPrivateMenu(aircraft)
 end)
 
 RegisterNetEvent('aircraft:spawn')
@@ -135,21 +180,36 @@ AddEventHandler('aircraft:spawn', function(hash, id)
 end)
 
 -- stationary job peds --
+local createdJobPeds = {}
 Citizen.CreateThread(function()
-	for name, data in pairs(locations) do
-		local hash = GetHashKey(data.ped.model)
-		RequestModel(hash)
-		while not HasModelLoaded(hash) do
-			Citizen.Wait(100)
+	while true do
+		local playerCoords = GetEntityCoords(PlayerPedId(), false)
+		for name, data in pairs(locations) do
+			if Vdist(data.ped.x, data.ped.y, data.ped.z, playerCoords.x, playerCoords.y, playerCoords.z) < 50 then
+				if not createdJobPeds[name] then
+					local hash = GetHashKey(data.ped.model)
+					RequestModel(hash)
+					while not HasModelLoaded(hash) do
+						Citizen.Wait(100)
+					end
+					local ped = CreatePed(4, hash, data.ped.x, data.ped.y, data.ped.z, data.ped.heading, false, true)
+					SetEntityCanBeDamaged(ped,false)
+					SetPedCanRagdollFromPlayerImpact(ped,false)
+					TaskSetBlockingOfNonTemporaryEvents(ped,true)
+					SetPedFleeAttributes(ped,0,0)
+					SetPedCombatAttributes(ped,17,1)
+					SetPedRandomComponentVariation(ped, true)
+					TaskStartScenarioInPlace(ped, "WORLD_HUMAN_HANG_OUT_STREET", 0, true)
+					createdJobPeds[name] = ped
+				end
+			else 
+				if createdJobPeds[name] then
+					DeletePed(createdJobPeds[name])
+					createdJobPeds[name] = nil
+				end
+			end
 		end
-		local ped = CreatePed(4, hash, data.ped.x, data.ped.y, data.ped.z, data.ped.heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
-		SetEntityCanBeDamaged(ped,false)
-		SetPedCanRagdollFromPlayerImpact(ped,false)
-		TaskSetBlockingOfNonTemporaryEvents(ped,true)
-		SetPedFleeAttributes(ped,0,0)
-		SetPedCombatAttributes(ped,17,1)
-		SetPedRandomComponentVariation(ped, true)
-		TaskStartScenarioInPlace(ped, "WORLD_HUMAN_HANG_OUT_STREET", 0, true)
+		Wait(1)
 	end
 end)
 
@@ -158,10 +218,16 @@ Citizen.CreateThread(function()
     while true do
         for name, data in pairs(locations) do
             local shopDist = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), data.menu.x, data.menu.y, data.menu.z, true)
-            if shopDist < 70 then
-                DrawText3D(data.menu.x, data.menu.y, data.menu.z, 8, '[E] - Aircraft Management')
-            end
-            if shopDist < 5 then 
+			if data.private and shopDist < 70 then
+				DrawText3D(data.menu.x, data.menu.y, data.menu.z, 2, '[E] - Private Hanger')
+				if IsControlPressed(0, KEYS.E) then
+					TriggerServerEvent('aircraft:requestOpenPrivateMenu')
+				end
+			elseif shopDist < 70 then
+				DrawText3D(data.menu.x, data.menu.y, data.menu.z, 8, '[E] - Aircraft Management')
+			end
+
+            if shopDist < 5 and not data.private then
                 if IsControlJustPressed(0, KEYS.E) then
                     Wait(500)
                     if IsControlPressed(0, KEYS.E) then -- holding E
@@ -182,11 +248,13 @@ Citizen.CreateThread(function()
     while true do
         for name, data in pairs(locations) do
             local returnDist = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), data.returns.x, data.returns.y, data.returns.z, true)
-            if returnDist < 70 then
+			if data.private and returnDist < 70 then
+				DrawText3D(data.returns.x, data.returns.y, data.returns.z, 10, '[E] - Return aircraft')
+			elseif returnDist < 70 then
                 DrawText3D(data.returns.x, data.returns.y, data.returns.z, 30, '[E] - Return personal / rented aircraft')
                 DrawMarker(1, data.returns.x, data.returns.y, data.returns.z-1.0, 0, 0, 0, 0, 0, 0, 4.0, 4.0, 0.25, 76, 144, 114, 200, 0, 0, 0, 0)
             end
-            if returnDist < 5 then
+            if returnDist < 4 then
                 if IsControlJustPressed(0, KEYS.E) then
                     local me = PlayerPedId()
                     local vehicle = GetVehiclePedIsIn(me, false)
@@ -238,6 +306,12 @@ Citizen.CreateThread(function()
 		Wait(0)
 	end
 end)
+
+function ShowPrivateMenu(aircraft)
+	mainMenu:Clear()
+	CreateGarageMenu(mainMenu, aircraft)
+	mainMenu:Visible(not mainMenu:Visible())
+end
 
 function ShowMainMenu(aircraft)
 	mainMenu:Clear()
@@ -328,16 +402,6 @@ function CreateGarageMenu(menu, playerAircraft)
         item.Activated = function(parentmenu, selected)
             TriggerServerEvent("aircraft:requestRetrieval", aircraft.id)
             retrieveMenu.SubMenu:Visible(false)
-            --[[
-			if aircraft.stored then
-				TriggerEvent("aircraft:spawnAircraft", aircraft)
-				TriggerEvent('usa:notify', 'Alright, aircraft has been deployed.')
-				aircraft.stored = false
-				retrieveMenu.SubMenu:Visible(false)
-			else
-				TriggerEvent('usa:notify', 'This aircraft is not stored!')
-            end
-            --]]
 		end
 	end
 	if #playerAircraft <= 0 then
@@ -414,7 +478,7 @@ function CreateMapBlips()
       SetBlipScale(blip, 0.8)
       SetBlipAsShortRange(blip, true)
       BeginTextCommandSetBlipName("STRING")
-      AddTextComponentString('Aircraft Shop')
+      AddTextComponentString('Aircrafts')
       EndTextCommandSetBlipName(blip)
       table.insert(BLIPS, blip)
 	end

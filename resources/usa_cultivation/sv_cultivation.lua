@@ -135,7 +135,6 @@ Citizen.CreateThread(function()
                 if didSustenanceUpdate then
                     TriggerClientEvent("cultivation:updateSustenance", -1, i, PLANTED[i].foodLevel, PLANTED[i].waterLevel, (PLANTED[i].isDead or false))
                 end
-                Wait(1000)
             end
         end
         Wait(STAGE_CHECK_INTERVAL_MINUTES * 60 * 1000)
@@ -152,7 +151,7 @@ Citizen.CreateThread(function()
             for i = 1, #PLANTED do
                 local plant = PLANTED[i]
                 db.updateDocument("cultivation", plant._id, { foodLevel = plant.foodLevel, waterLevel = plant.waterLevel, stage = plant.stage, isDead = plant.isDead }, saveCallback)
-                Wait(2000)
+                Wait(300)
             end
             Wait(SAVE_INTERVAL_MINUTES * 60 * 1000)
         end

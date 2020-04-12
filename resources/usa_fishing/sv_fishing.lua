@@ -1,7 +1,7 @@
 local fishItems = {
-  {name = "Trout", quantity = 1, worth = 25, type = "fish", weight = 10, legality = "legal"},
-  {name = "Flounder", quantity = 1, worth = 30, type = "fish", weight = 10, legality = "legal"},
-  {name = "Halibut", quantity = 1, worth = 50, type = "fish", weight = 10, legality = "legal"}
+  {name = "Trout", quantity = 1, worth = 85, type = "fish", weight = math.random(1, 6), legality = "legal"},
+  {name = "Flounder", quantity = 1, worth = 110, type = "fish", weight = math.random(2, 7), legality = "legal"},
+  {name = "Halibut", quantity = 1, worth = 125, type = "fish", weight = math.random(3, 8), legality = "legal"}
 }
 
 RegisterServerEvent("fish:giveFish")

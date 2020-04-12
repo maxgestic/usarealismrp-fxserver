@@ -1,7 +1,6 @@
 taskkill /F /IM FXServer.exe /T
 taskkill /F /IM git.exe /T
 taskkill /F /IM git-credential-manager.exe /T
-taskkill /F /IM node.exe /T
 taskkill /F /IM xcopy.exe /T
 timeout /t 10 /nobreak
 break > CitizenFX.log
@@ -17,9 +16,14 @@ rd /S /Q eup-stream
 rd /S /Q map_courthouse
 rd /S /Q map_dealership
 rd /S /Q map_hospital
-rd /S /Q map_pdextended
+rd /S /Q map_mrpd
 rd /S /Q map_sandypdinterior
 rd /S /Q gabz_pillbox_hospital
+rd /S /Q map_burgershot
+rd /S /Q map_customDesigns
+rd /S /Q map_glory
+rd /S /Q map_mosleys
+rd /S /Q map_luxury-autos
 rd /S /Q paletopd
 rd /S /Q nw_comedyClub
 rd /S /Q policeveh

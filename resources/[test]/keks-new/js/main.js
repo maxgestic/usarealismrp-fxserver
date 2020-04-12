@@ -17,7 +17,13 @@
     ], { duration: 4400, fade: 1500 });
 
     /* BEGIN HOWL RADIO PLAYER */
-    var stations = ["http://ice1.somafm.com/beatblender-128-mp3", "http://hot108jamz.hot108.com:4040/;stream.nsv", "http://listen.radionomy.com/urbanradio-oldschoolrap"]
+    var stations = [
+      "http://ice1.somafm.com/beatblender-128-mp3",
+      "http://hot108jamz.hot108.com:4040/;stream.nsv",
+      "http://listen.radionomy.com/urbanradio-oldschoolrap",
+      "http://ice6.somafm.com/reggae-128-aac",
+      "http://ice6.somafm.com/poptron-128-aac"
+    ]
 
     var MAX_VOL = 0.10
 

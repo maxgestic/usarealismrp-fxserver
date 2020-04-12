@@ -99,29 +99,28 @@ function Display(ped, text, offset, maxDist, time)
     nbrDisplaying = nbrDisplaying + 1
     while displaying do
       Wait(0)
-      local coords = GetEntityCoords(GetPlayerPed(ped), false)
-      DrawText3Ds(coords['x'], coords['y'], coords['z']+offset+0.3, text, maxDist)
+      local targetPedCoords = GetEntityCoords(GetPlayerPed(ped), false)
+      local myCoords = GetEntityCoords(PlayerPedId())
+      if Vdist(targetPedCoords, myCoords) < maxDist then
+        DrawText3D(targetPedCoords['x'], targetPedCoords['y'], targetPedCoords['z']+offset+0.3, text)
+      end
     end
     nbrDisplaying = nbrDisplaying - 1
   end)
 end
 
-function DrawText3Ds(x, y, z, text, maxDist)
-    local onScreen,_x,_y=World3dToScreen2d(x,y,z)
-    local px,py,pz=table.unpack(GetGameplayCamCoords())
-		local dist = GetDistanceBetweenCoords(px,py,pz, x,y,z, 1)
-    if dist <= maxDist then
-      SetTextScale(0.35, 0.35)
-      SetTextFont(4)
-      SetTextProportional(1)
-      SetTextColour(255, 255, 255, 215)
-      SetTextEntry("STRING")
-      SetTextCentre(1)
-      AddTextComponentString(text)
-      DrawText(_x,_y)
-      local factor = (string.len(text)) / 370
-      DrawRect(_x,_y+0.0125, 0.015+ factor, 0.03, 41, 11, 41, 68)
-  end
+function DrawText3D(x, y, z, text)
+  local onScreen,_x,_y=World3dToScreen2d(x,y,z)
+  SetTextScale(0.35, 0.35)
+  SetTextFont(4)
+  SetTextProportional(1)
+  SetTextColour(255, 255, 255, 215)
+  SetTextEntry("STRING")
+  SetTextCentre(1)
+  AddTextComponentString(text)
+  DrawText(_x,_y)
+  local factor = (string.len(text)) / 500
+  DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
 end
 
 function GetUserInput()

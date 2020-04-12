@@ -28,9 +28,9 @@ local fishingZoneBlips = {
 }
 
 local fish = {
-	{name = 'Trout', price = 25},
-	{name = 'Flounder', price = 30},
-	{name = 'Halibut', price = 50}
+	{name = 'Trout', price = 85},
+	{name = 'Flounder', price = 110},
+	{name = 'Halibut', price = 125}
 }
 
 local peds = {

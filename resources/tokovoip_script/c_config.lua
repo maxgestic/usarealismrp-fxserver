@@ -5,8 +5,8 @@ local KEYS = {
 }
 
 TokoVoipConfig = {
-	refreshRate = 100, -- Rate at which the data is sent to the TSPlugin
-	networkRefreshRate = 2000, -- Rate at which the network data is updated/reset on the local ped
+	refreshRate = 450, -- Rate at which the data is sent to the TSPlugin
+	networkRefreshRate = 2500, -- Rate at which the network data is updated/reset on the local ped
 	playerListRefreshRate = 5000, -- Rate at which the playerList is updated
 	minVersion = "1.2.4", -- Version of the TS plugin required to play on the server
 
@@ -33,7 +33,7 @@ TokoVoipConfig = {
 		TSChannelWait = "WAITING",
 
 		-- Blocking screen informations
-		TSServer = "162.248.94.43", -- TeamSpeak server address to be displayed on blocking screen
+		TSServer = "74.91.125.217", -- TeamSpeak server address to be displayed on blocking screen
 		TSChannelSupport = "SUPPORT", -- TeamSpeak support channel name displayed on blocking screen
 		TSDownload = "http://usarrp.net/voip", -- Download link displayed on blocking screen
 		TSChannelWhitelist = { -- Black screen will not be displayed when users are in those TS channels

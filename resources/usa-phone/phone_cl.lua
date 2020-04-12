@@ -82,8 +82,10 @@ end)
 
 RegisterNetEvent("phone:openPhone")
 AddEventHandler("phone:openPhone", function(phone)
-	--print("opening phone with number: " .. phone.number)
-	EnableGui(true, phone)
+	local me = PlayerPedId()
+	if not IsPedCuffed(me) then
+		EnableGui(true, phone)
+	end
 end)
 
 RegisterNUICallback('deleteContact', function(data, cb)

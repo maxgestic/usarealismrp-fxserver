@@ -63,12 +63,11 @@ end)
 
 local failed  = false
 function mycb(success, timeremaining, finish)
-	ClearPedTasks(playerPed)
-	if success then
+	local playerPed = PlayerPedId()
+	if success and timeremaining >= 0.5 then
 		print('Success with '..timeremaining..'s remaining.')
 		if finish then
 			if not failed then
-				local playerPed = PlayerPedId()
 				if Vdist(GetEntityCoords(playerPed), currentlyHacking.coords.x, currentlyHacking.coords.y, currentlyHacking.coords.z) < 3.0 then
 					TriggerServerEvent('bank:hackComplete')
 					TriggerEvent("usa:notify", "You successfully hacked the firewall!")
@@ -84,6 +83,9 @@ function mycb(success, timeremaining, finish)
 		failed = true
 		print('Failure to win hacking game!')
 		TriggerEvent("usa:notify", "You failed to hacked the firewall!")
+	end
+	if finish or failed then
+		ClearPedTasks(playerPed)
 	end
 end
 

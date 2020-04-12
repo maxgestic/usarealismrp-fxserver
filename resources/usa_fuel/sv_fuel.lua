@@ -4,8 +4,8 @@ RegisterServerEvent('fuel:purchaseFuel')
 local gasPrices = {
 		['Aircraft'] = 25,
 		['Watercraft'] = 10,
-		['Electric'] = 3,
-		['Gasoline'] = 3
+		['Electric'] = 5,
+		['Gasoline'] = 5
 	}
 
 local vehicleGas = {}

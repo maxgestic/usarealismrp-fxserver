@@ -14,7 +14,10 @@ local fuelStations = {
 			{-475.08, 5988.36, 31.34}, -- Paleto Sheriff Department
 			{1834.73, 2501.94, 47.61}, -- Prison
 			{449.48, -981.07, 44.69}, -- MISSION ROW
-			{351.42, -588.21, 75.16} -- PILLBOX MEDICAL
+			{351.42, -588.21, 75.16}, -- PILLBOX MEDICAL
+			{-1513.0, -67.61, 56.57}, -- Reapers House
+			{-1597.16, 825.24, 187.74}, -- Gloryholes Corp
+			{-33.22, 768.99, 223.42}, -- Scott Johnson
 		}
 	},
 	['Watercraft'] = {
@@ -112,7 +115,7 @@ Citizen.CreateThread(function()
 		for k, v in pairs(fuelStations) do
 			for i = 1, #fuelStations[k].locations do
 				local x, y, z = table.unpack(fuelStations[k].locations[i])
-				if Vdist(GetEntityCoords(playerPed), x, y, z) < 12.0 then
+				if Vdist(GetEntityCoords(playerPed), x, y, z) < 5.0 then
 					DrawText3D(x, y, z, '[E] - Fuel Station')
 				end
 			end
@@ -141,8 +144,13 @@ Citizen.CreateThread(function()
 					TriggerServerEvent('fuel:returnFuelAmount', GetVehicleNumberPlateText(playerVeh))
 					wasInVeh = true
 				end
-				DrawTxt(0.708, 1.418, 1.0, 1.0, 0.55, math.floor(fuelData.fuelAmount) .. '', 255, 255, 255, 255)
-				DrawTxt(0.729, 1.425, 1.0, 1.0, 0.35, 'Fuel', 255, 255, 255, 255)
+				if math.floor(fuelData.fuelAmount) <= 10 then
+					DrawTxt(0.708, 1.418, 1.0, 1.0, 0.55, math.floor(fuelData.fuelAmount) .. '', 255, 0, 0, 255)
+					DrawTxt(0.729, 1.425, 1.0, 1.0, 0.35, 'Fuel', 255, 0, 0, 255)
+				else
+					DrawTxt(0.708, 1.418, 1.0, 1.0, 0.55, math.floor(fuelData.fuelAmount) .. '', 255, 255, 255, 255)
+					DrawTxt(0.729, 1.425, 1.0, 1.0, 0.35, 'Fuel', 255, 255, 255, 255)
+				end
 			else
 				if wasInVeh then
 					wasInVeh = false
@@ -325,7 +333,7 @@ function IsNearFuelStation(stationType)
 		if k == stationType then
 			for i = 1, #fuelStations[k].locations do
 				local x, y, z = table.unpack(fuelStations[k].locations[i])
-				if Vdist(GetEntityCoords(playerPed), x, y, z) < 8.0 then
+				if Vdist(GetEntityCoords(playerPed), x, y, z) < 5.0 then
 					return true
 				end
 			end

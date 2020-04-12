@@ -1,42 +1,7 @@
-local data = {
-  peds = {
-    {x = 2197.88, y = 5577.93, z = 52.88, heading = 270.0, hash = -264140789, scenario = "WORLD_HUMAN_SMOKING_POT"},
-    {x = 1441.86, y = 6338.78, z = 24.7478, heading = 10.0, hash = 1191548746, scenario = "WORLD_HUMAN_HANG_OUT_STREET"}
-  }
-}
-
--------------------------------------------------------------------
--- todo: make it so the info peds give directions to the next point
--------------------------------------------------------------------
-
 local KEY = 38 -- "E"
 local SOUND_ENABLE = true
 local processed = false
 local harvested = false
-
---------------------
--- Spawn job peds --
---------------------
--- S P A W N  J O B  P E D S
-Citizen.CreateThread(function()
-	for i = 1, #data.peds do
-    local hash = data.peds[i].hash
-		RequestModel(hash)
-		while not HasModelLoaded(hash) do
-			RequestModel(hash)
-			Citizen.Wait(0)
-		end
-		local ped = CreatePed(4, hash, data.peds[i].x, data.peds[i].y, data.peds[i].z, data.peds[i].heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
-    data.peds[i].handle = ped
-    SetEntityCanBeDamaged(ped,false)
-		SetPedCanRagdollFromPlayerImpact(ped,false)
-		TaskSetBlockingOfNonTemporaryEvents(ped,true)
-		SetPedFleeAttributes(ped,0,0)
-		SetPedCombatAttributes(ped,17,1)
-		SetPedRandomComponentVariation(ped, true)
-    TaskStartScenarioInPlace(ped, data.peds[i].scenario, 0, true);
-  end
-end)
 
 ------------------------------------------------
 -- See if player is close to any job location --
@@ -50,16 +15,6 @@ Citizen.CreateThread(function()
     DrawText3D(1546.81, 2166.45, 78.72, 8, '[E] - Enter')
     DrawText3D(1066.40, -3183.47, -39.16, 5, '[E] - Exit')
     if IsControlJustPressed(1, KEY) then
-      --[[
-      if Vdist(playerCoords, 2224.04, 5577.28, 52.7) < 9 and not harvested then
-        Wait(500)
-        if not IsControlPressed(1, KEY) then
-          TriggerServerEvent("weed:checkItem", "Harvest")
-          Wait(5000) -- prevent spamming
-        else
-          TriggerEvent("chatMessage", "", {}, "^3HINT:^0 Go to the big blue barn off the dirt road just south of the car dealership in Harmony when you finish harvesting. You can process this stuff there.")
-        end
-      --]]
       if Vdist(playerCoords, 1036.35, -3203.71, -38.17) < 3.5 and not processed then
         Wait(500)
         if not IsControlPressed(1, KEY) then
