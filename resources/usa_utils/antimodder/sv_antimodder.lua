@@ -299,7 +299,7 @@ AddEventHandler("entityCreated",  function(entity)
                 local user = exports["essentialmode"]:getPlayerFromId(player)
                 local userGroup = user.getGroup()
                 if userGroup == 'user' then
-                    exports["es_admin"]:BanPlayer(player, "Modding")
+                    exports["es_admin"]:BanPlayer(player, "Modding (object spawning). If you feel this was a mistake please let a staff member know.")
                 end
             end
         end
