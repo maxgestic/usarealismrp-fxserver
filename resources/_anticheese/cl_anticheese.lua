@@ -941,7 +941,7 @@ AddEventHandler("deletenearestobjects", function()
     		local objcoords = GetEntityCoords(object)
 			local mycoords = GetEntityCoords(GetPlayerPed(-1))
 			if Vdist(mycoords.x, mycoords.y, mycoords.z, objcoords.x, objcoords.y, objcoords.z) < 50 then
-				local ent = SetEntityAsMissionEntity(object)
+				local ent = SetEntityAsMissionEntity(object, true, true)
 				DeleteObject(ent)
 			end
             Wait(0)
@@ -957,7 +957,7 @@ AddEventHandler("deletenearestvehicles", function()
     		local vehcoords = GetEntityCoords(veh)
 			local mycoords = GetEntityCoords(GetPlayerPed(-1))
 			if Vdist(mycoords.x, mycoords.y, mycoords.z, vehcoords.x, vehcoords.y, vehcoords.z) < 50 then
-				local vehicle = SetEntityAsMissionEntity(veh)
+				local vehicle = SetEntityAsMissionEntity(veh, true, true)
 				DeleteObject(vehicle)
 			end
             Wait(0)
