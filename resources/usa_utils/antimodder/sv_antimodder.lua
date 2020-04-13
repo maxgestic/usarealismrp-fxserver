@@ -291,7 +291,8 @@ AddEventHandler('scrambler:injectionDetected', function(name, source, isServerEv
     exports["es_admin"]:BanPlayer(source, "Modding (code injection). If you feel this was a mistake please let a staff member know.")
 end)
 
-AddEventHandler("entityCreated",  function(entity)
+local eventNameVariableToSkipBeingScrambled = "entityCreated"
+AddEventHandler(eventNameVariableToSkipBeingScrambled,  function(entity)
     for i = 1, #blacklist_entity_hash do
         if DoesEntityExist(entity) then
             if GetEntityModel(entity) == GetHashKey(blacklist_entity_hash[i]) then
