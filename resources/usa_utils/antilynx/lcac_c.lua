@@ -1509,10 +1509,11 @@ Citizen.CreateThread(function()
 						SetEntityAsMissionEntity(t8C, tr0oVKfP8ketBijKuzv[1], tr0oVKfP8ketBijKuzv[1])
 						DeleteEntity(t8C)
 					end
+					Wait(100)
 				end
 			end
 		end;
-		if LXC.APD then
+		if LXC.AED then
 			Citizen.Wait(LXC.AutomaticDeleteTimeout)
 			objst = tr0oVKfP8ketBijKuzv[21]
 			for FBnn9lDDhV in EnumerateObjects() do
@@ -1522,6 +1523,7 @@ Citizen.CreateThread(function()
 						DeleteEntity(FBnn9lDDhV)
 					end
 				end
+				Wait(100)
 			end
 		end;
 		if LXC.APD then
@@ -1535,6 +1537,7 @@ Citizen.CreateThread(function()
 						DeleteEntity(pErU)
 					end
 				end
+				Wait(100)
 			end
 		end;
 		if LXC.ABCmdsGlobal then
