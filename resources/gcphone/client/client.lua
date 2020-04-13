@@ -206,7 +206,7 @@ Citizen.CreateThread(function ()
               PhonePlayCall(true)
               TakeAppel(PhoneInCall[i])
               PhoneInCall = {}
-              StopSoundJS('ring2.ogg')
+              StopSoundJS('ring.ogg')
             end
           end
           break
@@ -216,17 +216,17 @@ Citizen.CreateThread(function ()
       showFixePhoneHelper(coords)
     end
     if inRangeToActivePhone == true and currentPlaySound == false then
-      PlaySoundJS('ring2.ogg', 0.2 + (inRangedist - soundDistanceMax) / -soundDistanceMax * 0.8 )
+      PlaySoundJS('ring.ogg', 0.2 + (inRangedist - soundDistanceMax) / -soundDistanceMax * 0.8 )
       currentPlaySound = true
     elseif inRangeToActivePhone == true then
       mod = mod + 1
       if (mod == 15) then
         mod = 0
-        SetSoundVolumeJS('ring2.ogg', 0.2 + (inRangedist - soundDistanceMax) / -soundDistanceMax * 0.8 )
+        SetSoundVolumeJS('ring.ogg', 0.2 + (inRangedist - soundDistanceMax) / -soundDistanceMax * 0.8 )
       end
     elseif inRangeToActivePhone == false and currentPlaySound == true then
       currentPlaySound = false
-      StopSoundJS('ring2.ogg')
+      StopSoundJS('ring.ogg')
     end
     Citizen.Wait(0)
   end
