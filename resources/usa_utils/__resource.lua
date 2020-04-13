@@ -14,14 +14,17 @@ files {
 client_scripts { 
     "screenshots/cl_screenshots.lua",
     'commerce/cl_commerce.lua',
-    'antimodder/cl_commerce.lua'
+    'antimodder/cl_commerce.lua',
+    'antilynx/config_c.lua',
+    'antilynx/lcac_c.lua'
 }
 
 server_scripts {
     'sessionmonitor.lua',
     'screenshots/sv_screenshots.lua',
     'commerce/sv_commerce.lua',
-    'antimodder/sv_antimodder.lua'
+    'antimodder/sv_antimodder.lua',
+   'antilynx/lcac_s.lua'
 }
 
 server_exports {
