@@ -346,7 +346,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(tr0oVKfP8ketBijKuzv[3])
 		if g92t9q5fITeqRXPzz < tr0oVKfP8ketBijKuzv[4] then
 			if Config == tr0oVKfP8ketBijKuzv[5] then
-				TriggerServerEvent(tr0oVKfP8ketBijKuzv[6], tr0oVKfP8ketBijKuzv[7], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
+				TriggerServerEvent("LCAC:ViolationDetected", tr0oVKfP8ketBijKuzv[7], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
 			else
 				g92t9q5fITeqRXPzz = g92t9q5fITeqRXPzz + tr0oVKfP8ketBijKuzv[1]
 			end
