@@ -668,10 +668,12 @@ end)
 RegisterNUICallback('callEvent', function(data, cb)
   local eventName = data.eventName or ''
   if string.match(eventName, 'gcphone') then
-    if data.data ~= nil then 
-      TriggerEvent(data.eventName, data.data)
-    else
-      TriggerEvent(data.eventName)
+    if eventName == "gcphone:send911Message" then
+      TriggerEvent("gcphone:send911Message", (data.data or nil))
+    elseif eventName == "gcphone:sendMechanicMessage" then
+      TriggerEvent("gcphone:sendMechanicMessage", (data.data or nil))
+    elseif eventName == "gcphone:sendTaxiMessage" then 
+      TriggerEvent("gcphone:sendTaxiMessage", (data.data or nil))
     end
   else
     print('Event not allowed')

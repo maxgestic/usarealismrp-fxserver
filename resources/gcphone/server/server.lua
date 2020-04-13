@@ -761,19 +761,21 @@ AddEventHandler("phone:sendMechanicMessage", function(data)
 end)
 
 -- Just For reload
---[[
 RegisterServerEvent('gcPhone:allUpdate')
 AddEventHandler('gcPhone:allUpdate', function()
     local sourcePlayer = tonumber(source)
     local identifier = getPlayerID(source)
-    local num = getNumberPhone(identifier)
-    TriggerClientEvent("gcPhone:myPhoneNumber", sourcePlayer, num)
-    TriggerClientEvent("gcPhone:contactList", sourcePlayer, getContacts(identifier))
-    TriggerClientEvent("gcPhone:allMessage", sourcePlayer, getMessages(identifier))
-    TriggerClientEvent('gcPhone:getBourse', sourcePlayer, getBourse())
-    sendHistoriqueCall(sourcePlayer, num)
+    getNumberPhone(identifier, function(num)
+        TriggerClientEvent("gcPhone:myPhoneNumber", sourcePlayer, num)
+        getContacts(identifier, function(contacts)
+            TriggerClientEvent("gcPhone:contactList", sourcePlayer, contacts)
+            getMessages(identifier, function(messages)
+                TriggerClientEvent("gcPhone:allMessage", sourcePlayer, messages)
+                sendHistoriqueCall(sourcePlayer, num)
+            end)
+        end)
+    end)
 end)
---]]
 
 
 --[[
