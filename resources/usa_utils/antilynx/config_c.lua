@@ -22,7 +22,7 @@ LXC.MaxPlayerHealth = 200 -- Set the max health on your server (default is 200)
 LXC.GodCheckTimer = 30000 -- Every 30s the player get a full godmode check
 
 ----General----
-LXC.ACheat = false -- General shit, "AntiInvincible, AntiInfiniteAmmo, etc."
+LXC.ACheat = true -- General shit, "AntiInvincible, AntiInfiniteAmmo, etc."
 LXC.ASpectate = true -- HIGHLY RECOMMENDED
 LXC.ABlips = false  -- HIGHLY RECOMMENDED
 LXC.PlayerProtection = true -- FIRE AND EXPLOSIONS (this only protect your players from being damaged by explosions or fire)
@@ -30,7 +30,7 @@ LXC.PlayerProtection = true -- FIRE AND EXPLOSIONS (this only protect your playe
 LXC.ASpeedHack = false -- On foot (not falling) anti speed hack (optional)
 LXC.SpeedHackValue = 10.0 -- MAX SPEED ALLOWED FOR WALKING/RUNNING/SWIMMING from 0.0 to 99.0
 
-LXC.TriggerKick = fakse -- Use this only if you windows.bat/replace.py your files, HIGHLY RECOMMENDED
+LXC.TriggerKick = false -- Use this only if you windows.bat/replace.py your files, HIGHLY RECOMMENDED
 LXC.ChatKick = true -- Kick a player if says something blacklisted (cheat stuff,links,etc.) HIGHLY RECOMMENDED
 
 --Explosion Event-- Thanks to YourMumXD for helping me
@@ -80,9 +80,9 @@ LXC.DetectExplosions = true -- ONESYNC ONLY!! Detects explosions and cancel them
 ---Injection methods BE CAREFUL---
 
 LXC.NRCMethod = true -- Resource counter
-LXC.RSIMethod = false -- Detects any random string resource injection
+LXC.RSIMethod = true -- Detects any random string resource injection
 LXC.ARRMethod = false -- Anti-Resource-Restart , this detect any resource restart/start , good for shit executors... (use as your own risk)
-LXC.ARSMethod = false -- Anti-Resource-Stop, this detect any resource stop, good to stop cheaters from blocking anticheats or scripts... (use as your own risk)
+LXC.ARSMethod = true -- Anti-Resource-Stop, this detect any resource stop, good to stop cheaters from blocking anticheats or scripts... (use as your own risk)
 LXC.AVHCMethod = true -- Detects Cheat Engine Vehicle Hash Changer
 
 ---------------Blacklisted Commands------------------------
@@ -189,7 +189,7 @@ LXC.ABWeps = {
 LXC.WeaponManipulation = true -- Masterswitch for weapon manipulation / damage etc.
 LXC.ADamageChanger = true -- Detects if a user changed his weapon damage (Cheat Engine)
 LXC.AExplosiveWeapons = true -- Detects if a user is using explosive ammo, or explosive melee
-LXC.ABWeapons = true -- Detect and log if someone is holding a blacklisted weapon
+LXC.ABWeapons = false -- Detect and log if someone is holding a blacklisted weapon
 LXC.ABWeaponsKick = false -- if the player get detected, kick him (NOT RECOMMENDED)
 
 ---------------Blacklisted Models-------------------------
