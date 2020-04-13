@@ -7,6 +7,8 @@ local ITEMS = {
         {name = "Cheeseburger", price = 20, type = "food", substance = 60.0, quantity = 1, legality = "legal", weight = 2, objectModel = "prop_food_burg1"},
         {name = "Big Whopper", price = 40, type = "food", substance = 100.0, quantity = 1, legality = "legal", weight = 4, objectModel = "prop_food_burg2"},
         {name = "Foot Long Dog", price = 25, type = "food", substance = 70.0, quantity = 1, legality = "legal", weight = 3, objectModel = "prop_cs_hotdog_02"},
+        {name = "Veggie Gasm Burger", price = 35, type = "food", substance = 85.0, quantity = 1, legality = "legal", weight = 3, objectModel = "prop_food_burg2"},
+        {name = "Torpedo Sandwich", price = 15, type = "food", substance = 55.0, quantity = 1, legality = "legal", weight = 3, objectModel = "prop_sandwich_01"},
     },
     ["Fry"] = {
         {name = "Doughnuts", price = 10, type = "food", substance = 25.0, quantity = 1, legality = "legal", weight = 2, objectModel = "prop_donut_01"},
@@ -40,11 +42,11 @@ AddEventHandler("burgerjob:startJob", function(location)
 end)
 
 RegisterServerEvent("burgerjob:quitJob")
-AddEventHandler("burgerjob:quitJob", function(location)
+AddEventHandler("burgerjob:quitJob", function()
     local char = exports["usa-characters"]:GetCharacter(source)
     if char.get("job") == 'BurgerShotEmployee' then
         char.set("job", "civ")
-        TriggerClientEvent("burgerjob:quitJob", source, location)
+        TriggerClientEvent("burgerjob:quitJob", source)
     end
 end)
 

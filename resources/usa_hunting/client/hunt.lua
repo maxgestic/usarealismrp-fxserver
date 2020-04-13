@@ -3,7 +3,7 @@ local hunt_shack_location = {x = -1493.3, y = 4972.0, z = 63.93}
 local SHOW_HINT_TEXT_DIST = 15
 local MAX_HINT_TEXT_DIST = 5
 
-local BUTCHER_ANIMATION_TIME = 45
+local BUTCHER_ANIMATION_TIME_SECONDS = 45
 
 local KEYS = {
     E = 38
@@ -37,25 +37,28 @@ Citizen.CreateThread(function()
         if IsControlJustPressed(0, KEYS.E) then
             local myped = PlayerPedId()
             local playerCoords = GetEntityCoords(myped)
+            local isInVeh = IsPedInAnyVehicle(myped, true)
             for otherPed in exports.globals:EnumeratePeds() do
                 if not isBlacklistedModel(GetEntityModel(otherPed)) then
                     local pedCoords = GetEntityCoords(otherPed)
                     local distBetweenPedAndAnimal = Vdist(pedCoords, playerCoords)
                     if DoesEntityExist(otherPed) and IsPedDeadOrDying(ped) then
-                        if distBetweenPedAndAnimal <= 1.5 and otherPed ~= myped and not IsPedHuman(otherPed) then
+                        if distBetweenPedAndAnimal <= 1.5 and otherPed ~= myped and not IsPedHuman(otherPed) and not isInVeh then
                             SetEntityAsMissionEntity(otherPed)
                             local beginTime = GetGameTimer()
                             exports.globals:loadAnimDict("amb@medic@standing@kneel@idle_a")
-                            while GetGameTimer() - beginTime < BUTCHER_ANIMATION_TIME do
+                            while GetGameTimer() - beginTime < BUTCHER_ANIMATION_TIME_SECONDS * 1000 do
                                 if not IsEntityPlayingAnim(myped, "amb@medic@standing@kneel@idle_a", "idle_a", 3) then
                                     TaskPlayAnim(myped, "amb@medic@standing@kneel@idle_a", "idle_a", 8.0, 1.0, -1, 11, 1.0, false, false, false)
                                 end
-                                exports.globals:DrawTimerBar(beginTime, BUTCHER_ANIMATION_TIME, 1.42, 1.475, 'Skinning & Butchering')
+                                exports.globals:DrawTimerBar(beginTime, BUTCHER_ANIMATION_TIME_SECONDS * 1000, 1.42, 1.475, 'Skinning & Butchering')
                                 Wait(1)
                             end
                             ClearPedTasks(myped)
-                            TriggerServerEvent('hunting:skinforfurandmeat', givefur)
-                            DeleteEntity(otherPed)
+                            if DoesEntityExist(otherPed) then
+                                TriggerServerEvent('hunting:skinforfurandmeat', givefur)
+                                DeleteEntity(otherPed)
+                            end
                         end
                     end
                 end

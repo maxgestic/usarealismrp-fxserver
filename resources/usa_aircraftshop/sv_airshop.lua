@@ -40,6 +40,17 @@ AddEventHandler('aircraft:requestOpenMenu', function()
   end
 end)
 
+RegisterServerEvent('aircraft:requestOpenPrivateMenu')
+AddEventHandler('aircraft:requestOpenPrivateMenu', function()
+    local char = exports["usa-characters"]:GetCharacter(source)
+    local license = char.getItem("Aircraft License")
+    if license and license.status == "valid" then
+        TriggerClientEvent('aircraft:openPrivateMenu', source, (char.get("aircraft") or {}))
+    else
+        TriggerClientEvent('usa:notify', source, 'No license! Hold E to purchase one for $' .. exports["globals"]:comma_value(LICENSE_PURCHASE_PRICE))
+    end
+end)
+
 RegisterServerEvent('aircraft:loadItems')
 AddEventHandler('aircraft:loadItems', function()
     TriggerClientEvent("aircraft:loadItems", source, ITEMS, RENTAL_PERCENTAGE, CLAIM_PERCENTAGE)

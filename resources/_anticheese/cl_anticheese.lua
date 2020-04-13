@@ -940,11 +940,13 @@ AddEventHandler("deletenearestobjects", function()
         for object in exports.globals:EnumerateObjects() do
     		local objcoords = GetEntityCoords(object)
 			local mycoords = GetEntityCoords(GetPlayerPed(-1))
-			if Vdist(mycoords.x, mycoords.y, mycoords.z, objcoords.x, objcoords.y, objcoords.z) < 50.0 then
-				DeleteEntity(object)
+			if Vdist(mycoords.x, mycoords.y, mycoords.z, objcoords.x, objcoords.y, objcoords.z) < 50 then
+				SetEntityAsMissionEntity(object, true, true)
+				DeleteObject(object)
 			end
-            Wait(5)
+            Wait(0)
         end
+		print('deleted all objects')
     end)
 end)
 
@@ -954,10 +956,11 @@ AddEventHandler("deletenearestvehicles", function()
         for veh in exports.globals:EnumerateVehicles() do
     		local vehcoords = GetEntityCoords(veh)
 			local mycoords = GetEntityCoords(GetPlayerPed(-1))
-			if Vdist(mycoords.x, mycoords.y, mycoords.z, vehcoords.x, vehcoords.y, vehcoords.z) < 20.0 then
-				DeleteEntity(veh)
+			if Vdist(mycoords.x, mycoords.y, mycoords.z, vehcoords.x, vehcoords.y, vehcoords.z) < 50 then
+				SetEntityAsMissionEntity(veh, true, true)
+				DeleteVehicle(veh)
 			end
-            Wait(5)
+            Wait(0)
         end
         print("** Deleted all vehicles! **")
     end)
