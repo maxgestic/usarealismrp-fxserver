@@ -11,6 +11,7 @@ AddEventHandler("doc:getWeapons", function(weps)
 end)
 
 local vehicles = {
+  { name = "Quad Bike", hash = GetHashKey("blazer") },
   { name = "CVPI", hash = GetHashKey("pdcvpi") },
   { name = "Charger", hash = GetHashKey("pdchgr") },
   { name = "Taurus", hash = GetHashKey("pdtau") },

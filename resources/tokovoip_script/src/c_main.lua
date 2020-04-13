@@ -190,6 +190,7 @@ AddEventHandler("initializeVoip", function()
 	RequestAnimDict("facials@gen_male@base");
 
 	-- Debug data stuff
+	--[[
 	local debugData = false;
 	Citizen.CreateThread(function()
 		while true do
@@ -228,6 +229,7 @@ AddEventHandler("initializeVoip", function()
 			end
 		end
 	end);
+	--]]
 end)
 --------------------------------------------------------------------------------
 --	Radio functions
