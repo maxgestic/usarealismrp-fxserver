@@ -432,7 +432,7 @@ AddEventHandler('911:PlayerCall', function(x, y, z, street, text)
   local char = exports["usa-characters"]:GetCharacter(usource)
   local time = math.random(1000, 3000)
   Citizen.Wait(time)
-  local string = '^*Caller:^r '..char.getFullName()..' ['..usource..'] ^1^*|^r ^*Location:^r '..street..' ^1^*|^r ^*Call Info: '..text
+  local string = '^*Caller:^r '..char.getFullName()..' ['..usource..'] ^1^*|^r ^*Location:^r '..street..' ^1^*|^r ^*Call Info: '.. (text or "")
   Send911Notification({'sheriff', 'corrections', 'ems'}, string, x, y, z, 'Player Call')
 end)
 
