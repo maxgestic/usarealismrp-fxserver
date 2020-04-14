@@ -73,6 +73,9 @@ var itemImages = {
   "Trout": "http://www.stickpng.com/assets/images/580b57fbd9996e24bc43bbf9.png",
   "Flounder": "https://www.freshfromflorida.com/var/ezdemo_site/storage/images/media/images/marketing-development-images/flounder-transparent/2389314-1-eng-US/flounder-transparent_large.png",
   "Halibut": "https://i.dlpng.com/static/png/332762_thumb.png",
+  "Yellowfin Tuna" : "https://imgur.com/JQmcQLV.png",
+  "Swordfish" : "https://imgur.com/7718g2G.png",
+
   "Weed Bud": "https://66.media.tumblr.com/30ff99a59894fdd9abd04712189708af/tumblr_mvyvwdxNVi1t04rb2o1_r1_400.png",
   "Packaged Weed": "https://imgur.com/QnjBptr.png",
   "Processed Sand": "https://imgur.com/GQ8TPYU.png",
