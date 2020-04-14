@@ -239,8 +239,7 @@ LXC.BEntities = {
 	"stt_prop_ramp_spiral_l_xxl",
 	"stt_prop_ramp_spiral_m",
 	"stt_prop_ramp_spiral_s",
-    "misc_ufo2",
-    "prop_beach_fire",
+    	"misc_ufo2",
 	"stt_prop_ramp_spiral_xxl",
 	-145066854
 }
