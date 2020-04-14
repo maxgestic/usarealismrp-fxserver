@@ -101,19 +101,19 @@ function fishValues(fish)
     end
   elseif fish.name == 'Yellowfin Tuna' then
     if fish.weight <= 10 then
-      fish.worth = 250
+      fish.worth = 130
     elseif fish.weight > 10 and fish.weight < 25 then
-      fish.worth = 500
+      fish.worth = 250
     else
-      fish.worth = 800
+      fish.worth = 500
     end
   elseif fish.name == 'Swordfish' then
     if fish.weight <= 10 then
-      fish.worth = 300
+      fish.worth = 250
     elseif fish.weight > 10 and fish.weight < 30 then
-      fish.worth = 670
+      fish.worth = 400
     else
-      fish.worth = 1000
+      fish.worth = 700
     end
   end
   return fish.worth

@@ -36,8 +36,8 @@ local fish = {
 }
 
 local seaFish = {
-	{name = 'Yellowfin Tuna', price = 800},
-	{name = 'Swordfish', price = 1000},
+	{name = 'Yellowfin Tuna', price = 500},
+	{name = 'Swordfish', price = 700},
 }
 
 local peds = {
