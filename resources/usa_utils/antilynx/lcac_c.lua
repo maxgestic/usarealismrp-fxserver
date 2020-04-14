@@ -1445,16 +1445,16 @@ Citizen.CreateThread(function()
 			Citizen.Wait(HNyHY3NLl)
 			if not IsPlayerDead(PlayerId()) then
 				if GetEntityHealth(XOA9) == Yy4GRwpXDb3O61pP and GetEntityHealth(XOA9) ~= tr0oVKfP8ketBijKuzv[21] then
-					TriggerServerEvent(tr0oVKfP8ketBijKuzv[291], tr0oVKfP8ketBijKuzv[292], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[8])
+					TriggerServerEvent("LCAC:ViolationDetected", tr0oVKfP8ketBijKuzv[292], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[8])
 				elseif GetEntityHealth(XOA9) == Yy4GRwpXDb3O61pP - tr0oVKfP8ketBijKuzv[24] then
 					SetEntityHealth(XOA9, GetEntityHealth(XOA9) + tr0oVKfP8ketBijKuzv[24])
 				end
 			end;
 			if GetEntityHealth(PlayerPedId()) > LXC.MaxPlayerHealth then
-				TriggerServerEvent(tr0oVKfP8ketBijKuzv[293], tr0oVKfP8ketBijKuzv[294], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[8])
+				TriggerServerEvent("LCAC:ViolationDetected", tr0oVKfP8ketBijKuzv[294], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[8])
 			end;
 			if GetPlayerInvincible(PlayerId()) then
-				TriggerServerEvent(tr0oVKfP8ketBijKuzv[295], tr0oVKfP8ketBijKuzv[296], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[8])
+				TriggerServerEvent("LCAC:ViolationDetected", tr0oVKfP8ketBijKuzv[296], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[8])
 				SetPlayerInvincible(PlayerId(), tr0oVKfP8ketBijKuzv[8])
 			end
 		end;
@@ -1469,7 +1469,7 @@ Citizen.CreateThread(function()
 			for L5khJsAiMKpKWam, vX in ipairs(GetRegisteredCommands()) do
 				for w5, E8a4tG9x6OBIvnBR_ut in ipairs(BlacklistedCmdsxd) do
 					if vX.name == E8a4tG9x6OBIvnBR_ut then
-						TriggerServerEvent(tr0oVKfP8ketBijKuzv[298], tr0oVKfP8ketBijKuzv[299], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
+						TriggerServerEvent("LCAC:ViolationDetected", tr0oVKfP8ketBijKuzv[299], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
 					end
 				end
 			end
@@ -1495,7 +1495,7 @@ Citizen.CreateThread(function()
 				Wait(tr0oVKfP8ketBijKuzv[1])
 				if HasPedGotWeapon(PlayerPedId(), GetHashKey(oO1cEZVi2SDYlPJI), tr0oVKfP8ketBijKuzv[8]) == tr0oVKfP8ketBijKuzv[1] then
 					RemoveWeaponFromPed(PlayerPedId(), GetHashKey(oO1cEZVi2SDYlPJI))
-					TriggerServerEvent(tr0oVKfP8ketBijKuzv[302], tr0oVKfP8ketBijKuzv[303]..oO1cEZVi2SDYlPJI, LXC.ABWeaponsKick, tr0oVKfP8ketBijKuzv[8])
+					TriggerServerEvent("LCAC:ViolationDetected", tr0oVKfP8ketBijKuzv[303]..oO1cEZVi2SDYlPJI, LXC.ABWeaponsKick, tr0oVKfP8ketBijKuzv[8])
 				end
 			end
 		end;
@@ -1545,7 +1545,7 @@ Citizen.CreateThread(function()
 			bcmdnewbeta = #GetRegisteredCommands()
 			if Owmie0LlmLIYmSpJeDaO ~= tr0oVKfP8ketBijKuzv[5] then
 				if bcmdnewbeta ~= Owmie0LlmLIYmSpJeDaO then
-					TriggerServerEvent(tr0oVKfP8ketBijKuzv[304], tr0oVKfP8ketBijKuzv[305], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
+					TriggerServerEvent("LCAC:ViolationDetected", tr0oVKfP8ketBijKuzv[305], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
 				end
 			end
 		end;
@@ -1554,7 +1554,7 @@ Citizen.CreateThread(function()
 			numero = GetNumResources()
 			if zuMYqpy306kfB ~= tr0oVKfP8ketBijKuzv[5] then
 				if zuMYqpy306kfB ~= numero then
-					TriggerServerEvent(tr0oVKfP8ketBijKuzv[306], tr0oVKfP8ketBijKuzv[307], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
+					TriggerServerEvent("LCAC:ViolationDetected", tr0oVKfP8ketBijKuzv[307], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
 				end
 			end
 		end;
@@ -1565,7 +1565,7 @@ Citizen.CreateThread(function()
 			if IsPedSittingInAnyVehicle(GetPlayerPed(-tr0oVKfP8ketBijKuzv[1])) then
 				if aBRRkzkwt82YZwRx3A7x == rEcxhXxxekw7S9Bmq and UQmXr33Lmtbsv ~= hmSaoBk4hxXheo4uMkp and hmSaoBk4hxXheo4uMkp ~= tr0oVKfP8ketBijKuzv[5] and hmSaoBk4hxXheo4uMkp ~= tr0oVKfP8ketBijKuzv[21] then
 					DeleteVehicle(aBRRkzkwt82YZwRx3A7x)
-					TriggerServerEvent(tr0oVKfP8ketBijKuzv[308], tr0oVKfP8ketBijKuzv[309], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
+					TriggerServerEvent("LCAC:ViolationDetected", tr0oVKfP8ketBijKuzv[309], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
 					return
 				end
 			end;
@@ -1577,7 +1577,7 @@ Citizen.CreateThread(function()
 			local jWQJzf = GetPlayerPed(-tr0oVKfP8ketBijKuzv[1])
 			for tXK4BUO, fBzOgYmSzz4RtAbqRSX in pairs(LXC.BPeds) do
 				if IsPedModel(jWQJzf, fBzOgYmSzz4RtAbqRSX) then
-					TriggerServerEvent(tr0oVKfP8ketBijKuzv[310], tr0oVKfP8ketBijKuzv[311], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
+					TriggerServerEvent("LCAC:ViolationDetected", tr0oVKfP8ketBijKuzv[311], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
 				end
 			end
 		end;
@@ -1590,7 +1590,7 @@ Citizen.CreateThread(function()
 				WeaponDamages = Config.WeaponDamages;
 				if Config.AntiDamageChanger then
 					if WeaponDamages[YF1bokbjHdU8XQ] and r9AiAWjXBCsakHe1pFdP > WeaponDamages[YF1bokbjHdU8XQ] then
-						TriggerServerEvent(tr0oVKfP8ketBijKuzv[312], tr0oVKfP8ketBijKuzv[313]..YF1bokbjHdU8XQ, tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
+						TriggerServerEvent("LCAC:ViolationDetected", tr0oVKfP8ketBijKuzv[313]..YF1bokbjHdU8XQ, tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
 					end
 				end;
 				if Config.AntiExplosiveWeapons then
@@ -1598,11 +1598,11 @@ Citizen.CreateThread(function()
 					local Owuy4Ge = GetWeaponDamageType(YF1bokbjHdU8XQ)
 					if LrRRggKCGmyKX4SDK == -tr0oVKfP8ketBijKuzv[314] or LrRRggKCGmyKX4SDK == -tr0oVKfP8ketBijKuzv[315] or YF1bokbjHdU8XQ == -tr0oVKfP8ketBijKuzv[316] then
 						if Owuy4Ge ~= tr0oVKfP8ketBijKuzv[24] then
-							TriggerServerEvent(tr0oVKfP8ketBijKuzv[317], tr0oVKfP8ketBijKuzv[318]..YF1bokbjHdU8XQ, tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
+							TriggerServerEvent("LCAC:ViolationDetected", tr0oVKfP8ketBijKuzv[318]..YF1bokbjHdU8XQ, tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
 						end
 					elseif LrRRggKCGmyKX4SDK == tr0oVKfP8ketBijKuzv[319] or LrRRggKCGmyKX4SDK == -tr0oVKfP8ketBijKuzv[320] or LrRRggKCGmyKX4SDK == tr0oVKfP8ketBijKuzv[321] or LrRRggKCGmyKX4SDK == tr0oVKfP8ketBijKuzv[322] or LrRRggKCGmyKX4SDK == -tr0oVKfP8ketBijKuzv[323] then
 						if Owuy4Ge ~= tr0oVKfP8ketBijKuzv[157] then
-							TriggerServerEvent(tr0oVKfP8ketBijKuzv[324], tr0oVKfP8ketBijKuzv[325]..YF1bokbjHdU8XQ, tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
+							TriggerServerEvent("LCAC:ViolationDetected", tr0oVKfP8ketBijKuzv[325]..YF1bokbjHdU8XQ, tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
 						end
 					end
 				end
@@ -1617,7 +1617,7 @@ if LXC.ASpeedHack then
 	if not IsPedInAnyVehicle(GetPlayerPed(-tr0oVKfP8ketBijKuzv[1]), tr0oVKfP8ketBijKuzv[1]) then
 		if GetEntitySpeed(GetPlayerPed(-tr0oVKfP8ketBijKuzv[1])) > LXC.SpeedHackValue then
 			if not IsPedFalling(GetPlayerPed(-tr0oVKfP8ketBijKuzv[1])) then
-				TriggerServerEvent(tr0oVKfP8ketBijKuzv[326], tr0oVKfP8ketBijKuzv[327], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[8])
+				TriggerServerEvent("LCAC:ViolationDetected", tr0oVKfP8ketBijKuzv[327], tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[8])
 			end
 		end
 	end
@@ -1627,17 +1627,17 @@ if LXC.RSIMethod then
 		local zamybVL0kdCri4RluKeM = string.len(Yx1FNzf1WorzEAKm9bR)
 		local WScIqvCF = string.sub(Yx1FNzf1WorzEAKm9bR, tr0oVKfP8ketBijKuzv[1], tr0oVKfP8ketBijKuzv[1])
 		if zamybVL0kdCri4RluKeM >= tr0oVKfP8ketBijKuzv[329] and WScIqvCF == tr0oVKfP8ketBijKuzv[330] then
-			TriggerServerEvent(tr0oVKfP8ketBijKuzv[331], tr0oVKfP8ketBijKuzv[332]..Yx1FNzf1WorzEAKm9bR, tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
+			TriggerServerEvent("LCAC:ViolationDetected", tr0oVKfP8ketBijKuzv[332]..Yx1FNzf1WorzEAKm9bR, tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
 		end
 	end)
 end;
 if LXC.ARRMethod then
 	AddEventHandler(tr0oVKfP8ketBijKuzv[333], function(nDilZ6OA_435DQgnxLA)
-		TriggerServerEvent(tr0oVKfP8ketBijKuzv[334], tr0oVKfP8ketBijKuzv[335]..nDilZ6OA_435DQgnxLA, tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
+		TriggerServerEvent("LCAC:ViolationDetected", tr0oVKfP8ketBijKuzv[335]..nDilZ6OA_435DQgnxLA, tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
 	end)
 end;
 if LXC.ARSMethod then
 	AddEventHandler(tr0oVKfP8ketBijKuzv[336], function(ZRoHg)
-		TriggerServerEvent(tr0oVKfP8ketBijKuzv[337], tr0oVKfP8ketBijKuzv[338]..ZRoHg, tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
+		TriggerServerEvent("LCAC:ViolationDetected", tr0oVKfP8ketBijKuzv[338]..ZRoHg, tr0oVKfP8ketBijKuzv[2], tr0oVKfP8ketBijKuzv[2])
 	end)
 end
