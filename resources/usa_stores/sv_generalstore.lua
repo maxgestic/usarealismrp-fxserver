@@ -37,7 +37,7 @@ local GENERAL_STORE_ITEMS = {
     {name = "Everclear Vodka (90%)", price = 80, type = "alcohol", substance = 5.0, quantity = 1, legality = "legal", weight = 10, strength = 0.10, objectModel = "prop_vodka_bottle", blockedInPrison = true}
   },
   ["Electronics"] = {
-    { name = "Cell Phone", price = 650, type = "misc", quantity = 1, legality = "legal", weight = 3, objectModel = "prop_npc_phone_02", blockedInPrison = true}
+    { name = "Cell Phone", price = 650, type = "misc", quantity = 1, legality = "legal", contacts = {}, conversations = {}, weight = 3, objectModel = "prop_npc_phone_02", blockedInPrison = true}
   },
   ["Misc"] = {
     { name = "First Aid Kit", price = 80, type = "misc", quantity = 1, legality = "legal", weight = 15, objectModel = "v_ret_ta_firstaid", blockedInPrison = true},
@@ -55,7 +55,7 @@ local HARDWARE_STORE_ITEMS = {
     { name = "Repair Kit", price = 250, type = "vehicle", quantity = 1, legality = "legal", weight = 20, objectModel = "imp_prop_tool_box_01a"}
   },
   ["Electronics"] = {
-    { name = "Cell Phone", price = 500, type = "misc", quantity = 1, legality = "legal", weight = 10, objectModel = "prop_npc_phone_02"}
+    { name = "Cell Phone", price = 650, type = "misc", quantity = 1, legality = "legal", contacts = {}, conversations = {}, weight = 3, objectModel = "prop_npc_phone_02", blockedInPrison = true}
   },
   ["Misc"] = {
     {name = 'Razor Blade', type = 'misc', price = 60, legality = 'legal', quantity = 1, residue = false, weight = 3},
@@ -103,6 +103,12 @@ AddEventHandler("generalStore:buyItem", function(item, store, inPrison, business
   if char.canHoldItem(item) then
     if char.get("money") >= item.price then
       char.removeMoney(item.price)
+      if item.name == "Cell Phone" then
+        item.number = string.sub(tostring(os.time()), -8)
+        item.owner = char.getName()
+        item.name = item.name .. " - " .. item.number
+        exports["usa-phone"]:CreateNewPhone(item)
+      end
       char.giveItem(item, item.quantity or 1)
       TriggerClientEvent("usa:notify", source, "Purchased: ~y~" .. item.name)
       if business then
