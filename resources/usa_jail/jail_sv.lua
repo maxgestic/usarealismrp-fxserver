@@ -35,25 +35,25 @@ AddEventHandler("jail:jailPlayerFromMenu", function(data)
 	local job = char.get('job')
 	if job == 'sheriff' or job == 'corrections' or job == "judge" then
 		local arrestingOfficerName = char.getFullName()
-		jailPlayer(data, arrestingOfficerName, data.gender)
+		jailPlayer(source, data, arrestingOfficerName, data.gender)
 	else
 		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
 		TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for LUA injection, please intervene^0!')
 	end
 end)
 
-function jailPlayer(data, officerName, gender)
+function jailPlayer(src, data, officerName, gender)
 	local targetPlayer = tonumber(data.id)
-	if not GetPlayerName(targetPlayer) then TriggerClientEvent("usa:notify", source, 'Player to jail not found!') return end
+	if not GetPlayerName(targetPlayer) then TriggerClientEvent("usa:notify", src, 'Player to jail not found!') return end
 	local sentence = tonumber(data.sentence)
 	local reason = data.charges
 	local fine = data.fine
 	if sentence == nil then
-		TriggerClientEvent("usa:notify", source, 'Invalid jail time!')
+		TriggerClientEvent("usa:notify", src, 'Invalid jail time!')
 		CancelEvent()
 		return
 	elseif not tonumber(fine) then
-		TriggerClientEvent("usa:notify", source, 'Invalid fine!')
+		TriggerClientEvent("usa:notify", src, 'Invalid fine!')
 		CancelEvent()
 		return
 	end
@@ -86,7 +86,19 @@ function jailPlayer(data, officerName, gender)
 	inmate.removeIllegalItems()
 	inmate.set("jailTime", sentence)
 	inmate.set("job", "civ")
-	inmate.removeBank(fine)
+
+	local property = inmate.get("property")
+
+	if inmate.get("bank") > 0 or not property then
+		inmate.removeBank(fine)
+	else
+		if property["money"] > 0 then
+			property["money"] = property["money"] - fine
+			inmate.set("property", property)
+		else 
+			TriggerClientEvent("usa:notify", src, "Person is not able to pay their fine!", "^3INFO: ^0The person you jailed now owes $" .. fine .. " to the state. Consider seizing assets worth that amount if they cannot pay it back.")
+		end
+	end
 
 	TriggerClientEvent("usa:notify", targetPlayer, "You have been fined: $" .. fine)
 	-- add to criminal history --
