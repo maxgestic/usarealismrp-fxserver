@@ -3,6 +3,8 @@ local mainMenu = NativeUI.CreateMenu("Fish Store", "~b~Sell your fish", 0 --[[X 
 _menuPool:Add(mainMenu)
 
 local fishing = false
+local seaFishing = false
+
 local fishStoreLocations = {
   {x = -666.796, y = 5805.82, z = 17.57},
   {x = -3044.07, y = 102.78, z = 12.34}
@@ -28,15 +30,87 @@ local fishingZoneBlips = {
 }
 
 local fish = {
-	{name = 'Trout', price = 25},
-	{name = 'Flounder', price = 30},
-	{name = 'Halibut', price = 50}
+	{name = 'Trout', price = 85},
+	{name = 'Flounder', price = 110},
+	{name = 'Halibut', price = 125}
+}
+
+local seaFish = {
+	{name = 'Yellowfin Tuna', price = 500},
+	{name = 'Swordfish', price = 700},
 }
 
 local peds = {
 	{x = -666.794, y = 5805.77, z = 16.5, heading = 280.352, hash = 261586155},
 	{x = -3044.07, y = 102.78, z = 11.34, heading = 282.0, hash = 261586155}
 }
+
+
+-- Sea Fishing
+Citizen.CreateThread(function()
+	while true do
+		Wait(0)
+		local playerPed = PlayerPedId()
+		local playerCoords = GetEntityCoords(playerPed)
+		local fishingBoat = GetClosestVehicle(playerCoords[1], playerCoords[2], playerCoords[3], 10.000, 0, 12294)
+		if DoesEntityExist(fishingBoat) then
+			SetEntityAsMissionEntity(fishingBoat, true, true)
+			while IsEntityInWater(fishingBoat) do
+				Wait(0)
+				if IsControlJustPressed(0, 311) then
+					if not IsPedSwimming(player) then
+						exports.globals:notify('Wait for a fish to bite!')
+						FreezeEntityPosition(playerPed, true)
+						seaFishing = true
+						local wait = math.random(60000, 300000)
+						local robObject = AttachEntityToPed('prop_fishing_rod_01', 60309, 0, 0, 0, 0, 0, 0)
+						RequestAnimDict('amb@world_human_stand_fishing@base')
+						while not HasAnimDictLoaded('amb@world_human_stand_fishing@base') do Citizen.Wait(100) end
+						TaskPlayAnim(playerPed,'amb@world_human_stand_fishing@base', 'base', 8.0, -8, -1, 49, 0, 0, 0, 0)
+						Citizen.Wait(wait)
+						ClearPedTasks(playerPed)
+						TriggerEvent('usa:showHelp', true, 'Tap ~INPUT_PICKUP~ to reel the fish in!')
+						exports.globals:notify('Tap ~y~E~w~ to reel the fish in!')
+						local resistance = 0
+						local maxResistance = math.random(5000, 10000)
+						local timeToResist = math.random(30000, 60000)
+						RequestAnimDict('amb@world_human_stand_fishing@idle_a')
+						while not HasAnimDictLoaded('amb@world_human_stand_fishing@idle_a') do Citizen.Wait(100) end
+						TaskPlayAnim(playerPed,'amb@world_human_stand_fishing@idle_a', 'idle_c', 8.0, -8, -1, 49, 0, 0, 0, 0) -- 10sec
+
+						Citizen.CreateThread(function()
+							while seaFishing do
+								Citizen.Wait(0)
+								DrawTimer(GetGameTimer() - resistance, maxResistance, 1.42, 1.475, 'REELING')
+								if IsControlJustPressed(0, 38) then
+									resistance = resistance + 50
+									if resistance > maxResistance and seaFishing then
+										ClearPedTasks(playerPed)
+										DeleteObject(robObject)
+										seaFishing = false
+										local seaFishCaught = math.random(#seaFish)
+										TriggerServerEvent('fish:giveSeaFish', seaFishCaught)
+										TriggerEvent('usa:notify', 'You have caught a ~y~'..seaFish[seaFishCaught].name..'~s~!')
+										FreezeEntityPosition(playerPed, false)
+									end
+								end
+							end
+						end)
+
+						Citizen.Wait(timeToResist)
+						if seaFishing then
+							ClearPedTasks(playerPed)
+							DeleteObject(robObject)
+							seaFishing = false
+							TriggerEvent('usa:notify', 'You failed to catch the fish!')
+						end
+						FreezeEntityPosition(playerPed, false)
+					end
+				end
+			end
+		end
+	end
+end)
 
 Citizen.CreateThread(function()
 	EnumerateBlips()
@@ -60,11 +134,11 @@ Citizen.CreateThread(function()
 				local playerCoords = GetEntityCoords(playerPed)
 				if Vdist(playerCoords, spot.x, spot.y, spot.z) < 1.0 then
 					if not IsPedInAnyVehicle(playerPed) and not IsPedSwimming(playerPed) then
-            exports.globals:notify('Wait for a fish to bite!')
+            			exports.globals:notify('Wait for a fish to bite!')
 						SetEntityHeading(playerPed, spot.heading)
 						FreezeEntityPosition(playerPed, true)
 						fishing = true
-						local wait = math.random(5000, 20000)
+						local wait = math.random(15000, 30000)
 						local robObject = AttachEntityToPed('prop_fishing_rod_01', 60309, 0, 0, 0, 0, 0, 0)
 						RequestAnimDict('amb@world_human_stand_fishing@base')
 						while not HasAnimDictLoaded('amb@world_human_stand_fishing@base') do Citizen.Wait(100) end
@@ -72,10 +146,10 @@ Citizen.CreateThread(function()
 						Citizen.Wait(wait)
 						ClearPedTasks(playerPed)
 						TriggerEvent('usa:showHelp', true, 'Tap ~INPUT_PICKUP~ to reel the fish in!')
-            exports.globals:notify('Tap ~y~E~w~ to reel the fish in!')
+            			exports.globals:notify('Tap ~y~E~w~ to reel the fish in!')
 						local resistance = 0
-						local maxResistance = math.random(7200, 9000)
-						local timeToResist = math.random(6000, 10000)
+						local maxResistance = math.random(4000, 10000)
+						local timeToResist = math.random(5000, 8000)
 						RequestAnimDict('amb@world_human_stand_fishing@idle_a')
 						while not HasAnimDictLoaded('amb@world_human_stand_fishing@idle_a') do Citizen.Wait(100) end
 						TaskPlayAnim(playerPed,'amb@world_human_stand_fishing@idle_a', 'idle_c', 8.0, -8, -1, 49, 0, 0, 0, 0) -- 10sec
@@ -83,17 +157,17 @@ Citizen.CreateThread(function()
 							while fishing do
 								Citizen.Wait(0)
 						        DrawTimer(GetGameTimer() - resistance, maxResistance, 1.42, 1.475, 'REELING')
-						        if IsControlJustPressed(0, 38) then
-						            resistance = resistance + 250
-						            if resistance > maxResistance and fishing then
-					            		ClearPedTasks(playerPed)
-					            		DeleteObject(robObject)
-					            		fishing = false
-					            		local fishCaught = math.random(#fish)
-					            		TriggerServerEvent('fish:giveFish', fishCaught)
-					            		TriggerEvent('usa:notify', 'You have caught a ~y~'..fish[fishCaught].name..'~s~!')
-					            	end
-					            end
+								if IsControlJustPressed(0, 38) then
+									resistance = resistance + 150
+									if resistance > maxResistance and fishing then
+										ClearPedTasks(playerPed)
+										DeleteObject(robObject)
+										fishing = false
+										local fishCaught = math.random(#fish)
+										TriggerServerEvent('fish:giveFish', fishCaught)
+										TriggerEvent('usa:notify', 'You have caught a ~y~'..fish[fishCaught].name..'~s~!')
+									end
+								end
 						    end
 						end)
 						Citizen.Wait(timeToResist)
@@ -173,11 +247,19 @@ end
 
 function CreateMenu()
 	for i = 1, #fish do
-		local fishItem = NativeUI.CreateItem(fish[i].name, "Sell price: $"..comma_value(fish[i].price))
+		local fishItem = NativeUI.CreateItem(fish[i].name, "Sale price varies on weight")
 		fishItem.Activated = function(parentmenu, selected)
 			TriggerServerEvent('fish:sellFish', i)
 		end
 		mainMenu:AddItem(fishItem)
+	end
+
+	for i = 1, #seaFish do
+		local seafishItem = NativeUI.CreateItem(seaFish[i].name, "Sale price varies on weight")
+		seafishItem.Activated = function(parentmenu, selected)
+			TriggerServerEvent('fish:sellSeaFish', i)
+		end
+		mainMenu:AddItem(seafishItem)
 	end
 end
 

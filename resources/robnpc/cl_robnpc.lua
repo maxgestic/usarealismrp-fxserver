@@ -46,8 +46,9 @@ Citizen.CreateThread(function()
         ::top::
         if IsControlJustPressed(0, KEYS.E) and IsPedArmed(GetPlayerPed(-1), 7) then
             local me = PlayerPedId()
+            local isInVeh = IsPedInAnyVehicle(me, true)
             aiming, targetPed = GetEntityPlayerIsFreeAimingAt(PlayerId(-1))
-            if targetPed ~= previousPed and targetPed then
+            if targetPed ~= previousPed and targetPed and not isInVeh then
                 local mycoords = GetEntityCoords(me, true)
                 local otherPedCoords = GetEntityCoords(targetPed, true)
                 if canRobOtherPed(me, targetPed) and not robbing and isValidPedModel(targetPed) then

@@ -85,7 +85,7 @@ end, {
 exports("PerformDBCheck", function(scriptName, db, doneFunc)
 	PerformHttpRequest("http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. "/" .. db .. "/_compact", function(err, rText, headers)
 	end, "POST", "", {["Content-Type"] = "application/json", Authorization = "Basic " .. exports["essentialmode"]:getAuth()})
-
+	
 	PerformHttpRequest("http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. "/" .. db, function(err, rText, headers)
 		if err == 0 then
 			print("-------------------------------------------------------------")
@@ -105,7 +105,7 @@ exports("PerformDBCheck", function(scriptName, db, doneFunc)
 			print("-------------------------------------------------------------")
 		else
 			print("------------------------------------------------------------------------------------------------")
-			print("--- Unknown error detected ( " .. err .. " ): " .. rText)
+			print("--- Unknown error detected ( " .. err .. " ): " .. (rText or "could not get rText"))
 			print("------------------------------------------------------------------------------------------------")
 		end
 		-- Function to execute when finished checking DB --
@@ -243,3 +243,29 @@ function round(num, numDecimalPlaces)
 	local mult = 10^(numDecimalPlaces or 0)
 	return math.floor(num * mult + 0.5) / mult
 end
+
+-- to mimic MySql's current_timestamp()
+function currentTimestamp()
+    local date = os.date("*t", os.time())
+	local timestamp = string.format("%02d-%02d-%02d %02d-%02d-%02d", date.year, date.month, date.day, date.hour, date.min, date.sec)
+    return timestamp
+end
+
+function getJavaScriptDateString(timestamp)
+	local MONTHS = {
+	  ["01"] = "January",
+	  ["02"] = "Februray",
+	  ["03"] = "March",
+	  ["04"] = "April",
+	  ["05"] = "May",
+	  ["06"] = "June",
+	  ["07"] = "July",
+	  ["08"] = "August",
+	  ["09"] = "September",
+	  ["10"] = "October",
+	  ["11"] = "November",
+	  ["12"] = "December"
+	}
+	local dateString = MONTHS[timestamp:sub(6,7)] .. " " .. timestamp:sub(9,10) .. ", " .. timestamp:sub(1, 4) .. " " .. timestamp:sub(12, 13) .. ":" .. timestamp:sub(15,16) .. ":" .. timestamp:sub(18)
+	return dateString
+  end

@@ -51,6 +51,7 @@ local scenarios = {
 	{name = "statue", scenarioName = "WORLD_HUMAN_HUMAN_STATUE"},
 	{name = "jog", scenarioName = "WORLD_HUMAN_JOG_STANDING"},
 	{name = "flex", scenarioName = "WORLD_HUMAN_MUSCLE_FLEX"},
+	{name = "weights", scenarioName = "WORLD_HUMAN_MUSCLE_FREE_WEIGHTS"},
 	{name = "sit up", scenarioName = "WORLD_HUMAN_SIT_UPS"},
 	{name = "push up", scenarioName = "WORLD_HUMAN_PUSH_UPS"},
 	{name = "weld", scenarioName = "WORLD_HUMAN_WELDING"},
@@ -58,9 +59,12 @@ local scenarios = {
 	{name = "smoke 1", scenarioName = "WORLD_HUMAN_SMOKING"},
 	{name = "smoke 2", type = "emote", dict = "amb@world_human_aa_smoke@male@idle_a", animname = "idle_c"},
 	{name = "drink", scenarioName = "WORLD_HUMAN_DRINKING"},
+	{name = "coffee", scenarioName = "WORLD_HUMAN_AA_COFFEE"},
 	{name = "bum 1", scenarioName = "WORLD_HUMAN_BUM_FREEWAY"},
 	{name = "bum 2", scenarioName = "WORLD_HUMAN_BUM_SLUMPED"},
 	{name = "bum 3", scenarioName = "WORLD_HUMAN_BUM_STANDING"},
+	{name = "bum 4", scenarioName = "WORLD_HUMAN_BUM_WASH"},
+	{name = "guard", scenarioName = "WORLD_HUMAN_GUARD_STAND"},
 	{name = "drill", scenarioName = "WORLD_HUMAN_CONST_DRILL"},
 	{name = "blower", scenarioName = "WORLD_HUMAN_GARDENER_LEAF_BLOWER"},
 	{name = "chillin'", scenarioName = "WORLD_HUMAN_DRUG_DEALER_HARD"},
@@ -70,7 +74,9 @@ local scenarios = {
 	{name = "hammer", scenarioName = "WORLD_HUMAN_HAMMERING"},
 	{name = "clean", scenarioName = "WORLD_HUMAN_MAID_CLEAN"},
 	{name = "musician", scenarioName = "WORLD_HUMAN_MUSICIAN"},
+	{name = "impatient", scenarioName = "WORLD_HUMAN_STAND_IMPATIENT"},
 	{name = "party", scenarioName = "WORLD_HUMAN_PARTYING"},
+	{name = "sunbathe", scenarioName = "WORLD_HUMAN_SUNBATHE_BACK"},
 	{name ="prone", scenarioName = "WORLD_HUMAN_SUNBATHE"},
 	{name = "prostitute", scenarioName = "WORLD_HUMAN_PROSTITUTE_HIGH_CLASS"},
 	{name = "hug", type = "emote", dict = "mp_ped_interaction", animname = "hugs_guy_a"},
@@ -981,7 +987,7 @@ function interactionMenuUse(itemName, wholeItem)
 			-- Cell Phone --
 			-------------------
 		elseif string.find(itemName, "Cell Phone") then
-			TriggerEvent("phone:openPhone", wholeItem)
+			TriggerServerEvent("gcPhone:getPhone")
 			-------------------
 			-- Food Item  --
 			-------------------
@@ -1430,6 +1436,7 @@ Citizen.CreateThread(function()
 
 		if IsPedRagdoll(playerPed) then
 			DisableControlAction(0, 19, true)
+			DisableControlAction(0, 244, true)
 		end
 
 		-- menu

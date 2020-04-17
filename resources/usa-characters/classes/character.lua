@@ -25,6 +25,21 @@ function CreateCharacter(data)
     return false
   end
 
+  self.sameWeight = function(item)
+    local targetItemName = (item.name or item)
+    local targetItemWeight = (item.weight)
+    local inv = self.inventory
+    for i = 0, inv.MAX_CAPACITY - 1 do
+      local invItem = inv.items[tostring(i)]
+      if invItem then
+        if invItem.name:find(targetItemName or invItem.name == targetItemName) and invItem.weight == targetItemWeight then
+          return true
+        end
+      end
+    end
+    return false
+  end
+
   self.adjustChatSuggestions = function(data)
     TriggerClientEvent('chat:removeSuggestionAll', self.source)
     for k,v in pairs(exports['essentialmode']:getCommands()) do
@@ -120,15 +135,18 @@ function CreateCharacter(data)
   end
 
   rTable.removeWeapons = function()
+    local weps = {}
     local inv = self.inventory
     for i = 0, inv.MAX_CAPACITY - 1 do
       local item = inv.items[tostring(i)]
       if item then
         if item.type == "weapon" then
+          TriggerClientEvent("interaction:equipWeapon", self.source, item, false)
           self.inventory.items[tostring(i)] = nil
         end
       end
     end
+    return weps
   end
 
   rTable.getLicenses = function()
@@ -147,6 +165,10 @@ function CreateCharacter(data)
 
   rTable.hasItem = function(item)
     return self.hasItem(item)
+  end
+
+  rTable.sameWeight = function(item)
+    return self.sameWeight(item)
   end
 
   rTable.hasItemWithExactName = function(item)
@@ -251,7 +273,7 @@ function CreateCharacter(data)
      for i = 0, self.inventory.MAX_CAPACITY - 1 do
        if self.inventory.items[tostring(i)] == nil and not firstFreeSlot then
          firstFreeSlot = tostring(i)
-       elseif self.inventory.items[tostring(i)] and self.inventory.items[tostring(i)].name == item.name and not item.notStackable then
+       elseif self.inventory.items[tostring(i)] and self.inventory.items[tostring(i)].name == item.name and self.inventory.items[tostring(i)].weight == item.weight and not item.notStackable then
          self.inventory.items[tostring(i)].quantity = self.inventory.items[tostring(i)].quantity + item.quantity
          return
        end
