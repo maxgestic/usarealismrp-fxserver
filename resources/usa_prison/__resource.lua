@@ -28,8 +28,6 @@ client_scripts {
     "@NativeUI/UIMenu/UIMenu.lua",
 	"@NativeUI/UIMenu/MenuPool.lua",
 	"@NativeUI/NativeUI.lua",
-    'map.lua',
-    'client.lua',
     'menu.lua'
 }
 

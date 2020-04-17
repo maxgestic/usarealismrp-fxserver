@@ -3,7 +3,6 @@
 --# requres 'globals' resource to send notifications and usa_rp to change their model, check their jail time on join, and stuff like that
 
 local releaseX, releaseY, releaseZ = 1847.086, 2585.990, 45.672
-local imprisoned = false
 local assigned_cell = nil
 local tabletObject
 
@@ -112,7 +111,6 @@ AddEventHandler("jail:jail", function(cell, gender)
       SetEntityCoords(playerPed, cell.x, cell.y, cell.z, 1, 0, 0, 1) -- tp to jail
   end
   assigned_cell = cell
-  imprisoned = true
   TriggerEvent("cuff:unCuff", true)
   if not gender then
     gender = 'male'
@@ -125,7 +123,7 @@ AddEventHandler("jail:jail", function(cell, gender)
   TriggerEvent("jail:removeWeapons")
   TriggerEvent("death:toggleJailed", true)
   DoScreenFadeIn(1000)
-  Citizen.Wait(600000)
+  Wait(5000)
   gracePeriod = false
 end)
 
@@ -136,7 +134,6 @@ AddEventHandler("jail:release", function(character)
   Citizen.CreateThread(function()
     local model
     SetEntityCoords(playerPed, releaseX, releaseY, releaseZ, 1, 0, 0, 1) -- release from jail
-    imprisoned = false
     if not character.hash then
       model = GetHashKey("a_m_y_skater_01")
       RequestModel(model)
@@ -157,8 +154,8 @@ end)
 
 RegisterNetEvent("jail:escaped")
 AddEventHandler("jail:escaped", function()
-  imprisoned = false
   TriggerServerEvent("jail:clearCell", assigned_cell, true)
+  TriggerServerEvent("jail:notifyEscapee")
   TriggerEvent("usa:notify", "You escaped prison!")
   TriggerEvent("death:toggleJailed", false)
 end)
