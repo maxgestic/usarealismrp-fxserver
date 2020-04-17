@@ -66,7 +66,7 @@ Citizen.CreateThread(function()
 			------------------
       doorRadius = 1.0
       drawTextRange = 2.0
-      if door.gate then drawTextRange = 10.0 doorRadius = 6.0 end
+      if door.gate then drawTextRange = 7.0 doorRadius = 6.0 end
 			if Vdist(door.x, door.y, door.z, playerCoords.x, playerCoords.y, playerCoords.z) < drawTextRange and not door.static and door.offset and door ~= doorBeingLocked then
         local doorObject = GetClosestObjectOfType(door.x, door.y, door.z, doorRadius, door.model, false, false, false)
         local doorCoords = GetEntityCoords(doorObject)

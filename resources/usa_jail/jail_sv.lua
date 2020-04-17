@@ -170,6 +170,14 @@ AddEventHandler("jail:clearCell", function(cell, clearJailTime)
 	end
 end)
 
+RegisterServerEvent("jail:notifyEscapee")
+AddEventHandler("jail:notifyEscapee", function()
+	local char = exports["usa-characters"]:GetCharacter(source)
+	SetTimeout(math.random(3000, 10000), function()
+		exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3INFO: ^0A person has escaped from Bolingbroke Penitentiary! ^3Inmate info: ^0" .. char.getFullName())
+	end)
+end)
+
 function GetFPRevoked(charges) -- firearm permit
 	local numbers = {
 		'118', '135', '187', '192', '207', '215', '245', '16590', '29800', '33410', '2800.2', '2800.3', '2800.4', '51-50', '5150'

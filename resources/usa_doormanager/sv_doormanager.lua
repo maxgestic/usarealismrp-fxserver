@@ -3,6 +3,9 @@
 --# This script keeps a server sided track of frozen states on objects like doors or gates that can be toggled by being in the activation area and pressing "E"
 
 local DOORS = {
+  {name = "Bolingbroke Prison Gate 1", x = 1818.662, y = 2606.8, z = 45.59, model = 741314661, locked = true, _dist = 8.0, gate = true, offset={0.0, 3.65, 2.8}, lockedCoords={1818.54, 2604.811, 44.607}, allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "Bolingbroke Prison Gate 2", x = 1845.05, y = 2607.21, z = 45.57, model = 741314661, locked = true, _dist = 8.0, gate = true, offset={0.0, 3.65, 2.8}, lockedCoords={1844.99, 2604.811, 44.636}, allowedJobs = {'sheriff', 'corrections', 'judge'}},
+
   {name = "Boilingbroke Visitors Reception", x = 1838.26, y = 2594.52, z = 45.95, model = -1033001619, locked = true, offset={0.0, -1.13, 0.05}, heading=270.0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Boilingbroke Inmate Processing", x = 1838.3, y = 2586.02, z = 45.95, model = -1033001619, locked = true, offset={0.0, -1.13, 0.05}, heading=90.0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Boilingbroke Inmate CO Door", x = 1828.57, y = 2585.2, z = 45.95, model = -1033001619, locked = true, offset={0.0, -1.13, 0.05}, heading=0.0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
