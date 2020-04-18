@@ -197,8 +197,8 @@ var itemImages = {
   "Pepsi": "https://imgur.com/fHUPIqp.png",
   "Dr Pepper": "https://imgur.com/JNCWDcR.png",
   "Veggie Gasm Burger" : "https://imgur.com/pzwQmmQ.png",
-  "Torpedo Sandwich" : "https://imgur.com/fqnd3wJ.png"
-
+  "Torpedo Sandwich" : "https://imgur.com/fqnd3wJ.png",
+  "Fishing Pole": "https://i.imgur.com/FPgsx97.png"
 }
 
 var menuItems = [
