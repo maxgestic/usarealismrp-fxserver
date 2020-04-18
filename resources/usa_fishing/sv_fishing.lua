@@ -1,7 +1,7 @@
 local fishItems = {
-  {name = "Trout", quantity = 1, worth = 85, type = "fish", weight = 5, legality = "legal"},
-  {name = "Flounder", quantity = 1, worth = 110, type = "fish", weight = 5, legality = "legal"},
-  {name = "Halibut", quantity = 1, worth = 125, type = "fish", weight = 5, legality = "legal"},
+  {name = "Trout", quantity = 1, worth = 65, type = "fish", weight = 5, legality = "legal"},
+  {name = "Flounder", quantity = 1, worth = 90, type = "fish", weight = 5, legality = "legal"},
+  {name = "Halibut", quantity = 1, worth = 105, type = "fish", weight = 5, legality = "legal"}
 }
 
 local seaFishItems = {
@@ -39,7 +39,7 @@ AddEventHandler("fish:sellFish", function(fish)
   local char = exports["usa-characters"]:GetCharacter(source)
   if char.hasItem(fish) then
     char.removeItem(fish, 1)
-    fish.worth = fish.worth + math.random(-50, 50)
+    fish.worth = fish.worth + math.random(0, 50)
     char.giveMoney(fish.worth)
     TriggerClientEvent("usa:notify", source, "You have sold (1x) " .. fish.name .. " for $" .. fish.worth)
   else

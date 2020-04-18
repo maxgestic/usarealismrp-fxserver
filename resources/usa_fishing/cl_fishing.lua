@@ -30,14 +30,14 @@ local fishingZoneBlips = {
 }
 
 local fish = {
-	{name = 'Trout', price = 85},
-	{name = 'Flounder', price = 110},
-	{name = 'Halibut', price = 125}
+	{name = 'Trout'},
+	{name = 'Flounder'},
+	{name = 'Halibut'}
 }
 
 local seaFish = {
-	{name = 'Yellowfin Tuna', price = 500},
-	{name = 'Swordfish', price = 700},
+	{name = 'Yellowfin Tuna'},
+	{name = 'Swordfish'}
 }
 
 local peds = {
@@ -290,7 +290,7 @@ end
 
 function AttachEntityToPed(prop,bone_ID,x,y,z,RotX,RotY,RotZ)
 	BoneID = GetPedBoneIndex(PlayerPedId(), bone_ID)
-	obj = CreateObject(GetHashKey(prop),  1729.73,  6403.90,  34.56,  true,  true,  true)
+	obj = CreateObject(GetHashKey(prop),  1729.73,  6403.90,  34.56,  false,  false,  false)
 	SetEntityAsMissionEntity(obj, true, true)
 	vX,vY,vZ = table.unpack(GetEntityCoords(PlayerPedId()))
 	xRot, yRot, zRot = table.unpack(GetEntityRotation(PlayerPedId(),2))
