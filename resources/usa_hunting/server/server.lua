@@ -18,7 +18,7 @@ AddEventHandler("hunting:skinforfurandmeat", function(ped)
         legality = "legal",
         quantity = 1,
         type = 'misc',
-        weight = math.random(5, 20)
+        weight = 7
     }
     local meat = {
         name = "Butchered Meat",
