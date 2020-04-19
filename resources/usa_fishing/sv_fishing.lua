@@ -39,8 +39,7 @@ AddEventHandler("fish:sellFish", function(fish)
   local char = exports["usa-characters"]:GetCharacter(source)
   if char.hasItem(fish) then
     char.removeItem(fish, 1)
-    fish.worth = fish.worth + math.random(0, 50)
-    char.giveMoney(fish.worth)
+    char.giveMoney(fish.worth + math.random(0, 50))
     TriggerClientEvent("usa:notify", source, "You have sold (1x) " .. fish.name .. " for $" .. fish.worth)
   else
     TriggerClientEvent("usa:notify", source, "You have no fish to sell!")
@@ -53,8 +52,7 @@ AddEventHandler("fish:sellSeaFish", function(fish)
   local char = exports["usa-characters"]:GetCharacter(source)
   if char.hasItem(fish) then
     char.removeItem(fish, 1)
-    fish.worth = fish.worth + math.random(-50, 50)
-    char.giveMoney(fish.worth)
+    char.giveMoney(fish.worth + math.random(0, 85))
     TriggerClientEvent("usa:notify", source, "You have sold (1x) " .. fish.name .. " for $" .. fish.worth)
   else
     TriggerClientEvent("usa:notify", source, "You have no fish to sell!")
