@@ -5,6 +5,7 @@ local vendingModels = {
     "prop_vend_soda_01",
     "prop_vend_soda_02",
     "prop_vend_snak_01",
+    -1034034125,
     "prop_vend_coffe_01",
     "prop_vend_water_01"
 }
@@ -20,7 +21,7 @@ local createdMenus = {}
 _menuPool = NativeUI.CreatePool()
 
 foodMenu = NativeUI.CreateMenu("Vending Machine", "~b~Please select an item!", 0 --[[X COORD]], 320 --[[Y COORD]])
-table.insert(createdMenus, { menu = foodMenu, category = "Food", model = "prop_vend_snak_01"})
+table.insert(createdMenus, { menu = foodMenu, category = "Food", model = "prop_vend_snak_01", model2 = -1034034125})
 sodaMenu = NativeUI.CreateMenu("Vending Machine", "~b~Please select an item!", 0 --[[X COORD]], 320 --[[Y COORD]])
 table.insert(createdMenus, { menu = sodaMenu, category = "Soda", model = "prop_vend_soda_01", model2 = "prop_vend_soda_02"})
 waterMenu = NativeUI.CreateMenu("Vending Machine", "~b~Please select an item!", 0 --[[X COORD]], 320 --[[Y COORD]])
@@ -64,7 +65,11 @@ Citizen.CreateThread(function()
 
         if IsControlJustPressed(1, MENU_OPEN_KEY) then
             for i = 1, #vendingModels do
-                local obj = GetClosestObjectOfType(playerCoords.x, playerCoords.y, playerCoords.z, CHECK_RADIUS, GetHashKey(vendingModels[i]), false, false, false)
+                local hash = vendingModels[i]
+                if type(hash) ~= "number" then
+                    hash = GetHashKey(vendingModels[i])
+                end
+                local obj = GetClosestObjectOfType(playerCoords.x, playerCoords.y, playerCoords.z, CHECK_RADIUS, hash, false, false, false)
                 if DoesEntityExist(obj) then
                     if _menuPool:IsAnyMenuOpen() then
                         _menuPool:CloseAllMenus()
