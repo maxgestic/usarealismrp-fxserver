@@ -108,9 +108,11 @@ Citizen.CreateThread(function()
         --local ent = GetObject(DOORS_TO_MANAGE[i].model, DOORS_TO_MANAGE[i].distance, DOORS_TO_MANAGE[i].locations[1].x, DOORS_TO_MANAGE[i].locations[1].y, DOORS_TO_MANAGE[i].locations[1].z)
         local doorObject = GetClosestObjectOfType(door.x, door.y, door.z, doorRadius, door.model, false, false, false)
         if doorObject then
+						--[[
           if not IsEntityAMissionEntity(doorObject) then
             SetEntityAsMissionEntity(doorObject, true, true)
           end
+						--]]
           if DEBUG then print("ent: " .. doorObject) end
           if not door.cell_block then
             if door.locked then
@@ -139,9 +141,11 @@ AddEventHandler("doormanager:toggleDoorLock", function(index, locked, x, y, z)
       if door.gate then doorRadius = 6.0 end
       local doorObject = GetClosestObjectOfType(x, y, z, doorRadius, door.model, false, false, false)
       --print("mission entity: " .. tostring(IsEntityAMissionEntity(doorObject)))
+			--[[
       if not IsEntityAMissionEntity(doorObject) then
         SetEntityAsMissionEntity(doorObject, true, true)
       end
+			--]]
       if not door.cell_block then
         if locked and door.offset then
           if not door.gate then
