@@ -185,9 +185,7 @@ end)
 RegisterServerEvent("jail:notifyEscapee")
 AddEventHandler("jail:notifyEscapee", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
-	SetTimeout(math.random(3000, 10000), function()
-		exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3INFO: ^0A person has escaped from Bolingbroke Penitentiary! ^3Inmate info: ^0" .. char.getFullName())
-	end)
+	exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3INFO: ^0A person has escaped from Bolingbroke Penitentiary! ^3Inmate info: ^0" .. char.getFullName())
 end)
 
 function GetFPRevoked(charges) -- firearm permit
