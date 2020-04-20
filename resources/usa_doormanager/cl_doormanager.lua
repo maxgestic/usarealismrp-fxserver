@@ -138,7 +138,7 @@ AddEventHandler("doormanager:toggleDoorLock", function(index, locked, x, y, z)
   if door then
       if door.gate then doorRadius = 6.0 end
       local doorObject = GetClosestObjectOfType(x, y, z, doorRadius, door.model, false, false, false)
-      print("mission entity: " .. tostring(IsEntityAMissionEntity(doorObject)))
+      --print("mission entity: " .. tostring(IsEntityAMissionEntity(doorObject)))
       if not IsEntityAMissionEntity(doorObject) then
         SetEntityAsMissionEntity(doorObject, true, true)
       end
