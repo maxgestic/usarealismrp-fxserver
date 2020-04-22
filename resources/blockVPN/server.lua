@@ -1,9 +1,9 @@
 --------------
 --  CONFIG  --
 --------------
-local ownerEmail = 'info@goryholes.com'             -- Owner Email (Required) - No account needed (Used Incase of Issues)
+local ownerEmail = 'usarrpcommunity@gmail.com'             -- Owner Email (Required) - No account needed (Used Incase of Issues)
 local kickThreshold = 0.99        -- Anything equal to or higher than this value will be kicked. (0.99 Recommended as Lowest)
-local kickReason = 'We\'ve detected that you\'re using a VPN or Proxy. If you believe this is a mistake please contact the administration team.'
+local kickReason = 'We\'ve detected that you\'re using a VPN or Proxy. If you believe this is a mistake please visit our Discord #support channel or contact us through our website at https://usarrp.net.'
 local flags = 'm'				  -- Quickest and most accurate check. Checks IP blacklist.
 local printFailed = true
 
@@ -19,7 +19,7 @@ function splitString(inputstr, sep)
 end
 
 AddEventHandler('playerConnecting', function(playerName, setKickReason, deferrals)
-	if GetNumPlayerIndices() < GetConvarInt('sv_maxclients', 32) then
+	if GetNumPlayerIndices() < GetConvarInt('sv_maxclients', 90) then
 		deferrals.defer()
 		deferrals.update("Checking Player Information. Please Wait.")
 		playerIP = GetPlayerEP(source)
