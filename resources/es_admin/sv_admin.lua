@@ -1125,7 +1125,7 @@ AddEventHandler('mini:checkPlayerBannedOnSpawn', function()
 			gameLicense = allPlayerIdentifiers[j]
 		elseif string.find(allPlayerIdentifiers[j], "steam") then
 			steamLicense = allPlayerIdentifiers[j]
-		if string.find(allPlayerIdentifiers[j], "ip") then
+		elseif string.find(allPlayerIdentifiers[j], "ip") then
 			ipAddress = allPlayerIdentifiers[j]
 		end
 	end
