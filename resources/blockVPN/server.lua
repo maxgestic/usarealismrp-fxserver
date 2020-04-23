@@ -1,12 +1,10 @@
 --------------
 --  CONFIG  --
 --------------
-local ownerEmail = 'usarrpcommunity@gmail.com'             -- Owner Email (Required) - No account needed (Used Incase of Issues)
-local kickThreshold = 0.99        -- Anything equal to or higher than this value will be kicked. (0.99 Recommended as Lowest)
+local kickThreshold = 34        -- Anything equal to or higher than this value will be kicked. (0.99 Recommended as Lowest)
 local kickReason = 'We\'ve detected that you\'re using a VPN or Proxy. If you believe this is a mistake please visit our Discord #support channel or contact us through our website at https://usarrp.net.'
-local flags = 'm'				  -- Quickest and most accurate check. Checks IP blacklist.
-local printFailed = true
-
+local key = "582919-63inb7-06r227-3372e3"
+--local testIP = "167.114.5.2" -- VPN Test Case
 
 ------- DO NOT EDIT BELOW THIS LINE -------
 function splitString(inputstr, sep)
@@ -29,22 +27,20 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
 		if IsPlayerAceAllowed(source, "blockVPN.bypass") then
 			deferrals.done()
 		else
-			PerformHttpRequest('http://check.getipintel.net/check.php?ip=' .. playerIP .. '&contact=' .. ownerEmail .. '&flags=' .. flags, function(statusCode, response, headers)
-				if response then
-					if tonumber(response) == -5 then
-						print('[BlockVPN][ERROR] GetIPIntel seems to have blocked the connection with error code 5 (Either incorrect email, blocked email, or blocked IP. Try changing the contact email)')
-					elseif tonumber(response) == -6 then
-						print('[BlockVPN][ERROR] A valid contact email is required!')
-					elseif tonumber(response) == -4 then
-						print('[BlockVPN][ERROR] Unable to reach database. Most likely being updated.')
-					else
-						if tonumber(response) >= kickThreshold then
-							deferrals.done(kickReason)
-							if printFailed then
-								print('[BlockVPN][BLOCKED] ' .. playerName .. ' has been blocked from joining with a value of ' .. tonumber(response))
+			PerformHttpRequest("http://proxycheck.io/v2/"..playerIP.."?key="..key..'&risk=1&vpn=1', function(statusCode, response)
+				local ipCheckResponse = json.decode(response)
+				for key, value in pairs(ipCheckResponse) do
+					if key == playerIP then
+						for k,v in pairs(value) do
+							if k == 'proxy' and v == 'yes' then
+								deferrals.done(kickReason)
+							elseif k == 'type' and v == 'VPN' then
+								deferrals.done(kickReason)
+							elseif k == 'risk' and v >= kickThreshold  then
+								deferrals.done(kickReason)
+							else
+								deferrals.done()
 							end
-						else 
-							deferrals.done()
 						end
 					end
 				end
