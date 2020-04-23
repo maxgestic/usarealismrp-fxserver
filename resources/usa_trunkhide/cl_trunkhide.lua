@@ -51,6 +51,11 @@ AddEventHandler('trunkhide:enterTrunk', function(targetVehicle)
 			inTrunk = true
 			vehicle = targetVehicle
 			Citizen.Wait(2000)
+			SendNUIMessage({
+				type = "enableui",
+				enable = true,
+				inTrunk = true
+			})
 		    SetVehicleDoorShut(targetVehicle, 5, false)
 	   	end
 	end
@@ -75,6 +80,11 @@ AddEventHandler('trunkhide:exitTrunk', function(allowExitWhenTied)
 		inTrunk = false
 		vehicle = nil
 		Citizen.Wait(2000)
+		SendNUIMessage({
+			type = "enableui",
+			enable = false,
+			inTrunk = false
+		})
 	    SetVehicleDoorShut(_vehicle, 5, false)
 	end
 end)
