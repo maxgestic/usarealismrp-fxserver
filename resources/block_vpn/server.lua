@@ -28,21 +28,25 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
 			deferrals.done()
 		else
 			PerformHttpRequest("http://proxycheck.io/v2/"..playerIP.."?key="..key..'&risk=1&vpn=1', function(statusCode, response)
-				local ipCheckResponse = json.decode(response)
-				for key, value in pairs(ipCheckResponse) do
-					if key == playerIP then
-						for k,v in pairs(value) do
-							if k == 'proxy' and v == 'yes' then
-								deferrals.done(kickReason)
-							elseif k == 'type' and v == 'VPN' then
-								deferrals.done(kickReason)
-							elseif k == 'risk' and v >= kickThreshold  then
-								deferrals.done(kickReason)
-							else
-								deferrals.done()
+				if response then
+					local ipCheckResponse = json.decode(response)
+					for key, value in pairs(ipCheckResponse) do
+						if key == playerIP then
+							for k,v in pairs(value) do
+								if k == 'proxy' and v == 'yes' then
+									deferrals.done(kickReason)
+								elseif k == 'type' and v == 'VPN' then
+									deferrals.done(kickReason)
+								elseif k == 'risk' and v >= kickThreshold  then
+									deferrals.done(kickReason)
+								else
+									deferrals.done()
+								end
 							end
 						end
 					end
+				else
+					deferrals.done(kickReason)
 				end
 			end)
 		end
