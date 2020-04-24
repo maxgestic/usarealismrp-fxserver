@@ -28,6 +28,7 @@ client_scripts {
     "@NativeUI/UIMenu/UIMenu.lua",
 	"@NativeUI/UIMenu/MenuPool.lua",
 	"@NativeUI/NativeUI.lua",
-	'cl_fishing.lua'
+	'cl_fishing.lua',
+    'cl_anchor.lua'
 }
 server_script 'sv_fishing.lua'
