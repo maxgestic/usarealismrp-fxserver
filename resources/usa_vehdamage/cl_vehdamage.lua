@@ -64,7 +64,7 @@ Citizen.CreateThread(function()
                and GetPedInVehicleSeat(car, 1) ~= GetPlayerPed(-1)
                and GetPedInVehicleSeat(car, 2) ~= GetPlayerPed(-1)
                and IsBeltVehicle(car) then
-               local damagedEngine = GetVehicleEngineHealth(car)-speedBuffer[1]*20
+               local damagedEngine = GetVehicleEngineHealth(car)-speedBuffer[1]*40
                if damagedEngine < 0 then damagedEngine = -4000.0 end
                if GetPedInVehicleSeat(car, -1) == ped then
                 SetVehicleEngineHealth(car, damagedEngine)
