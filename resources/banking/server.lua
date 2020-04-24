@@ -56,7 +56,8 @@ AddEventHandler('bank:transfer', function(targetID, amount)
 		char.removeBank(amount)
 		target.giveBank(amount)
 		TriggerClientEvent("usa:notify", source, "Transfer of ~g~$" .. exports["globals"]:comma_value(amount) .. "~w~ complete!")
-	else 
+		TriggerClientEvent("usa:notify", targetID, "A transfer of ~g~$" .. exports["globals"]:comma_value(amount) .. "~w~ has been transferred to your account!")
+	else
 		TriggerClientEvent("usa:notify", source, "Not enough money to transfer!")
 	end
 end)
