@@ -1,12 +1,11 @@
 --------------
 --  CONFIG  --
 --------------
-local kickThreshold = 34        -- Anything equal to or higher than this value will be kicked. (0.99 Recommended as Lowest)
+local kickThreshold = 66        -- Anything equal to or higher than this value will be kicked
 local kickReason = 'We\'ve detected that you\'re using a VPN or Proxy. If you believe this is a mistake please visit our Discord #support channel or contact us through our website at https://usarrp.net.'
 local key = "582919-63inb7-06r227-3372e3"
 --local testIP = "167.114.5.2" -- VPN Test Case
 
-------- DO NOT EDIT BELOW THIS LINE -------
 function splitString(inputstr, sep)
 	local t= {}; i=1
 	for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
@@ -27,27 +26,22 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
 		if IsPlayerAceAllowed(source, "blockVPN.bypass") then
 			deferrals.done()
 		else
-			PerformHttpRequest("http://proxycheck.io/v2/"..playerIP.."?key="..key..'&risk=1&vpn=1', function(statusCode, response)
+			PerformHttpRequest("http://proxycheck.io/v2/"..playerIP.."?key="..key..'&risk=1&vpn=1', function(statusCode, response, headers)
 				if response then
-					local ipCheckResponse = json.decode(response)
-					for key, value in pairs(ipCheckResponse) do
-						if key == playerIP then
-							for k,v in pairs(value) do
-								if k == 'proxy' and v == 'yes' then
-									deferrals.done(kickReason)
-								elseif k == 'type' and v == 'VPN' then
-									deferrals.done(kickReason)
-								elseif k == 'risk' and v >= kickThreshold  then
-									deferrals.done(kickReason)
-								else
-									deferrals.done()
-								end
-							end
+					local resp = json.decode(response)
+					if resp[playerIP] then
+						if resp[playerIP]["proxy"] == "yes" then
+							deferrals.done(kickReason)
+						end
+						if resp[playerIP]["type"] == "VPN" then
+							deferrals.done(kickReason)
+						end
+						if resp[playerIP]["risk"] >= kickThreshold then
+							deferrals.done(kickReason)
 						end
 					end
-				else
-					deferrals.done(kickReason)
 				end
+				deferrals.done()
 			end)
 		end
 	end
