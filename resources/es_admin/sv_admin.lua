@@ -1005,8 +1005,11 @@ function BanPlayer(targetSrc, reason)
 			print("allPlayerIdentifiers[i] = " .. allPlayerIdentifiers[i])
 		end
 		-- get char name:
+		local char_name = "UNDEFINED"
 		local player = exports["usa-characters"]:GetCharacter(targetPlayer)
-		local char_name = player.getFullName()
+		if player then
+			char_name = player.getFullName()
+		end
 		local desc = "**Character Name:** " .. char_name
 		-- send discord message
 		desc = desc .. "\n**Display Name:** " .. targetPlayerName
