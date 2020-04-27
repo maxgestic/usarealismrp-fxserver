@@ -129,9 +129,9 @@ AddEventHandler('rconCommand', function(commandName, args)
         end
         CancelEvent()
     end
-  end)
+end)
 
-  function GetMostFrequentPlayerDropReason()
+function GetMostFrequentPlayerDropReason()
     local mostFreq = {
         count = -1,
         str = "N/A"
@@ -143,4 +143,8 @@ AddEventHandler('rconCommand', function(commandName, args)
         end
     end
     return mostFreq.str
-  end
+end
+
+-- save disk space by compacting this stock CouchDB "_global_changes" database --
+PerformHttpRequest("http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. "/_global_changes/_compact", function(err, rText, headers)
+end, "POST", "", {["Content-Type"] = "application/json", Authorization = "Basic " .. exports["essentialmode"]:getAuth()})
