@@ -33,7 +33,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
 						if resp[playerIP]["proxy"] == "yes" then
 							deferrals.done(kickReason)
 						end
-						if resp[playerIP]["type"] == "VPN" then
+						if resp[playerIP]["type"] == "VPN" or resp[playerIP]["type"] == "blacklisted" then
 							deferrals.done(kickReason)
 						end
 						if resp[playerIP]["risk"] >= kickThreshold then
