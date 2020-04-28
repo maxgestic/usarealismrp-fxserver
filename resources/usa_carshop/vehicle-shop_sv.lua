@@ -48,6 +48,7 @@ local vehicleShopItems = {
 			{make = "Lampadati", model = "Michelli GT", price = 53540, hash = "michelli", storage_capacity = 110.0},
 			{make = "Ocelot", model = "F620", price = 43458, hash = "f620", storage_capacity = 145.0},
 			{make = "Benefactor", model = "Schwartzer", price = 48977, hash = "schwarzer", storage_capacity = 135.0},
+			{make = "Benefactor", model = "Schlagen GT", price = 70000, hash = "schlagen", storage_capacity = 135.0},
 			{make = "Hijak", model = "Ruston", price = 80000, hash = "ruston", storage_capacity = 90.0},
 			{make = "Ubermacht", model = "Zion", price = 40000, hash = "zion", storage_capacity = 145.0},
 			{make = "Dinka", model = "Jester 3", price = 55000, hash = "jester3", storage_capacity = 125.0},
