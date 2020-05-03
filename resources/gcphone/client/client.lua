@@ -288,12 +288,12 @@ AddEventHandler("gcPhone:receiveMessage", function(message, owner)
   SendNUIMessage({event = 'newMessage', message = message})
   table.insert(messages, message)
   if not owner then
-    local text = '~o~Nouveau message'
+    local text = '~o~New message'
     if ShowNumberNotification == true then
-      text = '~o~Nouveau message du ~y~'.. message.transmitter
+      text = '~o~New message du ~y~'.. message.transmitter
       for _,contact in pairs(contacts) do
         if contact.number == message.transmitter then
-          text = '~o~Nouveau message de ~g~'.. contact.display
+          text = '~o~New message de ~g~'.. contact.display
           break
         end
       end
