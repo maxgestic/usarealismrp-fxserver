@@ -280,6 +280,7 @@ end)
 RegisterServerEvent('gcPhone:twitter_createAccount')
 AddEventHandler('gcPhone:twitter_createAccount', function(username, password, avatarUrl)
   local sourcePlayer = tonumber(source)
+  avatarUrl = (avatarUrl or "https://i.imgur.com/51ld1WE.png")
   TwitterCreateAccount(username, password, avatarUrl, function (ok)
     if ok then
       TriggerClientEvent('gcPhone:twitter_setAccount', sourcePlayer, username, password, avatarUrl)
