@@ -29,60 +29,25 @@ function TwitterGetTweets (accountId, cb)
 end
 
 function TwitterGetFavotireTweets (accountId, cb)
-  if accountId == nil then
-    db.getAllDocumentsFromDbLimit("twitter-tweets", 130, function(docs)
-      if docs then
-        table.sort(docs, function(a, b) return a.likes > b.likes end)
-        for i = 1, #docs do -- see if this account liked this tweet
-          docs[i].id = docs[i]._id -- for front end to read correctly, just renaming id field for now
+  local endpoint = "/twitter-tweets/_design/tweetViews/_view/byLikes?descending=true&limit=130"
+  local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+  PerformHttpRequest(url, function(err, responseText, headers)
+      if responseText then
+        local data = json.decode(responseText)
+        if data.rows then
+            local tweets = arrayifyDBDocsResponse(data.rows)
+            for i = 1, #tweets do
+              tweets[i].id = tweets[i]._id -- for front end to read correctly, just renaming id field for now
+              if accountId then
+                tweets[i].isLikes = hasLikedTweet(tweets[i], accountId)
+              end
+            end
+            cb(tweets)
+        else
+            cb({})
         end
-        cb(docs)
-      else 
-        cb({})
       end
-    end)
-    --[[
-    MySQL.Async.fetchAll([===[
-      SELECT twitter_tweets.*,
-        twitter_accounts.username as author,
-        twitter_accounts.avatar_url as authorIcon
-      FROM twitter_tweets
-        LEFT JOIN twitter_accounts
-          ON twitter_tweets.authorId = twitter_accounts.id
-      WHERE twitter_tweets.TIME > CURRENT_TIMESTAMP() - INTERVAL '15' DAY
-      ORDER BY likes DESC, TIME DESC LIMIT 30
-    ]===], {}, cb)
-    --]]
-  else
-    db.getAllDocumentsFromDbLimit("twitter-tweets", 130, function(docs)
-      if docs then
-        table.sort(docs, function(a, b) return a.likes > b.likes end)
-        for i = 1, #docs do -- see if this account liked this tweet
-          docs[i].id = docs[i]._id -- for front end to read correctly, just renaming id field for now
-          docs[i].isLikes = hasLikedTweet(docs[i], accountId)
-        end
-        cb(docs)
-      else 
-        cb({})
-      end
-    end)
-  end
-    --[[
-    MySQL.Async.fetchAll([===[
-      SELECT twitter_tweets.*,
-        twitter_accounts.username as author,
-        twitter_accounts.avatar_url as authorIcon,
-        twitter_likes.id AS isLikes
-      FROM twitter_tweets
-        LEFT JOIN twitter_accounts
-          ON twitter_tweets.authorId = twitter_accounts.id
-        LEFT JOIN twitter_likes 
-          ON twitter_tweets.id = twitter_likes.tweetId AND twitter_likes.authorId = @accountId
-      WHERE twitter_tweets.TIME > CURRENT_TIMESTAMP() - INTERVAL '15' DAY
-      ORDER BY likes DESC, TIME DESC LIMIT 30
-    ]===], { ['@accountId'] = accountId }, cb)
-  end
-  --]]
+  end, "GET", "", { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function getUser(username, password, cb)
