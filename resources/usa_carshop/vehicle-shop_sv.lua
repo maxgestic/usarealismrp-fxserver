@@ -386,7 +386,7 @@ AddEventHandler("mini:checkVehicleMoney", function(vehicle, business)
 				end
 			end
 		else
-			TriggerClientEvent("usa:notify", source, "Not enough money for that vehicle!")
+			TriggerClientEvent("usa:notify", source, "Not enough money in bank to purchase!")
 		end
 	else
 		TriggerClientEvent("usa:notify", source, "Come back when you have a valid driver's license!")
