@@ -344,6 +344,7 @@ AddEventHandler('gcPhone:twitter_setAvatarUrl', function(username, password, ava
   local sourcePlayer = tonumber(source)
   db.updateDocument("twitter-accounts", username, { avatar_url = avatarUrl }, function(ok)
     if ok then
+      TriggerClientEvent('gcPhone:twitter_setAccount', sourcePlayer, username, password, avatarUrl)
       TwitterShowSuccess(sourcePlayer, 'Twitter Info', 'APP_TWITTER_NOTIF_AVATAR_SUCCESS')
     else
       TwitterShowError(sourcePlayer, 'Twitter Info', 'APP_TWITTER_NOTIF_LOGIN_ERROR')
