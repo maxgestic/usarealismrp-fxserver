@@ -79,7 +79,7 @@ AddEventHandler("fishing:startDockFishing", function(spotHeading)
 					resistance = resistance + 135
 					if resistance > maxResistance and fishing then
 						ClearPedTasks(playerPed)
-						DeleteObject(robObject)
+						DeleteEntity(robObject)
 						fishing = false
 						TriggerServerEvent('fish:giveFish')
 					end
@@ -89,7 +89,7 @@ AddEventHandler("fishing:startDockFishing", function(spotHeading)
 		Wait(timeToResist)
 		if fishing then
 			ClearPedTasks(playerPed)
-			DeleteObject(robObject)
+			DeleteEntity(robObject)
 			fishing = false
 			TriggerEvent('usa:notify', 'You failed to catch the fish!')
 		end
@@ -126,7 +126,7 @@ AddEventHandler("fishing:startSeaFishing", function()
 					resistance = resistance + 100
 					if resistance > maxResistance and seaFishing then
 						ClearPedTasks(playerPed)
-						DeleteObject(robObject)
+						DeleteEntity(robObject)
 						seaFishing = false
 						TriggerServerEvent('fish:giveSeaFish')
 					end
@@ -136,7 +136,7 @@ AddEventHandler("fishing:startSeaFishing", function()
 		Wait(timeToResist)
 		if seaFishing then
 			ClearPedTasks(playerPed)
-			DeleteObject(robObject)
+			DeleteEntity(robObject)
 			seaFishing = false
 			TriggerEvent('usa:notify', 'You failed to catch the fish!')
 		end
