@@ -57,7 +57,9 @@ local COORDS_TO_ALLOW_TELEPORTATION_FROM = {
 	{ x = 1546.81, y = 2166.45, z = 78.72}, -- weed exit
 	{ x = 1066.40, y = -3183.47, z = -39.16 }, -- weed enter
 	{ x = -121.95, y = 1918.01, z = 197.43 }, -- meth exit
-	{ x = 996.50, y = -3200.201, z = -36.19 } -- meth enter
+	{ x = 996.50, y = -3200.201, z = -36.19 }, -- meth enter
+	{ x = -1569.64, y = -3013.94, z = -74.41 }, -- night club interior
+	{ x = -337.22, y = 207.74, z = 88.57 } -- night club entrance
 }
 
 local PROPERTY_COORDS = {
@@ -940,11 +942,13 @@ AddEventHandler("deletenearestobjects", function()
         for object in exports.globals:EnumerateObjects() do
     		local objcoords = GetEntityCoords(object)
 			local mycoords = GetEntityCoords(GetPlayerPed(-1))
-			if Vdist(mycoords.x, mycoords.y, mycoords.z, objcoords.x, objcoords.y, objcoords.z) < 50.0 then
-				DeleteEntity(object)
+			if Vdist(mycoords.x, mycoords.y, mycoords.z, objcoords.x, objcoords.y, objcoords.z) < 50 then
+				SetEntityAsMissionEntity(object, true, true)
+				DeleteObject(object)
 			end
-            Wait(5)
+            Wait(0)
         end
+		print('deleted all objects')
     end)
 end)
 
@@ -954,10 +958,11 @@ AddEventHandler("deletenearestvehicles", function()
         for veh in exports.globals:EnumerateVehicles() do
     		local vehcoords = GetEntityCoords(veh)
 			local mycoords = GetEntityCoords(GetPlayerPed(-1))
-			if Vdist(mycoords.x, mycoords.y, mycoords.z, vehcoords.x, vehcoords.y, vehcoords.z) < 20.0 then
-				DeleteEntity(veh)
+			if Vdist(mycoords.x, mycoords.y, mycoords.z, vehcoords.x, vehcoords.y, vehcoords.z) < 50 then
+				SetEntityAsMissionEntity(veh, true, true)
+				DeleteVehicle(veh)
 			end
-            Wait(5)
+            Wait(0)
         end
         print("** Deleted all vehicles! **")
     end)

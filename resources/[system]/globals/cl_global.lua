@@ -123,23 +123,24 @@ function DrawText3D(x, y, z, text)
   DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
 end
 
-function GetUserInput()
-    -- get withdraw amount from user input --
-    DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 15 )
-    while true do
-        if ( UpdateOnscreenKeyboard() == 1 ) then
-            local input = GetOnscreenKeyboardResult()
-            if ( string.len( input ) > 0 ) then
-                -- do something with the input var
-                return input
-            else
-                DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 15 )
-            end
-        elseif ( UpdateOnscreenKeyboard() == 2 ) then
-            break
-        end
-        Wait( 0 )
-    end
+function GetUserInput(placeholder, charLimit)
+  -- get withdraw amount from user input --
+  --DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 15 )
+  DisplayOnscreenKeyboard(1, "", "", (placeholder or ""), "", "", "", (charLimit or 15))
+  while true do
+      if ( UpdateOnscreenKeyboard() == 1 ) then
+          local input = GetOnscreenKeyboardResult()
+          if ( string.len( input ) > 0 ) then
+              -- do something with the input var
+              return input
+          else
+              DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 15 )
+          end
+      elseif ( UpdateOnscreenKeyboard() == 2 ) then
+          break
+      end
+      Wait( 0 )
+  end
 end
 
 function comma_value(amount)

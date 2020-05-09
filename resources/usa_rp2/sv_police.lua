@@ -298,6 +298,16 @@ TriggerEvent('es:addJobCommand', 'seize', { "sheriff", "corrections" }, function
 			TriggerClientEvent("police:getMoneyInput", source)
 		elseif arg == "vehcontraband" then
 			TriggerClientEvent("interaction:seizeVehContraband", source)
+		elseif arg == "weapons" then
+			local target = exports["usa-characters"]:GetCharacter(targetId)
+			local weps = target.removeWeapons()
+			--print(weps)
+			for i = 1, #weps do
+				TriggerClientEvent("usa:notify", source, "~y~Seized: ~w~(x".. (weps[i].quantity or 1) ..") " .. weps[i].name)
+				TriggerClientEvent("usa:notify", targetId, "~y~Seized: ~w~(x".. (weps[i].quantity or 1) ..") " .. weps[i].name)
+			end
+			exports["globals"]:sendLocalActionMessage(source, "Removes weapons")
+			TriggerClientEvent("chatMessage", targetId, "", {0, 0, 0}, "^0" .. char.getName() .. " seized your weapons.")
 		end
 	end
 end, {
@@ -370,7 +380,7 @@ function SendPanicTextAlert(id, msg)
 end
 
 function PlayPanicButtonSound(id)
-	TriggerClientEvent('InteractSound_CL:PlayOnOne', id, "panicButton", 0.45)
+	TriggerClientEvent('InteractSound_CL:PlayOnOne', id, "panicButton", 0.35)
 end
 
 TriggerEvent('es:addJobCommand', 'p', { "sheriff", "ems", "corrections" }, function(source, args, char, location)

@@ -352,6 +352,11 @@ function ShowMainMenu()
 	CreateBuyMenu(mainMenu, boats)
 	CreateSellMenu(mainMenu, playerBoats)
 	CreateGarageMenu(mainMenu, playerBoats)
+	local buyFishingPoleBtn = NativeUI.CreateItem("Buy fishing pole", "Press K to fish when on a boat.")
+	buyFishingPoleBtn.Activated = function(parentmenu, selected)
+		TriggerServerEvent("boatMenu:buyFishingPole")
+	end
+	mainMenu:AddItem(buyFishingPoleBtn)
 	mainMenu:Visible(not mainMenu:Visible())
 end
 
@@ -479,7 +484,3 @@ AddEventHandler('blips:returnBlips', function(blipsTable)
     BLIPS = {}
   end
 end)
-
------------------
------------------
------------------

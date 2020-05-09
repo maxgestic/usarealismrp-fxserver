@@ -191,9 +191,9 @@ AddEventHandler('911:ShotsFired', function(x, y, z, street, area, isMale)
 		recentcalls[area] = 'ShotsFired'
 		local time = math.random(2000, 5000)
 		Citizen.Wait(time)
-		local string = '^*Shots Fired:^r '..street..' ^*^1^*|^r ^*Suspect:^r '..Gender(isMale)
+		local string = '^*^1Shots Fired:^r '..street..' ^*^1^*|^r ^*Suspect:^r '..Gender(isMale)
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Shots Fired')
-        SendWeazelNewsAlert('Report of ^3shots fired^r at ^3'..street..'^r, see what\'s going on!', x, y, z, 'Shots Fired')
+        exports.usa_weazelnews:SendWeazelNewsAlert('Report of ^3shots fired^r at ^3'..street..'^r, see what\'s going on!', x, y, z, 'Shots Fired')
 		Citizen.Wait(30000)
 		recentcalls[area] = nil
 	end
@@ -206,7 +206,7 @@ AddEventHandler('911:Carjacking', function(x, y, z, street, vehicle, plate, isMa
 		local secondaryColor = colorNames[tostring(secondaryColor)]
 		local time = math.random(1000, 6000)
 		Citizen.Wait(time)
-		local string = '^*Carjacking^r: '..street..' ^1^*|^r ^*Vehicle^r: '..string.upper(vehicle)..' ^1^*|^r ^*Plate^r: '..plate..' ^1^*|^r ^*Color^r: '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect^r: '..Gender(isMale)
+		local string = '^*^2Carjacking^r: '..street..' ^1^*|^r ^*Vehicle^r: '..string.upper(vehicle)..' ^1^*|^r ^*Plate^r: '..plate..' ^1^*|^r ^*Color^r: '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect^r: '..Gender(isMale)
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Carjacking')
 		Citizen.Wait(5000)
 		recentcalls[street] = nil
@@ -232,7 +232,7 @@ AddEventHandler('911:MuggingNPC', function(x, y, z, street)
 		recentcalls[street] = 'MuggingNPC'
 		local time = math.random(5000, 10000)
 		Citizen.Wait(time)
-		local string = '^*Mugging^r: '..street
+		local string = '^*^5Mugging^r: '..street
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Mugging in progress')
 		Citizen.Wait(180000)
 		recentcalls[street] = nil
@@ -260,7 +260,7 @@ AddEventHandler('911:AssaultInProgress', function(x, y, z, street, area, isMale)
 		Citizen.Wait(time)
 		local string = '^*Assault^r: '..street..' ^1^*|^r ^*Suspect^r: '..Gender(isMale)
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Assault')
-        SendWeazelNewsAlert('Report of an ^3assault^r at ^3'..street..'^r, stay at a safe distance!', x, y, z, 'Assault')
+        exports.usa_weazelnews:SendWeazelNewsAlert('Report of an ^3assault^r at ^3'..street..'^r, stay at a safe distance!', x, y, z, 'Assault')
 		Citizen.Wait(120000)
 		recentcalls[area] = nil
 	end
@@ -287,9 +287,9 @@ AddEventHandler('911:VehicleTheft', function(x, y, z, street, vehicle, plate, is
 		local secondaryColor = colorNames[tostring(secondaryColor)]
 		local time = math.random(1000, 5000)
 		Citizen.Wait(time)
-		local string = '^*Vehicle Theft:^r '..street..' ^1^*|^r ^*Vehicle:^r '..string.upper(vehicle)..' ^1^*|^r ^*Plate:^r '..plate..' ^1^*|^r ^*Color:^r '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
+		local string = '^*^6Vehicle Theft:^r '..street..' ^1^*|^r ^*Vehicle:^r '..string.upper(vehicle)..' ^1^*|^r ^*Plate:^r '..plate..' ^1^*|^r ^*Color:^r '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Vehicle Theft')
-        SendWeazelNewsAlert('Report of a ^3vehicle theft^r at ^3'..street..'^r, don\'t be too late!', x, y, z, 'Vehicle Theft')
+        exports.usa_weazelnews:SendWeazelNewsAlert('Report of a ^3vehicle theft^r at ^3'..street..'^r, don\'t be too late!', x, y, z, 'Vehicle Theft')
 		Citizen.Wait(5000)
 		recentcalls[street] = nil
 	end
@@ -316,9 +316,9 @@ AddEventHandler('911:ArmedCarjacking', function(x, y, z, street, vehicle, plate,
 		local secondaryColor = colorNames[tostring(secondaryColor)]
 		local time = math.random(1000, 3000)
 		Citizen.Wait(time)
-		local string = '^*Armed Carjacking:^r '..street..' ^1^*|^r ^*Vehicle:^r '..string.upper(vehicle)..' ^1^*|^r ^*Plate:^r '..plate..' ^1^*|^r ^*Color:^r '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
+		local string = '^*^6Armed Carjacking:^r '..street..' ^1^*|^r ^*Vehicle:^r '..string.upper(vehicle)..' ^1^*|^r ^*Plate:^r '..plate..' ^1^*|^r ^*Color:^r '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Armed Carjacking')
-        SendWeazelNewsAlert('Report of an ^3armed carjacking^r at ^3'..street..'^r, proceed with caution!', x, y, z, 'Armed Carjacking')
+        exports.usa_weazelnews:SendWeazelNewsAlert('Report of an ^3armed carjacking^r at ^3'..street..'^r, proceed with caution!', x, y, z, 'Armed Carjacking')
 		Citizen.Wait(5000)
 		recentcalls[street] = nil
 	end
@@ -329,9 +329,9 @@ AddEventHandler('911:Narcotics', function(x, y, z, street, isMale)
 		recentcalls[street] = 'Narcotics'
 		local time = math.random(4000, 10000)
 		Citizen.Wait(time)
-		local string = '^*Sale of Narcotics:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
+		local string = '^2^*Sale of Narcotics:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Narcotics')
-        SendWeazelNewsAlert('Report of ^3drugs sold^r at ^3'..street..'^r, be careful and cautious!', x, y, z, 'Drugs Sold')
+        exports.usa_weazelnews:SendWeazelNewsAlert('Report of ^3drugs sold^r at ^3'..street..'^r, be careful and cautious!', x, y, z, 'Drugs Sold')
 		Citizen.Wait(50000)
 		recentcalls[street] = nil
 	end
@@ -340,16 +340,16 @@ end)
 AddEventHandler('911:CocaineSting', function(x, y, z, street, isMale)
 	local time = math.random(90000, 120000)
 	Citizen.Wait(time)
-	local string = '^*Cocaine Sting:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)..' ^1^*|^r ^*Dispatch Info:^r Await arrival and apprehend suspect after a sale is made, do not be seen.'
+	local string = '^*^2Cocaine Sting:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)..' ^1^*|^r ^*Dispatch Info:^r Await arrival and apprehend suspect after a sale is made, do not be seen.'
 	Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Cocaine Sting')
 end)
 
 AddEventHandler('911:MethExplosion', function(x, y, z, street)
     local time = math.random(6000, 10000)
     Citizen.Wait(time)
-    local string = '^*Explosion:^r '..street..' ^1^*|^r ^*Dispatch Info:^r Caller reports suspicious activity in area, proceed with caution.'
+    local string = '^*^1Explosion:^r '..street..' ^1^*|^r ^*Dispatch Info:^r Caller reports suspicious activity in area, proceed with caution.'
     Send911Notification({'sheriff', 'corrections', 'ems'}, string, x, y, z, 'Explosion')
-    SendWeazelNewsAlert('Report of an ^3explosion^r at ^3'..street..'^r, figure out what\'s going on!', x, y, z, 'Explosion')
+    exports.usa_weazelnews:SendWeazelNewsAlert('Report of an ^3explosion^r at ^3'..street..'^r, figure out what\'s going on!', x, y, z, 'Explosion')
 end)
 
 AddEventHandler('911:ChopShop', function(x, y, z, street, isMale)
@@ -357,7 +357,7 @@ AddEventHandler('911:ChopShop', function(x, y, z, street, isMale)
     Citizen.Wait(time)
     local string = '^*Suspicious Person:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)..' ^1^*|^r ^*Dispatch Info:^r Caller reports constant banging and noises of cars.'
     Send911Notification({'sheriff', 'corrections', 'ems'}, string, x, y, z, 'Suspicious Person')
-    SendWeazelNewsAlert('Report of a ^3suspicious person^r at ^3'..street..'^r, go see what\'s up with that!', x, y, z, 'Suspicious Person')
+    exports.usa_weazelnews:SendWeazelNewsAlert('Report of a ^3suspicious person^r at ^3'..street..'^r, go see what\'s up with that!', x, y, z, 'Suspicious Person')
 end)
 
 AddEventHandler('911:SuspiciousHospitalInjuries', function(fullName, x, y, z)
@@ -383,7 +383,7 @@ AddEventHandler('911:HotwiringVehicle', function(x, y, z, street, vehicle, plate
 		Citizen.Wait(time)
 		local string = '^*Vehicle Being Hotwired:^r '..street..' ^1^*|^r ^*Vehicle:^r '..string.upper(vehicle)..' ^1^*|^r ^*Plate:^r '..plate..' ^1^*|^r ^*Color:^r '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Vehicle Hotwiring')
-        SendWeazelNewsAlert('Report of a ^3vehicle theft^r at ^3'..street..'^r, don\'t let yourself be seen!', x, y, z, 'Vehicle Theft')
+        exports.usa_weazelnews:SendWeazelNewsAlert('Report of a ^3vehicle theft^r at ^3'..street..'^r, don\'t let yourself be seen!', x, y, z, 'Vehicle Theft')
 		Citizen.Wait(50000)
 		recentcalls[street] = nil
 	end
@@ -398,7 +398,7 @@ AddEventHandler('911:LockpickingVehicle', function(x, y, z, street, vehicle, pla
 		Citizen.Wait(time)
 		local string = '^*Vehicle Being Lockpicked:^r '..street..' ^1^*|^r ^*Vehicle:^r '..string.upper(vehicle)..' ^1^*|^r ^*Plate:^r '..plate..' ^1^*|^r ^*Color:^r '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Vehicle Lockpicking')
-        SendWeazelNewsAlert('Report of a ^3vehicle theft^r at ^3'..street..'^r, stay vigilant and out of sight!', x, y, z, 'Vehicle Theft')
+        exports.usa_weazelnews:SendWeazelNewsAlert('Report of a ^3vehicle theft^r at ^3'..street..'^r, stay vigilant and out of sight!', x, y, z, 'Vehicle Theft')
 		Citizen.Wait(50000)
 		recentcalls[street] = nil
 	end
@@ -409,7 +409,7 @@ AddEventHandler('911:LockpickingDoor', function(x, y, z, street, isMale)
     Citizen.Wait(time)
     local string = '^*Door Being Lockpicked:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
     Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Door Lockpicking')
-    SendWeazelNewsAlert('Report of a ^3door lockpicking^r at ^3'..street..'^r, this will make a good story!', x, y, z, 'Door Lockpicking')
+    exports.usa_weazelnews:SendWeazelNewsAlert('Report of a ^3door lockpicking^r at ^3'..street..'^r, this will make a good story!', x, y, z, 'Door Lockpicking')
 end)
 
 AddEventHandler('911:CuffCutting', function(x, y, z, street, isMale)
@@ -422,9 +422,9 @@ end)
 AddEventHandler('911:Robbery', function(x, y, z, name, isMale, camID)
 	local time = math.random(4000, 10000)
 	Citizen.Wait(time)
-	local string = '^*Robbery in Progress:^r '..name..' ^1^*|^r ^*Camera ID:^r '..camID..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
+	local string = '^*^3Robbery in Progress:^r '..name..' ^1^*|^r ^*Camera ID:^r '..camID..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
 	Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Robbery in Progress')
-    SendWeazelNewsAlert('Report of a ^3robbery^r at ^3'..name..'^r, make your way down there as soon as possible!', x, y, z, 'Robbery in Progress')
+    exports.usa_weazelnews:SendWeazelNewsAlert('Report of a ^3robbery^r at ^3'..name..'^r, make your way down there as soon as possible!', x, y, z, 'Robbery in Progress')
 end)
 
 AddEventHandler('911:PlayerCall', function(x, y, z, street, text)
@@ -432,14 +432,14 @@ AddEventHandler('911:PlayerCall', function(x, y, z, street, text)
   local char = exports["usa-characters"]:GetCharacter(usource)
   local time = math.random(1000, 3000)
   Citizen.Wait(time)
-  local string = '^*Caller:^r '..char.getFullName()..' ['..usource..'] ^1^*|^r ^*Location:^r '..street..' ^1^*|^r ^*Call Info: '..text
+  local string = '^4^*Caller:^r '..char.getFullName()..' ['..usource..'] ^1^*|^r ^*Location:^r '..street..' ^1^*|^r ^*Call Info: '.. (text or "")
   Send911Notification({'sheriff', 'corrections', 'ems'}, string, x, y, z, 'Player Call')
 end)
 
 AddEventHandler('911:BankRobbery', function(x, y, z, street, isMale, bankName, camID)
-    local string = '^*Bank Robbery:^r ' .. bankName .. ' ('..street..') ^1^*|^r ^*Camera ID:^r ' .. camID .. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
+    local string = '^1^*Bank Robbery:^r ' .. bankName .. ' ('..street..') ^1^*|^r ^*Camera ID:^r ' .. camID .. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
     Send911Notification({'sheriff', 'corrections', 'ems'}, string, x, y, z, 'Bank Robbery')
-    SendWeazelNewsAlert('Report of a ^bank robbery^r at ^3'..street..'^r, yikes! Don\'t mess this one up recruit!', x, y, z, 'Bank Robbery')
+    exports.usa_weazelnews:SendWeazelNewsAlert('Report of a ^bank robbery^r at ^3'..street..'^r, yikes! Don\'t mess this one up recruit!', x, y, z, 'Bank Robbery')
 end)
 
 AddEventHandler('911:Burglary', function(x, y, z, street, isMale)
@@ -447,7 +447,7 @@ AddEventHandler('911:Burglary', function(x, y, z, street, isMale)
         recentcalls[street] = 'Burglary'
         local string = '^*Burglary:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
         Send911Notification({'sheriff', 'corrections', 'ems'}, string, x, y, z, 'Burglary')
-        SendWeazelNewsAlert('Report of a ^burglary^r at ^3'..street..'^r, expose those theives! Don\'t get too much attention!', x, y, z, 'Burglary')
+        exports.usa_weazelnews:SendWeazelNewsAlert('Report of a ^burglary^r at ^3'..street..'^r, expose those theives! Don\'t get too much attention!', x, y, z, 'Burglary')
         Citizen.Wait(180000)
         recentcalls[street] = nil
     end
@@ -483,17 +483,6 @@ function Send911Notification(intendedEmergencyType, string, x, y, z, blipText)
                 end
             end  
     	end
-    end)
-end
-
-function SendWeazelNewsAlert(string, x, y, z, blipText)
-    exports["usa-characters"]:GetCharacters(function(characters)
-        for id, char in pairs(characters) do
-            local job = char.get("job")
-            if job == "reporter" then
-                TriggerClientEvent('weazelnews:911call', id, string, x, y, z, blipText)
-            end
-        end
     end)
 end
 

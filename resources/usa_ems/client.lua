@@ -8,7 +8,8 @@ local EMSLockerRooms = {
 {x=-366.269, y = 6102.27, z = 35.6397}, -- paleto
 --{x=1692.13, y=3586.27, z=34.7209} -- sandy
 {x = 1701.4, y = 3604.1, z = 35.9}, -- sandy (interior / ymap)
-{x = 338.24346923828,y = -586.91796875, z = 74.165657043457} -- pillbox helipad
+{x = 338.24346923828,y = -586.91796875, z = 74.165657043457}, -- pillbox helipad
+{x = 301.4, y = -599.26, z = 43.28} -- pillbox lockeroom
 }
 
 local emsoutfitamount = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}

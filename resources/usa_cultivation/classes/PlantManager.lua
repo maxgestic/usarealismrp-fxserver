@@ -86,8 +86,8 @@ PlantManager.sustanenceTick = function(plant)
             didUpdate = true
         end
         -- food string --
-        if plant.foodLevel.val <= LOW_THRESHOLD and plant.foodLevel.asString ~= "~g~Slighty Hungry~w~" then
-            plant.foodLevel.asString = "~g~Slighty Hungry~w~"
+        if plant.foodLevel.val <= LOW_THRESHOLD and plant.foodLevel.asString ~= "~g~Slightly Hungry~w~" then
+            plant.foodLevel.asString = "~g~Slightly Hungry~w~"
             didUpdate = true
         elseif plant.foodLevel.val <= MED_THRESHOLD and plant.foodLevel.asString ~= "~y~Hungry~w~" then
             plant.foodLevel.asString = "~y~Hungry~w~"
@@ -146,8 +146,8 @@ PlantManager.updateWaterAndFoodStrings = function(i)
         PLANTED[i].waterLevel.asString = "~g~Not Thirsty~w~"
     end
     -- food string --
-    if PLANTED[i].foodLevel.val <= LOW_THRESHOLD and PLANTED[i].foodLevel.asString ~= "~g~Slighty Hungry~w~" then
-        PLANTED[i].foodLevel.asString = "~g~Slighty Hungry~w~"
+    if PLANTED[i].foodLevel.val <= LOW_THRESHOLD and PLANTED[i].foodLevel.asString ~= "~g~Slightly Hungry~w~" then
+        PLANTED[i].foodLevel.asString = "~g~Slightly Hungry~w~"
     elseif PLANTED[i].foodLevel.val <= MED_THRESHOLD and PLANTED[i].foodLevel.asString ~= "~y~Hungry~w~" then
         PLANTED[i].foodLevel.asString = "~y~Hungry~w~"
     elseif PLANTED[i].foodLevel.val <= HIGH_THRESHOLD and PLANTED[i].foodLevel.asString ~= "~r~Needs Food~w~" then

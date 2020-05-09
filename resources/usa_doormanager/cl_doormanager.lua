@@ -66,7 +66,7 @@ Citizen.CreateThread(function()
 			------------------
       doorRadius = 1.0
       drawTextRange = 2.0
-      if door.gate then drawTextRange = 10.0 doorRadius = 6.0 end
+      if door.gate then drawTextRange = 7.0 doorRadius = 6.0 end
 			if Vdist(door.x, door.y, door.z, playerCoords.x, playerCoords.y, playerCoords.z) < drawTextRange and not door.static and door.offset and door ~= doorBeingLocked then
         local doorObject = GetClosestObjectOfType(door.x, door.y, door.z, doorRadius, door.model, false, false, false)
         local doorCoords = GetEntityCoords(doorObject)
@@ -108,6 +108,11 @@ Citizen.CreateThread(function()
         --local ent = GetObject(DOORS_TO_MANAGE[i].model, DOORS_TO_MANAGE[i].distance, DOORS_TO_MANAGE[i].locations[1].x, DOORS_TO_MANAGE[i].locations[1].y, DOORS_TO_MANAGE[i].locations[1].z)
         local doorObject = GetClosestObjectOfType(door.x, door.y, door.z, doorRadius, door.model, false, false, false)
         if doorObject then
+						--[[
+          if not IsEntityAMissionEntity(doorObject) then
+            SetEntityAsMissionEntity(doorObject, true, true)
+          end
+						--]]
           if DEBUG then print("ent: " .. doorObject) end
           if not door.cell_block then
             if door.locked then
@@ -115,7 +120,6 @@ Citizen.CreateThread(function()
               -- print('freezing pos of door: ' ..door.name)
             end
           else
-            SetEntityAsMissionEntity(doorObject, true, true)
             if door.locked then
               SetEntityVisible(doorObject, true)
             else
@@ -136,6 +140,12 @@ AddEventHandler("doormanager:toggleDoorLock", function(index, locked, x, y, z)
   if door then
       if door.gate then doorRadius = 6.0 end
       local doorObject = GetClosestObjectOfType(x, y, z, doorRadius, door.model, false, false, false)
+      --print("mission entity: " .. tostring(IsEntityAMissionEntity(doorObject)))
+			--[[
+      if not IsEntityAMissionEntity(doorObject) then
+        SetEntityAsMissionEntity(doorObject, true, true)
+      end
+			--]]
       if not door.cell_block then
         if locked and door.offset then
           if not door.gate then
@@ -156,11 +166,12 @@ AddEventHandler("doormanager:toggleDoorLock", function(index, locked, x, y, z)
             end
           else
             _x, _y, _z = table.unpack(door.lockedCoords)
-            while GetDistanceBetweenCoords(GetEntityCoords(doorObject).x, GetEntityCoords(doorObject).y, GetEntityCoords(doorObject).z, _x, _y, _z, false) > 0.2 do
+            local doorCoords = GetEntityCoords(doorObject)
+            while GetDistanceBetweenCoords(doorCoords.x, doorCoords.y, doorCoords.z, _x, _y, _z, false) > 0.2 do
+              --print("dist: " .. GetDistanceBetweenCoords(GetEntityCoords(doorObject).x, GetEntityCoords(doorObject).y, GetEntityCoords(doorObject).z, _x, _y, _z, false))
               --print(GetEntityCoords(doorObject))
               Citizen.Wait(1)
               local playerCoords = GetEntityCoords(PlayerPedId())
-              local doorCoords = GetEntityCoords(doorObject)
               local offsetX, offsetY, offsetZ = table.unpack(door.offset)
               doorBeingLocked = door
               if Vdist(x, y, z, table.unpack(playerCoords)) < 8.0 then
