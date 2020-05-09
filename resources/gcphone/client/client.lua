@@ -515,6 +515,7 @@ end)
 
 RegisterNetEvent("gcphone:send911Message")
 AddEventHandler("gcphone:send911Message", function(data)
+  TooglePhone()
   local msg = exports.globals:GetUserInput("", 255)
   local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
 	local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
@@ -525,6 +526,7 @@ end)
 
 RegisterNetEvent("gcphone:sendMechanicMessage")
 AddEventHandler("gcphone:sendMechanicMessage", function(data)
+  TooglePhone()
   data = {}
   data.message = exports.globals:GetUserInput("", 255)
 	-- get location of sender and send to server function:
@@ -553,6 +555,7 @@ end)
 
 RegisterNetEvent("gcphone:sendTaxiMessage")
 AddEventHandler("gcphone:sendTaxiMessage", function(data)
+  TooglePhone()
   data = {}
   data.message = exports.globals:GetUserInput("", 255)
 	-- get location of sender and send to server function:
