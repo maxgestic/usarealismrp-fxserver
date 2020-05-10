@@ -81,7 +81,6 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     if takePhoto ~= true then
-      --[[
       if IsControlJustPressed(1, KeyOpenClose) then
         if not menuIsOpen then
           TriggerServerEvent("gcPhone:getPhone")
@@ -89,7 +88,6 @@ Citizen.CreateThread(function()
           TooglePhone()
         end
       end
-      --]]
       if menuIsOpen == true then
         for _, value in ipairs(KeyToucheCloseEvent) do
           if IsControlJustPressed(1, value.code) then
