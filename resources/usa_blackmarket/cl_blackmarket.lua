@@ -1,5 +1,8 @@
 local MENU_KEY = 38 -- "E"
 local closest_shop = nil
+local openingHour = math.random(20, 22)
+local closingHour = math.random(5, 7)
+local open = true
 
 local markets = {}
 
@@ -10,6 +13,19 @@ AddEventHandler("blackMarket:loadItems", function(items)
   markets = items
 end)
 
+Citizen.CreateThread(function ()
+    while true do
+        Wait(0)
+        if GetClockHours() >= openingHour or GetClockHours() <= closingHour then
+            open = true
+        else
+            open = false
+        end
+        print(open)
+    end
+end)
+
+
 local createdJobPeds = {}
 Citizen.CreateThread(function()
   while true do
@@ -17,21 +33,21 @@ Citizen.CreateThread(function()
     for k, v in pairs(markets) do
       local mkt = markets[k]
       if Vdist(mkt['coords'][1], mkt['coords'][2], mkt['coords'][3], playerCoords.x, playerCoords.y, playerCoords.z) < 50 then
-        if not createdJobPeds[k] then
-          RequestModel(mkt['pedHash'])
-          while not HasModelLoaded(mkt['pedHash']) do
-            Wait(100)
+          if not createdJobPeds[k] then
+              RequestModel(mkt['pedHash'])
+              while not HasModelLoaded(mkt['pedHash']) do
+                  Wait(100)
+              end
+              local ped = CreatePed(4, mkt['pedHash'], mkt['coords'][1], mkt['coords'][2], mkt['coords'][3] - 1.0, mkt['pedHeading'] or 100, false, true)
+              SetEntityCanBeDamaged(ped,false)
+              SetPedCanRagdollFromPlayerImpact(ped,false)
+              SetBlockingOfNonTemporaryEvents(ped,true)
+              SetPedFleeAttributes(ped,0,0)
+              SetPedCombatAttributes(ped,17,1)
+              SetPedRandomComponentVariation(ped, true)
+              TaskStartScenarioInPlace(ped, "WORLD_HUMAN_STAND_MOBILE", 0, true)
+              createdJobPeds[k] = ped
           end
-          local ped = CreatePed(4, mkt['pedHash'], mkt['coords'][1], mkt['coords'][2], mkt['coords'][3] - 1.0, mkt['pedHeading'] or 100, false, true)
-          SetEntityCanBeDamaged(ped,false)
-          SetPedCanRagdollFromPlayerImpact(ped,false)
-          SetBlockingOfNonTemporaryEvents(ped,true)
-          SetPedFleeAttributes(ped,0,0)
-          SetPedCombatAttributes(ped,17,1)
-          SetPedRandomComponentVariation(ped, true)
-          TaskStartScenarioInPlace(ped, "WORLD_HUMAN_STAND_MOBILE", 0, true)
-          createdJobPeds[k] = ped
-        end
       else 
         if createdJobPeds[k] then
           DeletePed(createdJobPeds[k])
@@ -102,35 +118,37 @@ end
 
 Citizen.CreateThread(function()
 	while true do
-    	Citizen.Wait(0)
-        -- Process Menu --
-        _menuPool:MouseControlsEnabled(false)
-        _menuPool:ControlDisablingEnabled(false)
-        _menuPool:ProcessMenus()
-        ------------------
-        -- Draw Markers --
-        ------------------
-    	for k, v in pairs(markets) do
-        local x, y, z = table.unpack(markets[k]['coords'])
-    		DrawText3D(x, y, z, 15, '[E] - Black Market')
-    	end
-        --------------------------
-        -- Listen for menu open --
-        --------------------------
-		if IsControlJustPressed(1, MENU_KEY) then
-			if IsPlayerAtBlackMarket() then
-                mainMenu:Clear()
-                CreateItemList(mainMenu)
-                mainMenu:Visible(not mainMenu:Visible())
-			end
-		end
+    	Wait(0)
+        if open then
+            -- Process Menu --
+            _menuPool:MouseControlsEnabled(false)
+            _menuPool:ControlDisablingEnabled(false)
+            _menuPool:ProcessMenus()
+            ------------------
+            -- Draw Markers --
+            ------------------
+            for k, v in pairs(markets) do
+                local x, y, z = table.unpack(markets[k]['coords'])
+                DrawText3D(x, y, z, 15, '[E] - Black Market')
+            end
+            --------------------------
+            -- Listen for menu open --
+            --------------------------
+            if IsControlJustPressed(1, MENU_KEY) then
+                if IsPlayerAtBlackMarket() then
+                    mainMenu:Clear()
+                    CreateItemList(mainMenu)
+                    mainMenu:Visible(not mainMenu:Visible())
+                end
+            end
 
-        if mainMenu:Visible() then
-            local playerPed = PlayerPedId()
-            local playerCoords = GetEntityCoords(playerPed)
-            local x, y, z = table.unpack(markets[closest_shop]['coords'])
-            if Vdist(playerCoords, x, y, z) > 5.0 then
-                mainMenu:Visible(false)
+            if mainMenu:Visible() then
+                local playerPed = PlayerPedId()
+                local playerCoords = GetEntityCoords(playerPed)
+                local x, y, z = table.unpack(markets[closest_shop]['coords'])
+                if Vdist(playerCoords, x, y, z) > 5.0 then
+                    mainMenu:Visible(false)
+                end
             end
         end
 	end
