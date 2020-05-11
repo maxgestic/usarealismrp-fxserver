@@ -169,7 +169,6 @@ RegisterServerEvent('911:VehicleTheft')
 RegisterServerEvent('911:MVA')
 RegisterServerEvent('911:ArmedCarjacking')
 RegisterServerEvent('911:Narcotics')
-RegisterServerEvent('911:CocaineSting')
 RegisterServerEvent('911:HotwiringVehicle')
 RegisterServerEvent('911:LockpickingVehicle')
 RegisterServerEvent('911:Robbery')
@@ -335,13 +334,6 @@ AddEventHandler('911:Narcotics', function(x, y, z, street, isMale)
 		Citizen.Wait(50000)
 		recentcalls[street] = nil
 	end
-end)
-
-AddEventHandler('911:CocaineSting', function(x, y, z, street, isMale)
-	local time = math.random(90000, 120000)
-	Citizen.Wait(time)
-	local string = '^*^2Cocaine Sting:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)..' ^1^*|^r ^*Dispatch Info:^r Await arrival and apprehend suspect after a sale is made, do not be seen.'
-	Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Cocaine Sting')
 end)
 
 AddEventHandler('911:MethExplosion', function(x, y, z, street)
