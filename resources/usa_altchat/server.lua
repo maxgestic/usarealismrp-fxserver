@@ -1,3 +1,6 @@
+local adCost = 200
+local anonAdCost = 800
+
 local jobNames = {
 	['civ'] = false,
 	['taxi'] = 'Taxi',
@@ -12,27 +15,32 @@ local jobNames = {
 }
 
 TriggerEvent('es:addCommand', 'ad', function(source, args, char)
-	local sender = char.getName()
-	if char.hasItem("Cell Phone") then
-		table.remove(args, 1)
-		exports["usa-characters"]:GetCharacters(function(characters)
-			for id, char in pairs(characters) do
-				if char.hasItem("Cell Phone") then
-					TriggerClientEvent('chatMessage', id, "[Advertisement] - " .. sender, {171, 67, 227}, table.concat(args, " "))
+	if char.get("money") >= adCost then
+		local sender = char.getName()
+		if char.hasItem("Cell Phone") then
+			table.remove(args, 1)
+			char.removeMoney(adCost)
+			exports["usa-characters"]:GetCharacters(function(characters)
+				for id, char in pairs(characters) do
+					if char.hasItem("Cell Phone") then
+						TriggerClientEvent('chatMessage', id, "[Advertisement] - " .. sender, {171, 67, 227}, table.concat(args, " "))
+					end
 				end
-			end
-		end)
+			end)
+		else
+			TriggerClientEvent('usa:notify', source, 'You do not have a cell phone!')
+		end
 	else
-		TriggerClientEvent('usa:notify', source, 'You do not have a cell phone!')
+		TriggerClientEvent('usa:notify',source, 'You do not have enough money!')
 	end
-end, {help = "Send an advertisement.", params = {{name = "message", help = "the advertisement"}}})
+end, {help = "Send an advertisement ($".. adCost ..").", params = {{name = "message", help = "the advertisement"}}})
 
 local lastAnonAdAuthor = nil
 TriggerEvent('es:addCommand', 'anonad', function(source, args, char)
-	if char.get("money") >= 200 then
+	if char.get("money") >= anonAdCost then
 		if char.hasItem("Cell Phone") then
 			table.remove(args, 1) -- remove "anonad"
-			char.removeMoney(200)
+			char.removeMoney(anonAdCost)
 			lastAnonAdAuthor = "(#" .. source .. ") " .. char.getFullName()
 			exports["usa-characters"]:GetCharacters(function(characters)
 				for id, char in pairs(characters) do
@@ -47,7 +55,7 @@ TriggerEvent('es:addCommand', 'anonad', function(source, args, char)
 	else
 		TriggerClientEvent("usa:notify", source, "You don't have enough money!")
 	end
-end, {help = "Send an anonymous advertisement ($200)", params = {{name = "message", help = "the advertisement"}}})
+end, {help = "Send an anonymous advertisement ($".. anonAdCost ..")", params = {{name = "message", help = "the advertisement"}}})
 
 TriggerEvent('es:addGroupCommand', 'lastanonad', 'mod', function(source, args, char)
 	if lastAnonAdAuthor then
