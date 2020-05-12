@@ -15,6 +15,7 @@ Citizen.CreateThread(function()
    			EnableControlAction(0, 177, true) --- BACKSPACE
    			EnableControlAction(0, 200, true) --- ESC
    			EnableControlAction(0, 245, true)
+   			EnableControlAction(0, 289, true) --- F2 - Change voice from whisper / normal / yell
    			if not IsEntityPlayingAnim(playerPed, 'timetable@floyd@cryingonbed@base', 'base', 3) then
 		  		TaskPlayAnim(playerPed, 'timetable@floyd@cryingonbed@base', 'base', 1.0, -1, -1, 1, 0, 0, 0, 0)
 		  	end
@@ -51,11 +52,13 @@ AddEventHandler('trunkhide:enterTrunk', function(targetVehicle)
 			inTrunk = true
 			vehicle = targetVehicle
 			Citizen.Wait(2000)
-			SendNUIMessage({
-				type = "enableui",
-				enable = true,
-				inTrunk = true
-			})
+			if GetVehicleClass(vehicle) ~= 9 and GetVehicleClass(vehicle) ~= 0 then
+				SendNUIMessage({
+					type = "enableui",
+					enable = true,
+					inTrunk = true
+				})
+			end
 		    SetVehicleDoorShut(targetVehicle, 5, false)
 	   	end
 	end
@@ -79,7 +82,7 @@ AddEventHandler('trunkhide:exitTrunk', function(allowExitWhenTied)
 		SetEntityCollision(vehicle, true, true)
 		inTrunk = false
 		vehicle = nil
-		Citizen.Wait(2000)
+		Citizen.Wait(1000)
 		SendNUIMessage({
 			type = "enableui",
 			enable = false,
