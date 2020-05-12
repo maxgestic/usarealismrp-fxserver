@@ -851,6 +851,8 @@ function interactionMenuUse(itemName, wholeItem)
 			TriggerEvent("veh:hotwireVehicle")
 		elseif string.find(itemName, "Body Armor") then
 			TriggerServerEvent("interaction:bodyArmor")
+		elseif string.find(itemName, "Police Armor") then
+			TriggerServerEvent("interaction:policeBodyArmor")
 			---------------
 			-- Jerry Can --
 			---------------
@@ -1048,6 +1050,12 @@ RegisterNetEvent("interaction:equipArmor")
 AddEventHandler("interaction:equipArmor", function()
 	SetPedArmour(PlayerPedId(), 40)
 	TriggerEvent('usa:notify', "You have equipped light body armor!")
+end)
+
+RegisterNetEvent("interaction:equipPoliceArmor")
+AddEventHandler("interaction:equipPoliceArmor", function()
+	SetPedArmour(PlayerPedId(), 100)
+	TriggerEvent('usa:notify', "You have equipped Police Body Armor!")
 end)
 
 RegisterNetEvent("interaction:ragdoll")

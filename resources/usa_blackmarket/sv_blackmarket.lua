@@ -12,7 +12,9 @@ local markets = {
       { name = "AP Pistol", type = "weapon", hash = 0x22D8FE39, price = 20000, legality = "illegal", quantity = 1, weight = 15, stock = math.random(0, 2), objectModel = "w_pi_appistol" },
       { name = "Sawn-off", type = "weapon", hash = 0x7846A318, price = 30000, legality = "illegal", quantity = 1, weight = 30, stock = math.random(0, 3), objectModel = "w_sg_sawnoff", },
       { name = "Micro SMG", type = "weapon", hash = 324215364, price = 40000, legality = "illegal", quantity = 1, weight = 30, stock = math.random(0, 2), objectModel = "w_sb_microsmg"},
-      {name = 'SMG', type = 'weapon', hash = 736523883, price = 75000, legality = 'illegal', quantity = 1, weight = 55, stock = math.random(0, 1), objectModel = "w_sb_smg"}
+      {name = 'SMG', type = 'weapon', hash = 736523883, price = 75000, legality = 'illegal', quantity = 1, weight = 55, stock = math.random(0, 1), objectModel = "w_sb_smg"},
+      { name = "Police Armor", type = "misc", price = 2000, legality = "illegal", quantity = 1, weight = 25, stock = math.random(0, 3), objectModel = "prop_bodyarmour_03" }
+
     },
     ["pedHash"] = -48477765
   },
@@ -30,7 +32,9 @@ local markets = {
       { name = "Machine Pistol", type = "weapon", hash = -619010992, price = 25000, legality = "illegal", quantity = 1, weight = 20, stock = math.random(0, 2) },
       { name = "Tommy Gun", type = "weapon", hash = 1627465347, price = 110000, legality = "illegal", quantity = 1, weight = 45, stock = math.random(0, 2), objectModel = "w_sb_gusenberg" },
       { name = "AK47", type = "weapon", hash = -1074790547, price = 100000, legality = "illegal", quantity = 1, weight = 45, stock = math.random(0, 2), objectModel = "w_ar_assaultrifle" },
-      { name = "Carbine", type = "weapon", hash = -2084633992, price = 100000, legality = "illegal", quantity = 1, weight = 45, stock = math.random(0, 2), objectModel = "w_ar_carbinerifle" }
+      { name = "Carbine", type = "weapon", hash = -2084633992, price = 100000, legality = "illegal", quantity = 1, weight = 45, stock = math.random(0, 2), objectModel = "w_ar_carbinerifle" },
+      { name = "Police Armor", type = "misc", price = 2500, legality = "illegal", quantity = 1, weight = 25, stock = math.random(0, 5), objectModel = "prop_bodyarmour_03" }
+
     },
     ["pedHash"] = -1773333796
   }

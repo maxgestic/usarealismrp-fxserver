@@ -154,6 +154,7 @@ var itemImages = {
   "MK2 Carbine Rifle": "https://www.gtabase.com/images/gta-5/weapons/assault-rifles/carbine-rifle-mk2.png",
   "MK2 Pump Shotgun": "https://www.gtabase.com/images/gta-5/weapons/shotguns/pump-shotgun-mk2.png",
   "Body Armor": "https://i.imgur.com/oHsLkWD.png",
+  "Police Armor": "https://i.imgur.com/oHsLkWD.png",
   "Tear Gas": "https://i.imgur.com/v9b6bNm.png",
   "Flare": "https://i.imgur.com/gMOnw6x.png",
   "The Daily Weazel": "https://i.imgur.com/Pg6TODN.png",
