@@ -21,7 +21,6 @@ Citizen.CreateThread(function ()
         else
             open = false
         end
-        print(open)
     end
 end)
 
