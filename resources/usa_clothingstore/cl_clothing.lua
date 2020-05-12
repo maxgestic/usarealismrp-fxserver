@@ -17,7 +17,8 @@ local CLOTHING_STORE_LOCATIONS = {
 	{x = -818.509, y = -1074.14, z = 11.0281}, -- vinewood 7
 	{x = 77.7774, y = -1389.87, z = 29.0761}, -- vinewood
 	{x = 105.8, y = -1302.9, z = 27.7, noblip = true}, -- vanilla unicorn
-	{x = -82.16, y = -809.99, z = 243.38, blacklistExempt = true, noblip = true}
+	{x = -82.16, y = -809.99, z = 243.38, blacklistExempt = true, noblip = true},
+	{x = -454.08, y = 282.46, z = 83.06, blacklistExempt = true, noblip = true}, -- Comedy Club
 }
 local me = nil
 local mycoords = nil

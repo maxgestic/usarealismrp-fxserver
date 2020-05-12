@@ -29,16 +29,16 @@ AddEventHandler("methJob:methProcessed", function(itemName)
 		name = itemName,
 		type = 'drug',
     legality = 'illegal',
-    quantity = 1,
+    quantity = 1000,
     weight = 4,
     objectModel = 'bkr_prop_meth_smallbag_01a'
   }
-	if char.canHoldItem(methProduced) then
+	--if char.canHoldItem(methProduced) then
 		char.giveItem(methProduced)
 		TriggerClientEvent("usa:notify", source, "You have successfully processed meth rock into packaged product!")
-  else
-		TriggerClientEvent("usa:notify", source, "Your inventory is full. Can't carry anymore!")
-  end
+  --else
+	--	TriggerClientEvent("usa:notify", source, "Your inventory is full. Can't carry anymore!")
+  --end
 end)
 
 RegisterServerEvent("methJob:checkUserJobSupplies")
