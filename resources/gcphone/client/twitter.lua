@@ -47,7 +47,10 @@ AddEventHandler("gcPhone:twitter_setTweetLikes", function(tweetId, isLikes)
   SendNUIMessage({event = 'twitter_setTweetLikes', tweetId = tweetId, isLikes = isLikes})
 end)
 
-
+RegisterNetEvent("gcPhone:twitter_Logout")
+AddEventHandler("gcPhone:twitter_Logout", function()
+  SendNUIMessage({event = 'twitter_logout'})
+end)
 
 RegisterNUICallback('twitter_login', function(data, cb)
   TriggerServerEvent('gcPhone:twitter_login', data.username, data.password)

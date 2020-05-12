@@ -28,6 +28,18 @@ end
 --     return '0' .. math.random(600000000,699999999)
 -- end
 
+TriggerEvent('es:addGroupCommand', 'phonetest', "admin", function(source, args, char)
+    local char = exports["usa-characters"]:GetCharacter(source)
+    local phone = char.getItem("Cell Phone")
+	if phone then
+		TriggerClientEvent("gcPhone:togglePhone", source)
+	else
+		TriggerClientEvent("usa:notify", source, "You have no cell phone!")
+	end
+end, {
+	help = "Test new phone"
+})
+
 RegisterServerEvent("gcPhone:getPhone")
 AddEventHandler("gcPhone:getPhone", function()
     local char = exports["usa-characters"]:GetCharacter(source)

@@ -87,15 +87,6 @@ Citizen.CreateThread(function()
         else
           TooglePhone()
         end
-        --[[
-        hasPhone(function (hasPhone)
-          if hasPhone == true then
-            TooglePhone()
-          else
-            ShowNoPhoneWarning()
-          end
-        end)
-        --]]
       end
       if menuIsOpen == true then
         for _, value in ipairs(KeyToucheCloseEvent) do
@@ -206,7 +197,7 @@ Citizen.CreateThread(function ()
               PhonePlayCall(true)
               TakeAppel(PhoneInCall[i])
               PhoneInCall = {}
-              StopSoundJS('ring.ogg')
+              StopSoundJS('ring2.ogg')
             end
           end
           break
@@ -216,17 +207,17 @@ Citizen.CreateThread(function ()
       showFixePhoneHelper(coords)
     end
     if inRangeToActivePhone == true and currentPlaySound == false then
-      PlaySoundJS('ring.ogg', 0.2 + (inRangedist - soundDistanceMax) / -soundDistanceMax * 0.8 )
+      PlaySoundJS('ring2.ogg', 0.2 + (inRangedist - soundDistanceMax) / -soundDistanceMax * 0.8 )
       currentPlaySound = true
     elseif inRangeToActivePhone == true then
       mod = mod + 1
       if (mod == 15) then
         mod = 0
-        SetSoundVolumeJS('ring.ogg', 0.2 + (inRangedist - soundDistanceMax) / -soundDistanceMax * 0.8 )
+        SetSoundVolumeJS('ring2.ogg', 0.2 + (inRangedist - soundDistanceMax) / -soundDistanceMax * 0.8 )
       end
     elseif inRangeToActivePhone == false and currentPlaySound == true then
       currentPlaySound = false
-      StopSoundJS('ring.ogg')
+      StopSoundJS('ring2.ogg')
     end
     Citizen.Wait(0)
   end
@@ -295,12 +286,12 @@ AddEventHandler("gcPhone:receiveMessage", function(message, owner)
   SendNUIMessage({event = 'newMessage', message = message})
   table.insert(messages, message)
   if not owner then
-    local text = '~o~Nouveau message'
+    local text = '~o~New message'
     if ShowNumberNotification == true then
-      text = '~o~Nouveau message du ~y~'.. message.transmitter
+      text = '~o~New message du ~y~'.. message.transmitter
       for _,contact in pairs(contacts) do
         if contact.number == message.transmitter then
-          text = '~o~Nouveau message de ~g~'.. contact.display
+          text = '~o~New message de ~g~'.. contact.display
           break
         end
       end
@@ -522,6 +513,7 @@ end)
 
 RegisterNetEvent("gcphone:send911Message")
 AddEventHandler("gcphone:send911Message", function(data)
+  TooglePhone()
   local msg = exports.globals:GetUserInput("", 255)
   local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
 	local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
@@ -532,6 +524,7 @@ end)
 
 RegisterNetEvent("gcphone:sendMechanicMessage")
 AddEventHandler("gcphone:sendMechanicMessage", function(data)
+  TooglePhone()
   data = {}
   data.message = exports.globals:GetUserInput("", 255)
 	-- get location of sender and send to server function:
@@ -560,6 +553,7 @@ end)
 
 RegisterNetEvent("gcphone:sendTaxiMessage")
 AddEventHandler("gcphone:sendTaxiMessage", function(data)
+  TooglePhone()
   data = {}
   data.message = exports.globals:GetUserInput("", 255)
 	-- get location of sender and send to server function:

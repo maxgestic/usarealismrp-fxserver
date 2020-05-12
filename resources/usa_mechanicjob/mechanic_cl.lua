@@ -9,6 +9,8 @@ local TIME_KICK_MINUTES = 20
 
 local lastRecordedTimeDoingJob = 0
 
+local isRepairing = false
+
 local locations = {
 	["Paleto"] = {
 		duty = {
@@ -282,7 +284,10 @@ RegisterNetEvent('towJob:towVehicle')
 AddEventHandler('towJob:towVehicle', function()
 	local playerPed = PlayerPedId()
 	if lastTowTruck then
-		local targetVehicle = MechanicHelper.getClosestVehicle(5)
+		local targetVehicle = MechanicHelper.getClosestVehicle(15)
+		if not IsEntityAMissionEntity(targetVehicle) then
+			SetEntityAsMissionEntity(targetVehicle, true, true)
+		end
 		if currentlyTowedVehicle == nil and not IsPedInAnyVehicle(playerPed, true) then
 			if targetVehicle ~= 0 then
 				local targetVehicleCoords = GetEntityCoords(targetVehicle, true)
@@ -344,22 +349,26 @@ end)
 
 RegisterNetEvent("mechanic:repairJobCheck")
 AddEventHandler("mechanic:repairJobCheck", function()
-	local me = PlayerPedId()
-	local veh = MechanicHelper.getClosestVehicle()
-	if not IsPedInAnyVehicle(me) then
-		if veh then
-			local engineHP = GetVehicleEngineHealth(veh)
-			local driveable = IsVehicleDriveable(veh, true)
-			local isAnyTireBurst = IsAnyVehicleTireBursted(veh)
-			if engineHP < 600 or not driveable or isAnyTireBurst then
-				print("gonna check palyer's job")
-				TriggerServerEvent("mechanic:repairJobCheck")
-			else
-				exports.globals:notify("Vehicle does not need repairs!")
+	if not isRepairing then
+		local me = PlayerPedId()
+		local veh = MechanicHelper.getClosestVehicle()
+		if not IsPedInAnyVehicle(me) then
+			if veh then
+				local engineHP = GetVehicleEngineHealth(veh)
+				local driveable = IsVehicleDriveable(veh, true)
+				local isAnyTireBurst = IsAnyVehicleTireBursted(veh)
+				if engineHP < 600 or not driveable or isAnyTireBurst then
+					print("gonna check palyer's job")
+					TriggerServerEvent("mechanic:repairJobCheck")
+				else
+					exports.globals:notify("Vehicle does not need repairs!")
+				end
 			end
+		else 
+			exports.globals:notify("Must be outside vehicle!")
 		end
 	else 
-		exports.globals:notify("Must be outside vehicle!")
+		exports.globals:notify("Please wait!")
 	end
 end)
 
@@ -367,6 +376,7 @@ RegisterNetEvent("mechanic:repair")
 AddEventHandler("mechanic:repair", function(repairCount)
 	local veh = MechanicHelper.getClosestVehicle(5)
 	if veh then
+		isRepairing = true
 		MechanicHelper.repairVehicle(veh, repairCount, function(success)
 			if success then
 				print("repair succeeded!")
@@ -376,6 +386,7 @@ AddEventHandler("mechanic:repair", function(repairCount)
 				print("repair failed")
 				exports.globals:notify("Vehicle repair failed!")
 			end
+			isRepairing = false
 		end)
 	else 
 		exports.globals:notify("No vehicle found!")
