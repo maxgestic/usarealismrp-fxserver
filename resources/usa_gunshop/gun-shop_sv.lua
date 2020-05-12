@@ -16,7 +16,7 @@ local STORE_ITEMS = {
     { name = ".50 Caliber", type = "weapon", hash = -1716589765, price = 2000, legality = "legal", quantity = 1, weight = 20, objectModel = "w_pi_pistol50" },
     { name = "SNS Pistol", type = "weapon", hash = -1076751822, price = 800, legality = "legal", quantity = 1, weight = 12, objectModel = "w_pi_sns_pistol" },
     { name = "Combat Pistol", type = "weapon", hash = 1593441988, price = 800, legality = "legal", quantity = 1, weight = 15, objectModel = "w_pi_combatpistol" },
-    { name = "MK2", type = "weapon", hash = 3219281620, price = 1250, legality = "legal", quantity = 1, weight = 15 },
+    { name = "MK2", type = "weapon", hash = -1075685676, price = 1250, legality = "legal", quantity = 1, weight = 15 },
     { name = "Vintage Pistol", type = "weapon", hash = 137902532, price = 1250, legality = "legal", quantity = 1, weight = 15, objectModel = "w_pi_vintage_pistol" },
     --{ name = "Stun Gun", type = "weapon", hash = 911657153, price = 1500, legality = "legal", quantity = 1, weight = 5, objectModel = "w_pi_stungun" }
     --{ name = "Marksman Pistol", type = "weapon", hash = -598887786, price = 2000, legality = "legal", quantity = 1, weight = 15 },
