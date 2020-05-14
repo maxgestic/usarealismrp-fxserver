@@ -116,6 +116,17 @@ AddEventHandler("weazelnews:checkPlate", function(plateGiven)
 	TriggerClientEvent("weazelnews:checkPlateDone", source, false)
 end)
 
+function SendWeazelNewsAlert(string, x, y, z, blipText)
+    exports["usa-characters"]:GetCharacters(function(characters)
+        for id, char in pairs(characters) do
+            local job = char.get("job")
+            if job == "reporter" then
+                TriggerClientEvent('weazelnews:911call', id, string, x, y, z, blipText)
+            end
+        end
+    end)
+end
+
 function generate_random_number_plate()
 	local charset = {
 		numbers = {},

@@ -69,7 +69,7 @@ testobj["plantedAt"] = 1575570530 -- harvest stage
 testobj["type"] = "cannabis"
 testobj["foodLevel"] = {
     ["val"] = 16.25,
-    ["asString"] = "~g~Slighty Hungry~w~"
+    ["asString"] = "~g~Slightly Hungry~w~"
 }
 testobj["coords"] = {
     ["x"] = -1073.2800292969,

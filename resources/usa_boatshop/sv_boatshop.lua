@@ -20,8 +20,32 @@ local rentals = {}
 
 local LICENSE_PURCHASE_PRICE = 1000
 
+local fishingPole = {
+  name = "Fishing Pole",
+  quantity = 1,
+  legality = "legal",
+  weight = 15.0,
+  price = 100
+}
+
 AddEventHandler('es:playerLoaded', function(source, user)
   TriggerEvent("boatMenu:loadBoats", source)
+end)
+
+RegisterServerEvent("boatMenu:buyFishingPole")
+AddEventHandler("boatMenu:buyFishingPole", function()
+  local char = exports["usa-characters"]:GetCharacter(source)
+  if char.canHoldItem(fishingPole) then 
+    if char.get("money") >= fishingPole.price then
+      char.removeMoney(100)
+      char.giveItem(fishingPole)
+      TriggerClientEvent("usa:notify", source, "You've purchased a fishing pole!")
+    else 
+      TriggerClientEvent("usa:notify", source, "Not enough money! Need $100")
+    end
+  else 
+    TriggerClientEvent("usa:notify", source, "Inventory full!")
+  end
 end)
 
 RegisterServerEvent("boatMenu:requestPurchase")

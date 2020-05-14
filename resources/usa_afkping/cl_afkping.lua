@@ -43,7 +43,7 @@ AddEventHandler('afkping:displayTokenMessage', function(token)
 		Citizen.Wait(0)
 		DrawRect(0.5, 0.0, 1.0, 0.2, 0, 0, 0, 255)
 		DrawTxt(0.85, 0.50, 1.0, 1.0, 0.60, 'You will be disconnected in '..timer..' minutes for idling too long!', 255, 255, 255, 255)
-		DrawTxt(0.95, 0.54, 1.0, 1.0, 0.60, '/token ' .. token, 255, 255, 255, 255)
+		DrawTxt(0.95, 0.54, 1.0, 1.0, 0.60, 'Type /token ' .. token .. " to cancel.", 255, 255, 255, 255)
 	end
 end)
 

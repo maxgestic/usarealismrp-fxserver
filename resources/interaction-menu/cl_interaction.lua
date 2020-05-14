@@ -987,6 +987,7 @@ function interactionMenuUse(itemName, wholeItem)
 			-- Cell Phone --
 			-------------------
 		elseif string.find(itemName, "Cell Phone") then
+			--TriggerServerEvent("gcPhone:getPhone")
 			TriggerEvent("phone:openPhone", wholeItem)
 			-------------------
 			-- Food Item  --
@@ -1440,7 +1441,6 @@ Citizen.CreateThread(function()
 
 		if IsPedRagdoll(playerPed) then
 			DisableControlAction(0, 19, true)
-			DisableControlAction(0, 244, true)
 		end
 
 		-- menu

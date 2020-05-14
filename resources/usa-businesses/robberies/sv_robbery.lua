@@ -18,6 +18,9 @@ AddEventHandler('business:beginRobbery', function(storeName, isSuspectMale, play
 			TriggerEvent('911:Robbery', x, y, z, storeName, isSuspectMale, store.cameraID)
 			TriggerClientEvent('usa:notify', usource, "~y~Robbery has begun~s~, hold the fort for the timer duration and don't leave!")
 			TriggerClientEvent('business:robStore', usource, storeName)
+			if math.random() < 0.5 then
+				exports.usa_weazelnews:SendWeazelNewsAlert("Reports of an armed robbery at ^3" .. storeName .. "^0!", x, y, z, 'Robbery')
+			end
 			print('ROBBERY: Robbery has begun at store['..storeName..'], triggered by '..GetPlayerName(usource)..'['..GetPlayerIdentifier(usource)..']!')
 		end)
 	else
@@ -41,7 +44,7 @@ AddEventHandler('business:finishRobbery', function(storeName)
 		end
 		RobPercentageOfCashFromBusiness(storeName, randomPercentage, function(reward)
 			if reward then
-				reward = reward + math.random(0, 600) -- boost reward a little to be nice
+				reward = reward + math.random(25, 2000) -- boost reward a little to be nice
 				local policeOnline = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
 				local bonus = 0
 				if policeOnline >= policeNeededForBonus then

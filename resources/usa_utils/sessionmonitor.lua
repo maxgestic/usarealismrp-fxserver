@@ -7,6 +7,9 @@ local lastRecordedAmount = 0
 
 local WEBHOOK_URL = "https://discordapp.com/api/webhooks/613598358568828938/YVkkUeUF75IrnA9rsnV1A_O-rX---wd4gOl1-T627P1FY5gBmfYx638ZTszo4LxXLEmZ"
 
+local SECONDS_BEFORE_ACCEPTING_CONNECTIONS = 95
+local SERVER_START_TIME = os.time()
+
 local statistics = {
     ["playerDrops"] = 0,
     ["abnormalDrops"] = 0,
@@ -36,6 +39,15 @@ Citizen.CreateThread(function()
         end
         lastRecordedAmount = #GetPlayers()
         Wait(CHECK_INTVERAL_SECONDS * 1000)
+    end
+end)
+
+AddEventHandler('playerConnecting', function(playerName, setKickReason, deferrals)
+    local secondsFromStart = exports.globals:GetSecondsFromTime(SERVER_START_TIME)
+    if secondsFromStart < SECONDS_BEFORE_ACCEPTING_CONNECTIONS then
+        print("Preventing connection attempt from " .. playerName .. " due to joining too early.")
+        setKickReason("Please wait " .. SECONDS_BEFORE_ACCEPTING_CONNECTIONS - secondsFromStart .. " more seconds before connecting.")
+        CancelEvent()
     end
 end)
 
@@ -117,9 +129,9 @@ AddEventHandler('rconCommand', function(commandName, args)
         end
         CancelEvent()
     end
-  end)
+end)
 
-  function GetMostFrequentPlayerDropReason()
+function GetMostFrequentPlayerDropReason()
     local mostFreq = {
         count = -1,
         str = "N/A"
@@ -131,4 +143,8 @@ AddEventHandler('rconCommand', function(commandName, args)
         end
     end
     return mostFreq.str
-  end
+end
+
+-- save disk space by compacting this stock CouchDB "_global_changes" database --
+PerformHttpRequest("http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. "/_global_changes/_compact", function(err, rText, headers)
+end, "POST", "", {["Content-Type"] = "application/json", Authorization = "Basic " .. exports["essentialmode"]:getAuth()})
