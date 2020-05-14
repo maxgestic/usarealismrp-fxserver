@@ -6,17 +6,9 @@ local STORE_ROBBERY_TIMEOUT = 10800000
 RegisterServerEvent('jewelleryheist:doesUserHaveThermiteToUse')
 AddEventHandler('jewelleryheist:doesUserHaveThermiteToUse', function()
     local char = exports["usa-characters"]:GetCharacter(source)
-    local thermite = {
-        name = "Thermite",
-        legality = "illegal",
-        quantity = math.random(0, 2),
-        type = "misc",
-        weight = 2
-    }
-
-    char.giveItem(thermite)
     if robbable then
         if char.hasItem("Thermite") then
+            char.removeItem('Thermite')
             TriggerClientEvent('jewelleryheist:doesUserHaveThermiteToUse', source, true)
             robbable = false;
             SetTimeout(STORE_ROBBERY_TIMEOUT, function()
@@ -26,7 +18,7 @@ AddEventHandler('jewelleryheist:doesUserHaveThermiteToUse', function()
             TriggerClientEvent('jewelleryheist:doesUserHaveThermiteToUse', source, false)
         end
     else
-        TriggerServerEvent('usa:notify', 'You cannot commit a jewellery heist yet')
+        TriggerClientEvent('usa:notify', 'You cannot commit a jewellery heist yet')
     end
 end)
 
@@ -59,12 +51,13 @@ AddEventHandler('jewelleryheist:stolengoods', function()
     local stolenGoods = {
         name = "Stolen Goods",
         legality = "illegal",
-        quantity = math.random(0, 2),
+        quantity = math.random(0, 3),
         type = "misc",
         weight = 2
     }
     if char.canHoldItem(stolenGoods) then
         char.giveItem(stolenGoods)
+        TriggerClientEvent("usa:notify", source, "You have taken (" .. stolenGoods.quantity .. ")x stolen goods.")
     else
         TriggerClientEvent("usa:notify", source, "Inventory is full!")
     end

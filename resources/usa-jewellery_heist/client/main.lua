@@ -1,33 +1,6 @@
 -- STAGE 1 - Thermite the electronic locks to gain access to the doors.
 local thermite_loc = {-607.29, -245.78, 50.24}
 local thermite_success = false
-local doorList = {
-    [1] = { ["objName"] = "p_jewel_door_l", ["x"]= -631.91, ["y"]= -237.19,["z"]= 38.06,["locked"]= true},
-}
-
-Citizen.CreateThread(function()
-    while true do
-        Wait(0)
-        for i = 1, #doorList do
-            local playerCoords = GetEntityCoords( GetPlayerPed(-1) )
-            local closeDoor = GetClosestObjectOfType(doorList[i]["x"], doorList[i]["y"], doorList[i]["z"], 1.0, GetHashKey(doorList[i]["objName"]), false, false, false)
-            local playerDistance = GetDistanceBetweenCoords(playerCoords.x, playerCoords.y, playerCoords.z, doorList[i]["x"], doorList[i]["y"], doorList[i]["z"], true)
-
-            if(playerDistance < 1) then
-                if IsControlJustPressed(1,51) then
-                    if doorList[i]["locked"] == true then
-                        TriggerServerEvent("doormanager:s_openDoor", i)
-                    else
-                        TriggerServerEvent("doormanager:s_closeDoor", i)
-                    end
-                end
-            else
-                FreezeEntityPosition(closeDoor, doorList[i]["locked"])
-            end
-        end
-    end
-end)
-
 Citizen.CreateThread(function()
     while true do
         local x,y,z = table.unpack(thermite_loc)
@@ -45,25 +18,7 @@ end)
 RegisterNetEvent('jewelleryheist:doesUserHaveThermiteToUse')
 AddEventHandler('jewelleryheist:doesUserHaveThermiteToUse', function(hasProduct) -- action of selling to the ped spawned
     if hasProduct then
-        local success_thermite = math.random()
-        if success_thermite < 0.6 then
-            StartEntityFire(GetPlayerPed(-1))
-        else
-            notify('success!')
-            local mycoords = GetEntityCoords(GetPlayerPed(-1), false)
-            local x, y, z = table.unpack(mycoords)
-            local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-            local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-            TriggerServerEvent("911:JewelleryRobbery", x, y, z, lastStreetNAME)
-            for i = 1, #doorList do
-                doorList[i]['locked'] = false
-                FreezeEntityPosition(unlockDoor, doorList[i]['locked'])
-                thermite_success = true
-                Wait(3000)
-                TriggerEvent('usa:notify', 'Once you have collected the goods head to Jamestown and locate the buyer!')
-            end
-        end
-        TriggerServerEvent("jewelleryheist:thermite", source)
+       TriggerEvent('doormanager:thermiteDoor')
     else
         TriggerEvent('usa:notify', 'You do not have any ~y~Thermite~s~!')
     end
@@ -83,11 +38,22 @@ Citizen.CreateThread(function()
     while true do
         Wait(0)
         for k in pairs(smash_n_grab) do
+            local pid = PlayerPedId()
             local plyCoords = GetEntityCoords(GetPlayerPed(-1), false)
             local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, smash_n_grab[k].x, smash_n_grab[k].y, smash_n_grab[k].z)
             if dist < 0.5 and not smash_n_grab[k].robbed then
                 if IsControlJustPressed(1,51) then
-                    pleaseHold('Stealing Jewellery', 6000, 'missheist_jewel@first_person', 'smash_case_e')
+                    local beginTime = GetGameTimer()
+                    RequestAnimDict("missheist_jewel@first_person")
+                    while (not HasAnimDictLoaded("missheist_jewel@first_person")) do Citizen.Wait(0) end
+                    while GetGameTimer() - beginTime < 6 * 1000 do
+                        if not IsEntityPlayingAnim(pid, "missheist_jewel@first_person", "smash_case_e", 3) then
+                            TaskPlayAnim(pid, "missheist_jewel@first_person", "smash_case_e", 8.0, 1.0, -1, 11, 1.0, false, false, false)
+                        end
+                        DrawTimer(beginTime, 6 * 1000, 1.42, 1.475, 'Stealing Jewellery')
+                        Citizen.Wait(1)
+                    end
+                    ClearPedTasks(pid)
                     TriggerServerEvent('jewelleryheist:stolengoods', source)
                     smash_n_grab[k].robbed = true
                 end
@@ -100,9 +66,33 @@ end)
 local purchaser = 'g_m_y_mexgoon_01'
 local purchase_location = {334.39, -2058.19, 20.94, 325.57}
 
-
+local NPCHandle = nil
 Citizen.CreateThread(function()
-    spawnPed(purchaser, purchase_location)
+    while true do
+        local playerCoords = GetEntityCoords(PlayerPedId(), false)
+        local x,y,z = table.unpack(purchase_location)
+        if Vdist(playerCoords, x, y, z) < 40 then
+            if not NPCHandle then
+                RequestModel(GetHashKey(purchaser))
+                while not HasModelLoaded(purchaser) do
+                    RequestModel(purchaser)
+                    Wait(1)
+                end
+                NPCHandle = CreatePed(0, purchaser, x, y, z, 0.1, false, false) -- need to add distance culling
+                SetEntityCanBeDamaged(NPCHandle,false)
+                SetPedCanRagdollFromPlayerImpact(NPCHandle,false)
+                SetBlockingOfNonTemporaryEvents(NPCHandle,true)
+                SetPedFleeAttributes(NPCHandle,0,0)
+                SetPedCombatAttributes(NPCHandle,17,1)
+            end
+        else
+            if NPCHandle then
+                DeletePed(NPCHandle)
+                NPCHandle = nil
+            end
+        end
+        Wait(1)
+    end
 end)
 
 Citizen.CreateThread(function()
@@ -116,17 +106,6 @@ Citizen.CreateThread(function()
     end
 end)
 
-function spawnPed(ped, location)
-    RequestModel(GetHashKey(ped))
-    while not HasModelLoaded(ped) do
-        RequestModel(ped)
-        Citizen.Wait(1)
-    end
-    local x,y,z = table.unpack(location)
-    local purchasee = CreatePed(0, ped, x, y, z, 0.1, true, false)
-    SetEntityAsMissionEntity(purchasee, true, true)
-end
-
 function promptSale()
     if IsControlJustPressed(0, 38) then
         TriggerServerEvent('jewelleryheist:doesUserHaveGoodsToSell')
@@ -136,7 +115,13 @@ end
 RegisterNetEvent('jewelleryheist:doesUserHaveGoodsToSell')
 AddEventHandler('jewelleryheist:doesUserHaveGoodsToSell', function(hasProduct) -- action of selling to the ped spawned
     if hasProduct then
-        pleaseHold('Selling Stolen Goods', 10000, 'missheist_agency2aig_13', 'pickup_briefcase_upperbody')
+        local beginTime = GetGameTimer()
+        while GetGameTimer() - beginTime < 10 * 1000 do
+            DrawTimer(beginTime, 10 * 1000, 1.42, 1.475, 'Stealing Jewellery')
+            DisableControlAction(0, 244, true) -- 244 = M key (interaction menu / inventory)
+            DisableControlAction(0, 38, true) -- prevent spam clicking
+            Citizen.Wait(1)
+        end
         TriggerServerEvent("jewelleryheist:sellstolengoods", source)
     else
         TriggerEvent('usa:notify', 'You do not have any ~y~Stolen Goods~s~!')
@@ -162,34 +147,6 @@ function notify(text)
     DrawNotification(false,truee)
 end
 
-function pleaseHold(label, time, animation, anim)
-    TriggerEvent("mythic_progressbar:client:progress", {
-        name = "unique_action_name",
-        duration = time,
-        label = label,
-        useWhileDead = false,
-        canCancel = false,
-        controlDisables = {
-            disableMovement = true,
-            disableCarMovement = true,
-            disableMouse = false,
-            disableCombat = true,
-        },
-        animation = {
-            animDict = animation,
-            anim = anim,
-            flags = 20,
-        },
-        prop = {
-            model = "prop_paper_bag_small",
-        }
-    }, function(status)
-        if not status then
-            -- Do Something If Event Wasn't Cancelled
-        end
-    end)
-end
-
 function DrawText3D(x, y, z, distance, text)
     if Vdist(GetEntityCoords(PlayerPedId()), x, y, z) < distance then
         local onScreen,_x,_y=World3dToScreen2d(x,y,z)
@@ -204,4 +161,38 @@ function DrawText3D(x, y, z, distance, text)
         local factor = (string.len(text)) / 470
         DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
     end
+end
+
+function DrawTimer(beginTime, duration, x, y, text)
+    if not HasStreamedTextureDictLoaded('timerbars') then
+        RequestStreamedTextureDict('timerbars')
+        while not HasStreamedTextureDictLoaded('timerbars') do
+            Citizen.Wait(0)
+        end
+    end
+
+    if GetTimeDifference(GetGameTimer(), beginTime) < duration then
+        w = (GetTimeDifference(GetGameTimer(), beginTime) * (0.085 / duration))
+    end
+
+    local correction = ((1.0 - math.floor(GetSafeZoneSize(), 2)) * 100) * 0.005
+    x, y = x - correction, y - correction
+
+    Set_2dLayer(0)
+    DrawSprite('timerbars', 'all_black_bg', x, y, 0.15, 0.0325, 0.0, 255, 255, 255, 180)
+
+    Set_2dLayer(1)
+    DrawRect(x + 0.0275, y, 0.085, 0.0125, 100, 0, 0, 180)
+
+    Set_2dLayer(2)
+    DrawRect(x - 0.015 + (w / 2), y, w, 0.0125, 150, 0, 0, 180)
+
+    SetTextColour(255, 255, 255, 180)
+    SetTextFont(0)
+    SetTextScale(0.3, 0.3)
+    SetTextCentre(true)
+    SetTextEntry('STRING')
+    AddTextComponentString(text)
+    Set_2dLayer(3)
+    DrawText(x - 0.06, y - 0.012)
 end

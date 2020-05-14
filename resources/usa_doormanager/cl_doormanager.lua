@@ -259,6 +259,30 @@ AddEventHandler('doormanager:lockpickDoor', function(lockpickItem)
   end
  end)
 
+RegisterNetEvent('doormanager:thermiteDoor')
+AddEventHandler('doormanager:thermiteDoor', function(thermiteItem)
+    for i = 1, #DOORS_TO_MANAGE do
+        local door = DOORS_TO_MANAGE[i]
+        if door.thermiteable then
+            if math.random() < 0.4 then
+                StartEntityFire(GetPlayerPed(-1))
+            else
+                local mycoords = GetEntityCoords(GetPlayerPed(-1), false)
+                local x, y, z = table.unpack(mycoords)
+                local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+                local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+                TriggerServerEvent("911:JewelleryRobbery", x, y, z, lastStreetNAME)
+                TriggerServerEvent('doormanager:checkDoorLock', i, door.x, door.y, door.z, true, true)
+                TriggerServerEvent("jewelleryheist:thermite", source)
+                TriggerServerEvent("usa:removeItem", thermiteItem, 1)
+                exports.globals:notify('You have successfully thermited the electronics to the Jewellery Store door!')
+                Wait(5000)
+                exports.globals:notify('Once you have collected the goods head to Jamestown and locate the buyer!')
+            end
+        end
+    end
+end)
+
 function DrawTimer(beginTime, duration, x, y, text)
     if not HasStreamedTextureDictLoaded('timerbars') then
         RequestStreamedTextureDict('timerbars')
