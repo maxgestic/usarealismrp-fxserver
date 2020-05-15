@@ -818,19 +818,28 @@ end)
 
 function interactionMenuUse(itemName, wholeItem)
 	Citizen.CreateThread(function()
-		if  string.find(itemName, "Uncut Cocaine") then
-			TriggerServerEvent("interaction:removeItemFroamPlayer", itemName)
+		if string.find(itemName, "Meth") or string.find(itemName, "Uncut Cocaine") then
+			TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
 			TriggerEvent("interaction:notify", "You have used: (x1) " .. itemName:sub(6))
 			intoxicate(true, nil)
 			reality(5)
-		elseif string.find(itemName, "LSD Vial") or string.find(itemName, "Meth") then
+		elseif string.find(itemName, "LSD Vial") then
 			TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
 			TriggerEvent("interaction:notify", "You have used: (x1) LSD Vial")
 			Citizen.CreateThread(function()
-				local drug_duration = 3 * 60 * 1000 -- 15 minutes in ms?
-				--Wait(8000)
-				exports["acidtrip"]:DoAcid(drug_duration)
-
+				local drug_duration = 15 * 60 * 1000 -- 15 minutes in ms?					local drug_duration = 3 * 60 * 1000 -- 15 minutes in ms?
+				Wait(8000)					--Wait(8000)
+				DoScreenFadeOut(1500)					exports["acidtrip"]:DoAcid(drug_duration)
+				Wait(1500)	
+				DoScreenFadeIn(1500)	
+				StartScreenEffect("DrugsMichaelAliensFight", 0, false)	
+				local useTime = GetGameTimer()	
+				while GetGameTimer() - useTime <= drug_duration do 	
+					Wait(1)	
+				end	
+				DoScreenFadeOut(1000)	
+				DoScreenFadeIn(1000)	
+				StopScreenEffect("DrugsMichaelAliensFight")
 			end)
 		elseif string.find(itemName, "Packaged Weed") then
 			TriggerServerEvent("drugs:use", "Packaged Weed")
