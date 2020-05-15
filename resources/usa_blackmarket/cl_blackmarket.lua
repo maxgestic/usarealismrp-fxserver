@@ -103,13 +103,12 @@ function IsPlayerAtBlackMarket()
 end
 
 function isOpen()
-  -- open from openingHour AM to 2 AM
   local currentHour = GetClockHours()
-    if currentHour >= openingHour and currentHour <= closingHour then
-        return true
-    else
-        return false
-    end
+  if currentHour >= openingHour and currentHour <= closingHour then
+      return true
+  else
+      return false
+  end
 end
 
 Citizen.CreateThread(function()
