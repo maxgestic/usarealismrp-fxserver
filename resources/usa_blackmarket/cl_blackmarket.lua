@@ -125,15 +125,16 @@ Citizen.CreateThread(function()
       -- Listen for menu open --
       --------------------------
       if IsControlJustPressed(1, MENU_KEY) then
-        if isOpen() then
           if IsPlayerAtBlackMarket() then
-              mainMenu:Clear()
-              CreateItemList(mainMenu)
-              mainMenu:Visible(not mainMenu:Visible())
+              if isOpen() then
+                  mainMenu:Clear()
+                  CreateItemList(mainMenu)
+                  mainMenu:Visible(not mainMenu:Visible())
+              else
+                  exports.globals:notify("My connect is still sleeping! Come back later!")
+
+              end
           end
-        else 
-          exports.globals:notify("My connect is still sleeping! Come back later!")
-        end
       end
 
       if mainMenu:Visible() then
