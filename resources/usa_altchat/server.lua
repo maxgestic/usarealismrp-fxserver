@@ -86,12 +86,21 @@ TriggerEvent('es:addJobCommand', 'fakeid', {'sheriff', 'corrections'}, function(
 	elseif job == 'corrections' then
 		local usource = source
 		local job = char.get('job')
+		local cbRan = false
+		local highEnoughRank = false
 		getRankForJob(char, job, function(rank)
-			if rank < 3 then
-				TriggerClientEvent("usa:notify", source, "Not high enough rank!")
-				return
+			if rank >= 3 then
+				highEnoughRank = true
 			end
+			cbRan = true
 		end)
+		while not cbRan do
+			Wait(100)
+		end
+		if not highEnoughRank then
+			TriggerClientEvent("usa:notify", source, "Not high enough rank!")
+			return
+		end
 	end
 
 	if args[2] and args[3] and args[4] and args[5] and args[6] then
@@ -104,19 +113,19 @@ TriggerEvent('es:addJobCommand', 'fakeid', {'sheriff', 'corrections'}, function(
 end, {
 	help = "Present a fake identification card",
 	params = {
-	{ name = "first name", help = "first name to show on ID" },
-	{ name = "last name", help = "last name to show on ID" },
-	{ name = "dob year", help = "date of birth year to show on ID" },
-	{ name = "dob month", help = "date of birth month to show on ID" },
-	{ name = "dob day", help = "date of birth day to show on ID" }
+		{ name = "first name", help = "first name to show on ID" },
+		{ name = "last name", help = "last name to show on ID" },
+		{ name = "dob year", help = "date of birth year to show on ID" },
+		{ name = "dob month", help = "date of birth month to show on ID" },
+		{ name = "dob day", help = "date of birth day to show on ID" }
 	}
-	})
+})
 
-	TriggerEvent('es:addJobCommand', 'faketweet', {'sheriff'}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'faketweet', {'sheriff'}, function(source, args, char, location)
 	local job = char.get("job")
 	if char.get("policeRank") < 4 and (job == "sheriff" or job == "police") then
-	TriggerClientEvent("usa:notify", source, "Not high enough rank!")
-	return
+		TriggerClientEvent("usa:notify", source, "Not high enough rank!")
+		return
 	end
 	local name = "@" .. args[2] .. "_" .. args[3]
 	name = string.lower(name)
@@ -125,22 +134,22 @@ end, {
 	table.remove(args, 1)
 	local msg = table.concat(args, " ")
 	exports["usa-characters"]:GetCharacters(function(characters)
-	for id, char in pairs(characters) do
-	if char.hasItem("Cell Phone") then
-	TriggerClientEvent('chatMessage', id, "[TWEET] - " .. name, {29,161,242}, msg)
-	end
-	end
+		for id, char in pairs(characters) do
+			if char.hasItem("Cell Phone") then
+				TriggerClientEvent('chatMessage', id, "[TWEET] - " .. name, {29,161,242}, msg)
+			end
+		end
 	end)
 	TriggerEvent("chat:sendToLogFile", source, "[TWEET] - " .. name .. ": " .. msg)
-	end, {
+end, {
 	help = "Send a fake tweet",
 	params = {
-	{ name = "first name", help = "first name to show on tweet" },
-	{ name = "last name", help = "last name to show on tweet" },
+		{ name = "first name", help = "first name to show on tweet" },
+		{ name = "last name", help = "last name to show on tweet" },
 	}
-	})
+})
 
-	TriggerEvent('es:addJobCommand', 'fakead', {'sheriff', 'corrections'}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'fakead', {'sheriff', 'corrections'}, function(source, args, char, location)
 	local job = char.get("job")
 	if char.get("policeRank") < 4 and (job == "sheriff" or job == "police") then
 	TriggerClientEvent("usa:notify", source, "Not high enough rank!")
@@ -148,12 +157,21 @@ end, {
 	elseif job == 'corrections' then
 		local usource = source
 		local job = char.get('job')
+		local cbRan = false
+		local highEnoughRank = false
 		getRankForJob(char, job, function(rank)
-			if rank < 3 then
-				TriggerClientEvent("usa:notify", source, "Not high enough rank!")
-				return
+			if rank >= 3 then
+				highEnoughRank = true
 			end
+			cbRan = true
 		end)
+		while not cbRan do
+			Wait(100)
+		end
+		if not highEnoughRank then
+			TriggerClientEvent("usa:notify", source, "Not high enough rank!")
+			return
+		end
 	end
 	local name = args[2] .. " " .. args[3]
 	table.remove(args, 1)
@@ -161,31 +179,32 @@ end, {
 	table.remove(args, 1)
 	local msg = table.concat(args, " ")
 	exports["usa-characters"]:GetCharacters(function(characters)
-	for id, char in pairs(characters) do
-	if char.hasItem("Cell Phone") then
-	TriggerClientEvent('chatMessage', id, "[Advertisement] - " .. name, {171, 67, 227}, msg)
-	end
-	end
+		for id, char in pairs(characters) do
+			if char.hasItem("Cell Phone") then
+				TriggerClientEvent('chatMessage', id, "[Advertisement] - " .. name, {171, 67, 227}, msg)
+			end
+		end
 	end)
-	end, {
+end, {
 	help = "Send a fake advertisement",
 	params = {
-	{ name = "first name", help = "first name to show on ad" },
-	{ name = "last name", help = "last name to show on ad" },
+		{ name = "first name", help = "first name to show on ad" },
+		{ name = "last name", help = "last name to show on ad" },
+		{ name = "message", help = "the advertisement message" }
 	}
-	})
+})
 
-	TriggerEvent('es:addCommand', 'id', function(source, args, char, location)
+TriggerEvent('es:addCommand', 'id', function(source, args, char, location)
 	showid(source, char, location)
-	end, {help = "Present your identification card / DL."})
+end, {help = "Present your identification card / DL."})
 
-	RegisterServerEvent("altchat:showID")
-	AddEventHandler("altchat:showID", function(location)
+RegisterServerEvent("altchat:showID")
+AddEventHandler("altchat:showID", function(location)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	showid(source, char, location)
-	end)
+end)
 
-	function showid(src, u, location)
+function showid(src, u, location)
 	local job = u.get("job")
 	local employer = jobNames[job]
 	local char_name = u.getFullName()
@@ -194,9 +213,9 @@ end, {
 	local msg = "^4^*[STATE ID]^0 Name: ^r" .. char_name .. " ^4^*|^0 SSN: ^r" .. src .. " ^4^*| ^0DOB: ^r" .. dob
 	if employer then msg = "^4^*[STATE ID]^0 Name: ^r" .. char_name .. " ^4^*|^0 SSN: ^r" .. src .. " ^4^*| ^0DOB: ^r" .. dob .. " ^4^*| ^0Employer: ^r".. employer end
 	exports["globals"]:sendLocalActionMessageChat(msg, location)
-	end
+end
 
-	function GetIdString(src, u)
+function GetIdString(src, u)
 	local job = u.get("job")
 	local employer = jobNames[job]
 	local char_name = u.getFullName()
@@ -204,7 +223,7 @@ end, {
 	local msg = "^4^*[ID]^0 Name: ^r" .. char_name .. " ^4^*|^0 SSN: ^r" .. src .. " ^4^*| ^0DOB: ^r" .. dob
 	if employer then msg = "^4^*[ID]^0 Name: ^r" .. char_name .. " ^4^*|^0 SSN: ^r" .. src .. " ^4^*| ^0DOB: ^r" .. dob .. " ^4^*| ^0Employer: ^r".. employer end
 	return msg
-	end
+end
 
 function getRankForJob(char, job, cb)
 	if job == "corrections" then

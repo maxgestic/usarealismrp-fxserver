@@ -1,8 +1,6 @@
 local MENU_KEY = 38 -- "E"
 local closest_shop = nil
-local openingHour = math.random(20, 22)
-local closingHour = math.random(5, 7)
-local open = true
+local openingHour = math.random(10, 15)
 
 local markets = {}
 
@@ -12,18 +10,6 @@ RegisterNetEvent("blackMarket:loadItems")
 AddEventHandler("blackMarket:loadItems", function(items)
   markets = items
 end)
-
-Citizen.CreateThread(function ()
-    while true do
-        Wait(0)
-        if GetClockHours() >= openingHour or GetClockHours() <= closingHour then
-            open = true
-        else
-            open = false
-        end
-    end
-end)
-
 
 local createdJobPeds = {}
 Citizen.CreateThread(function()
@@ -115,41 +101,49 @@ function IsPlayerAtBlackMarket()
     if atblackmarket then return true else return false end
 end
 
+function isOpen()
+  -- open from openingHour AM to 2 AM
+  local currentHour = GetClockHours()
+  return currentHour >= openingHour or currentHour == 1 or currentHour == 2
+end
+
 Citizen.CreateThread(function()
 	while true do
     	Wait(0)
-        if open then
-            -- Process Menu --
-            _menuPool:MouseControlsEnabled(false)
-            _menuPool:ControlDisablingEnabled(false)
-            _menuPool:ProcessMenus()
-            ------------------
-            -- Draw Markers --
-            ------------------
-            for k, v in pairs(markets) do
-                local x, y, z = table.unpack(markets[k]['coords'])
-                DrawText3D(x, y, z, 15, '[E] - Black Market')
-            end
-            --------------------------
-            -- Listen for menu open --
-            --------------------------
-            if IsControlJustPressed(1, MENU_KEY) then
-                if IsPlayerAtBlackMarket() then
-                    mainMenu:Clear()
-                    CreateItemList(mainMenu)
-                    mainMenu:Visible(not mainMenu:Visible())
-                end
-            end
-
-            if mainMenu:Visible() then
-                local playerPed = PlayerPedId()
-                local playerCoords = GetEntityCoords(playerPed)
-                local x, y, z = table.unpack(markets[closest_shop]['coords'])
-                if Vdist(playerCoords, x, y, z) > 5.0 then
-                    mainMenu:Visible(false)
-                end
-            end
+      -- Process Menu --
+      _menuPool:MouseControlsEnabled(false)
+      _menuPool:ControlDisablingEnabled(false)
+      _menuPool:ProcessMenus()
+      ------------------
+      -- Draw Markers --
+      ------------------
+      for k, v in pairs(markets) do
+          local x, y, z = table.unpack(markets[k]['coords'])
+          DrawText3D(x, y, z, 15, '[E] - Black Market')
+      end
+      --------------------------
+      -- Listen for menu open --
+      --------------------------
+      if IsControlJustPressed(1, MENU_KEY) then
+        if isOpen() then
+          if IsPlayerAtBlackMarket() then
+              mainMenu:Clear()
+              CreateItemList(mainMenu)
+              mainMenu:Visible(not mainMenu:Visible())
+          end
+        else 
+          exports.globals:notify("My connect is still sleeping! Come back later!")
         end
+      end
+
+      if mainMenu:Visible() then
+          local playerPed = PlayerPedId()
+          local playerCoords = GetEntityCoords(playerPed)
+          local x, y, z = table.unpack(markets[closest_shop]['coords'])
+          if Vdist(playerCoords, x, y, z) > 5.0 then
+              mainMenu:Visible(false)
+          end
+      end
 	end
 end)
 
