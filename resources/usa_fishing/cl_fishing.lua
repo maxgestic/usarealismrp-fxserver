@@ -81,6 +81,7 @@ AddEventHandler("fishing:startDockFishing", function(spotHeading)
 						DeleteEntity(robObject)
 						fishing = false
 						TriggerServerEvent('fish:giveFish')
+						FreezeEntityPosition(playerPed, false)
 					end
 				end
 			end
@@ -92,6 +93,7 @@ AddEventHandler("fishing:startDockFishing", function(spotHeading)
 				DeleteEntity(robObject)
 				TriggerEvent('usa:notify', 'You failed to catch the fish!')
 				fishing = false
+				FreezeEntityPosition(playerPed, false)
 			end
 		end)
 	else 
@@ -155,7 +157,7 @@ Citizen.CreateThread(function()
 			local boat = GetClosestBoatInRange(playerCoords, 10)
 			if DoesEntityExist(boat) then
 				SetEntityAsMissionEntity(boat, true, true)
-				if IsEntityInWater(boat) or (GetVehicleClass(boat) == 14) then
+				if IsEntityInWater(boat) or GetVehicleClass(boat) == 14 then
 					if not IsPedSwimming(playerPed) and not IsPedInAnyVehicle(playerPed, true) then
 						TriggerServerEvent("fishing:checkForPole")
 					end
