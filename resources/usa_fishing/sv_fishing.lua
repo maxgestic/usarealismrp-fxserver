@@ -5,8 +5,8 @@ local fishItems = {
 }
 
 local seaFishItems = {
-  {name = "Yellowfin Tuna", quantity = 1, worth = 300, type = "seafish", weight = 10, legality = "legal"},
-  {name = "Swordfish", quantity = 1, worth = 400, type = "seafish", weight = 15, legality = "legal"}
+  {name = "Yellowfin Tuna", quantity = 1, worth = 200, type = "seafish", weight = 15, legality = "legal"},
+  {name = "Swordfish", quantity = 1, worth = 300, type = "seafish", weight = 20, legality = "legal"}
 }
 
 RegisterServerEvent("fish:giveFish")
