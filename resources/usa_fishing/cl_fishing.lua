@@ -107,7 +107,6 @@ AddEventHandler("fishing:startSeaFishing", function()
 		seaFishing = true
 		local wait = math.random(25000, 120000)
 		local robObject = AttachEntityToPed('prop_fishing_rod_01', 60309, 0, 0, 0, 0, 0, 0)
-		local rod = SetEntityAsMissionEntity(robObject)
 		exports.globals:loadAnimDict('amb@world_human_stand_fishing@base')
 		TaskPlayAnim(playerPed,'amb@world_human_stand_fishing@base', 'base', 8.0, -8, -1, 49, 0, 0, 0, 0)
 		Wait(wait)
@@ -127,7 +126,7 @@ AddEventHandler("fishing:startSeaFishing", function()
 					resistance = resistance + 100
 					if resistance > maxResistance and seaFishing then
 						ClearPedTasks(playerPed)
-						DeleteEntity(rod)
+						DeleteEntity(robObject)
 						seaFishing = false
 						TriggerServerEvent('fish:giveSeaFish')
 					end
@@ -137,7 +136,7 @@ AddEventHandler("fishing:startSeaFishing", function()
 		Wait(timeToResist)
 		if seaFishing then
 			ClearPedTasks(playerPed)
-			DeleteEntity(rod)
+			DeleteEntity(robObject)
 			seaFishing = false
 			TriggerEvent('usa:notify', 'You failed to catch the fish!')
 		end
