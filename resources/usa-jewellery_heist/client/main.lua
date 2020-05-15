@@ -116,8 +116,8 @@ RegisterNetEvent('jewelleryheist:doesUserHaveGoodsToSell')
 AddEventHandler('jewelleryheist:doesUserHaveGoodsToSell', function(hasProduct) -- action of selling to the ped spawned
     if hasProduct then
         local beginTime = GetGameTimer()
-        while GetGameTimer() - beginTime < 10 * 1000 do
-            DrawTimer(beginTime, 10 * 1000, 1.42, 1.475, 'Stealing Jewellery')
+        while GetGameTimer() - beginTime < 5 * 1000 do
+            DrawTimer(beginTime, 5 * 1000, 1.42, 1.475, 'Stealing Jewellery')
             DisableControlAction(0, 244, true) -- 244 = M key (interaction menu / inventory)
             DisableControlAction(0, 38, true) -- prevent spam clicking
             Citizen.Wait(1)
