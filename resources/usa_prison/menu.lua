@@ -15,6 +15,7 @@ local vehicles = {
   { name = "CVPI", hash = GetHashKey("pdcvpi") },
   { name = "Charger", hash = GetHashKey("pdchgr") },
   { name = "Taurus", hash = GetHashKey("pdtau") },
+  { name = "Explorer", hash = GetHashKey("pdexp") },
   { name = "Truck", hash = GetHashKey("sheriff2") },
   { name = "Riot", hash = GetHashKey("riot") },
   { name = "Motorcycle 1", hash = GetHashKey("policeb") },
