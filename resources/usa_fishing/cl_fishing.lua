@@ -289,8 +289,8 @@ function GetClosestBoatInRange(coords, range)
 end
 
 function AttachEntityToPed(prop,bone_ID,x,y,z,RotX,RotY,RotZ)
-	BoneID = GetPedBoneIndex(PlayerPedId(), bone_ID)
-	obj = CreateObject(GetHashKey(prop),  1729.73,  6403.90,  34.56,  false,  false,  false)
+	local BoneID = GetPedBoneIndex(PlayerPedId(), bone_ID)
+	local obj = CreateObject(GetHashKey(prop),  1729.73,  6403.90,  34.56,  false,  false,  false)
 	SetEntityAsMissionEntity(obj, true, true)
 	vX,vY,vZ = table.unpack(GetEntityCoords(PlayerPedId()))
 	xRot, yRot, zRot = table.unpack(GetEntityRotation(PlayerPedId(),2))
