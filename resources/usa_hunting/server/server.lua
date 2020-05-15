@@ -38,8 +38,6 @@ AddEventHandler("hunting:skinforfurandmeat", function()
     else
         TriggerClientEvent('usa:notify', usource, 'Inventory is full!')
     end
-
-    TriggerClientEvent("hunting:skinforfurandmeat", source)
 end)
 
 RegisterServerEvent("hunting:sellFur")
