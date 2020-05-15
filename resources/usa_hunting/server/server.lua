@@ -1,16 +1,16 @@
 local REWARD_RANGES = {
     fur = {
         low = 90,
-        high = 150
+        high = 250
     },
     meat = {
         low = 85,
-        high = 135
+        high = 195
     }
 }
 
 RegisterServerEvent("hunting:skinforfurandmeat")
-AddEventHandler("hunting:skinforfurandmeat", function(ped)
+AddEventHandler("hunting:skinforfurandmeat", function()
     local usource = source
     local char = exports["usa-characters"]:GetCharacter(usource)
     local fur = {
@@ -38,8 +38,6 @@ AddEventHandler("hunting:skinforfurandmeat", function(ped)
     else
         TriggerClientEvent('usa:notify', usource, 'Inventory is full!')
     end
-
-    TriggerClientEvent("hunting:skinforfurandmeat", source, ped)
 end)
 
 RegisterServerEvent("hunting:sellFur")

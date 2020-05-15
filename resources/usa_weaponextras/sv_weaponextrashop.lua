@@ -47,6 +47,9 @@ local ITEMS = { -- must be kept in sync with one in sv_weaponeaxtrashop.lua --
                 {name = "Flashlight", value = "COMPONENT_AT_PI_FLSH", price = 200, weapon_hash = -1716589765},
                 {name = "Platinum Pearl Deluxe Finish", value = "COMPONENT_PISTOL50_VARMOD_LUXE", price = 500, weapon_hash = -1716589765}
             },
+            ['MK2'] = {
+                {name = "Flashlight", value = "COMPONENT_AT_PI_FLSH_02", price = 200, weapon_hash = -1075685676},
+            },
             ["Revolver"] = {
                 {name = "Variation 1", value = "COMPONENT_REVOLVER_VARMOD_BOSS", price = 500, weapon_hash = -1045183535},
                 {name = "Variation 2", value = "COMPONENT_REVOLVER_VARMOD_GOON", price = 500, weapon_hash = -1045183535}

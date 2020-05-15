@@ -92,7 +92,7 @@ local VEHICLE_RANKS = {
 			hash = GetHashKey("pdexp")
 		},
 		["polmav"] = {
-			rank = 4,
+			rank = 3,
 			allowedLiveries = { 2 },
 			hash = 353883353
 		},

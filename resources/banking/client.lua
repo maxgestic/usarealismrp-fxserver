@@ -13,7 +13,7 @@ local atms = {
   "prop_fleeca_atm",
 }
 
-local CHECK_RADIUS = 0.6
+local CHECK_RADIUS = 0.7
 
 
 -- Banks

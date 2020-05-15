@@ -9,6 +9,7 @@
       <manifestFlags/>
       <itypDepArray>
         <Item>v_rooftop</Item>
+        <Item>v_utility</Item>
       </itypDepArray>
     </Item>
     <Item>

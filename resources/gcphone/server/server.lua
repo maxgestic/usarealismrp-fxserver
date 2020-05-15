@@ -734,8 +734,8 @@ AddEventHandler("phone:sendTaxiMessage", function(data)
 		for id, char in pairs(characters) do
 			if char.get("job") == "taxi" then
 				TriggerClientEvent('chatMessage', id, "Taxi Requested! (Caller: #" .. src .. ")", {251, 229, 5}, message .. " (" .. data.location .. ")")
-				TriggerClientEvent("phone:notify", id, "~y~TAXI REQUEST (Caller: # ".. src .. "):\n~w~"..message)
-				taxi_online = true
+                TriggerClientEvent("gcPhone:serviceRequested", id)
+                taxi_online = true
 				-- set temp blip
 				TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z)
 			end
@@ -759,8 +759,8 @@ AddEventHandler("phone:sendMechanicMessage", function(data)
 		for id, char in pairs(characters) do
 			if char.get("job") == "mechanic" then
 				TriggerClientEvent('chatMessage', id, "Mechanic Requested! (Caller: #" .. src .. ")", {118, 120, 251}, message .. " (" .. data.location .. ")")
-				TriggerClientEvent("phone:notify", id, "~y~MECHANIC REQUEST (Caller: # ".. src .. "):\n~w~"..message)
-				tow_online = true
+                TriggerClientEvent("gcPhone:serviceRequested", id)
+                tow_online = true
 				TriggerClientEvent('drug-sell:createBlip', id, data.pos.x, data.pos.y, data.pos.z) -- hacky blip
 			end
 		end

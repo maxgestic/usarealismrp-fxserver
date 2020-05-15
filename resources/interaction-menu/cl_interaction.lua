@@ -827,18 +827,18 @@ function interactionMenuUse(itemName, wholeItem)
 			TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
 			TriggerEvent("interaction:notify", "You have used: (x1) LSD Vial")
 			Citizen.CreateThread(function()
-				local drug_duration = 15 * 60 * 1000 -- 15 minutes in ms?
-				Wait(8000)
-				DoScreenFadeOut(1500)
-				Wait(1500)
-				DoScreenFadeIn(1500)
-				StartScreenEffect("DrugsMichaelAliensFight", 0, false)
-				local useTime = GetGameTimer()
-				while GetGameTimer() - useTime <= drug_duration do 
-					Wait(1)
-				end
-				DoScreenFadeOut(1000)
-				DoScreenFadeIn(1000)
+				local drug_duration = 15 * 60 * 1000 -- 15 minutes in ms?					local drug_duration = 3 * 60 * 1000 -- 15 minutes in ms?
+				Wait(8000)					--Wait(8000)
+				DoScreenFadeOut(1500)					exports["acidtrip"]:DoAcid(drug_duration)
+				Wait(1500)	
+				DoScreenFadeIn(1500)	
+				StartScreenEffect("DrugsMichaelAliensFight", 0, false)	
+				local useTime = GetGameTimer()	
+				while GetGameTimer() - useTime <= drug_duration do 	
+					Wait(1)	
+				end	
+				DoScreenFadeOut(1000)	
+				DoScreenFadeIn(1000)	
 				StopScreenEffect("DrugsMichaelAliensFight")
 			end)
 		elseif string.find(itemName, "Packaged Weed") then
@@ -851,6 +851,8 @@ function interactionMenuUse(itemName, wholeItem)
 			TriggerEvent("veh:hotwireVehicle")
 		elseif string.find(itemName, "Body Armor") then
 			TriggerServerEvent("interaction:bodyArmor")
+		elseif string.find(itemName, "Police Armor") then
+			TriggerServerEvent("interaction:policeBodyArmor")
 			---------------
 			-- Jerry Can --
 			---------------
@@ -1048,6 +1050,12 @@ RegisterNetEvent("interaction:equipArmor")
 AddEventHandler("interaction:equipArmor", function()
 	SetPedArmour(PlayerPedId(), 40)
 	TriggerEvent('usa:notify', "You have equipped light body armor!")
+end)
+
+RegisterNetEvent("interaction:equipPoliceArmor")
+AddEventHandler("interaction:equipPoliceArmor", function()
+	SetPedArmour(PlayerPedId(), 100)
+	TriggerEvent('usa:notify', "You have equipped Police Body Armor!")
 end)
 
 RegisterNetEvent("interaction:ragdoll")

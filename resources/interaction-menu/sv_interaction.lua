@@ -71,6 +71,16 @@ AddEventHandler("interaction:bodyArmor", function()
 	end
 end)
 
+RegisterServerEvent("interaction:policeBodyArmor")
+AddEventHandler("interaction:policeBodyArmor", function()
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local armor = char.getItem("Police Armor")
+	if armor then
+		char.removeItem("Police Armor", 1)
+		TriggerClientEvent("interaction:equipPoliceArmor", source)
+	end
+end)
+
 function removeQuantityFromItemName(itemName)
 	if string.find(itemName,"%)") then
 		local i = string.find(itemName, "%)")

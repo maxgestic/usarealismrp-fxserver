@@ -31,7 +31,7 @@ end)
 IsCar = function(veh)
             local vc = GetVehicleClass(veh)
             local model = GetEntityModel(veh)
-            return (vc >= 0 and vc <= 7) or (vc >= 9 and vc <= 12) or (vc >= 17 and vc <= 20) and model ~= GetHashKey("policeb") and model ~= GetHashKey("1200RT")
+            return (vc >= 0 and vc <= 7) or (vc >= 9 and vc <= 12) or (vc >= 15 and vc <= 20) and model ~= GetHashKey("policeb") and model ~= GetHashKey("1200RT")
         end
 
 Fwv = function (entity)
@@ -64,7 +64,7 @@ Citizen.CreateThread(function()
                and GetPedInVehicleSeat(car, 1) ~= GetPlayerPed(-1)
                and GetPedInVehicleSeat(car, 2) ~= GetPlayerPed(-1)
                and IsBeltVehicle(car) then
-               local damagedEngine = GetVehicleEngineHealth(car)-speedBuffer[1]*40
+               local damagedEngine = GetVehicleEngineHealth(car)-speedBuffer[1]*vehicleClassDamage(car)
                if damagedEngine < 0 then damagedEngine = -4000.0 end
                if GetPedInVehicleSeat(car, -1) == ped then
                 SetVehicleEngineHealth(car, damagedEngine)
@@ -125,7 +125,6 @@ function IsBeltVehicle(vehicle)
     if GetVehicleClass(vehicle) ~= 8
     and GetVehicleClass(vehicle) ~= 13
     and GetVehicleClass(vehicle) ~= 14
-    and GetVehicleClass(vehicle) ~= 15
     and GetVehicleClass(vehicle) ~= 16
     and GetVehicleClass(vehicle) ~= 19
     and GetVehicleClass(vehicle) ~= 21
@@ -133,5 +132,13 @@ function IsBeltVehicle(vehicle)
         return true
     else
         return false
+    end
+end
+
+function vehicleClassDamage(car)
+    if GetVehicleClass(car) ~= 9 then
+        return 40
+    else
+        return 29
     end
 end

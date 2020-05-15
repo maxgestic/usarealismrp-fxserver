@@ -3,7 +3,7 @@ local hunt_shack_location = {x = -1493.3, y = 4972.0, z = 63.93}
 local SHOW_HINT_TEXT_DIST = 15
 local MAX_HINT_TEXT_DIST = 5
 
-local BUTCHER_ANIMATION_TIME_SECONDS = 45
+local BUTCHER_ANIMATION_TIME_SECONDS = 30
 
 local KEYS = {
     E = 38
@@ -42,7 +42,7 @@ Citizen.CreateThread(function()
                 if not isBlacklistedModel(GetEntityModel(otherPed)) then
                     local pedCoords = GetEntityCoords(otherPed)
                     local distBetweenPedAndAnimal = Vdist(pedCoords, playerCoords)
-                    if DoesEntityExist(otherPed) and IsPedDeadOrDying(ped) then
+                    if DoesEntityExist(otherPed) and IsPedDeadOrDying(otherPed) then
                         if distBetweenPedAndAnimal <= 1.5 and otherPed ~= myped and not IsPedHuman(otherPed) and not isInVeh then
                             SetEntityAsMissionEntity(otherPed)
                             local beginTime = GetGameTimer()
@@ -56,7 +56,7 @@ Citizen.CreateThread(function()
                             end
                             ClearPedTasks(myped)
                             if DoesEntityExist(otherPed) then
-                                TriggerServerEvent('hunting:skinforfurandmeat', givefur)
+                                TriggerServerEvent('hunting:skinforfurandmeat')
                                 DeleteEntity(otherPed)
                             end
                         end

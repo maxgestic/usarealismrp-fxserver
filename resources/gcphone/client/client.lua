@@ -280,6 +280,13 @@ AddEventHandler("gcPhone:getBourse", function(bourse)
   SendNUIMessage({event = 'updateBourse', bourse = bourse})
 end)
 
+RegisterNetEvent('gcPhone:serviceRequested')
+AddEventHandler("gcPhone:serviceRequested", function()
+  PlaySound(-1, "Menu_Accept", "Phone_SoundSet_Default", 0, 0, 1)
+  Citizen.Wait(300)
+  PlaySound(-1, "Menu_Accept", "Phone_SoundSet_Default", 0, 0, 1)
+end)
+
 RegisterNetEvent("gcPhone:receiveMessage")
 AddEventHandler("gcPhone:receiveMessage", function(message, owner)
   -- SendNUIMessage({event = 'updateMessages', messages = messages})

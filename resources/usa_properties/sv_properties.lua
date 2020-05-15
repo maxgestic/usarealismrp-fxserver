@@ -434,7 +434,6 @@ local burglarySearchItems = {
 	{name = "Arizona Iced Tea", price = 1, type = "drink", substance = 60.0, quantity = 1, legality = "legal", weight = 9.0, objectModel = "ba_prop_club_water_bottle"},
 	{name = "Pepsi", price = 4, type = "drink", substance = 9.0, quantity = 1, legality = "legal", weight = 9.0, objectModel = "ng_proc_sodacan_01b"},
 	{name = "Everclear Vodka (90%)", price = 35, type = "alcohol", substance = 5.0, quantity = 1, legality = "legal", weight = 10.0, strength = 0.10, objectModel = "prop_vodka_bottle"},
-	{name = "Repair Kit", price = 250, type = "vehicle", quantity = 1, legality = "legal", weight = 15.0, objectModel = "imp_prop_tool_box_01a"},
 	{name = 'Lockpick', type = 'misc', price = 400, legality = 'illegal', quantity = 1, weight = 5.0},
 	{name = "First Aid Kit", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 10.0, objectModel = "v_ret_ta_firstaid"},
 	{name = "Packaged Weed", quantity = 1, weight = 5.0, type = "drug", legality = "illegal", objectModel = "bkr_prop_weed_bag_01a"},
@@ -450,6 +449,7 @@ local burglarySearchItems = {
 	{name = "Ludde's Lube", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "v_res_d_lube"},
 	{name = "Fluffy Handcuffs", type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "p_cs_cuffs_02_s"},
 	{name = "Vibrator", type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_marker_01"},
+	{name = "Sam Smith's Strapon", type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_marker_01"},
 	{name = "French Dip Au Jus", price = 55, type = "food", substance = 60.0, quantity = 1, legality = "legal", weight = 10},
 	{name = "Back Porch Strawberry Lemonade", price = 60, type = "alcohol", substance = 15.0, quantity = 4, legality = "legal", weight = 1, strength = 0.28}
 }
