@@ -27,7 +27,7 @@ rd /S /Q map_luxury-autos
 rd /S /Q map_prisonMap1
 rd /S /Q map_prisonMap2
 rd /S /Q paletopd
-rd /S /Q nw_comedyClub
+rd /S /Q map_splitsides
 rd /S /Q policeveh
 rd /S /Q unmarked-police-pack
 cd ..
