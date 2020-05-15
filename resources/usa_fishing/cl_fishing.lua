@@ -68,7 +68,6 @@ AddEventHandler("fishing:startDockFishing", function(spotHeading)
 		exports.globals:notify('Tap ~y~E~w~ to reel the fish in!')
 		local resistance = 0
 		local maxResistance = math.random(4000, 10000)
-		local timeToResist = math.random(7000, 12000)
 		exports.globals:loadAnimDict('amb@world_human_stand_fishing@idle_a')
 		TaskPlayAnim(playerPed,'amb@world_human_stand_fishing@idle_a', 'idle_c', 8.0, -8, -1, 49, 0, 0, 0, 0) -- 10sec
 		Citizen.CreateThread(function()
@@ -76,7 +75,7 @@ AddEventHandler("fishing:startDockFishing", function(spotHeading)
 				Wait(0)
 				DrawTimer(GetGameTimer() - resistance, maxResistance, 1.42, 1.475, 'REELING')
 				if IsControlJustPressed(0, KEYS.E) then
-					resistance = resistance + 135
+					resistance = resistance + math.random(10, 70)
 					if resistance > maxResistance and fishing then
 						ClearPedTasks(playerPed)
 						DeleteEntity(robObject)
@@ -86,14 +85,15 @@ AddEventHandler("fishing:startDockFishing", function(spotHeading)
 				end
 			end
 		end)
-		Wait(timeToResist)
-		if fishing then
-			ClearPedTasks(playerPed)
-			DeleteEntity(robObject)
-			fishing = false
-			TriggerEvent('usa:notify', 'You failed to catch the fish!')
-		end
-		FreezeEntityPosition(playerPed, false)
+		Citizen.CreateThread(function()
+			Wait(20000)
+			if fishing and resistance < maxResistance / 2 then
+				ClearPedTasks(playerPed)
+				DeleteEntity(robObject)
+				TriggerEvent('usa:notify', 'You failed to catch the fish!')
+				fishing = false
+			end
+		end)
 	else 
 		exports.globals:notify("You are already fishing!")
 	end
