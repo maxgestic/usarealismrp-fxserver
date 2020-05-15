@@ -1,6 +1,7 @@
 local MENU_KEY = 38 -- "E"
 local closest_shop = nil
-local openingHour = math.random(10, 15)
+local openingHour = math.random(0, 2)
+local closingHour = math.random(4,6)
 
 local markets = {}
 
@@ -102,9 +103,12 @@ function IsPlayerAtBlackMarket()
 end
 
 function isOpen()
-  -- open from openingHour AM to 2 AM
   local currentHour = GetClockHours()
-  return currentHour >= openingHour or currentHour == 1 or currentHour == 2
+  if currentHour >= openingHour and currentHour <= closingHour then
+      return true
+  else
+      return false
+  end
 end
 
 Citizen.CreateThread(function()
@@ -125,15 +129,16 @@ Citizen.CreateThread(function()
       -- Listen for menu open --
       --------------------------
       if IsControlJustPressed(1, MENU_KEY) then
-        if isOpen() then
           if IsPlayerAtBlackMarket() then
-              mainMenu:Clear()
-              CreateItemList(mainMenu)
-              mainMenu:Visible(not mainMenu:Visible())
+              if isOpen() then
+                  mainMenu:Clear()
+                  CreateItemList(mainMenu)
+                  mainMenu:Visible(not mainMenu:Visible())
+              else
+                  exports.globals:notify("My connect is still sleeping! Come back later!")
+
+              end
           end
-        else 
-          exports.globals:notify("My connect is still sleeping! Come back later!")
-        end
       end
 
       if mainMenu:Visible() then
