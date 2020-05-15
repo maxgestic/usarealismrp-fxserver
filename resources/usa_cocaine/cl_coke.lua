@@ -252,6 +252,11 @@ AddEventHandler("cocaineJob:setDelivery", function()
         TaskStartScenarioInPlace(ped, "WORLD_HUMAN_HANG_OUT_STREET", 0, true);
         -- add to peds collection
         table.insert(peds, {name = 'delivery_ped', handle = ped})
+        if math.random() > 0.95 then
+            local lastStreetHASH = GetStreetNameAtCoord(location.x, location.y, location.z)
+            local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+            TriggerServerEvent('911:CocaineSting', location.x, location.y, location.z, lastStreetNAME, IsPedMale(GetPlayerPed(-1)))
+        end
     end
 end)
 
