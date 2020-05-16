@@ -52,7 +52,7 @@ AddEventHandler('trunkhide:enterTrunk', function(targetVehicle)
 			inTrunk = true
 			vehicle = targetVehicle
 			Citizen.Wait(2000)
-			if GetVehicleClass(vehicle) ~= 9 and GetVehicleClass(vehicle) ~= 0 then
+			if GetVehicleClass(vehicle) ~= 9 and GetVehicleClass(vehicle) ~= 0 and GetVehicleClass(vehicle) ~= 10 then
 				SendNUIMessage({
 					type = "enableui",
 					enable = true,
