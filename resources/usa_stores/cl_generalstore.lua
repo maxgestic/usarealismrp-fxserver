@@ -25,6 +25,10 @@ local GENERAL_STORE_LOCATIONS = {
     {x = 1780.9207763672,y = 2598.8671875, z = 45.797817230225, prison = true} -- Prison
 }
 
+local GENERAL_STORE_SHOPLIFT_COORDS = {
+  {x = -1222.81, y = -904.39, z = 12.33}
+}
+
 local HARDWARE_STORE_LOCATIONS = {
   {x = 46.38, y = -1749.47, z = 29.63},
   {x = 2748.35, y = 3472.56, z = 55.67}
@@ -257,6 +261,11 @@ Citizen.CreateThread(function()
     for i = 1, #GENERAL_STORE_LOCATIONS do
       DrawText3D(GENERAL_STORE_LOCATIONS[i].x, GENERAL_STORE_LOCATIONS[i].y, GENERAL_STORE_LOCATIONS[i].z, 5, '[E] - General Store')
     end
+
+    for i = 1, #GENERAL_STORE_SHOPLIFT_COORDS do
+      DrawText3D(GENERAL_STORE_SHOPLIFT_COORDS[i].x, GENERAL_STORE_SHOPLIFT_COORDS[i].y, GENERAL_STORE_SHOPLIFT_COORDS[i].z, 0.5, '[E] - Shoplift')
+    end
+
     for i = 1, #HARDWARE_STORE_LOCATIONS do
       DrawText3D(HARDWARE_STORE_LOCATIONS[i].x, HARDWARE_STORE_LOCATIONS[i].y, HARDWARE_STORE_LOCATIONS[i].z, 7, '[E] - Hardware Store')
     end
@@ -325,6 +334,56 @@ Citizen.CreateThread(function()
     Wait(1)
   end
 end)
+
+Citizen.CreateThread(function()
+  while true do
+    Wait(0)
+    local playerPed = PlayerPedId()
+    local beginTime = GetGameTimer()
+    if IsControlJustPressed(1, MENU_KEY) then
+      AttemptShoplift()
+    end
+  end
+end)
+
+function AttemptShoplift()
+  local beginTime = GetGameTimer()
+  local playerPed = PlayerPedId()
+  local playerCoords = GetEntityCoords(playerPed)
+  for i = 1, #GENERAL_STORE_SHOPLIFT_COORDS do
+    if IsNearStore(GENERAL_STORE_SHOPLIFT_COORDS[i]) then
+      local successChance = math.random()
+      local success = nil
+
+      if successChance < 0.4 then
+        local x, y, z = table.unpack(playerCoords)
+        local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+        local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+        TriggerServerEvent("911:Shoplifting", x, y, z, lastStreetNAME, IsPedMale(playerPed))
+        success = false
+      else
+        success = true
+      end
+
+      TriggerServerEvent('generalStore:attemptShoplift', GENERAL_STORE_SHOPLIFT_COORDS[i])
+      RequestAnimDict("anim@am_hold_up@male")
+      while (not HasAnimDictLoaded("anim@am_hold_up@male")) do Citizen.Wait(0) end
+      while GetGameTimer() - beginTime < 10 * 1000 do
+        exports.globals:DrawTimerBar(beginTime, 10 * 1000, 1.42, 1.475, 'Preparing')
+        if not IsEntityPlayingAnim(playerPed, "anim@am_hold_up@male", "shoplift_mid", 3) then
+          TaskPlayAnim(playerPed, "anim@am_hold_up@male", "shoplift_mid", 8.0, 1.0, 10000, 11, 1.0, false, false, false)
+        end
+        Citizen.Wait(1)
+      end
+      ClearPedTasks(playerPed)
+
+      if success then
+        TriggerServerEvent('generalStore:giveStolenItem')
+      end
+    end
+  end
+end
+
 
 RegisterNetEvent("generalStore:loadItems")
 AddEventHandler("generalStore:loadItems", function(items)

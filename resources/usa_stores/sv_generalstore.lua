@@ -2,6 +2,18 @@
 --# for USA REALISM rp
 --# Made for the 24/7 stores as general stores for various items
 
+local STOLEN_GOODS = {
+  {name = "First Aid Kit", type = "misc", quantity = 1, legality = "legal", weight = 15, objectModel = "v_ret_ta_firstaid", blockedInPrison = true},
+  {name = "Water", price = 25, type = "drink", substance = 40.0, quantity = 1, legality = "legal", weight = 10, objectModel = "ba_prop_club_water_bottle"},
+  {name = "Arizona Iced Tea", price = 25, type = "drink", substance = 50.0, quantity = 1, legality = "legal", weight = 10, objectModel = "ba_prop_club_water_bottle"},
+  {name = "Peanut Butter Cups", price = 35, type = "food", substance = 10.0, quantity = 1, legality = "legal", weight = 5, objectModel = "ng_proc_food_chips01a"},
+  {name = "Sea Salt & Vinegar Chips", price = 35, type = "food", substance = 7.0, quantity = 1, legality = "legal", weight = 7, objectModel = "ng_proc_food_chips01a"},
+  {name = "RAW Papers", price = 10, type = "misc", quantity = 5, legality = "legal", weight = 1, objectModel = "prop_cs_pills", blockedInPrison = true},
+  {name = "Bic Lighter", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_pills", blockedInPrison = true}
+}
+
+local LAST_SHOPLIFTED = nil
+
 local GENERAL_STORE_ITEMS = {
   ["Food"] = {
     {name = "Tuna Sandwich", price = 40, type = "food", substance = 15.0, quantity = 1, legality = "legal", weight = 10, objectModel = "prop_sandwich_01"},
@@ -132,4 +144,27 @@ end)
 RegisterServerEvent("hardwareStore:loadItems")
 AddEventHandler("hardwareStore:loadItems", function()
   TriggerClientEvent("hardwareStore:loadItems", source, HARDWARE_STORE_ITEMS)
+end)
+
+RegisterServerEvent('generalStore:giveStolenItem')
+AddEventHandler('generalStore:giveStolenItem', function()
+  local goods = STOLEN_GOODS[math.random(#STOLEN_GOODS)]
+  local char = exports["usa-characters"]:GetCharacter(source)
+  if char.canHoldItem(goods) then
+    char.giveItem(goods, 1)
+    TriggerClientEvent('usa:notify', source, 'You stole a ~y~' .. goods.name .. '~s~!')
+  else
+    TriggerClientEvent("usa:notify", source, "Inventory is full!")
+  end
+end)
+
+RegisterServerEvent('generalStore:attemptShoplift')
+AddEventHandler('generalStore:attemptShoplift', function(store)
+  print(store)
+  if (os.time() - store.lastShoplifted) < 120000 then
+    TriggerClientEvent('usa:notify', source, 'This store has already been shoplifted')
+  else
+    store.lastShoplifted = os.time()
+    print('a')
+  end
 end)
