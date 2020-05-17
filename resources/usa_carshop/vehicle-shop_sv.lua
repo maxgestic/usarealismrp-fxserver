@@ -120,7 +120,6 @@ local vehicleShopItems = {
 			{make = "Canis", model = "Mesa 2", price = 27640, hash = -2064372143, storage_capacity = 170.0},
 			{make = "Canis", model = "Mesa", price = 14650, hash = 914654722, storage_capacity = 170.0},
 			{make = "Canis", model = "Kamacho", price = 59000, hash = "kamacho", storage_capacity = 130.0},
-			{make = "Dune", model = "Buggy", price = 15430, hash = -1661854193, storage_capacity = 70.0},
 			{make = "BF", model = "Injection", price = 5930, hash = 1126868326, storage_capacity = 70.0},
 			{make = "Canis", model = "Bodhi", price = 21320, hash = "bodhi2", storage_capacity = 70.0},
 			{make = "Nagasaki", model = "Blazer", price = 15000, hash = -2128233223, storage_capacity = 170.0},

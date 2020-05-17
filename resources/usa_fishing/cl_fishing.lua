@@ -124,7 +124,7 @@ AddEventHandler("fishing:startSeaFishing", function()
 				Wait(0)
 				DrawTimer(GetGameTimer() - resistance, maxResistance, 1.42, 1.475, 'REELING')
 				if IsControlJustPressed(0, 38) then
-					resistance = resistance + math.random(25, 100)
+					resistance = resistance + math.random(70, 130)
 					if resistance > maxResistance and seaFishing then
 						seaFishing = false
 						ClearPedTasks(playerPed)
