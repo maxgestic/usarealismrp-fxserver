@@ -51,7 +51,7 @@ AddEventHandler('jewelleryheist:stolengoods', function()
     local stolenGoods = {
         name = "Stolen Goods",
         legality = "illegal",
-        quantity = math.random(0, 3),
+        quantity = math.random(1, 3),
         type = "misc",
         weight = 2
     }

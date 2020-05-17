@@ -50,7 +50,7 @@ Citizen.CreateThread(function()
                         if not IsEntityPlayingAnim(pid, "missheist_jewel@first_person", "smash_case_e", 3) then
                             TaskPlayAnim(pid, "missheist_jewel@first_person", "smash_case_e", 8.0, 1.0, -1, 11, 1.0, false, false, false)
                         end
-                        DrawTimer(beginTime, 6 * 1000, 1.42, 1.475, 'Stealing Jewellery')
+                        DrawTimer(beginTime, 6 * 1000, 1.42, 1.475, 'Stealing Jewelry')
                         Citizen.Wait(1)
                     end
                     ClearPedTasks(pid)
@@ -117,7 +117,7 @@ AddEventHandler('jewelleryheist:doesUserHaveGoodsToSell', function(hasProduct) -
     if hasProduct then
         local beginTime = GetGameTimer()
         while GetGameTimer() - beginTime < 5 * 1000 do
-            DrawTimer(beginTime, 5 * 1000, 1.42, 1.475, 'Stealing Jewellery')
+            DrawTimer(beginTime, 5 * 1000, 1.42, 1.475, 'Selling Jewelry')
             DisableControlAction(0, 244, true) -- 244 = M key (interaction menu / inventory)
             DisableControlAction(0, 38, true) -- prevent spam clicking
             Citizen.Wait(1)
