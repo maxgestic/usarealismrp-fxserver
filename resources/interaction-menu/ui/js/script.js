@@ -118,7 +118,7 @@ var itemImages = {
   "Lockpick": "https://lansky.com/files/2015/4593/1583/LMT100B.png",
   "Molotov": "https://vignette.wikia.nocookie.net/left4dead/images/e/ea/Molotov-1.png/revision/latest?cb=20140322002700",
   "Thermite": "https://imgur.com/BvBOnDu.png",
-  "Stolen Goods": "https://imgur.com/V2JfMLA.png",
+  "Stolen Goods": "https://i.imgur.com/K7xYxbc.png",
   "Brass Knuckles": "https://i.pinimg.com/originals/5b/b6/84/5bb684cd2beb5e318fe3933262121c32.png",
   "Dagger": "http://www.pngmart.com/files/8/Dagger-PNG-Free-Download.png",
   "Switchblade": "https://vignette.wikia.nocookie.net/gtawiki/images/f/fc/Switchblade-GTAV.png/revision/latest?cb=20161021210105",
