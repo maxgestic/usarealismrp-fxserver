@@ -42,7 +42,7 @@ local markets = {
 
 for store, info in pairs(markets) do
     for i = 1, #info["items"] do
-        if info["items"][i].name ~= "Lockpick" and info["items"][i].name ~= "Hotwiring Kit" then
+        if info["items"][i].name ~= "Lockpick" and info["items"][i].name ~= "Hotwiring Kit" and info["items"][i].name ~= "Advanced Pick" then
             info["items"][i].notStackable = true
         end
     end

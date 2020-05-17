@@ -201,6 +201,7 @@ var itemImages = {
   "Torpedo Sandwich" : "https://imgur.com/fqnd3wJ.png",
   "Fishing Pole": "https://i.imgur.com/FPgsx97.png",
   "Sam Smith's Strapon": "https://i.imgur.com/cQjjGVg.png",
+  "Advanced Pick" : "https://i.imgur.com/86KdWw0.png",
 }
 
 var menuItems = [
