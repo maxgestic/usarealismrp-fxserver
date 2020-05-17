@@ -9,7 +9,7 @@ local INPUT_KEY = 38 -- E
 local meth = {
     peds = {
         {x = 705.34, y = 4185.25, z = 40.7858, name = "meth_supplies_ped", model = "U_M_O_TAPHILLBILLY"},
-        {x = 3801.7, y = 4475.1, z = 5.9, name = "meth_supplies_ped_quality", model = 'A_M_M_HILLBILLY_01'}
+        {x = 1387.02, y = 4281.44, z = 36.21, name = "meth_supplies_ped_quality", model = 'A_M_M_HILLBILLY_01'}
     },
     suppliesProduce = "Pseudoephedrine",
     suppliesProduceQuality = 'Red Phosphorus',
@@ -35,7 +35,7 @@ Citizen.CreateThread(function()
         DrawText3D(996.50, -3200.201, -36.19, 5, '[E] - Exit')
         DrawText3D(138.18, 2295.25, 94.09, 4, '[E] - Enter')
         DrawText3D(704.62, 4185.3, 40.70, 5, '[E] - Buy Pseudoephedrine (~g~$175.00~w~) | [Hold E] - Hint')
-        DrawText3D(3801.7, 4475.1, 5.9, 5, '[E] - Buy Red Phosphorus (~g~$150.00~w~) | [Hold E] - Hint')
+        DrawText3D(1387.02, 4281.44, 36.21, 3, '[E] - Buy Red Phosphorus (~g~$150.00~w~) | [Hold E] - Hint')
         DrawText3D(1012.29, -3194.89, -38.99, 5, '[E] - Cook Meth | [Hold E] - Hint')
         DrawText3D(2434.78, 4964.29, 42.34, 5, '[E] - Package Meth')
         if IsControlJustPressed(0, INPUT_KEY) then
@@ -62,7 +62,7 @@ Citizen.CreateThread(function()
             elseif GetDistanceBetweenCoords(playerCoords, 2434.78, 4964.29, 42.34, true) < 3 and not meth.processingMeth and GetGameTimer() - cooldown > 2000 then -- process/package meth rocks
                   TriggerServerEvent("methJob:checkUserJobSupplies", meth.suppliesProcess, meth.suppliesProcessQuality)
                 cooldown = GetGameTimer()
-            elseif GetDistanceBetweenCoords(playerCoords, 3801.7, 4475.1, 5.9, true) < 3 and not meth.pedIsBusy and GetGameTimer() - cooldown > 2000 then -- purchase quality supplies
+            elseif GetDistanceBetweenCoords(playerCoords, 1387.02, 4280.96, 36.11, true) < 3 and not meth.pedIsBusy and GetGameTimer() - cooldown > 2000 then -- purchase quality supplies
               Wait(500)
               if not IsControlPressed(0, INPUT_KEY) then
                 TriggerServerEvent("methJob:checkUserMoney", meth.suppliesProduceQuality)
@@ -177,7 +177,7 @@ AddEventHandler("methJob:getSupplies", function(supplyType)
         for i = 1, #peds do
             if peds[i].name == "meth_supplies_ped_quality" then
                 meth.pedIsBusy = true
-                TaskGoStraightToCoord(peds[i].handle, 3800.3, 4478.9, 5.9, 2, -1)
+                TaskGoStraightToCoord(peds[i].handle, 1386.9, 4283.97, 36.46, 2, -1)
                 SetBlockingOfNonTemporaryEvents(peds[i].handle, false)
                 TriggerServerEvent("methJob:startTimer", "meth_supplies_ped_quality")
                 local sounds = {
