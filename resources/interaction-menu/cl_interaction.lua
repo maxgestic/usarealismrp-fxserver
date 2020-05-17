@@ -857,9 +857,9 @@ function interactionMenuUse(itemName, wholeItem)
 			TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
 			TriggerEvent("interaction:notify", "You have used: (x1) LSD Vial")
 			Citizen.CreateThread(function()
-				local drug_duration = 15 * 60 * 1000 -- 15 minutes in ms?					local drug_duration = 3 * 60 * 1000 -- 15 minutes in ms?
-				Wait(8000)					--Wait(8000)
-				DoScreenFadeOut(1500)					exports["acidtrip"]:DoAcid(drug_duration)
+				local drug_duration = 15 * 60 * 1000 -- 15 minutes in ms?
+				Wait(8000)
+				DoScreenFadeOut(1500)
 				Wait(1500)	
 				DoScreenFadeIn(1500)	
 				StartScreenEffect("DrugsMichaelAliensFight", 0, false)	
