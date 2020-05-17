@@ -82,7 +82,6 @@ AddEventHandler('trunkhide:exitTrunk', function(allowExitWhenTied)
 		SetEntityCollision(vehicle, true, true)
 		inTrunk = false
 		vehicle = nil
-		Citizen.Wait(1000)
 		SendNUIMessage({
 			type = "enableui",
 			enable = false,
