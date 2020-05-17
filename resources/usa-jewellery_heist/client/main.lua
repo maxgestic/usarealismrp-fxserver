@@ -32,12 +32,14 @@ Citizen.CreateThread(function()
         local pid = PlayerPedId()
         local plyCoords = GetEntityCoords(pid, false)
         for k = 1, #jewelryCases do
-            local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, jewelryCases[k].x, jewelryCases[k].y, jewelryCases[k].z)
-            if dist < 1.5 then
-                exports.globals:DrawText3D(jewelryCases[k].x, jewelryCases[k].y, jewelryCases[k].z, '[E] - Smash')
-                if dist < 0.7 then
-                    if IsControlJustPressed(1,51) then
-                        TriggerServerEvent("jewelryHeist:attemptSmashNGrab", k)
+            if not jewelryCases[k].robbed then
+                local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, jewelryCases[k].x, jewelryCases[k].y, jewelryCases[k].z)
+                if dist < 1.5 then
+                    exports.globals:DrawText3D(jewelryCases[k].x, jewelryCases[k].y, jewelryCases[k].z, '[E] - Smash')
+                    if dist < 0.7 then
+                        if IsControlJustPressed(1,51) then
+                            TriggerServerEvent("jewelryHeist:attemptSmashNGrab", k)
+                        end
                     end
                 end
             end
@@ -60,6 +62,18 @@ AddEventHandler("jewelryHeist:performSmashNGrab", function()
     end
     ClearPedTasks(pid)
     TriggerServerEvent('jewelleryheist:stolengoods', source)
+end)
+
+RegisterNetEvent("jewelryHeist:caseSmashed")
+AddEventHandler("jewelryHeist:caseSmashed", function(caseIndex)
+    jewelryCases[caseIndex].robbed = true
+end)
+
+RegisterNetEvent("jewelryHeist:resetCases")
+AddEventHandler("jewelryHeist:resetCases", function()
+    for i = 1, #jewelryCases do
+        jewelryCases[i].robbed = false
+    end
 end)
 
 -- Stage 3 if not caught, sell the stolen goods!

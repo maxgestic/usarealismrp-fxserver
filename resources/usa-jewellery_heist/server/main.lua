@@ -1,6 +1,9 @@
+-- todo: add animation + sound when planting thermite kit
+-- todo: add sound when smashing case
+
 local robbable = true
-local COPS_NEEDED_TO_ROB = 0
-local STORE_ROBBERY_TIMEOUT = 25000
+local COPS_NEEDED_TO_ROB = 0 -- todo: change back when pushed to prod 
+local STORE_ROBBERY_TIMEOUT = 2 * 60 * 60 * 1000 -- 2 hour cooldown
 local hasDoorBeenThermited = false -- prevent people from stealing jewelry by emoting through the door and skipping thermite stage
 
 local jewelryCases = {
@@ -107,6 +110,7 @@ AddEventHandler("jewelryHeist:attemptSmashNGrab", function(caseIndex)
         else 
             jewelryCases[caseIndex].robbed = true
             TriggerClientEvent("jewelryHeist:performSmashNGrab", source)
+            TriggerClientEvent("jewelryHeist:caseSmashed", -1, caseIndex)
         end
     end
 end)
@@ -118,4 +122,5 @@ function resetHeistState()
         jewelryCases[i].robbed = false
     end
     TriggerEvent('doormanager:lockThermitableDoors')
+    TriggerClientEvent("jewelryHeist:resetCases", -1)
 end
