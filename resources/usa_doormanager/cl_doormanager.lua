@@ -294,7 +294,7 @@ AddEventHandler('doormanager:advancedPick', function(advancedPick)
                 local x, y, z = table.unpack(playerCoords)
                 local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
                 local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-                TriggerServerEvent('911:BankRobbery', x, y, z, lastStreetNAME, IsPedMale(playerPed))
+                TriggerServerEvent('911:LockpickingDoor', x, y, z, lastStreetNAME, IsPedMale(playerPed))
                 Citizen.CreateThread(function()
                     while GetGameTimer() - start_time < duration do
                         Citizen.Wait(0)
