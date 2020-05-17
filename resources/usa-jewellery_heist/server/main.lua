@@ -3,9 +3,9 @@
 
 local COPS_NEEDED_TO_ROB = 0 -- todo: change back when pushed to prod 
 local STORE_ROBBERY_TIMEOUT = 2 * 60 * 60 * 1000 -- 2 hour cooldown
-local hasDoorBeenThermited = false -- prevent people from stealing jewelry by emoting through the door and skipping thermite stage
+local hasDoorBeenThermited = false -- prevent people from stealing Jewellery by emoting through the door and skipping thermite stage
 
-local jewelryCases = {
+local JewelleryCases = {
     {x = -628.0, y = -233.83, z = 38.06, robbed = false}, 
     {x = -626.86, y = -233.0, z = 38.06, robbed = false},
     {x = -624.66, y = -230.9, z = 38.06, robbed = false},
@@ -29,9 +29,9 @@ local jewelryCases = {
     {x = -626.92, y = -235.47, z = 38.06, robbed = false}
 }
 
-RegisterServerEvent("jewelryHeist:loadCases")
-AddEventHandler("jewelryHeist:loadCases", function()
-    TriggerClientEvent("jewelryHeist:loadCases", source, jewelryCases)
+RegisterServerEvent("jewelleryheist:loadCases")
+AddEventHandler("jewelleryheist:loadCases", function()
+    TriggerClientEvent("jewelleryheist:loadCases", source, JewelleryCases)
 end)
 
 RegisterServerEvent('jewelleryheist:doesUserHaveThermiteToUse')
@@ -43,7 +43,7 @@ AddEventHandler('jewelleryheist:doesUserHaveThermiteToUse', function()
             if numCops >= COPS_NEEDED_TO_ROB then
                 if char.hasItem("Thermite") then
                     hasDoorBeenThermited = true
-                    TriggerClientEvent("jewelryHeist:plantThermite", src)
+                    TriggerClientEvent("jewelleryheist:plantThermite", src)
                 else
                     TriggerClientEvent("usa:notify", src, "You have no thermite!")
                 end
@@ -56,8 +56,8 @@ AddEventHandler('jewelleryheist:doesUserHaveThermiteToUse', function()
     end
 end)
 
-RegisterServerEvent('jewelryHeist:plantThermite')
-AddEventHandler('jewelryHeist:plantThermite', function()
+RegisterServerEvent('jewelleryheist:plantThermite')
+AddEventHandler('jewelleryheist:plantThermite', function()
     local char = exports["usa-characters"]:GetCharacter(source)
     char.removeItem('Thermite')
     TriggerClientEvent('doormanager:thermiteDoor', source)
@@ -105,25 +105,25 @@ AddEventHandler('jewelleryheist:stolengoods', function()
     end
 end)
 
-RegisterServerEvent("jewelryHeist:attemptSmashNGrab")
-AddEventHandler("jewelryHeist:attemptSmashNGrab", function(caseIndex)
+RegisterServerEvent("jewelleryheist:attemptSmashNGrab")
+AddEventHandler("jewelleryheist:attemptSmashNGrab", function(caseIndex)
     if hasDoorBeenThermited then
-        if jewelryCases[caseIndex].robbed then
+        if JewelleryCases[caseIndex].robbed then
             TriggerClientEvent("usa:notify", source, "That case has already been robbed!")
             return
         else 
-            jewelryCases[caseIndex].robbed = true
-            TriggerClientEvent("jewelryHeist:performSmashNGrab", source)
-            TriggerClientEvent("jewelryHeist:caseSmashed", -1, caseIndex)
+            JewelleryCases[caseIndex].robbed = true
+            TriggerClientEvent("jewelleryheist:performSmashNGrab", source)
+            TriggerClientEvent("jewelleryheist:caseSmashed", -1, caseIndex)
         end
     end
 end)
 
 function resetHeistState()
     hasDoorBeenThermited = false
-    for i = 1, #jewelryCases do
-        jewelryCases[i].robbed = false
+    for i = 1, #JewelleryCases do
+        JewelleryCases[i].robbed = false
     end
     TriggerEvent('doormanager:lockThermitableDoors')
-    TriggerClientEvent("jewelryHeist:resetCases", -1)
+    TriggerClientEvent("jewelleryheist:resetCases", -1)
 end

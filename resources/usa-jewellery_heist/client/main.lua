@@ -15,8 +15,8 @@ Citizen.CreateThread(function()
     end
 end)
 
-RegisterNetEvent("jewelryHeist:plantThermite")
-AddEventHandler("jewelryHeist:plantThermite", function()
+RegisterNetEvent("jewelleryheist:plantThermite")
+AddEventHandler("jewelleryheist:plantThermite", function()
     local myped = PlayerPedId()
     local start = GetGameTimer()
     while GetGameTimer() - start < THERMITE_PLANT_ANIMATION_TIME do
@@ -27,34 +27,34 @@ AddEventHandler("jewelryHeist:plantThermite", function()
         Wait(1)
     end
     ClearPedTasksImmediately(myped)
-    TriggerServerEvent('jewelryHeist:plantThermite')
+    TriggerServerEvent('jewelleryheist:plantThermite')
 end)
 
 -- STAGE 2 - ROB THIS MOFUGGA
 local BASE_SMASH_N_GRAB_TIME = 6000
 
-local jewelryCases = {}
+local JewelleryCases = {}
 
-RegisterNetEvent("jewelryHeist:loadCases")
-AddEventHandler("jewelryHeist:loadCases", function(cases)
-    jewelryCases = cases
+RegisterNetEvent("jewelleryheist:loadCases")
+AddEventHandler("jewelleryheist:loadCases", function(cases)
+    JewelleryCases = cases
 end)
 
-TriggerServerEvent("jewelryHeist:loadCases")
+TriggerServerEvent("jewelleryheist:loadCases")
 
 Citizen.CreateThread(function()
     while true do
         Wait(0)
         local pid = PlayerPedId()
         local plyCoords = GetEntityCoords(pid, false)
-        for k = 1, #jewelryCases do
-            if not jewelryCases[k].robbed then
-                local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, jewelryCases[k].x, jewelryCases[k].y, jewelryCases[k].z)
+        for k = 1, #JewelleryCases do
+            if not JewelleryCases[k].robbed then
+                local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, JewelleryCases[k].x, JewelleryCases[k].y, JewelleryCases[k].z)
                 if dist < 1.5 then
-                    exports.globals:DrawText3D(jewelryCases[k].x, jewelryCases[k].y, jewelryCases[k].z, '[E] - Smash')
+                    exports.globals:DrawText3D(JewelleryCases[k].x, JewelleryCases[k].y, JewelleryCases[k].z, '[E] - Smash')
                     if dist < 0.7 then
                         if IsControlJustPressed(1,51) then
-                            TriggerServerEvent("jewelryHeist:attemptSmashNGrab", k)
+                            TriggerServerEvent("jewelleryheist:attemptSmashNGrab", k)
                         end
                     end
                 end
@@ -63,8 +63,8 @@ Citizen.CreateThread(function()
     end
 end)
 
-RegisterNetEvent("jewelryHeist:performSmashNGrab")
-AddEventHandler("jewelryHeist:performSmashNGrab", function()
+RegisterNetEvent("jewelleryheist:performSmashNGrab")
+AddEventHandler("jewelleryheist:performSmashNGrab", function()
     local pid = PlayerPedId()
     local beginTime = GetGameTimer()
     exports.globals:loadAnimDict("missheist_jewel@first_person")
@@ -73,22 +73,22 @@ AddEventHandler("jewelryHeist:performSmashNGrab", function()
         if not IsEntityPlayingAnim(pid, "missheist_jewel@first_person", "smash_case_e", 3) then
             TaskPlayAnim(pid, "missheist_jewel@first_person", "smash_case_e", 8.0, 1.0, -1, 11, 1.0, false, false, false)
         end
-        exports.globals:DrawTimerBar(beginTime, thisCaseTime, 1.42, 1.475, 'Stealing Jewelry')
+        exports.globals:DrawTimerBar(beginTime, thisCaseTime, 1.42, 1.475, 'Stealing Jewellery')
         Wait(1)
     end
     ClearPedTasks(pid)
     TriggerServerEvent('jewelleryheist:stolengoods', source)
 end)
 
-RegisterNetEvent("jewelryHeist:caseSmashed")
-AddEventHandler("jewelryHeist:caseSmashed", function(caseIndex)
-    jewelryCases[caseIndex].robbed = true
+RegisterNetEvent("jewelleryheist:caseSmashed")
+AddEventHandler("jewelleryheist:caseSmashed", function(caseIndex)
+    JewelleryCases[caseIndex].robbed = true
 end)
 
-RegisterNetEvent("jewelryHeist:resetCases")
-AddEventHandler("jewelryHeist:resetCases", function()
-    for i = 1, #jewelryCases do
-        jewelryCases[i].robbed = false
+RegisterNetEvent("jewelleryheist:resetCases")
+AddEventHandler("jewelleryheist:resetCases", function()
+    for i = 1, #JewelleryCases do
+        JewelleryCases[i].robbed = false
     end
 end)
 
@@ -148,7 +148,7 @@ AddEventHandler('jewelleryheist:sellGoods', function() -- action of selling to t
     local thisSellTime = BASE_SELL_TIME + math.random(1000, 5000)
     local beginTime = GetGameTimer()
     while GetGameTimer() - beginTime < thisSellTime do
-        exports.globals:DrawTimerBar(beginTime, thisSellTime, 1.42, 1.475, 'Selling Jewelry')
+        exports.globals:DrawTimerBar(beginTime, thisSellTime, 1.42, 1.475, 'Selling Jewellery')
         DisableControlAction(0, 244, true) -- 244 = M key (interaction menu / inventory)
         DisableControlAction(0, 38, true) -- prevent spam clicking
         Wait(1)
