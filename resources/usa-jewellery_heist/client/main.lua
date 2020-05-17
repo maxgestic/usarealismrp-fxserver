@@ -1,5 +1,6 @@
 -- STAGE 1 - Thermite the electronic locks to gain access to the doors.
 local thermite_loc = {x = -607.29, y = -245.78, z = 50.24}
+local THERMITE_PLANT_ANIMATION_TIME = 15000
 
 Citizen.CreateThread(function()
     while true do
@@ -12,6 +13,21 @@ Citizen.CreateThread(function()
         end
         Wait(0)
     end
+end)
+
+RegisterNetEvent("jewelryHeist:plantThermite")
+AddEventHandler("jewelryHeist:plantThermite", function()
+    local myped = PlayerPedId()
+    local start = GetGameTimer()
+    while GetGameTimer() - start < THERMITE_PLANT_ANIMATION_TIME do
+        exports.globals:DrawTimerBar(start, THERMITE_PLANT_ANIMATION_TIME, 1.42, 1.475, 'Planting Thermite')
+        if not IsEntityPlayingAnim(myped, "anim@move_m@trash", "pickup", 3) then
+            TaskPlayAnim(myped, "anim@move_m@trash", "pickup", 8.0, 1.0, -1, 11, 1.0, false, false, false)
+        end
+        Wait(1)
+    end
+    ClearPedTasksImmediately(myped)
+    TriggerServerEvent('jewelryHeist:plantThermite')
 end)
 
 -- STAGE 2 - ROB THIS MOFUGGA

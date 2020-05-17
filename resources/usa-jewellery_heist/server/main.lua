@@ -1,7 +1,6 @@
--- todo: add animation + sound when planting thermite kit
+-- todo: add sound when planting thermite kit
 -- todo: add sound when smashing case
 
-local robbable = true
 local COPS_NEEDED_TO_ROB = 0 -- todo: change back when pushed to prod 
 local STORE_ROBBERY_TIMEOUT = 2 * 60 * 60 * 1000 -- 2 hour cooldown
 local hasDoorBeenThermited = false -- prevent people from stealing jewelry by emoting through the door and skipping thermite stage
@@ -39,17 +38,12 @@ RegisterServerEvent('jewelleryheist:doesUserHaveThermiteToUse')
 AddEventHandler('jewelleryheist:doesUserHaveThermiteToUse', function()
     local src = source
     local char = exports["usa-characters"]:GetCharacter(source)
-    if robbable then
+    if not hasDoorBeenThermited then
         exports.globals:getNumCops(function(numCops)
             if numCops >= COPS_NEEDED_TO_ROB then
                 if char.hasItem("Thermite") then
-                    char.removeItem('Thermite')
-                    TriggerClientEvent('doormanager:thermiteDoor', src)
                     hasDoorBeenThermited = true
-                    robbable = false
-                    SetTimeout(STORE_ROBBERY_TIMEOUT, function()
-                        resetHeistState()
-                    end)
+                    TriggerClientEvent("jewelryHeist:plantThermite", src)
                 else
                     TriggerClientEvent("usa:notify", src, "You have no thermite!")
                 end
@@ -60,6 +54,16 @@ AddEventHandler('jewelleryheist:doesUserHaveThermiteToUse', function()
     else
         TriggerClientEvent('usa:notify', src, 'The electrical box is already busted!')
     end
+end)
+
+RegisterServerEvent('jewelryHeist:plantThermite')
+AddEventHandler('jewelryHeist:plantThermite', function()
+    local char = exports["usa-characters"]:GetCharacter(source)
+    char.removeItem('Thermite')
+    TriggerClientEvent('doormanager:thermiteDoor', source)
+    SetTimeout(STORE_ROBBERY_TIMEOUT, function()
+        resetHeistState()
+    end)
 end)
 
 RegisterServerEvent('jewelleryheist:doesUserHaveGoodsToSell')
@@ -116,7 +120,6 @@ AddEventHandler("jewelryHeist:attemptSmashNGrab", function(caseIndex)
 end)
 
 function resetHeistState()
-    robbable = true
     hasDoorBeenThermited = false
     for i = 1, #jewelryCases do
         jewelryCases[i].robbed = false
