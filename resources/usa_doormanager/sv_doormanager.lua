@@ -250,6 +250,16 @@ AddEventHandler("doormanager:checkDoorLock", function(index, x, y, z, lockpicked
   end
 end)
 
+RegisterServerEvent('doormanager:lockThermitableDoors')
+AddEventHandler('doormanager:lockThermitableDoors', function()
+  for i = 1, #DOORS do
+    if DOORS[i].thermiteable then
+      DOORS[i].locked = true
+      TriggerClientEvent("doormanager:toggleDoorLock", -1, i, DOORS[i].locked, DOORS[i].x, DOORS[i].y, DOORS[i].z)
+    end
+  end
+end)
+
 RegisterServerEvent("doormanager:firstJoin")
 AddEventHandler("doormanager:firstJoin", function()
   TriggerClientEvent("doormanager:update", source, DOORS)

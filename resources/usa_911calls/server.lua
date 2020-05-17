@@ -449,8 +449,8 @@ AddEventHandler('911:JewelleryRobbery', function(x, y, z, street)
         recentcalls[street] = 'JewelleryRobbery'
         local time = math.random(5000, 10000)
         Citizen.Wait(time)
-        local string = '^*Jewellery Robbery^r: '..street
-        Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Jewellery Robbery in progress')
+        local string = '^*Store Alarm^r: Vangelico Jewelry Store, '..street
+        Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Store Alarm')
         Citizen.Wait(180000)
         recentcalls[street] = nil
     end

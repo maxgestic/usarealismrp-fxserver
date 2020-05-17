@@ -271,7 +271,7 @@ AddEventHandler('doormanager:lockpickDoor', function(lockpickItem)
  end)
 
 RegisterNetEvent('doormanager:thermiteDoor')
-AddEventHandler('doormanager:thermiteDoor', function(thermiteItem)
+AddEventHandler('doormanager:thermiteDoor', function()
     for i = 1, #DOORS_TO_MANAGE do
         local door = DOORS_TO_MANAGE[i]
         if door.thermiteable then
@@ -284,11 +284,9 @@ AddEventHandler('doormanager:thermiteDoor', function(thermiteItem)
                 local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
                 TriggerServerEvent("911:JewelleryRobbery", x, y, z, lastStreetNAME)
                 TriggerServerEvent('doormanager:checkDoorLock', i, door.x, door.y, door.z, true, true)
-                TriggerServerEvent("jewelleryheist:thermite", source)
-                TriggerServerEvent("usa:removeItem", thermiteItem, 1)
-                exports.globals:notify('You have successfully thermited the electronics to the Jewellery Store door!')
+                exports.globals:notify("You've damaged the jewelry store door locks!", "^3INFO: ^0You've damaged the jewelry store door locks!")
                 Wait(5000)
-                exports.globals:notify('Once you have collected the goods head to Jamestown and locate the buyer!')
+                exports.globals:notify('Once you have collected the goods head to Jamestown and locate the buyer!', "^3INFO: ^0Once you have collected the goods head to Jamestown and locate the buyer!")
             end
         end
     end
