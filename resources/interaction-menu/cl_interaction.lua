@@ -125,8 +125,7 @@ local scenarios = {
 	{name = "no", type = "emote", dict = "mp_player_int_upper_nod", animname = "mp_player_int_nod_no", cancelTime = 1.3},
 	{name = "aim", type = "emote", dict = "move_weapon@pistol@cope", animname = "idle"},
 	{name = "typing", type = "emote", dict = "anim@amb@prop_human_seat_computer@male@base", animname = "base"},
-	{name = "leanwindow", type = "emote", dict = "amb@prop_human_bum_shopping_cart@male@idle_a", animname = "idle_a"}
-	
+	{name = "leanwindow", type = "emote", dict = "amb@prop_human_bum_shopping_cart@male@idle_a", animname = "idle_a"},
 	--New Emotes
 	{name = "dancef", type = "emote", dict = "anim@amb@nightclub@dancers@solomun_entourage@", animname = "mi_dance_facedj_17_v1_female^1"},
 	{name = "dancef2", type = "emote", dict = "anim@amb@nightclub@mini@dance@dance_solo@female@var_a@", animname = "high_center"},
