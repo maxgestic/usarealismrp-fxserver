@@ -143,7 +143,6 @@ local DOORS = {
   {name = "BCSO Station - Cell 1", x = -432.09231567383, y = 5999.8515625, z = 31.716178894043, model = 631614199, locked = false, offset={0.0, 1.24, -0.1}, heading=315, _dist = 1.0, allowedJobs = {'sheriff', "corrections"}},
   {name = "BCSO Station - Cell 2", x = -429.02087402344,y = 5996.828125, z = 31.716180801392, model = 631614199, locked = false, offset={0.0, 1.24, -0.1}, heading=315, _dist = 1.0, allowedJobs = {'sheriff', "corrections"}},
   {name = "BCSO Station - Questioning", x = -453.81491088867,y = 6010.7387695313, z = 31.716337203979, model = -519068795, locked = false, offset={0.0, -1.0, -0.1}, heading=10, _dist = 1.0, allowedJobs = {'sheriff', "corrections"}},
-
   --{name = "Prison Block / Cell 1", x = 1729.7, y = 2624.0, z = 45.6, model = -642608865, locked = true, cell_block = true, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   --{name = "Prison Block / Cell 2", x = 1729.8, y = 2628.1, z = 45.6, model = -642608865, locked = true, cell_block = true, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   --{name = "Prison Block / Cell 3", x = 1730.1, y = 2632.3, z = 45.6, model = -642608865, locked = true, cell_block = true, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
@@ -215,7 +214,8 @@ local DOORS = {
   {name = "DA Office / Door 4", x = -77.79, y = -814.25, z = 243.38, model = -88942360, locked = true, offset = {0.0, 1.12, -0.02}, heading = 250.0, _dist = 1.0, allowedJobs = {'da', 'judge'}},
   {name = "Court House / Front 1", x = 242.60382080078,y = -1074.208984375, z = 29.287979125977, model = 110411286, locked = true, static = true, _dist = 1.0, allowedJobs = {'sheriff', "corrections", "ems", "judge"}},
   {name = "Court House / Front 2", x = 243.99006652832,y = -1074.3812255859, z = 29.286693572998, model = 110411286, locked = false, offset={0.0, -1.24, 0.0}, heading=180, _dist = 1.5, allowedJobs = {'sheriff', "corrections", "ems", "judge"}},
-
+  {name = "Jewellery Store Door 1", x = -631.91,y = -237.19, z = 38.06, model = 1425919976, locked = true, thermiteable = true, offset={0.0, -0.8, 0.0}, heading=305.0, _dist = 1.0, allowedJobs = {'sheriff', "corrections", "ems", "judge"}},
+  {name = "Jewellery Store Door 2", x = -631.15,y = -238.21, z = 38.09, model = 9467943, locked = true, static = true, _dist = 1.0},
   --Bank stuff with new pick method
   {name = "Pacific Standard Bank / Door 1", x = 261.96, y = 221.79, z= 106.28, model = 746855201, locked = true, offset ={0.0, -1.2, 0.0}, heading = 250.0, _dist = 1.0, advancedlockpickable = true, allowedJobs = {'sheriff', 'corrections'}},
   {name = "Pacific Standard Bank / Door 2", x = 256.89, y = 220.34, z = 106.28, model = -222270721, locked = true, offset ={0.0, -1.2, 0.0}, heading = 340.0, _dist = 1.0, advancedlockpickable = true, allowedJobs = {'sheriff', 'corrections'}},
@@ -236,12 +236,12 @@ local DOORS = {
 -- ymap - true will result in the door not using any of the above new values for 3D text, and having the text display at the x, y, z coords on the list
 
 RegisterServerEvent("doormanager:checkDoorLock")
-AddEventHandler("doormanager:checkDoorLock", function(index, x, y, z, lockpicked)
+AddEventHandler("doormanager:checkDoorLock", function(index, x, y, z, lockpicked, thermited)
   local char = exports["usa-characters"]:GetCharacter(source)
   local job = char.get("job")
   local da_rank = char.get('daRank')
   for i = 1, #DOORS[index].allowedJobs do
-    if job == DOORS[index].allowedJobs[i] or (lockpicked and DOORS[index].lockpickable) or (DOORS[index].allowedJobs[i] == 'da' and da_rank and da_rank > 0) or (lockpicked and DOORS[index].advancedlockpickable) then
+    if job == DOORS[index].allowedJobs[i] or (lockpicked and DOORS[index].lockpickable) or (DOORS[index].allowedJobs[i] == 'da' and da_rank and da_rank > 0) or (lockpicked and DOORS[index].advancedlockpickable) or (thermited and DOORS[index].thermiteable) then
         if not DOORS[index].locked then
           DOORS[index].locked = true
         else
@@ -249,6 +249,16 @@ AddEventHandler("doormanager:checkDoorLock", function(index, x, y, z, lockpicked
         end
         TriggerClientEvent("doormanager:toggleDoorLock", -1, index, DOORS[index].locked, x, y, z)
         break
+    end
+  end
+end)
+
+RegisterServerEvent('doormanager:lockThermitableDoors')
+AddEventHandler('doormanager:lockThermitableDoors', function()
+  for i = 1, #DOORS do
+    if DOORS[i].thermiteable then
+      DOORS[i].locked = true
+      TriggerClientEvent("doormanager:toggleDoorLock", -1, i, DOORS[i].locked, DOORS[i].x, DOORS[i].y, DOORS[i].z)
     end
   end
 end)

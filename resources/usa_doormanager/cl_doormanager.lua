@@ -270,11 +270,33 @@ AddEventHandler('doormanager:lockpickDoor', function(lockpickItem)
   end
  end)
 
+RegisterNetEvent('doormanager:thermiteDoor')
+AddEventHandler('doormanager:thermiteDoor', function()
+    for i = 1, #DOORS_TO_MANAGE do
+        local door = DOORS_TO_MANAGE[i]
+        if door.thermiteable then
+            if math.random() < 0.4 then
+                StartEntityFire(GetPlayerPed(-1))
+            else
+                local mycoords = GetEntityCoords(GetPlayerPed(-1), false)
+                local x, y, z = table.unpack(mycoords)
+                local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+                local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+                TriggerServerEvent("911:JewelleryRobbery", x, y, z, lastStreetNAME)
+                TriggerServerEvent('doormanager:checkDoorLock', i, door.x, door.y, door.z, true, true)
+                exports.globals:notify("You've damaged the jewelry store door locks!", "^3INFO: ^0You've damaged the jewelry store door locks!")
+                Wait(5000)
+                exports.globals:notify('Once you have collected the goods head to Jamestown and locate the buyer!', "^3INFO: ^0Once you have collected the goods head to Jamestown and locate the buyer!")
+            end
+        end
+    end
+end)
+          
+          
 RegisterNetEvent('doormanager:advancedPick')
 AddEventHandler('doormanager:advancedPick', function(advancedPick)
     local playerPed = PlayerPedId()
     local playerCoords = GetEntityCoords(playerPed)
-
     for i = 1, #DOORS_TO_MANAGE do
         local door = DOORS_TO_MANAGE[i]
         local x, y, z = door.x, door.y, door.z

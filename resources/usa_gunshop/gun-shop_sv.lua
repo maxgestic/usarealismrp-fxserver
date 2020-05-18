@@ -30,7 +30,8 @@ local STORE_ITEMS = {
   },
   ["Extras"] = {
     { name = "Parachute", type = "weapon", hash = "GADGET_PARACHUTE", price = 500, legality = "legal", quantity = 1, weight = 15, objectModel = "prop_parachute" },
-    { name = "Body Armor", type = "misc", price = 1000, legality = "legal", quantity = 1, weight = 15, objectModel = "prop_bodyarmour_03" }
+    { name = "Body Armor", type = "misc", price = 1000, legality = "legal", quantity = 1, weight = 15, objectModel = "prop_bodyarmour_03" },
+    { name = "Fire Extinguisher", type = "weapon",  hash = 101631238, price = 400, weight = 20, objectModel = "prop_fire_hosereel" }
   }
 }
 
