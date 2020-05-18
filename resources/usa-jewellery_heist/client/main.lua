@@ -54,8 +54,12 @@ Citizen.CreateThread(function()
                 if dist < 1.5 then
                     exports.globals:DrawText3D(JewelleryCases[k].x, JewelleryCases[k].y, JewelleryCases[k].z, '[E] - Smash')
                     if dist < 0.5 then
-                        if IsControlJustPressed(1,51) then
-                            TriggerServerEvent("jewelleryheist:attemptSmashNGrab", k)
+                        if IsControlJustPressed(1,51) and IsPedArmed(pid, 7) then
+                            if IsPedArmed(pid, 7) then
+                                TriggerServerEvent("jewelleryheist:attemptSmashNGrab", k)
+                            else 
+                                exports.globals:notify("Can't break the glass!")
+                            end
                         end
                     end
                 end
