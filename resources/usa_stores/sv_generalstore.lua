@@ -12,7 +12,16 @@ local STOLEN_GOODS = {
   {name = "Bic Lighter", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_pills", blockedInPrison = true}
 }
 
-local LAST_SHOPLIFTED = nil
+local ShopliftingAreas = {
+  {x = -1222.81, y = -904.39, z = 12.33, shoplifted = false},
+  {x = 31.72, y = -1345.48, z = 29.5, shoplifted = false},
+  {x = -52.73, y = -1749.77, z = 29.42, shoplifted = false},
+  {x = 1156.5, y = -323.1, z = 69.21, shoplifted = false},
+  {x = 377.34, y = 327.45, z = 103.57, shoplifted = false},
+  {x = -710.43, y = -911.96, z = 19.22, shoplifted = false},
+  {x = 378.35, y = 329.75, z = 103.57, shoplifted = false},
+  {x = 1164.44, y = 2707.41, z = 38.16, shoplifted = false},
+}
 
 local GENERAL_STORE_ITEMS = {
   ["Food"] = {
@@ -100,6 +109,11 @@ function AddGeneralStoreItem(category, item)
   table.insert(GENERAL_STORE_ITEMS[category], item)
 end
 
+RegisterServerEvent('generalStore:loadShopliftAreas')
+AddEventHandler('generalStore:loadShopliftAreas', function()
+  TriggerClientEvent('generalStore:loadShopliftAreas', source, ShopliftingAreas)
+end)
+
 RegisterServerEvent("generalStore:buyItem")
 AddEventHandler("generalStore:buyItem", function(item, store, inPrison, business)
   local char = exports["usa-characters"]:GetCharacter(source)
@@ -159,12 +173,27 @@ AddEventHandler('generalStore:giveStolenItem', function()
 end)
 
 RegisterServerEvent('generalStore:attemptShoplift')
-AddEventHandler('generalStore:attemptShoplift', function(store)
-  print(store)
-  if (os.time() - store.lastShoplifted) < 120000 then
-    TriggerClientEvent('usa:notify', source, 'This store has already been shoplifted')
-  else
-    store.lastShoplifted = os.time()
-    print('a')
+AddEventHandler('generalStore:attemptShoplift', function(area)
+  local usource = source
+  exports.globals:getNumCops(function(numCops)
+    if numCops >= 1 then
+      if not ShopliftingAreas[area].shoplifted then
+        ShopliftingAreas[area].shoplifted = true
+        TriggerClientEvent('generalStore:performShoplift', usource, area)
+        TriggerClientEvent('generalStore:markAsShoplifted', -1, area)
+      else
+        TriggerClientEvent('usa:notify', usource, 'This store has already been shoplifted')
+        return
+      end
+    else
+      TriggerClientEvent("usa:notify", usource, "The shelves have not been re stocked yet! Try again later!")
+    end
+  end)
+end)
+
+RegisterServerEvent('generalStore:resetCooldown')
+AddEventHandler('generalStore:resetCooldown', function(area)
+  if ShopliftingAreas[area].shoplifted then
+    ShopliftingAreas[area].shoplifted = false
   end
 end)
