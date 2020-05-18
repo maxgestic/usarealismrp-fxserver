@@ -28,6 +28,7 @@ AddEventHandler("jewelleryheist:plantThermite", function()
         Wait(1)
     end
     ClearPedTasksImmediately(myped)
+    TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 7, 'thermite', 0.5)
     TriggerServerEvent('jewelleryheist:plantThermite')
 end)
 
@@ -54,7 +55,7 @@ Citizen.CreateThread(function()
                 if dist < 1.5 then
                     exports.globals:DrawText3D(JewelleryCases[k].x, JewelleryCases[k].y, JewelleryCases[k].z, '[E] - Smash')
                     if dist < 0.5 then
-                        if IsControlJustPressed(1,51) and IsPedArmed(pid, 7) then
+                        if IsControlJustPressed(1,51) then
                             if IsPedArmed(pid, 7) then
                                 TriggerServerEvent("jewelleryheist:attemptSmashNGrab", k)
                             else 
@@ -73,6 +74,7 @@ AddEventHandler("jewelleryheist:performSmashNGrab", function()
     local pid = PlayerPedId()
     local beginTime = GetGameTimer()
     exports.globals:loadAnimDict("missheist_jewel@first_person")
+    TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 7, 'glassbreak', 0.5)
     local thisCaseTime = BASE_SMASH_N_GRAB_TIME + math.random(1000, 3000)
     while GetGameTimer() - beginTime < thisCaseTime do
         if not IsEntityPlayingAnim(pid, "missheist_jewel@first_person", "smash_case_e", 3) then

@@ -117,7 +117,7 @@ var itemImages = {
   "Champagne (12.5%)": "https://www.wineconnection.com.sg//media/catalog/product/c/h/ch31_3.png",
   "Lockpick": "https://lansky.com/files/2015/4593/1583/LMT100B.png",
   "Molotov": "https://vignette.wikia.nocookie.net/left4dead/images/e/ea/Molotov-1.png/revision/latest?cb=20140322002700",
-  "Thermite": "https://imgur.com/BvBOnDu.png",
+  "Thermite": "https://i.imgur.com/9OsEhuK.png",
   "Stolen Goods": "https://i.imgur.com/Yi5ZmwE.png",
   "Brass Knuckles": "https://i.pinimg.com/originals/5b/b6/84/5bb684cd2beb5e318fe3933262121c32.png",
   "Dagger": "http://www.pngmart.com/files/8/Dagger-PNG-Free-Download.png",

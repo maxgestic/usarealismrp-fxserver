@@ -1,7 +1,4 @@
--- todo: add sound when planting thermite kit
--- todo: add sound when smashing case
-
-local COPS_NEEDED_TO_ROB = 0 -- todo: change back when pushed to prod 
+local COPS_NEEDED_TO_ROB = 4 
 local STORE_ROBBERY_TIMEOUT = 2 * 60 * 60 * 1000 -- 2 hour cooldown
 local hasDoorBeenThermited = false -- prevent people from stealing Jewellery by emoting through the door and skipping thermite stage
 
@@ -61,7 +58,7 @@ AddEventHandler('jewelleryheist:plantThermite', function()
     local char = exports["usa-characters"]:GetCharacter(source)
     char.removeItem('Thermite')
     TriggerClientEvent('doormanager:thermiteDoor', source)
-    SetTimeout(STORE_ROBBERY_TIMEOUT, function()
+    SetTimeout(STORE_ROBBERY_TIMEOUT + math.random(0, 45 * 60 * 1000), function()
         resetHeistState()
     end)
 end)
