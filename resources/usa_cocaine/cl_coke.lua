@@ -102,14 +102,14 @@ Citizen.CreateThread(function()
         local playerPed = PlayerPedId()
         local playerCoords = GetEntityCoords(playerPed)
         DrawText3D(1088.18, -3187.18, -38.85, 5, '[E] - Exit')
-        DrawText3D(614.19, 2783.85, 43.60, 8, '[E] - Enter')
+        DrawText3D(1181.63, -3113.83, 6.03, 3, '[E] - Enter')
         DrawText3D(1273.708, -1709.06, 54.77, 5, '[E] - Buy Uncut Cocaine (~g~$800.00~w~)')
         DrawText3D(1092.86, -3195.80, -38.99, 5, '[E] - Process Cocaine')
         if IsControlJustPressed(0, INPUT_KEY) then
-            if GetDistanceBetweenCoords(playerCoords, 614.69, 2784.20, 43.48, true) < 0.7 then -- enter coke location
+            if GetDistanceBetweenCoords(playerCoords, 1181.63, -3113.83, 6.03, true) < 0.7 then -- enter coke location
                 DoorTransition(playerPed, 1088.68, -3187.58, -38.99, 180.0)
             elseif GetDistanceBetweenCoords(playerCoords, 1088.68, -3187.58, -38.99, true) < 0.7 then -- leave coke location
-                DoorTransition(playerPed, 614.69, 2784.20, 43.48, 0.0)
+                DoorTransition(playerPed, 1181.63, -3113.83, 6.03, 89.15)
             elseif GetDistanceBetweenCoords(playerCoords, 1273.708, -1709.06, 54.77, true) < 2 and not cocaine.pedIsBusy then -- purchase supplies
                 if not cocaine.activeJob then
                     TriggerServerEvent("cocaineJob:checkUserMoney", cocaine.requiredSupplies)
