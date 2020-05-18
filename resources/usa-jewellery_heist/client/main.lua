@@ -53,7 +53,7 @@ Citizen.CreateThread(function()
                 local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, JewelleryCases[k].x, JewelleryCases[k].y, JewelleryCases[k].z)
                 if dist < 1.5 then
                     exports.globals:DrawText3D(JewelleryCases[k].x, JewelleryCases[k].y, JewelleryCases[k].z, '[E] - Smash')
-                    if dist < 0.7 then
+                    if dist < 0.5 then
                         if IsControlJustPressed(1,51) then
                             TriggerServerEvent("jewelleryheist:attemptSmashNGrab", k)
                         end
