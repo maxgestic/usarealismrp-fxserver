@@ -10,7 +10,7 @@ Citizen.CreateThread(function()
         local vehicleClass = GetVehicleClass(fishingBoat)
         local speedCheck = GetEntitySpeed(fishingBoat)
 
-        if IsControlPressed(0, 187) and  then -- down arrow
+        if IsControlPressed(0, 187)  then -- down arrow
             if IsPedSittingInAnyVehicle(ped) and IsEntityInWater(fishingBoat) and vehicleClass == 14  then
                 if speedCheck < 1 then
                     while GetGameTimer() - beginTime < ANIMATION_TIME_SECONDS * 1000 do

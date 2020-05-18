@@ -57,7 +57,7 @@ var itemImages = {
   "Machete": "https://www.bellota.com/var/site/storage/images/_aliases/large/7/7/3/5/35377-1-esl-EU/31B20.png",
   "Pistol": "https://steamuserimages-a.akamaihd.net/ugc/29613457985625199/0D5453A0ADC32EDBADEACF8D5CBE1EF129FCA5DC/",
   "Heavy Pistol": "https://vignette.wikia.nocookie.net/saintsrow/images/9/9c/SRIV_Pistols_-_Heavy_Pistol_-_.45_Fletcher_-_Default.png/revision/latest/scale-to-width-down/350?cb=20131028193410",
-  ".50 Caliber": "https://imgur.com/W9sFoxi.png",
+  ".50 Caliber": "https://i.imgur.com/W9sFoxi.png",
   "SNS Pistol": "https://vignette.wikia.nocookie.net/gtawiki/images/f/f5/SNSPistol-GTAV-SocialClub.png/revision/latest/scale-to-width-down/185?cb=20180202170333",
   "Combat Pistol": "https://vignette.wikia.nocookie.net/the-gta-online/images/4/4e/CombatPistol-GTA5-ingame.png/revision/latest?cb=20150519181654",
   "Revolver": "https://upload.wikimedia.org/wikipedia/commons/7/77/Taurus_Raging_Bull.png",
@@ -156,6 +156,7 @@ var itemImages = {
   "MK2 Carbine Rifle": "https://www.gtabase.com/images/gta-5/weapons/assault-rifles/carbine-rifle-mk2.png",
   "MK2 Pump Shotgun": "https://www.gtabase.com/images/gta-5/weapons/shotguns/pump-shotgun-mk2.png",
   "Body Armor": "https://i.imgur.com/oHsLkWD.png",
+  "Police Armor": "https://i.imgur.com/oHsLkWD.png",
   "Tear Gas": "https://i.imgur.com/v9b6bNm.png",
   "Flare": "https://i.imgur.com/gMOnw6x.png",
   "The Daily Weazel": "https://i.imgur.com/Pg6TODN.png",
@@ -200,7 +201,9 @@ var itemImages = {
   "Dr Pepper": "https://imgur.com/JNCWDcR.png",
   "Veggie Gasm Burger" : "https://imgur.com/pzwQmmQ.png",
   "Torpedo Sandwich" : "https://imgur.com/fqnd3wJ.png",
-  "Fishing Pole": "https://i.imgur.com/FPgsx97.png"
+  "Fishing Pole": "https://i.imgur.com/FPgsx97.png",
+  "Sam Smith's Strapon": "https://i.imgur.com/cQjjGVg.png",
+  "Advanced Pick" : "https://i.imgur.com/86KdWw0.png",
 }
 
 var menuItems = [

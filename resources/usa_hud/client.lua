@@ -223,7 +223,6 @@ function IsBeltVehicle(vehicle)
 	if GetVehicleClass(vehicle) ~= 8
 	and GetVehicleClass(vehicle) ~= 13
 	and GetVehicleClass(vehicle) ~= 14
-	and GetVehicleClass(vehicle) ~= 15
 	and GetVehicleClass(vehicle) ~= 16
 	and GetVehicleClass(vehicle) ~= 19 then
 		return true

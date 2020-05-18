@@ -68,7 +68,6 @@ AddEventHandler("fishing:startDockFishing", function(spotHeading)
 		exports.globals:notify('Tap ~y~E~w~ to reel the fish in!')
 		local resistance = 0
 		local maxResistance = math.random(4000, 10000)
-		local timeToResist = math.random(7000, 12000)
 		exports.globals:loadAnimDict('amb@world_human_stand_fishing@idle_a')
 		TaskPlayAnim(playerPed,'amb@world_human_stand_fishing@idle_a', 'idle_c', 8.0, -8, -1, 49, 0, 0, 0, 0) -- 10sec
 		Citizen.CreateThread(function()
@@ -76,24 +75,27 @@ AddEventHandler("fishing:startDockFishing", function(spotHeading)
 				Wait(0)
 				DrawTimer(GetGameTimer() - resistance, maxResistance, 1.42, 1.475, 'REELING')
 				if IsControlJustPressed(0, KEYS.E) then
-					resistance = resistance + 135
+					resistance = resistance + math.random(10, 70)
 					if resistance > maxResistance and fishing then
 						ClearPedTasks(playerPed)
 						DeleteEntity(robObject)
 						fishing = false
 						TriggerServerEvent('fish:giveFish')
+						FreezeEntityPosition(playerPed, false)
 					end
 				end
 			end
 		end)
-		Wait(timeToResist)
-		if fishing then
-			ClearPedTasks(playerPed)
-			DeleteEntity(robObject)
-			fishing = false
-			TriggerEvent('usa:notify', 'You failed to catch the fish!')
-		end
-		FreezeEntityPosition(playerPed, false)
+		Citizen.CreateThread(function()
+			Wait(20000)
+			if fishing and resistance < maxResistance / 2 then
+				ClearPedTasks(playerPed)
+				DeleteEntity(robObject)
+				TriggerEvent('usa:notify', 'You failed to catch the fish!')
+				fishing = false
+				FreezeEntityPosition(playerPed, false)
+			end
+		end)
 	else 
 		exports.globals:notify("You are already fishing!")
 	end
@@ -114,8 +116,7 @@ AddEventHandler("fishing:startSeaFishing", function()
 		TriggerEvent('usa:showHelp', true, 'Tap ~INPUT_PICKUP~ to reel the fish in!')
 		exports.globals:notify('Tap ~y~E~w~ to reel the fish in!')
 		local resistance = 0
-		local maxResistance = math.random(5000, 10000)
-		local timeToResist = math.random(25000, 40000)
+		local maxResistance = math.random(10000, 15000)
 		exports.globals:loadAnimDict('amb@world_human_stand_fishing@idle_a')
 		TaskPlayAnim(playerPed,'amb@world_human_stand_fishing@idle_a', 'idle_c', 8.0, -8, -1, 49, 0, 0, 0, 0) -- 10sec
 		Citizen.CreateThread(function()
@@ -123,23 +124,25 @@ AddEventHandler("fishing:startSeaFishing", function()
 				Wait(0)
 				DrawTimer(GetGameTimer() - resistance, maxResistance, 1.42, 1.475, 'REELING')
 				if IsControlJustPressed(0, 38) then
-					resistance = resistance + 100
+					resistance = resistance + math.random(70, 130)
 					if resistance > maxResistance and seaFishing then
+						seaFishing = false
 						ClearPedTasks(playerPed)
 						DeleteEntity(robObject)
-						seaFishing = false
 						TriggerServerEvent('fish:giveSeaFish')
 					end
 				end
 			end
 		end)
-		Wait(timeToResist)
-		if seaFishing then
-			ClearPedTasks(playerPed)
-			DeleteEntity(robObject)
-			seaFishing = false
-			TriggerEvent('usa:notify', 'You failed to catch the fish!')
-		end
+		Citizen.CreateThread(function()
+			Wait(20000)
+			if seaFishing and resistance < maxResistance / 2 then
+				ClearPedTasks(playerPed)
+				DeleteEntity(robObject)
+				TriggerEvent('usa:notify', 'You failed to catch the fish!')
+				seaFishing = false
+			end
+		end)
 	else 
 		exports.globals:notify("You are already fishing!")
 	end
@@ -154,7 +157,7 @@ Citizen.CreateThread(function()
 			local boat = GetClosestBoatInRange(playerCoords, 10)
 			if DoesEntityExist(boat) then
 				SetEntityAsMissionEntity(boat, true, true)
-				if IsEntityInWater(boat) then
+				if IsEntityInWater(boat) or GetVehicleClass(boat) == 14 then
 					if not IsPedSwimming(playerPed) and not IsPedInAnyVehicle(playerPed, true) then
 						TriggerServerEvent("fishing:checkForPole")
 					end
@@ -289,8 +292,8 @@ function GetClosestBoatInRange(coords, range)
 end
 
 function AttachEntityToPed(prop,bone_ID,x,y,z,RotX,RotY,RotZ)
-	BoneID = GetPedBoneIndex(PlayerPedId(), bone_ID)
-	obj = CreateObject(GetHashKey(prop),  1729.73,  6403.90,  34.56,  false,  false,  false)
+	local BoneID = GetPedBoneIndex(PlayerPedId(), bone_ID)
+	local obj = CreateObject(GetHashKey(prop),  1729.73,  6403.90,  34.56,  false,  false,  false)
 	SetEntityAsMissionEntity(obj, true, true)
 	vX,vY,vZ = table.unpack(GetEntityCoords(PlayerPedId()))
 	xRot, yRot, zRot = table.unpack(GetEntityRotation(PlayerPedId(),2))

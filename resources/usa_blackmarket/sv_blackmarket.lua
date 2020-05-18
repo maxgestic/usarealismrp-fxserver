@@ -12,7 +12,9 @@ local markets = {
       { name = "AP Pistol", type = "weapon", hash = 0x22D8FE39, price = 20000, legality = "illegal", quantity = 1, weight = 15, stock = math.random(0, 2), objectModel = "w_pi_appistol" },
       { name = "Sawn-off", type = "weapon", hash = 0x7846A318, price = 30000, legality = "illegal", quantity = 1, weight = 30, stock = math.random(0, 3), objectModel = "w_sg_sawnoff", },
       { name = "Micro SMG", type = "weapon", hash = 324215364, price = 40000, legality = "illegal", quantity = 1, weight = 30, stock = math.random(0, 2), objectModel = "w_sb_microsmg"},
-      {name = 'SMG', type = 'weapon', hash = 736523883, price = 75000, legality = 'illegal', quantity = 1, weight = 55, stock = math.random(0, 1), objectModel = "w_sb_smg"}
+      {name = 'SMG', type = 'weapon', hash = 736523883, price = 75000, legality = 'illegal', quantity = 1, weight = 55, stock = math.random(0, 1), objectModel = "w_sb_smg"},
+      { name = "Police Armor", type = "misc", price = 5000, legality = "illegal", quantity = 1, weight = 25, stock = math.random(0, 3), objectModel = "prop_bodyarmour_03" }
+
     },
     ["pedHash"] = -48477765
   },
@@ -26,7 +28,7 @@ local markets = {
       {name = 'Combat Pistol', type = 'weapon', hash = 1593441988, price = 5000, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(0, 3), objectModel = "w_pi_combatpistol"},
       {name = 'Switchblade', type = 'weapon', hash = -538741184, price = 1500, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(0, 3)},
       {name = 'Brass Knuckles', type = 'weapon', hash = -656458692, price = 1100, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(0, 5)},
-      { name = "Machine Pistol", type = "weapon", hash = -619010992, price = 25000, legality = "illegal", quantity = 1, weight = 20, stock = math.random(0, 2) },
+      {name = "Machine Pistol", type = "weapon", hash = -619010992, price = 25000, legality = "illegal", quantity = 1, weight = 20, stock = math.random(0, 2) },
     },
     ["pedHash"] = -1773333796
   },
@@ -45,7 +47,7 @@ local markets = {
 
 for store, info in pairs(markets) do
     for i = 1, #info["items"] do
-        if info["items"][i].name ~= "Lockpick" and info["items"][i].name ~= "Hotwiring Kit" and info['items'][i].name ~= 'Thermite' then
+        if info["items"][i].name ~= "Lockpick" and info["items"][i].name ~= "Hotwiring Kit" and info["items"][i].name ~= "Advanced Pick" and info['items'][i].name ~= 'Thermite' then
             info["items"][i].notStackable = true
         end
     end

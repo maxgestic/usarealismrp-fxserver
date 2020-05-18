@@ -33,15 +33,15 @@ Citizen.CreateThread(function()
         local playerPed = PlayerPedId()
         local playerCoords = GetEntityCoords(playerPed)
         DrawText3D(996.50, -3200.201, -36.19, 5, '[E] - Exit')
-        DrawText3D(-121.95, 1918.01, 197.43, 8, '[E] - Enter')
+        DrawText3D(138.18, 2295.25, 94.09, 4, '[E] - Enter')
         DrawText3D(704.62, 4185.3, 40.70, 5, '[E] - Buy Pseudoephedrine (~g~$175.00~w~) | [Hold E] - Hint')
         DrawText3D(3801.7, 4475.1, 5.9, 5, '[E] - Buy Red Phosphorus (~g~$150.00~w~) | [Hold E] - Hint')
         DrawText3D(1012.29, -3194.89, -38.99, 5, '[E] - Cook Meth | [Hold E] - Hint')
         DrawText3D(2434.78, 4964.29, 42.34, 5, '[E] - Package Meth')
         if IsControlJustPressed(0, INPUT_KEY) then
             if GetDistanceBetweenCoords(playerCoords, 996.90, -3200.701, -36.39, true) < 0.7 then
-                DoorTransition(playerPed, -121.23, 1918.45, 197.33, 270.0)
-            elseif GetDistanceBetweenCoords(playerCoords, -121.23, 1918.45, 197.33, true) < 0.7 then
+                DoorTransition(playerPed, 138.18, 2295.25, 94.09, 78.12)
+            elseif GetDistanceBetweenCoords(playerCoords, 138.18, 2295.25, 94.09, true) < 0.7 then
                 DoorTransition(playerPed, 996.90, -3200.701, -36.39, 270.0)
             elseif GetDistanceBetweenCoords(playerCoords, 704.62, 4185.3, 40.70, true) < 3 and not meth.pedIsBusy and GetGameTimer() - cooldown > 2000 then -- purchase supplies
                 Wait(500)
@@ -49,7 +49,7 @@ Citizen.CreateThread(function()
                   TriggerServerEvent("methJob:checkUserMoney", meth.suppliesProduce)
                   cooldown = GetGameTimer()
                 else
-                  TriggerEvent("chatMessage", "", {}, "^3Chemical Dealer:^0 You can take these chemicals to my bud's farm to process them. He lives on Baytree Canyon Rd. in the Grand Senora Desert. It is a few miles south west of the dirt track in the Harmony area. Look for the big plot of land with a few barns. If you look you should see a door to get into the barn to process the chemicals. It is south of this location and south of Route 68 in Harmony, but north of Vinewood in LS.")
+                  TriggerEvent("chatMessage", "", {}, "^3Chemical Dealer:^0 You can take these chemicals to my bud's barn to process them. He lives just south west of Joshua Road. in the Grand Senora Desert. Look for a large barn. If you look you should see a door to get into the barn to process the chemicals.")
                 end
             elseif GetDistanceBetweenCoords(playerCoords, 1012.29, -3194.89, -38.99, true) < 3 and not meth.producingMeth and GetGameTimer() - cooldown > 2000 then -- produce meth rocks
                 Wait(500)
@@ -68,7 +68,7 @@ Citizen.CreateThread(function()
                 TriggerServerEvent("methJob:checkUserMoney", meth.suppliesProduceQuality)
                 cooldown = GetGameTimer()
               else
-                TriggerEvent("chatMessage", "", {}, "^3Chemical Dealer:^0 You can take these chemicals to my bud's farm to process them. He lives on Baytree Canyon Rd. in the Grand Senora Desert. It is a few miles south west of the dirt track in the Harmony area. Look for the big plot of land with a few barns. If you look you should see a door to get into the barn to process the chemicals. It is south of this location and south of Route 68 in Harmony, but north of Vinewood in LS.")
+                  TriggerEvent("chatMessage", "", {}, "^3Chemical Dealer:^0 You can take these chemicals to my bud's barn to process them. He lives just south west of Joshua Road. in the Grand Senora Desert. Look for a large barn. If you look you should see a door to get into the barn to process the chemicals.")
               end
             end
         end
