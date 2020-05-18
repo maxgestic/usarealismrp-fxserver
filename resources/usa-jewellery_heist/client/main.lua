@@ -19,6 +19,7 @@ RegisterNetEvent("jewelleryheist:plantThermite")
 AddEventHandler("jewelleryheist:plantThermite", function()
     local myped = PlayerPedId()
     local start = GetGameTimer()
+    exports.globals:loadAnimDict("anim@move_m@trash")
     while GetGameTimer() - start < THERMITE_PLANT_ANIMATION_TIME do
         exports.globals:DrawTimerBar(start, THERMITE_PLANT_ANIMATION_TIME, 1.42, 1.475, 'Planting Thermite')
         if not IsEntityPlayingAnim(myped, "anim@move_m@trash", "pickup", 3) then
