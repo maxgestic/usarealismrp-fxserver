@@ -184,6 +184,7 @@ RegisterServerEvent('911:CuffCutting')
 RegisterServerEvent('911:Burglary')
 RegisterServerEvent('911:MuggingNPC')
 RegisterServerEvent('911:Shoplifting')
+RegisterServerEvent('911:JewelleryRobbery')
 
 recentcalls = {}
 
@@ -453,6 +454,19 @@ AddEventHandler('911:BankRobbery', function(x, y, z, street, isMale, bankName, c
     local string = '^1^*Bank Robbery:^r ' .. bankName .. ' ('..street..') ^1^*|^r ^*Camera ID:^r ' .. camID .. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
     Send911Notification({'sheriff', 'corrections', 'ems'}, string, x, y, z, 'Bank Robbery')
     exports.usa_weazelnews:SendWeazelNewsAlert('Report of a ^bank robbery^r at ^3'..street..'^r, yikes! Don\'t mess this one up recruit!', x, y, z, 'Bank Robbery')
+end)
+
+AddEventHandler('911:JewelleryRobbery', function(x, y, z, street)
+    local sendChance = math.random()
+    if recentcalls[street] ~= 'JewelleryRobbery' then
+        recentcalls[street] = 'JewelleryRobbery'
+        local time = math.random(5000, 10000)
+        Citizen.Wait(time)
+        local string = '^*Store Alarm^r: Vangelico Jewelry Store, '..street
+        Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Store Alarm')
+        Citizen.Wait(180000)
+        recentcalls[street] = nil
+    end
 end)
 
 AddEventHandler('911:Burglary', function(x, y, z, street, isMale)

@@ -125,7 +125,7 @@ AddEventHandler("cocaineJob:startTimer", function(timerType)
 		local seconds = 45 -- must be synced with DrawTimer on client
 		local time = seconds * 1000
 		SetTimeout(time, function()
-            TriggerClientEvent("chatMessage", usource, "", {}, "^3Lester:^0 Alright, let me know if you need more. Take this to get processed first at the spot behind that store in Harmony (make sure you have a Razor Blade) and then look for the red pill on your map to deliver the final product.")
+			TriggerClientEvent("chatMessage", usource, "", {}, "^3Lester:^0 Alright, let me know if you need more. Go and cut this first at that warehouse down on the docks (make sure you have a Razor Blade) and then look for the red pill on your map to deliver the final product.")
 			TriggerClientEvent('cocaineJob:setDelivery', usource)
 			TriggerClientEvent("cocaineJob:returnPedToStartPosition", usource, timerType)
 			local uncutCocaine = {

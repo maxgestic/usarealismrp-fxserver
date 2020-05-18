@@ -17,8 +17,8 @@ AddEventHandler("bank:beginRobbery", function(bank)
 				TriggerClientEvent('usa:notify', usource, 'You are now robbing the bank, hack into the system to get the money!')
 				TriggerClientEvent("bank:startHacking", usource, bank)
 				SetTimeout(BANK_ROBBERY_TIMEOUT, function()
-					bankRobbable = true
-				end)
+				bankRobbable = true
+			end)
 			else
 				TriggerClientEvent("usa:notify", usource, "You need a cell phone to hack into the vault!")
 			end
@@ -29,10 +29,15 @@ AddEventHandler("bank:beginRobbery", function(bank)
 end)
 
 RegisterServerEvent("bank:hackComplete")
-AddEventHandler("bank:hackComplete", function()
+AddEventHandler("bank:hackComplete", function(bankName)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	if sourceRobbing == source then
-		local rewardMoney = math.random(15000, 120000)
+		local rewardMoney
+		if bankName == 'Pacific Standard' then
+			rewardMoney = math.random(50000, 120000)
+		else
+			rewardMoney = math.random(15000, 30000)
+		end
 		char.giveMoney(rewardMoney)
 		TriggerClientEvent("usa:notify", source, "You have received ~g~$" .. exports.globals:comma_value(rewardMoney) .. "~w~!")
 		print("BANKROBBERY: Player " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] successfully robbed the bank and was given a reward of [$".. rewardMoney .. "]!")

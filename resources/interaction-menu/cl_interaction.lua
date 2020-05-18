@@ -125,8 +125,38 @@ local scenarios = {
 	{name = "no", type = "emote", dict = "mp_player_int_upper_nod", animname = "mp_player_int_nod_no", cancelTime = 1.3},
 	{name = "aim", type = "emote", dict = "move_weapon@pistol@cope", animname = "idle"},
 	{name = "typing", type = "emote", dict = "anim@amb@prop_human_seat_computer@male@base", animname = "base"},
-	{name = "leanwindow", type = "emote", dict = "amb@prop_human_bum_shopping_cart@male@idle_a", animname = "idle_a"}
-	--{name = "hug", type = "emote", dict = "", animname = ""},
+	{name = "leanwindow", type = "emote", dict = "amb@prop_human_bum_shopping_cart@male@idle_a", animname = "idle_a"},
+	--New Emotes
+	{name = "dancef", type = "emote", dict = "anim@amb@nightclub@dancers@solomun_entourage@", animname = "mi_dance_facedj_17_v1_female^1"},
+	{name = "dancef2", type = "emote", dict = "anim@amb@nightclub@mini@dance@dance_solo@female@var_a@", animname = "high_center"},
+	{name = "dancef3", type = "emote", dict = "anim@amb@nightclub@mini@dance@dance_solo@female@var_a@", animname = "high_center_up"},
+	{name = "dancef4", type = "emote", dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", animname = "hi_dance_facedj_09_v2_female^1"},
+	{name = "dancef5", type = "emote", dict = "anim@amb@nightclub@dancers@crowddance_facedj@hi_intensity", animname = "hi_dance_facedj_09_v2_female^3"},
+	{name = "dance slow", type = "emote", dict = "anim@amb@nightclub@mini@dance@dance_solo@female@var_a@", animname = "low_center"},
+	{name = "dance shy", type = "emote", dict = "anim@amb@nightclub@mini@dance@dance_solo@female@var_b@", animname = "low_center_down"},
+	{name = "dance shy 2", type = "emote", dict = "anim@amb@nightclub@mini@dance@dance_solo@male@var_a@", animname = "low_center"},
+	{name = "dance silly", type = "emote", dict = "rcmnigel1bnmt_1b", animname = "dance_loop_tyler"},
+	{name = "beast", type = "emote", dict = "anim@mp_fm_event@intro", animname = "beast_transform"},
+	{name = "pullover", type = "emote", dict = "misscarsteal3pullover", animname = "pull_over_right"},
+	{name = "airguitar", type = "emote", dict = "anim@mp_player_intcelebrationfemale@air_guitar", animname = "air_guitar"},
+	{name = "airsynth", type = "emote", dict = "anim@mp_player_intcelebrationfemale@air_synth", animname = "air_synth"},
+	{name = "argue", type = "emote", dict = "oddjobs@assassinate@vice@hooker", animname = "argue_a"},
+	{name = "blow kiss", type = "emote", dict = "anim@mp_player_intcelebrationfemale@blow_kiss", animname = "blow_kiss"},
+	{name = "blow kiss 2", type = "emote", dict = "anim@mp_player_intselfieblow_kiss", animname = "exit"},
+	{name = "curtsy", type = "emote", dict = "anim@mp_player_intcelebrationpaired@f_f_sarcastic", animname = "sarcastic_left"},
+	{name = "bringiton", type = "emote", dict = "misscommon@response", animname = "bring_it_on"},
+	{name = "cop3", type = "emote", dict = "amb@code_human_police_investigate@idle_a", animname = "idle_b"},
+	{name = "wait", type = "emote", dict = "amb@world_human_hang_out_street@female_hold_arm@idle_a", animname = "idle_a"},
+	{name = "damn2", type = "emote", dict = "anim@am_hold_up@male", animname = "shoplift_mid"},
+	{name = "point down", type = "emote", dict = "gestures@f@standing@casual", animname = "gesture_hand_down"},
+	{name = "fallasleep", type = "emote", dict = "mp_sleep", animname = "sleep_loop"},
+	{name = "fight me", type = "emote", dict = "anim@deathmatch_intros@unarmed", animname = "intro_male_unarmed_c"},
+	{name = "handshake", type = "emote", dict = "mp_ped_interaction", animname = "handshake_guy_a"},
+	{name = "whistle", type = "emote", dict = "rcmnigel1c", animname = "hailing_whistle_waive_a"},
+	{name = "airplane", type = "emote", dict = "missfbi1", animname = "ledge_loop"},
+	{name = "corona", type = "emote", dict = "timetable@gardener@smoking_joint", animname = "idle_cough"},
+	{name = "pee", type = "emote", dict = "misscarsteal2peeing", animname = "peeing_loop"},
+	{name = "mind control", type = "emote", dict = "rcmbarry", animname = "mind_control_b_loop"},
 }
 
 local walkstyles = {
@@ -827,9 +857,9 @@ function interactionMenuUse(itemName, wholeItem)
 			TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
 			TriggerEvent("interaction:notify", "You have used: (x1) LSD Vial")
 			Citizen.CreateThread(function()
-				local drug_duration = 15 * 60 * 1000 -- 15 minutes in ms?					local drug_duration = 3 * 60 * 1000 -- 15 minutes in ms?
-				Wait(8000)					--Wait(8000)
-				DoScreenFadeOut(1500)					exports["acidtrip"]:DoAcid(drug_duration)
+				local drug_duration = 15 * 60 * 1000 -- 15 minutes in ms?
+				Wait(8000)
+				DoScreenFadeOut(1500)
 				Wait(1500)	
 				DoScreenFadeIn(1500)	
 				StartScreenEffect("DrugsMichaelAliensFight", 0, false)	
@@ -983,6 +1013,8 @@ function interactionMenuUse(itemName, wholeItem)
 				TriggerEvent('doormanager:lockpickDoor', wholeItem)
 				TriggerServerEvent('properties:lockpickHouse', GetEntityCoords(playerPed), wholeItem)
 			end
+		elseif string.find(itemName, 'Advanced Pick') then
+			TriggerEvent('doormanager:advancedPick', wholeItem)
 		elseif string.find(itemName, "Binoculars") then
 			TriggerEvent("binoculars:Activate")
 			-------------------
@@ -1040,6 +1072,10 @@ function interactionMenuUse(itemName, wholeItem)
 			TriggerEvent("cultivation:harvest")
 		elseif itemName:find("Shovel") then
 			TriggerEvent("cultivation:shovel")
+		elseif itemName:find("Thermite") then
+			TriggerServerEvent("jewelleryheist:thermite", wholeItem.name)
+		elseif itemName:find("Stolen Goods") then
+			TriggerServerEvent("jewelleryheist:stolengoods", wholeItem.name)
 		else
 			TriggerEvent("interaction:notify", "There is no use action for that item!")
 		end

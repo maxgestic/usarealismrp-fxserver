@@ -136,7 +136,6 @@ Citizen.CreateThread(function()
                   mainMenu:Visible(not mainMenu:Visible())
               else
                   exports.globals:notify("My connect is still sleeping! Come back later!")
-
               end
           end
       end
