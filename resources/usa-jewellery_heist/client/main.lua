@@ -29,6 +29,7 @@ AddEventHandler("jewelleryheist:plantThermite", function()
     end
     ClearPedTasksImmediately(myped)
     TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 7, 'thermite', 0.5)
+    Wait(2000)
     TriggerServerEvent('jewelleryheist:plantThermite')
 end)
 
