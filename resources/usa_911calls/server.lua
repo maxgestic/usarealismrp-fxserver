@@ -184,6 +184,7 @@ RegisterServerEvent('911:CuffCutting')
 RegisterServerEvent('911:Burglary')
 RegisterServerEvent('911:MuggingNPC')
 RegisterServerEvent('911:JewelleryRobbery')
+RegisterServerEvent('911:UncontrolledFire')
 
 recentcalls = {}
 
@@ -451,6 +452,20 @@ AddEventHandler('911:JewelleryRobbery', function(x, y, z, street)
         Citizen.Wait(time)
         local string = '^*Store Alarm^r: Vangelico Jewelry Store, '..street
         Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Store Alarm')
+        Citizen.Wait(180000)
+        recentcalls[street] = nil
+    end
+end)
+
+AddEventHandler('911:UncontrolledFire', function(x, y, z, street)
+    print('alalal')
+    local sendChance = math.random()
+    if recentcalls[street] ~= 'UncontrolledFire' then
+        recentcalls[street] = 'UncontrolledFire'
+        local time = math.random(5000, 10000)
+        Citizen.Wait(time)
+        local string = '^*^rFIRE^r: Fire Outbreak '..street
+        Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Fire Outbreak')
         Citizen.Wait(180000)
         recentcalls[street] = nil
     end
