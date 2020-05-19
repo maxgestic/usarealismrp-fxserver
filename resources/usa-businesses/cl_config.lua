@@ -30,13 +30,6 @@ BUSINESSES = {
 		lastRobbedTime = 0,
 		price = 5000
 	},
-	["Vangelico Jewelry Store (Rockford Hills)"] = {
-		position = {-631.0, -229.4, 38.1},
-		cameraID = 'store35',
-		isBeingRobbed = false,
-		lastRobbedTime = 0,
-		price = 6000
-	},
 	["Car Dealership (Los Santos)"] = {
 		position = {-28.2, -1104.1, 26.4},
 		cameraID = 'store34',
