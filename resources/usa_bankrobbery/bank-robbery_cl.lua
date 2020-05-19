@@ -1,9 +1,7 @@
 local bankCoords = {
 	{coords = {x = 252.95, y = 228.60, z = 102.00}, name = "Pacific Standard", camID = "bank1", timeToTapSeconds = 120}, -- pacific standard
-	{coords = {x = -103.74,y = 6477.9, z = 31.63}, name = "Paleto", camID = "bank2", timeToTapSeconds = 120},
-	{coords = {x = 1173.07, y = 2716.26, z = 38.07}, name = "Harmony Fleeca", camID = "N/A", timeToTapSeconds = 60},
-	{coords = {x = 148.54,y = -1049.98, z = 29.35}, name = "Legion Fleeca", camID = "N/A", timeToTapSeconds = 60}
 }
+
 local clerkCoords = {x = 253.57, y = 221.05, z = 106.28}
 local currentlyHacking = nil
 
