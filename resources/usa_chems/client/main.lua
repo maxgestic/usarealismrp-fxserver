@@ -66,7 +66,7 @@ AddEventHandler("chems:performChemicalMixing", function()
         Wait(1)
     end
     if math.random() <= 0.4 then
-        StartEntityFire(GetPlayerPed(-1))
+        StartEntityFire(PlayerPedId())
         local x, y, z = table.unpack(mycoords)
         local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
         local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)

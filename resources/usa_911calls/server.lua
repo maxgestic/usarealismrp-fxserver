@@ -458,7 +458,6 @@ AddEventHandler('911:JewelleryRobbery', function(x, y, z, street)
 end)
 
 AddEventHandler('911:UncontrolledFire', function(x, y, z, street)
-    print('alalal')
     local sendChance = math.random()
     if recentcalls[street] ~= 'UncontrolledFire' then
         recentcalls[street] = 'UncontrolledFire'
