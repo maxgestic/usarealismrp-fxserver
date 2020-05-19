@@ -275,14 +275,15 @@ AddEventHandler('doormanager:thermiteDoor', function()
     for i = 1, #DOORS_TO_MANAGE do
         local door = DOORS_TO_MANAGE[i]
         if door.thermiteable then
+            local mycoords = GetEntityCoords(GetPlayerPed(-1), false)
+            local x, y, z = table.unpack(mycoords)
+            local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+            local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+            TriggerServerEvent("911:JewelleryRobbery", x, y, z, lastStreetNAME)
+
             if math.random() < 0.4 then
                 StartEntityFire(GetPlayerPed(-1))
             else
-                local mycoords = GetEntityCoords(GetPlayerPed(-1), false)
-                local x, y, z = table.unpack(mycoords)
-                local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-                local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-                TriggerServerEvent("911:JewelleryRobbery", x, y, z, lastStreetNAME)
                 TriggerServerEvent('doormanager:checkDoorLock', i, door.x, door.y, door.z, true, true)
                 exports.globals:notify("You've damaged the jewelry store door locks!", "^3INFO: ^0You've damaged the jewelry store door locks!")
                 Wait(5000)
