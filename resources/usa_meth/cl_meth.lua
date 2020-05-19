@@ -218,9 +218,9 @@ Citizen.CreateThread(function()
             if math.random() > 0.985 then
                 if math.random() > 0.45 then
                     AddExplosion(GetEntityCoords(PlayerPedId()), 9, 1.0, true, false, 1.0)
-                    local lastStreetHASH = GetStreetNameAtCoord(-121.95, 1918.01, 197.43)
+                    local lastStreetHASH = GetStreetNameAtCoord(138.18, 2295.25, 94.09)
                     local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-                    TriggerServerEvent('911:MethExplosion', -121.95, 1918.01, 197.43, lastStreetNAME)
+                    TriggerServerEvent('911:MethExplosion', 138.18, 2295.25, 94.09, lastStreetNAME)
                 end
             end
             ClearPedTasksImmediately(GetPlayerPed(-1))
