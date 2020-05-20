@@ -77,7 +77,6 @@ AddEventHandler('hunting:cookMeat', function()
     local campfire = getClosestCampfireInRange(playerCoords, 5)
     if DoesEntityExist(campfire) then
         local beginTime = GetGameTimer()
-        exports.globals:notify("test")
         exports.globals:loadAnimDict("amb@medic@standing@kneel@idle_a")
         while GetGameTimer() - beginTime < HUNTING_COOK_MEAT_TIME_SECONDS * 1000 do
             if not IsEntityPlayingAnim(myped, "amb@medic@standing@kneel@idle_a", "idle_a", 3) then
