@@ -40,6 +40,37 @@ AddEventHandler("hunting:skinforfurandmeat", function()
     end
 end)
 
+RegisterServerEvent('hunting:cookMeat')
+AddEventHandler('hunting:cookMeat', function(itemName)
+    local usource = source
+    local char = exports["usa-characters"]:GetCharacter(usource)
+    if char.hasItem(itemName) then
+        TriggerClientEvent('hunting:cookMeat', source)
+    end
+end)
+
+RegisterServerEvent('hunting:giveCookedMeat')
+AddEventHandler('hunting:giveCookedMeat', function()
+    local char = exports["usa-characters"]:GetCharacter(source)
+    local cookedMeat = {
+        name = "Cooked Meat",
+        legality = "legal",
+        quantity = 1,
+        type = 'food',
+        substance = 25.0,
+        weight = 5
+    }
+
+    char.removeItem("Butchered Meat")
+
+    if char.canHoldItem(cookedMeat) then
+        char.giveItem(cookedMeat)
+        TriggerClientEvent("usa:notify", source, "Your meat is now ready to eat!")
+    else
+        TriggerClientEvent("usa:notify", source, "Inventory full")
+    end
+end)
+
 RegisterServerEvent("hunting:sellFur")
 AddEventHandler("hunting:sellFur", function()
     local usource = source
