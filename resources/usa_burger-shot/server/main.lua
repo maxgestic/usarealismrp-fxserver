@@ -34,11 +34,10 @@ RegisterServerEvent("burgerjob:startJob")
 AddEventHandler("burgerjob:startJob", function(location)
     local usource = source
     local char = exports["usa-characters"]:GetCharacter(usource)
-    if char.get("job") == 'civ' then
-        char.set("job", "BurgerShotEmployee")
-        TriggerClientEvent("burgerjob:startJob", usource, location)
-        TriggerClientEvent('usa:notify', usource, 'You are now working for Burger Shot.')
-    end
+        if char.get("job") == 'civ' then
+            char.set("job", "BurgerShotEmployee")
+            TriggerClientEvent("burgerjob:startJob", usource, location)
+        end
 end)
 
 RegisterServerEvent("burgerjob:quitJob")
@@ -50,13 +49,26 @@ AddEventHandler("burgerjob:quitJob", function()
     end
 end)
 
-RegisterServerEvent("burgerjob:checkStrikes")
-AddEventHandler("burgerjob:checkStrikes", function()
-    local usource = source
-    local char = exports["usa-characters"]:GetCharacter(usource)
+function checkStrikes(char)
+    local src = source
     BurgerHelper.getStrikes(char.get("_id"), function(strikes)
-        TriggerClientEvent('burgerjob:checkStrikes', usource, strikes)
+        TriggerClientEvent('burgerjob:checkStrikes', src, strikes)
     end)
+end
+
+RegisterServerEvent("burgerjob:checkCriminalHistory")
+AddEventHandler("burgerjob:checkCriminalHistory", function()
+    local char = exports["usa-characters"]:GetCharacter(source)
+    local criminal_history = char.get("criminalHistory")
+    if #criminal_history > 0 then
+        for i = 1, #criminal_history do
+            if GetFPRevoked(criminal_history[i].charges) then
+                TriggerClientEvent("usa:notify", source, "Unfortunately you have a pretty serious criminal background therefore, we are unable to hire you.")
+                return
+            end
+        end
+    end
+    checkStrikes(char)
 end)
 
 RegisterServerEvent("burgerjob:addStrike")
@@ -110,3 +122,14 @@ AddEventHandler("burgerjob:forceRemoveJob", function()
     TriggerClientEvent("burgerjob:quitJob", source)
 end)
 
+function GetFPRevoked(charges) -- firearm permit
+    local numbers = {
+        '118', '135', '187', '192', '207', '215', '245', '16590', '29800', '33410', '2800.2', '2800.3', '2800.4', '51-50', '5150'
+    }
+    for _, code in pairs(numbers) do
+        if string.find(charges, code) then
+            return true
+        end
+    end
+    return false
+end
