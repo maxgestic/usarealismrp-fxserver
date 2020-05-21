@@ -1,15 +1,15 @@
 local armoryItems = {
-    { name = "First Aid Kit", hash = 101631238, price = 25, weight = 20 },
+    { name = "First Aid Kit", hash = 101631238, price = 25, weight = 10 },
     { name = "Fire Extinguisher", hash = 101631238, price = 25, weight = 20 },
-    { name = "Flare", hash = 1233104067, price = 25, weight = 9 },
-    { name = "Tear Gas", hash = -1600701090, price = 25, weight = 9 },
+    { name = "Flare", hash = 1233104067, price = 25, weight = 5 },
+    { name = "Tear Gas", hash = -1600701090, price = 25, weight = 5 },
     { name = "Flashlight", hash = -1951375401, price = 25, weight = 4 },
     { name = "Nightstick", hash = 1737195953, price = 25, weight = 4 },
-    { name = "Combat Pistol", hash = 1593441988, price = 100, weight = 8 },
+    { name = "Combat Pistol", hash = 1593441988, price = 100, weight = 5 },
     { name = "Stun Gun", hash = 911657153, price = 250, weight = 5 },
-    { name = "SMG", hash = 736523883, price = 500, weight = 25 },
-    { name = "MK2 Pump Shotgun", hash = 1432025498, price = 500, weight = 30 },
-    { name = "MK2 Carbine Rifle", hash = 4208062921, price = 500, weight = 30, minRank = 2 }
+    { name = "SMG", hash = 736523883, price = 500, weight = 10 },
+    { name = "MK2 Pump Shotgun", hash = 1432025498, price = 500, weight = 15 },
+    { name = "MK2 Carbine Rifle", hash = 4208062921, price = 500, weight = 15, minRank = 2 }
 }
 
 for i = 1, #armoryItems do

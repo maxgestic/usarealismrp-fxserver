@@ -81,15 +81,13 @@ Citizen.CreateThread(function()
   while true do
     Citizen.Wait(0)
     if takePhoto ~= true then
-      --[[
-      if IsControlJustPressed(1, KeyOpenClose) then
+      if IsControlJustPressed(1, KeyOpenClose) and GetLastInputMethod(0) then
         if not menuIsOpen then
           TriggerServerEvent("gcPhone:getPhone")
         else
           TooglePhone()
         end
       end
-      --]]
       if menuIsOpen == true then
         for _, value in ipairs(KeyToucheCloseEvent) do
           if IsControlJustPressed(1, value.code) then
@@ -280,6 +278,13 @@ end)
 RegisterNetEvent("gcPhone:getBourse")
 AddEventHandler("gcPhone:getBourse", function(bourse)
   SendNUIMessage({event = 'updateBourse', bourse = bourse})
+end)
+
+RegisterNetEvent('gcPhone:serviceRequested')
+AddEventHandler("gcPhone:serviceRequested", function()
+  PlaySound(-1, "Menu_Accept", "Phone_SoundSet_Default", 0, 0, 1)
+  Citizen.Wait(300)
+  PlaySound(-1, "Menu_Accept", "Phone_SoundSet_Default", 0, 0, 1)
 end)
 
 RegisterNetEvent("gcPhone:receiveMessage")
@@ -515,6 +520,7 @@ end)
 
 RegisterNetEvent("gcphone:send911Message")
 AddEventHandler("gcphone:send911Message", function(data)
+  TooglePhone()
   local msg = exports.globals:GetUserInput("", 255)
   local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
 	local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
@@ -525,6 +531,7 @@ end)
 
 RegisterNetEvent("gcphone:sendMechanicMessage")
 AddEventHandler("gcphone:sendMechanicMessage", function(data)
+  TooglePhone()
   data = {}
   data.message = exports.globals:GetUserInput("", 255)
 	-- get location of sender and send to server function:
@@ -553,6 +560,7 @@ end)
 
 RegisterNetEvent("gcphone:sendTaxiMessage")
 AddEventHandler("gcphone:sendTaxiMessage", function(data)
+  TooglePhone()
   data = {}
   data.message = exports.globals:GetUserInput("", 255)
 	-- get location of sender and send to server function:

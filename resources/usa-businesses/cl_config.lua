@@ -30,20 +30,13 @@ BUSINESSES = {
 		lastRobbedTime = 0,
 		price = 5000
 	},
-	["Vangelico Jewelry Store (Rockford Hills)"] = {
-		position = {-631.0, -229.4, 38.1},
-		cameraID = 'store35',
-		isBeingRobbed = false,
-		lastRobbedTime = 0,
-		price = 6000
-	},
 	["Car Dealership (Los Santos)"] = {
 		position = {-28.2, -1104.1, 26.4},
 		cameraID = 'store34',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
 		price = 25000,
-		purchasePercentage = 0.06
+		purchasePercentage = 0.09
 	},
 	["Car Dealership (Harmony)"] = {
 		position = {1234.0, 2737.2, 38.0},
@@ -51,7 +44,7 @@ BUSINESSES = {
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
 		price = 25000,
-		purchasePercentage = 0.06
+		purchasePercentage = 0.09
 	},
 	["LS Tattoos (El Burro Heights)"] = {
 		position = {1325.2, -1650.7, 52.3},
@@ -319,6 +312,13 @@ BUSINESSES = {
 	["Clothing Store (Paleto Bay)"] = {
 		position = {6.2, 6508.7, 31.9},
 		cameraID = 'store39',
+		isBeingRobbed = false,
+		lastRobbedTime = 0,
+		price = 5000
+	},
+	["Clothing Store 8 (Portola Dr.)"] = {
+		position = {-705.25714111328, -151.59468078613, 37.415142059326},
+		cameraID = 'store43',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
 		price = 5000

@@ -12,7 +12,7 @@ Citizen.CreateThread(function()
     local playerCoords = GetEntityCoords(playerPed)
     --DrawText3D(2224.04, 5577.28, 53.7, 10, '[E] - Harvest Weed | [Hold E] - Hint')
     DrawText3D(1036.35, -3203.71, -38.17, 10, '[E] - Process Weed')
-    DrawText3D(1546.81, 2166.45, 78.72, 8, '[E] - Enter')
+    DrawText3D(2856.12, 4458.76, 48.5, 3, '[E] - Enter')
     DrawText3D(1066.40, -3183.47, -39.16, 5, '[E] - Exit')
     if IsControlJustPressed(1, KEY) then
       if Vdist(playerCoords, 1036.35, -3203.71, -38.17) < 3.5 and not processed then
@@ -21,10 +21,10 @@ Citizen.CreateThread(function()
           TriggerServerEvent("weed:checkItem", "Process")
           Wait(5000) -- prevent spamming
         end
-      elseif Vdist(playerCoords, 1546.81, 2166.45, 78.72) < 1.5 then
+      elseif Vdist(playerCoords, 2856.12, 4458.76, 48.5) < 1.5 then
         DoorTransition(playerPed, 1066.40, -3183.47, -39.16, 86.0)
       elseif Vdist(playerCoords, 1066.40, -3183.47, -39.16, 86.0) < 1.5 then
-        DoorTransition(playerPed, 1546.81, 2166.45, 78.72, 90.0)
+        DoorTransition(playerPed, 2856.12, 4458.76, 48.5, 9.85)
   	  end
     end
     Wait(0)

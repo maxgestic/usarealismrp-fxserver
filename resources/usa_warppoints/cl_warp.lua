@@ -13,30 +13,6 @@ local warp_locations = {
     },
     job_access = "civ"
   },
-  ["Comedy Club"] = {
-    entrance = {
-        coords = {-430.06, 261.86, 83.00},
-        heading = 180.0
-    },
-    exit = {
-      coords = {-458.73, 284.85, 78.52},
-      heading = 265.0
-    },
-    job_access = "civ"
-  },
-  --[[
-  ["Courthouse"] = {
-    entrance = {
-      coords = {318.162, -1631.92, 32.53},
-      heading = 50.0
-    },
-    exit = {
-      coords = {234.60, -413.17, -118.46},
-      heading = 160.0
-    },
-  job_access = "civ"
-  },
-  --]]
   ['24/7 - Innocence Blvd.'] = { -- 24/7 little soul
     entrance = {
       coords = {26.365692138672, -1315.4512939453, 29.622989654541},
@@ -191,19 +167,6 @@ local warp_locations = {
     },
     job_access = 'da'
   }
-  --[[,
-  ["Sandy Shores PD"] = {
-  	entrance = {
-      coords = {1848.7, 3689.8, 34.3},
-      heading = 80.0
-    },
-    exit = {
-      coords = {1853.9, 3715.9, 0.1},
-      heading = 250.0
-    },
-  job_access = "emergency"
-  }
-  --]]
 }
 
 Citizen.CreateThread(function()

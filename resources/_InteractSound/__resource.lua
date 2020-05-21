@@ -48,5 +48,7 @@ files({
 	'client/html/sounds/race-start-beep.ogg',
 	'client/html/sounds/chopshop.ogg',
 	'client/html/sounds/panicButton.ogg',
-	'client/html/sounds/warrantfound.ogg'
+	'client/html/sounds/warrantfound.ogg',
+	'client/html/sounds/thermite.ogg',
+	'client/html/sounds/glassbreak.ogg'
 })

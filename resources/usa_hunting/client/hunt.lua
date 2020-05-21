@@ -3,7 +3,8 @@ local hunt_shack_location = {x = -1493.3, y = 4972.0, z = 63.93}
 local SHOW_HINT_TEXT_DIST = 15
 local MAX_HINT_TEXT_DIST = 5
 
-local BUTCHER_ANIMATION_TIME_SECONDS = 45
+local BUTCHER_ANIMATION_TIME_SECONDS = 30
+local HUNTING_COOK_MEAT_TIME_SECONDS = 10
 
 local KEYS = {
     E = 38
@@ -42,7 +43,7 @@ Citizen.CreateThread(function()
                 if not isBlacklistedModel(GetEntityModel(otherPed)) then
                     local pedCoords = GetEntityCoords(otherPed)
                     local distBetweenPedAndAnimal = Vdist(pedCoords, playerCoords)
-                    if DoesEntityExist(otherPed) and IsPedDeadOrDying(ped) then
+                    if DoesEntityExist(otherPed) and IsPedDeadOrDying(otherPed) then
                         if distBetweenPedAndAnimal <= 1.5 and otherPed ~= myped and not IsPedHuman(otherPed) and not isInVeh then
                             SetEntityAsMissionEntity(otherPed)
                             local beginTime = GetGameTimer()
@@ -56,7 +57,7 @@ Citizen.CreateThread(function()
                             end
                             ClearPedTasks(myped)
                             if DoesEntityExist(otherPed) then
-                                TriggerServerEvent('hunting:skinforfurandmeat', givefur)
+                                TriggerServerEvent('hunting:skinforfurandmeat')
                                 DeleteEntity(otherPed)
                             end
                         end
@@ -68,6 +69,29 @@ Citizen.CreateThread(function()
     end
 end)
 
+
+RegisterNetEvent('hunting:cookMeat')
+AddEventHandler('hunting:cookMeat', function()
+    local myped = PlayerPedId()
+    local playerCoords = GetEntityCoords(myped)
+    local campfire = getClosestCampfireInRange(playerCoords, 5)
+    if DoesEntityExist(campfire) then
+        local beginTime = GetGameTimer()
+        exports.globals:loadAnimDict("amb@medic@standing@kneel@idle_a")
+        while GetGameTimer() - beginTime < HUNTING_COOK_MEAT_TIME_SECONDS * 1000 do
+            if not IsEntityPlayingAnim(myped, "amb@medic@standing@kneel@idle_a", "idle_a", 3) then
+                TaskPlayAnim(myped, "amb@medic@standing@kneel@idle_a", "idle_a", 8.0, 1.0, -1, 11, 1.0, false, false, false)
+            end
+            exports.globals:DrawTimerBar(beginTime, HUNTING_COOK_MEAT_TIME_SECONDS * 1000, 1.42, 1.475, 'Cooking Meat')
+            Wait(1)
+        end
+        TriggerServerEvent('hunting:giveCookedMeat')
+        ClearPedTasks(myped)
+    end
+end)
+
+
+
 function isBlacklistedModel(model)
     local BLACK_LISTED_MODELS = {}
     BLACK_LISTED_MODELS[-1788665315] = true -- rottweiler
@@ -78,7 +102,21 @@ function isBlacklistedModel(model)
     BLACK_LISTED_MODELS[-1384627013] = true -- westy
     BLACK_LISTED_MODELS[1318032802] = true -- husky
     BLACK_LISTED_MODELS[1462895032] = true -- cat
+    BLACK_LISTED_MODELS[1173762] = false -- campfire
     BLACK_LISTED_MODELS[GetHashKey("a_c_rat")] = true -- rat
 
     return BLACK_LISTED_MODELS[model]
+end
+
+function getClosestCampfireInRange(coords, range)
+    for object in exports.globals:EnumerateObjects() do
+        local pedCoords = GetEntityCoords(object)
+        local distBetweenPedAndCampfire = Vdist(pedCoords, coords)
+        local campfire = 1173762
+        if DoesEntityExist(object) then
+            if distBetweenPedAndCampfire <= 5 and object == campfire then
+                return object
+            end
+        end
+    end
 end

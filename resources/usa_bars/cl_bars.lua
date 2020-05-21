@@ -3,8 +3,9 @@ local LOCATIONS = {
     {x = -560.2, y = 286.7, z = 82.3}, -- tequilala
     {x = -1393.6, y = -606.6, z = 30.4}, -- bahama mamas
     {x = 127.4, y = -1284.6, z = 29.3}, -- vanilla unicorn
-    {x = -451.7, y = 285.4, z = 78.5}, -- comedy club
-    {x = -1577.9, y = -3014.9, z = -79.0}, -- night club
+    {x = -435.6, y = 273.24, z = 83.42}, -- comedy club
+    {x = -1577.31, y = -3018.51, z = -79.01}, -- night club
+    {x = -1582.92, y = -3013.31, z = -76.0}, -- night club upper
     {x = -1435.8010253906,y = 205.99688720703, z = 57.82116317749}, -- hank alabaster's requested location (playboy mansion)
     {x = -3022.3759765625,y = 39.504207611084, z = 10.117781639099}
 }

@@ -2,6 +2,7 @@ local onDuty = false
 local unholsteredWeapon = nil
 local smallHolstered = true
 local largeHolstered = true
+local meleeHolsted = true
 local playingAnim = false
 local togive
 local control = nil
@@ -22,6 +23,21 @@ AddEventHandler("ptt:returnHotkey", function(key)
 	control = key
 end)
 
+local meleeWeapons = {
+	"WEAPON_KNIFE",
+	"WEAPON_NIGHTSTICK",
+	"WEAPON_HAMMER",
+	"WEAPON_GOLFCLUB",
+	"WEAPON_CROWBAR",
+	"WEAPON_KNUCKLE",
+	"WEAPON_HATCHET",
+	"WEAPON_MACHETE",
+	"WEAPON_WRENCH",
+	"WEAPON_POOLCUE",
+	"WEAPON_BATTLEAXE",
+	"WEAPON_SWITCHBLADE",
+}
+
 local smallWeapons = {
 	"WEAPON_MACHINEPISTOL",
 	"WEAPON_PISTOL",
@@ -35,20 +51,8 @@ local smallWeapons = {
 	"WEAPON_STUNGUN",
 	"WEAPON_HEAVYREVOLVER",
 	"WEAPON_REVOLVER",
-	"WEAPON_KNIFE",
-	"WEAPON_NIGHTSTICK",
-	"WEAPON_HAMMER",
-	"WEAPON_GOLFCLUB",
-	"WEAPON_CROWBAR",
 	"WEAPON_BOTTLE",
 	"WEAPON_DAGGER",
-	"WEAPON_KNUCKLE",
-	"WEAPON_HATCHET",
-	"WEAPON_MACHETE",
-	"WEAPON_WRENCH",
-	"WEAPON_POOLCUE",
-	"WEAPON_BATTLEAXE",
-	"WEAPON_SWITCHBLADE",
 	"WEAPON_MARKSMANPISTOL"
 }
 
@@ -171,6 +175,29 @@ Citizen.CreateThread(function()
 					SetCurrentPedWeapon(ped, GetHashKey("WEAPON_UNARMED"), true)
 	        		playingAnim = false
 	        		largeHolstered = true
+
+				elseif CheckMeleeWeapon(ped) then
+					if meleeHolsted and not IsPedInMeleeCombat(ped) and not IsPlayerTargettingAnything(ped) and not IsPedInCombat(ped) then
+						local togive = GetSelectedPedWeapon(ped) -- to prevent gun from coming out too early for animation, remove the gun when it starts and only give at right time
+						SetCurrentPedWeapon(ped, GetHashKey("WEAPON_UNARMED"), true)
+						playingAnim = true
+						TaskPlayAnim(ped, "reaction@intimidation@1h", "outro", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
+						Wait(750)
+						SetCurrentPedWeapon(ped, togive, true)
+						ClearPedTasks(ped)
+						playingAnim = false
+						UNHOLSTERED_WEAPON = togive
+						meleeHolsted = false
+					end
+				elseif not CheckMeleeWeapon(ped) and not meleeHolsted and not playingAnim then
+					playingAnim = true
+					SetCurrentPedWeapon(ped, UNHOLSTERED_WEAPON, true)
+					TaskPlayAnim(ped, "weapons@pistol@", "aim_2_holster", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
+					Citizen.Wait(700)
+					ClearPedTasks(ped)
+					SetCurrentPedWeapon(ped, GetHashKey("WEAPON_UNARMED"), true)
+					playingAnim = false
+					meleeHolsted = true
 	        	end
 			end
 		end
@@ -243,6 +270,15 @@ end )
 function CheckSmallWeapon(ped)
 	for i = 1, #smallWeapons do
 		if GetHashKey(smallWeapons[i]) == GetSelectedPedWeapon(ped) then
+			return true
+		end
+	end
+	return false
+end
+
+function CheckMeleeWeapon(ped)
+	for i = 1, #meleeWeapons do
+		if GetHashKey(meleeWeapons[i]) == GetSelectedPedWeapon(ped) then
 			return true
 		end
 	end
