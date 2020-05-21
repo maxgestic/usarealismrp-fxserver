@@ -403,8 +403,13 @@ RegisterServerEvent("police:revokeFirearmPermit")
 AddEventHandler("police:revokeFirearmPermit", function(source)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local permit = char.getItem("Firearm Permit")
+	local flyingPermit = char.getItem("Aircraft License")
 	if permit then
 		char.modifyItem(permit, "status", "suspended")
+	end
+
+	if flyingPermit then
+		char.modifyItem(flyingPermit, "status", "suspended")
 	end
 end)
 
