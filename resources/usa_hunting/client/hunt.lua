@@ -113,9 +113,9 @@ function getClosestCampfireInRange(coords, range)
     for object in exports.globals:EnumerateObjects() do
         local pedCoords = GetEntityCoords(object)
         local distBetweenPedAndCampfire = Vdist(pedCoords, coords)
-        local campfire = 1363970
+        local campfire = GetEntityModel(1363970)
         if DoesEntityExist(object) then
-            if distBetweenPedAndCampfire <= 5 and object == campfire then
+            if distBetweenPedAndCampfire <= 5 and GetEntityModel(object) == campfire then
                 return object
             end
         end
