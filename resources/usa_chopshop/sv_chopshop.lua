@@ -14,7 +14,7 @@ AddEventHandler("chopshop:reward", function(veh_name, damage, property)
     reward = math.ceil(0.20 * reward) -- only give 20% of regular reward if no cops
   end
 
-  if payout <= 0.10 then
+  if payout <= 0.04 then
     local randomItem = items[math.random(#items)]
     if char.canHoldItem(randomItem) then
       char.giveItem(randomItem)
