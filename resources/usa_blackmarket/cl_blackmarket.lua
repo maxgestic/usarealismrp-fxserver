@@ -1,7 +1,7 @@
 local MENU_KEY = 38 -- "E"
 local closest_shop = nil
-local openingHour = math.random(0, 2)
-local closingHour = math.random(4,6)
+local openingHour = 2
+local closingHour = 5
 
 local markets = {}
 
