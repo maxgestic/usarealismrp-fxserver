@@ -195,16 +195,18 @@ end)
 
 RegisterNetEvent("cultivation:clientNewPlant")
 AddEventHandler("cultivation:clientNewPlant", function(newPlant)
-    if Vdist(me.coords.x, me.coords.y, me.coords.z, newPlant.coords.x, newPlant.coords.y, newPlant.coords.z) < OBJECT_CULLING_DIST then -- create plant object
-        local objectModel = newPlant.stage.objectModels[1]
-        LoadPlantModel(objectModel)
-        local zCoordAdjustment = doAdjustZCoord(objectModel)
-        if zCoordAdjustment then
-            newPlant.objectHandle = CreateObject(GetHashKey(objectModel), newPlant.coords.x, newPlant.coords.y, newPlant.coords.z + zCoordAdjustment, 0, 0, 0)
-        else
-            newPlant.objectHandle = CreateObject(GetHashKey(objectModel), newPlant.coords.x, newPlant.coords.y, newPlant.coords.z, 0, 0, 0)
+    if me.coords ~= nil then
+        if Vdist(me.coords.x, me.coords.y, me.coords.z, newPlant.coords.x, newPlant.coords.y, newPlant.coords.z) < OBJECT_CULLING_DIST then -- create plant object
+            local objectModel = newPlant.stage.objectModels[1]
+            LoadPlantModel(objectModel)
+            local zCoordAdjustment = doAdjustZCoord(objectModel)
+            if zCoordAdjustment then
+                newPlant.objectHandle = CreateObject(GetHashKey(objectModel), newPlant.coords.x, newPlant.coords.y, newPlant.coords.z + zCoordAdjustment, 0, 0, 0)
+            else
+                newPlant.objectHandle = CreateObject(GetHashKey(objectModel), newPlant.coords.x, newPlant.coords.y, newPlant.coords.z, 0, 0, 0)
+            end
+            SetEntityAsMissionEntity(newPlant.objectHandle, 1, 1)
         end
-        SetEntityAsMissionEntity(newPlant.objectHandle, 1, 1)
     end
     table.insert(PLANTED, newPlant)
 end)
