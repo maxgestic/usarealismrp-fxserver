@@ -127,6 +127,7 @@ AddEventHandler('fleeca:purchaseDrill', function()
     if char.canHoldItem(drill) then
         if cash >= DRILL_PRICE then
             char.giveItem(drill)
+            char.removeMoney(DRILL_PRICE)
             TriggerClientEvent("usa:notify", source, "You have purchased a " .. drill.name)
         else
             TriggerClientEvent("usa:notify", source, "You do not have enough cash!")
