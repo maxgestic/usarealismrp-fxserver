@@ -1,4 +1,3 @@
-local aluminum_price = 1500
 local thermite = {
     name = "Thermite",
     legality = "illegal",
@@ -6,31 +5,6 @@ local thermite = {
     type = "misc",
     weight = 20
 }
-
-RegisterNetEvent('chems:buyAluminum')
-AddEventHandler('chems:buyAluminum', function()
-    local src = source
-    local char = exports["usa-characters"]:GetCharacter(source)
-    local cash = char.get('money')
-    local powder = {
-        name = "Aluminum Powder",
-        legality = "legal",
-        quantity = 1,
-        type = "misc",
-        weight = 4
-    }
-    if char.canHoldItem(powder) then
-        if cash >= aluminum_price then
-            char.removeMoney(aluminum_price)
-            char.giveItem(powder)
-            TriggerClientEvent("usa:notify", src, "You have purchased 1 bag of " .. powder.name)
-        else
-            TriggerClientEvent("usa:notify", src, 'You dont have enough money!')
-        end
-    else
-        TriggerClientEvent("usa:notify", src, "Inventory is full!")
-    end
-end)
 
 RegisterNetEvent('chems:checkForAllChems')
 AddEventHandler('chems:checkForAllChems', function()

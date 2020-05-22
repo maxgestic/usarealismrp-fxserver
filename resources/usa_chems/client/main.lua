@@ -4,6 +4,8 @@ local PROCESS_CHEM_DURATION = 60000
 
 local COMBINE_SUBSTANCES = {x = 141.09, y = -2204.24, z = 4.69}
 
+
+-- TROLLING BITCHES
 local NPCHandle = nil
 Citizen.CreateThread(function()
     while true do
@@ -35,13 +37,6 @@ end)
 
 Citizen.CreateThread(function()
     while true do
-        if nearMarker(ALUMINUM_LOC.x, ALUMINUM_LOC.y, ALUMINUM_LOC.z) then
-            exports.globals:DrawText3D(ALUMINUM_LOC.x, ALUMINUM_LOC.y, ALUMINUM_LOC.z, '[E] - Aluminum Powder [$1,500]')
-            if IsControlJustPressed(0, 86) then
-                TriggerServerEvent('chems:buyAluminum')
-            end
-        end
-
         if nearMarker(COMBINE_SUBSTANCES.x, COMBINE_SUBSTANCES.y, COMBINE_SUBSTANCES.z) then
             exports.globals:DrawText3D(COMBINE_SUBSTANCES.x, COMBINE_SUBSTANCES.y, COMBINE_SUBSTANCES.z, '[E] - Combine Chemicals')
             if IsControlJustPressed(0, 86) then
