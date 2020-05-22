@@ -5,10 +5,6 @@ local MINING = {
     {x = -592.55, y = 2076.86, z = 131.37, radius = 40}
 }
 
-_menuPool = NativeUI.CreatePool()
-miningMenu = NativeUI.CreateMenu('Sell Mined Goods', "~~b~Please select an item you would like to sell!", 0, 320)
-table.insert(createdMenus, {menu = miningMenu})
-
 for i = 1, #createdMenus do
     _menuPool:Add(createdMenus[i].menu)
 end
@@ -43,6 +39,8 @@ AddEventHandler('mining:startMining', function()
     exports.globals:loadAnimDict("anim@move_m@trash")
     while GetGameTimer() - begintime < 15000 do
         exports.globals:DrawTimerBar(begintime, 15000, 1.42, 1.475, 'Mining')
+        DisableControlAction(0, 244, true) -- 244 = M key (interaction menu / inventory)
+        DisableControlAction(0, 38, true) -- prevent spam clicking
         if not IsEntityPlayingAnim(ped, "anim@move_m@trash", "pickup", 3) then
             TaskPlayAnim(ped, "anim@move_m@trash", "pickup", 8.0, 1.0, 15000, 1.0, false, false, false)
         end
