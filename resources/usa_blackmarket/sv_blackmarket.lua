@@ -45,6 +45,9 @@ local markets = {
   }
 }
 
+local openingHours = math.random(0, 3)
+local closingHours = math.random(4, 7)
+
 for store, info in pairs(markets) do
     for i = 1, #info["items"] do
         if info["items"][i].name ~= "Lockpick" and info["items"][i].name ~= "Hotwiring Kit" and info["items"][i].name ~= "Advanced Pick" and info['items'][i].name ~= 'Thermite' then
@@ -56,6 +59,11 @@ end
 RegisterServerEvent("blackMarket:loadItems")
 AddEventHandler("blackMarket:loadItems", function()
   TriggerClientEvent("blackMarket:loadItems", source, markets)
+end)
+
+RegisterServerEvent("blackMarket:openAndClosingHours")
+AddEventHandler("blackMarket:openAndClosingHours", function()
+    TriggerClientEvent("blackMarket:operatingHours", source, openingHours, closingHours)
 end)
 
 RegisterServerEvent("blackMarket:requestPurchase")
