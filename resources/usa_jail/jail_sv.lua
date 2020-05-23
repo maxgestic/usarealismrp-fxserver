@@ -141,6 +141,8 @@ function jailPlayer(src, data, officerName, gender)
 	-- suspend gun permit if necessary --
 	if GetFPRevoked(reason) then
 		TriggerEvent("police:revokeFirearmPermit", targetPlayer)
+		-- If we revoke FP permit, revoke the pilot license too
+		TriggerEvent("police:suspendPilotLicense", targetPlayer)
 		TriggerClientEvent("usa:notify", targetPlayer, "Your firearm permit has been revoked!")
 		suspensions = suspensions .. "\nFP revoked permanently"
 	end

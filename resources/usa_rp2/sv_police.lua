@@ -413,6 +413,16 @@ AddEventHandler("police:revokeFirearmPermit", function(source)
 	end
 end)
 
+RegisterServerEvent('police:suspendPilotLicense')
+AddEventHandler('police:suspendPilotLicense', function()
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local flyingPermit = char.getItem("Aircraft License")
+
+	if flyingPermit then
+		char.modifyItem(flyingPermit, "status", "suspended")
+	end
+end)
+
 -- check suspension dates --
 RegisterServerEvent("police:checkSuspension")
 AddEventHandler("police:checkSuspension", function(character)
