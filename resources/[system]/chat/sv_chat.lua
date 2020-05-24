@@ -47,7 +47,7 @@ AddEventHandler('_chat:messageEntered', function(name, color, message, location)
 		-- write to admin log LOG_FILE --
 		---------------------------------
 		if not LOG_FILE then
-			LOG_FILE = io.open(exports["usa_rp2"]:GetLogFilePath(), "a")
+			LOG_FILE = io.open("C:/wamp/www/log.txt", "a")
 		end
 		if LOG_FILE then
 			io.output(LOG_FILE)
