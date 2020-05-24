@@ -52,12 +52,12 @@ local COORDS_TO_ALLOW_TELEPORTATION_FROM = {
 	{ x = 1508.97, y = 3769.1, z = 34.14}, -- spawn in sandy
 	{ x = 307.48, y = -1435.36, z = 29.81}, -- respawn in Davis
 	{ x = 354.03, y = -589.41, z = 43.42}, -- hospital
-	{ x = 1088.68, y = -3187.58, z = -38.99 }, -- cocaine enter
+	{ x = 1181.63, y = -3113.83, z = 6.03}, -- cocaine enter
 	{ x = 614.69, y = 2784.20, z = 43.48}, -- cocaine processing exit
 	{ x = 1546.81, y = 2166.45, z = 78.72}, -- weed exit
-	{ x = 1066.40, y = -3183.47, z = -39.16 }, -- weed enter
-	{ x = -121.95, y = 1918.01, z = 197.43 }, -- meth exit
-	{ x = 996.50, y = -3200.201, z = -36.19 }, -- meth enter
+	{ x = 2856.12, y = 4458.76, z = 48.5}, -- weed enter
+	{ x = -121.95, y = 1918.01, z = 197.43}, -- meth exit
+	{ x = 138.18, y = 2295.25, z = 94.09}, -- meth enter
 	{ x = -1569.64, y = -3013.94, z = -74.41 }, -- night club interior
 	{ x = -337.22, y = 207.74, z = 88.57 } -- night club entrance
 }

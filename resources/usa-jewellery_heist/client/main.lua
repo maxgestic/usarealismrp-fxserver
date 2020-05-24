@@ -1,6 +1,6 @@
 -- STAGE 1 - Thermite the electronic locks to gain access to the doors.
 local thermite_loc = {x = -607.29, y = -245.78, z = 50.24}
-local THERMITE_PLANT_ANIMATION_TIME = 15000
+local THERMITE_PLANT_ANIMATION_TIME = 30000
 
 Citizen.CreateThread(function()
     while true do
@@ -29,11 +29,12 @@ AddEventHandler("jewelleryheist:plantThermite", function()
     end
     ClearPedTasksImmediately(myped)
     TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 7, 'thermite', 0.5)
+    Wait(2000)
     TriggerServerEvent('jewelleryheist:plantThermite')
 end)
 
 -- STAGE 2 - ROB THIS MOFUGGA
-local BASE_SMASH_N_GRAB_TIME = 6000
+local BASE_SMASH_N_GRAB_TIME = 15000
 
 local JewelleryCases = {}
 
