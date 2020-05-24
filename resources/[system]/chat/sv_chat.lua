@@ -7,10 +7,12 @@ RegisterServerEvent('_chat:messageEntered')
 RegisterServerEvent('chat:clear')
 RegisterServerEvent('__cfx_internal:commandFallback')
 
--- open and clear new log file --
-os.remove("C:/wamp/www/log.txt")
-
-local LOG_FILE
+-- remove last log file if it existed, only keep track of one for now  --
+local LOG_FILE = io.open(exports["usa_rp2"]:GetLogFilePath(), "a")
+if LOG_FILE then
+	os.remove(exports["usa_rp2"]:GetLogFilePath())
+	LOG_FILE = nil
+end
 
 AddEventHandler('_chat:messageEntered', function(name, color, message, location)
 	if not name or not color or not message or #color ~= 3 then
@@ -44,10 +46,14 @@ AddEventHandler('_chat:messageEntered', function(name, color, message, location)
 		---------------------------------
 		-- write to admin log LOG_FILE --
 		---------------------------------
-		LOG_FILE = io.open("C:/wamp/www/log.txt", "a")
-		io.output(LOG_FILE)
-		io.write(name .. " [" .. GetPlayerName(source) .. " / " .. GetPlayerIdentifiers(source)[1] .. "]" .. ': ' .. message .. "\r\n")
-		io.close(LOG_FILE)
+		if not LOG_FILE then
+			LOG_FILE = io.open("C:/wamp/www/log.txt", "a")
+		end
+		if LOG_FILE then
+			io.output(LOG_FILE)
+			io.write(name .. " [" .. GetPlayerName(source) .. " / " .. GetPlayerIdentifiers(source)[1] .. "]" .. ': ' .. message .. "\r\n")
+			io.close(LOG_FILE)
+		end
 
 	TriggerEvent('chatMessageLocation', source, name, message, location)
 
@@ -74,11 +80,14 @@ RegisterCommand('say', function(source, args, rawCommand)
 	TriggerClientEvent('chatMessage', -1, (source == 0) and 'Government' or GetPlayerName(source), { 255, 255, 255 }, rawCommand:sub(5))
 end)
 
--- test this
 RegisterServerEvent("chat:sendToLogFile")
 AddEventHandler("chat:sendToLogFile", function(source, message)
-	LOG_FILE = io.open(exports["usa_rp2"]:GetLogFilePath(), "a")
-	io.output(LOG_FILE)
-	io.write("[" .. GetPlayerName(source) .. " (#" .. source .. ") / " .. GetPlayerIdentifiers(source)[1] .. "]" .. ': ' .. message .. "\r\n")
-	io.close(LOG_FILE)
+	if not LOG_FILE then
+		LOG_FILE = io.open(exports["usa_rp2"]:GetLogFilePath(), "a")
+	end
+	if LOG_FILE then
+		io.output(LOG_FILE)
+		io.write("[" .. GetPlayerName(source) .. " (#" .. source .. ") / " .. GetPlayerIdentifiers(source)[1] .. "]" .. ': ' .. message .. "\r\n")
+		io.close(LOG_FILE)
+	end
 end)
