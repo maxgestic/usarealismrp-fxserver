@@ -398,7 +398,7 @@ function exposedDB.getDocumentsByRowsLimit(db, rowsAndValues, limitVal, callback
 					callback(nil)
 				end
 			else
-				callback(nil, rText)
+				callback(nil)
 			end
 	end, "POST", json.encode(qu), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end
