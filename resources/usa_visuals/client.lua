@@ -27,6 +27,11 @@ AddEventHandler('visuals:enableVisuals', function()
 	if not visualsEnabled then
 		visualsEnabled = true
 		Citizen.CreateThread(function()
+			while true do
+				Citizen.Wait(5000)
+				collectgarbage()
+			end
+
 			local settingsFile = LoadResourceFile(GetCurrentResourceName(), "visualsettings.dat")
 
 			local lines = stringsplit(settingsFile, "\n")

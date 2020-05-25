@@ -305,7 +305,7 @@ function exposedDB.getDocument(db, docID, callback)
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. docID, function(err, rText, headers)
 		--print("getDocument() rtext: " .. rText)
 		local doc = json.decode(rText)
-		callback(doc)
+		callback(doc, source)
 	end, "GET", "", {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end
 
@@ -390,15 +390,17 @@ end
 function exposedDB.getDocumentsByRowsLimit(db, rowsAndValues, limitVal, callback) -- for sort array syntax see couch db
 	local qu = { selector = rowsAndValues, limit = limitVal }
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/_find", function(err, rText, headers)
-		local data = json.decode(rText)
-		if data then
-			if data.docs then
-				callback(data.docs)
+		if rText then
+			local data = json.decode(rText)
+			if data then
+				if data.docs then
+					callback(data.docs)
+				else
+					callback(nil)
+				end
 			else
-				callback(nil)
+				callback(nil, rText)
 			end
-		else
-			callback(nil, rText)
 		end
 	end, "POST", json.encode(qu), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end
