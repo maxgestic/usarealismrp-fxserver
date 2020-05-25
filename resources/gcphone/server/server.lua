@@ -94,7 +94,14 @@ end
 
 function getPlayerID(source) -- character's ID
     if source then
-        return exports["usa-characters"]:GetCharacterField(source, "_id")
+        local char = exports["usa-characters"]:GetCharacter(source)
+        if char then
+            return char.get("_id")
+        else 
+            return nil
+        end
+    else 
+        return nil
     end
 end
 
