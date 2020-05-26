@@ -270,7 +270,7 @@ TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, char)
 					}
 				}
 			}
-		}), { ["Content-Type"] = 'application/json' })
+		}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 
 		sendMessageToModsAndAdmins(userSource, GetPlayerName(player) .. " has been kicked (" .. reason .. ")")
 		--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^3kicked^0 (" .. reason .. ")")
@@ -529,7 +529,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 						else
 							RconPrint("\nSomething might have gone wrong, response code was: " .. err)
 						end
-					end, "DELETE", "", {["Content-Type"] = 'application/json'})
+					end, "DELETE", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 				else
 					RconPrint("\nIdentifier NOT found!")
 				end
@@ -608,7 +608,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 							}
 						}
 					}
-				}), { ["Content-Type"] = 'application/json' })
+				}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 			-- update db
 			GetDoc.createDocument("bans",  {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
 				RconPrint("player banned!")
@@ -661,7 +661,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 							}
 						}
 					}
-				}), { ["Content-Type"] = 'application/json' })
+				}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 			end)
 		end)
 	elseif commandName == "tempbanid" then
@@ -714,7 +714,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 							}
 						}
 					}
-				}), { ["Content-Type"] = 'application/json' })
+				}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 			end)
 		end)
 	elseif commandName == 'setadmin' then
@@ -977,7 +977,7 @@ TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, char)
 						}
 					}
 				}
-			}), { ["Content-Type"] = 'application/json' })
+			}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 		-- update db
 		GetDoc.createDocument("bans",  {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
 			print("player banned!")
@@ -1031,7 +1031,7 @@ function BanPlayer(targetSrc, reason)
 						}
 					}
 				}
-			}), { ["Content-Type"] = 'application/json' })
+			}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 		-- update db
 		GetDoc.createDocument("bans",  {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = "anticheese", bannerId = -1, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
 			print("player banned!")
@@ -1089,7 +1089,7 @@ TriggerEvent('es:addGroupCommand', 'tempban', "mod", function(source, args, char
 						}
 					}
 				}
-			}), { ["Content-Type"] = 'application/json' })
+			}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 		-- update db
 		GetDoc.createDocument("bans", {time = os.time(), duration = time, char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
 			print("player banned!")
@@ -1157,7 +1157,7 @@ AddEventHandler('mini:checkPlayerBannedOnSpawn', function()
 						PerformHttpRequest("http://127.0.0.1:5984/bans/" .. docid .. "?rev=" .. docRev, function(err, rText, headers)
 							print("\nrText = " .. rText)
 							print("\nerr = " .. err)
-						end, "DELETE", "", {["Content-Type"] = 'application/json'})
+						end, "DELETE", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 						print("\nPlayer ".. doc.name .." has been unbanned due to tempban expiration!")
 						return
 					end

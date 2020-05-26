@@ -88,7 +88,7 @@ function loadDOCEmployees()
 			print("Finished loading DOC employees.")
 			print("# of DOC employees: " .. #DOC_EMPLOYEES)
 		end
-	end, "GET", "", { ["Content-Type"] = 'application/json' })
+	end, "GET", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 -- PERFORM FIRST TIME DB CHECK--

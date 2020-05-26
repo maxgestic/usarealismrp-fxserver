@@ -161,7 +161,7 @@ function jailPlayer(src, data, officerName, gender)
 				}
 			}
 		}
-	}), { ["Content-Type"] = 'application/json' })
+	}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 RegisterServerEvent("jail:clearCell")

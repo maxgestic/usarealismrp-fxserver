@@ -7,8 +7,10 @@ RegisterServerEvent('_chat:messageEntered')
 RegisterServerEvent('chat:clear')
 RegisterServerEvent('__cfx_internal:commandFallback')
 
+local LOG_FILE_NAME = "/var/www/html/log.txt"
+
 -- open and clear new log file --
-os.remove("C:/wamp/www/log.txt")
+os.remove(LOG_FILE_NAME)
 
 local LOG_FILE
 
@@ -44,7 +46,7 @@ AddEventHandler('_chat:messageEntered', function(name, color, message, location)
 		---------------------------------
 		-- write to admin log LOG_FILE --
 		---------------------------------
-		LOG_FILE = io.open("C:/wamp/www/log.txt", "a")
+		LOG_FILE = io.open(LOG_FILE_NAME, "a")
 		io.output(LOG_FILE)
 		io.write(name .. " [" .. GetPlayerName(source) .. " / " .. GetPlayerIdentifiers(source)[1] .. "]" .. ': ' .. message .. "\r\n")
 		io.close(LOG_FILE)
@@ -77,7 +79,7 @@ end)
 -- test this
 RegisterServerEvent("chat:sendToLogFile")
 AddEventHandler("chat:sendToLogFile", function(source, message)
-	LOG_FILE = io.open(exports["usa_rp2"]:GetLogFilePath(), "a")
+	LOG_FILE = io.open(LOG_FILE_NAME, "a")
 	io.output(LOG_FILE)
 	io.write("[" .. GetPlayerName(source) .. " (#" .. source .. ") / " .. GetPlayerIdentifiers(source)[1] .. "]" .. ': ' .. message .. "\r\n")
 	io.close(LOG_FILE)

@@ -232,7 +232,7 @@ function getMessages(identifier, cb)
             end
         end, "POST", json.encode({
             keys = { number }
-        }), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+        }), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
     end)
 end
 
