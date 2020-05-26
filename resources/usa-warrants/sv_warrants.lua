@@ -8,7 +8,7 @@ function getWarrants(cb)
 			end
 			cb(warrants)
 		end
-	end, "GET", "", ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
+	end, "GET", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function createWarrant(src, warrant, notify_with_nui)
