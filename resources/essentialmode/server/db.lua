@@ -445,7 +445,7 @@ function exposedDB.deleteDocument(db, docID, callback)
 			local doc = json.decode(rText)
 			PerformHttpRequest("http://127.0.0.1:5984/"..db.."/"..docID.."?rev="..doc._rev, function(err, rText, headers)
 				callback(true)
-			end, "DELETE", "", {["Content-Type"] = 'application/json'})
+			end, "DELETE", "", {["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 		else
 			callback(false)
 		end
