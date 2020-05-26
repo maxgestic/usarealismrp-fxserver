@@ -390,16 +390,16 @@ end
 function exposedDB.getDocumentsByRowsLimit(db, rowsAndValues, limitVal, callback) -- for sort array syntax see couch db
 	local qu = { selector = rowsAndValues, limit = limitVal }
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/_find", function(err, rText, headers)
-		local data = json.decode(rText)
-		if data then
-			if data.docs then
-				callback(data.docs)
+			local data = json.decode(rText)
+			if data then
+				if data.docs then
+					callback(data.docs)
+				else
+					callback(nil)
+				end
 			else
 				callback(nil)
 			end
-		else
-			callback(nil, rText)
-		end
 	end, "POST", json.encode(qu), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end
 
