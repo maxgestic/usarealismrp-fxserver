@@ -354,7 +354,7 @@ AddEventHandler('job:sendNewLog', function(source, job, isOnDuty)
 			    }
 			}
 		},
-	}), { ["Content-Type"] = 'application/json' })
+	}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end)
 
 RegisterServerEvent('playerDropped')
@@ -410,7 +410,7 @@ AddEventHandler('playerDropped', function()
 						    }
 						}
 					},
-				}), { ["Content-Type"] = 'application/json' })
+				}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 			end
 		end
 	end

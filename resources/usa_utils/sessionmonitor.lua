@@ -82,7 +82,7 @@ function SendDiscordLog(url, msg, stat)
     PerformHttpRequest(url, function(err, text, headers)
     end, "POST", json.encode({
         content = msg
-    }), { ["Content-Type"] = 'application/json' })
+    }), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function SendServerMonitorDiscordMsg(msg, stat)

@@ -689,7 +689,7 @@ function fetchWhitelistFromDb()
 			print("finished loading whitelisted players table...")
 			print("# of WL players: " .. #(response.rows))
 		end
-	end, "GET", "", { ["Content-Type"] = 'application/json' })
+	end, "GET", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 -- PERFORM FIRST TIME DB CHECK--
@@ -757,7 +757,7 @@ AddEventHandler("rconCommand", function(command, args)
                     RconPrint("\nrText = " .. rText)
                     RconPrint("\nerr = " .. err)
                   end
-                end, "DELETE", "", {["Content-Type"] = 'application/json'})
+                end, "DELETE", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
               end
             end)
           end)
