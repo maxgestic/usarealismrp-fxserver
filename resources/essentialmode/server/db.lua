@@ -103,7 +103,7 @@ local function createDocument(doc, cb)
 	if doc == nil or type(doc) ~= "table" then doc = {} end
 
 	getUUID(1, function(uuid)
-		requestDB('PUT', 'essentialmode/' .. uuid, doc, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
+		requestDB('PUT', 'essentialmode/' .. uuid, doc, { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() }, function(err, rText, headers)
 			if err ~= 201 and err ~= 200 then
 				print('Error occured while performing database request: could not create document, error code: ' .. err .. ", server returned: " .. rText)
 			else
@@ -136,7 +136,7 @@ local function updateDocument(docID, updates, callback)
 				end
 			end
 
-			requestDB('PUT', 'essentialmode/' .. docID, update, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
+			requestDB('PUT', 'essentialmode/' .. docID, update, { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() }, function(err, rText, headers)
 				if not json.decode(rText).ok then
 					if err ~= 409 then
 						print('Error occured while performing database request: could not update document error ' .. err .. ", returned: " .. rText)
@@ -175,7 +175,7 @@ end
 
 function db.doesUserExist(identifier, callback)
 	if identifier ~= nil and type(identifier) == "string" then
-		requestDB('POST', 'essentialmode/_find', {selector = {["identifier"] = identifier}}, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
+		requestDB('POST', 'essentialmode/_find', {selector = {["identifier"] = identifier}}, { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() }, function(err, rText, headers)
 			if rText then
 				if callback then
 					if json.decode(rText).docs[1] then callback(true) else callback(false) end
@@ -191,7 +191,7 @@ end
 
 function db.retrieveUser(identifier, callback)
 	if identifier ~= nil and type(identifier) == "string" then
-		requestDB('POST', 'essentialmode/_find', {selector = {["identifier"] = identifier}}, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
+		requestDB('POST', 'essentialmode/_find', {selector = {["identifier"] = identifier}}, { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() }, function(err, rText, headers)
 			--if err ~= 200 or err ~= "200" then print("error inside of db.retrieveUser: " .. err) end
 			--if not rText then print("rText value was nil inside of db.retrieveUser") return end
 			local doc =  json.decode(rText).docs[1]
@@ -281,7 +281,7 @@ function exposedDB.getAllDocumentsFromDbLimit(db, limit, callback)
 			end
 		end
 		callback(docs)
-	end, "POST", json.encode(qParams), {["Content-Type"] = 'application/json'})
+	end, "POST", json.encode(qParams), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function exposedDB.getDocumentById(db, id, callback)
@@ -298,7 +298,7 @@ function exposedDB.getDocumentById(db, id, callback)
     else
         callback(false)
     end
-  end, "GET", "", {["Content-Type"] = 'application/json'})
+  end, "GET", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function exposedDB.getDocument(db, docID, callback)
@@ -390,16 +390,16 @@ end
 function exposedDB.getDocumentsByRowsLimit(db, rowsAndValues, limitVal, callback) -- for sort array syntax see couch db
 	local qu = { selector = rowsAndValues, limit = limitVal }
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/_find", function(err, rText, headers)
-		local data = json.decode(rText)
-		if data then
-			if data.docs then
-				callback(data.docs)
+			local data = json.decode(rText)
+			if data then
+				if data.docs then
+					callback(data.docs)
+				else
+					callback(nil)
+				end
 			else
 				callback(nil)
 			end
-		else
-			callback(nil, rText)
-		end
 	end, "POST", json.encode(qu), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end
 
@@ -445,11 +445,11 @@ function exposedDB.deleteDocument(db, docID, callback)
 			local doc = json.decode(rText)
 			PerformHttpRequest("http://127.0.0.1:5984/"..db.."/"..docID.."?rev="..doc._rev, function(err, rText, headers)
 				callback(true)
-			end, "DELETE", "", {["Content-Type"] = 'application/json'})
+			end, "DELETE", "", {["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 		else
 			callback(false)
 		end
-	end, "GET", "", {["Content-Type"] = 'application/json'})
+	end, "GET", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 AddEventHandler('es:exposeDBFunctions', function(cb)

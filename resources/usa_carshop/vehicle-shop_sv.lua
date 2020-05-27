@@ -501,5 +501,5 @@ function RemoveVehicleFromDB(vehicle, cb)
 		RconPrint("\nerr = " .. err)
 		RconPrint("\nrText = " .. rText)
 		cb(err, rText)
-	end, "DELETE", "", {["Content-Type"] = 'application/json'})
+	end, "DELETE", "", {["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end

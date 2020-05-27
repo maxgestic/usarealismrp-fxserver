@@ -9,7 +9,7 @@ function loadPlants()
                 end
 			end
 		end
-	end, "GET", "", { ["Content-Type"] = 'application/json' })
+	end, "GET", "", {["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 exports["globals"]:PerformDBCheck("usa_cultivation", "cultivation", loadPlants)

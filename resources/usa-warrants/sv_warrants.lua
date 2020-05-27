@@ -8,7 +8,7 @@ function getWarrants(cb)
 			end
 			cb(warrants)
 		end
-	end, "GET", "", { ["Content-Type"] = 'application/json' })
+	end, "GET", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function createWarrant(src, warrant, notify_with_nui)
@@ -30,7 +30,7 @@ function createWarrant(src, warrant, notify_with_nui)
 						}
 					}
 				}
-			}), { ["Content-Type"] = 'application/json' })
+			}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 	-- add warrant to warrant list
 	TriggerEvent('es:exposeDBFunctions', function(GetDoc)
 		-- insert into db
@@ -57,7 +57,7 @@ function deleteWarrant(db, id, rev)
 			RconPrint("\nrText = " .. rText)
 			RconPrint("\nerr = " .. err)
 		end
-	end, "DELETE", "", {["Content-Type"] = 'application/json'})
+	end, "DELETE", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function GetWarrantsForPerson(name, dob, cb)

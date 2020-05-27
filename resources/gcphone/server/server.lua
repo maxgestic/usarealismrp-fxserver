@@ -93,7 +93,16 @@ function getIdentifierByPhoneNumber(phone_number, cb)
 end
 
 function getPlayerID(source) -- character's ID
-    return exports["usa-characters"]:GetCharacterField(source, "_id")
+    if source then
+        local char = exports["usa-characters"]:GetCharacter(source)
+        if char then
+            return char.get("_id")
+        else 
+            return nil
+        end
+    else 
+        return nil
+    end
 end
 
 
@@ -223,7 +232,7 @@ function getMessages(identifier, cb)
             end
         end, "POST", json.encode({
             keys = { number }
-        }), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+        }), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
     end)
 end
 
@@ -777,16 +786,18 @@ RegisterServerEvent('gcPhone:allUpdate')
 AddEventHandler('gcPhone:allUpdate', function()
     local sourcePlayer = tonumber(source)
     local identifier = getPlayerID(source)
-    getNumberPhone(identifier, function(num)
-        TriggerClientEvent("gcPhone:myPhoneNumber", sourcePlayer, num)
-        getContacts(identifier, function(contacts)
-            TriggerClientEvent("gcPhone:contactList", sourcePlayer, contacts)
-            getMessages(identifier, function(messages)
-                TriggerClientEvent("gcPhone:allMessage", sourcePlayer, messages)
-                sendHistoriqueCall(sourcePlayer, num)
+    if identifier then
+        getNumberPhone(identifier, function(num)
+            TriggerClientEvent("gcPhone:myPhoneNumber", sourcePlayer, num)
+            getContacts(identifier, function(contacts)
+                TriggerClientEvent("gcPhone:contactList", sourcePlayer, contacts)
+                getMessages(identifier, function(messages)
+                    TriggerClientEvent("gcPhone:allMessage", sourcePlayer, messages)
+                    sendHistoriqueCall(sourcePlayer, num)
+                end)
             end)
         end)
-    end)
+    end
 end)
 
 
