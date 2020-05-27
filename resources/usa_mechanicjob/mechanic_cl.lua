@@ -265,9 +265,14 @@ Citizen.CreateThread(function()
 end)
 
 RegisterNetEvent("towJob:onDuty")
-AddEventHandler("towJob:onDuty", function(coords)
+AddEventHandler("towJob:onDuty", function(coords, tier)
+	exports.globals:notify(tier)
 	exports.globals:notify('You are now ~g~on-duty~s~ as a mechanic.')
-	SpawnTowFlatbed(coords)
+	if tier then
+		SpawnHeavyHauler(coords)
+	else
+		SpawnTowFlatbed(coords)
+	end
 	onDuty = "yes"
 	ShowHelp()
 end)
@@ -394,7 +399,7 @@ AddEventHandler("mechanic:repair", function(repairCount)
 end)
 
 RegisterNetEvent("mechanic:tryInstall")
-AddEventHandler("mechanic:tryInstall", function(upgrade)
+AddEventHandler("mechanic:tryInstall", function(upgrade, rank)
 	if isNearAnyRepairShop() then
 		local veh = MechanicHelper.getClosestVehicle(5)
 		if not isVehMotorcycle(veh) then
@@ -402,15 +407,15 @@ AddEventHandler("mechanic:tryInstall", function(upgrade)
 				exports.globals:notify("Installing " .. upgrade.displayName .. " upgrade!")
 				MechanicHelper.installUpgrade(veh, upgrade, function()
 					local plate = GetVehicleNumberPlateText(veh)
-					TriggerServerEvent("mechanic:installedUpgrade", plate, VehToNet(veh))
+					TriggerServerEvent("mechanic:installedUpgrade", plate, VehToNet(veh), rank)
 				end)
-			else 
+			else
 				exports.globals:notify("No vehicle found!")
 			end
-		else 
+		else
 			exports.globals:notify("Incompatible vehicle!")
 		end
-	else 
+	else
 		exports.globals:notify("You must be at a mechanic shop!")
 	end
 end)
@@ -427,10 +432,10 @@ function isNearAnyRepairShop()
 	local me = PlayerPedId()
 	local mycoords = GetEntityCoords(me)
 	local coordList = exports["usa_autorepair"]:GetAllRepairShopCoords()
-	for num, info in pairs(exports["lscustoms"]:getLocations()) do 
+	for num, info in pairs(exports["lscustoms"]:getLocations()) do
 		table.insert(coordList, {info.inside.x, info.inside.y, info.inside.z})
 	end
-	for i = 1, #coordList do 
+	for i = 1, #coordList do
 		local dist = Vdist(mycoords.x, mycoords.y, mycoords.z, coordList[i][1], coordList[i][2], coordList[i][3])
 		if dist < 45.0 then
 			return true
@@ -485,6 +490,41 @@ function ImpoundVehicle()
 			TriggerServerEvent("towJob:giveReward")
 		end
 	end
+end
+
+function SpawnHeavyHauler(coords)
+	local numberHash = 'isgtow' -- tow truck
+	Citizen.CreateThread(function()
+		RequestModel(numberHash)
+		while not HasModelLoaded(numberHash) do
+			RequestModel(numberHash)
+			Citizen.Wait(0)
+		end
+		local vehicle = CreateVehicle(numberHash, coords.x, coords.y, coords.z, coords.heading, true, false)
+		local vehPlate = GetVehicleNumberPlateText(vehicle)
+		SetVehicleOnGroundProperly(vehicle)
+		SetVehRadioStation(vehicle, "OFF")
+		SetEntityAsMissionEntity(vehicle, true, true)
+		SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
+		lastTowTruck = vehicle
+		lastRecordedTimeDoingJob = GetGameTimer()
+		local vehicle_key = {
+			name = "Key -- " .. vehPlate,
+			quantity = 1,
+			type = "key",
+			owner = "Bubba's Mechanic",
+			make = "MTL",
+			model = "Industrial",
+			plate = vehPlate
+		}
+
+		-- give key to owner
+		TriggerServerEvent("garage:giveKey", vehicle_key)
+		TriggerServerEvent('mdt:addTempVehicle', 'MTL Flatbed', "Bubba's Mechanic Co.", vehPlate)
+
+		-- give repair kit to start with --
+		TriggerServerEvent("mechanic:giveRepairKit", vehPlate)
+	end)
 end
 
 function SpawnTowFlatbed(coords)

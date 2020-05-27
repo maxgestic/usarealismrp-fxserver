@@ -31,10 +31,10 @@ TriggerEvent('es:addJobCommand', 'install', { "mechanic" }, function(source, arg
 		if char.get("money") >= upgrade.cost then
 			MechanicHelper.getMechanicRank(char.get("_id"), function(rank)
 				if rank >= 2 then
-					TriggerClientEvent('mechanic:tryInstall', source, upgrade)
+					TriggerClientEvent('mechanic:tryInstall', source, upgrade, rank)
 					installQueue[source] = args[2]
 				else 
-					TriggerClientEvent("usa:notify", source, "Must be lvl 2 to install upgrades!", "^3INFO: ^0Must be a level 2 mechanic to install upgrades! Respond to more player calls and repair vehicles to rank up!")		
+					TriggerClientEvent("usa:notify", source, "Must be lvl 2 or higher to install upgrades!", "^3INFO: ^0Must be a level 2 mechanic to install upgrades! Respond to more player calls and repair vehicles to rank up!")
 				end
 			end)
 		else 
@@ -63,6 +63,7 @@ end, {
 RegisterServerEvent("towJob:setJob")
 AddEventHandler("towJob:setJob", function(truckSpawnCoords)
 	local char = exports["usa-characters"]:GetCharacter(source)
+	local repairs = nil
 	if char.get("job") == "mechanic" then
 		TriggerClientEvent("towJob:offDuty", source)
 		char.set("job", "civ")
@@ -73,7 +74,14 @@ AddEventHandler("towJob:setJob", function(truckSpawnCoords)
 			if drivers_license.status == "valid" then
 				local usource = source
 				char.set("job", "mechanic")
-				TriggerClientEvent("towJob:onDuty", usource, truckSpawnCoords)
+				local ident = char.get("_id")
+				MechanicHelper.getMechanicRepairCount(ident, function(repairCount)
+					if repairCount >= MechanicHelper.LEVEL_3_RANK_THRESH then
+						TriggerClientEvent("towJob:onDuty", usource, truckSpawnCoords, repairCount)
+					else
+						TriggerClientEvent("towJob:onDuty", usource, truckSpawnCoords)
+					end
+				end)
 				return
 			else
 				TriggerClientEvent("usa:notify", source, "Your driver's license is ~y~suspended~s~!")
@@ -128,21 +136,24 @@ AddEventHandler("mechanic:vehicleRepaired", function()
 end)
 
 RegisterServerEvent("mechanic:installedUpgrade")
-AddEventHandler("mechanic:installedUpgrade", function(plate, vehNetId)
+AddEventHandler("mechanic:installedUpgrade", function(plate, vehNetId, rank)
 	print("installing upgrade! veh net id: " .. vehNetId)
 	local usource = source
 	local upgrade = UPGRADES[installQueue[usource]]
 	local char = exports["usa-characters"]:GetCharacter(usource)
+	local cost = upgrade.cost
 	if upgrade then
-		if char.get("money") >= upgrade.cost then
-			char.removeMoney(upgrade.cost)
+		if rank >= 3 then
+			cost = upgrade.cost - 3000
+		end
+		if char.get("money") >= cost then
+			char.removeMoney(cost)
 			MechanicHelper.upgradeInstalled(plate, upgrade, function()
 				installQueue[usource] = nil
-				print("upgrade install complete!")
 				TriggerClientEvent("mechanic:syncUpgrade", -1, vehNetId, upgrade)
 			end)
 		else
-			TriggerClientEvent("usa:notify", usource, "Not enough money! Need $" .. exports.globals:comma_value(upgrade.cost))
+			TriggerClientEvent("usa:notify", usource, "Not enough money! Need $" .. exports.globals:comma_value(cost))
 		end
 	end
 end)
