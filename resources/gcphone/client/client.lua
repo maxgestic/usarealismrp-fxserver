@@ -205,9 +205,11 @@ Citizen.CreateThread(function ()
           break
         end
     end
+    --[[
     if inRangeToActivePhone == false then
       showFixePhoneHelper(coords)
     end
+    --]]
     if inRangeToActivePhone == true and currentPlaySound == false then
       PlaySoundJS('ring2.ogg', 0.2 + (inRangedist - soundDistanceMax) / -soundDistanceMax * 0.8 )
       currentPlaySound = true
