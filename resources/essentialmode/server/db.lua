@@ -333,6 +333,11 @@ function exposedDB.getDocumentsByRows(db, rowsAndValues, callback)
 	--local qu = {selector = {[row] = value}}
 	local qu = {selector = rowsAndValues}
 	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/_find", function(err, rText, headers)
+		if not rText then
+			print("db.getDocumentByRows DEBUG: error code = " .. (err or "No error code"))
+			callback(false)
+			return
+		end
 		local response = json.decode(rText)
 		if response then
 			if response.docs then
