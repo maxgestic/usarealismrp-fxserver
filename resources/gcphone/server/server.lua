@@ -111,13 +111,31 @@ function getOrGeneratePhoneNumber (src, identifier, cb)
         if myPhoneNumber == nil then
             local char = exports["usa-characters"]:GetCharacter(src)
             local newNum = getPhoneRandomNumber()
-            db.createDocumentWithId("phone-users", { ["number"] = newNum }, char.get("_id"), function(ok)
-                if ok then
-                    cb(newNum)
-                else
-                    print("PHONE: Error trying to create doc with num:" .. newNum)
+            local uniqueNumFound = false
+            local waitingResponse = false
+            -- make sure to create only unique numbers
+            repeat
+                if not waitingResponse and not uniqueNumFound then
+                    waitingResponse = true
+                    db.getDocumentByRow("phone-users", "number", newNum, function(doc)
+                        if not doc then
+                            uniqueNumFound = true
+                            -- unique number found, create it
+                            db.createDocumentWithId("phone-users", { ["number"] = newNum }, char.get("_id"), function(ok)
+                                if ok then
+                                    cb(newNum)
+                                else
+                                    print("PHONE: Error trying to create doc with num:" .. newNum)
+                                end
+                            end)
+                        else
+                            newNum = getPhoneRandomNumber()
+                        end
+                        waitingResponse = false
+                    end)
                 end
-            end)
+                Wait(1000)
+            until uniqueNumFound
         else
             cb(myPhoneNumber)
         end
