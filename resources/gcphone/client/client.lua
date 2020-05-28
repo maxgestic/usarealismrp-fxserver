@@ -155,6 +155,8 @@ end)
 --[[
   Affiche les imformations quant le joueurs est proche d'un fixe
 --]]
+
+--[[
 function showFixePhoneHelper (coords)
   for number, data in pairs(FixePhone) do
     local dist = GetDistanceBetweenCoords(
@@ -171,7 +173,7 @@ function showFixePhoneHelper (coords)
     end
   end
 end
- 
+--]]
 
 Citizen.CreateThread(function ()
   local mod = 0
