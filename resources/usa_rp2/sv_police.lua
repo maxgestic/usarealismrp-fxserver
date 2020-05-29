@@ -314,7 +314,7 @@ end, {
 	help = "Seize illegal items on a person, in a vehicle or cash from the person.",
 	params = {
 		{ name = "id", help = "Player's' ID (or '0' for vehicle seizures)" },
-		{ name = "type", help = "'cash', 'contraband', or 'vehcontraband'" }
+		{ name = "type", help = "'cash', 'weapons', 'contraband', or 'vehcontraband'" }
 	}
 })
 
