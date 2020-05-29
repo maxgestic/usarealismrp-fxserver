@@ -12,6 +12,7 @@ local SETTINGS = {
 
 AddEventHandler("playerDropped", function(reason)
   local usource = source
+  local accountIdentifier = GetPlayerIdentifiers(usource)[1]
   if CHARACTERS[usource] then
     TriggerEvent('es:exposeDBFunctions', function(db)
       -- save player data --
@@ -20,14 +21,10 @@ AddEventHandler("playerDropped", function(reason)
       db.updateDocument("characters", CHARACTERS[usource].get("_id"), CHARACTERS[usource].getSelf(), function(doc, err, rText)
         print("* Character updated in DB! err " .. err .. " *")
         -- save last character played --
-        db.getDocumentByRow("essentialmode", "identifier", GetPlayerIdentifiers(usource)[1], function(doc)
+        db.getDocumentByRow("essentialmode", "identifier", accountIdentifier, function(doc)
           doc._rev = nil
           doc.lastPlayedChar = CHARACTERS[usource].getFullName()
-          db.updateDocument("essentialmode", doc._id, doc, function(doc, err, rText)
-            if err then
-              print("when saving last char, ERR: " .. err)
-            end
-          end)
+          db.updateDocument("essentialmode", doc._id, doc, function(doc, err, rText) end)
           -- notify DOC of player disconnect while in jail --
           local jailtime = CHARACTERS[usource].get("jailTime")
           if jailtime then
