@@ -183,6 +183,7 @@ RegisterServerEvent('911:LockpickingDoor')
 RegisterServerEvent('911:CuffCutting')
 RegisterServerEvent('911:Burglary')
 RegisterServerEvent('911:MuggingNPC')
+RegisterServerEvent('911:Shoplifting')
 RegisterServerEvent('911:JewelleryRobbery')
 
 recentcalls = {}
@@ -238,6 +239,18 @@ AddEventHandler('911:MuggingNPC', function(x, y, z, street)
 		Citizen.Wait(180000)
 		recentcalls[street] = nil
 	end
+end)
+
+AddEventHandler('911:Shoplifting', function(x, y, z, street, isMale)
+    if recentcalls[street] ~= 'Shoplifting' then
+        recentcalls[street] = 'Shoplifting'
+        local time = math.random(1000, 2000)
+        Citizen.Wait(time)
+        local string = '^2^*Shoplifting In Progress:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
+        Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Shoplifting')
+        Citizen.Wait(50000)
+        recentcalls[street] = nil
+    end
 end)
 
 AddEventHandler('911:PersonWithAKnife', function(x, y, z, street, area, isMale)

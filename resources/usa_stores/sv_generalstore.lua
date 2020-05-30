@@ -2,6 +2,27 @@
 --# for USA REALISM rp
 --# Made for the 24/7 stores as general stores for various items
 
+local STOLEN_GOODS = {
+  {name = "First Aid Kit", type = "misc", quantity = 1, legality = "legal", weight = 15, objectModel = "v_ret_ta_firstaid", blockedInPrison = true},
+  {name = "Water", price = 25, type = "drink", substance = 40.0, quantity = 1, legality = "legal", weight = 10, objectModel = "ba_prop_club_water_bottle"},
+  {name = "Arizona Iced Tea", price = 25, type = "drink", substance = 50.0, quantity = 1, legality = "legal", weight = 10, objectModel = "ba_prop_club_water_bottle"},
+  {name = "Peanut Butter Cups", price = 35, type = "food", substance = 10.0, quantity = 1, legality = "legal", weight = 5, objectModel = "ng_proc_food_chips01a"},
+  {name = "Sea Salt & Vinegar Chips", price = 35, type = "food", substance = 7.0, quantity = 1, legality = "legal", weight = 7, objectModel = "ng_proc_food_chips01a"},
+  {name = "RAW Papers", price = 10, type = "misc", quantity = 5, legality = "legal", weight = 1, objectModel = "prop_cs_pills", blockedInPrison = true},
+  {name = "Bic Lighter", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_pills", blockedInPrison = true}
+}
+
+local ShopliftingAreas = {
+  {x = -1222.81, y = -904.39, z = 12.33, shoplifted = false},
+  {x = 31.72, y = -1345.48, z = 29.5, shoplifted = false},
+  {x = -52.73, y = -1749.77, z = 29.42, shoplifted = false},
+  {x = 1156.5, y = -323.1, z = 69.21, shoplifted = false},
+  {x = 377.34, y = 327.45, z = 103.57, shoplifted = false},
+  {x = -710.43, y = -911.96, z = 19.22, shoplifted = false},
+  {x = 378.35, y = 329.75, z = 103.57, shoplifted = false},
+  {x = 1164.44, y = 2707.41, z = 38.16, shoplifted = false},
+}
+
 local GENERAL_STORE_ITEMS = {
   ["Food"] = {
     {name = "Tuna Sandwich", price = 40, type = "food", substance = 15.0, quantity = 1, legality = "legal", weight = 10, objectModel = "prop_sandwich_01"},
@@ -88,6 +109,11 @@ function AddGeneralStoreItem(category, item)
   table.insert(GENERAL_STORE_ITEMS[category], item)
 end
 
+RegisterServerEvent('generalStore:loadShopliftAreas')
+AddEventHandler('generalStore:loadShopliftAreas', function()
+  TriggerClientEvent('generalStore:loadShopliftAreas', source, ShopliftingAreas)
+end)
+
 RegisterServerEvent("generalStore:buyItem")
 AddEventHandler("generalStore:buyItem", function(item, store, inPrison, business)
   local char = exports["usa-characters"]:GetCharacter(source)
@@ -103,14 +129,6 @@ AddEventHandler("generalStore:buyItem", function(item, store, inPrison, business
   if char.canHoldItem(item) then
     if char.get("money") >= item.price then
       char.removeMoney(item.price)
-      --[[
-      if item.name == "Cell Phone" then
-        item.number = string.sub(tostring(os.time()), -8)
-        item.owner = char.getName()
-        item.name = item.name .. " - " .. item.number
-        exports["usa-phone"]:CreateNewPhone(item)
-      end
-      --]]
       char.giveItem(item, item.quantity or 1)
       TriggerClientEvent("usa:notify", source, "Purchased: ~y~" .. item.name)
       if business then
@@ -132,4 +150,42 @@ end)
 RegisterServerEvent("hardwareStore:loadItems")
 AddEventHandler("hardwareStore:loadItems", function()
   TriggerClientEvent("hardwareStore:loadItems", source, HARDWARE_STORE_ITEMS)
+end)
+
+RegisterServerEvent('generalStore:giveStolenItem')
+AddEventHandler('generalStore:giveStolenItem', function()
+  local goods = STOLEN_GOODS[math.random(#STOLEN_GOODS)]
+  local char = exports["usa-characters"]:GetCharacter(source)
+  if char.canHoldItem(goods) then
+    char.giveItem(goods, 1)
+    TriggerClientEvent('usa:notify', source, 'You stole a ~y~' .. goods.name .. '~s~!')
+  else
+    TriggerClientEvent("usa:notify", source, "Inventory is full!")
+  end
+end)
+
+RegisterServerEvent('generalStore:attemptShoplift')
+AddEventHandler('generalStore:attemptShoplift', function(area)
+  local usource = source
+  exports.globals:getNumCops(function(numCops)
+    if numCops >= 1 then
+      if not ShopliftingAreas[area].shoplifted then
+        -- start shop lift
+        ShopliftingAreas[area].shoplifted = true
+        TriggerClientEvent('generalStore:performShoplift', usource, area)
+        TriggerClientEvent('generalStore:markAsShoplifted', -1, area)
+        -- reset cooldown
+        SetTimeout(math.random(60000, 300000), function()
+          if ShopliftingAreas[area].shoplifted then
+            ShopliftingAreas[area].shoplifted = false
+          end
+        end)
+      else
+        TriggerClientEvent('usa:notify', usource, 'This store has already been shoplifted')
+        return
+      end
+    else
+      TriggerClientEvent("usa:notify", usource, "The shelves have not been re stocked yet! Try again later!")
+    end
+  end)
 end)

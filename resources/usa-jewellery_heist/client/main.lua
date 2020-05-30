@@ -158,7 +158,7 @@ AddEventHandler('jewelleryheist:sellGoods', function() -- action of selling to t
     while GetGameTimer() - beginTime < thisSellTime do
         exports.globals:DrawTimerBar(beginTime, thisSellTime, 1.42, 1.475, 'Selling Jewellery')
         DisableControlAction(0, 244, true) -- 244 = M key (interaction menu / inventory)
-        DisableControlAction(0, 38, true) -- prevent spam clicking
+        DisableControlAction(0, 86, true) -- prevent spam clicking
         Wait(1)
     end
     TriggerServerEvent("jewelleryheist:sellstolengoods")
