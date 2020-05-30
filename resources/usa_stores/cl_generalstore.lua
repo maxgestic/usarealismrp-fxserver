@@ -354,40 +354,27 @@ AddEventHandler('generalStore:performShoplift', function(area)
   local beginTime = GetGameTimer()
   local playerPed = PlayerPedId()
   local playerCoords = GetEntityCoords(playerPed)
+  local SHOPLIFT_ANIMATION_TIME_SECONDS = 10
 
-  local successChance = math.random()
-  local success = nil
-
-  if successChance < 0.4 then
+  if math.random() < 0.2 then -- 20% chance to call police
     local x, y, z = table.unpack(playerCoords)
     local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
     local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
     TriggerServerEvent("911:Shoplifting", x, y, z, lastStreetNAME, IsPedMale(playerPed))
-    success = false
-  else
-    success = true
   end
 
-  --TriggerServerEvent('generalStore:attemptShoplift', area)
-  RequestAnimDict("anim@am_hold_up@male")
-  while (not HasAnimDictLoaded("anim@am_hold_up@male")) do Citizen.Wait(0) end
-  while GetGameTimer() - beginTime < 10 * 1000 do
-    exports.globals:DrawTimerBar(beginTime, 10 * 1000, 1.42, 1.475, 'Preparing')
+  exports.globals:loadAnimDict("anim@am_hold_up@male") -- play animation
+  while GetGameTimer() - beginTime < SHOPLIFT_ANIMATION_TIME_SECONDS * 1000 do
+    exports.globals:DrawTimerBar(beginTime, SHOPLIFT_ANIMATION_TIME_SECONDS * 1000, 1.42, 1.475, 'Preparing')
     if not IsEntityPlayingAnim(playerPed, "anim@am_hold_up@male", "shoplift_mid", 3) then
-      TaskPlayAnim(playerPed, "anim@am_hold_up@male", "shoplift_mid", 8.0, 1.0, 10000, 11, 1.0, false, false, false)
+      TaskPlayAnim(playerPed, "anim@am_hold_up@male", "shoplift_mid", 8.0, 1.0, SHOPLIFT_ANIMATION_TIME_SECONDS * 1000, 11, 1.0, false, false, false)
     end
-    Citizen.Wait(1)
+    DisableControlAction(0, 86, true) -- disable spamming E
+    Wait(1)
   end
   ClearPedTasks(playerPed)
 
-  if success then
-    TriggerServerEvent('generalStore:giveStolenItem')
-  else
-    exports.globals:notify('You failed to shoplift anything')
-  end
-  local cooldown = math.random(60000, 300000)
-  Wait(cooldown)
-  TriggerServerEvent('generalStore:resetCooldown', area)
+  TriggerServerEvent('generalStore:giveStolenItem') -- give item
 end)
 
 RegisterNetEvent('generalStore:markAsShoplifted')

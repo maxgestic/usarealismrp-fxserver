@@ -129,14 +129,6 @@ AddEventHandler("generalStore:buyItem", function(item, store, inPrison, business
   if char.canHoldItem(item) then
     if char.get("money") >= item.price then
       char.removeMoney(item.price)
-      --[[
-      if item.name == "Cell Phone" then
-        item.number = string.sub(tostring(os.time()), -8)
-        item.owner = char.getName()
-        item.name = item.name .. " - " .. item.number
-        exports["usa-phone"]:CreateNewPhone(item)
-      end
-      --]]
       char.giveItem(item, item.quantity or 1)
       TriggerClientEvent("usa:notify", source, "Purchased: ~y~" .. item.name)
       if business then
@@ -178,9 +170,16 @@ AddEventHandler('generalStore:attemptShoplift', function(area)
   exports.globals:getNumCops(function(numCops)
     if numCops >= 1 then
       if not ShopliftingAreas[area].shoplifted then
+        -- start shop lift
         ShopliftingAreas[area].shoplifted = true
         TriggerClientEvent('generalStore:performShoplift', usource, area)
         TriggerClientEvent('generalStore:markAsShoplifted', -1, area)
+        -- reset cooldown
+        SetTimeout(math.random(60000, 300000), function()
+          if ShopliftingAreas[area].shoplifted then
+            ShopliftingAreas[area].shoplifted = false
+          end
+        end)
       else
         TriggerClientEvent('usa:notify', usource, 'This store has already been shoplifted')
         return
@@ -189,11 +188,4 @@ AddEventHandler('generalStore:attemptShoplift', function(area)
       TriggerClientEvent("usa:notify", usource, "The shelves have not been re stocked yet! Try again later!")
     end
   end)
-end)
-
-RegisterServerEvent('generalStore:resetCooldown')
-AddEventHandler('generalStore:resetCooldown', function(area)
-  if ShopliftingAreas[area].shoplifted then
-    ShopliftingAreas[area].shoplifted = false
-  end
 end)
