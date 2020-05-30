@@ -33,7 +33,7 @@ TokoVoipConfig = {
 		TSChannelWait = "WAITING",
 
 		-- Blocking screen informations
-		TSServer = "74.91.125.217", -- TeamSpeak server address to be displayed on blocking screen
+		TSServer = "147.135.104.174", -- TeamSpeak server address to be displayed on blocking screen
 		TSChannelSupport = "SUPPORT", -- TeamSpeak support channel name displayed on blocking screen
 		TSDownload = "http://usarrp.net/voip", -- Download link displayed on blocking screen
 		TSChannelWhitelist = { -- Black screen will not be displayed when users are in those TS channels

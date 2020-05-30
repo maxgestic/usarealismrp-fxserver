@@ -143,7 +143,7 @@ function GetVehicleInventory(plate, cb)
     end, "POST", json.encode({
         keys = { plate }
         --keys = { "86CSH075" }
-    }), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+    }), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function GetVehicleInventoryAndCapacity(plate, cb)
@@ -172,7 +172,7 @@ function GetVehicleInventoryAndCapacity(plate, cb)
     end, "POST", json.encode({
         keys = { plate }
         --keys = { "86CSH075" }
-    }), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
+    }), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function IsPlayerActive(id)

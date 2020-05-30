@@ -195,7 +195,7 @@ end)
 
 RegisterNetEvent("cultivation:clientNewPlant")
 AddEventHandler("cultivation:clientNewPlant", function(newPlant)
-    if me.coords ~= nil then
+    if me.coords and newPlant.coords then
         if Vdist(me.coords.x, me.coords.y, me.coords.z, newPlant.coords.x, newPlant.coords.y, newPlant.coords.z) < OBJECT_CULLING_DIST then -- create plant object
             local objectModel = newPlant.stage.objectModels[1]
             LoadPlantModel(objectModel)
