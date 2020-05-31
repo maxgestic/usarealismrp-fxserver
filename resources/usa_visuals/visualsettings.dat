@@ -492,8 +492,8 @@ defaultsearchlight.mainLightInfo.falloffScale	2.0
 defaultsearchlight.mainLightInfo.falloffExp	8.0
 defaultsearchlight.mainLightInfo.innerAngle	0.0
 defaultsearchlight.mainLightInfo.outerAngle	5.0
-defaultsearchlight.mainLightInfo.globalIntensity	4.0
-defaultsearchlight.mainLightInfo.lightIntensityScale	10.0
+defaultsearchlight.mainLightInfo.globalIntensity	1.0
+defaultsearchlight.mainLightInfo.lightIntensityScale	1.0
 defaultsearchlight.mainLightInfo.volumeIntensityScale	0.125
 defaultsearchlight.mainLightInfo.volumeSizeScale	0.5
 defaultsearchlight.mainLightInfo.outerVolumeColor.color.red	0.0

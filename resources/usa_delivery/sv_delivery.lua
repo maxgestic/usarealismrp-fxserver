@@ -1,4 +1,4 @@
-local BASE_PAY = 200
+local BASE_PAY = 350
 
 local DELIVERY_LOCATIONS = {
 	{x = 92.51, y = 187.70, z = 105.26},

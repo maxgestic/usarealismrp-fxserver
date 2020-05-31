@@ -1,6 +1,6 @@
 exports["globals"]:PerformDBCheck("usa_mechanicjob", "mechanicjob")
 
-local TOW_REWARD = {200, 350}
+local TOW_REWARD = {100, 450}
 
 local installQueue = {}
 

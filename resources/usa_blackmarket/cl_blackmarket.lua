@@ -1,16 +1,26 @@
 local MENU_KEY = 38 -- "E"
 local closest_shop = nil
-local openingHour = math.random(0, 2)
-local closingHour = math.random(4,6)
+local openingHour = nil
+local closingHour = nil
 
 local markets = {}
 
 TriggerServerEvent("blackMarket:loadItems")
+TriggerServerEvent("blackMarket:openAndClosingHours")
 
 RegisterNetEvent("blackMarket:loadItems")
 AddEventHandler("blackMarket:loadItems", function(items)
   markets = items
 end)
+
+RegisterNetEvent("blackMarket:operatingHours")
+AddEventHandler("blackMarket:operatingHours", function(open, closed)
+    print(open)
+    print(closed)
+    openingHour = open
+    closingHour = closed
+end)
+
 
 local createdJobPeds = {}
 Citizen.CreateThread(function()
