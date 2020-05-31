@@ -354,10 +354,7 @@ function setReadMessageNumber(identifier, num)
                 for i = 1, #docs do
                     docs[i]._rev = nil
                     docs[i].isRead = 1
-                    db.updateDocument("phone-messages", docs[i]._id, docs[i], function(doc, err, rText)
-                        print("message with id " .. docs[i]._id .. " set to read!")
-                        print("err: " .. err)
-                    end)
+                    db.updateDocument("phone-messages", docs[i]._id, docs[i], function(doc, err, rText) end)
                 end
             end
         end)
