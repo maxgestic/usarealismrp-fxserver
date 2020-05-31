@@ -1251,7 +1251,7 @@ function getVehicleInsideOrInFrontOfUser()
 	local coordA = GetEntityCoords(ped, 1)
 	local coordB = GetOffsetFromEntityInWorldCoords(ped, 0.0, 2.0, 0.0)
 	local targetVehicle = getVehicleInDirection(coordA, coordB)
-	if targetVehicle == 0 and IsPedInAnyVehicle(ped, true) then
+	if IsPedInAnyVehicle(ped, true) then
 		targetVehicle = GetVehiclePedIsIn(ped, true)
 	end
 	return targetVehicle
