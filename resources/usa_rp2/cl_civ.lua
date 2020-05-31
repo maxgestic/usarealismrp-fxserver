@@ -390,21 +390,17 @@ AddEventHandler("crim:areHandsUp", function(from_source, to_source, action, x, y
   end
 end)
 
-local dying = false
 RegisterNetEvent("crim:areHandsTied")
 AddEventHandler("crim:areHandsTied", function(from_source, to_source, action)
-  if IsPedDeadOrDying(to_source) and closeEnoughToPlayer(from_source) then
-    dying = true
-  end
   -- don't need to check distance (or can't cause ped is in vehicle):
   if action == "unseat" then
-    if hands_tied == true or dying == true then
+    if hands_tied == true then
       TriggerEvent("place:unseat", from_source)
       return
     end
   end
   -- need to check distance
-  if hands_tied == true or dying == true and closeEnoughToPlayer(from_source) then
+  if hands_tied == true and closeEnoughToPlayer(from_source) then
     if action == "rob" then
       -- hands were up, continue stealing cash
       TriggerServerEvent("crim:continueRobbing", true, from_source, to_source)
