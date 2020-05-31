@@ -469,7 +469,7 @@ RegisterNUICallback('playEmote', function(data, cb)
 									name = scenarios[i].animname,
 									flag = 7
 								}
-							elseif string.find(scenarioName, "cpr") or string.find(scenarioName, "cross arms") or string.find(scenarioName, "typing") or string.find(scenarioName, "gang 1") or string.find(scenarioName, "gang 2") then
+							elseif string.find(scenarioName, "cpr") or string.find(scenarioName, "salute") or string.find(scenarioName, "airplane") or string.find(scenarioName, "cross arms") or string.find(scenarioName, "typing") or string.find(scenarioName, "gang 1") or string.find(scenarioName, "gang 2") then
 								--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
 								--TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, 5, 1, 1000, 31, 0, 0, 0, 0)
 								TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 53, 0, 0, 0, 0)
@@ -601,7 +601,7 @@ AddEventHandler("emotes:playEmote", function(scenarioName)
 									name = scenarios[i].animname,
 									flag = 7
 								}
-							elseif string.find(scenarioName, "cpr") or string.find(scenarioName, "cross arms") or string.find(scenarioName, "leanwindow") or string.find(scenarioName, "typing") or string.find(scenarioName, "gang 1") or string.find(scenarioName, "gang 2") then
+							elseif string.find(scenarioName, "cpr") or string.find(scenarioName, "salute") or string.find(scenarioName, "airplane") or string.find(scenarioName, "cross arms") or string.find(scenarioName, "leanwindow") or string.find(scenarioName, "typing") or string.find(scenarioName, "gang 1") or string.find(scenarioName, "gang 2") then
 								--TriggerEvent("usa:playAnimation", scenarios[i].animname, scenarios[i].dict, false, 6.5, true)
 								--TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, 5, 1, 1000, 31, 0, 0, 0, 0)
 								TriggerEvent("usa:playAnimation", scenarios[i].dict, scenarios[i].animname, -8, 1, -1, 53, 0, 0, 0, 0)
@@ -1251,7 +1251,7 @@ function getVehicleInsideOrInFrontOfUser()
 	local coordA = GetEntityCoords(ped, 1)
 	local coordB = GetOffsetFromEntityInWorldCoords(ped, 0.0, 2.0, 0.0)
 	local targetVehicle = getVehicleInDirection(coordA, coordB)
-	if targetVehicle == 0 and IsPedInAnyVehicle(ped, true) then
+	if IsPedInAnyVehicle(ped, true) then
 		targetVehicle = GetVehiclePedIsIn(ped, true)
 	end
 	return targetVehicle

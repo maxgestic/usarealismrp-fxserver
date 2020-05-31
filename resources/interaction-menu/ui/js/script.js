@@ -204,7 +204,10 @@ var itemImages = {
   "Fishing Pole": "https://i.imgur.com/FPgsx97.png",
   "Sam Smith's Strapon": "https://i.imgur.com/cQjjGVg.png",
   "Advanced Pick" : "https://i.imgur.com/86KdWw0.png",
-  "Cooked Meat": "https://i.imgur.com/5pd8czn.png",
+  "Ceramic Tubing": "https://i.imgur.com/Fg1pZNH.png",
+  "Aluminum Powder": "https://i.imgur.com/FcoUYM4.png",
+  "Iron Oxide": "https://i.imgur.com/pBhnwQl.png",
+  "Cooked Meat": "https://i.imgur.com/5pd8czn.png"
 }
 
 var menuItems = [
