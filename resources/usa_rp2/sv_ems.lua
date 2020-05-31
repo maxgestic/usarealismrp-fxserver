@@ -88,7 +88,43 @@ local hospitalBeds = {
 		occupied = nil,
 		objCoords = {354.87, -599.26, 43.28},
 		objModel = 1631638868
-	}
+	},
+	-- Prison Beds
+	{
+		occupied = nil,
+		objCoords = {1777.81, 2558.01, 45.8},
+		objModel = 2117668672
+	},
+	{
+		occupied = nil,
+		objCoords = {1778.09, 2560.46, 45.8},
+		objModel = 2117668672
+	},
+	{
+		occupied = nil,
+		objCoords = {1777.71, 2562.4, 45.8},
+		objModel = 2117668672
+	},
+	{
+		occupied = nil,
+		objCoords = {1777.74, 2564.5, 45.8},
+		objModel = 2117668672
+	},
+	{
+		occupied = nil,
+		objCoords = {1781.71, 2564.5, 45.8},
+		objModel = 2117668672
+	},
+	{
+		occupied = nil,
+		objCoords = {1781.59, 2562.5, 45.8},
+		objModel = 2117668672
+	},
+	{
+		occupied = nil,
+		objCoords = {1781.11, 2560.51, 45.8},
+		objModel = 2117668672
+	},
 }
 
 
