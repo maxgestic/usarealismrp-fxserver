@@ -15,8 +15,6 @@ end)
 
 RegisterNetEvent("blackMarket:operatingHours")
 AddEventHandler("blackMarket:operatingHours", function(open, closed)
-    print(open)
-    print(closed)
     openingHour = open
     closingHour = closed
 end)

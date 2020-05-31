@@ -120,7 +120,6 @@ Citizen.CreateThread(function()
               -- print('freezing pos of door: ' ..door.name)
             end
           else
-            SetEntityAsMissionEntity(doorObject, true, true)
             if door.locked then
               SetEntityVisible(doorObject, true)
             else
@@ -167,12 +166,12 @@ AddEventHandler("doormanager:toggleDoorLock", function(index, locked, x, y, z)
             end
           else
             _x, _y, _z = table.unpack(door.lockedCoords)
-              while GetDistanceBetweenCoords(GetEntityCoords(doorObject).x, GetEntityCoords(doorObject).y, GetEntityCoords(doorObject).z, _x, _y, _z, false) > 0.2 do
+            while GetDistanceBetweenCoords(GetEntityCoords(doorObject).x, GetEntityCoords(doorObject).y, GetEntityCoords(doorObject).z, _x, _y, _z, false) > 0.2 do
               --print("dist: " .. GetDistanceBetweenCoords(GetEntityCoords(doorObject).x, GetEntityCoords(doorObject).y, GetEntityCoords(doorObject).z, _x, _y, _z, false))
               --print(GetEntityCoords(doorObject))
-              Citizen.Wait(1)
+              Wait(1)
               local playerCoords = GetEntityCoords(PlayerPedId())
-                  local doorCoords = GetEntityCoords(doorObject)
+              local doorCoords = GetEntityCoords(doorObject)
               local offsetX, offsetY, offsetZ = table.unpack(door.offset)
               doorBeingLocked = door
               if Vdist(x, y, z, table.unpack(playerCoords)) < 8.0 then
