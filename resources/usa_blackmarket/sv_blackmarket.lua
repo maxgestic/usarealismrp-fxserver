@@ -35,7 +35,6 @@ local markets = {
   ['marketC'] = {
     ['coords'] = {2549.91, 4639.19, 34.08}, -- Grapeseed
     ['items'] = {
-        { name = "Thermite", type = "misc", hash = 865563579, price = 6000, legality = "illegal", quantity = 1, weight = 20, stock = math.random(0, 3), objectModel = "hei_prop_heist_thermite"},
         { name = "Molotov", type = "weapon", hash = 615608432, price = 500, legality = "illegal", quantity = 1, weight = 20, stock = math.random(0, 3), objectModel = "w_ex_molotov"},
         { name = "Tommy Gun", type = "weapon", hash = 1627465347, price = 110000, legality = "illegal", quantity = 1, weight = 45, stock = math.random(0, 2), objectModel = "w_sb_gusenberg" },
         { name = "AK47", type = "weapon", hash = -1074790547, price = 100000, legality = "illegal", quantity = 1, weight = 45, stock = math.random(0, 2), objectModel = "w_ar_assaultrifle" },

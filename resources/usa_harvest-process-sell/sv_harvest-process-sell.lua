@@ -9,6 +9,13 @@ local REWARDS = {
       legality = "legal",
       objectModel = "prop_cs_box_step"
     },
+    powder = {
+      name = "Aluminum Powder",
+      legality = "legal",
+      quantity = 1,
+      type = "misc",
+      weight = 4.0
+    },
     processed_item = {
       name = "Processed Sand",
       quantity = 1,
@@ -17,7 +24,7 @@ local REWARDS = {
       legality = "legal",
       objectModel = "prop_cs_box_step"
     },
-    reward_amount = math.random(70, 80)
+    reward_amount = math.random(70, 200)
   }
 }
 
@@ -45,7 +52,7 @@ AddEventHandler("HPS:checkItem", function(job_name, process_time, stage)
       TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 3)
     end
   else
-    -- no materials:
+     --no materials:
     if stage == "Harvest" then
       TriggerClientEvent("usa:notify", source, "You need " .. REWARDS[job_name].harvest_item_requirement .. " to gather!")
     elseif stage == "Process" then
@@ -62,19 +69,30 @@ AddEventHandler("HPS:rewardItem", function(job_name, stage)
     if job == job_name then
       local char = exports["usa-characters"]:GetCharacter(source)
       if stage == "Harvest" then
-        if char.canHoldItem(data.harvest_item) then
-            char.giveItem(data.harvest_item)
+        local givePowderItemChance = math.random()
+        if givePowderItemChance < 0.05 then
+          if char.canHoldItem(data.powder) then
+            char.giveItem(data.powder)
+            TriggerClientEvent("usa:notify", source, "You have dug and retrieved " .. data.powder.name)
+          else
+            TriggerClientEvent("usa:notify", source, "Inventory full!")
+          end
         else
-          TriggerClientEvent("usa:notify", source, "Inventory full!")
+          if char.canHoldItem(data.harvest_item) then
+            char.giveItem(data.harvest_item)
+            TriggerClientEvent("usa:notify", source, "Harvested " .. data.harvest_item.name)
+          else
+            TriggerClientEvent("usa:notify", source, "Inventory full!")
+          end
         end
       elseif stage == "Process" then
-        if char.canHoldItem(data.processed_item) then
-          char.removeItem(data.harvest_item.name, 1)
-          data.processed_item.quantity = 1
-          char.giveItem(data.processed_item)
-        else
-          TriggerClientEvent("usa:notify", source, "Inventory full!")
-        end
+          if char.canHoldItem(data.processed_item) then
+            char.removeItem(data.harvest_item.name, 1)
+            data.processed_item.quantity = 1
+            char.giveItem(data.processed_item)
+          else
+            TriggerClientEvent("usa:notify", source, "Inventory full!")
+          end
       end
     end
   end
