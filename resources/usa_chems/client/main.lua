@@ -2,10 +2,8 @@ local ALUMINUM_LOC = {x = 1111.49, y = -2006.51, z = 30.91}
 local ALUMINUM_NPC = 's_m_y_construct_02'
 local PROCESS_CHEM_DURATION = 60000
 
-local COMBINE_SUBSTANCES = {x = 141.09, y = -2204.24, z = 4.69}
+local COMBINE_SUBSTANCES = {x = 140.55950927734,y = -2204.01171875, z = 4.6880221366882}
 
-
--- TROLLING BITCHES
 local NPCHandle = nil
 Citizen.CreateThread(function()
     while true do
@@ -58,9 +56,10 @@ AddEventHandler("chems:performChemicalMixing", function()
         if not IsEntityPlayingAnim(myped, "anim@move_m@trash", "pickup", 3) then
             TaskPlayAnim(myped, "anim@move_m@trash", "pickup", 8.0, 1.0, -1, 11, 1.0, false, false, false)
         end
+        DisableControlAction(0, 86, true) -- disable spamming E
         Wait(1)
     end
-    if math.random() <= 0.4 then
+    if math.random() <= 0.20 then
         StartEntityFire(PlayerPedId())
         local x, y, z = table.unpack(mycoords)
         local lastStreetHASH = GetStreetNameAtCoord(x, y, z)

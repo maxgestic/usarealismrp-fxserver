@@ -464,7 +464,7 @@ AddEventHandler('911:UncontrolledFire', function(x, y, z, street)
         local time = math.random(5000, 10000)
         Citizen.Wait(time)
         local string = '^*^rFIRE^r: Fire Outbreak '..street
-        Send911Notification({'ems'}, string, x, y, z, 'Building Fire Alarm Triggered')
+        Send911Notification({'ems'}, string, x, y, z, 'Fire Alarm')
         Citizen.Wait(180000)
         recentcalls[street] = nil
     end

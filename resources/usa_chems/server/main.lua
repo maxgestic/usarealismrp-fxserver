@@ -16,7 +16,7 @@ AddEventHandler('chems:checkForAllChems', function()
             char.removeItem('Ceramic Tubing', 1)
             TriggerClientEvent('chems:performChemicalMixing', source)
         else
-            TriggerClientEvent("usa:notify", source, 'You dot have all of the relevant materials')
+            TriggerClientEvent("usa:notify", source, "You don't have all of the relevant materials")
             return
         end
     else

@@ -7,24 +7,24 @@ RegisterServerEvent("chopshop:reward")
 AddEventHandler("chopshop:reward", function(veh_name, damage, property)
   local char = exports["usa-characters"]:GetCharacter(source)
   local reward = math.random(200, 900)
-  local payout = math.random()
   local numTroopers = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
+
   if numTroopers == 0 then
     damage = math.ceil(0.10 * damage)
     reward = math.ceil(0.20 * reward) -- only give 20% of regular reward if no cops
   end
 
-  if payout <= 0.04 then
+  local finalReward = math.max(reward - damage, 0) -- give money reward
+  char.giveMoney(finalReward)
+  TriggerClientEvent("usa:notify", source, "Thanks! Here is $" .. finalReward .. "!", "^0Thanks! Here is $" .. finalReward .. "!")
+
+  if math.random() <= 0.10 then
     local randomItem = items[math.random(#items)]
     if char.canHoldItem(randomItem) then
       char.giveItem(randomItem)
-      TriggerClientEvent("usa:notify", source, "Thanks for your help! We dont have any cash right now so take this instead " .. randomItem.name)
+      TriggerClientEvent("usa:notify", source, "Here, take this " .. randomItem.name .. ". It might be useful.", "^3Pedro: ^0Here, take this " .. randomItem.name .. ". It might be useful.")
     else
-      TriggerClientEvent("usa:notify", source, "Inventory full!")
+      TriggerClientEvent("usa:notify", source, "Inventory full!", "^3Pedro: ^0I was going to give you something extra but your pockets are full!")
     end
-  else
-    local finalReward = math.max(reward - damage, 0)
-    char.giveMoney(finalReward)
-    TriggerClientEvent("usa:notify", source, "Thanks! Here is $" .. finalReward .. "!", "^0Thanks! Here is $" .. finalReward .. "!")
   end
 end)

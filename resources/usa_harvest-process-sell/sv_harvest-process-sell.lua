@@ -69,8 +69,8 @@ AddEventHandler("HPS:rewardItem", function(job_name, stage)
     if job == job_name then
       local char = exports["usa-characters"]:GetCharacter(source)
       if stage == "Harvest" then
-        local item = math.random()
-        if item < 0.03 then
+        local givePowderItemChance = math.random()
+        if givePowderItemChance < 0.05 then
           if char.canHoldItem(data.powder) then
             char.giveItem(data.powder)
             TriggerClientEvent("usa:notify", source, "You have dug and retrieved " .. data.powder.name)
@@ -85,14 +85,14 @@ AddEventHandler("HPS:rewardItem", function(job_name, stage)
             TriggerClientEvent("usa:notify", source, "Inventory full!")
           end
         end
-        elseif stage == "Process" then
-        if char.canHoldItem(data.processed_item) then
-          char.removeItem(data.harvest_item.name, 1)
-          data.processed_item.quantity = 1
-          char.giveItem(data.processed_item)
-        else
-          TriggerClientEvent("usa:notify", source, "Inventory full!")
-        end
+      elseif stage == "Process" then
+          if char.canHoldItem(data.processed_item) then
+            char.removeItem(data.harvest_item.name, 1)
+            data.processed_item.quantity = 1
+            char.giveItem(data.processed_item)
+          else
+            TriggerClientEvent("usa:notify", source, "Inventory full!")
+          end
       end
     end
   end
