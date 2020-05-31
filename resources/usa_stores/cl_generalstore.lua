@@ -25,6 +25,15 @@ local GENERAL_STORE_LOCATIONS = {
     {x = 1780.9207763672,y = 2598.8671875, z = 45.797817230225, prison = true} -- Prison
 }
 
+local ShopliftingAreas = {}
+
+RegisterNetEvent('generalStore:loadShopliftAreas')
+AddEventHandler('generalStore:loadShopliftAreas', function(areas)
+  ShopliftingAreas = areas
+end)
+
+TriggerServerEvent('generalStore:loadShopliftAreas')
+
 local HARDWARE_STORE_LOCATIONS = {
   {x = 46.38, y = -1749.47, z = 29.63},
   {x = 2748.35, y = 3472.56, z = 55.67}
@@ -257,6 +266,21 @@ Citizen.CreateThread(function()
     for i = 1, #GENERAL_STORE_LOCATIONS do
       DrawText3D(GENERAL_STORE_LOCATIONS[i].x, GENERAL_STORE_LOCATIONS[i].y, GENERAL_STORE_LOCATIONS[i].z, 5, '[E] - General Store')
     end
+
+    for i = 1, #ShopliftingAreas do
+      --if not ShopliftingAreas[i].shoplifted then
+        local dist = Vdist(mycoords.x, mycoords.y, mycoords.z, ShopliftingAreas[i].x, ShopliftingAreas[i].y, ShopliftingAreas[i].z)
+        if dist < 1.5 then
+          exports.globals:DrawText3D(ShopliftingAreas[i].x, ShopliftingAreas[i].y, ShopliftingAreas[i].z, '[E] - Shoplift')
+          if IsControlJustPressed(1, MENU_KEY) then
+            if IsNearStore(ShopliftingAreas[i]) then
+              TriggerServerEvent('generalStore:attemptShoplift', i)
+            end
+          end
+        end
+      --end
+    end
+
     for i = 1, #HARDWARE_STORE_LOCATIONS do
       DrawText3D(HARDWARE_STORE_LOCATIONS[i].x, HARDWARE_STORE_LOCATIONS[i].y, HARDWARE_STORE_LOCATIONS[i].z, 7, '[E] - Hardware Store')
     end
@@ -264,7 +288,6 @@ Citizen.CreateThread(function()
       -- see if close to any stores --
       for i = 1, #GENERAL_STORE_LOCATIONS do
         if IsNearStore(GENERAL_STORE_LOCATIONS[i]) then
-          --mainMenu:Visible(not mainMenu:Visible())
           mainMenu:Clear()
           TriggerServerEvent("generalStore:loadItems")
           closest_location = GENERAL_STORE_LOCATIONS[i]
@@ -325,6 +348,40 @@ Citizen.CreateThread(function()
     Wait(1)
   end
 end)
+
+RegisterNetEvent('generalStore:performShoplift')
+AddEventHandler('generalStore:performShoplift', function(area)
+  local beginTime = GetGameTimer()
+  local playerPed = PlayerPedId()
+  local playerCoords = GetEntityCoords(playerPed)
+  local SHOPLIFT_ANIMATION_TIME_SECONDS = 10
+
+  if math.random() < 0.2 then -- 20% chance to call police
+    local x, y, z = table.unpack(playerCoords)
+    local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+    local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+    TriggerServerEvent("911:Shoplifting", x, y, z, lastStreetNAME, IsPedMale(playerPed))
+  end
+
+  exports.globals:loadAnimDict("anim@am_hold_up@male") -- play animation
+  while GetGameTimer() - beginTime < SHOPLIFT_ANIMATION_TIME_SECONDS * 1000 do
+    exports.globals:DrawTimerBar(beginTime, SHOPLIFT_ANIMATION_TIME_SECONDS * 1000, 1.42, 1.475, 'Preparing')
+    if not IsEntityPlayingAnim(playerPed, "anim@am_hold_up@male", "shoplift_mid", 3) then
+      TaskPlayAnim(playerPed, "anim@am_hold_up@male", "shoplift_mid", 8.0, 1.0, SHOPLIFT_ANIMATION_TIME_SECONDS * 1000, 11, 1.0, false, false, false)
+    end
+    DisableControlAction(0, 86, true) -- disable spamming E
+    Wait(1)
+  end
+  ClearPedTasks(playerPed)
+
+  TriggerServerEvent('generalStore:giveStolenItem') -- give item
+end)
+
+RegisterNetEvent('generalStore:markAsShoplifted')
+AddEventHandler('generalStore:markAsShoplifted', function(area)
+  ShopliftingAreas[area].shoplifted = true
+end)
+
 
 RegisterNetEvent("generalStore:loadItems")
 AddEventHandler("generalStore:loadItems", function(items)

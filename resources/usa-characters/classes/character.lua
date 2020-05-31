@@ -120,7 +120,6 @@ function CreateCharacter(data)
   end
 
   rTable.removeWeapons = function()
-    local weps = {}
     local inv = self.inventory
     for i = 0, inv.MAX_CAPACITY - 1 do
       local item = inv.items[tostring(i)]
@@ -131,7 +130,6 @@ function CreateCharacter(data)
         end
       end
     end
-    return weps
   end
 
   rTable.getLicenses = function()

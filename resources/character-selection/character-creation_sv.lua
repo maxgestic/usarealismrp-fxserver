@@ -102,7 +102,7 @@ function DeleteCharacterById(id, rev, cb)
 		else
 			cb()
 		end
-	end, "DELETE", "", {["Content-Type"] = 'application/json'})
+	end, "DELETE", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function ContainsVowel(word)

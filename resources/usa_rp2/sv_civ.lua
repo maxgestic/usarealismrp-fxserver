@@ -418,7 +418,7 @@ function SendDiscordMessage(content, url, color)
 				}
 			}
 		}
-	}), { ["Content-Type"] = 'application/json' })
+	}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function TradeVehicle(details)
