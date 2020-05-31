@@ -1021,8 +1021,7 @@ function interactionMenuUse(itemName, wholeItem)
 			-- Cell Phone --
 			-------------------
 		elseif string.find(itemName, "Cell Phone") then
-			--TriggerServerEvent("gcPhone:getPhone")
-			TriggerEvent("phone:openPhone", wholeItem)
+			TriggerServerEvent("gcPhone:getPhone")
 			-------------------
 			-- Food Item  --
 			-------------------

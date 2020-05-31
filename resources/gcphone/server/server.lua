@@ -111,13 +111,31 @@ function getOrGeneratePhoneNumber (src, identifier, cb)
         if myPhoneNumber == nil then
             local char = exports["usa-characters"]:GetCharacter(src)
             local newNum = getPhoneRandomNumber()
-            db.createDocumentWithId("phone-users", { ["number"] = newNum }, char.get("_id"), function(ok)
-                if ok then
-                    cb(newNum)
-                else
-                    print("PHONE: Error trying to create doc with num:" .. newNum)
+            local uniqueNumFound = false
+            local waitingResponse = false
+            -- make sure to create only unique numbers
+            repeat
+                if not waitingResponse and not uniqueNumFound then
+                    waitingResponse = true
+                    db.getDocumentByRow("phone-users", "number", newNum, function(doc)
+                        if not doc then
+                            uniqueNumFound = true
+                            -- unique number found, create it
+                            db.createDocumentWithId("phone-users", { ["number"] = newNum }, char.get("_id"), function(ok)
+                                if ok then
+                                    cb(newNum)
+                                else
+                                    print("PHONE: Error trying to create doc with num:" .. newNum)
+                                end
+                            end)
+                        else
+                            newNum = getPhoneRandomNumber()
+                        end
+                        waitingResponse = false
+                    end)
                 end
-            end)
+                Wait(1000)
+            until uniqueNumFound
         else
             cb(myPhoneNumber)
         end
@@ -334,20 +352,16 @@ function setReadMessageNumber(identifier, num)
         db.getDocumentsByRows("phone-messages", query, function(docs)
             if docs then
                 for i = 1, #docs do
-                    db.updateDocument("phone-messages", docs[i]._id, { isRead = 1 }, function(doc, err, rText)
-                        --print("message with id " .. docs[i]._id .. " set to read!")
+                    docs[i]._rev = nil
+                    docs[i].isRead = 1
+                    db.updateDocument("phone-messages", docs[i]._id, docs[i], function(doc, err, rText)
+                        print("message with id " .. docs[i]._id .. " set to read!")
+                        print("err: " .. err)
                     end)
                 end
             end
         end)
     end)
-    --[[
-    local mePhoneNumber = getNumberPhone(identifier)
-    MySQL.Sync.execute("UPDATE phone_messages SET phone_messages.isRead = 1 WHERE phone_messages.receiver = @receiver AND phone_messages.transmitter = @transmitter", { 
-        ['@receiver'] = mePhoneNumber,
-        ['@transmitter'] = num
-    })
-    --]]
 end
 
 function deleteMessage(msgId)
