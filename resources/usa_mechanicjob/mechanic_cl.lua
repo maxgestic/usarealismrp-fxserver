@@ -265,16 +265,16 @@ Citizen.CreateThread(function()
 end)
 
 RegisterNetEvent("towJob:onDuty")
-AddEventHandler("towJob:onDuty", function(coords, tier)
+AddEventHandler("towJob:onDuty", function(coords, isRank3)
 	exports.globals:notify(tier)
 	exports.globals:notify('You are now ~g~on-duty~s~ as a mechanic.')
-	if tier then
+	if isRank3 then
 		SpawnHeavyHauler(coords)
 	else
 		SpawnTowFlatbed(coords)
 	end
 	onDuty = "yes"
-	ShowHelp()
+	ShowHelp(isRank3)
 end)
 
 RegisterNetEvent("towJob:offDuty")
@@ -506,6 +506,10 @@ function SpawnHeavyHauler(coords)
 		SetVehRadioStation(vehicle, "OFF")
 		SetEntityAsMissionEntity(vehicle, true, true)
 		SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
+		SetVehicleExtra(vehicle, 1, false)
+		SetVehicleExtra(vehicle, 2, true)
+		SetVehicleExtra(vehicle, 3, true)
+		SetVehicleExtra(vehicle, 4, true)
 		lastTowTruck = vehicle
 		lastRecordedTimeDoingJob = GetGameTimer()
 		local vehicle_key = {
@@ -657,13 +661,18 @@ function ApplyUpgrades(veh, upgrades)
 	end
 end
 
-function ShowHelp()
+function ShowHelp(isRank3)
 	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Use ^3/dispatch [id] [msg]^0 to respond to a tow request!")
-	Wait(3000)
-	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Use ^3/tow^0 when facing a vehicle to load/unload it from the flatbed.")
 	Wait(3000)
 	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Use ^3/ping [id]^0 to request a person\'s location.")
 	Wait(3000)
+	if isRank3 then
+		TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Use ^3NUMPAD 8^0 to raise the tow arm and ^3NUMPAD 5^0 to lower the arm. Hold ^3H^0 to release the vehicle. Press ^3E^0 to toggle light bar.")
+		Wait(3000)
+	else
+		TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Use ^3/tow^0 when facing a vehicle to load/unload it from the flatbed.")
+		Wait(3000)
+	end
 	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Use ^3/install [upgrade]^0 to install custom vehicle upgrades (must be lvl 2 mechanic).")
 	Wait(3000)
 	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0You can get a repair kit from the hardware store and use that to repair vehicles.")

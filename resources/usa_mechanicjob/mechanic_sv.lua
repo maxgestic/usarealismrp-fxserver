@@ -77,7 +77,7 @@ AddEventHandler("towJob:setJob", function(truckSpawnCoords)
 				local ident = char.get("_id")
 				MechanicHelper.getMechanicRepairCount(ident, function(repairCount)
 					if repairCount >= MechanicHelper.LEVEL_3_RANK_THRESH then
-						TriggerClientEvent("towJob:onDuty", usource, truckSpawnCoords, repairCount)
+						TriggerClientEvent("towJob:onDuty", usource, truckSpawnCoords, true)
 					else
 						TriggerClientEvent("towJob:onDuty", usource, truckSpawnCoords)
 					end
