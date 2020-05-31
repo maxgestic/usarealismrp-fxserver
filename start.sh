@@ -32,6 +32,7 @@ rm policeveh -f -r
 rm unmarked-police-pack -f -r
 rm usa_customClothing -f -r
 rm usa_customHair -f -r
+rm usa_customVehicles -f -r
 cd ..
 
 # avoid scrambling [system]/[builders] resources
