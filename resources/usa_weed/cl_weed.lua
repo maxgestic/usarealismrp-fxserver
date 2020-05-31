@@ -21,9 +21,9 @@ Citizen.CreateThread(function()
           TriggerServerEvent("weed:checkItem", "Process")
           Wait(5000) -- prevent spamming
         end
-      elseif Vdist(playerCoords, 2856.12, 4458.76, 48.5) < 0.5 then
+      elseif Vdist(playerCoords, 2856.12, 4458.76, 48.5) < 1.5 then
         DoorTransition(playerPed, 1066.40, -3183.47, -39.16, 86.0)
-      elseif Vdist(playerCoords, 1066.40, -3183.47, -39.16, 86.0) < 0.5 then
+      elseif Vdist(playerCoords, 1066.40, -3183.47, -39.16, 86.0) < 1.5 then
         DoorTransition(playerPed, 2856.12, 4458.76, 48.5, 9.85)
   	  end
     end
