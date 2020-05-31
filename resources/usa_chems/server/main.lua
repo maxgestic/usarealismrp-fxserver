@@ -6,7 +6,7 @@ local thermite = {
     weight = 20
 }
 
-RegisterNetEvent('chems:checkForAllChems')
+RegisterServerEvent('chems:checkForAllChems')
 AddEventHandler('chems:checkForAllChems', function()
     local char = exports["usa-characters"]:GetCharacter(source)
     if char.canHoldItem(thermite) then
@@ -24,7 +24,7 @@ AddEventHandler('chems:checkForAllChems', function()
     end
 end)
 
-RegisterNetEvent('chems:successCheck')
+RegisterServerEvent('chems:successCheck')
 AddEventHandler('chems:successCheck', function()
     local src = source
     local char = exports["usa-characters"]:GetCharacter(source)
