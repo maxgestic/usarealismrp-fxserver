@@ -430,44 +430,52 @@ AddEventHandler("police:checkSuspension", function(character)
 	-- DL --
 	if dl then
 		if dl.status == "suspended" then
-			local reference = dl.suspension_start
-			local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
-			local wholedays = math.floor(daysfrom)
-			if wholedays >= dl.suspension_days then
-				character.modifyItem(dl, "status", "valid")
+			if dl.suspension_start then
+				local reference = dl.suspension_start
+				local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
+				local wholedays = math.floor(daysfrom)
+				if wholedays >= dl.suspension_days then
+					character.modifyItem(dl, "status", "valid")
+				end
 			end
 		end
 	end
 
 	if bl then
 		if bl.status == "suspended" then
-			local reference = bl.suspension_start
-			local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
-			local wholedays = math.floor(daysfrom)
-			if wholedays >= bl.suspension_days then
-				character.modifyItem(bl, "status", "valid")
+			if bl.suspension_start then
+				local reference = bl.suspension_start
+				local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
+				local wholedays = math.floor(daysfrom)
+				if wholedays >= bl.suspension_days then
+					character.modifyItem(bl, "status", "valid")
+				end
 			end
 		end
 	end
 
 	if al then
 		if al.status == "suspended" then
-			local reference = al.suspension_start
-			local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
-			local wholedays = math.floor(daysfrom)
-			if wholedays >= al.suspension_days then
-				character.modifyItem(al, "status", "valid")
+			if al.suspension_start then
+				local reference = al.suspension_start
+				local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
+				local wholedays = math.floor(daysfrom)
+				if wholedays >= al.suspension_days then
+					character.modifyItem(al, "status", "valid")
+				end
 			end
 		end
 	end
 
 	if bar then
 		if bar.status == "suspended" then
-			local reference = bar.suspension_start
-			local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
-			local wholedays = math.floor(daysfrom)
-			if wholedays >= bar.suspension_days then
-				character.modifyItem(bar, "status", "valid")
+			if bar.suspension_start then
+				local reference = bar.suspension_start
+				local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
+				local wholedays = math.floor(daysfrom)
+				if wholedays >= bar.suspension_days then
+					character.modifyItem(bar, "status", "valid")
+				end
 			end
 		end
 	end
