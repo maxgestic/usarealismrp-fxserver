@@ -88,7 +88,8 @@ Citizen.CreateThread(function()
           --print("player is close to harvest job location:  " .. job)
           drawTxt("Press ~g~E~w~ to dig!",0,1,0.5,0.8,0.6,255,255,255,255)
           if IsControlJustPressed(1, KEY) then
-            TriggerServerEvent("HPS:checkItem", job, places.harvest.time, "Harvest")
+            TriggerServerEvent("HPS:checkCriminalHistory", job, places.harvest.time, "Harvest")
+            --TriggerServerEvent("HPS:checkItem", job, places.harvest.time, "Harvest")
             Wait(places.harvest.time * 1000) -- prevent spamming
           end
         elseif Vdist(player_coords, places.process.x, places.process.y, places.process.z) < places.process.radius then
