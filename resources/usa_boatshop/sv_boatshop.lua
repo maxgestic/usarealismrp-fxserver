@@ -181,6 +181,7 @@ AddEventHandler("boatMenu:returnRental", function(item)
     local return_amount = math.ceil(boats[item.name].rent * 0.25)
     local char = exports["usa-characters"]:GetCharacter(source)
     char.giveMoney(return_amount)
+    rentals = {}
   end
 end)
 
