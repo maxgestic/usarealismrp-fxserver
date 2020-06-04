@@ -997,7 +997,11 @@ function LoadPropertyMenu(menu_data, location, index)
 		                end
 					end
 	            else
-	            	TriggerServerEvent("properties:storeItem", location, index, item, item.quantity)
+					if item.name == 'Jerry Can' then
+						TriggerEvent('usa:notify', 'You cannot store Jerry Cans here!')
+					else
+						TriggerServerEvent("properties:storeItem", location, index, item, item.quantity)
+					end
 	            end
 	       	end
             storage_submenu.SubMenu:AddItem(itembtn)
