@@ -40,7 +40,7 @@ AddEventHandler("HPS:checkCriminalHistory", function(job_name, process_time, sta
       end
     end
   end
-  checkItem(job_name, process_time, stage)
+  checkItem(source, job_name, process_time, stage)
 end)
 
 RegisterServerEvent("HPS:rewardItem")
@@ -92,7 +92,7 @@ function hasCriminalRecord(charges)
   end
 end
 
-function checkItem(job_name, process_time, stage)
+function checkItem(src, job_name, process_time, stage)
   local item_name = "undefined"
   if stage == "Harvest" then
     item_name = REWARDS[job_name].harvest_item_requirement
@@ -101,27 +101,27 @@ function checkItem(job_name, process_time, stage)
   elseif stage == "Sale" then
     item_name = REWARDS[job_name].processed_item.name
   end
-  local character = exports["usa-characters"]:GetCharacter(source)
+  local character = exports["usa-characters"]:GetCharacter(src)
   local item = character.getItem(item_name)
   if item then
     if stage == "Harvest" then
-      TriggerClientEvent("HPS:continueHarvesting", source, job_name, process_time)
+      TriggerClientEvent("HPS:continueHarvesting", src, job_name, process_time)
     elseif stage == "Process" then
-      TriggerClientEvent("HPS:continueProcessing", source, job_name, process_time)
+      TriggerClientEvent("HPS:continueProcessing", src, job_name, process_time)
     elseif stage == "Sale" then
       character.removeItem(item_name, 1)
       character.giveMoney(REWARDS[job_name].reward_amount)
-      TriggerClientEvent("usa:notify", source, "Here is the cash!")
-      TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 3)
+      TriggerClientEvent("usa:notify", src, "Here is the cash!")
+      TriggerClientEvent("usa:playAnimation", src, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 3)
     end
   else
     --no materials:
     if stage == "Harvest" then
-      TriggerClientEvent("usa:notify", source, "You need " .. REWARDS[job_name].harvest_item_requirement .. " to gather!")
+      TriggerClientEvent("usa:notify", src, "You need " .. REWARDS[job_name].harvest_item_requirement .. " to gather!")
     elseif stage == "Process" then
-      TriggerClientEvent("usa:notify", source, "Don't have any " .. REWARDS[job_name].harvest_item.name .. " to process!")
+      TriggerClientEvent("usa:notify", src, "Don't have any " .. REWARDS[job_name].harvest_item.name .. " to process!")
     elseif stage == "Sale" then
-      TriggerClientEvent("usa:notify", source, "Don't have any " .. REWARDS[job_name].processed_item.name .. " to sell!")
+      TriggerClientEvent("usa:notify", src, "Don't have any " .. REWARDS[job_name].processed_item.name .. " to sell!")
     end
   end
 end
