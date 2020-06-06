@@ -54,7 +54,7 @@ local COORDS_TO_ALLOW_TELEPORTATION_FROM = {
 	{ x = 354.03, y = -589.41, z = 43.42}, -- hospital
 	{ x = 1181.63, y = -3113.83, z = 6.03}, -- cocaine enter
 	{ x = 614.69, y = 2784.20, z = 43.48}, -- cocaine processing exit
-	{ x = 1546.81, y = 2166.45, z = 78.72}, -- weed exit
+	{ x = 1066.4, y = -3183.47, z = -39.16}, -- weed exit
 	{ x = 2856.12, y = 4458.76, z = 48.5}, -- weed enter
 	{ x = -121.95, y = 1918.01, z = 197.43}, -- meth exit
 	{ x = 138.18, y = 2295.25, z = 94.09}, -- meth enter

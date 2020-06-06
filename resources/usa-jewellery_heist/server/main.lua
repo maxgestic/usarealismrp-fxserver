@@ -76,7 +76,7 @@ end)
 RegisterServerEvent('jewelleryheist:sellstolengoods')
 AddEventHandler('jewelleryheist:sellstolengoods', function()
     local char = exports["usa-characters"]:GetCharacter(source)
-    local purchaseAmount = math.random(600, 1250)
+    local purchaseAmount = math.random(700, 2000)
     if char.hasItem("Stolen Goods") then
         char.removeItem("Stolen Goods", 1)
         char.giveMoney(purchaseAmount)

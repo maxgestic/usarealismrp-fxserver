@@ -37,7 +37,7 @@ Citizen.CreateThread(function()
     while true do
         local mycoords = GetEntityCoords(PlayerPedId())
         local x,y,z = table.unpack(meat_location)
-        if GetDistanceBetweenCoords(x, y, z, mycoords, true) < 7 then
+        if GetDistanceBetweenCoords(x, y, z, mycoords, true) < 1.5 then
             promptSale(x,y,z)
         end
         Wait(0)

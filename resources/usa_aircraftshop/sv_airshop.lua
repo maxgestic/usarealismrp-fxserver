@@ -33,11 +33,15 @@ RegisterServerEvent('aircraft:requestOpenMenu')
 AddEventHandler('aircraft:requestOpenMenu', function()
   local char = exports["usa-characters"]:GetCharacter(source)
   local license = char.getItem("Aircraft License")
-  if license and license.status == "valid" then
-    TriggerClientEvent('aircraft:openMenu', source, (char.get("aircraft") or {}))
-  else
-    TriggerClientEvent('usa:notify', source, 'No license! Hold E to purchase one for $' .. exports["globals"]:comma_value(LICENSE_PURCHASE_PRICE))
-  end
+    if license then
+        if license.status == "valid" then
+            TriggerClientEvent('aircraft:openMenu', source, (char.get("aircraft") or {}))
+        else
+            TriggerClientEvent("usa:notify", source, "Your license is suspended!")
+        end
+    else
+        TriggerClientEvent('usa:notify', source, 'No license! Hold E to purchase one for $' .. exports["globals"]:comma_value(LICENSE_PURCHASE_PRICE))
+    end
 end)
 
 RegisterServerEvent('aircraft:requestOpenPrivateMenu')
@@ -177,18 +181,22 @@ AddEventHandler("aircraft:purchaseLicense", function(business)
         notDroppable = true,
         weight = 2.0
     }
-    if char.get("money") < LICENSE_PURCHASE_PRICE then
-        TriggerClientEvent("usa:notify", source, "Not enough money!")
-        return
+    if char.hasItem('Aircraft License') then
+        TriggerClientEvent("usa:notify", source, 'You already have a pilots license!')
+    else
+        if char.get("money") < LICENSE_PURCHASE_PRICE then
+            TriggerClientEvent("usa:notify", source, "Not enough money!")
+            return
+        end
+        if not char.canHoldItem(NEW_PILOT_LICENSE) then
+            TriggerClientEvent("usa:notify", source, "Inventory full!")
+            return
+        end
+        char.giveItem(NEW_PILOT_LICENSE)
+        char.removeMoney(LICENSE_PURCHASE_PRICE)
+        if business then
+            exports["usa-businesses"]:GiveBusinessCashPercent(business, LICENSE_PURCHASE_PRICE)
+        end
+        TriggerClientEvent("usa:notify", source, "You have been issued a pilot's license!")
     end
-    if not char.canHoldItem(NEW_PILOT_LICENSE) then 
-        TriggerClientEvent("usa:notify", source, "Inventory full!")
-        return
-    end
-    char.giveItem(NEW_PILOT_LICENSE)
-    char.removeMoney(LICENSE_PURCHASE_PRICE)
-    if business then
-        exports["usa-businesses"]:GiveBusinessCashPercent(business, LICENSE_PURCHASE_PRICE)
-    end
-    TriggerClientEvent("usa:notify", source, "You have been issued a pilot's license!")
 end)

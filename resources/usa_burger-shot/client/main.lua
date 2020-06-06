@@ -219,7 +219,7 @@ function promptJob(location)
     if working == 'no' then
         DrawText3D(x,y,z, 8, startWork)
         if IsControlJustPressed(0, 38) then
-            TriggerServerEvent('burgerjob:checkStrikes')
+            TriggerServerEvent('burgerjob:checkCriminalHistory')
         end
     else
         DrawText3D(x,y,z,  5, quitWork)

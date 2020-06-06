@@ -1,5 +1,6 @@
 cache/
 resources/essentialmode/sv_es-DB-config.lua
+resources/scrambler-events.json
 resources/assets
 resources/unmarked-police-pack
 resources/police-bmw-bike
@@ -18,5 +19,8 @@ start2.bat
 
 node_modules
 scrambled_resources
+toTransfer
 
 server_internal.cfg
+
+scramblerServerPass.txt

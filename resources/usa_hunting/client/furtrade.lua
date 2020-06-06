@@ -37,7 +37,7 @@ Citizen.CreateThread(function()
     while true do
         local mycoords = GetEntityCoords(PlayerPedId())
         local x,y,z = table.unpack(trade_location)
-        if Vdist(mycoords, x, y, z) < 8 then
+        if Vdist(mycoords, x, y, z) < 1.5 then
             promptFurSale(x,y,z)
         end
         Wait(0)

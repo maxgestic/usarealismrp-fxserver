@@ -54,12 +54,12 @@ local deliveryCoords = {
     {x = 538.78, y = -1785.06, z = 27.81, heading = 90.0, model = 'CSB_BALLASOG', message = 'You askin\' for trouble round here. Here\'s all you\'ll get.'},
     {x = 334.22, y = -2023.53, z = 20.72, heading = 139.75, model = 'G_F_Y_VAGOS_01', message = 'Si, si. Very nice, I see you later.'},
     {x = -1105.17, y = -1173.85, z = 1.14, heading = 130.0, model = 'CSB_HUGH', message = 'Wife just divorced and I need to relax. You\'re a life saver.'},
-    {x = -915.007, y = -959.50, z = 1.15, heading = 297.0, model = 'CSB_IMRAN', message = 'Thanks. You can find some guns by climing a hill near the cult camp.'},
-    {x = -928.67, y = -1078.06, z = 1.15, heading = 12.0, model = 'A_M_Y_VINEWOOD_01', message = 'Just sent you something on your GPS. Take a look maybe?', waypoint = {752.996, -3192.206}},
-    {x = -174.06, y = 215.0, z = 88.08, heading = 155.0, model = 'A_M_Y_STBLA_02', message = 'Appreciated homie. Take a look on your GPS, you\'ll like it.', waypoint = {3824.198, 4442.688}},
-    {x = -1803.34, y = 402.01, z = 111.82, heading = 226.0, model = 'A_M_Y_BUSINESS_03', message = 'Pleasure doing business. Stay away from trouble, and check your GPS.', waypoint = {-1005.81, 4846.01}},
-    {x = -135.77, y = 597.91, z = 203.94, heading = 334.0, model = 'A_M_Y_BEVHILLS_01', message = 'Wanna make some crystal? Get the supplies at a house near one of the Alamo Sea piers.'},
-    {x = 1550.29, y = 2199.79, z = 77.78, heading = 40.0, model = 'IG_OLD_MAN2', message = 'Check ya\'lls GPS for a nice spot to make some rocks.', waypoint = {-121.95, 1918.01}},
+    {x = -915.007, y = -959.50, z = 1.15, heading = 297.0, model = 'CSB_IMRAN', message = 'Thank you!'},
+    {x = -928.67, y = -1078.06, z = 1.15, heading = 12.0, model = 'A_M_Y_VINEWOOD_01', message = 'Thanks!'},
+    {x = -174.06, y = 215.0, z = 88.08, heading = 155.0, model = 'A_M_Y_STBLA_02', message = 'Appreciated homie!'},
+    {x = -1803.34, y = 402.01, z = 111.82, heading = 226.0, model = 'A_M_Y_BUSINESS_03', message = 'Pleasure doing business. Stay out of trouble!'},
+    {x = -135.77, y = 597.91, z = 203.94, heading = 334.0, model = 'A_M_Y_BEVHILLS_01', message = 'Thanks!'},
+    {x = 1550.29, y = 2199.79, z = 77.78, heading = 40.0, model = 'IG_OLD_MAN2', message = 'Thank you!'},
     {x = -1798.47, y = -683.87, z = 9.46, heading = 144.0, model = 'CSB_ROCCOPELOSI', message = 'If you need red phosphorus, there\'s a place off-road East Joshua in Sandy.'},
     {x = -1982.99, y = -526.67, z = 10.84, heading = 147.0, model = 'A_F_M_BEACH_01', message = 'Ohhh my goddddd. Why did it take so long asshole?!'},
     {x = -599.44, y = 399.96, z = 100.68, heading = 51.7, model = 'A_F_M_BODYBUILD_01', message = 'Privyet! Ahh yes, these are my steroids. Here wise man, have this.'},
@@ -205,7 +205,6 @@ AddEventHandler('cocaineJob:doesUserHaveProductToSell', function(hasProduct) -- 
         Citizen.Wait(1000)
         local location = deliveryCoords[cocaine.deliveryIndex]
         TriggerEvent('usa:notify', location.message)
-        if location.waypoint then SetNewWaypoint(table.unpack(location.waypoint)) end
         RemoveBlip(cocaine.blip)
         TriggerServerEvent('cocaineJob:completeDelivery')
         SetEntityAsNoLongerNeeded(cocaine.buyerHandle)

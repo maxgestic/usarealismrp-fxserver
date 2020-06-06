@@ -283,7 +283,7 @@ BUSINESSES = {
 	},
 	["Ammunation (Adam's Apple Blvd.)"] = {
 		position = {14.1, -1105.9, 29.8},
-		cameraID = 'store35',
+		cameraID = 'store41',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
 		price = 10000
@@ -304,7 +304,7 @@ BUSINESSES = {
 	},
 	["Ammunation (Paleto Bay)"] = {
 		position = {-334.4, 6082.1, 31.5},
-		cameraID = 'store38',
+		cameraID = 'store42',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
 		price = 6500

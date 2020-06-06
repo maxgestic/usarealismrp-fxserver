@@ -127,12 +127,16 @@ AddEventHandler("boats:purchaseLicense", function()
       TriggerClientEvent("usa:notify", source, "Not enough money!")
       return
   end
-  if char.canHoldItem(NEW_BOAT_LICENSE) then
-    char.giveItem(NEW_BOAT_LICENSE)
-    char.removeMoney(LICENSE_PURCHASE_PRICE)
-    TriggerClientEvent("usa:notify", source, "You have been issued a boating license!")
+  if char.hasItem("Boat License") then
+    TriggerClientEvent("usa:notify", source, 'You already have a boating license!')
   else
-    TriggerClientEvent("usa:notify", source, "Inventory full!")
+    if char.canHoldItem(NEW_BOAT_LICENSE) then
+      char.giveItem(NEW_BOAT_LICENSE)
+      char.removeMoney(LICENSE_PURCHASE_PRICE)
+      TriggerClientEvent("usa:notify", source, "You have been issued a boating license!")
+    else
+      TriggerClientEvent("usa:notify", source, "Inventory full!")
+    end
   end
 end)
 
@@ -177,6 +181,7 @@ AddEventHandler("boatMenu:returnRental", function(item)
     local return_amount = math.ceil(boats[item.name].rent * 0.25)
     local char = exports["usa-characters"]:GetCharacter(source)
     char.giveMoney(return_amount)
+    rentals = {}
   end
 end)
 

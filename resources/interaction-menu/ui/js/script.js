@@ -211,6 +211,9 @@ var itemImages = {
   "Copper": "https://i.imgur.com/7sC2n9I.png",
   "Iron": "https://i.imgur.com/362wJPk.png",
   "Pick Axe": "https://i.imgur.com/fEmIfhj.png",
+  "Ceramic Tubing": "https://i.imgur.com/Fg1pZNH.png",
+  "Aluminum Powder": "https://i.imgur.com/FcoUYM4.png",
+  "Iron Oxide": "https://i.imgur.com/pBhnwQl.png"
 }
 
 var menuItems = [

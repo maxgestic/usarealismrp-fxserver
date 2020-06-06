@@ -262,7 +262,7 @@ AddEventHandler("boatMenu:spawnSeacraft", function(boat)
 		        local vehicle = CreateVehicle(numberHash, info.spawn.x, info.spawn.y, info.spawn.z, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
 		        SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
 		        SetVehicleHasBeenOwnedByPlayer(vehicle, true)
-		        SetEntityAsMissionEntity(vehicle)
+		        SetEntityAsMissionEntity(vehicle, true, true)
 		        local vehicle_key = {
     					name = "Key -- " .. GetVehicleNumberPlateText(vehicle),
     					quantity = 1,

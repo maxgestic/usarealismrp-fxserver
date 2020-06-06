@@ -141,6 +141,8 @@ function jailPlayer(src, data, officerName, gender)
 	-- suspend gun permit if necessary --
 	if GetFPRevoked(reason) then
 		TriggerEvent("police:revokeFirearmPermit", targetPlayer)
+		-- If we revoke FP permit, revoke the pilot license too
+		TriggerEvent("police:suspendPilotLicense", targetPlayer)
 		TriggerClientEvent("usa:notify", targetPlayer, "Your firearm permit has been revoked!")
 		suspensions = suspensions .. "\nFP revoked permanently"
 	end
@@ -161,7 +163,7 @@ function jailPlayer(src, data, officerName, gender)
 				}
 			}
 		}
-	}), { ["Content-Type"] = 'application/json' })
+	}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 RegisterServerEvent("jail:clearCell")
@@ -190,8 +192,9 @@ end)
 
 function GetFPRevoked(charges) -- firearm permit
 	local numbers = {
-		'118', '135', '187', '192', '207', '215', '245', '16590', '29800', '33410', '2800.2', '2800.3', '2800.4', '51-50', '5150'
+		'187', '192', '206', '207', '211', '215', '245', '600', '487', '836.6', '26500', '23153', '11392', '646.9', '16590', '18720', '29800', '30605', '33410', '2331', '2800.2', '2800.3', '2800.4', '51-50', '5150'
 	}
+
 	for _, code in pairs(numbers) do
 		if string.find(charges, code) then
 			return true
@@ -202,16 +205,16 @@ end
 
 function GetDLSuspensionDays(charges) -- driver license
 	local codes = {
-		['2800.1'] = 14,
-		['2800.2'] = 30,
-		['2800.3'] = 60,
-		['2800.4'] = 60,
-		["20001"] = 45,
-		["20002"] = 30,
-		["23103(b)"] = 7,
+		['2800.1'] = 3,
+		['2800.2'] = 14,
+		['2800.3'] = 20,
+		['2800.4'] = 20,
+		["20001"] = 5,
+		["20002"] = 3,
+		["23103(b)"] = 1,
 		["23153"] = 30,
-		["14601"] = 14,
-		["10851"] = 7
+		["10851"] = 4,
+		["14601"] = 2,
 	}
 	local daysTotal = 0
 	for code, days in pairs(codes) do

@@ -109,12 +109,13 @@ function isBlacklistedModel(model)
 end
 
 function getClosestCampfireInRange(coords, range)
+    print('alalal')
     for object in exports.globals:EnumerateObjects() do
         local pedCoords = GetEntityCoords(object)
         local distBetweenPedAndCampfire = Vdist(pedCoords, coords)
-        local campfire = 1173762
+        local campfire = -1065766299
         if DoesEntityExist(object) then
-            if distBetweenPedAndCampfire <= 5 and object == campfire then
+            if distBetweenPedAndCampfire <= 5 and GetEntityModel(object) == campfire then
                 return object
             end
         end

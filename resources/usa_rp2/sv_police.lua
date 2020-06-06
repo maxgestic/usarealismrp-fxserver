@@ -300,12 +300,8 @@ TriggerEvent('es:addJobCommand', 'seize', { "sheriff", "corrections" }, function
 			TriggerClientEvent("interaction:seizeVehContraband", source)
 		elseif arg == "weapons" then
 			local target = exports["usa-characters"]:GetCharacter(targetId)
-			local weps = target.removeWeapons()
-			--print(weps)
-			for i = 1, #weps do
-				TriggerClientEvent("usa:notify", source, "~y~Seized: ~w~(x".. (weps[i].quantity or 1) ..") " .. weps[i].name)
-				TriggerClientEvent("usa:notify", targetId, "~y~Seized: ~w~(x".. (weps[i].quantity or 1) ..") " .. weps[i].name)
-			end
+			target.removeWeapons()
+			TriggerClientEvent("usa:notify", source, "Weapons seized!")
 			exports["globals"]:sendLocalActionMessage(source, "Removes weapons")
 			TriggerClientEvent("chatMessage", targetId, "", {0, 0, 0}, "^0" .. char.getName() .. " seized your weapons.")
 		end
@@ -314,7 +310,7 @@ end, {
 	help = "Seize illegal items on a person, in a vehicle or cash from the person.",
 	params = {
 		{ name = "id", help = "Player's' ID (or '0' for vehicle seizures)" },
-		{ name = "type", help = "'cash', 'contraband', or 'vehcontraband'" }
+		{ name = "type", help = "'cash', 'weapons', 'contraband', or 'vehcontraband'" }
 	}
 })
 
@@ -403,8 +399,23 @@ RegisterServerEvent("police:revokeFirearmPermit")
 AddEventHandler("police:revokeFirearmPermit", function(source)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local permit = char.getItem("Firearm Permit")
+	local flyingPermit = char.getItem("Aircraft License")
 	if permit then
 		char.modifyItem(permit, "status", "suspended")
+	end
+
+	if flyingPermit then
+		char.modifyItem(flyingPermit, "status", "suspended")
+	end
+end)
+
+RegisterServerEvent('police:suspendPilotLicense')
+AddEventHandler('police:suspendPilotLicense', function()
+	local char = exports["usa-characters"]:GetCharacter(source)
+	local flyingPermit = char.getItem("Aircraft License")
+
+	if flyingPermit then
+		char.modifyItem(flyingPermit, "status", "suspended")
 	end
 end)
 
@@ -419,44 +430,52 @@ AddEventHandler("police:checkSuspension", function(character)
 	-- DL --
 	if dl then
 		if dl.status == "suspended" then
-			local reference = dl.suspension_start
-			local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
-			local wholedays = math.floor(daysfrom)
-			if wholedays >= dl.suspension_days then
-				character.modifyItem(dl, "status", "valid")
+			if dl.suspension_start then
+				local reference = dl.suspension_start
+				local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
+				local wholedays = math.floor(daysfrom)
+				if wholedays >= dl.suspension_days then
+					character.modifyItem(dl, "status", "valid")
+				end
 			end
 		end
 	end
 
 	if bl then
 		if bl.status == "suspended" then
-			local reference = bl.suspension_start
-			local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
-			local wholedays = math.floor(daysfrom)
-			if wholedays >= bl.suspension_days then
-				character.modifyItem(bl, "status", "valid")
+			if bl.suspension_start then
+				local reference = bl.suspension_start
+				local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
+				local wholedays = math.floor(daysfrom)
+				if wholedays >= bl.suspension_days then
+					character.modifyItem(bl, "status", "valid")
+				end
 			end
 		end
 	end
 
 	if al then
 		if al.status == "suspended" then
-			local reference = al.suspension_start
-			local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
-			local wholedays = math.floor(daysfrom)
-			if wholedays >= al.suspension_days then
-				character.modifyItem(al, "status", "valid")
+			if al.suspension_start then
+				local reference = al.suspension_start
+				local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
+				local wholedays = math.floor(daysfrom)
+				if wholedays >= al.suspension_days then
+					character.modifyItem(al, "status", "valid")
+				end
 			end
 		end
 	end
 
 	if bar then
 		if bar.status == "suspended" then
-			local reference = bar.suspension_start
-			local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
-			local wholedays = math.floor(daysfrom)
-			if wholedays >= bar.suspension_days then
-				character.modifyItem(bar, "status", "valid")
+			if bar.suspension_start then
+				local reference = bar.suspension_start
+				local daysfrom = os.difftime(os.time(), reference) / (24 * 60 * 60) -- seconds in a day
+				local wholedays = math.floor(daysfrom)
+				if wholedays >= bar.suspension_days then
+					character.modifyItem(bar, "status", "valid")
+				end
 			end
 		end
 	end
