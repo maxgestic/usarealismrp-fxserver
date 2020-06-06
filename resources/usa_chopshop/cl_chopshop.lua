@@ -62,7 +62,7 @@ Citizen.CreateThread(function()
           if chopped then
             TriggerServerEvent("chopshop:reward", display_name, GetVehicleBodyDamage(handle))
             SetEntityAsMissionEntity(handle, true, true)
-            DeleteCar(handle)
+            DeleteVehicle(handle)
             break
           end
         else 

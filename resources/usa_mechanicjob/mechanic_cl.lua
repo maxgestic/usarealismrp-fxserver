@@ -239,7 +239,7 @@ Citizen.CreateThread(function()
 			if IsPedInAnyVehicle(me) then 
 				local veh = GetVehiclePedIsIn(me, false)
 				local vehModel = GetEntityModel(veh)
-				if vehModel == GetHashKey("flatbed") then
+				if vehModel == GetHashKey("flatbed") or vehModel == GetHashKey("isgtow") then
 					lastRecordedTimeDoingJob = GetGameTimer()
 				end
 			end
