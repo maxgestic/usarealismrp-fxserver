@@ -127,12 +127,12 @@ function hasCriminalRecord(charges)
         '187', '192', '206', '207', '211', '245', '459', '600', '646.9', '16590', '18720', '29800', '30605', '33410', '2331', '2800.2', '2800.3', '2800.4', '51-50', '5150'
     }
 
-    for _, code in pairs(numbers) do
-        if charges then
+    if charges then
+        for _, code in pairs(numbers) do
             if string.find(charges, code) then
                 return true
             end
+            return false
         end
-        return false
     end
 end
