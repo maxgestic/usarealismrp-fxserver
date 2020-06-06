@@ -1,13 +1,8 @@
-local createdMenus = {}
-
 local MINING = {
     {x = 1797.88, y = -2831.8, z = 3.57, radius = 30},
     {x = -592.55, y = 2076.86, z = 131.37, radius = 40}
 }
 
-for i = 1, #createdMenus do
-    _menuPool:Add(createdMenus[i].menu)
-end
 
 Citizen.CreateThread(function()
     while true do
