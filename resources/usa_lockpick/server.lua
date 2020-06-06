@@ -1,0 +1,6 @@
+RegisterServerEvent('lockpick:removeBrokenPick')
+AddEventHandler('lockpick:removeBrokenPick', function(item)
+	local char = exports["usa-characters"]:GetCharacter(source)
+	char.removeItem(item, 1)
+	TriggerClientEvent('lockpick:closehtml', source)
+end)
