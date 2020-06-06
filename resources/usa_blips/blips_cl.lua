@@ -89,6 +89,8 @@ local blips = {
 	{title = "Hunting", x = -1508.83, y = 4978.63, id = 442, colour = 0},
 	{ title = "Burger Shot", x = -1189.22, y = -888.43, id = 106, colour = 1, scale = 0.7},
 	{ title = "REA Office", x = -148.55, y = -579.82, id = 475, colour = 2, scale = 0.7},
+	{ title = "Mining", x = -596.51, y = 2090.44, id = 78, colour = 59, scale = 0.5},
+	{ title = "Mining", x = 1797.88, y = -2831.8, id = 78, colour = 59, scale = 0.5},
 }
 
 Citizen.CreateThread(function()
