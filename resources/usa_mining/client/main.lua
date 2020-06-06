@@ -9,14 +9,6 @@ for i = 1, #createdMenus do
     _menuPool:Add(createdMenus[i].menu)
 end
 
-RegisterNetEvent('mining:deleteDoor')
-AddEventHandler('mining:deleteDoor', function()
-    SetEntityAsMissionEntity(4591362)
-    DeleteObject(4591362)
-end)
-
-TriggerEvent('miningDeleteDoor')
-
 Citizen.CreateThread(function()
     while true do
         local player = PlayerPedId()
@@ -52,7 +44,6 @@ end)
 
 
 local purchaser = 'a_f_y_business_01'
-local purchase_location = {x = -629.08, y = -265.75, z = 38.79}
 local purchase_location = {x = -629.08, y = -265.75, z = 38.79}
 local BASE_SELL_TIME = 5000
 
