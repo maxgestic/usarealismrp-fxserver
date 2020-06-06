@@ -132,7 +132,7 @@ function hasCriminalRecord(charges)
             if string.find(charges, code) then
                 return true
             end
-            return false
         end
+        return false
     end
 end
