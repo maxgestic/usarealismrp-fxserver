@@ -5,7 +5,7 @@ RegisterNetEvent('lockpick:openlockpick')
 AddEventHandler('lockpick:openlockpick', function(location, bankLoc)
 	if location then
 		loc = location
-	elseif bank then
+	elseif bankLoc then
 		bank = bankLoc
 	end
 	SetNuiFocus( true, true )
