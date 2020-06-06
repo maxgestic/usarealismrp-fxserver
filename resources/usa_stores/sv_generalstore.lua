@@ -72,9 +72,6 @@ local GENERAL_STORE_ITEMS = {
 }
 
 local HARDWARE_STORE_ITEMS = {
-  ["Vehicle"] = {
-    { name = "Repair Kit", price = 250, type = "vehicle", quantity = 1, legality = "legal", weight = 20, objectModel = "imp_prop_tool_box_01a"}
-  },
   ["Electronics"] = {
     { name = "Cell Phone", price = 650, type = "misc", quantity = 1, legality = "legal", weight = 3, objectModel = "prop_npc_phone_02", blockedInPrison = true}
   },

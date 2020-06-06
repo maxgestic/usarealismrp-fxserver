@@ -20,7 +20,7 @@ local currentJob = {
 }
 
 local KEYS = {
-	E = 38
+	E = 86
 }
 
 local me = nil
@@ -161,6 +161,7 @@ AddEventHandler('gopostal:quitJob', function(fee)
 			DeleteObject(currentJob.packageObject)
 		end
 		currentJob.onDuty = false
+		currentJob.destination = nil
 		Citizen.Wait(100)
 		ClearPedTasks(me)
 		if fee then
