@@ -12,7 +12,7 @@ local markets = {
       { name = "AP Pistol", type = "weapon", hash = 0x22D8FE39, price = 20000, legality = "illegal", quantity = 1, weight = 15, stock = math.random(0, 2), objectModel = "w_pi_appistol" },
       { name = "Sawn-off", type = "weapon", hash = 0x7846A318, price = 30000, legality = "illegal", quantity = 1, weight = 30, stock = math.random(0, 3), objectModel = "w_sg_sawnoff", },
       { name = "Micro SMG", type = "weapon", hash = 324215364, price = 40000, legality = "illegal", quantity = 1, weight = 30, stock = math.random(0, 2), objectModel = "w_sb_microsmg"},
-      {name = 'SMG', type = 'weapon', hash = 736523883, price = 75000, legality = 'illegal', quantity = 1, weight = 55, stock = math.random(0, 1), objectModel = "w_sb_smg"},
+      {name = 'SMG', type = 'weapon', hash = 736523883, price = 75000, legality = 'illegal', quantity = 1, weight = 35, stock = math.random(0, 1), objectModel = "w_sb_smg"},
       { name = "Police Armor", type = "misc", price = 5000, legality = "illegal", quantity = 1, weight = 25, stock = math.random(0, 3), objectModel = "prop_bodyarmour_03" }
 
     },
@@ -35,7 +35,6 @@ local markets = {
   ['marketC'] = {
     ['coords'] = {2549.91, 4639.19, 34.08}, -- Grapeseed
     ['items'] = {
-        { name = "Thermite", type = "misc", hash = 865563579, price = 6000, legality = "illegal", quantity = 1, weight = 20, stock = math.random(0, 3), objectModel = "hei_prop_heist_thermite"},
         { name = "Molotov", type = "weapon", hash = 615608432, price = 500, legality = "illegal", quantity = 1, weight = 20, stock = math.random(0, 3), objectModel = "w_ex_molotov"},
         { name = "Tommy Gun", type = "weapon", hash = 1627465347, price = 110000, legality = "illegal", quantity = 1, weight = 45, stock = math.random(0, 2), objectModel = "w_sb_gusenberg" },
         { name = "AK47", type = "weapon", hash = -1074790547, price = 100000, legality = "illegal", quantity = 1, weight = 45, stock = math.random(0, 2), objectModel = "w_ar_assaultrifle" },
@@ -44,6 +43,9 @@ local markets = {
     ['pedHash'] = 'a_m_o_soucent_03'
   }
 }
+
+local openingHours = math.random(0, 3)
+local closingHours = math.random(4, 7)
 
 for store, info in pairs(markets) do
     for i = 1, #info["items"] do
@@ -56,6 +58,11 @@ end
 RegisterServerEvent("blackMarket:loadItems")
 AddEventHandler("blackMarket:loadItems", function()
   TriggerClientEvent("blackMarket:loadItems", source, markets)
+end)
+
+RegisterServerEvent("blackMarket:openAndClosingHours")
+AddEventHandler("blackMarket:openAndClosingHours", function()
+    TriggerClientEvent("blackMarket:operatingHours", source, openingHours, closingHours)
 end)
 
 RegisterServerEvent("blackMarket:requestPurchase")

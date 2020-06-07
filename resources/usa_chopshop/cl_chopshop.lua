@@ -62,7 +62,7 @@ Citizen.CreateThread(function()
           if chopped then
             TriggerServerEvent("chopshop:reward", display_name, GetVehicleBodyDamage(handle))
             SetEntityAsMissionEntity(handle, true, true)
-            DeleteCar(handle)
+            DeleteVehicle(handle)
             break
           end
         else 
@@ -165,14 +165,11 @@ function GetVehicleBodyDamage(veh)
   return damage
 end
 
-function DeleteCar(entity)
-  Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( entity ) )
-end
-
 function OpenAllDoors(playerCar)
-  for i = 1, 5 do
-    SetVehicleDoorOpen(playerCar, i, true, true)
-    Citizen.Wait(100)
+  local doors = GetNumberOfVehicleDoors(playerCar)
+  for i = 0, doors do
+    SetVehicleDoorOpen(playerCar, i, false, true)
+    Citizen.Wait(50)
   end
 end
 

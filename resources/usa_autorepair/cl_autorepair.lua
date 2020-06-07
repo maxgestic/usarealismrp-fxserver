@@ -22,7 +22,7 @@ vehicleRepairStation = {
 	{201.339, -1656.36, 27.2832}, -- los santos fire department in davis
 	{1146.7, -775.8, 56.79},
 	{-35.4, -1088.7, 25.55}, -- ls dealership
-	{-10.37, -1662.44, 28.74}, -- mosley dealership
+	--{-10.37, -1662.44, 28.74}, -- mosley dealership
 	{-770.68, -231.39, 36.34 } -- rpg performance
 }
 

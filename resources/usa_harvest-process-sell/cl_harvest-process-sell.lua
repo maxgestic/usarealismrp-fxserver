@@ -1,6 +1,6 @@
 local JOBS = {
   ["Sand"] = {
-    harvest = {x = 2952.7, y = 2789.5, z = 41.5, reward_item_name = "Raw Sand", time = 10, radius = 17},
+    harvest = {x = 2952.7, y = 2789.5, z = 41.5, reward_item_name = "Raw Sand", time = 15, radius = 17},
     process = {x = 1223.3, y = 1875.2, z = 78.9, time = 18, reward_item_name = "Processed Sand", radius = 4.5},
     sell = {x = 843.4, y = -3205.4, z = 6.0, heading = 10.0},
     peds = {
@@ -86,9 +86,10 @@ Citizen.CreateThread(function()
       if not IsPedInAnyVehicle(player_ped) then
         if Vdist(player_coords, places.harvest.x, places.harvest.y, places.harvest.z) < places.harvest.radius then
           --print("player is close to harvest job location:  " .. job)
-          drawTxt("Press ~g~E~w~ to harvest " .. job .. "!",0,1,0.5,0.8,0.6,255,255,255,255)
+          drawTxt("Press ~g~E~w~ to dig!",0,1,0.5,0.8,0.6,255,255,255,255)
           if IsControlJustPressed(1, KEY) then
-            TriggerServerEvent("HPS:checkItem", job, places.harvest.time, "Harvest")
+            TriggerServerEvent("HPS:checkCriminalHistory", job, places.harvest.time, "Harvest")
+            --TriggerServerEvent("HPS:checkItem", job, places.harvest.time, "Harvest")
             Wait(places.harvest.time * 1000) -- prevent spamming
           end
         elseif Vdist(player_coords, places.process.x, places.process.y, places.process.z) < places.process.radius then

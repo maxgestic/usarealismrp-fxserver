@@ -494,7 +494,7 @@ AddEventHandler('mdt:checkFlags', function(vehPlate, vehModel)
 						end
 					end
 				end
-			end, "GET", "", { ["Content-Type"] = 'application/json' })
+			end, "GET", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 			for i = 1, #warrants do
 				if string.find(warrants[i].notes:lower(), vehPlate:lower()) then
 					TriggerClientEvent('chatMessage', _source, '^1^*[ALPR HIT]^r^0 '..vehModel..' with plate '..vehPlate..' has an active warrant.')
@@ -663,7 +663,7 @@ AddEventHandler("mdt:fetchPoliceReportDetails", function(id)
 			}
 			TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
 		end
-	end, "GET", "", { ["Content-Type"] = 'application/json' })
+	end, "GET", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end)
 
 RegisterServerEvent("mdt:createPoliceReport")
@@ -778,7 +778,7 @@ end
 function deleteBOLO(db, id, rev)
 	-- send DELETE http request
 	PerformHttpRequest("http://127.0.0.1:5984/"..db.."/"..id.."?rev="..rev, function(err, rText, headers)
-	end, "DELETE", "", {["Content-Type"] = 'application/json'})
+	end, "DELETE", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function fetchBOLOs(src)
@@ -797,13 +797,13 @@ function fetchBOLOs(src)
 			}
 			TriggerClientEvent("mdt:sendNUIMessage", src, msg)
 		end
-	end, "GET", "", { ["Content-Type"] = 'application/json' })
+	end, "GET", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function deletePoliceReport(db, id, rev)
 	-- send DELETE http request
 	PerformHttpRequest("http://127.0.0.1:5984/"..db.."/"..id.."?rev="..rev, function(err, rText, headers)
-	end, "DELETE", "", {["Content-Type"] = 'application/json'})
+	end, "DELETE", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function fetchPoliceReports(src)
@@ -830,7 +830,7 @@ function fetchPoliceReports(src)
 			}
 			TriggerClientEvent("mdt:sendNUIMessage", src, msg)
 		end
-	end, "GET", "", { ["Content-Type"] = 'application/json' })
+	end, "GET", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function playerHasValidAutoInsurance(playerInsurance)

@@ -137,7 +137,7 @@ TriggerEvent('es:addJobCommand', 'newrecord', {'ems', 'doctor'}, function(source
 				}
 			}
 		}
-	}), { ["Content-Type"] = 'application/json' })
+	}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end, {
 	help = 'Sign off a new field on a patient\'s record',
 	params = {
@@ -223,7 +223,7 @@ AddEventHandler('injuries:sendLog', function(log, payment)
 				}
 			}
 		}
-	}), { ["Content-Type"] = 'application/json' })
+	}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end)
 
 RegisterServerEvent('injuries:chargeForInjuries')

@@ -366,6 +366,19 @@ AddEventHandler('gcPhone:twitter_setAvatarUrl', function(username, password, ava
   --]]
 end)
 
+RegisterServerEvent("twitter:lastCharCheck")
+AddEventHandler("twitter:lastCharCheck", function(src, currentCharName)
+  db.getDocumentByRow("essentialmode", "identifier", GetPlayerIdentifiers(src)[1], function(doc, err, rText)
+    if doc then
+      if doc.lastPlayedChar then
+        if doc.lastPlayedChar ~= currentCharName then
+          TriggerClientEvent("gcPhone:twitter_Logout", src)
+        end
+      end
+    end
+  end)
+end)
+
 
 --[[
   Discord WebHook

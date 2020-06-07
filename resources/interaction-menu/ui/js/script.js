@@ -205,7 +205,16 @@ var itemImages = {
   "Sam Smith's Strapon": "https://i.imgur.com/cQjjGVg.png",
   "Advanced Pick" : "https://i.imgur.com/86KdWw0.png",
   "Cooked Meat": "https://i.imgur.com/5pd8czn.png",
-  "Drill": "https://i.imgur.com/7lMxrcm.png"
+  "Drill": "https://i.imgur.com/7lMxrcm.png",
+  "Gold": "https://i.imgur.com/QYthPRN.png",
+  "Diamond": "https://i.imgur.com/F1arH11.png",
+  "Aluminum": "https://i.imgur.com/FAhri6J.png",
+  "Copper": "https://i.imgur.com/7sC2n9I.png",
+  "Iron": "https://i.imgur.com/362wJPk.png",
+  "Pick Axe": "https://i.imgur.com/fEmIfhj.png",
+  "Ceramic Tubing": "https://i.imgur.com/Fg1pZNH.png",
+  "Aluminum Powder": "https://i.imgur.com/FcoUYM4.png",
+  "Iron Oxide": "https://i.imgur.com/pBhnwQl.png"
 }
 
 var menuItems = [

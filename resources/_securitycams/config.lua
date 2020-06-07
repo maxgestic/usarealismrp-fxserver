@@ -23,15 +23,15 @@ SecurityCamConfig.Locations = {
     {
         camBox = {label = "Bolingbroke Penitentiary", id = 'prison'},
         cameras = {
-            --{label = "Cell Block / Level 1", x = 1732.7, y = 2649.6, z = 45.6, r = {x = 0.0, y = 0.0, z = 180.0}}, -- not working
-            --{label = "Cell Block / Level 2", x = 1732.7, y = 2649.6, z = 49.6, r = {x = 0.0, y = 0.0, z = 180.0}}, -- not working
-            --{label = "Cell Block / Level 3", x = 1732.7, y = 2649.6, z = 53.6, r = {x = 0.0, y = 0.0, z = 180.0}} -- not working
             {label = "Front Gate 1", x = 1834.0, y = 2604.3, z = 48.8, r = {x = 0.0, y = 0.0, z = -90.0}},
             {label = "Front Gate 2", x = 1827.7, y = 2605.4, z = 47.8, r = {x = 0.0, y = 0.0, z = 90.0}},
             {label = "Parking Lot 1", x = 1905.2, y = 2605.4, z = 51.8, r = {x = 0.0, y = 0.0, z = 90.0}},
             {label = "Parking Lot 2", x = 1849.6, y = 2699.6, z = 68.7, r = {x = -20.0, y = 0.0, z = 210.0}},
             {label = "Parking Lot 3", x = 1824.2, y = 2473.7, z = 68.7, r = {x = -10.0, y = 0.0, z = -40.0}},
-            {label = "Intake", x = 1678.4, y = 2613.0, z = 53.6, r = {x = -20.0, y = 0.0, z = 230.0}},
+            {label = "Intake", x = 1789.97, y = 2599.16, z = 48.0, r = {x = -30.0, y = 0.0, z = 140.0}},
+            {label = "Main Cell Block", x = 1772.66, y = 2570.34, z = 53.0, r = {x = -30.0, y = 0.0, z = -40.0}},
+            {label = "Main Cell Block 2", x = 1787.08, y = 2570.47, z = 53.0, r = {x = -25.0, y = 0.0, z = 40.0}},
+            {label = "Main Cell Block 3", x = 1779.68, y = 2589.72, z = 48.8, r = {x = -25.0, y = 0.0, z = 170.0}},
             {label = "Yard 1", x = 1627.2, y = 2565.6,  z = 54.6, r = {x = -20.0, y = 0.0, z = 200.0}},
             {label = "Yard 2", x = 1629.2, y = 2489.7, z = 54.6, r = {x = -20.0, y = 0.0, z = -35.0}},
         }
@@ -290,6 +290,20 @@ SecurityCamConfig.Locations = {
         cameras = {
             {label = "Front Door", x = -320.71, y = 6079.22, z = 34.26, r = {x = -20.0, y = 0.0, z = 200.0}},
             {label = "Main", x = -334.92, y = 6082.7, z = 33.45, r = {x = -20.0, y = 0.0, z = 270.0}},
+        }
+    },
+    {
+        camBox = {label = "Clothing Store (Portola Dr)", id = 'store43'},
+        cameras = {
+            {label = "Front Door", x = -320.71, y = 6079.22, z = 34.26, r = {x = -20.0, y = 0.0, z = 200.0}},
+            {label = "Main", x = -334.92, y = 6082.7, z = 33.45, r = {x = -20.0, y = 0.0, z = 270.0}},
+        }
+    },
+    {
+        camBox = {label = "Auto Repair (Elgin Ave.)", id = 'store44'},
+        cameras = {
+            {label = "Front Door", x = 528.08, y = -162.14, z = 59.0, r = {x = -25.0, y = 0.0, z = 200.0}},
+            {label = "Main", x = 538.39, y = -172.2, z = 58.0, r = {x = -25.0, y = 0.0, z = 250.0}},
         }
     }
 }
