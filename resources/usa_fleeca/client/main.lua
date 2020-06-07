@@ -77,15 +77,13 @@ AddEventHandler('fleeca:startDrilling', function()
     local x, y, z = table.unpack(playerCoords)
     local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
     local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-    if alertPolice then
-        TriggerServerEvent('911:BankRobbery', x, y, z, lastStreetNAME, IsPedMale(playerPed))
-        alertPolice(false)
+    if alertPolice == true then
+        TriggerServerEvent('911:FleecaRobbery', x, y, z, lastStreetNAME, IsPedMale(myped))
+        alertPolice = false
     end
 
     TriggerEvent('chatMessage', "", {}, "^0Use ^3Left Arrow ^0key to slow drill down, ^3Right Arrow ^0key to speed drill up.")
-    Wait(2000)
     TriggerEvent('chatMessage', "", {}, "^0Use ^3Up Arrow ^0key to drill deposit box, ^3Down Arrow ^0key to cool drill down")
-    Wait(2000)
     TriggerEvent('chatMessage', "", {}, "^0Dont drill too fast!")
 
     exports.globals:loadAnimDict("anim@heists@fleeca_bank@drilling")
