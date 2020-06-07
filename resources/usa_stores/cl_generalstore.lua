@@ -365,7 +365,7 @@ AddEventHandler('generalStore:performShoplift', function(area)
 
   exports.globals:loadAnimDict("anim@am_hold_up@male") -- play animation
   while GetGameTimer() - beginTime < SHOPLIFT_ANIMATION_TIME_SECONDS * 1000 do
-    exports.globals:DrawTimerBar(beginTime, SHOPLIFT_ANIMATION_TIME_SECONDS * 1000, 1.42, 1.475, 'Preparing')
+    exports.globals:DrawTimerBar(beginTime, SHOPLIFT_ANIMATION_TIME_SECONDS * 1000, 1.42, 1.475, 'Stealing')
     if not IsEntityPlayingAnim(playerPed, "anim@am_hold_up@male", "shoplift_mid", 3) then
       TaskPlayAnim(playerPed, "anim@am_hold_up@male", "shoplift_mid", 8.0, 1.0, SHOPLIFT_ANIMATION_TIME_SECONDS * 1000, 11, 1.0, false, false, false)
     end
