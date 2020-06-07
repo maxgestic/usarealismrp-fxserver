@@ -63,7 +63,7 @@ Citizen.CreateThread(function()
 		end
 
 		local dist2 = Vdist(playerCoords.x, playerCoords.y, playerCoords.z, mainHackLocation.x, mainHackLocation.y, mainHackLocation.z)
-		if dist2 < 1 then
+		if dist2 < 3 then
 			exports.globals:DrawText3D(mainHackLocation.x, mainHackLocation.y, mainHackLocation.z, '[E] - Hack Main System')
 			if IsControlJustPressed(0, 86) and not hacked then
 				TriggerEvent("utk_fingerprint:Start", 4, 1, 1, function(outcome)
