@@ -41,5 +41,4 @@ AddEventHandler('lockpick:closehtml', function()
 	SendNUIMessage({
 		showPlayerMenu = 'close'
 	})
-	exports.globals:notify('Your lockpick broke!')
 end)
