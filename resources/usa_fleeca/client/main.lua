@@ -1,6 +1,7 @@
 local KEY_K = 311
 local NPC = 's_m_y_construct_01'
 local drill_location = {73.01, -341.71, 55.51}
+local alertPolice = true
 
 local drilling_spots = {}
 TriggerServerEvent('fleeca:loadDrillingSpots')
@@ -72,6 +73,15 @@ end)
 RegisterNetEvent('fleeca:startDrilling')
 AddEventHandler('fleeca:startDrilling', function()
     local myped = PlayerPedId()
+    local playerCoords = GetEntityCoords(myped)
+    local x, y, z = table.unpack(playerCoords)
+    local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+    local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+    if alertPolice then
+        TriggerServerEvent('911:BankRobbery', x, y, z, lastStreetNAME, IsPedMale(playerPed))
+        alertPolice(false)
+    end
+
     TriggerEvent('chatMessage', "", {}, "^0Use ^3Left Arrow ^0key to slow drill down, ^3Right Arrow ^0key to speed drill up.")
     Wait(2000)
     TriggerEvent('chatMessage', "", {}, "^0Use ^3Up Arrow ^0key to drill deposit box, ^3Down Arrow ^0key to cool drill down")
@@ -92,3 +102,8 @@ function nearMarker(x, y, z)
     local mycoords = GetEntityCoords(GetPlayerPed(-1))
     return GetDistanceBetweenCoords(x, y, z, mycoords.x, mycoords.y, mycoords.z, true) < JOB_START_TEXT_DIST
 end
+
+RegisterNetEvent('fleeca:reset911')
+AddEventHandler('fleeca:reset911', function()
+    alertPolice = true
+end)

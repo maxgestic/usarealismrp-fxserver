@@ -79,7 +79,7 @@ function attemptDrilling(depositBox, source)
         drilling_spots[depositBox].drilled =  true
         TriggerClientEvent('fleeca:startDrilling', source)
         SetTimeout(FLEECA_COOLDOWN + math.random(0, 1 * 60 * 60 * 1000), function() -- randomise
-            resetFleeca()
+            resetFleeca(source)
         end)
     end
 end
@@ -137,10 +137,11 @@ AddEventHandler('fleeca:purchaseDrill', function()
 
 end)
 
-function resetFleeca()
+function resetFleeca(src)
     for i = 1, #drilling_spots do
         if drilling_spots[i].drilled then
             drilling_spots[i].drilled = false
         end
     end
+    TriggerClientEvent('fleeca:reset911', src)
 end
