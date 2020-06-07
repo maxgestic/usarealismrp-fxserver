@@ -22,8 +22,8 @@ AddEventHandler("afkping:checkMyPing", function()
 	local _source = source
 	local playerPing = GetPlayerPing(_source)
 	if playerPing >= pingLimit then
-		print('PING: '..GetPlayerName(_source)..'['..GetPlayerIdentifier(_source)..'] has been kicked for ping['..playerPing..']!')
-		DropPlayer(_source, "You have lost connection to the server. (Please ensure you have a stable internet connection and rejoin)")
+		print('PING: '..GetPlayerName(_source)..'['..GetPlayerIdentifier(_source)..'] has a high ping of '..playerPing..'ms!')
+		--DropPlayer(_source, "You have lost connection to the server. (Please ensure you have a stable internet connection and rejoin)")
 	end
 end)
 
