@@ -101,7 +101,7 @@ AddEventHandler("bank:startHacking", function(bank)
 			return
 		end
 	end
-	TriggerEvent("mhacking:seqstart", {3,2,1}, 80, mycb)
+	TriggerEvent("mhacking:seqstart", {3,2,1}, 60, mycb)
 	currentlyHacking = bank
 end)
 
