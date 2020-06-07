@@ -5,35 +5,6 @@
   <imapDependencies/>
   <imapDependencies_2>
     <Item>
-      <imapName>hei_cs1_12_strm_6</imapName>
-      <manifestFlags/>
-      <itypDepArray>
-        <Item>cs_xref</Item>
-        <Item>v_bush</Item>
-        <Item>country_01_metadata_004_strm</Item>
-        <Item>hei_country_01_metadata_001_strm</Item>
-        <Item>v_kitchen</Item>
-        <Item>int_retail</Item>
-        <Item>v_rubbish</Item>
-        <Item>hei_lev_des_mp_dlc</Item>
-        <Item>v_fences_2</Item>
-        <Item>v_garden</Item>
-        <Item>v_bins</Item>
-        <Item>v_seating_tables</Item>
-        <Item>v_storage</Item>
-        <Item>v_construction</Item>
-        <Item>v_garage</Item>
-        <Item>int_residential</Item>
-        <Item>v_bar</Item>
-        <Item>v_rooftop</Item>
-        <Item>v_industrial_2</Item>
-        <Item>v_traffic_lights</Item>
-        <Item>v_airport</Item>
-        <Item>v_potted</Item>
-        <Item>v_ext_veg</Item>
-      </itypDepArray>
-    </Item>
-    <Item>
       <imapName>apa_ch2_06_strm_0</imapName>
       <manifestFlags/>
       <itypDepArray>
@@ -53,6 +24,32 @@
         <Item>v_storage</Item>
         <Item>v_fences</Item>
         <Item>v_fences_2</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
+      <imapName>apa_ch2_06_strm_2</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>cityhills_02_metadata_010_strm</Item>
+        <Item>v_ext_veg</Item>
+        <Item>v_bush</Item>
+        <Item>v_fences</Item>
+        <Item>v_seating_tables</Item>
+        <Item>v_garden</Item>
+        <Item>v_potted</Item>
+        <Item>v_traffic_lights</Item>
+        <Item>v_rooftop</Item>
+        <Item>v_bar</Item>
+        <Item>v_electrical</Item>
+        <Item>v_crops</Item>
+        <Item>v_utility</Item>
+        <Item>v_rubbish</Item>
+        <Item>v_bins</Item>
+        <Item>v_fences_2</Item>
+        <Item>v_construction</Item>
+        <Item>v_signs</Item>
+        <Item>v_sports</Item>
+        <Item>lev_des</Item>
       </itypDepArray>
     </Item>
     <Item>
@@ -89,6 +86,38 @@
       </itypDepArray>
     </Item>
     <Item>
+      <imapName>ch2_05d_long_0</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>cityhills_02_metadata_022_strm</Item>
+        <Item>v_ext_veg</Item>
+        <Item>v_bush</Item>
+        <Item>v_rocks</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
+      <imapName>ch2_05d_strm_1</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>cityhills_02_metadata_022_strm</Item>
+        <Item>v_lev_doors</Item>
+        <Item>v_utility</Item>
+        <Item>v_rooftop</Item>
+        <Item>v_rubbish</Item>
+        <Item>v_storage</Item>
+        <Item>v_construction</Item>
+        <Item>v_traffic_lights</Item>
+        <Item>v_bins</Item>
+        <Item>v_seating_tables</Item>
+        <Item>v_ext_veg</Item>
+        <Item>v_bush</Item>
+        <Item>v_garden</Item>
+        <Item>v_potted</Item>
+        <Item>v_signs</Item>
+        <Item>v_fences_2</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
       <imapName>ch2_06_strm_0</imapName>
       <manifestFlags/>
       <itypDepArray>
@@ -108,6 +137,32 @@
         <Item>v_storage</Item>
         <Item>v_fences</Item>
         <Item>v_fences_2</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
+      <imapName>ch2_06_strm_2</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>cityhills_02_metadata_010_strm</Item>
+        <Item>v_ext_veg</Item>
+        <Item>v_bush</Item>
+        <Item>v_fences</Item>
+        <Item>v_seating_tables</Item>
+        <Item>v_garden</Item>
+        <Item>v_potted</Item>
+        <Item>v_traffic_lights</Item>
+        <Item>v_rooftop</Item>
+        <Item>v_bar</Item>
+        <Item>v_electrical</Item>
+        <Item>v_crops</Item>
+        <Item>v_utility</Item>
+        <Item>v_rubbish</Item>
+        <Item>v_bins</Item>
+        <Item>v_fences_2</Item>
+        <Item>v_construction</Item>
+        <Item>v_signs</Item>
+        <Item>v_sports</Item>
+        <Item>lev_des</Item>
       </itypDepArray>
     </Item>
     <Item>
@@ -134,6 +189,14 @@
         <Item>v_utility</Item>
         <Item>cs_xref</Item>
         <Item>cityhills_02_metadata_023_strm</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
+      <imapName>daemon</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>v_rooftop</Item>
+        <Item>downtown_01_metadata_012_strm</Item>
       </itypDepArray>
     </Item>
     <Item>
@@ -215,6 +278,35 @@
         <Item>v_bush</Item>
         <Item>v_fanpalm</Item>
         <Item>v_traffic_lights</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
+      <imapName>hei_cs1_12_strm_6</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>cs_xref</Item>
+        <Item>v_bush</Item>
+        <Item>country_01_metadata_004_strm</Item>
+        <Item>hei_country_01_metadata_001_strm</Item>
+        <Item>v_kitchen</Item>
+        <Item>int_retail</Item>
+        <Item>v_rubbish</Item>
+        <Item>hei_lev_des_mp_dlc</Item>
+        <Item>v_fences_2</Item>
+        <Item>v_garden</Item>
+        <Item>v_bins</Item>
+        <Item>v_seating_tables</Item>
+        <Item>v_storage</Item>
+        <Item>v_construction</Item>
+        <Item>v_garage</Item>
+        <Item>int_residential</Item>
+        <Item>v_bar</Item>
+        <Item>v_rooftop</Item>
+        <Item>v_industrial_2</Item>
+        <Item>v_traffic_lights</Item>
+        <Item>v_airport</Item>
+        <Item>v_potted</Item>
+        <Item>v_ext_veg</Item>
       </itypDepArray>
     </Item>
     <Item>
@@ -362,6 +454,45 @@
       <manifestFlags/>
       <itypDepArray>
         <Item>v_rooftop</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
+      <imapName>tedjones</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>v_rooftop</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
+      <imapName>apa_ch2_05d_long_0</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>cityhills_02_metadata_022_strm</Item>
+        <Item>v_ext_veg</Item>
+        <Item>v_bush</Item>
+        <Item>v_rocks</Item>
+      </itypDepArray>
+    </Item>
+    <Item>
+      <imapName>apa_ch2_05d_strm_1</imapName>
+      <manifestFlags/>
+      <itypDepArray>
+        <Item>cityhills_02_metadata_022_strm</Item>
+        <Item>v_lev_doors</Item>
+        <Item>v_utility</Item>
+        <Item>v_rooftop</Item>
+        <Item>v_rubbish</Item>
+        <Item>v_storage</Item>
+        <Item>v_construction</Item>
+        <Item>v_traffic_lights</Item>
+        <Item>v_bins</Item>
+        <Item>v_seating_tables</Item>
+        <Item>v_ext_veg</Item>
+        <Item>v_bush</Item>
+        <Item>v_garden</Item>
+        <Item>v_potted</Item>
+        <Item>v_signs</Item>
+        <Item>v_fences_2</Item>
       </itypDepArray>
     </Item>
   </imapDependencies_2>
