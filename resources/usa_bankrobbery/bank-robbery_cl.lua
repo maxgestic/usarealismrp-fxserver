@@ -1,36 +1,80 @@
 local bankCoords = {
-	{coords = {x = 252.95, y = 228.60, z = 102.00}, name = "Pacific Standard", camID = "bank1", timeToTapSeconds = 120}, -- pacific standard
-	{coords = {x = -103.74,y = 6477.9, z = 31.63}, name = "Paleto", camID = "bank2", timeToTapSeconds = 120},
-	{coords = {x = 1173.07, y = 2716.26, z = 38.07}, name = "Harmony Fleeca", camID = "N/A", timeToTapSeconds = 60},
-	{coords = {x = 148.54,y = -1049.98, z = 29.35}, name = "Legion Fleeca", camID = "N/A", timeToTapSeconds = 60}
+	{ coords = { x = 252.95, y = 228.60, z = 102.00 }, name = "Pacific Standard", camID = "bank1", timeToTapSeconds = 5 }, -- pacific standard
 }
-local clerkCoords = {x = 253.57, y = 221.05, z = 106.28}
-local currentlyHacking = nil
 
+local clerkCoords = {x = 253.57, y = 221.05, z = 106.28}
+
+local currentlyHacking = nil
+local mainHacking = nil
+local VaultDoor = nil
+
+local KEY_K = 311
+local drilling_spots = {}
+local openVault = false
+
+local mainHackLocation = {x = 265.06, y = 213.79, z = 101.68}
+
+RegisterNetEvent('bank:loadDrillingSpots')
+AddEventHandler('bank:loadDrillingSpots', function(spots)
+	drilling_spots = spots
+end)
+
+TriggerServerEvent('bank:loadDrillingSpots')
+
+
+local hacked = false
 Citizen.CreateThread(function()
 	while true do
 		local playerPed = PlayerPedId()
 		local playerCoords = GetEntityCoords(playerPed)
-		-- draw 3d text --
-		for i = 1, #bankCoords do
-			if Vdist(playerCoords, bankCoords[i].coords.x, bankCoords[i].coords.y, bankCoords[i].coords.z) < 5.0 then
-				DrawText3D(bankCoords[i].coords.x, bankCoords[i].coords.y, bankCoords[i].coords.z, '[HOLD K] - Rob Bank')
+		VaultDoor = GetClosestObjectOfType(playerCoords.x, playerCoords.y, playerCoords.z, 100.0, 961976194, 0, 0, 0)
+		if VaultDoor ~= nil and VaultDoor ~= 0 then
+			FreezeEntityPosition(VaultDoor, true)
+			-- draw 3d text --
+			for i = 1, #bankCoords do
+				if Vdist(playerCoords, bankCoords[i].coords.x, bankCoords[i].coords.y, bankCoords[i].coords.z) < 5.0 then
+					DrawText3D(bankCoords[i].coords.x, bankCoords[i].coords.y, bankCoords[i].coords.z, '[HOLD K] - Rob Bank')
+				end
+			end
+			if Vdist(playerCoords, clerkCoords.x, clerkCoords.y, clerkCoords.z) < 5.0 then
+				DrawText3D(clerkCoords.x, clerkCoords.y, clerkCoords.z, '[E] - Bank Clerk')
+			end
+			-- rob / clerk tip --
+			for i = 1, #bankCoords do
+				if IsControlJustPressed(0, 311) and Vdist(playerCoords, bankCoords[i].coords.x, bankCoords[i].coords.y, bankCoords[i].coords.z) < 2.0 then
+					Wait(500)
+					if IsControlPressed(0, 311) then
+						TriggerServerEvent('bank:beginRobbery', bankCoords[i])
+					end
+				end
+			end
+			if IsControlJustPressed(0, 38) and Vdist(playerCoords, clerkCoords.x, clerkCoords.y, clerkCoords.z) < 2.0 then
+				TriggerServerEvent('bank:clerkTip')
 			end
 		end
-		if Vdist(playerCoords, clerkCoords.x, clerkCoords.y, clerkCoords.z) < 5.0 then
-			DrawText3D(clerkCoords.x, clerkCoords.y, clerkCoords.z, '[E] - Bank Clerk')
-		end
-		-- rob / clerk tip --
-		for i = 1, #bankCoords do
-			if IsControlJustPressed(0, 311) and Vdist(playerCoords, bankCoords[i].coords.x, bankCoords[i].coords.y, bankCoords[i].coords.z) < 2.0 then
-				Wait(500)
-				if IsControlPressed(0, 311) then
-					TriggerServerEvent('bank:beginRobbery', bankCoords[i])
+		for i = 1, #drilling_spots do
+			local dist = Vdist(playerCoords.x, playerCoords.y, playerCoords.z, drilling_spots[i].x, drilling_spots[i].y, drilling_spots[i].z)
+			if dist < 1 then
+				exports.globals:DrawText3D(drilling_spots[i].x, drilling_spots[i].y, drilling_spots[i].z, '[K] - Drill Deposit Box')
+				if IsControlJustPressed(0, KEY_K) then
+					TriggerServerEvent('bank:doesUserHaveDrill', i)
 				end
 			end
 		end
-		if IsControlJustPressed(0, 38) and Vdist(playerCoords, clerkCoords.x, clerkCoords.y, clerkCoords.z) < 2.0 then
-			TriggerServerEvent('bank:clerkTip')
+
+		local dist2 = Vdist(playerCoords.x, playerCoords.y, playerCoords.z, mainHackLocation.x, mainHackLocation.y, mainHackLocation.z)
+		if dist2 < 3 then
+			exports.globals:DrawText3D(mainHackLocation.x, mainHackLocation.y, mainHackLocation.z, '[E] - Hack Main System')
+			if IsControlJustPressed(0, 86) and not hacked then
+				TriggerEvent("utk_fingerprint:Start", 4, 1, 1, function(outcome)
+					if outcome == true then
+						TriggerServerEvent('bank:hackComplete')
+					elseif outcome == false then
+						exports.globals:notify("You failed to access the mainframe!")
+					end
+					hacked = true
+				end)
+			end
 		end
 		Wait(0)
 	end
@@ -57,7 +101,7 @@ AddEventHandler("bank:startHacking", function(bank)
 			return
 		end
 	end
-	TriggerEvent("mhacking:seqstart", {4, 3, 2, 1}, 70, mycb)
+	TriggerEvent("mhacking:seqstart", {3,2,1}, 60, mycb)
 	currentlyHacking = bank
 end)
 
@@ -69,25 +113,58 @@ function mycb(success, timeremaining, finish)
 		if finish then
 			if not failed then
 				if Vdist(GetEntityCoords(playerPed), currentlyHacking.coords.x, currentlyHacking.coords.y, currentlyHacking.coords.z) < 3.0 then
-					TriggerServerEvent('bank:hackComplete', currentlyHacking.name)
-					TriggerEvent("usa:notify", "You successfully hacked the firewall!")
+					TriggerServerEvent('bank:vaultDoorHacked', currentlyHacking.name)
+					TriggerEvent("usa:notify", "You successfully hacked the vault door!")
 				else
 					TriggerEvent('usa:notify', 'You went out of range!')
 				end
 			else
-				TriggerEvent("usa:notify", "You failed to hacked the firewall!")
+				TriggerEvent("usa:notify", "You failed to hacked the vault door!")
 			end
 			currentlyHacking = nil
 		end
 	else
 		failed = true
-		print('Failure to win hacking game!')
-		TriggerEvent("usa:notify", "You failed to hacked the firewall!")
+		TriggerEvent("usa:notify", "You failed to hacked the vault door!")
 	end
 	if finish or failed then
 		ClearPedTasks(playerPed)
 	end
 end
+
+RegisterNetEvent('bank:openVaultDoor')
+AddEventHandler('bank:openVaultDoor', function()
+	openVault =  true
+end)
+
+RegisterNetEvent('bank:resetVault')
+AddEventHandler('bank:resetVault', function()
+	openVault =  false
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		if openVault then
+			local playerPed = PlayerPedId()
+			local CurrentHeading = GetEntityHeading(VaultDoor)
+			if round(CurrentHeading, 1) == 158.7 then
+				CurrentHeading = CurrentHeading - 0.1
+			end
+
+			if round(CurrentHeading, 1) == 160.0 then
+				DisplayHelpText('Hold ~INPUT_CELLPHONE_LEFT~ to Open the Vault')
+			end
+
+			while GetIsControlPressed(174) and round(CurrentHeading, 1) ~= 0.0 do -- Open
+				Citizen.Wait(0)
+				SetEntityHeading(VaultDoor, round(CurrentHeading, 1) - 0.4)
+				CurrentHeading = GetEntityHeading(VaultDoor)
+			end
+		end
+		Wait(0)
+	end
+end)
+
 
 function DrawText3D(x,y,z, text)
     local onScreen,_x,_y=World3dToScreen2d(x,y,z)
@@ -138,3 +215,41 @@ function DrawTimer(beginTime, duration, x, y, text)
     Set_2dLayer(3)
     DrawText(x - 0.06, y - 0.012)
 end
+
+function DisplayHelpText(Text)
+	BeginTextCommandDisplayHelp('STRING')
+	AddTextComponentSubstringPlayerName(Text)
+	EndTextCommandDisplayHelp(0, 0, 1, -1)
+end
+
+function round(num, numDecimalPlaces)
+	local mult = 10^(numDecimalPlaces or 0)
+	return math.floor(num * mult + 0.5) / mult
+end
+
+function GetIsControlPressed(Control)
+	if IsControlPressed(1, Control) or IsDisabledControlPressed(1, Control) then
+		return true
+	end
+	return false
+end
+
+RegisterNetEvent('bank:startDrilling')
+AddEventHandler('bank:startDrilling', function()
+	TriggerEvent("Drilling:Start", function(success)
+		if (success) then
+			TriggerServerEvent('bank:drilledGoods')
+		else
+			TriggerServerEvent('bank:bustedDrill')
+		end
+	end)
+	DisplayHelpText('Tap ~INPUT_CELLPHONE_LEFT~ to Slow Down the Drill, ~INPUT_CELLPHONE_RIGHT~ to speed up the drill')
+	Wait(3000)
+	DisplayHelpText('Tap ~INPUT_CELLPHONE_UP~ to drill the locks, ~INPUT_CELLPHONE_DOWN~ to pull the drill out')
+end)
+
+RegisterNetEvent('bank:shutVaultDoor')
+AddEventHandler('bank:shutVaultDoor', function()
+	SetEntityHeading(VaultDoor, 160.0)
+	FreezeEntityPosition(VaultDoor, true)
+end)

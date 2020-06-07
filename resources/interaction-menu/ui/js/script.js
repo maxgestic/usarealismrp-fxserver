@@ -205,6 +205,7 @@ var itemImages = {
   "Sam Smith's Strapon": "https://i.imgur.com/cQjjGVg.png",
   "Advanced Pick" : "https://i.imgur.com/86KdWw0.png",
   "Cooked Meat": "https://i.imgur.com/5pd8czn.png",
+  "Drill": "https://i.imgur.com/7lMxrcm.png",
   "Gold": "https://i.imgur.com/QYthPRN.png",
   "Diamond": "https://i.imgur.com/F1arH11.png",
   "Aluminum": "https://i.imgur.com/FAhri6J.png",
