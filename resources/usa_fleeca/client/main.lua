@@ -15,7 +15,7 @@ Citizen.CreateThread(function()
     while true do
         local playerCoords = GetEntityCoords(PlayerPedId(), false)
         local x,y,z = table.unpack(drill_location)
-        if Vdist(playerCoords, x, y, z) < 40 then
+        if Vdist(playerCoords, x, y, z) < 90 then
             if not NPCHandle then
                 RequestModel(GetHashKey(NPC))
                 while not HasModelLoaded(NPC) do
@@ -36,7 +36,7 @@ Citizen.CreateThread(function()
                 end
             end
 
-            if Vdist(playerCoords, x, y, z) <= 1 then
+            if Vdist(playerCoords, x, y, z) <= 3 then
                 exports.globals:DrawText3D(x, y, z, '[E] - Drill [$1,500]')
                 if IsControlJustPressed(0, 86) then
                     TriggerServerEvent('fleeca:purchaseDrill')
