@@ -557,10 +557,8 @@ AddEventHandler('properties:enterBurglaryHouse', function(_currentProperty)
 	local x, y, z = table.unpack(currentProperty.entryCoords)
 	local heading = currentProperty.entryHeading
 	local residentSpawned = false
-	if GetClockHours() > 6 and GetClockHours() < 20 and math.random() > 0.50 then
-		residentSpawned = true
-		SpawnResidents()
-	elseif GetClockHours() < 6 and GetClockHours() > 20 then
+
+	if math.random() > 0.50 then
 		residentSpawned = true
 		SpawnResidents()
 	end
