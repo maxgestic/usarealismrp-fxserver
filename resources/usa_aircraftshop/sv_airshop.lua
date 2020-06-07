@@ -34,11 +34,7 @@ AddEventHandler('aircraft:requestOpenMenu', function()
   local char = exports["usa-characters"]:GetCharacter(source)
   local license = char.getItem("Aircraft License")
     if license then
-        if license.status == "valid" then
             TriggerClientEvent('aircraft:openMenu', source, (char.get("aircraft") or {}))
-        else
-            TriggerClientEvent("usa:notify", source, "Your license is suspended!")
-        end
     else
         TriggerClientEvent('usa:notify', source, 'No license! Hold E to purchase one for $' .. exports["globals"]:comma_value(LICENSE_PURCHASE_PRICE))
     end
