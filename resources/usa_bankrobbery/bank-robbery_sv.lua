@@ -30,7 +30,7 @@ AddEventHandler("bank:beginRobbery", function(bank)
 				TriggerClientEvent("bank:startHacking", usource, bank)
 				SetTimeout(BANK_ROBBERY_TIMEOUT, function()
 					TriggerClientEvent('bank:shutVaultDoor', usource)
-					bankRobbable = true
+					resetBankHeist(usource)
 				end)
 			else
 				TriggerClientEvent("usa:notify", usource, "You need a cell phone to hack into the vault!")
@@ -43,7 +43,6 @@ end)
 
 RegisterServerEvent('bank:vaultDoorHacked')
 AddEventHandler('bank:vaultDoorHacked', function()
-	local char = exports["usa-characters"]:GetCharacter(source)
 	if sourceRobbing == source then
 		TriggerClientEvent('bank:openVaultDoor', source)
 	end
@@ -99,12 +98,14 @@ function attemptDrilling(depositBox, source)
 	end
 end
 
-function resetBankHeist()
+function resetBankHeist(src)
 	for i = 1, #drilling_spots do
 		if drilling_spots[i].drilled then
 			drilling_spots[i].drilled = false
 		end
 	end
+	bankRobbable = true
+	TriggerClientEvent('bank:resetVault', src)
 end
 
 RegisterServerEvent('bank:bustedDrill')

@@ -10,6 +10,7 @@ local VaultDoor = nil
 
 local KEY_K = 311
 local drilling_spots = {}
+local openVault = false
 
 local mainHackLocation = {x = 265.06, y = 213.79, z = 101.68}
 
@@ -133,9 +134,17 @@ end
 
 RegisterNetEvent('bank:openVaultDoor')
 AddEventHandler('bank:openVaultDoor', function()
-	Citizen.CreateThread(function()
-		while true do
-			Wait(0)
+	openVault =  true
+end)
+
+RegisterNetEvent('bank:resetVault')
+AddEventHandler('bank:resetVault', function()
+	openVault =  false
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		if openVault then
 			local playerPed = PlayerPedId()
 			local CurrentHeading = GetEntityHeading(VaultDoor)
 			if round(CurrentHeading, 1) == 158.7 then
@@ -152,7 +161,8 @@ AddEventHandler('bank:openVaultDoor', function()
 				CurrentHeading = GetEntityHeading(VaultDoor)
 			end
 		end
-	end)
+		Wait(0)
+	end
 end)
 
 
