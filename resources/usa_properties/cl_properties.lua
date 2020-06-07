@@ -535,14 +535,6 @@ end)
 
 RegisterNetEvent('properties:lockpickHouseBurglary')
 AddEventHandler('properties:lockpickHouseBurglary', function(index, lockpickItem)
-	local playerPed = PlayerPedId()
-
-	local beginTime = GetGameTimer()
-	RequestAnimDict("veh@break_in@0h@p_m_one@")
-	while not HasAnimDictLoaded("veh@break_in@0h@p_m_one@") do
-		Wait(100)
-	end
-
 	if GetClockHours() > 6 and GetClockHours() < 20 and math.random() < 0.45 then -- chance of reporting when burglary is happening at day
 		local x, y, z = table.unpack(GetEntityCoords(playerPed))
 		local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
@@ -550,44 +542,7 @@ AddEventHandler('properties:lockpickHouseBurglary', function(index, lockpickItem
 		TriggerServerEvent('911:Burglary', x, y, z, lastStreetNAME, IsPedMale(playerPed))
 	end
 
-	Citizen.CreateThread(function()
-		while GetGameTimer() - beginTime < 20000 do
-			Citizen.Wait(0)
-			local x, y, z = table.unpack(GetEntityCoords(playerPed))
-	        if not IsEntityPlayingAnim(playerPed, "veh@break_in@0h@p_m_one@", "low_force_entry_ds", 3) then
-	          TaskPlayAnim(playerPed, "veh@break_in@0h@p_m_one@", "low_force_entry_ds", 8.0, 1.0, -1, 11, 1.0, false, false, false)
-	          Citizen.Wait(2000)
-	          ClearPedTasks(playerPed)
-	          SetEntityCoords(playerPed, x, y, z - 1.0, false, false, false, false)
-	        end
-	    end
-	end)
-
-	while GetGameTimer() - beginTime < 20000 do
-		Citizen.Wait(0)
-		DisableControlAction(0, 301, true)
-		DisableControlAction(0, 86, true)
-        DisableControlAction(0, 244, true)
-        DisableControlAction(0, 245, true)
-        DisableControlAction(0, 288, true)
-        DisableControlAction(0, 79, true)
-        DisableControlAction(0, 73, true)
-        DisableControlAction(0, 37, true)
-        DisableControlAction(0, 311, true)
-		DrawTimer(beginTime, 20000, 1.42, 1.475, 'LOCKPICKING')
-	end
-	ClearPedTasks(playerPed)
-
-	if math.random() < 0.6 then
-      TriggerServerEvent('properties:lockpickSuccessful', index)
-      TriggerEvent("usa:notify", "Lockpick was successful!")
-      return
-    else
-      TriggerEvent("usa:notify", "Lockpick has broken!")
-      TriggerServerEvent("usa:removeItem", lockpickItem, 1)
-      return
-    end
-
+	TriggerEvent("lockpick:openlockpick", index)
 end)
 
 RegisterNetEvent('properties:enterBurglaryHouse')
@@ -602,10 +557,8 @@ AddEventHandler('properties:enterBurglaryHouse', function(_currentProperty)
 	local x, y, z = table.unpack(currentProperty.entryCoords)
 	local heading = currentProperty.entryHeading
 	local residentSpawned = false
-	if GetClockHours() > 6 and GetClockHours() < 20 and math.random() > 0.50 then
-		residentSpawned = true
-		SpawnResidents()
-	elseif GetClockHours() < 6 and GetClockHours() > 20 then
+
+	if math.random() > 0.50 then
 		residentSpawned = true
 		SpawnResidents()
 	end
