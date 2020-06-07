@@ -302,6 +302,10 @@ AddEventHandler('doormanager:advancedPick', function()
         local x, y, z = door.x, door.y, door.z
         if Vdist(playerCoords, x, y, z) < 1.0 then
             if door.advancedlockpickable then
+                local x, y, z = table.unpack(playerCoords)
+                local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+                local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+                TriggerServerEvent('911:LockpickingDoor', x, y, z, lastStreetNAME, IsPedMale(playerPed))
                 TriggerEvent('lockpick:openlockpick', nil, 'bank')
             else
                 TriggerEvent('usa:notify', 'You cannot use advanced lockpicks here!')
