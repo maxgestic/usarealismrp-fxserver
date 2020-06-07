@@ -78,7 +78,6 @@ function attemptDrilling(depositBox, source)
     else
         drilling_spots[depositBox].drilled =  true
         TriggerClientEvent('fleeca:startDrilling', source)
-        Wait(600000) -- Wait 10 mins and then set the timeout
         SetTimeout(FLEECA_COOLDOWN + math.random(0, 1 * 60 * 60 * 1000), function() -- randomise
             resetFleeca()
         end)
