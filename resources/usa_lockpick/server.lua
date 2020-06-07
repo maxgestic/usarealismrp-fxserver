@@ -1,7 +1,6 @@
 RegisterServerEvent('lockpick:removeBrokenPick')
 AddEventHandler('lockpick:removeBrokenPick', function(item)
 	local char = exports["usa-characters"]:GetCharacter(source)
-	local chanceOfBreak = math.random()
 	if math.random() > 0.75 then
 		char.removeItem(item, 1)
 		TriggerClientEvent('usa:notify', source, 'Your lockpick broke!')
