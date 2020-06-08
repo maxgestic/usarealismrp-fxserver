@@ -43,6 +43,11 @@ AddEventHandler("HPS:checkCriminalHistory", function(job_name, process_time, sta
   checkItem(source, job_name, process_time, stage)
 end)
 
+RegisterServerEvent('HPS:checkItem')
+AddEventHandler('HPS:checkItem', function(job_name, process_time, stage)
+  checkItem(source, job_name, process_time, stage)
+end)
+
 RegisterServerEvent("HPS:rewardItem")
 AddEventHandler("HPS:rewardItem", function(job_name, stage)
   for job, data in pairs(REWARDS) do

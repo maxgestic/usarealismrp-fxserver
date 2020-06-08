@@ -1128,6 +1128,7 @@ function SpawnResidents()
 
 		local weapon = residents.weapons[math.random(1, #residents.weapons)]
 		GiveWeaponToPed(ped, GetHashKey(weapon), 255, true, false)
+		SetPedDropsWeaponsWhenDead(ped, false)
 
 		TaskPlayAnimAdvanced(ped, residents.animation.dict, residents.animation.anim, resident.coords, 0.0, 0.0, resident.rotation, 8.0, 1.0, -1, 1, 1.0, true, true)
 		SetFacialIdleAnimOverride(ped, "mood_sleeping_1", 0)
