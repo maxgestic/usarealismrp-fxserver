@@ -78,7 +78,7 @@ AddEventHandler('fleeca:startDrilling', function()
     local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
     local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
     if alertPolice == true then
-        TriggerServerEvent('911:FleecaRobbery', x, y, z, lastStreetNAME, IsPedMale(playerPed))
+        TriggerServerEvent('911:FleecaRobbery', x, y, z, lastStreetNAME, IsPedMale(myped))
         alertPolice = false
     end
 
