@@ -1126,7 +1126,7 @@ function SpawnResidents()
 			Wait(0)
 		end
 
-		weapon = residents.weapons[math.random(1, #residents.weapons)]
+		local weapon = residents.weapons[math.random(1, #residents.weapons)]
 		GiveWeaponToPed(ped, GetHashKey(weapon), 255, true, false)
 		SetPedDropsWeaponsWhenDead(ped, false)
 
