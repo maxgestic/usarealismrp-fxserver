@@ -74,6 +74,7 @@ local DOORS = {
 
   {name = "Boilingbroke Cell Block Side 1", x = 1785.1411132813,y = 2571.6547851563, z = 45.797821044922, model = 430324891, locked = true, _dist = 2, gate = true, offset={-0.00, -0.13, 1.05}, lockedCoords={1785.8, 2572.0, 44.8},  allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Boilingbroke Cell Block Side 2", x = 1772.9583740234,y = 2571.7209472656, z = 45.797840118408, model = 430324891, locked = true, _dist = 2, gate = true, offset={-0.00, -0.13, 1.05}, lockedCoords={1773.5337744141,2572.0244140625,45.797836303711},  allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "Boilingbroke Yard Exercise Gate", x = 1642.32, y = 2540.19, z = 45.56, model = -1934898817, locked = true, _dist = 2, offset={0.00, 1.13, 0.05}, heading=230,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
 
 
   {name = "Lower Visitation Left", x = 1785.18, y = 2609.17, z = 45.92, model = 262839150, static= true, locked = true, _dist = 2, offset={1.13, 2.20, 0.05}, heading=0,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
