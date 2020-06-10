@@ -1,6 +1,10 @@
-# scrambler command to run on scrambler server
+# commands
 runScramblerCmd="
-cd /d D:\\fxserver-resource-scrambler-dist && rd /s /q resources && rd /s /q scrambled_resources && index-win.exe
+cd /d D:\\fxserver-resource-scrambler-dist && index-win.exe
+"
+
+clearResourcesCmd="
+cd /d D:\\fxserver-resource-scrambler-dist && rd /s /q resources && rd /s /q scrambled_resources
 "
 
 # scrambler server details
@@ -51,10 +55,13 @@ cd ..
 cp -r resources/[system]/[builders] .
 rm -f -r resources/[system]/[builders]
 
+# clear old copy of resources on scrambler server
+sshpass -f "scramblerServerPass.txt" ssh $scramblerServerUser@$scramblerServerIP $clearResourcesCmd
+
 # copy resources to scrambler server
 sshpass -f "scramblerServerPass.txt" scp -r resources $scramblerServerUser@$scramblerServerIP:D:/fxserver-resource-scrambler-dist
 
-# clear old files and run scrambler on scrambler server
+# run scrambler on scrambler server
 sshpass -f "scramblerServerPass.txt" ssh $scramblerServerUser@$scramblerServerIP $runScramblerCmd
 
 # retrieve scrambled resources from scrambler server
