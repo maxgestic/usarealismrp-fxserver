@@ -45,66 +45,42 @@ end
 local player = GetPlayerPed(-1) -- the player trying to lock/unlock
 local vehicle = nil -- vehicle to be kept locked/unlocked (either inside already or the vehicle in front of player)
 local isPlayerInside = nil -- is player inside of any vehicle when trying to lock/unlock?
---local targetVehicle = nil
 
 Citizen.CreateThread(function()
 	while true do
 
 		if IsControlJustPressed(1, keyParam) then
 
-			player = GetPlayerPed(-1)
-
+			player = PlayerPedId()
 			vehicle = GetVehiclePedIsIn(player, false)
 			isPlayerInside = IsPedInAnyVehicle(player, true)
 
-			lastVehicle = GetPlayersLastVehicle()
-			px, py, pz = table.unpack(GetEntityCoords(player, true))
-			coordA = GetEntityCoords(player, true)
+			local coordA = GetEntityCoords(player, true)
+			local coordB = GetOffsetFromEntityInWorldCoords(player, 0.0, 3.0, 0.0)
 
-			coordB = GetOffsetFromEntityInWorldCoords(player, 0.0, 3.0, 0.0)
-			targetVehicle = GetVehicleInDirection(coordA, coordB) -- performs a scan on the z-axis from coordA to coordB, (for motorcycles that have fallen over, or low vehicles)
+			local targetVehicle = GetVehicleInDirection(coordA, coordB) -- performs a scan on the z-axis from coordA to coordB, (for motorcycles that have fallen over, or low vehicles)
 
 			if targetVehicle ~= 0 or vehicle ~= 0 then
 
+				local plate = nil
 				if vehicle ~= 0 then
 					plate = GetVehicleNumberPlateText(vehicle)
-					--print("inside of vehicle already!")
-					--print("checking lock key & lock status for plate " .. plate)
-					--print("vehicle = " .. vehicle)
 				else
 					vehicle = targetVehicle
 					plate = GetVehicleNumberPlateText(vehicle)
-					--print("not inside a vehicle! target = " .. targetVehicle)
-					--print("checking lock key & lock status for plate " .. plate)
-					--print("vehicle = " .. vehicle)
 				end
 				if type(plate) == 'string' then
 					TriggerServerEvent("lock:checkForKey", plate)
 				end
-
-			--else
-				--print("***** ERROR: if you see this then there was a problem trying to lock/unlock a vehicle! ******")
 			end
-
 		end
-
 		Wait(1)
-
 	end
 end)
 
 RegisterNetEvent("lock:lockVehicle")
 AddEventHandler("lock:lockVehicle", function()
-	local lockStatus = GetVehicleDoorLockStatus(vehicle)
-	--print("inside lockVehicle with lockStatus = " .. lockStatus)
-
-	if IsVehicleEngineOn(vehicle) then
-		--SetVehicleUndriveable(vehicle, true)
-	end
-
-	--print("locking doors!")
 	SetVehicleDoorsLocked(vehicle, 2)
-	--SetVehicleDoorsLockedForAllPlayers(vehicle, true)
 
 	-- ## Notifications
 		if soundEnable then TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "lock", 1.0) end
@@ -116,16 +92,7 @@ end)
 
 RegisterNetEvent("lock:unlockVehicle")
 AddEventHandler("lock:unlockVehicle", function()
-	local lockStatus = GetVehicleDoorLockStatus(vehicle)
-	--print("inside unlockVehicle with lockStatus = " .. lockStatus)
-
-	if not IsVehicleEngineOn(vehicle) then
-		--SetVehicleUndriveable(vehicle, false)
-	end
-
-	--print("unlocking doors!")
 	SetVehicleDoorsLocked(vehicle, 1)
-	--SetVehicleDoorsLockedForAllPlayers(vehicle, false)
 
 	-- ## Notifications
 		if soundEnable then	TriggerServerEvent("InteractSound_SV:PlayWithinDistance", soundDistance, "unlock", 1.0) end
