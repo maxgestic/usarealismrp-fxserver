@@ -49,7 +49,9 @@ AddEventHandler('_chat:messageEntered', function(name, color, message, location)
 		LOG_FILE = io.open(LOG_FILE_NAME, "a")
 		io.output(LOG_FILE)
 		io.write(name .. " [" .. GetPlayerName(source) .. " / " .. GetPlayerIdentifiers(source)[1] .. "]" .. ': ' .. message .. "\r\n")
-		io.close(LOG_FILE)
+		if type(LOG_FILE) == "userdata" then -- userdata == FILE*
+			io.close(LOG_FILE)
+		end
 
 	TriggerEvent('chatMessageLocation', source, name, message, location)
 
@@ -82,5 +84,7 @@ AddEventHandler("chat:sendToLogFile", function(source, message)
 	LOG_FILE = io.open(LOG_FILE_NAME, "a")
 	io.output(LOG_FILE)
 	io.write("[" .. GetPlayerName(source) .. " (#" .. source .. ") / " .. GetPlayerIdentifiers(source)[1] .. "]" .. ': ' .. message .. "\r\n")
-	io.close(LOG_FILE)
+	if type(LOG_FILE) == "userdata" then -- userdata == FILE*
+		io.close(LOG_FILE)
+	end
 end)
