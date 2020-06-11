@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <SInteriorOrderData>
-  <startFrom value="3200" />
+  <startFrom value="5400" />
   <filePathHash value="0" />
   <proxies>
 	<Item>int_prison_first_milo</Item>
