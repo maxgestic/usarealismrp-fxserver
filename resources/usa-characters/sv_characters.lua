@@ -14,30 +14,39 @@ AddEventHandler("playerDropped", function(reason)
   local usource = source
   local accountIdentifier = GetPlayerIdentifiers(usource)[1]
   if CHARACTERS[usource] then
+    -- gather some needed info
+    local char = CHARACTERS[usource]
+    char.set("_rev", nil) -- avoid document update conflict
+    local charId = char.get("_id")
+    local charSelf = char.getSelf()
+    local charFullName = char.getFullName()
+    local charJailTime = char.get("jailTime")
     TriggerEvent('es:exposeDBFunctions', function(db)
       -- save player data --
-      print("player dropped, updating char with ID: " .. CHARACTERS[usource].get("_id"))
-      CHARACTERS[usource].set("_rev", nil)
-      db.updateDocument("characters", CHARACTERS[usource].get("_id"), CHARACTERS[usource].getSelf(), function(doc, err, rText)
-        print("* Character updated in DB! err " .. err .. " *")
-        -- save last character played --
-        db.getDocumentByRow("essentialmode", "identifier", accountIdentifier, function(doc)
+      print("[usa-characters] player dropped, updating char with ID: " .. charId)
+      db.updateDocument("characters", charId, charSelf, function(doc, err, rText)
+        print("[usa-characters] Character updated in DB! err: " .. err)
+      end)
+      -- save last character played --
+      db.getDocumentByRow("essentialmode", "identifier", accountIdentifier, function(doc)
+        if doc then
           doc._rev = nil
-          doc.lastPlayedChar = CHARACTERS[usource].getFullName()
+          doc.lastPlayedChar = charFullName
           db.updateDocument("essentialmode", doc._id, doc, function(doc, err, rText) end)
-          -- notify DOC of player disconnect while in jail --
-          local jailtime = CHARACTERS[usource].get("jailTime")
-          if jailtime then
-            if jailtime > 0 then
-              local n = CHARACTERS[usource].getName()
-              exports["globals"]:notifyPlayersWithJobs({"corrections"}, "^3INFO: ^0" .. n .. " has fallen asleep.")
-            end
-          end
-          -- destroy player object --
-          CHARACTERS[usource] = nil
-        end)
+        else 
+          print("[usa-characters] ERROR: No doc found when saving last character played!")
+        end
       end)
     end)
+     -- notify DOC of player disconnect while in jail --
+     if charJailTime then
+      if charJailTime > 0 then
+        exports["globals"]:notifyPlayersWithJobs({"corrections"}, "^3INFO: ^0" .. charFullName .. " has fallen asleep.")
+      end
+    end
+    -- destroy player object --
+    print("[usa-characters] Destroying character object for src: " .. usource)
+    CHARACTERS[usource] = nil
   end
 end)
 
