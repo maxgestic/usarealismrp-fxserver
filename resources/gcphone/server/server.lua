@@ -352,9 +352,14 @@ function setReadMessageNumber(identifier, num)
         db.getDocumentsByRows("phone-messages", query, function(docs)
             if docs then
                 for i = 1, #docs do
-                    docs[i]._rev = nil
-                    docs[i].isRead = 1
-                    db.updateDocument("phone-messages", docs[i]._id, docs[i], function(doc, err, rText) end)
+                    if docs[i].isRead == 0 then
+                        docs[i]._rev = nil
+                        docs[i].isRead = 1
+                        db.updateDocument("phone-messages", docs[i]._id, docs[i], function(doc, err, rText)
+                            print("when setting message as read, err: " .. (err or "NIL"))
+                            print("rText: " .. (rText or "NIL"))
+                        end)
+                    end
                 end
             end
         end)
