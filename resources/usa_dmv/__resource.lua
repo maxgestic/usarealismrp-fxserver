@@ -32,3 +32,7 @@ client_scripts {
 	"@NativeUI/NativeUI.lua",
 	'dmv_cl.lua'
 }
+
+server_exports {
+    "getLicenseStatus"
+}
