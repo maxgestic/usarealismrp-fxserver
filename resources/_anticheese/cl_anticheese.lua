@@ -843,7 +843,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(5000)
 		if not IsEntityVisible(PlayerPedId()) then
 			if not isAtAnLSC() then
-				TriggerServerEvent("AntiCheese:InvisibilityFlag")
+				TriggerServerEvent("AntiCheese:InvisibilityFlag", GetEntityCoords(PlayerPedId()))
 				SetEntityVisible(PlayerPedId(), true, 0)
 			end
 		end

@@ -339,7 +339,7 @@ Citizen.CreateThread(function()
 	end)
 
 	RegisterServerEvent('AntiCheese:InvisibilityFlag')
-	AddEventHandler('AntiCheese:InvisibilityFlag', function()
+	AddEventHandler('AntiCheese:InvisibilityFlag', function(coords)
 		local userSource = source
 		if Components.Invisibility then
 			print("*****invisibility flag trigged (source: #" .. userSource .. ")!!****")
@@ -350,6 +350,7 @@ Citizen.CreateThread(function()
 			local msg = "```" .. getTimeString() ..
 				"Invisibility hacker detected!\n" ..
 				userInfoStr ..
+				"Coords: (" .. coords.x .. ", " .. coords.y .. ", " .. coords.z .. ")\n" ..
 				"Player was invisible! Player reset to visible.\n" ..
 				flagStr .. "```"
 			local staff_msg = "^3*Invisibility hacker detected!* ID #: ^0" .. userSource .. "^3, Name: ^0" .. name
