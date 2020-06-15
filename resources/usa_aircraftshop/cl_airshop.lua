@@ -162,6 +162,7 @@ AddEventHandler('aircraft:spawn', function(hash, id)
     end
     local location = GetClosestLocation()
 	local aircraft = CreateVehicle(hash, location.spawn.x, location.spawn.y, location.spawn.z, (location.spawn.heading or 0.0), true, false)
+	TriggerEvent('persistent-vehicles/register-vehicle', aircraft)
 	SetEntityAsMissionEntity(aircraft, 1, 1)
     if id then
         SetVehicleNumberPlateText(aircraft, tostring(id):sub(1, 8))
@@ -264,7 +265,8 @@ Citizen.CreateThread(function()
                         local plate = GetVehicleNumberPlateText(vehicle)
                         TriggerServerEvent("aircraft:requestReturn", plate)
                         if DoesEntityExist(vehicle) and IsPlaneOrHeli(vehicle) then
-                            DeleteVehicle(vehicle)
+							DeleteVehicle(vehicle)
+							TriggerEvent('persistent-vehicles/forget-vehicle', vehicle)
                         end
                     else
                         exports.globals:notify("You must be in the driver's seat.")

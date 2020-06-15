@@ -518,6 +518,7 @@ AddEventHandler("weazelnews:spawnVan", function(locationName, plate)
 		end
 		local coords = locations[locationName].van_garage
 		local vehicle = CreateVehicle(numberHash, coords.x, coords.y, coords.z, coords.heading, true, false)
+		TriggerEvent('persistent-vehicles/register-vehicle', vehicle)
 		SetVehicleOnGroundProperly(vehicle)
 		SetVehRadioStation(vehicle, "OFF")
 		SetPedIntoVehicle(GetPlayerPed(-1), vehicle, -1)
@@ -545,6 +546,7 @@ RegisterNetEvent("weazelnews:returnVan")
 AddEventHandler("weazelnews:returnVan", function()
 	local veh = GetVehiclePedIsIn(GetPlayerPed(-1), false)
 	if veh then
+		TriggerEvent('persistent-vehicles/forget-vehicle', veh)
 		DeleteVehicle(veh)
 	end
 end)

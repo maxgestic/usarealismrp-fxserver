@@ -77,6 +77,7 @@ function AddGarageMenuItems(menu)
 				ShowNotification('You must be in a vehicle!')
 			else
 				SetEntityAsMissionEntity(veh)
+				TriggerEvent('persistent-vehicles/forget-vehicle', veh)
 				DeleteVehicle(veh)
 				ShowNotification('Your vehicle has been returned.')
 			end
@@ -108,6 +109,7 @@ function AddGarageMenuItems(menu)
 	        	for i = 1, #policeGarages do
 	        		if Vdist(px,py,pz,policeGarages[i].x,policeGarages[i].y,policeGarages[i].z)  <  9 and waiting < 5000 then
 						spawnedVeh = CreateVehicle(vehicleHash, policeGarages[i]._x,policeGarages[i]._y,policeGarages[i]._z, policeGarages[i]._heading, true)
+						TriggerEvent('persistent-vehicles/register-vehicle', spawnedVeh)
 						SetVehicleHasBeenOwnedByPlayer(spawnedVeh, true)
 						SetVehicleExplodesOnHighExplosionDamage(spawnedVeh, false)
 						SetVehicleEngineOn(spawnedVeh, true, true, false)

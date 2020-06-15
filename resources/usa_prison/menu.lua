@@ -410,6 +410,7 @@ function SpawnVehicle(model)
     end
 
     local veh = CreateVehicle(model, x + 2.5, y + 2.5, z + 1, 0.0, true, false)
+    TriggerEvent('persistent-vehicles/register-vehicle', veh)
     SetEntityAsMissionEntity(veh, true, true)
     SetVehicleHasBeenOwnedByPlayer(veh, true)
     SetVehicleExplodesOnHighExplosionDamage(veh, false)
