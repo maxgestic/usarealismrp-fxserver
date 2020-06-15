@@ -337,8 +337,8 @@ function GetNextCheckpoint()
         if Vdist(mycoords.x, mycoords.y, mycoords.z, vehcoords.x, vehcoords.y, vehcoords.z) > 550.0 then
             givemoney = false
         end
-        DeleteVehicle(active_job.current_vehicle)
         TriggerEvent('persistent-vehicles/forget-vehicle', active_job.current_vehicle)
+        DeleteVehicle(active_job.current_vehicle)
     end
     if active_job.current_passengers then
         for i = 1, #active_job.current_passengers do

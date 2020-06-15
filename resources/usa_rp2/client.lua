@@ -998,8 +998,8 @@ AddEventHandler( 'impoundVehicle', function()
             if GetPedInVehicleSeat( vehicle, -1 ) == ped then
                 TriggerServerEvent("impound:impoundVehicle", vehicle, plate)
                 SetEntityAsMissionEntity( vehicle, true, true )
-                deleteCar( vehicle )
                 TriggerEvent('persistent-vehicles/forget-vehicle', vehicle)
+                deleteCar( vehicle )
                 ShowNotification( "Vehicle impounded." )
             else
                 ShowNotification( "You must be in the driver's seat!" )
@@ -1013,8 +1013,8 @@ AddEventHandler( 'impoundVehicle', function()
             if DoesEntityExist( vehicle ) then
                 TriggerServerEvent("impound:impoundVehicle", vehicle, plate)
                 SetEntityAsMissionEntity( vehicle, true, true )
-                deleteCar( vehicle )
                 TriggerEvent('persistent-vehicles/forget-vehicle', vehicle)
+                deleteCar( vehicle )
                 ShowNotification( "Vehicle impounded." )
             else
                 ShowNotification( "You must be in or near a vehicle to impound it." )

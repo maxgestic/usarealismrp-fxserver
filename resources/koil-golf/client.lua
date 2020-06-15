@@ -158,8 +158,8 @@ function startGolf()
 				end
 			end
 		end
-		Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(spawned_car))
 		TriggerEvent('persistent-vehicles/forget-vehicle', spawned_car)
+		Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(spawned_car))
 	end)
 end
 

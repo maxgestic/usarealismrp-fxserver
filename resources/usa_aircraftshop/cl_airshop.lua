@@ -264,9 +264,9 @@ Citizen.CreateThread(function()
                     if inDriverSeat then
                         local plate = GetVehicleNumberPlateText(vehicle)
                         TriggerServerEvent("aircraft:requestReturn", plate)
-                        if DoesEntityExist(vehicle) and IsPlaneOrHeli(vehicle) then
-							DeleteVehicle(vehicle)
+						if DoesEntityExist(vehicle) and IsPlaneOrHeli(vehicle) then
 							TriggerEvent('persistent-vehicles/forget-vehicle', vehicle)
+							DeleteVehicle(vehicle)
                         end
                     else
                         exports.globals:notify("You must be in the driver's seat.")
