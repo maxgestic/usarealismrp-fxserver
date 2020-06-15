@@ -240,6 +240,7 @@ function SpawnPlane(plane)
         local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
         -- Spawn the vehicle at the gas station car dealership in paleto and assign the vehicle handle to 'vehicle'
         active_job.current_vehicle = CreateVehicle(numberHash, plane.location.x, plane.location.y, plane.location.z, 56.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
+        TriggerEvent('persistent-vehicles/register-vehicle', active_job.current_vehicle)
         SetVehicleExplodesOnHighExplosionDamage(active_job.current_vehicle, false)
         SetEntityAsMissionEntity(active_job.current_vehicle, true, true)
         TriggerServerEvent("fuel:setFuelAmount", GetVehicleNumberPlateText(active_job.current_vehicle), 100)
@@ -337,6 +338,7 @@ function GetNextCheckpoint()
             givemoney = false
         end
         DeleteVehicle(active_job.current_vehicle)
+        TriggerEvent('persistent-vehicles/forget-vehicle', active_job.current_vehicle)
     end
     if active_job.current_passengers then
         for i = 1, #active_job.current_passengers do

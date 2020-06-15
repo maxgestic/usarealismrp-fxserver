@@ -135,6 +135,7 @@ AddEventHandler("bikeShop:spawnBike", function(bike, location, plate)
     -- Model loaded, continue
     -- Spawn the vehicle at the gas station car dealership in paleto and assign the vehicle handle to 'vehicle'
     local vehicle = CreateVehicle(bike.hash, location.x, location.y, location.z, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
+    TriggerEvent('persistent-vehicles/register-vehicle', vehicle)
     SetVehicleNumberPlateText(vehicle, plate)
     SetEntityAsMissionEntity(vehicle, true, true)
     SetVehicleHasBeenOwnedByPlayer(vehicle, true)

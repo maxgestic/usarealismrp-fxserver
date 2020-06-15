@@ -198,6 +198,7 @@ function SpawnDeliveryVan(x, y, z, heading)
 		Wait(0)
 	end
 	local vehicle = CreateVehicle(numberHash, x, y, z, heading, true, false)
+	TriggerEvent('persistent-vehicles/register-vehicle', vehicle)
 	SetVehicleOnGroundProperly(vehicle)
 	SetVehRadioStation(vehicle, "OFF")
 	SetEntityAsMissionEntity(vehicle, true, true)
@@ -218,6 +219,7 @@ function SpawnDeliveryVan(x, y, z, heading)
 end
 
 function DelVehicle(entity)
+	TriggerEvent('persistent-vehicles/forget-vehicle', entity)
     Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(entity))
 end
 

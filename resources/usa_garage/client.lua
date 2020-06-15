@@ -125,6 +125,7 @@ AddEventHandler("garage:storeVehicle", function()
 	}
 	-- delete veh --
 	SetEntityAsMissionEntity(veh, true, true)
+	TriggerEvent('persistent-vehicles/forget-vehicle', veh)
 	DeleteVehicle(veh)
 	-- store vehicle key with vehicle
 	TriggerServerEvent("garage:storeKey", plate)
@@ -172,6 +173,7 @@ AddEventHandler("garage:spawn", function(vehicle)
 		local playerCoords = GetEntityCoords(playerPed, false)
 		local heading = GetEntityHeading(playerPed)
 		local vehicle = CreateVehicle(numberHash, playerCoords.x, playerCoords.y, playerCoords.z, GetEntityHeading(playerPed), true, false)
+		TriggerEvent('persistent-vehicles/register-vehicle', vehicle)
 		SetVehicleNumberPlateText(vehicle, plateText)
 		SetVehicleOnGroundProperly(vehicle)
 		SetVehRadioStation(vehicle, "OFF")

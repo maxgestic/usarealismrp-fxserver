@@ -260,7 +260,8 @@ AddEventHandler("boatMenu:spawnSeacraft", function(boat)
         for name, info in pairs(locations) do
         	if Vdist(info.rent.x, info.rent.y, info.rent.z, playerCoords) < 5 then
 		        local vehicle = CreateVehicle(numberHash, info.spawn.x, info.spawn.y, info.spawn.z, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
-		        SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
+				TriggerEvent('persistent-vehicles/register-vehicle', vehicle)
+				SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
 		        SetVehicleHasBeenOwnedByPlayer(vehicle, true)
 		        SetEntityAsMissionEntity(vehicle, true, true)
 		        local vehicle_key = {
@@ -307,7 +308,8 @@ AddEventHandler('boatMenu:rentBoat', function(index)
         for name, info in pairs(locations) do
         	if Vdist(info.rent.x, info.rent.y, info.rent.z, playerCoords) < 5 then
 		        local vehicle = CreateVehicle(numberHash, info.spawn.x, info.spawn.y, info.spawn.z, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
-		        SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
+				TriggerEvent('persistent-vehicles/register-vehicle', vehicle)
+				SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
             local vehicle_key = {
     					name = "Key -- " .. GetVehicleNumberPlateText(vehicle),
     					quantity = 1,
@@ -332,6 +334,7 @@ AddEventHandler('boatMenu:openMenu', function(watercraft)
 end)
 
 function deleteCar( entity )
+	TriggerEvent('persistent-vehicles/forget-vehicle', entity)
     Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( entity ) )
 end
 

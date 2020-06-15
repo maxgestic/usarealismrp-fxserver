@@ -302,6 +302,7 @@ function SpawnTaxi()
 			Wait(100)
 		end
 		JOB.taxi = CreateVehicle(numberHash, closest_location.spawn.x, closest_location.spawn.y, closest_location.spawn.z, closest_location.spawn.heading, true, false)
+		TriggerEvent('persistent-vehicles/register-vehicle', JOB.taxi)
 		SetVehicleOnGroundProperly(JOB.taxi)
 		SetVehRadioStation(JOB.taxi, "OFF")
 		SetEntityAsMissionEntity(JOB.taxi, true, true)
@@ -355,6 +356,7 @@ end
 
 -- Delete car function borrowed frtom Mr.Scammer's model blacklist, thanks to him!
 function DelVehicle(entity)
+	TriggerEvent('persistent-vehicles/forget-vehicle', entity)
     Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( entity ) )
 end
 
