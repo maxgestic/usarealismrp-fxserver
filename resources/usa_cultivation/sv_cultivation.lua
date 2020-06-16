@@ -125,18 +125,24 @@ end, {
 -- Stage / Food Level / Water Level Updates --
 Citizen.CreateThread(function()
     while true do
+        local numStageUpdates = 0
+        local numSustenanceUpdates = 0
         for i = 1, #PLANTED do
             if PLANTED[i] then
                 PLANTED[i], didStageUpdate, didSustenanceUpdate = PlantManager.tick(PLANTED[i])
                 if didStageUpdate then
-                    print("did stage update! new stage: " .. PLANTED[i].stage.name)
                     TriggerClientEvent("cultivation:updatePlantStage", -1, i, PLANTED[i].stage) -- advance to next stage (if there is a next stage)
+                    numStageUpdates = numStageUpdates + 1
                 end
                 if didSustenanceUpdate then
                     TriggerClientEvent("cultivation:updateSustenance", -1, i, PLANTED[i].foodLevel, PLANTED[i].waterLevel, (PLANTED[i].isDead or false))
+                    numSustenanceUpdates = numSustenanceUpdates + 1
                 end
             end
+            Wait(20)
         end
+        print("[cultivation]: done doing stage check, # of stage client updates: " .. numStageUpdates)
+        print("[cultivation]: done doing stage check, # of sustenance client updates: " .. numSustenanceUpdates)
         Wait(STAGE_CHECK_INTERVAL_MINUTES * 60 * 1000)
     end
 end)
