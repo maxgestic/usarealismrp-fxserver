@@ -141,18 +141,25 @@ Citizen.CreateThread(function()
     end
 end)
 
-function saveCallback(ok)
+function saveCallback(doc, err)
     -- nothing for now
 end
 
 Citizen.CreateThread(function()
     TriggerEvent("es:exposeDBFunctions", function(db)
         while true do
+            local deadCount = 0
             for i = 1, #PLANTED do
                 local plant = PLANTED[i]
-                db.updateDocument("cultivation", plant._id, { foodLevel = plant.foodLevel, waterLevel = plant.waterLevel, stage = plant.stage, isDead = plant.isDead }, saveCallback)
-                Wait(300)
+                if not plant.isDead then
+                    db.updateDocument("cultivation", plant._id, { foodLevel = plant.foodLevel, waterLevel = plant.waterLevel, stage = plant.stage, isDead = plant.isDead }, saveCallback)
+                    Wait(300)
+                else 
+                    deadCount = deadCount + 1
+                end
             end
+            print("[cultivation] done saving plants, # of alive: " .. (#PLANTED - deadCount))
+            print("[cultivation] done saving plants, # of dead: " .. deadCount)
             Wait(SAVE_INTERVAL_MINUTES * 60 * 1000)
         end
     end)
