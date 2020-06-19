@@ -610,7 +610,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 					}
 				}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 			-- update db
-			GetDoc.createDocument("bans",  {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+			GetDoc.createDocument("bans",  {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date("!%Y-%m-%dT%TZ", os.time())}, function()
 				RconPrint("player banned!")
 				DropPlayer(targetPlayer, "Banned: " .. reason)
 			end)
@@ -641,7 +641,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
 			sendMessageToModsAndAdmins(0, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ").")
 			-- update db --
-			GetDoc.createDocument("bans",  {char_name = "?", name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+			GetDoc.createDocument("bans",  {char_name = "?", name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date("!%Y-%m-%dT%TZ", os.time())}, function()
 				RconPrint("player banned!")
 				-- send discord message --
 				local desc = "\n**Name:** " .. targetPlayerName
@@ -693,7 +693,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 			--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ")")
 			sendMessageToModsAndAdmins(0, targetPlayerName .. " has been ^1banned^0 (" .. reason .. ").")
 			-- update db --
-			GetDoc.createDocument("bans",  {time = os.time(), duration = time, char_name = "?", name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+			GetDoc.createDocument("bans",  {time = os.time(), duration = time, char_name = "?", name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date("!%Y-%m-%dT%TZ", os.time())}, function()
 				RconPrint("player banned!")
 				-- send discord message --
 				local desc = "\n**Name:** " .. targetPlayerName
@@ -979,7 +979,7 @@ TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, char)
 				}
 			}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 		-- update db
-		GetDoc.createDocument("bans",  {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+		GetDoc.createDocument("bans",  {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date("!%Y-%m-%dT%TZ", os.time())}, function()
 			print("player banned!")
 			-- drop player from session
 			--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
@@ -1033,7 +1033,7 @@ function BanPlayer(targetSrc, reason)
 				}
 			}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 		-- update db
-		GetDoc.createDocument("bans",  {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = "anticheese", bannerId = -1, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+		GetDoc.createDocument("bans",  {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = "anticheese", bannerId = -1, timestamp = os.date("!%Y-%m-%dT%TZ", os.time())}, function()
 			print("player banned!")
 			DropPlayer(targetPlayer, "Banned: " .. reason .. " -- You can file an appeal at https://usarrp.net")
 		end)
@@ -1091,7 +1091,7 @@ TriggerEvent('es:addGroupCommand', 'tempban', "mod", function(source, args, char
 				}
 			}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 		-- update db
-		GetDoc.createDocument("bans", {time = os.time(), duration = time, char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())}, function()
+		GetDoc.createDocument("bans", {time = os.time(), duration = time, char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date("!%Y-%m-%dT%TZ", os.time())}, function()
 			print("player banned!")
 			-- drop player from session
 			--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
