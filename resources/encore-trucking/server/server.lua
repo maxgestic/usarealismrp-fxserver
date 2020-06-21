@@ -42,7 +42,7 @@ RegisterServerEvent('encore_trucking:loadDelivered')
 AddEventHandler('encore_trucking:loadDelivered', function()
 	local playerId = source
 	local totalRouteDistance = TRUCKERS[playerId].distanceToPickup + TRUCKERS[playerId].distanceToDelivery
-	local payout   = math.floor(totalRouteDistance * Config.PayPerMeter)
+	local payout   = math.floor(totalRouteDistance * Config.PayPerMeter) + math.random(0, 200)
 
 	addMoney(playerId, payout)
 
