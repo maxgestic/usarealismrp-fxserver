@@ -66,6 +66,20 @@ AddEventHandler('encore_trucking:rentTruck', function()
 	end
 end)
 
+RegisterNetEvent('encore_trucking:putKeysInTruck')
+AddEventHandler('encore_trucking:putKeysInTruck', function(plate)
+	local keys = {
+		name = "Key -- " .. plate,
+		quantity = 1,
+		type = "key",
+		owner = "Encore Trucking",
+		make = "Semi",
+		model = "Truck",
+		plate = plate
+	}
+	TriggerEvent("vehicle:storeItem", source, plate, keys, 1, 0, function(success, inv) end)
+end)
+
 RegisterNetEvent('encore_trucking:returnTruck')
 AddEventHandler('encore_trucking:returnTruck', function()
 	local playerId = source

@@ -22,8 +22,9 @@ EncoreHelper.SpawnVehicle = function(name, coordinates, heading)
     local vehicle = CreateVehicle(name, coordinates, heading, true, true)
 
     SetEntityAsMissionEntity(vehicle, true, true)
-    SetVehicleOnGroundProperly(vehicle)
-    SetModelAsNoLongerNeeded(name)
+	SetVehicleOnGroundProperly(vehicle)
+	SetVehicleEngineOn(vehicle, false, true, true)
+	SetModelAsNoLongerNeeded(name)
 
     return vehicle
 end

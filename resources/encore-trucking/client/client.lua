@@ -107,6 +107,7 @@ function deliveringThread(playerId, playerCoordinates)
 		if trailerId and (not DoesEntityExist(trailerId) or not IsEntityAttachedToEntity(trailerId, truckId)) then
 			if DoesEntityExist(trailerId) then
 				DeleteVehicle(trailerId)
+				trailerId = nil
 			end
 
 			RemoveBlip(routeBlip)
@@ -180,7 +181,7 @@ function assignTask()
 	totalRouteDistance  = distanceToPickup + distanceToDelivery
 	lastDropCoordinates = currentDestination
 
-	EncoreHelper.ShowNotification('Head to the ~y~pickup~s~ on your GPS.')
+	EncoreHelper.ShowNotification('Head to the ~y~pickup~s~ on your GPS. The keys are in the truck!')
 
 	jobStatus = CONST_PICKINGUP
 end
@@ -193,26 +194,20 @@ RegisterNetEvent('encore_trucking:startJob')
 AddEventHandler('encore_trucking:startJob', function()
 	local playerId = PlayerPedId()
 
+	if truckId then
+		if DoesEntityExist(truckId) then
+			DeleteVehicle(truckId)
+		end
+	end
+
 	-- spawn semi truck
-	truckId = EncoreHelper.SpawnVehicle(Config.TruckModel, Config.JobStart.Coordinates, Config.JobStart.Heading)
+	truckId = EncoreHelper.SpawnVehicle(Config.TruckModel, Config.JobStart.VehicleSpawn.Coordinates, Config.JobStart.VehicleSpawn.Heading)
 
 	-- give keys
 	local vehPlate = GetVehicleNumberPlateText(truckId)
-	local keys = {
-		name = "Key -- " .. vehPlate,
-		quantity = 1,
-		type = "key",
-		owner = "Encore Trucking",
-		make = "Semi",
-		model = "Truck",
-		plate = vehPlate
-	}
-	TriggerServerEvent("garage:giveKey", keys)
+	TriggerServerEvent("encore_trucking:putKeysInTruck", vehPlate)
 
 	-- other stuff
-	SetPedIntoVehicle(playerId, truckId, -1)
-
 	lastDropCoordinates = Config.JobStart.Coordinates
-
 	jobStatus = CONST_WAITINGFORTASK
 end)
