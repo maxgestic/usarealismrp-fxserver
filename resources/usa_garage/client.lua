@@ -45,7 +45,9 @@ locations = {
 	-- Boat Dock
 	{ ['x'] = -725.25, ['y'] = -1409.93, ['z'] = 5.0, ['noBlip'] = false},
 	--Boat Dock Paleto
-	{ ['x'] = -202.36, ['y'] = 6567.08, ['z'] = 10.96, ['noBlip'] = false}
+	{ ['x'] = -202.36, ['y'] = 6567.08, ['z'] = 10.96, ['noBlip'] = false},
+	-- trucking job garage, parking lot
+	{ ['x'] = 1156.6257324219, ['y'] = -3132.2739257813, ['z'] = 5.8998193740845, ['noBlip'] = true }
 }
 
 local VEHICLE_DAMAGES = {}
@@ -59,7 +61,6 @@ Citizen.CreateThread(function()
 					SetBlipSprite(info.blip, 357)
 					SetBlipDisplay(info.blip, 4)
 					SetBlipScale(info.blip, info['blipScale'] or 0.7)
-					SetBlipColour(info.blip, 4)
 					SetBlipAsShortRange(info.blip, true)
 					SetBlipColour(info.blip, 18)
 					BeginTextCommandSetBlipName("STRING")
@@ -75,18 +76,22 @@ Citizen.CreateThread(function()
 		Wait(0)
 		local ped = GetPlayerPed(-1)
 	    for _, info in pairs(locations) do
-	    	DrawText3D(info['x'], info['y'], info['z'], 10, '[E] - Garage')
-			if IsControlJustPressed(0, 86) and Vdist(GetEntityCoords(ped), info['x'], info['y'], info['z']) < 2 then
-				Citizen.Wait(50)
-				if IsPedInAnyVehicle(ped, true) then
-					local handle = GetVehiclePedIsIn(ped, false)
-					local numberPlateText = GetVehicleNumberPlateText(handle)
-					TriggerServerEvent("garage:storeVehicle", handle, numberPlateText, info["jobs"])
-				else
-					--TriggerServerEvent("garage:checkVehicleStatus")
-					closest_shop = info
-					TriggerServerEvent("garage:openMenu", info["jobs"])
-					--Citizen.Wait(60000)
+			local dist = Vdist(GetEntityCoords(ped), info['x'], info['y'], info['z'])
+			if dist < 70 then
+				DrawText3D(info['x'], info['y'], info['z'], 10, '[E] - Garage')
+				DrawMarker(27, vector3(info['x'], info['y'], info['z'] - 0.98), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, vector3(4.0, 4.0, 3.0),  118, 137, 122, 150, false, true, 2, false, nil, nil, false)
+				if IsControlJustPressed(0, 86) and dist < 2 then
+					Citizen.Wait(50)
+					if IsPedInAnyVehicle(ped, true) then
+						local handle = GetVehiclePedIsIn(ped, false)
+						local numberPlateText = GetVehicleNumberPlateText(handle)
+						TriggerServerEvent("garage:storeVehicle", handle, numberPlateText, info["jobs"])
+					else
+						--TriggerServerEvent("garage:checkVehicleStatus")
+						closest_shop = info
+						TriggerServerEvent("garage:openMenu", info["jobs"])
+						--Citizen.Wait(60000)
+					end
 				end
 			end
 		end
