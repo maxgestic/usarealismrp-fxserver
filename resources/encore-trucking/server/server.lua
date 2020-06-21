@@ -38,7 +38,7 @@ end
 -- Events
 --
 
-RegisterNetEvent('encore_trucking:loadDelivered')
+RegisterServerEvent('encore_trucking:loadDelivered')
 AddEventHandler('encore_trucking:loadDelivered', function()
 	local playerId = source
 	local totalRouteDistance = TRUCKERS[playerId].distanceToPickup + TRUCKERS[playerId].distanceToDelivery
@@ -49,7 +49,7 @@ AddEventHandler('encore_trucking:loadDelivered', function()
 	TriggerClientEvent('encore_trucking:helper:showNotification', playerId, 'Received ~g~$' .. payout .. '~s~ commission from trucking.')
 end)
 
-RegisterNetEvent('encore_trucking:rentTruck')
+RegisterServerEvent('encore_trucking:rentTruck')
 AddEventHandler('encore_trucking:rentTruck', function()
 	local playerId = source
 
@@ -70,7 +70,7 @@ AddEventHandler('encore_trucking:rentTruck', function()
 	end
 end)
 
-RegisterNetEvent('encore_trucking:registerTrucker')
+RegisterServerEvent('encore_trucking:registerTrucker')
 AddEventHandler('encore_trucking:registerTrucker', function(distanceToPickup, distanceToDelivery)
 	TRUCKERS[source] = {
 		distanceToPickup = distanceToPickup,
@@ -78,7 +78,7 @@ AddEventHandler('encore_trucking:registerTrucker', function(distanceToPickup, di
 	}
 end)
 
-RegisterNetEvent('encore_trucking:putKeysInTruck')
+RegisterServerEvent('encore_trucking:putKeysInTruck')
 AddEventHandler('encore_trucking:putKeysInTruck', function(plate)
 	local keys = {
 		name = "Key -- " .. plate,
@@ -92,7 +92,7 @@ AddEventHandler('encore_trucking:putKeysInTruck', function(plate)
 	TriggerEvent("vehicle:storeItem", source, plate, keys, 1, 0, function(success, inv) end)
 end)
 
-RegisterNetEvent('encore_trucking:returnTruck')
+RegisterServerEvent('encore_trucking:returnTruck')
 AddEventHandler('encore_trucking:returnTruck', function()
 	local playerId = source
 
