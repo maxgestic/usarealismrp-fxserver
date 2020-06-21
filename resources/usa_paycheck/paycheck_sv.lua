@@ -86,13 +86,13 @@ function DepositPayCheck(char)
             end)
         end)
     elseif job == "lawyer" then
-        paycheckAmount = 500
+        paycheckAmount = 650
     elseif job == "doctor" then
-        paycheckAmount = 700
+        paycheckAmount = 875
     elseif job == "da" then
         paycheckAmount = 550
     elseif job == 'BurgerShotEmployee' then
-        paycheckAmount = 850
+        paycheckAmount = 800
     else
         paycheckAmount = 25 -- welfare amount (no job)
         isWelfare = true
