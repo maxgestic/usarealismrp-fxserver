@@ -92,6 +92,7 @@ function spawnCart()
 		Citizen.Wait(100)
 	end
 	local spawned_car = CreateVehicle(vehicle, -1332.7823486328,128.18229675293,56.032329559326, 180, true, false)
+	TriggerEvent('persistent-vehicles/register-vehicle', spawned_car)
 	SetVehicleOnGroundProperly(spawned_car)
 	SetPedIntoVehicle(GetPlayerPed(-1), spawned_car, - 1)
 	SetModelAsNoLongerNeeded(vehicle)
@@ -157,6 +158,7 @@ function startGolf()
 				end
 			end
 		end
+		TriggerEvent('persistent-vehicles/forget-vehicle', spawned_car)
 		Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(spawned_car))
 	end)
 end

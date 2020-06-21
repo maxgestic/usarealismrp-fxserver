@@ -154,6 +154,7 @@ AddEventHandler("vehShop:spawnPlayersVehicle", function(hash, plate)
 		-- Model loaded, continue
 		-- Spawn the vehicle at the gas station car dealership in paleto and assign the vehicle handle to 'vehicle'
 		local vehicle = CreateVehicle(numberHash, menu_data.closest.vehspawn_x, menu_data.closest.vehspawn_y, menu_data.closest.vehspawn_z, menu_data.closest.vehspawn_heading, true, false)
+		TriggerEvent('persistent-vehicles/register-vehicle', vehicle)
 		SetVehicleNumberPlateText(vehicle, plate)
 		SetVehicleExplodesOnHighExplosionDamage(vehicle, false)
 		--SetVehicleAsNoLongerNeeded(vehicle)
@@ -236,6 +237,7 @@ function PreviewVehicle(item)
 			end
 			-- Model loaded, continue
 			menu_data.preview.handle = CreateVehicle(numberHash, menu_data.closest.vehspawn_x, menu_data.closest.vehspawn_y, menu_data.closest.vehspawn_z, menu_data.closest.vehspawn_heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
+			TriggerEvent('persistent-vehicles/register-vehicle', menu_data.preview.handle)
 			SetVehicleExplodesOnHighExplosionDamage(menu_data.preview.handle, false)
 			SetVehicleOnGroundProperly(menu_data.preview.handle)
 			SetVehRadioStation(menu_data.preview.handle, "OFF")
@@ -262,6 +264,7 @@ end
 
 function EndPreview()
 	if menu_data.preview.handle then
+		TriggerEvent('persistent-vehicles/forget-vehicle', menu_data.preview.handle)
 	    Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( menu_data.preview.handle ) )
 		menu_data.preview.handle = nil
 		SetEntityCoords(GetPlayerPed(-1), table.unpack(menu_data.preview.start_coords))

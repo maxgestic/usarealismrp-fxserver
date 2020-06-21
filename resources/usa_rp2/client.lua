@@ -986,23 +986,20 @@ local distanceToCheck = 5.0
 -- Add an event handler for the deleteVehicle event.
 -- Gets called when a user types in /impound in chat (see server.lua)
 AddEventHandler( 'impoundVehicle', function()
-    Citizen.Trace("inside of impoundVehicle!")
-    local ped = GetPlayerPed( -1 )
+    local ped = PlayerPedId()
 
-    if ( DoesEntityExist( ped ) and not IsEntityDead( ped ) ) then
+    if DoesEntityExist(ped) and not IsEntityDead(ped) then
         local pos = GetEntityCoords( ped )
-        -- log( "Player is at:\nX: " .. pos.x .. " Y: " .. pos.y .. " Z: " .. pos.z )
-        -- log( "Found vehicle?: " .. tostring( DoesEntityExist( vehicle ) ) )
 
-        if ( IsPedSittingInAnyVehicle( ped ) ) then
-            local vehicle = GetVehiclePedIsIn( ped, false )
-            Citizen.Trace("vehicle = " .. vehicle)
+        if IsPedSittingInAnyVehicle( ped ) then
+            local vehicle = GetVehiclePedIsIn(ped, false)
             local plate = GetVehicleNumberPlateText(vehicle, false)
-            Citizen.Trace("plate = " .. plate)
 
-            if ( GetPedInVehicleSeat( vehicle, -1 ) == ped ) then
+            if GetPedInVehicleSeat( vehicle, -1 ) == ped then
                 TriggerServerEvent("impound:impoundVehicle", vehicle, plate)
                 SetEntityAsMissionEntity( vehicle, true, true )
+                TriggerEvent('persistent-vehicles/forget-vehicle', vehicle)
+                Wait(2000)
                 deleteCar( vehicle )
                 ShowNotification( "Vehicle impounded." )
             else
@@ -1014,10 +1011,11 @@ AddEventHandler( 'impoundVehicle', function()
             local vehicle = GetVehicleInDirection( playerPos, inFrontOfPlayer )
             local plate = GetVehicleNumberPlateText(vehicle, false)
 
-            if ( DoesEntityExist( vehicle ) ) then
-                -- log( "Distance between ped and vehicle: " .. tostring( GetDistanceBetween( ped, vehicle ) ) )
+            if DoesEntityExist( vehicle ) then
                 TriggerServerEvent("impound:impoundVehicle", vehicle, plate)
                 SetEntityAsMissionEntity( vehicle, true, true )
+                TriggerEvent('persistent-vehicles/forget-vehicle', vehicle)
+                Wait(2000)
                 deleteCar( vehicle )
                 ShowNotification( "Vehicle impounded." )
             else

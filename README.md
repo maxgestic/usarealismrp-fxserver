@@ -12,6 +12,10 @@ To get started with your own testing environment:
     * Set the variable `ip` to your couchDB IP
     * Set the variable `port` your couchDB port
     * Set your base64 encoded credentials to the variable `auth` as a string
+    * Create three exports in the file to return the variables set above:
+		- ``getIP``
+		- ``getPort``
+		- ``getAuth``
 3) Create the file `server_internal.cfg` in the project root directory
     * write `sv_hostname <server name>`, replacing `<server name>` with a name of your choice
     * write `sv_licenseKey <license key>`, replacing `<license key>` with a [FiveM license key](https://keymaster.fivem.net/)

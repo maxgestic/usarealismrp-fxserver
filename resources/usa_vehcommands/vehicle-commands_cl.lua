@@ -10,6 +10,8 @@ AddEventHandler("vehicleCommands:spawnVehicle", function(modelName, userJob)
 	local playerHeading = GetEntityHeading(playerPed)
 	local vehicle = CreateVehicle(vehicleHash, playerCoords.x, playerCoords.y + 4.5, playerCoords.z, playerHeading, true, false)
 
+	TriggerEvent('persistent-vehicles/register-vehicle', vehicle)
+
 	SetEntityAsMissionEntity(vehicle, true, true)
 	SetVehicleHasBeenOwnedByPlayer(vehicle, true)
 	SetVehicleExplodesOnHighExplosionDamage(vehicle, false)
