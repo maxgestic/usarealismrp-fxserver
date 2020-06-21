@@ -5,7 +5,6 @@ local currentDestination    = nil
 local routeBlip             = nil
 local trailerId             = nil
 local lastDropCoordinates   = nil
-local totalRouteDistance    = nil
 
 --
 -- Threads
@@ -98,7 +97,7 @@ function deliveringThread(playerId, playerCoordinates)
 				EncoreHelper.ShowAlert('Press ~INPUT_PICKUP~ to deliver the load.', true)
 
 				if IsControlJustReleased(0, 38) then
-					TriggerServerEvent('encore_trucking:loadDelivered', totalRouteDistance)
+					TriggerServerEvent('encore_trucking:loadDelivered')
 					cleanupTask()
 				end
 			end
@@ -164,7 +163,6 @@ function abortJob()
 	currentDestination  = nil
 	currentRoute        = nil
 	lastDropCoordinates = nil
-	totalRouteDistance  = nil
 
 	Citizen.Wait(500)
 	DoScreenFadeIn(500)
@@ -178,12 +176,13 @@ function assignTask()
 	local distanceToPickup   = GetDistanceBetweenCoords(lastDropCoordinates, currentRoute.PickupCoordinates)
 	local distanceToDelivery = GetDistanceBetweenCoords(currentRoute.PickupCoordinates, currentDestination)
 
-	totalRouteDistance  = distanceToPickup + distanceToDelivery
 	lastDropCoordinates = currentDestination
 
 	EncoreHelper.ShowNotification('Head to the ~y~pickup~s~ on your GPS. The keys are in the truck!')
 
 	jobStatus = CONST_PICKINGUP
+
+	TriggerServerEvent("encore_trucking:registerTrucker", distanceToPickup, distanceToDelivery)
 end
 
 --
@@ -197,6 +196,7 @@ AddEventHandler('encore_trucking:startJob', function()
 	if truckId then
 		if DoesEntityExist(truckId) then
 			DeleteVehicle(truckId)
+			truckId = nil
 		end
 	end
 

@@ -1,3 +1,6 @@
+-- to prevent "money injection"
+local TRUCKERS = {}
+
 --
 -- Functions
 --
@@ -36,8 +39,9 @@ end
 --
 
 RegisterNetEvent('encore_trucking:loadDelivered')
-AddEventHandler('encore_trucking:loadDelivered', function(totalRouteDistance)
+AddEventHandler('encore_trucking:loadDelivered', function()
 	local playerId = source
+	local totalRouteDistance = TRUCKERS[playerId].distanceToPickup + TRUCKERS[playerId].distanceToDelivery
 	local payout   = math.floor(totalRouteDistance * Config.PayPerMeter)
 
 	addMoney(playerId, payout)
@@ -66,6 +70,14 @@ AddEventHandler('encore_trucking:rentTruck', function()
 	end
 end)
 
+RegisterNetEvent('encore_trucking:registerTrucker')
+AddEventHandler('encore_trucking:registerTrucker', function(distanceToPickup, distanceToDelivery)
+	TRUCKERS[source] = {
+		distanceToPickup = distanceToPickup,
+		distanceToDelivery = distanceToDelivery
+	}
+end)
+
 RegisterNetEvent('encore_trucking:putKeysInTruck')
 AddEventHandler('encore_trucking:putKeysInTruck', function(plate)
 	local keys = {
@@ -87,4 +99,11 @@ AddEventHandler('encore_trucking:returnTruck', function()
 	addMoney(playerId, Config.TruckRentalPrice)
 
 	TriggerClientEvent('encore_trucking:helper:showNotification', playerId, 'Your $' .. Config.TruckRentalPrice .. ' deposit was returned to you.')
+end)
+
+AddEventHandler("playerDropped", function(reason)
+	if TRUCKERS[source] then
+		TRUCKERS[source] = nil
+		print("[encore_trucking] REMOVED TRUCKER!")
+	end
 end)
