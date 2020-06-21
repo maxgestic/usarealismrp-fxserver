@@ -501,9 +501,9 @@ AddEventHandler('rconCommand', function(commandName, args)
 	if commandName == "unban" then
 		-- identifier argument --
 		local identifierToUnban = args[1]
-		RconPrint("\nlooking to unban: " .. identifierToUnban)
+		print("\nlooking to unban: " .. identifierToUnban)
 		-- valid input check --
-		if not identifierToUnban then RconPrint("\nUsage: unban [identifier] ") CancelEvent() return end
+		if not identifierToUnban then print("\nUsage: unban [identifier] ") CancelEvent() return end
 		-- Search for banned doc with that identifier --
 		TriggerEvent('es:exposeDBFunctions', function(couchdb)
 			local query = {
@@ -523,15 +523,15 @@ AddEventHandler('rconCommand', function(commandName, args)
 					--print(doc.name .. " found in DB search!")
 					PerformHttpRequest("http://127.0.0.1:5984/bans/".. doc._id .. "?rev=" .. doc._rev, function(err, rText, headers)
 						--RconPrint("\nrText = " .. rText)
-						RconPrint("\nResponse Code = " .. err)
+						print("\nResponse Code = " .. err)
 						if tonumber(err) == 200 then
-							RconPrint("\nBan successfully removed!")
+							print("\nBan successfully removed!")
 						else
-							RconPrint("\nSomething might have gone wrong, response code was: " .. err)
+							print("\nSomething might have gone wrong, response code was: " .. err)
 						end
 					end, "DELETE", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 				else
-					RconPrint("\nIdentifier NOT found!")
+					print("Ban for " .. identifierToUnban .. " not found!")
 				end
 			end)
 		end)
@@ -786,7 +786,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 		local char = exports["usa-characters"]:GetCharacter(tonumber(args[1]))
 		if char then
 			char.set("money", tonumber(args[2]))
-			RconPrint("Money set")
+			print("Money set")
 			TriggerClientEvent('chatMessage', args[1], "", {255, 255, 255}, "^2^*[SERVER] ^r^0Your money has been set to ^2^*" .. args[2]..'^r^0.')
 			TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Money of ^2'..GetPlayerName(args[1])..' ['..args[1]..'] ^0 has been set to ^2^*'..args[2]..'^r^0 by ^2^*console^r^0.')
 		end
@@ -878,10 +878,10 @@ AddEventHandler('rconCommand', function(commandName, args)
 						doc.name.last = newLast
 						-- update --
 						couchdb.updateDocument("characters", doc._id, {name = doc.name}, function()
-							RconPrint("Name updated in DB!")
+							print("Name updated in DB!")
 						end)
 					else
-						RconPrint("\nError: unable to find person ".. prevFirst .. " " .. (prevMiddle or "") .. " " .. prevLast .. " in database!")
+						print("\nError: unable to find person ".. prevFirst .. " " .. (prevMiddle or "") .. " " .. prevLast .. " in database!")
 					end
 				end)
 			end)
@@ -917,10 +917,10 @@ AddEventHandler('rconCommand', function(commandName, args)
 				couchdb.getSpecificFieldFromDocumentByRows("characters", query, fields, function(doc)
 					if doc then
 						couchdb.updateDocument("characters", doc._id, {dateOfBirth = newDob}, function()
-							RconPrint("DOB updated in DB!")
+							print("DOB updated in DB!")
 						end)
 					else
-						RconPrint("\nError: unable to find person ".. prevFirst .. " " .. (prevMiddle or "") .. " " .. prevLast .. " in database!")
+						print("\nError: unable to find person ".. prevFirst .. " " .. (prevMiddle or "") .. " " .. prevLast .. " in database!")
 					end
 				end)
 			end)
