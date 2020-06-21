@@ -153,6 +153,8 @@ AddEventHandler("character:setCharacter", function(appearance, weapons)
 		end
 		-- spawn --
 		SpawnCharacter(data)
+		-- rules accepted check --
+		TriggerServerEvent("info:acceptedRulesCheck")
 	end)
 end)
 
@@ -258,7 +260,7 @@ function SpawnCharacter()
 	RenderScriptCams(false, false, camera, 1, 0)
 	DestroyCam(camera, false)
 	if not IsPlayerSwitchInProgress() then
-  	SwitchOutPlayer(ped, 0, 1)
+		SwitchOutPlayer(ped, 0, 1)
 	end
 	if spawn_coords_closed_menu then
 		RequestCollisionAtCoord(spawn_coords_closed_menu.x, spawn_coords_closed_menu.y, spawn_coords_closed_menu.z)
@@ -273,16 +275,16 @@ function SpawnCharacter()
 	end
 	FreezeEntityPosition(ped, false)
 	while GetPlayerSwitchState() ~= 5 do
-  	Wait(0)
-  	ClearScreen()
+		Wait(0)
+		ClearScreen()
 	end
 	DoScreenFadeIn(500)
 	while not IsScreenFadedIn() do
-    Wait(0)
-    ClearScreen()
+		Wait(0)
+		ClearScreen()
 	end
 	WaitForSwitchToComplete(GetPlayerPed(-1))
-  ClearDrawOrigin()
+	ClearDrawOrigin()
 	-- welcome info --
 	TriggerEvent('usa:toggleHUD', true)
 	TriggerEvent("chatMessage", "", { 0, 0, 0 }, "^0Welcome to ^1U^0S^5A ^3REALISM RP^0!")

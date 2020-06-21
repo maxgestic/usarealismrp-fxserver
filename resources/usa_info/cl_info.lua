@@ -47,4 +47,5 @@ end)
 RegisterNUICallback('accept', function(data, cb)
 	TriggerEvent('info:display', false)
 	display = false
+	TriggerServerEvent("info:acceptedRulesConfirm")
 end)
