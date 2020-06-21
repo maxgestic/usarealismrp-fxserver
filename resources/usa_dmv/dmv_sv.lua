@@ -59,3 +59,17 @@ AddEventHandler("dmv:getLicenseStatus", function()
 		TriggerClientEvent("usa:notify", source, "You do not own a Driver's License!")
 	end
 end)
+
+function getLicenseStatus(src)
+	local char = exports["usa-characters"]:GetCharacter(src)
+	local license = char.getItem("Driver's License")
+	if license then
+		if license.status == "suspended" then
+			return "suspended"
+		else
+			return "valid"
+		end
+	else
+		return nil
+	end
+end
