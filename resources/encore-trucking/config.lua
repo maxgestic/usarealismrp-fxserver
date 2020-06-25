@@ -169,5 +169,29 @@ Config.Routes = {
 			vector3(-97.66, 6422.26, 30.43), -- Xero (Postal 911)
 			vector3(-1811.93, 810.2, 137.53), -- Xero (Postal 911)
 		}
-	}
+	},
+	{
+		TrailerModel      = 'trailers',
+		PickupLocations = {
+			{
+				coords = vector3(-2522.6572265625, 2341.6188964844, 33.05989074707),
+				heading = 210.30
+			},
+			{
+				coords = vector3(-2526.716796875, 2341.8117675781, 33.05989074707),
+				heading = 210.30
+			},
+			{
+				coords = vector3(-2530.8544921875, 2341.84375, 33.05989074707),
+				heading = 210.30
+			},
+			{
+				coords = vector3(-2534.4235839844, 2341.5913085938, 33.05989074707),
+				heading = 210.30
+			}
+		},
+		Destinations = {
+			vector3(2825.8896484375, 1672.3699951172, 24.68688583374), -- factory place on east coast
+		}
+	},
 }

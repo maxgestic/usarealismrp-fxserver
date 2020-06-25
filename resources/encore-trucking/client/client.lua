@@ -92,7 +92,13 @@ function pickingUpThread(playerId, playerCoordinates)
 
 		if trailerId then
 			if GetVehicleEngineHealth(trailerId) < 500 or GetVehicleBodyHealth(trailerId) < 500 or not DoesEntityExist(trailerId) then
-				abortJob()
+				abortJob("Trucking route ended! Return your semi truck!")
+			end
+		end
+
+		if truckId then
+			if GetVehicleEngineHealth(truckId) < 100 or GetVehicleBodyHealth(truckId) < 100 or not DoesEntityExist(truckId) then
+				abortJob("Trucking route ended!")
 			end
 		end
 	end
@@ -132,6 +138,12 @@ function deliveringThread(playerId, playerCoordinates)
 
 			jobStatus = CONST_WAITINGFORTASK
 		end
+
+		if truckId then
+			if GetVehicleEngineHealth(truckId) < 100 or GetVehicleBodyHealth(truckId) < 100 or not DoesEntityExist(truckId) then
+				abortJob("Trucking route ended!")
+			end
+		end
 	end
 end
 
@@ -155,7 +167,7 @@ function cleanupTask()
 	jobStatus = CONST_WAITINGFORTASK
 end
 
-function abortJob()
+function abortJob(msg)
 	if routeBlip then
 		RemoveBlip(routeBlip)
 	end
@@ -166,14 +178,18 @@ function abortJob()
 	currentRoute        = nil
 	lastDropCoordinates = nil
 
-	exports.globals:notify("Job ended! Return your semi!")
+	jobStatus = CONST_NOTWORKING
 
-	Wait(90000) -- delay deletion of trailer object for a little
+	exports.globals:notify(msg, "^3INFO: ^0" .. msg)
 
-	if trailerId and DoesEntityExist(trailerId) then
-		DeleteVehicle(trailerId)
-		trailerId		    = nil
-	end
+	Citizen.CreateThread(function()
+		Wait(90000) -- delay deletion of trailer object for a little
+
+		if trailerId and DoesEntityExist(trailerId) then
+			DeleteVehicle(trailerId)
+			trailerId		    = nil
+		end
+	end)
 end
 
 function assignTask()
