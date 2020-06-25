@@ -2,6 +2,7 @@ local truckId      	        = nil
 local jobStatus    		    = CONST_NOTWORKING
 local currentRoute          = nil
 local currentDestination    = nil
+local currentPickup			= nil
 local routeBlip             = nil
 local trailerId             = nil
 local lastDropCoordinates   = nil
@@ -37,10 +38,13 @@ Citizen.CreateThread(function()
 						abortJob()
 					end
 				elseif not IsPedInAnyVehicle(playerId, false) then
-					EncoreHelper.ShowAlert('Press ~INPUT_PICKUP~ to retrieve semi truck for $' .. Config.TruckRentalPrice .. '.', true)
-
-					if IsControlJustReleased(0, 38) then
-						TriggerServerEvent('encore_trucking:rentTruck')
+					if not currentRoute then
+						EncoreHelper.ShowAlert('Press ~INPUT_PICKUP~ to retrieve semi truck for $' .. Config.TruckRentalPrice .. '.', true)
+						if IsControlJustReleased(0, 38) then
+							TriggerServerEvent('encore_trucking:rentTruck')
+						end
+					else 
+						EncoreHelper.ShowAlert('Bring your truck back here when you finish!', true)
 					end
 				end
 			end
@@ -58,9 +62,11 @@ Citizen.CreateThread(function()
 			end
 		
 			-- Abort Hotkey
+			--[[
 			if IsControlJustReleased(0, Config.AbortKey) then
 				abortJob()
 			end
+			--]]
 		end
 
 		if sleep > 0 then
@@ -71,8 +77,8 @@ end)
 
 function pickingUpThread(playerId, playerCoordinates)
 	if currentRoute then
-		if not trailerId and GetDistanceBetweenCoords(playerCoordinates, currentRoute.PickupCoordinates, true) < 100.0 then
-			trailerId = EncoreHelper.SpawnVehicle(currentRoute.TrailerModel, currentRoute.PickupCoordinates, currentRoute.PickupHeading)
+		if not trailerId and GetDistanceBetweenCoords(playerCoordinates, currentPickup.coords, true) < 100.0 then
+			trailerId = EncoreHelper.SpawnVehicle(currentRoute.TrailerModel, currentPickup.coords, currentPickup.heading)
 		end
 
 		if trailerId and IsEntityAttachedToEntity(trailerId, truckId) then
@@ -82,6 +88,12 @@ function pickingUpThread(playerId, playerCoordinates)
 			EncoreHelper.ShowNotification('Take the delivery to the ~y~drop off point~s~.')
 
 			jobStatus = CONST_DELIVERING
+		end
+
+		if trailerId then
+			if GetVehicleEngineHealth(trailerId) < 500 or GetVehicleBodyHealth(trailerId) < 500 or not DoesEntityExist(trailerId) then
+				abortJob()
+			end
 		end
 	end
 end
@@ -112,6 +124,7 @@ function deliveringThread(playerId, playerCoordinates)
 			RemoveBlip(routeBlip)
 
 			currentRoute        = nil
+			currentPickup		= nil
 			currentDestination  = nil
 			lastDropCoordinates = playerCoordinates
 
@@ -136,45 +149,41 @@ function cleanupTask()
 	trailerId          = nil
 	routeBlip          = nil
 	currentDestination = nil
+	currentPickup	   = nil
 	currentRoute       = nil
 
 	jobStatus = CONST_WAITINGFORTASK
 end
 
 function abortJob()
-	DoScreenFadeOut(500)
-	Citizen.Wait(500)
-
-	if truckId and DoesEntityExist(truckId) then
-		DeleteVehicle(truckId)
-	end
-
-	if trailerId and DoesEntityExist(trailerId) then
-		DeleteVehicle(trailerId)
-	end
-
 	if routeBlip then
 		RemoveBlip(routeBlip)
 	end
 
-	truckId  		    = nil
-	trailerId		    = nil
 	routeBlip			= nil
 	currentDestination  = nil
+	currentPickup		= nil
 	currentRoute        = nil
 	lastDropCoordinates = nil
 
-	Citizen.Wait(500)
-	DoScreenFadeIn(500)
+	exports.globals:notify("Job ended! Return your semi!")
+
+	Wait(90000) -- delay deletion of trailer object for a little
+
+	if trailerId and DoesEntityExist(trailerId) then
+		DeleteVehicle(trailerId)
+		trailerId		    = nil
+	end
 end
 
 function assignTask()
 	currentRoute       = Config.Routes[math.random(1, #Config.Routes)]
 	currentDestination = currentRoute.Destinations[math.random(1, #currentRoute.Destinations)]
-	routeBlip          = EncoreHelper.CreateRouteBlip(currentRoute.PickupCoordinates)
+	currentPickup	   = currentRoute.PickupLocations[math.random(1, #currentRoute.PickupLocations)]
+	routeBlip          = EncoreHelper.CreateRouteBlip(currentPickup.coords)
 
-	local distanceToPickup   = GetDistanceBetweenCoords(lastDropCoordinates, currentRoute.PickupCoordinates)
-	local distanceToDelivery = GetDistanceBetweenCoords(currentRoute.PickupCoordinates, currentDestination)
+	local distanceToPickup   = GetDistanceBetweenCoords(lastDropCoordinates, currentPickup.coords)
+	local distanceToDelivery = GetDistanceBetweenCoords(currentPickup.coords, currentDestination)
 
 	lastDropCoordinates = currentDestination
 
