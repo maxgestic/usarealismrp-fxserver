@@ -35,7 +35,12 @@ Citizen.CreateThread(function()
 					if IsControlJustReleased(0, 38) then
 						TriggerServerEvent('encore_trucking:returnTruck')
 
-						abortJob()
+						abortJob("Truck returned!")
+
+						if truckId and DoesEntityExist(truckId) then
+							DeleteVehicle(truckId)
+							truckId = nil
+						end
 					end
 				elseif not IsPedInAnyVehicle(playerId, false) then
 					if not currentRoute then
@@ -79,11 +84,12 @@ function pickingUpThread(playerId, playerCoordinates)
 	if currentRoute then
 		if not trailerId and GetDistanceBetweenCoords(playerCoordinates, currentPickup.coords, true) < 100.0 then
 			trailerId = EncoreHelper.SpawnVehicle(currentRoute.TrailerModel, currentPickup.coords, currentPickup.heading)
+			Wait(1000)
 		end
 
 		if trailerId and IsEntityAttachedToEntity(trailerId, truckId) then
 			RemoveBlip(routeBlip)
-			EncoreHelper.CreateRouteBlip(currentDestination)
+			routeBlip = EncoreHelper.CreateRouteBlip(currentDestination)
 
 			EncoreHelper.ShowNotification('Take the delivery to the ~y~drop off point~s~.')
 
@@ -91,7 +97,7 @@ function pickingUpThread(playerId, playerCoordinates)
 		end
 
 		if trailerId then
-			if GetVehicleEngineHealth(trailerId) < 500 or GetVehicleBodyHealth(trailerId) < 500 or not DoesEntityExist(trailerId) then
+			if GetVehicleEngineHealth(trailerId) < 300 or GetVehicleBodyHealth(trailerId) <= 0 or not DoesEntityExist(trailerId) then
 				abortJob("Trucking route ended! Return your semi truck!")
 			end
 		end
@@ -121,7 +127,7 @@ function deliveringThread(playerId, playerCoordinates)
 			end
 		end
 
-		if trailerId and (not DoesEntityExist(trailerId) or not IsEntityAttachedToEntity(trailerId, truckId)) then
+		if trailerId and (not DoesEntityExist(trailerId) or not IsEntityAttachedToEntity(trailerId, truckId) or Vdist(GetEntityCoords(trailerId), GetEntityCoords(truckId)) > 300) then
 			if DoesEntityExist(trailerId) then
 				DeleteVehicle(trailerId)
 				trailerId = nil
@@ -132,6 +138,7 @@ function deliveringThread(playerId, playerCoordinates)
 			currentRoute        = nil
 			currentPickup		= nil
 			currentDestination  = nil
+			routeBlip			= nil
 			lastDropCoordinates = playerCoordinates
 
 			EncoreHelper.ShowNotification('You lost your load. A new route will be assigned.')

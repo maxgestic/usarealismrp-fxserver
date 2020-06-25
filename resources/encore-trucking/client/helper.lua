@@ -37,8 +37,8 @@ EncoreHelper.CreateBlip = function(coordinates, name, spriteId, colorId, scale)
 	SetBlipScale(blip, scale)
 	SetBlipAsShortRange(blip, true)
 
-	BeginTextCommandSetBlipName('STRING')
-	AddTextComponentSubstringPlayerName(name)
+	BeginTextCommandSetBlipName("STRING")
+	AddTextComponentString(name)
 	EndTextCommandSetBlipName(blip)
 
 	return blip
@@ -51,6 +51,10 @@ EncoreHelper.CreateRouteBlip = function(coordinates)
 	SetBlipColour(blip, 5)
 	SetBlipScale(blip, 0.30)
 	SetBlipRoute(blip,  true)
+
+	BeginTextCommandSetBlipName("STRING")
+	AddTextComponentString("Truck Route")
+	EndTextCommandSetBlipName(blip)
 
 	return blip
 end
