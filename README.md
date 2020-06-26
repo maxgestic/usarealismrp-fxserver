@@ -32,6 +32,12 @@ To get started with your own testing environment:
 		- with resource scrambling: ``/start.sh`` from the ``server-data`` folder
 		- without resource scrambling: ``bash run.sh +exec server-data/server.cfg`` from folder where server .dlls are
 
+**Scrambler Requirements**
+For it to work properly you need to follow these rules:
+	- Use ``__resource.lua`` instead of ``fxmanifest.lua``
+	- No globbing syntax allowed in the ``__resource.lua``
+	- Use ``RegisterServerEvent``, not ``RegisterNetEvent`` in server scripts
+
 **Job Types**
 1. "civ"
 2. "sheriff" (AKA SASP)
