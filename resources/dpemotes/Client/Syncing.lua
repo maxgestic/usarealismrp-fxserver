@@ -8,7 +8,8 @@ local requestedemote = ''
 -- Commands / Events --------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------
 if Config.SharedEmotesEnabled then
-    RegisterCommand('nearby', function(source, args, raw)
+    RegisterNetEvent("dpemotes:nearbyCommand")
+    AddEventHandler("dpemotes:nearbyCommand", function(args)
         if #args > 0 then
             local emotename = string.lower(args[1])
             target, distance = GetClosestPlayer()
@@ -26,7 +27,7 @@ if Config.SharedEmotesEnabled then
         else
           MearbysOnCommand()
         end
-    end, false)
+    end)
 end
 
 RegisterNetEvent("SyncPlayEmote")

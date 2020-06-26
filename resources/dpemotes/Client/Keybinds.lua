@@ -79,7 +79,7 @@ function EmoteBindsStart()
         ..firstToUpper(keyb6).." = '^2"..emob6.."^7'\n")
 end
 
-function EmoteBindStart(source, args, raw)
+function EmoteBindStart(source, args)
     if #args > 0 then
         local key = string.lower(args[1])
         local emote = string.lower(args[2])

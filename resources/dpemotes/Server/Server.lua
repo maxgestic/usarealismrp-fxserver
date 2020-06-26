@@ -14,6 +14,41 @@ AddEventHandler("ServerValidEmote", function(target, requestedemote, otheremote)
 	TriggerClientEvent("SyncPlayEmoteSource", target, requestedemote)
 end)
 
+TriggerEvent('es:addCommand', 'e', function(source, args, user)
+	table.remove(args, 1)
+	TriggerClientEvent("dpemotes:command", source, 'e', source, args)
+end, { help = "List emotes" })
+
+TriggerEvent('es:addCommand', 'emote', function(source, args, user)
+	table.remove(args, 1)
+	TriggerClientEvent("dpemotes:command", source, 'emote', source, args)
+end, { help = "List emotes" })
+
+TriggerEvent('es:addCommand', 'emotes', function(source, args, user)
+	table.remove(args, 1)
+	TriggerClientEvent("dpemotes:command", source, 'emotes', source, args)
+end, { help = "List emotes" })
+
+TriggerEvent('es:addCommand', 'emotemenu', function(source, args, user)
+	table.remove(args, 1)
+	TriggerClientEvent("dpemotes:command", source, 'emotemenu', source, args)
+end, { help = "Open emote menu" })
+
+TriggerEvent('es:addCommand', 'walk', function(source, args, user)
+	table.remove(args, 1)
+	TriggerClientEvent("dpemotes:command", source, 'walk', source, args)
+end, { help = "Change walk" })
+
+TriggerEvent('es:addCommand', 'walks', function(source, args, user)
+	table.remove(args, 1)
+	TriggerClientEvent("dpemotes:command", source, 'walks', source, args)
+end, { help = "List walks" })
+
+TriggerEvent('es:addCommand', 'nearby', function(source, args, user)
+	table.remove(args, 1)
+	TriggerClientEvent("dpemotes:nearbyCommand", source, args)
+end, { help = "Perform emote with someone nearby!" })
+
 -----------------------------------------------------------------------------------------------------
 -- Keybinding  --------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------------------

@@ -60,16 +60,18 @@ Citizen.CreateThread(function()
     TriggerEvent('chat:addSuggestion', '/walks', 'List available walking styles.')
 end)
 
-RegisterCommand('e', function(source, args, raw) EmoteCommandStart(source, args, raw) end)
-RegisterCommand('emote', function(source, args, raw) EmoteCommandStart(source, args, raw) end)
+--[[
+RegisterCommand('e', function(source, args, raw) EmoteCommandStart(source, args) end)
+RegisterCommand('emote', function(source, args, raw) EmoteCommandStart(source, args) end)
 if Config.SqlKeybinding then
-  RegisterCommand('emotebind', function(source, args, raw) EmoteBindStart(source, args, raw) end)
-  RegisterCommand('emotebinds', function(source, args, raw) EmoteBindsStart(source, args, raw) end)
+  RegisterCommand('emotebind', function(source, args, raw) EmoteBindStart(source, args) end)
+  RegisterCommand('emotebinds', function(source, args, raw) EmoteBindsStart() end)
 end
 RegisterCommand('emotemenu', function(source, args, raw) OpenEmoteMenu() end)
 RegisterCommand('emotes', function(source, args, raw) EmotesOnCommand() end)
-RegisterCommand('walk', function(source, args, raw) WalkCommandStart(source, args, raw) end)
+RegisterCommand('walk', function(source, args, raw) WalkCommandStart(source, args) end)
 RegisterCommand('walks', function(source, args, raw) WalksOnCommand() end)
+--]]
 
 AddEventHandler('onResourceStop', function(resource)
   if resource == GetCurrentResourceName() then
@@ -192,8 +194,8 @@ function EmoteMenuStart(args, hard)
     end
 end
 
-function EmoteCommandStart(source, args, raw)
-    if #args > 0 then
+function EmoteCommandStart(source, args)
+  if #args > 0 then
     local name = string.lower(args[1])
     if name == "c" then
         if IsInAnimation then
@@ -204,7 +206,8 @@ function EmoteCommandStart(source, args, raw)
       return
     elseif name == "help" then
       EmotesOnCommand()
-    return end
+      return
+    end
 
     if DP.Emotes[name] ~= nil then
       if OnEmotePlay(DP.Emotes[name]) then end return
@@ -215,6 +218,13 @@ function EmoteCommandStart(source, args, raw)
     else
       EmoteChatMessage("'"..name.."' "..Config.Languages[lang]['notvalidemote'].."")
     end
+  else
+    local EmotesCommand = ""
+  for a in pairsByKeys(DP.Emotes) do
+    EmotesCommand = EmotesCommand .. ""..a..", "
+  end
+  EmoteChatMessage(EmotesCommand)
+  EmoteChatMessage(Config.Languages[lang]['emotemenucmd'])
   end
 end
 
@@ -423,3 +433,20 @@ function OnEmotePlay(EmoteName)
   end
   return true
 end
+
+-----------------------------------------------------------------------------------------------------
+-- handle commands from server ----------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------
+local COMMANDS = {
+  e = function(src, args) EmoteCommandStart(src, args) end,
+  emote = function(src, args) EmoteCommandStart(src, args) end,
+  emotemenu = function(src, args)  OpenEmoteMenu(src, args) end,
+  emotes = function(src, args) EmotesOnCommand(src, args) end,
+  walk = function(src, args) WalkCommandStart(src, args) end,
+  walks = function(src, args) WalksOnCommand(src, args) end
+}
+
+RegisterNetEvent("dpemotes:command")
+AddEventHandler("dpemotes:command", function(cmd, src, args)
+  COMMANDS[cmd](src, args)
+end)
