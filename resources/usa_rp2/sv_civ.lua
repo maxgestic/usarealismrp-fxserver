@@ -222,6 +222,7 @@ local walkstyles = {
 ----------------------------
 -- Change your walk style --
 ----------------------------
+--[[
 TriggerEvent('es:addCommand', 'walkstyle', function(source, args, char, location)
 	local usource = source
 	local isSignedInWithFiveM = CanPlayerStartCommerceSession(usource)
@@ -267,6 +268,7 @@ end, {
 		{ name = "style name", help = "Options: 1 - " .. #walkstyles .. ", do /walkstyle for list" }
 	}
 })
+--]]
 
 RegisterServerEvent("usa:requestWalkstyleChange")
 AddEventHandler("usa:requestWalkstyleChange", function(style_number)
@@ -280,7 +282,8 @@ AddEventHandler("usa:requestWalkstyleChange", function(style_number)
 	end
 	if style_number ~= 0 then
 		if isSignedInWithFiveM then
-			if walkstyles[style_number].premium and not DoesPlayerOwnSku(usource, 16) then 
+			local user = exports["essentialmode"]:getPlayerFromId(usource)
+			if walkstyles[style_number].premium and not DoesPlayerOwnSku(usource, 16) and user.getGroup() == "user" then 
 				TriggerClientEvent("usa:notify", usource, "You've discovered a premium walkstyle!", "^0You've discovered a premium feature! Type ^3/store^0 to purchase that walkstyle!")
 				return
 			end
