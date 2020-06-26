@@ -14,6 +14,49 @@ AddEventHandler("ServerValidEmote", function(target, requestedemote, otheremote)
 	TriggerClientEvent("SyncPlayEmoteSource", target, requestedemote)
 end)
 
+local PREMIUM_EMOTES = {
+	["Armored"] = true,
+	["Lemar"] = true,
+	["Lean Forward"] = true,
+	["Fire2"] = true,
+	["Lester"] = true,
+	["Lester2"] = true,
+	["Wide"] = true,
+	["Brave"] = true,
+	["Gangster3"] = true,
+	["Gangster4"] = true,
+	["Jog"] = true,
+	["Franklin"] = true,
+	["Cop"] = true,
+	["Cop2"] = true,
+	["Cop3"] = true
+}
+
+RegisterServerEvent("dpemotes:walkstyleCheck") 
+AddEventHandler("dpemotes:walkstyleCheck", function(name)
+	local usource = source
+	local isSignedInWithFiveM = CanPlayerStartCommerceSession(usource)
+	if isSignedInWithFiveM and not IsPlayerCommerceInfoLoaded(usource) then
+		LoadPlayerCommerceData(usource)
+	end
+	while isSignedInWithFiveM and not IsPlayerCommerceInfoLoaded(usource) do 
+		Wait(100)
+	end
+	if isSignedInWithFiveM then
+		local user = exports["essentialmode"]:getPlayerFromId(usource)
+		if PREMIUM_EMOTES[name] and not DoesPlayerOwnSku(usource, 16) and user.getGroup() == "user" then 
+			TriggerClientEvent("usa:notify", usource, "You've discovered a premium walkstyle!", "^0You've discovered a premium feature! Type ^3/store^0 to purchase more walkstyles!")
+			return
+		end
+	else 
+		if PREMIUM_EMOTES[name] then 
+			TriggerClientEvent("usa:notify", usource, "You've discovered a premium walkstyle!", "^0You've discovered a premium feature! Type ^3/store^0 to purchase more walkstyles!")
+			return
+		end
+	end
+	TriggerClientEvent("dpemotes:continueWalkstyleChange", usource, name)
+end)
+
 TriggerEvent('es:addCommand', 'e', function(source, args, user)
 	table.remove(args, 1)
 	TriggerClientEvent("dpemotes:command", source, 'e', source, args)

@@ -258,7 +258,7 @@ function OpenEmoteMenu()
 end
 
 function firstToUpper(str)
-    return (str:gsub("^%l", string.upper))
+    return str:gsub("(%l)(%w*)", function(a,b) return string.upper(a)..b end)
 end
 
 AddEmoteMenu(mainMenu)

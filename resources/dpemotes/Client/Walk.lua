@@ -21,16 +21,21 @@ function WalksOnCommand(source, args)
 end
 
 function WalkCommandStart(source, args)
-  local name = firstToUpper(args[1])
-
+  local fullName = table.concat(args, " ")
+  local name = firstToUpper(fullName)
   if name == "Reset" then
-      ResetPedMovementClipset(PlayerPedId()) return
-  end
-
-  local name2 = table.unpack(DP.Walks[name])
-  if name2 ~= nil then
-    WalkMenuStart(name2)
+      ResetPedMovementClipset(PlayerPedId())
   else
-    EmoteChatMessage("'"..name.."' is not a valid walk")
+    TriggerServerEvent("dpemotes:walkstyleCheck", name)
   end
 end
+
+RegisterNetEvent("dpemotes:continueWalkstyleChange")
+AddEventHandler("dpemotes:continueWalkstyleChange", function(name)
+  local name2 = table.unpack(DP.Walks[name])
+    if name2 ~= nil then
+      WalkMenuStart(name2)
+    else
+      EmoteChatMessage("'"..name.."' is not a valid walk")
+    end
+end)

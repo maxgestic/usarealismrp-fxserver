@@ -97,6 +97,7 @@ DP.Walks = {
   ["Trash2"] = {"missfbi4prepp1_garbageman"},
   ["Trevor"] = {"move_p_m_two"},
   ["Wide"] = {"move_m@bag"},
+  ["Lean Forward"] = {"move_characters@franklin@fire"}
   -- I cant get these to work for some reason, if anyone knows a fix lmk
   --["Caution"] = {"move_m@caution"},
   --["Chubby"] = {"anim@move_m@chubby@a"},
