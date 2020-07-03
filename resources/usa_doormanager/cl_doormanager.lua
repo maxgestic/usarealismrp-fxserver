@@ -26,25 +26,66 @@ end)
 RegisterNetEvent("doormanager:update")
 AddEventHandler("doormanager:update", function(doors)
   DOORS_TO_MANAGE = doors
+  --SpawnAllPrisonCellDoors(DOORS_TO_MANAGE)
 end)
 
+-- delete horrible sliding cell doors so we can replace with better ones --
+Citizen.CreateThread(function()
+  while true do
+    local me = PlayerPedId()
+    local myCoords = GetEntityCoords(me)
+    for i = 1, #DOORS_TO_MANAGE do
+      local door = DOORS_TO_MANAGE[i]
+      if door.cell_block then
+        if Vdist2(myCoords, door.x, door.y, door.z) < 500.0 then
+          local doorObject = GetClosestObjectOfType(door.x, door.y, door.z, 1.0, door.model, false, false, false)
+          if DoesEntityExist(doorObject) then
+            --print("deleting cell door!")
+            SetEntityAsMissionEntity(doorObject, true, true)
+            DeleteEntity(doorObject)
+          end
+        end
+      end
+    end
+    Wait(4000)
+  end
+end)
+
+-- custom prison cell door lock / unlock system since the default sliding gates are horrible --
+Citizen.CreateThread(function()
+  while true do
+    local me = PlayerPedId()
+    local myCoords = GetEntityCoords(me)
+    for i = 1, #DOORS_TO_MANAGE do
+      local door = DOORS_TO_MANAGE[i]
+      if door.cell_block then
+        if Vdist2(myCoords, door.x, door.y, door.z) < 1000.0 then
+          if door.locked then
+            MakeSureCellDoorPropExists(door)
+          else
+            MakeSureCellDoorPropDeleted(door)
+          end
+        end
+      end
+    end
+    Wait(1500)
+  end
+end)
+
+----------------------------------------------------------------------------------------
+-- LOAD STATE OF DOORS ON FIRST JOIN / DRAW 3D TEXT / LISTEN FOR DOOR TOGGLE KEYPRESS --
+----------------------------------------------------------------------------------------
 Citizen.CreateThread(function()
 	while true do
-		Wait(0)
-		---------------------------------------
-		-- LOAD STATE OF DOORS ON FIRST JOIN --
-		---------------------------------------
+		Wait(1)
 		if FIRST_JOIN then
 			TriggerServerEvent("doormanager:firstJoin")
 			FIRST_JOIN = false
 		end
 
 		playerPed = GetPlayerPed(-1)
-	  playerCoords = GetEntityCoords(playerPed)
-
-      -----------------------------------
-      -- LISTEN FOR DOOR TOGGLE EVENTS --
-      -----------------------------------
+    playerCoords = GetEntityCoords(playerPed)
+    
     if IsControlJustPressed(1, LOCK_KEY) then
       for i = 1, #DOORS_TO_MANAGE do
         local door = DOORS_TO_MANAGE[i]
@@ -56,52 +97,49 @@ Citizen.CreateThread(function()
         end
       end
     end
-		-----------------------------
-		-- CHECK DIST TO EACH DOOR --
-		-----------------------------
+
 		for i = 1, #DOORS_TO_MANAGE do
       local door = DOORS_TO_MANAGE[i]
-			------------------
-			-- draw 3d text --
-			------------------
       doorRadius = 1.0
       drawTextRange = 2.0
       if door.gate then drawTextRange = 7.0 doorRadius = 6.0 end
-			if Vdist(door.x, door.y, door.z, playerCoords.x, playerCoords.y, playerCoords.z) < drawTextRange and not door.static and door.offset and door ~= doorBeingLocked then
-        local doorObject = GetClosestObjectOfType(door.x, door.y, door.z, doorRadius, door.model, false, false, false)
-        local doorCoords = GetEntityCoords(doorObject)
-        if not door.gate then
-					--print("heading: " .. GetEntityHeading(doorObject))
-          local offsetX, offsetY, offsetZ = table.unpack(door.offset)
-					local angle = math.rad(180+GetEntityHeading(doorObject))
-					local x=doorCoords.x+offsetY*math.cos(angle)
-					local y=doorCoords.y+offsetY*math.sin(angle)
-					if door.locked then DrawText3Ds(x+offsetX, y, doorCoords.z+offsetZ, "[E] - Locked") else DrawText3Ds(x+offsetX, y, doorCoords.z+offsetZ, "[E] - Unlocked") end
-        else
-          local offsetX, offsetY, offsetZ = table.unpack(door.offset)
-          local x, y, z = table.unpack(doorCoords)
-          --print(doorCoords)
-          if door.locked and door ~= doorBeingLocked then DrawText3Ds(x+offsetX, y+offsetY, z+offsetZ, "[E] - Locked") else DrawText3Ds(x+offsetX, y+offsetY, z+offsetZ, "[E] - Unlocked") end
+      if Vdist(door.x, door.y, door.z, playerCoords.x, playerCoords.y, playerCoords.z) < drawTextRange then
+        if not door.static and door.offset and door ~= doorBeingLocked then
+          local doorObject = GetClosestObjectOfType(door.x, door.y, door.z, doorRadius, door.model, false, false, false)
+          local doorCoords = GetEntityCoords(doorObject)
+          if not door.gate then
+            --print("heading: " .. GetEntityHeading(doorObject))
+            local offsetX, offsetY, offsetZ = table.unpack(door.offset)
+            local angle = math.rad(180+GetEntityHeading(doorObject))
+            local x=doorCoords.x+offsetY*math.cos(angle)
+            local y=doorCoords.y+offsetY*math.sin(angle)
+            if door.locked then DrawText3Ds(x+offsetX, y, doorCoords.z+offsetZ, "[E] - Locked") else DrawText3Ds(x+offsetX, y, doorCoords.z+offsetZ, "[E] - Unlocked") end
+          else
+            local offsetX, offsetY, offsetZ = table.unpack(door.offset)
+            local x, y, z = table.unpack(doorCoords)
+            --print(doorCoords)
+            if door.locked and door ~= doorBeingLocked then DrawText3Ds(x+offsetX, y+offsetY, z+offsetZ, "[E] - Locked") else DrawText3Ds(x+offsetX, y+offsetY, z+offsetZ, "[E] - Unlocked") end
+          end
+        elseif not door.static and door ~= doorBeingLocked and not door.offset then
+          if door.locked then
+            DrawText3Ds(door.x, door.y, door.z, "[E] - Locked")
+          else
+            DrawText3Ds(door.x, door.y, door.z, "[E] - Unlocked")
+          end
         end
-			elseif Vdist(door.x, door.y, door.z, playerCoords.x, playerCoords.y, playerCoords.z) < drawTextRange and not door.static and door ~= doorBeingLocked and not door.offset then
-				if door.locked then
-					DrawText3Ds(door.x, door.y, door.z, "[E] - Locked")
-				else
-					DrawText3Ds(door.x, door.y, door.z, "[E] - Unlocked")
-				end
-			end
+      end
 		end
 	end
 end)
 
-Citizen.CreateThread(function()
-  while true do
   ------------------------------------------------------------------------------------
   -- MAKE SURE DOORS STAY LOCKED (things like leaving the area would unlock things) --
   ------------------------------------------------------------------------------------
+Citizen.CreateThread(function()
+  while true do
     for i = 1, #DOORS_TO_MANAGE do
       local door = DOORS_TO_MANAGE[i]
-      if door.gate then doorRadius = 6.0 end
+      if not door.cell_block and door.gate then doorRadius = 6.0 end
       --if DOORS_TO_MANAGE[i].coords then
       if Vdist(door.x, door.y, door.z, playerCoords.x, playerCoords.y, playerCoords.z) <= RELOCK_DISTANCE then
         if DEBUG then print("making sure door is locked: " ..door.name) end
@@ -114,23 +152,14 @@ Citizen.CreateThread(function()
           end
 						--]]
           if DEBUG then print("ent: " .. doorObject) end
-          if not door.cell_block then
-            if door.locked then
-              FreezeEntityPosition(doorObject, true)
-              -- print('freezing pos of door: ' ..door.name)
-            end
-          else
-            if door.locked then
-              SetEntityVisible(doorObject, true)
-            else
-              SetEntityVisible(doorObject, false)
-              SetEntityCollision(doorObject, false, true)
-            end
+          if door.locked then
+            FreezeEntityPosition(doorObject, true)
+            -- print('freezing pos of door: ' ..door.name)
           end
         end
       end
     end
-  Wait(5000) -- check approx. every 2 seconds
+  Wait(3000) -- check approx. every X seconds
   end
 end)
 
@@ -139,14 +168,15 @@ AddEventHandler("doormanager:toggleDoorLock", function(index, locked, x, y, z)
   local door = DOORS_TO_MANAGE[index]
   if door then
       if door.gate then doorRadius = 6.0 end
-      local doorObject = GetClosestObjectOfType(x, y, z, doorRadius, door.model, false, false, false)
       --print("mission entity: " .. tostring(IsEntityAMissionEntity(doorObject)))
 			--[[
       if not IsEntityAMissionEntity(doorObject) then
         SetEntityAsMissionEntity(doorObject, true, true)
       end
-			--]]
+      --]]
+      DOORS_TO_MANAGE[index].locked = locked
       if not door.cell_block then
+        local doorObject = GetClosestObjectOfType(x, y, z, doorRadius, door.model, false, false, false)
         if locked and door.offset then
           if not door.gate then
             while math.floor(GetEntityHeading(doorObject)) ~= door.heading do
@@ -183,18 +213,8 @@ AddEventHandler("doormanager:toggleDoorLock", function(index, locked, x, y, z)
         end
         FreezeEntityPosition(doorObject, locked)
       else
-        SetEntityAsMissionEntity(doorObject, true, true)
-        if locked then
-          SetEntityVisible(doorObject, true)
-          SetEntityCollision(doorObject, true, true)
-          --SetEntityRotation(door_entity, 0, 0, 0, 2, true)
-        else
-          SetEntityVisible(doorObject, false)
-          SetEntityCollision(doorObject, false, true)
-          --SetEntityRotation(door_entity, 0, 0, 90, 2, true)
-        end
+        togglePrisonCellDoor(door)
       end
-      DOORS_TO_MANAGE[index].locked = locked
   end
 end)
 
@@ -333,6 +353,67 @@ AddEventHandler('doormanager:advancedSuccess', function()
         end
     end
 end)
+
+function CreateCellDoor(door)
+  local cellDoorHandle = CreateObject(door.customDoor.model, door.customDoor.coords.x, door.customDoor.coords.y, door.customDoor.coords.z, false, false, true)
+  SetEntityCollision(cellDoorHandle, true, true)
+  SetEntityAsMissionEntity(cellDoorHandle, true, true)
+  FreezeEntityPosition(cellDoorHandle, true)
+  SetEntityRotation(cellDoorHandle, 0.0, 0.0, (door.customDoor.rot or -90.0), true)
+end
+
+function togglePrisonCellDoor(door)
+  if door.customDoor then
+    if door.locked then
+      local cellDoor = GetClosestObjectOfType(door.customDoor.coords.x, door.customDoor.coords.y, door.customDoor.coords.z, 1.3, door.customDoor.model, false, false, false)
+      if not DoesEntityExist(cellDoor) then
+        --print("Creating cell door at: " .. door.customDoor.coords.x .. " " .. door.customDoor.coords.y .. " " .. door.customDoor.coords.z)
+        --print("instead of : " .. door.x .. " " .. door.y .. " " .. door.z)
+        -- 1557126584
+        CreateCellDoor(door)
+      end
+    else
+      local cellDoor = GetClosestObjectOfType(door.customDoor.coords.x, door.customDoor.coords.y, door.customDoor.coords.z, 1.3, door.customDoor.model, false, false, false)
+      if DoesEntityExist(cellDoor) then
+        --print("Deleting cell door at: " .. door.customDoor.coords.x .. " " .. door.customDoor.coords.y .. " " .. door.customDoor.coords.z)
+        SetEntityAsMissionEntity(cellDoor, true, true)
+        DeleteEntity(cellDoor)
+      end
+    end
+  end
+end
+
+function MakeSureCellDoorPropExists(door)
+  if door.cell_block and door.customDoor then
+    local cellDoor = GetClosestObjectOfType(door.customDoor.coords.x, door.customDoor.coords.y, door.customDoor.coords.z, 1.0, door.customDoor.model, false, false, false)
+    if not DoesEntityExist(cellDoor) then
+      --print("Creating cell door at: " .. door.customDoor.coords.x .. " " .. door.customDoor.coords.y .. " " .. door.customDoor.coords.z)
+      -- 1557126584
+      CreateCellDoor(door)
+    end
+  else 
+    print("not a cell door or no customDoor specified")
+  end
+end
+
+function MakeSureCellDoorPropDeleted(door)
+  if door.cell_block and door.customDoor then
+    local cellDoor = GetClosestObjectOfType(door.customDoor.coords.x, door.customDoor.coords.y, door.customDoor.coords.z, 1.0, door.customDoor.model, false, false, false)
+    if DoesEntityExist(cellDoor) then
+      --print("Deleting cell door at: " .. door.customDoor.coords.x .. " " .. door.customDoor.coords.y .. " " .. door.customDoor.coords.z)
+      SetEntityAsMissionEntity(cellDoor, true, true)
+      DeleteEntity(cellDoor)
+    end
+  else
+    print("not a cell door or no customDoor specified")
+  end
+end
+
+function SpawnAllPrisonCellDoors(doors)
+  for i = 1, #doors do
+    togglePrisonCellDoor(doors[i])
+  end
+end
 
 function DrawTimer(beginTime, duration, x, y, text)
     if not HasStreamedTextureDictLoaded('timerbars') then
