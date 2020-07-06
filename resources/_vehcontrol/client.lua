@@ -257,13 +257,9 @@ function SetAirManuStateForVeh(veh, newstate)
 			elseif newstate == 2 then
 				snd_airmanu[veh] = GetSoundId()
 				PlaySoundFromEntity(snd_airmanu[veh], "VEHICLES_HORNS_SIREN_1", veh, 0, 0, 0)
-				TriggerEvent("lux_vehcontrol:ELSClick", "Upgrade", 0.7)
-			
 			elseif newstate == 3 then
 				snd_airmanu[veh] = GetSoundId()
 				PlaySoundFromEntity(snd_airmanu[veh], "VEHICLES_HORNS_SIREN_2", veh, 0, 0, 0)
-				TriggerEvent("lux_vehcontrol:ELSClick", "Upgrade", 0.7)
-				
 			end				
 				
 			state_airmanu[veh] = newstate
