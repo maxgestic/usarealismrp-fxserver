@@ -94,26 +94,26 @@ local locations = {
 		ped = {},
 		private = true
 	},
-	["GloryCorp"] = {
-		menu = {
-			x = -1607.23,
-			y = 840.97,
-			z = 186.0
-		},
-		returns = {
-			x = -1598.37,
-			y = 833.64,
-			z = 187.74
-		},
-		spawn = {
-			x = -1596.33,
-			y = 829.51,
-			z = 187.74,
-			heading = 291.91
-		},
-		ped = {},
-		private = true
-	}
+	--["GloryCorp"] = {
+	--	menu = {
+	--		x = -1607.23,
+	--		y = 840.97,
+	--		z = 186.0
+	--	},
+	--	returns = {
+	--		x = -1598.37,
+	--		y = 833.64,
+	--		z = 187.74
+	--	},
+	--	spawn = {
+	--		x = -1596.33,
+	--		y = 829.51,
+	--		z = 187.74,
+	--		heading = 291.91
+	--	},
+	--	ped = {},
+	--	private = true
+	--}
 }
 
 local KEYS = {

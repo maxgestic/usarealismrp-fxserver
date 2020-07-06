@@ -73,6 +73,7 @@ local DOORS = {
 
   {name = "Boilingbroke Cell Block Side 1", x = 1785.1411132813,y = 2571.6547851563, z = 45.797821044922, model = 430324891,  customDoor = { coords = {x = 1786.0126464844, y = 2571.9845214844, z = 44.797840118408}, model = GetHashKey("prop_ld_jail_door"), rot = 0.0}, locked = true, _dist = 2, cell_block = true, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Boilingbroke Cell Block Side 2", x = 1772.9583740234,y = 2571.7209472656, z = 45.797840118408, model = 430324891,  customDoor = { coords = {x = 1773.8320068359, y = 2571.9602050781, z = 44.797840118408}, model = GetHashKey("prop_ld_jail_door"), rot = 0.0}, locked = true, _dist = 2, cell_block = true, allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "Boilingbroke Yard Exercise Gate", x = 1642.32, y = 2540.19, z = 45.56, model = -1934898817, locked = true, _dist = 2, offset={0.00, 1.13, 0.05}, heading=230,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
 
   {name = "Lower Visitation Left", x = 1785.18, y = 2609.17, z = 45.92, model = 262839150, static= true, locked = true, _dist = 2, offset={1.13, 2.20, 0.05}, heading=0,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Lower Visitation Right", x = 1786.5, y = 2609.21, z = 45.92, model = 1645000677, locked = true, _dist = 2, offset={0.00, 1.20, 0.05}, heading=0,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
