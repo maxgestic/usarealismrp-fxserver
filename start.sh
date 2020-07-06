@@ -39,6 +39,8 @@ rm map_luxury-autos -f -r
 rm map_prisonMap1 -f -r
 rm map_prisonMap2 -f -r
 rm map_banktweaks -f -r
+rm map_parsons -f -r
+rm map_prisonGate -f -r
 rm paletopd -f -r
 rm map_splitsides -f -r
 rm policeveh -f -r
