@@ -1,9 +1,10 @@
 --[[
 ---------------------------------------------------
-LUXART VEHICLE CONTROL (FOR FIVEM)
+LUXART VEHICLE CONTROL ELS CLICKS (2.0) (FOR FIVEM)
 ---------------------------------------------------
 Last revision: MAY 01 2017 (VERS. 1.01)
 Coded by Lt.Caine
+ELS Clicks by Faction
 ---------------------------------------------------
 NOTES
 	LVC will automatically apply to all emergency vehicles (vehicle class 18)
@@ -235,7 +236,9 @@ end
 ---------------------------------------------------------------------
 function SetAirManuStateForVeh(veh, newstate)
 	if DoesEntityExist(veh) and not IsEntityDead(veh) then
+	
 		if newstate ~= state_airmanu[veh] then
+
 				
 			if snd_airmanu[veh] ~= nil then
 				StopSound(snd_airmanu[veh])
@@ -254,10 +257,12 @@ function SetAirManuStateForVeh(veh, newstate)
 			elseif newstate == 2 then
 				snd_airmanu[veh] = GetSoundId()
 				PlaySoundFromEntity(snd_airmanu[veh], "VEHICLES_HORNS_SIREN_1", veh, 0, 0, 0)
+				TriggerEvent("lux_vehcontrol:ELSClick", "Upgrade", 0.7)
 			
 			elseif newstate == 3 then
 				snd_airmanu[veh] = GetSoundId()
 				PlaySoundFromEntity(snd_airmanu[veh], "VEHICLES_HORNS_SIREN_2", veh, 0, 0, 0)
+				TriggerEvent("lux_vehcontrol:ELSClick", "Upgrade", 0.7)
 				
 			end				
 				
@@ -280,6 +285,14 @@ AddEventHandler("lvc_TogIndicState_c", function(sender, newstate)
 			end
 		end
 	end
+end)
+
+AddEventHandler('lux_vehcontrol:ELSClick', function(soundFile, soundVolume)
+SendNUIMessage({
+  transactionType     = 'playSound',
+  transactionFile     = soundFile,
+  transactionVolume   = soundVolume
+})
 end)
 
 ---------------------------------------------------------------------
@@ -375,7 +388,6 @@ Citizen.CreateThread(function()
 									count_ind_timer = 0
 									actv_ind_timer = false
 									state_indic[veh] = ind_state_o
-									PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 									TogIndicStateForVeh(veh, state_indic[veh])
 									count_bcast_timer = delay_bcast_timer
 								else
@@ -402,8 +414,6 @@ Citizen.CreateThread(function()
 						DisableControlAction(0, 19, true) -- INPUT_CHARACTER_WHEEL 
 						DisableControlAction(0, 58, true) -- INPUT_THROW_GRENADE 
 						DisableControlAction(0, 80, true) -- INPUT_VEH_CIN_CAM 
-						-- hopefully this fixes the radio issue, i took the script from my previous test server and replaced this one...
-						-- that one seemed to work fine**
 					
 						SetVehicleRadioEnabled(veh, true)
 						
@@ -426,12 +436,10 @@ Citizen.CreateThread(function()
 						end
 						
 						if not IsVehicleSirenOn(veh) and state_lxsiren[veh] > 0 then
-							PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 							SetLxSirenStateForVeh(veh, 0)
 							count_bcast_timer = delay_bcast_timer
 						end
 						if not IsVehicleSirenOn(veh) and state_pwrcall[veh] == true then
-							PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 							TogPowercallStateForVeh(veh, false)
 							count_bcast_timer = delay_bcast_timer
 						end
@@ -442,10 +450,11 @@ Citizen.CreateThread(function()
 							-- TOG DFLT SRN LIGHTS
 							if IsDisabledControlJustReleased(0, 58) or IsDisabledControlJustReleased(0, 246) then
 								if IsVehicleSirenOn(veh) then
-									PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+									TriggerEvent("lux_vehcontrol:ELSClick", "Off", 0.7) -- Off
 									SetVehicleSiren(veh, false)
 								else
-									PlaySoundFrontend(-1, "NAV_LEFT_RIGHT", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+									TriggerEvent("lux_vehcontrol:ELSClick", "On", 0.5) -- On
+									Citizen.Wait(150)
 									SetVehicleSiren(veh, true)
 									count_bcast_timer = delay_bcast_timer
 								end		
@@ -455,12 +464,12 @@ Citizen.CreateThread(function()
 								local cstate = state_lxsiren[veh]
 								if cstate == 0 then
 									if IsVehicleSirenOn(veh) then
-										PlaySoundFrontend(-1, "NAV_LEFT_RIGHT", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1) -- on
+										TriggerEvent("lux_vehcontrol:ELSClick", "Upgrade", 0.7) -- Upgrade
 										SetLxSirenStateForVeh(veh, 1)
 										count_bcast_timer = delay_bcast_timer
 									end
 								else
-									PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1) -- off
+									TriggerEvent("lux_vehcontrol:ELSClick", "Downgrade", 1) -- Downgrade
 									SetLxSirenStateForVeh(veh, 0)
 									count_bcast_timer = delay_bcast_timer
 								end
@@ -468,12 +477,12 @@ Citizen.CreateThread(function()
 							-- POWERCALL
 							elseif IsDisabledControlJustReleased(0, 172) then
 								if state_pwrcall[veh] == true then
-									PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+									TriggerEvent("lux_vehcontrol:ELSClick", "Downgrade", 1) -- Downgrade
 									TogPowercallStateForVeh(veh, false)
 									count_bcast_timer = delay_bcast_timer
 								else
 									if IsVehicleSirenOn(veh) then
-										PlaySoundFrontend(-1, "NAV_LEFT_RIGHT", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
+										TriggerEvent("lux_vehcontrol:ELSClick", "Upgrade", 0.7) -- Upgrade
 										TogPowercallStateForVeh(veh, true)
 										count_bcast_timer = delay_bcast_timer
 									end
@@ -487,7 +496,7 @@ Citizen.CreateThread(function()
 									if IsVehicleSirenOn(veh) then
 										local cstate = state_lxsiren[veh]
 										local nstate = 1
-										PlaySoundFrontend(-1, "NAV_LEFT_RIGHT", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1) -- on
+										TriggerEvent("lux_vehcontrol:ELSClick", "Upgrade", 0.7)
 										if cstate == 1 then
 											nstate = 2
 										elseif cstate == 2 then
@@ -500,7 +509,8 @@ Citizen.CreateThread(function()
 									end
 								end
 							end
-										
+									
+	
 							-- MANU
 							if state_lxsiren[veh] < 1 then
 								if IsDisabledControlPressed(0, 80) or IsDisabledControlPressed(0, 81) then
@@ -514,6 +524,7 @@ Citizen.CreateThread(function()
 							
 							-- HORN
 							if IsDisabledControlPressed(0, 86) then
+							
 								actv_horn = true
 							else
 								actv_horn = false
@@ -524,6 +535,7 @@ Citizen.CreateThread(function()
 						---- ADJUST HORN / MANU STATE ----
 						local hmanu_state_new = 0
 						if actv_horn == true and actv_manu == false then
+						
 							hmanu_state_new = 1
 						elseif actv_horn == false and actv_manu == true then
 							hmanu_state_new = 2
@@ -546,6 +558,9 @@ Citizen.CreateThread(function()
 								end
 							end
 						end
+						
+						
+						
 						if state_airmanu[veh] ~= hmanu_state_new then
 							SetAirManuStateForVeh(veh, hmanu_state_new)
 							count_bcast_timer = delay_bcast_timer
@@ -565,11 +580,9 @@ Citizen.CreateThread(function()
 								if cstate == ind_state_l then
 									state_indic[veh] = ind_state_o
 									actv_ind_timer = false
-									PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 								else
 									state_indic[veh] = ind_state_l
 									actv_ind_timer = true
-									PlaySoundFrontend(-1, "NAV_LEFT_RIGHT", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 								end
 								TogIndicStateForVeh(veh, state_indic[veh])
 								count_ind_timer = 0
@@ -580,11 +593,9 @@ Citizen.CreateThread(function()
 								if cstate == ind_state_r then
 									state_indic[veh] = ind_state_o
 									actv_ind_timer = false
-									PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 								else
 									state_indic[veh] = ind_state_r
 									actv_ind_timer = true
-									PlaySoundFrontend(-1, "NAV_LEFT_RIGHT", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 								end
 								TogIndicStateForVeh(veh, state_indic[veh])
 								count_ind_timer = 0
@@ -595,10 +606,8 @@ Citizen.CreateThread(function()
 									local cstate = state_indic[veh]
 									if cstate == ind_state_h then
 										state_indic[veh] = ind_state_o
-										PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 									else
 										state_indic[veh] = ind_state_h
-										PlaySoundFrontend(-1, "NAV_LEFT_RIGHT", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 									end
 									TogIndicStateForVeh(veh, state_indic[veh])
 									actv_ind_timer = false
