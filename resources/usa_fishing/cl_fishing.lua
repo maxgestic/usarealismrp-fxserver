@@ -75,7 +75,7 @@ AddEventHandler("fishing:startDockFishing", function(spotHeading)
 				Wait(0)
 				DrawTimer(GetGameTimer() - resistance, maxResistance, 1.42, 1.475, 'REELING')
 				if IsControlJustPressed(0, KEYS.E) then
-					resistance = resistance + math.random(10, 70)
+					resistance = resistance + math.random(30, 100)
 					if resistance > maxResistance and fishing then
 						ClearPedTasks(playerPed)
 						DeleteEntity(robObject)
@@ -124,7 +124,7 @@ AddEventHandler("fishing:startSeaFishing", function()
 				Wait(0)
 				DrawTimer(GetGameTimer() - resistance, maxResistance, 1.42, 1.475, 'REELING')
 				if IsControlJustPressed(0, 38) then
-					resistance = resistance + math.random(70, 130)
+					resistance = resistance + math.random(85, 150)
 					if resistance > maxResistance and seaFishing then
 						seaFishing = false
 						ClearPedTasks(playerPed)

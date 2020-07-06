@@ -27,7 +27,7 @@ AddEventHandler('mining:startMining', function()
     while GetGameTimer() - begintime < 15000 do
         exports.globals:DrawTimerBar(begintime, 15000, 1.42, 1.475, 'Mining')
         DisableControlAction(0, 244, true) -- 244 = M key (interaction menu / inventory)
-        DisableControlAction(0, 38, true) -- prevent spam clicking
+        DisableControlAction(0, 86, true) -- prevent spam clicking
         if not IsEntityPlayingAnim(ped, "anim@move_m@trash", "pickup", 3) then
             TaskPlayAnim(ped, "anim@move_m@trash", "pickup", 8.0, 1.0, 15000, 1.0, false, false, false)
         end

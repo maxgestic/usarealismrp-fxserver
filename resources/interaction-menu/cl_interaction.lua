@@ -1503,7 +1503,7 @@ end)
 
 RegisterNetEvent('interaction:tackleMe')
 AddEventHandler('interaction:tackleMe', function(fwdVectorX, fwdVectorY, fwdVectorZ)
-	SetPedToRagdollWithFall(PlayerPedId(), 5500, 5500, 0, fwdVectorX, fwdVectorY, fwdVectorZ, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+	SetPedToRagdollWithFall(PlayerPedId(), 4500, 4500, 0, fwdVectorX, fwdVectorY, fwdVectorZ, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 end)
 
 RegisterNUICallback('performAction', function(data, cb)

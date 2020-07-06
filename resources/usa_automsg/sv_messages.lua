@@ -18,14 +18,14 @@ Citizen.CreateThread(function()
             end
             print('SERVER: Restarting in 10 minutes!')
             sentWarnings.tenMinute = true
-        elseif date.hour == 3 and date.min == 28 and not sentWarnings.twoMinute then
+        elseif date.hour == 3 and date.min == 27 and not sentWarnings.twoMinute then
             print("SERVER: Restarting!")
             for i = 1, 4 do
                 TriggerClientEvent('chatMessage', -1, '^8^*[SERVER] ^rServer is restarting, disconnect now or risk data loss!')
             end
             exports["usa_utils"]:SendPreRestartServerMonitorDiscordMsg()
             sentWarnings.twoMinute = true
-        elseif date.hour == 3 and date.min == 29 then
+        elseif date.hour == 3 and date.min == 28 then
             KickAllPlayers()
         elseif date.hour == 15 and date.min == 20 and not sentWarnings.tenMinute then 
             for i = 1, 3 do
@@ -33,14 +33,14 @@ Citizen.CreateThread(function()
             end
             print('SERVER: Restarting in 10 minutes!')
             sentWarnings.tenMinute = true
-        elseif date.hour == 15 and date.min == 28 and not sentWarnings.twoMinute then 
+        elseif date.hour == 15 and date.min == 27 and not sentWarnings.twoMinute then 
             print("SERVER: Restarting!")
             for i = 1, 4 do
                 TriggerClientEvent('chatMessage', -1, '^8^*[SERVER] ^rServer is restarting, disconnect now or risk data loss!')
             end
             exports["usa_utils"]:SendPreRestartServerMonitorDiscordMsg()
             sentWarnings.twoMinute = true
-        elseif date.hour == 15 and date.min == 29 then
+        elseif date.hour == 15 and date.min == 28 then
             KickAllPlayers()
         end
     end

@@ -71,7 +71,6 @@ AddEventHandler("weed:continueProcessing", function()
   RequestAnimDict("timetable@jimmy@ig_1@idle_a")
   while not HasAnimDictLoaded("timetable@jimmy@ig_1@idle_a") do Citizen.Wait(100) end
   TaskPlayAnim(playerPed,"timetable@jimmy@ig_1@idle_a","hydrotropic_bud_or_something", 100.0, 200.0, 0.3, 121, 0.2, 0, 0, 0)
-  TriggerServerEvent("InteractSound_SV:PlayOnSource", "weed-process", 0.105)
   while GetGameTimer() - beginTime < 25000 do
     Citizen.Wait(0)
     if Vdist(GetEntityCoords(playerPed), 1036.35, -3203.71, -38.17) < 5.0 then

@@ -12,13 +12,31 @@ To get started with your own testing environment:
     * Set the variable `ip` to your couchDB IP
     * Set the variable `port` your couchDB port
     * Set your base64 encoded credentials to the variable `auth` as a string
+    * Create three exports in the file to return the variables set above:
+		- ``getIP``
+		- ``getPort``
+		- ``getAuth``
 3) Create the file `server_internal.cfg` in the project root directory
     * write `sv_hostname <server name>`, replacing `<server name>` with a name of your choice
     * write `sv_licenseKey <license key>`, replacing `<license key>` with a [FiveM license key](https://keymaster.fivem.net/)
-4) Create the path `C:/wamp/www/` to house the auto generated chat log file
-    * Temporary step, path should be auto generated
+4) Create path for log file (optional)
+    * We use this to expose a chat log via an HTTP web server, so we provide a path to a file in its public directory
+	* For example: ``C:/wamp/www/log.txt``
 5) Create your database views (see below view definitions)
-6) You can start the server with ``..\run.cmd +exec server.cfg`` from the ``server-data`` folder instead of using the start.bat file to avoid scrambling. Add ``stop usa_utils`` to your ``server_internal.cfg`` as well (so you don't get banned for code injection).
+6) Add ``stop usa_utils`` to your ``server_internal.cfg`` so you don't get banned for code injection when developing.
+7) Start the server.
+	* Windows:
+		- with resource scrambling: ``./start.bat`` from the ``server-data`` folder
+		- without resource scrambling: ``..\run.cmd +exec server.cfg`` from the ``server-data`` folder
+	* Linux:
+		- with resource scrambling: ``/start.sh`` from the ``server-data`` folder
+		- without resource scrambling: ``bash run.sh +exec server-data/server.cfg`` from folder where server .dlls are
+
+**Scrambler Requirements**
+For it to work properly you need to follow these rules:
+	- Use ``__resource.lua`` instead of ``fxmanifest.lua``
+	- No globbing syntax allowed in the ``__resource.lua``
+	- Use ``RegisterServerEvent``, not ``RegisterNetEvent`` in server scripts
 
 **Job Types**
 1. "civ"

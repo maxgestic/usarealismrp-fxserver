@@ -24,7 +24,6 @@ files({
 	'client/html/sounds/atc3.ogg',
     'client/html/sounds/cell-lock.ogg',
     'client/html/sounds/handcuff.ogg',
-    'client/html/sounds/weed-process.ogg',
     'client/html/sounds/trimming.ogg',
     'client/html/sounds/lock.ogg',
     'client/html/sounds/unlock.ogg',

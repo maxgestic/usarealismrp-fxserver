@@ -28,18 +28,6 @@ end
 --     return '0' .. math.random(600000000,699999999)
 -- end
 
-TriggerEvent('es:addGroupCommand', 'phonetest', "admin", function(source, args, char)
-    local char = exports["usa-characters"]:GetCharacter(source)
-    local phone = char.getItem("Cell Phone")
-	if phone then
-		TriggerClientEvent("gcPhone:togglePhone", source)
-	else
-		TriggerClientEvent("usa:notify", source, "You have no cell phone!")
-	end
-end, {
-	help = "Test new phone"
-})
-
 RegisterServerEvent("gcPhone:getPhone")
 AddEventHandler("gcPhone:getPhone", function()
     local char = exports["usa-characters"]:GetCharacter(source)
@@ -345,19 +333,47 @@ end
 
 function setReadMessageNumber(identifier, num)
     getNumberPhone(identifier, function(mePhoneNumber)
-        local query = {
-            ["receiver"] = mePhoneNumber,
-            ["transmitter"] = num
-        }
+        local endpoint = "/phone-messages/_design/messageFilters/_view/getReceivedMessagesByNum"
+        local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
+        PerformHttpRequest(url, function(err, responseText, headers)
+            if responseText then
+                local data = json.decode(responseText)
+                if data.rows then
+                    local msgs = arrayifyDBDocsResponse(data.rows)
+                    for i = 1, #msgs do
+                        if msgs[i].transmitter == num then -- only set messages as read for the person the user clicked on
+                            if msgs[i].isRead == 0 then
+                                msgs[i]._rev = nil -- prevent document conflict
+                                msgs[i].isRead = 1
+                                db.updateDocument("phone-messages", msgs[i]._id, msgs[i], function(doc, err, rText) end)
+                            end
+                        end
+                    end
+                end
+            end
+        end, "POST", json.encode({
+            keys = { mePhoneNumber }
+        }), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
+        --[[
+        -- ! not working for some reason, returning code "0" ??
         db.getDocumentsByRows("phone-messages", query, function(docs)
+            print("docs: " .. type(docs))
             if docs then
+                print("docs existed")
                 for i = 1, #docs do
-                    docs[i]._rev = nil
-                    docs[i].isRead = 1
-                    db.updateDocument("phone-messages", docs[i]._id, docs[i], function(doc, err, rText) end)
+                    if docs[i].isRead == 0 then
+                        print("was not marked as read, setting message with id " .. docs[i]._id .. " as read")
+                        docs[i]._rev = nil
+                        docs[i].isRead = 1
+                        db.updateDocument("phone-messages", docs[i]._id, docs[i], function(doc, err, rText)
+                            print("when setting message as read, err: " .. (err or "NIL"))
+                            print("rText: " .. (rText or "NIL"))
+                        end)
+                    end
                 end
             end
         end)
+        --]]
     end)
 end
 

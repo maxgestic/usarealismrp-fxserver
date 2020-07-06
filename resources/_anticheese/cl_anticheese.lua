@@ -56,7 +56,7 @@ local COORDS_TO_ALLOW_TELEPORTATION_FROM = {
 	{ x = 614.69, y = 2784.20, z = 43.48}, -- cocaine processing exit
 	{ x = 1066.4, y = -3183.47, z = -39.16}, -- weed exit
 	{ x = 2856.12, y = 4458.76, z = 48.5}, -- weed enter
-	{ x = -121.95, y = 1918.01, z = 197.43}, -- meth exit
+	{ x = 996.50, y = -3200.201, z = -36.19}, -- meth exit
 	{ x = 138.18, y = 2295.25, z = 94.09}, -- meth enter
 	{ x = -1569.64, y = -3013.94, z = -74.41 }, -- night club interior
 	{ x = -337.22, y = 207.74, z = 88.57 } -- night club entrance
@@ -134,6 +134,7 @@ local COORDS_THAT_ALLOW_INVISIBILITY = {
 	{x = 1174.823,y = 2637.807, z = 37.045},  -- LSC 4
 	{x = 108.842,y = 6628.447, z = 31.072},  -- LSC 5
 	{x = -212.368,y = -1325.486, z = 30.176},  -- LSC 6
+	{x= 0.0, y= 0.0, z = 1.0} -- ?
 }
 
 local BlacklistedWeapons = { -- weapons that will get people banned
@@ -843,7 +844,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(5000)
 		if not IsEntityVisible(PlayerPedId()) then
 			if not isAtAnLSC() then
-				TriggerServerEvent("AntiCheese:InvisibilityFlag")
+				TriggerServerEvent("AntiCheese:InvisibilityFlag", GetEntityCoords(PlayerPedId()))
 				SetEntityVisible(PlayerPedId(), true, 0)
 			end
 		end

@@ -205,6 +205,7 @@ AddEventHandler("inventory:dropItem", function(name, index, posX, posY, posZ)
 end)
 
 -- /e [emoteName]
+--[[
 TriggerEvent('es:addCommand', 'e', function(source, args, char)
 	if args[2] then
 		table.remove(args, 1)
@@ -218,6 +219,7 @@ end, {
 		{ name = "name", help = "The name of the emote to play" }
 	}
 })
+--]]
 
 function DroppedActionMessage(source, name)
 	-- 1/3 chance to print notification message to all players in the area

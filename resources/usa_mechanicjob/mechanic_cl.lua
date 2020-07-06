@@ -501,6 +501,7 @@ function SpawnHeavyHauler(coords)
 			Citizen.Wait(0)
 		end
 		local vehicle = CreateVehicle(numberHash, coords.x, coords.y, coords.z, coords.heading, true, false)
+		TriggerEvent('persistent-vehicles/register-vehicle', vehicle)
 		local vehPlate = GetVehicleNumberPlateText(vehicle)
 		SetVehicleOnGroundProperly(vehicle)
 		SetVehRadioStation(vehicle, "OFF")
@@ -540,6 +541,7 @@ function SpawnTowFlatbed(coords)
 			Citizen.Wait(0)
 		end
 		local vehicle = CreateVehicle(numberHash, coords.x, coords.y, coords.z, coords.heading, true, false)
+		TriggerEvent('persistent-vehicles/register-vehicle', vehicle)
 		local vehPlate = GetVehicleNumberPlateText(vehicle)
 		SetVehicleOnGroundProperly(vehicle)
 		SetVehRadioStation(vehicle, "OFF")
@@ -578,6 +580,7 @@ end
 
 -- Delete car function borrowed frtom Mr.Scammer's model blacklist, thanks to him!
 function DelVehicle(entity)
+	TriggerEvent('persistent-vehicles/forget-vehicle', entity)
 	Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( entity ) )
 end
 
