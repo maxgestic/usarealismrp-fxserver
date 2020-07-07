@@ -112,13 +112,12 @@ end)
 
 -- Give Cash
 TriggerEvent('es:addCommand', 'givecash', function(source, args, char)
-	print("giving cash")
 	if #args == 3 then
 		local toPlayer = tonumber(args[2])
 		local toChar = exports["usa-characters"]:GetCharacter(toPlayer)
 		if toChar then
 			local to_user_name = toChar.getFullName()
-			local amount = math.ceil(tonumber(args[3]))
+			local amount = math.abs(math.ceil(tonumber(args[3])))
 			if char.get("money") >= amount then
 				TriggerClientEvent('bank:givecash', source, toPlayer, amount, "test", source)
 			else 
@@ -165,6 +164,7 @@ RegisterServerEvent('bank:givecash')
 AddEventHandler('bank:givecash', function(toPlayer, amount)
 	amount = (tonumber(amount) or 0)
 	amount = math.floor(amount)
+	amount = math.abs(amount)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local recipient = exports["usa-characters"]:GetCharacter(toPlayer)
 	if GetPlayerName(toPlayer) then
