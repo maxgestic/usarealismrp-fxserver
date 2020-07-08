@@ -301,7 +301,7 @@ AddEventHandler('doormanager:thermiteDoor', function()
             local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
             TriggerServerEvent("911:JewelleryRobbery", x, y, z, lastStreetNAME)
 
-            if math.random() < 0.4 then
+            if math.random() < 0.30 then
                 StartEntityFire(GetPlayerPed(-1))
             else
                 TriggerServerEvent('doormanager:checkDoorLock', i, door.x, door.y, door.z, true, true)
