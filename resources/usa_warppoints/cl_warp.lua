@@ -1,7 +1,36 @@
 local INTERACTION_KEY = 86 -- "E"
 --GiveWeaponToPed(PlayerPedId(), 171789620, 1000, false, false)
 
+-- enter: x = 1085.9984130859,y = 215.00494384766, z = -49.195377349854
+-- exit: x = 979.99719238281,y = 57.005077362061, z = 116.16428375244
+
 local warp_locations = {
+  ["Casino"] = {
+    entrance = {
+        coords = {928.15985107422, 44.713218688965, 81.095771789551},
+        heading = 73.0
+    },
+    exit = {
+      coords = {1089.9970703125, 207.00463867188, -48.996398925781},
+      heading = 350.0
+    },
+    job_access = "civ",
+    groundMarker = true,
+    skipSound = true
+  },
+  ["Casino - Penthouse"] = {
+    entrance = {
+        coords = {1085.9984130859, 215.00494384766, -49.195377349854},
+        heading = 180.0
+    },
+    exit = {
+      coords = {979.99719238281, 57.005077362061, 116.16428375244},
+      heading = 265.0
+    },
+    job_access = "civ",
+    groundMarker = true,
+    skipSound = true
+  },
   ["Upper Yacht"] = {
     entrance = {
         coords = {-2036.3878173828,-1033.9129638672, 5.8823575973511},
@@ -179,14 +208,21 @@ Citizen.CreateThread(function()
       local _x, _y, _z = table.unpack(value.exit.coords)
       local dist1 = GetDistanceBetweenCoords(x, y, z, entitycoords, true)
       local dist2 = GetDistanceBetweenCoords(_x, _y, _z, entitycoords, true)
+      -- ground marker
+      if value.groundMarker then
+        if dist1 < 50.0 then 
+          DrawMarker(27, x, y, z - 0.9, 0, 0, 0, 0, 0, 0, 0.71, 0.71, 0.71, 255 --[[r]], 150 --[[g]], 30 --[[b]], 90 --[[alpha]], 0, 0, 2, 0, 0, 0, 0)
+        elseif dist2 < 50.0 then
+          DrawMarker(27, _x, _y, _z - 0.9, 0, 0, 0, 0, 0, 0, 0.71, 0.71, 0.71, 60 --[[r]], 150 --[[g]], 30 --[[b]], 90 --[[alpha]], 0, 0, 2, 0, 0, 0, 0)
+        end
+      end
       -- enter/exit
       if dist1 < 1.0 then
         DrawText3D(x, y, z, 4, '[E] - Enter '..key)
         if IsControlPressed(0, INTERACTION_KEY) then
           -- is location access restricted to certain jobs?
           if value.job_access == "civ" then
-            print("job access: " ..value.job_access)
-            DoorTransition(ped, _x, _y, _z, value.exit.heading)
+            DoorTransition(ped, _x, _y, _z, value.exit.heading, value.skipSound)
           else
             --print("job access: " ..locationCoords.job_access)
             TriggerServerEvent("warp:checkJob", value.exit.coords, value.exit.heading, value.job_access)
@@ -195,7 +231,7 @@ Citizen.CreateThread(function()
       elseif dist2 < 1.0 then
         DrawText3D(_x, _y, _z, 4, '[E] - Exit '..key)
         if IsControlPressed(0, INTERACTION_KEY) then
-          DoorTransition(ped, x, y, z, value.entrance.heading)
+          DoorTransition(ped, x, y, z, value.entrance.heading, value.skipSound)
         end
       end
     end
@@ -231,7 +267,7 @@ function PlayDoorAnimation()
     TaskPlayAnim(PlayerPedId(), "anim@mp_player_intmenu@key_fob@", "fob_click", 8.0, 1.0, -1, 48)
 end
 
-function DoorTransition(playerPed, x, y, z, heading)
+function DoorTransition(playerPed, x, y, z, heading, skipSound)
   PlayDoorAnimation()
   DoScreenFadeOut(500)
   Wait(500)
@@ -242,7 +278,9 @@ function DoorTransition(playerPed, x, y, z, heading)
       Citizen.Wait(100)
       SetEntityCoords(playerPed, x, y, z, 1, 0, 0, 1)
   end
-  TriggerServerEvent('InteractSound_SV:PlayOnSource', 'door-shut', 0.5)
+  if not skipSound then
+    TriggerServerEvent('InteractSound_SV:PlayOnSource', 'door-shut', 0.5)
+  end
   Wait(2000)
   DoScreenFadeIn(500)
 end
