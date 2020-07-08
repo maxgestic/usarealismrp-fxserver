@@ -51,6 +51,7 @@ rm usa_customVehicles -f -r
 rm usa_adidas -f -r
 rm usa_levis -f -r
 rm map_mining -f -r
+rm [cassino] -f -r
 cd ..
 
 # avoid scrambling [system]/[builders] resources
