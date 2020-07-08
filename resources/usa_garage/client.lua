@@ -47,7 +47,9 @@ locations = {
 	--Boat Dock Paleto
 	{ ['x'] = -202.36, ['y'] = 6567.08, ['z'] = 10.96, ['noBlip'] = false},
 	-- trucking job garage, parking lot
-	{ ['x'] = 1156.6257324219, ['y'] = -3132.2739257813, ['z'] = 5.8998193740845, ['noBlip'] = true }
+	{ ['x'] = 1156.6257324219, ['y'] = -3132.2739257813, ['z'] = 5.8998193740845, ['noBlip'] = true },
+	-- casino
+	{['x'] = 919.86614990234, ['y'] = 48.851104736328, ['z'] = 80.898368835449, ['noBlip'] = true}
 }
 
 local VEHICLE_DAMAGES = {}
