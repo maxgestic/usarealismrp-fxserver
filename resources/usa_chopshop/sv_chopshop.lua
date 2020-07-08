@@ -18,7 +18,7 @@ AddEventHandler("chopshop:reward", function(veh_name, damage, property)
   char.giveMoney(finalReward)
   TriggerClientEvent("usa:notify", source, "Thanks! Here is $" .. finalReward .. "!", "^0Thanks! Here is $" .. finalReward .. "!")
 
-  if math.random() <= 0.10 then
+  if math.random() <= 0.20 then
     local randomItem = items[math.random(#items)]
     if char.canHoldItem(randomItem) then
       char.giveItem(randomItem)
