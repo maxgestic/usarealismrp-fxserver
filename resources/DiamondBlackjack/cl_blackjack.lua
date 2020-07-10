@@ -3044,6 +3044,44 @@ RegisterCommand("cleantable",function()
 	end	
 end)
 
+local atm = {
+	objectHash = GetHashKey("prop_atm_02"),
+	coords = { x = 1117.9536865234,y = 216.50749816895, z = -49.635108184814 }
+}
+
+function CreateObjectByHash(hash, coords)
+	if type(coords) == "table" then
+		local obj = CreateObject(hash, coords.x, coords.y, coords.z, false, false, true)
+		SetEntityCollision(obj, true, true)
+		SetEntityAsMissionEntity(obj, true, true)
+		FreezeEntityPosition(obj, true)
+		SetEntityRotation(obj, 0.0, 0.0, -37.0, true)
+	end
+end
+
+-- spawn ATM inside when close, delete when far
+Citizen.CreateThread(function()
+	while true do
+		local me = PlayerPedId()
+		local mycoords = GetEntityCoords(me)
+		if atm.coords then
+			if Vdist(atm.coords.x, atm.coords.y, atm.coords.z, mycoords.x, mycoords.y, mycoords.z) < 100 then
+				local atmObject = GetClosestObjectOfType(atm.coords.x, atm.coords.y, atm.coords.z, 1.0, atm.objectHash, false, false, false)
+				if not DoesEntityExist(atmObject) then
+					CreateObjectByHash(atm.objectHash, atm.coords)
+				end
+			else 
+				local atmObject = GetClosestObjectOfType(atm.coords.x, atm.coords.y, atm.coords.z, 1.0, atm.objectHash, false, false, false)
+				if DoesEntityExist(atmObject) then
+					SetEntityAsMissionEntity(atmObject, true, true)
+					DeleteEntity(atmObject)
+				end
+			end
+		end
+		Wait(500)
+	end
+end)
+
 -- RegisterCommand("debugtable",function()
 --     print(dump(blackjackTableData))
 -- end)
