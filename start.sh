@@ -8,7 +8,7 @@ cd /d C:\\fxserver-resource-scrambler-dist && rd /s /q resources && rd /s /q scr
 "
 
 # scrambler server details
-scramblerServerIP=68.4.75.110
+scramblerServerIP=68.4.39.135
 scramblerServerUser=joshy
 
 # close FXServer
