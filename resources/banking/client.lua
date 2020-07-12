@@ -218,7 +218,7 @@ AddEventHandler('bank:withdraw', function(amount)
       TriggerEvent('usa:notify', "~y~You cannot do this in a vehicle!");
     else
       if not IsNearBank() then
-        if IsNearATM() and tonumber(amount) > 1000 then
+        if IsNearATM() and tonumber(amount) > 5000 then
           TriggerEvent('usa:notify', '~y~Please use a bank to withdraw this amount!')
           return
         end
