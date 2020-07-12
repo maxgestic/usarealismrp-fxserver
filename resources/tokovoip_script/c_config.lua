@@ -5,10 +5,10 @@ local KEYS = {
 }
 
 TokoVoipConfig = {
-	refreshRate = 450, -- Rate at which the data is sent to the TSPlugin
-	networkRefreshRate = 2500, -- Rate at which the network data is updated/reset on the local ped
+	refreshRate = 100, -- Rate at which the data is sent to the TSPlugin
+	networkRefreshRate = 2000, -- Rate at which the network data is updated/reset on the local ped
 	playerListRefreshRate = 5000, -- Rate at which the playerList is updated
-	minVersion = "1.2.4", -- Version of the TS plugin required to play on the server
+	minVersion = "1.5.0", -- Version of the TS plugin required to play on the server
 
 	distance = {
 		35, -- Normal speech distance in gta distance units
@@ -20,6 +20,10 @@ TokoVoipConfig = {
 	keySwitchChannels = KEYS.CAPS_LOCK, -- Keybind used to switch the radio channels
 	keySwitchChannelsSecondary = KEYS.SHIFT, -- If set, both the keySwitchChannels and keySwitchChannelsSecondary keybinds must be pressed to switch the radio channels
 	keyProximity = KEYS.F2, -- Keybind used to switch the proximity mode
+	radioClickMaxChannel = 100, -- Set the max amount of radio channels that will have local radio clicks enabled
+	radioAnim = true, -- Enable or disable the radio animation
+	radioEnabled = true, -- Enable or disable using the radio
+	wsServer = "ip:port", -- Address of the websocket server
 
 	plugin_data = {
 		-- TeamSpeak channel name used by the voip
@@ -61,3 +65,21 @@ AddEventHandler("onClientResourceStart", function(resource)
 		TriggerEvent("initializeVoip"); -- Trigger this event whenever you want to start the voip
 	end
 end)
+
+-- Update config properties from another script
+function SetTokoProperty(key, value)
+	if TokoVoipConfig[key] ~= nil and TokoVoipConfig[key] ~= "plugin_data" then
+		TokoVoipConfig[key] = value
+
+		if voip then
+			if voip.config then
+				if voip.config[key] ~= nil then
+					voip.config[key] = value
+				end
+			end
+		end
+	end
+end
+
+-- Make exports available on first tick
+exports("SetTokoProperty", SetTokoProperty)
