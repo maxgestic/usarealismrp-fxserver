@@ -1,4 +1,4 @@
-local PAY_PER_CHICKEN_MEAT = 12
+local PAY_PER_CHICKEN_MEAT = 60
 local KILL = {}
 
 local chickenItems = {
@@ -17,10 +17,10 @@ function endItemRetrieval(character, src, chickenItemToGive, quantityToGive, chi
 			return
 		end
 
-		if math.random(1,80) <= 1 then
+		if math.random() < 0.1 then
 			TriggerClientEvent("chickenJob:endProcessingAnimation", src)
 			TriggerClientEvent("usa:notify", src, "The chicken escaped!")
-			TriggerClientEvent("chickenJob:spawnChicken", src)
+			TriggerClientEvent("chickenJob:spawnChicken", src, true)
 			return
 		end
 
@@ -161,7 +161,7 @@ AddEventHandler("chickenJob:killTask", function()
 end)
 
 RegisterServerEvent("chickenJob:spawnChicken")
-AddEventHandler("chickenJob:spawnChicken", function()
+AddEventHandler("chickenJob:spawnChicken", function(itemName)
 	local char = exports["usa-characters"]:GetCharacter(source)
-	char.removeItem("Chicken", 1)
+	char.removeItem(itemName, 1)
 end)

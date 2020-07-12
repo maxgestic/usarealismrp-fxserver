@@ -126,7 +126,6 @@ end)
 
 RegisterNetEvent("chickenJob:startProcessingAnimation")
 AddEventHandler("chickenJob:startProcessingAnimation", function()
-	print("Start processing chicken")
 	PROCESSING = true
 
 	Citizen.CreateThread(function()
@@ -143,13 +142,12 @@ end)
 
 RegisterNetEvent("chickenJob:endProcessingAnimation")
 AddEventHandler("chickenJob:endProcessingAnimation", function()
-	print("Stop processing chicken")
 	ClearPedTasks(GetPlayerPed(-1))
 	PROCESSING = false
 end)
 
 RegisterNetEvent("chickenJob:spawnChicken")
-AddEventHandler("chickenJob:spawnChicken", function()
+AddEventHandler("chickenJob:spawnChicken", function(alive)
 	Citizen.CreateThread(function()
 		local hash = 1794449327 -- hen hash
 		RequestModel(hash)
@@ -159,6 +157,11 @@ AddEventHandler("chickenJob:spawnChicken", function()
 		local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
 		local ped = CreatePed(29, hash, playerCoords.x + math.random(0,1), playerCoords.y + math.random(0,1), playerCoords.z - 0.9, math.random(0,360), true, true)
 		TaskWanderStandard(ped, 10.0, 10)
-		TriggerServerEvent("chickenJob:spawnChicken") -- removes chicken
+		local itemToRemove = "Chicken"
+		if not alive then
+			SetEntityHealth(ped, 0)
+			itemToRemove = "Chicken carcass"
+		end
+		TriggerServerEvent("chickenJob:spawnChicken", itemToRemove) -- removes chicken
 	end)
 end)
