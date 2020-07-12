@@ -54,9 +54,11 @@ rm map_mining -f -r
 rm [cassino] -f -r
 cd ..
 
-# avoid scrambling [system]/[builders] resources
+# avoid scrambling node_modules within resources
 cp -r resources/[system]/[builders] .
+cp -r resources/ws_server/node_modules .
 rm -f -r resources/[system]/[builders]
+rm -f -r resources/ws_server/node_modules
 
 # clear old copy of resources on scrambler server
 sshpass -f "scramblerServerPass.txt" ssh $scramblerServerUser@$scramblerServerIP $clearResourcesCmd
@@ -71,7 +73,10 @@ sshpass -f "scramblerServerPass.txt" ssh $scramblerServerUser@$scramblerServerIP
 sshpass -f "scramblerServerPass.txt" scp -r $scramblerServerUser@$scramblerServerIP:C:/fxserver-resource-scrambler-dist/scrambled_resources .
 cp -r scrambled_resources/* resources
 rm -r scrambled_resources
+
+# move node_modules back into place
 mv [builders] resources/[system]
+mv node_modules resources/ws_server
 
 # copy stuff that should be skipped when scrambling
 cp -r toTransfer/* resources
