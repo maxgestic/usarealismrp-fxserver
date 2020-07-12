@@ -104,6 +104,7 @@ function isBlacklistedModel(model)
     BLACK_LISTED_MODELS[1462895032] = true -- cat
     BLACK_LISTED_MODELS[1173762] = false -- campfire
     BLACK_LISTED_MODELS[GetHashKey("a_c_rat")] = true -- rat
+    BLACK_LISTED_MODELS[GetHashKey("a_c_hen")] = true -- chicken
 
     return BLACK_LISTED_MODELS[model]
 end
