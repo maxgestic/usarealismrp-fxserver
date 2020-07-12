@@ -17,6 +17,11 @@ AddEventHandler("vehicleCommands:spawnVehicle", function(modelName, userJob)
 	SetVehicleExplodesOnHighExplosionDamage(vehicle, false)
 	SetVehicleEngineOn(vehicle, true, true, false)
 
+	if modelName == "1200RT" then
+		ModifyVehicleTopSpeed(vehicle, 0.0) -- reset first to avoid doubling up issue
+        ModifyVehicleTopSpeed(vehicle, 30.0)
+	end
+
 	if userJob == "ems" then
 		if modelName == "maverick2" then
 			SetVehicleLivery(vehicle, 1)

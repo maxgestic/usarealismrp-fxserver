@@ -206,11 +206,11 @@ AddEventHandler("doc:loadOutfit", function(slot, id)
 end)
 
 RegisterServerEvent("doc:spawnVehicle")
-AddEventHandler("doc:spawnVehicle", function(hash)
+AddEventHandler("doc:spawnVehicle", function(veh)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get("job")
 	if job == "corrections" then
-		TriggerClientEvent("doc:spawnVehicle", source, hash)
+		TriggerClientEvent("doc:spawnVehicle", source, veh)
 	else
 		TriggerClientEvent("usa:notify", source, "You are not on-duty!")
 	end

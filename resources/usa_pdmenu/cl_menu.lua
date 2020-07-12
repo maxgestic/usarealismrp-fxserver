@@ -114,10 +114,16 @@ function AddGarageMenuItems(menu)
 						SetVehicleExplodesOnHighExplosionDamage(spawnedVeh, false)
 						SetVehicleEngineOn(spawnedVeh, true, true, false)
 					    SetEntityAsMissionEntity(spawnedVeh)
-					    TaskWarpPedIntoVehicle(GetPlayerPed(-1), spawnedVeh, -1)
+						TaskWarpPedIntoVehicle(GetPlayerPed(-1), spawnedVeh, -1)
+						
 					    SetVehicleMod(spawnedVeh, 16, 4, false)
 					    SetVehicleMod(spawnedVeh, 12, 2, false)
-					    SetVehicleMod(spawnedVeh, 22, 1, false)
+						SetVehicleMod(spawnedVeh, 22, 1, false)
+						
+						if selectedVeh == "1200RT" then
+							ModifyVehicleTopSpeed(spawnedVeh, 0.0) -- reset first to avoid doubling up issue
+        					ModifyVehicleTopSpeed(spawnedVeh, 30.0)
+						end
 
 						local vehicle_key = {
 							name = "Key -- " .. GetVehicleNumberPlateText(spawnedVeh),
@@ -132,6 +138,8 @@ function AddGarageMenuItems(menu)
 						-- give key to owner
 						TriggerServerEvent("garage:giveKey", vehicle_key)
 						TriggerServerEvent("mdt:addTempVehicle", 'Police Interceptor', 'San Andreas State Police', GetVehicleNumberPlateText(spawnedVeh))
+						
+						return
 					end
 				end
 			else

@@ -301,7 +301,7 @@ function CreateVehiclesMenu(menu)
     for i = 1, #vehicles do
         local item = NativeUI.CreateItem(vehicles[i].name, "")
         item.Activated = function(parentmenu, selected)
-          TriggerServerEvent("doc:spawnVehicle", vehicles[i].hash)
+          TriggerServerEvent("doc:spawnVehicle", vehicles[i])
         end
         submenu.SubMenu:AddItem(item)
     end
@@ -350,13 +350,12 @@ Citizen.CreateThread(function()
 end)
 
 RegisterNetEvent("doc:spawnVehicle")
-AddEventHandler("doc:spawnVehicle", function(hash)
-  SpawnVehicle(hash)
+AddEventHandler("doc:spawnVehicle", function(veh)
+  SpawnVehicle(veh)
 end)
 
 RegisterNetEvent("doc:open")
 AddEventHandler("doc:open", function(loc)
-    print("opening!")
     mainMenu:Visible(not mainMenu:Visible())
     closest_location = loc
 end)
@@ -396,12 +395,13 @@ end)
 function addVehicles(id)
   for i = 1, #vehicles do
     TriggerEvent("menu:addModuleItem", id, vehicles[i].name, nil, false, function(id, state)
-      SpawnVehicle(vehicles[i].hash)
+      SpawnVehicle(vehicles[i])
     end)
   end
 end
 
-function SpawnVehicle(model)
+function SpawnVehicle(vehInfo)
+  local model = vehInfo.hash
   Citizen.CreateThread(function()
     local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
     RequestModel(model)
@@ -415,7 +415,11 @@ function SpawnVehicle(model)
     SetVehicleHasBeenOwnedByPlayer(veh, true)
     SetVehicleExplodesOnHighExplosionDamage(veh, false)
     SetVehicleLivery(veh, 2) -- DOC SKIN
-		TaskWarpPedIntoVehicle(GetPlayerPed(-1), veh, -1)
+    TaskWarpPedIntoVehicle(GetPlayerPed(-1), veh, -1)
+    if vehInfo.name == "Motorcycle 2" then
+      ModifyVehicleTopSpeed(veh, 0.0) -- reset first to avoid doubling up issue
+      ModifyVehicleTopSpeed(veh, 30.0)
+    end
 
     -- give key to owner
     local vehicle_key = {
