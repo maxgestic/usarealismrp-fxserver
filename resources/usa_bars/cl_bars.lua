@@ -7,7 +7,8 @@ local LOCATIONS = {
     {x = -1577.31, y = -3018.51, z = -79.01}, -- night club
     {x = -1582.92, y = -3013.31, z = -76.0}, -- night club upper
     {x = -1435.8010253906,y = 205.99688720703, z = 57.82116317749}, -- hank alabaster's requested location (playboy mansion)
-    {x = -3022.3759765625,y = 39.504207611084, z = 10.117781639099}
+    {x = -3022.3759765625,y = 39.504207611084, z = 10.117781639099},
+    {x = 1110.4865722656,y = 207.48405456543, z = -49.440128326416} -- diamond casino
 }
 
 local ITEMS = {} -- loaded from server
