@@ -69,7 +69,7 @@ function RefreshMenu(players)
 		local player = players[i]
 		local playerItem = NativeUI.CreateItem(player.id .. ' | ' .. HexIdToSteamId(player.steam), 'Ping: '..player.ping..'ms')
 		if playerlist.group ~= 'user' then
-			playerItem = NativeUI.CreateItem(player.id .. ' | ' .. HexIdToSteamId(player.steam), 'Name: '..tostring(player.fullname)..' \nJob: '  ..tostring(player.job))
+			playerItem = NativeUI.CreateItem(player.id .. ' | ' .. player.steam, 'Name: '..tostring(player.fullname)..' \nJob: '  ..tostring(player.job))
 			if player.job ~= "civ" and player.job ~= "sheriff" and player.job ~= "corrections" then
 				playerItem:SetRightBadge(18) -- star
 			end
@@ -82,9 +82,9 @@ function RefreshDCMenu(players)
 	_menuPool:TotalItemsPerPage(21)
 	if table.getIndex(players) > 0 then
 		for player, info in pairs(players) do
-			local playerItem = NativeUI.CreateItem(player .. ' | ' .. HexIdToSteamId(info[2]), '')
+			local playerItem = NativeUI.CreateItem(player .. ' | ' .. info[2], '')
 			if playerlist.group ~= 'user' then
-				playerItem = NativeUI.CreateItem(player .. ' | ' .. HexIdToSteamId(info[2]), 'Name: '..tostring(info[1]))
+				playerItem = NativeUI.CreateItem(player .. ' | ' .. info[2], 'Name: '..tostring(info[1]))
 			end
 			dcMenu:AddItem(playerItem)
 		end
@@ -122,6 +122,15 @@ function DrawTracerText(text, spacing, talking, playerPed)
 	ClearDrawOrigin()
 end
 
+function HexIdToSteamId(hexId)
+    local cid = math.floor(tonumber(string.sub(hexId, 7), 16))
+	local steam64 = math.floor(tonumber(string.sub( cid, 2)))
+	local a = steam64 % 2 == 0 and 0 or 1
+	local b = math.floor(math.abs(6561197960265728 - steam64 - a) / 2)
+	local sid = "STEAM_0:"..a..":"..(a == 1 and b -1 or b)
+    return sid
+end
+
 function ShowIds()
 	local viewDistance = 10
 	local myCoords = GetEntityCoords(PlayerPedId())
@@ -139,15 +148,6 @@ function ShowIds()
 			end
 		end
 	end
-end
-
-function HexIdToSteamId(hexId)
-    local cid = math.floor(tonumber(string.sub(hexId, 7), 16))
-	local steam64 = math.floor(tonumber(string.sub( cid, 2)))
-	local a = steam64 % 2 == 0 and 0 or 1
-	local b = math.floor(math.abs(6561197960265728 - steam64 - a) / 2)
-	local sid = "STEAM_0:"..a..":"..(a == 1 and b -1 or b)
-    return sid
 end
 
 function table.getIndex(table)

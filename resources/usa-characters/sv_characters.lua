@@ -44,6 +44,8 @@ AddEventHandler("playerDropped", function(reason)
         exports["globals"]:notifyPlayersWithJobs({"corrections"}, "^3INFO: ^0" .. charFullName .. " has fallen asleep.")
       end
     end
+    -- add to recent DC list --
+    TriggerEvent("playerlist:addDC", char)
     -- destroy player object --
     print("[usa-characters] Destroying character object for src: " .. usource)
     CHARACTERS[usource] = nil

@@ -30,18 +30,21 @@ AddEventHandler('es:playerLoaded', function(source)
 	TriggerClientEvent("playerlist:setUserGroup", source, user_group)
 end)
 
-AddEventHandler('playerDropped', function()
+RegisterServerEvent("playerlist:addDC")
+AddEventHandler("playerlist:addDC", function(char)
 	print('PLAYERLIST: Adding player to recently disconnected list!')
-	local usource = source
-	local char = exports["usa-characters"]:GetCharacter(usource)
+	local usource = char.get("source")
 	if char then
+		print("disconnected ident: " .. GetPlayerIdentifier(usource))
 		recentDC[usource] = {char.getFullName(), GetPlayerIdentifier(usource)}
 		Citizen.Wait(600000)
+		print("CLEARING DISCONNECTED USER WITH SRC: " .. usource)
 		recentDC[usource] = nil
 	end
 end)
 
 TriggerEvent('es:addCommand', 'dcs', function(source, args, char)
+	print("recent DC table: " .. exports.globals:dump(recentDC))
 	TriggerClientEvent('playerlist:dcList', source, recentDC)
 end, {
 	help = "View a list of recently disconnected players."
