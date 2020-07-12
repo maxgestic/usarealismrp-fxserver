@@ -141,6 +141,17 @@ function receivedClientCall(event) {
 		} else if (eventName == 'disconnect') {
 			sendData('disconnect');
 			voipStatus = NOT_CONNECTED;
+		} else if (eventName == 'updateHUD') {	
+			let isInVeh = event.data.isInVeh	
+			let el = $(".tokovoipInfo")	
+			if (isInVeh) {	
+				el.css("bottom", "7%");	
+			} else {	
+				el.css("bottom", "1%");	
+			}	
+		} else if (eventName == 'toggleHUD') {	
+			let el = $(".tokovoipInfo")	
+			el.toggle();	
 		}
 	}
 
@@ -201,7 +212,7 @@ function displayPluginScreen(toggle) {
 }
 
 function updateTokovoipInfo(msg) {
-	document.getElementById('tokovoipInfo').style.fontSize = '12px';
+	document.getElementById('tokovoipInfo').style.fontSize = '16';
 	let screenMessage;
 
 	switch (voipStatus) {
@@ -229,11 +240,11 @@ function updateTokovoipInfo(msg) {
 			color = 'red';
 			break;
 		case OK:
-			color = '#01b0f0';
+			color = '#fefefe';
 			break;
 	}
 	if (msg) {
-		document.getElementById('tokovoipInfo').innerHTML = `<font color="${color}">[TokoVoip] ${msg}</font>`;
+		document.getElementById('tokovoipInfo').innerHTML = `<font color="${color}">${msg}</font>`;
 	}
 	document.getElementById('pluginStatus').innerHTML = `Plugin status: <font color="${color}">${screenMessage || msg}</font>`;
 }
