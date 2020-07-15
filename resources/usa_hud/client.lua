@@ -107,7 +107,7 @@ Citizen.CreateThread(function()
 				DisplayRadar(false)
 				DrawRect(0.08555, 0.976, 0.14, 0.0149999999999998, 0, 0, 0, 140)
 				DrawTxt(0.664, 1.455, 1.0, 1.0, 0.40, hud.time, 255, 255, 255, 255)
-				DrawTxt(0.750, 1.455, 1.0, 1.0, 0.40, hud.direction , 255, 255, 255, 255)
+				DrawTxt(0.737, 1.455, 1.0, 1.0, 0.37, hud.direction , 255, 255, 255, 255)
 			end
 			-- HEALTH
 			local Health = GetEntityHealth(playerPed)
