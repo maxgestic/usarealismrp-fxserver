@@ -84,7 +84,11 @@ function TokoVoip.updateTokoVoipInfo(self, forceUpdate) -- Update the top-left i
 end
 
 function TokoVoip.updatePlugin(self, event, payload)
-	exports.tokovoip_script:doSendNuiMessage(event, payload);
+	--exports.tokovoip_script:doSendNuiMessage(event, payload);
+	SendNUIMessage({
+			type = event,
+			payload = payload
+	})
 end
 
 function TokoVoip.updateConfig(self)
@@ -103,7 +107,7 @@ function TokoVoip.initialize(self)
 		while (true) do
 			Citizen.Wait(5);
 
-			if ((self.keySwitchChannelsSecondary and IsControlPressed(0, self.keySwitchChannelsSecondary)) or not self.keySwitchChannelsSecondary) then -- Switch radio channels
+			if ((self.keySwitchChannelsSecondary and GetLastInputMethod(0) and IsControlPressed(0, self.keySwitchChannelsSecondary)) or not self.keySwitchChannelsSecondary) then -- Switch radio channels
 				if (IsControlJustPressed(0, self.keySwitchChannels) and GetLastInputMethod(0) and tablelength(self.myChannels) > 0) then
 					local myChannels = {};
 					local currentChannel = 0;
@@ -125,7 +129,7 @@ function TokoVoip.initialize(self)
 					setPlayerData(self.serverId, "radio:channel", currentChannelID, true);
 					self:updateTokoVoipInfo();
 				end
-			elseif (IsControlJustPressed(0, self.keyProximity)) and GetLastInputMethod(0) then -- Switch proximity modes (normal / whisper / shout)
+			elseif IsControlJustPressed(0, self.keyProximity) and GetLastInputMethod(0) then -- Switch proximity modes (normal / whisper / shout)
 				if (not self.mode) then
 					self.mode = 1;
 				end
