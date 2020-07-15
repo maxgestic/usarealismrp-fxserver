@@ -376,7 +376,7 @@ function SendPanicTextAlert(id, msg)
 end
 
 function PlayPanicButtonSound(id)
-	TriggerClientEvent('InteractSound_CL:PlayOnOne', id, "panicButton", 0.35)
+	TriggerClientEvent('InteractSound_CL:PlayOnOne', id, "panicButton", 0.26)
 end
 
 TriggerEvent('es:addJobCommand', 'p', { "sheriff", "ems", "corrections" }, function(source, args, char, location)

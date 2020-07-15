@@ -559,7 +559,7 @@ AddEventHandler('properties:enterBurglaryHouse', function(_currentProperty)
 	local heading = currentProperty.entryHeading
 	local residentSpawned = false
 
-	if math.random() > 0.50 then
+	if math.random() > 0.70 then
 		residentSpawned = true
 		SpawnResidents()
 	end

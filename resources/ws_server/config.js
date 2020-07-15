@@ -12,12 +12,12 @@ module.exports = {
 
   //-- [OPTIONAL] IPv4 Adress of your FiveM server
   //-- Set by autoconfig if you run ws_server as FXServer resource or standalone on the same machine
-  // FivemServerIP: "127.0.0.1",
+   FivemServerIP: "147.135.104.174",
 
   //-- [OPTIONAL] Port of your FiveM Server
   //-- Set by autoconfig if you run ws_server as FXServer resource
-  // FivemServerPort: 32000,
+   FivemServerPort: 30120,
 
   //-- [OPTIONAL] Enable connection/disconnection logs
-  enableLogs: false,
+  enableLogs: false
 };
