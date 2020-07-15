@@ -175,9 +175,9 @@ function receivedClientCall (event) {
 			let isInVeh = event.data.isInVeh	
 			let el = $(".tokovoipInfo")	
 			if (isInVeh) {	
-				el.css("bottom", "7%");	
+				el.css("bottom", "7.3%");	
 			} else {	
-				el.css("bottom", "1%");	
+				el.css("bottom", "1.5%");	
 			}	
 		} else if (eventName == 'toggleHUD') {	
 			let el = $(".tokovoipInfo")	
