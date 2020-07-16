@@ -842,10 +842,19 @@ end)
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(5000)
-		if not IsEntityVisible(PlayerPedId()) then
+		local myped = PlayerPedId()
+		if not IsEntityVisible(myped) then
 			if not isAtAnLSC() then
-				TriggerServerEvent("AntiCheese:InvisibilityFlag", GetEntityCoords(PlayerPedId()))
-				SetEntityVisible(PlayerPedId(), true, 0)
+				local veh = GetVehiclePedIsIn(myped, false)
+				if veh and DoesEntityExist(veh) then
+					if GetEntityModel(veh) ~= GetHashKey("rcbandito") then
+						TriggerServerEvent("AntiCheese:InvisibilityFlag", GetEntityCoords(myped)) -- when not in an rcbandito, but in vehicle
+						SetEntityVisible(myped, true, 0)
+					end
+				else 	
+					TriggerServerEvent("AntiCheese:InvisibilityFlag", GetEntityCoords(myped)) -- when not in any vehicle
+					SetEntityVisible(myped, true, 0)
+				end
 			end
 		end
 	end
