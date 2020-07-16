@@ -20,7 +20,7 @@ Config = {
 	VapeCoolDownTime = 4000,
 
 		-- The amount of time in (ms) the smoke from the vape will linger. (2800) by default.
-	VapeHangTime = 2800,
+	VapeHangTime = 3500,
 
 		-- Whether or not you want ace permissions to be enabled, False = Everyone Can vape, 
 	VapePermission = false,
