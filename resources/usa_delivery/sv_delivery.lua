@@ -168,7 +168,7 @@ end
 function IsNearDeliveryLocation(coords)
 	for i = 1, #DELIVERY_LOCATIONS do
 		local location = DELIVERY_LOCATIONS[i]
-		if find_distance(coords, location) < 10.0 then
+		if find_distance(coords, location) < 70.0 then
 			return true
 		end
 	end
