@@ -34,7 +34,7 @@ Citizen.CreateThread(function()
 end)
 
 -- Server event for creating a race
-RegisterNetEvent("StreetRaces:createRace_sv")
+RegisterServerEvent("StreetRaces:createRace_sv")
 AddEventHandler("StreetRaces:createRace_sv", function(amount, startDelay, startCoords, checkpoints, finishTimeout)
     -- Add fields to race struct and add to races array
     local race = {
@@ -56,7 +56,7 @@ AddEventHandler("StreetRaces:createRace_sv", function(amount, startDelay, startC
 end)
 
 -- Server event for canceling a race
-RegisterNetEvent("StreetRaces:cancelRace_sv")
+RegisterServerEvent("StreetRaces:cancelRace_sv")
 AddEventHandler("StreetRaces:cancelRace_sv", function()
     -- Iterate through races
     for index, race in pairs(races) do
@@ -82,7 +82,7 @@ AddEventHandler("StreetRaces:cancelRace_sv", function()
 end)
 
 -- Server event for joining a race
-RegisterNetEvent("StreetRaces:joinRace_sv")
+RegisterServerEvent("StreetRaces:joinRace_sv")
 AddEventHandler("StreetRaces:joinRace_sv", function(index)
     -- Validate and deduct player money
     local race = races[index]
@@ -104,7 +104,7 @@ AddEventHandler("StreetRaces:joinRace_sv", function(index)
 end)
 
 -- Server event for leaving a race
-RegisterNetEvent("StreetRaces:leaveRace_sv")
+RegisterServerEvent("StreetRaces:leaveRace_sv")
 AddEventHandler("StreetRaces:leaveRace_sv", function(index)
     -- Validate player is part of the race
     local race = races[index]
@@ -119,7 +119,7 @@ AddEventHandler("StreetRaces:leaveRace_sv", function(index)
 end)
 
 -- Server event for finishing a race
-RegisterNetEvent("StreetRaces:finishedRace_sv")
+RegisterServerEvent("StreetRaces:finishedRace_sv")
 AddEventHandler("StreetRaces:finishedRace_sv", function(index, time)
     -- Check player was part of the race
     local race = races[index]
@@ -162,7 +162,7 @@ AddEventHandler("StreetRaces:finishedRace_sv", function(index, time)
 end)
 
 -- Server event for saving recorded checkpoints as a race
-RegisterNetEvent("StreetRaces:saveRace_sv")
+RegisterServerEvent("StreetRaces:saveRace_sv")
 AddEventHandler("StreetRaces:saveRace_sv", function(name, checkpoints)
     -- Cleanup data so it can be serialized
     for _, checkpoint in pairs(checkpoints) do
@@ -187,7 +187,7 @@ AddEventHandler("StreetRaces:saveRace_sv", function(name, checkpoints)
 end)
 
 -- Server event for deleting recorded race
-RegisterNetEvent("StreetRaces:deleteRace_sv")
+RegisterServerEvent("StreetRaces:deleteRace_sv")
 AddEventHandler("StreetRaces:deleteRace_sv", function(name)
     -- Get saved player races
     local src = source
@@ -211,7 +211,7 @@ AddEventHandler("StreetRaces:deleteRace_sv", function(name)
 end)
 
 -- Server event for listing recorded races
-RegisterNetEvent("StreetRaces:listRaces_sv")
+RegisterServerEvent("StreetRaces:listRaces_sv")
 AddEventHandler("StreetRaces:listRaces_sv", function()
     -- Get saved player races and iterate through saved races
     local msg = "Saved races: "
@@ -236,7 +236,7 @@ AddEventHandler("StreetRaces:listRaces_sv", function()
 end)
 
 -- Server event for loaded recorded race
-RegisterNetEvent("StreetRaces:loadRace_sv")
+RegisterServerEvent("StreetRaces:loadRace_sv")
 AddEventHandler("StreetRaces:loadRace_sv", function(name)
     -- Get saved player races and load race
     local src = source
