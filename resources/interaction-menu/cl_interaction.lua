@@ -1470,7 +1470,7 @@ Citizen.CreateThread(function()
 								last_tackle_time = GetGameTimer()
 							else
 								local seconds_left = ((last_tackle_time + tackle_delay) - GetGameTimer())/1000
-								TriggerEvent("usa:notify", "Please wait " .. seconds_left .. " more seconds!") -- need to test tackle delay!!!
+								TriggerEvent("usa:notify", "Please wait " .. math.floor(seconds_left) .. " more seconds!") -- need to test tackle delay!!!
 							end
 						end
 					else
