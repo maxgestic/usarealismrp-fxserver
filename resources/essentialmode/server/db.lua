@@ -433,12 +433,16 @@ function exposedDB.updateDocument(db, documentID, updates, callback)
 		if err ~= 404 then
 			local doc = json.decode(rText)
 			for i in pairs(updates) do
-				doc[i] = updates[i]
+				if updates[i] ~= "deleteMePlz!" then
+					doc[i] = updates[i]
+				else 
+					doc[i] = nil
+				end
 			end
 			PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/" .. documentID, function(err, rText, headers)
 				callback(doc, err, rText)
 			end, "PUT", json.encode(doc), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
-		else 
+		else
 			callback(nil)
 		end
 	end, "GET", "", {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
