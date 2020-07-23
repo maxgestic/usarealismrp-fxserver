@@ -157,7 +157,7 @@ function IsValidInput(src, data)
 		return false
 	end
 	local dob_year = tonumber(string.sub(data.dateOfBirth, 1, 4))
-	if dob_year > 2001 or dob_year < 1940 then
+	if dob_year > 2001 or dob_year < 1915 then
 		TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (5)')
 		print('Character date of birth was invalid: '..data.dateOfBirth)
 		return false
