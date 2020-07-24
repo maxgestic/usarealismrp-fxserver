@@ -5,7 +5,7 @@ local gasPrices = {
 		['Aircraft'] = 15,
 		['Watercraft'] = 10,
 		['Electric'] = 3,
-		['Gasoline'] = 7
+		['Gasoline'] = 5
 	}
 
 local vehicleGas = {}
