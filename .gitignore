@@ -1,7 +1,7 @@
 cache/
 resources/essentialmode/sv_es-DB-config.lua
 resources/scrambler-events.json
-resources/assets
+resources/assets/stream
 resources/unmarked-police-pack
 resources/police-bmw-bike
 resources/policeveh
