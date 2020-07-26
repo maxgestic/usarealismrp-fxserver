@@ -27,7 +27,8 @@ local vehicles = {
 
 local PRISON_GUARD_SIGN_IN_LOCATIONS = {
 	{x = 1690.71484375, y = 2591.3149414063, z = 45.914203643799},
-	{x = 1849.0, y = 2599.5, z = 45.8} -- front
+  {x = 1849.0, y = 2599.5, z = 45.8}, -- front
+  {x = 1778.3930664063,y = 2548.5463867188, z = 45.797786712646} -- inside prison locker room
 }
 
 local policeoutfitamount = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}

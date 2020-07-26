@@ -19,7 +19,7 @@ local DOORS = {
   {name = "Boilingbroke Side Entrance 2", x = 1791.18, y = 2552.05, z = 45.8, model = 262839150, locked = true, offset={0.0, 1.13, 0.05}, heading=270, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Boilingbroke Side Entrance 3", x = 1776.7, y = 2551.9, z = 45.8, model = 1645000677, locked = true, offset={0.0, 1.13, 0.05}, heading=270, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Boilingbroke Side Entrance 4", x = 1765.69, y = 2567.85, z = 45.71, model = 1645000677, locked = true, offset={0.0, 1.13, 0.05}, heading=0, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
-  {name = "Boilingbroke Armory / offices", x = 1785.39, y = 2550.78, z = 45.8, model = 1028191914, locked = true, offset={0.0, 1.13, 0.05}, heading=180, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "Boilingbroke Armory / offices", x = 1785.39, y = 2550.78, z = 45.8, model = 1028191914, locked = false, offset={0.0, 1.13, 0.05}, heading=180, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
 
   {name = "Boilingbroke upper office small", x = 1785.72, y = 2551.02, z = 49.58, model = 1028191914, locked = true, offset={0.0, 1.13, 0.05}, heading=90, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Boilingbroke upper office large left door", x = 1782.45, y = 2551.5, z = 49.58, model = 1028191914, locked = true, offset={0.0, 1.13, 0.05}, heading=90, static=true, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
@@ -88,8 +88,6 @@ local DOORS = {
   {name = "Door 332 EXT", x = 1753.3, y = 2615.56, z = 45.56, model = 1645000677, static = true, locked = true, _dist = 2, offset={0.00, 1.20, 0.05}, heading=0,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
 
   {name = "Yard Door", x = 1763.97, y = 2616.71, z = 45.97, model = 1028191914, locked = true, _dist = 2, offset={0.00, 1.20, 0.05}, heading=90,  allowedJobs = {'sheriff', 'corrections', 'judge'}},
-
-
 
   {name = "Mission Row / Door 1", x = 464.192, y = -1003.638, z = 24.9, model = -1033001619, locked = true, offset={0.0, -1.13, 0.05}, heading=0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Mission Row / Door 2", x = 463.72, y = -992.7, z = 24.9, model = 631614199, locked = true, offset={0.0, 1.12, 0.025}, heading=0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
