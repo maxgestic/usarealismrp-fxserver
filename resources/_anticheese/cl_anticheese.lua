@@ -935,6 +935,11 @@ Citizen.CreateThread(function()
 end)
 --]]
 
+-- anti resource stopping
+AddEventHandler("onResourceStop", function(resourceName)
+	TriggerServerEvent("anticheese:ViolationDetected", "\240\159\144\134 Anti-Resource-Stop Detection: " .. resourceName)
+end)
+
 RegisterNetEvent("makepedskillable")
 AddEventHandler("makepedskillable", function()
     Citizen.CreateThread(function()
