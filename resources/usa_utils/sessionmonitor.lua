@@ -7,7 +7,7 @@ local lastRecordedAmount = 0
 
 local WEBHOOK_URL = "https://discordapp.com/api/webhooks/613598358568828938/YVkkUeUF75IrnA9rsnV1A_O-rX---wd4gOl1-T627P1FY5gBmfYx638ZTszo4LxXLEmZ"
 
-local SECONDS_BEFORE_ACCEPTING_CONNECTIONS = 95
+local SECONDS_BEFORE_ACCEPTING_CONNECTIONS = 45
 local SERVER_START_TIME = os.time()
 
 local statistics = {
