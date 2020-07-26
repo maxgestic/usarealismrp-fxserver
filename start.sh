@@ -17,6 +17,9 @@ tmux kill-session -t fxserver
 # clear log file
 > CitizenFX.log
 
+# run any setup needed before checking out this file
+sh setup.sh
+
 # pull from GH repo
 git checkout .
 git pull
