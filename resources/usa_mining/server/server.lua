@@ -23,7 +23,7 @@ RegisterServerEvent('mining:giveUserMiningGoods')
 AddEventHandler('mining:giveUserMiningGoods', function()
     local char = exports["usa-characters"]:GetCharacter(source)
     local brokenPick = math.random()
-    if brokenPick < 0.40 then
+    if brokenPick > 0.15 then
         local success = math.random()
 
         if success <= 0.50 then
