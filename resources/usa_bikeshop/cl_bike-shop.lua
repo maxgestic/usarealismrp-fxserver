@@ -142,25 +142,34 @@ AddEventHandler("bikeShop:spawnBike", function(bike, location, plate)
   end)
 end)
 
--- S P A W N  P E D S --
---[[
+local shopNPCHandles = {}
+local NPC_PED_MODEL = -771835772
 Citizen.CreateThread(function()
-	for i = 1, #locations do
-    if locations[i].heading then
-  		local hash = -771835772
-  		RequestModel(hash)
-  		while not HasModelLoaded(hash) do
-  			Wait(100)
-  		end
-  		local ped = CreatePed(4, hash, locations[i].x, locations[i].y, locations[i].z-1, locations[i].heading, false, true)
-  		SetEntityCanBeDamaged(ped,false)
-  		SetPedCanRagdollFromPlayerImpact(ped,false)
-  		TaskSetBlockingOfNonTemporaryEvents(ped,true)
-  		SetPedFleeAttributes(ped,0,0)
-  		SetPedCombatAttributes(ped,17,1)
-  		SetPedRandomComponentVariation(ped, true)
-  		TaskStartScenarioInPlace(ped, "WORLD_HUMAN_HANG_OUT_STREET", 0, true)
+  while true do
+    local playerCoords = GetEntityCoords(PlayerPedId(), false)
+    for i = 1, #locations do
+      if Vdist(playerCoords, locations[i].x, locations[i].y, locations[i].z) < 75 then
+          if not shopNPCHandles[i] then
+              RequestModel(NPC_PED_MODEL)
+              while not HasModelLoaded(NPC_PED_MODEL) do
+                  Wait(1)
+              end
+              shopNPCHandles[i] = CreatePed(0, NPC_PED_MODEL, locations[i].x, locations[i].y, locations[i].z - 0.5, locations[i].heading, false, false) -- need to add distance culling
+              SetEntityCanBeDamaged(shopNPCHandles[i],false)
+              SetPedCanRagdollFromPlayerImpact(shopNPCHandles[i],false)
+              SetBlockingOfNonTemporaryEvents(shopNPCHandles[i],true)
+              SetPedFleeAttributes(shopNPCHandles[i],0,0)
+              SetPedCombatAttributes(shopNPCHandles[i],17,1)
+              SetPedRandomComponentVariation(shopNPCHandles[i], true)
+              TaskStartScenarioInPlace(shopNPCHandles[i], "WORLD_HUMAN_HANG_OUT_STREET", 0, true)
+          end
+      else 
+          if shopNPCHandles[i] then
+              DeletePed(shopNPCHandles[i])
+              shopNPCHandles[i] = nil
+          end
+      end
     end
-	end
+    Wait(1)
+  end
 end)
---]]
