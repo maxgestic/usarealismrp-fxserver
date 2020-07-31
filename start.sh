@@ -1,16 +1,3 @@
-# commands
-runScramblerCmd="
-cd /d C:\\fxserver-resource-scrambler-dist && index-win.exe
-"
-
-clearResourcesCmd="
-cd /d C:\\fxserver-resource-scrambler-dist && rd /s /q resources && rd /s /q scrambled_resources
-"
-
-# scrambler server details
-scramblerServerIP=68.4.39.135
-scramblerServerUser=joshy
-
 # close FXServer
 tmux kill-session -t fxserver
 
@@ -63,19 +50,8 @@ cp -r resources/ws_server/node_modules .
 rm -f -r resources/[system]/[builders]
 rm -f -r resources/ws_server/node_modules
 
-# clear old copy of resources on scrambler server
-sshpass -f "scramblerServerPass.txt" ssh $scramblerServerUser@$scramblerServerIP $clearResourcesCmd
-
-# copy resources to scrambler server
-sshpass -f "scramblerServerPass.txt" scp -r resources $scramblerServerUser@$scramblerServerIP:C:/fxserver-resource-scrambler-dist
-
-# run scrambler on scrambler server
-sshpass -f "scramblerServerPass.txt" ssh $scramblerServerUser@$scramblerServerIP $runScramblerCmd
-
-# retrieve scrambled resources from scrambler server
-sshpass -f "scramblerServerPass.txt" scp -r $scramblerServerUser@$scramblerServerIP:C:/fxserver-resource-scrambler-dist/scrambled_resources .
-cp -r scrambled_resources/* resources
-rm -r scrambled_resources
+# scramble resources
+java -jar ResourceEventScrambler.jar
 
 # move node_modules back into place
 mv [builders] resources/[system]
