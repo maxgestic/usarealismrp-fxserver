@@ -13,8 +13,6 @@ Citizen.CreateThread(function()
 			if not isEnteringVehicle and IsPedInAnyVehicle(ped, false) and GetSeatPedIsTryingToEnter(ped) == -1 then
 				vehicle = GetVehiclePedIsIn(ped, false)
 				isEnteringVehicle = true
-				TriggerServerEvent('veh:checkForKey', GetVehicleNumberPlateText(vehicle), GetIsVehicleEngineRunning(veh))
-				TriggerServerEvent('fuel:returnFuelAmount', GetVehicleNumberPlateText(vehicle))
 			elseif not DoesEntityExist(GetVehiclePedIsTryingToEnter(ped)) and not IsPedInAnyVehicle(ped, true) and isEnteringVehicle then
 				-- vehicle entering aborted
 				TriggerServerEvent('baseevents:enteringAborted')
