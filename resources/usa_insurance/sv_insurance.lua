@@ -1,4 +1,4 @@
-local INSURANCE_COVERAGE_MONTHLY_COST = 500
+local INSURANCE_COVERAGE_MONTHLY_COST = 5000
 local BASE_FEE = 100
 local PERCENTAGE = 0.03
 
@@ -28,27 +28,36 @@ RegisterServerEvent("insurance:fileClaim")
 AddEventHandler("insurance:fileClaim", function(vehicle_to_claim)
 	local _source = source
 	local char = exports["usa-characters"]:GetCharacter(_source)
-	local cash = char.get("money")
-	local CLAIM_PROCESSING_FEE = math.floor(BASE_FEE + (PERCENTAGE * vehicle_to_claim.price))
-	if CLAIM_PROCESSING_FEE <= cash then
-		TriggerEvent('es:exposeDBFunctions', function(couchdb)
-			exports["usa_vehinv"]:GetVehicleInventory(vehicle_to_claim.plate, function(inv)
-				inv.items = {}
-		    	couchdb.updateDocument("vehicles", vehicle_to_claim.plate, {{inventory = inv}, stored = true, impounded = false}, function() end)
-				char.removeMoney(CLAIM_PROCESSING_FEE)
-				if vehicle_to_claim.make and vehicle_to_claim.model then
-					TriggerClientEvent("usa:notify", _source, "Filed an insurance claim for your " .. vehicle_to_claim.make .. " " .. vehicle_to_claim.model .. ".\n~y~Fee:~w~ $" .. CLAIM_PROCESSING_FEE)
-				else
-					TriggerClientEvent("usa:notify", _source, "Filed an insurance claim for your " .. vehicle_to_claim.model .. ".\n~y~Fee:~w~ $" .. CLAIM_PROCESSING_FEE)
-				end
-				TriggerClientEvent("garage:removeDamages", _source, vehicle_to_claim.plate)
-				if business then
-					exports["usa-businesses"]:GiveBusinessCashPercent(business, CLAIM_PROCESSING_FEE)
-				end
-			end)
-		end)
-	else
-		TriggerClientEvent("usa:notify", _source, "You don't have enough money to make a claim on that vehicle.")
+	local insurance = char.get("insurance")
+	if insurance.type == "auto" then
+		if playerHasValidAutoInsurance(insurance) then
+			local cash = char.get("money")
+			local CLAIM_PROCESSING_FEE = math.floor(BASE_FEE + (PERCENTAGE * vehicle_to_claim.price))
+			if CLAIM_PROCESSING_FEE <= cash then
+				TriggerEvent('es:exposeDBFunctions', function(couchdb)
+					exports["usa_vehinv"]:GetVehicleInventory(vehicle_to_claim.plate, function(inv)
+						inv.items = {}
+						couchdb.updateDocument("vehicles", vehicle_to_claim.plate, {{inventory = inv}, stored = true, impounded = false}, function() end)
+						char.removeMoney(CLAIM_PROCESSING_FEE)
+						if vehicle_to_claim.make and vehicle_to_claim.model then
+							TriggerClientEvent("usa:notify", _source, "Filed an insurance claim for your " .. vehicle_to_claim.make .. " " .. vehicle_to_claim.model .. ".\n~y~Fee:~w~ $" .. CLAIM_PROCESSING_FEE)
+						else
+							TriggerClientEvent("usa:notify", _source, "Filed an insurance claim for your " .. vehicle_to_claim.model .. ".\n~y~Fee:~w~ $" .. CLAIM_PROCESSING_FEE)
+						end
+						TriggerClientEvent("garage:removeDamages", _source, vehicle_to_claim.plate)
+						if business then
+							exports["usa-businesses"]:GiveBusinessCashPercent(business, CLAIM_PROCESSING_FEE)
+						end
+					end)
+				end)
+			else
+				TriggerClientEvent("usa:notify", _source, "You don't have enough money to make a claim on that vehicle.")
+			end
+		else
+			insurance.valid = false
+			char.set("insurance", insurance)
+			TriggerClientEvent("usa:notify", _source, "Your insurance has expired, please renew!")
+		end
 	end
 end)
 

@@ -31,7 +31,7 @@ function CreateMenu(menu)
 		-- Make a claim --
 		claim_submenu = _menuPool:AddSubMenu(menu, "Make a Claim", "Issue a claim for a damaged or lost vehicle.", true)
 		-- Purchase --
-		local purchaseItem = NativeUI.CreateItem("Purchase or Renew", "If not insured, purchase or renew now for $500.")
+		local purchaseItem = NativeUI.CreateItem("Purchase or Renew", "If not insured, purchase or renew now for $5,000.")
 		purchaseItem.Activated = function(parentmenu, selected)
 			TriggerServerEvent("insurance:checkPlayerInsurance")
 		end
