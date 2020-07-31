@@ -995,7 +995,8 @@ end, {
 })
 
 function BanPlayer(targetSrc, reason)
-	-- add player to ban list
+	DropPlayer(targetSrc, "Banned: " .. reason .. " -- You can file an appeal at https://usarrp.net")
+	-- add player to ban list / send discord web hook msg
 	TriggerEvent('es:exposeDBFunctions', function(GetDoc)
 		-- get info from command
 		local targetPlayer = targetSrc
@@ -1034,8 +1035,7 @@ function BanPlayer(targetSrc, reason)
 			}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 		-- update db
 		GetDoc.createDocument("bans",  {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = "anticheese", bannerId = -1, timestamp = os.date("!%Y-%m-%dT%XZ", os.time() - 7 * 60 * 60)}, function()
-			print("player banned!")
-			DropPlayer(targetPlayer, "Banned: " .. reason .. " -- You can file an appeal at https://usarrp.net")
+			print("[es_admin] player ban document saved!")
 		end)
 	end)
 end
