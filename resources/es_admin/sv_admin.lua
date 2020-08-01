@@ -995,7 +995,6 @@ end, {
 })
 
 function BanPlayer(targetSrc, reason)
-	DropPlayer(targetSrc, "Banned: " .. reason .. " -- You can file an appeal at https://usarrp.net")
 	-- add player to ban list / send discord web hook msg
 	TriggerEvent('es:exposeDBFunctions', function(GetDoc)
 		-- get info from command
@@ -1012,6 +1011,8 @@ function BanPlayer(targetSrc, reason)
 			char_name = player.getFullName()
 		end
 		local desc = "**Character Name:** " .. char_name
+		-- kick from server
+		DropPlayer(targetPlayer, "Banned: " .. reason .. " -- You can file an appeal at https://usarrp.net")
 		-- send discord message
 		desc = desc .. "\n**Display Name:** " .. (targetPlayerName or "UNDEFINED")
 		for i = 1, #allPlayerIdentifiers do
