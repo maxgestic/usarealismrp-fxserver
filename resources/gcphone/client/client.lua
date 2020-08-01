@@ -673,11 +673,11 @@ end)
 RegisterNUICallback('callEvent', function(data, cb)
   local eventName = data.eventName or ''
   if string.match(eventName, 'gcphone') then
-    if eventName == "gcphone:send911Message" then
+    if eventName:find("gcphone:send911Mess") then -- purposely incomplete event name, otherwise the new scrambler breaks this by scrambling it
       TriggerEvent("gcphone:send911Message", (data.data or nil))
-    elseif eventName == "gcphone:sendMechanicMessage" then
+    elseif eventName:find("gcphone:sendMechanicMess") then -- purposely incomplete event name, otherwise the new scrambler breaks this by scrambling it
       TriggerEvent("gcphone:sendMechanicMessage", (data.data or nil))
-    elseif eventName == "gcphone:sendTaxiMessage" then 
+    elseif eventName:find("gcphone:sendTaxiMess") then -- purposely incomplete event name, otherwise the new scrambler breaks this by scrambling it
       TriggerEvent("gcphone:sendTaxiMessage", (data.data or nil))
     end
   else
