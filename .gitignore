@@ -13,6 +13,7 @@ resources/eup-ui
 resources/paletopd
 resources/\[cassino\]
 resources/RES_Anticheat/events.lua
+resources [UNSCRAMBLED]
 server2.cfg
 gitpull.bat
 CitizenFX.log
