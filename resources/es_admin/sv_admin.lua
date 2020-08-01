@@ -1013,7 +1013,7 @@ function BanPlayer(targetSrc, reason)
 		end
 		local desc = "**Character Name:** " .. char_name
 		-- send discord message
-		desc = desc .. "\n**Display Name:** " .. targetPlayerName
+		desc = desc .. "\n**Display Name:** " .. (targetPlayerName or "UNDEFINED")
 		for i = 1, #allPlayerIdentifiers do
 			desc = desc .. " \n**Identifier #"..i..":** " .. allPlayerIdentifiers[i]
 		end
