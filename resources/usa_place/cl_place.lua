@@ -4,8 +4,8 @@ function getVehicleInDirection(coordFrom, coordTo)
     return vehicle
 end
 
-RegisterNetEvent("place")
-AddEventHandler("place", function(frontSeat)
+RegisterNetEvent("place:place")
+AddEventHandler("place:place", function(frontSeat)
 	local playerPed = PlayerPedId()
 	if DoesEntityExist(playerPed) then
 

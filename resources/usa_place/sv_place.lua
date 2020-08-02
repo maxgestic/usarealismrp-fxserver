@@ -12,7 +12,7 @@ TriggerEvent('es:addCommand', 'place', function(source, args, char, location)
 				draggedPlayers[source] = nil
 				TriggerEvent('place:returnUpdatedTable', draggedPlayers)
 			end
-			TriggerClientEvent("place", tPID)
+			TriggerClientEvent("place:place", tPID)
 			local msg = "places person in vehicle"
 			exports["globals"]:sendLocalActionMessage(source, msg)
 		end)
@@ -23,7 +23,7 @@ TriggerEvent('es:addCommand', 'place', function(source, args, char, location)
 			draggedPlayers[source] = nil
 			TriggerEvent('place:returnUpdatedTable', draggedPlayers)
 		end
-		TriggerClientEvent("crim:areHandsTied", tPID, source, tPID, "place")
+		TriggerClientEvent("crim:areHandsTied", tPID, source, tPID, "place:place")
 	end
 end, {
 	help = "Place tied or handcuffed player in a car",
@@ -42,7 +42,7 @@ TriggerEvent('es:addJobCommand', 'placef', {'sheriff', 'ems', 'fire', 'correctio
 			draggedPlayers[source] = nil
 			TriggerEvent('place:returnUpdatedTable', draggedPlayers)
 		end
-		TriggerClientEvent("place", tPID, true)
+		TriggerClientEvent("place:place", tPID, true)
 		local msg = "places person in vehicle"
 		exports["globals"]:sendLocalActionMessage(source, msg)
 	end)
@@ -86,7 +86,7 @@ AddEventHandler("place:placePerson", function(targetId)
 			draggedPlayers[source] = nil
 			TriggerEvent('place:returnUpdatedTable', draggedPlayers)
 		end
-		TriggerClientEvent("place", targetId)
+		TriggerClientEvent("place:place", targetId)
 	end)
 end)
 
