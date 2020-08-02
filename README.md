@@ -37,6 +37,7 @@ For it to work properly you need to follow these rules:
 	- Use ``__resource.lua`` instead of ``fxmanifest.lua``
 	- No globbing syntax allowed in the ``__resource.lua``
 	- Use ``RegisterServerEvent``, not ``RegisterNetEvent`` in server scripts
+	- Don't name registered chat commands the same as events
 
 **Job Types**
 1. "civ"
