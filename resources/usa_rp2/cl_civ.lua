@@ -407,7 +407,7 @@ AddEventHandler("crim:areHandsTied", function(from_source, to_source, action)
     elseif action == "blindfold" then
       TriggerServerEvent("crim:continueBlindfolding", true, from_source, to_source)
     elseif action == "place" then
-      TriggerEvent("place")
+      TriggerEvent("place:place")
     elseif action == "placet" then
       TriggerEvent('trunkhide:hideInNearestTrunk')
     elseif action == "search" then
