@@ -43,5 +43,6 @@ server_exports {
   "round",
   "hash256",
   "currentTimestamp",
-  "getJavaScriptDateString"
+  "getJavaScriptDateString",
+  "hasFelonyOnRecord"
 }

@@ -268,4 +268,22 @@ function getJavaScriptDateString(timestamp)
 	}
 	local dateString = MONTHS[timestamp:sub(6,7)] .. " " .. timestamp:sub(9,10) .. ", " .. timestamp:sub(1, 4) .. " " .. timestamp:sub(12, 13) .. ":" .. timestamp:sub(15,16) .. ":" .. timestamp:sub(18)
 	return dateString
-  end
+end
+
+function hasFelonyOnRecord(src)
+	local felonyChargeNumbers = {
+		'PC 187', 'PC 192', 'PC 206', 'PC 207', 'PC 211', 'PC 215', 'PC 245', 'PC 487', '18720', '29800', '33410', '2331', '2800.2', '2800.3', '2800.4', '51-50', '5150'
+	}
+	local char = exports["usa-characters"]:GetCharacter(src)
+	local chargeHistory = char.get("criminalHistory")
+	if #chargeHistory > 0 then
+		for i = 1, #chargeHistory do
+			for j = 1, #felonyChargeNumbers do
+				if chargeHistory[i].charges:lower():find(felonyChargeNumbers[j]:lower()) then
+					return true
+				end
+			end
+		end
+	end
+	return false
+end

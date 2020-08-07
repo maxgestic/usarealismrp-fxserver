@@ -125,7 +125,7 @@ AddEventHandler("gunShop:purchaseLicense", function(business)
   local timestamp = os.date("*t", os.time())
   local char = exports["usa-characters"]:GetCharacter(usource)
   local permit_status = checkPermit(char)
-  if permit_status == "valid" then
+  if not exports.globals:hasFelonyOnRecord(usource) then
     local m = char.get("money")
     local NEW_GUN_LICENSE = {
       name = 'Firearm Permit',
@@ -160,7 +160,7 @@ AddEventHandler("gunShop:purchaseLicense", function(business)
       TriggerClientEvent("usa:notify", usource, "Inventory full!")
     end
   else 
-    TriggerClientEvent("usa:notify", usource, "You have no valid permit!")
+    TriggerClientEvent("usa:notify", usource, "You have a felony on your record! We can't issue you a permit!")
   end
 end)
 
