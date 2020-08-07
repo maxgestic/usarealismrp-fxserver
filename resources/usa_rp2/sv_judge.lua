@@ -388,19 +388,26 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'revoke', {'judge', 'sheriff'}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'revoke', {'judge', 'sheriff'}, function(src, args, char)
+	print("inside revoke command handler")
 	local type = string.lower(args[2])
 	local target = tonumber(args[3])
-	local target_item_name = nil
+
+	if not GetPlayerName(target) then
+		TriggerClientEvent("usa:notify", src, "Invalid ID provided")
+		return
+	end
+
     -- check SGT + rank for police --
     if char.get("job") == "sheriff" then
         if char.get("policeRank") < 4 then
-            TriggerClientEvent("usa:notify", usource, "Not high enough rank!")
+            TriggerClientEvent("usa:notify", src, "Not high enough rank!")
             return
         end
     end
 
-	if type and GetPlayerName(target) then
+	local target_item_name = nil
+	if type then
 		if type == "dl" then
 			target_item_name = "Driver's License"
 		elseif type == "al" then
@@ -415,10 +422,10 @@ TriggerEvent('es:addJobCommand', 'revoke', {'judge', 'sheriff'}, function(source
 		local target_player = exports["usa-characters"]:GetCharacter(target)
 		if target_player.hasItem(target_item_name) then
 			target_player.removeItem(target_item_name, 1)
-			TriggerClientEvent("usa:notify", usource,  "You have revoked ~y~" .. target_item_name .. "~s~.")
-        	TriggerClientEvent("usa:notify", target,  "Your ~y~" .. target_item_name .. "~s~ has been revoked.")
+			TriggerClientEvent("usa:notify", src,  "You have revoked ~y~" .. target_item_name .. "~s~.")
+			TriggerClientEvent("usa:notify", target,  "Your ~y~" .. target_item_name .. "~s~ has been revoked.")
         else
-        	TriggerClientEvent("usa:notify", usource, "No "..target_item_name.." found~s~!")
+			TriggerClientEvent("usa:notify", src, "No "..target_item_name.." found~s~!")
         end
 	end
 end, {
