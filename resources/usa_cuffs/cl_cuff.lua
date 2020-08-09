@@ -9,6 +9,7 @@ local uncuff_locations = {
 	{x = -533.3, y = 5291.5, z = 74.2}
 }
 
+-- falling when running
 Citizen.CreateThread(function()
 	while true do
 		Wait(4000)
@@ -167,15 +168,12 @@ AddEventHandler("cuff:attemptToCuffNearest", function()
 	TriggerEvent("usa:getClosestPlayer", 1.65, function(player)
 		if player then
 			if tonumber(player.id) ~= 0 then
-				print('player found to cuff: '..player.id)
 				local playerPed = PlayerPedId()
 				if IsEntityVisible(GetPlayerPed(GetPlayerFromServerId(player.id))) then
 					local playerCoords = GetEntityCoords(playerPed)
 					local playerHeading = GetEntityHeading(playerPed)
 					local x, y, z = table.unpack(GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 0.65, -1.0))
-					TriggerServerEvent("cuff:Handcuff", player.id)
-					TriggerServerEvent("cuff:triggerSuspectAnim", player.id, x, y, z, playerHeading)
-					TriggerEvent('cuff:playPoliceAnim', 1)
+					TriggerServerEvent("cuff:Handcuff", player.id, x, y, z, playerHeading)
 				end
 			else
 				TriggerEvent('usa:notify', "No target found to cuff!")
@@ -210,7 +208,9 @@ AddEventHandler('cuff:playPoliceAnim', function(animType)
 			name = "pickup"
 		}
 		TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 1, 'cuffing', 1.0)
-		--TriggerEvent("usa:playAnimation", anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 1.5)
+		TriggerEvent("usa:playAnimation", anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 1.5)
+	elseif animType == 3 then
+		TriggerEvent("usa:playAnimation", "mp_arresting", "a_uncuff", -8, 1, -1, 53, 0, 0, 0, 0, 1.5)
 	end
 end)
 
@@ -252,7 +252,7 @@ AddEventHandler("cuff:unCuff", function(silent)
 end)
 
 RegisterNetEvent("cuff:Handcuff")
-AddEventHandler("cuff:Handcuff", function()
+AddEventHandler("cuff:Handcuff", function(arrestingPlayerId, x, y, z, playerHeading)
 	TriggerEvent('cuff:forceHandsDown', function()
 		local lPed = GetPlayerPed(-1)
 		if DoesEntityExist(lPed) then
@@ -261,12 +261,13 @@ AddEventHandler("cuff:Handcuff", function()
 				while not HasAnimDictLoaded("mp_arresting") do
 					Citizen.Wait(100)
 				end
-				--if IsEntityPlayingAnim(lPed, "mp_arresting", "idle", 3) then
 				if isCuffed then
-					Citizen.Trace("ENTITY WAS ALREADY PLAYING ARRESTED ANIM, UNCUFFING")
+					if arrestingPlayerId then
+						TriggerServerEvent("cuff:triggerAnimType", arrestingPlayerId, 3) -- police uncuffing
+					end
+					Wait(2600)
 					ClearPedSecondaryTask(lPed)
 					SetEnableHandcuffs(lPed, false)
-					--FreezeEntityPosition(lPed, false)
 					TriggerEvent('usa:showHelp', false, 'You have been ~g~released~s~.')
 					isCuffed = false
 					isHardcuffed = false
@@ -279,11 +280,14 @@ AddEventHandler("cuff:Handcuff", function()
 					while IsEntityPlayingAnim(GetPlayerPed(-1), "mp_arrest_paired", "crook_p2_back_right", 3) or cuffanimplaying or IsPedRagdoll(GetPlayerPed(-1)) do
 						Citizen.Wait(5)
 					end
-					Citizen.Trace("ENTITY WAS NOT PLAYING ARRESTED ANIM, CUFFING")
+					if arrestingPlayerId then
+						TriggerServerEvent("cuff:triggerAnimType", arrestingPlayerId, 1) -- police scuffing
+					end
+					TriggerEvent("cuff:playSuspectAnim", x, y, z, playerHeading)
+					Wait(3000)
 					TaskPlayAnim(lPed, "mp_arresting", "idle", 8.0, -8, -1, 49, 0, 0, 0, 0)
 					SetEnableHandcuffs(lPed, true)
 					SetCurrentPedWeapon(lPed, GetHashKey("WEAPON_UNARMED"), true)
-					-- FreezeEntityPosition(lPed, true)
 					TriggerEvent('usa:showHelp', false, 'You have been ~r~detained~s~.')
 					isCuffed = true
 					isHardcuffed = false
