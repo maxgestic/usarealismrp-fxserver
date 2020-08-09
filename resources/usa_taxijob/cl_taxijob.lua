@@ -26,6 +26,8 @@ local JOB = {
 	end_time = nil
 }
 
+local keypressOnHold = false
+
 --------------------
 -- list of models --
 --------------------
@@ -125,8 +127,17 @@ end)
 
 RegisterNetEvent("taxiJob:onDuty")
 AddEventHandler("taxiJob:onDuty", function()
+	keypressOnHold = true
+	TriggerEvent("chatMessage", "", {}, "Use ^3/dispatch [id] [msg]^0 to respond to a player taxi request!")
+	Citizen.Wait(3000)
+	TriggerEvent("chatMessage", "", {}, "Use ^3/togglerequests^0 to allow or deny local taxi requests.")
+	Citizen.Wait(3000)
+	TriggerEvent("chatMessage", "", {}, "Use ^3/ping [id]^0 to request a person\'s location.")
+	Citizen.Wait(3000)
+	TriggerEvent("chatMessage", "", {}, "A taxi is waiting for you, use this vehicle while working.")
 	DrawCoolLookingNotificationWithTaxiPic("Here's your cab! Have a good shift!")
 	SpawnTaxi()
+	keypressOnHold = false
 end)
 
 RegisterNetEvent("taxiJob:offDuty")
@@ -264,7 +275,7 @@ Citizen.CreateThread(function()
 		for name, data in pairs(taxi_duty_locations) do
 			DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 20, '[E] - On/Off Duty (~y~Taxi~s~)')
 		end
-		if IsControlJustPressed(0, 38) then
+		if IsControlJustPressed(0, 38) and not keypressOnHold then
 			for name, data in pairs(taxi_duty_locations) do
 		        local playerCoords = GetEntityCoords(PlayerPedId(), false)
 			    if GetDistanceBetweenCoords(playerCoords, data.duty.x, data.duty.y, data.duty.z, true) < 3 then
