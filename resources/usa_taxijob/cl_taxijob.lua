@@ -28,6 +28,10 @@ local JOB = {
 
 local keypressOnHold = false
 
+local NPC_CALL_WAIT_MIN = 20
+
+local hasMissionPedSpawned = false
+
 --------------------
 -- list of models --
 --------------------
@@ -162,7 +166,8 @@ Citizen.CreateThread(function()
 	local AUTO_JOB_TIME_DELAY = 120000 -- in milliseconds
 
 	function GenerateNPCJob()
-		local model = GetHashKey(PED_MODELS[math.random(#PED_MODELS)])
+		hasMissionPedSpawned = false
+
 		local start_location = LOCATIONS[math.random(#LOCATIONS)]
 		local end_location = LOCATIONS[math.random(#LOCATIONS)]
 		while end_location == start_location do
@@ -170,25 +175,47 @@ Citizen.CreateThread(function()
 		end
 		TriggerEvent("chatMessage", "", {}, "^3^*[DISPATCH] ^r^7A pickup has been requested at ^3" .. start_location.name .. "^7, please respond as soon as possible!")
 		TriggerServerEvent('InteractSound_SV:PlayOnSource', 'demo', 0.1)
-		--ClearGpsPlayerWaypoint()
-		--SetNewWaypoint(start_location.x, start_location.y)
 		TriggerEvent("swayam:SetWayPointWithAutoDisable", start_location.x, start_location.y, start_location.z, 280, 60, "Taxi Request")
-		RequestModel(model)
-		while not HasModelLoaded(model) do
-			Citizen.Wait(100)
-		end
-		JOB.customer_ped = CreatePed(4, model, start_location.x, start_location.y, start_location.z, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
-		-- TODO: make ped start random scenario
-		SetEntityAsMissionEntity(JOB.customer_ped, true, true)
+
+		-- set as on job
 		JOB.isOnJob = true
 		JOB.start = start_location
 		JOB.destination = end_location
 		JOB.destination.arrived = false
 		JOB.start.arrived = false
+
+		-- spawn ped and start job when close to pick up point since there are problems with the ped despawning and ending the job prematurely, hopeful fix
+		Citizen.CreateThread(function()
+			local myped = PlayerPedId()
+			local startedWaitingTime = GetGameTimer()
+			while true do
+				if JOB.isOnJob then
+					local mycoords = GetEntityCoords(myped)
+					if Vdist(mycoords, start_location.x, start_location.y, start_location.z) < 100 then
+						local model = GetHashKey(PED_MODELS[math.random(#PED_MODELS)])
+						RequestModel(model)
+						while not HasModelLoaded(model) do
+							Wait(100)
+						end
+						JOB.customer_ped = CreatePed(4, model, start_location.x, start_location.y, start_location.z, 0.0, true, false)
+						-- TODO: make ped start random scenario
+						SetEntityAsMissionEntity(JOB.customer_ped, true, true)
+						hasMissionPedSpawned = true
+						return
+					elseif GetGameTimer() - startedWaitingTime >= NPC_CALL_WAIT_MIN * 60 * 1000 then
+						exports.globals:notify("Call canceled!", "^3INFO: ^0Taxi call canceled!")
+						JOB.isOnJob = false
+						return
+					end
+				else 
+					return
+				end
+				Wait(1)
+			end
+		end)
 	end
 
 	while true do
-		Citizen.Wait(1)
 		local playerPed = PlayerPedId()
 		------------------------------------------------
 		-- unlock the door just in case it was locked --
@@ -241,12 +268,14 @@ Citizen.CreateThread(function()
 				JOB.end_time = GetGameTimer()
 				JOB.customer_ped = nil
 				TriggerServerEvent("taxiJob:payDriver", Vdist(JOB.start.x, JOB.start.y, JOB.start.z, JOB.destination.x, JOB.destination.y, JOB.destination.z))
+				Wait(1200)
+				SetVehicleDoorShut(JOB.taxi, 2, false)
 			end
 		end
 		---------------------------------
 		-- CHECK FOR JOB ENDING EVENTS --
 		---------------------------------
-		if JOB.isOnJob and (IsPedDeadOrDying(JOB.customer_ped, 1) or not DoesEntityExist(JOB.customer_ped) or (JOB.start.arrived == true and Vdist(GetEntityCoords(JOB.customer_ped), GetEntityCoords(JOB.taxi)) > 10.0)) then
+		if JOB.isOnJob and not IsMissionPedWell(JOB) then
 			JOB.isOnJob = false
 			JOB.end_time = GetGameTimer()
 			TriggerEvent("swayam:RemoveWayPoint")
@@ -262,8 +291,8 @@ Citizen.CreateThread(function()
 				DrawText3D(JOB.destination.x, JOB.destination.y, JOB.destination.z, 30, 'Destination')
 			end
 		end
+		Wait(1)
 	end
-
 end)
 
 local closest_location = {}
@@ -313,7 +342,9 @@ function SpawnTaxi()
 			Wait(100)
 		end
 		JOB.taxi = CreateVehicle(numberHash, closest_location.spawn.x, closest_location.spawn.y, closest_location.spawn.z, closest_location.spawn.heading, true, false)
+		local plate = GetVehicleNumberPlateText(JOB.taxi)
 		TriggerEvent('persistent-vehicles/register-vehicle', JOB.taxi)
+		TriggerServerEvent("fuel:setFuelAmount", plate, 100)
 		SetVehicleOnGroundProperly(JOB.taxi)
 		SetVehRadioStation(JOB.taxi, "OFF")
 		SetEntityAsMissionEntity(JOB.taxi, true, true)
@@ -331,7 +362,7 @@ function SpawnTaxi()
 
 		-- give key to owner
 		TriggerServerEvent("garage:giveKey", vehicle_key)
-		TriggerServerEvent('mdt:addTempVehicle', 'Vapid Stainer (Taxi)', "Downtown Cab Co.", GetVehicleNumberPlateText(JOB.taxi))
+		TriggerServerEvent('mdt:addTempVehicle', 'Vapid Stainer (Taxi)', "Downtown Cab Co.", plate)
 	end)
 end
 
@@ -383,4 +414,20 @@ function EnumerateBlips()
 		AddTextComponentString('Downtown Cab Co.')
 		EndTextCommandSetBlipName(blip)
     end
+end
+
+function IsMissionPedWell(JOB)
+	if DoesEntityExist(JOB.customer_ped) then 
+		if IsPedDeadOrDying(JOB.customer_ped, 1) then
+			return false
+		end
+		if JOB.start.arrived == true and Vdist(GetEntityCoords(JOB.customer_ped), GetEntityCoords(JOB.taxi)) > 10.0 then
+			return false
+		end
+	else
+		if hasMissionPedSpawned then
+			return false
+		end
+	end
+	return true
 end

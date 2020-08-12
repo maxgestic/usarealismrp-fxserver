@@ -1,11 +1,11 @@
 local DUTY_FEE = 100
-local BASE_PAY = 20
+local BASE_PAY = 150
 
 RegisterServerEvent("taxiJob:payDriver")
 AddEventHandler("taxiJob:payDriver", function(distance)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	if char.get("job") == "taxi" then
-		local amountRewarded = math.ceil(BASE_PAY + (0.04 * distance))
+		local amountRewarded = math.ceil(BASE_PAY + (0.095 * distance))
 		char.giveMoney(amountRewarded)
 		TriggerClientEvent('usa:notify', source, 'Request completed, you have received: ~g~$'..amountRewarded..'.00')
 		print("TAXI: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] has received amount["..amountRewarded..'] after distance['..distance..'] for taxi request!')
