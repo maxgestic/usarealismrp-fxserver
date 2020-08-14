@@ -100,7 +100,6 @@ local DOORS = {
   {name = "Mission Row / Aux 1", x = 466.12319946289,y = -990.48913574219, z = 24.914930343628, model = 185711165, locked = true, static = true, _dist = 1.5, allowedJobs = {'sheriff', "corrections", "ems", "judge"}},
   {name = "Mission Row / Aux 2", x = 466.26898193359,y = -989.31799316406, z = 24.914930343628, model = 185711165, locked = false, offset={0.0, 1.24, 0.0}, heading=90, _dist = 1.5, allowedJobs = {'sheriff', "corrections", "ems", "judge"}},
   {name = "EMS Station - Paleto", x = -361.8, y = 6129.8, z = 31.4, model = -250842784, locked = false, _dist = 1.5, allowedJobs = {'ems'}},
-  {name = "Mission Row / Roof", x = 463.58, y = -983.94, z =43.69, model = -340230128, locked = true, offset={0.0, -1.05, 0.10}, heading=89, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Mission Row / Roof", x = 463.58, y = -983.94, z =43.69, model = -340230128, locked = true, offset={0.0, -1.05, 0.10}, heading=89, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
 
   {name = "Mission Row / Holding Cells Entrance 1", x = 468.1, y = -1014.3299, z = 26.4, model = -2023754432, locked = true, offset={0.0, -1.12, 0.0}, heading=0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
