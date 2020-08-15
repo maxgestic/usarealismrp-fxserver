@@ -83,7 +83,7 @@ end)
 function pickingUpThread(playerId, playerCoordinates)
 	if currentRoute then
 		if not trailerId and GetDistanceBetweenCoords(playerCoordinates, currentPickup.coords, true) < 100.0 then
-			trailerId = EncoreHelper.SpawnVehicle(currentRoute.TrailerModel, currentPickup.coords, currentPickup.heading)
+			trailerId = EncoreHelper.SpawnVehicle(currentRoute.TrailerModel, currentPickup.coords, currentPickup.heading, currentRoute.TrailerLivery)
 			Wait(1000)
 		end
 

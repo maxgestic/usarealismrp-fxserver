@@ -194,4 +194,69 @@ Config.Routes = {
 			vector3(2825.8896484375, 1672.3699951172, 24.68688583374), -- factory place on east coast
 		}
 	},
+	{
+		TrailerModel      = 'trailers2',
+		TrailerLivery	  = 2, -- cluckin bell
+		PickupLocations = {
+			{
+				coords = vector3(0.50987166166306, 6274.9931640625, 31.242219924927),
+				heading = 119.30
+			},
+			{
+				coords = vector3(11.030169487, 6280.2177734375, 31.231569290161),
+				heading = 119.30
+			},
+			{
+				coords = vector3(19.62077331543, 6286.0239257813, 31.22992515564),
+				heading = 119.30
+			},
+			{
+				coords = vector3(25.048343658447, 6278.521484375, 31.269769668579),
+				heading = 119.30
+			},
+			{
+				coords = vector3(12.242469787598, 6271.578125, 31.286443710327),
+				heading = 119.30
+			}
+		},
+		Destinations = {
+			vector3(1859.9040527344, 2714.603515625, 45.321678161621) -- prison
+		}
+	},
+	{
+		TrailerModel      = 'trailers3',
+		PickupLocations = {
+			{
+				coords = vector3(1021.8527832031, -3184.986328125, 5.9009618759155),
+				heading = 0.0
+			},
+			{
+				coords = vector3(1025.9313964844, -3184.5651855469, 5.9009504318237),
+				heading = 0.0
+			},
+			{
+				coords = vector3(1030.0994873047, -3184.3107910156, 5.9009938240051),
+				heading = 0.0
+			},
+			{
+				coords = vector3(1034.0607910156, -3185.0092773438, 5.901020526886),
+				heading = 0.0
+			},
+			{
+				coords = vector3(1038.2584228516, -3184.892578125, 5.9010100364685),
+				heading = 0.0
+			},
+			{
+				coords = vector3(1042.2054443359, -3184.6618652344, 5.9009947776794),
+				heading = 0.0
+			},
+			{
+				coords = vector3(1046.2117919922, -3184.5915527344, 5.9009861946106),
+				heading = 0.0
+			}	
+		},
+		Destinations = {
+			vector3(2674.5617675781, 3527.9245605469, 51.765563964844) -- Fake Home Depot (You Tool, Senora FWY)
+		}
+	}
 }

@@ -12,7 +12,7 @@ EncoreHelper.ShowNotification = function(message)
     DrawNotification(true, false)
 end
 
-EncoreHelper.SpawnVehicle = function(name, coordinates, heading)
+EncoreHelper.SpawnVehicle = function(name, coordinates, heading, livery)
     RequestModel(name)
 
     while not HasModelLoaded(name) do
@@ -25,6 +25,10 @@ EncoreHelper.SpawnVehicle = function(name, coordinates, heading)
 	SetVehicleOnGroundProperly(vehicle)
 	SetVehicleEngineOn(vehicle, false, true, true)
 	SetModelAsNoLongerNeeded(name)
+
+	if livery then
+		SetVehicleLivery(vehicle, livery)
+	end
 
     return vehicle
 end
