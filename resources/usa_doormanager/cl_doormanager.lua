@@ -6,6 +6,7 @@ local DOORS_TO_MANAGE = {} -- loaded from server file on start of resource
 
 local LOCK_KEY = 38 -- "E"
 local ACTIVATE_LOCK_SWITCH_DISTANCE = 1.5
+local KEY_PRESS_DELAY = 2000
 local DRAW_MARKER_RANGE = 50
 local RELOCK_DISTANCE = 100.0
 local DEBUG = false
@@ -76,6 +77,8 @@ end)
 -- LOAD STATE OF DOORS ON FIRST JOIN / DRAW 3D TEXT / LISTEN FOR DOOR TOGGLE KEYPRESS --
 ----------------------------------------------------------------------------------------
 Citizen.CreateThread(function()
+  local lastKeyPress = 0
+
 	while true do
 		Wait(1)
 		if FIRST_JOIN then
@@ -86,7 +89,8 @@ Citizen.CreateThread(function()
 		playerPed = GetPlayerPed(-1)
     playerCoords = GetEntityCoords(playerPed)
     
-    if IsControlJustPressed(1, LOCK_KEY) then
+    if IsControlJustPressed(1, LOCK_KEY) and GetGameTimer() - lastKeyPress > KEY_PRESS_DELAY then
+      lastKeyPress = GetGameTimer()
       for i = 1, #DOORS_TO_MANAGE do
         local door = DOORS_TO_MANAGE[i]
         if not doorsBeingLocked[door.name] and Vdist(door.x, door.y, door.z, playerCoords.x, playerCoords.y, playerCoords.z) <= door._dist and not door.static then
