@@ -6,9 +6,11 @@ local DOORS_TO_MANAGE = {} -- loaded from server file on start of resource
 
 local LOCK_KEY = 38 -- "E"
 local ACTIVATE_LOCK_SWITCH_DISTANCE = 1.5
-local KEY_PRESS_DELAY = 2000
+local KEY_PRESS_DELAY = 1000
 local DRAW_MARKER_RANGE = 50
 local RELOCK_DISTANCE = 100.0
+local LOCK_TIMEOUT_SECONDS = 300
+local LOCKING_TEXT_MAX_DISTANCE = 75.0
 local DEBUG = false
 local doorsBeingLocked = {}
 local doorRadius = 1.0
@@ -162,40 +164,63 @@ Citizen.CreateThread(function()
 end)
 
 RegisterNetEvent("doormanager:toggleDoorLock")
-AddEventHandler("doormanager:toggleDoorLock", function(index, locked, x, y, z)  
+AddEventHandler("doormanager:toggleDoorLock", function(index, locked, x, y, z)
+  local doorRadius = 5.0  
   local door = DOORS_TO_MANAGE[index]
   if door then
-      if door.gate then doorRadius = 6.0 end
+      if door.gate then
+        doorRadius = 15.0
+      end
       DOORS_TO_MANAGE[index].locked = locked
       if not door.cell_block then
         local doorObject = GetClosestObjectOfType(x, y, z, doorRadius, door.model, false, false, false)
         if locked and door.offset then
+          doorsBeingLocked[door.name] = true
+          local startedWaitingForLock = GetGameTimer()
           if not door.gate then
             while math.floor(GetEntityHeading(doorObject)) ~= door.heading do
-              Citizen.Wait(1)
-              local playerCoords = GetEntityCoords(PlayerPedId())
-              local doorCoords = GetEntityCoords(doorObject)
-              local offsetX, offsetY, offsetZ = table.unpack(door.offset)
-              doorsBeingLocked[door.name] = true
-              if Vdist(x, y, z, table.unpack(playerCoords)) < drawTextRange then
-                local angle = math.rad(180+GetEntityHeading(doorObject))
-                local r = offsetY
-                local x=doorCoords.x+r*math.cos(angle)
-                local y=doorCoords.y+r*math.sin(angle)
-                DrawText3Ds(x+offsetX, y, doorCoords.z+offsetZ, "Locking...")
+              if DoesEntityExist(doorObject) then
+                local playerCoords = GetEntityCoords(PlayerPedId())
+                local doorCoords = GetEntityCoords(doorObject)
+                local offsetX, offsetY, offsetZ = table.unpack(door.offset)
+                if Vdist(x, y, z, table.unpack(playerCoords)) < drawTextRange then
+                  local angle = math.rad(180+GetEntityHeading(doorObject))
+                  local r = offsetY
+                  local x=doorCoords.x+r*math.cos(angle)
+                  local y=doorCoords.y+r*math.sin(angle)
+                  DrawText3Ds(x+offsetX, y, doorCoords.z+offsetZ, "Locking...")
+                end
+              else 
+                doorObject = GetClosestObjectOfType(x, y, z, doorRadius, door.model, false, false, false)
+                Wait(1000)
+                if not DoesEntityExist(doorObject) then
+                  if GetGameTimer() - startedWaitingForLock >= LOCK_TIMEOUT_SECONDS * 1000 then
+                    break
+                  end
+                end
               end
+              Wait(1)
             end
           else
             _x, _y, _z = table.unpack(door.lockedCoords)
             while GetDistanceBetweenCoords(GetEntityCoords(doorObject).x, GetEntityCoords(doorObject).y, GetEntityCoords(doorObject).z, _x, _y, _z, false) > 0.2 do
-              Wait(1)
-              local playerCoords = GetEntityCoords(PlayerPedId())
-              local doorCoords = GetEntityCoords(doorObject)
-              local offsetX, offsetY, offsetZ = table.unpack(door.offset)
-              doorsBeingLocked[door.name] = true
-              if Vdist(x, y, z, table.unpack(playerCoords)) < 8.0 then
-                DrawText3Ds(doorCoords.x+offsetX, doorCoords.y+offsetY, doorCoords.z+offsetZ, 'Locking...')
+              if DoesEntityExist(doorObject) then
+                local playerCoords = GetEntityCoords(PlayerPedId())
+                local doorCoords = GetEntityCoords(doorObject)
+                local offsetX, offsetY, offsetZ = table.unpack(door.offset)
+                if Vdist(x, y, z, table.unpack(playerCoords)) < 8.0 then
+                  DrawText3Ds(doorCoords.x+offsetX, doorCoords.y+offsetY, doorCoords.z+offsetZ, 'Locking...')
+                end
+              else 
+                doorObject = GetClosestObjectOfType(x, y, z, doorRadius, door.model, false, false, false)
+                Wait(1000)
+                if not DoesEntityExist(doorObject) then
+                  if GetGameTimer() - startedWaitingForLock >= LOCK_TIMEOUT_SECONDS * 1000 then
+                    break
+                  end
+                end
               end
+              Wait(1)
             end
           end
           doorsBeingLocked[door.name] = nil
