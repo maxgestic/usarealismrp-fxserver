@@ -278,9 +278,11 @@ function hasFelonyOnRecord(src)
 	local chargeHistory = char.get("criminalHistory")
 	if #chargeHistory > 0 then
 		for i = 1, #chargeHistory do
-			for j = 1, #felonyChargeNumbers do
-				if chargeHistory[i].charges:lower():find(felonyChargeNumbers[j]:lower()) then
-					return true
+			if chargeHistory[i].charges then
+				for j = 1, #felonyChargeNumbers do
+					if chargeHistory[i].charges:lower():find(felonyChargeNumbers[j]:lower()) then
+						return true
+					end
 				end
 			end
 		end
