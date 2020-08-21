@@ -306,20 +306,24 @@ AddEventHandler("cultivation:harvest", function()
     -- find nearest plant
     local closest = GetClosestPlant()
     if closest.index ~= -1 then
-        if not HasAnimDictLoaded("anim@move_m@trash") then
-            exports.globals:loadAnimDict("anim@move_m@trash")
-        end
-        local start = GetGameTimer()
-        while GetGameTimer() - start < HARVEST_TIME_SECONDS * 1000 do
-            exports.globals:DrawTimerBar(start, HARVEST_TIME_SECONDS * 1000, 1.42, 1.475, 'HARVESTING')
-            DisablePlayerControls()
-            if not IsEntityPlayingAnim(me.ped, "anim@move_m@trash", "pickup", 3) then
-                TaskPlayAnim(me.ped, "anim@move_m@trash", "pickup", 8.0, 1.0, -1, 11, 1.0, false, false, false)
+        if PLANTED[closest.index] and not PLANTED[closest.index].isDead then
+            if not HasAnimDictLoaded("anim@move_m@trash") then
+                exports.globals:loadAnimDict("anim@move_m@trash")
             end
-            Wait(1)
+            local start = GetGameTimer()
+            while GetGameTimer() - start < HARVEST_TIME_SECONDS * 1000 do
+                exports.globals:DrawTimerBar(start, HARVEST_TIME_SECONDS * 1000, 1.42, 1.475, 'HARVESTING')
+                DisablePlayerControls()
+                if not IsEntityPlayingAnim(me.ped, "anim@move_m@trash", "pickup", 3) then
+                    TaskPlayAnim(me.ped, "anim@move_m@trash", "pickup", 8.0, 1.0, -1, 11, 1.0, false, false, false)
+                end
+                Wait(1)
+            end
+            ClearPedTasks(me.ped)
+            TriggerServerEvent("cultivation:harvest", closest.index)
+        else 
+            exports.globals:notify("This plant is dead!", "^3INFO: ^0This plant is dead! Use a shovel to remove it!")
         end
-        ClearPedTasks(me.ped)
-        TriggerServerEvent("cultivation:harvest", closest.index)
     else
         exports.globals:notify("No plant found!")
     end
