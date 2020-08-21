@@ -108,7 +108,9 @@ RegisterServerEvent("cultivation:remove")
 AddEventHandler("cultivation:remove", function(i)
     TriggerClientEvent("cultivation:remove", -1, i)
     PlantManager.removePlant(i)
-    TriggerClientEvent("usa:notify", source, "Plant removed!")
+    if source then
+        TriggerClientEvent("usa:notify", source, "Plant removed!")
+    end
 end)
 
 TriggerEvent('es:addCommand', 'removeplant', function(source, args, char)
@@ -137,6 +139,9 @@ Citizen.CreateThread(function()
                 if didSustenanceUpdate then
                     TriggerClientEvent("cultivation:updateSustenance", -1, i, PLANTED[i].foodLevel, PLANTED[i].waterLevel, (PLANTED[i].isDead or false))
                     numSustenanceUpdates = numSustenanceUpdates + 1
+                end
+                if PlantManager.hasBeenDeadLongEnoughToDelete(i) then
+                    TriggerEvent("cultvation:remove", i)
                 end
             end
             Wait(20)

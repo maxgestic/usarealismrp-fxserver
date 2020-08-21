@@ -99,7 +99,12 @@ PlantManager.sustanenceTick = function(plant)
         -- check for death --
         if plant.foodLevel.val < DIE_THRESHOLD or plant.waterLevel.val < DIE_THRESHOLD and not plant.isDead then
             plant.isDead = true
+            plant.deathTimestamp = os.time()
             didUpdate = true
+        end
+    else
+        if not plant.deathTimestamp then -- needed for plants that were _already_ dead but did not have a death timestamp
+            plant.deathTimestamp = os.time()
         end
     end
     return plant, didUpdate
@@ -169,4 +174,14 @@ PlantManager.removePlant = function(i)
             end)
         end)
     end
+end
+
+PlantManager.hasBeenDeadLongEnoughToDelete = function(i)
+    if PLANTED[i].isDead and PLANTED[i].deathTimestamp then
+        local daysSinceDead = math.floor(exports.globals:GetHoursFromTime(PLANTED[i].deathTimestamp) / 24)
+        if daysSinceDead >= DAYS_DEAD_BEFORE_DELETE then
+            return true
+        end
+    end
+    return false
 end
