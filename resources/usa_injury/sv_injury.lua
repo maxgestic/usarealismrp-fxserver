@@ -93,6 +93,8 @@ TriggerEvent('es:addJobCommand', 'bandage', {'ems', 'doctor', 'sheriff', 'correc
 	if targetSource and GetPlayerName(targetSource) then
 		TriggerEvent('injuries:bandagePlayer', targetSource)
 		TriggerClientEvent('usa:notify', _source, 'Patient\'s injuries have been bandaged.')
+		exports.globals:sendLocalActionMessage(_source, "gives bandage", 5.0, 3500)
+		TriggerClientEvent("usa:playAnimation", _source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 3)
 	else
 		TriggerClientEvent('injuries:bandageNearestPed', _source)
 	end
