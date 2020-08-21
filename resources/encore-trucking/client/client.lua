@@ -82,7 +82,7 @@ end)
 
 function pickingUpThread(playerId, playerCoordinates)
 	if currentRoute then
-		if not trailerId and GetDistanceBetweenCoords(playerCoordinates, currentPickup.coords, true) < 100.0 then
+		if not trailerId and GetDistanceBetweenCoords(playerCoordinates, currentPickup.coords, true) < 175.0 then
 			trailerId = EncoreHelper.SpawnVehicle(currentRoute.TrailerModel, currentPickup.coords, currentPickup.heading, currentRoute.TrailerLivery)
 			Wait(1000)
 		end
@@ -128,27 +128,32 @@ function deliveringThread(playerId, playerCoordinates)
 		end
 
 		if trailerId and (not DoesEntityExist(trailerId) or not IsEntityAttachedToEntity(trailerId, truckId) or Vdist(GetEntityCoords(trailerId), GetEntityCoords(truckId)) > 300) then
-			if DoesEntityExist(trailerId) then
-				DeleteVehicle(trailerId)
-				trailerId = nil
+			Wait(3000) -- wait and try again, Hopeful fix for a job ending bug that has been reported
+			if trailerId and (not DoesEntityExist(trailerId) or not IsEntityAttachedToEntity(trailerId, truckId) or Vdist(GetEntityCoords(trailerId), GetEntityCoords(truckId)) > 300) then
+				if DoesEntityExist(trailerId) then
+					DeleteVehicle(trailerId)
+					trailerId = nil
+				end
+
+				RemoveBlip(routeBlip)
+
+				currentRoute        = nil
+				currentPickup		= nil
+				currentDestination  = nil
+				routeBlip			= nil
+				lastDropCoordinates = playerCoordinates
+
+				EncoreHelper.ShowNotification('You lost your load. A new route will be assigned.')
+
+				jobStatus = CONST_WAITINGFORTASK
 			end
-
-			RemoveBlip(routeBlip)
-
-			currentRoute        = nil
-			currentPickup		= nil
-			currentDestination  = nil
-			routeBlip			= nil
-			lastDropCoordinates = playerCoordinates
-
-			EncoreHelper.ShowNotification('You lost your load. A new route will be assigned.')
-
-			jobStatus = CONST_WAITINGFORTASK
 		end
 
 		if truckId then
 			if GetVehicleEngineHealth(truckId) < 100 or GetVehicleBodyHealth(truckId) < 100 or not DoesEntityExist(truckId) then
-				abortJob("Trucking route ended!")
+				abortJob("Route ended! Truck is too damaged!")
+				print("[trucking] GetVehicleBodyHealth(truckId): " .. GetVehicleBodyHealth(truckId))
+				print("[trucking] GetVehicleEngineHealth(truckId): " .. GetVehicleEngineHealth(truckId))
 			end
 		end
 	end
