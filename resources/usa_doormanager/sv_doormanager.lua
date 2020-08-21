@@ -14,8 +14,8 @@ local DOORS = {
   {name = "Boilingbroke Leading Yard Gate 1", x = 1796.62, y = 2595.63, z = 45.8, model = -1156020871, locked = true, offset={0.0, -1.13, 0.05}, heading=180.0, _dist =3.0, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Boilingbroke Leading Yard Gate 2", x = 1797.39, y = 2592.49, z = 45.8, model = -1156020871, locked = true, offset={0.0, -1.13, 0.05}, heading=180.0, _dist = 3.0, allowedJobs = {'sheriff', 'corrections', 'judge'}},
 
-  {name = "Boilingbroke Pantry Door", x = 1784.59, y = 2598.43, z = 45.8, model = 1028191914, locked = true, offset={0.0, 1.13, 0.05}, heading=90.0, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
-  {name = "Boilingbroke Side Entrance", x = 1786.384, y = 2600.229, z = 46.089, model = 262839150, locked = true, offset={0.0, 1.13, 0.05}, heading=0, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "Boilingbroke Pantry Door", x = 1783.5921630859, y = 2598.4162597656, z = 45.564971923828, model = 1028191914, locked = true, offset={0.0, 1.13, 0.05}, heading=90.0, _dist = 1.0, allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "Boilingbroke Side Entrance", x = 1785.6279296875, y = 2599.763671875, z = 45.56494140625, model = 262839150, locked = true, offset={0.0, 1.13, 0.05}, heading=0, _dist = 1.0, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Boilingbroke Side Entrance 2", x = 1791.18, y = 2552.05, z = 45.8, model = 262839150, locked = true, offset={0.0, 1.13, 0.05}, heading=270, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Boilingbroke Side Entrance 3", x = 1776.7, y = 2551.9, z = 45.8, model = 1645000677, locked = true, offset={0.0, 1.13, 0.05}, heading=270, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Boilingbroke Side Entrance 4", x = 1765.69, y = 2567.85, z = 45.71, model = 1645000677, locked = true, offset={0.0, 1.13, 0.05}, heading=0, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
