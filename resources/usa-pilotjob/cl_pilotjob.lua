@@ -118,11 +118,12 @@ Citizen.CreateThread(function()
                     active_job = nil
                     exports.globals:notify("Job ended! You damaged the aircraft!")
                     TriggerServerEvent("usa:loadPlayerComponents")
-                elseif dist >= 100.0 then
+                elseif dist >= 700.0 then
                     MarkCurrentCheckpointComplete() -- should mark all checkpoints completed?
                     active_job = nil
                     TriggerServerEvent("pilotjob:endJob")
                     exports.globals:notify("Job ended! You went too far!")
+                    TriggerServerEvent("usa:loadPlayerComponents")
                 end
             end
             -- time --
