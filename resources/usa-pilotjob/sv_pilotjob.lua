@@ -10,40 +10,40 @@ local MISSIONS = {
     {
       name = "Training Flight",
       description = "Fly to and land the mammatus at the airport in Sandy Shores and then come back and land at LSA then park it in the hangar.",
-        checkpoints = {
-          {
-            name = "Mammatus",
-            coords = {  x = -962.2, y = -2991.7, z = 13.9 },
-            requirement = "Get into the Mammatus and prepare yourself and Instructor Blackfoot for flight."
-          },
-          {
-            name = "Runway 1",
-            coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
-            requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
-            sound = "atc3"
-          },
-          {
-            name = "Sandy Shores Airport",
-            coords = { x = 1673.0, y = 3243.9, z = 40.9 },
-            requirement = "Fly safely and properly to the Sandy Shores Airport with Instructor Blackfoot."
-          },
-          {
-            name = "LSA",
-            coords = { x = -1220.7, y = -3211.9, z = 13.9 },
-            requirement = "You did it! Now let's take the Mammatus back to Los Santos Airport."
-          },
-          {
-            name = "LSA Hangar",
-            coords = { x = -943.7, y = -2964.3, z = 13.9 },
-            requirement = "Nice! Now park it in the hangar, and check in with staff, and that will be all for your training flight! Congratulations!"
-          }
+      checkpoints = {
+        {
+          name = "Mammatus",
+          coords = {  x = -962.2, y = -2991.7, z = 13.9 },
+          requirement = "Get into the Mammatus and prepare yourself and Instructor Blackfoot for flight."
         },
-        pay = 500,
-        plane_spawn = {
-          model = "mammatus",
-          location = { x = -962.2, y = -2991.7, z = 13.9 },
-          passengers = 0
+        {
+          name = "Runway 1",
+          coords = {  x = -1058.1, y = -3103.1, z = 14.6 },
+          requirement = "When the coast is clear, get ready for takeoff and line up on Runway 1.",
+          sound = "atc3"
+        },
+        {
+          name = "Sandy Shores Airport",
+          coords = { x = 1673.0, y = 3243.9, z = 40.9 },
+          requirement = "Fly safely and properly to the Sandy Shores Airport with Instructor Blackfoot."
+        },
+        {
+          name = "LSA",
+          coords = { x = -1220.7, y = -3211.9, z = 13.9 },
+          requirement = "You did it! Now let's take the Mammatus back to Los Santos Airport."
+        },
+        {
+          name = "LSA Hangar",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Nice! Now park it in the hangar, and check in with staff, and that will be all for your training flight! Congratulations!"
         }
+      },
+      pay = 600,
+      plane_spawn = {
+        model = "mammatus",
+        location = { x = -962.2, y = -2991.7, z = 13.9 },
+        passengers = 0
+      }
     },
   },
   ["Junior Flight Officer"] = {
@@ -78,7 +78,7 @@ local MISSIONS = {
           requirement = "Nice! Now park it in the hangar, and check in with staff, and that will be all for this task!"
         }
       },
-      pay = 500,
+      pay = 750,
       plane_spawn = {
         model = "cuban800",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -116,7 +116,7 @@ local MISSIONS = {
           requirement = "Nice job! Let's park the Dodo back in the hangar and you'll be finished for this task!"
         }
       },
-      pay = 500,
+      pay = 850,
       plane_spawn = {
         model = "dodo",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -149,7 +149,7 @@ local MISSIONS = {
           requirement = "Nice! Go check in with staff and let them know you finished."
         }
       },
-      pay = 500,
+      pay = 650,
       plane_spawn = {
         model = "frogger",
         location = { x = -1112.2, y = -2883.9, z = 13.3 },
@@ -187,7 +187,7 @@ local MISSIONS = {
           requirement = "Nice! Now park it in the hangar, and check in with staff, and that will be all for this task!"
         }
       },
-      pay = 500,
+      pay = 800,
       plane_spawn = {
         model = "vestra",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -228,7 +228,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 800,
       plane_spawn = {
         model = "shamal",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -267,7 +267,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 800,
       plane_spawn = {
         model = "nimbus",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -306,7 +306,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 800,
       plane_spawn = {
         model = "luxor2",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -364,7 +364,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 800,
       plane_spawn = {
         model = "nimbus",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -403,7 +403,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 800,
       plane_spawn = {
         model = "shamal",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -442,7 +442,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 800,
       plane_spawn = {
         model = "luxor",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -451,6 +451,39 @@ local MISSIONS = {
     }
   },
   ["First Officer"] = {
+    {
+      name = "Helicopter Flight",
+      description = "Our pilots need to know how to also fly helicopters! Take the frogger out for a quick spin for some practice.",
+      checkpoints = {
+        {
+          name = "Frogger",
+          coords = { x = -1112.2, y = -2883.9, z = 13.3 },
+          requirement = "Get into the Frogger and prepare yourself and your instructor for flight.",
+          sound = "atc3"
+        },
+        {
+          name = "Sandy Shores Airport",
+          coords = { x = 1770.3, y = 3239.7, z = 41.5 },
+          requirement = "Take the frogger to the Sandy Shores airport and land on the helipad."
+        },
+        {
+          name = "LSA",
+          coords = { x = -1112.2, y = -2883.9, z = 13.3 },
+          requirement = "Good job! Let's take it back to LSA now and land back where we took off from."
+        },
+        {
+          name = "Staff",
+          coords = { x = -943.7, y = -2964.3, z = 13.9 },
+          requirement = "Nice! Go check in with staff and let them know you finished."
+        }
+      },
+      pay = 700,
+      plane_spawn = {
+        model = "frogger",
+        location = { x = -1112.2, y = -2883.9, z = 13.3 },
+        passengers = 0
+      }
+    },
     {
       name = "Titan Cargo Flight",
       description = "Take the Titan and its cargo to the Sandy Shores Airport safely.",
@@ -483,7 +516,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 835,
       plane_spawn = {
         model = "titan",
         location = { x = -962.2, y = -2991.7, z = 13.9 }
@@ -521,7 +554,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 520,
+      pay = 835,
       plane_spawn = {
         model = "titan",
         location = { x = -962.2, y = -2991.7, z = 13.9 }
@@ -559,7 +592,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 835,
       plane_spawn = {
         model = "nimbus",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -598,7 +631,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 835,
       plane_spawn = {
         model = "shamal",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -637,7 +670,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 835,
       plane_spawn = {
         model = "luxor",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -675,7 +708,7 @@ local MISSIONS = {
           requirement = "Park the Velum in the hangar, and check in with staff, and that will be all for this flight!"
         }
       },
-      pay = 500,
+      pay = 835,
       plane_spawn = {
         model = "velum",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -714,7 +747,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 835,
       plane_spawn = {
         model = "shamal",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
@@ -753,7 +786,7 @@ local MISSIONS = {
           requirement = "Park it in the hangar, and check in with staff, and that will be all for this flight! Nice job, Flight Officer!"
         }
       },
-      pay = 500,
+      pay = 835,
       plane_spawn = {
         model = "nimbus",
         location = { x = -962.2, y = -2991.7, z = 13.9 },
