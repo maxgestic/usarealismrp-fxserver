@@ -102,6 +102,10 @@ AddEventHandler("doc:setciv", function(character, playerWeapons)
                     end
                 end
             end
+            -- eye color --
+            if head.eyeColor then
+              SetPedEyeColor(ped, head.eyeColor)
+            end
         end
         -- give weapons
         if playerWeapons then

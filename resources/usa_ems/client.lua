@@ -114,6 +114,10 @@ AddEventHandler("emsstation2:setciv", function(character, playerWeapons)
 					end
 				end
 			end
+			-- eye color --
+			if head.eyeColor then
+				SetPedEyeColor(ped, head.eyeColor)
+			end
 		else
 			print("no barber shop customizations!")
 		end

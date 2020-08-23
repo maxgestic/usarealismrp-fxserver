@@ -787,6 +787,10 @@ AddEventHandler("usa:loadCivCharacter", function(character, playerWeapons)
           end
         end
       end
+      -- eye color --
+			if head.eyeColor then
+				SetPedEyeColor(ped, head.eyeColor)
+			end
     else
       --print("no barber shop customizations!")
     end
@@ -844,6 +848,10 @@ AddEventHandler("usa:setPlayerComponents", function(character)
             end
           end
         end
+        -- eye color --
+        if head.eyeColor then
+          SetPedEyeColor(ped, head.eyeColor)
+        end
       else
         --print("no barber customizations!")
         -- set default values --
@@ -890,6 +898,10 @@ AddEventHandler("usa:setPlayerComponents", function(character)
             SetPedHeadOverlayColor(ped, i - 1, 2, old_head.other[i][3])
           end
           --]]
+        end
+        -- eye color --
+        if old_head.eyeColor then
+          SetPedEyeColor(ped, old_head.eyeColor)
         end
       end
     else

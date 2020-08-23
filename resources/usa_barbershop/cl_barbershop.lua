@@ -84,11 +84,13 @@ local old_head = {
     {"Body Blemishes", 255, 11},
     {"Add Body Blemishes", 255, 1},
     {"Hair", 0, 100, 0, 0} -- change max ?
-  }
+  },
+  eyeColor = nil
 }
 
 local MENU_OPEN_KEY = 38
 
+local MAX_EYE_COLORS = 31
 local MAX_PARENT_OPTIONS = 45
 local MAX_COLOR_OPTIONS = 85
 
@@ -127,6 +129,10 @@ function UpdateHead(ped, head)
         SetPedHairColor(ped, head.other[i][4], head.other[i][5] or 0)
       end
     end
+  end
+  -- eye color --
+  if head.eyeColor then
+    SetPedEyeColor(ped, head.eyeColor)
   end
 end
 
@@ -186,7 +192,7 @@ function CreateBarberShopMenu(menu)
     -- exit button
 
     ---------------------------------------
-    -- Parent / Skin Color Buttons --
+    -- Parent / Skin Color / Eye Color Buttons --
     ---------------------------------------
     local parentValuesArr = {}
     for j = 1, MAX_PARENT_OPTIONS do parentValuesArr[j] = j end
@@ -218,6 +224,17 @@ function CreateBarberShopMenu(menu)
         UpdateHead(GetPlayerPed(-1), old_head)
     end
     menu:AddItem(skin_item_2)
+
+    local eyeColorSelections = {}
+    for i = 0, MAX_EYE_COLORS do
+      table.insert(eyeColorSelections, i)
+    end
+    local eyeColorSlider = UIMenuSliderItem.New("Eye Color", eyeColorSelections, 0, "Customize Eye Color")
+    eyeColorSlider.OnSliderChanged = function(menu, item, index)
+        old_head.eyeColor = index
+        UpdateHead(GetPlayerPed(-1), old_head)
+    end
+    menu:AddItem(eyeColorSlider)
 
     ---------------------------------
     -- Customization Buttons --
