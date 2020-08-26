@@ -1,13 +1,9 @@
 local onDuty = false
-local unholsteredWeapon = nil
 local smallHolstered = true
 local largeHolstered = true
 local meleeHolsted = true
 local playingAnim = false
 local togive
-local control = nil
-
-TriggerServerEvent('ptt:getHotkey')
 
 RegisterNetEvent("interaction:setPlayersJob")
 AddEventHandler("interaction:setPlayersJob", function(job)
@@ -16,11 +12,6 @@ AddEventHandler("interaction:setPlayersJob", function(job)
 	else
 		onDuty = false
 	end
-end)
-
-RegisterNetEvent("ptt:returnHotkey")
-AddEventHandler("ptt:returnHotkey", function(key)
-	control = key
 end)
 
 local meleeWeapons = {
@@ -100,7 +91,7 @@ Citizen.CreateThread( function()
 			end
 		end
 	end
-end )
+end)
 
 Citizen.CreateThread(function()
 	while true do
@@ -151,8 +142,6 @@ Citizen.CreateThread(function()
 		                playingAnim = false
 		            end
 		            smallHolstered = true
-
-
 				elseif CheckLargeWeapon(ped) then
 					if largeHolstered and not IsPedInMeleeCombat(ped) and not IsPlayerTargettingAnything(ped) and not IsPedInCombat(ped) then
 						local togive = GetSelectedPedWeapon(ped) -- to prevent gun from coming out too early for animation, remove the gun when it starts and only give at right time
@@ -206,7 +195,6 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
 		local ped = PlayerPedId()
 		if GetPedParachuteState(ped) == -1 then
 			if playingAnim then
@@ -231,41 +219,9 @@ Citizen.CreateThread(function()
 				end
 			end
 		end
+		Wait(0)
 	end
 end)
-
--- RADIO ANIMATIONS --
-
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait( 0 )
-		local ped = PlayerPedId()
-		if control ~= nil and GetPedParachuteState(ped) == -1 and onDuty then
-			if DoesEntityExist( ped ) and not IsEntityDead( ped ) then
-				if not IsPauseMenuActive() then
-					loadAnimDict( "random@arrests" )
-					if IsControlJustReleased( 0, control ) then
-						--TriggerServerEvent('InteractSound_SV:PlayOnSource', 'off', 0.1)
-						ClearPedTasks(ped)
-					else
-						if IsControlJustPressed( 0, control ) and not IsPlayerFreeAiming(PlayerId()) then
-							--TriggerServerEvent('InteractSound_SV:PlayOnSource', 'on', 0.1)
-							TaskPlayAnim(ped, "random@arrests", "generic_radio_enter", 8.0, 2.0, -1, 50, 2.0, 0, 0, 0 )
-						elseif IsControlJustPressed( 0, control ) and IsPlayerFreeAiming(PlayerId()) then
-							--TriggerServerEvent('InteractSound_SV:PlayOnSource', 'on', 0.1)
-							TaskPlayAnim(ped, "random@arrests", "radio_chatter", 8.0, 2.0, -1, 50, 2.0, 0, 0, 0 )
-						end
-						if IsEntityPlayingAnim(GetPlayerPed(PlayerId()), "random@arrests", "generic_radio_enter", 3) then
-							DisableActions(ped)
-						elseif IsEntityPlayingAnim(GetPlayerPed(PlayerId()), "random@arrests", "radio_chatter", 3) then
-							DisableActions(ped)
-						end
-					end
-				end
-			end
-		end
-	end
-end )
 
 function CheckSmallWeapon(ped)
 	for i = 1, #smallWeapons do
