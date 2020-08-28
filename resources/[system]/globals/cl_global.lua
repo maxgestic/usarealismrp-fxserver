@@ -4,7 +4,8 @@ local KEYS = {
   SCROLL_DOWN = 242,
   ONE = 157,
   TWO = 158,
-  THREE = 160
+  THREE = 160,
+  FOUR = 164
 }
 
 local MAX_ITEM_TRADE_DISTANCE = 1.5

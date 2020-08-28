@@ -127,8 +127,8 @@ function handleHolsterAnim()
 			loadAnimDict( "rcmjosh4" )
 			loadAnimDict( "timetable@jimmy@ig_2@ig_2_p2" )
 			if CheckSmallWeapon(ped) and smallHolstered and not IsPedInMeleeCombat(ped) and not IsPlayerTargettingAnything(ped) and not IsPedInCombat(ped) then -- unholstering
+				local togive = GetSelectedPedWeapon(ped) -- to prevent gun from coming out too early for animation, remove the gun when it starts and only give at right time
 				if not onDuty and GetPedDrawableVariation(ped, 7) ~= 8 and GetPedDrawableVariation(ped, 7) ~= 6 and GetPedDrawableVariation(ped, 7) ~= 1 then
-					local togive = GetSelectedPedWeapon(ped) -- to prevent gun from coming out too early for animation, remove the gun when it starts and only give at right time
 					SetCurrentPedWeapon(ped, GetHashKey("WEAPON_UNARMED"), true)
 					playingAnim = true
 					TaskPlayAnim(ped, "reaction@intimidation@1h", "intro", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
@@ -146,6 +146,7 @@ function handleHolsterAnim()
 					ClearPedTasks(ped)
 					playingAnim = false
 				end
+				UNHOLSTERED_WEAPON = togive
 				smallHolstered = false
 				largeHolstered = true
 				meleeHolsted = true

@@ -15,5 +15,3 @@ AddEventHandler("interaction:hotkeyPressed", function(key)
         TriggerClientEvent("usa:notify", source, "Nothing in slot " .. (key + 1))
     end
 end)
-
--- todo: color inventory slots 1 - 3 to indicate their special function

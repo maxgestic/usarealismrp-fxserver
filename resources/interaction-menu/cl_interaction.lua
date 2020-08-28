@@ -1484,6 +1484,7 @@ Citizen.CreateThread(function()
 			local target_veh_plate = GetVehicleNumberPlateText(hitHandleVehicle)
 			EnableGui(target_veh_plate)
 			GiveWeaponToPed(GetPlayerPed(-1), 0xA2719263, 0, false, true)
+			TriggerEvent("hotkeys:setCurrentSlotPassive", nil)
 		end
 
 		-- tackling --
