@@ -162,12 +162,12 @@ Citizen.CreateThread(function()
             local deadCount = 0
             for i = 1, #PLANTED do
                 local plant = PLANTED[i]
-                if not plant.isDead then
-                    db.updateDocument("cultivation", plant._id, { foodLevel = plant.foodLevel, waterLevel = plant.waterLevel, stage = plant.stage, isDead = plant.isDead }, saveCallback)
-                    Wait(300)
-                else 
+                if plant.isDead then
                     deadCount = deadCount + 1
                 end
+                plant._rev = nil
+                db.updateDocument("cultivation", plant._id, plant, saveCallback)
+                Wait(150)
             end
             print("[cultivation] done saving plants, # of alive: " .. (#PLANTED - deadCount))
             print("[cultivation] done saving plants, # of dead: " .. deadCount)
