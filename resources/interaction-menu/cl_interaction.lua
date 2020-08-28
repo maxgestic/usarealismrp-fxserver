@@ -1235,6 +1235,9 @@ AddEventHandler("interaction:toggleWeapon", function(item, skipAnim)
 	local ped = PlayerPedId()
 	if GetSelectedPedWeapon(ped) == item.hash then
 		GiveWeaponToPed(ped, WEAPON_UNARMED, 1000, false, true)
+		if not skipAnim then
+			exports["usa_holster"]:handleHolsterAnim()
+		end
 	else
 		GiveWeaponToPed(ped, item.hash, 1000, false, true)
 		if not skipAnim then
