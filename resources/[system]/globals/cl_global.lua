@@ -1,3 +1,13 @@
+local KEYS = {
+  TAB = 37,
+  SCROLL_UP = 241,
+  SCROLL_DOWN = 242,
+  ONE = 157,
+  TWO = 158,
+  THREE = 160,
+  FOUR = 164
+}
+
 local MAX_ITEM_TRADE_DISTANCE = 1.5
 local MAX_TACKLE_DISTANCE = 1.5
 local ACTION_MESSAGE_TIME_SECONDS = 6.5
@@ -8,6 +18,10 @@ end
 
 function MaxTackleDistance()
 	return MAX_TACKLE_DISTANCE
+end
+
+function GetKeys()
+  return KEYS
 end
 
 --------------------------------------------------------------

@@ -171,12 +171,12 @@ local walkstyles = {
     {display_name = "Slow", clipset_name ="move_p_m_zero_slow"},
     {display_name = "Gangster 2", clipset_name ="move_m@gangster@var_i"},
     {display_name = "Casual", clipset_name ="move_m@casual@d"},
-		{display_name = "Injured", clipset_name ="move_injured_generic"},
-		{display_name = "Flee", clipset_name ="move_f@flee@a"},
-		{display_name = "Scared", clipset_name ="move_f@scared"},
-		{display_name = "Sexy", clipset_name ="move_f@sexy@a"},
-		{display_name = "Slightly Drunk", clipset_name ="MOVE_M@DRUNK@SLIGHTLYDRUNK"},
-		{display_name = "Moderately Drunk", clipset_name ="MOVE_M@DRUNK@MODERATEDRUNK_HEAD_UP"},
+	{display_name = "Injured", clipset_name ="move_injured_generic"},
+	{display_name = "Flee", clipset_name ="move_f@flee@a"},
+	{display_name = "Scared", clipset_name ="move_f@scared"},
+	{display_name = "Sexy", clipset_name ="move_f@sexy@a"},
+	{display_name = "Slightly Drunk", clipset_name ="MOVE_M@DRUNK@SLIGHTLYDRUNK"},
+	{display_name = "Moderately Drunk", clipset_name ="MOVE_M@DRUNK@MODERATEDRUNK_HEAD_UP"},
     {display_name = "Very Drunk", clipset_name ="MOVE_M@DRUNK@VERYDRUNK"},
     {display_name = "Grooving", clipset_name="ANIM@MOVE_M@GROOVING@SLOW@"}
 }
@@ -669,6 +669,11 @@ AddEventHandler("emotes:showHelp", function()
 		end
 	end
 	TriggerEvent("chatMessage", "", {255, 255, 255}, msg)
+end)
+
+RegisterNetEvent("interaction:useItem")
+AddEventHandler("interaction:useItem", function(item)
+	interactionMenuUse(item.name, item)
 end)
 
 function GivePedObject(target_bone, object, x, y, z, rotX, rotY, rotZ)
@@ -1224,10 +1229,35 @@ end
 return itemName
 end
 
+RegisterNetEvent("interaction:toggleWeapon")
+AddEventHandler("interaction:toggleWeapon", function(item, skipAnim)
+	local WEAPON_UNARMED = -1569615261
+	local ped = PlayerPedId()
+	if GetSelectedPedWeapon(ped) == item.hash then
+		GiveWeaponToPed(ped, WEAPON_UNARMED, 1000, false, true)
+		if not skipAnim then
+			exports["usa_holster"]:handleHolsterAnim()
+		end
+	else
+		GiveWeaponToPed(ped, item.hash, 1000, false, true)
+		if not skipAnim then
+			exports["usa_holster"]:handleHolsterAnim()
+		end
+		GiveWeaponToPed(ped, item.hash, 1000, false, true)
+		if item.components then
+			if #item.components > 0 then
+				for x = 1, #item.components do
+					GiveWeaponComponentToPed(ped, item.hash, GetHashKey(item.components[x]))
+				end
+			end
+		end
+		if item.tint then
+			SetPedWeaponTintIndex(ped, item.hash, item.tint)
+		end
+	end
+end)
 
 RegisterNetEvent("interaction:equipWeapon")
-
-
 AddEventHandler("interaction:equipWeapon", function(item, equip, ammoAmount)
 	local ped = GetPlayerPed(-1)
 	if equip then
@@ -1454,6 +1484,7 @@ Citizen.CreateThread(function()
 			local target_veh_plate = GetVehicleNumberPlateText(hitHandleVehicle)
 			EnableGui(target_veh_plate)
 			GiveWeaponToPed(GetPlayerPed(-1), 0xA2719263, 0, false, true)
+			TriggerEvent("hotkeys:setCurrentSlotPassive", nil)
 		end
 
 		-- tackling --

@@ -48,6 +48,7 @@ AddEventHandler("character:swap--check-distance", function()
   for i = 1, #swap_locations do
 	local location = swap_locations[i]
 	if GetDistanceBetweenCoords(location.x, location.y, location.z,GetEntityCoords(GetPlayerPed(-1))) < 8 then
+		TriggerEvent("hotkeys:setCurrentSlotPassive", nil)
 		TriggerEvent("gcPhone:twitter_Logout")
 		TriggerEvent("radio:unsubscribe")
 		TriggerServerEvent("character:getCharactersAndOpenMenu", "home")
