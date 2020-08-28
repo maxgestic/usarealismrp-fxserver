@@ -1,5 +1,14 @@
 local KEYS = nil
 
+local currentSelectedSlot = nil
+
+RegisterNetEvent("hotkeys:setCurrentSlotPassive")
+AddEventHandler("hotkeys:setCurrentSlotPassive", function(slot)
+    if type(slot) == "number" and slot >= 1 and slot <= 3 then
+        currentSelectedSlot = slot
+    end
+end)
+
 -- async thread to load key table from globals resource --
 Citizen.CreateThread(function()
     while not KEYS do
@@ -25,23 +34,44 @@ Citizen.CreateThread(function()
             if GetLastInputMethod(0) then -- keyboard only
                 -- cycle through slots keys --
                 if IsDisabledControlJustPressed(24, KEYS.TAB) then
-                    --local WEAPON_UNARMED = 0xA2719263
-                    --GiveWeaponToPed(PlayerPedId(), WEAPON_UNARMED, 0, false, true)
+                    local WEAPON_UNARMED = -1569615261
+                    GiveWeaponToPed(PlayerPedId(), WEAPON_UNARMED, 1000, false, true)
+                    currentSelectedSlot = nil
                 elseif IsControlJustPressed(0, KEYS.SCROLL_UP) then
-                    print("scroll up detected")
+                    if currentSelectedSlot == nil then
+                        currentSelectedSlot = 1
+                    else
+                        if currentSelectedSlot + 1 > 3 then
+                            currentSelectedSlot = 1
+                        else
+                            currentSelectedSlot = currentSelectedSlot + 1
+                        end
+                    end
+                    TriggerServerEvent("interaction:hotkeyPressed", currentSelectedSlot)
                 elseif IsControlJustPressed(0, KEYS.SCROLL_DOWN) then
-                    print("scroll down detected")
+                    if currentSelectedSlot == nil  then
+                        currentSelectedSlot = 3
+                    else
+                        if currentSelectedSlot - 1 <= 0 then
+                            currentSelectedSlot = 3
+                        else
+                            currentSelectedSlot = currentSelectedSlot - 1
+                        end
+                    end
+                    TriggerServerEvent("interaction:hotkeyPressed", currentSelectedSlot)
                 -- direct slot hotkey --
                 elseif IsDisabledControlJustPressed(24, KEYS.ONE) then
-                    TriggerServerEvent("interaction:hotkeyPressed", 1)
+                    currentSelectedSlot = 1
+                    TriggerServerEvent("interaction:hotkeyPressed", currentSelectedSlot)
                 elseif IsDisabledControlJustPressed(24, KEYS.TWO) then
-                    TriggerServerEvent("interaction:hotkeyPressed", 2)
+                    currentSelectedSlot = 2
+                    TriggerServerEvent("interaction:hotkeyPressed", currentSelectedSlot)
                 elseif IsDisabledControlJustPressed(24, KEYS.THREE) then
-                    TriggerServerEvent("interaction:hotkeyPressed", 3)
+                    currentSelectedSlot = 3
+                    TriggerServerEvent("interaction:hotkeyPressed", currentSelectedSlot)
                 end
             end
         end
-
         Wait(1)
     end
 end)

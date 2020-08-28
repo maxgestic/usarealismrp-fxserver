@@ -1231,11 +1231,15 @@ end
 
 RegisterNetEvent("interaction:toggleWeapon")
 AddEventHandler("interaction:toggleWeapon", function(item, skipAnim)
+	local WEAPON_UNARMED = -1569615261
 	local ped = PlayerPedId()
 	if GetSelectedPedWeapon(ped) == item.hash then
-		local WEAPON_UNARMED = -1569615261
 		GiveWeaponToPed(ped, WEAPON_UNARMED, 1000, false, true)
 	else
+		GiveWeaponToPed(ped, item.hash, 1000, false, true)
+		if not skipAnim then
+			exports["usa_holster"]:handleHolsterAnim()
+		end
 		GiveWeaponToPed(ped, item.hash, 1000, false, true)
 		if item.components then
 			if #item.components > 0 then
@@ -1247,9 +1251,6 @@ AddEventHandler("interaction:toggleWeapon", function(item, skipAnim)
 		if item.tint then
 			SetPedWeaponTintIndex(ped, item.hash, item.tint)
 		end
-	end
-	if not skipAnim then
-		exports["usa_holster"]:handleHolsterAnim()
 	end
 end)
 
