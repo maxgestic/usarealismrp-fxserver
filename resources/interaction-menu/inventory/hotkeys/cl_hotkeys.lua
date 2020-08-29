@@ -2,6 +2,8 @@ local KEYS = nil
 
 local currentSelectedSlot = nil
 
+local SCROLL_DISABLED = true
+
 RegisterNetEvent("hotkeys:setCurrentSlotPassive")
 AddEventHandler("hotkeys:setCurrentSlotPassive", function(slot)
     if type(slot) == "number" and slot >= 1 and slot <= 4 or type(slot) == "nil" then
@@ -37,7 +39,7 @@ Citizen.CreateThread(function()
                     local WEAPON_UNARMED = -1569615261
                     GiveWeaponToPed(PlayerPedId(), WEAPON_UNARMED, 1000, false, true)
                     currentSelectedSlot = nil
-                elseif IsControlJustPressed(0, KEYS.SCROLL_DOWN) then
+                elseif not SCROLL_DISABLED and IsControlJustPressed(0, KEYS.SCROLL_DOWN) then
                     if currentSelectedSlot == nil then
                         currentSelectedSlot = 1
                     else
@@ -48,7 +50,7 @@ Citizen.CreateThread(function()
                         end
                     end
                     TriggerServerEvent("interaction:hotkeyPressed", currentSelectedSlot)
-                elseif IsControlJustPressed(0, KEYS.SCROLL_UP) then
+                elseif not SCROLL_DISABLED and IsControlJustPressed(0, KEYS.SCROLL_UP) then
                     if currentSelectedSlot == nil  then
                         currentSelectedSlot = 4
                     else

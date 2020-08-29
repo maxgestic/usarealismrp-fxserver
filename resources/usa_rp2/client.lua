@@ -236,7 +236,7 @@ Citizen.CreateThread(function()
 		Wait(0)
 
 		SetPedDensityMultiplierThisFrame(1.0)
-		SetVehicleDensityMultiplierThisFrame(0.3) -- npc vehicle amount
+		SetVehicleDensityMultiplierThisFrame(0.4) -- npc vehicle amount
 		--local playerPed = GetPlayerPed(-1)
 		--local pos = GetEntityCoords(playerPed)
 		--RemoveVehiclesFromGeneratorsInArea(pos['x'] - 1500.0, pos['y'] - 1500.0, pos['z'] - 1500.0, pos['x'] + 1500.0, pos['y'] + 1500.0, pos['z'] + 1500.0);
