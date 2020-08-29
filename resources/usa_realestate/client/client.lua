@@ -1,5 +1,6 @@
 local SignIn = "[E] - Sign In / Out"
-local SigninCoords = {-148.55, -579.82, 48.24}
+--local SigninCoords = {-148.55, -579.82, 48.24}
+local SigninCoords = {-1069.0053710938, -247.00053405762, 44.021144866943}
 
 Citizen.CreateThread(function()
     while true do

@@ -88,7 +88,7 @@ local blips = {
 	{ title="Vangelico", colour = 81, id = 478, x = -623.4, y = -233.1, z = 38.1, scale = 0.5 },
 	{title = "Hunting", x = -1508.83, y = 4978.63, id = 442, colour = 0},
 	{ title = "Burger Shot", x = -1189.22, y = -888.43, id = 106, colour = 1, scale = 0.7},
-	{ title = "REA Office", x = -148.55, y = -579.82, id = 475, colour = 2, scale = 0.7},
+	--{ title = "REA Office", x = -148.55, y = -579.82, id = 475, colour = 2, scale = 0.7},
 	{ title = "Mining", x = -596.51, y = 2090.44, id = 78, colour = 59, scale = 0.5},
 	{ title = "Mining", x = 1797.88, y = -2831.8, id = 78, colour = 59, scale = 0.5},
 	{ title = "Casino", x = 923.79486083984,y = 49.580528259277, id = 89, colour = 73, scale = 0.7}
