@@ -68,7 +68,7 @@ Citizen.CreateThread(function()
                if damagedEngine < 0 then damagedEngine = -4000.0 end
                if GetPedInVehicleSeat(car, -1) == ped then
                 SetVehicleEngineHealth(car, damagedEngine)
-                if math.random() > 0.92 then
+                if math.random() > 0.97 then
                     local tyreBursted = math.random(1, 2)
                     SetVehicleTyreBurst(car, tyreBursted, true, 1000.0)
                 end

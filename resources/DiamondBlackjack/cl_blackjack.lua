@@ -3019,6 +3019,7 @@ function notify(msg)
 end
 
 function getGenericTextInput(title)
+    TriggerEvent("hotkeys:enable", false)
 	if type == nil then type = "" end
 	AddTextEntry('FMMC_MPM_NA', "Enter " .. tostring(title))
 	DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "Enter " .. tostring(title) .. " message", "", "", "", "", 30)
@@ -3029,9 +3030,11 @@ function getGenericTextInput(title)
     if (GetOnscreenKeyboardResult()) then
         local result = GetOnscreenKeyboardResult()
         if result then
+            TriggerEvent("hotkeys:enable", true)
 			return result
 		end
     end
+    TriggerEvent("hotkeys:enable", true)
 	return false
 end
 

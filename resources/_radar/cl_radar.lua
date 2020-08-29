@@ -132,8 +132,8 @@ end )
 
 function Radar_SetLimit()
     Citizen.CreateThread( function()
+        TriggerEvent("hotkeys:enable", false)
         DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 4 )
-
         while true do 
             if ( UpdateOnscreenKeyboard() == 1 ) then 
                 local speedStr = GetOnscreenKeyboardResult()
@@ -155,9 +155,9 @@ function Radar_SetLimit()
             elseif ( UpdateOnscreenKeyboard() == 2 ) then 
                 break 
             end  
-
-            Citizen.Wait( 0 )
+            Wait(0)
         end 
+        TriggerEvent("hotkeys:enable", true)
     end )
 end 
 

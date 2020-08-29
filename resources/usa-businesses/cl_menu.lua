@@ -54,6 +54,7 @@ AddEventHandler("business:showMenu", function(business, charInv)
     RemoveMenuPool(_menuPool)
     -- 2) get input
     Citizen.CreateThread( function()
+      TriggerEvent("hotkeys:enable", false)
       DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
       while true do
         if ( UpdateOnscreenKeyboard() == 1 ) then
@@ -75,6 +76,7 @@ AddEventHandler("business:showMenu", function(business, charInv)
         end
         Wait( 0 )
       end
+      TriggerEvent("hotkeys:enable", true)
     end )
   end
   mainMenu:AddItem(item)
@@ -90,6 +92,7 @@ AddEventHandler("business:showMenu", function(business, charInv)
     RemoveMenuPool(_menuPool)
     -- get input to withdraw --
     Citizen.CreateThread( function()
+      TriggerEvent("hotkeys:enable", false)
       DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
       while true do
         if ( UpdateOnscreenKeyboard() == 1 ) then
@@ -111,6 +114,7 @@ AddEventHandler("business:showMenu", function(business, charInv)
         end
         Wait( 0 )
       end
+      TriggerEvent("hotkeys:enable", true)
     end )
   end
   mainMenu:AddItem(item)
@@ -134,6 +138,7 @@ AddEventHandler("business:showMenu", function(business, charInv)
         -- ask for quantity to retrieve, then try to retrieve it --
         ----------------------------------------------------------------
         Citizen.CreateThread( function()
+          TriggerEvent("hotkeys:enable", false)
           DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
           while true do
             if ( UpdateOnscreenKeyboard() == 1 ) then
@@ -159,6 +164,7 @@ AddEventHandler("business:showMenu", function(business, charInv)
             end
             Wait( 0 )
           end
+          TriggerEvent("hotkeys:enable", true)
         end )
       end
       retrieval_submenu.SubMenu:AddItem(itembtn)
@@ -185,6 +191,7 @@ AddEventHandler("business:showMenu", function(business, charInv)
         RemoveMenuPool(_menuPool)
         -- ask for quantity to store, then try to store it --
         Citizen.CreateThread( function()
+          TriggerEvent("hotkeys:enable", false)
           DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
           while true do
             if ( UpdateOnscreenKeyboard() == 1 ) then
@@ -212,6 +219,7 @@ AddEventHandler("business:showMenu", function(business, charInv)
             end
             Wait( 0 )
           end
+          TriggerEvent("hotkeys:enable", true)
         end )
       end
       storage_submenu.SubMenu:AddItem(itembtn)
@@ -297,22 +305,25 @@ Citizen.CreateThread(function()
 end)
 
 function GetUserInput()
-    -- get withdraw amount from user input --
-    DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 15 )
-    while true do
-        if ( UpdateOnscreenKeyboard() == 1 ) then
-            local input = GetOnscreenKeyboardResult()
-            if ( string.len( input ) > 0 ) then
-                -- do something with the input var
-                return input
-            else
-                DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 15 )
-            end
-        elseif ( UpdateOnscreenKeyboard() == 2 ) then
-            break
-        end
-        Wait( 0 )
-    end
+  TriggerEvent("hotkeys:enable", false)
+  -- get withdraw amount from user input --
+  DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 15 )
+  while true do
+      if ( UpdateOnscreenKeyboard() == 1 ) then
+          local input = GetOnscreenKeyboardResult()
+          if ( string.len( input ) > 0 ) then
+              -- do something with the input var
+              TriggerEvent("hotkeys:enable", true)
+              return input
+          else
+              DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 15 )
+          end
+      elseif ( UpdateOnscreenKeyboard() == 2 ) then
+          break
+      end
+      Wait( 0 )
+  end
+  TriggerEvent("hotkeys:enable", true)
 end
 
 function drawTxt(text,font,centre,x,y,scale,r,g,b,a)

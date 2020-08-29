@@ -260,6 +260,7 @@ function Notify(text)
 	DrawNotification(true, false)
 end
 function Input(help)
+	TriggerEvent("hotkeys:enable", false)
 	local var = ''
 	DisplayOnscreenKeyboard(6, "FMMC_KEY_TIP8", "", help, "", "", "", 60)
 	while UpdateOnscreenKeyboard() == 0 do
@@ -269,6 +270,7 @@ function Input(help)
 	if GetOnscreenKeyboardResult() then
 		var = GetOnscreenKeyboardResult()
 	end
+	TriggerEvent("hotkeys:enable", true)
 	return var
 end
 function DeletePed(handle)

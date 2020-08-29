@@ -126,6 +126,7 @@ end)
 --  Gestion des appels fixe
 --====================================================================================
 function startFixeCall (fixeNumber)
+  TriggerEvent("hotkeys:enable", false)
   local number = ''
   DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", "", "", "", "", 10)
   while (UpdateOnscreenKeyboard() == 0) do
@@ -141,6 +142,7 @@ function startFixeCall (fixeNumber)
     })
     PhonePlayCall(true)
   end
+  TriggerEvent("hotkeys:enable", true)
 end
 
 function TakeAppel (infoCall)
@@ -606,9 +608,9 @@ RegisterNUICallback('blur', function(data, cb)
   cb()
 end)
 RegisterNUICallback('reponseText', function(data, cb)
+  TriggerEvent("hotkeys:enable", false)
   local limit = data.limit or 255
   local text = data.text or ''
-  
   DisplayOnscreenKeyboard(1, "FMMC_MPM_NA", "", text, "", "", "", limit)
   while (UpdateOnscreenKeyboard() == 0) do
       DisableAllControlActions(0);
@@ -617,6 +619,7 @@ RegisterNUICallback('reponseText', function(data, cb)
   if (GetOnscreenKeyboardResult()) then
       text = GetOnscreenKeyboardResult()
   end
+  TriggerEvent("hotkeys:enable", true)
   cb(json.encode({text = text}))
 end)
 --====================================================================================

@@ -140,12 +140,14 @@ end
 function GetUserInput(placeholder, charLimit)
   -- get withdraw amount from user input --
   --DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 15 )
+  TriggerEvent("hotkeys:enable", false)
   DisplayOnscreenKeyboard(1, "", "", (placeholder or ""), "", "", "", (charLimit or 15))
   while true do
       if ( UpdateOnscreenKeyboard() == 1 ) then
           local input = GetOnscreenKeyboardResult()
           if ( string.len( input ) > 0 ) then
               -- do something with the input var
+              TriggerEvent("hotkeys:enable", true)
               return input
           else
               DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 15 )
@@ -155,6 +157,7 @@ function GetUserInput(placeholder, charLimit)
       end
       Wait( 0 )
   end
+  TriggerEvent("hotkeys:enable", true)
 end
 
 function comma_value(amount)

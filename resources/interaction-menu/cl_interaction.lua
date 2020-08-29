@@ -375,6 +375,7 @@ RegisterNUICallback('retrieveVehicleItem', function(data, cb)
 		else
 			-- Get quantity to transfer from user input:
 			Citizen.CreateThread( function()
+				TriggerEvent("hotkeys:enable", false)
 				DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
 				while true do
 					if ( UpdateOnscreenKeyboard() == 1 ) then
@@ -409,9 +410,10 @@ RegisterNUICallback('retrieveVehicleItem', function(data, cb)
 					elseif ( UpdateOnscreenKeyboard() == 2 ) then
 						break
 					end
-				Citizen.Wait( 0 )
+				Wait(0)
 				end
-			end )
+				TriggerEvent("hotkeys:enable", true)
+			end)
 		end
 	else
 		TriggerEvent("usa:notify", "Can't retrieve item. Vehicle is locked.")
@@ -796,6 +798,7 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 			if not string.find(itemName, "Driver") and not string.find(itemName, "Firearm") and not string.find(itemName, 'License') and not string.find(itemName, 'Certificate') then
 				-- Get quantity to transfer from user input:
 				Citizen.CreateThread( function()
+					TriggerEvent("hotkeys:enable", false)
 					DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
 					while true do
 						if ( UpdateOnscreenKeyboard() == 1 ) then
@@ -819,6 +822,7 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 						end
 						Wait( 0 )
 					end
+					TriggerEvent("hotkeys:enable", true)
 				end )
 			else
 				print("can't store DL!!")

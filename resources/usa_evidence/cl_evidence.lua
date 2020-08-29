@@ -572,6 +572,7 @@ function DrawText3D(x, y, z, distance, text)
 end
 
 function KeyboardInput(textEntry, inputText, maxLength) -- Thanks to Flatracer for the function.
+	TriggerEvent("hotkeys:enable", false)
     AddTextEntry('FMMC_KEY_TIP1', textEntry)
     DisplayOnscreenKeyboard(1, "FMMC_KEY_TIP1", "", inputText, "", "", "", maxLength)
     while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
@@ -579,10 +580,12 @@ function KeyboardInput(textEntry, inputText, maxLength) -- Thanks to Flatracer f
     end
     if UpdateOnscreenKeyboard() ~= 2 then
         local result = GetOnscreenKeyboardResult()
-        Citizen.Wait(500)
+		Citizen.Wait(500)
+		TriggerEvent("hotkeys:enable", true)
         return result
     else
-        Citizen.Wait(500)
+		Citizen.Wait(500)
+		TriggerEvent("hotkeys:enable", true)
         return nil
     end
 end

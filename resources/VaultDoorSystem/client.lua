@@ -84,6 +84,7 @@ function GetIsControlPressed(Control)
 end
 
 function KeyboardInput(TextEntry, ExampleText, MaxStringLenght, NoSpaces)
+	TriggerEvent("hotkeys:enable", false)
 	AddTextEntry(GetCurrentResourceName() .. '_KeyboardHead', TextEntry)
 	DisplayOnscreenKeyboard(1, GetCurrentResourceName() .. '_KeyboardHead', '', ExampleText, '', '', '', MaxStringLenght)
 	blockinput = true
@@ -99,10 +100,12 @@ function KeyboardInput(TextEntry, ExampleText, MaxStringLenght, NoSpaces)
 		local result = GetOnscreenKeyboardResult()
 		Citizen.Wait(500)
 		blockinput = false
+		TriggerEvent("hotkeys:enable", true)
 		return result
 	else
 		Citizen.Wait(500)
 		blockinput = false
+		TriggerEvent("hotkeys:enable", true)
 		return nil
 	end
 end
