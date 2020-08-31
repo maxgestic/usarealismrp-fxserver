@@ -4,7 +4,7 @@ local REWARDS = {
     harvest_item = {
       name = "Raw Sand",
       quantity = 1,
-      weight = 8.0,
+      weight = 5.0,
       type = "misc",
       legality = "legal",
       objectModel = "prop_cs_box_step"
@@ -19,7 +19,7 @@ local REWARDS = {
     processed_item = {
       name = "Processed Sand",
       quantity = 1,
-      weight = 8.0,
+      weight = 5.0,
       type = "misc",
       legality = "legal",
       objectModel = "prop_cs_box_step"
@@ -55,7 +55,7 @@ AddEventHandler("HPS:rewardItem", function(job_name, stage)
       local char = exports["usa-characters"]:GetCharacter(source)
       if stage == "Harvest" then
         local givePowderItemChance = math.random()
-        if givePowderItemChance < 0.05 then
+        if givePowderItemChance < 0.07 then
           if char.canHoldItem(data.powder) then
             char.giveItem(data.powder)
             TriggerClientEvent("usa:notify", source, "You have dug and retrieved " .. data.powder.name)
