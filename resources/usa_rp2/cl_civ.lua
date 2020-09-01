@@ -314,12 +314,10 @@ AddEventHandler('cuff:forceHandsDown', function(cb)
 end)
 -- hands up animation --
 Citizen.CreateThread(function()
+  local dict = "ped"
+  local anim = "handsup_base"
   while true do
-    Citizen.Wait(0)
     local playerPed = PlayerPedId()
-    local dict = "ped"
-    local anim = "handsup_base"
-    RequestAnimDict(dict)
     DisableControlAction(0, 73, true)
     if IsControlPressed(1, 323) and DoesEntityExist(playerPed) then
       Citizen.CreateThread(function()
@@ -330,10 +328,6 @@ Citizen.CreateThread(function()
         if not hands_up then
           hands_up = true
           TaskPlayAnim(playerPed, dict, anim,  8.0, -8, -1, 49, 0, 0, 0, 0)
-          if GetSelectedPedWeapon(playerPed) ~= -1569615261 then
-            RemoveWeaponFromPed(playerPed, -1569615261)
-            GiveWeaponToPed(playerPed, -1569615261, 0, false, true)
-          end
         end
       end)
     end
@@ -353,6 +347,7 @@ Citizen.CreateThread(function()
         end)
       end
     end
+    Wait(0)
   end
 end)
 

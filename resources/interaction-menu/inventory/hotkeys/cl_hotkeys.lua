@@ -47,6 +47,7 @@ Citizen.CreateThread(function()
                         local WEAPON_UNARMED = -1569615261
                         GiveWeaponToPed(PlayerPedId(), WEAPON_UNARMED, 1000, false, true)
                         currentSelectedSlot = nil
+                        exports["usa_holster"]:handleHolsterAnim()
                     elseif not SCROLL_DISABLED and IsControlJustPressed(0, KEYS.SCROLL_DOWN) then
                         if currentSelectedSlot == nil then
                             currentSelectedSlot = 1
