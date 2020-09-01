@@ -195,6 +195,17 @@ local warp_locations = {
       heading = 348.2,
     },
     job_access = 'da'
+  },
+  ['Vinewood Home 1'] = {
+    entrance = {
+      coords = {346.92343139648, 440.76049804688, 147.70223999023},
+      heading = 111.0
+    },
+    exit = {
+      coords = {341.6022644043, 437.49826049805, 149.39402770996},
+      heading = 292.0
+    },
+    job_access = 'civ'
   }
 }
 
@@ -206,32 +217,32 @@ Citizen.CreateThread(function()
     for key, value in pairs(warp_locations) do
       local x, y, z = table.unpack(value.entrance.coords)
       local _x, _y, _z = table.unpack(value.exit.coords)
-      local dist1 = GetDistanceBetweenCoords(x, y, z, entitycoords, true)
-      local dist2 = GetDistanceBetweenCoords(_x, _y, _z, entitycoords, true)
+      local entranceDist = GetDistanceBetweenCoords(x, y, z, entitycoords, true)
+      local exitDist = GetDistanceBetweenCoords(_x, _y, _z, entitycoords, true)
       -- ground marker
       if value.groundMarker then
-        if dist1 < 50.0 then 
+        if entranceDist < 50.0 then 
           DrawMarker(27, x, y, z - 0.9, 0, 0, 0, 0, 0, 0, 0.71, 0.71, 0.71, 255 --[[r]], 150 --[[g]], 30 --[[b]], 90 --[[alpha]], 0, 0, 2, 0, 0, 0, 0)
-        elseif dist2 < 50.0 then
+        elseif exitDist < 50.0 then
           DrawMarker(27, _x, _y, _z - 0.9, 0, 0, 0, 0, 0, 0, 0.71, 0.71, 0.71, 60 --[[r]], 150 --[[g]], 30 --[[b]], 90 --[[alpha]], 0, 0, 2, 0, 0, 0, 0)
         end
       end
       -- enter/exit
-      if dist1 < 1.0 then
+      if entranceDist < 1.0 then
         DrawText3D(x, y, z, 4, '[E] - Enter '..key)
         if IsControlPressed(0, INTERACTION_KEY) then
           -- is location access restricted to certain jobs?
           if value.job_access == "civ" then
-            DoorTransition(ped, _x, _y, _z, value.exit.heading, value.skipSound)
+            DoorTransition(ped, _x, _y, _z, value.entrance.heading, value.skipSound)
           else
             --print("job access: " ..locationCoords.job_access)
-            TriggerServerEvent("warp:checkJob", value.exit.coords, value.exit.heading, value.job_access)
+            TriggerServerEvent("warp:checkJob", value.exit.coords, value.entrance.heading, value.job_access)
           end
         end
-      elseif dist2 < 1.0 then
+      elseif exitDist < 1.0 then
         DrawText3D(_x, _y, _z, 4, '[E] - Exit '..key)
         if IsControlPressed(0, INTERACTION_KEY) then
-          DoorTransition(ped, x, y, z, value.entrance.heading, value.skipSound)
+          DoorTransition(ped, x, y, z, value.exit.heading, value.skipSound)
         end
       end
     end
