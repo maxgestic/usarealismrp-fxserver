@@ -84,6 +84,7 @@ Citizen.CreateThread(function()
 				DrawSpecialText("Press ~g~E~w~ to grab a chicken")
 				if IsControlJustPressed(1,38) then
 					TriggerServerEvent("chickenJob:getChicken")
+					Wait(150)
 				end
 			end
 		elseif GetDistanceBetweenCoords(playerCoords.x, playerCoords.y, playerCoords.z, locations.slaughterCircle.x, locations.slaughterCircle.y, locations.slaughterCircle.z, true) < 3 then
