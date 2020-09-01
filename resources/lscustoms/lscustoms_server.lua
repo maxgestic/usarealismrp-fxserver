@@ -107,6 +107,7 @@ AddEventHandler("LSC:buttonSelected", function(name, button, mname, business)
 	if button.price then -- check if button have price
 		local char = exports["usa-characters"]:GetCharacter(source)
 		local job = char.get("job")
+		local charMoney = char.get("money")
 		button.price = math.abs(button.price) -- prevent mem hack to gain money
 		if mname ~= 'main' then
 			for menuname, contents in pairs(prices) do
@@ -141,17 +142,27 @@ AddEventHandler("LSC:buttonSelected", function(name, button, mname, business)
 				end
 			end
 		end
-		if button.price <= char.get("money") or JobGetsFreeUpgrades(job) then
-			-- take money from player, apply customization --
-			TriggerClientEvent("LSC:buttonSelected", source, name, button, true)
-			if not JobGetsFreeUpgrades(job) then
-				char.removeMoney(button.price)
+		if JobGetsDiscountedUpgrades(job) then
+			local discountedPrice = math.floor(button.price / 2)
+			if discountedPrice <= charMoney then
+				TriggerClientEvent("LSC:buttonSelected", source, name, button, true)
+				char.removeMoney(discountedPrice) -- half off for LEO/EMS
+				if business then
+					exports["usa-businesses"]:GiveBusinessCashPercent(business, discountedPrice)
+				end
+			else
+				TriggerClientEvent("LSC:buttonSelected", source, name, button, false)
+			end
+		else 
+			if button.price <= charMoney then
+				TriggerClientEvent("LSC:buttonSelected", source, name, button, true)
+				char.removeMoney(button.price) -- full price
 				if business then
 					exports["usa-businesses"]:GiveBusinessCashPercent(business, button.price)
 				end
+			else 
+				TriggerClientEvent("LSC:buttonSelected", source, name, button, false)
 			end
-		else
-			TriggerClientEvent("LSC:buttonSelected", source, name, button, false)
 		end
 	end
 end)
@@ -340,7 +351,7 @@ function tprint (tbl, indent)
   return toprint
 end
 
-function JobGetsFreeUpgrades(job)
+function JobGetsDiscountedUpgrades(job)
 	if job == "sheriff" then
 		return true
 	elseif job == "ems" then
