@@ -78,6 +78,15 @@ For it to work properly you need to follow these rules:
 	* In the ``phone-messages`` db:
 		* **getReceivedMessagesByNum**
 			- ``emit(doc.receiver, doc);``
-3) Must create following couch db views in a ``characterFilters`` design doc in a ``characters``:
+3) Must create following couch db views in a ``characterFilters`` design doc in the ``characters`` db:
 	* **getCharactersForSelectionBySteamID**
 		- ``emit(doc.created.ownerIdentifier, [doc._id, doc._rev, doc.name, doc.dateOfBirth, doc.money, doc.bank, doc.spawn, doc.created.time]);``
+4) Must create following couch db views in a ``businessFilters`` design doc in the ``businesses`` db:
+	* **getBusinessByName**
+		- ``emit(doc._id, doc);``
+	* **getBusinessFeeInfo**
+		- ``emit(doc._id, [doc._id, doc.fee.paidAt]);``
+	* **getBusinessOwner**
+		- ``emit(doc._id, doc.owner);``
+	* **getBusinessStorage**
+		- ``emit(doc._id, doc.storage);``
