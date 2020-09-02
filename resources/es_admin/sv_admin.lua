@@ -899,13 +899,15 @@ AddEventHandler('rconCommand', function(commandName, args)
 			local newDob = args[4]
 
 			local query = {
-				["firstName"] = {
-					["$regex"] = "(?i)" .. prevFirst
+				name = {
+					first = {
+						["$regex"] = "(?i)" .. prevFirst
+					},
+					last = {
+						["$regex"] = "(?i)" .. prevLast
+					}
 				},
-				["lastName"] = {
-					["$regex"] = "(?i)" .. prevLast
-				},
-				["dateOfBirth"] = prevDob
+				dateOfBirth = prevDob
 			}
 
 			-- search for player's document in DB --
