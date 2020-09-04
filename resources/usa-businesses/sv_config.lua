@@ -338,3 +338,8 @@ BUSINESSES = {
 		price = 6500
 	}
 }
+
+RegisterServerEvent("businesses:load")
+AddEventHandler("businesses:load", function()
+	TriggerClientEvent("businesses:load", source, BUSINESSES)
+end)
