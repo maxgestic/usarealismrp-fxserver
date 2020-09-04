@@ -13,7 +13,7 @@ git pull
 
 # remove maps / assets to avoid scrambling them to save time
 cd resources
-rm assets -f -r
+rm assets/stream -f -r
 rm eup-stream -f -r
 rm map_courthouse -f -r
 rm map_dealership -f -r
