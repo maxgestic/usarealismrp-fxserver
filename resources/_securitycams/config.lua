@@ -23,17 +23,65 @@ SecurityCamConfig.Locations = {
     {
         camBox = {label = "Bolingbroke Penitentiary", id = 'prison'},
         cameras = {
-            {label = "Front Gate 1", x = 1834.0, y = 2604.3, z = 48.8, r = {x = 0.0, y = 0.0, z = -90.0}},
-            {label = "Front Gate 2", x = 1827.7, y = 2605.4, z = 47.8, r = {x = 0.0, y = 0.0, z = 90.0}},
-            {label = "Parking Lot 1", x = 1905.2, y = 2605.4, z = 51.8, r = {x = 0.0, y = 0.0, z = 90.0}},
-            {label = "Parking Lot 2", x = 1849.6, y = 2699.6, z = 68.7, r = {x = -20.0, y = 0.0, z = 210.0}},
-            {label = "Parking Lot 3", x = 1824.2, y = 2473.7, z = 68.7, r = {x = -10.0, y = 0.0, z = -40.0}},
+            {label = "Front Gate 1", x = 1823.2, y = 2616.7, z = 61.0, r = {x = -50.0, y = 0.0, z = 208.0}},
+            {label = "Intake Entrance 1", x = 1804.9, y = 2597.7, z = 50.7, r = {x = -30.0, y = 0.0, z = 40.0}},
+            {label = "Intake Entrance A2", x = 1817.8, y = 2581.1, z = 59.9, r = {x = -45.0, y = 0.0, z = 60.0}},
             {label = "Intake", x = 1789.97, y = 2599.16, z = 48.0, r = {x = -30.0, y = 0.0, z = 140.0}},
             {label = "Main Cell Block", x = 1772.66, y = 2570.34, z = 53.0, r = {x = -30.0, y = 0.0, z = -40.0}},
             {label = "Main Cell Block 2", x = 1787.08, y = 2570.47, z = 53.0, r = {x = -25.0, y = 0.0, z = 40.0}},
-            {label = "Main Cell Block 3", x = 1779.68, y = 2589.72, z = 48.8, r = {x = -25.0, y = 0.0, z = 170.0}},
+            {label = "Main Cell Block 3", x = 1783.52, y = 2599.52, z = 52.81, r = {x = -30.0, y = 0.0, z = 115.0}},
+            {label = "Main Cell Block 4", x = 1779.68, y = 2589.72, z = 48.8, r = {x = -25.0, y = 0.0, z = 170.0}},
+            {label = "Medical Ward", x = 1776.68, y = 2565.58, z = 47.64, r = {x = -28.0, y = 0.0, z = 230.0}},
             {label = "Yard 1", x = 1627.2, y = 2565.6,  z = 54.6, r = {x = -20.0, y = 0.0, z = 200.0}},
             {label = "Yard 2", x = 1629.2, y = 2489.7, z = 54.6, r = {x = -20.0, y = 0.0, z = -35.0}},
+            {label = "Yard 3", x = 1768.32, y = 2531.38, z = 49.91, r = {x = -20.0, y = 0.0, z = -05.0}},
+            {label = "Yard 4", x = 1765.59, y = 2554.28, z = 50.19, r = {x = -25.0, y = 0.0, z = 110.0}},
+            {label = "Yard 5", x = 1685.75, y = 2528.86, z = 59.31, r = {x = -45.0, y = 0.0, z = 120.0}},
+            {label = "Visit Inmate", x = 1770.0, y = 2613.1, z = 48.2, r = {x = -30.0, y = 0.0, z = -50.0}},
+            {label = "Visit Vistor", x = 1781.5, y = 2620.33, z = 48.2, r = {x = -30.0, y = 0.0, z = 135.0}},
+        }
+    },
+    {
+        camBox = {label = "Bolingbroke Penitentiary External", id = 'prisonext'},
+        cameras = {
+            {label = "Front Gate 1", x = 1823.2, y = 2616.7, z = 61.0, r = {x = -50.0, y = 0.0, z = 208.0}},
+            {label = "Security Gate In", x = 1888.23, y = 2605.3, z = 52.58, r = {x = -40.0, y = 0.0, z = 280.0}},
+            {label = "Cas Roberson Road", x = 1905.2, y = 2605.4, z = 51.8, r = {x = 0.0, y = 0.0, z = 270.0}},
+            {label = "Parking Lot 1", x = 1872.99, y = 2525.52, z = 64.2, r = {x = -25.0, y = 0.0, z = 0.0}},
+            {label = "Parking Lot 2", x = 1849.6, y = 2699.6, z = 68.7, r = {x = -20.0, y = 0.0, z = 210.0}},
+            {label = "Ring Road 1", x = 1872.99, y = 2525.52, z = 64.2, r = {x = -25.0, y = 0.0, z = 110.0}},
+            {label = "Ring Road 2", x = 1660.31, y = 2390.37, z = 64.7, r = {x = -25.0, y = 0.0, z = 250.0}},
+            {label = "Ring Road 3", x = 1657.39, y = 2390.61, z = 64.7, r = {x = -25.0, y = 0.0, z = 30.0}},
+            {label = "Ring Road 4", x = 1537.45, y = 2472.68, z = 64.06, r = {x = -25.0, y = 0.0, z = 30.0}},
+            {label = "Ring Road 5", x = 1567.42, y = 2684.21, z = 64.09, r = {x = -25.0, y = 0.0, z = 320.0}},
+            {label = "Ring Road 6", x = 1775.45, y = 2766.47, z = 64.34, r = {x = -25.0, y = 0.0, z = 254.0}},
+            {label = "Vistor Entrance", x = 1838.44, y = 2595.66, z = 48.15, r = {x = -30.0, y = 0.0, z = 210.0}},
+        }
+    },
+    {
+        camBox = {label = "Vespucci Pd", id = 'vespd'},
+        cameras = {
+            {label = "Upper Parking Entrance", x = -1144.13, y = -843.72, z = 19.11, r = {x = -20.0, y = 0.0, z = 100.0}},
+            {label = "Upper Parking Entrance 2", x = -1131.33, y = -857.46, z = 17.19, r = {x = -10.0, y = 0.0, z = 100.0}},
+            {label = "Overlook Burger Shot", x = -1102.74, y = -853.16, z = 37.36, r = {x = -30.0, y = 0.0, z = 115.0}},
+            {label = "San Andreas Entrance", x = -1090.43, y = -807.68, z = 22.3, r = {x = -20.0, y = 0.0, z = 65.0}},
+        }
+    },
+    {
+        camBox = {label = "Vespucci Bank", id = 'bank4'},
+        cameras = {
+            {label = "Fleeca Valut Door", x = 145.49, y = -1043.19, z = 31.1, r = {x = -30.0, y = 0.0, z = 210.0}},
+            {label = "Bank Lobby", x = 152.93, y = -1042.21, z = 30.8, r = {x = -20.0, y = 0.0, z = 50.0}},
+            {label = "Cashier Exit", x = 146.58, y = -1038.21, z = 31.1, r = {x = -30.0, y = 0.0, z = 120.0}},
+            {label = "Vespucci Exit", x = 148.7, y = -1035.87, z = 32.4, r = {x = -35.0, y = 0.0, z = 300.0}},
+        }
+    },
+    {
+        camBox = {label = "Route 68 Bank", id = 'bank3'},
+        cameras = {
+            {label = "Fleeca Valut Door", x = 1178.97, y = 2710.94, z = 39.8, r = {x = -30.0, y = 0.0, z = 54.0}},
+            {label = "Bank Lobby", x = 1171.36, y = 2706.76, z = 39.5, r = {x = -20.0, y = 0.0, z = 250.0}},
+            {label = "Cashier Exit", x = 1179.37, y = 2705.78, z = 39.5, r = {x = -30.0, y = 0.0, z = 330.0}},
         }
     },
     {
@@ -204,13 +252,20 @@ SecurityCamConfig.Locations = {
     {
         camBox = {label = "Benny's Auto Garage (Strawberry)", id = 'store24'},
         cameras = {
-            {label = "Upper Deck", x = -216.2, y = -1333.3 , z = 35.9, r = {x = -10.0, y = 0.0, z = 240.0}}
+            {label = "Upper Deck", x = -216.2, y = -1333.3 , z = 35.9, r = {x = -10.0, y = 0.0, z = 240.0}},
+            {label = "Workshop", x = -195.31, y = -1314.1 , z = 33.7, r = {x = -15.0, y = 0.0, z = 120.0}}
+        }
+    },
+    {
+        camBox = {label = "Haynes Auto's", id = 'store45'},
+        cameras = {
+            {label = "Workshop", x = 469.91, y = -1309.73 , z = 32.5, r = {x = -35.0, y = 0.0, z = 250.0}}
         }
     },
     {
         camBox = {label = "LS Customs (Route 68)", id = 'store25'},
         cameras = {
-            {label = "Office", x = 1188.6, y = 2644.5, z = 39.4, r = {x = -20.0, y = 0.0, z = 200.0}}
+            {label = "Office", x = 1188.6, y = 2644.5, z = 40.4, r = {x = -20.0, y = 0.0, z = 170.0}}
         }
     },
     {
@@ -229,6 +284,12 @@ SecurityCamConfig.Locations = {
         camBox = {label = "The Pit (Vespucci Beach)", id = 'store28'},
         cameras = {
             {label = "Main", x = -1156.4, y = -1427.1, z = 6.0, r = {x = -10.0, y = 00.0, z = -30.0}}
+        }
+    },
+    {
+        camBox = {label = "Blazing Tattoo (Vinewood)", id = 'store29'},
+        cameras = {
+            {label = "Main", x = 327.3, y = 181.7, z = 105.8, r = {x = -20.0, y = 00.0, z = 105.0}}
         }
     },
     {
@@ -252,14 +313,49 @@ SecurityCamConfig.Locations = {
     {
         camBox = {label = "Car Dealership (Harmony)", id = 'store33'},
         cameras = {
-            {label = "Front", x = 1202.1, y = 2722.7, z = 42.0, r = {x = 0.0, y = 0.0, z = -100.0}}
+            {label = "Front", x = 1202.1, y = 2722.7, z = 42.0, r = {x = 0.0, y = 0.0, z = -100.0}},
+            {label = "Office Door", x = 1233.21, y = 2728.1, z = 42.5, r = {x = -35.0, y = 0.0, z = 320.0}}
         }
     },
     {
         camBox = {label = "Car Dealership (Los Santos)", id = 'store34'},
         cameras = {
-            {label = "Office", x = -32.5, y = -1106.7, z = 27.4, r = {x = 0.0, y = 0.0, z = -100.0}},
+            {label = "Office", x = -32.5, y = -1106.7, z = 28.4, r = {x = -20.0, y = 0.0, z = -70.0}},
+            {label = "Inside Showroom", x = -39.87, y = -1092.67, z = 28.8, r = {x = -20.0, y = 0.0, z = 170.0}},
+            {label = "Workshop", x = -27.71, y = -1095.52, z = 28.8, r = {x = -20.0, y = 0.0, z = 30.0}},
             {label = "Outside Front", x = -39.8, y = -1120.8, z = 28.7, r = {x = 0.0, y = 0.0, z = -5.0}}
+        }
+    },
+    {
+        camBox = {label = "Vangelico Jewelry Store (Rockford Hills)", id = 'store35'},
+        cameras = {
+            {label = "Front Door", x = -627.98, y = -230.1, z = 40.5, r = {x = -30.0, y = 0.0, z = 150.0}},
+            {label = "Office Doors", x = -627.34, y = -239.58, z = 40.5, r = {x = -30.0, y = 0.0, z = 340.0}},
+            {label = "Cash Registers", x = -620.65, y = -224.6, z = 40.5, r = {x = -30.0, y = 0.0, z = 160.0}},
+            {label = "Office", x = -633.0, y = -229.2, z = 40.2, r = {x = -30.0, y = 0.0, z = 270.0}}
+        }
+    },
+    {
+        camBox = {label = "Ammunation (Popular St.)", id = 'store36'},
+        cameras = {
+            {label = "Front Door", x = 825.53, y = -2147.76, z = 35.1, r = {x = -30.0, y = 0.0, z = 42.0}},
+            {label = "Sales Counter", x = 814.21, y = -2159.79, z = 31.8, r = {x = -20.0, y = 0.0, z = 45.0}},
+            {label = "Office Door", x = 827.75, y = -2159.8, z = 31.8, r = {x = -20.0, y = 0.0, z = 45.0}},
+            {label = "Shooting Range", x = 815.33, y = -2160.92, z = 31.8, r = {x = -25.0, y = 0.0, z = 235.0}},
+        }
+    },
+    {
+        camBox = {label = "Clothing Store (Route 68)", id = 'store37'},
+        cameras = {
+            {label = "Front Door", x = 1202.21, y = 2711.98, z = 40.4, r = {x = -20.0, y = 0.0, z = 130.0}},
+            {label = "Camera 2", x = 1188.9, y = 2715.9, z = 40.4, r = {x = -20.0, y = 0.0, z = 210.0}},
+        }
+    },
+    {
+        camBox = {label = "Clothing Store (Paleto Bay)", id = 'store39'},
+        cameras = {
+            {label = "Front Door", x = 1.81, y = 6507.3, z = 34.2, r = {x = -20.0, y = 0.0, z = 0.0}},
+            {label = "Camera 2", x = 14.61, y = 6513.4, z = 34.2, r = {x = -20.0, y = 0.0, z = 75.0}},
         }
     },
     {
@@ -295,8 +391,14 @@ SecurityCamConfig.Locations = {
     {
         camBox = {label = "Clothing Store (Portola Dr)", id = 'store43'},
         cameras = {
-            {label = "Front Door", x = -320.71, y = 6079.22, z = 34.26, r = {x = -20.0, y = 0.0, z = 200.0}},
-            {label = "Main", x = -334.92, y = 6082.7, z = 33.45, r = {x = -20.0, y = 0.0, z = 270.0}},
+            {label = "Cash Register", x = -710.99, y = -164.48, z = 39.9, r = {x = -20.0, y = 0.0, z = 350.0}},
+            {label = "Main", x = -712.99, y = -144.74, z = 39.9, r = {x = -20.0, y = 0.0, z = 170.0}},
+        }
+    },
+    {
+        camBox = {label = "Herr Kutz Barber (Bay City)", id = 'store46'},
+        cameras = {
+            {label = "Front Door", x = -1278.35, y = -1115.6, z = 8.6, r = {x = -20.0, y = 0.0, z = 125.0}}
         }
     },
     {
