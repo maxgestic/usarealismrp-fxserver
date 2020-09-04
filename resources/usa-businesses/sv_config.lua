@@ -18,14 +18,14 @@ BASE_ROB_DURATION = 60000
 BUSINESSES = {
 	["Auto Repair (Little Bighorn Ave.)"] = {
 		position = {472.45822143555, -1310.5356445313, 29.223064422607},
-		cameraID = 'store42',
+		cameraID = 'store45',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
 		price = 5000
 	},
 	["Auto Repair (Elgin Ave.)"] = {
 		position = {548.21875, -172.63174438477, 54.481338500977},
-		cameraID = 'store41',
+		cameraID = 'store44',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
 		price = 5000
@@ -111,7 +111,7 @@ BUSINESSES = {
 	},
 	["Herr Kutz Barber (Bay City Ave.)"] = {
 		position = {-1283.7, -1115.3, 6.9},
-		cameraID = 'store40',
+		cameraID = 'store46',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
 		price = 3000
@@ -290,7 +290,7 @@ BUSINESSES = {
 	},
 	["Ammunation (Adam's Apple Blvd.)"] = {
 		position = {14.1, -1105.9, 29.8},
-		cameraID = 'store35',
+		cameraID = 'store41',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
 		price = 10000
@@ -311,7 +311,7 @@ BUSINESSES = {
 	},
 	["Ammunation (Paleto Bay)"] = {
 		position = {-334.4, 6082.1, 31.5},
-		cameraID = 'store38',
+		cameraID = 'store42',
 		isBeingRobbed = false,
 		lastRobbedTime = 0,
 		price = 6500
@@ -338,3 +338,8 @@ BUSINESSES = {
 		price = 6500
 	}
 }
+
+RegisterServerEvent("businesses:load")
+AddEventHandler("businesses:load", function()
+	TriggerClientEvent("businesses:load", source, BUSINESSES)
+end)
