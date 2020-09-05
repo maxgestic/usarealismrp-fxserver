@@ -272,7 +272,7 @@ Citizen.CreateThread(function()
 				end
 
 				-- If fire mode selector key pressed
-				if IsDisabledControlJustReleased(1, Config.SelectorKey) and IsPlayerFreeAiming(PlayerId) then
+				if IsDisabledControlJustReleased(1, Config.SelectorKey) and IsPlayerFreeAiming(PlayerId) and GetLastInputMethod(0) then
 					if Active == "full" then
 						if FireMode.Weapons[PedWeapon] <= 2 then
 							if FireMode.Weapons[PedWeapon] == 0 then
