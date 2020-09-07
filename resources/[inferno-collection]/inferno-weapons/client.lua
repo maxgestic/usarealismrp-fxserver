@@ -74,14 +74,12 @@ Config.Weapons.Full = {
 
 -- These weapons will have their reticle enabled
 Config.Weapons.Reticle = {
-	--[[
 	"WEAPON_SNIPERRIFLE",
 	"WEAPON_HEAVYSNIPER",
 	"WEAPON_HEAVYSNIPER_MK2",
 	"WEAPON_MARKSMANRIFLE",
 	"WEAPON_MARKSMANRIFLE_MK2",
 	"WEAPON_STUNGUN"
-	--]]
 }
 
 -- Effects that are randomly selected when the player takes any damage.
