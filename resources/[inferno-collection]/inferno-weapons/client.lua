@@ -69,7 +69,8 @@ Config.Weapons.Full = {
 	"WEAPON_BULLPUPRIFLE",
 	"WEAPON_COMPACTRIFLE",
 	"WEAPON_SPECIALCARBINE_MK2",
-	"WEAPON_BULLPUPRIFLE_MK2"
+	"WEAPON_BULLPUPRIFLE_MK2",
+	"WEAPON_PUMPSHOTGUN_MK2"
 }
 
 -- These weapons will have their reticle enabled
