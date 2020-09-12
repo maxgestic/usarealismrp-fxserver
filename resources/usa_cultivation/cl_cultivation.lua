@@ -114,19 +114,21 @@ end
 
 function updatePlantObjectStage(plant)
     local id = plant._id
-    if NEARBY_PLANTS[id].objectHandle then -- plant object exists for client
-        local obj = NEARBY_PLANTS[id].objectHandle
-        DeleteObject(obj)
-        local nextStageObj = plant.stage.objectModels[math.random(#(plant.stage.objectModels))]
-        local hash = GetHashKey(nextStageObj)
-        local zCoordAdjustment = doAdjustZCoord(nextStageObj)
-        if zCoordAdjustment then
-            obj = CreateObject(hash, plant.coords.x, plant.coords.y, plant.coords.z + zCoordAdjustment, 0, 0, 0)
-        else 
-            obj = CreateObject(hash, plant.coords.x, plant.coords.y, plant.coords.z, 0, 0, 0)
+    if NEARBY_PLANTS[id] then
+        if NEARBY_PLANTS[id].objectHandle then -- plant object exists for client
+            local obj = NEARBY_PLANTS[id].objectHandle
+            DeleteObject(obj)
+            local nextStageObj = plant.stage.objectModels[math.random(#(plant.stage.objectModels))]
+            local hash = GetHashKey(nextStageObj)
+            local zCoordAdjustment = doAdjustZCoord(nextStageObj)
+            if zCoordAdjustment then
+                obj = CreateObject(hash, plant.coords.x, plant.coords.y, plant.coords.z + zCoordAdjustment, 0, 0, 0)
+            else 
+                obj = CreateObject(hash, plant.coords.x, plant.coords.y, plant.coords.z, 0, 0, 0)
+            end
+            SetEntityAsMissionEntity(obj, 1, 1)
+            NEARBY_PLANTS[id].objectHandle = obj
         end
-        SetEntityAsMissionEntity(obj, 1, 1)
-        NEARBY_PLANTS[id].objectHandle = obj
     end
 end
 
