@@ -31,7 +31,7 @@ PlantManager.newPlant = function(char, type, coords, cb)
         db.createDocument("cultivation", newPlant, function(docID)
             print("plant created in DB!")
             newPlant._id = docID
-            table.insert(PLANTED, newPlant)
+            PLANTED[docID] = newPlant
             cb(newPlant)
         end)
     end)
@@ -110,28 +110,28 @@ PlantManager.sustanenceTick = function(plant)
     return plant, didUpdate
 end
 
-PlantManager.waterPlant = function(i)
-    local newVal = PLANTED[i].waterLevel.val + PlantManager.WATER_REPLENISH_AMOUNT
+PlantManager.waterPlant = function(id)
+    local newVal = PLANTED[id].waterLevel.val + PlantManager.WATER_REPLENISH_AMOUNT
     if newVal <= PlantManager.WATER_MAX then
-        PLANTED[i].waterLevel.val = newVal
+        PLANTED[id].waterLevel.val = newVal
     else
-        PLANTED[i].waterLevel.val = PlantManager.WATER_MAX
+        PLANTED[id].waterLevel.val = PlantManager.WATER_MAX
     end
-    PlantManager.updateWaterAndFoodStrings(i)
+    PlantManager.updateWaterAndFoodStrings(id)
 end
 
-PlantManager.feedPlant = function(i)
-    local newVal = PLANTED[i].foodLevel.val + PlantManager.FOOD_REPLENISH_AMOUNT
+PlantManager.feedPlant = function(id)
+    local newVal = PLANTED[id].foodLevel.val + PlantManager.FOOD_REPLENISH_AMOUNT
     if newVal <= PlantManager.FOOD_MAX then
-        PLANTED[i].foodLevel.val = newVal
+        PLANTED[id].foodLevel.val = newVal
     else
-        PLANTED[i].foodLevel.val = PlantManager.FOOD_MAX
+        PLANTED[id].foodLevel.val = PlantManager.FOOD_MAX
     end
-    PlantManager.updateWaterAndFoodStrings(i)
+    PlantManager.updateWaterAndFoodStrings(id)
 end
 
-PlantManager.harvestPlant = function(i)
-    local plant = PLANTED[i]
+PlantManager.harvestPlant = function(id)
+    local plant = PLANTED[id]
     local rewardQuantity = math.random(PRODUCTS[plant.type].rewardQuantity.min, PRODUCTS[plant.type].rewardQuantity.max)
     local rewardItem = PRODUCTS[plant.type].harvestItem
     rewardItem.quantity = rewardQuantity
@@ -139,46 +139,46 @@ PlantManager.harvestPlant = function(i)
     return rewardItem
 end
 
-PlantManager.updateWaterAndFoodStrings = function(i)
+PlantManager.updateWaterAndFoodStrings = function(id)
     -- water string --
-    if PLANTED[i].waterLevel.val <= HIGH_THRESHOLD and PLANTED[i].waterLevel.asString ~= "~r~Very Thirsty~w~" then
-        PLANTED[i].waterLevel.asString = "~r~Very Thirsty~w~"
-    elseif PLANTED[i].waterLevel.val <= MED_THRESHOLD and PLANTED[i].waterLevel.asString ~= "~y~Thirsty~w~" then
-        PLANTED[i].waterLevel.asString = "~y~Thirsty~w~"
-    elseif PLANTED[i].waterLevel.val <= LOW_THRESHOLD and PLANTED[i].waterLevel.asString ~= "~g~A little Thirsty~w~" then
-        PLANTED[i].waterLevel.asString = "~g~A little Thirsty~w~"
-    elseif PLANTED[i].waterLevel.asString ~= "~g~Not Thirsty~w~" then
-        PLANTED[i].waterLevel.asString = "~g~Not Thirsty~w~"
+    if PLANTED[id].waterLevel.val <= HIGH_THRESHOLD and PLANTED[id].waterLevel.asString ~= "~r~Very Thirsty~w~" then
+        PLANTED[id].waterLevel.asString = "~r~Very Thirsty~w~"
+    elseif PLANTED[id].waterLevel.val <= MED_THRESHOLD and PLANTED[id].waterLevel.asString ~= "~y~Thirsty~w~" then
+        PLANTED[id].waterLevel.asString = "~y~Thirsty~w~"
+    elseif PLANTED[id].waterLevel.val <= LOW_THRESHOLD and PLANTED[id].waterLevel.asString ~= "~g~A little Thirsty~w~" then
+        PLANTED[id].waterLevel.asString = "~g~A little Thirsty~w~"
+    elseif PLANTED[id].waterLevel.asString ~= "~g~Not Thirsty~w~" then
+        PLANTED[id].waterLevel.asString = "~g~Not Thirsty~w~"
     end
     -- food string --
-    if PLANTED[i].foodLevel.val <= LOW_THRESHOLD and PLANTED[i].foodLevel.asString ~= "~g~Slightly Hungry~w~" then
-        PLANTED[i].foodLevel.asString = "~g~Slightly Hungry~w~"
-    elseif PLANTED[i].foodLevel.val <= MED_THRESHOLD and PLANTED[i].foodLevel.asString ~= "~y~Hungry~w~" then
-        PLANTED[i].foodLevel.asString = "~y~Hungry~w~"
-    elseif PLANTED[i].foodLevel.val <= HIGH_THRESHOLD and PLANTED[i].foodLevel.asString ~= "~r~Needs Food~w~" then
-        PLANTED[i].foodLevel.asString = "~r~Needs Food~w~"
-    elseif PLANTED[i].foodLevel.asString ~= "~g~Not Hungry~w~" then
-        PLANTED[i].foodLevel.asString = "~g~Not Hungry~w~"
+    if PLANTED[id].foodLevel.val <= LOW_THRESHOLD and PLANTED[id].foodLevel.asString ~= "~g~Slightly Hungry~w~" then
+        PLANTED[id].foodLevel.asString = "~g~Slightly Hungry~w~"
+    elseif PLANTED[id].foodLevel.val <= MED_THRESHOLD and PLANTED[id].foodLevel.asString ~= "~y~Hungry~w~" then
+        PLANTED[id].foodLevel.asString = "~y~Hungry~w~"
+    elseif PLANTED[id].foodLevel.val <= HIGH_THRESHOLD and PLANTED[id].foodLevel.asString ~= "~r~Needs Food~w~" then
+        PLANTED[id].foodLevel.asString = "~r~Needs Food~w~"
+    elseif PLANTED[id].foodLevel.asString ~= "~g~Not Hungry~w~" then
+        PLANTED[id].foodLevel.asString = "~g~Not Hungry~w~"
     end
     -- check for death --
-    if PLANTED[i].foodLevel.val < DIE_THRESHOLD or PLANTED[i].waterLevel.val < DIE_THRESHOLD and not PLANTED[i].isDead then
-        PLANTED[i].isDead = true
+    if PLANTED[id].foodLevel.val < DIE_THRESHOLD or PLANTED[id].waterLevel.val < DIE_THRESHOLD and not PLANTED[id].isDead then
+        PLANTED[id].isDead = true
     end
 end
 
-PlantManager.removePlant = function(i)
-    if PLANTED[i] then
+PlantManager.removePlant = function(id)
+    if PLANTED[id] then
         TriggerEvent("es:exposeDBFunctions", function(db)
-            db.deleteDocument("cultivation", PLANTED[i]._id, function(ok)
-                table.remove(PLANTED, i)
+            db.deleteDocument("cultivation", PLANTED[id]._id, function(ok)
+                PLANTED[id] = nil
             end)
         end)
     end
 end
 
-PlantManager.hasBeenDeadLongEnoughToDelete = function(i)
-    if PLANTED[i].isDead and PLANTED[i].deathTimestamp then
-        local daysSinceDead = math.floor(exports.globals:GetHoursFromTime(PLANTED[i].deathTimestamp) / 24)
+PlantManager.hasBeenDeadLongEnoughToDelete = function(id)
+    if PLANTED[id].isDead and PLANTED[id].deathTimestamp then
+        local daysSinceDead = math.floor(exports.globals:GetHoursFromTime(PLANTED[id].deathTimestamp) / 24)
         if daysSinceDead >= DAYS_DEAD_BEFORE_DELETE then
             return true
         end

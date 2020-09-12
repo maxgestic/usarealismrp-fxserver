@@ -41,12 +41,9 @@ MED_THRESHOLD = 45.0
 HIGH_THRESHOLD = 30.0
 DIE_THRESHOLD = 10.0 -- no longer harvestable if below this threshold
 
-DAYS_DEAD_BEFORE_DELETE = 7 -- auto delete when dead for X days
+NEARBY_DISTANCE = 400
 
-RegisterServerEvent("cultivation:load")
-AddEventHandler("cultivation:load", function()
-    TriggerClientEvent("cultivation:load", source, PRODUCTS, PLANTED)
-end)
+--DAYS_DEAD_BEFORE_DELETE = 7 -- auto delete when dead for X days
 
 --[[
 local testobj = {}

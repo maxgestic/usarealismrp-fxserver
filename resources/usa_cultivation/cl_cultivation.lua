@@ -1,6 +1,5 @@
 local PRODUCTS = {}
-local PLANTED = {}
-local CLOSEST_PLANTED = {}
+local NEARBY_PLANTS = {}
 
 local me = {
     ped = nil,
@@ -21,62 +20,7 @@ local KEYS = {
     E = 38
 }
 
-RegisterNetEvent("cultivation:load")
-AddEventHandler("cultivation:load", function(products, planted)
-    PRODUCTS = products
-    PLANTED = planted
-    if PLANTED then
-        local mycoords = GetEntityCoords(PlayerPedId())
-        for i = 1, #PLANTED do
-            local plant = PLANTED[i]
-            if Vdist(mycoords.x, mycoords.y, mycoords.z, plant.coords.x, plant.coords.y, plant.coords.z) <= OBJECT_CULLING_DIST then
-                local objectModel = plant.stage.objectModels[1]
-                if objectModel then
-                    local zCoordAdjustment = doAdjustZCoord(objectModel)
-                    if zCoordAdjustment then
-                        PLANTED[i].objectHandle = CreateObject(GetHashKey(objectModel), plant.coords.x, plant.coords.y, plant.coords.z + zCoordAdjustment, 0, 0, 0)
-                    else
-                        PLANTED[i].objectHandle = CreateObject(GetHashKey(objectModel), plant.coords.x, plant.coords.y, plant.coords.z, 0, 0, 0)
-                    end
-                    SetEntityAsMissionEntity(PLANTED[i].objectHandle, 1, 1)
-                end
-            end
-        end
-    end
-end)
-
-Citizen.CreateThread(function()
-    Wait(2000)
-    TriggerServerEvent("cultivation:load")
-end)
-
-Citizen.CreateThread(function()
-    while true do
-        me.ped = PlayerPedId()
-        me.coords = GetEntityCoords(me.ped)
-        if PRODUCTS then
-            for name, info in pairs(PRODUCTS) do
-                local seedBuyLocation = info.buyLocation
-                local distance = Vdist(me.coords.x, me.coords.y, me.coords.z, seedBuyLocation.x, seedBuyLocation.y, seedBuyLocation.z)
-                if distance < MENU_TEXT_RADIUS then
-                    DrawText3D(seedBuyLocation.x, seedBuyLocation.y, seedBuyLocation.z, "[E] - Buy Cannabis Plant | [Hold E] - Help")
-                end
-                if distance < MENU_RADIUS then
-                    if IsControlJustPressed(0, KEYS.E) then
-                        Wait(500)
-                        if IsControlPressed(0, KEYS.E) then
-                            ShowHelp()
-                        else
-                            TriggerServerEvent("cultivation:buy", name)
-                        end
-                        Wait(500)
-                    end
-                end
-            end
-        end
-        Wait(1)
-    end
-end)
+local POLL_INTERVAL_SECONDS = 5
 
 function DrawText3D(x, y, z, text)
     local onScreen,_x,_y=World3dToScreen2d(x,y,z)
@@ -92,21 +36,19 @@ function DrawText3D(x, y, z, text)
     DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
 end
 
--- returns plant index and distance of closest plant --
 function GetClosestPlant()
     if not me.ped then
         return
     end
     local closest = {
-        index = -1,
+        _id = nil,
         dist = 9999999999
     }
-    if PLANTED then
-        for i = 1, #PLANTED do
-            local plant = PLANTED[i]
+    if NEARBY_PLANTS then
+        for id, plant in pairs(NEARBY_PLANTS) do
             local dist = Vdist(me.coords.x, me.coords.y, me.coords.z, plant.coords.x, plant.coords.y, plant.coords.z)
             if dist < closest.dist and dist < 5.0 then
-                closest.index = i 
+                closest._id = id
                 closest.dist = dist
             end
         end
@@ -153,30 +95,90 @@ function LoadPlantModel(model)
     end
 end
 
-function CreatePlantObject(i)
-    if PLANTED[i] and not PLANTED[i].objectHandle then
-        local plant = PLANTED[i]
-        local objectModel = plant.stage.objectModels[1]
-        if plant.stage.objectModels[1] then
-            LoadPlantModel(plant.stage.objectModels[1])
-            local zCoordAdjustment = doAdjustZCoord(objectModel)
-            if zCoordAdjustment then
-                plant.objectHandle = CreateObject(GetHashKey(objectModel), plant.coords.x, plant.coords.y, plant.coords.z + zCoordAdjustment, 0, 0, 0)
-            else
-                plant.objectHandle = CreateObject(GetHashKey(objectModel), plant.coords.x, plant.coords.y, plant.coords.z, 0, 0, 0)
-            end
-            SetEntityAsMissionEntity(plant.objectHandle, 1, 1)
-            PLANTED[i].objectHandle = plant.objectHandle
+function createPlantObject(plant)
+    local objectModel = plant.stage.objectModels[1] -- use 1 because others have invisible collision issue
+    local hash = GetHashKey(objectModel)
+    local handle = nil
+    if objectModel then
+        local zCoordAdjustment = doAdjustZCoord(objectModel)
+        if zCoordAdjustment then
+            handle = CreateObject(hash, plant.coords.x, plant.coords.y, plant.coords.z + zCoordAdjustment, 0, 0, 0)
+        else
+            handle = CreateObject(hash, plant.coords.x, plant.coords.y, plant.coords.z, 0, 0, 0)
         end
+        SetEntityAsMissionEntity(handle, 1, 1)
+        FreezeEntityPosition(handle, true)
+    end
+    return handle
+end
+
+function updatePlantObjectStage(plant)
+    local id = plant._id
+    if NEARBY_PLANTS[id].objectHandle then -- plant object exists for client
+        local obj = NEARBY_PLANTS[id].objectHandle
+        DeleteObject(obj)
+        local nextStageObj = plant.stage.objectModels[math.random(#(plant.stage.objectModels))]
+        local hash = GetHashKey(nextStageObj)
+        local zCoordAdjustment = doAdjustZCoord(nextStageObj)
+        if zCoordAdjustment then
+            obj = CreateObject(hash, plant.coords.x, plant.coords.y, plant.coords.z + zCoordAdjustment, 0, 0, 0)
+        else 
+            obj = CreateObject(hash, plant.coords.x, plant.coords.y, plant.coords.z, 0, 0, 0)
+        end
+        SetEntityAsMissionEntity(obj, 1, 1)
+        NEARBY_PLANTS[id].objectHandle = obj
     end
 end
 
+function updatePlantSustenance(plant)
+    local id = plant._id
+    if NEARBY_PLANTS[id] then
+        NEARBY_PLANTS[id].foodLevel = plant.foodLevel
+        NEARBY_PLANTS[id].waterLevel = plant.waterLevel
+        NEARBY_PLANTS[id].isDead = plant.isDead
+    end
+end
+
+--[[
 function DeletePlantObject(i)
     if PLANTED[i] and PLANTED[i].objectHandle then
         DeleteObject(PLANTED[i].objectHandle)
         PLANTED[i].objectHandle = nil
     end
 end
+--]]
+
+RegisterNetEvent("cultivation:loadProducts")
+AddEventHandler("cultivation:loadProducts", function(products)
+    PRODUCTS = products
+end)
+
+TriggerServerEvent("cultivation:loadProducts")
+
+RegisterNetEvent("cultivation:loadNearbyPlants")
+AddEventHandler("cultivation:loadNearbyPlants", function(nearbyPlants)
+    -- add new nearby plants, update still nearby plants --
+    for id, plant in pairs(nearbyPlants) do
+        if not NEARBY_PLANTS[id] then
+            NEARBY_PLANTS[id] = plant
+            NEARBY_PLANTS[id].objectHandle = createPlantObject(plant)
+        else
+            for k, v in pairs(plant) do
+                NEARBY_PLANTS[id][k] = v -- to avoid overwriting client side variables (like plant object handle)
+            end
+        end
+    end
+    -- delete plants that were close but now are too far away --
+    for id, plant in pairs(NEARBY_PLANTS) do
+        if not nearbyPlants[id] then
+            if plant.objectHandle then
+                DeleteObject(plant.objectHandle)
+                plant.objectHandle = nil
+            end
+            NEARBY_PLANTS[id] = nil
+        end
+    end
+end)
 
 RegisterNetEvent("cultivation:plant")
 AddEventHandler("cultivation:plant", function(type, itemName)
@@ -194,61 +196,27 @@ AddEventHandler("cultivation:plant", function(type, itemName)
 end)
 
 RegisterNetEvent("cultivation:clientNewPlant")
-AddEventHandler("cultivation:clientNewPlant", function(newPlant)
-    if me.coords and newPlant.coords then
-        if Vdist(me.coords.x, me.coords.y, me.coords.z, newPlant.coords.x, newPlant.coords.y, newPlant.coords.z) < OBJECT_CULLING_DIST then -- create plant object
-            local objectModel = newPlant.stage.objectModels[1]
-            LoadPlantModel(objectModel)
-            local zCoordAdjustment = doAdjustZCoord(objectModel)
-            if zCoordAdjustment then
-                newPlant.objectHandle = CreateObject(GetHashKey(objectModel), newPlant.coords.x, newPlant.coords.y, newPlant.coords.z + zCoordAdjustment, 0, 0, 0)
-            else
-                newPlant.objectHandle = CreateObject(GetHashKey(objectModel), newPlant.coords.x, newPlant.coords.y, newPlant.coords.z, 0, 0, 0)
-            end
-            SetEntityAsMissionEntity(newPlant.objectHandle, 1, 1)
-        end
-    end
-    table.insert(PLANTED, newPlant)
+AddEventHandler("cultivation:clientNewPlant", function(plant)
+    NEARBY_PLANTS[plant._id] = plant
+    NEARBY_PLANTS[plant._id].objectHandle = createPlantObject(plant)
 end)
 
 -- update's plant object model on stage update --
-RegisterNetEvent("cultivation:updatePlantStage")
-AddEventHandler("cultivation:updatePlantStage", function(i, stage)
-    if PLANTED[i] then
-        PLANTED[i].stage = stage
-        if PLANTED[i].objectHandle then -- plant object exists for client
-            local obj = PLANTED[i].objectHandle
-            DeleteObject(obj)
-            local plant = PLANTED[i]
-            local nextStageObj = plant.stage.objectModels[math.random(#(plant.stage.objectModels))]
-            local zCoordAdjustment = doAdjustZCoord(nextStageObj)
-            if zCoordAdjustment then
-                obj = CreateObject(GetHashKey(nextStageObj), plant.coords.x, plant.coords.y, plant.coords.z + zCoordAdjustment, 0, 0, 0)
-            else 
-                obj = CreateObject(GetHashKey(nextStageObj), plant.coords.x, plant.coords.y, plant.coords.z, 0, 0, 0)
-            end
-            SetEntityAsMissionEntity(obj, 1, 1)
-            PLANTED[i].objectHandle = obj
-        end
-    end
+RegisterNetEvent("cultivation:updatePlantStageIfNearby")
+AddEventHandler("cultivation:updatePlantStageIfNearby", function(plant)
+    updatePlantObjectStage(plant)
 end)
 
-RegisterNetEvent("cultivation:updateSustenance")
-AddEventHandler("cultivation:updateSustenance", function(i, foodLevel, waterLevel, isDead)
-    if PLANTED[i] then
-        PLANTED[i].foodLevel = foodLevel
-        PLANTED[i].waterLevel = waterLevel
-        if isDead then
-            PLANTED[i].isDead = isDead
-        end
-    end
+RegisterNetEvent("cultivation:updateSustenanceIfNearby")
+AddEventHandler("cultivation:updateSustenanceIfNearby", function(plant)
+    updatePlantSustenance(plant)
 end)
 
 RegisterNetEvent("cultivation:water")
 AddEventHandler("cultivation:water", function()
     -- find nearest plant
     local closest = GetClosestPlant()
-    if closest.index ~= -1 then
+    if closest._id then
         if not HasAnimDictLoaded("anim@move_m@trash") then
             exports.globals:loadAnimDict("anim@move_m@trash")
         end
@@ -262,7 +230,7 @@ AddEventHandler("cultivation:water", function()
             Wait(1)
         end
         ClearPedTasks(me.ped)
-        TriggerServerEvent("cultivation:water", closest.index)
+        TriggerServerEvent("cultivation:water", closest._id)
     else
         exports.globals:notify("No plant found!")
     end
@@ -272,7 +240,7 @@ RegisterNetEvent("cultivation:feed")
 AddEventHandler("cultivation:feed", function()
     -- find nearest plant
     local closest = GetClosestPlant()
-    if closest.index ~= -1 then
+    if closest._id then
         if not HasAnimDictLoaded("anim@move_m@trash") then
             exports.globals:loadAnimDict("anim@move_m@trash")
         end
@@ -286,18 +254,9 @@ AddEventHandler("cultivation:feed", function()
             Wait(1)
         end
         ClearPedTasks(me.ped)
-        TriggerServerEvent("cultivation:feed", closest.index)
+        TriggerServerEvent("cultivation:feed", closest._id)
     else
         exports.globals:notify("No plant found!")
-    end
-end)
-
-RegisterNetEvent("cultivation:update")
-AddEventHandler("cultivation:update", function(i, field, val)
-    if PLANTED[i] then
-        PLANTED[i][field] = val
-    else 
-        print("cultivation:update failed. Plant at index " .. i .. " not valid!")
     end
 end)
 
@@ -305,8 +264,8 @@ RegisterNetEvent("cultivation:harvest")
 AddEventHandler("cultivation:harvest", function()
     -- find nearest plant
     local closest = GetClosestPlant()
-    if closest.index ~= -1 then
-        if PLANTED[closest.index] and not PLANTED[closest.index].isDead then
+    if closest._id then
+        if NEARBY_PLANTS[closest._id] and not NEARBY_PLANTS[closest._id].isDead then
             if not HasAnimDictLoaded("anim@move_m@trash") then
                 exports.globals:loadAnimDict("anim@move_m@trash")
             end
@@ -320,7 +279,7 @@ AddEventHandler("cultivation:harvest", function()
                 Wait(1)
             end
             ClearPedTasks(me.ped)
-            TriggerServerEvent("cultivation:harvest", closest.index)
+            TriggerServerEvent("cultivation:harvest", closest._id)
         else 
             exports.globals:notify("This plant is dead!", "^3INFO: ^0This plant is dead! Use a shovel to remove it!")
         end
@@ -330,12 +289,12 @@ AddEventHandler("cultivation:harvest", function()
 end)
 
 RegisterNetEvent("cultivation:remove")
-AddEventHandler("cultivation:remove", function(i, msg)
-    if PLANTED[i] then
-        if PLANTED[i].objectHandle then
-            DeleteObject(PLANTED[i].objectHandle)
+AddEventHandler("cultivation:remove", function(id, msg)
+    if NEARBY_PLANTS[id] then
+        if NEARBY_PLANTS[id].objectHandle then
+            DeleteObject(NEARBY_PLANTS[id].objectHandle)
+            NEARBY_PLANTS[id] = nil
         end
-        table.remove(PLANTED, i)
         if msg then 
             exports.globals:notify(msg)
         end
@@ -346,7 +305,7 @@ RegisterNetEvent("cultivation:shovel")
 AddEventHandler("cultivation:shovel", function()
     -- find nearest plant
     local closest = GetClosestPlant()
-    if closest.index ~= -1 then
+    if closest._id then
         if not HasAnimDictLoaded("anim@move_m@trash") then
             exports.globals:loadAnimDict("anim@move_m@trash")
         end
@@ -360,7 +319,7 @@ AddEventHandler("cultivation:shovel", function()
             Wait(1)
         end
         ClearPedTasks(me.ped)
-        TriggerServerEvent("cultivation:shovel", closest.index)
+        TriggerServerEvent("cultivation:shovel", closest._id)
     else
         exports.globals:notify("No plant found!")
     end
@@ -369,33 +328,23 @@ end)
 RegisterNetEvent("cultivation:attemptToRemoveNearest")
 AddEventHandler("cultivation:attemptToRemoveNearest", function()
     local closest = GetClosestPlant()
-    TriggerServerEvent("cultivation:remove", closest.index)
+    TriggerServerEvent("cultivation:remove", closest._id)
 end)
 
--- Used to optimize drawing of 3D text (only look for nearby plants every x seconds instead of every frame)
-local lastCheckTime = GetGameTimer()
+-- draw 3D text for all NEARBY_PLANTS within PLANT_TEXT_RADIUS distance --
 Citizen.CreateThread(function()
     while true do
-        local isTimeForNextCheck = GetGameTimer() - lastCheckTime >= CLOSEST_PLANTS_BUFFER_INTERVAL_SECONDS * 1000
-        if PLANTED and me.coords and isTimeForNextCheck then
-            lastCheckTime = GetGameTimer()
-            for i = 1, #PLANTED do
-                local plant = PLANTED[i]
-                if plant and plant.coords then
-                    local dist = Vdist(me.coords.x, me.coords.y, me.coords.z, plant.coords.x, plant.coords.y, plant.coords.z)
-                    if dist <= OBJECT_CULLING_DIST then
-                        if not CLOSEST_PLANTED[i] then
-                            CLOSEST_PLANTED[i] = plant
-                            CreatePlantObject(i)
-                        end
+        if NEARBY_PLANTS and me.coords then
+            for id, plant in pairs(NEARBY_PLANTS) do
+                local dist = Vdist(me.coords.x, me.coords.y, me.coords.z, plant.coords.x, plant.coords.y, plant.coords.z)
+                if dist < PLANT_TEXT_RADIUS then
+                    local water = plant.waterLevel.asString
+                    local food = plant.foodLevel.asString
+                    if not plant.isDead then
+                        DrawText3D(plant.coords.x, plant.coords.y, plant.coords.z, plant.type .. " Plant | " .. water .. " | " .. food)
                     else
-                        if CLOSEST_PLANTED[i] then
-                            CLOSEST_PLANTED[i] = nil
-                            DeletePlantObject(i)
-                        end
+                        DrawText3D(plant.coords.x, plant.coords.y, plant.coords.z, plant.type .. " Plant | ~r~Dead~w~")
                     end
-                else
-                    print("cultivation: found bad plant, id: " .. (plant._id or "NO ID"))
                 end
             end
         end
@@ -403,37 +352,51 @@ Citizen.CreateThread(function()
     end
 end)
 
--- Draw 3D text for all plants within PLANT_TEXT_RADIUS distance --
+-- update global player ped and ped coords variables --
 Citizen.CreateThread(function()
     while true do
-        if CLOSEST_PLANTED and me.coords then
-            for i, plant in pairs(CLOSEST_PLANTED) do
-                if PLANTED[i] then
-                    local dist = Vdist(me.coords.x, me.coords.y, me.coords.z, plant.coords.x, plant.coords.y, plant.coords.z)
-                    if dist < PLANT_TEXT_RADIUS then
-                        local water = plant.waterLevel.asString
-                        local food = plant.foodLevel.asString
-                        if not plant.isDead then
-                            DrawText3D(plant.coords.x, plant.coords.y, plant.coords.z, plant.type .. " Plant | " .. water .. " | " .. food)
+        me.ped = PlayerPedId()
+        me.coords = GetEntityCoords(me.ped)
+        Wait(1)
+    end
+end)
+
+-- poll the server for nearest plant data every POLL_INTERVAL_SECONDS seconds --
+Citizen.CreateThread(function()
+    local lastCheck = 0
+    while true do
+        if GetGameTimer() - lastCheck > POLL_INTERVAL_SECONDS * 1000 then
+            local mycoords = GetEntityCoords(PlayerPedId())
+            TriggerServerEvent("cultivation:loadNearbyPlants", mycoords)
+            lastCheck = GetGameTimer()
+        end
+        Wait(1)
+    end
+end)
+
+-- listen for cannabis plant purchase keypress, display purchase text --
+Citizen.CreateThread(function()
+    while true do
+        if PRODUCTS and me.coords then
+            for name, info in pairs(PRODUCTS) do
+                local seedBuyLocation = info.buyLocation
+                local distance = Vdist(me.coords.x, me.coords.y, me.coords.z, seedBuyLocation.x, seedBuyLocation.y, seedBuyLocation.z)
+                if distance < MENU_TEXT_RADIUS then
+                    DrawText3D(seedBuyLocation.x, seedBuyLocation.y, seedBuyLocation.z, "[E] - Buy Cannabis Plant | [Hold E] - Help")
+                end
+                if distance < MENU_RADIUS then
+                    if IsControlJustPressed(0, KEYS.E) then
+                        Wait(500)
+                        if IsControlPressed(0, KEYS.E) then
+                            ShowHelp()
                         else
-                            DrawText3D(plant.coords.x, plant.coords.y, plant.coords.z, plant.type .. " Plant | ~r~Dead~w~")
+                            TriggerServerEvent("cultivation:buy", name)
                         end
+                        Wait(500)
                     end
-                else 
-                    CLOSEST_PLANTED[i] = nil
                 end
             end
         end
         Wait(1)
     end
 end)
-
---[[
-RegisterCommand("cultdebug", function()
-    print("# PLANTED: " .. #PLANTED)
-    for i, plant in pairs(CLOSEST_PLANTED) do
-        local dist = Vdist(me.coords.x, me.coords.y, me.coords.z, plant.coords.x, plant.coords.y, plant.coords.z)
-        print("closest plant at " .. i .. ", dist: " .. dist)
-    end
-end, false) 
---]]
