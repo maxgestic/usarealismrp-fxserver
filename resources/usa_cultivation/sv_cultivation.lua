@@ -185,7 +185,6 @@ end)
 
 function saveCallback(doc, err)
     -- nothing for now
-    print("planted saved! Err: " .. err)
 end
 
 Citizen.CreateThread(function()
