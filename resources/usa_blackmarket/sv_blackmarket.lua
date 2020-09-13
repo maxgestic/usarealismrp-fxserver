@@ -55,8 +55,8 @@ local markets = {
 
 -- x = 113.21036529541, y = -1967.2863769531, z = 21.317756652832
 
-local openingHours = math.random(0, 3)
-local closingHours = math.random(4, 7)
+local openingHours = math.random(0, 4)
+local closingHours = math.random(5, 7)
 
 for store, info in pairs(markets) do
     for i = 1, #info["items"] do
