@@ -18,6 +18,37 @@ for i = 1, #WEAPONS do
     WEAPONS[i].type = "weapon"
 end
 
+local function GetWeaponAttachments(name)
+    local attachments = {}
+    if name == "MK2 Carbine Rifle" then
+        table.insert(attachments, 'COMPONENT_AT_SIGHTS')
+        table.insert(attachments, 'COMPONENT_AT_AR_FLSH')
+        table.insert(attachments, 'COMPONENT_AT_AR_AFGRIP_02')
+        --table.insert(attachments, 'COMPONENT_CARBINERIFLE_MK2_CLIP_FMJ')
+        table.insert(attachments, 'COMPONENT_AT_CR_BARREL_02')
+        table.insert(attachments, 'COMPONENT_AT_MUZZLE_06')
+    elseif name == "MK2 Pump Shotgun" then
+        table.insert(attachments, 'COMPONENT_AT_SIGHTS')
+        table.insert(attachments, 'COMPONENT_AT_AR_FLSH')
+        --table.insert(attachments, 'COMPONENT_PUMPSHOTGUN_MK2_CLIP_HOLLOWPOINT')
+    elseif name == "Combat Pistol" then
+        table.insert(attachments, 0x359B7AAE)
+    end
+    return attachments
+end
+
+function getBCSORank(id, cb)
+	TriggerEvent('es:exposeDBFunctions', function(db)
+		db.getDocumentByRow("correctionaldepartment", "identifier" , GetPlayerIdentifiers(id)[1], function(doc)
+			if doc and doc.rank then
+				cb(doc.rank)
+			else
+				cb(nil)
+			end
+		end)
+	end)
+end
+
 RegisterServerEvent("doc:getWeapons")
 AddEventHandler("doc:getWeapons", function()
 	TriggerClientEvent("doc:getWeapons", source, WEAPONS)
@@ -239,6 +270,7 @@ AddEventHandler("doc:checkRankForWeapon", function(weapon)
 					        local serialLetter = letters[math.random(#letters)]
 					        weapon.serialNumber = serialLetter .. serialEnding
 							weapon.uuid = weapon.serialNumber
+							weapon.components = GetWeaponAttachments(weapon.name)
 							TriggerClientEvent("doc:equipWeapon", usource, weapon)
 							char.giveItem(weapon)
 							local weaponDB = {}
@@ -324,15 +356,3 @@ TriggerEvent('es:addJobCommand', 'setcorrectionsrank', {"corrections"}, function
 		end)
 	end)
 end)
-
-function getBCSORank(id, cb)
-	TriggerEvent('es:exposeDBFunctions', function(db)
-		db.getDocumentByRow("correctionaldepartment", "identifier" , GetPlayerIdentifiers(id)[1], function(doc)
-			if doc and doc.rank then
-				cb(doc.rank)
-			else
-				cb(nil)
-			end
-		end)
-	end)
-end

@@ -445,9 +445,6 @@ end
 ---------------------
 RegisterNetEvent("doc:equipWeapon")
 AddEventHandler("doc:equipWeapon", function(weapon)
-    if type(weapon.hash) ~= "number" then
-        weapon.hash = GetHashKey(weapon.hash)
-    end
-    GiveWeaponToPed(GetPlayerPed(-1), weapon.hash, 1000, 0, false)
+    TriggerEvent("mini:equipWeapon", weapon.hash, weapon.components)
     exports.globals:notify("Equipped: " .. weapon.name)
 end)
