@@ -41,8 +41,19 @@ local markets = {
         { name = "Carbine", type = "weapon", hash = -2084633992, price = 100000, legality = "illegal", quantity = 1, weight = 45, stock = math.random(0, 2), objectModel = "w_ar_carbinerifle" }
     },
     ['pedHash'] = 'a_m_o_soucent_03'
+  },
+  ['marketD'] = {
+    ['coords'] = {113.24684906006, -1967.5310058594, 21.317762374878}, -- Grove St. house interior
+    ['items'] = {
+        { name = "Large Firework", type = "misc", price = 2000, legality = "illegal", quantity = 1, weight = 15, stock = math.random(0, 10) }
+    },
+    ['pedHash'] = 'a_m_o_soucent_03',
+    ['3dTextDistance'] = 7,
+    ['pedScenario'] = "WORLD_HUMAN_SMOKING_POT"
   }
 }
+
+-- x = 113.21036529541, y = -1967.2863769531, z = 21.317756652832
 
 local openingHours = math.random(0, 3)
 local closingHours = math.random(4, 7)

@@ -1088,6 +1088,8 @@ function interactionMenuUse(itemName, wholeItem)
 			TriggerServerEvent("hunting:cookMeat", wholeItem.name)
 		elseif itemName:find("Vape") then
 			TriggerEvent("Vape:ToggleVaping")
+		elseif itemName:find("Large Firework") then
+			TriggerEvent("fireworks:placeFirework")
 		else
 			TriggerEvent("interaction:notify", "There is no use action for that item!")
 		end

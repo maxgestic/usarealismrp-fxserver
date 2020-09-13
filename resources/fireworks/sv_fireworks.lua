@@ -1,0 +1,5 @@
+RegisterServerEvent("fireworks:remove")
+AddEventHandler("fireworks:remove", function()
+	local char = exports["usa-characters"]:GetCharacter(source)
+	char.removeItem("Large Firework", 1)
+end)

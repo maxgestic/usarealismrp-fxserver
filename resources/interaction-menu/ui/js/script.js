@@ -215,7 +215,9 @@ var itemImages = {
   "Ceramic Tubing": "https://i.imgur.com/Fg1pZNH.png",
   "Aluminum Powder": "https://i.imgur.com/FcoUYM4.png",
   "Iron Oxide": "https://i.imgur.com/pBhnwQl.png",
-  "Vape": "https://i.imgur.com/d8BS61Q.png"
+  "Vape": "https://i.imgur.com/d8BS61Q.png",
+  "Black Powder": "https://i.imgur.com/Zct2dcM.png",
+  "Large Firework": "https://i.imgur.com/XHhxRmG.png"
 }
 
 var menuItems = [
