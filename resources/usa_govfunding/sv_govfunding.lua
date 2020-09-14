@@ -1,9 +1,9 @@
-TriggerEvent('es:addJobCommand', 'govcheck', {"sheriff", "corrections", "judge", "ems"}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'govcheck', {"sheriff", "corrections", "judge", "ems", "realtor"}, function(source, args, char, location)
     local usource = source
     local job = exports["usa-characters"]:GetCharacterField(source, "job")
     local char = exports["usa-characters"]:GetCharacter(usource)
     local fundAccount = job
-  if job == "corrections" then
+    if job == "corrections" then
         local whitelister_identifier = GetPlayerIdentifiers(source)[1]
         TriggerEvent('es:exposeDBFunctions', function(GetDoc)
             GetDoc.getDocumentByRow("correctionaldepartment", "identifier" , whitelister_identifier, function(result)
@@ -25,7 +25,7 @@ TriggerEvent('es:addJobCommand', 'govcheck', {"sheriff", "corrections", "judge",
        else
             TriggerClientEvent("govfunding:check", source)
        end
-    return
+        return
     elseif job == "ems" then
        if char.get("emsRank") < 4 then
             TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
@@ -35,11 +35,14 @@ TriggerEvent('es:addJobCommand', 'govcheck', {"sheriff", "corrections", "judge",
        end
     elseif job == "judge" then
         TriggerClientEvent("govfunding:check", source)
-    return
+        return
+    elseif job == "realtor" then
+        TriggerClientEvent("govfunding:check", source)
+        return
     end
 end, { help = "Check your departments funding"})
 
-TriggerEvent('es:addJobCommand', 'govdeposit', {"sheriff", "corrections", "judge", "ems"}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'govdeposit', {"sheriff", "corrections", "judge", "ems", "realtor"}, function(source, args, char, location)
     local usource = source
     local amount = tonumber(args[2])
     local job = exports["usa-characters"]:GetCharacterField(source, "job")
@@ -79,10 +82,12 @@ TriggerEvent('es:addJobCommand', 'govdeposit', {"sheriff", "corrections", "judge
         else
             TriggerEvent("govfunding:save", amount, usource, fundAccount)
         end
+    elseif job == "realtor" then
+        TriggerEvent("govfunding:save", amount, usource, fundAccount)
     end
 end, { help = "Deposit to your departments funds"})
 
-TriggerEvent('es:addJobCommand', 'govwithdraw', {"sheriff", "corrections", "judge", "ems"}, function(source, args, char, location)
+TriggerEvent('es:addJobCommand', 'govwithdraw', {"sheriff", "corrections", "judge", "ems", "realtor"}, function(source, args, char, location)
     local usource = source
     local amount = tonumber(args[2])
     local job = exports["usa-characters"]:GetCharacterField(source, "job")
@@ -122,6 +127,13 @@ TriggerEvent('es:addJobCommand', 'govwithdraw', {"sheriff", "corrections", "judg
             return
         else
             TriggerEvent("govfunding:delete", amount, usource, fundAccount)
+        end
+    elseif job == "realtor" then
+        if char.get("realtorRank") >= 2 then
+            TriggerEvent("govfunding:delete", amount, usource, fundAccount)
+        else 
+            TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
+            return
         end
     end
 end, { help = "Withdraw from your departments funds"})
@@ -177,6 +189,8 @@ AddEventHandler("govfunding:save", function(depositAmount, src, fundAccount)
                 agencyName = "SASP"
             elseif job == "judge" then
                 agencyName = "State"
+            elseif job == "realtor" then
+                agencyName = "REA"
             end
             amountChanged = depositAmount
             typeChanged = "Deposited"
@@ -235,7 +249,7 @@ function saveBal(src, finishedBalance, fundAccount)
                 print("* Balance updated in DB! *")
             else
                 local newBal = {
-                    content = 10000,
+                    content = 0,
                 }
                 db.createDocumentWithId("govfunds", newBal, fundAccount, function(okay)
                     if okay then 
@@ -250,7 +264,7 @@ function saveBal(src, finishedBalance, fundAccount)
 end
 
 function sendChat(src, msg)
-    TriggerClientEvent("chatMessage", src, msg)
+    TriggerClientEvent("chatMessage", src, "", {}, msg)
 end
 
 function GetSavedBal(ident, cb, fundAccount)

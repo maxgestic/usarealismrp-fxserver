@@ -3,12 +3,11 @@ AddEventHandler("realty:duty", function()
     local char = exports["usa-characters"]:GetCharacter(source)
     local job = char.get('job')
     local realty_rank = char.get("realtorRank")
-    print(realty_rank)
-    if not realty_rank then
+    if not realty_rank or realty_rank <= 0 then
         TriggerClientEvent("usa:notify", source, "You are not whitelisted for Real Estate Agent!")
         return
     end
-    if job ~= "realtor" and realty_rank > 0  then
+    if job ~= "realtor"  then
         char.set("job", "realtor")
         TriggerClientEvent("usa:notify", source, "You are now in service as a Realtor.")
         TriggerEvent("eblips:remove", source)
