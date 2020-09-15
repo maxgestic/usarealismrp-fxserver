@@ -1,7 +1,3 @@
-TriggerServerEvent('blips:getBlips')
-
-local createdBlips = {}
-
 local blips = {
 	--[[{ title="Ammu-Nation", colour=4, id=110, x=-330.184, y=6083.23, z=31.4548 },
 	{ title="Ammu-Nation", colour=4, id=110, x=1701.292, y=3750.450, z=34.365 },

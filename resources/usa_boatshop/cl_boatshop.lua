@@ -456,34 +456,13 @@ end
 ----------------------
 ---- Set up blips ----
 ----------------------
-
-local BLIPS = {}
-function EnumerateBlips()
-  if #BLIPS == 0 then
-  	for k, v in pairs(locations) do
-      local blip = AddBlipForCoord(locations[k].rent.x, locations[k].rent.y, locations[k].rent.z)
-      SetBlipSprite(blip, 410)
-      SetBlipDisplay(blip, 4)
-      SetBlipScale(blip, 0.8)
-      SetBlipAsShortRange(blip, true)
-      BeginTextCommandSetBlipName("STRING")
-      AddTextComponentString('Boat Shop')
-      EndTextCommandSetBlipName(blip)
-      table.insert(BLIPS, blip)
-	end
-  end
+for k, v in pairs(locations) do
+	local blip = AddBlipForCoord(locations[k].rent.x, locations[k].rent.y, locations[k].rent.z)
+	SetBlipSprite(blip, 410)
+	SetBlipDisplay(blip, 4)
+	SetBlipScale(blip, 0.8)
+	SetBlipAsShortRange(blip, true)
+	BeginTextCommandSetBlipName("STRING")
+	AddTextComponentString('Boat Shop')
+	EndTextCommandSetBlipName(blip)
 end
-
-TriggerServerEvent('blips:getBlips')
-
-RegisterNetEvent('blips:returnBlips')
-AddEventHandler('blips:returnBlips', function(blipsTable)
-  if blipsTable['boatshop'] then
-    EnumerateBlips()
-  else
-    for _, k in pairs(BLIPS) do
-      RemoveBlip(k)
-    end
-    BLIPS = {}
-  end
-end)

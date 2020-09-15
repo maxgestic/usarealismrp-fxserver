@@ -11,46 +11,17 @@ local BARBER_SHOPS = {
   {x = -815.59008789063, y = -182.16806030273, z = 37.568920135498}
 }
 
-----------------------
----- Set up blips ----
-----------------------
-
-local BLIPS = {}
-function EnumerateBlips()
-  if #BLIPS == 0 then
-    for i = 1, #BARBER_SHOPS do
-      local blip = AddBlipForCoord(BARBER_SHOPS[i].x, BARBER_SHOPS[i].y, BARBER_SHOPS[i].z)
-      SetBlipSprite(blip, 71  )
-      SetBlipDisplay(blip, 4)
-      SetBlipScale(blip, 0.8)
-      SetBlipColour(blip, 13)
-      SetBlipAsShortRange(blip, true)
-      BeginTextCommandSetBlipName("STRING")
-      AddTextComponentString('Barber Shop')
-      EndTextCommandSetBlipName(blip)
-      table.insert(BLIPS, blip)
-    end
-  end
+for i = 1, #BARBER_SHOPS do -- place map blips
+  local blip = AddBlipForCoord(BARBER_SHOPS[i].x, BARBER_SHOPS[i].y, BARBER_SHOPS[i].z)
+  SetBlipSprite(blip, 71  )
+  SetBlipDisplay(blip, 4)
+  SetBlipScale(blip, 0.8)
+  SetBlipColour(blip, 13)
+  SetBlipAsShortRange(blip, true)
+  BeginTextCommandSetBlipName("STRING")
+  AddTextComponentString('Barber Shop')
+  EndTextCommandSetBlipName(blip)
 end
-
-TriggerServerEvent('blips:getBlips')
-
-RegisterNetEvent('blips:returnBlips')
-AddEventHandler('blips:returnBlips', function(blipsTable)
-  if blipsTable['barber'] then
-    EnumerateBlips()
-  else
-    for _, k in pairs(BLIPS) do
-      print(k)
-      RemoveBlip(k)
-    end
-    BLIPS = {}
-  end
-end)
-
------------------
------------------
------------------
 
 local purchases = {}
 

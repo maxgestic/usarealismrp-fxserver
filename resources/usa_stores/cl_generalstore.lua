@@ -115,52 +115,30 @@ end
 ----------------------
 ---- Set up blips ----
 ----------------------
-
-function EnumerateBlips()
-  if #BLIPS == 0 then
-    for i = 1, #GENERAL_STORE_LOCATIONS do
-      if not GENERAL_STORE_LOCATIONS[i].prison then
-        local blip = AddBlipForCoord(GENERAL_STORE_LOCATIONS[i].x, GENERAL_STORE_LOCATIONS[i].y, GENERAL_STORE_LOCATIONS[i].z)
-        SetBlipSprite(blip, 52)
-        SetBlipDisplay(blip, 4)
-        SetBlipScale(blip, 0.7)
-        SetBlipAsShortRange(blip, true)
-        SetBlipColour(blip, 36)
-        BeginTextCommandSetBlipName("STRING")
-        AddTextComponentString('General Store')
-        EndTextCommandSetBlipName(blip)
-        table.insert(BLIPS, blip)
-      end
-    end
-    for i = 1, #HARDWARE_STORE_LOCATIONS do
-      local blip = AddBlipForCoord(HARDWARE_STORE_LOCATIONS[i].x, HARDWARE_STORE_LOCATIONS[i].y, HARDWARE_STORE_LOCATIONS[i].z)
-      SetBlipSprite(blip, 473)
-      SetBlipDisplay(blip, 4)
-      SetBlipScale(blip, 0.7)
-      SetBlipAsShortRange(blip, true)
-      SetBlipColour(blip, 64)
-      BeginTextCommandSetBlipName("STRING")
-      AddTextComponentString('Hardware Store')
-      EndTextCommandSetBlipName(blip)
-      table.insert(BLIPS, blip)
-    end
+for i = 1, #GENERAL_STORE_LOCATIONS do
+  if not GENERAL_STORE_LOCATIONS[i].prison then
+    local blip = AddBlipForCoord(GENERAL_STORE_LOCATIONS[i].x, GENERAL_STORE_LOCATIONS[i].y, GENERAL_STORE_LOCATIONS[i].z)
+    SetBlipSprite(blip, 52)
+    SetBlipDisplay(blip, 4)
+    SetBlipScale(blip, 0.7)
+    SetBlipAsShortRange(blip, true)
+    SetBlipColour(blip, 36)
+    BeginTextCommandSetBlipName("STRING")
+    AddTextComponentString('General Store')
+    EndTextCommandSetBlipName(blip)
   end
 end
-
-TriggerServerEvent('blips:getBlips')
-
-RegisterNetEvent('blips:returnBlips')
-AddEventHandler('blips:returnBlips', function(blipsTable)
-  if blipsTable['store'] then
-    EnumerateBlips()
-  else
-    for _, k in pairs(BLIPS) do
-      print(k)
-      RemoveBlip(k)
-    end
-    BLIPS = {}
-  end
-end)
+for i = 1, #HARDWARE_STORE_LOCATIONS do
+  local blip = AddBlipForCoord(HARDWARE_STORE_LOCATIONS[i].x, HARDWARE_STORE_LOCATIONS[i].y, HARDWARE_STORE_LOCATIONS[i].z)
+  SetBlipSprite(blip, 473)
+  SetBlipDisplay(blip, 4)
+  SetBlipScale(blip, 0.7)
+  SetBlipAsShortRange(blip, true)
+  SetBlipColour(blip, 64)
+  BeginTextCommandSetBlipName("STRING")
+  AddTextComponentString('Hardware Store')
+  EndTextCommandSetBlipName(blip)
+end
 
 ----------------------
 -- Set up main menu --

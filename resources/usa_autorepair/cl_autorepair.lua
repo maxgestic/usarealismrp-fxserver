@@ -98,40 +98,17 @@ end)
 ----------------------
 ---- Set up blips ----
 ----------------------
-
-local BLIPS = {}
-function PlaceMapBlips()
-  if #BLIPS == 0 then
-    for i = 1, #repairBlips do
-      local blip = AddBlipForCoord(repairBlips[i][1], repairBlips[i][2], repairBlips[i][3])
-      SetBlipSprite(blip, 402)
-      SetBlipDisplay(blip, 4)
-      SetBlipScale(blip, 0.9)
-      SetBlipColour(blip, 27)
-      SetBlipAsShortRange(blip, true)
-      BeginTextCommandSetBlipName("STRING")
-      AddTextComponentString('Auto Repair')
-      EndTextCommandSetBlipName(blip)
-      table.insert(BLIPS, blip)
-    end
-  end
+for i = 1, #repairBlips do
+	local blip = AddBlipForCoord(repairBlips[i][1], repairBlips[i][2], repairBlips[i][3])
+	SetBlipSprite(blip, 402)
+	SetBlipDisplay(blip, 4)
+	SetBlipScale(blip, 0.9)
+	SetBlipColour(blip, 27)
+	SetBlipAsShortRange(blip, true)
+	BeginTextCommandSetBlipName("STRING")
+	AddTextComponentString('Auto Repair')
+	EndTextCommandSetBlipName(blip)
 end
-
-TriggerServerEvent('blips:getBlips')
-
-RegisterNetEvent('blips:returnBlips')
-AddEventHandler('blips:returnBlips', function(blipsTable)
-  if blipsTable['autorepair'] then
-    PlaceMapBlips()
-  else
-    for _, k in pairs(BLIPS) do
-      print(k)
-      RemoveBlip(k)
-    end
-    BLIPS = {}
-  end
-end)
-
 -----------------
 -----------------
 -----------------

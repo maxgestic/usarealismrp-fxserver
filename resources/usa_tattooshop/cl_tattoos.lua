@@ -211,35 +211,14 @@ end)
 ----------------------
 ---- Set up blips ----
 ----------------------
-
-local BLIPS = {}
-function CreateMapBlips()
-  if #BLIPS == 0 then
-    for i = 1, #SHOPS do
-      local blip = AddBlipForCoord(SHOPS[i].x, SHOPS[i].y, SHOPS[i].z)
-      SetBlipSprite(blip, 75)
-      SetBlipDisplay(blip, 4)
-      SetBlipScale(blip, 0.8)
-      SetBlipColour(blip, 1)
-      SetBlipAsShortRange(blip, true)
-      BeginTextCommandSetBlipName("STRING")
-      AddTextComponentString('Tattoo Shop')
-      EndTextCommandSetBlipName(blip)
-      table.insert(BLIPS, blip)
-    end
-  end
+for i = 1, #SHOPS do
+  local blip = AddBlipForCoord(SHOPS[i].x, SHOPS[i].y, SHOPS[i].z)
+  SetBlipSprite(blip, 75)
+  SetBlipDisplay(blip, 4)
+  SetBlipScale(blip, 0.8)
+  SetBlipColour(blip, 1)
+  SetBlipAsShortRange(blip, true)
+  BeginTextCommandSetBlipName("STRING")
+  AddTextComponentString('Tattoo Shop')
+  EndTextCommandSetBlipName(blip)
 end
-
-TriggerServerEvent('blips:getBlips')
-
-RegisterNetEvent('blips:returnBlips')
-AddEventHandler('blips:returnBlips', function(blipsTable)
-  if blipsTable['tattoo'] then
-    CreateMapBlips()
-  else
-    for _, k in pairs(BLIPS) do
-      RemoveBlip(k)
-    end
-    BLIPS = {}
-  end
-end)

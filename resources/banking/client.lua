@@ -295,40 +295,17 @@ end)
 ----------------------
 ---- Set up blips ----
 ----------------------
-
-local BLIPS = {}
-function EnumerateBlips()
-  if #BLIPS == 0 then
-    for i = 1, #banks do
-      local blip = AddBlipForCoord(banks[i].x, banks[i].y, banks[i].z)
-      SetBlipSprite(blip, 500)
-      SetBlipDisplay(blip, 4)
-      SetBlipScale(blip, 0.8)
-      SetBlipAsShortRange(blip, true)
-      SetBlipColour(blip, 11)
-      BeginTextCommandSetBlipName("STRING")
-      AddTextComponentString('Bank')
-      EndTextCommandSetBlipName(blip)
-      table.insert(BLIPS, blip)
-    end
-  end
+for i = 1, #banks do
+  local blip = AddBlipForCoord(banks[i].x, banks[i].y, banks[i].z)
+  SetBlipSprite(blip, 500)
+  SetBlipDisplay(blip, 4)
+  SetBlipScale(blip, 0.8)
+  SetBlipAsShortRange(blip, true)
+  SetBlipColour(blip, 11)
+  BeginTextCommandSetBlipName("STRING")
+  AddTextComponentString('Bank')
+  EndTextCommandSetBlipName(blip)
 end
-
-TriggerServerEvent('blips:getBlips')
-
-RegisterNetEvent('blips:returnBlips')
-AddEventHandler('blips:returnBlips', function(blipsTable)
-  if blipsTable['bank'] then
-    EnumerateBlips()
-  else
-    for _, k in pairs(BLIPS) do
-      print(k)
-      RemoveBlip(k)
-    end
-    BLIPS = {}
-  end
-end)
-
 -----------------
 -----------------
 -----------------

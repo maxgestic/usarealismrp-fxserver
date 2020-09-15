@@ -469,42 +469,16 @@ end
 ----------------------
 ---- Set up blips ----
 ----------------------
-
 local MAP_BLIP_SPRITE = 251
-local BLIPS = {}
-function CreateMapBlips()
-  if #BLIPS == 0 then
-	  for k, v in pairs(locations) do
-		if not v.private then
-			local blip = AddBlipForCoord(locations[k].menu.x, locations[k].menu.y, locations[k].menu.z)
-			SetBlipSprite(blip, MAP_BLIP_SPRITE)
-			SetBlipDisplay(blip, 4)
-			SetBlipScale(blip, 0.8)
-			SetBlipAsShortRange(blip, true)
-			BeginTextCommandSetBlipName("STRING")
-			AddTextComponentString('Aircrafts')
-			EndTextCommandSetBlipName(blip)
-			table.insert(BLIPS, blip)
-		end
+for k, v in pairs(locations) do
+	if not v.private then
+		local blip = AddBlipForCoord(locations[k].menu.x, locations[k].menu.y, locations[k].menu.z)
+		SetBlipSprite(blip, MAP_BLIP_SPRITE)
+		SetBlipDisplay(blip, 4)
+		SetBlipScale(blip, 0.8)
+		SetBlipAsShortRange(blip, true)
+		BeginTextCommandSetBlipName("STRING")
+		AddTextComponentString('Aircrafts')
+		EndTextCommandSetBlipName(blip)
 	end
-  end
 end
-
-RegisterNetEvent('blips:returnBlips')
-AddEventHandler('blips:returnBlips', function(blipsTable)
-  if blipsTable['planeshop'] then
-    CreateMapBlips()
-  else
-    for _, k in pairs(BLIPS) do
-      print(k)
-      RemoveBlip(k)
-    end
-    BLIPS = {}
-  end
-end)
-
-TriggerServerEvent('blips:getBlips')
-
------------------
------------------
------------------

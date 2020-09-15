@@ -4,23 +4,7 @@ RegisterServerEvent('usaSettings:returnUserSettings')
 
 local defaultSettings = {
 	radioHotkey = 161,
-	serverVisuals = true,
-	blips = {
-		['clothes'] = true, -- true = on by default
-		['barber'] = true,
-		['tattoo'] = true,
-		['store'] = true,
-		['carwash'] = true,
-		['gunshop'] = true,
-		['boatshop'] = true,
-		['planeshop'] = true,
-		['fuel'] = true,
-		['boatfuel'] = true,
-		['planefuel'] = true,
-		['movies'] = true,
-		['autorepair'] = true,
-		['bank'] = true
-	}
+	serverVisuals = true
 }
 
 AddEventHandler('usaSettings:updateUserSettings', function(_source, settings)

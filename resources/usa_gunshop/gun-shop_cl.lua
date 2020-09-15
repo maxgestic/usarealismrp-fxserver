@@ -31,38 +31,18 @@ AddEventHandler("gunShop:getItems", function(items)
 	_menuPool:RefreshIndex()
 end)
 
-local BLIPS = {}
-function CreateMapBlips()
-  if #BLIPS == 0 then
-    for i = 1, #locations do
-      local blip = AddBlipForCoord(locations[i].x, locations[i].y, locations[i].z)
-      SetBlipSprite(blip, 119)
-      SetBlipDisplay(blip, 4)
-      SetBlipScale(blip, 0.8)
-      SetBlipColour(blip, 50)
-      SetBlipAsShortRange(blip, true)
-      BeginTextCommandSetBlipName("STRING")
-      AddTextComponentString('Gun Store')
-      EndTextCommandSetBlipName(blip)
-      table.insert(BLIPS, blip)
-    end
-  end
+-- create map blips --
+for i = 1, #locations do
+  local blip = AddBlipForCoord(locations[i].x, locations[i].y, locations[i].z)
+  SetBlipSprite(blip, 119)
+  SetBlipDisplay(blip, 4)
+  SetBlipScale(blip, 0.8)
+  SetBlipColour(blip, 50)
+  SetBlipAsShortRange(blip, true)
+  BeginTextCommandSetBlipName("STRING")
+  AddTextComponentString('Gun Store')
+  EndTextCommandSetBlipName(blip)
 end
-
-RegisterNetEvent('blips:returnBlips')
-AddEventHandler('blips:returnBlips', function(blipsTable)
-  if blipsTable['gunshop'] then
-    CreateMapBlips()
-  else
-    for _, k in pairs(BLIPS) do
-      print(k)
-      RemoveBlip(k)
-    end
-    BLIPS = {}
-  end
-end)
-
-TriggerServerEvent('blips:getBlips')
 
 -------------------
 -- utility funcs --
