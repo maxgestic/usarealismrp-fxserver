@@ -39,7 +39,7 @@ Citizen.CreateThread(function()
 			if Vdist(playerCoords, clerkCoords.x, clerkCoords.y, clerkCoords.z) < 5.0 then
 				DrawText3D(clerkCoords.x, clerkCoords.y, clerkCoords.z, '[E] - Bank Clerk')
 			end
-			-- rob / clerk tip --
+			-- rob --
 			for i = 1, #bankCoords do
 				if IsControlJustPressed(0, 311) and Vdist(playerCoords, bankCoords[i].coords.x, bankCoords[i].coords.y, bankCoords[i].coords.z) < 2.0 then
 					Wait(500)
@@ -48,6 +48,7 @@ Citizen.CreateThread(function()
 					end
 				end
 			end
+			-- clerk tip --
 			if IsControlJustPressed(0, 38) and Vdist(playerCoords, clerkCoords.x, clerkCoords.y, clerkCoords.z) < 2.0 then
 				TriggerServerEvent('bank:clerkTip')
 			end
@@ -101,7 +102,7 @@ AddEventHandler("bank:startHacking", function(bank)
 			return
 		end
 	end
-	TriggerEvent("mhacking:seqstart", {3,2,1}, 60, mycb)
+	TriggerEvent("mhacking:seqstart", {3, 2, 1}, 60, mycb)
 	currentlyHacking = bank
 end)
 
@@ -132,6 +133,7 @@ function mycb(success, timeremaining, finish)
 	end
 end
 
+-- vault stuff --
 RegisterNetEvent('bank:openVaultDoor')
 AddEventHandler('bank:openVaultDoor', function()
 	openVault =  true
@@ -140,6 +142,10 @@ end)
 RegisterNetEvent('bank:resetVault')
 AddEventHandler('bank:resetVault', function()
 	openVault =  false
+	if DoesEntityExist(VaultDoor) then
+		SetEntityHeading(VaultDoor, 160.0)
+		FreezeEntityPosition(VaultDoor, true)
+	end
 end)
 
 Citizen.CreateThread(function()
@@ -151,12 +157,8 @@ Citizen.CreateThread(function()
 				CurrentHeading = CurrentHeading - 0.1
 			end
 
-			if round(CurrentHeading, 1) == 160.0 then
-				DisplayHelpText('Hold ~INPUT_CELLPHONE_LEFT~ to Open the Vault')
-			end
-
-			while GetIsControlPressed(174) and round(CurrentHeading, 1) ~= 0.0 do -- Open
-				Citizen.Wait(0)
+			while round(CurrentHeading, 1) ~= 0.0 do -- slowly open door
+				Wait(0)
 				SetEntityHeading(VaultDoor, round(CurrentHeading, 1) - 0.4)
 				CurrentHeading = GetEntityHeading(VaultDoor)
 			end
@@ -165,7 +167,7 @@ Citizen.CreateThread(function()
 	end
 end)
 
-
+-- functions --
 function DrawText3D(x,y,z, text)
     local onScreen,_x,_y=World3dToScreen2d(x,y,z)
     local px,py,pz=table.unpack(GetGameplayCamCoords())
@@ -246,10 +248,4 @@ AddEventHandler('bank:startDrilling', function()
 	DisplayHelpText('Tap ~INPUT_CELLPHONE_LEFT~ to Slow Down the Drill, ~INPUT_CELLPHONE_RIGHT~ to speed up the drill')
 	Wait(3000)
 	DisplayHelpText('Tap ~INPUT_CELLPHONE_UP~ to drill the locks, ~INPUT_CELLPHONE_DOWN~ to pull the drill out')
-end)
-
-RegisterNetEvent('bank:shutVaultDoor')
-AddEventHandler('bank:shutVaultDoor', function()
-	SetEntityHeading(VaultDoor, 160.0)
-	FreezeEntityPosition(VaultDoor, true)
 end)

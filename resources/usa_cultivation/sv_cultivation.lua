@@ -198,7 +198,7 @@ Citizen.CreateThread(function()
                 end
                 plant._rev = nil
                 db.updateDocument("cultivation", id, plant, saveCallback)
-                Wait(150)
+                Wait(10)
             end
             print("[cultivation] done saving plants, # of dead: " .. deadCount)
         end
