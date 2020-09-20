@@ -14,7 +14,7 @@
 
 local UseAlternativeCalculation = false
 local maxAllowedAccelerationBeforeFalloff = 80
-local maxAllowedUpDownAccelerationBeforeFalloff = 95
+local maxAllowedUpDownAccelerationBeforeFalloff = 97
 local isRunningGetVehicleVelocityVectorAccelerations = false
 
 local NOT_FALL_CHANCE = 0.25

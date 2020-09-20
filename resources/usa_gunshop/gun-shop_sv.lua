@@ -25,8 +25,7 @@ local STORE_ITEMS = {
   ["Shotguns"] = {
     { name = "Pump Shotgun", type = "weapon", hash = 487013001, price = 4000, legality = "legal", quantity = 1, weight = 25, objectModel = "w_sg_pumpshotgun" },
     { name = "Bullpup Shotgun", type = "weapon", hash = -1654528753, price = 6000, legality = "legal", quantity = 1, weight = 30, objectModel = "w_sg_bullpupshotgun" },
-    { name = "Musket", type = "weapon", hash = -1466123874, price = 1500, legality = "legal", quantity = 1, weight = 35, objectModel = "w_ar_musket" },
-    { name = "Firework Gun", type = "weapon", hash = 2138347493, price = 10000, legality = "legal", quantity = 1, weight = 50, objectModel = "w_lr_firework" }
+    { name = "Musket", type = "weapon", hash = -1466123874, price = 1500, legality = "legal", quantity = 1, weight = 35, objectModel = "w_ar_musket" }
   },
   ["Extras"] = {
     { name = "Parachute", type = "weapon", hash = "GADGET_PARACHUTE", price = 500, legality = "legal", quantity = 1, weight = 15, objectModel = "prop_parachute" },

@@ -28,7 +28,7 @@ local markets = {
       {name = 'Combat Pistol', type = 'weapon', hash = 1593441988, price = 5000, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(0, 3), objectModel = "w_pi_combatpistol"},
       {name = 'Switchblade', type = 'weapon', hash = -538741184, price = 1500, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(0, 3)},
       {name = 'Brass Knuckles', type = 'weapon', hash = -656458692, price = 1100, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(0, 5)},
-      {name = "Machine Pistol", type = "weapon", hash = -619010992, price = 25000, legality = "illegal", quantity = 1, weight = 20, stock = math.random(0, 2) },
+      {name = "Machine Pistol", type = "weapon", hash = -619010992, price = 25000, legality = "illegal", quantity = 1, weight = 20, stock = math.random(0, 2) }
     },
     ["pedHash"] = -1773333796
   },
@@ -45,7 +45,8 @@ local markets = {
   ['marketD'] = {
     ['coords'] = {113.24684906006, -1967.5310058594, 21.317762374878}, -- Grove St. house interior
     ['items'] = {
-        { name = "Large Firework", type = "misc", price = 2000, legality = "illegal", quantity = 1, weight = 15, stock = math.random(0, 10) }
+        { name = "Large Firework", type = "misc", price = 2000, legality = "illegal", quantity = 1, weight = 15, stock = math.random(0, 10), objectModel = "ind_prop_firework_03" },
+        { name = "Firework Gun", type = "weapon", hash = 2138347493, price = 10000, legality = "illegal", quantity = 1, weight = 50, objectModel = "w_lr_firework" }
     },
     ['pedHash'] = 'a_m_o_soucent_03',
     ['3dTextDistance'] = 7,
