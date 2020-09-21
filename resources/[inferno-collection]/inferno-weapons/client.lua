@@ -37,6 +37,7 @@ Config.Weapons = {} -- Do not edit this line
 Config.Weapons.Single = {
 	"WEAPON_REVOLVER",
 	"WEAPON_PISTOL",
+	"WEAPON_COMBATPISTOL",
 	"WEAPON_PISTOL_MK2",
 	"WEAPON_PISTOL50",
 	"WEAPON_SNSPISTOL",
@@ -261,7 +262,7 @@ Citizen.CreateThread(function()
 				-- If weapon is not yet logged
 				if FireMode.Weapons[PedWeapon] == nil then
 					-- Log to array
-					if Config.StartSafe then
+					if Config.StartSafe and doesWeaponHaveSafety(PedWeapon) then
 						FireMode.Weapons[PedWeapon] = 0
 					else
 						FireMode.Weapons[PedWeapon] = 1
@@ -574,4 +575,11 @@ function NewNUIMessage (Type, Load)
 			Payload = Load
 		})
 	end
+end
+
+function doesWeaponHaveSafety(wep)
+	if wep == GetHashKey("WEAPON_COMBATPISTOL") then
+		return false
+	end
+	return true
 end
