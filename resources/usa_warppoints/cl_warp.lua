@@ -206,6 +206,17 @@ local warp_locations = {
       heading = 292.0
     },
     job_access = 'civ'
+  },
+  ['Life Invader - Office'] = {
+    entrance = {
+      coords = {-1048.4464111328, -238.31770324707, 44.021060943604},
+      heading = 300.0
+    },
+    exit = {
+      coords = {-1047.1091308594, -237.77569580078, 44.021022796631},
+      heading = 120.0
+    },
+    job_access = 'civ'
   }
 }
 
