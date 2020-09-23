@@ -129,6 +129,8 @@ local PROPERTY_COORDS = {
 }
 
 local COORDS_THAT_ALLOW_INVISIBILITY = {
+	{ x = 288.62399291992, y = 6229.2231445312, z = 32.454002380372 }, -- not sure but apparently it triggers lots of false alarms
+	{ x = -391.07147216797, y = 6216.5712890625, z = 31.4739818573 }, -- default spawnmanager spawn point
 	{x = -337.3863,y = -136.9247,z = 38.5737},  -- LSC 1
 	{x = 733.69,y = -1088.74, z = 21.733},  -- LSC 2
 	{x = -1155.077,y = -2006.61, z = 12.465},  -- LSC 3
