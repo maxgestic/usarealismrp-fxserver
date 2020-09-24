@@ -49,5 +49,6 @@ files({
 	'client/html/sounds/panicButton.ogg',
 	'client/html/sounds/warrantfound.ogg',
 	'client/html/sounds/thermite.ogg',
-	'client/html/sounds/glassbreak.ogg'
+	'client/html/sounds/glassbreak.ogg',
+	'client/html/sounds/drill.ogg'
 })

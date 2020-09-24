@@ -1625,10 +1625,6 @@ function AttachEntityToPed(prop,bone_ID,x,y,z,RotX,RotY,RotZ)
 		BoneID = GetPedBoneIndex(me, bone_ID)
 		obj = CreateObject(hashed,  1729.73,  6403.90,  34.56,  true,  true,  false)
 		Wait(1000)
-		local netid = ObjToNet(obj)
-		SetNetworkIdExistsOnAllMachines(netid, true)
-		--NetworkSetNetworkIdDynamic(netid, true)
-		SetNetworkIdCanMigrate(netid, false)
 		AttachEntityToEntity(obj,  me,  BoneID, x,y,z, RotX,RotY,RotZ,  1, 1, false, false, 0, true)
 		return netid
 end

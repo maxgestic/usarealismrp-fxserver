@@ -87,12 +87,12 @@ AddEventHandler('bank:doesUserHaveDrill', function(box)
 end)
 
 
-function attemptDrilling(depositBox, source)
-	if drilling_spots[depositBox].drilled then
+function attemptDrilling(depositBoxIndex, source)
+	if drilling_spots[depositBoxIndex].drilled then
 		TriggerClientEvent("usa:notify", source, "This box has already been drilled")
 	else
-		drilling_spots[depositBox].drilled =  true
-		TriggerClientEvent('bank:startDrilling', source)
+		drilling_spots[depositBoxIndex].drilled =  true
+		TriggerClientEvent('bank:startDrilling', source, depositBoxIndex)
 		--Wait(600000) -- Wait 10 mins and then set the timeout
 	end
 end

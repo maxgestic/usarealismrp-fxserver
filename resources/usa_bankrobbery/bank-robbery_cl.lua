@@ -8,11 +8,29 @@ local currentlyHacking = nil
 local mainHacking = nil
 local VaultDoor = nil
 
+local startedFinalHack = false
+
 local KEY_K = 311
 local drilling_spots = {}
 local openVault = false
 
 local mainHackLocation = {x = 265.06, y = 213.79, z = 101.68}
+
+local shouldBePlayingAnim = false
+local clearedAnim = false
+local dictLoaded = false
+local DRILLING = {
+	ANIM = {
+		DICT = "anim@heists@fleeca_bank@drilling",
+		NAME = "drill_straight_idle"
+	},
+	OBJECT = {
+		NAME = "hei_prop_heist_drill",
+		handle = nil
+	}
+}
+
+local shouldBeShowingHelpText = false
 
 RegisterNetEvent('bank:loadDrillingSpots')
 AddEventHandler('bank:loadDrillingSpots', function(spots)
@@ -66,7 +84,8 @@ Citizen.CreateThread(function()
 		local dist2 = Vdist(playerCoords.x, playerCoords.y, playerCoords.z, mainHackLocation.x, mainHackLocation.y, mainHackLocation.z)
 		if dist2 < 3 then
 			exports.globals:DrawText3D(mainHackLocation.x, mainHackLocation.y, mainHackLocation.z, '[E] - Hack Main System')
-			if IsControlJustPressed(0, 86) and not hacked then
+			if IsControlJustPressed(0, 86) and not hacked and not startedFinalHack then
+				startedFinalHack = true
 				TriggerEvent("utk_fingerprint:Start", 4, 1, 1, function(outcome)
 					if outcome == true then
 						TriggerServerEvent('bank:hackComplete')
@@ -74,6 +93,7 @@ Citizen.CreateThread(function()
 						exports.globals:notify("You failed to access the mainframe!")
 					end
 					hacked = true
+					startedFinalHack = false
 				end)
 			end
 		end
@@ -219,9 +239,9 @@ function DrawTimer(beginTime, duration, x, y, text)
 end
 
 function DisplayHelpText(Text)
-	BeginTextCommandDisplayHelp('STRING')
-	AddTextComponentSubstringPlayerName(Text)
-	EndTextCommandDisplayHelp(0, 0, 1, -1)
+	SetTextComponentFormat('STRING')
+    AddTextComponentString(Text)
+    DisplayHelpTextFromStringLabel(0, 0, true, -1)
 end
 
 function round(num, numDecimalPlaces)
@@ -237,15 +257,80 @@ function GetIsControlPressed(Control)
 end
 
 RegisterNetEvent('bank:startDrilling')
-AddEventHandler('bank:startDrilling', function()
+AddEventHandler('bank:startDrilling', function(boxIndex)
+	local box = drilling_spots[boxIndex]
+	TaskTurnPedToFaceCoord(PlayerPedId(), box.x, box.y, box.z, 2000)
+	Wait(2000)
+	shouldBePlayingAnim = true
 	TriggerEvent("Drilling:Start", function(success)
 		if (success) then
 			TriggerServerEvent('bank:drilledGoods')
 		else
 			TriggerServerEvent('bank:bustedDrill')
 		end
+		shouldBePlayingAnim = false
 	end)
-	DisplayHelpText('Tap ~INPUT_CELLPHONE_LEFT~ to Slow Down the Drill, ~INPUT_CELLPHONE_RIGHT~ to speed up the drill')
-	Wait(3000)
-	DisplayHelpText('Tap ~INPUT_CELLPHONE_UP~ to drill the locks, ~INPUT_CELLPHONE_DOWN~ to pull the drill out')
+	shouldBeShowingHelpText = true
+	TriggerEvent('InteractSound_CL:PlayWithinDistance', PlayerId(), 10.0, "drill", 0.5)
 end)
+
+Citizen.CreateThread(function()
+	while true do
+		if shouldBePlayingAnim then
+			if not dictLoaded then
+				exports.globals:loadAnimDict(DRILLING.ANIM.DICT)
+				dictLoaded = true
+			end
+			local myped = PlayerPedId()
+			if not IsEntityPlayingAnim(myped, DRILLING.ANIM.DICT, DRILLING.ANIM.NAME, 3) then
+				TaskPlayAnim(myped, DRILLING.ANIM.DICT, DRILLING.ANIM.NAME, 2.0, 2.0, -1, 51, 0, false, false, false)
+				clearedAnim = false
+			end
+			if not DRILLING.OBJECT.handle then
+				giveDrillObject(myped)
+			end
+		else
+			if not clearedAnim then
+				local myped = PlayerPedId()
+				ClearPedTasksImmediately(myped)
+				clearedAnim = true
+			end
+			if DRILLING.OBJECT.handle then
+				DeleteObject(DRILLING.OBJECT.handle)
+				DRILLING.OBJECT.handle = nil
+			end
+		end
+		Wait(0)
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
+		if shouldBeShowingHelpText and shouldBePlayingAnim then
+			DisplayHelpText('Tap ~INPUT_CELLPHONE_LEFT~ to Slow Down the Drill, ~INPUT_CELLPHONE_RIGHT~ to speed up the drill')
+			Wait(8000)
+			if not shouldBePlayingAnim then return end
+			DisplayHelpText('Tap ~INPUT_CELLPHONE_UP~ to drill the locks, ~INPUT_CELLPHONE_DOWN~ to pull the drill out')
+			Wait(8000)
+			if not shouldBePlayingAnim then return end
+			DisplayHelpText('Cool down the drill by pulling the drill out for a few seconds.')
+			Wait(8000)
+			if not shouldBePlayingAnim then return end
+			shouldBeShowingHelpText = false
+		end
+		Wait(1)
+	end
+end)
+
+function giveDrillObject(ped)
+	local rightHandBoneId = 57005
+	local pedCoords = GetEntityCoords(ped, false)
+	local drillObjectHash = GetHashKey(DRILLING.OBJECT.NAME)
+	RequestModel(drillObjectHash)
+	while not HasModelLoaded(drillObjectHash) do
+		Wait(100)
+	end
+	DRILLING.OBJECT.handle = CreateObject(drillObjectHash, pedCoords.x, pedCoords.y, pedCoords.z+0.2,  true,  true, true)
+	SetEntityAsMissionEntity(DRILLING.OBJECT.handle, true, true)
+	AttachEntityToEntity(DRILLING.OBJECT.handle, ped, GetPedBoneIndex(ped, rightHandBoneId), 0.15, 0.0, -0.05, 100.0, -90.0, 150.0, true, true, false, true, 1, true)
+end

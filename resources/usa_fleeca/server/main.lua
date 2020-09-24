@@ -120,7 +120,8 @@ AddEventHandler('fleeca:purchaseDrill', function()
         legality = "legal",
         quantity = 1,
         type = "misc",
-        weight = 10
+        weight = 10,
+        objectModel = "hei_prop_heist_drill"
     }
 
     if char.canHoldItem(drill) then
