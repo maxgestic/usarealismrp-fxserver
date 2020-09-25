@@ -102,10 +102,10 @@ AddEventHandler('fleeca:startDrilling', function()
 
     shouldBePlayingAnim = true
     TriggerEvent("Drilling:Start", function(success)
-        if (success) then
+        if success then
             TriggerServerEvent('fleeca:drilledGoods')
         else
-            TriggerServerEvent('fleeca:bustedDrill')
+            exports.globals:notify("The drill bit is too hot!")
         end
         shouldBePlayingAnim = false
     end)

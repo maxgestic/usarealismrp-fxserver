@@ -107,18 +107,10 @@ function resetBankHeist()
 	TriggerClientEvent('bank:resetVault', -1)
 end
 
-RegisterServerEvent('bank:bustedDrill')
-AddEventHandler('bank:bustedDrill', function()
-	local char = exports["usa-characters"]:GetCharacter(source)
-	char.removeItem('Drill', 1)
-	TriggerClientEvent("usa:notify", source, "The drill broke!")
-end)
-
 RegisterServerEvent('bank:drilledGoods')
 AddEventHandler('bank:drilledGoods', function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local cash = math.random(1750, 12350)
-
 	char.giveMoney(cash)
 	TriggerClientEvent("usa:notify", source, "You stole $".. cash .. ' from the deposit box!')
 end)
