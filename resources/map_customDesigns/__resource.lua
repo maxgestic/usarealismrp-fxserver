@@ -105,3 +105,15 @@ this_is_a_map 'yes'
 --bh1_46_0.ybn
 --hi@bh1_46_0.ybn
 --COORDS: -899.37 58.48 49.87
+
+
+-- ################################################
+
+--Forum Dr Cleanup
+
+--lr_sc1_rd_strm_2.ymap
+--lr_sc1_rd_strm_0.ymap
+--lr_sc1_11_0.ybn
+--hei_sc1_11_0.ybn
+--sc_1_11_0.ybn
+--COORDS: -0.22 -1457.87 30.48
