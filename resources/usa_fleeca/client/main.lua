@@ -3,6 +3,20 @@ local NPC = 's_m_y_construct_01'
 local drill_location = {73.01, -341.71, 55.51}
 local alertPolice = true
 
+local shouldBePlayingAnim = false
+local clearedAnim = false
+local dictLoaded = false
+local DRILLING = {
+	ANIM = {
+		DICT = "anim@heists@fleeca_bank@drilling",
+		NAME = "drill_straight_idle"
+	},
+	OBJECT = {
+		NAME = "hei_prop_heist_drill",
+		handle = nil
+	}
+}
+
 local drilling_spots = {}
 TriggerServerEvent('fleeca:loadDrillingSpots')
 
@@ -86,14 +100,19 @@ AddEventHandler('fleeca:startDrilling', function()
     TriggerEvent('chatMessage', "", {}, "^0Use ^3Up Arrow ^0key to drill deposit box, ^3Down Arrow ^0key to cool drill down")
     TriggerEvent('chatMessage', "", {}, "^0Dont drill too fast!")
 
-    exports.globals:loadAnimDict("anim@heists@fleeca_bank@drilling")
+    shouldBePlayingAnim = true
     TriggerEvent("Drilling:Start", function(success)
         if (success) then
             TriggerServerEvent('fleeca:drilledGoods')
         else
             TriggerServerEvent('fleeca:bustedDrill')
         end
+        shouldBePlayingAnim = false
     end)
+    
+    Wait(1000)
+
+    TriggerEvent('InteractSound_CL:PlayWithinDistance', PlayerId(), 10.0, "drill", 0.5)
 end)
 
 function nearMarker(x, y, z)
@@ -105,3 +124,46 @@ RegisterNetEvent('fleeca:reset911')
 AddEventHandler('fleeca:reset911', function()
     alertPolice = true
 end)
+
+Citizen.CreateThread(function()
+	while true do
+		if shouldBePlayingAnim then
+			if not dictLoaded then
+				exports.globals:loadAnimDict(DRILLING.ANIM.DICT)
+				dictLoaded = true
+			end
+			local myped = PlayerPedId()
+			if not IsEntityPlayingAnim(myped, DRILLING.ANIM.DICT, DRILLING.ANIM.NAME, 3) then
+				TaskPlayAnim(myped, DRILLING.ANIM.DICT, DRILLING.ANIM.NAME, 2.0, 2.0, -1, 51, 0, false, false, false)
+				clearedAnim = false
+			end
+			if not DRILLING.OBJECT.handle then
+				giveDrillObject(myped)
+			end
+		else
+			if not clearedAnim then
+				local myped = PlayerPedId()
+				ClearPedTasksImmediately(myped)
+				clearedAnim = true
+			end
+			if DRILLING.OBJECT.handle then
+				DeleteObject(DRILLING.OBJECT.handle)
+				DRILLING.OBJECT.handle = nil
+			end
+		end
+		Wait(0)
+	end
+end)
+
+function giveDrillObject(ped)
+	local rightHandBoneId = 57005
+	local pedCoords = GetEntityCoords(ped, false)
+	local drillObjectHash = GetHashKey(DRILLING.OBJECT.NAME)
+	RequestModel(drillObjectHash)
+	while not HasModelLoaded(drillObjectHash) do
+		Wait(100)
+	end
+	DRILLING.OBJECT.handle = CreateObject(drillObjectHash, pedCoords.x, pedCoords.y, pedCoords.z+0.2,  true,  true, true)
+	SetEntityAsMissionEntity(DRILLING.OBJECT.handle, true, true)
+	AttachEntityToEntity(DRILLING.OBJECT.handle, ped, GetPedBoneIndex(ped, rightHandBoneId), 0.15, 0.0, -0.05, 100.0, -90.0, 150.0, true, true, false, true, 1, true)
+end
