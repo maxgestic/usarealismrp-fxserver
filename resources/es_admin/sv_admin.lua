@@ -182,6 +182,7 @@ TriggerEvent('es:addCommand', 'help', function(source, args, char)
 				end
 			end
 		end)
+		TriggerClientEvent("chatMessage", source, "", {}, "^6^*YOU:^r^0 " .. GetPlayerName(source) .. " [#" .. source .. "] ^6^*|^r^0 " .. message)
 	else
 		TriggerClientEvent("chatMessage", tonumber(source), "", {}, "^3Usage: ^0/help [message]")
 	end
@@ -1413,18 +1414,29 @@ end
 
 -- TESTING COMMAND --
 TriggerEvent('es:addGroupCommand', 'test', "owner", function(source, args, char)
-	--[[ GIVING LSD VILES
+	-- GIVING ITEM
 	local char = exports["usa-characters"]:GetCharacter(source)
-	--TriggerClientEvent("testing:spawnObject", source, "bkr_prop_meth_acetone")
-	local lsd = {name = "LSD Vile", price = 6, type = "drug", quantity = 1, legality = "illegal", weight = 5.0, objectModel = "prop_cs_pour_tube"}
-	if char.canHoldItem(lsd) then
-		char.giveItem(lsd)
+	--local lsd = {name = "LSD Vile", price = 6, type = "drug", quantity = 1, legality = "illegal", weight = 5.0, objectModel = "prop_cs_pour_tube"}
+	local advancedPick = {name = 'Advanced Pick', type = 'illegal', price = 800, legality = 'illegal', quantity = 1, weight = 7.0}
+	--local lockpick = {name = 'Lockpick', type = 'misc', price = 150, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(0, 7)}
+	local drill = {
+        name = "Drill",
+        legality = "legal",
+        quantity = 1,
+        type = "misc",
+		weight = 10,
+		objectModel = "hei_prop_heist_drill"
+    }
+
+	if char.canHoldItem(drill) then
+		char.giveItem(drill)
 	end
-	--]]
 
-	--TriggerClientEvent("interaction:equipWeapon", source, {hash = GetHashKey("WEAPON_RPG")}, true)
+	-- TriggerClientEvent("interaction:equipWeapon", source, {hash = GetHashKey("WEAPON_RPG")}, true)
 
-	TriggerClientEvent("testtest", source)
+	-- TriggerClientEvent("testing:spawnObject", source, "bkr_prop_meth_acetone")
+
+	--TriggerClientEvent("testtest", source)
 end, {
 	help = "Test something"
 })
