@@ -2,13 +2,28 @@
 local thermite_loc = {x = -607.29, y = -245.78, z = 50.24}
 local THERMITE_PLANT_ANIMATION_TIME = 30000
 
+local canBeRobbed = false -- only available during certain hours
+
 Citizen.CreateThread(function()
     while true do
-        local myped = PlayerPedId()
-        if nearMarker(thermite_loc.x, thermite_loc.y, thermite_loc.z) and not IsEntityDead(myped) then
-            exports.globals:DrawText3D(thermite_loc.x, thermite_loc.y, thermite_loc.z, '[E] - Rig Thermite')
-            if IsControlJustPressed(0, 38) then
-                TriggerServerEvent('jewelleryheist:doesUserHaveThermiteToUse')
+        if GetClockHours() < 9 and GetClockHours() >= 1 then
+            canBeRobbed = true
+        else
+            canBeRobbed = false
+        end
+        Wait(30000)
+    end
+end)
+
+Citizen.CreateThread(function()
+    while true do
+        if canBeRobbed then
+            local myped = PlayerPedId()
+            if nearMarker(thermite_loc.x, thermite_loc.y, thermite_loc.z) and not IsEntityDead(myped) then
+                exports.globals:DrawText3D(thermite_loc.x, thermite_loc.y, thermite_loc.z, '[E] - Rig Thermite')
+                if IsControlJustPressed(0, 38) then
+                    TriggerServerEvent('jewelleryheist:doesUserHaveThermiteToUse')
+                end
             end
         end
         Wait(0)
@@ -17,20 +32,22 @@ end)
 
 RegisterNetEvent("jewelleryheist:plantThermite")
 AddEventHandler("jewelleryheist:plantThermite", function()
-    local myped = PlayerPedId()
-    local start = GetGameTimer()
-    exports.globals:loadAnimDict("anim@move_m@trash")
-    while GetGameTimer() - start < THERMITE_PLANT_ANIMATION_TIME do
-        exports.globals:DrawTimerBar(start, THERMITE_PLANT_ANIMATION_TIME, 1.42, 1.475, 'Planting Thermite')
-        if not IsEntityPlayingAnim(myped, "anim@move_m@trash", "pickup", 3) then
-            TaskPlayAnim(myped, "anim@move_m@trash", "pickup", 8.0, 1.0, -1, 11, 1.0, false, false, false)
+    if canBeRobbed then
+        local myped = PlayerPedId()
+        local start = GetGameTimer()
+        exports.globals:loadAnimDict("anim@move_m@trash")
+        while GetGameTimer() - start < THERMITE_PLANT_ANIMATION_TIME do
+            exports.globals:DrawTimerBar(start, THERMITE_PLANT_ANIMATION_TIME, 1.42, 1.475, 'Planting Thermite')
+            if not IsEntityPlayingAnim(myped, "anim@move_m@trash", "pickup", 3) then
+                TaskPlayAnim(myped, "anim@move_m@trash", "pickup", 8.0, 1.0, -1, 11, 1.0, false, false, false)
+            end
+            Wait(1)
         end
-        Wait(1)
+        ClearPedTasksImmediately(myped)
+        TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 7, 'thermite', 0.5)
+        Wait(2000)
+        TriggerServerEvent('jewelleryheist:plantThermite')
     end
-    ClearPedTasksImmediately(myped)
-    TriggerServerEvent('InteractSound_SV:PlayWithinDistance', 7, 'thermite', 0.5)
-    Wait(2000)
-    TriggerServerEvent('jewelleryheist:plantThermite')
 end)
 
 -- STAGE 2 - ROB THIS MOFUGGA
@@ -48,19 +65,21 @@ TriggerServerEvent("jewelleryheist:loadCases")
 Citizen.CreateThread(function()
     while true do
         Wait(0)
-        local pid = PlayerPedId()
-        local plyCoords = GetEntityCoords(pid, false)
-        for k = 1, #JewelleryCases do
-            if not JewelleryCases[k].robbed then
-                local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, JewelleryCases[k].x, JewelleryCases[k].y, JewelleryCases[k].z)
-                if dist < 1.5 then
-                    exports.globals:DrawText3D(JewelleryCases[k].x, JewelleryCases[k].y, JewelleryCases[k].z, '[E] - Smash')
-                    if dist < 0.5 then
-                        if IsControlJustPressed(1,51) then
-                            if IsPedArmed(pid, 7) then
-                                TriggerServerEvent("jewelleryheist:attemptSmashNGrab", k)
-                            else 
-                                exports.globals:notify("Can't break the glass!")
+        if canBeRobbed then
+            local pid = PlayerPedId()
+            local plyCoords = GetEntityCoords(pid, false)
+            for k = 1, #JewelleryCases do
+                if not JewelleryCases[k].robbed then
+                    local dist = Vdist(plyCoords.x, plyCoords.y, plyCoords.z, JewelleryCases[k].x, JewelleryCases[k].y, JewelleryCases[k].z)
+                    if dist < 1.5 then
+                        exports.globals:DrawText3D(JewelleryCases[k].x, JewelleryCases[k].y, JewelleryCases[k].z, '[E] - Smash')
+                        if dist < 0.5 then
+                            if IsControlJustPressed(1,51) then
+                                if IsPedArmed(pid, 7) then
+                                    TriggerServerEvent("jewelleryheist:attemptSmashNGrab", k)
+                                else 
+                                    exports.globals:notify("Can't break the glass!")
+                                end
                             end
                         end
                     end

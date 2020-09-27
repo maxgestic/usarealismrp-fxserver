@@ -165,8 +165,9 @@ AddEventHandler("cultivation:loadNearbyPlants", function(nearbyPlants)
             NEARBY_PLANTS[id] = plant
             NEARBY_PLANTS[id].objectHandle = createPlantObject(plant)
         else
-            for k, v in pairs(plant) do
-                NEARBY_PLANTS[id][k] = v -- to avoid overwriting client side variables (like plant object handle)
+            for k, v in pairs(plant) do -- to avoid overwriting client side variables (like plant object handle)
+                NEARBY_PLANTS[id][k] = v
+
             end
         end
     end

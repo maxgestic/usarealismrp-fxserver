@@ -72,7 +72,6 @@ RegisterServerEvent("cultivation:water")
 AddEventHandler("cultivation:water", function(id)
     if not PLANTED[id].isDead then
         PlantManager.waterPlant(id)
-        TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 2)
     else 
         TriggerClientEvent("usa:notify", source, "Plant is dead")
     end
@@ -85,7 +84,6 @@ AddEventHandler("cultivation:feed", function(id)
         local fertilizer = char.getItem("Fertilizer")
         if fertilizer then
             PlantManager.feedPlant(id)
-            TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 2)
             char.removeItem("Fertilizer", 1)
         end
     else 

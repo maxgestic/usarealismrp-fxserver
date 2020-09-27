@@ -32,6 +32,24 @@ AddEventHandler("doormanager:update", function(doors)
   --SpawnAllPrisonCellDoors(DOORS_TO_MANAGE)
 end)
 
+-- manage doors during certain hours --
+Citizen.CreateThread(function()
+  while true do
+      for i = 1, #DOORS_TO_MANAGE do
+        local door = DOORS_TO_MANAGE[i]
+        if door.unlockedAfter then
+          if door.locked and GetClockHours() > door.unlockedAfter then -- needs to be unlocked
+            TriggerServerEvent('doormanager:forceToggleLock', i)
+          elseif not door.locked and GetClockHours() <= door.unlockedAfter then -- needs to be locked
+            TriggerServerEvent('doormanager:forceToggleLock', i)
+          end
+        end
+        Wait(10)
+      end
+      Wait(30000)
+  end
+end)
+
 -- delete horrible sliding cell doors so we can replace with better ones --
 Citizen.CreateThread(function()
   while true do

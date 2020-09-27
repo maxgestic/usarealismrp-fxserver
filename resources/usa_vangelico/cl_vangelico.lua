@@ -16,6 +16,19 @@ local cart = {}
 
 local MENU_DISTANCE = 1.3
 
+local storeIsOpen = false -- only available certain hours
+
+Citizen.CreateThread(function()
+    while true do
+        if GetClockHours() >= 9 then
+            storeIsOpen = true
+        else
+            storeIsOpen = false
+        end
+        Wait(30000)
+    end
+end)
+
 _menuPool = NativeUI.CreatePool()
 menu = NativeUI.CreateMenu("Vangelico", "~b~Welcome!", 0 --[[X COORD]], 320 --[[Y COORD]])
 _menuPool:Add(menu)
@@ -98,29 +111,31 @@ Citizen.CreateThread(function()
         _menuPool:ControlDisablingEnabled(false)
         _menuPool:ProcessMenus()
 
-        for i = 1, #MENU_LOCATIONS do
-            DrawText3D(MENU_LOCATIONS[i].x, MENU_LOCATIONS[i].y, MENU_LOCATIONS[i].z, 4, '[E] - ' .. MENU_LOCATIONS[i].name)
-        end
-
-        if IsControlJustPressed(1, MENU_OPEN_KEY) then
+        if storeIsOpen then
             for i = 1, #MENU_LOCATIONS do
-                local playerCoords = GetEntityCoords(me, false)
-                if Vdist(playerCoords, MENU_LOCATIONS[i].x, MENU_LOCATIONS[i].y, MENU_LOCATIONS[i].z) < MENU_DISTANCE then
-                    closest_section = MENU_LOCATIONS[i] --// set shop player is at
-                    local menuName = MENU_LOCATIONS[i].name
-                    DisplayMenu(menu, menuName:lower())
-                    _menuPool:RefreshIndex()
+                DrawText3D(MENU_LOCATIONS[i].x, MENU_LOCATIONS[i].y, MENU_LOCATIONS[i].z, 4, '[E] - ' .. MENU_LOCATIONS[i].name)
+            end
+
+            if IsControlJustPressed(1, MENU_OPEN_KEY) then
+                for i = 1, #MENU_LOCATIONS do
+                    local playerCoords = GetEntityCoords(me, false)
+                    if Vdist(playerCoords, MENU_LOCATIONS[i].x, MENU_LOCATIONS[i].y, MENU_LOCATIONS[i].z) < MENU_DISTANCE then
+                        closest_section = MENU_LOCATIONS[i] --// set shop player is at
+                        local menuName = MENU_LOCATIONS[i].name
+                        DisplayMenu(menu, menuName:lower())
+                        _menuPool:RefreshIndex()
+                    end
                 end
             end
-        end
 
-        if closest_section then
-            local playerCoords = GetEntityCoords(me, false)
-            if Vdist(playerCoords, closest_section.x, closest_section.y, closest_section.z) > MENU_DISTANCE then
-                TriggerServerEvent("usa:loadPlayerComponents")
-                cart = {}
-                closest_section = nil
-                menu:Visible(false)
+            if closest_section then
+                local playerCoords = GetEntityCoords(me, false)
+                if Vdist(playerCoords, closest_section.x, closest_section.y, closest_section.z) > MENU_DISTANCE then
+                    TriggerServerEvent("usa:loadPlayerComponents")
+                    cart = {}
+                    closest_section = nil
+                    menu:Visible(false)
+                end
             end
         end
 
