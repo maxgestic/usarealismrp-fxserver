@@ -935,6 +935,63 @@ end)
 -- PERFORM FIRST TIME DB CHECK --
 exports["globals"]:PerformDBCheck("BANS", "bans", fetchAllBans)
 
+AddEventHandler('playerConnecting', function(playerName, setKickReason, deferrals)
+	deferrals.defer()
+	deferrals.update("Checking ban status...")
+	local usource = source
+	local allPlayerIdentifiers = GetPlayerIdentifiers(tonumber(usource))
+	local gameLicense, steamLicense, ipAddress
+	for j = 1, #allPlayerIdentifiers do
+		if string.find(allPlayerIdentifiers[j], "license") then
+			gameLicense = allPlayerIdentifiers[j]
+		elseif string.find(allPlayerIdentifiers[j], "steam") then
+			steamLicense = allPlayerIdentifiers[j]
+		elseif string.find(allPlayerIdentifiers[j], "ip") then
+			ipAddress = allPlayerIdentifiers[j]
+		end
+	end
+	TriggerEvent('es:exposeDBFunctions', function(couchdb)
+		local query = {
+			["identifiers"] = {
+				["$elemMatch"] = {
+					["$or"] = {
+						gameLicense, steamLicense, ipAddress
+					}
+				}
+			}
+		}
+		couchdb.getDocumentByRows("bans", query, function(doc)
+			if doc then
+				print("found banned player document, name: " .. doc.name)
+				if doc.duration then
+					if getHoursFromTime(doc.time) < doc.duration then
+						print(GetPlayerName(tonumber(usource)) .. " has been temp banned from your server and should not be able to play!")
+						--DropPlayer(tonumber(usource), "Temp Banned: " .. doc.reason .. " This ban is in place for " .. doc.duration .. " hour(s).")
+						deferrals.done("Temp Banned: " .. doc.reason .. " This ban is in place for " .. doc.duration .. " hour(s).")
+					else
+						local docid = doc._id
+						local docRev = doc._rev
+						--RconPrint("\nfound a matching identifer to unban for "..bannedPlayer.name.."!")
+						-- found a match, unban
+						PerformHttpRequest("http://127.0.0.1:5984/bans/" .. docid .. "?rev=" .. docRev, function(err, rText, headers)
+							print("\nrText = " .. rText)
+							print("\nerr = " .. err)
+						end, "DELETE", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
+						print("\nPlayer ".. doc.name .." has been unbanned due to tempban expiration!")
+						deferrals.done()
+					end
+				else
+					print(GetPlayerName(tonumber(usource)) .. " has been perma banned from your server and should not be able to play!")
+					--DropPlayer(tonumber(usource), "Banned: " .. doc.reason)
+					deferrals.done("Banned: " .. doc.reason)
+				end
+			else
+				deferrals.done()
+			end
+		end)
+	end)
+end)
+
 -- ban command --
 TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, char)
 	local userSource = tonumber(source)

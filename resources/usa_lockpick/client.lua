@@ -9,6 +9,8 @@ local LOCKPICK_ANIM_NAME = "machinic_loop_mechandplayer"
 
 RegisterNetEvent('lockpick:openlockpick')
 AddEventHandler('lockpick:openlockpick', function(location, bankLoc)
+	loc = nil
+	bank = nil
 	if location then
 		loc = location
 	elseif bankLoc then
