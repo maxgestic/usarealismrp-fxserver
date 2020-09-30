@@ -226,7 +226,11 @@ function AddTextEntry(key, value)
 end
 
 Citizen.CreateThread(function()
+  Wait(1000)
   SetPlayerHealthRechargeMultiplier(PlayerId(), 0.0)
+end)
+
+Citizen.CreateThread(function()
   AddTextEntry('FE_THDR_GTAO', 'USA REALISM RP - HTTPS://USARRP.NET')
 end)
 
