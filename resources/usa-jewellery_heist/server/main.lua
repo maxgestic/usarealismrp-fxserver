@@ -1,4 +1,4 @@
-local COPS_NEEDED_TO_ROB = 4 
+local COPS_NEEDED_TO_ROB = 4
 local STORE_ROBBERY_TIMEOUT = 2 * 60 * 60 * 1000 -- 2 hour cooldown
 local hasDoorBeenThermited = false -- prevent people from stealing Jewellery by emoting through the door and skipping thermite stage
 
@@ -114,6 +114,11 @@ AddEventHandler("jewelleryheist:attemptSmashNGrab", function(caseIndex)
             TriggerClientEvent("jewelleryheist:caseSmashed", -1, caseIndex)
         end
     end
+end)
+
+RegisterServerEvent("jewelleryheist:hasDoorBeenThermited")
+AddEventHandler("jewelleryheist:hasDoorBeenThermited", function(cb)
+    cb(hasDoorBeenThermited)
 end)
 
 function resetHeistState()

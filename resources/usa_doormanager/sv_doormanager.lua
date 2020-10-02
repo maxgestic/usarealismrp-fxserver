@@ -236,14 +236,26 @@ local DOORS = {
 -- heading - the heading of the door in it's regular position (when a player is not holding it open) -- this value should always be somewhat a multiple of 5 as rockstar like uniformity e.g., 270, 90, 180, 30, 315
 -- ymap - true will result in the door not using any of the above new values for 3D text, and having the text display at the x, y, z coords on the list
 
-RegisterServerEvent("doormanager:forceToggleLock")
-AddEventHandler("doormanager:forceToggleLock", function(index)
+function toggleDoorLock(index)
   if not DOORS[index].locked then
     DOORS[index].locked = true
   else
     DOORS[index].locked = false
   end
   TriggerClientEvent("doormanager:toggleDoorLock", -1, index, DOORS[index].locked, DOORS[index].x, DOORS[index].y, DOORS[index].z)
+end
+
+RegisterServerEvent("doormanager:forceToggleLock")
+AddEventHandler("doormanager:forceToggleLock", function(index)
+  if DOORS[index].name:find("Jewellery Store") then
+    TriggerEvent("jewelleryheist:hasDoorBeenThermited", function(isThermited)
+      if not isThermited then
+        toggleDoorLock(index)
+      end
+    end)
+  else
+    toggleDoorLock(index)
+  end
 end)
 
 RegisterServerEvent("doormanager:checkDoorLock")
