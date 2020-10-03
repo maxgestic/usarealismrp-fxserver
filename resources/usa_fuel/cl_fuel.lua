@@ -17,6 +17,7 @@ local fuelStations = {
 			{351.42, -588.21, 75.16}, -- PILLBOX MEDICAL
 			{-1513.0, -67.61, 56.57}, -- Reapers House
 			{-33.22, 768.99, 223.42}, -- Scott Johnson
+			{-33.22, 768.99, 223.42}, -- Josef
 		}
 	},
 	['Watercraft'] = {
