@@ -1,4 +1,7 @@
-local myped = {}
+local myped = {
+    handle = nil,
+    coords = nil
+}
 
 local OBJECTS = {
     {
@@ -84,10 +87,10 @@ local PEDS = {
 
 local DISPLAY_VEHICLES = {} -- loaded from server
 
-local SHOP_VISIBLE_DISTANCE = 200
+local SHOP_VISIBLE_DISTANCE = 500
 local SHOP_SPAWN_CHECK_DELAY = 3000
 
-local PURCHASE_KEY = exports.globals:GetKeys().E
+local PURCHASE_KEY = nil
 local HOLD_TIME_BUY = 5000
 
 local KART_SPAWN = {
@@ -187,6 +190,14 @@ function comma_value(amount)
 	end
 	return formatted
 end
+
+-- async thread to load key table from globals resource --
+Citizen.CreateThread(function()
+    while not exports.globals:GetKeys() do
+        Wait(1000)
+    end
+    PURCHASE_KEY = exports.globals:GetKeys().E
+end)
 
 -- handle purchasing / 3D text --
 Citizen.CreateThread(function()
