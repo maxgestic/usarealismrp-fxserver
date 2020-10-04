@@ -5,7 +5,8 @@ local KEYS = {
   ONE = 157,
   TWO = 158,
   THREE = 160,
-  FOUR = 164
+  FOUR = 164,
+  E = 46
 }
 
 local MAX_ITEM_TRADE_DISTANCE = 1.5

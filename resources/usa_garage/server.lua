@@ -6,7 +6,8 @@ local WITHDRAW_FEE = 50
 local IMPOUND_FEE = 150
 
 RegisterServerEvent("garage:giveKey")
-AddEventHandler("garage:giveKey", function(key)
+AddEventHandler("garage:giveKey", function(key, src)
+	if src then source = src end
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local invKey = char.getItemWithField("plate", key.plate)
 	if not invKey then
