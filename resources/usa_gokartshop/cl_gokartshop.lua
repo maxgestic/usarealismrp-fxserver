@@ -156,7 +156,7 @@ function spawnVehicle(veh, forDisplay)
         SetVehicleExplodesOnHighExplosionDamage(handle, false)
     else
         PlaySoundFrontend(-1,"Out_Of_Area", "DLC_Lowrider_Relay_Race_Sounds", 0)
-        handle = CreateVehicle(veh.HASH, KART_SPAWN.COORDS.x, KART_SPAWN.COORDS.y, KART_SPAWN.COORDS.z, (KART_SPAWN.HEADING or 0.0) --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
+        handle = CreateVehicle(veh.HASH, KART_SPAWN.COORDS.x, KART_SPAWN.COORDS.y, KART_SPAWN.COORDS.z, (KART_SPAWN.HEADING or 0.0) --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
     end
     SetVehicleOnGroundProperly(handle)
     SetEntityAsMissionEntity(handle, true, true)
