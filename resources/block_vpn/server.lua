@@ -36,7 +36,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
 						if resp[playerIP]["type"] == "VPN" or resp[playerIP]["type"] == "blacklisted" then
 							deferrals.done(kickReason)
 						end
-						if resp[playerIP]["risk"] >= kickThreshold then
+						if resp[playerIP]["risk"] and resp[playerIP]["risk"] >= kickThreshold then
 							deferrals.done(kickReason)
 						end
 					end
