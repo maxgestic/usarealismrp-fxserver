@@ -2,7 +2,7 @@ local KARTS = {
     {
         MODEL = "kart",
         HASH = GetHashKey("kart"),
-        COORDS = vector3(-65.50290222168, -1826.6392822266, 25.943315505981),
+        COORDS = vector3(-65.50290222168, -1826.6392822266, 25.503315505981),
         HEADING = 227.0,
         PRICE = 10000
     },
@@ -11,21 +11,21 @@ local KARTS = {
         HASH = GetHashKey("kart3"),
         COORDS = vector3(-67.355209350586, -1828.2266357422, 25.942804336548),
         HEADING = 227.0,
-        PRICE = 15000
+        PRICE = 17500
     },
     {
         MODEL = "kart20",
         HASH = GetHashKey("kart20"),
         COORDS = vector3(-68.73802947998, -1829.9088378906, 25.942209243774),
         HEADING = 227.0,
-        PRICE = 17500
+        PRICE = 20000
     },
     {
         MODEL = "Shifter_kart",
         HASH = GetHashKey("Shifter_kart"),
         COORDS = vector3(-70.300369262695, -1831.78515625, 25.941976547241),
         HEADING = 231.0,
-        PRICE = 25000
+        PRICE = 30000
     }
 }
 
