@@ -613,7 +613,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 			-- update db
 			GetDoc.createDocument("bans",  {char_name = char_name, name = targetPlayerName, identifiers = allPlayerIdentifiers, banned = true, reason = reason, bannerName = banner, bannerId = bannerId, timestamp = os.date("!%Y-%m-%dT%XZ", os.time() - 7 * 60 * 60)}, function()
 				RconPrint("player banned!")
-				DropPlayer(targetPlayer, "Banned: " .. reason)
+				DropPlayer(targetPlayer, "Banned: " .. reason .. " - Banned by: " .. banner)
 			end)
 		end)
 	elseif commandName == "banid" then
@@ -967,7 +967,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
 					if getHoursFromTime(doc.time) < doc.duration then
 						print(GetPlayerName(tonumber(usource)) .. " has been temp banned from your server and should not be able to play!")
 						--DropPlayer(tonumber(usource), "Temp Banned: " .. doc.reason .. " This ban is in place for " .. doc.duration .. " hour(s).")
-						deferrals.done("Temp Banned: " .. doc.reason .. " This ban is in place for " .. doc.duration .. " hour(s).")
+						deferrals.done("Temp Banned: " .. doc.reason .. " This ban is in place for " .. doc.duration .. " hour(s). Banned by: " .. doc.bannerName)
 					else
 						local docid = doc._id
 						local docRev = doc._rev
@@ -983,7 +983,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
 				else
 					print(GetPlayerName(tonumber(usource)) .. " has been perma banned from your server and should not be able to play!")
 					--DropPlayer(tonumber(usource), "Banned: " .. doc.reason)
-					deferrals.done("Banned: " .. doc.reason)
+					deferrals.done("Banned: " .. doc.reason .. " - Banned by: " .. doc.bannerName)
 				end
 			else
 				deferrals.done()
@@ -1043,7 +1043,7 @@ TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, char)
 			print("player banned!")
 			-- drop player from session
 			--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
-			DropPlayer(targetPlayer, "Banned: " .. reason .. " -- You can file an appeal at https://usarrp.net")
+			DropPlayer(targetPlayer, "Banned: " .. reason .. " -- You can file an appeal at https://usarrp.net. Banned by: " .. banner)
 		end)
 	end)
 end, {
@@ -1209,7 +1209,7 @@ AddEventHandler('mini:checkPlayerBannedOnSpawn', function()
 				if doc.duration then
 					if getHoursFromTime(doc.time) < doc.duration then
 						print(GetPlayerName(tonumber(usource)) .. " has been temp banned from your server and should not be able to play!")
-						DropPlayer(tonumber(usource), "Temp Banned: " .. doc.reason .. " This ban is in place for " .. doc.duration .. " hour(s).")
+						DropPlayer(tonumber(usource), "Temp Banned: " .. doc.reason .. " This ban is in place for " .. doc.duration .. " hour(s). Banned by: " .. doc.bannerName)
 					else
 						local docid = doc._id
 						local docRev = doc._rev
@@ -1224,7 +1224,7 @@ AddEventHandler('mini:checkPlayerBannedOnSpawn', function()
 					end
 				else
 					print(GetPlayerName(tonumber(usource)) .. " has been perma banned from your server and should not be able to play!")
-					DropPlayer(tonumber(usource), "Banned: " .. doc.reason)
+					DropPlayer(tonumber(usource), "Banned: " .. doc.reason .. " - Banned by: " .. doc.bannerName)
 				end
 			end
 		end)
@@ -1483,11 +1483,18 @@ TriggerEvent('es:addGroupCommand', 'test', "owner", function(source, args, char)
         type = "misc",
 		weight = 10,
 		objectModel = "hei_prop_heist_drill"
-    }
+	}
+	local thermite = {
+		name = "Thermite",
+		legality = "illegal",
+		quantity = 2,
+		type = "misc",
+		weight = 20
+	}
 
-	if char.canHoldItem(drill) then
-		char.giveItem(drill)
-	end
+	--if char.canHoldItem(thermite) then
+		char.giveItem(thermite)
+	--end
 
 	-- TriggerClientEvent("interaction:equipWeapon", source, {hash = GetHashKey("WEAPON_RPG")}, true)
 
