@@ -372,7 +372,9 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 
 		-- If weapon does not require reticle, remove reticle
-		if FireMode.LastWeaponActive ~= "reticle" then HideHudComponentThisFrame(14) end
+		if FireMode.LastWeaponActive ~= "reticle" and not IsPedInAnyVehicle(PlayerPedId(), true) then
+			HideHudComponentThisFrame(14)
+		end
 
 		-- Hide weapon icon
 		HideHudComponentThisFrame(2)
