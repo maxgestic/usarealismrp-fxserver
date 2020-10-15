@@ -29,6 +29,8 @@ local KARTS = {
     }
 }
 
+local GO_KART_STORAGE_CAPACITY = 10.0
+
 RegisterServerEvent("gokarts:loadKarts")
 AddEventHandler("gokarts:loadKarts", function()
     TriggerClientEvent("gokarts:loadKarts", source, KARTS)
@@ -36,9 +38,9 @@ end)
 
 RegisterServerEvent("gokarts:buy")
 AddEventHandler("gokarts:buy", function(index)
-    local char = exports["usa-characters"]:GetCharacter(source)
+    local src = source
+    local char = exports["usa-characters"]:GetCharacter(src)
     if char.get("money") >= KARTS[index].PRICE then
-        char.removeMoney(KARTS[index].PRICE)
         local vehicles = char.get("vehicles")
         local owner_name = char.getFullName()
         local plate = generate_random_number_plate()
@@ -50,31 +52,42 @@ AddEventHandler("gokarts:buy", function(index)
             plate = plate,
             stored = false,
             price = KARTS[index].PRICE,
-            inventory = {},
-            storage_capacity = 5.0
+            inventory = exports["usa_vehinv"]:NewInventory(GO_KART_STORAGE_CAPACITY),
+            storage_capacity = GO_KART_STORAGE_CAPACITY
         }
-        table.insert(vehicles, vehicle.plate)
-        char.set("vehicles", vehicles)
         -- add to database --
-        AddVehicleToDB(vehicle)
-        local key = {
-            name = "Key -- " .. plate,
-            quantity = 1,
-            type = "key",
-            owner = owner_name,
-            make = "Kart Co.",
-            model = KARTS[index].MODEL,
-            plate = plate
-        }
-        TriggerEvent("garage:giveKey", key, source)
-        KARTS[index].plate = plate
-        TriggerClientEvent("gokarts:spawn", source, KARTS[index])
-        local chatSentence1 = "Purchased a " .. KARTS[index].MODEL .. " for $" .. exports.globals:comma_value(KARTS[index].PRICE)
-        local chatSentence2 = "Remember, these are ^3not legal to drive on the streets^0! We receommend having them towed to their final destination."
-        TriggerClientEvent("usa:notify", source, chatSentence1, "^3INFO:^0 " .. chatSentence1)
-        TriggerClientEvent("chatMessage", source, "", {}, "^3INFO:^0 " .. chatSentence2)
+        AddVehicleToDB(vehicle, function(ok)
+            if ok then
+                -- remove money --
+                char.removeMoney(KARTS[index].PRICE)
+                -- give to player --
+                table.insert(vehicles, vehicle.plate)
+                char.set("vehicles", vehicles)
+                -- put keys in car --
+                local key = {
+                    name = "Key -- " .. plate,
+                    quantity = 1,
+                    type = "key",
+                    owner = owner_name,
+                    make = "Kart Co.",
+                    model = KARTS[index].MODEL,
+                    plate = plate
+                }
+                TriggerEvent("vehicle:storeItem", src, vehicle.plate, key, 1, 0, function(success, inv) end)
+                KARTS[index].plate = plate
+                TriggerClientEvent("gokarts:spawn", src, KARTS[index])
+                local chatSentence1 = "Purchased a " .. KARTS[index].MODEL .. " for $" .. exports.globals:comma_value(KARTS[index].PRICE)
+                local chatSentence2 = "Remember, these are ^3not legal to drive on the streets^0! We receommend having them towed to their final destination."
+                local chatSentence3 = "The keys are in the kart!"
+                TriggerClientEvent("usa:notify", src, chatSentence1, "^3INFO:^0 " .. chatSentence1)
+                TriggerClientEvent("usa:notify", src, chatSentence3, "^3INFO:^0 " .. chatSentence3)
+                TriggerClientEvent("chatMessage", src, "", {}, "^3INFO:^0 " .. chatSentence2)
+            else
+                print("[usa_gokartshop] *** ERROR WHEN BUYING GO KART!!!! **")
+            end
+        end)
     else 
-        TriggerClientEvent("usa:notify", source, "Need: $" .. exports.globals:comma_value(KARTS[index].PRICE), "^3INFO:^0 Need: $" .. exports.globals:comma_value(KARTS[index].PRICE))
+        TriggerClientEvent("usa:notify", src, "Need: $" .. exports.globals:comma_value(KARTS[index].PRICE), "^3INFO:^0 Need: $" .. exports.globals:comma_value(KARTS[index].PRICE))
     end
 end)
 
@@ -99,13 +112,15 @@ function generate_random_number_plate()
 end
 
 -- Insert new vehicle into DB --
-function AddVehicleToDB(vehicle)
+function AddVehicleToDB(vehicle, cb)
     TriggerEvent('es:exposeDBFunctions', function(couchdb)
         couchdb.createDocumentWithId("vehicles", vehicle, vehicle.plate, function(success)
         if success then
+            cb(true)
             --print("* Vehicle created in DB!! *")
         else
             --print("* Error: vehicle was not created in DB!! *")
+            cb(false)
         end
         end)
     end)

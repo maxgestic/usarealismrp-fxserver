@@ -205,7 +205,7 @@ Citizen.CreateThread(function()
         if GetClockHours() > OPEN_AFTER and GetClockHours() < CLOSED_AT then
             if myped.handle then
                 for i = 1, #DISPLAY_VEHICLES do
-                    local dist = Vdist(DISPLAY_VEHICLES[i].COORDS, myped.coords)
+                    local dist = GetDistanceBetweenCoords(DISPLAY_VEHICLES[i].COORDS, myped.coords, false)
                     if dist <= 10 then
                         -- draw 3d text when close enough to any vehicle
                         local text = "UNDEFINED"
@@ -215,8 +215,12 @@ Citizen.CreateThread(function()
                             local timeleft = math.floor((HOLD_TIME_BUY / 1000) - ((GetGameTimer() - DISPLAY_VEHICLES[i].startBuyTime) / 1000))
                             text = "Buying in " .. timeleft .. " second(s)"
                         end
-                        DrawText3D(DISPLAY_VEHICLES[i].COORDS.x, DISPLAY_VEHICLES[i].COORDS.y, DISPLAY_VEHICLES[i].COORDS.z + 1.0, text)
-                        if dist <= 1.55 then
+                        if DISPLAY_VEHICLES[i].MODEL == "kart" then
+                            DrawText3D(DISPLAY_VEHICLES[i].COORDS.x, DISPLAY_VEHICLES[i].COORDS.y, DISPLAY_VEHICLES[i].COORDS.z + 1.5, text)
+                        else 
+                            DrawText3D(DISPLAY_VEHICLES[i].COORDS.x, DISPLAY_VEHICLES[i].COORDS.y, DISPLAY_VEHICLES[i].COORDS.z + 1.0, text)
+                        end
+                        if dist <= 1.2 then
                             -- listen for holding e to buy it:
                             if IsControlJustPressed(0, PURCHASE_KEY) and GetLastInputMethod(0) then
                                 DISPLAY_VEHICLES[i].startBuyTime = GetGameTimer()
