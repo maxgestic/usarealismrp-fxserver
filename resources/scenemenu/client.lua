@@ -292,9 +292,11 @@ AddEventHandler('RemoveBlip', function()
             closestSpeedZone = i
         end
     end
-    RemoveSpeedZone(speedzones[closestSpeedZone][4])
-    RemoveBlip(speedzones[closestSpeedZone][5])
-    table.remove(speedzones, closestSpeedZone)
+    if closestSpeedZone ~= 0 then
+      RemoveSpeedZone(speedzones[closestSpeedZone][4])
+      RemoveBlip(speedzones[closestSpeedZone][5])
+      table.remove(speedzones, closestSpeedZone)
+    end
 
 end)
 
