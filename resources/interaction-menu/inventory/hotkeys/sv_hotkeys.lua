@@ -9,7 +9,7 @@ AddEventHandler("interaction:hotkeyPressed", function(key)
             TriggerClientEvent("interaction:toggleWeapon", source, item)
         else 
             -- perform item's 'use' action
-            TriggerClientEvent("interaction:useItem", source, item)
+            TriggerClientEvent("interaction:useItem", source, key, item)
         end
     else 
         TriggerClientEvent("usa:notify", source, "Nothing in slot " .. (key + 1))

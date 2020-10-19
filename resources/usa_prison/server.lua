@@ -7,15 +7,18 @@ local WEAPONS = {
 	{ name = "SMG", hash = 736523883, rank = 2, price = 500, weight = "30" },
 	{ name = "MK2 Pump Shotgun", hash = 1432025498, rank = 2, price = 500, weight = "30" },
 	{ name = "MK2 Carbine Rifle", hash = 4208062921, rank = 2, price = 500, weight = "30"},
-	{ hash = 100416529, name = "Marksman Rifle", rank = 2, weight = "40", price = 1000}
+	{ hash = 100416529, name = "Marksman Rifle", rank = 2, weight = "40", price = 1000},
+	{ name = "Spike Strips", rank = 3 },
 }
 
 for i = 1, #WEAPONS do
     WEAPONS[i].serviceWeapon = true
     WEAPONS[i].notStackable = true
     WEAPONS[i].quantity = 1
-    WEAPONS[i].legality = "legal"
-    WEAPONS[i].type = "weapon"
+	WEAPONS[i].legality = "legal"
+	if WEAPONS[i].name ~= "Spike Strips" then
+		WEAPONS[i].type = "weapon"
+	end
 end
 
 local function GetWeaponAttachments(name)
@@ -258,39 +261,43 @@ AddEventHandler("doc:checkRankForWeapon", function(weapon)
 			GetDoc.getDocumentByRow("correctionaldepartment", "identifier" , GetPlayerIdentifiers(usource)[1], function(result)
 				if type(result) ~= "boolean" then
 					if result.rank >= weapon.rank then
-						if char.canHoldItem(weapon) then
-							if char.get("money") < weapon.price then
-								TriggerClientEvent("usa:notify", usource, "Not enough money!")
-								return
-							end
-							char.removeMoney(weapon.price)
-							local letters = {}
-							for i = 65,  90 do table.insert(letters, string.char(i)) end -- add capital letters
-					        local serialEnding = math.random(100000000, 999999999)
-					        local serialLetter = letters[math.random(#letters)]
-					        weapon.serialNumber = serialLetter .. serialEnding
-							weapon.uuid = weapon.serialNumber
-							weapon.components = GetWeaponAttachments(weapon.name)
-							TriggerClientEvent("doc:equipWeapon", usource, weapon)
-							char.giveItem(weapon)
-							local weaponDB = {}
-					        weaponDB.name = weapon.name
-					        weaponDB.serialNumber = serialLetter .. serialEnding
-					        weaponDB.ownerName = char.getFullName()
-					        weaponDB.ownerDOB = char.get('dateOfBirth')
-							local timestamp = os.date("*t", os.time())
-					        weaponDB.issueDate = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year
-							TriggerEvent('es:exposeDBFunctions', function(db)
-					          db.createDocumentWithId("legalweapons", weaponDB, weaponDB.serialNumber, function(success)
-					              if success then
-					                  print("* Weapon created serial["..weaponDB.serialNumber.."] name["..weaponDB.name.."] owner["..weaponDB.ownerName.."] *")
-					              else
-					                  print("* Error: Weapon failed to be created!! *")
-					              end
-					          end)
-					        end)
+						if weapon.name == "Spike Strips" then
+							TriggerEvent("spikestrips:equip", true, usource)
 						else
-							TriggerClientEvent("usa:notify", usource, "Inventory full!")
+							if char.canHoldItem(weapon) then
+								if char.get("money") < weapon.price then
+									TriggerClientEvent("usa:notify", usource, "Not enough money!")
+									return
+								end
+								char.removeMoney(weapon.price)
+								local letters = {}
+								for i = 65,  90 do table.insert(letters, string.char(i)) end -- add capital letters
+								local serialEnding = math.random(100000000, 999999999)
+								local serialLetter = letters[math.random(#letters)]
+								weapon.serialNumber = serialLetter .. serialEnding
+								weapon.uuid = weapon.serialNumber
+								weapon.components = GetWeaponAttachments(weapon.name)
+								TriggerClientEvent("doc:equipWeapon", usource, weapon)
+								char.giveItem(weapon)
+								local weaponDB = {}
+								weaponDB.name = weapon.name
+								weaponDB.serialNumber = serialLetter .. serialEnding
+								weaponDB.ownerName = char.getFullName()
+								weaponDB.ownerDOB = char.get('dateOfBirth')
+								local timestamp = os.date("*t", os.time())
+								weaponDB.issueDate = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year
+								TriggerEvent('es:exposeDBFunctions', function(db)
+								db.createDocumentWithId("legalweapons", weaponDB, weaponDB.serialNumber, function(success)
+									if success then
+										print("* Weapon created serial["..weaponDB.serialNumber.."] name["..weaponDB.name.."] owner["..weaponDB.ownerName.."] *")
+									else
+										print("* Error: Weapon failed to be created!! *")
+									end
+								end)
+								end)
+							else
+								TriggerClientEvent("usa:notify", usource, "Inventory full!")
+							end
 						end
 					else
 						TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")

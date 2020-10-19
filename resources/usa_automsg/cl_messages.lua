@@ -3,7 +3,7 @@ local m = {
     prefix = '^5^*[USARRP] ^r^0',
     messages = {
         "Aspiring to become a police officer? The SASP is hiring! Apply today at https://www.usarrp.net ^*>^r Applications",
-        "Check out the new market place for some cool things you can get to support the server! Type ^3/store^0 to check it out!",
+        --"Check out the new market place for some cool things you can get to support the server! Type ^3/store^0 to check it out!",
         "Aspiring to become a law enforcement officer? The BCSO is hiring! Apply today at https://www.usarrp.net ^*>^r Applications",
         "The San Andreas Department of Corrections is hiring, apply at https://www.usarrp.net ^*>^r Applications",
         "Interested in working a paramedic? Join the Los Santos Fire Department now at https://www.usarrp.net ^*>^r Applications",
