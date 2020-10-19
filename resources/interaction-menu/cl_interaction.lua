@@ -674,8 +674,8 @@ AddEventHandler("emotes:showHelp", function()
 end)
 
 RegisterNetEvent("interaction:useItem")
-AddEventHandler("interaction:useItem", function(item)
-	interactionMenuUse(item.name, item)
+AddEventHandler("interaction:useItem", function(index, item)
+	interactionMenuUse(index, item.name, item)
 end)
 
 function GivePedObject(target_bone, object, x, y, z, rotX, rotY, rotZ)
@@ -785,7 +785,7 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 	local targetPlayerId = data.playerId
 	if actionName and itemName and wholeItem and targetPlayerId then
 		if actionName == "use" then
-			interactionMenuUse(itemName, wholeItem)
+			interactionMenuUse(data.index, itemName, wholeItem)
 		elseif string.find(actionName, "give") then
 			if targetPlayerId ~= 0 and distanceToClosestTargetPed <= exports["globals"]:MaxItemTradeDistance() then
 				if not string.find(itemName, "Driver") and not string.find(itemName, "Firearm") and not string.find(itemName, 'License') and not string.find(itemName, 'Certificate') then
@@ -855,7 +855,7 @@ RegisterNUICallback('moveItem', function(data, cb)
 	end
 end)
 
-function interactionMenuUse(itemName, wholeItem)
+function interactionMenuUse(index, itemName, wholeItem)
 	Citizen.CreateThread(function()
 		if string.find(itemName, "Meth") or string.find(itemName, "Uncut Cocaine") then
 			TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
@@ -1090,6 +1090,10 @@ function interactionMenuUse(itemName, wholeItem)
 			TriggerEvent("Vape:ToggleVaping")
 		elseif itemName:find("Large Firework") then
 			TriggerEvent("fireworks:placeFirework")
+		elseif itemName == "Spike Strips" then
+			local pos = GetEntityCoords(PlayerPedId(), true)
+			TriggerEvent("usa:playAnimation", "anim@move_m@trash", "pickup", -8, 1, -1, 48, 0, 0, 0, 0)
+			TriggerServerEvent("inventory:dropItem", itemName, index, pos.x, pos.y, pos.z)
 		else
 			TriggerEvent("interaction:notify", "There is no use action for that item!")
 		end

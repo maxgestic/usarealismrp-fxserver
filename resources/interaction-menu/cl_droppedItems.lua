@@ -20,6 +20,7 @@ AddEventHandler("interaction:addDroppedItem", function(item)
   if item.objectModel then
     local handle = CreateObject(GetHashKey(item.objectModel), item.coords.x, item.coords.y, item.coords.z, false, false, false)
     SetEntityAsMissionEntity(handle, true, true)
+    SetEntityHeading(handle, GetEntityHeading(PlayerPedId()))
     item.objectHandle = handle
   end
   table.insert(DROPPED_ITEMS, item)
@@ -60,7 +61,7 @@ Citizen.CreateThread(function()
         end
         if Vdist(coords.x, coords.y, coords.z, item.coords.x, item.coords.y, item.coords.z) < 3.5 then
           DrawText3Ds(item.coords.x, item.coords.y, item.coords.z + 0.2, 370, 16, '[Y] - ' .. item.name)
-          if IsControlJustPressed(1, E_KEY) and not attemptingPickup then
+          if IsControlJustPressed(1, E_KEY) and not attemptingPickup and not IsPedInAnyVehicle(ped, true) then
             attemptingPickup = true
             TriggerServerEvent("interaction:attemptPickup", item)
             break

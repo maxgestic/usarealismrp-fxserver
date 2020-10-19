@@ -217,7 +217,8 @@ var itemImages = {
   "Iron Oxide": "https://i.imgur.com/pBhnwQl.png",
   "Vape": "https://i.imgur.com/d8BS61Q.png",
   "Black Powder": "https://i.imgur.com/Zct2dcM.png",
-  "Large Firework": "https://i.imgur.com/XHhxRmG.png"
+  "Large Firework": "https://i.imgur.com/XHhxRmG.png",
+  "Spike Strips": "https://i.imgur.com/0iPbmxW.png"
 }
 
 var menuItems = [
@@ -447,6 +448,7 @@ var interactionMenu = new Vue({
         }));
       } else {
         $.post('http://interaction-menu/inventoryActionItemClicked', JSON.stringify({
+          index: index,
           wholeItem: item,
           itemName: item.name,
           actionName: action.toLowerCase(),
