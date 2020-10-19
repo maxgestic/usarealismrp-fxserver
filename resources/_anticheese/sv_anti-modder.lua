@@ -97,6 +97,8 @@ AddEventHandler('entityCreating', function(entity)
         local createdEntityModel = GetEntityModel(entity)
         if BLACKLISTED_HASHES[createdEntityModel] then
             print("[anticheese] blacklisted entity with model of " .. createdEntityModel .. " was created by src: " .. src)
+            local reason = "Spawning Entities."
+            TriggerEvent("anticheese:ViolationDetected", reason, src)
             CancelEvent()
         end
     end
