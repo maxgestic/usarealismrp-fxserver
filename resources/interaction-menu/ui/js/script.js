@@ -54,7 +54,7 @@ var itemImages = {
   "Crowbar": "http://assets.stickpng.com/thumbs/58b8364015d8273a5cab2f7b.png",
   "Hatchet": "https://cdn11.bigcommerce.com/s-w3u6iwh84c/images/stencil/500x659/products/40987/2198/FR-19inch-Axe-0836__84668.1526531213.png?c=2",
   "Wrench": "https://imgur.com/C0pRAo5.png",
-  "Machete": "https://www.bellota.com/var/site/storage/images/_aliases/large/7/7/3/5/35377-1-esl-EU/31B20.png",
+  "Machete": "https://i.imgur.com/bMxYq8T.png",
   "Pistol": "https://steamuserimages-a.akamaihd.net/ugc/29613457985625199/0D5453A0ADC32EDBADEACF8D5CBE1EF129FCA5DC/",
   "Heavy Pistol": "https://vignette.wikia.nocookie.net/saintsrow/images/9/9c/SRIV_Pistols_-_Heavy_Pistol_-_.45_Fletcher_-_Default.png/revision/latest/scale-to-width-down/350?cb=20131028193410",
   ".50 Caliber": "https://i.imgur.com/W9sFoxi.png",
