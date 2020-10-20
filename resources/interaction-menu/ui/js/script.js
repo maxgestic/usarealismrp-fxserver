@@ -52,7 +52,7 @@ var itemImages = {
   "Knife": "https://www.pngarts.com/files/3/Kitchen-Knife-Transparent-Background-PNG.png",
   "Bat": "https://www.pngarts.com/files/3/Baseball-Bat-Download-Transparent-PNG-Image.png",
   "Crowbar": "http://assets.stickpng.com/thumbs/58b8364015d8273a5cab2f7b.png",
-  "Hatchet": "https://cdn11.bigcommerce.com/s-w3u6iwh84c/images/stencil/500x659/products/40987/2198/FR-19inch-Axe-0836__84668.1526531213.png?c=2",
+  "Hatchet": "https://i.ibb.co/7R0MYwX/hatchet.png",
   "Wrench": "https://imgur.com/C0pRAo5.png",
   "Machete": "https://i.imgur.com/bMxYq8T.png",
   "Pistol": "https://steamuserimages-a.akamaihd.net/ugc/29613457985625199/0D5453A0ADC32EDBADEACF8D5CBE1EF129FCA5DC/",
