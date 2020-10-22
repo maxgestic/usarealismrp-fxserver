@@ -34,7 +34,11 @@ function CreateGarageMenu(menu, vehicles)
 	for i = 1, #vehicles do
 		-- button text --
 		local vehicle = vehicles[i]
-		local buttonText = "Retrieve " .. vehicle.make .. " " .. vehicle.model
+		local buttonText = "Retrieve " --.. vehicle.make .. " " .. vehicle.model .. " (" .. vehicle.plate .. ")"
+		if vehicle.make:len() > 0 then
+			buttonText = buttonText .. vehicle.make .. " "
+		end
+		buttonText = buttonText .. vehicle.model .. " [" .. vehicle.plate .. "]"
 		if vehicle.impounded == true then
 			buttonText = buttonText .. " (~y~Impounded~s~)"
 		elseif vehicle.stored == false then
