@@ -17,7 +17,7 @@ var itemImages = {
   "Donut": "http://25.media.tumblr.com/92c54f13df54b2440f7f5782c4504e99/tumblr_mg3rni4xx81qhy9dqo1_400.png",
   "Taco": "http://www.stickpng.com/assets/thumbs/58727fb4f3a71010b5e8ef08.png",
   "Nachos": "https://newvitruvian.com/images/nachos-transparent-big-1.png",
-  "Sea Salt & Vinegar Chips": "https://www.fritolay.com/images/default-source/blue-bag-image/lays-salt-vinegar.png?sfvrsn=411e563a_2",
+  "Sea Salt & Vinegar Chips": "https://i.imgur.com/Wk2tecx.png",
   "Cheetos": "https://imgur.com/nJxPlfa.png",
   "Doritos": "https://ui-ex.com/images/doritos-transparent-3.png",
   "Water": "https://www.freepngimg.com/thumb/water_bottle/5-2-water-bottle-transparent.png",
@@ -75,7 +75,6 @@ var itemImages = {
   "Halibut": "https://i.dlpng.com/static/png/332762_thumb.png",
   "Yellowfin Tuna" : "https://imgur.com/JQmcQLV.png",
   "Swordfish" : "https://imgur.com/7718g2G.png",
-
   "Weed Bud": "https://66.media.tumblr.com/30ff99a59894fdd9abd04712189708af/tumblr_mvyvwdxNVi1t04rb2o1_r1_400.png",
   "Packaged Weed": "https://imgur.com/QnjBptr.png",
   "Processed Sand": "https://imgur.com/GQ8TPYU.png",
@@ -218,7 +217,8 @@ var itemImages = {
   "Vape": "https://i.imgur.com/d8BS61Q.png",
   "Black Powder": "https://i.imgur.com/Zct2dcM.png",
   "Large Firework": "https://i.imgur.com/XHhxRmG.png",
-  "Spike Strips": "https://i.imgur.com/0iPbmxW.png"
+  "Spike Strips": "https://i.imgur.com/0iPbmxW.png",
+  "Heavy Shotgun": "https://i.imgur.com/JRP4gPv.png"
 }
 
 var menuItems = [
