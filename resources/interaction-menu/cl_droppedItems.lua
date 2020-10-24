@@ -21,6 +21,7 @@ AddEventHandler("interaction:addDroppedItem", function(item)
     local handle = CreateObject(GetHashKey(item.objectModel), item.coords.x, item.coords.y, item.coords.z, false, false, false)
     SetEntityAsMissionEntity(handle, true, true)
     SetEntityHeading(handle, GetEntityHeading(PlayerPedId()))
+    PlaceObjectOnGroundProperly(handle)
     item.objectHandle = handle
   end
   table.insert(DROPPED_ITEMS, item)

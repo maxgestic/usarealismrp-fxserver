@@ -190,7 +190,7 @@ AddEventHandler("inventory:dropItem", function(name, index, posX, posY, posZ)
 	DroppedActionMessage(source, name)
 	local coords = {
 		x = posX,
-		y = posY + 0.5,
+		y = posY,
 		z = posZ - 0.9
 	}
 	local char = exports["usa-characters"]:GetCharacter(source)

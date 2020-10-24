@@ -30,6 +30,9 @@ local inProperty = false
 
 local JERRY_CAN_REFUEL_TIME = 25000
 
+local SPIKE_STRIP_OBJ_SPAWN_OFFSET = {0.0, 2.8, 0.2}
+local NORMAL_OBJ_SPAWN_OFFSET = {0.0, 0.5, 0.2}
+
 local scenarios = {
 	{name = "cancel", type = "cancel", dict = "", animname = ""},
 	{name = "stop", type = "cancel", dict = "", animname = ""},
@@ -841,9 +844,15 @@ RegisterNUICallback("dropItem", function(data, cb)
 			return
 		end
 		-- remove from inventory --
-		local pos = GetEntityCoords(me, true)
+		local myped = PlayerPedId()
+		local finalPos = nil
+		if data.itemName:find("Spike Strips") then
+			finalPos = GetOffsetFromEntityInWorldCoords(myped, table.unpack(SPIKE_STRIP_OBJ_SPAWN_OFFSET)) -- in front of player
+		else
+			finalPos = GetOffsetFromEntityInWorldCoords(myped, table.unpack(NORMAL_OBJ_SPAWN_OFFSET))
+		end
 		TriggerEvent("usa:playAnimation", "anim@move_m@trash", "pickup", -8, 1, -1, 48, 0, 0, 0, 0)
-		TriggerServerEvent("inventory:dropItem", data.itemName, data.index, pos.x, pos.y, pos.z)
+		TriggerServerEvent("inventory:dropItem", data.itemName, data.index, finalPos.x, finalPos.y, finalPos.z)
 	else
 		exports.globals:notify("Can't drop that item, sorry!")
 	end
@@ -1098,7 +1107,8 @@ function interactionMenuUse(index, itemName, wholeItem)
 	elseif itemName:find("Large Firework") then
 		TriggerEvent("fireworks:placeFirework")
 	elseif itemName == "Spike Strips" then
-		local pos = GetEntityCoords(PlayerPedId(), true)
+		local myped = PlayerPedId()
+		local pos = GetOffsetFromEntityInWorldCoords(myped, table.unpack(SPIKE_STRIP_OBJ_SPAWN_OFFSET)) -- in front of player
 		TriggerEvent("usa:playAnimation", "anim@move_m@trash", "pickup", -8, 1, -1, 48, 0, 0, 0, 0)
 		TriggerServerEvent("inventory:dropItem", itemName, index, pos.x, pos.y, pos.z)
 	else
