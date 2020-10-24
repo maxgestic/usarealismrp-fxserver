@@ -1,4 +1,4 @@
-local loc = nil
+local savedHouseIndex = nil
 local bank = nil
 local shouldBePlayingAnim = false
 local dictLoaded = false
@@ -8,28 +8,24 @@ local LOCKPICK_ANIM_DICT = "anim@amb@clubhouse@tutorial@bkr_tut_ig3@"
 local LOCKPICK_ANIM_NAME = "machinic_loop_mechandplayer"
 
 RegisterNetEvent('lockpick:openlockpick')
-AddEventHandler('lockpick:openlockpick', function(location, bankLoc)
-	loc = nil
-	bank = nil
-	if location then
-		loc = location
-	elseif bankLoc then
-		bank = bankLoc
+AddEventHandler('lockpick:openlockpick', function(houseIndex)
+	if houseIndex then
+		savedHouseIndex = houseIndex
 	end
-	SetNuiFocus( true, true )
 	SendNUIMessage({
 		showPlayerMenu = 'open'
 	})
+	SetNuiFocus( true, true )
 	shouldBePlayingAnim = true
-	return
 end)
 
 RegisterNUICallback('lose', function()
-	if loc then
+	if savedHouseIndex then
 		TriggerServerEvent('lockpick:removeBrokenPick', 'Lockpick')
 	else
 		TriggerServerEvent('lockpick:removeBrokenPick', 'Advanced Pick')
 	end
+	savedHouseIndex = nil
 end)
 
 RegisterNUICallback('win', function()
@@ -38,11 +34,12 @@ RegisterNUICallback('win', function()
 		showPlayerMenu = 'close'
 	})
 	shouldBePlayingAnim = false
-	if loc then
-		TriggerServerEvent('properties:lockpickSuccessful', loc)
+	if savedHouseIndex then
+		TriggerServerEvent('properties:lockpickSuccessful', savedHouseIndex)
 	else
 		TriggerEvent('doormanager:advancedSuccess')
 	end
+	savedHouseIndex = nil
 end)
 
 RegisterNetEvent('lockpick:closehtml')
@@ -52,6 +49,7 @@ AddEventHandler('lockpick:closehtml', function()
 		showPlayerMenu = 'close'
 	})
 	shouldBePlayingAnim = false
+	savedHouseIndex = false
 end)
 
 Citizen.CreateThread(function()

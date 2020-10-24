@@ -250,78 +250,6 @@ AddEventHandler("doormanager:toggleDoorLock", function(index, locked, x, y, z)
   end
 end)
 
-RegisterNetEvent('doormanager:lockpickDoor')
-AddEventHandler('doormanager:lockpickDoor', function(lockpickItem)
-  local playerPed = PlayerPedId()
-  local playerCoords = GetEntityCoords(playerPed)
-  for i = 1, #DOORS_TO_MANAGE do
-    local door = DOORS_TO_MANAGE[i]
-    local x, y, z = door.x, door.y, door.z
-    if Vdist(playerCoords, x, y, z) < 1.0 then
-      if door.lockpickable then
-        local start_time = GetGameTimer()
-        local duration = 30000
-        -- play animation:
-        local anim = {
-          dict = "veh@break_in@0h@p_m_one@",
-          name = "low_force_entry_ds"
-        }
-        RequestAnimDict(anim.dict)
-        while not HasAnimDictLoaded(anim.dict) do
-          Wait(100)
-        end
-        local x, y, z = table.unpack(playerCoords)
-        local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-        local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-        TriggerServerEvent('911:LockpickingDoor', x, y, z, lastStreetNAME, IsPedMale(playerPed))
-        Citizen.CreateThread(function()
-          while GetGameTimer() - start_time < duration do
-            Citizen.Wait(0)
-            DisableControlAction(0, 301, true)
-            DisableControlAction(0, 86, true)
-            DisableControlAction(0, 244, true)
-            DisableControlAction(0, 245, true)
-            DisableControlAction(0, 288, true)
-            DisableControlAction(0, 79, true)
-            DisableControlAction(0, 73, true)
-            DisableControlAction(0, 37, true)
-            DisableControlAction(0, 311, true)
-            DrawTimer(start_time, duration, 1.42, 1.475, 'LOCKPICKING')
-          end
-        end)
-        while GetGameTimer() - start_time < duration do
-          Wait(0)
-          local x, y, z = table.unpack(GetEntityCoords(playerPed))
-          --print("IsEntityPlayingAnim(me, anim.dict, anim.name, 3): " .. tostring(IsEntityPlayingAnim(me, anim.dict, anim.name, 3)))
-          if not IsEntityPlayingAnim(playerPed, anim.dict, anim.name, 3) then
-                TaskPlayAnim(playerPed, anim.dict, anim.name, 8.0, 1.0, -1, 11, 1.0, false, false, false)
-                Citizen.Wait(2000)
-                ClearPedTasks(playerPed)
-                SetEntityCoords(playerPed, x, y, z - 1.0, false, false, false, false)
-              end
-          if Vdist(playerCoords, x, y, z) > 3.0 then
-            TriggerEvent("usa:notify", "Lockpick ~y~failed~s~, out of range!")
-            ClearPedTasksImmediately(playerPed)
-            return
-          end
-        end
-        if math.random() < 0.6 then
-          TriggerServerEvent('doormanager:checkDoorLock', i, door.x, door.y, door.z, true)
-          TriggerEvent("usa:notify", "Lockpick was ~y~successful~s~!")
-          return
-        else
-          TriggerEvent("usa:notify", "Lockpick has ~y~broken~s~!")
-          TriggerServerEvent("usa:removeItem", lockpickItem, 1)
-          return
-        end
-      else
-        TriggerEvent('usa:notify', 'This door cannot be lockpicked!')
-        return
-      end
-    end
-  end
- end)
-
 RegisterNetEvent('doormanager:thermiteDoor')
 AddEventHandler('doormanager:thermiteDoor', function()
     for i = 1, #DOORS_TO_MANAGE do
@@ -360,7 +288,7 @@ AddEventHandler('doormanager:advancedPick', function()
                 if math.random() >= 0.40 then
                     TriggerServerEvent('911:LockpickingDoor', x, y, z, lastStreetNAME, IsPedMale(playerPed))
                 end
-                TriggerEvent('lockpick:openlockpick', nil, 'bank')
+                TriggerEvent('lockpick:openlockpick')
             else
                 TriggerEvent('usa:notify', 'You cannot use advanced lockpicks here!')
                 return
