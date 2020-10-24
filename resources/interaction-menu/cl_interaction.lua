@@ -1035,11 +1035,12 @@ function interactionMenuUse(index, itemName, wholeItem)
 				TriggerEvent("usa:notify", "Door is already unlocked!")
 			end
 		else
-			TriggerEvent('doormanager:lockpickDoor', wholeItem)
 			TriggerServerEvent('properties:lockpickHouse', GetEntityCoords(playerPed), wholeItem)
 		end
 	elseif string.find(itemName, 'Advanced Pick') then
-		TriggerEvent('doormanager:advancedPick', wholeItem)
+		CreateThread(function()
+			TriggerEvent('doormanager:advancedPick')
+		end)
 	elseif string.find(itemName, "Binoculars") then
 		TriggerEvent("binoculars:Activate")
 		-------------------

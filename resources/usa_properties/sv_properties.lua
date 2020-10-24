@@ -1544,7 +1544,7 @@ RegisterServerEvent('properties:lockpickHouse')
 AddEventHandler('properties:lockpickHouse', function(playerCoords, lockpickItem)
 	local usource = source
 	exports.globals:getNumCops(function(numCops)
-		if numCops >= 1 then
+		if numCops >= 2 then
 			for i = 1, #burglaryHouses do
 				if find_distance(playerCoords, burglaryHouses[i]) < 2.0 then
 					if (burglaryHouses[i].cooldown[usource] and getMinutesFromTime(burglaryHouses[i].cooldown[usource]) > 240) or not burglaryHouses[i].cooldown[usource] then
