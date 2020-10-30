@@ -2,13 +2,6 @@ local hasAlreadySpawnedOnce = false
 
 local menuOpen = false
 
-local open_menu_spawn_coords = {
-	x = -1236.653,
-	y = 4392.405,
-	z = 19.532,
-	angle = 285.343
-}
-
 local spawn_coords_closed_menu = {
 	x = 177.596,
 	y = 6636.183,
@@ -16,11 +9,7 @@ local spawn_coords_closed_menu = {
 	angle = 168.2
 }
 
-local while_menu_open_location = {
-	x = 751.31121826172,
-	y = 6454.3813476563,
-	z = 31.926473617554
-}
+local while_menu_open_location = nil
 
 local swap_locations = {
 	{name="Clothes Store", x = 1.27486, y = 6511.89, z = 30.8778}, -- paleto bay
@@ -42,6 +31,126 @@ local swap_locations = {
 }
 
 local camera = nil
+
+local CAMERA_LOCATIONS = {
+	-- note: ROT order is pitch, roll, yaw (- goes right, + goes left)
+	{
+		COORDS = {550.49926757813, 6458.6333007813, 37.48811340332},
+		ROT = {0.0, 0.0, -40.0},
+		PED_COORDS = {x = 569.42376708984, y = 6443.505859375, z = 47.761920928955}
+	},
+	{
+		COORDS = {548.78338623047, 6475.6381835938, 165.71755981445},
+		ROT = {0.0, 0.0, -150.0},
+		PED_COORDS = {x = 569.42376708984, y = 6443.505859375, z = 47.761920928955}
+	},
+	{
+		COORDS = {548.78338623047, 6475.6381835938, 165.71755981445},
+		ROT = {0.0, 0.0, 150.0},
+		PED_COORDS = {x = 569.42376708984, y = 6443.505859375, z = 47.761920928955}
+	},
+	{
+		COORDS = {548.78338623047, 6475.6381835938, 165.71755981445},
+		ROT = {0.0, 0.0, 70.0},
+		PED_COORDS = {x = 569.42376708984, y = 6443.505859375, z = 47.761920928955}
+	},
+	{
+		COORDS = {-421.22219848633, 5952.3671875, 46.48246383667},
+		ROT = {0.0, 0.0, 150.0},
+		PED_COORDS = {x = -507.51861572266, y = 5959.2451171875, z = 98.814010620117}
+	},
+	{
+		COORDS = {-803.09161376953, 6870.9780273438, 14.492477416992},
+		ROT = {0.0, 0.0, -120.0},
+		PED_COORDS = {x = -1186.3214111328, y = 7199.755859375, z = 208.49247741699}
+	},
+	{
+		COORDS = {85.910736083984, 6803.1103515625, 22.514495849609},
+		ROT = {0.0, 0.0, -75.0},
+		PED_COORDS = {x = 116.60729217529, y = 6814.64453125, z = 101.51449584961}
+	},
+	{
+		COORDS = {2320.044921875, 3873.7338867188, 50.840881347656},
+		ROT = {0.0, 0.0, -50.0},
+		PED_COORDS = {x = 2326.9506835938, y = 3795.208984375, z = 36.840881347656}
+	},
+	{
+		COORDS = {1494.2039794922, 3901.2141113281, 39.050464630127},
+		ROT = {0.0, 0.0, -30.0},
+		PED_COORDS = {x = 1546.025390625, y = 3812.3876953125, z = 30.126842498779}
+	},
+	{
+		COORDS = {-1836.6252441406, 4596.2880859375, 30.607460021973},
+		ROT = {0.0, 0.0, -110.0},
+		PED_COORDS = {x = -1807.9621582031, y = 4503.0913085938, z = 100.60746002197}
+	},
+	{
+		COORDS = {3921.3442382813, 4393.05859375, 21.41202545166},
+		ROT = {0.0, 0.0, -110.0},
+		PED_COORDS = {x = 4064.6037597656, y = 4486.98046875, z = 5.9689440727234}
+	},
+	{
+		COORDS = {3947.9865722656, 4376.9643554688, 10.30509185791},
+		ROT = {-50.0, 0.0, -110.0},
+		PED_COORDS = {x = 4115.4370117188, y = 4472.8271484375, z = 9.0813055038452}
+	},
+	{
+		COORDS = {3947.9865722656, 4376.9643554688, 10.30509185791},
+		ROT = {0.0, 0.0, -45.0}, -- pitch, roll, yaw
+		PED_COORDS = {x = 4115.4370117188, y = 4472.8271484375, z = 9.0813055038452}
+	},
+	{
+		COORDS = {3947.9865722656, 4376.9643554688, 10.30509185791},
+		ROT = {-40.0, 0.0, -70.0}, -- pitch, roll, yaw
+		PED_COORDS = {x = 4115.4370117188, y = 4472.8271484375, z = 9.0813055038452}
+	},
+	{
+		COORDS = {-1758.8270263672, 2598.3557128906, 18.951589584351},
+		ROT = {0.0, 0.0, 0.0}, -- pitch, roll, yaw (- goes right, + goes left)
+		PED_COORDS = {x = -2120.4187011719, y = 2552.1657714844, z = 3.0172595977783}
+	},
+	{
+		COORDS = {104.64833068848, -1006.0614624023, 51.410491943359},
+		ROT = {0.0, 0.0, -60.0}, -- pitch, roll, yaw (- goes right, + goes left)
+		PED_COORDS = {x = 92.386772155762, y = -969.20666503906, z = 85.287590026855}
+	},
+	{
+		COORDS = {539.73193359375, -577.5732421875, 90.49142456055},
+		ROT = {-45.0, 0.0, -10.0}, -- pitch, roll, yaw (- goes right, + goes left)
+		PED_COORDS = {x = 530.17596435547, y = -453.39477539063, z = 24.799680709839}
+	},
+	{
+		COORDS = {-239.17681884766, -857.51593017578, 211.49209594727},
+		ROT = {0.0, 0.0, 45.0}, -- pitch, roll, yaw (- goes right, + goes left)
+		PED_COORDS = {x = -239.0470123291, y = -829.11236572266, z = 125.25695800781}
+	},
+	{
+		COORDS = {-239.17681884766, -825.51593017578, 211.49209594727},
+		ROT = {0.0, 0.0, -60.0}, -- pitch, roll, yaw (- goes right, + goes left)
+		PED_COORDS = {x = -239.0470123291, y = -829.11236572266, z = 125.25695800781}
+	},
+	{
+		COORDS = {-1178.3681640625, -836.81439208984, 25.273780822754},
+		ROT = {-35.0, 0.0, -143.0}, -- pitch, roll, yaw (- goes right, + goes left)
+		PED_COORDS = {x = -1244.6948242188, y = -904.13238525391, z = 65.331062316895}
+	},
+	{
+		COORDS = {55.317489624023, -1908.0682373047, 21.507209777832},
+		ROT = {0.0, 0.0, 0.0}, -- pitch, roll, yaw (- goes right, + goes left)
+		PED_COORDS = {x = 9.9323348999023, y = -1911.8826904297, z = 22.138774871826}
+	},
+	{
+		COORDS = {56.772190093994, -1909.2546386719, 21.606565475464},
+		ROT = {0.0, 0.0, -75.0}, -- pitch, roll, yaw (- goes right, + goes left)
+		PED_COORDS = {x = 9.9323348999023, y = -1911.8826904297, z = 22.138774871826}
+	},
+	{
+		COORDS = {-14.769966125488, -1405.4432373047, 32.492092132568},
+		ROT = {-10.0, 0.0, 90.0}, -- pitch, roll, yaw (- goes right, + goes left)
+		PED_COORDS = {x = -2.1343140602112, y = -1394.7618408203, z = 33.996654510498}
+	}
+	
+}
 
 RegisterNetEvent("character:swap--check-distance")
 AddEventHandler("character:swap--check-distance", function()
@@ -299,8 +408,10 @@ end
 
 function MakeCamera()
 	camera = CreateCam("DEFAULT_SCRIPTED_CAMERA", true)
-	SetCamCoord(camera, 548.78338623047, 6475.6381835938, 165.71755981445)
-	SetCamRot(camera, -25.0, 0.0, 80.00, true)
+	local randomCam = CAMERA_LOCATIONS[math.random(#CAMERA_LOCATIONS)]
+	while_menu_open_location = randomCam.PED_COORDS
+	SetCamCoord(camera, table.unpack(randomCam.COORDS))
+	SetCamRot(camera, randomCam.ROT[1], randomCam.ROT[2], randomCam.ROT[3], 2)
 	RenderScriptCams(true, false, 0, 1, 0)
 end
 
@@ -325,7 +436,7 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(1)
 		if menuOpen then
-			SetEntityCoords(GetPlayerPed(-1), while_menu_open_location.x, while_menu_open_location.y, while_menu_open_location.z, open_menu_spawn_coords.angle, 0, 0, 1)
+			SetEntityCoords(GetPlayerPed(-1), while_menu_open_location.x, while_menu_open_location.y, while_menu_open_location.z, (while_menu_open_location.angle or 0.0), 0, 0, 1)
 		end
 	end
 end)
