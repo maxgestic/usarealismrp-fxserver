@@ -1156,7 +1156,7 @@ TriggerEvent('es:addGroupCommand', 'tempban', "mod", function(source, args, char
 			print("player banned!")
 			-- drop player from session
 			--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
-			DropPlayer(targetPlayer, "Temp Banned: " .. reason .. " This ban is in place for " .. time .. " hour(s).")
+			DropPlayer(targetPlayer, "Temp Banned: " .. reason .. " This ban is in place for " .. time .. " hour(s). Banned by: " .. banner)
 		end)
 	end)
 end, {
@@ -1475,7 +1475,7 @@ TriggerEvent('es:addGroupCommand', 'test', "owner", function(source, args, char)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	--local lsd = {name = "LSD Vile", price = 6, type = "drug", quantity = 1, legality = "illegal", weight = 5.0, objectModel = "prop_cs_pour_tube"}
 	local advancedPick = {name = 'Advanced Pick', type = 'illegal', price = 800, legality = 'illegal', quantity = 1, weight = 7.0}
-	--local lockpick = {name = 'Lockpick', type = 'misc', price = 150, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(0, 7)}
+	local lockpick = {name = 'Lockpick', type = 'misc', price = 150, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(0, 7)}
 	local drill = {
         name = "Drill",
         legality = "legal",
@@ -1491,14 +1491,23 @@ TriggerEvent('es:addGroupCommand', 'test', "owner", function(source, args, char)
 		type = "misc",
 		weight = 20
 	}
+	local bodyArmor = { name = "Body Armor", type = "misc", price = 1000, legality = "legal", quantity = 1, weight = 15, objectModel = "prop_bodyarmour_03" }
+	local chemical = {
+		name = "Red Phosphorus",
+		legality = "illegal",
+		quantity = 1,
+		type = "chemical",
+		weight = 6,
+		objectModel = "bkr_prop_meth_acetone"
+	}
 
 	--if char.canHoldItem(thermite) then
-		char.giveItem(thermite)
+		char.giveItem(advancedPick)
 	--end
 
 	-- TriggerClientEvent("interaction:equipWeapon", source, {hash = GetHashKey("WEAPON_RPG")}, true)
 
-	-- TriggerClientEvent("testing:spawnObject", source, "bkr_prop_meth_acetone")
+	--TriggerClientEvent("testing:spawnObject", source, "stt_prop_stunt_track_sh45_a")
 
 	--TriggerClientEvent("testtest", source)
 end, {

@@ -219,9 +219,12 @@ end)
 
 RegisterNetEvent("testing:spawnObject")
 AddEventHandler("testing:spawnObject", function(obj)
+	if type(obj) == "string" then
+		obj = GetHashKey(obj)
+	end
 	print("spawning obj: " .. obj)
 	local pos = GetEntityCoords(GetPlayerPed(-1))
-	local prop = CreateObject(GetHashKey(obj), pos.x, pos.y + 0.5, pos.z - 0.9, true, false, true)
+	local prop = CreateObject(obj, pos.x, pos.y + 0.5, pos.z - 0.9, true, false, true)
 end)
 
 local heading = 0
