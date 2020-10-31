@@ -7,6 +7,7 @@ local WEAPONS = {
 	{ name = "SMG", hash = 736523883, rank = 2, price = 500, weight = "30" },
 	{ name = "MK2 Pump Shotgun", hash = 1432025498, rank = 2, price = 500, weight = "30" },
 	{ name = "MK2 Carbine Rifle", hash = 4208062921, rank = 2, price = 500, weight = "30"},
+	{ name = "SMG MK2", hash = 0x78A97CD0, price = 750, rank = 2, weight = "25" },
 	{ hash = 100416529, name = "Marksman Rifle", rank = 2, weight = "40", price = 1000},
 	{ name = "Spike Strips", rank = 3 },
 }

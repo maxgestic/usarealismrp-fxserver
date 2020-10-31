@@ -8,6 +8,7 @@ local armoryItems = {
     { name = "Combat Pistol", hash = 1593441988, price = 300, weight = 5 },
     { name = "Stun Gun", hash = 911657153, price = 400, weight = 5 },
     { name = "SMG", hash = 736523883, price = 750, weight = 25 },
+    { name = "SMG MK2", hash = 0x78A97CD0, price = 750, weight = 25 },
     { name = "MK2 Pump Shotgun", hash = 1432025498, price = 700, weight = 15 },
     { name = "MK2 Carbine Rifle", hash = 4208062921, price = 700, weight = 15, minRank = 2 },
     { name = "Spike Strips", price = 300 }
