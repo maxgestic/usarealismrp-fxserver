@@ -1055,6 +1055,11 @@ DP.Emotes = {
        EmoteLoop = true,
        EmoteMoving = true,
    }},
+   ["shag"] = {"misscarsteal2pimpsex", "shagloop_pimp", "Shag", AnimationOptions =
+   {
+       EmoteLoop = true,
+       EmoteMoving = true,
+   }},
    ["smell"] = {"move_p_m_two_idles@generic", "fidget_sniff_fingers", "Smell", AnimationOptions =
    {
        EmoteLoop = true,
