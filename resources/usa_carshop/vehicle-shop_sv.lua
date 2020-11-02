@@ -246,7 +246,7 @@ local vehicleShopItems = {
 			{make = "Grotti", model = "Visione", price = 795794, hash = "visione", storage_capacity = 110.0},
 			{make = "Dewbauchee", model = "Vagner", price = 884638, hash = "vagner", storage_capacity = 110.0},
 			{make = "Principe", model = "Deveste Eight", price = 1200000, hash = "deveste", storage_capacity = 110.0},
-			{make = "Overflood", model = "Entity XXR", price = 862000, hash = "entity2", storage_capacity = 110.0},
+			{make = "Overflod", model = "Entity XXR", price = 862000, hash = "entity2", storage_capacity = 110.0},
 		},
 		["Classic"] = {
 			{make = "Declasse", model = "Tornado", price = 10250, hash = 464687292, storage_capacity = 150.0},
