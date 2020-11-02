@@ -1,5 +1,14 @@
 const characterSelectionApp = new Vue({
   el: "#app",
+  created() {
+    window.addEventListener('keydown', (e) => {
+      if (e.key == "ArrowLeft") {
+        this.selectLeft()
+      } else if (e.key == "ArrowRight") {
+        this.selectRight()
+      }
+    });
+  },
   data: {
 		page: "list",
 		characters: [],
@@ -8,6 +17,7 @@ const characterSelectionApp = new Vue({
 			show: false
 		},
     selectedCharacter: null,
+    selectedCharIndex: null,
     selectedSpawn: null
   },
   methods: {
@@ -77,20 +87,15 @@ const characterSelectionApp = new Vue({
       $.post('http://character-selection/disconnect', JSON.stringify({}));
     },
     selectCharacter: function(charIndex) {
+      this.selectedCharIndex = charIndex;
       this.selectedCharacter = this.characters[charIndex];
       var selectedChar = this.selectedCharacter;
-      /* Highlight border */
       $('.character').each(function () {
         var char = $(this);
         if (char.attr("data-id") == selectedChar.id) {
-          char.addClass("selected");
-        } else {
-          char.removeClass("selected");
+          char[0].scrollIntoView(false)
         }
       });
-      /* Enable appropriate buttons */
-      $("button#select").removeClass("disabled");
-      $("button#delete").removeClass("disabled");
     },
     selectSpawn: function(spawn) {
       this.selectedSpawn = spawn;
@@ -111,6 +116,23 @@ const characterSelectionApp = new Vue({
         name: this.selectedCharacter.name,
         spawn: this.selectedSpawn
       }));
+      this.page = "list"
+    },
+    selectRight: function() {
+      if (this.page == "list") {
+        this.selectedCharIndex += 1
+        if (this.selectedCharIndex >= this.characters.length)
+          this.selectedCharIndex = 0
+        this.selectCharacter(this.selectedCharIndex)
+      }
+    },
+    selectLeft: function() {
+      if (this.page == "list") {
+        this.selectedCharIndex -= 1
+        if (this.selectedCharIndex < 0)
+          this.selectedCharIndex = this.characters.length - 1
+        this.selectCharacter(this.selectedCharIndex)
+      }
     }
   },
   computed: {
@@ -131,22 +153,27 @@ const characterSelectionApp = new Vue({
   }
 })
 
-/* Listen for events from lua script */
 document.onreadystatechange = () => {
   if (document.readyState === "complete") {
-      window.addEventListener('message', function(event) {
-				var eventType = event.data.type;
-          if (eventType == "toggleMenu") {
-            if (event.data.open == true){
-              characterSelectionApp.characters = event.data.characters;
-              document.body.style.display = "flex";
+    /* Listen for events from lua script */
+    window.addEventListener('message', function(event) {
+      var eventType = event.data.type;
+        if (eventType == "toggleMenu") {
+          if (event.data.open == true){
+            characterSelectionApp.characters = event.data.characters;
+            if (event.data.characters.length > 0) {
+              characterSelectionApp.selectedCharacter = event.data.characters[0]
+              characterSelectionApp.selectedCharIndex = 0
             }
-            else
-						  document.body.style.display = "none";
-					} else if (eventType == "displayGUI") {
-            document.body.style.display = event.data.open = "flex";
+            document.body.style.display = "flex";
           }
-      });
+          else
+            document.body.style.display = "none";
+        } else if (eventType == "displayGUI") {
+          document.body.style.display = event.data.open = "flex";
+          $(".characters").scrollLeft(0)
+        }
+    });
   };
 };
 

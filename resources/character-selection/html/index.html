@@ -11,7 +11,7 @@
 		<div class="notification" v-if="showNotification">{{ notification.msg }}</div>
 		<div class="body">
 			<div class="section characters dragscroll" v-show="page == 'list'">
-				<div class="character" v-for="(character, index) in characters" @click="selectCharacter(index)" v-bind:data-id="character.id">
+				<div class="character" v-for="(character, index) in characters" @click="selectCharacter(index)" v-bind:data-id="character.id" v-bind:class="{selected: selectedCharIndex == index}">
 					<h3><b>First Name:</b> {{ character.name.first }}</h3>
 					<h3><b>Last Name:</b> {{ character.name.last }}</h3>
 					<h3 style="padding-top: 25px"><b>Cash:</b> <span>$</span>{{ character.money | displayMoney }}</h3>
@@ -67,8 +67,8 @@
 				<button class="disconnect" v-if="page == 'list'" @click="disconnect">Disconnect</button>
 			</a>
 			<button id="birth" v-if="page == 'create'" @click="createCharacter">Create Character</button>
-			<button id="delete" class="disabled" v-if="page == 'list'" @click="deleteCharacter">Delete Character</button>
-			<button id="select" class="disabled" v-if="page == 'list'" @click="page = 'spawn'">Select Character</button>
+			<button id="delete" v-bind:class="{disabled: !selectedCharacter}" v-if="page == 'list'" @click="deleteCharacter">Delete Character</button>
+			<button id="select" v-bind:class="{disabled: !selectedCharacter}" v-if="page == 'list'" @click="page = 'spawn'">Select Character</button>
 			<button id="spawn-select-back" v-if="page == 'spawn'" @click="page = 'list'">Back</button>
 			<button id="go" class="disabled" v-if="page == 'spawn'" @click="spawnCharacter()">Go &#10095;</button>
 		</div>
