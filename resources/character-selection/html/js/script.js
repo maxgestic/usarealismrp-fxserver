@@ -6,6 +6,24 @@ const characterSelectionApp = new Vue({
         this.selectLeft()
       } else if (e.key == "ArrowRight") {
         this.selectRight()
+      } else if (e.key == "Enter") {
+        if (this.page == "list") {
+          if (this.selectedCharIndex == this.characters.length) {
+            this.page = "create" // new char
+          } else {
+            this.page = "spawn" // select a char
+          }
+        } else if (this.page == "spawn") {
+          if (this.selectedSpawn && this.selectedCharacter) {
+            this.spawnCharacter()
+          }
+        } else if (this.page == "create") {
+          this.createCharacter()
+        }
+      } else if (e.key == "Backspace") {
+        if (this.page == "create" || this.page == "spawn") {
+          this.page = "list"
+        }
       }
     });
   },
@@ -88,14 +106,18 @@ const characterSelectionApp = new Vue({
     },
     selectCharacter: function(charIndex) {
       this.selectedCharIndex = charIndex;
-      this.selectedCharacter = this.characters[charIndex];
-      var selectedChar = this.selectedCharacter;
-      $('.character').each(function () {
-        var char = $(this);
-        if (char.attr("data-id") == selectedChar.id) {
-          char[0].scrollIntoView(false)
-        }
-      });
+      if (this.selectedCharIndex != this.characters.length) {
+        this.selectedCharacter = this.characters[charIndex];
+        var selectedChar = this.selectedCharacter;
+        $('.character').each(function () {
+          var char = $(this);
+          if (char.attr("data-id") == selectedChar.id) {
+            char[0].scrollIntoView(false)
+          }
+        });
+      } else {
+        $("#new")[0].scrollIntoView(false)
+      }
     },
     selectSpawn: function(spawn) {
       this.selectedSpawn = spawn;
@@ -117,20 +139,25 @@ const characterSelectionApp = new Vue({
         spawn: this.selectedSpawn
       }));
       this.page = "list"
+      this.selectedCharacter = null
+      this.selectedCharIndex = 0
+      this.selectedSpawn = null
     },
     selectRight: function() {
       if (this.page == "list") {
         this.selectedCharIndex += 1
-        if (this.selectedCharIndex >= this.characters.length)
-          this.selectedCharIndex = 0
+        if (this.selectedCharIndex >= this.characters.length + 1)
+          this.selectedCharIndex = 0 // to beginning of list
         this.selectCharacter(this.selectedCharIndex)
       }
     },
     selectLeft: function() {
       if (this.page == "list") {
         this.selectedCharIndex -= 1
-        if (this.selectedCharIndex < 0)
-          this.selectedCharIndex = this.characters.length - 1
+        if (this.selectedCharIndex < 0) {
+          this.selectedCharIndex = this.characters.length // to new char button
+          $("#new")[0].scrollIntoView(false)
+        }
         this.selectCharacter(this.selectedCharIndex)
       }
     }
@@ -144,7 +171,13 @@ const characterSelectionApp = new Vue({
   				return this.notification.show;
   			}
       }
-		}
+    },
+    selectButtonText() {
+      if (this.selectedCharIndex == this.characters.length)
+        return "Create Character"
+      else
+        return "Select Character"
+    }
   },
   filters: {
     displayMoney: function(value) {
