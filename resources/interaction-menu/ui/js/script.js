@@ -218,7 +218,8 @@ var itemImages = {
   "Black Powder": "https://i.imgur.com/Zct2dcM.png",
   "Large Firework": "https://i.imgur.com/XHhxRmG.png",
   "Spike Strips": "https://i.imgur.com/0iPbmxW.png",
-  "Heavy Shotgun": "https://i.imgur.com/JRP4gPv.png"
+  "Heavy Shotgun": "https://i.imgur.com/JRP4gPv.png",
+  "SMG MK2": "https://i.imgur.com/sN9udjW.png",
 }
 
 var menuItems = [
