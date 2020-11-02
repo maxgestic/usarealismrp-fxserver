@@ -209,8 +209,7 @@ local vehicleShopItems = {
 			{make = "Bravado", model = "Buffalo S", price = 60000, hash = 736902334, storage_capacity = 135.0},
 			{make = "Annis", model = "Elegy RH8", price = 90000, hash = -566387422, storage_capacity = 145.0},
 			{make = "Bravado", model = "Banshee 990R", price = 100000, hash = 633712403, storage_capacity = 100.0},
-			{make = "Lampadati", model = "Tropos Rallye", price = 70000, hash = "tropos", storage_capacity = 100.0},
-			{make = "Ubermacht", model = "Revolter", price = 55000, hash = "revolter", storage_capacity = 100.0},
+			{make = "Lampadati", model = "Tropos Rallye", price = 70000, hash = "tropos", storage_capacity = 100.0}
 		},
 		["Supers"] = {
 			{make = "Pegassi", model = "Infernus", price = 368621, hash = 418536135, storage_capacity = 100.0},
