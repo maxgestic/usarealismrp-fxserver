@@ -26,7 +26,7 @@ local SETTINGS = {
       ["w_sb_microsmg"] = 324215364,
       ["w_sb_assaultsmg"] = -270015777,
       ["w_sb_smg"] = 736523883,
-      ["w_sb_smgmk2"] = GetHashKey("WEAPON_SMGMk2"),
+      ["w_sb_smgmk2"] = GetHashKey("WEAPON_SMG_MK2"),
       ["w_sb_gusenberg"] = 1627465347,
       -- sniper rifles:
       ["w_sr_sniperrifle"] = 100416529,
