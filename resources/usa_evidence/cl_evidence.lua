@@ -37,6 +37,11 @@ local EVIDENCE_DESTROY_TIME = 15000
 
 local POLL_INTERVAL_SECONDS = 5
 
+local PICK_UP_ANIMATION = {
+	DICT = "amb@prop_human_bum_bin@idle_b",
+	NAME = "idle_d"
+}
+
 RegisterNetEvent('evidence:updateData')
 AddEventHandler('evidence:updateData', function(key, value)
 	playerData[key] = value
@@ -317,14 +322,15 @@ Citizen.CreateThread(function()
 			for i = 1, #droppedEvidence do
 				local item = droppedEvidence[i]
 				if Vdist(playerCoords, item.coords) < 1.0 then
+					exports.globals:loadAnimDict(PICK_UP_ANIMATION.DICT)
 					if onDuty then
-						RequestAnimDict("amb@prop_human_bum_bin@idle_b")
-						while not HasAnimDictLoaded("amb@prop_human_bum_bin@idle_b") do Citizen.Wait(100) end
-						TaskPlayAnim(playerPed,"amb@prop_human_bum_bin@idle_b","idle_d", 100.0, 200.0, 0.3, 120, 0.2, 0, 0, 0)
 						local beginTime = GetGameTimer()
 						while GetGameTimer() - beginTime < 3000 do
 							DrawTimer(beginTime, 3000, 1.42, 1.475, 'COLLECTING')
-							Citizen.Wait(0)
+							if not IsEntityPlayingAnim(playerPed, PICK_UP_ANIMATION.DICT, PICK_UP_ANIMATION.NAME, 3) and not IsPedInAnyVehicle(playerPed, true) then
+								TaskPlayAnim(playerPed,PICK_UP_ANIMATION.DICT, PICK_UP_ANIMATION.NAME, 100.0, 200.0, 0.3, 120, 0.2, 0, 0, 0)
+							end
+							Wait(0)
 						end
 						ClearPedTasks(playerPed)
 						local street = string.upper(string.sub(GetStreetNameFromHashKey(GetStreetNameAtCoord(table.unpack(item.coords))), 1, 3))
@@ -346,14 +352,14 @@ Citizen.CreateThread(function()
 							end
 						end
 					else
-						RequestAnimDict("amb@prop_human_bum_bin@idle_b")
-						while not HasAnimDictLoaded("amb@prop_human_bum_bin@idle_b") do Citizen.Wait(100) end
-						TaskPlayAnim(playerPed,"amb@prop_human_bum_bin@idle_b","idle_d", 100.0, 200.0, 0.3, 120, 0.2, 0, 0, 0)
 						local beginTime = GetGameTimer()
 						discardingEvidence = true
 						while GetGameTimer() - beginTime < EVIDENCE_DESTROY_TIME do
 							DrawTimer(beginTime, EVIDENCE_DESTROY_TIME, 1.42, 1.475, 'DESTROYING')
-							Citizen.Wait(0)
+							if not IsEntityPlayingAnim(playerPed, PICK_UP_ANIMATION.DICT, PICK_UP_ANIMATION.NAME, 3) and not IsPedInAnyVehicle(playerPed, true) then
+								TaskPlayAnim(playerPed, PICK_UP_ANIMATION.DICT, PICK_UP_ANIMATION.NAME, 100.0, 200.0, 0.3, 120, 0.2, 0, 0, 0)
+							end
+							Wait(0)
 						end
 						ClearPedTasks(playerPed)
 						TriggerEvent('usa:notify', 'Evidence has been destroyed.')
