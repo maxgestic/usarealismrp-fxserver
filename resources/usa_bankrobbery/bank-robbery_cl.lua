@@ -45,32 +45,38 @@ Citizen.CreateThread(function()
 	while true do
 		local playerPed = PlayerPedId()
 		local playerCoords = GetEntityCoords(playerPed)
-		VaultDoor = GetClosestObjectOfType(playerCoords.x, playerCoords.y, playerCoords.z, 100.0, 961976194, 0, 0, 0)
-		if VaultDoor ~= nil and VaultDoor ~= 0 then
-			FreezeEntityPosition(VaultDoor, true)
-			-- draw 3d text --
-			for i = 1, #bankCoords do
-				if Vdist(playerCoords, bankCoords[i].coords.x, bankCoords[i].coords.y, bankCoords[i].coords.z) < 5.0 then
-					DrawText3D(bankCoords[i].coords.x, bankCoords[i].coords.y, bankCoords[i].coords.z, '[HOLD K] - Rob Bank')
+
+		for i = 1, #bankCoords do
+			local dist = Vdist(playerCoords, bankCoords[i].coords.x, bankCoords[i].coords.y, bankCoords[i].coords.z)
+			if dist < 50.0 then
+				if not VaultDoor or not DoesEntityExist(VaultDoor) then
+					VaultDoor = GetClosestObjectOfType(playerCoords.x, playerCoords.y, playerCoords.z, 100.0, 961976194, 0, 0, 0)
+					if DoesEntityExist(VaultDoor) then
+						FreezeEntityPosition(VaultDoor, true)
+					end
 				end
-			end
-			if Vdist(playerCoords, clerkCoords.x, clerkCoords.y, clerkCoords.z) < 5.0 then
-				DrawText3D(clerkCoords.x, clerkCoords.y, clerkCoords.z, '[E] - Bank Clerk')
-			end
-			-- rob --
-			for i = 1, #bankCoords do
-				if IsControlJustPressed(0, 311) and Vdist(playerCoords, bankCoords[i].coords.x, bankCoords[i].coords.y, bankCoords[i].coords.z) < 2.0 then
-					Wait(500)
-					if IsControlPressed(0, 311) then
-						TriggerServerEvent('bank:beginRobbery', bankCoords[i])
+				if dist < 5.0 then
+					DrawText3D(bankCoords[i].coords.x, bankCoords[i].coords.y, bankCoords[i].coords.z, '[HOLD K] - Rob Bank')
+					if IsControlJustPressed(0, 311) then
+						Citizen.CreateThread(function()
+							Wait(500)
+							if IsControlPressed(0, 311) then
+								TriggerServerEvent('bank:beginRobbery', bankCoords[i])
+							end
+						end)
 					end
 				end
 			end
-			-- clerk tip --
-			if IsControlJustPressed(0, 38) and Vdist(playerCoords, clerkCoords.x, clerkCoords.y, clerkCoords.z) < 2.0 then
+		end
+
+		local clerkDist = Vdist(playerCoords, clerkCoords.x, clerkCoords.y, clerkCoords.z)
+		if clerkDist < 5.0 then
+			DrawText3D(clerkCoords.x, clerkCoords.y, clerkCoords.z, '[E] - Bank Clerk')
+			if IsControlJustPressed(0, 38) and clerkDist < 2.0 then
 				TriggerServerEvent('bank:clerkTip')
 			end
 		end
+
 		for i = 1, #drilling_spots do
 			local dist = Vdist(playerCoords.x, playerCoords.y, playerCoords.z, drilling_spots[i].x, drilling_spots[i].y, drilling_spots[i].z)
 			if dist < 1 then
@@ -161,26 +167,40 @@ end)
 
 RegisterNetEvent('bank:resetVault')
 AddEventHandler('bank:resetVault', function()
-	openVault =  false
+	local playerCoords = GetEntityCoords(PlayerPedId())
+	VaultDoor = GetClosestObjectOfType(playerCoords.x, playerCoords.y, playerCoords.z, 100.0, 961976194, 0, 0, 0)
 	if DoesEntityExist(VaultDoor) then
 		SetEntityHeading(VaultDoor, 160.0)
 		FreezeEntityPosition(VaultDoor, true)
 	end
+	openVault =  false
 end)
 
 Citizen.CreateThread(function()
 	while true do
 		if openVault then
 			local playerPed = PlayerPedId()
-			local CurrentHeading = GetEntityHeading(VaultDoor)
-			if round(CurrentHeading, 1) == 158.7 then
-				CurrentHeading = CurrentHeading - 0.1
-			end
+			local playerCoords = GetEntityCoords(playerPed)
+			for i = 1, #bankCoords do
+				local dist = Vdist(playerCoords, bankCoords[i].coords.x, bankCoords[i].coords.y, bankCoords[i].coords.z)
+				if dist < 30.0 then
+					if DoesEntityExist(VaultDoor) then
+						local CurrentHeading = GetEntityHeading(VaultDoor)
+						if round(CurrentHeading, 1) == 158.7 then
+							CurrentHeading = CurrentHeading - 0.1
+						end
 
-			while round(CurrentHeading, 1) ~= 0.0 do -- slowly open door
-				Wait(0)
-				SetEntityHeading(VaultDoor, round(CurrentHeading, 1) - 0.4)
-				CurrentHeading = GetEntityHeading(VaultDoor)
+						while round(CurrentHeading, 1) ~= 0.0 do -- slowly open door
+							Wait(0)
+							SetEntityHeading(VaultDoor, round(CurrentHeading, 1) - 0.4)
+							CurrentHeading = GetEntityHeading(VaultDoor)
+						end
+
+						FreezeEntityPosition(VaultDoor, true)
+					else
+						VaultDoor = GetClosestObjectOfType(playerCoords.x, playerCoords.y, playerCoords.z, 100.0, 961976194, 0, 0, 0)
+					end
+				end
 			end
 		end
 		Wait(0)
