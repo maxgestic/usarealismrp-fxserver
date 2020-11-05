@@ -52,6 +52,8 @@ local exempt_evidence = {
 	vector3(-781.77, 322.00, 211.99)
 }
 
+local NEARBY_DISTANCE = 100
+
 TriggerEvent('es:addJobCommand', 'breathalyze', { "police", "sheriff", "ems", "corrections" }, function(source, args, char)
 	TriggerClientEvent("evidence:breathalyzeNearest", source)
 end, {
@@ -119,7 +121,6 @@ AddEventHandler('evidence:newCasing', function(playerCoords, playerWeapon)
 		end
 	end
 	table.insert(evidenceDropped, evidence)
-	TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
 end)
 
 RegisterServerEvent('evidence:newDNA')
@@ -144,13 +145,11 @@ AddEventHandler('evidence:newDNA', function(playerCoords)
 		end
 	end
 	table.insert(evidenceDropped, evidence)
-	TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
 end)
 
 RegisterServerEvent('evidence:discardEvidence')
 AddEventHandler('evidence:discardEvidence', function(index)
 	table.remove(evidenceDropped, index)
-	TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
 end)
 
 RegisterServerEvent('evidence:returnGSRResult')
@@ -187,6 +186,18 @@ AddEventHandler('evidence:returnObservations', function(observations, sourceRetu
 	TriggerClientEvent('evidence:displayObservations', sourceReturnedTo, observations, source)
 end)
 
+RegisterServerEvent("evidence:loadNearbyEvidence")
+AddEventHandler("evidence:loadNearbyEvidence", function(coords)
+	local nearby = {}
+	for i = 1, #evidenceDropped do
+		local item = evidenceDropped[i]
+		if find_distance(item.coords, coords) < NEARBY_DISTANCE then
+			table.insert(nearby, item)
+		end
+	end
+    TriggerClientEvent("evidence:loadNearbyEvidence", source, nearby)
+end)
+
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(5000)
@@ -194,7 +205,6 @@ Citizen.CreateThread(function()
 			local item = evidenceDropped[i]
 			if getMinutesFromTime(item.made) >= 45 then
 				table.remove(evidenceDropped, i)
-				TriggerClientEvent('evidence:updateEvidenceDropped', -1, evidenceDropped)
 			end
 		end
 	end
