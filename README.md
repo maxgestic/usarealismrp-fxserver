@@ -23,7 +23,7 @@ To get started with your own testing environment:
     * We use this to expose a chat log via an HTTP web server, so we provide a path to a file in its public directory
 	* For example: ``C:/wamp/www/log.txt``
 5) Create your database views (see below view definitions)
-6) Add ``stop usa_utils`` to your ``server_internal.cfg`` so you don't get banned for code injection when developing.
+6) Add ``stop usa_utils`` and ``stop _anticheese`` to your ``server_internal.cfg`` so you don't get banned for code injection when developing.
 7) Start the server.
 	* Windows:
 		- with resource scrambling: ``./start.bat`` from the ``server-data`` folder
