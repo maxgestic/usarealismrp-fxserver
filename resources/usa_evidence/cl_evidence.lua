@@ -340,14 +340,14 @@ Citizen.CreateThread(function()
 							break
 						else
 							if item.name == '' or not item.name then
-								TriggerServerEvent('evidence:discardEvidence', i)
+								TriggerServerEvent('evidence:discardEvidence', item.coords)
 								TriggerEvent('usa:notify', 'Evidence has been ~y~discarded~s~.')
 								break
 							else
 								TriggerEvent('chatMessage', '^3^*[EVIDENCE]^r ^7You have picked up ^3'..item.string..'^7, tagged as ^3'..item.name..'^7!')
 								item.processed = false
 								table.insert(collectedEvidence, item)
-								TriggerServerEvent('evidence:discardEvidence', i)
+								TriggerServerEvent('evidence:discardEvidence', item.coords)
 								break
 							end
 						end
@@ -363,7 +363,7 @@ Citizen.CreateThread(function()
 						end
 						ClearPedTasks(playerPed)
 						TriggerEvent('usa:notify', 'Evidence has been destroyed.')
-						TriggerServerEvent('evidence:discardEvidence', i)
+						TriggerServerEvent('evidence:discardEvidence', item.coords)
 						discardingEvidence = false
 						break
 					end

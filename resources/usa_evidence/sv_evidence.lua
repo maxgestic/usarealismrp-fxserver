@@ -148,8 +148,14 @@ AddEventHandler('evidence:newDNA', function(playerCoords)
 end)
 
 RegisterServerEvent('evidence:discardEvidence')
-AddEventHandler('evidence:discardEvidence', function(index)
-	table.remove(evidenceDropped, index)
+AddEventHandler('evidence:discardEvidence', function(coords)
+	for i = 1, #evidenceDropped do
+		local item = evidenceDropped[i]
+		if item.coords == coords then
+			table.remove(evidenceDropped, i)
+			return
+		end
+	end
 end)
 
 RegisterServerEvent('evidence:returnGSRResult')
