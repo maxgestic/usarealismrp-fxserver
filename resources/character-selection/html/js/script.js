@@ -36,7 +36,7 @@ const characterSelectionApp = new Vue({
 		},
     selectedCharacter: null,
     selectedCharIndex: null,
-    selectedSpawn: null
+    selectedSpawn: "Paleto Bay"
   },
   methods: {
     createCharacter: function() {
@@ -124,9 +124,13 @@ const characterSelectionApp = new Vue({
       /* Highlight border */
       $('.spawn-point').each(function () {
         if ($(this).attr("data-id") == spawn) {
-          $(this).css("border-color", "#308bcd");
+          //$(this).css("border-color", "#308bcd");
+          $(this).removeClass("unselected-border")
+          $(this).addClass("selected-border")
         } else {
-          $(this).css("border", "2px solid #ddd");
+          //$(this).css("border", "2px solid #ddd");
+          $(this).removeClass("selected-border")
+          $(this).addClass("unselected-border")
         }
       });
     },
@@ -141,7 +145,7 @@ const characterSelectionApp = new Vue({
       this.page = "list"
       this.selectedCharacter = null
       this.selectedCharIndex = 0
-      this.selectedSpawn = null
+      this.selectedSpawn = "Paleto Bay"
     },
     selectRight: function() {
       if (this.page == "list") {
@@ -149,6 +153,9 @@ const characterSelectionApp = new Vue({
         if (this.selectedCharIndex >= this.characters.length + 1)
           this.selectedCharIndex = 0 // to beginning of list
         this.selectCharacter(this.selectedCharIndex)
+      } else if (this.page == "spawn") {
+        let next = getNextSpawn(this.selectedSpawn)
+        this.selectSpawn(next)
       }
     },
     selectLeft: function() {
@@ -159,6 +166,9 @@ const characterSelectionApp = new Vue({
           $("#new")[0].scrollIntoView(false)
         }
         this.selectCharacter(this.selectedCharIndex)
+      } else if (this.page == "spawn") {
+        let prev = getPreviousSpawn(this.selectedSpawn)
+        this.selectSpawn(prev)
       }
     }
   },
@@ -216,6 +226,32 @@ function confirmDelete() {
 
 function cancelDelete() {
   characterSelectionApp.cancelDelete();
+}
+
+function getPreviousSpawn(current) {
+  switch (current) {
+    case "Paleto Bay":
+      return "Property"
+    case "Sandy Shores":
+      return "Paleto Bay"
+    case "Los Santos":
+      return "Sandy Shores"
+    case "Property":
+      return "Los Santos"
+  }
+}
+
+function getNextSpawn(current) {
+  switch (current) {
+    case "Paleto Bay":
+      return "Sandy Shores"
+    case "Sandy Shores":
+      return "Los Santos"
+    case "Los Santos":
+      return "Property"
+    case "Property":
+      return "Paleto Bay"
+  }
 }
 
 Number.prototype.formatMoney = function (c, d, t) {

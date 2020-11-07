@@ -45,16 +45,16 @@
 			</div>
 			<header id="badly-placed-spawn-select-header" v-if="page == 'spawn'">Select a spawn point!</header>
 			<div class="section spawn-select" v-if="page == 'spawn'">
-					<div class="spawn-point" @click='selectSpawn("Paleto Bay")' data-id="Paleto Bay">
+					<div class="spawn-point selected-border" @click='selectSpawn("Paleto Bay")' data-id="Paleto Bay">
 						<section id="spawn-point--paleto-bay">Paleto Bay</section>
 					</div>
-					<div class="spawn-point" @click='selectSpawn("Sandy Shores")' data-id="Sandy Shores">
+					<div class="spawn-point unselected-border" @click='selectSpawn("Sandy Shores")' data-id="Sandy Shores">
 						<section id="spawn-point--sandy-shores">Sandy Shores</section>
 					</div>
-					<div class="spawn-point" @click='selectSpawn("Los Santos")' data-id="Los Santos">
+					<div class="spawn-point unselected-border" @click='selectSpawn("Los Santos")' data-id="Los Santos">
 						<section id="spawn-point--los-santos">Los Santos</section>
 					</div>
-					<div class="spawn-point" @click='selectSpawn("Property")' data-id="Property">
+					<div class="spawn-point unselected-border" @click='selectSpawn("Property")' data-id="Property">
 						<section id="spawn-point--property">Property</section>
 					</div>
 			</div>
