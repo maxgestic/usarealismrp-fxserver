@@ -121,18 +121,6 @@ const characterSelectionApp = new Vue({
     },
     selectSpawn: function(spawn) {
       this.selectedSpawn = spawn;
-      /* Highlight border */
-      $('.spawn-point').each(function () {
-        if ($(this).attr("data-id") == spawn) {
-          //$(this).css("border-color", "#308bcd");
-          $(this).removeClass("unselected-border")
-          $(this).addClass("selected-border")
-        } else {
-          //$(this).css("border", "2px solid #ddd");
-          $(this).removeClass("selected-border")
-          $(this).addClass("unselected-border")
-        }
-      });
     },
     spawnCharacter: function() {
       if (!this.selectedCharacter || !this.selectedSpawn)
@@ -170,6 +158,12 @@ const characterSelectionApp = new Vue({
         let prev = getPreviousSpawn(this.selectedSpawn)
         this.selectSpawn(prev)
       }
+    },
+    isSpawnCurrentlySelected(spawn) {
+      if (this.selectedSpawn == spawn)
+        return true
+      else
+        return false
     }
   },
   computed: {
