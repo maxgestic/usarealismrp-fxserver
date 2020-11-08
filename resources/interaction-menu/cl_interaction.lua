@@ -1470,7 +1470,7 @@ AddEventHandler("interaction:seizeVehContraband", function()
 end)
 
 local last_tackle_time = 0
-local tackle_delay = 10000 -- 10 second delay
+local tackle_delay = 5000 -- 5 second delay
 local lastClosest = nil
 
 Citizen.CreateThread(function()
@@ -1566,7 +1566,8 @@ end)
 
 RegisterNetEvent('interaction:tackleMe')
 AddEventHandler('interaction:tackleMe', function(fwdVectorX, fwdVectorY, fwdVectorZ)
-	SetPedToRagdollWithFall(PlayerPedId(), 4500, 4500, 0, fwdVectorX, fwdVectorY, fwdVectorZ, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+	local randomTackleTime = math.random(1500, 4000)
+	SetPedToRagdollWithFall(PlayerPedId(), randomTackleTime, randomTackleTime, 0, fwdVectorX, fwdVectorY, fwdVectorZ, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 end)
 
 RegisterNUICallback('performAction', function(data, cb)
