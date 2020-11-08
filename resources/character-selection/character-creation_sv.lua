@@ -30,7 +30,7 @@ AddEventHandler("character:new", function(data)
 	local ident = GetPlayerIdentifiers(usource)[1]
 	if createdCharCounts[ident] then 
 		if createdCharCounts[ident] >= MAX_DAILY_NEW_CHARS then
-			TriggerClientEvent("usa:notify", usource, "You've reached the daily new char. limit!", "^0You've reached the daily new char. limit!")
+			TriggerClientEvent("usa:notify", usource, "You've reached the daily new char limit!", "^0You've reached the daily new character limit!")
 			return
 		end
 	else 

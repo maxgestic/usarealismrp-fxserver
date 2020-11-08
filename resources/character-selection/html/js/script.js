@@ -1,5 +1,32 @@
 const characterSelectionApp = new Vue({
   el: "#app",
+  created() {
+    window.addEventListener('keydown', (e) => {
+      if (e.key == "ArrowLeft") {
+        this.selectLeft()
+      } else if (e.key == "ArrowRight") {
+        this.selectRight()
+      } else if (e.key == "Enter") {
+        if (this.page == "list") {
+          if (this.selectedCharIndex == this.characters.length) {
+            this.page = "create" // new char
+          } else {
+            this.page = "spawn" // select a char
+          }
+        } else if (this.page == "spawn") {
+          if (this.selectedSpawn && this.selectedCharacter) {
+            this.spawnCharacter()
+          }
+        } else if (this.page == "create") {
+          this.createCharacter()
+        }
+      } else if (e.key == "Backspace") {
+        if (this.page == "create" || this.page == "spawn") {
+          this.page = "list"
+        }
+      }
+    });
+  },
   data: {
 		page: "list",
 		characters: [],
@@ -8,7 +35,8 @@ const characterSelectionApp = new Vue({
 			show: false
 		},
     selectedCharacter: null,
-    selectedSpawn: null
+    selectedCharIndex: null,
+    selectedSpawn: "Paleto Bay"
   },
   methods: {
     createCharacter: function() {
@@ -77,31 +105,22 @@ const characterSelectionApp = new Vue({
       $.post('http://character-selection/disconnect', JSON.stringify({}));
     },
     selectCharacter: function(charIndex) {
-      this.selectedCharacter = this.characters[charIndex];
-      var selectedChar = this.selectedCharacter;
-      /* Highlight border */
-      $('.character').each(function () {
-        var char = $(this);
-        if (char.attr("data-id") == selectedChar.id) {
-          char.addClass("selected");
-        } else {
-          char.removeClass("selected");
-        }
-      });
-      /* Enable appropriate buttons */
-      $("button#select").removeClass("disabled");
-      $("button#delete").removeClass("disabled");
+      this.selectedCharIndex = charIndex;
+      if (this.selectedCharIndex != this.characters.length) {
+        this.selectedCharacter = this.characters[charIndex];
+        var selectedChar = this.selectedCharacter;
+        $('.character').each(function () {
+          var char = $(this);
+          if (char.attr("data-id") == selectedChar.id) {
+            char[0].scrollIntoView(false)
+          }
+        });
+      } else {
+        $("#new")[0].scrollIntoView(false)
+      }
     },
     selectSpawn: function(spawn) {
       this.selectedSpawn = spawn;
-      /* Highlight border */
-      $('.spawn-point').each(function () {
-        if ($(this).attr("data-id") == spawn) {
-          $(this).css("border-color", "#308bcd");
-        } else {
-          $(this).css("border", "2px solid #ddd");
-        }
-      });
     },
     spawnCharacter: function() {
       if (!this.selectedCharacter || !this.selectedSpawn)
@@ -111,6 +130,40 @@ const characterSelectionApp = new Vue({
         name: this.selectedCharacter.name,
         spawn: this.selectedSpawn
       }));
+      this.page = "list"
+      this.selectedCharacter = null
+      this.selectedCharIndex = 0
+      this.selectedSpawn = "Paleto Bay"
+    },
+    selectRight: function() {
+      if (this.page == "list") {
+        this.selectedCharIndex += 1
+        if (this.selectedCharIndex >= this.characters.length + 1)
+          this.selectedCharIndex = 0 // to beginning of list
+        this.selectCharacter(this.selectedCharIndex)
+      } else if (this.page == "spawn") {
+        let next = getNextSpawn(this.selectedSpawn)
+        this.selectSpawn(next)
+      }
+    },
+    selectLeft: function() {
+      if (this.page == "list") {
+        this.selectedCharIndex -= 1
+        if (this.selectedCharIndex < 0) {
+          this.selectedCharIndex = this.characters.length // to new char button
+          $("#new")[0].scrollIntoView(false)
+        }
+        this.selectCharacter(this.selectedCharIndex)
+      } else if (this.page == "spawn") {
+        let prev = getPreviousSpawn(this.selectedSpawn)
+        this.selectSpawn(prev)
+      }
+    },
+    isSpawnCurrentlySelected(spawn) {
+      if (this.selectedSpawn == spawn)
+        return true
+      else
+        return false
     }
   },
   computed: {
@@ -122,7 +175,13 @@ const characterSelectionApp = new Vue({
   				return this.notification.show;
   			}
       }
-		}
+    },
+    selectButtonText() {
+      if (this.selectedCharIndex == this.characters.length)
+        return "Create Character"
+      else
+        return "Select Character"
+    }
   },
   filters: {
     displayMoney: function(value) {
@@ -131,22 +190,27 @@ const characterSelectionApp = new Vue({
   }
 })
 
-/* Listen for events from lua script */
 document.onreadystatechange = () => {
   if (document.readyState === "complete") {
-      window.addEventListener('message', function(event) {
-				var eventType = event.data.type;
-          if (eventType == "toggleMenu") {
-            if (event.data.open == true){
-              characterSelectionApp.characters = event.data.characters;
-              document.body.style.display = "flex";
+    /* Listen for events from lua script */
+    window.addEventListener('message', function(event) {
+      var eventType = event.data.type;
+        if (eventType == "toggleMenu") {
+          if (event.data.open == true){
+            characterSelectionApp.characters = event.data.characters;
+            if (event.data.characters.length > 0) {
+              characterSelectionApp.selectedCharacter = event.data.characters[0]
+              characterSelectionApp.selectedCharIndex = 0
             }
-            else
-						  document.body.style.display = "none";
-					} else if (eventType == "displayGUI") {
-            document.body.style.display = event.data.open = "flex";
+            document.body.style.display = "flex";
           }
-      });
+          else
+            document.body.style.display = "none";
+        } else if (eventType == "displayGUI") {
+          document.body.style.display = event.data.open = "flex";
+          $(".characters").scrollLeft(0)
+        }
+    });
   };
 };
 
@@ -156,6 +220,32 @@ function confirmDelete() {
 
 function cancelDelete() {
   characterSelectionApp.cancelDelete();
+}
+
+function getPreviousSpawn(current) {
+  switch (current) {
+    case "Paleto Bay":
+      return "Property"
+    case "Sandy Shores":
+      return "Paleto Bay"
+    case "Los Santos":
+      return "Sandy Shores"
+    case "Property":
+      return "Los Santos"
+  }
+}
+
+function getNextSpawn(current) {
+  switch (current) {
+    case "Paleto Bay":
+      return "Sandy Shores"
+    case "Sandy Shores":
+      return "Los Santos"
+    case "Los Santos":
+      return "Property"
+    case "Property":
+      return "Paleto Bay"
+  }
 }
 
 Number.prototype.formatMoney = function (c, d, t) {

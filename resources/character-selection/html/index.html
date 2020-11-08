@@ -11,14 +11,14 @@
 		<div class="notification" v-if="showNotification">{{ notification.msg }}</div>
 		<div class="body">
 			<div class="section characters dragscroll" v-show="page == 'list'">
-				<div class="character" v-for="(character, index) in characters" @click="selectCharacter(index)" v-bind:data-id="character.id">
+				<div class="character" v-for="(character, index) in characters" @click="selectCharacter(index)" v-bind:data-id="character.id" v-bind:class="{selected: selectedCharIndex == index}">
 					<h3><b>First Name:</b> {{ character.name.first }}</h3>
 					<h3><b>Last Name:</b> {{ character.name.last }}</h3>
 					<h3 style="padding-top: 25px"><b>Cash:</b> <span>$</span>{{ character.money | displayMoney }}</h3>
 					<h3><b>Bank:</b> <span>$</span>{{ character.bank | displayMoney }}</h3>
 					<h3 style="padding-top: 25px;"><b>DOB:</b> {{ character.dateOfBirth }}</h3>
 				</div>
-				<div class="character" id="new" @click="page = 'create'">
+				<div class="character" id="new" @click="page = 'create'" v-bind:class="{selected: selectedCharIndex == characters.length}">
 					<div class="new">+</div>
 					<h4>Create New</h4>
 				</div>
@@ -45,16 +45,16 @@
 			</div>
 			<header id="badly-placed-spawn-select-header" v-if="page == 'spawn'">Select a spawn point!</header>
 			<div class="section spawn-select" v-if="page == 'spawn'">
-					<div class="spawn-point" @click='selectSpawn("Paleto Bay")' data-id="Paleto Bay">
+					<div class="spawn-point" @click='selectSpawn("Paleto Bay")' data-id="Paleto Bay" v-bind:class="{'selected-border': isSpawnCurrentlySelected('Paleto Bay'), 'unselected-border': !isSpawnCurrentlySelected('Paleto Bay')}">
 						<section id="spawn-point--paleto-bay">Paleto Bay</section>
 					</div>
-					<div class="spawn-point" @click='selectSpawn("Sandy Shores")' data-id="Sandy Shores">
+					<div class="spawn-point" @click='selectSpawn("Sandy Shores")' data-id="Sandy Shores" v-bind:class="{'selected-border': isSpawnCurrentlySelected('Sandy Shores'), 'unselected-border': !isSpawnCurrentlySelected('Sandy Shores')}">
 						<section id="spawn-point--sandy-shores">Sandy Shores</section>
 					</div>
-					<div class="spawn-point" @click='selectSpawn("Los Santos")' data-id="Los Santos">
+					<div class="spawn-point" @click='selectSpawn("Los Santos")' data-id="Los Santos" v-bind:class="{'selected-border': isSpawnCurrentlySelected('Los Santos'), 'unselected-border': !isSpawnCurrentlySelected('Los Santos')}">
 						<section id="spawn-point--los-santos">Los Santos</section>
 					</div>
-					<div class="spawn-point" @click='selectSpawn("Property")' data-id="Property">
+					<div class="spawn-point" @click='selectSpawn("Property")' data-id="Property" v-bind:class="{'selected-border': isSpawnCurrentlySelected('Property'), 'unselected-border': !isSpawnCurrentlySelected('Property')}">
 						<section id="spawn-point--property">Property</section>
 					</div>
 			</div>
@@ -67,8 +67,8 @@
 				<button class="disconnect" v-if="page == 'list'" @click="disconnect">Disconnect</button>
 			</a>
 			<button id="birth" v-if="page == 'create'" @click="createCharacter">Create Character</button>
-			<button id="delete" class="disabled" v-if="page == 'list'" @click="deleteCharacter">Delete Character</button>
-			<button id="select" class="disabled" v-if="page == 'list'" @click="page = 'spawn'">Select Character</button>
+			<button id="delete" v-bind:class="{disabled: !selectedCharacter}" v-if="page == 'list' && selectedCharIndex != characters.length" @click="deleteCharacter">Delete Character</button>
+			<button id="select" v-bind:class="{disabled: !selectedCharacter}" v-if="page == 'list'" @click="page = 'spawn'">{{ selectButtonText }}</button>
 			<button id="spawn-select-back" v-if="page == 'spawn'" @click="page = 'list'">Back</button>
 			<button id="go" class="disabled" v-if="page == 'spawn'" @click="spawnCharacter()">Go &#10095;</button>
 		</div>
