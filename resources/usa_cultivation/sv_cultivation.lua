@@ -93,20 +93,24 @@ end)
 
 RegisterServerEvent("cultivation:harvest")
 AddEventHandler("cultivation:harvest", function(id)
-    if PLANTED[id].stage.name == "harvest" then
-        TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 2)
-        local reward = PlantManager.harvestPlant(id)
-        local char = exports["usa-characters"]:GetCharacter(source)
-        if not char.canHoldItem(reward) then
-            TriggerEvent("interaction:dropMultipleOfItem", reward, PLANTED[id].coords) -- drop items on ground
-        else
-            char.giveItem(reward)
+    if PLANTED[id] then
+        if PLANTED[id].stage.name == "harvest" then
+            TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 2)
+            local reward = PlantManager.harvestPlant(id)
+            local char = exports["usa-characters"]:GetCharacter(source)
+            if not char.canHoldItem(reward) then
+                TriggerEvent("interaction:dropMultipleOfItem", reward, PLANTED[id].coords) -- drop items on ground
+            else
+                char.giveItem(reward)
+            end
+            PlantManager.removePlant(id)
+            TriggerClientEvent("cultivation:remove", -1, id)
+            TriggerClientEvent("usa:notify", source, "Plant ~g~harvested~w~!")
+        else 
+            TriggerClientEvent("usa:notify", source, "Plant not ready for harvest")
         end
-        PlantManager.removePlant(id)
-        TriggerClientEvent("cultivation:remove", -1, id)
-        TriggerClientEvent("usa:notify", source, "Plant ~g~harvested~w~!")
-    else 
-        TriggerClientEvent("usa:notify", source, "Plant not ready for harvest")
+    else
+        print("[cultivation/cultivation:harvest] PLANTED[id] was nil! id: " .. id)
     end
 end)
 
