@@ -170,9 +170,8 @@ Citizen.CreateThread(function()
                     numSustenanceUpdates = numSustenanceUpdates + 1
                     TriggerClientEvent("cultivation:updateSustenanceIfNearby", -1, PLANTED[id])
                 end
-                if not PLANTED[id].isDead then
-                    db.updateDocument("cultivation", id, PLANTED[id], saveCallback)
-                end
+                PLANTED[id]._rev = nil
+                db.updateDocument("cultivation", id, PLANTED[id], saveCallback)
                 --[[
                 if PlantManager.hasBeenDeadLongEnoughToDelete(id) then
                     TriggerEvent("cultvation:remove", id)
