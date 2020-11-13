@@ -153,31 +153,36 @@ end, {
     help = "Remove nearest plant"
 })
 
--- Stage / Food Level / Water Level Updates --
+-- Stage / Food Level / Water Level Updates / Saving --
 Citizen.CreateThread(function()
     while true do
-        local numStageUpdates = 0
-        local numSustenanceUpdates = 0
-        for id, plant in pairs(PLANTED) do
-            PLANTED[id], didStageUpdate, didSustenanceUpdate = PlantManager.tick(PLANTED[id])
-            if didStageUpdate then
-                numStageUpdates = numStageUpdates + 1
-                TriggerClientEvent("cultivation:updatePlantStageIfNearby", -1, PLANTED[id])
+        Wait(STAGE_CHECK_INTERVAL_MINUTES * 60 * 1000) -- wait first to give more time for resource that defines the below event handler to load
+        TriggerEvent("es:exposeDBFunctions", function(db)
+            local numStageUpdates = 0
+            local numSustenanceUpdates = 0
+            for id, plant in pairs(PLANTED) do
+                PLANTED[id], didStageUpdate, didSustenanceUpdate = PlantManager.tick(PLANTED[id])
+                if didStageUpdate then
+                    numStageUpdates = numStageUpdates + 1
+                    TriggerClientEvent("cultivation:updatePlantStageIfNearby", -1, PLANTED[id])
+                end
+                if didSustenanceUpdate then
+                    numSustenanceUpdates = numSustenanceUpdates + 1
+                    TriggerClientEvent("cultivation:updateSustenanceIfNearby", -1, PLANTED[id])
+                end
+                if not PLANTED[id].isDead then
+                    db.updateDocument("cultivation", id, PLANTED[id], saveCallback)
+                end
+                --[[
+                if PlantManager.hasBeenDeadLongEnoughToDelete(id) then
+                    TriggerEvent("cultvation:remove", id)
+                end
+                --]]
+                Wait(20)
             end
-            if didSustenanceUpdate then
-                numSustenanceUpdates = numSustenanceUpdates + 1
-                TriggerClientEvent("cultivation:updateSustenanceIfNearby", -1, PLANTED[id])
-            end
-            --[[
-            if PlantManager.hasBeenDeadLongEnoughToDelete(id) then
-                TriggerEvent("cultvation:remove", id)
-            end
-            --]]
-            Wait(20)
-        end
-        print("[cultivation]: done doing stage check, # of stage client updates: " .. numStageUpdates)
-        print("[cultivation]: done doing stage check, # of sustenance client updates: " .. numSustenanceUpdates)
-        Wait(STAGE_CHECK_INTERVAL_MINUTES * 60 * 1000)
+            print("[cultivation]: done doing stage check, # of stage client updates: " .. numStageUpdates)
+            print("[cultivation]: done doing stage check, # of sustenance client updates: " .. numSustenanceUpdates)
+        end)
     end
 end)
 
@@ -185,6 +190,7 @@ function saveCallback(doc, err)
     -- nothing for now
 end
 
+--[[
 Citizen.CreateThread(function()
     TriggerEvent("es:exposeDBFunctions", function(db)
         while true do
@@ -202,3 +208,4 @@ Citizen.CreateThread(function()
         end
     end)
 end)
+--]]
