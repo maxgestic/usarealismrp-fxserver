@@ -35,10 +35,10 @@ local locations = {
 	},
 	["Los Santos"] = {
 		duty_ped = {
-			x = -599.5,
-			y = -931.9,
-			z = 23.9,
-			heading = 100.0,
+			x = -588.72094726563,
+			y = -936.03741455078,
+			z = 23.877563476563,
+			heading = 10.0,
 			model = "a_m_y_business_01"
 		},
 		van_garage = {
