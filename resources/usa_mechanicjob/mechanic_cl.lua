@@ -363,7 +363,6 @@ AddEventHandler("mechanic:repairJobCheck", function()
 				local driveable = IsVehicleDriveable(veh, true)
 				local isAnyTireBurst = IsAnyVehicleTireBursted(veh)
 				if engineHP < 600 or not driveable or isAnyTireBurst then
-					print("gonna check palyer's job")
 					TriggerServerEvent("mechanic:repairJobCheck")
 				else
 					exports.globals:notify("Vehicle does not need repairs!")
@@ -379,22 +378,26 @@ end)
 
 RegisterNetEvent("mechanic:repair")
 AddEventHandler("mechanic:repair", function(repairCount)
-	local veh = MechanicHelper.getClosestVehicle(5)
-	if veh then
+	if not isRepairing then
 		isRepairing = true
-		MechanicHelper.repairVehicle(veh, repairCount, function(success)
-			if success then
-				print("repair succeeded!")
-				TriggerServerEvent("mechanic:vehicleRepaired")
-				exports.globals:notify("Vehicle repaired!")
-			else 
-				print("repair failed")
-				exports.globals:notify("Vehicle repair failed!")
-			end
-			isRepairing = false
-		end)
-	else 
-		exports.globals:notify("No vehicle found!")
+		local veh = MechanicHelper.getClosestVehicle(5)
+		if veh then
+			MechanicHelper.repairVehicle(veh, repairCount, function(success)
+				if success then
+					print("repair succeeded!")
+					TriggerServerEvent("mechanic:vehicleRepaired")
+					exports.globals:notify("Vehicle repaired!")
+				else 
+					print("repair failed")
+					exports.globals:notify("Vehicle repair failed!")
+				end
+			end)
+		else 
+			exports.globals:notify("No vehicle found!")
+		end
+		isRepairing = false
+	else
+		exports.globals:notify("Busy")
 	end
 end)
 
