@@ -6,7 +6,7 @@ local canBeRobbed = false -- only available during certain hours
 
 Citizen.CreateThread(function()
     while true do
-        if GetClockHours() < 9 and GetClockHours() >= 1 then
+        if GetClockHours() >= 0 and GetClockHours() < 9 then
             canBeRobbed = true
         else
             canBeRobbed = false
