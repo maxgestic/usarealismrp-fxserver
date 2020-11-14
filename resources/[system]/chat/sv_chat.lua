@@ -67,15 +67,13 @@ AddEventHandler('__cfx_internal:commandFallback', function(command)
 
 	TriggerEvent('chatMessage', source, name, '/' .. command)
 
-	if not WasEventCanceled() then
-		TriggerClientEvent('chatMessage', -1, name, { 255, 255, 255 }, '/' .. command)
-	end
-
 	CancelEvent()
 end)
 
 RegisterCommand('say', function(source, args, rawCommand)
-	TriggerClientEvent('chatMessage', -1, (source == 0) and 'Government' or GetPlayerName(source), { 255, 255, 255 }, rawCommand:sub(5))
+	if source == 0 then
+		TriggerClientEvent('chatMessage', -1, 'Government', { 255, 255, 255 }, rawCommand:sub(5))
+	end
 end)
 
 -- test this
