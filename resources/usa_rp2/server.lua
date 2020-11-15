@@ -285,17 +285,31 @@ AddEventHandler("impound:impoundVehicle", function(vehicle, plate)
 end)
 
 local JOBS_TO_LOG = {
-	sheriff = "Sheriff",
-	ems = "EMS",
-	doctor = "Pillbox Medical",
-	police = "SASP",
-	corrections = "BCSO/Corrections"
+	sheriff = {
+		DISPLAY_NAME = "SASP",
+		WEBHOOK_URL = "https://discordapp.com/api/webhooks/777640062560239636/8cri7MtQA9Qm12hQgxgwb-xYFqzlLZMbizAZ7tLvA8xeXRPq4q6xGAg_rT_2_9PL26xk"
+	},
+	corrections = {
+		DISPLAY_NAME = "BCSO/Corrections",
+		WEBHOOK_URL = "https://discordapp.com/api/webhooks/777640307814432799/EQjQ9DIE7rR5Iy4ipo-yjNpKazlXuYIMTKicFW8ejr089L9XRuPkvcfDaJHt2gP5ILwA"
+	},
+	ems = {
+		DISPLAY_NAME = "EMS",
+		WEBHOOK_URL = "https://discordapp.com/api/webhooks/777640434398396417/xcOjuF1EwF82x3lMVGc5SbRcPPNDkHI9vFD2TWsVsMw91jEYt8DNhNSuAOrpchKYbuVw"
+	},
+	doctor = {
+		DISPLAY_NAME = "Pillbox Medical",
+		WEBHOOK_URL = "https://discordapp.com/api/webhooks/777640434398396417/xcOjuF1EwF82x3lMVGc5SbRcPPNDkHI9vFD2TWsVsMw91jEYt8DNhNSuAOrpchKYbuVw"
+	}
 }
 
 RegisterServerEvent('job:sendNewLog')
 AddEventHandler('job:sendNewLog', function(source, job, isOnDuty)
+	print("sending new log")
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local userName = char.getFullName()
+	local steamName = GetPlayerName(source)
+	local steamIdent = GetPlayerIdentifier(source)
 
 	local reason = 'Clocked in'
 	local color = 47156
@@ -305,8 +319,7 @@ AddEventHandler('job:sendNewLog', function(source, job, isOnDuty)
 		color = 13565952
 	end
 
-	local url = 'https://discordapp.com/api/webhooks/618096197156208660/KmZtxRfaZmtuWW3BwIxWrxq5Meq0uXZzPJxBrDOridMh-NSX1OFHVbnGnX9Gpd9l1Ctw'
-	PerformHttpRequest(url, function(err, text, headers)
+	PerformHttpRequest(JOBS_TO_LOG[job].WEBHOOK_URL, function(err, text, headers)
 		if text then
 			print(text)
 		end
@@ -318,38 +331,36 @@ AddEventHandler('job:sendNewLog', function(source, job, isOnDuty)
 				author = {
 					name = author
 				},
-
 				fields = {
-			        {
-			          name = "Identifier 1",
-			          value = GetPlayerIdentifier(source),
-			          inline = true
-			        },
-			        {
-			          name = "Identifier 2",
-			          value = userName,
-			          inline = true
-			        },
-			        {
-			          name = "Identifier 3",
-			          value = GetPlayerName(source),
-			          inline = true
-			        },
-			        {
-			          name = "Job",
-			          value = job,
-			          inline = true
-			        },
-			        {
-			          name = "Reason",
-			          value = reason,
-			          inline = true
-			        },
-		      	},
-
-		      	footer = {
-			        text = os.date('%m-%d-%Y %H:%M:%S', os.time()) .. ' PDT'
-			    }
+					{
+						name = "Identifier 1",
+						value = steamIdent,
+						inline = true
+					},
+					{
+						name = "Identifier 2",
+						value = userName,
+						inline = true
+					},
+					{
+						name = "Identifier 3",
+						value = steamName,
+						inline = true
+					},
+					{
+						name = "Job",
+						value = JOBS_TO_LOG[job].DISPLAY_NAME,
+						inline = true
+					},
+					{
+						name = "Reason",
+						value = reason,
+						inline = true
+					},
+				},
+				footer = {
+					text = os.date('%m-%d-%Y %H:%M:%S', os.time()) .. ' PST'
+				}
 			}
 		},
 	}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
@@ -360,9 +371,8 @@ function handlePlayerDropDutyLog(char, steamName, steamIdent)
 		local userJob = char.get('job')
 		local userName = char.getFullName()
 		if JOBS_TO_LOG[userJob] then
-			local jobDisplayName = JOBS_TO_LOG[userJob]
-			local url = "https://discordapp.com/api/webhooks/618096197156208660/KmZtxRfaZmtuWW3BwIxWrxq5Meq0uXZzPJxBrDOridMh-NSX1OFHVbnGnX9Gpd9l1Ctw"
-			PerformHttpRequest(url, function(err, text, headers)
+			local jobDisplayName = JOBS_TO_LOG[userJob].DISPLAY_NAME
+			PerformHttpRequest(JOBS_TO_LOG[userJob].WEBHOOK_URL, function(err, text, headers)
 				if text then
 					print(text)
 				end
@@ -402,7 +412,7 @@ function handlePlayerDropDutyLog(char, steamName, steamIdent)
 						},
 
 						footer = {
-							text = os.date('%m-%d-%Y %H:%M:%S', os.time()) .. ' PDT'
+							text = os.date('%m-%d-%Y %H:%M:%S', os.time()) .. ' PST'
 						}
 					}
 				},

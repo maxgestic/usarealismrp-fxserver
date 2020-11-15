@@ -1,3 +1,5 @@
+local JOB_NAME = "corrections"
+
 local WEAPONS = {
 	{ hash = "WEAPON_NIGHTSTICK", name = "Nightstick", rank = 1, weight = "10", price = 50},
     { hash = "WEAPON_FLASHLIGHT", name = "Flashlight", rank = 1, weight = "10", price = 50},
@@ -62,7 +64,7 @@ AddEventHandler("doc:getWeapons", function()
 end)
 
 -- Check inmates remaining jail time --
-TriggerEvent('es:addJobCommand', 'roster', {"corrections"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'roster', {JOB_NAME}, function(source, args, char)
 	local hasInmates = false
 	TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1^*[BOLINGBROKE PENITENTIARY]")
 	exports["usa-characters"]:GetCharacters(function(characters)
@@ -88,7 +90,7 @@ end, {
 ----------------
 local cellblockOpen = false
 
-TriggerEvent('es:addJobCommand', 'c', {"corrections"}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'c', {JOB_NAME}, function(source, args, char)
 	cellblockOpen = not cellblockOpen
 	print("cellblock is now: " .. tostring(cellblockOpen))
 	TriggerClientEvent('toggleJailDoors', -1, cellblockOpen)
@@ -98,7 +100,7 @@ RegisterServerEvent("jail:checkJobForWarp")
 AddEventHandler("jail:checkJobForWarp", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get("job")
-	if job == "sheriff" or job == "ems" or job == "fire" or job == "corrections" or job == "doctor" then
+	if job == "sheriff" or job == "ems" or job == "fire" or job == JOB_NAME or job == "doctor" then
 		TriggerClientEvent("jail:continueWarp", source)
 	else
 		TriggerClientEvent("usa:notify", source, "That area is prohibited!")
@@ -161,8 +163,8 @@ AddEventHandler("doc:offduty", function()
 	-------------------------
 	-- put back to civ job --
 	-------------------------
-	if job == "corrections" then
-		TriggerEvent('job:sendNewLog', source, 'BCSO', false)
+	if job == JOB_NAME then
+		TriggerEvent('job:sendNewLog', source, JOB_NAME, false)
 	end
 	--exports["usa_ems"]:RemoveServiceWeapons(char)
 	char.set("job", "civ")
@@ -185,16 +187,16 @@ RegisterServerEvent("doc:forceDuty")
 AddEventHandler("doc:forceDuty", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get("job")
-	if job ~= "corrections" then
+	if job ~= JOB_NAME then
 		----------------------------
 		-- set to corrections job --
 		----------------------------
-		char.set("job", "corrections")
+		char.set("job", JOB_NAME)
 		TriggerEvent("doc:loadUniform", 1, source)
 		TriggerClientEvent("usa:notify", source, "You have clocked in!")
-		TriggerEvent('job:sendNewLog', source, 'BCSO', true)
+		TriggerEvent('job:sendNewLog', source, JOB_NAME, true)
 		TriggerClientEvent("ptt:isEmergency", source, true)
-		TriggerClientEvent("interaction:setPlayersJob", source, "corrections")
+		TriggerClientEvent("interaction:setPlayersJob", source, JOB_NAME)
 		TriggerEvent("eblips:add", {name = char.getName(), src = source, color = 82})
 	end
 end)
@@ -226,12 +228,12 @@ AddEventHandler("doc:loadOutfit", function(slot, id)
 	local char = exports["usa-characters"]:GetCharacter(usource)
 	local job = char.get("job")
 	local player_identifer = GetPlayerIdentifiers(usource)[1]
-	if job ~= "corrections" then
-		char.set("job", "corrections")
-		TriggerEvent('job:sendNewLog', source, 'BCSO', true)
+	if job ~= JOB_NAME then
+		char.set("job", JOB_NAME)
+		TriggerEvent('job:sendNewLog', source, JOB_NAME, true)
 		TriggerClientEvent("usa:notify", usource, "You have clocked in!")
 		TriggerClientEvent("ptt:isEmergency", usource, true)
-		TriggerClientEvent("interaction:setPlayersJob", usource, "corrections")
+		TriggerClientEvent("interaction:setPlayersJob", usource, JOB_NAME)
 		TriggerEvent("eblips:add", {name = char.getName(), src = usource, color = 82})
 	end
 	TriggerEvent('es:exposeDBFunctions', function(usersTable)
@@ -247,7 +249,7 @@ RegisterServerEvent("doc:spawnVehicle")
 AddEventHandler("doc:spawnVehicle", function(veh)
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local job = char.get("job")
-	if job == "corrections" then
+	if job == JOB_NAME then
 		TriggerClientEvent("doc:spawnVehicle", source, veh)
 	else
 		TriggerClientEvent("usa:notify", source, "You are not on-duty!")
@@ -260,7 +262,7 @@ AddEventHandler("doc:checkRankForWeapon", function(weapon)
 	local usource = source
 	local char = exports["usa-characters"]:GetCharacter(usource)
 	local job = char.get("job")
-	if job == "corrections" then
+	if job == JOB_NAME then
 		TriggerEvent('es:exposeDBFunctions', function(GetDoc)
 			GetDoc.getDocumentByRow("correctionaldepartment", "identifier" , GetPlayerIdentifiers(usource)[1], function(result)
 				if type(result) ~= "boolean" then
@@ -317,7 +319,7 @@ AddEventHandler("doc:checkRankForWeapon", function(weapon)
 end)
 
 -- adding new DOC employees --
-TriggerEvent('es:addJobCommand', 'setcorrectionsrank', {"corrections"}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'setcorrectionsrank', {JOB_NAME}, function(source, args, user)
 	local usource = source
 	if not GetPlayerName(tonumber(args[2])) or not tonumber(args[3]) then
 		TriggerClientEvent("usa:notify", source, "Error: bad format!")

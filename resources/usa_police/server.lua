@@ -1,3 +1,5 @@
+local JOB_NAME = "sheriff"
+
 local armoryItems = {
     { name = "First Aid Kit", hash = 101631238, price = 25, weight = 10 },
     { name = "Fire Extinguisher", hash = 101631238, price = 100, weight = 20 },
@@ -326,7 +328,7 @@ AddEventHandler("policestation2:loadOutfit", function(slot)
         TriggerClientEvent("policestation2:setCharacter", source, policeChar[tostring(slot)])
         if job ~= 'sheriff' then
             char.set("job", "sheriff")
-            TriggerEvent('job:sendNewLog', source, 'SASP', true)
+            TriggerEvent('job:sendNewLog', source, JOB_NAME, true)
         end
         TriggerClientEvent('interaction:setPlayersJob', source, 'sheriff')
         TriggerEvent("eblips:add", {name = char.getName(), src = source, color = 3})
@@ -343,7 +345,7 @@ AddEventHandler("policestation2:offduty", function()
     TriggerClientEvent('interaction:setPlayersJob', source, 'civ')
     TriggerClientEvent("policestation2:setciv", source, char.get("appearance"), playerWeapons)
     char.set("job", "civ")
-    TriggerEvent('job:sendNewLog', source, 'SASP', false)
+    TriggerEvent('job:sendNewLog', source, JOB_NAME, false)
     TriggerEvent("eblips:remove", source)
     TriggerClientEvent("radio:unsubscribe", source)
 end)
