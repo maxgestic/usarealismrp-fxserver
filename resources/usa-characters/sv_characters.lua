@@ -46,6 +46,8 @@ AddEventHandler("playerDropped", function(reason)
     end
     -- add to recent DC list --
     TriggerEvent("playerlist:addDC", char)
+    -- send duty log if on duty for one of a few designated jobs --
+    exports["usa_rp2"]:handlePlayerDropDutyLog(char, GetPlayerName(usource), accountIdentifier)
     -- destroy player object --
     print("[usa-characters] Destroying character object for src: " .. usource)
     CHARACTERS[usource] = nil

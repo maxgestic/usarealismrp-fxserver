@@ -262,14 +262,14 @@ AddEventHandler('injuries:toggleOnDuty', function()
 		if char.get('emsRank') >= 4 then
 			TriggerClientEvent('usa:notify', source, 'You are now signed ~g~on-duty~s~ as a doctor.')
 			char.set('job', 'doctor')
-			TriggerEvent('job:sendNewLog', source, 'doctor', true)
+			TriggerEvent('job:sendNewLog', source, 'Pillbox Medical', true)
 		else
 			TriggerClientEvent('usa:notify', source, '~y~You are not whitelisted for DOCTOR')
 		end
 	else
 		TriggerClientEvent('usa:notify', source, 'You are now signed ~y~off-duty~s~ as a doctor.')
 		char.set('job', 'civ')
-		TriggerEvent('job:sendNewLog', source, 'doctor', false)
+		TriggerEvent('job:sendNewLog', source, 'Pillbox Medical', false)
 	end
 end)
 

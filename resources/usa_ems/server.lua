@@ -44,7 +44,7 @@ AddEventHandler("emsstation2:loadOutfit", function(slot)
   TriggerClientEvent("emsstation2:setCharacter", source, character[tostring(slot)])
   if char.get('job') ~= 'ems' then
     char.set("job", "ems")
-    TriggerEvent('job:sendNewLog', source, 'ems', true)
+    TriggerEvent('job:sendNewLog', source, 'EMS', true)
   end
   TriggerClientEvent('interaction:setPlayersJob', source, 'ems')
   TriggerEvent("eblips:add", {name = char.getName(), src = source, color = 1})
@@ -69,7 +69,7 @@ AddEventHandler("emsstation2:onduty", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
   if char.get("job") ~= "ems" then
     char.set("job", "ems")
-    TriggerEvent('job:sendNewLog', source, 'ems', true)
+    TriggerEvent('job:sendNewLog', source, 'EMS', true)
     TriggerEvent("eblips:add", {name = char.getName(), src = source, color = 1})
   end
 end)
@@ -81,7 +81,7 @@ AddEventHandler("emsstation2:offduty", function()
   TriggerClientEvent("emsstation2:setciv", source, char.get("appearance"), playerWeapons) -- need to test
   if char.get('job') == 'ems' then
       char.set("job", "civ")
-      TriggerEvent('job:sendNewLog', source, 'ems', false)
+      TriggerEvent('job:sendNewLog', source, 'EMS', false)
       TriggerEvent("eblips:remove", source)
       TriggerClientEvent("radio:unsubscribe", source)
   end

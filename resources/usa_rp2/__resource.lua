@@ -23,3 +23,7 @@ exports {
   "areHandsUp",
   "isBlindfolded"
 }
+
+server_exports {
+  "handlePlayerDropDutyLog"
+}
