@@ -1,3 +1,5 @@
+local JOB_NAME = "judge"
+
 licensePrices = {
 	["Driver's License"] = 500,
 	["Firearm Permit"] = 1000,
@@ -18,15 +20,17 @@ AddEventHandler("judge:duty", function()
     TriggerClientEvent("usa:notify", source, "You are not whitelisted for Judge!")
     return
   end
-  if job ~= "judge" and judge_rank > 0 then
+  if job ~= JOB_NAME and judge_rank > 0 then
 	local user_char_name = char.getFullName()
-   	char.set("job", "judge")
+   	char.set("job", JOB_NAME)
     TriggerClientEvent("usa:notify", source, "You are now in service as a Judge.")
 	TriggerClientEvent('chatMessage', -1, "", {0, 0, 0}, "^6^*[COURTHOUSE] ^r^7A Judge is now available for all legal affairs!")
-	TriggerEvent("eblips:remove", source)
+	TriggerEvent("eblips:remove", source) -- ? why is this here lol, delete?
+	TriggerEvent('job:sendNewLog', source, JOB_NAME, true)
   else
     char.set("job", "civ")
-    TriggerClientEvent("usa:notify", source, "You are now out of service as a Judge.")
+	TriggerClientEvent("usa:notify", source, "You are now out of service as a Judge.")
+	TriggerEvent('job:sendNewLog', source, JOB_NAME, false)
   end
 end)
 
