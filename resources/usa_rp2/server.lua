@@ -302,22 +302,25 @@ local JOBS_TO_LOG = {
 		WEBHOOK_URL = "https://discordapp.com/api/webhooks/777640434398396417/xcOjuF1EwF82x3lMVGc5SbRcPPNDkHI9vFD2TWsVsMw91jEYt8DNhNSuAOrpchKYbuVw"
 	},
 	realtor = {
-		DISPALY_NAME = "REA",
+		DISPLAY_NAME = "REA",
 		WEBHOOK_URL = "https://discordapp.com/api/webhooks/777652520013004850/7qTAZLylrFIZB24to7fZ0qJi8RZzjBKB5FaL-iAUtZNEXdHGi_mhpnJMtB_6TdHoAadx"
 	},
 	judge = {
-		DISPALY_NAME = "Judge",
+		DISPLAY_NAME = "Judge",
 		WEBHOOK_URL = "https://discordapp.com/api/webhooks/777652709905661972/MduQ6-uICtA2Fv5y6JmEBqTMUYOZ6bF6u_4U6C98ZyGDSNkUJTc2OgfyTQeXkqP6zgu8"
 	},
 	lawyer = {
-		DISPALY_NAME = "Attorney",
+		DISPLAY_NAME = "Attorney",
+		WEBHOOK_URL = "https://discordapp.com/api/webhooks/777652709905661972/MduQ6-uICtA2Fv5y6JmEBqTMUYOZ6bF6u_4U6C98ZyGDSNkUJTc2OgfyTQeXkqP6zgu8"
+	},
+	da = {
+		DISPLAY_NAME = "District Attorney",
 		WEBHOOK_URL = "https://discordapp.com/api/webhooks/777652709905661972/MduQ6-uICtA2Fv5y6JmEBqTMUYOZ6bF6u_4U6C98ZyGDSNkUJTc2OgfyTQeXkqP6zgu8"
 	}
 }
 
 RegisterServerEvent('job:sendNewLog')
 AddEventHandler('job:sendNewLog', function(source, job, isOnDuty)
-	print("sending new log")
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local userName = char.getFullName()
 	local steamName = GetPlayerName(source)

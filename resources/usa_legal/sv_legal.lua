@@ -15,13 +15,15 @@ AddEventHandler('legal:checkBarCertificate', function()
 			TriggerClientEvent('usa:notify', source, 'You are now signed ~g~on-duty~s~ as an attorney.')
 			print('LEGAL: '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has signed ON-DUTY as an attorney!')
 			char.set("job", "lawyer")
+			TriggerEvent('job:sendNewLog', source, "lawyer", true)
 		else
 			TriggerClientEvent('usa:notify', source, 'You do not have a valid Bar Certificate!')
 		end
   	else
 	   	TriggerClientEvent('usa:notify', source, 'You are now signed ~y~off-duty~s~ as an attorney.')
 	   	print('LEGAL: '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has signed OFF-DUTY as an attorney!')
-	   	char.set('job', 'civ')
+		   char.set('job', 'civ')
+		   TriggerEvent('job:sendNewLog', source, "lawyer", false)
 	end
 end)
 
@@ -92,11 +94,13 @@ AddEventHandler('legal:onDutyDA', function()
 		char.set('job', 'civ')
 		TriggerClientEvent('interaction:setPlayersJob', source, 'civ')
 		TriggerClientEvent('usa:notify', source, 'You are now off-duty.')
+		TriggerEvent('job:sendNewLog', source, 'da', false)
 	else
 		if da_rank and da_rank > 0 then
 			char.set('job', 'da')
 			TriggerClientEvent('interaction:setPlayersJob', source, 'da')
 			TriggerClientEvent('usa:notify', source, 'You are now on-duty as a DA.')
+			TriggerEvent('job:sendNewLog', source, 'da', true)
 		else
 			TriggerClientEvent('usa:notify', source, 'You are not whitelisted for DA!')
 		end

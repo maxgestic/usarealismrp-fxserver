@@ -74,6 +74,7 @@ AddEventHandler('rconCommand', function(commandName, args)
                 RconPrint("DEBUG: " .. playerId .. " un-whitelisted as EMS.")
             end
         elseif wl_type == "da" then
+            local char = exports["usa-characters"]:GetCharacter(playerId)
             if rank > 0 then
                 char.set("daRank", rank)
                 RconPrint("DEBUG: " .. playerId .. "'s DA rank has been set to: " .. rank .. "!")
