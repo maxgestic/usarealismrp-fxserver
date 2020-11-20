@@ -87,7 +87,7 @@ local blips = {
 	--{ title = "REA Office", x = -148.55, y = -579.82, id = 475, colour = 2, scale = 0.7},
 	{ title = "Mining", x = -596.51, y = 2090.44, id = 78, colour = 59, scale = 0.5},
 	{ title = "Mining", x = 1797.88, y = -2831.8, id = 78, colour = 59, scale = 0.5},
-	{ title = "Casino", x = 923.79486083984,y = 49.580528259277, id = 89, colour = 73, scale = 0.7},
+	--{ title = "Casino", x = 923.79486083984,y = 49.580528259277, id = 89, colour = 73, scale = 0.7},
 	{ title = "Vishnu's Go-Karts", x = -58.797729492188, y = -1839.8370361328, id = 488, colour = 0, scale = 0.7}
 }
 

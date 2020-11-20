@@ -5,6 +5,7 @@ local INTERACTION_KEY = 86 -- "E"
 -- exit: x = 979.99719238281,y = 57.005077362061, z = 116.16428375244
 
 local warp_locations = {
+  --[[
   ["Casino"] = {
     entrance = {
         coords = {928.15985107422, 44.713218688965, 81.095771789551},
@@ -31,6 +32,7 @@ local warp_locations = {
     groundMarker = true,
     skipSound = true
   },
+  --]]
   ["Upper Yacht"] = {
     entrance = {
         coords = {-2036.3878173828,-1033.9129638672, 5.8823575973511},
