@@ -90,3 +90,21 @@ For it to work properly you need to follow these rules:
 		- ``emit(doc._id, doc.owner);``
 	* **getBusinessStorage**
 		- ``emit(doc._id, doc.storage);``
+
+**Common Framework Usage**
+
+```
+--[[
+	The server-sided character object (from usa-characters) has a whole bunch of helpful properties and method pertaining to the player's character
+]]
+
+-- for example:
+local char = exports["usa-characters]:GetCharacter(source) -- get the usa-characters resource character object for player with given source
+
+if char.get("money") > 100 then
+	-- do something
+end
+
+if char.hasItem("Tuna Fish") then
+	-- do something
+end
