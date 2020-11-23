@@ -169,10 +169,6 @@ end)
 
 Citizen.CreateThread(function()
 	while true do
-		local ped = GetPlayerPed(-1)
-		if IsPedInAnyVehicle(ped, true) then
-			PlayerIsEnteringVehicle()
-		end
 		if IsPlayerAbleToVape then
 			if IsControlPressed(0, Config.DragControl) then
 			  Wait(Config.ButtonHoldTime)
@@ -234,7 +230,11 @@ function PlayerIsUnableToVape()
 	IsPlayerAbleToVape = false
 	local ped = GetPlayerPed(-1)
 	DeleteObject(VapeMod)
-	ClearPedTasksImmediately(ped)
+	if IsPedInAnyVehicle(ped, true) then
+		ClearPedTasks(ped)
+	else 
+		ClearPedTasksImmediately(ped)
+	end
 	ClearPedSecondaryTask(ped)
 end
 function ShowNotification( text )
