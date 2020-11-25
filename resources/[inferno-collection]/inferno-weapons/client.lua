@@ -45,7 +45,8 @@ Config.Weapons.Single = {
 	"WEAPON_VINTAGEPISTOL",
 	"WEAPON_PUMPSHOTGUN",
 	"WEAPON_SNSPISTOL_MK2",
-	"WEAPON_REVOLVER_MK2"
+	"WEAPON_REVOLVER_MK2",
+	"WEAPON_PUMPSHOTGUN_MK2"
 }
 
 -- These weapons will have safety, semi-automatic, burst shot, and full auto modes
@@ -69,8 +70,7 @@ Config.Weapons.Full = {
 	"WEAPON_BULLPUPRIFLE",
 	"WEAPON_COMPACTRIFLE",
 	"WEAPON_SPECIALCARBINE_MK2",
-	"WEAPON_BULLPUPRIFLE_MK2",
-	"WEAPON_PUMPSHOTGUN_MK2"
+	"WEAPON_BULLPUPRIFLE_MK2"
 }
 
 -- These weapons will have their reticle enabled
