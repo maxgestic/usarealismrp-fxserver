@@ -151,6 +151,10 @@ local ITEMS = { -- must be kept in sync with one in sv_weaponeaxtrashop.lua --
               {name = "Rail Cover", value = "COMPONENT_AT_RAILCOVER_01", price = 900, weapon_hash = -2084633992},
               {name = "Yusuf Amir Luxury Finish", value = "COMPONENT_CARBINERIFLE_VARMOD_LUXE", price = 6500, weapon_hash = -2084633992}
           },
+          ["Compact Rifle"] = {
+            {name = "Extended Magazine", value = "COMPONENT_COMPACTRIFLE_CLIP_02", price = 5000, weapon_hash = 1649403952},
+            {name = "Drum Magazine", value = "COMPONENT_COMPACTRIFLE_CLIP_03", price = 7500, weapon_hash = 1649403952}
+          },
           ["Machine Pistol"] = {
               {name = "Extended Magazine", value = "COMPONENT_MACHINEPISTOL_CLIP_02", price = 1500, weapon_hash = -619010992},
               {name = "Suppressor", value = "COMPONENT_AT_PI_SUPP", price = 1500, weapon_hash = -619010992}
