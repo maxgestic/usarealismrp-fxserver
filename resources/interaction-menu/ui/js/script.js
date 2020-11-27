@@ -220,6 +220,7 @@ var itemImages = {
   "Spike Strips": "https://i.imgur.com/0iPbmxW.png",
   "Heavy Shotgun": "https://i.imgur.com/JRP4gPv.png",
   "SMG MK2": "https://i.imgur.com/sN9udjW.png",
+  "Compact Rifle": "https://i.imgur.com/38RjuhX.png"
 }
 
 var menuItems = [
