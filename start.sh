@@ -20,7 +20,6 @@ rm map_dealership -f -r
 rm map_hospital -f -r
 rm map_mrpd -f -r
 rm map_sandypdinterior -f -r
-rm gabz_pillbox_hospital -f -r
 rm map_burgershot -f -r
 rm map_glory -f -r
 rm map_mosleys -f -r
