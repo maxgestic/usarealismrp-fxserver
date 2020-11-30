@@ -95,7 +95,7 @@ For it to work properly you need to follow these rules:
 
 ```
 --[[
-	The server-sided character object (from usa-characters) has a whole bunch of helpful properties and method pertaining to the player's character
+	The server-sided character object (from usa-characters) has a whole bunch of helpful properties and methods pertaining to the player's character
 ]]
 
 -- for example:
