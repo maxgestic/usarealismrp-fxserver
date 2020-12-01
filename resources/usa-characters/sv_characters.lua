@@ -6,8 +6,8 @@ local UPDATE_TIME_INTERVAL_MINUTES = 30
 local CHARACTERS = {} -- table of all playing characters for fast look up
 
 local SETTINGS = {
-  DEFAULT_BANK = 0,
-  DEFAULT_MONEY = 5000
+  DEFAULT_BANK = 5000,
+  DEFAULT_MONEY = 1500
 }
 
 AddEventHandler("playerDropped", function(reason)
