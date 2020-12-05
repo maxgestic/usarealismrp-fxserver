@@ -13,7 +13,8 @@ local armoryItems = {
     { name = "SMG MK2", hash = 0x78A97CD0, price = 750, weight = 20 },
     { name = "MK2 Pump Shotgun", hash = 1432025498, price = 700, weight = 25 },
     { name = "MK2 Carbine Rifle", hash = 4208062921, price = 700, weight = 25, minRank = 2 },
-    { name = "Spike Strips", price = 300 }
+    { name = "Spike Strips", price = 700 },
+    { name = "Police Radio", price = 300, type = "misc", weight = 5 }
 }
 
 for i = 1, #armoryItems do
@@ -21,7 +22,7 @@ for i = 1, #armoryItems do
     armoryItems[i].notStackable = true
     armoryItems[i].quantity = 1
     armoryItems[i].legality = "legal"
-    if armoryItems[i].name ~= "Spike Strips" then
+    if armoryItems[i].name ~= "Spike Strips" and armoryItems[i].name ~= "Police Radio" then
         armoryItems[i].type = "weapon"
     end
 end

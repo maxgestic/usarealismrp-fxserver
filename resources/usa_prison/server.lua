@@ -1,17 +1,18 @@
 local JOB_NAME = "corrections"
 
 local WEAPONS = {
-	{ hash = "WEAPON_NIGHTSTICK", name = "Nightstick", rank = 1, weight = "10", price = 50},
-    { hash = "WEAPON_FLASHLIGHT", name = "Flashlight", rank = 1, weight = "10", price = 50},
-    { hash = "WEAPON_STUNGUN", name = "Stun Gun", rank = 1, weight = "9", price = 200},
-    { hash = 1593441988, name = "Combat Pistol", rank = 1, weight = "15", price = 200},
-	{ hash = -1600701090, name = "Tear Gas", rank = 2, weight = "10", price = 150},
-	{ name = "SMG", hash = 736523883, rank = 2, price = 500, weight = "30" },
-	{ name = "MK2 Pump Shotgun", hash = 1432025498, rank = 2, price = 500, weight = "30" },
-	{ name = "MK2 Carbine Rifle", hash = 4208062921, rank = 2, price = 500, weight = "30"},
-	{ name = "SMG MK2", hash = 0x78A97CD0, price = 750, rank = 2, weight = "20" },
-	{ hash = 100416529, name = "Marksman Rifle", rank = 2, weight = "40", price = 1000},
+	{ hash = "WEAPON_NIGHTSTICK", name = "Nightstick", rank = 1, weight = 10, price = 50},
+    { hash = "WEAPON_FLASHLIGHT", name = "Flashlight", rank = 1, weight = 10, price = 50},
+    { hash = "WEAPON_STUNGUN", name = "Stun Gun", rank = 1, weight = 9, price = 200},
+    { hash = 1593441988, name = "Combat Pistol", rank = 1, weight = 15, price = 200},
+	{ hash = -1600701090, name = "Tear Gas", rank = 2, weight = 10, price = 150},
+	{ name = "SMG", hash = 736523883, rank = 2, price = 500, weight = 30 },
+	{ name = "MK2 Pump Shotgun", hash = 1432025498, rank = 2, price = 500, weight = 30 },
+	{ name = "MK2 Carbine Rifle", hash = 4208062921, rank = 2, price = 500, weight = 30},
+	{ name = "SMG MK2", hash = 0x78A97CD0, price = 750, rank = 2, weight = 20 },
+	{ hash = 100416529, name = "Marksman Rifle", rank = 2, weight = 40, price = 1000},
 	{ name = "Spike Strips", rank = 3 },
+    { name = "Police Radio", rank = 1, price = 300, type = "misc", weight = 5 }
 }
 
 for i = 1, #WEAPONS do
@@ -19,7 +20,7 @@ for i = 1, #WEAPONS do
     WEAPONS[i].notStackable = true
     WEAPONS[i].quantity = 1
 	WEAPONS[i].legality = "legal"
-	if WEAPONS[i].name ~= "Spike Strips" then
+	if WEAPONS[i].name ~= "Spike Strips" and WEAPONS[i].name ~= "Police Radio" then
 		WEAPONS[i].type = "weapon"
 	end
 end

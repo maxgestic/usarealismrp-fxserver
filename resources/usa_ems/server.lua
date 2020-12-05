@@ -3,7 +3,8 @@ local JOB_NAME = "ems"
 local LOADOUT_ITEMS = {
   { name = "Flashlight", hash = -1951375401, price = 15, weight = 4 },
   { name = "Flare", hash = 1233104067, price = 25, weight = 9 },
-  { name = "Fire Extinguisher", hash = 101631238, price = 25, weight = 20 }
+  { name = "Fire Extinguisher", hash = 101631238, price = 25, weight = 20 },
+  { name = "EMS Radio", price = 500, weight = 5, type = "misc" },
 }
 
 for i = 1, #LOADOUT_ITEMS do
@@ -11,7 +12,9 @@ for i = 1, #LOADOUT_ITEMS do
     LOADOUT_ITEMS[i].notStackable = true
     LOADOUT_ITEMS[i].quantity = 1
     LOADOUT_ITEMS[i].legality = "legal"
-    LOADOUT_ITEMS[i].type = "weapon"
+    if not LOADOUT_ITEMS[i].type then
+      LOADOUT_ITEMS[i].type = "weapon"
+    end
 end
 
 RegisterServerEvent("ems:getLoadout")
@@ -29,7 +32,9 @@ AddEventHandler("ems:getLoadout", function()
             if char.canHoldItem(item) then
                 char.removeMoney(item.price)
                 char.giveItem(item)
-                TriggerClientEvent("mini:equipWeapon", source, item.hash)
+                if item.hash then
+                  TriggerClientEvent("mini:equipWeapon", source, item.hash)
+                end
                 TriggerClientEvent("usa:notify", source, "Retrieved a " .. item.name)
             else
                 TriggerClientEvent("usa:notify", source, "Unable to get " .. item.name ..". Inventory full.")

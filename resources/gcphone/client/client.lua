@@ -398,7 +398,7 @@ AddEventHandler("gcPhone:acceptCall", function(infoCall, initiator)
     inCall = true
     --NetworkSetVoiceChannel(infoCall.id + 1)
     --NetworkSetTalkerProximity(0.0)
-    exports.tokovoip_script:addPlayerToRadio(infoCall.id + 300) -- +300 just to avoid conflicting with dispatch radio channels
+    exports["mumble-voip"]:addPlayerToCall(infoCall.id + 300) -- +300 just to avoid conflicting with dispatch radio channels
   end
   if menuIsOpen == false then 
     TooglePhone()
@@ -413,7 +413,7 @@ AddEventHandler("gcPhone:rejectCall", function(infoCall)
     inCall = false
     --Citizen.InvokeNative(0xE036A705F989E049)
     --NetworkSetTalkerProximity(2.5)
-    exports.tokovoip_script:removePlayerFromRadio(infoCall.id + 300)
+    exports["mumble-voip"]:removePlayerFromCall(infoCall.id + 300)
   end
   PhonePlayText()
   SendNUIMessage({event = 'rejectCall', infoCall = infoCall})

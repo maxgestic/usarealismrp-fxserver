@@ -74,7 +74,8 @@ local GENERAL_STORE_ITEMS = {
 
 local HARDWARE_STORE_ITEMS = {
   ["Electronics"] = {
-    { name = "Cell Phone", price = 650, type = "misc", quantity = 1, legality = "legal", weight = 3, objectModel = "prop_npc_phone_02", blockedInPrison = true}
+    { name = "Cell Phone", price = 650, type = "misc", quantity = 1, legality = "legal", weight = 3, objectModel = "prop_npc_phone_02", blockedInPrison = true },
+    { name = "Radio", price = 2000, type = "misc", quantity = 1, legality = "legal", weight = 15, objectModel = "prop_cs_hand_radio" }
   },
   ["Misc"] = {
     {name = 'Razor Blade', type = 'misc', price = 60, legality = 'legal', quantity = 1, residue = false, weight = 3},

@@ -795,6 +795,9 @@ RegisterNUICallback('inventoryActionItemClicked', function(data, cb)
 			if targetPlayerId ~= 0 and distanceToClosestTargetPed <= exports["globals"]:MaxItemTradeDistance() then
 				if not string.find(itemName, "Driver") and not string.find(itemName, "Firearm") and not string.find(itemName, 'License') and not string.find(itemName, 'Certificate') then
 					TriggerServerEvent("interaction:giveItemToPlayer", wholeItem, targetPlayerId)
+					if itemName:find("Radio") then
+						TriggerEvent("Radio.Set", false, {})
+					end
 				end
 			else
 				exports.globals:notify("Can't find player to give to!")
@@ -853,6 +856,9 @@ RegisterNUICallback("dropItem", function(data, cb)
 		end
 		TriggerEvent("usa:playAnimation", "anim@move_m@trash", "pickup", -8, 1, -1, 48, 0, 0, 0, 0)
 		TriggerServerEvent("inventory:dropItem", data.itemName, data.index, finalPos.x, finalPos.y, finalPos.z)
+		if data.itemName:find("Radio") then
+			TriggerEvent("Radio.Set", false, {})
+		end
 	else
 		exports.globals:notify("Can't drop that item, sorry!")
 	end
