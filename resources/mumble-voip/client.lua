@@ -1113,12 +1113,27 @@ Citizen.CreateThread(function()
 						SetPlayerTargets(callTargets, speakerTargets, vehicleTargets, playerData.radioActive and radioTargets or nil)
 					end
 				end
-			end
 
+			end
+			
 			Citizen.Wait(1000)
 		else
 			Citizen.Wait(0)
 		end
+	end
+end)
+
+-- this thread fixes the bug where passengers who enter and leave your vehicle never get unmuted if you are tuned into a radio channel with rp-radio
+Citizen.CreateThread(function()
+	local oldVehicleTargets = {}
+	while true do
+		for id, exists in pairs(oldVehicleTargets) do
+			if not vehicleTargets[id] then
+				TogglePlayerVoice(id, false)
+			end
+		end
+		oldVehicleTargets = vehicleTargets
+		Wait(1000)
 	end
 end)
 
