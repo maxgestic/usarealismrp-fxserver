@@ -149,6 +149,8 @@ function Radio:Toggle(toggle)
 
         self.Handle = CreateObject(self.Prop, 0.0, 0.0, 0.0, true, true, false)
 
+        SetEntityAsMissionEntity(self.Handle, true, true)
+
         local bone = GetPedBoneIndex(playerPed, self.Bone)
 
         SetCurrentPedWeapon(playerPed, `weapon_unarmed`, true)
