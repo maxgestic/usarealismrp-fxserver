@@ -113,8 +113,14 @@ function Radio:Toggle(toggle)
     if not self.Has then
         self.Open = false
         
+        --[[
         DetachEntity(self.Handle, true, false)
         DeleteEntity(self.Handle)
+        --]]
+        if self.Handle and DoesEntityExist(self.Handle) then
+            DeleteRadioObject(self.Handle)
+            self.Handle = nil
+        end
         
         return
     end
@@ -147,16 +153,20 @@ function Radio:Toggle(toggle)
             Citizen.Wait(150)
         end
 
-        self.Handle = CreateObject(self.Prop, 0.0, 0.0, 0.0, true, true, false)
+        if not self.Handle or (self.Handle and not DoesEntityExist(self.Handle)) then -- only create radio if it doesn't already exist (to prevent undeletable radios)
 
-        SetEntityAsMissionEntity(self.Handle, true, true)
+            self.Handle = CreateObject(self.Prop, 0.0, 0.0, 0.0, true, true, false)
 
-        local bone = GetPedBoneIndex(playerPed, self.Bone)
+            SetEntityAsMissionEntity(self.Handle, true, true)
 
-        SetCurrentPedWeapon(playerPed, `weapon_unarmed`, true)
-        AttachEntityToEntity(self.Handle, playerPed, bone, self.Offset.x, self.Offset.y, self.Offset.z, self.Rotation.x, self.Rotation.y, self.Rotation.z, true, false, false, false, 2, true)
+            local bone = GetPedBoneIndex(playerPed, self.Bone)
 
-        SetModelAsNoLongerNeeded(self.Handle)
+            SetCurrentPedWeapon(playerPed, `weapon_unarmed`, true)
+            AttachEntityToEntity(self.Handle, playerPed, bone, self.Offset.x, self.Offset.y, self.Offset.z, self.Rotation.x, self.Rotation.y, self.Rotation.z, true, false, false, false, 2, true)
+
+            SetModelAsNoLongerNeeded(self.Handle)
+
+        end
 
         TaskPlayAnim(playerPed, dictionary, animation, 4.0, -1, -1, 50, 0, false, false, false)
     else
@@ -166,6 +176,7 @@ function Radio:Toggle(toggle)
 
         StopAnimTask(playerPed, dictionary, animation, 1.0)
 
+        --[[
         NetworkRequestControlOfEntity(self.Handle)
 
 		while not NetworkHasControlOfEntity(self.Handle) and count < 5000 do
@@ -175,6 +186,11 @@ function Radio:Toggle(toggle)
         
         DetachEntity(self.Handle, true, false)
         DeleteEntity(self.Handle)
+        --]]
+
+        DeleteRadioObject(self.Handle)
+        
+        self.Handle = nil
     end
 end
 
@@ -433,6 +449,14 @@ function RemovePlayerAccessToFrequencies(...)
         end
 
         GenerateFrequencyList()
+    end
+end
+
+function DeleteRadioObject(radioObject)
+    if radioObject then
+        DeleteEntity(radioObject)
+    else 
+        print("error deleteing radio, it did not exist!")
     end
 end
 
