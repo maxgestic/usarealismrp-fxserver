@@ -1,3 +1,5 @@
+math.randomseed(os.time())
+
 local common = {
     {name = "Aluminum", type = "misc", price = 100, legality = "legal", quantity = 1, weight = 5.0},
     {name = "Copper", type = "misc", price = 75, legality = "legal", quantity = 1, weight = 10.0},
@@ -22,32 +24,16 @@ end)
 RegisterServerEvent('mining:giveUserMiningGoods')
 AddEventHandler('mining:giveUserMiningGoods', function()
     local char = exports["usa-characters"]:GetCharacter(source)
-    local brokenPick = math.random()
-    if brokenPick > 0.15 then
-        local success = math.random()
-
-        if success <= 0.50 then
-            TriggerClientEvent("usa:notify", source, "You didn't find anything!")
-        elseif success >= 0.60 then
-            local commonItem = common[math.random(#common)]
-            if char.canHoldItem(commonItem) then
-                char.giveItem(commonItem)
-                TriggerClientEvent("usa:notify", source, "You found (" .. commonItem.quantity .. "x) " .. commonItem.name)
-            else
-                TriggerClientEvent("usa:notify", source, "Inventory full")
-            end
-        elseif success > 0.50 and success < 0.60 then
-            local rareItem = rare[math.random(#rare)]
-            if char.canHoldItem(rareItem) then
-                char.giveItem(rareItem)
-                TriggerClientEvent("usa:notify", source, "You found (" .. rareItem.quantity .. "x) " .. rareItem.name)
-            else
-                TriggerClientEvent("usa:notify", source, "Inventory full")
-            end
+    local gotSomething = math.random() <= 0.60
+    if gotSomething then
+        local gotARareItem = math.random() <= 0.14
+        if gotARareItem then
+            giveCharItem(char, source, "rare")
+        else 
+            giveCharItem(char, source, "common")
         end
     else
-        char.removeItem("Pick Axe")
-        TriggerClientEvent("usa:notify", source, "Your Pick Axe Broke!")
+        TriggerClientEvent("usa:notify", source, "You didn't find anything!")
     end
 end)
 
@@ -69,3 +55,20 @@ AddEventHandler('mining:sellMinedItems', function()
         end
     end
 end)
+
+function giveCharItem(char, src, type)
+    local item = nil
+    if type == "rare" then
+        item = rare[math.random(#rare)]
+    elseif type == "common" then
+        item = common[math.random(#common)]
+    end
+    if item then
+        if char.canHoldItem(item) then
+            char.giveItem(item)
+            TriggerClientEvent("usa:notify", src, "You found (" .. item.quantity .. "x) " .. item.name)
+        else
+            TriggerClientEvent("usa:notify", src, "Inventory full")
+        end
+    end
+end
