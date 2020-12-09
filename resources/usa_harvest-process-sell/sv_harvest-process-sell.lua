@@ -1,3 +1,5 @@
+local CHECK_CRIMINAL_HISTORY = false
+
 local REWARDS = {
   ["Sand"] = {
     harvest_item_requirement = "Shovel",
@@ -30,13 +32,15 @@ local REWARDS = {
 
 RegisterServerEvent("HPS:checkCriminalHistory")
 AddEventHandler("HPS:checkCriminalHistory", function(job_name, process_time, stage)
-  local char = exports["usa-characters"]:GetCharacter(source)
-  local criminal_history = char.get("criminalHistory")
-  if #criminal_history > 0 then
-    for i = 1, #criminal_history do
-      if hasCriminalRecord(criminal_history[i].charges) then
-        TriggerClientEvent("usa:notify", source, "Due to your serious criminal background, we cannot hire you to work in our sandpit!")
-        return
+  if CHECK_CRIMINAL_HISTORY then
+    local char = exports["usa-characters"]:GetCharacter(source)
+    local criminal_history = char.get("criminalHistory")
+    if #criminal_history > 0 then
+      for i = 1, #criminal_history do
+        if hasCriminalRecord(criminal_history[i].charges) then
+          TriggerClientEvent("usa:notify", source, "Due to your serious criminal background, we cannot hire you to work in our sandpit!")
+          return
+        end
       end
     end
   end
