@@ -109,11 +109,16 @@ AddEventHandler("LSC:buttonSelected", function(name, button, mname, business)
 		local job = char.get("job")
 		local charMoney = char.get("money")
 		button.price = math.abs(button.price) -- prevent mem hack to gain money
+		--[[
 		if mname ~= 'main' then
 			for menuname, contents in pairs(prices) do
 				if menuname == mname then
 					if contents.startprice then
+						print(".startprice existed!")
 						local actualprice = contents.startprice + (button.mod * contents.increaseby)
+						print("actualprice: " .. actualprice)
+						print("button.price: " .. button.price)
+						print("button.mod: " .. button.mod)
 						if button.price == actualprice or (button.name == 'Stock' and button.price == 0) then
 							break
 						else
@@ -142,6 +147,7 @@ AddEventHandler("LSC:buttonSelected", function(name, button, mname, business)
 				end
 			end
 		end
+		--]]
 		if JobGetsDiscountedUpgrades(job) then
 			local discountedPrice = math.floor(button.price / 2)
 			if discountedPrice <= charMoney then
