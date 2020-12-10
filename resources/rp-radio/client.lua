@@ -460,6 +460,28 @@ function DeleteRadioObject(radioObject)
     end
 end
 
+function CreateRadioObjectForPed(ped)
+    RequestModel(Radio.Prop)
+
+    while not HasModelLoaded(Radio.Prop) do
+        Citizen.Wait(150)
+    end
+
+    if not Radio.Handle or (Radio.Handle and not DoesEntityExist(Radio.Handle)) then -- only create radio if it doesn't already exist (to prevent undeletable radios)
+
+        Radio.Handle = CreateObject(Radio.Prop, 0.0, 0.0, 0.0, true, true, false)
+
+        SetEntityAsMissionEntity(Radio.Handle, true, true)
+
+        local bone = GetPedBoneIndex(ped, Radio.Bone)
+
+        SetCurrentPedWeapon(ped, `weapon_unarmed`, true)
+        AttachEntityToEntity(Radio.Handle, ped, bone, Radio.Offset.x, Radio.Offset.y, Radio.Offset.z, Radio.Rotation.x, Radio.Rotation.y, Radio.Rotation.z, true, false, false, false, 2, true)
+
+        SetModelAsNoLongerNeeded(Radio.Handle)
+    end
+end
+
 -- Define exports
 exports("IsRadioOpen", IsRadioOpen)
 exports("IsRadioOn", IsRadioOn)
@@ -670,18 +692,23 @@ Citizen.CreateThread(function()
                 end
             end
         else
-            -- Play emergency services radio animation
+            -- Play closed radio animation
             if radioConfig.AllowRadioWhenClosed or HAS_EARPIECE then
-                if Radio.Has and Radio.On and isBroadcasting and not isPlayingBroadcastAnim then
-                    RequestAnimDict(broadcastDictionary)
-    
-                    while not HasAnimDictLoaded(broadcastDictionary) do
-                        Citizen.Wait(150)
-                    end
-        
-                    TaskPlayAnim(playerPed, broadcastDictionary, broadcastAnimation, 8.0, 0.0, -1, 49, 0, 0, 0, 0)                    
-                elseif not isBroadcasting and isPlayingBroadcastAnim then
+                if radioConfig.AllowRadioWhenClosed and not HAS_EARPIECE then -- should play civ anim (holding radio in front to speak)
+                    broadcastDictionary = Radio.Dictionary[3]
+                    broadcastAnimation = Radio.Animation[3]
+                elseif HAS_EARPIECE then
+                    broadcastDictionary = Radio.Dictionary[4]
+                    broadcastAnimation = Radio.Animation[4]
+                end
+                if Radio.Has and Radio.On and isBroadcasting and not IsEntityPlayingAnim(playerPed, broadcastDictionary, broadcastAnimation, 3) then
+                    exports.globals:loadAnimDict(broadcastDictionary)
+                    CreateRadioObjectForPed(playerPed)
+                    TaskPlayAnim(playerPed, broadcastDictionary, broadcastAnimation, 8.0, 0.0, -1, 49, 0, 0, 0, 0)
+                elseif not isBroadcasting and IsEntityPlayingAnim(playerPed, broadcastDictionary, broadcastAnimation, 3) then
                     StopAnimTask(playerPed, broadcastDictionary, broadcastAnimation, -4.0)
+                    DeleteRadioObject(Radio.Handle)
+                    Radio.Handle = nil
                 end
             end
         end

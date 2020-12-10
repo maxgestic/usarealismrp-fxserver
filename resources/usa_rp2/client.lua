@@ -602,19 +602,11 @@ local policeVehicles = {
 
 }
 
---------------------------------------
--- increase tazer gun stun duration --
---------------------------------------
-local tiempo = 8000 -- in miliseconds >> 1000 ms = 1s
-
 Citizen.CreateThread(function()
-	while true do
-    playerPed = PlayerPedId() -- IMPORTANT!! DO NOT REMOVE!! THIS IS USED TO SET THE GLOBAL PLAYER PED FOR THE WHOLE FILE! --
-		if IsPedBeingStunned(playerPed) then
-		    SetPedMinGroundTimeForStungun(playerPed, tiempo)
-		end
-        Wait(10)
-	end
+  while true do
+    playerPed = PlayerPedId() -- !! IMPORTANT! DO NOT DELETE! THIS SETS playerPed FOR THE _WHOLE_ SCRIPT!! !!
+    Wait(2)
+  end
 end)
 
 ------------------------------------

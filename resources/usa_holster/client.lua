@@ -127,18 +127,22 @@ function handleHolsterAnim()
 	local ped = GetPlayerPed(-1)
 	if GetPedParachuteState(ped) == -1 then
 		if DoesEntityExist(ped) and not IsEntityDead(ped) and not IsPedInAnyVehicle(ped, true) then
-			loadAnimDict( "reaction@intimidation@1h" )
-			loadAnimDict( "rcmjosh4" )
-			loadAnimDict( "timetable@jimmy@ig_2@ig_2_p2" )
+			loadAnimDict("reaction@intimidation@1h")
+			loadAnimDict("rcmjosh4")
+			loadAnimDict("timetable@jimmy@ig_2@ig_2_p2")
 			if CheckSmallWeapon(ped) and smallHolstered and not IsPedInMeleeCombat(ped) and not IsPlayerTargettingAnything(ped) and not IsPedInCombat(ped) then -- unholstering
 				local togive = GetSelectedPedWeapon(ped) -- to prevent gun from coming out too early for animation, remove the gun when it starts and only give at right time
 				if not onDuty and GetPedDrawableVariation(ped, 7) ~= 8 and GetPedDrawableVariation(ped, 7) ~= 6 and GetPedDrawableVariation(ped, 7) ~= 1 then
 					SetCurrentPedWeapon(ped, GetHashKey("WEAPON_UNARMED"), true)
 					playingAnim = true
 					TaskPlayAnim(ped, "reaction@intimidation@1h", "intro", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
+					while not IsEntityPlayingAnim(ped, "reaction@intimidation@1h", "intro", 3) do -- make sure anim plays (avoid exploits like playing other anims while pulling weapons)
+						TaskPlayAnim(ped, "reaction@intimidation@1h", "intro", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
+						Wait(5)
+					end
 					Wait(1400)
 					SetCurrentPedWeapon(ped, togive, true)
-					Wait(1500)
+					Wait(600)
 					ClearPedTasks(ped)
 					SetCurrentPedWeapon(ped, togive, true)
 					playingAnim = false
@@ -176,6 +180,10 @@ function handleHolsterAnim()
 				SetCurrentPedWeapon(ped, GetHashKey("WEAPON_UNARMED"), true)
 				playingAnim = true
 				TaskPlayAnim(ped, "timetable@jimmy@ig_2@ig_2_p2", "ig_2_exit", 8.0, 1.0, -1, 48, 0.0, 0, 0, 0 )
+				while not IsEntityPlayingAnim(ped, "timetable@jimmy@ig_2@ig_2_p2", "ig_2_exit", 3) do -- make sure anim plays (avoid exploits like playing other anims while pulling weapons)
+					TaskPlayAnim(ped, "timetable@jimmy@ig_2@ig_2_p2", "ig_2_exit", 8.0, 2.0, -1, 48, 10, 0, 0, 0 )
+					Wait(5)
+				end
 				Wait(1400)
 				SetCurrentPedWeapon(ped, togive, true)
 				ClearPedTasks(ped)
@@ -219,6 +227,17 @@ function handleHolsterAnim()
 		end
 	end
 end
+
+-- thread to disable caps lock while unholstering/holstering
+Citizen.CreateThread(function()
+	while true do
+		if playingAnim then
+			local CAPS_LOCK = 137
+			DisableControlAction(0, CAPS_LOCK, true)
+		end
+		Wait(1)
+	end
+end)
 
 function CheckSmallWeapon(ped)
 	for i = 1, #smallWeapons do
