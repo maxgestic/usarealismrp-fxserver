@@ -641,6 +641,8 @@ Citizen.CreateThread(function()
                     if IsControlJustPressed(0, radioConfig.Controls.Input.Key) then
                         radioConfig.Controls.Input.Pressed = true
                         Citizen.CreateThread(function()
+                            TriggerEvent("hotkeys:enable", false)
+
                             DisplayOnscreenKeyboard(1, Radio.Labels[3][1], "", radioConfig.Frequency.Current, "", "", "", 3)
 
                             while UpdateOnscreenKeyboard() ~= 1 and UpdateOnscreenKeyboard() ~= 2 do
@@ -678,6 +680,8 @@ Citizen.CreateThread(function()
                             end
                             
                             radioConfig.Controls.Input.Pressed = false
+
+                            TriggerEvent("hotkeys:enable", true)
                         end)
                     end
                 end
