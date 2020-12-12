@@ -9,7 +9,7 @@ mumbleConfig = {
 		{30.0, "Shouting"}, -- Shout speech distance in gta distance units
 	},
 	speakerRange = 1.5, -- Speaker distance in gta distance units (how close you need to be to another player to hear other players on the radio or phone)
-	callSpeakerEnabled = true, -- Allow players to hear all talking participants of a phone call if standing next to someone that is on the phone
+	callSpeakerEnabled = false, -- Allow players to hear all talking participants of a phone call if standing next to someone that is on the phone
 	radioEnabled = true, -- Enable or disable using the radio
 	micClicks = true, -- Are clicks enabled or not
 	micClickOn = true, -- Is click sound on active
