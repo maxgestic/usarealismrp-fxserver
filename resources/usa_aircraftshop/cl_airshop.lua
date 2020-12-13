@@ -235,7 +235,7 @@ Citizen.CreateThread(function()
             local shopDist = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), data.menu.x, data.menu.y, data.menu.z, true)
 			if data.private and shopDist < 70 then
 				DrawText3D(data.menu.x, data.menu.y, data.menu.z, 2, '[E] - Private Hanger')
-				if IsControlPressed(0, KEYS.E) then
+				if IsControlPressed(0, KEYS.E) and shopDist < 5 then
 					TriggerServerEvent('aircraft:requestOpenPrivateMenu')
 				end
 			elseif shopDist < 70 then
