@@ -475,7 +475,6 @@ function CreateRadioObjectForPed(ped)
 
         local bone = GetPedBoneIndex(ped, Radio.Bone)
 
-        SetCurrentPedWeapon(ped, `weapon_unarmed`, true)
         AttachEntityToEntity(Radio.Handle, ped, bone, Radio.Offset.x, Radio.Offset.y, Radio.Offset.z, Radio.Rotation.x, Radio.Rotation.y, Radio.Rotation.z, true, false, false, false, 2, true)
 
         SetModelAsNoLongerNeeded(Radio.Handle)
@@ -517,7 +516,7 @@ Citizen.CreateThread(function()
         local broadcastType = 3 + (HAS_EARPIECE and 1 or 0) + (radioConfig.AllowRadioWhenClosed and 1 or 0) + ((Radio.Open and radioConfig.AllowRadioWhenClosed) and -1 or 0)
         local broadcastDictionary = Radio.Dictionary[broadcastType]
         local broadcastAnimation = Radio.Animation[broadcastType]
-        local isBroadcasting = IsControlPressed(0, radioConfig.Controls.Broadcast.Key)
+        local isBroadcasting = IsControlPressed(0, radioConfig.Controls.Broadcast.Key) and not IsPlayerFreeAiming(PlayerId())
         local isPlayingBroadcastAnim = IsEntityPlayingAnim(playerPed, broadcastDictionary, broadcastAnimation, 3)
 
         -- Open radio settings
@@ -697,22 +696,24 @@ Citizen.CreateThread(function()
             end
         else
             -- Play closed radio animation
-            if radioConfig.AllowRadioWhenClosed or HAS_EARPIECE then
-                if radioConfig.AllowRadioWhenClosed and not HAS_EARPIECE then -- should play civ anim (holding radio in front to speak)
-                    broadcastDictionary = Radio.Dictionary[3]
-                    broadcastAnimation = Radio.Animation[3]
-                elseif HAS_EARPIECE then
-                    broadcastDictionary = Radio.Dictionary[4]
-                    broadcastAnimation = Radio.Animation[4]
-                end
-                if Radio.Has and Radio.On and isBroadcasting and not IsEntityPlayingAnim(playerPed, broadcastDictionary, broadcastAnimation, 3) then
-                    exports.globals:loadAnimDict(broadcastDictionary)
-                    CreateRadioObjectForPed(playerPed)
-                    TaskPlayAnim(playerPed, broadcastDictionary, broadcastAnimation, 8.0, 0.0, -1, 49, 0, 0, 0, 0)
-                elseif not isBroadcasting and IsEntityPlayingAnim(playerPed, broadcastDictionary, broadcastAnimation, 3) then
-                    StopAnimTask(playerPed, broadcastDictionary, broadcastAnimation, -4.0)
-                    DeleteRadioObject(Radio.Handle)
-                    Radio.Handle = nil
+            if not IsPlayerFreeAiming(PlayerId()) then
+                if radioConfig.AllowRadioWhenClosed or HAS_EARPIECE then
+                    if radioConfig.AllowRadioWhenClosed and not HAS_EARPIECE then -- should play civ anim (holding radio in front to speak)
+                        broadcastDictionary = Radio.Dictionary[3]
+                        broadcastAnimation = Radio.Animation[3]
+                    elseif HAS_EARPIECE then
+                        broadcastDictionary = Radio.Dictionary[4]
+                        broadcastAnimation = Radio.Animation[4]
+                    end
+                    if Radio.Has and Radio.On and isBroadcasting and not IsEntityPlayingAnim(playerPed, broadcastDictionary, broadcastAnimation, 3) then
+                        exports.globals:loadAnimDict(broadcastDictionary)
+                        CreateRadioObjectForPed(playerPed)
+                        TaskPlayAnim(playerPed, broadcastDictionary, broadcastAnimation, 8.0, 0.0, -1, 49, 0, 0, 0, 0)
+                    elseif not isBroadcasting and IsEntityPlayingAnim(playerPed, broadcastDictionary, broadcastAnimation, 3) then
+                        StopAnimTask(playerPed, broadcastDictionary, broadcastAnimation, -4.0)
+                        DeleteRadioObject(Radio.Handle)
+                        Radio.Handle = nil
+                    end
                 end
             end
         end

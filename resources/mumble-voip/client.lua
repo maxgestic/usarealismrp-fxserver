@@ -813,7 +813,7 @@ Citizen.CreateThread(function()
 
 			if mumbleConfig.radioEnabled then
 				if not mumbleConfig.controls.radio.pressed then
-					if IsControlJustPressed(0, mumbleConfig.controls.radio.key) then
+					if IsControlJustPressed(0, mumbleConfig.controls.radio.key) and not IsPlayerFreeAiming(PlayerId()) then
 						if playerData.radio > 0 then
 							SetVoiceData("radioActive", true)
 							playerData.radioActive = true
@@ -825,8 +825,17 @@ Citizen.CreateThread(function()
 							mumbleConfig.controls.radio.pressed = true
 
 							Citizen.CreateThread(function()
-								while IsControlPressed(0, mumbleConfig.controls.radio.key) do
+								while IsControlPressed(0, mumbleConfig.controls.radio.key) and not IsPlayerFreeAiming(PlayerId()) do
 									Citizen.Wait(0)
+								end
+
+								local myped = PlayerPedId()
+								if IsEntityPlayingAnim(myped, "cellphone@str", "cellphone_call_listen_a", 3) then
+									StopAnimTask(myped, "cellphone@str", "cellphone_call_listen_a", 3.0)
+									-- todo: trigger event in rp-radio to clear radio object in hand here
+								elseif IsEntityPlayingAnim(myped, "random@arrests", "generic_radio_chatter", 3) then
+									StopAnimTask(myped, "random@arrests", "generic_radio_chatter", 3.0)
+									-- todo: trigger event in rp-radio to clear radio object in hand here
 								end
 
 								SetVoiceData("radioActive", false)
