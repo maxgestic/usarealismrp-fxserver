@@ -51,8 +51,7 @@ AddEventHandler("burgerjob:quitJob", function()
     end
 end)
 
-function checkStrikes(char)
-    local src = source
+function checkStrikes(char, src)
     BurgerHelper.getStrikes(char.get("_id"), function(strikes)
         TriggerClientEvent('burgerjob:checkStrikes', src, strikes)
     end)
@@ -60,8 +59,8 @@ end
 
 RegisterServerEvent("burgerjob:checkCriminalHistory")
 AddEventHandler("burgerjob:checkCriminalHistory", function()
+    local char = exports["usa-characters"]:GetCharacter(source)
     if ENABLE_CRIMINAL_HISTORY_CHECK then
-        local char = exports["usa-characters"]:GetCharacter(source)
         local criminal_history = char.get("criminalHistory")
         if #criminal_history > 0 then
             for i = 1, #criminal_history do
@@ -72,7 +71,7 @@ AddEventHandler("burgerjob:checkCriminalHistory", function()
             end
         end
     end
-    checkStrikes(char)
+    checkStrikes(char, source)
 end)
 
 RegisterServerEvent("burgerjob:addStrike")

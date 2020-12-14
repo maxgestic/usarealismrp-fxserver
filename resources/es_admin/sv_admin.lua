@@ -301,7 +301,7 @@ end
 -- Announcing
 TriggerEvent('es:addGroupCommand', 'announce', "mod", function(source, args, char)
 	table.remove(args, 1)
-	TriggerClientEvent('chatMessage', -1, "", {255, 0, 0}, "^2^*[STAFF ANNOUNCEMENT] ^r^0" .. table.concat(args, " "))
+	TriggerClientEvent('chatMessage', -1, "", {255, 0, 0}, "^2^*[CITY ANNOUNCEMENT] ^r^0" .. table.concat(args, " "))
 end, {
 	help = "Send a server-wide message.",
 	params = {
@@ -764,7 +764,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 					if(true)then
 						print(args[1] .. " " .. args[2])
 						TriggerClientEvent('es:setPlayerDecorator', tonumber(args[1]), 'group', tonumber(args[2]), true)
-						TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, "^2^*[SERVER] ^r^0Group of ^2^*" .. GetPlayerName(tonumber(args[1])) .. "^r^0 has been set to ^2^*" .. args[2]..'^r^0.')
+						--TriggerClientEvent('chatMessage', -1, "", {255, 255, 255}, "^2^*[SERVER] ^r^0Group of ^2^*" .. GetPlayerName(tonumber(args[1])) .. "^r^0 has been set to ^2^*" .. args[2]..'^r^0.')
 					end
 				end)
 			else
