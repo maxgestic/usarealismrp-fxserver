@@ -707,12 +707,16 @@ Citizen.CreateThread(function()
                     end
                     if Radio.Has and Radio.On and isBroadcasting and not IsEntityPlayingAnim(playerPed, broadcastDictionary, broadcastAnimation, 3) then
                         exports.globals:loadAnimDict(broadcastDictionary)
-                        CreateRadioObjectForPed(playerPed)
+                        if not HAS_EARPIECE then
+                            CreateRadioObjectForPed(playerPed)
+                        end
                         TaskPlayAnim(playerPed, broadcastDictionary, broadcastAnimation, 8.0, 0.0, -1, 49, 0, 0, 0, 0)
                     elseif not isBroadcasting and IsEntityPlayingAnim(playerPed, broadcastDictionary, broadcastAnimation, 3) then
                         StopAnimTask(playerPed, broadcastDictionary, broadcastAnimation, -4.0)
-                        DeleteRadioObject(Radio.Handle)
-                        Radio.Handle = nil
+                        if not HAS_EARPIECE then
+                            DeleteRadioObject(Radio.Handle)
+                            Radio.Handle = nil
+                        end
                     end
                 end
             end
