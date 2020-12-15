@@ -27,7 +27,7 @@ local Radio = {
 
 Radio.Labels = {        
     { "FRZL_RADIO_HELP", "~s~" .. (radioConfig.Controls.Secondary.Enabled and "~" .. radioConfig.Controls.Secondary.Name .. "~ + ~" .. radioConfig.Controls.Activator.Name .. "~" or "~" .. radioConfig.Controls.Activator.Name .. "~") .. " to hide.~n~~" .. radioConfig.Controls.Toggle.Name .. "~ to turn radio ~g~on~s~.~n~~" .. radioConfig.Controls.Decrease.Name .. "~ or ~" .. radioConfig.Controls.Increase.Name .. "~ to switch frequency~n~~" .. radioConfig.Controls.Input.Name .. "~ to choose frequency~n~~" .. radioConfig.Controls.ToggleClicks.Name .. "~ to ~a~ mic clicks~n~Frequency: ~1~ MHz" },
-    { "FRZL_RADIO_HELP2", "~s~" .. (radioConfig.Controls.Secondary.Enabled and "~" .. radioConfig.Controls.Secondary.Name .. "~ + ~" .. radioConfig.Controls.Activator.Name .. "~" or "~" .. radioConfig.Controls.Activator.Name .. "~") .. " to hide.~n~~" .. radioConfig.Controls.Toggle.Name .. "~ to turn radio ~r~off~s~.~n~~" .. radioConfig.Controls.Broadcast.Name .. "~ to broadcast.~n~Frequency: ~1~ MHz" },
+    { "FRZL_RADIO_HELP2", "~s~" .. (radioConfig.Controls.Secondary.Enabled and "~" .. radioConfig.Controls.Secondary.Name .. "~ + ~" .. radioConfig.Controls.Activator.Name .. "~" or "~" .. radioConfig.Controls.Activator.Name .. "~") .. " to hide.~n~~" .. radioConfig.Controls.Toggle.Name .. "~ to turn radio ~r~off~s~.~n~~" .. radioConfig.Controls.Decrease.Name .. "~ or ~" .. radioConfig.Controls.Increase.Name .. "~ to switch frequency~n~~" .. radioConfig.Controls.Broadcast.Name .. "~ to broadcast.~n~Frequency: ~1~ MHz" },
     { "FRZL_RADIO_INPUT", "Enter Frequency" },
 }
 Radio.Commands = {
@@ -604,37 +604,39 @@ Citizen.CreateThread(function()
                 end
             end
 
-            -- Change radio frequency
+            -- changing frequency - decrease
+            if not isBroadcasting and not radioConfig.Controls.Decrease.Pressed then
+                if IsControlJustPressed(0, radioConfig.Controls.Decrease.Key) then
+                    radioConfig.Controls.Decrease.Pressed = true
+                    Citizen.CreateThread(function()
+                        while IsControlPressed(0, radioConfig.Controls.Decrease.Key) do
+                            Radio:Decrease()
+                            Citizen.Wait(125)
+                        end
+
+                        radioConfig.Controls.Decrease.Pressed = false
+                    end)
+                end
+            end
+
+            -- changing frequency - increase
+            if not isBroadcasting and not radioConfig.Controls.Increase.Pressed then
+                if IsControlJustPressed(0, radioConfig.Controls.Increase.Key) then
+                    radioConfig.Controls.Increase.Pressed = true
+                    Citizen.CreateThread(function()
+                        while IsControlPressed(0, radioConfig.Controls.Increase.Key) do
+                            Radio:Increase()
+                            Citizen.Wait(125)
+                        end
+
+                        radioConfig.Controls.Increase.Pressed = false
+                    end)
+                end
+            end
+
+            -- toggling mic clicks
             if not Radio.On then
                 DisableControlAction(0, radioConfig.Controls.ToggleClicks.Key, false)
-
-                if not radioConfig.Controls.Decrease.Pressed then
-                    if IsControlJustPressed(0, radioConfig.Controls.Decrease.Key) then
-                        radioConfig.Controls.Decrease.Pressed = true
-                        Citizen.CreateThread(function()
-                            while IsControlPressed(0, radioConfig.Controls.Decrease.Key) do
-                                Radio:Decrease()
-                                Citizen.Wait(125)
-                            end
-
-                            radioConfig.Controls.Decrease.Pressed = false
-                        end)
-                    end
-                end
-
-                if not radioConfig.Controls.Increase.Pressed then
-                    if IsControlJustPressed(0, radioConfig.Controls.Increase.Key) then
-                        radioConfig.Controls.Increase.Pressed = true
-                        Citizen.CreateThread(function()
-                            while IsControlPressed(0, radioConfig.Controls.Increase.Key) do
-                                Radio:Increase()
-                                Citizen.Wait(125)
-                            end
-
-                            radioConfig.Controls.Increase.Pressed = false
-                        end)
-                    end
-                end
 
                 if not radioConfig.Controls.Input.Pressed then
                     if IsControlJustPressed(0, radioConfig.Controls.Input.Key) then
