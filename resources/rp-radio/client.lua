@@ -509,14 +509,14 @@ Citizen.CreateThread(function()
         Citizen.Wait(0)
         -- Init local vars
         local playerPed = PlayerPedId()
-        local isActivatorPressed = IsControlJustPressed(0, radioConfig.Controls.Activator.Key)
-        local isSecondaryPressed = (radioConfig.Controls.Secondary.Enabled == false and true or (IsControlPressed(0, radioConfig.Controls.Secondary.Key) or IsDisabledControlPressed(0, radioConfig.Controls.Secondary.Key)))
+        local isActivatorPressed = IsControlJustPressed(0, radioConfig.Controls.Activator.Key) and GetLastInputMethod(0)
+        local isSecondaryPressed = (radioConfig.Controls.Secondary.Enabled == false and true or (IsControlPressed(0, radioConfig.Controls.Secondary.Key) or IsDisabledControlPressed(0, radioConfig.Controls.Secondary.Key) and GetLastInputMethod(0)))
         local isFalling = IsPedFalling(playerPed)
         local minFrequency = radioConfig.Frequency.List[1]
         local broadcastType = 3 + (HAS_EARPIECE and 1 or 0) + (radioConfig.AllowRadioWhenClosed and 1 or 0) + ((Radio.Open and radioConfig.AllowRadioWhenClosed) and -1 or 0)
         local broadcastDictionary = Radio.Dictionary[broadcastType]
         local broadcastAnimation = Radio.Animation[broadcastType]
-        local isBroadcasting = IsControlPressed(0, radioConfig.Controls.Broadcast.Key) and not IsPlayerFreeAiming(PlayerId())
+        local isBroadcasting = IsControlPressed(0, radioConfig.Controls.Broadcast.Key) and not IsPlayerFreeAiming(PlayerId()) and GetLastInputMethod(0)
         local isPlayingBroadcastAnim = IsEntityPlayingAnim(playerPed, broadcastDictionary, broadcastAnimation, 3)
 
         -- Open radio settings

@@ -51,7 +51,7 @@ AddEventHandler("jewelleryheist:plantThermite", function()
 end)
 
 -- STAGE 2 - ROB THIS MOFUGGA
-local BASE_SMASH_N_GRAB_TIME = 15000
+local BASE_SMASH_N_GRAB_TIME = 10000
 
 local JewelleryCases = {}
 
