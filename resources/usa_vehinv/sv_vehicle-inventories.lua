@@ -45,6 +45,9 @@ AddEventHandler("vehicle:storeItem", function(src, vehicle_plate, item, quantity
                     if item.type == "weapon" then
                         TriggerClientEvent("interaction:equipWeapon", usource, item, false) -- remove weapon
                     end
+                    if item.name:find("Radio") then
+                        TriggerClientEvent("Radio.Set", usource, false, {})
+                    end
                     TriggerClientEvent("usa:playAnimation", usource, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 3)
                 end
                 if msg then
