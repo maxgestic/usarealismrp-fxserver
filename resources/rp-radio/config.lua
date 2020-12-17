@@ -13,6 +13,16 @@ radioConfig = {
             Name = "INPUT_CONTEXT", -- Control name
             Key = 51, -- E
         },
+        IncreaseVolume = { -- Increase Volume
+            Name = "INPUT_CELLPHONE_UP", -- Control name
+            Key = 172, -- Right Arrow
+            Pressed = false,
+        },
+        DecreaseVolume = { -- Decrease Volume
+            Name = "INPUT_CELLPHONE_DOWN", -- Control name
+            Key = 173, -- Right Arrow
+            Pressed = false,
+        },
         Increase = { -- Increase Frequency
             Name = "INPUT_CELLPHONE_RIGHT", -- Control name
             Key = 175, -- Right Arrow
@@ -60,5 +70,6 @@ radioConfig = {
         List = {}, -- Frequency list, Don't touch
         Access = {}, -- List of frequencies a player has access to
     },
-    AllowRadioWhenClosed = true -- Allows the radio to be used when not open for civs (uses shoulder mic animation) 
+    AllowRadioWhenClosed = true, -- Allows the radio to be used when not open for civs (uses shoulder mic animation)
+    DEFAULT_VOLUME = 1.0
 }

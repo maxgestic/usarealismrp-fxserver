@@ -23,11 +23,12 @@ local Radio = {
         "generic_radio_chatter",
     },
     Clicks = true, -- Radio clicks
+    Volume = radioConfig.DEFAULT_VOLUME
 }
 
 Radio.Labels = {        
-    { "FRZL_RADIO_HELP", "~s~" .. (radioConfig.Controls.Secondary.Enabled and "~" .. radioConfig.Controls.Secondary.Name .. "~ + ~" .. radioConfig.Controls.Activator.Name .. "~" or "~" .. radioConfig.Controls.Activator.Name .. "~") .. " to hide.~n~~" .. radioConfig.Controls.Toggle.Name .. "~ to turn radio ~g~on~s~.~n~~" .. radioConfig.Controls.Decrease.Name .. "~ or ~" .. radioConfig.Controls.Increase.Name .. "~ to switch frequency~n~~" .. radioConfig.Controls.Input.Name .. "~ to choose frequency~n~~" .. radioConfig.Controls.ToggleClicks.Name .. "~ to ~a~ mic clicks~n~Frequency: ~1~ MHz" },
-    { "FRZL_RADIO_HELP2", "~s~" .. (radioConfig.Controls.Secondary.Enabled and "~" .. radioConfig.Controls.Secondary.Name .. "~ + ~" .. radioConfig.Controls.Activator.Name .. "~" or "~" .. radioConfig.Controls.Activator.Name .. "~") .. " to hide.~n~~" .. radioConfig.Controls.Toggle.Name .. "~ to turn radio ~r~off~s~.~n~~" .. radioConfig.Controls.Decrease.Name .. "~ or ~" .. radioConfig.Controls.Increase.Name .. "~ to switch frequency~n~~" .. radioConfig.Controls.Broadcast.Name .. "~ to broadcast.~n~Frequency: ~1~ MHz" },
+    { "FRZL_RADIO_HELP", "~s~" .. (radioConfig.Controls.Secondary.Enabled and "~" .. radioConfig.Controls.Secondary.Name .. "~ + ~" .. radioConfig.Controls.Activator.Name .. "~" or "~" .. radioConfig.Controls.Activator.Name .. "~") .. " to hide.~n~~" .. radioConfig.Controls.Toggle.Name .. "~ to turn radio ~g~on~s~.~n~~" .. radioConfig.Controls.DecreaseVolume.Name .. "~ or ~" .. radioConfig.Controls.IncreaseVolume.Name .. "~ to adjust volume~n~~" .. radioConfig.Controls.Decrease.Name .. "~ or ~" .. radioConfig.Controls.Increase.Name .. "~ to switch frequency~n~~" .. radioConfig.Controls.Input.Name .. "~ to choose frequency~n~~" .. radioConfig.Controls.ToggleClicks.Name .. "~ to ~a~ mic clicks~n~Frequency: ~1~ MHz" },
+    { "FRZL_RADIO_HELP2", "~s~" .. (radioConfig.Controls.Secondary.Enabled and "~" .. radioConfig.Controls.Secondary.Name .. "~ + ~" .. radioConfig.Controls.Activator.Name .. "~" or "~" .. radioConfig.Controls.Activator.Name .. "~") .. " to hide.~n~~" .. radioConfig.Controls.Toggle.Name .. "~ to turn radio ~r~off~s~.~n~~" .. radioConfig.Controls.DecreaseVolume.Name .. "~ or ~" .. radioConfig.Controls.IncreaseVolume.Name .. "~ to adjust volume~n~~" .. radioConfig.Controls.Decrease.Name .. "~ or ~" .. radioConfig.Controls.Increase.Name .. "~ to switch frequency~n~~" .. radioConfig.Controls.Broadcast.Name .. "~ to broadcast.~n~Frequency: ~1~ MHz" },
     { "FRZL_RADIO_INPUT", "Enter Frequency" },
 }
 Radio.Commands = {
@@ -269,6 +270,17 @@ function Radio:Increase()
             radioConfig.Frequency.Current = radioConfig.Frequency.List[radioConfig.Frequency.CurrentIndex]
         end
     end
+end
+
+-- Set Radio Volume
+function Radio:SetVolume(val)
+    if val <= 0.0 then
+        val = 0.0
+    elseif val >= 1.0 then
+        val = 1.0
+    end
+    exports["mumble-voip"]:setRadioVolume(val)
+    Radio.Volume = val
 end
 
 -- Generate list of available frequencies
@@ -601,6 +613,22 @@ Citizen.CreateThread(function()
                 else
                     SendNUIMessage({ sound = "audio_off", volume = 0.5})
                     Radio:Remove()
+                end
+            end
+
+            -- changing volume - decrease
+            if not isBroadcasting and Radio.Volume > 0.0 then
+                if IsControlJustPressed(0, radioConfig.Controls.DecreaseVolume.Key) then
+                    SendNUIMessage({ sound = "audio_off", volume = 0.3})
+                    Radio:SetVolume(Radio.Volume - 0.2)
+                end
+            end
+
+            -- changing volume - increase
+            if not isBroadcasting and Radio.Volume < 1.0 then
+                if IsControlJustPressed(0, radioConfig.Controls.IncreaseVolume.Key) then
+                    SendNUIMessage({ sound = "audio_off", volume = 0.3})
+                    Radio:SetVolume(Radio.Volume + 0.2)
                 end
             end
 

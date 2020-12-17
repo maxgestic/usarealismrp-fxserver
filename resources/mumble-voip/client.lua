@@ -11,6 +11,7 @@ local playerChunk = nil
 local voiceTarget = 2
 local vehicleTargets = {}
 local wasPlayerInVehicle = false
+local radioVolume = 1.0
 
 -- Functions
 function SetVoiceData(key, value, target)
@@ -136,7 +137,11 @@ function TogglePlayerVoice(serverId, value)
 	if value then
 		if not unmutedPlayers[serverId] then
 			unmutedPlayers[serverId] = true
-			MumbleSetVolumeOverrideByServerId(serverId, 1.0)
+			if radioTargets[serverId] then -- only set radio targets to radioVolume, otherwise just set as 1.0 (for calls)
+				MumbleSetVolumeOverrideByServerId(serverId, radioVolume)
+			else
+				MumbleSetVolumeOverrideByServerId(serverId, 1.0)
+			end
 			msg = true
 		end
 	else
@@ -172,6 +177,15 @@ function SetRadioChannel(channel)
 					end
 				end
 			end
+		end
+	end
+end
+
+function SetRadioVolume(val)
+	radioVolume = val -- set volume for anyone who will speak
+	for id, info in pairs(radioTargets) do -- also change volume of anyone actively speaking
+		if unmutedPlayers[id] then
+			MumbleSetVolumeOverrideByServerId(id, val)
 		end
 	end
 end
@@ -1185,3 +1199,5 @@ exports("addPlayerToCall", SetCallChannel)
 exports("removePlayerFromCall", function()
 	SetCallChannel(0)
 end)
+
+exports("setRadioVolume", SetRadioVolume)
