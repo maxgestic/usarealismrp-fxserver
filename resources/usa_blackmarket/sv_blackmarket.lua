@@ -50,7 +50,7 @@ local markets = {
     ['coords'] = {113.24684906006, -1967.5310058594, 21.317762374878}, -- Grove St. house interior
     ['items'] = {
         { name = "Large Firework", type = "misc", price = 2000, legality = "illegal", quantity = 1, weight = 15, stock = math.random(0, 10), objectModel = "ind_prop_firework_03" },
-        { name = "Firework Gun", type = "weapon", hash = 2138347493, price = 10000, legality = "illegal", quantity = 1, weight = 50, objectModel = "w_lr_firework" }
+        { name = "Firework Gun", type = "weapon", hash = 2138347493, price = 10000, legality = "illegal", quantity = 1, weight = 50, stock = math.random(0, 2), objectModel = "w_lr_firework" }
     },
     ['pedHash'] = 'a_m_o_soucent_03',
     ['3dTextDistance'] = 7,
