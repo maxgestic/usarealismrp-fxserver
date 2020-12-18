@@ -22,19 +22,15 @@ end)
 AddEventHandler("Vape:StartVaping", function()
 	local ped = GetPlayerPed(-1)
 	if DoesEntityExist(ped) and not IsEntityDead(ped) then
-		if IsPedOnFoot(ped) then
-			if IsPlayerAbleToVape == false then
-				IsVaping = true
-				PlayerIsAbleToVape()
-				TriggerEvent("Vape:HelpFadeIn", 0)
-				ShowNotification("~c~You've ~b~started ~c~using your vape.")
-				Wait(Config.HelpTextLength)
-				TriggerEvent("Vape:HelpFadeOut", 0)
-			else
-				ShowNotification("~r~You are already holding your vape.")
-			end
+		if IsPlayerAbleToVape == false then
+			IsVaping = true
+			PlayerIsAbleToVape()
+			TriggerEvent("Vape:HelpFadeIn", 0)
+			ShowNotification("~c~You've ~b~started ~c~using your vape.")
+			Wait(Config.HelpTextLength)
+			TriggerEvent("Vape:HelpFadeOut", 0)
 		else
-			ShowNotification("~r~You can not do this in a vehicle.")
+			ShowNotification("~r~You are already holding your vape.")
 		end
 	else
 		ShowNotification("~r~You can not do this if you are dead.")
