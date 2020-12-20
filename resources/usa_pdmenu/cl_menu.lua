@@ -1,8 +1,6 @@
 local menuPool = NativeUI.CreatePool()
-local garageMenu = NativeUI.CreateMenu('SASP Garage', 'VEHICLE MANAGEMENT', 0, 320)
-local customizationMenu = NativeUI.CreateMenu('SASP Workshop', 'PIMP MY RIDE', 0, 320)
-local permittedVehicles = {}
-local awaitChanges = false
+local garageMenu = NativeUI.CreateMenu('LEO Garage', 'VEHICLE MANAGEMENT', 0, 320)
+local customizationMenu = NativeUI.CreateMenu('LEO Workshop', 'PIMP MY RIDE', 0, 320)
 
 ---------- CAR CUSTOMIZATION MENU COLORS ------------
 
@@ -43,10 +41,10 @@ local policeGarages = {
 menuPool:Add(customizationMenu)
 menuPool:Add(garageMenu)
 
-function AddGarageMenuItems(menu)
+function AddGarageMenuItems(menu, vehs)
 	local ped = GetPlayerPed(-1)
 	local repair = NativeUI.CreateItem('Repair Vehicle', 'Stop by the police mechanic.')
-	local vehicle = UIMenuListItem.New('Vehicle', permittedVehicles, 'Select this vehicle.')
+	local vehicle = UIMenuListItem.New('Vehicle', (vehs or {}), 'Select this vehicle.')
 	local clean = NativeUI.CreateItem('Clean Vehicle', '"Cleanup on aisle 5..."')
 	local returnveh = NativeUI.CreateItem('~r~Return Vehicle', 'Return your police vehicle')
 	menu:AddItem(vehicle)
@@ -249,32 +247,22 @@ function AddCustomization(menu)
 		ShowNotification('Applied: '..x)
 	end
 	engines.OnListSelected = function(sender, item, index)
-		--local vehicle = GetVehiclePedIsUsing(GetPlayerPed(-1))
+		local vehicle = GetVehiclePedIsUsing(GetPlayerPed(-1))
 		local engine = item:IndexToItem(index)
 		if engine == "EMS Upgrade, Level 1" then
-			TriggerServerEvent("pdmenu:checkRankForVehMod", 11, 0, engine)
-			--SetVehicleMod(vehicle, 11, 0)
+			SetVehicleMod(vehicle, 11, 0)
 		elseif engine == "EMS Upgrade, Level 2" then
-			TriggerServerEvent("pdmenu:checkRankForVehMod", 11, 1, engine)
-			--SetVehicleMod(vehicle, 11, 1)
+			SetVehicleMod(vehicle, 11, 1)
 		elseif engine == "EMS Upgrade, Level 3" then
-			TriggerServerEvent("pdmenu:checkRankForVehMod", 11, 2, engine)
-			--SetVehicleMod(vehicle, 11, 2)
+			SetVehicleMod(vehicle, 11, 2)
 		elseif engine == "EMS Upgrade, Level 4" then
-			TriggerServerEvent("pdmenu:checkRankForVehMod", 11, 3, engine)
-			--SetVehicleMod(vehicle, 11, 3)
+			SetVehicleMod(vehicle, 11, 3)
 		else
 			SetVehicleMod(vehicle, 11, -1)
 		end
+		ShowNotification('Applied: '.. (engine or "N/A"))
 	end
 end
-
-RegisterNetEvent("pdmenu:checkRankForVehMod")
-AddEventHandler("pdmenu:checkRankForVehMod", function(index, val, name)
-	local vehicle = GetVehiclePedIsUsing(GetPlayerPed(-1))
-	SetVehicleMod(vehicle, index, val)
-	ShowNotification('Applied: '.. name)
-end)
 
 AddGarageMenuItems(garageMenu)
 garageMenu:RefreshIndex()
@@ -306,22 +294,10 @@ Citizen.CreateThread(function()
 	end
 end)
 
-RegisterNetEvent('pdmenu:sendAllowedVehicles')
-AddEventHandler('pdmenu:sendAllowedVehicles', function(vehList)
-	permittedVehicles = vehList
-	awaitChanges = false
-end)
-
 RegisterNetEvent('pdmenu:openGarageMenu')
-AddEventHandler('pdmenu:openGarageMenu', function()
-	TriggerServerEvent('pdmenu:returnAllowedVehicles')
-	awaitChanges = true
-	while awaitChanges do
-		Citizen.Wait(0)
-	end
-	print('Opening garage menu')
+AddEventHandler('pdmenu:openGarageMenu', function(vehs)
 	garageMenu:Clear()
-	AddGarageMenuItems(garageMenu)
+	AddGarageMenuItems(garageMenu, vehs)
 	garageMenu:Visible(not garageMenu:Visible())
 	customizationMenu:Visible(false)
 end)

@@ -1,54 +1,18 @@
-local VEHICLE_RANKS = {
-	["sheriff"] = {
-		["pdcvpi"] = 1,
-		["pdtau"] = 2,
-		["pdchrg"] = 1,
-		["pdchgr"] = 1,
-		["pdexp"] = 2,
-		["pdtahoe"] = 2,
-		["pdchrgum"] = 5,
-		["riot"] = 5,
-		["policeb"] = 3,
-		["fbi"] = 4,
-		["fbi2"] = 4,
-		["police4"] = 4,
-		["sheriff2"] = 4,
-		["1200RT"] = 3
-	},
-	["ems"] = {
-		["ambulance"] = 1,
-		["paraexp"] = 2,
-		--["sheriff2"] = 2,
-		["firetruk"] = 1,
-		["lguard2"] = 1,
-		["blazer"] = 1
-	},
-	["doctor"] = {
-		["paraexp"] = 1,
-		--["sheriff2"] = 1
-	}
-}
+local LEO_VEHICLES = {"pdcvpi", "pdtau", "pdchrg", "pdchgr", "pdexp", "pdtahoe", "pdchrgum", "riot", "policeb", "fbi", "fbi2", "police4", "sheriff2", "1200RT"}
 
-local MODIFICATION_RANKS = {
-	[11] = 2
+local JOB_VEHICLES = {
+	["sheriff"] = LEO_VEHICLES,
+	["corrections"] = LEO_VEHICLES,
+	["ems"] = {"ambulance", "paraexp", "firetruk", "lguard2", "blazer"},
+	["doctor"] = {"paraexp"}
 }
-
-RegisterServerEvent("pdmenu:checkRankForVehMod")
-AddEventHandler("pdmenu:checkRankForVehMod", function(index, val, name)
-	local rank = exports["usa-characters"]:GetCharacterField(source, "policeRank")
-	if rank >= MODIFICATION_RANKS[index] then 
-		TriggerClientEvent("pdmenu:checkRankForVehMod", source, index, val, name)
-	else 
-		TriggerClientEvent("usa:notify", source, "Must be trooper rank or above")
-	end
-end)
 
 RegisterServerEvent("pdmenu:checkWhitelistForGarage")
 AddEventHandler("pdmenu:checkWhitelistForGarage", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local user_job = char.get("job")
 	if user_job == "sheriff" or user_job == "corrections" then
-		TriggerClientEvent('pdmenu:openGarageMenu', source)
+		TriggerClientEvent('pdmenu:openGarageMenu', source, JOB_VEHICLES[user_job])
 	else
 		TriggerClientEvent("usa:notify", source, "~y~You are not on-duty for POLICE.")
 	end
@@ -64,22 +28,3 @@ AddEventHandler("pdmenu:checkWhitelistForCustomization", function()
 		TriggerClientEvent("usa:notify", source, "~y~You are not on-duty for POLICE.")
 	end
 end)
-
-RegisterServerEvent('pdmenu:returnAllowedVehicles')
-AddEventHandler('pdmenu:returnAllowedVehicles', function()
-	local char = exports["usa-characters"]:GetCharacter(source)
-	local user_job = char.get("job")
-	local myRank = char.get("policeRank")
-    local vehs = GetAllowedVehicles(user_job, myRank)
-	TriggerClientEvent('pdmenu:sendAllowedVehicles', source, vehs)
-end)
-
-function GetAllowedVehicles(job, myRank)
-    local vehs = {}
-	for veh, rank in pairs(VEHICLE_RANKS[job]) do
-		if myRank >= rank then
-			table.insert(vehs, veh)
-		end
-    end
-    return vehs
-end
