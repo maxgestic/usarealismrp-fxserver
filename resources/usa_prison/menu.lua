@@ -26,9 +26,12 @@ local vehicles = {
 }
 
 local PRISON_GUARD_SIGN_IN_LOCATIONS = {
-	{x = 1690.71484375, y = 2591.3149414063, z = 45.914203643799},
-  {x = 1849.0, y = 2599.5, z = 45.8}, -- front
-  {x = 1778.3930664063,y = 2548.5463867188, z = 45.797786712646} -- inside prison locker room
+	{x = 1690.71484375, y = 2591.3149414063, z = 45.914203643799, vehSpawn = vector3(1696.0581054688, 2599.6557617188, 45.56489944458)},
+  {x = 1849.0, y = 2599.5, z = 45.8, vehSpawn = vector3(1854.4420166016, 2599.0654296875, 45.672290802002)}, -- front
+  {x = 1778.3930664063,y = 2548.5463867188, z = 45.797786712646, vehSpawn = vector3(1854.4420166016, 2599.0654296875, 45.672290802002)}, -- inside prison locker room
+  {x = 1840.5009765625, y = 3690.2153320313, z = 34.286655426025, vehSpawn = vector3(1872.4410400391, 3691.5651855469, 33.568901062012), vehSpawnHeading = 220.0}, -- Sandy SO
+  {x = -449.33654785156, y = 6010.4638671875, z = 31.716360092163, vehSpawn = vector3(-462.80316162109, 6009.2587890625, 31.340545654297), vehSpawnHeading = 60.0} -- Paleto SO
+  
 }
 
 local policeoutfitamount = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
@@ -405,17 +408,34 @@ function addVehicles(id)
   end
 end
 
+function findClosestVehSpawn()
+  local closest = {
+    dist = nil,
+    index = nil
+  }
+  local mycoords = GetEntityCoords(PlayerPedId(), true)
+  for i = 1, #PRISON_GUARD_SIGN_IN_LOCATIONS do
+    local loc = PRISON_GUARD_SIGN_IN_LOCATIONS[i]
+    local dist = Vdist(mycoords, loc.vehSpawn)
+    if not closest.index or dist < closest.dist then
+      closest.index = i
+      closest.dist = dist
+    end
+  end
+  return PRISON_GUARD_SIGN_IN_LOCATIONS[closest.index]
+end
+
 function SpawnVehicle(vehInfo)
   local model = vehInfo.hash
   Citizen.CreateThread(function()
-    local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(-1), true))
     RequestModel(model)
     while not HasModelLoaded(model) do
       Wait(100)
     end
 
-    local veh = CreateVehicle(model, x + 2.5, y + 2.5, z + 1, 0.0, true, false)
-    TriggerEvent('persistent-vehicles/register-vehicle', veh)
+    local closestLocation = findClosestVehSpawn()
+    local spawnCoords = closestLocation.vehSpawn
+    local veh = CreateVehicle(model, spawnCoords.x, spawnCoords.y, spawnCoords.z + 0.6, (closestLocation.vehSpawnHeading or 0.0), true, false)
     SetEntityAsMissionEntity(veh, true, true)
     SetVehicleHasBeenOwnedByPlayer(veh, true)
     SetVehicleExplodesOnHighExplosionDamage(veh, false)
