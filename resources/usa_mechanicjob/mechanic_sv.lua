@@ -67,7 +67,6 @@ AddEventHandler("towJob:setJob", function(truckSpawnCoords)
 	if char.get("job") == "mechanic" then
 		TriggerClientEvent("towJob:offDuty", source)
 		char.set("job", "civ")
-		TriggerClientEvent("radio:unsubscribe", source)
 	else
 		local drivers_license = char.getItem("Driver's License")
 		if drivers_license then
@@ -100,7 +99,6 @@ AddEventHandler("tow:forceRemoveJob", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	char.set("job", "civ")
 	TriggerClientEvent("towJob:offDuty", source)
-	TriggerClientEvent("radio:unsubscribe", source)
 end)
 
 RegisterServerEvent("mechanic:repairJobCheck")
