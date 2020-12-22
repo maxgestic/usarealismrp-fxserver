@@ -49,7 +49,8 @@ injuries = { -- ensure this is the same as sv_injury.lua
     [2343591895] = {type = 'blunt', bleed = 2700, string = 'Blunt Object', treatableWithBandage = true, treatmentPrice = 40, dropEvidence = 0.6}, -- WEAPON_FLASHLIGHT
     [3219281620] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 150, dropEvidence = 1.0}, -- WEAPON_PISTOL_MK2
     [4208062921] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0}, -- WEAPON_CARBINERIFLE_MK2
-    [1432025498] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0} -- WEAPON_PUMPSHOTGUN_MK2
+	[1432025498] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0}, -- WEAPON_PUMPSHOTGUN_MK2
+	[GetHashKey("WEAPON_COMPACTRIFLE")] = {type = 'penetrating', bleed = 300, string = 'High-speed Projectile', treatableWithBandage = false, treatmentPrice = 80, dropEvidence = 1.0}
 }
 
 local WEBHOOK_URL = "https://discordapp.com/api/webhooks/618096654842593281/tz9hG-cD-2EqzMLr-4Z3KdRG1XHQyS8OhVLMWQLCIT6ebz6SGI6-iM0qgj-wXf8FBXBx"
