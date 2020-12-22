@@ -741,7 +741,7 @@ Citizen.CreateThread(function()
                             CreateRadioObjectForPed(playerPed)
                         end
                         TaskPlayAnim(playerPed, broadcastDictionary, broadcastAnimation, 8.0, 0.0, -1, 49, 0, 0, 0, 0)
-                    elseif not isBroadcasting and IsEntityPlayingAnim(playerPed, broadcastDictionary, broadcastAnimation, 3) then
+                    elseif not isBroadcasting and (IsEntityPlayingAnim(playerPed, broadcastDictionary, broadcastAnimation, 3) or Radio.Handle) then
                         StopAnimTask(playerPed, broadcastDictionary, broadcastAnimation, -4.0)
                         if not HAS_EARPIECE then
                             DeleteRadioObject(Radio.Handle)
