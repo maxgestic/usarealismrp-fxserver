@@ -3,7 +3,8 @@
 --------------
 local kickThreshold = 66        -- Anything equal to or higher than this value will be kicked
 local kickReason = 'We\'ve detected that you\'re using a VPN or Proxy. If you believe this is a mistake please visit our Discord #support channel or contact us through our website at https://usarrp.net.'
-local key = "582919-63inb7-06r227-3372e3"
+--local key = "582919-63inb7-06r227-3372e3"
+local key = "6903tg-49i57q-3t6171-38c374"
 --local testIP = "167.114.5.2" -- VPN Test Case
 
 function splitString(inputstr, sep)
