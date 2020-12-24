@@ -101,7 +101,7 @@ currentWeatherData = {
 
 function getRandomWeatherDuration(weatherName)
 	if weatherName == "RAIN" or weatherName == "THUNDER" then
-		return math.random(15, 40) * 60000
+		return math.random(5, 30) * 60000
 	else
 		return math.random(DURATION_LOWER_BOUND_IN_MINUTES, DURATION_UPPER_BOUND_IN_MINUTES) * 60000
 	end

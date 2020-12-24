@@ -379,6 +379,19 @@ function ShowHelp(text, bleep)
     EndTextCommandDisplayHelp(0, false, bleep, -1)
 end
 
+-- checks if the provided ped handle is the ped for an actual player
+function isPedAPlayerPed(ped)
+	for i = 1, 255 do
+		if NetworkIsPlayerActive(i) then
+			local playerPed = GetPlayerPed(i)
+			if playerPed == ped then
+				return true
+			end
+		end
+	end
+	return false
+end
+
 function isNearAnyPeds()
 	local myPed = PlayerPedId()
 	local playerCoords = GetEntityCoords(myPed)
@@ -389,7 +402,7 @@ function isNearAnyPeds()
 
 		if DoesEntityExist(otherPed) then
 			SetEntityAsMissionEntity(otherPed)
-			if distanceBetweenNpcAndPed < MAX_REPORT_DISTANCE and otherPed ~= myPed and IsPedHuman(otherPed) then
+			if distanceBetweenNpcAndPed < MAX_REPORT_DISTANCE and otherPed ~= myPed and IsPedHuman(otherPed) and not isPedAPlayerPed(otherPed) then
 				return true
 			end
 		end
