@@ -24,7 +24,7 @@ local weapons = {} -- armory items
 
 local policeoutfitamount = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
-local MAX_COMPONENT = 200
+local MAX_COMPONENT = 270
 local MAX_COMPONENT_TEXTURE = 100
 local MAX_PROP = 200
 local MAX_PROP_TEXTURE = 100
