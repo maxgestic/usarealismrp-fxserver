@@ -56,7 +56,7 @@ var itemImages = {
   "Wrench": "https://imgur.com/C0pRAo5.png",
   "Machete": "https://i.imgur.com/bMxYq8T.png",
   "Pistol": "https://steamuserimages-a.akamaihd.net/ugc/29613457985625199/0D5453A0ADC32EDBADEACF8D5CBE1EF129FCA5DC/",
-  "Heavy Pistol": "https://vignette.wikia.nocookie.net/saintsrow/images/9/9c/SRIV_Pistols_-_Heavy_Pistol_-_.45_Fletcher_-_Default.png/revision/latest/scale-to-width-down/350?cb=20131028193410",
+  "Heavy Pistol": "https://i.imgur.com/weWweWG.png",
   ".50 Caliber": "https://i.imgur.com/W9sFoxi.png",
   "SNS Pistol": "https://vignette.wikia.nocookie.net/gtawiki/images/f/f5/SNSPistol-GTAV-SocialClub.png/revision/latest/scale-to-width-down/185?cb=20180202170333",
   "Combat Pistol": "https://vignette.wikia.nocookie.net/the-gta-online/images/4/4e/CombatPistol-GTA5-ingame.png/revision/latest?cb=20150519181654",
