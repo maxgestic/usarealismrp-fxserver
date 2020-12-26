@@ -36,7 +36,7 @@ local PRISON_GUARD_SIGN_IN_LOCATIONS = {
 
 local policeoutfitamount = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
-local MAX_COMPONENT = 220
+local MAX_COMPONENT = 270
 local MAX_COMPONENT_TEXTURE = 100
 local MAX_PROP = 220
 local MAX_PROP_TEXTURE = 100
