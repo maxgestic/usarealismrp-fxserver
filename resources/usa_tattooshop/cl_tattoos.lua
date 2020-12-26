@@ -69,15 +69,15 @@ function RemoveClothes()
   -- remove clothing (to see tattoos) --
   if IsPedModel(me,"mp_m_freemode_01") or IsPedModel(me,"mp_f_freemode_01") then
     if(GetEntityModel(me) == -1667301416) then -- female
-      SetPedComponentVariation(me, 8, 34,0, 2)
+      SetPedComponentVariation(me, 8, 14,0, 2)
       SetPedComponentVariation(me, 3, 15,0, 2)
-      SetPedComponentVariation(me, 11, 101,1, 2)
-      SetPedComponentVariation(me, 4, 16,0, 2)
+      SetPedComponentVariation(me, 11, 15,1, 2)
+      SetPedComponentVariation(me, 4, 10,0, 2)
     else -- male
-      SetPedComponentVariation(me, 8, 15,0, 2)
-      SetPedComponentVariation(me, 3, 15,0, 2)
-      SetPedComponentVariation(me, 11, 91,0, 2)
-      SetPedComponentVariation(me, 4, 14,0, 2)
+      SetPedComponentVariation(me, 8, 15,0, 2) -- torso 1
+      SetPedComponentVariation(me, 3, 15,0, 2) -- arms/hands
+      SetPedComponentVariation(me, 11, 29,0, 2) -- torso 2
+      SetPedComponentVariation(me, 4, 14,0, 2) -- legs
     end
   end
   -- remove weird black box on back/front? --
