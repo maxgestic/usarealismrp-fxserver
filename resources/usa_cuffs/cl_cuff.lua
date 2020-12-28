@@ -293,10 +293,10 @@ AddEventHandler("cuff:Handcuff", function(arrestingPlayerId, x, y, z, playerHead
 					isHardcuffed = false
 					if IsPedModel(lPed,"mp_f_freemode_01") then
 				  		prevFemaleVariation = GetPedDrawableVariation(lPed, 7)
-						SetPedComponentVariation(lPed, 7, 25, 0, 0)
+						SetPedComponentVariation(lPed, 7, 45, 0, 0)
 					elseif IsPedModel(lPed,"mp_m_freemode_01") then
 						prevMaleVariation = GetPedDrawableVariation(lPed, 7)
-	            		SetPedComponentVariation(lPed, 7, 41, 0, 0)
+	            		SetPedComponentVariation(lPed, 7, 55, 0, 0)
 					end
 				end
 			end)
