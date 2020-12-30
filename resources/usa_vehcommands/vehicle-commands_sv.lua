@@ -68,6 +68,11 @@ local VEHICLE_RANKS = {
 			rank = 4,
 			allowedLiveries = { 1 },
 			hash = -1973172295	
+		},
+		["pd_20camaro"] = {
+			rank = 4,
+			allowedLiveries = { 1 },
+			hash = -1575764804
 		}
 	},
 	["corrections"] = {
