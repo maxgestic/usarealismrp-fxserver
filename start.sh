@@ -13,7 +13,6 @@ git pull
 
 # remove maps / assets to avoid scrambling them to save time
 cd resources
-rm assets/stream -f -r
 rm map_courthouse -f -r
 rm map_dealership -f -r
 rm map_hospital -f -r
@@ -31,9 +30,7 @@ rm map_prisonGate -f -r
 rm paletopd -f -r
 rm map_splitsides -f -r
 rm unmarked-police-pack -f -r
-rm usa_customVehicles -f -r
 rm map_mining -f -r
-rm [cassino] -f -r
 cd ..
 
 # avoid scrambling node_modules within resources

@@ -1,12 +1,10 @@
 cache/
 resources/essentialmode/sv_es-DB-config.lua
 resources/scrambler-events.json
-resources/assets/stream
 resources/unmarked-police-pack
-resources/police-bmw-bike
-resources/policeveh
 resources/nw_bahamaMama
 resources/\[custom_clothing\]
+resources/\[custom_vehicles\]
 resources/burgershot
 resources/koil-debug
 resources/eup-ui
@@ -27,5 +25,3 @@ toTransfer
 
 server_internal.cfg
 server_internal2.cfg
-
-scramblerServerPass.txt
