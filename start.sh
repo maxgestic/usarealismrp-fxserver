@@ -30,7 +30,6 @@ rm map_parsons -f -r
 rm map_prisonGate -f -r
 rm paletopd -f -r
 rm map_splitsides -f -r
-rm policeveh -f -r
 rm unmarked-police-pack -f -r
 rm usa_customVehicles -f -r
 rm map_mining -f -r
