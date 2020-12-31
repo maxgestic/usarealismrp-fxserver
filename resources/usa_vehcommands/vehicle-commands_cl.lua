@@ -44,6 +44,9 @@ AddEventHandler("vehicleCommands:spawnVehicle", function(modelName, userJob)
 
 	TriggerServerEvent("garage:giveKey", vehicle_key)
 
+	local plate = GetVehicleNumberPlateText(vehicle)
+	TriggerServerEvent('mdt:addTempVehicle', 'Govt. Vehicle [' .. userJob .. ']', "", plate)
+
 end)
 
 RegisterNetEvent("vehicleCommands:setLivery")

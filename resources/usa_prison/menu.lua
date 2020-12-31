@@ -459,7 +459,10 @@ function SpawnVehicle(vehInfo)
       model = "GOVT",
       plate = GetVehicleNumberPlateText(veh)
     }
-		TriggerServerEvent("garage:giveKey", vehicle_key)
+    TriggerServerEvent("garage:giveKey", vehicle_key)
+    
+    local plate = GetVehicleNumberPlateText(veh)
+	  TriggerServerEvent('mdt:addTempVehicle', 'Govt. Vehicle [BCSO]', "", plate)
   end)
 end
 
