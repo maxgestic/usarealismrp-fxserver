@@ -55,7 +55,7 @@ end)
 RegisterServerEvent("cocaine:locationValidated")
 AddEventHandler("cocaine:locationValidated", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
-	local reward = math.random(1300, 1800)
+	local reward = math.random(1500, 2400)
 	-- bonus when police are online --
 	local policeOnline = exports["usa-characters"]:GetNumCharactersWithJob("sheriff")
 	local bonus = 0
@@ -142,7 +142,7 @@ end)
 
 RegisterServerEvent("cocaineJob:checkUserMoney")
 AddEventHandler("cocaineJob:checkUserMoney", function(supplyType)
-	local amount = 800
+	local amount = 200
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local uncut_cocaine = {
 		name = "coke bruh",
