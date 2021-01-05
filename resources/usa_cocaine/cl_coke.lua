@@ -18,6 +18,8 @@ TriggerServerEvent("cocaineJob:giveItem", cocaineProduced)]]
 local COKE_SUPPLY_WAIT_TIME = 45000
 local COCAINE_PROCESS_WAIT_TIME = 55000
 
+local UNCUT_PRICE = 200
+
 local INPUT_KEY = 38 -- E
 
 local cocaine = {
@@ -103,7 +105,7 @@ Citizen.CreateThread(function()
         local playerCoords = GetEntityCoords(playerPed)
         DrawText3D(1088.18, -3187.18, -38.85, 5, '[E] - Exit')
         DrawText3D(1181.63, -3113.83, 6.03, 3, '[E] - Enter')
-        DrawText3D(1273.708, -1709.06, 54.77, 5, '[E] - Buy Uncut Cocaine (~g~$800.00~w~)')
+        DrawText3D(1273.708, -1709.06, 54.77, 5, '[E] - Buy Uncut Cocaine (~g~$' .. UNCUT_PRICE .. '.00~w~)')
         DrawText3D(1092.86, -3195.80, -38.99, 5, '[E] - Process Cocaine')
         if IsControlJustPressed(0, INPUT_KEY) then
             if GetDistanceBetweenCoords(playerCoords, 1181.63, -3113.83, 6.03, true) < 0.7 then -- enter coke location
