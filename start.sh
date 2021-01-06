@@ -16,7 +16,6 @@ cd resources
 rm map_courthouse -f -r
 rm map_dealership -f -r
 rm map_hospital -f -r
-rm map_mrpd -f -r
 rm map_sandypdinterior -f -r
 rm map_burgershot -f -r
 rm map_glory -f -r
