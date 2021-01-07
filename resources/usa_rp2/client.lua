@@ -1193,6 +1193,7 @@ Citizen.CreateThread(function()
 	end
 end)
 
+--[[
 -- add XMAS tree --
 local TREES = {
   LEGION = {226.48237609863, -895.41094970703, 28.692138671875},
@@ -1207,3 +1208,4 @@ local LARGE_XMAS_TREE_MODEL = 118627012
 for tree, coords in pairs(TREES) do
   CreateObject(LARGE_XMAS_TREE_MODEL, coords[1], coords[2], coords[3], 0, 0, 0)
 end
+--]]
