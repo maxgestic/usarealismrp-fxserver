@@ -143,16 +143,27 @@ local warp_locations = {
     },
   job_access = "emergency"
   },
-  ['Pillbox Medical'] = {
-    entrance = {
-      coords = {355.49, -596.29, 28.77},
-      heading = 260.0
+  ["Public Pillbox Elevator"] = {
+  	entrance = {
+      coords = {331.91830444336, -595.49407958984, 43.28409576416},
+      heading = 250.0
     },
     exit = {
-      coords = {332.22552490234, -595.58044433594, 43.284019470215},
-      heading = 340.0
+      coords = {344.65518188477, -586.38732910156, 28.79683303833},
+      heading = 70.0
     },
-  job_access = 'civ'
+  job_access = "civ"
+  },
+  ["Private Pillbox Elevator"] = {
+  	entrance = {
+      coords = {330.08773803711, -601.03497314453, 43.28409576416},
+      heading = 70.0
+    },
+    exit = {
+      coords = {339.48376464844, -584.45709228516, 28.796844482422},
+      heading = 70.0
+    },
+  job_access = "emergency"
   },
   ['Nightclub'] = {
     entrance = {

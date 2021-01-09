@@ -132,7 +132,8 @@ injuries = { -- ensure this is the same as sv_injury.lua
 }
 
 hospitalLocations = {
-    {307.10046386719, -595.07073974609, 43.284019470215}
+    {307.10046386719, -595.07073974609, 43.284019470215}, -- upper PB
+    {350.97692871094, -587.77874755859, 28.796844482422} -- lower PB
 }
 
 doctorLocations = {

@@ -194,6 +194,8 @@ local DOORS = {
   {name = 'Hospital / Ward A 2', x = 304.57992553711,y = -582.55187988281, z = 43.284008026123, model = -1700911976, locked = true, static = true,  _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
   {name = 'Hospital / Ward A 3', x = 326.43518066406,y = -579.94946289063, z = 43.284027099609, model = -1700911976, locked = false, offset={0.0, 1.0, 0.00}, heading = 250, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
   {name = 'Hospital / Ward A 4', x = 326.91903686523,y = -578.595703125, z = 43.284027099609, model = -434783486, locked = true, static = true,  _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
+  {name = "PB Medical / Lower Garage 1", x = 338.19873046875, y = -589.33801269531, z = 28.796865463257, model = -434783486, locked = true, offset={0.0, -1.0, -0.1}, heading = 70, _dist = 1.3, allowedJobs = {'sheriff', "corrections", "ems", "doctor"}},
+  {name = "PB Medical / Lower Garage 2", x = 339.61959838867, y = -588.25390625, z = 28.796855926514, model = -1700911976, locked = true, offset={0.0, 1.0, -0.1}, heading = 70, _dist = 1.3, allowedJobs = {'sheriff', "corrections", "ems", "doctor"}},
   {name = 'BCSO Paleto - Door 1', x = -443.16, y = 6015.41, z = 31.71, model = -1501157055, locked = false, offset={0.0, 1.24, -0.1}, heading = 315, _dist = 1.5, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = 'BCSO Paleto - Door 2', x = -444.3, y = 6016.3, z = 31.71, model = -1501157055, locked = true, _dist = 1.5, static = true, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = 'Nightclub / Door 1', x = -1621.88, y = -3016.0, z = -75.20, model = -1119680854, locked = true, static = true, _dist = 1.0},
