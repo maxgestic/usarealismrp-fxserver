@@ -5,7 +5,8 @@
 local EMERGENCY_JOBS = {
     sheriff = true,
     ems = true,
-    corrections = true
+    corrections = true,
+    doctor = true
 }
 
 RegisterServerEvent("rp-radio:checkForRadioItem")
