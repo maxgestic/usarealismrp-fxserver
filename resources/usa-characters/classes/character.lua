@@ -382,5 +382,11 @@ function CreateCharacter(data)
     end
   end
 
+  rTable.setCoords = function(coords)
+    if coords and self.source then
+      TriggerClientEvent("character:setCoords", self.source, coords)
+    end
+  end
+
   return rTable
 end

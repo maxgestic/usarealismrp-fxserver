@@ -149,12 +149,24 @@ function InitializeCharacter(src, characterID, doSpawnAtProperty)
             CHARACTERS[src] = character
             TriggerClientEvent("character:setCharacter", src, character.get("appearance"), character.getWeapons()) -- load character
             TriggerEvent("police:checkSuspension", character) -- check dmv / firearm permit license status
-            TriggerEvent("properties:loadCharacter", src, doSpawnAtProperty) -- ?
             TriggerEvent("eblips:remove", src) -- remove any eblip
             TriggerClientEvent("banking:updateBalance", src, character.get("bank")) -- intialize bank resource
             TriggerClientEvent("es:activateMoney", src, character.get("money")) -- make /cash work
             TriggerEvent("twitter:lastCharCheck", src, character.getFullName()) -- sign out of twitter if playing on different character than their last session
             TriggerEvent("character:loaded", character)
+            if doSpawnAtProperty then
+              local savedSpawn = character.get("spawn")
+              if savedSpawn then
+                TriggerEvent("properties:loadCharacter", src, false) -- for usa_property script
+                SetTimeout(3000, function()
+                  character.setCoords(savedSpawn)
+                end)
+              else
+                TriggerEvent("properties:loadCharacter", src, true) -- for usa_property script
+              end
+            else
+              TriggerEvent("properties:loadCharacter", src, false) -- for usa_property script
+            end
         end)
     end)
 end

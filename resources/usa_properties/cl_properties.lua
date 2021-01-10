@@ -66,6 +66,15 @@ Citizen.CreateThread(function() -- manage instances
 	end
 end)
 
+--[[
+Citizen.CreateThread(function()
+	while true do
+		TriggerServerEvent('properties:requestNearestData')
+		Wait(2000)
+	end
+end)
+--]]
+
 Citizen.CreateThread(function()
 	if firstSpawn then
 		TriggerServerEvent('properties:requestAllData')
@@ -124,7 +133,7 @@ Citizen.CreateThread(function()
 			end
 		else
 			DrawText3D(-115.40, -603.75, 36.28, 15, '[E] - Real Estate')
-			for property, data in pairs(properties) do
+			for property, data in pairs(properties) do -- ! this loop needs to be optimized -- poll server for X nearest properties so that client doesn't have to iterate through ALL of them EVERY frame
 				if data.type == 'motel' or data.type == 'house' then
 					if data.type == 'motel' then
 						DrawText3D(data.office[1], data.office[2], data.office[3], 5, '[E] - Move Properties (~g~$500~s~)')
@@ -963,7 +972,17 @@ function LoadPropertyMenu(menu_data, location, index)
     else
         local item = NativeUI.CreateItem("No items to store!", "You have nothing to store.")
         storage_submenu.SubMenu:AddItem(item)
+	end
+	---------------------------------
+    -- set as saved spawn location --
+    ---------------------------------
+    local setSpawnButton = NativeUI.CreateItem("Spawn Here", "Set this property as your saved spawn location.")
+    setSpawnButton.Activated = function(parentmenu, selected)
+        RemoveMenuPool(_menuPool) -- close menu
+		TriggerServerEvent("properties:setSpawnPoint", nil)
+		exports.globals:notify("Spawn set!")
     end
+    mainMenu:AddItem(setSpawnButton)
     _menuPool:RefreshIndex()
     _menuPool:Add(mainMenu)
     mainMenu:Visible(true)

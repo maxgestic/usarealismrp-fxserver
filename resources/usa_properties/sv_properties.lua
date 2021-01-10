@@ -218,9 +218,7 @@ local properties = {
 		type = 'house',
 		weightLimit = 3000,
 		cashLimit = 500000,
-		rooms = {
-
-		}
+		rooms = {}
 	}
 }
 
@@ -810,7 +808,7 @@ function RefreshProperties(source, spawnAtProperty)
 		char.set('property', property)
 	end
 
-	-- check fees / find open room or applicable house  to spawn at --
+	-- check fees / find open room or applicable house to spawn at --
 	if not property['house'] then
 		-- evict owner if time has exceeded
 		if properties[property['location']].type == 'apartment' then
@@ -1501,6 +1499,12 @@ AddEventHandler('properties:estateChange', function(estate)
 		RefreshProperties(source, false)
 	end
 end)
+
+--[[
+RegisterServerEvent('properties:requestNearestData')
+AddEventHandler('properties:requestNearestData', function(coords)
+end)
+--]]
 
 RegisterServerEvent('properties:requestAllData')
 AddEventHandler('properties:requestAllData', function()

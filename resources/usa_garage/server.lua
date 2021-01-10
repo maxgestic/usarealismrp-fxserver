@@ -162,7 +162,8 @@ function GetVehiclesForMenu(plates, cb)
 						hash = data.rows[i].value[6], -- hash
 						owner = data.rows[i].value[7], -- owner
 						stats = data.rows[i].value[8], -- vehicle stats
-						upgrades = data.rows[i].value[9] -- vehicle upgrades
+						upgrades = data.rows[i].value[9], -- vehicle upgrades
+						stored_location = data.rows[i].value[10] -- stored_location
 					}
 					table.insert(responseVehArray, veh)
 				end

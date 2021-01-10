@@ -39,7 +39,9 @@ function CreateGarageMenu(menu, vehicles)
 			buttonText = buttonText .. vehicle.make .. " "
 		end
 		buttonText = buttonText .. vehicle.model .. " [" .. vehicle.plate .. "]"
-		if vehicle.impounded == true then
+		if vehicle.stored_location then
+			buttonText = buttonText .. " (at " .. vehicle.stored_location .. ")"
+		elseif vehicle.impounded == true then
 			buttonText = buttonText .. " (~y~Impounded~s~)"
 		elseif vehicle.stored == false then
 			buttonText = buttonText .. " (~r~Not Stored~s~)"
