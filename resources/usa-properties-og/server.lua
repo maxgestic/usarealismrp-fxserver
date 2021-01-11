@@ -725,14 +725,13 @@ TriggerEvent('es:addCommand', 'addproperty', function(source, args, char)
     -- add to db --
     TriggerEvent('es:exposeDBFunctions', function(GetDoc)
       -- insert into db
-      GetDoc.createDocument("properties", new_property, function()
+      GetDoc.createDocument("properties", new_property, function(docID)
         -- notify:
         print("**Property [" .. name .. "] added successfully! Make sure the circles are there!**")
         TriggerClientEvent("usa:notify", usource, "Property [" .. name .. "] added successfully! Make sure the circles are there!")
+        -- update server --
+        new_property._id = docID
         PROPERTIES[name] = new_property
-        -- refresh properties:
-        --loadProperties()
-        -- can do refreshproperties for it to show up
       end)
     end)
   else
@@ -808,13 +807,13 @@ TriggerEvent('es:addCommand', 'addbusinessproperty', function(source, args, char
     -- add to db --
     TriggerEvent('es:exposeDBFunctions', function(GetDoc)
       -- insert into db
-      GetDoc.createDocument("properties", new_property, function()
+      GetDoc.createDocument("properties", new_property, function(docID)
         -- notify:
-  print("**Property [" .. name .. "] added successfully! Make sure the circle is there!**")
-  TriggerClientEvent("usa:notify", usource, "Property [" .. name .. "] added successfully! Make sure the circle is there!")
-        -- refresh properties:
-        --loadProperties()
-        -- can do refreshproperties for it to show up
+        print("**Property [" .. name .. "] added successfully! Make sure the circle is there!**")
+        TriggerClientEvent("usa:notify", usource, "Property [" .. name .. "] added successfully! Make sure the circle is there!")
+        -- update server --
+        new_property._id = docID
+        PROPERTIES[name] = new_property
       end)
     end)
   else
