@@ -656,8 +656,14 @@ end, {
 --]]
 
 --TriggerEvent('es:addCommand','addproperty', function(source, args, user)
-TriggerEvent('es:addGroupCommand', 'addproperty', 'superadmin', function(source, args, user)
-	local usource = source
+TriggerEvent('es:addCommand', 'addproperty', function(source, args, char)
+  local usource = source
+  local user = exports["essentialmode"]:getPlayerFromId(usource)
+  local userGroup = user.getGroup()
+  if userGroup == "user" and char.get("job") ~= "realtor" then
+    TriggerClientEvent("usa:notify", usource, "Not allowed to use this command")
+    return
+  end
   print("inside /addproperty command!")
   -- usage: /addproperty [door X] [door Y] [door Z] [garage X] [garage Y] [garage Z] [price] [name]
   local price = tonumber(args[8])
@@ -748,69 +754,72 @@ end, {
 })
 
 -- To add business properties --
-TriggerEvent('es:addGroupCommand', 'addbusinessproperty', 'admin', function(source, args, user)
-	local usource = source
-  local group = user.getGroup()
-    if group == "owner" or group == "superadmin" or group == "admin" then
-        print("inside /addbusinessproperty command!")
-        -- usage: /addbusinessproperty [door X] [door Y] [door Z] [price] [name]
-        local price = tonumber(args[5])
-        local coords = {
-          door = {
-            x = tonumber(args[2]),
-            y = tonumber(args[3]),
-            z = tonumber(args[4])
-          }
-        }
-        table.remove(args, 1)
-        table.remove(args, 1)
-        table.remove(args, 1)
-        table.remove(args, 1)
-        table.remove(args, 1)
-        local name = table.concat(args, " ")
-        local new_property = {
-          owner = {
-            name = null,
-            purchase_date = 0,
-            identifier = "undefined"
-          },
-          type = "business",
-          name = name,
-          fee = {
-            price =  price,
-            paid_time = 0,
-            due_time = 0,
-            paid =  false,
-            end_date = 0,
-            due_days = 0
-            },
-          y = coords.door.y,
-          x = coords.door.x,
-          z = coords.door.z,
-          storage =  {
-            money = 0,
-            items = {}
-          },
-          wardrobe = {},
-          coowners = {}
-        }
-        if name and price and coords.door.x then
-          -- add to db --
-          TriggerEvent('es:exposeDBFunctions', function(GetDoc)
-            -- insert into db
-            GetDoc.createDocument("properties", new_property, function()
-              -- notify:
-				print("**Property [" .. name .. "] added successfully! Make sure the circle is there next restart.**")
-				TriggerClientEvent("usa:notify", usource, "Property [" .. name .. "] added successfully! Make sure the circle is there next restart.")
-              -- refresh properties:
-              --loadProperties()
-              -- can do refreshproperties for it to show up
-            end)
-          end)
-        else
-          TriggerClientEvent("usa:notify", usource, "Invalid command format! Usage: /addproperty [door X] [door Y] [door Z] [price] [name]")
-        end
-    end
+TriggerEvent('es:addCommand', 'addbusinessproperty', function(source, args, char)
+  local usource = source
+  local user = exports["essentialmode"]:getPlayerFromId(usource)
+  local userGroup = user.getGroup()
+  if userGroup == "user" and char.get("job") ~= "realtor" then
+    TriggerClientEvent("usa:notify", usource, "Not allowed to use this command")
+    return
+  end
+  print("inside /addbusinessproperty command!")
+  -- usage: /addbusinessproperty [door X] [door Y] [door Z] [price] [name]
+  local price = tonumber(args[5])
+  local coords = {
+    door = {
+      x = tonumber(args[2]),
+      y = tonumber(args[3]),
+      z = tonumber(args[4])
+    }
+  }
+  table.remove(args, 1)
+  table.remove(args, 1)
+  table.remove(args, 1)
+  table.remove(args, 1)
+  table.remove(args, 1)
+  local name = table.concat(args, " ")
+  local new_property = {
+    owner = {
+      name = null,
+      purchase_date = 0,
+      identifier = "undefined"
+    },
+    type = "business",
+    name = name,
+    fee = {
+      price =  price,
+      paid_time = 0,
+      due_time = 0,
+      paid =  false,
+      end_date = 0,
+      due_days = 0
+      },
+    y = coords.door.y,
+    x = coords.door.x,
+    z = coords.door.z,
+    storage =  {
+      money = 0,
+      items = {}
+    },
+    wardrobe = {},
+    coowners = {}
+  }
+  if name and price and coords.door.x then
+    -- add to db --
+    TriggerEvent('es:exposeDBFunctions', function(GetDoc)
+      -- insert into db
+      GetDoc.createDocument("properties", new_property, function()
+        -- notify:
+  print("**Property [" .. name .. "] added successfully! Make sure the circle is there next restart.**")
+  TriggerClientEvent("usa:notify", usource, "Property [" .. name .. "] added successfully! Make sure the circle is there next restart.")
+        -- refresh properties:
+        --loadProperties()
+        -- can do refreshproperties for it to show up
+      end)
+    end)
+  else
+    TriggerClientEvent("usa:notify", usource, "Invalid command format! Usage: /addproperty [door X] [door Y] [door Z] [price] [name]")
+  end
 end, {
 	help = "Add a new business property",
     params = {
