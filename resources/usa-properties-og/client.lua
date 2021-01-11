@@ -489,7 +489,7 @@ Citizen.CreateThread(function()
                                                         name = outfitname,
                                                         clothing = clothing
                                                     }
-                                                    TriggerServerEvent("properties:saveOutfit", nearest_property_info.name, outfit)
+                                                    TriggerServerEvent("properties-og:saveOutfit", nearest_property_info.name, outfit)
                                                     RemoveMenuPool(_menuPool)
                                                 end
                                             end)

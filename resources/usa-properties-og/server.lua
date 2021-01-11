@@ -94,8 +94,8 @@ AddEventHandler("properties:deleteOutfitByName", function(property_name, outfit_
     end
 end)
 
-RegisterServerEvent("properties:saveOutfit")
-AddEventHandler("properties:saveOutfit", function(property_name, outfit)
+RegisterServerEvent("properties-og:saveOutfit")
+AddEventHandler("properties-og:saveOutfit", function(property_name, outfit)
     -- add outfit to property --
     if  not PROPERTIES[property_name].wardrobe then
         PROPERTIES[property_name].wardrobe = {}
@@ -727,8 +727,8 @@ TriggerEvent('es:addCommand', 'addproperty', function(source, args, char)
       -- insert into db
       GetDoc.createDocument("properties", new_property, function()
         -- notify:
-        print("**Property [" .. name .. "] added successfully! Make sure the circles are there next restart.**")
-        TriggerClientEvent("usa:notify", usource, "Property [" .. name .. "] added successfully! Make sure the circles are there next restart.")
+        print("**Property [" .. name .. "] added successfully! Make sure the circles are there!**")
+        TriggerClientEvent("usa:notify", usource, "Property [" .. name .. "] added successfully! Make sure the circles are there!")
         PROPERTIES[name] = new_property
         -- refresh properties:
         --loadProperties()
@@ -810,8 +810,8 @@ TriggerEvent('es:addCommand', 'addbusinessproperty', function(source, args, char
       -- insert into db
       GetDoc.createDocument("properties", new_property, function()
         -- notify:
-  print("**Property [" .. name .. "] added successfully! Make sure the circle is there next restart.**")
-  TriggerClientEvent("usa:notify", usource, "Property [" .. name .. "] added successfully! Make sure the circle is there next restart.")
+  print("**Property [" .. name .. "] added successfully! Make sure the circle is there!**")
+  TriggerClientEvent("usa:notify", usource, "Property [" .. name .. "] added successfully! Make sure the circle is there!")
         -- refresh properties:
         --loadProperties()
         -- can do refreshproperties for it to show up
@@ -928,7 +928,7 @@ AddEventHandler('rconCommand', function(commandName, args)
 				-- insert into db
 				GetDoc.createDocument("properties", new_property, function()
 					-- notify:
-					RconPrint("\nProperty [" .. name .. "] added successfully! Make sure the circles are there next restart.")
+					RconPrint("\nProperty [" .. name .. "] added successfully! Make sure the circles are there!")
 					-- refresh properties:
 					--loadProperties()
 					-- can do refreshproperties for it to show up
