@@ -4,7 +4,6 @@
 --# made for: USA REALISM RP
 
 local PROPERTIES = {} -- loaded and updated by database
-local PROPERTIES_FOR_CLIENT = nil
 
 local BUSINESS_PAY_PERIOD_DAYS = 7
 local HOUSE_PAY_PERIOD_DAYS = 30
@@ -329,7 +328,6 @@ function loadProperties()
 		local response = json.decode(text)
 		if response.rows then
 			PROPERTIES = {} -- reset table
-            PROPERTIES_FOR_CLIENT = {} -- set as table from nil
 			print("#(response.rows) = " .. #(response.rows))
 			-- insert all properties from 'properties' db into lua table
 			for i = 1, #(response.rows) do
@@ -338,20 +336,6 @@ function loadProperties()
 					--if response.rows[i].doc.doc then response.rows[i].doc = response.rows[i].doc.doc end
 					if response.rows[i].doc.name then
 						PROPERTIES[response.rows[i].doc.name] = response.rows[i].doc
-                        PROPERTIES_FOR_CLIENT[response.rows[i].doc.name] = { -- only give client needed information for each property for performance reasons
-                            name = response.rows[i].doc.name,
-                            storage = {
-                                money = response.rows[i].doc.storage.money
-                            },
-                            fee = response.rows[i].doc.fee,
-                            x = response.rows[i].doc.x,
-                            y = response.rows[i].doc.y,
-                            z = response.rows[i].doc.z,
-                            garage_coords = response.rows[i].doc.garage_coords,
-                            owner = response.rows[i].doc.owner,
-                            type = response.rows[i].doc.type,
-                            coowners = response.rows[i].doc.coowners
-                        }
 						print("loaded property: " .. response.rows[i].doc.name)
                     else
 						print("Error loading property document at index #" .. i)
@@ -471,7 +455,7 @@ AddEventHandler("properties:purchaseProperty", function(property)
       SavePropertyData(property.name)
 			-- send discord msg to #property-logs --
 			local desc = "\n**Property:** " .. property.name .. "\n**Purchase Price:** $" .. comma_value(PROPERTIES[property.name].fee.price) ..  "\n**Purchased By:** " .. char_name .. "\n**Purchase Date:** ".. PROPERTIES[property.name].owner.purchase_date .. "\n**End Date:** " .. PROPERTIES[property.name].fee.end_date
-			local url = 'https://discordapp.com/api/webhooks/419573361170055169/6v2NLnxzF8lSHgT8pSDccB_XN1R6miVuZDrEYtvNfPny6kSqddSN_9iJ9PPkbAbM01pW'
+			local url = 'https://discord.com/api/webhooks/618097005750648837/qjGutLzwwboVNFbgjeRdiR3rtaPEmtOgRlF5GDJEZxP0mBR3wb-_bh1XwRMM2xdzkOpP'
 			PerformHttpRequest(url, function(err, text, headers)
 				if text then
 					print(text)
@@ -672,84 +656,83 @@ end, {
 --]]
 
 --TriggerEvent('es:addCommand','addproperty', function(source, args, user)
-TriggerEvent('es:addGroupCommand', 'addproperty', 'admin', function(source, args, user)
+TriggerEvent('es:addGroupCommand', 'addproperty', 'superadmin', function(source, args, user)
 	local usource = source
-  local group = user.getGroup()
-    if group == "owner" or group == "superadmin" or group == "admin" then
-        print("inside /addproperty command!")
-        -- usage: /addproperty [door X] [door Y] [door Z] [garage X] [garage Y] [garage Z] [price] [name]
-        local price = tonumber(args[8])
-        local coords = {
-          door = {
-            x = tonumber(args[2]),
-            y = tonumber(args[3]),
-            z = tonumber(args[4])
-          },
-          garage = {
-            x = tonumber(args[5]),
-            y = tonumber(args[6]),
-            z = tonumber(args[7])
-          }
-        }
-        table.remove(args, 1)
-        table.remove(args, 1)
-        table.remove(args, 1)
-        table.remove(args, 1)
-        table.remove(args, 1)
-        table.remove(args, 1)
-        table.remove(args, 1)
-        table.remove(args, 1)
-        local name = table.concat(args, " ")
-        local new_property = {
-          owner = {
-            name = null,
-            purchase_date = 0,
-            identifier = "undefined"
-          },
-          type = "house",
-          name = name,
-          fee = {
-            price =  price,
-            paid_time = 0,
-            due_time = 0,
-            paid =  false,
-            end_date = 0,
-            due_days = 0
-            },
-          y = coords.door.y,
-          x = coords.door.x,
-          z = coords.door.z,
-          storage =  {
-            money = 0,
-            items = {}
-          },
-           garage_coords = {
-            x = coords.garage.x,
-            y = coords.garage.y,
-            z = coords.garage.z,
-            heading = 214.7
-           },
-          vehicles = {},
-          wardrobe = {},
-          coowners = {}
-        }
-        if name and price and coords.door.x and coords.garage.x then
-          -- add to db --
-          TriggerEvent('es:exposeDBFunctions', function(GetDoc)
-            -- insert into db
-            GetDoc.createDocument("properties", new_property, function()
-              -- notify:
-				print("**Property [" .. name .. "] added successfully! Make sure the circles are there next restart.**")
-				TriggerClientEvent("usa:notify", usource, "Property [" .. name .. "] added successfully! Make sure the circles are there next restart.")
-              -- refresh properties:
-              --loadProperties()
-              -- can do refreshproperties for it to show up
-            end)
-          end)
-        else
-          TriggerClientEvent("usa:notify", usource, "Invalid command format! Usage: /addproperty [door X] [door Y] [door Z] [garage X] [garage Y] [garage Z] [price] [name]")
-        end
-    end
+  print("inside /addproperty command!")
+  -- usage: /addproperty [door X] [door Y] [door Z] [garage X] [garage Y] [garage Z] [price] [name]
+  local price = tonumber(args[8])
+  local coords = {
+    door = {
+      x = tonumber(args[2]),
+      y = tonumber(args[3]),
+      z = tonumber(args[4])
+    },
+    garage = {
+      x = tonumber(args[5]),
+      y = tonumber(args[6]),
+      z = tonumber(args[7])
+    }
+  }
+  table.remove(args, 1)
+  table.remove(args, 1)
+  table.remove(args, 1)
+  table.remove(args, 1)
+  table.remove(args, 1)
+  table.remove(args, 1)
+  table.remove(args, 1)
+  table.remove(args, 1)
+  local name = table.concat(args, " ")
+  local new_property = {
+    owner = {
+      name = null,
+      purchase_date = 0,
+      identifier = "undefined"
+    },
+    type = "house",
+    name = name,
+    fee = {
+      price =  price,
+      paid_time = 0,
+      due_time = 0,
+      paid =  false,
+      end_date = 0,
+      due_days = 0
+      },
+    y = coords.door.y,
+    x = coords.door.x,
+    z = coords.door.z,
+    storage =  {
+      money = 0,
+      items = {}
+    },
+      garage_coords = {
+      x = coords.garage.x,
+      y = coords.garage.y,
+      z = coords.garage.z,
+      heading = 214.7
+      },
+    vehicles = {},
+    wardrobe = {},
+    coowners = {}
+  }
+  if name and price and coords.door.x and coords.garage.x then
+    -- add to db --
+    TriggerEvent('es:exposeDBFunctions', function(GetDoc)
+      -- insert into db
+      GetDoc.createDocument("properties", new_property, function()
+        -- notify:
+        print("**Property [" .. name .. "] added successfully! Make sure the circles are there next restart.**")
+        TriggerClientEvent("usa:notify", usource, "Property [" .. name .. "] added successfully! Make sure the circles are there next restart.")
+        PROPERTIES[name] = new_property
+        -- refresh properties:
+        --loadProperties()
+        -- can do refreshproperties for it to show up
+      end)
+    end)
+  else
+    TriggerClientEvent("usa:notify", usource, "Invalid command format! Usage: /addproperty [door X] [door Y] [door Z] [garage X] [garage Y] [garage Z] [price] [name]")
+  end
+    
 end, {
 	help = "Add a new residential property",
     params = {
