@@ -75,7 +75,7 @@ AddEventHandler("garage:vehicleSelected", function(vehicle, business, playerCoor
 	local vehicles = char.get("vehicles")
 	local money = char.get("money")
 	vehicle.upgrades = exports["usa_mechanicjob"]:GetUpgradeObjectsFromIds(vehicle.upgrades)
-	if vehicle.impounded == true then
+	if vehicle.impounded == true and not vehicle.stored_location then
 		if money >= IMPOUND_FEE then
 			TriggerClientEvent("usa:notify", usource, "~y~STATE IMPOUND: ~s~Vehicle retrieved from the impound! Fee: ~y~$"..IMPOUND_FEE..".00")
 			GetVehicleCustomizations(vehicle.plate, function(customizations)
@@ -93,7 +93,7 @@ AddEventHandler("garage:vehicleSelected", function(vehicle, business, playerCoor
 		else
 			TriggerClientEvent("usa:notify", usource, "~y~STATE IMPOUND: ~s~Your vehicle is impounded and can be retrieved for ~y~$"..IMPOUND_FEE..".00~s~!")
 		end
-	elseif vehicle.stored == true then
+	elseif vehicle.stored == true and not vehicle.stored_location then
 		local doPay = true
 		if isAtProperty(char, playerCoords) then
 			doPay = false

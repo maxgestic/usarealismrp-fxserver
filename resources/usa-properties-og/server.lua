@@ -233,7 +233,7 @@ RegisterServerEvent("properties:retrieveVehicle")
 AddEventHandler("properties:retrieveVehicle", function(property_name, vehicle) -- IMPLEMENT
   local usource = source
   TriggerEvent('es:exposeDBFunctions', function(couchdb)
-      couchdb.updateDocument("vehicles", vehicle.plate, { stored_location = "" }, function(err)
+      couchdb.updateDocument("vehicles", vehicle.plate, { stored_location = "deleteMePlz!" }, function(err)
          -- print("INFO: stored location set to nil!")
           GetVehicleCustomizations(vehicle.plate, function(customizations)
               -- retrieve vehicle --
