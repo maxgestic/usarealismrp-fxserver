@@ -90,6 +90,7 @@ For it to work properly you need to follow these rules:
 		- ``emit(doc._id, doc.owner);``
 	* **getBusinessStorage**
 		- ``emit(doc._id, doc.storage);``
+5) Must create index on the ``stored_location`` field in the ``vehicles`` database for ``usa-properties-og`` to function correctly when storing/retrieving vehicles from property garages.
 
 **Common Framework Usage**
 
