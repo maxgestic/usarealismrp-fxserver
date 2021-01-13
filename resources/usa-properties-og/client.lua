@@ -341,12 +341,16 @@ Citizen.CreateThread(function()
                                             for i = 1, #menu_data.property_items do
                                                 local item = menu_data.property_items[i]
                                                 local color = ""
+                                                local suffix = ""
                                                 if item.legality == "legal" then
                                                     color = ""
                                                 else
                                                     color = "~r~"
                                                 end
-                                                local itembtn = NativeUI.CreateItem(color .. "(" .. item.quantity .. "x) " .. item.name, "Withdraw some amount of this item.")
+                                                if item.type == "weapon" and item.serialNumber then
+                                                    suffix = " -- " .. item.serialNumber
+                                                end
+                                                local itembtn = NativeUI.CreateItem(color .. "(" .. item.quantity .. "x) " .. item.name .. suffix, "Withdraw some amount of this item.")
                                                 itembtn.Activated = function(parentmenu, selected)
                                                     RemoveMenuPool(_menuPool)
                                                     ----------------------------------------------------------------
@@ -398,12 +402,16 @@ Citizen.CreateThread(function()
                                             for i = 1, #menu_data.user_items do
                                                 local item = menu_data.user_items[i]
                                                 local color = ""
+                                                local suffix = ""
                                                 if item.legality == "legal" then
                                                     color = ""
                                                 else
                                                     color = "~r~"
                                                 end
-                                                local itembtn = NativeUI.CreateItem(color .. "(" .. item.quantity .. "x) " .. item.name, "Store some amount of this item.")
+                                                if item.type == "weapon" and item.serialNumber then
+                                                    suffix = " -- " .. item.serialNumber
+                                                end
+                                                local itembtn = NativeUI.CreateItem(color .. "(" .. item.quantity .. "x) " .. item.name .. suffix, "Store some amount of this item.")
                                                 itembtn.Activated = function(parentmenu, selected)
                                                     RemoveMenuPool(_menuPool)
                                                     -- ask for quantity to store, then try to store it --

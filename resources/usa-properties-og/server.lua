@@ -130,12 +130,10 @@ AddEventHandler("properties:getUserItemsToStore", function(user_source)
     if player then
       local items = {}
       local inventory = player.get("inventory")
-      local weapons = player.getWeapons()
       --for i = 1, #inventory do table.insert(items, inventory[i]) end
       for index, item in pairs(inventory.items) do
         table.insert(items, item)
       end
-      for i = 1, #weapons do table.insert(items, weapons[i]) end
       --print("sending #" .. #items .. " items to client for storage menu")
       TriggerClientEvent("properties:setItemsToStore", userSource, items)
     end
@@ -160,7 +158,8 @@ end)
 -- try to store item --
 RegisterServerEvent("properties:store")
 AddEventHandler("properties:store", function(name, item, quantity)
-    local user_source = source
+  local user_source = source
+  if item.type and item.type ~= "license" then
     local saved_quantity = item.quantity
     -- remove from player --
     --TriggerEvent("usa:removeItem", item, quantity, user_source)
@@ -172,7 +171,7 @@ AddEventHandler("properties:store", function(name, item, quantity)
     -- insert into property --
     for i = 1, #PROPERTIES[name].storage.items do
         if PROPERTIES[name].storage.items[i].name == item.name then
-            if PROPERTIES[name].storage.items[i].type ~= "weapon" then
+            if not PROPERTIES[name].storage.items[i].notStackable then
                 had_already	= true
                 PROPERTIES[name].storage.items[i].quantity = PROPERTIES[name].storage.items[i].quantity + quantity
             end
@@ -185,6 +184,9 @@ AddEventHandler("properties:store", function(name, item, quantity)
     end
     -- save property --
     SavePropertyData(name)
+  else
+    TriggerClientEvent("usa:notify", user_source, "Can't store licenses!")
+  end
 end)
 
 -- load stored money --
