@@ -983,7 +983,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
 				else
 					print(GetPlayerName(tonumber(usource)) .. " has been perma banned from your server and should not be able to play!")
 					--DropPlayer(tonumber(usource), "Banned: " .. doc.reason)
-					deferrals.done("Banned: " .. doc.reason .. " - Banned by: " .. doc.bannerName)
+					deferrals.done("Banned: " .. doc.reason .. " -- You can file an appeal at https://usarrp.net. Banned by: " .. doc.bannerName)
 				end
 			else
 				deferrals.done()
@@ -1501,8 +1501,10 @@ TriggerEvent('es:addGroupCommand', 'test', "owner", function(source, args, char)
 		objectModel = "bkr_prop_meth_acetone"
 	}
 
+	local policearmor = { name = "Police Armor", type = "misc", price = 5000, legality = "illegal", quantity = 1, weight = 25, stock = math.random(0, 3), objectModel = "prop_bodyarmour_03" }
+
 	--if char.canHoldItem(thermite) then
-		char.giveItem(advancedPick)
+		char.giveItem(policearmor)
 	--end
 
 	-- TriggerClientEvent("interaction:equipWeapon", source, {hash = GetHashKey("WEAPON_RPG")}, true)
