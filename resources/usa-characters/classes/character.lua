@@ -185,13 +185,25 @@ function CreateCharacter(data)
     end
   end
 
-  rTable.getItem = function(itemName)
+  rTable.getItem = function(item) -- todo: to test
     local inv = self.inventory
     for i = 0, inv.MAX_CAPACITY - 1 do
-      local item = inv.items[tostring(i)]
-      if item then
-        if item.name:find(itemName) then
-          return item
+      local lookingAtItem = inv.items[tostring(i)]
+      if lookingAtItem then
+        if type(item) == "string" then
+          if lookingAtItem.name == item.name or lookingAtItem.name:find(item) then
+            return lookingAtItem
+          end
+        elseif type(item) == "table" then
+          if lookingAtItem.name == item.name or lookingAtItem.name:find(item.name) then
+            if item.type == "weapon" then
+              if lookingAtItem.serialNumber == item.serialNumber then
+                return lookingAtItem
+              end
+            else
+              return lookingAtItem
+            end
+          end
         end
       end
     end
@@ -279,21 +291,45 @@ function CreateCharacter(data)
   end
 
 -- can pass -1 as quantity to remove item completely
-  rTable.removeItem = function(item, quantity)
-    item = (item.name or item)
+-- supports passing in an item name as well as an entire item object (which performs extended field matching)
+  rTable.removeItem = function(item, quantity) -- TODO: to test
+    local function decrementQuantity(tempItem)
+      local newQuantity = tempItem.quantity - (quantity or 1)
+      if (quantity or 1) == -1 then
+        newQuantity = 0
+      end
+      if newQuantity <= 0 then
+        tempItem = nil
+      else
+        tempItem.quantity = newQuantity
+      end
+      return tempItem
+    end
+
     for i = 0, self.inventory.MAX_CAPACITY - 1 do
-      if self.inventory.items[tostring(i)] then
-        if self.inventory.items[tostring(i)].name:find(item) or self.inventory.items[tostring(i)].name == item then
-          local newQuantity = self.inventory.items[tostring(i)].quantity - (quantity or 1)
-          if ((quantity or 1) == -1) then
-            newQuantity = 0
+      i = tostring(i)
+      if self.inventory.items[i] then
+        if type(item) == "string" then -- simple name matching
+          if self.inventory.items[i].name:find(item) or self.inventory.items[i].name == item then
+            if self.inventory.items[i].type and self.inventory.items[i].type == "weapon" then
+              TriggerClientEvent("interaction:equipWeapon", self.source, self.inventory.items[i], false)
+            end
+            self.inventory.items[i] = decrementQuantity(self.inventory.items[i])
+            return
           end
-          if newQuantity <= 0 then
-            self.inventory.items[tostring(i)] = nil
-          else
-            self.inventory.items[tostring(i)].quantity = newQuantity
+        elseif type(item) == "table" then -- extended field matching
+          if self.inventory.items[i].name:find(item.name) or self.inventory.items[i].name == item.name then
+            if item.type and item.type == "weapon" then
+              if item.serialNumber == self.inventory.items[i].serialNumber then
+                TriggerClientEvent("interaction:equipWeapon", self.source, self.inventory.items[i], false)
+                self.inventory.items[i] = decrementQuantity(self.inventory.items[i])
+                return
+              end
+            else
+              self.inventory.items[i] = decrementQuantity(self.inventory.items[i])
+              return
+            end
           end
-          return
         end
       end
     end

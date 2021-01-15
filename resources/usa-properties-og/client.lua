@@ -347,7 +347,7 @@ Citizen.CreateThread(function()
                                                 else
                                                     color = "~r~"
                                                 end
-                                                if item.type == "weapon" and item.serialNumber then
+                                                if item.type == "weapon" and item.legality == "legal" and item.serialNumber then
                                                     suffix = " -- " .. item.serialNumber
                                                 end
                                                 local itembtn = NativeUI.CreateItem(color .. "(" .. item.quantity .. "x) " .. item.name .. suffix, "Withdraw some amount of this item.")
@@ -408,7 +408,7 @@ Citizen.CreateThread(function()
                                                 else
                                                     color = "~r~"
                                                 end
-                                                if item.type == "weapon" and item.serialNumber then
+                                                if item.type == "weapon" and item.legality == "legal" and item.serialNumber then
                                                     suffix = " -- " .. item.serialNumber
                                                 end
                                                 local itembtn = NativeUI.CreateItem(color .. "(" .. item.quantity .. "x) " .. item.name .. suffix, "Store some amount of this item.")

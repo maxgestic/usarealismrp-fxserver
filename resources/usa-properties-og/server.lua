@@ -7,7 +7,7 @@ local PROPERTIES = {} -- loaded and updated by database
 
 local BUSINESS_PAY_PERIOD_DAYS = 7
 local HOUSE_PAY_PERIOD_DAYS = 30
-local MAX_NUM_OF_PROPERTIES_SINGLE_PERSON = 7
+local MAX_NUM_OF_PROPERTIES_SINGLE_PERSON = 5
 
 local NEARBY_DISTANCE = 500
 
@@ -159,11 +159,10 @@ end)
 RegisterServerEvent("properties:store")
 AddEventHandler("properties:store", function(name, item, quantity)
   local user_source = source
+  local char = exports["usa-characters"]:GetCharacter(user_source)
+  item = char.getItem(item)
   if item.type and item.type ~= "license" then
-    local saved_quantity = item.quantity
     -- remove from player --
-    --TriggerEvent("usa:removeItem", item, quantity, user_source)
-    local char = exports["usa-characters"]:GetCharacter(user_source)
     char.removeItem(item, quantity)
     local copy = item
     copy.quantity = quantity
