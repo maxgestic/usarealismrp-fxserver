@@ -1274,9 +1274,14 @@ end)
 
 RegisterServerEvent("properties:storeItem")
 AddEventHandler("properties:storeItem", function(location, index, item, quantity)
+	local char = exports["usa-characters"]:GetCharacter(source)
+	item = char.getItem(item) -- server-sided validity check, don't trust the client!
+	if not item then
+		print("** [usa_properties] ALERT: Client " .. char.getFullName() .. " sent an item as a parameter to a server event that failed server validation! **")
+		return
+	end
 	local room = properties[location].rooms[index]
 	if room.owner and isPlayerInInstance(location, index, source) then
-	    local char = exports["usa-characters"]:GetCharacter(source)
 	    local target_char = exports["usa-characters"]:GetCharacter(room.owner)
 	    local property = target_char.get('property')
 	    item.quantity = quantity

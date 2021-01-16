@@ -160,7 +160,11 @@ RegisterServerEvent("properties:store")
 AddEventHandler("properties:store", function(name, item, quantity)
   local user_source = source
   local char = exports["usa-characters"]:GetCharacter(user_source)
-  item = char.getItem(item)
+  item = char.getItem(item) -- server-sided validity check here, don't trust
+  if not item then
+    print("** [usa-properties-og] ALERT: Client " .. char.getFullName() .. " sent in an item that failed server validation! **")
+    return
+  end
   if item.type and item.type ~= "license" then
     -- remove from player --
     char.removeItem(item, quantity)
