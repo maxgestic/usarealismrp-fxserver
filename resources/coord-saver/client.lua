@@ -1,3 +1,9 @@
+RegisterCommand('coords', function(source, args, rawCommand)
+	local coords = GetEntityCoords(PlayerPedId())
+	SendNUIMessage({
+		coords = "x = " .. coords.x .. ", y = " .. coords.y ..", z = " .. coords.z
+	})
+end)
 
 RegisterCommand('coords1', function(source, args, rawCommand)
 	local coords = GetEntityCoords(PlayerPedId())
@@ -17,5 +23,12 @@ RegisterCommand('coords3', function(source, args, rawCommand)
 	local coords = GetEntityCoords(PlayerPedId())
 	SendNUIMessage({
 		coords = coords.x .. ", " .. coords.y ..", " .. coords.z
+	})
+end)
+
+RegisterCommand('coords4', function(source, args, rawCommand)
+	local coords = GetEntityCoords(PlayerPedId())
+	SendNUIMessage({
+		coords = coords.x .. " " .. coords.y .." " .. coords.z
 	})
 end)
