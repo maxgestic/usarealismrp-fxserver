@@ -71,9 +71,9 @@ end)
 Citizen.CreateThread(function()
 	local timeRunning = 0
 	while true do
-		Citizen.Wait(1000)
-		local playerBAC = playerData['levelBAC']
+		Wait(1000)
 		local playerPed = PlayerPedId()
+		local playerBAC = playerData['levelBAC']
 		if playerBAC > 0.04 and not playerData['odorAlcohol'] then
 			playerData['odorAlcohol'] = true
 		elseif playerBAC <= 0.03 and playerData['odorAlcohol'] then
@@ -510,7 +510,6 @@ function Intoxicate(playScenario, clipset, shakeCam)
 			Citizen.Wait(5000)
 			DoScreenFadeOut(500)
 			Citizen.Wait(500)
-			ClearPedTasksImmediately(playerPed)
 			SetTimecycleModifier("spectator5")
 			SetPedMotionBlur(playerPed, true)
 			if clipset then
