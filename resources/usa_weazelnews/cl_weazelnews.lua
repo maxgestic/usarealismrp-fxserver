@@ -300,23 +300,32 @@ Citizen.CreateThread(function()
 	end
 end)
 
+function ClearCurrentCall(dist)
+	TriggerServerEvent('weazelnews:completeCall', dist)
+	RemoveBlip(current_call.handle)
+	current_call = {}
+end
+
+RegisterNetEvent('weazelNews:cancelCall')
+AddEventHandler('weazelNews:cancelCall', function()
+	ClearCurrentCall()
+end)
+
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(5000)
 		if current_call.handle then
 			local playerCoords = GetEntityCoords(PlayerPedId())
 			local player = current_call.player_coords
 			local call = current_call.call_coords
 			if Vdist(playerCoords, call[1], call[2], call[3]) < 15 then
-				Citizen.Wait(10000)
+				Wait(10000)
 				if Vdist(playerCoords, call[1], call[2], call[3]) < 15 then
 					local dist = Vdist(player[1], player[2], player[3], call[1], call[2], call[3])
-					TriggerServerEvent('weazelnews:completeCall', dist)
-					RemoveBlip(current_call.handle)
-					current_call = {}
+					ClearCurrentCall(dist)
 				end
 			end
 		end
+		Wait(5000)
 	end
 end)
 

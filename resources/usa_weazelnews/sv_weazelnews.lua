@@ -11,6 +11,10 @@ TriggerEvent('es:addJobCommand', 'mic', { "reporter" }, function(source, args, c
     TriggerClientEvent("weazelnews:ToggleMic", source)
 end, { help = "Take out or put away the microphone" })
 
+TriggerEvent('es:addJobCommand', 'cancelcall', { "reporter" }, function(source, args, char, location)
+    TriggerClientEvent("weazelNews:cancelCall", source)
+end, { help = "Cancel your current call" })
+
 local timeout = false
 RegisterServerEvent("weazelnews:toggleDuty")
 AddEventHandler("weazelnews:toggleDuty", function()
@@ -35,6 +39,7 @@ AddEventHandler("weazelnews:toggleDuty", function()
 		if not timeout then
 			print("WEAZEL_NEWS: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] is now ON-DUTY for REPORTER")
 			TriggerClientEvent("weazelnews:notify", source, "You are now clocked in!")
+			TriggerClientEvent("chatMessage", source, "", {}, "^3INFO: ^0Use ^3/cam ^0 and ^3/mic ^0 when facing your van to bring out the news camera and microphone!")
 			char.set("job", "reporter")
 		else
 			print("WEAZEL_NEWS: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] tried to go on-duty during timeout")
@@ -78,6 +83,10 @@ end)
 
 RegisterServerEvent('weazelnews:completeCall')
 AddEventHandler('weazelnews:completeCall', function(distance)
+	if not distance then
+		TriggerClientEvent('usa:notify', source, 'Call ended!')
+		return
+	end
 	local char = exports["usa-characters"]:GetCharacter(source)
 	if char.get("job") == "reporter" then
 		local amountRewarded = math.ceil(BASE_PAY + (0.04 * distance))
