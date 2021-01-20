@@ -35,13 +35,20 @@ local previous_menu = nil
 local COMPONENTS = {"Face","Head","Hair","Arms/Hands","Legs","Back","Feet","Ties","Torso 1","Vests","Textures","Torso 2"}
 local PROPS = { "Head", "Glasses", "Ear Acessories"}
 
+local BLACKLISTED_MENU_ITEMS = {
+	COMPONENTS = {
+		[1] = true, -- Face
+		[3] = true -- Hair
+	}
+}
+
 local BLACKLISTED_ITEMS = {
 	["male"] = {
 		["components"] = {
 			[7] = {1, 2, 3, 5, 6, 8, 16, 17, 56, 57}, -- ties
 			[8] = {30, 32, 52, 57, 67, 81, 86, 111, 136, 145}, -- torso 1
 			[9] = {5, 7, 10, 30, 31, 32, 36, 38, 45, 46, 47, 50}, -- vests
-			[11] = {16, 31, 45, 46, 49, 50, 69, 91, 94, 95, 107, 108, 111, 112, 113, 114, 115, 116, 117, 125, 137, 168, 170, 180, 197} -- torso 2
+			[11] = {16, 24, 25, 31, 45, 46, 49, 50, 69, 91, 94, 95, 107, 108, 111, 112, 113, 114, 115, 116, 117, 125, 137, 168, 170, 180, 197} -- torso 2
 		},
 		["props"] = {
 			[1] = {8, 10, 13, 17, 43, 54, 55} -- head
@@ -52,13 +59,15 @@ local BLACKLISTED_ITEMS = {
 			[7] = {1, 2, 3, 4, 5, 6, 8, 10, 11, 49, 50, 101, 102, 108, 109},
 			[8] = {9, 10, 18, 41, 44, 47, 65, 80, 81, 119, 175},
 			[9] = {7, 8, 31, 32, 33, 40, 41, 44, 49, 50, 51, 56},
-			[11] = {16, 35, 45, 47, 54, 62, 78, 87, 98, 99, 102, 103, 104, 105, 106, 107, 108, 117, 133, 165, 167, 182, 186, 193, 199, 238}
+			[11] = {16, 26, 35, 45, 47, 54, 62, 78, 87, 98, 99, 102, 103, 104, 105, 106, 107, 108, 117, 133, 165, 167, 182, 186, 193, 199, 238}
 		},
 		["props"] = {
 			[1] = {8, 13, 17, 20, 42, 54}
 		}
 	}
 }
+
+
 
 ------------------------------------------------------------------------------------------------------
 -- Swayam's way of setting up data structures with skins, basically 3 parallel arrays --
@@ -275,41 +284,43 @@ function CreateMenu()
 		local components_submenu = _menuPool:AddSubMenu(MainMenu, "Components", "Change things like your shirt, jacket, pants, and more. Go to a barber shop for more face customization.", true)
 
 		for i = 1, #COMPONENTS do
-			local adjusted_index = i - 1
-			local item = NativeUI.CreateItem(COMPONENTS[i], "Change your " .. COMPONENTS[i])
-			item.Activated = function(parentmenu, selected)
-				previous_menu = parentmenu
-				_menuPool:CloseAllMenus()
-				ComponentValuesMenu:Clear()
-				local component_variations_total = {} for i = 1, GetNumberOfPedDrawableVariations(me, adjusted_index) - 1 do table.insert(component_variations_total, i) end
-				local texture_variations_total = {} for i = 1, GetNumberOfPedTextureVariations(me, adjusted_index, GetPedDrawableVariation(me, adjusted_index)) - 1 do table.insert(texture_variations_total, i) end
-				local component_changer = NativeUI.CreateListItem("Component Value", component_variations_total, GetPedDrawableVariation(me, adjusted_index))
-				local texture_changer = NativeUI.CreateListItem("Texture Value", texture_variations_total, 1)
-				ComponentValuesMenu:AddItem(component_changer)
-				if #texture_variations_total > 0 then
-					ComponentValuesMenu:AddItem(texture_changer)
-				end
-				ComponentValuesMenu.OnListChange = function(sender, item, index)
- 					if item == component_changer then
-						 local val = item:IndexToItem(index)
-						 if (not IsBlacklisted(getGenderFromModel(GetEntityModel(PlayerPedId())), "components", adjusted_index, val) or CLOTHING_STORE_LOCATIONS[lastShop].blacklistExempt) then
-							 --print("setting adjusted index " .. adjusted_index .. " to val " .. val)
-							 SetPedComponentVariation(me, adjusted_index, val, 0, 0)
-							 UpdateValueChangerMenu(me, adjusted_index, val, false)
-						 end
-					elseif item == texture_changer then
-						local val = item:IndexToItem(index)
-						SetPedComponentVariation(me, adjusted_index, GetPedDrawableVariation(me, adjusted_index), val, 0)
+			if not BLACKLISTED_MENU_ITEMS.COMPONENTS[i] then
+				local adjusted_index = i - 1
+				local item = NativeUI.CreateItem(COMPONENTS[i], "Change your " .. COMPONENTS[i])
+				item.Activated = function(parentmenu, selected)
+					previous_menu = parentmenu
+					_menuPool:CloseAllMenus()
+					ComponentValuesMenu:Clear()
+					local component_variations_total = {} for i = 1, GetNumberOfPedDrawableVariations(me, adjusted_index) - 1 do table.insert(component_variations_total, i) end
+					local texture_variations_total = {} for i = 1, GetNumberOfPedTextureVariations(me, adjusted_index, GetPedDrawableVariation(me, adjusted_index)) - 1 do table.insert(texture_variations_total, i) end
+					local component_changer = NativeUI.CreateListItem("Component Value", component_variations_total, GetPedDrawableVariation(me, adjusted_index))
+					local texture_changer = NativeUI.CreateListItem("Texture Value", texture_variations_total, 1)
+					ComponentValuesMenu:AddItem(component_changer)
+					if #texture_variations_total > 0 then
+						ComponentValuesMenu:AddItem(texture_changer)
 					end
+					ComponentValuesMenu.OnListChange = function(sender, item, index)
+						if item == component_changer then
+							local val = item:IndexToItem(index)
+							if (not IsBlacklisted(getGenderFromModel(GetEntityModel(PlayerPedId())), "components", adjusted_index, val) or CLOTHING_STORE_LOCATIONS[lastShop].blacklistExempt) then
+								--print("setting adjusted index " .. adjusted_index .. " to val " .. val)
+								SetPedComponentVariation(me, adjusted_index, val, 0, 0)
+								UpdateValueChangerMenu(me, adjusted_index, val, false)
+							end
+						elseif item == texture_changer then
+							local val = item:IndexToItem(index)
+							SetPedComponentVariation(me, adjusted_index, GetPedDrawableVariation(me, adjusted_index), val, 0)
+						end
+					end
+					local clearbtn = NativeUI.CreateItem("Clear", "Clear this component")
+					clearbtn.Activated = function(parentmenu, selected)
+						SetPedComponentVariation(me, adjusted_index, 0, 0, 0)
+					end
+					ComponentValuesMenu:AddItem(clearbtn)
+					ComponentValuesMenu:Visible(true)
 				end
-				local clearbtn = NativeUI.CreateItem("Clear", "Clear this component")
-				clearbtn.Activated = function(parentmenu, selected)
-					SetPedComponentVariation(me, adjusted_index, 0, 0, 0)
-				end
-				ComponentValuesMenu:AddItem(clearbtn)
-				ComponentValuesMenu:Visible(true)
+				components_submenu.SubMenu:AddItem(item)
 			end
-			components_submenu.SubMenu:AddItem(item)
 		end
 
 		-- props --
