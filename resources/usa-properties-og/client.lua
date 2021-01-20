@@ -30,6 +30,8 @@ local closest_coords = {
 
 local VEHICLE_DAMAGES = {}
 
+local waitingForWardrobeToLoad = false
+
 RegisterNetEvent("properties:setPropertyIdentifier")
 AddEventHandler("properties:setPropertyIdentifier", function(ident)
     my_property_identifier = ident
@@ -50,6 +52,7 @@ end)
 RegisterNetEvent("properties:loadWardrobe")
 AddEventHandler("properties:loadWardrobe", function(wardrobe)
     menu_data.wardrobe = wardrobe
+    waitingForWardrobeToLoad = false
 end)
 
 -- list items to store --
@@ -456,6 +459,10 @@ Citizen.CreateThread(function()
                                         -----------------
                                         local wardrobe_submenu = _menuPool:AddSubMenu(mainMenu, "Wardrobe", "Store and retrieve outfits here.", true --[[KEEP POSITION]])
                                         TriggerServerEvent("properties:getWardrobe", nearest_property_info.name)
+                                        waitingForWardrobeToLoad = true
+                                        while waitingForWardrobeToLoad do
+                                            Wait(10)
+                                        end
                                         if menu_data.wardrobe and #menu_data.wardrobe > 0 then
                                             for x  = 1, #menu_data.wardrobe do
                                                 local outfit = menu_data.wardrobe[x]

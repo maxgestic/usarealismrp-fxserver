@@ -39,7 +39,7 @@ AddEventHandler("weazelnews:toggleDuty", function()
 		if not timeout then
 			print("WEAZEL_NEWS: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] is now ON-DUTY for REPORTER")
 			TriggerClientEvent("weazelnews:notify", source, "You are now clocked in!")
-			TriggerClientEvent("chatMessage", source, "", {}, "^3INFO: ^0Use ^3/cam ^0 and ^3/mic ^0 when facing your van to bring out the news camera and microphone!")
+			TriggerClientEvent("chatMessage", source, "", {}, "^3INFO: ^0Use ^3/cam ^0 and ^3/mic ^0 when facing your van to bring out the news camera and microphone! You can also use ^3/cancelcall^0 to cancel your current call!")
 			char.set("job", "reporter")
 		else
 			print("WEAZEL_NEWS: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] tried to go on-duty during timeout")
