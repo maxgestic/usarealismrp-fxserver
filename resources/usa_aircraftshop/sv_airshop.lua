@@ -59,8 +59,10 @@ end)
 -- # note: plate == first 8 digits of aircraft.id
 RegisterServerEvent('aircraft:requestReturn')
 AddEventHandler('aircraft:requestReturn', function(plate)
+    print("[usa_aircraftshop] inside aircraft:requestReturn!")
     local char = exports["usa-characters"]:GetCharacter(source)
     local aircraft = char.get("aircraft")
+    print("[usa_aircraftshop] #aircraft: " .. #aircraft)
     for i = 1, #aircraft do 
         if tostring(aircraft[i].id):sub(1, 8) == plate then
             aircraft[i].stored = true
@@ -69,6 +71,7 @@ AddEventHandler('aircraft:requestReturn', function(plate)
             return
         end
     end
+    print("[usa_aircraftshop] no match found for plate: " .. plate .. "!")
 end)
 
 RegisterServerEvent('aircraft:requestRent')
