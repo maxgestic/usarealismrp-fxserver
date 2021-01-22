@@ -274,6 +274,7 @@ Citizen.CreateThread(function()
                                             RemoveMenuPool(_menuPool)
                                             -- 2) get input
                                             Citizen.CreateThread( function()
+                                                TriggerEvent("hotkeys:enable", false)
                                                 DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
                                                 while true do
                                                     if ( UpdateOnscreenKeyboard() == 1 ) then
@@ -295,6 +296,7 @@ Citizen.CreateThread(function()
                                                     end
                                                     Wait( 0 )
                                                 end
+                                                TriggerEvent("hotkeys:enable", true)
                                             end )
                                         end
                                         mainMenu:AddItem(item)
@@ -310,6 +312,7 @@ Citizen.CreateThread(function()
                                             RemoveMenuPool(_menuPool)
                                             -- get input to withdraw --
                                             Citizen.CreateThread( function()
+                                                TriggerEvent("hotkeys:enable", false)
                                                 DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
                                                 while true do
                                                     if ( UpdateOnscreenKeyboard() == 1 ) then
@@ -329,7 +332,8 @@ Citizen.CreateThread(function()
                                                     end
                                                     Wait( 0 )
                                                 end
-                                            end )
+                                                TriggerEvent("hotkeys:enable", true)
+                                            end)
                                         end
                                         mainMenu:AddItem(item)
                                         ---------------------
@@ -360,6 +364,7 @@ Citizen.CreateThread(function()
                                                     -- ask for quantity to retrieve, then try to retrieve it --
                                                     ----------------------------------------------------------------
                                                     Citizen.CreateThread( function()
+                                                        TriggerEvent("hotkeys:enable", false)
                                                         DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
                                                         while true do
                                                             if ( UpdateOnscreenKeyboard() == 1 ) then
@@ -385,6 +390,7 @@ Citizen.CreateThread(function()
                                                             end
                                                             Wait( 0 )
                                                         end
+                                                        TriggerEvent("hotkeys:enable", true)
                                                     end )
                                                 end
                                                 retrieval_submenu.SubMenu:AddItem(itembtn)
@@ -419,6 +425,7 @@ Citizen.CreateThread(function()
                                                     RemoveMenuPool(_menuPool)
                                                     -- ask for quantity to store, then try to store it --
                                                     Citizen.CreateThread( function()
+                                                        TriggerEvent("hotkeys:enable", false)
                                                         DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
                                                         while true do
                                                             if ( UpdateOnscreenKeyboard() == 1 ) then
@@ -446,6 +453,7 @@ Citizen.CreateThread(function()
                                                             end
                                                             Wait( 0 )
                                                         end
+                                                        TriggerEvent("hotkeys:enable", true)
                                                     end)
                                                 end
                                                 storage_submenu.SubMenu:AddItem(itembtn)
@@ -547,6 +555,7 @@ Citizen.CreateThread(function()
                                             RemoveMenuPool(_menuPool)
                                             -- 2) get input
                                             Citizen.CreateThread( function()
+                                                TriggerEvent("hotkeys:enable", false)
                                                 DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 9 )
                                                 while true do
                                                     if ( UpdateOnscreenKeyboard() == 1 ) then
@@ -565,6 +574,7 @@ Citizen.CreateThread(function()
                                                     end
                                                     Wait( 0 )
                                                 end
+                                                TriggerEvent("hotkeys:enable", true)
                                             end )
                                           end
                                           coowners_submenu.SubMenu:AddItem(add_owner_btn)
@@ -887,12 +897,14 @@ end
 
 function GetUserInput()
     -- get withdraw amount from user input --
+    TriggerEvent("hotkeys:enable", false)
     DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 15 )
     while true do
         if ( UpdateOnscreenKeyboard() == 1 ) then
             local input = GetOnscreenKeyboardResult()
             if ( string.len( input ) > 0 ) then
                 -- do something with the input var
+                TriggerEvent("hotkeys:enable", true)
                 return input
             else
                 DisplayOnscreenKeyboard( false, "", "", "", "", "", "", 15 )
@@ -902,6 +914,7 @@ function GetUserInput()
         end
         Wait( 0 )
     end
+    TriggerEvent("hotkeys:enable", true)
 end
 
 function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
