@@ -707,7 +707,7 @@ Citizen.CreateThread(function()
                                             ---------------------------
                                             for i = 1, #menu_data.vehicles do
                                                 local veh = menu_data.vehicles[i]
-                                                local item = NativeUI.CreateItem((veh.make or "INVALIDMAKE") .. " " .. (veh.model or "INVALIDMODEL"), "Press enter to withdraw this vehicle.")
+                                                local item = NativeUI.CreateItem((veh.owner or "Someone") .. "'s " .. (veh.make or "INVALIDMAKE") .. " " .. (veh.model or "INVALIDMODEL") .. " [" .. (veh.plate or "N/A") .. "]", "Press enter to withdraw this vehicle.")
                                                 item.Activated = function(parentmenu, selected)
                                                     RemoveMenuPool(_menuPool)
                                                     TriggerServerEvent("properties:retrieveVehicle", name, veh)
