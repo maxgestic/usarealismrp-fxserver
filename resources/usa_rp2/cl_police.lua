@@ -100,7 +100,7 @@ AddEventHandler("search:searchNearest", function(src)
       local x, y, z = table.unpack(GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 0.70, -1.0))
       TriggerEvent('search:playAnim')
       TriggerServerEvent('search:playSuspectAnim', player.id, x, y, z, playerHeading)
-      Citizen.Wait(12000)
+      Citizen.Wait(10000)
       TriggerServerEvent("search:searchPlayer", player.id, src)
     elseif IsPedInAnyVehicle(PlayerPedId(), false) then
       TriggerEvent("veh:searchVeh")
