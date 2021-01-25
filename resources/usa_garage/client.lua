@@ -22,7 +22,7 @@ locations = {
 	{ ["x"] = 1865.5, ["y"] = 3695.9, ["z"] = 33.7, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- sandy PD
 	{ ["x"] = 1712.8, ["y"] = 3599.5, ["z"] = 35.3, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- sandy FD
 	{ ['x'] = 445.236328125, ['y'] = -991.69458007813, ['z'] = 25.699808120728, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- MRPD
-	{ ["x"] = 343.7, ["y"] = -560.4, ["z"] = 28.7, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- pillbox medical
+	{ ['x'] = 317.69635009766, ['y'] = -574.09649658203, ['z'] = 28.796865463257, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- pillbox medical
 	{ ["x"] = 326.4, ["y"] = -1475.6, ["z"] = 29.8, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- one of the hospitals in LS, forgot exaclty the name
 	{ ["x"] = 1834.5, ["y"] = 2542.2, ["z"] = 45.9, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections", "da"} },
 	{ ['x'] = 911.6, ['y'] = -163.6, ['z'] = 74.4, ["jobs"] = {"taxi"}},
@@ -34,7 +34,6 @@ locations = {
 	{ ['x'] = 1127.5, ['y'] = 2670.8, ['z'] = 38.1, ['noBlip'] = true}, -- Sandy Shores Motel
 	{ ['x'] = 388.5, ['y'] = 2647.6, ['z'] = 44.5, ['noBlip'] = true}, -- Eastern Motel (sandy)
 	{ ['x'] = 967.45831298828, ['y'] = -128.59553527832, ['z'] = 74.387634277344, ['noBlip'] = true}, -- LS biker compound
-	-- Additionals added
 	{ ['x'] = 2362.2, ['y'] = 3113.97, ['z'] = 48.26, ['noBlip'] = true}, -- Sandy tow
 	{ ['x'] = 1754.54, ['y'] = 3293.54, ['z'] = 41.13, ['noBlip'] = true}, -- Sandy airport
 	{ ['x'] = 2148.8, ['y'] = 4798.39, ['z'] = 41.1, ['noBlip'] = true}, -- Grapeseed airport

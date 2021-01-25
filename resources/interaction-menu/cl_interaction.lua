@@ -924,12 +924,10 @@ function interactionMenuUse(index, itemName, wholeItem)
 			name = "fire"
 		}
 
-		RequestAnimDict(JERRY_CAN_ANIMATION.dict)
-		while not HasAnimDictLoaded(JERRY_CAN_ANIMATION.dict) do
-			Wait(100)
-		end
+		exports.globals:loadAnimDict(JERRY_CAN_ANIMATION.dict)
 
 		if tonumber(hitHandleVehicle) ~= 0 then
+			busy = true
 			local ped = GetPlayerPed(-1)
 			local jcan = 883325847
 			GiveWeaponToPed(ped, jcan, 20, false, true) -- easiest way to remove jerry can object off back when using it (from weapons-on-back resource)
@@ -952,6 +950,7 @@ function interactionMenuUse(index, itemName, wholeItem)
 			-- remove jerry can weapon from inventory --
 			TriggerServerEvent("usa:removeItem", wholeItem, 1)
 			TriggerEvent("interaction:equipWeapon", wholeItem, false)
+			busy = false
 		else
 			TriggerEvent("usa:notify", "No vehicle found!")
 		end
@@ -1512,7 +1511,7 @@ Citizen.CreateThread(function()
 		end
 
 		-- watch for open/close menu --
-		if IsControlJustPressed( 0, MENU_KEY1 ) and GetLastInputMethod(2) then
+		if IsControlJustPressed(0, MENU_KEY1) and GetLastInputMethod(2) and not busy then
 			hitHandleVehicle, distance = getVehicleInsideOrInFrontOfUser()
 			local target_veh_plate = GetVehicleNumberPlateText(hitHandleVehicle)
 			EnableGui(target_veh_plate)
