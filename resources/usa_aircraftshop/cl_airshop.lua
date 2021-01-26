@@ -331,6 +331,11 @@ end
 
 function ShowMainMenu(aircraft)
 	mainMenu:Clear()
+	local parachuteItem = NativeUI.CreateItem("Purchase Parachute", "Price: $500")
+	parachuteItem.Activated = function(parentmenu, selected)
+		TriggerServerEvent("aircraft:purchaseParachute")
+	end
+	mainMenu:AddItem(parachuteItem)
 	CreateHelicopterMenu(mainMenu, ITEMS.helicopters)
 	CreatePlaneMenu(mainMenu, ITEMS.planes)
 	CreateSellMenu(mainMenu, aircraft)

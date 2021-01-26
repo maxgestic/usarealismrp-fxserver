@@ -1,15 +1,4 @@
 local STORE_ITEMS = {
-  ["Melee"] = {
-    { name = "Flashlight", type = "weapon", hash = -1951375401, price = 200, legality = "legal", quantity = 1, weight = 9, objectModel = "p_cs_police_torch_s" },
-    { name = "Hammer", type = "weapon", hash = 1317494643, price = 50, legality = "legal", quantity = 1, weight = 10, objectModel = "prop_tool_hammer" },
-    { name = "Knife", type = "weapon", hash = -1716189206, price = 200, legality = "legal", quantity = 1, weight = 8, objectModel = "w_me_knife_01" },
-    { name = "Bat", type = "weapon", hash = -1786099057, price = 100, legality = "legal", quantity = 1, weight = 20, objectModel = "w_me_bat" },
-    { name = "Crowbar", type = "weapon", hash = -2067956739, price = 150, legality = "legal", quantity = 1, weight = 17, objectModel = "w_me_crowbar" },
-    { name = "Hatchet", type = "weapon", hash = -102973651, price = 250, legality = "legal", quantity = 1, weight = 12, objectModel = "w_me_hatchet" },
-    { name = "Wrench", type = "weapon", hash = 419712736, price = 400, legality = "legal", quantity = 1, weight = 12, objectModel = "prop_tool_wrench" },
-    { name = "Machete", type = "weapon", hash = -581044007, price = 250, legality = "legal", quantity = 1, weight = 15, objectModel = "prop_ld_w_me_machette" }
-
-  },
   ["Handguns"] = {
     { name = "Pistol", type = "weapon", hash = 453432689, price = 600, legality = "legal", quantity = 1, weight = 15, objectModel = "w_pi_pistol" },
     { name = "Heavy Pistol", type = "weapon", hash = -771403250, price = 1500, legality = "legal", quantity = 1, weight = 20, objectModel = "w_pi_heavypistol" },
@@ -28,7 +17,6 @@ local STORE_ITEMS = {
     { name = "Musket", type = "weapon", hash = -1466123874, price = 1500, legality = "legal", quantity = 1, weight = 35, objectModel = "w_ar_musket" }
   },
   ["Extras"] = {
-    { name = "Parachute", type = "weapon", hash = "GADGET_PARACHUTE", price = 500, legality = "legal", quantity = 1, weight = 15, objectModel = "prop_parachute" },
     { name = "Body Armor", type = "misc", price = 1000, legality = "legal", quantity = 1, weight = 15, objectModel = "prop_bodyarmour_03" },
     { name = "Fire Extinguisher", type = "weapon",  hash = 101631238, price = 400, weight = 20, objectModel = "prop_fire_hosereel" }
   }

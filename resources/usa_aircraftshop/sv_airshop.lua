@@ -29,6 +29,8 @@ local LICENSE_PURCHASE_PRICE = 1000
 local RENTAL_PERCENTAGE = 0.40
 local CLAIM_PERCENTAGE = 0.16
 
+local PARACHUTE_ITEM = { name = "Parachute", type = "weapon", hash = "GADGET_PARACHUTE", price = 500, legality = "legal", quantity = 1, weight = 15, objectModel = "prop_parachute" }
+
 RegisterServerEvent('aircraft:requestOpenMenu')
 AddEventHandler('aircraft:requestOpenMenu', function()
   local char = exports["usa-characters"]:GetCharacter(source)
@@ -54,6 +56,22 @@ end)
 RegisterServerEvent('aircraft:loadItems')
 AddEventHandler('aircraft:loadItems', function()
     TriggerClientEvent("aircraft:loadItems", source, ITEMS, RENTAL_PERCENTAGE, CLAIM_PERCENTAGE)
+end)
+
+RegisterServerEvent('aircraft:purchaseParachute')
+AddEventHandler('aircraft:purchaseParachute', function()
+    local char = exports["usa-characters"]:GetCharacter(source)
+    if char.canHoldItem(PARACHUTE_ITEM) then
+        if char.get("money") >= PARACHUTE_ITEM.price then
+          char.removeMoney(PARACHUTE_ITEM.price)
+          char.giveItem(PARACHUTE_ITEM, 1)
+          TriggerClientEvent("usa:notify", source, "Purchased: ~y~" .. PARACHUTE_ITEM.name)
+        else
+            TriggerClientEvent("usa:notify", source, "Not enough money")
+        end
+    else
+        TriggerClientEvent("usa:notify", source, "Inventory full")
+    end
 end)
 
 -- # note: plate == first 8 digits of aircraft.id

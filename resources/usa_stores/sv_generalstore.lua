@@ -92,7 +92,15 @@ local HARDWARE_STORE_ITEMS = {
     { name = "Pick Axe", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 30, objectModel = "prop_tool_pickaxe"},
     { name = "Watering Can", price = 75, type = "misc", quantity = 1, legality = "legal", weight = 20, objectModel = "prop_wateringcan"},
     { name = "Fertilizer", price = 75, type = "misc", quantity = 5, legality = "legal", weight = 5},
-    { name = "Ceramic Tubing", price = 30, type = "misc", quantity = 5, legality = "legal", weight = 5}
+    { name = "Ceramic Tubing", price = 30, type = "misc", quantity = 5, legality = "legal", weight = 5},
+    { name = "Flashlight", type = "weapon", hash = -1951375401, price = 200, legality = "legal", quantity = 1, weight = 9, objectModel = "p_cs_police_torch_s" },
+    { name = "Hammer", type = "weapon", hash = 1317494643, price = 50, legality = "legal", quantity = 1, weight = 10, objectModel = "prop_tool_hammer" },
+    { name = "Knife", type = "weapon", hash = -1716189206, price = 200, legality = "legal", quantity = 1, weight = 8, objectModel = "w_me_knife_01" },
+    { name = "Bat", type = "weapon", hash = -1786099057, price = 100, legality = "legal", quantity = 1, weight = 20, objectModel = "w_me_bat" },
+    { name = "Crowbar", type = "weapon", hash = -2067956739, price = 150, legality = "legal", quantity = 1, weight = 17, objectModel = "w_me_crowbar" },
+    { name = "Hatchet", type = "weapon", hash = -102973651, price = 250, legality = "legal", quantity = 1, weight = 12, objectModel = "w_me_hatchet" },
+    { name = "Wrench", type = "weapon", hash = 419712736, price = 400, legality = "legal", quantity = 1, weight = 12, objectModel = "prop_tool_wrench" },
+    { name = "Machete", type = "weapon", hash = -581044007, price = 250, legality = "legal", quantity = 1, weight = 15, objectModel = "prop_ld_w_me_machette" }
   }
 }
 
