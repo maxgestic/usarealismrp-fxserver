@@ -31,6 +31,10 @@ end)
 
 RegisterNetEvent('playerlist:displayPlayerlist')
 AddEventHandler('playerlist:displayPlayerlist', function(players, group)
+	local displayTime = 15000
+	if group ~= "user" then
+		displayTime = displayTime + 99999 -- staff can hold menu open longer than non-staff (to prevent meta gaming)
+	end
 	playerlist.group = group
 	mainMenu:Clear()
 	RefreshMenu(players)
@@ -38,7 +42,7 @@ AddEventHandler('playerlist:displayPlayerlist', function(players, group)
 	mainMenu:Visible(true)
 	PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", 1)
 	local beginTime = GetGameTimer()
-	while IsControlPressed(0, playerlist.key) and GetGameTimer() - beginTime < 15000 do
+	while IsControlPressed(0, playerlist.key) and GetGameTimer() - beginTime < displayTime do
 		ShowIds()
 		Citizen.Wait(0)
 	end
