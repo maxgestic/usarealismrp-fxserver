@@ -211,6 +211,8 @@ function canCharUnlockDoor(char, doorIndex)
       return true
     elseif door.allowedJobs[i] == 'sheriff' and char.get("policeRank") and char.get("policeRank") > 0 then -- not clocked in, but whitelisted for job
       return true
+    elseif door.allowedJobs[i] == 'ems' and char.get("emsRank") and char.get("emsRank") > 0 then -- not clocked in, but whitelisted for job
+      return true
     end
   end
   return false
