@@ -11,6 +11,11 @@ local lastRecordedTimeDoingJob = 0
 
 local isRepairing = false
 
+local KEYS = {
+	E = 38,
+	V = 0
+}
+
 local locations = {
 	["Paleto"] = {
 		duty = {
@@ -186,19 +191,27 @@ Citizen.CreateThread(function()
 	end
 end)
 
+-- draw 3D text --
 Citizen.CreateThread(function()
-	local timeout = 0
 	while true do
-		Citizen.Wait(0)
 		for name, data in pairs(locations) do
 			if onDuty == "no" then
 				DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 5, '[E] - Sign in (~g~Mechanic~s~)')
 			else
-				DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 5, '[E] - Sign out (~g~Mechanic~s~)')
+				DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 5, '[E] - Sign out (~g~Mechanic~s~) | [Hold V] - Retrieve Truck')
 			end
 			DrawText3D(data.impound.x, data.impound.y, (data.impound.z + 1.5), 15, '[E] - Impound Vehicle')
 		end
-		if IsControlJustPressed(0, 38) then
+		Wait(1)
+	end
+end)
+
+-- listen for key presses --
+Citizen.CreateThread(function()
+	local timeout = 0
+	while true do
+		Wait(0)
+		if IsControlJustPressed(0, KEYS.E) then
 			local playerPed = PlayerPedId()
 			local playerCoords = GetEntityCoords(playerPed)
 			for name, data in pairs(locations) do
@@ -217,14 +230,24 @@ Citizen.CreateThread(function()
 								timeout = 0
 							end)
 						end
-						TriggerServerEvent("towJob:setJob", data.truck_spawn)
+						TriggerServerEvent("towJob:setJob")
 					end
-				elseif
-				Vdist(playerCoords, data.impound.x, data.impound.y, data.impound.z) < 15.0 then
+				elseif Vdist(playerCoords, data.impound.x, data.impound.y, data.impound.z) < 15.0 then
 					if onDuty == "yes" then
 						ImpoundVehicle()
 					end
 				end
+			end
+		end
+
+		if IsControlJustPressed(0, KEYS.V) and GetLastInputMethod(0) and onDuty == "yes" then
+			if not (lastTowTruck and DoesEntityExist(lastTowTruck)) then
+				Wait(500)
+				if IsControlPressed(0, KEYS.V) then
+					TriggerServerEvent("mechanic:spawnTruck")
+				end
+			else
+				exports.globals:notify("Already retrieved truck")
 			end
 		end
 	end
@@ -235,7 +258,7 @@ Citizen.CreateThread(function()
 	local warnedKick = false
 	while true do
 		local me = PlayerPedId()
-		if onDuty == "yes" and lastTowTruck then
+		if onDuty == "yes" then
 			if IsPedInAnyVehicle(me) then 
 				local veh = GetVehiclePedIsIn(me, false)
 				local vehModel = GetEntityModel(veh)
@@ -260,20 +283,35 @@ Citizen.CreateThread(function()
 		if onDuty == "no" and warnedKick then
 			warnedKick = false
 		end
-		Wait(10)
+		Wait(5000)
+	end
+end)
+
+-- help register towed vehicles for impounding for money when using the 'isgtow' model truck --
+Citizen.CreateThread(function()
+	local ISGTOW_HASH = GetHashKey("isgtow")
+	while true do
+		if onDuty == "yes" then
+			local me = PlayerPedId()
+			if IsPedInAnyVehicle(me, false) then
+				local myveh = GetVehiclePedIsIn(me, false)
+				if ISGTOW_HASH == GetEntityModel(myveh) then
+					local towingveh = GetEntityAttachedToTowTruck(myveh)
+					if towingveh > 0 then
+						vehicleToImpound = towingveh
+					end
+				end
+			end
+		end
+		Wait(2000)
 	end
 end)
 
 RegisterNetEvent("towJob:onDuty")
-AddEventHandler("towJob:onDuty", function(coords, isRank3)
-	exports.globals:notify(tier)
+AddEventHandler("towJob:onDuty", function(isRank3)
 	exports.globals:notify('You are now ~g~on-duty~s~ as a mechanic.')
-	if isRank3 then
-		SpawnHeavyHauler(coords)
-	else
-		SpawnTowFlatbed(coords)
-	end
 	onDuty = "yes"
+	lastRecordedTimeDoingJob = GetGameTimer()
 	ShowHelp(isRank3)
 end)
 
@@ -431,6 +469,23 @@ AddEventHandler('mechanic:syncUpgrade', function(vehNetId, upgrade)
 	end
 end)
 
+RegisterNetEvent("mechanic:spawnTruck")
+AddEventHandler("mechanic:spawnTruck", function(repairCount)
+	local me = PlayerPedId()
+	local mycoords = GetEntityCoords(me, false)
+	for name, info in pairs(locations) do
+		local dutyCoordsVector = vector3(info.duty.x, info.duty.y, info.duty.z)
+		if Vdist(mycoords, dutyCoordsVector) < 10 then
+			if repairCount >= MechanicHelper.LEVEL_3_RANK_THRESH then
+				SpawnHeavyHauler(info.truck_spawn)
+			else
+				SpawnTowFlatbed(info.truck_spawn)
+			end
+			return
+		end
+	end
+end)
+
 function isNearAnyRepairShop()
 	local me = PlayerPedId()
 	local mycoords = GetEntityCoords(me)
@@ -511,7 +566,6 @@ function SpawnHeavyHauler(coords)
 			Citizen.Wait(0)
 		end
 		local vehicle = CreateVehicle(numberHash, coords.x, coords.y, coords.z, coords.heading, true, false)
-		TriggerEvent('persistent-vehicles/register-vehicle', vehicle)
 		local vehPlate = GetVehicleNumberPlateText(vehicle)
 		SetVehicleOnGroundProperly(vehicle)
 		SetVehRadioStation(vehicle, "OFF")
@@ -551,7 +605,6 @@ function SpawnTowFlatbed(coords)
 			Citizen.Wait(0)
 		end
 		local vehicle = CreateVehicle(numberHash, coords.x, coords.y, coords.z, coords.heading, true, false)
-		TriggerEvent('persistent-vehicles/register-vehicle', vehicle)
 		local vehPlate = GetVehicleNumberPlateText(vehicle)
 		SetVehicleOnGroundProperly(vehicle)
 		SetVehRadioStation(vehicle, "OFF")
@@ -588,10 +641,7 @@ function IsVehicleWhitelisted(entity)
 	end
 end
 
--- Delete car function borrowed frtom Mr.Scammer's model blacklist, thanks to him!
 function DelVehicle(entity)
-	--TriggerEvent('persistent-vehicles/forget-vehicle', entity)
-	--Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( entity ) )
 	DeleteVehicle(entity)
 end
 
@@ -690,6 +740,4 @@ function ShowHelp(isRank3)
 	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Use ^3/install [upgrade]^0 to install custom vehicle upgrades (must be lvl 2 mechanic).")
 	Wait(3000)
 	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0You can get a repair kit from the hardware store and use that to repair vehicles.")
-	Wait(3000)
-	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0You can use the company tow truck that is right over there. It has a repair kit inside.")
 end

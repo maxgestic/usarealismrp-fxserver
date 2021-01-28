@@ -1,5 +1,7 @@
 exports["globals"]:PerformDBCheck("usa_mechanicjob", "mechanicjob")
 
+local NEEDS_TO_BE_CLOCKED_IN = true
+
 local TOW_REWARD = {100, 450}
 
 local installQueue = {}
@@ -61,7 +63,7 @@ end, {
 })
 
 RegisterServerEvent("towJob:setJob")
-AddEventHandler("towJob:setJob", function(truckSpawnCoords)
+AddEventHandler("towJob:setJob", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local repairs = nil
 	if char.get("job") == "mechanic" then
@@ -76,9 +78,9 @@ AddEventHandler("towJob:setJob", function(truckSpawnCoords)
 				local ident = char.get("_id")
 				MechanicHelper.getMechanicRepairCount(ident, function(repairCount)
 					if repairCount >= MechanicHelper.LEVEL_3_RANK_THRESH then
-						TriggerClientEvent("towJob:onDuty", usource, truckSpawnCoords, true)
+						TriggerClientEvent("towJob:onDuty", usource, true)
 					else
-						TriggerClientEvent("towJob:onDuty", usource, truckSpawnCoords)
+						TriggerClientEvent("towJob:onDuty", usource, false)
 					end
 				end)
 				return
@@ -105,18 +107,18 @@ RegisterServerEvent("mechanic:repairJobCheck")
 AddEventHandler("mechanic:repairJobCheck", function()
 	local usource = source
 	local char = exports["usa-characters"]:GetCharacter(usource)
-	if char.get("job") == "mechanic" then
-		local kit = char.getItem("Repair Kit")
-		if kit then
-			local ident = char.get("_id")
-			MechanicHelper.getMechanicRepairCount(ident, function(repairCount)
-				TriggerClientEvent("mechanic:repair", usource, repairCount)
-			end)
-		else 
-			TriggerClientEvent("usa:notify", source, "You need a repair kit!")
-		end
-	else
+	if NEEDS_TO_BE_CLOCKED_IN and char.get("job") ~= "mechanic" then
 		TriggerClientEvent("usa:notify", source, "Must be on duty as mechanic!")
+		return
+	end
+	local kit = char.getItem("Repair Kit")
+	if kit then
+		local ident = char.get("_id")
+		MechanicHelper.getMechanicRepairCount(ident, function(repairCount)
+			TriggerClientEvent("mechanic:repair", usource, repairCount)
+		end)
+	else 
+		TriggerClientEvent("usa:notify", source, "You need a repair kit!")
 	end
 end)
 
@@ -160,6 +162,16 @@ RegisterServerEvent("mechanic:giveRepairKit")
 AddEventHandler("mechanic:giveRepairKit", function(plate)
 	local repairKit = { name = "Repair Kit", price = 250, type = "vehicle", quantity = 1, legality = "legal", weight = 20, objectModel = "imp_prop_tool_box_01a"}
 	TriggerEvent("vehicle:storeItem", source, plate, repairKit, 1, 0, function(success, inv) end)
+end)
+
+RegisterServerEvent("mechanic:spawnTruck")
+AddEventHandler("mechanic:spawnTruck", function()
+	local usource = source
+	local char = exports["usa-characters"]:GetCharacter(usource)
+	local ident = char.get("_id")
+	MechanicHelper.getMechanicRepairCount(ident, function(repairCount)
+		TriggerClientEvent("mechanic:spawnTruck", usource, repairCount)
+	end)
 end)
 
 AddEventHandler("playerDropped", function(reason)

@@ -8,6 +8,9 @@ MechanicHelper.animations.repair.name = "fixing_a_player"
 MechanicHelper.REPAIR_TIME = 60000
 MechanicHelper.UPGRADE_INSTALL_TIME = 300000
 
+MechanicHelper.LEVEL_2_RANK_THRESH = 70
+MechanicHelper.LEVEL_3_RANK_THRESH = 500
+
 MechanicHelper.UPGRADE_FUNC_MAP = {
     ["topspeed1"] = function(veh, amountIncrease)
         ModifyVehicleTopSpeed(veh, 0.0) -- reset first to avoid doubling up issue
