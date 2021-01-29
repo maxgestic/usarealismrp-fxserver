@@ -73,6 +73,11 @@ local VEHICLE_RANKS = {
 			rank = 4,
 			allowedLiveries = { 1 },
 			hash = -1575764804
+		},
+		["chgr"] = {
+			rank = 4,
+			allowedLiveries = { 1 },
+			hash = 1624609239
 		}
 	},
 	["corrections"] = {
@@ -135,6 +140,11 @@ local VEHICLE_RANKS = {
 			rank = 4,
 			allowedLiveries = { 1 },
 			hash = -1973172295	
+		},
+		["chgr"] = {
+			rank = 4,
+			allowedLiveries = { 1 },
+			hash = 1624609239
 		}
 	},
 	["ems"] = {

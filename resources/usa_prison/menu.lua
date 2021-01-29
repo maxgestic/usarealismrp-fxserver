@@ -14,6 +14,7 @@ local vehicles = {
   { name = "Quad Bike", hash = GetHashKey("blazer") },
   { name = "CVPI", hash = GetHashKey("pdcvpi") },
   { name = "Charger", hash = GetHashKey("pdchgr") },
+  { name = "Unmarked Charger", hash = GetHashKey("chgr") },
   { name = "Taurus", hash = GetHashKey("pdtau") },
   { name = "Explorer", hash = GetHashKey("pdexp") },
   { name = "Truck", hash = GetHashKey("sheriff2") },
