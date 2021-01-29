@@ -112,7 +112,6 @@ end)
 -- retrieving vehicle --
 RegisterNetEvent("properties:retrieveVehicle")
 AddEventHandler("properties:retrieveVehicle", function(vehicle)
-    print("retrieving vehicle! hash: " .. vehicle.hash)
   local playerVehicle = vehicle
   local modelHash = vehicle.hash
   local plateText = vehicle.plate
@@ -144,7 +143,19 @@ AddEventHandler("properties:retrieveVehicle", function(vehicle)
 
     -- car customizations
     if playerVehicle.customizations then
-      TriggerEvent("customs:applyCustomizations", playerVehicle.customizations)
+        TriggerEvent("customs:applyCustomizations", playerVehicle.customizations)
+    end
+
+    -- veh fuel level
+    if playerVehicle.stats then
+        if playerVehicle.stats.fuel then
+            TriggerServerEvent("fuel:setFuelAmount", playerVehicle.plate, playerVehicle.stats.fuel)
+        end
+    end
+
+    -- any mechanic-installed upgrades
+    if playerVehicle.upgrades then
+        exports["usa_mechanicjob"]:ApplyUpgrades(vehicle, playerVehicle.upgrades)
     end
 
     -- apply any stored engine / body damage --
