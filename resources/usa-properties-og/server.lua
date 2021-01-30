@@ -239,10 +239,8 @@ AddEventHandler("properties:retrieveVehicle", function(property_name, vehicle) -
   local usource = source
   TriggerEvent('es:exposeDBFunctions', function(couchdb)
     couchdb.updateDocument("vehicles", vehicle.plate, { stored_location = "deleteMePlz!" }, function(err)
-      GetVehicleCustomizations(vehicle.plate, function(customizations)
-          vehicle.customizations = customizations
-          TriggerClientEvent("properties:retrieveVehicle", usource, vehicle)
-      end)
+      vehicle.upgrades = exports["usa_mechanicjob"]:GetUpgradeObjectsFromIds(vehicle.upgrades)
+        TriggerClientEvent("properties:retrieveVehicle", usource, vehicle)
     end)
   end)
 end)
@@ -982,7 +980,10 @@ function GetVehiclesForMenu(property_name, cb)
                       model = data.docs[i].model,
                       plate = data.docs[i].plate,
                       hash = data.docs[i].hash,
-                      owner = data.docs[i].owner
+                      owner = data.docs[i].owner,
+                      stats = data.docs[i].stats,
+                      upgrades = data.docs[i].upgrades,
+                      customizations = data.docs[i].customizations
                   }
                   table.insert(responseVehArray, veh)
               end
@@ -995,28 +996,8 @@ function GetVehiclesForMenu(property_name, cb)
         selector = {
             ["stored_location"] = property_name
         },
-        fields = { "make", "model", "plate", "hash", "owner" }
+        fields = { "make", "model", "plate", "hash", "owner", "stats", "upgrades", "customizations" }
     }), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
-end
-
-function GetVehicleCustomizations(plate, cb)
-	-- query for the information needed from each vehicle --
-	local endpoint = "/vehicles/_design/vehicleFilters/_view/getVehicleCustomizationsByPlate"
-	local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
-	PerformHttpRequest(url, function(err, responseText, headers)
-		if responseText then
-      local customizations = {}
-			--print(responseText)
-			local data = json.decode(responseText)
-      if data.rows and data.rows[1].value then
-			  customizations = data.rows[1].value[1] -- customizations
-      end
-			cb(customizations)
-		end
-	end, "POST", json.encode({
-		keys = { plate }
-		--keys = { "86CSH075" }
-	}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 function nroot(root, num)
