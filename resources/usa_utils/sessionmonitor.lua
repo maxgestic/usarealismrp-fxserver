@@ -145,6 +145,11 @@ function GetMostFrequentPlayerDropReason()
     return mostFreq.str
 end
 
+function RunPreRestartSaveEvents()
+    print("[usa_utils] Triggering pre-restart save events!")
+    TriggerEvent("cultivation:saveAllPlants")
+end
+
 -- save disk space by compacting this stock CouchDB "_global_changes" database --
 PerformHttpRequest("http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. "/_global_changes/_compact", function(err, rText, headers)
 end, "POST", "", {["Content-Type"] = "application/json", Authorization = "Basic " .. exports["essentialmode"]:getAuth()})

@@ -29,5 +29,6 @@ server_scripts {
 
 server_exports {
     "SendServerMonitorDiscordMsg",
-    "SendPreRestartServerMonitorDiscordMsg"
+    "SendPreRestartServerMonitorDiscordMsg",
+    "RunPreRestartSaveEvents"
 }

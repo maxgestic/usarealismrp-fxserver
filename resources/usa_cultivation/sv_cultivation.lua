@@ -146,6 +146,11 @@ AddEventHandler("cultivation:loadNearbyPlants", function(coords)
     TriggerClientEvent("cultivation:loadNearbyPlants", source, nearby)
 end)
 
+RegisterServerEvent("cultivation:saveAllPlants")
+AddEventHandler("cultivation:saveAllPlants", function()
+    saveAllPlants()
+end)
+
 TriggerEvent('es:addCommand', 'removeplant', function(source, args, char)
     local user = exports["essentialmode"]:getPlayerFromId(source)
     local job = char.get("job")
@@ -175,6 +180,7 @@ Citizen.CreateThread(function()
                     TriggerClientEvent("cultivation:updateSustenanceIfNearby", -1, PLANTED[id])
                 end
                 PLANTED[id]._rev = nil
+                PLANTED[id].last_save_time = os.date('%m-%d-%Y %H:%M:%S', os.time())
                 db.updateDocument("cultivation", id, PLANTED[id], saveCallback)
                 --[[
                 if PlantManager.hasBeenDeadLongEnoughToDelete(id) then
@@ -191,6 +197,17 @@ end)
 
 function saveCallback(doc, err)
     -- nothing for now
+end
+
+function saveAllPlants()
+    TriggerEvent("es:exposeDBFunctions", function(db)
+        for id, plant in pairs(PLANTED) do
+            PLANTED[id]._rev = nil
+            PLANTED[id].last_save_time = os.date('%m-%d-%Y %H:%M:%S', os.time())
+            db.updateDocument("cultivation", id, PLANTED[id], saveCallback)
+            Wait(5)
+        end
+    end)
 end
 
 --[[

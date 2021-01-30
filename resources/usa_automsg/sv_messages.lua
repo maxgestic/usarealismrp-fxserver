@@ -27,6 +27,7 @@ Citizen.CreateThread(function()
             sentWarnings.twoMinute = true
         elseif date.hour == 3 and date.min == 28 then
             KickAllPlayers()
+            exports["usa_utils"]:RunPreRestartSaveEvents()
         elseif date.hour == 15 and date.min == 20 and not sentWarnings.tenMinute then 
             for i = 1, 3 do
                 TriggerClientEvent('chatMessage', -1, '^8^*[SERVER] ^3Server restarting in 10 minutes!')
@@ -42,6 +43,7 @@ Citizen.CreateThread(function()
             sentWarnings.twoMinute = true
         elseif date.hour == 15 and date.min == 28 then
             KickAllPlayers()
+            exports["usa_utils"]:RunPreRestartSaveEvents()
         end
     end
 end)
