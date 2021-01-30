@@ -20,7 +20,6 @@ local vehicles = {
   { name = "Truck", hash = GetHashKey("sheriff2") },
   { name = "FBI", hash = GetHashKey("fbi") },
   { name = "FBI 2", hash = GetHashKey("fbi2") },
-  { name = "Unmarked Camaro", hash = GetHashKey("pd_20camaro") },
   { name = "Riot", hash = GetHashKey("riot") },
   { name = "Motorcycle 1", hash = GetHashKey("policeb") },
   { name = "Motorcycle 2", hash = GetHashKey("1200RT") },

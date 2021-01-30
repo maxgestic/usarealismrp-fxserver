@@ -69,11 +69,6 @@ local VEHICLE_RANKS = {
 			allowedLiveries = { 1 },
 			hash = -1973172295	
 		},
-		["pd_20camaro"] = {
-			rank = 4,
-			allowedLiveries = { 1 },
-			hash = -1575764804
-		},
 		["chgr"] = {
 			rank = 4,
 			allowedLiveries = { 1 },
