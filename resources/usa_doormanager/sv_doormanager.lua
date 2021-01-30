@@ -120,7 +120,7 @@ local DOORS = {
   {name = "MRPD / Cell 5", x = 484.87088012695, y = -1008.1482543945, z = 26.273153305054, model = -53345114, locked = true, offset={0.0, 1.1, 0.05}, heading=180, _dist = 1.0, allowedJobs = {'sheriff', "corrections", "ems"}},
   {name = "MRPD / Interrogation 1", x = 482.38342285156, y = -996.49035644531, z = 26.29306602478, model = -1406685646, locked = true, offset={0.0, -1.1, 0.05}, heading=270, _dist = 1.2, allowedJobs = {'sheriff', "corrections", "ems"}},
   {name = "MRPD / Interrogation 1", x = 482.41610717773, y = -988.29467773438, z = 26.364437103271, model = -1406685646, locked = true, offset={0.0, -1.1, 0.05}, heading=270, _dist = 1.2, allowedJobs = {'sheriff', "corrections", "ems"}},
-
+  {name = "MRPD / Roof", x = 464.03317260742, y = -983.90405273438, z = 43.709926605225, model = -692649124, locked = true, offset={0.0, -1.1, 0.05}, heading=90, _dist = 1.5, allowedJobs = {'sheriff', "corrections", "ems"}},
 
   
   {name = "BCSO Station - Sidewalk", x = -449.8, y = 6024.3, z = 31.5, model = -1156020871, locked = true, offset={0.0, -1.5, -0.095}, heading=315, _dist = 1.0, allowedJobs = {'sheriff', "corrections"}},
