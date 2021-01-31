@@ -131,10 +131,11 @@ Citizen.CreateThread(function()
             if location then
                 local distToLocation = GetDistanceBetweenCoords(playerCoords, location.x, location.y, location.z, true)
                 if distToLocation < 10.0 then
-                DrawText3D(location.x, location.y, location.z + 0.5, 10, 'Press [E] to sell packaged cocaine')
-                if distToLocation < 2.0 then
-                    if IsControlJustPressed(0, INPUT_KEY) then
-                        TriggerServerEvent('cocaineJob:doesUserHaveProductToSell')
+                    DrawText3D(location.x, location.y, location.z + 0.5, 10, 'Press [E] to sell packaged cocaine')
+                    if distToLocation < 2.0 then
+                        if IsControlJustPressed(0, INPUT_KEY) then
+                            TriggerServerEvent('cocaineJob:doesUserHaveProductToSell')
+                        end
                     end
                 end
             end
