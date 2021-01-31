@@ -1,9 +1,6 @@
 # close FXServer
 tmux kill-session -t fxserver
 
-# clear log file
-> CitizenFX.log
-
 # run any setup needed before checking out this file
 sh setup.sh
 
@@ -23,6 +20,9 @@ java -jar ResourceEventScrambler.jar
 # move node_modules back into place
 mv [builders] resources/[system]
 mv node_modules resources/ws_server
+
+# save last log file, create new one
+mv CitizenFX.log CitizenFX.log.2
 
 # run server
 tmux new -d -s fxserver "bash /home/ubuntu/FXServer/server/run.sh +exec server.cfg > CitizenFX.log"
