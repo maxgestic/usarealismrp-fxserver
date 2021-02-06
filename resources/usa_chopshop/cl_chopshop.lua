@@ -31,39 +31,43 @@ Citizen.CreateThread(function()
       if IsControlJustPressed(1,KEY) and Vdist(playerCoords, drop_offs[i].x, drop_offs[i].y, drop_offs[i].z) < 3.0 then
         if IsPedInAnyVehicle(playerPed, true) then
           local handle = GetVehiclePedIsIn(playerPed, true)
-          local display_name = string.lower(GetDisplayNameFromVehicleModel(GetEntityModel(handle)))
-          if math.random() < 0.20 then
-            local x, y, z = table.unpack(playerCoords)
-            local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
-            local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-            TriggerServerEvent('911:ChopShop', x, y, z, lastStreetNAME, IsPedMale(playerPed))
-          end
-          OpenAllDoors(handle)
-          TaskLeaveVehicle(playerPed, handle, 256)
-          SetVehicleDoorsLockedForAllPlayers(handle, true)
-          SetVehicleDoorsLocked(handle, true)
-          TriggerEvent('usa:notify', 'Wait here while the vehicle is being chopped up.')
-          PlayChoppingSounds()
-          local chopped = true
-          local beginTime = GetGameTimer()
-          while GetGameTimer() - beginTime < chop_time do
-            playerCoords = GetEntityCoords(playerPed)
-            if Vdist(playerCoords, drop_offs[i].x, drop_offs[i].y, drop_offs[i].z) < 15.0 then
-              DrawTimer(beginTime, chop_time, 1.42, 1.475, 'CHOPPING')
-              Citizen.Wait(0)
-            else
-              TriggerEvent('usa:notify', 'You went too far away while the vehicle was being chopped!')
-              chopped = false
-              SetVehicleDoorsLockedForAllPlayers(handle, false)
-              SetVehicleDoorsLocked(handle, false)
+          if GetPedInVehicleSeat(handle, -1) == playerPed then
+            local display_name = string.lower(GetDisplayNameFromVehicleModel(GetEntityModel(handle)))
+            if math.random() < 0.20 then
+              local x, y, z = table.unpack(playerCoords)
+              local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
+              local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+              TriggerServerEvent('911:ChopShop', x, y, z, lastStreetNAME, IsPedMale(playerPed))
+            end
+            OpenAllDoors(handle)
+            TaskLeaveVehicle(playerPed, handle, 256)
+            SetVehicleDoorsLockedForAllPlayers(handle, true)
+            SetVehicleDoorsLocked(handle, true)
+            TriggerEvent('usa:notify', 'Wait here while the vehicle is being chopped up.')
+            PlayChoppingSounds()
+            local chopped = true
+            local beginTime = GetGameTimer()
+            while GetGameTimer() - beginTime < chop_time do
+              playerCoords = GetEntityCoords(playerPed)
+              if Vdist(playerCoords, drop_offs[i].x, drop_offs[i].y, drop_offs[i].z) < 15.0 then
+                DrawTimer(beginTime, chop_time, 1.42, 1.475, 'CHOPPING')
+                Citizen.Wait(0)
+              else
+                TriggerEvent('usa:notify', 'You went too far away while the vehicle was being chopped!')
+                chopped = false
+                SetVehicleDoorsLockedForAllPlayers(handle, false)
+                SetVehicleDoorsLocked(handle, false)
+                break
+              end
+            end
+            if chopped then
+              TriggerServerEvent("chopshop:reward", display_name, GetVehicleBodyDamage(handle))
+              SetEntityAsMissionEntity(handle, true, true)
+              DeleteVehicle(handle)
               break
             end
-          end
-          if chopped then
-            TriggerServerEvent("chopshop:reward", display_name, GetVehicleBodyDamage(handle))
-            SetEntityAsMissionEntity(handle, true, true)
-            DeleteVehicle(handle)
-            break
+          else
+            exports.globals:notify("Must be in driver seat!")  
           end
         else 
           exports.globals:notify("Must be in a vehicle!")
