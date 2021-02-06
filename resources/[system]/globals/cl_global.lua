@@ -6,7 +6,10 @@ local KEYS = {
   TWO = 158,
   THREE = 160,
   FOUR = 164,
-  E = 46
+  E = 46,
+  P = 199,
+  V = 0,
+  Y = 246
 }
 
 local MAX_ITEM_TRADE_DISTANCE = 1.5
@@ -228,4 +231,21 @@ function loadAnimDict(dict)
   while not HasAnimDictLoaded(dict) do
       Wait(1)
   end
+end
+
+function getClosestVehicle(maxRange)
+  local me = PlayerPedId()
+  local mycoords = GetEntityCoords(me)
+  local closest = {}
+  closest.dist = 999999999
+  closest.veh = nil
+  for veh in EnumerateVehicles() do
+      local vehCoords = GetEntityCoords(veh)
+      local dist = Vdist(mycoords.x, mycoords.y, mycoords.z, vehCoords.x, vehCoords.y, vehCoords.z)
+      if dist < closest.dist and dist < (maxRange or 500) then
+          closest.dist = dist
+          closest.handle = veh
+      end
+  end
+  return closest.handle
 end

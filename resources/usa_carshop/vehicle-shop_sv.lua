@@ -433,6 +433,15 @@ end)
 RegisterServerEvent("vehShop:sellVehicle")
 AddEventHandler("vehShop:sellVehicle", function(toSellVehicle)
 	local usource = source
+	print("toSellVehicle: " .. toSellVehicle.model)
+	local vehiclePrice = GetVehiclePrice(toSellVehicle)
+	if not vehiclePrice then
+		if toSellVehicle.price then
+			print("vehicle price nil with toSellVehicle: " .. toSellVehicle.make .. " " .. toSellVehicle.model)
+			TriggerClientEvent("chatMessage", usource, "", {}, "^3CAR DEALER: ^0We're not interested in it, sorry.")
+		end
+		return
+	end
 	local char = exports["usa-characters"]:GetCharacter(usource)
 	local vehicles = char.get("vehicles")
 	for i = 1, #vehicles do
@@ -444,14 +453,8 @@ AddEventHandler("vehShop:sellVehicle", function(toSellVehicle)
 	end
 	-- remove from DB / take money --
 	RemoveVehicleFromDB(toSellVehicle, function(err, resp)
-		print("toSellVehicle: " .. toSellVehicle.model)
-		local vehiclePrice = GetVehiclePrice(toSellVehicle)
-		if not vehiclePrice then
-			print("vehicle price nil with toSellVehicle: " .. toSellVehicle.make .. " " .. toSellVehicle.model)
-			TriggerClientEvent("chatMessage", usource, "", {}, "^0" .. "Please notify staff in the #bugs discord channel if you see this message and did not get money for selling a vehicle at the car dealership. Thank you.")
-			return
-		end
 		char.giveMoney(math.ceil(vehiclePrice * .50))
+		TriggerClientEvent("usa:notify", usource, "~y~SOLD:~w~ " .. toSellVehicle.make .. " " .. toSellVehicle.model .. "\n~y~PRICE: ~g~$" .. exports.globals:comma_value(.50 * toSellVehicle.price))
 	end)
 end)
 

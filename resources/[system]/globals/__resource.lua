@@ -22,7 +22,8 @@ exports {
   "dump",
   "loadAnimDict",
   'DrawText3D',
-  "GetKeys"
+  "GetKeys",
+  "getClosestVehicle"
 }
 
 -- global server functions/tables

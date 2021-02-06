@@ -89,7 +89,7 @@ AddEventHandler('weazelnews:completeCall', function(distance)
 	end
 	local char = exports["usa-characters"]:GetCharacter(source)
 	if char.get("job") == "reporter" then
-		local amountRewarded = math.ceil(BASE_PAY + (0.04 * distance))
+		local amountRewarded = math.ceil(BASE_PAY + (0.05 * distance))
 		char.giveMoney(amountRewarded)
 		TriggerClientEvent('usa:notify', source, 'Call completed, you have received: ~y~$'..amountRewarded..'.00')
 		print("WEAZEL_NEWS: " .. GetPlayerName(source) .. "["..GetPlayerIdentifier(source).."] has received amount["..amountRewarded..'] after distance['..distance..'] for 911 call!')

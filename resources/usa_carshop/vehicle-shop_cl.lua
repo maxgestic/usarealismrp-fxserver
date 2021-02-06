@@ -2,6 +2,8 @@
 --# for: USA REALISM RP
 --# simple vehicle shop script to preview and purchase a vehicle
 
+local BLIP_NAME = "PDM - Downtown LS"
+
 local MENU_KEY = 38
 
 local SHOPS = {
@@ -43,9 +45,9 @@ mainMenu.OnItemSelect = function(menu, item, index)
 		if #menu_data.vehicles_to_sell > 0 then
 			for i = 1, #menu_data.vehicles_to_sell do
 				local veh = menu_data.vehicles_to_sell[i]
+				veh.price = (veh.price or 0)
 				local item = NativeUI.CreateItem(veh.make .. " " .. veh.model, "Sell this vehicle for $" .. comma_value(.50 * veh.price))
 				item.Activated = function(parentmenu, selected)
-					TriggerEvent("usa:notify", "~y~SOLD:~w~ " .. veh.make .. " " .. veh.model .. "\n~y~PRICE: ~g~$" .. comma_value(.50 * veh.price))
 					TriggerServerEvent("vehShop:sellVehicle", veh)
 					_menuPool:CloseAllMenus()
 				end
@@ -226,9 +228,8 @@ end
 
 function PreviewVehicle(item)
 		local numberHash = tonumber(item.hash)
-		-- thread code stuff below was taken from an example on the wiki
-		-- Create a thread so that we don't 'wait' the entire game
 		Citizen.CreateThread(function()
+			TriggerEvent("hotwire:enableKeyEngineCheck", false)
 			-- Request the model so that it can be spawned
 			RequestModel(numberHash)
 			-- Check if it's loaded, if not then wait and re-request it.
@@ -257,7 +258,7 @@ function addBlips()
 		SetBlipDisplay(blip, 4)
 		SetBlipColour(blip, 1)
 		BeginTextCommandSetBlipName("STRING")
-		AddTextComponentString("Car Dealership")
+		AddTextComponentString(BLIP_NAME)
 		EndTextCommandSetBlipName(blip)
 	end
 end
@@ -270,6 +271,7 @@ function EndPreview()
 		SetEntityCoords(GetPlayerPed(-1), table.unpack(menu_data.preview.start_coords))
 		menu_data.preview.prev_menu:Visible(true)
 	end
+	TriggerEvent("hotwire:enableKeyEngineCheck", true)
 end
 
 function comma_value(amount)

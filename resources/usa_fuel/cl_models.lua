@@ -9,7 +9,7 @@ blacklisted_models = { -- Vehicles which doesn't need fuel
 }
 
 
-electric_models = {
+electric_models = { -- not used? it just basically changes the price.. so it looks like it is getting ignored entirely since it's not a big deal to pay diff prices for elec vs. gas
 	"VOLTIC",
 	"SURGE",
 	"DILETTANTE",
@@ -17,5 +17,7 @@ electric_models = {
 	"CADDY",
 	"CADDY2",
 	"AIRTUG",
-	"RAIDEN"
+	"RAIDEN",
+	"i8",
+	"NEON"
 }

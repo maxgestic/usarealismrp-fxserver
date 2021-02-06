@@ -171,15 +171,16 @@ AddEventHandler("garage:spawn", function(vehicle)
 	-- give key to owner
 	TriggerServerEvent("garage:giveKey", vehicle_key)
 
-	if type(modelHash) ~= "number" then
-		numberHash = tonumber(modelHash)
+	if type(numberHash) ~= "number" then
+		numberHash = GetHashKey(numberHash)
 	end
 
 	Citizen.CreateThread(function()
+
 		RequestModel(numberHash)
 
 		while not HasModelLoaded(numberHash) do
-			Wait(100)
+			Wait(500)
 		end
 
 		local playerPed = GetPlayerPed(-1)

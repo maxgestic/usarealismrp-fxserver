@@ -11,6 +11,8 @@ local VEHICLE_ITEM_SEARCH_TIME = 20000
 
 local HOTWIRE_BREAK_CHANCE = 0.70
 
+local ENABLE_KEY_CHECK_FOR_ENGINE = false
+
 Citizen.CreateThread(function()
   local wasInVeh = false
     while true do
@@ -19,7 +21,7 @@ Citizen.CreateThread(function()
         veh = GetVehiclePedIsIn(playerPed, true)
         engineOn = GetIsVehicleEngineRunning(veh)
         if IsPedInAnyVehicle(playerPed, false) and GetPedInVehicleSeat(playerPed == -1) then
-          if not wasInVeh then
+          if not wasInVeh and ENABLE_KEY_CHECK_FOR_ENGINE then
             TriggerServerEvent('veh:checkForKey', GetVehicleNumberPlateText(veh), GetIsVehicleEngineRunning(veh))
             wasInVeh = true
           end
@@ -29,7 +31,7 @@ Citizen.CreateThread(function()
           end
         end
         if engineOn then
-          if not hasKeys then
+          if not hasKeys and ENABLE_KEY_CHECK_FOR_ENGINE then
             SetVehicleEngineOn(veh, false, true, true)
           else
             if DoesEntityExist(playerPed) and IsPedInAnyVehicle(playerPed, false) and IsControlPressed(2, 75) and not IsEntityDead(playerPed) and not IsPauseMenuActive() then
@@ -43,12 +45,17 @@ Citizen.CreateThread(function()
                 end
             end
           end
-        elseif IsControlJustPressed(0, 71) and not IsEntityDead(playerPed) and DoesEntityExist(playerPed) and IsPedInAnyVehicle(playerPed, false) and GetGameTimer() - timeout > 10000 then
+        elseif IsControlJustPressed(0, 71) and not IsEntityDead(playerPed) and DoesEntityExist(playerPed) and IsPedInAnyVehicle(playerPed, false) and GetGameTimer() - timeout > 10000 and ENABLE_KEY_CHECK_FOR_ENGINE then
             timeout = GetGameTimer()
             local veh = GetVehiclePedIsIn(playerPed, true)
             TriggerServerEvent('veh:checkForKey', GetVehicleNumberPlateText(veh))
         end
     end
+end)
+
+RegisterNetEvent('hotwire:enableKeyEngineCheck')
+AddEventHandler('hotwire:enableKeyEngineCheck', function(status)
+  ENABLE_KEY_CHECK_FOR_ENGINE = status
 end)
 
 RegisterNetEvent('veh:returnPlateToCheck')
