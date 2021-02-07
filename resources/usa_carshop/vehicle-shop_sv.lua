@@ -52,6 +52,7 @@ local vehicleShopItems = {
 			{make = "Hijak", model = "Ruston", price = 80000, hash = "ruston", storage_capacity = 90.0},
 			{make = "Ubermacht", model = "Zion", price = 40000, hash = "zion", storage_capacity = 145.0},
 			{make = "Dinka", model = "Jester 3", price = 55000, hash = "jester3", storage_capacity = 125.0},
+			{make = "Miabatsu", model = "Penumbra", price = 35000, hash = "penumbra", storage_capacity = 125.0}
 			--{make = "Annis", model = "Savestra", price = 27560, hash = "savestra", storage_capacity = 125.0} -- has machine guns
 		},
 		["Muscles"] = {
