@@ -115,23 +115,23 @@ AddEventHandler("properties:retrieveVehicle", function(vehicle)
   local playerVehicle = vehicle
   local modelHash = vehicle.hash
   local plateText = vehicle.plate
-  local numberHash = modelHash
 
   if type(modelHash) ~= "number" then
-    numberHash = tonumber(modelHash)
+    modelHash = GetHashKey(modelHash)
   end
 
   Citizen.CreateThread(function()
-    RequestModel(numberHash)
 
-    while not HasModelLoaded(numberHash) do
+    RequestModel(modelHash)
+
+    while not HasModelLoaded(modelHash) do
       Citizen.Wait(100)
     end
 
     local playerPed = GetPlayerPed(-1)
     local playerCoords = GetEntityCoords(playerPed, false)
     local heading = GetEntityHeading(playerPed)
-    local vehicle = CreateVehicle(numberHash, playerCoords.x, playerCoords.y, playerCoords.z, heading, true, false)
+    local vehicle = CreateVehicle(modelHash, playerCoords.x, playerCoords.y, playerCoords.z, heading, true, false)
     SetVehicleNumberPlateText(vehicle, plateText)
     SetVehicleOnGroundProperly(vehicle)
     SetVehRadioStation(vehicle, "OFF")
