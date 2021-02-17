@@ -76,7 +76,7 @@ function RemoveClothes()
     else -- male
       SetPedComponentVariation(me, 8, 15,0, 2) -- torso 1
       SetPedComponentVariation(me, 3, 15,0, 2) -- arms/hands
-      SetPedComponentVariation(me, 11, 29,0, 2) -- torso 2
+      SetPedComponentVariation(me, 11, 15,0, 2) -- torso 2
       SetPedComponentVariation(me, 4, 14,0, 2) -- legs
     end
   end
