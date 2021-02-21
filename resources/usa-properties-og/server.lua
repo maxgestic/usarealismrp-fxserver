@@ -165,31 +165,31 @@ AddEventHandler("properties:store", function(name, item, quantity)
     print("** [usa-properties-og] ALERT: Client " .. char.getFullName() .. " sent in an item that failed server validation! **")
     return
   end
-  if item.type and item.type ~= "license" then
-    -- remove from player --
-    char.removeItem(item, quantity)
-    local copy = item
-    copy.quantity = quantity
-    local had_already = false
-    -- insert into property --
-    for i = 1, #PROPERTIES[name].storage.items do
-        if PROPERTIES[name].storage.items[i].name == item.name then
-            if not PROPERTIES[name].storage.items[i].notStackable then
-                had_already	= true
-                PROPERTIES[name].storage.items[i].quantity = PROPERTIES[name].storage.items[i].quantity + quantity
-            end
-            break
-        end
-    end
-    if not had_already then
-        table.insert(PROPERTIES[name].storage.items, copy)
-        --print("inserted item into house storage: " .. copy.name .. ", type: " .. copy.type .. ", customizations: " .. type(copy.components))
-    end
-    -- save property --
-    SavePropertyData(name)
-  else
+  if item.type and item.type == "license" then
     TriggerClientEvent("usa:notify", user_source, "Can't store licenses!")
+    return
   end
+  -- remove from player --
+  char.removeItem(item, quantity)
+  local copy = item
+  copy.quantity = quantity
+  local had_already = false
+  -- insert into property --
+  for i = 1, #PROPERTIES[name].storage.items do
+      if PROPERTIES[name].storage.items[i].name == item.name then
+          if not PROPERTIES[name].storage.items[i].notStackable then
+              had_already	= true
+              PROPERTIES[name].storage.items[i].quantity = PROPERTIES[name].storage.items[i].quantity + quantity
+          end
+          break
+      end
+  end
+  if not had_already then
+      table.insert(PROPERTIES[name].storage.items, copy)
+      --print("inserted item into house storage: " .. copy.name .. ", type: " .. copy.type .. ", customizations: " .. type(copy.components))
+  end
+  -- save property --
+  SavePropertyData(name)
 end)
 
 -- load stored money --
