@@ -181,8 +181,8 @@ AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, 
 				end
 			end
 		end
-		if treatmentTimeMinutes > 10 then
-			treatmentTimeMinutes = 10
+		if treatmentTimeMinutes > 15 then
+			treatmentTimeMinutes = 15
 		end
 		TriggerEvent('injuries:getHospitalBeds', function(hospitalBeds)
 			for i = 1, #hospitalBeds do

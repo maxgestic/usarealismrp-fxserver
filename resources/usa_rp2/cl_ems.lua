@@ -62,6 +62,9 @@ AddEventHandler('ems:admitMe', function(bed, reasonForAdmission)
                 end
             end
         end
+        if treatmentTimeMinutes > 15 then
+            treatmentTimeMinutes = 15
+        end
         TriggerEvent('ems:hospitalize', treatmentTimeMinutes, bed)
         TriggerEvent("chatMessage", '^3^*[HOSPITAL] ^r^7You have been admitted to the hospital. (' .. reasonForAdmission .. ')')
     end
