@@ -152,58 +152,50 @@ end, {
 
 RegisterServerEvent('injuries:validateCheckin')
 AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, x, y, z, isMale)
+	local usource = source
 	local treatmentTimeMinutes = 2
-	local doctors = exports["usa-characters"]:GetNumCharactersWithJob("doctor")
-	if isPedDead and (exports["usa-characters"]:GetNumCharactersWithJob("ems") > 0 or exports["usa-characters"]:GetNumCharactersWithJob("sheriff") > 3 or doctors > 0) then
-		TriggerClientEvent('usa:notify', source, 'See a doctor or call emergency services instead.')
-		return
-	end
-	local char = exports["usa-characters"]:GetCharacter(source)
+	local char = exports["usa-characters"]:GetCharacter(usource)
 	local userBank = char.get('bank')
-	if doctors > 1 then
-		TriggerClientEvent('usa:showHelp', source, true, 'Please see any available doctor instead.')
-	else
-		local totalPrice = BASE_CHECKIN_PRICE
-		for bone, injuries in pairs(playerInjuries) do
-			for injury, data in pairs(playerInjuries[bone]) do
-				if injuries[injury].dropEvidence == 1.0 then
-					TriggerEvent('911:SuspiciousHospitalInjuries', char.getFullName(), x, y, z)
-				end
-				totalPrice = totalPrice + injuries[injury].treatmentPrice
-				if injuries[injury].string == "High-speed Projectile" then 
-					treatmentTimeMinutes = treatmentTimeMinutes + 3
-				elseif injuries[injury].string == "Knife Puncture" then 
-					treatmentTimeMinutes = treatmentTimeMinutes + 2
-				elseif injuries[injury].string == "Explosion" then 
-					treatmentTimeMinutes = treatmentTimeMinutes + 3
-				elseif injuries[injury].string == "Large Sharp Object" then 
-					treatmentTimeMinutes = treatmentTimeMinutes + 2
-				end
+	local totalPrice = BASE_CHECKIN_PRICE
+	for bone, injuries in pairs(playerInjuries) do
+		for injury, data in pairs(playerInjuries[bone]) do
+			if injuries[injury].dropEvidence == 1.0 then
+				TriggerEvent('911:SuspiciousHospitalInjuries', char.getFullName(), x, y, z)
+			end
+			totalPrice = totalPrice + injuries[injury].treatmentPrice
+			if injuries[injury].string == "High-speed Projectile" then 
+				treatmentTimeMinutes = treatmentTimeMinutes + 3
+			elseif injuries[injury].string == "Knife Puncture" then 
+				treatmentTimeMinutes = treatmentTimeMinutes + 2
+			elseif injuries[injury].string == "Explosion" then 
+				treatmentTimeMinutes = treatmentTimeMinutes + 3
+			elseif injuries[injury].string == "Large Sharp Object" then 
+				treatmentTimeMinutes = treatmentTimeMinutes + 2
 			end
 		end
-		if treatmentTimeMinutes > 15 then
-			treatmentTimeMinutes = 15
-		end
-		TriggerEvent('injuries:getHospitalBeds', function(hospitalBeds)
-			for i = 1, #hospitalBeds do
-				if hospitalBeds[i].occupied == nil then
-					hospitalBeds[i].occupied = targetPlayerId
-					bed = {
-						heading = hospitalBeds[i].heading,
-						coords = hospitalBeds[i].objCoords,
-						model = hospitalBeds[i].objModel
-					}
-					TriggerClientEvent('ems:hospitalize', source, treatmentTimeMinutes, bed, i)
-					break
-				end
+	end
+	if treatmentTimeMinutes > 15 then
+		treatmentTimeMinutes = 15
+	end
+	TriggerEvent('injuries:getHospitalBeds', function(hospitalBeds)
+		for i = 1, #hospitalBeds do
+			if hospitalBeds[i].occupied == nil then
+				hospitalBeds[i].occupied = targetPlayerId
+				bed = {
+					heading = hospitalBeds[i].heading,
+					coords = hospitalBeds[i].objCoords,
+					model = hospitalBeds[i].objModel
+				}
+				TriggerClientEvent('ems:hospitalize', usource, treatmentTimeMinutes, bed, i)
+				break
 			end
-		end)
-		TriggerClientEvent("chatMessage", source, '^3^*[HOSPITAL] ^r^7You have been admitted to the hospital, please wait while you are treated.')
-		TriggerClientEvent('chatMessage', source, 'The payment has been deducted from your bank balance.')
-		print('INJURIES: '..PlayerName(source) .. ' has checked-in to hospital and was charged amount['..totalPrice..']')
-		if char.get('job') ~= 'sheriff' then
-			char.removeBank(totalPrice)
 		end
+	end)
+	TriggerClientEvent("chatMessage", usource, '^3^*[HOSPITAL] ^r^7You have been admitted to the hospital, please wait while you are treated.')
+	TriggerClientEvent('chatMessage', usource, 'The payment has been deducted from your bank balance.')
+	print('INJURIES: '..PlayerName(usource) .. ' has checked-in to hospital and was charged amount['..totalPrice..']')
+	if char.get('job') ~= 'sheriff' and char.get("job") ~= "corrections" and char.get("job") ~= "ems" then
+		char.removeBank(totalPrice)
 	end
 end)
 
