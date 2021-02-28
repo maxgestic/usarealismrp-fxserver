@@ -1,6 +1,7 @@
 RegisterNetEvent("vehicleCommands:spawnVehicle")
 AddEventHandler("vehicleCommands:spawnVehicle", function(modelName, userJob)
 	local vehicleHash = GetHashKey(modelName)
+	
 	RequestModel(vehicleHash)
 	while not HasModelLoaded(vehicleHash) do
 		Citizen.Wait(100)
