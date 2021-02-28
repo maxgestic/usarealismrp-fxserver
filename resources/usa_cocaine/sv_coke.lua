@@ -1,9 +1,3 @@
---
---  MADE BY MINIPUNCH
--- A player will get close to a designated blip on the map within this script, press "E", and begin gathering.
--- This same concept within the script will handle all aspects of a job from getting supplies, processing, to selling, etc.
---
-
 local uncutCocaine = {
     name = "Uncut Cocaine",
     legality = "illegal",
@@ -19,16 +13,6 @@ local cocaineProduced = {
 	quantity = 1,
 	weight = 6
 }
-
-RegisterServerEvent("cocaineJob:giveUncut")
-AddEventHandler("cocaineJob:giveUncut", function()
-	local char = exports["usa-characters"]:GetCharacter(source)
-	if char.canHoldItem(uncutCocaine) then
-	  	char.giveItem(uncutCocaine)
-	else
-		TriggerClientEvent("usa:notify", source, "Your inventory is full. Can't carry anymore!")
-	end
-end)
 
 RegisterServerEvent("cocaineJob:givePackaged")
 AddEventHandler("cocaineJob:givePackaged", function()
@@ -109,48 +93,17 @@ AddEventHandler('cocaineJob:doesUserHaveProductToSell', function()
 	end
 end)
 
-RegisterServerEvent("cocaineJob:startTimer")
-AddEventHandler("cocaineJob:startTimer", function(timerType)
-	local usource = source
+RegisterServerEvent("cocaineJob:giveUncut")
+AddEventHandler("cocaineJob:giveUncut", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
-	local messages = {
-		"Hurdle on friend, just wait up here...",
-		"In the market for this junk? Interesting, wait here.",
-		"Lester, the molester. Be right back.",
-		"This'll kill you before your genes do, but I don't judge. Be right back.",
-		"Perfect, we're on our heads. Just wait here."
-	}
-	TriggerClientEvent("usa:notify", source, messages[math.random(1, tonumber(#messages))])
-	if timerType == "coke_supplies_ped" then
-		local seconds = 45 -- must be synced with DrawTimer on client
-		local time = seconds * 1000
-		SetTimeout(time, function()
-			TriggerClientEvent("chatMessage", usource, "", {}, "^3Lester:^0 Alright, let me know if you need more. Go and cut this first at that warehouse down on the docks (make sure you have a Razor Blade) and then look for the red pill on your map to deliver the final product.")
-			TriggerClientEvent('cocaineJob:setDelivery', usource)
-			TriggerClientEvent("cocaineJob:returnPedToStartPosition", usource, timerType)
-			local uncutCocaine = {
-				name = "Uncut Cocaine",
-				legality = "illegal",
-				quantity = 1,
-				type = "chemical",
-				weight = 10
-			}
-			char.giveItem(uncutCocaine)
-		end)
-	end
+	char.giveItem(uncutCocaine, 1)
 end)
 
 RegisterServerEvent("cocaineJob:checkUserMoney")
 AddEventHandler("cocaineJob:checkUserMoney", function(supplyType)
 	local amount = 200
 	local char = exports["usa-characters"]:GetCharacter(source)
-	local uncut_cocaine = {
-		name = "coke bruh",
-		weight = 10,
-		quantity = 1,
-		type = "drug"
-		}
-	if char.canHoldItem(uncut_cocaine) then
+	if char.canHoldItem(uncutCocaine) then
 		local money = char.get("money")
 		if money >= amount then
 		  TriggerClientEvent("cocaineJob:getSupplies", source)

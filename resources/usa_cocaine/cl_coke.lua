@@ -15,6 +15,8 @@
   }
 TriggerServerEvent("cocaineJob:giveItem", cocaineProduced)]]
 
+local SUPPLY_PICKUP_COORDS = vector3(1273.708, -1709.06, 54.77)
+
 local COKE_SUPPLY_WAIT_TIME = 45000
 local COCAINE_PROCESS_WAIT_TIME = 55000
 
@@ -115,6 +117,7 @@ Citizen.CreateThread(function()
             elseif GetDistanceBetweenCoords(playerCoords, 1273.708, -1709.06, 54.77, true) < 2 and not cocaine.pedIsBusy then -- purchase supplies
                 if not cocaine.activeJob then
                     TriggerServerEvent("cocaineJob:checkUserMoney", cocaine.requiredSupplies)
+                    Wait(500)
                 else
                     TriggerEvent('usa:notify', 'Process and deliver the current batch first!')
                 end
@@ -286,7 +289,6 @@ AddEventHandler("cocaineJob:getSupplies", function(supplyType)
             cocaine.pedIsBusy = true
             TaskGoStraightToCoord(peds[i].handle, 1268.59, -1710.37, 54.77, 2, -1, 115.0)
             SetBlockingOfNonTemporaryEvents(peds[i].handle, false)
-            TriggerServerEvent("cocaineJob:startTimer", "coke_supplies_ped")
             local beginTime = GetGameTimer()
             local sounds = {
               {sound = "Shout_Threaten_Ped", param = "Speech_Params_Force_Shouted_Critical"},
@@ -295,10 +297,35 @@ AddEventHandler("cocaineJob:getSupplies", function(supplyType)
             }
             local random_sound = sounds[math.random(1, tonumber(#sounds))]
             PlayAmbientSpeech1(peds[i].handle, random_sound.sound, random_sound.param)
+            
+            local isCancelled = false
+
             while GetGameTimer() - beginTime < COKE_SUPPLY_WAIT_TIME do
                 Citizen.Wait(0)
                 DrawTimer(beginTime, COKE_SUPPLY_WAIT_TIME, 1.42, 1.475, 'WAITING')
+                local playerPedCoords = GetEntityCoords(PlayerPedId(), false)
+                if Vdist(SUPPLY_PICKUP_COORDS, playerPedCoords) >= 10.0 then
+                    isCancelled = true
+                    break
+                end
             end
+
+            if not isCancelled then
+                local messages = {
+                    "Hurdle on friend, just wait up here...",
+                    "In the market for this junk? Interesting, wait here.",
+                    "Lester, the molester. Be right back.",
+                    "This'll kill you before your genes do, but I don't judge. Be right back.",
+                    "Perfect, we're on our heads. Just wait here."
+                }
+                exports.globals:notify(messages[math.random(1, tonumber(#messages))], "^3Lester:^0 Alright, let me know if you need more. Go and cut this first at that warehouse down on the docks (make sure you have a Razor Blade) and then look for the red pill on your map to deliver the final product.")
+                TriggerServerEvent("cocaineJob:giveUncut")
+                TriggerEvent('cocaineJob:setDelivery')
+            else
+                exports.globals:notify("You went too far")
+            end
+
+            TriggerEvent("cocaineJob:returnPedToStartPosition", "coke_supplies_ped")
         end
     end
 end)
