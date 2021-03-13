@@ -147,8 +147,8 @@ AddEventHandler("inventory:moveItem", function(data)
 			TriggerEvent("vehicle:storeItem", usource, data.plate, item, quantity, data.toSlot, function(success, inv) -- make export?
 				if success then
 					char.removeItemByIndex(data.fromSlot, quantity)
-					--TriggerClientEvent("interaction:sendNUIMessage", usource, { type = "updateBothInventories", inventory = { primary = char.get("inventory"), secondary = inv}})
-					TriggerClientEvent("interaction:sendNUIMessage", usource, { type = "inventoryLoaded", inventory = char.get("inventory")})
+					TriggerClientEvent("interaction:sendNUIMessage", usource, { type = "updateBothInventories", inventory = { primary = char.get("inventory"), secondary = inv}})
+					--TriggerClientEvent("interaction:sendNUIMessage", usource, { type = "inventoryLoaded", inventory = char.get("inventory")})
 					TriggerEvent("vehicle:updateForOthers", data.plate, inv)
 				end
 			end)
@@ -172,7 +172,6 @@ AddEventHandler("inventory:moveItem", function(data)
 			exports["usa_vehinv"]:setVehicleBusy(data.plate)
 			TriggerEvent("vehicle:moveInventorySlots", data.plate, data.fromSlot, data.toSlot, function(inv)
 				local isLocked = exports["_locksystem"]:isLocked(data.plate)
-				--TriggerClientEvent("interaction:sendNUIMessage", usource, { type = "vehicleInventoryLoaded", inventory = inv, locked = isLocked})
 				TriggerEvent("vehicle:updateForOthers", data.plate, inv, isLocked)
 			end)
 		else
