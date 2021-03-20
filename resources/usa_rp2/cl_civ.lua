@@ -197,17 +197,15 @@ AddEventHandler('ping:requestPing', function()
 end)
 
 RegisterNetEvent('ping:sendLocation')
-AddEventHandler('ping:sendLocation', function(target)
+AddEventHandler('ping:sendLocation', function(coords)
   TriggerEvent('usa:showHelp', true, 'Your ping accept was requested, check your GPS!')
   TriggerEvent('usa:notify', 'Your ping request was accepted, check your GPS!')
-  local targetPed = GetPlayerPed(GetPlayerFromServerId(target))
-  local x, y, z = table.unpack(GetEntityCoords(targetPed))
   local newBlip = {
       handle = nil,
       created_at = nil
   }
-  local handle = AddBlipForCoord(x, y, z)
-  SetNewWaypoint(x, y)
+  local handle = AddBlipForCoord(coords.x, coords.y, coords.z)
+  SetNewWaypoint(coords.x, coords.y)
   SetBlipSprite(handle, 280)
   SetBlipDisplay(handle, 2)
   SetBlipScale(handle, 1.2)

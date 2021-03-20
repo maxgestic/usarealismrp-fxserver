@@ -81,7 +81,7 @@ end, {
 
 TriggerEvent('es:addCommand','pingaccept', function(source, args, char)
 	if pings[source] ~= nil then
-		TriggerClientEvent('ping:sendLocation', pings[source], source)
+		TriggerClientEvent('ping:sendLocation', pings[source], GetEntityCoords(GetPlayerPed(source)))
 	end
 end, {
 	help = "Accept a player's ping request.",

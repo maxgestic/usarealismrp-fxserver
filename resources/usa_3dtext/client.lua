@@ -1,20 +1,22 @@
 local nbrDisplaying = 0
 
-function Display(ped, text, offset, factor2, maxDist, time)
-	local displaying = true
-	Citizen.CreateThread(function()
-		Wait(time)
-		displaying = false
-	end)
-	Citizen.CreateThread(function()
-		nbrDisplaying = nbrDisplaying + 1
-		while displaying do
-			Wait(0)
-			local coords = GetEntityCoords(GetPlayerPed(ped), false)
-			DrawText3Ds(coords['x'], coords['y'], coords['z']+offset+0.3, text, factor2, maxDist)
-		end
-		nbrDisplaying = nbrDisplaying - 1
-	end)
+function Display(player, text, offset, factor2, maxDist, time)
+	if player ~= -1 then
+		local displaying = true
+		Citizen.CreateThread(function()
+			Wait(time)
+			displaying = false
+		end)
+		Citizen.CreateThread(function()
+			nbrDisplaying = nbrDisplaying + 1
+			while displaying do
+				Wait(0)
+				local coords = GetEntityCoords(GetPlayerPed(player), false)
+				DrawText3Ds(coords['x'], coords['y'], coords['z']+offset+0.3, text, factor2, maxDist)
+			end
+			nbrDisplaying = nbrDisplaying - 1
+		end)
+	end
 end
 
 function DrawText3Ds(x,y,z, text, factor2, maxDist)

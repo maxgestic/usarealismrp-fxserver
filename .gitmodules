@@ -1,0 +1,3 @@
+[submodule "resources/[EmergencyBlips]"]
+	path = resources/[EmergencyBlips]
+	url = https://github.com/minipunch/EmergencyBlips

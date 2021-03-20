@@ -25,4 +25,4 @@ mv node_modules resources/ws_server
 mv CitizenFX.log CitizenFX.log.2
 
 # run server
-tmux new -d -s fxserver "bash /home/ubuntu/FXServer/server/run.sh +exec server.cfg > CitizenFX.log"
+tmux new -d -s fxserver "bash /home/ubuntu/FXServer/server/run.sh +exec server.cfg +set onesync on > CitizenFX.log"

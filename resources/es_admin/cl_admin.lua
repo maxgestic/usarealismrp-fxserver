@@ -1,5 +1,4 @@
 local states = {}
-local spectating = {}
 states.frozen = false
 states.frozenPos = nil
 
@@ -9,46 +8,51 @@ local KEYS = {
 	N = 249
 }
 
+local pedSpectateTarget = nil
+local prevSpectateCoords = nil
+
 RegisterNetEvent("mini_admin:spectate")
 AddEventHandler("mini_admin:spectate", function(target, targetName, spectator_name)
-
-	local target_id = target
-
-		local playerPed = GetPlayerPed(-1) -- yourself
-		--Citizen.Trace("target before = " .. target)
-		--Citizen.Trace("calling GetPlayerFromServerId on target...")
-		target = GetPlayerFromServerId(target)
-		--Citizen.Trace("target after = " .. target)
-		--Citizen.Trace("calling GetPlayerPed() on target...")
-		target = GetPlayerPed(target)
-		--Citizen.Trace("target after = " .. target)
-		if spectating.target == target then
-			-- stop spectating and return
-			local targetx,targety,targetz = table.unpack(GetEntityCoords(target, false))
-			RequestCollisionAtCoord(targetx,targety,targetz)
-			NetworkSetInSpectatorMode(false, target)
-			spectating = {}
-			TriggerServerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..spectator_name..' ['..GetPlayerServerId(PlayerId())..'] ^0 has stopped spectating ^2'..targetName..' ['..target_id..']^0.')
-			return
-		end
-		enable = true
-		if target == playerPed then enable = false end
-		if(enable)then
-			local targetx,targety,targetz = table.unpack(GetEntityCoords(target, false))
-			RequestCollisionAtCoord(targetx,targety,targetz)
-			NetworkSetInSpectatorMode(true, target)
-			spectating = {
-				target = target,
-				status = true
-			}
-			TriggerServerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..spectator_name..' ['..GetPlayerServerId(PlayerId())..'] ^0 has began spectating ^2'..targetName..' ['..target_id..']^0.')
-		else
-			local targetx,targety,targetz = table.unpack(GetEntityCoords(target, false))
-			RequestCollisionAtCoord(targetx,targety,targetz)
-			NetworkSetInSpectatorMode(false, target)
-			TriggerServerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..spectator_name..' ['..GetPlayerServerId(PlayerId())..'] ^0 has stopped spectating ^2'..targetName..' ['..target_id..']^0.')
-		end
-
+	local playerPed = PlayerPedId()
+	if pedSpectateTarget then
+		pedSpectateTarget = nil
+		RequestCollisionAtCoord(prevSpectateCoords)
+		NetworkSetInSpectatorMode(false, pedSpectateTarget)
+		NetworkConcealPlayer(PlayerId(), false, false)
+		Wait(50)
+		SetEntityCoords(PlayerPedId(), prevSpectateCoords.x, prevSpectateCoords.y, prevSpectateCoords.z)
+		FreezeEntityPosition(playerPed, false)
+		exports["_anticheese"]:Enable("invisibility")
+		exports["_anticheese"]:Enable("speedOrTPHack")
+	else 
+		exports["_anticheese"]:Disable("invisibility")
+		exports["_anticheese"]:Disable("speedOrTPHack")
+		prevSpectateCoords = GetEntityCoords(playerPed)
+		RequestCollisionAtCoord(target.coords.x,target.coords.y,target.coords.z)
+		NetworkConcealPlayer(PlayerId(), true, true)
+		SetEntityCoords(playerPed, target.coords.x, target.coords.y, target.coords.z + 10.0)
+		Wait(1000)
+		FreezeEntityPosition(playerPed, true)
+		local targetPlayer = GetPlayerFromServerId(target.src)
+		local targetPed = GetPlayerPed(targetPlayer)
+		NetworkSetInSpectatorMode(true, targetPed)
+		pedSpectateTarget = targetPed
+		Citizen.CreateThread(function()
+			while pedSpectateTarget do
+				Wait(1000)
+				local newCoords = GetEntityCoords(pedSpectateTarget)
+				if NetworkIsPlayerConcealed(PlayerId()) then
+					NetworkConcealPlayer(PlayerId(), false, false)
+					Wait(10)
+					FreezeEntityPosition(playerPed, false)
+					SetEntityCoords(playerPed, newCoords.x, newCoords.y, newCoords.z + 10.0)
+					Wait(10)
+					NetworkConcealPlayer(PlayerId(), true, true)
+					FreezeEntityPosition(playerPed, true)
+				end
+			end
+		end)
+	end
 end)
 
 RegisterNetEvent('es_admin:spawnVehicle')

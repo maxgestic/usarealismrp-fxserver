@@ -487,9 +487,21 @@ end, {
 
 TriggerEvent('es:addGroupCommand', 'spectate', 'mod', function(source, args, char)
 	local userSource = tonumber(source)
-	local targetPlayer = tonumber(args[2])
-	if not targetPlayer then return end
-	TriggerClientEvent("mini_admin:spectate", userSource, targetPlayer, GetPlayerName(targetPlayer), GetPlayerName(userSource))
+	local targetSrc = tonumber(args[2])
+	if targetSrc and GetPlayerPed(targetSrc) ~= 0 then
+		if targetSrc == source then
+			TriggerClientEvent("usa:notify", userSource, "Can't spectate yourself")
+			return
+		end
+		local target = {
+			src = targetSrc,
+			coords = GetEntityCoords(GetPlayerPed(targetSrc))
+		}
+		if not target.coords then return end
+		TriggerClientEvent("mini_admin:spectate", userSource, target, GetPlayerName(target.src), GetPlayerName(userSource))
+	else
+		TriggerClientEvent("usa:notify", userSource, targetSrc .. " is not in the server")
+	end
 end, {
 	help = "Spectate a player.",
 	params = {

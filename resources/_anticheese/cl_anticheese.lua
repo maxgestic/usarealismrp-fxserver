@@ -161,7 +161,8 @@ local BlacklistedWeapons = { -- weapons that will get people banned
 }
 
 local enableStatus = {
-	speedOrTPHack = true
+	speedOrTPHack = true,
+	invisibility = true
 }
 
 local BlacklistedObjectsList = {
@@ -842,22 +843,24 @@ Citizen.CreateThread(function()
 	end
 end)
 
--- invincibility detection
+-- invisibility detection
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(5000)
-		local myped = PlayerPedId()
-		if not IsEntityVisible(myped) then
-			if not isAtAnLSC() then
-				local veh = GetVehiclePedIsIn(myped, false)
-				if veh and DoesEntityExist(veh) then
-					if GetEntityModel(veh) ~= GetHashKey("rcbandito") then
-						TriggerServerEvent("AntiCheese:InvisibilityFlag", GetEntityCoords(myped)) -- when not in an rcbandito, but in vehicle
+		if enableStatus.invisibility then
+			local myped = PlayerPedId()
+			if not IsEntityVisible(myped) then
+				if not isAtAnLSC() then
+					local veh = GetVehiclePedIsIn(myped, false)
+					if veh and DoesEntityExist(veh) then
+						if GetEntityModel(veh) ~= GetHashKey("rcbandito") then
+							TriggerServerEvent("AntiCheese:InvisibilityFlag", GetEntityCoords(myped)) -- when not in an rcbandito, but in vehicle
+							SetEntityVisible(myped, true, 0)
+						end
+					else 	
+						TriggerServerEvent("AntiCheese:InvisibilityFlag", GetEntityCoords(myped)) -- when not in any vehicle
 						SetEntityVisible(myped, true, 0)
 					end
-				else 	
-					TriggerServerEvent("AntiCheese:InvisibilityFlag", GetEntityCoords(myped)) -- when not in any vehicle
-					SetEntityVisible(myped, true, 0)
 				end
 			end
 		end
