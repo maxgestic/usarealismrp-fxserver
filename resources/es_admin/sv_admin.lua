@@ -340,7 +340,8 @@ end, {
 TriggerEvent('es:addGroupCommand', 'bring', "mod", function(source, args, char)
 	if(GetPlayerName(tonumber(args[2])))then
 		local player = tonumber(args[2])
-		TriggerClientEvent('es_admin:teleportUser', player, source)
+		local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(source)))
+		TriggerClientEvent('es_admin:teleportUserByCoords', player, x, y, z)
 		TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(player)..' ['..player..'] ^0 has been brought to ^2'..GetPlayerName(source)..' ['..source..']^0.')
 		TriggerClientEvent('chatMessage', player, '^2^*[STAFF]^r^0 You have been teleported.')
 	else
@@ -410,8 +411,8 @@ TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, char)
 				local target = exports["essentialmode"]:getPlayerFromId(player)
 
 				if (target) then
-
-					TriggerClientEvent('es_admin:teleportUser', source, player)
+					local x, y, z = table.unpack(GetEntityCoords(GetPlayerPed(player)))
+					TriggerClientEvent('es_admin:teleportUserByCoords', source, x, y, z)
 
 					TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(source)..' ['..source..'] ^0 has teleported to ^2'..GetPlayerName(player)..' ['..player..']^0.')
 					TriggerClientEvent('chatMessage', player, '^2^*[STAFF]^r^0 You have been teleported to.')

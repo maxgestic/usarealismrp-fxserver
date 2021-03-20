@@ -24,7 +24,9 @@ AddEventHandler("mini_admin:spectate", function(target, targetName, spectator_na
 		FreezeEntityPosition(playerPed, false)
 		exports["_anticheese"]:Enable("invisibility")
 		exports["_anticheese"]:Enable("speedOrTPHack")
+		TriggerServerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..spectator_name..' ['..GetPlayerServerId(PlayerId())..'] ^0has ^3stopped^0 spectating ' .. targetName)
 	else 
+		TriggerServerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..spectator_name..' ['..GetPlayerServerId(PlayerId())..'] ^0has ^2started^0 spectating ' .. targetName)
 		exports["_anticheese"]:Disable("invisibility")
 		exports["_anticheese"]:Disable("speedOrTPHack")
 		prevSpectateCoords = GetEntityCoords(playerPed)
