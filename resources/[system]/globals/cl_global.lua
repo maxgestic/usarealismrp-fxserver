@@ -103,7 +103,10 @@ RegisterNetEvent('globals:startActionMessage')
 AddEventHandler('globals:startActionMessage', function(source, text, maxDist, time)
   offset = 0 + (nbrDisplaying*0.06)
   if nbrDisplaying < 5 then
-    Display(GetPlayerFromServerId(source), text, offset, maxDist, time)
+    local targetPlayer = GetPlayerFromServerId(source)
+    if targetPlayer ~= -1 then
+      Display(targetPlayer, text, offset, maxDist, time)
+    end
   end
 end)
 
