@@ -367,8 +367,8 @@ function GetPublicServantIds()
 	return all
 end
 
-function PutPanicBlipOnMap(id, targetID, name)
-	TriggerClientEvent("police:panicBlip", id, targetID, name)
+function PutPanicBlipOnMap(id, coord, name)
+	TriggerClientEvent("police:panicBlipAtCoord", id, coord, name)
 end
 
 function SendPanicTextAlert(id, msg)
@@ -387,7 +387,8 @@ TriggerEvent('es:addJobCommand', 'p', { "sheriff", "ems", "corrections" }, funct
 	local publicServants = GetPublicServantIds()
 	for i = 1, #publicServants do 
 		local id = publicServants[i]
-		PutPanicBlipOnMap(id, source, char.get("name").first)
+		local panicCoords = GetEntityCoords(GetPlayerPed(source))
+		PutPanicBlipOnMap(id, panicCoords, char.get("name").last)
 		local msg = "(10-99) Panic button pressed by " .. char.getFullName()
 		SendPanicTextAlert(id, msg)
 		PlayPanicButtonSound(id)

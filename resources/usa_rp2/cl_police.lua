@@ -21,6 +21,26 @@ AddEventHandler("police:panicBlip", function(targetID, name)
   RemoveBlip(blipHandle)
 end)
 
+RegisterNetEvent("police:panicBlipAtCoord")
+AddEventHandler("police:panicBlipAtCoord", function(coord, name)
+  local PANIC_BLIP_DURATION_SECONDS = 30
+  local blipID = 161
+  local blipHandle = AddBlipForCoord(coord.x, coord.y, coord.z)
+  SetBlipSprite(blipHandle, blipID)
+  SetBlipSprite(blipHandle, 267)
+  SetBlipDisplay(blipHandle, 4)
+  SetBlipScale(blipHandle, 0.9)
+  SetBlipColour(blipHandle, 4)
+  BeginTextCommandSetBlipName("STRING")
+  AddTextComponentString("Panic (" .. name .. ")")
+  EndTextCommandSetBlipName(blipHandle)
+  local start = GetGameTimer()
+  while GetGameTimer() - start < PANIC_BLIP_DURATION_SECONDS * 1000 do
+    Wait(1)
+  end
+  RemoveBlip(blipHandle)
+end)
+
 RegisterNetEvent("police:muteRadio")
 AddEventHandler("police:muteRadio", function()
     radioMuted = not radioMuted
