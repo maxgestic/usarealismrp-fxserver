@@ -14,6 +14,8 @@ violations = {}
 local instancedWarnings = {}
 --userLifeChecks = {}
 
+local violationDetectionEnabled = true
+
 webhook = "https://discordapp.com/api/webhooks/618094411003199509/IeXSWsln5hPo83l5wles9m62kEAKAJQUry6cZvV0MQzCLa6mYgBZOEVdtwwjpC1MUwoh"
 
 AddEventHandler('anticheese:playerDropped', function(userSource)
@@ -446,11 +448,19 @@ end)
 
 RegisterServerEvent('anticheese:ViolationDetected') -- will ban player and send message to discord
 AddEventHandler('anticheese:ViolationDetected', function(reason, src)
-	local usource = source
-	if src then usource = src end
-	local minipunchDiscordID = "<@178016707292561409>"
-	local WEBHOOK_URL = "https://discordapp.com/api/webhooks/618094411003199509/IeXSWsln5hPo83l5wles9m62kEAKAJQUry6cZvV0MQzCLa6mYgBZOEVdtwwjpC1MUwoh"
-    local msg = 'Player id [' .. usource .. ' / ' .. (GetPlayerIdentifiers(usource)[1] or 'N/A') .. '] was banned for anticheese violation!'
-    exports.globals:SendDiscordLog(WEBHOOK_URL, msg .. " " .. minipunchDiscordID)
-    exports["es_admin"]:BanPlayer(usource, "Modding (" .. reason .. "). If you feel this was a mistake please let a staff member know.")
+	if violationDetectionEnabled then
+		local usource = source
+		if src then usource = src end
+		local minipunchDiscordID = "<@178016707292561409>"
+		local WEBHOOK_URL = "https://discordapp.com/api/webhooks/618094411003199509/IeXSWsln5hPo83l5wles9m62kEAKAJQUry6cZvV0MQzCLa6mYgBZOEVdtwwjpC1MUwoh"
+		local msg = 'Player id [' .. usource .. ' / ' .. (GetPlayerIdentifiers(usource)[1] or 'N/A') .. '] was banned for anticheese violation!'
+		exports.globals:SendDiscordLog(WEBHOOK_URL, msg .. " " .. minipunchDiscordID)
+		exports["es_admin"]:BanPlayer(usource, "Modding (" .. reason .. "). If you feel this was a mistake please let a staff member know.")
+	end
+end)
+
+RegisterServerEvent("anticheese:toggleViolationDetection")
+AddEventHandler("anticheese:toggleViolationDetection", function(status)
+	print("setting anticheese banning to: " .. tostring(status))
+	violationDetectionEnabled = status
 end)
