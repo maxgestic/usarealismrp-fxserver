@@ -500,25 +500,27 @@ Citizen.CreateThread(function()
 		-- Loop though all player flashlights
 		for Source, Pack in pairs(Flashlights.All) do
 			local SourcePlayer = GetPlayerFromServerId(Source)
-			local SourcePed = GetPlayerPed(SourcePlayer)
-			local Flashlight = Pack[1]
-			local Weapon = Pack[2]
+			if SourcePlayer ~= -1 then
+				local SourcePed = GetPlayerPed(SourcePlayer)
+				local Flashlight = Pack[1]
+				local Weapon = Pack[2]
 
-			if DoesEntityExist(SourcePed) and not IsPedInAnyVehicle(SourcePed, false) then
-				if Source and SourcePlayer and SourcePlayer and SourcePed and GetSelectedPedWeapon(SourcePed) == Weapon then
-					local FlashlightVectors = Flashlights.Hashes[Flashlight]
-					local FlashlightPosition = GetPedBoneCoords(SourcePed, 0xDEAD, FlashlightVectors[1])
-					local FlashlightDirection = GetPedBoneCoords(SourcePed, 0xDEAD, FlashlightVectors[2])
-					local DirectionVector = FlashlightDirection - FlashlightPosition
-					local VectorMagnitude = Vmag2(DirectionVector)
-					local FlashlightEndPosition = vector3(
-						DirectionVector.x / VectorMagnitude,
-						DirectionVector.y / VectorMagnitude,
-						DirectionVector.z / VectorMagnitude
-					)
+				if DoesEntityExist(SourcePed) and not IsPedInAnyVehicle(SourcePed, false) then
+					if Source and SourcePlayer and SourcePlayer and SourcePed and GetSelectedPedWeapon(SourcePed) == Weapon then
+						local FlashlightVectors = Flashlights.Hashes[Flashlight]
+						local FlashlightPosition = GetPedBoneCoords(SourcePed, 0xDEAD, FlashlightVectors[1])
+						local FlashlightDirection = GetPedBoneCoords(SourcePed, 0xDEAD, FlashlightVectors[2])
+						local DirectionVector = FlashlightDirection - FlashlightPosition
+						local VectorMagnitude = Vmag2(DirectionVector)
+						local FlashlightEndPosition = vector3(
+							DirectionVector.x / VectorMagnitude,
+							DirectionVector.y / VectorMagnitude,
+							DirectionVector.z / VectorMagnitude
+						)
 
-					DrawSpotLight(FlashlightPosition, FlashlightEndPosition, 255, 255, 255, 40.0, 2.0, 2.0, 10.0, 15.0)
-				end
+						DrawSpotLight(FlashlightPosition, FlashlightEndPosition, 255, 255, 255, 40.0, 2.0, 2.0, 10.0, 15.0)
+					end
+				end 
 			end
 		end
 	end
