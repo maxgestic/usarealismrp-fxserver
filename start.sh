@@ -5,7 +5,7 @@ tmux kill-session -t fxserver
 sh setup.sh
 
 # pull from GH repo
-git checkout .
+git checkout . --recurse-submodules
 git pull
 
 # avoid scrambling node_modules within resources
