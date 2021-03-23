@@ -139,7 +139,7 @@ AddEventHandler('rconCommand', function(commandName, args)
         elseif status == "false" then
             val = true
         end
-        RconPrint("Safe mode restart: " .. status)
+        RconPrint("Safe mode restart: " .. status .. "\n")
         TriggerEvent("utils:toggleInjectionDetection", val)
         TriggerEvent("anticheese:toggleViolationDetection", val)
         TriggerEvent("LCAC:setEnabled", val)
