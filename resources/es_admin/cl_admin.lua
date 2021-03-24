@@ -8,20 +8,39 @@ local KEYS = {
 	N = 249
 }
 
-local pedSpectateTarget = nil
-local prevSpectateCoords = nil
+local prevSpectate = {
+	target = nil,
+	coords = nil,
+	veh = {
+		handle = nil
+	}
+}
+
+function GetFreeSeatIndex(veh)
+	if IsVehicleSeatFree(veh, -1) then
+		return -1 -- driver seat first
+	end
+	for i = 0, GetVehicleMaxNumberOfPassengers(veh) do
+		if IsVehicleSeatFree(veh, i) then
+			return i
+		end
+	end
+end
 
 RegisterNetEvent("mini_admin:spectate")
 AddEventHandler("mini_admin:spectate", function(target, targetName, spectator_name)
 	local playerPed = PlayerPedId()
-	if pedSpectateTarget then
-		pedSpectateTarget = nil
-		RequestCollisionAtCoord(prevSpectateCoords)
-		NetworkSetInSpectatorMode(false, pedSpectateTarget)
+	if prevSpectate.target then
+		prevSpectate.target = nil
+		RequestCollisionAtCoord(prevSpectate.coords)
+		NetworkSetInSpectatorMode(false, prevSpectate.target)
 		NetworkConcealPlayer(PlayerId(), false, false)
 		Wait(50)
-		SetEntityCoords(PlayerPedId(), prevSpectateCoords.x, prevSpectateCoords.y, prevSpectateCoords.z)
+		SetEntityCoords(PlayerPedId(), prevSpectate.coords.x, prevSpectate.coords.y, prevSpectate.coords.z)
 		FreezeEntityPosition(playerPed, false)
+		if prevSpectate.veh.handle then
+			SetPedIntoVehicle(playerPed, prevSpectate.veh.handle, GetFreeSeatIndex(prevSpectate.veh.handle))
+		end
 		exports["_anticheese"]:Enable("invisibility")
 		exports["_anticheese"]:Enable("speedOrTPHack")
 		TriggerServerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..spectator_name..' ['..GetPlayerServerId(PlayerId())..'] ^0has ^3stopped^0 spectating ' .. targetName)
@@ -29,7 +48,12 @@ AddEventHandler("mini_admin:spectate", function(target, targetName, spectator_na
 		TriggerServerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..spectator_name..' ['..GetPlayerServerId(PlayerId())..'] ^0has ^2started^0 spectating ' .. targetName)
 		exports["_anticheese"]:Disable("invisibility")
 		exports["_anticheese"]:Disable("speedOrTPHack")
-		prevSpectateCoords = GetEntityCoords(playerPed)
+		prevSpectate.coords = GetEntityCoords(playerPed)
+		if IsPedInAnyVehicle(playerPed) then
+			prevSpectate.veh.handle = GetVehiclePedIsIn(playerPed)
+		else
+			prevSpectate.veh.handle = nil
+		end
 		RequestCollisionAtCoord(target.coords.x,target.coords.y,target.coords.z)
 		NetworkConcealPlayer(PlayerId(), true, true)
 		SetEntityCoords(playerPed, target.coords.x, target.coords.y, target.coords.z + 10.0)
@@ -38,11 +62,11 @@ AddEventHandler("mini_admin:spectate", function(target, targetName, spectator_na
 		local targetPlayer = GetPlayerFromServerId(target.src)
 		local targetPed = GetPlayerPed(targetPlayer)
 		NetworkSetInSpectatorMode(true, targetPed)
-		pedSpectateTarget = targetPed
+		prevSpectate.target = targetPed
 		Citizen.CreateThread(function()
-			while pedSpectateTarget do
+			while prevSpectate.target do
 				Wait(1000)
-				local newCoords = GetEntityCoords(pedSpectateTarget)
+				local newCoords = GetEntityCoords(prevSpectate.target)
 				if NetworkIsPlayerConcealed(PlayerId()) then
 					NetworkConcealPlayer(PlayerId(), false, false)
 					Wait(10)
