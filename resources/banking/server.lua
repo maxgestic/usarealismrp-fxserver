@@ -53,10 +53,14 @@ AddEventHandler('bank:transfer', function(targetID, amount)
 	local bank = char.get("bank")
 	if bank >= amount then 
 		local target = exports["usa-characters"]:GetCharacter(targetID)
-		char.removeBank(amount)
-		target.giveBank(amount)
-		TriggerClientEvent("usa:notify", source, "Transfer of ~g~$" .. exports["globals"]:comma_value(amount) .. "~w~ complete!")
-		TriggerClientEvent("usa:notify", targetID, "A transfer of ~g~$" .. exports["globals"]:comma_value(amount) .. "~w~ has been transferred to your account!")
+		if target then
+			char.removeBank(amount)
+			target.giveBank(amount)
+			TriggerClientEvent("usa:notify", source, "Transfer of ~g~$" .. exports["globals"]:comma_value(amount) .. "~w~ complete!")
+			TriggerClientEvent("usa:notify", targetID, "A transfer of ~g~$" .. exports["globals"]:comma_value(amount) .. "~w~ has been transferred to your account!")
+		else
+			TriggerClientEvent("usa:notify", source, "Error processing transfer request. Try again later.")
+		end
 	else
 		TriggerClientEvent("usa:notify", source, "Not enough money to transfer!")
 	end
