@@ -51,6 +51,7 @@ Citizen.CreateThread(function()
             RequestAnimDict(dict)
             if tabletObject == nil then
                 tabletObject = CreateObject(GetHashKey('prop_cs_tablet'), GetEntityCoords(playerPed), 1, 1, 1)
+                SetEntityAsMissionEntity(tabletObject, true, true)
                 AttachEntityToEntity(tabletObject, playerPed, GetPedBoneIndex(playerPed, 28422), 0.0, 0.0, 0.03, 0.0, 0.0, 0.0, 1, 1, 0, 1, 0, 1)
             end
             while not HasAnimDictLoaded(dict) do Citizen.Wait(100) end
@@ -63,7 +64,7 @@ Citizen.CreateThread(function()
             Citizen.Wait(2000)
         else
             if tabletObject ~= nil then
-                DeleteEntity(tabletObject)
+                DeleteObject(tabletObject)
                 ClearPedTasks(playerPed)
                 tabletObject = nil
             end
