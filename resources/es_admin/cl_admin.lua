@@ -37,6 +37,7 @@ AddEventHandler("mini_admin:spectate", function(target, targetName, spectator_na
 		NetworkConcealPlayer(PlayerId(), false, false)
 		Wait(50)
 		SetEntityCoords(PlayerPedId(), prevSpectate.coords.x, prevSpectate.coords.y, prevSpectate.coords.z)
+		SetEntityCollision(playerPed, true, true)
 		FreezeEntityPosition(playerPed, false)
 		if prevSpectate.veh.handle then
 			SetPedIntoVehicle(playerPed, prevSpectate.veh.handle, GetFreeSeatIndex(prevSpectate.veh.handle))
