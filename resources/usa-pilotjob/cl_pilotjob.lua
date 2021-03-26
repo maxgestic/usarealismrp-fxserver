@@ -199,8 +199,6 @@ AddEventHandler("pilotjob:beginJob", function(job)
     GetNextCheckpoint()
     -- Set Job Clothing --
     SetJobClothing()
-    -- Notify of radio access --
-    TriggerEvent("chatMessage", "", {}, "^0You can press ^3Shift + F2^0 to access the Air Traffic Control (ATC) radio frequency, ^3arrow keys^0 to change channels, and ^3CAPS LOCK^0 to speak on it.")
 end)
 
 function SetJobClothing()
