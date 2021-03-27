@@ -1,3 +1,7 @@
+local DB_NAME = "lsfd-outfits"
+
+exports.globals:PerformDBCheck("usa_ems", DB_NAME)
+
 local JOB_NAME = "ems"
 
 local LOADOUT_ITEMS = {
@@ -45,29 +49,45 @@ end)
 
 RegisterServerEvent("emsstation2:loadOutfit")
 AddEventHandler("emsstation2:loadOutfit", function(slot)
-  local user = exports["essentialmode"]:getPlayerFromId(source)
-  local char = exports["usa-characters"]:GetCharacter(source)
-  local character = user.getEmsCharacter()
-  TriggerClientEvent("emsstation2:setCharacter", source, character[tostring(slot)])
-  if char.get('job') ~= JOB_NAME then
-    char.set("job",JOB_NAME)
-    TriggerEvent('job:sendNewLog', source, JOB_NAME, true)
-  end
-  TriggerClientEvent('interaction:setPlayersJob', source, JOB_NAME)
-  TriggerEvent("eblips:add", {name = char.getName(), src = source, color = 1})
+  local src = source
+  local char = exports["usa-characters"]:GetCharacter(src)
+  local docID = char.get("_id") .. "-" .. slot
+  TriggerEvent('es:exposeDBFunctions', function(db)
+    db.getDocumentById(DB_NAME, docID, function(outfit)
+      TriggerClientEvent("emsstation2:setCharacter", src, outfit)
+      if char.get('job') ~= JOB_NAME then
+        char.set("job",JOB_NAME)
+        TriggerEvent('job:sendNewLog', src, JOB_NAME, true)
+      end
+      TriggerClientEvent('interaction:setPlayersJob', src, JOB_NAME)
+      TriggerEvent("eblips:add", {name = char.getName(), src = src, color = 1})
+    end)
+  end)
 end)
 
 RegisterServerEvent("emsstation2:saveOutfit")
 AddEventHandler("emsstation2:saveOutfit", function(character, slot)
-  local user = exports["essentialmode"]:getPlayerFromId(source)
-  local job = exports["usa-characters"]:GetCharacterField(source, "job")
-  local emsCharacter = user.getEmsCharacter()
-  emsCharacter[tostring(slot)] = character
-  if job == JOB_NAME then
-    user.setEmsCharacter(emsCharacter)
-    TriggerClientEvent("usa:notify", source, "Outfit in slot "..slot.." has been saved.")
+  local src = source
+  local char = exports["usa-characters"]:GetCharacter(src)
+  if char.get("job") == JOB_NAME then
+    TriggerEvent('es:exposeDBFunctions', function(db)
+      local docID = char.get("_id") .. "-" .. slot
+      db.createDocumentWithId(DB_NAME, character, docID, function(ok)
+        if ok then
+          TriggerClientEvent("usa:notify", src, "Outfit in slot "..slot.." has been saved.")
+        else
+          db.updateDocument(DB_NAME, docID, character, function(ok)
+            if ok then
+                TriggerClientEvent("usa:notify", src, "Outfit in slot "..slot.." has been updated.")
+            else 
+                TriggerClientEvent("usa:notify", src, "Error saving outfit")
+            end
+        end)
+        end
+      end)
+    end)
   else
-    TriggerClientEvent("usa:notify", source, "You must be on-duty to save a uniform.")
+    TriggerClientEvent("usa:notify", src, "You must be on-duty to save a uniform.")
   end
 end)
 
