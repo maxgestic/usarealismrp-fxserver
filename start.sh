@@ -6,7 +6,7 @@ sh setup.sh
 
 # pull from GH repo
 git checkout . --recurse-submodules
-git pull
+git pull --recurse-submodules
 
 # avoid scrambling node_modules within resources
 cp -r resources/[system]/[builders] .
