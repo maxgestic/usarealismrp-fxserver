@@ -214,7 +214,7 @@ Citizen.CreateThread(function()
 			local me = GetPlayerPed(-1)
 			for name, info in pairs(NEARBY_PROPERTIES) do
 				-- see if close to display menu --
-                if GetDistanceBetweenCoords(GetEntityCoords(me), info.x, info.y, info.z, true) < 2 then
+                if GetDistanceBetweenCoords(GetEntityCoords(me), info.x, info.y, info.z, true) < 1 then
                     nearest_property_info = NEARBY_PROPERTIES[name]
                     closest_coords.x, closest_coords.y, closest_coords.z = info.x, info.y, info.z
                         --drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property menu!",7,1,0.5,0.8,0.6,255,255,255,255)
@@ -642,7 +642,7 @@ Citizen.CreateThread(function()
                             end)
                         --end
                 elseif info.garage_coords then
-                    if GetDistanceBetweenCoords(GetEntityCoords(me), info.garage_coords.x, info.garage_coords.y, info.garage_coords.z, true) < 2 then
+                    if GetDistanceBetweenCoords(GetEntityCoords(me), info.garage_coords.x, info.garage_coords.y, info.garage_coords.z, true) < 1 then
                         nearest_property_info = NEARBY_PROPERTIES[name]
                         closest_coords.x, closest_coords.y, closest_coords.z = info.garage_coords.x, info.garage_coords.y, info.garage_coords.z
                         if IsPedInAnyVehicle(me, true) then
@@ -766,38 +766,38 @@ Citizen.CreateThread(function()
                     DrawMarker(27, info.garage_coords.x, info.garage_coords.y, info.garage_coords.z-0.9, 0, 0, 0, 0, 0, 0, 1.0, 1.0, 1.0, 255 --[[r]], 92 --[[g]], 92 --[[b]], 90, 0, 0, 2, 0, 0, 0, 0)
                 end
 				-- draw special text --
-				if GetDistanceBetweenCoords(info.x, info.y, info.z, mycoords.x, mycoords.y, mycoords.z, true) < 3 then
+				if GetDistanceBetweenCoords(info.x, info.y, info.z, mycoords.x, mycoords.y, mycoords.z, true) < 1 then
 					drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property menu!",7,1,0.5,0.8,0.6,255,255,255,255)
 				elseif info.garage_coords then
-					if GetDistanceBetweenCoords(info.garage_coords.x, info.garage_coords.y, info.garage_coords.z, mycoords.x, mycoords.y, mycoords.z, true) < 3 then
+					if GetDistanceBetweenCoords(info.garage_coords.x, info.garage_coords.y, info.garage_coords.z, mycoords.x, mycoords.y, mycoords.z, true) < 1 then
 						if IsPedInAnyVehicle(me, true) then
-								if info.owner then
-                  local can_open = {
-                    status = false,
-                    owner = false
-                  }
-                  if info.owner.identifier == my_property_identifier then
-                    can_open = {
-                      status = true,
-                      owner = true
-                    }
-                  else
-                    if info.coowners then
-                      for i = 1, #info.coowners do
-                        if info.coowners[i].identifier == my_property_identifier then
-                          can_open = {
-                            status = true,
-                            owner = false
-                          }
-                          break
-                        end
-                      end
-                    end
-                  end
-									if can_open.status == true then
-										drawTxt("Press [ ~b~E~w~ ] to store your vehicle in the garage!",7,1,0.5,0.8,0.6,255,255,255,255)
-									end
-								end
+                            if info.owner then
+                                local can_open = {
+                                    status = false,
+                                    owner = false
+                                }
+                                if info.owner.identifier == my_property_identifier then
+                                    can_open = {
+                                        status = true,
+                                        owner = true
+                                    }
+                                else
+                                    if info.coowners then
+                                        for i = 1, #info.coowners do
+                                            if info.coowners[i].identifier == my_property_identifier then
+                                                can_open = {
+                                                    status = true,
+                                                    owner = false
+                                                }
+                                                break
+                                            end
+                                        end
+                                    end
+                                end
+                                if can_open.status == true then
+                                    drawTxt("Press [ ~b~E~w~ ] to store your vehicle in the garage!",7,1,0.5,0.8,0.6,255,255,255,255)
+                                end
+                            end
 						else
 							drawTxt("Press [ ~b~E~w~ ] to access the " .. name .. " property garage!",7,1,0.5,0.8,0.6,255,255,255,255)
 						end
