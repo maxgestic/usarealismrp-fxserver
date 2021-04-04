@@ -41,36 +41,19 @@ AddEventHandler('cameras:activateCamera', function(cameraID)
     end
 end)
 
+-- play tablet animation when viewing cams
 Citizen.CreateThread(function()
-    local tabletObject = nil
+    local dict = "amb@world_human_seat_wall_tablet@female@base"
     while true do
-        Citizen.Wait(500)
         local playerPed = PlayerPedId()
         if createdCamera ~= 0 then
-            local dict = "amb@world_human_seat_wall_tablet@female@base"
-            RequestAnimDict(dict)
-            if tabletObject == nil then
-                tabletObject = CreateObject(GetHashKey('prop_cs_tablet'), GetEntityCoords(playerPed), 1, 1, 1)
-                SetEntityAsMissionEntity(tabletObject, true, true)
-                AttachEntityToEntity(tabletObject, playerPed, GetPedBoneIndex(playerPed, 28422), 0.0, 0.0, 0.03, 0.0, 0.0, 0.0, 1, 1, 0, 1, 0, 1)
-            end
-            while not HasAnimDictLoaded(dict) do Citizen.Wait(100) end
+            exports.globals:loadAnimDict(dict)
             if not IsEntityPlayingAnim(playerPed, dict, 'base', 3) then
-            --local tablet = CreateObject(GetHashKey('prop_cs_tablet'), 0.0, 0.0, 0.0, true, false, true)
-            --AttachEntityToEntity(tablet, playerPed, GetPedBoneIndex(playerPed, 57005), 0.1, 0.0, 0.0, 0.5, 0.0, -0.2, true, true, false, true, 1.0, false)
                 TaskPlayAnim(playerPed, dict, "base", 8.0, 1.0, -1, 49, 1.0, 0, 0, 0)
             end
-            --DeleteEntity(tablet)
-            Citizen.Wait(2000)
-        else
-            if tabletObject ~= nil then
-                DeleteObject(tabletObject)
-                ClearPedTasks(playerPed)
-                tabletObject = nil
-            end
         end
+        Wait(100)
     end
-
 end)
 
 Citizen.CreateThread(function()
@@ -184,6 +167,7 @@ function CloseSecurityCamera()
     createdCamera = 0
     ClearTimecycleModifier("scanline_cam_cheap")
     SetFocusEntity(GetPlayerPed(PlayerId()))
+    ClearPedTasks(PlayerPedId())
 end
 
 function Draw3DText(x, y, z, text)
