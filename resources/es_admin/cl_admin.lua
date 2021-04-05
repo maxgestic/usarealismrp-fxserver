@@ -98,7 +98,7 @@ AddEventHandler('es_admin:spawnVehicle', function(v)
 		SetEntityAsMissionEntity(veh, true, true)
 		TaskWarpPedIntoVehicle(playerPed, veh, -1)
 
-		TriggerEvent('persistent-vehicles/register-vehicle', veh)
+		TriggerServerEvent("fuel:setFuelAmount", GetVehicleNumberPlateText(veh), 100)
 
 		local vehicle_key = {
 			name = "Key -- " .. GetVehicleNumberPlateText(veh),
