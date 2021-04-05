@@ -298,6 +298,24 @@ function MuteVehiclePassengers(playerData)
 	return changed
 end
 
+function SetTalkingRange(src, modeIndex)
+	local playerData = voiceData[src]
+	local voiceMode = playerData.mode
+				
+	local newMode = modeIndex
+
+	if newMode > #mumbleConfig.voiceModes then
+		voiceMode = 1
+	else
+		voiceMode = newMode
+	end
+	
+	NetworkSetTalkerProximity(mumbleConfig.voiceModes[voiceMode][1] + 0.0)
+
+	SetVoiceData("mode", voiceMode)
+	playerData.mode = voiceMode
+end
+
 -- Events
 AddEventHandler("onClientResourceStart", function(resName) -- Initialises the script, sets up voice range, voice targets and request sync with server
 	if GetCurrentResourceName() ~= resName then
@@ -1201,3 +1219,5 @@ exports("removePlayerFromCall", function()
 end)
 
 exports("setRadioVolume", SetRadioVolume)
+
+exports("SetTalkingRange", SetTalkingRange)

@@ -712,10 +712,14 @@ end)
 RegisterNUICallback('setVoipLevel', function(data, cb)
 	DisableGui()
 	local selected = data.level:lower()
-	if selected == "normal" then
-		selected = "default"
+	if selected == "yell" then
+		selected = 3
+	elseif selected == "normal" then
+		selected = 2
+	elseif selected == "whisper" then
+		selected = 1
 	end
-	TriggerEvent("voip", selected)
+	exports["mumble-voip"]:SetTalkingRange(GetPlayerServerId(PlayerId()), selected)
 end)
 
 RegisterNUICallback('openVehicleDoor', function(data, cb)
