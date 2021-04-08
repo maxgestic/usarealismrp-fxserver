@@ -17,6 +17,7 @@ local civilianSpawns = {
 }
 
 local FIRST_AID_KIT_FEE = 80
+local WHEELCHAIR_FEE = 200
 
 local playerPed = GetPlayerPed(-1)
 
@@ -60,7 +61,7 @@ local blacklistedVehicles = {
 
 }
 
-local HOSPITALS = {
+local HOSPITAL_ITEM_PURCHASE_LOCATIONS = {
   {name = "paleto", x = -247.2, y = 6330.8, z = 32.4},
   {name = "pillbox", x = 312.41775512695,y = -592.96716308594, z = 43.283985137939}, 
   {name = "mt. zenoah", x = -497.9, y = -335.9, z = 34.5},
@@ -80,12 +81,18 @@ Citizen.CreateThread(function()
   while true do
     local me = GetPlayerPed(-1)
     local mycoords = GetEntityCoords(me)
-    for i = 1, #HOSPITALS do
-      local h = HOSPITALS[i]
-      DrawText3D(h.x, h.y, h.z, 4, '[E] - First Aid Kit ($' .. FIRST_AID_KIT_FEE .. ')')
+    for i = 1, #HOSPITAL_ITEM_PURCHASE_LOCATIONS do
+      local h = HOSPITAL_ITEM_PURCHASE_LOCATIONS[i]
+      DrawText3D(h.x, h.y, h.z, 4, '[E] - First Aid Kit ($' .. FIRST_AID_KIT_FEE .. ') | [Hold E] - Wheel Chair ($' .. WHEELCHAIR_FEE .. ')')
       if IsControlJustPressed(0, KEYS.E) then
         if Vdist(h.x, h.y, h.z, mycoords.x, mycoords.y, mycoords.z) < 1.5 then
-          TriggerServerEvent("hospital:buyFirstAidKit")
+          Wait(500)
+          if IsControlPressed(0, KEYS.E) then
+            TriggerServerEvent("hospital:buyWheelchair")
+            Wait(1000)
+          else
+            TriggerServerEvent("hospital:buyFirstAidKit")
+          end
         end
       end
     end

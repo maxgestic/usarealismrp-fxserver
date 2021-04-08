@@ -863,6 +863,12 @@ RegisterNUICallback("dropItem", function(data, cb)
 		if data.itemName:find("Radio") then
 			TriggerEvent("Radio.Set", false, {})
 		end
+		if data.itemName:find("Wheelchair") then
+			local handle = CreateObject(GetHashKey("prop_wheelchair_01"), finalPos.x, finalPos.y, finalPos.z, true, true, true)
+			SetEntityAsMissionEntity(handle, true, true)
+			SetEntityHeading(handle, GetEntityHeading(PlayerPedId()))
+			PlaceObjectOnGroundProperly(handle)
+		end
 	else
 		exports.globals:notify("Can't drop that item, sorry!")
 	end

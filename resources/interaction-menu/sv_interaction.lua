@@ -199,7 +199,9 @@ AddEventHandler("inventory:dropItem", function(name, index, posX, posY, posZ)
 	if item.type == "weapon" then
 		TriggerClientEvent("interaction:equipWeapon", source, item, false)
 	end
-	TriggerEvent("interaction:addDroppedItem", item)
+	if not item.invisibleWhenDropped then
+		TriggerEvent("interaction:addDroppedItem", item)
+	end
 	char.removeItemByIndex(index, 1)
 end)
 
