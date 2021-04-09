@@ -14,6 +14,11 @@ RegisterCommand('removewheelchair', function()
 end, false)
 --]]
 
+RegisterNetEvent("wheelchair:removeWheelchair")
+AddEventHandler("wheelchair:removeWheelchair", function()
+	RemoveWheelchair()
+end)
+
 local currentlySitting = false
 
 Citizen.CreateThread(function()
@@ -48,8 +53,7 @@ Citizen.CreateThread(function()
 					if IsControlPressed(0, 38) then
 						TriggerEvent("usa:getClosestPlayer", 1.2, function(player)
 							if player.id == 0 then
-								RemoveWheelchair()
-								TriggerServerEvent("hospital:giveWheelchair")
+								TriggerServerEvent("hospital:wheelchair:pickUpIfPlayerHasRoom")
 							else
 								exports.globals:notify("Someone already in wheelchair!")
 							end

@@ -1,5 +1,4 @@
 local FIRST_AID_KIT_FEE = 80
-local WHEELCHAIR_FEE = 200
 
 local civSkins = {
 		"a_m_m_beach_01",
@@ -62,51 +61,6 @@ AddEventHandler("usa_rp:checkJailedStatusOnPlayerJoin", function(id)
 	if time > 0 then
 		TriggerClientEvent("jail:jail", source)
 		exports["globals"]:notifyPlayersWithJobs({"corrections"}, "^3INFO: ^0" .. fullName .. " has woken up from a nap.")
-	end
-end)
-
-RegisterServerEvent("hospital:giveWheelchair")
-AddEventHandler("hospital:giveWheelchair", function()
-	local c = exports["usa-characters"]:GetCharacter(source)
-	local wheelChairItem = {
-		name = "Wheelchair",
-		price = WHEELCHAIR_FEE,
-		type = "misc",
-		quantity = 1,
-		legality = "legal",
-		weight = 30,
-		objectModel = "prop_wheelchair_01",
-		invisibleWhenDropped = true
-	}
-	-- give to player
-	c.giveItem(wheelChairItem)
-end)
-
-RegisterServerEvent("hospital:buyWheelchair")
-AddEventHandler("hospital:buyWheelchair", function()
-	local c = exports["usa-characters"]:GetCharacter(source)
-	local wheelChairItem = {
-		name = "Wheelchair",
-		price = WHEELCHAIR_FEE,
-		type = "misc",
-		quantity = 1,
-		legality = "legal",
-		weight = 30,
-		objectModel = "prop_wheelchair_01",
-		invisibleWhenDropped = true
-	}
-	-- take money
-	if c.get("money") >= wheelChairItem.price then
-		if c.canHoldItem(wheelChairItem) then
-			-- give to player
-			c.removeMoney(wheelChairItem.price)
-			c.giveItem(wheelChairItem)
-			TriggerClientEvent("usa:notify", source, "~y~Purchased:~w~ Wheelchair")
-		else 
-			TriggerClientEvent("usa:notify", source, "Inventory full!")
-		end
-	else
-		TriggerClientEvent("usa:notify", source, "Not enough money. Need: $" .. wheelChairItem.price)
 	end
 end)
 
