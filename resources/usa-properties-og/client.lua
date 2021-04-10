@@ -32,6 +32,14 @@ local VEHICLE_DAMAGES = {}
 
 local waitingForWardrobeToLoad = false
 
+local currentMapBlips = {} -- used to mark owned properties as blips on map on character load
+
+RegisterNetEvent("properties:setPropertyBlips")
+AddEventHandler("properties:setPropertyBlips", function(propertyLocations)
+    RemoveBlips()
+    AddBlips(propertyLocations)
+end)
+
 RegisterNetEvent("properties:setPropertyIdentifier")
 AddEventHandler("properties:setPropertyIdentifier", function(ident)
     my_property_identifier = ident
@@ -962,4 +970,29 @@ function RemoveMenuPool(pool)
     menu_data.wardrobe = nil
     menu_data.coowners = nil
     _menuPool = nil
+end
+
+function AddBlips(locations)
+    for i = 1, #locations do
+        local b = AddBlipForCoord(locations[i].x, locations[i].y, locations[i].z)
+        SetBlipSprite(b, 40)
+        SetBlipDisplay(b, 4)
+        SetBlipScale(b, 0.75)
+        if locations[i].coowner then
+            SetBlipColour(b, 11)
+        else
+            SetBlipColour(b, 61)
+        end
+        SetBlipAsShortRange(b, true)
+        BeginTextCommandSetBlipName("STRING")
+        AddTextComponentString('Your Property')
+        EndTextCommandSetBlipName(b)
+        table.insert(currentMapBlips, b)
+    end
+end
+
+function RemoveBlips()
+    for i = 1, #currentMapBlips do
+        RemoveBlip(currentMapBlips[i])
+    end
 end

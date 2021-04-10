@@ -12,13 +12,9 @@ local MAX_NUM_OF_PROPERTIES_SINGLE_PERSON = 5
 local NEARBY_DISTANCE = 500
 
 AddEventHandler("character:loaded", function(char)
-  TriggerEvent("properties:getPropertyIdentifier", char)
-end)
-
-RegisterServerEvent("properties:getPropertyIdentifier")
-AddEventHandler("properties:getPropertyIdentifier", function(char)
-  print("setting property identifier to: " .. char.get("_id"))
-  TriggerClientEvent("properties:setPropertyIdentifier", char.get("source"), char.get("_id"))
+  local charIdent = char.get("_id")
+  TriggerClientEvent("properties:setPropertyBlips", char.get("source"), GetOwnedPropertyCoords(charIdent, true))
+  TriggerClientEvent("properties:setPropertyIdentifier", char.get("source"), charIdent)
 end)
 
 RegisterServerEvent("properties-og:requestNearestData")
@@ -454,6 +450,8 @@ AddEventHandler("properties:purchaseProperty", function(property)
 			player.removeMoney(PROPERTIES[property.name].fee.price)
       -- save property --
       SavePropertyData(property.name)
+      -- add map blip --
+      TriggerClientEvent("properties:setPropertyBlips", user_source, GetOwnedPropertyCoords(player.get("_id"), true))
 			-- send discord msg to #property-logs --
 			local desc = "\n**Property:** " .. property.name .. "\n**Purchase Price:** $" .. comma_value(PROPERTIES[property.name].fee.price) ..  "\n**Purchased By:** " .. char_name .. "\n**Purchase Date:** ".. PROPERTIES[property.name].owner.purchase_date .. "\n**End Date:** " .. PROPERTIES[property.name].fee.end_date
 			local url = 'https://discord.com/api/webhooks/618097005750648837/qjGutLzwwboVNFbgjeRdiR3rtaPEmtOgRlF5GDJEZxP0mBR3wb-_bh1XwRMM2xdzkOpP'
@@ -515,6 +513,8 @@ AddEventHandler("properties:addCoOwner", function(property_name, id)
     SavePropertyData(property_name)
     -- update all clients --
     TriggerClientEvent("properties:update", -1, PROPERTIES[property_name])
+    -- add blip for co owner --
+    TriggerClientEvent("properties:setPropertyBlips", id, GetOwnedPropertyCoords(coowner.identifier, true))
     -- notify --
     TriggerClientEvent("usa:notify", source, coowner.name .. " has been successfully added!")
   else
@@ -940,6 +940,40 @@ AddEventHandler('rconCommand', function(commandName, args)
 	end
 	CancelEvent()
 end)
+
+function GetOwnedPropertyCoords(identifier, includingCoOwner)
+	local ret = {}
+	for name, info in pairs(PROPERTIES) do
+		if info.owner.identifier == identifier then -- is a full owner
+			table.insert(ret, {x = info.x, y = info.y, z = info.z})
+    elseif includingCoOwner then
+      for i = 1, #info.coowners do
+        if info.coowners[i].identifier == identifier then -- is a co-owner
+          table.insert(ret, {x = info.x, y = info.y, z = info.z, coowner = true})
+          break
+        end
+      end
+    end
+	end
+	return ret
+end
+
+function GetOwnedProperties(identifier, includingCoOwner)
+	local ret = {}
+	for name, info in pairs(PROPERTIES) do
+		if info.owner.identifier == identifier then
+			table.insert(ret, info)
+    elseif includingCoOwner then
+      for i = 1, #info.coowners do
+        if info.coowners[i].identifier == identifier then -- is a co-owner
+          table.insert(ret, info)
+          break
+        end
+      end
+    end
+	end
+	return ret
+end
 
 function GetNumberOfOwnedProperties(identifier)
 	local count = 0
