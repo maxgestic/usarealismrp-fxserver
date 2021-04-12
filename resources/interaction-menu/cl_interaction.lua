@@ -869,6 +869,11 @@ RegisterNUICallback("dropItem", function(data, cb)
 			SetEntityHeading(handle, GetEntityHeading(PlayerPedId()))
 			PlaceObjectOnGroundProperly(handle)
 		end
+		if data.itemName:find("Stretcher") then
+			local handle = CreateObject(GetHashKey("prop_ld_binbag_01"), finalPos.x, finalPos.y, finalPos.z - 0.33, true, true, true)
+			SetEntityAsMissionEntity(handle, true, true)
+			SetEntityHeading(handle, GetEntityHeading(PlayerPedId()))
+		end
 	else
 		exports.globals:notify("Can't drop that item, sorry!")
 	end

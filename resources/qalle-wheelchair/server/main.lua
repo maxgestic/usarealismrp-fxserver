@@ -9,12 +9,29 @@ local wheelChairItem = {
 	invisibleWhenDropped = true
 }
 
-RegisterServerEvent("hospital:wheelchair:pickUpIfPlayerHasRoom")
-AddEventHandler("hospital:wheelchair:pickUpIfPlayerHasRoom", function()
+local stretcherItem = {
+	name = "Stretcher",
+	price = 400,
+	type = "misc",
+	quantity = 1,
+	legality = "legal",
+	weight = 40,
+	objectModel = "prop_ld_binbag_01",
+	invisibleWhenDropped = true
+}
+
+RegisterServerEvent("hospital:pushable:pickUpIfPlayerHasRoom")
+AddEventHandler("hospital:pushable:pickUpIfPlayerHasRoom", function(pushable)
 	local c = exports["usa-characters"]:GetCharacter(source)
-	if c.canHoldItem(wheelChairItem) then
-		TriggerClientEvent("wheelchair:removeWheelchair", source)
-        c.giveItem(wheelChairItem)
+	local item = nil
+	if pushable.itemName == "Stretcher" then
+		item = stretcherItem
+	elseif pushable.itemName == "Wheelchair" then
+		item = wheelchairItem
+	end
+	if c.canHoldItem(item) then
+		TriggerClientEvent("pushable:remove", source, pushable)
+        c.giveItem(item)
 	else
 		TriggerClientEvent("usa:notify", source, "Inventory full!")
 	end

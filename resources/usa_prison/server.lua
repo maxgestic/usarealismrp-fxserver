@@ -12,7 +12,8 @@ local WEAPONS = {
 	{ name = "SMG MK2", hash = 0x78A97CD0, price = 750, rank = 2, weight = 20 },
 	{ hash = 100416529, name = "Marksman Rifle", rank = 2, weight = 30, price = 2000},
 	{ name = "Spike Strips", rank = 3 },
-    { name = "Police Radio", rank = 1, price = 300, type = "misc", weight = 5 }
+    { name = "Police Radio", rank = 1, price = 300, type = "misc", weight = 5 },
+	{ name = "Stretcher", rank = 1, price = 400, type = "misc", weight = 35, invisibleWhenDropped = true }
 }
 
 for i = 1, #WEAPONS do

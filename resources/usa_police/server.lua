@@ -19,7 +19,8 @@ local armoryItems = {
     { name = "MK2 Carbine Rifle", hash = 4208062921, price = 700, weight = 25, minRank = 2 },
     { name = "Sniper Rifle", hash = 100416529, price = 2000, weight = 30, minRank = 2 },
     { name = "Spike Strips", price = 700 },
-    { name = "Police Radio", price = 300, type = "misc", weight = 5 }
+    { name = "Police Radio", price = 300, type = "misc", weight = 5 },
+    { name = "Stretcher", price = 400, type = "misc", weight = 35, invisibleWhenDropped = true }
 }
 
 for i = 1, #armoryItems do
