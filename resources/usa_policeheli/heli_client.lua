@@ -12,13 +12,12 @@ local toggle_lock_on = 22 -- control id to lock onto a vehicle with the camera. 
 
 -- Script starts here
 local helicam = false
-local polmav_hash = GetHashKey("polmav")
 local fov = (fov_max+fov_min)*0.5
 local vision_state = 0 -- 0 is normal, 1 is nightmode, 2 is thermal vision
 Citizen.CreateThread(function()
 	while true do
         Citizen.Wait(0)
-		if IsPlayerInPolmav() then
+		if IsPlayerInCompatibleHeli() then
 			local lPed = GetPlayerPed(-1)
 			local heli = GetVehiclePedIsIn(lPed)
 
@@ -162,10 +161,16 @@ AddEventHandler('heli:spotlight', function(serverID, state)
 	Citizen.Trace("Set heli light state to "..tostring(state).." for serverID: "..serverID)
 end)
 
-function IsPlayerInPolmav()
+function IsPlayerInCompatibleHeli()
+	local compatibleHelis = {"polmav", "as350", "buzzard2"}
 	local lPed = GetPlayerPed(-1)
 	local vehicle = GetVehiclePedIsIn(lPed)
-	return IsVehicleModel(vehicle, polmav_hash)
+	for i = 1, #compatibleHelis do
+		if IsVehicleModel(vehicle, GetHashKey(compatibleHelis[i])) then
+			return true
+		end
+	end
+	return false
 end
 
 function IsHeliHighEnough(heli)

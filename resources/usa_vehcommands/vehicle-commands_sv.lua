@@ -34,6 +34,11 @@ local VEHICLE_RANKS = {
 			allowedLiveries = { 1 },
 			hash = 353883353
 		},
+		["as350"] = {
+			rank = 3,
+			allowedLiveries = { 3 },
+			hash = 1346171487
+		},
 		["buzzard2"] = {
 			rank = 3,
 			allowedLiveries = { 1 },
@@ -105,6 +110,11 @@ local VEHICLE_RANKS = {
 			rank = 3,
 			allowedLiveries = { 2 },
 			hash = 353883353
+		},
+		["as350"] = {
+			rank = 3,
+			allowedLiveries = { 1 },
+			hash = 1346171487
 		},
 		["buzzard2"] = {
 			rank = 3,
@@ -179,6 +189,11 @@ local VEHICLE_RANKS = {
 			rank = 1,
 			allowedLiveries = { 3 },
 			hash = 353883353
+		},
+		["as350"] = {
+			rank = 1,
+			allowedLiveries = { 2 },
+			hash = 1346171487
 		},
 		["buzzard2"] = {
 			rank = 1,
