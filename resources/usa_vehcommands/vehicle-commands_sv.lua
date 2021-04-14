@@ -83,6 +83,26 @@ local VEHICLE_RANKS = {
 			rank = 4,
 			allowedLiveries = { 1 },
 			hash = 1624609239
+		},
+		["hptahoe"] = {
+			rank = 5,
+			allowedLiveries = { 3 },
+			hash = -1591990051
+		},
+		["sotruck"] = {
+			rank = 5,
+			allowedLiveries = { 3 },
+			hash = 1799416425
+		},
+		["pdcharger"] = {
+			rank = 1,
+			allowedLiveries = { 2 },
+			hash = -1763515681
+		},
+		["pdfpiu"] = {
+			rank = 1,
+			allowedLiveries = { 2 },
+			hash = -61406477
 		}
 	},
 	["corrections"] = {
@@ -160,6 +180,26 @@ local VEHICLE_RANKS = {
 			rank = 4,
 			allowedLiveries = { 1 },
 			hash = 1624609239
+		},
+		["hptahoe"] = {
+			rank = 5,
+			allowedLiveries = { 1 },
+			hash = -1591990051
+		},
+		["sotruck"] = {
+			rank = 5,
+			allowedLiveries = { 1 },
+			hash = 1799416425
+		},
+		["pdcharger"] = {
+			rank = 3,
+			allowedLiveries = { 1 },
+			hash = -1763515681
+		},
+		["pdfpiu"] = {
+			rank = 3,
+			allowedLiveries = { 1 },
+			hash = -61406477
 		}
 	},
 	["ems"] = {
@@ -210,6 +250,11 @@ local VEHICLE_RANKS = {
 			rank = 1,
 			allowedLiveries = { 1 },
 			hash = -488123221
+		},
+		["sotruck"] = {
+			rank = 1,
+			allowedLiveries = { 2 },
+			hash = 1799416425
 		}
 	},
 	["doctor"] = {

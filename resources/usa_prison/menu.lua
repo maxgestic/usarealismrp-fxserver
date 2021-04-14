@@ -25,7 +25,11 @@ local vehicles = {
   { name = "Motorcycle 2", hash = GetHashKey("1200RT") },
   { name = "Golf Cart", hash = GetHashKey("caddy") },
   { name = "Prison Bus", hash = GetHashKey("pbus") },
-  { name = "Transport Van", hash = GetHashKey("policet") }
+  { name = "Transport Van", hash = GetHashKey("policet") },
+  { name = "Tahoe", hash = GetHashKey("hptahoe") },
+  { name = "Explorer 2", hash = GetHashKey("pdfpiu") },
+  { name = "Charger 2", hash = GetHashKey("pdcharger") },
+  { name = "Truck 2", hash = GetHashKey("sotruck") }
 }
 
 local PRISON_GUARD_SIGN_IN_LOCATIONS = {
