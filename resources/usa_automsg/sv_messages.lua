@@ -1,4 +1,5 @@
 
+--[[
 local sentWarnings = {
     tenMinute = false,
     twoMinute = false
@@ -54,3 +55,4 @@ function KickAllPlayers()
         DropPlayer(playerIDs[i], "Server restarting.")
     end
 end
+--]]

@@ -592,7 +592,7 @@ function SpawnHeavyHauler(coords)
 		TriggerServerEvent('mdt:addTempVehicle', 'MTL Flatbed', "Bubba's Mechanic Co.", vehPlate)
 
 		-- give repair kit to start with --
-		TriggerServerEvent("mechanic:giveRepairKit", vehPlate)
+		--TriggerServerEvent("mechanic:giveRepairKit", vehPlate)
 	end)
 end
 
