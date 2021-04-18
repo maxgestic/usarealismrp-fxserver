@@ -326,6 +326,23 @@ local vehicleShopItems = {
 			{make = "Cheval", model = "Surge", price = 17453, hash = "surge", storage_capacity = 135.0},
 			{make = "Coil", model = "Cyclone", price = 84372, hash = "cyclone", storage_capacity = 135.0},
 			{make = "Hijak", model = "Khamelion", price = 44637, hash = 544021352, storage_capacity = 145.0},
+		},
+		["Custom"] = {
+			{make = "2016 Dodge", model = "Charger", price = 120000, hash = "16charger", storage_capacity = 160.0},
+			{make = "Ford", model = "F150 Raptor", price = 100000, hash = "f150", storage_capacity = 280.0},
+			{make = "Ford", model = "F150 (1978)", price = 65000, hash = "f15078", storage_capacity = 280.0},
+			{make = "Subaru", model = "WRX STI (2004)", price = 95000, hash = "subwrx", storage_capacity = 160.0},
+			{make = "Subaru", model = "WRX STI", price = 115000, hash = "subisti08", storage_capacity = 160.0},
+			{make = "Chevy", model = "C8", price = 180000, hash = "stingray", storage_capacity = 130.0},
+			{make = "Audi", model = "R8", price = 250000, hash = "r820", storage_capacity = 130.0},
+			{make = "Ferrari", model = "F8 Tributo", price = 850000, hash = "f8t", storage_capacity = 130.0},
+			{make = "Jeep", model = "SRT8", price = 100000, hash = "srt8", storage_capacity = 185.0},
+			{make = "Lamborghini", model = "LP 700 R", price = 850000, hash = "lp700r", storage_capacity = 130.0},
+			{make = "Ford", model = "Crown Victoria", price = 30000, hash = "crownvic2011", storage_capacity = 155.0},
+			{make = "Tesla", model = "Model X", price = 160000, hash = "teslax", storage_capacity = 185.0},
+			{make = "Nissan", model = "GTR", price = 210000, hash = "gtr", storage_capacity = 130.0},
+			{make = "Chevy", model = "Camaro", price = 160000, hash = "zl12017", storage_capacity = 130.0},
+			{make = "Maserati", model = "Levante Novitec", price = 150000, hash = "mlnovitec", storage_capacity = 185.0}
 		}
 	}
 }

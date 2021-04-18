@@ -2,14 +2,37 @@
 --# for: USA REALISM RP
 --# simple vehicle shop script to preview and purchase a vehicle
 
-local BLIP_NAME = "PDM - Downtown LS"
+local DISPLAY_VEHICLE_CHECK_WAIT = 3000
+local DISPLAY_VEH_SPAWN_DISTANCE = 250
+
+local DEFAULT_BLIP_NAME = "PDM"
 
 local MENU_KEY = 38
 
 local SHOPS = {
 	--{name = "Paleto Bay", store_x = 120.9, store_y = 6624.605, store_z = 32.0, vehspawn_x = 131.04, vehspawn_y = 6625.39, vehspawn_z = 31.71, vehspawn_heading = 315.0},
-	{name = "Los Santos", store_x = -33.40, store_y = -1102.03, store_z = 26.4523, vehspawn_x = -48.884, vehspawn_y = -1113.75, vehspawn_z = 26.4358, vehspawn_heading = 315.0},
-	{name = "Sandy Shores", store_x = 1224.7, store_y = 2727.3, store_z = 37.0, vehspawn_x = 1228.5, vehspawn_y = 2718.0, vehspawn_z = 38.0, vehspawn_heading = 260.0}
+	{name = "Los Santos", store_x = -33.40, store_y = -1102.03, store_z = 26.4523, vehspawn_x = -48.884, vehspawn_y = -1113.75, vehspawn_z = 26.4358, vehspawn_heading = 315.0, blipName = "PDM - Downtown LS"},
+	{name = "Sandy Shores", store_x = 1224.7, store_y = 2727.3, store_z = 37.0, vehspawn_x = 1228.5, vehspawn_y = 2718.0, vehspawn_z = 38.0, vehspawn_heading = 260.0, blipName = "PDM - Sandy Shores"},
+	{
+		name = "Benefactor",
+		store_x = -56.239898681641, 
+		store_y = 67.927253723145,
+		store_z = 71.944839477539,
+		vehspawn_x = -62.409317016602,
+		vehspawn_y = 69.345016479492,
+		vehspawn_z = 71.842216491699,
+		vehspawn_heading = 291.0,
+		onlySellsCustom = true,
+		blipName = "Benefactor Dealership",
+		displayVehicles = {
+			{
+				HASHES = {"lp700r", "zl12017", "models", "subwrx", "f8t"},
+				COORDS = vector3(-76.197906494141, 75.080581665039, 71.911987304688),
+				HEADING = 204.0
+			}
+		}
+},
+
 }
 
 local vehicleShopItems = nil
@@ -30,6 +53,7 @@ local buy_submenu = nil
 
 _menuPool = NativeUI.CreatePool()
 mainMenu = NativeUI.CreateMenu("Car Dealership", "Welcome!", 0 --[[X COORD]], 320 --[[Y COORD]])
+customsMenu = NativeUI.CreateMenu("Premium Car Dealership", "Welcome!", 0 --[[X COORD]], 320 --[[Y COORD]])
 previewMenu = NativeUI.CreateMenu("Vehicle Preview", "~b~Welcome!", 0, 320)
 
 mainMenu.OnItemSelect = function(menu, item, index)
@@ -61,7 +85,29 @@ mainMenu.OnItemSelect = function(menu, item, index)
 end
 
 _menuPool:Add(mainMenu)
+_menuPool:Add(customsMenu)
 _menuPool:Add(previewMenu)
+
+function CreateCustomCarMenu(menu)
+	Citizen.CreateThread(function()
+		local me = GetPlayerPed(-1)
+		while not vehicleShopItems do
+			Wait(100)
+		end
+		local items = vehicleShopItems["vehicles"]["Custom"]
+		for i = 1, #items do
+			local item = NativeUI.CreateItem("($" .. comma_value(items[i].price) .. ") " .. items[i].make .. " " .. items[i].model, "Buy or preview the " .. items[i].make .. " " .. items[i].model .. " (Storage Capacity: " .. items[i].storage_capacity .. ")")
+			item.Activated = function(parentmenu, selected)
+			parentmenu:Visible(false)
+			previewMenu:Visible(true)
+			menu_data.preview.vehicle = items[i]
+			menu_data.preview.prev_menu = parentmenu
+			UpdatePreviewMenu()
+			end
+			menu:AddItem(item)
+		  end
+	end)
+end
 
 function CreateMenu(menu)
 	Citizen.CreateThread(function()
@@ -126,7 +172,29 @@ function UpdatePreviewMenu()
 	previewMenu:AddItem(item)
 end
 
+function spawnDisplayVehicle(veh)
+	local randomHash = veh.HASHES[math.random(#veh.HASHES)]
+    if type(randomHash) ~= "number" then
+        randomHash = GetHashKey(randomHash)
+    end
+    RequestModel(randomHash)
+    while not HasModelLoaded(randomHash) do
+        Wait(100)
+    end
+	local handle = CreateVehicle(randomHash, veh.COORDS.x, veh.COORDS.y, veh.COORDS.z, (veh.HEADING or 0.0) --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
+	FreezeEntityPosition(handle, true)
+	SetVehicleDoorsLocked(handle, 10)
+	SetVehicleExplodesOnHighExplosionDamage(handle, false)
+    SetVehicleOnGroundProperly(handle)
+    SetEntityAsMissionEntity(handle, true, true)
+    if veh.plate then
+        SetVehicleNumberPlateText(handle, veh.plate)
+    end
+    return handle
+end
+
 CreateMenu(mainMenu)
+CreateCustomCarMenu(customsMenu)
 _menuPool:RefreshIndex()
 
 RegisterNetEvent("vehicle-shop:loadItems")
@@ -197,7 +265,11 @@ Citizen.CreateThread(function()
 				if not mainMenu:Visible() then
 					if IsControlJustPressed(1, MENU_KEY) then
 						menu_data.closest = SHOPS[k]
-						mainMenu:Visible(not mainMenu:Visible())
+						if menu_data.closest.onlySellsCustom then
+							customsMenu:Visible(not customsMenu:Visible())
+						else
+							mainMenu:Visible(not mainMenu:Visible())
+						end
 					end
 				end
 			end
@@ -221,6 +293,32 @@ Citizen.CreateThread(function()
 	end
 end)
 
+-- thread to manage shop display vehicles --
+Citizen.CreateThread(function()
+    while true do
+		local myped = PlayerPedId()
+		local mycoords = GetEntityCoords(myped)
+        for i = 1, #SHOPS do
+			local dist = Vdist(mycoords, SHOPS[i].store_x, SHOPS[i].store_y, SHOPS[i].store_z)
+			if SHOPS[i].displayVehicles then
+				for j = 1, #SHOPS[i].displayVehicles do
+					if dist < DISPLAY_VEH_SPAWN_DISTANCE then
+						if not SHOPS[i].displayVehicles[j].handle then
+							SHOPS[i].displayVehicles[j].handle = spawnDisplayVehicle(SHOPS[i].displayVehicles[j])
+						end
+					else
+						if SHOPS[i].displayVehicles[j].handle then
+							DeleteVehicle(SHOPS[i].displayVehicles[j].handle)
+							SHOPS[i].displayVehicles[j].handle = nil
+						end
+					end
+				end
+			end
+		end
+        Wait(DISPLAY_VEHICLE_CHECK_WAIT)
+    end
+end)
+
 function getPlayerDistanceFromShop(ped, shopX,shopY,shopZ)
 	local playerCoords = GetEntityCoords(ped, false)
 	return GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,shopX,shopY,shopZ,true)
@@ -238,7 +336,6 @@ function PreviewVehicle(item)
 			end
 			-- Model loaded, continue
 			menu_data.preview.handle = CreateVehicle(numberHash, menu_data.closest.vehspawn_x, menu_data.closest.vehspawn_y, menu_data.closest.vehspawn_z, menu_data.closest.vehspawn_heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
-			TriggerEvent('persistent-vehicles/register-vehicle', menu_data.preview.handle)
 			SetVehicleExplodesOnHighExplosionDamage(menu_data.preview.handle, false)
 			SetVehicleOnGroundProperly(menu_data.preview.handle)
 			SetVehRadioStation(menu_data.preview.handle, "OFF")
@@ -258,7 +355,7 @@ function addBlips()
 		SetBlipDisplay(blip, 4)
 		SetBlipColour(blip, 1)
 		BeginTextCommandSetBlipName("STRING")
-		AddTextComponentString(BLIP_NAME)
+		AddTextComponentString((SHOPS[i].blipName or DEFAULT_BLIP_NAME))
 		EndTextCommandSetBlipName(blip)
 	end
 end

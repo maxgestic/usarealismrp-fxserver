@@ -94,7 +94,25 @@ local VEHICLES = {
         HEADING = 21.0,
         PRICE = 120000,
         CAPACITY = 165
+    },
+    {
+        MODEL = "BMW M5 (e34)",
+        HASH = "e34",
+        COORDS = vector3(-1256.7427978516, -355.42782592773, 36.907447814941),
+        HEADING = 120.0,
+        PRICE = 90000,
+        CAPACITY = 165
+    },
+    --[[
+    {
+        MODEL = "BMW M3 Custom (e46)",
+        HASH = "m3kean",
+        COORDS = vector3(-1241.0963134766, -345.73568725586, 37.332790374756),
+        HEADING = 209.0,
+        PRICE = 135000,
+        CAPACITY = 130
     }
+    --]]
 }
 
 RegisterServerEvent("bmwshop:loadVehicles")
