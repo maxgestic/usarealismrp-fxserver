@@ -84,6 +84,10 @@ LSC_Config.prices = {}
 --------Prices---------
 LSC_Config.prices = {
 
+	livery = {
+		price = 2000
+	},
+
 ------Window tint------
 	windowtint = {
 		{ name = "Pure Black", tint = 1, price = 1000},

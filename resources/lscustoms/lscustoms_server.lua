@@ -29,7 +29,7 @@ prices = {
 	['back wheel'] = LSC_Config.prices.backwheel,
 	['trim color'] = LSC_Config.prices.trim,
 	['windows'] = LSC_Config.prices.windowtint,
-	['liveries'] = LSC_Config.prices.mods[48],
+	['livery'] = LSC_Config.prices.livery,
 	['doors'] = LSC_Config.prices.mods[46],
 	['tank'] = LSC_Config.prices.mods[45],
 	['roof scoops'] = LSC_Config.prices.mods[44],
@@ -167,6 +167,7 @@ AddEventHandler("LSC:buttonSelected", function(name, button, mname, business)
 					exports["usa-businesses"]:GiveBusinessCashPercent(business, button.price)
 				end
 			else 
+				TriggerClientEvent("usa:notify", source, "Not enough money!")
 				TriggerClientEvent("LSC:buttonSelected", source, name, button, false)
 			end
 		end

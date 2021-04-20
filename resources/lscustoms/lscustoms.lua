@@ -1,6 +1,6 @@
 --[[
 Los Santos Customs V1.1
-Credits - MythicalBro
+Credits - MythicalBro - modified by Minipunch for USARRP
 /////License/////
 Do not reupload/re release any part of this script without my permission
 ]]
@@ -60,9 +60,7 @@ end
 -- mini's added function to save customizations
 RegisterNetEvent("customs:applyCustomizations")
 AddEventHandler("customs:applyCustomizations", function(veh)
-    currentvehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
-
-		print("typeof veh: " .. type(veh))
+    	local currentvehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
 
 		local customizations = veh.mods
 		local extracolor = veh.extracolor
@@ -87,7 +85,7 @@ AddEventHandler("customs:applyCustomizations", function(veh)
 		SetVehicleNeonLightEnabled(currentvehicle, 3, not not veh.neonlightenabled)
 
 		-- set mods --
-    SetVehicleModKit(currentvehicle,0)
+    	SetVehicleModKit(currentvehicle,0)
 		for x = 0, 48 do
 			if x == 18 or x == 20 or x == 22 then -- turbo, xeon headlights, tyre smoke
 				print("toggling vehicle mod!")
@@ -124,6 +122,8 @@ AddEventHandler("customs:applyCustomizations", function(veh)
 				end
 			end
 		end
+
+		SetVehicleLivery(GetVehiclePedIsIn(PlayerPedId(), false), (veh.liveryIndex or 1))
 end)
 ------------
 
@@ -134,32 +134,48 @@ LSCMenu.config.pcontrol = false
 --Add mod to menu
 local function AddMod(mod,parent,header,name,info,stock)
 	local veh = myveh.vehicle
-	SetVehicleModKit(veh,0)
-	if (GetNumVehicleMods(veh,mod) ~= nil and GetNumVehicleMods(veh,mod) > 0) or mod == 18 or mod == 22 then
-		local m = parent:addSubMenu(header, name, info,true)
-		if stock then
+	if mod ~= 48 then -- 48 == liveries
+		SetVehicleModKit(veh,0)
+		if (GetNumVehicleMods(veh,mod) ~= nil and GetNumVehicleMods(veh,mod) > 0) or mod == 18 or mod == 22 then
+			local m = parent:addSubMenu(header, name, info,true)
+			if stock then
+				local btn = m:addPurchase("Stock")
+				btn.modtype = mod
+				btn.mod = -1
+			end
+			if LSC_Config.prices.mods[mod].startprice then
+				local price = LSC_Config.prices.mods[mod].startprice
+				for i = 0,   tonumber(GetNumVehicleMods(veh,mod)) -1 do
+					local lbl = GetModTextLabel(veh,mod,i)
+					if lbl ~= nil then
+						local mname = (tostring(GetLabelText(lbl)) or "no name mod")
+						if mname ~= "NULL" then
+							local btn = m:addPurchase(mname,price)
+							btn.modtype = mod
+							btn.mod = i
+							price = price + LSC_Config.prices.mods[mod].increaseby
+						end
+					end
+				end
+			else
+				for n, v in pairs(LSC_Config.prices.mods[mod]) do
+					btn = m:addPurchase(v.name,v.price)btn.modtype = mod
+					btn.mod = v.mod
+				end
+			end
+		end
+	else
+		if GetVehicleLiveryCount(veh) > 0 then
+			local m = parent:addSubMenu(header, name, info, true)
 			local btn = m:addPurchase("Stock")
 			btn.modtype = mod
 			btn.mod = -1
-		end
-		if LSC_Config.prices.mods[mod].startprice then
-			local price = LSC_Config.prices.mods[mod].startprice
-			for i = 0,   tonumber(GetNumVehicleMods(veh,mod)) -1 do
-				local lbl = GetModTextLabel(veh,mod,i)
-				if lbl ~= nil then
-					local mname = tostring(GetLabelText(lbl))
-					if mname ~= "NULL" then
-						local btn = m:addPurchase(mname,price)
-						btn.modtype = mod
-						btn.mod = i
-						price = price + LSC_Config.prices.mods[mod].increaseby
-					end
-				end
-			end
-		else
-			for n, v in pairs(LSC_Config.prices.mods[mod]) do
-				btn = m:addPurchase(v.name,v.price)btn.modtype = mod
-				btn.mod = v.mod
+			btn.liveryIndex = -1
+			for i = 1, GetVehicleLiveryCount(veh) do
+				btn = m:addPurchase("Livery " .. i, LSC_Config.prices.livery.price)
+				btn.modtype = 48
+				btn.mod = i
+				btn.liveryIndex = i
 			end
 		end
 	end
@@ -374,7 +390,7 @@ local function DriveInGarage()
 		--AddMod(47, LSCMenu.categories, "UNK47", "unk47", "",true)
 		--AddMod(49, LSCMenu.categories, "UNK49", "unk49", "",true)
 		AddMod(38,LSCMenu.categories,"HYDRAULICS","Hydraulics","",true)
-		AddMod(48,LSCMenu.categories,"Liveries", "Liveries", "A selection of decals for your vehicle.",true)
+		AddMod(48,LSCMenu.categories,"Livery", "Livery", "A selection of decals for your vehicle.",true)
 
 		if bumper then
 			LSCMenu.categories:addSubMenu("BUMPERS", "Bumpers", "Custom front and rear bumpers.",true)
@@ -989,6 +1005,11 @@ AddEventHandler("LSC:buttonSelected", function(name, button, canpurchase)
 				myveh.repair()
 				LSCMenu:ChangeMenu("categories")
 			end
+		end
+	elseif mname == "livery" then
+		if CanPurchase(price, canpurchase) then
+			SetVehicleLivery(veh, button.liveryIndex)
+			myveh.liveryIndex = button.liveryIndex
 		end
 	end
 	CheckPurchases(m)
