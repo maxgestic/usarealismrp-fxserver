@@ -27,7 +27,7 @@ local SHOPS = {
 		displayVehicles = {
 			{
 				HASHES = {"lp700r", "zl12017", "models", "subwrx", "f8t"},
-				COORDS = vector3(-76.197906494141, 75.080581665039, 71.911987304688),
+				COORDS = vector3(-76.197906494141, 75.080581665039, 70.911987304688),
 				HEADING = 204.0
 			}
 		}

@@ -98,7 +98,7 @@ local VEHICLES = {
     {
         MODEL = "BMW M5 (e34)",
         HASH = "e34",
-        COORDS = vector3(-1256.7427978516, -355.42782592773, 36.907447814941),
+        COORDS = vector3(-1256.7427978516, -355.42782592773, 35.907447814941),
         HEADING = 120.0,
         PRICE = 90000,
         CAPACITY = 165
