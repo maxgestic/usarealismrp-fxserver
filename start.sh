@@ -24,5 +24,8 @@ mv node_modules resources/ws_server
 # save last log file, create new one
 mv CitizenFX.log CitizenFX.log.2
 
+# clear chat log file
+> /var/www/html/log.txt
+
 # run server
 tmux new -d -s fxserver "bash /home/ubuntu/FXServer/server/run.sh +exec server.cfg +set onesync on > CitizenFX.log"
