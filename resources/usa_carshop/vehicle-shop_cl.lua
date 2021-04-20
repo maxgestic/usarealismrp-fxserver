@@ -325,25 +325,28 @@ function getPlayerDistanceFromShop(ped, shopX,shopY,shopZ)
 end
 
 function PreviewVehicle(item)
-		local numberHash = tonumber(item.hash)
-		Citizen.CreateThread(function()
-			TriggerEvent("hotwire:enableKeyEngineCheck", false)
-			-- Request the model so that it can be spawned
-			RequestModel(numberHash)
-			-- Check if it's loaded, if not then wait and re-request it.
-			while not HasModelLoaded(numberHash) do
-				Wait(100)
-			end
-			-- Model loaded, continue
-			menu_data.preview.handle = CreateVehicle(numberHash, menu_data.closest.vehspawn_x, menu_data.closest.vehspawn_y, menu_data.closest.vehspawn_z, menu_data.closest.vehspawn_heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
-			SetVehicleExplodesOnHighExplosionDamage(menu_data.preview.handle, false)
-			SetVehicleOnGroundProperly(menu_data.preview.handle)
-			SetVehRadioStation(menu_data.preview.handle, "OFF")
-			SetPedIntoVehicle(GetPlayerPed(-1), menu_data.preview.handle, -1)
-			SetVehicleEngineOn(menu_data.preview.handle, true, false, false)
-			FreezeEntityPosition(menu_data.preview.handle, true)
-			SetVehicleDoorsLocked(menu_data.preview.handle, 4)
-		end)
+	local numberHash = tonumber(item.hash)
+	Citizen.CreateThread(function()
+		TriggerEvent("hotwire:enableKeyEngineCheck", false)
+		-- Request the model so that it can be spawned
+		RequestModel(numberHash)
+		-- Check if it's loaded, if not then wait and re-request it.
+		while not HasModelLoaded(numberHash) do
+			Wait(100)
+		end
+		-- Model loaded, continue
+		if menu_data.preview and menu_data.preview.handle and DoesEntityExist(menu_data.preview.handle) then
+			DeleteVehicle(menu_data.preview.handle)
+		end
+		menu_data.preview.handle = CreateVehicle(numberHash, menu_data.closest.vehspawn_x, menu_data.closest.vehspawn_y, menu_data.closest.vehspawn_z, menu_data.closest.vehspawn_heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
+		SetVehicleExplodesOnHighExplosionDamage(menu_data.preview.handle, false)
+		SetVehicleOnGroundProperly(menu_data.preview.handle)
+		SetVehRadioStation(menu_data.preview.handle, "OFF")
+		SetPedIntoVehicle(GetPlayerPed(-1), menu_data.preview.handle, -1)
+		SetVehicleEngineOn(menu_data.preview.handle, true, false, false)
+		FreezeEntityPosition(menu_data.preview.handle, true)
+		SetVehicleDoorsLocked(menu_data.preview.handle, 4)
+	end)
 end
 
 function addBlips()

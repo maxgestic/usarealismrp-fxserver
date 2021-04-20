@@ -329,9 +329,9 @@ local vehicleShopItems = {
 		},
 		["Custom"] = {
 			{make = "2016 Dodge", model = "Charger", price = 120000, hash = "16charger", storage_capacity = 160.0},
-			{make = "Ford", model = "F150 Raptor", price = 100000, hash = "f150", storage_capacity = 280.0},
+			{make = "Ford", model = "F150 Raptor", price = 150000, hash = "f150", storage_capacity = 280.0},
 			{make = "Ford", model = "F150 (1978)", price = 65000, hash = "f15078", storage_capacity = 280.0},
-			{make = "Subaru", model = "WRX STI (2004)", price = 95000, hash = "subwrx", storage_capacity = 160.0},
+			{make = "Subaru", model = "WRX STI (2004)", price = 100000, hash = "subwrx", storage_capacity = 160.0},
 			{make = "Subaru", model = "WRX STI", price = 115000, hash = "subisti08", storage_capacity = 160.0},
 			{make = "Chevy", model = "C8", price = 180000, hash = "stingray", storage_capacity = 130.0},
 			{make = "Audi", model = "R8", price = 250000, hash = "r820", storage_capacity = 130.0},
@@ -340,7 +340,7 @@ local vehicleShopItems = {
 			{make = "Lamborghini", model = "LP 700 R", price = 850000, hash = "lp700r", storage_capacity = 130.0},
 			{make = "Ford", model = "Crown Victoria", price = 30000, hash = "crownvic2011", storage_capacity = 155.0},
 			{make = "Tesla", model = "Model X", price = 160000, hash = "teslax", storage_capacity = 185.0},
-			{make = "Nissan", model = "GTR", price = 210000, hash = "gtr", storage_capacity = 130.0},
+			{make = "Nissan", model = "GTR", price = 275000, hash = "gtr", storage_capacity = 130.0},
 			{make = "Chevy", model = "Camaro", price = 160000, hash = "zl12017", storage_capacity = 130.0},
 			{make = "Maserati", model = "Levante Novitec", price = 150000, hash = "mlnovitec", storage_capacity = 185.0}
 		}
