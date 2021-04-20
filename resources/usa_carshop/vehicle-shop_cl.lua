@@ -70,7 +70,7 @@ mainMenu.OnItemSelect = function(menu, item, index)
 			for i = 1, #menu_data.vehicles_to_sell do
 				local veh = menu_data.vehicles_to_sell[i]
 				veh.price = (veh.price or 0)
-				local item = NativeUI.CreateItem(veh.make .. " " .. veh.model, "Sell this vehicle for $" .. comma_value(.50 * veh.price))
+				local item = NativeUI.CreateItem(veh.make .. " " .. veh.model, "Sell this vehicle for $" .. comma_value(.30 * veh.price))
 				item.Activated = function(parentmenu, selected)
 					TriggerServerEvent("vehShop:sellVehicle", veh)
 					_menuPool:CloseAllMenus()

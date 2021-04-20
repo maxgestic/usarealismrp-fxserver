@@ -471,8 +471,8 @@ AddEventHandler("vehShop:sellVehicle", function(toSellVehicle)
 	end
 	-- remove from DB / take money --
 	RemoveVehicleFromDB(toSellVehicle, function(err, resp)
-		char.giveMoney(math.ceil(vehiclePrice * .50))
-		TriggerClientEvent("usa:notify", usource, "~y~SOLD:~w~ " .. toSellVehicle.make .. " " .. toSellVehicle.model .. "\n~y~PRICE: ~g~$" .. exports.globals:comma_value(.50 * toSellVehicle.price))
+		char.giveMoney(math.ceil(vehiclePrice * .30))
+		TriggerClientEvent("usa:notify", usource, "~y~SOLD:~w~ " .. toSellVehicle.make .. " " .. toSellVehicle.model .. "\n~y~PRICE: ~g~$" .. exports.globals:comma_value(.30 * toSellVehicle.price))
 	end)
 end)
 
