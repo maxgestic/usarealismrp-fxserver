@@ -1545,7 +1545,8 @@ Citizen.CreateThread(function()
 							if GetGameTimer() > last_tackle_time + tackle_delay then
 								local fwdvector = GetEntityForwardVector(PlayerPedId())
 								TriggerServerEvent("interaction:tackle", playerServerId, fwdvector.x, fwdvector.y, fwdvector.z)
-								SetPedToRagdollWithFall(playerPed, 1500, 2000, 0, fwdvector, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+								local randomTackleTime = math.random(2000, 3000)
+								SetPedToRagdollWithFall(playerPed, randomTackleTime, randomTackleTime, 0, fwdvector, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 								last_tackle_time = GetGameTimer()
 							else
 								local seconds_left = ((last_tackle_time + tackle_delay) - GetGameTimer())/1000
@@ -1586,7 +1587,7 @@ end)
 
 RegisterNetEvent('interaction:tackleMe')
 AddEventHandler('interaction:tackleMe', function(fwdVectorX, fwdVectorY, fwdVectorZ)
-	local randomTackleTime = math.random(1500, 4000)
+	local randomTackleTime = math.random(2000, 3000)
 	SetPedToRagdollWithFall(PlayerPedId(), randomTackleTime, randomTackleTime, 0, fwdVectorX, fwdVectorY, fwdVectorZ, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
 end)
 
