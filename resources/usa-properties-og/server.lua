@@ -657,14 +657,9 @@ end, {
 --]]
 
 --TriggerEvent('es:addCommand','addproperty', function(source, args, user)
-TriggerEvent('es:addCommand', 'addproperty', function(source, args, char)
+TriggerEvent('es:addGroupCommand', 'addproperty', "mod", function(source, args, char)
   local usource = source
   local user = exports["essentialmode"]:getPlayerFromId(usource)
-  local userGroup = user.getGroup()
-  if userGroup == "user" and char.get("job") ~= "realtor" then
-    TriggerClientEvent("usa:notify", usource, "Not allowed to use this command")
-    return
-  end
   print("inside /addproperty command!")
   -- usage: /addproperty [door X] [door Y] [door Z] [garage X] [garage Y] [garage Z] [price] [name]
   local price = tonumber(args[8])
@@ -738,7 +733,6 @@ TriggerEvent('es:addCommand', 'addproperty', function(source, args, char)
   else
     TriggerClientEvent("usa:notify", usource, "Invalid command format! Usage: /addproperty [door X] [door Y] [door Z] [garage X] [garage Y] [garage Z] [price] [name]")
   end
-    
 end, {
 	help = "Add a new residential property",
     params = {
@@ -754,14 +748,9 @@ end, {
 })
 
 -- To add business properties --
-TriggerEvent('es:addCommand', 'addbusinessproperty', function(source, args, char)
+TriggerEvent('es:addGroupCommand', 'addbusinessproperty', 'admin', function(source, args, char)
   local usource = source
   local user = exports["essentialmode"]:getPlayerFromId(usource)
-  local userGroup = user.getGroup()
-  if userGroup == "user" and char.get("job") ~= "realtor" then
-    TriggerClientEvent("usa:notify", usource, "Not allowed to use this command")
-    return
-  end
   print("inside /addbusinessproperty command!")
   -- usage: /addbusinessproperty [door X] [door Y] [door Z] [price] [name]
   local price = tonumber(args[5])
