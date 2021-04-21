@@ -1008,8 +1008,13 @@ AddEventHandler("LSC:buttonSelected", function(name, button, canpurchase)
 		end
 	elseif mname == "livery" then
 		if CanPurchase(price, canpurchase) then
-			SetVehicleLivery(veh, button.liveryIndex)
-			myveh.liveryIndex = button.liveryIndex
+			if GetNumVehicleMods(veh, 48) > 0 then
+				SetVehicleMod(veh, 48, button.liveryIndex)
+				myveh.mods[48].mod = button.liveryIndex
+			else
+				SetVehicleLivery(veh, button.liveryIndex)
+				myveh.liveryIndex = button.liveryIndex
+			end
 		end
 	end
 	CheckPurchases(m)
