@@ -148,13 +148,14 @@ local function AddMod(mod,parent,header,name,info,stock)
 				for i = 0,   tonumber(GetNumVehicleMods(veh,mod)) -1 do
 					local lbl = GetModTextLabel(veh,mod,i)
 					if lbl ~= nil then
-						local mname = (tostring(GetLabelText(lbl)) or "no name mod")
-						if mname ~= "NULL" then
-							local btn = m:addPurchase(mname,price)
-							btn.modtype = mod
-							btn.mod = i
-							price = price + LSC_Config.prices.mods[mod].increaseby
+						local mname = tostring(GetLabelText(lbl))
+						if mname == "NULL" then
+							mname = "Mod #" .. (i + 1)
 						end
+						local btn = m:addPurchase(mname,price)
+						btn.modtype = mod
+						btn.mod = i
+						price = price + LSC_Config.prices.mods[mod].increaseby
 					end
 				end
 			else
