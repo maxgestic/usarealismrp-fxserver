@@ -3,6 +3,7 @@ local playerServerId = GetPlayerServerId(PlayerId())
 local unmutedPlayers = {}
 local gridTargets = {}
 local radioTargets = {}
+local radioTargetsFx = {}
 local callTargets = {}
 local speakerTargets = {}
 local nearbySpeakerTargets = {}
@@ -12,6 +13,14 @@ local voiceTarget = 2
 local vehicleTargets = {}
 local wasPlayerInVehicle = false
 local radioVolume = 1.0
+
+-- RADIO FX SETUP --
+local RADIO_FX_SUBMIX_ID = CreateAudioSubmix("Radio")
+SetAudioSubmixEffectRadioFx(RADIO_FX_SUBMIX_ID, 0)
+SetAudioSubmixEffectParamInt(RADIO_FX_SUBMIX_ID, 0, `default`, 1)
+
+AddAudioSubmixOutput(RADIO_FX_SUBMIX_ID, 0)
+-- END --
 
 -- Functions
 function SetVoiceData(key, value, target)
@@ -426,6 +435,11 @@ AddEventHandler("mumble:SetVoiceData", function(player, key, value)
 							if radioTargets[player] then
 								radioTargets[player] = nil
 
+								if radioTargetsFx[player] then
+									MumbleSetSubmixForServerId(player, -1) -- remove radio fx
+									radioTargetsFx[player] = nil
+								end
+
 								if mumbleConfig.showRadioList then
 									SendNUIMessage({ radioId = player }) -- Remove player from radio list
 								end
@@ -447,6 +461,12 @@ AddEventHandler("mumble:SetVoiceData", function(player, key, value)
 								end
 							end
 							
+							for id, info in pairs(radioTargets) do
+								if id then
+									MumbleSetSubmixForServerId(id, -1) -- remove radio fx
+								end
+							end
+
 							radioTargets = {} -- Remove all radio targets as client has left the radio channel
 
 							if mumbleConfig.showRadioList then
@@ -474,7 +494,7 @@ AddEventHandler("mumble:SetVoiceData", function(player, key, value)
 			if CompareChannels(playerData, "radio", value) then
 				if playerServerId ~= player then
 					if not radioTargets[player] then
-						radioTargets[player] = true							
+						radioTargets[player] = true
 						
 						if mumbleConfig.showRadioList then
 							SendNUIMessage({ radioId = player, radioName = voiceData[player].radioName }) -- Add player to radio list
@@ -774,6 +794,12 @@ AddEventHandler("mumble:RemoveVoiceData", function(player)
 			end
 
 			radioTargets[player] = nil
+
+			if radioTargetsFx[player] then
+				MumbleSetSubmixForServerId(player, -1) -- remove radio fx
+				radioTargetsFx[player] = nil
+			end
+
 			callTargets[player] = nil
 			speakerTargets[player] = nil
 
@@ -1175,6 +1201,39 @@ Citizen.CreateThread(function()
 		end
 		oldVehicleTargets = vehicleTargets
 		Wait(1000)
+	end
+end)
+
+-- this thread handles radio FX submix application / removal based on radio targets' ped distances (only play fx for radio target client if they are not close to you)
+Citizen.CreateThread(function()
+	while true do
+		local myped = PlayerPedId()
+		local mycoords = GetEntityCoords(myped)
+		for id, info in pairs(radioTargets) do
+			local otherPlayer = GetPlayerFromServerId(id)
+			if otherPlayer ~= -1 then
+				local otherPed = GetPlayerPed(otherPlayer)
+				local otherPlayerCoords = GetEntityCoords(otherPed)
+				if Vdist(mycoords, otherPlayerCoords) > 60.0 then
+					if not radioTargetsFx[id] then
+						MumbleSetSubmixForServerId(id, RADIO_FX_SUBMIX_ID) -- add radio fx
+						radioTargetsFx[id] = true
+					end
+				else
+					if radioTargetsFx[id] then
+						MumbleSetSubmixForServerId(id, -1) -- remove radio fx
+						radioTargetsFx[id] = nil
+					end
+				end
+			else
+				-- add radio fx since clearly outside of 1s infinity mode 'bubble' since other player ped doesn't exist on this client
+				if not radioTargetsFx[id] then
+					MumbleSetSubmixForServerId(id, RADIO_FX_SUBMIX_ID) -- add radio fx
+					radioTargetsFx[id] = true
+				end
+			end
+		end
+		Wait(10)
 	end
 end)
 
