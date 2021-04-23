@@ -1,5 +1,5 @@
 --
--- MADE BY DISTRITIC
+-- MADE BY DISTRITIC / minipunch
 -- A player will get close to a designated blip on the map within this script, press "E", and begin gathering.
 -- This same concept within the script will handle all aspects of a job from getting supplies, processing, to selling, etc.
 --
@@ -14,6 +14,14 @@
     weight = 6
   }
 TriggerServerEvent("cocaineJob:giveItem", cocaineProduced)]]
+
+local COORDS = {
+    PROCESSING = {
+        X = 1954.3068847656,
+        Y = 5179.9643554688,
+        Z = 47.858142852783
+    }
+}
 
 local SUPPLY_PICKUP_COORDS = vector3(1273.708, -1709.06, 54.77)
 
@@ -108,7 +116,7 @@ Citizen.CreateThread(function()
         DrawText3D(1088.18, -3187.18, -38.85, 5, '[E] - Exit')
         DrawText3D(1181.63, -3113.83, 6.03, 3, '[E] - Enter')
         DrawText3D(1273.708, -1709.06, 54.77, 5, '[E] - Buy Uncut Cocaine (~g~$' .. UNCUT_PRICE .. '.00~w~)')
-        DrawText3D(1092.86, -3195.80, -38.99, 5, '[E] - Process Cocaine')
+        DrawText3D(COORDS.PROCESSING.X, COORDS.PROCESSING.Y, COORDS.PROCESSING.Z, 5, '[E] - Process Cocaine')
         if IsControlJustPressed(0, INPUT_KEY) then
             if GetDistanceBetweenCoords(playerCoords, 1181.63, -3113.83, 6.03, true) < 0.7 then -- enter coke location
                 DoorTransition(playerPed, 1088.68, -3187.58, -38.99, 180.0)
@@ -121,11 +129,11 @@ Citizen.CreateThread(function()
                 else
                     TriggerEvent('usa:notify', 'Process and deliver the current batch first!')
                 end
-            elseif GetDistanceBetweenCoords(playerCoords, 1092.86, -3196.70, -38.99, true) < 3 and not cocaine.processingCocaine then -- process/package cocaine rocks
+            elseif GetDistanceBetweenCoords(playerCoords, COORDS.PROCESSING.X, COORDS.PROCESSING.Y, COORDS.PROCESSING.Z, true) < 3 and not cocaine.processingCocaine then -- process/package cocaine rocks
                 TriggerServerEvent("cocaineJob:checkUserJobSupplies", cocaine.requiredItem, cocaine.requiredSupplies)
             end
         end
-        if cocaine.processingCocaine and GetDistanceBetweenCoords(playerCoords, 1092.86, -3196.70, -38.99, true) > 6 then -- too far from being able to process
+        if cocaine.processingCocaine and GetDistanceBetweenCoords(playerCoords, COORDS.PROCESSING.X, COORDS.PROCESSING.Y, COORDS.PROCESSING.Z, true) > 6 then -- too far from being able to process
             TriggerEvent("usa:notify", "You went ~y~out of range~w~.")
             TriggerServerEvent("cocaineJob:giveUncut")
             cocaine.processingCocaine = false
@@ -318,7 +326,7 @@ AddEventHandler("cocaineJob:getSupplies", function(supplyType)
                     "This'll kill you before your genes do, but I don't judge. Be right back.",
                     "Perfect, we're on our heads. Just wait here."
                 }
-                exports.globals:notify(messages[math.random(1, tonumber(#messages))], "^3Lester:^0 Alright, let me know if you need more. Go and cut this first at that warehouse down on the docks (make sure you have a Razor Blade) and then look for the red pill on your map to deliver the final product.")
+                exports.globals:notify(messages[math.random(1, tonumber(#messages))], "^3Lester:^0 Alright, let me know if you need more. Go and cut this first at that barn in the Northern part of Grapeseed (make sure you have a Razor Blade) and then look for the red pill on your map to deliver the final product.")
                 TriggerServerEvent("cocaineJob:giveUncut")
                 TriggerEvent('cocaineJob:setDelivery')
             else
