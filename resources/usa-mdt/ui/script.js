@@ -333,6 +333,8 @@ document.onreadystatechange = () => {
                 mdtApp.person_check = event.data.person_info;
                 /* hide error message */
                 mdtApp.error = null;
+                /* load MDT property address info */
+                $.post('http://usa-mdt/getAddressInfo', JSON.stringify({}));
             } else if (event.data.type == "plateInfoLoaded") {
                 /* fill plate info data */
                 mdtApp.plate_check.registered_owner = event.data.plate_info.registered_owner;
@@ -437,6 +439,15 @@ document.onreadystatechange = () => {
                 mdtApp.current_tab = "Police Reports"
             } else if (event.data.type == "personCheckNotification") {
                 mdtApp.personCheckNotification = event.data.message
+            } else if (event.data.type == "addressInfoLoaded") {
+                let s = "";
+                for (let i = 0; i < event.data.info.length; i++) {
+                    s += event.data.info[i].name;
+                    if (i != event.data.info.length - 1) {
+                        s += ", ";
+                    }
+                }
+                mdtApp.person_check.address = s;
             }
         });
     };

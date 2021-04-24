@@ -743,6 +743,16 @@ AddEventHandler("mdt:fetchEmployee", function()
 	TriggerClientEvent("mdt:sendNUIMessage", source, msg)
 end)
 
+RegisterServerEvent("mdt:getAddressInfo")
+AddEventHandler("mdt:getAddressInfo", function()
+	local c = exports["usa-characters"]:GetCharacter(source)
+	local info = exports["usa-properties-og"]:GetOwnedProperties(c.get("_id"), false)
+	TriggerClientEvent("mdt:sendNUIMessage", c.get("source"), {
+		type = "addressInfoLoaded",
+		info = info
+	})
+end)
+
 function GetDisplayNameFromJob(job)
 	if job == "sheriff" then 
 		return "San Andreas State Police"

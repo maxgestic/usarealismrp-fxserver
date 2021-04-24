@@ -125,6 +125,10 @@ RegisterNUICallback("fetchEmployee", function(data, cb)
     cb('ok')
 end)
 
+RegisterNUICallback("getAddressInfo", function(data, cb)
+    TriggerServerEvent("mdt:getAddressInfo")
+end)
+
 function ToggleGUI(explicit_status)
   if explicit_status ~= nil then
     isVisible = explicit_status
