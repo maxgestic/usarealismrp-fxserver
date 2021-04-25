@@ -336,9 +336,9 @@ local locations = {
       stripclub = {
         {x = 102.423, y = -1290.594, z = 28.2587, animDict = "mini@strip_club@private_dance@part1", animName = "priv_dance_p1", model = "CSB_Stripper_02", heading = (math.random(50, 360)) * 1.0},
         {x = 104.256, y = -1294.67, z = 28.2587, animDict = "mini@strip_club@private_dance@part3", animName = "priv_dance_p3", model = "CSB_Stripper_01", heading = (math.random(50, 360)) * 1.0},
-        {x = 109.00591278076, y = -1290.1696777344, z = 29.249711990356, animDict = "mini@strip_club@private_dance@part2", animName = "priv_dance_p2", model = "CSB_Stripper_01", heading = (math.random(50, 360)) * 1.0},
-        {x = 109.57312774658, y = -1289.064453125, z = 29.249706268311, animDict = "mini@strip_club@private_dance@part3", animName = "priv_dance_p3", model = "S_F_Y_Stripper_02", heading = (math.random(50, 360)) * 1.0},
-        {x = 107.92155456543, y = -1288.7708740234, z = 29.249706268311, animDict = "mini@strip_club@private_dance@part2", animName = "priv_dance_p2", model = "CSB_Stripper_02", heading = (math.random(50, 360)) * 1.0},
+        {x = 109.00591278076, y = -1290.1696777344, z = 28.2587, animDict = "mini@strip_club@private_dance@part2", animName = "priv_dance_p2", model = "CSB_Stripper_01", heading = (math.random(50, 360)) * 1.0},
+        {x = 109.57312774658, y = -1289.064453125, z = 28.2587, animDict = "mini@strip_club@private_dance@part3", animName = "priv_dance_p3", model = "S_F_Y_Stripper_02", heading = (math.random(50, 360)) * 1.0},
+        {x = 107.92155456543, y = -1288.7708740234, z = 28.2587, animDict = "mini@strip_club@private_dance@part2", animName = "priv_dance_p2", model = "CSB_Stripper_02", heading = (math.random(50, 360)) * 1.0},
         {x = 129.442, y = -1283.407, z = 28.272, animDict = "missfbi3_party_d", animName = "stand_talk_loop_a_female", model = "S_F_Y_Bartender_01", heading = 122.471}
     },
     illegal_weapon_extra_shop = {

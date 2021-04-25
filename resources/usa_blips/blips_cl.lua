@@ -51,7 +51,7 @@ local blips = {
 	{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = 308.1, y = -1434.7,  z = 29.9 },
 	{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = 360.5, y = -584.7, z = 28.8 },
 	{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = -473.4, y = -339.6, z = 35.2 }, -- mt. zonoah
-	{ title="Strip Club", colour = 4, id = 121, scale = 0.7, x=129.607, y=-1299.83, z=29.2327 },
+	{ title="Vanilla Unicorn", colour = 50, id = 121, scale = 0.7, x=129.607, y=-1299.83, z=29.2327 },
 	--{ title="FBI", colour = 47, id = 88, x=140.577, y=-768.375, z=45.752 },
 	--{ title="Airport", colour = 30, id = 307, x=-1329.32, y=-3045.92, z=13.944 },
 	--{ title="The Hen House", colour = 83, id = 93, x= -304.092, y= 6264.582, z= 31.530 },
