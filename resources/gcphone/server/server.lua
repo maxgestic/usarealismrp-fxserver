@@ -169,9 +169,24 @@ function updateContact(src, identifier, id, number, display)
         notifyContactChange(sourcePlayer, identifier)
     end)
 end
-function deleteContact(source, identifier, id)
-    db.deleteDocument("phone-contacts", id, function(ok)
-        notifyContactChange(sourcePlayer, identifier)
+function deleteContact(src, identifier, name)
+    local query = {
+        ["display"] = {
+            ["$regex"] = "(?i)" .. name
+        },
+        ["ownerIdentifier"] = identifier,
+    }
+    db.getDocumentByRows("phone-contacts", query, function(doc)
+        if doc then
+            db.deleteDocument("phone-contacts", doc._id, function(ok)
+                if ok then
+                    notifyContactChange(src, identifier)
+                    TriggerClientEvent("usa:notify", src, "Contact deleted!")
+                end
+            end)
+        else
+            TriggerClientEvent("usa:notify", src, "Error deleting: " .. name)
+        end
     end)
 end
 function deleteAllContact(identifier)
@@ -204,10 +219,10 @@ AddEventHandler('gcPhone:updateContact', function(id, display, phoneNumber)
 end)
 
 RegisterServerEvent('gcPhone:deleteContact')
-AddEventHandler('gcPhone:deleteContact', function(id)
+AddEventHandler('gcPhone:deleteContact', function(name)
     local sourcePlayer = tonumber(source)
     local identifier = getPlayerID(source)
-    deleteContact(sourcePlayer, identifier, id)
+    deleteContact(sourcePlayer, identifier, name)
 end)
 
 --====================================================================================
