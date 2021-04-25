@@ -63,6 +63,11 @@ window.APP = {
 			this.immersionMode = !this.immersionMode
 			if (this.immersionMode) {
 				this.showWindow = false
+			} else {
+				this.$nextTick(() => {
+					var buf = document.getElementsByClassName('chat-messages')[0];
+					buf.scrollTop = buf.scrollHeight;
+				});
 			}
 		},
 		ON_MESSAGE({ message }) {
