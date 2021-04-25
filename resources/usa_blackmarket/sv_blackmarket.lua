@@ -28,7 +28,7 @@ local markets = {
       {name = 'Hotwiring Kit', type = 'misc', price = 300, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(0, 6)},
       {name = 'Heavy Shotgun', type = 'weapon', hash = 984333226, price = 20000, legality = 'illegal', quantity = 1, weight = 35, stock = math.random(0, 2), objectModel = "w_sg_heavyshotgun"},
       {name = 'SNS Pistol', type = 'weapon', hash = -1076751822, price = 3500, legality = 'illegal', quantity = 1, weight = 8, stock = math.random(0, 3), objectModel = "w_pi_sns_pistol"},
-      {name = 'Combat Pistol', type = 'weapon', hash = 1593441988, price = 5000, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(0, 3), objectModel = "w_pi_combatpistol"},
+      {name = 'Glock', type = 'weapon', hash = 1593441988, price = 5000, legality = 'illegal', quantity = 1, weight = 10, stock = math.random(0, 3), objectModel = "w_pi_combatpistol"},
       {name = 'Switchblade', type = 'weapon', hash = -538741184, price = 1500, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(0, 3)},
       {name = 'Brass Knuckles', type = 'weapon', hash = -656458692, price = 1100, legality = 'illegal', quantity = 1, weight = 5, stock = math.random(0, 5)},
       {name = "Machine Pistol", type = "weapon", hash = -619010992, price = tonumber(tostring(math.random(22, 30)) .. "000"), legality = "illegal", quantity = 1, weight = 20, stock = math.random(0, 2) }

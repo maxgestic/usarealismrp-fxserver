@@ -225,7 +225,8 @@ var itemImages = {
   "EMS Radio": "https://i.imgur.com/0ve01NN.png",
   "Compact Rifle": "https://i.imgur.com/38RjuhX.png",
   "Wheelchair": "https://www.freeiconspng.com/thumbs/wheelchair-png/black-wheelchair-png-3.png",
-  "Stretcher": "https://i.imgur.com/X5dv2kQ.png"
+  "Stretcher": "https://i.imgur.com/X5dv2kQ.png",
+  "Glock": "https://i.imgur.com/UjZeF6e.png"
 }
 
 var menuItems = [

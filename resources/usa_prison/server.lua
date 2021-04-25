@@ -4,7 +4,7 @@ local WEAPONS = {
 	{ hash = "WEAPON_NIGHTSTICK", name = "Nightstick", rank = 1, weight = 4, price = 50},
     { hash = "WEAPON_FLASHLIGHT", name = "Flashlight", rank = 1, weight = 4, price = 50},
     { hash = "WEAPON_STUNGUN", name = "Stun Gun", rank = 1, weight = 5, price = 200},
-    { hash = 1593441988, name = "Combat Pistol", rank = 1, weight = 5, price = 200},
+    { hash = 1593441988, name = "Glock", rank = 1, weight = 5, price = 200},
 	{ hash = -1600701090, name = "Tear Gas", rank = 2, weight = 5, price = 150},
 	{ name = "SMG", hash = 736523883, rank = 2, price = 500, weight = 25 },
 	{ name = "MK2 Pump Shotgun", hash = 1432025498, rank = 2, price = 500, weight = 25 },
@@ -39,7 +39,7 @@ local function GetWeaponAttachments(name)
         table.insert(attachments, 'COMPONENT_AT_SIGHTS')
         table.insert(attachments, 'COMPONENT_AT_AR_FLSH')
         --table.insert(attachments, 'COMPONENT_PUMPSHOTGUN_MK2_CLIP_HOLLOWPOINT')
-    elseif name == "Combat Pistol" then
+    elseif name == "Glock" then
         table.insert(attachments, 0x359B7AAE)
     elseif name == "SMG MK2" then
         table.insert(attachments, "COMPONENT_AT_AR_FLSH")

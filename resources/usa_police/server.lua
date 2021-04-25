@@ -11,7 +11,7 @@ local armoryItems = {
     { name = "Tear Gas", hash = -1600701090, price = 300, weight = 5 },
     { name = "Flashlight", hash = -1951375401, price = 25, weight = 4 },
     { name = "Nightstick", hash = 1737195953, price = 100, weight = 4 },
-    { name = "Combat Pistol", hash = 1593441988, price = 300, weight = 5 },
+    { name = "Glock", hash = 1593441988, price = 300, weight = 5 },
     { name = "Stun Gun", hash = 911657153, price = 400, weight = 5 },
     { name = "SMG", hash = 736523883, price = 750, weight = 25 },
     { name = "SMG MK2", hash = 0x78A97CD0, price = 750, weight = 20 },
@@ -411,7 +411,7 @@ function GetWeaponAttachments(name)
         table.insert(attachments, 'COMPONENT_AT_SIGHTS')
         table.insert(attachments, 'COMPONENT_AT_AR_FLSH')
         --table.insert(attachments, 'COMPONENT_PUMPSHOTGUN_MK2_CLIP_HOLLOWPOINT')
-    elseif name == "Combat Pistol" then
+    elseif name == "Glock" then
         table.insert(attachments, 0x359B7AAE)
     elseif name == "SMG MK2" then
         table.insert(attachments, "COMPONENT_AT_AR_FLSH")

@@ -39,7 +39,7 @@ local ITEMS = { -- must be kept in sync with one in sv_weaponeaxtrashop.lua --
                 {name = "Flashlight", value = "COMPONENT_AT_PI_FLSH", price = 200, weapon_hash = -771403250},
                 {name = "Etched Wood Grip Finish", value = "COMPONENT_HEAVYPISTOL_VARMOD_LUXE", price = 2000, weapon_hash = -771403250}
             },
-            ["Combat Pistol"] = {
+            ["Glock"] = {
                 {name = "Flashlight", value = "COMPONENT_AT_PI_FLSH", price = 200, weapon_hash = 1593441988},
                 {name = "Yusuf Amir Luxury Finish", value = "COMPONENT_COMBATPISTOL_VARMOD_LOWRIDER", price = 1000, weapon_hash = 1593441988}
             },
@@ -77,7 +77,7 @@ local ITEMS = { -- must be kept in sync with one in sv_weaponeaxtrashop.lua --
                 {name = "Extended Magazine", value = "COMPONENT_HEAVYPISTOL_CLIP_02", price = 1500, weapon_hash = -771403250},
                 {name = "Suppressor", value = "COMPONENT_AT_PI_SUPP", price = 1500, weapon_hash = -771403250}
             },
-            ["Combat Pistol"] = {
+            ["Glock"] = {
                 {name = "Extended Magazine", value = "COMPONENT_COMBATPISTOL_CLIP_02", price = 1500, weapon_hash = 1593441988},
                 {name = "Suppressor", value = "COMPONENT_AT_PI_SUPP", price = 1500, weapon_hash = 1593441988}
             },
