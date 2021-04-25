@@ -126,7 +126,7 @@ RegisterNUICallback("fetchEmployee", function(data, cb)
 end)
 
 RegisterNUICallback("getAddressInfo", function(data, cb)
-    TriggerServerEvent("mdt:getAddressInfo")
+    TriggerServerEvent("mdt:getAddressInfo", data)
 end)
 
 function ToggleGUI(explicit_status)

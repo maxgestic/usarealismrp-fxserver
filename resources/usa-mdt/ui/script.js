@@ -334,7 +334,11 @@ document.onreadystatechange = () => {
                 /* hide error message */
                 mdtApp.error = null;
                 /* load MDT property address info */
-                $.post('http://usa-mdt/getAddressInfo', JSON.stringify({}));
+                $.post('http://usa-mdt/getAddressInfo', JSON.stringify({
+                    ssn: mdtApp.person_check.ssn,
+                    fname: mdtApp.person_check.fname,
+                    lname: mdtApp.person_check.lname
+                }));
             } else if (event.data.type == "plateInfoLoaded") {
                 /* fill plate info data */
                 mdtApp.plate_check.registered_owner = event.data.plate_info.registered_owner;

@@ -744,13 +744,38 @@ AddEventHandler("mdt:fetchEmployee", function()
 end)
 
 RegisterServerEvent("mdt:getAddressInfo")
-AddEventHandler("mdt:getAddressInfo", function()
-	local c = exports["usa-characters"]:GetCharacter(source)
-	local info = exports["usa-properties-og"]:GetOwnedProperties(c.get("_id"), false)
-	TriggerClientEvent("mdt:sendNUIMessage", c.get("source"), {
-		type = "addressInfoLoaded",
-		info = info
-	})
+AddEventHandler("mdt:getAddressInfo", function(data)
+	local src = source
+	if data.ssn then
+		local c = exports["usa-characters"]:GetCharacter(data.ssn)
+		local info = exports["usa-properties-og"]:GetOwnedProperties(c.get("_id"), false)
+		TriggerClientEvent("mdt:sendNUIMessage", src, {
+			type = "addressInfoLoaded",
+			info = info
+		})
+	else
+		TriggerEvent('es:exposeDBFunctions', function(db)
+			local query = {
+				["name"] = {
+					["first"] = {
+						["$regex"] = "(?i)" .. data.fname
+					},
+					["last"] = {
+						["$regex"] = "(?i)" .. data.lname
+					}
+				}
+			}
+			db.getDocumentByRows("characters", query, function(doc)
+				if doc then
+					local info = exports["usa-properties-og"]:GetOwnedProperties(doc._id, false)
+					TriggerClientEvent("mdt:sendNUIMessage", src, {
+						type = "addressInfoLoaded",
+						info = info
+					})
+				end
+			end)	
+		end)
+	end
 end)
 
 function GetDisplayNameFromJob(job)
