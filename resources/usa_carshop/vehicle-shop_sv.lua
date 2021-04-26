@@ -342,7 +342,9 @@ local vehicleShopItems = {
 			{make = "Tesla", model = "Model X", price = 160000, hash = "teslax", storage_capacity = 185.0},
 			{make = "Nissan", model = "GTR", price = 275000, hash = "gtr", storage_capacity = 130.0},
 			{make = "Chevy", model = "Camaro", price = 160000, hash = "zl12017", storage_capacity = 130.0},
-			{make = "Maserati", model = "Levante Novitec", price = 150000, hash = "mlnovitec", storage_capacity = 185.0}
+			{make = "Maserati", model = "Levante Novitec", price = 150000, hash = "mlnovitec", storage_capacity = 185.0},
+			{make = "Dodge", model = "Challenger", price = 120000, hash = "16challenger", storage_capacity = 130.0},
+			{make = "Audi", model = "RS6", price = 170000, hash = "rs6", storage_capacity = 245.0}
 		}
 	}
 }
