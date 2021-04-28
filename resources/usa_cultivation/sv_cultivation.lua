@@ -1,4 +1,5 @@
 function loadPlants()
+    -- get all plant docs
 	PerformHttpRequest("http://127.0.0.1:5984/cultivation/_all_docs?include_docs=true", function(err, text, headers)
 		local response = json.decode(text)
         if response.rows then
@@ -10,6 +11,11 @@ function loadPlants()
 			end
 		end
 	end, "GET", "", {["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
+    -- also compact DB so we don't lag while auto compacting some time down the line
+    print("beginning compacting")
+    PerformHttpRequest("http://127.0.0.1:5984/cultivation/_compact", function(err)
+        print("done compacting plant docs! err: " .. err)
+    end, "POST", "", {["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
 local function nroot(root, num)
@@ -202,9 +208,11 @@ end
 function saveAllPlants()
     TriggerEvent("es:exposeDBFunctions", function(db)
         for id, plant in pairs(PLANTED) do
-            PLANTED[id]._rev = nil
-            PLANTED[id].last_save_time = os.date('%m-%d-%Y %H:%M:%S', os.time())
-            db.updateDocument("cultivation", id, PLANTED[id], saveCallback)
+            if not PLANTED[id].isDead then
+                PLANTED[id]._rev = nil
+                PLANTED[id].last_save_time = os.date('%m-%d-%Y %H:%M:%S', os.time())
+                db.updateDocument("cultivation", id, PLANTED[id], saveCallback)
+            end
             Wait(5)
         end
     end)
