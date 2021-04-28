@@ -9,7 +9,7 @@ local STORE_ITEMS = {
     { name = "Vintage Pistol", type = "weapon", hash = 137902532, price = 1250, legality = "legal", quantity = 1, weight = 15, objectModel = "w_pi_vintage_pistol" },
     --{ name = "Stun Gun", type = "weapon", hash = 911657153, price = 1500, legality = "legal", quantity = 1, weight = 5, objectModel = "w_pi_stungun" }
     --{ name = "Marksman Pistol", type = "weapon", hash = -598887786, price = 2000, legality = "legal", quantity = 1, weight = 15 },
-    { name = "Revolver", type = "weapon", hash = -1045183535, price = 2000, legality = "legal", quantity = 1, weight = 15 }
+    --{ name = "Revolver", type = "weapon", hash = -1045183535, price = 2000, legality = "legal", quantity = 1, weight = 15 }
   },
   ["Shotguns"] = {
     { name = "Pump Shotgun", type = "weapon", hash = 487013001, price = 4000, legality = "legal", quantity = 1, weight = 25, objectModel = "w_sg_pumpshotgun" },
