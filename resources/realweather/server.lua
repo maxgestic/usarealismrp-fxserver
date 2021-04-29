@@ -26,6 +26,8 @@ local GetWeather = "http://api.openweathermap.org/data/2.5/weather?id="..cityid.
 
 local MINUTES_PER_CHECK = 30
 
+local DO_SEND_DISCORD_MSG = false
+
 function sendToDiscordMeteo (type, name,message,color)
     local DiscordWebHook = "https://discord.com/api/webhooks/836098352881074177/TAHvodAqbGjeOXtYrePJZbG8uLcEWbQM1-XhH9U6tlJxwsKGz3_Ld1dH-AfWJS0XXO1i"
 
@@ -114,7 +116,10 @@ function checkMeteo(err,response)
             ["DirVent"] = windrot
         }
         TriggerClientEvent("meteo:actu", -1, Data)
-        sendToDiscordMeteo(1,('Météo'), emoji.." La météo à "..ville.." est "..description..". \n:thermometer: Il fait actuellement "..temp.."°C avec des minimales à "..tempmini.."°C et des maximales à "..tempmaxi.."°C. \n:wind_blowing_face: Des vents de "..wind.."m/s sont à prévoir.",16711680)
+        if DO_SEND_DISCORD_MSG then
+            sendToDiscordMeteo(1,('Météo'), emoji.." La météo à "..ville.." est "..description..". \n:thermometer: Il fait actuellement "..temp.."°C avec des minimales à "..tempmini.."°C et des maximales à "..tempmaxi.."°C. \n:wind_blowing_face: Des vents de "..wind.."m/s sont à prévoir.",16711680)
+    
+        end
     end
 
     SetTimeout(MINUTES_PER_CHECK*60*1000, checkMeteoHTTPRequest)
