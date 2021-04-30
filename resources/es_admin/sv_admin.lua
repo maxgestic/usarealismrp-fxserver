@@ -1516,17 +1516,16 @@ TriggerEvent('es:addGroupCommand', 'test', "owner", function(source, args, char)
 
 	local policearmor = { name = "Police Armor", type = "misc", price = 5000, legality = "illegal", quantity = 1, weight = 25, stock = math.random(0, 3), objectModel = "prop_bodyarmour_03" }
 
-	--if char.canHoldItem(thermite) then
-		char.giveItem(policearmor)
-	--end
-
-	-- TriggerClientEvent("interaction:equipWeapon", source, {hash = GetHashKey("WEAPON_RPG")}, true)
-
-	--TriggerClientEvent("testing:spawnObject", source, "stt_prop_stunt_track_sh45_a")
-
-	--TriggerClientEvent("testtest", source)
+	char.giveItem(policearmor)
 end, {
 	help = "Test something"
+})
+
+TriggerEvent('es:addGroupCommand', 'test2', "owner", function(source, args, char)
+	local arg = args[2]
+	TriggerClientEvent("testing:spawnObject", source, args[2])
+end, {
+	help = "Test something 2"
 })
 
 function NotifyStaff(source)
