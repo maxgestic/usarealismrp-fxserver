@@ -128,7 +128,8 @@ const characterSelectionApp = new Vue({
       $.post('http://character-selection/select-character', JSON.stringify({
         id: this.selectedCharacter.id,
         name: this.selectedCharacter.name,
-        spawn: this.selectedSpawn
+        spawn: this.selectedSpawn,
+        charSavedSpawn: this.selectedCharacter.spawn
       }));
       this.page = "list"
       this.selectedCharacter = null

@@ -54,7 +54,7 @@
 					<div class="spawn-point" @click='selectSpawn("Los Santos")' data-id="Los Santos" v-bind:class="{'selected-border': isSpawnCurrentlySelected('Los Santos'), 'unselected-border': !isSpawnCurrentlySelected('Los Santos')}">
 						<section id="spawn-point--los-santos">Los Santos</section>
 					</div>
-					<div class="spawn-point" @click='selectSpawn("Property")' data-id="Property" v-bind:class="{'selected-border': isSpawnCurrentlySelected('Property'), 'unselected-border': !isSpawnCurrentlySelected('Property')}">
+					<div v-if="selectedCharacter && selectedCharacter.spawn" class="spawn-point" @click='selectSpawn("Property")' data-id="Property" v-bind:class="{'selected-border': isSpawnCurrentlySelected('Property'), 'unselected-border': !isSpawnCurrentlySelected('Property')}">
 						<section id="spawn-point--property">Property</section>
 					</div>
 			</div>

@@ -65,7 +65,7 @@ AddEventHandler("character:delete", function(data)
 end)
 
 RegisterServerEvent("character:loadCharacter")
-AddEventHandler("character:loadCharacter", function(id, doSpawnAtProperty)
+AddEventHandler("character:loadCharacter", function(id)
 	TriggerClientEvent('chat:removeSuggestionAll', source)
 	local user = exports["essentialmode"]:getPlayerFromId(source)
 	if user then
@@ -77,7 +77,7 @@ AddEventHandler("character:loadCharacter", function(id, doSpawnAtProperty)
 			end
 		end
 		-- initialize character --
-		exports["usa-characters"]:InitializeCharacter(source, id, doSpawnAtProperty)
+		exports["usa-characters"]:InitializeCharacter(source, id)
 	end
 end)
 

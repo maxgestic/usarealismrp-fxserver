@@ -302,13 +302,12 @@ RegisterNUICallback('select-character', function(data, cb)
 				heading = 344.0
 			}
 		elseif data.spawn:find("Property") then
-			data.doSpawnAtProperty = true
-			spawn_coords_closed_menu = nil -- need to change  to data.spawn.coords?
+			spawn_coords_closed_menu = data.charSavedSpawn
 		end
 	end
 	toggleMenu(false)
 	DoScreenFadeIn(3000)
-	TriggerServerEvent("character:loadCharacter", data.id, data.doSpawnAtProperty) -- loadout the player with the selected character appearance
+	TriggerServerEvent("character:loadCharacter", data.id) -- loadout the player with the selected character appearance
 	TriggerEvent("chat:setCharName", data.name) -- for chat messages
 	cb('ok')
 end)
@@ -425,8 +424,8 @@ function WaitForSwitchToComplete(ped)
 		ClearScreen()
 		-- Wait for the player switch to be completed (state 12).
 		while GetPlayerSwitchState() ~= 12 do
-				Wait(0)
-				ClearScreen()
+			Wait(0)
+			ClearScreen()
 		end
 		-- Stop the infinite loop.
 		break

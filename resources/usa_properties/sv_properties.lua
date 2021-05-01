@@ -525,15 +525,6 @@ AddEventHandler('properties:loadOutfit', function(slot)
 	end
 end)
 
-TriggerEvent('es:addJobCommand', 'breach', {'sheriff', 'ems', 'corrections'}, function(source, args, char, location)
-	TriggerClientEvent('properties:findRoomToBreach', source, args[2])
-end, {
-	help = "Breach into the nearest property",
-	params = {
-		{ name = "apt", help = "apartment number (omit if motel or house)" }
-	}
-})
-
 TriggerEvent('es:addJobCommand', 'bbreach', {'sheriff', 'ems', "corrections"}, function(source, args, char, location)
 	location = vector3(table.unpack(location))
 	for i = 1, #burglaryHouses do
@@ -565,13 +556,6 @@ end, {
 	help = "Breach into the nearest burglary property"
 })
 
-TriggerEvent('es:addCommand', 'knock', function(source, args, char, location)
-	TriggerClientEvent('properties:findRoomToKnock', source)
-
-end, {
-	help = "Knock on the door of the nearest motel or house"
-})
-
 TriggerEvent('es:addCommand', 'bknock', function(source, args, char, location)
 	location = vector3(table.unpack(location))
 	for i = 1, #burglaryHouses do
@@ -590,102 +574,6 @@ TriggerEvent('es:addCommand', 'bknock', function(source, args, char, location)
 	end
 end, {
 	help = "Knock on the door of the nearest burglary property"
-})
-
-
-local createdBy = nil
-local purchaserName = nil
-local testPrice = nil
-
-TriggerEvent('es:addJobCommand', 'createhouse', {'realtor'}, function(source, args, char, location)
-	local targetSource = tonumber(args[2])
-	local price = tonumber(args[3])
-	if price and targetSource and GetPlayerName(targetSource) then
-		price = math.abs(price)
-		if price < 10000 then
-			TriggerClientEvent('usa:notify', source, 'There is a $10k minimum fee for any new property.')
-			return
-		end
-		setHousePrices[tostring(source)] = price
-		local target_char = exports["usa-characters"]:GetCharacter(targetSource)
-		local seller = exports["usa-characters"]:GetCharacter(source)
-		local buyer = exports["usa-characters"]:GetCharacter(targetSource)
-		local property = target_char.get('property')
-		if property['house'] then
-			TriggerClientEvent('usa:notify', source, 'This person already owns a house!')
-		else
-			TriggerClientEvent('properties:getHeadingForHouse', source, targetSource, location, price)
-			createdBy = seller.getFullName()
-			purchaserName = buyer.getFullName()
-			testPrice = price
-			SendToDiscordLog()
-		end
-	end
-end, {
-	help = "Create a house for a player where you're standing.",
-	params = {
-		{ name = "id", help = "player id" },
-		{ name = "price", help = "price ($10k minimum)" },
-	}
-})
--- .. "\n**Location:** " .. location
-function SendToDiscordLog()
-	local desc = "\n**Created By:** " .. createdBy .. "\n**Purchase Price:** $" .. comma_value(testPrice) ..  "\n**Purchased By:** " .. purchaserName
-	local url = 'https://discordapp.com/api/webhooks/634280080956456961/m-Inw9QXmIFZBwSOmfSdOmRLrKy42KetvM09GhUqcoP_oO8BXvEAupFdvfCzKaYEdehV'
-	PerformHttpRequest(url, function(err, text, headers)
-	  if text then
-		print(text)
-	  end
-	end, "POST", json.encode({
-	  embeds = {
-		{
-		  description = desc,
-		  color = 524288,
-		  author = {
-			name = "SAN ANDREAS HOUSE MGMT"
-		  }
-		}
-	  }
-	}), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
-  end
-
-  function comma_value(amount)
-	local formatted = amount
-	while true do
-		formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1,%2')
-		if (k==0) then
-			break
-		end
-	end
-	return formatted
-end
-
-
-TriggerEvent('es:addJobCommand', 'setgarage', {'realtor'}, function(source, args, char, location)
-	local targetSource = tonumber(args[2])
-	if targetSource and GetPlayerName(targetSource) then
-		local target_char = exports["usa-characters"]:GetCharacter(targetSource)
-		local property = target_char.get('property')
-		if property['house'] then
-			property['garageCoords'] = location
-			for i = 1, #properties['Houses'].rooms do
-				local room = properties['Houses'].rooms[i]
-				if room.owner == targetSource then
-					room.garage = property['garageCoords']
-					TriggerClientEvent('properties:updateData', -1, 'Houses', i, properties['Houses'].rooms[i])
-					target_char.set('property', property)
-					return
-				end
-			end
-		else
-			TriggerClientEvent('usa:notify', source, 'This person doesn\'t own a house!')
-		end
-	end
-end, {
-	help = "Set a garage for a player's house where you're standing.",
-	params = {
-		{ name = "id", help = "player id" }
-	}
 })
 
 RegisterServerEvent('properties:continueHousePurchase')
@@ -724,32 +612,6 @@ AddEventHandler('properties:continueHousePurchase', function(targetSource, locat
 		RefreshProperties(targetSource, false)
 	end
 end)
-
-TriggerEvent('es:addJobCommand', 'deletehouse', {'realtor'}, function(source, args, char, location)
-	local targetSource = tonumber(args[2])
-	if targetSource and GetPlayerName(targetSource) then
-		local target_char = exports["usa-characters"]:GetCharacter(targetSource)
-		local property = target_char.get('property')
-		if property['house'] then
-			property['house'] = false
-			property['houseCoords'] = nil
-			property['garageCoords'] = nil
-			property['houseHeading'] = nil
-			property['location'] = 'Perrera Beach Motel'
-			target_char.set('property', property)
-			TriggerClientEvent('usa:notify', targetSource, 'Your house is now foreclosure, ordered by ~y~'..char.getFullName()..'~s~!')
-			TriggerClientEvent('usa:notify', source, 'House is now foreclosure.')
-			RefreshProperties(targetSource, false)
-		else
-			TriggerClientEvent('usa:notify', source, 'This player does not own a house!')
-		end
-	end
-end, {
-	help = "Delete a house for a player.",
-	params = {
-		{ name = "id", help = "player id" }
-	}
-})
 
 function canPropertyHoldItem(owner, location, itemToCheck)
 	local maxWeight = properties[location].weightLimit
@@ -1093,50 +955,6 @@ AddEventHandler('properties:knockOnDoor', function(location, index)
 	end
 end)
 
-RegisterServerEvent('properties:moveProperties')
-AddEventHandler('properties:moveProperties', function(location)
-	local char = exports["usa-characters"]:GetCharacter(source)
-	local userMoney = char.get('money')
-	local property = char.get('property')
-	if properties[property['location']].type == 'motel' then
-		if location ~= property['location'] then
-			for i = 1, #properties[location].rooms do
-				local room = properties[location].rooms[i]
-				if not room.owner then
-					if userMoney - 500 >= 0 then
-						print('PROPERTIES: A free room was found, '..i..', and has been given to '..source ..' at '..location)
-						for _property, data in pairs(properties) do
-							for i = 1, #data.rooms do
-								local room = properties[_property].rooms[i]
-								if room.owner == source then
-									print('PROPERTIES: Removing old room '.. i .. ' from '..source..', moving properties to '..location.. ' from '.._property)
-									properties[_property].rooms[i].owner = false
-								end
-							end
-						end
-						property['location'] = location
-						char.set('property', property)
-						char.removeMoney(500)
-						properties[location].rooms[i].owner = source
-						TriggerClientEvent('properties:updateData', -1, location, i, properties[location].rooms[i])
-						TriggerClientEvent('usa:notify', source, 'Your room no. is '..i..', here are the keys.')
-						TriggerClientEvent('properties:updateBlip', source, location, i)
-						return
-					else
-						TriggerClientEvent('usa:notify', source, 'You cannot afford this purchase!')
-						return
-					end
-				end
-			end
-		else
-			TriggerClientEvent('usa:notify', source, 'You already own a room here!')
-			return
-		end
-		TriggerClientEvent('usa:notify', source, 'All rooms at this property are taken!')
-		return
-	end
-end)
-
 RegisterServerEvent('properties:requestEntry')
 AddEventHandler('properties:requestEntry', function(location, index, _source)
 	if _source then
@@ -1207,7 +1025,6 @@ AddEventHandler('properties:forceEntry', function(location, index)
 		DropPlayer(usource, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
     end
 end)
-
 
 RegisterServerEvent('properties:requestExit')
 AddEventHandler('properties:requestExit', function(location, index, noTp)
@@ -1455,62 +1272,6 @@ AddEventHandler('properties:requestRealEstateMenu', function()
 	TriggerClientEvent('properties:openRealEstateMenu', source, property)
 end)
 
-RegisterServerEvent('properties:estateChange')
-AddEventHandler('properties:estateChange', function(estate)
-	local char = exports['usa-characters']:GetCharacter(source)
-	local property = char.get('property')
-	if not property['house'] then
-		local interior = properties[property['location']].interior
-		local userMoney = char.get('money')
-		local today = os.date("*t", os.time())
-		if estate == 'motel' then
-			property['location'] = 'Perrera Beach Motel'
-			property['paid_time'] = os.time()
-
-			char.set('property', property)
-		elseif estate == 'lowapartment' then
-			if userMoney - 1500 >= 0 then
-				property['location'] = 'Burton Apartments'
-				property['paid_time'] = os.time()
-				char.set('property', property)
-				char.removeMoney(1500)
-			else
-				TriggerClientEvent('usa:notify', source, 'You cannot afford this purchase.')
-				return
-			end
-		elseif estate == 'midapartment' then
-			if userMoney - 3000 >= 0 then
-				property['location'] = 'Tinsel Towers'
-				property['paid_time'] = os.time()
-				char.set('property', property)
-				char.removeMoney(3000)
-			else
-				TriggerClientEvent('usa:notify', source, 'You cannot afford this purchase.')
-				return
-			end
-		elseif estate == 'highapartment' then
-			if userMoney - 7500 >= 0 then
-				property['location'] = 'Eclipse Towers'
-				property['paid_time'] = os.time()
-				char.set('property', property)
-				char.removeMoney(7500)
-			else
-				TriggerClientEvent('usa:notify', source, 'You cannot afford this purchase.')
-				return
-			end
-		end
-		--TriggerClientEvent('usa:notify', source, 'You have relocated to ~y~'..property['location']..'~s~.')
-		TriggerClientEvent('usa:showHelp', source, 'Weekly payments are covered from your bank balance, ensure you have enough each week.')
-		RefreshProperties(source, false)
-	end
-end)
-
---[[
-RegisterServerEvent('properties:requestNearestData')
-AddEventHandler('properties:requestNearestData', function(coords)
-end)
---]]
-
 RegisterServerEvent('properties:requestAllData')
 AddEventHandler('properties:requestAllData', function()
 	TriggerClientEvent('properties:returnAllData', source, properties)
@@ -1528,32 +1289,11 @@ AddEventHandler('properties:buzzApartment', function(location, index)
 	end
 end)
 
-TriggerEvent('es:addCommand','buzzaccept', function(source, args, char)
-	for property, data in pairs(properties) do
-		for i = 1, #data.rooms do
-			local room = properties[property].rooms[i]
-			for j = 1, #room.instance do
-				if room.instance[j] == source then
-					TriggerClientEvent('properties:buzzEnter', -1, property, i)
-					properties[property].rooms[i].locked = false
-					print('PROPERTIES: Unlocking room '..i.. ' at location '.. property.. ', door was buzzed and accepted!')
-					SetTimeout(30000, function()
-						properties[property].rooms[i].locked = true
-					end)
-					break
-				end
-			end
-		end
-	end
-end, {
-	help = "Accept a buzz request when in an apartment."
-})
-
 RegisterServerEvent('properties:lockpickHouse')
 AddEventHandler('properties:lockpickHouse', function(playerCoords, lockpickItem)
 	local usource = source
 	exports.globals:getNumCops(function(numCops)
-		if numCops >= 2 then
+		if numCops >= 0 then
 			for i = 1, #burglaryHouses do
 				if find_distance(playerCoords, burglaryHouses[i]) < 2.0 then
 					if (burglaryHouses[i].cooldown[usource] and getMinutesFromTime(burglaryHouses[i].cooldown[usource]) > 240) or not burglaryHouses[i].cooldown[usource] then

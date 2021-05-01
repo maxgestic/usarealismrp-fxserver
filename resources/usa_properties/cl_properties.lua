@@ -66,15 +66,6 @@ Citizen.CreateThread(function() -- manage instances
 	end
 end)
 
---[[
-Citizen.CreateThread(function()
-	while true do
-		TriggerServerEvent('properties:requestNearestData')
-		Wait(2000)
-	end
-end)
---]]
-
 Citizen.CreateThread(function()
 	if firstSpawn then
 		TriggerServerEvent('properties:requestAllData')
@@ -130,103 +121,6 @@ Citizen.CreateThread(function()
 			end
 			if Vdist(x, y, z, playerCoords) > 50.0 and not doorTransition then
 				TriggerServerEvent('properties:requestExit', currentProperty.location, currentProperty.index, true)
-			end
-		else
-			DrawText3D(-115.40, -603.75, 36.28, 15, '[E] - Real Estate')
-			for property, data in pairs(properties) do -- ! this loop needs to be optimized -- poll server for X nearest properties so that client doesn't have to iterate through ALL of them EVERY frame
-				if data.type == 'motel' or data.type == 'house' then
-					if data.type == 'motel' then
-						DrawText3D(data.office[1], data.office[2], data.office[3], 5, '[E] - Move Properties (~g~$500~s~)')
-						local dist = Vdist(data.office[1], data.office[2], data.office[3], GetEntityCoords(playerPed))
-						if dist > 5.0 and dist < 50.0 then
-							DrawMarker(20, data.office[1], data.office[2], data.office[3], 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.5, 0.5, 0.5, 206, 47, 39, 255, false, true, 2, nil, nil, false)
-						end
-					end
-					for i = 1, #data.rooms do
-						local room = properties[property].rooms[i]
-						if room.owner == GetPlayerServerId(PlayerId()) then
-							if room.garage then
-								DrawText3D(room.garage[1], room.garage[2], room.garage[3], 4, '[E] - Garage')
-							end
-							if room.locked then
-								DrawText3D(room.coords[1], room.coords[2], room.coords[3], 2, '[E] - Enter | [U] - Locked (~y~'..room.name..'~s~)')
-							else
-								DrawText3D(room.coords[1], room.coords[2], room.coords[3], 2, '[E] - Enter | [U] - Unlocked (~g~'..room.name..'~s~)')
-							end
-						elseif room.owner then
-							DrawText3D(room.coords[1], room.coords[2], room.coords[3], 2, '[E] - Enter (~g~'..room.name..'~s~)')
-						end
-					end
-				elseif data.type == 'apartment' then
-					DrawText3D(data.office[1], data.office[2], data.office[3], 10, '[E] - Buzz Apartments')
-				end
-			end
-			if IsControlJustPressed(0, 38) then
-				local playerCoords = GetEntityCoords(playerPed)
-				if Vdist(playerCoords, -115.40, -603.75, 36.28) < 4 then
-					TriggerServerEvent('properties:requestRealEstateMenu')
-				end
-				for property, data in pairs(properties) do
-					if data.type == 'house' then
-						for i = 1, #data.rooms do
-							local room = data.rooms[i]
-							if Vdist(playerCoords, room.coords[1], room.coords[2], room.coords[3]) < 1.0 then
-								TriggerServerEvent('properties:requestEntry', property, i)
-								PlayDoorAnimation()
-							end
-							if room.garage and room.owner == GetPlayerServerId(PlayerId()) then
-								if Vdist(playerCoords, room.garage[1], room.garage[2], room.garage[3]) < 2.0 then
-									if IsPedInAnyVehicle(playerPed, true) then
-										local handle = GetVehiclePedIsIn(playerPed, false)
-										local numberPlateText = GetVehicleNumberPlateText(handle)
-										TriggerServerEvent("garage:storeVehicle", handle, numberPlateText)
-									else
-										local garage = {
-											['x'] = room.garage[1],
-											['y'] = room.garage[2],
-											['z'] = room.garage[3]
-										}
-										TriggerServerEvent('garage:openMenu', false, garage)
-									end
-								end
-							end
-						end
-					else
-						if Vdist(playerCoords, data.office[1], data.office[2], data.office[3]) < 3 then
-							if data.type == 'motel' then
-								TriggerServerEvent('properties:moveProperties', property)
-							else
-								TriggerEvent('properties:openBuzzMenu', property)
-							end
-						end
-						if data.type == 'motel' then
-							for i = 1, #data.rooms do
-								local room = properties[property].rooms[i]
-								if room.owner then
-									if Vdist(room.coords[1], room.coords[2], room.coords[3], playerCoords) < 0.5 then
-										TriggerServerEvent('properties:requestEntry', property, i)
-										PlayDoorAnimation()
-									end
-								end
-							end
-						end
-					end
-				end
-			elseif IsControlJustPressed(0, 303) then
-				for property, data in pairs(properties) do
-					if data.type == 'motel' or data.type == 'house' then
-						for i = 1, #data.rooms do
-							local room = properties[property].rooms[i]
-							local playerCoords = GetEntityCoords(playerPed)
-							if Vdist(room.coords[1], room.coords[2], room.coords[3], playerCoords) < 0.5 then
-								if room.owner == GetPlayerServerId(PlayerId()) then
-									TriggerServerEvent('properties:toggleLock', property, i)
-									PlayDoorAnimation()
-								end
-							end
-						end
-					end
-				end
 			end
 		end
 	end

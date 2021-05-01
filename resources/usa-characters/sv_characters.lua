@@ -145,7 +145,7 @@ function CreateNewCharacter(src, data, cb)
   end)
 end
 
-function InitializeCharacter(src, characterID, doSpawnAtProperty)
+function InitializeCharacter(src, characterID)
     TriggerEvent('es:exposeDBFunctions', function(db)
         db.getDocument("characters", characterID, function(charData)
             charData.source = src
@@ -159,19 +159,6 @@ function InitializeCharacter(src, characterID, doSpawnAtProperty)
             TriggerClientEvent("es:activateMoney", src, character.get("money")) -- make /cash work
             TriggerEvent("twitter:lastCharCheck", src, character.getFullName()) -- sign out of twitter if playing on different character than their last session
             TriggerEvent("character:loaded", character)
-            if doSpawnAtProperty then
-              local savedSpawn = character.get("spawn")
-              if savedSpawn then
-                TriggerEvent("properties:loadCharacter", src, false) -- for usa_property script
-                SetTimeout(3000, function()
-                  character.setCoords(savedSpawn)
-                end)
-              else
-                TriggerEvent("properties:loadCharacter", src, true) -- for usa_property script
-              end
-            else
-              TriggerEvent("properties:loadCharacter", src, false) -- for usa_property script
-            end
         end)
     end)
 end
