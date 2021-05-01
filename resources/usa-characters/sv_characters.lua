@@ -1,5 +1,10 @@
 -- need to check for existance of DB
-exports["globals"]:PerformDBCheck("usa-characters", "characters", nil)
+exports["globals"]:PerformDBCheck("usa-characters", "characters", function()
+  print("starting compaction...")
+  PerformHttpRequest("http://127.0.0.1:5984/characters/_compact", function(err)
+    print("done compacting characters db! err: " .. err)
+  end, "POST", "", {["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
+end)
 
 local UPDATE_TIME_INTERVAL_MINUTES = 30
 
