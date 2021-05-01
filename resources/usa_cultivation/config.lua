@@ -43,7 +43,7 @@ DIE_THRESHOLD = 10.0 -- no longer harvestable if below this threshold
 
 NEARBY_DISTANCE = 400
 
---DAYS_DEAD_BEFORE_DELETE = 7 -- auto delete when dead for X days
+DAYS_DEAD_BEFORE_DELETE = 7 -- auto delete when dead for X days
 
 --[[
 local testobj = {}

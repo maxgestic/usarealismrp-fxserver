@@ -169,7 +169,8 @@ end
 PlantManager.removePlant = function(id)
     if PLANTED[id] then
         TriggerEvent("es:exposeDBFunctions", function(db)
-            db.deleteDocument("cultivation", PLANTED[id]._id, function(ok)
+            db.deleteDocument("cultivation", id, function(ok)
+                print("done deleteing plant doc")
                 PLANTED[id] = nil
             end)
         end)

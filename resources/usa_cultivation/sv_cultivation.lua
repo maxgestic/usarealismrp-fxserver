@@ -170,34 +170,38 @@ end, {
 
 -- Stage / Food Level / Water Level Updates / Saving --
 Citizen.CreateThread(function()
+    local lastUpdateTime = os.time()
     while true do
-        Wait(STAGE_CHECK_INTERVAL_MINUTES * 60 * 1000) -- wait first to give more time for resource that defines the below event handler to load
-        TriggerEvent("es:exposeDBFunctions", function(db)
-            local numStageUpdates = 0
-            local numSustenanceUpdates = 0
-            for id, plant in pairs(PLANTED) do
-                PLANTED[id], didStageUpdate, didSustenanceUpdate = PlantManager.tick(PLANTED[id])
-                if didStageUpdate then
-                    numStageUpdates = numStageUpdates + 1
-                    TriggerClientEvent("cultivation:updatePlantStageIfNearby", -1, PLANTED[id])
+        if os.difftime(os.time(), lastUpdateTime) >= STAGE_CHECK_INTERVAL_MINUTES * 60 then
+            lastUpdateTime = os.time()
+            TriggerEvent("es:exposeDBFunctions", function(db)
+                local numStageUpdates = 0
+                local numSustenanceUpdates = 0
+                for id, plant in pairs(PLANTED) do
+                    if not PLANTED[id].isDead then
+                        PLANTED[id], didStageUpdate, didSustenanceUpdate = PlantManager.tick(PLANTED[id])
+                        if didStageUpdate then
+                            numStageUpdates = numStageUpdates + 1
+                            TriggerClientEvent("cultivation:updatePlantStageIfNearby", -1, PLANTED[id])
+                        end
+                        if didSustenanceUpdate then
+                            numSustenanceUpdates = numSustenanceUpdates + 1
+                            TriggerClientEvent("cultivation:updateSustenanceIfNearby", -1, PLANTED[id])
+                        end
+                        PLANTED[id]._rev = nil
+                        PLANTED[id].last_save_time = os.date('%m-%d-%Y %H:%M:%S', os.time())
+                        db.updateDocument("cultivation", id, PLANTED[id], saveCallback)
+                    elseif PlantManager.hasBeenDeadLongEnoughToDelete(id) then
+                        print("removing dead plant: " .. id)
+                        TriggerEvent("cultivation:remove", id)
+                    end
+                    Wait(20)
                 end
-                if didSustenanceUpdate then
-                    numSustenanceUpdates = numSustenanceUpdates + 1
-                    TriggerClientEvent("cultivation:updateSustenanceIfNearby", -1, PLANTED[id])
-                end
-                PLANTED[id]._rev = nil
-                PLANTED[id].last_save_time = os.date('%m-%d-%Y %H:%M:%S', os.time())
-                db.updateDocument("cultivation", id, PLANTED[id], saveCallback)
-                --[[
-                if PlantManager.hasBeenDeadLongEnoughToDelete(id) then
-                    TriggerEvent("cultvation:remove", id)
-                end
-                --]]
-                Wait(20)
-            end
-            print("[cultivation]: done doing stage check, # of stage client updates: " .. numStageUpdates)
-            print("[cultivation]: done doing stage check, # of sustenance client updates: " .. numSustenanceUpdates)
-        end)
+                print("[cultivation]: done doing stage check, # of stage client updates: " .. numStageUpdates)
+                print("[cultivation]: done doing stage check, # of sustenance client updates: " .. numSustenanceUpdates)
+            end)
+        end
+        Wait(1000)
     end
 end)
 
