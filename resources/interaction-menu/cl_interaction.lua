@@ -1132,6 +1132,8 @@ function interactionMenuUse(index, itemName, wholeItem)
 		local pos = GetOffsetFromEntityInWorldCoords(myped, table.unpack(SPIKE_STRIP_OBJ_SPAWN_OFFSET)) -- in front of player
 		TriggerEvent("usa:playAnimation", "anim@move_m@trash", "pickup", -8, 1, -1, 48, 0, 0, 0, 0)
 		TriggerServerEvent("inventory:dropItem", itemName, index, pos.x, pos.y, pos.z)
+	elseif itemName:find("Radio") then
+		TriggerServerEvent("rp-radio:checkForRadioItem")
 	else
 		TriggerEvent("interaction:notify", "There is no use action for that item!")
 	end

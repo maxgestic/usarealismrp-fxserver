@@ -467,8 +467,6 @@ end
 function DeleteRadioObject(radioObject)
     if radioObject then
         DeleteEntity(radioObject)
-    else 
-        print("error deleteing radio, it did not exist!")
     end
 end
 
