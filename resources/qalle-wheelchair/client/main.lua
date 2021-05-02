@@ -22,6 +22,8 @@ RegisterCommand('stretcher', function()
 end, false)
 --]]
 
+LoadModel('prop_ld_binbag_01')
+
 local PUSHABLES = {
 	{ 
 		prop = "prop_wheelchair_01",
