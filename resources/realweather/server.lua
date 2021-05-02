@@ -110,6 +110,7 @@ function checkMeteo(err,response)
     end
 
     if not doOverride then
+        print("setting weather to: " .. meteo)
         Data = {
             ["Meteo"] = meteo,
             ["VitesseVent"] = wind,
@@ -118,7 +119,6 @@ function checkMeteo(err,response)
         TriggerClientEvent("meteo:actu", -1, Data)
         if DO_SEND_DISCORD_MSG then
             sendToDiscordMeteo(1,('Météo'), emoji.." La météo à "..ville.." est "..description..". \n:thermometer: Il fait actuellement "..temp.."°C avec des minimales à "..tempmini.."°C et des maximales à "..tempmaxi.."°C. \n:wind_blowing_face: Des vents de "..wind.."m/s sont à prévoir.",16711680)
-    
         end
     end
 
