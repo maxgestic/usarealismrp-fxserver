@@ -230,6 +230,39 @@ local warp_locations = {
       heading = 120.0
     },
     job_access = 'civ'
+  },
+  ['Casino Lobby'] = {
+    entrance = {
+      coords = {935.68670654297, 46.851871490479, 81.095748901367},
+      heading = 323.0
+    },
+    exit = {
+      coords = {1089.6453857422, 206.12762451172, -48.999729156494},
+      heading = 140.0
+    },
+    job_access = 'civ'
+  },
+  ['Casino Roof'] = {
+    entrance = {
+      coords = {969.59783935547, 63.212020874023, 112.55535888672},
+      heading = 59.0
+    },
+    exit = {
+      coords = {967.63153076172, 63.706787109375, 112.55310058594},
+      heading = 237.0
+    },
+    job_access = 'civ'
+  },
+  ['Casino Penthouse'] = {
+    entrance = {
+      coords = {1085.4709472656, 214.5655670166, -49.200412750244},
+      heading = 45.0
+    },
+    exit = {
+      coords = {980.60974121094, 56.602554321289, 116.16416931152},
+      heading = -45.0
+    },
+    job_access = 'civ'
   }
 }
 

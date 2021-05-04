@@ -38,7 +38,6 @@ local shouldForceIdleCardGames = false
 
 local cfg = {}
 
-
 --Please note the config order is important, dealerPositions must start from 0 and increase consecutively 
 cfg.blackjackTables = {
     --[id] = {x,y,z,heading}
@@ -82,17 +81,17 @@ RegisterCommand("getcasinotable",function()
     local playerCoords = GetEntityCoords(PlayerPedId())
     local blackjackTable = GetClosestObjectOfType(playerCoords.x,playerCoords.y,playerCoords.z,GetEntityHeading(PlayerPedId()),GetHashKey("vw_prop_casino_blckjack_01"),0,0,0)
     if DoesEntityExist(blackjackTable) then
-        print("Found entity")
+        print("Found entity 1")
         print("tablePos pos",GetEntityCoords(blackjackTable))
         print("tableHeading heading",GetEntityHeading(blackjackTable))
         print("prop: vw_prop_casino_blckjack_01")
     else
         local blackjackTable2 = GetClosestObjectOfType(playerCoords.x,playerCoords.y,playerCoords.z,GetEntityHeading(PlayerPedId()),GetHashKey("vw_prop_casino_blckjack_01b"),0,0,0)
         if DoesEntityExist(blackjackTable2) then
-            print("Found entity")
+            print("Found entity 2")
             print("tablePos pos:",GetEntityCoords(blackjackTable2))
             print("tableHeading heading:",GetEntityHeading(blackjackTable2))
-            print("prop: vw_prop_casino_blckjack_01")
+            print("prop: vw_prop_casino_blckjack_01b")
         else
             print("Could not find entity")
         end
@@ -109,9 +108,11 @@ AddEventHandler("Blackjack:sendBlackjackTableData", function(newBlackjackTableDa
 end)
 
 Citizen.CreateThread(function()
+    print("thread started")
     while not closeToCasino do 
         Wait(0)
     end
+    print("close to casino")
     maleCasinoDealer = GetHashKey("S_M_Y_Casino_01")
     femaleCasinoDealer = GetHashKey("S_F_Y_Casino_01")
     math.randomseed(GetGameTimer())
@@ -121,6 +122,7 @@ Citizen.CreateThread(function()
     while not HasAnimDictLoaded(dealerAnimDict) do
         Wait(0)
     end
+    print("starting table loop")
     for i=0,#cfg.blackjackTables,1 do
         math.random() math.random() math.random()
         randomBlackShit = math.random(1,13)
@@ -129,12 +131,15 @@ Citizen.CreateThread(function()
         else 
             dealerModel = femaleCasinoDealer 
         end 
+        print("requesting to load model: " .. dealerModel)
         RequestModel(dealerModel)
         while not HasModelLoaded(dealerModel) do
             RequestModel(dealerModel)
             Wait(0)
         end
+        print("done loading, about to create ped")
         dealerEntity = CreatePed(26,dealerModel,cfg.blackjackTables[i].dealerPos.x,cfg.blackjackTables[i].dealerPos.y,cfg.blackjackTables[i].dealerPos.z,cfg.blackjackTables[i].dealerHeading,false,true)
+        print("created")
         table.insert(dealerPeds,dealerEntity)
         SetModelAsNoLongerNeeded(dealerModel)     
         SetEntityCanBeDamaged(dealerEntity, 0)
@@ -375,7 +380,7 @@ Citizen.CreateThread(function()
         closeToCasino = false
         for k,v in pairs(cfg.blackjackTables) do
             cfg.blackjackTables[k].distance = #(playerCoords-cfg.blackjackTables[k].tablePos)
-            if cfg.blackjackTables[k].distance < 100.0 then
+            if cfg.blackjackTables[k].distance < 300.0 then
                 closeToCasino = true
             end
         end
@@ -1499,12 +1504,10 @@ function blackjack_func_348(iParam0) --GetVectorFromChairId
     local tableId = blackjack_func_368(iParam0)
     local x,y,z = getTableCoords(tableId)
     blackjackTableObj = GetClosestObjectOfType(x, y, z, 1.0, cfg.blackjackTables[tableId].prop, 0, 0, 0)
-    
+
     if DoesEntityExist(blackjackTableObj) and DoesEntityHaveDrawable(blackjackTableObj) then
         local localChairId = getLocalChairIndexFromGlobalChairId(iParam0)
-        --print("localchairId was",localChairId)
         localChairId = getInverseChairId(localChairId) + 1
-        --print("localchairId is now",localChairId)
         return GetWorldPositionOfEntityBone_2(blackjackTableObj,GetEntityBoneIndexByName(blackjackTableObj, "Chair_Base_0"..localChairId))
     end
     return vector3(0.0,0.0,0.0)
@@ -3049,7 +3052,7 @@ end)
 
 local atm = {
 	objectHash = GetHashKey("prop_atm_02"),
-	coords = { x = 1117.9536865234,y = 216.50749816895, z = -49.635108184814 }
+	coords = { x = 1117.9536865234,y = 216.50749816895, z = -49.835108184814 }
 }
 
 function CreateObjectByHash(hash, coords)

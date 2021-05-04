@@ -147,4 +147,10 @@ Citizen.CreateThread(function()
     AfterHoursNightclubs.Interior.Security.Set(AfterHoursNightclubs.Interior.Security.off, true)
     AfterHoursNightclubs.Interior.Speakers.Set(AfterHoursNightclubs.Interior.Speakers.upgrade, true)
     AfterHoursNightclubs.Interior.Name.Set(AfterHoursNightclubs.Interior.Name.studio, true)
+
+    -- ===============================================================
+    -- =----------------------- [DLC: Casino] -----------------------=
+    -- ===============================================================
+    DiamondCasino.LoadDefault()
+    DiamondPenthouse.LoadDefault()
 end)
