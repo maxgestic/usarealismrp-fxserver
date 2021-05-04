@@ -52,6 +52,7 @@ end
 
 function checkMeteo(err,response)
     local data = json.decode(response)
+    print("weather data err: " .. err .. "\nweather data response: " .. response)
     local type = data.weather[1].main
     local id = data.weather[1].id
     local description = data.weather[1].description
