@@ -124,9 +124,6 @@ AddEventHandler('gopostal:payDriver', function(destination, playerCoords, lastDe
 		if lastDestination then
 			char.set("job", "civ")
 		end
-	else
-		DropPlayer(source, "Exploiting. Your information has been logged and staff has been notified. If you feel this was by mistake, let a staff member know.")
-    	TriggerEvent("usa:notifyStaff", '^1^*[ANTICHEAT]^r^0 Player ^1'..GetPlayerName(source)..' ['..GetPlayerIdentifier(source)..'] ^0 has been kicked for attempting to exploit gopostal:payDriver event, please intervene^0!')
 	end
 end)
 
