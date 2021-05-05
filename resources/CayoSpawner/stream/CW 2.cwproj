@@ -1,0 +1,107 @@
+<CodeWalkerProject>
+  <Name>New CodeWalker Project</Name>
+  <Version value="1" />
+  <YmapFilenames>
+    <Item>cayo perico fruit stall.ymap</Item>
+    <Item>cayo perico runway lights.ymap</Item>
+    <Item>cw_landingstrip_med_shack.ymap</Item>
+    <Item>h4_aa_guns.ymap</Item>
+    <Item>h4_beach.ymap</Item>
+    <Item>h4_beach_bar_props.ymap</Item>
+    <Item>h4_beach_party.ymap</Item>
+    <Item>h4_beach_party_lod.ymap</Item>
+    <Item>h4_beach_props.ymap</Item>
+    <Item>h4_beach_props_party.ymap</Item>
+    <Item>h4_island_padlock_props.ymap</Item>
+    <Item>h4_islandairstrip.ymap</Item>
+    <Item>h4_islandairstrip_doorsclosed.ymap</Item>
+    <Item>h4_islandairstrip_doorsclosed_lod.ymap</Item>
+    <Item>h4_islandairstrip_doorsopen.ymap</Item>
+    <Item>h4_islandairstrip_doorsopen_lod.ymap</Item>
+    <Item>h4_islandairstrip_hangar_props.ymap</Item>
+    <Item>h4_islandairstrip_hangar_props_lod.ymap</Item>
+    <Item>h4_islandairstrip_hangar_props_slod.ymap</Item>
+    <Item>h4_islandairstrip_lod.ymap</Item>
+    <Item>h4_islandairstrip_props.ymap</Item>
+    <Item>h4_islandairstrip_props_lod.ymap</Item>
+    <Item>h4_islandairstrip_propsb.ymap</Item>
+    <Item>h4_islandairstrip_propsb_lod.ymap</Item>
+    <Item>h4_islandairstrip_propsb_slod.ymap</Item>
+    <Item>h4_islandx_barrack_hatch.ymap</Item>
+    <Item>h4_islandx_barrack_props.ymap</Item>
+    <Item>h4_islandx_barrack_props_lod.ymap</Item>
+    <Item>h4_islandx_checkpoint.ymap</Item>
+    <Item>h4_islandx_checkpoint_props.ymap</Item>
+    <Item>h4_islandx_checkpoint_props_lod.ymap</Item>
+    <Item>h4_islandx_disc_strandedwhale.ymap</Item>
+    <Item>h4_islandx_maindock.ymap</Item>
+    <Item>h4_islandx_maindock_lod.ymap</Item>
+    <Item>h4_islandx_maindock_props.ymap</Item>
+    <Item>h4_islandx_maindock_props_2.ymap</Item>
+    <Item>h4_islandx_maindock_props_2_lod.ymap</Item>
+    <Item>h4_islandx_maindock_props_lod.ymap</Item>
+    <Item>h4_islandx_maindock_props_slod.ymap</Item>
+    <Item>h4_islandx_mansion.ymap</Item>
+    <Item>h4_islandx_mansion_b.ymap</Item>
+    <Item>h4_islandx_mansion_entrance_fence.ymap</Item>
+    <Item>h4_islandx_mansion_lights.ymap</Item>
+    <Item>h4_islandx_mansion_props.ymap</Item>
+    <Item>h4_islandx_mansion_props_lod.ymap</Item>
+    <Item>h4_islandx_props.ymap</Item>
+    <Item>h4_islandx_sea_mines.ymap</Item>
+    <Item>h4_islandx_terrain_02_lod.ymap</Item>
+    <Item>h4_islandx_terrain_03.ymap</Item>
+    <Item>h4_islandx_terrain_03_lod.ymap</Item>
+    <Item>h4_islandx_terrain_04.ymap</Item>
+    <Item>h4_islandx_terrain_04_lod.ymap</Item>
+    <Item>h4_islandx_terrain_05.ymap</Item>
+    <Item>h4_islandx_terrain_06.ymap</Item>
+    <Item>h4_islandx_terrain_props_05_f_lod.ymap</Item>
+    <Item>h4_islandx_terrain_props_06_a_lod.ymap</Item>
+    <Item>h4_islandx_terrain_props_06_c.ymap</Item>
+    <Item>h4_islandx_terrain_props_06_c_lod.ymap</Item>
+    <Item>h4_islandxcanal_props.ymap</Item>
+    <Item>h4_islandxcanal_props_lod.ymap</Item>
+    <Item>h4_islandxdock.ymap</Item>
+    <Item>h4_islandxdock_lod.ymap</Item>
+    <Item>h4_islandxdock_props.ymap</Item>
+    <Item>h4_islandxdock_props_2.ymap</Item>
+    <Item>h4_islandxdock_props_2_lod.ymap</Item>
+    <Item>h4_islandxdock_props_lod.ymap</Item>
+    <Item>h4_islandxdock_water_hatch.ymap</Item>
+    <Item>h4_islandxtower.ymap</Item>
+    <Item>h4_islandxtower_lod.ymap</Item>
+    <Item>h4_islandxtower_veg.ymap</Item>
+    <Item>h4_islandxtower_veg_lod.ymap</Item>
+    <Item>h4_mansion_gate_broken.ymap</Item>
+    <Item>h4_mansion_gate_closed.ymap</Item>
+    <Item>h4_ne_ipl_01_lod.ymap</Item>
+    <Item>h4_ne_ipl_03.ymap</Item>
+    <Item>h4_ne_ipl_03_lod.ymap</Item>
+    <Item>h4_nw_ipl_00_lod.ymap</Item>
+    <Item>h4_nw_ipl_01.ymap</Item>
+    <Item>h4_nw_ipl_01_lod.ymap</Item>
+    <Item>h4_nw_ipl_07.ymap</Item>
+    <Item>h4_nw_ipl_07_lod.ymap</Item>
+    <Item>h4_nw_ipl_07_slod.ymap</Item>
+    <Item>h4_sw_ipl_01_lod.ymap</Item>
+    <Item>h4_underwater_gate_closed.ymap</Item>
+    <Item>island boat house lights.ymap</Item>
+    <Item>island lighthouse.ymap</Item>
+    <Item>island party tay.ymap</Item>
+    <Item>island pool improvements.ymap</Item>
+    <Item>island street lights 1.ymap</Item>
+    <Item>island street lights 2.ymap</Item>
+    <Item>island street lights 3.ymap</Item>
+    <Item>island street lights 4.ymap</Item>
+    <Item>island street lights 5.ymap</Item>
+    <Item>teleporter platform.ymap</Item>
+  </YmapFilenames>
+  <YtypFilenames />
+  <YbnFilenames />
+  <YndFilenames />
+  <YnvFilenames />
+  <TrainsFilenames />
+  <ScenarioFilenames />
+  <AudioRelFilenames />
+</CodeWalkerProject>
