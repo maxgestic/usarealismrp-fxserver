@@ -3,10 +3,10 @@ AddEventHandler(littleTrickToSkipGettingScrambledByParser, function(event, data)
     if event == "CEventNetworkEntityDamage" then
         victim = data[1]
         attacker = data[2]
-        victimDied = data[4]
-        weaponHash = data[5]
-        isMeleeDamage = data[10]
-        vehicleDamageTypeFlag = data[11]
+        victimDied = data[6]
+        weaponHash = data[7]
+        isMeleeDamage = data[12]
+        vehicleDamageTypeFlag = data[13]
 
         if victim and attacker then
             if victimDied then
