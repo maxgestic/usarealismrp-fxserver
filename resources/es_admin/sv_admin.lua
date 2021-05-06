@@ -1528,6 +1528,12 @@ end, {
 	help = "Test something 2"
 })
 
+TriggerEvent('es:addGroupCommand', 'tvremote', "mod", function(source, args, char)
+	TriggerClientEvent("Hypnonema.OpenPlease", source)
+end, {
+	help = "Play something to watch together!"
+})
+
 function NotifyStaff(source)
 	for i = 1, #noNotifications do
 		if noNotifications[i] == source then

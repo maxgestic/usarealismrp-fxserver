@@ -248,6 +248,11 @@ Citizen.CreateThread(function()
 	end
 end)
 
+RegisterNetEvent("Hypnonema.OpenPlease")
+AddEventHandler("Hypnonema.OpenPlease", function(obj)
+	TriggerServerEvent("Hypnonema.OnOpen")
+end)
+
 RegisterNetEvent("testing:spawnObject")
 AddEventHandler("testing:spawnObject", function(obj)
 	if type(obj) == "string" then
