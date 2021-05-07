@@ -248,9 +248,11 @@ Citizen.CreateThread(function()
 	end
 end)
 
-RegisterNetEvent("Hypnonema.OpenPlease")
-AddEventHandler("Hypnonema.OpenPlease", function(obj)
-	TriggerServerEvent("Hypnonema.OnOpen")
+local eventName = "Hypnonema.OpenPlease"
+RegisterNetEvent(eventName)
+AddEventHandler(eventName, function(obj)
+	local eventName2 = "Hypnonema.OnOpen"
+	TriggerServerEvent(eventName2)
 end)
 
 RegisterNetEvent("testing:spawnObject")

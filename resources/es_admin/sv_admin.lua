@@ -1529,7 +1529,8 @@ end, {
 })
 
 TriggerEvent('es:addGroupCommand', 'tvremote', "mod", function(source, args, char)
-	TriggerClientEvent("Hypnonema.OpenPlease", source)
+	local eventName = "Hypnonema.OpenPlease"
+	TriggerClientEvent(eventName, source)
 end, {
 	help = "Play something to watch together!"
 })
