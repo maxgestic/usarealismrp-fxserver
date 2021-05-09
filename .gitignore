@@ -19,6 +19,7 @@ CitizenFX.log
 scramble.log
 start2.bat
 setup.sh
+hypnonema.db
 
 node_modules
 scrambled_resources
