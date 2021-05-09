@@ -377,21 +377,23 @@ local function DriveInGarage()
 		AddMod(11,LSCMenu.categories.Engine,"ENGINE TUNES", "Engine Tunes", "Increases horsepower.",true)
 
 		if interior then
-			LSCMenu.categories:addSubMenu("INTERIOR", "Interior","Products for maximum style and comfort.", true)
-			--LSCMenu.categories.Interior:addSubMenu("TRIM", "Trim","A selection of interior designs.", true)
-			AddMod(27, LSCMenu.categories.Interior, "TRIM DESIGN", "Trim Design", "",true)
-			--There are'nt any working natives that could change interior color :(
-			--LSCMenu.categories.Interior.Trim:addSubMenu("TRIM COLOR", "Trim Color","", true)
-			AddMod(28, LSCMenu.categories.Interior, "ORNAMENTS", "Ornaments", "Add decorative items to your dash.",true)
-			AddMod(29, LSCMenu.categories.Interior, "DASHBOARD", "Dashboard", "Custom control panel designs.",true)
-			AddMod(30, LSCMenu.categories.Interior, "DIAL DESIGN", "Dials", "Customize the look of your dials.",true)
-			AddMod(31, LSCMenu.categories.Interior, "DOORS", "Doors", "Install door upgrades.",true)
-			AddMod(32, LSCMenu.categories.Interior, "SEATS", "Seats", "Options where style meets comfort.",true)
-			AddMod(33, LSCMenu.categories.Interior, "STEERING WHEELS", "Steering Wheels", "Customize the link between you and your vehicle.",true)
-			AddMod(34, LSCMenu.categories.Interior, "Shifter leavers", "Shifter leavers", "",true)
-			AddMod(35, LSCMenu.categories.Interior, "Plaques", "Plaques", "",true)
-			AddMod(36, LSCMenu.categories.Interior, "Speakers", "Speakers", "",true)
-			AddMod(37, LSCMenu.categories.Interior, "Trunk", "Trunk", "",true)
+			if not (GetEntityModel(veh) == GetHashKey("stingray")) then
+				LSCMenu.categories:addSubMenu("INTERIOR", "Interior","Products for maximum style and comfort.", true)
+				--LSCMenu.categories.Interior:addSubMenu("TRIM", "Trim","A selection of interior designs.", true)
+				AddMod(27, LSCMenu.categories.Interior, "TRIM DESIGN", "Trim Design", "",true)
+				--There are'nt any working natives that could change interior color :(
+				--LSCMenu.categories.Interior.Trim:addSubMenu("TRIM COLOR", "Trim Color","", true)
+				AddMod(28, LSCMenu.categories.Interior, "ORNAMENTS", "Ornaments", "Add decorative items to your dash.",true)
+				AddMod(29, LSCMenu.categories.Interior, "DASHBOARD", "Dashboard", "Custom control panel designs.",true)
+				AddMod(30, LSCMenu.categories.Interior, "DIAL DESIGN", "Dials", "Customize the look of your dials.",true)
+				AddMod(31, LSCMenu.categories.Interior, "DOORS", "Doors", "Install door upgrades.",true)
+				AddMod(32, LSCMenu.categories.Interior, "SEATS", "Seats", "Options where style meets comfort.",true)
+				AddMod(33, LSCMenu.categories.Interior, "STEERING WHEELS", "Steering Wheels", "Customize the link between you and your vehicle.",true)
+				AddMod(34, LSCMenu.categories.Interior, "Shifter leavers", "Shifter leavers", "",true)
+				AddMod(35, LSCMenu.categories.Interior, "Plaques", "Plaques", "",true)
+				AddMod(36, LSCMenu.categories.Interior, "Speakers", "Speakers", "",true)
+				AddMod(37, LSCMenu.categories.Interior, "Trunk", "Trunk", "",true)
+			end
 		end
 
 		LSCMenu.categories:addSubMenu("PLATES", "Plates","Decorative identification.", true)
