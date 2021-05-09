@@ -178,6 +178,21 @@ local function AddMod(mod,parent,header,name,info,stock)
 				btn.mod = i
 				btn.liveryIndex = i
 			end
+		else
+			local m = parent:addSubMenu(header, name, info, true)
+			local btn = m:addPurchase("Stock")
+			btn.modtype = mod
+			btn.mod = -1
+			btn.liveryIndex = -1
+			local numModsForMod48 = GetNumVehicleMods(veh, 48)
+			if numModsForMod48 > 0 then
+				for i = 1, numModsForMod48 do
+					btn = m:addPurchase("Livery " .. i, LSC_Config.prices.livery.price)
+					btn.modtype = 48
+					btn.mod = i
+					btn.liveryIndex = i
+				end
+			end
 		end
 	end
 end
