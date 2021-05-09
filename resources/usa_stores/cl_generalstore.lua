@@ -22,7 +22,8 @@ local GENERAL_STORE_LOCATIONS = {
     { x=-1819.872, y=793.053, z=138.259 }, -- Banham Canyon Dr.
     { x=-3241.570, y=1000.506, z=12.990 }, -- Barbareno Rd.
     {x=-2967.086, y=391.539, z=15.243 }, -- Great Ocean Hwy
-    {x = 1780.9207763672,y = 2598.8671875, z = 45.797817230225, prison = true} -- Prison
+    {x = 1780.9207763672,y = 2598.8671875, z = 45.797817230225, prison = true}, -- Prison
+    {x = 4503.35546875, y = -4520.0258789062, z = 4.4123592376709} -- Cayo Perico island
 }
 
 local ShopliftingAreas = {}
