@@ -36,6 +36,7 @@ AddEventHandler("ems:hospitalize", function(treatmentTimeMinutes, bed, index)
             Wait(1)
         end
         SetEntityHealth(playerPed, 200)
+        ClearPedBloodDamage(playerPed)
         currentlyAdmitted = false
         TriggerEvent('usa:showHelp', 'You have been treated.')
     end)
