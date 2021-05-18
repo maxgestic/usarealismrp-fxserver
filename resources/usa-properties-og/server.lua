@@ -11,6 +11,8 @@ local MAX_NUM_OF_PROPERTIES_SINGLE_PERSON = 5
 
 local NEARBY_DISTANCE = 500
 
+local PROPERTY_DATA_SEND_INTERVAL_SEC = 1
+
 AddEventHandler("character:loaded", function(char)
   local charIdent = char.get("_id")
   TriggerClientEvent("properties:setPropertyBlips", char.get("source"), GetOwnedPropertyCoords(charIdent, true))
@@ -33,9 +35,13 @@ AddEventHandler("properties-og:requestNearestData", function(coords)
     -- send to client (to remove no longer nearby properties)
     TriggerClientEvent("properties-og:updateNearby", src, nearbyNames)
     -- 'asynchronously' send nearest property data to client as to not send too much data in a single event (causing network thread hitches + mass client DCs)
+    local lastSentTime = os.time()
     for name, info in pairs(nearbyInfo) do
+      while os.difftime(os.time(), lastSentTime) < PROPERTY_DATA_SEND_INTERVAL_SEC do
+        Wait(1)
+      end
       TriggerClientEvent("properties-og:addNearbyProperty", src, name, info)
-      Wait(2000)
+      lastSentTime = os.time()
     end
   end)
 end)
