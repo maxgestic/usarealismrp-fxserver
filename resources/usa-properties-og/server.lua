@@ -19,13 +19,25 @@ end)
 
 RegisterServerEvent("properties-og:requestNearestData")
 AddEventHandler("properties-og:requestNearestData", function(coords)
-  local nearby = {}
-  for name, info in pairs(PROPERTIES) do
-      if getCoordDistance({x = info.x, y = info.y, z = info.z}, coords) < NEARBY_DISTANCE then
-          nearby[name] = info
-      end
-  end
-  TriggerClientEvent("properties-og:loadNearbyData", source, nearby)
+  local src = source
+  Citizen.CreateThread(function()
+    local nearbyInfo = {}
+    local nearbyNames = {}
+    -- first gather nearby properties from client's coords
+    for name, info in pairs(PROPERTIES) do
+        if getCoordDistance({x = info.x, y = info.y, z = info.z}, coords) < NEARBY_DISTANCE then
+            nearbyInfo[name] = info
+            nearbyNames[name] = true
+        end
+    end
+    -- send to client (to remove no longer nearby properties)
+    TriggerClientEvent("properties-og:updateNearby", src, nearbyNames)
+    -- 'asynchronously' send nearest property data to client as to not send too much data in a single event (causing network thread hitches + mass client DCs)
+    for name, info in pairs(nearbyInfo) do
+      TriggerClientEvent("properties-og:addNearbyProperty", src, name, info)
+      Wait(2000)
+    end
+  end)
 end)
 
 RegisterServerEvent("properties:getPropertyMoney")
