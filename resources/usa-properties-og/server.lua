@@ -11,7 +11,7 @@ local MAX_NUM_OF_PROPERTIES_SINGLE_PERSON = 5
 
 local NEARBY_DISTANCE = 500
 
-local PROPERTY_DATA_SEND_INTERVAL_SEC = 1
+local CLIENT_UPDATE_INTERVAL = 10
 
 AddEventHandler("character:loaded", function(char)
   local charIdent = char.get("_id")
@@ -1021,3 +1021,38 @@ function getCoordDistance(coords1, coords2)
 	zdistance = math.abs(coords1.z - coords2.z)
 	return nroot(3, (xdistance ^ 3 + ydistance ^ 3 + zdistance ^ 3))
 end
+
+function TrimPropertyTableForClient(propertyInfo)
+  local toSendInfo = {}
+  toSendInfo.name = propertyInfo.name
+  toSendInfo.x = propertyInfo.x
+  toSendInfo.y = propertyInfo.y
+  toSendInfo.z = propertyInfo.z
+  toSendInfo.garage_coords = propertyInfo.garage_coords
+  toSendInfo.owner = propertyInfo.owner
+  toSendInfo.coowners = propertyInfo.coowners
+  toSendInfo.fee = propertyInfo.fee
+  return toSendInfo
+end
+
+Citizen.CreateThread(function()
+  local lastUpdateTime = os.time()
+  while true do
+    if os.difftime(os.time(), lastUpdateTime) >= CLIENT_UPDATE_INTERVAL then
+      lastUpdateTime = os.time()
+      local players = GetPlayers()
+      for i = 1, #players do
+        local nearby = {}
+        local coords = GetEntityCoords(GetPlayerPed(players[i]))
+        for name, info in pairs(PROPERTIES) do
+          if getCoordDistance({x = info.x, y = info.y, z = info.z}, coords) < NEARBY_DISTANCE then
+            local trimmedTable = TrimPropertyTableForClient(info)
+            nearby[name] = trimmedTable
+          end
+        end
+        TriggerClientEvent("properties-og:setNearbyProperties", players[i], nearby)
+      end
+    end
+    Wait(1)
+  end
+end)

@@ -45,18 +45,9 @@ AddEventHandler("properties:setPropertyIdentifier", function(ident)
     my_property_identifier = ident
 end)
 
-RegisterNetEvent("properties-og:addNearbyProperty")
-AddEventHandler("properties-og:addNearbyProperty", function(name, info) -- 'asynchronously' retrieve nearest property data (as to not make server send massive amounts of data)
-    NEARBY_PROPERTIES[name] = info
-end)
-
-RegisterNetEvent("properties-og:updateNearby")
-AddEventHandler("properties-og:updateNearby", function(nearbyNames) -- remove properties player is no longer near
-    for name, info in pairs(NEARBY_PROPERTIES) do
-        if not nearbyNames[name] then
-            NEARBY_PROPERTIES[name] = nil
-        end
-    end
+RegisterNetEvent("properties-og:setNearbyProperties")
+AddEventHandler("properties-og:setNearbyProperties", function(nearby)
+    NEARBY_PROPERTIES = nearby
 end)
 
 RegisterNetEvent("properties:update")
@@ -835,14 +826,6 @@ Citizen.CreateThread(function()
 			end
         end
     end
-end)
-
--- poll server for nearest properties --
-Citizen.CreateThread(function()
-	while true do
-		TriggerServerEvent('properties-og:requestNearestData', GetEntityCoords(PlayerPedId()))
-		Wait(5000)
-	end
 end)
 
 function SetPedOutfit(outfit)
