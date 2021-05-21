@@ -1032,9 +1032,11 @@ function TrimPropertyTableForClient(propertyInfo)
   toSendInfo.owner = propertyInfo.owner
   toSendInfo.coowners = propertyInfo.coowners
   toSendInfo.fee = propertyInfo.fee
+  toSendInfo.type = propertyInfo.type
   return toSendInfo
 end
 
+-- send nearby property data to clients every CLIENT_UPDATE_INTERVAL seconds
 Citizen.CreateThread(function()
   local lastUpdateTime = os.time()
   while true do
