@@ -48,9 +48,10 @@ local blips = {
 	{ title="Fire Department", colour = 1, id = 60, scale = 0.7, x=1694.01, y=3589.87, z=40.3212 }, -- SANDY
 	{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = -240.10, y = 6324.22, z = 32.43 }, -- paleto
 	--{ title="Hospital", colour = 48, id = 61, x = 360.3, y = -548.9, z = 28.8 }, -- LS, pillbox hill
-	{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = 308.1, y = -1434.7,  z = 29.9 },
-	{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = 360.5, y = -584.7, z = 28.8 },
-	{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = -473.4, y = -339.6, z = 35.2 }, -- mt. zonoah
+	--{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = 308.1, y = -1434.7,  z = 29.9 },
+	{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = -817.61511230469, y = -1236.6121826172, z = 7.3374252319336 }, -- viceroy medical
+	{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = 360.5, y = -584.7, z = 28.8 }, -- pillbox medical
+	--{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = -473.4, y = -339.6, z = 35.2 }, -- mt. zonoah
 	{ title="Vanilla Unicorn", colour = 50, id = 121, scale = 0.7, x=129.607, y=-1299.83, z=29.2327 },
 	--{ title="FBI", colour = 47, id = 88, x=140.577, y=-768.375, z=45.752 },
 	--{ title="Airport", colour = 30, id = 307, x=-1329.32, y=-3045.92, z=13.944 },

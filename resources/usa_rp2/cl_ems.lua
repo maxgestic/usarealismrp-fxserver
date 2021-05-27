@@ -1,6 +1,7 @@
 local currentlyAdmitted = false
 local currentBed = nil
 local hospitalCoords = vector3(354.032, -589.411, 42.415)
+local BED_TRANSITION_TIME_MS = 5000
 
 RegisterNetEvent("ems:hospitalize")
 AddEventHandler("ems:hospitalize", function(treatmentTimeMinutes, bed, index)
@@ -88,10 +89,19 @@ end)
 function ActivateBed(x, y, z, model)
     Citizen.CreateThread(function()
         local playerPed = PlayerPedId()
-        local bedObject = GetClosestObjectOfType(x, y, z, 1.0, model, false, false, false)
+        RequestCollisionAtCoord(x, y, z)
+        SetEntityCoords(playerPed, x, y, z + 0.1)
+        while not HasCollisionLoadedAroundEntity(playerPed) do
+            SetEntityCoords(playerPed, x, y, z + 0.1)
+            Wait(1)
+        end
+        local coordSetTime = GetGameTimer()
+        while GetGameTimer() - coordSetTime <= BED_TRANSITION_TIME_MS do
+            Wait(1)
+        end
+        local bedObject = GetClosestObjectOfType(x, y, z, 5.0, model, false, false, false)
         local x, y, z = table.unpack(GetEntityCoords(bedObject))
         local rx, ry, rz = table.unpack(GetEntityRotation(bedObject))
-        SetEntityCoords(playerPed, x, y, z + 0.3)
         local dict = 'anim@mp_bedmid@left_var_04'
         RequestAnimDict(dict)
         while not HasAnimDictLoaded(dict) do
@@ -122,7 +132,6 @@ function ActivateBed(x, y, z, model)
     end)
 end
 
-  DoScreenFadeIn(1000)
 function DrawTxt(x,y ,width,height,scale, text, r,g,b,a)
     SetTextFont(6)
     SetTextProportional(0)

@@ -1,3 +1,5 @@
+local MAX_BED_DISTANCE = 1000
+
 BASE_CHECKIN_PRICE = 25 -- must be kept the same with one in cl_injury under check-in section
 
 injuries = { -- ensure this is the same as sv_injury.lua
@@ -178,16 +180,20 @@ AddEventHandler('injuries:validateCheckin', function(playerInjuries, isPedDead, 
 		treatmentTimeMinutes = 15
 	end
 	TriggerEvent('injuries:getHospitalBeds', function(hospitalBeds)
+		local playerCoords = GetEntityCoords(GetPlayerPed(usource))
 		for i = 1, #hospitalBeds do
-			if hospitalBeds[i].occupied == nil then
-				hospitalBeds[i].occupied = targetPlayerId
-				bed = {
-					heading = hospitalBeds[i].heading,
-					coords = hospitalBeds[i].objCoords,
-					model = hospitalBeds[i].objModel
-				}
-				TriggerClientEvent('ems:hospitalize', usource, treatmentTimeMinutes, bed, i)
-				break
+			local distToBed = exports.globals:getCoordDistance(playerCoords, {x = hospitalBeds[i].objCoords[1], y = hospitalBeds[i].objCoords[2], z = hospitalBeds[i].objCoords[3]})
+			if distToBed <= MAX_BED_DISTANCE then
+				if hospitalBeds[i].occupied == nil then
+					hospitalBeds[i].occupied = targetPlayerId
+					bed = {
+						heading = hospitalBeds[i].heading,
+						coords = hospitalBeds[i].objCoords,
+						model = hospitalBeds[i].objModel
+					}
+					TriggerClientEvent('ems:hospitalize', usource, treatmentTimeMinutes, bed, i)
+					break
+				end
 			end
 		end
 	end)

@@ -1,4 +1,5 @@
 local hospitalBeds = {
+	-- pillbox medical --
 	{
 		occupied = nil,
 		objCoords  = {324.28768920898, -582.46478271484, 44.20397567749},
@@ -125,6 +126,52 @@ local hospitalBeds = {
 		objCoords = {1781.11, 2560.51, 45.8},
 		objModel = 2117668672
 	},
+	-- viceroy medical --
+	{
+		occupied = nil,
+		objCoords = {-797.15881347656, -1231.1979980469, 8.2572345733643},
+		objModel = 1631638868
+	},
+	{
+		occupied = nil,
+		objCoords = {-801.06939697266, -1227.6901855469, 8.2572336196899},
+		objModel = 1631638868
+	},
+	{
+		occupied = nil,
+		objCoords = {-805.46911621094, -1223.9091796875, 8.2572374343872},
+		objModel = 1631638868
+	},
+	{
+		occupied = nil,
+		objCoords = {-809.29748535156, -1220.8298339844, 8.2572355270386},
+		objModel = 1631638868
+	},
+	{
+		occupied = nil,
+		objCoords = {-812.12854003906, -1224.4470214844, 8.2572355270386},
+		objModel = 1631638868
+	},
+	{
+		occupied = nil,
+		objCoords = {-809.29473876953, -1226.6359863281, 8.2572355270386},
+		objModel = 1631638868
+	},
+	{
+		occupied = nil,
+		objCoords = {-806.57873535156, -1229.03515625, 8.2572355270386},
+		objModel = 1631638868
+	},
+	{
+		occupied = nil,
+		objCoords = {-804.00402832031, -1231.2360839844, 8.2572355270386},
+		objModel = 1631638868
+	},
+	{
+		occupied = nil,
+		objCoords = {-799.9267578125, -1234.4288330078, 8.2572355270386},
+		objModel = 1631638868
+	}
 }
 
 
