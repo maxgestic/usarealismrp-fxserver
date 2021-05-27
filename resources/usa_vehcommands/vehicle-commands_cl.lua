@@ -101,3 +101,5 @@ AddEventHandler("vehicleCommands:setExtra", function(extra, toggle)
 		TriggerEvent('usa:notify', 'You must be in a vehicle!')
 	end
 end)
+
+--print("hash: " .. GetEntityModel(GetVehiclePedIsIn(PlayerPedId(), false)))

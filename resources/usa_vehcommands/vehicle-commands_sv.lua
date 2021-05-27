@@ -59,6 +59,11 @@ local VEHICLE_RANKS = {
 			allowedLiveries = { 1 },
 			hash = 1127131465
 		},
+		["mustang19"] = {
+			rank = 5,
+			allowedLiveries = { 1, 2, 4 },
+			hash = 1311724675
+		},
 		["predator"] = {
 			rank = 1,
 			allowedLiveries = { 1 },
@@ -150,6 +155,11 @@ local VEHICLE_RANKS = {
 			rank = 4,
 			allowedLiveries = { 1 },
 			hash = 1127131465
+		},
+		["mustang19"] = {
+			rank = 5,
+			allowedLiveries = { 1, 3 },
+			hash = 1311724675
 		},
 		["policeb"] = {
 			rank = 4,
