@@ -4,9 +4,15 @@
 -- GetPlayerUnderwaterTimeRemaining
 -- SetPlayerUnderwaterTimeRemaining
 
+-- males --
 -- goggles: glasses - 40
 -- oxygen tank: shirt - 137
 -- flippers: feet - 81
+
+-- females --
+-- goggles: glasses - 42
+-- oxygen tank: shirt - 167
+-- flippers: feet - 84
 
 --SetEnableScuba(PlayerPedId(), true)
 --SetPedMaxTimeUnderwater(PlayerPedId(), 1500.00)
@@ -38,10 +44,23 @@ AddEventHandler("scuba:useGear", function()
             previousClothing.components[8] ={ drawable = GetPedDrawableVariation(p, 8), texture = GetPedTextureVariation(p, 8) }
             previousClothing.props[1] = { index = GetPedPropIndex(p, 1), texture = GetPedPropTextureIndex(p, 1) }
             -- give scuba gear --
+            local toGive = {}
+            toGive.glasses = nil
+            toGive.shirt = nil
+            toGive.feet = nil
+            if GetEntityModel(PlayerPedId()) == `mp_m_freemode_01` then -- male
+                toGive.glasses = 40
+                toGive.shirt = 137
+                toGive.feet = 81
+            else
+                toGive.glasses = 42
+                toGive.shirt = 167
+                toGive.feet = 84
+            end
             SetPedMaxTimeUnderwater(p, 1500.00)
-            SetPedComponentVariation(p, 6, 81, 4, 1) -- flippers
-            SetPedComponentVariation(p, 8, 137, 4, 1) -- tank
-            SetPedPropIndex(p, 1, 40, 20, 1) -- mask
+            SetPedComponentVariation(p, 6, toGive.feet, 4, 1) -- flippers
+            SetPedComponentVariation(p, 8, toGive.shirt, 4, 1) -- tank
+            SetPedPropIndex(p, 1, toGive.glasses, 20, 1) -- mask
             currentlyEnabled = true
         else
             playAnimation(10)
