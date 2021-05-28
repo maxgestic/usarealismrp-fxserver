@@ -1134,6 +1134,8 @@ function interactionMenuUse(index, itemName, wholeItem)
 		TriggerServerEvent("inventory:dropItem", itemName, index, pos.x, pos.y, pos.z)
 	elseif itemName:find("Radio") then
 		TriggerServerEvent("rp-radio:checkForRadioItem")
+	elseif itemName == "Scuba Gear" then
+		TriggerEvent("scuba:useGear")
 	else
 		TriggerEvent("interaction:notify", "There is no use action for that item!")
 	end

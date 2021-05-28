@@ -372,11 +372,18 @@ function ShowMainMenu()
 	CreateBuyMenu(mainMenu, boats)
 	CreateSellMenu(mainMenu, playerBoats)
 	CreateGarageMenu(mainMenu, playerBoats)
+	-- fishing pole item --
 	local buyFishingPoleBtn = NativeUI.CreateItem("Buy fishing pole", "Press K to fish when on a boat.")
 	buyFishingPoleBtn.Activated = function(parentmenu, selected)
 		TriggerServerEvent("boatMenu:buyFishingPole")
 	end
 	mainMenu:AddItem(buyFishingPoleBtn)
+	-- scuba gear item --
+	local scubaGearBtn = NativeUI.CreateItem("Buy scuba gear", "Just 'use' the scuba gear! ($5,000)")
+	scubaGearBtn.Activated = function(parentmenu, selected)
+		TriggerServerEvent("scuba:buyGear")
+	end
+	mainMenu:AddItem(scubaGearBtn)
 	mainMenu:Visible(not mainMenu:Visible())
 end
 
