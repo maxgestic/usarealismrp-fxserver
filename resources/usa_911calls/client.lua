@@ -1,5 +1,5 @@
 local mute911 = false
-local ReportAssault = true
+local ReportAssault = false
 local ReportShotsFired = true
 local ReportCarjacking = true
 local ReportPersonWithAGun = false
