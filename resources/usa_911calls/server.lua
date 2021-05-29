@@ -188,117 +188,110 @@ RegisterServerEvent('911:Shoplifting')
 RegisterServerEvent('911:JewelleryRobbery')
 RegisterServerEvent('911:UncontrolledFire')
 
-recentcalls = {}
+local DISPATCH_DELAY_PERIOD_SECONDS = 60
+
+local recentCalls = {}
+
+Citizen.CreateThread(function()
+    local lastWipe = os.time()
+    while true do
+        if os.difftime(os.time(), lastWipe) >= DISPATCH_DELAY_PERIOD_SECONDS then
+            recentCalls = {} -- clear call log so we can accept new calls
+            lastWipe = os.time()
+        end
+        Wait(1)
+    end
+end)
 
 AddEventHandler('911:ShotsFired', function(x, y, z, street, area, isMale)
-	if recentcalls[area] ~= 'ShotsFired' then
-		recentcalls[area] = 'ShotsFired'
-		local time = math.random(2000, 5000)
-		Citizen.Wait(time)
-		local string = '^*^1Shots Fired:^r '..street..' ^*^1^*|^r ^*Suspect:^r '..Gender(isMale)
-		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Shots Fired')
+    if not recentCalls["Shots Fired"] then
+        recentCalls["Shots Fired"] = true
+        local time = math.random(2000, 5000)
+        Citizen.Wait(time)
+        local string = '^*^1Shots Fired:^r '..street..' ^*^1^*|^r ^*Suspect:^r '..Gender(isMale)
+        Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Shots Fired')
         exports.usa_weazelnews:SendWeazelNewsAlert('Report of ^3shots fired^r at ^3'..street..'^r, see what\'s going on!', x, y, z, 'Shots Fired')
-		Citizen.Wait(30000)
-		recentcalls[area] = nil
-	end
+    end
 end)
 
 AddEventHandler('911:Carjacking', function(x, y, z, street, vehicle, plate, isMale, primaryColor, secondaryColor)
-	if recentcalls[street] ~= 'Carjacking' then
-		recentcalls[street] = 'Carjacking'
-		local primaryColor = colorNames[tostring(primaryColor)]
-		local secondaryColor = colorNames[tostring(secondaryColor)]
-		local time = math.random(1000, 6000)
-		Citizen.Wait(time)
-		local string = '^*^2Carjacking^r: '..street..' ^1^*|^r ^*Vehicle^r: '..string.upper(vehicle)..' ^1^*|^r ^*Plate^r: '..plate..' ^1^*|^r ^*Color^r: '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect^r: '..Gender(isMale)
-		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Carjacking')
-		Citizen.Wait(5000)
-		recentcalls[street] = nil
-	end
+    if not recentCalls["Carjacking"] then
+        recentCalls["Carjacking"] = true
+        local primaryColor = colorNames[tostring(primaryColor)]
+        local secondaryColor = colorNames[tostring(secondaryColor)]
+        local time = math.random(1000, 6000)
+        Citizen.Wait(time)
+        local string = '^*^2Carjacking^r: '..street..' ^1^*|^r ^*Vehicle^r: '..string.upper(vehicle)..' ^1^*|^r ^*Plate^r: '..plate..' ^1^*|^r ^*Color^r: '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect^r: '..Gender(isMale)
+        Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Carjacking')
+    end
 end)
 
 AddEventHandler('911:PersonWithAGun', function(x, y, z, street, area, isMale)
-	local sendChance = math.random()
-	if recentcalls[area] ~= 'PersonWithAGun' and recentcalls[area] ~= 'ShotsFired' and recentcalls[street] ~= 'ArmedCarjacking' and sendChance < 0.3 then
-		recentcalls[area] = 'PersonWithAGun'
+	if not recentCalls["Person With Gun"] then
+        recentCalls["Person With Gun"] = true
 		local time = math.random(2500, 8000)
 		Citizen.Wait(time)
 		local string = '^*Person with Gun^r: '..street..' ^1^*|^r ^*Suspect^r: '..Gender(isMale)
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Person with a Gun')
-		Citizen.Wait(180000)
-		recentcalls[area] = nil
 	end
 end)
 
 AddEventHandler('911:MuggingNPC', function(x, y, z, street)
-    local sendChance = math.random()
-    if recentcalls[street] ~= 'MuggingNPC' and sendChance <= 0.37 then
-		recentcalls[street] = 'MuggingNPC'
+    if not recentCalls["Mugging"] then
+        recentCalls["Mugging"] = true
 		local time = math.random(5000, 10000)
 		Citizen.Wait(time)
 		local string = '^*^5Mugging^r: '..street
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Mugging in progress')
-		Citizen.Wait(180000)
-		recentcalls[street] = nil
 	end
 end)
 
 AddEventHandler('911:Shoplifting', function(x, y, z, street, isMale)
-    if recentcalls[street] ~= 'Shoplifting' then
-        recentcalls[street] = 'Shoplifting'
+    if not recentCalls["Shoplifting"] then
+        recentCalls["Shoplifting"] = true
         local time = math.random(1000, 2000)
         Citizen.Wait(time)
         local string = '^2^*Shoplifting In Progress:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
         Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Shoplifting')
-        Citizen.Wait(50000)
-        recentcalls[street] = nil
     end
 end)
 
 AddEventHandler('911:PersonWithAKnife', function(x, y, z, street, area, isMale)
-	local sendChance = math.random()
-	if recentcalls[area] ~= 'PersonWithAKnife' and recentcalls[area] ~= 'AssaultInProgress' and sendChance < 0.3 then
-		recentcalls[area] = 'PersonWithAKnife'
+	if not recentCalls["Person With Knife"] then
+        recentCalls["Person With Knife"] = true
 		local time = math.random(2500, 8000)
 		Citizen.Wait(time)
 		local string = '^*Person with Knife^r: '..street..' ^1^*|^r ^*Suspect^r: '..Gender(isMale)
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Person with a Knife')
-		Citizen.Wait(120000)
-		recentcalls[area] = nil
 	end
 end)
 
 AddEventHandler('911:AssaultInProgress', function(x, y, z, street, area, isMale)
-	local sendChance = math.random()
-	if recentcalls[area] ~= 'AssaultInProgress' and sendChance < 0.2 then
-		recentcalls[area] = 'AssaultInProgress'
+	if not recentCalls["Assault"] then
+        recentCalls["Assault"] = true
 		local time = math.random(4000, 9000)
 		Citizen.Wait(time)
 		local string = '^*Assault^r: '..street..' ^1^*|^r ^*Suspect^r: '..Gender(isMale)
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Assault')
         exports.usa_weazelnews:SendWeazelNewsAlert('Report of an ^3assault^r at ^3'..street..'^r, stay at a safe distance!', x, y, z, 'Assault')
-		Citizen.Wait(120000)
-		recentcalls[area] = nil
 	end
 end)
 
 AddEventHandler('911:RecklessDriving', function(x, y, z, street, area, vehicle, plate, isMale, primaryColor, secondaryColor)
-	if recentcalls[area] ~= 'RecklessDriving' then
-		recentcalls[area] = 'RecklessDriving'
+	if not recentCalls["Reckless Driver"] then
+        recentCalls["Reckless Driver"] = true
 		local primaryColor = colorNames[tostring(primaryColor)]
 		local secondaryColor = colorNames[tostring(secondaryColor)]
 		local time = math.random(1000, 3500)
 		Citizen.Wait(time)
 		local string = '^*Reckless Driving^r: '..street..' ^1^*|^r ^*Vehicle^r: '..string.upper(vehicle)..' ^1^*|^r ^*Plate^r: '..plate..' ^1^*|^r ^*Color^r: '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect^r: '..Gender(isMale)
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Reckless Driving')
-		Citizen.Wait(45000)
-		recentcalls[area] = nil
 	end
 end)
 
 AddEventHandler('911:VehicleTheft', function(x, y, z, street, vehicle, plate, isMale, primaryColor, secondaryColor)
-	if recentcalls[street] ~= 'VehicleTheft' then
-		recentcalls[street] = 'VehicleTheft'
+	if not recentCalls["Vehicle Theft"] then
+        recentCalls["Vehicle Theft"] = true
 		local primaryColor = colorNames[tostring(primaryColor)]
 		local secondaryColor = colorNames[tostring(secondaryColor)]
 		local time = math.random(1000, 5000)
@@ -306,28 +299,24 @@ AddEventHandler('911:VehicleTheft', function(x, y, z, street, vehicle, plate, is
 		local string = '^*^6Vehicle Theft:^r '..street..' ^1^*|^r ^*Vehicle:^r '..string.upper(vehicle)..' ^1^*|^r ^*Plate:^r '..plate..' ^1^*|^r ^*Color:^r '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Vehicle Theft')
         exports.usa_weazelnews:SendWeazelNewsAlert('Report of a ^3vehicle theft^r at ^3'..street..'^r, don\'t be too late!', x, y, z, 'Vehicle Theft')
-		Citizen.Wait(5000)
-		recentcalls[street] = nil
 	end
 end)
 
 AddEventHandler('911:MVA', function(x, y, z, street, area, vehicle, plate, isMale, primaryColor, secondaryColor)
-	if recentcalls[area] ~= 'MVA' then
-		recentcalls[area] = 'MVA'
+	if not recentCalls["MVA"] then
+        recentCalls["MVA"] = true
 		local primaryColor = colorNames[tostring(primaryColor)]
 		local secondaryColor = colorNames[tostring(secondaryColor)]
 		local time = math.random(2000, 5000)
 		Citizen.Wait(time)
 		local string = '^*MVA:^r '..street..' ^1^*|^r ^*Vehicle:^r '..string.upper(vehicle)..' ^1^*|^r ^*Plate:^r '..plate..' ^1^*|^r ^*Color:^r '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
 		Send911Notification({'sheriff', 'corrections', 'ems'}, string, x, y, z, 'Motor Vehicle Accident')
-		Citizen.Wait(30000)
-		recentcalls[area] = nil
 	end
 end)
 
 AddEventHandler('911:ArmedCarjacking', function(x, y, z, street, vehicle, plate, isMale, primaryColor, secondaryColor)
-	if recentcalls[street] ~= 'ArmedCarjacking' then
-		recentcalls[street] = 'ArmedCarjacking'
+	if not recentCalls["Armed Carjacking"] then
+        recentCalls["Armed Carjacking"] = true
 		local primaryColor = colorNames[tostring(primaryColor)]
 		local secondaryColor = colorNames[tostring(secondaryColor)]
 		local time = math.random(1000, 3000)
@@ -335,21 +324,17 @@ AddEventHandler('911:ArmedCarjacking', function(x, y, z, street, vehicle, plate,
 		local string = '^*^6Armed Carjacking:^r '..street..' ^1^*|^r ^*Vehicle:^r '..string.upper(vehicle)..' ^1^*|^r ^*Plate:^r '..plate..' ^1^*|^r ^*Color:^r '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Armed Carjacking')
         exports.usa_weazelnews:SendWeazelNewsAlert('Report of an ^3armed carjacking^r at ^3'..street..'^r, proceed with caution!', x, y, z, 'Armed Carjacking')
-		Citizen.Wait(5000)
-		recentcalls[street] = nil
 	end
 end)
 
 AddEventHandler('911:Narcotics', function(x, y, z, street, isMale)
-	if recentcalls[street] ~= 'Narcotics' then
-		recentcalls[street] = 'Narcotics'
+	if not recentCalls["Narcotics"] then
+        recentCalls["Narcotics"] = true
 		local time = math.random(4000, 10000)
 		Citizen.Wait(time)
 		local string = '^2^*Sale of Narcotics:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Narcotics')
         exports.usa_weazelnews:SendWeazelNewsAlert('Report of ^3drugs sold^r at ^3'..street..'^r, be careful and cautious!', x, y, z, 'Drugs Sold')
-		Citizen.Wait(50000)
-		recentcalls[street] = nil
 	end
 end)
 
@@ -391,8 +376,8 @@ AddEventHandler('911:SuspiciousWeaponBuying', function(x, y, z, street, isMale)
 end)
 
 AddEventHandler('911:HotwiringVehicle', function(x, y, z, street, vehicle, plate, isMale, primaryColor, secondaryColor)
-	if recentcalls[street] ~= 'HotwiringVehicle' then
-		recentcalls[street] = 'HotwiringVehicle'
+	if not recentCalls["Hotwiring"] then
+        recentCalls["Hotwiring"] = true
 		local primaryColor = colorNames[tostring(primaryColor)]
 		local secondaryColor = colorNames[tostring(secondaryColor)]
 		local time = math.random(4000, 10000)
@@ -400,14 +385,12 @@ AddEventHandler('911:HotwiringVehicle', function(x, y, z, street, vehicle, plate
 		local string = '^*Vehicle Being Hotwired:^r '..street..' ^1^*|^r ^*Vehicle:^r '..string.upper(vehicle)..' ^1^*|^r ^*Plate:^r '..plate..' ^1^*|^r ^*Color:^r '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Vehicle Hotwiring')
         exports.usa_weazelnews:SendWeazelNewsAlert('Report of a ^3vehicle theft^r at ^3'..street..'^r, don\'t let yourself be seen!', x, y, z, 'Vehicle Theft')
-		Citizen.Wait(50000)
-		recentcalls[street] = nil
 	end
 end)
 
 AddEventHandler('911:LockpickingVehicle', function(x, y, z, street, vehicle, plate, isMale, primaryColor, secondaryColor)
-	if recentcalls[street] ~= 'LockpickingVehicle' then
-		recentcalls[street] = 'LockpickingVehicle'
+	if not recentCalls["Vehicle Lockpicking"] then
+        recentCalls["Vehicle Lockpicking"] = true
 		local primaryColor = colorNames[tostring(primaryColor)]
 		local secondaryColor = colorNames[tostring(secondaryColor)]
 		local time = math.random(4000, 10000)
@@ -415,8 +398,6 @@ AddEventHandler('911:LockpickingVehicle', function(x, y, z, street, vehicle, pla
 		local string = '^*Vehicle Being Lockpicked:^r '..street..' ^1^*|^r ^*Vehicle:^r '..string.upper(vehicle)..' ^1^*|^r ^*Plate:^r '..plate..' ^1^*|^r ^*Color:^r '..secondaryColor..' on '..primaryColor.. ' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
 		Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Vehicle Lockpicking')
         exports.usa_weazelnews:SendWeazelNewsAlert('Report of a ^3vehicle theft^r at ^3'..street..'^r, stay vigilant and out of sight!', x, y, z, 'Vehicle Theft')
-		Citizen.Wait(50000)
-		recentcalls[street] = nil
 	end
 end)
 
@@ -459,52 +440,41 @@ AddEventHandler('911:BankRobbery', function(x, y, z, street, isMale, bankName, c
 end)
 
 AddEventHandler('911:FleecaRobbery', function(x, y, z, street)
-    local sendChance = math.random()
-    if recentcalls[street] ~= 'FleecaRobbery' then
-        recentcalls[street] = 'FleecaRobbery'
+    if not recentCalls["Fleeca Alarm"] then
+        recentCalls["Fleeca Alarm"] = true
         local time = math.random(5000, 10000)
         Citizen.Wait(time)
         local string = '^*Store Alarm^r: Fleeca Bank, '..street
         Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Store Alarm')
-        Citizen.Wait(180000)
-        recentcalls[street] = nil
     end
 end)
 
 AddEventHandler('911:JewelleryRobbery', function(x, y, z, street)
-    local sendChance = math.random()
-    if recentcalls[street] ~= 'JewelleryRobbery' then
-        recentcalls[street] = 'JewelleryRobbery'
+    if not recentCalls["Vangelico Alarm"] then
+        recentCalls["Vangelico Alarm"] = true
         local time = math.random(5000, 10000)
         Citizen.Wait(time)
         local string = '^*Store Alarm^r: Vangelico Jewelry Store, '..street
         Send911Notification({'sheriff', 'corrections'}, string, x, y, z, 'Store Alarm')
-        Citizen.Wait(180000)
-        recentcalls[street] = nil
     end
 end)
 
 AddEventHandler('911:UncontrolledFire', function(x, y, z, street)
-    local sendChance = math.random()
-    if recentcalls[street] ~= 'UncontrolledFire' then
-        recentcalls[street] = 'UncontrolledFire'
+    if not recentCalls["Fire"] then
+        recentCalls["Fire"] = true
         local time = math.random(5000, 10000)
         Citizen.Wait(time)
         local string = '^*^rFIRE^r: Fire Outbreak '..street
         Send911Notification({'ems'}, string, x, y, z, 'Fire Alarm')
-        Citizen.Wait(180000)
-        recentcalls[street] = nil
     end
 end)
 
 AddEventHandler('911:Burglary', function(x, y, z, street, isMale)
-    if recentcalls[street] ~= 'Burglary' then
-        recentcalls[street] = 'Burglary'
+    if not recentCalls["Burglary"] then
+        recentCalls["Burglary"] = true
         local string = '^*Burglary:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)
         Send911Notification({'sheriff', 'corrections', 'ems'}, string, x, y, z, 'Burglary')
         exports.usa_weazelnews:SendWeazelNewsAlert('Report of a ^burglary^r at ^3'..street..'^r, expose those theives! Don\'t get too much attention!', x, y, z, 'Burglary')
-        Citizen.Wait(180000)
-        recentcalls[street] = nil
     end
 end)
 
