@@ -6,10 +6,9 @@ local releaseX, releaseY, releaseZ = 1847.086, 2585.990, 45.672
 local assigned_cell = nil
 local tabletObject
 
--- start of NUI menu
-
 local menuEnabled = false
 local gracePeriod = false
+local allowedOut = false
 
 function EnableGui(enable)
     SetNuiFocus(enable, enable)
@@ -80,7 +79,7 @@ Citizen.CreateThread(function()
     -- escaping jail check --
     if assigned_cell then
       local playerCoords = GetEntityCoords(PlayerPedId())
-      if Vdist(playerCoords, assigned_cell.x, assigned_cell.y, assigned_cell.z) > 350 and not gracePeriod then
+      if Vdist(playerCoords, assigned_cell.x, assigned_cell.y, assigned_cell.z) > 350 and not gracePeriod and not allowedAwayFromPrison then
         TriggerEvent("jail:escaped")
         assigned_cell = nil
       elseif Vdist(playerCoords, assigned_cell.x, assigned_cell.y, assigned_cell.z) > 350 and gracePeriod then
@@ -211,4 +210,9 @@ AddEventHandler("jail:changeClothes", function(gender)
             ClearPedProp(playerPed, 1)
         end
     end
+end)
+
+RegisterNetEvent("jail:setAllowedOut")
+AddEventHandler("jail:setAllowedOut", function(status)
+  allowedOut = status
 end)

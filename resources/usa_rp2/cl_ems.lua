@@ -12,15 +12,8 @@ AddEventHandler("ems:hospitalize", function(treatmentTimeMinutes, bed, index)
         end
         DoScreenFadeOut(500)
         Citizen.Wait(500)
-        RequestCollisionAtCoord(hospitalCoords)
         Citizen.Wait(1000)
         TriggerServerEvent('InteractSound_SV:PlayOnSource', 'door-shut', 0.3)
-        SetEntityCoords(playerPed, hospitalCoords) -- tp to hospital
-        while not HasCollisionLoadedAroundEntity(playerPed) do
-            Citizen.Wait(100)
-            SetEntityCoords(playerPed, hospitalCoords) -- tp to hospital
-        end
-        Citizen.Wait(2000)
         TriggerEvent("crim:untieHands", GetPlayerServerId(PlayerId()))
         TriggerEvent("crim:blindfold", false, true)
         TriggerEvent('injuries:checkin')
