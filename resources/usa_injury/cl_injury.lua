@@ -532,7 +532,7 @@ Citizen.CreateThread(function()
                     end
                 end
                 DrawText3Ds(x, y, z, '[E] - Check In (~g~$'..totalPrice..'~s~)')
-                if IsControlJustPressed(0, 38) and Vdist(playerCoords, x, y, z) < 3 and not checkingIn then
+                if IsControlJustPressed(0, 38) and Vdist(playerCoords, x, y, z) < 1.5 and not checkingIn then
                     PlayDoorAnimation()
                     checkingIn = true
                     local beginTime = GetGameTimer()
