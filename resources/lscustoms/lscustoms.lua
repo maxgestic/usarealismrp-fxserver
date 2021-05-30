@@ -124,6 +124,14 @@ AddEventHandler("customs:applyCustomizations", function(veh)
 		end
 
 		SetVehicleLivery(GetVehiclePedIsIn(PlayerPedId(), false), (veh.liveryIndex or 1))
+
+		for i = 1, 15 do
+			if veh.extras[i] then
+				SetVehicleExtra(currentvehicle, i, false)
+			else
+				SetVehicleExtra(currentvehicle, i, true)
+			end
+		end
 end)
 ------------
 
@@ -302,6 +310,7 @@ local function DriveInGarage()
 		myveh.smokecolor = table.pack(GetVehicleTyreSmokeColor(veh))
 		myveh.plateindex = GetVehicleNumberPlateTextIndex(veh)
 		myveh.mods = {}
+		myveh.extras = {}
 		for i = 0, 48 do
 			myveh.mods[i] = {mod = nil}
 		end
@@ -330,6 +339,7 @@ local function DriveInGarage()
 		--Menu stuff
 		local chassis,interior,bumper,fbumper,rbumper = false,false,false,false
 
+		-- get set mods
 		for i = 0,48 do
 			if GetNumVehicleMods(veh,i) ~= nil and GetNumVehicleMods(veh,i) ~= false and GetNumVehicleMods(veh,i) > 0 then
 				if i == 1 then
@@ -343,6 +353,13 @@ local function DriveInGarage()
 				elseif i >= 27 and i <= 37 then --If any interior mod exist then add interior menu
 					interior = true
 				end
+			end
+		end
+
+		-- get set extras
+		for i = 1, 15 do
+			if IsVehicleExtraTurnedOn(veh, i) then
+				myveh.extras[i] = true
 			end
 		end
 
@@ -574,6 +591,14 @@ local function DriveInGarage()
 			btn = m:addPurchase(tint.name,tint.price)btn.tint = tint.tint
 		end
 
+		local vehExtrasMenu = LSCMenu.categories:addSubMenu("Extras", "Extras", "Vehicle extras",true)
+		for i = 1, 15 do
+			if DoesExtraExist(veh, i) then
+				local extraBtn = vehExtrasMenu:addPurchase("Extra #" .. i, "$500")
+				extraBtn.extraIndex = i
+				extraBtn.price = 500
+			end
+		end
 				
 		Citizen.CreateThread(function()
 			--NetworkFadeOutEntity(veh, 1,1)
@@ -1032,6 +1057,18 @@ AddEventHandler("LSC:buttonSelected", function(name, button, canpurchase)
 			else
 				SetVehicleLivery(veh, button.liveryIndex)
 				myveh.liveryIndex = button.liveryIndex
+			end
+		end
+	elseif mname == "extras" then
+		if CanPurchase(price, canpurchase) then
+			if IsVehicleExtraTurnedOn(veh, button.extraIndex) then
+				exports.globals:notify("Extra " .. button.extraIndex .. " off")
+				SetVehicleExtra(veh, button.extraIndex, true)
+				myveh.extras[button.extraIndex] = nil
+			else
+				exports.globals:notify("Extra " .. button.extraIndex .. " on")
+				SetVehicleExtra(veh, button.extraIndex, false)
+				myveh.extras[button.extraIndex] = true
 			end
 		end
 	end

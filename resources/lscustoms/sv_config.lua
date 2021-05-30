@@ -88,6 +88,10 @@ LSC_Config.prices = {
 		price = 2000
 	},
 
+	extra = {
+		price = 500
+	},
+
 ------Window tint------
 	windowtint = {
 		{ name = "Pure Black", tint = 1, price = 1000},
