@@ -356,7 +356,10 @@ local vehicleShopItems = {
 			{make = "Chevy", model = "Camaro", price = 160000, hash = "zl12017", storage_capacity = 130.0},
 			{make = "Maserati", model = "Levante Novitec", price = 150000, hash = "mlnovitec", storage_capacity = 185.0},
 			{make = "Dodge", model = "Challenger", price = 120000, hash = "16challenger", storage_capacity = 130.0},
-			{make = "Audi", model = "RS6", price = 170000, hash = "rs6", storage_capacity = 245.0}
+			{make = "Audi", model = "RS6", price = 170000, hash = "rs6", storage_capacity = 245.0},
+			{make = "Subaru", model = "BRZ", price = 80000, hash = "brz13", storage_capacity = 160.0},
+			{make = "Chevy", model = "C7", price = 95000, hash = "c7", storage_capacity = 160.0},
+			{make = "Porsche", model = "911 Turbo S", price = 280000, hash = "pts21", storage_capacity = 160.0}
 		}
 	}
 }
