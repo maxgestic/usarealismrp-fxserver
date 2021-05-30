@@ -2,6 +2,8 @@ local deathLog = {}
 
 local RESPAWN_FEE = 1000
 
+local MAX_DEATH_LOG_COUNT = 15
+
 RegisterServerEvent("death:respawn")
 AddEventHandler("death:respawn", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
@@ -174,7 +176,7 @@ end, {
 RegisterServerEvent("death:newDeathLog")
 AddEventHandler("death:newDeathLog", function(log)
 	log.timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())
-	if #deathLog >= 10 then
+	if #deathLog >= MAX_DEATH_LOG_COUNT then
 		--deathLog = {}
 		table.remove(deathLog, 1)
 	end
