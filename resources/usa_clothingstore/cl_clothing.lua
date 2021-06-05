@@ -17,8 +17,8 @@ local CLOTHING_STORE_LOCATIONS = {
 	{x = -818.509, y = -1074.14, z = 11.0281}, -- vinewood 7
 	{x = 77.7774, y = -1389.87, z = 29.0761}, -- vinewood
 	{x = 105.8, y = -1302.9, z = 27.7, noblip = true}, -- vanilla unicorn
-	{x = -82.16, y = -809.99, z = 243.38, blacklistExempt = true, noblip = true},
-	{x = -454.08, y = 282.46, z = 83.06, blacklistExempt = true, noblip = true}, -- Comedy Club
+	{x = -82.16, y = -809.99, z = 243.38, noblip = true},
+	{x = -454.08, y = 282.46, z = 83.06, noblip = true}, -- Comedy Club
 }
 local me = nil
 local mycoords = nil
@@ -45,31 +45,27 @@ local BLACKLISTED_MENU_ITEMS = {
 local BLACKLISTED_ITEMS = {
 	["male"] = {
 		["components"] = {
-			[7] = {1, 2, 3, 5, 6, 8, 16, 17, 24, 56, 57}, -- ties
+			[7] = {1, 2, 3, 5, 6, 8, 16, 17, 24, 58, 59}, -- ties
 			[8] = {17, 22, 23, 24, 25, 30, 32, 52, 57, 67, 70, 81, 86, 111, 128, 129, 130, 136, 144, 145}, -- torso 1
 			[9] = {5, 7, 10, 11, 14, 15, 18, 30, 31, 32, 36, 37, 38, 43, 45, 46, 47, 50}, -- vests
-			[11] = {16, 24, 25, 26, 35, 36, 37, 38, 39, 43, 45, 59, 60, 63, 64, 101, 102, 103, 109, 121, 122, 127, 128, 129, 130, 131, 139, 146, 180, 184, 194, 211} -- torso 2
+			[11] = {16, 24, 25, 26, 35, 36, 37, 38, 39, 47, 61, 62, 65, 66, 103, 104, 105, 110, 111, 123, 124, 129, 130, 131, 132, 133, 141, 148, 182, 185, 186, 196, 213, 344, 345, 350} -- torso 2
 		},
 		["props"] = {
-			[1] = {8, 10, 13, 17, 20, 43, 54, 56} -- head
+			[0] = {8, 10, 13, 17, 20, 43, 54, 56} -- head
 		}
 	},
 	["female"] = {
 		["components"] = {
 			[7] = {1, 2, 3, 4, 5, 6, 8, 10, 11, 14, 49, 50, 101, 102, 108, 109},
 			[8] = {9, 10, 16, 18, 20, 22, 23, 24, 41, 47, 65, 80, 81, 95, 119, 166, 174, 175},
-			[9] = {7, 8, 11, 12, 31, 32, 33, 40, 41, 43, 44, 47, 49, 50, 51, 56},
-			[11] = {16, 26, 34, 39, 40, 41, 42, 43, 56, 66, 68, 75, 119, 120, 125, 126, 129, 138, 179, 184, 198, 202, 214, 220}
+			[9] = {7, 8, 11, 12, 14, 31, 32, 33, 40, 41, 43, 44, 46, 47, 48, 49, 50, 51, 56},
+			[11] = {16, 26, 34, 39, 40, 41, 42, 43, 60, 70, 72, 79, 87, 123, 124, 129, 103, 130, 131, 132, 133, 142, 153, 183, 188, 190, 191, 192, 202, 206, 211, 218, 224, 263, 364, 370}
 		},
 		["props"] = {
-			[1] = {8, 10, 13, 17, 20, 42, 53}
+			[0] = {8, 10, 13, 17, 20, 42, 53}
 		}
 	}
 }
-
-
-
-
 
 ------------------------------------------------------------------------------------------------------
 -- Swayam's way of setting up data structures with skins, basically 3 parallel arrays --
@@ -115,42 +111,42 @@ end)
 
 -- menu processing / opening --
 Citizen.CreateThread(function()
-			while true do
-				me = GetPlayerPed(-1)
-				mycoords = GetEntityCoords(me)
-				-- see if close enough to open menu --
-				if  IsNearStore() then
-					if not _menuPool:IsAnyMenuOpen() then
-						if not previous_menu then
-							if IsControlJustPressed(1, MENU_KEY)  then
-								if not IsEntityDead(me) then
+	while true do
+		me = GetPlayerPed(-1)
+		mycoords = GetEntityCoords(me)
+		-- see if close enough to open menu --
+		if  IsNearStore() then
+			if not _menuPool:IsAnyMenuOpen() then
+				if not previous_menu then
+					if IsControlJustPressed(1, MENU_KEY)  then
+						if not IsEntityDead(me) then
 
-									------------------------------------------------------------
-									-- give money to owner, subtract from customer --
-									local business = exports["usa-businesses"]:GetClosestStore(15)
-									TriggerServerEvent("clothing-store:chargeCustomer", business)
-								else
-									TriggerEvent("usa:notify", "Can't use the clothing store when dead!")
-								end
-							end
+							------------------------------------------------------------
+							-- give money to owner, subtract from customer --
+							local business = exports["usa-businesses"]:GetClosestStore(15)
+							TriggerServerEvent("clothing-store:chargeCustomer", business)
 						else
-							previous_menu:Visible(true)
-							previous_menu = nil
+							TriggerEvent("usa:notify", "Can't use the clothing store when dead!")
 						end
 					end
-				elseif _menuPool:IsAnyMenuOpen() then
-					_menuPool:CloseAllMenus()
+				else
+					previous_menu:Visible(true)
+					previous_menu = nil
 				end
-
-				for i = 1, #CLOTHING_STORE_LOCATIONS do
-					DrawText3D(CLOTHING_STORE_LOCATIONS[i].x, CLOTHING_STORE_LOCATIONS[i].y, CLOTHING_STORE_LOCATIONS[i].z, 2, '[E] - Clothes Store (~g~$60.00~s~)')
-				end
-				-- process menus --
-				_menuPool:MouseControlsEnabled(false)
-				_menuPool:ControlDisablingEnabled(false)
-				_menuPool:ProcessMenus()
-				Wait(0)
 			end
+		elseif _menuPool:IsAnyMenuOpen() then
+			_menuPool:CloseAllMenus()
+		end
+
+		for i = 1, #CLOTHING_STORE_LOCATIONS do
+			DrawText3D(CLOTHING_STORE_LOCATIONS[i].x, CLOTHING_STORE_LOCATIONS[i].y, CLOTHING_STORE_LOCATIONS[i].z, 2, '[E] - Clothes Store (~g~$60.00~s~)')
+		end
+		-- process menus --
+		_menuPool:MouseControlsEnabled(false)
+		_menuPool:ControlDisablingEnabled(false)
+		_menuPool:ProcessMenus()
+		Wait(0)
+	end
 end)
 
 RegisterNetEvent("CS:giveWeapons")
@@ -304,7 +300,7 @@ function CreateMenu()
 					ComponentValuesMenu.OnListChange = function(sender, item, index)
 						if item == component_changer then
 							local val = item:IndexToItem(index)
-							if (not IsBlacklisted(getGenderFromModel(GetEntityModel(PlayerPedId())), "components", adjusted_index, val) or CLOTHING_STORE_LOCATIONS[lastShop].blacklistExempt) then
+							if (not IsBlacklisted(getGenderFromModel(GetEntityModel(PlayerPedId())), "components", adjusted_index, val)) then
 								--print("setting adjusted index " .. adjusted_index .. " to val " .. val)
 								SetPedComponentVariation(me, adjusted_index, val, 0, 0)
 								UpdateValueChangerMenu(me, adjusted_index, val, false)
@@ -348,7 +344,7 @@ function CreateMenu()
 						 local val = item:IndexToItem(index)
 						 ClearPedProp(me, adjusted_index)
 						 if val then
-							 if (not IsBlacklisted(getGenderFromModel(GetEntityModel(PlayerPedId())), "props", adjusted_index, val) or CLOTHING_STORE_LOCATIONS[lastShop].blacklistExempt) then
+							 if not IsBlacklisted(getGenderFromModel(GetEntityModel(PlayerPedId())), "props", adjusted_index, val) then
 								 --print("adjusted index: " .. adjusted_index .. ", val: " .. val)
 								 SetPedPropIndex(me, adjusted_index, val, 0, true)
 								 UpdateValueChangerMenu(me, adjusted_index, val, true)
@@ -431,7 +427,7 @@ function UpdateValueChangerMenu(me, adjusted_index, oldval, isProp)
 		ComponentValuesMenu.OnListChange = function(sender, item, index)
 			if item == component_changer then
 				 local val2 = item:IndexToItem(index)
-				 if not IsBlacklisted(getGenderFromModel(GetEntityModel(PlayerPedId())), "components", adjusted_index, val2) or CLOTHING_STORE_LOCATIONS[lastShop].blacklistExempt then
+				 if not IsBlacklisted(getGenderFromModel(GetEntityModel(PlayerPedId())), "components", adjusted_index, val2) then
 					 --print("setting adjusted index " .. adjusted_index .. " to val2 " .. val2)
 					 SetPedComponentVariation(me, adjusted_index, val2, 0, 0)
 					 UpdateValueChangerMenu(me, adjusted_index, val2)
@@ -460,7 +456,7 @@ function UpdateValueChangerMenu(me, adjusted_index, oldval, isProp)
 				 local val2 = item:IndexToItem(index)
 				 ClearPedProp(me, adjusted_index)
 				 if val2 then
-					 if not IsBlacklisted(getGenderFromModel(GetEntityModel(PlayerPedId())), "props", adjusted_index, val2) or CLOTHING_STORE_LOCATIONS[lastShop].blacklistExempt then
+					 if not IsBlacklisted(getGenderFromModel(GetEntityModel(PlayerPedId())), "props", adjusted_index, val2) then
 						 --print("adjusted index: " .. adjusted_index .. ", val2: " .. val2)
 						 SetPedPropIndex(me, adjusted_index, val2, 0, true)
 						 UpdateValueChangerMenu(me, adjusted_index, val2, true)
