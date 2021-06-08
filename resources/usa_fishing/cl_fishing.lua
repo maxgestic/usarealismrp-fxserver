@@ -7,7 +7,8 @@ local seaFishing = false
 
 local fishStoreLocations = {
   {x = -666.796, y = 5805.82, z = 17.57},
-  {x = -3044.07, y = 102.78, z = 12.34}
+  {x = -3044.07, y = 102.78, z = 12.34},
+  {x = 4519.8374023438, y = -4515.0639648438, z = 4.4947814941406} -- cayo perico
 }
 
 local fishingZoneSpots = {
