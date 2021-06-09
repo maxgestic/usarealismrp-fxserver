@@ -236,7 +236,18 @@ local warp_locations = {
     },
     job_access = 'civ'
   },
-  ['Eclipse Tower Apartment'] = {
+  ['Eclipse Tower Apartment 1'] = {
+    entrance = {
+      coords = {-776.77490234375, 319.72201538086, 85.662673950195},
+      heading = 180.0
+    },
+    exit = {
+      coords = {-782.02569580078, 326.37509155273, 223.25759887695},
+      heading = -180.0
+    },
+    job_access = 'civ'
+  },
+  ['Eclipse Tower Apartment 2'] = {
     entrance = {
       coords = {-770.53485107422, 319.64730834961, 85.662643432617},
       heading = 260.0
