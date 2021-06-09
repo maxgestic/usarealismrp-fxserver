@@ -1206,19 +1206,26 @@ Citizen.CreateThread(function()
 	end
 end)
 
---[[
--- add XMAS tree --
-local TREES = {
-  LEGION = {226.48237609863, -895.41094970703, 28.692138671875},
-  UPPER_PILLBOX = {242.40295410156, -565.30682373047, 41.278789520264},
-  BURGERSHOT = { -1191.5321044922, -894.51275634766, 18.479234695435},
-  PDM = { -30.562828063965, -1100.5909423828, 32.261386108398},
+-- add static objects --
+local LARGE_XMAS_TREE_MODEL = 118627012
+local ATM_MODEL = GetHashKey("prop_atm_02")
+
+local STATIC_OBJECTS = {
+  --LEGION = {226.48237609863, -895.41094970703, 28.692138671875},
+  --UPPER_PILLBOX = {242.40295410156, -565.30682373047, 41.278789520264},
+  --BURGERSHOT = { -1191.5321044922, -894.51275634766, 18.479234695435},
+  --PDM = { -30.562828063965, -1100.5909423828, 32.261386108398},
   --MRPD = { 455.22213745117, -1024.1641845703, 26.466562271118},
+  BS_ATM = {
+    coords = vector3(-1205.6720947266, -889.24501953125, 12.570239067078),
+    heading = 215.0,
+    obj = ATM_MODEL
+  }
 }
 
-local LARGE_XMAS_TREE_MODEL = 118627012
-
-for tree, coords in pairs(TREES) do
-  CreateObject(LARGE_XMAS_TREE_MODEL, coords[1], coords[2], coords[3], 0, 0, 0)
+for name, info in pairs(STATIC_OBJECTS) do
+  info.handle = CreateObject(info.obj, info.coords.x, info.coords.y, info.coords.z, 0, 0, 0)
+  if info.heading then
+    SetEntityHeading(info.handle, info.heading)
+  end
 end
---]]
