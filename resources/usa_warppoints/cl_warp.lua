@@ -5,34 +5,6 @@ local INTERACTION_KEY = 86 -- "E"
 -- exit: x = 979.99719238281,y = 57.005077362061, z = 116.16428375244
 
 local warp_locations = {
-  --[[
-  ["Casino"] = {
-    entrance = {
-        coords = {928.15985107422, 44.713218688965, 81.095771789551},
-        heading = 73.0
-    },
-    exit = {
-      coords = {1089.9970703125, 207.00463867188, -48.996398925781},
-      heading = 350.0
-    },
-    job_access = "civ",
-    groundMarker = true,
-    skipSound = true
-  },
-  ["Casino - Penthouse"] = {
-    entrance = {
-        coords = {1085.9984130859, 215.00494384766, -49.195377349854},
-        heading = 180.0
-    },
-    exit = {
-      coords = {979.99719238281, 57.005077362061, 116.16428375244},
-      heading = 265.0
-    },
-    job_access = "civ",
-    groundMarker = true,
-    skipSound = true
-  },
-  --]]
   ["Upper Yacht"] = {
     entrance = {
         coords = {-2036.3878173828,-1033.9129638672, 5.8823575973511},
@@ -261,6 +233,17 @@ local warp_locations = {
     exit = {
       coords = {980.60974121094, 56.602554321289, 116.16416931152},
       heading = -45.0
+    },
+    job_access = 'civ'
+  },
+  ['Eclipse Tower Apartment'] = {
+    entrance = {
+      coords = {-770.53485107422, 319.64730834961, 85.662643432617},
+      heading = 260.0
+    },
+    exit = {
+      coords = {-784.77124023438, 323.70672607422, 211.99717712402},
+      heading = -180.0
     },
     job_access = 'civ'
   }
