@@ -7,6 +7,7 @@ Do not reupload/re release any part of this script without my permission
 local inside = false
 local currentpos = nil
 local currentgarage = 0
+local savedVehicleLockState = nil
 
 local garages = {
 	[1] = { locked = false, camera = {x = -330.945, y = -135.471, z = 39.01, heading = 102.213}, driveout = {x = -350.376,y = -136.76, z = 38.294, heading = 70.226}, drivein = {x = -350.655,y = -136.55, z = 38.295, heading = 249.532}, outside = { x = -362.7962, y = -132.4005, z = 38.25239, heading = 71.187133}, inside = {x = -337.3863,y = -136.9247,z = 38.5737, heading = 269.455}},
@@ -610,6 +611,7 @@ local function DriveInGarage()
 			SetVehicleOnGroundProperly(veh)
 			SetVehicleLights(veh, 2)
 			SetVehicleInteriorlight(veh, true)
+			savedVehicleLockState = GetVehicleDoorLockStatus(veh)
 			SetVehicleDoorsLocked(veh,4)
 			SetPlayerInvincible(GetPlayerIndex(),true)
 			SetEntityInvincible(veh,true)
@@ -677,7 +679,7 @@ local function DriveOutOfGarage(pos)
 		SetEntityCoords(veh,pos.x,pos.y,pos.z)
 		SetEntityHeading(veh,pos.heading)
 		SetVehicleOnGroundProperly(veh)
-		SetVehicleDoorsLocked(veh,0)
+		SetVehicleDoorsLocked(veh, (savedVehicleLockState or 0))
 		SetPlayerInvincible(GetPlayerIndex(),false)
 		SetEntityInvincible(veh,false)
 		SetVehicleLights(veh, 0)
