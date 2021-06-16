@@ -313,7 +313,7 @@ local vehicleShopItems = {
 			{make = "Benefactor", model = "Schafter 2", price = 30000, hash = -1255452397, storage_capacity = 155.0},
 			{make = "Ocelot", model = "Jugular", price = 50000, hash = "jugular", storage_capacity = 155.0},
 			{make = "Lampadati", model = "Komoda", price = 55000, hash = "komoda", storage_capacity = 155.0},
-			--{make = "Ubermacht", model = "Revolter", price = 49634, hash = "revolter", storage_capacity = 155.0} -- has miniguns in LSC
+			{make = "Ubermacht", model = "Revolter", price = 49634, hash = "revolter", storage_capacity = 155.0} -- has miniguns in LSC (disabled)
 		},
 		["Specials"] = {
 			{make = "Dundreary", model = "Stretch", price = 25575, hash = -1961627517, storage_capacity = 300.0},
