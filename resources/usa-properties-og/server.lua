@@ -808,7 +808,6 @@ end, {
     }
 })
 
--- todo: rcon command that loads properties from db (so we can make changes) and refresh everyone's clientside property info (without removing their property identifier)
 AddEventHandler('rconCommand', function(commandName, args)
 	if commandName == "refreshproperties" then
 		--loadProperties(function(status)
@@ -914,7 +913,26 @@ AddEventHandler('rconCommand', function(commandName, args)
 		else
 			RconPrint("\nInvalid command format! Usage: addproperty [door X] [door Y] [door Z] [garage X] [garage Y] [garage Z] [price] [name]")
 		end
-	end
+	elseif commandName == "removeproperty" then
+    local name = table.concat(args, " ")
+    if PROPERTIES[name] then
+      local propertyId = PROPERTIES[name]._id
+      -- remove from server memory
+      PROPERTIES[name] = nil
+      -- remove from disk
+      TriggerEvent('es:exposeDBFunctions', function(db)
+        db.deleteDocument("properties", propertyId, function(ok)
+          if ok then
+            RconPrint(name .. " has successfully been removed!")
+          else
+            RconPrint("Error deleting property " .. name)      
+          end
+        end)
+      end)
+    else
+      RconPrint(name .. " was not found.")
+    end
+  end
 	CancelEvent()
 end)
 
