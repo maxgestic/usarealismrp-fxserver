@@ -24,6 +24,14 @@ local VEHICLES = {
         CAPACITY = 200
     },
     {
+        MODEL = "BMW M4 Widebody (f82lw)",
+        HASH = "f82lw",
+        COORDS = vector3(-1243.0841064453, -345.67370605469, 37.332809448242),
+        HEADING = 211.0,
+        PRICE = 190000,
+        CAPACITY = 200
+    },
+    {
         MODEL = "BMW M2",
         HASH = "m2",
         COORDS = vector3(-1270.4283447266, -358.63748168945, 35.907474517822),
@@ -44,7 +52,7 @@ local VEHICLES = {
         HASH = "bmci",
         COORDS = vector3(-1258.8269042969, -362.40911865234, 35.907482147217),
         HEADING = 298.0,
-        PRICE = 165000,
+        PRICE = 170000,
         CAPACITY = 220
     },
     {
