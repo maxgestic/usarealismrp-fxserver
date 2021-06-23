@@ -22,8 +22,6 @@ RegisterCommand('stretcher', function()
 end, false)
 --]]
 
-LoadModel('prop_ld_binbag_01')
-
 local PUSHABLES = {
 	{ 
 		prop = "prop_wheelchair_01",
@@ -57,6 +55,7 @@ end)
 local currentlyUsing = false
 
 Citizen.CreateThread(function()
+	LoadModel('prop_ld_binbag_01')
 	while true do
 		local sleep = 500
 

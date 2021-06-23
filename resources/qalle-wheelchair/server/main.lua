@@ -24,10 +24,10 @@ RegisterServerEvent("hospital:pushable:pickUpIfPlayerHasRoom")
 AddEventHandler("hospital:pushable:pickUpIfPlayerHasRoom", function(pushable)
 	local c = exports["usa-characters"]:GetCharacter(source)
 	local item = nil
-	if pushable.itemName == "Stretcher" then
+	if pushable.itemnaName == "Stretcher" then
 		item = stretcherItem
 	elseif pushable.itemName == "Wheelchair" then
-		item = wheelchairItem
+		item = wheelChairItem
 	end
 	if c.canHoldItem(item) then
 		TriggerClientEvent("pushable:remove", source, pushable)
