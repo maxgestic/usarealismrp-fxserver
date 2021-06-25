@@ -66,7 +66,7 @@ AddEventHandler("doc:getWeapons", function()
 end)
 
 -- Check inmates remaining jail time --
-TriggerEvent('es:addJobCommand', 'roster', {JOB_NAME}, function(source, args, char)
+TriggerEvent('es:addJobCommand', 'roster', {"sheriff", "corrections", "da", "judge"}, function(source, args, char)
 	local hasInmates = false
 	TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "^1^*[BOLINGBROKE PENITENTIARY]")
 	exports["usa-characters"]:GetCharacters(function(characters)
