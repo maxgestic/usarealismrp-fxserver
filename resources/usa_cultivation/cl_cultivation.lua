@@ -141,15 +141,6 @@ function updatePlantSustenance(plant)
     end
 end
 
---[[
-function DeletePlantObject(i)
-    if PLANTED[i] and PLANTED[i].objectHandle then
-        DeleteObject(PLANTED[i].objectHandle)
-        PLANTED[i].objectHandle = nil
-    end
-end
---]]
-
 RegisterNetEvent("cultivation:loadProducts")
 AddEventHandler("cultivation:loadProducts", function(products)
     PRODUCTS = products

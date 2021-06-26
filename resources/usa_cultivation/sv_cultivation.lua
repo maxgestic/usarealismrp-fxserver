@@ -4,11 +4,22 @@ function loadPlants()
 		local response = json.decode(text)
         if response.rows then
             print("loaded " .. #(response.rows) - 1 .. " plants")
+            -- load into memory
             for i = 1, #(response.rows) do
                 if not response.rows[i].doc._id:find("design") then
                     PLANTED[response.rows[i].doc._id] = response.rows[i].doc
                 end
 			end
+            -- set plant stage + sustenance levels
+            for id, plant in pairs(PLANTED) do
+                if plant.isDead and PlantManager.hasBeenDeadLongEnoughToDelete(id) then
+                    print("removing dead plant: " .. id)
+                    TriggerEvent("cultivation:remove", id)
+                else 
+                    PlantManager.setPlantStage(plant) -- set growth stage object models for client
+                    PlantManager.setSustenenaceLevels(plant) -- set sustenance levels
+                end
+            end
 		end
 	end, "GET", "", {["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
     -- also compact DB so we don't lag while auto compacting some time down the line
@@ -68,6 +79,8 @@ AddEventHandler("cultivation:plant", function(productName, itemName, coords)
         for i = 1, #players do
             local playerCoords = GetEntityCoords(GetPlayerPed(players[i]))
             if exports.globals:getCoordDistance(playerCoords, coords) < NEARBY_DISTANCE then
+                PlantManager.setPlantStage(plant) -- set growth stage object models for client
+                PlantManager.setSustenenaceLevels(plant) -- set sustenance levels
                 TriggerClientEvent("cultivation:clientNewPlant", players[i], plant)
             end
         end
@@ -168,40 +181,23 @@ end, {
     help = "Remove nearest plant"
 })
 
--- Stage / Food Level / Water Level Updates / Saving --
 Citizen.CreateThread(function()
-    local lastUpdateTime = os.time()
+    local lastCheckTime = os.time()
     while true do
-        if os.difftime(os.time(), lastUpdateTime) >= STAGE_CHECK_INTERVAL_MINUTES * 60 then
-            lastUpdateTime = os.time()
-            TriggerEvent("es:exposeDBFunctions", function(db)
-                local numStageUpdates = 0
-                local numSustenanceUpdates = 0
-                for id, plant in pairs(PLANTED) do
-                    if not PLANTED[id].isDead then
-                        PLANTED[id], didStageUpdate, didSustenanceUpdate = PlantManager.tick(PLANTED[id])
-                        if didStageUpdate then
-                            numStageUpdates = numStageUpdates + 1
-                            TriggerClientEvent("cultivation:updatePlantStageIfNearby", -1, PLANTED[id])
-                        end
-                        if didSustenanceUpdate then
-                            numSustenanceUpdates = numSustenanceUpdates + 1
-                            TriggerClientEvent("cultivation:updateSustenanceIfNearby", -1, PLANTED[id])
-                        end
-                        PLANTED[id]._rev = nil
-                        PLANTED[id].last_save_time = os.date('%m-%d-%Y %H:%M:%S', os.time())
-                        db.updateDocument("cultivation", id, PLANTED[id], saveCallback)
-                    elseif PlantManager.hasBeenDeadLongEnoughToDelete(id) then
-                        print("removing dead plant: " .. id)
-                        TriggerEvent("cultivation:remove", id)
-                    end
-                    Wait(20)
+        local now = os.time()
+        if os.difftime(now, lastCheckTime) >= PLANT_CHECK_INTERVAL_MINUTES * 60 then
+            lastCheckTime = now
+            for id, plant in pairs(PLANTED) do
+                if not plant.isDead then
+                    PlantManager.setPlantStage(plant) -- set growth stage object models for client
+                    PlantManager.setSustenenaceLevels(plant) -- set sustenance levels
+                elseif PlantManager.hasBeenDeadLongEnoughToDelete(id) then
+                    print("removing dead plant: " .. id)
+                    TriggerEvent("cultivation:remove", id)
                 end
-                print("[cultivation]: done doing stage check, # of stage client updates: " .. numStageUpdates)
-                print("[cultivation]: done doing stage check, # of sustenance client updates: " .. numSustenanceUpdates)
-            end)
+            end
         end
-        Wait(1000)
+        Wait(1)
     end
 end)
 
@@ -221,23 +217,3 @@ function saveAllPlants()
         end
     end)
 end
-
---[[
-Citizen.CreateThread(function()
-    TriggerEvent("es:exposeDBFunctions", function(db)
-        while true do
-            Wait(SAVE_INTERVAL_MINUTES * 60 * 1000)
-            local deadCount = 0
-            for id, plant in pairs(PLANTED) do
-                if plant.isDead then
-                    deadCount = deadCount + 1
-                end
-                plant._rev = nil
-                db.updateDocument("cultivation", id, plant, saveCallback)
-                Wait(10)
-            end
-            print("[cultivation] done saving plants, # of dead: " .. deadCount)
-        end
-    end)
-end)
---]]

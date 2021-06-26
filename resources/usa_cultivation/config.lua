@@ -30,16 +30,16 @@ PRODUCTS = {
 
 PLANTED = {} -- global table of all currently planted plants (sort of an in-memory cache between DB and server)
 
-STAGE_CHECK_INTERVAL_MINUTES = 30
---SAVE_INTERVAL_MINUTES = 35
+PLANT_CHECK_INTERVAL_MINUTES = 30
 
-WATER_DECREMENT_VAL = 0.55
-FOOD_DECREMENT_VAL = 0.45
+MAX_DAYS_NO_FOOD = 9
+MAX_DAYS_NO_WATER = 7
 
-LOW_THRESHOLD = 70.0
-MED_THRESHOLD = 45.0
-HIGH_THRESHOLD = 30.0
-DIE_THRESHOLD = 10.0 -- no longer harvestable if below this threshold
+PLANT_STAGE_HOURS = {
+    VEGETATIVE = 5 * 24,
+    FLOWER = 10 * 24,
+    HARVEST = 14 * 24 -- two weeks (14 days) until ready for harvest
+}
 
 NEARBY_DISTANCE = 400
 

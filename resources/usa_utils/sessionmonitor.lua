@@ -61,7 +61,8 @@ AddEventHandler('es:playerLoaded', function(source, user)
 end)
 
 AddEventHandler("playerDropped", function(reason)
-    if reason:find("Game crashed") or reason:find("Timed out after") then
+    print("player drop reason: " .. (reason or "NULL"))
+    if reason:find("Game crashed") or reason:find("Timed out") then
         local timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())
         local msg = "\nPlayer " .. GetPlayerName(source) .. " (#" .. source .. " / " .. GetPlayerIdentifiers(source)[1] .. ") dropped with reason: " .. reason .. " at " .. timestamp
         SendDiscordLog(WEBHOOK_URL, msg)
