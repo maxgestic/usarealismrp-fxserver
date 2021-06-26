@@ -60,6 +60,7 @@ AddEventHandler("character:delete", function(data)
 	else
 		print("Error: Can't delete a character whose age is less than " .. WHOLE_DAYS_TO_DELETE .. "!")
 		TriggerClientEvent('chatMessage', usource, "Error", { 255, 50, 50 }, "Can't delete a character whose age is less than " .. WHOLE_DAYS_TO_DELETE .. " days!")
+		TriggerClientEvent("usa:notify", usource, "Must be 3 days old to delete")
 		TriggerEvent("character:getCharactersAndOpenMenu", "home", usource)
 	end
 end)

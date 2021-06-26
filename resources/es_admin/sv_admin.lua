@@ -827,120 +827,122 @@ AddEventHandler('rconCommand', function(commandName, args)
 		TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(targetId)..' ['..targetId..'] ^0 has received ^2^*'..amount..'^r^0 money from ^2^*console^r^0.')
 		RconPrint("Money given")
 	elseif commandName == "changename" then
-			if #args ~= 6 and #args ~= 5 then
-				RconPrint("\nUsage: changename [prevFirst] [prevLast] [DOB] [newFirst] [newMiddle] [newLast] -> Full Name Change")
-				RconPrint("\nOR")
-				RconPrint("\nchangename [prevFirst] [prevLast] [DOB] [newFirst] [newLast] -> No Middle Name Change")
-				RconPrint("\nDOB must be in YYYY-MM-DD format, i.e. 1980-01-15")
-				CancelEvent()
-				return
-			end
-
-			local prevFirst = nil
-			local prevLast = nil
-			local dob = nil
-			local newFirst = nil
-			local newMiddle = nil
-			local newLast = nil
-
-			if #args == 6 then
-				prevFirst = args[1]
-				prevLast = args[2]
-				dob = args[3]
-				newFirst = args[4]
-				newMiddle = args[5]
-				newLast = args[6]
-			else
-				prevFirst = args[1]
-				prevLast = args[2]
-				dob = args[3]
-				newFirst = args[4]
-				newLast = args[5]
-			end
-
-			repeat -- (so users can put hyphens in place of spaces to change last names with spaces)
-				if prevLast:find("-") then
-					local findStart, findEnd = prevLast:find("-")
-					prevLast = exports["globals"]:replaceChar(findStart, prevLast, " ")
-					print("replaced hyphen at " .. findStart .. ", new str is: " .. prevLast)
-				end
-			until (not prevLast:find("-"))
-
-			local query = {
-				name = {
-					first = {
-						["$regex"] = "(?i)" .. prevFirst
-					},
-					last = {
-						["$regex"] = "(?i)" .. prevLast
-					}
-				},
-				dateOfBirth = dob
-			}
-
-			-- search for player's document in DB --
-			TriggerEvent('es:exposeDBFunctions', function(couchdb)
-				local fields = {
-					"_id",
-					"_rev",
-					"name"
-				}
-				couchdb.getSpecificFieldFromDocumentByRows("characters", query, fields, function(doc)
-					if doc then
-						doc.name.first = newFirst
-						doc.name.middle = (newMiddle or doc.name.middle)
-						doc.name.last = newLast
-						-- update --
-						couchdb.updateDocument("characters", doc._id, {name = doc.name}, function()
-							print("Name updated in DB!")
-						end)
-					else
-						print("\nError: unable to find person ".. prevFirst .. " " .. (prevMiddle or "") .. " " .. prevLast .. " in database!")
-					end
-				end)
-			end)
-		elseif commandName == "changedob" then
-			if #args ~= 4 then
-				RconPrint("\nUsage: changedob [firstName] [lastName] [prevDOB] [newDOB]")
-				RconPrint("\nDOB must be in YYYY-MM-DD format, i.e. 1980-01-15")
-				CancelEvent()
-				return
-			end
-
-			local prevFirst = args[1]
-			local prevLast = args[2]
-			local prevDob = args[3]
-			local newDob = args[4]
-
-			local query = {
-				name = {
-					first = {
-						["$regex"] = "(?i)" .. prevFirst
-					},
-					last = {
-						["$regex"] = "(?i)" .. prevLast
-					}
-				},
-				dateOfBirth = prevDob
-			}
-
-			-- search for player's document in DB --
-			TriggerEvent('es:exposeDBFunctions', function(couchdb)
-				local fields = {
-					"_id",
-					"_rev"
-				}
-				couchdb.getSpecificFieldFromDocumentByRows("characters", query, fields, function(doc)
-					if doc then
-						couchdb.updateDocument("characters", doc._id, {dateOfBirth = newDob}, function()
-							print("DOB updated in DB!")
-						end)
-					else
-						print("\nError: unable to find person ".. prevFirst .. " " .. (prevMiddle or "") .. " " .. prevLast .. " in database!")
-					end
-				end)
-			end)
+		if #args ~= 6 and #args ~= 5 then
+			RconPrint("\nUsage: changename [prevFirst] [prevLast] [DOB] [newFirst] [newMiddle] [newLast] -> Full Name Change")
+			RconPrint("\nOR")
+			RconPrint("\nchangename [prevFirst] [prevLast] [DOB] [newFirst] [newLast] -> No Middle Name Change")
+			RconPrint("\nDOB must be in YYYY-MM-DD format, i.e. 1980-01-15")
+			CancelEvent()
+			return
 		end
+
+		local prevFirst = nil
+		local prevLast = nil
+		local dob = nil
+		local newFirst = nil
+		local newMiddle = nil
+		local newLast = nil
+
+		if #args == 6 then
+			prevFirst = args[1]
+			prevLast = args[2]
+			dob = args[3]
+			newFirst = args[4]
+			newMiddle = args[5]
+			newLast = args[6]
+		else
+			prevFirst = args[1]
+			prevLast = args[2]
+			dob = args[3]
+			newFirst = args[4]
+			newLast = args[5]
+		end
+
+		repeat -- (so users can put hyphens in place of spaces to change last names with spaces)
+			if prevLast:find("-") then
+				local findStart, findEnd = prevLast:find("-")
+				prevLast = exports["globals"]:replaceChar(findStart, prevLast, " ")
+				print("replaced hyphen at " .. findStart .. ", new str is: " .. prevLast)
+			end
+		until (not prevLast:find("-"))
+
+		local query = {
+			name = {
+				first = {
+					["$regex"] = "(?i)" .. prevFirst
+				},
+				last = {
+					["$regex"] = "(?i)" .. prevLast
+				}
+			},
+			dateOfBirth = dob
+		}
+
+		-- search for player's document in DB --
+		TriggerEvent('es:exposeDBFunctions', function(couchdb)
+			local fields = {
+				"_id",
+				"_rev",
+				"name"
+			}
+			couchdb.getSpecificFieldFromDocumentByRows("characters", query, fields, function(doc)
+				if doc then
+					doc.name.first = newFirst
+					doc.name.middle = (newMiddle or doc.name.middle)
+					doc.name.last = newLast
+					-- update --
+					couchdb.updateDocument("characters", doc._id, {name = doc.name}, function()
+						print("Name updated in DB!")
+					end)
+				else
+					print("\nError: unable to find person ".. prevFirst .. " " .. (prevMiddle or "") .. " " .. prevLast .. " in database!")
+				end
+			end)
+		end)
+	elseif commandName == "changedob" then
+		if #args ~= 4 then
+			RconPrint("\nUsage: changedob [firstName] [lastName] [prevDOB] [newDOB]")
+			RconPrint("\nDOB must be in YYYY-MM-DD format, i.e. 1980-01-15")
+			CancelEvent()
+			return
+		end
+
+		local prevFirst = args[1]
+		local prevLast = args[2]
+		local prevDob = args[3]
+		local newDob = args[4]
+
+		local query = {
+			name = {
+				first = {
+					["$regex"] = "(?i)" .. prevFirst
+				},
+				last = {
+					["$regex"] = "(?i)" .. prevLast
+				}
+			},
+			dateOfBirth = prevDob
+		}
+
+		-- search for player's document in DB --
+		TriggerEvent('es:exposeDBFunctions', function(couchdb)
+			local fields = {
+				"_id",
+				"_rev"
+			}
+			couchdb.getSpecificFieldFromDocumentByRows("characters", query, fields, function(doc)
+				if doc then
+					couchdb.updateDocument("characters", doc._id, {dateOfBirth = newDob}, function()
+						print("DOB updated in DB!")
+					end)
+				else
+					print("\nError: unable to find person ".. prevFirst .. " " .. (prevMiddle or "") .. " " .. prevLast .. " in database!")
+				end
+			end)
+		end)
+	elseif commandName == "stafflist" then
+		printStaffList(true, 0)
+	end
 	CancelEvent()
 end)
 
@@ -1535,6 +1537,11 @@ end, {
 	help = "Play something to watch together!"
 })
 
+-- misc commands --
+TriggerEvent('es:addGroupCommand', 'stafflist', "mod", function(src, args, char)
+	printStaffList(false, src)
+end)
+
 function NotifyStaff(source)
 	for i = 1, #noNotifications do
 		if noNotifications[i] == source then
@@ -1542,4 +1549,29 @@ function NotifyStaff(source)
 		end
 	end
 	return true
+end
+
+function printStaffList(fromRCON, src)
+	TriggerEvent("es:getPlayers", function(players)
+		local staff = {}
+		if players then
+			for id, player in pairs(players) do
+				if id and player then
+					local playerGroup = player.getGroup()
+					if playerGroup == "owner" or playerGroup == "superadmin" or playerGroup == "admin" or playerGroup == "mod" then
+						table.insert(staff, {id = id, group = playerGroup})
+					end
+				end
+			end
+		end
+		local msg = "ONLINE STAFF (" .. #staff .. "):\n"
+		for i = 1, #staff do
+			msg = msg .. GetPlayerName(staff[i].id) .. " - " .. staff[i].group .. "\n"
+		end
+		if not fromRCON then
+			TriggerClientEvent("chatMessage", src, "", {}, msg)
+		else
+			RconPrint(msg)
+		end
+	end)
 end
