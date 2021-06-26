@@ -137,33 +137,41 @@ function IsValidInput(src, data)
 		local BLACKLISTED_WORD = BLACKLISTED_WORDS[i]
 		if string.find(firstName, BLACKLISTED_WORD) or string.find(middleName, BLACKLISTED_WORD) or string.find(lastName, BLACKLISTED_WORD) then
 			TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (1) '..BLACKLISTED_WORD)
+			TriggerClientEvent("usa:notify", src, "The character data provided is invalid or inappropriate!")
 			print('Character name contained forbidden words: '..firstName..' '..middleName..' '..lastName)
 			return false
 		end
 	end
 	if not ContainsVowel(firstName) or not ContainsVowel(lastName) then
 		TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (2)')
+		TriggerClientEvent("usa:notify", src, "The character data provided is invalid or inappropriate!")
 		print('Character name did not contain a vowel: '..firstName..' '..middleName..' '..lastName)
 		return false
 	end
 	if string.len(firstName) < 3 or string.len(lastName) < 3 then
 		TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (3)')
+		TriggerClientEvent("usa:notify", src, "The character data provided is invalid or inappropriate!")
 		print('Character name was insufficient length: '..firstName..' '..middleName..' '..lastName)
 		return false
 	end
 	if string.len(firstName) > 16 or (string.len(middleName) > 16 and middleName ~= '') or string.len(lastName) > 16 then
 		TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (4)')
+		TriggerClientEvent("usa:notify", src, "The character data provided is invalid or inappropriate!")
 		print('Character name was insufficient length: '..firstName..' '..middleName..' '..lastName)
 		return false
 	end
 	local dob_year = tonumber(string.sub(data.dateOfBirth, 1, 4))
-	if dob_year > 2001 or dob_year < 1915 then
+	local now = os.date("*t", os.time())
+	now.year = tonumber(now.year)
+	if dob_year < 1915 or now.year - dob_year < 18 then
 		TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (5)')
+		TriggerClientEvent("usa:notify", src, "The character data provided is invalid or inappropriate!")
 		print('Character date of birth was invalid: '..data.dateOfBirth)
 		return false
 	end
 	if ContainsSpecialCharacters(firstName) or (ContainsSpecialCharacters(middleName) and middleName ~= '') or ContainsSpecialCharacters(lastName) then
 		TriggerClientEvent('chatMessage', src, '^1^*[ERROR]^r^0 The character data provided is invalid or inappropriate! (6)')
+		TriggerClientEvent("usa:notify", src, "The character data provided is invalid or inappropriate!")
 		print('Character name contained special characters: '..firstName..' '..middleName..' '..lastName)
 		return false
 	end
