@@ -1566,7 +1566,9 @@ function printStaffList(fromRCON, src)
 		end
 		local msg = "ONLINE STAFF (" .. #staff .. "):\n"
 		for i = 1, #staff do
-			msg = msg .. GetPlayerName(staff[i].id) .. " - " .. staff[i].group .. "\n"
+			if GetPlayerName(staff[i].id) and staff[i].group then
+				msg = msg .. GetPlayerName(staff[i].id) .. " - " .. staff[i].group .. "\n"
+			end
 		end
 		if not fromRCON then
 			TriggerClientEvent("chatMessage", src, "", {}, msg)
