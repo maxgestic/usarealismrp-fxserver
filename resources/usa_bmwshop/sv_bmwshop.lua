@@ -26,7 +26,7 @@ local VEHICLES = {
     {
         MODEL = "BMW M4 Widebody (f82lw)",
         HASH = "f82lw",
-        COORDS = vector3(-1243.0841064453, -345.67370605469, 37.332809448242),
+        COORDS = vector3(-1243.0841064453, -345.67370605469, 36.342809448242),
         HEADING = 211.0,
         PRICE = 190000,
         CAPACITY = 200
