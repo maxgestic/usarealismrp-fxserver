@@ -1564,7 +1564,7 @@ function printStaffList(fromRCON, src)
 				end
 			end
 		end
-		local msg = "ONLINE STAFF (" .. #staff .. "):\n"
+		local msg = "ONLINE STAFF:\n"
 		for i = 1, #staff do
 			if GetPlayerName(staff[i].id) and staff[i].group then
 				msg = msg .. GetPlayerName(staff[i].id) .. " - " .. staff[i].group .. "\n"
