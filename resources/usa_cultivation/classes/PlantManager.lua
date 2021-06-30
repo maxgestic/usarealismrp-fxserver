@@ -36,11 +36,11 @@ PlantManager.setSustenenaceLevels = function(plant)
         local hoursSinceWatered = exports.globals:GetHoursFromTime(plant.lastWaterTime)
         local starvationPercent = (hoursSinceWatered / 24) / MAX_DAYS_NO_WATER
         if starvationPercent <= 1/3 then
-            return "~g~Not thirsty"
+            return "~g~Not thirsty~w~"
         elseif starvationPercent <= 2/3 then
-            return "~y~Thirsty"
+            return "~y~Thirsty~w~"
         elseif starvationPercent < 3/3 then
-            return "~r~Very Thirsty"
+            return "~r~Very Thirsty~w~"
         else
             return "Dead"
         end
@@ -50,11 +50,11 @@ PlantManager.setSustenenaceLevels = function(plant)
         local hoursSinceFed = exports.globals:GetHoursFromTime(plant.lastFeedTime)
         local starvationPercent = (hoursSinceFed / 24) / MAX_DAYS_NO_FOOD
         if starvationPercent <= 1/3 then
-            return "~g~Not hungry"
+            return "~g~Not hungry~w~"
         elseif starvationPercent <= 2/3 then
-            return "~y~Hungry"
+            return "~y~Hungry~w~"
         elseif starvationPercent < 3/3 then
-            return "~r~Very Hungry"
+            return "~r~Very Hungry~w~"
         else
             return "Dead"
         end
@@ -115,7 +115,9 @@ end
 
 -- set lastWaterTime and save to DB:
 PlantManager.waterPlant = function(id)
-    PLANTED[id].lastWaterTime = os.time()
+    local now = os.time()
+    PLANTED[id].lastWaterTime = now
+    PlantManager.setSustenenaceLevels(PLANTED[id])
     TriggerEvent("es:exposeDBFunctions", function(db)
         db.updateDocument("cultivation", id, { lastWaterTime = now }, function(doc, err)
             print("plant water time updated, set to: " .. now)
@@ -127,6 +129,7 @@ end
 PlantManager.feedPlant = function(id)
     local now = os.time()
     PLANTED[id].lastFeedTime = now
+    PlantManager.setSustenenaceLevels(PLANTED[id])
     TriggerEvent("es:exposeDBFunctions", function(db)
         db.updateDocument("cultivation", id, { lastFeedTime = now }, function(doc, err)
             print("plant feed time updated, set to: " .. now)
