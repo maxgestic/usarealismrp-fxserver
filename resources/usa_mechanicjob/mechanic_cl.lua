@@ -113,48 +113,32 @@ local locations = {
 			z = 37.28,
 			heading = 216.46
 		},
-		impound = {
-			x = 0,
-			y = 0,
-			z = 0,
-		},
-		ped = {
-			x = 0,
-			y = 0,
-			z = 0,
-		},
+		impound = nil,
+		ped = nil,
 		show_blip = {
 			disable_blip = true
 		}
 	},
-	--["Moseleys Autos"] = {
-	--	duty = {
-	--		x = -0.05,
-	--		y = -1659.87,
-	--		z = 28.48,
-	--	},
-	--	truck_spawn = {
-	--		x = -21.83,
-	--		y = -1679.88,
-	--		z = 49.45,
-	--		heading = 107.23
-	--	},
-	--	impound = {
-	--		x = 0,
-	--		y = 0,
-	--		z = 0,
-	--	},
-	--	ped = {
-	--		x = 0,
-	--		y = 0,
-	--		z = 0,
-	--	},
-	--	show_blip = {
-	--		disable_blip = true
-	--	}
-	--}
+	["Elgin Ave"] = {
+		duty = {
+			x = 550.58752441406,
+			y = -182.13092041016,
+			z = 53.493202209473
+		},
+		truck_spawn = {
+			x = 541.54089355469,
+			y = -210.18563842773,
+			z = 53.542335510254,
+			heading = 183.0
+		},
+		impound = nil,
+		ped = nil,
+		show_blip = {
+			disable_blip = true
+		}
+	}
 }
-
+	
 -- S P A W N  J O B  P E D S
 local createdJobPeds = {}
 Citizen.CreateThread(function()
@@ -162,28 +146,30 @@ Citizen.CreateThread(function()
 	while true do
 		local playerCoords = GetEntityCoords(PlayerPedId(), false)
 		for name, data in pairs(locations) do
-			if Vdist(data.ped.x, data.ped.y, data.ped.z, playerCoords.x, playerCoords.y, playerCoords.z) < 50 then
-				if not createdJobPeds[name] then
-					local hash = -1806291497
-					RequestModel(hash)
-					while not HasModelLoaded(hash) do
+			if data.ped then
+				if Vdist(data.ped.x, data.ped.y, data.ped.z, playerCoords.x, playerCoords.y, playerCoords.z) < 50 then
+					if not createdJobPeds[name] then
+						local hash = -1806291497
 						RequestModel(hash)
-						Wait(0)
+						while not HasModelLoaded(hash) do
+							RequestModel(hash)
+							Wait(0)
+						end
+						local ped = CreatePed(4, hash, data.ped.x, data.ped.y, data.ped.z, data.ped.heading, false, true)
+						SetEntityCanBeDamaged(ped,false)
+						SetPedCanRagdollFromPlayerImpact(ped,false)
+						TaskSetBlockingOfNonTemporaryEvents(ped,true)
+						SetPedFleeAttributes(ped,0,0)
+						SetPedCombatAttributes(ped,17,1)
+						SetPedRandomComponentVariation(ped, true)
+						TaskStartScenarioInPlace(ped, "WORLD_HUMAN_CLIPBOARD", 0, true)
+						createdJobPeds[name] = ped
 					end
-					local ped = CreatePed(4, hash, data.ped.x, data.ped.y, data.ped.z, data.ped.heading, false, true)
-					SetEntityCanBeDamaged(ped,false)
-					SetPedCanRagdollFromPlayerImpact(ped,false)
-					TaskSetBlockingOfNonTemporaryEvents(ped,true)
-					SetPedFleeAttributes(ped,0,0)
-					SetPedCombatAttributes(ped,17,1)
-					SetPedRandomComponentVariation(ped, true)
-					TaskStartScenarioInPlace(ped, "WORLD_HUMAN_CLIPBOARD", 0, true)
-					createdJobPeds[name] = ped
-				end
-			else 
-				if createdJobPeds[name] then 
-					DeletePed(createdJobPeds[name])
-					createdJobPeds[name] = nil
+				else 
+					if createdJobPeds[name] then 
+						DeletePed(createdJobPeds[name])
+						createdJobPeds[name] = nil
+					end
 				end
 			end
 		end
@@ -200,7 +186,9 @@ Citizen.CreateThread(function()
 			else
 				DrawText3D(data.duty.x, data.duty.y, (data.duty.z + 1.0), 5, '[E] - Sign out (~g~Mechanic~s~) | [Hold V] - Retrieve Truck')
 			end
-			DrawText3D(data.impound.x, data.impound.y, (data.impound.z + 1.5), 15, '[E] - Impound Vehicle')
+			if data.impound then
+				DrawText3D(data.impound.x, data.impound.y, (data.impound.z + 1.5), 15, '[E] - Impound Vehicle')
+			end
 		end
 		Wait(1)
 	end
@@ -232,7 +220,7 @@ Citizen.CreateThread(function()
 						end
 						TriggerServerEvent("towJob:setJob")
 					end
-				elseif Vdist(playerCoords, data.impound.x, data.impound.y, data.impound.z) < 15.0 then
+				elseif data.impound and Vdist(playerCoords, data.impound.x, data.impound.y, data.impound.z) < 15.0 then
 					if onDuty == "yes" then
 						ImpoundVehicle()
 					end
@@ -646,11 +634,13 @@ function DelVehicle(entity)
 end
 
 function isPlayerAtTowSpot()
-	local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
+	local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
 
 	for name, data in pairs(locations) do
-		if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,data.impound.x,data.impound.y,data.impound.z,true) < 5 then
-			return true
+		if data.impound then
+			if GetDistanceBetweenCoords(playerCoords.x,playerCoords.y,playerCoords.z,data.impound.x,data.impound.y,data.impound.z,true) < 5 then
+				return true
+			end
 		end
 	end
 
