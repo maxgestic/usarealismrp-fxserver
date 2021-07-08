@@ -86,7 +86,7 @@ PlantManager.setSustenenaceLevels = function(plant)
             plant.isDead = true
             plant.deathTimestamp = os.time()
             db.updateDocument("cultivation", plant._id, { isDead = true, deathTimestamp = os.time() }, function(doc, err)
-                print("plant death event recorded, time: " .. os.time())
+                --print("plant death event recorded, time: " .. os.time())
             end)
         end
 
