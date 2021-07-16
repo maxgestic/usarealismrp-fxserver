@@ -23,7 +23,8 @@ local GENERAL_STORE_LOCATIONS = {
     { x=-3241.570, y=1000.506, z=12.990 }, -- Barbareno Rd.
     {x=-2967.086, y=391.539, z=15.243 }, -- Great Ocean Hwy
     {x = 1780.9207763672,y = 2598.8671875, z = 45.797817230225, prison = true}, -- Prison
-    {x = 4503.35546875, y = -4520.0258789062, z = 4.4123592376709} -- Cayo Perico island
+    {x = 4503.35546875, y = -4520.0258789062, z = 4.4123592376709}, -- Cayo Perico island
+    {x = -689.92376708984, y = 5798.9174804688, z = 17.3327293396} -- bayview lodge in paleto bay
 }
 
 local ShopliftingAreas = {}
