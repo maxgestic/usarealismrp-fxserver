@@ -3,7 +3,6 @@ local hasKeys = false
 local isHotwiring = false
 local timeout = GetGameTimer()
 local veh = GetVehiclePedIsIn(playerPed, true)
-local canBeSearched = false
 local playerHotwiredVehicles = {}
 local searchedVehicles = {}
 
@@ -73,7 +72,7 @@ AddEventHandler('veh:searchVeh', function()
       exports.globals:notify("Can't search this vehicle") 
       return
   end
-  if canBeSearched and not IsPedCuffed(playerPed) and GetPedInVehicleSeat(vehicle, -1) == playerPed and GetVehicleDoorLockStatus(vehicle) ~= 4 then
+  if not IsPedCuffed(playerPed) and GetPedInVehicleSeat(vehicle, -1) == playerPed and GetVehicleDoorLockStatus(vehicle) ~= 4 then
     for k, v in pairs(searchedVehicles) do
       if GetVehicleNumberPlateText(vehicle) == v then
         -- vehicle has already been searched
@@ -108,9 +107,8 @@ AddEventHandler('veh:searchVeh', function()
 end)
 
 RegisterNetEvent("veh:toggleEngine")
-AddEventHandler('veh:toggleEngine', function(_hasKey, _engineOn, canBeSearched_)
+AddEventHandler('veh:toggleEngine', function(_hasKey, _engineOn)
   -- _engineOn to turn the engine on instantly, used when checking if the player is entering a vehicle with the engine already on
-  canBeSearched = canBeSearched_
   hasKeys = _hasKey
   if not IsVehicleBlacklisted(veh) and GetPedInVehicleSeat(veh, -1) == PlayerPedId() and not IsPedCuffed(PlayerPedId()) then
     local playerPed = PlayerPedId()
