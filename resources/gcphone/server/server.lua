@@ -237,6 +237,15 @@ function getMessages(identifier, cb)
     end)
     --]]
     getNumberPhone(identifier, function(number)
+        local query = {
+			["receiver"] = number
+		}
+		db.getDocumentsByRows("phone-messages", query, function(msgs)
+            if not msgs then msgs = {} end
+            table.sort(msgs, function(a, b) return a.timeMs < b.timeMs end)
+            cb(msgs)
+        end)
+        --[[
         local endpoint = "/phone-messages/_design/messageFilters/_view/getReceivedMessagesByNum"
         local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
         PerformHttpRequest(url, function(err, responseText, headers)
@@ -254,6 +263,7 @@ function getMessages(identifier, cb)
         end, "POST", json.encode({
             keys = { number }
         }), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
+        --]]
     end)
 end
 

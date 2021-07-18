@@ -75,9 +75,6 @@ For it to work properly you need to follow these rules:
 	* In the ``phone-contacts`` db:
 		* **getContactsByIdentifier**
 			- ``emit(doc.ownerIdentifier, doc);``
-	* In the ``phone-messages`` db:
-		* **getReceivedMessagesByNum**
-			- ``emit(doc.receiver, doc);``
 3) Must create following couch db views in a ``characterFilters`` design doc in the ``characters`` db:
 	* **getCharactersForSelectionBySteamID**
 		- ``emit(doc.created.ownerIdentifier, [doc._id, doc._rev, doc.name, doc.dateOfBirth, doc.money, doc.bank, doc.spawn, doc.created.time]);``
@@ -91,6 +88,7 @@ For it to work properly you need to follow these rules:
 	* **getBusinessStorage**
 		- ``emit(doc._id, doc.storage);``
 5) Must create index on the ``stored_location`` field in the ``vehicles`` database for ``usa-properties-og`` to function correctly when storing/retrieving vehicles from property garages.
+6) Must create index on the ``receiver`` field in the ``phone-messages`` database for ``gcphone`` to function correctly when storing/retrieving phone text messages.
 
 **Common Framework Usage**
 
