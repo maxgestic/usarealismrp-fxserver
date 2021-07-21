@@ -355,6 +355,21 @@ function exposedDB.getDocumentsByRows(db, rowsAndValues, callback)
 	end, "POST", json.encode(qu), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
 end
 
+function exposedDB.findDocuments(db, options, callback)
+	PerformHttpRequest("http://" .. ip .. ":" .. port .. "/" .. db .. "/_find", function(err, rText, headers)
+		local t = json.decode(rText)
+		if t then
+			if t.docs then
+				callback(t.docs)
+			else
+				callback(false)
+			end
+		else
+			callback(false, rText)
+		end
+	end, "POST", json.encode(options), {["Content-Type"] = 'application/json', Authorization = "Basic " .. auth})
+end
+
 function exposedDB.getDocumentByRows(db, rowsAndValues, callback)
 	--local qu = {selector = {[row] = value}}
 	local qu = {selector = rowsAndValues}

@@ -228,42 +228,48 @@ end)
 --====================================================================================
 --  Messages
 --====================================================================================
-function getMessages(identifier, cb)
-    --[[
-    getNumberPhone(identifer, function(num)
-        db.getDocumentsByRows("phone-messages", { receiver = num }, function(docs)
-            cb(messages)
-        end)
+function getPageOfMessagesForNum(number, limit, page)
+    local result = nil
+    local query = {
+        ["receiver"] = number
+    }
+    db.findDocuments("phone-messages", { selector = query, limit = limit, skip = limit * page }, function(msgs)
+        if not msgs then msgs = {} end
+        result = msgs
     end)
-    --]]
+    while not result do
+        Wait(50)
+    end
+    return result
+end
+
+function getMessages(identifier, cb)
     getNumberPhone(identifier, function(number)
-        local query = {
-			["receiver"] = number
-		}
-		db.getDocumentsByRows("phone-messages", query, function(msgs)
-            if not msgs then msgs = {} end
-            table.sort(msgs, function(a, b) return a.timeMs < b.timeMs end)
-            cb(msgs)
-        end)
-        --[[
-        local endpoint = "/phone-messages/_design/messageFilters/_view/getReceivedMessagesByNum"
-        local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
-        PerformHttpRequest(url, function(err, responseText, headers)
-            if responseText then
-                local data = json.decode(responseText)
-                local messages = {}
-                if data.rows then
-                    local msgs = arrayifyDBDocsResponse(data.rows)
-                    table.sort(msgs, function(a, b) return a.timeMs < b.timeMs end)
-                    cb(msgs)
+        Citizen.CreateThread(function()
+            local LIMIT = 100
+            local curPage = 0
+            local allMessages = {}
+            while true do
+                local pageMessages = getPageOfMessagesForNum(number, LIMIT, curPage)
+                for i = 1, #pageMessages do
+                    table.insert(allMessages, pageMessages[i])
+                end
+                if #pageMessages < LIMIT then -- reached end of messages
+                    break
                 else
-                    cb(messages)
+                    curPage = curPage + 1
                 end
             end
-        end, "POST", json.encode({
-            keys = { number }
-        }), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
-        --]]
+            for i = #allMessages, 1, -1 do
+                if os.difftime(os.time(), allMessages[i].timeMs) > 30 * 24 * 60 * 60 then -- older than 30 days
+                    deleteMessage(allMessages[i]._id)
+                    table.remove(allMessages, i)
+                end
+            end
+            table.sort(allMessages, function(a, b) return a.timeMs < b.timeMs end)
+            cb(allMessages)
+            print("got all messages... count: " .. #allMessages .. ", total pages / db calls: " .. curPage + 1)
+        end)
     end)
 end
 
