@@ -228,6 +228,22 @@ end)
 --====================================================================================
 --  Messages
 --====================================================================================
+function getPageOfMessagesForNumFromNum(receiver, transmitter, limit, page)
+    local result = nil
+    local query = {
+        ["receiver"] = receiver,
+        ["transmitter"] = transmitter
+    }
+    db.findDocuments("phone-messages", { selector = query, limit = limit, skip = limit * page }, function(msgs)
+        if not msgs then msgs = {} end
+        result = msgs
+    end)
+    while not result do
+        Wait(50)
+    end
+    return result
+end
+
 function getPageOfMessagesForNum(number, limit, page)
     local result = nil
     local query = {
@@ -241,6 +257,36 @@ function getPageOfMessagesForNum(number, limit, page)
         Wait(50)
     end
     return result
+end
+
+function getMessagesFromNum(identifier, fromNum, cb)
+    getNumberPhone(identifier, function(number)
+        Citizen.CreateThread(function()
+            local LIMIT = 100
+            local curPage = 0
+            local allMessages = {}
+            while true do
+                local pageMessages = getPageOfMessagesForNumFromNum(number, fromNum, LIMIT, curPage)
+                for i = 1, #pageMessages do
+                    table.insert(allMessages, pageMessages[i])
+                end
+                if #pageMessages < LIMIT then -- reached end of messages
+                    break
+                else
+                    curPage = curPage + 1
+                end
+            end
+            for i = #allMessages, 1, -1 do
+                if os.difftime(os.time(), allMessages[i].timeMs) > 30 * 24 * 60 * 60 then -- older than 30 days
+                    deleteMessage(allMessages[i]._id)
+                    table.remove(allMessages, i)
+                end
+            end
+            table.sort(allMessages, function(a, b) return a.timeMs < b.timeMs end)
+            cb(allMessages)
+            print("got all messages from num... count: " .. #allMessages .. ", total pages / db calls: " .. curPage + 1)
+        end)
+    end)
 end
 
 function getMessages(identifier, cb)
@@ -363,65 +409,16 @@ function addMessage(src, identifier, phone_number, message)
 end
 
 function setReadMessageNumber(identifier, num)
-    getNumberPhone(identifier, function(mePhoneNumber)
-        local query = {
-			["receiver"] = mePhoneNumber
-		}
-		db.getDocumentsByRows("phone-messages", query, function(msgs)
-            if not msgs then msgs = {} end
-            for i = 1, #msgs do
-                if msgs[i].transmitter == num then -- only set messages as read for the person the user clicked on
-                    if msgs[i].isRead == 0 then
-                        msgs[i]._rev = nil -- prevent document conflict
-                        msgs[i].isRead = 1
-                        db.updateDocument("phone-messages", msgs[i]._id, msgs[i], function(doc, err, rText) end)
-                    end
+    getMessagesFromNum(identifier, num, function(msgs)
+        for i = 1, #msgs do
+            if msgs[i].transmitter == num then -- only set messages as read for the person the user clicked on
+                if msgs[i].isRead == 0 then
+                    msgs[i]._rev = nil -- prevent document conflict
+                    msgs[i].isRead = 1
+                    db.updateDocument("phone-messages", msgs[i]._id, msgs[i], function(doc, err, rText) end)
                 end
             end
-        end)
-        --[[
-        local endpoint = "/phone-messages/_design/messageFilters/_view/getReceivedMessagesByNum"
-        local url = "http://" .. exports["essentialmode"]:getIP() .. ":" .. exports["essentialmode"]:getPort() .. endpoint
-        PerformHttpRequest(url, function(err, responseText, headers)
-            if responseText then
-                local data = json.decode(responseText)
-                if data.rows then
-                    local msgs = arrayifyDBDocsResponse(data.rows)
-                    for i = 1, #msgs do
-                        if msgs[i].transmitter == num then -- only set messages as read for the person the user clicked on
-                            if msgs[i].isRead == 0 then
-                                msgs[i]._rev = nil -- prevent document conflict
-                                msgs[i].isRead = 1
-                                db.updateDocument("phone-messages", msgs[i]._id, msgs[i], function(doc, err, rText) end)
-                            end
-                        end
-                    end
-                end
-            end
-        end, "POST", json.encode({
-            keys = { mePhoneNumber }
-        }), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
-        --]]
-        --[[
-        -- ! not working for some reason, returning code "0" ??
-        db.getDocumentsByRows("phone-messages", query, function(docs)
-            print("docs: " .. type(docs))
-            if docs then
-                print("docs existed")
-                for i = 1, #docs do
-                    if docs[i].isRead == 0 then
-                        print("was not marked as read, setting message with id " .. docs[i]._id .. " as read")
-                        docs[i]._rev = nil
-                        docs[i].isRead = 1
-                        db.updateDocument("phone-messages", docs[i]._id, docs[i], function(doc, err, rText)
-                            print("when setting message as read, err: " .. (err or "NIL"))
-                            print("rText: " .. (rText or "NIL"))
-                        end)
-                    end
-                end
-            end
-        end)
-        --]]
+        end
     end)
 end
 

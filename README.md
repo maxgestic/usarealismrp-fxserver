@@ -88,7 +88,7 @@ For it to work properly you need to follow these rules:
 	* **getBusinessStorage**
 		- ``emit(doc._id, doc.storage);``
 5) Must create index on the ``stored_location`` field in the ``vehicles`` database for ``usa-properties-og`` to function correctly when storing/retrieving vehicles from property garages.
-6) Must create index on the ``receiver`` field in the ``phone-messages`` database for ``gcphone`` to function correctly when storing/retrieving phone text messages.
+6) Must create indexes on the ``receiver`` and ``transmitter`` fields (in that order) in the ``phone-messages`` database for ``gcphone`` to function correctly when storing/retrieving/updating phone text messages.
 
 **Common Framework Usage**
 
