@@ -89,6 +89,7 @@ For it to work properly you need to follow these rules:
 		- ``emit(doc._id, doc.storage);``
 5) Must create index on the ``stored_location`` field in the ``vehicles`` database for ``usa-properties-og`` to function correctly when storing/retrieving vehicles from property garages.
 6) Must create indexes on the ``receiver`` and ``transmitter`` fields (in that order) in the ``phone-messages`` database for ``gcphone`` to function correctly when storing/retrieving/updating phone text messages.
+7) Should create indexes on the ``owner`` and ``num`` fields in the ``phone-calls`` database for ``gcphone`` to function most efficiently when storing/retrieving phone call history.
 
 **Common Framework Usage**
 
