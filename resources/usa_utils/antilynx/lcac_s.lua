@@ -7,7 +7,7 @@ RegisterServerEvent('LCAC:ViolationDetected')
 AddEventHandler('LCAC:ViolationDetected', function(reason, ban, ban2)
     if enabled then
         local msg = 'Player id [' .. source .. ' / ' .. (GetPlayerIdentifiers(source)[1] or 'N/A') .. '] was banned for LCAC violation!'
-        exports.globals:SendDiscordLog(WEBHOOK_URL, msg .. " " .. minipunchDiscordID)
+        exports.globals:SendDiscordLog(WEBHOOK_URL, msg)
         exports["es_admin"]:BanPlayer(source, "Modding (" .. reason .. "). If you feel this was a mistake please let a staff member know.")
     end
 end)
