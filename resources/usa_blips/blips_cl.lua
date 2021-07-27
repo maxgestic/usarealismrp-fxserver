@@ -12,7 +12,7 @@ local blips = {
     { title="Ammu-Nation", colour=4, id=110, x=812.4276, y=-2145.2118, z=29.3063 },]]
 	--{ title="Car Dealership", colour=76, id=225, scale = 0.7, x=120.924, y=6624.605, z=31.000 },
 	--{ title="DMV", colour=4, id=355, x= -447.845, y = 6013.775, z = 30.716 },
-	{ title="DMV", colour=4, id=355, scale = 0.7, x = -544.857, y = -204.422, z = 37.2152 },
+	{ title="DMV", colour=4, id=355, scale = 0.65, x = -544.857, y = -204.422, z = 37.2152 },
 	--{ title="Bubba's Tow Co.", colour=64, id=68, x = -196.027, y = 6265.625, z = 30.489 }, -- paleto
 	--{ title="Bubba's Tow Co.", colour=64, id=68, x = 2363.89, y = 3126.85, z = 47.211 }, -- sandy shores
 	--{ title="Bubba's Tow Co.", colour=64, id=68, x = 408.03, y = -1624.62, z = 28.29 }, -- los santos
@@ -82,7 +82,7 @@ local blips = {
 	{ title="Weazel News", colour = 4, id = 184, x = -249.6443, y = 6235.7524, z = 30.4893 },
 	{ title="Weazel News", colour = 4, id = 184, x = -599.5, y = -931.9, z = 23.9 },
 	{ title="Cluckin' Bell", colour = 4, id = 89, x = -69.9295, y = 6251.2900, z = 30.4893, scale = 0.7 },
-	{ title="Vangelico", colour = 81, id = 478, x = -623.4, y = -233.1, z = 38.1, scale = 0.5 },
+	{ title="Vangelico", colour = 81, id = 478, x = -623.4, y = -233.1, z = 38.1, scale = 0.65 },
 	{title = "Hunting", x = -1508.83, y = 4978.63, id = 442, colour = 0},
 	{ title = "Burger Shot", x = -1189.22, y = -888.43, id = 106, colour = 1, scale = 0.7},
 	--{ title = "REA Office", x = -148.55, y = -579.82, id = 475, colour = 2, scale = 0.7},

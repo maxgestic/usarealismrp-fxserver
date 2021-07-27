@@ -1,6 +1,6 @@
 local MENU_LOCATIONS  = {
-    { name = "Watches", x = -623.4, y = -233.1, z = 38.1},
-    { name = "Bracelets", x = -624.6, y = -231.0, z = 38.1}
+    { x = -623.4, y = -233.1, z = 38.1},
+    { x = -624.6, y = -231.0, z = 38.1}
 }
 
 local me = GetPlayerPed(-1)
@@ -38,9 +38,10 @@ AddEventHandler("vangelico:loadItems", function(items)
     ITEMS = items
 end)
 
-function CreateMenu(menu, gender, type)
+function CreateMenu(menu, gender)
     menu:Clear()
 
+    --[[
     for name, info in pairs(ITEMS[gender][type]) do
         local submenu = _menuPool:AddSubMenu(menu, "($" .. exports["globals"]:comma_value(info.price) .. ") " .. name, "See variations for " .. name .. " (" .. GetWristDisplayName(info.wrist) .. " wrist)", true)
         local tryOnBtn = NativeUI.CreateItem("Try on", "Try on the " .. name .. " (" .. GetWristDisplayName(info.wrist) .. " wrist)")
@@ -63,11 +64,62 @@ function CreateMenu(menu, gender, type)
         submenu.SubMenu:AddItem(textureSlider)
         menu:AddItem(submenu.SubMenu)
     end
+    --]]
 
-    local checkout = NativeUI.CreateItem("Checkout", "Check out the items you are wearing.")
+    local leftWristSubmenu = _menuPool:AddSubMenu(menu, "Left Wrist", "See left wrist items", true)
+    for i = 1, #ITEMS[gender].left_wrist do
+        local val = ITEMS[gender].left_wrist[i]
+        local itemSubmenu = _menuPool:AddSubMenu(leftWristSubmenu.SubMenu, "Item #" .. i, "", true)
+        local tryOnBtn = NativeUI.CreateItem("Try on", "Try on item #" .. i)
+        tryOnBtn.Activated = function(pmenu, selected)
+            ClearPedProp(me, 6)
+            SetPedPropIndex(me, 6, val, 0, true)
+            AddToCart(6, val, 0)
+        end
+        itemSubmenu.SubMenu:AddItem(tryOnBtn)
+        local prop_texture_variations_total = GetTextureVariations(6, val)
+        local textureSlider = NativeUI.CreateListItem("Variation:", prop_texture_variations_total, 1)
+		textureSlider.OnListSelected = function(sender, item, index)
+			if item == textureSlider then
+                local sliderVal = item:IndexToItem(index)
+                ClearPedProp(me, 6)
+                SetPedPropIndex(me, 6, val, sliderVal, true)
+                AddToCart(6, val, sliderVal)
+			end
+		end
+        itemSubmenu.SubMenu:AddItem(textureSlider)
+        leftWristSubmenu.SubMenu:AddItem(itemSubmenu.SubMenu)
+    end
+
+    local rightWristSubmenu = _menuPool:AddSubMenu(menu, "Right Wrist", "See right wrist items", true)
+    for i = 1, #ITEMS[gender].right_wrist do
+        local val = ITEMS[gender].right_wrist[i]
+        local itemSubmenu = _menuPool:AddSubMenu(rightWristSubmenu.SubMenu, "Item #" .. i, "", true)
+        local tryOnBtn = NativeUI.CreateItem("Try on", "Try on item #" .. i)
+        tryOnBtn.Activated = function(pmenu, selected)
+            ClearPedProp(me, 7)
+            SetPedPropIndex(me, 7, val, 0, true)
+            AddToCart(7, val, 0)
+        end
+        itemSubmenu.SubMenu:AddItem(tryOnBtn)
+        local prop_texture_variations_total = GetTextureVariations(7, val)
+        local textureSlider = NativeUI.CreateListItem("Variation:", prop_texture_variations_total, 1)
+		textureSlider.OnListSelected = function(sender, item, index)
+			if item == textureSlider then
+                local sliderVal = item:IndexToItem(index)
+                ClearPedProp(me, 7)
+                SetPedPropIndex(me, 7, val, sliderVal, true)
+                AddToCart(7, val, sliderVal)
+			end
+		end
+        itemSubmenu.SubMenu:AddItem(textureSlider)
+        rightWristSubmenu.SubMenu:AddItem(itemSubmenu.SubMenu)
+    end
+
+    local checkout = NativeUI.CreateItem("Checkout", "Purchase the items you are wearing.")
     checkout:SetRightBadge(BadgeStyle.Star)
     checkout.Activated = function(parentmenu, selected)
-        if cart["left"] or cart["right"] then
+        if cart[6] or cart[7] then
             local business = exports["usa-businesses"]:GetClosestStore(15)
             TriggerServerEvent("vangelico:purchase", cart, business)
             cart = {}
@@ -79,6 +131,7 @@ function CreateMenu(menu, gender, type)
     removeLeftBtn.Activated = function(pmenu, selected)
         ClearPedProp(me, 6)
         TriggerServerEvent("vangelico:clear", "6")
+        cart[6] = nil
     end
     menu:AddItem(removeLeftBtn)
 
@@ -86,19 +139,20 @@ function CreateMenu(menu, gender, type)
     removeRightBtn.Activated = function(pmenu, selected)
         ClearPedProp(me, 7)
         TriggerServerEvent("vangelico:clear", "7")
+        cart[7] = nil
     end
     menu:AddItem(removeRightBtn)
 
 end
 
-function DisplayMenu(menu, type)
+function DisplayMenu(menu)
     local gender = "undefined"
     if IsPedMaleModel(me) then
         gender = "male"
     else
         gender = "female"
     end
-    CreateMenu(menu, gender, type)
+    CreateMenu(menu, gender)
     menu:Visible(true)
 end
 
@@ -113,16 +167,15 @@ Citizen.CreateThread(function()
 
         if storeIsOpen then
             for i = 1, #MENU_LOCATIONS do
-                DrawText3D(MENU_LOCATIONS[i].x, MENU_LOCATIONS[i].y, MENU_LOCATIONS[i].z, 4, '[E] - ' .. MENU_LOCATIONS[i].name)
+                DrawText3D(MENU_LOCATIONS[i].x, MENU_LOCATIONS[i].y, MENU_LOCATIONS[i].z, 4, '[E] - View Items')
             end
 
             if IsControlJustPressed(1, MENU_OPEN_KEY) then
                 for i = 1, #MENU_LOCATIONS do
                     local playerCoords = GetEntityCoords(me, false)
                     if Vdist(playerCoords, MENU_LOCATIONS[i].x, MENU_LOCATIONS[i].y, MENU_LOCATIONS[i].z) < MENU_DISTANCE then
-                        closest_section = MENU_LOCATIONS[i] --// set shop player is at
-                        local menuName = MENU_LOCATIONS[i].name
-                        DisplayMenu(menu, menuName:lower())
+                        closest_section = MENU_LOCATIONS[i] -- set shop player is at
+                        DisplayMenu(menu)
                         _menuPool:RefreshIndex()
                     end
                 end
@@ -168,19 +221,9 @@ function GetTextureVariations(wrist, val)
     return t
 end
 
-function GetWristDisplayName(wrist)
-    if wrist == 6 then
-        return "Left"
-    elseif wrist == 7 then
-        return "Right"
-    else
-        return "Undefined"
-    end
-end
-
-function AddToCart(name, info, textureVal)
-    local wrist = GetWristDisplayName(info.wrist):lower()
-    cart[wrist] = info
-    cart[wrist].name = name
-    cart[wrist].textureVal = textureVal
+function AddToCart(wrist, val, textureVal)
+    cart[wrist] = {
+        val = val,
+        textureVal = textureVal
+    }
 end
