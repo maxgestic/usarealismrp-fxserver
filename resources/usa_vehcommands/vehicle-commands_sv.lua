@@ -69,6 +69,16 @@ local VEHICLE_RANKS = {
 			allowedLiveries = { 1 },
 			hash = -488123221
 		},
+		["predator2"] = {
+			rank = 1,
+			allowedLiveries = { 1 },
+			hash = 1766503135
+		},
+		["dinghy"] = {
+			rank = 3,
+			allowedLiveries = { 1 },
+			hash = 1033245328
+		},
 		["sheriff2"] = {
 			rank = 5,
 			allowedLiveries = { 1, 2 },
@@ -150,6 +160,16 @@ local VEHICLE_RANKS = {
 			rank = 1,
 			allowedLiveries = { 1 },
 			hash = -488123221
+		},
+		["predator2"] = {
+			rank = 1,
+			allowedLiveries = { 3 },
+			hash = 1766503135
+		},
+		["dinghy"] = {
+			rank = 3,
+			allowedLiveries = { 1 },
+			hash = 1033245328
 		},
 		["fbi"] = {
 			rank = 4,
@@ -260,6 +280,16 @@ local VEHICLE_RANKS = {
 			rank = 1,
 			allowedLiveries = { 1 },
 			hash = -488123221
+		},
+		["predator2"] = {
+			rank = 1,
+			allowedLiveries = { 2 },
+			hash = 1766503135
+		},
+		["dinghy"] = {
+			rank = 2,
+			allowedLiveries = { 1 },
+			hash = 1033245328
 		},
 		["sotruck"] = {
 			rank = 1,
