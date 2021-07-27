@@ -29,6 +29,11 @@ local VEHICLE_RANKS = {
 			allowedLiveries = { 1 },
 			hash = -1205689942
 		},
+		["bearcatrb"] = {
+			rank = 5,
+			allowedLiveries = { 1, 2, 3 },
+			hash = -500937862
+		},
 		["polmav"] = {
 			rank = 3,
 			allowedLiveries = { 1 },
@@ -43,6 +48,16 @@ local VEHICLE_RANKS = {
 			rank = 3,
 			allowedLiveries = { 1 },
 			hash = 745926877
+		},
+		["c3swathawk"] = {
+			rank = 3,
+			allowedLiveries = { 1, 2, 3 },
+			hash = -218549024
+		},
+		["pbike"] = {
+			rank = 1,
+			allowedLiveries = { 1, 2 },
+			hash = 1077822991
 		},
 		["policeb"] = {
 			rank = 3,
@@ -63,6 +78,21 @@ local VEHICLE_RANKS = {
 			rank = 5,
 			allowedLiveries = { 1, 2, 4 },
 			hash = 1311724675
+		},
+		["npolchal"] = {
+			rank = 5,
+			allowedLiveries = { 1, 2, 3 },
+			hash = 1949729657
+		},
+		["npolstang"] = {
+			rank = 5,
+			allowedLiveries = { 1, 2, 3 },
+			hash = -1336796853
+		},
+		["npolvette"] = {
+			rank = 5,
+			allowedLiveries = { 1, 2, 3 },
+			hash = -1109563416
 		},
 		["predator"] = {
 			rank = 1,
@@ -121,6 +151,36 @@ local VEHICLE_RANKS = {
 		}
 	},
 	["corrections"] = {
+		["npolchal"] = {
+			rank = 5,
+			allowedLiveries = { 1, 2, 3 },
+			hash = 1949729657
+		},
+		["npolstang"] = {
+			rank = 5,
+			allowedLiveries = { 1, 2, 3 },
+			hash = -1336796853
+		},
+		["npolvette"] = {
+			rank = 5,
+			allowedLiveries = { 1, 2, 3 },
+			hash = -1109563416
+		},
+		["c3swathawk"] = {
+			rank = 3,
+			allowedLiveries = { 1, 2, 3 },
+			hash = -218549024
+		},
+		["pbike"] = {
+			rank = 1,
+			allowedLiveries = { 1, 2 },
+			hash = 1077822991
+		},
+		["bearcatrb"] = {
+			rank = 5,
+			allowedLiveries = { 1, 2, 3 },
+			hash = -500937862
+		},
 		["pdcvpi"] = {
 			rank = 1,
 			allowedLiveries = { 1, 2 },

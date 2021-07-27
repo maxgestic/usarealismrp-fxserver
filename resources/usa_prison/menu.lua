@@ -11,6 +11,7 @@ AddEventHandler("doc:getWeapons", function(weps)
 end)
 
 local vehicles = {
+  { name = "Police Bike", hash = GetHashKey("pbike") },
   { name = "Quad Bike", hash = GetHashKey("blazer") },
   { name = "CVPI", hash = GetHashKey("pdcvpi") },
   { name = "Charger", hash = GetHashKey("pdchgr") },
@@ -19,9 +20,13 @@ local vehicles = {
   { name = "Explorer", hash = GetHashKey("pdexp") },
   { name = "Truck", hash = GetHashKey("sheriff2") },
   { name = "FBI", hash = GetHashKey("fbi") },
-  { name = "Mustang", hash = GetHashKey("mustang19") },
+  { name = "Unmarked Mustang 1", hash = GetHashKey("mustang19") },
+  { name = "Unmarked Mustang 2", hash = GetHashKey("npolstang") },
+  { name = "Unmarked Challenger", hash = GetHashKey("npolchal") },
+  { name = "Unmarked Corvette", hash = GetHashKey("npolvette") },
   { name = "FBI 2", hash = GetHashKey("fbi2") },
-  { name = "Riot", hash = GetHashKey("riot") },
+  { name = "Bearcat 1", hash = GetHashKey("riot") },
+  { name = "Bearcat 2", hash = GetHashKey("bearcatrb") },
   { name = "Motorcycle 1", hash = GetHashKey("policeb") },
   { name = "Motorcycle 2", hash = GetHashKey("1200RT") },
   { name = "Golf Cart", hash = GetHashKey("caddy") },
