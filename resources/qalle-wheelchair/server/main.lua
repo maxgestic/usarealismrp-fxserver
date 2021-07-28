@@ -24,7 +24,7 @@ RegisterServerEvent("hospital:pushable:pickUpIfPlayerHasRoom")
 AddEventHandler("hospital:pushable:pickUpIfPlayerHasRoom", function(pushable)
 	local c = exports["usa-characters"]:GetCharacter(source)
 	local item = nil
-	if pushable.itemnaName == "Stretcher" then
+	if pushable.itemnName == "Stretcher" then
 		item = stretcherItem
 	elseif pushable.itemName == "Wheelchair" then
 		item = wheelChairItem
