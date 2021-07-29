@@ -1,0 +1,5 @@
+JOB_TOGGLE_LOCATIONS = {
+    vector3(-1081.0, -247.0, 37.8)
+}
+
+TEXT_3D_DRAW_DIST = 5

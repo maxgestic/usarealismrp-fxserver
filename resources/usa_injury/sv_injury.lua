@@ -323,17 +323,22 @@ AddEventHandler('injuries:requestData', function()
   end
 end)
 
-TriggerEvent('es:addGroupCommand', 'heal', 'mod', function(source, args, char)
-	local targetSource = tonumber(args[2])
-	if tonumber(args[2]) and GetPlayerName(args[2]) then
-		local target = exports["usa-characters"]:GetCharacter(targetSource)
-		target.set('injuries', {})
-		TriggerClientEvent('death:allowRevive', targetSource)
-		Citizen.Wait(100)
-		TriggerClientEvent('injuries:updateInjuries', targetSource, {})
-		TriggerClientEvent('usa:notify', source, 'Player has been healed.')
-		TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(targetSource)..' ['..targetSource..'] ^0 has been healed by ^2'..GetPlayerName(source)..' ['..source..'] ^0.')
-		TriggerClientEvent('chatMessage', targetSource, '^2^*[STAFF]^r^0 You have been healed by ^2'..GetPlayerName(source)..'^0.')
+TriggerEvent('es:addCommand', 'heal', function(source, args, char)
+	local group = exports["essentialmode"]:getPlayerFromId(source).getGroup()
+	if group ~= "user" or char.get("job") == "eventPlanner" then
+		local targetSource = tonumber(args[2])
+		if tonumber(args[2]) and GetPlayerName(args[2]) then
+			local target = exports["usa-characters"]:GetCharacter(targetSource)
+			target.set('injuries', {})
+			TriggerClientEvent('death:allowRevive', targetSource)
+			Citizen.Wait(100)
+			TriggerClientEvent('injuries:updateInjuries', targetSource, {})
+			TriggerClientEvent('usa:notify', source, 'Player has been healed.')
+			TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(targetSource)..' ['..targetSource..'] ^0 has been healed by ^2'..GetPlayerName(source)..' ['..source..'] ^0.')
+			TriggerClientEvent('chatMessage', targetSource, '^2^*[STAFF]^r^0 You have been healed by ^2'..GetPlayerName(source)..'^0.')
+		end
+	else
+		TriggerClientEvent("usa:notify", source, "Not permitted")
 	end
 end, {
 	help = "Heal a player's injuries.",

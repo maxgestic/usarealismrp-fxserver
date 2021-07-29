@@ -147,6 +147,10 @@ AddEventHandler('rconCommand', function(commandName, args)
                     end
                 end)
             end)
+        elseif wl_type:lower() == "eventplanner" then
+            local c = exports["usa-characters"]:GetCharacter(playerId)
+            c.set("eventPlannerRank", rank)
+            RconPrint("DEBUG: " .. playerId .. "'s event planner rank is now " .. rank)
         end
         CancelEvent()
     end

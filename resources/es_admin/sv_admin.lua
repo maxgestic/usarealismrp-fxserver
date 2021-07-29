@@ -476,9 +476,12 @@ end, {
 	help = "Save pos to txt"
 })
 
-TriggerEvent('es:addGroupCommand', 'car', 'admin', function(source, args, char)
-	TriggerClientEvent('es_admin:spawnVehicle', source, args[2])
-	TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(source)..' ['..source..'] ^0 has requested to spawn vehicle: ^2'..args[2]..'^0.')
+TriggerEvent('es:addCommand', 'car', function(source, args, char)
+	local group = exports["essentialmode"]:getPlayerFromId(source).getGroup()
+	if (group ~= "user" and group ~= "mod") or char.get("job") == "eventPlanner" then
+		TriggerClientEvent('es_admin:spawnVehicle', source, args[2])
+		TriggerEvent("usa:notifyStaff", '^2^*[STAFF]^r^0 Player ^2'..GetPlayerName(source)..' ['..source..'] ^0 has requested to spawn vehicle: ^2'..args[2]..'^0.')
+	end
 end, {
 	help = "Spawn a car (not to be abused, we are watching..)",
 	params = {
@@ -1530,9 +1533,14 @@ end, {
 	help = "Test something 2"
 })
 
-TriggerEvent('es:addGroupCommand', 'tvremote', "mod", function(source, args, char)
-	local eventName = "Hypnonema.OpenPlease"
-	TriggerClientEvent(eventName, source)
+TriggerEvent('es:addCommand', 'tvremote', function(source, args, char)
+	local group = exports["essentialmode"]:getPlayerFromId(source).getGroup()
+	if group ~= "user" or char.get("job") == "eventPlanner" then
+		local eventName = "Hypnonema.OpenPlease"
+		TriggerClientEvent(eventName, source)
+	else
+		TriggerClientEvent("usa:notify", source, "Not allowed to use that command")
+	end
 end, {
 	help = "Play something to watch together!"
 })

@@ -3,6 +3,9 @@ local mainMenu = NativeUI.CreateMenu("Insurance", "~b~Manage your plan", 0 --[[X
 local MENU_KEY = 38
 local vehiclesToClaim
 
+local MENU_COORDS = {x = -1083.146484375, y = -248.03326416016, z = 37.763290405273}
+local MENU_OPEN_MAX_DIST = 1.2
+
 _menuPool:Add(mainMenu)
 
 RegisterNetEvent("insurance:loadedVehicles")
@@ -92,11 +95,11 @@ Citizen.CreateThread(function()
 	EnumerateBlips()
 	while true do
 		local playerPed = PlayerPedId()
-		DrawText3D(-1082.47, -246.98, 38.00, 5, '[E] - Insurance')
+		DrawText3D(MENU_COORDS.x, MENU_COORDS.y, MENU_COORDS.z, 5, '[E] - Insurance')
 		-----------------------------------------------------------
 		-- watch for entering store and menu open keypress event --
 		-----------------------------------------------------------
-		if GetDistanceBetweenCoords(GetEntityCoords(playerPed), -1081.807, -248.32, 37.76, true) < 3 then
+		if GetDistanceBetweenCoords(GetEntityCoords(playerPed), MENU_COORDS.x, MENU_COORDS.y, MENU_COORDS.z, true) < MENU_OPEN_MAX_DIST then
 			if not mainMenu:Visible() then
 				if IsControlJustPressed(1, MENU_KEY) then
 					mainMenu:Visible(not mainMenu:Visible())
@@ -110,10 +113,9 @@ Citizen.CreateThread(function()
 		_menuPool:ControlDisablingEnabled(false)
 		_menuPool:ProcessMenus()
 		-- closing menus --
-		if GetDistanceBetweenCoords(GetEntityCoords(playerPed), -1081.807, -248.32, 37.76, true) > 3 then
+		if GetDistanceBetweenCoords(GetEntityCoords(playerPed), MENU_COORDS.x, MENU_COORDS.y, MENU_COORDS.z, true) > MENU_OPEN_MAX_DIST then
 			mainMenu:Visible(false)
 		end
-		--print("menu_data.closest: " .. type(menu_data.closest))
 		Wait(0)
 	end
 end)

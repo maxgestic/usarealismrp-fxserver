@@ -261,8 +261,11 @@ TriggerEvent('es:addJobCommand', 'impound', { "sheriff", "ems", "corrections" },
 	TriggerClientEvent('impoundVehicle', source)
 end, { help = "Impound a vehicle." })
 
-TriggerEvent('es:addGroupCommand', 'dv', 'mod', function(source, args, char)
-	TriggerClientEvent('impoundVehicle', source)
+TriggerEvent('es:addCommand', 'dv', function(source, args, char)
+	local group = exports["essentialmode"]:getPlayerFromId(source).getGroup()
+	if group ~= "user" or char.get("job") == "eventPlanner" then
+		TriggerClientEvent('impoundVehicle', source)
+	end
 end, { help = "(Delete) Impound a vehicle." })
 
 RegisterServerEvent("impound:impoundVehicle")
