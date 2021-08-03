@@ -111,6 +111,26 @@ VehInventoryManager.canHoldItem = function(inv, item)
   end
 end
 
+VehInventoryManager.putItemInFirstFreeSlot = function(plate, inv, item, cb)
+  for i = 0, inv.MAX_ITEMS - 1 do
+    i = tostring(i)
+    if inv.items[i] == nil then
+      inv.items[i] = item
+      -- save --
+      if not VehInventoryManager:getTempVehInv(plate) then
+        TriggerEvent('es:exposeDBFunctions', function(db)
+          db.updateDocument("vehicles", plate, { inventory = inv }, function()
+            removeVehicleBusy(plate)
+          end)
+        end)
+      else
+          removeVehicleBusy(plate)
+      end
+      return
+    end
+  end
+end
+
 VehInventoryManager.putItemInSlot = function(plate, inv, item, slot, cb)
   slot = tostring(slot)
   if not inv.items[slot] then -- no item in slot already

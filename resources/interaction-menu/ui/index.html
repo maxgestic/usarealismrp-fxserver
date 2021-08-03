@@ -50,7 +50,13 @@
 				<li @click="contextMenuClicked(event, 'Use')">Use</li>
 				<li @click="contextMenuClicked(event, 'Give')">Give to <span v-if="nearestPlayer">{{ nearestPlayer.name }}</span><span v-else>no one</span></li>
 				<li @click="contextMenuClicked(event, 'Drop')">Drop</li>
+				<li v-if="contextMenu.doShowReloadOption" @click="contextMenuClicked(event, 'Reload')">Reload</li>
 			</ul>
+
+			<!-- Inventory item hover tooltip -->
+			<div id="tooltip" v-show="tooltip.visible && !contextMenu.showContextMenu" :style="{top: tooltip.top + 'px', left: tooltip.left + 'px'}">
+				<span>{{ tooltip.text }}</span>
+			</div>
 
 			<!-- Inventory -->
 			<div class="container center" v-if="currentPage === 'Inventory'">
@@ -68,14 +74,14 @@
 						<table>
 							<tr class="inventory-row" v-for="i in 5">
 								<td class="inventory-item droppable" v-droppable v-for="j in 5" v-bind:id="((5*(i-1)) + (j-1))" data-inventory-type="primary">
-									<div v-if="inventory.items[(5*(i-1)) + (j-1)]" @mousedown.right="contextMenu.openMenu(((5*(i-1)) + (j-1)))" @mousedown.left="contextMenu.showContextMenu = false">
-										<div class="draggable" v-draggable v-bind:id="((5*(i-1)) + (j-1))" data-inventory-type="primary">
+									<div v-if="inventory.items[(5*(i-1)) + (j-1)]" @mousedown.right="contextMenu.openMenu((5*(i-1)) + (j-1), inventory.items[(5*(i-1)) + (j-1)], isInVehicle)" @mousedown.left="contextMenu.showContextMenu = false">
+										<div class="draggable" v-draggable v-bind:id="((5*(i-1)) + (j-1))" data-inventory-type="primary" title="test" @mouseenter="tooltip.toggle(inventory.items[(5*(i-1)) + (j-1)])" @mouseleave="tooltip.toggle(inventory.items[(5*(i-1)) + (j-1)])" @mousemove="tooltip.updatePosition(event)">
 											<header>
 												<span class="inventory-item-quantity">{{ inventory.items[(5*(i-1)) + (j-1)].quantity }}</span>
 												<span class="inventory-item-weight">W: {{ inventory.items[(5*(i-1)) + (j-1)].weight }}</span>
 											</header>
 											<section>
-												<img v-if="getItemImage(inventory.items[(5*(i-1)) + (j-1)].name)" v-bind:src="getItemImage(inventory.items[(5*(i-1)) + (j-1)].name)" v-bind:alt="getItemImage(inventory.items[(5*(i-1)) + (j-1)].name)">
+												<img v-if="getItemImage(inventory.items[(5*(i-1)) + (j-1)])" v-bind:src="getItemImage(inventory.items[(5*(i-1)) + (j-1)])" v-bind:alt="getItemImage(inventory.items[(5*(i-1)) + (j-1)])">
 											</section>
 											<footer>
 												<div>
@@ -111,7 +117,7 @@
 												<span class="inventory-item-weight">W: {{ vehicleInventory.items[(5*(i-1)) + (j-1)].weight }}</span>
 											</header>
 											<section>
-												<img v-if="getItemImage(vehicleInventory.items[(5*(i-1)) + (j-1)].name)" v-bind:src="getItemImage(vehicleInventory.items[(5*(i-1)) + (j-1)].name)" v-bind:alt="getItemImage(vehicleInventory.items[(5*(i-1)) + (j-1)].name)">
+												<img v-if="getItemImage(vehicleInventory.items[(5*(i-1)) + (j-1)])" v-bind:src="getItemImage(vehicleInventory.items[(5*(i-1)) + (j-1)])" v-bind:alt="getItemImage(vehicleInventory.items[(5*(i-1)) + (j-1)])">
 											</section>
 											<footer>
 												<div>

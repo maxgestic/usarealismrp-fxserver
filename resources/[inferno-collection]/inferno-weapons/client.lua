@@ -8,12 +8,21 @@
 -- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. THE SOFTWARE MAY NOT BE SOLD.
 --
 
+-- modified by minipunch for https://usarrp.net
+
 --
 -- Resource Configuration
 --
 -- PLEASE RESTART SERVER AFTER MAKING CHANGES TO THIS CONFIGURATION
 --
+local alreadyTriggeredOutOfAmmoForNonHandgun = false
+local alreadyTriggeredOutOfAmmoForHandgun = false
+
 local Config = {} -- Do not edit this line
+
+Config.Keys = {
+	R = 45
+}
 
 -- The ID of the key used to change fire mode
 -- https://docs.fivem.net/game-references/controls/
@@ -44,15 +53,26 @@ Config.Weapons.Single = {
 	"WEAPON_HEAVYPISTOL",
 	"WEAPON_VINTAGEPISTOL",
 	"WEAPON_PUMPSHOTGUN",
+	"WEAPON_HEAVYSHOTGUN",
+	"WEAPON_SAWNOFFSHOTGUN",
+	"WEAPON_BULLPUPSHOTGUN",
 	"WEAPON_SNSPISTOL_MK2",
 	"WEAPON_REVOLVER_MK2",
-	"WEAPON_PUMPSHOTGUN_MK2"
+	"WEAPON_PUMPSHOTGUN_MK2",
+	"WEAPON_MUSKET",
+	"WEAPON_SNIPERRIFLE",
+	"WEAPON_HEAVYSNIPER",
+	"WEAPON_HEAVYSNIPER_MK2",
+	"WEAPON_MARKSMANRIFLE",
+	"WEAPON_MARKSMANRIFLE_MK2",
+	"WEAPON_FIREWORK"
 }
 
--- These weapons will have safety, semi-automatic, burst shot, and full auto modes
+-- These weapons will have safety, semi-automatic and full auto mode
 Config.Weapons.Full = {
 	"WEAPON_MINISMG",
 	"WEAPON_SMG",
+	"WEAPON_MICROSMG",
 	"WEAPON_SMG_MK2",
 	"WEAPON_ASSAULTSMG",
 	"WEAPON_MG",
@@ -70,17 +90,17 @@ Config.Weapons.Full = {
 	"WEAPON_BULLPUPRIFLE",
 	"WEAPON_COMPACTRIFLE",
 	"WEAPON_SPECIALCARBINE_MK2",
-	"WEAPON_BULLPUPRIFLE_MK2"
+	"WEAPON_BULLPUPRIFLE_MK2",
+	"WEAPON_GUSENBERG"
 }
 
 -- These weapons will have their reticle enabled
 Config.Weapons.Reticle = {
-	"WEAPON_SNIPERRIFLE",
-	"WEAPON_HEAVYSNIPER",
-	"WEAPON_HEAVYSNIPER_MK2",
-	"WEAPON_MARKSMANRIFLE",
-	"WEAPON_MARKSMANRIFLE_MK2",
-	"WEAPON_STUNGUN"
+	[`WEAPON_SNIPERRIFLE`] = true,
+	[`WEAPON_HEAVYSNIPER`] = true,
+	[`WEAPON_HEAVYSNIPER_MK2`] = true,
+	[`WEAPON_MARKSMANRIFLE`] = true,
+	[`WEAPON_MARKSMANRIFLE_MK2`] = true
 }
 
 -- Effects that are randomly selected when the player takes any damage.
@@ -224,6 +244,7 @@ Citizen.CreateThread(function()
 				end
 
 				-- If weapon was not found in full auto loop
+				--[[
 				if not Active then
 					-- Loop though all the weapons that require a reticle
 					for _, Weapon in ipairs(Config.Weapons.Reticle) do
@@ -235,6 +256,7 @@ Citizen.CreateThread(function()
 						end
 					end
 				end
+				--]]
 
 				::WeaponIdLoop::
 
@@ -258,7 +280,7 @@ Citizen.CreateThread(function()
 
 
 			-- If weapon needs to be affected
-			if Active and Active ~= "reticle" then
+			if Active then
 				-- If weapon is not yet logged
 				if FireMode.Weapons[PedWeapon] == nil then
 					-- Log to array
@@ -272,17 +294,17 @@ Citizen.CreateThread(function()
 				-- If fire mode selector key pressed
 				if IsDisabledControlJustReleased(1, Config.SelectorKey) and IsPlayerFreeAiming(PlayerId) and GetLastInputMethod(0) then
 					if Active == "full" then
-						if FireMode.Weapons[PedWeapon] <= 2 then
+						if FireMode.Weapons[PedWeapon] <= 1 then
 							if FireMode.Weapons[PedWeapon] == 0 then
 								NewNUIMessage("NewMode", "single")
+							--elseif FireMode.Weapons[PedWeapon] == 1 then
+								--NewNUIMessage("NewMode", "burst")
 							elseif FireMode.Weapons[PedWeapon] == 1 then
-								NewNUIMessage("NewMode", "burst")
-							elseif FireMode.Weapons[PedWeapon] == 2 then
 								NewNUIMessage("NewMode", "full_auto")
 							end
 							PlaySoundFrontend(-1, "Faster_Click", "RESPAWN_ONLINE_SOUNDSET", 1)
 							FireMode.Weapons[PedWeapon] = FireMode.Weapons[PedWeapon] + 1
-						elseif FireMode.Weapons[PedWeapon] >= 3 then
+						elseif FireMode.Weapons[PedWeapon] >= 2 then
 							NewNUIMessage("NewMode", "safety")
 							PlaySoundFrontend(-1, "Reset_Prop_Position", "DLC_Dmod_Prop_Editor_Sounds", 0)
 							FireMode.Weapons[PedWeapon] = 0
@@ -308,21 +330,22 @@ Citizen.CreateThread(function()
 				if IsDisabledControlJustPressed(1, 45) and not FireMode.Reloading then
 					FireMode.Reloading = true
 					FireMode.ShootingDisable = true
-					if IsPlayerFreeAiming(PlayerId) then SetPlayerForcedAim(PlayerId, true) end
-					Citizen.Wait(400)
-					MakePedReload(PlayerPed)
-					Citizen.Wait(300)
-					SetPlayerForcedAim(PlayerId, false)
+					TriggerServerEvent("ammo:checkForMagazine")
+					Wait(2500)
 					FireMode.ShootingDisable = false
 					FireMode.Reloading = false
 				-- If they is only one bullet left in the magazine
 				-- Or if the firemode is burst, and out of ammo
-				elseif (Ammo == 1 and FireMode.Weapons[PedWeapon] ~= 2) or (Ammo <= 3 and FireMode.Weapons[PedWeapon] == 2) then
-					FireMode.ShootingDisable = true
+				--elseif (Ammo == 0 and FireMode.Weapons[PedWeapon] ~= 2) or (Ammo <= 3 and FireMode.Weapons[PedWeapon] == 2) then
+				elseif Ammo == 0 and not isFullAuto(PedWeapon) then
+					TriggerEvent("ammo:setRanOutOfAmmo", true)
 					-- Set the ammo in the magazine to one
 					SetAmmoInClip(PlayerPed, PedWeapon, 1)
-					-- If left click just pressed
-					if IsDisabledControlJustPressed(1, 24) then PlaySoundFrontend(-1, "Faster_Click", "RESPAWN_ONLINE_SOUNDSET", 1) end
+					alreadyTriggeredOutOfAmmoForHandgun = true
+				elseif Ammo == 1 and not alreadyTriggeredOutOfAmmoForNonHandgun and isFullAuto(PedWeapon) then
+					alreadyTriggeredOutOfAmmoForNonHandgun = true
+					TriggerEvent("ammo:setRanOutOfAmmo", true)
+					SetAmmoInClip(PlayerPed, PedWeapon, 2)
 				-- If left click just pressed
 				elseif IsDisabledControlJustPressed(1, 24) then
 					-- If the fire mode is set to safety
@@ -336,6 +359,7 @@ Citizen.CreateThread(function()
 							DisablePlayerFiring(PlayerId, true)
 							Citizen.Wait(0)
 						end
+						--[[
 					-- If fire mode is set to burst
 					elseif FireMode.Weapons[PedWeapon] == 2 then
 						Citizen.Wait(200)
@@ -345,6 +369,7 @@ Citizen.CreateThread(function()
 							DisablePlayerFiring(PlayerId, true)
 							Citizen.Wait(0)
 						end
+						--]]
 					end
 				-- If fire mode is not set to safety
 				elseif FireMode.Weapons[PedWeapon] ~= 0 then
@@ -365,6 +390,23 @@ Citizen.CreateThread(function()
 	end
 end)
 
+-- play clicky sound when out of ammo and trying to shoot --
+Citizen.CreateThread(function()
+	while true do
+		local p = PlayerPedId()
+		local w = GetSelectedPedWeapon(p)
+		if w ~= `WEAPON_UNARMED` then
+			local _,c = GetAmmoInClip(p, w)
+			if c == 0 or alreadyTriggeredOutOfAmmoForHandgun or alreadyTriggeredOutOfAmmoForNonHandgun then
+				if IsDisabledControlJustPressed(1, 24) then
+					PlaySoundFrontend(-1, "Faster_Click", "RESPAWN_ONLINE_SOUNDSET", 1)
+				end
+			end
+		end
+		Wait(1)
+	end
+end)
+
 -- Remove reticle loop
 -- This is in it"s own loop to stop flickering caused by Citizen.Wait"s in other loops.
 Citizen.CreateThread(function()
@@ -372,7 +414,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 
 		-- If weapon does not require reticle, remove reticle
-		if FireMode.LastWeaponActive ~= "reticle" and not IsPedInAnyVehicle(PlayerPedId(), true) then
+		if not Config.Weapons.Reticle[FireMode.LastWeapon] and not IsPedInAnyVehicle(PlayerPedId(), true) then
 			HideHudComponentThisFrame(14)
 		end
 
@@ -415,7 +457,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 
-		if FireMode.LastWeapon and FireMode.LastWeaponActive ~= "reticle" then
+		if FireMode.LastWeapon and not Config.Weapons.Reticle[FireMode.LastWeapon] then
 			-- Disable fire mode selector key
 			DisableControlAction(0, Config.SelectorKey, true)
 
@@ -526,6 +568,18 @@ Citizen.CreateThread(function()
 	end
 end)
 
+-- disable auto reload
+Citizen.CreateThread(function()
+	while true do
+		local myped = PlayerPedId()
+		if IsDisabledControlJustPressed(1, Config.Keys.R) or IsControlJustPressed(1, Config.Keys.R) then
+			Wait(3500)
+		elseif IsPedReloading(myped) then
+			ClearPedTasks(myped) -- to disable auto reloading when currently equipped ped weapon is 0
+		end
+		Wait(1)
+	end
+end)
 
 -- Injury loop
 --[[
@@ -567,9 +621,14 @@ Citizen.CreateThread(function()
 end)
 --]]
 
--- Updates the synced flashlight variable
-RegisterNetEvent("Weapons:Client:Return")
-AddEventHandler("Weapons:Client:Return", function(NewFlashlights) Flashlights.All = NewFlashlights end)
+RegisterNetEvent("Weapons:Client:Return") 
+AddEventHandler("Weapons:Client:Return", function(NewFlashlights) Flashlights.All = NewFlashlights end) -- Updates the synced flashlight variable
+
+RegisterNetEvent("Weapons:Client:resetAlreadyTriggeredOutOfAmmo") 
+AddEventHandler("Weapons:Client:resetAlreadyTriggeredOutOfAmmo", function()
+	alreadyTriggeredOutOfAmmoForNonHandgun = false
+	alreadyTriggeredOutOfAmmoForHandgun = false
+end)
 
 -- NUI function
 function NewNUIMessage (Type, Load)
@@ -586,4 +645,13 @@ function doesWeaponHaveSafety(wep)
 		return false
 	end
 	return true
+end
+
+function isFullAuto(wep)
+	for i = 1, #Config.Weapons.Full do
+		if GetHashKey(Config.Weapons.Full[i]) == wep then
+			return true
+		end
+	end
+	return false
 end

@@ -5,32 +5,46 @@ exports.globals:PerformDBCheck("usa_police", DB_NAME)
 local JOB_NAME = "sheriff"
 
 local armoryItems = {
-    { name = "First Aid Kit", hash = 101631238, price = 25, weight = 10 },
-    { name = "Fire Extinguisher", hash = 101631238, price = 100, weight = 20 },
-    { name = "Flare", hash = 1233104067, price = 200, weight = 5 },
-    { name = "Tear Gas", hash = -1600701090, price = 300, weight = 5 },
-    { name = "Flashlight", hash = -1951375401, price = 25, weight = 4 },
-    { name = "Nightstick", hash = 1737195953, price = 100, weight = 4 },
-    { name = "Glock", hash = 1593441988, price = 300, weight = 5 },
-    { name = "Stun Gun", hash = 911657153, price = 400, weight = 5 },
-    { name = "SMG", hash = 736523883, price = 750, weight = 25 },
-    { name = "SMG MK2", hash = 0x78A97CD0, price = 750, weight = 20 },
-    { name = "MK2 Pump Shotgun", hash = 1432025498, price = 700, weight = 25 },
-    { name = "MK2 Carbine Rifle", hash = 4208062921, price = 700, weight = 25, minRank = 2 },
-    { name = "Sniper Rifle", hash = 100416529, price = 2000, weight = 30, minRank = 2 },
+    { name = "First Aid Kit", price = 25, weight = 10 },
+    { name = "Fire Extinguisher", type = "weapon", hash = 101631238, price = 100, weight = 20 },
+    { name = "Flare", type = "weapon", hash = 1233104067, price = 200, weight = 5 },
+    { name = "Tear Gas", type = "weapon", hash = -1600701090, price = 300, weight = 5 },
+    { name = "Flashlight", type = "weapon", hash = -1951375401, price = 25, weight = 4 },
+    { name = "Nightstick", type = "weapon", hash = 1737195953, price = 100, weight = 4 },
+    { name = "Glock", type = "weapon", hash = 1593441988, price = 300, weight = 5 },
+    { name = "Stun Gun", type = "weapon", hash = 911657153, price = 400, weight = 5 },
+    { name = "SMG", type = "weapon", hash = 736523883, price = 750, weight = 25 },
+    { name = "SMG MK2", type = "weapon", hash = 0x78A97CD0, price = 750, weight = 20 },
+    { name = "MK2 Pump Shotgun", type = "weapon", hash = 1432025498, price = 700, weight = 25 },
+    { name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 700, weight = 25, minRank = 2 },
+    { name = "Sniper Rifle", type = "weapon", hash = 100416529, price = 2000, weight = 30, minRank = 2 },
     { name = "Spike Strips", price = 700 },
-    { name = "Police Radio", price = 300, type = "misc", weight = 5 },
-    { name = "Stretcher", price = 400, type = "misc", weight = 35, invisibleWhenDropped = true }
+    { name = "Police Radio", price = 300, type = "misc", weight = 5, notStackable = true },
+    { name = "Stretcher", price = 400, type = "misc", weight = 35, invisibleWhenDropped = true },
+    { name = "9mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 10 },
+    { name = ".45 Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 10 },
+    { name = "Empty 9mm Mag [12]", type = "magazine", price = 50, weight = 3, receives = "9mm", MAX_CAPACITY = 12, currentCapacity = 0 },
+    { name = "Empty 9mm Mag [30]", type = "magazine", price = 50, weight = 3, receives = "9mm", MAX_CAPACITY = 30, currentCapacity = 0 },
+    { name = "12 Gauge Shells", type = "ammo", price = 50, weight = 0.5, quantity = 10 },
+    { name = "7.62mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 10 },
+    { name = "Empty 7.62mm Mag [10]", type = "magazine", price = 50, weight = 3, receives = "7.62mm", MAX_CAPACITY = 10, currentCapacity = 0 },
+    { name = "5.56mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 20 },
+    { name = "Empty 5.56mm Mag [30]", type = "magazine", price = 50, weight = 3, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0 },
+    { name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 700, weight = 25, minRank = 2 },
 }
 
 for i = 1, #armoryItems do
-    armoryItems[i].serviceWeapon = true
-    armoryItems[i].notStackable = true
-    armoryItems[i].quantity = 1
-    armoryItems[i].legality = "legal"
-    if armoryItems[i].name ~= "Spike Strips" and armoryItems[i].name ~= "Police Radio" then
-        armoryItems[i].type = "weapon"
+	armoryItems[i].legality = "legal"
+	if armoryItems[i].type == "weapon" then
+		armoryItems[i].serviceWeapon = true
+        armoryItems[i].notStackable = true
+	end
+    if armoryItems[i].type == "magazine" then
+        armoryItems[i].notStackable = true
     end
+	if not armoryItems[i].quantity then
+		armoryItems[i].quantity = 1
+	end
 end
 
 RegisterServerEvent("police:loadArmoryItems")
@@ -279,25 +293,21 @@ AddEventHandler("policestation2:requestPurchase", function(index)
             local user_money = char.get("money")
             if user_money - armoryItems[index].price >= 0 then
                 local timestamp = os.date("*t", os.time())
-                local letters = {}
-                for i = 65,  90 do table.insert(letters, string.char(i)) end -- add capital letters
-                local serialEnding = math.random(100000000, 999999999)
-                local serialLetter = letters[math.random(#letters)]
-                weapon.serialNumber = serialLetter .. serialEnding
+                weapon.serialNumber = exports.globals:generateID()
                 weapon.uuid = weapon.serialNumber
                 local weaponDB = {}
                 weaponDB.name = weapon.name
-                weaponDB.serialNumber = serialLetter .. serialEnding
+                weaponDB.serialNumber = weapon.uuid
                 weaponDB.ownerName = char.getFullName()
                 weaponDB.ownerDOB = char.get('dateOfBirth')
                 weaponDB.issueDate = timestamp.month .. "/" .. timestamp.day .. "/" .. timestamp.year
                 local attachments = GetWeaponAttachments(weapon.name)
                 weaponDB.components = attachments
                 weapon.components = attachments
-                char.giveItem(weapon, 1)
+                char.giveItem(weapon, (weapon.quantity or 1))
                 char.removeMoney(armoryItems[index].price)
-                TriggerClientEvent("mini:equipWeapon", usource, armoryItems[index].hash, attachments) -- equip
-                TriggerClientEvent('usa:notify', usource, 'Purchased: ~y~'..weapon.name..'\n~s~Serial Number: ~y~'..weapon.serialNumber..'\n~s~Price: ~y~$'..armoryItems[index].price)
+                TriggerClientEvent("mini:equipWeapon", usource, armoryItems[index].hash, attachments, false) -- equip
+                TriggerClientEvent('usa:notify', usource, 'Purchased: ~y~'..weapon.name..'\n~s~Price: ~y~$'..armoryItems[index].price)
                 TriggerEvent('es:exposeDBFunctions', function(couchdb)
                     couchdb.createDocumentWithId("legalweapons", weaponDB, weaponDB.serialNumber, function(success)
                         if success then

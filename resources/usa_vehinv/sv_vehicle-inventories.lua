@@ -62,6 +62,33 @@ AddEventHandler("vehicle:storeItem", function(src, vehicle_plate, item, quantity
     end)
 end)
 
+RegisterServerEvent("vehicle:storeItemInFirstFreeSlot")
+AddEventHandler("vehicle:storeItemInFirstFreeSlot", function(src, vehicle_plate, item, cb)
+    local usource = tonumber(src)
+    GetVehicleInventory(vehicle_plate, function(inv)
+        if VehInventoryManager.canHoldItem(inv, item) then
+            VehInventoryManager.putItemInFirstFreeSlot(vehicle_plate, inv, item, function(success, msg)
+                if success == true then
+                    if item.type == "weapon" then
+                        TriggerClientEvent("interaction:equipWeapon", usource, item, false) -- remove weapon
+                    end
+                    if item.name:find("Radio") then
+                        TriggerClientEvent("Radio.Set", usource, false, {})
+                    end
+                    TriggerClientEvent("usa:playAnimation", usource, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 3)
+                end
+                if msg then
+                    TriggerClientEvent("usa:notify", usource, msg)
+                end
+                cb(success, inv)
+            end)
+        else
+            TriggerClientEvent("usa:notify", usource, "Vehicle inventory full!")
+            cb(false, inv)
+        end
+    end)
+end)
+
 RegisterServerEvent("vehicle:moveItemToPlayerInv")
 AddEventHandler("vehicle:moveItemToPlayerInv", function(src, plate, fromSlot, toSlot, quantity, char, cb)
     quantity = math.floor(quantity)
@@ -84,9 +111,6 @@ AddEventHandler("vehicle:moveItemToPlayerInv", function(src, plate, fromSlot, to
             if char.canHoldItem(item, quantity) then
                 char.putItemInSlot(item, toSlot, quantity, function(success)
                     if success == true then
-                        if item.type == "weapon" then
-                            TriggerClientEvent("interaction:equipWeapon", usource, item, true)
-                        end
                         TriggerClientEvent("usa:playAnimation", usource, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 3)
                         VehInventoryManager.removeItemInSlot(plate, inv, fromSlot, quantity)
                         cb(inv)

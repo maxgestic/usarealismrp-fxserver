@@ -27,18 +27,14 @@ AddEventHandler("ems:getLoadout", function()
     local char = exports["usa-characters"]:GetCharacter(source)
     for i = 1, #LOADOUT_ITEMS do
         local item = LOADOUT_ITEMS[i]
-        local letters = {}
-        for i = 65,  90 do table.insert(letters, string.char(i)) end -- add capital letters
-        local serialEnding = math.random(100000000, 999999999)
-        local serialLetter = letters[math.random(#letters)]
-        item.serialNumber = serialLetter .. serialEnding
+        item.serialNumber = exports.globals:generateID()
         item.uuid = item.serialNumber
         if char.get("money") >= item.price then
             if char.canHoldItem(item) then
                 char.removeMoney(item.price)
                 char.giveItem(item)
                 if item.hash then
-                  TriggerClientEvent("mini:equipWeapon", source, item.hash)
+                  TriggerClientEvent("mini:equipWeapon", source, item.hash, false, false)
                 end
                 TriggerClientEvent("usa:notify", source, "Retrieved a " .. item.name)
             else

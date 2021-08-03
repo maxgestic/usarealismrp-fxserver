@@ -716,19 +716,9 @@ end)
 
 RegisterNetEvent("usa:equipWeapon")
 AddEventHandler("usa:equipWeapon", function(weapon)
-  -- todo: store ammo count on weapon object
   if weapon.name ~= "Jerry Can" then
-    GiveWeaponToPed(playerPed, weapon.hash, 100, false, true)
-    if weapon.components then
-      if #weapon.components > 0 then
-        for x = 1, #weapon.components do
-          GiveWeaponComponentToPed(playerPed, weapon.hash, GetHashKey(weapon.components[x]))
-        end
-      end
-    end
-    if weapon.tint then
-      SetPedWeaponTintIndex(playerPed, weapon.hash, weapon.tint)
-    end
+    local currentWeaponAmmo = ((weapon.magazine and weapon.magazine.currentCapacity) or 0)
+    TriggerEvent("interaction:equipWeapon", weapon, true, currentWeaponAmmo, false)
   else
     SetPedAmmo(playerPed, weapon.hash, math.random(1000, 4500))
   end
@@ -800,14 +790,13 @@ AddEventHandler("usa:loadCivCharacter", function(character, playerWeapons)
 			if head.eyeColor then
 				SetPedEyeColor(ped, head.eyeColor)
 			end
-    else
-      --print("no barber shop customizations!")
     end
     -- give weapons
     if playerWeapons then
       for i = 1, #playerWeapons do
-        --print("playerWeapons[i].hash = " .. playerWeapons[i].hash)
-        GiveWeaponToPed(ped, playerWeapons[i].hash, 1000, false, false)
+        local weapon = playerWeapons[i]
+        local currentWeaponAmmo = ((weapon.magazine and weapon.magazine.currentCapacity) or 0)
+        TriggerEvent("interaction:equipWeapon", weapon, true, currentWeaponAmmo, false)
       end
     end
   end)

@@ -176,6 +176,13 @@ ul.submenu li label {
 	background-color: rgba(180, 180, 180, 0.2);
 }
 
+#tooltip {
+	position: absolute;
+	background-color: lightgray;
+	z-index: 3;
+	padding: 0.5em;
+}
+
 #contextMenu {
 	position: absolute;
 	background-color: lightgray;

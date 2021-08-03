@@ -84,7 +84,7 @@ AddEventHandler('fuel:purchaseJerryCan', function()
 		if char.canHoldItem(jerryCan) then
 			char.removeMoney(cost)
 			char.giveItem(jerryCan)
-			TriggerClientEvent("interaction:equipWeapon", source, jerryCan, true, 1000)
+			TriggerClientEvent("interaction:equipWeapon", source, jerryCan, true, 1000, false)
 			TriggerClientEvent("usa:notify", source, "You have purchased a jerry can for $" .. cost)
 		else
 			TriggerClientEvent("usa:notify", source, "Inventory full!")

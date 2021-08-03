@@ -46,5 +46,6 @@ server_exports {
   "hash256",
   "currentTimestamp",
   "getJavaScriptDateString",
-  "hasFelonyOnRecord"
+  "hasFelonyOnRecord",
+  "generateID"
 }

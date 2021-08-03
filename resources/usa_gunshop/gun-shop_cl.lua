@@ -89,6 +89,11 @@ function CreateWeaponShopMenu(menu)
       submenu.SubMenu:AddItem(item)
     end
   end
+  local helpBtn = NativeUI.CreateItem("Help", "Which magazines do I need?")
+  helpBtn.Activated = function(parentmenu, selected)
+    TriggerServerEvent("ammo:showHelpText", STORE_ITEMS)
+  end
+  menu:AddItem(helpBtn)
 end
 
 -------------------------------------------
@@ -134,10 +139,13 @@ Citizen.CreateThread(function()
 end)
 
 RegisterNetEvent("mini:equipWeapon")
-AddEventHandler("mini:equipWeapon", function(hash, attachments)
+AddEventHandler("mini:equipWeapon", function(hash, attachments, equipNow)
+  if equipNow == nil then
+    equipNow = true
+  end
 	local playerPed = GetPlayerPed(-1)
 	if hash ~= GetHashKey("GADGET_PARACHUTE") then	--Dont auto equip parachutes from gunstore
-		GiveWeaponToPed(playerPed, hash, 60, false, true)
+    GiveWeaponToPed(playerPed, hash, 0, false, equipNow)
 		if attachments then
 			for i = 1, #attachments do
 				if type(attachments[i]) ~= "number" then

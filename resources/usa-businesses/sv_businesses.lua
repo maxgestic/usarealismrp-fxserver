@@ -84,7 +84,7 @@ AddEventHandler("business:retrieve", function(name, item, amount)
             SetBusinessStorage(name, storage, function(success)
               if success then
                 char.giveItem(toGiveCopy)
-                TriggerClientEvent("interaction:equipWeapon", usource, toGiveCopy, true)
+                TriggerClientEvent("interaction:equipWeapon", usource, toGiveCopy, true, false, false)
                 TriggerClientEvent("usa:notify", usource, "Retrieved: " .. item.name)
               end
             end)

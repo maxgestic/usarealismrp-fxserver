@@ -705,6 +705,17 @@ function RemovePedObject()
 	spawned_object = nil
 end
 
+RegisterNUICallback('reloadWeapon', function(data, cb)
+	local me = PlayerPedId()
+	local myveh = nil
+	local vehiclePlate = nil
+	if IsPedInAnyVehicle(me, false) then
+		myveh = GetVehiclePedIsIn(me, false)
+		vehiclePlate = GetVehicleNumberPlateText(myveh)
+	end
+	TriggerServerEvent("ammo:checkForMagazine", data.inventoryItemIndex, vehiclePlate)
+end)
+
 RegisterNUICallback('notification', function(data, cb)
 	exports.globals:notify(data.msg)
 end)
@@ -888,7 +899,14 @@ RegisterNUICallback('moveItem', function(data, cb)
 end)
 
 function interactionMenuUse(index, itemName, wholeItem)
-	if string.find(itemName, "Meth") or string.find(itemName, "Uncut Cocaine") then
+	if wholeItem.type and wholeItem.type == "weapon" and not wholeItem.name:find("Parachute") then
+		local myped = PlayerPedId()
+		TriggerServerEvent("ammo:checkWeaponAmmo", index)
+	elseif wholeItem.type and wholeItem.type == "magazine" then
+		if not busy then
+			TriggerServerEvent("ammo:useMagazine", wholeItem)
+		end
+	elseif string.find(itemName, "Meth") or string.find(itemName, "Uncut Cocaine") then
 		TriggerServerEvent("interaction:removeItemFromPlayer", itemName)
 		TriggerEvent("interaction:notify", "You have used: (x1) " .. itemName:sub(6))
 		intoxicate(true, nil)
@@ -1282,37 +1300,46 @@ end
 
 RegisterNetEvent("interaction:toggleWeapon")
 AddEventHandler("interaction:toggleWeapon", function(item, skipAnim)
-	local WEAPON_UNARMED = -1569615261
 	local ped = PlayerPedId()
-	if GetSelectedPedWeapon(ped) == item.hash then
-		GiveWeaponToPed(ped, WEAPON_UNARMED, 1000, false, true)
+	local selectedPedWeapon = GetSelectedPedWeapon(ped)
+	if IsPedArmed(ped, 1 | 2 | 4) then
+		if IsPedInAnyVehicle(ped, true) then
+			SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
+		else
+			GiveWeaponToPed(ped, `WEAPON_UNARMED`, 1000, false, true)
+		end
 		if not skipAnim then
 			exports["usa_holster"]:handleHolsterAnim()
 		end
 	else
-		GiveWeaponToPed(ped, item.hash, 1000, false, true)
-		if not skipAnim then
-			exports["usa_holster"]:handleHolsterAnim()
+		local toGiveAmmo = 0
+		if item.magazine then
+			toGiveAmmo = item.magazine.currentCapacity
 		end
-		GiveWeaponToPed(ped, item.hash, 1000, false, true)
-		if item.components then
-			if #item.components > 0 then
-				for x = 1, #item.components do
-					GiveWeaponComponentToPed(ped, item.hash, GetHashKey(item.components[x]))
-				end
-			end
+		if item.name:find("Molotov") or item.name:find("Flare") or item.name:find("Tear Gas") or item.name:find("Stun Gun") then
+			toGiveAmmo = 1
 		end
-		if item.tint then
-			SetPedWeaponTintIndex(ped, item.hash, item.tint)
+		if item.name:find("Fire Extinguisher") then
+			toGiveAmmo = 500
 		end
+		TriggerEvent("interaction:equipWeapon", item, true, toGiveAmmo, (not skipAnim))
 	end
 end)
 
 RegisterNetEvent("interaction:equipWeapon")
-AddEventHandler("interaction:equipWeapon", function(item, equip, ammoAmount)
+AddEventHandler("interaction:equipWeapon", function(item, equip, ammoAmount, playAnim)
 	local ped = GetPlayerPed(-1)
 	if equip then
-		GiveWeaponToPed(ped, item.hash, 1000, false, false)
+		local currentWeaponAmmo = (ammoAmount or (item.magazine and item.magazine.currentCapacity) or 0)
+		print("equipping wep with ammo count: " .. currentWeaponAmmo)
+		if currentWeaponAmmo ~= 0 then
+			TriggerEvent("ammo:setRanOutOfAmmo", false)
+		else
+			if not isMeleeWeapon(item.hash) then
+				TriggerEvent("ammo:setRanOutOfAmmo", true)
+			end
+		end
+		GiveWeaponToPed(ped, item.hash, currentWeaponAmmo, false, true)
 		if item.components then
 			if #item.components > 0 then
 				for x = 1, #item.components do
@@ -1323,11 +1350,21 @@ AddEventHandler("interaction:equipWeapon", function(item, equip, ammoAmount)
 		if item.tint then
 			SetPedWeaponTintIndex(ped, item.hash, item.tint)
 		end
-		if ammoAmount then
-			SetPedAmmo(ped, item.hash, ammoAmount)
+		if item.magazine and item.magazine.magComponent then
+			GiveWeaponComponentToPed(ped, item.hash, GetHashKey(item.magazine.magComponent))
+		end
+		SetPedAmmo(ped, item.hash, currentWeaponAmmo)
+		SetAmmoInClip(ped, item.hash, currentWeaponAmmo)
+		if playAnim then
+			exports["usa_holster"]:handleHolsterAnim()
+		end
+		if IsPedInAnyVehicle(ped, true) then
+			SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
+			SetCurrentPedWeapon(ped, item.hash, true)
 		end
 	else
 		RemoveWeaponFromPed(ped, item.hash)
+		SetCurrentPedWeapon(ped, `WEAPON_UNARMED`, true)
 	end
 end)
 
@@ -1534,7 +1571,7 @@ Citizen.CreateThread(function()
 			hitHandleVehicle, distance = getVehicleInsideOrInFrontOfUser()
 			local target_veh_plate = GetVehicleNumberPlateText(hitHandleVehicle)
 			EnableGui(target_veh_plate)
-			GiveWeaponToPed(GetPlayerPed(-1), 0xA2719263, 0, false, true)
+			SetCurrentPedWeapon(playerPed, `WEAPON_UNARMED`, true)
 			exports["usa_holster"]:handleHolsterAnim()
 			TriggerEvent("hotkeys:setCurrentSlotPassive", nil)
 		end
@@ -1593,6 +1630,11 @@ RegisterNetEvent('interaction:tackleMe')
 AddEventHandler('interaction:tackleMe', function(fwdVectorX, fwdVectorY, fwdVectorZ)
 	local randomTackleTime = math.random(2000, 3000)
 	SetPedToRagdollWithFall(PlayerPedId(), randomTackleTime, randomTackleTime, 0, fwdVectorX, fwdVectorY, fwdVectorZ, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+end)
+
+RegisterNetEvent('interaction:setBusy')
+AddEventHandler('interaction:setBusy', function(isBusy)
+	busy = isBusy
 end)
 
 RegisterNUICallback('performAction', function(data, cb)
@@ -1773,4 +1815,18 @@ function playHealingAnimation(ped)
 	TaskPlayAnim(ped, "combat@damage@injured_pistol@to_writhe", "variation_d", 8.0, 1, -1, 49, 0, 0, 0, 0)
 	Wait(2600)
 	StopAnimTask(ped, "combat@damage@injured_pistol@to_writhe", "variation_d", 1.0)
+end
+
+function isMeleeWeapon(wepHash)
+    local MELEE_WEPS = {
+        [`WEAPON_FLASHLIGHT`] = true,
+        [`WEAPON_HAMMER`] = true,
+        [`WEAPON_KNIFE`] = true,
+        [`WEAPON_BAT`] = true,
+        [`WEAPON_CROWBAR`] = true,
+        [`WEAPON_HATCHET`] = true,
+        [`WEAPON_WRENCH`] = true,
+        [`WEAPON_MACHETE`] = true
+    }
+    return (MELEE_WEPS[wepHash] or false)
 end

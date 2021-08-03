@@ -1,28 +1,41 @@
 local JOB_NAME = "corrections"
 
 local WEAPONS = {
-	{ hash = "WEAPON_NIGHTSTICK", name = "Nightstick", rank = 1, weight = 4, price = 50},
-    { hash = "WEAPON_FLASHLIGHT", name = "Flashlight", rank = 1, weight = 4, price = 50},
-    { hash = "WEAPON_STUNGUN", name = "Stun Gun", rank = 1, weight = 5, price = 200},
-    { hash = 1593441988, name = "Glock", rank = 1, weight = 5, price = 200},
-	{ hash = -1600701090, name = "Tear Gas", rank = 2, weight = 5, price = 150},
-	{ name = "SMG", hash = 736523883, rank = 2, price = 500, weight = 25 },
-	{ name = "MK2 Pump Shotgun", hash = 1432025498, rank = 2, price = 500, weight = 25 },
-	{ name = "MK2 Carbine Rifle", hash = 4208062921, rank = 2, price = 500, weight = 25},
-	{ name = "SMG MK2", hash = 0x78A97CD0, price = 750, rank = 2, weight = 20 },
-	{ hash = 100416529, name = "Marksman Rifle", rank = 2, weight = 30, price = 2000},
-	{ name = "Spike Strips", rank = 3 },
-    { name = "Police Radio", rank = 1, price = 300, type = "misc", weight = 5 },
-	{ name = "Stretcher", rank = 1, price = 400, type = "misc", weight = 35, invisibleWhenDropped = true }
+	{ hash = "WEAPON_NIGHTSTICK", type = "weapon", name = "Nightstick", rank = 1, weight = 4, price = 50},
+    { hash = "WEAPON_FLASHLIGHT", type = "weapon", name = "Flashlight", rank = 1, weight = 4, price = 50},
+    { hash = "WEAPON_STUNGUN", type = "weapon", name = "Stun Gun", rank = 1, weight = 5, price = 200},
+    { hash = 1593441988, type = "weapon", name = "Glock", rank = 1, weight = 5, price = 200},
+	{ hash = -1600701090, type = "weapon", name = "Tear Gas", rank = 2, weight = 5, price = 150},
+	{ name = "SMG", type = "weapon", hash = 736523883, rank = 2, price = 500, weight = 25 },
+	{ name = "MK2 Pump Shotgun", type = "weapon", hash = 1432025498, rank = 2, price = 500, weight = 25 },
+	{ name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, rank = 2, price = 500, weight = 25},
+	{ name = "SMG MK2", type = "weapon", hash = 0x78A97CD0, price = 750, rank = 2, weight = 20 },
+	{ hash = 100416529,  type = "weapon", name = "Marksman Rifle", rank = 2, weight = 30, price = 2000},
+	{ name = "Spike Strips", type = "misc", rank = 3 },
+    { name = "Police Radio", type = "misc", rank = 1, price = 300, type = "misc", weight = 5 },
+	{ name = "Stretcher", type = "misc", rank = 1, price = 400, type = "misc", weight = 35, invisibleWhenDropped = true },
+	{ name = "7.62mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 10 },
+	{ name = "Empty 7.62mm Mag [8]", type = "magazine", price = 50, weight = 3, receives = "7.62mm", MAX_CAPACITY = 8, currentCapacity = 0 },
+	{ name = "9mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 10 },
+	{ name = ".45 Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 10 },
+    { name = "Empty 9mm Mag [12]", type = "magazine", price = 50, weight = 3, receives = "9mm", MAX_CAPACITY = 12, currentCapacity = 0 },
+    { name = "Empty 9mm Mag [30]", type = "magazine", price = 50, weight = 3, receives = "9mm", MAX_CAPACITY = 30, currentCapacity = 0 },
+	{ name = "5.56mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 20 },
+    { name = "Empty 5.56mm Mag [30]", type = "magazine", price = 50, weight = 3, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0 },
+	{ name = "12 Gauge Shells", type = "ammo", price = 50, weight = 0.5, quantity = 10 }
 }
 
 for i = 1, #WEAPONS do
-    WEAPONS[i].serviceWeapon = true
-    WEAPONS[i].notStackable = true
-    WEAPONS[i].quantity = 1
 	WEAPONS[i].legality = "legal"
-	if WEAPONS[i].name ~= "Spike Strips" and WEAPONS[i].name ~= "Police Radio" then
-		WEAPONS[i].type = "weapon"
+	if WEAPONS[i].type == "weapon" then
+		WEAPONS[i].serviceWeapon = true
+		WEAPONS[i].notStackable = true
+	end
+	if WEAPONS[i].type == "magazine" then
+        WEAPONS[i].notStackable = true
+    end
+	if not WEAPONS[i].quantity then
+		WEAPONS[i].quantity = 1
 	end
 end
 
@@ -268,6 +281,7 @@ AddEventHandler("doc:checkRankForWeapon", function(weapon)
 		TriggerEvent('es:exposeDBFunctions', function(GetDoc)
 			GetDoc.getDocumentByRow("correctionaldepartment", "identifier" , GetPlayerIdentifiers(usource)[1], function(result)
 				if type(result) ~= "boolean" then
+					weapon.rank = (weapon.rank or 1)
 					if result.rank >= weapon.rank then
 						if weapon.name == "Spike Strips" then
 							TriggerEvent("spikestrips:equip", true, usource)
@@ -278,18 +292,14 @@ AddEventHandler("doc:checkRankForWeapon", function(weapon)
 									return
 								end
 								char.removeMoney(weapon.price)
-								local letters = {}
-								for i = 65,  90 do table.insert(letters, string.char(i)) end -- add capital letters
-								local serialEnding = math.random(100000000, 999999999)
-								local serialLetter = letters[math.random(#letters)]
-								weapon.serialNumber = serialLetter .. serialEnding
+								weapon.serialNumber = exports.globals:generateID()
 								weapon.uuid = weapon.serialNumber
 								weapon.components = GetWeaponAttachments(weapon.name)
 								TriggerClientEvent("doc:equipWeapon", usource, weapon)
 								char.giveItem(weapon)
 								local weaponDB = {}
 								weaponDB.name = weapon.name
-								weaponDB.serialNumber = serialLetter .. serialEnding
+								weaponDB.serialNumber = weapon.uuid
 								weaponDB.ownerName = char.getFullName()
 								weaponDB.ownerDOB = char.get('dateOfBirth')
 								local timestamp = os.date("*t", os.time())

@@ -185,7 +185,7 @@ function CreateCharacter(data)
     end
   end
 
-  rTable.getItem = function(item) -- todo: to test
+  rTable.getItem = function(item)
     local inv = self.inventory
     for i = 0, inv.MAX_CAPACITY - 1 do
       local lookingAtItem = inv.items[tostring(i)]
@@ -208,6 +208,20 @@ function CreateCharacter(data)
       end
     end
     return nil
+  end
+
+  rTable.getAllItemsOfType = function(inType)
+    local items = {}
+    local inv = self.inventory
+    for i = 0, inv.MAX_CAPACITY - 1 do
+      local lookingAtItem = inv.items[tostring(i)]
+      if lookingAtItem then
+        if lookingAtItem.type == inType then
+          table.insert(items, lookingAtItem)
+        end
+      end
+    end
+    return items
   end
 
   rTable.getItemWithExactName = function(itemName)
@@ -237,6 +251,19 @@ function CreateCharacter(data)
       local item = inv.items[tostring(i)]
       if item then
         if item[field] == val then
+          return item
+        end
+      end
+    end
+    return nil
+  end
+
+  rTable.getItemByUUID = function(uuid)
+    local inv = self.inventory
+    for i = 0, inv.MAX_CAPACITY - 1 do
+      local item = inv.items[tostring(i)]
+      if item then
+        if item.uuid and item.uuid == uuid then
           return item
         end
       end
@@ -292,44 +319,72 @@ function CreateCharacter(data)
 
 -- can pass -1 as quantity to remove item completely
 -- supports passing in an item name as well as an entire item object (which performs extended field matching)
-  rTable.removeItem = function(item, quantity) -- TODO: to test
+  rTable.removeItem = function(item, quantity)
+
+    quantity = (quantity or 1)
+
     local function decrementQuantity(tempItem)
-      local newQuantity = tempItem.quantity - (quantity or 1)
-      if (quantity or 1) == -1 then
+      local newQuantity = tempItem.quantity - quantity
+      if quantity == -1 then
         newQuantity = 0
       end
       if newQuantity <= 0 then
         tempItem = nil
+        quantity = quantity - math.abs(newQuantity)
       else
         tempItem.quantity = newQuantity
+        quantity = 0
       end
       return tempItem
     end
-
-    for i = 0, self.inventory.MAX_CAPACITY - 1 do
-      i = tostring(i)
-      if self.inventory.items[i] then
-        if type(item) == "string" then -- simple name matching
-          if self.inventory.items[i].name:find(item) or self.inventory.items[i].name == item then
-            if self.inventory.items[i].type and self.inventory.items[i].type == "weapon" then
-              TriggerClientEvent("interaction:equipWeapon", self.source, self.inventory.items[i], false)
-            end
-            self.inventory.items[i] = decrementQuantity(self.inventory.items[i])
-            return
-          end
-        elseif type(item) == "table" then -- extended field matching
-          if self.inventory.items[i].name:find(item.name) or self.inventory.items[i].name == item.name then
-            if item.type and item.type == "weapon" then
-              if item.serialNumber == self.inventory.items[i].serialNumber then
+    
+    while (quantity > 0) do
+      local itemFound = false
+      for i = 0, self.inventory.MAX_CAPACITY - 1 do
+        i = tostring(i)
+        if self.inventory.items[i] then
+          if type(item) == "string" then -- simple name matching
+            if self.inventory.items[i].name:find(item) or self.inventory.items[i].name == item then
+              if self.inventory.items[i].type and self.inventory.items[i].type == "weapon" then
                 TriggerClientEvent("interaction:equipWeapon", self.source, self.inventory.items[i], false)
-                self.inventory.items[i] = decrementQuantity(self.inventory.items[i])
-                return
               end
-            else
               self.inventory.items[i] = decrementQuantity(self.inventory.items[i])
-              return
+              itemFound = true
+              break
+            end
+          elseif type(item) == "table" then -- extended field matching
+            if self.inventory.items[i].name:find(item.name) or self.inventory.items[i].name == item.name then
+              if item.type and item.type == "weapon" then
+                if item.serialNumber == self.inventory.items[i].serialNumber then
+                  TriggerClientEvent("interaction:equipWeapon", self.source, self.inventory.items[i], false)
+                  self.inventory.items[i] = decrementQuantity(self.inventory.items[i])
+                  itemFound = true
+                  break
+                end
+              else
+                self.inventory.items[i] = decrementQuantity(self.inventory.items[i])
+                itemFound = true
+                break
+              end
             end
           end
+        end
+      end
+      if not itemFound then
+        break
+      end
+    end
+
+  end
+
+  rTable.removeItemByUUID = function(uuid)
+    local inv = self.inventory
+    for i = 0, inv.MAX_CAPACITY - 1 do
+      local lookingAtItem = inv.items[tostring(i)]
+      if lookingAtItem then
+        if lookingAtItem.uuid and lookingAtItem.uuid == uuid then
+          self.inventory.items[tostring(i)] = nil
+          return
         end
       end
     end
@@ -344,6 +399,27 @@ function CreateCharacter(data)
             self.inventory.items[tostring(i)] = nil
             return
           end
+        end
+      end
+    end
+  end
+
+  rTable.removeItemWithFieldValues = function(fieldValuesTable)
+    local inv = self.inventory
+    for i = 0, inv.MAX_CAPACITY - 1 do
+      local lookingAtItem = inv.items[tostring(i)]
+      if lookingAtItem then
+        local allMatch = true
+        for key, val in pairs(fieldValuesTable) do
+          if key ~= "image" and not lookingAtItem[key] or lookingAtItem[key] ~= val then
+            allMatch = false
+            break
+          end
+        end
+        if allMatch then
+          print("found matching item when removing")
+          self.inventory.items[tostring(i)] = nil
+          return
         end
       end
     end
@@ -387,6 +463,21 @@ function CreateCharacter(data)
       end
     end
     return seized
+  end
+
+  rTable.modifyItemByUUID = function(uuid, newVals)
+    local inv = self.inventory
+    for i = 0, inv.MAX_CAPACITY - 1 do
+      local lookingAtItem = inv.items[tostring(i)]
+      if lookingAtItem then
+        if lookingAtItem.uuid and lookingAtItem.uuid == uuid then
+          for key, val in pairs(newVals) do
+            self.inventory.items[tostring(i)][key] = val
+          end
+          return
+        end
+      end
+    end
   end
 
   rTable.modifyItem = function(itemName, field, newVal)

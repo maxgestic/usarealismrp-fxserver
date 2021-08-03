@@ -4,6 +4,21 @@ var emoteOptions = ["Cancel", "Cop", "Sit", "Cross Arms", "Kneel", "CPR", "Notep
 
 const DEFAULT_ITEM_IMAGE = "https://i.imgur.com/JlvKMeQ.png";
 
+const NO_TOOLTIP_WEAPONS = new Set();
+NO_TOOLTIP_WEAPONS.add("Flashlight");
+NO_TOOLTIP_WEAPONS.add("Fire Extinguisher");
+NO_TOOLTIP_WEAPONS.add("Flare");
+NO_TOOLTIP_WEAPONS.add("Molotov");
+NO_TOOLTIP_WEAPONS.add("Tear Gas");
+NO_TOOLTIP_WEAPONS.add("Nightstick");
+NO_TOOLTIP_WEAPONS.add("Stun Gun");
+NO_TOOLTIP_WEAPONS.add("Machete");
+NO_TOOLTIP_WEAPONS.add("Wrench");
+NO_TOOLTIP_WEAPONS.add("Crowbar");
+NO_TOOLTIP_WEAPONS.add("Bat");
+NO_TOOLTIP_WEAPONS.add("Knife");
+NO_TOOLTIP_WEAPONS.add("Hammer");
+
 var itemImages = {
   "Driver's License": "https://i.imgur.com/dy0SpFh.png",
   "Firearm Permit": "https://www.scientific.net/KEM.773.56/preview.gif",
@@ -124,7 +139,7 @@ var itemImages = {
   "AP Pistol": "https://i.pinimg.com/originals/3e/5b/09/3e5b09796cb124639c5f2232e5f32d9b.png",
   "Sawn-off": "https://steamcommunity-a.akamaihd.net/economy/image/-9a81dlWLwJ2UUGcVs_nsVtzdOEdtWwKGZZLQHTxDZ7I56KU0Zwwo4NUX4oFJZEHLbXH5ApeO4YmlhxYQknCRvCo04DEVlxkKgpopbuyLgNv1fX3cDx96t2ykb-GkuP1P7fYlVRd4cJ5ntbN9J7yjRq1qkRoYmHxJICcdwVrNVyC_Va-xrq718W0uZSbm3M26Cdws3mOlkTln1gSOcynOW1P/360fx360f",
   "Micro SMG": "https://www.gtagaming.com/images/10490/1317045779_micro_uzi_t_lad.png",
-  "SMG": "https://img.gta5-mods.com/q75/images/assault-smg-new-sound-effects/b5ff68-AssaultSMG-GTAV.png",
+  "SMG": "https://i.imgur.com/XbTVfAB.png",
   "Machine Pistol": "https://i.pinimg.com/originals/19/38/54/193854f15e38f4e13174e815c92de4e4.png",
   "Tommy Gun": "https://www.gtabase.com/images/gta-5/weapons/machine-guns/gusenberg-sweeper.png",
   "AK47": "http://www.transparentpng.com/thumb/ak-47/icon-clipart-ak-47-12.png",
@@ -227,7 +242,55 @@ var itemImages = {
   "Wheelchair": "https://www.freeiconspng.com/thumbs/wheelchair-png/black-wheelchair-png-3.png",
   "Stretcher": "https://i.imgur.com/X5dv2kQ.png",
   "Glock": "https://i.imgur.com/UjZeF6e.png",
-  "Scuba Gear": "https://i.imgur.com/3b2ZiE1.png"
+  "Scuba Gear": "https://i.imgur.com/3b2ZiE1.png",
+  // begin ammo
+  "9mm Bullets": "https://i.imgur.com/AWEjRpc.png",
+  "9x18mm Bullets": "https://i.imgur.com/TFW3q4q.png",
+  "Musket Ammo": "https://i.imgur.com/KSGBwWX.png",
+  "12 Gauge Shells": "https://i.imgur.com/NmUMqXD.png",
+  "7.62mm Bullets": "https://i.imgur.com/twK3t2s.png",
+  "5.56mm Bullets": "https://i.imgur.com/ivr2Jcg.png",
+  ".50 Cal Bullets": "https://i.imgur.com/o3v8Avw.png",
+  ".45 Bullets": "https://i.imgur.com/HzzWF5w.png",
+  // begin magazines
+  "9mm Mag [7]": "https://i.imgur.com/gD7RuG7.png",
+  "9mm Mag [12]": "https://i.imgur.com/gD7RuG7.png",
+  "9mm Mag [30]": "https://i.imgur.com/3m72QvM.png",
+  "9x18mm Mag [18]": "https://i.imgur.com/brGIZW0.png",
+  "7.62mm Mag [8]": "https://i.imgur.com/Cl49BvK.png",
+  "7.62mm Mag [10]": "https://i.imgur.com/Cl49BvK.png",
+  "7.62mm Mag [30]": "https://i.imgur.com/2AOnIid.png",
+  "7.62mm Mag [54]": "https://i.imgur.com/2AOnIid.png",
+  "7.62mm Mag [100]": "https://i.imgur.com/0cDXWJl.png",
+  "5.56mm Mag [30]": "https://i.imgur.com/9tK7cKI.png",
+  ".50 Cal Mag [6]": "https://i.imgur.com/EknUuba.png",
+  ".50 Cal Mag [9]": "https://i.imgur.com/EknUuba.png",
+  ".45 Mag [6]": "https://i.imgur.com/YqtNNv6.png",
+  ".45 Mag [16]": "https://i.imgur.com/YqtNNv6.png",
+  ".45 Mag [18]": "https://i.imgur.com/YqtNNv6.png",
+  ".45 Mag [30]": "https://i.imgur.com/1mT0fNP.png",
+  "Empty Pistol Extended Mag": "https://i.imgur.com/3m72QvM.png",
+  "Loaded Pistol Extended Mag": "https://i.imgur.com/3m72QvM.png",
+  "SNS Pistol Extended Mag": "https://i.imgur.com/1mT0fNP.png",
+  "Heavy Pistol Extended Mag": "https://i.imgur.com/1mT0fNP.png",
+  "Glock Extended Mag": "https://i.imgur.com/3m72QvM.png",
+  "Pistol .50 Extended Mag": "https://i.imgur.com/EknUuba.png",
+  "Vintage Pistol Extended Mag": "https://i.imgur.com/3m72QvM.png",
+  "Empty SMG Extended Mag": "https://i.imgur.com/2b0Qdsq.png",
+  "Loaded SMG Extended Mag": "https://i.imgur.com/2b0Qdsq.png",
+  "Empty SMG Drum Mag": "https://i.imgur.com/pjAU6wN.png",
+  "Loaded SMG Drum Mag": "https://i.imgur.com/pjAU6wN.png",
+  "AP Pistol Extended Mag": "https://i.imgur.com/NyFuIwH.png",
+  "Micro SMG Extended Mag": "https://i.imgur.com/AupbtAw.png",
+  "Gusenberg Extended Mag": "https://i.imgur.com/c7yP4cm.png",
+  "AK47 Extended Mag": "https://i.imgur.com/YqCXmEF.png",
+  "AK47 Drum Mag": "https://i.imgur.com/NS7Cho2.png",
+  "Carbine Extended Mag": "https://i.imgur.com/XenqzGG.png",
+  "Carbine Box Mag": "https://i.imgur.com/tXiEpqx.png",
+  "Compact Rifle Extended Mag": "https://i.imgur.com/UxpUdCO.png",
+  "Compact Rifle Drum Mag": "https://i.imgur.com/AtnZkbY.png",
+  "Machine Pistol Extended Mag": "https://i.imgur.com/bkP2aVs.png",
+  "Machine Pistol Drum Mag": "https://i.imgur.com/cycagWt.png"
 }
 
 var menuItems = [
@@ -333,14 +396,15 @@ var interactionMenu = new Vue({
       MAX_CAPACITY: 0.0,
       items: {}
     },
-    isInsideVehicle: false,
+    isInVehicle: false,
     isCuffed: false,
     contextMenu: {
       showContextMenu: false,
       top: 0,
       left: 0,
       clickedInventoryIndex: 0,
-      openMenu: function(clickedInventoryIndex) {
+      doShowReloadOption: false,
+      openMenu: function(clickedInventoryIndex, fullItem, isInVehicle) {
         /* Show context menu */
         this.showContextMenu = true
         /* Open next to mouse: */
@@ -348,7 +412,13 @@ var interactionMenu = new Vue({
         this.left = event.x;
         /* Saved clicked inventory index */
         this.clickedInventoryIndex = clickedInventoryIndex;
-      }
+        /* Show 'Reload' option if clicked on weapon */
+        if (fullItem.type == "weapon" && isInVehicle) {
+          this.doShowReloadOption = true;
+        } else {
+          this.doShowReloadOption = false;
+        }
+      },
     },
     nearestPlayer: {
       id: 0, // 0 if nobody near
@@ -363,6 +433,38 @@ var interactionMenu = new Vue({
     locked: null, // to be moved into vehicleInventory property (since it pertains to veh inv)
     profiler: {
       startTime: null
+    },
+    tooltip: {
+      toggle(hoveredItem) {
+        this.visible = !this.visible;
+        this.left = event.x + 10;
+        this.top = event.y + 20;
+        if (hoveredItem.type) {
+          if (hoveredItem.type == "magazine") {
+            this.text = hoveredItem.currentCapacity + "/" + hoveredItem.MAX_CAPACITY + " bullets";
+          } else if (hoveredItem.type == "weapon") {
+            if (hoveredItem.magazine) {
+              this.text = hoveredItem.magazine.currentCapacity + "/" + hoveredItem.magazine.MAX_CAPACITY + " bullets";
+            } else {
+              if (!NO_TOOLTIP_WEAPONS.has(hoveredItem.name)) {
+                this.text = "Unloaded";
+              } else {
+                this.visible = false;
+              }
+            }
+          } else {
+            this.visible = false;
+          }
+        }
+      },
+      updatePosition(event) {
+        this.left = event.x + 10;
+        this.top = event.y + 20;
+      },
+      text: null,
+      visible: false,
+      left: 0,
+      top: 0
     }
   },
   methods: {
@@ -448,7 +550,11 @@ var interactionMenu = new Vue({
       var index = this.contextMenu.clickedInventoryIndex;
       var item = this.inventory.items[index];
       /* Perform Action */
-      if (action == "Drop") {
+      if (action == "Reload") {
+        $.post('http://interaction-menu/reloadWeapon', JSON.stringify({
+          inventoryItemIndex: index
+        }));
+      } else if (action == "Drop") {
         /* Perform Action */
         $.post('http://interaction-menu/dropItem', JSON.stringify({
           index: index,
@@ -514,8 +620,15 @@ var interactionMenu = new Vue({
         return false;
       }
     },
-    getItemImage: function(name) {
-      if (name.includes("Cell Phone")) {
+    getItemImage: function(item) {
+      let name = item.name;
+      if (item.type == "magazine") {
+        name = name.split(" ");
+        name.splice(0, 1);
+        let strippedName = name.join(" "); // to remove the 'empty' or 'loaded' prefix
+        strippedName = strippedName.trim();
+        return itemImages[strippedName];
+      } else if (name.includes("Cell Phone")) {
         return itemImages["Cell Phone"];
       } else if (name.includes("Key")) {
         return itemImages["Key"];
@@ -723,6 +836,7 @@ function CloseMenu() {
   interactionMenu.contextMenu.showContextMenu = false;
   interactionMenu.inputBox.show = false;
   interactionMenu.locked = false;
+  interactionMenu.tooltip.visible = false;
   navigationHistory = [{ name: "Home", children: menuItems }];
   /* Clean up jQuery UI stuff! (causes mem leak if not cleaned up) */
   $(".draggable").draggable("destroy");

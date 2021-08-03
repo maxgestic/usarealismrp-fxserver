@@ -1166,7 +1166,7 @@ AddEventHandler("properties:retrieveItem", function(location, index, item, quant
 							TriggerClientEvent('usa:notify', source, '~y~'..item.name..' ~s~has been retrieved!')
 							char.giveItem(item, quantity)
 							if item.type == "weapon" then
-								TriggerClientEvent("interaction:equipWeapon", source, item, true)
+								TriggerClientEvent("interaction:equipWeapon", source, item, true, false, false)
 							end
 							TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 3)
 							return
@@ -1176,7 +1176,7 @@ AddEventHandler("properties:retrieveItem", function(location, index, item, quant
 							TriggerClientEvent('usa:notify', source, '~y~'..item.name..' ~s~has been retrieved!')
 							char.giveItem(item, quantity)
 							if item.type == "weapon" then
-								TriggerClientEvent("interaction:equipWeapon", source, item, true)
+								TriggerClientEvent("interaction:equipWeapon", source, item, true, false, false)
 							end
 							TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 3)
 							return
@@ -1362,14 +1362,10 @@ AddEventHandler('properties:searchCabinetBurglary', function(index)
 						TriggerClientEvent('usa:notify', source, 'You have found '..item_found.name..'.')
 						print('PROPERTIES: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has found item['..item_found.name..'] in house burglary!')
 						if item_found.type == "weapon" then
-							local letters = {}
-					        for i = 65,  90 do table.insert(letters, string.char(i)) end -- add capital letters
-					        local serialEnding = math.random(100000000, 999999999)
-					        local serialLetter = letters[math.random(#letters)]
-					        item_found.uuid = math.random(999999999)
-					        item_found.serialNumber = serialLetter .. serialEnding
+					        item_found.uuid = exports.globals:generateID()
+					        item_found.serialNumber = item_found.uuid
 							char.giveItem(item_found, 1)
-							TriggerClientEvent("interaction:equipWeapon", source, item_found, true)
+							TriggerClientEvent("interaction:equipWeapon", source, item_found, true, false, false)
 						else
 							char.giveItem(item_found, 1)
 						end

@@ -31,6 +31,8 @@ Citizen.CreateThread(function()
     while true do
         if KEYS then
             DisableControlAction(24, KEYS.TAB, true)
+            DisableControlAction(0, 100, true)
+            DisableControlAction(0, 99, true)
         end
         Wait(1)
     end
@@ -44,8 +46,10 @@ Citizen.CreateThread(function()
                 if GetLastInputMethod(0) and not IsPlayerFreeAiming(PlayerId()) then -- keyboard only / not aiming
                     -- cycle through slots keys --
                     if IsDisabledControlJustPressed(24, KEYS.TAB) then
+                        local playerPed = PlayerPedId()
                         local WEAPON_UNARMED = -1569615261
-                        GiveWeaponToPed(PlayerPedId(), WEAPON_UNARMED, 1000, false, true)
+                        GiveWeaponToPed(playerPed, WEAPON_UNARMED, 0, false, true)
+                        SetCurrentPedWeapon(playerPed, WEAPON_UNARMED, true)
                         currentSelectedSlot = nil
                         exports["usa_holster"]:handleHolsterAnim()
                     elseif not SCROLL_DISABLED and IsControlJustPressed(0, KEYS.SCROLL_DOWN) then

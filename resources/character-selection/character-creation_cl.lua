@@ -243,21 +243,8 @@ AddEventHandler("character:setCharacter", function(appearance, weapons)
 		end
 		-- G I V E  W E A P O N S --
 		for i =1, #weapons do
-			GiveWeaponToPed(GetPlayerPed(-1), weapons[i].hash, 1000, false, false)
-			if weapons[i].components then
-				if #weapons[i].components > 0 then
-					for x = 1, #weapons[i].components do
-						if type(weapons[i].components[x]) ~= "number" then
-							GiveWeaponComponentToPed(GetPlayerPed(-1), weapons[i].hash, GetHashKey(weapons[i].components[x]))
-						else
-							GiveWeaponComponentToPed(GetPlayerPed(-1), weapons[i].hash, weapons[i].components[x])
-						end
-					end
-				end
-			end
-			if weapons[i].tint then
-				SetPedWeaponTintIndex(GetPlayerPed(-1), weapons[i].hash, weapons[i].tint)
-			end
+			local currentWeaponAmmo = ((weapons[i].magazine and weapons[i].magazine.currentCapacity) or 0)
+			TriggerEvent("interaction:equipWeapon", weapons[i], true, currentWeaponAmmo)
 		end
 		SetCurrentPedWeapon(GetPlayerPed(-1), GetHashKey("WEAPON_UNARMED"), true)
 		-- player state checks  --

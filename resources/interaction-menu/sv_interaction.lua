@@ -106,15 +106,14 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
 			else 
 				fromChar.removeItem(item, 1)
 			end
-			TriggerClientEvent("interaction:equipWeapon", targetPlayerId, item, true)
 			TriggerClientEvent("interaction:equipWeapon", source, item, false)
 		else
 			item.quantity = 1
 			toChar.giveItem(item)
 			fromChar.removeItem(item, 1)
-			TriggerClientEvent("usa:notify", source, "You gave " .. GetPlayerName(targetPlayerId) .. ": (x1) " .. item.name)
-			TriggerClientEvent("usa:notify", targetPlayerId, GetPlayerName(source) .. " has given you " .. ": (x1) " .. item.name)
 		end
+		TriggerClientEvent("usa:notify", targetPlayerId, GetPlayerName(source) .. " has given you " .. ": (x1) " .. item.name)
+		TriggerClientEvent("usa:notify", source, "You gave " .. GetPlayerName(targetPlayerId) .. ": (x1) " .. item.name)
 		TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 2)
 	else
 		TriggerClientEvent("usa:notify", source, "Player can't hold anymore items! Inventory full.")

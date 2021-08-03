@@ -124,18 +124,8 @@ AddEventHandler("emsstation2:setciv", function(character, playerWeapons)
 		-- give weapons
 		if playerWeapons then
 			for i = 1, #playerWeapons do
-				print("playerWeapons[i].hash = " .. playerWeapons[i].hash)
-				GiveWeaponToPed(GetPlayerPed(-1), playerWeapons[i].hash, 1000, false, false)
-				if playerWeapons[i].components then
-					if #playerWeapons[i].components > 0 then
-						for x = 1, #playerWeapons[i].components do
-							GiveWeaponComponentToPed(GetPlayerPed(-1), playerWeapons[i].hash, GetHashKey(playerWeapons[i].components[x]))
-						end
-					end
-				end
-				if playerWeapons[i].tint then
-					SetPedWeaponTintIndex(GetPlayerPed(-1), playerWeapons[i].hash, playerWeapons[i].tint)
-				end
+				local currentWeaponAmmo = ((playerWeapons[i].magazine and playerWeapons[i].magazine.currentCapacity) or 0)
+				TriggerEvent("interaction:equipWeapon", playerWeapons[i], true, currentWeaponAmmo, false)
 			end
 		end
     end)

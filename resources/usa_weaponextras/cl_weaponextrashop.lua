@@ -113,7 +113,7 @@ function CreateLegalExtrasMenu(menu)
         local equipped_weapon = GetSelectedPedWeapon(GetPlayerPed(-1))
         if equipped_weapon == components[i].weapon_hash then
           if not HasPedGotWeaponComponent(GetPlayerPed(-1), equipped_weapon, GetHashKey(components[i].value)) then
-            TriggerServerEvent("weaponExtraShop:requestComponentPurchase", weapon, i, equipped_weapon, true, property)
+            TriggerServerEvent("weaponExtraShop:requestComponentPurchase", weapon, i, equipped_weapon, true)
           else
               TriggerEvent("usa:notify", "You already have that upgrade!")
           end
@@ -143,14 +143,18 @@ function CreateIllegalExtrasMenu(menu)
       item.Activated = function(parentmenu, selected)
         local playerCoords = GetEntityCoords(GetPlayerPed(-1) --[[Ped]], false)
         local equipped_weapon = GetSelectedPedWeapon(GetPlayerPed(-1))
-        if equipped_weapon == components[i].weapon_hash then
-          if not HasPedGotWeaponComponent(GetPlayerPed(-1), equipped_weapon, GetHashKey(components[i].value)) then
-            TriggerServerEvent("weaponExtraShop:requestComponentPurchase", weapon, i, equipped_weapon, false, property)
+        if components[i].type ~= "magazine" then
+          if equipped_weapon == components[i].weapon_hash then
+            if not HasPedGotWeaponComponent(GetPlayerPed(-1), equipped_weapon, GetHashKey(components[i].value)) then
+              TriggerServerEvent("weaponExtraShop:requestComponentPurchase", weapon, i, equipped_weapon, false)
+            else
+                TriggerEvent("usa:notify", "You already have that upgrade!")
+            end
           else
-              TriggerEvent("usa:notify", "You already have that upgrade!")
+            TriggerEvent("usa:notify", "Please equip the weapon before upgrading!")
           end
         else
-          TriggerEvent("usa:notify", "Please equip the weapon before upgrading!")
+          TriggerServerEvent("weaponExtraShop:requestComponentPurchase", weapon, i, false, false)
         end
       end
       ----------------------------------------

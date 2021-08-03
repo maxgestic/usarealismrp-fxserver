@@ -154,17 +154,8 @@ AddEventHandler("CS:giveWeapons", function(weapons)
 	local myped = PlayerPedId()
 	for i = 1, #weapons do
 		local weapon = weapons[i]
-		GiveWeaponToPed(myped, weapon.hash, 1000, 0, false) -- name already is the hash
-		if weapon.components then
-			if #weapon.components > 0 then
-			  for x = 1, #weapon.components do
-				GiveWeaponComponentToPed(myped, weapon.hash, GetHashKey(weapon.components[x]))
-			  end
-			end
-		  end
-		  if weapon.tint then
-			SetPedWeaponTintIndex(myped, weapon.hash, weapon.tint)
-		  end
+		local currentWeaponAmmo = ((weapon.magazine and weapon.magazine.currentCapacity) or 0)
+		TriggerEvent("interaction:equipWeapon", weapon, true, currentWeaponAmmo, false)
 	end
 end)
 
