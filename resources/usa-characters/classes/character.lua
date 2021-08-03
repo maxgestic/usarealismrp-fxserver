@@ -361,6 +361,12 @@ function CreateCharacter(data)
                   itemFound = true
                   break
                 end
+              elseif item.type and item.type == "magazine" then
+                if item.uuid == self.inventory.items[i].uuid then
+                  self.inventory.items[i] = decrementQuantity(self.inventory.items[i])
+                  itemFound = true
+                  break
+                end
               else
                 self.inventory.items[i] = decrementQuantity(self.inventory.items[i])
                 itemFound = true
