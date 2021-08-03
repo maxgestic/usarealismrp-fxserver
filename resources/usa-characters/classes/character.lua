@@ -361,9 +361,12 @@ function CreateCharacter(data)
                   itemFound = true
                   break
                 end
-              elseif item.type and item.type == "magazine" then
+              elseif item.type and (item.type == "magazine" or item.type == "ammo") then
                 if item.uuid == self.inventory.items[i].uuid then
                   self.inventory.items[i] = decrementQuantity(self.inventory.items[i])
+                  if self.inventory.items[i] == nil then
+                    return -- end if item was removed
+                  end
                   itemFound = true
                   break
                 end
