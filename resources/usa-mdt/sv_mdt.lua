@@ -452,7 +452,6 @@ end)
 RegisterServerEvent("mdt:performWeaponCheck")
 AddEventHandler("mdt:performWeaponCheck", function(serialNumber)
 	local usource = source
-	serialNumber = string.lower(serialNumber)
 	if not serialNumber or (string.len(serialNumber) ~= WEAPON_SERIAL_LENGTH and string.len(serialNumber) ~= 10) then
 		local msg = {
 			type = "error",
