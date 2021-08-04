@@ -107,7 +107,7 @@ AddEventHandler("blackMarket:requestPurchase", function(key, itemIndex)
     local selectedItem = markets[key]['items'][itemIndex]
     if selectedItem.stock == nil then
       if selectedItem.type == "ammo" then
-        selectedItem.stock = math.random(0, 10)
+        selectedItem.stock = math.random(3, 15)
       else 
         selectedItem.stock = math.random(0, 5)
       end

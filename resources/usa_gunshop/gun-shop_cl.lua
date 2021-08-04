@@ -82,6 +82,7 @@ function CreateWeaponShopMenu(menu)
       item.Activated = function(parentmenu, selected)
         local business = exports["usa-businesses"]:GetClosestStore(15)
          TriggerServerEvent("gunShop:requestPurchase", category, i, business)
+         Wait(1000)
       end
       ----------------------------------------
       -- add to sub menu created previously --
