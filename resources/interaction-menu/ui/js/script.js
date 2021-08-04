@@ -18,6 +18,7 @@ NO_TOOLTIP_WEAPONS.add("Crowbar");
 NO_TOOLTIP_WEAPONS.add("Bat");
 NO_TOOLTIP_WEAPONS.add("Knife");
 NO_TOOLTIP_WEAPONS.add("Hammer");
+NO_TOOLTIP_WEAPONS.add("Jerry Can");
 
 var itemImages = {
   "Driver's License": "https://i.imgur.com/dy0SpFh.png",

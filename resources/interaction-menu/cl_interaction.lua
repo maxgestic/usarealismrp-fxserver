@@ -899,10 +899,7 @@ RegisterNUICallback('moveItem', function(data, cb)
 end)
 
 function interactionMenuUse(index, itemName, wholeItem)
-	if wholeItem.type and wholeItem.type == "weapon" and not wholeItem.name:find("Parachute") then
-		local myped = PlayerPedId()
-		TriggerServerEvent("ammo:checkWeaponAmmo", index)
-	elseif wholeItem.type and wholeItem.type == "magazine" then
+	if wholeItem.type and wholeItem.type == "magazine" then
 		if not busy then
 			TriggerServerEvent("ammo:useMagazine", wholeItem)
 		end
