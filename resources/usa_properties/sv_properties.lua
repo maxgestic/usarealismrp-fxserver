@@ -441,17 +441,19 @@ local burglarySearchItems = {
 	{name = 'Switchblade', type = 'weapon', hash = -538741184, price = 1500, legality = 'illegal', quantity = 1, weight = 5, notStackable = true},
 	{name = "Condoms", price = 5, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "ng_proc_candy01a"},
 	{name = "KY Intense Gel", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "v_res_d_lube"},
-	{name = "Viagra", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_pills"},
 	{name = "Sturdy Rope", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 4, objectModel = "prop_devin_rope_01"},
 	{name = "Bag", price = 100, type = "misc", quantity = 1, legality = "legal", weight = 3, objectModel = "prop_paper_bag_01"},
-	{name = "Ludde's Lube", price = 10, type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "v_res_d_lube"},
 	{name = "Fluffy Handcuffs", type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "p_cs_cuffs_02_s"},
 	{name = "Vibrator", type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_marker_01"},
-	{name = "Sam Smith's Strapon", type = "misc", quantity = 1, legality = "legal", weight = 1, objectModel = "prop_cs_marker_01"},
 	{name = "French Dip Au Jus", price = 55, type = "food", substance = 60.0, quantity = 1, legality = "legal", weight = 10},
 	{name = "Back Porch Strawberry Lemonade", price = 60, type = "alcohol", substance = 15.0, quantity = 4, legality = "legal", weight = 1, strength = 0.28},
 	{name = 'Advanced Pick', type = 'illegal', price = 800, legality = 'illegal', quantity = 1, weight = 7.0},
-
+	{ name = "5.56mm Bullets", type = "ammo", price = 600, weight = 0.5, quantity = 10, legality = "legal", objectModel = "prop_ld_ammo_pack_03"  },
+	{ name = "7.62mm Bullets", type = "ammo", price = 600, weight = 0.5, quantity = 10, legality = "legal", objectModel = "prop_ld_ammo_pack_03" },
+	{ name = "9mm Bullets", type = "ammo", price = 300, weight = 0.5, quantity = 10, legality = "legal", objectModel = "prop_ld_ammo_pack_01" },
+	{ name = ".45 Bullets", type = "ammo", price = 375, weight = 0.5, quantity = 10, legality = "legal", objectModel = "prop_ld_ammo_pack_01" },
+	{ name = "12 Gauge Shells", type = "ammo", price = 300, weight = 0.5, quantity = 10, legality = "legal", objectModel = "prop_ld_ammo_pack_02" },
+	{ name = "Pump Shotgun", legality = "illegal", type = "weapon", hash = 487013001, price = 4000, quantity = 1, weight = 25, objectModel = "w_sg_pumpshotgun", notStackable = true },
 }
 
 local interiors = {
@@ -1361,8 +1363,8 @@ AddEventHandler('properties:searchCabinetBurglary', function(index)
 					if char.canHoldItem(item_found) then
 						TriggerClientEvent('usa:notify', source, 'You have found '..item_found.name..'.')
 						print('PROPERTIES: Player '..GetPlayerName(source)..'['..GetPlayerIdentifier(source)..'] has found item['..item_found.name..'] in house burglary!')
+						item_found.uuid = exports.globals:generateID()
 						if item_found.type == "weapon" then
-					        item_found.uuid = exports.globals:generateID()
 					        item_found.serialNumber = item_found.uuid
 							char.giveItem(item_found, 1)
 							TriggerClientEvent("interaction:equipWeapon", source, item_found, true, false, false)
