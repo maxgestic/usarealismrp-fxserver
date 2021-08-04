@@ -304,13 +304,25 @@ TriggerEvent('es:addJobCommand', 'seize', { "sheriff", "corrections" }, function
 			TriggerClientEvent("usa:notify", source, "Weapons seized!")
 			exports["globals"]:sendLocalActionMessage(source, "Removes weapons")
 			TriggerClientEvent("chatMessage", targetId, "", {0, 0, 0}, "^0" .. char.getName() .. " seized your weapons.")
+		elseif arg == "ammo" then
+			local target = exports["usa-characters"]:GetCharacter(targetId)
+			target.removeItemWithField("type", "ammo", true)
+			TriggerClientEvent("usa:notify", source, "Ammo seized!")
+			exports["globals"]:sendLocalActionMessage(source, "Removes ammo")
+			TriggerClientEvent("chatMessage", targetId, "", {0, 0, 0}, "^0" .. char.getName() .. " seized your ammo.")
+		elseif arg == "mags" then
+			local target = exports["usa-characters"]:GetCharacter(targetId)
+			target.removeItemWithField("type", "magazine", true)
+			TriggerClientEvent("usa:notify", source, "Magazines seized!")
+			exports["globals"]:sendLocalActionMessage(source, "Removes magazines")
+			TriggerClientEvent("chatMessage", targetId, "", {0, 0, 0}, "^0" .. char.getName() .. " seized your magazines.")
 		end
 	end
 end, {
-	help = "Seize illegal items on a person, in a vehicle or cash from the person.",
+	help = "Seize cash/items from a person or vehicle.",
 	params = {
 		{ name = "id", help = "Player's' ID (or '0' for vehicle seizures)" },
-		{ name = "type", help = "'cash', 'weapons', 'contraband', or 'vehcontraband'" }
+		{ name = "type", help = "'cash', 'weapons', 'contraband', 'vehcontraband', 'ammo', or 'mags'" }
 	}
 })
 

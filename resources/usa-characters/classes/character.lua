@@ -399,14 +399,16 @@ function CreateCharacter(data)
     end
   end
 
-  rTable.removeItemWithField = function(field, val)
+  rTable.removeItemWithField = function(field, val, removeAll)
     for i = 0, self.inventory.MAX_CAPACITY - 1 do
       if self.inventory.items[tostring(i)] then
         local item = self.inventory.items[tostring(i)]
         if item[field] then
           if item[field] == val then
             self.inventory.items[tostring(i)] = nil
-            return
+            if not removeAll then
+              return
+            end
           end
         end
       end
