@@ -112,8 +112,12 @@ for k, v in pairs(WEPS_NO_MAGS) do
 end
 -- end --
 
+-- reloading
 RegisterServerEvent("ammo:checkForMagazine")
-AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate)
+AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate, src)
+    if not src then
+        src = source
+    end
     local droppedMagItem = {
         name = nil,
         uuid = nil,
@@ -127,7 +131,7 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate)
         currentCapacity = 0,
         notStackable = true
     }
-    local char = exports["usa-characters"]:GetCharacter(source)
+    local char = exports["usa-characters"]:GetCharacter(src)
     if not selectedIndex then
         selectedIndex = char.get("currentlySelectedIndex")
     end
@@ -138,9 +142,9 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate)
             if WEPS_WITH_MAGS[curWep.hash] then
                 local magToUse = FindMagToReloadWith(char, curWep.hash)
                 if magToUse then
-                    TriggerClientEvent("ammo:reloadMag", source, magToUse)
+                    TriggerClientEvent("ammo:reloadMag", src, magToUse)
                     if curWep.magazine then
-                        local playerCoords = GetEntityCoords(GetPlayerPed(source))
+                        local playerCoords = GetEntityCoords(GetPlayerPed(src))
                         droppedMagItem = curWep.magazine
                         droppedMagItem.coords = {
                             x = playerCoords.x,
@@ -158,7 +162,7 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate)
                             droppedMagItem.name = "Empty " .. newName
                         end
                         if vehiclePlate then
-                            TriggerEvent("vehicle:storeItemInFirstFreeSlot", source, vehiclePlate, droppedMagItem, function(success, inv) end)
+                            TriggerEvent("vehicle:storeItemInFirstFreeSlot", src, vehiclePlate, droppedMagItem, function(success, inv) end)
                         else
                             if char.canHoldItem(droppedMagItem) then
                                 char.giveItem(droppedMagItem, 1)
@@ -170,7 +174,7 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate)
                     char.modifyItemByUUID(curWep.uuid, { magazine = magToUse })
                     char.removeItemByUUID(magToUse.uuid)
                 else
-                    TriggerClientEvent("usa:notify", source, "No fitting " .. WEPS_WITH_MAGS[curWep.hash].accepts .. " mags found!")
+                    TriggerClientEvent("usa:notify", src, "No fitting " .. WEPS_WITH_MAGS[curWep.hash].accepts .. " mags found!")
                     local helpMsg2 = "Need: "
                     for i = 1, #WEPS_WITH_MAGS[curWep.hash].magAmmoCounts do
                         helpMsg2 = helpMsg2 .. WEPS_WITH_MAGS[curWep.hash].magAmmoCounts[i]
@@ -181,7 +185,7 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate)
                         end
                     end
                     helpMsg2 = helpMsg2 .. " capacity"
-                    TriggerClientEvent("usa:notify", source, helpMsg2)
+                    TriggerClientEvent("usa:notify", src, helpMsg2)
                 end
             elseif WEPS_NO_MAGS[curWep.hash] then
                 -- search for appropriate weapon type of ammo, up to MAX_CAPACITY
@@ -196,7 +200,7 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate)
                     else
                         ammoCountToUse = ammoCount
                     end
-                    TriggerClientEvent("ammo:reloadMag", source, ammoCountToUse)
+                    TriggerClientEvent("ammo:reloadMag", src, ammoCountToUse)
                     -- modify weapon's ammo
                     local magToUse = nil
                     if curWep.magazine then
@@ -214,13 +218,14 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate)
                     -- remove ammo from inventory
                     char.removeItem(ammoName, ammoCountToUse)
                 else
-                    TriggerClientEvent("usa:notify", source, "No " .. ammoName .. " ammo found!")
+                    TriggerClientEvent("usa:notify", src, "No " .. ammoName .. " ammo found!")
                 end
             end
         end
     end
 end)
 
+-- filing magazines
 RegisterServerEvent("ammo:useMagazine")
 AddEventHandler("ammo:useMagazine", function(magazine)
     local char = exports["usa-characters"]:GetCharacter(source)
@@ -259,21 +264,6 @@ AddEventHandler("ammo:useMagazine", function(magazine)
             TriggerClientEvent("usa:notify", source, "No " .. magazine.receives .. " ammo found!")
         end
     end
-end)
-
-RegisterServerEvent("ammo:checkWeaponAmmo")
-AddEventHandler("ammo:checkWeaponAmmo", function(index)
-    --[[
-    local char = exports["usa-characters"]:GetCharacter(source)
-    local wep = char.getItemByIndex(index)
-    if wep and wep.type == "weapon" and not isMeleeWeapon(wep.name) then
-        local currAmmo = 0
-        if wep.magazine and wep.magazine.currentCapacity then
-            currAmmo = wep.magazine.currentCapacity
-        end
-        TriggerClientEvent("usa:notify", source, "Ammo: " .. currAmmo)
-    end
-    -]]
 end)
 
 RegisterServerEvent("ammo:save")

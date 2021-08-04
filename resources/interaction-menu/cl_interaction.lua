@@ -713,7 +713,7 @@ RegisterNUICallback('reloadWeapon', function(data, cb)
 		myveh = GetVehiclePedIsIn(me, false)
 		vehiclePlate = GetVehicleNumberPlateText(myveh)
 	end
-	TriggerServerEvent("ammo:checkForMagazine", data.inventoryItemIndex, vehiclePlate)
+	TriggerServerEvent("ammo:checkForMagazine", data.inventoryItemIndex, (vehiclePlate or false))
 end)
 
 RegisterNUICallback('notification', function(data, cb)

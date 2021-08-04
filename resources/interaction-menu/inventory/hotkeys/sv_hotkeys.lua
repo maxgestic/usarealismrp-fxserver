@@ -1,12 +1,17 @@
 RegisterServerEvent("interaction:hotkeyPressed")
-AddEventHandler("interaction:hotkeyPressed", function(key)
+AddEventHandler("interaction:hotkeyPressed", function(key, isModifierKeyPressed, vehiclePlate)
     key = tonumber(key) - 1
     local char = exports["usa-characters"]:GetCharacter(source)
     local item = char.getItemByIndex(key)
     if item then
         if item.type == "weapon" then
-            -- equip
-            TriggerClientEvent("interaction:toggleWeapon", source, item)
+            if not isModifierKeyPressed then
+                -- equip
+                TriggerClientEvent("interaction:toggleWeapon", source, item)
+            else
+                -- reload
+                TriggerEvent("ammo:checkForMagazine", key, (vehiclePlate or false), char.get("source"))
+            end
         else 
             -- perform item's 'use' action
             TriggerClientEvent("interaction:useItem", source, key, item)

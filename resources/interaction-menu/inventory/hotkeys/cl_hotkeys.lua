@@ -6,6 +6,8 @@ local SCROLL_DISABLED = true
 
 local HOTKEYS_ENABLED = true
 
+local MODIFIER_KEY = 21
+
 RegisterNetEvent("hotkeys:enable")
 AddEventHandler("hotkeys:enable", function(value)
     HOTKEYS_ENABLED = value
@@ -44,12 +46,18 @@ Citizen.CreateThread(function()
         if KEYS then
             if HOTKEYS_ENABLED then
                 if GetLastInputMethod(0) and not IsPlayerFreeAiming(PlayerId()) then -- keyboard only / not aiming
+                    local me = PlayerPedId()
+                    local isModifierKeyPressed = IsControlPressed(0, MODIFIER_KEY)
+                    local vehiclePlate = nil
+                    local currentVeh = GetVehiclePedIsIn(me, false)
+                    if currentVeh ~= 0 then
+                        vehiclePlate = GetVehicleNumberPlateText(currentVeh)
+                    end
                     -- cycle through slots keys --
                     if IsDisabledControlJustPressed(24, KEYS.TAB) then
-                        local playerPed = PlayerPedId()
                         local WEAPON_UNARMED = -1569615261
-                        GiveWeaponToPed(playerPed, WEAPON_UNARMED, 0, false, true)
-                        SetCurrentPedWeapon(playerPed, WEAPON_UNARMED, true)
+                        GiveWeaponToPed(me, WEAPON_UNARMED, 0, false, true)
+                        SetCurrentPedWeapon(me, WEAPON_UNARMED, true)
                         currentSelectedSlot = nil
                         exports["usa_holster"]:handleHolsterAnim()
                     elseif not SCROLL_DISABLED and IsControlJustPressed(0, KEYS.SCROLL_DOWN) then
@@ -62,7 +70,7 @@ Citizen.CreateThread(function()
                                 currentSelectedSlot = currentSelectedSlot + 1
                             end
                         end
-                        TriggerServerEvent("interaction:hotkeyPressed", currentSelectedSlot)
+                        TriggerServerEvent("interaction:hotkeyPressed", currentSelectedSlot, isModifierKeyPressed, vehiclePlate)
                     elseif not SCROLL_DISABLED and IsControlJustPressed(0, KEYS.SCROLL_UP) then
                         if currentSelectedSlot == nil  then
                             currentSelectedSlot = 4
@@ -73,20 +81,20 @@ Citizen.CreateThread(function()
                                 currentSelectedSlot = currentSelectedSlot - 1
                             end
                         end
-                        TriggerServerEvent("interaction:hotkeyPressed", currentSelectedSlot)
+                        TriggerServerEvent("interaction:hotkeyPressed", currentSelectedSlot, isModifierKeyPressed, vehiclePlate)
                     -- direct slot hotkey --
                     elseif IsDisabledControlJustPressed(24, KEYS.ONE) then
                         currentSelectedSlot = 1
-                        TriggerServerEvent("interaction:hotkeyPressed", currentSelectedSlot)
+                        TriggerServerEvent("interaction:hotkeyPressed", currentSelectedSlot, isModifierKeyPressed, vehiclePlate)
                     elseif IsDisabledControlJustPressed(24, KEYS.TWO) then
                         currentSelectedSlot = 2
-                        TriggerServerEvent("interaction:hotkeyPressed", currentSelectedSlot)
+                        TriggerServerEvent("interaction:hotkeyPressed", currentSelectedSlot, isModifierKeyPressed, vehiclePlate)
                     elseif IsDisabledControlJustPressed(24, KEYS.THREE) then
                         currentSelectedSlot = 3
-                        TriggerServerEvent("interaction:hotkeyPressed", currentSelectedSlot)
+                        TriggerServerEvent("interaction:hotkeyPressed", currentSelectedSlot, isModifierKeyPressed, vehiclePlate)
                     elseif IsDisabledControlJustPressed(24, KEYS.FOUR) then
                         currentSelectedSlot = 4
-                        TriggerServerEvent("interaction:hotkeyPressed", currentSelectedSlot)
+                        TriggerServerEvent("interaction:hotkeyPressed", currentSelectedSlot, isModifierKeyPressed, vehiclePlate)
                     end
                 end
             end
