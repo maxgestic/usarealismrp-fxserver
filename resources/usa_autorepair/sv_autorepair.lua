@@ -11,6 +11,7 @@ AddEventHandler("autoRepair:checkMoney", function(business, engineHp, bodyHp)
     if char.get("money") - REPAIR_COST >= 0 then
       char.removeMoney(REPAIR_COST)
       TriggerClientEvent("autoRepair:repairVehicle", source, REPAIR_COST)
+      TriggerClientEvent("usa:notify", source, '~y~Charged:~w~ $' .. REPAIR_COST)
     else
       TriggerClientEvent("usa:notify", source, 'Cash required for repair: $' .. REPAIR_COST)
     end
