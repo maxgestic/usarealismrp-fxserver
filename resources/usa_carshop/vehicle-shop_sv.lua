@@ -359,7 +359,11 @@ local vehicleShopItems = {
 			{make = "Audi", model = "RS6", price = 170000, hash = "rs6", storage_capacity = 245.0},
 			{make = "Subaru", model = "BRZ", price = 80000, hash = "brz13", storage_capacity = 160.0},
 			{make = "Chevy", model = "C7", price = 95000, hash = "c7", storage_capacity = 160.0},
-			{make = "Porsche", model = "911 Turbo S", price = 280000, hash = "pts21", storage_capacity = 160.0}
+			{make = "Porsche", model = "911 Turbo S", price = 280000, hash = "pts21", storage_capacity = 160.0},
+			{make = "Mazda", model = "RX-7", price = 80000, hash = "rx7rb", storage_capacity = 150.0},
+			{make = "Toyota", model = "Supra", price = 95000, hash = "rmodsuprapandem", storage_capacity = 160.0},
+			{make = "Mercedes", model = "GT63", price = 215000, hash = "rmodgt63", storage_capacity = 175.0},
+			{make = "Nissan", model = "240SX", price = 70000, hash = "rmod240sx", storage_capacity = 150.0},
 		}
 	}
 }
