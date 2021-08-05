@@ -41,7 +41,7 @@ var itemImages = {
   "Gatorade": "https://www.pngkit.com/png/full/115-1153791_gatorade-transparent-32-ounce-clip-transparent-library-32.png",
   "Caramel Iced Coffee": "https://i.pinimg.com/originals/6e/59/7a/6e597aeb09c6604cf5eb99e6c5472ba3.png",
   "Mocha Iced Coffee": "https://i.pinimg.com/originals/6e/59/7a/6e597aeb09c6604cf5eb99e6c5472ba3.png",
-  "Slurpee": "https://www.7-eleven.com/sites/default/files/2017-03/Red.png",
+  "Slurpee": "https://i.imgur.com/yx74cB8.png",
   "Pepsi": "https://www.freepngimg.com/thumb/pepsi/3-2-pepsi-transparent.png",
   "Dr. Pepper": "https://cdn.shopify.com/s/files/1/2597/8324/products/170200209-1-dr-pepper-carbonated-beverage-web.png?v=1524654127",
   "Grape Soda": "https://www.zevia.ca/sites/zevia.ca/files/2019-02/Canadian_BlackCherry_Can.png",
