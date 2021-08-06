@@ -143,6 +143,7 @@ local vehicleShopItems = {
 			{make = "Pegassi", model = "Faggio", price = 2069, hash = -1842748181, storage_capacity = 30.0},
 			{make = "Pegassi", model = "Faggio Mod", price = 8000, hash = 55628203, storage_capacity = 50.0},
 			{make = "Pegassi", model = "Faggio Sport", price = 6000, hash = -1289178744, storage_capacity = 60.0},
+			{make = "Dinka", model = "Double T", price = 35000, hash = "double", storage_capacity = 30.0},
 			{make = "Dinka", model = "Enduro", price = 10750, hash = 1753414259, storage_capacity = 30.0},
 			{make = "Dinka", model = "Akuma", price = 15760, hash = 1672195559, storage_capacity = 30.0},
 			{make = "Maibatsu", model = "Sanchez", price = 14880, hash = -1453280962, storage_capacity = 30.0},
