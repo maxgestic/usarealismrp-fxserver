@@ -10,7 +10,7 @@ AddEventHandler('scrambler:injectionDetected', function(name, source, isServerEv
             eventType = 'server'
         end
         local msg = 'Player id [' .. source .. ' / ' .. (GetPlayerIdentifiers(source)[1] or 'N/A') .. '] attempted to use ' .. eventType .. ' event [' .. name .. ']'
-        exports.globals:SendDiscordLog(WEBHOOK_URL, msg .. " " .. minipunchDiscordID)
+        exports.globals:SendDiscordLog(WEBHOOK_URL, msg)
         exports["es_admin"]:BanPlayer(source, "Modding (code injection). If you feel this was a mistake please let a staff member know.")
     end
 end)
