@@ -1308,6 +1308,13 @@ AddEventHandler("interaction:toggleWeapon", function(item, skipAnim)
 		if not skipAnim then
 			exports["usa_holster"]:handleHolsterAnim()
 		end
+		-- show selected weapon preview if in vehicle --
+		if IsPedInAnyVehicle(ped, false) then
+			SendNUIMessage({
+				type = "showSelectedItemPreview",
+				itemName = "Unarmed"
+			})
+		end
 	else
 		local toGiveAmmo = 0
 		if item.magazine then
@@ -1320,6 +1327,14 @@ AddEventHandler("interaction:toggleWeapon", function(item, skipAnim)
 			toGiveAmmo = 500
 		end
 		TriggerEvent("interaction:equipWeapon", item, true, toGiveAmmo, (not skipAnim))
+		-- show selected weapon preview if in vehicle --
+		if IsPedInAnyVehicle(ped, false) then
+			SendNUIMessage({
+				type = "showSelectedItemPreview",
+				itemName = item.name,
+				ammoCount = toGiveAmmo
+			})
+		end
 	end
 end)
 

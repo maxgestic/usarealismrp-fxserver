@@ -2,7 +2,7 @@
 body {
 	font-family: sans-serif;
 	overflow: hidden;
-	display: none;
+	display: block;
 }
 
 html,
@@ -219,4 +219,21 @@ ul.submenu li label {
 ::-webkit-scrollbar-thumb
 {
 	background-color: rgba(0, 0, 0, 0.4);
+}
+
+#selected-item-preview {
+	position: fixed;
+	left: 50%;
+	bottom: 30px;
+	transform: translate(-50%, -50%);
+	margin: 0 auto;
+}
+
+#app section:nth-child(1) {
+	display: none;
+}
+
+#app #hud img {
+	width: 75px;
+	opacity: 80%
 }

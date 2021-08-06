@@ -466,6 +466,33 @@ var interactionMenu = new Vue({
       visible: false,
       left: 0,
       top: 0
+    },
+    selectedItemPreview: {
+      src: "http://via.placeholder.com/150",
+      visible: false,
+      DISPLAY_TIME_MS: 5000,
+      show(itemName, ammoCount) {
+        this.showOutOfAmmoText = false;
+        let img = null;
+        if (itemName == "Unarmed") {
+          img = "https://i.imgur.com/EaFIt2K.png"; // fist image
+        } else {
+          img = itemImages[itemName];
+          if (ammoCount <= 0) {
+            this.showOutOfAmmoText = true;
+          }
+        }
+        if (img) {
+          this.src = img;
+          this.visible = true;
+          let startedAs = img;
+          setTimeout(() => {
+            if (this.src == startedAs) {
+              this.visible = false;
+            }
+          }, this.DISPLAY_TIME_MS);
+        }
+      }
     }
   },
   methods: {
@@ -622,7 +649,7 @@ var interactionMenu = new Vue({
       }
     },
     getItemImage: function(item) {
-      let name = item.name;
+      let name = item.name || item;
       if (item.type == "magazine") {
         name = name.split(" ");
         name.splice(0, 1);
@@ -825,7 +852,8 @@ var interactionMenu = new Vue({
 });
 
 function CloseMenu() {
-  document.body.style.display = "none";
+  let mainAppDiv = document.querySelector("#app section:nth-child(1)");
+  mainAppDiv.style.display = "none";
   $.post('http://interaction-menu/escape', JSON.stringify({
     vehicle: {
       plate: interactionMenu.targetVehiclePlate
@@ -851,7 +879,8 @@ $(function() {
 	window.addEventListener('message', function(event) {
 		if (event.data.type == "enableui") {
       /* Display */
-			document.body.style.display = event.data.enable ? "block" : "none";
+      let mainAppDiv = document.querySelector("#app section:nth-child(1)");
+      mainAppDiv.style.display = event.data.enable ? "block" : "none";
       /* Set targetted / occupied in vehicle */
       if (event.data.target_vehicle_plate && typeof event.data.target_vehicle_plate !== "undefined")
         interactionMenu.targetVehiclePlate = event.data.target_vehicle_plate;
@@ -897,7 +926,9 @@ $(function() {
         }
       }
       interactionMenu.nearestPlayer = nearest;
-		}
+		} else if (event.data.type == "showSelectedItemPreview") {
+      interactionMenu.selectedItemPreview.show(event.data.itemName, event.data.ammoCount);
+    }
 	});
   /* Close Menu */
 	document.onkeydown = function (data) {

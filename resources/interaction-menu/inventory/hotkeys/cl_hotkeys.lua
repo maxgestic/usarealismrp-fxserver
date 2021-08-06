@@ -60,6 +60,15 @@ Citizen.CreateThread(function()
                         SetCurrentPedWeapon(me, WEAPON_UNARMED, true)
                         currentSelectedSlot = nil
                         exports["usa_holster"]:handleHolsterAnim()
+
+                        -- send NUI message to interaction-menu script to show unarmed weapon selection preview on HUD...
+                        if currentVeh ~= 0 then
+                            TriggerEvent("interaction:sendNUIMessage", {
+                                type = "showSelectedItemPreview",
+                                itemName = "Unarmed"
+                            })
+                        end
+
                     elseif not SCROLL_DISABLED and IsControlJustPressed(0, KEYS.SCROLL_DOWN) then
                         if currentSelectedSlot == nil then
                             currentSelectedSlot = 1
