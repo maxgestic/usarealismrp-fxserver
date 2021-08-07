@@ -162,7 +162,17 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate, s
                             droppedMagItem.name = "Empty " .. newName
                         end
                         if vehiclePlate then
-                            TriggerEvent("vehicle:storeItemInFirstFreeSlot", src, vehiclePlate, droppedMagItem, function(success, inv) end)
+                            TriggerEvent("vehicle:storeItemInFirstFreeSlot", src, vehiclePlate, droppedMagItem, false, function(success, inv)
+                                if not success then
+                                    print("inv full, attempting to store in player inventory")
+                                    if char.canHoldItem(droppedMagItem) then    
+                                        char.giveItem(droppedMagItem)
+                                    else
+                                        print("all inventories full, dropping to floor")
+                                        TriggerEvent("interaction:addDroppedItem", droppedMagItem)
+                                    end
+                                end
+                            end)
                         else
                             if char.canHoldItem(droppedMagItem) then
                                 char.giveItem(droppedMagItem, 1)

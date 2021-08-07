@@ -63,7 +63,7 @@ AddEventHandler("vehicle:storeItem", function(src, vehicle_plate, item, quantity
 end)
 
 RegisterServerEvent("vehicle:storeItemInFirstFreeSlot")
-AddEventHandler("vehicle:storeItemInFirstFreeSlot", function(src, vehicle_plate, item, cb)
+AddEventHandler("vehicle:storeItemInFirstFreeSlot", function(src, vehicle_plate, item, notifyIfFull, cb)
     local usource = tonumber(src)
     GetVehicleInventory(vehicle_plate, function(inv)
         if VehInventoryManager.canHoldItem(inv, item) then
@@ -83,7 +83,9 @@ AddEventHandler("vehicle:storeItemInFirstFreeSlot", function(src, vehicle_plate,
                 cb(success, inv)
             end)
         else
-            TriggerClientEvent("usa:notify", usource, "Vehicle inventory full!")
+            if notifyIfFull then
+                TriggerClientEvent("usa:notify", usource, "Vehicle inventory full!")
+            end
             cb(false, inv)
         end
     end)
