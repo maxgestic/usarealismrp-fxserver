@@ -240,6 +240,8 @@ AddEventHandler("properties:storeVehicle", function(property_name, plate) --IMPL
             couchdb.updateDocument("vehicles", plate, { stored_location = property_name }, function()
                 -- delete vehicle on client --
                 TriggerClientEvent("properties:storeVehicle", usource)
+                -- remove key from inventory --
+                user.removeItem("Key -- " .. plate)
             end)
         end)
     else
