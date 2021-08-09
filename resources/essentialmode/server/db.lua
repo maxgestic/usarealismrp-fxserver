@@ -362,7 +362,7 @@ function exposedDB.findDocuments(db, options, callback)
 			if t.docs then
 				callback(t.docs)
 			else
-				callback(false)
+				callback(false, rText)
 			end
 		else
 			callback(false, rText)

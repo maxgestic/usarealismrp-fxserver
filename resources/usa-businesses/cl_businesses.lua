@@ -1,3 +1,42 @@
+local currentMapBlips = {}
+
+RegisterNetEvent("businesses:addMapBlip")
+AddEventHandler("businesses:addMapBlip", function(coords)
+	local b = AddBlipForCoord(coords[1], coords[2], coords[3])
+	SetBlipSprite(b, 40)
+	SetBlipDisplay(b, 4)
+	SetBlipScale(b, 0.75)
+	SetBlipColour(b, 24)
+	SetBlipAsShortRange(b, true)
+	BeginTextCommandSetBlipName("STRING")
+	AddTextComponentString('Owned Business')
+	EndTextCommandSetBlipName(b)
+	table.insert(currentMapBlips, b)
+end)
+
+RegisterNetEvent("businesses:addMapBlips")
+AddEventHandler("businesses:addMapBlips", function(mapBlipData)
+	RemoveBlips()
+	for name, coords in pairs(mapBlipData) do
+        local b = AddBlipForCoord(coords[1], coords[2], coords[3])
+        SetBlipSprite(b, 40)
+        SetBlipDisplay(b, 4)
+        SetBlipScale(b, 0.75)
+		SetBlipColour(b, 24)
+        SetBlipAsShortRange(b, true)
+        BeginTextCommandSetBlipName("STRING")
+        AddTextComponentString('Owned Business')
+        EndTextCommandSetBlipName(b)
+        table.insert(currentMapBlips, b)
+    end
+end)
+
+function RemoveBlips()
+    for i = 1, #currentMapBlips do
+        RemoveBlip(currentMapBlips[i])
+    end
+end
+
 -- ROB ON KEY HOLD --
 Citizen.CreateThread(function()
 	while true do

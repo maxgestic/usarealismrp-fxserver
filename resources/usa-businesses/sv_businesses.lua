@@ -171,11 +171,33 @@ AddEventHandler("business:lease", function(name)
         CreateNewBusiness(usource, name, function(newBusinessDoc) -- create doc
           TriggerClientEvent("usa:notify", usource, "You now own: " .. name .. "!")
           SendToDiscordLog(newBusinessDoc)
+          TriggerClientEvent("businesses:addMapBlip", usource, BUSINESSES[name].position)
         end)
       else
         TriggerClientEvent("usa:notify", usource, "You need $" .. comma_value(BUSINESSES[name].price) .. " to lease this business.")
       end
     end
+  end)
+end)
+
+AddEventHandler("character:loaded", function(char)
+  -- grab all owned businesses with this char's identifier and send their positions to the client for adding blips to map
+  TriggerEvent("es:exposeDBFunctions", function(db)
+    local query = {
+      owner = {
+        identifiers = {
+          id = char.get("_id")
+        }
+      }
+    }
+    db.findDocuments("businesses", { selector = query }, function(docs)
+      local ownedBusinessesMapBlipData = {}
+      for i = 1, #docs do
+        print(docs[i].name)
+        ownedBusinessesMapBlipData[docs[i].name] = BUSINESSES[docs[i].name].position
+      end
+      TriggerClientEvent("businesses:addMapBlips", char.get("source"), ownedBusinessesMapBlipData)
+    end)
   end)
 end)
 
