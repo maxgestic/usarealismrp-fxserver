@@ -19,7 +19,7 @@ locations = {
 	{ ["x"] = 196.30528259277, ["y"] = -1664.2943115234, ["z"] = 29.803218841553, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- FD in LS
 	{ ["x"] = -455.9, ["y"] = 6040.9, ["z"] = 31.3, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- paleto PD
 	{ ["x"] = -357.1, ["y"] = 6094.2, ["z"] = 31.4, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- paleto FD
-	{ ["x"] = 1865.5, ["y"] = 3695.9, ["z"] = 33.7, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- sandy PD
+	{ ['x'] = 1877.0660400391, ['y'] = 3707.8864746094, ['z'] = 33.546321868896, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- sandy PD
 	{ ["x"] = 1712.8, ["y"] = 3599.5, ["z"] = 35.3, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- sandy FD
 	{ ['x'] = 445.236328125, ['y'] = -991.69458007813, ['z'] = 25.699808120728, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- MRPD
 	{ ['x'] = 317.69635009766, ['y'] = -574.09649658203, ['z'] = 28.796865463257, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- pillbox medical
