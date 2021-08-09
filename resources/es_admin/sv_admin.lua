@@ -984,8 +984,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
 				if doc.duration then
 					if getHoursFromTime(doc.time) < doc.duration then
 						print(GetPlayerName(tonumber(usource)) .. " has been temp banned from your server and should not be able to play!")
-						--DropPlayer(tonumber(usource), "Temp Banned: " .. doc.reason .. " This ban is in place for " .. doc.duration .. " hour(s).")
-						deferrals.done("Temp Banned: " .. doc.reason .. " This ban is in place for " .. doc.duration .. " hour(s). Banned by: " .. doc.bannerName)
+						deferrals.done("Temp Banned: " .. doc.reason .. " This ban is in place for " .. (doc.duration - getHoursFromTime(doc.time)) .. " hour(s). Banned by: " .. doc.bannerName)
 					else
 						local docid = doc._id
 						local docRev = doc._rev
@@ -1227,7 +1226,7 @@ AddEventHandler('mini:checkPlayerBannedOnSpawn', function()
 				if doc.duration then
 					if getHoursFromTime(doc.time) < doc.duration then
 						print(GetPlayerName(tonumber(usource)) .. " has been temp banned from your server and should not be able to play!")
-						DropPlayer(tonumber(usource), "Temp Banned: " .. doc.reason .. " This ban is in place for " .. doc.duration .. " hour(s). Banned by: " .. doc.bannerName)
+						DropPlayer(tonumber(usource), "Temp Banned: " .. doc.reason .. " This ban is in place for " .. (doc.duration - getHoursFromTime(doc.time)) .. " hour(s). Banned by: " .. doc.bannerName)
 					else
 						local docid = doc._id
 						local docRev = doc._rev
