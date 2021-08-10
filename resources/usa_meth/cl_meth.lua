@@ -83,7 +83,6 @@ Citizen.CreateThread(function()
             meth.producingMeth = false
         elseif meth.processingMeth and GetDistanceBetweenCoords(playerCoords, 2434.78, 4964.29, 42.34, true) > 6 then
             TriggerEvent("usa:notify", "You went ~y~out of range~w~.")
-            TriggerServerEvent("methJob:giveRock", meth.methToProcess)
             meth.methToProcess = nil
             meth.processingMeth = false
         end
@@ -245,6 +244,7 @@ Citizen.CreateThread(function()
                 Citizen.Wait(100)
             end
             TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49, 0, 0, 0, 0)
+            local failed = false
             while GetGameTimer() - beginTime < 5000 do
                 Citizen.Wait(0)
                 DrawTimer(beginTime, 5000, 1.42, 1.475, 'PACKAGING')
@@ -253,7 +253,8 @@ Citizen.CreateThread(function()
                         TaskPlayAnim(GetPlayerPed(-1), animDict, animName, 8.0, -8, -1, 49 , 0, 0, 0, 0)
                     end
                 else
-                    print('player stopped processing! breaking from for loop!')
+                    -- something happened while processing the meth to fail it (like going too far)
+                    failed = true
                     break
                 end
             end
@@ -265,7 +266,9 @@ Citizen.CreateThread(function()
                 meth.methToProcess = nil
             end
             meth.processingMeth = false
-            TriggerServerEvent("methJob:methProcessed", processedMeth)
+            if not failed then
+                TriggerServerEvent("methJob:methProcessed", processedMeth)
+            end
         end
     Citizen.Wait(0)
     end

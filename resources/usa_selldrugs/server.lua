@@ -1,7 +1,7 @@
 local debug = false
 
 local SELLABLE_ITEMS = {
-	["Packaged Meth"] = {150, 250},
+	["Packaged Meth"] = {150, 350},
 	["Packaged Blue Meth"] = {300, 450},
 	["Packaged Weed"] = {250, 350},
 	["Packaged Cocaine"] = {650, 1250},
