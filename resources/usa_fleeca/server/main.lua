@@ -93,6 +93,7 @@ AddEventHandler('fleeca:drilledGoods', function()
     if payout <= 0.20 then
         local randomItem = items[math.random(#items)]
         if char.canHoldItem(randomItem) then
+            randomItem.uuid = exports.globals:generateID()
             char.giveItem(randomItem)
             TriggerClientEvent("usa:notify", source, "You stole ".. randomItem.name)
         else
