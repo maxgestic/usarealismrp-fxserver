@@ -87,7 +87,7 @@ LXC.AVHCMethod = true -- Detects Cheat Engine Vehicle Hash Changer
 
 ---------------Blacklisted Commands------------------------
 
-LXC.ABCmds = true -- Detects less cheats but works on all servers
+LXC.ABCmds = false -- Detects less cheats but works on all servers
 LXC.ABCmdsGlobal = false -- Detects more cheats but not working on all servers
 
 ---------------Blacklisted Weapons-----------------
