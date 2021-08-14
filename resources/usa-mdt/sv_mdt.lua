@@ -453,17 +453,6 @@ end)
 RegisterServerEvent("mdt:performWeaponCheck")
 AddEventHandler("mdt:performWeaponCheck", function(serialNumber)
 	local usource = source
-	if not serialNumber or (string.len(serialNumber) ~= WEAPON_SERIAL_LENGTH_1 and string.len(serialNumber) ~= WEAPON_SERIAL_LENGTH_2) then
-		local msg = {
-			type = "error",
-			message  = "Invalid serial number format!"
-		}
-		TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
-		return
-	end
-	if string.len(serialNumber) == WEAPON_SERIAL_LENGTH_2 then -- help user by auto capitalizing input
-		serialNumber = serialNumber:upper()
-	end
 	TriggerEvent('es:exposeDBFunctions', function(couchdb)
         couchdb.getDocumentById("legalweapons", serialNumber, function(weapon)
             if weapon then
