@@ -203,18 +203,13 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate, s
                 local max = WEPS_NO_MAGS[curWep.hash].MAX_CAPACITY
                 local ammoCount = getAmmoCountByName(char, ammoName)
                 if ammoCount > 0 then
-                    -- send to client for reload
-                    local ammoCountToUse = nil
-                    if ammoCount >= max then
-                        ammoCountToUse = max
-                    else
-                        ammoCountToUse = ammoCount
-                    end
+                    local neededAmmo = max - ((curWep.magazine and curWep.magazine.currentCapacity) or 0)
+                    local ammoCountToUse = math.min(neededAmmo, ammoCount)
                     TriggerClientEvent("ammo:reloadMag", src, ammoCountToUse)
                     -- modify weapon's ammo
                     local magToUse = nil
                     if curWep.magazine then
-                        curWep.magazine.currentCapacity = ammoCountToUse
+                        curWep.magazine.currentCapacity = curWep.magazine.currentCapacity + ammoCountToUse
                         magToUse = curWep.magazine
                     else
                         magToUse = {
