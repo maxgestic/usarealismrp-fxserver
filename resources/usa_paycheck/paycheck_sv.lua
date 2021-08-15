@@ -28,41 +28,41 @@ function DepositPayCheck(char)
 
     if job == "sheriff" or job == "highwaypatrol" or job == "fbi" then
         local cop_rank = char.get("policeRank")
-        paycheckAmount = 700
+        paycheckAmount = 850
         if cop_rank == 2 then
-            paycheckAmount = 750
+            paycheckAmount = 950
         elseif cop_rank == 3 then
-            paycheckAmount = 800
+            paycheckAmount = 1050
         elseif cop_rank == 4 then
-            paycheckAmount = 825
+            paycheckAmount = 1150
         elseif cop_rank == 5 then
-            paycheckAmount = 875
+            paycheckAmount = 1250
         elseif cop_rank == 6 then
-            paycheckAmount = 890
+            paycheckAmount = 1350
         elseif cop_rank == 7 then
-            paycheckAmount = 895
+            paycheckAmount = 1450
         elseif cop_rank == 8 then
-            paycheckAmount = 900
+            paycheckAmount = 1550
         elseif cop_rank == 9 then
-            paycheckAmount = 910
+            paycheckAmount = 1650
         elseif cop_rank == 10 then
-            paycheckAmount = 925
+            paycheckAmount = 1750
         end
     elseif job == "ems" then
         local rank = char.get("emsRank")
-        paycheckAmount = 700
+        paycheckAmount = 900
         if rank == 2 then
-            paycheckAmount = 770
+            paycheckAmount = 1000
         elseif rank == 3 then
-            paycheckAmount = 800
+            paycheckAmount = 1100
         elseif rank == 4 then
-            paycheckAmount = 815
+            paycheckAmount = 1200
         elseif rank == 5 then
-            paycheckAmount = 850
+            paycheckAmount = 1300
         elseif rank == 6 then
-            paycheckAmount = 860
+            paycheckAmount = 1400
         elseif rank == 7 then
-            paycheckAmount = 875
+            paycheckAmount = 1500
         end
     elseif job == "taxi" then
         paycheckAmount = 575
@@ -71,7 +71,7 @@ function DepositPayCheck(char)
     elseif job == "reporter" then
         paycheckAmount = 500
     elseif job == "judge" then
-        paycheckAmount = 875
+        paycheckAmount = 1700
     elseif job == "corrections" then
         asyncGiveBank = true
         local ident = GetPlayerIdentifiers(source)[1]
@@ -86,11 +86,11 @@ function DepositPayCheck(char)
             end)
         end)
     elseif job == "lawyer" then
-        paycheckAmount = 700
+        paycheckAmount = 1500
     elseif job == "doctor" then
-        paycheckAmount = 875
+        paycheckAmount = 1000
     elseif job == "da" then
-        paycheckAmount = 800
+        paycheckAmount = 1700
     elseif job == 'BurgerShotEmployee' then
         paycheckAmount = 800
     elseif job == "eventPlanner" then
@@ -187,25 +187,25 @@ end
 
 function GetBCSOPayFromRank(rank)
     if rank == 1 then 
-        return 700
-    elseif rank == 2 then 
-        return 735
-    elseif rank == 3 then 
-        return 745
-    elseif rank == 4 then 
-        return 775
-    elseif rank == 5 then 
         return 800
+    elseif rank == 2 then 
+        return 900
+    elseif rank == 3 then 
+        return 1000
+    elseif rank == 4 then 
+        return 1100
+    elseif rank == 5 then 
+        return 1200
     elseif rank == 6 then 
-        return 825
+        return 1300
     elseif rank == 7 then 
-        return 840
+        return 1400
     elseif rank == 8 then 
-        return 850
+        return 1500
     elseif rank == 9 then
-        return 860
+        return 1600
     elseif rank == 10 then
-        return 880
+        return 1700
     else
         return 700
     end
