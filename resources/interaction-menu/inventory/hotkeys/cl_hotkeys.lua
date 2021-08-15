@@ -6,7 +6,7 @@ local SCROLL_DISABLED = true
 
 local HOTKEYS_ENABLED = true
 
-local MODIFIER_KEY = 21
+local MODIFIER_KEY = 19
 
 RegisterNetEvent("hotkeys:enable")
 AddEventHandler("hotkeys:enable", function(value)
