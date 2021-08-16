@@ -1000,7 +1000,7 @@ AddEventHandler('playerConnecting', function(playerName, setKickReason, deferral
 				else
 					print(GetPlayerName(tonumber(usource)) .. " has been perma banned from your server and should not be able to play!")
 					--DropPlayer(tonumber(usource), "Banned: " .. doc.reason)
-					deferrals.done("Banned: " .. doc.reason .. " -- You can file an appeal at https://usarrp.net. Banned by: " .. doc.bannerName)
+					deferrals.done("Banned: " .. doc.reason .. " -- You can file an appeal at https://usarrp.gg. Banned by: " .. doc.bannerName)
 				end
 			else
 				deferrals.done()
@@ -1060,7 +1060,7 @@ TriggerEvent('es:addGroupCommand', 'ban', "admin", function(source, args, char)
 			print("player banned!")
 			-- drop player from session
 			--print("banning player with endpoint: " .. GetPlayerEP(targetPlayer))
-			DropPlayer(targetPlayer, "Banned: " .. reason .. " -- You can file an appeal at https://usarrp.net. Banned by: " .. banner)
+			DropPlayer(targetPlayer, "Banned: " .. reason .. " -- You can file an appeal at https://usarrp.gg. Banned by: " .. banner)
 		end)
 	end)
 end, {
@@ -1089,7 +1089,7 @@ function BanPlayer(targetSrc, reason)
 		end
 		local desc = "**Character Name:** " .. char_name
 		-- kick from server
-		DropPlayer(targetPlayer, "Banned: " .. reason .. " -- You can file an appeal at https://usarrp.net")
+		DropPlayer(targetPlayer, "Banned: " .. reason .. " -- You can file an appeal at https://usarrp.gg")
 		-- send discord message
 		desc = desc .. "\n**Display Name:** " .. (targetPlayerName or "UNDEFINED")
 		for i = 1, #allPlayerIdentifiers do

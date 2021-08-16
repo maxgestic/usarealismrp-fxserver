@@ -106,7 +106,7 @@ SetDiscordAppId("517228692834091033")
 SetDiscordRichPresenceAsset("5a158f46d2aefd14d3c7a16f3f4bc72b")
 SetDiscordRichPresenceAssetText("USARRP")
 SetDiscordRichPresenceAction(0, "Connect", "fivem://connect/cfx.re/join/8kgomm")
-SetDiscordRichPresenceAction(1, "Website", "https://usarrp.net")
+SetDiscordRichPresenceAction(1, "Website", "https://usarrp.gg")
 
 -- REMOVE AI WEAPON DROPS --
 Citizen.CreateThread(function()
@@ -241,7 +241,7 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-  AddTextEntry('FE_THDR_GTAO', 'USA REALISM RP - HTTPS://USARRP.NET')
+  AddTextEntry('FE_THDR_GTAO', 'USA REALISM RP - HTTPS://USARRP.GG')
 end)
 
  --ped/vehicle npcs

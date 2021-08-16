@@ -116,7 +116,7 @@ AddEventHandler("emsstation2:checkWhitelist", function()
 	if exports["usa-characters"]:GetCharacterField(source, "emsRank") > 0 then
 		TriggerClientEvent("emsstation2:isWhitelisted", source)
 	else
-		TriggerClientEvent("usa:notify", source, "~y~You are not whitelisted for EMS. Apply at https://www.usarrp.net.")
+		TriggerClientEvent("usa:notify", source, "~y~You are not whitelisted for EMS. Apply at https://www.usarrp.gg.")
 	end
 end)
 
