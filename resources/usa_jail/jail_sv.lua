@@ -32,6 +32,8 @@ local CELLS = {
 	{x = 1774.32, y = 2568.13, z = 50.55, occupant = nil},
 }
 
+local alarm_on = false
+
 -- V2
 TriggerEvent('es:addCommand', 'jail', function(source, args, char)
 	local job = char.get("job")
@@ -43,6 +45,23 @@ TriggerEvent('es:addCommand', 'jail', function(source, args, char)
 	end
 end, {
 	help = "See how much time you have left in jail / jail a player (police)"
+})
+
+TriggerEvent('es:addCommand', 'toggle_alarm', function(source, args, char)
+	local job = char.get("job")
+	if job == "sheriff" or job == "cop" or job == "corrections" then
+		if alarm_on == false then
+			alarm_on = true
+		    TriggerClientEvent('chat:addMessage', source, { args = { '^1SYSTEM', 'Prison Alarm Activated!' } })
+		    TriggerEvent("jail:startalarmSV", -1)
+		else
+			alarm_on = false
+			TriggerClientEvent('chat:addMessage', source, { args = { '^1SYSTEM', 'Prison Alarm Deactivated!' } })
+			TriggerEvent("jail:stopalarmSV",-1)
+		end
+	end
+end, {
+	help = "Toggle the Prison Alarm on or off (Police/Corrections)"
 })
 
 RegisterServerEvent("jail:jailPlayerFromMenu")
@@ -186,8 +205,38 @@ end)
 
 RegisterServerEvent("jail:notifyEscapee")
 AddEventHandler("jail:notifyEscapee", function()
+	local WEBHOOK_URL = "https://discord.com/api/webhooks/876634488476692551/tvcqPzkDCod0gz5JmtZkbyV7ShW_W9B_SlutIFTLRBtw43soBtYowt0SFMVgn7q9J9sa"
 	local char = exports["usa-characters"]:GetCharacter(source)
-	exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3INFO: ^0A person has escaped from Bolingbroke Penitentiary! ^3Inmate info: ^0" .. char.getFullName())
+	local inmate_name = char.getFullName()
+	exports["globals"]:notifyPlayersWithJobs({"sheriff", "corrections"}, "^3INFO: ^0A person has escaped from Bolingbroke Penitentiary! ^3Inmate info: ^0" .. inmate_name)
+
+	exports.globals:SendDiscordLog(WEBHOOK_URL, "An inmate escaped! Name: `" .. inmate_name .. "`")
+
+	alarm_on = true
+    TriggerEvent("jail:startalarmSV", -1)
+    SetTimeout(5 * 60 * 1000, function ()
+    	if alarm_on then
+	    	alarm_on = false
+	    	TriggerClientEvent("jail:stopalarmCL", -1)
+	    end
+    end)
+end)
+
+RegisterServerEvent("jail:startalarmSV")
+AddEventHandler('jail:startalarmSV', function()
+TriggerClientEvent("jail:startalarmCL", -1)
+end)
+RegisterServerEvent("jail:stopalarmSV")
+AddEventHandler('jail:stopalarmSV', function()
+TriggerClientEvent("jail:stopalarmCL", -1)
+end)
+RegisterServerEvent("jail:checkalarm")
+AddEventHandler('jail:checkalarm', function()
+	if alarm_on then
+		TriggerClientEvent("jail:startalarmCL", source)
+	else
+		TriggerClientEvent("jail:stopalarmCL", source)
+	end
 end)
 
 function GetFPRevoked(charges) -- firearm permit

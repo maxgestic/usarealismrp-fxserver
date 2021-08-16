@@ -216,3 +216,31 @@ RegisterNetEvent("jail:setAllowedOut")
 AddEventHandler("jail:setAllowedOut", function(status)
   allowedOut = status
 end)
+
+RegisterNetEvent("jail:startalarmCL")
+AddEventHandler('jail:startalarmCL', function()
+    local alarmIpl = GetInteriorAtCoordsWithType(1787.004,2593.1984,45.7978,"int_prison_main")
+    RefreshInterior(alarmIpl)
+    EnableInteriorProp(alarmIpl, "prison_alarm")
+    while not PrepareAlarm("PRISON_ALARMS") do
+            Citizen.Wait(0)
+        end
+        StartAlarm("PRISON_ALARMS", true)
+    end)
+
+RegisterNetEvent("jail:stopalarmCL")
+AddEventHandler('jail:stopalarmCL', function()
+    local alarmIpl = GetInteriorAtCoordsWithType(1787.004,2593.1984,45.7978,"int_prison_main")
+    RefreshInterior(alarmIpl)
+    DisableInteriorProp(alarmIpl, "prison_alarm")
+    Citizen.CreateThread(function()
+        while not PrepareAlarm("PRISON_ALARMS") do
+            Citizen.Wait(100)
+        end
+        StopAllAlarms(true)
+    end)
+end)
+
+Citizen.CreateThread(function()
+  TriggerServerEvent("jail:checkalarm")
+end)
