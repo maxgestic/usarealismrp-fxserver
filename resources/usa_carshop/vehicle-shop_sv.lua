@@ -366,7 +366,8 @@ local vehicleShopItems = {
 			{make = "Mercedes", model = "GT63", price = 215000, hash = "rmodgt63", storage_capacity = 175.0},
 			{make = "Nissan", model = "240SX", price = 70000, hash = "rmod240sx", storage_capacity = 150.0},
 			{make = "Mclaren", model = "600LT", price = 500000, hash = "600lt", storage_capacity = 145.0},
-			{make = "Toyota", model = "Supra Mk4", price = 100000, hash = "supra2", storage_capacity = 150.0}
+			{make = "Toyota", model = "Supra Mk4", price = 100000, hash = "supra2", storage_capacity = 150.0},
+			{make = "Ford", model = "Mustang", price = 100000, hash = "mgt", storage_capacity = 150.0}
 		}
 	}
 }
