@@ -181,7 +181,13 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate, s
                             end
                         end
                     end
-                    char.modifyItemByUUID(curWep.uuid, { magazine = magToUse })
+                    if not curWep.uuid then
+                        curWep.uuid = exports.globals:generateID()
+                        curWep.magazine = magToUse
+                        char.setItemByIndex(selectedIndex, curWep)
+                    else
+                        char.modifyItemByUUID(curWep.uuid, { magazine = magToUse })
+                    end
                     char.removeItemByUUID(magToUse.uuid)
                 else
                     TriggerClientEvent("usa:notify", src, "No fitting " .. WEPS_WITH_MAGS[curWep.hash].accepts .. " mags found!")
@@ -219,7 +225,13 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate, s
                             currentCapacity = ammoCountToUse
                         }
                     end
-                    char.modifyItemByUUID(curWep.uuid, { magazine = magToUse })
+                    if not curWep.uuid then
+                        curWep.uuid = exports.globals:generateID()
+                        curWep.magazine = magToUse
+                        char.setItemByIndex(selectedIndex, curWep)
+                    else
+                        char.modifyItemByUUID(curWep.uuid, { magazine = magToUse })
+                    end
                     -- remove ammo from inventory
                     char.removeItem(ammoName, ammoCountToUse)
                 else

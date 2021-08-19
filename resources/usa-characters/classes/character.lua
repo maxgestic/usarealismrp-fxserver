@@ -245,6 +245,10 @@ function CreateCharacter(data)
     end
   end
 
+  rTable.setItemByIndex = function(index, item)
+    self.inventory.items[tostring(index)] = item
+  end
+
   rTable.getItemWithField = function(field, val)
     local inv = self.inventory
     for i = 0, inv.MAX_CAPACITY - 1 do
