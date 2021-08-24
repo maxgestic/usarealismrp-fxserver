@@ -1369,7 +1369,7 @@ AddEventHandler('properties:searchCabinetBurglary', function(index)
 							char.giveItem(item_found, 1)
 							TriggerClientEvent("interaction:equipWeapon", source, item_found, true, false, false)
 						else
-							char.giveItem(item_found, 1)
+							char.giveItem(item_found, (item_found.quantity or 1))
 						end
 						return
 					else
