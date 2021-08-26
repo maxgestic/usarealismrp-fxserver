@@ -8,7 +8,7 @@ local me = {
 
 local MENU_RADIUS = 1.5
 local MENU_TEXT_RADIUS = 40
-local PLANT_TEXT_RADIUS = 5.0
+local PLANT_TEXT_RADIUS = 2.0
 
 local ANIMATION_TIME_SECONDS = 10
 local HARVEST_TIME_SECONDS = 60
