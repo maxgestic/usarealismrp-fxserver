@@ -369,7 +369,15 @@ local vehicleShopItems = {
 			{make = "Toyota", model = "Supra Mk4", price = 100000, hash = "supra2", storage_capacity = 150.0},
 			{make = "Ford", model = "Mustang", price = 100000, hash = "mgt", storage_capacity = 150.0},
 			{make = "Chevy", model = "Caprice (Donk)", price = 60000, hash = "trixbox", storage_capacity = 200.0},
-			{make = "Chevy", model = "Nova", price = 70000, hash = "nova66", storage_capacity = 180.0}
+			{make = "Chevy", model = "Nova", price = 70000, hash = "nova66", storage_capacity = 180.0},
+			{make = "Ferrari", model = "California (1957)", price = 600000, hash = "cali57", storage_capacity = 150.0},
+			{make = "Dodge", model = "Camaro (1969)", price = 70000, hash = "camaro69", storage_capacity = 180.0},
+			{make = "Dodge", model = "Camaro SS (1970)", price = 80000, hash = "camaro70", storage_capacity = 180.0},
+			{make = "Volkswagon", model = "Golf GTI", price = 90000, hash = "golfgti", storage_capacity = 175.0},
+			{make = "Chevy", model = "Imapala (1959)", price = 70000, hash = "impala59c", storage_capacity = 250.0},
+			{make = "Volkswagon", model = "Golf MK3", price = 60000, hash = "mk3", storage_capacity = 200.0},
+			{make = "Porsche", model = "911 (1973)", price = 60000, hash = "porrs73", storage_capacity = 165.0},
+			{make = "Volkswagon", model = "Type 2 (1966)", price = 50000, hash = "type266", storage_capacity = 165.0}
 		}
 	}
 }
