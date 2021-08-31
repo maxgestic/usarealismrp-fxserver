@@ -380,7 +380,10 @@ local vehicleShopItems = {
 			{make = "Volkswagon", model = "Type 2 (1962)", price = 50000, hash = "type262", storage_capacity = 165.0},
 			{make = "Volkswagon", model = "Type 2 (1963)", price = 50000, hash = "type263", storage_capacity = 165.0},
 			{make = "Volkswagon", model = "Type 2 (1966)", price = 50000, hash = "type266", storage_capacity = 165.0},
-			{make = "Mercedes-Benz", model = "300 SL", price = 700000, hash = "mb300sl", storage_capacity = 165.0}
+			{make = "Mercedes-Benz", model = "300 SL", price = 700000, hash = "mb300sl", storage_capacity = 165.0},
+			{make = "Chevrolet", model = "Corvette (1970)", price = 50000, hash = "corvette70", storage_capacity = 170.0},
+			{make = "Dodge", model = "Viper (1999)", price = 250000, hash = "99viper", storage_capacity = 170.0},
+			{make = "Porsche", model = "356", price = 100000, hash = "356ac", storage_capacity = 165.0},
 		}
 	}
 }
