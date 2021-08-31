@@ -51,12 +51,8 @@ AddEventHandler('business:finishRobbery', function(storeName)
 					bonus = math.floor(reward * 0.40)
 				end
 				char.giveMoney(reward + bonus)
-				print("ROBBERY: "..GetPlayerName(usource)..'['..GetPlayerIdentifier(usource).."] has been rewarded reward["..reward.."] with bonus["..bonus.."]!")
-				if bonus > 0 then
-					TriggerClientEvent('usa:notify', usource, 'You have stolen $'..exports["globals"]:comma_value(reward)..'.00 with a bonus of $'..bonus..'.00!')
-				else
-					TriggerClientEvent('usa:notify', usource, 'You have stolen $'..exports["globals"]:comma_value(reward)..'.00!')
-				end
+				print("ROBBERY: "..GetPlayerName(usource)..'['..GetPlayerIdentifier(usource).."] has been rewarded reward: "..(reward + bonus))
+				TriggerClientEvent('usa:notify', usource, 'You have stolen $'..exports["globals"]:comma_value(reward + bonus))
 			end
 		end)
 	else
