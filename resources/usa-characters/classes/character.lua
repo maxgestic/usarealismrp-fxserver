@@ -359,7 +359,7 @@ function CreateCharacter(data)
           elseif type(item) == "table" then -- extended field matching
             if self.inventory.items[i].name:find(item.name) or self.inventory.items[i].name == item.name then
               if item.type and item.type == "weapon" then
-                if item.serialNumber == self.inventory.items[i].serialNumber then
+                if (item.serialNumber and item.serialNumber == self.inventory.items[i].serialNumber) or (item.uuid and item.uuid == self.inventory.items[i].uuid) then
                   TriggerClientEvent("interaction:equipWeapon", self.source, self.inventory.items[i], false)
                   self.inventory.items[i] = decrementQuantity(self.inventory.items[i])
                   itemFound = true
