@@ -220,6 +220,8 @@ AddEventHandler("weaponExtraShop:requestComponentPurchase", function(weapon, com
                 char.removeMoney(component.price)
                 -- notify
                 TriggerClientEvent("usa:notify", source, "Purchased: " .. component.name)        
+            else
+                TriggerClientEvent("usa:notify", source, "Inventory full!")
             end
         end
     else
