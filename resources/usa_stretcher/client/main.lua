@@ -1,26 +1,4 @@
---[[
-RegisterCommand('wheelchair', function()
-	LoadModel('prop_wheelchair_01')
-
-	local wheelchair = CreateObject(GetHashKey('prop_wheelchair_01'), GetEntityCoords(PlayerPedId()), true)
-end, false)
-
-RegisterCommand('removewheelchair', function()
-	local wheelchair = GetClosestObjectOfType(GetEntityCoords(PlayerPedId()), 10.0, GetHashKey('prop_wheelchair_01'))
-
-	if DoesEntityExist(wheelchair) then
-		DeleteEntity(wheelchair)
-	end
-end, false)
---]]
-
---[[
-RegisterCommand('stretcher', function()
-	LoadModel('prop_ld_binbag_01')
-	local obj = CreateObject(GetHashKey('prop_ld_binbag_01'), GetEntityCoords(PlayerPedId()), true)
-	print("created stretcher: " .. obj)
-end, false)
---]]
+local currentlyUsing = false
 
 local PUSHABLES = {
 	{ 
@@ -52,12 +30,24 @@ AddEventHandler("pushable:remove", function(pushable)
 	RemovePushable(pushable)
 end)
 
-local currentlyUsing = false
+RegisterNetEvent("stretcher:togglestrincar")
+AddEventHandler("stretcher:togglestrincar", function(source)
+    local ped = GetPlayerPed(-1)
+    local pedCoords = GetEntityCoords(ped)
+    local veh = GetClosestVehicle(pedCoords, 8.000, GetHashKey("ambulance"), 70)
+    local closestObject = GetClosestObjectOfType(pedCoords, 3.0, GetHashKey("prop_ld_binbag_01"), false)
+    if IsEntityAttachedToAnyVehicle(closestObject) then
+        StretcheroutCar()
+    elseif IsEntityAttachedToEntity(closestObject, veh) then 
+        StretcheroutCar()
+    else
+        StreachertoCar()
+    end
+end)
 
 Citizen.CreateThread(function()
 	LoadModel('prop_ld_binbag_01')
 	while true do
-		local sleep = 500
 
 		local ped = PlayerPedId()
 		local pedCoords = GetEntityCoords(ped)
@@ -66,44 +56,101 @@ Citizen.CreateThread(function()
 			PUSHABLES[i].closestObject = GetClosestObjectOfType(pedCoords, 3.0, GetHashKey(PUSHABLES[i].prop), false)
 
 			if DoesEntityExist(PUSHABLES[i].closestObject) then
-				sleep = 5
 
 				local objectCoords = GetEntityCoords(PUSHABLES[i].closestObject)
 				local objectForward = GetEntityForwardVector(PUSHABLES[i].closestObject)
-				
 				local useCoords = (objectCoords + objectForward * - 0.5)
 				local pickupCoords = (objectCoords + objectForward * 0.3)
+				local distanceFromBeingAbleToUse = GetDistanceBetweenCoords(pedCoords, useCoords, true)
+				local distanceFromBeingAbleToPickup = GetDistanceBetweenCoords(pedCoords, pickupCoords, true)
 
-				if GetDistanceBetweenCoords(pedCoords, useCoords, true) <= 1.0 and not currentlyUsing then
-					DrawText3Ds(useCoords, "[E] Use", 0.4)
+				while distanceFromBeingAbleToUse <= 1.0 or distanceFromBeingAbleToPickup <= 1.0 do
+					objectCoords = GetEntityCoords(PUSHABLES[i].closestObject)
+					objectForward = GetEntityForwardVector(PUSHABLES[i].closestObject)
+					useCoords = (objectCoords + objectForward * - 0.5)
+					pickupCoords = (objectCoords + objectForward * 0.3)
+					pedCoords = GetEntityCoords(ped)
+					distanceFromBeingAbleToUse = GetDistanceBetweenCoords(pedCoords, useCoords, true)
+					distanceFromBeingAbleToPickup = GetDistanceBetweenCoords(pedCoords, pickupCoords, true)
 
-					if IsControlJustPressed(0, 38) then
-						Use(PUSHABLES[i])
-					end
-				elseif GetDistanceBetweenCoords(pedCoords, pickupCoords, true) <= 1.0 and not currentlyPickedUp then
-					DrawText3Ds(pickupCoords, "[E] Push | [Hold E] Pickup", 0.4)
+					if distanceFromBeingAbleToUse <= 1.0 and not currentlyUsing then
+						DrawText3Ds(useCoords, "[E] Use", 0.4)
 
-					if IsControlJustPressed(0, 38) then
-						Wait(500)
-						if IsControlPressed(0, 38) then
-							TriggerEvent("usa:getClosestPlayer", 1.2, function(player)
-								if player.id == 0 then
-									TriggerServerEvent("hospital:pushable:pickUpIfPlayerHasRoom", PUSHABLES[i])
-								else
-									exports.globals:notify("Someone already in wheelchair!")
-								end
-							end)
-						else
-							Push(PUSHABLES[i])
+						if IsControlJustPressed(0, 38) then
+							Use(PUSHABLES[i])
+						end
+					elseif distanceFromBeingAbleToPickup <= 1.0 and not currentlyPickedUp then
+						DrawText3Ds(pickupCoords, "[E] Push | [Hold E] Pickup", 0.4)
+
+						if IsControlJustPressed(0, 38) then
+							Wait(500)
+							if IsControlPressed(0, 38) then
+								TriggerEvent("usa:getClosestPlayer", 1.2, function(player)
+									if player.id == 0 then
+										TriggerServerEvent("hospital:pushable:pickUpIfPlayerHasRoom", PUSHABLES[i])
+									else
+										exports.globals:notify("Someone already in wheelchair!")
+									end
+								end)
+							else
+								Push(PUSHABLES[i])
+							end
 						end
 					end
+					Wait(0)
 				end
+
 			end
 		end
 
-		Citizen.Wait(sleep)
+		Wait(500)
 	end
 end)
+
+
+function StreachertoCar()
+    local ped = GetPlayerPed(-1)
+    local pedCoords = GetEntityCoords(ped)
+    local veh = GetClosestVehicle(pedCoords, 8.000, GetHashKey("ambulance"), 70)
+    local closestObject = GetClosestObjectOfType(pedCoords, 3.0, GetHashKey("prop_ld_binbag_01"), false)
+    if DoesEntityExist(closestObject) then
+        if GetVehiclePedIsIn(ped, false) == 0 and DoesEntityExist(veh) and IsEntityAVehicle(veh) then
+			currentlyPickedUp = false
+            DetachEntity(closestObject, true, true)
+			ClearPedTasks(PlayerPedId())
+            AttachEntityToEntity(closestObject, veh, 0.0, 0.0, -3.2, 1.0, 0.0, 0.0, 180.00, false, false, false, false, 2, true)
+            FreezeEntityPosition(closestObject, true)
+		end
+    end
+end
+
+function StretcheroutCar()
+    local ped = GetPlayerPed(-1)
+    local pedCoords = GetEntityCoords(ped)
+    local veh = GetClosestVehicle(pedCoords, 8.000, GetHashKey("ambulance"), 70)
+    local closestObject = GetClosestObjectOfType(pedCoords, 3.0, GetHashKey("prop_ld_binbag_01"), false)
+    if DoesEntityExist(closestObject) then
+        if GetVehiclePedIsIn(playerPed, false) == 0 and DoesEntityExist(veh) and IsEntityAVehicle(veh) then
+            FreezeEntityPosition(closestObject, false)
+            DetachEntity(closestObject, true, true)
+            SetEntityCoords(closestObject, pedCoords)
+
+            local pedheading = GetEntityHeading(ped)
+
+            if pedheading >= 180 then 
+            	pedheading = pedheading - 180
+            else
+            	pedheading = pedheading + 180
+            end
+
+            SetEntityHeading(closestObject, pedheading)
+        else
+            TriggerClientEvent("usa:notify","There is no ambulance here")
+        end
+    else
+        TriggerClientEvent("usa:notify","There is no stretcher here")
+    end
+end
 
 Use = function(pushable)
 	local closestPlayer, closestPlayerDist = GetClosestPlayer()
@@ -118,16 +165,25 @@ Use = function(pushable)
 	LoadAnim(pushable.anim.dict)
 
 	if DoesEntityExist(pushable.closestObject) then
+		currentlyUsing = true
 		--AttachEntityToEntity(PlayerPedId(), pushable.closestObject, 0, 0, 0.0, 0.4, 0.0, 0.0, 180.0, 0.0, false, true, false, false, 2, true)
 		AttachEntityToEntity(PlayerPedId(), pushable.closestObject, 0, 0, 0.0, (pushable.usingZPos or 0.4), 0.0, 0.0, 180.0, 0.0, false, true, false, false, 2, true)
+		Wait(50)
+		SetEntityCollision(PlayerPedId(), false, true)
+
+		exports.usa_injury:isInStretcher(true)
 
 		local heading = GetEntityHeading(pushable.closestObject)
-		currentlyUsing = true
 		while IsEntityAttachedToEntity(PlayerPedId(), pushable.closestObject) do
 			Citizen.Wait(5)
 
 			if IsPedDeadOrDying(PlayerPedId()) then
-				DetachEntity(PlayerPedId(), true, true)
+				if not (IsEntityAttachedToAnyVehicle(pushable.closestObject)) then
+					SetEntityCollision(PlayerPedId(), true, true)
+					DetachEntity(PlayerPedId(), true, true)
+					exports.usa_injury:isInStretcher(false)
+
+				end
 			end
 
 			if not IsEntityPlayingAnim(PlayerPedId(), pushable.anim.dict, pushable.anim.name, 3) then
@@ -163,11 +219,13 @@ Use = function(pushable)
 			end
 
 			if IsControlJustPressed(0, 38) then
-				DetachEntity(PlayerPedId(), true, true)
-
-				local x, y, z = table.unpack(GetEntityCoords(pushable.closestObject) + GetEntityForwardVector(pushable.closestObject) * - 0.7)
-
-				SetEntityCoords(PlayerPedId(), x,y,z)
+				if not (IsEntityAttachedToAnyVehicle(pushable.closestObject)) then
+					SetEntityCollision(PlayerPedId(), true, true)
+					DetachEntity(PlayerPedId(), true, true)
+					exports.usa_injury:isInStretcher(false)
+					local x, y, z = table.unpack(GetEntityCoords(pushable.closestObject) + GetEntityForwardVector(pushable.closestObject) * - 0.7)
+					SetEntityCoords(PlayerPedId(), x,y,z)
+				end
 			end
 		end
 		currentlyUsing = false
@@ -195,7 +253,7 @@ Push = function(pushable)
 			while IsEntityAttachedToEntity(pushable.closestObject, PlayerPedId()) do
 				Citizen.Wait(5)
 
-				if not IsEntityPlayingAnim(PlayerPedId(), 'anim@heists@box_carry@', 'idle', 3) then
+				if not IsEntityPlayingAnim(PlayerPedId(), 'anim@heists@box_carry@', 'idle', 3) and currentlyPickedUp == true then
 					TaskPlayAnim(PlayerPedId(), 'anim@heists@box_carry@', 'idle', 8.0, 8.0, -1, 50, 0, false, false, false)
 				end
 
@@ -299,3 +357,8 @@ RemovePushable = function(pushable)
 		Wait(1)
 	end
 end
+
+RegisterCommand("togglestr", function()
+	TriggerEvent("stretcher:togglestrincar")
+end)
+RegisterKeyMapping('togglestr', 'EMS: Load/Unload Stretcher', 'keyboard', 'J')

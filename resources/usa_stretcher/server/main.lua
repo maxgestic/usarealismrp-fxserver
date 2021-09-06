@@ -61,3 +61,9 @@ AddEventHandler("hospital:buyWheelchair", function()
 		TriggerClientEvent("usa:notify", source, "Not enough money. Need: $" .. wheelChairItem.price)
 	end
 end)
+
+TriggerEvent('es:addCommand', 'togglestr', function(source, args, char)
+	TriggerClientEvent("stretcher:togglestrincar", source)
+end, {
+	help = "Toggle Stretcher in/out of amulance"
+})
