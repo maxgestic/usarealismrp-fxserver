@@ -138,6 +138,9 @@ AddEventHandler("generalStore:buyItem", function(item, store, inPrison, business
   end
   if char.canHoldItem(item) then
     if char.get("money") >= item.price then
+      if item.type and item.type == "weapon" then
+        item.uuid = exports.globals:generateID()
+      end
       char.removeMoney(item.price)
       char.giveItem(item, item.quantity or 1)
       TriggerClientEvent("usa:notify", source, "Purchased: ~y~" .. item.name)
