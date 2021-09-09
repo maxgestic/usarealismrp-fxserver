@@ -404,8 +404,12 @@ SecurityCamConfig.Locations = {
     {
         camBox = {label = "Auto Repair (Elgin Ave.)", id = 'store44'},
         cameras = {
-            {label = "Front Door", x = 528.08, y = -162.14, z = 59.0, r = {x = -25.0, y = 0.0, z = 200.0}},
-            {label = "Main", x = 538.39, y = -172.2, z = 58.0, r = {x = -25.0, y = 0.0, z = 250.0}},
+            {label = "Outside 1", x = 539.89, y = -199.06, z = 56.52, r = {x = -20.0, y = 0.0, z = 10.0}},
+            {label = "Outside 2", x = 551.54, y = -203.05, z = 56.52, r = {x = -25.0, y = 0.0, z = 150.0}},
+            {label = "Shop Cam", x = 541.82, y = -165.84, z = 56.52, r = {x = -25.0, y = 0.0, z = 215.0}},
+            {label = "Office Cam", x = 541.51, y = -201.88, z = 56.0, r = {x = -25.0, y = 0.0, z = 310.0}},
+            {label = "Stairs Cam", x = 528.50, y = -166.12, z = 56.52, r = {x = -50.0, y = 0.0, z = 230.0}},
+            {label = "Bar Cam", x = 551.65, y = -166.02, z = 52.67, r = {x = -25.0, y = 0.0, z = 140.0}},
         }
     }
 }
