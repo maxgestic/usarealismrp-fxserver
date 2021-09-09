@@ -144,7 +144,6 @@ doctorLocations = {
 
 effects = {} -- when you take damage for a specific reason, you may be put into an effect
 injuredParts = {} -- injured body parts, and their wounds as the value
-instrecher = false
 
 ------ NOTIFY PLAYER OF INJURIES ------
 
@@ -176,11 +175,9 @@ end)
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(1000)
-        -- print(instrecher)
         local playerPed = PlayerPedId()
         for bone, injuries in pairs(injuredParts) do
             for injury, data in pairs(injuredParts[bone]) do
-                -- print(data.bandagedTime)
                 if data.bandagedTime <= 0 then -- wounds are not bandaged for five mins, or five mins has passed since
                     if not injuredParts[bone][injury].timer then -- start a timer of bleeding if doesn't already exist
                         injuredParts[bone][injury].timer = data.bleed
@@ -508,7 +505,7 @@ Citizen.CreateThread(function()
         for bone, injuries in pairs(injuredParts) do
             for injury, data in pairs(injuredParts[bone]) do
                 if injuredParts[bone][injury].bandagedTime > 0 then
-                    if not instrecher then
+                    if not exports["usa_stretcher"]:IsInStretcher() then
                         injuredParts[bone][injury].bandagedTime = injuredParts[bone][injury].bandagedTime - 1
                     end
                 end
@@ -750,7 +747,3 @@ end
 function getPlayerInjuries()
     return injuredParts
 end
-
-exports("isInStretcher", function(data)
-    instrecher = data
-end)

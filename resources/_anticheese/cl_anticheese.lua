@@ -735,7 +735,7 @@ Citizen.CreateThread(function()
 			if not isAtAWarpPoint(newx, newy, newz) then
 				if GetEntitySpeed(GetPlayerPed(-1)) == 0 then -- noclipping
 					if dist > (MaxRunSpeed * Seconds) and dist > MinTriggerDistance then
-						if not exports["usa_trunkhide"]:IsInTrunk() and enableStatus.speedOrTPHack == true then
+						if not exports["usa_trunkhide"]:IsInTrunk() and not exports["usa_stretcher"]:IsInStretcher() and enableStatus.speedOrTPHack == true then
 							TriggerServerEvent("AntiCheese:NoclipFlag", dist, posx,posy,posz, newx,newy,newz)
 						end
 					end

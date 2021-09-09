@@ -126,7 +126,7 @@ end)
 function handleHolsterAnim()
 	local ped = GetPlayerPed(-1)
 	if GetPedParachuteState(ped) == -1 then
-		if DoesEntityExist(ped) and not IsEntityDead(ped) and not IsPedInAnyVehicle(ped, true) then
+		if DoesEntityExist(ped) and not IsEntityDead(ped) and not IsPedInAnyVehicle(ped, true) and not exports["usa_stretcher"]:IsInStretcher() then
 			loadAnimDict("reaction@intimidation@1h")
 			loadAnimDict("rcmjosh4")
 			loadAnimDict("timetable@jimmy@ig_2@ig_2_p2")

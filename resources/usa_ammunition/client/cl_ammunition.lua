@@ -39,37 +39,39 @@ end)
 
 RegisterNetEvent("ammo:reloadMag")
 AddEventHandler("ammo:reloadMag", function(data)
-    local myped = PlayerPedId()
-    local currentWeaponHash = GetSelectedPedWeapon(myped)
-    local ammoCountToUse = nil
-    if type(data) == "table" then
-        ammoCountToUse = data.currentCapacity
-    elseif type(data) == "number" then
-        ammoCountToUse = data
-    end
-    -- play reload animation --
-    playAnimation("cover@weapon@machinegun@combat_mg_str", "low_reload_left", 2000, 48, "Reloading")
-    -- set / remove extended mag if applicable --
-    if type(data) == "table" then
-        if data.magComponent then
-            GiveWeaponComponentToPed(myped, currentWeaponHash, GetHashKey(data.magComponent))
-        else
-            if WEP_EXTENDED_MAG_COMPONENTS[currentWeaponHash] then
-                for index, hash in pairs(WEP_EXTENDED_MAG_COMPONENTS[currentWeaponHash]) do
-                    hash = GetHashKey(hash)
-                    RemoveWeaponComponentFromPed(myped, currentWeaponHash, hash)
+    if not exports["usa_stretcher"]:IsInStretcher() then
+        local myped = PlayerPedId()
+        local currentWeaponHash = GetSelectedPedWeapon(myped)
+        local ammoCountToUse = nil
+        if type(data) == "table" then
+            ammoCountToUse = data.currentCapacity
+        elseif type(data) == "number" then
+            ammoCountToUse = data
+        end
+        -- play reload animation --
+        playAnimation("cover@weapon@machinegun@combat_mg_str", "low_reload_left", 2000, 48, "Reloading")
+        -- set / remove extended mag if applicable --
+        if type(data) == "table" then
+            if data.magComponent then
+                GiveWeaponComponentToPed(myped, currentWeaponHash, GetHashKey(data.magComponent))
+            else
+                if WEP_EXTENDED_MAG_COMPONENTS[currentWeaponHash] then
+                    for index, hash in pairs(WEP_EXTENDED_MAG_COMPONENTS[currentWeaponHash]) do
+                        hash = GetHashKey(hash)
+                        RemoveWeaponComponentFromPed(myped, currentWeaponHash, hash)
+                    end
                 end
             end
         end
+        -- fill currently equipped weapon with mag.currentCapacity (or +1 if not pistol)
+        --SetPedAmmo(myped, currentWeaponHash, ammoCountToUse)
+        SetAmmoInClip(myped, currentWeaponHash, ammoCountToUse)
+        if isFullAuto(currentWeaponHash) then
+            SetPedAmmo(myped, currentWeaponHash, ammoCountToUse + 1) -- give pseudo ammo so we don't auto store weapon
+        end
+        -- reset state var
+        ranOutOfAmmo = false
     end
-    -- fill currently equipped weapon with mag.currentCapacity (or +1 if not pistol)
-    --SetPedAmmo(myped, currentWeaponHash, ammoCountToUse)
-    SetAmmoInClip(myped, currentWeaponHash, ammoCountToUse)
-    if isFullAuto(currentWeaponHash) then
-        SetPedAmmo(myped, currentWeaponHash, ammoCountToUse + 1) -- give pseudo ammo so we don't auto store weapon
-    end
-    -- reset state var
-    ranOutOfAmmo = false
 end)
 
 RegisterNetEvent("ammo:setRanOutOfAmmo")

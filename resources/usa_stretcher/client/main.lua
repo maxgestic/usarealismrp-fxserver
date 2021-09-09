@@ -1,4 +1,5 @@
 local currentlyUsing = false
+local isInStretcher = false
 
 local PUSHABLES = {
 	{ 
@@ -113,6 +114,8 @@ function StreachertoCar()
     local pedCoords = GetEntityCoords(ped)
     local veh = GetClosestVehicle(pedCoords, 8.000, GetHashKey("ambulance"), 70)
     local closestObject = GetClosestObjectOfType(pedCoords, 3.0, GetHashKey("prop_ld_binbag_01"), false)
+    NetworkRequestControlOfEntity(veh)
+    SetEntityAsMissionEntity(veh)
     if DoesEntityExist(closestObject) then
         if GetVehiclePedIsIn(ped, false) == 0 and DoesEntityExist(veh) and IsEntityAVehicle(veh) then
 			currentlyPickedUp = false
@@ -129,6 +132,8 @@ function StretcheroutCar()
     local pedCoords = GetEntityCoords(ped)
     local veh = GetClosestVehicle(pedCoords, 8.000, GetHashKey("ambulance"), 70)
     local closestObject = GetClosestObjectOfType(pedCoords, 3.0, GetHashKey("prop_ld_binbag_01"), false)
+    NetworkRequestControlOfEntity(veh)
+    SetEntityAsMissionEntity(veh)
     if DoesEntityExist(closestObject) then
         if GetVehiclePedIsIn(playerPed, false) == 0 and DoesEntityExist(veh) and IsEntityAVehicle(veh) then
             FreezeEntityPosition(closestObject, false)
@@ -171,7 +176,7 @@ Use = function(pushable)
 		Wait(50)
 		SetEntityCollision(PlayerPedId(), false, true)
 
-		exports.usa_injury:isInStretcher(true)
+		isInStretcher = true
 
 		local heading = GetEntityHeading(pushable.closestObject)
 		while IsEntityAttachedToEntity(PlayerPedId(), pushable.closestObject) do
@@ -181,7 +186,7 @@ Use = function(pushable)
 				if not (IsEntityAttachedToAnyVehicle(pushable.closestObject)) then
 					SetEntityCollision(PlayerPedId(), true, true)
 					DetachEntity(PlayerPedId(), true, true)
-					exports.usa_injury:isInStretcher(false)
+					isInStretcher = false
 
 				end
 			end
@@ -222,7 +227,7 @@ Use = function(pushable)
 				if not (IsEntityAttachedToAnyVehicle(pushable.closestObject)) then
 					SetEntityCollision(PlayerPedId(), true, true)
 					DetachEntity(PlayerPedId(), true, true)
-					exports.usa_injury:isInStretcher(false)
+					isInStretcher = false
 					local x, y, z = table.unpack(GetEntityCoords(pushable.closestObject) + GetEntityForwardVector(pushable.closestObject) * - 0.7)
 					SetEntityCoords(PlayerPedId(), x,y,z)
 				end
@@ -362,3 +367,7 @@ RegisterCommand("togglestr", function()
 	TriggerEvent("stretcher:togglestrincar")
 end)
 RegisterKeyMapping('togglestr', 'EMS: Load/Unload Stretcher', 'keyboard', 'J')
+
+function IsInStretcher()
+	return isInStretcher
+end
