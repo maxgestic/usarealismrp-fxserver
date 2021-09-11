@@ -11,6 +11,9 @@ resources/koil-debug
 resources/eup-ui
 resources/paletopd
 resources/\[cassino\]
+resources/carsounds
+resources/r34sound
+resources/r35sound
 resources/RES_Anticheat/events.lua
 resources [UNSCRAMBLED]
 server2.cfg
@@ -23,7 +26,6 @@ hypnonema.db
 
 node_modules
 scrambled_resources
-toTransfer
 
 server_internal.cfg
 server_internal2.cfg
