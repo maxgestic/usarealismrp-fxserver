@@ -20,6 +20,7 @@ NO_TOOLTIP_WEAPONS.add("Knife");
 NO_TOOLTIP_WEAPONS.add("Hammer");
 NO_TOOLTIP_WEAPONS.add("Jerry Can");
 NO_TOOLTIP_WEAPONS.add("Switchblade");
+NO_TOOLTIP_WEAPONS.add("Fishing Pole");
 
 var itemImages = {
   "Driver's License": "https://i.imgur.com/dy0SpFh.png",
