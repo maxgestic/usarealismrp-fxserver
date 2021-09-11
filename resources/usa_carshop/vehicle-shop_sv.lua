@@ -377,8 +377,8 @@ local vehicleShopItems = {
 			{make = "Chevy", model = "Caprice (Donk)", price = 60000, hash = "trixbox", storage_capacity = 200.0},
 			{make = "Chevy", model = "Nova", price = 70000, hash = "nova66", storage_capacity = 180.0},
 			{make = "Ferrari", model = "California (1957)", price = 600000, hash = "cali57", storage_capacity = 150.0},
-			{make = "Chevrolet", model = "Camaro (1969)", price = 70000, hash = "camaro69", storage_capacity = 180.0},
-			{make = "Chevrolet", model = "Camaro SS (1970)", price = 80000, hash = "camaro70", storage_capacity = 180.0},
+			{make = "Chevrolet", model = "Camaro SS (1969)", price = 70000, hash = "camaro69", storage_capacity = 180.0},
+			{make = "Chevrolet", model = "Camaro Z28 (1970)", price = 80000, hash = "camaro70", storage_capacity = 180.0},
 			{make = "Volkswagon", model = "Golf GTI", price = 90000, hash = "golfgti", storage_capacity = 175.0},
 			{make = "Chevrolet", model = "Impala (1959)", price = 70000, hash = "impala59c", storage_capacity = 250.0},
 			{make = "Volkswagon", model = "Golf (MK3)", price = 60000, hash = "mk3", storage_capacity = 200.0},
@@ -390,6 +390,11 @@ local vehicleShopItems = {
 			{make = "Chevrolet", model = "Corvette (1970)", price = 50000, hash = "corvette70", storage_capacity = 170.0},
 			{make = "Dodge", model = "Viper (1999)", price = 250000, hash = "99viper", storage_capacity = 170.0},
 			{make = "Porsche", model = "356", price = 100000, hash = "356ac", storage_capacity = 165.0},
+			{make = "Porsche", model = "GT3", price = 280000, hash = "pgt3", storage_capacity = 160.0},
+			{make = "Nissan", model = "Skyline (R34)", price = 170000, hash = "skyline", storage_capacity = 175.0},
+			{make = "Mazda", model = "Miata", price = 40000, hash = "na6", storage_capacity = 160.0},
+			{make = "Chevrolet", model = "Silverado 2500 HD", price = 125000, hash = "silv2500hd", storage_capacity = 300.0},
+			{make = "Ford", model = "F350", price = 95000, hash = "wdf350", storage_capacity = 300.0},
 		}
 	}
 }
