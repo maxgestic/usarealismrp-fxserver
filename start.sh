@@ -2,7 +2,7 @@
 tmux kill-session -t fxserver
 
 # run any setup needed before checking out this file
-sh setup.sh
+bash setup.sh
 
 # pull from GH repo
 git checkout . --recurse-submodules
