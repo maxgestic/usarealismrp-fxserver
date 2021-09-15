@@ -1,35 +1,55 @@
-function getVehicleInDirection(coordFrom, coordTo)
-    local rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 10, GetPlayerPed(-1), 0)
-    local a, b, c, d, vehicle = GetRaycastResult(rayHandle)
-    return vehicle
+function _placeIntoVehicleInternal(ped, veh, frontSeat)
+	if frontSeat and IsVehicleSeatFree(veh, 0) then
+		SetPedIntoVehicle(ped, veh, 0) -- place in front right seat
+	else
+		if IsVehicleSeatFree(veh, 1) then
+			SetPedIntoVehicle(ped, veh, 1) -- place in back left seat
+		elseif IsVehicleSeatFree(veh, 2) then
+			SetPedIntoVehicle(ped, veh, 2) -- place in back right seat
+		end
+	end
 end
 
 RegisterNetEvent("place:place")
-AddEventHandler("place:place", function(frontSeat)
-	local playerPed = PlayerPedId()
-	if DoesEntityExist(playerPed) then
+AddEventHandler("place:place", function(frontSeat, placedByLEO, placerID)
+	local me = PlayerPedId()
+	if DoesEntityExist(me) then
+		local coordA = GetEntityCoords(me, 1)
+		local coordB = GetOffsetFromEntityInWorldCoords(me, 0.0, 20.0, 0.0)
 
-		local coordA = GetEntityCoords(GetPlayerPed(-1), 1)
-		local coordB = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 0.0, 20.0, 0.0)
-		local targetVehicle = getVehicleInDirection(coordA, coordB) -- vehicle in front of player
-		if frontSeat and IsVehicleSeatFree(targetVehicle, 0) then
-			SetPedIntoVehicle(playerPed, targetVehicle, 0) -- place in front right seat
+		local veh = exports.globals:getClosestVehicle(5.0)
+
+		if IsPedDeadOrDying(me, true) then
+			-- revive
+			TriggerEvent("death:allowRevive")
+			local start = GetGameTimer()
+			while GetGameTimer() - start < 1500 do
+				Wait(1)
+			end
+			-- place
+			_placeIntoVehicleInternal(me, veh, frontSeat)
+			-- re-incapacitate
+			start = GetGameTimer()
+			while GetGameTimer() - start < 1000 do
+				Wait(1)
+			end
+			SetEntityHealth(me, 0)
 		else
-			if IsVehicleSeatFree(targetVehicle, 1) then
-				SetPedIntoVehicle(playerPed, targetVehicle, 1) -- place in back left seat
-			elseif IsVehicleSeatFree(targetVehicle, 2) then
-				SetPedIntoVehicle(playerPed, targetVehicle, 2) -- place in back right seat
+			if placedByLEO then
+				_placeIntoVehicleInternal(me, veh, frontSeat)
+			else
+				local areHandsTied = exports["usa_rp2"]:areHandsTied()
+				if areHandsTied then
+					_placeIntoVehicleInternal(me, veh, frontSeat)
+				else
+					TriggerServerEvent("place:notifyPlacer", placerID, "Person not downed and does not have hands up!")
+				end
 			end
 		end
 
-    -- try to prevent the car from locking when a person is placed inside (experimental):
-    TriggerServerEvent("lock:setLocked", GetVehicleNumberPlateText(targetVehicle), false)
-    SetVehicleDoorsLocked(targetVehicle, 1) -- unlock
-
-        -- TODO0:
-         -- DetachEntity(GetPlayerPed(-1), true, false)	 -- detach from player
-        -- drag = false?
-
+		-- try to prevent the car from locking when a person is placed inside (experimental):
+		TriggerServerEvent("lock:setLocked", GetVehicleNumberPlateText(veh), false)
+		SetVehicleDoorsLocked(veh, 1) -- unlock
 	end
 end)
 
@@ -52,22 +72,39 @@ AddEventHandler("place:invalidCommand", function(msg)
 
 end)
 
--- unseat
-RegisterNetEvent('place:unseat')
-AddEventHandler('place:unseat', function(targetSource)
-	local playerPed = PlayerPedId()
+function _unseatPedInternal(targetSource, playerPed)
 	local playerCoords = GetEntityCoords(playerPed)
 	local targetPed = GetPlayerPed(GetPlayerFromServerId(targetSource))
 	local targetCoords = GetEntityCoords(targetPed)
-	local offset = GetOffsetFromEntityInWorldCoords(targetPed, 1.0, 0.0, 0.5)
+	--local offset = GetOffsetFromEntityInWorldCoords(targetPed, 1.0, 0.0, 0.0)
 	TriggerEvent('trunkhide:exitTrunk', true)
 	if Vdist(playerCoords, targetCoords) < 5.0 and IsPedInAnyVehicle(playerPed) then
 		RequestCollisionAtCoord(targetCoords)
 		while not HasCollisionLoadedAroundEntity(playerPed) do
 			RequestCollisionAtCoord(targetCoords)
-			Citizen.Wait(10)
+			Wait(10)
 		end
-		SetEntityCoords(playerPed, offset)
+		SetEntityCoords(playerPed, targetCoords.x, targetCoords.y, targetCoords.z - 0.9)
+	end
+end
+
+-- unseat
+RegisterNetEvent('place:unseat')
+AddEventHandler('place:unseat', function(targetSource, unseatedByLEO)
+	local playerPed = PlayerPedId()
+	if IsPedDeadOrDying(playerPed, true) then
+		_unseatPedInternal(targetSource, playerPed)
+	else
+		if unseatedByLEO then
+			_unseatPedInternal(targetSource, playerPed)
+		else
+			local areHandsTied = exports["usa_rp2"]:areHandsTied()
+			if areHandsTied then
+				_unseatPedInternal(targetSource, playerPed)
+			else
+				TriggerServerEvent("place:notifyPlacer", targetSource, "Person not downed and does not have hands up!")
+			end
+		end
 	end
 end)
 
