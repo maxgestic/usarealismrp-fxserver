@@ -53,7 +53,7 @@ Citizen.CreateThread(function()
       ---------------------------------------
       for wep_name, wep_hash in pairs(SETTINGS.compatable_weapon_hashes) do
           if HasPedGotWeapon(me, wep_hash, false) then
-              if not attached_weapons[wep_name] then
+              if not attached_weapons[wep_name] and GetSelectedPedWeapon(me) ~= wep_hash then
                   AttachWeapon(wep_name, wep_hash, SETTINGS.back_bone, SETTINGS.x, SETTINGS.y, SETTINGS.z, SETTINGS.x_rotation, SETTINGS.y_rotation, SETTINGS.z_rotation, isMeleeWeapon(wep_name))
               end
           end
@@ -63,7 +63,7 @@ Citizen.CreateThread(function()
       --------------------------------------------
       for name, attached_object in pairs(attached_weapons) do
           -- equipped? delete it from back:
-          if GetSelectedPedWeapon(me) ==  attached_object.hash or not HasPedGotWeapon(me, attached_object.hash, false) then -- equipped or not in weapon wheel
+          if GetSelectedPedWeapon(me) == attached_object.hash or not HasPedGotWeapon(me, attached_object.hash, false) then -- equipped or not in weapon wheel
             --print("weapon was equipped! removing: " .. name .. ", hash: " .. attached_object.hash)
             DeleteObject(attached_object.handle)
             attached_weapons[name] = nil
