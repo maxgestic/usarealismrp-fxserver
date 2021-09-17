@@ -1,7 +1,7 @@
-function _placeIntoVehicleInternal(ped, veh, frontSeat)
-	if frontSeat and IsVehicleSeatFree(veh, 0) then
+function _placeIntoVehicleInternal(ped, veh, seatOption)
+	if seatOption == "any" or seatOption == "front" and IsVehicleSeatFree(veh, 0) then
 		SetPedIntoVehicle(ped, veh, 0) -- place in front right seat
-	else
+	elseif seatOption == "any" or seatOption == "back" then
 		if IsVehicleSeatFree(veh, 1) then
 			SetPedIntoVehicle(ped, veh, 1) -- place in back left seat
 		elseif IsVehicleSeatFree(veh, 2) then
@@ -11,7 +11,7 @@ function _placeIntoVehicleInternal(ped, veh, frontSeat)
 end
 
 RegisterNetEvent("place:place")
-AddEventHandler("place:place", function(frontSeat, placedByLEO, placerID)
+AddEventHandler("place:place", function(seatOption, placedByLEO, placerID)
 	local me = PlayerPedId()
 	if DoesEntityExist(me) then
 		local coordA = GetEntityCoords(me, 1)
@@ -27,7 +27,7 @@ AddEventHandler("place:place", function(frontSeat, placedByLEO, placerID)
 				Wait(1)
 			end
 			-- place
-			_placeIntoVehicleInternal(me, veh, frontSeat)
+			_placeIntoVehicleInternal(me, veh, seatOption)
 			-- re-incapacitate
 			start = GetGameTimer()
 			while GetGameTimer() - start < 1000 do
@@ -36,11 +36,11 @@ AddEventHandler("place:place", function(frontSeat, placedByLEO, placerID)
 			SetEntityHealth(me, 0)
 		else
 			if placedByLEO then
-				_placeIntoVehicleInternal(me, veh, frontSeat)
+				_placeIntoVehicleInternal(me, veh, seatOption)
 			else
 				local areHandsTied = exports["usa_rp2"]:areHandsTied()
 				if areHandsTied then
-					_placeIntoVehicleInternal(me, veh, frontSeat)
+					_placeIntoVehicleInternal(me, veh, seatOption)
 				else
 					TriggerServerEvent("place:notifyPlacer", placerID, "Person not downed and does not have hands up!")
 				end

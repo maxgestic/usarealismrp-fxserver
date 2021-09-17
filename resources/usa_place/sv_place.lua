@@ -12,9 +12,9 @@ TriggerEvent('es:addCommand', 'place', function(src, args, char, location)
 			TriggerEvent('place:returnUpdatedTable', draggedPlayers)
 		end
 		if user_job == "sheriff" or user_job == "ems" or user_job == "corrections" then
-			TriggerClientEvent("place:place", tPID, false, true, src)
+			TriggerClientEvent("place:place", tPID, "any", true, src)
 		else
-			TriggerClientEvent("place:place", tPID, false, false, src)
+			TriggerClientEvent("place:place", tPID, "any", false, src)
 		end
 	end)
 end, {
@@ -34,12 +34,33 @@ TriggerEvent('es:addJobCommand', 'placef', {'sheriff', 'ems', 'fire', 'correctio
 			draggedPlayers[src] = nil
 			TriggerEvent('place:returnUpdatedTable', draggedPlayers)
 		end
-		TriggerClientEvent("place:place", tPID, true, true, src)
+		TriggerClientEvent("place:place", tPID, "front", true, src)
 		local msg = "places person in vehicle"
 		exports["globals"]:sendLocalActionMessage(src, msg)
 	end)
 end, {
 	help = "Place handcuffed player in a car front seat",
+	params = {
+		{ name = "id", help = "Players ID" }
+	}
+})
+
+TriggerEvent('es:addJobCommand', 'placeb', {'sheriff', 'ems', 'fire', 'corrections'}, function(src, args, char, location)
+	local tPID = tonumber(args[2])
+	TriggerEvent('drag:getTable', function(table)
+		draggedPlayers = table
+		if draggedPlayers[src] == tonumber(args[2]) then
+			TriggerClientEvent('drag:dragPlayer', tonumber(args[2]), src, true)
+			TriggerClientEvent('drag:carryPlayer', tonumber(args[2]), src, true)
+			draggedPlayers[src] = nil
+			TriggerEvent('place:returnUpdatedTable', draggedPlayers)
+		end
+		TriggerClientEvent("place:place", tPID, "back", true, src)
+		local msg = "places person in vehicle"
+		exports["globals"]:sendLocalActionMessage(src, msg)
+	end)
+end, {
+	help = "Place handcuffed player in a car's back seat",
 	params = {
 		{ name = "id", help = "Players ID" }
 	}
@@ -75,15 +96,16 @@ end)
 
 RegisterServerEvent("place:placePerson")
 AddEventHandler("place:placePerson", function(targetId)
+	local src = source
 	TriggerEvent('drag:getTable', function(table)
 		draggedPlayers = table
-		if draggedPlayers[source] == targetId then
-			TriggerClientEvent('drag:dragPlayer', targetId, source, true)
-			TriggerClientEvent('drag:carryPlayer', targetId, source, true)
-			draggedPlayers[source] = nil
+		if draggedPlayers[src] == targetId then
+			TriggerClientEvent('drag:dragPlayer', targetId, src, true)
+			TriggerClientEvent('drag:carryPlayer', targetId, src, true)
+			draggedPlayers[src] = nil
 			TriggerEvent('place:returnUpdatedTable', draggedPlayers)
 		end
-		TriggerClientEvent("place:place", targetId)
+		TriggerClientEvent("place:place", targetId, "any", false, src)
 	end)
 end)
 
