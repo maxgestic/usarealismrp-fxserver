@@ -388,7 +388,7 @@ AddEventHandler("crim:areHandsTied", function(from_source, to_source, action)
   -- don't need to check distance (or can't cause ped is in vehicle):
   if action == "unseat" then
     if hands_tied == true then
-      TriggerEvent("place:unseat", from_source)
+      TriggerEvent("place:unseat", from_source, false)
       return
     end
   end

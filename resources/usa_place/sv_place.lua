@@ -105,13 +105,25 @@ AddEventHandler("place:placePerson", function(targetId)
 			draggedPlayers[src] = nil
 			TriggerEvent('place:returnUpdatedTable', draggedPlayers)
 		end
-		TriggerClientEvent("place:place", targetId, "any", true, src)
+		local c = exports["usa-characters"]:GetCharacter(source)
+		local cJob = c.get("job")
+		if cJob == "ems" or cJob == "sheriff" or cJob == "corrections" then
+			TriggerClientEvent("place:place", targetId, "any", true, src)
+		else 
+			TriggerClientEvent("place:place", targetId, "any", false, src)
+		end
 	end)
 end)
 
 RegisterServerEvent("place:unseatPerson")
-AddEventHandler("place:unseatPerson", function(targetId, unseatedByLEO)
-	TriggerClientEvent("place:unseat", targetId, source, unseatedByLEO)
+AddEventHandler("place:unseatPerson", function(targetId)
+	local c = exports["usa-characters"]:GetCharacter(source)
+	local cJob = c.get("job")
+	if cJob == "sheriff" or cJob == "corrections" or cJob == "ems" then
+		TriggerClientEvent("place:unseat", targetId, source, true)
+	else
+		TriggerClientEvent("place:unseat", targetId, source, false)
+	end
 end)
 
 -- unseat
