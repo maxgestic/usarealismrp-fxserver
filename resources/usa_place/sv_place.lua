@@ -105,13 +105,13 @@ AddEventHandler("place:placePerson", function(targetId)
 			draggedPlayers[src] = nil
 			TriggerEvent('place:returnUpdatedTable', draggedPlayers)
 		end
-		TriggerClientEvent("place:place", targetId, "any", false, src)
+		TriggerClientEvent("place:place", targetId, "any", true, src)
 	end)
 end)
 
 RegisterServerEvent("place:unseatPerson")
-AddEventHandler("place:unseatPerson", function(targetId)
-	TriggerClientEvent("place:unseat", targetId, source)
+AddEventHandler("place:unseatPerson", function(targetId, unseatedByLEO)
+	TriggerClientEvent("place:unseat", targetId, source, unseatedByLEO)
 end)
 
 -- unseat

@@ -83,7 +83,7 @@ RegisterServerEvent("cuff:checkWhitelistForUnseat")
 AddEventHandler("cuff:checkWhitelistForUnseat", function()
   local job = exports["usa-characters"]:GetCharacterField(source, "job")
   if job == "sheriff" or job == "corrections" or job == "ems" then
-    TriggerClientEvent('place:attemptToUnseatNearest', source)
+    TriggerClientEvent('place:attemptToUnseatNearest', source, true)
   end
 end)
 

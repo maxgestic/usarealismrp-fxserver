@@ -124,13 +124,13 @@ AddEventHandler('place:attemptToPlaceNearest', function()
 end)
 
 RegisterNetEvent('place:attemptToUnseatNearest')
-AddEventHandler('place:attemptToUnseatNearest', function()
+AddEventHandler('place:attemptToUnseatNearest', function(unseatedByLEO)
 	TriggerEvent("usa:getClosestPlayer", 1.65, function(player)
 		if player then
 			if tonumber(player.id) ~= 0 and IsEntityVisible(GetPlayerPed(GetPlayerFromServerId(player.id))) then
 				print('player found to unseat: '..player.id)
 				TriggerServerEvent('display:shareDisplay', 'removes person from vehicle', 2, 370, 10, 3000, true)
-				TriggerServerEvent('place:unseatPerson', player.id)
+				TriggerServerEvent('place:unseatPerson', player.id, unseatedByLEO)
 			else
 				TriggerEvent('usa:notify', "No target found to unseat!")
 			end
