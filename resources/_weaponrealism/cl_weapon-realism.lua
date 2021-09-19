@@ -27,7 +27,6 @@ function ManageReticle()
 		end 
 end 
 
-
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -416,92 +415,87 @@ Citizen.CreateThread(function()
 	end
 end)
 
--- recoil script by bluethefurry / Blumlaut https://forum.fivem.net/t/betterrecoil-better-3rd-person-recoil-for-fivem/82894
--- I just added some missing weapons because of the doomsday update adding some MK2.
--- I can't manage to make negative hashes works, if someone make it works, please let me know =)
-
-local recoils = {
-	[453432689] = 0.3, -- PISTOL
-	[3219281620] = 0.3, -- PISTOL MK2
-	[1593441988] = 0.2, -- COMBAT PISTOL
-	[584646201] = 0.1, -- AP PISTOL
-	[2578377531] = 0.6, -- PISTOL .50
-	[324215364] = 0.2, -- MICRO SMG
-	[736523883] = 0.1, -- SMG
-	[2024373456] = 0.1, -- SMG MK2
-	[4024951519] = 0.1, -- ASSAULT SMG
-	[3220176749] = 0.2, -- ASSAULT RIFLE
-	[961495388] = 0.2, -- ASSAULT RIFLE MK2
-	[2210333304] = 0.1, -- CARBINE RIFLE
-	[4208062921] = 0.1, -- CARBINE RIFLE MK2
-	[2937143193] = 0.1, -- ADVANCED RIFLE
-	[2634544996] = 0.1, -- MG
-	[2144741730] = 0.1, -- COMBAT MG
-	[3686625920] = 0.1, -- COMBAT MG MK2
-	[487013001] = 0.4, -- PUMP SHOTGUN
-	[1432025498] = 0.4, -- PUMP SHOTGUN MK2
-	[2017895192] = 0.7, -- SAWNOFF SHOTGUN
-	[3800352039] = 0.4, -- ASSAULT SHOTGUN
-	[2640438543] = 0.2, -- BULLPUP SHOTGUN
-	[911657153] = 0.1, -- STUN GUN
-	[100416529] = 0.5, -- SNIPER RIFLE
-	[205991906] = 0.7, -- HEAVY SNIPER
-	[177293209] = 0.7, -- HEAVY SNIPER MK2
-	[856002082] = 1.2, -- REMOTE SNIPER
-	[2726580491] = 1.0, -- GRENADE LAUNCHER
-	[1305664598] = 1.0, -- GRENADE LAUNCHER SMOKE
-	[2982836145] = 0.0, -- RPG
-	[1752584910] = 0.0, -- STINGER
-	[1119849093] = 0.01, -- MINIGUN
-	[3218215474] = 0.2, -- SNS PISTOL
-	[2009644972] = 0.25, -- SNS PISTOL MK2
-	[1627465347] = 0.1, -- GUSENBERG
-	[3231910285] = 0.2, -- SPECIAL CARBINE
-	[-1768145561] = 0.25, -- SPECIAL CARBINE MK2
-	[3523564046] = 0.5, -- HEAVY PISTOL
-	[2132975508] = 0.2, -- BULLPUP RIFLE
-	[-2066285827] = 0.25, -- BULLPUP RIFLE MK2
-	[137902532] = 0.4, -- VINTAGE PISTOL
-	[-1746263880] = 0.4, -- DOUBLE ACTION REVOLVER
-	[2828843422] = 0.7, -- MUSKET
-	[984333226] = 0.2, -- HEAVY SHOTGUN
-	[3342088282] = 0.3, -- MARKSMAN RIFLE
-	[1785463520] = 0.35, -- MARKSMAN RIFLE MK2
-	[1672152130] = 0, -- HOMING LAUNCHER
-	[1198879012] = 0.9, -- FLARE GUN
-	[171789620] = 0.2, -- COMBAT PDW
-	[3696079510] = 0.9, -- MARKSMAN PISTOL
-  	[1834241177] = 2.4, -- RAILGUN
-	[3675956304] = 0.3, -- MACHINE PISTOL
-	[3249783761] = 0.6, -- REVOLVER
-	[-879347409] = 0.65, -- REVOLVER MK2
-	[4019527611] = 0.7, -- DOUBLE BARREL SHOTGUN
-	[1649403952] = 0.1, -- COMPACT RIFLE
-	[317205821] = 0.2, -- AUTO SHOTGUN
-	[125959754] = 0.5, -- COMPACT LAUNCHER
-	[3173288789] = 0.1, -- MINI SMG		
+-- custom (more noticable) weapon recoil --
+local RECOILS = {
+	[GetHashKey("WEAPON_PISTOL")] = 1.5, -- PISTOL
+	[GetHashKey("WEAPON_PISTOL_MK2")] = 1.5, -- PISTOL MK2
+	[GetHashKey("WEAPON_COMBATPISTOL")] = 1.5, -- COMBAT PISTOL
+	[GetHashKey("WEAPON_APPISTOL")] = 1.5, -- AP PISTOL
+	[GetHashKey("WEAPON_PISTOL50")] = 2.2, -- PISTOL .50
+	[GetHashKey("WEAPON_MICROSMG")] = 1.7, -- MICRO SMG
+	[GetHashKey("WEAPON_SMG")] = 1.5, -- SMG
+	[GetHashKey("WEAPON_SMG_MK2")] = 1.5, -- SMG MK2
+	[GetHashKey("WEAPON_ASSAULTSMG")] = 1.5, -- ASSAULT SMG
+	[GetHashKey("WEAPON_ASSAULTRIFLE")] = 1.7, -- ASSAULT RIFLE
+	[GetHashKey("WEAPON_ASSAULTRIFLE_MK2")] = 1.7, -- ASSAULT RIFLE MK2
+	[GetHashKey("WEAPON_CARBINERIFLE")] = 1.7, -- CARBINE RIFLE
+	[GetHashKey("WEAPON_CARBINERIFLE_MK2")] = 1.7, -- CARBINE RIFLE MK2
+	[GetHashKey("WEAPON_ADVANCEDRIFLE")] = 1.7, -- ADVANCED RIFLE
+	[GetHashKey("WEAPON_MG")] = 2.0, -- MG
+	[GetHashKey("WEAPON_COMBATMG")] = 2.0, -- COMBAT MG
+	[GetHashKey("WEAPON_COMBATMG_MK2")] = 2.0, -- COMBAT MG MK2
+	[GetHashKey("WEAPON_PUMPSHOTGUN")] = 2.5, -- PUMP SHOTGUN
+	[GetHashKey("WEAPON_PUMPSHOTGUN_MK2")] = 2.5, -- PUMP SHOTGUN MK2
+	[GetHashKey("WEAPON_SAWNOFFSHOTGUN")] = 2.8, -- SAWNOFF SHOTGUN
+	[GetHashKey("WEAPON_ASSAULTSHOTGUN")] = 2.5, -- ASSAULT SHOTGUN
+	[GetHashKey("WEAPON_BULLPUPSHOTGUN")] = 2.5, -- BULLPUP SHOTGUN
+	[GetHashKey("WEAPON_STUNGUN")] = 0.0, -- STUN GUN
+	[GetHashKey("WEAPON_SNIPERRIFLE")] = 2.5, -- SNIPER RIFLE
+	[GetHashKey("WEAPON_HEAVYSNIPER")] = 3.5, -- HEAVY SNIPER
+	[GetHashKey("WEAPON_HEAVYSNIPER_MK2")] = 3.5, -- HEAVY SNIPER MK2
+	[GetHashKey("WEAPON_REMOTESNIPER")] = 2.0, -- REMOTE SNIPER
+	[GetHashKey("WEAPON_GRENADELAUNCHER")] = 5.0, -- GRENADE LAUNCHER
+	[GetHashKey("WEAPON_GRENADERLAUNCHER_SMOKE")] = 5.0, -- GRENADE LAUNCHER SMOKE
+	[GetHashKey("WEAPON_RPG")] = 10.0, -- RPG
+	[GetHashKey("WEAPON_STINGER")] = 15.0, -- STINGER
+	[GetHashKey("WEAPON_MINIGUN")] = 1.0, -- MINIGUN
+	[GetHashKey("WEAPON_SNSPISTOL")] = 1.3, -- SNS PISTOL
+	[GetHashKey("WEAPON_SNSPISTOL_MK2")] = 1.3, -- SNS PISTOL MK2
+	[GetHashKey("WEAPON_GUSENBERG")] = 1.55, -- GUSENBERG
+	[GetHashKey("WEAPON_SPECIALCARBINE")] = 1.7, -- SPECIAL CARBINE
+	[GetHashKey("WEAPON_SPECIALCARBINE_MK2")] = 1.7, -- SPECIAL CARBINE MK2
+	[GetHashKey("WEAPON_HEAVYPISTOL")] = 1.8, -- HEAVY PISTOL
+	[GetHashKey("WEAPON_BULLPUPRIFLE")] = 2.0, -- BULLPUP RIFLE
+	[GetHashKey("WEAPON_BULLPUPRIFLE_MK2")] = 2.0, -- BULLPUP RIFLE MK2
+	[GetHashKey("WEAPON_VINTAGEPISTOL")] = 2.8, -- VINTAGE PISTOL
+	[GetHashKey("WEAPON_DOUBLEACTION")] = 2.2, -- DOUBLE ACTION REVOLVER
+	[GetHashKey("WEAPON_MUSKET")] = 2.1, -- MUSKET
+	[GetHashKey("WEAPON_HEAVYSHOTGUN")] = 1.9, -- HEAVY SHOTGUN
+	[GetHashKey("WEAPON_MARKSMANRIFLE")] = 2.0, -- MARKSMAN RIFLE
+	[GetHashKey("WEAPON_MARKSMANRIFLE_MK2")] = 2.0, -- MARKSMAN RIFLE MK2
+	[GetHashKey("WEAPON_HOMINGLAUNCHER")] = 0, -- HOMING LAUNCHER
+	[GetHashKey("WEAPON_FLAREGUN")] = 0.9, -- FLARE GUN
+	[GetHashKey("WEAPON_COMBATPDW")] = 0.2, -- COMBAT PDW
+	[GetHashKey("WEAPON_MARKSMANPISTOL")] = 2.0, -- MARKSMAN PISTOL
+	[GetHashKey("WEAPON_RAILGUN")] = 2.4, -- RAILGUN
+	[GetHashKey("WEAPON_MACHINEPISTOL")] = 1.6, -- MACHINE PISTOL
+	[GetHashKey("WEAPON_REVOLVER")] = 2.1, -- REVOLVER
+	[GetHashKey("WEAPON_REVOLVER_MK2")] = 2.1, -- REVOLVER MK2
+	[GetHashKey("WEAPON_DBSHOTGUN")] = 2.5, -- DOUBLE BARREL SHOTGUN
+	[GetHashKey("WEAPON_COMPACTRIFLE")] = 1.9, -- COMPACT RIFLE
+	[GetHashKey("WEAPON_AUTOSHOTGUN")] = 1.8, -- AUTO SHOTGUN
+	[GetHashKey("WEAPON_COMPACTLAUNCHER")] = 0.5, -- COMPACT LAUNCHER
+	[GetHashKey("WEAPON_MINISMG")] = 1.7, -- MINI SMG		
 }
 
-
+local CAR_INNACURACY_PITCH = 3.0
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
-		if IsPedShooting(PlayerPedId()) and not IsPedDoingDriveby(PlayerPedId()) then
-			local _,wep = GetCurrentPedWeapon(PlayerPedId())
-			_,cAmmo = GetAmmoInClip(PlayerPedId(), wep)
-			if recoils[wep] and recoils[wep] ~= 0 then
-				tv = 0
-				repeat 
-					Wait(0)
-					p = GetGameplayCamRelativePitch()
-					if GetFollowPedCamViewMode() ~= 4 then
-						SetGameplayCamRelativePitch(p+0.1, 0.2)
-					end
-					tv = tv+0.1
-				until tv >= recoils[wep]
+		local me = PlayerPedId()
+		if IsPedShooting(me) then
+			local _,wepHash = GetCurrentPedWeapon(me)
+			if RECOILS[wepHash] then
+				local p = GetGameplayCamRelativePitch()
+				if not IsPedInAnyVehicle(me, false) then
+					SetGameplayCamRelativePitch(p + RECOILS[wepHash], 1.0)
+				else
+					SetGameplayCamRelativePitch(p + RECOILS[wepHash] + CAR_INNACURACY_PITCH, 1.0)
+				end
+			else
+				print("no recoil value for wep hash: " .. wepHash)
 			end
-			
 		end
+		Wait(1)
 	end
 end)
