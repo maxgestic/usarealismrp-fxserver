@@ -1,5 +1,5 @@
 function _placeIntoVehicleInternal(ped, veh, seatOption)
-	if seatOption == "any" or seatOption == "front" and IsVehicleSeatFree(veh, 0) then
+	if (seatOption == "any" or seatOption == "front") and IsVehicleSeatFree(veh, 0) then
 		SetPedIntoVehicle(ped, veh, 0) -- place in front right seat
 	elseif seatOption == "any" or seatOption == "back" then
 		if IsVehicleSeatFree(veh, 1) then
