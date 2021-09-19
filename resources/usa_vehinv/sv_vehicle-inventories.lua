@@ -149,6 +149,19 @@ AddEventHandler("vehicle:removeAllIllegalItems", function(plate)
   end
 end)
 
+RegisterServerEvent("vehicle:seizeVeh")
+AddEventHandler("vehicle:seizeVeh", function(plate, arg)
+  local usource = tonumber(source)
+  local charJob = exports["usa-characters"]:GetCharacterField(usource, "job")
+  if charJob == "sheriff" or charJob == "corrections" then
+    GetVehicleInventory(plate, function(inv)
+        VehInventoryManager.seizeVeh(usource, plate, inv, true, arg)
+    end)
+  else
+    DropPlayer(usource, "Exploiting. If you feel this was wrongfully done, please contact staff.")
+  end
+end)
+
 function GetVehicleInventory(plate, cb)
     -- query for the information needed from each vehicle --
     local endpoint = "/vehicles/_design/vehicleFilters/_view/getVehicleInventoryByPlate"

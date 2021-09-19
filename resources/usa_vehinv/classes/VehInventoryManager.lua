@@ -214,12 +214,31 @@ VehInventoryManager.moveItemSlots = function(plate, inv, from, to)
   end
 end
 
-VehInventoryManager.removeAllIllegalItems = function(src, plate, inv, notify) -- TO TEST
+VehInventoryManager.removeAllIllegalItems = function(src, plate, inv, notify)
   -- remove --
   for i = 0, (inv.MAX_CAPACITY - 1) do
     local invItem = inv.items[tostring(i)]
     if invItem then
       if invItem.legality and invItem.legality == "illegal" then
+        inv.items[tostring(i)] = nil
+        if src and notify then
+          TriggerClientEvent("usa:notify", src, "~y~Seized: ~w~(" .. (invItem.quantity or 1) .. "x) " .. invItem.name)
+        end
+      end
+    end
+  end
+  -- save --
+  TriggerEvent('es:exposeDBFunctions', function(db)
+    db.updateDocument("vehicles", plate, { inventory = inv }, function() end)
+  end)
+end
+
+VehInventoryManager.seizeVeh = function(src, plate, inv, notify, arg)
+  -- remove --
+  for i = 0, (inv.MAX_CAPACITY - 1) do
+    local invItem = inv.items[tostring(i)]
+    if invItem then
+      if invItem.type and invItem.type == arg then
         inv.items[tostring(i)] = nil
         if src and notify then
           TriggerClientEvent("usa:notify", src, "~y~Seized: ~w~(" .. (invItem.quantity or 1) .. "x) " .. invItem.name)

@@ -1542,6 +1542,17 @@ AddEventHandler("interaction:seizeVehContraband", function()
 	TriggerServerEvent("vehicle:removeAllIllegalItems", plate)
 end)
 
+RegisterNetEvent("interaction:seizeVeh")
+AddEventHandler("interaction:seizeVeh", function(arg)
+	local veh = getVehicleInsideOrInFrontOfUser()
+	local plate = GetVehicleNumberPlateText(veh)
+	if plate then
+		TriggerServerEvent("vehicle:seizeVeh", plate, arg)
+	else
+		exports.globals:notify("No vehicle found")
+	end
+end)
+
 local last_tackle_time = 0
 local tackle_delay = 5000 -- 5 second delay
 local lastClosest = nil

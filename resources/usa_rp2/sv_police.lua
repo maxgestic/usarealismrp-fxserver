@@ -296,8 +296,6 @@ TriggerEvent('es:addJobCommand', 'seize', { "sheriff", "corrections" }, function
 		elseif arg == "cash" then
 			target_player_id = targetId
 			TriggerClientEvent("police:getMoneyInput", source)
-		elseif arg == "vehcontraband" then
-			TriggerClientEvent("interaction:seizeVehContraband", source)
 		elseif arg == "weapons" then
 			local target = exports["usa-characters"]:GetCharacter(targetId)
 			target.removeWeapons()
@@ -316,13 +314,39 @@ TriggerEvent('es:addJobCommand', 'seize', { "sheriff", "corrections" }, function
 			TriggerClientEvent("usa:notify", source, "Magazines seized!")
 			exports["globals"]:sendLocalActionMessage(source, "Removes magazines")
 			TriggerClientEvent("chatMessage", targetId, "", {0, 0, 0}, "^0" .. char.getName() .. " seized your magazines.")
+		else
+			TriggerClientEvent("usa:notify", source, "Invalid Seize Type")
 		end
 	end
 end, {
-	help = "Seize cash/items from a person or vehicle.",
+	help = "Seize cash/items from a person.",
 	params = {
-		{ name = "id", help = "Player's' ID (or '0' for vehicle seizures)" },
-		{ name = "type", help = "'cash', 'weapons', 'contraband', 'vehcontraband', 'ammo', or 'mags'" }
+		{ name = "id", help = "Player's' ID" },
+		{ name = "type", help = "'cash', 'weapons', 'contraband', 'ammo', or 'mags'" }
+	}
+})
+
+TriggerEvent('es:addJobCommand', 'seizeveh', { "sheriff", "corrections" }, function(source, args, char)
+	local arg = args[2]
+	if arg then
+		if arg == "contraband" then
+			TriggerClientEvent("interaction:seizeVehContraband", source)
+		elseif arg == "weapons" then
+			arg = "weapon"
+			TriggerClientEvent("interaction:seizeVeh", source, arg)
+		elseif arg == "ammo" then
+			TriggerClientEvent("interaction:seizeVeh", source, arg)
+		elseif arg == "mags" then
+			arg = "magazine"
+			TriggerClientEvent("interaction:seizeVeh", source, arg)
+		else
+			TriggerClientEvent("usa:notify", source, "Invalid Seize Type")
+		end
+	end
+end, {
+	help = "Seize items from a vehicle.",
+	params = {
+		{ name = "type", help = "'weapons', 'contraband', 'ammo', or 'mags'" }
 	}
 })
 
