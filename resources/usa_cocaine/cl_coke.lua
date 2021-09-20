@@ -269,7 +269,16 @@ AddEventHandler("cocaineJob:setDelivery", function()
         if math.random() > 0.95 then
             local lastStreetHASH = GetStreetNameAtCoord(location.x, location.y, location.z)
             local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-            TriggerServerEvent('911:CocaineSting', location.x, location.y, location.z, lastStreetNAME, IsPedMale(GetPlayerPed(-1)))
+            local isMale = true
+            local playerPed = PlayerPedId()
+            if GetEntityModel(playerPed) == GetHashKey("mp_f_freemode_01") then
+              isMale = false
+            elseif GetEntityModel(playerPed) == GetHashKey("mp_m_freemode_01") then 
+              isMale = true
+            else
+              isMale = IsPedMale(playerPed)
+            end
+            TriggerServerEvent('911:CocaineSting', location.x, location.y, location.z, lastStreetNAME, isMale)
         end
     end
 end)

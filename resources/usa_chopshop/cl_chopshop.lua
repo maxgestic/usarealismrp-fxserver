@@ -37,7 +37,15 @@ Citizen.CreateThread(function()
               local x, y, z = table.unpack(playerCoords)
               local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
               local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-              TriggerServerEvent('911:ChopShop', x, y, z, lastStreetNAME, IsPedMale(playerPed))
+              local isMale = true
+              if GetEntityModel(playerPed) == GetHashKey("mp_f_freemode_01") then
+                isMale = false
+              elseif GetEntityModel(playerPed) == GetHashKey("mp_m_freemode_01") then 
+                isMale = true
+              else
+                isMale = IsPedMale(playerPed)
+              end
+              TriggerServerEvent('911:ChopShop', x, y, z, lastStreetNAME, isMale)
             end
             OpenAllDoors(handle)
             TaskLeaveVehicle(playerPed, handle, 256)

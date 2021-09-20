@@ -285,8 +285,16 @@ AddEventHandler('doormanager:advancedPick', function()
                 local x, y, z = table.unpack(playerCoords)
                 local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
                 local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
+                local isMale = true
+                if GetEntityModel(playerPed) == GetHashKey("mp_f_freemode_01") then
+                  isMale = false
+                elseif GetEntityModel(playerPed) == GetHashKey("mp_m_freemode_01") then 
+                  isMale = true
+                else
+                  isMale = IsPedMale(playerPed)
+                end
                 if math.random() >= 0.40 then
-                    TriggerServerEvent('911:LockpickingDoor', x, y, z, lastStreetNAME, IsPedMale(playerPed))
+                    TriggerServerEvent('911:LockpickingDoor', x, y, z, lastStreetNAME, isMale)
                 end
                 TriggerEvent('lockpick:openlockpick')
             else

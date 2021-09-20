@@ -46,7 +46,15 @@ Citizen.CreateThread(function()
 									local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
 									-- dispatch to police:
 									--Wait(10000) -- (this will be done within a random range of 4 - 10 secs after event is triggered)
-									TriggerServerEvent("911:Narcotics", x, y, z, lastStreetNAME, IsPedMale(playerPed))
+									local isMale = true
+								    if GetEntityModel(playerPed) == GetHashKey("mp_f_freemode_01") then
+								      isMale = false
+								    elseif GetEntityModel(playerPed) == GetHashKey("mp_m_freemode_01") then 
+								      isMale = true
+								    else
+								      isMale = IsPedMale(playerPed)
+								    end
+									TriggerServerEvent("911:Narcotics", x, y, z, lastStreetNAME, isMale)
 								end
 							else
 								SellDrugsToPed(localPed)
