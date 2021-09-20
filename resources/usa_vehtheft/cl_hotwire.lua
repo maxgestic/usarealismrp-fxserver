@@ -165,7 +165,15 @@ AddEventHandler('veh:hotwireVehicle', function()
         local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
         local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
         local primary, secondary = GetVehicleColours(veh)
-        TriggerServerEvent('911:HotwiringVehicle', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(veh))), GetVehicleNumberPlateText(veh), IsPedMale(playerPed), primary, secondary)
+        local isMale = true
+        if GetEntityModel(playerPed) == GetHashKey("mp_f_freemode_01") then
+          isMale = false
+        elseif GetEntityModel(playerPed) == GetHashKey("mp_m_freemode_01") then 
+          isMale = true
+        else
+          isMale = IsPedMale(playerPed)
+        end
+        TriggerServerEvent('911:HotwiringVehicle', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(veh))), GetVehicleNumberPlateText(veh), isMale, primary, secondary)
       end
       if math.random() < HOTWIRE_BREAK_CHANCE then
         TriggerServerEvent('veh:removeHotwiringKit')

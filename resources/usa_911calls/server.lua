@@ -368,10 +368,10 @@ AddEventHandler('911:SuspiciousHospitalInjuries', function(fullName, x, y, z)
     Send911Notification({'sheriff', 'corrections', 'ems'}, string, x, y, z, 'Suspicious Person')
 end)
 
-AddEventHandler('911:SuspiciousWeaponBuying', function(x, y, z, street, isMale)
+AddEventHandler('911:SuspiciousWeaponBuying', function(x, y, z, street, buyerName)
     local time = math.random(1000, 2000)
     Citizen.Wait(time)
-    local string = '^*Suspicious Person:^r '..street..' ^1^*|^r ^*Suspect:^r '..Gender(isMale)..' ^1^*|^r ^*Dispatch Info:^r Caller reports suspect is purchasing large quantities of weapons.'
+    local string = '^*Suspicious Person:^r '..street..' ^1^*|^r ^*Suspect:^r '..buyerName..' ^1^*|^r ^*Dispatch Info:^r Caller reports suspect is purchasing large quantities of weapons.'
     Send911Notification({'sheriff', 'corrections', 'ems'}, string, x, y, z, 'Suspicious Person')
 end)
 

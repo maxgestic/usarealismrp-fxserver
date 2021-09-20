@@ -20,6 +20,8 @@ local locations = {
 
 local purchasedWeapons = 0
 
+local recentWeapon911 = false
+
 local STORE_ITEMS = {}
 
 TriggerServerEvent("gunShop:getItems")
@@ -165,14 +167,15 @@ AddEventHandler('gunShop:openMenu', function()
 end)
 
 RegisterNetEvent('gunShop:addRecentlyPurchased')
-AddEventHandler('gunshop:addRecentlyPurchased', function()
+AddEventHandler('gunShop:addRecentlyPurchased', function(buyerName)
   purchasedWeapons = purchasedWeapons + 1
-  if purchasedWeapons > 3 then
+  if purchasedWeapons > 3 and not recentWeapon911 then
     local playerPed = PlayerPedId()
     local x, y, z = table.unpack(GetEntityCoords(playerPed))
     local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
     local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-    TriggerServerEvent('911:SuspiciousWeaponBuying', x, y, z, lastStreetNAME, IsPedMale(playerPed))
+    TriggerServerEvent('911:SuspiciousWeaponBuying', x, y, z, lastStreetNAME, buyerName)
+    recentWeapon911 = true
   end
 end)
 
@@ -190,8 +193,12 @@ end)
 Citizen.CreateThread(function()
   while true do
     Citizen.Wait(90000)
+    -- Citizen.Wait(10000)
     if purchasedWeapons > 0  then
       purchasedWeapons = purchasedWeapons - 1
+    	if purchasedWeapons == 0 then
+    		recentWeapon911 = false
+    	end
     end
   end
 end)

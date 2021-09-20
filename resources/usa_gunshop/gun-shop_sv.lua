@@ -63,6 +63,7 @@ AddEventHandler("gunShop:requestPurchase", function(category, index, business)
   local requestedItem = STORE_ITEMS[category][index]
   local char = exports["usa-characters"]:GetCharacter(usource)
   local permit_status = checkPermit(char)
+  local buyerName = char.getFullName()
   if permit_status == "valid" then
     local money = char.get("money")
     if money - STORE_ITEMS[category][index].price >= 0 then
@@ -74,6 +75,7 @@ AddEventHandler("gunShop:requestPurchase", function(category, index, business)
         if requestedItem.type == "weapon" then
           requestedItem.serialNumber = requestedItem.uuid
           weaponDB.serialNumber = requestedItem.uuid
+          TriggerClientEvent("gunShop:addRecentlyPurchased", usource, buyerName)
         end
         char.giveItem(requestedItem, (requestedItem.quantity or 1))
         char.removeMoney(STORE_ITEMS[category][index].price)

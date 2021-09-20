@@ -48,7 +48,15 @@ Citizen.CreateThread(function()
 				if closestStore then
 					if IsPedArmed(me, 7) then
 						if not isRobbingStore then
-							TriggerServerEvent('business:beginRobbery', closestStore, IsPedMale(me), GetNumberOfPlayers())
+							local isMale = true
+              if GetEntityModel(me) == GetHashKey("mp_f_freemode_01") then
+                isMale = false
+              elseif GetEntityModel(me) == GetHashKey("mp_m_freemode_01") then 
+                isMale = true
+              else
+                isMale = IsPedMale(me)
+              end
+							TriggerServerEvent('business:beginRobbery', closestStore, isMale, GetNumberOfPlayers())
 						end
 					else
 						exports.globals:notify("I am not intimidated!")

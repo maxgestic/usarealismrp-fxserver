@@ -134,7 +134,15 @@ Citizen.CreateThread(function()
 					local x, y, z = table.unpack(GetEntityCoords(ped))
 					local lastStreetHASH = GetStreetNameAtCoord(x, y, z)
 					local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
-					TriggerServerEvent('911:CuffCutting', x, y, z, lastStreetNAME, IsPedMale(ped))
+                    local isMale = true
+                    if GetEntityModel(ped) == GetHashKey("mp_f_freemode_01") then
+                      isMale = false
+                    elseif GetEntityModel(ped) == GetHashKey("mp_m_freemode_01") then 
+                      isMale = true
+                    else
+                      isMale = IsPedMale(ped)
+                    end
+					TriggerServerEvent('911:CuffCutting', x, y, z, lastStreetNAME, isMale)
 				end
 				local start = GetGameTimer()
 				local uncuff = true
