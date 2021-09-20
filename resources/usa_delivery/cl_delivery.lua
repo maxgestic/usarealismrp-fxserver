@@ -198,7 +198,6 @@ function SpawnDeliveryVan(x, y, z, heading)
 		Wait(0)
 	end
 	local vehicle = CreateVehicle(numberHash, x, y, z, heading, true, false)
-	TriggerEvent('persistent-vehicles/register-vehicle', vehicle)
 	SetVehicleOnGroundProperly(vehicle)
 	SetVehRadioStation(vehicle, "OFF")
 	SetEntityAsMissionEntity(vehicle, true, true)
