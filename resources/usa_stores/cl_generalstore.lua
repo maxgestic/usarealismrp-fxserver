@@ -348,7 +348,7 @@ AddEventHandler('generalStore:performShoplift', function(area)
     else
       isMale = IsPedMale(playerPed)
     end
-    TriggerServerEvent("911:Shoplifting", x, y, z, lastStreetNAME, isMale))
+    TriggerServerEvent("911:Shoplifting", x, y, z, lastStreetNAME, isMale)
   end
 
   exports.globals:loadAnimDict("anim@am_hold_up@male") -- play animation
