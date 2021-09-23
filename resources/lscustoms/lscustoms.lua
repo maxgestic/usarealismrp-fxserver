@@ -576,6 +576,10 @@ local function DriveInGarage()
 						for n, w in pairs(LSC_Config.prices.highendwheels) do
 							local btn = hughendw:addPurchase(w.name,w.price)btn.wtype = w.wtype btn.modtype = 23 btn.mod = w.mod
 						end
+					bennysw = wtype:addSubMenu("BENNY'S WHEELS", "Benny's", nil,true)
+						for n, w in pairs(LSC_Config.prices.bennyswheels) do
+							local btn = bennysw:addPurchase(w.name,w.price)btn.wtype = w.wtype btn.modtype = 23 btn.mod = w.mod
+						end
 				end
 
 		m = LSCMenu.categories.Wheels:addSubMenu("WHEEL COLOR", "Wheel color", "Custom wheel colors.",true)
@@ -902,6 +906,23 @@ function LSCMenu:onButtonSelected(name, button)
 	TriggerServerEvent("LSC:buttonSelected", name, button, mname, business)
 end
 
+local function isAWheelTypeMenu(mname)
+	local WHEEL_TYPES = {
+		sport = true,
+		muscle = true,
+		lowrider = true,
+		["back wheel"] = true,
+		["front wheel"] = true,
+		highend = true,
+		suv = true,
+		offroad = true,
+		tuner = true,
+		["benny's"] = true,
+		bespoke = true
+	}
+	return WHEEL_TYPES[mname]
+end
+
 --So we get the button back from server +  bool that determines if we can prchase specific item or not
 RegisterNetEvent("LSC:buttonSelected")
 AddEventHandler("LSC:buttonSelected", function(name, button, canpurchase)
@@ -995,7 +1016,7 @@ AddEventHandler("LSC:buttonSelected", function(name, button, canpurchase)
 			myveh.windowtint = button.tint
 			SetVehicleWindowTint(veh, button.tint)
 		end
-	elseif mname == "sport" or mname == "muscle" or mname == "lowrider" or mname == "back wheel" or mname == "front wheel" or mname == "highend" or mname == "suv" or mname == "offroad" or mname == "tuner" then
+	elseif isAWheelTypeMenu(mname) then
 		if button.purchased or CanPurchase(price, canpurchase) then
 			myveh.wheeltype = button.wtype
 			myveh.mods[button.modtype].mod = button.mod
@@ -1340,7 +1361,7 @@ function CheckPurchases(m)
 				b.sprite = nil
 			end
 		end
-	elseif name == "sport" or name == "muscle" or name == "lowrider" or name == "back wheel" or name == "front wheel" or name == "highend" or name == "suv" or name == "offroad" or name == "tuner" then
+	elseif isAWheelTypeMenu(name) then
 		for i,b in pairs(m.buttons) do
 			if myveh.mods[b.modtype].mod == b.mod and myveh.wheeltype == b.wtype then
 				b.sprite = "garage"
