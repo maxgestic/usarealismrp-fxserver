@@ -227,10 +227,10 @@ function CreateUniformMenu(menu)
 	for i = 1, #components do
 		local selectedComponent = GetPedDrawableVariation(ped, i - 1)
 		local selectedTexture = GetPedTextureVariation(ped, i - 1)
-		--local maxComponent = GetNumberOfPedDrawableVariations(ped, i - 1)
+		local maxComponent = GetNumberOfPedDrawableVariations(ped, i - 1)
 		--local maxTexture = GetNumberOfPedTextureVariations(ped, i - 1, selectedComponent)
 		local arr = {}
-		for j = 0, MAX_COMPONENT + 1 do arr[j] = j - 1 end
+		for j = 0, maxComponent + 1 do arr[j] = j - 1 end
 		local listitem = UIMenuListItem.New(components[i], arr, selectedComponent)
 		listitem.OnListChanged = function(sender, item, index)
 			if item == listitem then
