@@ -223,6 +223,32 @@ local hospitalBeds = {
 		objCoords = {1822.6603, 3679.9390, 34.2749},
 		objModel = 2117668672
 	},
+	-- Paleto clinic
+	{
+		occupied = nil,
+		objCoords = {-258.2631, 6322.4629, 32.4272},
+		objModel = 2117668672
+	},
+	{
+		occupied = nil,
+		objCoords = {-260.5793, 6325.0547, 32.4272},
+		objModel = 2117668672
+	},
+	{
+		occupied = nil,
+		objCoords = {-262.9742, 6327.2983, 32.4271},
+		objModel = 2117668672
+	},
+	{
+		occupied = nil,
+		objCoords = {-258.2792, 6329.3374, 32.4272},
+		objModel = 2117668672
+	},
+	{
+		occupied = nil,
+		objCoords = {-255.6944, 6327.2202, 32.4272},
+		objModel = 2117668672
+	},
 }
 
 

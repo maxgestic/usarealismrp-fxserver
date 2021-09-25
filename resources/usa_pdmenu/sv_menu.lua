@@ -14,7 +14,7 @@ AddEventHandler("pdmenu:checkWhitelistForGarage", function()
 	if user_job == "sheriff" or user_job == "corrections" or user_job == "ems" or user_job == "doctor" then
 		TriggerClientEvent('pdmenu:openGarageMenu', source, JOB_VEHICLES[user_job], user_job)
 	else
-		TriggerClientEvent("usa:notify", source, "~y~You are not on-duty for POLICE.")
+		TriggerClientEvent("usa:notify", source, "~y~You are not on duty!.")
 	end
 end)
 
@@ -25,6 +25,6 @@ AddEventHandler("pdmenu:checkWhitelistForCustomization", function()
 	if user_job == "sheriff" or user_job == "corrections" or user_job == "ems" or user_job == "doctor" then
 		TriggerClientEvent('pdmenu:openCustomizationMenu', source)
 	else
-		TriggerClientEvent("usa:notify", source, "~y~You are not on-duty for POLICE.")
+		TriggerClientEvent("usa:notify", source, "~y~You are not on duty!.")
 	end
 end)
