@@ -16,21 +16,21 @@ locations = {
 	{ ['x'] = -740.66, ['y'] = -67.24, ['z'] = 41.75},
 	{ ['x'] = -11.58, ['y'] = -303.64, ['z'] = 45.80},
 	{ ['x'] = -1439.64, ['y'] = -677.51, ['z'] = 26.38},
-	{ ["x"] = 196.30528259277, ["y"] = -1664.2943115234, ["z"] = 29.803218841553, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- FD in LS
+	{ ["x"] = 196.30528259277, ["y"] = -1664.2943115234, ["z"] = 29.803218841553, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections", "doctor"} }, -- FD in LS
 	{ ["x"] = -455.9, ["y"] = 6040.9, ["z"] = 31.3, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- paleto PD
-	{ ["x"] = -357.1, ["y"] = 6094.2, ["z"] = 31.4, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- paleto FD
-	{ ['x'] = 1877.0660400391, ['y'] = 3707.8864746094, ['z'] = 33.546321868896, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- sandy PD
-	{ ["x"] = 1712.8, ["y"] = 3599.5, ["z"] = 35.3, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- sandy FD
+	{ ["x"] = -357.1, ["y"] = 6094.2, ["z"] = 31.4, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections", "doctor"} }, -- paleto FD
+	{ ['x'] = 1877.0660400391, ['y'] = 3707.8864746094, ['z'] = 33.546321868896, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections", "doctor"} }, -- sandy PD
+	{ ["x"] = 1712.8, ["y"] = 3599.5, ["z"] = 35.3, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections", "doctor"} }, -- sandy FD
 	{ ['x'] = 445.236328125, ['y'] = -991.69458007813, ['z'] = 25.699808120728, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- MRPD
-	{ ['x'] = 317.69635009766, ['y'] = -574.09649658203, ['z'] = 28.796865463257, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- pillbox medical
-	{ ['x'] = -842.25219726562, ['y'] = -1233.0513916016, ['z'] = 6.9339327812195, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- viceroy medical
-	{ ["x"] = 326.4, ["y"] = -1475.6, ["z"] = 29.8, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"} }, -- one of the hospitals in LS, forgot exaclty the name
+	{ ['x'] = 326.3464, ['y'] = -588.4531, ['z'] = 28.7968, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections", "doctor"} }, -- pillbox medical
+	{ ['x'] = -842.25219726562, ['y'] = -1233.0513916016, ['z'] = 6.9339327812195, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections", "doctor"} }, -- viceroy medical
+	{ ["x"] = 326.4, ["y"] = -1475.6, ["z"] = 29.8, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections", "doctor"} }, -- one of the hospitals in LS, forgot exaclty the name
 	{ ["x"] = 1834.5, ["y"] = 2542.2, ["z"] = 45.9, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections", "da"} },
 	{ ['x'] = 911.6, ['y'] = -163.6, ['z'] = 74.4, ["jobs"] = {"taxi"}},
 	{ ['x'] = -77.19, ['y'] = -808.706, ['z'] = 36.48, ['jobs'] = {"da"}},
 	{ ['x'] = -311.8, ['y'] = 228.2, ['z'] = 87.8, ['noBlip'] = true}, -- studio los santos
 	{ ['x'] = -620.3, ['y'] = 52.7, ['z'] = 43.7, ['noBlip'] = true}, -- Tinsel Towers Apartments
-	{ ['x'] = 364.4, ['y'] = -1700.6, ['z'] = 32.5, ['noBlip'] = true}, -- court house (davis, LS)
+	{ ['x'] = 364.4, ['y'] = -1700.6, ['z'] = 32.5}, -- court house (davis, LS)
 	{ ["x"] = -1073.4, ["y"] = -879.7, ["z"] = 4.8, ["jobs"] = {"sheriff", "ems", "police", "judge", "corrections"}, ["noBlip"] = true }, -- Vespucci PD
 	{ ['x'] = 1127.5, ['y'] = 2670.8, ['z'] = 38.1, ['noBlip'] = true}, -- Sandy Shores Motel
 	{ ['x'] = 388.5, ['y'] = 2647.6, ['z'] = 44.5, ['noBlip'] = true}, -- Eastern Motel (sandy)
@@ -58,6 +58,7 @@ locations = {
 	{x = 419.80194091797, y = -1629.1114501953, z = 29.282044067383, noBlip = true}, -- Davis, LS tow yard
 	{x = 4527.1513671875, y = -4529.048828125, z = 4.2344647407532}, -- cayo perico island
 	{x = 5171.826171875, y = -4635.3139648438, z = 2.5622141551971, noBlip = true}
+
 
 }
 

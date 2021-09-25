@@ -2,14 +2,17 @@
 local EMSLockerRooms = {
 {x = -447.24325561523, y= -329.1171875, z = 33.601892089844}, -- mt. zonoah
 {x = 1196.320435703, y = -1465.4461669922, z = 34.859535217285}, -- LS fire station 9
-{x = 207.106, y = -1641.45, z = 28.5},
-{x = 373.269, y = -1441.48, z = 28.5},
-{x=-366.269, y = 6102.27, z = 35.6397}, -- paleto
---{x=1692.13, y=3586.27, z=34.7209} -- sandy
+{x = 207.106, y = -1641.45, z = 28.5}, -- davis fire stations
+{x = 373.269, y = -1441.48, z = 28.5}, -- los santos central hospital rear clockon
+{x = 343.70, y = -1397.15, z = 32.50}, -- los santos central hospital main door
+{x=-380.01, y = 6118.63, z = 31.8497}, -- paleto
+--{x= 1692.13, y= 3586.27, z= 34.7209} -- sandy
 {x = 1701.4, y = 3604.1, z = 35.9}, -- sandy (interior / ymap)
 {x = 338.24346923828,y = -586.91796875, z = 74.165657043457}, -- pillbox helipad
+{x = -778.9980,y = -1202.9496, z = 51.1471}, -- viceroy helipad
 {x = 301.4, y = -599.26, z = 43.28}, -- pillbox lockeroom
-{x = -823.76940917969, y = -1238.7368164062, z = 7.3374271392822} -- viceroy medical locker room
+{x = -823.76940917969, y = -1238.7368164062, z = 7.3374271392822}, -- viceroy medical locker room
+{x = 1825.89, y = 3674.86, z = 34.27} -- sandy hostpital locker room
 }
 
 local emsoutfitamount = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}

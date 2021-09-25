@@ -128,14 +128,14 @@ AddEventHandler("garage:openMenu", function(required_jobs, _closest_shop)
 	if required_jobs then
 		local job = char.get("job")
 		for i = 1, #required_jobs do
-			if required_jobs[i] == job or (required_jobs[i] == 'sheriff' and char.get('policeRank') > 0) then
+			if required_jobs[i] == job or (required_jobs[i] == 'sheriff' and char.get('policeRank') > 0) or (required_jobs[i] == 'ems' and char.get('emsRank') > 0) or (required_jobs[i] == 'doctor' and char.get('emsRank') > 0) then
 				GetVehiclesForMenu(char.get("vehicles"), function(vehs)
 					TriggerClientEvent("garage:openMenuWithVehiclesLoaded", usource, vehs)
 				end)
 				return
 			end
-			TriggerClientEvent("usa:notify", usource, "Garage prohibited!")
 		end
+		TriggerClientEvent("usa:notify", usource, "Garage prohibited!")
 	else
 		GetVehiclesForMenu(char.get("vehicles"), function(vehs)
 			TriggerClientEvent("garage:openMenuWithVehiclesLoaded", usource, vehs, _closest_shop)

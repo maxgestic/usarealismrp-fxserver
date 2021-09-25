@@ -1,6 +1,6 @@
 local menuPool = NativeUI.CreatePool()
-local garageMenu = NativeUI.CreateMenu('LEO Garage', 'VEHICLE MANAGEMENT', 0, 320)
-local customizationMenu = NativeUI.CreateMenu('LEO Workshop', 'PIMP MY RIDE', 0, 320)
+local garageMenu = NativeUI.CreateMenu('ER Garage', 'VEHICLE MANAGEMENT', 0, 320)
+local customizationMenu = NativeUI.CreateMenu('ER Workshop', 'PIMP MY RIDE', 0, 320)
 
 ---------- CAR CUSTOMIZATION MENU COLORS ------------
 
@@ -26,22 +26,31 @@ local colors = { -- https://wiki.gtanet.work/index.php?title=Vehicle_Colors
 --------------- LOCATIONS ----------------------
 
 local policeGarages = {
-	{x = 459.37362670898, y = -986.36254882813, z = 25.699831008911, _x = 458.52395629883, _y = -980.78051757813, _z = 25.699831008911, _heading = 89.102}, -- Mission Row
+	{x = 459.37, y = -986.36, z = 25.69, _x = 458.52, _y = -980.78, _z = 25.69, _heading = 89.102}, -- Mission Row
 	{x = 1864.02, y = 3681.70, z = 33.69, _x = 1864.08, _y = 3701.667, _z = 33.52, _heading = 211.45}, -- Sandy Shores
 	{x = -462.19, y = 6001.45, z = 31.34, _x = -468.93, _y = 6039.11, _z = 31.34, _heading = 220.43}, -- Paleto Bay
 	{x = 818.147, y = -1334.51, z =  26.1, _x = 828.69, _y = -1351.26, _z = 26.09, _heading = 64.9}, -- La Mesa
 	{x = -1123.47, y = -848.411, z = 13.45, _x = -1126.32, _y = -864.89, _z = 13.55, _heading = 34.54}, -- Vespucci 
 	{x = 378.16, y = -1613.96, z = 29.29, _x = 394.39, _y = -1625.57, _z = 29.29, _heading = 51.66}, -- Davis
 	{x = 560.04, y = -60.305, z = 71.186, _x = 534.24, _y = -26.13, _z = 70.62, _heading = 210.88}, -- Vinewood
-	{x = -85.21, y = -807.60, z = 36.49, _x = -73.97, _y = -818.25, _z = 36.05, _heading = 295.0} -- DA Office
-
+	{x = -85.21, y = -807.60, z = 36.49, _x = -73.97, _y = -818.25, _z = 36.05, _heading = 295.0}, -- DA Office
+	--hospitals
+	{x = 1696.53, y = 3603.31, z = 35.52, _x = 1696.53, _y = 3603.31, _z = 35.52, _heading = 210.95}, -- Sandy Fire Station
+	{x = -449.06, y = -340.25, z = 33.60, _x = -454.24, _y = -339.42, _z = 34.36, _heading = 173.34}, -- Mnt Zonah
+	{x = 1200.60, y = -1474.00, z = 34.85, _x = 1204.98, _y = -1468.67, _z = 34.85, _heading = 359.99}, -- LS fire station 9
+	{x = 205.08, y = -1652.21, z = 29.80, _x = 212.35, _y = -1649.66, _z = 29.80, _heading = 319.52}, -- davis station
+	{x = 295.40, y = -1447.32, z = 29.96, _x = 317.64, _y = -1450.60, _z = 29.80, _heading = 229.44}, -- los santos central hospital
+	{x = -369.29, y = 6123.67, z = 31.44, _x = -353.00, _y = 6127.91, _z = 31.44, _heading = 41.22}, -- paleto fire station
+	{x = -851.29, y = -1226.97, z = 6.69, _x = -858.50, _y = -1216.24, _z = 6.03, _heading = 307.99}, -- viceroy
+	{x = 338.85, y = -575.15, z = 27.79, _x = 328.30, _y = -578.12, _z = 28.79, _heading = 337.49}, -- pillbox
+	{x = 1821.19, y = 3685.34, z = 34.27, _x = 1813.15, _y = 3685.52, _z = 34.22, _heading = 296.15} -- sandy hospital
 }
 
 ----------------- VEHICLE MENU -----------------
 menuPool:Add(customizationMenu)
 menuPool:Add(garageMenu)
 
-function AddGarageMenuItems(menu, vehs)
+function AddGarageMenuItems(menu, vehs, job)
 	local ped = GetPlayerPed(-1)
 	local repair = NativeUI.CreateItem('Repair Vehicle', 'Stop by the police mechanic.')
 	local vehicle = UIMenuListItem.New('Vehicle', (vehs or {}), 'Select this vehicle.')
@@ -105,7 +114,7 @@ function AddGarageMenuItems(menu, vehs)
 	        	local px,py,pz=table.unpack(GetEntityCoords(GetPlayerPed(-1)))
 	        	local spawnedVeh = nil
 	        	for i = 1, #policeGarages do
-	        		if Vdist(px,py,pz,policeGarages[i].x,policeGarages[i].y,policeGarages[i].z)  <  9 and waiting < 5000 then
+	        		if Vdist(px,py,pz,policeGarages[i].x,policeGarages[i].y,policeGarages[i].z)  <  7 and waiting < 5000 then
 						spawnedVeh = CreateVehicle(vehicleHash, policeGarages[i]._x,policeGarages[i]._y,policeGarages[i]._z, policeGarages[i]._heading, true)
 						TriggerEvent('persistent-vehicles/register-vehicle', spawnedVeh)
 						SetVehicleHasBeenOwnedByPlayer(spawnedVeh, true)
@@ -135,7 +144,18 @@ function AddGarageMenuItems(menu, vehs)
 
 						-- give key to owner
 						TriggerServerEvent("garage:giveKey", vehicle_key)
-						TriggerServerEvent("mdt:addTempVehicle", 'Police Interceptor', 'San Andreas State Police', GetVehicleNumberPlateText(spawnedVeh))
+						local mdtjob
+						if job == "sheriff" then
+							mdtjob = 'San Andreas State Police'
+						elseif job == "corrections" then
+							mdtjob = 'Correctional Department'
+						elseif job == "ems" then 
+							mdtjob = 'Los Santos Fire Department'
+						elseif job == "doctor" then 
+							mdtjob = 'Pillbox Medical Center'
+						end
+						print(mdtjob)
+						TriggerServerEvent("mdt:addTempVehicle", 'Emergency Vehicle', mdtjob, GetVehicleNumberPlateText(spawnedVeh))
 						
 						return
 					end
@@ -279,14 +299,14 @@ Citizen.CreateThread(function()
        	local px,py,pz=table.unpack(GetEntityCoords(GetPlayerPed(-1)))
         if IsControlJustPressed(0, 38) then
         	for i = 1, #policeGarages do
-        		if Vdist(px,py,pz,policeGarages[i].x,policeGarages[i].y,policeGarages[i].z)  <  5 then
+        		if Vdist(px,py,pz,policeGarages[i].x,policeGarages[i].y,policeGarages[i].z)  <  4 then
 					TriggerServerEvent('pdmenu:checkWhitelistForGarage')
 				end
 			end
 		end
        	if IsControlJustPressed(0, 303) then
        		for i = 1, #policeGarages do
-        		if Vdist(px,py,pz,policeGarages[i].x,policeGarages[i].y,policeGarages[i].z)  <  5 then
+        		if Vdist(px,py,pz,policeGarages[i].x,policeGarages[i].y,policeGarages[i].z)  <  4 then
 					TriggerServerEvent('pdmenu:checkWhitelistForCustomization')
 				end
 			end
@@ -295,9 +315,9 @@ Citizen.CreateThread(function()
 end)
 
 RegisterNetEvent('pdmenu:openGarageMenu')
-AddEventHandler('pdmenu:openGarageMenu', function(vehs)
+AddEventHandler('pdmenu:openGarageMenu', function(vehs, job)
 	garageMenu:Clear()
-	AddGarageMenuItems(garageMenu, vehs)
+	AddGarageMenuItems(garageMenu, vehs, job)
 	garageMenu:Visible(not garageMenu:Visible())
 	customizationMenu:Visible(false)
 end)

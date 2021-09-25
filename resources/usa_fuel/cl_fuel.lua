@@ -15,6 +15,7 @@ local fuelStations = {
 			{1834.73, 2501.94, 47.61}, -- Prison
 			{449.48, -981.07, 44.69}, -- MISSION ROW
 			{351.42, -588.21, 75.16}, -- PILLBOX MEDICAL
+			{-791.0382, -1191.6010, 53.0270}, -- VICEROY MEDICAL
 			{-1513.0, -67.61, 56.57}, -- Reapers House
 			{-33.22, 768.99, 223.42}, -- Scott Johnson
 			{-1023.3225097656, 173.47639465332, 63.475910186768}, -- Josef
@@ -53,7 +54,9 @@ local fuelStations = {
 			{264.93, -1262.58, 30.29}, -- Stawberry Ave, Olympic Fwy
 			{-70.44, -1760.49, 30.53}, -- Grove St., LTD Store
 			{1208.34, -1402.18, 36.22}, -- Capital Blvd, El Rancho Blvd.
-			{819.09, -1029.48, 27.404} -- Popular St, Olympic Fwy
+			{819.09, -1029.48, 27.404}, -- Popular St, Olympic Fwy
+			{172.5049, -1558.8756, 29.2453}, --McDonald Street, Davies Pump 1
+			{178.2956, -1565.0645, 29.2806} --McDonald Street, Davies Pump 2
 		}
 	}
 }

@@ -121,6 +121,7 @@ local DOORS = {
   {name = "MRPD / Interrogation 1", x = 482.41610717773, y = -988.29467773438, z = 26.364437103271, model = -1406685646, locked = true, offset={0.0, -1.1, 0.05}, heading=270, _dist = 1.2, allowedJobs = {'sheriff', "corrections", "ems"}},
   {name = "MRPD / Roof", x = 464.03317260742, y = -983.90405273438, z = 43.709926605225, model = -692649124, locked = true, offset={0.0, -1.1, 0.05}, heading=90, _dist = 1.5, allowedJobs = {'sheriff', "corrections", "ems"}},
   {name = "BCSO Station - Sidewalk", x = -449.8, y = 6024.3, z = 31.5, model = -1156020871, locked = true, offset={0.0, -1.5, -0.095}, heading=315, _dist = 1.0, allowedJobs = {'sheriff', "corrections"}},
+  {name = "BCSO Station - Balcony", x = 1840.8318, y = 3692.2534, z = 38.2264, model = 3069817278, locked = true, offset={0.0, -0.50, -0.095}, heading=30, _dist = 1.0, allowedJobs = {'sheriff', "corrections"}},
   {name = "BCSO Station - Sandy Shores", x = 1855.0, y = 3683.5, z = 34.2, model = -1765048490, locked = false, offset={0.0, 1.24, -0.1}, heading=30, _dist = 1.0, allowedJobs = {'sheriff', "corrections"}},
   {name = "BCSO Station - Cell 1", x = -432.09231567383, y = 5999.8515625, z = 31.716178894043, model = 631614199, locked = false, offset={0.0, 1.24, -0.1}, heading=315, _dist = 1.0, allowedJobs = {'sheriff', "corrections"}},
   {name = "BCSO Station - Cell 2", x = -429.02087402344,y = 5996.828125, z = 31.716180801392, model = 631614199, locked = false, offset={0.0, 1.24, -0.1}, heading=315, _dist = 1.0, allowedJobs = {'sheriff', "corrections"}},
@@ -154,8 +155,8 @@ local DOORS = {
   {name = 'Nightclub / Door 3', x = -1610.8, y = -3004.98, z = -79.0, model = 1743859485, locked = true, static = true, _dist = 1.0},
   {name = 'Legal Offices / Door 1', x = 121.21, y = -757.02, z = 242.15, model = -1821777087, locked = true, static = true, _dist = 1.0},
   {name = 'Legal Offices / Door 2', x = 143.16, y = -759.65, z = 242.15, model = -1821777087, locked = true, static = true, _dist = 1.0},
-  {name = 'LSSD Davis / Door 1', x = 392.31, y = -1635.45, z = 29.29, model = -1156020871, locked = true, offset={0.0, -1.6, -0.1}, heading = 50, _dist = 1.0, allowedJobs = {'sheriff'}},
-  {name = 'LSSD Davis / Gate 1', x = 398.32, y = -1607.73, z = 29.29, model = 1286535678, locked = true, _dist = 8.0, gate = true, offset={3.0, -2.5, 1.5}, lockedCoords = {397.88, -1607.38, 28.33}, allowedJobs = {'sheriff'}},
+  {name = 'LSSD Davis / Door 1', x = 392.31, y = -1635.45, z = 29.29, model = -1156020871, locked = true, offset={0.0, -1.6, -0.1}, heading = 50, _dist = 1.0, allowedJobs = {'sheriff', 'corrections'}},
+  {name = 'LSSD Davis / Gate 1', x = 398.32, y = -1607.73, z = 29.29, model = 1286535678, locked = true, _dist = 8.0, gate = true, offset={3.0, -2.5, 1.5}, lockedCoords = {397.88, -1607.38, 28.33}, allowedJobs = {'sheriff', 'corrections'}},
   {name = 'Mission Row / Front Gate', x = 411.4, y = -1028.26, z = 29.39, model = -512634970, locked = true, _dist = 10.0, gate = true, offset={0.0, 3.0, 1.5}, lockedCoords = {410.80, -1028.15, 28.38}, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Mission Row / Garage Door", x = 427.42, y = -1016.92, z = 28.97, model = 631614199, locked = true, offset={0.0, 1.12, 0.025}, heading=81, _dist = 1.0, allowedJobs = {'sheriff','corrections'}},
   {name = "Eclipse Towers / Heist Room", x = -767.55, y = 331.14, z = 211.39, model = 34120519, locked = true, static = true, _dist = 1.0},
@@ -184,6 +185,10 @@ local DOORS = {
   {name = "Harmony Door 2", x = 1173.16, y = 2712.46, z = 38.07, model = -1591004109, locked = true, offset ={0.0, -1.5, 0.0}, heading = 0.0, _dist = 1.0, advancedlockpickable = true, allowedJobs = {'sheriff', "corrections"}},
   {name = "Paleto Bank 1", x = -106.34, y = 6475.35, z = 31.63, model = 1309269072, locked = true, offset ={0.0, -1.0, -0.2}, heading = 310.0, _dist = 1.0, advancedlockpickable = true, allowedJobs = {'sheriff', "corrections"}},
   {name = "Paleto Bank 2", x = -105.8, y = 6473.4, z = 31.63, model = 1622278560, locked = true, offset ={0.0, 1.0, -0.2}, heading = 41.0, _dist = 1.0, advancedlockpickable = true, allowedJobs = {'sheriff', "corrections"}},
+  {name = 'Sandy Hospital Ward Front 1', x = 1828.9033, y = 3670.8318, z = 34.2749, model = 3151957239, locked = false, offset={0.0, 1.0, 0.00}, heading = 300.0, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
+  {name = 'Sandy Hospital Ward Front 2', x = 1828.3647, y = 3671.7383, z = 34.2749, model = 3151957239, locked = false, offset={0.0, 1.0, 0.00}, heading = 120.0, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
+  {name = 'Sandy Hospital Ward Rear 1', x = 1830.2230, y = 3682.6743, z = 34.2749, model = 3151957239, locked = false, offset={0.0, 1.0, 0.00}, heading = 120.0, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
+  {name = 'Sandy Hospital Ward Rear 2', x = 1831.0431, y = 3681.6572, z = 34.2749, model = 3151957239, locked = false, offset={0.0, 1.0, 0.00}, heading = 300.0, _dist = 1.5, allowedJobs = {'ems', 'sheriff', 'doctor', "corrections"}},
 }
 
 -- allowedJobs - table of job names allowed to use door, the player's job must match any value in the list for the door to lock/unlock

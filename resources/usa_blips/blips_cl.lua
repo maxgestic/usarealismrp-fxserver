@@ -49,6 +49,7 @@ local blips = {
 	{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = -240.10, y = 6324.22, z = 32.43 }, -- paleto
 	--{ title="Hospital", colour = 48, id = 61, x = 360.3, y = -548.9, z = 28.8 }, -- LS, pillbox hill
 	--{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = 308.1, y = -1434.7,  z = 29.9 },
+	{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = 1832.5958, y = 3676.7114,  z = 34.2749 }, -- sandy
 	{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = -817.61511230469, y = -1236.6121826172, z = 7.3374252319336 }, -- viceroy medical
 	{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = 360.5, y = -584.7, z = 28.8 }, -- pillbox medical
 	--{ title="Hospital", colour = 51, id = 61, scale = 0.7, x = -473.4, y = -339.6, z = 35.2 }, -- mt. zonoah

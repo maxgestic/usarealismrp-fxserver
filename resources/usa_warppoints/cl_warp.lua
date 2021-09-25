@@ -137,6 +137,17 @@ local warp_locations = {
     },
   job_access = "emergency"
   },
+  ["Viceroy Helipad"] = {
+    entrance = {
+      coords = {-801.2888, -1251.5900, 7.3374},
+      heading = 321.1256
+    },
+    exit = {
+      coords = {-774.0347, -1207.4052, 51.1470},
+      heading = 322.8826
+    },
+  job_access = "emergency"
+  },
   ['Nightclub'] = {
     entrance = {
       coords = {-337.23, 207.189, 88.57},

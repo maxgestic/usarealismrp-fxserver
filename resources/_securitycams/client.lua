@@ -12,7 +12,6 @@ AddEventHandler('cameras:activateCamera', function(cameraID)
             local camData = SecurityCamConfig.Locations[cam].cameras[1]
             if createdCamera == 0 then
                 FreezeEntityPosition(playerPed, true)
-                SetFlash(0, 0, 100, 100, 100)
                 Citizen.Wait(250)
                 Citizen.CreateThread(function()
                     scaleform = GetScaleform('traffic_cam')
@@ -33,8 +32,6 @@ AddEventHandler('cameras:activateCamera', function(cameraID)
                 })
                 currentCameraIndex = cam
                 currentCameraIndexIndex = 1
-                Citizen.Wait(1200)
-                SetFlash(0, 0, 100, 100, 100)
             end
             return
         end
@@ -62,8 +59,8 @@ Citizen.CreateThread(function()
             if createdCamera ~= 0 then
                 local instructions = CreateInstuctionScaleform("instructional_buttons")
                 DrawScaleformMovieFullscreen(instructions, 255, 255, 255, 255, 0)
-                SetTimecycleModifier("scanline_cam_cheap")
-                SetTimecycleModifierStrength(2.0)
+                SetTimecycleModifier("CAMERA_secuirity")
+                SetTimecycleModifierStrength(0.5)
 
                 if SecurityCamConfig.HideRadar then
                     DisplayRadar(false)
@@ -71,7 +68,6 @@ Citizen.CreateThread(function()
 
                 -- CLOSE CAMERAS
                 if IsControlJustPressed(1, 194) then
-                    SetFlash(0, 0, 100, 100, 100)
                     DoScreenFadeOut(500)
                     Citizen.Wait(500)
                     CloseSecurityCamera()
@@ -85,7 +81,6 @@ Citizen.CreateThread(function()
 
                 -- GO BACK CAMERA
                 if IsControlJustPressed(1, 174) then
-                    SetFlash(0, 0, 100, 100, 100)
                     DoScreenFadeOut(500)
                     Citizen.Wait(500)
                     local newCamIndex
@@ -113,7 +108,6 @@ Citizen.CreateThread(function()
 
                 -- GO FORWARD CAMERA
                 if IsControlJustPressed(1, 175) then
-                    SetFlash(0, 0, 100, 100, 100)
                     DoScreenFadeOut(500)
                     Citizen.Wait(500)
                     local newCamIndex

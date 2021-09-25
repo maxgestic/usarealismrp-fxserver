@@ -1,4 +1,4 @@
-local LEO_VEHICLES = {"pdcvpi", "pdtau", "pdchrg", "pdchgr", "pdexp", "pdtahoe", "pdchrgum", "riot", "policeb", "fbi", "fbi2", "police4", "sheriff2", "1200RT", "chgr", "sotruck", "pdcharger", "pdfpiu", "hptahoe", "mustang19", "npolstang", "npolchal", "npolvette", "pbike", "bearcatrb"}
+local LEO_VEHICLES = {"pdcvpi", "pdtau", "pdchgr", "pdcharger", "pdexp", "pdfpiu", "sotruck", "hptahoe", "sheriff2", "policeb", "1200RT", "pbike", "chgr","fbi", "fbi2", "police4", "mustang19", "npolstang", "npolchal", "npolvette", "riot", "bearcatrb"}
 
 local JOB_VEHICLES = {
 	["sheriff"] = LEO_VEHICLES,
@@ -11,8 +11,8 @@ RegisterServerEvent("pdmenu:checkWhitelistForGarage")
 AddEventHandler("pdmenu:checkWhitelistForGarage", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local user_job = char.get("job")
-	if user_job == "sheriff" or user_job == "corrections" then
-		TriggerClientEvent('pdmenu:openGarageMenu', source, JOB_VEHICLES[user_job])
+	if user_job == "sheriff" or user_job == "corrections" or user_job == "ems" or user_job == "doctor" then
+		TriggerClientEvent('pdmenu:openGarageMenu', source, JOB_VEHICLES[user_job], user_job)
 	else
 		TriggerClientEvent("usa:notify", source, "~y~You are not on-duty for POLICE.")
 	end
@@ -22,7 +22,7 @@ RegisterServerEvent("pdmenu:checkWhitelistForCustomization")
 AddEventHandler("pdmenu:checkWhitelistForCustomization", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local user_job = char.get("job")
-	if user_job == "sheriff" or user_job == "corrections" then
+	if user_job == "sheriff" or user_job == "corrections" or user_job == "ems" or user_job == "doctor" then
 		TriggerClientEvent('pdmenu:openCustomizationMenu', source)
 	else
 		TriggerClientEvent("usa:notify", source, "~y~You are not on-duty for POLICE.")

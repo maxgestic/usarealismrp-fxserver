@@ -411,7 +411,49 @@ SecurityCamConfig.Locations = {
             {label = "Stairs Cam", x = 528.50, y = -166.12, z = 56.52, r = {x = -50.0, y = 0.0, z = 230.0}},
             {label = "Bar Cam", x = 551.65, y = -166.02, z = 52.67, r = {x = -25.0, y = 0.0, z = 140.0}},
         }
-    }
+    },
+    {
+        camBox = {label = "Pillbox Medical Center", id = 'pillbox'},
+        cameras = {
+            {label = "Front Door", x = 301.9279, y = -576.0494, z = 46.0002, r = {x = -25.0, y = 0.0, z = 110.0}},
+            {label = "Reception", x = 301.4309, y = -581.5127, z = 45.7002, r = {x = -25.0, y = 0.0, z = 210.0}},
+            {label = "Elevator Room", x = 329.2158, y = -591.7203, z = 45.7002, r = {x = -25.0, y = 0.0, z = 200.0}},
+            {label = "Hallway 1", x = 305.6093, y = -569.4415, z = 45.7002, r = {x = -25.0, y = 0.0, z = 210.0}},
+            {label = "Hallway 2", x = 334.4932, y = -569.7571, z = 45.7002, r = {x = -25.0, y = 0.0, z = 110.0}},
+            {label = "Hallway 3", x = 349.0863, y = -585.4603, z = 45.7002, r = {x = -25.0, y = 0.0, z = 120.0}},
+            {label = "Hallway 4", x = 348.1623, y = -602.2171, z = 45.7002, r = {x = -25.0, y = 0.0, z = 20.0}},
+            {label = "Hallway 5", x = 364.2874, y = -594.4622, z = 45.7002, r = {x = -25.0, y = 0.0, z = 50.0}},
+            {label = "Main Ward Camera 1", x = 309.1040, y = -576.3586, z = 45.7002, r = {x = -25.0, y = 0.0, z = 210.0}},
+            {label = "Main Ward Camera 2", x = 322.8481, y = -588.2246, z = 45.7002, r = {x = -25.0, y = 0.0, z = 30.0}},
+            {label = "Overflow Ward Camera", x = 360.3528, y = -588.7112, z = 45.7002, r = {x = -25.0, y = 0.0, z = 300.0}},
+        }
+    },
+    {
+        camBox = {label = "Viceroy Medical Center", id = 'viceroy'},
+        cameras = {
+            {label = "Front Door", x = -812.7182, y = -1213.6923, z = 9.2002, r = {x = -25.0, y = 0.0, z = 107.0}},
+            {label = "Parking Lot", x = -856.4421, y = -1225.4766, z = 10.1, r = {x = -25.0, y = 0.0, z = 287.0}},
+            {label = "Reception", x = -818.1445, y = -1221.8866, z = 9.2002, r = {x = -25.0, y = 0.0, z = 180.0}},
+            {label = "Elevator Room", x = -795.4916, y = -1240.8934, z = 9.2002, r = {x = -25.0, y = 0.0, z = 170.0}},
+            {label = "Hallway 1", x = -810.0911, y = -1212.1284, z = 9.2002, r = {x = -25.0, y = 0.0, z = 190.0}},
+            {label = "Hallway 2", x = -782.6148, y = -1222.3152, z = 9.5002, r = {x = -25.0, y = 0.0, z = 100.0}},
+            {label = "Hallway 3", x = -774.4793, y = -1242.0088, z = 9.2002, r = {x = -25.0, y = 0.0, z = 80.0}},
+            {label = "Main Ward Camera 1", x = -809.0632, y = -1219.8818, z = 9.2002, r = {x = -25.0, y = 0.0, z = 180.0}},
+            {label = "Main Ward Camera 2", x = -800.2723, y = -1235.6636, z = 9.2002, r = {x = -25.0, y = 0.0, z = 0.0}},
+        }
+    },
+    {
+        camBox = {label = "Sandy Shores Hospital", id = 'sandyhospital'},
+        cameras = {
+            {label = "Front Door", x = 1836.7238, y = 3672.0742, z = 35.5290, r = {x = -20.0, y = 0.0, z = 285.0}},
+            {label = "Rear Door", x = 1831.0315, y = 3693.0425, z = 35.5290, r = {x = -20.0, y = 0.0, z = 89.0}},
+            {label = "Reception", x = 1836.5260, y = 3681.6050, z = 36.9129, r = {x = -20.0, y = 0.0, z = 160.0}},
+            {label = "Hallway", x = 1835.7220, y = 3682.2893, z = 36.2129, r = {x = -20.0, y = 0.0, z = 50.0}},
+            {label = "Ward Camera 1", x = 1825.7205, y = 3677.4946, z = 36.2129, r = {x = -20.0, y = 0.0, z = 75.0}},
+            {label = "Ward Camera 2", x = 1826.7700, y = 3667.7930, z = 36.2129, r = {x = -20.0, y = 0.0, z = 35.0}},
+            {label = "Ward Camera 3", x = 1822.5922, y = 3675.7083, z = 36.2129, r = {x = -20.0, y = 0.0, z = 140.0}},
+        }
+    },
 }
 
 -- prison cam 1 [x = 1732.7, y = 2649.6, z = 45.6]
