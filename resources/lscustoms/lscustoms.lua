@@ -580,6 +580,10 @@ local function DriveInGarage()
 						for n, w in pairs(LSC_Config.prices.bennyswheels) do
 							local btn = bennysw:addPurchase(w.name,w.price)btn.wtype = w.wtype btn.modtype = 23 btn.mod = w.mod
 						end
+					bespokew = wtype:addSubMenu("BESPOKE WHEELS", "Bespoke", nil,true)
+						for n, w in pairs(LSC_Config.prices.bespokewheels) do
+							local btn = bespokew:addPurchase(w.name,w.price)btn.wtype = w.wtype btn.modtype = 23 btn.mod = w.mod
+						end
 				end
 
 		m = LSCMenu.categories.Wheels:addSubMenu("WHEEL COLOR", "Wheel color", "Custom wheel colors.",true)
