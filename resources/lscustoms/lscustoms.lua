@@ -85,6 +85,10 @@ AddEventHandler("customs:applyCustomizations", function(veh)
 		SetVehicleNeonLightEnabled(currentvehicle, 2, not not veh.neonlightenabled)
 		SetVehicleNeonLightEnabled(currentvehicle, 3, not not veh.neonlightenabled)
 
+		print("(veh.driftTiresEnabled or false): " .. tostring((veh.driftTiresEnabled or false)))
+
+		SetDriftTyresEnabled(currentvehicle, (veh.driftTiresEnabled or false))
+
 		-- set mods --
     	SetVehicleModKit(currentvehicle,0)
 		for x = 0, 48 do
@@ -1042,6 +1046,8 @@ AddEventHandler("LSC:buttonSelected", function(name, button, canpurchase)
 				SetVehicleMod(veh,24,myveh.mods[24].mod,false)
 				myveh.mods[24].variation = false
 			end
+			SetDriftTyresEnabled(veh, false)
+			myveh.driftTiresEnabled = false
 		elseif button.name == "Custom Tires" and  (button.purchased or CanPurchase(price, canpurchase)) then
 			SetVehicleModKit(veh,0)
 			SetVehicleMod(veh,23,myveh.mods[23].mod,true)
@@ -1058,6 +1064,13 @@ AddEventHandler("LSC:buttonSelected", function(name, button, canpurchase)
 			else
 				myveh.bulletProofTyres = true
 				SetVehicleTyresCanBurst(veh,true)
+			end
+		elseif button.name == "Low Grip Tires" and (button.purchased or CanPurchase(price, canpurchase)) then
+			if not GetDriftTyresEnabled(veh) then
+				myveh.driftTiresEnabled = true
+				SetDriftTyresEnabled(veh, true)
+			else
+				exports.globals:notify("Low grip tires already equipped")
 			end
 		elseif button.smokecolor ~= nil  and  (button.purchased or CanPurchase(price, canpurchase)) then
 			SetVehicleModKit(veh,0)
@@ -1384,13 +1397,19 @@ function CheckPurchases(m)
 	elseif name == "wheel accessories" then
 		for i,b in pairs(m.buttons) do
 			if b.name == "Stock Tires" then
-				if GetVehicleModVariation(myveh.vehicle,23) == false then
+				if GetVehicleModVariation(myveh.vehicle,23) == false and not GetDriftTyresEnabled(myveh.vehicle) then
 					b.sprite = "garage"
 				else
 					b.sprite = nil
 				end
 			elseif b.name == "Custom Tires" then
 				if GetVehicleModVariation(myveh.vehicle,23) then
+					b.sprite = "garage"
+				else
+					b.sprite = nil
+				end
+			elseif b.name == "Low Grip Tires" then
+				if GetDriftTyresEnabled(myveh.vehicle) then
 					b.sprite = "garage"
 				else
 					b.sprite = nil
