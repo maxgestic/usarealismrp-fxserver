@@ -8,7 +8,6 @@ exports["globals"]:PerformDBCheck("vehicle-shop", "vehicles", nil)
 local price, vehicleName, hash, plate
 local MAX_PLAYER_VEHICLES = 500
 
--- VEHICLES
 local vehicleShopItems = {
 	["vehicles"] = {
 		["Suvs"] = {
@@ -54,7 +53,18 @@ local vehicleShopItems = {
 			{make = "Hijak", model = "Ruston", price = 80000, hash = "ruston", storage_capacity = 90.0},
 			{make = "Ubermacht", model = "Zion", price = 40000, hash = "zion", storage_capacity = 145.0},
 			{make = "Dinka", model = "Jester 3", price = 55000, hash = "jester3", storage_capacity = 125.0},
-			{make = "Miabatsu", model = "Penumbra", price = 35000, hash = "penumbra", storage_capacity = 125.0}
+			{make = "Miabatsu", model = "Penumbra", price = 35000, hash = "penumbra", storage_capacity = 125.0},
+			{make = "Karin", model = "Calico GTF", price = 25000, hash = "calico", storage_capacity = 125.0},
+			{make = "Ubermacht", model = "Cypher", price = 57500, hash = "cypher", storage_capacity = 125.0},
+			{make = "Karin", model = "Previon", price = 30500, hash = "previon", storage_capacity = 125.0},
+			{make = "Annis", model = "ZR350", price = 20500, hash = "zr350", storage_capacity = 125.0},
+			{make = "Annis", model = "Euros", price = 30000, hash = "euros", storage_capacity = 125.0},
+			{make = "Annis", model = "Remus", price = 25500, hash = "remus", storage_capacity = 125.0},
+			{make = "Dinka", model = "RT3000", price = 30500, hash = "rt3000", storage_capacity = 125.0},
+			{make = "Vulcan", model = "Warrener HKR", price = 20000, hash = "warrener2", storage_capacity = 125.0},
+			{make = "Karin", model = "Futo GTX", price = 20500, hash = "futo2", storage_capacity = 125.0},
+			{make = "Karin", model = "Sultan RS Classic", price = 25500, hash = "sultan3", storage_capacity = 125.0},
+			{make = "Dinka", model = "Jester RR", price = 60000, hash = "jester4", storage_capacity = 125.0},
 			--{make = "Annis", model = "Savestra", price = 27560, hash = "savestra", storage_capacity = 125.0} -- has machine guns
 		},
 		["Muscles"] = {
@@ -90,7 +100,9 @@ local vehicleShopItems = {
 			{make = "Imponte", model = "Phoenix", price = 28470, hash = "phoenix", storage_capacity = 170.0},
 			{make = "Schyster", model = "Deviant", price = 40000, hash = "deviant", storage_capacity = 170.0},
 			{make = "Bravado", model = "Gauntlet Hellfire", price = 60000, hash = "gauntlet4", storage_capacity = 170.0},
-			{make = "Bravado", model = "Gauntlet Classic", price = 35000, hash = "gauntlet3", storage_capacity = 170.0}
+			{make = "Bravado", model = "Gauntlet Classic", price = 35000, hash = "gauntlet3", storage_capacity = 170.0},
+			{make = "Vapid", model = "Dominator ASP", price = 30500, hash = "dominator7", storage_capacity = 125.0},
+			{make = "Vapid", model = "Dominator GTT", price = 40500, hash = "dominator8", storage_capacity = 125.0},
 		},
 		["Trucks"] = {
 			{make = "Karin", model = "Rebel", price = 8800, hash = "rebel", storage_capacity = 230.0},
@@ -225,6 +237,9 @@ local vehicleShopItems = {
 			{make = "Obey", model = "8F Drafter", price = 50000, hash = "drafter", storage_capacity = 100.0},
 			{make = "Dinka", model = "Sugoi", price = 30000, hash = "sugoi", storage_capacity = 100.0},
 			{make = "Enus", model = "Paragon", price = 90000, hash = "paragon", storage_capacity = 100.0},
+			{make = "Emperor", model = "Vectre", price = 65000, hash = "vectre", storage_capacity = 125.0},
+			{make = "Pfister", model = "Growler", price = 70000, hash = "growler", storage_capacity = 125.0},
+			{make = "Pfister", model = "Comet S2", price = 70500, hash = "comet6", storage_capacity = 125.0},
 		},
 		["Supers"] = {
 			{make = "Pegassi", model = "Infernus", price = 368621, hash = 418536135, storage_capacity = 100.0},
@@ -320,6 +335,7 @@ local vehicleShopItems = {
 			{make = "Benefactor", model = "Schafter 2", price = 30000, hash = -1255452397, storage_capacity = 155.0},
 			{make = "Ocelot", model = "Jugular", price = 50000, hash = "jugular", storage_capacity = 155.0},
 			{make = "Lampadati", model = "Komoda", price = 55000, hash = "komoda", storage_capacity = 155.0},
+			{make = "Obey", model = "Tailgater S", price = 60500, hash = "tailgater2", storage_capacity = 125.0},
 			{make = "Ubermacht", model = "Revolter", price = 49634, hash = "revolter", storage_capacity = 155.0} -- has miniguns in LSC (disabled)
 		},
 		["Specials"] = {
