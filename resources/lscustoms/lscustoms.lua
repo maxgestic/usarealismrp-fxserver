@@ -130,11 +130,13 @@ AddEventHandler("customs:applyCustomizations", function(veh)
 
 		SetVehicleLivery(GetVehiclePedIsIn(PlayerPedId(), false), (veh.liveryIndex or 1))
 
-		for i = 1, 15 do
-			if veh.extras[i] then
-				SetVehicleExtra(currentvehicle, i, false)
-			else
-				SetVehicleExtra(currentvehicle, i, true)
+		if veh.extras then
+			for i = 1, 15 do
+				if veh.extras[i] then
+					SetVehicleExtra(currentvehicle, i, false)
+				else
+					SetVehicleExtra(currentvehicle, i, true)
+				end
 			end
 		end
 end)
@@ -588,6 +590,14 @@ local function DriveInGarage()
 						for n, w in pairs(LSC_Config.prices.bespokewheels) do
 							local btn = bespokew:addPurchase(w.name,w.price)btn.wtype = w.wtype btn.modtype = 23 btn.mod = w.mod
 						end
+					trackwheels = wtype:addSubMenu("TRACK WHEELS", "Track", nil,true)
+						for n, w in pairs(LSC_Config.prices.trackwheels) do
+							local btn = trackwheels:addPurchase(w.name,w.price)btn.wtype = w.wtype btn.modtype = 23 btn.mod = w.mod
+						end
+					streetwheels = wtype:addSubMenu("STREET WHEELS", "Street", nil,true)
+						for n, w in pairs(LSC_Config.prices.streetwheels) do
+							local btn = streetwheels:addPurchase(w.name,w.price)btn.wtype = w.wtype btn.modtype = 23 btn.mod = w.mod
+						end
 				end
 
 		m = LSCMenu.categories.Wheels:addSubMenu("WHEEL COLOR", "Wheel color", "Custom wheel colors.",true)
@@ -926,7 +936,9 @@ local function isAWheelTypeMenu(mname)
 		offroad = true,
 		tuner = true,
 		["benny's"] = true,
-		bespoke = true
+		bespoke = true,
+		track = true,
+		street = true
 	}
 	return WHEEL_TYPES[mname]
 end
