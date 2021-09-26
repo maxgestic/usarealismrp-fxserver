@@ -263,6 +263,8 @@ AddEventHandler('injuries:toggleOnDuty', function()
 			TriggerClientEvent('usa:notify', source, 'You are now signed ~g~on-duty~s~ as a doctor.')
 			char.set('job', 'doctor')
 			TriggerEvent('job:sendNewLog', source, JOB_NAME, true)
+      		TriggerEvent("eblips:remove", source)
+      		TriggerEvent("eblips:add", {name = char.getName(), src = source, color = 50})
 		else
 			TriggerClientEvent('usa:notify', source, '~y~You are not whitelisted for DOCTOR')
 		end
@@ -270,6 +272,7 @@ AddEventHandler('injuries:toggleOnDuty', function()
 		TriggerClientEvent('usa:notify', source, 'You are now signed ~y~off-duty~s~ as a doctor.')
 		char.set('job', 'civ')
 		TriggerEvent('job:sendNewLog', source, JOB_NAME, false)
+      	TriggerEvent("eblips:remove", source)
 	end
 end)
 
