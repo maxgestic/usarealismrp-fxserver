@@ -213,7 +213,7 @@ function CreateUniformMenu(menu)
   for i = 1, #components do
     local selectedComponent = GetPedDrawableVariation(PlayerPedId(), i - 1)
     local selectedTexture = GetPedTextureVariation(PlayerPedId(), i - 1)
-    local maxComponent = GetNumberOfPedDrawableVariations(ped, i - 1)
+    local maxComponent = GetNumberOfPedDrawableVariations(PlayerPedId(), i - 1)
     --local maxTexture = GetNumberOfPedTextureVariations(ped, i - 1, selectedComponent)
     local arr = {}
     for j = 0, maxComponent + 1 do arr[j] = j - 1 end
