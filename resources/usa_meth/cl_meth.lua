@@ -24,6 +24,10 @@ local meth = {
 
 local peds = {}
 
+local BUY_RED_PHOS_COORDS = {x = 1387.02, y = 4281.44, z = 36.21}
+local BUY_PSEUDOPHEDRINE_COORDS = {x = 704.62, y = 4185.3, z = 40.70}
+local PACKAGE_COORDS = {x = 2434.78, y = 4964.29, z = 42.34}
+local COOK_COORDS = {x = 738.85601806641, y = -773.63940429688, z = 25.093187332153}
 
 -- JOB HANDLING
 Citizen.CreateThread(function()
@@ -34,24 +38,24 @@ Citizen.CreateThread(function()
         local playerCoords = GetEntityCoords(playerPed)
         DrawText3D(996.50, -3200.201, -36.19, 5, '[E] - Exit')
         DrawText3D(138.18, 2295.25, 94.09, 4, '[E] - Enter')
-        DrawText3D(704.62, 4185.3, 40.70, 5, '[E] - Buy Pseudoephedrine (~g~$175.00~w~) | [Hold E] - Hint')
-        DrawText3D(1387.02, 4281.44, 36.21, 3, '[E] - Buy Red Phosphorus (~g~$150.00~w~) | [Hold E] - Hint')
-        DrawText3D(1012.29, -3194.89, -38.99, 5, '[E] - Cook Meth | [Hold E] - Hint')
-        DrawText3D(2434.78, 4964.29, 42.34, 5, '[E] - Package Meth')
+        DrawText3D(BUY_PSEUDOPHEDRINE_COORDS.x, BUY_PSEUDOPHEDRINE_COORDS.y, BUY_PSEUDOPHEDRINE_COORDS.z, 5, '[E] - Buy Pseudoephedrine (~g~$175.00~w~) | [Hold E] - Hint')
+        DrawText3D(BUY_RED_PHOS_COORDS.x, BUY_RED_PHOS_COORDS.y, BUY_RED_PHOS_COORDS.z, 3, '[E] - Buy Red Phosphorus (~g~$150.00~w~) | [Hold E] - Hint')
+        DrawText3D(COOK_COORDS.x, COOK_COORDS.y, COOK_COORDS.z, 5, '[E] - Cook Meth | [Hold E] - Hint')
+        DrawText3D(PACKAGE_COORDS.x, PACKAGE_COORDS.y, PACKAGE_COORDS.z, 5, '[E] - Package Meth')
         if IsControlJustPressed(0, INPUT_KEY) then
             if GetDistanceBetweenCoords(playerCoords, 996.90, -3200.701, -36.39, true) < 0.7 then
                 DoorTransition(playerPed, 138.18, 2295.25, 94.09, 78.12)
             elseif GetDistanceBetweenCoords(playerCoords, 138.18, 2295.25, 94.09, true) < 0.7 then
                 DoorTransition(playerPed, 996.90, -3200.701, -36.39, 270.0)
-            elseif GetDistanceBetweenCoords(playerCoords, 704.62, 4185.3, 40.70, true) < 3 and not meth.pedIsBusy and GetGameTimer() - cooldown > 2000 then -- purchase supplies
+            elseif GetDistanceBetweenCoords(playerCoords, BUY_PSEUDOPHEDRINE_COORDS.x, BUY_PSEUDOPHEDRINE_COORDS.y, BUY_PSEUDOPHEDRINE_COORDS.z, true) < 3 and not meth.pedIsBusy and GetGameTimer() - cooldown > 2000 then -- purchase supplies
                 Wait(500)
                 if not IsControlPressed(0, INPUT_KEY) then
                   TriggerServerEvent("methJob:checkUserMoney", meth.suppliesProduce)
                   cooldown = GetGameTimer()
                 else
-                  TriggerEvent("chatMessage", "", {}, "^3Chemical Dealer:^0 You can take these chemicals to my bud's barn to process them. He lives just south west of Joshua Road. in the Grand Senora Desert. Look for a large barn. If you look you should see a door to get into the barn to process the chemicals.")
+                  TriggerEvent("chatMessage", "", {}, "^3Chemical Dealer:^0 You can take these chemicals to my bud's lab in Los Santos. It's just east of the canal and just North of San Andreas Ave. If you look you should see a door to get into the building to process the chemicals in an alley behind some buildings.")
                 end
-            elseif GetDistanceBetweenCoords(playerCoords, 1012.29, -3194.89, -38.99, true) < 3 and not meth.producingMeth and GetGameTimer() - cooldown > 2000 then -- produce meth rocks
+            elseif GetDistanceBetweenCoords(playerCoords, COOK_COORDS.x, COOK_COORDS.y, COOK_COORDS.z, true) < 3 and not meth.producingMeth and GetGameTimer() - cooldown > 2000 then -- produce meth rocks
                 Wait(500)
                 if not IsControlPressed(0, INPUT_KEY) then
                   TriggerServerEvent("methJob:checkUserJobSupplies", meth.suppliesProduce, meth.suppliesProduceQuality)
@@ -59,16 +63,16 @@ Citizen.CreateThread(function()
                 else
                   TriggerEvent("chatMessage", "", {}, "^3HINT: ^0You can take cooked meth to get packaged at the O'Neill's Ranch in Grapeseed.")
                 end
-            elseif GetDistanceBetweenCoords(playerCoords, 2434.78, 4964.29, 42.34, true) < 3 and not meth.processingMeth and GetGameTimer() - cooldown > 2000 then -- process/package meth rocks
+            elseif GetDistanceBetweenCoords(playerCoords, PACKAGE_COORDS.x, PACKAGE_COORDS.y, PACKAGE_COORDS.z, true) < 3 and not meth.processingMeth and GetGameTimer() - cooldown > 2000 then -- process/package meth rocks
                   TriggerServerEvent("methJob:checkUserJobSupplies", meth.suppliesProcess, meth.suppliesProcessQuality)
                 cooldown = GetGameTimer()
-            elseif GetDistanceBetweenCoords(playerCoords, 1387.02, 4280.96, 36.11, true) < 3 and not meth.pedIsBusy and GetGameTimer() - cooldown > 2000 then -- purchase quality supplies
+            elseif GetDistanceBetweenCoords(playerCoords, BUY_RED_PHOS_COORDS.x, BUY_RED_PHOS_COORDS.y, BUY_RED_PHOS_COORDS.z, true) < 3 and not meth.pedIsBusy and GetGameTimer() - cooldown > 2000 then -- purchase quality supplies
               Wait(500)
               if not IsControlPressed(0, INPUT_KEY) then
                 TriggerServerEvent("methJob:checkUserMoney", meth.suppliesProduceQuality)
                 cooldown = GetGameTimer()
               else
-                  TriggerEvent("chatMessage", "", {}, "^3Chemical Dealer:^0 You can take these chemicals to my bud's barn to process them. He lives just south west of Joshua Road. in the Grand Senora Desert. Look for a large barn. If you look you should see a door to get into the barn to process the chemicals.")
+                  TriggerEvent("chatMessage", "", {}, "^3Chemical Dealer:^0 You can take these chemicals to my bud's lab in Los Santos. It's just east of the canal and just North of San Andreas Ave. If you look you should see a door to get into the building to process the chemicals in an alley behind some buildings.")
               end
             end
         end
