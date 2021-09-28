@@ -42,8 +42,8 @@ local PRISON_GUARD_SIGN_IN_LOCATIONS = {
     {x = 1690.71484375, y = 2591.3149414063, z = 45.914203643799, vehSpawn = vector3(1696.0581054688, 2599.6557617188, 45.56489944458)},
     {x = 1849.0, y = 2599.5, z = 45.8, vehSpawn = vector3(1854.4420166016, 2599.0654296875, 45.672290802002)}, -- front
     {x = 1778.3930664063,y = 2548.5463867188, z = 45.797786712646, vehSpawn = vector3(1854.4420166016, 2599.0654296875, 45.672290802002)}, -- inside prison locker room
-    {x = 1853.5485839844, y = 3688.4887695312, z = 29.818534851074, vehSpawn = vector3(1872.4410400391, 3691.5651855469, 33.568901062012), vehSpawnHeading = 220.0}, -- Sandy SO
-    {x = -449.33654785156, y = 6010.4638671875, z = 31.716360092163, vehSpawn = vector3(-462.80316162109, 6009.2587890625, 31.340545654297), vehSpawnHeading = 60.0} -- Paleto SO
+    {x = 1853.5485839844, y = 3688.4887695312, z = 29.818534851074}, -- Sandy SO
+    {x = -449.33654785156, y = 6010.4638671875, z = 31.716360092163} -- Paleto SO
 }
 
 local policeoutfitamount = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18 , 19, 20}
@@ -158,7 +158,6 @@ _menuPool:Add(mainMenu)
 
 function CreateUniformMenu(menu)
     local ped = GetPlayerPed(-1)
-    menu:Clear()
 
     local submenu2 = _menuPool:AddSubMenu(menu, "Outfits", "Save and load outfits", true)
     local selectedSaveSlot = 1
@@ -319,13 +318,6 @@ function CreateVehiclesMenu(menu)
     end
 end
 
-----------------
--- add to GUI --
-----------------
-CreateUniformMenu(mainMenu)
-CreateVehiclesMenu(mainMenu)
-_menuPool:RefreshIndex()
-
 -------------------------------------------
 -- open menu when near sign in location --
 -------------------------------------------
@@ -368,9 +360,15 @@ end)
 
 RegisterNetEvent("doc:open")
 AddEventHandler("doc:open", function(loc)
+    mainMenu:Clear()
     CreateUniformMenu(mainMenu)
+    if loc.vehSpawn then
+        CreateVehiclesMenu(mainMenu)
+    end
+    CreateWeaponsMenu(mainMenu)
     mainMenu:Visible(not mainMenu:Visible())
     closest_location = loc
+    _menuPool:RefreshIndex()
 end)
 
 RegisterNetEvent("doc:uniformLoaded")

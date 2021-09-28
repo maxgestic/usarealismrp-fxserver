@@ -165,7 +165,7 @@ AddEventHandler("doc:checkWhitelist", function(loc)
 				TriggerClientEvent("usa:notify", source, "You don't work here!")
 			else
 				print("DOC EMPLOYEE EXISTED")
-				TriggerClientEvent("doc:open", source)
+				TriggerClientEvent("doc:open", source, loc)
 			end
 			return
 		end
