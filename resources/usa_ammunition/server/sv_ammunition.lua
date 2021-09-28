@@ -161,24 +161,23 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate, s
                         else
                             droppedMagItem.name = "Empty " .. newName
                         end
-                        if vehiclePlate then
-                            TriggerEvent("vehicle:storeItemInFirstFreeSlot", src, vehiclePlate, droppedMagItem, false, function(success, inv)
-                                if not success then
-                                    print("inv full, attempting to store in player inventory")
-                                    if char.canHoldItem(droppedMagItem) then    
-                                        char.giveItem(droppedMagItem)
-                                    else
-                                        print("all inventories full, dropping to floor")
-                                        TriggerEvent("interaction:addDroppedItem", droppedMagItem)
+                        -- drop already inserted mag
+                        if char.canHoldItem(droppedMagItem) then
+                            char.giveItem(droppedMagItem, 1)
+                        elseif vehiclePlate then
+                                TriggerEvent("vehicle:storeItemInFirstFreeSlot", src, vehiclePlate, droppedMagItem, false, function(success, inv)
+                                    if not success then
+                                        print("inv full, attempting to store in player inventory")
+                                        if char.canHoldItem(droppedMagItem) then    
+                                            char.giveItem(droppedMagItem)
+                                        else
+                                            print("all inventories full, dropping to floor")
+                                            TriggerEvent("interaction:addDroppedItem", droppedMagItem)
+                                        end
                                     end
-                                end
-                            end)
+                                end)
                         else
-                            if char.canHoldItem(droppedMagItem) then
-                                char.giveItem(droppedMagItem, 1)
-                            else
-                                TriggerEvent("interaction:addDroppedItem", droppedMagItem)
-                            end
+                            TriggerEvent("interaction:addDroppedItem", droppedMagItem)
                         end
                     end
                     if not curWep.uuid then
