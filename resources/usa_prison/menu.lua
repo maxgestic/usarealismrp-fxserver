@@ -157,10 +157,11 @@ mainMenu = NativeUI.CreateMenu("BCSO", "~b~Blaine County Sheriff's Office", 0 --
 _menuPool:Add(mainMenu)
 
 function CreateUniformMenu(menu)
-  menu:Clear()
+    local ped = GetPlayerPed(-1)
+    menu:Clear()
 
-  local submenu2 = _menuPool:AddSubMenu(menu, "Outfits", "Save and load outfits", true)
-  local selectedSaveSlot = 1
+    local submenu2 = _menuPool:AddSubMenu(menu, "Outfits", "Save and load outfits", true)
+    local selectedSaveSlot = 1
     local selectedLoadSlot = 1
     local saveslot = UIMenuListItem.New("Slot to Save", policeoutfitamount)
     local saveconfirm = UIMenuItem.New('Confirm Save', 'Save outfit into the above number')
@@ -211,9 +212,9 @@ function CreateUniformMenu(menu)
   -- Components --
   local submenu = _menuPool:AddSubMenu(menu, "Components", "Modify components", true --[[KEEP POSITION]])
   for i = 1, #components do
-    local selectedComponent = GetPedDrawableVariation(PlayerPedId(), i - 1)
-    local selectedTexture = GetPedTextureVariation(PlayerPedId(), i - 1)
-    local maxComponent = GetNumberOfPedDrawableVariations(PlayerPedId(), i - 1)
+    local selectedComponent = GetPedDrawableVariation(ped, i - 1) + 1
+    local selectedTexture = GetPedTextureVariation(ped, i - 1) + 1
+    local maxComponent = GetNumberOfPedDrawableVariations(ped, i - 1)
     --local maxTexture = GetNumberOfPedTextureVariations(ped, i - 1, selectedComponent)
     local arr = {}
     for j = 0, maxComponent + 1 do arr[j] = j - 1 end
@@ -233,8 +234,8 @@ function CreateUniformMenu(menu)
       local listitem = UIMenuListItem.New(components[i] .. " Texture", arr, selectedTexture)
       listitem.OnListChanged = function(sender, item, index)
         if item == listitem then
-          selectedTexture = index - 1
-          SetPedComponentVariation(PlayerPedId(), i - 1, selectedComponent, selectedTexture, 0)
+            selectedTexture = index - 1
+            SetPedComponentVariation(PlayerPedId(), i - 1, GetPedDrawableVariation(ped, i - 1), selectedTexture, 0)
         end
       end
       submenu.SubMenu:AddItem(listitem)
@@ -243,12 +244,12 @@ function CreateUniformMenu(menu)
   -- Props --
   local submenu = _menuPool:AddSubMenu(menu, "Props", "Modify props", true --[[KEEP POSITION]])
   for i = 1, 3 do
-    local selectedProp = GetPedPropIndex(PlayerPedId(), i - 1)
-    local selectedPropTexture = GetPedPropTextureIndex(PlayerPedId(), i - 1)
-    --local maxProp = GetNumberOfPedPropDrawableVariations(ped, i - 1)
+    local selectedProp = GetPedPropIndex(ped, i - 1) + 1
+    local selectedPropTexture = GetPedPropTextureIndex(ped, i - 1) + 1
+    local maxProp = GetNumberOfPedPropDrawableVariations(ped, i - 1)
     --local maxPropTexture = GetNumberOfPedPropTextureVariations(ped, i - 1, selectedProp)
     local arr = {}
-    for j = 0, MAX_PROP + 1 do arr[j] = j - 1 end
+    for j = 0, maxProp + 1 do arr[j] = j - 1 end
     local listitem = UIMenuListItem.New(props[i], arr, selectedProp)
     listitem.OnListChanged = function(sender, item, index)
       if item == listitem then
@@ -271,7 +272,7 @@ function CreateUniformMenu(menu)
         if item == listitem then
           --print("Selected ~b~" .. index .. "~w~...")
           selectedPropTexture = index - 1
-          SetPedPropIndex(PlayerPedId(), i - 1, selectedProp, selectedPropTexture, true)
+          SetPedPropIndex(PlayerPedId(), i - 1, GetPedPropIndex(ped, i - 1), selectedPropTexture, true)
         end
       end
       submenu.SubMenu:AddItem(listitem)
@@ -367,6 +368,7 @@ end)
 
 RegisterNetEvent("doc:open")
 AddEventHandler("doc:open", function(loc)
+    CreateUniformMenu(mainMenu)
     mainMenu:Visible(not mainMenu:Visible())
     closest_location = loc
 end)
