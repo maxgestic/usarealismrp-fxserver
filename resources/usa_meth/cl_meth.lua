@@ -76,7 +76,7 @@ Citizen.CreateThread(function()
               end
             end
         end
-        if meth.producingMeth and GetDistanceBetweenCoords(playerCoords, 1012.29, -3194.89, -38.99, true) > 6 then -- too far from being able to process
+        if meth.producingMeth and GetDistanceBetweenCoords(playerCoords, COOK_COORDS.x, COOK_COORDS.y, COOK_COORDS.z, true) > 6 then -- too far from being able to process
             TriggerEvent("usa:notify", "You went ~y~out of range~w~.")
             if meth.producingMeth then
                 for k = 1, #meth.methIngredients do
@@ -85,7 +85,7 @@ Citizen.CreateThread(function()
                 meth.methIngredients = {}
             end
             meth.producingMeth = false
-        elseif meth.processingMeth and GetDistanceBetweenCoords(playerCoords, 2434.78, 4964.29, 42.34, true) > 6 then
+        elseif meth.processingMeth and GetDistanceBetweenCoords(playerCoords, PACKAGE_COORDS.x, PACKAGE_COORDS.y, PACKAGE_COORDS.z, true) > 6 then
             TriggerEvent("usa:notify", "You went ~y~out of range~w~.")
             meth.methToProcess = nil
             meth.processingMeth = false
