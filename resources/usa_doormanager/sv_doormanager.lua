@@ -207,8 +207,24 @@ function toggleDoorLock(index)
   TriggerClientEvent("doormanager:toggleDoorLock", -1, index, DOORS[index].locked, DOORS[index].x, DOORS[index].y, DOORS[index].z)
 end
 
-function canCharUnlockDoor(char, doorIndex)
+function canCharUnlockDoor(char, doorIndex, lsource)
   local door = DOORS[doorIndex]
+  local bcso_rank = nil
+
+  TriggerEvent('es:exposeDBFunctions', function(GetDoc)
+    GetDoc.getDocumentByRow("correctionaldepartment", "identifier" , GetPlayerIdentifiers(lsource)[1], function(result)
+      if type(result) ~= "boolean" then
+        bcso_rank = result.rank
+      else
+        bcso_rank = 0
+      end
+    end)
+  end)
+
+  while bcso_rank == nil do
+    Wait(0)
+  end
+    
   for i = 1, #door.allowedJobs do
     if door.allowedJobs[i] == char.get("job") then -- clocked in for job
       return true
@@ -217,6 +233,8 @@ function canCharUnlockDoor(char, doorIndex)
     elseif door.allowedJobs[i] == 'sheriff' and char.get("policeRank") and char.get("policeRank") > 0 then -- not clocked in, but whitelisted for job
       return true
     elseif door.allowedJobs[i] == 'ems' and char.get("emsRank") and char.get("emsRank") > 0 then -- not clocked in, but whitelisted for job
+      return true
+    elseif door.allowedJobs[i] == 'corrections' and bcso_rank and bcso_rank > 0 then -- not clocked in, but whitelisted for job
       return true
     end
   end
@@ -239,6 +257,7 @@ end)
 RegisterServerEvent("doormanager:checkDoorLock")
 AddEventHandler("doormanager:checkDoorLock", function(index, x, y, z, lockpicked, thermited)
   local char = exports["usa-characters"]:GetCharacter(source)
+  local lsource = source
 
   if lockpicked and (DOORS[index].lockpickable or DOORS[index].advancedlockpickable) then
     toggleDoorLock(index)
@@ -250,7 +269,7 @@ AddEventHandler("doormanager:checkDoorLock", function(index, x, y, z, lockpicked
     return
   end
 
-  if canCharUnlockDoor(char, index) then
+  if canCharUnlockDoor(char, index, lsource) then
     toggleDoorLock(index)
     return
   end
