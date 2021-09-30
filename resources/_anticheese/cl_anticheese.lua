@@ -1,5 +1,4 @@
 -- This collection is to prevent this script from detecting our custom warp points that teleport far distances (like the paleto jail cells into mission row pd) --
--- todo: instead of duplicating the coordinates from warppoints resource, just make them gloabl or exports or something and use them so we don't have to worry about updating both resources manually
 local COORDS_TO_ALLOW_TELEPORTATION_FROM = {
 	{ x = -299.48, y = 6255.23, z = 30.53 }, -- Hen house entrance
 	{ x = -1387.47, y = -588.195, z = 29.3195 }, -- Hen house exit
@@ -60,7 +59,9 @@ local COORDS_TO_ALLOW_TELEPORTATION_FROM = {
 	{ x = 138.18, y = 2295.25, z = 94.09}, -- meth enter
 	{ x = -1569.64, y = -3013.94, z = -74.41 }, -- night club interior
 	{ x = -337.22, y = 207.74, z = 88.57 }, -- night club entrance
-	{x = 300.96530151367, y = -585.62915039063, z = 43.283988952637} -- pillbox entrance
+	{x = 300.96530151367, y = -585.62915039063, z = 43.283988952637}, -- pillbox entrance
+	{x = 783.46, y = -1868.02, z = 29.27}, -- enter LS Car Meet
+	{x = -2219.15, y = 1155.85, z = -23.26} -- leave LS Car Meet
 }
 
 local PROPERTY_COORDS = {
