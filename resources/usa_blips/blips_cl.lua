@@ -92,6 +92,7 @@ local blips = {
 	{ title = "Casino", x = 923.79486083984,y = 49.580528259277, id = 89, colour = 73, scale = 0.62},
 	{ title = "Vishnu's Go-Karts", x = -58.797729492188, y = -1839.8370361328, id = 488, colour = 0, scale = 0.7},
 	{ title = "PDM - Rockford Hills", x = -1259.8367919922, y = -361.47216796875, id = 225, colour = 57, scale = 0.8},
+	{ title = "LS Car Meet", x = 784.30633544922, y = -1868.2249755859, id = 38, colour = 62, scale = 0.8},
 }
 
 Citizen.CreateThread(function()
