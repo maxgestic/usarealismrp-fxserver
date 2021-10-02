@@ -245,31 +245,15 @@ Citizen.CreateThread(function()
   AddTextEntry('FE_THDR_GTAO', 'USA REALISM RP - HTTPS://USARRP.GG')
 end)
 
- --ped/vehicle npcs
- --[[
-Citizen.CreateThread(function()
-	while true do
-		Wait(0)
-
-		SetPedDensityMultiplierThisFrame(1.0)
-		SetVehicleDensityMultiplierThisFrame(0.5) -- npc vehicle amount
-		--local playerPed = GetPlayerPed(-1)
-		--local pos = GetEntityCoords(playerPed)
-		--RemoveVehiclesFromGeneratorsInArea(pos['x'] - 1500.0, pos['y'] - 1500.0, pos['z'] - 1500.0, pos['x'] + 1500.0, pos['y'] + 1500.0, pos['z'] + 1500.0);
-
-	end
-end)
---]]
-
 -- DISTRITIC'S RAGDOLL ON JUMP --
 local ragdoll_chance = 0.30 -- 80 = 80%
 
 Citizen.CreateThread(function()
 	while true do
 		Wait(100) -- check every 100 ticks, performance matters
-    if DoesEntityExist(playerPed) and IsPedUsingActionMode(playerPed) then -- disable action mode/combat stance when engaged in combat (thing which makes you run around like an idiot when shooting)
-        SetPedUsingActionMode(playerPed, -1, -1, 1)
-    end
+    --if DoesEntityExist(playerPed) and IsPedUsingActionMode(playerPed) then -- disable action mode/combat stance when engaged in combat (thing which makes you run around like an idiot when shooting)
+        --SetPedUsingActionMode(playerPed, -1, -1, 1)
+    --end
 		if IsPedOnFoot(playerPed) and not IsPedSwimming(playerPed) and (IsPedRunning(playerPed) or IsPedSprinting(playerPed)) and not IsPedClimbing(playerPed) and IsPedJumping(playerPed) and not IsPedRagdoll(playerPed) then
       local chance_result = math.random()
 			if chance_result < ragdoll_chance then
@@ -292,7 +276,6 @@ Citizen.CreateThread(function()
 		ClearAreaOfCops(playerLocalisation.x, playerLocalisation.y, playerLocalisation.z, 400.0)
 	end
 end)
-
 
 -- no police npc / never wanted
 Citizen.CreateThread(function()
@@ -503,7 +486,6 @@ Citizen.CreateThread(function()
         end
     end
 end)
-
 
 ------------------------------------
 -- V E H I C L E  C O N T R O L S --
@@ -890,13 +872,6 @@ AddEventHandler("usa:setPlayerComponents", function(character)
         SetPedHeadBlendData(playerPed, old_head.parent1, old_head.parent2, old_head.parent3, old_head.skin1, old_head.skin2, old_head.skin3, old_head.mix1, old_head.mix2, old_head.mix3, false) -- needed to apply head overlays like facial hair
         for i = 1, #old_head.other do
           SetPedHeadOverlay(playerPed, i - 1, 255, 1.0)
-          --[[
-          if i == 2 or i == 3 or i == 11 then -- chest hair, facial hair, eyebrows
-            SetPedHeadOverlayColor(ped, i - 1, 1, old_head.other[i][3])
-          elseif i == 6 or i == 9 then -- blush, lipstick
-            SetPedHeadOverlayColor(ped, i - 1, 2, old_head.other[i][3])
-          end
-          --]]
         end
         -- eye color --
         if old_head.eyeColor then
