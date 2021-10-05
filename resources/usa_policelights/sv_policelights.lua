@@ -20,10 +20,10 @@ TriggerEvent('es:addJobCommand', 'uclights', {'sheriff', 'corrections'}, functio
 	elseif job == "corrections" then -- BCSO
 		exports.usa_prison:getBCSORank(src, function(rank)
 			if rank then 
-				if rank >= 6 then
+				if rank >= 4 then
 					TriggerClientEvent('policelights:enableLightsOnVehicle', src)
 				else
-					TriggerClientEvent("usa:notify", src, "Must be rank 6+")
+					TriggerClientEvent("usa:notify", src, "Must be rank 4+")
 				end
 			end
 		end)

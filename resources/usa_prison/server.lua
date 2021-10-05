@@ -333,7 +333,7 @@ AddEventHandler("doc:checkRankForWeapon", function(weapon)
 end)
 
 -- adding new DOC employees --
-TriggerEvent('es:addJobCommand', 'setcorrectionsrank', {JOB_NAME}, function(source, args, user)
+TriggerEvent('es:addJobCommand', 'setcorrectionsrank', {"corrections"}, function(source, args, user)
 	local usource = source
 	if not GetPlayerName(tonumber(args[2])) or not tonumber(args[3]) then
 		TriggerClientEvent("usa:notify", source, "Error: bad format!")
@@ -382,4 +382,11 @@ TriggerEvent('es:addJobCommand', 'setcorrectionsrank', {JOB_NAME}, function(sour
 			end)
 		end)
 	end)
-end)
+	
+end, {
+	help = "Whitelist a player for corrections",
+	params = {
+		{ name = "id", help = "Players ID" },
+		{ name = "rank", help = "Rank" }
+	}
+})

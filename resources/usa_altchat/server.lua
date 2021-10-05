@@ -9,51 +9,59 @@ local jobNames = {
 	['da'] = 'District Attorney',
 	['ems'] = 'Medical Responder (LSFD)',
 	['doctor'] = 'Doctor',
-	['corrections'] = 'Corrections',
+	['corrections'] = 'Peace Officer (BCSO)',
 	['lawyer'] = 'Attorney',
 	['judge'] = 'Judge'
 }
 
 TriggerEvent('es:addCommand', 'ad', function(source, args, char)
-	if char.get("money") >= adCost then
-		local sender = char.getName()
-		if char.hasItem("Cell Phone") then
-			table.remove(args, 1)
-			char.removeMoney(adCost)
-			exports["usa-characters"]:GetCharacters(function(characters)
-				for id, char in pairs(characters) do
-					if char.hasItem("Cell Phone") then
-						TriggerClientEvent('chatMessage', id, "[Advertisement] - " .. sender, {171, 67, 227}, table.concat(args, " "))
+	if not (args[2] == nil) then
+		if char.get("money") >= adCost then
+			local sender = char.getName()
+			if char.hasItem("Cell Phone") then
+				table.remove(args, 1)
+				char.removeMoney(adCost)
+				exports["usa-characters"]:GetCharacters(function(characters)
+					for id, char in pairs(characters) do
+						if char.hasItem("Cell Phone") then
+							TriggerClientEvent('chatMessage', id, "[Advertisement] - " .. sender, {171, 67, 227}, table.concat(args, " "))
+						end
 					end
-				end
-			end)
+				end)
+			else
+				TriggerClientEvent('usa:notify', source, 'You do not have a cell phone!')
+			end
 		else
-			TriggerClientEvent('usa:notify', source, 'You do not have a cell phone!')
+			TriggerClientEvent('usa:notify',source, 'You do not have enough money!')
 		end
 	else
-		TriggerClientEvent('usa:notify',source, 'You do not have enough money!')
+		TriggerClientEvent('usa:notify',source, 'Please make sure to include a message!')
 	end
 end, {help = "Send an advertisement ($".. adCost ..").", params = {{name = "message", help = "the advertisement"}}})
 
 local lastAnonAdAuthor = nil
 TriggerEvent('es:addCommand', 'anonad', function(source, args, char)
-	if char.get("money") >= anonAdCost then
-		if char.hasItem("Cell Phone") then
-			table.remove(args, 1) -- remove "anonad"
-			char.removeMoney(anonAdCost)
-			lastAnonAdAuthor = "(#" .. source .. ") " .. char.getFullName()
-			exports["usa-characters"]:GetCharacters(function(characters)
-				for id, char in pairs(characters) do
-					if char.hasItem("Cell Phone") then
-						TriggerClientEvent('chatMessage', id, "[Advertisement]", {171, 67, 227}, table.concat(args, " "))
+	if not (args[2] == nil) then
+		if char.get("money") >= anonAdCost then
+			if char.hasItem("Cell Phone") then
+				table.remove(args, 1) -- remove "anonad"
+				char.removeMoney(anonAdCost)
+				lastAnonAdAuthor = "(#" .. source .. ") " .. char.getFullName()
+				exports["usa-characters"]:GetCharacters(function(characters)
+					for id, char in pairs(characters) do
+						if char.hasItem("Cell Phone") then
+							TriggerClientEvent('chatMessage', id, "[Advertisement]", {171, 67, 227}, table.concat(args, " "))
+						end
 					end
-				end
-			end)
+				end)
+			else
+				TriggerClientEvent('usa:notify', source, 'You do not have a cell phone!')
+			end
 		else
-			TriggerClientEvent('usa:notify', source, 'You do not have a cell phone!')
+			TriggerClientEvent("usa:notify", source, "You don't have enough money!")
 		end
 	else
-		TriggerClientEvent("usa:notify", source, "You don't have enough money!")
+		TriggerClientEvent('usa:notify',source, 'Please make sure to include a message!')
 	end
 end, {help = "Send an anonymous advertisement ($".. anonAdCost ..")", params = {{name = "message", help = "the advertisement"}}})
 
@@ -121,33 +129,33 @@ end, {
 	}
 })
 
-TriggerEvent('es:addJobCommand', 'faketweet', {'sheriff'}, function(source, args, char, location)
-	local job = char.get("job")
-	if char.get("policeRank") < 4 and (job == "sheriff" or job == "police") then
-		TriggerClientEvent("usa:notify", source, "Not high enough rank!")
-		return
-	end
-	local name = "@" .. args[2] .. "_" .. args[3]
-	name = string.lower(name)
-	table.remove(args, 1)
-	table.remove(args, 1)
-	table.remove(args, 1)
-	local msg = table.concat(args, " ")
-	exports["usa-characters"]:GetCharacters(function(characters)
-		for id, char in pairs(characters) do
-			if char.hasItem("Cell Phone") then
-				TriggerClientEvent('chatMessage', id, "[TWEET] - " .. name, {29,161,242}, msg)
-			end
-		end
-	end)
-	TriggerEvent("chat:sendToLogFile", source, "[TWEET] - " .. name .. ": " .. msg)
-end, {
-	help = "Send a fake tweet",
-	params = {
-		{ name = "first name", help = "first name to show on tweet" },
-		{ name = "last name", help = "last name to show on tweet" },
-	}
-})
+-- TriggerEvent('es:addJobCommand', 'faketweet', {'sheriff'}, function(source, args, char, location)
+-- 	local job = char.get("job")
+-- 	if char.get("policeRank") < 4 and (job == "sheriff" or job == "police") then
+-- 		TriggerClientEvent("usa:notify", source, "Not high enough rank!")
+-- 		return
+-- 	end
+-- 	local name = "@" .. args[2] .. "_" .. args[3]
+-- 	name = string.lower(name)
+-- 	table.remove(args, 1)
+-- 	table.remove(args, 1)
+-- 	table.remove(args, 1)
+-- 	local msg = table.concat(args, " ")
+-- 	exports["usa-characters"]:GetCharacters(function(characters)
+-- 		for id, char in pairs(characters) do
+-- 			if char.hasItem("Cell Phone") then
+-- 				TriggerClientEvent('chatMessage', id, "[TWEET] - " .. name, {29,161,242}, msg)
+-- 			end
+-- 		end
+-- 	end)
+-- 	TriggerEvent("chat:sendToLogFile", source, "[TWEET] - " .. name .. ": " .. msg)
+-- end, {
+-- 	help = "Send a fake tweet",
+-- 	params = {
+-- 		{ name = "first name", help = "first name to show on tweet" },
+-- 		{ name = "last name", help = "last name to show on tweet" },
+-- 	}
+-- })
 
 TriggerEvent('es:addJobCommand', 'fakead', {'sheriff', 'corrections'}, function(source, args, char, location)
 	local job = char.get("job")
@@ -206,7 +214,26 @@ end)
 
 function showid(src, u, location)
 	local job = u.get("job")
-	local employer = jobNames[job]
+	local employer = nil
+	if job == 'corrections' then
+		local ident = GetPlayerIdentifiers(src)[1]
+		TriggerEvent("es:exposeDBFunctions", function(db)
+			db.getDocumentByRow("correctionaldepartment", "identifier", ident, function(doc)
+				if doc then
+					if doc.rank > 2 then
+						employer = jobNames[job]
+					else
+						employer = 'Correctional Officer (BCSO)'
+					end
+				end
+			end)
+		end)
+		while employer == nil do
+			Wait(0)
+		end
+	else
+		employer = jobNames[job]
+	end
 	local char_name = u.getFullName()
 	local dob = u.get("dateOfBirth")
 	exports["globals"]:sendLocalActionMessage(src, "shows ID")
