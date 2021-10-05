@@ -1,6 +1,6 @@
 local bankRobbable = true
 local bankClosed = false
-local COPS_NEEDED_TO_ROB = 5
+local COPS_NEEDED_TO_ROB = 8
 local sourceRobbing = -1
 local BANK_ROBBERY_TIMEOUT = math.random(3600000, 10800000)
 
@@ -62,11 +62,13 @@ end)
 
 RegisterServerEvent("bank:clerkTip")
 AddEventHandler("bank:clerkTip", function()
-	if bankRobbable and (not bankClosed) and (exports["usa-characters"]:GetNumCharactersWithJob("sheriff") >= COPS_NEEDED_TO_ROB) then
-		TriggerClientEvent('usa:notify', source, "Our branch is currently open for business...")
-	else
-		TriggerClientEvent('usa:notify', source, "Our branch is closed, the vault has been recently cleared.")
-	end
+	exports.globals:getNumCops(function(numCops)
+		if bankRobbable and (not bankClosed) and numCops >= COPS_NEEDED_TO_ROB then
+			TriggerClientEvent('usa:notify', source, "Our branch is currently open for business...")
+		else
+			TriggerClientEvent('usa:notify', source, "Our branch is closed, the vault has been recently cleared.")
+		end
+	end)
 end)
 
 RegisterServerEvent('bank:loadDrillingSpots')
