@@ -62,11 +62,12 @@ end)
 
 RegisterServerEvent("bank:clerkTip")
 AddEventHandler("bank:clerkTip", function()
+	local src = source
 	exports.globals:getNumCops(function(numCops)
 		if bankRobbable and (not bankClosed) and numCops >= COPS_NEEDED_TO_ROB then
-			TriggerClientEvent('usa:notify', source, "Our branch is currently open for business...")
+			TriggerClientEvent('usa:notify', src, "Our branch is currently open for business...")
 		else
-			TriggerClientEvent('usa:notify', source, "Our branch is closed, the vault has been recently cleared.")
+			TriggerClientEvent('usa:notify', src, "Our branch is closed, the vault has been recently cleared.")
 		end
 	end)
 end)
