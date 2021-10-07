@@ -268,6 +268,18 @@ local warp_locations = {
       heading = -180.0
     },
     job_access = 'civ'
+  },
+  ['Humane Labs Water Labs'] = {
+    entrance = {
+      coords = {3540.6101, 3675.9336, 28.1211},
+      heading = 168.8225
+    },
+    exit = {
+      coords = {3540.6101, 3675.9336, 20.9918},
+      heading = -180.0
+    },
+    job_access = 'civ',
+    skipSound = true,
   }
 }
 
