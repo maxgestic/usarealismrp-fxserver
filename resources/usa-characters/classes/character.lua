@@ -119,6 +119,19 @@ function CreateCharacter(data)
     return weps
   end
 
+  rTable.hasWeapons = function()
+    local inv = self.inventory
+    for i = 0, self.inventory.MAX_CAPACITY - 1 do
+      local item = self.inventory.items[tostring(i)]
+      if item then
+        if item.type == "weapon" then
+          return true
+        end
+      end
+    end
+    return false
+  end
+
   rTable.removeWeapons = function()
     local inv = self.inventory
     for i = 0, inv.MAX_CAPACITY - 1 do
