@@ -411,6 +411,7 @@ local vehicleShopItems = {
 			{make = "Mazda", model = "Miata", price = 40000, hash = "na6", storage_capacity = 160.0},
 			{make = "Chevrolet", model = "Silverado 2500 HD", price = 125000, hash = "silv2500hd", storage_capacity = 300.0},
 			{make = "Ford", model = "F350", price = 95000, hash = "wdf350", storage_capacity = 300.0},
+			{make = "Chevrolet", model = "Camaro (2002)", price = 50000, hash = "camaro02", storage_capacity = 165.0},
 		}
 	}
 }
