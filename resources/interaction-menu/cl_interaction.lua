@@ -1331,8 +1331,8 @@ AddEventHandler("interaction:toggleWeapon", function(item, skipAnim)
 		if item.name:find("Molotov") or item.name:find("Flare") or item.name:find("Tear Gas") or item.name:find("Stun Gun") then
 			toGiveAmmo = 1
 		end
-		if item.name:find("Fire Extinguisher") then
-			toGiveAmmo = 500
+		if item.name:find("Fire Extinguisher") or item.name:find("Jerry Can") then
+			toGiveAmmo = 1000
 		end
 		TriggerEvent("interaction:equipWeapon", item, true, toGiveAmmo, (not skipAnim))
 		-- show selected weapon preview if in vehicle --

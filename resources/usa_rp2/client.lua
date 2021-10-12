@@ -697,16 +697,6 @@ Citizen.CreateThread(function()
 	end
 end)
 
-RegisterNetEvent("usa:equipWeapon")
-AddEventHandler("usa:equipWeapon", function(weapon)
-  if weapon.name ~= "Jerry Can" then
-    local currentWeaponAmmo = ((weapon.magazine and weapon.magazine.currentCapacity) or 0)
-    TriggerEvent("interaction:equipWeapon", weapon, true, currentWeaponAmmo, false)
-  else
-    SetPedAmmo(playerPed, weapon.hash, math.random(1000, 4500))
-  end
-end)
-
 RegisterNetEvent("usa:dropWeapon")
 AddEventHandler("usa:dropWeapon", function(weapon_hash)
 	--print("typeof weapon_hash: " .. type(weapon_hash))
