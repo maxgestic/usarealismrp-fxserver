@@ -973,9 +973,20 @@ AddEventHandler( 'impoundVehicle', function()
 
             if GetPedInVehicleSeat( vehicle, -1 ) == ped then
                 TriggerServerEvent("impound:impoundVehicle", vehicle, plate)
-                SetEntityAsMissionEntity( vehicle, true, true )
-                TriggerEvent('persistent-vehicles/forget-vehicle', vehicle)
-                deleteCar( vehicle )
+
+                NetworkRequestControlOfEntity(vehicle)
+                while not NetworkHasControlOfEntity(vehicle) do
+                    Wait(100)
+                    timeout = timeout - 100
+                end
+                SetEntityAsMissionEntity(vehicle, true, true)
+                while not IsEntityAMissionEntity(vehicle) do
+                    Wait(100)
+                end
+                Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( vehicle ) ) -- DeleteVehicle Native
+                if (DoesEntityExist(vehicle)) then 
+                    DeleteEntity(vehicle) -- Fallback in case DeleteVehicle does not work, DeleteEntity might
+                end 
                 ShowNotification( "Vehicle impounded." )
             else
                 ShowNotification( "You must be in the driver's seat!" )
@@ -983,14 +994,25 @@ AddEventHandler( 'impoundVehicle', function()
         else
             local playerPos = GetEntityCoords( ped, 1 )
             local inFrontOfPlayer = GetOffsetFromEntityInWorldCoords( ped, 0.0, distanceToCheck, 0.0 )
-            local vehicle = GetVehicleInDirection( playerPos, inFrontOfPlayer )
+            local vehicle = GetVehicleInDirection( playerPos, inFrontOfPlayer , distanceToCheck, ped)
             local plate = GetVehicleNumberPlateText(vehicle, false)
 
             if DoesEntityExist( vehicle ) then
                 TriggerServerEvent("impound:impoundVehicle", vehicle, plate)
-                SetEntityAsMissionEntity( vehicle, true, true )
-                TriggerEvent('persistent-vehicles/forget-vehicle', vehicle)
-                deleteCar( vehicle )
+
+                NetworkRequestControlOfEntity(vehicle)
+                while not NetworkHasControlOfEntity(vehicle) do
+                    Wait(100)
+                    timeout = timeout - 100
+                end
+                SetEntityAsMissionEntity(vehicle, true, true)
+                while not IsEntityAMissionEntity(vehicle) do
+                    Wait(100)
+                end
+                Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( vehicle ) ) -- DeleteVehicle Native
+                if (DoesEntityExist(vehicle)) then 
+                    DeleteEntity(vehicle) -- Fallback in case DeleteVehicle does not work, DeleteEntity might
+                end
                 ShowNotification( "Vehicle impounded." )
             else
                 ShowNotification( "You must be in or near a vehicle to impound it." )
@@ -1093,17 +1115,16 @@ Citizen.CreateThread(function()
     end
 end)
 
--- Delete car function borrowed frtom Mr.Scammer's model blacklist, thanks to him!
-function deleteCar( entity )
-    Citizen.InvokeNative( 0xEA386986E786A54F, Citizen.PointerValueIntInitialized( entity ) )
-end
-
 -- Gets a vehicle in a certain direction
 -- Credit to Konijima
-function GetVehicleInDirection( coordFrom, coordTo )
+function GetVehicleInDirection( coordFrom, coordTo, distance, ped )
     local rayHandle = CastRayPointToPoint( coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z, 10, GetPlayerPed( -1 ), 0 )
     local _, _, _, _, vehicle = GetRaycastResult( rayHandle )
-    return vehicle
+    if Vdist2(GetEntityCoords(ped), GetEntityCoords(vehicle)) < distance then
+        return vehicle
+    else 
+        return nil
+    end
 end
 
 -- Shows a notification on the player's screen
