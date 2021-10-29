@@ -350,6 +350,9 @@ RegisterNUICallback('escape', function(data, cb)
 	if data.vehicle.plate then
 		TriggerServerEvent("vehicle:RemovePersonFromInventory", data.vehicle.plate)
 	end
+	if data.secondaryInventoryType == "person" then
+		TriggerServerEvent("inventory:removeInventoryAccessor", data.secondaryInventorySrc)
+	end
 end)
 
 RegisterNUICallback('showPhone', function(data, cb)
@@ -1193,6 +1196,12 @@ end)
 
 RegisterNetEvent("interaction:sendNUIMessage")
 AddEventHandler("interaction:sendNUIMessage", function(messageTable)
+    SendNUIMessage(messageTable)
+end)
+
+RegisterNetEvent("interaction:openGUIAndSendNUIData")
+AddEventHandler("interaction:openGUIAndSendNUIData", function(messageTable)
+	EnableGui()
     SendNUIMessage(messageTable)
 end)
 

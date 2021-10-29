@@ -98,6 +98,19 @@ end)
 
 -- SEARCH COMMAND --------------------------------------------------------------------------------------------------------
 
+-- searches this client's player if hands are tied or is incapacitated
+RegisterNetEvent("search:civSearchCheck")
+AddEventHandler("search:civSearchCheck", function(searchedSrc, searcherSrc, isLEO)
+  local me = PlayerPedId()
+  local isIncapacitated = IsPedDeadOrDying(me, 1)
+  local handsTied = exports["usa_rp2"]:areHandsTied()
+  if isIncapacitated or handsTied or isLEO then
+    TriggerServerEvent("search:searchPlayer", searchedSrc, searcherSrc)
+  else
+    TriggerServerEvent("search:civSearchedCheckFailedNotify", searcherSrc)
+  end
+end)
+
 RegisterNetEvent("search:attemptToSearchNearestPerson")
 AddEventHandler("search:attemptToSearchNearestPerson", function()
   TriggerEvent("usa:getClosestPlayer", 1.6, function(player)

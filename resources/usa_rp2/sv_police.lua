@@ -135,9 +135,27 @@ function comma_value(amount)
   return formatted
 end
 
----------- SEARCH COMMAND ------------------------------------------------------------------------------------------------------------------------
+function isCloseEnoughToSearch(id1, id2)
+	local coords1 = GetEntityCoords(GetPlayerPed(id1))
+	local coords2 = GetEntityCoords(GetPlayerPed(id2))
+	if exports.globals:getCoordDistance(coords1, coords2) < 3 then
+		return true
+	else
+		return false
+	end
+end
+
+---------- SEARCH COMMAND ----------
 RegisterServerEvent("search:searchPlayer")
 AddEventHandler("search:searchPlayer", function(playerId, src)
+	if not GetPlayerName(playerId) then -- online check
+		TriggerClientEvent("usa:notify", src, "No person found")
+		return
+	end
+	if not isCloseEnoughToSearch(src, playerId) then
+		TriggerClientEvent("usa:notify", src, "Not close enough")
+		return
+	end
 	local char = exports["usa-characters"]:GetCharacter(playerId)
 	local items = {}
 	local inventory = char.get("inventory")
@@ -167,7 +185,7 @@ AddEventHandler("search:searchPlayer", function(playerId, src)
 			elseif items[i].residue and items[i].name == 'Large Scissors' then
 				TriggerClientEvent("chatMessage", src, "", {}, "^0(x" .. quantity .. ") " .. name .. ' (Odor of Marijuana)') -- print item
 			else
-				TriggerClientEvent("chatMessage", src, "", {}, "^0(x" .. quantity .. ") " .. name)
+				TriggerClientEvent("chatMessage", src, "", {}, "^0(x" .. (quantity or "?") .. ") " .. name)
 			end
 		end
 		if items[i].components then
@@ -176,6 +194,14 @@ AddEventHandler("search:searchPlayer", function(playerId, src)
 			end
 		end
 	end
+	-- open inventory UI for person doing searching showing items of searched person
+	TriggerClientEvent("interaction:openGUIAndSendNUIData", src, {
+		type = "showSearchedInventory",
+		inv = inventory,
+		searchedPersonSource = playerId
+	})
+	-- add to list of people accessing that inventory (so we can keep track of who needs to be updated if multiple people are searching a single inventory at once)
+	TriggerEvent("inventory:addInventoryAccessor", playerId, src)
 end)
 
 RegisterServerEvent("police:frisk")
@@ -225,9 +251,30 @@ AddEventHandler("search:playSuspectAnim", function(sourceToSearch, x, y, z, head
 	TriggerClientEvent("search:playSuspectAnim", sourceToSearch, x, y, z, heading)
 end)
 
+function canBypassDownedOrTiedCheck(char)
+	local isLEO = false
+	local charJob = char.get("job")
+	if charJob == "corrections" then
+		return true
+	elseif charJob == "sheriff" then
+		return true
+	elseif charJob == "ems" then
+		return true
+	else
+		return false
+	end
+end
+
 RegisterServerEvent("search:foundPlayerToSearch")
 AddEventHandler("search:foundPlayerToSearch", function(id)
-	TriggerClientEvent("crim:areHandsTied", id, source, id, "search")
+	local fromSrc = source
+	local fromChar = exports["usa-characters"]:GetCharacter(fromSrc)
+	TriggerClientEvent("search:civSearchCheck", id, id, fromSrc, canBypassDownedOrTiedCheck(fromChar))
+end)
+
+RegisterServerEvent("search:civSearchedCheckFailedNotify")
+AddEventHandler("search:civSearchedCheckFailedNotify", function(playerId)
+	TriggerClientEvent("usa:notify", playerId, "Person not downed / tied up")
 end)
 
 TriggerEvent('es:addCommand', 'search', function(source, args, char)
@@ -238,6 +285,10 @@ TriggerEvent('es:addCommand', 'search', function(source, args, char)
 		if not tonumber(args[2]) then
 			TriggerClientEvent("search:searchNearest", source, source)
 		else
+			if source == tonumber(args[2]) then
+				TriggerClientEvent("usa:notify", source, "Cant search self")
+				return
+			end
 			TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 4)
 			TriggerEvent("search:searchPlayer", tonumber(args[2]), source)
 		end

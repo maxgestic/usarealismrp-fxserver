@@ -394,10 +394,12 @@ var interactionMenu = new Vue({
       MAX_CAPACITY: 25,
       items: {}
     },
-    vehicleInventory: {
+    secondaryInventory: {
       MAX_ITEMS: 25,
       MAX_CAPACITY: 0.0,
-      items: {}
+      items: {},
+      type: null,
+      searchedPersonSource: null
     },
     isInVehicle: false,
     isCuffed: false,
@@ -433,7 +435,7 @@ var interactionMenu = new Vue({
       fromType: null,
       toType: null
     },
-    locked: null, // to be moved into vehicleInventory property (since it pertains to veh inv)
+    locked: null, // to be moved into secondaryInventory property (since it pertains to veh inv)
     profiler: {
       startTime: null
     },
@@ -624,8 +626,8 @@ var interactionMenu = new Vue({
         }
         else if (this.dropHelper.fromType == "primary" && this.inputBox.value > this.inventory.items[this.dropHelper.originIndex].quantity)
           this.inputBox.value = this.inventory.items[this.dropHelper.originIndex].quantity;
-        else if (this.dropHelper.fromType == "secondary" && this.inputBox.value > this.vehicleInventory.items[this.dropHelper.originIndex].quantity)
-          this.inputBox.value = this.vehicleInventory.items[this.dropHelper.originIndex].quantity;
+        else if (this.dropHelper.fromType == "secondary" && this.inputBox.value > this.secondaryInventory.items[this.dropHelper.originIndex].quantity)
+          this.inputBox.value = this.secondaryInventory.items[this.dropHelper.originIndex].quantity;
       }
       /* Update player */
       $.post('http://interaction-menu/moveItem', JSON.stringify({
@@ -634,7 +636,9 @@ var interactionMenu = new Vue({
         fromType: this.dropHelper.fromType,
         toType: this.dropHelper.toType,
         quantity: this.inputBox.value,
-        plate: this.targetVehiclePlate
+        plate: this.targetVehiclePlate,
+        secondaryInventoryType: this.secondaryInventory.type,
+        searchedPersonSource: this.secondaryInventory.searchedPersonSource
       }));
       /* Reset quantity input box value */
       this.inputBox.value = 1;
@@ -678,10 +682,10 @@ var interactionMenu = new Vue({
       }
       return weight
     },
-    vehicleInventoryWeight: function() {
+    secondaryInventoryWeight: function() {
       let weight = 0
-      for (var index in this.vehicleInventory.items) {
-        let item = this.vehicleInventory.items[index]
+      for (var index in this.secondaryInventory.items) {
+        let item = this.secondaryInventory.items[index]
         weight += (item.weight * (item.quantity || 1) || 1.0)
       }
       return weight
@@ -747,7 +751,7 @@ var interactionMenu = new Vue({
             componentInstance.dropHelper.fromType = fromType;
             componentInstance.dropHelper.toType = toType;
 
-            if (fromType != toType && ((fromType == "primary" && componentInstance.inventory.items[originIndex].quantity > 1) || fromType == "secondary" && componentInstance.vehicleInventory.items[originIndex].quantity > 1)) {
+            if (fromType != toType && ((fromType == "primary" && componentInstance.inventory.items[originIndex].quantity > 1) || fromType == "secondary" && componentInstance.secondaryInventory.items[originIndex].quantity > 1)) {
               /* Get user input for quantity to move */
               componentInstance.inputBox.show = true;
             } else {
@@ -791,7 +795,7 @@ var interactionMenu = new Vue({
               app.dropHelper.fromType = fromType;
               app.dropHelper.toType = toType;
 
-              if (fromType != toType && ((fromType == "primary" && app.inventory.items[originIndex].quantity > 1) || fromType == "secondary" && app.vehicleInventory.items[originIndex].quantity > 1)) {
+              if (fromType != toType && ((fromType == "primary" && app.inventory.items[originIndex].quantity > 1) || fromType == "secondary" && app.secondaryInventory.items[originIndex].quantity > 1)) {
                 /* Get user input for quantity to move */
                 app.inputBox.show = true;
               } else {
@@ -859,7 +863,9 @@ function CloseMenu() {
   $.post('http://interaction-menu/escape', JSON.stringify({
     vehicle: {
       plate: interactionMenu.targetVehiclePlate
-    }
+    },
+    secondaryInventoryType: interactionMenu.secondaryInventory.type,
+    secondaryInventorySrc: interactionMenu.secondaryInventory.searchedPersonSource
   }));
   interactionMenu.currentPage = "Home";
   interactionMenu.currentSubmenuItems = [];
@@ -909,16 +915,37 @@ $(function() {
       if (!event.data.inventory.items)
         event.data.inventory.items = {};
       /* set items */
-      interactionMenu.vehicleInventory = event.data.inventory;
+      interactionMenu.secondaryInventory = event.data.inventory;
+      interactionMenu.secondaryInventory.type = "vehicle";
       /* prevent access to veh inv items of a locked vehicle unless inside it */
       if (event.data.locked) {
         interactionMenu.locked = event.data.locked;
       }
       /* Show secondary inventory (only show after locked status is set to prevent premature access to items when locked) */
       interactionMenu.showSecondaryInventory = true;
+    } else if (event.data.type == "showSearchedInventory") {
+      $.post('http://interaction-menu/loadInventory', JSON.stringify({}));
+      interactionMenu.currentPage = "Inventory";
+      interactionMenu.locked = false;
+      interactionMenu.secondaryInventory = event.data.inv;
+      interactionMenu.secondaryInventory.type = "person";
+      interactionMenu.showSecondaryInventory = true;
+      interactionMenu.secondaryInventory.searchedPersonSource = event.data.searchedPersonSource;
+    } else if (event.data.type == "updateSecondaryInventory") {
+      let savedType = interactionMenu.secondaryInventory.type;
+      let savedSrc = interactionMenu.secondaryInventory.searchedPersonSource;
+
+      interactionMenu.secondaryInventory = event.data.inventory;
+
+      interactionMenu.secondaryInventory.type = savedType;
+      interactionMenu.secondaryInventory.searchedPersonSource = savedSrc;
 		} else if (event.data.type == "updateBothInventories") {
+      let savedType = interactionMenu.secondaryInventory.type;
+      let savedSrc = interactionMenu.secondaryInventory.searchedPersonSource;
       interactionMenu.inventory = event.data.inventory.primary;
-      interactionMenu.vehicleInventory = event.data.inventory.secondary;
+      interactionMenu.secondaryInventory = event.data.inventory.secondary;
+      interactionMenu.secondaryInventory.type = savedType;
+      interactionMenu.secondaryInventory.searchedPersonSource = savedSrc;
     } else if (event.data.type == "updateNearestPlayer") {
       var nearest = event.data.nearest;
       if (nearest.name == "") {

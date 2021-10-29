@@ -68,8 +68,9 @@
 							Weight: {{ this.inventoryWeight }}/100
 						</div>
 						<!-- Secondary inventory weight display -->
-						<div v-if="showSecondaryInventory" style="padding: 0.5em; position: absolute; top: -35px; right: 0; color: lightgray; font-size: 13px;">
-							Weight: {{ this.vehicleInventoryWeight }}/{{ this.vehicleInventory.MAX_CAPACITY }}
+						<div v-if="showSecondaryInventory && secondaryInventory.type" style="padding: 0.5em; position: absolute; top: -35px; right: 0; color: lightgray; font-size: 13px;">
+							<span v-if="secondaryInventory.type == 'vehicle'">Weight: {{ this.secondaryInventoryWeight }}/{{ this.secondaryInventory.MAX_CAPACITY }}</span>
+							<span v-if="secondaryInventory.type == 'person'">Weight: {{ this.secondaryInventoryWeight }}/100</span>
 						</div>
 						<!-- Player Inventory -->
 						<div class="inventory-wrap">
@@ -112,18 +113,18 @@
 							<table>
 								<tr class="inventory-row" v-for="i in 5">
 									<td class="inventory-item secondary-inv-slot" v-for="j in 5" v-bind:id="((5*(i-1)) + (j-1))" data-inventory-type="secondary">
-										<div v-if="vehicleInventory.items[(5*(i-1)) + (j-1)]">
+										<div v-if="secondaryInventory.items[(5*(i-1)) + (j-1)]">
 											<div class="secondary-inv-item" v-bind:id="((5*(i-1)) + (j-1))" data-inventory-type="secondary">
 												<header>
-													<span class="inventory-item-quantity">{{ vehicleInventory.items[(5*(i-1)) + (j-1)].quantity }}</span>
-													<span class="inventory-item-weight">W: {{ vehicleInventory.items[(5*(i-1)) + (j-1)].weight }}</span>
+													<span class="inventory-item-quantity">{{ secondaryInventory.items[(5*(i-1)) + (j-1)].quantity }}</span>
+													<span class="inventory-item-weight">W: {{ secondaryInventory.items[(5*(i-1)) + (j-1)].weight }}</span>
 												</header>
 												<section>
-													<img v-if="getItemImage(vehicleInventory.items[(5*(i-1)) + (j-1)])" v-bind:src="getItemImage(vehicleInventory.items[(5*(i-1)) + (j-1)])" v-bind:alt="getItemImage(vehicleInventory.items[(5*(i-1)) + (j-1)])">
+													<img v-if="getItemImage(secondaryInventory.items[(5*(i-1)) + (j-1)])" v-bind:src="getItemImage(secondaryInventory.items[(5*(i-1)) + (j-1)])" v-bind:alt="getItemImage(secondaryInventory.items[(5*(i-1)) + (j-1)])">
 												</section>
 												<footer>
 													<div>
-														<span :class="{ 'w3-text-red' : isItemIllegal(vehicleInventory.items[(5*(i-1)) + (j-1)]) }">{{ vehicleInventory.items[(5*(i-1)) + (j-1)].name }}</span>
+														<span :class="{ 'w3-text-red' : isItemIllegal(secondaryInventory.items[(5*(i-1)) + (j-1)]) }">{{ secondaryInventory.items[(5*(i-1)) + (j-1)].name }}</span>
 													</div>
 												</footer>
 											</div>
