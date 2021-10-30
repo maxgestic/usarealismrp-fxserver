@@ -91,6 +91,20 @@ AddEventHandler("vehicle:storeItemInFirstFreeSlot", function(src, vehicle_plate,
     end)
 end)
 
+function canBypassItemMovePermCheck(char)
+    local isLEO = false
+    local charJob = char.get("job")
+    if charJob == "corrections" then
+        return true
+    elseif charJob == "sheriff" then
+        return true
+    elseif charJob == "ems" then
+        return true
+    else
+        return false
+    end
+end
+
 RegisterServerEvent("vehicle:moveItemToPlayerInv")
 AddEventHandler("vehicle:moveItemToPlayerInv", function(src, plate, fromSlot, toSlot, quantity, char, cb)
     quantity = math.floor(quantity)
@@ -105,6 +119,11 @@ AddEventHandler("vehicle:moveItemToPlayerInv", function(src, plate, fromSlot, to
         if item and item.type and item.type == "license" then
             TriggerClientEvent("usa:notify", src, "Can't move licenses!")
             -- todo: send msg to NUI to give some UI feedback for failed move
+            exports["usa_vehinv"]:removeVehicleBusy(plate)
+            return
+        end
+        if item and not canBypassItemMovePermCheck(char) and (item.serviceWeapon or item.notTakeable) then
+            TriggerClientEvent("usa:notify", src, "Can't take that")
             exports["usa_vehinv"]:removeVehicleBusy(plate)
             return
         end
