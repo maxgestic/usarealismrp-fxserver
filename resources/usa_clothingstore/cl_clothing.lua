@@ -379,7 +379,7 @@ function CreateMenu()
 			local ply = GetPlayerPed(-1)
 			character.hash = GetEntityModel(ply)
 			--local debugstr = "Player Hash: " .. character.hash .. "| Props: "
-			for i=0,2 do
+			for i=0,7 do
 				character.props[i] = GetPedPropIndex(ply, i)
 				character.propstexture[i] = GetPedPropTextureIndex(ply, i)
 				--debugstr = debugstr .. character.props[i] .. "->" .. character.propstexture[i] .. ","
