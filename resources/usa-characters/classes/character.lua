@@ -301,6 +301,9 @@ function CreateCharacter(data)
   end
 
   rTable.giveItem = function(item, quantity)
+    if not item.uuid then
+      item.uuid = exports.globals:generateID()
+    end
     if quantity then
       item.quantity = quantity
     end
