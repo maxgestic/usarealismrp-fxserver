@@ -471,6 +471,9 @@ function CreateCharacter(data)
         newQuantity = 0
       end
       if newQuantity <= 0 then
+        if self.inventory.items[tostring(index)].name:find("Radio") then
+          TriggerClientEvent("Radio.Set", self.source, false, {})
+        end
         self.inventory.items[tostring(index)] = nil
       else
         self.inventory.items[tostring(index)].quantity = newQuantity
