@@ -89,15 +89,33 @@ end, {
 
 RegisterServerEvent("crim:foundPlayerToRob")
 AddEventHandler("crim:foundPlayerToRob", function(id)
-	TriggerClientEvent("crim:areHandsTied", id, source, id, "rob")
-	-- play animation:
+	TriggerClientEvent("civ:robPlayerIfTiedOrDowned", id, source)
+end)
+
+RegisterServerEvent("civ:continueRobbingPlayer")
+AddEventHandler("civ:continueRobbingPlayer", function(fromSrc)
+	-- play anim
 	local anim = {
 		dict = "anim@move_m@trash",
 		name = "pickup"
 	}
-	--TriggerClientEvent("usa:playAnimation", tonumber(source), anim.name, anim.dict, 3)
-	--TriggerClientEvent("usa:playAnimation", tonumber(source), anim.dict, anim.name, 5, 1, 3000, 31, 0, 0, 0, 0)
-	TriggerClientEvent("usa:playAnimation", tonumber(source), anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 3)
+	TriggerClientEvent("usa:playAnimation", fromSrc, anim.dict, anim.name, -8, 1, -1, 53, 0, 0, 0, 0, 3)
+	-- take money
+	local victim_char = exports["usa-characters"]:GetCharacter(source)
+	local amount_stolen = victim_char.get("money")
+	if amount_stolen >= 0 then
+		victim_char.removeMoney(amount_stolen)
+		local robber = exports["usa-characters"]:GetCharacter(fromSrc)
+		robber.giveMoney(amount_stolen)
+		TriggerClientEvent("usa:notify", fromSrc, "You've taken $" .. comma_value(amount_stolen) .. "!")
+	else
+		TriggerClientEvent("usa:notify", fromSrc, "Person has no money on them!")
+	end
+end)
+
+RegisterServerEvent("civ:notify")
+AddEventHandler("civ:notify", function(targetSrc, msg)
+	TriggerClientEvent("usa:notify", targetSrc, msg)
 end)
 
 ---------------------------------------

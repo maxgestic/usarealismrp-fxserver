@@ -44,6 +44,18 @@ AddEventHandler("crim:attemptToBlindfoldNearestPerson", function(blindfold)
   end)
 end)
 
+RegisterNetEvent("civ:robPlayerIfTiedOrDowned")
+AddEventHandler("civ:robPlayerIfTiedOrDowned", function(fromSrc)
+  local me = PlayerPedId()
+  local isDowned = IsPedDeadOrDying(me, 1)
+  local isTied = exports["usa_rp2"]:areHandsTied()
+  if isDowned or isTied then
+    TriggerServerEvent("civ:continueRobbingPlayer", fromSrc)
+  else
+    TriggerServerEvent("civ:notify", fromSrc, "Person not downed / hands tied")
+  end
+end)
+
 RegisterNetEvent("crim:attemptToRobNearestPerson")
 AddEventHandler("crim:attemptToRobNearestPerson", function()
   TriggerEvent("usa:getClosestPlayer", 1.5, function(player)
