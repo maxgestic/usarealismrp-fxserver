@@ -4,27 +4,20 @@ TriggerEvent('es:addJobCommand', 'govcheck', {"sheriff", "corrections", "judge",
     local char = exports["usa-characters"]:GetCharacter(usource)
     local fundAccount = job
     if job == "corrections" then
-        local whitelister_identifier = GetPlayerIdentifiers(source)[1]
-        TriggerEvent('es:exposeDBFunctions', function(GetDoc)
-            GetDoc.getDocumentByRow("correctionaldepartment", "identifier" , whitelister_identifier, function(result)
-                if type(result) == "boolean" then
-                    return
-                end
-                if result.rank < 4 then
-                    TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
-                    return
-                else
-                    TriggerClientEvent("govfunding:check", source)
-                end
-            end)
-        end)
+        if char.get("bcsoRank") < 4 then
+            TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
+            return
+        else
+            TriggerClientEvent("govfunding:check", source)
+        end
+        return
     elseif job == "sheriff" then
         if char.get("policeRank") < 4 then
             TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
             return
-       else
+        else
             TriggerClientEvent("govfunding:check", source)
-       end
+        end
         return
     elseif job == "ems" then
        if char.get("emsRank") < 4 then
@@ -55,20 +48,13 @@ TriggerEvent('es:addJobCommand', 'govdeposit', {"sheriff", "corrections", "judge
     if job == "judge" then
         TriggerEvent("govfunding:save", amount, usource, fundAccount)
     elseif job == "corrections" then
-        local whitelister_identifier = GetPlayerIdentifiers(source)[1]
-        TriggerEvent('es:exposeDBFunctions', function(GetDoc)
-            GetDoc.getDocumentByRow("correctionaldepartment", "identifier" , whitelister_identifier, function(result)
-                if type(result) == "boolean" then
-                    return
-                end
-                if result.rank < 4 then
-                    TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
-                    return
-                else
-                    TriggerEvent("govfunding:save", amount, usource, fundAccount)
-                end
-            end)
-        end)
+        if char.get("bcsoRank") < 4 then
+            TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
+            return
+        else
+            TriggerEvent("govfunding:save", amount, usource, fundAccount)
+        end
+        return
     elseif job == "sheriff" then
         if char.get("policeRank") < 4 then
             TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
@@ -100,20 +86,13 @@ TriggerEvent('es:addJobCommand', 'govwithdraw', {"sheriff", "corrections", "judg
     if job == "judge" then
         TriggerEvent("govfunding:delete", amount, usource, fundAccount)
     elseif job == "corrections" then
-        local whitelister_identifier = GetPlayerIdentifiers(source)[1]
-        TriggerEvent('es:exposeDBFunctions', function(GetDoc)
-            GetDoc.getDocumentByRow("correctionaldepartment", "identifier" , whitelister_identifier, function(result)
-                if type(result) == "boolean" then
-                    return
-                end
-                if result.rank < 4 then
-                    TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
-                    return
-                else
-                    TriggerEvent("govfunding:delete", amount, usource, fundAccount)
-                end
-            end)
-        end)
+        if char.get("bcsoRank") < 4 then
+            TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
+            return
+        else
+            TriggerEvent("govfunding:delete", amount, usource, fundAccount)
+        end
+        return
     elseif job == "sheriff" then
         if char.get("policeRank") < 4 then
             TriggerClientEvent("usa:notify", usource, "Not a high enough rank!")
@@ -221,7 +200,7 @@ AddEventHandler("govfunding:delete", function(withdrawAmount, src, fundAccount)
             sendChat(usource, message)
             return
         else
-            local message = "^1^*[GOV] ^r^7You withdrew: ^2$" .. withdrawAmount .. "^0. Your final balance is: ^2$" .. finishedBalance
+            local message = "^1^*[GOV] ^r^7You withdrew: ^2$" .. withdrawAmount .. "^0. Your final balance is: ^2$" .. exports.globals:comma_value(finishedBalance)
             sendChat(usource, message)
             saveBal(usource, finishedBalance, fundAccount)
             char.giveMoney(withdrawAmount)

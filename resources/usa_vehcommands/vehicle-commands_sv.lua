@@ -375,14 +375,7 @@ function getRankForJob(char, job, cb)
 	elseif job == "ems" or job == "doctor" then
 		cb(char.get("emsRank"))
 	elseif job == "corrections" then 
-		TriggerEvent('es:exposeDBFunctions', function(db)
-			local ident = GetPlayerIdentifiers(char.get("source"))[1]
-			db.getDocumentByRow("correctionaldepartment", "identifier", ident, function(doc)
-				if doc then
-					cb(doc.rank)
-				end
-			end)
-		end)
+		cb(char.get("bcsoRank"))
 	end
 end
 

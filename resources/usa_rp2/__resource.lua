@@ -25,5 +25,6 @@ exports {
 }
 
 server_exports {
-  "handlePlayerDropDutyLog"
+  "handlePlayerDropDutyLog",
+  "GetRankName"
 }

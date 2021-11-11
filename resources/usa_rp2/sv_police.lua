@@ -415,7 +415,7 @@ AddEventHandler("police:seizeCash", function(amount)
 	end
 end)
 
--- retrieve AR/pump shotgun
+
 TriggerEvent('es:addJobCommand', 'showbadge', { "corrections", "sheriff" }, function(source, args, char, location)
 	local cjob = char.get("job")
 	local char_name = char.getFullName()
@@ -423,24 +423,26 @@ TriggerEvent('es:addJobCommand', 'showbadge', { "corrections", "sheriff" }, func
 	if cjob == "sheriff" then
 		local police_rank = char.get("policeRank")
 		if police_rank > 0 then
-			local msg = "^*[ID]^r ^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2SASP Rank: ^0" .. GetRankName(police_rank, "SASP")
+			local msg = "^*[SASP BADGE]^r ^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2Rank: ^0" .. GetRankName(police_rank, "sheriff")
 			exports["globals"]:sendLocalActionMessageChat(msg, location)
 		end
 	elseif cjob == "corrections" then
-		local ident = GetPlayerIdentifiers(source)[1]
-		TriggerEvent("es:exposeDBFunctions", function(db)
-			db.getDocumentByRow("correctionaldepartment", "identifier", ident, function(doc)
-				if doc then
-					local msg = "^*[ID]^r ^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2BCSO Rank: ^0" .. GetRankName(doc.rank, "BCSO")
-					exports["globals"]:sendLocalActionMessageChat(msg, location)
-				end
-			end)
-		end)
+		local bcso_rank = char.get("bcsoRank")
+		if bcso_rank > 0 then
+			local msg = "^*[BCSO BADGE]^r ^2Name: ^0" .. char_name .. " - ^2SSN: ^0" .. source .. " - ^2Rank: ^0" .. GetRankName(bcso_rank, "corrections")
+			exports["globals"]:sendLocalActionMessageChat(msg, location)
+		end
 	end
 end, { help = "Present your official police or EMS identification." })
 
 function GetRankName(rank, dept)
-	return POLICE_RANKS[dept][rank]
+	local department = nil
+	if dept == "corrections" then 
+		department = "BCSO"
+	elseif dept == "sheriff" then 
+		department = "SASP"
+	end
+	return POLICE_RANKS[department][rank]
 end
 
 function GetPublicServantIds()

@@ -119,6 +119,7 @@ function CreateNewCharacter(src, data, cb)
     job = "civ",
     criminalHistory = {},
     policeRank = 0,
+    bcsoRank = 0,
     emsRank = 0,
     securityRank = 0,
     realtorRank = 0,
@@ -152,6 +153,20 @@ function InitializeCharacter(src, characterID)
             local character = CreateCharacter(charData) -- Create character object in memory
             character.set("job", "civ")
             CHARACTERS[src] = character
+            if character.get("bcsoRank") == nil then
+              local ident = GetPlayerIdentifiers(src)[1]
+              TriggerEvent("es:exposeDBFunctions", function(db)
+                db.getDocumentByRow("correctionaldepartment", "identifier", ident, function(doc)
+                  if doc then
+                    if doc.rank > 0 then
+                      character.set("bcsoRank", doc.rank)
+                    else
+                      character.set("bcsoRank", 0)
+                    end
+                  end
+                end)
+              end)
+            end
             TriggerClientEvent("character:setCharacter", src, character.get("appearance"), character.getWeapons()) -- load character
             TriggerEvent("police:checkSuspension", character) -- check dmv / firearm permit license status
             TriggerEvent("eblips:remove", src) -- remove any eblip

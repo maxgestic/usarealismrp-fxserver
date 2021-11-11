@@ -493,16 +493,9 @@ function Send911Notification(intendedEmergencyType, string, x, y, z, blipText)
                     if j ~= "corrections" then
                         TriggerClientEvent('911:Notification', id, string, x, y, z, blipText)
                     else 
-                        TriggerEvent('es:exposeDBFunctions', function(db)
-                            local ident = GetPlayerIdentifiers(char.get("source"))[1]
-                            db.getDocumentByRow("correctionaldepartment", "identifier", ident, function(doc)
-                                if doc then
-                                    if doc.rank >= 3 then 
-                                        TriggerClientEvent('911:Notification', id, string, x, y, z, blipText)
-                                    end
-                                end
-                            end)
-                        end)
+                        if char.get("bcsoRank") >= 3 then 
+                            TriggerClientEvent('911:Notification', id, string, x, y, z, blipText)
+                        end
                     end
                     break
                 end

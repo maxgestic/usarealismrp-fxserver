@@ -32,7 +32,3 @@ client_scripts {
 }
 
 server_script 'server.lua'
-
-server_exports {
-    "getBCSORank"
-}
