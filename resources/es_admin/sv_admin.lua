@@ -1388,7 +1388,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, char)
 
 			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
 			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Name: " .. char.getFullName() .. " | Identifer: " .. char.get("created").ownerIdentifier .. " | Group: " .. user.getGroup() .. " |")
-			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Police Rank: " .. char.get("policeRank") .. " | EMS Rank: " .. char.get("emsRank") .. " |  Job: " .. char.get("job") .. " |" )
+			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Police Rank: " .. (char.get("policeRank") or 0) .. " | EMS Rank: " .. (char.get("emsRank") or 0) .. " |  Job: " .. (char.get("job") or 0) .. " |" )
 			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Cash: " .. comma_value(char.get("money")) .. " | Bank: " .. comma_value(char.get("bank")) .. " |  Ingame Time: " .. FormatSeconds(char.get("ingameTime")) .. " |" )
 			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
 			TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Weapons: " .. weaponnames .. " | Firearms License: " .. firearms_permit .. " |")
