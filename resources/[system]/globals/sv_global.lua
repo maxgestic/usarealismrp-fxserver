@@ -36,17 +36,10 @@ function notifyPlayersWithJobs(target_jobs, msg, specialRequest)
 				for i = 1, #target_jobs do
 					if job == target_jobs[i] then
 						if specialRequest == "onlyDeputiesNoCOs" and job == "corrections" then
-							TriggerEvent("es:exposeDBFunctions", function(db)
-								local ident = GetPlayerIdentifiers(player.get("source"))[1]
-								db.getDocumentByRow("correctionaldepartment", "identifier", ident, function(doc)
-									if doc then
-										if doc.rank >= 3 then 
-											TriggerClientEvent("chatMessage", id, "", {}, "^0" .. msg)
-										end
-									end
-								end)
-							end)
-						else 
+							if player.get("bcsoRank") >= 3 then 
+								TriggerClientEvent('911:Notification', id, string, x, y, z, blipText)
+							end
+						else
 							TriggerClientEvent("chatMessage", id, "", {}, "^0" .. msg)
 						end
 					end
@@ -195,14 +188,13 @@ function getNumCops(cb)
 		if #bcso > 0 then
 			for i = 1, #bcso do
 				local id = bcso[i]
-				exports.usa_prison:getBCSORank(id, function(rank)
-					if rank >= 3 then
-						count = count + 1
-					end
-					if i == #bcso then
-						doneCounting = true
-					end
-				end)
+				local char = exports["usa-characters"]:GetCharacter(id)
+				if char.get("bcsoRank") >= 3 then
+					count = count + 1
+				end
+				if i == #bcso then
+					doneCounting = true
+				end
 			end
 		else
 			doneCounting = true
@@ -222,14 +214,13 @@ function getCopIds(cb)
 		if #bcso > 0 then
 			for i = 1, #bcso do
 				local id = bcso[i]
-				exports.usa_prison:getBCSORank(id, function(rank)
-					if rank >= 3 then
-						table.insert(ids, id)
-					end
-					if i == #bcso then
-						done = true
-					end
-				end)
+				local char = exports["usa-characters"]:GetCharacter(id)
+				if char.get("bcsoRank") >= 3 then
+					table.insert(ids, id)
+				end
+				if i == #bcso then
+					done = true
+				end
 			end
 		else
 			done = true

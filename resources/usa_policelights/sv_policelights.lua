@@ -11,22 +11,17 @@ end)
 TriggerEvent('es:addJobCommand', 'uclights', {'sheriff', 'corrections'}, function(src, args, char)
 	local job = char.get("job")
 	if job == "sheriff" then -- SASP
-		print("police rank: " .. char.get("policeRank"))
 		if char.get("policeRank") >= 4 then
 			TriggerClientEvent('policelights:enableLightsOnVehicle', src)
 		else 
 			TriggerClientEvent("usa:notify", src, "Must be rank 4+")
 		end
 	elseif job == "corrections" then -- BCSO
-		exports.usa_prison:getBCSORank(src, function(rank)
-			if rank then 
-				if rank >= 4 then
-					TriggerClientEvent('policelights:enableLightsOnVehicle', src)
-				else
-					TriggerClientEvent("usa:notify", src, "Must be rank 4+")
-				end
-			end
-		end)
+		if char.get("bcsoRank") >= 4 then
+			TriggerClientEvent('policelights:enableLightsOnVehicle', src)
+		else 
+			TriggerClientEvent("usa:notify", src, "Must be rank 4+")
+		end
 	end
 end, {
 	help = "Enable undercover lights on non-police vehicles",

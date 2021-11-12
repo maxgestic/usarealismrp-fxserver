@@ -209,21 +209,6 @@ end
 
 function canCharUnlockDoor(char, doorIndex, lsource)
   local door = DOORS[doorIndex]
-  local bcso_rank = nil
-
-  TriggerEvent('es:exposeDBFunctions', function(GetDoc)
-    GetDoc.getDocumentByRow("correctionaldepartment", "identifier" , GetPlayerIdentifiers(lsource)[1], function(result)
-      if type(result) ~= "boolean" then
-        bcso_rank = result.rank
-      else
-        bcso_rank = 0
-      end
-    end)
-  end)
-
-  while bcso_rank == nil do
-    Wait(0)
-  end
     
   for i = 1, #door.allowedJobs do
     if door.allowedJobs[i] == char.get("job") then -- clocked in for job
@@ -234,7 +219,7 @@ function canCharUnlockDoor(char, doorIndex, lsource)
       return true
     elseif door.allowedJobs[i] == 'ems' and char.get("emsRank") and char.get("emsRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
       return true
-    elseif door.allowedJobs[i] == 'corrections' and bcso_rank and bcso_rank > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
+    elseif door.allowedJobs[i] == 'corrections' and char.get("bcsoRank") and char.get("bcsoRank") > 0 and not door.denyOffDuty then -- not clocked in, but whitelisted for job
       return true
     end
   end

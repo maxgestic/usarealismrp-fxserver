@@ -42,30 +42,22 @@ TriggerEvent('es:addJobCommand', 'removesuspension', {'judge', 'sheriff', 'corre
 	local target = tonumber(args[3])
 	local target_item_name = nil
 	local isAllowed = nil
-	if char.get("job") == "judge" then
-		isAllowed = true
-	end
-    -- check SGT + rank for police --
-    if char.get("job") == "sheriff" then
-        if char.get("policeRank") < 4 then
-            isAllowed = false
+	-- check SGT + rank for police or if judge --
+	if char.get("job") == "sheriff" then
+	    if char.get("policeRank") < 4 then
+			isAllowed = false
 		else
 			isAllowed = true
-        end
+	    end
     elseif char.get("job") == "corrections" then
-    	local ident = GetPlayerIdentifiers(source)[1]
-		TriggerEvent("es:exposeDBFunctions", function(db)
-			db.getDocumentByRow("correctionaldepartment", "identifier", ident, function(doc)
-				if doc then
-					if doc.rank < 5 then
-						isAllowed = false
-					else
-						isAllowed = true
-					end
-				end
-			end)
-		end)
-    end
+	    if char.get("bcsoRank") < 5 then
+			isAllowed = false
+		else
+			isAllowed = true
+	    end
+	elseif char.get("job") == "judge" then
+		isAllowed = true
+	end
     while isAllowed == nil do
     	Wait(0)
     end
@@ -243,10 +235,7 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff', 'corrections'}, f
 	local target_item_name = nil
 	local target_item = nil
 	local isAllowed = nil
-	if char.get("job") == "judge" then
-		isAllowed = true
-	end
-  -- check SGT + rank for police --
+  	-- check SGT + rank for police or if judge --
 	if char.get("job") == "sheriff" then
 	    if char.get("policeRank") < 4 then
 			isAllowed = false
@@ -254,18 +243,13 @@ TriggerEvent('es:addJobCommand', 'issue', {'judge', 'sheriff', 'corrections'}, f
 			isAllowed = true
 	    end
     elseif char.get("job") == "corrections" then
-    	local ident = GetPlayerIdentifiers(source)[1]
-		TriggerEvent("es:exposeDBFunctions", function(db)
-			db.getDocumentByRow("correctionaldepartment", "identifier", ident, function(doc)
-				if doc then
-					if doc.rank < 5 then
-						isAllowed = false
-					else
-						isAllowed = true
-					end
-				end
-			end)
-		end)
+	    if char.get("bcsoRank") < 5 then
+			isAllowed = false
+		else
+			isAllowed = true
+	    end
+	elseif char.get("job") == "judge" then
+		isAllowed = true
 	end
 	while isAllowed == nil do
     	Wait(0)
@@ -401,30 +385,22 @@ TriggerEvent('es:addJobCommand', 'suspend', {'judge', "sheriff", "corrections"},
     local days = tonumber(args[4])
 	local target_item_name = nil
 	local isAllowed = nil
-	if char.get("job") == "judge" then
-		isAllowed = true
-	end
-    -- check SGT + rank for police --
-    if char.get("job") == "sheriff" then
-        if char.get("policeRank") < 4 then
+	-- check SGT + rank for police or if judge --
+	if char.get("job") == "sheriff" then
+	    if char.get("policeRank") < 4 then
 			isAllowed = false
 		else
 			isAllowed = true
-        end
+	    end
     elseif char.get("job") == "corrections" then
-    	local ident = GetPlayerIdentifiers(source)[1]
-		TriggerEvent("es:exposeDBFunctions", function(db)
-			db.getDocumentByRow("correctionaldepartment", "identifier", ident, function(doc)
-				if doc then
-			        if doc.rank < 5 then
-			            isAllowed = false
-					else
-						isAllowed = true
-			        end
-			    end
-			end)
-		end)
-    end
+	    if char.get("bcsoRank") < 5 then
+			isAllowed = false
+		else
+			isAllowed = true
+	    end
+	elseif char.get("job") == "judge" then
+		isAllowed = true
+	end
     while isAllowed == nil do
     	Wait(0)
     end
@@ -483,37 +459,28 @@ TriggerEvent('es:addJobCommand', 'revoke', {'judge', 'sheriff', 'corrections'}, 
 	local type = string.lower(args[2])
 	local target = tonumber(args[3])
 	local isAllowed = nil
-		
-	if char.get("job") == "judge" then
-		isAllowed = true
-	end
 
 	if not GetPlayerName(target) then
 		TriggerClientEvent("usa:notify", source, "Invalid ID provided")
 		return
 	end
 
-    -- check SGT + rank for police --
-    if char.get("job") == "sheriff" then
-        if char.get("policeRank") < 4 then
-            isAllowed = false
+    -- check SGT + rank for police or if judge --
+	if char.get("job") == "sheriff" then
+	    if char.get("policeRank") < 4 then
+			isAllowed = false
 		else
 			isAllowed = true
-        end
+	    end
     elseif char.get("job") == "corrections" then
-    	local ident = GetPlayerIdentifiers(source)[1]
-		TriggerEvent("es:exposeDBFunctions", function(db)
-			db.getDocumentByRow("correctionaldepartment", "identifier", ident, function(doc)
-				if doc then
-			        if doc.rank < 5 then
-			            isAllowed = false
-					else
-						isAllowed = true
-			        end
-			    end
-			end)
-		end)
-    end
+	    if char.get("bcsoRank") < 5 then
+			isAllowed = false
+		else
+			isAllowed = true
+	    end
+	elseif char.get("job") == "judge" then
+		isAllowed = true
+	end
 
     while isAllowed == nil do
     	Wait(0)

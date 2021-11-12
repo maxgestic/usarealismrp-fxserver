@@ -1279,7 +1279,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, char)
 					local property = targetchar.get("property")
 					local inventorynames = ""
 					local userInventory = targetchar.get("inventory").items
-					for i = 0, char.get("inventory").MAX_CAPACITY - 1 do
+					for i = 0, targetchar.get("inventory").MAX_CAPACITY - 1 do
 						--local inventory = userInventory[i]
 						--local quantity = inventory.quantity
 						if userInventory[tostring(i)] then
@@ -1320,7 +1320,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, char)
 					end
 					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
 					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Name: " .. targetchar.getFullName() .. " | Identifier: " .. targetchar.get("created").ownerIdentifier .. " | Group: " .. user.getGroup() .. " |")
-					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Police Rank: " .. targetchar.get("policeRank") .. " | EMS Rank: " .. targetchar.get("emsRank") .. " | Job: " .. targetchar.get("job") .. " | Steam Name: ".. GetPlayerName(args[2]))
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "SASP Rank: " .. targetchar.get("policeRank") .. " | BCSO Rank: " .. targetchar.get("bcsoRank") .. " | EMS Rank: " .. targetchar.get("emsRank") .. " | Job: " .. targetchar.get("job") .. " | Steam Name: ".. GetPlayerName(args[2]))
 					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Cash: " .. comma_value(targetchar.get("money")) .. " | Bank: " .. comma_value(targetchar.get("bank")) .. " | Property: " .. comma_value(property['money']) .. " |")
 					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Ingame Time: " .. FormatSeconds(targetchar.get("ingameTime")))
 					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")

@@ -562,43 +562,34 @@ AddEventHandler("mdt:deleteWarrant", function(id, rev)
 	local usource = source
 	local char = exports["usa-characters"]:GetCharacter(usource)
 	local job = char.get("job")
-	if job == "corrections" then
-		TriggerEvent("es:exposeDBFunctions", function(db)
-			db.getDocumentByRow("correctionaldepartment", "identifier", GetPlayerIdentifiers(usource)[1], function(doc)
-				if doc then
-					local msg = {}
-					if doc.rank >= 5 then
-						exports["usa-warrants"]:deleteWarrant("warrants", id, rev)
-						msg = {
-							type = "warrantDeleteFinish",
-							message = "Warrant deleted!",
-							uuid = id,
-							success = true
-						}
-					else 
-						msg = {
-							type = "warrantDeleteFinish",
-							message = "Insufficient permissions to delete!",
-							uuid = id,
-							success = false
-						}
-					end
-					TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
-				end
-			end)
-		end)
-	elseif (job == 'sheriff' and char.get("policeRank") >= 4) or job == 'judge' then
+	local permitted = false
+
+	if job == "corrections" and char.get("bcsoRank") >= 5 then
+		permitted = true
+	elseif (job == 'sheriff' and char.get("policeRank") >= 4) then
+		permitted = true
+	elseif job == 'judge' then 
+		permitted = true
+	end
+
+	local msg = {}
+	if permitted == true then
 		exports["usa-warrants"]:deleteWarrant("warrants", id, rev)
-		local msg = {
+		msg = {
 			type = "warrantDeleteFinish",
 			message = "Warrant deleted!",
 			uuid = id,
 			success = true
 		}
-		TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
 	else
-		TriggerClientEvent('usa:notify', usource, 'Insufficient permission!')
+		msg = {
+			type = "warrantDeleteFinish",
+			message = "Insufficient permissions to delete!",
+			uuid = id,
+			success = false
+		}
 	end
+	TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
 end)
 
 RegisterServerEvent("mdt:createBOLO")
@@ -684,36 +675,34 @@ AddEventHandler("mdt:deletePoliceReport", function(id, rev)
 	local usource = source
 	local char = exports["usa-characters"]:GetCharacter(usource)
 	local job = char.get("job")
-	if job == "corrections" then
-		TriggerEvent("es:exposeDBFunctions", function(db)
-			db.getDocumentByRow("correctionaldepartment", "identifier", GetPlayerIdentifiers(usource)[1], function(doc)
-				if doc then
-					local msg = {}
-					if doc.rank >= 5 then
-						deletePoliceReport("policereports", id, rev)
-						msg = {
-							type = "reportDeleteFinish",
-							message = "Report deleted!",
-							uuid = id,
-							success = true
-						}
-					else
-						msg = {
-							type = "reportDeleteFinish",
-							message = "Insufficient permission!",
-							uuid = id,
-							success = false
-						}
-					end
-					TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
-				end
-			end)
-		end)
-	elseif (job == 'sheriff' and char.get("policeRank") >= 4) or job == 'judge' then
-		deletePoliceReport("policereports", id, rev)
-	else 
-		TriggerClientEvent('usa:notify', usource, 'Insufficient permission!')
+	local permitted = false
+
+	if job == "corrections" and char.get("bcsoRank") >= 5 then
+		permitted = true
+	elseif (job == 'sheriff' and char.get("policeRank") >= 4) then
+		permitted = true
+	elseif job == 'judge' then 
+		permitted = true
 	end
+
+	local msg = {}
+	if permitted == true then
+		deletePoliceReport("policereports", id, rev)
+		msg = {
+			type = "reportDeleteFinish",
+			message = "Report deleted!",
+			uuid = id,
+			success = true
+		}
+	else
+		msg = {
+			type = "reportDeleteFinish",
+			message = "Insufficient permission!",
+			uuid = id,
+			success = false
+		}
+	end
+	TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
 end)
 
 RegisterServerEvent("mdt:fetchEmployee")
@@ -721,10 +710,16 @@ AddEventHandler("mdt:fetchEmployee", function()
 	local char = exports["usa-characters"]:GetCharacter(source)
 	local n = char.get("name")
 	local job = char.get("job")
+	local rank = nil
+	if job == "sheriff" then
+		rank = exports["usa_rp2"]:GetRankName(char.get("policeRank"), job)
+	elseif job == "corrections" then
+		rank = exports["usa_rp2"]:GetRankName(char.get("bcsoRank"), job)
+	end
 	local employee = {
 		fname = n.first,
 		lname = n.last,
-		rank = GetRankDisplayName(char.get("policeRank")),
+		rank = rank,
 		job = {
 			rawName = job,
 			displayName = GetDisplayNameFromJob(job)

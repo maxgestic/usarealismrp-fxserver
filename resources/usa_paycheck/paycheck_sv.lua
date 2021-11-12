@@ -73,18 +73,27 @@ function DepositPayCheck(char)
     elseif job == "judge" then
         paycheckAmount = 1700
     elseif job == "corrections" then
-        asyncGiveBank = true
-        local ident = GetPlayerIdentifiers(source)[1]
-        TriggerEvent("es:exposeDBFunctions", function(db)
-            db.getDocumentByRow("correctionaldepartment", "identifier", ident, function(doc)
-                if doc then
-                    paycheckAmount = GetBCSOPayFromRank(doc.rank)
-                    char.giveBank(paycheckAmount)
-                    local msg = "You received a check of $" .. paycheckAmount .. " from the ~y~Blaine County Sheriff's Office~s~."
-                    TriggerClientEvent('usa:notify', source, msg)
-                end
-            end)
-        end)
+        local bcsoRank = char.get("bcsoRank")
+        paycheckAmount = 800
+        if bcsoRank == 2 then
+            paycheckAmount = 900
+        elseif bcsoRank == 3 then
+            paycheckAmount = 1000
+        elseif bcsoRank == 4 then
+            paycheckAmount = 1100
+        elseif bcsoRank == 5 then
+            paycheckAmount = 1200
+        elseif bcsoRank == 6 then
+            paycheckAmount = 1300
+        elseif bcsoRank == 7 then
+            paycheckAmount = 1400
+        elseif bcsoRank == 8 then
+            paycheckAmount = 1500
+        elseif bcsoRank == 9 then
+            paycheckAmount = 1600
+        elseif bcsoRank == 10 then
+            paycheckAmount = 1700
+        end
     elseif job == "lawyer" then
         paycheckAmount = 1500
     elseif job == "doctor" then
@@ -118,6 +127,8 @@ function DepositPayCheck(char)
         msg = msg .. "of $" .. paycheckAmount .. " from ~y~Weazel News~s~."
     elseif job == "sheriff" then
         msg = msg .. "of $" .. paycheckAmount .. " from the ~y~San Andreas State Police~s~."
+    elseif job == "corrections" then
+        msg = msg .. "of $" .. paycheckAmount .. " from the ~y~Blaine County Sheriff's Office~s~."
     elseif job == "ems" then
         msg = msg .. "of $" .. paycheckAmount .. " from ~y~Los Santos Fire Department~s~."
     elseif job == "lawyer" then
@@ -183,32 +194,6 @@ function GetMinutesFromTime(time)
 	local minutesfrom = os.difftime(os.time(), time) / 60
 	local wholemins = math.floor(minutesfrom)
 	return wholemins
-end
-
-function GetBCSOPayFromRank(rank)
-    if rank == 1 then 
-        return 800
-    elseif rank == 2 then 
-        return 900
-    elseif rank == 3 then 
-        return 1000
-    elseif rank == 4 then 
-        return 1100
-    elseif rank == 5 then 
-        return 1200
-    elseif rank == 6 then 
-        return 1300
-    elseif rank == 7 then 
-        return 1400
-    elseif rank == 8 then 
-        return 1500
-    elseif rank == 9 then
-        return 1600
-    elseif rank == 10 then
-        return 1700
-    else
-        return 700
-    end
 end
 
 Citizen.CreateThread(function()

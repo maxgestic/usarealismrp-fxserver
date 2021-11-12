@@ -91,24 +91,9 @@ TriggerEvent('es:addJobCommand', 'fakeid', {'sheriff', 'corrections'}, function(
 	if char.get("policeRank") < 4 and (job == "sheriff" or job == "police") then
 		TriggerClientEvent("usa:notify", source, "Not high enough rank!")
 		return
-	elseif job == 'corrections' then
-		local usource = source
-		local job = char.get('job')
-		local cbRan = false
-		local highEnoughRank = false
-		getRankForJob(char, job, function(rank)
-			if rank >= 3 then
-				highEnoughRank = true
-			end
-			cbRan = true
-		end)
-		while not cbRan do
-			Wait(100)
-		end
-		if not highEnoughRank then
-			TriggerClientEvent("usa:notify", source, "Not high enough rank!")
-			return
-		end
+	elseif char.get("bcsoRank") < 4 and job == 'corrections' then
+		TriggerClientEvent("usa:notify", source, "Not high enough rank!")
+		return
 	end
 
 	if args[2] and args[3] and args[4] and args[5] and args[6] then
@@ -160,26 +145,11 @@ end, {
 TriggerEvent('es:addJobCommand', 'fakead', {'sheriff', 'corrections'}, function(source, args, char, location)
 	local job = char.get("job")
 	if char.get("policeRank") < 4 and (job == "sheriff" or job == "police") then
-	TriggerClientEvent("usa:notify", source, "Not high enough rank!")
-	return
-	elseif job == 'corrections' then
-		local usource = source
-		local job = char.get('job')
-		local cbRan = false
-		local highEnoughRank = false
-		getRankForJob(char, job, function(rank)
-			if rank >= 3 then
-				highEnoughRank = true
-			end
-			cbRan = true
-		end)
-		while not cbRan do
-			Wait(100)
-		end
-		if not highEnoughRank then
-			TriggerClientEvent("usa:notify", source, "Not high enough rank!")
-			return
-		end
+		TriggerClientEvent("usa:notify", source, "Not high enough rank!")
+		return
+	elseif char.get("bcsoRank") < 4 and job == 'corrections' then
+		TriggerClientEvent("usa:notify", source, "Not high enough rank!")
+		return
 	end
 	local name = args[2] .. " " .. args[3]
 	table.remove(args, 1)
@@ -216,18 +186,11 @@ function showid(src, u, location)
 	local job = u.get("job")
 	local employer = nil
 	if job == 'corrections' then
-		local ident = GetPlayerIdentifiers(src)[1]
-		TriggerEvent("es:exposeDBFunctions", function(db)
-			db.getDocumentByRow("correctionaldepartment", "identifier", ident, function(doc)
-				if doc then
-					if doc.rank > 2 then
-						employer = jobNames[job]
-					else
-						employer = 'Correctional Officer (BCSO)'
-					end
-				end
-			end)
-		end)
+		if u.get("bcsoRank") > 2 then
+            employer = jobNames[job]
+        else
+        	employer = 'Correctional Officer (BCSO)'
+        end
 		while employer == nil do
 			Wait(0)
 		end
@@ -250,17 +213,4 @@ function GetIdString(src, u)
 	local msg = "^4^*[ID]^0 Name: ^r" .. char_name .. " ^4^*|^0 SSN: ^r" .. src .. " ^4^*| ^0DOB: ^r" .. dob
 	if employer then msg = "^4^*[ID]^0 Name: ^r" .. char_name .. " ^4^*|^0 SSN: ^r" .. src .. " ^4^*| ^0DOB: ^r" .. dob .. " ^4^*| ^0Employer: ^r".. employer end
 	return msg
-end
-
-function getRankForJob(char, job, cb)
-	if job == "corrections" then
-		TriggerEvent('es:exposeDBFunctions', function(db)
-			local ident = GetPlayerIdentifiers(char.get("source"))[1]
-			db.getDocumentByRow("correctionaldepartment", "identifier", ident, function(doc)
-				if doc then
-					cb(doc.rank)
-				end
-			end)
-		end)
-	end
 end

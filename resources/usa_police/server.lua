@@ -60,16 +60,20 @@ AddEventHandler('rconCommand', function(commandName, args)
         local wl_type = table.remove(args, 1)
         local rank = tonumber(table.remove(args, 1)) -- 0 for unwhitelist, remove whitelist
         --RconPrint(type)
-        if not GetPlayerName(playerId) then
+        if not playerId then
+            RconPrint("\nYou must enter a player id!")
+            CancelEvent()
+            return
+        elseif not GetPlayerName(playerId) then
             RconPrint("\nError: player with id #" .. playerId .. " does not exist!")
             CancelEvent()
             return
         elseif not wl_type then
-            RconPrint("\nYou must enter a whitelist type: police or  ems")
+            RconPrint("\nYou must enter a whitelist type: police, ems, corrections, da, judge or eventplanner")
             CancelEvent()
             return
         elseif not rank then
-            RconPrint("\nYou must enter a rank for that player: 0 to un-whitelist. 1 is probationary deputy, 7 is max.")
+            RconPrint("\nYou must enter a rank for that player: 0 to un-whitelist. 1 is lowest rank, 10 is highest rank.")
             CancelEvent()
             return
         end
@@ -130,39 +134,16 @@ AddEventHandler('rconCommand', function(commandName, args)
                 RconPrint("DEBUG: " .. playerId .. " un-whitelisted as realtor.")
             end
         elseif wl_type == "corrections" then
-            if not GetPlayerName(playerId) or not tonumber(rank) then
-                RconPrint("Error: bad format!")
-                return
+            local char = exports["usa-characters"]:GetCharacter(playerId)
+            if rank > 0 then
+                char.set("bcsoRank", rank)
+                RconPrint("DEBUG: " .. playerId .. "'s BCSO rank has been set to: " .. rank .. "!")
+                TriggerClientEvent('chatMessage', tonumber(playerId), "CONSOLE", {255, 255, 255}, "You have been whitelisted for BCSO, rank: " .. rank)
+            else
+                char.set("bcsoRank", 0)
+                char.set("job", "civ")
+                RconPrint("DEBUG: " .. playerId .. " un-whitelisted from BCSO.")
             end
-            local target_ident = GetPlayerIdentifiers(playerId)[1]
-            TriggerEvent('es:exposeDBFunctions', function(GetDoc)
-                GetDoc.getDocumentByRow("correctionaldepartment", "identifier" , target_ident, function(result)
-
-                    local char = exports["usa-characters"]:GetCharacter(playerId)
-                    local employee = {
-                        identifier = target_ident,
-                        name = char.getFullName(),
-                        rank = tonumber(rank)
-                    }
-
-                    if type(result) ~= "boolean" then -- exists (table)
-                        GetDoc.updateDocument("correctionaldepartment", result._id, {rank = employee.rank}, function()
-                            RconPrint("Rank updated to: " .. employee.rank)
-                            RconPrint("\nEmployee " .. employee.name .. "updated, rank: " .. employee.rank .. "!")
-                            --loadDOCEmployees()
-                            TriggerEvent("doc:refreshEmployees") -- TODO: CREATE HANDLER FOR THIS EVENT in prisonfive/server.lua
-                        end)
-                    else -- did not exist already, create doc
-                        GetDoc.createDocument("correctionaldepartment", employee, function()
-                            -- notify:
-                            RconPrint("Employee " .. employee.name .. "created, rank: " .. employee.rank .. "!")
-                            -- refresh employees:
-                            --loadDOCEmployees()
-                            TriggerEvent("doc:refreshEmployees")
-                        end)
-                    end
-                end)
-            end)
         elseif wl_type:lower() == "eventplanner" then
             local c = exports["usa-characters"]:GetCharacter(playerId)
             c.set("eventPlannerRank", rank)
@@ -173,6 +154,23 @@ AddEventHandler('rconCommand', function(commandName, args)
 end)
 
 TriggerEvent('es:addCommand', 'whitelist', function(source, args, char)
+    if not args[2] then
+        TriggerClientEvent("usa:notify", source, " You must enter a player id!")
+        CancelEvent()
+        return
+    elseif not GetPlayerName(args[2]) then
+        TriggerClientEvent("usa:notify", source, "Error: player with id #" .. args[2] .. " does not exist!")
+        CancelEvent()
+        return
+    elseif not args[3] then
+        TriggerClientEvent("usa:notify", source, "You must enter a whitelist type: police, ems, corrections or da")
+        CancelEvent()
+        return
+    elseif not args[4] then
+        TriggerClientEvent("usa:notify", source, "You must enter a rank for that player: 0 to un-whitelist. 1 is lowest rank, 10 is highest rank.")
+        CancelEvent()
+        return
+    end
     local user = exports["essentialmode"]:getPlayerFromId(source)
     local user_group = user.getGroup()
     local user_rank = 0
@@ -184,6 +182,8 @@ TriggerEvent('es:addCommand', 'whitelist', function(source, args, char)
         user_rank = tonumber(char.get("emsRank"))
     elseif type == "police" then
         user_rank = tonumber(char.get("policeRank"))
+    elseif type == "corrections" then 
+        user_rank = tonumber(char.get("bcsoRank"))
     elseif type == "da" then
         user_rank = char.get("daRank")
         if user_rank then
@@ -191,6 +191,10 @@ TriggerEvent('es:addCommand', 'whitelist', function(source, args, char)
         else
             user_rank = 0
         end
+    else
+        TriggerClientEvent("usa:notify", source, "That is not a valid whitelist please enter a valid type: police, ems, corrections or da")
+        CancelEvent()
+        return
     end
 
     if user_group == "admin" or user_group == "superadmin" or user_group == "owner" then
@@ -210,17 +214,19 @@ TriggerEvent('es:addCommand', 'whitelist', function(source, args, char)
         return
     elseif not type then
         print("You must enter a whitelist type: police, ems or da")
-        TriggerClientEvent("usa:notify", source, "You must enter a whitelist type: police or ems")
+        TriggerClientEvent("usa:notify", source, "You must enter a whitelist type: police, corrections, ems or da")
         return
     elseif not rank then
         print("You must enter a whitelist status for that player: true or false")
-        TriggerClientEvent("usa:notify", source, "You must enter a rank for that player: 0 to un-whitelist. 1 is lowest, 7 is max.")
+        TriggerClientEvent("usa:notify", source, "You must enter a rank for that player: 0 to un-whitelist. 1 is lowest rank, 10 is highest rank.")
         return
     end
     local target = exports["usa-characters"]:GetCharacter(playerId)
     if rank > 0 then
         if type == "police" then
             target.set("policeRank", rank)
+        elseif type == "corrections" then 
+            target.set("bcsoRank", rank)
         elseif type == "ems" then
             target.set("emsRank", rank)
         elseif type == "da" then
@@ -230,23 +236,25 @@ TriggerEvent('es:addCommand', 'whitelist', function(source, args, char)
     else
         if type == "police" then
             target.set("policeRank", 0)
+        elseif type == "corrections" then
+            target.set("bcsoRank", 0)
         elseif type == "ems" then
             target.set("emsRank", 0)
         elseif type == "da" then
             target.set("daRank", 0)
         end
         local user_job = target.get("job")
-        if user_job == "ems" or user_job == "fire" or user_job == "sheriff" then
+        if user_job == "ems" or user_job == "fire" or user_job == "sheriff" or user_job == "corrections" then
             target.set("job", "civ")
         end
         TriggerClientEvent("usa:notify", source, "Player " .. playerName .. " has been un-whitelisted for " .. type)
     end
 end, {
-    help = "Set a person's police, EMS or DA rank.",
+    help = "Set a person's police, corrections, EMS or DA rank.",
     params = {
         { name = "id", help = "The player's server ID #" },
-        { name = "type", help = "'police', 'ems' or 'da'" },
-        { name = "rank", help = "0 to remove whitelist, 1 for lowest, 7 is max permissions" }
+        { name = "type", help = "'police', 'corrections', 'ems' or 'da'" },
+        { name = "rank", help = "0 to remove whitelist, 1 for lowest, 10 is max permissions" }
     }
 })
 
@@ -269,7 +277,7 @@ AddEventHandler("policestation2:checkWhitelistForArmory", function()
     local playerGameLicense = ""
     local char = exports["usa-characters"]:GetCharacter(source)
     local job = char.get("job")
-    if (char.get("policeRank") > 0 and job == "sheriff") or job == "corrections" then
+    if (char.get("policeRank") > 0 and job == "sheriff") or (char.get("bcsoRank") > 0 and job == "corrections") then
         TriggerClientEvent("policestation2:showArmoury", source)
     else
         TriggerClientEvent("usa:notify", source, "~y~You are not on duty for POLICE. Apply at https://www.usarrp.gg.")
@@ -284,7 +292,12 @@ AddEventHandler("policestation2:requestPurchase", function(index)
         TriggerEvent("spikestrips:equip", true, usource) -- true = pay required
     else
         local char = exports["usa-characters"]:GetCharacter(usource)
-        local rank = char.get("policeRank")
+        local rank = nil
+        if char.get("job") == "sheriff" then
+            rank = char.get("policeRank")
+        elseif char.get("job") == "corrections" then 
+            rank = char.get("bcsoRank")
+        end
         if weapon.minRank then
             if rank < weapon.minRank then
                 TriggerClientEvent("usa:notify", usource, "Not high enough rank, need to be: " .. weapon.minRank)
