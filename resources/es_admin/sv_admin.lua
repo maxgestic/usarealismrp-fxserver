@@ -1320,7 +1320,7 @@ TriggerEvent('es:addCommand', 'stats', function(source, args, char)
 					end
 					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "***********************************************************************")
 					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Name: " .. targetchar.getFullName() .. " | Identifier: " .. targetchar.get("created").ownerIdentifier .. " | Group: " .. user.getGroup() .. " |")
-					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "SASP Rank: " .. targetchar.get("policeRank") .. " | BCSO Rank: " .. targetchar.get("bcsoRank") .. " | EMS Rank: " .. targetchar.get("emsRank") .. " | Job: " .. targetchar.get("job") .. " | Steam Name: ".. GetPlayerName(args[2]))
+					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "SASP Rank: " .. (targetchar.get("policeRank") or 0) .. " | BCSO Rank: " .. (targetchar.get("bcsoRank") or 0) .. " | EMS Rank: " .. (targetchar.get("emsRank") or 0) .. " | Job: " .. targetchar.get("job") .. " | Steam Name: ".. GetPlayerName(args[2]))
 					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Cash: " .. comma_value(targetchar.get("money")) .. " | Bank: " .. comma_value(targetchar.get("bank")) .. " | Property: " .. comma_value(property['money']) .. " |")
 					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Ingame Time: " .. FormatSeconds(targetchar.get("ingameTime")))
 					TriggerClientEvent('chatMessage', source, "", {255, 255, 255}, "Vehicles: " .. vehiclenames .. " | Insurance: " .. displayInsurance .. " | Driver's License: " .. driving_license .. " |")
