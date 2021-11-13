@@ -234,6 +234,10 @@ AddEventHandler("inventory:moveItem", function(data)
 							TriggerClientEvent("interaction:sendNUIMessage", usource, { type = "inventoryLoaded", inventory = char.get("inventory") })
 							TriggerEvent("inventory:updateForOthers", data.searchedPersonSource, fromChar.get("inventory"))
 							TriggerClientEvent("interaction:sendNUIMessage", data.searchedPersonSource, { type = "inventoryLoaded", inventory = fromChar.get("inventory") })
+							if item.type and item.type == "weapon" then
+								TriggerClientEvent("interaction:equipWeapon", data.searchedPersonSource, item, false)
+								TriggerClientEvent("interaction:equipWeapon", usource, item, true, ((item.magazine and item.magazine.currentCapacity) or 0), false, false)
+							end
 						else
 							TriggerClientEvent("usa:notify", usource, "Invalid slot!")
 						end
