@@ -1356,8 +1356,11 @@ AddEventHandler("interaction:toggleWeapon", function(item, skipAnim)
 end)
 
 RegisterNetEvent("interaction:equipWeapon")
-AddEventHandler("interaction:equipWeapon", function(item, equip, ammoAmount, playAnim)
+AddEventHandler("interaction:equipWeapon", function(item, equip, ammoAmount, playAnim, equipNow)
 	local ped = GetPlayerPed(-1)
+	if equipNow == nil then
+		equipNow = true
+	end
 	if equip then
 		local currentWeaponAmmo = (ammoAmount or (item.magazine and item.magazine.currentCapacity) or 0)
 		print("equipping wep with ammo count: " .. currentWeaponAmmo)
@@ -1368,7 +1371,7 @@ AddEventHandler("interaction:equipWeapon", function(item, equip, ammoAmount, pla
 				TriggerEvent("ammo:setRanOutOfAmmo", true)
 			end
 		end
-		GiveWeaponToPed(ped, item.hash, currentWeaponAmmo, false, true)
+		GiveWeaponToPed(ped, item.hash, currentWeaponAmmo, false, equipNow)
 		if item.components then
 			if #item.components > 0 then
 				for x = 1, #item.components do

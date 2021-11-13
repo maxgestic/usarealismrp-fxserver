@@ -108,6 +108,7 @@ AddEventHandler("interaction:giveItemToPlayer", function(item, targetPlayerId)
 				fromChar.removeItem(item, 1)
 			end
 			TriggerClientEvent("interaction:equipWeapon", source, item, false)
+			TriggerClientEvent("interaction:equipWeapon", targetPlayerId, item, true, ((item.magazine and item.magazine.currentCapacity) or 0), false, false)
 		else
 			item.quantity = 1
 			toChar.giveItem(item)
