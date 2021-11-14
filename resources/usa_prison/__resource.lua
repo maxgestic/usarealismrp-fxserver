@@ -28,7 +28,15 @@ client_scripts {
     "@NativeUI/UIMenu/UIMenu.lua",
 	"@NativeUI/UIMenu/MenuPool.lua",
 	"@NativeUI/NativeUI.lua",
-    'menu.lua'
+    'menu.lua',
+    'contraband/cl_contraband.lua'
 }
 
-server_script 'server.lua'
+server_scripts {
+    'server.lua',
+    'contraband/sv_contraband.lua'
+}
+
+server_exports {
+    "getBCSORank"
+}

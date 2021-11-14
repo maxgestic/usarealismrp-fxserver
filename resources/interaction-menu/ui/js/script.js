@@ -246,6 +246,7 @@ var itemImages = {
   "Stretcher": "https://i.imgur.com/X5dv2kQ.png",
   "Glock": "https://i.imgur.com/UjZeF6e.png",
   "Scuba Gear": "https://i.imgur.com/3b2ZiE1.png",
+  "Broken Bottle": "https://i.imgur.com/I64qsxm.png",
   // begin ammo
   "9mm Bullets": "https://i.imgur.com/AWEjRpc.png",
   "9x18mm Bullets": "https://i.imgur.com/TFW3q4q.png",
