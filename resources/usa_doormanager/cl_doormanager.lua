@@ -322,6 +322,21 @@ AddEventHandler('doormanager:advancedSuccess', function()
     end
 end)
 
+RegisterNetEvent('doormanager:DoorClipboard')
+AddEventHandler('doormanager:DoorClipboard', function(name, jobs, offDuty, doorHash)
+  doorHash = tonumber(doorHash)
+  local door = GetClosestObjectOfType(GetEntityCoords(PlayerPedId()), 5.0, doorHash, false, false, false)
+  local door_x = round(GetEntityCoords(door).x, 2)
+  local door_y = round(GetEntityCoords(door).y, 2)
+  local door_z = round(GetEntityCoords(door).z, 2)
+  local door_heading = round(GetEntityHeading(door))
+  local message = '{name = "' .. name .. '", x = ' .. door_x .. ', y = ' .. door_y .. ', z = ' .. door_z .. ', model = ' .. doorHash .. ', locked = true, offset={0.0, -1.0, 0.0}, heading=' .. door_heading .. ', _dist = 1.5, allowedJobs = {' .. jobs .. '}, denyOffDuty = ' .. offDuty .. '},'
+  print(message)
+  SendNUIMessage({
+    message = message
+  })
+end)
+
 function CreateCellDoor(door)
   local cellDoorHandle = CreateObject(door.customDoor.model, door.customDoor.coords.x, door.customDoor.coords.y, door.customDoor.coords.z, false, false, true)
   SetEntityCollision(cellDoorHandle, true, true)
@@ -459,4 +474,13 @@ function PlayLockAnim()
         ped = GetPlayerPed(-1)
         TaskPlayAnim(ped, "anim@mp_player_intmenu@key_fob@", "fob_click", 8.0, 1.0, -1, 48)
     end
+end
+
+function round(value, numDecimalPlaces)
+  if numDecimalPlaces then
+    local power = 10^numDecimalPlaces
+    return math.floor((value * power) + 0.5) / (power)
+  else
+    return math.floor(value + 0.5)
+  end
 end

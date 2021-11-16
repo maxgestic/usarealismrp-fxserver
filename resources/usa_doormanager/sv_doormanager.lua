@@ -71,6 +71,27 @@ local DOORS = {
   {name = "Solitary Double Doors", x = 1780.15, y = 2600.77, z = 50.55, model = 1028191914, static= true, locked = true, _dist = 2, offset={1.13, 2.20, 0.05}, heading=0,  allowedJobs = {'sheriff', 'corrections'}},
   {name = "Solitary Double Doors", x = 1778.74, y = 2601.03, z = 50.55, model = 1028191914, locked = true, _dist = 2, offset={1.13, 0.00, 0.05}, heading=180,  allowedJobs = {'sheriff', 'corrections'}},
 
+  {name = "BolingbrokeTower1Bottom", x = 1821.48, y = 2476.93, z = 45.53, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=65, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}, denyOffDuty = true},
+  {name = "BolingbrokeTower1Top", x = 1821.48, y = 2476.93, z = 62.85, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=245, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}, denyOffDuty = true},
+  {name = "BolingbrokeTower2Bottom", x = 1760.44, y = 2412.81, z = 45.56, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=25, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}, denyOffDuty = true},
+  {name = "BolingbrokeTower2Top", x = 1760.44, y = 2412.81, z = 62.85, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=205, _dist = 1.5, allowedJobs = {'sheriff', 'corrections'}, denyOffDuty = true},
+  {name = "BolingbrokeTower3Bottom", x = 1658.58, y = 2397.72, z = 45.72, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=354, _dist = 1.5, allowedJobs = {"sheriff","corrections"}, denyOffDuty = true},
+  {name = "BolingbrokeTower3Top", x = 1659.88, y = 2397.58, z = 63.03, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=175, _dist = 1.5, allowedJobs = {"sheriff","corrections"}, denyOffDuty = true},
+  {name = "BolingbrokeTower4Bottom", x = 1543.24, y = 2471.29, z = 45.71, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=290, _dist = 1.5, allowedJobs = {"sheriff","corrections"}, denyOffDuty = true},
+  {name = "BolingbrokeTower4Top", x = 1543.65, y = 2470.06, z = 63.03, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=110, _dist = 1.5, allowedJobs = {"sheriff","corrections"}, denyOffDuty = true},
+  {name = "BolingbrokeTower5Bottom", x = 1537.81, y = 2586.0, z = 45.69, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=270, _dist = 1.5, allowedJobs = {"sheriff","corrections"}, denyOffDuty = true},
+  {name = "BolingbrokeTower5Top", x = 1537.78, y = 2584.69, z = 63.0, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=90, _dist = 1.5, allowedJobs = {"sheriff","corrections"}, denyOffDuty = true},
+  {name = "BolingbrokeTower6Bottom", x = 1572.66, y = 2679.19, z = 45.73, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=235, _dist = 1.5, allowedJobs = {"sheriff","corrections"}, denyOffDuty = true},
+  {name = "BolingbrokeTower6Top", x = 1571.89, y = 2678.15, z = 63.04, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=55, _dist = 1.5, allowedJobs = {"sheriff","corrections"}, denyOffDuty = true},
+  {name = "BolingbrokeTower7Bottom", x = 1651.16, y = 2755.44, z = 45.88, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=200, _dist = 1.5, allowedJobs = {"sheriff","corrections"}, denyOffDuty = true},
+  {name = "BolingbrokeTower7Top", x = 1649.93, y = 2755.02, z = 63.19, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=20, _dist = 1.5, allowedJobs = {"sheriff","corrections"}, denyOffDuty = true},
+  {name = "BolingbrokeTower8Bottom", x = 1773.11, y = 2759.7, z = 45.89, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=165, _dist = 1.5, allowedJobs = {"sheriff","corrections"}, denyOffDuty = true},
+  {name = "BolingbrokeTower8Top", x = 1771.86, y = 2760.07, z = 63.2, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=345, _dist = 1.5, allowedJobs = {"sheriff","corrections"}, denyOffDuty = true},
+  {name = "BolingbrokeTower9Bottom", x = 1845.79, y = 2698.62, z = 45.96, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=95, _dist = 1.5, allowedJobs = {"sheriff","corrections"}, denyOffDuty = true},
+  {name = "BolingbrokeTower9Top", x = 1845.71, y = 2699.92, z = 63.27, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=275, _dist = 1.5, allowedJobs = {"sheriff","corrections"}, denyOffDuty = true},
+  {name = "BolingbrokeTowerABottom", x = 1820.77, y = 2620.77, z = 45.95, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=85, _dist = 1.5, allowedJobs = {"sheriff","corrections"}, denyOffDuty = true},
+  {name = "BolingbrokeTowerATop", x = 1820.92, y = 2622.06, z = 63.26, model = -1033001619, locked = true, offset={0.0, -1.0, 0.0}, heading=265, _dist = 1.5, allowedJobs = {"sheriff","corrections"}, denyOffDuty = true},
+
   {name = "Boilingbroke medic door left", x = 1783.93, y = 2557.73, z = 45.8, model = 580361003, static= true, locked = true, _dist = 2, offset={1.13, 2.20, 0.05}, heading=0,  allowedJobs = {'sheriff', 'corrections'}},
   {name = "Boilingbroke medic door right", x = 1783.51, y = 2558.79, z = 45.8, model = 580361003, locked = true, _dist = 2, offset={0, 1.20, 0.05}, heading=88,  allowedJobs = {'sheriff', 'corrections'}},
 
@@ -281,3 +302,14 @@ end, {
 	help = "DEBUG: Debug the door lock system"
 })
 
+TriggerEvent('es:addGroupCommand', 'copydoor', 'owner', function(source, args, char)
+  TriggerClientEvent('doormanager:DoorClipboard', source, args[2], args[3], args[4], args[5])
+end, {
+  help = "Copies Door to clipboard.",
+  params = {
+    { name = "name", help = "Name of Door" },
+    { name = "jobs", help = 'jobs allowed format: {"job1","job2"}'},
+    { name = "denyofduty", help = "If the door should be denied if off duty" },
+    { name = "model", help = 'model of door in hash format'}
+  }
+})
