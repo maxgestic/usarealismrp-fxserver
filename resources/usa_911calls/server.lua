@@ -484,6 +484,13 @@ AddEventHandler('carjack:playHandsUpOnAll', function(pedToPlay)
 end)
 
 function Send911Notification(intendedEmergencyType, string, x, y, z, blipText)
+    local prison_coords = vector3(1686.6680, 2581.7151, 45.5649)
+    local alert_co = false
+    local callCoords = vector3(x, y, z)
+    if #(prison_coords.xy - callCoords.xy) < 200 then
+        alert_co = true
+    end
+    -- print(alert_co)
     exports["usa-characters"]:GetCharacters(function(characters)
     	for id, char in pairs(characters) do
     		local job = char.get("job")
@@ -493,7 +500,11 @@ function Send911Notification(intendedEmergencyType, string, x, y, z, blipText)
                     if j ~= "corrections" then
                         TriggerClientEvent('911:Notification', id, string, x, y, z, blipText)
                     else 
-                        if char.get("bcsoRank") >= 3 then 
+                        if alert_co == false then
+                            if char.get("bcsoRank") >= 3 then 
+                                TriggerClientEvent('911:Notification', id, string, x, y, z, blipText)
+                            end
+                        else
                             TriggerClientEvent('911:Notification', id, string, x, y, z, blipText)
                         end
                     end
@@ -503,6 +514,7 @@ function Send911Notification(intendedEmergencyType, string, x, y, z, blipText)
     	end
     end)
 end
+
 
 function Gender(isMale)
 	isSuspectIdentified = math.random(1, 4)
