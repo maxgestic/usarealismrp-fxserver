@@ -37,7 +37,7 @@ function notifyPlayersWithJobs(target_jobs, msg, specialRequest)
 					if job == target_jobs[i] then
 						if specialRequest == "onlyDeputiesNoCOs" and job == "corrections" then
 							if player.get("bcsoRank") >= 3 then 
-								TriggerClientEvent('911:Notification', id, string, x, y, z, blipText)
+								TriggerClientEvent("chatMessage", id, "", {}, "^0" .. msg)
 							end
 						else
 							TriggerClientEvent("chatMessage", id, "", {}, "^0" .. msg)
