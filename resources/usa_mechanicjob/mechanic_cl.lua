@@ -163,7 +163,25 @@ local locations = {
 		show_blip = {
 			disable_blip = true
 		}
-	}
+	},
+	["Mirror Park"] = {
+		duty = {
+			x = 1154.6276,
+			y = -792.1779,
+			z = 56.6051,
+		},
+		truck_spawn = {
+			x = 1147.9426,
+			y = -799.1232,
+			z = 57.5782,
+			heading = 91.5599
+		},
+		impound = nil,
+		ped = nil,
+		show_blip = {
+			disable_blip = true
+		}
+	},
 }
 	
 -- S P A W N  J O B  P E D S
