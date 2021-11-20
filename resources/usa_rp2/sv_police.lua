@@ -194,14 +194,16 @@ AddEventHandler("search:searchPlayer", function(playerId, src)
 			end
 		end
 	end
-	-- open inventory UI for person doing searching showing items of searched person
-	TriggerClientEvent("interaction:openGUIAndSendNUIData", src, {
-		type = "showSearchedInventory",
-		inv = inventory,
-		searchedPersonSource = playerId
-	})
-	-- add to list of people accessing that inventory (so we can keep track of who needs to be updated if multiple people are searching a single inventory at once)
-	TriggerEvent("inventory:addInventoryAccessor", playerId, src)
+	if src ~= playerId then
+		-- open inventory UI for person doing searching showing items of searched person
+		TriggerClientEvent("interaction:openGUIAndSendNUIData", src, {
+			type = "showSearchedInventory",
+			inv = inventory,
+			searchedPersonSource = playerId
+		})
+		-- add to list of people accessing that inventory (so we can keep track of who needs to be updated if multiple people are searching a single inventory at once)
+		TriggerEvent("inventory:addInventoryAccessor", playerId, src)
+	end
 end)
 
 RegisterServerEvent("police:frisk")
@@ -285,10 +287,6 @@ TriggerEvent('es:addCommand', 'search', function(source, args, char)
 		if not tonumber(args[2]) then
 			TriggerClientEvent("search:searchNearest", source, source)
 		else
-			if source == tonumber(args[2]) then
-				TriggerClientEvent("usa:notify", source, "Cant search self")
-				return
-			end
 			TriggerClientEvent("usa:playAnimation", source, "anim@move_m@trash", "pickup", -8, 1, -1, 53, 0, 0, 0, 0, 4)
 			TriggerEvent("search:searchPlayer", tonumber(args[2]), source)
 		end
