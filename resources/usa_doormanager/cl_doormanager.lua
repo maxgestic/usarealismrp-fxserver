@@ -330,7 +330,7 @@ AddEventHandler('doormanager:DoorClipboard', function(name, jobs, offDuty, doorH
   local door_y = round(GetEntityCoords(door).y, 2)
   local door_z = round(GetEntityCoords(door).z, 2)
   local door_heading = round(GetEntityHeading(door))
-  local message = '{name = "' .. name .. '", x = ' .. door_x .. ', y = ' .. door_y .. ', z = ' .. door_z .. ', model = ' .. doorHash .. ', locked = true, offset={0.0, -1.0, 0.0}, heading=' .. door_heading .. ', _dist = 1.5, allowedJobs = {' .. jobs .. '}, denyOffDuty = ' .. offDuty .. '},'
+  local message = '{name = "' .. name .. '", x = ' .. door_x .. ', y = ' .. door_y .. ', z = ' .. door_z .. ', model = ' .. doorHash .. ', locked = true, offset={0.0, 0.0, 0.0}, heading=' .. door_heading .. ', _dist = 1.5, allowedJobs = {' .. jobs .. '}, denyOffDuty = ' .. offDuty .. '},'
   print(message)
   SendNUIMessage({
     message = message

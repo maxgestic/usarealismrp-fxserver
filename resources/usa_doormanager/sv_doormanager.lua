@@ -26,13 +26,18 @@ local DOORS = {
   {name = "Boilingbroke upper office large left door", x = 1782.45, y = 2551.5, z = 49.58, model = 1028191914, locked = true, offset={0.0, 1.13, 0.05}, heading=90, static=true, _dist = 2, allowedJobs = {'sheriff', 'corrections'}},
   {name = "Boilingbroke upper office large right door", x = 1782.24, y = 2552.58, z = 49.58, model = 1028191914, locked = true, offset={0.0, 1.13, 0.05}, heading=90, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
 
+  {name = "BoilingbrokeSolitaryObservation", x = 1764.96, y = 2608.42, z = 50.73, model = 1028191914, locked = true, offset={0.0, 1.1, 0.0}, heading=90, _dist = 1.5, allowedJobs = {"corrections","sheriff"}, denyOffDuty = false},
   {name = "Boilingbroke Solitary MAIN 1", x = 1768.2, y = 2606.66, z = 50.55, model = 430324891, customDoor = { coords = {x = 1767.2981201172, y = 2605.9309570313, z = 49.549682617188}, model = GetHashKey("prop_ld_jail_door")}, cell_block = true, locked = true, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
   {name = "Boilingbroke Solitary MAIN 2", x = 1763.8814697266, y = 2600.3071289063, z = 50.549659729004, model = 430324891, customDoor = { coords = {x = 1763.0814697266, y = 2600.2071289063, z = 49.549659729004}, model = GetHashKey("prop_ld_jail_door"), rot = 182.0}, cell_block = true, locked = true, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
-  {name = "Bolingbroke Solitary - Cell 1", x = 1765.1734619141, y = 2597.0900878906, z = 50.549686431885, model = 871712474, locked = true, offset={0.0, 1.13, 0.05}, heading=90, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
-  {name = "Bolingbroke Solitary - Cell 2", x = 1765.2260742188, y = 2594.1359863281, z = 50.549686431885, model = 871712474, locked = true, offset={0.0, 1.13, 0.05}, heading=90, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
-  {name = "Bolingbroke Solitary - Cell 3", x = 1765.287109375, y = 2591.1877441406, z = 50.549682617188, model = 871712474, locked = true, offset={0.0, 1.13, 0.05}, heading=90, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
-  {name = "Bolingbroke Solitary - Cell 4", x = 1765.2783203125, y = 2588.0070800781, z = 50.549690246582, model = 871712474, locked = true, offset={0.0, 1.13, 0.05}, heading=90, _dist = 2, allowedJobs = {'sheriff', 'corrections', 'judge'}},
-  
+  {name = "BolingbrokeSolitary-Cell1", x = 1765.1734619141, y = 2597.0900878906, z = 50.549686431885, model = 871712474, locked = true, offset={0.0, 1.13, 0.05}, heading=90, _dist = 1, allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "BolingbrokeSolitary-Cell2", x = 1765.2260742188, y = 2594.1359863281, z = 50.549686431885, model = 871712474, locked = true, offset={0.0, 1.13, 0.05}, heading=90, _dist = 1, allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "BolingbrokeSolitary-Cell3", x = 1765.287109375, y = 2591.1877441406, z = 50.549682617188, model = 871712474, locked = true, offset={0.0, 1.13, 0.05}, heading=90, _dist = 1, allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "BolingbrokeSolitary-Cell4", x = 1765.2783203125, y = 2588.0070800781, z = 50.549690246582, model = 871712474, locked = true, offset={0.0, 1.13, 0.05}, heading=90, _dist = 1, allowedJobs = {'sheriff', 'corrections', 'judge'}},
+  {name = "BolingbrokeSolitary-Cell5", x = 1762.77, y = 2587.68, z = 50.67, model = 871712474, locked = true, offset={0.0, 1.0, 0.0}, heading=270, _dist = 1, allowedJobs = {"sheriff","corrections","judge"}, denyOffDuty = true},
+  {name = "BolingbrokeSolitary-Cell6", x = 1762.78, y = 2590.63, z = 50.67, model = 871712474, locked = true, offset={0.0, 1.0, 0.0}, heading=270, _dist = 1, allowedJobs = {"sheriff","corrections","judge"}, denyOffDuty = true},
+  {name = "BolingbrokeSolitary-Cell7", x = 1762.78, y = 2593.57, z = 50.67, model = 871712474, locked = true, offset={0.0, 1.0, 0.0}, heading=270, _dist = 1, allowedJobs = {"sheriff","corrections","judge"}, denyOffDuty = true},
+  {name = "BolingbrokeSolitary-Cell8", x = 1762.77, y = 2596.51, z = 50.67, model = 871712474, locked = true, offset={0.0, 1.0, 0.0}, heading=270, _dist = 1, allowedJobs = {"sheriff","corrections","judge"}, denyOffDuty = true},
+
   {name = "Bolingbroke Cellblock Entry 1", x = 1790.5031738281,y = 2594.3981933594, z = 45.797847747803, model = 1645000677, locked = true, static = true, _dist = 1.5, allowedJobs = {'sheriff', "corrections", "ems", "judge"}, denyOffDuty = true},
   {name = "Bolingbroke Cellblock Entry 2", x = 1790.5510253906,y = 2593.14453125, z = 45.800338745117, model = 262839150, locked = true, offset={0.0, 1.24, 0.0}, heading=270, _dist = 1.5, allowedJobs = {'sheriff', "corrections", "ems", "judge"}, denyOffDuty = true},
 
