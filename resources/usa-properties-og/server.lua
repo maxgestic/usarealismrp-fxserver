@@ -512,6 +512,66 @@ AddEventHandler("properties:addCoOwner", function(property_name, id)
   end
 end)
 
+RegisterServerEvent("properties:addLEO")
+AddEventHandler("properties:addLEO", function(property_name, id, source)
+  if GetPlayerName(id) then
+    if not PROPERTIES[property_name] then
+      TriggerClientEvent("usa:notify", source, "Property does not exist, please check capitalisation!")
+    else
+      -- check if property has any co owners already --
+      if not PROPERTIES[property_name].coowners then
+        PROPERTIES[property_name].coowners = {}
+      end
+      -- create person --
+      local person = exports["usa-characters"]:GetCharacter(tonumber(id))
+      local job = person.get("job")
+      local coowner = {
+        name = person.getFullName(),
+        identifier = person.get("_id")
+      }
+      if job == "sheriff" or job == "corrections" then
+        -- add person to list of co owners --
+        table.insert(PROPERTIES[property_name].coowners, coowner)
+        -- save --
+        SavePropertyData(property_name)
+        -- update all clients --
+        TriggerClientEvent("properties:update", -1, PROPERTIES[property_name])
+        -- add blip for co owner --
+        TriggerClientEvent("properties:setPropertyBlips", id, GetOwnedPropertyCoords(coowner.identifier, true))
+        -- notify --
+        TriggerClientEvent("usa:notify", source, coowner.name .. " has been successfully added!")
+        TriggerClientEvent("usa:notify", id, "You were added to " .. PROPERTIES[property_name].name .. " by a judge to execute a warrant!")
+
+        local judge = exports["usa-characters"]:GetCharacter(source)
+        local judge_name = judge.getFullName()
+        local officer = exports["usa-characters"]:GetCharacter(tonumber(id))
+        local officer_name = officer.getFullName()
+        local url = 'https://discord.com/api/webhooks/911750531419095060/n5wtA-5uAzStdgoRFq43L5KKQGBF9yct25W7uFIZT9t2c2hJu-_0eYfquQI7SDDUjY-O'
+        if not suspensions then suspensions = "None" end
+        PerformHttpRequest(url, function(err, text, headers)
+          if text then
+            print(text)
+          end
+        end, "POST", json.encode({
+          embeds = {
+            {
+              description = "**Judge:** " .. judge_name .. "\n**Property:** " .. property_name .. "\n**Officer Issued To:** " .. officer_name .. "\n**Timestamp:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
+              color = 263172,
+              author = {
+                name = "DOJ: Search Warrant Issued"
+              }
+            }
+          }
+        }), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
+      else
+        TriggerClientEvent("usa:notify", source, coowner.name .. " is not a Law Enforcement Officer!")
+      end
+    end
+  else
+    TriggerClientEvent("usa:notify", source, "Person does not exist!")
+  end
+end)
+
 ------------------------------
 -- REMOVE PROPERTY CO-OWNER --
 ------------------------------
@@ -530,6 +590,73 @@ AddEventHandler("properties:removeCoOwner", function(property_name, index)
     TriggerClientEvent("properties:update", -1, PROPERTIES[property_name])
     -- notify --
     TriggerClientEvent("usa:notify", source, "Co-owner removed!")
+  end
+end)
+
+RegisterServerEvent("properties:removeLEO")
+AddEventHandler("properties:removeLEO", function(property_name, id, source)
+  if GetPlayerName(id) then
+    if not PROPERTIES[property_name] then
+      TriggerClientEvent("usa:notify", source, "Property does not exist, please check capitalisation!")
+    else
+      -- check if property has any co owners already --
+      if not PROPERTIES[property_name].coowners then
+        PROPERTIES[property_name] = {}
+      end
+      local person = exports["usa-characters"]:GetCharacter(tonumber(id))
+      local identifier = person.get("_id")
+      local job = person.get("job")
+      local name = person.getFullName()
+
+      local index = nil
+      for i=1,#PROPERTIES[property_name].coowners do
+        print(PROPERTIES[property_name].coowners[i].identifier)
+        if PROPERTIES[property_name].coowners[i].identifier == identifier then 
+          index = i
+          break
+        end
+      end
+
+      if job == "sheriff" or job == "corrections" then
+        -- remove at index --
+        if PROPERTIES[property_name].coowners[index] then
+          table.remove(PROPERTIES[property_name].coowners, index)
+          -- save --
+          SavePropertyData(property_name)
+          -- update all clients --
+          TriggerClientEvent("properties:update", -1, PROPERTIES[property_name])
+          -- notify --
+          TriggerClientEvent("usa:notify", source, "Warrant Revoked!")
+          TriggerClientEvent("usa:notify", id, "Your warrant for " .. PROPERTIES[property_name].name .. " was revoked!")
+
+          local judge = exports["usa-characters"]:GetCharacter(source)
+          local judge_name = judge.getFullName()
+          local officer = exports["usa-characters"]:GetCharacter(tonumber(id))
+          local officer_name = officer.getFullName()
+          local url = 'https://discord.com/api/webhooks/911750531419095060/n5wtA-5uAzStdgoRFq43L5KKQGBF9yct25W7uFIZT9t2c2hJu-_0eYfquQI7SDDUjY-O'
+          if not suspensions then suspensions = "None" end
+          PerformHttpRequest(url, function(err, text, headers)
+            if text then
+              print(text)
+            end
+          end, "POST", json.encode({
+            embeds = {
+              {
+                description = "**Judge:** " .. judge_name .. "\n**Property:** " .. property_name .. "\n**Officer Revoked From:** " .. officer_name .. "\n**Timestamp:** " .. os.date('%m-%d-%Y %H:%M:%S', os.time()),
+                color = 263172,
+                author = {
+                  name = "DOJ: Search Warrant Revoked"
+                }
+              }
+            }
+          }), { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
+        end
+      else
+        TriggerClientEvent("usa:notify", source, name .. " is not a Law Enforcement Officer!")
+      end
+    end
+  else
+    TriggerClientEvent("usa:notify", source, "Person does not exist!")
   end
 end)
 

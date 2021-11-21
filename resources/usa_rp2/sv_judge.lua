@@ -524,3 +524,31 @@ end, {
 		{ name = "id", help = "id of player" }
 	}
 })
+
+TriggerEvent('es:addJobCommand', 'issuewarrant', {'judge'}, function(source, args, char)
+	local id = args[2]
+	table.remove(args,1) -- remove /command
+	table.remove(args,1) -- remove LEO id arg
+	local address = table.concat(args, " ")
+	TriggerEvent("properties:addLEO", address, id, source)
+end, {
+	help = "Add a Law Enforcment Officer to a House for a search Warrant.",
+	params = {
+		{ name = "id", help = "id of LEO" },
+		{ name = "property name", help = "Full address/name of property"}
+	}
+})
+
+TriggerEvent('es:addJobCommand', 'revokewarrant', {'judge'}, function(source, args, char)
+	local id = args[2]
+	table.remove(args,1) -- remove /command
+	table.remove(args,1) -- remove LEO id arg
+	local address = table.concat(args, " ")
+	TriggerEvent("properties:removeLEO", address, id, source)
+end, {
+	help = "Revoke a LEO's search warrant for a property.",
+	params = {
+		{ name = "id", help = "id of LEO" },
+		{ name = "property name", help = "Full address/name of property"}
+	}
+})

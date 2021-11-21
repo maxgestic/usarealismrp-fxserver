@@ -597,6 +597,16 @@ Citizen.CreateThread(function()
                                             end )
                                           end
                                           coowners_submenu.SubMenu:AddItem(add_owner_btn)
+                                        else
+                                              local coowners_submenu = _menuPool:AddSubMenu(mainMenu, "Co-Owners", "See co-owners.", true --[[KEEP POSITION]])
+                                              TriggerServerEvent("properties:getCoOwners", nearest_property_info.name)
+                                              while not menu_data.coowners do
+                                                Wait(1)
+                                              end
+                                              for i = 1, #menu_data.coowners do
+                                                local coowner = NativeUI.CreateItem(menu_data.coowners[i].name, "Lives Here")
+                                                coowners_submenu.SubMenu:AddItem(coowner)
+                                              end
                                         end
                                     else
                                         mainMenu = NativeUI.CreateMenu(name, "", 50 --[[X COORD]], 320 --[[Y COORD]])
