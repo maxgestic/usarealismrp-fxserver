@@ -58,6 +58,9 @@ AddEventHandler("dpemotes:walkstyleCheck", function(name)
 end)
 
 TriggerEvent('es:addCommand', 'e', function(source, args, char)
+	if args[2]:lower() == "sunbatheback" and char.get("jailTime") > 0 then
+		return
+	end
 	table.remove(args, 1)
 	TriggerClientEvent("dpemotes:command", source, 'e', source, args)
 end, { help = "List emotes" })
