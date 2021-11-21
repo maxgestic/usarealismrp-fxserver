@@ -175,12 +175,29 @@ AddEventHandler("doc:saveOutfit", function(uniform, slot)
 	local player_identifer = GetPlayerIdentifiers(usource)[1]
 	TriggerEvent('es:exposeDBFunctions', function(db)
 		db.getDocumentByRow(DB_NAME, "identifier" , player_identifer, function(result)
-			local uniforms = result.uniform or {}
-			uniforms[tostring(slot)] = uniform
-			db.updateDocument(DB_NAME, result._id, {uniform = uniforms}, function()
+			if type(result) ~= "boolean" then
+				db.getDocumentByRow(DB_NAME, "identifier" , player_identifer, function(result)
+					local uniforms = result.uniform or {}
+					uniforms[tostring(slot)] = uniform
+					db.updateDocument(DB_NAME, result._id, {uniform = uniforms}, function()
+						TriggerClientEvent("usa:notify", usource, "Uniform saved!")
+					end)
+				end)
+			else
+				local target = exports["usa-characters"]:GetCharacter(tonumber(usource))
+				local uniforms = {}
+				uniforms[tostring(slot)] = uniform
+				local employee = {
+					identifier = player_identifer,
+					name = target.getFullName(),
+					uniform = uniforms,
+				}
+				db.createDocument("correctionaldepartment", employee, function()
+					print("new co created in db")
+				end)
 				TriggerClientEvent("usa:notify", usource, "Uniform saved!")
-			end)
-		end)
+			end
+		end)	
 	end)
 end)
 
