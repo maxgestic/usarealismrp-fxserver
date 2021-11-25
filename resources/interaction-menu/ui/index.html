@@ -50,7 +50,7 @@
 				<!-- Inventory Context Menu -->
 				<ul id="contextMenu" v-show="contextMenu.showContextMenu" :style="{top: contextMenu.top + 'px', left: contextMenu.left + 'px'}">
 					<li @click="contextMenuClicked(event, 'Use')">Use</li>
-					<li @click="contextMenuClicked(event, 'Give')">Give to <span v-if="nearestPlayer">{{ nearestPlayer.id }}</span><span v-else>no one</span></li>
+					<li @click="contextMenuClicked(event, 'Give')">Give to <span v-if="nearestPlayer && nearestPlayer.id && nearestPlayer.id != 0">{{ nearestPlayer.id }}</span><span v-else>no one</span></li>
 					<li @click="contextMenuClicked(event, 'Drop')">Drop</li>
 					<li v-if="contextMenu.doShowReloadOption" @click="contextMenuClicked(event, 'Reload')">Reload</li>
 				</ul>
