@@ -301,15 +301,13 @@ Citizen.CreateThread(function()
       -- see if close to any stores --
       for i = 1, #GENERAL_STORE_LOCATIONS do
         if IsNearStore(GENERAL_STORE_LOCATIONS[i]) then
-          mainMenu:Clear()
-          TriggerServerEvent("generalStore:loadItems")
+          mainMenu:Visible(true)
           closest_location = GENERAL_STORE_LOCATIONS[i]
         end
       end
       for i = 1, #HARDWARE_STORE_LOCATIONS do
         if IsNearStore(HARDWARE_STORE_LOCATIONS[i]) then
-          mainMenuHardware:Clear()
-          TriggerServerEvent("hardwareStore:loadItems")
+          mainMenuHardware:Visible(true)
           closest_location = HARDWARE_STORE_LOCATIONS[i]
         end
       end
@@ -410,6 +408,7 @@ AddEventHandler("generalStore:loadItems", function(items)
   -- Create Menu --
   -----------------
   CreateGeneralStoreMenu(mainMenu, items)
+  mainMenu:Visible(false)
   _menuPool:RefreshIndex()
 end)
 
@@ -419,5 +418,9 @@ AddEventHandler("hardwareStore:loadItems", function(items)
   -- Create Menu --
   -----------------
   CreateHardwareStoreMenu(mainMenuHardware, items)
+  mainMenuHardware:Visible(false)
   _menuPool:RefreshIndex()
 end)
+
+TriggerServerEvent("hardwareStore:loadItems")
+TriggerServerEvent("generalStore:loadItems")
