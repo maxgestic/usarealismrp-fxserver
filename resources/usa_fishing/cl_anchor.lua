@@ -1,5 +1,4 @@
 local ANIMATION_TIME_SECONDS = 10
-local anchored = 
 
 Citizen.CreateThread(function()
     while true do
