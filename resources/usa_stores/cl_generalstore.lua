@@ -98,20 +98,18 @@ function IsNearStore(store)
   end
 end
 
-function DrawText3D(x, y, z, distance, text)
-  if Vdist(GetEntityCoords(PlayerPedId()), x, y, z) < distance then
-    local onScreen,_x,_y=World3dToScreen2d(x,y,z)
-    SetTextScale(0.35, 0.35)
-    SetTextFont(4)
-    SetTextProportional(1)
-    SetTextColour(255, 255, 255, 215)
-    SetTextEntry("STRING")
-    SetTextCentre(1)
-    AddTextComponentString(text)
-    DrawText(_x,_y)
-    local factor = (string.len(text)) / 370
-    DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
-  end
+function DrawText3D(x, y, z, text)
+  local onScreen,_x,_y=World3dToScreen2d(x,y,z)
+  SetTextScale(0.35, 0.35)
+  SetTextFont(4)
+  SetTextProportional(1)
+  SetTextColour(255, 255, 255, 215)
+  SetTextEntry("STRING")
+  SetTextCentre(1)
+  AddTextComponentString(text)
+  DrawText(_x,_y)
+  local factor = (string.len(text)) / 370
+  DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
 end
 
 ----------------------
@@ -236,6 +234,45 @@ function CreateHardwareStoreMenu(menu, hardwareStoreItems)
   menu:Visible(true)
 end
 
+local NEARBY_GENERAL_STORE_LOCATIONS = {}
+local NearbyShopliftingAreas = {}
+local NEARBY_HARDWARE_STORE_LOCATIONS = {}
+
+Citizen.CreateThread(function()
+  while true do
+    local mycoords = GetEntityCoords(GetPlayerPed(-1))
+
+    for i = 1, #GENERAL_STORE_LOCATIONS do
+      local dist = Vdist(mycoords.x, mycoords.y, mycoords.z, GENERAL_STORE_LOCATIONS[i].x, GENERAL_STORE_LOCATIONS[i].y, GENERAL_STORE_LOCATIONS[i].z)
+      if dist < 5 then
+        NEARBY_GENERAL_STORE_LOCATIONS[i] = true
+      else
+        NEARBY_GENERAL_STORE_LOCATIONS[i] = nil
+      end
+    end
+
+    for i = 1, #ShopliftingAreas do
+      local dist = Vdist(mycoords.x, mycoords.y, mycoords.z, ShopliftingAreas[i].x, ShopliftingAreas[i].y, ShopliftingAreas[i].z)
+      if dist < 1.5 then
+        NearbyShopliftingAreas[i] = true
+      else
+        NearbyShopliftingAreas[i] = nil
+      end
+    end
+
+    for i = 1, #HARDWARE_STORE_LOCATIONS do
+      local dist = Vdist(mycoords.x, mycoords.y, mycoords.z, HARDWARE_STORE_LOCATIONS[i].x, HARDWARE_STORE_LOCATIONS[i].y, HARDWARE_STORE_LOCATIONS[i].z)
+      if dist < 7 then
+        NEARBY_HARDWARE_STORE_LOCATIONS[i] = true
+      else
+        NEARBY_HARDWARE_STORE_LOCATIONS[i] = nil
+      end
+    end
+
+    Wait(500)
+  end
+end)
+
 Citizen.CreateThread(function()
   while true do
     Wait(1)
@@ -243,27 +280,23 @@ Citizen.CreateThread(function()
     _menuPool:ControlDisablingEnabled(false)
     _menuPool:ProcessMenus()
     local mycoords = GetEntityCoords(GetPlayerPed(-1))
-    for i = 1, #GENERAL_STORE_LOCATIONS do
-      DrawText3D(GENERAL_STORE_LOCATIONS[i].x, GENERAL_STORE_LOCATIONS[i].y, GENERAL_STORE_LOCATIONS[i].z, 5, '[E] - General Store')
+    for index, isNearby in pairs(NEARBY_GENERAL_STORE_LOCATIONS) do
+      DrawText3D(GENERAL_STORE_LOCATIONS[index].x, GENERAL_STORE_LOCATIONS[index].y, GENERAL_STORE_LOCATIONS[index].z, '[E] - General Store')
     end
 
-    for i = 1, #ShopliftingAreas do
-      --if not ShopliftingAreas[i].shoplifted then
-        local dist = Vdist(mycoords.x, mycoords.y, mycoords.z, ShopliftingAreas[i].x, ShopliftingAreas[i].y, ShopliftingAreas[i].z)
-        if dist < 1.5 then
-          exports.globals:DrawText3D(ShopliftingAreas[i].x, ShopliftingAreas[i].y, ShopliftingAreas[i].z, '[E] - Shoplift')
-          if IsControlJustPressed(1, MENU_KEY) then
-            if IsNearStore(ShopliftingAreas[i]) then
-              TriggerServerEvent('generalStore:attemptShoplift', i)
-            end
-          end
+    for index, isNearby in pairs(NearbyShopliftingAreas) do
+      exports.globals:DrawText3D(ShopliftingAreas[index].x, ShopliftingAreas[index].y, ShopliftingAreas[index].z, '[E] - Shoplift')
+      if IsControlJustPressed(1, MENU_KEY) then
+        if IsNearStore(ShopliftingAreas[index]) then
+          TriggerServerEvent('generalStore:attemptShoplift', index)
         end
-      --end
+      end
     end
 
-    for i = 1, #HARDWARE_STORE_LOCATIONS do
-      DrawText3D(HARDWARE_STORE_LOCATIONS[i].x, HARDWARE_STORE_LOCATIONS[i].y, HARDWARE_STORE_LOCATIONS[i].z, 7, '[E] - Hardware Store')
+    for index, isNearby in pairs(NEARBY_HARDWARE_STORE_LOCATIONS) do
+      DrawText3D(HARDWARE_STORE_LOCATIONS[index].x, HARDWARE_STORE_LOCATIONS[index].y, HARDWARE_STORE_LOCATIONS[index].z, '[E] - Hardware Store')
     end
+
     if IsControlJustPressed(1, MENU_KEY) and not _menuPool:IsAnyMenuOpen() then
       -- see if close to any stores --
       for i = 1, #GENERAL_STORE_LOCATIONS do
@@ -325,7 +358,7 @@ Citizen.CreateThread(function()
         end
       end
     end
-    Wait(1)
+    Wait(100)
   end
 end)
 
