@@ -279,9 +279,11 @@ Citizen.CreateThread(function()
 		----------------------
 		-- process menu --
 		----------------------
-		_menuPool:MouseControlsEnabled(false)
-		_menuPool:ControlDisablingEnabled(false)
-		_menuPool:ProcessMenus()
+		if _menuPool:IsAnyMenuOpen() then
+			_menuPool:MouseControlsEnabled(false)
+			_menuPool:ControlDisablingEnabled(false)
+			_menuPool:ProcessMenus()
+		end
 		-- closing menus --
 		if not menu_data.preview.handle and menu_data.closest and getPlayerDistanceFromShop(playerPed, menu_data.closest.store_x, menu_data.closest.store_y, menu_data.closest.store_z) > 3 then
 			mainMenu:Visible(false)
