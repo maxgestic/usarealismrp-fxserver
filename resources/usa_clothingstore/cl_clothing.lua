@@ -109,12 +109,30 @@ AddEventHandler("clothing-store:openMenu", function()
 	MainMenu:Visible(true)
 end)
 
+local nearbyClothingStores = {}
+
+-- thread to record nearby clothing store locations as an optimization:
+Citizen.CreateThread(function()
+	while true do
+		local mycoords = GetEntityCoords(PlayerPedId())
+		for i = 1, #CLOTHING_STORE_LOCATIONS do
+			if Vdist(mycoords, CLOTHING_STORE_LOCATIONS[i].x, CLOTHING_STORE_LOCATIONS[i].y, CLOTHING_STORE_LOCATIONS[i].z) < 5 then
+				nearbyClothingStores[i] = true
+			else
+				nearbyClothingStores[i] = nil
+			end
+		end
+		Wait(1000)
+	end
+end)
+
 -- menu processing / opening --
 Citizen.CreateThread(function()
 	while true do
 		me = GetPlayerPed(-1)
 		mycoords = GetEntityCoords(me)
-		-- see if close enough to open menu --
+
+		-- see if close enough to open menu and handle opening --
 		if  IsNearStore() then
 			if not _menuPool:IsAnyMenuOpen() then
 				if not previous_menu then
@@ -138,14 +156,18 @@ Citizen.CreateThread(function()
 			_menuPool:CloseAllMenus()
 		end
 
-		for i = 1, #CLOTHING_STORE_LOCATIONS do
-			DrawText3D(CLOTHING_STORE_LOCATIONS[i].x, CLOTHING_STORE_LOCATIONS[i].y, CLOTHING_STORE_LOCATIONS[i].z, 2, '[E] - Clothes Store (~g~$60.00~s~)')
+		-- draw 3d text
+		for i, isNearby in pairs(nearbyClothingStores) do
+			DrawText3D(CLOTHING_STORE_LOCATIONS[i].x, CLOTHING_STORE_LOCATIONS[i].y, CLOTHING_STORE_LOCATIONS[i].z, '[E] - Clothes Store (~g~$60.00~s~)')
 		end
+
 		-- process menus --
-		_menuPool:MouseControlsEnabled(false)
-		_menuPool:ControlDisablingEnabled(false)
-		_menuPool:ProcessMenus()
-		Wait(0)
+		if _menuPool:IsAnyMenuOpen() then
+			_menuPool:MouseControlsEnabled(false)
+			_menuPool:ControlDisablingEnabled(false)
+			_menuPool:ProcessMenus()
+		end
+		Wait(1)
 	end
 end)
 
@@ -493,18 +515,16 @@ end
 -- Component Value -- (slider)
 -- Texture Value-- (slider)
 
-function DrawText3D(x, y, z, distance, text)
-  if Vdist(GetEntityCoords(PlayerPedId()), x, y, z) < distance then
-    local onScreen,_x,_y=World3dToScreen2d(x,y,z)
-    SetTextScale(0.35, 0.35)
-    SetTextFont(4)
-    SetTextProportional(1)
-    SetTextColour(255, 255, 255, 215)
-    SetTextEntry("STRING")
-    SetTextCentre(1)
-    AddTextComponentString(text)
-    DrawText(_x,_y)
-    local factor = (string.len(text)) / 370
-    DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
-  end
+function DrawText3D(x, y, z, text)
+	local onScreen,_x,_y=World3dToScreen2d(x,y,z)
+	SetTextScale(0.35, 0.35)
+	SetTextFont(4)
+	SetTextProportional(1)
+	SetTextColour(255, 255, 255, 215)
+	SetTextEntry("STRING")
+	SetTextCentre(1)
+	AddTextComponentString(text)
+	DrawText(_x,_y)
+	local factor = (string.len(text)) / 370
+	DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
 end
