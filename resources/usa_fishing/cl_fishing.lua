@@ -169,21 +169,52 @@ Citizen.CreateThread(function()
 	end
 end)
 
+local nearbyFishingZoneSpots = {}
+local nearbyFishStoreLocations = {}
+
+-- record nearest stores every so often (as an optimization for drawing 3d text)
+Citizen.CreateThread(function()
+	while true do
+		local playerPed = PlayerPedId()
+		local mycoords = GetEntityCoords(playerPed)
+		for i = 1, #fishingZoneSpots do
+			local dist = Vdist(mycoords, fishingZoneSpots[i].x, fishingZoneSpots[i].y, fishingZoneSpots[i].z)
+			if dist <= 15 then
+				nearbyFishingZoneSpots[i] = true
+			else
+				nearbyFishingZoneSpots[i] = nil
+			end
+		end
+		for i = 1, #fishStoreLocations do
+			local dist = Vdist(mycoords, fishStoreLocations[i].x, fishStoreLocations[i].y, fishStoreLocations[i].z)
+			if dist <= 10 then
+				nearbyFishStoreLocations[i] = true
+			else
+				nearbyFishStoreLocations[i] = nil
+			end
+		end
+		Wait(1000)
+	end
+end)
+
+-- process menus + start fishing + draw 3d text for nearest stores and fishing zones
 Citizen.CreateThread(function()
 	PlaceMapBlips()
 	while true do
-		Citizen.Wait(0)
-		_menuPool:MouseControlsEnabled(false)
-		_menuPool:ControlDisablingEnabled(false)
-		_menuPool:ProcessMenus()
-		local playerPed = PlayerPedId()
-		for i = 1, #fishingZoneSpots do
-			local spot = fishingZoneSpots[i]
-			DrawText3D(spot.x, spot.y, spot.z, 15, '[K] - Fish')
+		Citizen.Wait(1)
+		if _menuPool:IsAnyMenuOpen() then
+			_menuPool:MouseControlsEnabled(false)
+			_menuPool:ControlDisablingEnabled(false)
+			_menuPool:ProcessMenus()
 		end
-		for i = 1, #fishStoreLocations do
+		local playerPed = PlayerPedId()
+		for i, isNearby in pairs(nearbyFishingZoneSpots) do
+			local spot = fishingZoneSpots[i]
+			DrawText3D(spot.x, spot.y, spot.z, '[K] - Fish')
+		end
+		for i, isNearby in pairs(nearbyFishStoreLocations) do
 			local spot = fishStoreLocations[i]
-			DrawText3D(spot.x, spot.y, spot.z, 10, '[E] - Sell Fish')
+			DrawText3D(spot.x, spot.y, spot.z, '[E] - Sell Fish')
 		end
 		if IsControlJustPressed(0, KEYS.K) then
 			for i = 1, #fishingZoneSpots do
@@ -236,7 +267,7 @@ Citizen.CreateThread(function()
 		while not HasModelLoaded(peds[i].hash) do
 			Citizen.Wait(100)
 		end
-		local ped = CreatePed(4, peds[i].hash, peds[i].x, peds[i].y, peds[i].z, peds[i].heading --[[Heading]], false --[[Networked, set to false if you just want to be visible by the one that spawned it]], true --[[Dynamic]])
+		local ped = CreatePed(4, peds[i].hash, peds[i].x, peds[i].y, peds[i].z, peds[i].heading, false, true)
 		SetEntityCanBeDamaged(ped,false)
 		SetPedCanRagdollFromPlayerImpact(ped,false)
 		SetBlockingOfNonTemporaryEvents(ped,true)
@@ -302,20 +333,18 @@ function AttachEntityToPed(prop,bone_ID,x,y,z,RotX,RotY,RotZ)
 	return obj
 end
 
-function DrawText3D(x, y, z, distance, text)
-    if GetDistanceBetweenCoords(GetEntityCoords(PlayerPedId()), x, y, z, true) < distance then
-        local onScreen,_x,_y=World3dToScreen2d(x,y,z)
-        SetTextScale(0.35, 0.35)
-        SetTextFont(4)
-        SetTextProportional(1)
-        SetTextColour(255, 255, 255, 215)
-        SetTextEntry("STRING")
-        SetTextCentre(1)
-        AddTextComponentString(text)
-        DrawText(_x,_y)
-        local factor = (string.len(text)) / 370
-        DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
-    end
+function DrawText3D(x, y, z, text)
+	local onScreen,_x,_y=World3dToScreen2d(x,y,z)
+	SetTextScale(0.35, 0.35)
+	SetTextFont(4)
+	SetTextProportional(1)
+	SetTextColour(255, 255, 255, 215)
+	SetTextEntry("STRING")
+	SetTextCentre(1)
+	AddTextComponentString(text)
+	DrawText(_x,_y)
+	local factor = (string.len(text)) / 370
+	DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
 end
 
 function DrawTimer(beginTime, duration, x, y, text)
