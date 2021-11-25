@@ -24,7 +24,7 @@ AddEventHandler("judge:duty", function()
 	local user_char_name = char.getFullName()
    	char.set("job", JOB_NAME)
     TriggerClientEvent("usa:notify", source, "You are now in service as a Judge.")
-	TriggerClientEvent('chatMessage', -1, "", {0, 0, 0}, "^6^*[COURTHOUSE] ^r^7A Judge is now available for all legal affairs!")
+	--TriggerClientEvent('chatMessage', -1, "", {0, 0, 0}, "^6^*[COURTHOUSE] ^r^7A Judge is now available for all legal affairs!")
 	TriggerEvent("eblips:remove", source) -- ? why is this here lol, delete?
 	TriggerEvent('job:sendNewLog', source, JOB_NAME, true)
   else
