@@ -107,22 +107,45 @@ function createGasolineMenu(vehicleType)
 	end
 end
 
+local nearbyFuelStations = {
+	Aircraft = {},
+	Watercraft = {},
+	Gasoline = {}
+}
+
+-- thread to record nearby stations as an otimization
+Citizen.CreateThread(function()
+	while true do
+		for type, v in pairs(fuelStations) do
+			for i = 1, #fuelStations[type].locations do
+				local x, y, z = table.unpack(fuelStations[type].locations[i])
+				if Vdist(GetEntityCoords(playerPed), x, y, z) < 7.0 then
+					nearbyFuelStations[type][i] = true
+				else
+					nearbyFuelStations[type][i] = nil
+				end
+			end
+		end
+		Wait(1000)
+	end
+end)
+
 -- Main thread for displaying fuel, managing menu and updating global variables
 Citizen.CreateThread(function()
 	local wasInVeh = false
 	while true do
-		Citizen.Wait(0)
+		Wait(1)
 		playerPed = PlayerPedId()
 		playerVeh = GetVehiclePedIsIn(playerPed, true)
-		_menuPool:MouseControlsEnabled(false)
-		_menuPool:ControlDisablingEnabled(false)
-		_menuPool:ProcessMenus()
-		for k, v in pairs(fuelStations) do
-			for i = 1, #fuelStations[k].locations do
+		if _menuPool:IsAnyMenuOpen() then
+			_menuPool:MouseControlsEnabled(false)
+			_menuPool:ControlDisablingEnabled(false)
+			_menuPool:ProcessMenus()
+		end
+		for k, v in pairs(nearbyFuelStations) do
+			for i, isNearby in pairs(nearbyFuelStations[k]) do
 				local x, y, z = table.unpack(fuelStations[k].locations[i])
-				if Vdist(GetEntityCoords(playerPed), x, y, z) < 5.0 then
-					DrawText3D(x, y, z, '[E] - Fuel Station')
-				end
+				DrawText3D(x, y, z, '[E] - Fuel Station')
 			end
 		end
 		if mainMenu:Visible() and not IsNearFuelStation(GetVehicleType(playerVeh)) then
