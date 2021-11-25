@@ -169,11 +169,13 @@ local closest_shop = nil
 
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
+		Citizen.Wait(1)
     -- Process Menu --
-    _menuPool:MouseControlsEnabled(false)
-    _menuPool:ControlDisablingEnabled(false)
-    _menuPool:ProcessMenus()
+    if _menuPool:IsAnyMenuOpen() then
+      _menuPool:MouseControlsEnabled(false)
+      _menuPool:ControlDisablingEnabled(false)
+      _menuPool:ProcessMenus()
+    end
     -------------------------------------
     -- Draw Markers / set closest shop --
     -------------------------------------
@@ -263,6 +265,6 @@ Citizen.CreateThread(function() -- spawn shop peds
         end
       end
     end
-    Wait(1)
+    Wait(100)
   end
 end)
