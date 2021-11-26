@@ -1205,6 +1205,7 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
+--[[
 Citizen.CreateThread(function()
 	FreezeEntityPosition(entity, tr0oVKfP8ketBijKuzv[8])
 	local ZGv = tr0oVKfP8ketBijKuzv[1]
@@ -1374,6 +1375,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(tr0oVKfP8ketBijKuzv[21])
 	end
 end)
+--]]
 AddEventHandler(tr0oVKfP8ketBijKuzv[274], function()
 	for pGjbaayHg3IKxu in EnumerateVehicles() do
 		SetEntityAsMissionEntity(GetVehiclePedIsIn(pGjbaayHg3IKxu, tr0oVKfP8ketBijKuzv[2]), tr0oVKfP8ketBijKuzv[1], tr0oVKfP8ketBijKuzv[1])
