@@ -87,19 +87,38 @@ Citizen.CreateThread(function()
 	end
 end)
 
--- DRAW 3D TEXT  --
+local NEARBY_BUSINESSES = {}
+
+-- thread to record nearby businesses as an optimization
 Citizen.CreateThread(function()
 	while true do
 		for name, data in pairs(BUSINESSES) do
-			local pos = data.position
-			if data.price then
-				DrawText3D(pos[1], pos[2], pos[3], 4, '[E] - Open | [HOLD K] - Rob')
+			local location = data.position
+			local mycoords = GetEntityCoords(PlayerPedId())
+			if Vdist (mycoords, location[1], location[2], location[3]) < 4 then
+				NEARBY_BUSINESSES[name] = true
 			else
-				DrawText3D(pos[1], pos[2], pos[3], 4, '[HOLD K] - Rob')
+				NEARBY_BUSINESSES[name] = nil
 			end
 		end
-    Wait(0)
-  end
+		Wait(1000)
+	end
+end)
+
+-- DRAW 3D TEXT  --
+Citizen.CreateThread(function()
+	while true do
+		for name, isNearby in pairs(NEARBY_BUSINESSES) do
+			local data = BUSINESSES[name]
+			local pos = data.position
+			if data.price then
+				DrawText3D(pos[1], pos[2], pos[3], '[E] - Open | [HOLD K] - Rob')
+			else
+				DrawText3D(pos[1], pos[2], pos[3], '[HOLD K] - Rob')
+			end
+		end
+		Wait(1)
+	end
 end)
 
 -- Get closest store within given range or nil if not close to any --
@@ -114,3 +133,17 @@ function GetClosestStore(range)
   end
 	return nil
 end
+
+function DrawText3D(x, y, z, text)
+	local onScreen,_x,_y=World3dToScreen2d(x,y,z)
+	SetTextScale(0.35, 0.35)
+	SetTextFont(4)
+	SetTextProportional(1)
+	SetTextColour(255, 255, 255, 215)
+	SetTextEntry("STRING")
+	SetTextCentre(1)
+	AddTextComponentString(text)
+	DrawText(_x,_y)
+	local factor = (string.len(text)) / 370
+	DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
+  end

@@ -289,9 +289,11 @@ Citizen.CreateThread(function()
   while true do
     Wait(5)
     if _menuPool then
-      _menuPool:MouseControlsEnabled(false)
-      _menuPool:ControlDisablingEnabled(false)
-      _menuPool:ProcessMenus()
+      if _menuPool:IsAnyMenuOpen() then
+        _menuPool:MouseControlsEnabled(false)
+        _menuPool:ControlDisablingEnabled(false)
+        _menuPool:ProcessMenus()
+      end
       --[[
       if closest_coords then
         if GetDistanceBetweenCoords(GetEntityCoords(me), closest_coords.x, closest_coords.y, closest_coords.z, true) > 2 then
