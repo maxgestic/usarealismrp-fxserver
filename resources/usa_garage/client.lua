@@ -84,30 +84,46 @@ Citizen.CreateThread(function()
     end
 end)
 
+local nearbyLocations = {}
+
+-- thread to record nearby locations as an optimization
 Citizen.CreateThread(function()
 	while true do
-		Wait(0)
+		local mycoords = GetEntityCoords(PlayerPedId())
+		for i = 1, #locations do
+			if Vdist(mycoords, locations[i].x, locations[i].y, locations[i].z) < 70 then
+				nearbyLocations[i] = true
+			else
+				nearbyLocations[i] = nil
+			end
+		end
+		Wait(1000)
+	end
+end)
+
+Citizen.CreateThread(function()
+	while true do
 		local ped = GetPlayerPed(-1)
-	    for _, info in pairs(locations) do
-			local dist = Vdist(GetEntityCoords(ped), info['x'], info['y'], info['z'])
-			if dist < 70 then
-				DrawText3D(info['x'], info['y'], info['z'], 10, '[E] - Garage')
-				DrawMarker(27, vector3(info['x'], info['y'], info['z'] - 0.98), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, vector3(4.0, 4.0, 3.0),  118, 137, 122, 150, false, true, 2, false, nil, nil, false)
-				if IsControlJustPressed(0, 86) and dist < 2 then
-					Citizen.Wait(50)
-					if IsPedInAnyVehicle(ped, true) then
-						local handle = GetVehiclePedIsIn(ped, false)
-						local numberPlateText = GetVehicleNumberPlateText(handle)
-						TriggerServerEvent("garage:storeVehicle", handle, numberPlateText, info["jobs"])
-					else
-						--TriggerServerEvent("garage:checkVehicleStatus")
-						closest_shop = info
-						TriggerServerEvent("garage:openMenu", info["jobs"])
-						--Citizen.Wait(60000)
-					end
+		for i, isNearby in pairs(nearbyLocations) do
+			local info = locations[i]
+			local dist = Vdist(GetEntityCoords(ped), info.x, info.y, info.z)
+			DrawMarker(27, vector3(info['x'], info['y'], info['z'] - 0.98), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, vector3(4.0, 4.0, 3.0),  118, 137, 122, 150, false, true, 2, false, nil, nil, false)
+			if dist < 10 then
+				DrawText3D(info['x'], info['y'], info['z'], '[E] - Garage')
+			end
+			if IsControlJustPressed(0, 86) and dist < 2 then
+				Citizen.Wait(50)
+				if IsPedInAnyVehicle(ped, true) then
+					local handle = GetVehiclePedIsIn(ped, false)
+					local numberPlateText = GetVehicleNumberPlateText(handle)
+					TriggerServerEvent("garage:storeVehicle", handle, numberPlateText, info["jobs"])
+				else
+					closest_shop = info
+					TriggerServerEvent("garage:openMenu", info["jobs"])
 				end
 			end
 		end
+		Wait(1)
 	end
 end)
 
@@ -239,16 +255,14 @@ AddEventHandler("garage:spawn", function(vehicle)
 
 end)
 
-function DrawText3D(x, y, z, distance, text)
-    if Vdist(GetEntityCoords(PlayerPedId()), x, y, z) < distance then
-        local onScreen,_x,_y=World3dToScreen2d(x,y,z)
-        SetTextScale(0.35, 0.35)
-        SetTextFont(4)
-        SetTextEntry("STRING")
-        SetTextCentre(1)
-        AddTextComponentString(text)
-        DrawText(_x,_y)
-        local factor = (string.len(text)) / 470
-        DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
-    end
+function DrawText3D(x, y, z, text)
+	local onScreen,_x,_y=World3dToScreen2d(x,y,z)
+	SetTextScale(0.35, 0.35)
+	SetTextFont(4)
+	SetTextEntry("STRING")
+	SetTextCentre(1)
+	AddTextComponentString(text)
+	DrawText(_x,_y)
+	local factor = (string.len(text)) / 470
+	DrawRect(_x,_y+0.0125, 0.015+factor, 0.03, 41, 11, 41, 68)
 end
