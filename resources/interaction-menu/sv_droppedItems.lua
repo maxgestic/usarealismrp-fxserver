@@ -13,6 +13,9 @@ AddEventHandler("interaction:addDroppedItem", function(item)
   item.dropTime = os.time()
   table.insert(DROPPED_ITEMS, item)
   TriggerClientEvent("interaction:addDroppedItem", -1, item)
+  if item.name and item.name:find("Spike Strips") and item.coords then
+    TriggerEvent("spikestrips:addStrip", item.coords)
+  end
 end)
 
 RegisterServerEvent("interaction:attemptPickup")
@@ -22,8 +25,11 @@ AddEventHandler("interaction:attemptPickup", function(item)
 		if item.x == DROPPED_ITEMS[i].x and item.y == DROPPED_ITEMS[i].y and item.z == DROPPED_ITEMS[i].z and item.name == DROPPED_ITEMS[i].name then
 			attemptPickup(usource, DROPPED_ITEMS[i], function(success)
 				if success then
-					table.remove(DROPPED_ITEMS, i)
+					if DROPPED_ITEMS[i].name and DROPPED_ITEMS[i].name:find("Spike Strips") and DROPPED_ITEMS[i].coords then
+						TriggerEvent("spikestrips:removeStrip", DROPPED_ITEMS[i].coords)
+					end
 					TriggerClientEvent("interaction:removeDroppedItem", -1, i)
+					table.remove(DROPPED_ITEMS, i)
 				end
 				TriggerClientEvent("interaction:finishedPickupAttempt", usource)
 			end)
@@ -72,6 +78,9 @@ Citizen.CreateThread(function()
 			for i = #DROPPED_ITEMS, 1, -1 do
 				if not DROPPED_ITEMS[i].doNotAutoRemove then
 					if (getMinutesFromTime(DROPPED_ITEMS[i].dropTime) > ITEM_EXPIRE_TIME) or (string.find(DROPPED_ITEMS[i].name, 'Key') and getMinutesFromTime(DROPPED_ITEMS[i].dropTime) > 5) then
+						if DROPPED_ITEMS[i].name and DROPPED_ITEMS[i].name:find("Spike Strips") and DROPPED_ITEMS[i].coords then
+							TriggerEvent("spikestrips:removeStrip", DROPPED_ITEMS[i].coords)
+						end
 						table.remove(DROPPED_ITEMS, i)
 						TriggerClientEvent("interaction:removeDroppedItem", -1, i)
 						break
