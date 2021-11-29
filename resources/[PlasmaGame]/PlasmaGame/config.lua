@@ -297,7 +297,7 @@ Maps = {
 }
 
 PaintBallShop = {
-	["PlasmaGame One"] = {
+	["Plasma Game"] = {
 		["Blip"] = {x=-1084.7562255859,y=-1280.9090576172,z=5.6599960327148,sprite=650,scale=0.8,colour=2},
 		["Create"] = {{x=-1095.1264648438,y=-1269.3354492188,z=5.8505229949951}},
 		["Join"] = 	{
