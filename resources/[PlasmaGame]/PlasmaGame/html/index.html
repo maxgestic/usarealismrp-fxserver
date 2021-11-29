@@ -1,0 +1,165 @@
+<html>
+	<head>
+		<script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+		<link href="style.css" rel="stylesheet" type="text/css" />
+	</head>
+
+	<body>
+    <div class="page-wrapper bg-gra-03 p-t-45 p-b-50">
+	<form id="register">
+        <div class="wrapper wrapper--w790">
+            <div class="card card-5">
+                <div class="card-heading">
+                    <h2 class="title">Create a Lobby</h2>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        
+						<div class="form-row">
+                            <div class="name">Lobby Name : </div>
+                            <div class="value">
+								<div class="input-group-desc">
+									<input class="input--style-5" id="sessionName" type="text" name="session_Name">
+									<label class="label--desc">Example : PaintBall 3000</label>
+								</div>
+                            </div>
+                        </div>
+						
+
+                        <div class="form-row">
+                            <div class="name">Your pseudo : </div>
+                            <div class="value">
+                                <div class="input-group-desc">
+                                    <input class="input--style-5" id="creatorPseudo" type="text" name="creator_Pseudo">
+									<label class="label--desc">Example: Super Pseudo</label>
+                                </div>
+                            </div>
+                        </div>
+						
+						
+						
+						<div class="form-row">
+                            <div class="name">Game Mode : </div>
+                            <div class="value">
+                                <div class="input-group-desc">
+                                    <select class="input--style-5" name="GameMode" id="GameMode">
+										<option value="TDM">Team Death Match</option>
+										<option value="CTF">Capture The Flag</option>
+									</select>
+									<label class="label--desc">Game Mode</label>
+                                </div>
+                            </div>
+                        </div>
+						
+						
+						
+						<div class="form-row">
+                            <div class="name">Maps : </div>
+                            <div class="value">
+                                <div class="input-group-desc">
+                                    <select class="input--style-5" name="Maps" id="Maps">
+										<option value="Patoche">Map 1</option>
+										<option value="Patochemap2">Map 2</option>
+										<option value="Patochemap3">Map 3</option>
+										<!--<option value="MarcMLO">Map 4</option>-->
+										<!-- ADD YOUR MAP HERE -->
+										<!-- <option value="MarcMLO">MarcMLO</option> -->
+										<!-- <option value="MarcMLO">MarcMLO</option> -->
+										<!-- <option value="MarcMLO">MarcMLO</option> -->
+									</select>
+									<label class="label--desc">On which room will you play</label>
+                                </div>
+                            </div>
+                        </div>
+						
+						
+						
+						<div class="form-row">
+                            <div class="name">Players per team :</div>
+                            <div class="value">
+                                <div class="input-group-desc">
+                                    <select class="input--style-5" name="NbPersEquip" id="NbPersEquip">
+										<option value="1"> 1</option>
+										<option value="2"> 2</option>
+										<option value="3"> 3</option>
+										<option value="4"> 4</option>
+										<option value="5"> 5</option>
+										<option value="6"> 6</option>
+										<option value="7"> 7</option>
+										<option value="8"> 8</option>
+										<option value="9"> 9</option>
+										<option value="10"> 10</option>
+									</select>
+									<label class="label--desc"></label>
+                                </div>
+                            </div>
+                        </div>
+						
+						
+						<div class="form-row">
+                            <div class="name">Nb of round : </div>
+                            <div class="value">
+                                <div class="input-group-desc">
+                                    <select class="input--style-5" name="NbManche" id="NbManche">
+										<option value="1"> 1</option>
+										<option value="2"> 2</option>
+										<option value="3"> 3</option>
+										<option value="4"> 4</option>
+										<option value="5"> 5</option>
+										<option value="6"> 6</option>
+										<option value="7"> 7</option>
+										<option value="8"> 8</option>
+										<option value="9"> 9</option>
+										<option value="10"> 10</option>
+									</select>
+									<label class="label--desc">How many round will be played</label>
+                                </div>
+                            </div>
+                        </div>
+						
+						
+						
+						<!-- <div class="form-row"> -->
+                            <!-- <div class="name">Nb d'impact : </div> -->
+                            <!-- <div class="value"> -->
+                                <!-- <div class="input-group-desc"> -->
+                                    <!-- <select class="input--style-5" name="NbImpact" id="NbImpact"> -->
+										<!-- <option value="1">1</option> -->
+										<!-- <option value="2">2</option> -->
+										<!-- <option value="3">3</option> -->
+										<!-- <option value="4">4</option> -->
+										<!-- <option value="5">5</option> -->
+									<!-- </select> -->
+									<!-- <label class="label--desc">Nombre d'impact recues avant éliminations</label> -->
+                                <!-- </div> -->
+                            <!-- </div> -->
+                        <!-- </div> -->
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+                        <div class="form-row p-t-20">
+                            
+                        </div>
+                        <div>
+                            <button class="btn btn--radius-2 btn--red" type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+	</form>
+    </div>
+		<script src="script.js" type="text/javascript"></script>
+	</body>
+</html>
