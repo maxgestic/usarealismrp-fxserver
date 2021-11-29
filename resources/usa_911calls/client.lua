@@ -29,6 +29,7 @@ prohibitedWeapons["shotsFired"][101631238] = true
 prohibitedWeapons["shotsFired"][911657153] = true
 prohibitedWeapons["shotsFired"][883325847] = true
 prohibitedWeapons["shotsFired"][883325847] = true
+prohibitedWeapons["shotsFired"][`WEAPON_PLASMAP`] = true
 
 Citizen.CreateThread(function()
 	while true do
