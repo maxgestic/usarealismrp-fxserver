@@ -671,6 +671,7 @@ end)
 
  
 function startGame(color,idx,manche)
+	exports["_anticheese"]:Disable()
 	FreezeEntityPosition(PlayerPedId(),true)
 	isCurrentlyOutInGame = false
 	local activity = {}
@@ -805,6 +806,8 @@ end
 
 
 function endTheGame(winner)
+
+	exports["_anticheese"]:Enable()
 
 	local activity = {}
 	
