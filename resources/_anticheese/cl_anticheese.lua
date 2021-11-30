@@ -163,7 +163,8 @@ local BlacklistedWeapons = { -- weapons that will get people banned
 
 local enableStatus = {
 	speedOrTPHack = true,
-	invisibility = true
+	invisibility = true,
+	health = true
 }
 
 local BlacklistedObjectsList = {
@@ -802,20 +803,22 @@ Citizen.CreateThread(function()
 		local curPed = PlayerPedId()
 		local curHealth = GetEntityHealth( curPed )
 		TriggerEvent('injuries:triggerGrace', function()
-			local curWait = math.random(10,150)
-			SetEntityHealth(curPed, curHealth - 2)
-			-- this will substract 2hp from the current player, wait between 10 & 150ms and then add it back, this is to check for hacks that force HP at 200
-			Citizen.Wait(curWait)
+			if enableStatus.health then
+				local curWait = math.random(10,150)
+				SetEntityHealth(curPed, curHealth - 2)
+				-- this will substract 2hp from the current player, wait between 10 & 150ms and then add it back, this is to check for hacks that force HP at 200
+				Citizen.Wait(curWait)
 
-			if not IsPlayerDead(PlayerId()) then
-				if PlayerPedId() == curPed and GetEntityHealth(curPed) == curHealth and GetEntityHealth(curPed) ~= 0 then
-					TriggerServerEvent("AntiCheese:HealthFlag", false, curHealth - 2, GetEntityHealth(curPed), curWait)
-				elseif GetEntityHealth(curPed) == curHealth - 2 then
-					SetEntityHealth(curPed, GetEntityHealth(curPed) + 2)
+				if not IsPlayerDead(PlayerId()) then
+					if PlayerPedId() == curPed and GetEntityHealth(curPed) == curHealth and GetEntityHealth(curPed) ~= 0 then
+						TriggerServerEvent("AntiCheese:HealthFlag", false, curHealth - 2, GetEntityHealth(curPed), curWait)
+					elseif GetEntityHealth(curPed) == curHealth - 2 then
+						SetEntityHealth(curPed, GetEntityHealth(curPed) + 2)
+					end
 				end
-			end
-			if GetEntityHealth(curPed) > 400 then
-				TriggerServerEvent("AntiCheese:HealthFlag", false, GetEntityHealth(curPed) - 200, GetEntityHealth(curPed), curWait)
+				if GetEntityHealth(curPed) > 400 then
+					TriggerServerEvent("AntiCheese:HealthFlag", false, GetEntityHealth(curPed) - 200, GetEntityHealth(curPed), curWait)
+				end
 			end
 
 			if GetPlayerInvincible(PlayerId()) and not isAtAnLSC() then  -- if the player is invincible, flag him as a cheater and then disable their invincibility

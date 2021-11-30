@@ -1,5 +1,5 @@
 local LOG_ENTITY_CREATION = true
-local LOG_EXPLOSIONS = true
+local LOG_EXPLOSIONS = false
 
 local BLACKLISTED_MODELS = {
     ["prop_fnclink_05crnr1"] = true,
