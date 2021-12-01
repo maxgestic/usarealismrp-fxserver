@@ -807,8 +807,6 @@ end
 
 function endTheGame(winner)
 
-	exports["_anticheese"]:Enable()
-
 	local activity = {}
 	
 	-- print("endTheGame winner : "..tostring(winner).." my team : "..tostring(currentTeam))
@@ -882,6 +880,8 @@ function endTheGame(winner)
 	end)
 	dontLeaveSpectate = false
 	EndFreeCam()
+
+	exports["_anticheese"]:Enable()
 	
 end
 -- TriggerClientEvent("PaintBall:GoForStartTheGame",v)
