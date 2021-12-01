@@ -163,6 +163,8 @@ function InitializeCharacter(src, characterID)
                     else
                       character.set("bcsoRank", 0)
                     end
+                  else
+                    character.set("bcsoRank", 0)
                   end
                 end)
               end)
