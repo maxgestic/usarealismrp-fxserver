@@ -819,11 +819,11 @@ Citizen.CreateThread(function()
 				if GetEntityHealth(curPed) > 400 then
 					TriggerServerEvent("AntiCheese:HealthFlag", false, GetEntityHealth(curPed) - 200, GetEntityHealth(curPed), curWait)
 				end
-			end
 
-			if GetPlayerInvincible(PlayerId()) and not isAtAnLSC() then  -- if the player is invincible, flag him as a cheater and then disable their invincibility
-				TriggerServerEvent("AntiCheese:HealthFlag", true, curHealth - 2, GetEntityHealth(curPed), curWait)
-				SetPlayerInvincible(PlayerId(), false)
+				if GetPlayerInvincible(PlayerId()) and not isAtAnLSC() then  -- if the player is invincible, flag him as a cheater and then disable their invincibility
+					TriggerServerEvent("AntiCheese:HealthFlag", true, curHealth - 2, GetEntityHealth(curPed), curWait)
+					SetPlayerInvincible(PlayerId(), false)
+				end
 			end
 		end)
 	end
