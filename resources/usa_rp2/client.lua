@@ -1199,6 +1199,22 @@ local STATIC_OBJECTS = {
     obj = ATM_MODEL
   }
   --]]
+  XMAS_TREE_LEGION = {
+    coords = vector3(226.48237609863, -895.41094970703, 28.692138671875),
+    obj = LARGE_XMAS_TREE_MODEL
+  },
+  XMAS_TREE_UPPER_PILLBOX = {
+    coords = vector3(242.40295410156, -565.30682373047, 41.278789520264),
+    obj = LARGE_XMAS_TREE_MODEL
+  },
+  XMAS_TREE_UPPER_BURGERSHOT = {
+    coords = vector3(-1191.5321044922, -894.51275634766, 18.479234695435),
+    obj = LARGE_XMAS_TREE_MODEL
+  },
+  XMAS_TREE_UPPER_PDM = {
+    coords = vector3(-30.562828063965, -1100.5909423828, 32.261386108398),
+    obj = LARGE_XMAS_TREE_MODEL
+  }
 }
 
 for name, info in pairs(STATIC_OBJECTS) do
@@ -1206,4 +1222,5 @@ for name, info in pairs(STATIC_OBJECTS) do
   if info.heading then
     SetEntityHeading(info.handle, info.heading)
   end
+  FreezeEntityPosition(info.handle, true)
 end
