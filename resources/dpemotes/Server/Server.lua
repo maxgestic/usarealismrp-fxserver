@@ -32,6 +32,7 @@ local PREMIUM_EMOTES = {
 	["Cop3"] = true
 }
 
+--[[
 RegisterServerEvent("dpemotes:walkstyleCheck") 
 AddEventHandler("dpemotes:walkstyleCheck", function(name)
 	local usource = source
@@ -56,6 +57,7 @@ AddEventHandler("dpemotes:walkstyleCheck", function(name)
 	end
 	TriggerClientEvent("dpemotes:continueWalkstyleChange", usource, name)
 end)
+--]]
 
 TriggerEvent('es:addCommand', 'e', function(source, args, char)
 	if args[2]:lower() == "sunbatheback" and char.get("jailTime") > 0 then

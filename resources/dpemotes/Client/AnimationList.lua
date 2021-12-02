@@ -69,6 +69,7 @@ DP.Walks = {
   ["Hipster"] = {"move_m@hipster@a"},
   ["Hobo"] = {"move_m@hobo@a"},
   ["Hurry"] = {"move_f@hurry@a"},
+  ["Injured"] = {"move_injured_generic"},
   ["Janitor"] = {"move_p_m_zero_janitor"},
   ["Janitor2"] = {"move_p_m_zero_slow"},
   ["Jog"] = {"move_m@jog@"},

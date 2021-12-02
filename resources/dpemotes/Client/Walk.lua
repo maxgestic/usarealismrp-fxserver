@@ -26,16 +26,24 @@ function WalkCommandStart(source, args)
   if name == "Reset" then
       ResetPedMovementClipset(PlayerPedId())
   else
-    TriggerServerEvent("dpemotes:walkstyleCheck", name)
-  end
-end
-
-RegisterNetEvent("dpemotes:continueWalkstyleChange")
-AddEventHandler("dpemotes:continueWalkstyleChange", function(name)
-  local name2 = table.unpack(DP.Walks[name])
-    if name2 ~= nil then
+    --TriggerServerEvent("dpemotes:walkstyleCheck", name)
+    if DP.Walks[name] ~= nil then
+      local name2 = table.unpack(DP.Walks[name])
       WalkMenuStart(name2)
     else
       EmoteChatMessage("'"..name.."' is not a valid walk")
     end
+  end
+end
+
+--[[
+RegisterNetEvent("dpemotes:continueWalkstyleChange")
+AddEventHandler("dpemotes:continueWalkstyleChange", function(name)
+  local name2 = table.unpack(DP.Walks[name])
+  if name2 ~= nil then
+    WalkMenuStart(name2)
+  else
+    EmoteChatMessage("'"..name.."' is not a valid walk")
+  end
 end)
+--]]
