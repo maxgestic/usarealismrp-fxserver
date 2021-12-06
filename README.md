@@ -24,7 +24,8 @@ To get started with your own testing environment:
 	* For example: ``C:/wamp/www/log.txt``
 5) Create your database views (see below view definitions)
 6) Add ``stop usa_utils`` and ``stop _anticheese`` to your ``server_internal.cfg`` so you don't get banned for code injection when developing.
-7) Start the server.
+7) Generate a Steam API dev key and paste it into your `server_internal.cfg` file on a new line in the format: `set steam_webApiKey "key here"`.
+8) Start the server.
 	* Windows:
 		- with resource scrambling: ``./start.bat`` from the ``server-data`` folder
 		- without resource scrambling: ``..\FXServer.exe +exec server.cfg +set onesync on`` from the ``server-data`` folder
