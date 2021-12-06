@@ -27,7 +27,7 @@ To get started with your own testing environment:
 7) Start the server.
 	* Windows:
 		- with resource scrambling: ``./start.bat`` from the ``server-data`` folder
-		- without resource scrambling: ``..\run.cmd +exec server.cfg`` from the ``server-data`` folder
+		- without resource scrambling: ``..\FXServer.exe +exec server.cfg +set onesync on`` from the ``server-data`` folder
 	* Linux:
 		- with resource scrambling: ``/start.sh`` from the ``server-data`` folder
 		- without resource scrambling: ``bash run.sh +exec server-data/server.cfg`` from folder where server .dlls are
@@ -35,7 +35,7 @@ To get started with your own testing environment:
 **Scrambler Requirements**
 For it to work properly you need to follow these rules:
 	- Use ``__resource.lua`` instead of ``fxmanifest.lua``
-	- No globbing syntax allowed in the ``__resource.lua``
+	- No globbing syntax allowed in the ``__resource.lua`` (? need to test since using new scrambler)
 	- Use ``RegisterServerEvent``, not ``RegisterNetEvent`` in server scripts
 	- Don't name registered chat commands the same as events
 
