@@ -37,7 +37,7 @@ trad["EN"] = {
 	["Win"] = "~g~Victory !",
 	["WinDesc"] = "You're awesome !",
 	["Loose"] = "~r~Defeat !",
-	["LooseDesc"] = "Looser !",
+	["LooseDesc"] = "Loser !",
 	
 	["Leave"] = "Fearful !",
 	["LeaveDesc"] = "Flee is not a solution",
@@ -46,7 +46,7 @@ trad["EN"] = {
 	["RoundTieDesc"] = "Surprising.",
 	["RoundWin"] = "~g~You win !",
 	["RoundWinDesc"] = "Continue like that !",
-	["RoundLoose"] = "~r~You loose !",
+	["RoundLoose"] = "~r~You lose !",
 	["RoundLooseDesc"] = "Wake up ! ",
 
 
