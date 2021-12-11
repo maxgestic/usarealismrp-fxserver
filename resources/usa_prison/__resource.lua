@@ -29,12 +29,14 @@ client_scripts {
 	"@NativeUI/UIMenu/MenuPool.lua",
 	"@NativeUI/NativeUI.lua",
     'menu.lua',
-    'contraband/cl_contraband.lua'
+    'contraband/cl_contraband.lua',
+    'jobs/janitor/cl_janitor.lua'
 }
 
 server_scripts {
     'server.lua',
-    'contraband/sv_contraband.lua'
+    'contraband/sv_contraband.lua',
+    'jobs/janitor/sv_janitor.lua'
 }
 
 server_exports {
