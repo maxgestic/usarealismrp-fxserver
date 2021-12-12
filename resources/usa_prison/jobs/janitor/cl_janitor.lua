@@ -138,7 +138,7 @@ Citizen.CreateThread(function()
         if Vdist(currentPedCoords, NPC_COORDS) < 2 then
             DrawText3D(NPC_COORDS.x, NPC_COORDS.y, NPC_COORDS.z, "[E] - " .. ((currentJobLocations and "Stop") or "Start") .." Cleaning Job")
             if IsControlJustPressed(0, START_JOB_KEY) then
-                if (not currentJobLocations and GetGameTimer() - lastJobFinishedAt > JOB_START_DELAY_SECONDS * 1000) or currentJobLocations then
+                if (not currentJobLocations and GetGameTimer() - lastJobFinishedAt > JOB_START_DELAY_SECONDS * 1000) or currentJobLocations or lastJobFinishedAt == 0 then
                     TriggerServerEvent("prison-janitor:toggleJob")
                 else
                     exports.globals:notify("Wait " .. math.floor(((JOB_START_DELAY_SECONDS * 1000) - (GetGameTimer() - lastJobFinishedAt)) / (1000 * 60)) .. " minute(s)")
