@@ -4,6 +4,7 @@ resources/scrambler-events.json
 resources/nw_bahamaMama
 resources/\[custom_clothing\]
 resources/\[custom_vehicles\]
+!resources/\[custom_vehicles\]/assets/handling.meta
 resources/\[custom_maps\]
 resources/\[custom_props\]
 resources/burgershot
