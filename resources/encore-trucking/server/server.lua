@@ -12,7 +12,7 @@ end
 
 function addMoney(playerId, amount)
 	local char = exports["usa-characters"]:GetCharacter(playerId)
-	char.giveMoney(amount)
+	char.giveBank(amount)
 end
 
 function removeMoney(playerId, amount)
