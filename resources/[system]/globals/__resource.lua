@@ -47,5 +47,6 @@ server_exports {
   "currentTimestamp",
   "getJavaScriptDateString",
   "hasFelonyOnRecord",
-  "generateID"
+  "generateID",
+  "deepCopy"
 }
