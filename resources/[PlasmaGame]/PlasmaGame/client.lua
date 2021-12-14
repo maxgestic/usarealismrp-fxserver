@@ -945,6 +945,7 @@ function leaveTheGame(winner,maps)
 	end)
 end
 
+local didDisableHotkeys = false
 Citizen.CreateThread(function()
 	while true do
 		Wait(1)
@@ -954,7 +955,16 @@ Citizen.CreateThread(function()
             DisableControlAction(1, 142, true)
 			DisableControlAction(1, 263, true)
 			DisableControlAction(1, 264, true)
+			DisableControlAction(1, 244, true) -- M
+			if not didDisableHotkeys then
+				didDisableHotkeys = true
+				TriggerEvent("hotkeys:enable", false)
+			end
 		else
+			if didDisableHotkeys then
+				didDisableHotkeys = false
+				TriggerEvent("hotkeys:enable", true)
+			end
 			Wait(1000)
 		end
 	end
