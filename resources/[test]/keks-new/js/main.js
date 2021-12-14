@@ -24,7 +24,7 @@
       "http://ice6.somafm.com/reggae-128-aac"
     ]
 
-    var MAX_VOL = 0.10
+    var MAX_VOL = 0.08
 
     var Radio = function (station) {
       var self = this;
