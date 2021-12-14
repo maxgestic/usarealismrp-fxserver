@@ -486,7 +486,7 @@ var interactionMenu = new Vue({
           img = "https://i.imgur.com/EaFIt2K.png"; // fist image
         } else {
           img = itemImages[itemName];
-          if (ammoCount <= 0) {
+          if (ammoCount <= 0 && !NO_TOOLTIP_WEAPONS.has(itemName)) {
             this.showOutOfAmmoText = true;
           }
         }
