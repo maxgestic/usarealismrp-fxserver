@@ -184,7 +184,11 @@ AddEventHandler("properties:store", function(name, item, quantity)
     return
   end
   -- remove from player --
-  char.removeItem(item, quantity)
+  if item.uuid then
+    char.removeItemByUUID(item.uuid, quantity)
+  else
+    char.removeItem(item, quantity)
+  end
   local copy = item
   copy.quantity = quantity
   local had_already = false
