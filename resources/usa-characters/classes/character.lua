@@ -406,13 +406,20 @@ function CreateCharacter(data)
 
   end
 
-  rTable.removeItemByUUID = function(uuid)
+  rTable.removeItemByUUID = function(uuid, quantity)
     local inv = self.inventory
     for i = 0, inv.MAX_CAPACITY - 1 do
       local lookingAtItem = inv.items[tostring(i)]
       if lookingAtItem then
         if lookingAtItem.uuid and lookingAtItem.uuid == uuid then
-          self.inventory.items[tostring(i)] = nil
+          if quantity then
+            self.inventory.items[tostring(i)].quantity = self.inventory.items[tostring(i)].quantity - quantity
+          else
+            self.inventory.items[tostring(i)].quantity = 0
+          end
+          if self.inventory.items[tostring(i)].quantity <= 0 then
+            self.inventory.items[tostring(i)] = nil
+          end
           return
         end
       end
