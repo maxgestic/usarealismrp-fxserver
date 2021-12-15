@@ -37,7 +37,7 @@ function AddSpray(Source, spray)
         end
     end
 
-    PersistSpray(spray)
+    PersistSpray(spray, Source)
     TriggerEvent('rcore_sprays:addSpray', Source, spray.text, spray.location)
     TriggerClientEvent('rcore_spray:setSprays', -1, SPRAYS)
 end
@@ -106,7 +106,7 @@ AddEventHandler('rcore_spray:addSpray', function(spray)
     TriggerClientEvent("usa:notify", Source, "Remaining uses: " .. sprayCanItem.remainingUses - 1)
 end)
 
-function PersistSpray(spray)
+function PersistSpray(spray, src)
     TriggerEvent('es:exposeDBFunctions', function(db)
         local newSprayDoc = {
             x = spray.location.x,
@@ -121,7 +121,8 @@ function PersistSpray(spray)
             color = spray.originalColor,
             interior = spray.interior,
             identifier = spray.identifier,
-            created_at = os.time()
+            created_at = os.time(),
+            created_by = GetPlayerIdentifiers(src)[1]
         }
         db.createDocument("sprays", newSprayDoc, function(ok)
             if ok then 
