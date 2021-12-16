@@ -1,6 +1,5 @@
 
 local IsCancelled = false
-local LastHp = nil
 
 Citizen.CreateThread(function()
     AddTextEntry('RC_CANCEL', "~" .. Config.Keys.CANCEL.label .. "~ " .. Config.Text.CANCEL)
@@ -25,7 +24,6 @@ function CancellableProgress(time, animDict, animName, flag, finish, cancel, opt
     end
 
     StartCancellableProgressBar(time)
-    LastHp = GetEntityHealth(ped)
 
     local timeLeft = time
 
