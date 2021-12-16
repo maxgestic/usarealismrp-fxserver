@@ -1,5 +1,5 @@
 local DiffTrigger = 0.25
-local MinSpeed    = 13.0 --THIS IS IN m/s
+local MinSpeed    = 25.0 --THIS IS IN m/s -- todo: to make sure you still fly out at high speeds with no belt on, but not at speeds < 60 mph anymore
 local speedBuffer  = {}
 local velBuffer    = {}
 local wasInCar     = false
