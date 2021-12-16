@@ -37,13 +37,9 @@ function CancellableProgress(time, animDict, animName, flag, finish, cancel, opt
             break
         end
 
-        local newHp = GetEntityHealth(ped)
-
-        if newHp < LastHp then
+        if IsPedDeadOrDying(ped) then
             IsCancelled = true
         end
-
-        LastHp = newHp
 
         DisableControlAction(0, Config.Keys.CANCEL.code, true)
 
