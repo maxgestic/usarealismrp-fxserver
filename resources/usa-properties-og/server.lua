@@ -236,14 +236,12 @@ function inventoryAsMapNotArray(inv)
     end
   end
   if isOldStyle then
-    print("converting old style inventory to new map based inventory")
     local ret = {}
     for i, itemData in pairs(inv) do
       ret[tostring(i - 1)] = itemData
     end
     return ret
   else
-    print("not converting, already a map style inventory")
     return inv
   end
 end
@@ -253,7 +251,6 @@ function getInventoryCount(inv)
   for i, itemData in pairs(inv) do
     count = count + 1
   end
-  print("INVENTORY COUNT: " .. count)
   return count
 end
 
