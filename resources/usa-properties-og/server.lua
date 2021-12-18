@@ -275,10 +275,9 @@ AddEventHandler("properties-og:onStorageBtnSelected", function(propertyName)
   })
   -- record id of person accessing
   if not peopleAccessingProperties[propertyName] then
-    peopleAccessingProperties[propertyName] = { source = true }
-  else
-    peopleAccessingProperties[propertyName][source] = true
+    peopleAccessingProperties[propertyName] = {}
   end
+  peopleAccessingProperties[propertyName][source] = true
 end)
 
 RegisterServerEvent("properties-og:markAsInventoryClosed")
@@ -361,6 +360,38 @@ AddEventHandler("properties-og:moveItemToPropertyStorage", function(src, data)
     MAX_ITEMS = getInventoryCount(PROPERTIES[data.propertyName].storage.items)
   }
   TriggerClientEvent("interaction:sendNUIMessage", src, { type = "updateBothInventories", inventory = { primary = char.get("inventory"), secondary = invForGUI}})
+  for id, dummyTrueBool in pairs(peopleAccessingProperties[data.propertyName]) do
+    TriggerClientEvent("interaction:sendNUIMessage", id, { type = "updateSecondaryInventory", inventory = invForGUI})
+  end
+end)
+
+RegisterServerEvent("properties-og:moveItemWithinPropertyStorage")
+AddEventHandler("properties-og:moveItemWithinPropertyStorage", function(src, data)
+  print("moving item within property")
+  -- move item to property
+  local char = exports["usa-characters"]:GetCharacter(src)
+  data.toSlot = tostring(data.toSlot)
+  data.fromSlot = tostring(data.fromSlot)
+  local propertyInv = PROPERTIES[data.propertyName].storage.items
+  local item = propertyInv[data.fromSlot]
+  if not propertyInv[data.toSlot] then
+    propertyInv[data.toSlot] = item
+    propertyInv[data.fromSlot] = nil
+  elseif propertyInv[data.toSlot] and not propertyInv[data.toSlot].notStackable and propertyInv[data.toSlot].name == item.name then
+    propertyInv[data.toSlot].quantity = propertyInv[data.toSlot].quantity + item.quantity
+    propertyInv[data.fromSlot] = nil
+  else
+    TriggerClientEvent("usa:notify", src, "Invalid slot!")
+    return
+  end
+  PROPERTIES[data.propertyName].storage.items = propertyInv
+  SavePropertyData(data.propertyName)
+  -- update GUI
+  local invForGUI = {
+    items = PROPERTIES[data.propertyName].storage.items,
+    MAX_CAPACITY = -1,
+    MAX_ITEMS = getInventoryCount(PROPERTIES[data.propertyName].storage.items)
+  }
   for id, dummyTrueBool in pairs(peopleAccessingProperties[data.propertyName]) do
     TriggerClientEvent("interaction:sendNUIMessage", id, { type = "updateSecondaryInventory", inventory = invForGUI})
   end
