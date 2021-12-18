@@ -344,7 +344,7 @@ AddEventHandler("properties-og:moveItemToPropertyStorage", function(src, data)
   if not propertyInv[data.toSlot] then
     propertyInv[data.toSlot] = item
     propertyInv[data.toSlot].quantity = (data.quantity or item.quantity)
-  elseif propertyInv[data.toSlot] and not propertyInv[data.toSlot].notStackable then
+  elseif propertyInv[data.toSlot] and not propertyInv[data.toSlot].notStackable and propertyInv[data.toSlot].name == item.name then
     propertyInv[data.toSlot].quantity = propertyInv[data.toSlot].quantity + (data.quantity or item.quantity)
   else
     TriggerClientEvent("usa:notify", src, "Invalid slot!")
