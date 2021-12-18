@@ -679,17 +679,15 @@ var interactionMenu = new Vue({
       }
     },
     getSecondaryInventoryRowCount: function() {
-      function countProperties(obj) {
-        var count = 0;
-    
-        for(var prop in obj) {
-            if(obj.hasOwnProperty(prop))
-                ++count;
-        }
-    
-        return count;
+      let largestIndexWithItem = null;
+      for (var index in this.secondaryInventory.items) {
+        if (this.secondaryInventory.items.hasOwnProperty(index)) {
+          if (!largestIndexWithItem || largestIndexWithItem < parseInt(index)) {
+            largestIndexWithItem = parseInt(index);
+          }
+        }       
       }
-      let necessaryRowCount = Math.ceil(countProperties(this.secondaryInventory.items) / 5);
+      let necessaryRowCount = Math.ceil((largestIndexWithItem + 1) / 5);
       return necessaryRowCount + 1;
     }
   },
