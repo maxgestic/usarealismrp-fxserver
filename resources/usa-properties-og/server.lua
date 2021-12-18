@@ -13,6 +13,19 @@ local NEARBY_DISTANCE = 500
 
 local CLIENT_UPDATE_INTERVAL = 10
 
+local peopleAccessingProperties = {}
+
+AddEventHandler("playerDropped", function(reason)
+  for propName, people in pairs(peopleAccessingProperties) do
+    for src, dummyTrueBool in pairs(peopleAccessingProperties[propName]) do
+      if src == source then
+        peopleAccessingProperties[propName][source] = nil
+        return
+      end
+    end
+  end
+end)
+
 AddEventHandler("character:loaded", function(char)
   local charIdent = char.get("_id")
   TriggerClientEvent("properties:setPropertyBlips", char.get("source"), GetOwnedPropertyCoords(charIdent, true))
@@ -129,6 +142,7 @@ end)
 ----------------------------
 -- ITEM STORAGE --
 ----------------------------
+--[[
 -- load stored items --
 RegisterServerEvent("properties:loadStorage")
 AddEventHandler("properties:loadStorage", function(name)
@@ -152,6 +166,7 @@ AddEventHandler("properties:getUserItemsToStore", function(user_source)
       TriggerClientEvent("properties:setItemsToStore", userSource, items)
     end
 end)
+--]]
 
 -- store cash in property --
 RegisterServerEvent("properties-og:storeMoney")
@@ -170,6 +185,7 @@ AddEventHandler("properties-og:storeMoney", function(name, amount)
 end)
 
 -- try to store item --
+--[[
 RegisterServerEvent("properties:store")
 AddEventHandler("properties:store", function(name, item, quantity)
   local user_source = source
@@ -208,6 +224,146 @@ AddEventHandler("properties:store", function(name, item, quantity)
   end
   -- save property --
   SavePropertyData(name)
+end)
+--]]
+
+function inventoryAsMapNotArray(inv)
+  local isOldStyle = false
+  for i, itemData in pairs(inv) do
+    if type(i) ~= "string" then
+      isOldStyle = true
+      break
+    end
+  end
+  if isOldStyle then
+    print("converting old style inventory to new map based inventory")
+    local ret = {}
+    for i, itemData in pairs(inv) do
+      ret[tostring(i - 1)] = itemData
+    end
+    return ret
+  else
+    print("not converting, already a map style inventory")
+    return inv
+  end
+end
+
+function getInventoryCount(inv)
+  local count = 0
+  for i, itemData in pairs(inv) do
+    count = count + 1
+  end
+  print("INVENTORY COUNT: " .. count)
+  return count
+end
+
+RegisterServerEvent("properties-og:onStorageBtnSelected")
+AddEventHandler("properties-og:onStorageBtnSelected", function(propertyName)
+  -- get property inventory
+  local propertyInv = PROPERTIES[propertyName].storage.items
+  -- send to interaction-menu's inventory system for display and item movement
+  local inventoryAsMap = inventoryAsMapNotArray(propertyInv)
+  local invForGUI = {
+    items = inventoryAsMap,
+    MAX_CAPACITY = -1,
+    MAX_ITEMS = getInventoryCount(inventoryAsMap)
+  }
+  TriggerClientEvent("interaction:openGUIAndSendNUIData", source, {
+    type = "showPropertyInventory",
+    inv = invForGUI,
+    propertyName = propertyName
+  })
+  -- record id of person accessing
+  if not peopleAccessingProperties[propertyName] then
+    peopleAccessingProperties[propertyName] = { source = true }
+  else
+    peopleAccessingProperties[propertyName][source] = true
+  end
+end)
+
+RegisterServerEvent("properties-og:markAsInventoryClosed")
+AddEventHandler("properties-og:markAsInventoryClosed", function()
+  for propName, people in pairs(peopleAccessingProperties) do
+    for src, dummyTrueBool in pairs(peopleAccessingProperties[propName]) do
+      if src == source then
+        peopleAccessingProperties[propName][source] = nil
+        return
+      end
+    end
+  end
+end)
+
+RegisterServerEvent("properties-og:moveItemFromProperty")
+AddEventHandler("properties-og:moveItemFromProperty", function(src, data)
+  data.fromSlot = tostring(data.fromSlot)
+  -- get item from property storage
+  local inv = inventoryAsMapNotArray(PROPERTIES[data.propertyName].storage.items)
+  local item = inv[data.fromSlot]
+  -- try to store in player's inventory
+  local char = exports["usa-characters"]:GetCharacter(src)
+  if char.canHoldItem(item, (data.quantity or item.quantity)) then
+    char.putItemInSlot(item, data.toSlot, (data.quantity or item.quantity), function(success)
+      if success then
+        -- remove from property inventory if success and save property data
+        inv[data.fromSlot].quantity = inv[data.fromSlot].quantity - (data.quantity or item.quantity)
+        if inv[data.fromSlot].quantity <= 0 then
+          inv[data.fromSlot] = nil
+        end
+        PROPERTIES[data.propertyName].storage.items = inv
+        SavePropertyData(data.propertyName)
+        -- update primary and secondary inventories in the GUI:
+        local invForGUI = {
+          items = PROPERTIES[data.propertyName].storage.items,
+          MAX_CAPACITY = -1,
+          MAX_ITEMS = getInventoryCount(PROPERTIES[data.propertyName].storage.items)
+        }
+        TriggerClientEvent("interaction:sendNUIMessage", src, { type = "updateBothInventories", inventory = { primary = char.get("inventory"), secondary = invForGUI}})
+        for id, dummyTrueBool in pairs(peopleAccessingProperties[data.propertyName]) do
+          TriggerClientEvent("interaction:sendNUIMessage", id, { type = "updateSecondaryInventory", inventory = invForGUI})
+        end
+      end
+    end)
+  else
+    TriggerClientEvent("usa:notify", src, "Inventory full!")
+  end
+end)
+
+RegisterServerEvent("properties-og:moveItemToPropertyStorage")
+AddEventHandler("properties-og:moveItemToPropertyStorage", function(src, data)
+  print("moving item in to property")
+  -- move item to property
+  local char = exports["usa-characters"]:GetCharacter(src)
+  data.toSlot = tostring(data.toSlot)
+  data.fromSlot = tostring(data.fromSlot)
+  local item = char.getItemByIndex(data.fromSlot)
+  if item.type and item.type == "license" then
+    TriggerClientEvent("usa:notify", src, "Can't move that")
+    return
+  end
+  local propertyInv = inventoryAsMapNotArray(PROPERTIES[data.propertyName].storage.items)
+  if not propertyInv[data.toSlot] then
+    propertyInv[data.toSlot] = item
+    propertyInv[data.toSlot].quantity = (data.quantity or item.quantity)
+  elseif propertyInv[data.toSlot] and not propertyInv[data.toSlot].notStackable then
+    propertyInv[data.toSlot].quantity = propertyInv[data.toSlot].quantity + (data.quantity or item.quantity)
+  else
+    TriggerClientEvent("usa:notify", src, "Invalid slot!")
+    return
+  end
+  PROPERTIES[data.propertyName].storage.items = propertyInv
+  SavePropertyData(data.propertyName)
+  -- remove from person if success
+  char.removeItemByIndex(data.fromSlot, (data.quantity or item.quantity))
+  -- update GUI
+  local invForGUI = {
+    items = PROPERTIES[data.propertyName].storage.items,
+    MAX_CAPACITY = -1,
+    MAX_ITEMS = getInventoryCount(PROPERTIES[data.propertyName].storage.items)
+  }
+  TriggerClientEvent("interaction:sendNUIMessage", src, { type = "updateBothInventories", inventory = { primary = char.get("inventory"), secondary = invForGUI}})
+  for id, dummyTrueBool in pairs(peopleAccessingProperties[data.propertyName]) do
+    TriggerClientEvent("interaction:sendNUIMessage", id, { type = "updateSecondaryInventory", inventory = invForGUI})
+  end
 end)
 
 -- load stored money --

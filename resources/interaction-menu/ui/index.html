@@ -111,7 +111,7 @@
 						<!-- Secondary Inventory -->
 						<div class="inventory-wrap" v-if="showSecondaryInventory">
 							<table>
-								<tr class="inventory-row" v-for="i in 5">
+								<tr class="inventory-row" v-for="i in getSecondaryInventoryRowCount()">
 									<td class="inventory-item secondary-inv-slot" v-for="j in 5" v-bind:id="((5*(i-1)) + (j-1))" data-inventory-type="secondary">
 										<div v-if="secondaryInventory.items[(5*(i-1)) + (j-1)]">
 											<div class="secondary-inv-item" v-bind:id="((5*(i-1)) + (j-1))" data-inventory-type="secondary">

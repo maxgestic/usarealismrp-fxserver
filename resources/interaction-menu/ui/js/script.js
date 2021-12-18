@@ -403,7 +403,8 @@ var interactionMenu = new Vue({
       MAX_CAPACITY: 0.0,
       items: {},
       type: null,
-      searchedPersonSource: null
+      searchedPersonSource: null,
+      propertyName: null
     },
     isInVehicle: false,
     isCuffed: false,
@@ -642,7 +643,8 @@ var interactionMenu = new Vue({
         quantity: this.inputBox.value,
         plate: this.targetVehiclePlate,
         secondaryInventoryType: this.secondaryInventory.type,
-        searchedPersonSource: this.secondaryInventory.searchedPersonSource
+        searchedPersonSource: this.secondaryInventory.searchedPersonSource,
+        propertyName: this.secondaryInventory.propertyName
       }));
       /* Reset quantity input box value */
       this.inputBox.value = 1;
@@ -675,6 +677,20 @@ var interactionMenu = new Vue({
       } else {
         return DEFAULT_ITEM_IMAGE;
       }
+    },
+    getSecondaryInventoryRowCount: function() {
+      function countProperties(obj) {
+        var count = 0;
+    
+        for(var prop in obj) {
+            if(obj.hasOwnProperty(prop))
+                ++count;
+        }
+    
+        return count;
+      }
+      let necessaryRowCount = Math.ceil(countProperties(this.secondaryInventory.items) / 5);
+      return necessaryRowCount + 1;
     }
   },
   computed: {
@@ -869,7 +885,8 @@ function CloseMenu() {
       plate: interactionMenu.targetVehiclePlate
     },
     secondaryInventoryType: interactionMenu.secondaryInventory.type,
-    secondaryInventorySrc: interactionMenu.secondaryInventory.searchedPersonSource
+    secondaryInventorySrc: interactionMenu.secondaryInventory.searchedPersonSource,
+    currentPage: interactionMenu.currentPage
   }));
   interactionMenu.currentPage = "Home";
   interactionMenu.currentSubmenuItems = [];
@@ -935,21 +952,33 @@ $(function() {
       interactionMenu.secondaryInventory.type = "person";
       interactionMenu.showSecondaryInventory = true;
       interactionMenu.secondaryInventory.searchedPersonSource = event.data.searchedPersonSource;
+    } else if (event.data.type == "showPropertyInventory") {
+      $.post('http://interaction-menu/loadInventory', JSON.stringify({}));
+      interactionMenu.currentPage = "Inventory";
+      interactionMenu.locked = false;
+      interactionMenu.secondaryInventory = event.data.inv;
+      interactionMenu.secondaryInventory.type = "property";
+      interactionMenu.showSecondaryInventory = true;
+      interactionMenu.secondaryInventory.propertyName = event.data.propertyName;
     } else if (event.data.type == "updateSecondaryInventory") {
       let savedType = interactionMenu.secondaryInventory.type;
       let savedSrc = interactionMenu.secondaryInventory.searchedPersonSource;
+      let savedPropertyName = interactionMenu.secondaryInventory.propertyName;
 
       interactionMenu.secondaryInventory = event.data.inventory;
 
       interactionMenu.secondaryInventory.type = savedType;
       interactionMenu.secondaryInventory.searchedPersonSource = savedSrc;
+      interactionMenu.secondaryInventory.propertyName = savedPropertyName;
 		} else if (event.data.type == "updateBothInventories") {
       let savedType = interactionMenu.secondaryInventory.type;
       let savedSrc = interactionMenu.secondaryInventory.searchedPersonSource;
+      let savedPropertyName = interactionMenu.secondaryInventory.propertyName;
       interactionMenu.inventory = event.data.inventory.primary;
       interactionMenu.secondaryInventory = event.data.inventory.secondary;
       interactionMenu.secondaryInventory.type = savedType;
       interactionMenu.secondaryInventory.searchedPersonSource = savedSrc;
+      interactionMenu.secondaryInventory.propertyName = savedPropertyName;
     } else if (event.data.type == "updateNearestPlayer") {
       var nearest = event.data.nearest;
       if (nearest.name == "") {
