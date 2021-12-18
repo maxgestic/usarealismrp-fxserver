@@ -164,7 +164,7 @@ AddEventHandler("inventory:moveItem", function(data)
 		char.moveItemSlots(data.fromSlot, data.toSlot)
 		TriggerClientEvent("interaction:sendNUIMessage", usource, { type = "inventoryLoaded", inventory = char.get("inventory")})
 	elseif data.fromType == "primary" and data.toType == "secondary" then
-		if data.secondaryInventoryType ~= "person" then
+		if data.secondaryInventoryType ~= "person" and data.secondaryInventoryType ~= "property" then
 			-- get item being moved --
 			local item = char.getItemByIndex(data.fromSlot)
 			-- validate item move --
@@ -187,6 +187,8 @@ AddEventHandler("inventory:moveItem", function(data)
 					end
 				end)
 			end
+		elseif data.secondaryInventoryType == "property" then
+			TriggerEvent("properties-og:moveItemToPropertyStorage", usource, data)
 		end
 	elseif data.fromType == "secondary" and data.toType == "primary" then
 		if data.secondaryInventoryType == "vehicle" then
@@ -249,6 +251,8 @@ AddEventHandler("inventory:moveItem", function(data)
 			else
 				TriggerClientEvent("usa:notify", usource, "Person not found")
 			end
+		elseif data.secondaryInventoryType == "property" then
+			TriggerEvent("properties-og:moveItemFromProperty", usource, data)
 		end
 	elseif data.fromType == "secondary" and data.toType == "secondary" then
 		if not exports["usa_vehinv"]:getVehicleBusy(data.plate) then

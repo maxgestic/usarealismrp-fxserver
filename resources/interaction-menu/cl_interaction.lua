@@ -353,6 +353,9 @@ RegisterNUICallback('escape', function(data, cb)
 	if data.secondaryInventoryType == "person" then
 		TriggerServerEvent("inventory:removeInventoryAccessor", data.secondaryInventorySrc)
 	end
+	if data.currentPage == "Inventory" and data.secondaryInventoryType == "property" then
+		TriggerServerEvent("properties-og:markAsInventoryClosed")
+	end
 end)
 
 RegisterNUICallback('showPhone', function(data, cb)
