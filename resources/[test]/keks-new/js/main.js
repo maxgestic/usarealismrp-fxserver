@@ -21,7 +21,11 @@
       "http://ice1.somafm.com/beatblender-128-mp3",
       "http://hot108jamz.hot108.com:4040/;stream.nsv",
       "http://listen.radionomy.com/urbanradio-oldschoolrap",
-      "http://ice6.somafm.com/reggae-128-aac"
+      "http://ice6.somafm.com/reggae-128-aac",
+      "https://ice4.somafm.com/poptron-128-aac",
+      "https://ice2.somafm.com/fluid-128-aac",
+      "https://ice2.somafm.com/metal-128-aac",
+      "https://ice4.somafm.com/dubstep-128-aac"
     ]
 
     var MAX_VOL = 0.08
