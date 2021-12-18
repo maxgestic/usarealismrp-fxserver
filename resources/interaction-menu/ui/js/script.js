@@ -688,7 +688,7 @@ var interactionMenu = new Vue({
         }       
       }
       let necessaryRowCount = Math.ceil((largestIndexWithItem + 1) / 5);
-      return necessaryRowCount + 1;
+      return Math.max(necessaryRowCount + 1, 5);
     }
   },
   computed: {
