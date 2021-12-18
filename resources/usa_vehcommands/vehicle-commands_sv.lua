@@ -148,6 +148,56 @@ local VEHICLE_RANKS = {
 			rank = 1,
 			allowedLiveries = { 2 },
 			hash = -61406477
+		},
+		["code3cvpi"] = {
+			rank = 1,
+			allowedLiveries = { 1, 2, 3},
+			hash = GetHashKey("code3cvpi")
+		},
+		["valorfpis"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("valorfpis")
+		},
+		["valor18charg"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("valor18charger")
+		},
+		["valor16fpiu"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("valor16fpiu")
+		},
+		["valor20fpiu"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("valor20fpiu")
+		},
+		["valor18tahoe"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("valor18tahoe")
+		},
+		["valor15f150"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("valor15f150")
+		},
+		["valorf250"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("valorf250")
+		},
+		["bwtrail"] = {
+			rank = 1,
+			allowedLiveries = {1},
+			hash = GetHashKey("bwtrail")
+		},
+		["bostonwhale"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("bostonwhale")
 		}
 	},
 	["corrections"] = {
@@ -290,6 +340,56 @@ local VEHICLE_RANKS = {
 			rank = 3,
 			allowedLiveries = { 1 },
 			hash = -61406477
+		},
+		["code3cvpi"] = {
+			rank = 1,
+			allowedLiveries = { 1, 2, 3},
+			hash = GetHashKey("code3cvpi")
+		},
+		["valorfpis"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("valorfpis")
+		},
+		["valor18charg"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("valor18charg")
+		},
+		["valor16fpiu"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("valor16fpiu")
+		},
+		["valor20fpiu"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("valor20fpiu")
+		},
+		["valor18tahoe"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("valor18tahoe")
+		},
+		["valor15f150"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("valor15f150")
+		},
+		["valorf250"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("valorf250")
+		},
+		["bwtrail"] = {
+			rank = 1,
+			allowedLiveries = {1},
+			hash = GetHashKey("bwtrail")
+		},
+		["bostonwhale"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("bostonwhale")
 		}
 	},
 	["ems"] = {
@@ -355,6 +455,11 @@ local VEHICLE_RANKS = {
 			rank = 1,
 			allowedLiveries = { 2 },
 			hash = 1799416425
+		},
+		["bostonwhale"] = {
+			rank = 1,
+			allowedLiveries = {1, 2, 3},
+			hash = GetHashKey("bostonwhale")
 		}
 	},
 	["doctor"] = {
