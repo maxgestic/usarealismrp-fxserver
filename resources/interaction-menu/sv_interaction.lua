@@ -255,14 +255,18 @@ AddEventHandler("inventory:moveItem", function(data)
 			TriggerEvent("properties-og:moveItemFromProperty", usource, data)
 		end
 	elseif data.fromType == "secondary" and data.toType == "secondary" then
-		if not exports["usa_vehinv"]:getVehicleBusy(data.plate) then
-			exports["usa_vehinv"]:setVehicleBusy(data.plate)
-			TriggerEvent("vehicle:moveInventorySlots", data.plate, data.fromSlot, data.toSlot, function(inv)
-				local isLocked = exports["_locksystem"]:isLocked(data.plate)
-				TriggerEvent("vehicle:updateForOthers", data.plate, inv, isLocked)
-			end)
-		else
-			TriggerClientEvent("usa:notify", usource, "Please wait a moment!")
+		if data.secondaryInventoryType == "vehicle" then
+			if not exports["usa_vehinv"]:getVehicleBusy(data.plate) then
+				exports["usa_vehinv"]:setVehicleBusy(data.plate)
+				TriggerEvent("vehicle:moveInventorySlots", data.plate, data.fromSlot, data.toSlot, function(inv)
+					local isLocked = exports["_locksystem"]:isLocked(data.plate)
+					TriggerEvent("vehicle:updateForOthers", data.plate, inv, isLocked)
+				end)
+			else
+				TriggerClientEvent("usa:notify", usource, "Please wait a moment!")
+			end
+		elseif data.secondaryInventoryType == "property" then
+			TriggerEvent("properties-og:moveItemWithinPropertyStorage", usource, data)
 		end
 	end
 end)
