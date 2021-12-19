@@ -15,7 +15,7 @@ files {
 dependency 'essentialmode'
 
 -- General
-client_scripts {'client.lua', 'cl_police.lua', 'cl_ems.lua', 'cl_civ.lua',  'cl_judge.lua', 'cl_groupRelationships.lua'}
+client_scripts {'client.lua', 'cl_police.lua', 'cl_ems.lua', 'cl_civ.lua',  'cl_judge.lua', 'cl_groupRelationships.lua', 'cl_buyItemsFromHospital.lua'}
 server_scripts {'config.lua', 'server.lua', 'sv_police.lua', 'sv_ems.lua', 'sv_civ.lua', 'sv_judge.lua'}
 
 exports {
