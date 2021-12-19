@@ -638,53 +638,61 @@ Citizen.CreateThread(function()
 
     local showHelp = true
     local loaded = false
+    local SNOWBALL_HASH = `WEAPON_SNOWBALL`
 
     while true do
-        local ped = GetPlayerPed(-1)
+      local ped = GetPlayerPed(-1)
 
-        if enableWeatherControl then
-            SetWeatherTypeNowPersist('XMAS')
-        end
-        Citizen.Wait(0) -- prevent crashing
-        if IsNextWeatherType('XMAS') then -- check for xmas weather type
-            -- enable frozen water effect (water isn't actually ice, just looks like there's an ice layer on top of the water)
-            N_0xc54a08c85ae4d410(3.0)
-            -- preview: https://vespura.com/hi/i/2eb901ad4b1.gif
+      if enableWeatherControl then
+          SetWeatherTypeNowPersist('XMAS')
+      end
+      
+      if IsNextWeatherType('XMAS') then -- check for xmas weather type
+          -- enable frozen water effect (water isn't actually ice, just looks like there's an ice layer on top of the water)
+          N_0xc54a08c85ae4d410(3.0)
+          -- preview: https://vespura.com/hi/i/2eb901ad4b1.gif
 
-            SetForceVehicleTrails(true)
-            SetForcePedFootstepsTracks(true)
-
-            if not loaded then
-                RequestScriptAudioBank("ICE_FOOTSTEPS", false)
-                RequestScriptAudioBank("SNOW_FOOTSTEPS", false)
-                RequestNamedPtfxAsset("core_snow")
-                while not HasNamedPtfxAssetLoaded("core_snow") do
-                    Citizen.Wait(0)
-                end
-                UseParticleFxAssetNextCall("core_snow")
-                loaded = true
+          SetForceVehicleTrails(true)
+          SetForcePedFootstepsTracks(true)
+          
+          if not loaded then
+            RequestScriptAudioBank("ICE_FOOTSTEPS", false)
+            RequestScriptAudioBank("SNOW_FOOTSTEPS", false)
+            RequestNamedPtfxAsset("core_snow")
+            while not HasNamedPtfxAssetLoaded("core_snow") do
+              Citizen.Wait(0)
             end
-            RequestAnimDict('anim@mp_snowball') -- pre-load the animation
-            if IsControlJustReleased(0, G_KEY) and not IsPedInAnyVehicle(ped, true) and not IsPlayerFreeAiming(PlayerId()) and not IsPedSwimming(ped) and not IsPedSwimmingUnderWater(ped) and not IsPedRagdoll(ped) and not IsPedFalling(PlayerPedId()) and not IsPedRunning(ped) and not IsPedSprinting(ped) and GetInteriorFromEntity(ped) == 0 and not IsPedShooting(ped) and not IsPedUsingAnyScenario(ped) and not IsPedInCover(ped, 0) then -- check if the snowball should be picked up
-                TaskPlayAnim(ped, 'anim@mp_snowball', 'pickup_snowball', 8.0, -1, -1, 0, 1, 0, 0, 0) -- pickup the snowball
-                Citizen.Wait(1950) -- wait 1.95 seconds to prevent spam clicking and getting a lot of snowballs without waiting for animatin to finish.
-                GiveWeaponToPed(ped, GetHashKey('WEAPON_SNOWBALL'), 2, false, true) -- get 2 snowballs each time.
-            end
-        else
-            -- disable frozen water effect
-            if loaded then N_0xc54a08c85ae4d410(0.0) end
+            UseParticleFxAssetNextCall("core_snow")
+            loaded = true
+          end
+
+          RequestAnimDict('anim@mp_snowball') -- pre-load the animation
+          
+          if IsControlJustReleased(0, G_KEY) and not IsPedInAnyVehicle(ped, true) and not IsPlayerFreeAiming(PlayerId()) and not IsPedSwimming(ped) and not IsPedSwimmingUnderWater(ped) and not IsPedRagdoll(ped) and not IsPedFalling(PlayerPedId()) and not IsPedRunning(ped) and not IsPedSprinting(ped) and GetInteriorFromEntity(ped) == 0 and not IsPedShooting(ped) and not IsPedUsingAnyScenario(ped) and not IsPedInCover(ped, 0) then -- check if the snowball should be picked up
+              TaskPlayAnim(ped, 'anim@mp_snowball', 'pickup_snowball', 8.0, -1, -1, 0, 1, 0, 0, 0) -- pickup the snowball
+              Citizen.Wait(1950) -- wait 1.95 seconds to prevent spam clicking and getting a lot of snowballs without waiting for animatin to finish.
+              GiveWeaponToPed(ped, SNOWBALL_HASH, 2, false, true) -- get 2 snowballs each time.
+          end
+      else
+          -- disable frozen water effect
+          if loaded then
+            N_0xc54a08c85ae4d410(0.0)
             loaded = false
             RemoveNamedPtfxAsset("core_snow")
             ReleaseNamedScriptAudioBank("ICE_FOOTSTEPS")
             ReleaseNamedScriptAudioBank("SNOW_FOOTSTEPS")
             SetForceVehicleTrails(false)
             SetForcePedFootstepsTracks(false)
-        end
-		if GetSelectedPedWeapon(PlayerPedId()) == GetHashKey('WEAPON_SNOWBALL') then
-			SetPlayerWeaponDamageModifier(PlayerId(), 0.0)
-		else
-			SetPlayerWeaponDamageModifier(PlayerId(), 1.0)
-		end
+          end
+      end
+
+      if GetSelectedPedWeapon(ped) == SNOWBALL_HASH then
+        SetPlayerWeaponDamageModifier(ped, 0.0)
+      else
+        SetPlayerWeaponDamageModifier(ped, 1.0)
+      end
+
+      Wait(0)
     end
 end)
 
