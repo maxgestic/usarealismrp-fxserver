@@ -77,7 +77,6 @@ SetDiscordRichPresenceAction(1, "Website", "https://usarrp.gg")
 -- REMOVE AI WEAPON DROPS --
 Citizen.CreateThread(function()
   while true do
-    Citizen.Wait(0)
     -- List of pickup hashes (https://pastebin.com/8EuSv2r1)
     RemoveAllPickupsOfType(0xDF711959) -- carbine rifle
     RemoveAllPickupsOfType(0xF9AFB48F) -- pistol
@@ -107,6 +106,7 @@ Citizen.CreateThread(function()
     RemoveAllPickupsOfType(0x2D5CE030)
     RemoveAllPickupsOfType(0xFD4AE5E5)
     RemoveAllPickupsOfType(0x2451A293) -- ammo for all weapons ends --
+    Wait(100)
   end
 end)
 
