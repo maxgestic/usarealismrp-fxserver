@@ -153,22 +153,9 @@ end)
 
 Citizen.CreateThread(function()
 	for i = 1, 12 do
-		Citizen.InvokeNative(0xDC0F817884CDD856, i, false)
+		Citizen.InvokeNative(0xDC0F817884CDD856, i, false) -- disable AI LEO/EMS dispatching
 	end
 end)
-
-Citizen.CreateThread(function()
-  while true do
-    Citizen.Wait(1000)
-    Citizen.InvokeNative(0xC54A08C85AE4D410, 0.6)
-    local playerVeh = GetVehiclePedIsUsing(playerPed)
-    local dirtLevel = GetVehicleDirtLevel(playerVeh)
-    if GetPedInVehicleSeat(playerVeh, -1) == playerPed and dirtLevel > 0.0 then
-      SetVehicleDirtLevel(playerVeh, dirtLevel - 0.5)
-    end
-  end
-end)
-
 
 ------------------------------
 -- FIRST LOAD / SPAWNING IN --
