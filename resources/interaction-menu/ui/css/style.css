@@ -172,11 +172,6 @@ ul.submenu li label {
 	text-align: center;
 }
 
-.inventory-progress-bar {
-	background-color: #34495E;
-	border-radius: 3px;
-}
-
 .ui-item-hover {
 	background-color: rgba(180, 180, 180, 0.2);
 }
