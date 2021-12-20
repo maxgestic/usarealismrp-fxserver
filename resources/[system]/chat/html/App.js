@@ -59,8 +59,12 @@ window.APP = {
 				}
 			}, 50);
 		},
-		ON_IMMERSION() {
-			this.immersionMode = !this.immersionMode
+		ON_IMMERSION(eventData) {
+			if (eventData.shouldHUDBeEnabled != null) {
+				this.immersionMode = !eventData.shouldHUDBeEnabled
+			} else {
+				this.immersionMode = !this.immersionMode
+			}
 			if (this.immersionMode) {
 				this.showWindow = false
 			} else {
