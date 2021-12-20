@@ -223,7 +223,7 @@ end)
 -- clear NPC cops --
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(100)
+		Citizen.Wait(150)
 		local playerLocalisation = GetEntityCoords(playerPed)
 		ClearAreaOfCops(playerLocalisation.x, playerLocalisation.y, playerLocalisation.z, 400.0)
 	end
@@ -252,8 +252,9 @@ end)
 
 -- NO DRIVE BY'S
 Citizen.CreateThread(function()
+  local driveBysEnabled = true
     while true do
-        Wait(0)
+        Wait(1)
         local me = PlayerPedId()
         local veh = GetVehiclePedIsIn(me)
         local mph = GetEntitySpeed(veh) * 2.236936
@@ -261,9 +262,15 @@ Citizen.CreateThread(function()
             DisableControlAction(0, 68, true)
             DisableControlAction(0, 69, true)
             DisableControlAction(0, 70, true)
-            SetPlayerCanDoDriveBy(me, false)
+            if driveBysEnabled then
+              driveBysEnabled = false
+              SetPlayerCanDoDriveBy(me, false)
+            end
         else
+          if not driveBysEnabled then
+            driveBysEnabled = true
             SetPlayerCanDoDriveBy(me, true)
+          end
         end
     end
 end)
@@ -326,7 +333,7 @@ Citizen.CreateThread(function()
         end
       end
     end
-    Wait(1)
+    Wait(100)
   end
 end)
 
@@ -347,7 +354,7 @@ Citizen.CreateThread(function()
                 SetVehicleSteeringAngle(GetVehiclePedIsIn(playerPed, true), angle)
             end
         end
-        Wait(0)
+        Wait(1)
     end
 end)
 
@@ -412,7 +419,7 @@ end)
 
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(0)
+        Wait(1)
         if IsPedInAnyVehicle(playerPed, false) and disableShuffle then
             if GetPedInVehicleSeat(GetVehiclePedIsIn(playerPed, false), 0) == playerPed then
                 if GetIsTaskActive(playerPed, 165) then
@@ -1011,7 +1018,7 @@ local oldvalped = false
 
 Citizen.CreateThread(function()
     while true do
-        Wait(0)
+        Wait(1)
 
         if once then
             once = false
