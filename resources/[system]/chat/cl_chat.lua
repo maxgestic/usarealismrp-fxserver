@@ -179,11 +179,12 @@ Citizen.CreateThread(function()
 end)
 
 -- hide on HUD black bars (immersion) bars --
-AddEventHandler("usa:toggleImmersion", function(disabled)
+AddEventHandler("usa:toggleImmersion", function(shouldHUDBeEnabled)
 	SendNUIMessage({
-		type = 'ON_IMMERSION'
+		type = 'ON_IMMERSION',
+		shouldHUDBeEnabled = shouldHUDBeEnabled
 	})
-	if not disabled then
+	if not shouldHUDBeEnabled then
 		chatInputActive = false
 		chatInputActivating = false
 		SetNuiFocus(false)
