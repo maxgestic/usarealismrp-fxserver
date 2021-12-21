@@ -711,10 +711,8 @@ var interactionMenu = new Vue({
     invProgBarStyle() {
       let styleObject = { width: "100%" }
       if (this.showSecondaryInventory) {
-        console.log("yes")
         styleObject["width"] = "50%";
       }
-      console.log("yup")
       return styleObject;
     }
   },
