@@ -89,15 +89,15 @@
   		font-weight: bold;
   	}
   	#website p {
-      width: 600px;
+      width: 650px;
       margin-left: -300px;
   	}
     #logo-container {
       text-align: center;
-      margin-top: 16em;
+      margin-top: 1em;
     }
     img {
-      width: 50em;
+      width: 40em;
     }
     .progress-bar-wrap {
       position: absolute;
