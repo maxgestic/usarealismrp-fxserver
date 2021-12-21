@@ -684,11 +684,9 @@ Citizen.CreateThread(function()
       end
 
       if GetSelectedPedWeapon(ped) == SNOWBALL_HASH then
-        SetPlayerWeaponDamageModifier(ped, 0.0)
-      else
-        SetPlayerWeaponDamageModifier(ped, 1.0)
+        SetPlayerWeaponDamageModifier(PlayerId(), 0.0)
       end
-
+      
       Wait(0)
     end
 end)
