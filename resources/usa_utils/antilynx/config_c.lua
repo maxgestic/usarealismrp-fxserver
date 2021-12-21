@@ -22,7 +22,7 @@ LXC.MaxPlayerHealth = 200 -- Set the max health on your server (default is 200)
 LXC.GodCheckTimer = 30000 -- Every 30s the player get a full godmode check
 
 ----General----
-LXC.ACheat = true -- General shit, "AntiInvincible, AntiInfiniteAmmo, etc."
+LXC.ACheat = false -- General shit, "AntiInvincible, AntiInfiniteAmmo, etc."
 LXC.ASpectate = true -- HIGHLY RECOMMENDED
 LXC.ABlips = false  -- HIGHLY RECOMMENDED
 LXC.PlayerProtection = true -- FIRE AND EXPLOSIONS (this only protect your players from being damaged by explosions or fire)

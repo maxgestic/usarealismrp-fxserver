@@ -67,6 +67,8 @@ local VEH_CLASS = {
     Motorcycle = 8
 }
 
+local GLOBAL_WEAPON_DAMAGE_MODIFIER = 0.65
+
 -- DISCORD RICH PRESENCE --
 SetDiscordAppId("517228692834091033")
 SetDiscordRichPresenceAsset("5a158f46d2aefd14d3c7a16f3f4bc72b")
@@ -1143,3 +1145,11 @@ for name, info in pairs(STATIC_OBJECTS) do
   end
   FreezeEntityPosition(info.handle, true)
 end
+
+-- GLOBAL WEAPON DAMAGE MODIFIER:
+Citizen.CreateThread(function()
+  while true do
+    SetPlayerWeaponDamageModifier(PlayerId(), GLOBAL_WEAPON_DAMAGE_MODIFIER)
+    Wait(5000)
+  end
+end)

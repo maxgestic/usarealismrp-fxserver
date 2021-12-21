@@ -1519,10 +1519,11 @@ TriggerEvent('es:addGroupCommand', 'test', "owner", function(source, args, char)
 	}
 	local policearmor = { name = "Police Armor", type = "misc", price = 5000, legality = "illegal", quantity = 1, weight = 25, stock = math.random(0, 3), objectModel = "prop_bodyarmour_03" }
 	local ammo_9mm = { name = "9mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 10 }
-	local loaded_9mm_mag_12 = { name = "Loaded 9mm Mag [12]", type = "magazine", price = 50, weight = 3, receives = "9mm", MAX_CAPACITY = 12, currentCapacity = 12  }
+	local loaded_9mm_mag_12 = { name = "Loaded 9mm Mag [12]", type = "magazine", price = 50, weight = 3, receives = "9mm", MAX_CAPACITY = 12, currentCapacity = 12, notStackable = true  }
 	local loaded_556_mag_30 = { name = "Loaded 5.56mm Mag [30]", type = "magazine", price = 50, weight = 3, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 30 }
 
-	local toGiveItem = loaded_556_mag_30
+	local toGiveItem = loaded_9mm_mag_12
+	toGiveItem.quantity = (toGiveItem.quantity or 1)
 
 	toGiveItem.uuid = exports.globals:generateID()
 	char.giveItem(toGiveItem)
