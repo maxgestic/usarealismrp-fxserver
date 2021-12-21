@@ -689,7 +689,7 @@ var interactionMenu = new Vue({
       }
       let necessaryRowCount = Math.ceil((largestIndexWithItem + 1) / 5);
       return Math.max(necessaryRowCount + 1, 5);
-    }
+    },
   },
   computed: {
     inventoryWeight: function() {
@@ -707,6 +707,15 @@ var interactionMenu = new Vue({
         weight += (item.weight * (item.quantity || 1) || 1.0)
       }
       return weight
+    },
+    invProgBarStyle() {
+      let styleObject = { width: "100%" }
+      if (this.showSecondaryInventory) {
+        console.log("yes")
+        styleObject["width"] = "50%";
+      }
+      console.log("yup")
+      return styleObject;
     }
   },
   directives: { /* used for primary inventory items (see 'updated' for secondary inventory items)*/
