@@ -3,7 +3,8 @@ local SV_ITEMS = { -- must be kept in sync with one in cl_bike-shop.lua --
   {name = "Cruiser", price = 300, hash = 448402357},
   {name = "Fixster", price = 350, hash = -836512833},
   {name = "Scorcher", price = 500, hash = -186537451},
-  {name = "TriBike", price = 550, hash = 1127861609}
+  {name = "TriBike", price = 550, hash = 1127861609},
+  {name = "Low Rider Bike", price = 5000, hash = GetHashKey("lowriderb")}
 }
 
 RegisterServerEvent("bikeShop:requestPurchase")
