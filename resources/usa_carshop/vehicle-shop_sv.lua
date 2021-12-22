@@ -415,6 +415,7 @@ local vehicleShopItems = {
 			--{make = "Tesla", model = "Model S", price = 140000, hash = "models", storage_capacity = 170.0},
 			{make = "Ford", model = "F150 Raptor 2", price = 140000, hash = "foxraptor", storage_capacity = 280.0},
 			{make = "Cadillac", model = "CTS-V (2016)", price = 160000, hash = "ctsv16", storage_capacity = 190.0},
+			{make = "Rolls Royce", model = "Cullinan", price = 500000, hash = "cullinan", storage_capacity = 230.0},
 		}
 	}
 }
@@ -424,7 +425,8 @@ local BIKES = {
 	["Cruiser"] = { price = 300, hash = 448402357},
 	["Fixster"] = { price = 350, hash = -836512833},
 	["Scorcher"] = { price = 500, hash = -186537451},
-	["TriBike"] = { price = 550, hash = 1127861609}
+	["TriBike"] = { price = 550, hash = 1127861609},
+	["Low Rider Bike"] = { price = 3000, hash = GetHashKey("lowriderb")}
 }
 
 RegisterServerEvent("vehicle-shop:loadItems")
