@@ -14,6 +14,7 @@ local boats = {
     {name = "Submersible 2", price =750000, rent = 20000, hash = -1066334226, stored = false},
 	{name = "Sea Ray L650 Fly", price = 3000000, rent = 50000, hash = GetHashKey("sr650fly"), stored = false},
 	{name = "Amels 200", price = 15000000, rent = 500000, hash = GetHashKey("amels200"), stored = false},
+	{name = "Kraken Avisa", price = 1000000, rent = 75000, hash = GetHashKey("avisa"), stored = false}
 }
 
 local playerBoats = {}
