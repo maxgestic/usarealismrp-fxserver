@@ -418,6 +418,12 @@ local vehicleShopItems = {
 			{make = "Rolls Royce", model = "Cullinan", price = 500000, hash = "cullinan", storage_capacity = 230.0},
 			{make = "Harley Davidson", model = "FLHXS (2018)", price = 70000, hash = "flhxs_streetglide_special18", storage_capacity = 95.0},
 			{make = "Harley Davidson", model = "Road King", price = 55000, hash = "na25", storage_capacity = 70.0},
+			{make = "Mercedes-Benz", model = "E55 AMG", price = 100000, hash = "benze55", storage_capacity = 175.0},
+			{make = "Tesla", model = "Model S", price = 125000, hash = "teslamodels", storage_capacity = 190.0},
+			{make = "Toyota", model = "4 Runner", price = 70000, hash = "4runner", storage_capacity = 280.0},
+			{make = "Jeep", model = "Gladiator", price = 70000, hash = "jeepg", storage_capacity = 280.0},
+			{make = "Chevrolet", model = "Silverado (Single Cab)", price = 70000, hash = "silv20", storage_capacity = 280.0},
+			{make = "GMC", model = "Sierra (2006)", price = 80000, hash = "polar06seirra", storage_capacity = 280.0},
 		}
 	}
 }
