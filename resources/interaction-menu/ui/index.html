@@ -65,19 +65,19 @@
 					<div style="position: relative;">
 						<!-- Pimary inventory weight display -->
 						<div style="padding: 0.5em; position: absolute; top: -35px; color: lightgray; font-size: 13px; text-align: center;" v-bind:style="invProgBarStyle">
-							<div class="inventory-progress-bar" v-bind:style="{height: '20px', width: this.inventoryWeight + '%', margin: 'auto;'}">
+							<div class="inventory-progress-bar" v-bind:style="{height: '20px', width: this.inventoryWeight + '%'}">
 								<span>{{this.inventoryWeight}}/100</span>
 							</div>
 						</div>
 						<!-- Secondary inventory weight display -->
 						<div v-if="showSecondaryInventory && secondaryInventory.type" style="padding: 0.5em; position: absolute; top: -35px; left: 50%; color: lightgray; font-size: 13px; text-align: center;" v-bind:style="invProgBarStyle">
 							<span v-if="secondaryInventory.type == 'vehicle'">
-								<div class="inventory-progress-bar" v-bind:style="{height: '20px', width: this.secondaryInventoryWeight + '%', margin: 'auto;'}">
+								<div class="inventory-progress-bar" style="height: 20px;" v-bind:style="vehInvProgBarStyle">
 									<span>{{this.secondaryInventoryWeight}}/{{this.secondaryInventory.MAX_CAPACITY}}</span>
 								</div>
 							</span>
 							<span v-if="secondaryInventory.type == 'person'">
-								<div class="inventory-progress-bar" v-bind:style="{height: '20px', width: this.secondaryInventoryWeight + '%', margin: 'auto;'}">
+								<div class="inventory-progress-bar" v-bind:style="{height: '20px', width: this.secondaryInventoryWeight + '%'}">
 									<span>{{this.secondaryInventoryWeight}}/100</span>
 								</div>
 							</span>
