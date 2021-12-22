@@ -11,7 +11,9 @@ local boats = {
     {name = "Shitzu Tropic", price = 40000, rent = 7500, hash =  1448677353, stored = false},
     {name = "Shitzu Suntrap", price = 30000, rent = 5500, hash =  -282946103, stored = false},
     {name = "Submersible", price =750000, rent = 20000, hash = 771711535, stored = false},
-    {name = "Submersible 2", price =750000, rent = 20000, hash = -1066334226, stored = false}
+    {name = "Submersible 2", price =750000, rent = 20000, hash = -1066334226, stored = false},
+	{name = "Sea Ray L650 Fly", price = 3000000, rent = 50000, hash = GetHashKey("sr650fly"), stored = false},
+	{name = "Amels 200", price = 15000000, rent = 500000, hash = GetHashKey("amels200"), stored = false},
 }
 
 local playerBoats = {}
@@ -95,7 +97,8 @@ local locations = {
 		spawn = {
 			x = -793.2,
 			y = -1434.7,
-			z = 1.6
+			z = 1.6,
+			heading = 144.0
 		},
 		ped = {
 			x = -782.1,
@@ -200,7 +203,7 @@ Citizen.CreateThread(function()
 			DrawText3D(data.rent.x, data.rent.y, data.rent.z, 8, '[E] - Boat Management')
 			DrawText3D(data.return_rental.x, data.return_rental.y, data.return_rental.z, 30, '[E] - Return Boat')
 			if IsControlJustPressed(0, MENU_OPEN_KEY) then
-				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), data.return_rental.x, data.return_rental.y, data.return_rental.z, true) < 5 then
+				if GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), data.return_rental.x, data.return_rental.y, data.return_rental.z, true) < 10 then
 					Citizen.Wait(500)
 					local vehicle = GetVehiclePedIsIn(GetPlayerPed(-1), false)
 					local hash = GetEntityModel(vehicle)
@@ -293,8 +296,7 @@ AddEventHandler("boatMenu:spawnSeacraft", function(boat)
         end
         for name, info in pairs(locations) do
         	if Vdist(info.rent.x, info.rent.y, info.rent.z, playerCoords) < 5 then
-		        local vehicle = CreateVehicle(numberHash, info.spawn.x, info.spawn.y, info.spawn.z, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
-				TriggerEvent('persistent-vehicles/register-vehicle', vehicle)
+		        local vehicle = CreateVehicle(numberHash, info.spawn.x, info.spawn.y, info.spawn.z, (info.spawn.heading or 0.0) --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
 				SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
 		        SetVehicleHasBeenOwnedByPlayer(vehicle, true)
 		        SetEntityAsMissionEntity(vehicle, true, true)
@@ -341,8 +343,7 @@ AddEventHandler('boatMenu:rentBoat', function(index)
         end
         for name, info in pairs(locations) do
         	if Vdist(info.rent.x, info.rent.y, info.rent.z, playerCoords) < 5 then
-		        local vehicle = CreateVehicle(numberHash, info.spawn.x, info.spawn.y, info.spawn.z, 0.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
-				TriggerEvent('persistent-vehicles/register-vehicle', vehicle)
+		        local vehicle = CreateVehicle(numberHash, info.spawn.x, info.spawn.y, info.spawn.z, (info.spawn.heading or 0.0)--[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
 				SetVehicleExplodesOnHighExplosionDamage(vehicle, true)
             local vehicle_key = {
     					name = "Key -- " .. GetVehicleNumberPlateText(vehicle),
