@@ -3,9 +3,23 @@ local SOUND_ENABLE = true
 local processed = false
 local harvested = false
 
-local PROCESS_WEED_COORDS = vector3(1036.35, -3203.71, -38.17)
-local PROCESS_WEED_COORDS_2 = vector3(382.287109375, -816.33471679688, 29.30421257019)
-local PROCESS_WEED_COORDS_3 = vector3(440.03646850586, -1886.7438964844, 31.739208221436)
+local WEED_PROCESS_LOCATIONS = {
+  vector3(1036.35, -3203.71, -38.17),
+  vector3(382.287109375, -816.33471679688, 29.30421257019),
+  vector3(440.03646850586, -1886.7438964844, 31.739208221436),
+  vector3(1145.2351074219, -1660.7742919922, 36.614681243896)
+}
+
+function isNearWeedProcessingSpot(range)
+  local playerCoords = GetEntityCoords(PlayerPedId())
+  local isNearAny = false
+  for i = 1, #WEED_PROCESS_LOCATIONS do
+    if Vdist(playerCoords, WEED_PROCESS_LOCATIONS[i]) < range then
+      return true
+    end
+  end
+  return false
+end
 
 ------------------------------------------------
 -- See if player is close to any job location --
@@ -14,14 +28,13 @@ Citizen.CreateThread(function()
   while true do
     local playerPed = PlayerPedId()
     local playerCoords = GetEntityCoords(playerPed)
-    --DrawText3D(2224.04, 5577.28, 53.7, 10, '[E] - Harvest Weed | [Hold E] - Hint')
-    DrawText3D(PROCESS_WEED_COORDS.x, PROCESS_WEED_COORDS.y, PROCESS_WEED_COORDS.z, 10, '[E] - Process Weed')
-    DrawText3D(PROCESS_WEED_COORDS_2.x, PROCESS_WEED_COORDS_2.y, PROCESS_WEED_COORDS_2.z, 5, '[E] - Process Weed')
-    DrawText3D(PROCESS_WEED_COORDS_3.x, PROCESS_WEED_COORDS_3.y, PROCESS_WEED_COORDS_3.z, 5, '[E] - Process Weed')
+    for i = 1, #WEED_PROCESS_LOCATIONS do
+      DrawText3D(WEED_PROCESS_LOCATIONS[i].x, WEED_PROCESS_LOCATIONS[i].y, WEED_PROCESS_LOCATIONS[i].z, 5, '[E] - Process Weed')
+    end
     DrawText3D(2856.12, 4458.76, 48.5, 3, '[E] - Enter')
     DrawText3D(1066.40, -3183.47, -39.16, 5, '[E] - Exit')
     if IsControlJustPressed(1, KEY) then
-      if (Vdist(playerCoords, PROCESS_WEED_COORDS) < 3.5 or Vdist(playerCoords, PROCESS_WEED_COORDS_2) < 3.5 or Vdist(playerCoords, PROCESS_WEED_COORDS_3) < 3.5) and not processed then
+      if isNearWeedProcessingSpot(3.5) and not processed then
         Wait(500)
         if not IsControlPressed(1, KEY) then
           TriggerServerEvent("weed:checkItem", "Process")
@@ -79,7 +92,7 @@ AddEventHandler("weed:continueProcessing", function()
   TaskPlayAnim(playerPed,"timetable@jimmy@ig_1@idle_a","hydrotropic_bud_or_something", 100.0, 200.0, 0.3, 121, 0.2, 0, 0, 0)
   while GetGameTimer() - beginTime < 25000 do
     Citizen.Wait(0)
-    if Vdist(GetEntityCoords(playerPed), PROCESS_WEED_COORDS) < 5.0 or Vdist(GetEntityCoords(playerPed), PROCESS_WEED_COORDS_2) < 5.0 or Vdist(GetEntityCoords(playerPed), PROCESS_WEED_COORDS_3) < 5.0 then
+    if isNearWeedProcessingSpot(5) then
       DrawTimer(beginTime, 25000, 1.42, 1.475, 'PROCESSING')
     else
       processed = false
