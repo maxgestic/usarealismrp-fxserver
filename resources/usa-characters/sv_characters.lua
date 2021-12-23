@@ -22,6 +22,7 @@ AddEventHandler("playerDropped", function(reason)
     -- gather some needed info
     local char = CHARACTERS[usource]
     char.set("_rev", nil) -- avoid document update conflict
+    char.set("lastRecordedLocation", GetEntityCoords(GetPlayerPed(usource)))
     local charId = char.get("_id")
     local charSelf = char.getSelf()
     local charFullName = char.getFullName()
@@ -43,8 +44,8 @@ AddEventHandler("playerDropped", function(reason)
         end
       end)
     end)
-     -- notify DOC of player disconnect while in jail --
-     if charJailTime then
+    -- notify DOC of player disconnect while in jail --
+    if charJailTime then
       if charJailTime > 0 then
         exports["globals"]:notifyPlayersWithJobs({"corrections"}, "^3INFO: ^0" .. charFullName .. " has fallen asleep.")
       end

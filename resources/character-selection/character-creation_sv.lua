@@ -95,6 +95,40 @@ AddEventHandler('character:disconnect', function()
 	DropPlayer(source, "Disconnected at character selection.")
 end)
 
+RegisterServerEvent('spawn:getCharLastLocation')
+AddEventHandler('spawn:getCharLastLocation', function(charID)
+	local src = source
+	TriggerEvent('es:exposeDBFunctions', function(db)
+		db.getDocumentById("characters", charID, function(doc)
+			if doc then
+				TriggerClientEvent("character:send-nui-message", src, {
+					type = "gotCharLastLocation",
+					coords = doc.lastRecordedLocation
+				})
+			end
+		end)
+	end)
+end)
+
+function SaveLastLocationWithRetry(src, coords)
+	local c = exports["usa-characters"]:GetCharacter(src)
+	TriggerEvent('es:exposeDBFunctions', function(db)
+		db.updateDocument("characters", c.get("_id"), { lastRecordedLocation = coords }, function(doc, err, rtext) print("location updated in db, err: " .. err)
+			if err == 409 then
+				print("was 409! trying again...")
+				SaveLastLocationWithRetry(src, coords)
+			else
+				print("done!")
+			end
+		end)
+	end)
+end
+
+RegisterServerEvent('spawn:setCharLastLocation')
+AddEventHandler('spawn:setCharLastLocation', function(coords)
+	SaveLastLocationWithRetry(source, coords)
+end)
+
 function DeleteCharacterById(id, rev, cb)
 	PerformHttpRequest("http://127.0.0.1:5984/characters/".. id .."?rev=".. rev, function(err, rText, headers)
 		if err == 0 then

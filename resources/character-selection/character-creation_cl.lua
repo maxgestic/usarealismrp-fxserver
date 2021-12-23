@@ -154,19 +154,21 @@ local CAMERA_LOCATIONS = {
 
 RegisterNetEvent("character:swap--check-distance")
 AddEventHandler("character:swap--check-distance", function()
-  for i = 1, #swap_locations do
-	local location = swap_locations[i]
-	if GetDistanceBetweenCoords(location.x, location.y, location.z,GetEntityCoords(GetPlayerPed(-1))) < 8 then
-		TriggerEvent("Radio.Set", false, {})
-		TriggerEvent("hotkeys:setCurrentSlotPassive", nil)
-		TriggerEvent("gcPhone:twitter_Logout")
-		TriggerEvent("radio:unsubscribe")
-		TriggerServerEvent("character:getCharactersAndOpenMenu", "home")
-		SendNUIMessage({
-			type = "displayGUI"
-		})
+	local mycoords = GetEntityCoords(GetPlayerPed(-1))
+	for i = 1, #swap_locations do
+		local location = swap_locations[i]
+		if GetDistanceBetweenCoords(location.x, location.y, location.z, mycoords) < 8 then
+			TriggerEvent("Radio.Set", false, {})
+			TriggerEvent("hotkeys:setCurrentSlotPassive", nil)
+			TriggerEvent("gcPhone:twitter_Logout")
+			TriggerEvent("radio:unsubscribe")
+			TriggerServerEvent("character:getCharactersAndOpenMenu", "home")
+			TriggerServerEvent("spawn:setCharLastLocation", mycoords)
+			SendNUIMessage({
+				type = "displayGUI"
+			})
+		end
 	end
-  end
 end)
 
 RegisterNetEvent("character:open")
@@ -290,6 +292,8 @@ RegisterNUICallback('select-character', function(data, cb)
 			}
 		elseif data.spawn:find("Property") then
 			spawn_coords_closed_menu = data.charSavedSpawn
+		elseif data.spawn:find("Last Location") then
+			spawn_coords_closed_menu = data.charLastLocation
 		end
 	end
 	toggleMenu(false)
@@ -297,6 +301,10 @@ RegisterNUICallback('select-character', function(data, cb)
 	TriggerServerEvent("character:loadCharacter", data.id) -- loadout the player with the selected character appearance
 	TriggerEvent("chat:setCharName", data.name) -- for chat messages
 	cb('ok')
+end)
+
+RegisterNUICallback('getCharLastLocation', function(data, cb)
+	TriggerServerEvent("spawn:getCharLastLocation", data.id)
 end)
 
 RegisterNUICallback('delete-character', function(data, cb)
