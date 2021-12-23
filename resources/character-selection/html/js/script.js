@@ -1,4 +1,4 @@
-const characterSelectionApp = new Vue({
+var characterSelectionApp = new Vue({
   el: "#app",
   created() {
     window.addEventListener('keydown', (e) => {
@@ -11,7 +11,7 @@ const characterSelectionApp = new Vue({
           if (this.selectedCharIndex == this.characters.length) {
             this.page = "create" // new char
           } else {
-            this.page = "spawn" // select a char
+            this.goToSpawnPage() // select a char
           }
         } else if (this.page == "spawn") {
           if (this.selectedSpawn && this.selectedCharacter) {
@@ -129,7 +129,8 @@ const characterSelectionApp = new Vue({
         id: this.selectedCharacter.id,
         name: this.selectedCharacter.name,
         spawn: this.selectedSpawn,
-        charSavedSpawn: this.selectedCharacter.spawn
+        charSavedSpawn: this.selectedCharacter.spawn,
+        charLastLocation: this.selectedCharacter.lastRecordedLocation
       }));
       this.page = "list"
       this.selectedCharacter = null
@@ -165,6 +166,14 @@ const characterSelectionApp = new Vue({
         return true
       else
         return false
+    },
+    goToSpawnPage() {
+      if (this.selectedCharacter) {
+        $.post('http://character-selection/getCharLastLocation', JSON.stringify({
+          id: this.selectedCharacter.id
+        }));
+      }
+      this.page = 'spawn';
     }
   },
   computed: {
@@ -196,21 +205,24 @@ document.onreadystatechange = () => {
     /* Listen for events from lua script */
     window.addEventListener('message', function(event) {
       var eventType = event.data.type;
-        if (eventType == "toggleMenu") {
-          if (event.data.open == true){
-            characterSelectionApp.characters = event.data.characters;
-            if (event.data.characters.length > 0) {
-              characterSelectionApp.selectedCharacter = event.data.characters[0]
-              characterSelectionApp.selectedCharIndex = 0
-            }
-            document.body.style.display = "flex";
+      if (eventType == "toggleMenu") {
+        if (event.data.open == true){
+          characterSelectionApp.characters = event.data.characters;
+          if (event.data.characters.length > 0) {
+            characterSelectionApp.selectedCharacter = event.data.characters[0]
+            characterSelectionApp.selectedCharIndex = 0
           }
-          else
-            document.body.style.display = "none";
-        } else if (eventType == "displayGUI") {
-          document.body.style.display = event.data.open = "flex";
-          $(".characters").scrollLeft(0)
+          document.body.style.display = "flex";
         }
+        else
+          document.body.style.display = "none";
+      } else if (eventType == "displayGUI") {
+        document.body.style.display = event.data.open = "flex";
+        $(".characters").scrollLeft(0)
+      } else if (eventType == "gotCharLastLocation") {
+        characterSelectionApp.selectedCharacter.lastRecordedLocation = event.data.coords;
+        characterSelectionApp.$forceUpdate();
+      }
     });
   };
 };
@@ -223,7 +235,7 @@ function cancelDelete() {
   characterSelectionApp.cancelDelete();
 }
 
-function getPreviousSpawn(current) {
+function getPreviousSpawn(current) { // todo: fix this
   switch (current) {
     case "Paleto Bay":
       return "Property"

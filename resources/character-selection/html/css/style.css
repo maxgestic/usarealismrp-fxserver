@@ -148,7 +148,6 @@ input[type=date] {
 	/* width: 300px; */
 	width: 18em;
 	border-radius: 4px;
-	padding: 5px;
 	margin-left: 0.5em;
 	margin-right: 0.5em;
 }
@@ -190,6 +189,12 @@ input[type=date] {
 #spawn-point--property {
 	background-image: url('../img/alleyway.jpg');
 	background-size: cover;
+}
+
+#spawn-point--last-location {
+	background-image: url('https://i.imgur.com/YHJhDUW.png');
+	background-size: cover;
+	background-position: 50% 50%;
 }
 
 #badly-placed-spawn-select-header {
