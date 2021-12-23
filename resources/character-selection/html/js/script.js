@@ -144,7 +144,7 @@ var characterSelectionApp = new Vue({
           this.selectedCharIndex = 0 // to beginning of list
         this.selectCharacter(this.selectedCharIndex)
       } else if (this.page == "spawn") {
-        let next = getNextSpawn(this.selectedSpawn)
+        let next = getNextSpawn(this.selectedSpawn, this.selectedCharacter.lastRecordedLocation, this.selectedCharacter.spawn)
         this.selectSpawn(next)
       }
     },
@@ -157,7 +157,7 @@ var characterSelectionApp = new Vue({
         }
         this.selectCharacter(this.selectedCharIndex)
       } else if (this.page == "spawn") {
-        let prev = getPreviousSpawn(this.selectedSpawn)
+        let prev = getPreviousSpawn(this.selectedSpawn, this.selectedCharacter.lastRecordedLocation, this.selectedCharacter.spawn)
         this.selectSpawn(prev)
       }
     },
@@ -235,27 +235,51 @@ function cancelDelete() {
   characterSelectionApp.cancelDelete();
 }
 
-function getPreviousSpawn(current) { // todo: fix this
+function getPreviousSpawn(current, lastSavedLocation = null, propertySpawn = null) {
   switch (current) {
-    case "Paleto Bay":
-      return "Property"
+    case "Paleto Bay": {
+      if (propertySpawn)
+        return "Property"
+      else if (lastSavedLocation)
+        return "Last Location"
+      else
+        return "Los Santos"
+    }
     case "Sandy Shores":
       return "Paleto Bay"
     case "Los Santos":
       return "Sandy Shores"
-    case "Property":
+    case "Last Location":
       return "Los Santos"
+    case "Property": {
+      if (lastSavedLocation)
+        return "Last Location"
+      else
+        return "Los Santos"
+    }
   }
 }
 
-function getNextSpawn(current) {
+function getNextSpawn(current, lastSavedLocation = null, propertySpawn = null) {
   switch (current) {
     case "Paleto Bay":
       return "Sandy Shores"
     case "Sandy Shores":
       return "Los Santos"
-    case "Los Santos":
-      return "Property"
+    case "Los Santos": {
+      if (lastSavedLocation)
+        return "Last Location"
+      else if (propertySpawn)
+        return "Property"
+      else
+        return "Paleto Bay"
+    }
+    case "Last Location": {
+      if (propertySpawn)
+        return "Property"
+      else
+        return "Paleto Bay"
+    }
     case "Property":
       return "Paleto Bay"
   }
