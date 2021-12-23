@@ -9,17 +9,17 @@ git checkout . --recurse-submodules
 git pull --recurse-submodules
 
 # avoid scrambling node_modules within resources
-cp -r resources/[system]/[builders] .
-cp -r resources/ws_server/node_modules .
-rm -f -r resources/[system]/[builders]
-rm -f -r resources/ws_server/node_modules
+#cp -r resources/[system]/[builders] .
+#cp -r resources/ws_server/node_modules .
+#rm -f -r resources/[system]/[builders]
+#rm -f -r resources/ws_server/node_modules
 
 # scramble resources
-java -jar ResourceEventScrambler.jar
+#java -jar ResourceEventScrambler.jar
 
 # move node_modules back into place
-mv [builders] resources/[system]
-mv node_modules resources/ws_server
+#mv [builders] resources/[system]
+#mv node_modules resources/ws_server
 
 # save last log file, create new one
 mv CitizenFX.log CitizenFX.log.2
