@@ -8,7 +8,6 @@ local LOCK_KEY = 38 -- "E"
 local ACTIVATE_LOCK_SWITCH_DISTANCE = 1.5
 local KEY_PRESS_DELAY = 1000
 local DRAW_MARKER_RANGE = 50
-local RELOCK_DISTANCE = 100.0
 local LOCK_TIMEOUT_SECONDS = 300
 local LOCKING_TEXT_MAX_DISTANCE = 75.0
 local DEBUG = false
@@ -16,10 +15,14 @@ local doorsBeingLocked = {}
 local doorRadius = 1.0
 local drawTextRange = 2.0
 
+local NEARBY_DOOR_CHECK_SECONDS = 1
+
 local FIRST_JOIN = true
 
 local playerPed = GetPlayerPed(-1)
 local playerCoords = GetEntityCoords(playerPed)
+
+local lastRecordedNearbyDoors = {}
 
 RegisterNetEvent("doormanager:debug")
 AddEventHandler("doormanager:debug", function()
@@ -97,6 +100,32 @@ end)
 -- LOAD STATE OF DOORS ON FIRST JOIN / DRAW 3D TEXT / LISTEN FOR DOOR TOGGLE KEYPRESS --
 ----------------------------------------------------------------------------------------
 Citizen.CreateThread(function()
+
+  local NEARBY_THRESHOLD = 100
+  local lastFetch = GetGameTimer()
+
+  while true do
+    while GetGameTimer() - lastFetch < NEARBY_DOOR_CHECK_SECONDS * 1000 do
+      Wait(1)
+    end
+    lastFetch = GetGameTimer()
+    local mycoords = GetEntityCoords(PlayerPedId())
+    lastRecordedNearbyDoors = {}
+    for i = 1, #DOORS_TO_MANAGE do
+      local door = DOORS_TO_MANAGE[i]
+      if door.x then
+        if Vdist(door.x, door.y, door.z, mycoords) <= NEARBY_THRESHOLD then
+          table.insert(lastRecordedNearbyDoors, i)
+        end
+      end
+    end
+    Wait(1)
+  end
+
+
+end)
+
+Citizen.CreateThread(function()
   local lastKeyPress = 0
 
 	while true do
@@ -122,8 +151,9 @@ Citizen.CreateThread(function()
       end
     end
 
-		for i = 1, #DOORS_TO_MANAGE do
-      local door = DOORS_TO_MANAGE[i]
+		for i = 1, #lastRecordedNearbyDoors do
+      local index = lastRecordedNearbyDoors[i]
+      local door = DOORS_TO_MANAGE[index]
       doorRadius = 1.0
       drawTextRange = 2.0
       if door.gate then drawTextRange = 7.0 doorRadius = 6.0 end
@@ -153,26 +183,26 @@ Citizen.CreateThread(function()
         end
       end
 		end
+    
 	end
 end)
 
-  ------------------------------------------------------------------------------------
-  -- MAKE SURE DOORS STAY LOCKED (things like leaving the area would unlock things) --
-  ------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------
+-- MAKE SURE DOORS STAY LOCKED (things like leaving the area would unlock things) --
+------------------------------------------------------------------------------------
 Citizen.CreateThread(function()
   while true do
-    for i = 1, #DOORS_TO_MANAGE do
-      local door = DOORS_TO_MANAGE[i]
+    for i = 1, #lastRecordedNearbyDoors do
+      local index = lastRecordedNearbyDoors[i]
+      local door = DOORS_TO_MANAGE[index]
       if door.locked then
         if not door.cell_block and door.gate then doorRadius = 6.0 end
-        if Vdist(door.x, door.y, door.z, playerCoords.x, playerCoords.y, playerCoords.z) <= RELOCK_DISTANCE then
-          if DEBUG then print("making sure door is locked: " ..door.name) end
-          local doorObject = GetClosestObjectOfType(door.x, door.y, door.z, doorRadius, door.model, false, false, false)
-          if doorObject then
-            if DEBUG then print("ent: " .. doorObject) end
-            if not doorsBeingLocked[door.name] then
-              FreezeEntityPosition(doorObject, true)
-            end
+        if DEBUG then print("making sure door is locked: " ..door.name) end
+        local doorObject = GetClosestObjectOfType(door.x, door.y, door.z, doorRadius, door.model, false, false, false)
+        if doorObject then
+          if DEBUG then print("ent: " .. doorObject) end
+          if not doorsBeingLocked[door.name] then
+            FreezeEntityPosition(doorObject, true)
           end
         end
       end
