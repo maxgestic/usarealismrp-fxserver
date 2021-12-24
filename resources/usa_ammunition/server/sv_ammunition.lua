@@ -1,13 +1,3 @@
-local AMMO_TYPES = {
-    "9mm",
-    "7.62mm",
-    "9x18mm",
-    ".50 Cal",
-    ".45",
-    "12 Gauge Shells",
-    "5.56mm",
-    ".22 LR"
-}
 
 local WEPS_WITH_MAGS = {
     -- pistols --
@@ -72,6 +62,10 @@ local WEPS_NO_MAGS = {
     [GetHashKey("WEAPON_REVOLVER")] = {
         AMMO_NAME = ".45",
         MAX_CAPACITY = 6
+    },
+    [GetHashKey("WEAPON_STUNGUN")] = {
+        AMMO_NAME = "Taser Cartridge",
+        MAX_CAPACITY = 1
     },
     -- shotguns --
     [GetHashKey("WEAPON_PUMPSHOTGUN")] = {
@@ -138,7 +132,7 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate, s
     if selectedIndex then
         local curWep = char.getItemByIndex(selectedIndex)
         if curWep and curWep.type == "weapon" then
-            curWep.hash = curWep.hash & 0xFFFFFFFF -- ensure hash key is an unsigned int to match our look up table
+            curWep.hash = tonumber(curWep.hash) & 0xFFFFFFFF -- ensure hash key is an unsigned int to match our look up table
             if WEPS_WITH_MAGS[curWep.hash] then
                 local magToUse = FindMagToReloadWith(char, curWep.hash)
                 if magToUse then
@@ -230,9 +224,17 @@ AddEventHandler("ammo:checkForMagazine", function(selectedIndex, vehiclePlate, s
                         char.setItemByIndex(selectedIndex, curWep)
                     else
                         char.modifyItemByUUID(curWep.uuid, { magazine = magToUse })
+                        if curWep.name:find("Taser") or curWep.name:find("Stun Gun") then
+                            TriggerClientEvent("usa-taser:enable", src, true)
+                        end
                     end
                     -- remove ammo from inventory
-                    char.removeItem(ammoName, ammoCountToUse)
+                    local ammoItem = char.getItem(ammoName)
+                    if ammoItem.uuid then
+                        char.removeItemByUUID(ammoItem.uuid, ammoCountToUse)
+                    else
+                        char.removeItem(ammoName, ammoCountToUse)
+                    end
                 else
                     TriggerClientEvent("usa:notify", src, "No " .. ammoName .. " ammo found!")
                 end

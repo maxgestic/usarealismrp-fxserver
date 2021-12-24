@@ -259,6 +259,7 @@ var itemImages = {
   "5.56mm Bullets": "https://i.imgur.com/ivr2Jcg.png",
   ".50 Cal Bullets": "https://i.imgur.com/o3v8Avw.png",
   ".45 Bullets": "https://i.imgur.com/HzzWF5w.png",
+  "Taser Cartridge": "https://i.imgur.com/sThFlQ5.png",
   // begin magazines
   "9mm Mag [7]": "https://i.imgur.com/gD7RuG7.png",
   "9mm Mag [12]": "https://i.imgur.com/gD7RuG7.png",

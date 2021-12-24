@@ -5,7 +5,7 @@ exports.globals:PerformDBCheck("usa_prison", DB_NAME)
 local WEAPONS = {
 	{ hash = "WEAPON_NIGHTSTICK", type = "weapon", name = "Nightstick", rank = 1, weight = 4, price = 50},
     { hash = "WEAPON_FLASHLIGHT", type = "weapon", name = "Flashlight", rank = 1, weight = 4, price = 50},
-    { hash = "WEAPON_STUNGUN", type = "weapon", name = "Stun Gun", rank = 1, weight = 5, price = 200},
+    { hash = GetHashKey("WEAPON_STUNGUN"), type = "weapon", name = "Stun Gun", rank = 1, weight = 5, price = 200},
     { hash = 1593441988, type = "weapon", name = "Glock", rank = 1, weight = 5, price = 200},
 	{ name = "Heavy Pistol", type = "weapon", hash = GetHashKey("WEAPON_HEAVYPISTOL"), rank = 1, price = 400, weight = 7 },
 	{ hash = -1600701090, type = "weapon", name = "Tear Gas", rank = 2, weight = 5, price = 150},
@@ -26,7 +26,8 @@ local WEAPONS = {
     { name = "Empty 9mm Mag [30]", type = "magazine", price = 50, weight = 3, receives = "9mm", MAX_CAPACITY = 30, currentCapacity = 0 },
 	{ name = "5.56mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 20 },
     { name = "Empty 5.56mm Mag [30]", type = "magazine", price = 50, weight = 3, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0 },
-	{ name = "12 Gauge Shells", type = "ammo", price = 50, weight = 0.5, quantity = 10 }
+	{ name = "12 Gauge Shells", type = "ammo", price = 50, weight = 0.5, quantity = 10 },
+	{ name = "Taser Cartridge", type = "ammo", price = 50, weight = 0.5, quantity = 1 }
 }
 
 for i = 1, #WEAPONS do
