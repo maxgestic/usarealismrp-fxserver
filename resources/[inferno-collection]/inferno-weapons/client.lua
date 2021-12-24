@@ -65,7 +65,8 @@ Config.Weapons.Single = {
 	"WEAPON_HEAVYSNIPER_MK2",
 	"WEAPON_MARKSMANRIFLE",
 	"WEAPON_MARKSMANRIFLE_MK2",
-	"WEAPON_FIREWORK"
+	"WEAPON_FIREWORK",
+	"WEAPON_STUNGUN"
 }
 
 -- These weapons will have safety, semi-automatic and full auto mode

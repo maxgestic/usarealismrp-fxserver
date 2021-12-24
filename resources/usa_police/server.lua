@@ -33,6 +33,7 @@ local armoryItems = {
     { name = "5.56mm Bullets", type = "ammo", price = 50, weight = 0.5, quantity = 20 },
     { name = "Empty 5.56mm Mag [30]", type = "magazine", price = 50, weight = 3, receives = "5.56mm", MAX_CAPACITY = 30, currentCapacity = 0 },
     { name = "MK2 Carbine Rifle", type = "weapon", hash = 4208062921, price = 700, weight = 25, minRank = 2 },
+    { name = "Taser Cartridge", type = "ammo", price = 50, weight = 0.5, quantity = 1 }
 }
 
 for i = 1, #armoryItems do
