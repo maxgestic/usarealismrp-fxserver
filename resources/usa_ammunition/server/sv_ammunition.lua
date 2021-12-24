@@ -336,6 +336,24 @@ AddEventHandler("ammo:showHelpText", function(forWeapons)
     end
 end)
 
+AddEventHandler("character:loaded", function(char)
+    local shouldHaveLoadedCartridge = false
+    local tazer = char.getItem("Taser")
+    local stunGun = char.getItem("Stun Gun")
+    if tazer then
+        if tazer.magazine and tazer.magazine.currentCapacity > 0 then
+            shouldHaveLoadedCartridge = true
+        end
+    elseif stunGun then
+        if stunGun.magazine and stunGun.magazine.currentCapacity > 0 then
+            shouldHaveLoadedCartridge = true
+        end
+    end
+    if not shouldHaveLoadedCartridge then
+        TriggerClientEvent("usa-taser:enable", char.get("source"), false)
+    end
+end)
+
 function FindMagToReloadWith(char, weaponHash)
     weaponHash = weaponHash & 0xFFFFFFFF -- ensure hash key is an unsigned int to match our look up table
     local mags = char.getAllItemsOfType("magazine")
