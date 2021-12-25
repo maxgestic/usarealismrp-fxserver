@@ -322,3 +322,11 @@ function trim(s)
 		return (s:gsub("^%s*(.-)%s*$", "%1"))
 	end
 end
+
+function isOnlyAlphaNumeric(str)
+	if str:match("%W") then
+		return false
+	else
+		return true
+	end
+end
