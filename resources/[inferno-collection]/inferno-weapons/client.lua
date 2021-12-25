@@ -400,7 +400,9 @@ Citizen.CreateThread(function()
 			local _,c = GetAmmoInClip(p, w)
 			if c == 0 or alreadyTriggeredOutOfAmmoForHandgun or alreadyTriggeredOutOfAmmoForNonHandgun then
 				if IsDisabledControlJustPressed(1, 24) then
-					PlaySoundFrontend(-1, "Faster_Click", "RESPAWN_ONLINE_SOUNDSET", 1)
+					if weaponHasFiremode(w) then
+						PlaySoundFrontend(-1, "Faster_Click", "RESPAWN_ONLINE_SOUNDSET", 1)
+					end
 				end
 			end
 		end
@@ -654,5 +656,27 @@ function isFullAuto(wep)
 			return true
 		end
 	end
+	return false
+end
+
+function weaponHasFiremode(wep)
+	for i = 1, #Config.Weapons.Single do
+		if GetHashKey(Config.Weapons.Single[i]) == wep then
+			return true
+		end
+	end
+
+	for i = 1, #Config.Weapons.Full do
+		if GetHashKey(Config.Weapons.Full[i]) == wep then
+			return true
+		end
+	end
+
+	for hash, dummyBool in pairs(Config.Weapons.Reticle) do
+		if hash == wep then
+			return true
+		end
+	end
+
 	return false
 end
