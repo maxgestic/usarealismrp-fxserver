@@ -458,20 +458,22 @@ function SpawnVehicle(vehInfo)
       ModifyVehicleTopSpeed(veh, 30.0)
     end
 
+    local vplate = GetVehicleNumberPlateText(veh)
+    vplate = exports.globals:trim(vplate)
+
     -- give key to owner
     local vehicle_key = {
-      name = "Key -- " .. GetVehicleNumberPlateText(veh),
+      name = "Key -- " .. vplate,
       quantity = 1,
       type = "key",
       owner = "GOVT",
       make = "GOVT",
       model = "GOVT",
-      plate = GetVehicleNumberPlateText(veh)
+      plate = vplate
     }
     TriggerServerEvent("garage:giveKey", vehicle_key)
     
-    local plate = GetVehicleNumberPlateText(veh)
-	  TriggerServerEvent('mdt:addTempVehicle', 'Govt. Vehicle [BCSO]', "", plate)
+	  TriggerServerEvent('mdt:addTempVehicle', 'Govt. Vehicle [BCSO]', "", vplate)
   end)
 end
 

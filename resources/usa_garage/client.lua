@@ -118,6 +118,7 @@ Citizen.CreateThread(function()
 				if IsPedInAnyVehicle(ped, true) then
 					local handle = GetVehiclePedIsIn(ped, false)
 					local numberPlateText = GetVehicleNumberPlateText(handle)
+					numberPlateText = exports.globals:trim(numberPlateText)
 					TriggerServerEvent("garage:storeVehicle", handle, numberPlateText, info["jobs"])
 				else
 					closest_shop = info
@@ -140,6 +141,7 @@ RegisterNetEvent("garage:storeVehicle")
 AddEventHandler("garage:storeVehicle", function()
 	local veh = GetVehiclePedIsIn(GetPlayerPed(-1), true)
 	local plate = GetVehicleNumberPlateText(veh)
+	plate = exports.globals:trim(plate)
 	exports.globals:notify("Vehicle has been returned to the garage!")
 	-- store engine / body damage --
 	VEHICLE_DAMAGES[plate] = {

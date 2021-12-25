@@ -46,7 +46,7 @@ Citizen.CreateThread(function()
 				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
 				local primary, secondary = GetVehicleColours(vehicle)
                 local isMale = isPlayerModelMale()
-				TriggerServerEvent('911:Carjacking', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))), GetVehicleNumberPlateText(vehicle), isMale, primary, secondary)
+				TriggerServerEvent('911:Carjacking', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))), exports.globals:trim(GetVehicleNumberPlateText(vehicle)), isMale, primary, secondary)
 				Citizen.Wait(500)
 			elseif ReportPersonWithAGun and IsPedArmed(ped, 6) and isPopulatedArea and not IsPedInAnyVehicle(ped) then
 				local x, y, z = table.unpack(GetEntityCoords(ped))
@@ -102,6 +102,7 @@ Citizen.CreateThread(function()
 				local primary, secondary = GetVehicleColours(GetVehiclePedIsUsing(ped))
 				local area = GetNameOfZone(x, y, z)
 				local plate = string.sub(GetVehicleNumberPlateText(vehicle), 1, 4)
+				plate = exports.globals:trim(plate)
 				if math.random() < 0.2 then
 					local isMale = isPlayerModelMale()
 					TriggerServerEvent('911:RecklessDriving', x, y, z, lastStreetNAME, area, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(GetVehiclePedIsUsing(ped)))), plate, isMale, primary, secondary)
@@ -113,7 +114,7 @@ Citizen.CreateThread(function()
 				local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
 				local primary, secondary = GetVehicleColours(vehicle)
 				local isMale = isPlayerModelMale()
-				TriggerServerEvent('911:VehicleTheft', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))), GetVehicleNumberPlateText(vehicle), isMale, primary, secondary)
+				TriggerServerEvent('911:VehicleTheft', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))), exports.globals:trim(GetVehicleNumberPlateText(vehicle)), isMale, primary, secondary)
 				Citizen.Wait(500)
 			elseif ReportMVA and DoesEntityExist(vehicle) and isPopulatedArea and vehClass ~= 14 and vehClass ~= 15 and vehClass ~= 16 and vehClass ~= 19 then
 				local currentDamage = GetVehicleBodyHealth(vehicle)
@@ -125,7 +126,7 @@ Citizen.CreateThread(function()
 						local primary, secondary = GetVehicleColours(vehicle)
 						local area = GetNameOfZone(x, y, z)
 						local isMale = isPlayerModelMale()
-						TriggerServerEvent('911:MVA', x, y, z, lastStreetNAME, area, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))), GetVehicleNumberPlateText(vehicle), isMale, primary, secondary)
+						TriggerServerEvent('911:MVA', x, y, z, lastStreetNAME, area, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(vehicle))), exports.globals:trim(GetVehicleNumberPlateText(vehicle)), isMale, primary, secondary)
 						Citizen.Wait(500)
 					end
 					oldBodyDamage = currentDamage
@@ -317,7 +318,7 @@ Citizen.CreateThread(function()
 		                    else
 		                      isMale = IsPedMale(playerPed)
 		                    end
-                            TriggerServerEvent('911:ArmedCarjacking', pCoords.x, pCoords.y, pCoords.z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(veh))), GetVehicleNumberPlateText(veh), isMale, primary, secondary)
+                            TriggerServerEvent('911:ArmedCarjacking', pCoords.x, pCoords.y, pCoords.z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(veh))), exports.globals:trim(GetVehicleNumberPlateText(veh)), isMale, primary, secondary)
 
                         	local intimidated = true
                         	local beginTime = GetGameTimer()

@@ -229,7 +229,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(10000)
 		if IsPedInAnyVehicle(playerPed, -1) and GetPedInVehicleSeat(playerVeh, -1) == playerPed then
-			TriggerServerEvent('fuel:setFuelAmount', GetVehicleNumberPlateText(playerVeh), fuelData.fuelAmount)
+			TriggerServerEvent('fuel:setFuelAmount', exports.globals:trim(GetVehicleNumberPlateText(playerVeh)), fuelData.fuelAmount)
 			Citizen.Wait(5000)
 		end
 	end

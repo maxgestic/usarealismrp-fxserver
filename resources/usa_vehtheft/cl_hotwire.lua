@@ -21,7 +21,7 @@ Citizen.CreateThread(function()
         engineOn = GetIsVehicleEngineRunning(veh)
         if IsPedInAnyVehicle(playerPed, false) and GetPedInVehicleSeat(playerPed == -1) then
           if not wasInVeh and ENABLE_KEY_CHECK_FOR_ENGINE then
-            TriggerServerEvent('veh:checkForKey', GetVehicleNumberPlateText(veh), GetIsVehicleEngineRunning(veh))
+            TriggerServerEvent('veh:checkForKey', exports.globals:trim(GetVehicleNumberPlateText(veh)), GetIsVehicleEngineRunning(veh))
             wasInVeh = true
           end
         else
@@ -47,7 +47,7 @@ Citizen.CreateThread(function()
         elseif IsControlJustPressed(0, 71) and not IsEntityDead(playerPed) and DoesEntityExist(playerPed) and IsPedInAnyVehicle(playerPed, false) and GetGameTimer() - timeout > 10000 and ENABLE_KEY_CHECK_FOR_ENGINE then
             timeout = GetGameTimer()
             local veh = GetVehiclePedIsIn(playerPed, true)
-            TriggerServerEvent('veh:checkForKey', GetVehicleNumberPlateText(veh))
+            TriggerServerEvent('veh:checkForKey', exports.globals:trim(GetVehicleNumberPlateText(veh)))
         end
     end
 end)
@@ -60,7 +60,7 @@ end)
 RegisterNetEvent('veh:returnPlateToCheck')
 AddEventHandler('veh:returnPlateToCheck', function()
   if veh then
-    TriggerServerEvent("veh:checkForKey", GetVehicleNumberPlateText(veh))
+    TriggerServerEvent("veh:checkForKey", exports.globals:trim(GetVehicleNumberPlateText(veh)))
   end
 end)
 
@@ -74,12 +74,13 @@ AddEventHandler('veh:searchVeh', function()
   end
   if not IsPedCuffed(playerPed) and GetPedInVehicleSeat(vehicle, -1) == playerPed and GetVehicleDoorLockStatus(vehicle) ~= 4 then
     for k, v in pairs(searchedVehicles) do
-      if GetVehicleNumberPlateText(vehicle) == v then
+      local p = exports.globals:trim(GetVehicleNumberPlateText(vehicle))
+      if p == v then
         -- vehicle has already been searched
         return
       end
     end
-    table.insert(searchedVehicles, GetVehicleNumberPlateText(vehicle))
+    table.insert(searchedVehicles, p)
     RequestAnimDict('veh@handler@base')
     while not HasAnimDictLoaded('veh@handler@base') do
       Citizen.Wait(100)
@@ -127,7 +128,7 @@ AddEventHandler('veh:toggleEngine', function(_hasKey, _engineOn)
       --print(GetVehicleNumberPlateText(veh))
       for k, v in pairs(playerHotwiredVehicles) do
         --print(k)
-        if GetVehicleNumberPlateText(veh) == k then
+        if exports.globals:trim(GetVehicleNumberPlateText(veh)) == k then
           --print('hotwired vehicle')
           if DoesEntityExist(playerPed) and not IsEntityDead(playerPed) then
             hasKeys = true
@@ -173,7 +174,7 @@ AddEventHandler('veh:hotwireVehicle', function()
         else
           isMale = IsPedMale(playerPed)
         end
-        TriggerServerEvent('911:HotwiringVehicle', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(veh))), GetVehicleNumberPlateText(veh), isMale, primary, secondary)
+        TriggerServerEvent('911:HotwiringVehicle', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(veh))), exports.globals:trim(GetVehicleNumberPlateText(veh)), isMale, primary, secondary)
       end
       if math.random() < HOTWIRE_BREAK_CHANCE then
         TriggerServerEvent('veh:removeHotwiringKit')
@@ -214,7 +215,7 @@ AddEventHandler('veh:hotwireVehicle', function()
         Citizen.CreateThread(function()
           local timeToWait = math.random((5 * 60000), (20 * 60000))
           Citizen.Wait(timeToWait)
-          TriggerServerEvent('mdt:addTempVehicle', GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(veh))), 'Unknown', GetVehicleNumberPlateText(veh), true)
+          TriggerServerEvent('mdt:addTempVehicle', GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(veh))), 'Unknown', exports.globals:trim(GetVehicleNumberPlateText(veh)), true)
           print('flagging as stolen!')
         end)
       else
@@ -304,7 +305,7 @@ AddEventHandler('veh:hotwireVehPolice', function()
       isHotwiring = false
       ClearPedTasks(playerPed)
       hasKeys = true
-      playerHotwiredVehicles[GetVehicleNumberPlateText(veh)] = true
+      playerHotwiredVehicles[exports.globals:trim(GetVehicleNumberPlateText(veh))] = true
       TriggerEvent('usa:notify', 'The vehicle has been ~y~hotwired~s~!')
       SetVehicleEngineOn(veh, true, false, false)
     end

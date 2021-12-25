@@ -325,6 +325,7 @@ end)
 RegisterServerEvent("customs:saveCarData")
 AddEventHandler("customs:saveCarData", function(data, plate, source)
 	if plate then
+		plate = exports.globals:trim(plate)
 		TriggerEvent('es:exposeDBFunctions', function(couchdb)
 			couchdb.updateDocument("vehicles", plate, { customizations = data }, function()
 				--print("Customizations saved!")

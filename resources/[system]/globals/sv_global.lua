@@ -316,3 +316,9 @@ function deepCopy(orig)
     end
     return copy
 end
+
+function trim(s)
+	if s then
+		return (s:gsub("^%s*(.-)%s*$", "%1"))
+	end
+end

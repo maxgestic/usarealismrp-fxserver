@@ -243,6 +243,7 @@ function smellNearestVehicle()
 		local nearestVehicle = getVehicleInFront()
 		if DoesEntityExist(nearestVehicle) then
 			local vehPlate = GetVehicleNumberPlateText(nearestVehicle)
+			vehPlate = exports.globals:trim(vehPlate)
 			k9.staying = true
 			TaskGoToCoordAnyMeans(k9.handle, GetEntityCoords(nearestVehicle), 2.0, 0, 0, 0, 0)
 			while Vdist(GetEntityCoords(k9.handle), GetEntityCoords(nearestVehicle)) > 2.0 do Citizen.Wait(100) if not k9.handle or not k9.staying then return end end
