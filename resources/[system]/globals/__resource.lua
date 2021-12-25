@@ -50,5 +50,6 @@ server_exports {
   "hasFelonyOnRecord",
   "generateID",
   "deepCopy",
-  "trim"
+  "trim",
+  "isOnlyAlphaNumeric"
 }

@@ -95,6 +95,10 @@ AddEventHandler("dmv:orderCustomPlate", function(oldPlate, newPlate)
 		TriggerClientEvent("usa:notify", src, "Currently no support for spaces")
 		return
 	end
+	if not exports.globals:isOnlyAlphaNumeric(newPlate) or not exports.globals:isOnlyAlphaNumeric(oldPlate) then
+		TriggerClientEvent("usa:notify", src, "Only numbers and letters allowed")
+		return
+	end
 	if doesCharacterOwnVehicle(c, oldPlate) then
 		if c.get("bank") >= CUSTOM_PLATE_PRICE then
 			if not getVehicleDBDoc(newPlate) then
