@@ -416,15 +416,6 @@ RegisterServerEvent("mdt:performPlateCheck")
 AddEventHandler("mdt:performPlateCheck", function(plateNumber)
 	local usource = source
 	plateNumber = string.upper(plateNumber)
-	-- check format --
-	if not plateNumber or string.len(plateNumber) < 7 or string.len(plateNumber) > 8 then
-		local msg = {
-			type = "error",
-			message  = "Invalid plate format!"
-		}
-		TriggerClientEvent("mdt:sendNUIMessage", source, msg)
-		return
-	end
 	-- look for any player with vehicle --
 	GetMakeModelOwner({ plateNumber }, function(vehs)
 		if vehs[1] then
@@ -441,11 +432,11 @@ AddEventHandler("mdt:performPlateCheck", function(plateNumber)
 					return
 				end
 			end
-			local vehicle = {}
-			vehicle.veh_name = "Undefined"
-			vehicle.registered_owner = random_names[math.random(#random_names)]
-			vehicle.plate = plateNumber
-			TriggerClientEvent("mdt:performPlateCheck", usource, vehicle)
+			local msg = {
+				type = "error",
+				message  = "Vehicle not found or it is locally registered"
+			}
+			TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
 		end
 	end)
 end)

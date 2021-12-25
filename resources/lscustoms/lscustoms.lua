@@ -691,6 +691,7 @@ local function DriveOutOfGarage(pos)
 		pos = currentpos.driveout
 
 		myveh.plate = GetVehicleNumberPlateText(veh)
+		myveh.plate = exports.globals:trim(myveh.plate)
 
 		--The vehicle customization is finished, so we send to server our vehicle data
 		TriggerServerEvent("LSC:finished", myveh)

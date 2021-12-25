@@ -30,7 +30,8 @@ client_scripts {
     "@NativeUI/UIMenu/UIMenu.lua",
 	"@NativeUI/UIMenu/MenuPool.lua",
 	"@NativeUI/NativeUI.lua",
-	'dmv_cl.lua'
+	'dmv_cl.lua',
+    'dmv_cl_menus.lua'
 }
 
 server_exports {

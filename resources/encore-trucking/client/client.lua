@@ -242,6 +242,7 @@ AddEventHandler('encore_trucking:startJob', function()
 
 	-- give keys
 	local vehPlate = GetVehicleNumberPlateText(truckId)
+	vehPlate = exports.globals:trim(vehPlate)
 	TriggerServerEvent("encore_trucking:putKeysInTruck", vehPlate)
 
 	-- other stuff

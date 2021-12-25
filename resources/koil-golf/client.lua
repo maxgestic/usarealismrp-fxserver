@@ -97,6 +97,7 @@ function spawnCart()
 	SetPedIntoVehicle(GetPlayerPed(-1), spawned_car, - 1)
 	SetModelAsNoLongerNeeded(vehicle)
 	plate = GetVehicleNumberPlateText(spawned_car)
+	plate = exports.globals:trim(plate)
 	local key = {
 		name = "Key -- " .. plate,
 		quantity = 1,

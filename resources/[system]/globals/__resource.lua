@@ -23,7 +23,8 @@ exports {
   "loadAnimDict",
   'DrawText3D',
   "GetKeys",
-  "getClosestVehicle"
+  "getClosestVehicle",
+  "trim"
 }
 
 -- global server functions/tables
@@ -48,5 +49,6 @@ server_exports {
   "getJavaScriptDateString",
   "hasFelonyOnRecord",
   "generateID",
-  "deepCopy"
+  "deepCopy",
+  "trim"
 }

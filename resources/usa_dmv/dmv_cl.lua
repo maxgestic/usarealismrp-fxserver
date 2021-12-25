@@ -45,22 +45,29 @@ mainMenu = NativeUI.CreateMenu("DMV", "~b~Department of Motor Vehicles", 0 --[[X
 _menuPool:Add(mainMenu)
 
 function CreateDMVMenu(menu)
-  ----------------------
-  -- Purchase License --
-  ----------------------
-  local item = NativeUI.CreateItem("Driver's License", "Purchase price: $" .. DL_PRICE)
-  item.Activated = function(parentmenu, selected)
-    TriggerServerEvent("dmv:buyLicense")
-  end
-  menu:AddItem(item)
+	----------------------
+	-- Purchase License --
+	----------------------
+	local item = NativeUI.CreateItem("Driver's License", "Purchase price: $" .. DL_PRICE)
+	item.Activated = function(parentmenu, selected)
+		TriggerServerEvent("dmv:buyLicense")
+	end
+	menu:AddItem(item)
 	-------------------------
 	-- See any suspensions --
 	-------------------------
-	local item = NativeUI.CreateItem("Suspensions", "Check any license suspensions")
-	item.Activated = function(parentmenu, selected)
+	local item2 = NativeUI.CreateItem("Suspensions", "Check any license suspensions")
+	item2.Activated = function(parentmenu, selected)
 		TriggerServerEvent("dmv:getLicenseStatus")
 	end
-	menu:AddItem(item)
+	menu:AddItem(item2)
+	-- custom license plate:
+	local item3 = NativeUI.CreateItem("Custom license plate", "Order a customer license plate")
+	item3.Activated = function(parentmenu, selected)
+		menu:Visible(false)
+		TriggerEvent("dmv:openCustomPlateMenu")
+	end
+	menu:AddItem(item3)
 end
 
 ----------------
