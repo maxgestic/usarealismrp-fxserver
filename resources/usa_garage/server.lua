@@ -5,6 +5,16 @@
 local WITHDRAW_FEE = 50
 local IMPOUND_FEE = 150
 
+local recentlyChangedPlates = {}
+
+RegisterServerEvent("garage:notifyOfPlateChange")
+AddEventHandler("garage:notifyOfPlateChange", function(src, oldPlate, newPlate)
+	print("adding recently changed plate!")
+	local c = exports["usa-characters"]:GetCharacter(src)
+	recentlyChangedPlates[c.get("_id")] = {}
+	recentlyChangedPlates[c.get("_id")][oldPlate] = newPlate
+end)
+
 RegisterServerEvent("garage:giveKey")
 AddEventHandler("garage:giveKey", function(key, src)
 	if src then source = src end
@@ -46,13 +56,15 @@ AddEventHandler("garage:storeVehicle", function(handle, numberPlateText, require
 	end
 
 	if isAuthorized then
+		-- does player own vehicle as determined by the list of plates of their vehicles?
 		local vehicles = char.get("vehicles")
 		for i = 1, #vehicles do
 			local vehicle = vehicles[i]
 			if numberPlateText and vehicle then
-				if string.match(numberPlateText, tostring(vehicle)) or numberPlateText == vehicle then -- player actually owns car that is being stored
+				numberPlateText = exports.globals:trim(numberPlateText)
+				if numberPlateText == vehicle then -- make sure player owns it
 					TriggerEvent('es:exposeDBFunctions', function(couchdb)
-						couchdb.updateDocument("vehicles", numberPlateText, { stored = true }, function()
+						couchdb.updateDocument("vehicles", numberPlateText, { stored = true }, function(doc, err, rtext)
 							TriggerClientEvent("garage:storeVehicle", usource)
 						end)
 					end)
@@ -60,6 +72,18 @@ AddEventHandler("garage:storeVehicle", function(handle, numberPlateText, require
 				end
 			end
 		end
+		-- no, so was plate recently changed?
+		if recentlyChangedPlates[char.get("_id")] and recentlyChangedPlates[char.get("_id")][numberPlateText] then
+			TriggerEvent('es:exposeDBFunctions', function(couchdb)
+				local newPlate = recentlyChangedPlates[char.get("_id")][numberPlateText]
+				couchdb.updateDocument("vehicles", newPlate, { stored = true }, function(doc, err, rtext)
+					TriggerClientEvent("garage:storeVehicle", usource)
+					recentlyChangedPlates[char.get("_id")][numberPlateText] = nil
+				end)
+			end)
+			return
+		end
+		-- nope to either, just notify and abort
 		TriggerClientEvent("usa:notify", usource, "You do not own that vehicle!")
 		return
 	else

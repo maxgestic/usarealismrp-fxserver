@@ -239,18 +239,18 @@ function SpawnPlane(plane)
         local playerCoords = GetEntityCoords(GetPlayerPed(-1), false)
         -- Spawn the vehicle at the gas station car dealership in paleto and assign the vehicle handle to 'vehicle'
         active_job.current_vehicle = CreateVehicle(numberHash, plane.location.x, plane.location.y, plane.location.z, 56.0 --[[Heading]], true --[[Networked, set to false if you just want to be visible by the one that spawned it]], false --[[Dynamic]])
-        TriggerEvent('persistent-vehicles/register-vehicle', active_job.current_vehicle)
         SetVehicleExplodesOnHighExplosionDamage(active_job.current_vehicle, false)
         SetEntityAsMissionEntity(active_job.current_vehicle, true, true)
-        TriggerServerEvent("fuel:setFuelAmount", GetVehicleNumberPlateText(active_job.current_vehicle), 100)
+        local curVehPlate = exports.globals:trim(GetVehicleNumberPlateText(active_job.current_vehicle))
+        TriggerServerEvent("fuel:setFuelAmount", curVehPlate, 100)
         local key = {
-    			name = "Key -- " .. GetVehicleNumberPlateText(active_job.current_vehicle),
+    			name = "Key -- " .. curVehPlate,
     			quantity = 1,
     			type = "key",
     			owner = "San Andreas Air",
     			make = "Air",
     			model = "Craft",
-    			plate = GetVehicleNumberPlateText(active_job.current_vehicle)
+    			plate = curVehPlate
     		}
     		-- give key to owner
     		TriggerServerEvent("garage:giveKey", key)

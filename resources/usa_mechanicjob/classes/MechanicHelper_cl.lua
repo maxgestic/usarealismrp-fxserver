@@ -92,7 +92,6 @@ MechanicHelper.installUpgrade = function(veh, upgrade, cb)
         end
         Wait(1)
     end
-    local plate = GetVehicleNumberPlateText(veh)
     MechanicHelper.UPGRADE_FUNC_MAP[upgrade.id](veh, upgrade.increaseAmount) -- call appropriate native
     ClearPedTasks(me)
     cb()

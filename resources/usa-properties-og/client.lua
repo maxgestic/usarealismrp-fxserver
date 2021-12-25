@@ -99,6 +99,7 @@ RegisterNetEvent("properties:storeVehicle")
 AddEventHandler("properties:storeVehicle", function()
     local veh = GetVehiclePedIsIn(GetPlayerPed(-1), true)
     local plate = GetVehicleNumberPlateText(veh)
+    plate = exports.globals:trim(plate)
     TriggerEvent("usa:notify", "~g~Vehicle stored!")
     -- store engine / body damage --
     VEHICLE_DAMAGES[plate] = {
@@ -575,6 +576,7 @@ Citizen.CreateThread(function()
                                     --if IsControlJustPressed(0, MENU_KEY) then
                                         local vehicle = GetVehiclePedIsIn(me, false)
                                         local numberPlateText = GetVehicleNumberPlateText(vehicle)
+                                        numberPlateText = exports.globals:trim(numberPlateText)
                                         TriggerServerEvent("properties:storeVehicle", nearest_property_info.name, numberPlateText)
                                         Wait(1000)
                                     --end

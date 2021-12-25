@@ -27,6 +27,7 @@ Citizen.CreateThread(function()
 		if DoesEntityExist(car) and not locked and GetVehicleClass(car) == 18 then
 			lastScan.vehicle = GetCurrentTargetCar()
 			local tempPlate = GetVehicleNumberPlateText(lastScan.vehicle)
+			tempPlate = exports.globals:trim(tempPlate)
 			if lastScan.vehicle and tempPlate then
 				if lastScan.plate ~= tempPlate then
 					TriggerServerEvent('mdt:checkFlags', tempPlate, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(lastScan.vehicle))))

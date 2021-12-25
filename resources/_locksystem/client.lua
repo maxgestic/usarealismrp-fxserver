@@ -70,6 +70,7 @@ Citizen.CreateThread(function()
 					plate = GetVehicleNumberPlateText(vehicle)
 				end
 				if type(plate) == 'string' then
+					plate = exports.globals:trim(plate)
 					TriggerServerEvent("lock:checkForKey", plate)
 				end
 			end

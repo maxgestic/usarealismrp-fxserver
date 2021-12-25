@@ -252,3 +252,9 @@ function getClosestVehicle(maxRange)
   end
   return closest.handle
 end
+
+function trim(s)
+  if s then
+    return (s:gsub("^%s*(.-)%s*$", "%1"))
+  end
+end
