@@ -907,6 +907,7 @@ AddEventHandler( 'impoundVehicle', function()
         if IsPedSittingInAnyVehicle( ped ) then
             local vehicle = GetVehiclePedIsIn(ped, false)
             local plate = GetVehicleNumberPlateText(vehicle, false)
+            plate = exports.globals:trim(plate)
 
             if GetPedInVehicleSeat( vehicle, -1 ) == ped then
                 TriggerServerEvent("impound:impoundVehicle", vehicle, plate)
@@ -933,6 +934,7 @@ AddEventHandler( 'impoundVehicle', function()
             local inFrontOfPlayer = GetOffsetFromEntityInWorldCoords( ped, 0.0, distanceToCheck, 0.0 )
             local vehicle = GetVehicleInDirection( playerPos, inFrontOfPlayer , distanceToCheck, ped)
             local plate = GetVehicleNumberPlateText(vehicle, false)
+            plate = exports.globals:trim(plate)
 
             if DoesEntityExist( vehicle ) then
                 TriggerServerEvent("impound:impoundVehicle", vehicle, plate)

@@ -1,4 +1,25 @@
 local DL_PRICE = 250
+local CUSTOM_PLATE_PRICE = 7000
+
+local BLACKLISTED_PLATE_PHRASES = {
+	"nigger",
+	"faggot",
+	"fagg0t",
+	"n1gger",
+	"n1gg3r",
+	"fuck",
+	"shit",
+	"server",
+	"cock",
+	"c0ck",
+	"dick",
+	"d1ck",
+	"whore",
+	"balls",
+	"pussy",
+	"vagina",
+	"cunt",
+}
 
 RegisterServerEvent("dmv:buyLicense")
 AddEventHandler("dmv:buyLicense", function()
@@ -60,6 +81,67 @@ AddEventHandler("dmv:getLicenseStatus", function()
 	end
 end)
 
+RegisterServerEvent("dmv:orderCustomPlate")
+AddEventHandler("dmv:orderCustomPlate", function(oldPlate, newPlate)
+	local src = source
+	local c = exports["usa-characters"]:GetCharacter(src)
+	oldPlate = exports.globals:trim(oldPlate:upper())
+	newPlate = exports.globals:trim(newPlate:upper())
+	if newPlate == "" or oldPlate == "" then
+		TriggerClientEvent("usa:notify", src, "Must provide new and old plate")
+		return
+	end
+	if newPlate:find(" ") then
+		TriggerClientEvent("usa:notify", src, "Currently no support for spaces")
+		return
+	end
+	if doesCharacterOwnVehicle(c, oldPlate) then
+		if c.get("bank") >= CUSTOM_PLATE_PRICE then
+			if not getVehicleDBDoc(newPlate) then
+				if not containsBlacklistedPhrase(newPlate) then
+					TriggerEvent("es:exposeDBFunctions", function(db)
+						-- make new db doc
+						local oldVehDoc = getVehicleDBDoc(oldPlate)
+						while not oldVehDoc do
+							Wait(10)
+						end
+						oldVehDoc._id = nil
+						oldVehDoc._rev = nil
+						oldVehDoc.plate = newPlate
+						db.createDocumentWithId("vehicles", oldVehDoc, newPlate, function(ok) end)
+						-- delete old vehicle doc
+						db.deleteDocument("vehicles", oldPlate, function() end)
+						-- save in character owned vehicle plate list
+						local vehs = c.get("vehicles")
+						for i = 1, #vehs do
+							if vehs[i] == oldPlate then
+								vehs[i] = newPlate
+								break
+							end
+						end
+						c.set("vehicles", vehs)
+						-- charge fee
+						c.removeBank(CUSTOM_PLATE_PRICE)
+						-- notify success
+						TriggerClientEvent("usa:notify", src, "Plate updated!")
+						TriggerClientEvent("usa:notify", src, "~y~Fee:~w~ " .. exports.globals:comma_value(CUSTOM_PLATE_PRICE))
+						-- notify garages to bypass vehicle plate ownership check for a vehicle that was used to drive to the DMV
+						TriggerEvent("garage:notifyOfPlateChange", src, oldPlate, newPlate)
+					end)
+				else
+					TriggerClientEvent("usa:notify", src, "Blacklisted phrase found")
+				end
+			else
+				TriggerClientEvent("usa:notify", src, "Plate already taken!")
+			end
+		else
+			TriggerClientEvent("usa:notify", src, "You need at least " .. exports.globals:comma_value(CUSTOM_PLATE_PRICE) .. ' in the bank!')
+		end
+	else
+		TriggerClientEvent("usa:notify", src, "You don't own that vehicle!")
+	end
+end)
+
 function getLicenseStatus(src)
 	local char = exports["usa-characters"]:GetCharacter(src)
 	local license = char.getItem("Driver's License")
@@ -72,4 +154,44 @@ function getLicenseStatus(src)
 	else
 		return nil
 	end
+end
+
+function doesCharacterOwnVehicle(char, plate)
+	local vehs = char.get("vehicles")
+	for i = 1, #vehs do
+		if plate == vehs[i] then
+			return true
+		end
+	end
+	return false
+end
+
+function containsBlacklistedPhrase(plate)
+	for i = 1, #BLACKLISTED_PLATE_PHRASES do
+		local phrase = BLACKLISTED_PLATE_PHRASES[i]
+		if plate:find(phrase:upper()) then
+			return true
+		end
+	end
+	return false
+end
+
+function getVehicleDBDoc(plate)
+	local ret = nil
+	TriggerEvent("es:exposeDBFunctions", function(db)
+		db.getDocumentById("vehicles", plate, function(doc)
+			if doc then
+				ret = doc
+			else
+				ret = "failed"
+			end
+		end)
+	end)
+	while not ret do
+		Wait(50)
+	end
+	if ret == "failed" then
+		ret = nil
+	end
+	return ret
 end

@@ -291,10 +291,10 @@ local VEH_ACTIONS = {
 	end,
 	["Engine"] = {
 		["On"] = function()
-			TriggerServerEvent("veh:checkForKey", GetVehicleNumberPlateText(hitHandleVehicle), true)
+			TriggerServerEvent("veh:checkForKey", exports.globals:trim(GetVehicleNumberPlateText(hitHandleVehicle)), true)
 		end,
 		["Off"] = function()
-			TriggerServerEvent("veh:checkForKey", GetVehicleNumberPlateText(hitHandleVehicle), false)
+			TriggerServerEvent("veh:checkForKey", exports.globals:trim(GetVehicleNumberPlateText(hitHandleVehicle)), false)
 		end
 	},
 	["Open"] = {
@@ -718,6 +718,7 @@ RegisterNUICallback('reloadWeapon', function(data, cb)
 	if IsPedInAnyVehicle(me, false) then
 		myveh = GetVehiclePedIsIn(me, false)
 		vehiclePlate = GetVehicleNumberPlateText(myveh)
+		vehiclePlate = exports.globals:trim(vehiclePlate)
 	end
 	TriggerServerEvent("ammo:checkForMagazine", data.inventoryItemIndex, (vehiclePlate or false))
 end)
@@ -982,7 +983,7 @@ function interactionMenuUse(index, itemName, wholeItem)
 			end
 			ClearPedTasksImmediately(ped)
 			-- refuel --
-			TriggerServerEvent("fuel:refuelWithJerryCan", GetVehicleNumberPlateText(hitHandleVehicle))
+			TriggerServerEvent("fuel:refuelWithJerryCan", exports.globals:trim(GetVehicleNumberPlateText(hitHandleVehicle)))
 			-- remove jerry can weapon from inventory --
 			TriggerServerEvent("usa:removeItem", wholeItem, 1)
 			TriggerEvent("interaction:equipWeapon", wholeItem, false)
@@ -1031,7 +1032,7 @@ function interactionMenuUse(index, itemName, wholeItem)
 		            else
 		                isMale = IsPedMale(playerPed)
 		            end
-					TriggerServerEvent('911:LockpickingVehicle', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(veh))), GetVehicleNumberPlateText(veh), isMale, primary, secondary)
+					TriggerServerEvent('911:LockpickingVehicle', x, y, z, lastStreetNAME, GetLabelText(GetDisplayNameFromVehicleModel(GetEntityModel(veh))), exports.globals:trim(GetVehicleNumberPlateText(veh)), isMale, primary, secondary)
 				end
 				Citizen.CreateThread(function()
 					while GetGameTimer() - start_time < duration and isLockpicking do
@@ -1562,6 +1563,7 @@ RegisterNetEvent("interaction:seizeVehContraband")
 AddEventHandler("interaction:seizeVehContraband", function()
 	local veh = getVehicleInsideOrInFrontOfUser()
 	local plate = GetVehicleNumberPlateText(veh)
+	plate = exports.globals:trim(plate)
 	TriggerServerEvent("vehicle:removeAllIllegalItems", plate)
 end)
 
@@ -1570,6 +1572,7 @@ AddEventHandler("interaction:seizeVeh", function(arg)
 	local veh = getVehicleInsideOrInFrontOfUser()
 	local plate = GetVehicleNumberPlateText(veh)
 	if plate then
+		plate = exports.globals:trim(plate)
 		TriggerServerEvent("vehicle:seizeVeh", plate, arg)
 	else
 		exports.globals:notify("No vehicle found")
@@ -1616,6 +1619,7 @@ Citizen.CreateThread(function()
 		if IsControlJustPressed(0, MENU_KEY1) and GetLastInputMethod(2) and not busy then
 			hitHandleVehicle, distance = getVehicleInsideOrInFrontOfUser()
 			local target_veh_plate = GetVehicleNumberPlateText(hitHandleVehicle)
+			target_veh_plate = exports.globals:trim(target_veh_plate)
 			EnableGui(target_veh_plate)
 			SetCurrentPedWeapon(playerPed, `WEAPON_UNARMED`, true)
 			exports["usa_holster"]:handleHolsterAnim()

@@ -15,6 +15,8 @@ local CLIENT_UPDATE_INTERVAL = 10
 
 local peopleAccessingProperties = {}
 
+local recentlyChangedPlates = {}
+
 AddEventHandler("playerDropped", function(reason)
   for propName, people in pairs(peopleAccessingProperties) do
     for src, dummyTrueBool in pairs(peopleAccessingProperties[propName]) do
@@ -30,6 +32,13 @@ AddEventHandler("character:loaded", function(char)
   local charIdent = char.get("_id")
   TriggerClientEvent("properties:setPropertyBlips", char.get("source"), GetOwnedPropertyCoords(charIdent, true))
   TriggerClientEvent("properties:setPropertyIdentifier", char.get("source"), charIdent)
+end)
+
+RegisterServerEvent("garage:notifyOfPlateChange")
+AddEventHandler("garage:notifyOfPlateChange", function(src, oldPlate, newPlate)
+	local c = exports["usa-characters"]:GetCharacter(src)
+	recentlyChangedPlates[c.get("_id")] = {}
+	recentlyChangedPlates[c.get("_id")][oldPlate] = newPlate
 end)
 
 RegisterServerEvent("properties-og:requestNearestData")
@@ -414,29 +423,33 @@ end)
 -- store vehicle at property --
 RegisterServerEvent("properties:storeVehicle")
 AddEventHandler("properties:storeVehicle", function(property_name, plate) --IMPLEMENT
-    local usource = tonumber(source)
-    -- check if player owns veh trying to store --
-    local owns = false
-    local user = exports["usa-characters"]:GetCharacter(usource)
-    local uvehicles = user.get("vehicles")
-    for i = 1, #uvehicles do
-        if plate == uvehicles[i] then
-            owns = true
+  plate = exports.globals:trim(plate)
+  local usource = tonumber(source)
+  -- check if player owns veh trying to store --
+  local owns = false
+  local user = exports["usa-characters"]:GetCharacter(usource)
+  local uvehicles = user.get("vehicles")
+  for i = 1, #uvehicles do
+    if plate == uvehicles[i] then
+        owns = true
+    end
+  end
+  if owns or (recentlyChangedPlates[user.get("_id")] and recentlyChangedPlates[user.get("_id")][plate]) then
+      -- store vehicle if owner --
+      TriggerEvent('es:exposeDBFunctions', function(couchdb)
+        if recentlyChangedPlates[user.get("_id")] and recentlyChangedPlates[user.get("_id")][plate] then
+          plate = recentlyChangedPlates[user.get("_id")][plate] -- if they recently changed their plate at the DMV, they still own it even though original logic says they don't
         end
-    end
-    if owns then
-        -- store vehicle if owner --
-        TriggerEvent('es:exposeDBFunctions', function(couchdb)
-            couchdb.updateDocument("vehicles", plate, { stored_location = property_name }, function()
-                -- delete vehicle on client --
-                TriggerClientEvent("properties:storeVehicle", usource)
-                -- remove key from inventory --
-                user.removeItem("Key -- " .. plate)
-            end)
+        couchdb.updateDocument("vehicles", plate, { stored_location = property_name }, function()
+            -- delete vehicle on client --
+            TriggerClientEvent("properties:storeVehicle", usource)
+            -- remove key from inventory --
+            user.removeItem("Key -- " .. plate)
         end)
-    else
-        TriggerClientEvent("usa:notify", usource, "You do not own that vehicle!")
-    end
+      end)
+  else
+      TriggerClientEvent("usa:notify", usource, "You do not own that vehicle!")
+  end
 end)
 
 -- retrieve vehicle from property --

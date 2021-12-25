@@ -134,14 +134,17 @@ function AddGarageMenuItems(menu, vehs, job)
         					ModifyVehicleTopSpeed(spawnedVeh, 30.0)
 						end
 
+						local plate = GetVehicleNumberPlateText(spawnedVeh)
+						plate = exports.globals:trim(plate)
+
 						local vehicle_key = {
-							name = "Key -- " .. GetVehicleNumberPlateText(spawnedVeh),
+							name = "Key -- " .. plate,
 							quantity = 1,
 							type = "key",
 							owner = "GOVT",
 							make = "GOVT",
 							model = "GOVT",
-							plate = GetVehicleNumberPlateText(spawnedVeh)
+							plate = plate
 						}
 
 						-- give key to owner
@@ -157,7 +160,7 @@ function AddGarageMenuItems(menu, vehs, job)
 							mdtjob = 'Pillbox Medical Center'
 						end
 						print(mdtjob)
-						TriggerServerEvent("mdt:addTempVehicle", 'Emergency Vehicle', mdtjob, GetVehicleNumberPlateText(spawnedVeh))
+						TriggerServerEvent("mdt:addTempVehicle", 'Emergency Vehicle', mdtjob, plate)
 						
 						return
 					end

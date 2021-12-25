@@ -52,6 +52,7 @@ Citizen.CreateThread(function()
                     local currentVeh = GetVehiclePedIsIn(me, false)
                     if currentVeh ~= 0 then
                         vehiclePlate = GetVehicleNumberPlateText(currentVeh)
+                        vehiclePlate = exports.globals:trim(vehiclePlate)
                     end
                     -- cycle through slots keys --
                     if IsDisabledControlJustPressed(24, KEYS.TAB) then
