@@ -169,7 +169,7 @@ Citizen.CreateThread(function()
 		if fuelData.displayFuel then
 			if IsPedInAnyVehicle(playerPed, false) and GetPedInVehicleSeat(playerVeh, -1) == playerPed and GetVehicleClass(playerVeh) ~= 13 and GetVehicleClass(playerVeh) ~= 21 then
 				if not wasInVeh then
-					TriggerServerEvent('fuel:returnFuelAmount', GetVehicleNumberPlateText(playerVeh))
+					TriggerServerEvent('fuel:returnFuelAmount', exports.globals:trim(GetVehicleNumberPlateText(playerVeh)))
 					wasInVeh = true
 				end
 				if math.floor(fuelData.fuelAmount) <= 10 then

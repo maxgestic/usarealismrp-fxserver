@@ -11,6 +11,7 @@ local gasPrices = {
 local vehicleGas = {}
 
 AddEventHandler('fuel:returnFuelAmount', function(vehiclePlate)
+	vehiclePlate = exports.globals:trim(vehiclePlate)
 	if vehicleGas[vehiclePlate] then
 		TriggerClientEvent('fuel:updateFuelAmount', source, vehicleGas[vehiclePlate])
 	else
@@ -25,6 +26,7 @@ AddEventHandler('fuel:returnFuelAmount', function(vehiclePlate)
 end)
 
 AddEventHandler('fuel:setFuelAmount', function(vehiclePlate, fuelAmount)
+	vehiclePlate = exports.globals:trim(vehiclePlate)
 	vehicleGas[vehiclePlate] = fuelAmount
 end)
 
@@ -53,6 +55,7 @@ AddEventHandler("fuel:refuelWithJerryCan", function(plate)
 	local new_amount = 75
 	local _source = source
 	if plate then
+		plate = exports.globals:trim(plate)
 		if vehicleGas[plate] then
 			if vehicleGas[plate] < new_amount then
 				vehicleGas[plate] = new_amount -- set to 75% of a full tank
@@ -96,6 +99,7 @@ end)
 
 RegisterServerEvent("fuel:save")
 AddEventHandler("fuel:save", function(plate)
+	plate = exports.globals:trim(plate)
 	TriggerEvent('es:exposeDBFunctions', function(db)
 		db.updateDocument("vehicles", plate, {stats = { fuel = vehicleGas[plate] }}, function(doc, err, rText)
 			--print("finished saving fuel, plate " .. plate .. " with fuel amount of " .. vehicleGas[plate] .. ", status is " .. err)
