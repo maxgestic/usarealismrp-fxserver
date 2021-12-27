@@ -4,6 +4,12 @@ local NEEDS_TO_BE_CLOCKED_IN = true
 
 local TOW_REWARD = {100, 450}
 
+local TRUCKS_FOR_RANK = {
+	[1] = {"flatbed"},
+	[2] = {"flatbed"},
+	[3] = {"flatbed", "isgtow"}
+}
+
 local installQueue = {}
 
 RegisterServerEvent("towJob:giveReward")
@@ -173,6 +179,16 @@ AddEventHandler("mechanic:spawnTruck", function()
 	local ident = char.get("_id")
 	MechanicHelper.getMechanicRepairCount(ident, function(repairCount)
 		TriggerClientEvent("mechanic:spawnTruck", usource, repairCount)
+	end)
+end)
+
+RegisterServerEvent("mechanic:openTruckSpawnMenu")
+AddEventHandler("mechanic:openTruckSpawnMenu", function()
+	local src = source
+	local char = exports["usa-characters"]:GetCharacter(src)
+	MechanicHelper.getMechanicRank(char.get("_id"), function(rank)
+		local availableTrucks = TRUCKS_FOR_RANK[rank]
+		TriggerClientEvent("mechanic:openTruckSpawnMenuCL", src, availableTrucks)
 	end)
 end)
 
