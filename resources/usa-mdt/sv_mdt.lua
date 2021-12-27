@@ -1,6 +1,8 @@
 local WEAPON_SERIAL_LENGTH_1 = 36 -- old UUID format
 local WEAPON_SERIAL_LENGTH_2 = 8 -- newest format
 
+local DAYS_TO_DELETE_BOLO = 7
+
 local random_names = {
 	"Jim Karen",
 	"Michael Phelps",
@@ -736,6 +738,7 @@ AddEventHandler("mdt:createBOLO", function(bolo)
 	local author = exports["usa-characters"]:GetCharacter(source)
 	bolo.author = author.getFullName()
 	bolo.timestamp = os.date('%m-%d-%Y %H:%M:%S', os.time())
+	bolo.createdTime = os.time()
 	TriggerEvent('es:exposeDBFunctions', function(couchdb)
 		-- insert into db
 		couchdb.createDocument("bolos", bolo, function()
@@ -744,8 +747,8 @@ AddEventHandler("mdt:createBOLO", function(bolo)
 			exports["globals"]:notifyPlayersWithJob("sheriff", "^3^*[MDT] ^r^0A new BOLO has been created!")
 
 			local msg = {
-		           type = "bolo_created"
-		       }
+				type = "bolo_created"
+			}
 			TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
 
 		end)
@@ -1045,6 +1048,22 @@ function GetMakeModelOwner(plates, cb) -- test
 	}), { ["Content-Type"] = 'application/json', Authorization = "Basic " .. exports["essentialmode"]:getAuth() })
 end
 
+function removeOldBOLOs()
+	print("removing old bolos")
+	PerformHttpRequest("http://127.0.0.1:5984/bolos/_all_docs?include_docs=true" --[[ string ]], function(err, text, headers)
+		local response = json.decode(text)
+		if response.rows then
+			print("Got # bolos: " .. #(response.rows))
+			for i = 1, #(response.rows) do
+				local doc = response.rows[i].doc
+				if math.floor(exports.globals:GetHoursFromTime((doc.createdTime or 0)) / 24) >= DAYS_TO_DELETE_BOLO then
+					deleteBOLO("bolos", doc._id, doc._rev)
+				end
+			end
+		end
+	end, "GET", "", { ["Content-Type"] = 'application/json', ['Authorization'] = "Basic " .. exports["essentialmode"]:getAuth() })
+end
+
 -- PERFORM FIRST TIME DB CHECKS --
 exports["globals"]:PerformDBCheck("POLICE REPORTS", "policereports")
-exports["globals"]:PerformDBCheck("BOLOS", "bolos")
+exports["globals"]:PerformDBCheck("BOLOS", "bolos", removeOldBOLOs)
