@@ -1,5 +1,7 @@
 resource_manifest_version '44febabe-d386-4d18-afbe-5e627f4af937'
 
+ui_page 'html/index.html'
+
 client_scripts {
 	"@NativeUI/Wrapper/Utility.lua",
     "@NativeUI/UIElements/UIVisual.lua",
@@ -31,3 +33,9 @@ client_scripts {
 	'cl_evidence.lua'
 }
 server_script 'sv_evidence.lua'
+
+files {
+    'html/index.html',
+    'html/jquery.js',
+    'html/init.js',
+}
