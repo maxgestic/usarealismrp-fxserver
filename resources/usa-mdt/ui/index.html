@@ -130,31 +130,31 @@
 
                 <!-- Icon Bar Nav-->
                 <nav id="icon_navbar" class="w3-sidebar w3-bar-block w3-center" v-bind:class="{ 'border-right-blue': employee.job.rawName == 'sheriff', 'border-right-gold': employee.job.rawName == 'corrections' }">
-                    <div v-on:click="changePage('Person(s) Check')" id="person_check" class="w3-bar-item w3-button w3-padding-large">
+                    <div v-on:click="changePage('Person(s) Check')" id="person_check" class="w3-bar-item w3-button w3-padding">
                         <i class="fa fa-user w3-xxlarge"></i>
                         <p>Person Check</p>
                     </div>
-                    <div v-on:click="changePage('Plate Check')" id="plate_check" class="w3-bar-item w3-button w3-padding-large">
+                    <div v-on:click="changePage('Plate Check')" id="plate_check" class="w3-bar-item w3-button w3-padding">
                         <i class="fa fa-car w3-xxlarge"></i>
                         <p>Plate Check</p>
                     </div>
-                    <div v-on:click="changePage('Weapon Check')" id="weapon_check" class="w3-bar-item w3-button w3-padding-large">
+                    <div v-on:click="changePage('Weapon Check')" id="weapon_check" class="w3-bar-item w3-button w3-padding">
                         <i class="fa fa-shield w3-xxlarge"></i>
                         <p>Weapon Check</p>
                     </div>
-                    <div v-on:click="changePage('Warrants')" id="warrants" class="w3-bar-item w3-button w3-padding-large">
+                    <div v-on:click="changePage('Warrants')" id="warrants" class="w3-bar-item w3-button w3-padding">
                         <i class="fa fa-archive w3-xxlarge"></i>
                         <p>Warrants</p>
                     </div>
-                    <div v-on:click="changePage('BOLO')" id="bolo" class="w3-bar-item w3-button w3-padding-large">
+                    <div v-on:click="changePage('BOLO')" id="bolo" class="w3-bar-item w3-button w3-padding">
                         <i class="fa fa-binoculars w3-xxlarge"></i>
                         <p>BOLOs</p>
                     </div>
-                    <div v-on:click="changePage('Police Reports')" id="reports" class="w3-bar-item w3-button w3-padding-large">
+                    <div v-on:click="changePage('Police Reports')" id="reports" class="w3-bar-item w3-button w3-padding">
                         <i class="fa fa-sticky-note w3-xxlarge"></i>
                         <p>Police Reports</p>
                     </div>
-                    <div v-on:click="changePage('Help')" id="help" class="w3-bar-item w3-button w3-padding-large">
+                    <div v-on:click="changePage('Help')" id="help" class="w3-bar-item w3-button w3-padding">
                         <i class="fa fa-question w3-xxlarge"></i>
                         <p>Help</p>
                     </div>
@@ -199,10 +199,13 @@
                                         <input v-model="lname_search" class="w3-input w3-border" type="text"  placeholder="Enter a last name to search..." required>
                                         <p>BY SSN:</p>
                                         <input v-model="person_check.ssn" class="w3-input w3-border" type="text"  placeholder="Enter an SSN to search..." required>
+                                        <p>BY DNA:</p>
+                                        <input v-model="person_check.dna" class="w3-input w3-border" type="text"  placeholder="Enter a DNA sample to search..." required>
                                     </p>
                                     <br>
                                     <button v-on:click="PerformPersonCheck" type="button" class="w3-btn w3-padding w3-text-black" style="width:120px; background-color: lightgray;">Search &nbsp; &#10095;</button>
                                     <button onclick="document.getElementById('photo-update').style.display='block'" type="button" class="w3-btn w3-padding w3-text-black" style="width:140px; background-color: lightgray;">Update Photo</button>
+                                    <button onclick="document.getElementById('dna-update').style.display='block'" type="button" class="w3-btn w3-padding w3-text-black" style="width:140px; background-color: lightgray;">Update DNA</button>
                                     <!--<button v-on:click="PerformMarkAddress" type="button" class="w3-btn w3-padding w3-text-black" style="width:158px; background-color: lightgray;">Address to GPS</button>-->
                                 </form>
 
@@ -222,6 +225,20 @@
                                     </div>
                                     </div>
 
+                                     <!-- Mugshot Photo Update Modal -->
+                                     <div id="dna-update" class="w3-modal">
+                                        <div class="w3-modal-content">
+                                            <div class="w3-container" style="padding: 0 2em 2em 2em;">
+                                                <span onclick="document.getElementById('dna-update').style.display='none'"
+                                                class="w3-button w3-display-topright w3-text-black">&times;</span>
+                                                <h3>Update DNA</h3>
+                                                <p>Please provide the DNA sample for {{person_check.fname + " " + person_check.lname}} below.</p>
+                                                <input v-model="dnaModalInput" class="w3-input w3-border" type="text" placeholder="DNA sample" required>
+                                                <button v-on:click="UpdateDNA" type="button" class="w3-btn w3-padding w3-text-black" style="width:120px; background-color: lightgray; margin-top: 1em;">Save DNA</button>
+                                            </div>
+                                        </div>
+                                        </div>
+
                                     <div style="display: inline-block; width: 60%; margin-right: 3em;">
                                         <div class="w3-text-red">{{ personCheckNotification }}</div>
 
@@ -238,6 +255,14 @@
                                         <table v-if="person_check.dob" class="w3-table-all w3-small">
                                             <tr>
                                                 <td>{{ person_check.dob }}</td>
+                                            </tr>
+                                        </table>
+
+                                        <h4><b>DNA:</b></h4>
+
+                                        <table v-if="person_check.returnedDNA" class="w3-table-all w3-small">
+                                            <tr>
+                                                <td>{{ person_check.returnedDNA }}</td>
                                             </tr>
                                         </table>
                                     </div>
@@ -625,12 +650,12 @@
             </section>
         </div>
 
-    </div>
-    <script src="vue.min.js"></script>
-    <script
-    src="https://code.jquery.com/jquery-3.3.1.min.js"
-    integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-    crossorigin="anonymous"></script>
-    <script src="script.js"></script>
+        </div>
+        <script src="vue.min.js"></script>
+        <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+        <script src="script.js"></script>
     </body>
 </html>

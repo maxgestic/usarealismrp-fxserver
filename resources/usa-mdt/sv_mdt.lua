@@ -194,6 +194,54 @@ AddEventHandler("mdt:updatePhoto", function(url, fname, lname, dob)
 	end)
 end)
 
+RegisterServerEvent("mdt:updateDNA")
+AddEventHandler("mdt:updateDNA", function(dna, fname, lname, dob)
+	print("Saving DNA for " .. fname ..  " " .. lname .. "(" .. dob .. ") with dna: " .. dna)
+	TriggerEvent('es:exposeDBFunctions', function(couchdb)
+		local query = {
+			["name"] = {
+				["first"] = {
+					["$regex"] = "(?i)" .. fname
+				},
+				["last"] = {
+					["$regex"] = "(?i)" .. lname
+				}
+			},
+			["dateOfBirth"] = dob
+		}
+		local fields = {
+			"_id",
+		}
+		couchdb.getSpecificFieldFromDocumentByRows("characters", query, fields, function(doc)
+			if doc then
+				print(fname .. " " .. lname .. " found in DB search!")
+				couchdb.updateDocument("characters", doc._id, {dna = dna}, function()
+					print("DNA updated in DB! Attempting to update player obj if online...")
+					--------------------------------------------------
+					-- update any online players user object --
+					--------------------------------------------------
+					exports["usa-characters"]:GetCharacters(function(players)
+						for id, user in pairs(players) do
+							if user.getName() == (fname .. " " .. lname) and user.get("dateOfBirth") == dob then
+								user.set("dna", dna)
+								print("Online player's DNA updated!")
+								break
+							end
+						end
+					end)
+				end)
+			else
+				print("person NOT found!")
+				local msg = {
+					type = "error",
+					message  = "No person found matching name " .. data.fname .. " " .. data.lname .. "!"
+				}
+				TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
+			end
+		end)
+	end)
+end)
+
 RegisterServerEvent("mdt:PerformPersonCheckBySSN")
 AddEventHandler("mdt:PerformPersonCheckBySSN", function(ssn)
 	local usource = source
@@ -221,7 +269,8 @@ AddEventHandler("mdt:PerformPersonCheckBySSN", function(ssn)
         crimes = {},
         tickets = {}
     	},
-			mugshot = "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg" -- generic place holder img
+			mugshot = "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg", -- generic place holder img
+			returnedDNA = char.get("dna")
     }
 	--------------------
 	-- get mugshot --
@@ -340,7 +389,8 @@ AddEventHandler("mdt:PerformPersonCheckByName", function(data)
 						crimes = {},
 						tickets = {}
 					},
-					mugshot = "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg" -- generic placeholder img
+					mugshot = "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg", -- generic placeholder img
+					returnedDNA = person.dna
 				}
 				-- get mug shot --
 				if person.mugshot then
@@ -405,6 +455,103 @@ AddEventHandler("mdt:PerformPersonCheckByName", function(data)
 				local msg = {
 					type = "error",
 					message  = "No person found matching name " .. data.fname .. " " .. data.lname .. "!"
+				}
+				TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
+			end
+		end)
+	end)
+end)
+
+RegisterServerEvent("mdt:PerformPersonCheckByDNA")
+AddEventHandler("mdt:PerformPersonCheckByDNA", function(data)
+	local usource = source
+	TriggerEvent('es:exposeDBFunctions', function(db)
+		local query = {
+			["dna"] = data.dna
+		}
+		db.getDocumentByRows("characters", query, function(doc)
+			if doc then
+				print(doc.name.first .. " " .. doc.name.last .. " found in DB search!")
+				local person = doc
+				-- values have to be false by default to work with UI --
+				local person_info  = {
+					ssn = ssn,
+					fname = firstToUpper(person.name.first),
+					lname = firstToUpper(person.name.last),
+					dob = person.dateOfBirth,
+					drivers_license = false,
+					firearm_permit = false,
+					insurance = false,
+					criminal_history = {
+						crimes = {},
+						tickets = {}
+					},
+					mugshot = "https://cpyu.org/wp-content/uploads/2016/09/mugshot.jpg", -- generic placeholder img
+					returnedDNA = person.dna
+				}
+				-- get mug shot --
+				if person.mugshot then
+					person_info.mugshot = person.mugshot
+				end
+
+				TriggerEvent('properties:getAddressByName', person.name.first .. ' ' .. person.name.last, function(address)
+					if address then
+						person_info.address = address
+					else
+						if person.property['house'] and person.property['houseStreet'] then
+							person_info.address = 'House '..person.property['house']..', '..person.property['houseStreet']
+						else
+							person_info.address = person.property['location']
+						end
+					end
+					-- get criminal history --
+					local criminal_history = person.criminalHistory
+					if #criminal_history > 0 then
+						for i = 1, #criminal_history do
+							local crime = criminal_history[i]
+							if (not crime.type or crime.type == "arrest") then
+								table.insert(person_info.criminal_history.crimes, crime)
+							else
+								table.insert(person_info.criminal_history.tickets, crime)
+							end
+						end
+						if #person_info.criminal_history.crimes <= 0 then
+							person_info.criminal_history.crimes = false
+						end
+						if #person_info.criminal_history.tickets <= 0 then
+							person_info.criminal_history.tickets = false
+						end
+					end
+					-- get licenses --
+					person_info.licenses = GetLicensesFromInventory(person.inventory)
+					-- get insurance --
+					local insurance = person.insurance
+					if insurance.planName then
+						person_info.insurance = insurance
+					end
+					------------------------
+					-- auto warrant check --
+					------------------------
+					exports["usa-warrants"]:GetWarrantsForPerson(person.name, person.dateOfBirth, function(warrants)
+						if type(warrants) ~= "boolean" then
+							if #warrants > 0 then
+								print("person has active warrants!")
+								local msg = {
+									type = "personCheckNotification",
+									message  = "Person has " .. #warrants .. " active warrant(s)!"
+								}
+								TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
+								TriggerClientEvent('InteractSound_CL:PlayOnOne', usource, "warrantfound", 0.4)
+							end
+						end
+					end)
+					TriggerClientEvent("mdt:performPersonCheck", usource, person_info)
+				end)
+			else
+				print("person NOT found!")
+				local msg = {
+					type = "error",
+					message  = "No person found matching dna: " .. data.dna .. "!"
 				}
 				TriggerClientEvent("mdt:sendNUIMessage", usource, msg)
 			end
