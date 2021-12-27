@@ -16,7 +16,7 @@ local KEYS = {
 	V = 0
 }
 
-local locations = {
+locations = {
 	["Paleto"] = {
 		duty = {
 			x = -196.027,
@@ -277,7 +277,8 @@ Citizen.CreateThread(function()
 			if not (lastTowTruck and DoesEntityExist(lastTowTruck)) then
 				Wait(500)
 				if IsControlPressed(0, KEYS.V) then
-					TriggerServerEvent("mechanic:spawnTruck")
+					--TriggerServerEvent("mechanic:spawnTruck")
+					TriggerServerEvent("mechanic:openTruckSpawnMenu")
 				end
 			else
 				exports.globals:notify("Already retrieved truck")

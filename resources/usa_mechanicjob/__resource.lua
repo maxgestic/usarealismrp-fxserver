@@ -8,7 +8,8 @@ server_scripts {
 
 client_scripts {
     'classes/MechanicHelper_cl.lua',
-    'mechanic_cl.lua'
+    'mechanic_cl.lua',
+    'mechanic_cl_menu.lua'
 }
 
 exports {
