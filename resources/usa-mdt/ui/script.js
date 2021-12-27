@@ -15,6 +15,8 @@ const mdtApp = new Vue({
             fname: null,
             lname: null,
             dob: null,
+            dna: null,
+            returnedDNA: null,
             licenses: null,
             address: null,
             insurance: null,
@@ -73,6 +75,7 @@ const mdtApp = new Vue({
             other_responders: ""
         },
         mugshot_url: null,
+        dnaModalInput: null,
         error: null,
         personCheckNotification: null,
         notification: null,
@@ -92,6 +95,21 @@ const mdtApp = new Vue({
                 this.mugshot_url = "";
             } else {
                 this.error = "You must look up the person before updating their photo!";
+            }
+        },
+        UpdateDNA() {
+            $("#dna-update").hide();
+            if (this.person_check.dob) {
+                $.post('http://usa-mdt/updateDNA', JSON.stringify({
+                    fname: this.person_check.fname,
+                    lname: this.person_check.lname,
+                    dob: this.person_check.dob,
+                    dna: this.dnaModalInput
+                }));
+                this.notification = "DNA updated!";
+                this.dnaModalInput = "";
+            } else {
+                this.error = "You must look up the person before updating their DNA!";
             }
         },
         PerformPersonCheck() {
@@ -115,11 +133,15 @@ const mdtApp = new Vue({
                     return;
                 }
 
-                if ((this.fname_search != "" && this.lname_search == "") || (this.lname_search != "" && this.fname_search == ""))
-                    this.error = "Please enter both a first and last name to search!";
+                if (this.person_check.dna && this.person_check.dna != "") {
+                    $.post('http://usa-mdt/PerformPersonCheckByDNA', JSON.stringify({
+                        dna: this.person_check.dna
+                    }));
+                    return;
+                }
 
-                if ((!this.person_check.ssn || this.person_check.ssn == 0) && this.fname_search == "" && this.lname_search == "")
-                    this.error = "Please enter an SSN or a first and last name to perform a person check!";
+                if (!this.person_check.ssn && this.fname_search == "" && this.lname_search == "" && !this.person_check.dna )
+                    this.error = "Please enter an SSN, first and last name, or DNA sample to perform a person check!";
 
             }
         },

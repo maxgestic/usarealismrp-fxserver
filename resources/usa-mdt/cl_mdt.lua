@@ -44,6 +44,11 @@ RegisterNUICallback("updatePhoto", function(data, cb)
     cb('ok')
 end)
 
+RegisterNUICallback("updateDNA", function(data, cb)
+    TriggerServerEvent("mdt:updateDNA", data.dna, data.fname, data.lname, data.dob)
+    cb('ok')
+end)
+
 RegisterNUICallback("PerformPersonCheckBySSN", function(data, cb)
     TriggerServerEvent("mdt:PerformPersonCheckBySSN", tonumber(data.ssn))
     cb('ok')
@@ -51,6 +56,11 @@ end)
 
 RegisterNUICallback("PerformPersonCheckByName", function(data, cb)
     TriggerServerEvent("mdt:PerformPersonCheckByName", data)
+    cb('ok')
+end)
+
+RegisterNUICallback("PerformPersonCheckByDNA", function(data, cb)
+    TriggerServerEvent("mdt:PerformPersonCheckByDNA", data)
     cb('ok')
 end)
 
