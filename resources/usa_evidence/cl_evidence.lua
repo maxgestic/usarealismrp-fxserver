@@ -207,6 +207,15 @@ AddEventHandler('evidence:dnaNearest', function()
 	end)
 end)
 
+RegisterNetEvent('evidence:dnaClipboard')
+AddEventHandler('evidence:dnaClipboard', function(dna)
+	local message = dna
+	-- print(message)
+	SendNUIMessage({
+    	message = message
+  	})
+end)
+
 RegisterNetEvent('evidence:getBreathalyzeResult')
 AddEventHandler('evidence:getBreathalyzeResult', function(sourceReturnedTo)
 	TriggerServerEvent('evidence:returnBreathalyzeResult', playerData['levelBAC'], sourceReturnedTo)
