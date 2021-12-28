@@ -128,6 +128,9 @@ end)
 
 -- menu processing / opening --
 Citizen.CreateThread(function()
+
+	local didAskToSave = nil
+
 	while true do
 		me = GetPlayerPed(-1)
 		mycoords = GetEntityCoords(me)
@@ -166,6 +169,14 @@ Citizen.CreateThread(function()
 			_menuPool:MouseControlsEnabled(false)
 			_menuPool:ControlDisablingEnabled(false)
 			_menuPool:ProcessMenus()
+			if didAskToSave or didAskToSave == nil then
+				didAskToSave = false
+			end
+		else
+			if didAskToSave ~= nil and not didAskToSave then
+				didAskToSave = true
+				TriggerEvent("clothing:openSavePopup")
+			end
 		end
 		Wait(1)
 	end
@@ -385,38 +396,6 @@ function CreateMenu()
 			ClearPedProp(me, 2)
 		end
 		props_submenu.SubMenu:AddItem(item)
-
-		-- save button --
-		local item = NativeUI.CreateItem("Save", "Save your selections.")
-		item:SetRightBadge(BadgeStyle.Star)
-		item.Activated = function(parentmenu, selected)
-			--Citizen.Trace("true")
-			local character = {
-				["hash"] = "",
-				["components"] = {},
-				["componentstexture"] = {},
-				["props"] = {},
-				["propstexture"] = {}
-			}
-			local ply = GetPlayerPed(-1)
-			character.hash = GetEntityModel(ply)
-			--local debugstr = "Player Hash: " .. character.hash .. "| Props: "
-			for i=0,7 do
-				character.props[i] = GetPedPropIndex(ply, i)
-				character.propstexture[i] = GetPedPropTextureIndex(ply, i)
-				--debugstr = debugstr .. character.props[i] .. "->" .. character.propstexture[i] .. ","
-			end
-			--debugstr = debugstr .. "| Components: "
-			for i=0,11 do
-				character.components[i] = GetPedDrawableVariation(ply, i)
-				character.componentstexture[i] = GetPedTextureVariation(ply, i)
-				--debugstr = debugstr .. character.components[i] .. "->" .. character.componentstexture[i] .. ","
-			end
-			TriggerServerEvent("mini:save", character)
-			TriggerServerEvent("mini:giveMeMyWeaponsPlease")
-			MainMenu:Visible(false)
-		end
-		MainMenu:AddItem(item)
 
 		_menuPool:RefreshIndex()
 	end)
