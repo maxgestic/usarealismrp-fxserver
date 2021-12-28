@@ -28,7 +28,8 @@ client_scripts {
     "@NativeUI/UIMenu/UIMenu.lua",
 	"@NativeUI/UIMenu/MenuPool.lua",
 	"@NativeUI/NativeUI.lua",
-	"cl_clothing.lua"
+	"cl_clothing.lua",
+    'cl_clothing_savePopup.lua'
 }
 
 server_scripts {
