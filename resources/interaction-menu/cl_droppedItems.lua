@@ -1,5 +1,9 @@
 local DROPPED_ITEMS = {}
 local E_KEY = 246
+local NEARBY_DROPPED_ITEM_POLL_INTERVAL_SECONDS = 1
+local NEARBY_DROPPED_ITEM_RANGE = 100
+
+local nearbyDroppedItems = {}
 
 RegisterNetEvent("interaction:getDroppedItems")
 AddEventHandler("interaction:getDroppedItems", function(items)
@@ -51,26 +55,36 @@ AddEventHandler("interaction:dropMultiple", function(items)
 end)
 
 Citizen.CreateThread(function()
+  local lastPoll = 0
+  while true do
+    local mycoords = GetEntityCoords(PlayerPedId())
+    while GetGameTimer() - lastPoll < NEARBY_DROPPED_ITEM_POLL_INTERVAL_SECONDS * 1000 do
+      Wait(1)
+    end
+    lastPoll = GetGameTimer()
+    nearbyDroppedItems = getNearbyDroppedItems(NEARBY_DROPPED_ITEM_RANGE)
+  end
+end)
+
+Citizen.CreateThread(function()
   while true do
     local ped = GetPlayerPed(-1)
     local coords = GetEntityCoords(ped)
-    for i = 1, #DROPPED_ITEMS do
-      local item = DROPPED_ITEMS[i]
-      if Vdist(coords.x, coords.y, coords.z, item.coords.x, item.coords.y, item.coords.z) < 50 then
-        if not item.objectModel then
-          DrawMarker(27, item.coords.x, item.coords.y, item.coords.z, 0, 0, 0, 0, 0, 0, 0.3, 0.3, 1.0, 240, 30, 140, 100, 0, 0, 2, 0, 0, 0, 0)
-        end
-        if Vdist(coords.x, coords.y, coords.z, item.coords.x, item.coords.y, item.coords.z) < 3.5 then
-          DrawText3Ds(item.coords.x, item.coords.y, item.coords.z + 0.2, 370, 16, '[Y] - ' .. item.name)
-          if IsControlJustPressed(1, E_KEY) and not attemptingPickup and not IsPedInAnyVehicle(ped, true) then
-            attemptingPickup = true
-            TriggerServerEvent("interaction:attemptPickup", item)
-            break
-          end
+    for i = 1, #nearbyDroppedItems do
+      local item = nearbyDroppedItems[i]
+      if not item.objectModel then
+        DrawMarker(27, item.coords.x, item.coords.y, item.coords.z, 0, 0, 0, 0, 0, 0, 0.3, 0.3, 1.0, 240, 30, 140, 100, 0, 0, 2, 0, 0, 0, 0)
+      end
+      if Vdist(coords.x, coords.y, coords.z, item.coords.x, item.coords.y, item.coords.z) < 3.5 then
+        DrawText3Ds(item.coords.x, item.coords.y, item.coords.z + 0.2, 370, 16, '[Y] - ' .. item.name)
+        if IsControlJustPressed(1, E_KEY) and not attemptingPickup and not IsPedInAnyVehicle(ped, true) then
+          attemptingPickup = true
+          TriggerServerEvent("interaction:attemptPickup", item)
+          break
         end
       end
     end
-    Wait(0)
+    Wait(1)
   end
 end)
 
@@ -100,4 +114,17 @@ function SpawnObjectModel(item)
     SetEntityAsMissionEntity(handle, true, true)
   end
   return handle
+end
+
+function getNearbyDroppedItems(range)
+  local mycoords = GetEntityCoords(PlayerPedId())
+  local nearby = {}
+	for i = #DROPPED_ITEMS, 1, -1 do
+    local item = DROPPED_ITEMS[i]
+		local dist = Vdist(item.coords.x, item.coords.y, item.coords.z, mycoords)
+		if dist < range then
+			table.insert(nearby, DROPPED_ITEMS[i])
+		end
+	end
+  return nearby
 end
