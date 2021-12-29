@@ -187,6 +187,7 @@ AddEventHandler("mechanic:openTruckSpawnMenu", function()
 	local src = source
 	local char = exports["usa-characters"]:GetCharacter(src)
 	MechanicHelper.getMechanicRank(char.get("_id"), function(rank)
+		if rank == 0 then rank = 1 end -- if no DB doc yet, just use rank 1
 		local availableTrucks = TRUCKS_FOR_RANK[rank]
 		TriggerClientEvent("mechanic:openTruckSpawnMenuCL", src, availableTrucks)
 	end)
