@@ -533,6 +533,7 @@ AddEventHandler("gcphone:send911Message", function(data)
 	local lastStreetNAME = GetStreetNameFromHashKey(lastStreetHASH)
 	TriggerServerEvent('911:PlayerCall', x, y, z, lastStreetNAME, msg)
 	TriggerEvent('usa:showHelp', true, 'Emergency services have been notified!')
+  exports.globals:notify("911 called!")
 end)
 
 RegisterNetEvent("gcphone:sendMechanicMessage")
