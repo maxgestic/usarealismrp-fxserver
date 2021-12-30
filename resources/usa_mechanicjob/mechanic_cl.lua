@@ -273,15 +273,18 @@ Citizen.CreateThread(function()
 			end
 		end
 
+		
 		if IsControlJustPressed(0, KEYS.V) and GetLastInputMethod(0) and onDuty == "yes" then
-			if not (lastTowTruck and DoesEntityExist(lastTowTruck)) then
-				Wait(500)
-				if IsControlPressed(0, KEYS.V) then
-					--TriggerServerEvent("mechanic:spawnTruck")
-					TriggerServerEvent("mechanic:openTruckSpawnMenu")
+			Wait(500)
+			if IsControlPressed(0, KEYS.V) then
+				if isNearSignOnSpot(5) then
+					if not (lastTowTruck and DoesEntityExist(lastTowTruck)) then
+						--TriggerServerEvent("mechanic:spawnTruck")
+						TriggerServerEvent("mechanic:openTruckSpawnMenu")
+					else
+						exports.globals:notify("Already retrieved truck")
+					end
 				end
-			else
-				exports.globals:notify("Already retrieved truck")
 			end
 		end
 	end
@@ -781,4 +784,14 @@ function ShowHelp(isRank3)
 	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0Use ^3/install [upgrade]^0 to install custom vehicle upgrades (must be lvl 2 mechanic).")
 	Wait(3000)
 	TriggerEvent("chatMessage", "", {}, "^3INFO: ^0You can get a repair kit from the hardware store and use that to repair vehicles.")
+end
+
+function isNearSignOnSpot(range)
+	local mycoords = GetEntityCoords(PlayerPedId())
+	for name, info in pairs(locations) do
+		if Vdist(mycoords, info.duty.x, info.duty.y, info.duty.z) < (range or 5) then
+			return true
+		end
+	end
+	return false
 end
