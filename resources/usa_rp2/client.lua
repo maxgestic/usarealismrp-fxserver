@@ -1122,6 +1122,7 @@ local STATIC_OBJECTS = {
     obj = ATM_MODEL
   }
   --]]
+  --[[
   XMAS_TREE_LEGION = {
     coords = vector3(226.48237609863, -895.41094970703, 28.692138671875),
     obj = LARGE_XMAS_TREE_MODEL
@@ -1138,6 +1139,7 @@ local STATIC_OBJECTS = {
     coords = vector3(-30.562828063965, -1100.5909423828, 32.261386108398),
     obj = LARGE_XMAS_TREE_MODEL
   }
+  --]]
 }
 
 for name, info in pairs(STATIC_OBJECTS) do
