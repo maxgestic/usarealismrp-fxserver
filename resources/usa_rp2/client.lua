@@ -369,20 +369,19 @@ end)
 ---------------------------------------------------------
 -- stop seat shuffling in vehicles, vehicle brakelight --
 ---------------------------------------------------------
-local disableShuffle = true
 local brakeLight = true
 
 RegisterNetEvent("usa:shuffleSeats")
 AddEventHandler("usa:shuffleSeats", function()
   if IsPedInAnyVehicle(playerPed, false) and GetPedInVehicleSeat(GetVehiclePedIsIn(playerPed, false), 0) == playerPed then
-      disableShuffle = false
-      Citizen.Wait(5000)
-      disableShuffle = true
-    elseif IsPedInAnyVehicle(playerPed, false) and GetPedInVehicleSeat(GetVehiclePedIsIn(playerPed, false), -1) == playerPed then
-      SetPedIntoVehicle(playerPed, GetVehiclePedIsIn(playerPed, false), 0)
-    else
-      CancelEvent()
-    end
+    Wait(700)
+    SetPedIntoVehicle(playerPed, GetVehiclePedIsIn(playerPed, false), -1)
+  elseif IsPedInAnyVehicle(playerPed, false) and GetPedInVehicleSeat(GetVehiclePedIsIn(playerPed, false), -1) == playerPed then
+    Wait(700)
+    SetPedIntoVehicle(playerPed, GetVehiclePedIsIn(playerPed, false), 0)
+  else
+    CancelEvent()
+  end
 end)
 
 RegisterNetEvent('usa:toggleBrakelight')
@@ -398,10 +397,13 @@ end)
 Citizen.CreateThread(function()
     while true do
         Wait(1)
-        if IsPedInAnyVehicle(playerPed, false) and disableShuffle then
-            if GetPedInVehicleSeat(GetVehiclePedIsIn(playerPed, false), 0) == playerPed then
+
+        
+        if IsPedInAnyVehicle(playerPed, false) then
+          local curVeh = GetVehiclePedIsIn(playerPed, false)
+            if GetPedInVehicleSeat(curVeh, 0) == playerPed then
                 if GetIsTaskActive(playerPed, 165) then
-                    SetPedIntoVehicle(playerPed, GetVehiclePedIsIn(playerPed, false), 0)
+                    SetPedIntoVehicle(playerPed, curVeh, 0)
                 end
             end
         end
