@@ -33,7 +33,7 @@ AddEventHandler("nitro:getFuel", function(vehPlate)
     }
     db.getSpecificFieldFromDocumentByRows("vehicles", query, fields, function(doc)
         if doc then
-            if isInArray(doc.upgrades, "nitrokit") and isInArray(doc.upgrades, "nitrobottle") then
+            if doc.upgrades and isInArray(doc.upgrades, "nitrokit") and isInArray(doc.upgrades, "nitrobottle") then
                 local fuelAmount = getNitroFuelAmount(vehPlate)
                 print("fuel amount: " .. fuelAmount)
                 TriggerClientEvent("nitro:setFuel", src, fuelAmount)
