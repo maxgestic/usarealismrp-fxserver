@@ -16,11 +16,13 @@ Citizen.CreateThread(function()
     while true do
         local me = PlayerPedId()
         local veh = GetVehiclePedIsIn(me)
-        
+
         if not alreadyAskedForGaugeData and veh and veh ~= 0 then
-            local vehPlate = GetVehicleNumberPlateText(veh)
-            TriggerServerEvent("nitro-gauge:fetchGuageData", vehPlate)
-            alreadyAskedForGaugeData = true
+            if GetPedInVehicleSeat(veh, -1) == me then
+                local vehPlate = GetVehicleNumberPlateText(veh)
+                TriggerServerEvent("nitro-gauge:fetchGuageData", vehPlate)
+                alreadyAskedForGaugeData = true
+            end
         elseif alreadyAskedForGaugeData and (not veh or veh == 0) then
             alreadyAskedForGaugeData = false
             if on then
