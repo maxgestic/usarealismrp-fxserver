@@ -325,8 +325,7 @@ function updateDeliveryProgress(char, orders)
 	end
 	local newDeliveries = {}
 	for i = #orders, 1, -1 do
-		--orders[i].deliveryProgress = math.min((os.difftime(os.time(), orders[i].orderedTime) / (60 * 60)) / 24, 1.0)
-		orders[i].deliveryProgress = 1.0
+		orders[i].deliveryProgress = math.min((os.difftime(os.time(), orders[i].orderedTime) / (60 * 60)) / 24, 1.0)
 		if orders[i].deliveryProgress == 1.0 then -- is delivered
 			table.insert(newDeliveries, orders[i])
 			table.remove(orders, i)
