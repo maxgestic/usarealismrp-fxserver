@@ -37,8 +37,20 @@ MechanicHelper.upgradeInstalled = function(plate, upgrade, cb)
             if not doc.upgrades then
                 doc.upgrades = {}
             end
+            for i = 1, #doc.upgrades do -- don't add if already added
+                if upgrade.id == doc.upgrades[i] then
+                    if upgrade.postInstall then
+                        upgrade.postInstall(plate)
+                    end
+                    cb()
+                    return
+                end
+            end
             table.insert(doc.upgrades, upgrade.id)
             MechanicHelper.db.updateDocument("vehicles", plate, { ["upgrades"] = doc.upgrades }, function(doc, err, rText)
+                if upgrade.postInstall then
+                    upgrade.postInstall(plate)
+                end
                 cb()
             end)
         end
@@ -62,6 +74,16 @@ MechanicHelper.getMechanicRank = function(ident, cb)
     end)
 end
 
+MechanicHelper.getMechanicInfo = function(ident, cb)
+    MechanicHelper.db.getDocumentByRow("mechanicjob", "owner_identifier", ident, function(doc)
+        if doc then
+            cb(doc)
+        else    
+            cb(nil)
+        end
+    end)
+end
+
 MechanicHelper.getMechanicRepairCount = function(ident, cb)
     MechanicHelper.db.getDocumentByRow("mechanicjob", "owner_identifier", ident, function(doc)
         if doc then 
@@ -70,4 +92,28 @@ MechanicHelper.getMechanicRepairCount = function(ident, cb)
             cb(0)
         end
     end)
+end
+
+MechanicHelper.doesVehicleHaveUpgrades = function(plate, upgradesToLookFor)
+    local result = nil
+    plate = exports.globals:trim(plate)
+    MechanicHelper.db.getDocumentById("vehicles", plate, function(doc)
+        if doc then
+            for i = #upgradesToLookFor, 1, -1 do
+                for j = 1, #doc.upgrades do
+                    if doc.upgrades[j] == upgradesToLookFor[i] then
+                        table.remove(upgradesToLookFor, i)
+                        break
+                    end
+                end
+            end
+            result = #upgradesToLookFor == 0
+        else
+            result = false
+        end
+    end)
+    while result == nil do
+        Wait(1)
+    end
+    return result
 end

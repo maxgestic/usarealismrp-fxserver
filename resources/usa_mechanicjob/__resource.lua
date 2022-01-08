@@ -9,7 +9,12 @@ server_scripts {
 client_scripts {
     'classes/MechanicHelper_cl.lua',
     'mechanic_cl.lua',
-    'mechanic_cl_menu.lua'
+    'menus/cl_truckSpawnMenu.lua',
+    'menus/cl_mechanicShopMenu.lua'
+}
+
+shared_scripts {
+    'config/PARTS.lua'
 }
 
 exports {
